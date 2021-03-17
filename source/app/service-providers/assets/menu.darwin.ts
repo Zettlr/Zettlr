@@ -319,8 +319,10 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         {
           id: 'menu.find_dir',
           label: trans('menu.find_dir'),
-          accelerator: 'Cmd+Shift+F' // ,
-          // command: 'dir-find' TODO
+          accelerator: 'Cmd+Shift+F',
+          click: function (menuitem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'global-search')
+          }
         },
         {
           type: 'separator'

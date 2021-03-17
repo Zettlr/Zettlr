@@ -94,8 +94,6 @@ function updateCitationDatabase (): void {
 
 ipcRenderer.on('citeproc-provider', (event, message) => {
   if (message === 'database-changed') {
-    console.log('Citation provider has notified us of new items!')
-
     updateCitationDatabase()
   }
 })

@@ -256,7 +256,6 @@ const config: StoreOptions<ZettlrState> = {
           command: 'update-modified-files',
           payload: state.modifiedDocuments
         })
-          .then(() => console.log('Updated list of modified files'))
           .catch(e => console.error(e))
       } else if (isClean === true && pathIndex > -1) {
         // Remove the path if in array
@@ -265,7 +264,6 @@ const config: StoreOptions<ZettlrState> = {
           command: 'update-modified-files',
           payload: state.modifiedDocuments
         })
-          .then(() => console.log('Updated list of modified files'))
           .catch(e => console.error(e))
       }
     },
@@ -513,7 +511,6 @@ const config: StoreOptions<ZettlrState> = {
         }
 
         if (!hasChanged) {
-          console.log('Not updating open files array')
           return // No need to update
         }
       }

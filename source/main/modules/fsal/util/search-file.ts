@@ -29,11 +29,19 @@ interface SearchOrOperator {
   word: string[]
 }
 
+interface SearchResult {
+  term: string
+  restext: string
+  weight: number
+  from: any
+  to: any
+}
+
 export default function searchFile (
   fileObject: MDFileDescriptor|CodeFileDescriptor,
   terms: Array<SearchOperator|SearchOrOperator>,
   cnt: string
-): any[] {
+): SearchResult[] {
   let matches = 0
   let cntLower = cnt.toLowerCase()
 
@@ -59,7 +67,19 @@ export default function searchFile (
   // Easy, look above: We'll be returning an object to indicate
   // *as if* this file had a filename match.
   if (notOperators.length === terms.length) {
-    return [{ line: -1, restext: fileObject.name, 'weight': 2 }]
+    return [{
+      term: '',
+      from: {
+        line: -1,
+        ch: 0
+      },
+      to: {
+        line: -1,
+        ch: fileObject.name.length
+      },
+      restext: fileObject.name,
+      weight: 2
+    }]
   }
 
   // Now, pluck the not operators from the terms
@@ -92,11 +112,23 @@ export default function searchFile (
 
   // Return immediately with an object of line -1 (indicating filename or tag matches) and a huge weight
   if (matches === termsToSearch.length) {
-    return [{ line: -1, restext: fileObject.name, 'weight': 2 }]
+    return [{
+      term: termsToSearch.map(term => term.word).join(' '),
+      from: {
+        line: -1,
+        ch: 0
+      },
+      to: {
+        line: -1,
+        ch: fileObject.name.length
+      },
+      restext: fileObject.name,
+      weight: 2
+    }]
   }
 
   // Now begin to search
-  const fileMatches = []
+  const fileMatches: SearchResult[] = []
 
   // Initialise the rest of the necessary variables
   let lines = cnt.split('\n')
@@ -110,18 +142,32 @@ export default function searchFile (
         // Try both normal and lowercase
         if (lines[index].includes(t.word)) {
           fileMatches.push({
-            'term': t.word,
-            'from': { 'line': index, 'ch': lines[index].indexOf(t.word) },
-            'to': { 'line': index, 'ch': lines[index].indexOf(t.word) + t.word.length },
-            'weight': 1 // Weight indicates that this was an exact match
+            term: t.word,
+            restext: lines[index],
+            from: {
+              line: index,
+              ch: lines[index].indexOf(t.word)
+            },
+            to: {
+              line: index,
+              ch: lines[index].indexOf(t.word) + t.word.length
+            },
+            weight: 1 // Weight indicates that this was an exact match
           })
           hasTermMatched = true
         } else if (linesLower[index].includes(t.word.toLowerCase())) {
           fileMatches.push({
-            'term': t.word,
-            'from': { 'line': index, 'ch': linesLower[index].indexOf(t.word.toLowerCase()) },
-            'to': { 'line': index, 'ch': linesLower[index].indexOf(t.word.toLowerCase()) + t.word.length },
-            'weight': 0.5 // Weight indicates that this was an approximate match
+            term: t.word,
+            restext: lines[index],
+            from: {
+              line: index,
+              ch: linesLower[index].indexOf(t.word.toLowerCase())
+            },
+            to: {
+              line: index,
+              ch: linesLower[index].indexOf(t.word.toLowerCase()) + t.word.length
+            },
+            weight: 0.5 // Weight indicates that this was an approximate match
           })
           hasTermMatched = true
         }
@@ -135,19 +181,32 @@ export default function searchFile (
           // Try both normal and lowercase
           if (lines[index].includes(wd)) {
             fileMatches.push({
-              'term': wd,
-              'from': { 'line': index, 'ch': lines[index].indexOf(wd) },
-              'to': { 'line': index, 'ch': lines[index].indexOf(wd) + wd.length },
-              'weight': 1 // Weight indicates that this was an exact match
+              term: wd,
+              restext: lines[index],
+              from: {
+                line: index,
+                ch: lines[index].indexOf(wd)
+              },
+              to: {
+                line: index,
+                ch: lines[index].indexOf(wd) + wd.length
+              },
+              weight: 1 // Weight indicates that this was an exact match
             })
             hasTermMatched = true
             br = true
           } else if (linesLower[index].includes(wd.toLowerCase())) {
             fileMatches.push({
-              'term': wd,
-              'from': { 'line': index, 'ch': linesLower[index].indexOf(wd.toLowerCase()) },
-              'to': { 'line': index, 'ch': linesLower[index].indexOf(wd.toLowerCase()) + wd.length },
-              'weight': 1 // Weight indicates that this was an exact match
+              term: wd,
+              restext: lines[index],
+              from: {
+                line: index,
+                ch: linesLower[index].indexOf(wd.toLowerCase())
+              },
+              to: {
+                line: index, ch: linesLower[index].indexOf(wd.toLowerCase()) + wd.length
+              },
+              weight: 1 // Weight indicates that this was an exact match
             })
             hasTermMatched = true
             br = true

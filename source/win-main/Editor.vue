@@ -351,6 +351,11 @@ export default {
     })
   },
   methods: {
+    jtl (lineNumber) {
+      if (this.editor !== null) {
+        this.editor.jtl(lineNumber)
+      }
+    },
     save () {
       // Go through all open files, and, if they are modified, save them
       if (this.activeDocument.cmDoc.isClean()) {

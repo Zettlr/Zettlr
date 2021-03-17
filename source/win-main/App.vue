@@ -21,7 +21,10 @@
           v-if="mainSplitViewVisibleComponent === 'fileManager'"
         ></FileManager>
         <!-- ... or the global search, if selected -->
-        <GlobalSearch v-else-if="mainSplitViewVisibleComponent === 'globalSearch'">
+        <GlobalSearch
+          v-else-if="mainSplitViewVisibleComponent === 'globalSearch'"
+          v-on:jtl="$refs['editor'].jtl($event)"
+        >
         </GlobalSearch>
       </template>
       <template #view2>
@@ -378,6 +381,9 @@ export default {
         if (activeFile !== null && activeFile.id !== '') {
           clipboard.writeText(activeFile.id)
         }
+      } else if (shortcut === 'global-search') {
+        this.fileManagerVisible = true
+        this.mainSplitViewVisibleComponent = 'globalSearch'
       }
     })
 
