@@ -107,26 +107,8 @@ module.exports = function displayFileContext (event, dirObject, el, callback) {
   global.menuProvider.show(point, items, (clickedID) => {
     callback(clickedID) // TODO
     switch (clickedID) {
-      case 'menu.delete_dir':
-        ipcRenderer.send('message', {
-          command: 'dir-delete',
-          content: { hash: dirObject.hash }
-        })
-        break
       case 'gui.attachments_open_dir':
         shell.showItemInFolder(dirObject.path)
-        break
-      case 'menu.remove_project':
-        ipcRenderer.send('message', {
-          command: 'dir-remove-project',
-          content: { hash: dirObject.hash }
-        })
-        break
-      case 'menu.new_project':
-        ipcRenderer.send('message', {
-          command: 'dir-new-project',
-          content: { hash: dirObject.hash }
-        })
         break
       case 'menu.project_properties':
         ipcRenderer.send('message', {

@@ -30,11 +30,8 @@
       v-bind:style="{
         'padding-left': `${depth * 15 + 10}px`
       }"
-      v-bind:draggable="!isRoot"
       v-on:click="requestSelection"
       v-on:dragover="acceptDrags"
-      v-on:dragstart="beginDragging"
-      v-on:drag="onDragHandler"
       v-on:dragenter="enterDragging"
       v-on:dragleave="leaveDragging"
       v-on:drop="handleDrop"
@@ -107,6 +104,9 @@
         ref="display-text"
         class="display-text"
         v-bind:data-hash="obj.hash"
+        v-bind:draggable="!isRoot"
+        v-on:dragstart="beginDragging"
+        v-on:drag="onDragHandler"
       >
         <template v-if="!nameEditing">
           {{ obj.name }}
@@ -287,6 +287,12 @@ export default {
             this.$emit('create-file')
           } else if (clickedID === 'menu.new_dir') {
             this.$emit('create-dir')
+          } else if (clickedID === 'menu.delete_dir') {
+            ipcRenderer.invoke('application', {
+              command: 'dir-delete',
+              payload: { path: this.obj.path }
+            })
+              .catch(err => console.error(err))
           } else if (clickedID === 'menu.properties') {
             const data = {
               dirname: this.obj.name,
