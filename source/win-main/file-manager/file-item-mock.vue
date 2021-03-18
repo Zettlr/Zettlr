@@ -52,7 +52,11 @@ export default {
     }
   },
   mounted: function () {
-    // this.focusInput()
+    setTimeout(() => {
+      // TODO: If this timeout is set too fast, the file list somehow aborts the
+      // process automatically. Have to investigate.
+      this.focusInput()
+    }, 500)
   },
   methods: {
     focusInput: function () {

@@ -1,5 +1,5 @@
 <template>
-  <textarea ref="custom-css"></textarea>
+  <textarea ref="editor"></textarea>
 </template>
 
 <script>
@@ -8,13 +8,18 @@ import 'codemirror/addon/edit/closebrackets'
 
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/mode/css/css'
+import 'codemirror/mode/yaml/yaml'
 
 export default {
   name: 'CodeEditor',
   props: {
-    contents: {
+    value: {
       type: String,
-      default: 'hello world'
+      default: ''
+    },
+    mode: {
+      type: String,
+      default: 'css'
     }
   },
   data: function () {
@@ -23,17 +28,17 @@ export default {
     }
   },
   watch: {
-    contents: function () {
+    value: function () {
       if (this.cmInstance !== null) {
-        this.cmInstance.setValue(this.contents)
+        this.cmInstance.setValue(this.value)
       }
     }
   },
   mounted: function () {
-    this.cmInstance = CodeMirror.fromTextArea(this.$refs['custom-css'], {
+    this.cmInstance = CodeMirror.fromTextArea(this.$refs['editor'], {
       lineNumbers: true,
       theme: 'code-editor',
-      mode: 'css',
+      mode: this.mode,
       cursorScrollMargin: 20,
       lineWrapping: true,
       autoCloseBrackets: true,
@@ -41,7 +46,7 @@ export default {
       cursorBlinkRate: 0
     })
 
-    this.cmInstance.setValue(this.contents)
+    this.cmInstance.setValue(this.initialContents)
 
     this.cmInstance.on('change', (event, changeObj) => {
       this.$emit('input', this.cmInstance.getValue())
@@ -51,6 +56,11 @@ export default {
     const cmWrapper = this.cmInstance.getWrapperElement()
     // "Remove this from your tree to delete an editor instance."
     cmWrapper.parentNode.removeChild(cmWrapper)
+  },
+  methods: {
+    setValue: function (newContents) {
+      this.cmInstance.setValue(newContents)
+    }
   }
 }
 </script>

@@ -10,8 +10,8 @@
     <div id="custom-css">
       <p id="custom-css-info" v-html="customCSSInfo"></p>
       <CodeEditor
-        v-bind:contents="initialCss"
-        v-on:input="css = $event"
+        v-model="css"
+        v-bind:mode="'css'"
       ></CodeEditor>
     </div>
   </WindowChrome>
@@ -33,8 +33,7 @@ export default {
     return {
       customCSSTitle: trans('dialog.custom_css.title'),
       customCSSInfo: trans('dialog.custom_css.info'),
-      css: '',
-      initialCss: ''
+      css: ''
     }
   },
   computed: {
@@ -61,7 +60,7 @@ export default {
       command: 'get-custom-css'
     })
       .then(css => {
-        this.initialCss = this.css = css
+        this.css = css
       })
       .catch(e => console.error(e))
   },

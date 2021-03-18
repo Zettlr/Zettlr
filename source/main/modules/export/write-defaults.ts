@@ -54,7 +54,6 @@ export default async function writeDefaults (
   // const bibliography = global.citeproc.getSelectedDatabase()
   const bibliography: string = global.config.get('export.cslLibrary')
   if (bibliography !== undefined && isFile(bibliography)) {
-    console.log('Adding database ' + bibliography)
     defaults.bibliography.push(bibliography)
   }
 
@@ -68,6 +67,9 @@ export default async function writeDefaults (
     simpleKeys: false
   }
   await fs.writeFile(defaultsFile, YAML.stringify(defaults, YAMLOptions), { encoding: 'utf8' })
+  // console.log('DEFAULTS FILE')
+  // console.log(YAML.stringify(defaults, YAMLOptions))
+  // console.log('======================')
 
   return defaultsFile
 }

@@ -147,12 +147,12 @@ async function runPandoc (defaultsFile: string): Promise<PandocRunnerOutput> {
     })
 
     pandocProcess.stdout.on('data', (data) => {
-      console.log(String(data))
+      console.log('PANDOC OUT: ' + String(data))
       output.stdout.push(String(data))
     })
 
     pandocProcess.stderr.on('data', (data) => {
-      console.log(String(data))
+      console.log('PANDOC ERR: ' + String(data))
       output.stderr.push(String(data))
     })
 

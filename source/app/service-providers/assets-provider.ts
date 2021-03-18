@@ -1,6 +1,6 @@
 import EventEmitter from 'events'
 import path from 'path'
-import { app } from 'electron'
+import { app, ipcMain } from 'electron'
 import { promises as fs } from 'fs'
 import YAML from 'yaml'
 
@@ -47,6 +47,16 @@ export default class AssetsProvider extends EventEmitter {
         return await this.setDefaultsFor(writer, newDefaults)
       }
     }
+
+    ipcMain.handle('assets-provider', async (event, message) => {
+      const { command, payload } = message
+
+      if (command === 'get-defaults-file') {
+        return await this.getDefaultsFor(payload)
+      } else if (command === 'set-defaults-file') {
+        return await this.setDefaultsFor(payload.writer, payload.contents)
+      }
+    })
   }
 
   async init (): Promise<void> {
