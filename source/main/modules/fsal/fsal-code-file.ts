@@ -194,22 +194,23 @@ export async function rename (fileObject: CodeFileDescriptor, cache: any, newNam
   cacheFile(fileObject, cache)
 }
 
-export function remove (fileObject: CodeFileDescriptor): void {
-  const deleteOnFail: boolean = global.config.get('system.deleteOnFail')
-  const deleteSuccess = shell.moveItemToTrash(fileObject.path, deleteOnFail)
+export async function remove (fileObject: CodeFileDescriptor): Promise<void> {
+  try {
+    await shell.trashItem(fileObject.path)
+  } catch (err) {
+    if (global.config.get('system.deleteOnFail') === true) {
+      // If this function throws, there's really something off and we shouldn't recover.
+      await fs.unlink(fileObject.path)
+    } else {
+      global.log.info(`[FSAL File] Could not remove file ${fileObject.path}: ${String(err.message)}`)
+      return
+    }
+  }
 
-  if (deleteSuccess && fileObject.parent !== null) {
+  if (fileObject.parent !== null) {
     // Splice it from the parent directory
     const idx = fileObject.parent.children.indexOf(fileObject)
     fileObject.parent.children.splice(idx, 1)
-  }
-
-  if (!deleteSuccess) {
-    // Forcefully remove the file
-    fs.unlink(fileObject.path)
-      .catch(err => {
-        global.log.error(`[FSAL CodeFile] Could not remove file ${fileObject.path}: ${err.message as string}`, err)
-      })
   }
 }
 
