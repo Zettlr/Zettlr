@@ -182,6 +182,9 @@ export default {
     },
     emptySearchResults: function () {
       this.searchResults = []
+      // Also, for convenience, re-focus and select the input
+      this.$refs['query-input'].focus()
+      this.$refs['query-input'].select()
     },
     jumpToLine: function (filePath, lineNumber) {
       const isFileOpen = this.openFiles.find(file => file.path === filePath)
