@@ -413,8 +413,10 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         {
           id: 'menu.toggle_filemanager',
           label: trans('menu.toggle_filemanager'),
-          accelerator: 'Cmd+!' // ,
-          // command: 'toggle-file-manager' TODO
+          accelerator: 'Cmd+!',
+          click: function (menuitem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'toggle-file-manager')
+          }
         },
         {
           id: 'menu.toggle_sidebar',

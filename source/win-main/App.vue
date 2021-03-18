@@ -384,6 +384,15 @@ export default {
       } else if (shortcut === 'global-search') {
         this.fileManagerVisible = true
         this.mainSplitViewVisibleComponent = 'globalSearch'
+      } else if (shortcut === 'toggle-file-manager') {
+        if (this.fileManagerVisible === true && this.mainSplitViewVisibleComponent === 'fileManager') {
+          this.fileManagerVisible = false
+        } else if (this.fileManagerVisible === false) {
+          this.fileManagerVisible = true
+          this.mainSplitViewVisibleComponent = 'fileManager'
+        } else if (this.mainSplitViewVisibleComponent === 'globalSearch') {
+          this.mainSplitViewVisibleComponent = 'fileManager'
+        }
       }
     })
 
