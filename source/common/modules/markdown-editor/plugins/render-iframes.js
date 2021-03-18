@@ -1,4 +1,4 @@
-/* global CodeMirror $ define */
+/* global CodeMirror define */
 // This plugin renders iFrames in CodeMirror instances
 
 const { getIframeRE } = require('../../../regular-expressions');
@@ -40,15 +40,17 @@ const { getIframeRE } = require('../../../regular-expressions');
       // We can only have one marker at any given position at any given time
       if (cm.doc.findMarks(curFrom, curTo).length > 0) continue
 
-      // Now we can render it finally.
-
-      let iframe = $(match[0])[0] // Use jQuery for simple creation of the DOM element
+      // Now we can render it finally. For this we need to convert it into an
+      // actual DOM node. We'll do this by rendering it as the innerHTML of a
+      // DIV element, from which we then take the firstChild.
+      let wrapper = document.createElement('div')
+      wrapper.innerHTML = match[0]
 
       cm.doc.markText(
         curFrom, curTo,
         {
           'clearOnEnter': true,
-          'replacedWith': iframe,
+          'replacedWith': wrapper.firstChild,
           'inclusiveLeft': false,
           'inclusiveRight': false
         }
