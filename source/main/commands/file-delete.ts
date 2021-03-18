@@ -26,7 +26,7 @@ export default class FileDelete extends ZettlrCommand {
     * @return {Boolean} Whether the file was successfully deleted.
     */
   async run (evt: string, arg: any): Promise<boolean> {
-    let file = this._app.getFileSystem().findFile(arg.hash)
+    let file = this._app.getFileSystem().findFile(arg.path)
     if (file === null) {
       global.log.error('Cannot delete file: Not found.')
       return false

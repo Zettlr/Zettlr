@@ -98,12 +98,6 @@ module.exports = function displayFileContext (event, fileObject, el, callback) {
   global.menuProvider.show(point, items, (clickedID) => {
     callback(clickedID) // TODO
     switch (clickedID) {
-      case 'menu.delete_file':
-        ipcRenderer.send('message', {
-          command: 'file-delete',
-          content: { hash: fileObject.hash }
-        })
-        break
       case 'menu.copy_filename':
         clipboard.writeText(fileObject.name)
         break

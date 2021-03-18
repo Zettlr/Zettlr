@@ -316,6 +316,12 @@ export default {
             this.$emit('create-file')
           } else if (clickedID === 'menu.new_dir') {
             this.$emit('create-dir')
+          } else if (clickedID === 'menu.delete_dir') {
+            ipcRenderer.invoke('application', {
+              command: 'dir-delete',
+              payload: { path: this.obj.path }
+            })
+              .catch(err => console.error(err))
           } else if (clickedID === 'menu.properties') {
             const data = {
               dirname: this.obj.name,
@@ -380,6 +386,12 @@ export default {
             // controller to display a mock file object below this file for the
             // user to enter a new file name.
             this.$emit('duplicate')
+          } else if (clickedID === 'menu.delete_file') {
+            ipcRenderer.invoke('application', {
+              command: 'file-delete',
+              payload: { path: this.obj.path }
+            })
+              .catch(err => console.error(err))
           } else if (clickedID === 'menu.properties') {
             const data = {
               filename: this.obj.name,
