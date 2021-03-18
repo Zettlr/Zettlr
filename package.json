@@ -43,7 +43,7 @@
     "@types/sanitize-html": "^1.27.1",
     "@types/semver": "^7.3.4",
     "@zettlr/citr": "^1.2.2",
-    "adm-zip": "^0.5.2",
+    "adm-zip": "^0.5.4",
     "archiver": "^5.2.0",
     "astrocite": "^0.16.4",
     "bcp-47": "^1.0.8",
