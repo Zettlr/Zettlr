@@ -198,10 +198,10 @@ export default class Zettlr {
     })
 
     // Listen to changes in the file system
-    this._fsal.on('fsal-state-changed', (objPath: string, info: any) => {
+    this._fsal.on('fsal-state-changed', (scope: string, changedPath: string) => {
       // Emitted when anything in the state changes
       const openDir = this._fsal.openDirectory
-      switch (objPath) {
+      switch (scope) {
         case 'activeFile':
           // The active file has changed; set it in the config and notify the
           // renderer process to switch to this file again.
@@ -215,6 +215,10 @@ export default class Zettlr {
           if (!this.isModified()) {
             this._windowManager.setModified(false)
           }
+          break
+        case 'openFileRemotelyChanged':
+          // An open file has been changed --> handle this!
+          this._onFileContentsChanged(changedPath)
           break
         case 'openDirectory':
           global.config.set('openDirectory', (openDir !== null) ? openDir.path : null)
@@ -259,11 +263,11 @@ export default class Zettlr {
    * @param {object} info The info object originally passed to the event.
    * @memberof Zettlr
    */
-  _onFileContentsChanged (info: any): void {
+  _onFileContentsChanged (changedPath: any): void {
     // TODO: This function is currently not called, but we probably need this!!!
-    let changedFile = this.findFile(info.hash)
+    let changedFile = this.findFile(changedPath)
     if (changedFile === null) {
-      global.log.error('[Application] Could not handle remote change, as no descriptor was found.', info)
+      global.log.error('[Application] Could not handle remote change, as no descriptor was found.', changedPath)
       return
     }
 
@@ -271,8 +275,7 @@ export default class Zettlr {
     // What follows looks a bit ugly, welcome to callback hell.
     if (global.config.get('alwaysReloadFiles') === true) {
       this._fsal.getFileContents(changedFile).then((file: MDFileMeta|CodeFileMeta) => {
-        // TODO: NOT IMPLEMENTED!
-        global.log.error('[Application] Could not send the file-replace-contents-command, since it has not yet been re-implemetned.')
+        broadcastIpcMessage('open-file-changed', file)
       }).catch(e => global.log.error(e.message, e))
     } else {
       // Prevent multiple instances of the dialog, just ask once. The logic
@@ -298,8 +301,7 @@ export default class Zettlr {
           }
 
           this._fsal.getFileContents(changedFile).then((file: any) => {
-            // TODO: NOT IMPLEMENTED
-            global.log.error('[Application] Could not send the file-replace-contents-command, since it has not yet been re-implemetned.')
+            broadcastIpcMessage('open-file-changed', file)
           }).catch(e => global.log.error(e.message, e))
         }).catch(e => global.log.error(e.message, e)) // END ask replace file
     }
@@ -457,7 +459,6 @@ export default class Zettlr {
     } else if (command === 'update-modified-files') {
       // Update the modification status according to the file path array given
       // in the payload.
-      console.log('Updating modification status of the following paths:', payload)
       this._fsal.updateModifiedFlags(payload)
       this._windowManager.setModified(!this._fsal.isClean())
     } else if (command === 'open-workspace') {

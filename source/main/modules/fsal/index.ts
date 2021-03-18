@@ -134,7 +134,7 @@ export default class FSAL extends EventEmitter {
       timestamp: timestamp
     })
 
-    this.emit('fsal-state-changed', 'filetree')
+    this.emit('fsal-state-changed', 'filetree', changedPath)
   }
 
   /**
@@ -242,6 +242,11 @@ export default class FSAL extends EventEmitter {
       }
       // Finally, add a history event of what has happened
       this._recordFiletreeChange('change', changedPath)
+      // Also notify the main process which will then check if we need to issue
+      // a content-replacement.
+      if ([ 'code', 'file' ].includes(affectedDescriptor.type)) {
+        this.emit('fsal-state-changed', 'openFileRemotelyChanged', changedPath)
+      }
     }
 
     this._isCurrentlyHandlingRemoteChange = false

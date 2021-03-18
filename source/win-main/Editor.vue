@@ -189,6 +189,7 @@ export default {
       this.editor.setCompletionDatabase('tags', this.tagDatabase)
     },
     activeFile: function () {
+      console.log('Active file changed')
       if (this.editor === null) {
         console.error('Received a file update but the editor was not yet initiated!')
         return
@@ -341,6 +342,30 @@ export default {
         this.editor.hasTypewriterMode = this.editor.hasTypewriterMode === false
       } else if (shortcut === 'search') {
         this.showSearch = this.showSearch === false
+      }
+    })
+
+    ipcRenderer.on('open-file-changed', (event, fileDescriptor) => {
+      // This event is emitted by the main process if the user wants to exchange
+      // a file with remote changes. It already ships with the file descriptor
+      // so all we have to do is find the right file and just swap the contents.
+      // We don't need to update anything else, since that has been updated in
+      // the application's store already by the time this event arrives.
+      const doc = this.openDocuments.find(item => item.path === fileDescriptor.path)
+
+      if (doc !== undefined) {
+        const cur = Object.assign({}, doc.cmDoc.getCursor())
+        doc.cmDoc.setValue(fileDescriptor.content)
+        this.$nextTick(() => {
+          // Wait a little bit for the unwanted modification-events to emit and
+          // then immediately revert that status again.
+          doc.cmDoc.markClean()
+          doc.cmDoc.setCursor(cur)
+          this.$store.commit('announceModifiedFile', {
+            filePath: doc.path,
+            isClean: doc.cmDoc.isClean()
+          })
+        })
       }
     })
 
