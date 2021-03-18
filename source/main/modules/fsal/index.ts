@@ -945,9 +945,6 @@ export default class FSAL extends EventEmitter {
       'path': path.join(path.dirname(src.path), newName)
     }])
 
-    this._recordFiletreeChange('remove', src.path)
-    this._recordFiletreeChange('add', path.join(path.dirname(src.path), newName))
-
     if (src.type === 'file') {
       await FSALFile.rename(src, this._cache, newName)
     } else if (src.type === 'code') {
@@ -958,6 +955,9 @@ export default class FSAL extends EventEmitter {
     if (src.parent !== null) {
       await FSALDir.sort(src.parent) // Omit sorting
     }
+
+    this._recordFiletreeChange('remove', src.path)
+    this._recordFiletreeChange('add', path.join(path.dirname(src.path), newName))
 
     // Notify of a state change
     this.emit('fsal-state-changed', 'filetree')
@@ -976,7 +976,6 @@ export default class FSAL extends EventEmitter {
       'event': 'unlink',
       'path': src.path
     }])
-    this._recordFiletreeChange('remove', src.path)
 
     // Will trigger a change that syncs the files
     this.closeFile(src) // Does nothing if the file is not open
@@ -998,6 +997,9 @@ export default class FSAL extends EventEmitter {
         newHash: src.parent.hash
       })
     }
+
+    this._recordFiletreeChange('remove', src.path)
+
     this._fsalIsBusy = false
     this._afterRemoteChange()
   }
@@ -1123,9 +1125,8 @@ export default class FSAL extends EventEmitter {
       'path': absolutePath
     }])
 
-    this._recordFiletreeChange('add', absolutePath)
-
     await FSALDir.create(src, newName, this._cache)
+    this._recordFiletreeChange('add', absolutePath)
 
     // Notify the event listeners
     this.emit('fsal-state-changed', 'directory', {

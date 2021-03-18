@@ -131,6 +131,21 @@
       </span>
     </div>
     <div
+      v-if="operationType !== undefined"
+      v-bind:style="{
+        'padding-left': `${(depth + 1) * 15 + 10}px`
+      }"
+    >
+      <input
+        v-if="operationType !== undefined"
+        ref="new-object-input"
+        type="text"
+        v-on:keyup.esc="operationType = undefined"
+        v-on:blur="operationType = undefined"
+        v-on:keyup.enter="handleOperationFinish($event.target.value)"
+      >
+    </div>
+    <div
       v-if="isDirectory"
       v-show="!collapsed"
     >
@@ -176,7 +191,8 @@ export default {
   data: () => {
     return {
       collapsed: true, // Initial: collapsed list (if there are children)
-      nameEditing: false // True if the user wants to rename the item
+      nameEditing: false, // True if the user wants to rename the item
+      operationType: undefined // Can be createFile or createDir
     }
   },
   computed: {
@@ -258,6 +274,14 @@ export default {
         this.$refs['name-editing-input'].focus()
         this.$refs['name-editing-input'].select()
       })
+    },
+    operationType: function (newVal, oldVal) {
+      if (newVal !== undefined) {
+        this.$nextTick(() => {
+          this.$refs['new-object-input'].focus()
+          this.$refs['new-object-input'].select()
+        })
+      }
     }
   },
   mounted: function () {
@@ -284,9 +308,9 @@ export default {
           if (clickedID === 'menu.rename_dir') {
             this.nameEditing = true
           } else if (clickedID === 'menu.new_file') {
-            this.$emit('create-file')
+            this.operationType = 'createFile'
           } else if (clickedID === 'menu.new_dir') {
-            this.$emit('create-dir')
+            this.operationType = 'createDir'
           } else if (clickedID === 'menu.delete_dir') {
             ipcRenderer.invoke('application', {
               command: 'dir-delete',
@@ -584,6 +608,27 @@ export default {
       })
         .catch(e => console.error(e))
         .finally(() => { this.nameEditing = false })
+    },
+    handleOperationFinish: function (newName) {
+      if (this.operationType === 'createFile' && newName.trim() !== '') {
+        ipcRenderer.invoke('application', {
+          command: 'file-new',
+          payload: {
+            path: this.obj.path,
+            name: newName.trim()
+          }
+        }).catch(e => console.error(e))
+      } else if (this.operationType === 'createDir' && newName.trim() !== '') {
+        ipcRenderer.invoke('application', {
+          command: 'dir-new',
+          payload: {
+            path: this.obj.path,
+            name: newName.trim()
+          }
+        }).catch(e => console.error(e))
+      }
+
+      this.operationType = undefined
     }
   }
 }
