@@ -313,7 +313,7 @@ export async function parse (filePath: string, cache: FSALCache, parent: DirDesc
   file.target = global.targets.get(file.path)
 
   // Finally, report the tags
-  global.tags.report(file.tags)
+  global.tags.report(file.tags, file.path)
 
   return file
 }
@@ -383,9 +383,9 @@ export async function save (fileObject: MDFileDescriptor, content: string, cache
   // Afterwards, retrieve the now current modtime
   await updateFileMetadata(fileObject)
   // Make sure to keep the file object itself as well as the tags updated
-  global.tags.remove(fileObject.tags)
+  global.tags.remove(fileObject.tags, fileObject.path)
   parseFileContents(fileObject, content)
-  global.tags.report(fileObject.tags)
+  global.tags.report(fileObject.tags, fileObject.path)
   fileObject.modified = false // Always reset the modification flag.
   cacheFile(fileObject, cache)
 }
@@ -459,9 +459,9 @@ export async function reparseChangedFile (fileObject: MDFileDescriptor, cache: F
   const contents = await load(fileObject)
   await updateFileMetadata(fileObject)
   // Make sure to keep the file object itself as well as the tags updated
-  global.tags.remove(fileObject.tags)
+  global.tags.remove(fileObject.tags, fileObject.path)
   parseFileContents(fileObject, contents)
-  global.tags.report(fileObject.tags)
+  global.tags.report(fileObject.tags, fileObject.path)
   fileObject.modified = false // Always reset the modification flag.
   cacheFile(fileObject, cache)
 }

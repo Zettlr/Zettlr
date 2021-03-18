@@ -17,6 +17,16 @@ import path from 'path'
 import { app, ipcMain } from 'electron'
 import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
 
+interface InternalTagRecord {
+  text: string
+  files: string[]
+  className: string
+}
+
+interface InternalTagDatabase {
+  [name: string]: InternalTagRecord
+}
+
 /**
  * This class manages the coloured tags of the app. It reads the tags on each
  * start of the app and writes them after they have been changed.
@@ -24,7 +34,7 @@ import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
 export default class TagProvider {
   private readonly _file: string
   private _colouredTags: ColouredTag[]
-  private _globalTagDatabase: TagDatabase
+  private _globalTagDatabase: InternalTagDatabase
   /**
    * Create the instance on program start and initially load the tags.
    */
@@ -45,20 +55,20 @@ export default class TagProvider {
        * @param  {string[]} tagArray An array containing the tags to be added
        * @return {void}          Does not return.
        */
-      report: (tagArray: string[]) => {
+      report: (tagArray: string[], filePath: string) => {
         for (let tag of tagArray) {
-          // Either init with one or increment the tag counter.
+          // Either init or modify accordingly
           if (this._globalTagDatabase[tag] === undefined) {
             this._globalTagDatabase[tag] = {
               text: tag,
-              count: 1,
+              files: [filePath],
               className: ''
             }
             let cInfo = this._colouredTags.find(e => e.name === tag)
             // Set a special class to all tags that have a highlight colour
             this._globalTagDatabase[tag].className = (cInfo !== undefined) ? 'cm-hint-colour' : ''
-          } else {
-            this._globalTagDatabase[tag].count += 1
+          } else if (!this._globalTagDatabase[tag].files.includes(filePath)) {
+            this._globalTagDatabase[tag].files.push(filePath)
           }
         }
 
@@ -70,13 +80,16 @@ export default class TagProvider {
        * @param  {string[]} tagArray The tags to remove from the database
        * @return {void}          Does not return.
        */
-      remove: (tagArray: string[]) => {
+      remove: (tagArray: string[], filePath: string) => {
         for (let tag of tagArray) {
           if (this._globalTagDatabase[tag] !== undefined) {
-            this._globalTagDatabase[tag].count--
+            const idx = this._globalTagDatabase[tag].files.indexOf(filePath)
+            if (idx > -1) {
+              this._globalTagDatabase[tag].files.splice(idx, 1)
+            }
           }
           // Remove the tag altogether if its count is zero.
-          if (this._globalTagDatabase[tag].count <= 0) {
+          if (this._globalTagDatabase[tag].files.length === 0) {
             delete this._globalTagDatabase[tag]
           }
         }
@@ -88,7 +101,7 @@ export default class TagProvider {
        * @return {TagDatabase} An object containing all tags.
        */
       getTagDatabase: () => {
-        return this._globalTagDatabase
+        return this._getSimplifiedTagDatabase()
       },
       /**
        * Returns the special (= coloured) tags
@@ -108,16 +121,32 @@ export default class TagProvider {
       }
     }
 
-    ipcMain.handle('tag-provider', (event, payload) => {
-      const { command } = payload
+    ipcMain.handle('tag-provider', (event, message) => {
+      const { command } = message
 
       if (command === 'get-tags-database') {
         return this._globalTagDatabase
       } else if (command === 'set-coloured-tags') {
-        const { colouredTags } = payload
-        this.setColouredTags(colouredTags)
+        const { payload } = message
+        this.setColouredTags(payload)
       } else if (command === 'get-coloured-tags') {
         return this._colouredTags
+      } else if (command === 'recommend-matching-files') {
+        const { payload } = message
+        const ret: { [key: string]: string[] } = {}
+
+        for (const tag of payload) {
+          const record = this._globalTagDatabase[tag]
+          for (const file of record.files) {
+            if (ret[file] === undefined) {
+              ret[file] = [tag]
+            } else if (!ret[file].includes(tag)) {
+              ret[file].push(tag)
+            }
+          }
+        }
+
+        return ret
       }
     })
   }
@@ -171,5 +200,23 @@ export default class TagProvider {
     this._colouredTags = tags
     this._save()
     broadcastIpcMessage('coloured-tags')
+  }
+
+  /**
+   * Returns a simplified version of the internal tag database for external use.
+   *
+   * @return  {TagDatabase}  The database
+   */
+  _getSimplifiedTagDatabase (): TagDatabase {
+    const ret: TagDatabase = {}
+    for (const tag of Object.keys(this._globalTagDatabase)) {
+      const record = this._globalTagDatabase[tag]
+      ret[tag] = {
+        text: record.text,
+        count: record.files.length,
+        className: record.className
+      }
+    }
+    return ret
   }
 }

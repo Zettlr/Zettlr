@@ -110,7 +110,7 @@ export default {
       if (controlID === 'save') {
         ipcRenderer.invoke('tag-provider', {
           command: 'set-coloured-tags',
-          colouredTags: this.tags
+          payload: this.tags
         })
           .then(() => {
             ipcRenderer.send('window-controls', { command: 'win-close' })

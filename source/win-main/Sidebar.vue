@@ -3,16 +3,16 @@
     <div id="sidebar-tabs" role="tablist">
       <div
         role="tab"
-        v-bind:aria-label="attachmentsLabel"
-        data-target="sidebar-files"
+        v-bind:aria-label="tocLabel"
+        data-target="sidebar-toc"
         v-bind:class="{
           'sidebar-tab': true,
-          'active': currentTab === 'attachments'
+          'active': currentTab === 'toc'
         }"
-        v-bind:title="attachmentsLabel"
-        v-on:click="currentTab = 'attachments'"
+        v-bind:title="tocLabel"
+        v-on:click="currentTab = 'toc'"
       >
-        <clr-icon shape="attachment" role="presentation"></clr-icon>
+        <clr-icon shape="indented-view-list" role="presentation"></clr-icon>
       </div>
       <div
         role="tab"
@@ -29,16 +29,55 @@
       </div>
       <div
         role="tab"
-        v-bind:aria-label="tocLabel"
-        data-target="sidebar-toc"
+        v-bind:aria-label="relatedFilesLabel"
+        data-target="sidebar-related-files"
         v-bind:class="{
           'sidebar-tab': true,
-          'active': currentTab === 'toc'
+          'active': currentTab === 'relatedFiles'
         }"
-        v-bind:title="tocLabel"
-        v-on:click="currentTab = 'toc'"
+        v-bind:title="relatedFilesLabel"
+        v-on:click="currentTab = 'relatedFiles'"
       >
-        <clr-icon shape="indented-view-list" role="presentation"></clr-icon>
+        <clr-icon shape="file-group" role="presentation"></clr-icon>
+      </div>
+      <div
+        role="tab"
+        v-bind:aria-label="attachmentsLabel"
+        data-target="sidebar-files"
+        v-bind:class="{
+          'sidebar-tab': true,
+          'active': currentTab === 'attachments'
+        }"
+        v-bind:title="attachmentsLabel"
+        v-on:click="currentTab = 'attachments'"
+      >
+        <clr-icon shape="attachment" role="presentation"></clr-icon>
+      </div>
+    </div>
+
+    <div v-show="currentTab === 'relatedFiles'">
+      <h1>Related files</h1>
+      <div v-if="relatedFiles.length === 0">
+        No related files.
+      </div>
+      <div v-else class="related-files-container">
+        <div
+          v-for="fileRecord, idx in relatedFiles"
+          v-bind:key="idx"
+          class="related-file"
+        >
+          <span
+            class="filename"
+            v-on:click="requestFile(fileRecord.path)"
+          >{{ fileRecord.file }}</span>
+          <span
+            v-for="tag, idx2 in fileRecord.tags"
+            v-bind:key="idx2"
+            class="tag"
+          >
+            #{{ tag }}
+          </span>
+        </div>
       </div>
     </div>
 
@@ -127,8 +166,9 @@ export default {
   },
   data: function () {
     return {
-      currentTab: 'attachments',
-      bibContents: undefined
+      currentTab: 'toc',
+      bibContents: undefined,
+      relatedFiles: []
     }
   },
   computed: {
@@ -140,6 +180,9 @@ export default {
     },
     tocLabel: function () {
       return trans('gui.table_of_contents')
+    },
+    relatedFilesLabel: function () {
+      return 'Related Files' // TODO: Translate!
     },
     openDirLabel: function () {
       return trans('gui.attachments_open_dir')
@@ -154,6 +197,9 @@ export default {
       } else {
         return currentDir.attachments
       }
+    },
+    activeFile: function () {
+      return this.$store.state.activeFile
     },
     tableOfContents: function () {
       return this.$store.state.tableOfContents
@@ -188,6 +234,38 @@ export default {
           this.bibContents = bibliography
         })
         .catch(err => console.error(err))
+    },
+    activeFile: function () {
+      if (this.activeFile === null) {
+        this.relatedFiles = []
+        return
+      }
+
+      if (this.activeFile.type !== 'file') {
+        this.relatedFiles = []
+        return
+      }
+
+      ipcRenderer.invoke('tag-provider', {
+        command: 'recommend-matching-files',
+        payload: this.activeFile.tags
+      })
+        .then(recommendations => {
+          // Recommendations come in the form of [file: string]: string[]
+          this.relatedFiles = []
+          for (const filePath of Object.keys(recommendations)) {
+            this.relatedFiles.push({
+              file: path.basename(filePath),
+              path: filePath,
+              tags: recommendations[filePath]
+            })
+          }
+
+          this.relatedFiles.sort((a, b) => {
+            return b.tags.length - a.tags.length
+          })
+        })
+        .catch(err => console.error(err))
     }
   },
   mounted: function () {
@@ -218,6 +296,13 @@ export default {
       const uri = decodeURIComponent(attachmentPath)
       const data = FILETYPES_IMG.includes(ext) ? `![${basename}](${uri})` : `[${basename}](${uri})`
       event.dataTransfer.setData('text', data)
+    },
+    requestFile: function (filePath) {
+      ipcRenderer.invoke('application', {
+        command: 'open-file',
+        payload: filePath
+      })
+        .catch(e => console.error(e))
     }
   }
 }
@@ -309,12 +394,43 @@ body {
       div.toc-level { flex-shrink: 1; }
       div.toc-entry { flex-grow: 3; }
     }
+
+    div.related-files-container {
+      padding: 10px;
+
+      div.related-file {
+        margin-bottom: 10px;
+
+        span.filename {
+          display: block;
+          font-size: 11px;
+          padding: 10px 5px;
+
+          &:hover {
+            background-color: rgb(200, 200, 200);
+          }
+        }
+
+        span.tag {
+          font-size: 10px;
+          display: inline-block;
+          border-radius: 4px;
+          padding: 2px;
+        }
+      }
+    }
   }
 
   &.dark {
     #sidebar {
       background-color: rgba(30, 30, 30, 1);
       color: rgb(230, 230, 230);
+
+      div.related-files-container {
+        div.related-file {
+          span.filename:hover { background-color: rgb(80, 80, 80); }
+        }
+      }
     }
   }
 }
