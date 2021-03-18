@@ -48,6 +48,7 @@ Due to a change in the underlying data structure, this version of Zettlr will no
 - Now tests can be run as JavaScript or as TypeScript files (use `.js` or `.spec.ts` files respectively).
 - Generalised the window state management so that all windows are now able to remember their positions easily.
 - The toolbar is now vue-ified and can be used on WindowChrome components.
+- Zettlr is now completely jQuery-free.
 
 # 1.8.7
 

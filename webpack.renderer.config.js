@@ -1,5 +1,4 @@
 const rules = require('./webpack.rules')
-const webpack = require('webpack')
 
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
@@ -36,13 +35,6 @@ module.exports = {
     rules
   },
   plugins: [
-    // Load jQuery
-    new webpack.ProvidePlugin({
-      '$': 'jquery',
-      'jQuery': 'jquery',
-      'window.jQuery': 'jquery'
-    }),
-
     // Enhanced typescript support (e.g. moves typescript type checking to separate process)
     new ForkTsCheckerWebpackPlugin(),
 

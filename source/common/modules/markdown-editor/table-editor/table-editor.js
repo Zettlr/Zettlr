@@ -870,7 +870,7 @@ module.exports = class TableEditor {
   }
 
   /**
-   * Calculates the position of the caret in the given jQuery element.
+   * Calculates the position of the caret in the given DOM element.
    * @param {DOMNode} elem The element in which we should compute the caret position
    */
   _getCursorPositionInElement (elem) {
