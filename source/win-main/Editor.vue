@@ -635,6 +635,12 @@ export default {
   overflow-x: hidden;
   overflow-y: auto;
 
+  .katex {
+    // display: inline-block;
+    // width: 100%;
+    // text-align: center;
+  }
+
   div#editor-search {
     position: absolute;
     width: 300px;

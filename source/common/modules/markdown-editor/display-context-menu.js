@@ -241,11 +241,12 @@ module.exports = function displayContextMenu (event, isReadOnly, commandCallback
 
     // If the ID resembles citekey-xxxx, open the corresponding attachment
     if (clickedID.startsWith('citekey-')) {
-      ipcRenderer.send('message', {
+      ipcRenderer.invoke('application', {
         command: 'open-attachment',
-        content: { 'citekey': clickedID.substr(8) }
+        payload: { 'citekey': clickedID.substr(8) }
       })
-      closeCallback()
+        .catch(err => console.error(err))
+        .finally(() => { closeCallback() })
       return
     }
 
