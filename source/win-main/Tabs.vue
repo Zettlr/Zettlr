@@ -16,7 +16,7 @@
       v-on:dragend="handleDragEnd"
       v-on:contextmenu="handleContextMenu($event, file)"
     >
-      <span class="filename" v-on:click="handleSelectFile(file)">{{ file.name }}</span>
+      <span class="filename" v-on:click="handleSelectFile(file)">{{ getTabText(file) }}</span>
       <span class="close" v-on:click.stop="handleCloseFile(file)">&times;</span>
     </div>
   </div>
@@ -37,6 +37,9 @@ export default {
     },
     modifiedDocs: function () {
       return this.$store.state.modifiedDocuments
+    },
+    useH1: function () {
+      return this.$store.state.config['display.useFirstHeadings']
     }
   },
   mounted: function () {
@@ -70,6 +73,18 @@ export default {
     })
   },
   methods: {
+    getTabText: function (file) {
+      // Returns a more appropriate tab text based on the user settings
+      if (file.type !== 'file') {
+        return file.name
+      } else if (file.frontmatter !== null && 'title' in file.frontmatter) {
+        return file.frontmatter.title
+      } else if (this.useH1 === true && file.firstHeading !== null) {
+        return file.firstHeading
+      } else {
+        return file.name
+      }
+    },
     handleCloseFile: function (file) {
       ipcRenderer.invoke('application', {
         command: 'file-close',
