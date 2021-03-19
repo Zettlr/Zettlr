@@ -64,5 +64,21 @@ body.darwin{
       padding: 5px;
     }
   }
+
+  &.dark {
+    .selectable-list-container {
+      border-color: #505050;
+
+      div.item {
+        background-color: rgb(50, 50, 50);
+        color: white;
+        border-color: #505050;
+
+        &.selected {
+          background-color: rgb(80, 80, 80);
+        }
+      }
+    }
+  }
 }
 </style>

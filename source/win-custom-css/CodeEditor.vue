@@ -30,7 +30,9 @@ export default {
   watch: {
     value: function () {
       if (this.cmInstance !== null) {
+        const cur = Object.assign({}, this.cmInstance.getCursor())
         this.cmInstance.setValue(this.value)
+        this.cmInstance.setCursor(cur)
       }
     }
   },
@@ -46,7 +48,7 @@ export default {
       cursorBlinkRate: 0
     })
 
-    this.cmInstance.setValue(this.initialContents)
+    this.cmInstance.setValue(this.value)
 
     this.cmInstance.on('change', (event, changeObj) => {
       this.$emit('input', this.cmInstance.getValue())
@@ -60,6 +62,12 @@ export default {
   methods: {
     setValue: function (newContents) {
       this.cmInstance.setValue(newContents)
+    },
+    isClean: function () {
+      return this.cmInstance.isClean()
+    },
+    markClean: function () {
+      this.cmInstance.markClean()
     }
   }
 }

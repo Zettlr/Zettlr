@@ -32,17 +32,22 @@
           ></SelectableList>
         </template>
         <template #view2>
-          Edit the corresponding defaults file here.
-          <CodeEditor
-            ref="code-editor"
-            v-model="editorContents"
-            v-bind:mode="'yaml'"
-          ></CodeEditor>
-          <ButtonControl
-            v-bind:primary="true"
-            v-bind:label="'Save'"
-            v-on:click="saveDefaultsFile()"
-          ></ButtonControl>
+          <div style="padding: 10px;">
+            <p>Edit the corresponding defaults file here.</p>
+
+            <CodeEditor
+              ref="code-editor"
+              v-model="editorContents"
+              v-bind:mode="'yaml'"
+            ></CodeEditor>
+            <ButtonControl
+              v-bind:primary="true"
+              v-bind:label="'Save'"
+              v-bind:inline="true"
+              v-on:click="saveDefaultsFile()"
+            ></ButtonControl>
+            <span v-if="savingStatus !== ''" class="saving-status">{{ savingStatus }}</span>
+          </div>
         </template>
       </SplitView>
     </div>
@@ -99,7 +104,8 @@ export default {
       ],
       currentTab: 0,
       currentItem: 0,
-      editorContents: ''
+      editorContents: '',
+      savingStatus: ''
     }
   },
   computed: {
@@ -121,6 +127,13 @@ export default {
     },
     currentItem: function (newValue, oldValue) {
       this.loadDefaultsForState()
+    },
+    editorContents: function () {
+      if (this.$refs['code-editor'].isClean() === true) {
+        this.savingStatus = ''
+      } else {
+        this.savingStatus = 'Unsaved changes' // TODO translate
+      }
     }
   },
   mounted: function () {
@@ -139,13 +152,15 @@ export default {
           // The data is a simple object, which we need to transform into YAML
           const yaml = YAML.stringify(data)
           this.editorContents = yaml
+          this.$refs['code-editor'].markClean()
+          this.savingStatus = ''
         })
         .catch(err => console.error(err))
     },
     saveDefaultsFile: function () {
+      this.savingStatus = 'Saving ...' // TODO translate
       const writer = Object.keys(WRITERS)[this.currentItem]
-      const data = YAML.parseDocument(this.editorContents)
-      console.log('Saving data: ', this.editorContents)
+      const data = YAML.parse(this.editorContents)
 
       ipcRenderer.invoke('assets-provider', {
         command: 'set-defaults-file',
@@ -154,6 +169,12 @@ export default {
           contents: data
         }
       })
+        .then(() => {
+          this.savingStatus = 'Saved!'
+          setTimeout(() => {
+            this.savingStatus = ''
+          }, 1000)
+        }) // TODO: Translate
         .catch(err => console.error(err))
     }
   }
