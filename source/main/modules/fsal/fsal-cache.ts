@@ -24,17 +24,26 @@ import fs from 'fs'
 import path from 'path'
 
 export default class FSALCache {
-  _datadir: string
-  _data: any
-  _accessed: any
+  private readonly _datadir: string
+  /**
+   * Our cache data is a map of maps. The outer map constitutes shards, which
+   * themselves contain maps of key-value pairs.
+   */
+  private readonly _data: Map<string, Map<string, any>>
+  /**
+   * This here is a Set which contains the keys of all values that have been
+   * accessed. If a key is in here, we have accessed it. If it's not but in the
+   * shard, that indicates we probably don't need it anymore.
+   */
+  private readonly _accessed: Set<string>
 
   constructor (datadir: string) {
     this._datadir = datadir
-    this._data = {}
-    // Hash table for all keys that were requested before persist is called
-    // Everything not in this table will be cleaned out to keep the disk
+    this._data = new Map()
+    // Contains all keys that were requested before persist is called
+    // Everything not in this Set will be cleaned out to keep the disk
     // space as small as possible.
-    this._accessed = {}
+    this._accessed = new Set()
 
     try {
       fs.lstatSync(this._datadir)
@@ -47,48 +56,55 @@ export default class FSALCache {
 
   /**
    * Returns the value associated for a key without removing it.
-   * @param {string} key The key to get
-   * @returns {any} The key's value or undefined
+   *
+   * @param   {string}         key  The key to get
+   *
+   * @returns {any|undefined}       The key's value or undefined
    */
-  get (key: string): any {
-    if (!this._hasShard(key)) this._loadShard(key)
-    if (this.has(key)) {
-      this._accessed[key] = true
-    } else {
-      return undefined
+  get (key: string): any|undefined {
+    const shard = this._loadShard(key)
+
+    if (shard.has(key)) {
+      this._accessed.add(key)
     }
-    return this._data[this._determineShard(key)][key]
+
+    return shard.get(key)
   }
 
   /**
    * Sets (potentially overwriting) a cache key.
-   * @param {string} key The key to set
-   * @param {any} value Any JSONable data
-   * @return {boolean} True on success, false otherwise.
+   *
+   * @param  {string}  key    The key to set
+   * @param  {any}     value  Any JSONable data
+   *
+   * @return {boolean}        True on success, false otherwise.
    */
   set (key: string, value: any): boolean {
     try {
       JSON.stringify(value)
     } catch (error) {
-      global.log.error(`Could not set cache value ${key}: Not JSONable!`, error.message)
+      global.log.error(`[FSAL Cache] Could not cache value for key ${key}: Not JSONable!`)
       return false
     }
 
-    if (!this._hasShard(key)) this._loadShard(key)
-    this._accessed[key] = true // Obviously, a set key has been accessed
-    this._data[this._determineShard(key)][key] = value
+    const shard = this._loadShard(key)
+    this._accessed.add(key) // Obviously, a set key has been accessed
+    shard.set(key, value)
     return true
   }
 
   /**
    * Removes the given key from the cache.
-   * @param {String} key The key to remove
-   * @returns {Boolean} Whether the adapter has removed the key
+   *
+   * @param   {string}  key  The key to remove
+   *
+   * @returns {boolean}      Whether the adapter has removed the key
    */
   del (key: string): boolean {
     if (this.has(key)) {
-      delete this._data[this._determineShard(key)][key]
-      if (this._accessed.hasOwnProperty(key)) delete this._accessed[key]
+      const shard = this._loadShard(key)
+      shard.delete(key)
+      this._accessed.delete(key)
       return true
     }
     return false
@@ -96,16 +112,22 @@ export default class FSALCache {
 
   /**
    * Returns true if the cache has the given key in memory.
-   * @param {String} key The key to be searched
+   *
+   * @param  {string}  key  The key to be searched
+   *
+   * @return {boolean}      True if the key exists
    */
   has (key: string): boolean {
-    if (!this._hasShard(key)) this._loadShard(key)
-    return this._data[this._determineShard(key)].hasOwnProperty(key)
+    const shard = this._loadShard(key)
+    return shard.has(key)
   }
 
   /**
    * Returns the value of key and removes the entry from the cache.
-   * @param {String} key The key to pluck
+   *
+   * @param  {string} key The key to pluck
+   *
+   * @return {any}        The value for the given key
    */
   pluck (key: string): any {
     let val = JSON.parse(JSON.stringify(this.get(key)))
@@ -119,26 +141,26 @@ export default class FSALCache {
   persist (): void {
     let deleted = 0
     // Saves all currently loaded shards to disk
-    for (let shard of Object.keys(this._data)) {
+    for (const [ shardKey, shard ] of this._data.entries()) {
       // Clean up the remnant keys
-      for (let key of Object.keys(this._data[shard])) {
-        if (!this._accessed.hasOwnProperty(key)) {
-          delete this._data[shard][key]
+      for (const [key] of shard.entries()) {
+        if (!this._accessed.has(key)) {
+          shard.delete(key)
           deleted++
         }
       }
 
       try {
-        fs.writeFileSync(path.join(this._datadir, shard), JSON.stringify(this._data[shard]))
+        // A map cannot be saved to disk directly, so we need to create an array
+        // which is JSONable. This will then be correctly read into a new map
+        // whenever we load this shard.
+        fs.writeFileSync(path.join(this._datadir, shardKey), JSON.stringify(Array.from(shard.entries())))
       } catch (e) {
-        global.log.error(`Could not save shard ${shard} on disk!`, e)
+        global.log.error(`[FSAL Cache] Could not persist shard ${shardKey}!`, e)
       }
     }
 
-    if (deleted > 0) global.log.info(`Cleaned up FSAL cache: Removed ${deleted} remnants.`)
-
-    // Reset the access table
-    this._accessed = {}
+    global.log.info(`[FSAL Cache] Cleaned up cache: Removed ${deleted} remnants.`)
   }
 
   /**
@@ -148,8 +170,8 @@ export default class FSALCache {
     // Two things need to be done:
     // First, flush everything from memory
     // Second: Remove all cache files
-    this._data = {}
-    this._accessed = {}
+    this._data.clear()
+    this._accessed.clear()
 
     // We'll collect the cache clearing actions to resolve them all
     let promises = []
@@ -158,7 +180,7 @@ export default class FSALCache {
       let realPath = path.join(this._datadir, file)
       promises.push(new Promise<void>((resolve, reject) => {
         fs.unlink(realPath, (err) => {
-          if (err) {
+          if (err !== null) {
             reject(err)
           } else {
             resolve()
@@ -169,40 +191,50 @@ export default class FSALCache {
 
     // Watch how the promises do
     Promise.all(promises).then(() => {
-      global.log.info('Cache cleared!')
+      global.log.info('[FSAL Cache] Cache cleared!')
     }).catch((e) => {
-      global.log.error('Error while clearing the cache!', e)
+      global.log.error('[FSAL Cache] Error while clearing the cache!', e)
     })
   }
 
   /**
    * Lazily loads the shard for the given key.
-   * @param {String} key The key for which the shard should be loaded
+   *
+   * @param  {string}  key  The key for which the shard should be loaded
+   *
+   * @return {Map<string, any>} The loaded shard
    */
-  _loadShard (key: string): void {
+  _loadShard (key: string): Map<string, any> {
     // load a shard
     let shard = this._determineShard(key)
 
+    // If the requested shard is already loaded, simply return that one.
+    const maybeShard = this._data.get(shard)
+    if (maybeShard !== undefined) {
+      return maybeShard
+    }
+
+    // If the shard has not yet been loaded, do so.
     try {
+      // Either return a persisted shard ...
       fs.lstatSync(path.join(this._datadir, shard))
       let content = fs.readFileSync(path.join(this._datadir, shard), { encoding: 'utf8' })
-      this._data[shard] = JSON.parse(content)
+      const shardContents = new Map<string, any>(JSON.parse(content))
+      this._data.set(shard, shardContents)
+      return shardContents
     } catch (err) {
-      this._data[shard] = {}
+      // ... or create a new one.
+      const shardContents = new Map()
+      this._data.set(shard, shardContents)
+      return shardContents
     }
   }
 
   /**
-   * Returns true if the given shard has already been loaded.
-   * @param {String} key The key to query a shard for
-   */
-  _hasShard (key: string): boolean {
-    return this._data.hasOwnProperty(this._determineShard(key))
-  }
-
-  /**
    * Algorithm to determine where to save the given key.
-   * @param {String} key The key for which the shard should be determined
+   *
+   * @param  {string}  key  The key for which the shard should be determined
+   * @return {string}       The shard key
    */
   _determineShard (key: string): string {
     // Here's the algorithm for choosing the shard:
@@ -214,8 +246,6 @@ export default class FSALCache {
     // One more note: This caching algorithm will ensure
     // there'll be at most 99 files (10 to 99 and -1 to -9).
 
-    let shard = key
-    if (typeof shard !== 'string') shard = key.toString()
-    return shard.substr(0, 2)
+    return String(key).substr(0, 2)
   }
 }

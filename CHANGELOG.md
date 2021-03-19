@@ -49,6 +49,8 @@ Due to a change in the underlying data structure, this version of Zettlr will no
 - Generalised the window state management so that all windows are now able to remember their positions easily.
 - The toolbar is now vue-ified and can be used on WindowChrome components.
 - Zettlr is now completely jQuery-free.
+- Migrated the FSAL cache from unstable Objects to Maps and Sets.
+- Migrated the TagProvider to a Map as well.
 
 # 1.8.7
 

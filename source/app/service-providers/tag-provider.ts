@@ -23,10 +23,6 @@ interface InternalTagRecord {
   className: string
 }
 
-interface InternalTagDatabase {
-  [name: string]: InternalTagRecord
-}
-
 /**
  * This class manages the coloured tags of the app. It reads the tags on each
  * start of the app and writes them after they have been changed.
@@ -34,7 +30,7 @@ interface InternalTagDatabase {
 export default class TagProvider {
   private readonly _file: string
   private _colouredTags: ColouredTag[]
-  private _globalTagDatabase: InternalTagDatabase
+  private readonly _globalTagDatabase: Map<string, InternalTagRecord>
   /**
    * Create the instance on program start and initially load the tags.
    */
@@ -44,7 +40,7 @@ export default class TagProvider {
     this._colouredTags = []
     // The global tag database; it contains all tags that are used in any of the
     // files.
-    this._globalTagDatabase = Object.create(null)
+    this._globalTagDatabase = new Map()
 
     this._load()
 
@@ -58,17 +54,21 @@ export default class TagProvider {
       report: (tagArray: string[], filePath: string) => {
         for (let tag of tagArray) {
           // Either init or modify accordingly
-          if (this._globalTagDatabase[tag] === undefined) {
-            this._globalTagDatabase[tag] = {
+          const record = this._globalTagDatabase.get(tag)
+          if (record === undefined) {
+            const cInfo = this._colouredTags.find(e => e.name === tag)
+            const newRecord: InternalTagRecord = {
               text: tag,
               files: [filePath],
-              className: ''
+              className: (cInfo !== undefined) ? 'cm-hint-colour' : ''
             }
-            let cInfo = this._colouredTags.find(e => e.name === tag)
+
+            this._globalTagDatabase.set(tag, newRecord)
             // Set a special class to all tags that have a highlight colour
-            this._globalTagDatabase[tag].className = (cInfo !== undefined) ? 'cm-hint-colour' : ''
-          } else if (!this._globalTagDatabase[tag].files.includes(filePath)) {
-            this._globalTagDatabase[tag].files.push(filePath)
+          } else {
+            if (!record.files.includes(filePath)) {
+              record.files.push(filePath)
+            }
           }
         }
 
@@ -82,15 +82,17 @@ export default class TagProvider {
        */
       remove: (tagArray: string[], filePath: string) => {
         for (let tag of tagArray) {
-          if (this._globalTagDatabase[tag] !== undefined) {
-            const idx = this._globalTagDatabase[tag].files.indexOf(filePath)
+          const record = this._globalTagDatabase.get(tag)
+          if (record !== undefined) {
+            const idx = record.files.indexOf(filePath)
             if (idx > -1) {
-              this._globalTagDatabase[tag].files.splice(idx, 1)
+              record.files.splice(idx, 1)
             }
-          }
-          // Remove the tag altogether if its count is zero.
-          if (this._globalTagDatabase[tag].files.length === 0) {
-            delete this._globalTagDatabase[tag]
+
+            // Remove the tag altogether if its count is zero.
+            if (record.files.length === 0) {
+              this._globalTagDatabase.delete(tag)
+            }
           }
         }
 
@@ -125,7 +127,7 @@ export default class TagProvider {
       const { command } = message
 
       if (command === 'get-tags-database') {
-        return this._globalTagDatabase
+        return this._getSimplifiedTagDatabase()
       } else if (command === 'set-coloured-tags') {
         const { payload } = message
         this.setColouredTags(payload)
@@ -133,10 +135,15 @@ export default class TagProvider {
         return this._colouredTags
       } else if (command === 'recommend-matching-files') {
         const { payload } = message
+        // We cannot use a Map for the return value since Maps are not JSONable.
         const ret: { [key: string]: string[] } = {}
 
         for (const tag of payload) {
-          const record = this._globalTagDatabase[tag]
+          const record = this._globalTagDatabase.get(tag)
+          if (record === undefined) {
+            continue
+          }
+
           for (const file of record.files) {
             if (ret[file] === undefined) {
               ret[file] = [tag]
@@ -209,8 +216,7 @@ export default class TagProvider {
    */
   _getSimplifiedTagDatabase (): TagDatabase {
     const ret: TagDatabase = {}
-    for (const tag of Object.keys(this._globalTagDatabase)) {
-      const record = this._globalTagDatabase[tag]
+    for (const [ tag, record ] of this._globalTagDatabase.entries()) {
       ret[tag] = {
         text: record.text,
         count: record.files.length,
