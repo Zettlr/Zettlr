@@ -236,6 +236,10 @@ export default {
             // more than ten words at once, we need to substract it to not
             // mess with the word count.
             newDoc.cmDoc.on('change', (doc, changeObj) => {
+              if (changeObj.origin !== 'paste') {
+                return
+              }
+
               const newTextWords = countWords(changeObj.text.join(' '), false) // TODO: re-enable countChars
               if (newTextWords > 10) {
                 newDoc.lastWordCount = countWords(newDoc.cmDoc.getValue(), false) // TODO: re-enable countChars
