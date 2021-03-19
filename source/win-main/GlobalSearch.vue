@@ -96,7 +96,7 @@ export default {
     }
   },
   mounted: function () {
-    this.$refs['query-input'].$el.focus()
+    this.$refs['query-input'].focus()
   },
   methods: {
     startSearch: function () {

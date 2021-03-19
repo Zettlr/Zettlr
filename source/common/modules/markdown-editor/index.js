@@ -155,18 +155,10 @@ module.exports = class MarkdownEditor extends EventEmitter {
     autocompleteHook(this._instance)
     linkTooltipsHook(this._instance)
 
-    // As a last step, listen to the change and click events, as this
-    // is what will be needed by the holding instance to determine
-    // the state (e.g. clean vs. dirty, word counts etc)
+    // Propagate necessary events to the master process
     this._instance.on('change', (cm, changeObj) => {
-      const newTextString = changeObj.text.join(' ')
-      const changeOrigin = changeObj.origin
-      const newTextCharCount = countWords(newTextString, true)
-      const newTextWordCount = countWords(newTextString, false)
-      this.emit('change', changeOrigin, newTextCharCount, newTextWordCount)
+      this.emit('change', changeObj)
     })
-
-    // Propagate the cursorActivity event to the calling process
     this._instance.on('cursorActivity', (cm) => {
       this.emit('cursorActivity')
     })

@@ -18,11 +18,12 @@
       <template #view1>
         <!-- File manager in the left side of the split view -->
         <FileManager
-          v-if="mainSplitViewVisibleComponent === 'fileManager'"
+          v-show="mainSplitViewVisibleComponent === 'fileManager'"
         ></FileManager>
         <!-- ... or the global search, if selected -->
         <GlobalSearch
-          v-else-if="mainSplitViewVisibleComponent === 'globalSearch'"
+          v-show="mainSplitViewVisibleComponent === 'globalSearch'"
+          ref="global-search"
           v-on:jtl="$refs['editor'].jtl($event)"
         >
         </GlobalSearch>
@@ -399,6 +400,15 @@ export default {
     // Initially, we need to hide the sidebar, since the view will be visible
     // by default.
     this.$refs['editor-sidebar-split'].hideView(2)
+
+    this.$on('start-global-search', (terms) => {
+      this.mainSplitViewVisibleComponent = 'globalSearch'
+      this.fileManagerVisible = true
+      this.$nextTick(() => {
+        this.$refs['global-search'].$data.query = terms
+        this.$refs['global-search'].startSearch()
+      })
+    })
   },
   methods: {
     handleClick: function (clickedID) {

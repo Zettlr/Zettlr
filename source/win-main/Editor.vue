@@ -320,7 +320,7 @@ export default {
     this.editor = new MarkdownEditor(this.$refs.textarea, this.editorConfiguration)
 
     // Update the document info on corresponding events
-    this.editor.on('change', (changeOrigin, newTextCharCount, newTextWordCount) => {
+    this.editor.on('change', (changeObj) => {
       this.$store.commit('activeDocumentInfo', this.editor.documentInfo)
       // this.activeDocument.modified = this.activeDocument.cmDoc.isClean()
       // Announce that the file is modified (if applicable) to the whole application
@@ -334,6 +334,17 @@ export default {
 
     this.editor.on('cursorActivity', () => {
       this.$store.commit('activeDocumentInfo', this.editor.documentInfo)
+    })
+
+    this.editor.on('zettelkasten-link', (linkContents) => {
+      ipcRenderer.invoke('application', {
+        command: 'force-open',
+        payload: linkContents
+      })
+        .catch(err => console.error(err))
+    })
+    this.editor.on('zettelkasten-tag', (tag) => {
+      this.$root.$emit('start-global-search', tag)
     })
 
     // Initiate the scrollbar annotations

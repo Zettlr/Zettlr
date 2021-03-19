@@ -77,6 +77,12 @@ export default {
     resetValue: function () {
       this.$refs.input.value = this.reset
       this.$emit('input', this.reset)
+    },
+    focus: function () {
+      this.$refs.input.focus()
+    },
+    select: function () {
+      this.$refs.input.select()
     }
   }
 }
