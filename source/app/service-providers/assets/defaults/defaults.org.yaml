@@ -12,7 +12,6 @@ include-before-body: []
 include-after-body: []
 include-in-header: []
 bibliography: []
-citation-abbreviations: ''
 filters:
 - type: citeproc
 file-scope: false

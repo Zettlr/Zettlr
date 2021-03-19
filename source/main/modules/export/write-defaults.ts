@@ -54,7 +54,11 @@ export default async function writeDefaults (
   // const bibliography = global.citeproc.getSelectedDatabase()
   const bibliography: string = global.config.get('export.cslLibrary')
   if (bibliography !== undefined && isFile(bibliography)) {
-    defaults.bibliography.push(bibliography)
+    if ('bibliography' in defaults) {
+      defaults.bibliography.push(bibliography)
+    } else {
+      defaults.bibliography = [bibliography]
+    }
   }
 
   const cslStyle: string = global.config.get('export.cslStyle')
