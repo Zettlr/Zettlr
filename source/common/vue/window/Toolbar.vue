@@ -167,4 +167,47 @@ body.darwin {
     }
   }
 }
+
+body.win32 {
+  @toolbar-height: 40px;
+  @font-size: 14px;
+
+  div#toolbar {
+    height: @toolbar-height;
+    font-size: @font-size;
+    background-color: rgb(245, 245, 245);
+    color: rgb(100, 100, 100);
+
+    button {
+      background-color: transparent;
+      border: none;
+      padding: 4px 8px;
+
+      &:hover {
+        background-color: rgb(230, 230, 230);
+      }
+    }
+  }
+
+  &.dark {
+    // Dark styling
+    div#toolbar {
+      background-color: rgb(51, 51, 51);
+      color: rgb(172, 172, 172);
+
+      button{
+        color: white;
+
+        &:hover {
+          background-color: rgb(60, 60, 60,);
+        }
+      }
+
+      &:window-inactive {
+        background-color: rgb(34, 34, 34);
+        color: rgb(100, 100, 100);
+      }
+    }
+  }
+}
 </style>

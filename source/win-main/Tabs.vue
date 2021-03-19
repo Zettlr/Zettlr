@@ -359,4 +359,16 @@ body.darwin {
     }
   }
 }
+
+body.win32 {
+  &.dark {
+    div#tab-container {
+      background-color: rgb(11, 11, 11);
+
+      div[role="tab"]:hover {
+        background-color: rgb(53, 53, 53);
+      }
+    }
+  }
+}
 </style>
