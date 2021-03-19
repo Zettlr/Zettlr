@@ -231,6 +231,16 @@ export default {
               modified: false,
               lastWordCount: countWords(descriptorWithContent.content, false) // TODO: re-enable countChars
             }
+
+            // Listen to change events on the doc, because if the user pastes
+            // more than ten words at once, we need to substract it to not
+            // mess with the word count.
+            newDoc.cmDoc.on('change', (doc, changeObj) => {
+              const newTextWords = countWords(changeObj.text.join(' '), false) // TODO: re-enable countChars
+              if (newTextWords > 10) {
+                newDoc.lastWordCount = countWords(newDoc.cmDoc.getValue(), false) // TODO: re-enable countChars
+              }
+            })
             this.openDocuments.push(newDoc)
             const idx = this.currentlyFetchingFiles.findIndex(e => e === descriptorWithContent.path)
             this.currentlyFetchingFiles.splice(idx, 1)
