@@ -587,7 +587,7 @@ body {
       width: 100%;
       overflow: hidden;
       position: relative;
-      margin: 3px 0px;
+      margin: 5px 0px 0px 0px;
 
       // These inputs should be more or less "invisible"
       input {
@@ -677,10 +677,10 @@ body.darwin {
 
   &.dark {
     div.list-item {
-      border-bottom: 1px solid rgb(40, 40, 40);
-      background-color: rgb(40, 40, 40);
+      border-bottom-color: #505050;
+      background-color: rgb(40, 40, 50);
 
-      div.filename div.date { background-color: rgb(40, 40, 40); }
+      div.filename div.date { background-color: rgb(40, 40, 50); }
 
       &.active {
         background-color: rgb(80, 80, 80);

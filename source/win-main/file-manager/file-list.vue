@@ -540,4 +540,10 @@ body {
       }
   }
 }
+
+body.darwin {
+  &.dark #file-list {
+    background-color: rgb(40, 40, 50);
+  }
+}
 </style>

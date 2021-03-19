@@ -96,6 +96,8 @@ body .popover {
 
   hr {
     margin: 4px 10px;
+    border: none;
+    border-bottom: 1px solid rgb(180, 180, 180);
   }
 
   table {
@@ -272,109 +274,6 @@ body .popover {
     &.hidden { height: 0px; }
   }
 
-  // Formatting
-  .formatting {
-    a {
-      text-decoration: none;
-      display: block;
-      padding: 5px 10px;
-
-      &#header-formatting {
-        display:flex;
-        &::before {
-          font-family: inherit;
-          font-weight: bold;
-          padding: 10px 0px;
-        }
-      }
-
-      span.markdownHeading1,
-      span.markdownHeading2,
-      span.markdownHeading3,
-      span.markdownHeading4,
-      span.markdownHeading5,
-      span.markdownHeading6 {
-        display: inline-block;
-        padding: 5px 0px;
-        flex: 1;
-        text-align: center;
-        font-weight: bold;
-      }
-
-      clr-icon {
-          height: 20px;
-          width: 20px;
-          margin-top: -4px;
-          margin-right: 18px;
-          margin-bottom: -4px;
-      }
-
-      span.fn-icon {
-        display: inline-block;
-        width: 20px;
-        // Margin left + right should be the same as the right margin of clr-icon
-        margin-right: 14px;
-        margin-left: 4px;
-
-        sup { font-size: 50%; }
-      }
-    }
-
-    #header-formatting.markdownHeading1::before { content: "H1"; }
-    #header-formatting.markdownHeading2::before { content: "H2"; }
-    #header-formatting.markdownHeading3::before { content: "H3"; }
-    #header-formatting.markdownHeading4::before { content: "H4"; }
-    #header-formatting.markdownHeading5::before { content: "H5"; }
-    #header-formatting.markdownHeading6::before { content: "H6"; }
-
-    hr {
-      margin: 14px 20px;
-      border: none;
-      border-bottom-width: 1px;
-      border-bottom-style: solid;
-    }
-  }
-
-  // SEARCH POPUP
-  .search {
-    width: 350px; // Make use of the bigger width
-
-    .row { display: flex; }
-    input {
-      /** flex layout of the search popup:
-      * 6 4
-      * 6 3 1
-      */
-      font-size: 100%;
-      flex: 0 6 auto; // 60 percent width -- set first param to 0 for alignment
-      text-align: left;
-      width: 60%;
-      background-color: transparent;
-      color: inherit;
-      padding: 5px;
-      border: none;
-      &:focus { outline: 0; }
-
-      // Use monospaced font for regular expressions.
-    //  &.regexp { font-family: @font-code; }
-    }
-
-    button {
-      width: auto;
-      padding: 5px 2px;
-      margin: 0px;
-      border-radius: 2px;
-      overflow: hidden;
-      outline: 0;
-
-      &#searchNext { flex: 4 4 auto; } // 40 percent width
-      &#replaceNext { flex: 2 2 auto; } // 20 percent width
-      &#replaceAll { flex: 2 2 auto; } // 20 percent width
-    }
-  }
-
-  .pomodoro p { font-size: 2em; }
-
   // Footnote edit popup
   .footnote-edit {
     textarea {
@@ -383,39 +282,6 @@ body .popover {
       width: 250px; // Maximum width
 
       &:focus { outline: 0; }
-    }
-  }
-
-  // Writing target popup
-  .set-target {
-    input[type="number"] {
-      display: inline-block;
-      font-size: 150%;
-      width: 25%;
-      padding: 0;
-
-      // Remove the up/down counter
-      &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-      }
-    }
-
-    select {
-      display: inline-block;
-      width: 45%;
-      font-size: 150%;
-      border: none;
-      border-radius: 0px;
-      background-color: transparent;
-      color: inherit;
-    }
-
-    button[type="submit"] {
-      display: inline-block;
-      width: 22%;
-      font-size: 150%;
-      margin: 0 auto;
     }
   }
 }
@@ -430,4 +296,8 @@ body.dark .popover-arrow {
 body.dark .popover {
   background-color: @color-dark;
   border: 1px solid rgb(70, 70, 70);
+
+  hr {
+    border-color: rgb(70, 70, 70);
+  }
 }

@@ -502,7 +502,17 @@ export default class FSAL extends EventEmitter {
       return false
     }
 
-    this._state.openFiles.push(file)
+    // Make sure to open the file adjacent of the activeFile, if possible.
+    let idx = -1
+    if (this._state.activeFile !== null) {
+      idx = this._state.openFiles.indexOf(this._state.activeFile)
+    }
+
+    if (idx > -1) {
+      this._state.openFiles.splice(idx + 1, 0, file)
+    } else {
+      this._state.openFiles.push(file)
+    }
     this.emit('fsal-state-changed', 'openFiles')
     return true
   }
