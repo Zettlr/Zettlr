@@ -55,7 +55,7 @@ export default class ConfigProvider extends EventEmitter {
    *
    * @var {any}
    */
-  private config: any
+  private config: ConfigOptions
   /**
    * A flag indicating whether the provider thinks this is a first start
    *
@@ -102,7 +102,7 @@ export default class ConfigProvider extends EventEmitter {
       }
     }
 
-    this.config = null
+    this.config = getConfigTemplate()
     this._rules = [] // This array holds all validation rules
     this._firstStart = false // Only true if a config file has been created
     this._newVersion = false // True if the last read config had a different version
@@ -228,7 +228,6 @@ export default class ConfigProvider extends EventEmitter {
     * @return {ZettlrConfig} This for chainability.
     */
   load (): this {
-    this.config = getConfigTemplate()
     let readConfig = null
     global.log.verbose(`[Config Provider] Loading configuration file from ${this.configFile} ...`)
 
@@ -384,8 +383,9 @@ export default class ConfigProvider extends EventEmitter {
       let nested = attr.split('.')
       let cfg = this.config
       for (let arg of nested) {
-        if (cfg.hasOwnProperty(arg)) {
-          cfg = cfg[arg]
+        if (arg in cfg) {
+          // arg will be a keyof ConfigOptions at this point
+          cfg = cfg[arg as keyof ConfigOptions] as unknown as any
         } else {
           global.log.warning(`[Config Provider] Someone has requested a non-existent key: ${attr}`)
           return null // The config option must match exactly
@@ -396,8 +396,8 @@ export default class ConfigProvider extends EventEmitter {
     }
 
     // Plain attribute requested
-    if (this.config.hasOwnProperty(attr)) {
-      return this.config[attr]
+    if (attr in this.config) {
+      return this.config[attr as keyof ConfigOptions]
     } else {
       global.log.warning(`[Config Provider] Someone has requested a non-existent key: ${attr}`)
       return null
@@ -420,14 +420,15 @@ export default class ConfigProvider extends EventEmitter {
     */
   set (option: string, value: any): boolean {
     // Don't add non-existent options
-    if (this.config.hasOwnProperty(option) && this._validate(option, value)) {
+    if (option in this.config && this._validate(option, value)) {
       // Do not set the option if it already has the requested value
-      if (this.config[option] === value) {
+      if (this.config[option as keyof ConfigOptions] === value) {
         return true
       }
 
       // Set the new value and inform the listeners
-      this.config[option] = value
+      // @ts-expect-error Since we're dynamically assigning a value here.
+      this.config[option as keyof ConfigOptions] = value
       this.emit('update', option) // Pass the option for info
 
       // Broadcast to all open windows
@@ -445,22 +446,23 @@ export default class ConfigProvider extends EventEmitter {
       let prop = nested.pop() as string // We can be sure it's not undefined
       let cfg = this.config
       for (let arg of nested) {
-        if (cfg.hasOwnProperty(arg)) {
-          cfg = cfg[arg]
+        if (arg in cfg) {
+          cfg = cfg[arg as keyof ConfigOptions] as unknown as any
         } else {
           return false // The config option must match exactly
         }
       }
 
       // Set the nested property
-      if (cfg.hasOwnProperty(prop) && this._validate(option, value)) {
+      if (prop in cfg && this._validate(option, value)) {
         // Do not set the option if it already has the requested value
-        if (cfg[prop] === value) {
+        if (cfg[prop as keyof ConfigOptions] === value) {
           return true
         }
 
         // Set the new value and inform the listeners
-        cfg[prop] = value
+        // @ts-expect-error Since we're dynamically assigning a value here
+        cfg[prop as keyof ConfigOptions] = value
         this.emit('update', option) // Pass the option for info
         // Broadcast to all open windows
         broadcastIpcMessage('config-provider', {
@@ -503,8 +505,16 @@ export default class ConfigProvider extends EventEmitter {
         f.push(p)
       }
     }
-    f.sort()
-    d.sort()
+
+    // We only want to sort the paths based on rudimentary, natural order.
+    let coll = new Intl.Collator([ this.get('appLang'), 'en' ], { numeric: true })
+    f.sort((a, b) => {
+      return coll.compare(path.basename(a), path.basename(b))
+    })
+    d.sort((a, b) => {
+      return coll.compare(path.basename(a), path.basename(b))
+    })
+
     this.config.openPaths = f.concat(d)
 
     return this

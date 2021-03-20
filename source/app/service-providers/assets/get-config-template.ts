@@ -16,7 +16,7 @@ const ATTACHMENT_EXTENSIONS = [
   '.png', '.jpg', '.jpeg', '.gif', '.tiff'
 ]
 
-export default function getConfigTemplate (): any {
+export default function getConfigTemplate (): ConfigOptions {
   // Before returning the settings object, we have to make sure we retrieve a
   // locale that is both installed as a translation AND more or less the user's
   // wish.
