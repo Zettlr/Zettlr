@@ -50,7 +50,7 @@ declare module NodeJS {
     notify: NotificationProvider
     ipc: any
     citeproc: CiteprocProvider
-    config: any
+    config: ConfigProvider
     application: Application
     typo: any
     filesToOpen: string[]

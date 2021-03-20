@@ -117,7 +117,7 @@ export default class Zettlr {
 
     // Now that the config provider is definitely set up, let's see if we
     // should copy the interactive tutorial to the documents directory.
-    if (global.config.isFirstStart() === true) {
+    if (global.config.isFirstStart()) {
       global.log.info(`[First Start] Copying over the interactive tutorial to ${app.getPath('documents')}!`)
       this._prepareFirstStart()
     }
@@ -128,7 +128,7 @@ export default class Zettlr {
 
     // Immediately determine if the cache needs to be cleared
     let shouldClearCache = process.argv.includes('--clear-cache')
-    if (global.config.newVersionDetected() === true || shouldClearCache) {
+    if (global.config.newVersionDetected() || shouldClearCache) {
       global.log.info('Clearing the FSAL cache ...')
       this._fsal.clearCache()
     }
@@ -577,7 +577,7 @@ export default class Zettlr {
         newDir = newFile.parent
       } else if ((newDir = this._fsal.findDir(f)) != null) {
         // Do nothing
-      } else if (global.config.addPath(f) === true) {
+      } else if (global.config.addPath(f)) {
         let loaded = await this._fsal.loadPath(f)
         if (!loaded) continue
         let file = this._fsal.findFile(f)

@@ -1,3 +1,41 @@
+interface ConfigProvider {
+  // Clone the properties to prevent intrusion
+  get: (key: string) => any
+  // The setter is a simply pass-through
+  set: (key: string, val: any) => boolean
+  // Enable global event listening to updates of the config
+  on: (evt: string, callback: (...args: any[]) => void) => void
+  // Also do the same for the removal of listeners
+  off: (evt: string, callback: (...args: any[]) => void) => void
+  /**
+   * Persists the current configuration to disk
+   * @return {void} Does not return
+   */
+  save: () => void
+  /**
+   * Adds a path to the startup path array
+   * @param {String} p The path to add
+   * @return {Boolean} Whether or not the call succeeded
+   */
+  addPath: (p: string) => boolean
+  /**
+   * Removes a path from the startup path array
+   * @param  {String} p The path to remove
+   * @return {Boolean}   Whether or not the call succeeded
+   */
+  removePath: (p: string) => boolean
+  addFile: (f: string) => boolean
+  removeFile: (f: string) => boolean
+  /**
+   * If true, Zettlr assumes this is the first start of the app
+   */
+  isFirstStart: () => boolean
+  /**
+   * If true, Zettlr has detected a change in version in the config
+   */
+  newVersionDetected: () => boolean
+}
+
 interface ConfigOptions {
   version: string
   openPaths: string[]
