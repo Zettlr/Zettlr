@@ -2,6 +2,8 @@
   <div
     id="file-list"
     tabindex="1"
+    role="region"
+    aria-label="File List"
     v-bind:data-hash="selectedDirectoryHash"
     v-on:keydown="navigate"
     v-on:focus="onFocusHandler"
@@ -453,6 +455,7 @@ export default {
       }
     },
     onFocusHandler: function (event) {
+      this.$emit('focus')
       this.activeDescriptor = this.selectedFile
     },
     focusFilter: function () {

@@ -45,12 +45,14 @@
         v-bind:file-tree="$store.state.fileTree"
         v-bind:class="{ hidden: !fileTreeVisible }"
         v-on:selection="selectionListener"
+        v-on:focus="maybeFocusFileTree()"
       ></FileTree>
       <!-- Now render the file list -->
       <FileList
         ref="fileList"
         v-bind:class="{hidden: !fileListVisible}"
         v-on:lock-file-tree="lockDirectoryTree()"
+        v-on:focus="maybeFocusFileList()"
       ></FileList>
     </div>
   </div>
@@ -297,7 +299,7 @@ export default {
      * Locks the directory tree (mostly in preparation for a drag operation)
      */
     lockDirectoryTree: function () {
-      if (this.isExpanded) {
+      if (!this.isThin) {
         return // Don't lock the file tree if we aren't in a thin mode
       }
 
@@ -315,7 +317,7 @@ export default {
      * Unlocks the directory tree (mostly after a completed drag and drop operation)
      */
     unlockDirectoryTree: function () {
-      if (this.isExpanded) {
+      if (!this.isThin) {
         return // Don't unlock the file tree if we aren't in a thin mode
       }
 
@@ -324,6 +326,18 @@ export default {
         this.toggleFileList()
         this.previous = ''
       }
+    },
+    maybeFocusFileList: function () {
+      if (!this.isThin || this.lockedTree) {
+        return // Cannot focus the file list
+      }
+
+      this.fileTreeVisible = false
+      this.fileListVisible = true
+    },
+    maybeFocusFileTree: function () {
+      this.fileTreeVisible = true
+      this.fileListVisible = false
     },
     /**
      * Begins a resize of the inner file manager components.

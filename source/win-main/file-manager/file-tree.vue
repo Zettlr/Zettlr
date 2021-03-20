@@ -1,5 +1,11 @@
 <template>
-  <div id="file-tree" v-on:click="clickHandler">
+  <div
+    id="file-tree"
+    role="region"
+    aria-label="File Tree"
+    v-on:click="clickHandler"
+    v-on:focus="$emit('focus')"
+  >
     <template v-if="$store.state.fileTree.length > 0">
       <div v-show="getFiles.length > 0" id="directories-files-header">
         <clr-icon
