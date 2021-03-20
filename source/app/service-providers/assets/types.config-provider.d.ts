@@ -1,17 +1,12 @@
 interface ConfigProvider {
   // Clone the properties to prevent intrusion
-  get: (key: string) => any
+  get: (key?: string) => any
   // The setter is a simply pass-through
   set: (key: string, val: any) => boolean
   // Enable global event listening to updates of the config
   on: (evt: string, callback: (...args: any[]) => void) => void
   // Also do the same for the removal of listeners
   off: (evt: string, callback: (...args: any[]) => void) => void
-  /**
-   * Persists the current configuration to disk
-   * @return {void} Does not return
-   */
-  save: () => void
   /**
    * Adds a path to the startup path array
    * @param {String} p The path to add
@@ -75,6 +70,7 @@ interface ConfigOptions {
     cslLibrary: string
     cslStyle: string
     useBundledPandoc: boolean
+    singleFileLastExporter: string
   }
   pdf: {
     author: string

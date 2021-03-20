@@ -125,7 +125,7 @@ export default class ConfigProvider extends EventEmitter {
     // Put a global setter and getter for config keys into the globals.
     global.config = {
       // Clone the properties to prevent intrusion
-      get: (key: string) => {
+      get: (key?: string) => {
         return JSON.parse(JSON.stringify(this.get(key)))
       },
       // The setter is a simply pass-through
@@ -139,13 +139,6 @@ export default class ConfigProvider extends EventEmitter {
       // Also do the same for the removal of listeners
       off: (evt: string, callback: (...args: any[]) => void) => {
         this.off(evt, callback)
-      },
-      /**
-       * Persists the current configuration to disk
-       * @return {void} Does not return
-       */
-      save: () => {
-        this.save()
       },
       /**
        * Adds a path to the startup path array

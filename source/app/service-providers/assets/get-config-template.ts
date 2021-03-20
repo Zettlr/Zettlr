@@ -75,7 +75,8 @@ export default function getConfigTemplate (): ConfigOptions {
       stripLinks: 'full', // Strip internal links: "full" - remove completely, "unlink" - only remove brackets, "no" - don't alter
       cslLibrary: '', // Path to a CSL JSON library file
       cslStyle: '', // Path to a CSL Style file
-      useBundledPandoc: true // Whether to use the bundled Pandoc
+      useBundledPandoc: true, // Whether to use the bundled Pandoc
+      singleFileLastExporter: 'html' // Remembers the last chosen exporter for easy re-exporting
     },
     // PDF options (for all documents; projects will copy this object over)
     pdf: {

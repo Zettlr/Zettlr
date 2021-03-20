@@ -428,10 +428,15 @@ export default {
           return // Can't export a non-open file
         }
         const data = {
-          exportDirectory: this.$store.state.config['export.dir']
+          exportDirectory: this.$store.state.config['export.dir'],
+          format: this.$store.state.config['export.singleFileLastExporter']
         }
         this.$showPopover(PopoverExport, document.getElementById('toolbar-export'), data, (data) => {
           if (data.shouldExport === true) {
+            // Remember the last choice
+            global.config.set('export.singleFileLastExporter', data.format)
+
+            // Run the exporter
             ipcRenderer.invoke('application', {
               command: 'export',
               payload: {

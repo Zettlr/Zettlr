@@ -55,6 +55,9 @@ div#statusbar {
   padding: 0px 20px;
   line-height: 40px;
   background-color: rgb(235, 235, 235); // TODO: Enable the status bar to be "invisible" and visible
+  display: flex;
+    justify-content: space-between;
+    align-items: center;
 
   button {
     margin-right: 5px; // Increase spacing a little bit here
