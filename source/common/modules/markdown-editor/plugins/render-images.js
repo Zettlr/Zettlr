@@ -77,6 +77,15 @@
 
         const img = new Image()
 
+        const isDataUrl = /data:[a-zA-Z0-9/;=]+(?:;base64){0,1},.+/.test(url)
+        let actualURLToLoad = ''
+
+        if (isDataUrl) {
+          actualURLToLoad = url
+        } else {
+          actualURLToLoad = makeAbsoluteURL(cm.getOption('zettlr').markdownImageBasePath, url)
+        }
+
         const caption = document.createElement('figcaption')
         caption.textContent = title
         caption.contentEditable = true
@@ -106,7 +115,9 @@
         figure.appendChild(img)
         figure.appendChild(caption)
         figure.appendChild(size)
-        figure.appendChild(openExternally)
+        if (!isDataUrl) {
+          figure.appendChild(openExternally)
+        }
 
         const container = document.createElement('div')
         container.classList.add('editor-image-container')
@@ -153,11 +164,7 @@
         if (match[3]) url = url.replace(`"${match[3]}"`, '').trim()
 
         // Finally set the src to begin the loading process of the image
-        if (/data:[a-zA-Z0-9/;=]+(?:;base64){0,1},.+/.test(url)) {
-          img.src = url
-        } else {
-          img.src = makeAbsoluteURL(cm.getOption('zettlr').markdownImageBasePath, url)
-        }
+        img.src = actualURLToLoad
       }
     }
   }
