@@ -11,7 +11,7 @@
     >
       <clr-icon v-if="control.icon" v-bind:shape="control.icon"></clr-icon>
     </button>
-    <span class="toolbar-label" v-if="showLabel" v-html="labelWithFallback"></span>
+    <span v-if="showLabel" class="toolbar-label" v-html="labelWithFallback"></span>
   </div>
 </template>
 

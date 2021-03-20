@@ -1,6 +1,7 @@
 <template>
   <div
     id="toolbar"
+    role="toolbar"
     v-bind:style="{ top: marginTop }"
     v-on:dblclick="$emit('dblclick')"
   >

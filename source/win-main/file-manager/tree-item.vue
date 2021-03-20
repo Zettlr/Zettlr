@@ -40,7 +40,7 @@
       <!-- First: Primary icon (either directory icon, file icon, or project icon) -->
       <span
         class="item-icon"
-        role="presentation"
+        aria-hidden="true"
       >
         <!-- Is this a project? -->
         <clr-icon
@@ -52,6 +52,7 @@
         <clr-icon
           v-else-if="isDirectory && hasChildren"
           v-show="obj.icon"
+          role="presentation"
           v-bind:shape="obj.icon"
         />
         <!-- Display a file icon -->
@@ -63,13 +64,14 @@
       <!-- Second: Secondary icon (the collapse/expand icon) -->
       <span
         class="toggle-icon"
-        role="presentation"
       >
         <!-- Display a toggle to collapse/expand the file list -->
         <!-- Only display in this position if the item has a primary icon -->
         <clr-icon
           v-if="hasChildren"
+          role="button"
           v-bind:shape="indicatorShape"
+          v-bind:aria-label="indicatorARIALabel"
           v-on:click.stop="toggleCollapse"
         />
         <!-- Is this a project? -->
@@ -91,18 +93,20 @@
           v-else-if="isDirectory && !hasChildren"
           v-show="obj.icon"
           v-bind:shape="obj.icon"
-          role="presentation"
+          aria-hidden="true"
         />
         <!-- Display a file icon -->
         <clr-icon
           v-else-if="obj.type === 'file' && !hasChildren"
           shape="file"
-          role="presentation"
+          aria-hidden="true"
         />
       </span>
       <span
         ref="display-text"
         class="display-text"
+        role="button"
+        v-bind:aria-label="`Select ${obj.name}`"
         v-bind:data-hash="obj.hash"
         v-bind:draggable="!isRoot"
         v-on:dragstart="beginDragging"
@@ -256,6 +260,9 @@ export default {
      */
     indicatorShape: function () {
       return this.collapsed ? 'caret right' : 'caret down'
+    },
+    indicatorARIALabel: function () {
+      return this.collapsed ? 'Uncollapse directory' : 'Collapse directory'
     }
   },
   watch: {

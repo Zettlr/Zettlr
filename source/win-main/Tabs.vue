@@ -16,8 +16,16 @@
       v-on:dragend="handleDragEnd"
       v-on:contextmenu="handleContextMenu($event, file)"
     >
-      <span class="filename" v-on:click="handleSelectFile(file)">{{ getTabText(file) }}</span>
-      <span class="close" v-on:click.stop="handleCloseFile(file)">&times;</span>
+      <span
+        class="filename"
+        role="button"
+        v-on:click="handleSelectFile(file)"
+      >{{ getTabText(file) }}</span>
+      <span
+        class="close"
+        aria-hidden="true"
+        v-on:click.stop="handleCloseFile(file)"
+      >&times;</span>
     </div>
   </div>
 </template>
