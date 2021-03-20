@@ -636,6 +636,13 @@ body.darwin {
     border-bottom: 1px solid rgb(213, 213, 213);
     background-color: rgb(235, 235, 235);
 
+    &.active {
+      background-color: rgb(200, 200, 200);
+      div.filename div.date {
+        background-color: rgb(200, 200, 200);
+      }
+    }
+
     div.filename div.date { background-color: rgb(235, 235, 235); }
 
     div.meta-info {
@@ -679,6 +686,13 @@ body.darwin {
     div.list-item {
       border-bottom-color: #505050;
       background-color: rgb(40, 40, 50);
+
+      &.active {
+      background-color: rgb(80, 80, 80);
+      div.filename div.date {
+        background-color: rgb(80, 80, 80);
+      }
+    }
 
       div.filename div.date { background-color: rgb(40, 40, 50); }
 

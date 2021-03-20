@@ -325,6 +325,14 @@ export default function getMenu (): MenuItemConstructorOptions[] {
           }
         },
         {
+          id: 'menu.filter_files',
+          label: trans('menu.filter_files'),
+          accelerator: 'Cmd+Shift+T',
+          click: function (menuitem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'filter-files')
+          }
+        },
+        {
           type: 'separator'
         },
         {

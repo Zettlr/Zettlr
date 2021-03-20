@@ -394,6 +394,11 @@ export default {
         } else if (this.mainSplitViewVisibleComponent === 'globalSearch') {
           this.mainSplitViewVisibleComponent = 'fileManager'
         }
+      } else if (shortcut === 'filter-files') {
+        // We need to immediately make the file manager visible, which will
+        // -- in the next tick -- focus its filter input.
+        this.fileManagerVisible = true
+        this.mainSplitViewVisibleComponent = 'fileManager'
       }
     })
 

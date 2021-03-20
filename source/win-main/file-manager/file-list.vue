@@ -292,6 +292,18 @@ export default {
       this.filterQuery = ''
     }
   },
+  mounted: function () {
+    ipcRenderer.on('shortcut', (event, message) => {
+      if (message === 'filter-files') {
+        // Focus the filter on the next tick. Why? Because it might be that
+        // the file manager is hidden, or the global search is visible. In both
+        // cases we need to wait for the app to display the file manager.
+        this.$nextTick(() => {
+          this.$refs['quickFilter'].focus()
+        })
+      }
+    })
+  },
   /**
    * Updates associated stuff whenever an update operation on the file manager
    * has finished (such as tippy).
