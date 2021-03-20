@@ -65,8 +65,6 @@ export default class AssetsProvider extends EventEmitter {
       const absolutePath = path.join(this._defaultsPath, file)
       try {
         await fs.lstat(absolutePath)
-        global.log.warning('DEBUG! COPYING OVER DEFAULTS FILE FROM DIRECTORY! Turn that behaviour off by commenting out the corresponding lines in the assets provider.')
-        await fs.copyFile(path.join(__dirname, './assets/defaults', file), absolutePath)
       } catch (err) {
         global.log.warning(`[Assets Provider] Required defaults file ${file} not found. Copying ...`)
         await fs.copyFile(path.join(__dirname, './assets/defaults', file), absolutePath)
