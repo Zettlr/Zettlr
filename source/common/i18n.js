@@ -97,12 +97,12 @@ function trans (string, ...args) {
   }
 
   for (let obj of str) {
-    if (transString.hasOwnProperty(obj)) {
+    if (obj in transString) {
       transString = transString[obj]
     } else {
       // Something went wrong and the requested translation string was
       // not found -> fall back and just return the original string
-      return (global.config.get('debug') || skipFallback) ? string : trans(string, ...[true].concat(args))
+      return (Boolean(global.config.get('debug')) || skipFallback) ? string : trans(string, ...[true].concat(args))
     }
   }
 
@@ -146,8 +146,8 @@ function getDictionaryFile (query) {
   // search for a best and a close match.
   let { exact, close } = findLangCandidates(lang, enumDictFiles())
 
-  if (exact) return exact
-  if (close) return close
+  if (exact !== undefined) return exact
+  if (close !== undefined) return close
   return ret
 }
 
@@ -170,8 +170,8 @@ function getLanguageFile (query) {
   // search for a best and a close match.
   let { exact, close } = findLangCandidates(lang, enumLangFiles())
 
-  if (exact) return exact
-  if (close) return close
+  if (exact !== undefined) return exact
+  if (close !== undefined) return close
   return ret
 }
 
@@ -260,7 +260,9 @@ function getTranslationMetadata (paths = [ path.join(app.getPath('userData'), '/
   // Now loop through them and extract the metadata section
   for (let f of files) {
     let lang = path.basename(f, path.extname(f)) // bcp-47 tag
-    if (metadata.find(elem => elem.bcp47 === lang)) continue // Already included
+    if (metadata.find(elem => elem.bcp47 === lang) !== undefined) {
+      continue // Already included
+    }
     let data = fs.readFileSync(f, 'utf-8')
     let stat = fs.lstatSync(f)
     data = JSON.parse(data)
@@ -273,7 +275,7 @@ function getTranslationMetadata (paths = [ path.join(app.getPath('userData'), '/
     } else {
       data.metadata['bcp47'] = lang // Add language tag
       // Make sure we have a last updated property.
-      if (!data.metadata.hasOwnProperty('updated_at')) {
+      if (!('updated_at' in data.metadata)) {
         data.metadata.updated_at = stat.mtime.toISOString()
       }
       metadata.push(data.metadata)
@@ -299,7 +301,7 @@ function enumLangFiles (paths = [ path.join(app.getPath('userData'), '/lang'), p
       if (path.extname(file) !== '.json') continue
 
       let schema = bcp47.parse(file.substr(0, file.lastIndexOf('.')))
-      if (schema.language) {
+      if (schema.language !== undefined) {
         candidates.push({
           'tag': bcp47.stringify(schema),
           'path': path.join(p, file)
@@ -322,7 +324,7 @@ function enumDictFiles (paths = [ path.join(app.getPath('userData'), '/dict'), p
     for (let dir of list) {
       if (!isDir(path.join(p, dir))) continue
       let schema = bcp47.parse(dir)
-      if (schema.language) {
+      if (schema.language !== undefined) {
         // Additional check to make sure the dictionaries are complete.
         let aff = path.join(p, dir, dir + '.aff')
         let dic = path.join(p, dir, dir + '.dic')

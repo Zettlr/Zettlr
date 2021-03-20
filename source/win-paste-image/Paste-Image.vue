@@ -154,7 +154,7 @@ export default {
   },
   methods: {
     recalculateDimensions: function (type) {
-      if (!this.retainAspect) {
+      if (this.retainAspect === false) {
         return
       }
 

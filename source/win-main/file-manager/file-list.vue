@@ -428,7 +428,7 @@ export default {
       for (let elem of elements) {
         // Either there's already an instance on the element,
         // then only update its contents ...
-        if (elem.hasOwnProperty('_tippy')) {
+        if ('_tippy' in elem) {
           elem._tippy.setContent(elem.dataset.tippyContent)
         } else {
           // ... or there is none, so let's add a tippy instance.
