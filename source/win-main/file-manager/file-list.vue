@@ -211,7 +211,7 @@ export default {
         return originalContents
       }
 
-      const queries = q.split(' ')
+      const queries = q.toLowerCase().split(' ').filter(query => query.trim() !== '')
 
       // Filter based on the query (remember: there's an ID and a "props" property)
       return originalContents.filter(element => {
@@ -255,8 +255,8 @@ export default {
           }
 
           // Third, should we use headings 1 and, if so, does it match?
-          const useH1 = Boolean(this.$store.state.useFirstHeadings)
-          if (useH1 && item.type === 'file' && item.firstHeading !== null) {
+          const useH1 = Boolean(this.$store.state.config['display.useFirstHeadings'])
+          if (useH1 && item.type === 'file' && item.firstHeading != null) {
             if (item.firstHeading.toLowerCase().indexOf(q) >= 0) {
               return true
             }
