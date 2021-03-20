@@ -1,4 +1,4 @@
-/* global define CodeMirror Image */
+/* global define CodeMirror */
 // This plugin renders markdown block images
 
 (function (mod) {
@@ -47,9 +47,9 @@
 
       // Run through all links on this line
       while ((match = imageRE.exec(line)) != null) {
-        let altText = match[1] || ''
-        let title = match[3] || altText
-        let url = match[2] || ''
+        let altText = match[1] || '' // Everything inside the square brackets
+        let title = match[3] || altText // An optional title in quotes after the image
+        let url = match[2] || '' // The URL
 
         // Now get the precise beginning of the match and its end
         let curFrom = { 'line': i, 'ch': match.index }
@@ -75,34 +75,77 @@
           continue
         }
 
-        let img = new Image()
+        const img = new Image()
+
+        const caption = document.createElement('figcaption')
+        caption.textContent = title
+        caption.contentEditable = true
+        caption.onkeydown = function (event) {
+          if (event.key === 'Enter') {
+            event.preventDefault()
+            event.stopPropagation()
+            // Make sure there are no quotes since these will break the image
+            const newCaption = caption.textContent.replace(/"/g, '')
+            const newImageTag = `![${altText}](${url} "${newCaption}")`
+            // Now replace the underlying image
+            cm.replaceRange(newImageTag, curFrom, curTo)
+          }
+        }
+
+        const size = document.createElement('span')
+        size.classList.add('image-size-info')
+
+        const openExternally = document.createElement('span')
+        openExternally.classList.add('open-externally-button')
+        openExternally.textContent = 'Open image externally'
+        openExternally.onclick = function (event) {
+          window.location.assign(makeAbsoluteURL(cm.getOption('zettlr').markdownImageBasePath, url))
+        }
+
+        const figure = document.createElement('figure')
+        figure.appendChild(img)
+        figure.appendChild(caption)
+        figure.appendChild(size)
+        figure.appendChild(openExternally)
+
+        const container = document.createElement('div')
+        container.classList.add('editor-image-container')
+        container.appendChild(figure)
+
         // Now add a line widget to this line.
         let textMarker = cm.doc.markText(
           curFrom,
           curTo,
           {
             'clearOnEnter': true,
-            'replacedWith': img,
-            'handleMouseEvents': true
+            'replacedWith': container,
+            'handleMouseEvents': false
           }
         )
 
         // Retrieve the size constraints
-        const maxPreviewWidth = cm.getOption('zettlr').imagePreviewWidth
-        const maxPreviewHeight = cm.getOption('zettlr').imagePreviewHeight
-        let width = (maxPreviewWidth) ? maxPreviewWidth + '%' : '100%'
-        let height = (maxPreviewHeight && maxPreviewHeight < 100) ? maxPreviewHeight + 'vh' : ''
+        const maxPreviewWidth = Number(cm.getOption('zettlr').imagePreviewWidth)
+        const maxPreviewHeight = Number(cm.getOption('zettlr').imagePreviewHeight)
+        let width = (!Number.isNaN(maxPreviewWidth)) ? maxPreviewWidth + '%' : '100%'
+        let height = (!Number.isNaN(maxPreviewHeight) && maxPreviewHeight < 100) ? maxPreviewHeight + 'vh' : ''
+
+        // Apply the constraints to the figure and image
+        figure.style.maxWidth = width
+        figure.style.maxHeight = height
         img.style.maxWidth = width
         img.style.maxHeight = height
-        img.style.cursor = 'default' // Nicer cursor
         img.alt = altText
         // Display a replacement image in case the correct one is not found
-        img.onerror = () => { img.src = img404 }
+        img.onerror = () => {
+          img.src = img404
+          caption.textContent = `Image not found: ${url}` // TODO: Translate
+        }
         img.onclick = () => { textMarker.clear() }
 
         // Update the image title on load to retrieve the real image size.
         img.onload = () => {
           img.title = `${title} (${img.naturalWidth}x${img.naturalHeight}px)`
+          size.innerHTML = `${img.naturalWidth}&times;${img.naturalHeight}px`
           textMarker.changed()
         }
 

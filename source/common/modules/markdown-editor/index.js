@@ -17,6 +17,10 @@
  * END HEADER
  */
 
+// Import our additional styles we need to put here since we don't have a Vue
+// component for the editor itself.
+require('./editor.less')
+
 /**
  * UTILITY FUNCTIONS
  */
