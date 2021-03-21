@@ -4,6 +4,8 @@
     tabindex="1"
     role="region"
     aria-label="File List"
+    v-bind:class="{ 'hidden': !isVisible }"
+    v-bind:aria-hidden="!isVisible"
     v-bind:data-hash="selectedDirectoryHash"
     v-on:keydown="navigate"
     v-on:focus="onFocusHandler"
@@ -106,6 +108,12 @@ export default {
     FileItem,
     FileItemMock,
     RecycleScroller
+  },
+  props: {
+    isVisible: {
+      type: Boolean,
+      required: true
+    }
   },
   data: function () {
     return {
@@ -455,7 +463,6 @@ export default {
       }
     },
     onFocusHandler: function (event) {
-      this.$emit('focus')
       this.activeDescriptor = this.selectedFile
     },
     focusFilter: function () {
@@ -522,13 +529,11 @@ body {
     top: -100%;
     left: 0%;
     height: 100%;
-    overflow-y: auto;
     overflow-x: hidden;
+    overflow-y: auto;
     outline: none;
 
-    &.hidden {
-      left: 100%;
-    }
+    &.hidden { left: 100%; }
 
       #file-manager-filter {
         padding: 5px;

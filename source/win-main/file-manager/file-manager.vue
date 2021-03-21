@@ -43,16 +43,14 @@
       <FileTree
         ref="directories"
         v-bind:file-tree="$store.state.fileTree"
-        v-bind:class="{ hidden: !fileTreeVisible }"
+        v-bind:is-visible="fileTreeVisible"
         v-on:selection="selectionListener"
-        v-on:focus="maybeFocusFileTree()"
       ></FileTree>
       <!-- Now render the file list -->
       <FileList
         ref="fileList"
-        v-bind:class="{hidden: !fileListVisible}"
+        v-bind:is-visible="fileListVisible"
         v-on:lock-file-tree="lockDirectoryTree()"
-        v-on:focus="maybeFocusFileList()"
       ></FileList>
     </div>
   </div>
@@ -210,15 +208,7 @@ export default {
     handleMouseOver: function (evt) {
       // TODO: Handle the case where the mouse is outside this element.
       // The fileList is not visible after all
-      if (!this.isFileListVisible || this.isExpanded) {
-        this.$refs.arrowButton.classList.add('hidden')
-        return
-      }
-      // This only displays the arrow button if
-      // it's in non-combined mode and the
-      // fileList is displayed and the user moves
-      // up to an area about 100px at the top
-      if (this.isCombined && this.$store.state.searchResults.length < 1) {
+      if (!this.isFileListVisible || !this.isThin) {
         this.$refs.arrowButton.classList.add('hidden')
         return
       }
@@ -327,18 +317,6 @@ export default {
         this.previous = ''
       }
     },
-    maybeFocusFileList: function () {
-      if (!this.isThin || this.lockedTree) {
-        return // Cannot focus the file list
-      }
-
-      this.fileTreeVisible = false
-      this.fileListVisible = true
-    },
-    maybeFocusFileTree: function () {
-      this.fileTreeVisible = true
-      this.fileListVisible = false
-    },
     /**
      * Begins a resize of the inner file manager components.
      * @param {MouseEvent} evt The associated event.
@@ -431,9 +409,7 @@ body #file-manager {
         height: 30px;
         transition: 0.4s left ease;
 
-        &.hidden {
-          left:-60px;
-        }
+        &.hidden { left:-60px; }
     }
 }
 

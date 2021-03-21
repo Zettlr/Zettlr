@@ -3,8 +3,9 @@
     id="file-tree"
     role="region"
     aria-label="File Tree"
+    v-bind:class="{ 'hidden': !isVisible }"
+    v-bind:aria-hidden="!isVisible"
     v-on:click="clickHandler"
-    v-on:focus="$emit('focus')"
   >
     <template v-if="$store.state.fileTree.length > 0">
       <div v-show="getFiles.length > 0" id="directories-files-header">
@@ -60,6 +61,10 @@ export default {
     fileTree: {
       type: Array,
       default: function () { return [] }
+    },
+    isVisible: {
+      type: Boolean,
+      required: true
     }
   },
   computed: {
@@ -107,13 +112,12 @@ body {
     width: 100%;
     height: 100%;
     left: 0%;
+    overflow-x: hidden;
     overflow-y: auto;
     outline: none;
     transition: left 0.3s ease;
 
-    &.hidden {
-      left:-100%;
-    }
+    &.hidden { left:-100%; }
 
     #directories-dirs-header, #directories-files-header {
       clr-icon {
@@ -133,10 +137,6 @@ body {
         position: absolute;
         top: 0px;
         right: 0px;
-
-        .sortDirection, .sortType {
-          margin: 5px 3px;
-        }
       }
     }
 
@@ -172,9 +172,7 @@ body.darwin {
       font-size: inherit;
       margin: 20px 0px 5px 10px;
 
-      clr-icon {
-        display: none;
-      }
+      clr-icon { display: none; }
     }
   }
 }
