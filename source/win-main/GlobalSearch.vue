@@ -7,14 +7,27 @@
       v-bind:placeholder="'Find …'"
       v-on:confirm="startSearch()"
     ></TextControl>
+    <!-- TODO: Allow to restrict to directories using an autocomplete input -->
     <ButtonControl
       v-if="searchResults.length > 0"
       v-bind:label="'Clear search results'"
       v-on:click="emptySearchResults()"
     ></ButtonControl>
-    <p v-if="filesToSearch.length > 0">
-      Searching {{ filesToSearch.length }} files ...
-    </p>
+    <div v-if="filesToSearch.length > 0">
+      <!-- TODO: Custom Progress component -->
+      <progress
+        v-bind:max="sumFilesToSearch"
+        v-bind:value="sumFilesToSearch - filesToSearch.length"
+      >
+        Searching {{ filesToSearch.length }} files ...
+      </progress>
+      <!-- TODO: Allow for a small, micro-button as seen on macOS -->
+      <ButtonControl
+        v-bind:inline="true"
+        v-bind:icon="'times'"
+        v-on:click="filesToSearch = []"
+      ></ButtonControl>
+    </div>
     <template v-if="searchResults.length > 0">
       <div
         v-for="result, idx in searchResults"
@@ -58,6 +71,7 @@ export default {
       searchIndex: -1,
       filesToSearch: [],
       searchResults: [],
+      sumFilesToSearch: 0,
       // Is set to a line number if this component is waiting for a file to
       // become active.
       jtlIntent: undefined
@@ -149,6 +163,7 @@ export default {
 
       // Now we're good to go!
       this.emptySearchResults()
+      this.sumFilesToSearch = fileList.length
       this.filesToSearch = fileList
       this.searchInProgress = true
       this.singleSearchRun().catch(err => console.error(err))
