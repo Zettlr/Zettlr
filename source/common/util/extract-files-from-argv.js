@@ -24,7 +24,9 @@ const filetypes = require('../data.json').filetypes
  * @returns {Array} The filtered out files
  */
 module.exports = function (argv = process.argv) {
-  if (!argv || !Array.isArray(argv)) return []
+  if (!Array.isArray(argv)) {
+    return []
+  }
 
   const filesToOpen = argv.filter(function (element) {
     // Filter out CLI arguments, non-files, and non-supported files

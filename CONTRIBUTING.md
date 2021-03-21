@@ -4,12 +4,16 @@ Zettlr lives through contributions from the community. You do not have to know a
 
 **Table of Contents**
 
-- [Where to Get Help](#where-to-get-help)
-- [How to Help](#how-to-help)
+- [Contributing to Zettlr](#contributing-to-zettlr)
+  - [Where to Get Help](#where-to-get-help)
+    - [All Communication Channels](#all-communication-channels)
+  - [How to Help](#how-to-help)
     - [Translation](#translation)
     - [Documentation](#documentation)
     - [Development](#development)
-- [Final Remarks](#final-remarks)
+      - [Our Stack (with linked documentation)](#our-stack-with-linked-documentation)
+      - [Issue Labels](#issue-labels)
+  - [Final Remarks](#final-remarks)
 
 ## Where to Get Help
 
@@ -45,7 +49,7 @@ If you have some experiences with developing, we would gladly welcome your help 
 #### Our Stack (with linked documentation)
 
 - [Electron.js](https://www.electronjs.org/docs) based on [Node.js](https://nodejs.org/api/) for backend
-- [Webpack](https://webpack.js.org/concepts/), [Handlebars](https://handlebarsjs.com/guide/), and [Less](http://lesscss.org/features/) for frontend
+- [Webpack](https://webpack.js.org/concepts/), and [Less](http://lesscss.org/features/) for frontend
 
 #### Issue Labels
 

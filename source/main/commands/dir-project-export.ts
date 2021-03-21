@@ -101,11 +101,11 @@ export default class DirProjectExport extends ZettlrCommand {
       await makeExport(opt)
     } catch (err) {
       global.log.error(err.message, err)
-      global.notify.error({
-        title: err.title || err.message,
-        message: err.message,
-        additionalInfo: err.additionalInfo || ''
-      }, true)
+      global.application.displayErrorMessage(
+        err.title || err.message,
+        err.message,
+        err.additionalInfo || ''
+      )
     }
 
     return true

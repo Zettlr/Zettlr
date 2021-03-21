@@ -11,19 +11,37 @@
  * END HEADER
  */
 
-/**
-* Format a date.
-* @param  {Date} dateObj Object of type date.
-* @return {String}       Returns the localized, human-readable date as a string
-*/
-module.exports = function (dateObj) {
-  // TODO: Enable settings for these
-  const options = {
-    dateStyle: 'long', // full|long|medium|short
-    timeStyle: 'short' // full|long|medium|short
-  }
+import { DateTime } from 'luxon'
 
-  // NOTE: This does not work during any tests, as Node.js needs Intl locales
-  // which it does not provide by default. For Electron, this works fine.
-  return new Intl.DateTimeFormat(global.config.get('appLang'), options).format(dateObj)
+/**
+ * Formats a date based on the user's locale.
+ *
+ * @param   {Date|number}      dateObj   A JavaScript Date object or a timestamp in milliseconds
+ * @param   {boolean}  [relative=false]  Optional. If true, output a relative timestamp
+ *
+ * @return  {string}                     The formatted date string
+ */
+export default function (dateObj, relative = false) {
+  // NOTE: This function does not work during any tests, as Node.js needs Intl
+  // locales which it does not provide by default. For Electron, this works fine.
+  const isDate = dateObj instanceof Date
+  const dt = (isDate) ? DateTime.fromJSDate(dateObj) : DateTime.fromMillis(dateObj)
+  if (relative) {
+    // Check if there is at least a minute difference between the datetime object
+    // and now. If not, simply output "just now", else the actual relative difference.
+    if (dt.diff(DateTime.now(), 'minutes').toObject().minutes * -1 < 1) {
+      return 'just now' // TODO: Translate
+    } else {
+      return dt.toRelative({
+        style: 'short', // Can be short, narrow, or long
+        locale: global.config.get('appLang')
+      })
+    }
+  } else {
+    return dt.toLocaleString({
+      dateStyle: 'long', // full|long|medium|short
+      timeStyle: 'short', // full|long|medium|short
+      locale: global.config.get('appLang')
+    })
+  }
 }

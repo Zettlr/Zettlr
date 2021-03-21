@@ -32,14 +32,24 @@ import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '../fsal/typ
 import createMainWindow from './create-main-window'
 import createPrintWindow from './create-print-window'
 import createLogWindow from './create-log-window'
+import createStatsWindow from './create-stats-window'
 import createQuicklookWindow from './create-ql-window'
+import createPreferencesWindow from './create-preferences-window'
+import createCustomCSSWindow from './create-custom-css-window'
+import createAboutWindow from './create-about-window'
+import createTagManagerWindow from './create-tag-manager-window'
+import createDefaultsWindow from './create-defaults-window'
+import createPasteImageModal from './create-paste-image-modal'
+import createErrorModal from './create-error-modal'
 import shouldOverwriteFileDialog from './dialog/should-overwrite-file'
 import shouldReplaceFileDialog from './dialog/should-replace-file'
 import askDirectoryDialog from './dialog/ask-directory'
+import askSaveChanges from './dialog/ask-save-changes'
 import promptDialog from './dialog/prompt'
 import sanitizeWindowPosition from './sanitize-window-position'
 import { WindowPosition } from './types.d'
 import askFileDialog from './dialog/ask-file'
+// import dragIcon from '../../assets/dragicon.png'
 
 interface QuicklookRecord {
   path: string
@@ -51,21 +61,39 @@ export default class WindowManager {
   private readonly _qlWindows: QuicklookRecord[]
   private _printWindow: BrowserWindow|null
   private _logWindow: BrowserWindow|null
+  private _statsWindow: BrowserWindow|null
+  private _defaultsWindow: BrowserWindow|null
+  private _preferences: BrowserWindow|null
+  private _customCSS: BrowserWindow|null
+  private _aboutWindow: BrowserWindow|null
+  private _tagManager: BrowserWindow|null
+  private _pasteImageModal: BrowserWindow|null
+  private _errorModal: BrowserWindow|null
   private _printWindowFile: string|undefined
   private _windowState: WindowPosition[]
   private readonly _configFile: string
   private _fileLock: boolean
   private _persistTimeout: ReturnType<typeof setTimeout>|undefined
+  private _beforeMainWindowCloseCallback: Function|null
 
   constructor () {
     this._mainWindow = null
     this._qlWindows = []
     this._printWindow = null
+    this._preferences = null
+    this._customCSS = null
+    this._aboutWindow = null
+    this._tagManager = null
+    this._pasteImageModal = null
+    this._errorModal = null
     this._printWindowFile = undefined
     this._logWindow = null
+    this._statsWindow = null
+    this._defaultsWindow = null
     this._windowState = []
     this._configFile = path.join(app.getPath('userData'), 'window_state.json')
     this._fileLock = false
+    this._beforeMainWindowCloseCallback = null
 
     // Listen to window control commands
     ipcMain.on('window-controls', (event, message) => {
@@ -111,6 +139,13 @@ export default class WindowManager {
         case 'inspect-element':
           event.sender.inspectElement(payload.x, payload.y)
           break
+        case 'drag-start':
+          app.getFileIcon(payload.filePath)
+            .then((icon) => {
+              event.sender.startDrag({ file: payload.filePath, icon: icon })
+            })
+            .catch(err => global.log.error(`[Window Manager] Could not fetch icon for path ${String(payload.filePath)}`, err))
+          break
       }
     })
 
@@ -121,9 +156,20 @@ export default class WindowManager {
      * of those selected.
      */
     ipcMain.handle('request-files', async (event, message) => {
+      const focusedWindow = BrowserWindow.getFocusedWindow()
       // The client only can choose what and how much it wants to get
-      let files = await this.askFile(message.filters, message.multiSelection)
+      let files = await this.askFile(
+        message.filters,
+        message.multiSelection,
+        focusedWindow
+      )
       return files
+    })
+
+    ipcMain.handle('request-dir', async (event, message) => {
+      const focusedWindow = BrowserWindow.getFocusedWindow()
+      let dir = await this.askDir(focusedWindow)
+      return dir
     })
   }
 
@@ -136,6 +182,25 @@ export default class WindowManager {
       this._windowState = JSON.parse(data) as WindowPosition[]
     } catch (err) {
       // Apparently no such file -> we'll leave the original (empty) array.
+    }
+  }
+
+  /**
+   * Sets a callback that will be called before the main window closes. Must
+   * return false if the window should not be closed.
+   *
+   * @param   {Function}  callback  The callback that will be called. Must return boolean.
+   */
+  onBeforeMainWindowClose (callback: () => boolean): void {
+    this._beforeMainWindowCloseCallback = callback
+  }
+
+  /**
+   * Programmatically closes the main window if it is open.
+   */
+  closeMainWindow (): void {
+    if (this._mainWindow !== null) {
+      this._mainWindow.close()
     }
   }
 
@@ -164,7 +229,9 @@ export default class WindowManager {
       for (const win of allWindows) {
         // Don't close the main window just yet. We are just preparing for the
         // shutdown by closing all other windows.
-        if (win === this._mainWindow) continue
+        if (win === this._mainWindow) {
+          continue
+        }
 
         // Now find the window to close. Emit a warning if the window is not
         // handled by the Window manager, as this indicates a bug and helps us
@@ -185,8 +252,12 @@ export default class WindowManager {
         }
       }
 
-      // TODO: Check if we can really close the window. Abort using
-      // event.preventDefault() if necessary.
+      if (this._beforeMainWindowCloseCallback !== null) {
+        const shouldClose: boolean = this._beforeMainWindowCloseCallback()
+        if (!shouldClose) {
+          event.preventDefault()
+        }
+      }
     }) // END: mainWindow.on(close)
 
     this._mainWindow.on('closed', () => {
@@ -198,7 +269,7 @@ export default class WindowManager {
   /**
    * Makes a BrowserWindow visible and focuses it.
    *
-   * @param   {BrowserWindow}  win  The window to make visible
+   * @param  {BrowserWindow}  win  The window to make visible
    */
   private _makeVisible (win: BrowserWindow): void {
     if (win.isMinimized()) {
@@ -225,7 +296,9 @@ export default class WindowManager {
         this._persistTimeout = undefined
       }
       // Try again after one second, because there is currently data being written
-      this._persistTimeout = setTimeout(() => { this._persistWindowPositions() }, 1000)
+      this._persistTimeout = setTimeout(() => {
+        this._persistWindowPositions()
+      }, 1000)
       return
     }
 
@@ -238,6 +311,94 @@ export default class WindowManager {
       .catch((err) => {
         global.log.error(`[Window Manager] Could not persist data: ${err.message as string}`, err)
       })
+  }
+
+  /**
+   * Returns a sanitised, ready to use WindowPosition, either from the saved
+   * window states, or a brand new one. If no window position was found, a new
+   * one will be created using the given default size.
+   *
+   * @param   {string}                          type         The window state to find
+   * @param   {Rect|null}                       defaultSize  An optional size. If null, will use half the screen.
+   * @param   {Record<string><WindowPosition>}  predicate    Optional WindowPosition attributes to look for
+   *
+   * @return  {WindowPosition}                               A sanitised WindowPosition
+   */
+  private _retrieveWindowPosition (type: string, defaultSize: Rect|null, predicate?: Record<string, any>): WindowPosition {
+    let windowConfiguration = this._windowState.find(state => {
+      if (state.windowType !== type) {
+        return false
+      }
+
+      if (predicate !== undefined) {
+        for (const property in predicate) {
+          // If property is not, in fact, a property of WindowPosition, it'll
+          // be undefined, and therefore probably not === to the predicate.
+          if (predicate[property] === state[property as keyof WindowPosition]) {
+            return false
+          }
+        }
+      }
+
+      return true
+    })
+
+    if (windowConfiguration === undefined) {
+      // Create a new default configuration
+      const display = screen.getPrimaryDisplay()
+
+      // Make a window half the size of the current primary display, if no
+      // sizes were passed.
+      if (defaultSize === null) {
+        const width = Math.min(display.workArea.width, display.workArea.width / 2)
+        const height = Math.min(display.workArea.height, display.workArea.height / 2)
+        const top = (display.workArea.height - height) / 2
+        const left = (display.workArea.width - width) / 2
+        defaultSize = {
+          top: display.workArea.y + top, // Some displays begin at a y > 0
+          left: display.workArea.x + left, // Same as with the y-value
+          width: width,
+          height: height
+        }
+      }
+
+      // Determine if the window should show up maximised
+      let maximised = false
+      if (defaultSize.top === display.workArea.y &&
+        defaultSize.left === display.workArea.x &&
+        defaultSize.width === display.workArea.width &&
+        defaultSize.height === display.workArea.height
+      ) {
+        maximised = true
+      }
+
+      // Create the configuration object
+      windowConfiguration = {
+        windowType: type,
+        top: defaultSize.top,
+        left: defaultSize.left,
+        width: defaultSize.width,
+        height: defaultSize.height,
+        isMaximised: maximised,
+        lastDisplayId: display.id
+      }
+
+      if (predicate !== undefined) {
+        // Add the predicates to the WindowConfiguration so the next filter won't
+        // return undefined.
+        for (const property in predicate) {
+          windowConfiguration[property] = predicate[property]
+        }
+      }
+
+      this._windowState.push(windowConfiguration)
+    }
+
+    // Sanitise the configuration and then replace the one in our window state
+    const saneConfiguration = sanitizeWindowPosition(windowConfiguration)
+    this._windowState.splice(this._windowState.indexOf(windowConfiguration), 1, saneConfiguration)
+
+    return saneConfiguration
   }
 
   /**
@@ -272,6 +433,9 @@ export default class WindowManager {
       })
     }
 
+    window.on('resize', callback)
+    window.on('move', callback)
+
     // Now hook the resizing events to save the last positions to config
     window.on('maximize', () => {
       conf.isMaximised = true
@@ -293,8 +457,6 @@ export default class WindowManager {
         payload: window.isMaximized()
       })
     })
-    window.on('resize', callback)
-    window.on('move', callback)
   }
 
   /**
@@ -302,34 +464,17 @@ export default class WindowManager {
    */
   showMainWindow (): void {
     if (this._mainWindow === null) {
-      // Instantiate a new main window
-      let windowConfiguration = this._windowState.find(state => {
-        return state.windowType === 'main'
+      const display = screen.getPrimaryDisplay()
+      const windowConfiguration = this._retrieveWindowPosition('main', {
+        top: display.workArea.y,
+        left: display.workArea.x,
+        width: display.workArea.width,
+        height: display.workArea.height
       })
 
-      if (windowConfiguration === undefined) {
-        // Pass a default configuration
-        const display = screen.getPrimaryDisplay()
-        windowConfiguration = {
-          windowType: 'main',
-          top: display.workArea.y,
-          left: display.workArea.x,
-          width: display.workArea.width,
-          height: display.workArea.height,
-          isMaximised: true,
-          lastDisplayId: display.id
-        }
-
-        this._windowState.push(windowConfiguration)
-      }
-
-      const saneConfiguration = sanitizeWindowPosition(windowConfiguration)
-      // Exchange the sanitised configuration
-      this._windowState.splice(this._windowState.indexOf(windowConfiguration), 1, saneConfiguration)
-
-      this._mainWindow = createMainWindow(saneConfiguration)
+      this._mainWindow = createMainWindow(windowConfiguration)
       this._hookMainWindow()
-      this._hookWindowResize(this._mainWindow, saneConfiguration)
+      this._hookWindowResize(this._mainWindow, windowConfiguration)
     } else {
       this._makeVisible(this._mainWindow)
     }
@@ -363,39 +508,12 @@ export default class WindowManager {
       // The window is already open -> make it visible
       this._makeVisible(record.win)
     } else {
-      let windowConfiguration = this._windowState.find(state => {
-        return state.windowType === 'quicklook' &&
-        state.quicklookFile === file.path
-      })
-
-      if (windowConfiguration === undefined) {
-        // Pass a default configuration
-        const display = screen.getPrimaryDisplay()
-        const width = Math.min(display.workArea.width, display.workArea.width / 2)
-        const height = Math.min(display.workArea.height, display.workArea.height / 2)
-        const top = (display.workArea.height - height) / 2
-        const left = (display.workArea.width - width) / 2
-        windowConfiguration = {
-          windowType: 'quicklook',
-          quicklookFile: file.path,
-          top: display.workArea.y + top, // Some displays begin at a y > 0
-          left: display.workArea.x + left, // Same as with the y-value
-          width: width,
-          height: height,
-          isMaximised: false,
-          lastDisplayId: display.id
-        }
-
-        this._windowState.push(windowConfiguration)
-      }
-
-      const saneConfiguration = sanitizeWindowPosition(windowConfiguration)
-      // Exchange the sanitised configuration
-      this._windowState.splice(this._windowState.indexOf(windowConfiguration), 1, saneConfiguration)
-
       // This particular file is not yet open -> open it
-      const window: BrowserWindow = createQuicklookWindow(file, saneConfiguration)
-      this._hookWindowResize(window, saneConfiguration)
+      // Pass null for default size
+      const conf = this._retrieveWindowPosition('quicklook', null, { quicklookFile: file.path })
+      const window: BrowserWindow = createQuicklookWindow(file, conf)
+      this._hookWindowResize(window, conf)
+
       const qlWindow: QuicklookRecord = {
         path: file.path,
         win: window
@@ -413,11 +531,14 @@ export default class WindowManager {
     }
   }
 
+  /**
+   * Displays the log window
+   */
   showLogWindow (): void {
-    // Shows the log window TODO
-    // Shows the print window
     if (this._logWindow === null) {
-      this._logWindow = createLogWindow()
+      const conf = this._retrieveWindowPosition('log', null)
+      this._logWindow = createLogWindow(conf)
+      this._hookWindowResize(this._logWindow, conf)
 
       // Dereference the window as soon as it is closed
       this._logWindow.on('closed', () => {
@@ -429,14 +550,179 @@ export default class WindowManager {
   }
 
   /**
+   * Displays the defaults window
+   */
+  showDefaultsWindow (): void {
+    if (this._defaultsWindow === null) {
+      const conf = this._retrieveWindowPosition('log', null)
+      this._defaultsWindow = createDefaultsWindow(conf)
+      this._hookWindowResize(this._defaultsWindow, conf)
+
+      // Dereference the window as soon as it is closed
+      this._defaultsWindow.on('closed', () => {
+        this._defaultsWindow = null
+      })
+    } else {
+      this._makeVisible(this._defaultsWindow)
+    }
+  }
+
+  /**
+   * Shows the statistics window
+   */
+  showStatsWindow (): void {
+    if (this._statsWindow === null) {
+      const conf = this._retrieveWindowPosition('stats', null)
+      this._statsWindow = createStatsWindow(conf)
+      this._hookWindowResize(this._statsWindow, conf)
+
+      this._statsWindow.on('closed', () => {
+        this._statsWindow = null
+      })
+    } else {
+      this._makeVisible(this._statsWindow)
+    }
+  }
+
+  /**
+   * Shows the preferences window
+   */
+  showPreferences (): void {
+    if (this._preferences === null) {
+      const conf = this._retrieveWindowPosition('preferences', null)
+      this._preferences = createPreferencesWindow(conf)
+      this._hookWindowResize(this._preferences, conf)
+
+      // Dereference the window as soon as it is closed
+      this._preferences.on('closed', () => {
+        this._preferences = null
+      })
+    } else {
+      this._makeVisible(this._preferences)
+    }
+  }
+
+  /**
+   * Shows the custom CSS window
+   */
+  showCustomCSS (): void {
+    if (this._customCSS === null) {
+      const display = screen.getPrimaryDisplay()
+      const conf = this._retrieveWindowPosition('custom-css', {
+        width: 600,
+        height: 500,
+        top: (display.workArea.height - 500) / 2,
+        left: (display.workArea.width - 600) / 2
+      })
+      this._customCSS = createCustomCSSWindow(conf)
+      this._hookWindowResize(this._customCSS, conf)
+
+      // Dereference the window as soon as it is closed
+      this._customCSS.on('closed', () => {
+        this._customCSS = null
+      })
+    } else {
+      this._makeVisible(this._customCSS)
+    }
+  }
+
+  /**
+   * Shows the custom CSS window
+   */
+  showAboutWindow (): void {
+    if (this._aboutWindow === null) {
+      const display = screen.getPrimaryDisplay()
+      const conf = this._retrieveWindowPosition('about', {
+        width: 600,
+        height: 500,
+        top: (display.workArea.height - 500) / 2,
+        left: (display.workArea.width - 600) / 2
+      })
+      this._aboutWindow = createAboutWindow(conf)
+      this._hookWindowResize(this._aboutWindow, conf)
+
+      // Dereference the window as soon as it is closed
+      this._aboutWindow.on('closed', () => {
+        this._aboutWindow = null
+      })
+    } else {
+      this._makeVisible(this._aboutWindow)
+    }
+  }
+
+  /**
+   * Shows the tag manager window
+   */
+  showTagManager (): void {
+    if (this._tagManager === null) {
+      const conf = this._retrieveWindowPosition('tag-manager', null)
+      this._tagManager = createTagManagerWindow(conf)
+      this._hookWindowResize(this._tagManager, conf)
+
+      // Dereference the window as soon as it is closed
+      this._tagManager.on('closed', () => {
+        this._tagManager = null
+      })
+    } else {
+      this._makeVisible(this._tagManager)
+    }
+  }
+
+  /**
+   * Shows the paste image modal and, after closing, returns
+   */
+  async showPasteImageModal (startPath: string): Promise<any> {
+    return await new Promise((resolve, reject) => {
+      if (this._mainWindow === null) {
+        return reject(new Error('[Window Manager] A paste image modal was requested, but there was no main window open.'))
+      }
+      this._pasteImageModal = createPasteImageModal(this._mainWindow, startPath)
+
+      ipcMain.on('paste-image-ready', (event, data) => {
+        // Resolve now
+        resolve(data)
+        this._pasteImageModal?.close()
+      })
+
+      // Dereference the modal as soon as it is closed
+      this._pasteImageModal.on('closed', () => {
+        ipcMain.removeAllListeners('paste-image-ready') // Not to have a dangling listener hanging around
+        resolve(undefined) // Resolve with undefined to indicate that the user has aborted
+        this._pasteImageModal = null
+      })
+    })
+  }
+
+  showErrorMessage (title: string, message: string, contents?: string): void {
+    if (this._mainWindow === null) {
+      global.log.error('[Application] Could not display error message, because the main window was not open!', message)
+      return
+    }
+
+    if (this._errorModal !== null) {
+      this._errorModal.close()
+      // Dereference
+      this._errorModal = null
+    }
+
+    this._errorModal = createErrorModal(this._mainWindow, title, message, contents)
+
+    // Dereference the window as soon as it is closed
+    this._errorModal.on('closed', () => {
+      this._errorModal = null
+    })
+  }
+
+  /**
    * Opens the print window with the given file
    *
    * @param   {string}  filePath  The file to load
    */
   showPrintWindow (filePath: string): void {
-    // Shows the print window
     if (this._printWindow === null) {
-      this._printWindow = createPrintWindow(filePath)
+      const conf = this._retrieveWindowPosition('print', null)
+      this._printWindow = createPrintWindow(filePath, conf)
+      this._hookWindowResize(this._printWindow, conf)
       this._printWindowFile = filePath
 
       // Dereference the window as soon as it is closed
@@ -469,7 +755,7 @@ export default class WindowManager {
   /**
    * Returns the main window
    *
-   * @return  {BrowserWindow}  The main window
+   * @return  {BrowserWindow|null}  The main window
    */
   getMainWindow (): BrowserWindow|null {
     return this._mainWindow
@@ -506,23 +792,43 @@ export default class WindowManager {
   }
 
   /**
+   * Asks the user whether or not to persist or drop changes to their files. It
+   * returns the ID of the clicked button in the message box, which is 0 to
+   * simply drop changes, 1 to abort closing in order to save. TODO: Enable auto-save
+   *
+   * @return  {Promise<any>}  Returns the message box results
+   */
+  async askSaveChanges (): Promise<any> {
+    return await askSaveChanges(this._mainWindow)
+  }
+
+  /**
     * Show the dialog for choosing a directory
     * @return {string[]} An array containing all selected paths.
     */
-  async askDir (): Promise<string[]> {
-    return await askDirectoryDialog(this._mainWindow)
+  async askDir (win?: BrowserWindow|null): Promise<string[]> {
+    if (win != null) {
+      return await askDirectoryDialog(win)
+    } else {
+      return await askDirectoryDialog(this._mainWindow)
+    }
   }
 
   /**
    * Shows the dialog for importing files from the disk.
    *
-   * @param  {FileFilter[]|null}  [filters=null]    An array of extension filters.
-   * @param  {boolean}            [multiSel=false]  Determines if multiple files are allowed
+   * @param  {FileFilter[]|null}   [filters=null]    An array of extension filters.
+   * @param  {boolean}             [multiSel=false]  Determines if multiple files are allowed
+   * @param  {BrowserWindow|null}  [win]             An optional window to attach to
    *
    * @return {string[]}                             An array containing all selected files.
    */
-  async askFile (filters: FileFilter[]|null = null, multiSel: boolean = false): Promise<string[]> {
-    return await askFileDialog(this._mainWindow, filters, multiSel)
+  async askFile (filters: FileFilter[]|null = null, multiSel: boolean = false, win?: BrowserWindow|null): Promise<string[]> {
+    if (win != null) {
+      return await askFileDialog(win, filters, multiSel)
+    } else {
+      return await askFileDialog(this._mainWindow, filters, multiSel)
+    }
   }
 
   /**

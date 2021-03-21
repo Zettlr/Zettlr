@@ -21,7 +21,7 @@ interface ThemeLoader {
 type Theme = 'berlin'|'bielefeld'|'frankfurt'|'karl-marx-stadt'|'bordeaux'
 
 /* eslint-disable @typescript-eslint/no-var-requires */
-var availableThemes: Record<Theme, ThemeLoader> = {
+const availableThemes: Record<Theme, ThemeLoader> = {
   'berlin': require('../../less/theme-berlin/theme-main.less').default as ThemeLoader,
   'bielefeld': require('../../less/theme-bielefeld/theme-main.less').default as ThemeLoader,
   'frankfurt': require('../../less/theme-frankfurt/theme-main.less').default as ThemeLoader,
@@ -34,30 +34,29 @@ var availableThemes: Record<Theme, ThemeLoader> = {
  *
  * @var {ThemeLoader|null}
  */
-var currentTheme: ThemeLoader|null = null
+let currentTheme: ThemeLoader|null = null
 
 /**
  * Listens for theming changes (main theme + custom CSS) and handles dark mode
  */
 export default function registerThemes (): void {
   // Listen for configuration changes
-  ipcRenderer.on('config-provider', (event, message) => {
-    const { command } = message
-
+  ipcRenderer.on('config-provider', (event, { command, payload }) => {
     if (command === 'update') {
-      // Switch the theme based on the current configuration value
-      switchTheme(global.config.get('display.theme'))
-
-      // Switch to light/dark mode based on the configuration variable
-      document.body.classList.toggle('dark', global.config.get('darkMode'))
+      if (payload === 'display.theme') {
+        // Switch the theme based on the current configuration value
+        switchTheme(global.config.get('display.theme'))
+      } else if (payload === 'darkMode') {
+        // Switch to light/dark mode based on the configuration variable
+        document.body.classList.toggle('dark', global.config.get('darkMode'))
+      }
     }
   })
 
   // Listen for custom CSS changes
-  ipcRenderer.on('css-provider', (evt, message) => {
-    const { command } = message
+  ipcRenderer.on('css-provider', (evt, { command, payload }) => {
     if (command === 'get-custom-css-path') {
-      setCustomCss(message.payload)
+      setCustomCss(payload)
     }
   })
 
@@ -68,6 +67,24 @@ export default function registerThemes (): void {
   // Initial rendering of the Custom CSS
   ipcRenderer.invoke('css-provider', { command: 'get-custom-css-path' })
     .then(cssPath => setCustomCss(cssPath))
+    .catch(e => console.error(e))
+
+  // Create the custom stylesheet which includes certain system colours which
+  // will be referenced by the components as necessary.
+  ipcRenderer.invoke('appearance-provider', { command: 'get-accent-color' })
+    .then((accentColor: string) => {
+      // TODO: Currently this is not scalable, just an exploratory implementation!
+      const style = document.createElement('style')
+      // style.setAttribute('type', 'text/css')
+
+      const color = '#' + accentColor.substr(0, 6)
+      style.textContent = `:root { --system-accent-color:${color}; }`
+      document.head.prepend(style)
+      // if (style.sheet === null) {
+      //   throw new Error('Style sheet was null?!?')
+      // }
+      // style.sheet.insertRule(`:root { --system-accent:${color}; }`, 0)
+    })
     .catch(e => console.error(e))
 }
 

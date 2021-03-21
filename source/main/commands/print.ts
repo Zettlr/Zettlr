@@ -16,6 +16,7 @@ import ZettlrCommand from './zettlr-command'
 import { app } from 'electron'
 import makeExport from '../modules/export'
 import { ExporterOptions } from '../modules/export/types'
+import { MDFileMeta } from '../modules/fsal/types'
 
 export default class Print extends ZettlrCommand {
   constructor (app: any) {
@@ -28,15 +29,22 @@ export default class Print extends ZettlrCommand {
    * @param {Object} arg The argument
    * @return {Boolean} Whether the command ran successful
    */
-  async run (evt: string, arg: any): Promise<void> {
-    if (!arg || !arg.hash) {
-      global.log.error('Could not produce print preview: No file hash given.')
+  async run (evt: string, arg?: string): Promise<void> {
+    let filePath = this._app.getFileSystem().activeFile
+    if (arg !== undefined) {
+      filePath = arg
+    }
+
+    if (filePath == null) {
+      global.log.error('[Print] Cannot print document: Not found.')
       return
     }
 
     // First we need to export the current file as HTML.
-    let file = await global.application.getFile(global.application.findFile(arg.hash))
-    if (!file) return // No file open.
+    let file: MDFileMeta = await this._app.runCommand('get-file-contents', filePath)
+    if (file === null) {
+      return // No file open.
+    }
 
     let opt: ExporterOptions = {
       'format': 'html',

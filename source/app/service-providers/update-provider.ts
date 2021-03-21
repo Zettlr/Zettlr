@@ -354,12 +354,12 @@ export default class UpdateProvider {
     })
 
     this._downloadReadStream.on('error', (err) => {
-      global.log.error(`[Update Provider] Download Read Stream Error: ${err.message as string}`, err)
+      global.log.error(`[Update Provider] Download Read Stream Error: ${err.message}`, err)
       this._cleanup(true)
     })
 
     this._downloadWriteStream.on('error', (err) => {
-      global.log.error(`[Update Provider] Download Write Stream Error: ${err.message as string}`, err)
+      global.log.error(`[Update Provider] Download Write Stream Error: ${err.message}`, err)
       this._cleanup(true)
     })
   }

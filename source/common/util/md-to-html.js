@@ -3,7 +3,7 @@ const Citr = require('@zettlr/citr')
 const { ipcRenderer } = require('electron')
 
 // Spin up a showdown converter which can be used across the app
-var showdownConverter = new Converter({
+const showdownConverter = new Converter({
   strikethrough: true,
   tables: true,
   omitExtraWLInCodeBlocks: true,

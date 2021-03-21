@@ -25,4 +25,5 @@ module.exports = function (a, b) {
   if (isAPDF && isBPDF) return 0
   if (isAPDF) return -1
   if (isBPDF) return 1
+  return 0
 }

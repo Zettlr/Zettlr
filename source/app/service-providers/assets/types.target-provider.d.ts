@@ -1,5 +1,5 @@
 interface WritingTarget {
-  hash: number
+  path: string
   mode: 'words'|'chars'
   count: number
 }
@@ -17,13 +17,13 @@ interface TargetProvider {
    * @param  {number}                   hash  The hash to be searched for.
    * @return {WritingTarget|undefined}        The writing target.
    */
-  get: (hash: number) => WritingTarget|undefined
+  get: (filePath: string) => WritingTarget|undefined
   /**
    * Removes a target from the database and returns the operation status.
    *
    * @return {boolean} Whether or not the target was removed.
    */
-  remove: (hash: number) => boolean
+  remove: (filePath: string) => boolean
   /**
    * Adds callback to the event listeners
    *

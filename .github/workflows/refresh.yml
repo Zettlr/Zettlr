@@ -21,9 +21,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '12.x'
-      - name: Install packages in main and source directories
+      - name: Install dependencies
         # the scripts require some modules that we need to install.
-        run: yarn install --frozen-lockfile && cd ./source && yarn install --frozen-lockfile && cd ..
+        run: yarn install --frozen-lockfile
       - name: Config git
         run: |
           git config --local user.email "action@github.com"
@@ -39,12 +39,7 @@ jobs:
           git add -A
           git diff-index --quiet HEAD || git commit -m "Update language files"
       - name: Test build # to make sure we don't break anything
-        run: |
-          yarn install --frozen-lockfile
-          cd ./source
-          yarn install --frozen-lockfile
-          cd ..
-          yarn test
+        run: yarn test
       - name: Push changes
         uses: ad-m/github-push-action@v0.5.0
         with:

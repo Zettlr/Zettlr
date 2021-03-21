@@ -19,8 +19,6 @@ const copyFolder = require('./copy-folder')
 
 const log = require('../console-colour')
 
-const hash = require('../../source/common/util/hash')
-
 const TEST_DIRECTORY = path.join(__dirname, '../../resources/test')
 const CONFIG_FILE = path.join(__dirname, '../../resources/test-config.json')
 
@@ -82,7 +80,8 @@ async function prepareEnvironment () {
   let cfg = await makeConfig()
   cfg.openPaths = roots
   // Set the README.md file as open
-  cfg.openFiles = [ hash(readmeFile) ]
+  cfg.openFiles = [ readmeFile ]
+  cfg.activeFile = readmeFile
 
   // We also want the dialogs to start at the test directory for easier navigation
   cfg.dialogPaths = {

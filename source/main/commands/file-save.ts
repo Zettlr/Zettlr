@@ -27,30 +27,30 @@ export default class SaveFile extends ZettlrCommand {
     * @return {void}      This function does not return.
     */
   async run (evt: string, file: any): Promise<boolean> {
-    if ((file == null) || !file.hasOwnProperty('content')) {
+    if ((file == null) || !file.hasOwnProperty('newContents')) {
       global.log.error('Could not save file, it\'s either null or has no content', file)
       // No file given -> abort saving process
       return false
     }
 
     try {
-      let realFile = this._app.getFileSystem().findFile(file.hash)
+      let realFile = this._app.getFileSystem().findFile(file.path)
       if (realFile === null) {
         throw new Error('File to save not found!')
       }
 
       global.log.info(`Saving file ${realFile.name}...`)
-      await this._app.getFileSystem().saveFile(realFile, file.content)
+      await this._app.getFileSystem().saveFile(realFile, file.newContents)
 
       // Update word count
-      global.stats.increaseWordCount(file.offsetWordcount || 0)
+      global.stats.increaseWordCount(file.offsetWordCount)
 
       global.log.info(`File ${realFile.name} saved.`)
+      return true
     } catch (e) {
       global.log.error(`Error saving file: ${e.message as string}`, e)
+      return false
     }
-
-    return true
   }
 }
 

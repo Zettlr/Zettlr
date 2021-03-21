@@ -36,7 +36,8 @@ const FRONTMATTER_VARS = [
   'date',
   'keywords',
   'tags',
-  'lang'
+  'lang',
+  'bibliography'
 ]
 
 /**
@@ -71,6 +72,7 @@ async function updateFileMetadata (fileObject: MDFileDescriptor): Promise<void> 
   try {
     let stat = await fs.lstat(fileObject.path)
     fileObject.modtime = stat.mtime.getTime()
+    fileObject.size = stat.size
     global.log.info(`Updated modtime for fileDescriptor ${fileObject.name} to ${fileObject.modtime}`)
   } catch (e) {
     global.log.error(`Could not update the metadata for file ${fileObject.name}: ${String(e.message).toString()}`, e)
@@ -222,6 +224,7 @@ export function metadata (fileObject: MDFileDescriptor): MDFileMeta {
     name: fileObject.name,
     hash: fileObject.hash,
     ext: fileObject.ext,
+    size: fileObject.size,
     id: fileObject.id,
     tags: fileObject.tags,
     type: fileObject.type,
@@ -256,6 +259,7 @@ export async function parse (filePath: string, cache: FSALCache, parent: DirDesc
     name: path.basename(filePath),
     hash: hash(filePath),
     ext: path.extname(filePath),
+    size: 0,
     id: '', // The ID, if there is one inside the file.
     tags: [], // All tags that are to be found inside the file's contents.
     bom: '', // Default: No BOM
@@ -275,8 +279,9 @@ export async function parse (filePath: string, cache: FSALCache, parent: DirDesc
   try {
     // Get lstat
     let stat = await fs.lstat(filePath)
-    file.modtime = stat.mtime.getTime() // stat.ctimeMs DEBUG: Switch to mtimeMs for the time being
+    file.modtime = stat.mtime.getTime()
     file.creationtime = stat.birthtime.getTime()
+    file.size = stat.size
   } catch (e) {
     global.log.error('Error reading file ' + filePath, e)
     throw e // Rethrow
@@ -305,10 +310,10 @@ export async function parse (filePath: string, cache: FSALCache, parent: DirDesc
   }
 
   // Get the target, if applicable
-  file.target = global.targets.get(file.hash)
+  file.target = global.targets.get(file.path)
 
   // Finally, report the tags
-  global.tags.report(file.tags)
+  global.tags.report(file.tags, file.path)
 
   return file
 }
@@ -378,9 +383,9 @@ export async function save (fileObject: MDFileDescriptor, content: string, cache
   // Afterwards, retrieve the now current modtime
   await updateFileMetadata(fileObject)
   // Make sure to keep the file object itself as well as the tags updated
-  global.tags.remove(fileObject.tags)
+  global.tags.remove(fileObject.tags, fileObject.path)
   parseFileContents(fileObject, content)
-  global.tags.report(fileObject.tags)
+  global.tags.report(fileObject.tags, fileObject.path)
   fileObject.modified = false // Always reset the modification flag.
   cacheFile(fileObject, cache)
 }
@@ -412,22 +417,23 @@ export async function rename (fileObject: MDFileDescriptor, cache: FSALCache, ne
  *
  * @param   {MDFileDescriptor}  fileObject  The file descriptor
  */
-export function remove (fileObject: MDFileDescriptor): void {
-  const deleteOnFail: boolean = global.config.get('system.deleteOnFail')
-  const deleteSuccess = shell.moveItemToTrash(fileObject.path, deleteOnFail)
+export async function remove (fileObject: MDFileDescriptor): Promise<void> {
+  try {
+    await shell.trashItem(fileObject.path)
+  } catch (err) {
+    if (global.config.get('system.deleteOnFail') === true) {
+      // If this function throws, there's really something off and we shouldn't recover.
+      await fs.unlink(fileObject.path)
+    } else {
+      global.log.info(`[FSAL File] Could not remove file ${fileObject.path}: ${String(err.message)}`)
+      return
+    }
+  }
 
-  if (deleteSuccess && fileObject.parent !== null) {
+  if (fileObject.parent !== null) {
     // Splice it from the parent directory
     const idx = fileObject.parent.children.indexOf(fileObject)
     fileObject.parent.children.splice(idx, 1)
-  }
-
-  if (!deleteSuccess) {
-    // Forcefully remove the file
-    fs.unlink(fileObject.path)
-      .catch(err => {
-        global.log.error(`[FSAL File] Could not remove file ${fileObject.path}: ${err.message as string}`, err)
-      })
   }
 }
 
@@ -447,4 +453,16 @@ export function markDirty (fileObject: MDFileDescriptor): void {
  */
 export function markClean (fileObject: MDFileDescriptor): void {
   fileObject.modified = false
+}
+
+export async function reparseChangedFile (fileObject: MDFileDescriptor, cache: FSALCache): Promise<void> {
+  // Literally the same as the save() function only without prior writing of contents
+  const contents = await load(fileObject)
+  await updateFileMetadata(fileObject)
+  // Make sure to keep the file object itself as well as the tags updated
+  global.tags.remove(fileObject.tags, fileObject.path)
+  parseFileContents(fileObject, contents)
+  global.tags.report(fileObject.tags, fileObject.path)
+  fileObject.modified = false // Always reset the modification flag.
+  cacheFile(fileObject, cache)
 }

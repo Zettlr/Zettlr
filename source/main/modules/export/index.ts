@@ -147,12 +147,12 @@ async function runPandoc (defaultsFile: string): Promise<PandocRunnerOutput> {
     })
 
     pandocProcess.stdout.on('data', (data) => {
-      console.log(String(data))
+      console.log('PANDOC OUT: ' + String(data))
       output.stdout.push(String(data))
     })
 
     pandocProcess.stderr.on('data', (data) => {
-      console.log(String(data))
+      console.log('PANDOC ERR: ' + String(data))
       output.stderr.push(String(data))
     })
 
@@ -166,6 +166,12 @@ async function runPandoc (defaultsFile: string): Promise<PandocRunnerOutput> {
       reject(err)
     })
   })
+
+  // The data doesn't come in clean lines because it's a stream, but it will
+  // include linefeeds. In order to enable easy checks (stderr.length === 0,
+  // for example), clean up the output.
+  output.stderr = output.stderr.join('').split('\n').filter(line => line.trim() !== '')
+  output.stdout = output.stdout.join('').split('\n').filter(line => line.trim() !== '')
 
   return output
 }

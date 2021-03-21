@@ -17,8 +17,6 @@ import FileRename from './file-rename'
 import FileSave from './file-save'
 import FileSearch from './file-search'
 import ForceOpen from './force-open'
-import GetPreferences from './get-preferences'
-import GetSponsors from './get-sponsors'
 import ImportLangFile from './import-lang-file'
 import ImportFiles from './import'
 import IncreasePomodoro from './increase-pomodoro'
@@ -51,8 +49,6 @@ export const commands = [
   FileSave,
   FileSearch,
   ForceOpen,
-  GetPreferences,
-  GetSponsors,
   ImportFiles,
   ImportLangFile,
   IncreasePomodoro,

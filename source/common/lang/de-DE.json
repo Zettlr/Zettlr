@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-01-04T10:09:20.000000Z"
+        "updated_at": "2021-03-06T11:52:13.000000Z"
     },
     "dialog": {
         "about": {
@@ -517,6 +517,7 @@
         "print": "Drucken\u2026",
         "project_build": "Projekt exportieren",
         "project_properties": "Projekteinstellungen\u2026",
+        "properties": "Eigenschaften",
         "quicklook": "Quicklook",
         "quit": "Beenden",
         "recent_docs": "K\u00fcrzlich verwendete Dokumente",

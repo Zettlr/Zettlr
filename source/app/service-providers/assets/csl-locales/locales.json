@@ -17,6 +17,7 @@
         "fi": "fi-FI",
         "fr": "fr-FR",
         "he": "he-IL",
+        "hi": "hi-IN",
         "hr": "hr-HR",
         "hu": "hu-HU",
         "id": "id-ID",
@@ -112,7 +113,7 @@
             "Spanish (Mexico)"
         ],
         "et-EE": [
-            "Eesti",
+            "Eesti keel",
             "Estonian"
         ],
         "eu": [
@@ -138,6 +139,10 @@
         "he-IL": [
             "עברית",
             "Hebrew"
+        ],
+        "hi-IN": [
+            "हिंदी",
+            "Hindi"
         ],
         "hr-HR": [
             "Hrvatski",
@@ -176,7 +181,7 @@
             "Latin"
         ],
         "lt-LT": [
-            "Lietuvių",
+            "Lietuvių kalba",
             "Lithuanian"
         ],
         "lv-LV": [

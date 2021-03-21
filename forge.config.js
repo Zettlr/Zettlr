@@ -1,33 +1,89 @@
-const resourcePaths = []
+const { spawn } = require('child_process')
 
-// Determine whether we can bundle Pandoc (and which version) based
-// on the arguments passed to Electron forge and the process environment
-const idxPlatform = process.argv.indexOf('--platform')
-const idxArch = process.argv.indexOf('--arch')
+/**
+ * This function runs the get-pandoc script in order to download the requested
+ * version of Pandoc. This way we can guarantee that the correct Pandoc version
+ * will be present when packaging the application.
+ *
+ * @param   {string}  platform  The platform for which to download.
+ * @param   {string}  arch      The architecture for which to download.
+ */
+async function downloadPandoc (platform, arch) {
+  // Check we have a valid platform ...
+  if (![ 'darwin', 'linux', 'win32' ].includes(platform)) {
+    throw new Error(`Cannot download Pandoc: Platform ${platform} is not recognised!`)
+  }
 
-const thisPlatform = process.platform
-const thisArch = process.arch
+  // ... and a valid architecture.
+  if (![ 'x64', 'arm' ].includes(arch)) {
+    throw new Error(`Cannot download Pandoc: Architecture ${arch} is not supported!`)
+  }
 
-const isWin32 = (idxPlatform > -1 && process.argv[idxPlatform + 1] === 'win32') || thisPlatform === 'win32'
-const isMacOS = (idxPlatform > -1 && process.argv[idxPlatform + 1] === 'darwin') || thisPlatform === 'darwin'
-const isLinux = (idxPlatform > -1 && process.argv[idxPlatform + 1] === 'linux') || thisPlatform === 'linux'
-const isArm64 = (idxArch > -1 && process.argv[idxArch + 1] === 'arm64') || thisArch === 'arm64'
-const is64Bit = (idxArch > -1 && process.argv[idxArch + 1] === 'x64') || thisArch === 'x64'
+  // Now run the script and wait for it to finish.
+  await new Promise((resolve, reject) => {
+    const shellProcess = spawn('./scripts/get-pandoc.sh', [ platform, arch ])
 
-// macOS has Rosetta 2 built-in, so we can bundle Pandoc 64bit
-const supportsPandoc = is64Bit || (isMacOS && isArm64)
+    // To not mess with Electron forge's output, suppress this processes output.
+    // But we should reject if there's any error output.
+    let shouldReject = false
+    shellProcess.stderr.on('data', (data) => {
+      shouldReject = true
+    })
 
-if (supportsPandoc && isWin32) {
-  console.log('\nBundling Pandoc for Windows 64 bit!')
-  resourcePaths.push('./resources/pandoc.exe')
-} else if (supportsPandoc && (isMacOS || isLinux)) {
-  console.log('\nBundling Pandoc for 64 bit or Apple M1!')
-  resourcePaths.push('./resources/pandoc')
-} else {
-  console.log('\nBuilding for an unsupported platform/arch-combination - not bundling Pandoc.')
+    // Resolve or reject once the process has finished.
+    shellProcess.on('close', (code, signal) => {
+      if (code !== 0 || shouldReject) {
+        reject(new Error(`Failed to download Pandoc: Process quit with code ${code}. If the code is 0, then there was error output.`))
+      } else {
+        resolve()
+      }
+    })
+
+    // Reject on errors.
+    shellProcess.on('error', (err) => {
+      reject(err)
+    })
+  })
 }
 
 module.exports = {
+  hooks: {
+    generateAssets: async (forgeConfig) => {
+      // Check if we can bundle Pandoc. To mimick electron forge's behaviour,
+      // we check the same CLI arguments, and fall back to the current platform,
+      // if applicable.
+      const idxPlatform = process.argv.indexOf('--platform')
+      const idxArch = process.argv.indexOf('--arch')
+
+      const thisPlatform = process.platform
+      const thisArch = process.arch
+
+      const isWin32 = (idxPlatform > -1 && process.argv[idxPlatform + 1] === 'win32') || thisPlatform === 'win32'
+      const isMacOS = (idxPlatform > -1 && process.argv[idxPlatform + 1] === 'darwin') || thisPlatform === 'darwin'
+      const isLinux = (idxPlatform > -1 && process.argv[idxPlatform + 1] === 'linux') || thisPlatform === 'linux'
+      const isArm64 = (idxArch > -1 && process.argv[idxArch + 1] === 'arm64') || thisArch === 'arm64'
+      const is64Bit = (idxArch > -1 && process.argv[idxArch + 1] === 'x64') || thisArch === 'x64'
+
+      // macOS has Rosetta 2 built-in, so we can bundle Pandoc 64bit
+      const supportsPandoc = is64Bit || (isMacOS && isArm64) || (isLinux && isArm64)
+
+      if (supportsPandoc && isWin32) {
+        // Download Pandoc beforehand
+        await downloadPandoc('win32', 'x64')
+        forgeConfig.packagerConfig.extraResource.push('./resources/pandoc.exe')
+      } else if (supportsPandoc && (isMacOS || isLinux)) {
+        // Download Pandoc either for macOS or Linux ...
+        const platform = (isMacOS) ? 'darwin' : 'linux'
+        // ... and the ARM version if we're downloading for Linux ARM, else x64.
+        const arch = (isLinux && isArm64) ? 'arm' : 'x64'
+        await downloadPandoc(platform, arch)
+        forgeConfig.packagerConfig.extraResource.push('./resources/pandoc')
+      } else {
+        // If someone is building this on an unsupported platform, drop a warning.
+        console.log('\nBuilding for an unsupported platform/arch-combination - not bundling Pandoc.')
+      }
+    }
+  },
   packagerConfig: {
     asar: true,
     darwinDarkModeSupport: 'true',
@@ -53,12 +109,9 @@ module.exports = {
     },
     osxNotarize: {
       appleId: process.env['APPLE_ID'],
-      appleIdPassword: process.env['APPLE_ID_PASS'],
+      appleIdPassword: process.env['APPLE_ID_PASS']
     },
-    extraResource:
-      // NOTE: This logic relies upon the Pandoc binary being downloaded
-      // after executing ./scripts/get-pandoc.sh
-      resourcePaths
+    extraResource: [] // NOTE: This will be filled in the generateAssets hook
   },
   plugins: [
     [
@@ -69,24 +122,64 @@ module.exports = {
           config: './webpack.renderer.config.js',
           entryPoints: [
             {
-              html: './source/renderer/assets/index.htm',
-              js: './source/renderer/renderer.ts',
+              html: './source/win-main/index.htm',
+              js: './source/win-main/index.ts',
               name: 'main_window'
             },
             {
-              html: './source/print/index.htm',
-              js: './source/print/index.ts',
+              html: './source/win-print/index.htm',
+              js: './source/win-print/index.ts',
               name: 'print'
             },
             {
-              html: './source/log-viewer/index.htm',
-              js: './source/log-viewer/index.ts',
+              html: './source/win-log-viewer/index.htm',
+              js: './source/win-log-viewer/index.ts',
               name: 'log_viewer'
             },
             {
-              html: './source/quicklook/index.htm',
-              js: './source/quicklook/index.ts',
+              html: './source/win-quicklook/index.htm',
+              js: './source/win-quicklook/index.ts',
               name: 'quicklook'
+            },
+            {
+              html: './source/win-preferences/index.htm',
+              js: './source/win-preferences/index.ts',
+              name: 'preferences'
+            },
+            {
+              html: './source/win-custom-css/index.htm',
+              js: './source/win-custom-css/index.ts',
+              name: 'custom_css'
+            },
+            {
+              html: './source/win-tag-manager/index.htm',
+              js: './source/win-tag-manager/index.ts',
+              name: 'tag_manager'
+            },
+            {
+              html: './source/win-paste-image/index.htm',
+              js: './source/win-paste-image/index.ts',
+              name: 'paste_image'
+            },
+            {
+              html: './source/win-error/index.htm',
+              js: './source/win-error/index.ts',
+              name: 'error'
+            },
+            {
+              html: './source/win-about/index.htm',
+              js: './source/win-about/index.ts',
+              name: 'about'
+            },
+            {
+              html: './source/win-stats/index.htm',
+              js: './source/win-stats/index.ts',
+              name: 'stats'
+            },
+            {
+              html: './source/win-defaults/index.htm',
+              js: './source/win-defaults/index.ts',
+              name: 'defaults'
             }
           ]
         }

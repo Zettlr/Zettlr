@@ -1,0 +1,49 @@
+.CodeMirror {
+  .editor-image-container {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    cursor: default;
+
+    figure {
+      display: inline-block;
+      position: relative;
+      top: 0;
+
+      &:hover {
+        figcaption, span.image-size-info, span.open-externally-button {
+          opacity: 1;
+        }
+      }
+
+      span.image-size-info, figcaption, span.open-externally-button {
+        position: absolute;
+        opacity: 0;
+        transition: 0.2s opacity ease;
+        background-color: rgba(0, 0, 0, .7);
+        color: white;
+        font-size: 12px;
+        border-radius: 6px;
+        padding: 10px;
+      }
+
+      span.image-size-info {
+        top: 10px;
+        left: 10px;
+      }
+
+      span.open-externally-button {
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+      }
+
+      figcaption {
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+        cursor: text; // Captions can be edited
+      }
+    }
+  }
+}

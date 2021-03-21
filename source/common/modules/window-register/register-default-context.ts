@@ -47,7 +47,7 @@ const TEXT_INPUT_TYPES = [
 ]
 
 // Holds the current close callback
-var currentCallback: Function|null = null
+let currentCallback: Function|null = null
 
 /**
  * Registers listeners for default context menus for anything text related

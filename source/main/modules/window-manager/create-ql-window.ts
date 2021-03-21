@@ -32,15 +32,16 @@ import attachLogger from './attach-logger'
 export default function createQuicklookWindow (file: MDFileDescriptor, conf: WindowPosition): BrowserWindow {
   const winConf: BrowserWindowConstructorOptions = {
     acceptFirstMouse: true,
+    minWidth: 300,
+    minHeight: 200,
     width: conf.width,
     height: conf.height,
     x: conf.left,
     y: conf.top,
-    minWidth: 300,
-    minHeight: 200,
     show: false,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
       additionalArguments: [file.hash.toString()]
     },
     backgroundColor: '#fff'

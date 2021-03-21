@@ -1,16 +1,30 @@
-# 1.9.0
+# 2.0.0
 
 ## DEPRECATION: 32 bit
 
 No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supported. On Linux, ARM is not available until we find a good solution of running Pandoc there.
 
+## New Configuration Options
+
+Several configuration values and options have changed their format. This means that changes to these won't be recognised by Zettlr 2.0. In this case, you may have to re-adapt your preferences in several places.
+
+## Writing Targets Must Be Re-Applied
+
+Due to a change in the underlying data structure, this version of Zettlr will not recognise any writing target set by a Zettlr version 1.x. This means: Please note down the important writing targets you have set before installing Zettlr 2.0 and then once re-apply them. We would like to apologise for this inconvenience, but believe its benefits by far outweigh the single additional migration effort on your side.
+
 ## GUI and Functionality
 
 - **Feature**: Switched the Exporting process in a way that allows more flexibility in setting options.
 - **Feature**: The macOS version of Zettlr now boasts a new application icon, adapted to fit the style of the Big Sur operating system. It was provided by Marc Oliver Orth (@marc2o) – thank you!
+- **Feature**: Zettlr now supports bibliography files on a per-file basis. Just set the wanted bibliography in your YAML frontmatter, within the `bibliography`-property.
 - 32 bit AppImages and Windows are no longer supported.
 - Removed the Pandoc installation item from the help menu.
 - Moved the Pandoc and XeLaTeX settings to the export tab in preferences.
+- Fixed a bug that would delete file if it got renamed as itself.
+- All languages will now be downloaded by the CI workflow. Updates will still be pulled via the application on boot.
+- Removed the ability for the translation provider to arbitrarily request languages that have not been installed in order to remove that fragile feature. All languages will now be provided from the application immediately.
+- All windows will now remember their last position (new: log window and print window).
+- Some components of the renderer elements will now respect a given accent colour set by your operating system (only available for macOS and Windows).
 
 ## Under the Hood
 
@@ -20,6 +34,34 @@ No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supp
 - Removed the Pandoc command.
 - Add typings for external modules, remove the internal custom ones for `bcp-47` and `nspell`.
 - Reenabled the Pandoc and XeLaTeX options in preferences.
+- Removed the generic IPC call from the config provider and replaced it with consistent checks as to which options have actually changed. This increases the performance after configuration saves.
+- Migrated the config provider to TypeScript.
+- Migrated the Citeproc Provider to TypeScript, and cleaned the provider up:
+    - The provider has now the capability to load multiple databases at once and switch between them.
+    - Furthermore, the provider now needs much less variables, the logic is much simpler, and many unnecessary ipc calls have been removed.
+- Migrated extractBibTexAttachments to TypeScript.
+- Migrated the Translation Provider to TypeScript.
+- The translations are now loaded by the `trans` helper to make sure it will always work.
+- Migrated the preferences dialog to Vue.js.
+- Added manifold new Vue components to compose windows from.
+- The menubar and window controls are no longer controlled by the window registration handler.
+- Now tests can be run as JavaScript or as TypeScript files (use `.js` or `.spec.ts` files respectively).
+- Generalised the window state management so that all windows are now able to remember their positions easily.
+- The toolbar is now vue-ified and can be used on WindowChrome components.
+- Zettlr is now completely jQuery-free.
+- Migrated the FSAL cache from unstable Objects to Maps and Sets.
+- Migrated the TagProvider to a Map as well.
+
+# 1.8.7
+
+## GUI and Functionality
+
+- On Linux systems, the application icon should now show up again.
+- Fixed an issue where your text would "jump" irradically when you were writing in the last line of the file.
+
+## Under the Hood
+
+- Restored the generic folder path in the `electron-builer.yaml` config.
 
 # 1.8.6
 

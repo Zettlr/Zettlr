@@ -15,9 +15,10 @@
 const fs = require('fs')
 const path = require('path')
 const bcp47 = require('bcp-47')
-const { app } = require('electron')
+const { app, ipcRenderer } = require('electron')
 const isDir = require('./util/is-dir')
 const isFile = require('./util/is-file')
+const sanitizeHtml = require('sanitize-html')
 
 /**
  * Status mode that describes a returned language metadata object as an exact
@@ -76,6 +77,13 @@ function trans (string, ...args) {
     return string
   }
 
+  // Make sure the translations are ready
+  if (global.i18n === undefined || global.i18nFallback === undefined) {
+    const { i18n, i18nFallback } = ipcRenderer.sendSync('get-translation')
+    global.i18n = i18n
+    global.i18nFallback = i18nFallback
+  }
+
   // Split the string by dots
   let str = string.split('.')
   // The function will be called from line 88 as a fallback
@@ -89,24 +97,33 @@ function trans (string, ...args) {
   }
 
   for (let obj of str) {
-    if (transString.hasOwnProperty(obj)) {
+    if (obj in transString) {
       transString = transString[obj]
     } else {
       // Something went wrong and the requested translation string was
       // not found -> fall back and just return the original string
-      return (global.config.get('debug') || skipFallback) ? string : trans(string, ...[true].concat(args))
+      return (Boolean(global.config.get('debug')) || skipFallback) ? string : trans(string, ...[true].concat(args))
     }
   }
 
   // There was an additional attribute missing (there is a whole object
   // in the variable) -> just return the string
-  if (typeof transString !== 'string') return string
+  if (typeof transString !== 'string') {
+    return string
+  }
 
   for (let a of args) {
     transString = transString.replace('%s', a) // Always replace one %s with an arg
   }
 
-  return transString
+  // Finally, before returning the translation, sanitize it. As these are only
+  // translation strings, we can basically only allow a VERY small subset of all
+  // tags.
+  const safeString = sanitizeHtml(transString, {
+    allowedTags: [ 'em', 'strong', 'kbd' ]
+  })
+
+  return safeString
 }
 
 /**
@@ -124,14 +141,13 @@ function getDictionaryFile (query) {
   }
 
   let lang = bcp47.parse(query)
-  if (!lang) throw new Error(`Request for BCP 47 compatible dictionary file was malformed: ${query}`)
 
   // Now we should have a list of all available dictionaries. Next, we need to
   // search for a best and a close match.
   let { exact, close } = findLangCandidates(lang, enumDictFiles())
 
-  if (exact) return exact
-  if (close) return close
+  if (exact !== undefined) return exact
+  if (close !== undefined) return close
   return ret
 }
 
@@ -149,14 +165,13 @@ function getLanguageFile (query) {
   }
 
   let lang = bcp47.parse(query)
-  if (!lang) throw new Error(`Request for BCP 47 compatible dictionary file was malformed: ${query}`)
 
   // Now we should have a list of all available dictionaries. Next, we need to
   // search for a best and a close match.
   let { exact, close } = findLangCandidates(lang, enumLangFiles())
 
-  if (exact) return exact
-  if (close) return close
+  if (exact !== undefined) return exact
+  if (close !== undefined) return close
   return ret
 }
 
@@ -213,14 +228,18 @@ function findLangCandidates (lang, candidates) {
     if (candidateType === 'best') {
       bestMatch = candidate
       break
-    } else if (candidateType === 'close' && !closeMatch) {
+    } else if (candidateType === 'close' && closeMatch === undefined) {
       closeMatch = candidate
       // Don't break here, because maybe the best match comes afterwards in the list
     }
   }
 
-  if (bestMatch) bestMatch.status = EXACT
-  if (closeMatch) closeMatch.status = CLOSE
+  if (bestMatch !== undefined) {
+    bestMatch.status = EXACT
+  }
+  if (closeMatch !== undefined) {
+    closeMatch.status = CLOSE
+  }
 
   return {
     'exact': bestMatch,
@@ -241,7 +260,9 @@ function getTranslationMetadata (paths = [ path.join(app.getPath('userData'), '/
   // Now loop through them and extract the metadata section
   for (let f of files) {
     let lang = path.basename(f, path.extname(f)) // bcp-47 tag
-    if (metadata.find(elem => elem.bcp47 === lang)) continue // Already included
+    if (metadata.find(elem => elem.bcp47 === lang) !== undefined) {
+      continue // Already included
+    }
     let data = fs.readFileSync(f, 'utf-8')
     let stat = fs.lstatSync(f)
     data = JSON.parse(data)
@@ -254,7 +275,7 @@ function getTranslationMetadata (paths = [ path.join(app.getPath('userData'), '/
     } else {
       data.metadata['bcp47'] = lang // Add language tag
       // Make sure we have a last updated property.
-      if (!data.metadata.hasOwnProperty('updated_at')) {
+      if (!('updated_at' in data.metadata)) {
         data.metadata.updated_at = stat.mtime.toISOString()
       }
       metadata.push(data.metadata)
@@ -280,7 +301,7 @@ function enumLangFiles (paths = [ path.join(app.getPath('userData'), '/lang'), p
       if (path.extname(file) !== '.json') continue
 
       let schema = bcp47.parse(file.substr(0, file.lastIndexOf('.')))
-      if (schema.language) {
+      if (schema.language !== undefined) {
         candidates.push({
           'tag': bcp47.stringify(schema),
           'path': path.join(p, file)
@@ -303,7 +324,7 @@ function enumDictFiles (paths = [ path.join(app.getPath('userData'), '/dict'), p
     for (let dir of list) {
       if (!isDir(path.join(p, dir))) continue
       let schema = bcp47.parse(dir)
-      if (schema.language) {
+      if (schema.language !== undefined) {
         // Additional check to make sure the dictionaries are complete.
         let aff = path.join(p, dir, dir + '.aff')
         let dic = path.join(p, dir, dir + '.dic')

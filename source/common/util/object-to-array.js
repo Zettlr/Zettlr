@@ -5,8 +5,6 @@
  * @param {Array} arr An optional array to append to
  */
 module.exports = function objectToArray (tree, traverse, arr = []) {
-  if (!tree) return arr
-
   // Add the current tree
   arr.push(tree)
 

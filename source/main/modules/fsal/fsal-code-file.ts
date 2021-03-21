@@ -55,6 +55,7 @@ async function updateFileMetadata (fileObject: CodeFileDescriptor): Promise<void
   try {
     let stat = await fs.lstat(fileObject.path)
     fileObject.modtime = stat.mtime.getTime()
+    fileObject.size = stat.size
     global.log.info(`Updated modtime for fileDescriptor ${fileObject.name} to ${fileObject.modtime}`)
   } catch (e) {
     global.log.error(`Could not update the metadata for file ${fileObject.name}: ${String(e.message).toString()}`, e)
@@ -82,6 +83,7 @@ export function metadata (fileObject: CodeFileDescriptor): CodeFileMeta {
     name: fileObject.name,
     hash: fileObject.hash,
     ext: fileObject.ext,
+    size: fileObject.size,
     type: fileObject.type,
     modtime: fileObject.modtime,
     creationtime: fileObject.creationtime,
@@ -104,6 +106,7 @@ export async function parse (
     name: path.basename(filePath),
     hash: hash(filePath),
     ext: path.extname(filePath),
+    size: 0,
     id: '', // The ID, if there is one inside the file.
     tags: [], // All tags that are to be found inside the file's contents.
     bom: '', // Default: No BOM
@@ -118,7 +121,8 @@ export async function parse (
   try {
     // Get lstat
     let stat = await fs.lstat(filePath)
-    file.modtime = stat.mtime.getTime() // stat.ctimeMs DEBUG: Switch to mtimeMs for the time being
+    file.modtime = stat.mtime.getTime()
+    file.size = stat.size
     file.creationtime = stat.birthtime.getTime()
   } catch (e) {
     global.log.error('Error reading file ' + filePath, e)
@@ -190,22 +194,23 @@ export async function rename (fileObject: CodeFileDescriptor, cache: any, newNam
   cacheFile(fileObject, cache)
 }
 
-export function remove (fileObject: CodeFileDescriptor): void {
-  const deleteOnFail: boolean = global.config.get('system.deleteOnFail')
-  const deleteSuccess = shell.moveItemToTrash(fileObject.path, deleteOnFail)
+export async function remove (fileObject: CodeFileDescriptor): Promise<void> {
+  try {
+    await shell.trashItem(fileObject.path)
+  } catch (err) {
+    if (global.config.get('system.deleteOnFail') === true) {
+      // If this function throws, there's really something off and we shouldn't recover.
+      await fs.unlink(fileObject.path)
+    } else {
+      global.log.info(`[FSAL File] Could not remove file ${fileObject.path}: ${String(err.message)}`)
+      return
+    }
+  }
 
-  if (deleteSuccess && fileObject.parent !== null) {
+  if (fileObject.parent !== null) {
     // Splice it from the parent directory
     const idx = fileObject.parent.children.indexOf(fileObject)
     fileObject.parent.children.splice(idx, 1)
-  }
-
-  if (!deleteSuccess) {
-    // Forcefully remove the file
-    fs.unlink(fileObject.path)
-      .catch(err => {
-        global.log.error(`[FSAL CodeFile] Could not remove file ${fileObject.path}: ${err.message as string}`, err)
-      })
   }
 }
 
@@ -215,4 +220,15 @@ export function markDirty (fileObject: CodeFileDescriptor): void {
 
 export function markClean (fileObject: CodeFileDescriptor): void {
   fileObject.modified = false
+}
+
+export async function reparseChangedFile (fileObject: CodeFileDescriptor, cache: any): Promise<void> {
+  // Almost the same, except we don't write anything
+  const contents = await load(fileObject)
+  // Afterwards, retrieve the now current modtime
+  await updateFileMetadata(fileObject)
+  // Make sure to keep the file object itself as well as the tags updated
+  parseFileContents(fileObject, contents)
+  fileObject.modified = false // Always reset the modification flag.
+  cacheFile(fileObject, cache)
 }
