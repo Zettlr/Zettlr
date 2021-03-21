@@ -9,24 +9,17 @@
     ></TextControl>
     <!-- TODO: Allow to restrict to directories using an autocomplete input -->
     <ButtonControl
-      v-if="searchResults.length > 0"
+      v-if="searchResults.length > 0 && filesToSearch.length === 0"
       v-bind:label="'Clear search results'"
       v-on:click="emptySearchResults()"
     ></ButtonControl>
     <div v-if="filesToSearch.length > 0">
-      <!-- TODO: Custom Progress component -->
-      <progress
+      <ProgressControl
         v-bind:max="sumFilesToSearch"
         v-bind:value="sumFilesToSearch - filesToSearch.length"
-      >
-        Searching {{ filesToSearch.length }} files ...
-      </progress>
-      <!-- TODO: Allow for a small, micro-button as seen on macOS -->
-      <ButtonControl
-        v-bind:inline="true"
-        v-bind:icon="'times'"
-        v-on:click="filesToSearch = []"
-      ></ButtonControl>
+        v-bind:interruptible="true"
+        v-on:interrupt="filesToSearch = []"
+      ></ProgressControl>
     </div>
     <template v-if="searchResults.length > 0">
       <div
@@ -55,12 +48,14 @@ import objectToArray from '../common/util/object-to-array'
 import compileSearchTerms from '../common/util/compile-search-terms'
 import TextControl from '../common/vue/form/elements/Text'
 import ButtonControl from '../common/vue/form/elements/Button'
+import ProgressControl from './Progress'
 import { ipcRenderer } from 'electron'
 
 export default {
   name: 'GlobalSearch',
   components: {
     TextControl,
+    ProgressControl,
     ButtonControl
   },
   data: function () {
