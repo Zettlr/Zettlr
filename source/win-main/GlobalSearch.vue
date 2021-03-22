@@ -6,10 +6,12 @@
       ref="query-input"
       v-model="query"
       v-bind:placeholder="'Find …'"
+      v-bind:label="'Enter your search terms below'"
       v-on:confirm="startSearch()"
     ></TextControl>
     <AutocompleteText
       v-model="restrictToDir"
+      v-bind:label="'Restrict search to directory'"
       v-bind:autocomplete-values="directorySuggestions"
       v-bind:placeholder="'Restrict to directory ...'"
       v-on:confirm="restrictToDir = $event"
@@ -58,7 +60,9 @@
           <clr-icon v-else shape="dot-circle" style="fill: #33aa33"></clr-icon>
           {{ result.file.filename }}
         </div>
-        <div class="filepath">{{ result.file.relativeDirectoryPath }}</div>
+        <div class="filepath">
+          {{ result.file.relativeDirectoryPath }}
+        </div>
         <div v-if="!result.hideResultSet" class="results-container">
           <div
             v-for="singleRes, idx2 in result.result"
