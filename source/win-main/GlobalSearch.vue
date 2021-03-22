@@ -1,18 +1,42 @@
 <template>
   <div id="global-search-pane">
     <h4>Search</h4>
+    <!-- First: Two text controls for search terms and to restrict the search -->
     <TextControl
       ref="query-input"
       v-model="query"
       v-bind:placeholder="'Find …'"
       v-on:confirm="startSearch()"
     ></TextControl>
-    <!-- TODO: Allow to restrict to directories using an autocomplete input -->
+    <AutocompleteText
+      v-model="restrictToDir"
+      v-bind:autocomplete-values="directorySuggestions"
+      v-bind:placeholder="'Restrict to directory ...'"
+      v-on:confirm="restrictToDir = $event"
+    ></AutocompleteText>
+    <!-- Then an always-visible search button ... -->
+    <ButtonControl
+      v-bind:label="'Search'"
+      v-bind:inline="true"
+      v-on:click="startSearch()"
+    ></ButtonControl>
+    <!-- ... as well as two buttons to clear the results or toggle them. -->
     <ButtonControl
       v-if="searchResults.length > 0 && filesToSearch.length === 0"
       v-bind:label="'Clear search results'"
+      v-bind:inline="true"
       v-on:click="emptySearchResults()"
     ></ButtonControl>
+    <ButtonControl
+      v-if="searchResults.length > 0 && filesToSearch.length === 0"
+      v-bind:label="'Toggle result display'"
+      v-bind:inline="true"
+      v-on:click="toggleIndividualResults()"
+    ></ButtonControl>
+    <!--
+      During searching, display a progress bar that indicates how far we are and
+      that allows to interrupt the search, if it takes too long.
+    -->
     <div v-if="filesToSearch.length > 0">
       <ProgressControl
         v-bind:max="sumFilesToSearch"
@@ -21,23 +45,31 @@
         v-on:interrupt="filesToSearch = []"
       ></ProgressControl>
     </div>
+    <!-- Finally, display all search results, per file and line. -->
     <template v-if="searchResults.length > 0">
       <div
         v-for="result, idx in searchResults"
         v-bind:key="idx"
         class="search-result-container"
       >
-        <span class="filename">{{ result.file.filename }}</span>
-        <span class="filepath">{{ result.file.relativeDirectoryPath }}</span>
-        <span
-          v-for="singleRes, idx2 in result.result"
-          v-bind:key="idx2"
-          class="result-line"
-          v-on:click="jumpToLine(result.file.path, singleRes.from.line)"
-        >
-          <strong>{{ singleRes.from.line }}</strong>:
-          <span v-html="markText(singleRes.term, singleRes.restext)"></span>
-        </span>
+        <div class="filename" v-on:click="result.hideResultSet = !result.hideResultSet">
+          <clr-icon v-if="result.weight / maxWeight < 0.3" shape="dot-circle" style="fill: #aaaaaa"></clr-icon>
+          <clr-icon v-else-if="result.weight / maxWeight < 0.7" shape="dot-circle" style="fill: #ddbb33"></clr-icon>
+          <clr-icon v-else shape="dot-circle" style="fill: #33aa33"></clr-icon>
+          {{ result.file.filename }}
+        </div>
+        <div class="filepath">{{ result.file.relativeDirectoryPath }}</div>
+        <div v-if="!result.hideResultSet" class="results-container">
+          <div
+            v-for="singleRes, idx2 in result.result"
+            v-bind:key="idx2"
+            class="result-line"
+            v-on:click="jumpToLine(result.file.path, singleRes.from.line)"
+          >
+            <strong>{{ singleRes.from.line }}</strong>:
+            <span v-html="markText(singleRes.term, singleRes.restext)"></span>
+          </div>
+        </div>
       </div>
     </template>
   </div>
@@ -49,6 +81,7 @@ import compileSearchTerms from '../common/util/compile-search-terms'
 import TextControl from '../common/vue/form/elements/Text'
 import ButtonControl from '../common/vue/form/elements/Button'
 import ProgressControl from './Progress'
+import AutocompleteText from './AutocompleteText'
 import { ipcRenderer } from 'electron'
 
 export default {
@@ -56,17 +89,30 @@ export default {
   components: {
     TextControl,
     ProgressControl,
-    ButtonControl
+    ButtonControl,
+    AutocompleteText
   },
   data: function () {
     return {
+      // The current search
       query: '',
-      searchInProgress: false,
+      // Whether or not we should restrict search to a given directory
+      restrictToDir: '',
+      // All directories we've found in the file tree
+      directorySuggestions: [],
+      // The compiled search terms
       compiledTerms: null,
-      searchIndex: -1,
+      // All files that we need to search. Will be emptied during a search.
       filesToSearch: [],
+      // All results so far received
       searchResults: [],
+      // The number of files the search started with (for progress bar)
       sumFilesToSearch: 0,
+      // A global trigger for the result set trigger. This will determine what
+      // the toggle will do to all result sets -- either hide or display them.
+      toggleState: false,
+      // Contains the current search's maximum (combined) weight across the results
+      maxWeight: 0,
       // Is set to a line number if this component is waiting for a file to
       // become active.
       jtlIntent: undefined
@@ -102,12 +148,34 @@ export default {
         this.$emit('jtl', this.jtlIntent)
         this.jtlIntent = undefined
       }
+    },
+    fileTree: function () {
+      this.recomputeDirectorySuggestions()
     }
   },
   mounted: function () {
     this.$refs['query-input'].focus()
+    this.recomputeDirectorySuggestions()
   },
   methods: {
+    recomputeDirectorySuggestions: function () {
+      let dirList = []
+
+      for (const treeItem of this.fileTree) {
+        if (treeItem.type !== 'directory') {
+          continue
+        }
+
+        let dirContents = objectToArray(treeItem, 'children')
+        dirContents = dirContents.filter(item => item.type === 'directory')
+        // Remove the workspace directory path itself so only the
+        // app-internal relative path remains. Also, we're removing the leading (back)slash
+        dirList = dirList.concat(dirContents.map(item => item.path.replace(treeItem.dir, '').substr(1)))
+      }
+
+      // Remove duplicates
+      this.directorySuggestions = [...new Set(dirList)]
+    },
     startSearch: function () {
       // We should start a search. We need two types of information for that:
       // 1. A list of files to be searched
@@ -147,8 +215,10 @@ export default {
         }
       }
 
-      // Now filter out all directories
-      fileList = fileList.filter(item => item.type !== 'directory')
+      // And also all files that are not within the selected directory
+      if (this.restrictToDir.trim() !== '') {
+        fileList = fileList.filter(item => item.relativeDirectoryPath.startsWith(this.restrictToDir))
+      }
 
       if (fileList.length === 0) {
         return console.warn('Could not begin search: The file list was empty.')
@@ -160,7 +230,7 @@ export default {
       this.emptySearchResults()
       this.sumFilesToSearch = fileList.length
       this.filesToSearch = fileList
-      this.searchInProgress = true
+      this.maxWeight = 0
       this.singleSearchRun().catch(err => console.error(err))
     },
     singleSearchRun: async function () {
@@ -176,10 +246,18 @@ export default {
           }
         })
         if (result.length > 0) {
-          this.searchResults.push({
+          const newResult = {
             file: fileToSearch,
-            result: result
-          })
+            result: result,
+            hideResultSet: false, // If true, the individual results won't be displayed
+            weight: result.reduce((accumulator, currentValue) => {
+              return accumulator + currentValue.weight
+            }, 0) // This is the initialValue, b/c we're summing up props
+          }
+          this.searchResults.push(newResult)
+          if (newResult.weight > this.maxWeight) {
+            this.maxWeight = newResult.weight
+          }
         }
       }
 
@@ -187,7 +265,6 @@ export default {
     },
     finaliseSearch: function () {
       this.compiledTerms = null
-      this.searchInProgress = false
       this.filesToSearch = [] // Reset, in case the search was aborted.
     },
     emptySearchResults: function () {
@@ -195,6 +272,12 @@ export default {
       // Also, for convenience, re-focus and select the input
       this.$refs['query-input'].focus()
       this.$refs['query-input'].select()
+    },
+    toggleIndividualResults: function () {
+      this.toggleState = this.toggleState === false
+      for (const result of this.searchResults) {
+        result.hideResultSet = this.toggleState
+      }
     },
     jumpToLine: function (filePath, lineNumber) {
       const isFileOpen = this.openFiles.find(file => file.path === filePath)
@@ -243,25 +326,24 @@ body div#global-search-pane {
     border-bottom: 1px solid rgb(180, 180, 180);
     padding: 10px;
     overflow: hidden;
+    font-size: 14px;
 
-    span.filename {
-      display: block;
+    div.filename {
       white-space: nowrap;
       font-weight: bold;
     }
 
-    span.filepath {
+    div.filepath {
       color: rgb(131, 131, 131);
-      font-size: 11px;
-      display: block;
+      font-size: 10px;
       white-space: nowrap;
       overflow: hidden;
       margin-bottom: 5px;
     }
 
-    span.result-line {
-      display: block;
+    div.result-line {
       padding: 5px;
+      font-size: 12px;
 
       &:hover {
         background-color: rgb(180, 180, 180);
