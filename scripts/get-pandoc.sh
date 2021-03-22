@@ -110,7 +110,7 @@ then
     echo "Moving binary from ./bin/pandoc to resources directory ..."
     # Now move the binary
     cd $EXTRACTEDFOLDER
-    mv ./bin/pandoc ../
+    mv ./bin/pandoc ../pandoc-darwin-$ARCH
     cd ..
 elif [ "$PLATFORM" == "linux" ]
 then
@@ -120,7 +120,7 @@ then
     echo "Extracted to: $EXTRACTEDFOLDER"
     echo "Moving binary from ./bin/pandoc to resources directory ..."
     cd $EXTRACTEDFOLDER
-    mv ./bin/pandoc ../
+    mv ./bin/pandoc ../pandoc-linux-$ARCH
     cd ..
 elif [ "$PLATFORM" == "win32" ]
 then
@@ -130,7 +130,7 @@ then
     echo "Extracted to: $EXTRACTEDFOLDER"
     cd $EXTRACTEDFOLDER
     echo "Moving binary from ./ to resources directory ..."
-    mv ./pandoc.exe ../
+    mv ./pandoc.exe ../pandoc-win32-$ARCH.exe
     cd ..
 fi
 

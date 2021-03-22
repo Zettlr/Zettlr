@@ -1,4 +1,6 @@
 const { spawn } = require('child_process')
+const fs = require('fs').promises
+const path = require('path')
 
 /**
  * This function runs the get-pandoc script in order to download the requested
@@ -68,16 +70,26 @@ module.exports = {
       const supportsPandoc = is64Bit || (isMacOS && isArm64) || (isLinux && isArm64)
 
       if (supportsPandoc && isWin32) {
-        // Download Pandoc beforehand
-        await downloadPandoc('win32', 'x64')
-        forgeConfig.packagerConfig.extraResource.push('./resources/pandoc.exe')
+        // Download Pandoc beforehand, if it's not yet there.
+        try {
+          await fs.lstat(path.join(__dirname, './resources/pandoc-win32-x64.exe'))
+        } catch (err) {
+          await downloadPandoc('win32', 'x64')
+        }
+
+        forgeConfig.packagerConfig.extraResource.push('./resources/pandoc-win32-x64.exe')
       } else if (supportsPandoc && (isMacOS || isLinux)) {
         // Download Pandoc either for macOS or Linux ...
         const platform = (isMacOS) ? 'darwin' : 'linux'
         // ... and the ARM version if we're downloading for Linux ARM, else x64.
         const arch = (isLinux && isArm64) ? 'arm' : 'x64'
-        await downloadPandoc(platform, arch)
-        forgeConfig.packagerConfig.extraResource.push('./resources/pandoc')
+        try {
+          await fs.lstat(path.join(__dirname, `./resources/pandoc-${platform}-${arch}`))
+        } catch (err) {
+          await downloadPandoc(platform, arch)
+        }
+
+        forgeConfig.packagerConfig.extraResource.push(`./resources/pandoc-${platform}-${arch}`)
       } else {
         // If someone is building this on an unsupported platform, drop a warning.
         console.log('\nBuilding for an unsupported platform/arch-combination - not bundling Pandoc.')

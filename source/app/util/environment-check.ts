@@ -68,8 +68,9 @@ export default async function environmentCheck (): Promise<void> {
   const isWindows = process.platform === 'win32'
   const winARM = isWindows && isARM64
   const macARM = isDarwin && isARM64
+  const linuxARM = isLinux && isARM64
 
-  if (!winARM && !macARM && !is64Bit && !isLinux) {
+  if (!winARM && !macARM && !is64Bit && !isLinux && !linuxARM) {
     // We support: Windows ARM and macOS ARM
     // and anything 64bit. Warn for everything else.
     global.log.warning(`[Application] Your platform/arch (${process.platform}/${process.arch}) combination is not officially supported. Zettlr might not function correctly.`)
@@ -77,7 +78,18 @@ export default async function environmentCheck (): Promise<void> {
 
   // We need to check if Pandoc has been bundled with this package.
   // Because if it is, we can simply use that one instead.
-  const executable = (process.platform === 'win32') ? 'pandoc.exe' : 'pandoc'
+  let executable = ''
+  if (process.platform === 'win32') {
+    executable = 'pandoc-win32-x64.exe'
+  } else if (isLinux && is64Bit) {
+    executable = 'pandoc-linux-x64'
+  } else if (linuxARM) {
+    executable = 'pandoc-linux-arm'
+  } else if (isDarwin) {
+    executable = 'pandoc-darwin-x64'
+  }
+
+  // const executable = (process.platform === 'win32') ? 'pandoc.exe' : 'pandoc'
   const pandocPath = path.join(process.resourcesPath, executable)
   if (isFile(pandocPath)) {
     global.log.info(`[Application] Pandoc has been bundled with this release. Path: ${pandocPath}`)
