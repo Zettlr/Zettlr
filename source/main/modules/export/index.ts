@@ -15,6 +15,7 @@
 // Modules
 import path from 'path'
 import { spawn } from 'child_process'
+import makeDefaultsFile from '@lackadaisical/defaults-generator'
 import YAML from 'yaml'
 import { app } from 'electron'
 import { promises as fs } from 'fs'
