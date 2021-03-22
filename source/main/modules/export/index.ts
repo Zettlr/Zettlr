@@ -68,8 +68,39 @@ export async function makeExport (options: ExporterOptions, formatOptions: any =
     targetFile: '' // This will be returned if no exporter has been found
   }
 
+<<<<<<< HEAD
   // Now, pre-process the input files
   const inputFiles = await prepareFiles(options)
+=======
+  // Now, prepare the input file
+  await prepareFile(options)
+
+  // Make sure the file endings are correct
+  if (options.format === 'plain') {
+    options.targetFile = options.targetFile.replace('.plain', '.txt')
+  }
+  if (options.format === 'latex') {
+    options.targetFile = options.targetFile.replace('.latex', '.tex')
+  }
+
+  if ([ 'textbundle', 'textpack' ].includes(options.format)) {
+    // Make a Textbundle
+    await makeTextbundle(
+      options.sourceFile,
+      options.targetFile,
+      options.format === 'textpack',
+      path.basename(options.file.path)
+    )
+  } else {
+    // Run Pandoc
+    const defaultsFile = await writeDefaults(options.format, options.file.frontmatter, options.sourceFile, options.targetFile)
+    const pandocOutput = await runPandoc(defaultsFile)
+    // Make sure to propagate the results
+    exporterReturn.code = pandocOutput.code
+    exporterReturn.stdout = pandocOutput.stdout
+    exporterReturn.stderr = pandocOutput.stderr
+  }
+>>>>>>> 732ca46b (More WIP)
 
   // This is basically the "plugin API"
   const ctx: ExporterAPI = {

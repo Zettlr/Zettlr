@@ -1,4 +1,3 @@
-import { CodeFileDescriptor, MDFileDescriptor } from '../fsal/types'
 
 /**
  * This interface descripes options that can be passed in general to the
