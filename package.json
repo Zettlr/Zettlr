@@ -69,7 +69,7 @@
     "sanitize-html": "^2.3.3",
     "semver": "^7.3.4",
     "showdown": "^1.9.1",
-    "tippy.js": "^6.2.7",
+    "tippy.js": "^6.3.1",
     "uuid": "^8.3.2",
     "vue": "^2.6.12",
     "vue-virtual-scroller": "^1.0.10",
