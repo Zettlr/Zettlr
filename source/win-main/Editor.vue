@@ -48,6 +48,7 @@ import makeSearchRegEx from '../common/util/make-search-regex'
 import MarkdownEditor from '../common/modules/markdown-editor'
 import CodeMirror from 'codemirror'
 import { util as citrUtil, parseSingle } from '@zettlr/citr'
+import objectToArray from '../common/util/object-to-array'
 
 export default {
   name: 'Editor',
@@ -143,6 +144,25 @@ export default {
     },
     cslItems: function () {
       return this.$store.state.cslItems
+    },
+    fsalFiles: function () {
+      const tree = this.$store.state.fileTree
+      const files = []
+
+      console.time('File allocation')
+
+      for (const item of tree) {
+        if (item.type === 'directory') {
+          const contents = objectToArray(item, 'children').filter(descriptor => descriptor.type === 'file')
+          files.push(...contents)
+        } else if (item.type === 'file') {
+          files.push(item)
+        }
+      }
+
+      console.timeEnd('File allocation')
+
+      return files
     }
   },
   watch: {
@@ -187,6 +207,36 @@ export default {
     },
     tagDatabase: function () {
       this.editor.setCompletionDatabase('tags', this.tagDatabase)
+    },
+    fsalFiles: function () {
+      const fileDatabase = {}
+
+      console.time('Database allocation')
+      for (let file of this.fsalFiles) {
+        let fname = file.name.substr(0, file.name.lastIndexOf('.'))
+        let displayText = fname // Fallback: Only filename
+        if ('frontmatter' in file && file.frontmatter !== null && file.frontmatter.title !== undefined) {
+          // (Else) if there is a frontmatter, use that title
+          displayText = file.frontmatter.title
+        } else if (Boolean(this.$store.state.config['display.useFirstHeadings']) && file.firstHeading != null) {
+          // The user wants to use first headings as fallbacks
+          displayText = file.firstHeading
+        }
+
+        if (file.id !== '') {
+          displayText = `${file.id}: ${displayText}`
+        }
+
+        fileDatabase[fname] = {
+          // Use the ID, if given, or the filename
+          'text': (file.id !== '') ? file.id : fname,
+          'displayText': displayText,
+          'id': file.id
+        }
+      }
+      console.timeEnd('Database allocation')
+
+      this.editor.setCompletionDatabase('files', fileDatabase)
     },
     activeFile: function () {
       console.log('Active file changed')
