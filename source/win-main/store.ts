@@ -441,6 +441,10 @@ const config: StoreOptions<ZettlrState> = {
       console.log(saneEvents.map(item => `${item.event}: ${item.path} (${item.timestamp})`))
 
       for (const event of saneEvents) {
+        if (event.timestamp <= context.state.lastFiletreeUpdate) {
+          console.warn('FSAL event had an outdated timestamp -- skipping', event.event, event.path, event.timestamp)
+          continue
+        }
         console.log('Processing FSAL event', event.event, event.path, event.timestamp)
         // In the end, we also need to update our filetree update timestamp
         context.commit('lastFiletreeUpdate', event.timestamp)
