@@ -4,6 +4,7 @@
     v-bind:titlebar="true"
     v-bind:menubar="false"
     v-bind:show-toolbar="true"
+    v-bind:toolbar-labels="true"
     v-bind:toolbar-controls="toolbarControls"
     v-on:toolbar-search="filter = $event"
     v-on:toolbar-toggle="handleToggle($event)"
@@ -167,15 +168,16 @@ export default {
       const elem = this.$refs['log-viewer']
       elem.scrollTop = elem.scrollHeight - elem.getBoundingClientRect().height
     },
-    handleToggle: function (toggleID) {
-      if (toggleID === 'verboseToggle') {
-        this.includeVerbose = !this.includeVerbose
-      } else if (toggleID === 'infoToggle') {
-        this.includeInfo = !this.includeInfo
-      } else if (toggleID === 'warningToggle') {
-        this.includeWarning = !this.includeWarning
-      } else if (toggleID === 'errorToggle') {
-        this.includeError = !this.includeError
+    handleToggle: function (event) {
+      const { id, state } = event
+      if (id === 'verboseToggle') {
+        this.includeVerbose = state
+      } else if (id === 'infoToggle') {
+        this.includeInfo = state
+      } else if (id === 'warningToggle') {
+        this.includeWarning = state
+      } else if (id === 'errorToggle') {
+        this.includeError = state
       }
     }
   }
