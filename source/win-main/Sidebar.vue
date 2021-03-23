@@ -57,7 +57,7 @@
 
     <div v-show="currentTab === 'relatedFiles'">
       <h1>Related files</h1>
-      <div v-if="relatedFiles.length === 0">
+      <div v-if="relatedFiles.length === 0" class="related-files-container">
         No related files.
       </div>
       <div v-else class="related-files-container">
