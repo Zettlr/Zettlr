@@ -33,10 +33,10 @@
   resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-3.1.0.tgz#8ff71d51053cd5ee4981e5a501d80a536244f7fd"
   integrity sha512-GcIY79elgB+azP74j8vqkiXz8xLFfIzbQJdlwOPisgbKT00tviJQuEghOXSMVxJ00HoYJbGswr4kcllUc4xCcg==
 
-"@clr/icons@^5.0.3":
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/@clr/icons/-/icons-5.0.3.tgz#58cfbd807b3ac42be6671b3d4bd0a70e6826451f"
-  integrity sha512-XBxI1dRMX9nQJCJ61yS/Z86x0Z7C58q/1mXWCUJMjKbdwb5ZH2YXvMIdQv/8i6hq0vyW+HXDcaEyuAwwDF0ycQ==
+"@clr/icons@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@clr/icons/-/icons-5.1.0.tgz#a9f03c5648c832b7cbe683f7a0bea2daf04c10e4"
+  integrity sha512-5I9ZPU871kMm+7Umeuh+sjR5Svib9/v70pMD0iCOb2bN3hmVV/xU8JX0IVJ0sFqbCc5kdo3QpV4CSb+AJ17Nog==
 
 "@develar/schema-utils@~2.6.5":
   version "2.6.5"
@@ -3476,10 +3476,10 @@ electron-rebuild@^2.0.3:
     tar "^6.0.5"
     yargs "^16.0.0"
 
-electron@^12.0.1:
-  version "12.0.1"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-12.0.1.tgz#11afa81dae858cc7cd79107c2f789e8a7f93a31b"
-  integrity sha512-4bTfLSTmuFkMxq3RMyjd8DxuzbxI1Bde879XDrBA4kFWbKhZ3hfXqHXQz3129eCmcLre5odcNsWq7/xzyJilMA==
+electron@^12.0.2:
+  version "12.0.2"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-12.0.2.tgz#d92be205f1937627bd6718aad44ac161382b4c2d"
+  integrity sha512-14luh9mGzfL4e0sncyy0+kW37IU7Y0Y1tvI97FDRSW0ZBQxi5cmAwSs5dmPmNBFBIGtzkaGaEB01j9RjZuCmow==
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^14.6.2"
