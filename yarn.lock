@@ -33,10 +33,10 @@
   resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-3.1.0.tgz#8ff71d51053cd5ee4981e5a501d80a536244f7fd"
   integrity sha512-GcIY79elgB+azP74j8vqkiXz8xLFfIzbQJdlwOPisgbKT00tviJQuEghOXSMVxJ00HoYJbGswr4kcllUc4xCcg==
 
-"@clr/icons@^5.0.3":
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/@clr/icons/-/icons-5.0.3.tgz#58cfbd807b3ac42be6671b3d4bd0a70e6826451f"
-  integrity sha512-XBxI1dRMX9nQJCJ61yS/Z86x0Z7C58q/1mXWCUJMjKbdwb5ZH2YXvMIdQv/8i6hq0vyW+HXDcaEyuAwwDF0ycQ==
+"@clr/icons@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@clr/icons/-/icons-5.1.0.tgz#a9f03c5648c832b7cbe683f7a0bea2daf04c10e4"
+  integrity sha512-5I9ZPU871kMm+7Umeuh+sjR5Svib9/v70pMD0iCOb2bN3hmVV/xU8JX0IVJ0sFqbCc5kdo3QpV4CSb+AJ17Nog==
 
 "@develar/schema-utils@~2.6.5":
   version "2.6.5"
@@ -2157,10 +2157,10 @@ code-point-at@^1.0.0:
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
 
-codemirror@^5.59.4:
-  version "5.59.4"
-  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.59.4.tgz#bfc11c8ce32b04818e8d661bbd790a94f4b3a6f3"
-  integrity sha512-achw5JBgx8QPcACDDn+EUUXmCYzx/zxEtOGXyjvLEvYY8GleUrnfm5D+Zb+UjShHggXKDT9AXrbkBZX6a0YSQg==
+codemirror@^5.60.0:
+  version "5.60.0"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.60.0.tgz#00a8cfd287d5d8737ceb73987f04aee2fe5860da"
+  integrity sha512-AEL7LhFOlxPlCL8IdTcJDblJm8yrAGib7I+DErJPdZd4l6imx8IMgKK3RblVgBQqz3TZJR4oknQ03bz+uNjBYA==
 
 collection-visit@^1.0.0:
   version "1.0.0"
