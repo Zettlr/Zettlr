@@ -47,9 +47,21 @@
 
       // Run through all links on this line
       while ((match = imageRE.exec(line)) != null) {
+        // The image RE will give us the following groups:
+        // p1: The alternative text (in square brackets)
+        // p2: The complete contents of the round braces
+        // p3: If applicable, an image title (within round braces)
+        // p4: Anything in curly brackets (mostly commands for Pandoc)
         let altText = match[1] || '' // Everything inside the square brackets
-        let title = match[3] || altText // An optional title in quotes after the image
         let url = match[2] || '' // The URL
+        let title = match[3] || altText // An optional title in quotes after the image
+        let p4 = match[4] || ''
+
+        // If a third group has been captured, we need to extract this from the
+        // "bigger" second group again.
+        if (match[3] !== undefined) {
+          url = url.replace(`"${match[3]}"`, '').trim()
+        }
 
         // Now get the precise beginning of the match and its end
         let curFrom = { 'line': i, 'ch': match.index }
@@ -77,12 +89,10 @@
 
         const img = new Image()
 
-        const isDataUrl = /data:[a-zA-Z0-9/;=]+(?:;base64){0,1},.+/.test(url)
-        let actualURLToLoad = ''
+        const isDataUrl = /^data:[a-zA-Z0-9/;=]+(?:;base64){0,1},.+/.test(url)
+        let actualURLToLoad = url
 
-        if (isDataUrl) {
-          actualURLToLoad = url
-        } else {
+        if (!isDataUrl) {
           actualURLToLoad = makeAbsoluteURL(cm.getOption('zettlr').markdownImageBasePath, url)
         }
 
@@ -95,7 +105,7 @@
             event.stopPropagation()
             // Make sure there are no quotes since these will break the image
             const newCaption = caption.textContent.replace(/"/g, '')
-            const newImageTag = `![${altText}](${url} "${newCaption}")`
+            const newImageTag = `![${altText}](${url} "${newCaption}")${p4}`
             // Now replace the underlying image
             cm.replaceRange(newImageTag, curFrom, curTo)
           }
@@ -108,6 +118,8 @@
         openExternally.classList.add('open-externally-button')
         openExternally.textContent = 'Open image externally'
         openExternally.onclick = function (event) {
+          // NOTE: We can only do this because the main process prevents any
+          // navigation, and hence will capture this and instead open it using the shell.
           window.location.assign(makeAbsoluteURL(cm.getOption('zettlr').markdownImageBasePath, url))
         }
 
@@ -159,9 +171,6 @@
           size.innerHTML = `${img.naturalWidth}&times;${img.naturalHeight}px`
           textMarker.changed()
         }
-
-        // Check if there is a title to replace
-        if (match[3]) url = url.replace(`"${match[3]}"`, '').trim()
 
         // Finally set the src to begin the loading process of the image
         img.src = actualURLToLoad
