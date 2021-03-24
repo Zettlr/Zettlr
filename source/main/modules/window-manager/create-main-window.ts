@@ -44,8 +44,7 @@ export default function createMainWindow (conf: WindowPosition): BrowserWindow {
       // 5.0 we'll need to explicitly request it.
       nodeIntegration: true,
       contextIsolation: false
-    },
-    backgroundColor: '#fff'
+    }
   }
 
   setWindowChrome(winConf)

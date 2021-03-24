@@ -57,7 +57,7 @@
 
     <div v-show="currentTab === 'relatedFiles'">
       <h1>Related files</h1>
-      <div v-if="relatedFiles.length === 0">
+      <div v-if="relatedFiles.length === 0" class="related-files-container">
         No related files.
       </div>
       <div v-else class="related-files-container">
@@ -439,5 +439,10 @@ body.darwin div#sidebar {
   // On macOS the toolbar is 40px high and the documents titlebar is 30px high,
   // so we want to offset the sidebar by that.
   top: calc(40px + 30px);
+  background-color: transparent;
+}
+
+body.darwin.dark div#sidebar {
+  background-color: transparent;
 }
 </style>

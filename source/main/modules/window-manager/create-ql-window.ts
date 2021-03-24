@@ -43,8 +43,7 @@ export default function createQuicklookWindow (file: MDFileDescriptor, conf: Win
       nodeIntegration: true,
       contextIsolation: false,
       additionalArguments: [file.hash.toString()]
-    },
-    backgroundColor: '#fff'
+    }
   }
 
   // Set the correct window chrome

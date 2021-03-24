@@ -28,10 +28,19 @@ import path from 'path'
 export default function setWindowChrome (winConf: BrowserWindowConstructorOptions): void {
   const shouldUseNativeAppearance: boolean = global.config.get('window.nativeAppearance')
 
-  // On macOS, we want the traffic lights slightly inset and no native window
-  // chrome.
+  if (process.platform !== 'darwin') {
+    // It is recommended to set a background color for the windows, however, on
+    // macOS we can't do so because that would render nil the vibrancy.
+    winConf.backgroundColor = '#fff'
+  }
+
   if (process.platform === 'darwin') {
+    // On macOS, we want slightly inset traffic lights without any other window
+    // chrome. Additionally, we'll be setting the window's vibrancy so that the
+    // app looks even more native.
     winConf.titleBarStyle = 'hiddenInset'
+    winConf.vibrancy = 'sidebar'
+    winConf.visualEffectState = 'followWindow'
   } else if (process.platform !== 'linux' || !shouldUseNativeAppearance) {
     // On Windows, we need a frameless window. On Linux, only if the
     // shouldUseNativeAppearance flag is set to false.

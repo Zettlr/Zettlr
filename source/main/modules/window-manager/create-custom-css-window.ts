@@ -43,8 +43,7 @@ export default function createCustomCSSWindow (conf: WindowPosition): BrowserWin
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
-    },
-    backgroundColor: '#fff'
+    }
   }
 
   // Set the correct window chrome

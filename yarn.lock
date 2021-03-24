@@ -33,10 +33,10 @@
   resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-3.1.0.tgz#8ff71d51053cd5ee4981e5a501d80a536244f7fd"
   integrity sha512-GcIY79elgB+azP74j8vqkiXz8xLFfIzbQJdlwOPisgbKT00tviJQuEghOXSMVxJ00HoYJbGswr4kcllUc4xCcg==
 
-"@clr/icons@^5.0.3":
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/@clr/icons/-/icons-5.0.3.tgz#58cfbd807b3ac42be6671b3d4bd0a70e6826451f"
-  integrity sha512-XBxI1dRMX9nQJCJ61yS/Z86x0Z7C58q/1mXWCUJMjKbdwb5ZH2YXvMIdQv/8i6hq0vyW+HXDcaEyuAwwDF0ycQ==
+"@clr/icons@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@clr/icons/-/icons-5.1.0.tgz#a9f03c5648c832b7cbe683f7a0bea2daf04c10e4"
+  integrity sha512-5I9ZPU871kMm+7Umeuh+sjR5Svib9/v70pMD0iCOb2bN3hmVV/xU8JX0IVJ0sFqbCc5kdo3QpV4CSb+AJ17Nog==
 
 "@develar/schema-utils@~2.6.5":
   version "2.6.5"
@@ -749,10 +749,10 @@
   resolved "https://registry.yarnpkg.com/@ungap/promise-all-settled/-/promise-all-settled-1.1.2.tgz#aa58042711d6e3275dd37dc597e5d31e8c290a44"
   integrity sha512-sL/cEvJWAnClXw0wHk85/2L0G6Sj8UB0Ctc1TEMbKSsmpRosqhwj9gWgFRZSrBr2f9tiXISwNhCPmlfqUqyb9Q==
 
-"@vercel/webpack-asset-relocator-loader@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@vercel/webpack-asset-relocator-loader/-/webpack-asset-relocator-loader-1.2.1.tgz#dd83e232f38fe1a77180028f46bad9103d12ae4c"
-  integrity sha512-LpO/dFl666D7Sxsxk+E/c2jutjkGzr7nDDHHcSv2zoQ8v50QqANflJCconOpnxLpAm7Y9Qf9IG8bDlXd1KAtpA==
+"@vercel/webpack-asset-relocator-loader@^1.2.4":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@vercel/webpack-asset-relocator-loader/-/webpack-asset-relocator-loader-1.2.4.tgz#a344305ad522105ad2248d5390b55d9da04a8074"
+  integrity sha512-QVricKHb9T8FdtCvdX9vd6J5SutJkUn8G9RgY7VdyR+HIcmd0KKNqKufmZcKWRCzvUya1yzX5H5iJZNXG8aO9g==
 
 "@vue/component-compiler-utils@^3.1.0":
   version "3.1.1"
@@ -8226,10 +8226,10 @@ sanitize-filename@^1.6.2, sanitize-filename@^1.6.3:
   dependencies:
     truncate-utf8-bytes "^1.0.0"
 
-sanitize-html@^2.3.2:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/sanitize-html/-/sanitize-html-2.3.2.tgz#a1954aea877a096c408aca7b0c260bef6e4fc402"
-  integrity sha512-p7neuskvC8pSurUjdVmbWPXmc9A4+QpOXIL+4gwFC+av5h+lYCXFT8uEneqsFQg/wEA1IH+cKQA60AaQI6p3cg==
+sanitize-html@^2.3.3:
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/sanitize-html/-/sanitize-html-2.3.3.tgz#3db382c9a621cce4c46d90f10c64f1e9da9e8353"
+  integrity sha512-DCFXPt7Di0c6JUnlT90eIgrjs6TsJl/8HYU3KLdmrVclFN4O0heTcVbJiMa23OKVr6aR051XYtsgd8EWwEBwUA==
   dependencies:
     deepmerge "^4.2.2"
     escape-string-regexp "^4.0.0"

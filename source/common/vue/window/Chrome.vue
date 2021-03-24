@@ -43,10 +43,15 @@
         v-if="showWindowControls"
       ></WindowControls>
     </div>
-    <div id="window-content" v-bind:style="{
-      top: windowChromeHeight,
-      bottom: contentMarginBottom
-    }"
+    <div
+      id="window-content"
+      v-bind:style="{
+        top: windowChromeHeight,
+        bottom: contentMarginBottom
+      }"
+      v-bind:class="{
+        'disable-vibrancy': disableVibrancy
+      }"
     >
       <!-- The actual window contents will be mounted here -->
       <slot></slot>
@@ -156,6 +161,13 @@ export default {
     statusbarControls: {
       type: Array,
       default: function () { return [] }
+    },
+    // If this is set to true, the window contents will disable vibrancy for
+    // this window on macOS. Doesn't have an effect on any other operating
+    // system.
+    disableVibrancy: {
+      type: Boolean,
+      default: false
     }
   },
   data: function () {
@@ -345,13 +357,18 @@ export default {
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, Ubuntu, Roboto, Noto, 'Segoe UI', Arial, sans-serif;
   // macOS OPERATING SYSTEM STYLES
+  // NOTE: On macOS, Zettlr uses vibrancy which means we must make the
+  // background-color of all elements transparent which should have this
+  // vibrancy effect. However, since this is the overall window background, we
+  // also need a way to disable the vibrancy selectively (e.g. for the
+  // preferences window).
   &.darwin {
-    div#window-content {
+    div#window-content.disable-vibrancy {
       background-color: rgb(235, 235, 235);
     }
 
     &.dark {
-      div#window-content {
+      div#window-content.disable-vibrancy {
         background-color: rgb(30, 30, 30);
       }
     }

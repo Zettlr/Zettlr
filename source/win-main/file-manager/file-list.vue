@@ -562,6 +562,18 @@ body {
 }
 
 body.darwin {
+  #file-list #file-manager-filter {
+    background-color: rgb(230, 230, 230);
+    height: 30px;
+    padding: 4px;
+
+    #file-manager-filter-input {
+      width: 100%;
+      font-size: 11px;
+      height: calc(30px - 8px);
+    }
+  }
+
   &.dark #file-list {
     background-color: rgb(40, 40, 50);
   }

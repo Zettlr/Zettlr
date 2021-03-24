@@ -43,8 +43,7 @@ export default function createTagManagerWindow (conf: WindowPosition): BrowserWi
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
-    },
-    backgroundColor: '#fff'
+    }
   }
 
   // Set the correct window chrome
