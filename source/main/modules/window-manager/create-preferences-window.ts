@@ -43,8 +43,7 @@ export default function createPreferencesWindow (conf: WindowPosition): BrowserW
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
-    },
-    backgroundColor: '#fff'
+    }
   }
 
   // Set the correct window chrome

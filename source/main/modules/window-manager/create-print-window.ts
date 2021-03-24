@@ -46,8 +46,7 @@ export default function createPrintWindow (file: string, conf: WindowPosition): 
       // We are loading an iFrame with a local resource, so we must disable webSecurity for this window
       webSecurity: false,
       contextIsolation: false
-    },
-    backgroundColor: '#fff'
+    }
   }
 
   // Set the correct window chrome

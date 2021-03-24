@@ -46,8 +46,7 @@ export default function createErrorModal (win: BrowserWindow, title: string, mes
       nodeIntegration: true,
       contextIsolation: false,
       additionalArguments: [ title, message, contents ]
-    },
-    backgroundColor: '#fff'
+    }
   }
 
   // Set the correct window chrome

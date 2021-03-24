@@ -40,8 +40,7 @@ export default function createPasteImageModal (win: BrowserWindow, startPath: st
       nodeIntegration: true,
       contextIsolation: false,
       additionalArguments: [startPath]
-    },
-    backgroundColor: '#fff'
+    }
   }
 
   // Set the correct window chrome

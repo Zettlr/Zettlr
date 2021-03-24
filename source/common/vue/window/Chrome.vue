@@ -345,17 +345,20 @@ export default {
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, Ubuntu, Roboto, Noto, 'Segoe UI', Arial, sans-serif;
   // macOS OPERATING SYSTEM STYLES
-  &.darwin {
-    div#window-content {
-      background-color: rgb(235, 235, 235);
-    }
+  // NOTE: On macOS, we shouldn't set this colour, since the vibrancy will
+  // already include this and with a background colour, the effect wouldn't
+  // be visible.
+  // &.darwin {
+  //   div#window-content {
+  //     background-color: rgb(235, 235, 235);
+  //   }
 
-    &.dark {
-      div#window-content {
-        background-color: rgb(30, 30, 30);
-      }
-    }
-  }
+  //   &.dark {
+  //     div#window-content {
+  //       background-color: rgb(30, 30, 30);
+  //     }
+  //   }
+  // }
 
   // win32 OPERATIONG SYSTEM STYLES TODO
   // Linux OPERATING SYSTEM STYLES TODO
