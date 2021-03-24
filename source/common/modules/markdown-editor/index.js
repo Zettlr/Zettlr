@@ -183,13 +183,14 @@ module.exports = class MarkdownEditor extends EventEmitter {
         // not yet be rendered.
         setTimeout(() => {
           const selection = cm.getWrapperElement().querySelector('.CodeMirror-selected')
-          if (selection === null) {
-            return // Selection is gone or already has a tippy shown
-          }
 
           if (this._formattingBar !== undefined) {
             this._formattingBar.destroy()
             this._formattingBar = undefined
+          }
+
+          if (selection === null) {
+            return // Selection is gone or already has a tippy shown
           }
 
           this._formattingBar = tippy(selection, {
