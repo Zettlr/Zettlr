@@ -73,7 +73,6 @@ interface ConfigOptions {
     singleFileLastExporter: string
   }
   pdf: {
-    author: string
     keywords: string
     papertype: string
     pagenumbering: string

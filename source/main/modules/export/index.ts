@@ -13,7 +13,6 @@
  */
 
 import commandExists from 'command-exists'
-import { shell } from 'electron'
 import path from 'path'
 import { spawn } from 'child_process'
 
@@ -109,22 +108,6 @@ export default async function makeExport (options: ExporterOptions): Promise<Exp
   if (options.format === 'revealjs') {
     const outputFile = await makeRevealJS(options.targetFile, options.revealJSStyle)
     options.targetFile = outputFile
-  }
-
-  // The user may pass an optional autoOpen property. If not present or set to
-  // true, the file will be opened automatically. If present and set to false,
-  // it'll do nothing.
-  if (options.autoOpen === undefined || options.autoOpen) {
-    // In case of a textbundle/pack it's a folder, else it's a file
-    if ([ 'textbundle', 'textpack' ].includes(options.format)) {
-      shell.showItemInFolder(options.targetFile)
-    } else {
-      let potentialError = await shell.openPath(options.targetFile)
-      if (potentialError !== '') {
-        console.log(options.targetFile)
-        throw new Error('Could not open exported file: ' + potentialError)
-      }
-    }
   }
 
   return exporterReturn

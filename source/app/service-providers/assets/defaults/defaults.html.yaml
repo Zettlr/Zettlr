@@ -3,10 +3,6 @@ reader: markdown
 writer: html
 self-contained: false
 variables: {}
-metadata:
-  author: []
-  lang: en
-  title: ''
 metadata-files: []
 include-before-body: []
 include-after-body: []

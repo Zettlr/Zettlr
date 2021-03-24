@@ -3,10 +3,6 @@ reader: markdown
 writer: docx
 self-contained: true
 variables: {}
-metadata:
-  author: []
-  lang: en
-  title: ''
 metadata-files: []
 include-before-body: []
 include-after-body: []

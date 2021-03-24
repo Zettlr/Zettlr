@@ -13,7 +13,7 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { app } from 'electron'
+import { app, shell } from 'electron'
 import path from 'path'
 import makeExport from '../modules/export'
 import { trans } from '../../common/i18n'
@@ -115,13 +115,23 @@ export default class Export extends ZettlrCommand {
     // Call the exporter. Don't throw the "big" error as this is single-file export
     try {
       const output = await makeExport(opt)
-      if (output.code === 0) {
+      if (output.code === 0 && output.stderr.length === 0) {
         global.log.info(`Successfully exported file to ${output.targetFile}`)
         global.notify.normal(trans('system.export_success', opt.format.toUpperCase()), true)
-      } else if (output.stderr.length > 0) {
+
+        // In case of a textbundle/pack it's a folder, else it's a file
+        if ([ 'textbundle', 'textpack' ].includes(arg.format)) {
+          shell.showItemInFolder(output.targetFile)
+        } else {
+          const potentialError = await shell.openPath(output.targetFile)
+          if (potentialError !== '') {
+            throw new Error('Could not open exported file: ' + potentialError)
+          }
+        }
+      } else {
         const title = trans('system.error.export_error_title')
         const message = trans('system.error.export_error_message', output.stderr[0])
-        const contents = output.stderr.join('')
+        const contents = output.stderr.join('\n')
         global.application.displayErrorMessage(title, message, contents)
       }
     } catch (err) {

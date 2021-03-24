@@ -20,12 +20,6 @@ export default async function writeDefaults (
     sourceFile // NOTE: Can be even more files!
   ]
 
-  defaults.metadata = {
-    author: [],
-    lang: global.config.get('appLang'),
-    title: path.basename(sourceFile, path.extname(sourceFile))
-  }
-
   // Use an HTML template if applicable
   if (writer === 'html') {
     let tpl = await fs.readFile(path.join(__dirname, 'assets/export.tpl.htm'), { encoding: 'utf8' })
@@ -44,9 +38,6 @@ export default async function writeDefaults (
 
   // Populate the variables section TODO: Migrate that to its own property
   defaults.variables = global.config.get('pdf')
-
-  // Populate the default author name
-  defaults.metadata.author.push(global.config.get('pdf').author)
 
   // In order to facilitate file-only databases, we need to get the currently
   // selected database. This could break in a lot of places, but until Pandoc

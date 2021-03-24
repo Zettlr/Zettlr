@@ -76,6 +76,8 @@ div#error {
 
   p#additional-info {
     text-align: left;
+    white-space: pre-line;
+    font-family: monospace;
     margin: 10px 0px;
   }
 }
