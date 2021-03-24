@@ -5,6 +5,7 @@
     v-bind:menubar="false"
     v-bind:show-statusbar="true"
     v-bind:statusbar-controls="statusbarControls"
+    v-bind:disable-vibrancy="true"
     v-on:statusbar-click="handleClick($event)"
   >
     <div id="tag-manager">

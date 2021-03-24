@@ -5,6 +5,7 @@
     v-bind:menubar="false"
     v-bind:show-toolbar="true"
     v-bind:toolbar-controls="toolbarControls"
+    v-bind:disable-vibrancy="true"
     v-on:toolbar-search="query = $event"
   >
     <Editor

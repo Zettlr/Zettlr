@@ -6,6 +6,7 @@
     v-bind:show-tabbar="true"
     v-bind:tabbar-tabs="tabs"
     v-bind:tabbar-label="windowTitle"
+    v-bind:disable-vibrancy="true"
     v-on:tab="currentTab = $event"
     v-on:statusbar-click="handleClick($event)"
   >

@@ -6,6 +6,7 @@
     v-bind:show-toolbar="true"
     v-bind:toolbar-labels="true"
     v-bind:toolbar-controls="toolbarControls"
+    v-bind:disable-vibrancy="true"
     v-on:toolbar-search="filter = $event"
     v-on:toolbar-toggle="handleToggle($event)"
   >
