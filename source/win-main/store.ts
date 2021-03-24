@@ -234,6 +234,9 @@ const config: StoreOptions<ZettlrState> = {
     cslItems: []
   },
   getters: {
+    file: state => (filePath: string, searchAttachments = false) => {
+      return findPathDescriptor(filePath, state.fileTree, searchAttachments)
+    }
   },
   mutations: {
     updateTableOfContents: function (state, toc) {

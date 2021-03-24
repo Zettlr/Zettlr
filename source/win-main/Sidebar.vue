@@ -55,6 +55,8 @@
       </div>
     </div>
 
+    <!-- Now the tab containers -->
+
     <div v-show="currentTab === 'relatedFiles'">
       <h1>Related files</h1>
       <div v-if="relatedFiles.length === 0" class="related-files-container">
@@ -68,8 +70,10 @@
         >
           <span
             class="filename"
+            draggable="true"
             v-on:click="requestFile(fileRecord.path)"
-          >{{ fileRecord.file }}</span>
+            v-on:dragstart="beginDragRelatedFile($event, fileRecord.path)"
+          >{{ getRelatedFileName(fileRecord.path) }}</span>
           <span
             v-for="tag, idx2 in fileRecord.tags"
             v-bind:key="idx2"
@@ -81,7 +85,6 @@
       </div>
     </div>
 
-    <!-- Now the tab containers -->
     <div v-show="currentTab === 'attachments'">
       <!-- Other files contents -->
       <h1>
@@ -303,6 +306,26 @@ export default {
         payload: filePath
       })
         .catch(e => console.error(e))
+    },
+    getRelatedFileName: function (filePath) {
+      const descriptor = this.$store.getters.file(filePath)
+
+      if (descriptor.frontmatter !== null && 'title' in descriptor.frontmatter) {
+        return descriptor.frontmatter.title
+      } else if (descriptor.firstHeading !== null && Boolean(this.$store.state.config['display.useFirstHeadings'])) {
+        return descriptor.firstHeading
+      } else {
+        return descriptor.name.replace(descriptor.ext, '')
+      }
+    },
+    beginDragRelatedFile: function (event, filePath) {
+      const descriptor = this.$store.getters.file(filePath)
+
+      event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
+        'type': descriptor.type, // Can be file, code, or directory
+        'path': descriptor.path,
+        'id': descriptor.id // Convenience
+      }))
     }
   }
 }
@@ -440,6 +463,10 @@ body.darwin div#sidebar {
   // so we want to offset the sidebar by that.
   top: calc(40px + 30px);
   background-color: transparent;
+
+  div.related-files-container {
+    div.related-file span.filename { border-radius: 4px; }
+  }
 }
 
 body.darwin.dark div#sidebar {

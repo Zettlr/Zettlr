@@ -11,6 +11,7 @@
       v-bind:placeholder="placeholder"
       v-on:input="$emit('input', $event.target.value)"
       v-on:keyup.enter="confirmSelection()"
+      v-on:keyup.tab="confirmSelection()"
       v-on:keyup.esc="$emit('escape', $event.target.value)"
       v-on:keyup.down="selectNextMatch()"
       v-on:keyup.up="selectPrevMatch()"
@@ -36,6 +37,7 @@
         }"
         v-on:mouseover="selectedMatch = idx"
         v-on:mousedown.prevent.stop="confirmSelection()"
+        v-on:keyup.tab="confirmSelection()"
       >
         {{ match }}
       </div>
