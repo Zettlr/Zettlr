@@ -115,7 +115,7 @@ export default class Export extends ZettlrCommand {
     // Call the exporter. Don't throw the "big" error as this is single-file export
     try {
       const output = await makeExport(opt)
-      if (output.code === 0 && output.stderr.length === 0) {
+      if (output.code === 0 /* && output.stderr.length === 0 */) {
         global.log.info(`Successfully exported file to ${output.targetFile}`)
         global.notify.normal(trans('system.export_success', opt.format.toUpperCase()), true)
 

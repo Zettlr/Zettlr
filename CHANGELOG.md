@@ -17,6 +17,7 @@ Due to a change in the underlying data structure, this version of Zettlr will no
 - **Feature**: Switched the Exporting process in a way that allows more flexibility in setting options.
 - **Feature**: The macOS version of Zettlr now boasts a new application icon, adapted to fit the style of the Big Sur operating system. It was provided by Marc Oliver Orth (@marc2o) – thank you!
 - **Feature**: Zettlr now supports bibliography files on a per-file basis. Just set the wanted bibliography in your YAML frontmatter, within the `bibliography`-property.
+- **Feature**: Now Zettlr can export to PDF even without any LaTeX-distribution installed on the system.
 - 32 bit AppImages and Windows are no longer supported.
 - Removed the Pandoc installation item from the help menu.
 - Moved the Pandoc and XeLaTeX settings to the export tab in preferences.

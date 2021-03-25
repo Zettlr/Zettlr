@@ -21,6 +21,8 @@ import prepareFile from './prepare-file'
 import { ExporterOptions } from './types'
 import writeDefaults from './write-defaults'
 import makeRevealJS from './make-reveal'
+import { BrowserWindow } from 'electron'
+import { promises as fs } from 'fs'
 
 interface PandocRunnerOutput {
   code: number
@@ -45,11 +47,15 @@ export default async function makeExport (options: ExporterOptions): Promise<Exp
   }
 
   // DEBUG: Remove that eventually and replace by something better.
+  let chromiumPDFExport = false
   if (options.format === 'pdf') {
     try {
       await commandExists('xelatex')
     } catch (err) {
-      throw new Error('Cannot run exporter: XeLaTeX has not been found.')
+      // TODO: Handle also other cases if people don't wanna use xelatex etc.
+      // throw new Error('Cannot run exporter: XeLaTeX has not been found.')
+      options.format = 'html'
+      chromiumPDFExport = true
     }
   }
 
@@ -110,6 +116,31 @@ export default async function makeExport (options: ExporterOptions): Promise<Exp
     options.targetFile = outputFile
   }
 
+  // PDF without XeLaTeX installed means that we'll print that using a hidden
+  // browser window. Chromium's PDF abilities are actually quite good.
+  if (chromiumPDFExport) {
+    const printer = new BrowserWindow({
+      width: 600,
+      height: 800,
+      show: false
+    })
+
+    await printer.loadFile(options.targetFile)
+    const pdfData = await printer.webContents.printToPDF({
+      marginsType: 0,
+      printBackground: false,
+      printSelectionOnly: false,
+      landscape: false,
+      pageSize: 'A4',
+      scaleFactor: 100
+    })
+    printer.close()
+
+    await fs.writeFile(options.targetFile.replace('.html', '.pdf'), pdfData)
+    await fs.unlink(options.targetFile) // Remove the intermediary HTML file
+    exporterReturn.targetFile = options.targetFile.replace('.html', '.pdf')
+  }
+
   return exporterReturn
 }
 
@@ -120,22 +151,18 @@ async function runPandoc (defaultsFile: string): Promise<PandocRunnerOutput> {
     stderr: []
   }
 
-  let binary = 'pandoc'
-
   await new Promise<void>((resolve, reject) => {
-    const pandocProcess = spawn(binary, [ '--defaults', `"${defaultsFile}"` ], {
+    const pandocProcess = spawn('pandoc', [ '--defaults', `"${defaultsFile}"` ], {
       // NOTE: This has to be true, because of reasons unbeknownst to me, Pandoc
       // is unable to open the defaultsFile if it is not run from within a shell
       shell: true
     })
 
     pandocProcess.stdout.on('data', (data) => {
-      console.log('PANDOC OUT: ' + String(data))
       output.stdout.push(String(data))
     })
 
     pandocProcess.stderr.on('data', (data) => {
-      console.log('PANDOC ERR: ' + String(data))
       output.stderr.push(String(data))
     })
 
