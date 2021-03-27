@@ -1,16 +1,4 @@
-/**
- * @ignore
- * BEGIN HEADER
- *
- * Contains:        bundlerModule
- * CVM-Role:        Controller
- * Maintainer:      Hendrik Erz
- * License:         GNU GPL v3
- *
- * Description:     Makes either a textbundle or textpack
- *
- * END HEADER
- */
+// DEFAULT exporter plugin
 
 import {
   promises as fs,
@@ -20,13 +8,61 @@ import path from 'path'
 import archiver from 'archiver'
 import rimraf from 'rimraf'
 import isFile from '../../../common/util/is-file'
+import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
 
-export default async function (
-  sourceFile: string,
-  targetFile: string,
-  textpack: boolean = false,
-  overrideFilename?: string
-): Promise<void> {
+export const plugin: ExporterPlugin = {
+  pluginInformation: function () {
+    return {
+      id: 'textbundleExporter',
+      formats: {
+        'textbundle': 'Textbundle',
+        'textpack': 'Textpack'
+      },
+      options: []
+    }
+  },
+  run: async function (options: ExporterOptions, sourceFiles, formatOptions: any, ctx: ExporterAPI): Promise<ExporterOutput> {
+    const output: ExporterOutput = {
+      code: 0,
+      stdout: [],
+      stderr: [],
+      targetFile: ''
+    }
+
+    if (sourceFiles.length > 1) {
+      throw new Error('Cannot export to Textbundle: Please only pass one single file.')
+    }
+
+    const baseName = path.basename(options.sourceFiles[0].name, options.sourceFiles[0].ext)
+    const ext = options.format === 'textpack' ? '.textpack' : '.textbundle'
+    const targetPath = path.join(options.targetDirectory, baseName + ext)
+    try {
+      output.targetFile = await makeTextbundle(
+        sourceFiles[0],
+        targetPath,
+        options.format === 'textpack',
+        path.basename(sourceFiles[0])
+      )
+    } catch (err) {
+      output.code = 1
+      output.stderr.push(err.message)
+    }
+
+    return output
+  }
+}
+
+/**
+ * Creates a textbundle and returns the path to the created folder/file.
+ *
+ * @param   {string}           sourceFile        The source file to be packed
+ * @param   {string}           targetFile        The target path
+ * @param   {boolean}          textpack          Whether to create a textpack
+ * @param   {string}           overrideFilename  An optional property to override the source file name in the info.json
+ *
+ * @return  {Promise<string>}                    Resolves with a path to the file.
+ */
+async function makeTextbundle (sourceFile: string, targetFile: string, textpack: boolean = false, overrideFilename?: string): Promise<string> {
   /*
    * We have to do the following (in order):
    * 1. Find all images in the Markdown file.
@@ -99,10 +135,10 @@ export default async function (
   // As a last step, check whether or not we should actually create a textpack
   if (textpack) {
     await new Promise<void>((resolve, reject) => {
-      let packFile = targetFile.replace('.textbundle', '.textpack')
-      let stream = writeStream(packFile)
+      const packFile = targetFile.replace('.textbundle', '.textpack')
+      const stream = writeStream(packFile)
       // Create a Zip file with compression 9
-      let archive = archiver('zip', { zlib: { level: 9 } })
+      const archive = archiver('zip', { zlib: { level: 9 } })
       // Throw the error for the engine to capture
       archive.on('error', (err) => {
         reject(err)
@@ -114,17 +150,27 @@ export default async function (
       archive.pipe(stream) // Pipe the data through to our file
       archive.directory(targetFile, path.basename(targetFile))
       archive.finalize() // Done.
-        .catch(err => global.log.error(`[TextBundler] Could not finalize the Textpack archive: ${err.message as string}`, err))
+        .then(() => {
+          resolve()
+        })
+        .catch(err => {
+          global.log.error(`[TextBundler] Could not finalize the Textpack archive: ${err.message as string}`, err)
+          reject(err)
+        })
       // Now we need to overwrite the targetFile with the pack name
       targetFile = packFile
-    })
 
-    // Afterwards remove the source file
-    rimraf(targetFile.replace('.textpack', '.textbundle'), (error) => {
-      if (error !== undefined) {
-        global.log.error(`[Export] Could not remove the temporary textbundle: ${error.message}`, error)
-      }
-      /* Nothing to do */
+      // Afterwards remove the source file
+      rimraf(targetFile.replace('.textpack', '.textbundle'), (error) => {
+        if (error !== undefined) {
+          global.log.error(`[Export] Could not remove the temporary textbundle: ${error.message}`, error)
+          reject(error)
+        }
+        resolve()
+      })
     })
   }
+
+  // After all is done, return the written file (folder, to be exact).
+  return targetFile
 }

@@ -26,11 +26,14 @@
 export default {
   name: 'Message',
   props: {
-    message: Object
+    message: {
+      type: Object,
+      required: true
+    }
   },
   computed: {
     hasDetails: function () {
-      if (!this.message.details) {
+      if (this.message.details === undefined) {
         return false
       }
 
@@ -85,7 +88,7 @@ export default {
       return classes.join(' ')
     },
     toggleDetails: function () {
-      if (!this.hasDetails) {
+      if (this.hasDetails === false) {
         return
       }
 

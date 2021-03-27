@@ -2,6 +2,7 @@
 reader: markdown
 writer: revealjs
 self-contained: false
+standalone: false
 variables: {}
 metadata-files: []
 include-before-body: []

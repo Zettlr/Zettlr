@@ -12,133 +12,81 @@
  * END HEADER
  */
 
-import commandExists from 'command-exists'
+// Modules
 import path from 'path'
 import { spawn } from 'child_process'
-
-import makeTextbundle from './make-textbundle'
-import prepareFile from './prepare-file'
-import { ExporterOptions } from './types'
-import writeDefaults from './write-defaults'
-import makeRevealJS from './make-reveal'
-import { BrowserWindow } from 'electron'
+import YAML from 'yaml'
+import { app } from 'electron'
 import { promises as fs } from 'fs'
 
-interface PandocRunnerOutput {
-  code: number
-  stdout: string[]
-  stderr: string[]
-}
+// Utilities
+import isFile from '../../../common/util/is-file'
+import prepareFiles from './prepare-files'
 
-interface ExporterOutput extends PandocRunnerOutput {
-  targetFile: string
-}
+// Exporters
+import { ExporterAPI, ExporterOptions, ExporterOutput, PandocRunnerOutput } from './types'
+import { plugin as DefaultExporter } from './default-exporter'
+import { plugin as PDFExporter } from './pdf-exporter'
+import { plugin as RevealJSExporter } from './revealjs-exporter'
+import { plugin as TextbundleExporter } from './textbundle-exporter'
 
-export default async function makeExport (options: ExporterOptions): Promise<ExporterOutput> {
-  // Determine the availability of Pandoc. As the Pandoc path is added to
-  // process.env.PATH during the environment check, this should always work
-  // if a supported Zettlr variant is being used. In other cases (e.g. custom
-  // 32 bit builds) users can manually add a path. In any case, the exporter
-  // requires Pandoc, and if it's not there we fail.
-  try {
-    await commandExists('pandoc')
-  } catch (err) {
-    throw new Error('Cannot run exporter: Pandoc has not been found.')
+const PLUGINS = [
+  DefaultExporter,
+  PDFExporter,
+  RevealJSExporter,
+  TextbundleExporter
+]
+
+export function getAvailableFormats (): any {
+  // Returns simply a list of all available formats
+  const list = []
+
+  for (const plugin of PLUGINS) {
+    list.push(plugin.pluginInformation())
   }
 
-  // DEBUG: Remove that eventually and replace by something better.
-  let chromiumPDFExport = false
-  if (options.format === 'pdf') {
-    try {
-      await commandExists('xelatex')
-    } catch (err) {
-      // TODO: Handle also other cases if people don't wanna use xelatex etc.
-      // throw new Error('Cannot run exporter: XeLaTeX has not been found.')
-      options.format = 'html'
-      chromiumPDFExport = true
+  return list
+}
+
+/**
+ * Runs the exporter.
+ *
+ * @param   {ExporterOptions}  options             The options needed to facilitate the export.
+ * @param   {any}              [formatOptions={}]  These are options possibly required by a plugin.
+ *
+ * @return  {Promise<ExporterOutput>}              Resolves with an info object.
+ */
+export async function makeExport (options: ExporterOptions, formatOptions: any = {}): Promise<ExporterOutput> {
+  // We already know where the exported file will end up, so set the property
+
+  // Now we can prepare our return
+  let exporterReturn: ExporterOutput = {
+    code: 1, // TODO: Find the applicable Pandoc exit code for faulty options
+    stdout: [],
+    stderr: [],
+    targetFile: '' // This will be returned if no exporter has been found
+  }
+
+  // Now, pre-process the input files
+  const inputFiles = await prepareFiles(options)
+
+  // This is basically the "plugin API"
+  const ctx: ExporterAPI = {
+    runPandoc: async (defaults: string) => {
+      return await runPandoc(defaults)
+    },
+    getDefaultsFor: async (writer: string, properties: any) => {
+      return await writeDefaults(writer, properties)
     }
   }
 
-  // A small preparation step in case we have a revealjs
-  // export to keep the switch below lean
-  if (/^revealjs/.test(options.format)) {
-    options.revealJSStyle = options.format.substr(9) as ExporterOptions['revealJSStyle']
-    options.format = 'revealjs'
-  }
-
-  // We already know where the exported file will end up, so set the property
-  let filename = path.basename(options.file.path, path.extname(options.file.path))
-  filename += '.' + options.format
-  options.targetFile = path.join(options.dest, filename)
-  options.sourceFile = path.join(options.dest, 'export.tmp')
-
-  // Now we can prepare our return
-  const exporterReturn: ExporterOutput = {
-    code: 0,
-    stdout: [],
-    stderr: [],
-    targetFile: options.targetFile
-  }
-
-  // Now, prepare the input file
-  await prepareFile(options)
-
-  // Make sure the file endings are correct
-  if (options.format === 'plain') {
-    options.targetFile = options.targetFile.replace('.plain', '.txt')
-  }
-  if (options.format === 'latex') {
-    options.targetFile = options.targetFile.replace('.latex', '.tex')
-  }
-
-  if ([ 'textbundle', 'textpack' ].includes(options.format)) {
-    // Make a Textbundle
-    await makeTextbundle(
-      options.sourceFile,
-      options.targetFile,
-      options.format === 'textpack',
-      path.basename(options.file.path)
-    )
-  } else {
-    // Run Pandoc
-    const defaultsFile = await writeDefaults(options.format, options.sourceFile, options.targetFile)
-    const pandocOutput = await runPandoc(defaultsFile)
-    // Make sure to propagate the results
-    exporterReturn.code = pandocOutput.code
-    exporterReturn.stdout = pandocOutput.stdout
-    exporterReturn.stderr = pandocOutput.stderr
-  }
-
-  // revealJS needs no *pre*paration, but postparation, if that is even
-  // a word. This is because Pandoc can't handle inline JavaScript.
-  if (options.format === 'revealjs') {
-    const outputFile = await makeRevealJS(options.targetFile, options.revealJSStyle)
-    options.targetFile = outputFile
-  }
-
-  // PDF without XeLaTeX installed means that we'll print that using a hidden
-  // browser window. Chromium's PDF abilities are actually quite good.
-  if (chromiumPDFExport) {
-    const printer = new BrowserWindow({
-      width: 600,
-      height: 800,
-      show: false
-    })
-
-    await printer.loadFile(options.targetFile)
-    const pdfData = await printer.webContents.printToPDF({
-      marginsType: 0,
-      printBackground: false,
-      printSelectionOnly: false,
-      landscape: false,
-      pageSize: 'A4',
-      scaleFactor: 100
-    })
-    printer.close()
-
-    await fs.writeFile(options.targetFile.replace('.html', '.pdf'), pdfData)
-    await fs.unlink(options.targetFile) // Remove the intermediary HTML file
-    exporterReturn.targetFile = options.targetFile.replace('.html', '.pdf')
+  // Search for the correct plugin to run, and run it
+  for (const plugin of PLUGINS) {
+    const formats = plugin.pluginInformation().formats
+    if (options.format in formats) {
+      exporterReturn = await plugin.run(options, inputFiles, formatOptions, ctx)
+      break
+    }
   }
 
   return exporterReturn
@@ -184,4 +132,60 @@ async function runPandoc (defaultsFile: string): Promise<PandocRunnerOutput> {
   output.stdout = output.stdout.join('').split('\n').filter(line => line.trim() !== '')
 
   return output
+}
+
+// REFERENCE: Full defaults file here: https://pandoc.org/MANUAL.html#default-files
+
+async function writeDefaults (
+  writer: string, // The writer to use (e.g. html or pdf)
+  properties: any // Contains properties that will be written to the defaults
+): Promise<string> {
+  const dataDir = app.getPath('temp')
+  const defaultsFile = path.join(dataDir, 'defaults.yml')
+
+  const defaults: any = await global.assets.getDefaultsFor(writer, 'export')
+
+  // Use an HTML template if applicable TODO: Don't override that property, if it
+  // has been customised by the user
+  if (writer === 'html') {
+    let tpl = await fs.readFile(path.join(__dirname, 'assets/export.tpl.htm'), { encoding: 'utf8' })
+    defaults.template = path.join(dataDir, 'template.tpl')
+    await fs.writeFile(defaults.template, tpl, { encoding: 'utf8' })
+  }
+
+  // Populate the variables section TODO: Migrate that to its own property
+  // defaults.variables = global.config.get('pdf')
+
+  // In order to facilitate file-only databases, we need to get the currently
+  // selected database. This could break in a lot of places, but until Pandoc
+  // respects a file-defined bibliography, this is our best shot.
+  // const bibliography = global.citeproc.getSelectedDatabase()
+  const bibliography: string = global.config.get('export.cslLibrary')
+  if (bibliography !== undefined && isFile(bibliography)) {
+    if ('bibliography' in defaults) {
+      defaults.bibliography.push(bibliography)
+    } else {
+      defaults.bibliography = [bibliography]
+    }
+  }
+
+  const cslStyle: string = global.config.get('export.cslStyle')
+  if (isFile(cslStyle)) {
+    defaults.csl = cslStyle
+  }
+
+  // After we have added our default keys, let the plugin add their keys, which
+  // enables them to override certain keys if necessary.
+  for (const key in properties) {
+    defaults[key] = properties[key]
+  }
+
+  const YAMLOptions: YAML.Options = {
+    indent: 4,
+    simpleKeys: false
+  }
+  await fs.writeFile(defaultsFile, YAML.stringify(defaults, YAMLOptions), { encoding: 'utf8' })
+
+  // Return the path to the defaults file
+  return defaultsFile
 }

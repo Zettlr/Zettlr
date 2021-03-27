@@ -25,26 +25,26 @@ export default class AssetsProvider extends EventEmitter {
     global.log.verbose('Assets provider starting up ...')
 
     this._requiredDefaults = [
-      'defaults.html.yaml',
-      'defaults.pdf.yaml',
-      'defaults.docx.yaml',
-      'defaults.odt.yaml',
-      'defaults.rtf.yaml',
-      'defaults.revealjs.yaml',
-      'defaults.rst.yaml',
-      'defaults.latex.yaml',
-      'defaults.plain.yaml',
-      'defaults.org.yaml'
+      'export.html.yaml',
+      'export.pdf.yaml',
+      'export.docx.yaml',
+      'export.odt.yaml',
+      'export.rtf.yaml',
+      'export.revealjs.yaml',
+      'export.rst.yaml',
+      'export.latex.yaml',
+      'export.plain.yaml',
+      'export.org.yaml'
     ]
 
     this._defaultsPath = path.join(app.getPath('userData'), '/defaults')
 
     global.assets = {
-      getDefaultsFor: async (writer: string) => {
-        return await this.getDefaultsFor(writer)
+      getDefaultsFor: async (format: string, type: 'import'|'export') => {
+        return await this.getDefaultsFor(format, type)
       },
-      setDefaultsFor: async (writer: string, newDefaults: any) => {
-        return await this.setDefaultsFor(writer, newDefaults)
+      setDefaultsFor: async (format: string, type: 'import'|'export', newDefaults: any) => {
+        return await this.setDefaultsFor(format, type, newDefaults)
       }
     }
 
@@ -52,9 +52,9 @@ export default class AssetsProvider extends EventEmitter {
       const { command, payload } = message
 
       if (command === 'get-defaults-file') {
-        return await this.getDefaultsFor(payload)
+        return await this.getDefaultsFor(payload.format, payload.type)
       } else if (command === 'set-defaults-file') {
-        return await this.setDefaultsFor(payload.writer, payload.contents)
+        return await this.setDefaultsFor(payload.format, payload.type, payload.contents)
       }
     })
   }
@@ -88,8 +88,8 @@ export default class AssetsProvider extends EventEmitter {
    *
    * @return  {Promise<any>}    The defaults (parsed from YAML)
    */
-  async getDefaultsFor (writer: string): Promise<any> {
-    const file = path.join(this._defaultsPath, `defaults.${writer}.yaml`)
+  async getDefaultsFor (format: string, type: 'export'|'import'): Promise<any> {
+    const file = path.join(this._defaultsPath, `${type}.${format}.yaml`)
     const yaml = await fs.readFile(file, { encoding: 'utf-8' })
     return YAML.parse(yaml)
   }
@@ -102,9 +102,9 @@ export default class AssetsProvider extends EventEmitter {
    *
    * @return  {Promise<boolean>}      Whether or not the operation was successful.
    */
-  async setDefaultsFor (writer: string, newDefaults: any): Promise<boolean> {
+  async setDefaultsFor (format: string, type: 'export'|'import', newDefaults: any): Promise<boolean> {
     try {
-      const file = path.join(this._defaultsPath, `defaults.${writer}.yaml`)
+      const file = path.join(this._defaultsPath, `${type}.${format}.yaml`)
       const yaml = YAML.stringify(newDefaults)
       await fs.writeFile(file, yaml)
       return true

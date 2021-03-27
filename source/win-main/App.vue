@@ -435,12 +435,12 @@ export default {
           if (data.shouldExport === true) {
             // Remember the last choice
             global.config.set('export.singleFileLastExporter', data.format)
-
             // Run the exporter
             ipcRenderer.invoke('application', {
               command: 'export',
               payload: {
                 format: data.format,
+                options: data.formatOptions,
                 exportTo: data.exportTo,
                 file: this.$store.state.activeFile.path
               }

@@ -147,7 +147,10 @@ export default {
 
       ipcRenderer.invoke('assets-provider', {
         command: 'get-defaults-file',
-        payload: writer
+        payload: {
+          format: writer,
+          type: 'export' // TODO
+        }
       })
         .then(data => {
           // The data is a simple object, which we need to transform into YAML
@@ -166,7 +169,8 @@ export default {
       ipcRenderer.invoke('assets-provider', {
         command: 'set-defaults-file',
         payload: {
-          writer: writer,
+          format: writer,
+          type: 'export', // TODO
           contents: data
         }
       })

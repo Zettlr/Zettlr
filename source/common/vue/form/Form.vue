@@ -154,11 +154,11 @@ export default {
   props: {
     model: {
       type: Object,
-      default: function () { return {} }
+      required: true
     },
     schema: {
       type: Object,
-      default: function () { return {} }
+      required: true
     }
   },
   methods: {
