@@ -3,7 +3,6 @@ reader: markdown
 writer: revealjs
 self-contained: false
 standalone: false
-variables: {}
 metadata-files: []
 include-before-body: []
 include-after-body: []
@@ -13,10 +12,6 @@ filters:
 - type: citeproc
 file-scope: false
 top-level-division: chapter
-pdf-engine: xelatex
-wrap: none
-columns: 78
-dpi: 72
 number-sections: false
 number-offset:
 - 0
@@ -28,7 +23,6 @@ number-offset:
 shift-heading-level-by: 1
 section-divs: true
 identifier-prefix: ''
-title-prefix: ''
 eol: lf
 strip-comments: false
 indented-code-classes: []
