@@ -41,9 +41,9 @@ export default class FileRename extends ZettlrCommand {
       newName += '.md'
     }
 
-    let file = this._app.findFile(arg.hash)
+    let file = this._app.findFile(arg.path)
     if (file === null) {
-      return global.log.error(`Could not find file ${String(arg.hash)}`)
+      return global.log.error(`Could not find file ${String(arg.path)}`)
     }
 
     // Test if we are about to override a file

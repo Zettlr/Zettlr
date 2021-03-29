@@ -524,7 +524,10 @@ export default {
 
       ipcRenderer.invoke('application', {
         command: command,
-        payload: { hash: this.obj.hash, name: newName }
+        payload: {
+          path: this.obj.path,
+          name: newName
+        }
       })
         .catch(e => console.error(e))
         .finally(() => { this.nameEditing = false })
