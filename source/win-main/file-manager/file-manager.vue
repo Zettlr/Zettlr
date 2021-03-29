@@ -17,8 +17,9 @@
     role="region"
     aria-label="File Manager"
     v-bind:class="{ expanded: isExpanded }"
-    v-on:mousemove="handleMouseOver"
-    v-on:mouseleave="handleMouseOver"
+    v-on:mouseenter="maybeShowArrowButton"
+    v-on:mousemove="maybeShowArrowButton"
+    v-on:mouseleave="maybeShowArrowButton"
     v-on:dragover="handleDragOver"
     v-on:wheel="handleWheel"
     v-on:dragstart="lockDirectoryTree"
@@ -176,12 +177,6 @@ export default {
         return // Can't show the file list
       }
 
-      // Toggle the fileList during combined mode only if there are search results
-      // TODO
-      // if (this.isCombined && this.$store.state.searchResults.length < 1) {
-      //   return
-      // }
-
       if (this.isFileListVisible) {
         // Display directories
         this.fileTreeVisible = true
@@ -197,7 +192,7 @@ export default {
      * Set focus to the file list filter (the file list will then also have focus)
      */
     focusFilter: function () {
-      if (this.isFileListVisible) {
+      if (this.isFileListVisible === true) {
         this.$refs.fileList.focusFilter()
       }
     },
@@ -205,18 +200,21 @@ export default {
      * Display the arrow button for nagivation, if applicable.
      * @param {MouseEvent} evt The associated event.
      */
-    handleMouseOver: function (evt) {
-      // TODO: Handle the case where the mouse is outside this element.
-      // The fileList is not visible after all
-      if (!this.isFileListVisible || !this.isThin) {
-        this.$refs.arrowButton.classList.add('hidden')
-        return
-      }
+    maybeShowArrowButton: function (evt) {
+      const canShowFileTree = this.isFileListVisible === true && this.isThin === true
 
-      if (evt.clientY > 150 || evt.clientY < this.$el.offsetTop || evt.clientX < 0 || evt.clientX > this.$el.offsetWidth) {
-        this.$refs.arrowButton.classList.add('hidden')
-      } else {
+      // Only show the button if the mouse is in the top of the file manager.
+      // We're adding 10px padding to make sure we have some leeway in case of
+      // sudden mouse movements.
+      const { top, left, right, bottom } = this.$el.getBoundingClientRect()
+      if (
+        canShowFileTree &&
+        evt.clientX >= left && evt.clientX <= right - 10 &&
+        evt.clientY >= top + 10 && evt.clientY <= bottom
+      ) {
         this.$refs.arrowButton.classList.remove('hidden')
+      } else {
+        this.$refs.arrowButton.classList.add('hidden')
       }
     },
     /**
