@@ -49,6 +49,7 @@ const CodeMirror = require('codemirror')
  */
 const dropFilesHook = require('./hooks/drop-files')
 const footnotesHook = require('./hooks/footnotes')
+const formattingBarHook = require('./hooks/formatting-bar')
 const pasteImagesHook = require('./hooks/paste-images')
 const matchStyleHook = require('./hooks/match-style')
 const { indentLinesHook, clearLineIndentationCache } = require('./hooks/indent-wrapped-lines')
@@ -62,7 +63,6 @@ const { autocompleteHook, setAutocompleteDatabase } = require('./hooks/autocompl
 const linkTooltipsHook = require('./hooks/link-tooltips')
 
 const displayContextMenu = require('./display-context-menu')
-const { default: tippy } = require('tippy.js')
 
 module.exports = class MarkdownEditor extends EventEmitter {
   /**
@@ -119,13 +119,6 @@ module.exports = class MarkdownEditor extends EventEmitter {
     this._contextCloseCallback = null
 
     /**
-     * The formatting bar is shown while there is a selection
-     *
-     * @var {Tippy|undefined}
-     */
-    this._formattingBar = undefined
-
-    /**
      * The CodeMirror options
      *
      * @var  {Object}
@@ -155,6 +148,7 @@ module.exports = class MarkdownEditor extends EventEmitter {
     // Attach plugins using event listeners ("hooks" in lieu of a better name)
     dropFilesHook(this._instance)
     footnotesHook(this._instance)
+    formattingBarHook(this._instance)
     pasteImagesHook(this._instance)
     matchStyleHook(this._instance)
     indentLinesHook(this._instance)
@@ -173,62 +167,6 @@ module.exports = class MarkdownEditor extends EventEmitter {
     })
 
     this._instance.on('cursorActivity', (cm) => {
-      // Whenever we have a single selection, display a nice tooltip with some
-      // fundamental formatting options
-      const selections = cm.listSelections()
-      if (Boolean(cm.somethingSelected()) && selections.length === 1 && !this.readOnly) {
-        // We have exactly one selection and it isn't just the cursor
-        // We have to retrieve the corresponding element. NOTE we have to delay
-        // this, since at the point cursorActivity is fired, the selection will
-        // not yet be rendered.
-        setTimeout(() => {
-          const selection = cm.getWrapperElement().querySelector('.CodeMirror-selected')
-
-          if (this._formattingBar !== undefined) {
-            this._formattingBar.destroy()
-            this._formattingBar = undefined
-          }
-
-          if (selection === null) {
-            return // Selection is gone or already has a tippy shown
-          }
-
-          this._formattingBar = tippy(selection, {
-            content: `<div class="editor-formatting-bar">
-    <div class="button" data-command="markdownBold"><clr-icon shape="bold"></clr-icon></div>
-    <div class="button" data-command="markdownItalic"><clr-icon shape="italic"></clr-icon></div>
-    <div class="button" data-command="markdownLink"><clr-icon shape="link"></clr-icon></div>
-    <div class="button" data-command="markdownImage"><clr-icon shape="image"></clr-icon></div>
-    <div class="button" data-command="markdownCode"><clr-icon shape="code-alt"></clr-icon></div>
-    <div class="button" data-command="markdownComment"><clr-icon shape="code"></clr-icon></div>
-</div>`,
-            allowHTML: true,
-            animation: 'shift-toward',
-            interactive: true,
-            interactiveBorder: 100, // Do not close the popup when the mouse stays within 100px of the tooltip
-            showOnCreate: true, // Immediately show the tooltip
-            appendTo: cm.getWrapperElement(), // Necessary so that the tooltip isn't hidden by other DIVs
-            onHidden: (instance) => {
-              if (this._formattingBar !== undefined) {
-                this._formattingBar.destroy()
-                this._formattingBar = undefined
-              }
-            }
-          })
-
-          this._formattingBar.popper.onclick = (event) => {
-            if (event.target.tagName === 'CLR-ICON') {
-              this.runCommand(event.target.parentElement.dataset.command)
-              this._formattingBar.destroy()
-              this._formattingBar = undefined
-            } else if (event.target.classList.contains('button') === true) {
-              this.runCommand(event.target.dataset.command)
-              this._formattingBar.destroy()
-              this._formattingBar = undefined
-            } // Else: Clicked slightly outside
-          }
-        }, 100)
-      }
       this.emit('cursorActivity')
     })
 
