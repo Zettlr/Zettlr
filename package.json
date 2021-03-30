@@ -98,7 +98,7 @@
     "@types/nspell": "^2.1.0",
     "@types/rimraf": "^3.0.0",
     "@types/uuid": "^8.3.0",
-    "@typescript-eslint/eslint-plugin": "^4.19.0",
+    "@typescript-eslint/eslint-plugin": "^4.20.0",
     "@typescript-eslint/parser": "^4.19.0",
     "@vercel/webpack-asset-relocator-loader": "^1.2.4",
     "copy-webpack-plugin": "^6.1.0",
