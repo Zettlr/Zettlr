@@ -2,30 +2,44 @@
 // it's not in the plugins folder.
 
 const tippy = require('tippy.js').default
-const { getFnRefRE } = require('../../../regular-expressions')
 const md2html = require('../../../util/md-to-html')
+
+/**
+ * No footnote tooltips while we're editing a footnote
+ *
+ * @var {boolean}
+ */
+let isEditingFootnote = false
 
 module.exports = (cm) => {
   // Hook into click events
   cm.getWrapperElement().addEventListener('click', (event) => {
     // Open links on both Cmd and Ctrl clicks - otherwise stop handling event
-    let cursor = cm.coordsChar({ left: event.clientX, top: event.clientY })
+    const cursor = cm.coordsChar({ left: event.clientX, top: event.clientY })
 
-    if (process.platform === 'darwin' && !event.metaKey) return true
-    if (process.platform !== 'darwin' && !event.ctrlKey) return true
-    if (cm.isReadOnly() || cm.getModeAt(cursor).name !== 'markdown') return true
+    if (process.platform === 'darwin' && event.metaKey === false) {
+      return true
+    }
 
-    let tokenInfo = cm.getTokenAt(cursor)
+    if (process.platform !== 'darwin' && event.ctrlKey === false) {
+      return true
+    }
+
+    if (Boolean(cm.isReadOnly()) || cm.getModeAt(cursor).name !== 'markdown') {
+      return true
+    }
+
+    const tokenInfo = cm.getTokenAt(cursor)
 
     if (tokenInfo.type === null) {
       return
     }
 
-    let tokenList = tokenInfo.type.split(' ')
-    let startsWithCirc = tokenInfo.string.indexOf('^') === 0
+    const tokenList = tokenInfo.type.split(' ')
+    const startsWithCirc = tokenInfo.string.indexOf('^') === 0
 
     // A link (reference) that starts with a cironflex is a footnote
-    if (tokenList.includes('link') && startsWithCirc) {
+    if (Boolean(tokenList.includes('link')) && startsWithCirc) {
       event.preventDefault()
       event.codemirrorIgnore = true
       editFootnote(cm, event.target)
@@ -34,9 +48,11 @@ module.exports = (cm) => {
 
   // Hook into mousemove events to show a footnote tooltip
   cm.getWrapperElement().addEventListener('mousemove', (e) => {
-    let t = e.target
-    if (t.classList.contains('cm-link') && t.textContent.indexOf('^') === 0) {
-      showFootnoteTooltip(cm, t)
+    const target = e.target
+    const isLink = Boolean(target.classList.contains('cm-link'))
+    const startsWithCircumflex = target.textContent.indexOf('^') === 0
+    if (isLink && startsWithCircumflex) {
+      showFootnoteTooltip(cm, target)
     }
   })
 }
@@ -54,35 +70,18 @@ function showFootnoteTooltip (cm, element) {
     return
   }
 
-  // Because we highlight the formatting as well, the element's text will
-  // only contain ^<id> without the brackets
-  let fn = element.textContent.substr(1)
-  let fnref = ''
-
-  // Now find the respective line and extract the footnote content using
-  // our RegEx from the footnotes plugin.
-  let fnrefRE = getFnRefRE(true) // Get the multiline version
-
-  for (let lineNo = cm.doc.lastLine(); lineNo > -1; lineNo--) {
-    fnrefRE.lastIndex = 0
-    let line = cm.doc.getLine(lineNo)
-    let match = null
-    if (((match = fnrefRE.exec(line)) != null) && (match[1] === fn)) {
-      fnref = match[2]
-      break
-    }
+  if (isEditingFootnote) {
+    return
   }
 
-  // TODO translate this message!
-  fnref = (fnref && fnref !== '') ? fnref : '_No reference text_'
+  // Because we highlight the formatting as well, the element's text will
+  // only contain ^<id> without the brackets
+  const ref = element.textContent.substr(1)
+  const fnref = getFootnoteTextForRef(cm, ref)
 
-  // For preview we should convert the footnote text to HTML.
-  fnref = md2html(fnref, true) // Ensure safe links
-
-  // Now we either got a match or an empty fnref. So create a tippy
-  // instance
   tippy(element, {
-    'content': fnref,
+    // Display the text as HTML TODO: Translate the no reference message
+    content: (fnref !== undefined && fnref.trim() !== '') ? md2html(fnref, true) : md2html('_No reference text_'),
     allowHTML: true,
     onHidden (instance) {
       instance.destroy() // Destroy the tippy instance.
@@ -100,36 +99,159 @@ function showFootnoteTooltip (cm, element) {
  * @param   {Element}    element  The target element
  */
 function editFootnote (cm, element) {
-  let ref = element.textContent.substr(1)
-  let line = null
+  const ref = element.textContent.substr(1)
+  const fnText = getFootnoteTextForRef(cm, ref)
 
-  cm.eachLine((handle) => {
-    if (handle.text.indexOf(`[^${ref}]:`) === 0) {
-      // Got the line
-      line = handle
-    }
+  if (fnText === undefined) {
+    return // There was no matching reference
+  }
+
+  const textArea = document.createElement('textarea')
+  textArea.classList.add('editor-fn-textarea') // Defined in ../editor.less
+  textArea.textContent = fnText
+
+  isEditingFootnote = true
+
+  // Now we either got a match or an empty fnref. So create a tippy
+  // instance
+  const tippyInstance = tippy(element, {
+    content: textArea,
+    allowHTML: true,
+    // Allow the user to move the cursor around quite a bit
+    interactiveBorder: 600,
+    showOnCreate: true,
+    onHidden (instance) {
+      isEditingFootnote = false
+      instance.destroy() // Destroy the tippy instance.
+    },
+    arrow: true,
+    interactive: true, // Enable clicking on links, etc.
+    appendTo: document.body, // Necessary because these tippys are interactive
+    trigger: 'manual'
   })
 
-  // TODO: Enable multiline footnotes
-
-  if (line === null) return // No matching reference found
-
-  const data = { 'content': line.text.substr(5 + ref.length) }
-  global.popupProvider.show('footnote-edit', element, data)
-
-  // Focus the textarea immediately.
-  const fnTextarea = document.getElementById('footnote-edit-textarea')
-
-  fnTextarea.focus()
-  fnTextarea.addEventListener('keydown', (e) => {
+  textArea.focus()
+  textArea.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && e.shiftKey) {
       // Done editing.
       e.preventDefault()
-      let newtext = `[^${ref}]: ${fnTextarea.value}`
-      let sc = cm.getSearchCursor(line.text, { 'line': 0, 'ch': 0 })
-      sc.findNext()
-      sc.replace(newtext)
-      global.popupProvider.close()
+      setFootnoteTextForRef(cm, ref, textArea.value)
+      tippyInstance.hide()
     }
   })
+}
+
+/**
+ * Retrieves the text for the given footnote reference.
+ *
+ * @param   {CodeMirror}        cm   The CodeMirror instance
+ * @param   {string}            ref  The reference
+ *
+ * @return  {undefined|string}       Either undefined or the text.
+ */
+function getFootnoteTextForRef (cm, ref) {
+  const range = getFnTextRange(cm, ref)
+  if (range === undefined) {
+    return undefined
+  }
+
+  const text = cm.getRange(range.from, range.to)
+
+  // Now we have the complete text. However, the text will still be indented,
+  // if it's a multi-line footnote, so we have to remove any excess indentation
+  // from the footnote text, which is especially important to not have sudden
+  // code blocks in the footnote text.
+  const lines = text.split(/\r\n|\n\r|\n/).map((line, idx) => {
+    if (idx === 0) {
+      return line
+    } else {
+      // Remove exactly four spaces at the beginning of the line
+      return line.replace(/^\s{4}/, '')
+    }
+  })
+
+  return lines.join('\n')
+}
+
+/**
+ * Sets the given string as the content for the given footnote reference.
+ *
+ * @param   {CodeMirror}  cm        The CodeMirror instance
+ * @param   {string}      ref       The reference to set the text for
+ * @param   {string}      newValue  The text to apply.
+ */
+function setFootnoteTextForRef (cm, ref, newValue) {
+  const range = getFnTextRange(cm, ref)
+  if (range === undefined) {
+    return console.warn(`Could not set footnote text for reference ${ref}: No matching text for the reference found.`)
+  }
+
+  // We have to prepare the text to be added in such a way that all lines except
+  // the first one are indented by four _additional_ spaces.
+  const lines = newValue.split(/\r\n|\n\r|\n/).map((line, idx) => {
+    if (idx === 0) {
+      return line
+    } else if (line.trim() === '') {
+      // It's good practice to keep empty lines actually empty.
+      return ''
+    } else {
+      return '    ' + line
+    }
+  })
+
+  cm.replaceRange(lines.join('\n'), range.from, range.to)
+}
+
+/**
+ * Retrieves the range as a from, to-object where the text for the given footnote
+ * reference resides.
+ *
+ * @param   {CodeMirror}  cm   The CodeMirror instance
+ * @param   {string}      ref  The reference to extract the range from
+ *
+ * @return  {undefined|{ from: { line: number, ch: number }, to: { line: number, ch: number } }}  Either undefined or the range
+ */
+function getFnTextRange (cm, ref) {
+  const lines = String(cm.getValue()).split(/\r\n|\n\r|\n/)
+
+  const from = {
+    line: 0,
+    ch: 0
+  }
+
+  const to = {
+    line: lines.length - 1,
+    ch: lines[lines.length - 1].length
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].indexOf(`[^${ref}]:`) === 0) {
+      // We have found the beginning of the footnote text: extract the position.
+      from.line = i
+      from.ch = 5 + ref.length
+    } else if (from.ch > 0) {
+      // If we're in this if, we have already found the first line of the
+      // footnote reference. However, it could be a multi-line/paragraph
+      // footnote, in which case we need to extract more. As the Pandoc
+      // documentation states, as long as the following paragraphs are indented,
+      // they will be count towards the footnote.
+
+      const isEmpty = lines[i].trim() === ''
+      const isIndented = /^\s{4,}\S+/.test(lines[i])
+      const isPreviousLineEmpty = i > 0 && lines[i - 1].trim() === ''
+
+      if (!isEmpty && !isIndented && isPreviousLineEmpty) {
+        // The line is neither empty, nor correctly indented, so stop searching.
+        to.line = i - 1
+        to.ch = lines[i - 1].length
+        break
+      }
+    }
+  }
+
+  if (from.line === 0 && from.ch === 0) {
+    return undefined
+  } else {
+    return { from, to }
+  }
 }
