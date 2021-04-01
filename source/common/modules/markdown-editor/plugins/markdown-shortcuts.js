@@ -75,7 +75,6 @@ const { getListOrderedRE, getListTaskListRE, getListUnorderedCMRE, getUrlRE, get
         cur.ch = cur.ch + pre.length
         cm.doc.setCursor(cur)
       }
-      cm.refresh()
       return
     }
 
@@ -292,7 +291,6 @@ const { getListOrderedRE, getListTaskListRE, getListUnorderedCMRE, getUrlRE, get
       let cur = cm.doc.getCursor()
       cur.ch = cur.ch + 1
       cm.doc.setCursor(cur)
-      cm.refresh()
       return
     }
 
@@ -326,7 +324,6 @@ const { getListOrderedRE, getListTaskListRE, getListUnorderedCMRE, getUrlRE, get
       let cur = cm.doc.getCursor()
       cur.ch = cur.ch + 2
       cm.doc.setCursor(cur)
-      cm.refresh()
       return
     }
 
