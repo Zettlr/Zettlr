@@ -258,8 +258,8 @@ export async function parse (currentPath: string, cache: FSALCache, parent: DirD
     if (isAttachment(absolutePath)) {
       dir.attachments.push(await FSALAttachment.parse(absolutePath, dir))
     } else if (isFile(absolutePath)) {
-      const isCode = ALLOWED_CODE_FILES.includes(path.extname(absolutePath))
-      const isMD = MARKDOWN_FILES.includes(path.extname(absolutePath))
+      const isCode = ALLOWED_CODE_FILES.includes(path.extname(absolutePath).toLowerCase())
+      const isMD = MARKDOWN_FILES.includes(path.extname(absolutePath).toLowerCase())
       if (isCode) {
         dir.children.push(await FSALCodeFile.parse(absolutePath, cache, dir))
       } else if (isMD) {

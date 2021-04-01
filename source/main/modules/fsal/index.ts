@@ -328,8 +328,8 @@ export default class FSAL extends EventEmitter {
    */
   private async _loadFile (filePath: string): Promise<void> {
     // Loads a standalone file
-    const isCode = ALLOWED_CODE_FILES.includes(path.extname(filePath))
-    const isMD = MARKDOWN_FILES.includes(path.extname(filePath))
+    const isCode = ALLOWED_CODE_FILES.includes(path.extname(filePath).toLowerCase())
+    const isMD = MARKDOWN_FILES.includes(path.extname(filePath).toLowerCase())
 
     if (isCode) {
       let file = await FSALCodeFile.parse(filePath, this._cache)
