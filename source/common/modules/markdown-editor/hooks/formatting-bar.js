@@ -81,6 +81,10 @@ function showFormattingBar (cm) {
     return // Selection is gone or already has a tippy shown
   }
 
+  if (cm.isReadOnly() === true) {
+    return // The instance is readonly, so we can't edit anything either way.
+  }
+
   formattingBar = tippy(selection, {
     content: FORMATTING_BAR_HTML,
     allowHTML: true,
