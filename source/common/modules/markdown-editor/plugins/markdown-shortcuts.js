@@ -75,50 +75,30 @@ const { getListOrderedRE, getListTaskListRE, getListUnorderedCMRE, getUrlRE, get
         cur.ch = cur.ch + pre.length
         cm.doc.setCursor(cur)
       }
-      cm.refresh()
       return
     }
 
     // Build the regular expression by first escaping problematic characters
-    let preregex = ''
-    let postregex = ''
+    let preregex = pre.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    let postregex = post.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
-    for (let i = 0; i < pre.length; i++) {
-      if (reservedChars.includes(pre.charAt(i))) {
-        preregex += '\\' + pre.charAt(i)
-      } else {
-        preregex += pre.charAt(i)
-      }
-    }
+    let re = new RegExp('^' + preregex + '.+?' + postregex + '$', 'g')
 
-    for (let i = 0; i < post.length; i++) {
-      if (reservedChars.includes(post.charAt(i))) {
-        postregex += '\\' + post.charAt(i)
-      } else {
-        postregex += post.charAt(i)
-      }
-    }
-
-    let re = new RegExp(preregex + '(.*)' + postregex, 'g')
-
-    // Retrieve currently selected selections
-    const sel = cm.doc.getSelections()
-
-    // Traverse all selections and perform bolden or unbolden on them
-    for (let i = 0; i < sel.length; i++) {
-      if (re.test(sel[i])) {
+    const replacements = []
+    for (const selection of cm.doc.getSelections()) {
+      if (re.test(selection)) {
         // We got something so unformat.
-        sel[i] = sel[i].substr(pre.length, sel[i].length - pre.length - post.length)
+        replacements.push(selection.substr(pre.length, selection.length - pre.length - post.length))
       } else {
         // TODO: Check whether the user just selected the text itself and
         // not the formatting marks!
         // We got no bold so bolden
-        sel[i] = pre + sel[i] + post
+        replacements.push(pre + selection + post)
       }
     }
 
     // Replace with changes selections
-    cm.doc.replaceSelections(sel, 'around')
+    cm.doc.replaceSelections(replacements, 'around')
   }
 
   /**
@@ -292,7 +272,6 @@ const { getListOrderedRE, getListTaskListRE, getListUnorderedCMRE, getUrlRE, get
       let cur = cm.doc.getCursor()
       cur.ch = cur.ch + 1
       cm.doc.setCursor(cur)
-      cm.refresh()
       return
     }
 
@@ -326,7 +305,6 @@ const { getListOrderedRE, getListTaskListRE, getListUnorderedCMRE, getUrlRE, get
       let cur = cm.doc.getCursor()
       cur.ch = cur.ch + 2
       cm.doc.setCursor(cur)
-      cm.refresh()
       return
     }
 
