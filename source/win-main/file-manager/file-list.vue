@@ -521,6 +521,9 @@ export default {
 </script>
 
 <style lang="less">
+// Import the necessary styles for the virtual scroller
+@import '~vue-virtual-scroller/dist/vue-virtual-scroller.css';
+
 body {
   #file-list {
     transition: left 0.3s ease;
