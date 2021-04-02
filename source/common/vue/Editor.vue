@@ -750,6 +750,7 @@ export default {
       height: 100%;
       cursor: text;
       font-family: inherit;
+      background: none;
 
       @media(min-width: 1025px) { margin-left: @editor-margin-normal-lg; }
       @media(max-width: 1024px) { margin-left: @editor-margin-normal-md; }
