@@ -12,13 +12,13 @@
  * END HEADER
  */
 
-const fs = require('fs')
-const path = require('path')
-const bcp47 = require('bcp-47')
-const { app, ipcRenderer } = require('electron')
-const isDir = require('./util/is-dir')
-const isFile = require('./util/is-file')
-const sanitizeHtml = require('sanitize-html')
+import fs from 'fs'
+import path from 'path'
+import * as bcp47 from 'bcp-47/index.js'
+import { app, ipcRenderer } from 'electron'
+import isDir from './util/is-dir'
+import isFile from './util/is-file'
+import sanitizeHtml from 'sanitize-html'
 
 /**
  * Status mode that describes a returned language metadata object as an exact
@@ -47,7 +47,7 @@ const FALLBACK = 'fallback'
  * @param  {String} [lang='en-US'] The language to be loaded
  * @return {Object}                The language metadata object.
  */
-function loadI18nMain (lang = 'en-US') {
+export function loadI18nMain (lang = 'en-US') {
   let file = getLanguageFile(lang) // Will return a working path
 
   // Cannot do this asynchronously, because it HAS to be loaded directly
@@ -70,7 +70,7 @@ function loadI18nMain (lang = 'en-US') {
  * @param  {any} args   Zero or more strings that will replace %s-placeholders in the string
  * @return {String}        The translation with all potential replacements applied.
  */
-function trans (string, ...args) {
+export function trans (string, ...args) {
   if (string.indexOf('.') === -1) {
     // Wtf? But alright, return the string and log an error
     global.log.warning('The translation string was malformed: ' + string + '!')
@@ -131,7 +131,7 @@ function trans (string, ...args) {
  * @param  {string} query         The language metadata is requested for (BCP 47 compatible)
  * @return {Object}               A language metadata object.
  */
-function getDictionaryFile (query) {
+export function getDictionaryFile (query) {
   // First of all, create the fallback object.
   let ret = {
     'tag': 'en-US',
@@ -156,7 +156,7 @@ function getDictionaryFile (query) {
  * @param  {string} query         The language metadata is requested for (BCP 47 compatible)
  * @return {Object}               A language metadata object.
  */
-function getLanguageFile (query) {
+export function getLanguageFile (query) {
   // First of all, create the fallback object.
   let ret = {
     'tag': 'en-US',
@@ -183,7 +183,7 @@ function getLanguageFile (query) {
  * @param  {Array} candidates An array containing all objects to check. Must expose a "tag"-property
  * @return {Object}            An object containing "close" and "exact" properties, which may be undefined.
  */
-function findLangCandidates (lang, candidates) {
+export function findLangCandidates (lang, candidates) {
   if (typeof lang === 'string') {
     lang = bcp47.parse(lang)
   }
@@ -252,7 +252,7 @@ function findLangCandidates (lang, candidates) {
  * @param  {Array}  [paths=[ __dirname,    path.join(app.getPath('userData'] Paths to be searched for
  * @return {Array}          An array containing the language metadata (keys = bcp-47 tags)
  */
-function getTranslationMetadata (paths = [ path.join(app.getPath('userData'), '/lang'), path.join(__dirname, '/lang') ]) {
+export function getTranslationMetadata (paths = [ path.join(app.getPath('userData'), '/lang'), path.join(__dirname, '/lang') ]) {
   let metadata = []
 
   // First get all translations available
@@ -290,7 +290,7 @@ function getTranslationMetadata (paths = [ path.join(app.getPath('userData'), '/
  * @param  {Array} [paths=[]] An array of paths to search for. Optional.
  * @return {Array}       An array containing metadata for all found files.
  */
-function enumLangFiles (paths = [ path.join(app.getPath('userData'), '/lang'), path.join(__dirname, '/lang') ]) {
+export function enumLangFiles (paths = [ path.join(app.getPath('userData'), '/lang'), path.join(__dirname, '/lang') ]) {
   // Now go through all search paths and enumerate all available files of interest
   let candidates = []
   for (let p of paths) {
@@ -317,7 +317,7 @@ function enumLangFiles (paths = [ path.join(app.getPath('userData'), '/lang'), p
  * @param  {Array} [paths=[]] An array of paths to be searched. Defaults to standard paths.
  * @return {Array}       An array containing metadata for all found dictionaries.
  */
-function enumDictFiles (paths = [ path.join(app.getPath('userData'), '/dict'), path.join(__dirname, 'dict') ]) {
+export function enumDictFiles (paths = [ path.join(app.getPath('userData'), '/dict'), path.join(__dirname, 'dict') ]) {
   let candidates = []
   for (let p of paths) {
     let list = fs.readdirSync(p)
@@ -343,15 +343,4 @@ function enumDictFiles (paths = [ path.join(app.getPath('userData'), '/dict'), p
     }
   }
   return candidates
-}
-
-module.exports = {
-  loadI18nMain,
-  trans,
-  getDictionaryFile,
-  getLanguageFile,
-  enumLangFiles,
-  enumDictFiles,
-  getTranslationMetadata,
-  findLangCandidates
 }
