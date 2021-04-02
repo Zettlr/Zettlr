@@ -1,5 +1,5 @@
 import { app } from 'electron'
-import bcp47 from 'bcp-47'
+import * as bcp47 from 'bcp-47'
 import { v4 as uuid4 } from 'uuid'
 import { getLanguageFile } from '../../../common/i18n'
 
