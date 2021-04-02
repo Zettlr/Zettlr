@@ -61,7 +61,7 @@ if [ "$PLATFORM" == "darwin" ] && [ "$ARCH" == "arm" ]
 then
     # There's no ARM Pandoc. However, x64 Pandoc binaries work well on macOS ARM
     # due to the existence of Rosetta. So we can safely take that one.
-    echo "Currently there is no ARM-release for macOS. Falling back to x64 ..." 1>&2 # Redirect echo's stdout to stderr
+    echo "Currently there is no ARM-release for macOS. Falling back to x64 ..."
     ARCH="x64" # In case we're at some point referring to ARCH again.
     RELEASE="$PANDOC_MACOS_X64"
 elif [ "$PLATFORM" == "darwin" ] && [ "$ARCH" == "x64" ]
@@ -81,12 +81,6 @@ elif [ "$PLATFORM" == "win32" ] && [ "$ARCH" == "x64" ]
 then
   RELEASE="$PANDOC_WIN32_X64"
 fi
-
-# if [ "$RELEASE" == "" ]
-# then
-#   echo "No release given! Please provide a release: linux, win32, darwin"
-#   exit
-# fi
 
 # First, cd into the resources directory
 cd "$(dirname "$0")"
