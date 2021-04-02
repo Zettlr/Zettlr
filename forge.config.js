@@ -23,7 +23,10 @@ async function downloadPandoc (platform, arch) {
 
   // Now run the script and wait for it to finish.
   await new Promise((resolve, reject) => {
-    const shellProcess = spawn('./scripts/get-pandoc.sh', [ platform, arch ])
+    const argWin = [ 'bash.exe', [ './scripts/get-pandoc.sh', platform, arch ] ]
+    const argUnix = [ './scripts/get-pandoc.sh', [ platform, arch ] ]
+    // Use the spread operator to spawn the process using the correct arguments.
+    const shellProcess = (process.platform === 'win32') ? spawn(...argWin) : spawn(...argUnix)
 
     // To not mess with Electron forge's output, suppress this processes output.
     // But we should reject if there's any error output.
@@ -57,14 +60,25 @@ module.exports = {
       const idxPlatform = process.argv.indexOf('--platform')
       const idxArch = process.argv.indexOf('--arch')
 
-      const thisPlatform = process.platform
-      const thisArch = process.arch
+      // Default: process.platform. If a platform has been explicitly defined,
+      // use that one.
+      let targetPlatform = process.platform
+      if (idxPlatform > -1 && process.argv.length > idxPlatform + 1) {
+        targetPlatform = process.argv[idxPlatform + 1]
+      }
 
-      const isWin32 = (idxPlatform > -1 && process.argv[idxPlatform + 1] === 'win32') || thisPlatform === 'win32'
-      const isMacOS = (idxPlatform > -1 && process.argv[idxPlatform + 1] === 'darwin') || thisPlatform === 'darwin'
-      const isLinux = (idxPlatform > -1 && process.argv[idxPlatform + 1] === 'linux') || thisPlatform === 'linux'
-      const isArm64 = (idxArch > -1 && process.argv[idxArch + 1] === 'arm64') || thisArch === 'arm64'
-      const is64Bit = (idxArch > -1 && process.argv[idxArch + 1] === 'x64') || thisArch === 'x64'
+      // Default: process.arch. If an architecture has been explicitly defined,
+      // use that one.
+      let targetArch = process.arch
+      if (idxArch > -1 && process.argv.length > idxArch + 1) {
+        targetArch = process.argv[idxArch + 1]
+      }
+
+      const isMacOS = targetPlatform === 'darwin'
+      const isLinux = targetPlatform === 'linux'
+      const isWin32 = targetPlatform === 'win32'
+      const isArm64 = targetArch === 'arm64'
+      const is64Bit = targetArch === 'x64'
 
       // macOS has Rosetta 2 built-in, so we can bundle Pandoc 64bit
       const supportsPandoc = is64Bit || (isMacOS && isArm64) || (isLinux && isArm64)
@@ -96,7 +110,7 @@ module.exports = {
         forgeConfig.packagerConfig.extraResource.push('./resources/pandoc')
       } else {
         // If someone is building this on an unsupported platform, drop a warning.
-        console.log('\nBuilding for an unsupported platform/arch-combination - not bundling Pandoc.')
+        console.log(`\nBuilding for an unsupported platform/arch-combination ${targetPlatform}/${targetArch} - not bundling Pandoc.`)
       }
     }
   },
