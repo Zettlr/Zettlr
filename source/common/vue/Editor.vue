@@ -43,12 +43,12 @@
 
 <script>
 import { ipcRenderer } from 'electron'
-import countWords from '../common/util/count-words'
-import makeSearchRegEx from '../common/util/make-search-regex'
-import MarkdownEditor from '../common/modules/markdown-editor'
+import countWords from '../util/count-words'
+import makeSearchRegEx from '../util/make-search-regex'
+import MarkdownEditor from '../modules/markdown-editor'
 import CodeMirror from 'codemirror'
 import { util as citrUtil, parseSingle } from '@zettlr/citr'
-import objectToArray from '../common/util/object-to-array'
+import objectToArray from '../util/object-to-array'
 
 export default {
   name: 'Editor',

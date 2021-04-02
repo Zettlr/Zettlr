@@ -60,8 +60,7 @@ import WindowChrome from '../common/vue/window/Chrome'
 import SplitView from '../common/vue/window/SplitView'
 import SelectableList from './SelectableList'
 import ButtonControl from '../common/vue/form/elements/Button'
-// TODO
-import CodeEditor from '../win-custom-css/CodeEditor'
+import CodeEditor from '../common/vue/CodeEditor'
 import { ipcRenderer } from 'electron'
 import YAML from 'yaml'
 
