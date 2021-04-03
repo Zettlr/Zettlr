@@ -9,11 +9,6 @@ import loadIcons from './load-icons'
  * bar (on Windows and Linux, if native is off)
  */
 export default function windowRegister (): void {
-  // First of all, add the correct class to the body element. This ensures
-  // certain styling, for instance a minimal top-bar for Windows and Linux non-
-  // native styles.
-  document.body.classList.add(process.platform)
-
   // Load the clarity icons
   loadIcons().catch(e => { console.error(e) })
 

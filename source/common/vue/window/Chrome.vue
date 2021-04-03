@@ -172,7 +172,7 @@ export default {
   },
   data: function () {
     return {
-      platform: process.platform,
+      platform: 'win32', // DEBUG process.platform,
       useNativeAppearance: global.config.get('window.nativeAppearance')
     }
   },
@@ -330,10 +330,12 @@ export default {
     // Oh, we can destructure stuff directly in the method signature?! Uuuuh
     ipcRenderer.on('config-provider', (event, { command, payload }) => {
       if (command === 'update' && payload === 'window.nativeAppearance') {
-        console.log('Apperance has changed for window chrome!')
         this.useNativeAppearance = global.config.get('window.nativeAppearance')
       }
     })
+
+    // Apply the body class immediately
+    document.body.classList.add(this.platform)
   },
   methods: {
     handleDoubleClick: function (origin) {

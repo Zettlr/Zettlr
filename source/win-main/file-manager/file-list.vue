@@ -584,4 +584,11 @@ body.darwin {
     background-color: rgb(40, 40, 50);
   }
 }
+
+body.win32 {
+  #file-list #file-manager-filter {
+    padding: 0;
+    border-bottom: 2px solid rgb(230, 230, 230);
+  }
+}
 </style>

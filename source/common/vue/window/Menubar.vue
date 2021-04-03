@@ -136,7 +136,7 @@ export default {
   width: 100%;
   // Use the system font with a somewhat smaller font-size
   font-family: inherit;
-  font-size: 14px;
+  font-size: 12px;
   padding-left: 30px;
   // Use the Zettlr logo as fixed background to enable branding in the menubar
   background-image: url("../../img/image-preview.png");

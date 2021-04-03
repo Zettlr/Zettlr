@@ -121,4 +121,12 @@ body {
     }
   }
 }
+
+body.win32 {
+  div.token-list {
+    .token {
+      border-radius: 0px;
+    }
+  }
+}
 </style>

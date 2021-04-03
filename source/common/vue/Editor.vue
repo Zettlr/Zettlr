@@ -736,13 +736,6 @@ export default {
     }
   }
 
-  &.fullscreen {
-    left: 0%; padding-left: 0px;
-
-    // Hide the tabs in distraction-free
-    #document-tabs { display: none; }
-  }
-
     .CodeMirror {
       // The CodeMirror editor needs to respect the new tabbar; it cannot take
       // up 100 % all for itself anymore.
@@ -806,6 +799,11 @@ body.darwin.dark #editor {
   div#editor-search {
     background-color: rgba(60, 60, 60, 1);
   }
+}
+
+body.win32 #editor {
+  // On Windows, the tab bar is 30px high
+  height: calc(100% - 30px);
 }
 
 // CodeMirror fullscreen

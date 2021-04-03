@@ -369,12 +369,20 @@ body.darwin {
 }
 
 body.win32 {
+  div#tab-container {
+    border-bottom-color: transparent;
+
+    div[role="tab"] {
+      font-size: 12px;
+    }
+  }
+
   &.dark {
     div#tab-container {
       background-color: rgb(11, 11, 11);
 
-      div[role="tab"]:hover {
-        background-color: rgb(53, 53, 53);
+      div[role="tab"] {
+        &:hover { background-color: rgb(53, 53, 53); }
       }
     }
   }

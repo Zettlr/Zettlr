@@ -59,7 +59,7 @@ export default {
 
 <style lang="less">
 // General styles
-div.tab-list {
+body div.tab-list {
   position: absolute;
   width: 100%;
   font-family: inherit;
@@ -68,7 +68,7 @@ div.tab-list {
 
   button[role="tab"] {
       display: inline-block;
-      font-size: 12px;
+      font-size: 11px;
       padding: 5px;
       outline: none;
       white-space: nowrap;
@@ -79,6 +79,7 @@ div.tab-list {
       }
     }
 }
+
 // macOS styling
 body.darwin {
   // System tabs, e.g. the "big ones" on the Windows
@@ -92,7 +93,6 @@ body.darwin {
 
     button[role="tab"] {
       color: var(--grey-4);
-      font-size: 11px;
       background-color: transparent;
       border: none;
       border-radius: 4px;
@@ -134,6 +134,7 @@ body.darwin {
   }
 }
 
+// Windows styling
 body.win32 {
   div.tab-list {
     top: 25px;

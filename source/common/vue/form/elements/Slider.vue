@@ -93,4 +93,45 @@ body.darwin {
     }
   }
 }
+
+body.win32 {
+  .slider-group {
+    margin: 6px 0px;
+
+    input[type=range] {
+     -webkit-appearance: none;
+     width: 100%;
+     background-color: transparent;
+     border: none;
+
+      &:focus {
+        outline: none;
+      }
+
+      &::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 2px;
+        background-color: rgb(130, 130, 130);
+      }
+
+      &::-webkit-slider-thumb {
+        height: 15px;
+        width: 15px;
+        margin-top: -7px;
+        border-radius: 50%;
+        -webkit-appearance: none;
+      }
+    }
+  }
+
+  &.dark {
+    .slider-group {
+      input[type="range"] {
+        &::-webkit-slider-runnable-track {
+          background-color: rgb(80, 80, 80);
+        }
+      }
+    }
+  }
+}
 </style>

@@ -333,7 +333,6 @@ body {
       .badge {
         font-size: 11px;
         line-height: 11px;
-        border-radius: 4px;
         padding: 2px 4px;
         margin: 2px;
         display: inline-block;
@@ -418,6 +417,86 @@ body.darwin {
         background-color: rgb(220, 220, 220);
         color: rgb(80, 80, 80);
 
+        &.code-indicator {
+          background-color: var(--system-accent-color, --c-primary);
+          color: white;
+        }
+
+        &.tag {
+          background-color: rgba(90, 90, 90, 0.5); // Make those tags a little bit translucent
+          color: rgb(240, 240, 240);
+
+          .color-circle {
+            // If there's a coloured tag in there, display that as well
+            display: inline-block;
+            width: 9px;
+            height: 9px;
+            border: 1px solid white;
+            border-radius: 50%;
+          }
+        }
+
+        svg {
+          display: inline-block;
+          width: 11px;
+          height: 11px;
+          margin: 0;
+
+          circle { fill: rgb(200, 200, 200); }
+          path { fill: rgb(90, 90, 90); }
+        }
+      }
+    }
+  }
+
+  &.dark {
+    div.list-item {
+      border-bottom-color: #505050;
+      background-color: rgb(40, 40, 50);
+
+      &.active {
+      background-color: rgb(80, 80, 80);
+      div.filename div.date {
+        background-color: rgb(80, 80, 80);
+      }
+    }
+
+      div.filename div.date { background-color: rgb(40, 40, 50); }
+
+      &.active {
+        background-color: rgb(80, 80, 80);
+      }
+
+      div.meta-info .badge {
+        background-color: rgb(80, 80, 80);
+        color: rgb(220, 220, 220);
+      }
+    }
+  }
+}
+
+body.win32 {
+  div.list-item {
+    border-bottom: 1px solid rgb(213, 213, 213);
+    background-color: rgb(255, 255, 255);
+
+    &.active {
+      background-color: rgb(200, 200, 200);
+      div.filename div.date {
+        background-color: rgb(200, 200, 200);
+      }
+    }
+
+    &.selected {
+      background-color: rgb(230, 230, 230);
+
+      div.filename div.date { background-color: rgb(230, 230, 230); }
+    }
+
+    div.filename div.date { background-color: rgb(255, 255, 255); }
+
+    div.meta-info {
+      .badge {
         &.code-indicator {
           background-color: var(--system-accent-color, --c-primary);
           color: white;

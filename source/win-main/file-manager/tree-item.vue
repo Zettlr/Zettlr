@@ -422,7 +422,6 @@ body {
 
 body.darwin {
   .tree-item {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     margin: 6px 0px;
 
     .item-icon, .toggle-icon {
@@ -446,6 +445,32 @@ body.darwin {
       background-color: var(--system-accent-color, --c-primary);
       background-image: linear-gradient(#00000000, #00000022);
       color: white;
+    }
+  }
+}
+
+body.win32 {
+  .tree-item {
+    margin: 8px 0px;
+
+    .item-icon, .toggle-icon {
+      display: inline-block;
+      width: 18px; // Size of clr-icon with the margin of the icon
+    }
+
+    .display-text {
+      font-size: 13px;
+      padding: 3px 5px;
+      overflow: hidden;
+
+      &.highlight {
+        background-color: var(--system-accent-color, --c-primary);
+        color: white;
+      }
+    }
+
+    &.selected .display-text {
+      color: var(--system-accent-color, --c-primary);
     }
   }
 }
