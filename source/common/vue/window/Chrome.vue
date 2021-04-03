@@ -273,7 +273,7 @@ export default {
       return `${margin}px`
     },
     contentMarginBottom: function () {
-      if (this.showStatusbar) {
+      if (this.showStatusbar === true) {
         return `${this.platformStatusbarHeight}px`
       } else {
         return '0px'
@@ -344,7 +344,7 @@ export default {
       } else if (origin === 'toolbar') {
         // A doubleclick on the toolbar should trigger a maximisation if there
         // is no titlebar on darwin
-        if (this.platform === 'darwin' && !this.titlebar) {
+        if (this.platform === 'darwin' && this.titlebar === false) {
           ipcRenderer.send('window-controls', { command: 'win-maximise' })
         }
       }
