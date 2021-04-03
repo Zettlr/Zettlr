@@ -130,30 +130,18 @@ import { trans } from '../../common/i18n.js'
 import formatDate from '../../common/util/format-date.js'
 import localiseNumber from '../../common/util/localise-number'
 import formatSize from '../../common/util/format-size'
-import fileContextMenu from './util/file-item-context.js'
-import dirContextMenu from './util/dir-item-context.js'
 import { ipcRenderer } from 'electron'
-import PopoverFileProps from './PopoverFileProps'
-import PopoverDirProps from './PopoverDirProps'
+import itemMixin from './util/item-mixin'
 
 export default {
   name: 'FileItem',
   components: {
   },
-  // Bind the actual object to the container
+  mixins: [itemMixin],
   props: {
-    obj: {
-      type: Object,
-      default: function () { return {} }
-    },
     activeFile: {
       type: Object,
       default: function () { return {} }
-    }
-  },
-  data: () => {
-    return {
-      nameEditing: false // True as long as the user edits the filename
     }
   },
   computed: {
@@ -191,9 +179,6 @@ export default {
     },
     hasTags: function () {
       return this.obj.tags !== undefined && this.obj.tags.length > 0
-    },
-    isDirectory: function () {
-      return this.obj.type === 'directory'
     },
     isProject: function () {
       return this.isDirectory === true && this.obj.project !== null
@@ -295,148 +280,8 @@ export default {
     }
   },
   watch: {
-    nameEditing: function (newVal, oldVal) {
-      if (newVal === false) {
-        return // No need to select
-      }
-
-      this.$nextTick(() => {
-        this.$refs['name-editing-input'].focus()
-        this.$refs['name-editing-input'].select()
-      })
-    }
   },
   methods: {
-    handleContextMenu: function (event) {
-      if (this.isDirectory === true) {
-        dirContextMenu(event, this.obj, this.$el, (clickedID) => {
-          if (clickedID === 'menu.rename_dir') {
-            this.nameEditing = true
-          } else if (clickedID === 'menu.new_file') {
-            this.$emit('create-file')
-          } else if (clickedID === 'menu.new_dir') {
-            this.$emit('create-dir')
-          } else if (clickedID === 'menu.delete_dir') {
-            ipcRenderer.invoke('application', {
-              command: 'dir-delete',
-              payload: { path: this.obj.path }
-            })
-              .catch(err => console.error(err))
-          } else if (clickedID === 'menu.properties') {
-            const data = {
-              dirname: this.obj.name,
-              creationtime: this.obj.creationtime,
-              modtime: this.obj.modtime,
-              files: this.obj.children.filter(e => e.type !== 'directory').length,
-              dirs: this.obj.children.filter(e => e.type === 'directory').length,
-              isProject: this.isProject === true,
-              icon: this.obj.icon
-            }
-
-            if (this.obj.sorting !== null) {
-              data.sortingType = this.obj.sorting.split('-')[0]
-              data.sortingDirection = this.obj.sorting.split('-')[1]
-            } // Else: Default sorting of name-up
-
-            this.$showPopover(PopoverDirProps, this.$el, data, (data) => {
-              // Apply new sorting if applicable
-              if (data.sorting !== this.obj.sorting) {
-                ipcRenderer.invoke('application', {
-                  command: 'dir-sort',
-                  payload: {
-                    path: this.obj.path,
-                    sorting: data.sorting
-                  }
-                }).catch(e => console.error(e))
-              }
-
-              // Set the project flag if applicable
-              const projectChanged = data.isProject !== this.isProject
-              if (projectChanged && data.isProject) {
-                ipcRenderer.invoke('application', {
-                  command: 'dir-new-project',
-                  payload: { path: this.obj.path }
-                }).catch(e => console.error(e))
-              } else if (projectChanged && !data.isProject) {
-                ipcRenderer.invoke('application', {
-                  command: 'dir-remove-project',
-                  payload: { path: this.obj.path }
-                }).catch(e => console.error(e))
-              }
-
-              // Set the icon if it has changed
-              if (data.icon !== this.obj.icon) {
-                ipcRenderer.invoke('application', {
-                  command: 'dir-set-icon',
-                  payload: {
-                    path: this.obj.path,
-                    icon: data.icon
-                  }
-                }).catch(e => console.error(e))
-              }
-            })
-          }
-        })
-      } else {
-        fileContextMenu(event, this.obj, this.$el, (clickedID) => {
-          if (clickedID === 'menu.rename_file') {
-            this.nameEditing = true
-          } else if (clickedID === 'menu.duplicate_file') {
-            // The user wants to duplicate this file --> instruct the file list
-            // controller to display a mock file object below this file for the
-            // user to enter a new file name.
-            this.$emit('duplicate')
-          } else if (clickedID === 'menu.delete_file') {
-            ipcRenderer.invoke('application', {
-              command: 'file-delete',
-              payload: { path: this.obj.path }
-            })
-              .catch(err => console.error(err))
-          } else if (clickedID === 'menu.properties') {
-            const data = {
-              filename: this.obj.name,
-              creationtime: this.obj.creationtime,
-              modtime: this.obj.modtime,
-              tags: this.obj.tags,
-              // We need to provide the coloured tags so
-              // the popover can render them correctly
-              colouredTags: this.$store.state.colouredTags,
-              targetValue: 0,
-              targetMode: 'words',
-              fileSize: this.obj.size,
-              type: this.obj.type,
-              words: 0,
-              ext: this.obj.ext
-            }
-
-            if (this.hasWritingTarget) {
-              data.targetValue = this.obj.target.count
-              data.targetMode = this.obj.target.mode
-            }
-
-            if (this.obj.type === 'file') {
-              data.words = this.obj.wordCount
-            }
-
-            this.$showPopover(PopoverFileProps, this.$el, data, (data) => {
-              // Whenever the data changes, update the target
-
-              // 1.: Writing Target
-              if (this.obj.type === 'file') {
-                ipcRenderer.invoke('application', {
-                  command: 'set-writing-target',
-                  payload: {
-                    mode: data.target.mode,
-                    count: data.target.value,
-                    path: this.obj.path
-                  }
-                }).catch(e => console.error(e))
-              }
-            })
-          }
-        })
-      }
-    },
     retrieveTagColour: function (tagName) {
       const colouredTags = this.$store.state.colouredTags
       const foundTag = colouredTags.find(tag => tag.name === tagName)
@@ -444,44 +289,6 @@ export default {
         return foundTag.color
       } else {
         return false
-      }
-    },
-    requestSelection: function (event) {
-      const alt = event.altKey === true
-      const ctrl = event.ctrlKey === true
-      const cmd = event.metaKey === true
-
-      if (this.obj.type === 'file' && alt) {
-        // QuickLook the file
-        ipcRenderer.invoke('application', {
-          command: 'open-quicklook',
-          payload: this.obj.path
-        })
-          .catch(e => console.error(e))
-      } else if ([ 'file', 'code' ].includes(this.obj.type)) {
-        // Request the clicked file
-        ipcRenderer.invoke('application', {
-          command: 'open-file',
-          payload: {
-            path: this.obj.path,
-            newTab: (ctrl && process.platform !== 'darwin') || (cmd && process.platform === 'darwin')
-          }
-        })
-          .catch(e => console.error(e))
-      } else if (alt && this.obj.parent !== null) {
-        // Select the parent directory
-        ipcRenderer.invoke('application', {
-          command: 'set-open-directory',
-          payload: this.obj.parent.path
-        })
-          .catch(e => console.error(e))
-      } else {
-        // Select this directory
-        ipcRenderer.invoke('application', {
-          command: 'set-open-directory',
-          payload: this.obj.path
-        })
-          .catch(e => console.error(e))
       }
     },
     beginDragging: function (event) {
@@ -494,48 +301,6 @@ export default {
         'path': this.obj.path,
         'id': this.obj.id // Convenience
       }))
-    },
-    onDragHandler: function (event) {
-      // We don't need to check if it's a directory because only files are
-      // draggable in the file list.
-      // If the drag x/y-coordinates are about to leave the window, we
-      // have to continue the drag in the main process (as it's being
-      // dragged out of the window)
-      const x = Number(event.x)
-      const y = Number(event.y)
-      const w = window.innerWidth
-      const h = window.innerHeight
-
-      if (x === 0 || y === 0 || x === w || y === h) {
-        event.stopPropagation()
-        event.preventDefault()
-        ipcRenderer.send('window-controls', {
-          command: 'drag-start',
-          payload: { filePath: this.obj.path }
-        })
-      }
-    },
-    /**
-     * Called when the user finishes renaming this file item
-     *
-     * @param   {string}  newName  The new name given to the item
-     */
-    finishNameEditing: function (newName) {
-      if (newName === this.obj.name) {
-        return // Not changed
-      }
-
-      const command = (this.obj.type === 'directory') ? 'dir-rename' : 'file-rename'
-
-      ipcRenderer.invoke('application', {
-        command: command,
-        payload: {
-          path: this.obj.path,
-          name: newName
-        }
-      })
-        .catch(e => console.error(e))
-        .finally(() => { this.nameEditing = false })
     }
   }
 }

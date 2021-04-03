@@ -58,10 +58,10 @@
 </template>
 
 <script>
-import formatDate from '../../common/util/format-date'
-import localiseNumber from '../../common/util/localise-number'
-import SelectControl from '../../common/vue/form/elements/Select'
-import SwitchControl from '../../common/vue/form/elements/Switch'
+import formatDate from '../../../common/util/format-date'
+import localiseNumber from '../../../common/util/localise-number'
+import SelectControl from '../../../common/vue/form/elements/Select'
+import SwitchControl from '../../../common/vue/form/elements/Switch'
 
 const ICONS = [
   { shape: null, title: 'Reset' },
