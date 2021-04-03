@@ -448,6 +448,8 @@ export default {
     },
     requestSelection: function (event) {
       const alt = event.altKey === true
+      const ctrl = event.ctrlKey === true
+      const cmd = event.metaKey === true
 
       if (this.obj.type === 'file' && alt) {
         // QuickLook the file
@@ -460,7 +462,10 @@ export default {
         // Request the clicked file
         ipcRenderer.invoke('application', {
           command: 'open-file',
-          payload: this.obj.path
+          payload: {
+            path: this.obj.path,
+            newTab: (ctrl && process.platform !== 'darwin') || (cmd && process.platform === 'darwin')
+          }
         })
           .catch(e => console.error(e))
       } else if (alt && this.obj.parent !== null) {

@@ -294,7 +294,10 @@ export default {
         // jtl-command
         ipcRenderer.invoke('application', {
           command: 'open-file',
-          payload: filePath
+          payload: {
+            path: filePath,
+            newTab: false
+          }
         })
           .then(() => {
             // As soon as the file becomes active, jump to that line

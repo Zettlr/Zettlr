@@ -303,7 +303,10 @@ export default {
     requestFile: function (filePath) {
       ipcRenderer.invoke('application', {
         command: 'open-file',
-        payload: filePath
+        payload: {
+          path: filePath,
+          newTab: false
+        }
       })
         .catch(e => console.error(e))
     },

@@ -366,7 +366,10 @@ export default {
           // Select the active file (if there is one)
           ipcRenderer.invoke('application', {
             command: 'open-file',
-            payload: descriptor.path
+            payload: {
+              path: descriptor.path,
+              newTab: false
+            }
           })
             .catch(e => console.error(e))
         }

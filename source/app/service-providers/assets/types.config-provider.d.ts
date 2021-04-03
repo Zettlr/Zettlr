@@ -143,6 +143,7 @@ interface ConfigOptions {
   }
   system: {
     deleteOnFail: boolean
+    avoidNewTabs: boolean
   }
   checkForBeta: boolean
   uuid: string

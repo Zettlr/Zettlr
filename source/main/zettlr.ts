@@ -436,7 +436,7 @@ export default class Zettlr {
       // Sets or updates a file's writing target
       global.targets.set(payload)
     } else if (command === 'open-file') {
-      this.openFile(payload)
+      this.openFile(payload.path, payload.newTab)
       return true
     } else if (command === 'get-open-files') {
       const openFiles = this._fsal.openFiles
@@ -632,13 +632,19 @@ export default class Zettlr {
    * Opens the file passed to this function
    *
    * @param   {string}   filePath  The filepath
+   * @param   {boolean}  newTab    Optional. If true, will always prevent exchanging the currently active file.
    */
-  openFile (filePath: string): void {
-    // arg contains the hash of a file.
-    // findFile now returns the file object
+  openFile (filePath: string, newTab?: boolean): void {
+    // If the file is already open, simply set it as active and return
+    if (this._fsal.openFiles.includes(filePath)) {
+      this._fsal.activeFile = filePath
+      return
+    }
+
+    // Otherwise, find the file and open it.
     let file = this.findFile(filePath)
 
-    if (file != null) {
+    if (file !== null) {
       // Add the file's metadata object to the recent docs
       // We only need to call the underlying function, it'll trigger a state
       // change event and will set in motion all other necessary processes.
@@ -646,6 +652,21 @@ export default class Zettlr {
       global.recentDocs.add(this._fsal.getMetadataFor(file))
       // Also, add to last opened files to persist during reboots
       global.config.addFile(file.path)
+
+      // The user determines if we should avoid new tabs. If we should do so,
+      // only open new tabs if the user has checked this setting.
+      const avoidNewTabs = Boolean(global.config.get('system.avoidNewTabs'))
+
+      if (this._fsal.activeFile !== null && newTab !== true && avoidNewTabs) {
+        // We should avoid tabs, a new tab is not explicitly requested and we
+        // have an active file to close.
+        const activeFile = this._fsal.findFile(this._fsal.activeFile)
+
+        if (activeFile !== null && !activeFile.modified) {
+          this._fsal.closeFile(activeFile)
+        }
+      }
+
       this._fsal.activeFile = file.path // Also make this thing active.
     } else {
       global.log.error('Could not find file', filePath)

@@ -45,7 +45,10 @@ module.exports = function (url, cm) {
       // Attempt to open internally
       ipcRenderer.invoke('application', {
         command: 'open-file',
-        payload: this.obj.path
+        payload: {
+          path: this.obj.path,
+          newTab: false
+        }
       })
         .catch(e => console.error(e))
     } else {

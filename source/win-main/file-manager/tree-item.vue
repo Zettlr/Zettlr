@@ -469,7 +469,10 @@ export default {
         }
         ipcRenderer.invoke('application', {
           command: 'open-file',
-          payload: this.obj.path
+          payload: {
+            path: this.obj.path,
+            newTab: middleClick || ctrl
+          }
         })
           .catch(e => console.error(e))
       } else {

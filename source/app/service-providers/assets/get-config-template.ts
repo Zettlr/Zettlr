@@ -210,7 +210,8 @@ export default function getConfigTemplate (): ConfigOptions {
       stabilityThreshold: 1000 // Positive int in milliseconds
     },
     system: {
-      deleteOnFail: false // Whether to delete files if trashing them fails
+      deleteOnFail: false, // Whether to delete files if trashing them fails
+      avoidNewTabs: true // Whether to avoid opening new tabs for documents if possible
     },
     checkForBeta: false, // Should the user be notified of beta releases?
     uuid: uuid4() // The app's unique anonymous identifier
