@@ -172,7 +172,8 @@ export default {
   },
   data: function () {
     return {
-      platform: 'win32', // DEBUG process.platform,
+      // platform: 'win32', // DEBUG process.platform,
+      platform: process.platform,
       useNativeAppearance: global.config.get('window.nativeAppearance')
     }
   },
