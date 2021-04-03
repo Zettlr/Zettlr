@@ -282,6 +282,9 @@ const config: StoreOptions<ZettlrState> = {
     addToFiletree: function (state, descriptor) {
       if (descriptor.parent == null && !state.fileTree.includes(descriptor)) {
         // It's a root, so insert at the root level
+        if (descriptor.type === 'directory') {
+          reconstructTree(descriptor)
+        }
         state.fileTree.push(descriptor)
         // @ts-expect-error TODO: The sorting function currently expects only FSAL descriptors, not metas
         state.fileTree = sort(state.fileTree) // Omit sorting to sort name-up
