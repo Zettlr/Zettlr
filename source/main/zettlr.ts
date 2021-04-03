@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-import { app, BrowserWindow, FileFilter, ipcMain } from 'electron'
+import { app, BrowserWindow, FileFilter, ipcMain, MessageBoxReturnValue } from 'electron'
 import path from 'path'
 import fs from 'fs'
 
@@ -176,7 +176,7 @@ export default class Zettlr {
     // successfully in any case.
     this._windowManager.onBeforeMainWindowClose(() => {
       if (!this._fsal.isClean()) {
-        this._windowManager.askSaveChanges()
+        this.askSaveChanges()
           .then(result => {
             // TODO translate and agree on buttons!
             // 0 = 'Close without saving changes',
@@ -460,7 +460,7 @@ export default class Zettlr {
       // Update the modification status according to the file path array given
       // in the payload.
       this._fsal.updateModifiedFlags(payload)
-      this._windowManager.setModified(!this._fsal.isClean())
+      this.setModified(!this._fsal.isClean())
     } else if (command === 'open-workspace') {
       await this.openWorkspace()
       return true
@@ -680,19 +680,9 @@ export default class Zettlr {
 
   /**
     * Indicate modifications.
-    * @return {void} Nothing to return here.
     */
-  setModified (hash: number): void {
-    // Set the modify-indicator on the window
-    // and tell the FSAL that a file has been
-    // modified.
-    let file = this._fsal.findFile(hash)
-    if (file !== null) {
-      this._fsal.markDirty(file)
-      this._windowManager.setModified(true)
-    } else {
-      global.log.warning('The renderer reported a modified file, but the FSAL did not find that file.')
-    }
+  setModified (isModified: boolean): void {
+    this._windowManager.setModified(isModified)
   }
 
   /**
@@ -810,6 +800,15 @@ export default class Zettlr {
 
   async askFile (filters: FileFilter[]|null = null, multiSel: boolean = false): Promise<string[]> {
     return await this._windowManager.askFile(filters, multiSel)
+  }
+
+  /**
+   * Asks the user to save changes to modified files
+   *
+   * @return  {Promise<MessageBoxReturnValue>}  The answer from the user
+   */
+  async askSaveChanges (): Promise<MessageBoxReturnValue> {
+    return await this._windowManager.askSaveChanges()
   }
 
   /**

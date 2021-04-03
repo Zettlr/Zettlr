@@ -42,9 +42,20 @@ export default class FileClose extends ZettlrCommand {
 
       // Now check if we can safely close the file
       if (file.modified) {
-        // TODO: Just ask the damn user if they want to omit the changes!
-        global.log.error('[Command] Could not close file: The file has the modified flag set.')
-        return false
+        const result = await this._app.askSaveChanges()
+        // TODO translate and agree on buttons!
+        // 0 = 'Close without saving changes',
+        // 1 = 'Save changes'
+        if (result.response === 0) {
+          // Clear the modification flag
+          this._app.getFileSystem().markClean(file)
+          // Mark the whole application as clean if applicable
+          this._app.setModified(!this._app.getFileSystem().isClean())
+        } else {
+          // Don't close the file
+          global.log.info('[Command] Not closing file, as the user did not want that.')
+          return false
+        }
       }
 
       // If we're here the user really wants to close the file.
