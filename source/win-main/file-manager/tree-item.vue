@@ -171,8 +171,6 @@ import itemMixin from './util/item-mixin'
 
 export default {
   name: 'TreeItem',
-  components: {
-  },
   mixins: [itemMixin],
   props: {
     // How deep is this tree item nested?

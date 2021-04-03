@@ -130,13 +130,10 @@ import { trans } from '../../common/i18n.js'
 import formatDate from '../../common/util/format-date.js'
 import localiseNumber from '../../common/util/localise-number'
 import formatSize from '../../common/util/format-size'
-import { ipcRenderer } from 'electron'
 import itemMixin from './util/item-mixin'
 
 export default {
   name: 'FileItem',
-  components: {
-  },
   mixins: [itemMixin],
   props: {
     activeFile: {
@@ -278,8 +275,6 @@ export default {
     formattedSize: function () {
       return formatSize(this.obj.size)
     }
-  },
-  watch: {
   },
   methods: {
     retrieveTagColour: function (tagName) {
