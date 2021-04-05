@@ -410,10 +410,10 @@
   optionalDependencies:
     prettier "*"
 
-"@types/adm-zip@^0.4.33":
-  version "0.4.33"
-  resolved "https://registry.yarnpkg.com/@types/adm-zip/-/adm-zip-0.4.33.tgz#ea5b94f771443f655613b64f920c0555867200dd"
-  integrity sha512-WM0DCWFLjXtddl0fu0+iN2ZF+qz8RF9RddG5OSy/S90AQz01Fu8lHn/3oTIZDxvG8gVcnBLAHMHOdBLbV6m6Mw==
+"@types/adm-zip@^0.4.34":
+  version "0.4.34"
+  resolved "https://registry.yarnpkg.com/@types/adm-zip/-/adm-zip-0.4.34.tgz#62ac859eb2af6024362a1b3e43527ab79e0c624e"
+  integrity sha512-8ToYLLAYhkRfcmmljrKi22gT2pqu7hGMDtORP1emwIEGmgUTZOsaDjzWFzW5N2frcFRz/50CWt4zA1CxJ73pmQ==
   dependencies:
     "@types/node" "*"
 
