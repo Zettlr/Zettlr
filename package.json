@@ -93,7 +93,7 @@
     "@types/bcp-47": "^1.0.0",
     "@types/command-exists": "^1.2.0",
     "@types/electron-devtools-installer": "^2.2.0",
-    "@types/luxon": "^1.26.2",
+    "@types/luxon": "^1.26.3",
     "@types/mocha": "^8.2.2",
     "@types/nspell": "^2.1.0",
     "@types/rimraf": "^3.0.0",
