@@ -146,6 +146,11 @@ export default class ZettlrPopover {
     this._arrow.style.top = ''
     this._arrow.classList.remove('up', 'down', 'left', 'right')
 
+    // Windows doesn't have arrows on their popovers, just as they call them
+    // "flyouts" instead of PopOvers. So on Windows we shouldn't show them.
+    const showArrow = process.platform !== 'win32'
+    const arrowSize = (showArrow) ? ARROW_SIZE : 10 // Windows gets 10px margin
+
     let elemRect = this._elem.getBoundingClientRect()
 
     this._x = elemRect.left + elemRect.width / 2
@@ -164,7 +169,7 @@ export default class ZettlrPopover {
     if (bottom > height + 10 || elemRect.top < 50) {
       // Below element
       this._arrow.classList.add('up')
-      this._popup.style.top = `${this._y + ARROW_SIZE}px` // 5px margin for arrow
+      this._popup.style.top = `${this._y + arrowSize}px` // 5px margin for arrow
       if ((this._x + width / 2) > (window.innerWidth - 10)) { // 10px margin to document
         this._popup.style.left = `${window.innerWidth - width - 10}px` // 10px margin to document
       } else if (this._x - width / 2 < 10) { // 10px margin to document
@@ -173,8 +178,10 @@ export default class ZettlrPopover {
         this._popup.style.left = `${this._x - width / 2}px` // Place centered under element
       }
 
-      this._arrow.style.top = `${top + elemRect.height}px`
-      this._arrow.style.left = `${left + elemRect.width / 2 - this._arrow.offsetWidth / 2}px`
+      if (showArrow) {
+        this._arrow.style.top = `${top + elemRect.height}px`
+        this._arrow.style.left = `${left + elemRect.width / 2 - this._arrow.offsetWidth / 2}px`
+      }
 
       // Ensure the popup is completely visible (move inside the document if it's at an edge)
       if (this._popup.offsetLeft + this._popup.offsetWidth > window.innerWidth - 10) {
@@ -183,8 +190,7 @@ export default class ZettlrPopover {
         this._popup.style.left = '10px'
       }
 
-      // Ensure the popup is not higher than the window itself (can happen,
-      // e.g., with the formatting popup)
+      // Ensure the popup is not higher than the window itself
       if (height > window.innerHeight - 20 - this._y) {
         this._popup.style.height = `${window.innerHeight - 20 - this._y}px`
         height = this._popup.offsetHeight
@@ -194,15 +200,18 @@ export default class ZettlrPopover {
       // Therefore re-compute x and y
       this._x = elemRect.left + elemRect.width
       this._y = elemRect.top + elemRect.height / 2
-      this._arrow.classList.add('left')
-      this._popup.style.left = `${this._x + ARROW_SIZE}px`
-      if (this._y + height / 2 > window.innerHeight - ARROW_SIZE) {
-        this._popup.style.top = `${window.innerHeight - height - ARROW_SIZE}px`
+      this._popup.style.left = `${this._x + arrowSize}px`
+      if (this._y + height / 2 > window.innerHeight - arrowSize) {
+        this._popup.style.top = `${window.innerHeight - height - arrowSize}px`
       } else {
         this._popup.style.top = `${this._y - height / 2}px`
       }
-      this._arrow.style.left = `${left + elemRect.width}px`
-      this._arrow.style.top = `${top + elemRect.height / 2 - this._arrow.offsetHeight / 2}px`
+
+      if (showArrow) {
+        this._arrow.classList.add('left')
+        this._arrow.style.left = `${left + elemRect.width}px`
+        this._arrow.style.top = `${top + elemRect.height / 2 - this._arrow.offsetHeight / 2}px`
+      }
 
       // Ensure the popup is completely visible (move inside the document if it's at an edge)
       if (this._popup.offsetTop + this._popup.offsetHeight > window.innerHeight - 10) {
@@ -215,15 +224,18 @@ export default class ZettlrPopover {
       // Therefore re-compute x and y
       this._x = elemRect.left + elemRect.width / 2
       this._y = elemRect.top
-      this._arrow.classList.add('down')
-      this._popup.style.top = `${this._y - height - ARROW_SIZE}px`
-      if (this._x + width / 2 > window.innerWidth - ARROW_SIZE) {
-        this._popup.style.left = `${window.innerWidth - width - ARROW_SIZE}px`
+      this._popup.style.top = `${this._y - height - arrowSize}px`
+      if (this._x + width / 2 > window.innerWidth - arrowSize) {
+        this._popup.style.left = `${window.innerWidth - width - arrowSize}px`
       } else {
         this._popup.style.left = `${this._x - width / 2}px`
       }
-      this._arrow.style.top = `${top - ARROW_SIZE}px`
-      this._arrow.style.left = `${left + elemRect.width / 2 - this._arrow.offsetWidth / 2}px`
+
+      if (showArrow) {
+        this._arrow.classList.add('down')
+        this._arrow.style.top = `${top - arrowSize}px`
+        this._arrow.style.left = `${left + elemRect.width / 2 - this._arrow.offsetWidth / 2}px`
+      }
 
       // Ensure the popup is completely visible (move inside the document if it's at an edge)
       if (this._popup.offsetLeft + this._popup.offsetWidth > window.innerWidth - 10) {
