@@ -25,7 +25,7 @@
     v-bind:data-filename="getFilename"
     v-bind:draggable="isDraggable"
     v-bind:style="getStyle"
-    v-on:click.stop="requestSelection"
+    v-on:mousedown.stop="requestSelection"
     v-on:dragstart.stop="beginDragging"
     v-on:drag="onDragHandler"
     v-on:contextmenu="handleContextMenu"

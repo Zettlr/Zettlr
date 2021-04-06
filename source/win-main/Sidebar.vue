@@ -71,7 +71,7 @@
           <span
             class="filename"
             draggable="true"
-            v-on:click="requestFile(fileRecord.path)"
+            v-on:mousedown.stop="requestFile($event, fileRecord.path)"
             v-on:dragstart="beginDragRelatedFile($event, fileRecord.path)"
           >{{ getRelatedFileName(fileRecord.path) }}</span>
           <span
@@ -300,12 +300,12 @@ export default {
       const data = FILETYPES_IMG.includes(ext) ? `![${basename}](${uri})` : `[${basename}](${uri})`
       event.dataTransfer.setData('text', data)
     },
-    requestFile: function (filePath) {
+    requestFile: function (event, filePath) {
       ipcRenderer.invoke('application', {
         command: 'open-file',
         payload: {
           path: filePath,
-          newTab: false
+          newTab: event.type === 'mousedown' && event.button === 1
         }
       })
         .catch(e => console.error(e))

@@ -51,8 +51,13 @@ export default {
         return event.stopPropagation()
       }
 
-      // Determine if we have a middle (wheel) click
-      const middleClick = (event.type === 'auxclick' && event.button === 1)
+      // Determine if we have a middle (wheel) click. The event-type checking
+      // is only done so this is only true when we triggered this function using
+      // the mousedown event.
+      const middleClick = (event.type === 'mousedown' && event.button === 1)
+      console.log('Was this a middle-click?', middleClick)
+      console.log('Event type:', event.type)
+      console.log('Event button', event.button)
       const alt = event.altKey
       const type = this.obj.type
 
