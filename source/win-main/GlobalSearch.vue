@@ -55,10 +55,21 @@
         class="search-result-container"
       >
         <div class="filename" v-on:click="result.hideResultSet = !result.hideResultSet">
-          <clr-icon v-if="result.weight / maxWeight < 0.3" shape="dot-circle" style="fill: #aaaaaa"></clr-icon>
-          <clr-icon v-else-if="result.weight / maxWeight < 0.7" shape="dot-circle" style="fill: #ddbb33"></clr-icon>
-          <clr-icon v-else shape="dot-circle" style="fill: #33aa33"></clr-icon>
-          {{ result.file.filename }}
+          <!--
+            NOTE: This DIV is just here due to the parent item's "display: flex",
+            such that the filename plus indicator icon are floated to the left,
+            while the collapse icon is floated to the right.
+          -->
+          <div class="overflow-hidden">
+            <clr-icon v-if="result.weight / maxWeight < 0.3" shape="dot-circle" style="fill: #aaaaaa"></clr-icon>
+            <clr-icon v-else-if="result.weight / maxWeight < 0.7" shape="dot-circle" style="fill: #2975d9"></clr-icon>
+            <clr-icon v-else shape="dot-circle" style="fill: #33aa33"></clr-icon>
+            {{ result.file.filename }}
+          </div>
+
+          <div class="collapse-icon">
+            <clr-icon v-bind:shape="(result.hideResultSet) ? 'caret left' : 'caret down'"></clr-icon>
+          </div>
         </div>
         <div class="filepath">
           {{ result.file.relativeDirectoryPath }}
@@ -68,7 +79,7 @@
             v-for="singleRes, idx2 in result.result"
             v-bind:key="idx2"
             class="result-line"
-            v-on:click="jumpToLine(result.file.path, singleRes.from.line)"
+            v-on:mousedown.stop="jumpToLine($event, result.file.path, singleRes.from.line)"
           >
             <strong>{{ singleRes.from.line }}</strong>:
             <span v-html="markText(singleRes.term, singleRes.restext)"></span>
@@ -283,9 +294,10 @@ export default {
         result.hideResultSet = this.toggleState
       }
     },
-    jumpToLine: function (filePath, lineNumber) {
+    jumpToLine: function (event, filePath, lineNumber) {
       const isFileOpen = this.openFiles.find(file => file.path === filePath)
       const isActiveFile = (this.activeFile !== null) ? this.activeFile.path === filePath : false
+      const isMiddleClick = (event.type === 'mousedown' && event.button === 1)
 
       if (isActiveFile) {
         this.$emit('jtl', lineNumber)
@@ -296,7 +308,7 @@ export default {
           command: 'open-file',
           payload: {
             path: filePath,
-            newTab: false
+            newTab: isMiddleClick // Open in a new tab if wanted
           }
         })
           .then(() => {
@@ -338,6 +350,12 @@ body div#global-search-pane {
     div.filename {
       white-space: nowrap;
       font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+
+      div.overflow-hidden {
+        overflow: hidden;
+      }
     }
 
     div.filepath {
