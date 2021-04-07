@@ -76,7 +76,6 @@ export default class FSAL extends EventEmitter {
   private readonly _remoteChangeBuffer: WatchdogEvent[]
   private _state: FSALState
   private readonly _history: FSALHistoryEvent[]
-  private readonly _actions: any
 
   constructor (cachedir: string) {
     super()
