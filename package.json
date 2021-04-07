@@ -41,7 +41,7 @@
     "forge": "./forge.config.js"
   },
   "dependencies": {
-    "@clr/icons": "^5.1.0",
+    "@clr/icons": "^5.1.1",
     "@types/sanitize-html": "^1.27.2",
     "@types/semver": "^7.3.4",
     "@zettlr/citr": "^1.2.2",
