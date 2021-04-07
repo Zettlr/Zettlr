@@ -19,12 +19,12 @@
       <span
         class="filename"
         role="button"
-        v-on:click="handleSelectFile(file)"
+        v-on:mousedown="handleClickFilename($event, file)"
       >{{ getTabText(file) }}</span>
       <span
         class="close"
         aria-hidden="true"
-        v-on:click.stop="handleCloseFile(file)"
+        v-on:mousedown="handleClickClose($event, file)"
       >&times;</span>
     </div>
   </div>
@@ -93,19 +93,52 @@ export default {
         return file.name
       }
     },
-    handleCloseFile: function (file) {
+    /**
+     * Handles a click on the close button
+     *
+     * @param   {MouseEvent}  event  The triggering event
+     * @param   {any}  file   The file descriptor
+     */
+    handleClickClose: function (event, file) {
+      if (event.button < 2) {
+        // It was either a left-click (button === 0) or an auxiliary/middle
+        // click (button === 1), so we should prevent the event from bubbling up
+        // and triggering other events. If it was a right-button click
+        // (button === 2), we should let it bubble up to the container to show
+        // the context menu.
+        // See: https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button#return_value
+        event.stopPropagation()
+      } else {
+        return // We don't handle this event here.
+      }
+
       ipcRenderer.invoke('application', {
         command: 'file-close',
         payload: file.path
       })
         .catch(e => console.error(e))
     },
-    handleSelectFile: function (file) {
-      ipcRenderer.invoke('application', {
-        command: 'set-active-file',
-        payload: file.path
-      })
-        .catch(e => console.error(e))
+    /**
+     * Handles a click on the filename
+     *
+     * @param   {MouseEvent}  event  The triggering event
+     * @param   {any}         file   The file descriptor
+     */
+    handleClickFilename: function (event, file) {
+      if (event.button === 1) {
+        // It was a middle-click (auxiliary button), so we should instead close
+        // the file.
+        this.handleClickClose(event, file)
+      } else if (event.button === 0) {
+        // It was a left-click. (We must check because otherwise we would also
+        // perform this action on a right-click (button === 2), but that event
+        // must be handled by the container).
+        ipcRenderer.invoke('application', {
+          command: 'set-active-file',
+          payload: file.path
+        })
+          .catch(e => console.error(e))
+      }
     },
     handleContextMenu: function (event, file) {
       displayTabsContextMenu(event, async (clickedID) => {
