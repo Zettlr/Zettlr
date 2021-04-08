@@ -161,7 +161,8 @@ export default {
 
 body.win32 {
   #menubar {
-    background-color: #1cb27e;
+    background-color: var(--system-accent-color, --c-primary);
+    color: var(--system-accent-color-contrast);
 
     span.top-level-item:hover {
       background-color: #136e4e;

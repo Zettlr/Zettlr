@@ -98,8 +98,13 @@ export default class AppearanceProvider extends EventEmitter {
     })
 
     ipcMain.handle('appearance-provider', (event, { command, payload }) => {
+      // This command returns the accent colour including a contrast colour to be used
+      // as the opposite colour, if a good visible contrast is wished for.
       if (command === 'get-accent-color') {
-        const colorFallback = '1cb27eff' // Fully opaque Zettlr green.
+        const colorFallback = {
+          accent: '1cb27eff', // Fully opaque Zettlr green
+          contrast: 'ffffffff' // White as a contrast
+        }
         // A renderer has requested the current accent colour. The accent colour
         // MUST be returned, and can be retrieved automatically for macOS and
         // Windows, and will be the Zettlr green on Linux systems. Format is
@@ -113,13 +118,24 @@ export default class AppearanceProvider extends EventEmitter {
             if (typeof accentColor !== 'string') {
               return colorFallback
             } else {
-              return accentColor
+              // Calculate the contrast before returning
+              const dark = '33333333'
+              const light = 'eeeeeeee'
+              const r = parseInt(accentColor.substring(0, 2), 16); // hexToR
+              const g = parseInt(accentColor.substring(2, 4), 16); // hexToG
+              const b = parseInt(accentColor.substring(4, 6), 16); // hexToB
+              const ratio = (r * 0.299) + (g * 0.587) + (b * 0.114)
+              const threshold = 186 // NOTE: We can adapt this later on
+              return {
+                accent: accentColor,
+                contrast: (ratio > threshold) ? dark : light
+              }
             }
           } catch (e) {
-            return colorFallback
+            return colorFallback // Probably macOS < 10.14
           }
         } else {
-          return colorFallback
+          return colorFallback // Unsupported platform
         }
       }
     })

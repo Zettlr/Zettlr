@@ -15,6 +15,14 @@ interface ThemeLoader {
 }
 
 /**
+ * Defines a SystemColour interface as is being returned by the appearance provider
+ */
+interface SystemColour {
+  accent: string
+  contrast: string
+}
+
+/**
  * This type holds all available themes for the application, which are
  * present in the availableThemes variable and can be indexed using Theme.
  */
@@ -72,18 +80,15 @@ export default function registerThemes (): void {
   // Create the custom stylesheet which includes certain system colours which
   // will be referenced by the components as necessary.
   ipcRenderer.invoke('appearance-provider', { command: 'get-accent-color' })
-    .then((accentColor: string) => {
+    .then((accentColor: SystemColour) => {
       // TODO: Currently this is not scalable, just an exploratory implementation!
       const style = document.createElement('style')
       // style.setAttribute('type', 'text/css')
 
-      const color = '#' + accentColor.substr(0, 6)
-      style.textContent = `:root { --system-accent-color:${color}; }`
+      const color = '#' + accentColor.accent.substr(0, 6)
+      const contrast = '#' + accentColor.contrast.substr(0, 6)
+      style.textContent = `:root { --system-accent-color:${color}; --system-accent-color-contrast:${contrast}}`
       document.head.prepend(style)
-      // if (style.sheet === null) {
-      //   throw new Error('Style sheet was null?!?')
-      // }
-      // style.sheet.insertRule(`:root { --system-accent:${color}; }`, 0)
     })
     .catch(e => console.error(e))
 }
