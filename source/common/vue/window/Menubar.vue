@@ -165,7 +165,8 @@ body.win32 {
     color: var(--system-accent-color-contrast);
 
     span.top-level-item:hover {
-      background-color: #136e4e;
+      // Since we can't be sure which colour the menu bar will have, simply add a transparent overlay
+      background-color: rgba(0, 0, 0, .3);
     }
   }
 }
