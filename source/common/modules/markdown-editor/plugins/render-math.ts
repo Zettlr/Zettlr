@@ -18,7 +18,7 @@ commands.markdownRenderMath = function (cm: CodeMirror.Editor) {
     let tokenType = cm.getTokenTypeAt({ 'line': i, 'ch': 0 })
     lines.push(new LineInfo(i, cm.getLine(i), modeName, tokenType))
   }
-  let equations = EquationFinder.findEquations(lines)
+  let equations = findEquations(lines)
 
   // Now cycle through all new markers and insert them, if they weren't already
   for (let myMarker of equations) {
@@ -87,9 +87,7 @@ export class EquationMarker {
   ) {}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
-export class EquationFinder {
-  /**
+/**
    * Finds all equations contained in a given string according to the Pandoc documentation
    * on its tex_math_dollars-extension.
    * More information: https://pandoc.org/MANUAL.html#math
@@ -97,74 +95,73 @@ export class EquationFinder {
    * @param line the line number of the input
    * @returns list of equations in the input
    */
-  static findInlineEquations (text: string, line: number): EquationMarker[] {
-    let inlineMathRE = getInlineMathRenderRE(true) // Get the RE with the global flag set.
-    let newMarkers = []
+export function findInlineEquations (text: string, line: number): EquationMarker[] {
+  let inlineMathRE = getInlineMathRenderRE(true) // Get the RE with the global flag set.
+  let newMarkers = []
 
-    let match
-    while ((match = inlineMathRE.exec(text)) !== null) {
-      if (match.groups === undefined) {
-        continue
-      }
+  let match
+  while ((match = inlineMathRE.exec(text)) !== null) {
+    if (match.groups === undefined) {
+      continue
+    }
 
-      newMarkers.push(new EquationMarker(
-        { 'ch': match.index, 'line': line },
-        { 'ch': match.index + match[0].length, 'line': line },
-        match.groups.eq ?? '',
-        // Equations surrounded by two dollars should be displayed as centred equation
-        (match.groups.dollar ?? '').length === 2
+    newMarkers.push(new EquationMarker(
+      { 'ch': match.index, 'line': line },
+      { 'ch': match.index + match[0].length, 'line': line },
+      match.groups.eq ?? '',
+      // Equations surrounded by two dollars should be displayed as centred equation
+      (match.groups.dollar ?? '').length === 2
+    ))
+  }
+  return newMarkers
+}
+
+export function findEquations (lines: LineInfo[]): EquationMarker[] {
+  let insideMultiline = false // Are we inside a multiline math environment?
+  let eq: string[] = []
+  let fromLine = 0
+
+  // This array holds all markers to be inserted (either one in case of the
+  // final line of a multiline-equation or multiple in case of several
+  // inline equations).
+  let equations: EquationMarker[] = []
+
+  for (let line of lines) {
+    if (![ 'markdown', 'stex' ].includes(line.modeName)) continue
+    if (line.modeName === 'stex') {
+      // Make sure the token list includes "multiline-equation"
+      // because otherwise we shouldn't render this as it's within
+      // a default LaTeX code block, not an equation.
+      let isMultilineBeginning = multilineMathRE.test(line.text)
+      let isMultilineEquation = line.tokenType?.includes('multiline-equation') ?? false
+      if (!isMultilineBeginning && !isMultilineEquation) continue
+    }
+
+    let multilineMathMatch = multilineMathRE.exec(line.text)
+    let isMultilineStartOrEnd = multilineMathMatch !== null
+    if (!insideMultiline && isMultilineStartOrEnd) {
+      insideMultiline = true
+      fromLine = line.lineNumber
+      eq = []
+    } else if (insideMultiline && !isMultilineStartOrEnd) {
+      // Simply add the line to the equation and continue
+      eq.push(line.text)
+      continue
+    } else if (insideMultiline && isMultilineStartOrEnd && multilineMathMatch !== null) {
+      // We have left the multiline equation and can render it now.
+      insideMultiline = false
+      equations.push(new EquationMarker(
+        { 'ch': 0, 'line': fromLine },
+        { 'ch': multilineMathMatch[1].length, 'line': line.lineNumber },
+        eq.join('\n'),
+        true
       ))
+      eq = [] // Reset the equation
+    } else {
+      // Else: No multiline. Search for inline equations.
+      equations.push.apply(equations, findInlineEquations(line.text, line.lineNumber))
     }
-    return newMarkers
   }
 
-  static findEquations (lines: LineInfo[]): EquationMarker[] {
-    let insideMultiline = false // Are we inside a multiline math environment?
-    let eq: string[] = []
-    let fromLine = 0
-
-    // This array holds all markers to be inserted (either one in case of the
-    // final line of a multiline-equation or multiple in case of several
-    // inline equations).
-    let equations: EquationMarker[] = []
-
-    for (let line of lines) {
-      if (![ 'markdown', 'stex' ].includes(line.modeName)) continue
-      if (line.modeName === 'stex') {
-        // Make sure the token list includes "multiline-equation"
-        // because otherwise we shouldn't render this as it's within
-        // a default LaTeX code block, not an equation.
-        let isMultilineBeginning = multilineMathRE.test(line.text)
-        let isMultilineEquation = line.tokenType?.includes('multiline-equation') ?? false
-        if (!isMultilineBeginning && !isMultilineEquation) continue
-      }
-
-      let multilineMathMatch = multilineMathRE.exec(line.text)
-      let isMultilineStartOrEnd = multilineMathMatch !== null
-      if (!insideMultiline && isMultilineStartOrEnd) {
-        insideMultiline = true
-        fromLine = line.lineNumber
-        eq = []
-      } else if (insideMultiline && !isMultilineStartOrEnd) {
-        // Simply add the line to the equation and continue
-        eq.push(line.text)
-        continue
-      } else if (insideMultiline && isMultilineStartOrEnd && multilineMathMatch !== null) {
-        // We have left the multiline equation and can render it now.
-        insideMultiline = false
-        equations.push(new EquationMarker(
-          { 'ch': 0, 'line': fromLine },
-          { 'ch': multilineMathMatch[1].length, 'line': line.lineNumber },
-          eq.join('\n'),
-          true
-        ))
-        eq = [] // Reset the equation
-      } else {
-        // Else: No multiline. Search for inline equations.
-        equations.push.apply(equations, EquationFinder.findInlineEquations(line.text, line.lineNumber))
-      }
-    }
-
-    return equations
-  }
+  return equations
 }
