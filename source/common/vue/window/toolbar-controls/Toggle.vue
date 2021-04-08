@@ -1,12 +1,18 @@
 <template>
   <button
+    v-bind:id="`toolbar-${control.id}`"
     role="button"
     v-bind:aria-pressed="isActive"
-    v-bind:class="getClass"
+    v-bind:class="{
+      'toggle': true,
+      'active': isActive,
+      [control.activeClass]: control.activeClass !== undefined && isActive
+    }"
+    v-bind:title="titleWithFallback"
     v-on:click="toggle"
   >
     <clr-icon v-if="control.icon" v-bind:shape="control.icon"></clr-icon>
-    <span v-html="control.label"></span>
+    <span v-if="showLabel" class="toolbar-label" v-html="labelWithFallback"></span>
   </button>
 </template>
 
@@ -17,6 +23,10 @@ export default {
     control: {
       type: Object,
       default: function () { return {} }
+    },
+    showLabel: {
+      type: Boolean,
+      default: false
     }
   },
   data: function () {
@@ -25,23 +35,54 @@ export default {
     }
   },
   computed: {
-    getClass: function () {
-      if (this.isActive === true) {
-        return this.control.activeClass
+    controlActiveChanged: function () {
+      return this.control.initialState
+    },
+    titleWithFallback: function () {
+      if (typeof this.control.title === 'string' && this.control.title.length > 0) {
+        return this.control.title
+      } else if (typeof this.control.label === 'string' && this.control.label.length > 0) {
+        return this.control.label
+      } else {
+        return ''
+      }
+    },
+    labelWithFallback: function () {
+      if (typeof this.control.label === 'string' && this.control.label.length > 0) {
+        return this.control.label
+      } else if (typeof this.control.title === 'string' && this.control.title.length > 0) {
+        return this.control.title
       } else {
         return ''
       }
     }
   },
+  watch: {
+    controlActiveChanged: function () {
+      this.isActive = this.control.initialState
+    }
+  },
   methods: {
     toggle: function () {
       this.isActive = !this.isActive
-      this.$emit('toggle')
+      this.$emit('toggle', this.isActive)
     }
   }
 }
 </script>
 
 <style lang="less">
-//
+body.darwin div#toolbar {
+  button.toggle {
+    &.active {
+      background-color: rgb(200, 200, 200);
+    }
+  }
+}
+
+body.darwin.dark div#toolbar {
+  button.toggle.active {
+    background-color: rgb(40, 40, 40);
+  }
+}
 </style>

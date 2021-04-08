@@ -1,10 +1,11 @@
 <template>
-  <div class="form-control">
+  <div class="form-control cb-group">
     <label class="checkbox">
       <input
         v-bind:id="fieldID"
         type="checkbox" v-bind:name="name" value="yes"
         v-bind:checked="value"
+        v-bind:disabled="disabled"
         v-on:input="$emit('input', $event.target.checked)"
       >
       <span class="checkmark"></span>
@@ -28,6 +29,10 @@ export default {
     name: {
       type: String,
       default: ''
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -42,12 +47,18 @@ export default {
 @input-size: 14px;
 
 body {
+  .cb-group {
+    display: flex;
+    align-items: center;
+  }
+
   label.checkbox {
     position: relative;
     display: inline-block !important;
     width: @input-size;
     height: @input-size;
     padding: 0;
+    margin-right: 5px;
 
     input {
       display: none !important;

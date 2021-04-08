@@ -39,9 +39,9 @@ export default function createLogWindow (conf: WindowPosition): BrowserWindow {
     y: conf.top,
     show: false,
     webPreferences: {
-      nodeIntegration: true
-    },
-    backgroundColor: '#fff'
+      nodeIntegration: true,
+      contextIsolation: false
+    }
   }
 
   // Set the correct window chrome

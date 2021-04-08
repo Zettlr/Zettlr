@@ -1,5 +1,5 @@
 <template>
-  <div class="form-control">
+  <div v-bind:class="{ 'inline': inline, 'form-control': true }">
     <label v-if="label" v-bind:for="fieldID" v-html="label"></label>
     <select
       v-bind:id="fieldID"
@@ -21,11 +21,15 @@
 
 <script>
 export default {
-  name: 'FieldText',
+  name: 'SelectControl',
   props: {
     value: {
       type: String,
       default: ''
+    },
+    inline: {
+      type: Boolean,
+      default: false
     },
     label: {
       type: String,

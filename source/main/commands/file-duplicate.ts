@@ -14,10 +14,15 @@
 
 import ZettlrCommand from './zettlr-command'
 import { trans } from '../../common/i18n'
-import hash from '../../common/util/hash'
 import { filetypes as ALLOWED_FILETYPES } from '../../common/data.json'
 import path from 'path'
 import sanitize from 'sanitize-filename'
+
+const CODEFILE_TYPES = [
+  '.yml',
+  '.yaml',
+  '.tex'
+]
 
 export default class FileDuplicate extends ZettlrCommand {
   constructor (app: any) {
@@ -34,7 +39,7 @@ export default class FileDuplicate extends ZettlrCommand {
     // ARG structure: { dir, file, name }
 
     // First, retrieve our source file
-    let file = this._app.findFile(arg.file) // File is only a hash
+    let file = this._app.findFile(arg.path)
     if (file === null) {
       global.log.error('Could not duplicate source file, because the source file was not found')
       this._app.prompt({
@@ -46,10 +51,12 @@ export default class FileDuplicate extends ZettlrCommand {
     }
 
     // Then, the target directory.
-    let dir = this._app.findDir(arg.dir) // (1) A specified directory
-    if (dir === null) dir = file.parent // (2) The source file's dir
-    if (dir === null) dir = this._app.getCurrentDir() // (3) The current dir
-    if (dir === null) { // (4) Fail
+    let dir = file.parent // (1) A specified directory
+    if (dir === null) {
+      dir = this._app.getFileSystem().openDirectory // (2) The current dir
+    }
+
+    if (dir === null) { // (3) Fail
       global.log.error('Could not create file, because no directory was found')
       this._app.prompt({
         type: 'error',
@@ -65,9 +72,12 @@ export default class FileDuplicate extends ZettlrCommand {
       throw new Error('Could not create file: Filename was not valid')
     }
 
-    // If no valid filename is provided, assume .md
-    if (!ALLOWED_FILETYPES.includes(path.extname(filename))) {
-      filename += '.md'
+    // If no valid filename is provided, assume the original file's extension
+    const newFileExtname = path.extname(filename).toLowerCase()
+    if (file.type === 'file' && !ALLOWED_FILETYPES.includes(newFileExtname)) {
+      filename += file.ext // Assume the original file's extension
+    } else if (file.type === 'code' && !CODEFILE_TYPES.includes(newFileExtname)) {
+      filename += file.ext // Assume the original file's extension
     }
 
     // Retrieve the file's content and create a new file with the same content
@@ -78,8 +88,7 @@ export default class FileDuplicate extends ZettlrCommand {
     })
 
     // And directly thereafter, open the file
-    let fileHash = hash(path.join(dir.path, filename))
-    await this._app.openFile(fileHash)
+    await this._app.openFile(path.join(dir.path, filename))
   }
 }
 

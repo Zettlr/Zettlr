@@ -176,32 +176,34 @@ export default class CiteprocProvider {
       },
       getBibTexAttachments: (id: string) => {
         return this._databases[this._databaseIdx].bibtexAttachments[id]
+      },
+      loadAndSelect: async (database: string) => {
+        let db = this._databases.find((db) => db.path === database)
+
+        if (db === undefined) {
+          db = await this._loadDatabase(database)
+        }
+
+        this._selectDatabase(db.path)
+      },
+      loadMainDatabase: () => {
+        // Make sure we deselect the current one, in case there is no main library
+        // defined so that the library will be effectively empty afterwards.
+        this._deselectDatabase()
+        if (this._databases.find((db) => db.path === this._mainLibrary) !== undefined) {
+          this._selectDatabase(this._mainLibrary)
+        }
+      },
+      getSelectedDatabase: () => {
+        if (this._databaseIdx > -1) {
+          return this._databases[this._databaseIdx].path
+        }
       }
     }
 
     // Be notified of potential updates
     global.config.on('update', (option: string) => {
       this._onConfigUpdate(option)
-    })
-
-    // Listen for synchronous citation messages from the renderer
-    // Citeproc calls (either single citation or a whole cluster)
-    ipcMain.on('cite', (event, message) => {
-      if (message.type === 'get-citation') {
-        // Return a single citation
-        event.returnValue = {
-          'citation': this.getCitation(message.content)
-        }
-      } else if (message.type === 'update-items') {
-        // Update the items of the registry
-        event.returnValue = this.updateItems(message.content)
-      } else if (message.type === 'make-bibliography') {
-        // Make and send out a bibliography based on the state of the registry
-        event.reply('message', {
-          'command': 'citeproc-bibliography',
-          'content': this.makeBibliography()
-        })
-      }
     })
 
     /**
@@ -232,6 +234,11 @@ export default class CiteprocProvider {
           'originalCitation': payload,
           'renderedCitation': this.getCitation(payload)
         }
+      } else if (command === 'get-bibliography') {
+        // The Payload contains the items the renderer wants to have
+        const { payload } = message
+        this.updateItems(payload)
+        return this.makeBibliography()
       }
     })
 
@@ -295,7 +302,7 @@ export default class CiteprocProvider {
     }
 
     // Prepare some helper variables
-    const libraryType = path.extname(databasePath)
+    const libraryType = path.extname(databasePath).toLowerCase()
 
     // First read in the database file
     const data = await fs.readFile(databasePath, 'utf8')
@@ -351,12 +358,7 @@ export default class CiteprocProvider {
     }
 
     if (idx === this._databaseIdx) {
-      // We are unloading the current database
-      this._items = Object.create(null)
-      this._engine.updateItems([]) // Remove the items from the registry
-      this._databaseIdx = -1
-      // Notify everyone interested
-      broadcastIpcMessage('citeproc-provider', 'database-changed')
+      this._deselectDatabase()
     }
 
     const db = this._databases[idx]
@@ -367,7 +369,7 @@ export default class CiteprocProvider {
   /**
    * Selects another database and activates it.
    *
-   * @param   {number}  idx  [idx description]
+   * @param   {string}  dbPath  The database to select
    */
   _selectDatabase (dbPath: string): void {
     // Find the database
@@ -398,6 +400,19 @@ export default class CiteprocProvider {
     // Remove the items from the registry
     this._engine.updateItems([])
 
+    // Notify everyone interested
+    broadcastIpcMessage('citeproc-provider', 'database-changed')
+  }
+
+  /**
+   * Unloads the current database so that none is loaded.
+   *
+   */
+  _deselectDatabase (): void {
+    // We are unloading the current database
+    this._items = Object.create(null)
+    this._engine.updateItems([]) // Remove the items from the registry
+    this._databaseIdx = -1
     // Notify everyone interested
     broadcastIpcMessage('citeproc-provider', 'database-changed')
   }
@@ -526,7 +541,12 @@ export default class CiteprocProvider {
    */
   updateItems (citations: string[]): boolean {
     try {
-      this._engine.updateItems(citations)
+      // Don't try to pass non-existent items in there, since that will make
+      // the citeproc engine to throw an error.
+      const sanitizedCitations = citations.filter(id => {
+        return this._sys.retrieveItem(id) !== undefined
+      })
+      this._engine.updateItems(sanitizedCitations)
       return true
     } catch (e) {
       global.log.error('[citeproc] Could not update engine registry: ' + String(e.message), citations)

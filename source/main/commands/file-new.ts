@@ -14,10 +14,15 @@
 
 import ZettlrCommand from './zettlr-command'
 import { trans } from '../../common/i18n'
-import hash from '../../common/util/hash'
 import path from 'path'
 import sanitize from 'sanitize-filename'
 import { filetypes as ALLOWED_FILETYPES } from '../../common/data.json'
+
+const CODEFILE_TYPES = [
+  '.yml',
+  '.yaml',
+  '.tex'
+]
 
 export default class FileNew extends ZettlrCommand {
   constructor (app: any) {
@@ -31,14 +36,10 @@ export default class FileNew extends ZettlrCommand {
    * @return {void}     This function does not return anything.
    */
   async run (evt: string, arg: any): Promise<void> {
-    let dir = null
+    let dir = this._app.getFileSystem().findDir(arg.path)
 
-    // There should be also a hash in the argument.
-    if (arg.hasOwnProperty('hash')) {
-      dir = this._app.getFileSystem().findDir(arg.hash)
-    } else {
-      global.log.warning('No directory selected. Using currently selected directory ...')
-      dir = this._app.getCurrentDir()
+    if (dir === null) {
+      dir = this._app.getFileSystem().openDirectory
     }
 
     if (dir === null) {
@@ -55,7 +56,7 @@ export default class FileNew extends ZettlrCommand {
 
       // If no valid filename is provided, assume .md
       let ext = path.extname(filename).toLowerCase()
-      if (!ALLOWED_FILETYPES.includes(ext)) {
+      if (!ALLOWED_FILETYPES.includes(ext) && !CODEFILE_TYPES.includes(ext)) {
         filename += '.md'
       }
 
@@ -80,8 +81,7 @@ export default class FileNew extends ZettlrCommand {
       })
 
       // And directly thereafter, open the file
-      let fileHash = hash(path.join(dir.path, filename))
-      await this._app.openFile(fileHash)
+      await this._app.openFile(path.join(dir.path, filename))
     } catch (e) {
       global.log.error(`Could not create file: ${e.message as string}`)
       this._app.prompt({

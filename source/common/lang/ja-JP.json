@@ -4,7 +4,7 @@
             "Ryota Abe"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-01-04T11:42:58.000000Z"
+        "updated_at": "2021-03-08T02:45:19.000000Z"
     },
     "dialog": {
         "about": {
@@ -517,6 +517,7 @@
         "print": "\u5370\u5237...",
         "project_build": "\u30d7\u30ed\u30b8\u30a7\u30af\u30c8\u3092\u30a8\u30af\u30b9\u30dd\u30fc\u30c8",
         "project_properties": "\u30d7\u30ed\u30b8\u30a7\u30af\u30c8\u8a2d\u5b9a...",
+        "properties": "\u30d7\u30ed\u30d1\u30c6\u30a3",
         "quicklook": "Quicklook",
         "quit": "\u7d42\u4e86",
         "recent_docs": "\u6700\u8fd1\u4f7f\u3063\u305f\u30c9\u30ad\u30e5\u30e1\u30f3\u30c8",

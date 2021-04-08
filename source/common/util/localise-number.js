@@ -11,14 +11,14 @@
  * END HEADER
  */
 
-const { trans } = require('../i18n')
+import { trans } from '../i18n'
 
 /**
  * Adds delimiters to numbers.
  * @param  {Number} number The number to be localised.
  * @return {String}        The number with delimiters.
  */
-module.exports = function (number) {
+export default function (number) {
   if (typeof number !== 'number' || (number < 1000 && number >= 0)) {
     return number.toString()
   }

@@ -54,8 +54,8 @@ export default class TargetProvider extends EventEmitter {
        * @param  {number}                   hash  The hash to be searched for.
        * @return {WritingTarget|undefined}        The writing target.
        */
-      get: (hash: number) => {
-        let target = this.get(hash)
+      get: (filePath: string) => {
+        let target = this.get(filePath)
         if (target === undefined) {
           return undefined
         }
@@ -66,8 +66,8 @@ export default class TargetProvider extends EventEmitter {
        * Removes a target from the database and returns the operation status.
        * @return {Boolean} Whether or not the target was removed.
        */
-      remove: (hash: number) => {
-        return this.remove(hash)
+      remove: (filePath: string) => {
+        return this.remove(filePath)
       },
       /**
        * Adds callback to the event listeners
@@ -142,8 +142,10 @@ export default class TargetProvider extends EventEmitter {
         continue
       }
 
-      // Now check if the file still exists.
-      if (global.application.findFile(target.hash) === null) {
+      // Now check if the file still exists. At this point, writing targets set
+      // in a Zettlr 1.x branch will be lost because target.path will evaluate
+      // to undefined.
+      if (global.application.findFile(target.path) === null) {
         continue
       }
 
@@ -160,17 +162,13 @@ export default class TargetProvider extends EventEmitter {
    * @param  {number|null} hash The hash to be searched for
    * @return {WritingTarget|undefined}      Either undefined (as returned by Array.find()) or the tag
    */
-  get (hash: number): WritingTarget|undefined {
-    if (hash === undefined) {
+  get (filePath: string): WritingTarget|undefined {
+    if (filePath === undefined) {
       return undefined
     }
 
-    if (typeof hash !== 'number') {
-      hash = parseInt(hash)
-    }
-
     return this._targets.find((elem) => {
-      return elem.hash === hash
+      return elem.path === filePath
     })
   }
 
@@ -183,12 +181,12 @@ export default class TargetProvider extends EventEmitter {
   set (target: WritingTarget): void {
     // Pass a count smaller or equal zero to remove.
     if (target.count <= 0) {
-      this.remove(target.hash)
+      this.remove(target.path)
       return
     }
 
     // Either update or add the target.
-    let existingTarget = this._targets.find(e => e.hash === target.hash)
+    let existingTarget = this._targets.find(e => e.path === target.path)
     if (existingTarget !== undefined) {
       existingTarget.mode = target.mode
       existingTarget.count = target.count
@@ -199,7 +197,7 @@ export default class TargetProvider extends EventEmitter {
     this._save()
 
     // Inform the respective file that its target has been updated.
-    this.emit('update', target.hash)
+    this.emit('update', target.path)
   }
 
   /**
@@ -207,13 +205,8 @@ export default class TargetProvider extends EventEmitter {
    * @param  {number} hash The hash to be searched for and removed.
    * @return {boolean}      Whether or not the operation succeeded.
    */
-  remove (hash: number): boolean {
-    // Make sure hash is really a number
-    if (typeof hash !== 'number') {
-      hash = parseInt(hash)
-    }
-
-    let target = this._targets.find(e => e.hash === hash)
+  remove (filePath: string): boolean {
+    let target = this._targets.find(e => e.path === filePath)
 
     if (target === undefined) {
       return false
@@ -223,7 +216,7 @@ export default class TargetProvider extends EventEmitter {
     this._save()
 
     // Inform the respective file that its target has been removed.
-    this.emit('remove', hash)
+    this.emit('remove', filePath)
 
     return true
   }

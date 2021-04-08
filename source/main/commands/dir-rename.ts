@@ -26,7 +26,7 @@ export default class DirRename extends ZettlrCommand {
    * @param  {Object} arg An object containing hash of containing and name of new dir.
    */
   async run (evt: string, arg: any): Promise<boolean> {
-    let sourceDir = this._app.findDir(arg.hash)
+    let sourceDir = this._app.findDir(arg.path)
     if (sourceDir === null) {
       global.log.error('Could not rename directory: Not found.')
       return false

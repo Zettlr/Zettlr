@@ -90,12 +90,23 @@
           v-if="field.type === 'list'"
           v-bind:key="f_idx"
           v-bind:value="getModelValue(field.model)"
-          v-bind:label="field.label"
+          v-bind:labels="field.labels"
           v-bind:name="field.model"
-          v-bind:list-options="field.listOptions"
-          v-bind:options="field.options"
+          v-bind:deletable="field.deletable"
+          v-bind:editable="field.editable"
+          v-bind:addable="field.addable"
+          v-bind:searchable="field.searchable"
+          v-bind:search-label="field.searchLabel"
           v-on:input="$emit('input', field.model, $event)"
         ></ListInput>
+        <TokenInput
+          v-if="field.type === 'token'"
+          v-bind:key="f_idx"
+          v-bind:value="getModelValue(field.model)"
+          v-bind:label="field.label"
+          v-bind:name="field.model"
+          v-on:input="$emit('input', field.model, $event)"
+        ></TokenInput>
         <Theme
           v-if="field.type === 'theme'"
           v-bind:key="f_idx"
@@ -121,6 +132,7 @@ import SwitchInput from './elements/Switch.vue'
 import RadioInput from './elements/Radio.vue'
 import SelectInput from './elements/Select.vue'
 import ListInput from './elements/List.vue'
+import TokenInput from './elements/TokenList.vue'
 import Theme from './elements/Theme.vue'
 
 export default {
@@ -136,16 +148,17 @@ export default {
     RadioInput,
     SelectInput,
     ListInput,
+    TokenInput,
     Theme
   },
   props: {
     model: {
       type: Object,
-      default: function () { return {} }
+      required: true
     },
     schema: {
       type: Object,
-      default: function () { return {} }
+      required: true
     }
   },
   methods: {

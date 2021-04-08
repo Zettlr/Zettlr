@@ -25,6 +25,7 @@
         v-if="showToolbar"
         v-bind:margin-top="toolbarMargin"
         v-bind:controls="toolbarControls"
+        v-bind:show-labels="toolbarLabels"
         v-on:search="$emit('toolbar-search', $event)"
         v-on:toggle="$emit('toolbar-toggle', $event)"
         v-on:click="$emit('toolbar-click', $event)"
@@ -42,10 +43,15 @@
         v-if="showWindowControls"
       ></WindowControls>
     </div>
-    <div id="window-content" v-bind:style="{
-      top: windowChromeHeight,
-      bottom: contentMarginBottom
-    }"
+    <div
+      id="window-content"
+      v-bind:style="{
+        top: windowChromeHeight,
+        bottom: contentMarginBottom
+      }"
+      v-bind:class="{
+        'disable-vibrancy': disableVibrancy
+      }"
     >
       <!-- The actual window contents will be mounted here -->
       <slot></slot>
@@ -138,6 +144,11 @@ export default {
       type: Boolean,
       default: false
     },
+    // Show labels under the toolbar icons?
+    toolbarLabels: {
+      type: Boolean,
+      default: false
+    },
     // Show the tabbar?
     showTabbar: {
       type: Boolean,
@@ -150,10 +161,18 @@ export default {
     statusbarControls: {
       type: Array,
       default: function () { return [] }
+    },
+    // If this is set to true, the window contents will disable vibrancy for
+    // this window on macOS. Doesn't have an effect on any other operating
+    // system.
+    disableVibrancy: {
+      type: Boolean,
+      default: false
     }
   },
   data: function () {
     return {
+      // platform: 'win32', // DEBUG process.platform,
       platform: process.platform,
       useNativeAppearance: global.config.get('window.nativeAppearance')
     }
@@ -255,7 +274,7 @@ export default {
       return `${margin}px`
     },
     contentMarginBottom: function () {
-      if (this.showStatusbar) {
+      if (this.showStatusbar === true) {
         return `${this.platformStatusbarHeight}px`
       } else {
         return '0px'
@@ -312,10 +331,12 @@ export default {
     // Oh, we can destructure stuff directly in the method signature?! Uuuuh
     ipcRenderer.on('config-provider', (event, { command, payload }) => {
       if (command === 'update' && payload === 'window.nativeAppearance') {
-        console.log('Apperance has changed for window chrome!')
         this.useNativeAppearance = global.config.get('window.nativeAppearance')
       }
     })
+
+    // Apply the body class immediately
+    document.body.classList.add(this.platform)
   },
   methods: {
     handleDoubleClick: function (origin) {
@@ -326,7 +347,7 @@ export default {
       } else if (origin === 'toolbar') {
         // A doubleclick on the toolbar should trigger a maximisation if there
         // is no titlebar on darwin
-        if (this.platform === 'darwin' && !this.titlebar) {
+        if (this.platform === 'darwin' && this.titlebar === false) {
           ipcRenderer.send('window-controls', { command: 'win-maximise' })
         }
       }
@@ -336,16 +357,25 @@ export default {
 </script>
 
 <style lang="less">
+// Import the CodeMirror CSS so that it's available on every window which
+// includes the WindowChrome.
+@import '~codemirror/lib/codemirror.css';
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, Ubuntu, Roboto, Noto, 'Segoe UI', Arial, sans-serif;
   // macOS OPERATING SYSTEM STYLES
+  // NOTE: On macOS, Zettlr uses vibrancy which means we must make the
+  // background-color of all elements transparent which should have this
+  // vibrancy effect. However, since this is the overall window background, we
+  // also need a way to disable the vibrancy selectively (e.g. for the
+  // preferences window).
   &.darwin {
-    div#window-content {
+    div#window-content.disable-vibrancy {
       background-color: rgb(235, 235, 235);
     }
 
     &.dark {
-      div#window-content {
+      div#window-content.disable-vibrancy {
         background-color: rgb(30, 30, 30);
       }
     }

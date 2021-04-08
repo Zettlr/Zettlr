@@ -11,7 +11,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-01-08T20:03:07.000000Z"
+        "updated_at": "2021-03-07T19:16:45.000000Z"
     },
     "dialog": {
         "about": {
@@ -524,6 +524,7 @@
         "print": "Imprimir....",
         "project_build": "Exportar proyecto",
         "project_properties": "Configuraci\u00f3n del proyecto....",
+        "properties": "Propiedades",
         "quicklook": "Vista r\u00e1pida",
         "quit": "Salir",
         "recent_docs": "Documentos recientes",

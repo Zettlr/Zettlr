@@ -5,6 +5,7 @@
     v-bind:menubar="false"
     v-bind:show-statusbar="true"
     v-bind:statusbar-controls="statusbarControls"
+    v-bind:disable-vibrancy="true"
     v-on:statusbar-click="handleClick($event)"
   >
     <div id="error">
@@ -75,6 +76,8 @@ div#error {
 
   p#additional-info {
     text-align: left;
+    white-space: pre-line;
+    font-family: monospace;
     margin: 10px 0px;
   }
 }

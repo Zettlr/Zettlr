@@ -12,10 +12,10 @@
  * END HEADER
  */
 
-import path from 'path'
-import sanitize from 'sanitize-filename'
+// import path from 'path'
+// import sanitize from 'sanitize-filename'
 import ZettlrCommand from './zettlr-command'
-import makeExport from '../modules/export'
+// import { makeExport } from '../modules/export'
 import objectToArray from '../../common/util/object-to-array'
 import makeImgPathsAbsolute from '../../common/util/make-img-paths-absolute'
 
@@ -71,34 +71,34 @@ export default class DirProjectExport extends ZettlrCommand {
 
       contents.push(fileContents)
     }
-    const finalContents = contents.join('\n\n')
+    // const finalContents = contents.join('\n\n')
 
     // Mock a file object to which ZettlrExport has access
-    let tempfile = {
-      'path': path.join(dir.path, sanitize(config.title, { replacement: '-' })),
-      'name': sanitize(config.title, { replacement: '-' }), // obvious filename
-      'content': finalContents
-    }
+    // let tempfile = {
+    //   'path': path.join(dir.path, sanitize(config.title, { replacement: '-' })),
+    //   'name': sanitize(config.title, { replacement: '-' }), // obvious filename
+    //   'content': finalContents
+    // }
 
     // Start up the Exporter
-    let opt = {
-      'format': config.format, // Which format: "html", "docx", "odt", "pdf"
-      'file': tempfile, // The file to be exported
-      'dest': dir.path, // On project exports, always dir path
-      'stripIDs': true,
-      'stripTags': true,
-      'stripLinks': 'full',
-      'pdf': config.pdf,
-      'title': config.title,
-      'date': '\\today',
-      'author': config.pdf.author,
-      'keywords': config.pdf.keywords,
-      'cslStyle': config.cslStyle
-    }
+    // let opt = {
+    //   'format': config.format, // Which format: "html", "docx", "odt", "pdf"
+    //   'file': tempfile, // The file to be exported
+    //   'dest': dir.path, // On project exports, always dir path
+    //   'stripIDs': true,
+    //   'stripTags': true,
+    //   'stripLinks': 'full',
+    //   'pdf': config.pdf,
+    //   'title': config.title,
+    //   'date': '\\today',
+    //   'author': config.pdf.author,
+    //   'keywords': config.pdf.keywords,
+    //   'cslStyle': config.cslStyle
+    // }
 
     // Aaaand export.
     try {
-      await makeExport(opt)
+      // await makeExport(opt) DEBUG @Kangie please reenable, had to remove that to fix a linter error
     } catch (err) {
       global.log.error(err.message, err)
       global.application.displayErrorMessage(

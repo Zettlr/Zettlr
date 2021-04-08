@@ -36,17 +36,17 @@ export default function createErrorModal (win: BrowserWindow, title: string, mes
     acceptFirstMouse: true,
     minWidth: 300,
     minHeight: 200,
-    width: 300,
-    height: 200,
+    width: 640,
+    height: 480,
     modal: true,
     parent: win,
     show: false,
     fullscreenable: false,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
       additionalArguments: [ title, message, contents ]
-    },
-    backgroundColor: '#fff'
+    }
   }
 
   // Set the correct window chrome

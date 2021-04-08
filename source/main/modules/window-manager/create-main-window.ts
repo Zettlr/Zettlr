@@ -43,9 +43,8 @@ export default function createMainWindow (conf: WindowPosition): BrowserWindow {
       // Zettlr needs all the node features, so in preparation for Electron
       // 5.0 we'll need to explicitly request it.
       nodeIntegration: true,
-      enableRemoteModule: false
-    },
-    backgroundColor: '#fff'
+      contextIsolation: false
+    }
   }
 
   setWindowChrome(winConf)

@@ -25,7 +25,7 @@ export default class DirRemoveProject extends ZettlrCommand {
     * @param  {Object} arg The hash of a directory.
     */
   async run (evt: string, arg: any): Promise<void> {
-    let dir = this._app.findDir(arg.hash)
+    let dir = this._app.findDir(arg.path)
     if (dir !== null) {
       await this._app.getFileSystem().removeProject(dir)
     } else {

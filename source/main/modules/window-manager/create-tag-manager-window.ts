@@ -41,9 +41,9 @@ export default function createTagManagerWindow (conf: WindowPosition): BrowserWi
     show: false,
     fullscreenable: false,
     webPreferences: {
-      nodeIntegration: true
-    },
-    backgroundColor: '#fff'
+      nodeIntegration: true,
+      contextIsolation: false
+    }
   }
 
   // Set the correct window chrome

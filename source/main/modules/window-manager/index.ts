@@ -32,20 +32,24 @@ import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '../fsal/typ
 import createMainWindow from './create-main-window'
 import createPrintWindow from './create-print-window'
 import createLogWindow from './create-log-window'
+import createStatsWindow from './create-stats-window'
 import createQuicklookWindow from './create-ql-window'
 import createPreferencesWindow from './create-preferences-window'
 import createCustomCSSWindow from './create-custom-css-window'
 import createAboutWindow from './create-about-window'
 import createTagManagerWindow from './create-tag-manager-window'
+import createDefaultsWindow from './create-defaults-window'
 import createPasteImageModal from './create-paste-image-modal'
 import createErrorModal from './create-error-modal'
 import shouldOverwriteFileDialog from './dialog/should-overwrite-file'
 import shouldReplaceFileDialog from './dialog/should-replace-file'
 import askDirectoryDialog from './dialog/ask-directory'
+import askSaveChanges from './dialog/ask-save-changes'
 import promptDialog from './dialog/prompt'
 import sanitizeWindowPosition from './sanitize-window-position'
 import { WindowPosition } from './types.d'
 import askFileDialog from './dialog/ask-file'
+// import dragIcon from '../../assets/dragicon.png'
 
 interface QuicklookRecord {
   path: string
@@ -57,6 +61,8 @@ export default class WindowManager {
   private readonly _qlWindows: QuicklookRecord[]
   private _printWindow: BrowserWindow|null
   private _logWindow: BrowserWindow|null
+  private _statsWindow: BrowserWindow|null
+  private _defaultsWindow: BrowserWindow|null
   private _preferences: BrowserWindow|null
   private _customCSS: BrowserWindow|null
   private _aboutWindow: BrowserWindow|null
@@ -68,6 +74,7 @@ export default class WindowManager {
   private readonly _configFile: string
   private _fileLock: boolean
   private _persistTimeout: ReturnType<typeof setTimeout>|undefined
+  private _beforeMainWindowCloseCallback: Function|null
 
   constructor () {
     this._mainWindow = null
@@ -81,9 +88,12 @@ export default class WindowManager {
     this._errorModal = null
     this._printWindowFile = undefined
     this._logWindow = null
+    this._statsWindow = null
+    this._defaultsWindow = null
     this._windowState = []
     this._configFile = path.join(app.getPath('userData'), 'window_state.json')
     this._fileLock = false
+    this._beforeMainWindowCloseCallback = null
 
     // Listen to window control commands
     ipcMain.on('window-controls', (event, message) => {
@@ -129,6 +139,13 @@ export default class WindowManager {
         case 'inspect-element':
           event.sender.inspectElement(payload.x, payload.y)
           break
+        case 'drag-start':
+          app.getFileIcon(payload.filePath)
+            .then((icon) => {
+              event.sender.startDrag({ file: payload.filePath, icon: icon })
+            })
+            .catch(err => global.log.error(`[Window Manager] Could not fetch icon for path ${String(payload.filePath)}`, err))
+          break
       }
     })
 
@@ -165,6 +182,25 @@ export default class WindowManager {
       this._windowState = JSON.parse(data) as WindowPosition[]
     } catch (err) {
       // Apparently no such file -> we'll leave the original (empty) array.
+    }
+  }
+
+  /**
+   * Sets a callback that will be called before the main window closes. Must
+   * return false if the window should not be closed.
+   *
+   * @param   {Function}  callback  The callback that will be called. Must return boolean.
+   */
+  onBeforeMainWindowClose (callback: () => boolean): void {
+    this._beforeMainWindowCloseCallback = callback
+  }
+
+  /**
+   * Programmatically closes the main window if it is open.
+   */
+  closeMainWindow (): void {
+    if (this._mainWindow !== null) {
+      this._mainWindow.close()
     }
   }
 
@@ -216,8 +252,12 @@ export default class WindowManager {
         }
       }
 
-      // TODO: Check if we can really close the window. Abort using
-      // event.preventDefault() if necessary.
+      if (this._beforeMainWindowCloseCallback !== null) {
+        const shouldClose: boolean = this._beforeMainWindowCloseCallback()
+        if (!shouldClose) {
+          event.preventDefault()
+        }
+      }
     }) // END: mainWindow.on(close)
 
     this._mainWindow.on('closed', () => {
@@ -510,6 +550,41 @@ export default class WindowManager {
   }
 
   /**
+   * Displays the defaults window
+   */
+  showDefaultsWindow (): void {
+    if (this._defaultsWindow === null) {
+      const conf = this._retrieveWindowPosition('log', null)
+      this._defaultsWindow = createDefaultsWindow(conf)
+      this._hookWindowResize(this._defaultsWindow, conf)
+
+      // Dereference the window as soon as it is closed
+      this._defaultsWindow.on('closed', () => {
+        this._defaultsWindow = null
+      })
+    } else {
+      this._makeVisible(this._defaultsWindow)
+    }
+  }
+
+  /**
+   * Shows the statistics window
+   */
+  showStatsWindow (): void {
+    if (this._statsWindow === null) {
+      const conf = this._retrieveWindowPosition('stats', null)
+      this._statsWindow = createStatsWindow(conf)
+      this._hookWindowResize(this._statsWindow, conf)
+
+      this._statsWindow.on('closed', () => {
+        this._statsWindow = null
+      })
+    } else {
+      this._makeVisible(this._statsWindow)
+    }
+  }
+
+  /**
    * Shows the preferences window
    */
   showPreferences (): void {
@@ -714,6 +789,17 @@ export default class WindowManager {
     */
   async shouldOverwriteFile (filename: string): Promise<boolean> {
     return await shouldOverwriteFileDialog(this._mainWindow, filename)
+  }
+
+  /**
+   * Asks the user whether or not to persist or drop changes to their files. It
+   * returns the ID of the clicked button in the message box, which is 0 to
+   * simply drop changes, 1 to abort closing in order to save. TODO: Enable auto-save
+   *
+   * @return  {Promise<any>}  Returns the message box results
+   */
+  async askSaveChanges (): Promise<any> {
+    return await askSaveChanges(this._mainWindow)
   }
 
   /**

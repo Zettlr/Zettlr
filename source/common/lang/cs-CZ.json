@@ -4,7 +4,7 @@
             "Ales Nehyba \u003Cneal.cz@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-02-09T20:11:30.000000Z"
+        "updated_at": "2021-03-28T08:25:22.000000Z"
     },
     "dialog": {
         "about": {
@@ -201,7 +201,8 @@
             "editor_font_size": "Velikost p\u00edsma v editoru",
             "editor_setting": {
                 "direction_ltr": "Pou\u017e\u00edt sm\u011br z\u00e1pisu zleva doprava (LTR)",
-                "direction_rtl": "Pou\u017e\u00edt sm\u011br z\u00e1pisu zprava doleva (RTL)"
+                "direction_rtl": "Pou\u017e\u00edt sm\u011br z\u00e1pisu zprava doleva (RTL)",
+                "rtl_move_visually": "P\u0159i pohybu pomoc\u00ed \u0161ipek v re\u017eimu RTL pou\u017e\u00edt vizu\u00e1ln\u00ed po\u0159ad\u00ed"
             },
             "enable_rmarkdown": "Povolit podporu soubor\u016f RMarkdown",
             "enable_table_helper": "Povolit Editor tabulek",
@@ -515,6 +516,7 @@
         "print": "Tisk...",
         "project_build": "Exportovat projekt",
         "project_properties": "Nastaven\u00ed projektu...",
+        "properties": "Vlastnosti",
         "quicklook": "N\u00e1hled",
         "quit": "Ukon\u010dit",
         "recent_docs": "Ned\u00e1vn\u00e9 dokumenty",

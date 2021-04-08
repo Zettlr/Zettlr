@@ -8,10 +8,25 @@ No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supp
 
 Several configuration values and options have changed their format. This means that changes to these won't be recognised by Zettlr 2.0. In this case, you may have to re-adapt your preferences in several places.
 
+## Writing Targets Must Be Re-Applied
+
+Due to a change in the underlying data structure, this version of Zettlr will not recognise any writing target set by a Zettlr version 1.x. This means: Please note down the important writing targets you have set before installing Zettlr 2.0 and then once re-apply them. We would like to apologise for this inconvenience, but believe its benefits by far outweigh the single additional migration effort on your side.
+
+## No more transitive files
+
+The idea of "transitive files" we implemented in previous iterations of Zettlr proved to be counter-intuitive to many people. We now removed that feature instead of a much better tab-management. By default, every file will be opened in its own tab no matter how you opened it. Instead, you now have an additional option in the preferences that allow you to indicate Zettlr should avoid opening new tabs wherever possible. This means, whenever you open a file, the current open tab will be replaced with whatever file you are opening. However, this does not apply if there are no tabs open, or if the current open tab contains unsaved changes. In that case, a new tab will be preferred. To explicitly open a file in a new tab, use the middle mouse button instead of the primary mouse button. This also applies to Zettelkasten-links inside your files.
+
+## No more Auto-Saving
+
+A few years ago we implemented auto-saving after a delay of five seconds with no change to the current file. However, that feature was always a little bit counter-intuitive. Instead, the new Zettlr version removes auto-saving and re-instates manual saving (since the "Save" menu option was never gone). We did this for several reasons. First, Zettlr is first and foremost a text editor working with files on your computer, so you are used to having to save files manually, and Zettlr should've never deviated from that. Furthermore, if we would implement a data-safe autosaving ability, this would put unnecessary strain on your computer's hard drive. Thus we opted for the traditional way and thus you need to manually save changes to files now. We found during beta that this is much more consistent and easy to work with.
+
 ## GUI and Functionality
 
 - **Feature**: Switched the Exporting process in a way that allows more flexibility in setting options.
 - **Feature**: The macOS version of Zettlr now boasts a new application icon, adapted to fit the style of the Big Sur operating system. It was provided by Marc Oliver Orth (@marc2o) – thank you!
+- **Feature**: Zettlr now supports bibliography files on a per-file basis. Just set the wanted bibliography in your YAML frontmatter, within the `bibliography`-property.
+- **Feature**: Now Zettlr can export to PDF even without any LaTeX-distribution installed on the system.
+- **Feature**: The footnote editing logic has been improved. Now, multiline footnotes are handled appropriately, and you can safely use multi-line footnotes alongside the in-place editing feature.
 - 32 bit AppImages and Windows are no longer supported.
 - Double-dollar equations are now rendered in display mode.
 - Removed the Pandoc installation item from the help menu.
@@ -21,6 +36,7 @@ Several configuration values and options have changed their format. This means t
 - Removed the ability for the translation provider to arbitrarily request languages that have not been installed in order to remove that fragile feature. All languages will now be provided from the application immediately.
 - All windows will now remember their last position (new: log window and print window).
 - Some components of the renderer elements will now respect a given accent colour set by your operating system (only available for macOS and Windows).
+- You can now close files by middle-clicking their tabs.
 
 ## Under the Hood
 
@@ -44,6 +60,9 @@ Several configuration values and options have changed their format. This means t
 - Now tests can be run as JavaScript or as TypeScript files (use `.js` or `.spec.ts` files respectively).
 - Generalised the window state management so that all windows are now able to remember their positions easily.
 - The toolbar is now vue-ified and can be used on WindowChrome components.
+- Zettlr is now completely jQuery-free.
+- Migrated the FSAL cache from unstable Objects to Maps and Sets.
+- Migrated the TagProvider to a Map as well.
 
 # 1.8.7
 

@@ -18,12 +18,6 @@
  * END HEADER
  */
 
-// Import the CodeMirror CSS so we can bundle it with the geometry file
-@import "~codemirror/lib/codemirror.css";
-
-// Import the necessary styles for the virtual scroller in the main window
-@import "~vue-virtual-scroller/dist/vue-virtual-scroller.css";
-
 // First import the geometry variables
 @import "variables.less";
 
@@ -138,10 +132,6 @@ body:not(.darwin) {
   ::-webkit-scrollbar {
     width: 10px;
   }
-
-  ::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-  }
 }
 
 .clearfix {
@@ -159,27 +149,7 @@ body:not(.darwin) {
 
 // END ANIMATIONS
 
-@import "modal.less";
-
-@import "file-list.less";
-@import "file-tree.less";
-@import "file-manager.less";
-
-@import "editor.less";
-
-@import "document-tabs.less";
-
 @import "codemirror.less";
-
-@import "toolbar.less";
-
-@import "notify.less";
-
-@import "popup.less";
-
-@import "sidebar.less";
-
-@import "inputs.less";
 
 @import "application-menu.less";
 

@@ -20,14 +20,14 @@ interface TagProvider {
    *
    * @param  {string[]}  tagArray  An array containing the tags to be added
    */
-  report: (tagArray: string[]) => void
+  report: (tagArray: string[], filePath: string) => void
   /**
    * Removes the given tagArray from the database, i.e. decreases the
    * counter until zero and then removes the tag.
    *
    * @param  {string[]}  tagArray  The tags to remove from the database
    */
-  remove: (tagArray: string[]) => void
+  remove: (tagArray: string[], filePath: string) => void
   /**
    * Returns the global tag database
    *

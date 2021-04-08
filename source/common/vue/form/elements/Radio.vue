@@ -22,7 +22,7 @@
 
 <script>
 export default {
-  name: 'FieldText',
+  name: 'RadioControl',
   props: {
     value: {
       type: String,
@@ -55,6 +55,11 @@ export default {
 body {
   .radio-group {
     break-inside: avoid;
+
+    .cb-group {
+      display: flex;
+      align-items: center;
+    }
   }
 
   label.radio {
@@ -159,9 +164,14 @@ body.darwin {
 body.win32 {
   @input-size: 20px;
 
+  .cb-group, .radio-group {
+    margin: 6px 0px;
+  }
+
   label.radio {
     width: @input-size;
     height: @input-size;
+    margin-right: 5px;
 
     input:checked + .toggle {
       border-color: var(--system-accent-color, --c-primary);

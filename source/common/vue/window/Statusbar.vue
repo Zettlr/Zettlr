@@ -4,26 +4,14 @@
       <ButtonControl
         v-if="item.type === 'button'"
         v-bind:key="idx"
-        v-bind:control="item"
+        v-bind:label="item.label"
+        v-bind:icon="item.icon"
+        v-bind:name="item.name"
+        v-bind:disabled="item.disabled"
+        v-bind:inline="true"
+        v-bind:primary="item.primary"
         v-on:click="$emit('click', item.id)"
       ></ButtonControl>
-      <ToggleControl
-        v-if="item.type === 'toggle'"
-        v-bind:key="idx"
-        v-bind:control="item"
-        v-on:toggle="$emit('toggle', item.id)"
-      ></ToggleControl>
-      <SearchControl
-        v-if="item.type === 'search'"
-        v-bind:key="idx"
-        v-bind:control="item"
-        v-on:input="$emit('search', $event)"
-      ></SearchControl>
-      <SpacerControl
-        v-if="item.type === 'spacer'"
-        v-bind:key="idx"
-        v-bind:control="item"
-      ></SpacerControl>
       <TextControl
         v-if="item.type === 'text'"
         v-bind:key="idx"
@@ -34,19 +22,14 @@
 </template>
 
 <script>
-import ButtonControl from './toolbar-controls/Button.vue'
-import ToggleControl from './toolbar-controls/Toggle.vue'
-import SearchControl from './toolbar-controls/Search.vue'
-import SpacerControl from './toolbar-controls/Spacer.vue'
+// Regular form button, but a static text display
+import ButtonControl from '../form/elements/Button.vue'
 import TextControl from './toolbar-controls/Text.vue'
 
 export default {
   name: 'Statusbar',
   components: {
     ButtonControl,
-    ToggleControl,
-    SearchControl,
-    SpacerControl,
     TextControl
   },
   props: {
@@ -72,6 +55,9 @@ div#statusbar {
   padding: 0px 20px;
   line-height: 40px;
   background-color: rgb(235, 235, 235); // TODO: Enable the status bar to be "invisible" and visible
+  display: flex;
+    justify-content: space-between;
+    align-items: center;
 
   button {
     margin-right: 5px; // Increase spacing a little bit here

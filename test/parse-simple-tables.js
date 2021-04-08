@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-const parseSimpleTable = require('../source/renderer/modules/table-editor/parse-simple')
+const parseSimpleTable = require('../source/common/modules/markdown-editor/table-editor/parse-simple')
 const assert = require('assert')
 
 const table = []

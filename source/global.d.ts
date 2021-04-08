@@ -3,15 +3,25 @@
 // More info: https://stackoverflow.com/a/35074833
 
 /**
+ * DECLARE ANY OTHER FILETYPES
+ *
+ * These filetypes can be "imported" but their resolved value will be a string
+ * pointing to wherever the file-loader has put these files.
+ */
+declare module '*.png'
+
+/**
  * DECLARE THE GLOBAL INTERFACES
  */
 interface Application {
+  runCommand: (command: string, payload?: any) => Promise<any>
   isBooting: () => boolean
   showLogViewer: () => void
   showPreferences: () => void
   showCustomCSS: () => void
   displayErrorMessage: (title: string, message: string, contents?: string) => void
   showAboutWindow: () => void
+  showDefaultsPreferences: () => void
   showTagManager: () => void
   // TODO: Match the signatures of fileUpdate and dirUpdate
   fileUpdate: (oldHash: number, fileMetadata: any) => void
@@ -32,6 +42,7 @@ interface Application {
  */
 declare module NodeJS {
   interface Global {
+    assets: AssetsProvider
     css: CssProvider
     dict: DictionaryProvider
     log: LogProvider
@@ -39,7 +50,7 @@ declare module NodeJS {
     notify: NotificationProvider
     ipc: any
     citeproc: CiteprocProvider
-    config: any
+    config: ConfigProvider
     application: Application
     typo: any
     filesToOpen: string[]

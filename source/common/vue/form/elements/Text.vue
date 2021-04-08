@@ -10,6 +10,9 @@
         v-bind:placeholder="placeholder"
         type="text"
         v-on:input="$emit('input', $event.target.value)"
+        v-on:keyup.enter="$emit('confirm', $event.target.value)"
+        v-on:keyup.esc="$emit('escape', $event.target.value)"
+        v-on:blur="$emit('blur', $event.target.value)"
       >
       <button
         type="button"
@@ -29,6 +32,9 @@
       v-bind:placeholder="placeholder"
       type="text"
       v-on:input="$emit('input', $event.target.value)"
+      v-on:keyup.enter="$emit('confirm', $event.target.value)"
+      v-on:keyup.esc="$emit('escape', $event.target.value)"
+      v-on:blur="$emit('blur', $event.target.value)"
     >
   </div>
 </template>
@@ -71,6 +77,12 @@ export default {
     resetValue: function () {
       this.$refs.input.value = this.reset
       this.$emit('input', this.reset)
+    },
+    focus: function () {
+      this.$refs.input.focus()
+    },
+    select: function () {
+      this.$refs.input.select()
     }
   }
 }

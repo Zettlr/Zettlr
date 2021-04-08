@@ -29,6 +29,7 @@ import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 
 // Providers
 import AppearanceProvider from './service-providers/appearance-provider'
+import AssetsProvider from './service-providers/assets-provider'
 import CiteprocProvider from './service-providers/citeproc-provider'
 import ConfigProvider from './service-providers/config-provider'
 import CssProvider from './service-providers/css-provider'
@@ -45,23 +46,24 @@ import StatsProvider from './service-providers/stats-provider'
 
 // We need module-global variables so that garbage collect won't shut down the
 // providers before the app is shut down.
-var appearanceProvider: AppearanceProvider
-var citeprocProvider: CiteprocProvider
-var configProvider: ConfigProvider
-var cssProvider: CssProvider
-var dictionaryProvider: DictionaryProvider
-var logProvider: LogProvider
-var recentDocsProvider: RecentDocsProvider
-var tagProvider: TagProvider
-var targetProvider: TargetProvider
-var translationProvider: TranslationProvider
-var updateProvider: UpdateProvider
-var menuProvider: MenuProvider
-var notificationProvider: NotificationProvider
-var statsProvider: StatsProvider
+let appearanceProvider: AppearanceProvider
+let assetsProvider: AssetsProvider
+let citeprocProvider: CiteprocProvider
+let configProvider: ConfigProvider
+let cssProvider: CssProvider
+let dictionaryProvider: DictionaryProvider
+let logProvider: LogProvider
+let recentDocsProvider: RecentDocsProvider
+let tagProvider: TagProvider
+let targetProvider: TargetProvider
+let translationProvider: TranslationProvider
+let updateProvider: UpdateProvider
+let menuProvider: MenuProvider
+let notificationProvider: NotificationProvider
+let statsProvider: StatsProvider
 
 // Statistics: Record the uptime of the application
-var upTimestamp: number
+let upTimestamp: number
 
 /**
  * Catches potential errors during shutdown of certain providers.
@@ -109,6 +111,8 @@ export async function bootApplication (): Promise<void> {
   logProvider = new LogProvider()
   configProvider = new ConfigProvider()
   appearanceProvider = new AppearanceProvider()
+  assetsProvider = new AssetsProvider()
+  await assetsProvider.init()
   citeprocProvider = new CiteprocProvider()
   dictionaryProvider = new DictionaryProvider()
   recentDocsProvider = new RecentDocsProvider()
@@ -187,6 +191,7 @@ export async function shutdownApplication (): Promise<void> {
   await safeShutdown(appearanceProvider)
   await safeShutdown(configProvider)
   await safeShutdown(statsProvider)
+  await safeShutdown(assetsProvider)
 
   const downTimestamp = Date.now()
 

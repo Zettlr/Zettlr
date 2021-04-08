@@ -8,7 +8,7 @@ module.exports = [
     test: /\.(m?js|node)$/,
     parser: { amd: false },
     use: {
-      loader: '@zeit/webpack-asset-relocator-loader',
+      loader: '@vercel/webpack-asset-relocator-loader',
       options: {
         outputAssetBase: 'native_modules'
       }
@@ -64,7 +64,7 @@ module.exports = [
   },
   {
     // Handle audio files: just copy them
-    test: /\.(ogg)$/,
+    test: /\.(ogg|mp3|wav)$/,
     use: {
       loader: 'file-loader',
       options: {
@@ -77,17 +77,6 @@ module.exports = [
         // The main context is our source directory. The resources are only
         // important for handlebars, but not for anything else.
         context: 'source'
-      }
-    }
-  },
-  {
-    // Handle files for citeproc: copy them, and import them as string
-    test: /\.(xml|csl)$/,
-    use: {
-      loader: 'raw-loader',
-      options: {
-        // Do not wrap in js module
-        esModule: false
       }
     }
   },

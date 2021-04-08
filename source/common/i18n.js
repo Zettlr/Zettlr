@@ -12,13 +12,13 @@
  * END HEADER
  */
 
-const fs = require('fs')
-const path = require('path')
-const bcp47 = require('bcp-47')
-const { app, ipcRenderer } = require('electron')
-const isDir = require('./util/is-dir')
-const isFile = require('./util/is-file')
-const sanitizeHtml = require('sanitize-html')
+import fs from 'fs'
+import path from 'path'
+import * as bcp47 from 'bcp-47/index.js'
+import { app, ipcRenderer } from 'electron'
+import isDir from './util/is-dir'
+import isFile from './util/is-file'
+import sanitizeHtml from 'sanitize-html'
 
 /**
  * Status mode that describes a returned language metadata object as an exact
@@ -47,7 +47,7 @@ const FALLBACK = 'fallback'
  * @param  {String} [lang='en-US'] The language to be loaded
  * @return {Object}                The language metadata object.
  */
-function loadI18nMain (lang = 'en-US') {
+export function loadI18nMain (lang = 'en-US') {
   let file = getLanguageFile(lang) // Will return a working path
 
   // Cannot do this asynchronously, because it HAS to be loaded directly
@@ -70,7 +70,7 @@ function loadI18nMain (lang = 'en-US') {
  * @param  {any} args   Zero or more strings that will replace %s-placeholders in the string
  * @return {String}        The translation with all potential replacements applied.
  */
-function trans (string, ...args) {
+export function trans (string, ...args) {
   if (string.indexOf('.') === -1) {
     // Wtf? But alright, return the string and log an error
     global.log.warning('The translation string was malformed: ' + string + '!')
@@ -97,12 +97,12 @@ function trans (string, ...args) {
   }
 
   for (let obj of str) {
-    if (transString.hasOwnProperty(obj)) {
+    if (obj in transString) {
       transString = transString[obj]
     } else {
       // Something went wrong and the requested translation string was
       // not found -> fall back and just return the original string
-      return (global.config.get('debug') || skipFallback) ? string : trans(string, ...[true].concat(args))
+      return (Boolean(global.config.get('debug')) || skipFallback) ? string : trans(string, ...[true].concat(args))
     }
   }
 
@@ -131,7 +131,7 @@ function trans (string, ...args) {
  * @param  {string} query         The language metadata is requested for (BCP 47 compatible)
  * @return {Object}               A language metadata object.
  */
-function getDictionaryFile (query) {
+export function getDictionaryFile (query) {
   // First of all, create the fallback object.
   let ret = {
     'tag': 'en-US',
@@ -141,14 +141,13 @@ function getDictionaryFile (query) {
   }
 
   let lang = bcp47.parse(query)
-  if (!lang) throw new Error(`Request for BCP 47 compatible dictionary file was malformed: ${query}`)
 
   // Now we should have a list of all available dictionaries. Next, we need to
   // search for a best and a close match.
   let { exact, close } = findLangCandidates(lang, enumDictFiles())
 
-  if (exact) return exact
-  if (close) return close
+  if (exact !== undefined) return exact
+  if (close !== undefined) return close
   return ret
 }
 
@@ -157,7 +156,7 @@ function getDictionaryFile (query) {
  * @param  {string} query         The language metadata is requested for (BCP 47 compatible)
  * @return {Object}               A language metadata object.
  */
-function getLanguageFile (query) {
+export function getLanguageFile (query) {
   // First of all, create the fallback object.
   let ret = {
     'tag': 'en-US',
@@ -166,14 +165,13 @@ function getLanguageFile (query) {
   }
 
   let lang = bcp47.parse(query)
-  if (!lang) throw new Error(`Request for BCP 47 compatible dictionary file was malformed: ${query}`)
 
   // Now we should have a list of all available dictionaries. Next, we need to
   // search for a best and a close match.
   let { exact, close } = findLangCandidates(lang, enumLangFiles())
 
-  if (exact) return exact
-  if (close) return close
+  if (exact !== undefined) return exact
+  if (close !== undefined) return close
   return ret
 }
 
@@ -185,7 +183,7 @@ function getLanguageFile (query) {
  * @param  {Array} candidates An array containing all objects to check. Must expose a "tag"-property
  * @return {Object}            An object containing "close" and "exact" properties, which may be undefined.
  */
-function findLangCandidates (lang, candidates) {
+export function findLangCandidates (lang, candidates) {
   if (typeof lang === 'string') {
     lang = bcp47.parse(lang)
   }
@@ -230,14 +228,18 @@ function findLangCandidates (lang, candidates) {
     if (candidateType === 'best') {
       bestMatch = candidate
       break
-    } else if (candidateType === 'close' && !closeMatch) {
+    } else if (candidateType === 'close' && closeMatch === undefined) {
       closeMatch = candidate
       // Don't break here, because maybe the best match comes afterwards in the list
     }
   }
 
-  if (bestMatch) bestMatch.status = EXACT
-  if (closeMatch) closeMatch.status = CLOSE
+  if (bestMatch !== undefined) {
+    bestMatch.status = EXACT
+  }
+  if (closeMatch !== undefined) {
+    closeMatch.status = CLOSE
+  }
 
   return {
     'exact': bestMatch,
@@ -250,7 +252,7 @@ function findLangCandidates (lang, candidates) {
  * @param  {Array}  [paths=[ __dirname,    path.join(app.getPath('userData'] Paths to be searched for
  * @return {Array}          An array containing the language metadata (keys = bcp-47 tags)
  */
-function getTranslationMetadata (paths = [ path.join(app.getPath('userData'), '/lang'), path.join(__dirname, '/lang') ]) {
+export function getTranslationMetadata (paths = [ path.join(app.getPath('userData'), '/lang'), path.join(__dirname, '/lang') ]) {
   let metadata = []
 
   // First get all translations available
@@ -258,7 +260,9 @@ function getTranslationMetadata (paths = [ path.join(app.getPath('userData'), '/
   // Now loop through them and extract the metadata section
   for (let f of files) {
     let lang = path.basename(f, path.extname(f)) // bcp-47 tag
-    if (metadata.find(elem => elem.bcp47 === lang)) continue // Already included
+    if (metadata.find(elem => elem.bcp47 === lang) !== undefined) {
+      continue // Already included
+    }
     let data = fs.readFileSync(f, 'utf-8')
     let stat = fs.lstatSync(f)
     data = JSON.parse(data)
@@ -271,7 +275,7 @@ function getTranslationMetadata (paths = [ path.join(app.getPath('userData'), '/
     } else {
       data.metadata['bcp47'] = lang // Add language tag
       // Make sure we have a last updated property.
-      if (!data.metadata.hasOwnProperty('updated_at')) {
+      if (!('updated_at' in data.metadata)) {
         data.metadata.updated_at = stat.mtime.toISOString()
       }
       metadata.push(data.metadata)
@@ -286,7 +290,7 @@ function getTranslationMetadata (paths = [ path.join(app.getPath('userData'), '/
  * @param  {Array} [paths=[]] An array of paths to search for. Optional.
  * @return {Array}       An array containing metadata for all found files.
  */
-function enumLangFiles (paths = [ path.join(app.getPath('userData'), '/lang'), path.join(__dirname, '/lang') ]) {
+export function enumLangFiles (paths = [ path.join(app.getPath('userData'), '/lang'), path.join(__dirname, '/lang') ]) {
   // Now go through all search paths and enumerate all available files of interest
   let candidates = []
   for (let p of paths) {
@@ -297,7 +301,7 @@ function enumLangFiles (paths = [ path.join(app.getPath('userData'), '/lang'), p
       if (path.extname(file) !== '.json') continue
 
       let schema = bcp47.parse(file.substr(0, file.lastIndexOf('.')))
-      if (schema.language) {
+      if (schema.language !== undefined) {
         candidates.push({
           'tag': bcp47.stringify(schema),
           'path': path.join(p, file)
@@ -313,14 +317,14 @@ function enumLangFiles (paths = [ path.join(app.getPath('userData'), '/lang'), p
  * @param  {Array} [paths=[]] An array of paths to be searched. Defaults to standard paths.
  * @return {Array}       An array containing metadata for all found dictionaries.
  */
-function enumDictFiles (paths = [ path.join(app.getPath('userData'), '/dict'), path.join(__dirname, 'dict') ]) {
+export function enumDictFiles (paths = [ path.join(app.getPath('userData'), '/dict'), path.join(__dirname, 'dict') ]) {
   let candidates = []
   for (let p of paths) {
     let list = fs.readdirSync(p)
     for (let dir of list) {
       if (!isDir(path.join(p, dir))) continue
       let schema = bcp47.parse(dir)
-      if (schema.language) {
+      if (schema.language !== undefined) {
         // Additional check to make sure the dictionaries are complete.
         let aff = path.join(p, dir, dir + '.aff')
         let dic = path.join(p, dir, dir + '.dic')
@@ -339,15 +343,4 @@ function enumDictFiles (paths = [ path.join(app.getPath('userData'), '/dict'), p
     }
   }
   return candidates
-}
-
-module.exports = {
-  loadI18nMain,
-  trans,
-  getDictionaryFile,
-  getLanguageFile,
-  enumLangFiles,
-  enumDictFiles,
-  getTranslationMetadata,
-  findLangCandidates
 }

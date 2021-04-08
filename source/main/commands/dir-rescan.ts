@@ -31,6 +31,6 @@ export default class DirRescan extends ZettlrCommand {
       return
     }
 
-    this._app.getFileSystem().rescanForDirectory(deadDir)
+    await this._app.getFileSystem().rescanForDirectory(deadDir)
   }
 }
