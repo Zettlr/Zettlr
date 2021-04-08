@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { EquationFinder, EquationMarker, LineInfo } from '../source/renderer/modules/markdown-editor/plugins/render-math'
+import { EquationFinder, EquationMarker, LineInfo } from '../source/common/modules/markdown-editor/plugins/render-math'
 import { deepStrictEqual } from 'assert'
 
 describe('EquationFinder#findInlineEquations()', function () {
