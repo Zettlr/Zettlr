@@ -51,6 +51,10 @@ export default {
         return event.stopPropagation()
       }
 
+      if (event.button === 2) {
+        return // The user requested a context menu
+      }
+
       // Determine if we have a middle (wheel) click. The event-type checking
       // is only done so this is only true when we triggered this function using
       // the mousedown event.
@@ -100,7 +104,7 @@ export default {
       // We need to tweak some minor things depending on whether this is a
       // FileItem or a TreeItem. NOTE: These things were determined by diffing
       // the original handleContextMenu functions in both components.
-      const treeItem = this.name === 'TreeItem'
+      const treeItem = this.$options.name === 'TreeItem'
 
       if (this.isDirectory === true) {
         dirContextMenu(event, this.obj, this.$el, (clickedID) => {

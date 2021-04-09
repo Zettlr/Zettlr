@@ -79,7 +79,7 @@
             v-for="singleRes, idx2 in result.result"
             v-bind:key="idx2"
             class="result-line"
-            v-on:mousedown.stop="jumpToLine($event, result.file.path, singleRes.from.line)"
+            v-on:mousedown.stop.prevent="jumpToLine($event, result.file.path, singleRes.from.line)"
           >
             <strong>{{ singleRes.from.line }}</strong>:
             <span v-html="markText(singleRes.term, singleRes.restext)"></span>
