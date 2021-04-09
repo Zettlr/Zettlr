@@ -4,8 +4,11 @@
 @font-lato: 'Lato', sans-serif;
 @font-sans-win: 'Segoe UI', sans-serif; // Windows fallback
 @font-crimson: 'Crimson', serif;
-@font-liberation: 'Liberation Mono', monospace;
-@font-inconsolata: 'Inconsolata', monospace;
+// On Windows, Liberation Mono looks ugly, so let's have Windows use Consolas,
+// since that's not installed on other systems.
+@font-liberation: Consolas, 'Liberation Mono', Menlo, monospace;
+// Same here
+@font-inconsolata: Consolas, 'Inconsolata', Menlo, monospace;
 
 // Set the code font
 @font-code: @font-inconsolata;
