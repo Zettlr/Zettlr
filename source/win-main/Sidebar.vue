@@ -312,6 +312,9 @@ export default {
     },
     getRelatedFileName: function (filePath) {
       const descriptor = this.$store.getters.file(filePath)
+      if (descriptor === null) {
+        return filePath
+      }
 
       if (descriptor.frontmatter !== null && 'title' in descriptor.frontmatter) {
         return descriptor.frontmatter.title
