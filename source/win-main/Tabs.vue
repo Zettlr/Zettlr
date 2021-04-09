@@ -315,11 +315,6 @@ body div#tab-container {
     }
 
     transition: 0.2s background-color ease;
-
-    &.active {
-      background-color: var(--c-primary);
-      color: white;
-    }
   }
 }
 
@@ -383,19 +378,19 @@ body.darwin {
     div#tab-container {
       border-bottom-color: rgb(11, 11, 11);
 
-        div[role="tab"] {
-          color: rgb(233, 233, 233);
-          background-color: rgb(22, 22, 22);
-          border-color: rgb(22, 22, 22);
+      div[role="tab"] {
+        color: rgb(233, 233, 233);
+        background-color: rgb(22, 22, 22);
+        border-color: rgb(22, 22, 22);
 
-          &:hover {
-            background-color: rgb(32, 34, 36);
-          }
+        &:hover {
+          background-color: rgb(32, 34, 36);
+        }
 
-          &.active {
-            background-color: rgb(51, 51, 51);
-            border-color: rgb(70, 70, 70);
-          }
+        &.active {
+          background-color: rgb(51, 51, 51);
+          border-color: rgb(70, 70, 70);
+        }
       }
     }
   }
@@ -403,10 +398,24 @@ body.darwin {
 
 body.win32 {
   div#tab-container {
-    border-bottom-color: transparent;
+    border-bottom: none;
 
     div[role="tab"] {
       font-size: 12px;
+
+      &:not(:last-child) {
+        border-right: 1px solid rgb(180, 180, 180);
+      }
+
+      &.active {
+        background-color: rgb(100, 100, 100);
+        color: white;
+      }
+
+      .close {
+        // The "x" needs to be bigger
+        font-size: 18px;
+      }
     }
   }
 
@@ -415,7 +424,13 @@ body.win32 {
       background-color: rgb(11, 11, 11);
 
       div[role="tab"] {
+        border-color: rgb(120, 120, 120);
+
         &:hover { background-color: rgb(53, 53, 53); }
+
+        &.active {
+          background-color: rgb(50, 50, 50);
+        }
       }
     }
   }
