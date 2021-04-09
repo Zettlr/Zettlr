@@ -117,10 +117,11 @@
    */
   function setup (option) {
     replacementCandidates = {}
+    console.log(option)
     if (option.replacements !== undefined && Array.isArray(option.replacements)) {
       // The user has provided an array of values
       for (const element of option.replacements) {
-        replacementCandidates[element.key] = element.val
+        replacementCandidates[element.key] = element.value
       }
     } else if (option.replacements !== undefined && typeof option.replacements === 'object') {
       // In case we have a property "replacements" which is also an object
