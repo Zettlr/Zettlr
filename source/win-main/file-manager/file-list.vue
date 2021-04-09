@@ -589,6 +589,9 @@ body.win32 {
   #file-list #file-manager-filter {
     padding: 0;
     border-bottom: 2px solid rgb(230, 230, 230);
+    height: 32px; // The border should be *below* the 30px mark
+
+    #file-manager-filter-input { height: 30px; }
   }
 }
 </style>
