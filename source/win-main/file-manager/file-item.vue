@@ -478,7 +478,7 @@ body.darwin {
 body.win32 {
   div.list-item {
     border-bottom: 1px solid rgb(213, 213, 213);
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(230, 230, 230);
 
     &.active {
       background-color: rgb(200, 200, 200);
@@ -493,7 +493,7 @@ body.win32 {
       div.filename div.date { background-color: rgb(230, 230, 230); }
     }
 
-    div.filename div.date { background-color: rgb(255, 255, 255); }
+    div.filename div.date { background-color: rgb(230, 230, 230); }
 
     div.meta-info {
       .badge {

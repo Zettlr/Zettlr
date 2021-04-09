@@ -5,6 +5,9 @@ import { ipcRenderer } from 'electron'
 // automatically
 import '../../less/main.less'
 
+// Import the application menu styles
+import './assets/application-menu.less'
+
 /**
  * Webpack provides the themes as JavaScript objects with two properties, use
  * and unuse. We have to declare this to TypeScript using this handy interface.
