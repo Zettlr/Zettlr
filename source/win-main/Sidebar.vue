@@ -535,4 +535,15 @@ body.darwin.dark div#sidebar {
     }
   }
 }
+
+body.win32 {
+
+  #sidebar #sidebar-tabs .sidebar-tab.active {
+    background-color: rgb(230, 230, 230);
+  }
+
+  &.dark #sidebar #sidebar-tabs .sidebar-tab.active {
+    background-color: rgb(120, 120, 120);
+  }
+}
 </style>
