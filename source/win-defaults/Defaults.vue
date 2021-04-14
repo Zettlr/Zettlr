@@ -138,6 +138,12 @@ export default {
   },
   mounted: function () {
     this.loadDefaultsForState()
+
+    ipcRenderer.on('shortcut', (event, shortcut) => {
+      if (shortcut === 'save-file') {
+        this.saveDefaultsFile()
+      }
+    })
   },
   methods: {
     loadDefaultsForState: function () {
