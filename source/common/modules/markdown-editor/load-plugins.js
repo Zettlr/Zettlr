@@ -31,8 +31,9 @@ require('codemirror/addon/display/fullscreen')
 require('codemirror/addon/display/placeholder')
 
 // 5. Search addons
-require('codemirror/addon/search/searchcursor')
 require('codemirror/addon/scroll/annotatescrollbar')
+require('codemirror/addon/search/searchcursor')
+require('codemirror/addon/search/matchesonscrollbar')
 
 // 6. Code highlighting-only modes
 require('codemirror/mode/clike/clike')
