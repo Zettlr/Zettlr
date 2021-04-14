@@ -416,6 +416,7 @@ body.darwin {
       .badge {
         background-color: rgb(220, 220, 220);
         color: rgb(80, 80, 80);
+        border-radius: 4px;
 
         &.code-indicator {
           background-color: var(--system-accent-color, --c-primary);
