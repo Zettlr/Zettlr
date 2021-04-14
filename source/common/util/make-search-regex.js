@@ -13,9 +13,11 @@
 
 /**
  * Creates a search term (always suitable to be used in new RegExp())
- * @param  {string} term A string that may contain a regular expression
- * @param {Array} [injectFlags=['i']] Flags to be injected into the expression
- * @return {Object}      A search term object with props term and flags.
+ *
+ * @param  {string} term              A string that may contain a regular expression
+ * @param  {array}  [injectFlags=[]]  Flags to be injected into the expression
+ *
+ * @return {RegExp}                    The regular expression
  */
 module.exports = function (term, injectFlags = []) {
   let re = {}
