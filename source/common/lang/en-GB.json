@@ -7,7 +7,7 @@
             "lukecarrier \u003Cluke@carrier.im\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-03-06T11:51:39.000000Z"
+        "updated_at": "2021-04-03T12:00:05.000000Z"
     },
     "dialog": {
         "about": {
@@ -178,6 +178,7 @@
                 "style_word_label": "Word style (replace immediately without pressing Space/Enter)",
                 "title": "AutoCorrect"
             },
+            "avoid_new_tabs": "Avoid opening files in new tabs if possible",
             "checkForBeta": "Notify me about beta releases",
             "choose_file": "Choose file \u2026",
             "citation_database": "Citation Database (CSL JSON or BibTex)",

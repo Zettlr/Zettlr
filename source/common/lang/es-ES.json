@@ -11,7 +11,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-03-07T19:16:45.000000Z"
+        "updated_at": "2021-04-06T20:39:37.000000Z"
     },
     "dialog": {
         "about": {
@@ -182,6 +182,7 @@
                 "style_word_label": "Estilo Word",
                 "title": "Autocorrecci\u00f3n"
             },
+            "avoid_new_tabs": "Evita, cuando sea posible, abrir archivos en nuevas pesta\u00f1as",
             "checkForBeta": "Notifiquame sobre las versiones beta",
             "choose_file": "Elegir archivo ....",
             "citation_database": "Base de datos de citas (CSL JSON o BibTex)",
