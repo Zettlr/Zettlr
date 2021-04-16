@@ -1,3 +1,9 @@
+# 2.0.1
+
+## Supports MDX as a type of markdown file
+
+Now `.mdx` files in your notes folders will appear in the file manager and open like any other markdown file. They do not get special treatment, though they may contain ::gasp:: `javascript`.
+
 # 2.0.0
 
 ## DEPRECATION: 32 bit
