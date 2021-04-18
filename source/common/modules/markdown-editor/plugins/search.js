@@ -41,6 +41,11 @@ let searchCursor = null
 let lastSearchResult = false
 
 /**
+ * Contains the annotation bar for the matches on the scrollbar
+ */
+let matchAnnotationBar = null
+
+/**
  * Performs a one-shot search, either forward or backward
  *
  * @param   {CodeMirror}  cm       The CodeMirror instance
@@ -155,18 +160,26 @@ function startSearch (cm, term, startPosition) {
   const regex = makeSearchRegex(currentLocalSearch)
   searchCursor = cm.getSearchCursor(regex, startPosition)
 
+  if (matchAnnotationBar !== null) {
+    matchAnnotationBar.clear()
+  }
+
   // Also show all occurrences on the scrollbar
   // NOTE: Doesn't work on macOS since there scrollbars are hidden by default
-  cm.showMatchesOnScrollbar(regex)
+  matchAnnotationBar = cm.showMatchesOnScrollbar(regex)
 }
 
 /**
- * Stops a running search (internal function)
+ * Stops a running search
  */
 function stopSearch () {
   currentLocalSearch = ''
   searchCursor = null
   lastSearchResult = false
+  if (matchAnnotationBar !== null) {
+    matchAnnotationBar.clear()
+    matchAnnotationBar = null
+  }
 }
 
 /**
@@ -196,5 +209,6 @@ module.exports = {
   replacePrevious: function (cm, term, replacement) {
     replace(cm, term, replacement, false)
   },
-  replaceAll
+  replaceAll,
+  stopSearch
 }

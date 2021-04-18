@@ -12,12 +12,16 @@
           v-on:keypress.shift.enter.exact="searchPrevious()"
         >
         <button
+          title="Toggle regular expression search"
           v-bind:class="{ 'active': regexpSearch }"
           v-on:click="toggleQueryRegexp()"
         >
           <clr-icon shape="regexp"></clr-icon>
         </button>
-        <button v-on:click="showSearch = false">
+        <button
+          title="Hide search"
+          v-on:click="showSearch = false"
+        >
           <clr-icon shape="times"></clr-icon>
         </button>
       </div>
@@ -31,10 +35,16 @@
           v-on:keypress.shift.enter.exact="replacePrevious()"
           v-on:keypress.alt.enter.exact="replaceAll()"
         >
-        <button v-on:click="replaceNext()">
+        <button
+          title="Replace this occurrence"
+          v-on:click="replaceNext()"
+        >
           <clr-icon shape="two-way-arrows"></clr-icon>
         </button>
-        <button v-on:click="replaceAll()">
+        <button
+          title="Replace all occurrences"
+          v-on:click="replaceAll()"
+        >
           <clr-icon shape="step-forward-2"></clr-icon>
         </button>
       </div>
@@ -236,7 +246,6 @@ export default {
       this.editor.setCompletionDatabase('files', fileDatabase)
     },
     activeFile: function () {
-      console.log('Active file changed')
       if (this.editor === null) {
         console.error('Received a file update but the editor was not yet initiated!')
         return
@@ -358,6 +367,10 @@ export default {
           this.$refs['search-input'].focus()
           this.searchNext()
         })
+      } else if (newValue === false) {
+        // Always "stopSearch" if the input is not shown, since this will clear
+        // out, e.g., the matches on the scrollbar
+        this.editor.stopSearch()
       }
     }
   },
@@ -660,6 +673,17 @@ body.darwin.dark #editor {
 body.win32 #editor {
   // On Windows, the tab bar is 30px high
   height: calc(100% - 30px);
+
+  div#editor-search {
+    background-color: rgba(230, 230, 230, 1);
+    box-shadow: -2px 2px 4px 1px rgba(0, 0, 0, .3);
+
+    button { max-width: fit-content; }
+    button, input { border-width: 1px; }
+
+    button:hover { background-color: rgb(240, 240, 240); }
+    button.active { background-color: rgb(200, 200, 200) }
+  }
 }
 
 // CodeMirror fullscreen

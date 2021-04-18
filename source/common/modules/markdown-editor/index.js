@@ -38,7 +38,8 @@ const {
   searchPrevious,
   replaceNext,
   replacePrevious,
-  replaceAll
+  replaceAll,
+  stopSearch
 } = require('./plugins/search')
 
 /**
@@ -276,6 +277,10 @@ module.exports = class MarkdownEditor extends EventEmitter {
 
   replaceAll (term, replacement) {
     replaceAll(this._instance, term, replacement)
+  }
+
+  stopSearch () {
+    stopSearch()
   }
 
   /**
