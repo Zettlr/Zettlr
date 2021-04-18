@@ -66,15 +66,15 @@ export default {
       const currentIdx = this.openFiles.findIndex(elem => elem === this.activeFile)
       if (shortcut === 'previous-tab') {
         if (currentIdx > 0) {
-          this.handleSelectFile(this.openFiles[currentIdx - 1])
+          this.selectFile(this.openFiles[currentIdx - 1])
         } else {
-          this.handleSelectFile(this.openFiles[this.openFiles.length - 1])
+          this.selectFile(this.openFiles[this.openFiles.length - 1])
         }
       } else if (shortcut === 'next-tab') {
         if (currentIdx < this.openFiles.length - 1) {
-          this.handleSelectFile(this.openFiles[currentIdx + 1])
+          this.selectFile(this.openFiles[currentIdx + 1])
         } else {
-          this.handleSelectFile(this.openFiles[0])
+          this.selectFile(this.openFiles[0])
         }
       } else if (shortcut === 'close-window') {
         // The tab bar has the responsibility to first close the activeFile if
@@ -171,6 +171,13 @@ export default {
         })
           .catch(e => console.error(e))
       }
+    },
+    selectFile: function (file) {
+      ipcRenderer.invoke('application', {
+        command: 'set-active-file',
+        payload: file.path
+      })
+        .catch(e => console.error(e))
     },
     handleContextMenu: function (event, file) {
       displayTabsContextMenu(event, async (clickedID) => {
