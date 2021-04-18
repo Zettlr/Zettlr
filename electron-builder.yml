@@ -98,8 +98,10 @@ nsis:
 deb:
   priority: optional
   compression: xz
+  depends: ["libappindicator3-1"]
 #
 # Configuration for Fedora builds
 #
 rpm:
   compression: xz
+  depends: ["libappindicator-gtk3"]
