@@ -1,5 +1,5 @@
 <template>
-  <div id="tab-container" role="tablist">
+  <div id="tab-container" ref="container" role="tablist">
     <div
       v-for="(file, idx) in openFiles"
       v-bind:key="idx"
@@ -50,6 +50,16 @@ export default {
       return this.$store.state.config['display.useFirstHeadings']
     }
   },
+  watch: {
+    activeFile: function () {
+      // Make sure the activeFile is in view
+      this.$nextTick(() => {
+        // We must wait until Vue has actually applied the active class to the
+        // new file tab so that our handler retrieves the correct one, not the old.
+        this.scrollActiveFileIntoView()
+      })
+    }
+  },
   mounted: function () {
     // Listen for shortcuts so that we can switch tabs programmatically
     ipcRenderer.on('shortcut', (event, shortcut) => {
@@ -81,6 +91,28 @@ export default {
     })
   },
   methods: {
+    scrollActiveFileIntoView: function () {
+      // First, we need to find the tab displaying the active file
+      const elem = this.$refs.container.querySelector('.active')
+      if (elem === null) {
+        return // The container is not yet present
+      }
+      // Then, find out where the element is ...
+      const left = elem.offsetLeft
+      const right = left + elem.getBoundingClientRect().width
+      // ... with respect to the container
+      const leftEdge = this.$refs.container.scrollLeft
+      const containerWidth = this.$refs.container.getBoundingClientRect().width
+      const rightEdge = leftEdge + containerWidth
+
+      if (left < leftEdge) {
+        // The active tab is (partially) hidden to the left -> Decrease scrollLeft
+        this.$refs.container.scrollLeft -= leftEdge - left
+      } else if (right > rightEdge) {
+        // The active tab is (partially) hidden to the right -> Increase scrollLeft
+        this.$refs.container.scrollLeft += right - rightEdge
+      }
+    },
     getTabText: function (file) {
       // Returns a more appropriate tab text based on the user settings
       if (file.type !== 'file') {
