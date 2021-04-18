@@ -278,7 +278,17 @@ export default class ConfigProvider extends EventEmitter {
     * @return {ZettlrConfig} This for chainability.
     */
   runMigrations (): this {
-    // No migrations right now.
+    // In 1.8.7 the replacements were provided as key-val pairs, but we've since
+    // moved to key-value since it's more verbose. So we need to make sure these
+    // conform to the new rules.
+    const replacements = this.config.editor.autoCorrect.replacements
+    for (const entry of replacements) {
+      if ('val' in entry && !('value' in entry)) {
+        global.log.info(`[Config Provider] Migrating Autocorrect replacement ${(entry as any).key as string} from 'val' to 'value' ...`);
+        (entry as any).value = (entry as any).val
+        delete (entry as any).val
+      }
+    }
     return this
   }
 
