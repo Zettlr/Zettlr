@@ -15,7 +15,8 @@
 import {
   Menu,
   ipcMain,
-  BrowserWindow
+  BrowserWindow,
+  MenuItem
 } from 'electron'
 
 import broadcastIPCMessage from '../../common/util/broadcast-ipc-message'
@@ -147,6 +148,13 @@ export default class MenuProvider {
         menuItem.click(menuItem, focusedWindow)
       }
     })
+
+    ipcMain.handle('menu-provider', async (event, message) => {
+      const { command, payload } = message
+      if (command === 'display-native-context-menu') {
+        return await this._displayNativeContextMenu(payload.menu, payload.x, payload.y)
+      }
+    })
   }
 
   /**
@@ -157,6 +165,35 @@ export default class MenuProvider {
   shutdown (): boolean {
     global.log.verbose('Menu provider shutting down ...')
     return true // This provider needs no special shutdown logic
+  }
+
+  /**
+   * Displays a native context menu with the given menu items
+   *
+   * @param   {MenuItem[]}                 menu  The menu to display
+   * @param   {number}                     x     X-coordinate of the menu
+   * @param   {number}                     y     Y-coordinate of the menu
+   *
+   * @return  {Promise<string|undefined>}        Returns the clicked ID, or undefined
+   */
+  private async _displayNativeContextMenu (menu: MenuItem[], x: number, y: number): Promise<string|undefined> {
+    return await new Promise((resolve, reject) => {
+      let resolvedID: string|undefined
+      for (const item of menu) {
+        // Hook onto a function that writes the item.id into the return value
+        item.click = () => { resolvedID = item.id }
+      }
+
+      const popupMenu = Menu.buildFromTemplate(menu)
+      popupMenu.on('menu-will-close', (event) => {
+        setTimeout(() => {
+          // NOTE/DEBUG: We have to resolve on the next tick, since this event
+          // unfortunately is emitted *before* the item click is actually triggered.
+          resolve(resolvedID)
+        }, 100)
+      })
+      popupMenu.popup({ x: x, y: y })
+    })
   }
 
   /**
