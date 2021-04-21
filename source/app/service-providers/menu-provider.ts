@@ -16,7 +16,7 @@ import {
   Menu,
   ipcMain,
   BrowserWindow,
-  MenuItem
+  MenuItemConstructorOptions
 } from 'electron'
 
 import broadcastIPCMessage from '../../common/util/broadcast-ipc-message'
@@ -176,19 +176,33 @@ export default class MenuProvider {
    *
    * @return  {Promise<string|undefined>}        Returns the clicked ID, or undefined
    */
-  private async _displayNativeContextMenu (menu: MenuItem[], x: number, y: number): Promise<string|undefined> {
+  private async _displayNativeContextMenu (menu: MenuItemConstructorOptions[], x: number, y: number): Promise<string|undefined> {
     return await new Promise((resolve, reject) => {
       let resolvedID: string|undefined
-      for (const item of menu) {
-        // Hook onto a function that writes the item.id into the return value
+      // Define a quick'n'dirty recursive function that applies the click handler
+      // to (theoretically) indefinite submenus
+      const applyClickHandler = (item: MenuItemConstructorOptions): void => {
         item.click = () => { resolvedID = item.id }
+
+        // Recurse into a potential submenu
+        if (item.submenu !== undefined) {
+          for (const subItem of item.submenu as MenuItemConstructorOptions[]) {
+            applyClickHandler(subItem)
+          }
+        }
+      }
+
+      // Apply the click handler to the menu itself
+      for (const item of menu) {
+        applyClickHandler(item)
       }
 
       const popupMenu = Menu.buildFromTemplate(menu)
       popupMenu.on('menu-will-close', (event) => {
         setTimeout(() => {
           // NOTE/DEBUG: We have to resolve on the next tick, since this event
-          // unfortunately is emitted *before* the item click is actually triggered.
+          // unfortunately is emitted *before* the item click is triggered.
+          // See: https://github.com/electron/electron/issues/28719
           resolve(resolvedID)
         }, 100)
       })
