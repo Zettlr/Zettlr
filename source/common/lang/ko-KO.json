@@ -5,7 +5,7 @@
             "Chanshik Lim \u003Cchanshik@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-03-07T16:07:05.000000Z"
+        "updated_at": "2021-04-10T14:29:38.000000Z"
     },
     "dialog": {
         "about": {
@@ -176,6 +176,7 @@
                 "style_word_label": "\uc6cc\ub4dc \uc2a4\ud0c0\uc77c",
                 "title": "\uc790\ub3d9\uc218\uc815"
             },
+            "avoid_new_tabs": "\uac00\ub2a5\ud558\uba74 \ud30c\uc77c\uc744 \uc0c8\ub85c\uc6b4 \ud0ed\uc73c\ub85c \uc5f4\uc9c0 \uc54a\uae30",
             "checkForBeta": "\ubca0\ud0c0 \ucd9c\uc2dc\ub97c \uc54c\ub9bc",
             "choose_file": "\ud30c\uc77c \uc120\ud0dd...",
             "citation_database": "\uc778\uc6a9(citation) \ub370\uc774\ud130\ubca0\uc774\uc2a4 (CSL JSON \ub610\ub294 BibTex)",

@@ -117,7 +117,6 @@
    */
   function setup (option) {
     replacementCandidates = {}
-    console.log(option)
     if (option.replacements !== undefined && Array.isArray(option.replacements)) {
       // The user has provided an array of values
       for (const element of option.replacements) {

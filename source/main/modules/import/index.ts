@@ -16,11 +16,13 @@ import commandExists from 'command-exists'
 import { promises as fs } from 'fs'
 import path from 'path'
 import { spawn } from 'child_process'
+import YAML from 'yaml'
 
 // Module utilities
 import checkImportIntegrity from './check-import-integrity'
 import importTextbundle from './import-textbundle'
 import { DirDescriptor } from '../fsal/types'
+import { app } from 'electron'
 
 export default async function makeImport (fileList: string[], dirToImport: DirDescriptor, errorCallback: Function|null = null, successCallback: Function|null = null): Promise<string[]> {
   // Determine the availability of Pandoc. As the Pandoc path is added to
@@ -60,15 +62,30 @@ export default async function makeImport (fileList: string[], dirToImport: DirDe
       }
     } else if (file.knownFormat !== '') {
       // The file is known -> let's import it!
-      let newName = path.join(dirToImport.path, path.basename(file.path, path.extname(file.path))) + '.md'
-      const argv = [
-        '-t', 'markdown',
-        '-o', `"${newName}"`,
-        '--wrap=none', '--atx-headers',
-        `"${String(file.path)}"`
-      ]
 
-      const pandocProcess = spawn('pandoc', argv, { shell: true })
+      let newName = path.join(dirToImport.path, path.basename(file.path, path.extname(file.path))) + '.md'
+
+      // Retrieve the corresponding defaults file ...
+      const defaults = await global.assets.getDefaultsFor(file.knownFormat, 'import')
+
+      // ... supply our file paths ...
+      defaults['input-files'] = [file.path]
+      defaults['output-file'] = newName
+
+      // ... get a temporary file name ...
+      const defaultsFile = path.join(app.getPath('temp'), 'defaults.yml')
+
+      // ... cast the defaults to string ...
+      const YAMLOptions: YAML.Options = {
+        indent: 4,
+        simpleKeys: false
+      }
+
+      // ... write to disk ...
+      await fs.writeFile(defaultsFile, YAML.stringify(defaults, YAMLOptions), { encoding: 'utf8' })
+
+      // ... and finally run pandoc, providing the file.
+      const pandocProcess = spawn('pandoc', [ '--defaults', `"${defaultsFile}"` ], { shell: true })
 
       await new Promise<void>((resolve, reject) => {
         pandocProcess.on('message', (message, handle) => {

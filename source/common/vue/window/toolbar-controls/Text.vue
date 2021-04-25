@@ -29,6 +29,6 @@ export default {
 body .toolbar-text {
   font-size: 11px;
   padding: 0 10px;
-  width: 100px; // constrain the text width to accomodate content changes.
+  width: 150px; // constrain the text width to accomodate content changes.
 }
 </style>

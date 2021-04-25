@@ -32,6 +32,16 @@ const md2html = require('../../util/md-to-html')
 const generateKeymap = require('./generate-keymap.js')
 const generateTableOfContents = require('./util/generate-toc')
 
+// Search plugin (module-namespaced set of utility functions)
+const {
+  searchNext,
+  searchPrevious,
+  replaceNext,
+  replacePrevious,
+  replaceAll,
+  stopSearch
+} = require('./plugins/search')
+
 /**
  * APIs
  */
@@ -247,6 +257,31 @@ module.exports = class MarkdownEditor extends EventEmitter {
       }
     })
   } // END CONSTRUCTOR
+
+  // SEARCH FUNCTIONALITY
+  searchNext (term) {
+    searchNext(this._instance, term)
+  }
+
+  searchPrevious (term) {
+    searchPrevious(this._instance, term)
+  }
+
+  replaceNext (term, replacement) {
+    replaceNext(this._instance, term, replacement)
+  }
+
+  replacePrevious (term, replacement) {
+    replacePrevious(this._instance, term, replacement)
+  }
+
+  replaceAll (term, replacement) {
+    replaceAll(this._instance, term, replacement)
+  }
+
+  stopSearch () {
+    stopSearch()
+  }
 
   /**
    * Pastes the clipboard contents as plain text, regardless of any formatted

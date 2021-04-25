@@ -4,6 +4,11 @@
     text-decoration: underline;
   }
 
+  // Enable matches on the searchbar to be indicated
+  .CodeMirror-search-match {
+    background-color: rgba(225, 225, 0, 0.7);
+  }
+
   .editor-image-container {
     display: inline-block;
     width: 100%;
@@ -50,6 +55,28 @@
         cursor: text; // Captions can be edited
       }
     }
+  }
+
+  .iframe-warning-wrapper {
+    text-align: center;
+    min-height: 300px;
+    padding: 40px 30%;
+
+    // More spacing for the buttons
+    button {
+      display: block;
+      margin: 20px auto;
+    }
+  }
+
+  // Apply a little bit of styling to the iframes
+  iframe {
+    display: inline-block;
+    border: none;
+    // Always render them 16:9
+    width: 480px;
+    height: 270px;
+    margin: 0 auto;
   }
 }
 

@@ -5,7 +5,7 @@
             "Anders Lykke Gade"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-03-22T14:00:48.000000Z"
+        "updated_at": "2021-04-14T15:42:54.000000Z"
     },
     "dialog": {
         "about": {
@@ -176,6 +176,7 @@
                 "style_word_label": "Word adf\u00e6rd",
                 "title": "Auto korrektur"
             },
+            "avoid_new_tabs": "Undg\u00e5 at \u00e5bne filer i nye faner hvis muligt",
             "checkForBeta": "Orienter om betaudgivelser",
             "choose_file": "V\u00e6lg fil ...",
             "citation_database": "Citations Database (CSL, JSON eller BibTex)",
