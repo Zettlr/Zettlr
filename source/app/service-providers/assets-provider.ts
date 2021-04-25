@@ -67,7 +67,8 @@ export default class AssetsProvider extends EventEmitter {
   /**
    * Gets the defaults file for a given writer
    *
-   * @param   {string}  writer  The writer, e.g., html or pdf.
+   * @param   {string}             format  The writer, e.g., html or pdf.
+   * @param   {'export'|'import'}  type    The type of the defaults file
    *
    * @return  {Promise<any>}    The defaults (parsed from YAML)
    */
@@ -80,8 +81,9 @@ export default class AssetsProvider extends EventEmitter {
   /**
    * Overwrites the defaults for a given writer.
    *
-   * @param   {string}   format       The writer or reader, e.g., html or pdf.
-   * @param   {any}      newDefaults  The new defaults (object to be cast to YAML string)
+   * @param   {string}            format       The writer or reader, e.g., html or pdf.
+   * @param   {'export'|'import'} type         The defaults' file type
+   * @param   {any}               newDefaults  The new defaults (object to be cast to YAML string)
    *
    * @return  {Promise<boolean>}      Whether or not the operation was successful.
    */
