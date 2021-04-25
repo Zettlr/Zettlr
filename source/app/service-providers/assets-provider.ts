@@ -6,14 +6,6 @@ import YAML from 'yaml'
 
 export default class AssetsProvider extends EventEmitter {
   /**
-   * Defines an array of required defaults files. There must be one for each
-   * writer supported by Zettlr.
-   *
-   * @var {string[]}
-   */
-  private readonly _requiredDefaults: string[]
-
-  /**
    * Holds the path where defaults files can be found.
    *
    * @var {string}
@@ -23,19 +15,6 @@ export default class AssetsProvider extends EventEmitter {
   constructor () {
     super()
     global.log.verbose('Assets provider starting up ...')
-
-    this._requiredDefaults = [
-      'export.html.yaml',
-      'export.pdf.yaml',
-      'export.docx.yaml',
-      'export.odt.yaml',
-      'export.rtf.yaml',
-      'export.revealjs.yaml',
-      'export.rst.yaml',
-      'export.latex.yaml',
-      'export.plain.yaml',
-      'export.org.yaml'
-    ]
 
     this._defaultsPath = path.join(app.getPath('userData'), '/defaults')
 
@@ -60,8 +39,12 @@ export default class AssetsProvider extends EventEmitter {
   }
 
   async init (): Promise<void> {
-    // First, ensure all required default files are where they should be
-    for (const file of this._requiredDefaults) {
+    const files = await fs.readdir(path.join(__dirname, './assets/defaults'))
+    const defaults = files.filter(file => /^(?:import|export)\..+?\.yaml$/.test(file))
+    // First, ensure all required default files are where they should be.
+    // Required are those defaults files which are in the assets/defaults directory
+    // and correspond to the format (import|export).(writer|reader).yaml
+    for (const file of defaults) {
       const absolutePath = path.join(this._defaultsPath, file)
       try {
         await fs.lstat(absolutePath)
@@ -97,7 +80,7 @@ export default class AssetsProvider extends EventEmitter {
   /**
    * Overwrites the defaults for a given writer.
    *
-   * @param   {string}   writer       The writer, e.g., html or pdf.
+   * @param   {string}   format       The writer or reader, e.g., html or pdf.
    * @param   {any}      newDefaults  The new defaults (object to be cast to YAML string)
    *
    * @return  {Promise<boolean>}      Whether or not the operation was successful.
