@@ -531,9 +531,13 @@ body.win32 {
       }
 
       &.selected {
-        background-color: rgb(230, 230, 230);
+        background-color: var(--system-accent-color, --c-primary);
+        color: var(--system-accent-color-contrast, white);
 
-        div.filename div.date { background-color: rgb(230, 230, 230); }
+        div.filename div.date {
+          background-color: var(--system-accent-color, --c-primary);
+          color: var(--system-accent-color-contrast, white);
+        }
       }
 
       div.filename div.date { background-color: rgb(230, 230, 230); }
