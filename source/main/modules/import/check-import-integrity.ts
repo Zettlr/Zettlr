@@ -49,6 +49,16 @@ export default async function checkImportIntegrity (fileList: string[]): Promise
       }
     }
 
+    // Pandoc requires the "latex" reader, not the "tex" reader
+    if (detectedFile.knownFormat === 'tex') {
+      detectedFile.knownFormat = 'latex'
+    }
+
+    // Same for "wiki" files: We use VimWiki
+    if (detectedFile.knownFormat === 'wiki') {
+      detectedFile.knownFormat = 'vimwiki'
+    }
+
     resList.push(detectedFile)
   }
   return resList
