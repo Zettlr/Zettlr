@@ -62,7 +62,6 @@ import SelectableList from './SelectableList'
 import ButtonControl from '../common/vue/form/elements/Button'
 import CodeEditor from '../common/vue/CodeEditor'
 import { ipcRenderer } from 'electron'
-import YAML from 'yaml'
 
 const WRITERS = {
   'html': 'HTML',
@@ -190,9 +189,7 @@ export default {
         }
       })
         .then(data => {
-          // The data is a simple object, which we need to transform into YAML
-          const yaml = YAML.stringify(data)
-          this.editorContents = yaml
+          this.editorContents = data
           this.$refs['code-editor'].markClean()
           this.savingStatus = ''
         })
@@ -214,14 +211,12 @@ export default {
         return
       }
 
-      const data = YAML.parse(this.editorContents)
-
       ipcRenderer.invoke('assets-provider', {
         command: 'set-defaults-file',
         payload: {
           format: format,
           type: (isWriter) ? 'export' : 'import',
-          contents: data
+          contents: this.editorContents
         }
       })
         .then(() => {

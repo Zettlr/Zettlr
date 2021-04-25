@@ -19,21 +19,28 @@ export default class AssetsProvider extends EventEmitter {
     this._defaultsPath = path.join(app.getPath('userData'), '/defaults')
 
     global.assets = {
+      // These two global functions get the defaults as a JavaScript object,
+      // e.g. comments are omitted
       getDefaultsFor: async (format: string, type: 'import'|'export') => {
-        return await this.getDefaultsFor(format, type)
+        return await this.getDefaultsFor(format, type, false)
       },
       setDefaultsFor: async (format: string, type: 'import'|'export', newDefaults: any) => {
-        return await this.setDefaultsFor(format, type, newDefaults)
+        return await this.setDefaultsFor(format, type, newDefaults, false)
       }
     }
 
     ipcMain.handle('assets-provider', async (event, message) => {
       const { command, payload } = message
 
+      // These function calls, however, treat the defaults files verbatim to
+      // retain comments. NOTE: This means that any *renderer* will always
+      // receive the text, not an Object. Renderers who need to work with the
+      // file contents programmatically should thus make use of the bundled YAML
+      // module to parse and stringify the files accordingly.
       if (command === 'get-defaults-file') {
-        return await this.getDefaultsFor(payload.format, payload.type)
+        return await this.getDefaultsFor(payload.format, payload.type, true)
       } else if (command === 'set-defaults-file') {
-        return await this.setDefaultsFor(payload.format, payload.type, payload.contents)
+        return await this.setDefaultsFor(payload.format, payload.type, payload.contents, true)
       }
     })
   }
@@ -72,10 +79,11 @@ export default class AssetsProvider extends EventEmitter {
    *
    * @return  {Promise<any>}    The defaults (parsed from YAML)
    */
-  async getDefaultsFor (format: string, type: 'export'|'import'): Promise<any> {
+  async getDefaultsFor (format: string, type: 'export'|'import', verbatim: boolean = false): Promise<any|string> {
     const file = path.join(this._defaultsPath, `${type}.${format}.yaml`)
     const yaml = await fs.readFile(file, { encoding: 'utf-8' })
-    return YAML.parse(yaml)
+    // Either return the string contents or a JavaScript object
+    return (verbatim) ? yaml : YAML.parse(yaml)
   }
 
   /**
@@ -87,10 +95,11 @@ export default class AssetsProvider extends EventEmitter {
    *
    * @return  {Promise<boolean>}      Whether or not the operation was successful.
    */
-  async setDefaultsFor (format: string, type: 'export'|'import', newDefaults: any): Promise<boolean> {
+  async setDefaultsFor (format: string, type: 'export'|'import', newDefaults: any, verbatim: boolean = false): Promise<boolean> {
     try {
       const file = path.join(this._defaultsPath, `${type}.${format}.yaml`)
-      const yaml = YAML.stringify(newDefaults)
+      // Stringify the new defaults according to the verbatim flag
+      const yaml = (verbatim) ? newDefaults : YAML.stringify(newDefaults)
       await fs.writeFile(file, yaml)
       return true
     } catch (err) {
