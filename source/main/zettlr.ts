@@ -225,7 +225,7 @@ export default class Zettlr {
           broadcastIpcMessage('fsal-state-changed', 'openDirectory')
           break
         case 'openFiles':
-          global.config.set('openFiles', this._fsal.openFiles)
+          global.config.set('openFiles', this._fsal.openFiles.map(file => file.path))
           broadcastIpcMessage('fsal-state-changed', 'openFiles')
           if (!this.isModified()) {
             this._windowManager.setModified(false)
@@ -331,7 +331,7 @@ export default class Zettlr {
     // Set the pointers either to null or last opened dir/file
     let openDirectory = null
     let activeFile = null
-    let openFiles = []
+    let openFiles: string[] = []
 
     try {
       openDirectory = this._fsal.findDir(global.config.get('openDirectory'))
@@ -343,6 +343,9 @@ export default class Zettlr {
 
     // Pre-set the state based on the configuration
     this._fsal.openFiles = openFiles
+      .map(filePath => this._fsal.findFile(filePath))
+      .filter(file => file !== null) as Array<MDFileDescriptor|CodeFileDescriptor>
+
     this._fsal.openDirectory = openDirectory
     this._fsal.activeFile = (activeFile !== null) ? activeFile.path : null
     if (activeFile !== null) {
@@ -359,9 +362,6 @@ export default class Zettlr {
     let duration = Date.now() - start
     duration /= 1000 // Convert to seconds
     global.log.info(`Loaded all roots in ${duration} seconds`)
-
-    // Also, we need to (re)open all files in tabs
-    this._fsal.openFiles = global.config.get('openFiles')
 
     // Finally, initiate a first check for updates
     global.updates.check()
@@ -439,15 +439,8 @@ export default class Zettlr {
       this.openFile(payload.path, payload.newTab)
       return true
     } else if (command === 'get-open-files') {
-      const openFiles = this._fsal.openFiles
-      const ret = []
-      for (const openFilePath of openFiles) {
-        const descriptor = this._fsal.findFile(openFilePath)
-        if (descriptor !== null) {
-          ret.push(this._fsal.getMetadataFor(descriptor))
-        }
-      }
-      return ret
+      // Return all open files as their metadata objects
+      return this._fsal.openFiles.map(file => this._fsal.getMetadataFor(file))
     } else if (command === 'get-file-contents') {
       const descriptor = this._fsal.findFile(payload)
       if (descriptor === null) {
@@ -636,7 +629,7 @@ export default class Zettlr {
    */
   openFile (filePath: string, newTab?: boolean): void {
     // If the file is already open, simply set it as active and return
-    if (this._fsal.openFiles.includes(filePath)) {
+    if (this._fsal.openFiles.find(file => file.path === filePath) !== undefined) {
       this._fsal.activeFile = filePath
       return
     }

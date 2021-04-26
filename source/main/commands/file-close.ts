@@ -61,14 +61,14 @@ export default class FileClose extends ZettlrCommand {
       // If we're here the user really wants to close the file.
       // Get the index of the next open file so that we can switch the active one.
       const openFiles = this._app.getFileSystem().openFiles
-      const currentIdx = openFiles.findIndex(filePath => filePath === file.path)
+      const currentIdx = openFiles.indexOf(file)
 
-      if (this._app.getFileSystem().activeFile === file.path) {
+      if (this._app.getFileSystem().activeFile === file.path && openFiles.length > 1) {
         if (currentIdx === 0) {
-          const nextFile = this._app.getFileSystem().findFile(openFiles[currentIdx + 1])
+          const nextFile = openFiles[currentIdx + 1]
           this._app.getFileSystem().activeFile = (nextFile === null) ? null : nextFile.path
         } else {
-          const prevFile = this._app.getFileSystem().findFile(openFiles[currentIdx - 1])
+          const prevFile = openFiles[currentIdx - 1]
           this._app.getFileSystem().activeFile = (prevFile === null) ? null : prevFile.path
         }
       }
