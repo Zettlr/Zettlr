@@ -35,6 +35,11 @@ export default {
         type: 'checkbox',
         label: trans('dialog.preferences.delete_on_fail'),
         model: 'system.deleteOnFail'
+      },
+      {
+        type:  'checkbox',
+        label: 'Show app in the notification area',
+        model: 'system.showInNotification'
       }
     ],
     [
