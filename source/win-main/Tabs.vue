@@ -160,6 +160,7 @@ export default {
       if (event.button === 1) {
         // It was a middle-click (auxiliary button), so we should instead close
         // the file.
+        event.preventDefault() // Otherwise, on Windows we'd have a middle-click-scroll
         this.handleClickClose(event, file)
       } else if (event.button === 0) {
         // It was a left-click. (We must check because otherwise we would also

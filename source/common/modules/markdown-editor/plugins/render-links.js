@@ -168,6 +168,7 @@
           regularLinkCaption = regularLinkCaption.replace(/\s_([^_]+?)_/g, ' <em>$1</em>')
           regularLinkCaption = regularLinkCaption.replace(/^_([^_]+?)_/, '<em>$1</em>')
           regularLinkCaption = regularLinkCaption.replace(/~~([^~]+?)~~/g, '<del>$1</del>')
+          regularLinkCaption = regularLinkCaption.replace(/`([^`]+?)`/g, '<code>$1</code>')
           if (/^!\[.+\]\(.+\)$/.test(regularLinkCaption)) {
             regularLinkCaption = regularLinkCaption.replace(/^!\[(.*)\]\((.+)\)$/, '<img src="$2" title="$1">')
           }
@@ -183,8 +184,12 @@
         let tk = cm.getTokenAt(curFrom, true).type
         if (tk) {
           tk = tk.split(' ')
-          if (tk.includes('strong')) a.style.fontWeight = 'bold'
-          if (tk.includes('em')) a.style.fontStyle = 'italic'
+          if (tk.includes('strong')) {
+            a.style.fontWeight = 'bold'
+          }
+          if (tk.includes('em')) {
+            a.style.fontStyle = 'italic'
+          }
         }
 
         // Apply TextMarker
