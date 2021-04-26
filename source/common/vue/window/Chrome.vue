@@ -206,7 +206,7 @@ export default {
       if (this.useNativeAppearance === true) {
         return false
       }
-      if(this.platform === 'darwin') {
+      if (this.platform === 'darwin') {
         return false
       } else {
         return true
