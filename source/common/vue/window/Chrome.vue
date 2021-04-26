@@ -201,10 +201,15 @@ export default {
       return this.menubar
     },
     showWindowControls: function () {
-      if (this.platform !== 'darwin') {
-        return true
-      } else {
+      // Window manager of Windows and Linux should have them built-in
+      // Thus we don't display them on native appearance
+      if (this.useNativeAppearance === true) {
         return false
+      }
+      if(this.platform === 'darwin') {
+        return false
+      } else {
+        return true
       }
     },
     platformTitlebarHeight: function () {
