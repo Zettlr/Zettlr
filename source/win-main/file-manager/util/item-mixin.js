@@ -62,6 +62,10 @@ export default {
       const alt = event.altKey
       const type = this.obj.type
 
+      if (middleClick) {
+        event.preventDefault() // Otherwise, on Windows we'd have a middle-click-scroll
+      }
+
       if (type === 'file' && alt) {
         // QuickLook the file
         ipcRenderer.invoke('application', {
