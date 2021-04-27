@@ -203,10 +203,9 @@ export default {
     showWindowControls: function () {
       // Window manager of Windows and Linux should have them built-in
       // Thus we don't display them on native appearance
-      if (this.useNativeAppearance === true) {
+      if (this.platform === 'linux' && this.useNativeAppearance === true) {
         return false
-      }
-      if (this.platform === 'darwin') {
+      } else if (this.platform === 'darwin') {
         return false
       } else {
         return true
