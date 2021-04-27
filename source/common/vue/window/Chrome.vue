@@ -201,8 +201,8 @@ export default {
       return this.menubar
     },
     showWindowControls: function () {
-      // Window manager of Windows and Linux should have them built-in
-      // Thus we don't display them on native appearance
+      // Shows the window control buttons only if we are on Windows
+      // or on Linux without native appearance.
       if (this.platform === 'linux' && this.useNativeAppearance === true) {
         return false
       } else if (this.platform === 'darwin') {
