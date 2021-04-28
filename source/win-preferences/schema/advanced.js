@@ -38,8 +38,8 @@ export default {
       },
       {
         type:  'checkbox',
-        label: 'Show app in the notification area',
-        model: 'system.showInNotification'
+        label: process.platform === 'darwin'? 'Show app in the notification area' : 'leave app running in the notification area',
+        model: 'system.displayInNotification'
       }
     ],
     [
