@@ -82,7 +82,7 @@
             v-on:mousedown.stop.prevent="jumpToLine($event, result.file.path, singleRes.from.line)"
           >
             <strong>{{ singleRes.from.line }}</strong>:
-            <span v-html="markText(singleRes.term, singleRes.restext)"></span>
+            <span v-html="markText(singleRes)"></span>
           </div>
         </div>
       </div>
@@ -328,8 +328,20 @@ export default {
           .catch(e => console.error(e))
       }
     },
-    markText: function (term, result) {
-      return result.replace(term, `<strong>${term}</strong>`)
+    markText: function (resultObject) {
+      // We receive a result object and should return an HTML string containing
+      // highlighting (we're using <strong>) where the result works. We have
+      // access to term, restext, weight, from, and to. NOTE that from and to
+      // also contain the line, but we only need the characters
+      const from = resultObject.from.ch
+      const to = resultObject.to.ch
+      let marked = resultObject.restext
+
+      // Because it shifts positions, we need to insert the closing tag first
+      marked = marked.substr(0, to) + '</strong>' + marked.substr(to)
+      marked = marked.substr(0, from) + '<strong>' + marked.substr(from)
+
+      return marked
     }
   }
 }

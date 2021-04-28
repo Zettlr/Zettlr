@@ -19,6 +19,11 @@
 
 import { MDFileDescriptor, CodeFileDescriptor } from '../types'
 
+// TODO: Need to collapse search results. Right now, individual matches on the
+// same line are reported as separate matches, but in order to both save space,
+// memory, and make the visual display more appealing we should really compress
+// those better.
+
 interface SearchOperator {
   operator: 'AND'|'NOT'
   word: string
