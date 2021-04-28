@@ -212,7 +212,7 @@ export default function getConfigTemplate (): ConfigOptions {
     system: {
       deleteOnFail: false, // Whether to delete files if trashing them fails
       avoidNewTabs: true, // Whether to avoid opening new tabs for documents if possible
-      showInNotification: false
+      displayInNotification: false
     },
     checkForBeta: false, // Should the user be notified of beta releases?
     uuid: uuid4() // The app's unique anonymous identifier

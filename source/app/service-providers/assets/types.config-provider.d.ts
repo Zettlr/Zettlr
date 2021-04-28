@@ -144,7 +144,7 @@ interface ConfigOptions {
   system: {
     deleteOnFail: boolean
     avoidNewTabs: boolean
-    showInNotification: boolean
+    displayInNotification: boolean
   }
   checkForBeta: boolean
   uuid: string
