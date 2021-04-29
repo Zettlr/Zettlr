@@ -211,6 +211,7 @@ export default function getConfigTemplate (): ConfigOptions {
     },
     system: {
       deleteOnFail: false, // Whether to delete files if trashing them fails
+      leaveAppRunning: false, // Whether to leave app running in the notification area (tray)
       avoidNewTabs: true // Whether to avoid opening new tabs for documents if possible
     },
     checkForBeta: false, // Should the user be notified of beta releases?

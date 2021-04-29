@@ -143,6 +143,7 @@ interface ConfigOptions {
   }
   system: {
     deleteOnFail: boolean
+    leaveAppRunning: boolean
     avoidNewTabs: boolean
   }
   checkForBeta: boolean

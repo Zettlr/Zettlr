@@ -35,6 +35,11 @@ export default {
         type: 'checkbox',
         label: trans('dialog.preferences.delete_on_fail'),
         model: 'system.deleteOnFail'
+      },
+      {
+        type: 'checkbox',
+        label: 'Leave app running in the notification area', // trans('dialog.preferences.leave_app_running'),
+        model: 'system.leaveAppRunning'
       }
     ],
     [
