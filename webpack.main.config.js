@@ -17,7 +17,8 @@ module.exports = {
         { from: 'source/app/service-providers/assets/defaults', to: 'assets/defaults' },
         { from: 'source/main/modules/export/assets/export.tpl.htm', to: 'assets' },
         { from: 'source/main/modules/export/assets/template.revealjs.htm', to: 'assets' },
-        { from: 'source/main/modules/export/assets/revealjs-styles', to: 'assets/revealjs-styles' }
+        { from: 'source/main/modules/export/assets/revealjs-styles', to: 'assets/revealjs-styles' },
+        { from: 'source/main/modules/window-manager/assets/icons', to: 'assets/icons' }
       ]
     })
   ],
