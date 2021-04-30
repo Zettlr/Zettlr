@@ -127,7 +127,17 @@ export default class WindowManager {
           callingWindow.minimize()
           break
         case 'win-close':
-          callingWindow.close()
+          if (process.platform !== 'darwin') {
+            const showInNotification = Boolean(global.config.get('system.showInNotification'))
+            if (showInNotification) {
+              callingWindow.hide()
+            }
+            else {
+              callingWindow.close()
+            }
+          } else {
+            callingWindow.close()
+          }
           break
         // Convenience APIs for the renderers to execute these commands
         case 'cut':
