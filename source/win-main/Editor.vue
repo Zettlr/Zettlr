@@ -1,6 +1,6 @@
 <template>
   <div id="editor" ref="editor" v-bind:style="{ 'font-size': `${fontSize}px` }">
-    <div v-show="showSearch" id="editor-search">
+    <div v-if="showSearch" id="editor-search">
       <div class="row">
         <input
           ref="search-input"
@@ -8,20 +8,15 @@
           type="text"
           placeholder="Find"
           v-bind:class="{'monospace': regexpSearch }"
-          v-on:keypress.enter.exact="searchNext()"
-          v-on:keypress.shift.enter.exact="searchPrevious()"
+          v-on:keypress.enter="searchNext()"
         >
         <button
-          title="Toggle regular expression search"
           v-bind:class="{ 'active': regexpSearch }"
           v-on:click="toggleQueryRegexp()"
         >
           <clr-icon shape="regexp"></clr-icon>
         </button>
-        <button
-          title="Hide search"
-          v-on:click="showSearch = false"
-        >
+        <button v-on:click="showSearch = false">
           <clr-icon shape="times"></clr-icon>
         </button>
       </div>
@@ -32,19 +27,12 @@
           placeholder="Replace"
           v-bind:class="{'monospace': regexpSearch }"
           v-on:keypress.enter.exact="replaceNext()"
-          v-on:keypress.shift.enter.exact="replacePrevious()"
           v-on:keypress.alt.enter.exact="replaceAll()"
         >
-        <button
-          title="Replace this occurrence"
-          v-on:click="replaceNext()"
-        >
+        <button v-on:click="replaceNext()">
           <clr-icon shape="two-way-arrows"></clr-icon>
         </button>
-        <button
-          title="Replace all occurrences"
-          v-on:click="replaceAll()"
-        >
+        <button v-on:click="replaceAll()">
           <clr-icon shape="step-forward-2"></clr-icon>
         </button>
       </div>
@@ -56,6 +44,7 @@
 <script>
 import { ipcRenderer } from 'electron'
 import countWords from '../common/util/count-words'
+import makeSearchRegEx from '../common/util/make-search-regex'
 import MarkdownEditor from '../common/modules/markdown-editor'
 import CodeMirror from 'codemirror'
 import { util as citrUtil, parseSingle } from '@zettlr/citr'
@@ -79,10 +68,14 @@ export default {
       // Should we perform a regexp search?
       regexpSearch: false,
       showSearch: false, // Set to true to show the search box
+      searchCursor: null,
+      currentLocalSearch: '',
+      lastSearchResult: false, // Holds the last search result
       query: '', // Models the search value
       replaceString: '', // Models the replace string
       findTimeout: undefined, // Holds a timeout so that not every single keypress results in a searchNext
       // END: Search options
+      scrollbarAnnotations: null,
       activeDocument: null // Almost like activeFile, only with additional info
     }
   },
@@ -246,6 +239,7 @@ export default {
       this.editor.setCompletionDatabase('files', fileDatabase)
     },
     activeFile: function () {
+      console.log('Active file changed')
       if (this.editor === null) {
         console.error('Received a file update but the editor was not yet initiated!')
         return
@@ -345,7 +339,6 @@ export default {
       // Begin a search
       if (this.findTimeout !== undefined) {
         clearTimeout(this.findTimeout)
-        this.findTimeout = undefined
       }
 
       if (this.regexpSearch === true) {
@@ -356,7 +349,6 @@ export default {
 
       this.findTimeout = setTimeout(() => {
         this.searchNext()
-        this.findTimeout = undefined
       }, 1000)
     },
     showSearch: function (newValue, oldValue) {
@@ -367,10 +359,9 @@ export default {
           this.$refs['search-input'].focus()
           this.searchNext()
         })
-      } else if (newValue === false) {
-        // Always "stopSearch" if the input is not shown, since this will clear
-        // out, e.g., the matches on the scrollbar
-        this.editor.stopSearch()
+      } else if (newValue === false && oldValue === true) {
+        // Unmark all search results
+        this.unmarkResults()
       }
     }
   },
@@ -405,6 +396,10 @@ export default {
     this.editor.on('zettelkasten-tag', (tag) => {
       this.$root.$emit('start-global-search', tag)
     })
+
+    // Initiate the scrollbar annotations
+    this.scrollbarAnnotations = this.editor.codeMirror.annotateScrollbar('sb-annotation')
+    this.scrollbarAnnotations.update([])
 
     this.$root.$on('search-next', () => {
       this.searchNext()
@@ -530,28 +525,165 @@ export default {
       this.editor.runCommand(cmd)
       this.editor.focus()
     },
-    // SEARCH FUNCTIONALITY BLOCK
     searchNext () {
-      // Make sure to clear out a timeout to prevent Zettlr from auto-searching
-      // again after the user deliberately searched by pressing Enter.
-      if (this.findTimeout !== undefined) {
-        clearTimeout(this.findTimeout)
-        this.findTimeout = undefined
+      if (this.query.trim() === '') {
+        // Stop search if the field is empty
+        this.stopSearch()
+        return
       }
 
-      this.editor.searchNext(this.query)
-    },
-    searchPrevious () {
-      this.editor.searchPrevious(this.query)
+      let currentTerm = this.query.trim()
+      const isRegexp = /^\/.+\/[gimy]{0,4}$/.test(currentTerm)
+      if (this.regexpSearch === true && !isRegexp) {
+        // Make sure it looks like a regular expression
+        currentTerm = `/${currentTerm}/`
+      }
+
+      if (this.searchCursor === null || this.currentLocalSearch !== currentTerm) {
+        // (Re)start search in case there was none or the term has changed
+        this.startSearch()
+      } else if (this.searchCursor !== null) {
+        this.lastSearchResult = this.searchCursor.findNext()
+        if (this.lastSearchResult !== false) {
+          // Another match
+          this.editor.codeMirror.setSelection(this.searchCursor.from(), this.searchCursor.to())
+        } else {
+          // Start from beginning
+          const regex = makeSearchRegEx(this.currentLocalSearch)
+          this.searchCursor = this.editor.codeMirror.getSearchCursor(regex, { 'line': 0, 'ch': 0 })
+          this.searchNext()
+        }
+      }
     },
     replaceNext () {
-      this.editor.replaceNext(this.query, this.replaceString)
-    },
-    replacePrevious () {
-      this.editor.replacePrevious(this.query, this.replaceString)
+      if (this.searchCursor === null) {
+        return
+      }
+
+      // First we need to check whether or not there have been capturing groups
+      // within the search result. If so, replace each variable with one of the
+      // matched groups from the last found search result. Do this globally for
+      // multiple occurrences.
+      let replacement = this.replaceString
+      for (let i = 1; i < this.lastSearchResult.length; i++) {
+        replacement = replacement.replace(new RegExp('\\$' + i, 'g'), this.lastSearchResult[i])
+      }
+
+      this.searchCursor.replace(replacement)
+      return this.searchNext()
     },
     replaceAll () {
-      this.editor.replaceAll(this.query, this.replaceString)
+      let searchWhat = this.query.trim()
+      let replaceWhat = this.replaceString
+      // First select all matches
+      let ranges = []
+      let replacements = []
+      let res
+      const regex = makeSearchRegEx(searchWhat)
+      let cur = this.editor.codeMirror.getSearchCursor(regex, { 'line': 0, 'ch': 0 })
+      while ((res = cur.findNext()) !== false) {
+        // First push the match to the ranges to be replaced
+        ranges.push({ 'anchor': cur.from(), 'head': cur.to() })
+        // Also make sure to replace variables in the replaceWhat, if applicable
+        if (res.length < 2) {
+          replacements.push(replaceWhat)
+        } else {
+          let repl = replaceWhat
+          for (let i = 1; i < res.length; i++) {
+            repl = repl.replace(new RegExp('\\$' + i, 'g'), res[i])
+          }
+          replacements.push(repl)
+        }
+      }
+
+      // Aaaand do it
+      this.editor.codeMirror.setSelections(ranges, 0)
+      this.editor.codeMirror.replaceSelections(replacements)
+
+      this.unmarkResults() // Nothing to show afterwards.
+    },
+
+    /**
+      * Starts the search by preparing a search cursor we can use to forward the
+      * search.
+      */
+    startSearch () {
+      // Create a new search cursor
+      this.currentLocalSearch = this.query.trim()
+      const cursor = this.editor.codeMirror.getCursor()
+      const regex = makeSearchRegEx(this.currentLocalSearch)
+      this.searchCursor = this.editor.codeMirror.getSearchCursor(regex, cursor)
+
+      // Find all matches
+      let tRE = makeSearchRegEx(this.currentLocalSearch, 'gi')
+      let res = []
+      let match = null
+      for (let i = 0; i < this.editor.codeMirror.lineCount(); i++) {
+        let l = this.editor.codeMirror.getLine(i)
+        tRE.lastIndex = 0
+        while ((match = tRE.exec(l)) != null) {
+          res.push({
+            'from': { 'line': i, 'ch': match.index },
+            'to': { 'line': i, 'ch': match.index + this.currentLocalSearch.length }
+          })
+        }
+      }
+
+      // Mark these in document and on the scroll bar
+      this.mark(res)
+
+      return this
+    },
+
+    /**
+      * Stops the search by destroying the search cursor
+      * @return {ZettlrEditor}   This for chainability.
+      */
+    stopSearch () {
+      this.searchCursor = null
+      this.unmarkResults()
+
+      return this
+    },
+
+    // MARK FUNCTIONS ALSO STOLEN FROM ZETTLREDITOR
+
+    /**
+      * Why do you have a second _mark-function, when there is markResults?
+      * Because the local search also generates search results that have to be
+      * marked without retrieving anything from the ZettlrPreview.
+      * @param  {Array} res An Array containing all positions to be rendered.
+      */
+    mark (res) {
+      this.unmarkResults() // Clear potential previous marks
+
+      let sbannotate = []
+      for (let result of res) {
+        if (!result.from || !result.to) {
+          // One of these was undefined. And somehow this if-clause has made
+          // searching approximately three times faster. Crazy.
+          continue
+        }
+        sbannotate.push({ 'from': result.from, 'to': result.to })
+        this.editor.codeMirror.markText(
+          result.from, result.to,
+          { className: 'search-result' }
+        )
+      }
+
+      this.scrollbarAnnotations.update(sbannotate)
+    },
+
+    /**
+      * Removes all marked search results
+      */
+    unmarkResults () {
+      // Simply remove all markers
+      for (let mark of this.editor.codeMirror.getAllMarks()) {
+        mark.clear()
+      }
+
+      this.scrollbarAnnotations.update([])
     }
   }
 }
@@ -578,11 +710,11 @@ export default {
   overflow-x: hidden;
   overflow-y: auto;
 
-  // .katex {
-  //   display: inline-block;
-  //   width: 100%;
-  //   text-align: center;
-  // }
+  .katex {
+    // display: inline-block;
+    // width: 100%;
+    // text-align: center;
+  }
 
   div#editor-search {
     position: absolute;
@@ -613,23 +745,30 @@ export default {
       font-family: inherit;
       background: none;
 
-      @media(min-width: 1025px) { margin-left: @editor-margin-normal-lg; }
-      @media(max-width: 1024px) { margin-left: @editor-margin-normal-md; }
-      @media(max-width:  900px) { margin-left: @editor-margin-normal-sm; }
+      // @media(min-width: 1025px) { margin-left: 10px; }
+      // @media(max-width: 1024px) { margin-left: 0.5px; }
+      // @media(max-width:  900px) { margin-left: 0.2px; }
+
     }
 
     .CodeMirror-code {
-      margin: 5em 0em;
+      //margin: 5em 0em;
       @media(max-width: 1024px) { margin: @editor-margin-fullscreen-md 0em; }
 
       .mute { opacity:0.2; }
     }
-
+    
     .CodeMirror-scroll {
       padding-right: 5em;
       @media(min-width: 1025px) { padding-right: @editor-margin-normal-lg; }
       @media(max-width: 1024px) { padding-right: @editor-margin-normal-md; }
       @media(max-width:  900px) { padding-right: @editor-margin-normal-sm; }
+    //Added padding to the left, this allows it to be scrollable. 
+    //Fold gutter does not work.
+      padding-left: 5em;
+      @media(min-width: 1025px) { padding-left:  @editor-margin-normal-lg; }
+      @media(max-width: 1024px) { padding-left:  @editor-margin-normal-md; }
+      @media(max-width:  900px) { padding-left:  @editor-margin-normal-sm; }
       overflow-x: hidden !important; // Necessary to hide the horizontal scrollbar
 
       // We need to override a negative margin
@@ -644,6 +783,7 @@ export default {
     .katex { font-size: 1.1em; }
   }
 
+
 body.darwin #editor {
   // On macOS the tabbar is 30px high.
   height: calc(100% - 30px);
@@ -652,7 +792,6 @@ body.darwin #editor {
     background-color: rgba(230, 230, 230, 1);
     border-bottom-left-radius: 6px;
     padding: 6px;
-    box-shadow: -2px 2px 4px 1px rgba(0, 0, 0, .3);
 
     input[type="text"], button {
       border-radius: 0;
@@ -673,17 +812,6 @@ body.darwin.dark #editor {
 body.win32 #editor {
   // On Windows, the tab bar is 30px high
   height: calc(100% - 30px);
-
-  div#editor-search {
-    background-color: rgba(230, 230, 230, 1);
-    box-shadow: -2px 2px 4px 1px rgba(0, 0, 0, .3);
-
-    button { max-width: fit-content; }
-    button, input { border-width: 1px; }
-
-    button:hover { background-color: rgb(240, 240, 240); }
-    button.active { background-color: rgb(200, 200, 200) }
-  }
 }
 
 // CodeMirror fullscreen
