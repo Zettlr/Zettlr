@@ -236,11 +236,6 @@ export default class WindowManager {
     }
 
     this._mainWindow.on('show', async () => {
-      // issue : Add tray to MacOS #4
-      // If Zettlr is running AND the Show app in the notification area is true, 
-      // the tray icon will be visible (regardless if Zettlr window(s) are visible or not).
-      // Zettlr can take a while a load. Only show the tray when the Zettlr window is ready.
-      // Do not add the actions (event handlers) to tray click and tray menu. See separate issue.
       if (process.platform == 'darwin') {
         if (tray == null) {
           let basepath = app.getAppPath()
@@ -262,6 +257,33 @@ export default class WindowManager {
               }, type: 'normal'
             }
           ])
+          tray.setToolTip('This is zettlr tray. \n click show Zettlr button to display app \n click quit to quit app')
+          tray.setContextMenu(contextMenu)
+        }
+      } else {
+        if (tray == null) {
+          tray = new Tray(app.getAppPath() + '\/source\/main\/assets\/icons\/128x128.png')
+          const contextMenu = Menu.buildFromTemplate([
+            {
+              label: 'Show Zettlr',
+              click: () => {
+                // Add show Zettlr window event to Windows #6
+                this.showMainWindow()
+              },
+              type: 'normal'
+            },
+            { label: '', type: 'separator' },
+            {
+              label: 'Quit',
+              click: () => {
+                // Add quit event to tray #8
+                // On Windows, left or right click the tray icon ➔ Quit will quit Zettlr. Same function as File ➔ Quit.
+                app.quit()
+              },
+              type: 'normal'
+            }
+          ])
+          tray.setToolTip('This is zettlr tray. \n click show Zettlr button to display app \n click quit to quit app')
           tray.setContextMenu(contextMenu)
         }
       }
