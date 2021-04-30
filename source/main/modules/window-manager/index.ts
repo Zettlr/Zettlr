@@ -63,24 +63,24 @@ interface QuicklookRecord {
 }
 
 export default class WindowManager {
-  private _mainWindow: BrowserWindow | null
+  private _mainWindow: BrowserWindow|null
   private readonly _qlWindows: QuicklookRecord[]
-  private _printWindow: BrowserWindow | null
-  private _logWindow: BrowserWindow | null
-  private _statsWindow: BrowserWindow | null
-  private _defaultsWindow: BrowserWindow | null
-  private _preferences: BrowserWindow | null
-  private _customCSS: BrowserWindow | null
-  private _aboutWindow: BrowserWindow | null
-  private _tagManager: BrowserWindow | null
-  private _pasteImageModal: BrowserWindow | null
-  private _errorModal: BrowserWindow | null
-  private _printWindowFile: string | undefined
+  private _printWindow: BrowserWindow|null
+  private _logWindow: BrowserWindow|null
+  private _statsWindow: BrowserWindow|null
+  private _defaultsWindow: BrowserWindow|null
+  private _preferences: BrowserWindow|null
+  private _customCSS: BrowserWindow|null
+  private _aboutWindow: BrowserWindow|null
+  private _tagManager: BrowserWindow|null
+  private _pasteImageModal: BrowserWindow|null
+  private _errorModal: BrowserWindow|null
+  private _printWindowFile: string|undefined
   private _windowState: WindowPosition[]
   private readonly _configFile: string
   private _fileLock: boolean
-  private _persistTimeout: ReturnType<typeof setTimeout> | undefined
-  private _beforeMainWindowCloseCallback: Function | null
+  private _persistTimeout: ReturnType<typeof setTimeout>|undefined
+  private _beforeMainWindowCloseCallback: Function|null
 
   constructor() {
     this._mainWindow = null
@@ -239,11 +239,11 @@ export default class WindowManager {
       if (process.platform == 'darwin') {
         if (tray == null) {
           let basepath = app.getAppPath()
-          let image = await nativeImage.createThumbnailFromPath(basepath + '/source/main/assets/icons/black_white_128.png', { width: 16, height: 16 })
+          let image = await nativeImage.createThumbnailFromPath(path.join(__dirname, 'assets/icons/128x128.png'), { width: 16, height: 16 })
           tray = new Tray(image)
           const contextMenu = Menu.buildFromTemplate([
             {
-              label: 'Show zettlr',
+              label: 'Show Zettlr',
               click: () => {
                 this.showAnyWindow()
               },
@@ -262,7 +262,7 @@ export default class WindowManager {
         }
       } else {
         if (tray == null) {
-          tray = new Tray(app.getAppPath() + '\/source\/main\/assets\/icons\/128x128.png')
+          tray = new Tray(path.join(__dirname, 'assets/icons/128x128.png'))
           const contextMenu = Menu.buildFromTemplate([
             {
               label: 'Show Zettlr',
