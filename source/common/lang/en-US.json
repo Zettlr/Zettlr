@@ -607,7 +607,8 @@
             "pandoc_error_message": "Pandoc reported an error: %s",
             "pandoc_error_title": "Could not export file",
             "remove_message": "Do you really want to remove %s?",
-            "remove_title": "Really delete?"
+            "remove_title": "Really delete?",
+            "tray_not_supported": "Tray is not supported. Gnome Extension 'KStatusNotifierItem/AppIndicator Support' is required for Tray support on the Gnome Desktop."
         },
         "export_success": "Exporting to %s",
         "file_changed": "File %s has changed remotely.",
