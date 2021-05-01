@@ -4,7 +4,7 @@
             "Ales Nehyba \u003Cneal.cz@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-03-28T08:25:22.000000Z"
+        "updated_at": "2021-04-15T05:23:21.000000Z"
     },
     "dialog": {
         "about": {
@@ -175,6 +175,7 @@
                 "style_word_label": "Styl pro Word",
                 "title": "Automatick\u00e9 opravy"
             },
+            "avoid_new_tabs": "Pokud mo\u017eno, neotev\u00edrat soubory v nov\u00fdch z\u00e1lo\u017ek\u00e1ch",
             "checkForBeta": "Informovat o beta vyd\u00e1n\u00edch",
             "choose_file": "Vybrat soubor...",
             "citation_database": "Datab\u00e1ze citac\u00ed (CSL JSON nebo BibTex)",

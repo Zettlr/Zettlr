@@ -17,7 +17,7 @@
             "Joris"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-04-09T08:14:16.000000Z"
+        "updated_at": "2021-04-24T07:48:00.000000Z"
     },
     "dialog": {
         "about": {
@@ -188,6 +188,7 @@
                 "style_word_label": "\u00c0 la mani\u00e8re de Word",
                 "title": "AutoCorrect"
             },
+            "avoid_new_tabs": "\u00c9viter d'ouvrir des fichiers dans de nouveaux onglets si possible",
             "checkForBeta": "Me pr\u00e9venir \u00e0 propos des versions b\u00eata",
             "choose_file": "Choisir un fichier\u2026",
             "citation_database": "Fichier de r\u00e9f\u00e9rences bibliographiques (au format CSL JSON ou BibTex)",
