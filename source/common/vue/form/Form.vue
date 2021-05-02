@@ -58,6 +58,7 @@
           v-bind:value="getModelValue(field.model)"
           v-bind:label="field.label"
           v-bind:name="field.model"
+          v-bind:disabled="field.disabled"
           v-on:input="$emit('input', field.model, $event)"
         ></CheckboxInput>
         <SwitchInput
