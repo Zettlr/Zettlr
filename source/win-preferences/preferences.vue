@@ -237,7 +237,7 @@ export default {
       }
     })
 
-    if (process.env.ZETTLR_IS_TRAY_SUPPORTED === 'false') {
+    if (process.env.ZETTLR_IS_TRAY_SUPPORTED === '0') {
       const leaveAppRunningField = modelToField('system.leaveAppRunning', SCHEMA['tab-advanced'])
       if (leaveAppRunningField !== undefined) {
         global.config.set('system.leaveAppRunning', false)

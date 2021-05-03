@@ -132,7 +132,14 @@ export default async function environmentCheck (): Promise<void> {
     }
   }
 
-  process.env.ZETTLR_IS_TRAY_SUPPORTED = (await isTraySupported()).value.toString()
+  try {
+    if (await isTraySupported()) {
+      process.env.ZETTLR_IS_TRAY_SUPPORTED = '1'
+    }
+  } catch (err) {
+    process.env.ZETTLR_IS_TRAY_SUPPORTED = '0'
+    global.log.warning(err)
+  }
 
   global.log.info('Environment check complete.')
 }
