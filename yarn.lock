@@ -5694,10 +5694,10 @@ junk@^3.1.0:
   resolved "https://registry.yarnpkg.com/junk/-/junk-3.1.0.tgz#31499098d902b7e98c5d9b9c80f43457a88abfa1"
   integrity sha512-pBxcB3LFc8QVgdggvZWyeys+hnrNWg4OcZIU/1X59k5jQdLBlCsYGRQaz234SqoRLTCgMH00fY0xRJH+F9METQ==
 
-katex@^0.13.3:
-  version "0.13.3"
-  resolved "https://registry.yarnpkg.com/katex/-/katex-0.13.3.tgz#b7b1f4a8de496ea8bfe60ab0b5e1822864288f00"
-  integrity sha512-/w0eycuK1xh201T0uFXYOZWPDoeqDHqR+6SLLKsYvNtUCYtmRjq8F+M74sdpzs+dJZYWv2eUsSW0r1AJfhZOCw==
+katex@^0.13.5:
+  version "0.13.5"
+  resolved "https://registry.yarnpkg.com/katex/-/katex-0.13.5.tgz#9e957dfa5428a66471ee1804f6ea8a6a784ecd19"
+  integrity sha512-n2uEzFpNFUOAlWs0eCgmT82LQyP+BlS45yBgnLRqe+ENp3+FEM3lM+cJwZwwxxONFgayyq1fm6n+w35vo2MaUg==
   dependencies:
     commander "^6.0.0"
 
