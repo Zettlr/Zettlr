@@ -49,7 +49,6 @@ import MarkdownEditor from '../common/modules/markdown-editor'
 import CodeMirror from 'codemirror'
 import { util as citrUtil, parseSingle } from '@zettlr/citr'
 import objectToArray from '../common/util/object-to-array'
-
 export default {
   name: 'Editor',
   components: {
@@ -148,9 +147,7 @@ export default {
     fsalFiles: function () {
       const tree = this.$store.state.fileTree
       const files = []
-
       console.time('File allocation')
-
       for (const item of tree) {
         if (item.type === 'directory') {
           const contents = objectToArray(item, 'children').filter(descriptor => descriptor.type === 'file')
@@ -159,9 +156,7 @@ export default {
           files.push(item)
         }
       }
-
       console.timeEnd('File allocation')
-
       return files
     }
   },
@@ -182,14 +177,12 @@ export default {
             }
           }).filter(elem => elem !== undefined).join(', ')
         }
-
         let title = ''
         if (item.title !== undefined) {
           title = item.title
         } else if (item['container-title'] !== undefined) {
           title = item['container-title']
         }
-
         // This is just a very crude representation of the citations.
         return {
           text: item.id,
@@ -210,7 +203,6 @@ export default {
     },
     fsalFiles: function () {
       const fileDatabase = {}
-
       console.time('Database allocation')
       for (let file of this.fsalFiles) {
         let fname = file.name.substr(0, file.name.lastIndexOf('.'))
@@ -222,11 +214,9 @@ export default {
           // The user wants to use first headings as fallbacks
           displayText = file.firstHeading
         }
-
         if (file.id !== '') {
           displayText = `${file.id}: ${displayText}`
         }
-
         fileDatabase[fname] = {
           // Use the ID, if given, or the filename
           'text': (file.id !== '') ? file.id : fname,
@@ -235,7 +225,6 @@ export default {
         }
       }
       console.timeEnd('Database allocation')
-
       this.editor.setCompletionDatabase('files', fileDatabase)
     },
     activeFile: function () {
@@ -244,7 +233,6 @@ export default {
         console.error('Received a file update but the editor was not yet initiated!')
         return
       }
-
       if (this.activeFile === null) {
         this.editor.swapDoc(CodeMirror.Doc('', 'multiplex'), 'multiplex')
         this.editor.readOnly = true
@@ -253,9 +241,7 @@ export default {
         this.updateCitationKeys()
         return
       }
-
       const doc = this.openDocuments.find(doc => doc.path === this.activeFile.path)
-
       if (doc !== undefined) {
         // Simply swap it
         this.editor.setOptions({
@@ -281,7 +267,6 @@ export default {
               modified: false,
               lastWordCount: countWords(descriptorWithContent.content, false) // TODO: re-enable countChars
             }
-
             // Listen to change events on the doc, because if the user pastes
             // more than ten words at once, we need to substract it to not
             // mess with the word count.
@@ -289,7 +274,6 @@ export default {
               if (changeObj.origin !== 'paste') {
                 return
               }
-
               const newTextWords = countWords(changeObj.text.join(' '), false) // TODO: re-enable countChars
               if (newTextWords > 10) {
                 newDoc.lastWordCount = countWords(newDoc.cmDoc.getValue(), false) // TODO: re-enable countChars
@@ -335,18 +319,15 @@ export default {
       } else if (!isRegexp && this.regexpSearch === true) {
         this.regexpSearch = false
       }
-
       // Begin a search
       if (this.findTimeout !== undefined) {
         clearTimeout(this.findTimeout)
       }
-
       if (this.regexpSearch === true) {
         // Don't automatically start a search b/c certain expressions will crash
         // the process (such as searching for /.*/ in a large document)
         return
       }
-
       this.findTimeout = setTimeout(() => {
         this.searchNext()
       }, 1000)
@@ -368,7 +349,6 @@ export default {
   mounted: function () {
     // As soon as the component is mounted, initiate the editor
     this.editor = new MarkdownEditor(this.$refs.textarea, this.editorConfiguration)
-
     // Update the document info on corresponding events
     this.editor.on('change', (changeObj) => {
       this.$store.commit('activeDocumentInfo', this.editor.documentInfo)
@@ -378,14 +358,11 @@ export default {
         filePath: this.activeDocument.path,
         isClean: this.activeDocument.cmDoc.isClean()
       })
-
       this.$store.commit('updateTableOfContents', this.editor.tableOfContents)
     })
-
     this.editor.on('cursorActivity', () => {
       this.$store.commit('activeDocumentInfo', this.editor.documentInfo)
     })
-
     this.editor.on('zettelkasten-link', (linkContents) => {
       ipcRenderer.invoke('application', {
         command: 'force-open',
@@ -396,15 +373,12 @@ export default {
     this.editor.on('zettelkasten-tag', (tag) => {
       this.$root.$emit('start-global-search', tag)
     })
-
     // Initiate the scrollbar annotations
     this.scrollbarAnnotations = this.editor.codeMirror.annotateScrollbar('sb-annotation')
     this.scrollbarAnnotations.update([])
-
     this.$root.$on('search-next', () => {
       this.searchNext()
     })
-
     // Listen to shortcuts from the main process
     ipcRenderer.on('shortcut', (event, shortcut) => {
       if (shortcut === 'save-file') {
@@ -419,7 +393,6 @@ export default {
         this.showSearch = this.showSearch === false
       }
     })
-
     ipcRenderer.on('open-file-changed', (event, fileDescriptor) => {
       // This event is emitted by the main process if the user wants to exchange
       // a file with remote changes. It already ships with the file descriptor
@@ -427,7 +400,6 @@ export default {
       // We don't need to update anything else, since that has been updated in
       // the application's store already by the time this event arrives.
       const doc = this.openDocuments.find(item => item.path === fileDescriptor.path)
-
       if (doc !== undefined) {
         const cur = Object.assign({}, doc.cmDoc.getCursor())
         doc.cmDoc.setValue(fileDescriptor.content)
@@ -443,7 +415,6 @@ export default {
         })
       }
     })
-
     // Other elements can emit a toc-line event on $root to request a jump to
     // a specific line.
     this.$root.$on('toc-line', (line) => {
@@ -461,7 +432,6 @@ export default {
       if (this.activeDocument.cmDoc.isClean()) {
         return // Nothing to save
       }
-
       const newContents = this.activeDocument.cmDoc.getValue()
       const currentWordCount = countWords(newContents, false) // TODO: Re-enable char count
       const descriptor = {
@@ -469,9 +439,7 @@ export default {
         newContents: this.activeDocument.cmDoc.getValue(),
         offsetWordCount: currentWordCount - this.activeDocument.lastWordCount
       }
-
       this.activeDocument.lastWordCount = currentWordCount
-
       ipcRenderer.invoke('application', {
         command: 'file-save',
         payload: descriptor
@@ -481,14 +449,12 @@ export default {
             console.error('Retrieved a falsy result from main, indicating an error with saving the file.')
             return
           }
-
           // Everything worked out, so clean up
           this.activeDocument.cmDoc.markClean()
           this.$store.commit('announceModifiedFile', {
             filePath: this.activeDocument.path,
             isClean: this.activeDocument.cmDoc.isClean()
           })
-
           // Also, extract all cited keys
           this.updateCitationKeys()
         })
@@ -496,12 +462,10 @@ export default {
     },
     updateCitationKeys: function () {
       const value = this.editor.value
-
       const citations = citrUtil.extractCitations(value)
       const keys = []
       for (const citation of citations) {
         const cslArray = parseSingle(citation)
-
         for (const csl of cslArray) {
           keys.push(csl.id)
         }
@@ -510,7 +474,6 @@ export default {
     },
     toggleQueryRegexp () {
       const isRegexp = /^\/.+\/[gimy]{0,4}$/.test(this.query.trim())
-
       if (isRegexp) {
         const match = /^\/(.+)\/[gimy]{0,4}$/.exec(this.query.trim())
         if (match !== null) {
@@ -531,14 +494,12 @@ export default {
         this.stopSearch()
         return
       }
-
       let currentTerm = this.query.trim()
       const isRegexp = /^\/.+\/[gimy]{0,4}$/.test(currentTerm)
       if (this.regexpSearch === true && !isRegexp) {
         // Make sure it looks like a regular expression
         currentTerm = `/${currentTerm}/`
       }
-
       if (this.searchCursor === null || this.currentLocalSearch !== currentTerm) {
         // (Re)start search in case there was none or the term has changed
         this.startSearch()
@@ -559,7 +520,6 @@ export default {
       if (this.searchCursor === null) {
         return
       }
-
       // First we need to check whether or not there have been capturing groups
       // within the search result. If so, replace each variable with one of the
       // matched groups from the last found search result. Do this globally for
@@ -568,7 +528,6 @@ export default {
       for (let i = 1; i < this.lastSearchResult.length; i++) {
         replacement = replacement.replace(new RegExp('\\$' + i, 'g'), this.lastSearchResult[i])
       }
-
       this.searchCursor.replace(replacement)
       return this.searchNext()
     },
@@ -595,14 +554,11 @@ export default {
           replacements.push(repl)
         }
       }
-
       // Aaaand do it
       this.editor.codeMirror.setSelections(ranges, 0)
       this.editor.codeMirror.replaceSelections(replacements)
-
       this.unmarkResults() // Nothing to show afterwards.
     },
-
     /**
       * Starts the search by preparing a search cursor we can use to forward the
       * search.
@@ -613,7 +569,6 @@ export default {
       const cursor = this.editor.codeMirror.getCursor()
       const regex = makeSearchRegEx(this.currentLocalSearch)
       this.searchCursor = this.editor.codeMirror.getSearchCursor(regex, cursor)
-
       // Find all matches
       let tRE = makeSearchRegEx(this.currentLocalSearch, 'gi')
       let res = []
@@ -628,13 +583,11 @@ export default {
           })
         }
       }
-
       // Mark these in document and on the scroll bar
       this.mark(res)
-
       return this
     },
-
+    
     /**
       * Stops the search by destroying the search cursor
       * @return {ZettlrEditor}   This for chainability.
@@ -642,12 +595,9 @@ export default {
     stopSearch () {
       this.searchCursor = null
       this.unmarkResults()
-
       return this
     },
-
     // MARK FUNCTIONS ALSO STOLEN FROM ZETTLREDITOR
-
     /**
       * Why do you have a second _mark-function, when there is markResults?
       * Because the local search also generates search results that have to be
@@ -656,7 +606,6 @@ export default {
       */
     mark (res) {
       this.unmarkResults() // Clear potential previous marks
-
       let sbannotate = []
       for (let result of res) {
         if (!result.from || !result.to) {
@@ -670,10 +619,8 @@ export default {
           { className: 'search-result' }
         )
       }
-
       this.scrollbarAnnotations.update(sbannotate)
     },
-
     /**
       * Removes all marked search results
       */
@@ -682,7 +629,6 @@ export default {
       for (let mark of this.editor.codeMirror.getAllMarks()) {
         mark.clear()
       }
-
       this.scrollbarAnnotations.update([])
     }
   }
@@ -691,7 +637,6 @@ export default {
 
 <style lang="less">
 // Editor Geometry
-
 // Editor margins left and right for all breakpoints in both fullscreen and
 // normal mode.
 @editor-margin-fullscreen-sm:   50px;
@@ -699,62 +644,57 @@ export default {
 @editor-margin-fullscreen-lg:  150px;
 @editor-margin-fullscreen-xl:  200px;
 @editor-margin-fullscreen-xxl: 350px;
-
 @editor-margin-normal-sm:  20px;
 @editor-margin-normal-md:  50px;
 @editor-margin-normal-lg: 100px;
-
 #editor {
   width: 100%;
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
-
   .katex {
     // display: inline-block;
     // width: 100%;
     // text-align: center;
   }
-
   div#editor-search {
     position: absolute;
     width: 300px;
     right: 0;
     z-index: 7; // One less and the scrollbar will on top of the input field
     padding: 5px 10px;
-
     div.row { display: flex; }
-
     input {
       flex: 3;
       &.monospace { font-family: monospace; }
     }
-
     button {
       flex: 1;
       max-width: 24px;
     }
   }
-
     .CodeMirror {
       // The CodeMirror editor needs to respect the new tabbar; it cannot take
       // up 100 % all for itself anymore.
-      margin-left: 0.5em;
+      margin-left: 0em; 
       height: 100%;
       cursor: text;
       font-family: inherit;
       background: none;
 
+      // @media(min-width: 1025px) { padding-left:  @editor-margin-normal-lg; }
+      // @media(max-width: 1024px) { padding-left:  @editor-margin-normal-md; }
+      // @media(max-width:  900px) { padding-left:  @editor-margin-normal-sm; }
+      ////////////////////////////
       // @media(min-width: 1025px) { margin-left: 10px; }
       // @media(max-width: 1024px) { margin-left: 0.5px; }
       // @media(max-width:  900px) { margin-left: 0.2px; }
-
     }
-
+    
     .CodeMirror-code {
       //margin: 5em 0em;
+      margin-left: 100px; 
       @media(max-width: 1024px) { margin: @editor-margin-fullscreen-md 0em; }
-
       .mute { opacity:0.2; }
     }
     
@@ -765,12 +705,11 @@ export default {
       @media(max-width:  900px) { padding-right: @editor-margin-normal-sm; }
     //Added padding to the left, this allows it to be scrollable. 
     //Fold gutter does not work.
-      padding-left: 5em;
-      @media(min-width: 1025px) { padding-left:  @editor-margin-normal-lg; }
-      @media(max-width: 1024px) { padding-left:  @editor-margin-normal-md; }
-      @media(max-width:  900px) { padding-left:  @editor-margin-normal-sm; }
+     // padding-left: 5em;
+      // @media(min-width: 1025px) { padding-left:  @editor-margin-normal-lg; }
+      // @media(max-width: 1024px) { padding-left:  @editor-margin-normal-md; }
+      // @media(max-width:  900px) { padding-left:  @editor-margin-normal-sm; }
       overflow-x: hidden !important; // Necessary to hide the horizontal scrollbar
-
       // We need to override a negative margin
       // and a bottom padding from the standard
       // CSS for some calculations to be correct
@@ -778,42 +717,33 @@ export default {
       margin-bottom: 0px;
       padding-bottom: 0px;
     }
-
     // Reduce font size of math a bit
     .katex { font-size: 1.1em; }
   }
-
-
 body.darwin #editor {
   // On macOS the tabbar is 30px high.
   height: calc(100% - 30px);
-
   div#editor-search {
     background-color: rgba(230, 230, 230, 1);
     border-bottom-left-radius: 6px;
     padding: 6px;
-
     input[type="text"], button {
       border-radius: 0;
-      margin: 0;
+     // margin: 0; I commented that 
     }
-
     button:hover { background-color: rgb(240, 240, 240); }
     button.active { background-color: rgb(200, 200, 200) }
   }
 }
-
 body.darwin.dark #editor {
   div#editor-search {
     background-color: rgba(60, 60, 60, 1);
   }
 }
-
 body.win32 #editor {
   // On Windows, the tab bar is 30px high
   height: calc(100% - 30px);
 }
-
 // CodeMirror fullscreen
 .CodeMirror-fullscreen {
   position: fixed !important; // Have to override another relative
@@ -823,13 +753,12 @@ body.win32 #editor {
   bottom: 0;
   height: auto;
   z-index: 500;
-
+  
   @media(min-width: 1301px) { margin-left: @editor-margin-fullscreen-xxl !important; }
   @media(max-width: 1300px) { margin-left: @editor-margin-fullscreen-xl  !important; }
   @media(max-width: 1100px) { margin-left: @editor-margin-fullscreen-lg  !important; }
   @media(max-width: 1000px) { margin-left: @editor-margin-fullscreen-md  !important; }
   @media(max-width:  800px) { margin-left: @editor-margin-fullscreen-sm  !important; }
-
   .CodeMirror-scroll {
     @media(min-width: 1301px) { padding-right: @editor-margin-fullscreen-xxl !important; }
     @media(max-width: 1300px) { padding-right: @editor-margin-fullscreen-xl  !important; }
@@ -838,7 +767,6 @@ body.win32 #editor {
     @media(max-width:  800px) { padding-right: @editor-margin-fullscreen-sm  !important; }
   }
 }
-
 // Define the readability classes
 .cm-readability-0   { background-color: hsv(100, 70%, 95%); color: #444444 !important; }
 .cm-readability-1   { background-color: hsv( 90, 70%, 95%); color: #444444 !important; }
