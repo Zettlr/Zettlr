@@ -143,17 +143,17 @@ export default async function environmentCheck (): Promise<void> {
  * an {Error} with the reason why.
  * Returns true on Linux with other desktops. e.g. KDE, XFCE, etc.
  *
- * @return {*}  {Promise<Boolean>} If supported, returns true. Never returns
+ * @return {*}  {Promise<boolean>} If supported, returns true. Never returns
  *              false.
  * @throws {Error} Details why the Tray is not supported; or
  *                 Details the error if an error occurred while checking Tray
  *                 support.
  */
-export async function isTraySupported (): Promise<Boolean> {
+export async function isTraySupported (): Promise<boolean> {
   const isLinux = process.platform === 'linux'
   if (isLinux) {
     if (process.env.XDG_CURRENT_DESKTOP === 'GNOME') {
-      return await new Promise<Boolean>((resolve, reject) => {
+      return await new Promise<boolean>((resolve, reject) => {
         const shellProcess = spawn('gsettings', [ 'get', 'org.gnome.shell', 'enabled-extensions' ])
         let out = ''
 
