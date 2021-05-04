@@ -242,6 +242,9 @@ export default {
       if (leaveAppRunningField !== undefined) {
         global.config.set('system.leaveAppRunning', false)
         leaveAppRunningField.disabled = true
+        if (process.env.ZETTLR_TRAY_ERROR !== undefined) {
+          leaveAppRunningField.additionaltext = '⚠️ ' + process.env.ZETTLR_TRAY_ERROR
+        }
       }
     }
   },
