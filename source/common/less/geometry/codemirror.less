@@ -10,6 +10,7 @@
   // fonts such as Hiragana/Katakana are correctly
   // aligned. Should also help accessibility-plugins.
   &.CodeMirror-wrap > div:first-child {
+    //margin-left: 200px; // Rand added 
     textarea {
       font-family: inherit;
       font-size: inherit;
@@ -17,7 +18,11 @@
       height: 1.4375em !important;
       bottom: -1.4375em !important;
       transform: scaleY(1.1);
+     // margin-left: 500px; // Rand added 
+   
     }
+
+
   }
 
   font-size: 1em;
@@ -158,14 +163,18 @@
     border: none;
     width: 2em;
     padding-right: 10px;
+    margin-left: 10px;// added margin to the left
   }
   .CodeMirror-foldgutter {
     width: 2em;
+    margin-left: 10px;//// added margin to the left
   }
   .CodeMirror-foldgutter-open, .CodeMirror-foldgutter-folded {
     text-align: right;
     cursor: pointer;
     font-size: 18px;
+    margin-left: 10px; // added margin to the left
+
 
     &:hover {
       color: var(--c-primary);
@@ -178,7 +187,9 @@
     border-radius: @border-radius;
     display: inline-block;
     font-size: 75%;
-    margin-left: 10px;
+    margin-left: 10px;// added margin to the left
+  
+    //padding-left: 50px;
     padding: 2px;
     cursor: pointer;
     vertical-align: baseline;
