@@ -54,9 +54,6 @@ import { WindowPosition } from './types.d'
 import askFileDialog from './dialog/ask-file'
 // import dragIcon from '../../assets/dragicon.png'
 
-// issue : Add tray to MacOS #4
-let tray: Tray | null = null
-
 interface QuicklookRecord {
   path: string
   win: BrowserWindow
@@ -82,7 +79,10 @@ export default class WindowManager {
   private _persistTimeout: ReturnType<typeof setTimeout>|undefined
   private _beforeMainWindowCloseCallback: Function|null
 
-  constructor() {
+  // Add tray to MacOS
+  private _tray: Tray | null
+
+  constructor () {
     this._mainWindow = null
     this._qlWindows = []
     this._printWindow = null
@@ -100,6 +100,7 @@ export default class WindowManager {
     this._configFile = path.join(app.getPath('userData'), 'window_state.json')
     this._fileLock = false
     this._beforeMainWindowCloseCallback = null
+    this._tray = null
 
     // Listen to window control commands
     ipcMain.on('window-controls', (event, message) => {
@@ -131,8 +132,7 @@ export default class WindowManager {
             const showInNotification = Boolean(global.config.get('system.showInNotification'))
             if (showInNotification) {
               callingWindow.hide()
-            }
-            else {
+            } else {
               callingWindow.close()
             }
           } else {
@@ -192,7 +192,7 @@ export default class WindowManager {
   /**
    * Loads persisted window position data from disk
    */
-  async loadData(): Promise<void> {
+  async loadData (): Promise<void> {
     try {
       const data = await fs.readFile(this._configFile, 'utf8')
       this._windowState = JSON.parse(data) as WindowPosition[]
@@ -207,14 +207,14 @@ export default class WindowManager {
    *
    * @param   {Function}  callback  The callback that will be called. Must return boolean.
    */
-  onBeforeMainWindowClose(callback: () => boolean): void {
+  onBeforeMainWindowClose (callback: () => boolean): void {
     this._beforeMainWindowCloseCallback = callback
   }
 
   /**
    * Programmatically closes the main window if it is open.
    */
-  closeMainWindow(): void {
+  closeMainWindow (): void {
     if (this._mainWindow !== null) {
       this._mainWindow.close()
     }
@@ -223,24 +223,26 @@ export default class WindowManager {
   /**
    * Shuts down the window manager and performs final operations
    */
-  shutdown(): void {
+  shutdown (): void {
     this._persistWindowPositions()
   }
 
   /**
    * Listens to events on the main window
    */
-  private _hookMainWindow(): void {
+  private _hookMainWindow (): void {
     if (this._mainWindow === null) {
       return
     }
 
     this._mainWindow.on('show', async () => {
-      if (process.platform == 'darwin') {
-        if (tray == null) {
+      if (process.platform === 'darwin') {
+        if (this._tray == null) {
           let basepath = app.getAppPath()
-          let image = await nativeImage.createThumbnailFromPath(path.join(__dirname, 'assets/icons/128x128.png'), { width: 16, height: 16 })
-          tray = new Tray(image)
+          let image = await nativeImage.createThumbnailFromPath(basepath + '/source/main/assets/icons/black_white_128.png', { width: 16, height: 16 })
+          this._tray = new Tray(image)
+
+          // this._tray = new Tray(path.join(__dirname, 'assets/icons/128x128.png'))
           const contextMenu = Menu.buildFromTemplate([
             {
               label: 'Show Zettlr',
@@ -254,20 +256,21 @@ export default class WindowManager {
               label: 'Quit',
               click: () => {
                 app.quit()
-              }, type: 'normal'
+              },
+              type: 'normal'
             }
           ])
-          tray.setToolTip('This is zettlr tray. \n click show Zettlr button to display app \n click quit to quit app')
-          tray.setContextMenu(contextMenu)
+          this._tray.setToolTip('This is Zettlr tray. \n click show Zettlr button to display app \n click quit to quit app')
+          this._tray.setContextMenu(contextMenu)
         }
       } else {
-        if (tray == null) {
-          tray = new Tray(path.join(__dirname, 'assets/icons/128x128.png'))
+        if (this._tray == null) {
+          this._tray = new Tray(path.join(__dirname, 'assets/icons/128x128.png'))
           const contextMenu = Menu.buildFromTemplate([
             {
               label: 'Show Zettlr',
               click: () => {
-                // Add show Zettlr window event to Windows #6
+                // Add show Zettlr window event to Windows
                 this.showMainWindow()
               },
               type: 'normal'
@@ -276,15 +279,15 @@ export default class WindowManager {
             {
               label: 'Quit',
               click: () => {
-                // Add quit event to tray #8
+                // Add quit event to tray
                 // On Windows, left or right click the tray icon ➔ Quit will quit Zettlr. Same function as File ➔ Quit.
                 app.quit()
               },
               type: 'normal'
             }
           ])
-          tray.setToolTip('This is zettlr tray. \n click show Zettlr button to display app \n click quit to quit app')
-          tray.setContextMenu(contextMenu)
+          this._tray.setToolTip('This is zettlr tray. \n click show Zettlr button to display app \n click quit to quit app')
+          this._tray.setContextMenu(contextMenu)
         }
       }
     })
@@ -341,7 +344,7 @@ export default class WindowManager {
    *
    * @param  {BrowserWindow}  win  The window to make visible
    */
-  private _makeVisible(win: BrowserWindow): void {
+  private _makeVisible (win: BrowserWindow): void {
     if (win.isMinimized()) {
       // Maximise and move on top
       win.maximize()
@@ -359,7 +362,7 @@ export default class WindowManager {
   /**
    * Persists the window positions to disk
    */
-  private _persistWindowPositions(): void {
+  private _persistWindowPositions (): void {
     if (this._fileLock) {
       if (this._persistTimeout !== undefined) {
         clearTimeout(this._persistTimeout)
@@ -394,7 +397,7 @@ export default class WindowManager {
    *
    * @return  {WindowPosition}                               A sanitised WindowPosition
    */
-  private _retrieveWindowPosition(type: string, defaultSize: Rect | null, predicate?: Record<string, any>): WindowPosition {
+  private _retrieveWindowPosition (type: string, defaultSize: Rect | null, predicate?: Record<string, any>): WindowPosition {
     let windowConfiguration = this._windowState.find(state => {
       if (state.windowType !== type) {
         return false
@@ -478,7 +481,7 @@ export default class WindowManager {
    * @param   {BrowserWindow}   window  The window to hook
    * @param   {WindowPosition}  conf    The configuration to update
    */
-  private _hookWindowResize(window: BrowserWindow, conf: WindowPosition): void {
+  private _hookWindowResize (window: BrowserWindow, conf: WindowPosition): void {
     const callback = (): void => {
       let newBounds = window.getBounds()
       // The configuration object will be edited in place.
@@ -532,7 +535,7 @@ export default class WindowManager {
   /**
    * Shows the main window
    */
-  showMainWindow(): void {
+  showMainWindow (): void {
     if (this._mainWindow === null) {
       const display = screen.getPrimaryDisplay()
       const windowConfiguration = this._retrieveWindowPosition('main', {
@@ -553,7 +556,7 @@ export default class WindowManager {
   /**
    * Shows any window. If none are open, the main window will be opened and shown.
    */
-  showAnyWindow(): void {
+  showAnyWindow (): void {
     const windows = BrowserWindow.getAllWindows()
     if (windows.length === 0) {
       this.showMainWindow()
@@ -567,7 +570,7 @@ export default class WindowManager {
    *
    * @param   {MDFileDescriptor}  file  The file to display in the Quicklook
    */
-  showQuicklookWindow(file: MDFileDescriptor): void {
+  showQuicklookWindow (file: MDFileDescriptor): void {
     // Opens a new Quicklook. It's called new because there can be multiple
     // Quicklook windows.
 
@@ -604,7 +607,7 @@ export default class WindowManager {
   /**
    * Displays the log window
    */
-  showLogWindow(): void {
+  showLogWindow (): void {
     if (this._logWindow === null) {
       const conf = this._retrieveWindowPosition('log', null)
       this._logWindow = createLogWindow(conf)
@@ -622,7 +625,7 @@ export default class WindowManager {
   /**
    * Displays the defaults window
    */
-  showDefaultsWindow(): void {
+  showDefaultsWindow (): void {
     if (this._defaultsWindow === null) {
       const conf = this._retrieveWindowPosition('log', null)
       this._defaultsWindow = createDefaultsWindow(conf)
@@ -640,7 +643,7 @@ export default class WindowManager {
   /**
    * Shows the statistics window
    */
-  showStatsWindow(): void {
+  showStatsWindow (): void {
     if (this._statsWindow === null) {
       const conf = this._retrieveWindowPosition('stats', null)
       this._statsWindow = createStatsWindow(conf)
@@ -657,19 +660,10 @@ export default class WindowManager {
   /**
    * Shows the preferences window
    */
-  showPreferences(): void {
+  showPreferences (): void {
     if (this._preferences === null) {
-      // const conf = this._retrieveWindowPosition('preferences', null)
-      let conf: WindowPosition = {
-        windowType: 'preferences',
-        lastDisplayId: 69734662,
-        top: 279.5,
-        left: 448,
-        width: 896,
-        height: 513,
-        isMaximised: false
-      }
-      this._preferences = createPreferencesWindow(conf);
+      const conf = this._retrieveWindowPosition('preferences', null)
+      this._preferences = createPreferencesWindow(conf)
       this._hookWindowResize(this._preferences, conf)
 
       // Dereference the window as soon as it is closed
@@ -684,7 +678,7 @@ export default class WindowManager {
   /**
    * Shows the custom CSS window
    */
-  showCustomCSS(): void {
+  showCustomCSS (): void {
     if (this._customCSS === null) {
       const display = screen.getPrimaryDisplay()
       const conf = this._retrieveWindowPosition('custom-css', {
@@ -708,7 +702,7 @@ export default class WindowManager {
   /**
    * Shows the custom CSS window
    */
-  showAboutWindow(): void {
+  showAboutWindow (): void {
     if (this._aboutWindow === null) {
       const display = screen.getPrimaryDisplay()
       const conf = this._retrieveWindowPosition('about', {
@@ -732,7 +726,7 @@ export default class WindowManager {
   /**
    * Shows the tag manager window
    */
-  showTagManager(): void {
+  showTagManager (): void {
     if (this._tagManager === null) {
       const conf = this._retrieveWindowPosition('tag-manager', null)
       this._tagManager = createTagManagerWindow(conf)
@@ -750,7 +744,7 @@ export default class WindowManager {
   /**
    * Shows the paste image modal and, after closing, returns
    */
-  async showPasteImageModal(startPath: string): Promise<any> {
+  async showPasteImageModal (startPath: string): Promise<any> {
     return await new Promise((resolve, reject) => {
       if (this._mainWindow === null) {
         return reject(new Error('[Window Manager] A paste image modal was requested, but there was no main window open.'))
@@ -772,7 +766,7 @@ export default class WindowManager {
     })
   }
 
-  showErrorMessage(title: string, message: string, contents?: string): void {
+  showErrorMessage (title: string, message: string, contents?: string): void {
     if (this._mainWindow === null) {
       global.log.error('[Application] Could not display error message, because the main window was not open!', message)
       return
@@ -797,7 +791,7 @@ export default class WindowManager {
    *
    * @param   {string}  filePath  The file to load
    */
-  showPrintWindow(filePath: string): void {
+  showPrintWindow (filePath: string): void {
     if (this._printWindow === null) {
       const conf = this._retrieveWindowPosition('print', null)
       this._printWindow = createPrintWindow(filePath, conf)
@@ -825,7 +819,7 @@ export default class WindowManager {
    *
    * @param   {boolean}  modificationState  Whether to indicate a modification
    */
-  setModified(modificationState: boolean): void {
+  setModified (modificationState: boolean): void {
     if (this._mainWindow !== null && process.platform === 'darwin') {
       this._mainWindow.setDocumentEdited(modificationState)
     }
@@ -836,7 +830,7 @@ export default class WindowManager {
    *
    * @return  {BrowserWindow|null}  The main window
    */
-  getMainWindow(): BrowserWindow | null {
+  getMainWindow (): BrowserWindow | null {
     return this._mainWindow
   }
 
@@ -849,7 +843,7 @@ export default class WindowManager {
    * @param {string}   filename The filename to be displayed.
    * @return {boolean} True if the file should be replaced
    */
-  async shouldReplaceFile(filename: string): Promise<boolean> {
+  async shouldReplaceFile (filename: string): Promise<boolean> {
     if (this._mainWindow === null) {
       // If the main window is not open, there is no sense in showing this
       // box, as the file is not really "open". It will be shown once a new
@@ -866,7 +860,7 @@ export default class WindowManager {
     * @param   {string} filename The filename that should be contained in the message
     * @return  {boolean}         Resolves with true if the file should be overwritten
     */
-  async shouldOverwriteFile(filename: string): Promise<boolean> {
+  async shouldOverwriteFile (filename: string): Promise<boolean> {
     return await shouldOverwriteFileDialog(this._mainWindow, filename)
   }
 
@@ -877,7 +871,7 @@ export default class WindowManager {
    *
    * @return  {Promise<any>}  Returns the message box results
    */
-  async askSaveChanges(): Promise<any> {
+  async askSaveChanges (): Promise<any> {
     return await askSaveChanges(this._mainWindow)
   }
 
@@ -885,7 +879,7 @@ export default class WindowManager {
     * Show the dialog for choosing a directory
     * @return {string[]} An array containing all selected paths.
     */
-  async askDir(win?: BrowserWindow | null): Promise<string[]> {
+  async askDir (win?: BrowserWindow | null): Promise<string[]> {
     if (win != null) {
       return await askDirectoryDialog(win)
     } else {
@@ -902,7 +896,7 @@ export default class WindowManager {
    *
    * @return {string[]}                             An array containing all selected files.
    */
-  async askFile(filters: FileFilter[] | null = null, multiSel: boolean = false, win?: BrowserWindow | null): Promise<string[]> {
+  async askFile (filters: FileFilter[] | null = null, multiSel: boolean = false, win?: BrowserWindow | null): Promise<string[]> {
     if (win != null) {
       return await askFileDialog(win, filters, multiSel)
     } else {
@@ -914,7 +908,7 @@ export default class WindowManager {
     * This function prompts the user with information.
     * @param  {any} options Necessary informations for displaying the prompt
     */
-  prompt(options: any): void {
+  prompt (options: any): void {
     promptDialog(this._mainWindow, options)
   }
 
@@ -923,10 +917,10 @@ export default class WindowManager {
     * @param  {MDFileDescriptor|DirDescriptor} descriptor The corresponding descriptor
     * @return {boolean}                                   True if user wishes to remove it.
     */
-  async confirmRemove(descriptor: MDFileDescriptor | CodeFileDescriptor | DirDescriptor): Promise<boolean> {
+  async confirmRemove (descriptor: MDFileDescriptor | CodeFileDescriptor | DirDescriptor): Promise<boolean> {
     const options: MessageBoxOptions = {
       type: 'warning',
-      buttons: ['Ok', trans('system.error.cancel_remove')],
+      buttons: [ 'Ok', trans('system.error.cancel_remove') ],
       defaultId: 0,
       cancelId: 1,
       title: trans('system.error.remove_title'),
