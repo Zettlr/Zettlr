@@ -38,7 +38,8 @@ import {
   AnyMetaDescriptor,
   MaybeRootDescriptor,
   CodeFileDescriptor,
-  CodeFileMeta
+  CodeFileMeta,
+  OtherFileDescriptor
 } from './types'
 
 const ALLOWED_CODE_FILES = [
@@ -738,7 +739,7 @@ export default class FSAL extends EventEmitter {
   /**
    * Attempts to find a directory in the FSAL. Returns null if not found.
    *
-   * @param  {string|number}           val  Either an absolute path or a hash
+   * @param  {string|number}       val  Either an absolute path or a hash. NOTE: Using hashes is deprecated behaviour!
    *
    * @return {DirDescriptor|null}       Either null or the wanted directory
    */
@@ -755,8 +756,11 @@ export default class FSAL extends EventEmitter {
 
   /**
    * Attempts to find a file in the FSAL. Returns null if not found.
-   * @param {Mixed} val Either an absolute path or a hash
-   * @return {Mixed} Either null or the wanted file
+   *
+   * @param {string|number}                             val       The value to be searched for. NOTE: Using hashes is deprecated behaviour!
+   * @param {MaybeRootDescriptor[]|MaybeRootDescriptor} baseTree  The tree to search within
+   *
+   * @return  {MDFileDescriptor|CodeFileDescriptor|null}          Either the corresponding descriptor, or null
    */
   public findFile (
     val: string|number,
@@ -776,12 +780,91 @@ export default class FSAL extends EventEmitter {
   }
 
   /**
-   * Convenience wrapper for findFile && findDir
-   * @param {number|string} val The value to search for (hash or path)
+   * Finds a non-markdown file within the filetree
+   *
+   * @param {string|number} val The value to be searched for. NOTE: Using hashes is deprecated behaviour!
+   * @param {MaybeRootDescriptor[]|MaybeRootDescriptor} baseTree The tree to search within
+   *
+   * @return  {OtherFileDescriptor|null}  Either the corresponding file, or null
    */
-  public find (val: number|string): MDFileDescriptor|DirDescriptor|CodeFileDescriptor|null {
-    let res = this.findFile(val)
-    if (res === null) return this.findDir(val)
+  public findOther (
+    val: string|number,
+    baseTree: MaybeRootDescriptor[]|MaybeRootDescriptor = this._state.filetree
+  ): OtherFileDescriptor|null {
+    // We'll only search for hashes, so if the user searches for a path,
+    // convert it to the hash prior to searching the tree.
+    if (typeof val === 'string' && path.isAbsolute(val)) val = hash(val)
+    if (typeof val !== 'number') val = parseInt(val, 10)
+
+    // Since the attachments are not recursive, we cannot employ findObject here,
+    // but have to do it "zu Fuß", as we say in Germany. NOTE: This approach is
+    // ugly as hell, and might break easily. So we definitely need to come to a
+    // better way of implmenting this. But in the end the larger goal here is to
+    // merge the "attachments" (a.k.a. non-Markdown files) into the children-array
+    // either way.
+    const findInDirectory = (dir: DirDescriptor, val: number): OtherFileDescriptor|null => {
+      let found = dir.attachments.find(elem => elem.hash === val)
+      if (found !== undefined) {
+        return found
+      } else {
+        const children = dir.children.filter(elem => elem.type === 'directory') as DirDescriptor[]
+        for (const childDir of children) {
+          let found = findInDirectory(childDir, val)
+          if (found !== null) {
+            return found
+          }
+        }
+      }
+
+      return null
+    }
+
+    if (Array.isArray(baseTree)) {
+      for (const root of baseTree) {
+        if (root.type !== 'directory') {
+          continue
+        }
+
+        let found = findInDirectory(root, val)
+        if (found !== null) {
+          return found
+        }
+      }
+    } else if (baseTree.type === 'directory') {
+      let found = findInDirectory(baseTree, val)
+      if (found !== null) {
+        return found
+      }
+    }
+
+    return null
+  }
+
+  /**
+   * Finds a descriptor that is loaded.
+   *
+   * @param   {number|string}       val  The value. NOTE: Using hashes is deprecated behaviour!
+   *
+   * @return  {AnyDescriptor|null}       Returns either the descriptor, or null.
+   */
+  public find (val: number|string): AnyDescriptor|null {
+    // First attempt to find a file ...
+    let res: AnyDescriptor|null = this.findFile(val)
+
+    // ... and if that fails, attempt to find a directory.
+    if (res === null) {
+      console.log('No file found for path')
+      res = this.findDir(val)
+    }
+
+    // Last but not least, attempt to find a non-markdown file
+    if (res === null) {
+      console.log('No directory found for path')
+      res = this.findOther(val)
+    }
+
+    if (res === null) console.log('No other file found for path')
+
     return res
   }
 
