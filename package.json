@@ -64,7 +64,6 @@
     "mermaid": "^8.9.2",
     "moment": "^2.29.1",
     "nspell": "^2.1.5",
-    "react-scripts": "^2.1.8",
     "rimraf": "^3.0.2",
     "sanitize-filename": "^1.6.3",
     "sanitize-html": "^2.3.3",
