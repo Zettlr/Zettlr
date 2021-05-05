@@ -15,7 +15,9 @@
 import path from 'path'
 import { app } from 'electron'
 import { promises as fs } from 'fs'
+import { spawn } from 'child_process'
 import isFile from '../../common/util/is-file'
+import { trans } from '../../common/i18n'
 
 /**
  * Contains custom paths that should be present on the process.env.PATH property
@@ -131,4 +133,54 @@ export default async function environmentCheck (): Promise<void> {
   }
 
   global.log.info('Environment check complete.')
+}
+
+export interface BooleanError {
+  value: boolean
+  err?: string
+}
+
+/**
+ * Check if system supports a Tray.
+ *
+ * Returns {value: true} on Windows and MacOS.
+ * Returns {value: true} on Linux with Gnome desktop if Gnome Extension
+ * 'KStatusNotifierItem/AppIndicator Support' is installed, otherwise false.
+ * Returns {value: true} on Linux with other desktops. e.g. KDE, XFCE, etc.
+ *
+ * @return {*}  {Promise<BooleanError>} If supported, returns {value: true}.
+ *              If not supported, returns {value: false, err: error_string}.
+ *              error_string details why the Tray is not supported. Throws an
+ *              exception if an error occurred while checking Tray support.
+ */
+export async function isTraySupported (): Promise<BooleanError> {
+  const isLinux = process.platform === 'linux'
+  if (isLinux) {
+    if (process.env.XDG_CURRENT_DESKTOP === 'GNOME') {
+      return await new Promise<BooleanError>((resolve, reject) => {
+        const shellProcess = spawn('gsettings', [ 'get', 'org.gnome.shell', 'enabled-extensions' ])
+        let out = ''
+
+        shellProcess.stdout.on('data', (data) => {
+          out = out.concat(data.toString())
+        })
+
+        shellProcess.on('close', (code, signal) => {
+          if (code !== 0) {
+            resolve({ value: false, err: trans('system.error.tray_not_supported') })
+          } else if (out.includes("'appindicatorsupport@rgcjonas.gmail.com'")) {
+            resolve({ value: true })
+          } else {
+            resolve({ value: false, err: trans('system.error.tray_not_supported') })
+          }
+        })
+
+        // Reject on errors.
+        shellProcess.on('error', (err) => {
+          reject(err)
+        })
+      })
+    }
+  }
+  return ({ value: true })
 }

@@ -153,6 +153,10 @@ module.exports = {
         // If someone is building this on an unsupported platform, drop a warning.
         console.log(`\nBuilding for an unsupported platform/arch-combination ${targetPlatform}/${targetArch} - not bundling Pandoc.`)
       }
+      // setup tray icon
+      if (isWin32) {
+        await fs.copyFile(path.join(__dirname, './resources/icons/icon.ico'), path.join(__dirname, './source/main/modules/window-manager/assets/icons/icon.ico'))
+      }
     },
     postPackage: async (forgeConfig, options) => {
       const isLinux = process.platform === 'linux'
