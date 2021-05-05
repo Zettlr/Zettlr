@@ -27,9 +27,9 @@ export default class ZettlrPopover {
   private _y: number
   private readonly _boundClickHandler: (event: MouseEvent) => void
   private readonly _boundResizeHandler: (event: UIEvent) => void
-  private readonly _popup: HTMLElement
+  private _popup: HTMLElement|null
   private readonly _popover: Vue
-  private readonly _arrow: HTMLElement
+  private _arrow: HTMLElement|null
   private readonly _watcher: Function
 
   /**
@@ -74,9 +74,7 @@ export default class ZettlrPopover {
     // Create the Vue instance and mount it into the popover container
     this._popover = new Vue(component)
     // Preset the data with initial values
-    for (const key in initialData) {
-      Vue.set(this._popover.$data, key, initialData[key])
-    }
+    this.updateData(initialData)
     // We need to mount it onto a div inside our container because the Vue component will replace the mount point
     this._popover.$mount(popoverMountPoint)
 
@@ -98,6 +96,10 @@ export default class ZettlrPopover {
    * @param  {MouseEvent}  event  The event fired
    */
   _onClickHandler (event: MouseEvent): void {
+    if (this._popup === null) {
+      return
+    }
+
     // Clicks on the popup itself are cool
     if (event.target === this._popup || event.target === null) {
       return
@@ -137,6 +139,10 @@ export default class ZettlrPopover {
     * Places the popup relative to the target element.
     */
   _place (): void {
+    if (this._popup === null || this._arrow === null) {
+      return
+    }
+
     // First, reset any applied styles to the elements
     this._popup.style.height = ''
     this._popup.style.width = ''
@@ -247,6 +253,31 @@ export default class ZettlrPopover {
   }
 
   /**
+   * Updates the data on the Vue instance
+   *
+   * @param   {any}   data  The data to be set
+   */
+  updateData (data: any): void {
+    for (const key in data) {
+      Vue.set(this._popover.$data, key, data[key])
+    }
+
+    // Also, the data update might have changed the data dimensions, so let's
+    // make sure the dimensions are re-calculated.
+    setTimeout(() => { this._place() }, 100)
+  }
+
+  /**
+   * Returns true if this popover isn't mounted anymore and should be left over
+   * to the garbage collector.
+   *
+   * @return  {boolean} True if the popup has been closed.
+   */
+  isClosed (): boolean {
+    return this._arrow === null || this._popup === null
+  }
+
+  /**
     * Closes the popover.
     */
   close (): void {
@@ -258,6 +289,8 @@ export default class ZettlrPopover {
     this._watcher() // Calling this function unwatches the Vue instance
     this._arrow.parentElement?.removeChild(this._arrow)
     this._popup.parentElement?.removeChild(this._popup)
+    this._arrow = null
+    this._popup = null
 
     document.removeEventListener('mousedown', this._boundClickHandler)
     document.removeEventListener('contextmenu', this._boundClickHandler)
