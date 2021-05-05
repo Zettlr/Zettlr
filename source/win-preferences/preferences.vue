@@ -236,6 +236,14 @@ export default {
         this.populateDynamicValues()
       }
     })
+
+    if (process.env.ZETTLR_IS_TRAY_SUPPORTED === '0') {
+      const leaveAppRunningField = modelToField('system.leaveAppRunning', SCHEMA['tab-advanced'])
+      if (leaveAppRunningField !== undefined) {
+        global.config.set('system.leaveAppRunning', false)
+        leaveAppRunningField.disabled = true
+      }
+    }
   },
   methods: {
     /**
