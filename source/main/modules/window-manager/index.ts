@@ -23,7 +23,9 @@ import {
   ipcMain,
   FileFilter,
   MessageBoxOptions,
-  MessageBoxReturnValue
+  MessageBoxReturnValue,
+  Menu,
+  Tray
 } from 'electron'
 import { promises as fs } from 'fs'
 import path from 'path'
@@ -75,6 +77,8 @@ export default class WindowManager {
   private _fileLock: boolean
   private _persistTimeout: ReturnType<typeof setTimeout>|undefined
   private _beforeMainWindowCloseCallback: Function|null
+  // Add tray to MacOS
+  private _tray: Tray | null
 
   constructor () {
     this._mainWindow = null
@@ -94,6 +98,7 @@ export default class WindowManager {
     this._configFile = path.join(app.getPath('userData'), 'window_state.json')
     this._fileLock = false
     this._beforeMainWindowCloseCallback = null
+    this._tray = null
 
     // Listen to window control commands
     ipcMain.on('window-controls', (event, message) => {
@@ -110,7 +115,7 @@ export default class WindowManager {
           } else {
             callingWindow.maximize()
           }
-          // fall through
+        // fall through
         case 'get-maximised-status':
           event.reply('window-controls', {
             command: 'get-maximised-status',
@@ -218,6 +223,53 @@ export default class WindowManager {
     if (this._mainWindow === null) {
       return
     }
+
+    const platformIcons: {[prop: string] : string} = {
+      'darwin': '/png/16x16.png',
+      'win32': '/icon.ico'
+    }
+
+    this._mainWindow.on('show', async () => {
+      if (this._tray == null) {
+        if (process.platform === 'linux') {
+          let size = '16'
+          const sizeList = ['16', '24', '32', '48', '64', '96', '128', '256', '512']
+          const display = screen.getPrimaryDisplay()
+          if (process.env.XDG_CURRENT_DESKTOP === 'GNOME') {
+            size = display.workArea.y + ''
+          } else if (process.env.XDG_CURRENT_DESKTOP === 'KDE'){
+            size = display.size.height - display.workArea.height + ''
+          }
+          if (sizeList.includes(size)) {
+            this._tray = new Tray(path.join(__dirname, `assets/icons/png/${size}x${size}.png`))
+          } else {
+            this._tray = new Tray(path.join(__dirname, `assets/icons/png/16x16.png`))
+          }
+        } else {
+          this._tray = new Tray(path.join(__dirname, 'assets/icons', platformIcons[process.platform] || '/png/16x16.png'))
+        }
+        
+        const contextMenu = Menu.buildFromTemplate([
+          {
+            label: 'Show Zettlr',
+            click: () => {
+              this.showAnyWindow()
+            },
+            type: 'normal'
+          },
+          { label: '', type: 'separator' },
+          {
+            label: 'Quit',
+            click: () => {
+              app.quit()
+            },
+            type: 'normal'
+          }
+        ])
+        this._tray.setToolTip('This is Zettlr tray. \n click show Zettlr button to display app \n click quit to quit app')
+        this._tray.setContextMenu(contextMenu)
+      }
+    })
 
     // Listens to events from the window
     this._mainWindow.on('close', (event) => {
