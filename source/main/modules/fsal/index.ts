@@ -184,12 +184,12 @@ export default class FSAL extends EventEmitter {
 
     if ([ 'unlink', 'unlinkDir' ].includes(event)) {
       // A file or a directory has been removed.
-      const descriptor = this.find(hash(changedPath))
+      const descriptor = this.find(changedPath)
       let rootDirectoryIndex = -1 // Only necessary if the open dir has been removed
       if (descriptor === null) {
         // It must have been an attachment
         const parentPath = path.dirname(changedPath)
-        const containingDirectory = this.find(hash(parentPath)) as DirDescriptor
+        const containingDirectory = this.find(parentPath) as DirDescriptor
         FSALDir.removeAttachment(containingDirectory, changedPath)
       } else {
         // It is a normal file or directory
@@ -233,7 +233,7 @@ export default class FSAL extends EventEmitter {
       this._recordFiletreeChange('remove', changedPath)
     } else if ([ 'add', 'addDir' ].includes(event)) {
       // A file or a directory has been added. It can not be a root.
-      const parentDescriptor = this.find(hash(path.dirname(changedPath))) as DirDescriptor
+      const parentDescriptor = this.find(path.dirname(changedPath)) as DirDescriptor
       if (isAttachment(changedPath)) {
         await FSALDir.addAttachment(parentDescriptor, changedPath)
       } else {
@@ -243,7 +243,7 @@ export default class FSAL extends EventEmitter {
       this._recordFiletreeChange('add', changedPath)
     } else if (['change'].includes(event)) {
       // A file has been modified. Can be an attachment, a MD file, or a code file
-      const affectedDescriptor = this.find(hash(changedPath)) as AnyDescriptor
+      const affectedDescriptor = this.find(changedPath) as AnyDescriptor
       if (affectedDescriptor.type === 'code') {
         await FSALCodeFile.reparseChangedFile(affectedDescriptor, this._cache)
       } else if (affectedDescriptor.type === 'file') {
@@ -1309,7 +1309,7 @@ export default class FSAL extends EventEmitter {
     // NOTE: Generates 1x unlink, 1x add for each child, src and on the target!
     let openFilesUpdateNeeded = false
     let activeFileUpdateNeeded = false
-    let newOpenDirHash
+    let newOpenDir
     let newFilePaths: string[] = []
     const hasOpenDir = this.openDirectory !== null
     const srcIsDir = src.type === 'directory'
@@ -1355,7 +1355,7 @@ export default class FSAL extends EventEmitter {
     // Next, check if the open directory is affected
     if (srcIsOpenDir || srcContainsOpenDir) {
       // Compute the new hash and indicate an update is necessary
-      newOpenDirHash = hash((this.openDirectory as DirDescriptor).path.replace(src.dir, target.path))
+      newOpenDir = (this.openDirectory as DirDescriptor).path.replace(src.dir, target.path)
     }
 
     // Now we need to generate the ignore events that are to be expected.
@@ -1404,8 +1404,8 @@ export default class FSAL extends EventEmitter {
         .map(filePath => this.findFile(filePath))
         .filter(file => file !== null) as Array<MDFileDescriptor|CodeFileDescriptor>
     }
-    if (newOpenDirHash !== undefined) {
-      this.openDirectory = this.findDir(newOpenDirHash)
+    if (newOpenDir !== undefined) {
+      this.openDirectory = this.findDir(newOpenDir)
     }
     if (activeFileUpdateNeeded) {
       this.emit('fsal-state-changed', 'activeFile')
