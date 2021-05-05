@@ -252,6 +252,14 @@ export default class WindowManager {
         }
       }
 
+      if (process.platform === 'win32' || process.platform === 'linux') {
+        if (global.config.get('system.leaveAppRunning')) {
+          event.preventDefault()
+          this._mainWindow?.hide()
+          return
+        }
+      }
+
       if (this._beforeMainWindowCloseCallback !== null) {
         const shouldClose: boolean = this._beforeMainWindowCloseCallback()
         if (!shouldClose) {

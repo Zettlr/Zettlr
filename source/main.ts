@@ -13,8 +13,9 @@
  * END HEADER
  */
 
-import { app } from 'electron'
+import { app, Tray, Menu } from 'electron'
 import { bootApplication, shutdownApplication } from './app/lifecycle'
+import path from 'path'
 
 // Include the global Zettlr class
 import Zettlr from './main/zettlr'
@@ -69,6 +70,12 @@ global.log = {
 let zettlr: Zettlr|null = null
 
 /**
+ * Tray
+ * @type {Tray|null}
+ */
+let tray: Tray|null = null
+
+/**
  * This variable is being used to determine if all servive providers have
  * successfully shut down and we can actually quit the app.
  *
@@ -109,6 +116,17 @@ app.whenReady().then(() => {
     console.error(err)
     app.exit(1)
   })
+
+  tray = new Tray(path.join(__dirname, 'assets/icons/icon.ico'))
+  tray.on('click', () => zettlr?.getMainWindow()?.show())
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Show Zettlr',
+      click: () => zettlr?.getMainWindow()?.show()
+    }
+  ])
+  tray.setContextMenu(contextMenu)
+
 }).catch(e => console.error(e))
 
 /**
@@ -172,6 +190,7 @@ app.on('window-all-closed', function () {
  * properly.
  */
 app.on('will-quit', function (event) {
+  console.log(111)
   if (!canQuit) {
     // Prevent immediate shutdown and allow the process to shut down first
     event.preventDefault()

@@ -102,7 +102,7 @@ export function trans (string, ...args) {
     } else {
       // Something went wrong and the requested translation string was
       // not found -> fall back and just return the original string
-      return (Boolean(global.config.get('debug')) || skipFallback) ? string : trans(string, ...[true].concat(args))
+      return (Boolean(global.config && global.config.get('debug')) || skipFallback) ? string : trans(string, ...[true].concat(args))
     }
   }
 
