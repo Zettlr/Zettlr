@@ -141,29 +141,26 @@ export default async function environmentCheck (): Promise<void> {
   global.log.info('Environment check complete.')
 }
 
-export interface BooleanError {
-  value: boolean
-  err?: string
-}
-
 /**
  * Check if system supports a Tray.
  *
- * Returns {value: true} on Windows and MacOS.
- * Returns {value: true} on Linux with Gnome desktop if Gnome Extension
- * 'KStatusNotifierItem/AppIndicator Support' is installed, otherwise false.
- * Returns {value: true} on Linux with other desktops. e.g. KDE, XFCE, etc.
+ * Returns true on Windows and MacOS.
+ * Returns true on Linux with Gnome desktop if Gnome Extension
+ * 'KStatusNotifierItem/AppIndicator Support' is installed, otherwise throws
+ * an {Error} with the reason why.
+ * Returns true on Linux with other desktops. e.g. KDE, XFCE, etc.
  *
- * @return {*}  {Promise<BooleanError>} If supported, returns {value: true}.
- *              If not supported, returns {value: false, err: error_string}.
- *              error_string details why the Tray is not supported. Throws an
- *              exception if an error occurred while checking Tray support.
+ * @return {*}  {Promise<boolean>} If supported, returns true. Never returns
+ *              false.
+ * @throws {Error} Details why the Tray is not supported; or
+ *                 Details the error if an error occurred while checking Tray
+ *                 support.
  */
-export async function isTraySupported (): Promise<BooleanError> {
+export async function isTraySupported (): Promise<boolean> {
   const isLinux = process.platform === 'linux'
   if (isLinux) {
     if (process.env.XDG_CURRENT_DESKTOP === 'GNOME') {
-      return await new Promise<BooleanError>((resolve, reject) => {
+      return await new Promise<boolean>((resolve, reject) => {
         const shellProcess = spawn('gsettings', [ 'get', 'org.gnome.shell', 'enabled-extensions' ])
         let out = ''
 
@@ -173,21 +170,17 @@ export async function isTraySupported (): Promise<BooleanError> {
 
         shellProcess.on('close', (code, signal) => {
           if (code !== 0) {
-            resolve({
-              value: false,
-              err: 'Tray is not supported. Gnome ' +
-                'Extension \'KStatusNotifierItem/AppIndicator Support\' is ' +
-                'required for Tray support on the Gnome Desktop.'
-            }) // trans('system.error.tray_not_supported')
+            reject(new Error('Tray is not supported. Gnome ' +
+              'Extension \'KStatusNotifierItem/AppIndicator Support\' is ' +
+              'required for Tray support on the Gnome Desktop.'
+            )) // trans('system.error.tray_not_supported')
           } else if (out.includes("'appindicatorsupport@rgcjonas.gmail.com'")) {
-            resolve({ value: true })
+            resolve(true)
           } else {
-            resolve({
-              value: false,
-              err: 'Tray is not supported. Gnome ' +
-                'Extension \'KStatusNotifierItem/AppIndicator Support\' is ' +
-                'required for Tray support on the Gnome Desktop.'
-            }) // trans('system.error.tray_not_supported')
+            reject(new Error('Tray is not supported. Gnome ' +
+              'Extension \'KStatusNotifierItem/AppIndicator Support\' is ' +
+              'required for Tray support on the Gnome Desktop.'
+            )) // trans('system.error.tray_not_supported')
           }
         })
 
@@ -198,5 +191,5 @@ export async function isTraySupported (): Promise<BooleanError> {
       })
     }
   }
-  return ({ value: true })
+  return (true)
 }
