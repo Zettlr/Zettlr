@@ -225,7 +225,7 @@ export default class WindowManager {
     }
 
     const platformIcons: {[prop: string] : string} = {
-      'darwin': '/png/16x16.png',
+      'darwin': '/png/22x22_white.png',
       'win32': '/icon.ico'
     }
 
@@ -266,7 +266,7 @@ export default class WindowManager {
             type: 'normal'
           }
         ])
-        this._tray.setToolTip('This is Zettlr tray. \n click show Zettlr button to display app \n click quit to quit app')
+        this._tray.setToolTip('This is the Zettlr tray. \n Select Show Zettlr to show the Zettlr app. \n Select Quit to quit the Zettlr app.')
         this._tray.setContextMenu(contextMenu)
       }
     })
