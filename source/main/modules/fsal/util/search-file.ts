@@ -35,7 +35,7 @@ interface SearchOrOperator {
 }
 
 interface SearchResult {
-  term: string
+  // term: string
   restext: string
   weight: number
   from: any
@@ -73,7 +73,7 @@ export default function searchFile (
   // *as if* this file had a filename match.
   if (notOperators.length === terms.length) {
     return [{
-      term: '',
+      // term: '',
       from: {
         line: -1,
         ch: 0
@@ -118,7 +118,7 @@ export default function searchFile (
   // Return immediately with an object of line -1 (indicating filename or tag matches) and a huge weight
   if (matches === termsToSearch.length) {
     return [{
-      term: termsToSearch.map(term => term.word).join(' '),
+      // term: termsToSearch.map(term => term.word).join(' '),
       from: {
         line: -1,
         ch: 0
@@ -147,7 +147,7 @@ export default function searchFile (
         // Try both normal and lowercase
         if (lines[index].includes(t.word)) {
           fileMatches.push({
-            term: t.word,
+            // term: t.word,
             restext: lines[index],
             from: {
               line: index,
@@ -162,7 +162,7 @@ export default function searchFile (
           hasTermMatched = true
         } else if (linesLower[index].includes(t.word.toLowerCase())) {
           fileMatches.push({
-            term: t.word,
+            // term: t.word,
             restext: lines[index],
             from: {
               line: index,
@@ -186,7 +186,7 @@ export default function searchFile (
           // Try both normal and lowercase
           if (lines[index].includes(wd)) {
             fileMatches.push({
-              term: wd,
+              // term: wd,
               restext: lines[index],
               from: {
                 line: index,
@@ -202,14 +202,15 @@ export default function searchFile (
             br = true
           } else if (linesLower[index].includes(wd.toLowerCase())) {
             fileMatches.push({
-              term: wd,
+              // term: wd,
               restext: lines[index],
               from: {
                 line: index,
                 ch: linesLower[index].indexOf(wd.toLowerCase())
               },
               to: {
-                line: index, ch: linesLower[index].indexOf(wd.toLowerCase()) + wd.length
+                line: index,
+                ch: linesLower[index].indexOf(wd.toLowerCase()) + wd.length
               },
               weight: 1 // Weight indicates that this was an exact match
             })
