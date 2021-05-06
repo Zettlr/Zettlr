@@ -79,9 +79,9 @@
             v-for="singleRes, idx2 in result.result"
             v-bind:key="idx2"
             class="result-line"
-            v-on:mousedown.stop.prevent="jumpToLine($event, result.file.path, singleRes.from.line)"
+            v-on:mousedown.stop.prevent="jumpToLine($event, result.file.path, singleRes.line)"
           >
-            <strong>{{ singleRes.from.line }}</strong>:
+            <strong>{{ singleRes.line }}</strong>:
             <span v-html="markText(singleRes)"></span>
           </div>
         </div>
@@ -331,15 +331,33 @@ export default {
     markText: function (resultObject) {
       // We receive a result object and should return an HTML string containing
       // highlighting (we're using <strong>) where the result works. We have
-      // access to term, restext, weight, from, and to. NOTE that from and to
-      // also contain the line, but we only need the characters
-      const from = resultObject.from.ch
-      const to = resultObject.to.ch
+      // access to restext, weight, line, and an array of from-to-ranges
+      // indicating all matches on the given line. NOTE that all results are
+      // being sorted correctly by the main process, so we can just assume the
+      // results to be non-overlapping and from beginning to the end of the
+      // line.
       let marked = resultObject.restext
 
+      // "Why are you deep-cloning this array?" you may ask. Well, well. The
+      // reason is that Vue will observe the original array. And, whenever an
+      // observed thing -- be it an array or object -- is mutated, this will
+      // cause Vue to update the whole component state. Array.prototype.reverse
+      // actually mutates the array. So in order to prevent Vue from endlessly
+      // updating the component, we'll pull out the values into an unobserved
+      // cloned array that we can reverse without Vue getting stuck in an
+      // infinite loop.
+      const unobserved = resultObject.ranges.map(range => {
+        return {
+          from: range.from,
+          to: range.to
+        }
+      })
+
       // Because it shifts positions, we need to insert the closing tag first
-      marked = marked.substr(0, to) + '</strong>' + marked.substr(to)
-      marked = marked.substr(0, from) + '<strong>' + marked.substr(from)
+      for (const range of unobserved.reverse()) {
+        marked = marked.substr(0, range.to) + '</strong>' + marked.substr(range.to)
+        marked = marked.substr(0, range.from) + '<strong>' + marked.substr(range.from)
+      }
 
       return marked
     }
