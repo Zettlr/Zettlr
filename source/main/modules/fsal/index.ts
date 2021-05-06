@@ -41,6 +41,7 @@ import {
   CodeFileMeta,
   OtherFileDescriptor
 } from './types'
+import { TouchBarSlider } from 'electron'
 
 const ALLOWED_CODE_FILES = [
   '.tex'
@@ -291,23 +292,43 @@ export default class FSAL extends EventEmitter {
    * filetree anymore. This fixes that.
    */
   private _consolidateOpenFiles (): void {
+    // First, save the index of the active file for later
+    const activeIdx = this.openFiles.findIndex(file => file.path === this.activeFile)
     // Filter out non-existent files ...
-    let oldHashes = this.openFiles.map(file => file.path)
-    this.openFiles = oldHashes
+    let oldFiles = this.openFiles.map(file => file.path)
+    this.openFiles = oldFiles
       .map(filePath => {
         return this.findFile(filePath)
       })
       .filter(file => file !== null) as Array<MDFileDescriptor|CodeFileDescriptor>
 
     // ... and see if some are missing afterwards.
-    if (this.openFiles.length !== oldHashes.length) {
+    if (this.openFiles.length !== oldFiles.length) {
       this.emit('fsal-state-changed', 'openFiles')
     }
 
     // Finally, check if the activeFile is now not present anymore, and remove
     // it if necessary.
     if (this.activeFile !== null && this.openFiles.find(file => file.path === this.activeFile) === undefined) {
-      this.activeFile = null
+      // Instead of setting it to null, we should attempt to find another file
+      // which we can make active. Zettlr is designed so that the editor always
+      // contains something. I realised that sometimes after closing or removing
+      // files, the editor still showed the old file, but no tab was active. And
+      // that's not desirable. So we're basically copying over the code from
+      // the mounted-function of Tabs.vue.
+      if (this.openFile.length > 0) {
+        if (activeIdx >= this.openFiles.length) {
+          this.activeFile = this.openFiles[this.openFiles.length - 1].path
+        } else if (activeIdx > -1) {
+          this.activeFile = this.openFiles[activeIdx].path
+        } else {
+          global.log.warning('[FSAL] Unexpected value: The active file was set but has not been found before consolidating the open files.')
+          this.activeFile = this.openFiles[0].path
+        }
+      } else {
+        // No open files, so reset
+        this.activeFile = null
+      }
       this.emit('fsal-state-changed', 'activeFile')
     }
   }
