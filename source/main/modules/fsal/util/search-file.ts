@@ -88,10 +88,10 @@ export default function searchFile (
   }
 
   // Now, pluck the not operators from the terms
-  let termsToSearch = terms.filter(elem => elem.operator !== 'NOT')
+  const termsToSearch = terms.filter(elem => elem.operator !== 'NOT')
 
   // First try to match the title and tags
-  for (let t of termsToSearch) {
+  for (const t of termsToSearch) {
     if (t.operator === 'AND') {
       if (fileObject.name.toLowerCase().includes(t.word.toLowerCase()) || fileObject.tags.includes(t.word.toLowerCase())) {
         matches++
@@ -140,7 +140,7 @@ export default function searchFile (
   let linesLower = cntLower.split('\n')
   let termsMatched = 0
 
-  for (let t of termsToSearch) {
+  for (const t of termsToSearch) {
     let hasTermMatched = false
     if (t.operator === 'AND') {
       for (let index = 0; index < lines.length; index++) {
@@ -180,7 +180,7 @@ export default function searchFile (
       // End AND operator
     } else if (t.operator === 'OR') {
       // OR operator.
-      for (let wd of t.word) {
+      for (const wd of t.word) {
         let br = false
         for (let index = 0; index < lines.length; index++) {
           // Try both normal and lowercase
@@ -217,11 +217,32 @@ export default function searchFile (
             br = true
           }
         }
-        if (br) break
+
+        if (br) {
+          break
+        }
       }
     } // End OR operator
-    if (hasTermMatched) termsMatched++
+
+    if (hasTermMatched) {
+      termsMatched++
+    }
   }
+
+  // Post-process the search result. Right now, a lot of stuff is unsorted since
+  // the whole document is first searched for the first AND-term, then the
+  // second, etc. We're doing this here in the node main process, and not in the
+  // renderer to save a few milliseconds of time (because no rendering actions
+  // are being performed here in between).
+
+  // First, sort all search results with regard to the lines in which they occur
+  fileMatches.sort((resultA, resultB) => {
+    // Should return a negative number if A < B
+    return resultA.from.line - resultB.from.line
+  })
+
+  // TODO: Second, we can also combine results from the same line! But that
+  // requires a change to the search result structure
 
   if (termsMatched === termsToSearch.length) {
     return fileMatches
