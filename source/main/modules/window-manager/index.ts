@@ -129,8 +129,8 @@ export default class WindowManager {
           break
         case 'win-close':
           if (process.platform !== 'darwin') {
-            const showInNotification = Boolean(global.config.get('system.showInNotification'))
-            if (showInNotification) {
+            const leaveAppRunning = Boolean(global.config.get('system.leaveAppRunning'))
+            if (leaveAppRunning) {
               callingWindow.hide()
             } else {
               callingWindow.close()
@@ -235,59 +235,60 @@ export default class WindowManager {
       return
     }
 
-    this._mainWindow.on('show', async () => {
-      if (process.platform === 'darwin') {
-        if (this._tray == null) {
-          let basepath = app.getAppPath()
-          let image = await nativeImage.createThumbnailFromPath(basepath + '/source/main/assets/icons/black_white_128.png', { width: 16, height: 16 })
-          this._tray = new Tray(image)
+    this._mainWindow.on('show', () => {
+      const leaveAppRunning = Boolean(global.config.get('system.leaveAppRunning'))
+      if (leaveAppRunning) {
+        if (process.platform === 'darwin') {
+          if (this._tray == null) {
+            let basepath = app.getAppPath()
+            this._tray = new Tray(path.join(__dirname, './assets/icons/128x128.png'))
 
-          // this._tray = new Tray(path.join(__dirname, 'assets/icons/128x128.png'))
-          const contextMenu = Menu.buildFromTemplate([
-            {
-              label: 'Show Zettlr',
-              click: () => {
-                this.showAnyWindow()
+            const contextMenu = Menu.buildFromTemplate([
+              {
+                label: 'Show Zettlr',
+                click: () => {
+                  this.showAnyWindow()
+                },
+                type: 'normal'
               },
-              type: 'normal'
-            },
-            { label: '', type: 'separator' },
-            {
-              label: 'Quit',
-              click: () => {
-                app.quit()
+              { label: '', type: 'separator' },
+              {
+                label: 'Quit',
+                click: () => {
+                  app.quit()
+                },
+                type: 'normal'
+              }
+            ])
+            this._tray.setToolTip('This is the Zettlr tray. \n Select Show Zettlr to show the Zettlr app. \n Select Quit to quit the Zettlr app.')
+            this._tray.setContextMenu(contextMenu)
+          }
+        } else {
+          if (this._tray == null) {
+            this._tray = new Tray(path.join(__dirname, 'assets/icons/128x128.png'))
+            const contextMenu = Menu.buildFromTemplate([
+              {
+                label: 'Show Zettlr',
+                click: () => {
+                  // Add show Zettlr window event to Windows
+                  this.showMainWindow()
+                },
+                type: 'normal'
               },
-              type: 'normal'
-            }
-          ])
-          this._tray.setToolTip('This is Zettlr tray. \n click show Zettlr button to display app \n click quit to quit app')
-          this._tray.setContextMenu(contextMenu)
-        }
-      } else {
-        if (this._tray == null) {
-          this._tray = new Tray(path.join(__dirname, 'assets/icons/128x128.png'))
-          const contextMenu = Menu.buildFromTemplate([
-            {
-              label: 'Show Zettlr',
-              click: () => {
-                // Add show Zettlr window event to Windows
-                this.showMainWindow()
-              },
-              type: 'normal'
-            },
-            { label: '', type: 'separator' },
-            {
-              label: 'Quit',
-              click: () => {
-                // Add quit event to tray
-                // On Windows, left or right click the tray icon ➔ Quit will quit Zettlr. Same function as File ➔ Quit.
-                app.quit()
-              },
-              type: 'normal'
-            }
-          ])
-          this._tray.setToolTip('This is zettlr tray. \n click show Zettlr button to display app \n click quit to quit app')
-          this._tray.setContextMenu(contextMenu)
+              { label: '', type: 'separator' },
+              {
+                label: 'Quit',
+                click: () => {
+                  // Add quit event to tray
+                  // On Windows, left or right click the tray icon ➔ Quit will quit Zettlr. Same function as File ➔ Quit.
+                  app.quit()
+                },
+                type: 'normal'
+              }
+            ])
+            this._tray.setToolTip('This is the Zettlr tray. \n Select Show Zettlr to show the Zettlr app. \n Select Quit to quit the Zettlr app.')
+            this._tray.setContextMenu(contextMenu)
+          }
         }
       }
     })
@@ -397,7 +398,7 @@ export default class WindowManager {
    *
    * @return  {WindowPosition}                               A sanitised WindowPosition
    */
-  private _retrieveWindowPosition (type: string, defaultSize: Rect | null, predicate?: Record<string, any>): WindowPosition {
+  private _retrieveWindowPosition (type: string, defaultSize: Rect|null, predicate?: Record<string, any>): WindowPosition {
     let windowConfiguration = this._windowState.find(state => {
       if (state.windowType !== type) {
         return false
@@ -830,7 +831,7 @@ export default class WindowManager {
    *
    * @return  {BrowserWindow|null}  The main window
    */
-  getMainWindow (): BrowserWindow | null {
+  getMainWindow (): BrowserWindow|null {
     return this._mainWindow
   }
 
@@ -879,7 +880,7 @@ export default class WindowManager {
     * Show the dialog for choosing a directory
     * @return {string[]} An array containing all selected paths.
     */
-  async askDir (win?: BrowserWindow | null): Promise<string[]> {
+  async askDir (win?: BrowserWindow|null): Promise<string[]> {
     if (win != null) {
       return await askDirectoryDialog(win)
     } else {
@@ -896,7 +897,7 @@ export default class WindowManager {
    *
    * @return {string[]}                             An array containing all selected files.
    */
-  async askFile (filters: FileFilter[] | null = null, multiSel: boolean = false, win?: BrowserWindow | null): Promise<string[]> {
+  async askFile (filters: FileFilter[]|null = null, multiSel: boolean = false, win?: BrowserWindow|null): Promise<string[]> {
     if (win != null) {
       return await askFileDialog(win, filters, multiSel)
     } else {
@@ -917,7 +918,7 @@ export default class WindowManager {
     * @param  {MDFileDescriptor|DirDescriptor} descriptor The corresponding descriptor
     * @return {boolean}                                   True if user wishes to remove it.
     */
-  async confirmRemove (descriptor: MDFileDescriptor | CodeFileDescriptor | DirDescriptor): Promise<boolean> {
+  async confirmRemove (descriptor: MDFileDescriptor|CodeFileDescriptor|DirDescriptor): Promise<boolean> {
     const options: MessageBoxOptions = {
       type: 'warning',
       buttons: [ 'Ok', trans('system.error.cancel_remove') ],

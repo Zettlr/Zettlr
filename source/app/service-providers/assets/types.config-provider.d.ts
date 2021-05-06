@@ -143,8 +143,8 @@ interface ConfigOptions {
   }
   system: {
     deleteOnFail: boolean
-    avoidNewTabs: boolean
     leaveAppRunning: boolean
+    avoidNewTabs: boolean
   }
   checkForBeta: boolean
   uuid: string
