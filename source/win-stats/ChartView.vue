@@ -60,7 +60,7 @@
 
 <script>
 import { DateTime } from 'luxon'
-import Chart from 'chart.js'
+import Chart from 'chart.js/auto' // Necessary for Chart.js 3.x TODO: Only import what we need!
 import SelectControl from '../common/vue/form/elements/Select.vue'
 import ButtonControl from '../common/vue/form/elements/Button.vue'
 
@@ -313,7 +313,7 @@ export default {
           },
           // Scales configuration
           scales: {
-            yAxes: [{
+            y: {
               scaleLabel: {
                 display: true,
                 labelString: 'Words'
@@ -327,8 +327,8 @@ export default {
                 display: true,
                 beginAtZero: false
               }
-            }],
-            xAxes: [{
+            },
+            x: {
               scaleLabel: {
                 display: true,
                 labelString: 'Time'
@@ -341,19 +341,21 @@ export default {
               ticks: {
                 display: true
               }
-            }]
+            }
           },
           // Generic options we need every time
           responsive: true,
           maintainAspectRatio: true,
-          // Tooltips should be fastly visible, b/c they won't be exported either way
-          tooltips: {
-            mode: 'index',
-            intersect: false
-          },
-          hover: {
-            mode: 'index',
-            intersect: false
+          // Tooltips should be fastly visible
+          plugins: {
+            tooltip: {
+              mode: 'index',
+              intersect: false
+            },
+            hover: {
+              mode: 'index',
+              intersect: false
+            }
           }
         }
       }) // END chart instantiation
