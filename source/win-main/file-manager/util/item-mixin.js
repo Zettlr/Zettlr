@@ -247,6 +247,13 @@ export default {
                 }).catch(e => console.error(e))
               }
             })
+          } else if (clickedID === 'menu.close_file') {
+            // The close_file item is only shown in the tree view on root files
+            ipcRenderer.invoke('application', {
+              command: 'root-close',
+              payload: this.obj.path
+            })
+              .catch(err => console.error(err))
           }
         })
       }
