@@ -34,6 +34,7 @@ export default function createLogWindow (): BrowserWindow {
     minHeight: 200,
     show: false,
     webPreferences: {
+      contextIsolation: false,
       nodeIntegration: true
     },
     backgroundColor: '#fff'

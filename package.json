@@ -80,7 +80,8 @@
     "fsevents": "^2.3.1"
   },
   "resolutions": {
-    "**/electron-packager": "15.2.0"
+    "**/electron-packager": "15.2.0",
+    "**/node-abi": "^2.21.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.54",
@@ -88,14 +89,14 @@
     "@electron-forge/plugin-webpack": "^6.0.0-beta.54",
     "@teamsupercell/typings-for-css-modules-loader": "^2.4.0",
     "@types/electron-devtools-installer": "^2.2.0",
-    "@typescript-eslint/parser": "^4.12.0",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
+    "@typescript-eslint/parser": "^4.12.0",
     "@zeit/webpack-asset-relocator-loader": "^0.8.0",
     "copy-webpack-plugin": "^6.1.0",
     "cross-env": "^7.0.3",
     "css-loader": "^5.0.1",
     "csso": "^4.2.0",
-    "electron": "^11.1.1",
+    "electron": "^12.0.6",
     "electron-builder": "^22.9.1",
     "electron-devtools-installer": "^3.1.1",
     "electron-notarize": "^1.0.0",

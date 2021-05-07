@@ -36,6 +36,7 @@ export default function createPrintWindow (file: string): BrowserWindow {
     webPreferences: {
       // Zettlr needs all the node features, so in preparation for Electron
       // 5.0 we'll need to explicitly request it.
+      contextIsolation: false,
       nodeIntegration: true,
       additionalArguments: [file],
       // We are loading an iFrame with a local resource, so we must disable webSecurity for this window
