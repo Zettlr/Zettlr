@@ -60,12 +60,12 @@ async function downloadPandoc (platform, arch) {
  * @returns {string}  The full path of the matching library. If library is not
  *                    found, throws an Error.
  */
-async function getLibraryPath(libraryName) {
+async function getLibraryPath (libraryName) {
   return new Promise((resolve, reject) => {
     const shellProcess = spawn('/sbin/ldconfig', ['-p'])
-    let out = '';
+    let out = ''
     shellProcess.stdout.on('data', (data) => {
-      out += data.toString();
+      out += data.toString()
     })
     shellProcess.on('close', (code, signal) => {
       if (code !== 0) {
@@ -75,12 +75,11 @@ async function getLibraryPath(libraryName) {
         if (index === -1) {
           reject(new Error(`'${code}' not found`))
         }
-        var left = out.slice(0, index + 1).search(/\S+$/)
-        var right = out.slice(index).search(/\s/)
+        let left = out.slice(0, index + 1).search(/\S+$/)
+        let right = out.slice(index).search(/\s/)
         if (right < 0) {
           resolve(out.slice(left))
         }
-        let retval = out.slice(left, right + index)
         resolve(out.slice(left, right + index))
       }
     })
@@ -168,19 +167,23 @@ module.exports = {
           targetArch = process.argv[idxArch + 1]
         }
         if (targetArch !== process.arch) {
-          if (options.spinner) {
-            options.spinner.info(`Unable to bundle 'libappindicator3' (target is different architecture).`)
-            return
+          if (options.spinner !== null && options.spinner !== undefined) {
+            options.spinner.info('Unable to bundle \'libappindicator3\' (target is different architecture).')
+          } else {
+            console.log('Unable to bundle \'libappindicator3\' (target is different architecture).')
           }
+          return
         }
 
         try {
           let lib = await getLibraryPath('libappindicator3')
-          await fs.mkdir(path.join(options.outputPaths[0], 'usr', 'lib'), { recursive: true})
+          await fs.mkdir(path.join(options.outputPaths[0], 'usr', 'lib'), { recursive: true })
           await fs.copyFile(lib, path.join(options.outputPaths[0], 'usr', 'lib', path.basename(lib)))
         } catch (err) {
-          if (options.spinner) {
+          if (options.spinner !== null && options.spinner !== undefined) {
             options.spinner.info(`Unable to bundle 'libappindicator3' (${err}).`)
+          } else {
+            console.log(`Unable to bundle 'libappindicator3' (${err}).`)
           }
         }
       }
