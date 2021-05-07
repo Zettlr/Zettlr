@@ -1,3 +1,18 @@
+# 1.8.8
+
+## HOTFIX FOR ELECTRON CVEs
+
+This is a hotfix that updates a vulnerable Electron version to a safe one. This
+is in response to a row of CVEs that have been detected in the source code of
+Chromium in the past days. With an outdated Electron-version (<12.0.6), it was
+possible for an attacker to take over your computer via Zettlr using a crafted
+HTML webpage.
+
+This release fixes Zettlr 1.8.7, which was vulnerable to this kind of attack. It
+upgrades Electron from a vulnerable 11.x.x-version to the safe version 12.0.6.
+
+> **DO NO LONGER USE ZETTLR 1.8.7! RELEASES PRIOR TO 1.8.8 MUST BE REGARDED AS UNSAFE!**
+
 # 1.8.7
 
 ## GUI and Functionality
