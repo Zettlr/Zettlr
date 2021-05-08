@@ -190,7 +190,6 @@ app.on('window-all-closed', function () {
  * properly.
  */
 app.on('will-quit', function (event) {
-
   if (!canQuit) {
     // Prevent immediate shutdown and allow the process to shut down first
     event.preventDefault()
