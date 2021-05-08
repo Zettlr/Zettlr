@@ -25,8 +25,7 @@ import {
   MessageBoxOptions,
   MessageBoxReturnValue,
   Menu,
-  Tray,
-  nativeImage
+  Tray
 } from 'electron'
 import { promises as fs } from 'fs'
 import path from 'path'
@@ -131,12 +130,12 @@ export default class WindowManager {
           if (process.platform !== 'darwin') {
             const leaveAppRunning = Boolean(global.config.get('system.leaveAppRunning'))
             if (leaveAppRunning) {
-              callingWindow.hide()
+              this._mainWindow?.hide()
             } else {
-              callingWindow.close()
+              this._mainWindow?.close()
             }
           } else {
-            callingWindow.close()
+            this._mainWindow?.close()
           }
           break
         // Convenience APIs for the renderers to execute these commands
@@ -240,8 +239,7 @@ export default class WindowManager {
       if (leaveAppRunning) {
         if (process.platform === 'darwin') {
           if (this._tray == null) {
-            let basepath = app.getAppPath()
-            this._tray = new Tray(path.join(__dirname, './assets/icons/128x128.png'))
+            this._tray = new Tray(path.join(__dirname, './assets/icons/22x22_white.png'))
 
             const contextMenu = Menu.buildFromTemplate([
               {
@@ -255,6 +253,32 @@ export default class WindowManager {
               {
                 label: 'Quit',
                 click: () => {
+                  app.quit()
+                },
+                type: 'normal'
+              }
+            ])
+            this._tray.setToolTip('This is the Zettlr tray. \n Select Show Zettlr to show the Zettlr app. \n Select Quit to quit the Zettlr app.')
+            this._tray.setContextMenu(contextMenu)
+          }
+        } else if (process.platform === 'win32') {
+          if (this._tray == null) {
+            this._tray = new Tray(path.join(__dirname, 'assets/icons/icon.ico'))
+            const contextMenu = Menu.buildFromTemplate([
+              {
+                label: 'Show Zettlr',
+                click: () => {
+                  // Add show Zettlr window event to Windows
+                  this.showMainWindow()
+                },
+                type: 'normal'
+              },
+              { label: '', type: 'separator' },
+              {
+                label: 'Quit',
+                click: () => {
+                  // Add quit event to tray
+                  // On Windows, left or right click the tray icon ➔ Quit will quit Zettlr. Same function as File ➔ Quit.
                   app.quit()
                 },
                 type: 'normal'
