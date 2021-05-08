@@ -2,8 +2,14 @@
   "name": "zettlr",
   "productName": "Zettlr",
   "homepage": "https://www.zettlr.com",
-  "author": "Hendrik Erz <info@zettlr.com>",
-  "repository": "git://github.com/Zettlr/Zettlr.git",
+  "author": {
+    "name": "Hendrik Erz",
+    "email": "info@zettlr.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Zettlr/Zettlr.git"
+  },
   "version": "1.8.7",
   "license": "GPL-3.0",
   "description": "A Markdown Editor for the 21st century.",
