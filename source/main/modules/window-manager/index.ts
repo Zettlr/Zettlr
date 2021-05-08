@@ -285,13 +285,7 @@ export default class WindowManager {
           win.close()
         }
       }
-      if (process.platform === 'win32' || process.platform === 'linux') {
-        if (global.config.get('system.leaveAppRunning')) {
-          event.preventDefault()
-          this._mainWindow?.hide()
-          return
-        }
-      }
+
 
       if (this._beforeMainWindowCloseCallback !== null) {
         const shouldClose: boolean = this._beforeMainWindowCloseCallback()
