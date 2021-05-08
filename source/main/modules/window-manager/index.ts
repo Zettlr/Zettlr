@@ -236,7 +236,7 @@ export default class WindowManager {
           const display = screen.getPrimaryDisplay()
           if (process.env.XDG_CURRENT_DESKTOP === 'GNOME') {
             size = display.workArea.y.toString()
-          } else if (process.env.XDG_CURRENT_DESKTOP === 'KDE'){
+          } else if (process.env.XDG_CURRENT_DESKTOP === 'KDE') {
             size = (display.size.height - display.workArea.height).toString()
           }
           if (sizeList.includes(size)) {
@@ -247,7 +247,7 @@ export default class WindowManager {
         } else {
           this._tray = new Tray(path.join(__dirname, 'assets/icons', platformIcons[process.platform] || '/png/32x32.png'))
         }
-        
+
         const contextMenu = Menu.buildFromTemplate([
           {
             label: 'Show Zettlr',
