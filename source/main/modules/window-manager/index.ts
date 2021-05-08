@@ -77,7 +77,6 @@ export default class WindowManager {
   private _fileLock: boolean
   private _persistTimeout: ReturnType<typeof setTimeout>|undefined
   private _beforeMainWindowCloseCallback: Function|null
-  // Add tray to MacOS
   private _tray: Tray | null
 
   constructor () {
@@ -224,29 +223,29 @@ export default class WindowManager {
       return
     }
 
-    const platformIcons: {[prop: string] : string} = {
+    const platformIcons: {[prop: string]: string} = {
       'darwin': '/png/22x22_white.png',
       'win32': '/icon.ico'
     }
 
-    this._mainWindow.on('show', async () => {
+    this._mainWindow.on('show', () => {
       if (this._tray == null) {
         if (process.platform === 'linux') {
-          let size = '16'
-          const sizeList = ['16', '24', '32', '48', '64', '96', '128', '256', '512']
+          let size = '32'
+          const sizeList = [ '16', '24', '32', '48', '64', '96', '128', '256', '512' ]
           const display = screen.getPrimaryDisplay()
           if (process.env.XDG_CURRENT_DESKTOP === 'GNOME') {
-            size = display.workArea.y + ''
+            size = display.workArea.y.toString()
           } else if (process.env.XDG_CURRENT_DESKTOP === 'KDE'){
-            size = display.size.height - display.workArea.height + ''
+            size = (display.size.height - display.workArea.height).toString()
           }
           if (sizeList.includes(size)) {
             this._tray = new Tray(path.join(__dirname, `assets/icons/png/${size}x${size}.png`))
           } else {
-            this._tray = new Tray(path.join(__dirname, `assets/icons/png/16x16.png`))
+            this._tray = new Tray(path.join(__dirname, 'assets/icons/png/32x32.png'))
           }
         } else {
-          this._tray = new Tray(path.join(__dirname, 'assets/icons', platformIcons[process.platform] || '/png/16x16.png'))
+          this._tray = new Tray(path.join(__dirname, 'assets/icons', platformIcons[process.platform] || '/png/32x32.png'))
         }
         
         const contextMenu = Menu.buildFromTemplate([
