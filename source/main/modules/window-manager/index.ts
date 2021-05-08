@@ -223,38 +223,35 @@ export default class WindowManager {
       return
     }
 
-    const platformIcons: {[prop: string]: string} = {
-      'darwin': '/png/22x22_white.png',
-      'win32': '/icon.ico'
-    }
+
 
     this._mainWindow.on('show', () => {
-      if (this._tray == null) {
-        if (process.platform === 'win32') {
-          this._tray = new Tray(path.join(__dirname, 'assets/icons/icon.ico'))
+      if (process.platform === 'win32' || process.platform === 'linux') {
         
-
-        const contextMenu = Menu.buildFromTemplate([
-          {
-            label: 'Show Zettlr',
-            click: () => {
-              this.showAnyWindow()
-            },
-            type: 'normal'
-          },
-          { label: '', type: 'separator' },
-          {
-            label: 'Quit',
-            click: () => {
-              app.quit()
-            },
-            type: 'normal'
-          }
-        ])
-        this._tray.setToolTip('This is the Zettlr tray. \n Select Show Zettlr to show the Zettlr app. \n Select Quit to quit the Zettlr app.')
-        this._tray.setContextMenu(contextMenu)
-      }}
-    })
+        if (this._tray == null) {
+          this._tray = new Tray(path.join(__dirname, 'assets/icons/icon.ico'))
+    
+            const contextMenu = Menu.buildFromTemplate([
+              {
+                label: 'Show Zettlr',
+                click: () => {
+                  this.showAnyWindow()
+                },
+                type: 'normal'
+              },
+              { label: '', type: 'separator' },
+              {
+                label: 'Quit',
+                click: () => {
+                  app.quit()
+                },
+                type: 'normal'
+              }
+            ])
+            this._tray.setContextMenu(contextMenu)
+         }
+        }
+      })
 
     // Listens to events from the window
     this._mainWindow.on('close', (event) => {
@@ -286,6 +283,13 @@ export default class WindowManager {
         } else {
           global.log.warning(`[Window Manager] The window "${win.getTitle()}" (ID: ${win.id}) is not managed by the window manager.`)
           win.close()
+        }
+      }
+      if (process.platform === 'win32' || process.platform === 'linux') {
+        if (global.config.get('system.leaveAppRunning')) {
+          event.preventDefault()
+          this._mainWindow?.hide()
+          return
         }
       }
 
