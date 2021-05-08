@@ -69,8 +69,6 @@ global.log = {
  */
 let zettlr: Zettlr|null = null
 
-
-
 /**
  * This variable is being used to determine if all servive providers have
  * successfully shut down and we can actually quit the app.
@@ -112,8 +110,6 @@ app.whenReady().then(() => {
     console.error(err)
     app.exit(1)
   })
-
-
 
 }).catch(e => console.error(e))
 
