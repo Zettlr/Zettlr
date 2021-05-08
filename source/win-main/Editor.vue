@@ -676,7 +676,7 @@ export default {
     .CodeMirror {
       // The CodeMirror editor needs to respect the new tabbar; it cannot take
       // up 100 % all for itself anymore.
-      margin-left: 0em; 
+      margin-left: 0em; // Made it 0em instead of 0.5 (team 9) 
       height: 100%;
       cursor: text;
       font-family: inherit;
@@ -692,8 +692,8 @@ export default {
     }
     
     .CodeMirror-code {
-      //margin: 5em 0em;
-      margin-left: 100px; 
+      //margin: 5em 0em; commented out  (team 9)
+      margin-left: 100px; // Made it left by 100px (team 9)
       @media(max-width: 1024px) { margin: @editor-margin-fullscreen-md 0em; }
       .mute { opacity:0.2; }
     }
