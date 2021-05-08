@@ -225,33 +225,7 @@ export default class WindowManager {
 
 
 
-    this._mainWindow.on('show', () => {
-      if (process.platform === 'win32' || process.platform === 'linux') {
-        
-        if (this._tray == null) {
-          this._tray = new Tray(path.join(__dirname, 'assets/icons/icon.ico'))
-    
-            const contextMenu = Menu.buildFromTemplate([
-              {
-                label: 'Show Zettlr',
-                click: () => {
-                  this.showAnyWindow()
-                },
-                type: 'normal'
-              },
-              { label: '', type: 'separator' },
-              {
-                label: 'Quit',
-                click: () => {
-                  app.quit()
-                },
-                type: 'normal'
-              }
-            ])
-            this._tray.setContextMenu(contextMenu)
-         }
-        }
-      })
+
 
     // Listens to events from the window
     this._mainWindow.on('close', (event) => {
