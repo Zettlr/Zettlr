@@ -13,9 +13,8 @@
  * END HEADER
  */
 
-import { app, Tray, Menu } from 'electron'
+import { app } from 'electron'
 import { bootApplication, shutdownApplication } from './app/lifecycle'
-import path from 'path'
 
 // Include the global Zettlr class
 import Zettlr from './main/zettlr'
