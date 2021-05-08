@@ -15,7 +15,7 @@
  * END HEADER
  */
 
-import {
+ import {
   app,
   screen,
   BrowserWindow,
@@ -23,7 +23,9 @@ import {
   ipcMain,
   FileFilter,
   MessageBoxOptions,
-  MessageBoxReturnValue
+  MessageBoxReturnValue,
+  Menu,
+  Tray
 } from 'electron'
 import { promises as fs } from 'fs'
 import path from 'path'
@@ -75,6 +77,7 @@ export default class WindowManager {
   private _fileLock: boolean
   private _persistTimeout: ReturnType<typeof setTimeout>|undefined
   private _beforeMainWindowCloseCallback: Function|null
+  private _tray: Tray | null
 
   constructor () {
     this._mainWindow = null
@@ -94,6 +97,7 @@ export default class WindowManager {
     this._configFile = path.join(app.getPath('userData'), 'window_state.json')
     this._fileLock = false
     this._beforeMainWindowCloseCallback = null
+    this._tray = null
 
     // Listen to window control commands
     ipcMain.on('window-controls', (event, message) => {
@@ -110,7 +114,7 @@ export default class WindowManager {
           } else {
             callingWindow.maximize()
           }
-          // fall through
+        // fall through
         case 'get-maximised-status':
           event.reply('window-controls', {
             command: 'get-maximised-status',
@@ -219,6 +223,39 @@ export default class WindowManager {
       return
     }
 
+    const platformIcons: {[prop: string]: string} = {
+      'darwin': '/png/22x22_white.png',
+      'win32': '/icon.ico'
+    }
+
+    this._mainWindow.on('show', () => {
+      if (this._tray == null) {
+        if (process.platform === 'win32') {
+          this._tray = new Tray(path.join(__dirname, 'assets/icons/icon.ico'))
+        
+
+        const contextMenu = Menu.buildFromTemplate([
+          {
+            label: 'Show Zettlr',
+            click: () => {
+              this.showAnyWindow()
+            },
+            type: 'normal'
+          },
+          { label: '', type: 'separator' },
+          {
+            label: 'Quit',
+            click: () => {
+              app.quit()
+            },
+            type: 'normal'
+          }
+        ])
+        this._tray.setToolTip('This is the Zettlr tray. \n Select Show Zettlr to show the Zettlr app. \n Select Quit to quit the Zettlr app.')
+        this._tray.setContextMenu(contextMenu)
+      }}
+    })
+
     // Listens to events from the window
     this._mainWindow.on('close', (event) => {
       // The user has requested the window to be closed -> first close
@@ -249,14 +286,6 @@ export default class WindowManager {
         } else {
           global.log.warning(`[Window Manager] The window "${win.getTitle()}" (ID: ${win.id}) is not managed by the window manager.`)
           win.close()
-        }
-      }
-
-      if (process.platform === 'win32' || process.platform === 'linux') {
-        if (global.config.get('system.leaveAppRunning')) {
-          event.preventDefault()
-          this._mainWindow?.hide()
-          return
         }
       }
 

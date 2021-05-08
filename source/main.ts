@@ -69,11 +69,7 @@ global.log = {
  */
 let zettlr: Zettlr|null = null
 
-/**
- * Tray
- * @type {Tray|null}
- */
-let tray: Tray|null = null
+
 
 /**
  * This variable is being used to determine if all servive providers have
@@ -117,15 +113,7 @@ app.whenReady().then(() => {
     app.exit(1)
   })
 
-  tray = new Tray(path.join(__dirname, 'assets/icons/icon.ico'))
-  tray.on('click', () => zettlr?.getMainWindow()?.show())
-  const contextMenu = Menu.buildFromTemplate([
-    {
-      label: 'Show Zettlr',
-      click: () => zettlr?.getMainWindow()?.show()
-    }
-  ])
-  tray.setContextMenu(contextMenu)
+
 
 }).catch(e => console.error(e))
 
@@ -190,6 +178,7 @@ app.on('window-all-closed', function () {
  * properly.
  */
 app.on('will-quit', function (event) {
+
   if (!canQuit) {
     // Prevent immediate shutdown and allow the process to shut down first
     event.preventDefault()
