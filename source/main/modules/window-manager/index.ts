@@ -214,10 +214,10 @@ export default class WindowManager {
   shutdown (): void {
     this._persistWindowPositions()
   }
+
   /**
    *  Return a suitable tray icon size
    */
-
   private _calcTrayIconSize (): number {
     let size = 32
     const fitSize = (size: number): number => {
