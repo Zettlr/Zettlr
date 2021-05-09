@@ -135,6 +135,7 @@ export default async function environmentCheck (): Promise<void> {
     process.env.ZETTLR_IS_TRAY_SUPPORTED = await isTraySupported() ? '1' : '0'
   } catch (err) {
     process.env.ZETTLR_IS_TRAY_SUPPORTED = '0'
+    process.env.ZETTLR_TRAY_ERROR = err.message
     global.log.warning(err.message)
   }
 
