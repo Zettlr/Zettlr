@@ -18,7 +18,8 @@ module.exports = {
         { from: 'source/main/modules/export/assets/export.tpl.htm', to: 'assets' },
         { from: 'source/main/modules/export/assets/template.revealjs.htm', to: 'assets' },
         { from: 'source/main/modules/export/assets/revealjs-styles', to: 'assets/revealjs-styles' },
-        { from: 'resources/icons/icon.ico', to: 'assets/icons' }
+        { from: 'resources/icons/icon.ico', to: 'assets/icons' },
+        { from: 'resources/icons/png', to: 'assets/icons/png' }
       ]
     })
   ],
