@@ -109,7 +109,6 @@ app.whenReady().then(() => {
     console.error(err)
     app.exit(1)
   })
-
 }).catch(e => console.error(e))
 
 /**

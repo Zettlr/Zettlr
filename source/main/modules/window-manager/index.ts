@@ -15,7 +15,7 @@
  * END HEADER
  */
 
- import {
+import {
   app,
   screen,
   BrowserWindow,
@@ -223,35 +223,32 @@ export default class WindowManager {
       return
     }
 
-
-
     this._mainWindow.on('show', () => {
       if (process.platform === 'win32' || process.platform === 'linux') {
-        
         if (this._tray == null) {
           this._tray = new Tray(path.join(__dirname, 'assets/icons/icon.ico'))
-    
-            const contextMenu = Menu.buildFromTemplate([
-              {
-                label: 'Show Zettlr',
-                click: () => {
-                  this.showAnyWindow()
-                },
-                type: 'normal'
+
+          const contextMenu = Menu.buildFromTemplate([
+            {
+              label: 'Show Zettlr',
+              click: () => {
+                this.showAnyWindow()
               },
-              { label: '', type: 'separator' },
-              {
-                label: 'Quit',
-                click: () => {
-                  app.quit()
-                },
-                type: 'normal'
-              }
-            ])
-            this._tray.setContextMenu(contextMenu)
-         }
+              type: 'normal'
+            },
+            { label: '', type: 'separator' },
+            {
+              label: 'Quit',
+              click: () => {
+                app.quit()
+              },
+              type: 'normal'
+            }
+          ])
+          this._tray.setContextMenu(contextMenu)
         }
-      })
+      }
+    })
 
     // Listens to events from the window
     this._mainWindow.on('close', (event) => {
@@ -286,7 +283,8 @@ export default class WindowManager {
         }
       }
       if (process.platform === 'win32' || process.platform === 'linux') {
-        if (global.config.get('system.leaveAppRunning')) {
+        const leaveAppRunning = Boolean(global.config.get('system.leaveAppRunning'))
+        if (leaveAppRunning) {
           event.preventDefault()
           this._mainWindow?.hide()
           return
