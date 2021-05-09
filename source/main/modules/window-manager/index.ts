@@ -214,6 +214,31 @@ export default class WindowManager {
   shutdown (): void {
     this._persistWindowPositions()
   }
+  /**
+   *  Return a suitable tray icon size
+   */
+
+  private _calcTrayIconSize (): number {
+    let size = 32
+    const fitSize = (size: number): number => {
+      const sizeList = [ 32, 48, 64, 96, 128, 256 ]
+      for (let s of sizeList) {
+        if (s >= size) {
+          return s
+        }
+      }
+      return 32
+    }
+    const display = screen.getPrimaryDisplay()
+    size = display.workArea.y
+    if (size >= 8 && size <= 256) {
+      size = fitSize(size)
+    } else {
+      size = display.size.height - display.workArea.height
+      size = fitSize(size)
+    }
+    return size
+  }
 
   /**
    * Listens to events on the main window
@@ -223,7 +248,7 @@ export default class WindowManager {
       return
     }
 
-    const platformIcons: {[prop: string]: string} = {
+    const platformIcons: {[key in 'darwin' | 'win32']: string} = {
       'darwin': '/png/22x22_white.png',
       'win32': '/icon.ico'
     }
@@ -231,21 +256,14 @@ export default class WindowManager {
     this._mainWindow.on('show', () => {
       if (this._tray == null) {
         if (process.platform === 'linux') {
-          let size = '32'
-          const sizeList = [ '16', '24', '32', '48', '64', '96', '128', '256', '512' ]
-          const display = screen.getPrimaryDisplay()
-          if (process.env.XDG_CURRENT_DESKTOP === 'GNOME') {
-            size = display.workArea.y.toString()
-          } else if (process.env.XDG_CURRENT_DESKTOP === 'KDE') {
-            size = (display.size.height - display.workArea.height).toString()
-          }
-          if (sizeList.includes(size)) {
-            this._tray = new Tray(path.join(__dirname, `assets/icons/png/${size}x${size}.png`))
-          } else {
-            this._tray = new Tray(path.join(__dirname, 'assets/icons/png/32x32.png'))
-          }
+          const size = this._calcTrayIconSize()
+          this._tray = new Tray(path.join(__dirname, `assets/icons/png/${size}x${size}.png`))
         } else {
-          this._tray = new Tray(path.join(__dirname, 'assets/icons', platformIcons[process.platform] || '/png/32x32.png'))
+          let iconPath = '/png/32x32.png'
+          if (process.platform === 'darwin' || process.platform === 'win32') {
+            iconPath = platformIcons[process.platform]
+          }
+          this._tray = new Tray(path.join(__dirname, 'assets/icons', iconPath))
         }
 
         const contextMenu = Menu.buildFromTemplate([
