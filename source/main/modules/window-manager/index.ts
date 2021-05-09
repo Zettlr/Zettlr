@@ -216,6 +216,31 @@ export default class WindowManager {
   }
 
   /**
+   *  Return a suitable tray icon size
+   */
+  private _calcTrayIconSize (): number {
+    let size = 32
+    const fitSize = (size: number): number => {
+      const sizeList = [ 32, 48, 64, 96, 128, 256 ]
+      for (let s of sizeList) {
+        if (s >= size) {
+          return s
+        }
+      }
+      return 32
+    }
+    const display = screen.getPrimaryDisplay()
+    size = display.workArea.y
+    if (size >= 8 && size <= 256) {
+      size = fitSize(size)
+    } else {
+      size = display.size.height - display.workArea.height
+      size = fitSize(size)
+    }
+    return size
+  }
+
+  /**
    * Listens to events on the main window
    */
   private _hookMainWindow (): void {
@@ -223,30 +248,43 @@ export default class WindowManager {
       return
     }
 
-    this._mainWindow.on('show', () => {
-      if (process.platform === 'win32' || process.platform === 'linux') {
-        if (this._tray == null) {
-          this._tray = new Tray(path.join(__dirname, 'assets/icons/icon.ico'))
+    const platformIcons: {[key in 'darwin' | 'win32']: string} = {
+      'darwin': '/png/22x22_white.png',
+      'win32': '/icon.ico'
+    }
 
-          const contextMenu = Menu.buildFromTemplate([
-            {
-              label: 'Show Zettlr',
-              click: () => {
-                this.showAnyWindow()
-              },
-              type: 'normal'
-            },
-            { label: '', type: 'separator' },
-            {
-              label: 'Quit',
-              click: () => {
-                app.quit()
-              },
-              type: 'normal'
-            }
-          ])
-          this._tray.setContextMenu(contextMenu)
+    this._mainWindow.on('show', () => {
+      if (this._tray == null) {
+        if (process.platform === 'linux') {
+          const size = this._calcTrayIconSize()
+          this._tray = new Tray(path.join(__dirname, `assets/icons/png/${size}x${size}.png`))
+        } else {
+          let iconPath = '/png/32x32.png'
+          if (process.platform === 'darwin' || process.platform === 'win32') {
+            iconPath = platformIcons[process.platform]
+          }
+          this._tray = new Tray(path.join(__dirname, 'assets/icons', iconPath))
         }
+
+        const contextMenu = Menu.buildFromTemplate([
+          {
+            label: 'Show Zettlr',
+            click: () => {
+              this.showAnyWindow()
+            },
+            type: 'normal'
+          },
+          { label: '', type: 'separator' },
+          {
+            label: 'Quit',
+            click: () => {
+              app.quit()
+            },
+            type: 'normal'
+          }
+        ])
+        this._tray.setToolTip('This is the Zettlr tray. \n Select Show Zettlr to show the Zettlr app. \n Select Quit to quit the Zettlr app.')
+        this._tray.setContextMenu(contextMenu)
       }
     })
 
