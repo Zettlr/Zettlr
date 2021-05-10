@@ -8,10 +8,10 @@ const converter = new Turndown({
   hr: '---',
   blankReplacement: function (content, node) {
     // A workaround solution for the whitespace deletion issue when copying HTML content
-    // from Chromium-based browsers. This method extends the default blankReplacement 
+    // from Chromium-based browsers. This method extends the default blankReplacement
     // rule of Joplin-Turndown, all '<span> </span>' will not be replaced.
-    if (node.nodeName === 'SPAN'){
-      return ' ';
+    if (node.nodeName === 'SPAN') {
+      return ' '
     }
     return node.isBlock ? '\n\n' : ''
   }
