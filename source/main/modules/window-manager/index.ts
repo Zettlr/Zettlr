@@ -239,7 +239,7 @@ export default class WindowManager {
       if (leaveAppRunning) {
         if (process.platform === 'darwin') {
           if (this._tray == null) {
-            this._tray = new Tray(path.join(__dirname, './assets/icons/22x22_white.png'))
+            this._tray = new Tray(path.join(__dirname, './assets/icons/png/22x22_white.png'))
 
             const contextMenu = Menu.buildFromTemplate([
               {

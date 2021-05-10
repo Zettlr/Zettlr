@@ -121,9 +121,9 @@ export default class AppearanceProvider extends EventEmitter {
               // Calculate the contrast before returning
               const dark = '33333333'
               const light = 'eeeeeeee'
-              const r = parseInt(accentColor.substring(0, 2), 16) // hexToR
-              const g = parseInt(accentColor.substring(2, 4), 16) // hexToG
-              const b = parseInt(accentColor.substring(4, 6), 16) // hexToB
+              const r = parseInt(accentColor.substring(0, 2), 16); // hexToR
+              const g = parseInt(accentColor.substring(2, 4), 16); // hexToG
+              const b = parseInt(accentColor.substring(4, 6), 16); // hexToB
               const ratio = (r * 0.299) + (g * 0.587) + (b * 0.114)
               const threshold = 186 // NOTE: We can adapt this later on
               return {
