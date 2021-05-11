@@ -38,8 +38,10 @@ import {
   AnyMetaDescriptor,
   MaybeRootDescriptor,
   CodeFileDescriptor,
-  CodeFileMeta
+  CodeFileMeta,
+  OtherFileDescriptor
 } from './types'
+import { TouchBarSlider } from 'electron'
 
 const ALLOWED_CODE_FILES = [
   '.tex'
@@ -184,12 +186,12 @@ export default class FSAL extends EventEmitter {
 
     if ([ 'unlink', 'unlinkDir' ].includes(event)) {
       // A file or a directory has been removed.
-      const descriptor = this.find(hash(changedPath))
+      const descriptor = this.find(changedPath)
       let rootDirectoryIndex = -1 // Only necessary if the open dir has been removed
       if (descriptor === null) {
         // It must have been an attachment
         const parentPath = path.dirname(changedPath)
-        const containingDirectory = this.find(hash(parentPath)) as DirDescriptor
+        const containingDirectory = this.find(parentPath) as DirDescriptor
         FSALDir.removeAttachment(containingDirectory, changedPath)
       } else {
         // It is a normal file or directory
@@ -233,7 +235,7 @@ export default class FSAL extends EventEmitter {
       this._recordFiletreeChange('remove', changedPath)
     } else if ([ 'add', 'addDir' ].includes(event)) {
       // A file or a directory has been added. It can not be a root.
-      const parentDescriptor = this.find(hash(path.dirname(changedPath))) as DirDescriptor
+      const parentDescriptor = this.find(path.dirname(changedPath)) as DirDescriptor
       if (isAttachment(changedPath)) {
         await FSALDir.addAttachment(parentDescriptor, changedPath)
       } else {
@@ -243,7 +245,7 @@ export default class FSAL extends EventEmitter {
       this._recordFiletreeChange('add', changedPath)
     } else if (['change'].includes(event)) {
       // A file has been modified. Can be an attachment, a MD file, or a code file
-      const affectedDescriptor = this.find(hash(changedPath)) as AnyDescriptor
+      const affectedDescriptor = this.find(changedPath) as AnyDescriptor
       if (affectedDescriptor.type === 'code') {
         await FSALCodeFile.reparseChangedFile(affectedDescriptor, this._cache)
       } else if (affectedDescriptor.type === 'file') {
@@ -290,21 +292,43 @@ export default class FSAL extends EventEmitter {
    * filetree anymore. This fixes that.
    */
   private _consolidateOpenFiles (): void {
+    // First, save the index of the active file for later
+    const activeIdx = this.openFiles.findIndex(file => file.path === this.activeFile)
     // Filter out non-existent files ...
-    let oldHashes = [...this.openFiles]
-    this.openFiles = oldHashes.filter(hash => {
-      return this.findFile(hash) !== null
-    })
+    let oldFiles = this.openFiles.map(file => file.path)
+    this.openFiles = oldFiles
+      .map(filePath => {
+        return this.findFile(filePath)
+      })
+      .filter(file => file !== null) as Array<MDFileDescriptor|CodeFileDescriptor>
 
     // ... and see if some are missing afterwards.
-    if (this.openFiles.length !== oldHashes.length) {
+    if (this.openFiles.length !== oldFiles.length) {
       this.emit('fsal-state-changed', 'openFiles')
     }
 
     // Finally, check if the activeFile is now not present anymore, and remove
     // it if necessary.
-    if (this.activeFile !== null && !this.openFiles.includes(this.activeFile)) {
-      this.activeFile = null
+    if (this.activeFile !== null && this.openFiles.find(file => file.path === this.activeFile) === undefined) {
+      // Instead of setting it to null, we should attempt to find another file
+      // which we can make active. Zettlr is designed so that the editor always
+      // contains something. I realised that sometimes after closing or removing
+      // files, the editor still showed the old file, but no tab was active. And
+      // that's not desirable. So we're basically copying over the code from
+      // the mounted-function of Tabs.vue.
+      if (this.openFile.length > 0) {
+        if (activeIdx >= this.openFiles.length) {
+          this.activeFile = this.openFiles[this.openFiles.length - 1].path
+        } else if (activeIdx > -1) {
+          this.activeFile = this.openFiles[activeIdx].path
+        } else {
+          global.log.warning('[FSAL] Unexpected value: The active file was set but has not been found before consolidating the open files.')
+          this.activeFile = this.openFiles[0].path
+        }
+      } else {
+        // No open files, so reset
+        this.activeFile = null
+      }
       this.emit('fsal-state-changed', 'activeFile')
     }
   }
@@ -454,7 +478,7 @@ export default class FSAL extends EventEmitter {
       }
     }
 
-    if (this.openFiles.includes(root.path) && root.type === 'file') {
+    if (root.type !== 'directory' && this.openFiles.includes(root)) {
       // It's an open root file --> close before splicing from the tree
       this.closeFile(root)
     }
@@ -472,18 +496,16 @@ export default class FSAL extends EventEmitter {
    * Called by the main object once to set the open files for the editor to pull.
    * @param {Array} fileArray An array with paths to open
    */
-  public set openFiles (fileArray: string[]) {
-    let files = fileArray.map(f => this.findFile(f))
-    let safeFiles = files.filter(elem => elem != null) as MDFileDescriptor[]
-    this._state.openFiles = safeFiles
+  public set openFiles (files: Array<MDFileDescriptor|CodeFileDescriptor>) {
+    this._state.openFiles = files
     this.emit('fsal-state-changed', 'openFiles')
   }
 
   /**
    * Returns a list of paths for all open files
    */
-  public get openFiles (): string[] {
-    return this._state.openFiles.map(elem => elem.path)
+  public get openFiles (): Array<MDFileDescriptor|CodeFileDescriptor> {
+    return this._state.openFiles
   }
 
   /**
@@ -738,7 +760,7 @@ export default class FSAL extends EventEmitter {
   /**
    * Attempts to find a directory in the FSAL. Returns null if not found.
    *
-   * @param  {string|number}           val  Either an absolute path or a hash
+   * @param  {string|number}       val  Either an absolute path or a hash. NOTE: Using hashes is deprecated behaviour!
    *
    * @return {DirDescriptor|null}       Either null or the wanted directory
    */
@@ -755,8 +777,11 @@ export default class FSAL extends EventEmitter {
 
   /**
    * Attempts to find a file in the FSAL. Returns null if not found.
-   * @param {Mixed} val Either an absolute path or a hash
-   * @return {Mixed} Either null or the wanted file
+   *
+   * @param {string|number}                             val       The value to be searched for. NOTE: Using hashes is deprecated behaviour!
+   * @param {MaybeRootDescriptor[]|MaybeRootDescriptor} baseTree  The tree to search within
+   *
+   * @return  {MDFileDescriptor|CodeFileDescriptor|null}          Either the corresponding descriptor, or null
    */
   public findFile (
     val: string|number,
@@ -776,12 +801,91 @@ export default class FSAL extends EventEmitter {
   }
 
   /**
-   * Convenience wrapper for findFile && findDir
-   * @param {number|string} val The value to search for (hash or path)
+   * Finds a non-markdown file within the filetree
+   *
+   * @param {string|number} val The value to be searched for. NOTE: Using hashes is deprecated behaviour!
+   * @param {MaybeRootDescriptor[]|MaybeRootDescriptor} baseTree The tree to search within
+   *
+   * @return  {OtherFileDescriptor|null}  Either the corresponding file, or null
    */
-  public find (val: number|string): MDFileDescriptor|DirDescriptor|CodeFileDescriptor|null {
-    let res = this.findFile(val)
-    if (res === null) return this.findDir(val)
+  public findOther (
+    val: string|number,
+    baseTree: MaybeRootDescriptor[]|MaybeRootDescriptor = this._state.filetree
+  ): OtherFileDescriptor|null {
+    // We'll only search for hashes, so if the user searches for a path,
+    // convert it to the hash prior to searching the tree.
+    if (typeof val === 'string' && path.isAbsolute(val)) val = hash(val)
+    if (typeof val !== 'number') val = parseInt(val, 10)
+
+    // Since the attachments are not recursive, we cannot employ findObject here,
+    // but have to do it "zu Fuß", as we say in Germany. NOTE: This approach is
+    // ugly as hell, and might break easily. So we definitely need to come to a
+    // better way of implmenting this. But in the end the larger goal here is to
+    // merge the "attachments" (a.k.a. non-Markdown files) into the children-array
+    // either way.
+    const findInDirectory = (dir: DirDescriptor, val: number): OtherFileDescriptor|null => {
+      let found = dir.attachments.find(elem => elem.hash === val)
+      if (found !== undefined) {
+        return found
+      } else {
+        const children = dir.children.filter(elem => elem.type === 'directory') as DirDescriptor[]
+        for (const childDir of children) {
+          let found = findInDirectory(childDir, val)
+          if (found !== null) {
+            return found
+          }
+        }
+      }
+
+      return null
+    }
+
+    if (Array.isArray(baseTree)) {
+      for (const root of baseTree) {
+        if (root.type !== 'directory') {
+          continue
+        }
+
+        let found = findInDirectory(root, val)
+        if (found !== null) {
+          return found
+        }
+      }
+    } else if (baseTree.type === 'directory') {
+      let found = findInDirectory(baseTree, val)
+      if (found !== null) {
+        return found
+      }
+    }
+
+    return null
+  }
+
+  /**
+   * Finds a descriptor that is loaded.
+   *
+   * @param   {number|string}       val  The value. NOTE: Using hashes is deprecated behaviour!
+   *
+   * @return  {AnyDescriptor|null}       Returns either the descriptor, or null.
+   */
+  public find (val: number|string): AnyDescriptor|null {
+    // First attempt to find a file ...
+    let res: AnyDescriptor|null = this.findFile(val)
+
+    // ... and if that fails, attempt to find a directory.
+    if (res === null) {
+      console.log('No file found for path')
+      res = this.findDir(val)
+    }
+
+    // Last but not least, attempt to find a non-markdown file
+    if (res === null) {
+      console.log('No directory found for path')
+      res = this.findOther(val)
+    }
+
+    if (res === null) console.log('No other file found for path')
+
     return res
   }
 
@@ -953,8 +1057,7 @@ export default class FSAL extends EventEmitter {
   public async renameFile (src: MDFileDescriptor|CodeFileDescriptor, newName: string): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates 1x unlink, 1x add
-    let oldHash = src.hash
-    let isOpenFile = this._state.openFiles.find(e => e.hash === oldHash) !== undefined
+    let isOpenFile = this._state.openFiles.includes(src)
     let isActiveFile = this._state.activeFile === src
 
     this._watchdog.ignoreEvents([{
@@ -1170,8 +1273,8 @@ export default class FSAL extends EventEmitter {
     let newPrefix = path.join(src.dir, newName)
 
     // Check the open files if something needs to change concerning them.
-    for (const filePath of this.openFiles) {
-      let found = this.findFile(filePath, [src])
+    for (const file of this.openFiles) {
+      let found = this.findFile(file.path, [src])
       if (found !== null) {
         // The file is in the directory, so we need to update the open files
         openFilesUpdateNeeded = true
@@ -1180,7 +1283,7 @@ export default class FSAL extends EventEmitter {
         newFilePaths.push(found.path.replace(oldPrefix, newPrefix))
       } else {
         // File will not be renamed, so retain the hash
-        newFilePaths.push(filePath)
+        newFilePaths.push(file.path)
       }
     }
 
@@ -1247,6 +1350,9 @@ export default class FSAL extends EventEmitter {
     // Update open files and the active file
     if (openFilesUpdateNeeded) {
       this.openFiles = newFilePaths
+        .map(filePath => this.findFile(filePath))
+        .filter(file => file !== null) as Array<MDFileDescriptor|CodeFileDescriptor>
+
       this._consolidateOpenFiles()
     }
 
@@ -1307,11 +1413,10 @@ export default class FSAL extends EventEmitter {
     // NOTE: Generates 1x unlink, 1x add for each child, src and on the target!
     let openFilesUpdateNeeded = false
     let activeFileUpdateNeeded = false
-    let newOpenDirHash
+    let newOpenDir
     let newFilePaths: string[] = []
     const hasOpenDir = this.openDirectory !== null
     const srcIsDir = src.type === 'directory'
-    const srcIsFile = src.type === 'file'
     const srcIsOpenDir = src === this.openDirectory
     const srcContainsOpenDir = srcIsDir && hasOpenDir && this.findDir((this.openDirectory as DirDescriptor).hash, [src as DirDescriptor]) !== null
     const srcContainsActiveFile = srcIsDir && this.activeFile !== null && this.findFile(this.activeFile, [src as DirDescriptor]) !== null
@@ -1320,8 +1425,8 @@ export default class FSAL extends EventEmitter {
     if (srcIsDir) {
       // A directory is being moved, so check the open files if something
       // needs to change concerning them.
-      for (let fileHash of this.openFiles) {
-        let found = this.findFile(fileHash, [src as DirDescriptor])
+      for (const file of this.openFiles) {
+        let found = this.findFile(file.path, [src as DirDescriptor])
         if (found !== null) {
           // The file is in there, so we need to update the open files
           openFilesUpdateNeeded = true
@@ -1330,15 +1435,15 @@ export default class FSAL extends EventEmitter {
           newFilePaths.push(found.path.replace(src.dir, target.path))
         } else {
           // Nothing really to do
-          newFilePaths.push(fileHash)
+          newFilePaths.push(file.path)
         }
       }
-    } else if (srcIsFile) {
-      if (this.openFiles.includes(src.path)) {
+    } else {
+      if (this.openFiles.includes(src as MDFileDescriptor|CodeFileDescriptor)) {
         // The source is an open file, we need to account for that.
         openFilesUpdateNeeded = true
         let newPath = src.path.replace(src.dir, target.path)
-        newFilePaths = this.openFiles
+        newFilePaths = this.openFiles.map(file => file.path)
         newFilePaths.splice(newFilePaths.indexOf(src.path), 1, newPath)
       }
     }
@@ -1354,7 +1459,7 @@ export default class FSAL extends EventEmitter {
     // Next, check if the open directory is affected
     if (srcIsOpenDir || srcContainsOpenDir) {
       // Compute the new hash and indicate an update is necessary
-      newOpenDirHash = hash((this.openDirectory as DirDescriptor).path.replace(src.dir, target.path))
+      newOpenDir = (this.openDirectory as DirDescriptor).path.replace(src.dir, target.path)
     }
 
     // Now we need to generate the ignore events that are to be expected.
@@ -1400,9 +1505,11 @@ export default class FSAL extends EventEmitter {
     // functions will notify the application respectively.
     if (openFilesUpdateNeeded) {
       this.openFiles = newFilePaths
+        .map(filePath => this.findFile(filePath))
+        .filter(file => file !== null) as Array<MDFileDescriptor|CodeFileDescriptor>
     }
-    if (newOpenDirHash !== undefined) {
-      this.openDirectory = this.findDir(newOpenDirHash)
+    if (newOpenDir !== undefined) {
+      this.openDirectory = this.findDir(newOpenDir)
     }
     if (activeFileUpdateNeeded) {
       this.emit('fsal-state-changed', 'activeFile')

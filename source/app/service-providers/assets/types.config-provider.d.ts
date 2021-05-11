@@ -145,6 +145,7 @@ interface ConfigOptions {
     deleteOnFail: boolean
     leaveAppRunning: boolean
     avoidNewTabs: boolean
+    iframeWhitelist: string[]
   }
   checkForBeta: boolean
   uuid: string

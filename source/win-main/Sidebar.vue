@@ -1,7 +1,7 @@
 <template>
   <div id="sidebar">
     <div id="sidebar-tabs" role="tablist">
-      <div
+      <button
         role="tab"
         v-bind:aria-label="tocLabel"
         data-target="sidebar-toc"
@@ -13,8 +13,8 @@
         v-on:click="currentTab = 'toc'"
       >
         <clr-icon shape="indented-view-list" role="presentation"></clr-icon>
-      </div>
-      <div
+      </button>
+      <button
         role="tab"
         v-bind:aria-label="referencesLabel"
         data-target="sidebar-bibliography"
@@ -26,8 +26,8 @@
         v-on:click="currentTab = 'references'"
       >
         <clr-icon shape="book" role="presentation"></clr-icon>
-      </div>
-      <div
+      </button>
+      <button
         role="tab"
         v-bind:aria-label="relatedFilesLabel"
         data-target="sidebar-related-files"
@@ -39,8 +39,8 @@
         v-on:click="currentTab = 'relatedFiles'"
       >
         <clr-icon shape="file-group" role="presentation"></clr-icon>
-      </div>
-      <div
+      </button>
+      <button
         role="tab"
         v-bind:aria-label="attachmentsLabel"
         data-target="sidebar-files"
@@ -52,12 +52,15 @@
         v-on:click="currentTab = 'attachments'"
       >
         <clr-icon shape="attachment" role="presentation"></clr-icon>
-      </div>
+      </button>
     </div>
 
     <!-- Now the tab containers -->
 
-    <div v-show="currentTab === 'relatedFiles'">
+    <div
+      v-show="currentTab === 'relatedFiles'"
+      role="tabpanel"
+    >
       <h1>Related files</h1>
       <div v-if="relatedFiles.length === 0" class="related-files-container">
         No related files.
@@ -85,7 +88,10 @@
       </div>
     </div>
 
-    <div v-show="currentTab === 'attachments'">
+    <div
+      v-show="currentTab === 'attachments'"
+      role="tabpanel"
+    >
       <!-- Other files contents -->
       <h1>
         {{ attachmentsLabel }}
@@ -118,14 +124,20 @@
         </a>
       </template>
     </div>
-    <div v-show="currentTab === 'references'">
+    <div
+      v-show="currentTab === 'references'"
+      role="tabpanel"
+    >
       <!-- References -->
       <h1>{{ referencesLabel }}</h1>
       <div v-html="referenceHTML">
         <!-- Will contain the actual HTML -->
       </div>
     </div>
-    <div v-show="currentTab === 'toc'">
+    <div
+      v-show="currentTab === 'toc'"
+      role="tabpanel"
+    >
       <!-- Table of Contents -->
       <h1>{{ tocLabel }}</h1>
       <!-- Show the ToC entries -->
@@ -343,9 +355,9 @@ body {
   @border-radius: 5px;
   @button-size: 5px;
   @button-icon-size: 5px;
-  #sidebar {
-    background-color: rgba(230, 230, 230, 1);
 
+  #sidebar {
+    background-color: rgb(230, 230, 230);
     height: 100%;
     width: 100%;
     overflow-y: auto;
@@ -383,23 +395,29 @@ body {
     p { padding: 10px; }
 
     a.attachment {
-        display: block;
-        margin: 10px;
-        padding: 4px;
-        text-decoration: none;
-        color: inherit;
-        // Padding 4px + 4px margin + 24px icon width = 32px
-        text-indent: -32px;
-        padding-left: 32px;
-        svg {
-          width: 24px;
-          height: 24px;
-          margin-right: 4px;
-          vertical-align: bottom;
-          margin-bottom: -1px;
-          // Necessary to give the extension icons the correct colour
-          fill: currentColor;
-        }
+      display: block;
+      margin: 10px;
+      padding: 4px;
+      text-decoration: none;
+      color: inherit;
+      // Padding 4px + 4px margin + 24px icon width = 32px
+      text-indent: -32px;
+      padding-left: 32px;
+      // Some filenames are too long for the sidebar. However, unlike with the
+      // file manager where we have the full filename visible in multiple places,
+      // here we must make sure the filename is fully visible. Hence, we don't
+      // use white-space: nowrap, but rather word-break: break-all.
+      word-break: break-all;
+
+      svg {
+        width: 24px;
+        height: 24px;
+        margin-right: 4px;
+        vertical-align: bottom;
+        margin-bottom: -1px;
+        // Necessary to give the extension icons the correct colour
+        fill: currentColor;
+      }
     }
 
     // Bibliography entries
@@ -412,6 +430,8 @@ body {
         user-select: text;
         cursor: text;
       }
+
+      a { color: var(--blue-0); }
     }
 
     // Table of Contents entries
@@ -419,9 +439,20 @@ body {
       // Clever calculation based on the data-level property
       // margin-left: calc(attr(data-level) * 10px);
       display: flex;
+      margin-bottom: 10px;
 
-      div.toc-level { flex-shrink: 1; }
-      div.toc-entry { flex-grow: 3; }
+      div.toc-level {
+        flex-shrink: 1;
+        padding: 0px 5px;
+        font-weight: bold;
+        color: var(--system-accent-color, --c-primary);
+      }
+
+      div.toc-entry {
+        flex-grow: 3;
+        cursor: pointer;
+        &:hover { text-decoration: underline; }
+      }
     }
 
     div.related-files-container {
@@ -468,14 +499,51 @@ body.darwin div#sidebar {
   // On macOS the toolbar is 40px high and the documents titlebar is 30px high,
   // so we want to offset the sidebar by that.
   top: calc(40px + 30px);
-  background-color: transparent;
 
   div.related-files-container {
     div.related-file span.filename { border-radius: 4px; }
   }
+
+  #sidebar-tabs {
+    justify-content: space-around;
+    padding: 10px 20px 0px 20px;
+
+    .sidebar-tab {
+      &.active { background-color: rgb(230, 230, 230); }
+
+      &:not(:first-child) {
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+        border-left: 0px; // We only want 1px border between the buttons
+      }
+
+      &:not(:last-child) {
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+      }
+    }
+  }
 }
 
 body.darwin.dark div#sidebar {
-  background-color: transparent;
+  #sidebar-tabs .sidebar-tab {
+    &.active { background-color: rgb(120, 120, 120); }
+
+    &:not(:last-child) {
+      // We need a border here
+      border-right: 1px solid rgb(120, 120, 120);
+    }
+  }
+}
+
+body.win32 {
+
+  #sidebar #sidebar-tabs .sidebar-tab.active {
+    background-color: rgb(230, 230, 230);
+  }
+
+  &.dark #sidebar #sidebar-tabs .sidebar-tab.active {
+    background-color: rgb(120, 120, 120);
+  }
 }
 </style>

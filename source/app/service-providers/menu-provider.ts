@@ -15,7 +15,8 @@
 import {
   Menu,
   ipcMain,
-  BrowserWindow
+  BrowserWindow,
+  MenuItemConstructorOptions
 } from 'electron'
 
 import broadcastIPCMessage from '../../common/util/broadcast-ipc-message'
@@ -147,6 +148,13 @@ export default class MenuProvider {
         menuItem.click(menuItem, focusedWindow)
       }
     })
+
+    ipcMain.handle('menu-provider', async (event, message) => {
+      const { command, payload } = message
+      if (command === 'display-native-context-menu') {
+        return await this._displayNativeContextMenu(payload.menu, payload.x, payload.y)
+      }
+    })
   }
 
   /**
@@ -157,6 +165,57 @@ export default class MenuProvider {
   shutdown (): boolean {
     global.log.verbose('Menu provider shutting down ...')
     return true // This provider needs no special shutdown logic
+  }
+
+  /**
+   * Displays a native context menu with the given menu items
+   *
+   * @param   {MenuItem[]}                 menu  The menu to display
+   * @param   {number}                     x     X-coordinate of the menu
+   * @param   {number}                     y     Y-coordinate of the menu
+   *
+   * @return  {Promise<string|undefined>}        Returns the clicked ID, or undefined
+   */
+  private async _displayNativeContextMenu (menu: MenuItemConstructorOptions[], x: number, y: number): Promise<string|undefined> {
+    return await new Promise((resolve, reject) => {
+      let resolvedID: string|undefined
+      // Define a quick'n'dirty recursive function that applies the click handler
+      // to (theoretically) indefinite submenus
+      const applyClickHandler = (item: MenuItemConstructorOptions): void => {
+        item.click = () => { resolvedID = item.id }
+
+        // Apple's Human Interface Guidelines state that context menus should
+        // not feature any keyboard shortcuts, so we should remove any potential
+        // accelerator here
+        // cf. https://developer.apple.com/design/human-interface-guidelines/macos/menus/contextual-menus/
+        if (process.platform === 'darwin' && 'accelerator' in item) {
+          item.accelerator = undefined
+        }
+
+        // Recurse into a potential submenu
+        if (item.submenu !== undefined) {
+          for (const subItem of item.submenu as MenuItemConstructorOptions[]) {
+            applyClickHandler(subItem)
+          }
+        }
+      }
+
+      // Apply the click handler to the menu itself
+      for (const item of menu) {
+        applyClickHandler(item)
+      }
+
+      const popupMenu = Menu.buildFromTemplate(menu)
+      popupMenu.on('menu-will-close', (event) => {
+        setTimeout(() => {
+          // NOTE/DEBUG: We have to resolve on the next tick, since this event
+          // unfortunately is emitted *before* the item click is triggered.
+          // See: https://github.com/electron/electron/issues/28719
+          resolve(resolvedID)
+        }, 100)
+      })
+      popupMenu.popup({ x: x, y: y })
+    })
   }
 
   /**

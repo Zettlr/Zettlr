@@ -201,10 +201,14 @@ export default {
       return this.menubar
     },
     showWindowControls: function () {
-      if (this.platform !== 'darwin') {
-        return true
-      } else {
+      // Shows the window control buttons only if we are on Windows
+      // or on Linux without native appearance.
+      if (this.platform === 'linux' && this.useNativeAppearance === true) {
         return false
+      } else if (this.platform === 'darwin') {
+        return false
+      } else {
+        return true
       }
     },
     platformTitlebarHeight: function () {

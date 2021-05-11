@@ -114,6 +114,7 @@ export default {
         currentEffectFile: glassFile,
         soundEffect: new Audio(glassFile),
         intervalHandle: undefined,
+        popover: undefined,
         durations: {
           task: 1500,
           short: 300,
@@ -484,7 +485,7 @@ export default {
           volume: this.pomodoro.soundEffect.volume * 100
         }
 
-        this.$showPopover(PopoverPomodoro, document.getElementById('toolbar-pomodoro'), data, (data) => {
+        this.pomodoro.popover = this.$showPopover(PopoverPomodoro, document.getElementById('toolbar-pomodoro'), data, (data) => {
           // Update the durations as necessary
           this.pomodoro.durations.task = data.taskDuration
           this.pomodoro.durations.short = data.shortDuration
@@ -592,6 +593,19 @@ export default {
         }
 
         this.pomodoro.soundEffect.play().catch(e => { /* We will be getting errors when pausing quickly */ })
+      }
+
+      // Finally handle the popover logic
+      if (this.pomodoro.popover !== undefined && this.pomodoro.popover.isClosed() === false) {
+        // The popover is visible, so let's update the data. Good thing is, we
+        // only really need to update two things: The current task, and the
+        // elapsed time.
+        this.pomodoro.popover.updateData({
+          currentPhase: this.pomodoro.phase.type,
+          elapsed: this.pomodoro.phase.elapsed
+        })
+      } else if (this.pomodoro.popover !== undefined && this.pomodoro.popover.isClosed() === true) {
+        this.pomodoro.popover = undefined // Cleanup
       }
     },
     stopPomodoro: function () {

@@ -225,7 +225,7 @@ function getFnTextRange (cm, ref) {
   }
 
   for (let i = 0; i < lines.length; i++) {
-    if (lines[i].indexOf(`[^${ref}]:`) === 0) {
+    if (lines[i].startsWith(`[^${ref}]:`)) {
       // We have found the beginning of the footnote text: extract the position.
       from.line = i
       from.ch = 5 + ref.length
@@ -239,8 +239,9 @@ function getFnTextRange (cm, ref) {
       const isEmpty = lines[i].trim() === ''
       const isIndented = /^\s{4,}\S+/.test(lines[i])
       const isPreviousLineEmpty = i > 0 && lines[i - 1].trim() === ''
+      const isAnotherFootnote = /^\[\^[^\]]+\]:/.test(lines[i])
 
-      if (!isEmpty && !isIndented && isPreviousLineEmpty) {
+      if ((!isEmpty && !isIndented && isPreviousLineEmpty) || isAnotherFootnote) {
         // The line is neither empty, nor correctly indented, so stop searching.
         to.line = i - 1
         to.ch = lines[i - 1].length
