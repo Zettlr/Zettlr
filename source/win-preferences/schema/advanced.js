@@ -38,7 +38,7 @@ export default {
       },
       {
         type: 'checkbox',
-        label: 'Leave app running in the notification area', // trans('dialog.preferences.leave_app_running'),
+        label: process.platform === 'darwin' ? 'Show app in the notification area' : 'Leave app running in the notification area',
         model: 'system.leaveAppRunning'
       }
     ],

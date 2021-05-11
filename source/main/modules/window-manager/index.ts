@@ -315,7 +315,10 @@ export default class WindowManager {
     }
 
     this._mainWindow.on('show', () => {
-      this._addTray()
+      const leaveAppRunning = Boolean(global.config.get('system.leaveAppRunning'))
+      if (leaveAppRunning) {
+        this._addTray()
+      }
     })
 
     // Listens to events from the window
