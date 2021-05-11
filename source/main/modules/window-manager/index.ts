@@ -125,6 +125,7 @@ export default class WindowManager {
           callingWindow.minimize()
           break
         case 'win-close':
+          callingWindow.close()
           break
         // Convenience APIs for the renderers to execute these commands
         case 'cut':
