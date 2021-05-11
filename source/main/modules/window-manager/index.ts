@@ -226,6 +226,86 @@ export default class WindowManager {
     this._persistWindowPositions()
   }
 
+  private _addTray(){
+    if (process.platform === 'darwin') {
+      if (this._tray == null) {
+        this._tray = new Tray(path.join(__dirname, './assets/icons/png/22x22_white.png'))
+
+        const contextMenu = Menu.buildFromTemplate([
+          {
+            label: 'Show Zettlr',
+            click: () => {
+              this.showAnyWindow()
+            },
+            type: 'normal'
+          },
+          { label: '', type: 'separator' },
+          {
+            label: 'Quit',
+            click: () => {
+              app.quit()
+            },
+            type: 'normal'
+          }
+        ])
+        this._tray.setToolTip('This is the Zettlr tray. \n Select Show Zettlr to show the Zettlr app. \n Select Quit to quit the Zettlr app.')
+        this._tray.setContextMenu(contextMenu)
+      }
+    } else if (process.platform === 'win32') {
+      if (this._tray == null) {
+        this._tray = new Tray(path.join(__dirname, 'assets/icons/icon.ico'))
+        const contextMenu = Menu.buildFromTemplate([
+          {
+            label: 'Show Zettlr',
+            click: () => {
+              // Add show Zettlr window event to Windows
+              this.showMainWindow()
+            },
+            type: 'normal'
+          },
+          { label: '', type: 'separator' },
+          {
+            label: 'Quit',
+            click: () => {
+              // Add quit event to tray
+              // On Windows, left or right click the tray icon ➔ Quit will quit Zettlr. Same function as File ➔ Quit.
+              app.quit()
+            },
+            type: 'normal'
+          }
+        ])
+        this._tray.setToolTip('This is the Zettlr tray. \n Select Show Zettlr to show the Zettlr app. \n Select Quit to quit the Zettlr app.')
+        this._tray.setContextMenu(contextMenu)
+      }
+    } else {
+      if (this._tray == null) {
+        this._tray = new Tray(path.join(__dirname, 'assets/icons/128x128.png'))
+        const contextMenu = Menu.buildFromTemplate([
+          {
+            label: 'Show Zettlr',
+            click: () => {
+              // Add show Zettlr window event to Windows
+              this.showMainWindow()
+            },
+            type: 'normal'
+          },
+          { label: '', type: 'separator' },
+          {
+            label: 'Quit',
+            click: () => {
+              // Add quit event to tray
+              // On Windows, left or right click the tray icon ➔ Quit will quit Zettlr. Same function as File ➔ Quit.
+              app.quit()
+            },
+            type: 'normal'
+          }
+        ])
+        this._tray.setToolTip('This is the Zettlr tray. \n Select Show Zettlr to show the Zettlr app. \n Select Quit to quit the Zettlr app.')
+        this._tray.setContextMenu(contextMenu)
+      }
+    }
+  }
+
   /**
    * Listens to events on the main window
    */
@@ -237,83 +317,7 @@ export default class WindowManager {
     this._mainWindow.on('show', () => {
       const leaveAppRunning = Boolean(global.config.get('system.leaveAppRunning'))
       if (leaveAppRunning) {
-        if (process.platform === 'darwin') {
-          if (this._tray == null) {
-            this._tray = new Tray(path.join(__dirname, './assets/icons/png/22x22_white.png'))
-
-            const contextMenu = Menu.buildFromTemplate([
-              {
-                label: 'Show Zettlr',
-                click: () => {
-                  this.showAnyWindow()
-                },
-                type: 'normal'
-              },
-              { label: '', type: 'separator' },
-              {
-                label: 'Quit',
-                click: () => {
-                  app.quit()
-                },
-                type: 'normal'
-              }
-            ])
-            this._tray.setToolTip('This is the Zettlr tray. \n Select Show Zettlr to show the Zettlr app. \n Select Quit to quit the Zettlr app.')
-            this._tray.setContextMenu(contextMenu)
-          }
-        } else if (process.platform === 'win32') {
-          if (this._tray == null) {
-            this._tray = new Tray(path.join(__dirname, 'assets/icons/icon.ico'))
-            const contextMenu = Menu.buildFromTemplate([
-              {
-                label: 'Show Zettlr',
-                click: () => {
-                  // Add show Zettlr window event to Windows
-                  this.showMainWindow()
-                },
-                type: 'normal'
-              },
-              { label: '', type: 'separator' },
-              {
-                label: 'Quit',
-                click: () => {
-                  // Add quit event to tray
-                  // On Windows, left or right click the tray icon ➔ Quit will quit Zettlr. Same function as File ➔ Quit.
-                  app.quit()
-                },
-                type: 'normal'
-              }
-            ])
-            this._tray.setToolTip('This is the Zettlr tray. \n Select Show Zettlr to show the Zettlr app. \n Select Quit to quit the Zettlr app.')
-            this._tray.setContextMenu(contextMenu)
-          }
-        } else {
-          if (this._tray == null) {
-            this._tray = new Tray(path.join(__dirname, 'assets/icons/128x128.png'))
-            const contextMenu = Menu.buildFromTemplate([
-              {
-                label: 'Show Zettlr',
-                click: () => {
-                  // Add show Zettlr window event to Windows
-                  this.showMainWindow()
-                },
-                type: 'normal'
-              },
-              { label: '', type: 'separator' },
-              {
-                label: 'Quit',
-                click: () => {
-                  // Add quit event to tray
-                  // On Windows, left or right click the tray icon ➔ Quit will quit Zettlr. Same function as File ➔ Quit.
-                  app.quit()
-                },
-                type: 'normal'
-              }
-            ])
-            this._tray.setToolTip('This is the Zettlr tray. \n Select Show Zettlr to show the Zettlr app. \n Select Quit to quit the Zettlr app.')
-            this._tray.setContextMenu(contextMenu)
-          }
-        }
+        this._addTray()
       }
     })
 
