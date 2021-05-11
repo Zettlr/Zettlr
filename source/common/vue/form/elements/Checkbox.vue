@@ -1,16 +1,26 @@
 <template>
-  <div class="form-control cb-group">
-    <label class="checkbox">
-      <input
-        v-bind:id="fieldID"
-        type="checkbox" v-bind:name="name" value="yes"
-        v-bind:checked="value"
-        v-bind:disabled="disabled"
-        v-on:input="$emit('input', $event.target.checked)"
+  <div>
+    <div class="form-control cb-group">
+      <label class="checkbox"
+             v-bind:disabled="disabled"
       >
-      <span class="checkmark"></span>
-    </label>
-    <label v-if="label" v-bind:for="fieldID" v-html="label"></label>
+        <input
+          v-bind:id="fieldID"
+          type="checkbox" v-bind:name="name" value="yes"
+          v-bind:checked="value"
+          v-bind:disabled="disabled"
+          v-on:input="$emit('input', $event.target.checked)"
+        >
+        <span class="checkmark"></span>
+      </label>
+      <label v-if="label" v-bind:for="fieldID" v-bind:disabled="disabled"
+             v-html="label"
+      >
+      </label>
+    </div>
+    <div v-if="additionaltext" class="form-control">
+      {{ additionaltext }}
+    </div>
   </div>
 </template>
 
@@ -33,6 +43,10 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    additionaltext: {
+      type: String,
+      default: ''
     }
   },
   computed: {
@@ -95,6 +109,21 @@ body {
       &:after {
         opacity: 1;
       }
+    }
+
+    &[disabled] {
+      input:checked ~ .checkmark {
+        background-color: lightgrey;
+      }
+      input:checked ~ .checkmark {
+        border-color: rgb(90, 90, 90);
+      }
+    }
+  }
+
+  label{
+    &[disabled] {
+      color: grey;
     }
   }
 }

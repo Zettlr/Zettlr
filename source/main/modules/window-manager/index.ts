@@ -77,8 +77,6 @@ export default class WindowManager {
   private _fileLock: boolean
   private _persistTimeout: ReturnType<typeof setTimeout>|undefined
   private _beforeMainWindowCloseCallback: Function|null
-
-  // Add tray to MacOS
   private _tray: Tray | null
 
   constructor () {
@@ -186,6 +184,16 @@ export default class WindowManager {
       let dir = await this.askDir(focusedWindow)
       return dir
     })
+
+    global.config.on('update', (option: string) => {
+      if (option === 'system.leaveAppRunning') {
+        if (global.config.get('system.leaveAppRunning') === true) {
+          this._addTray()
+        } else {
+          this._removeTray()
+        }
+      }
+    })
   }
 
   /**
@@ -226,84 +234,85 @@ export default class WindowManager {
     this._persistWindowPositions()
   }
 
-  private _addTray(){
-    if (process.platform === 'darwin') {
-      if (this._tray == null) {
-        this._tray = new Tray(path.join(__dirname, './assets/icons/png/22x22_white.png'))
-
-        const contextMenu = Menu.buildFromTemplate([
-          {
-            label: 'Show Zettlr',
-            click: () => {
-              this.showAnyWindow()
-            },
-            type: 'normal'
-          },
-          { label: '', type: 'separator' },
-          {
-            label: 'Quit',
-            click: () => {
-              app.quit()
-            },
-            type: 'normal'
-          }
-        ])
-        this._tray.setToolTip('This is the Zettlr tray. \n Select Show Zettlr to show the Zettlr app. \n Select Quit to quit the Zettlr app.')
-        this._tray.setContextMenu(contextMenu)
+  /**
+   *  Return a suitable tray icon size
+   */
+  private _calcTrayIconSize (): number {
+    let size = 32
+    const fitSize = (size: number): number => {
+      const sizeList = [ 32, 48, 64, 96, 128, 256 ]
+      for (let s of sizeList) {
+        if (s >= size) {
+          return s
+        }
       }
-    } else if (process.platform === 'win32') {
-      if (this._tray == null) {
-        this._tray = new Tray(path.join(__dirname, 'assets/icons/icon.ico'))
-        const contextMenu = Menu.buildFromTemplate([
-          {
-            label: 'Show Zettlr',
-            click: () => {
-              // Add show Zettlr window event to Windows
-              this.showMainWindow()
-            },
-            type: 'normal'
-          },
-          { label: '', type: 'separator' },
-          {
-            label: 'Quit',
-            click: () => {
-              // Add quit event to tray
-              // On Windows, left or right click the tray icon ➔ Quit will quit Zettlr. Same function as File ➔ Quit.
-              app.quit()
-            },
-            type: 'normal'
-          }
-        ])
-        this._tray.setToolTip('This is the Zettlr tray. \n Select Show Zettlr to show the Zettlr app. \n Select Quit to quit the Zettlr app.')
-        this._tray.setContextMenu(contextMenu)
-      }
-    } else {
-      if (this._tray == null) {
-        this._tray = new Tray(path.join(__dirname, 'assets/icons/128x128.png'))
-        const contextMenu = Menu.buildFromTemplate([
-          {
-            label: 'Show Zettlr',
-            click: () => {
-              // Add show Zettlr window event to Windows
-              this.showMainWindow()
-            },
-            type: 'normal'
-          },
-          { label: '', type: 'separator' },
-          {
-            label: 'Quit',
-            click: () => {
-              // Add quit event to tray
-              // On Windows, left or right click the tray icon ➔ Quit will quit Zettlr. Same function as File ➔ Quit.
-              app.quit()
-            },
-            type: 'normal'
-          }
-        ])
-        this._tray.setToolTip('This is the Zettlr tray. \n Select Show Zettlr to show the Zettlr app. \n Select Quit to quit the Zettlr app.')
-        this._tray.setContextMenu(contextMenu)
-      }
+      return 32
     }
+    const display = screen.getPrimaryDisplay()
+    size = display.workArea.y
+    if (size >= 8 && size <= 256) {
+      size = fitSize(size)
+    } else {
+      size = display.size.height - display.workArea.height
+      size = fitSize(size)
+    }
+    return size
+  }
+
+  /**
+   * Adds the Zettlr tray to the system notification area.
+   * @private
+   * @memberof WindowManager
+   */
+  private _addTray (): void {
+    if (this._tray == null) {
+      const platformIcons: { [key in 'darwin' | 'win32']: string } = {
+        'darwin': '/png/22x22_white.png',
+        'win32': '/icon.ico'
+      }
+      if (process.platform === 'linux') {
+        const size = this._calcTrayIconSize()
+        this._tray = new Tray(path.join(__dirname, `assets/icons/png/${size}x${size}.png`))
+      } else {
+        let iconPath = '/png/32x32.png'
+        if (process.platform === 'darwin' || process.platform === 'win32') {
+          iconPath = platformIcons[process.platform]
+        }
+        this._tray = new Tray(path.join(__dirname, 'assets/icons', iconPath))
+      }
+
+      const contextMenu = Menu.buildFromTemplate([
+        {
+          label: 'Show Zettlr',
+          click: () => {
+            this.showAnyWindow()
+          },
+          type: 'normal'
+        },
+        { label: '', type: 'separator' },
+        {
+          label: 'Quit',
+          click: () => {
+            app.quit()
+          },
+          type: 'normal'
+        }
+      ])
+      this._tray.setToolTip('This is the Zettlr tray. \n Select Show Zettlr to show the Zettlr app. \n Select Quit to quit the Zettlr app.')
+      this._tray.setContextMenu(contextMenu)
+    }
+  }
+
+  /**
+   * Removes the Zettlr tray from the system notification area.
+   * @private
+   * @memberof WindowManager
+   */
+  private _removeTray (): void {
+    if (this._tray != null) {
+      this._tray.destroy()
+    }
+    this._tray = null
   }
 
   /**
@@ -351,6 +360,14 @@ export default class WindowManager {
         } else {
           global.log.warning(`[Window Manager] The window "${win.getTitle()}" (ID: ${win.id}) is not managed by the window manager.`)
           win.close()
+        }
+      }
+      if (process.platform === 'win32' || process.platform === 'linux') {
+        const leaveAppRunning = Boolean(global.config.get('system.leaveAppRunning'))
+        if (leaveAppRunning) {
+          event.preventDefault()
+          this._mainWindow?.hide()
+          return
         }
       }
 

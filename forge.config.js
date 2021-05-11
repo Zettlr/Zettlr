@@ -51,6 +51,46 @@ async function downloadPandoc (platform, arch) {
   })
 }
 
+/**
+ * This function returns the full path and filename to the library specified
+ * by `libraryName`. Uses ldconfig to determine the library location because
+ * libraries location varies.
+ *
+ * @param   {string}  libraryName  The name of the library.
+ * @returns {string}  The full path of the matching library. If library is not
+ *                    found, throws an Error.
+ */
+async function getLibraryPath (libraryName) {
+  return new Promise((resolve, reject) => {
+    const shellProcess = spawn('/sbin/ldconfig', ['-p'])
+    let out = ''
+    shellProcess.stdout.on('data', (data) => {
+      out += data.toString()
+    })
+    shellProcess.on('close', (code, signal) => {
+      if (code !== 0) {
+        reject(new Error(`Failed to run ldconfig: Process quit with code ${code}`))
+      } else {
+        let index = out.lastIndexOf(libraryName)
+        if (index === -1) {
+          reject(new Error(`'${code}' not found`))
+        }
+        let left = out.slice(0, index + 1).search(/\S+$/)
+        let right = out.slice(index).search(/\s/)
+        if (right < 0) {
+          resolve(out.slice(left))
+        }
+        resolve(out.slice(left, right + index))
+      }
+    })
+
+    // Reject on errors.
+    shellProcess.on('error', (err) => {
+      reject(err)
+    })
+  })
+}
+
 module.exports = {
   hooks: {
     generateAssets: async (forgeConfig) => {
@@ -111,6 +151,37 @@ module.exports = {
       } else {
         // If someone is building this on an unsupported platform, drop a warning.
         console.log(`\nBuilding for an unsupported platform/arch-combination ${targetPlatform}/${targetArch} - not bundling Pandoc.`)
+      }
+    },
+    postPackage: async (forgeConfig, options) => {
+      const isLinux = process.platform === 'linux'
+      if (isLinux) {
+        // bundle libappindicator3 in AppImage and zip packages. Needed for tray icon on Gnome
+        const idxArch = process.argv.indexOf('--arch')
+        let targetArch = process.arch
+        if (idxArch > -1 && process.argv.length > idxArch + 1) {
+          targetArch = process.argv[idxArch + 1]
+        }
+        if (targetArch !== process.arch) {
+          if (options.spinner !== null && options.spinner !== undefined) {
+            options.spinner.info('Unable to bundle \'libappindicator3\' (target is different architecture).')
+          } else {
+            console.log('Unable to bundle \'libappindicator3\' (target is different architecture).')
+          }
+          return
+        }
+
+        try {
+          let lib = await getLibraryPath('libappindicator3')
+          await fs.mkdir(path.join(options.outputPaths[0], 'usr', 'lib'), { recursive: true })
+          await fs.copyFile(lib, path.join(options.outputPaths[0], 'usr', 'lib', path.basename(lib)))
+        } catch (err) {
+          if (options.spinner !== null && options.spinner !== undefined) {
+            options.spinner.info(`Unable to bundle 'libappindicator3' (${err}).`)
+          } else {
+            console.log(`Unable to bundle 'libappindicator3' (${err}).`)
+          }
+        }
       }
     }
   },
