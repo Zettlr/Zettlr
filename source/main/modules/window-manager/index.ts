@@ -125,16 +125,6 @@ export default class WindowManager {
           callingWindow.minimize()
           break
         case 'win-close':
-          if (process.platform !== 'darwin') {
-            const leaveAppRunning = Boolean(global.config.get('system.leaveAppRunning'))
-            if (leaveAppRunning) {
-              this._mainWindow?.hide()
-            } else {
-              this._mainWindow?.close()
-            }
-          } else {
-            this._mainWindow?.close()
-          }
           break
         // Convenience APIs for the renderers to execute these commands
         case 'cut':
