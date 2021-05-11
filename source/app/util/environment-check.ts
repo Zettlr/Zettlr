@@ -15,6 +15,7 @@
 import path from 'path'
 import { app } from 'electron'
 import { promises as fs } from 'fs'
+import { spawn } from 'child_process'
 import isFile from '../../common/util/is-file'
 
 /**
@@ -130,5 +131,66 @@ export default async function environmentCheck (): Promise<void> {
     }
   }
 
+  try {
+    process.env.ZETTLR_IS_TRAY_SUPPORTED = await isTraySupported() ? '1' : '0'
+  } catch (err) {
+    process.env.ZETTLR_IS_TRAY_SUPPORTED = '0'
+    process.env.ZETTLR_TRAY_ERROR = err.message
+    global.log.warning(err.message)
+  }
+
   global.log.info('Environment check complete.')
+}
+
+/**
+ * Check if system supports a Tray.
+ *
+ * Returns true on Windows and MacOS.
+ * Returns true on Linux with Gnome desktop if Gnome Extension
+ * 'KStatusNotifierItem/AppIndicator Support' is installed, otherwise throws
+ * an {Error} with the reason why.
+ * Returns true on Linux with other desktops. e.g. KDE, XFCE, etc.
+ *
+ * @return {*}  {Promise<boolean>} If supported, returns true. Never returns
+ *              false.
+ * @throws {Error} Details why the Tray is not supported; or
+ *                 Details the error if an error occurred while checking Tray
+ *                 support.
+ */
+export async function isTraySupported (): Promise<boolean> {
+  const isLinux = process.platform === 'linux'
+  if (isLinux) {
+    if (process.env.XDG_CURRENT_DESKTOP === 'GNOME') {
+      return await new Promise<boolean>((resolve, reject) => {
+        const shellProcess = spawn('gsettings', [ 'get', 'org.gnome.shell', 'enabled-extensions' ])
+        let out = ''
+
+        shellProcess.stdout.on('data', (data) => {
+          out = out.concat(data.toString())
+        })
+
+        shellProcess.on('close', (code, signal) => {
+          if (code !== 0) {
+            reject(new Error('Tray is not supported. Gnome ' +
+              'Extension \'KStatusNotifierItem/AppIndicator Support\' is ' +
+              'required for Tray support on the Gnome Desktop.'
+            )) // trans('system.error.tray_not_supported')
+          } else if (out.includes("'appindicatorsupport@rgcjonas.gmail.com'")) {
+            resolve(true)
+          } else {
+            reject(new Error('Tray is not supported. Gnome ' +
+              'Extension \'KStatusNotifierItem/AppIndicator Support\' is ' +
+              'required for Tray support on the Gnome Desktop.'
+            )) // trans('system.error.tray_not_supported')
+          }
+        })
+
+        // Reject on errors.
+        shellProcess.on('error', (err) => {
+          reject(err)
+        })
+      })
+    }
+  }
+  return (true)
 }
