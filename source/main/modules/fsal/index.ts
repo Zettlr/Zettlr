@@ -41,7 +41,6 @@ import {
   CodeFileMeta,
   OtherFileDescriptor
 } from './types'
-import { TouchBarSlider } from 'electron'
 
 const ALLOWED_CODE_FILES = [
   '.tex'
