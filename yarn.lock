@@ -521,10 +521,15 @@
   resolved "https://registry.yarnpkg.com/@types/mocha/-/mocha-8.2.2.tgz#91daa226eb8c2ff261e6a8cbf8c7304641e095e0"
   integrity sha512-Lwh0lzzqT5Pqh6z61P3c3P5nm6fzQK/MMHl9UKeneAeInVflBSz1O2EkX6gM6xfJd7FBXBY5purtLx7fUiZ7Hw==
 
-"@types/node@*", "@types/node@^14.14.22", "@types/node@^14.6.2":
+"@types/node@*", "@types/node@^14.14.22":
   version "14.14.34"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.34.tgz#07935194fc049069a1c56c0c274265abeddf88da"
   integrity sha512-dBPaxocOK6UVyvhbnpFIj2W+S+1cBTkHQbFQfeeJhoKFbzYcVUGHvddeWPSucKATb3F0+pgDq0i6ghEaZjsugA==
+
+"@types/node@^14.6.2":
+  version "14.14.44"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.44.tgz#df7503e6002847b834371c004b372529f3f85215"
+  integrity sha512-+gaugz6Oce6ZInfI/tK4Pq5wIIkJMEJUu92RB3Eu93mtj4wjjjz9EB5mLp5s1pSsLXdC/CPut/xF20ZzAQJbTA==
 
 "@types/nspell@^2.1.0":
   version "2.1.0"
@@ -532,11 +537,6 @@
   integrity sha512-wYxAPq+4ghcxfJmMG6CQt6h5eSqEfYrZJgAnmbH2Tyitm1CBt4HFoMLckDxXnjPMuLtXa9ETTVYLi7pSs+ZEQg==
   dependencies:
     "@types/node" "*"
-
-"@types/node@^14.6.2":
-  version "14.14.44"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.44.tgz#df7503e6002847b834371c004b372529f3f85215"
-  integrity sha512-+gaugz6Oce6ZInfI/tK4Pq5wIIkJMEJUu92RB3Eu93mtj4wjjjz9EB5mLp5s1pSsLXdC/CPut/xF20ZzAQJbTA==
 
 "@types/parse-json@^4.0.0":
   version "4.0.0"
@@ -4238,10 +4238,10 @@ forever-agent@~0.6.1:
   resolved "https://registry.yarnpkg.com/forever-agent/-/forever-agent-0.6.1.tgz#fbc71f0c41adeb37f96c577ad1ed42d8fdacca91"
   integrity sha1-+8cfDEGt6zf5bFd60e1C2P2sypE=
 
-fork-ts-checker-webpack-plugin@^6.2.5:
-  version "6.2.5"
-  resolved "https://registry.yarnpkg.com/fork-ts-checker-webpack-plugin/-/fork-ts-checker-webpack-plugin-6.2.5.tgz#09e81ad57ed862c9dd093298550e7f6966ab1a2f"
-  integrity sha512-EqHkTmxOotb5WJEc8kjzJh8IRuRUpHxtBh+jGyOHJcEwwZzqTmlMNAJsVF3tvALohi9yJzV8C1j215DyK8Ta8w==
+fork-ts-checker-webpack-plugin@^6.2.7:
+  version "6.2.7"
+  resolved "https://registry.yarnpkg.com/fork-ts-checker-webpack-plugin/-/fork-ts-checker-webpack-plugin-6.2.7.tgz#2787fb8e36e0e7d3030f189f9ef84d02f7a07386"
+  integrity sha512-uGl/x5aiWbBtKT3QtXYuuK/gY1BfN0/RNM/BZvu2o2QdPE7FemyNIxVAgUUbPTm4l90MwWStfVVb7Bu5nyHglg==
   dependencies:
     "@babel/code-frame" "^7.8.3"
     "@types/json-schema" "^7.0.5"
@@ -4250,6 +4250,7 @@ fork-ts-checker-webpack-plugin@^6.2.5:
     cosmiconfig "^6.0.0"
     deepmerge "^4.2.2"
     fs-extra "^9.0.0"
+    glob "^7.1.6"
     memfs "^3.1.2"
     minimatch "^3.0.4"
     schema-utils "2.7.0"
