@@ -122,7 +122,7 @@
     "fork-ts-checker-webpack-plugin": "^6.2.7",
     "jsdom": "^16.5.3",
     "less": "^4.1.1",
-    "less-loader": "^7.3.0",
+    "less-loader": "^8.1.1",
     "lorem-ipsum": "^2.0.3",
     "mocha": "^8.4.0",
     "node-loader": "^1.0.2",
