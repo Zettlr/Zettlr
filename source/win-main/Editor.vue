@@ -454,6 +454,15 @@ export default {
     this.$root.$on('toc-line', (line) => {
       this.editor.jtl(line)
     })
+
+    // Finally, let's observe if the editor element changes. If so, refresh the
+    // editor. This will keep the cursor correct when the SplitViews are either
+    // opened/closed or resized.
+    const obs = new ResizeObserver(entries => {
+      this.editor.codeMirror.refresh()
+    })
+
+    obs.observe(this.$refs.editor)
   },
   methods: {
     jtl (lineNumber) {
