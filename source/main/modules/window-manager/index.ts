@@ -353,15 +353,14 @@ export default class WindowManager {
           win.close()
         }
       }
-      let leaveAppRunning = false
       if (process.platform === 'win32' || process.platform === 'linux') {
-        leaveAppRunning = Boolean(global.config.get('system.leaveAppRunning'))
+        const leaveAppRunning = Boolean(global.config.get('system.leaveAppRunning'))
         if (leaveAppRunning) {
           this._mainWindow?.hide()
         }
       }
 
-      if (this._beforeMainWindowCloseCallback !== null && !leaveAppRunning) {
+      if (this._beforeMainWindowCloseCallback !== null) {
         const shouldClose: boolean = this._beforeMainWindowCloseCallback()
         if (!shouldClose) {
           event.preventDefault()
