@@ -356,9 +356,7 @@ export default class WindowManager {
       if (process.platform === 'win32' || process.platform === 'linux') {
         const leaveAppRunning = Boolean(global.config.get('system.leaveAppRunning'))
         if (leaveAppRunning) {
-          event.preventDefault()
           this._mainWindow?.hide()
-          return
         }
       }
 
