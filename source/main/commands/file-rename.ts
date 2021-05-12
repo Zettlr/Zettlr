@@ -46,6 +46,12 @@ export default class FileRename extends ZettlrCommand {
       return global.log.error(`Could not find file ${String(arg.path)}`)
     }
 
+    // If the new name equals the old one, don't do anything, see #1942
+    if (file.name.toLowerCase() === newName.toLowerCase()) {
+      global.log.info(`[App] Didn't rename file to ${newName} since it's the same name`)
+      return
+    }
+
     // Test if we are about to override a file
     const dir = file.parent
     let found = dir?.children.find(e => e.name.toLowerCase() === newName.toLowerCase())
