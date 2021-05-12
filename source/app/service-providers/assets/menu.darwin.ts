@@ -31,7 +31,11 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         id: recent.name,
         label: recent.name,
         click: function (menuitem, focusedWindow) {
-          // TODO: Run open command on the application
+          global.application.runCommand('open-file', {
+            path: recent.path,
+            newTab: false
+          })
+            .catch(err => global.log.error(String(err.message), err))
         }
       })
     }
