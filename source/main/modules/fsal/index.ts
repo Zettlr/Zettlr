@@ -605,6 +605,8 @@ export default class FSAL extends EventEmitter {
     } else if (descriptorPath !== null && descriptorPath !== this.activeFile) {
       let file = this.findFile(descriptorPath)
       if (file !== null && this._state.openFiles.includes(file)) {
+        // Add the file to the recent docs provider (or move it around)
+        global.recentDocs.add(this.getMetadataFor(file))
         // Make sure the main database is set before, and only load an optional
         // bibliography file afterwards.
         global.citeproc.loadMainDatabase()
