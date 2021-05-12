@@ -82,7 +82,11 @@ export default {
         // this window as if the user had clicked on the close-button.
         if (currentIdx > -1) {
           // There's an active file, so request the closure
-          this.handleCloseFile(this.openFiles[currentIdx])
+          ipcRenderer.invoke('application', {
+            command: 'file-close',
+            payload: this.openFiles[currentIdx].path
+          })
+            .catch(e => console.error(e))
         } else {
           // No more open files, so request closing of the window
           ipcRenderer.send('window-controls', { command: 'win-close' })
