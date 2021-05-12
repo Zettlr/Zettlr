@@ -218,7 +218,6 @@ export default {
     fsalFiles: function () {
       const fileDatabase = {}
 
-      console.time('Database allocation')
       for (let file of this.fsalFiles) {
         let fname = file.name.substr(0, file.name.lastIndexOf('.'))
         let displayText = fname // Fallback: Only filename
@@ -241,7 +240,6 @@ export default {
           'id': file.id
         }
       }
-      console.timeEnd('Database allocation')
 
       this.editor.setCompletionDatabase('files', fileDatabase)
     },

@@ -49,6 +49,7 @@ import promptDialog from './dialog/prompt'
 import sanitizeWindowPosition from './sanitize-window-position'
 import { WindowPosition } from './types.d'
 import askFileDialog from './dialog/ask-file'
+import saveFileDialog from './dialog/save-dialog'
 // import dragIcon from '../../assets/dragicon.png'
 
 interface QuicklookRecord {
@@ -828,6 +829,22 @@ export default class WindowManager {
       return await askFileDialog(win, filters, multiSel)
     } else {
       return await askFileDialog(this._mainWindow, filters, multiSel)
+    }
+  }
+
+  /**
+   * Allows the user to save a file.
+   *
+   * @param   {string}                 filename  An initial filename to display
+   * @param   {BrowserWindow<string>}  win       The window to attach to
+   *
+   * @return  {Promise<string|undefined>}        Resolves with a path or undefined
+   */
+  async saveFile (filename: string, win?: BrowserWindow|null): Promise<string|undefined> {
+    if (win != null) {
+      return await saveFileDialog(win, filename)
+    } else {
+      return await saveFileDialog(this._mainWindow, filename)
     }
   }
 
