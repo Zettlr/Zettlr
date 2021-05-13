@@ -43,6 +43,7 @@ import TranslationProvider from './service-providers/translation-provider'
 import UpdateProvider from './service-providers/update-provider'
 import NotificationProvider from './service-providers/notification-provider'
 import StatsProvider from './service-providers/stats-provider'
+import TrayProvider from './service-providers/tray-provider'
 
 // We need module-global variables so that garbage collect won't shut down the
 // providers before the app is shut down.
@@ -61,6 +62,7 @@ let updateProvider: UpdateProvider
 let menuProvider: MenuProvider
 let notificationProvider: NotificationProvider
 let statsProvider: StatsProvider
+let trayProvider: TrayProvider
 
 // Statistics: Record the uptime of the application
 let upTimestamp: number
@@ -124,6 +126,7 @@ export async function bootApplication (): Promise<void> {
   updateProvider = new UpdateProvider()
   notificationProvider = new NotificationProvider()
   statsProvider = new StatsProvider()
+  trayProvider = new TrayProvider()
 
   // If the user has provided a working path to XeLaTeX, make sure that its
   // directory name is in path for Zettlr to find it.
@@ -192,6 +195,7 @@ export async function shutdownApplication (): Promise<void> {
   await safeShutdown(configProvider)
   await safeShutdown(statsProvider)
   await safeShutdown(assetsProvider)
+  await safeShutdown(trayProvider)
 
   const downTimestamp = Date.now()
 

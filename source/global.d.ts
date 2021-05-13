@@ -64,5 +64,6 @@ declare module NodeJS {
     stats: StatsProvider
     i18n: any
     i18nFallback: any
+    tray: TrayProvider
   }
 }
