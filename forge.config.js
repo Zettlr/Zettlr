@@ -210,6 +210,11 @@ module.exports = {
               html: './source/win-defaults/index.htm',
               js: './source/win-defaults/index.ts',
               name: 'defaults'
+            },
+            {
+              html: './source/win-update/index.htm',
+              js: './source/win-update/index.ts',
+              name: 'update'
             }
           ]
         }

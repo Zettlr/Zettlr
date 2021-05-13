@@ -482,6 +482,8 @@ export default class Zettlr {
     } else if (command === 'open-stats-window') {
       this._windowManager.showStatsWindow()
       return true
+    } else if (command === 'open-update-window') {
+      this._windowManager.showUpdateWindow()
     } else {
       // ELSE: If the command has not yet been found, try to run one of the
       // bigger commands

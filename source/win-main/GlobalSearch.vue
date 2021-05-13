@@ -95,7 +95,7 @@ import objectToArray from '../common/util/object-to-array'
 import compileSearchTerms from '../common/util/compile-search-terms'
 import TextControl from '../common/vue/form/elements/Text'
 import ButtonControl from '../common/vue/form/elements/Button'
-import ProgressControl from './Progress'
+import ProgressControl from '../common/vue/form/elements/Progress'
 import AutocompleteText from './AutocompleteText'
 import { ipcRenderer } from 'electron'
 

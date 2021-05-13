@@ -570,8 +570,18 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         },
         {
           id: 'menu.update',
-          label: trans('menu.update') // ,
-          // command: 'update-check' TODO
+          label: trans('menu.update'),
+          click: function (menuitem, focusedWindow) {
+            if (global.updates.applicationUpdateAvailable()) {
+              // Immediately open the window instead of first checking
+              global.application.runCommand('open-update-window')
+                .catch(e => global.log.error(String(e.message), e))
+
+              return
+            }
+
+            global.updates.check()
+          }
         }
       ]
     }
