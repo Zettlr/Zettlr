@@ -23,7 +23,8 @@ export const plugin: ExporterPlugin = {
         'org': 'Orgmode',
         'plain': 'Plain Text',
         'rst': 'reStructured Text',
-        'rtf': 'RichText Format'
+        'rtf': 'RichText Format',
+        'icml': 'InDesign Markup Language (ICML)'
       },
       options: []
     }
