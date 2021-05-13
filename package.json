@@ -106,7 +106,7 @@
     "css-loader": "^5.2.4",
     "csso": "^4.2.0",
     "electron": "^12.0.7",
-    "electron-builder": "22.10.5",
+    "electron-builder": "22.11.3",
     "electron-devtools-installer": "^3.2.0",
     "electron-notarize": "^1.0.0",
     "eslint": "^7.25.0",
