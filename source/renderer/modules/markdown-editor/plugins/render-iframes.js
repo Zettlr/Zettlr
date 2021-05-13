@@ -1,4 +1,4 @@
-/* global CodeMirror $ define */
+/* global CodeMirror define */
 // This plugin renders iFrames in CodeMirror instances
 
 const { getIframeRE } = require('../../../../common/regular-expressions');
@@ -15,6 +15,15 @@ const { getIframeRE } = require('../../../../common/regular-expressions');
   'use strict'
 
   var iframeRE = getIframeRE() // Matches all iframes
+
+  // Utility function that only retains the source of an iframe and omits all
+  // other (potentially insecure) attributes, e.g., srcdoc (mentioned as part
+  // of JPCERT#90544144).
+  function renderIframe (src) {
+    const iframe = document.createElement('iframe')
+    iframe.src = src
+    return iframe
+  }
 
   CodeMirror.commands.markdownRenderIframes = function (cm) {
     let match
@@ -42,17 +51,69 @@ const { getIframeRE } = require('../../../../common/regular-expressions');
 
       // Now we can render it finally.
 
-      let iframe = $(match[0])[0] // Use jQuery for simple creation of the DOM element
+      // BEGIN: Backport commit 53b544b2
+      // as part of JPCERT/CC JVN#98239374 / TN: JPCERT#90544144
+      const iframeSrc = match[1]
+      // Retrieve the hostname from the iframe's source
+      const hostname = (new URL(iframeSrc)).hostname
 
-      cm.doc.markText(
-        curFrom, curTo,
-        {
-          'clearOnEnter': true,
-          'replacedWith': iframe,
-          'inclusiveLeft': false,
-          'inclusiveRight': false
+      // Retrieve the global whitelist to check if we can immediately render this
+      const whitelist = global.config.get('system.iframeWhitelist')
+
+      if (whitelist.includes(hostname) === true) {
+        // The hostname is whitelisted, so render this iFrame immediately
+        cm.doc.markText(
+          curFrom, curTo,
+          {
+            'clearOnEnter': true,
+            'replacedWith': renderIframe(iframeSrc),
+            'inclusiveLeft': false,
+            'inclusiveRight': false
+          }
+        )
+      } else {
+        // The hostname was not whitelisted, so notify the user
+        const wrapper = document.createElement('div')
+        wrapper.classList.add('iframe-warning-wrapper')
+        const info = document.createElement('p')
+        info.innerHTML = `iFrame elements can contain harmful content. The hostname <strong>${hostname}</strong> is not yet trusted. Do you wish to render this iFrame?`
+        const renderAlways = document.createElement('button')
+        renderAlways.textContent = `Always allow content from ${hostname}`
+        const renderOnce = document.createElement('button')
+        renderOnce.textContent = 'Render this time only'
+
+        wrapper.appendChild(info)
+        wrapper.appendChild(renderAlways)
+        wrapper.appendChild(renderOnce)
+
+        const marker = cm.doc.markText(
+          curFrom, curTo,
+          {
+            'clearOnEnter': true,
+            'replacedWith': wrapper,
+            'inclusiveLeft': false,
+            'inclusiveRight': false
+          }
+        )
+
+        renderOnce.onclick = (event) => {
+          // Render the iFrame, but only this time
+          const iframe = renderIframe(iframeSrc)
+          wrapper.replaceWith(iframe)
+          marker.changed() // Notify CodeMirror of the potentially updated size
         }
-      )
+
+        renderAlways.onclick = (event) => {
+          // Render the iFrame and also add the hostname to the whitelist
+          const iframe = renderIframe(iframeSrc)
+          wrapper.replaceWith(iframe)
+          marker.changed()
+
+          const currentWhitelist = global.config.get('system.iframeWhitelist')
+          currentWhitelist.push(hostname)
+          global.config.set('system.iframeWhitelist', currentWhitelist)
+        }
+      }
     }
   }
 })

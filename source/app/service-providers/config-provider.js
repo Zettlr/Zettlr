@@ -256,7 +256,8 @@ module.exports = class ConfigProvider extends EventEmitter {
         'stabilityThreshold': 1000 // Positive int in milliseconds
       },
       'system': {
-        'deleteOnFail': false // Whether to delete files if trashing them fails
+        'deleteOnFail': false, // Whether to delete files if trashing them fails
+        'iframeWhitelist': [ 'www.youtube.com', 'player.vimeo.com' ]
       },
       'checkForBeta': false, // Should the user be notified of beta releases?
       'uuid': null // The app's unique anonymous identifier

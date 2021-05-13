@@ -1,3 +1,35 @@
+# 1.8.9
+
+## HOTFIX FOR JPCERT#90544144
+
+> Read our Postmortem on this issue and the last one on our blog.
+
+This is a hotfix that fixes a potentially severe security-issue, reported to us
+by the Japanese cybersecurity organisation JPCERT/CC. It was reported that due
+to insecure iFrame handling on our side, malicious actors could take over users'
+computers using specially crafted iFrame-embed codes or Markdown-documents
+containing such an iFrame.
+
+This release closes this vulnerability. Specifically, the following precautions
+were taken:
+
+1. Now, whenever Zettlr renders an iFrame, it will omit all attributes except
+   `src` -- in the security disclosure, the attribute `srcdoc` has been used to
+   maliciously access the test system. While this means that certain features
+   are not supported during preview (e.g., `allowfullscreen`), remember that the
+   attributes will still be exported so that in HTML exports, they will work.
+2. We have added a global whitelist that by default only contains the hostnames
+   of YouTube and Vimeo players so that those embeds work out of the box. For
+   all other hostnames, rendering of iFrames will be blocked by default.
+   Instead, you will be presented with a warning and be asked whether or not you
+   want to render content from the given hostname. You can then choose to render
+   it _once_, or permanently add the named hostname to the whitelist.
+
+> Note that you can completely disable any iFrame pre-rendering in your display preferences.
+
+We would like to apologise for the inconvenience. If you are interested in how
+it came to this situation, please read our Postmortem on this issue.
+
 # 1.8.8
 
 ## HOTFIX FOR ELECTRON CVEs
