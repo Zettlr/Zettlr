@@ -338,6 +338,45 @@ export default class FSAL extends EventEmitter {
   }
 
   /**
+   * Simlarily to consolidateOpenFiles, this function takes all open root files
+   * and checks whether they are not actually root files, but contained within
+   * one of the loaded workspaces. This is necessary because it is sometimes
+   * easier to just dump certain files onto the disk and clean up later (instead
+   * of manually searching for their prospective root directories and adding the
+   * files there).
+   *
+   * Also, if a user opens first a root file and later on decides to open the
+   * whole directory, this function takes care to pluck the root files and put
+   * them where they belong.
+   */
+  private _consolidateRootFiles (): void {
+    // First, retrieve all root files
+    const roots = this._state.filetree.filter(elem => elem.type !== 'directory')
+
+    // Secondly, see if we can find the containing directories somewhere in our
+    // filetree.
+    for (const root of roots) {
+      const dir = this.findDir(root.dir)
+
+      if (dir !== null) {
+        // The directory is, in fact loaded! So first we can pluck that file
+        // from our filetree.
+        const idx = this._state.filetree.indexOf(root)
+        this._state.filetree.splice(idx, 1)
+        // In order to reflect this change in consumers of the filetree, we
+        // first need to remove the file so that consumers remove it from their
+        // filetree, before "adding" it again. The time they execute the second
+        // change, they will actually pull the "correct" element from within the
+        // loaded workspace rather than the "root" element.
+        // NOTE that this logic relies upon the fact that root files will be
+        // searched before the directory tree, so DON'T you change that ever!
+        this._recordFiletreeChange('remove', root.path)
+        this._recordFiletreeChange('add', root.path)
+      }
+    }
+  }
+
+  /**
    * Shuts down the service provider.
    *
    * @returns {boolean} Whether or not the shutdown was successful
@@ -434,6 +473,8 @@ export default class FSAL extends EventEmitter {
     }
 
     this._state.filetree = sort(this._state.filetree)
+
+    this._consolidateRootFiles()
 
     return true
   }
