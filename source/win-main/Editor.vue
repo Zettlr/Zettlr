@@ -584,6 +584,11 @@ export default {
         scroller.scrollTop += event.deltaY
       }
     },
+    /**
+     * Triggers when the user presses any mouse button
+     *
+     * @param   {MouseEvent}  event  The mouse event
+     */
     editorMousedown (event) {
       if (event.target !== this.$refs.editor) {
         // return // Only handle if the event's target is the editor itself
@@ -591,6 +596,11 @@ export default {
 
       // TODO: Enable selection of full lines on the editor instance
     },
+    /**
+     * Triggers when the user releases any mouse button
+     *
+     * @param   {MouseEvent}  event  The mouse event
+     */
     editorMouseup (event) {
       if (event.target !== this.$refs.editor) {
         // return // Only handle if the event's target is the editor itself
