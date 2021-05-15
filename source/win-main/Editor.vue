@@ -632,6 +632,8 @@ export default {
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
+  background-color: #ffffff;
+  transition: 0.2s background-color ease;
 
   // .katex {
   //   display: inline-block;
@@ -659,45 +661,49 @@ export default {
     }
   }
 
-    .CodeMirror {
-      // The CodeMirror editor needs to respect the new tabbar; it cannot take
-      // up 100 % all for itself anymore.
-      margin-left: 0.5em;
-      height: 100%;
-      cursor: text;
-      font-family: inherit;
-      background: none;
+  .CodeMirror {
+    // The CodeMirror editor needs to respect the new tabbar; it cannot take
+    // up 100 % all for itself anymore.
+    margin-left: 0.5em;
+    height: 100%;
+    cursor: text;
+    font-family: inherit;
+    background: none;
 
-      @media(min-width: 1025px) { margin-left: @editor-margin-normal-lg; }
-      @media(max-width: 1024px) { margin-left: @editor-margin-normal-md; }
-      @media(max-width:  900px) { margin-left: @editor-margin-normal-sm; }
-    }
-
-    .CodeMirror-code {
-      margin: 5em 0em;
-      @media(max-width: 1024px) { margin: @editor-margin-fullscreen-md 0em; }
-
-      .mute { opacity:0.2; }
-    }
-
-    .CodeMirror-scroll {
-      padding-right: 5em;
-      @media(min-width: 1025px) { padding-right: @editor-margin-normal-lg; }
-      @media(max-width: 1024px) { padding-right: @editor-margin-normal-md; }
-      @media(max-width:  900px) { padding-right: @editor-margin-normal-sm; }
-      overflow-x: hidden !important; // Necessary to hide the horizontal scrollbar
-
-      // We need to override a negative margin
-      // and a bottom padding from the standard
-      // CSS for some calculations to be correct
-      // such as the table editor
-      margin-bottom: 0px;
-      padding-bottom: 0px;
-    }
-
-    // Reduce font size of math a bit
-    .katex { font-size: 1.1em; }
+    @media(min-width: 1025px) { margin-left: @editor-margin-normal-lg; }
+    @media(max-width: 1024px) { margin-left: @editor-margin-normal-md; }
+    @media(max-width:  900px) { margin-left: @editor-margin-normal-sm; }
   }
+
+  .CodeMirror-code {
+    margin: 5em 0em;
+    @media(max-width: 1024px) { margin: @editor-margin-fullscreen-md 0em; }
+
+    .mute { opacity:0.2; }
+  }
+
+  .CodeMirror-scroll {
+    padding-right: 5em;
+    @media(min-width: 1025px) { padding-right: @editor-margin-normal-lg; }
+    @media(max-width: 1024px) { padding-right: @editor-margin-normal-md; }
+    @media(max-width:  900px) { padding-right: @editor-margin-normal-sm; }
+    overflow-x: hidden !important; // Necessary to hide the horizontal scrollbar
+
+    // We need to override a negative margin
+    // and a bottom padding from the standard
+    // CSS for some calculations to be correct
+    // such as the table editor
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+  }
+
+  // Reduce font size of math a bit
+  .katex { font-size: 1.1em; }
+}
+
+body.dark #editor {
+  background-color: rgba(20, 20, 30, 1);
+}
 
 body.darwin #editor {
   // On macOS the tabbar is 30px high.

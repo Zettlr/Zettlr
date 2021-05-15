@@ -71,14 +71,19 @@ body.darwin {
       &::-webkit-slider-runnable-track {
         width: 100%;
         height: 4px;
+        background-color: rgb(217, 217, 217);
+        border: 1px solid rgb(213, 213, 213);
       }
 
       &::-webkit-slider-thumb {
         height: 20px;
         width: 8px;
-        margin-top: -8px;
+        margin-top: -10px;
         border-radius: 5px;
         -webkit-appearance: none;
+        background-color: white;
+        border: 1px solid rgb(195, 195, 195);
+        border-top-color: rgb(218, 218, 218);
       }
     }
   }
@@ -87,7 +92,13 @@ body.darwin {
     .slider-group {
       input[type="range"] {
         &::-webkit-slider-runnable-track {
-          background-color: rgb(80, 80, 80);
+          background-color: rgb(56, 56, 56);
+          border-color: transparent;
+        }
+
+        &::-webkit-slider-thumb {
+          background-color: rgb(145, 145, 145);
+          border-color: transparent;
         }
       }
     }
@@ -120,6 +131,7 @@ body.win32 {
         margin-top: -7px;
         border-radius: 50%;
         -webkit-appearance: none;
+        background-color: red;
       }
     }
   }
