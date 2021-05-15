@@ -18,15 +18,6 @@
  * END HEADER
  */
 
-// First import the geometry variables
-@import "variables.less";
-
-// Then the font sets
-@import "../fonts.less";
-
-// NEW NEW NEW NEW NEW NEW NEW NEW
-// This code is already in the right format and will be used
-// Common CSS
 * {
   margin: 0;
   box-sizing: border-box;
@@ -45,40 +36,14 @@ html {
 body {
   width: 100vw;
   height: 100vh;
-}
-
-@import "./helper-classes.less";
-
-// Here the new code ends, everything outside of this must be migrated
-
-body {
   overflow: hidden;
-  width: 100vw;
-  height: 100vh;
-  user-select: none; // Prevent arbitrary selection outside of inputs
+  user-select: none;
 
-  .dragger {
-    // This class is applied to dragged elements
-    font-size: @font-size-small;
-    border-radius: 5px;
-    background-color: var(--grey-1);
-    padding: 4px;
-    box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, .25);
-    cursor: default;
-  }
-
-  // File manager arrow button
-  #file-manager #arrow-button {
-    background-color: white;
-    border-radius: 100%;
-    box-shadow: 1px 1px 10px 0px rgba(0, 0, 0, .25);
-  }
-
-  // Notifications
-  .notify {
-    background-color: rgba(0, 0, 0, .7);
-    color: white;
-    border-radius: 3px;
+  // Reset those ugly outlines
+  input, select, textarea, button {
+    &:focus {
+      outline: 0;
+    }
   }
 
   // Fixes the non-readable blue colour of the links and prevents them from
@@ -88,17 +53,17 @@ body {
       color: white;
       word-wrap: break-word;
     }
-
-    // The document tabs use the class "tag" to mark tags in the tippy preview
-    .tag {
-      border-radius: 5px;
-      margin: 3px;
-      padding: 3px;
-      display: inline-block;
-      background-color: #999;
-    }
   }
 
+  .dragger {
+    // This class is applied to dragged elements
+    font-size: 0.9em;
+    border-radius: 5px;
+    background-color: var(--grey-1);
+    padding: 4px;
+    box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, .25);
+    cursor: default;
+  }
 
   // The table helper injects CSS that we need to override
   .table-helper-align-button-container,
@@ -121,30 +86,27 @@ body {
   }
 }
 
-// Reset those ugly outlines
-input, select, textarea, button {
-  &:focus {
-    outline: 0;
-  }
+// The application menu class is basically one menu that is shown both if the
+// custom menubar is shown and a top level item submenu is pulled up, as well as
+// if there is a context menu (as we don't use the remote class to display
+// context menus anymore).
+
+@menubar-height: 31px; // The height of the menubar on Windows and Linux
+
+// HELPER CLASSES
+
+.columns {
+  columns: 2;
+}
+
+.dont-break-inside * {
+  break-inside: avoid;
+}
+
+.inline {
+  display: inline-block;
 }
 
 .clearfix {
   clear: both;
 }
-
-/**
- * Now the import directives to include the geometrical preconditions for all
- * elements.
- */
-
-// Cursor blink animation (see codemirror.less for implementation)
-@import "../animation-cursor.less";
-@cursor-blink-rate: 1s; // How fast should the cursor blink?
-
-// END ANIMATIONS
-
-@import "codemirror.less";
-
-@import "application-menu.less";
-
-@import "theme-mockups.less"; // Contains the mockup designs for the theme switcher
