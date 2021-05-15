@@ -1,5 +1,12 @@
 <template>
-  <div id="editor" ref="editor" v-bind:style="{ 'font-size': `${fontSize}px` }">
+  <div
+    id="editor"
+    ref="editor"
+    v-bind:style="{ 'font-size': `${fontSize}px` }"
+    v-on:wheel="onEditorScroll($event)"
+    v-on:mousedown="editorMousedown($event)"
+    v-on:mouseup="editorMouseup($event)"
+  >
     <div v-show="showSearch" id="editor-search">
       <div class="row">
         <input
@@ -559,6 +566,37 @@ export default {
     },
     replaceAll () {
       this.editor.replaceAll(this.query, this.replaceString)
+    },
+    /**
+     * Scrolls the editor according to the value if the user scrolls left of the
+     * .CodeMirror-scroll element
+     *
+     * @param   {WheelEvent}  event  The mousewheel event
+     */
+    onEditorScroll (event) {
+      if (event.target !== this.$refs.editor) {
+        return // Only handle if the event's target is the editor itself
+      }
+
+      const scroller = this.$refs.editor.querySelector('.CodeMirror-scroll')
+
+      if (scroller !== null) {
+        scroller.scrollTop += event.deltaY
+      }
+    },
+    editorMousedown (event) {
+      if (event.target !== this.$refs.editor) {
+        // return // Only handle if the event's target is the editor itself
+      }
+
+      // TODO: Enable selection of full lines on the editor instance
+    },
+    editorMouseup (event) {
+      if (event.target !== this.$refs.editor) {
+        // return // Only handle if the event's target is the editor itself
+      }
+
+      // TODO: Stop the selection of full lines on the editor instance
     }
   }
 }
