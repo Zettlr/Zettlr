@@ -833,15 +833,15 @@ body.darwin.dark #editor {
 }
 
 // Define the readability classes
-.cm-readability-0   { background-color: hsv(100, 70%, 95%); color: #444444 !important; }
-.cm-readability-1   { background-color: hsv( 90, 70%, 95%); color: #444444 !important; }
-.cm-readability-2   { background-color: hsv( 80, 70%, 95%); color: #444444 !important; }
-.cm-readability-3   { background-color: hsv( 70, 70%, 95%); color: #444444 !important; }
-.cm-readability-4   { background-color: hsv( 60, 70%, 95%); color: #444444 !important; }
-.cm-readability-5   { background-color: hsv( 50, 70%, 95%); color: #444444 !important; }
-.cm-readability-6   { background-color: hsv( 40, 70%, 95%); color: #444444 !important; }
-.cm-readability-7   { background-color: hsv( 30, 70%, 95%); color: #444444 !important; }
-.cm-readability-8   { background-color: hsv( 10, 70%, 95%); color: #444444 !important; }
-.cm-readability-9   { background-color: hsv(  0, 70%, 95%); color: #444444 !important; }
-.cm-readability-10  { background-color: hsv(350, 70%, 95%); color: #444444 !important; }
+.cm-readability-0   { background-color: rgb(246, 237, 178); color: #444444 !important; }
+.cm-readability-1   { background-color: rgb(229, 185, 184); color: #444444 !important; }
+.cm-readability-2   { background-color: rgb(153, 233, 239); color: #444444 !important; }
+.cm-readability-3   { background-color: rgb(195, 227, 245); color: #444444 !important; }
+.cm-readability-4   { background-color: rgb(229, 183, 133); color: #444444 !important; }
+.cm-readability-5   { background-color: rgb(195, 239, 153); color: #444444 !important; }
+.cm-readability-6   { background-color: rgb(136, 233, 44); color: #444444 !important; }
+.cm-readability-7   { background-color: rgb(246, 237, 178); color: #444444 !important; }
+.cm-readability-1   { background-color: rgb(229, 185, 184); color: #444444 !important; }
+.cm-readability-2   { background-color: rgb(153, 233, 239); color: #444444 !important; }
+.cm-readability-3   { background-color: rgb(195, 227, 245); color: #444444 !important; }
 </style>
