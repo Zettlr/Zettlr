@@ -70,6 +70,7 @@ const renderElementsHook = require('./hooks/render-elements')
 const typewriterHook = require('./hooks/typewriter')
 const { autocompleteHook, setAutocompleteDatabase } = require('./hooks/autocomplete')
 const linkTooltipsHook = require('./hooks/link-tooltips')
+const noteTooltipsHook = require('./hooks/note-preview')
 
 const displayContextMenu = require('./display-context-menu')
 
@@ -169,6 +170,7 @@ module.exports = class MarkdownEditor extends EventEmitter {
     typewriterHook(this._instance)
     autocompleteHook(this._instance)
     linkTooltipsHook(this._instance)
+    noteTooltipsHook(this._instance)
 
     // Propagate necessary events to the master process
     this._instance.on('change', (cm, changeObj) => {
