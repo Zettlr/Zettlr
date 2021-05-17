@@ -841,7 +841,7 @@ body.darwin.dark #editor {
 .cm-readability-5   { background-color: rgb(195, 239, 153); color: #444444 !important; }
 .cm-readability-6   { background-color: rgb(136, 233, 44); color: #444444 !important; }
 .cm-readability-7   { background-color: rgb(246, 237, 178); color: #444444 !important; }
-.cm-readability-1   { background-color: rgb(229, 185, 184); color: #444444 !important; }
-.cm-readability-2   { background-color: rgb(153, 233, 239); color: #444444 !important; }
-.cm-readability-3   { background-color: rgb(195, 227, 245); color: #444444 !important; }
+.cm-readability-8   { background-color: rgb(229, 185, 184); color: #444444 !important; }
+.cm-readability-9   { background-color: rgb(153, 233, 239); color: #444444 !important; }
+.cm-readability-10   { background-color: rgb(195, 227, 245); color: #444444 !important; }
 </style>
