@@ -58,7 +58,7 @@
     "got": "^11.8.2",
     "joplin-turndown": "^4.0.30",
     "joplin-turndown-plugin-gfm": "^1.0.12",
-    "katex": "^0.13.6",
+    "katex": "^0.13.11",
     "luxon": "^1.26.0",
     "md5": "^2.3.0",
     "mermaid": "^8.10.1",
