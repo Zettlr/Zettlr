@@ -27,6 +27,13 @@ Due to a change in the underlying data structure, this version of Zettlr will no
 - Removed the ability for the translation provider to arbitrarily request languages that have not been installed in order to remove that fragile feature. All languages will now be provided from the application immediately.
 - All windows will now remember their last position (new: log window and print window).
 - Some components of the renderer elements will now respect a given accent colour set by your operating system (only available for macOS and Windows).
+-Change the background color (night model) for quoted words from --grey-4 to --beige-5
+-Darken the color of the headlines for night model
+-Change the opacity for citing and Bold symbols from 0.3 to 
+0.65, so the symbols can be visible in night mode
+-Change the dotted underline for spellchecking to dashed underline so the space between the dots is more sparse
+-Soften every color in the Readability Mode
+-Enlighten the primary color for the theme bordeaux
 
 ## Under the Hood
 
