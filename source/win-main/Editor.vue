@@ -840,8 +840,8 @@ body.darwin.dark #editor {
 .cm-readability-4   { background-color: rgb(229, 183, 133); color: #444444 !important; }
 .cm-readability-5   { background-color: rgb(195, 239, 153); color: #444444 !important; }
 .cm-readability-6   { background-color: rgb(136, 233, 44); color: #444444 !important; }
-.cm-readability-7   { background-color: rgb(246, 237, 178); color: #444444 !important; }
-.cm-readability-8   { background-color: rgb(229, 185, 184); color: #444444 !important; }
-.cm-readability-9   { background-color: rgb(153, 233, 239); color: #444444 !important; }
-.cm-readability-10   { background-color: rgb(195, 227, 245); color: #444444 !important; }
+.cm-readability-7   { background-color: rgb(102, 94, 42); color: #444444 !important; }
+.cm-readability-8   { background-color: rgb(133, 51, 50); color: #444444 !important; }
+.cm-readability-9   { background-color: rgb(34, 110, 116); color: #444444 !important; }
+.cm-readability-10   { background-color: rgb(7, 43, 63); color: #444444 !important; }
 </style>
