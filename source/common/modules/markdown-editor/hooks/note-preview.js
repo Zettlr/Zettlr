@@ -32,7 +32,7 @@ module.exports = (cm) => {
     let tooltip = tippy(a, {
       content: `Searching for file...`,
       allowHTML: true, // Obviously
-      interactive: true, 
+      interactive: true,
       placement: 'top-start', // Display at the beginning of the anchor
       appendTo: document.body, // anchor
       showOnCreate: true, // Immediately show the tooltip
@@ -56,8 +56,8 @@ module.exports = (cm) => {
               content = descriptorWithContent.content.substring(0, 50) // The text, up to 50 chars
               wordCount = descriptorWithContent.wordCount // The word count
               title = descriptorWithContent.name // The file name
-              
-              dateDif = Date.now() - descriptorWithContent.modtime 
+
+              dateDif = Date.now() - descriptorWithContent.modtime
               days = Math.floor(dateDif / (86400000)) // The days since modification
 
               // On ready, show a tooltip with the note contents
