@@ -76,6 +76,7 @@ body div.tab-list {
       &.active {
         // --system variables are set dynamically based on the operating system.
         color: var(--system-accent-color, --c-primary);
+        background-color: var(--system-accent-color-contrast, white);
       }
     }
 }

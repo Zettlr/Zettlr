@@ -51,12 +51,20 @@ export default {
         return event.stopPropagation()
       }
 
+      if (event.button === 2) {
+        return // The user requested a context menu
+      }
+
       // Determine if we have a middle (wheel) click. The event-type checking
       // is only done so this is only true when we triggered this function using
       // the mousedown event.
       const middleClick = (event.type === 'mousedown' && event.button === 1)
       const alt = event.altKey
       const type = this.obj.type
+
+      if (middleClick) {
+        event.preventDefault() // Otherwise, on Windows we'd have a middle-click-scroll
+      }
 
       if (type === 'file' && alt) {
         // QuickLook the file
@@ -100,7 +108,7 @@ export default {
       // We need to tweak some minor things depending on whether this is a
       // FileItem or a TreeItem. NOTE: These things were determined by diffing
       // the original handleContextMenu functions in both components.
-      const treeItem = this.name === 'TreeItem'
+      const treeItem = this.$options.name === 'TreeItem'
 
       if (this.isDirectory === true) {
         dirContextMenu(event, this.obj, this.$el, (clickedID) => {
@@ -239,6 +247,13 @@ export default {
                 }).catch(e => console.error(e))
               }
             })
+          } else if (clickedID === 'menu.close_file') {
+            // The close_file item is only shown in the tree view on root files
+            ipcRenderer.invoke('application', {
+              command: 'root-close',
+              payload: this.obj.path
+            })
+              .catch(err => console.error(err))
           }
         })
       }

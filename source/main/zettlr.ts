@@ -225,7 +225,7 @@ export default class Zettlr {
           broadcastIpcMessage('fsal-state-changed', 'openDirectory')
           break
         case 'openFiles':
-          global.config.set('openFiles', this._fsal.openFiles)
+          global.config.set('openFiles', this._fsal.openFiles.map(file => file.path))
           broadcastIpcMessage('fsal-state-changed', 'openFiles')
           if (!this.isModified()) {
             this._windowManager.setModified(false)
@@ -331,7 +331,7 @@ export default class Zettlr {
     // Set the pointers either to null or last opened dir/file
     let openDirectory = null
     let activeFile = null
-    let openFiles = []
+    let openFiles: string[] = []
 
     try {
       openDirectory = this._fsal.findDir(global.config.get('openDirectory'))
@@ -343,6 +343,9 @@ export default class Zettlr {
 
     // Pre-set the state based on the configuration
     this._fsal.openFiles = openFiles
+      .map(filePath => this._fsal.findFile(filePath))
+      .filter(file => file !== null) as Array<MDFileDescriptor|CodeFileDescriptor>
+
     this._fsal.openDirectory = openDirectory
     this._fsal.activeFile = (activeFile !== null) ? activeFile.path : null
     if (activeFile !== null) {
@@ -359,9 +362,6 @@ export default class Zettlr {
     let duration = Date.now() - start
     duration /= 1000 // Convert to seconds
     global.log.info(`Loaded all roots in ${duration} seconds`)
-
-    // Also, we need to (re)open all files in tabs
-    this._fsal.openFiles = global.config.get('openFiles')
 
     // Finally, initiate a first check for updates
     global.updates.check()
@@ -439,16 +439,25 @@ export default class Zettlr {
       this.openFile(payload.path, payload.newTab)
       return true
     } else if (command === 'get-open-files') {
-      const openFiles = this._fsal.openFiles
-      const ret = []
-      for (const openFilePath of openFiles) {
-        const descriptor = this._fsal.findFile(openFilePath)
-        if (descriptor !== null) {
-          ret.push(this._fsal.getMetadataFor(descriptor))
+      // Return all open files as their metadata objects
+      return this._fsal.openFiles.map(file => this._fsal.getMetadataFor(file))
+    } else if (command === 'get-file-contents') {
+      if (String(payload).startsWith(':memory:')) {
+        // The renderer has requested an in-memory file, which is not in the
+        // file tree --> simply return the metadata object
+        // NOTE: We're doing this here, since the whole file management logic
+        // in the editor component requires a lot of changes. So it's easier to
+        // simply intercept the request here rather than handling it in the
+        // renderer.
+        const file = this._fsal.openFiles.find(file => file.path === payload)
+        if (file !== undefined) {
+          return this._fsal.getMetadataFor(file)
+        } else {
+          return null
         }
       }
-      return ret
-    } else if (command === 'get-file-contents') {
+
+      // Handle normal files
       const descriptor = this._fsal.findFile(payload)
       if (descriptor === null) {
         return null
@@ -473,6 +482,8 @@ export default class Zettlr {
     } else if (command === 'open-stats-window') {
       this._windowManager.showStatsWindow()
       return true
+    } else if (command === 'open-update-window') {
+      this._windowManager.showUpdateWindow()
     } else {
       // ELSE: If the command has not yet been found, try to run one of the
       // bigger commands
@@ -636,7 +647,7 @@ export default class Zettlr {
    */
   openFile (filePath: string, newTab?: boolean): void {
     // If the file is already open, simply set it as active and return
-    if (this._fsal.openFiles.includes(filePath)) {
+    if (this._fsal.openFiles.find(file => file.path === filePath) !== undefined) {
       this._fsal.activeFile = filePath
       return
     }
@@ -800,6 +811,10 @@ export default class Zettlr {
 
   async askFile (filters: FileFilter[]|null = null, multiSel: boolean = false): Promise<string[]> {
     return await this._windowManager.askFile(filters, multiSel)
+  }
+
+  async saveFile (filename: string = ''): Promise<string|undefined> {
+    return await this._windowManager.saveFile(filename)
   }
 
   /**

@@ -1,0 +1,5 @@
+reader: docbook
+writer: markdown
+wrap: none
+# Set to setext to produce underlined h1 and h2
+markdown-headings: atx

@@ -53,7 +53,7 @@ body.win32 {
     line-height: 30px;
     padding-left: 20px;
     background-color: var(--system-accent-color, --c-primary);
-    color: white;
+    color: var(--system-accent-color-contrast, white);
   }
 
   &.dark {

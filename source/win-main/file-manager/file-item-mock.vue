@@ -14,21 +14,28 @@
 <template>
   <div
     v-bind:class="{
-      'list-item': true,
-      'has-meta-info': fileMeta,
-      'directory': obj.type === 'directory'
+      'list-item-wrapper': true,
+      'odd': index % 2 === 1,
+      'even': index % 2 === 0
     }"
   >
-    <div class="filename">
-      <input
-        ref="name-input"
-        type="text"
-        v-bind:value="obj.name"
-        v-on:keyup.enter="$emit('submit', $event.target.value)"
-        v-on:keyup.esc="$emit('cancel')"
-        v-on:blur="$emit('cancel')"
-        v-on:click.stop=""
-      >
+    <div
+      v-bind:class="{
+        'list-item': true,
+        'has-meta-info': fileMeta
+      }"
+    >
+      <div class="filename">
+        <input
+          ref="name-input"
+          type="text"
+          v-bind:value="obj.name"
+          v-on:keyup.enter="$emit('submit', $event.target.value)"
+          v-on:keyup.esc="$emit('cancel')"
+          v-on:blur="$emit('cancel')"
+          v-on:click.stop=""
+        >
+      </div>
     </div>
   </div>
 </template>

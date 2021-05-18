@@ -18,6 +18,28 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
     targetRect.left = (position as Point).x
   }
 
+  if (process.platform === 'darwin') {
+    // NOTE: On macOS, we don't want the custom styled menus, but rather we want
+    // the native context menus (since the custom styled menus are only
+    // necessary on those platforms where you have a menu bar we have to manage)
+    ipcRenderer.invoke('menu-provider', {
+      command: 'display-native-context-menu',
+      payload: {
+        menu: items,
+        x: targetRect.left,
+        y: targetRect.top
+      }
+    })
+      .then(clickedID => {
+        // If the user did click a menu item, notify the caller
+        if (clickedID !== undefined) {
+          callback(clickedID)
+        }
+      })
+      .catch(err => { console.error(err) })
+    return () => { /* Noop-function, since no cleanup is required */ }
+  } // END darwin specific code
+
   // We have just received a serialized submenu which we should now display
   const appMenu = document.createElement('div')
   appMenu.setAttribute('id', 'application-menu')

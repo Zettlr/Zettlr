@@ -5,7 +5,7 @@
             "vfc"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-03-28T09:52:50.000000Z"
+        "updated_at": "2021-04-12T19:15:18.000000Z"
     },
     "dialog": {
         "about": {
@@ -22,7 +22,7 @@
             "license": "Llic\u00e8ncia",
             "main": "Projectes principals",
             "nspell": "Proveeix Zettlr amb habilitats de correcci\u00f3 ortogr\u00e0fica",
-            "other_projects": "Zettlr tamb\u00e9 fa \u00fas d'aquests projectes",
+            "other_projects": "Zettlr tamb\u00e9 fa \u00fas d'aquests projectes:",
             "projects": "Altres projectes",
             "showdownjs": "Renderitza el registre de canvis de forma que puguis veure qu\u00e8 ha canviat en una actualitzaci\u00f3",
             "sponsors": "Patrocinadors",
@@ -176,6 +176,7 @@
                 "style_word_label": "Estil de Microsoft Word",
                 "title": "Correcci\u00f3 autom\u00e0tica"
             },
+            "avoid_new_tabs": "Evita, quan sigui possible, obrir fitxers a noves pestanyes",
             "checkForBeta": "Notifica els llan\u00e7aments beta",
             "choose_file": "Tria el fitxer",
             "citation_database": "Base de dades de les refer\u00e8ncies (CSL, JSON o BibTex)",

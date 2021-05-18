@@ -26,7 +26,7 @@ const CODEFILE_TYPES = [
 
 export default class FileNew extends ZettlrCommand {
   constructor (app: any) {
-    super(app, 'file-new')
+    super(app, [ 'file-new', 'new-unsaved-file' ])
   }
 
   /**
@@ -36,6 +36,14 @@ export default class FileNew extends ZettlrCommand {
    * @return {void}     This function does not return anything.
    */
   async run (evt: string, arg: any): Promise<void> {
+    if (evt === 'new-unsaved-file') {
+      // We should simply create a new unsaved file that only resides in memory
+      const file = await this._app.getFileSystem().newUnsavedFile()
+      // Set it as active
+      this._app.getFileSystem().activeFile = file.path
+      return
+    }
+
     let dir = this._app.getFileSystem().findDir(arg.path)
 
     if (dir === null) {

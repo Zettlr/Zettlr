@@ -72,7 +72,7 @@
           role="button"
           v-bind:shape="indicatorShape"
           v-bind:aria-label="indicatorARIALabel"
-          v-on:click.stop="toggleCollapse"
+          v-on:mousedown.stop="collapsed = collapsed === false"
         />
         <!-- Is this a project? -->
         <clr-icon
@@ -168,6 +168,7 @@
 import { ipcRenderer } from 'electron'
 import path from 'path'
 import itemMixin from './util/item-mixin'
+import generateFilename from '../../common/util/generate-filename'
 
 export default {
   name: 'TreeItem',
@@ -259,6 +260,10 @@ export default {
     operationType: function (newVal, oldVal) {
       if (newVal !== undefined) {
         this.$nextTick(() => {
+          if (this.operationType === 'createFile') {
+            // If we're generating a file, generate a filename
+            this.$refs['new-object-input'].value = generateFilename()
+          }
           this.$refs['new-object-input'].focus()
           this.$refs['new-object-input'].select()
         })
@@ -282,12 +287,6 @@ export default {
       if (dirPath.startsWith(this.obj.path)) {
         this.collapsed = false
       }
-    },
-    /**
-     * On a click on the indicator, this'll toggle the collapsed state
-     */
-    toggleCollapse: function (event) {
-      this.collapsed = this.collapsed === false
     },
     /**
      * Initiates a drag movement and inserts the correct data

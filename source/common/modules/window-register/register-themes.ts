@@ -1,9 +1,9 @@
 import { ipcRenderer } from 'electron'
 
 // Import the main.less file which imports CSS for KaTeX, Clarity, Tippy.JS, and
-// the geometry for the application. This will be added to the HTML by WebPack
+// the geometry for the application. This will be added to the HTML by Webpack
 // automatically
-import '../../less/main.less'
+import './assets/main.less'
 
 /**
  * Webpack provides the themes as JavaScript objects with two properties, use
@@ -12,6 +12,14 @@ import '../../less/main.less'
 interface ThemeLoader {
   use: () => void
   unuse: () => void
+}
+
+/**
+ * Defines a SystemColour interface as is being returned by the appearance provider
+ */
+interface SystemColour {
+  accent: string
+  contrast: string
 }
 
 /**
@@ -72,18 +80,15 @@ export default function registerThemes (): void {
   // Create the custom stylesheet which includes certain system colours which
   // will be referenced by the components as necessary.
   ipcRenderer.invoke('appearance-provider', { command: 'get-accent-color' })
-    .then((accentColor: string) => {
+    .then((accentColor: SystemColour) => {
       // TODO: Currently this is not scalable, just an exploratory implementation!
       const style = document.createElement('style')
       // style.setAttribute('type', 'text/css')
 
-      const color = '#' + accentColor.substr(0, 6)
-      style.textContent = `:root { --system-accent-color:${color}; }`
+      const color = '#' + accentColor.accent.substr(0, 6)
+      const contrast = '#' + accentColor.contrast.substr(0, 6)
+      style.textContent = `:root { --system-accent-color:${color}; --system-accent-color-contrast:${contrast}}`
       document.head.prepend(style)
-      // if (style.sheet === null) {
-      //   throw new Error('Style sheet was null?!?')
-      // }
-      // style.sheet.insertRule(`:root { --system-accent:${color}; }`, 0)
     })
     .catch(e => console.error(e))
 }

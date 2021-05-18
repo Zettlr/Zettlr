@@ -113,12 +113,6 @@ module.exports = function displayFileContext (event, fileObject, el, callback) {
       case 'menu.show_file':
         shell.showItemInFolder(fileObject.path)
         break
-      case 'menu.close_file':
-        ipcRenderer.send('message', {
-          command: 'root-close',
-          content: fileObject.hash
-        })
-        break
     }
   })
 }
