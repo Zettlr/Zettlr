@@ -17,6 +17,7 @@ import FileRename from './file-rename'
 import FileSave from './file-save'
 import FileSearch from './file-search'
 import ForceOpen from './force-open'
+import FilePathFind from './file-path-find'
 import ImportLangFile from './import-lang-file'
 import ImportFiles from './import'
 import IncreasePomodoro from './increase-pomodoro'
@@ -48,6 +49,7 @@ export const commands = [
   FileRename,
   FileSave,
   FileSearch,
+  FilePathFind,
   ForceOpen,
   ImportFiles,
   ImportLangFile,

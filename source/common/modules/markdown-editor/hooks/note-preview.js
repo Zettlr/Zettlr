@@ -1,6 +1,6 @@
 const tippy = require('tippy.js').default
 const openMarkdownLink = require('../open-markdown-link')
-// import { ipcRenderer } from 'electron'
+const { ipcRenderer } = require('electron')
 
 
 /**
@@ -23,44 +23,51 @@ module.exports = (cm) => {
       return
     }
 
-    // Retrieve the link target
-    // ------------------- MAY NEED TO CHANGE FOR NEW NOTE -------------------
-    const linkTarget = a.getAttribute('title')
-
-    // ------------------- ADD CODE TO RETRIEVE DATA, AND PREPARE IT FOR BELOW -------------------
-
-    // ipcRenderer.invoke('application', { command: 'get-file-contents', payload: this.activeFile.path })
-    //       .then((descriptorWithContent) => {
-    //         const mode = (this.activeFile.ext === '.tex') ? 'stex' : 'multiplex'
-    //         const newDoc = {
-    //           path: descriptorWithContent.path,
-    //           mode: mode, // Save the mode for later swaps
-    //           cmDoc: CodeMirror.Doc(descriptorWithContent.content, mode),
-    //           modified: false,
-    //           lastWordCount: countWords(descriptorWithContent.content, false) // TODO: re-enable countChars
-    //         }
-
-    // Immediately show a tooltip with the link contents
-    // ------------------- USE PREV DATA TO CREATE TIPPY -------------------
-    tippy(a, {
-      content: `<clr-icon shape="pop-out"></clr-icon> <a href="#" id="editor-cm-tooltip-anchor">${linkTarget}</a>`,
+    // Initialise displayed attributes to 'loading'
+    let title = "loading"
+    let words = "loading"
+    let wordCount = "loading"
+    let days = "loading"
+    // Create a tippy. This will display the loading values
+    let tooltip = tippy(a, {
+      content: `Searching for file...`,
       allowHTML: true, // Obviously
       interactive: true, // Allow clicking the link
       placement: 'top-start', // Display at the beginning of the anchor
       appendTo: document.body, // As the cma anchors are inline, we need a different anchor-element
       showOnCreate: true, // Immediately show the tooltip
       arrow: false, // No arrow for these tooltips
-      onHidden (instance) {
+      onHidden(instance) {
         instance.destroy() // Destroy the tippy instance.
       },
-      onShown (instance) {
-        // Hook the event listener
-        document
-          .getElementById('editor-cm-tooltip-anchor')
-          .addEventListener('click', (e) => {
-            openMarkdownLink(linkTarget, cm)
-          })
-      }
     })
+
+    // Find the file's absolute path
+    ipcRenderer.invoke('application', { command: 'file-path-find', payload: a.innerText })
+      .then((filepath) => {
+        // If the file is found
+        if (filepath != "Not Found") {
+
+          // Retrieve the file contets
+          ipcRenderer.invoke('application', { command: 'get-file-contents', payload: filepath })
+            .then((descriptorWithContent) => {
+
+              // Get the contents of the file such as:
+              content = descriptorWithContent.content.substring(0, 50) // The text, up to 50 chars
+              wordCount = descriptorWithContent.wordCount // The word count
+              title = descriptorWithContent.name // The file name
+              
+              dateDif = Date.now() - descriptorWithContent.modtime 
+              days = Math.floor(dateDif / (86400000)) // The days since modification
+
+              // On ready, show a tooltip with the note contents
+              tooltip.setContent(`${title}<br>${content}<br>Word Count: ${wordCount}<br> ${days} days since modification`)
+            }).catch(err => console.error("File content get error: " + err));
+        } else {
+          tooltip.setContent(`File not found`)
+        }
+      }).catch(err => console.error("File path find error: " + err));
+
+
   })
 }
