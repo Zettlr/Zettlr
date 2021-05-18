@@ -1,0 +1,75 @@
+// In this file we're going to set up theme-specific variables.
+
+:root {
+  --c-primary: var(--green-0);
+  --c-primary-shade: var(--green-1);
+
+  --c-secondary: var(--blue-0);
+  --c-secondary-shade: var(--blue-1);
+
+  --bg-primary: white;
+
+  // Colours for the directory list
+  --bg-directories: #eaeaea;
+  --c-project: var(--red-0);
+  --c-project-dark: lighten(@red-0, 10%);
+
+  // Colours for the file list
+  --bg-preview: #eaeaea;
+
+  // Scrollbar annotations
+  --bg-annotation: var(--red-0);
+  --bg-annotation-dark: yellow;
+
+  --selection-light: var(--green-selection);
+  --selection-dark: var(--green-selection-dark);
+
+  /**
+   * ALERTS
+   */
+  --c-alert-success: var(--green-selection);
+  --c-alert-success-shade: var(--green-selection-dark);
+
+  --c-alert-warning: var(--gold-selection);
+  --c-alert-warning-shade: var(--gold-selection-dark);
+
+  --c-alert-error: var(--bg-error);
+  --c-alert-error-shade: var(--fg-error);
+
+  /**
+   * POMODORO
+   */
+  --pomodoro-task: var(--orange-2);
+  --pomodoro-short: var(--gold-selection);
+  --pomodoro-long: var(--green-selection-dark);
+
+  // Necessary for the heatmap colours, 159 corresponds to @green-0
+  --search-hue: 159;
+}
+
+// Vars that are used in internal LESS functions
+@c-primary: @green-0;
+@c-primary-shade: @green-1;
+
+
+/**
+ * FONTS
+ */
+@font-main: @font-lato;
+@font-secondary: @font-lato;
+@font-code: @font-liberation;
+@font-main-win: @font-sans-win;
+
+// TRANSITION DURING NIGHT/DAY-MODE THEME SWITCHES
+@mode-transition: 0.2s;
+
+@font-size-base:        1em;
+@font-size-small:       0.9em;
+@font-size-big:         1.2em;
+
+@border-radius:         4px;
+
+// Transitions and animations
+@fast-transition:       0.2s;
+@medium-transition:     0.6s;
+@slow-transition:       1.0s;

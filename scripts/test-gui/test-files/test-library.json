@@ -1,0 +1,139 @@
+[
+  {
+    "id": "Marx1962",
+    "author": [
+      {
+        "family": "Marx",
+        "given": "Karl"
+      }
+    ],
+    "collection-title": "Marx Engels Werke",
+    "edition": "4",
+    "event-place": "Berlin",
+    "issued": {
+      "date-parts": [
+        [
+          1962
+        ]
+      ]
+    },
+    "language": "de",
+    "number-of-pages": "956",
+    "number-of-volumes": "43",
+    "publisher": "Dietz",
+    "publisher-place": "Berlin",
+    "source": "Zotero",
+    "title": "Das Kapital. Kritik der politischen Ökonomie. Erster Band: Der Produktionsprozeß des Kapitals",
+    "title-short": "Das Kapital. Erster Band",
+    "type": "book",
+    "volume": "23"
+  },
+  {
+    "id": "Marx1964",
+    "accessed": {
+      "date-parts": [
+        [
+          2018,
+          6,
+          1
+        ]
+      ]
+    },
+    "author": [
+      {
+        "family": "Marx",
+        "given": "Karl"
+      }
+    ],
+    "collection-title": "Marx Engels Werke",
+    "editor": [
+      {
+        "family": "Engels",
+        "given": "Friedrich"
+      }
+    ],
+    "event-place": "Berlin",
+    "issued": {
+      "date-parts": [
+        [
+          1964
+        ]
+      ]
+    },
+    "number-of-volumes": "43",
+    "publisher": "Dietz",
+    "publisher-place": "Berlin",
+    "title": "Das Kapital. Kritik der politischen Ökonomie. Dritter Band: Der Gesamtprozeß der kapitalistischen Produktion",
+    "type": "book",
+    "URL": "https://marxwirklichstudieren.files.wordpress.com/2012/11/mew_band25.pdf",
+    "volume": "25"
+  },
+  {
+    "id": "Marx1983",
+    "accessed": {
+      "date-parts": [
+        [
+          2018,
+          5,
+          29
+        ]
+      ]
+    },
+    "author": [
+      {
+        "family": "Marx",
+        "given": "Karl"
+      }
+    ],
+    "collection-title": "Marx Engels Werke",
+    "event-place": "Berlin",
+    "issued": {
+      "date-parts": [
+        [
+          1983
+        ]
+      ]
+    },
+    "language": "de_DE",
+    "number-of-pages": "960",
+    "number-of-volumes": "43",
+    "publisher": "Dietz",
+    "publisher-place": "Berlin",
+    "title": "Ergänzungsband",
+    "type": "book",
+    "URL": "https://marxwirklichstudieren.files.wordpress.com/2012/11/mew_band42.pdf",
+    "volume": "42"
+  },
+  {
+    "id": "Marx2009",
+    "author": [
+      {
+        "family": "Marx",
+        "given": "Karl"
+      },
+      {
+        "family": "Korsch",
+        "given": "Karl"
+      }
+    ],
+    "edition": "Ungekürzte Ausg. nach der 2. Aufl. von 1872",
+    "event-place": "Köln",
+    "ISBN": "978-3-86647-325-6",
+    "issued": {
+      "date-parts": [
+        [
+          2009
+        ]
+      ]
+    },
+    "language": "ger",
+    "note": "OCLC: 317290659",
+    "number-of-pages": "768",
+    "publisher": "Anaconda",
+    "publisher-place": "Köln",
+    "source": "Gemeinsamer Bibliotheksverbund ISBN",
+    "title": "Das Kapital: Kritik der politischen Ökonomie",
+    "title-short": "Das Kapital",
+    "type": "book"
+  }
+]
