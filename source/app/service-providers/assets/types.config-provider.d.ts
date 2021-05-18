@@ -143,6 +143,8 @@ interface ConfigOptions {
   }
   system: {
     deleteOnFail: boolean
+    avoidNewTabs: boolean
+    iframeWhitelist: string[]
   }
   checkForBeta: boolean
   uuid: string

@@ -282,6 +282,9 @@ const config: StoreOptions<ZettlrState> = {
     addToFiletree: function (state, descriptor) {
       if (descriptor.parent == null && !state.fileTree.includes(descriptor)) {
         // It's a root, so insert at the root level
+        if (descriptor.type === 'directory') {
+          reconstructTree(descriptor)
+        }
         state.fileTree.push(descriptor)
         // @ts-expect-error TODO: The sorting function currently expects only FSAL descriptors, not metas
         state.fileTree = sort(state.fileTree) // Omit sorting to sort name-up
@@ -382,6 +385,11 @@ const config: StoreOptions<ZettlrState> = {
     updateActiveFile: function (state, descriptor) {
       if (descriptor === null) {
         state.activeFile = null
+      } else if (descriptor.dir === ':memory:') {
+        const found = state.openFiles.find(file => file.path === descriptor.path)
+        if (found !== undefined) {
+          state.activeFile = found
+        }
       } else {
         const ownDescriptor = findPathDescriptor(descriptor.path, state.fileTree)
 
@@ -391,16 +399,33 @@ const config: StoreOptions<ZettlrState> = {
       }
     },
     updateOpenFiles: function (state, openFiles) {
+      // First, we must make sure that the open files in memory are retained
+      const memoryFiles = state.openFiles.filter(file => file.dir === ':memory:')
+
+      // Then we can safely reset the open files in the state
       state.openFiles = []
 
       // TODO: I know we can create a more sophisticated algorithm that only
       // updates those necessary
       for (const file of openFiles) {
-        const descriptor = findPathDescriptor(file.path, state.fileTree)
-        if (descriptor !== null) {
-          state.openFiles.push(descriptor)
+        if (String(file.path).startsWith(':memory:')) {
+          // Fetch the descriptor from the old state
+          const found = memoryFiles.find(f => f.path === file)
+          if (found !== undefined) {
+            state.openFiles.push(found)
+          } else {
+            // In case the descriptor has not been found, add the new descriptor
+            // that has been delivered with the openFiles array
+            state.openFiles.push(file)
+          }
+        } else {
+          const descriptor = findPathDescriptor(file.path, state.fileTree)
+          if (descriptor !== null) {
+            state.openFiles.push(descriptor)
+          }
         }
-      }
+      } // END for
+      console.log(state.openFiles)
     },
     colouredTags: function (state, tags) {
       state.colouredTags = tags
@@ -438,17 +463,13 @@ const config: StoreOptions<ZettlrState> = {
       // account for this. We do so by first sanitizing the events that need
       // to be processed.
       const saneEvents = sanitizeFiletreeUpdates(events)
-      // DEBUG: Somehow, in rare occations, some root directories are added
-      // multiple times. The console output here is intended to help us pin down
-      // that issue.
-      console.log(saneEvents.map(item => `${item.event}: ${item.path} (${item.timestamp})`))
 
       for (const event of saneEvents) {
         if (event.timestamp <= context.state.lastFiletreeUpdate) {
           console.warn('FSAL event had an outdated timestamp -- skipping', event.event, event.path, event.timestamp)
           continue
         }
-        console.log('Processing FSAL event', event.event, event.path, event.timestamp)
+
         // In the end, we also need to update our filetree update timestamp
         context.commit('lastFiletreeUpdate', event.timestamp)
 

@@ -30,6 +30,11 @@ export default {
         type: 'checkbox',
         label: trans('dialog.preferences.always_reload_files'),
         model: 'alwaysReloadFiles'
+      },
+      {
+        type: 'checkbox',
+        label: trans('dialog.preferences.avoid_new_tabs'),
+        model: 'system.avoidNewTabs'
       }
     ],
     [

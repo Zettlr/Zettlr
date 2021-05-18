@@ -60,10 +60,8 @@ import WindowChrome from '../common/vue/window/Chrome'
 import SplitView from '../common/vue/window/SplitView'
 import SelectableList from './SelectableList'
 import ButtonControl from '../common/vue/form/elements/Button'
-// TODO
-import CodeEditor from '../win-custom-css/CodeEditor'
+import CodeEditor from '../common/vue/CodeEditor'
 import { ipcRenderer } from 'electron'
-import YAML from 'yaml'
 
 const WRITERS = {
   'html': 'HTML',
@@ -76,6 +74,23 @@ const WRITERS = {
   'revealjs': 'Reveal.js',
   'plain': 'Plain Text',
   'rst': 'reStructured Text'
+}
+
+const READERS = {
+  'docbook': 'DocBook',
+  'docx': 'Word',
+  'epub': 'ePub',
+  'haddock': 'Haddock',
+  'html': 'HTML',
+  'latex': 'LaTeX',
+  'muse': 'Muse',
+  'odt': 'OpenDocument Text',
+  'opml': 'OPML',
+  'org': 'Orgmode',
+  'rst': 'reStructured Text',
+  't2t': 'text2tags',
+  'textile': 'Textile',
+  'vimwiki': 'VimWiki'
 }
 
 export default {
@@ -118,8 +133,13 @@ export default {
       }
     },
     listItems: function () {
-      // TODO: Possibly different values for import and export!
-      return Object.values(WRITERS)
+      if (this.tabs[this.currentTab].id === 'tab-export-control') {
+        return Object.values(WRITERS)
+      } else if (this.tabs[this.currentTab].id === 'tab-import-control') {
+        return Object.values(READERS)
+      } else {
+        return [] // TODO: We need list items for every tab!
+      }
     }
   },
   watch: {
@@ -139,23 +159,37 @@ export default {
   },
   mounted: function () {
     this.loadDefaultsForState()
+
+    ipcRenderer.on('shortcut', (event, shortcut) => {
+      if (shortcut === 'save-file') {
+        this.saveDefaultsFile()
+      }
+    })
   },
   methods: {
     loadDefaultsForState: function () {
+      const isWriter = this.tabs[this.currentTab].id === 'tab-export-control'
+      const isReader = this.tabs[this.currentTab].id === 'tab-import-control'
+      let format
       // Loads a defaults file from main for the given state (tab + list item)
-      const writer = Object.keys(WRITERS)[this.currentItem]
+      if (isWriter) {
+        format = Object.keys(WRITERS)[this.currentItem]
+      } else if (isReader) {
+        format = Object.keys(READERS)[this.currentItem]
+      } else {
+        console.warn('Should\'ve loaded defaults, but neither writers nor readers selected')
+        return
+      }
 
       ipcRenderer.invoke('assets-provider', {
         command: 'get-defaults-file',
         payload: {
-          format: writer,
-          type: 'export' // TODO
+          format: format,
+          type: (isWriter) ? 'export' : 'import'
         }
       })
         .then(data => {
-          // The data is a simple object, which we need to transform into YAML
-          const yaml = YAML.stringify(data)
-          this.editorContents = yaml
+          this.editorContents = data
           this.$refs['code-editor'].markClean()
           this.savingStatus = ''
         })
@@ -163,23 +197,34 @@ export default {
     },
     saveDefaultsFile: function () {
       this.savingStatus = 'Saving ...' // TODO translate
-      const writer = Object.keys(WRITERS)[this.currentItem]
-      const data = YAML.parse(this.editorContents)
+
+      const isWriter = this.tabs[this.currentTab].id === 'tab-export-control'
+      const isReader = this.tabs[this.currentTab].id === 'tab-import-control'
+
+      let format
+      if (isWriter) {
+        format = Object.keys(WRITERS)[this.currentItem]
+      } else if (isReader) {
+        format = Object.keys(READERS)[this.currentItem]
+      } else {
+        console.warn('Should\'ve saved defaults, but neither writers nor readers selected')
+        return
+      }
 
       ipcRenderer.invoke('assets-provider', {
         command: 'set-defaults-file',
         payload: {
-          format: writer,
-          type: 'export', // TODO
-          contents: data
+          format: format,
+          type: (isWriter) ? 'export' : 'import',
+          contents: this.editorContents
         }
       })
         .then(() => {
-          this.savingStatus = 'Saved!'
+          this.savingStatus = 'Saved!' // TODO: Translate
           setTimeout(() => {
             this.savingStatus = ''
           }, 1000)
-        }) // TODO: Translate
+        })
         .catch(err => console.error(err))
     }
   }

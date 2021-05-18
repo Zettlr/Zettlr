@@ -31,6 +31,11 @@ export default class RootClose extends ZettlrCommand {
       return false
     }
 
+    if (root.type === 'other') {
+      global.log.warning(`Called root-close but passed the path of a non-Markdown file: ${arg as string}`)
+      return false
+    }
+
     // We got a root, so now we need to unload it and remove it from config
     try {
       this._app.getFileSystem().unloadPath(root)

@@ -19,9 +19,9 @@
 </template>
 
 <script>
-import WindowChrome from '../common/vue/window/Chrome.vue'
+import WindowChrome from '../common/vue/window/Chrome'
 import { trans } from '../common/i18n'
-import CodeEditor from './CodeEditor.vue'
+import CodeEditor from '../common/vue/CodeEditor'
 import { ipcRenderer } from 'electron'
 
 export default {

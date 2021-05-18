@@ -31,6 +31,7 @@ import { trans } from '../../../common/i18n'
 import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '../fsal/types'
 import createMainWindow from './create-main-window'
 import createPrintWindow from './create-print-window'
+import createUpdateWindow from './create-update-window'
 import createLogWindow from './create-log-window'
 import createStatsWindow from './create-stats-window'
 import createQuicklookWindow from './create-ql-window'
@@ -49,6 +50,7 @@ import promptDialog from './dialog/prompt'
 import sanitizeWindowPosition from './sanitize-window-position'
 import { WindowPosition } from './types.d'
 import askFileDialog from './dialog/ask-file'
+import saveFileDialog from './dialog/save-dialog'
 // import dragIcon from '../../assets/dragicon.png'
 
 interface QuicklookRecord {
@@ -60,6 +62,7 @@ export default class WindowManager {
   private _mainWindow: BrowserWindow|null
   private readonly _qlWindows: QuicklookRecord[]
   private _printWindow: BrowserWindow|null
+  private _updateWindow: BrowserWindow|null
   private _logWindow: BrowserWindow|null
   private _statsWindow: BrowserWindow|null
   private _defaultsWindow: BrowserWindow|null
@@ -80,6 +83,7 @@ export default class WindowManager {
     this._mainWindow = null
     this._qlWindows = []
     this._printWindow = null
+    this._updateWindow = null
     this._preferences = null
     this._customCSS = null
     this._aboutWindow = null
@@ -742,6 +746,24 @@ export default class WindowManager {
   }
 
   /**
+   * Opens the updater window
+   */
+  showUpdateWindow (): void {
+    if (this._updateWindow === null) {
+      const conf = this._retrieveWindowPosition('updater', null)
+      this._updateWindow = createUpdateWindow(conf)
+      this._hookWindowResize(this._updateWindow, conf)
+
+      // Dereference the window as soon as it is closed
+      this._updateWindow.on('closed', () => {
+        this._updateWindow = null
+      })
+    } else {
+      this._makeVisible(this._updateWindow)
+    }
+  }
+
+  /**
    * Sets the main window's modification flag
    *
    * @param   {boolean}  modificationState  Whether to indicate a modification
@@ -828,6 +850,22 @@ export default class WindowManager {
       return await askFileDialog(win, filters, multiSel)
     } else {
       return await askFileDialog(this._mainWindow, filters, multiSel)
+    }
+  }
+
+  /**
+   * Allows the user to save a file.
+   *
+   * @param   {string}                 filename  An initial filename to display
+   * @param   {BrowserWindow<string>}  win       The window to attach to
+   *
+   * @return  {Promise<string|undefined>}        Resolves with a path or undefined
+   */
+  async saveFile (filename: string, win?: BrowserWindow|null): Promise<string|undefined> {
+    if (win != null) {
+      return await saveFileDialog(win, filename)
+    } else {
+      return await saveFileDialog(this._mainWindow, filename)
     }
   }
 

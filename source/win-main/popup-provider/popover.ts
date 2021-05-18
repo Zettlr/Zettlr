@@ -27,9 +27,9 @@ export default class ZettlrPopover {
   private _y: number
   private readonly _boundClickHandler: (event: MouseEvent) => void
   private readonly _boundResizeHandler: (event: UIEvent) => void
-  private readonly _popup: HTMLElement
+  private _popup: HTMLElement|null
   private readonly _popover: Vue
-  private readonly _arrow: HTMLElement
+  private _arrow: HTMLElement|null
   private readonly _watcher: Function
 
   /**
@@ -74,9 +74,7 @@ export default class ZettlrPopover {
     // Create the Vue instance and mount it into the popover container
     this._popover = new Vue(component)
     // Preset the data with initial values
-    for (const key in initialData) {
-      Vue.set(this._popover.$data, key, initialData[key])
-    }
+    this.updateData(initialData)
     // We need to mount it onto a div inside our container because the Vue component will replace the mount point
     this._popover.$mount(popoverMountPoint)
 
@@ -98,6 +96,10 @@ export default class ZettlrPopover {
    * @param  {MouseEvent}  event  The event fired
    */
   _onClickHandler (event: MouseEvent): void {
+    if (this._popup === null) {
+      return
+    }
+
     // Clicks on the popup itself are cool
     if (event.target === this._popup || event.target === null) {
       return
@@ -137,6 +139,10 @@ export default class ZettlrPopover {
     * Places the popup relative to the target element.
     */
   _place (): void {
+    if (this._popup === null || this._arrow === null) {
+      return
+    }
+
     // First, reset any applied styles to the elements
     this._popup.style.height = ''
     this._popup.style.width = ''
@@ -145,6 +151,11 @@ export default class ZettlrPopover {
     this._arrow.style.left = ''
     this._arrow.style.top = ''
     this._arrow.classList.remove('up', 'down', 'left', 'right')
+
+    // Windows doesn't have arrows on their popovers, just as they call them
+    // "flyouts" instead of PopOvers. So on Windows we shouldn't show them.
+    const showArrow = process.platform !== 'win32'
+    const arrowSize = (showArrow) ? ARROW_SIZE : 10 // Windows gets 10px margin
 
     let elemRect = this._elem.getBoundingClientRect()
 
@@ -164,7 +175,7 @@ export default class ZettlrPopover {
     if (bottom > height + 10 || elemRect.top < 50) {
       // Below element
       this._arrow.classList.add('up')
-      this._popup.style.top = `${this._y + ARROW_SIZE}px` // 5px margin for arrow
+      this._popup.style.top = `${this._y + arrowSize}px` // 5px margin for arrow
       if ((this._x + width / 2) > (window.innerWidth - 10)) { // 10px margin to document
         this._popup.style.left = `${window.innerWidth - width - 10}px` // 10px margin to document
       } else if (this._x - width / 2 < 10) { // 10px margin to document
@@ -173,8 +184,10 @@ export default class ZettlrPopover {
         this._popup.style.left = `${this._x - width / 2}px` // Place centered under element
       }
 
-      this._arrow.style.top = `${top + elemRect.height}px`
-      this._arrow.style.left = `${left + elemRect.width / 2 - this._arrow.offsetWidth / 2}px`
+      if (showArrow) {
+        this._arrow.style.top = `${top + elemRect.height}px`
+        this._arrow.style.left = `${left + elemRect.width / 2 - this._arrow.offsetWidth / 2}px`
+      }
 
       // Ensure the popup is completely visible (move inside the document if it's at an edge)
       if (this._popup.offsetLeft + this._popup.offsetWidth > window.innerWidth - 10) {
@@ -183,8 +196,7 @@ export default class ZettlrPopover {
         this._popup.style.left = '10px'
       }
 
-      // Ensure the popup is not higher than the window itself (can happen,
-      // e.g., with the formatting popup)
+      // Ensure the popup is not higher than the window itself
       if (height > window.innerHeight - 20 - this._y) {
         this._popup.style.height = `${window.innerHeight - 20 - this._y}px`
         height = this._popup.offsetHeight
@@ -194,15 +206,18 @@ export default class ZettlrPopover {
       // Therefore re-compute x and y
       this._x = elemRect.left + elemRect.width
       this._y = elemRect.top + elemRect.height / 2
-      this._arrow.classList.add('left')
-      this._popup.style.left = `${this._x + ARROW_SIZE}px`
-      if (this._y + height / 2 > window.innerHeight - ARROW_SIZE) {
-        this._popup.style.top = `${window.innerHeight - height - ARROW_SIZE}px`
+      this._popup.style.left = `${this._x + arrowSize}px`
+      if (this._y + height / 2 > window.innerHeight - arrowSize) {
+        this._popup.style.top = `${window.innerHeight - height - arrowSize}px`
       } else {
         this._popup.style.top = `${this._y - height / 2}px`
       }
-      this._arrow.style.left = `${left + elemRect.width}px`
-      this._arrow.style.top = `${top + elemRect.height / 2 - this._arrow.offsetHeight / 2}px`
+
+      if (showArrow) {
+        this._arrow.classList.add('left')
+        this._arrow.style.left = `${left + elemRect.width}px`
+        this._arrow.style.top = `${top + elemRect.height / 2 - this._arrow.offsetHeight / 2}px`
+      }
 
       // Ensure the popup is completely visible (move inside the document if it's at an edge)
       if (this._popup.offsetTop + this._popup.offsetHeight > window.innerHeight - 10) {
@@ -215,15 +230,18 @@ export default class ZettlrPopover {
       // Therefore re-compute x and y
       this._x = elemRect.left + elemRect.width / 2
       this._y = elemRect.top
-      this._arrow.classList.add('down')
-      this._popup.style.top = `${this._y - height - ARROW_SIZE}px`
-      if (this._x + width / 2 > window.innerWidth - ARROW_SIZE) {
-        this._popup.style.left = `${window.innerWidth - width - ARROW_SIZE}px`
+      this._popup.style.top = `${this._y - height - arrowSize}px`
+      if (this._x + width / 2 > window.innerWidth - arrowSize) {
+        this._popup.style.left = `${window.innerWidth - width - arrowSize}px`
       } else {
         this._popup.style.left = `${this._x - width / 2}px`
       }
-      this._arrow.style.top = `${top - ARROW_SIZE}px`
-      this._arrow.style.left = `${left + elemRect.width / 2 - this._arrow.offsetWidth / 2}px`
+
+      if (showArrow) {
+        this._arrow.classList.add('down')
+        this._arrow.style.top = `${top - arrowSize}px`
+        this._arrow.style.left = `${left + elemRect.width / 2 - this._arrow.offsetWidth / 2}px`
+      }
 
       // Ensure the popup is completely visible (move inside the document if it's at an edge)
       if (this._popup.offsetLeft + this._popup.offsetWidth > window.innerWidth - 10) {
@@ -232,6 +250,31 @@ export default class ZettlrPopover {
         this._popup.style.left = '10px'
       }
     }
+  }
+
+  /**
+   * Updates the data on the Vue instance
+   *
+   * @param   {any}   data  The data to be set
+   */
+  updateData (data: any): void {
+    for (const key in data) {
+      Vue.set(this._popover.$data, key, data[key])
+    }
+
+    // Also, the data update might have changed the data dimensions, so let's
+    // make sure the dimensions are re-calculated.
+    setTimeout(() => { this._place() }, 100)
+  }
+
+  /**
+   * Returns true if this popover isn't mounted anymore and should be left over
+   * to the garbage collector.
+   *
+   * @return  {boolean} True if the popup has been closed.
+   */
+  isClosed (): boolean {
+    return this._arrow === null || this._popup === null
   }
 
   /**
@@ -246,6 +289,8 @@ export default class ZettlrPopover {
     this._watcher() // Calling this function unwatches the Vue instance
     this._arrow.parentElement?.removeChild(this._arrow)
     this._popup.parentElement?.removeChild(this._popup)
+    this._arrow = null
+    this._popup = null
 
     document.removeEventListener('mousedown', this._boundClickHandler)
     document.removeEventListener('contextmenu', this._boundClickHandler)

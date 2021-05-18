@@ -1,16 +1,16 @@
 <template>
-  <div
-    class="selectable-list-container"
-  >
-    <div
-      v-for="item, idx in items" v-bind:key="idx"
-      v-bind:class="{
-        'item': true,
-        'selected': idx === selectedItem
-      }"
-      v-on:click="$emit('select', idx)"
-    >
-      <span class="display-text">{{ item }}</span>
+  <div class="selectable-list-wrapper">
+    <div class="selectable-list-container">
+      <div
+        v-for="item, idx in items" v-bind:key="idx"
+        v-bind:class="{
+          'item': true,
+          'selected': idx === selectedItem
+        }"
+        v-on:click="$emit('select', idx)"
+      >
+        <span class="display-text">{{ item }}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -32,26 +32,25 @@ export default {
 </script>
 
 <style lang="less">
-body .selectable-list-container {
-  margin: 20px;
-  border: 1px solid rgb(180, 180, 180);
+body .selectable-list-wrapper {
+  padding: 20px;
 
-  div.item {
-    background-color: white;
-    color: rgb(33, 33, 33);
-    border-bottom: 1px solid rgb(180, 180, 180);
+  .selectable-list-container {
+    border: 1px solid rgb(180, 180, 180);
 
-    &.selected {
-      background-color: rgb(230, 230, 230);
-    }
+    div.item {
+      background-color: white;
+      color: rgb(33, 33, 33);
+      border-bottom: 1px solid rgb(180, 180, 180);
 
-    &:last-child {
-      border-bottom: none;
+      &.selected { background-color: rgb(230, 230, 230); }
+
+      &:last-child { border-bottom: none; }
     }
   }
 }
 
-body.darwin{
+body.darwin {
   .selectable-list-container {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-size: 12px;

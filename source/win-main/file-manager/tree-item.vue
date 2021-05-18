@@ -30,7 +30,7 @@
       v-bind:style="{
         'padding-left': `${depth * 15 + 10}px`
       }"
-      v-on:click="requestSelection"
+      v-on:mousedown.stop="requestSelection"
       v-on:dragover="acceptDrags"
       v-on:dragenter="enterDragging"
       v-on:dragleave="leaveDragging"
@@ -72,7 +72,7 @@
           role="button"
           v-bind:shape="indicatorShape"
           v-bind:aria-label="indicatorARIALabel"
-          v-on:click.stop="toggleCollapse"
+          v-on:mousedown.stop="collapsed = collapsed === false"
         />
         <!-- Is this a project? -->
         <clr-icon
@@ -165,23 +165,15 @@
 
 <script>
 // Tree View item component
-import fileContextMenu from './util/file-item-context.js'
-import dirContextMenu from './util/dir-item-context.js'
 import { ipcRenderer } from 'electron'
 import path from 'path'
-import PopoverFileProps from './PopoverFileProps'
-import PopoverDirProps from './PopoverDirProps'
+import itemMixin from './util/item-mixin'
+import generateFilename from '../../common/util/generate-filename'
 
 export default {
   name: 'TreeItem',
-  components: {
-  },
+  mixins: [itemMixin],
   props: {
-    // The actual tree item
-    obj: {
-      type: Object,
-      default: function () { return {} }
-    },
     // How deep is this tree item nested?
     depth: {
       type: Number,
@@ -195,7 +187,6 @@ export default {
   data: () => {
     return {
       collapsed: true, // Initial: collapsed list (if there are children)
-      nameEditing: false, // True if the user wants to rename the item
       operationType: undefined // Can be createFile or createDir
     }
   },
@@ -206,12 +197,6 @@ export default {
     isRoot: function () {
       // Parent apparently can also be undefined BUG
       return this.obj.parent == null
-    },
-    /**
-     * Returns true if this is a directory
-     */
-    isDirectory: function () {
-      return this.obj.type === 'directory'
     },
     /**
      * Shortcut methods to access the store
@@ -272,19 +257,13 @@ export default {
     selectedDir: function (newVal, oldVal) {
       this.uncollapseIfApplicable()
     },
-    nameEditing: function (newVal, oldVal) {
-      if (newVal === false) {
-        return // No need to select
-      }
-
-      this.$nextTick(() => {
-        this.$refs['name-editing-input'].focus()
-        this.$refs['name-editing-input'].select()
-      })
-    },
     operationType: function (newVal, oldVal) {
       if (newVal !== undefined) {
         this.$nextTick(() => {
+          if (this.operationType === 'createFile') {
+            // If we're generating a file, generate a filename
+            this.$refs['new-object-input'].value = generateFilename()
+          }
           this.$refs['new-object-input'].focus()
           this.$refs['new-object-input'].select()
         })
@@ -309,184 +288,6 @@ export default {
         this.collapsed = false
       }
     },
-    handleContextMenu: function (event) {
-      if (this.isDirectory === true) {
-        dirContextMenu(event, this.obj, this.$el, (clickedID) => {
-          if (clickedID === 'menu.rename_dir') {
-            this.nameEditing = true
-          } else if (clickedID === 'menu.new_file') {
-            this.operationType = 'createFile'
-          } else if (clickedID === 'menu.new_dir') {
-            this.operationType = 'createDir'
-          } else if (clickedID === 'menu.delete_dir') {
-            ipcRenderer.invoke('application', {
-              command: 'dir-delete',
-              payload: { path: this.obj.path }
-            })
-              .catch(err => console.error(err))
-          } else if (clickedID === 'menu.properties') {
-            const data = {
-              dirname: this.obj.name,
-              creationtime: this.obj.creationtime,
-              modtime: this.obj.modtime,
-              files: this.obj.children.filter(e => e.type !== 'directory').length,
-              dirs: this.obj.children.filter(e => e.type === 'directory').length,
-              isProject: this.isProject === true,
-              icon: this.obj.icon
-            }
-
-            if (this.obj.sorting !== null) {
-              data.sortingType = this.obj.sorting.split('-')[0]
-              data.sortingDirection = this.obj.sorting.split('-')[1]
-            } // Else: Default sorting of name-up
-
-            this.$showPopover(PopoverDirProps, this.$refs['display-text'], data, (data) => {
-              // Apply new sorting if applicable
-              if (data.sorting !== this.obj.sorting) {
-                ipcRenderer.invoke('application', {
-                  command: 'dir-sort',
-                  payload: {
-                    path: this.obj.path,
-                    sorting: data.sorting
-                  }
-                }).catch(e => console.error(e))
-              }
-
-              // Set the project flag if applicable
-              const projectChanged = data.isProject !== this.isProject
-              if (projectChanged && data.isProject) {
-                ipcRenderer.invoke('application', {
-                  command: 'dir-new-project',
-                  payload: { path: this.obj.path }
-                }).catch(e => console.error(e))
-              } else if (projectChanged && !data.isProject) {
-                ipcRenderer.invoke('application', {
-                  command: 'dir-remove-project',
-                  payload: { path: this.obj.path }
-                }).catch(e => console.error(e))
-              }
-
-              // Set the icon if it has changed
-              if (data.icon !== this.obj.icon) {
-                ipcRenderer.invoke('application', {
-                  command: 'dir-set-icon',
-                  payload: {
-                    path: this.obj.path,
-                    icon: data.icon
-                  }
-                }).catch(e => console.error(e))
-              }
-            })
-          }
-        })
-      } else {
-        fileContextMenu(event, this.obj, this.$el, (clickedID) => {
-          if (clickedID === 'menu.rename_file') {
-            this.nameEditing = true
-          } else if (clickedID === 'menu.duplicate_file') {
-            // The user wants to duplicate this file --> instruct the file list
-            // controller to display a mock file object below this file for the
-            // user to enter a new file name.
-            this.$emit('duplicate')
-          } else if (clickedID === 'menu.delete_file') {
-            ipcRenderer.invoke('application', {
-              command: 'file-delete',
-              payload: { path: this.obj.path }
-            })
-              .catch(err => console.error(err))
-          } else if (clickedID === 'menu.properties') {
-            const data = {
-              filename: this.obj.name,
-              creationtime: this.obj.creationtime,
-              modtime: this.obj.modtime,
-              tags: this.obj.tags,
-              // We need to provide the coloured tags so
-              // the popover can render them correctly
-              colouredTags: this.$store.state.colouredTags,
-              targetValue: 0,
-              targetMode: 'words',
-              fileSize: this.obj.size,
-              type: this.obj.type,
-              words: 0,
-              ext: this.obj.ext
-            }
-
-            if (this.hasWritingTarget === true) {
-              data.targetValue = this.obj.target.count
-              data.targetMode = this.obj.target.mode
-            }
-
-            if (this.obj.type === 'file') {
-              data.words = this.obj.wordCount
-            }
-
-            this.$showPopover(PopoverFileProps, this.$refs['display-text'], data, (data) => {
-              // Whenever the data changes, update the target
-
-              // 1.: Writing Target
-              if (this.obj.type === 'file') {
-                ipcRenderer.invoke('application', {
-                  command: 'set-writing-target',
-                  payload: {
-                    mode: data.target.mode,
-                    count: data.target.value,
-                    path: this.obj.path
-                  }
-                }).catch(e => console.error(e))
-              }
-            })
-          }
-        })
-      }
-    },
-    /**
-     * On click, this will call the selection function.
-     */
-    requestSelection: function (event) {
-      // Determine if we have a middle (wheel) click
-      const middleClick = (event.type === 'auxclick' && event.button === 1)
-      const ctrl = event.ctrlKey === true && process.platform !== 'darwin'
-      const cmd = event.metaKey === true && process.platform === 'darwin'
-      const alt = event.altkey === true
-
-      // Dead directories can't be opened, so stop the propagation to
-      // the file manager and don't do a thing.
-      if (this.obj.dirNotFoundFlag === true) {
-        return event.stopPropagation()
-      }
-
-      if (this.obj.type === 'file' && alt) {
-        // QuickLook the file
-        ipcRenderer.invoke('application', {
-          command: 'open-quicklook',
-          payload: this.obj.path
-        })
-          .catch(e => console.error(e))
-      } else if (this.obj.type === 'file') {
-        // Request the clicked file
-        if (!middleClick && !ctrl && !cmd) {
-          // global.editor.announceTransientFile(this.obj.hash)
-        }
-        ipcRenderer.invoke('application', {
-          command: 'open-file',
-          payload: this.obj.path
-        })
-          .catch(e => console.error(e))
-      } else {
-        // Select this directory
-        ipcRenderer.invoke('application', {
-          command: 'set-open-directory',
-          payload: this.obj.path
-        })
-          .catch(e => console.error(e))
-      }
-    },
-    /**
-     * On a click on the indicator, this'll toggle the collapsed state
-     */
-    toggleCollapse: function (event) {
-      this.collapsed = this.collapsed === false
-    },
     /**
      * Initiates a drag movement and inserts the correct data
      * @param {DragEvent} event The drag event
@@ -504,29 +305,6 @@ export default {
           path: this.obj.path,
           type: this.obj.type
         }))
-      }
-    },
-    onDragHandler: function (event) {
-      if (this.isDirectory === true) {
-        return // Directories cannot be dragged out of the app
-      }
-
-      // If the drag x/y-coordinates are about to leave the window, we
-      // have to continue the drag in the main process (as it's being
-      // dragged out of the window)
-      const x = Number(event.x)
-      const y = Number(event.y)
-      const w = window.innerWidth
-      const h = window.innerHeight
-
-      if (x === 0 || y === 0 || x === w || y === h) {
-        event.stopPropagation()
-        event.preventDefault()
-
-        ipcRenderer.send('window-controls', {
-          command: 'drag-start',
-          payload: { filePath: this.obj.path }
-        })
       }
     },
     /**
@@ -597,28 +375,6 @@ export default {
       // override the location.href to display.
       event.preventDefault()
     },
-    /**
-     * Called when the user finishes renaming this tree item
-     *
-     * @param   {string}  newName  The new name given to the directory
-     */
-    finishNameEditing: function (newName) {
-      if (newName === this.obj.name) {
-        return // Not changed
-      }
-
-      const command = (this.obj.type === 'directory') ? 'dir-rename' : 'file-rename'
-
-      ipcRenderer.invoke('application', {
-        command: command,
-        payload: {
-          path: this.obj.path,
-          name: newName
-        }
-      })
-        .catch(e => console.error(e))
-        .finally(() => { this.nameEditing = false })
-    },
     handleOperationFinish: function (newName) {
       if (this.operationType === 'createFile' && newName.trim() !== '') {
         ipcRenderer.invoke('application', {
@@ -665,7 +421,6 @@ body {
 
 body.darwin {
   .tree-item {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     margin: 6px 0px;
 
     .item-icon, .toggle-icon {
@@ -689,6 +444,32 @@ body.darwin {
       background-color: var(--system-accent-color, --c-primary);
       background-image: linear-gradient(#00000000, #00000022);
       color: white;
+    }
+  }
+}
+
+body.win32 {
+  .tree-item {
+    margin: 8px 0px;
+
+    .item-icon, .toggle-icon {
+      display: inline-block;
+      width: 18px; // Size of clr-icon with the margin of the icon
+    }
+
+    .display-text {
+      font-size: 13px;
+      padding: 3px 5px;
+      overflow: hidden;
+
+      &.highlight {
+        background-color: var(--system-accent-color, --c-primary);
+        color: white;
+      }
+    }
+
+    &.selected .display-text {
+      color: var(--system-accent-color, --c-primary);
     }
   }
 }

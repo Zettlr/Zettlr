@@ -61,8 +61,7 @@ export default {
       callback: Function|null = null
     ) => {
       if (currentPopover !== null && currentPopoverTarget !== null) {
-        // Close the popup
-        currentPopover.close()
+        // Close the previous popover, since only one is allowed
         closeFunction()
       }
 

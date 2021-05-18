@@ -20,6 +20,7 @@
           type="search"
           placeholder="Filter …"
           v-on:focus="$event.target.select()"
+          v-on:blur="activeDescriptor = null"
         />
       </div>
       <template v-if="getFilteredDirectoryContents.length === 0">
@@ -37,7 +38,7 @@
         performance incredibly!
         -->
         <RecycleScroller
-          v-slot="{ item }"
+          v-slot="{ item, index }"
           v-bind:items="getFilteredDirectoryContents"
           v-bind:item-size="itemHeight"
           v-bind:emit-update="true"
@@ -47,6 +48,7 @@
           <FileItemMock
             v-if="item.mock !== undefined && item.mock === true"
             v-bind:obj="item.props"
+            v-bind:index="index"
             v-on:submit="handleOperationFinish($event)"
             v-on:cancel="handleOperationFinish('')"
           >
@@ -55,6 +57,7 @@
             v-else
             v-bind:obj="item.props"
             v-bind:active-file="activeDescriptor"
+            v-bind:index="index"
             v-on:duplicate="startOperation('duplicate', item.id)"
             v-on:create-file="startOperation('createFile', item.id)"
             v-on:create-dir="startOperation('createDir', item.id)"
@@ -366,7 +369,10 @@ export default {
           // Select the active file (if there is one)
           ipcRenderer.invoke('application', {
             command: 'open-file',
-            payload: descriptor.path
+            payload: {
+              path: descriptor.path,
+              newTab: false
+            }
           })
             .catch(e => console.error(e))
         }
@@ -521,6 +527,9 @@ export default {
 </script>
 
 <style lang="less">
+// Import the necessary styles for the virtual scroller
+@import '~vue-virtual-scroller/dist/vue-virtual-scroller.css';
+
 body {
   #file-list {
     transition: left 0.3s ease;
@@ -562,20 +571,38 @@ body {
 }
 
 body.darwin {
-  #file-list #file-manager-filter {
-    background-color: rgb(230, 230, 230);
-    height: 30px;
-    padding: 4px;
+  #file-list {
+    background-color: white;
 
-    #file-manager-filter-input {
-      width: 100%;
-      font-size: 11px;
-      height: calc(30px - 8px);
+    #file-manager-filter {
+      background-color: rgb(230, 230, 230);
+      height: 30px;
+      padding: 4px;
+
+      #file-manager-filter-input {
+        width: 100%;
+        font-size: 11px;
+        height: calc(30px - 8px);
+      }
     }
   }
 
   &.dark #file-list {
     background-color: rgb(40, 40, 50);
+  }
+}
+
+body.win32 {
+  #file-list {
+    background-color: rgb(230, 230, 230);
+
+    #file-manager-filter {
+      padding: 0;
+      border-bottom: 2px solid rgb(230, 230, 230);
+      height: 32px; // The border should be *below* the 30px mark
+
+      #file-manager-filter-input { height: 30px; }
+    }
   }
 }
 </style>

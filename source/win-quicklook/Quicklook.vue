@@ -1,7 +1,7 @@
 <template>
   <WindowChrome
     v-bind:title="windowTitle"
-    v-bind:titlebar="false"
+    v-bind:titlebar="shouldShowTitlebar"
     v-bind:menubar="false"
     v-bind:show-toolbar="true"
     v-bind:toolbar-controls="toolbarControls"
@@ -67,6 +67,9 @@ export default {
     }
   },
   computed: {
+    shouldShowTitlebar: function () {
+      return process.platform !== 'darwin'
+    },
     windowTitle: function () {
       let title = this.name
       const firstHeadings = Boolean(global.config.get('display.useFirstHeadings'))
@@ -81,12 +84,7 @@ export default {
       return title
     },
     toolbarControls: function () {
-      return [
-        {
-          type: 'text',
-          content: (this.windowTitle === undefined) ? 'QuickLook' : this.windowTitle,
-          style: 'strong'
-        },
+      const ctrl = [
         {
           type: 'spacer', // Make sure the content is flushed to the left
           size: 'size-5x'
@@ -102,6 +100,17 @@ export default {
           }
         }
       ]
+
+      if (process.platform === 'darwin') {
+        // On macOS, we don't have a titlebar. There it is customary to add the window title to the toolbar.
+        ctrl.push({
+          type: 'text',
+          content: (this.windowTitle === undefined) ? 'QuickLook' : this.windowTitle,
+          style: 'strong'
+        })
+      }
+
+      return ctrl
     }
   },
   mounted: function () {

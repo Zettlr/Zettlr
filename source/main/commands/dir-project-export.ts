@@ -12,10 +12,10 @@
  * END HEADER
  */
 
-import path from 'path'
-import sanitize from 'sanitize-filename'
+// import path from 'path'
+// import sanitize from 'sanitize-filename'
 import ZettlrCommand from './zettlr-command'
-import { makeExport } from '../modules/export'
+// import { makeExport } from '../modules/export'
 import objectToArray from '../../common/util/object-to-array'
 import makeImgPathsAbsolute from '../../common/util/make-img-paths-absolute'
 

@@ -87,19 +87,14 @@ export default {
 </script>
 
 <style lang="less">
-body.darwin div#toolbar {
-  div.three-way-toggle {
+body.darwin {
+  div#toolbar div.three-way-toggle {
     border-radius: 4px;
     margin: 0 10px;
     border: 1px solid transparent;
 
-    &:hover {
-      border-color: rgb(180, 180, 180);
-    }
-
-    &.active {
-      background-color: rgb(230, 230, 230);
-    }
+    &:hover { border-color: rgb(180, 180, 180); }
+    &.active { background-color: rgb(230, 230, 230); }
 
     button {
       &:first-child {
@@ -111,25 +106,31 @@ body.darwin div#toolbar {
         border-bottom-left-radius: 0px;
       }
 
-      &.active {
-        background-color: rgb(200, 200, 200);
-      }
+      &.active { background-color: rgb(200, 200, 200); }
     }
   }
-}
 
-body.darwin.dark div#toolbar {
-  div.three-way-toggle {
+  &.dark div#toolbar div.three-way-toggle {
     &:hover { border-color: rgb(80, 80, 80); }
     &.active { background-color: rgb(60, 60, 60); }
-
     button.active { background-color: rgb(50, 50, 50); }
   }
 }
 
-body.darwin.dark div#toolbar {
-  button.toggle.active {
-    background-color: rgb(40, 40, 40);
+body.win32 {
+  div#toolbar div.three-way-toggle {
+    margin: 0 10px;
+    border: 2px solid transparent;
+
+    &:hover { border-color: rgb(180, 180, 180); }
+    &.active { background-color: rgb(230, 230, 230); }
+    button.active { background-color: rgb(200, 200, 200); }
+  }
+
+  &.dark div#toolbar div.three-way-toggle {
+    &:hover { border-color: rgb(80, 80, 80); }
+    &.active { background-color: rgb(60, 60, 60); }
+    button.active { background-color: rgb(50, 50, 50); }
   }
 }
 </style>

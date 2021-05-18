@@ -1,5 +1,5 @@
 import { app } from 'electron'
-import bcp47 from 'bcp-47'
+import * as bcp47 from 'bcp-47'
 import { v4 as uuid4 } from 'uuid'
 import { getLanguageFile } from '../../../common/i18n'
 
@@ -210,7 +210,9 @@ export default function getConfigTemplate (): ConfigOptions {
       stabilityThreshold: 1000 // Positive int in milliseconds
     },
     system: {
-      deleteOnFail: false // Whether to delete files if trashing them fails
+      deleteOnFail: false, // Whether to delete files if trashing them fails
+      avoidNewTabs: true, // Whether to avoid opening new tabs for documents if possible
+      iframeWhitelist: [ 'www.youtube.com', 'player.vimeo.com' ] // Contains a list of whitelisted iFrame prerendering domains
     },
     checkForBeta: false, // Should the user be notified of beta releases?
     uuid: uuid4() // The app's unique anonymous identifier

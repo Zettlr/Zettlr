@@ -13,20 +13,46 @@ function applyCodeblockClasses (cm) {
   let isCodeBlock = false
   let codeblockClass = 'code-block-line'
 
+  // This matches a line that starts with at most three spaces, followed by at
+  // least three backticks or tildes (fenced code block).
+  const codeBlockRE = /^(?:\s{0,3}`{3}|~{3}).*/
+  // This one, on the other hand, matches indented code blocks starting with at
+  // least four spaces.
+  const indentedRE = /^\s{4,}.*$/
+  // The old regex was: /^(?:`{3}|~{3}).*/
+
   // Buffer changes
   cm.startOperation()
 
   for (let i = 0; i < cm.lineCount(); i++) {
-    // Each code block line toggles the isCodeBlock variable (but the
-    // codeblocks themselves should not be styled)
-    if (/^(?:`{3}|~{3}).*/.test(cm.getLine(i))) {
-      isCodeBlock = !isCodeBlock
-      cm.removeLineClass(i, 'wrap', codeblockClass)
-      continue
+    // First, get the line and the info whether it's currently a code block line
+    const info = cm.lineInfo(i)
+    const line = info.text
+    const wrapClass = (info.wrapClass !== undefined) ? String(info.wrapClass) : ''
+    const isCurrentlyCode = wrapClass.includes(codeblockClass)
+
+    // Second, check if we are NOT inside a fenced code block. If we're not, but
+    // the line is indented by at least four spaces, we have an indented code
+    // block. That doesn't trigger the code block variable, but renders only
+    // this line as a codeblock.
+    if (!isCodeBlock && indentedRE.test(line)) {
+      if (!isCurrentlyCode) {
+        cm.addLineClass(i, 'wrap', codeblockClass)
+        needsRefresh = true
+      }
+      continue // No need to check the rest
     }
 
-    let wrapClass = cm.lineInfo(i).wrapClass
-    let isCurrentlyCode = (wrapClass) ? wrapClass.includes(codeblockClass) : false
+    // Each code block line toggles the isCodeBlock variable (but the
+    // codeblocks themselves should not be styled)
+    if (codeBlockRE.test(line)) {
+      isCodeBlock = !isCodeBlock
+      if (isCurrentlyCode) {
+        cm.removeLineClass(i, 'wrap', codeblockClass)
+        needsRefresh = true
+      }
+      continue
+    }
 
     if (isCodeBlock && !isCurrentlyCode) {
       // We should render as code
@@ -36,12 +62,14 @@ function applyCodeblockClasses (cm) {
       // We should not render as code
       cm.removeLineClass(i, 'wrap', codeblockClass)
       needsRefresh = true
-    }
+    } // Else: Leave the line as it is
   }
 
-  // End operation (apply the buffer to the layouting and force a repaint)
+  // End operation (apply the buffer to the layout and force a repaint)
   cm.endOperation()
 
   // If at least one line was altered, we need a refresh
-  if (needsRefresh) cm.refresh()
+  if (needsRefresh) {
+    cm.refresh()
+  }
 }

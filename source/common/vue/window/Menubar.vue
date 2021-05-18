@@ -136,7 +136,7 @@ export default {
   width: 100%;
   // Use the system font with a somewhat smaller font-size
   font-family: inherit;
-  font-size: 14px;
+  font-size: 12px;
   padding-left: 30px;
   // Use the Zettlr logo as fixed background to enable branding in the menubar
   background-image: url("../../img/image-preview.png");
@@ -161,10 +161,12 @@ export default {
 
 body.win32 {
   #menubar {
-    background-color: #1cb27e;
+    background-color: var(--system-accent-color, --c-primary);
+    color: var(--system-accent-color-contrast);
 
     span.top-level-item:hover {
-      background-color: #136e4e;
+      // Since we can't be sure which colour the menu bar will have, simply add a transparent overlay
+      background-color: rgba(0, 0, 0, .3);
     }
   }
 }

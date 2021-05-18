@@ -37,7 +37,7 @@ export default class RecentDocsProvider extends EventEmitter {
        * Add a document to the list of recently opened documents
        * @param {Object} doc A document exposing at least the metadata of the file
        */
-      add: (doc) => {
+      add: (doc: MDFileMeta|CodeFileMeta) => {
         const found = this._recentDocs.find((e) => e.hash === doc.hash)
         if (found !== undefined) {
           this._recentDocs.splice(this._recentDocs.indexOf(found), 1)
@@ -59,9 +59,8 @@ export default class RecentDocsProvider extends EventEmitter {
       },
       /**
        * Clears out the list of recent files
-       * @return {Boolean} True if the call succeeded
        */
-      clear: () => {
+      clear: (): void => {
         this._recentDocs = []
         // Clear the application's recent docs menu as well on macOS or Windows
         if ([ 'darwin', 'win32' ].includes(process.platform)) {
@@ -74,14 +73,16 @@ export default class RecentDocsProvider extends EventEmitter {
        * Retrieve the list of recent documents
        * @return {Array} A list containing all documents in the recent list
        */
-      get: () => {
+      get: (): Array<MDFileMeta|CodeFileMeta> => {
         return JSON.parse(JSON.stringify(this._recentDocs))
       },
       /**
        * Queries the list of recent documents
        * @return {Boolean} Returns true if there is at least one recent document.
        */
-      hasDocs: () => { return this._recentDocs.length > 0 },
+      hasDocs: (): boolean => {
+        return this._recentDocs.length > 0
+      },
       /**
        * Registers a callback for the given event
        */

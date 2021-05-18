@@ -65,7 +65,7 @@ div#statusbar {
       background-color: var(--system-accent-color, --c-primary);
       border-color: var(--system-accent-color, --c-primary);
       background-image: linear-gradient(transparent, #00000020);
-      color: white;
+      color: var(--system-accent-color-contrast, white);
     }
   }
 }

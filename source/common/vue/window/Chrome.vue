@@ -172,6 +172,7 @@ export default {
   },
   data: function () {
     return {
+      // platform: 'win32', // DEBUG process.platform,
       platform: process.platform,
       useNativeAppearance: global.config.get('window.nativeAppearance')
     }
@@ -200,10 +201,14 @@ export default {
       return this.menubar
     },
     showWindowControls: function () {
-      if (this.platform !== 'darwin') {
-        return true
-      } else {
+      // Shows the window control buttons only if we are on Windows
+      // or on Linux without native appearance.
+      if (this.platform === 'linux' && this.useNativeAppearance === true) {
         return false
+      } else if (this.platform === 'darwin') {
+        return false
+      } else {
+        return true
       }
     },
     platformTitlebarHeight: function () {
@@ -273,7 +278,7 @@ export default {
       return `${margin}px`
     },
     contentMarginBottom: function () {
-      if (this.showStatusbar) {
+      if (this.showStatusbar === true) {
         return `${this.platformStatusbarHeight}px`
       } else {
         return '0px'
@@ -330,10 +335,12 @@ export default {
     // Oh, we can destructure stuff directly in the method signature?! Uuuuh
     ipcRenderer.on('config-provider', (event, { command, payload }) => {
       if (command === 'update' && payload === 'window.nativeAppearance') {
-        console.log('Apperance has changed for window chrome!')
         this.useNativeAppearance = global.config.get('window.nativeAppearance')
       }
     })
+
+    // Apply the body class immediately
+    document.body.classList.add(this.platform)
   },
   methods: {
     handleDoubleClick: function (origin) {
@@ -344,7 +351,7 @@ export default {
       } else if (origin === 'toolbar') {
         // A doubleclick on the toolbar should trigger a maximisation if there
         // is no titlebar on darwin
-        if (this.platform === 'darwin' && !this.titlebar) {
+        if (this.platform === 'darwin' && this.titlebar === false) {
           ipcRenderer.send('window-controls', { command: 'win-maximise' })
         }
       }
@@ -354,6 +361,10 @@ export default {
 </script>
 
 <style lang="less">
+// Import the CodeMirror CSS so that it's available on every window which
+// includes the WindowChrome.
+@import '~codemirror/lib/codemirror.css';
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, Ubuntu, Roboto, Noto, 'Segoe UI', Arial, sans-serif;
   // macOS OPERATING SYSTEM STYLES
