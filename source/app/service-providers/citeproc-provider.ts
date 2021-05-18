@@ -28,6 +28,8 @@ import extractBibTexAttachments from './assets/extract-bibtex-attachments'
 import BibTexParser from 'astrocite-bibtex'
 import YAML from 'yaml'
 import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
+import { IpcModule } from '../../IpcModule'
+import { IpcCiteService } from '../../IpcCiteService'
 
 interface DatabaseRecord {
   path: string
@@ -43,7 +45,7 @@ interface DatabaseRecord {
 /**
  * This class enables to export citations from a CSL JSON file to HTML.
  */
-export default class CiteprocProvider {
+export default class CiteprocProvider implements IpcCiteService {
   /**
    * The main library which is being used everywhere where we don't have
    * specific libraries. This variable holds the absolute path.
@@ -583,3 +585,7 @@ export default class CiteprocProvider {
     return hasDatabases && hasItems
   }
 }
+
+// Listen for synchronous citation messages from the renderer
+// Citeproc calls (either single citation or a whole cluster)
+IpcModule.registerMain<IpcCiteService>(new CiteprocProvider())
