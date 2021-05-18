@@ -28,7 +28,7 @@ import extractBibTexAttachments from './assets/extract-bibtex-attachments'
 import BibTexParser from 'astrocite-bibtex'
 import YAML from 'yaml'
 import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
-import { IpcModule } from '../../IpcModule'
+import IpcModule from '../../IpcModule'
 import { IpcCiteService } from '../../IpcCiteService'
 
 interface DatabaseRecord {
@@ -229,12 +229,6 @@ export default class CiteprocProvider implements IpcCiteService {
           return []
         } else {
           return this._databases[this._databaseIdx].cslData
-        }
-      } else if (command === 'get-citation') {
-        const { payload } = message
-        return {
-          'originalCitation': payload,
-          'renderedCitation': this.getCitation(payload)
         }
       } else if (command === 'get-bibliography') {
         // The Payload contains the items the renderer wants to have
