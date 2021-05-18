@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   sodipodi:docname="view-list-line-alt.svg"
+   id="svg22"
+   preserveAspectRatio="xMidYMid meet"
+   viewBox="0 0 36 36"
+   height="36"
+   width="36"
+   version="1.1">
+  <metadata
+     id="metadata28">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>view-list-line</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs26" />
+  <sodipodi:namedview
+     inkscape:current-layer="svg22"
+     inkscape:window-maximized="1"
+     inkscape:window-y="0"
+     inkscape:window-x="0"
+     inkscape:cy="17.901829"
+     inkscape:cx="13.858299"
+     inkscape:zoom="30.209173"
+     inkscape:snap-smooth-nodes="true"
+     showgrid="true"
+     id="namedview24"
+     inkscape:window-height="1028"
+     inkscape:window-width="1920"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff">
+    <inkscape:grid
+       dotted="true"
+       id="grid857"
+       type="xygrid" />
+  </sodipodi:namedview>
+  <title
+     id="title2">view-list-line</title>
+  <rect
+     id="rect4"
+     height="2"
+     width="2"
+     y="8"
+     x="2"
+     class="clr-i-outline clr-i-outline-path-1" />
+  <path
+     id="path6"
+     d="M7,10H31a1,1,0,0,0,0-2H7a1,1,0,0,0,0,2Z"
+     class="clr-i-outline clr-i-outline-path-2" />
+  <rect
+     id="rect8"
+     height="2"
+     width="2"
+     y="14"
+     x="8"
+     class="clr-i-outline clr-i-outline-path-3" />
+  <path
+     sodipodi:nodetypes="sssss"
+     id="path10"
+     d="M 31,14 H 13 c -1.333333,0 -1.333333,2 0,2 h 18 c 1.333333,0 1.333333,-2 0,-2 z"
+     class="clr-i-outline clr-i-outline-path-4" />
+  <rect
+     id="rect12"
+     height="2"
+     width="2"
+     y="20"
+     x="14"
+     class="clr-i-outline clr-i-outline-path-5" />
+  <path
+     sodipodi:nodetypes="sssss"
+     id="path14"
+     d="M 31,20 H 19 c -1.333333,0 -1.333333,2 0,2 h 12 c 1.333333,0 1.333333,-2 0,-2 z"
+     class="clr-i-outline clr-i-outline-path-6" />
+  <rect
+     id="rect16"
+     height="2"
+     width="2"
+     y="26"
+     x="8"
+     class="clr-i-outline clr-i-outline-path-7" />
+  <path
+     sodipodi:nodetypes="sssss"
+     id="path18"
+     d="M 31,26 H 13 c -1.333333,0 -1.333333,2 0,2 h 18 c 1.333333,0 1.333333,-2 0,-2 z"
+     class="clr-i-outline clr-i-outline-path-8" />
+  <rect
+     id="rect20"
+     fill-opacity="0"
+     height="36"
+     width="36"
+     y="0"
+     x="0" />
+</svg>
