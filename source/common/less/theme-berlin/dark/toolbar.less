@@ -1,0 +1,30 @@
+// Toolbar styling
+
+#toolbar {
+    color:var(--grey-1);
+    background-color: black;
+
+    .button {
+        transition:@fast-transition all ease;
+        &:not(.pomodoro):hover {
+            background-color: var(--grey-6);
+        }
+
+        & clr-icon svg path {
+            stroke: var(--popup-dark-text);
+            fill: var(--popup-dark-text);
+        }
+    }
+
+    .searchbar {
+        input {
+            &::placeholder {
+                color: var(--grey-4);
+            }
+            color:inherit;
+            background-color: var(--grey-8);
+            border:1px solid var(--grey-8);
+            &:focus { border-color: var(--grey-6); }
+        }
+    }
+}
