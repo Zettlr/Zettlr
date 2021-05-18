@@ -36,6 +36,7 @@ A few years ago we implemented auto-saving after a delay of five seconds with no
 - All windows will now remember their last position (new: log window and print window).
 - Some components of the renderer elements will now respect a given accent colour set by your operating system (only available for macOS and Windows).
 - You can now close files by middle-clicking their tabs.
+- Fix the visibility problems under night mode mentioned in issue #1845
 
 
 ## Under the Hood
@@ -63,14 +64,7 @@ A few years ago we implemented auto-saving after a delay of five seconds with no
 - Zettlr is now completely jQuery-free.
 - Migrated the FSAL cache from unstable Objects to Maps and Sets.
 - Migrated the TagProvider to a Map as well.
-# 1.8.9
-## GUI and Functionality
-- Change the background color (night model) for quoted words from --grey-4 to --beige-5
-- Darken the color of the headlines for night model
-- Change the opacity for citing and Bold symbols from 0.3 to 0.65, so the symbols can be visible in night mode
-- Change the dotted underline for spellchecking to dashed underline so the space between the dots is more sparse
-- Soften every color in the Readability Mode
-- Enlighten the primary color for the theme bordeaux
+
 # 1.8.8
 
 ## HOTFIX FOR ELECTRON CVEs
