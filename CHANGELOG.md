@@ -40,6 +40,7 @@ A few years ago we implemented auto-saving after a delay of five seconds with no
 -Darken the color of the headlines for night model
 -Change the opacity for citing and Bold symbols from 0.3 to 0.65, so the symbols can be visible in night mode
 -Change the dotted underline for spellchecking to dashed underline so the space between the dots is more sparse
+-Soften every color in the Readability Mode
 -Enlighten the primary color for the theme bordeaux
 
 ## Under the Hood
