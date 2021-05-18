@@ -20,7 +20,7 @@ const testers = [
   { 'input': 'Alice & Bob', 'expected': 'Alice \\& Bob' }
 ]
 
-describe('Utility#makeValidUri()', function () {
+describe('Utility#sanitizeTexValue()', function () {
   for (let test of testers) {
     it(`Input "${test.input}" should return ${test.expected}`, function () {
       assert.strictEqual(sanitiseTexValue(test.input), test.expected)

@@ -14,7 +14,9 @@
 
 // Helpers to determine what files from argv we can open
 const isFile = require('./is-file')
-const ignoreFile = require('./ignore-file')
+const path = require('path')
+// Supported filetypes
+const filetypes = require('../data.json').filetypes
 
 /**
  * Extracts files from the argv.
@@ -22,9 +24,19 @@ const ignoreFile = require('./ignore-file')
  * @returns {Array} The filtered out files
  */
 module.exports = function (argv = process.argv) {
-  if (!argv || !Array.isArray(argv)) return []
+  if (!Array.isArray(argv)) {
+    return []
+  }
 
-  return argv.filter(function (element) {
-    return element.substring(0, 2) !== '--' && isFile(element) && !ignoreFile(element)
+  const filesToOpen = argv.filter(function (element) {
+    // Filter out CLI arguments, non-files, and non-supported files
+    return element.substring(0, 2) !== '--' &&
+      isFile(element) &&
+      // Include RMarkdown files here, filter them out later
+      filetypes.includes(path.extname(element))
   })
+
+  global.filesToOpen = global.filesToOpen.concat(filesToOpen)
+  // TODO: Side effects are not good!
+  return filesToOpen
 }

@@ -1,7 +1,6 @@
 ---
 name: Enhancement Request
 about: Do you miss that one inch of performance? Go this way!
-
 ---
 
 <!--
@@ -15,14 +14,14 @@ about: Do you miss that one inch of performance? Go this way!
   to keep the list easily accessible!
 -->
 
-<!-- First, please describe your enhancement in one or two short sentences. -->
 ## Description
+<!-- First, please describe your enhancement in one or two short sentences. -->
 
-<!-- Now, please tell us what this would change, and more specifically: how! -->
 ## Proposed Changes
+<!-- Now, please tell us what this would change, and more specifically: how! -->
 
-<!-- Now, are there any caveats, such as other features that would be affected? -->
 ## Caveats
+<!-- Now, are there any caveats, such as other features that would be affected? -->
 
-<!-- Anything else you'd like to add? The more info, the merrier! -->
 ## Additional Information
+<!-- Anything else you'd like to add? The more info, the merrier! -->

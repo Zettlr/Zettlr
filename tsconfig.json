@@ -1,24 +1,31 @@
 {
-    "compilerOptions": {
-        "target": "es5",
-        "module": "commonjs",
-        "allowJs": true,
-        "strict": true,
-        "esModuleInterop": true,
-        "outDir": "dist",
-        "baseUrl": ".",
-        "sourceMap": true,
-        "noImplicitAny": false,
-        "resolveJsonModule": true,
-        "downlevelIteration": true,
-        "types": [
-            "jquery"
-        ]
-    },
-    "include": [
-        "source/**/*"
-    ],
-    "files": [
-        "global.d.ts"
-    ]
+  "compilerOptions": {
+    "target": "ES2019",
+    "allowJs": true,
+    "module": "commonjs",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "downlevelIteration": true,
+    "paths": {
+      "*": ["node_modules/*"]
+    }
+  },
+  "include": [
+    "source/**/*",
+    "test/**/*",
+    "forge.config.js",
+    "webpack.main.config.js",
+    "webpack.renderer.config.js",
+    "webpack.rules.js"
+  ],
+  "files": [
+    "source/global.d.ts"
+  ]
 }

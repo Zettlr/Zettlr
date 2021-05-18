@@ -1,227 +1,140 @@
 {
   "name": "zettlr",
+  "productName": "Zettlr",
   "homepage": "https://www.zettlr.com",
   "author": {
     "name": "Hendrik Erz",
-    "email": "zettlr@mailbox.org"
+    "email": "info@zettlr.com"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/Zettlr/Zettlr.git"
   },
-  "version": "1.7.0-beta.10",
+  "version": "1.8.8",
   "license": "GPL-3.0",
-  "description": "A powerful Markdown editor for researchers.",
-  "main": "./source/main.js",
+  "description": "A Markdown Editor for the 21st century.",
+  "main": ".webpack/main",
   "scripts": {
-    "postinstall": "electron-builder install-app-deps && yarn less && yarn handlebars && yarn reveal:build && yarn wp:prod && yarn copy",
-    "start": "electron ./dist/main.js --enable-logging",
-    "build": "tsc",
-    "build:quick": "electron-builder --dir",
-    "release:this": "electron-builder",
-    "release:mac": "electron-builder --mac --publish \"never\"",
-    "release:win": "electron-builder --win --publish \"never\"",
-    "release:linux": "electron-builder --linux --publish \"never\"",
-    "less": "gulp less",
-    "handlebars": "gulp handlebars",
-    "copy": "gulp copyVendorAssets && gulp copyAssets",
+    "postinstall": "electron-builder install-app-deps",
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "package:mac-x64": "electron-forge package --platform=darwin --arch=x64",
+    "package:mac-arm": "electron-forge package --platform=darwin --arch=arm64",
+    "package:win-x64": "electron-forge package --platform=win32 --arch=x64",
+    "package:win-arm": "electron-forge package --platform=win32 --arch=arm64",
+    "package:linux-x64": "electron-forge package --platform=linux --arch=x64",
+    "package:linux-arm": "electron-forge package --platform=linux --arch=arm64",
+    "release:mac-x64": "electron-builder --mac --x64 --publish never --prepackaged out/Zettlr-darwin-x64/Zettlr.app",
+    "release:mac-arm": "electron-builder --mac --arm64 --publish never --prepackaged out/Zettlr-darwin-arm64/Zettlr.app",
+    "release:win-x64": "electron-builder --win --x64 --publish never --prepackaged out/Zettlr-win32-x64",
+    "release:win-arm": "electron-builder --win --ia32 --arm64 --publish never --prepackaged out/Zettlr-win32-arm64",
+    "release:linux-x64": "electron-builder --linux AppImage deb rpm zip --x64 --publish never --prepackaged out/Zettlr-linux-x64",
+    "release:linux-arm": "electron-builder --linux AppImage deb rpm zip --arm64 --publish never --prepackaged out/Zettlr-linux-arm64",
     "lang:refresh": "node scripts/refresh-language.js",
     "csl:refresh": "node scripts/update-csl.js",
     "reveal:build": "node scripts/update-reveal.js",
-    "wp:dev": "cross-env NODE_ENV=development webpack --progress --colors",
-    "wp:prod": "cross-env NODE_ENV=production webpack --progress --colors",
-    "watch:gulp": "gulp watch",
-    "watch:wp": "cross-env NODE_ENV=development webpack --progress --colors --watch",
-    "watch:ts": "tsc -w",
-    "watch": "npm-run-all --parallel watch:*",
-    "test": "mocha",
-    "test-gui": "node scripts/test-gui.js",
-    "lint": "eslint --ext js,jsx,ts,tsx,vue -f html -o eslint_report.htm source resources"
+    "test": "mocha test/**/*.js && mocha -r ts-node/register test/**/*.spec.ts",
+    "test-gui": "node scripts/test-gui/index.js",
+    "lint": "eslint --ext js,vue,ts source"
   },
-  "build": {
-    "appId": "com.zettlr.app",
-    "productName": "Zettlr",
-    "npmRebuild": false,
-    "copyright": "Zettlr is licensed under GNU GPL v3.",
-    "fileAssociations": [
-      {
-        "ext": "md",
-        "name": "Markdown",
-        "description": "Markdown document",
-        "mimeType": "text/markdown",
-        "role": "Editor",
-        "isPackage": false
-      },
-      {
-        "ext": "markdown",
-        "name": "Markdown",
-        "description": "Markdown document",
-        "mimeType": "text/markdown",
-        "role": "Editor",
-        "isPackage": false
-      }
-    ],
-    "directories": {
-      "output": "release",
-      "app": "source"
-    },
-    "afterPack": "./scripts/afterPack.js",
-    "afterSign": "./scripts/afterSign.js",
-    "mac": {
-      "category": "public.app-category.productivity",
-      "target": "dmg",
-      "artifactName": "Zettlr-${version}-${arch}.${ext}",
-      "icon": "resources/icons/icns/icon.icns",
-      "darkModeSupport": true,
-      "hardenedRuntime": true,
-      "gatekeeperAssess": false,
-      "entitlements": "./scripts/assets/entitlements.plist",
-      "entitlementsInherit": "./scripts/assets/entitlements.plist"
-    },
-    "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
-        }
-      ],
-      "artifactName": "Zettlr-${version}-${arch}.${ext}",
-      "icon": "resources/icons/ico/icon.ico"
-    },
-    "linux": {
-      "target": [
-        {
-          "target": "AppImage",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
-        },
-        "deb",
-        "rpm"
-      ],
-      "artifactName": "Zettlr-${version}-${arch}.${ext}",
-      "synopsis": "Markdown editor",
-      "category": "Office",
-      "icon": "resources/icons/png",
-      "desktop": {
-        "StartupWMClass": "zettlr"
-      }
-    },
-    "dmg": {
-      "background": "resources/icons/dmg/dmg_back.tiff",
-      "icon": "resources/icons/icns/icon.icns",
-      "contents": [
-        {
-          "x": 130,
-          "y": 220
-        },
-        {
-          "x": 410,
-          "y": 220,
-          "type": "link",
-          "path": "/Applications"
-        }
-      ],
-      "window": {
-        "width": 540,
-        "height": 400
-      }
-    },
-    "nsis": {
-      "oneClick": false,
-      "perMachine": false,
-      "allowElevation": true,
-      "allowToChangeInstallationDirectory": true,
-      "uninstallDisplayName": "${productName}"
-    },
-    "deb": {
-      "priority": "optional",
-      "compression": "xz"
-    },
-    "rpm": {
-      "compression": "xz"
-    }
-  },
-  "resolutions": {
-    "eslint/espree/acorn": "^7.2.0"
+  "config": {
+    "forge": "./forge.config.js"
   },
   "dependencies": {
-    "@zettlr/citr": "^1.1.0",
-    "adm-zip": "^0.4.14",
-    "archiver": "^4.0.1",
-    "astrocite": "^0.16.3",
-    "bcp-47": "^1.0.7",
-    "chart.js": "^2.9.3",
-    "chokidar": "^3.4.0",
-    "citeproc": "^2.3.22",
-    "codemirror": "^5.54.0",
+    "@clr/icons": "^5.2.0",
+    "@types/sanitize-html": "^2.3.1",
+    "@types/semver": "^7.3.5",
+    "@zettlr/citr": "^1.2.2",
+    "adm-zip": "^0.5.5",
+    "archiver": "^5.3.0",
+    "astrocite": "^0.16.4",
+    "bcp-47": "^2.0.0",
+    "chalk": "^4.1.1",
+    "chart.js": "^3.2.1",
+    "chokidar": "^3.5.1",
+    "citeproc": "^2.4.59",
+    "codemirror": "^5.61.0",
     "command-exists": "^1.2.9",
-    "got": "^11.1.4",
-    "joplin-turndown": "^4.0.27",
+    "got": "^11.8.2",
+    "joplin-turndown": "^4.0.30",
     "joplin-turndown-plugin-gfm": "^1.0.12",
-    "jquery": "^3.5.1",
-    "katex": "^0.11.1",
-    "md5": "^2.2.1",
-    "mermaid": "8.0.0",
-    "moment": "^2.26.0",
-    "nspell": "^2.1.1",
-    "on-change": "^2.0.1",
+    "katex": "^0.13.6",
+    "luxon": "^1.26.0",
+    "md5": "^2.3.0",
+    "mermaid": "^8.10.1",
+    "moment": "^2.29.1",
+    "nspell": "^2.1.5",
     "rimraf": "^3.0.2",
     "sanitize-filename": "^1.6.3",
-    "semver": "^7.3.2",
+    "sanitize-html": "^2.3.3",
+    "semver": "^7.3.5",
     "showdown": "^1.9.1",
-    "tippy.js": "^6.2.3",
-    "uuid": "^8.1.0",
-    "v8-compile-cache": "^2.1.0",
-    "vue": "^2.6.11",
-    "vuex": "^3.4.0",
-    "yaml": "^1.10.0"
+    "tippy.js": "^6.3.1",
+    "uuid": "^8.3.2",
+    "vue": "^2.6.12",
+    "vue-virtual-scroller": "^1.0.10",
+    "vuex": "^3.6.2",
+    "yaml": "^1.10.2"
+  },
+  "optionalDependencies": {
+    "fsevents": "^2.3.2"
+  },
+  "resolutions": {
+    "**/electron-packager": "15.2.0",
+    "**/node-abi": "^2.21.0"
   },
   "devDependencies": {
-    "@types/codemirror": "^0.0.96",
-    "@types/jquery": "^3.5.0",
-    "@typescript-eslint/eslint-plugin": "^3.6.0",
-    "@typescript-eslint/parser": "^3.6.0",
-    "chalk": "^4.0.0",
-    "cross-env": "^7.0.2",
-    "css-loader": "^3.5.3",
-    "csso": "^4.0.3",
-    "electron": "^9.0.0",
-    "electron-builder": "^22.7.0",
-    "electron-devtools-installer": "^3.0.0",
-    "electron-notarize": "^0.3.0",
-    "eslint": "^7.4.0",
-    "eslint-config-standard": "^14.1.1",
-    "eslint-config-standard-with-typescript": "^18.0.2",
+    "@electron-forge/cli": "^6.0.0-beta.54",
+    "@electron-forge/maker-zip": "^6.0.0-beta.53",
+    "@electron-forge/plugin-webpack": "^6.0.0-beta.54",
+    "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
+    "@types/adm-zip": "^0.4.34",
+    "@types/archiver": "^5.1.0",
+    "@types/bcp-47": "^1.0.0",
+    "@types/command-exists": "^1.2.0",
+    "@types/electron-devtools-installer": "^2.2.0",
+    "@types/luxon": "^1.26.4",
+    "@types/mocha": "^8.2.2",
+    "@types/nspell": "^2.1.0",
+    "@types/rimraf": "^3.0.0",
+    "@types/uuid": "^8.3.0",
+    "@typescript-eslint/eslint-plugin": "^4.23.0",
+    "@typescript-eslint/parser": "^4.23.0",
+    "@vercel/webpack-asset-relocator-loader": "^1.4.0",
+    "copy-webpack-plugin": "^6.1.0",
+    "cross-env": "^7.0.3",
+    "css-loader": "^5.2.4",
+    "csso": "^4.2.0",
+    "electron": "^12.0.7",
+    "electron-builder": "22.11.4",
+    "electron-devtools-installer": "^3.2.0",
+    "electron-notarize": "^1.0.0",
+    "eslint": "^7.25.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-config-standard-with-typescript": "^20.0.0",
     "eslint-loader": "^4.0.2",
-    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1",
-    "eslint-plugin-vue": "^7.0.0-alpha.1",
-    "gulp": "^4.0.2",
-    "gulp-concat": "^2.6.1",
-    "gulp-handlebars": "^5.0.2",
-    "gulp-less": "^4.0.1",
-    "gulp-plumber": "^1.2.1",
-    "gulp-rename": "^2.0.0",
-    "gulp-sourcemaps": "^2.6.5",
-    "gulp-wrap": "^0.15.0",
-    "handlebars": "^4.7.6",
+    "eslint-plugin-promise": "^4.3.1",
+    "eslint-plugin-standard": "^5.0.0",
+    "eslint-plugin-vue": "^7.9.0",
+    "file-loader": "^6.2.0",
+    "fork-ts-checker-webpack-plugin": "^6.2.7",
+    "jsdom": "^16.5.3",
+    "less": "^4.1.1",
+    "less-loader": "^7.3.0",
     "lorem-ipsum": "^2.0.3",
-    "mocha": "^7.2.0",
-    "npm-run-all": "^4.1.5",
-    "reveal.js": "^3.9.2",
-    "typescript": "^3.9.6",
-    "uglify-js": "^3.9.4",
-    "vue-loader": "^15.9.2",
-    "vue-template-compiler": "^2.6.11",
-    "vue-virtual-scroller": "^1.0.10",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11"
+    "mocha": "^8.4.0",
+    "node-loader": "^1.0.2",
+    "raw-loader": "^4.0.2",
+    "reveal.js": "^4.1.0",
+    "style-loader": "^2.0.0",
+    "svg-inline-loader": "^0.8.2",
+    "ts-loader": "^8.1.0",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4",
+    "typings-for-css-modules-loader": "^1.7.0",
+    "vue-loader": "^15.9.7",
+    "vue-template-compiler": "^2.6.12"
   }
 }
