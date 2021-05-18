@@ -45,8 +45,8 @@ global.preBootLog = []
 global.filesToOpen = []
 
 /**
-  * This will be overwritten by the log provider, once it has booted
-  */
+ * This will be overwritten by the log provider, once it has booted
+ */
 global.log = {
   verbose: (message: string) => {
     global.preBootLog.push({ 'level': 1, 'message': message })
@@ -63,24 +63,24 @@ global.log = {
 }
 
 /**
-  * The main Zettlr object. As long as this exists in memory, the app will run.
-  * @type {Zettlr|null}
-  */
+ * The main Zettlr object. As long as this exists in memory, the app will run.
+ * @type {Zettlr|null}
+ */
 let zettlr: Zettlr|null = null
 
 /**
-  * This variable is being used to determine if all servive providers have
-  * successfully shut down and we can actually quit the app.
-  *
-  * @var {boolean}
-  */
+ * This variable is being used to determine if all servive providers have
+ * successfully shut down and we can actually quit the app.
+ *
+ * @var {boolean}
+ */
 let canQuit: boolean = false
 
 /**
-  * Hook into the ready event and initialize the main object creating everything
-  * else. It is necessary to wait for the ready event, because prior, some APIs
-  * may not work correctly.
-  */
+ * Hook into the ready event and initialize the main object creating everything
+ * else. It is necessary to wait for the ready event, because prior, some APIs
+ * may not work correctly.
+ */
 app.whenReady().then(() => {
   // Override the about panel options so that a little bit more is being shown.
   // Makes only sense for macOS, as we don't call the showAboutPanel() method
@@ -112,14 +112,14 @@ app.whenReady().then(() => {
 }).catch(e => console.error(e))
 
 /**
-  * This event will be called if another instance of Zettlr has been opened with
-  * the argv of that instance.
-  * NOTE from the electron docs: This event is guaranteed to be emitted after
-  * the ready event of app gets emitted.
-  * @param {Object} event The instance event
-  * @param {Array} argv The arguments the second instance had received
-  * @param {String} cwd The current working directory
-  */
+ * This event will be called if another instance of Zettlr has been opened with
+ * the argv of that instance.
+ * NOTE from the electron docs: This event is guaranteed to be emitted after
+ * the ready event of app gets emitted.
+ * @param {Object} event The instance event
+ * @param {Array} argv The arguments the second instance had received
+ * @param {String} cwd The current working directory
+ */
 app.on('second-instance', (event, argv, cwd) => {
   if (zettlr === null) {
     console.error('A second instance called this instance but a Zettlr object has not yet been instantiated. This may indicate a logical error.')
@@ -157,8 +157,8 @@ app.on('open-file', (e, p) => {
 })
 
 /**
-  * Quit as soon as all windows are closed and we are not on macOS.
-  */
+ * Quit as soon as all windows are closed and we are not on macOS.
+ */
 app.on('window-all-closed', function () {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
@@ -168,9 +168,9 @@ app.on('window-all-closed', function () {
 })
 
 /**
-  * Hook into the will-quit event to make sure we are able to shut down our app
-  * properly.
-  */
+ * Hook into the will-quit event to make sure we are able to shut down our app
+ * properly.
+ */
 app.on('will-quit', function (event) {
   if (!canQuit) {
     // Prevent immediate shutdown and allow the process to shut down first
@@ -194,8 +194,8 @@ app.on('will-quit', function (event) {
 })
 
 /**
-  * On macOS, open a new window as soon as the user re-activates the app.
-  */
+ * On macOS, open a new window as soon as the user re-activates the app.
+ */
 app.on('activate', function () {
   if (zettlr !== null) {
     zettlr.openAnyWindow()
@@ -203,9 +203,9 @@ app.on('activate', function () {
 })
 
 /**
-  * Hook into the unhandledRejection-event to prevent nasty error messages when
-  * a Promise is rejected somewhere.
-  */
+ * Hook into the unhandledRejection-event to prevent nasty error messages when
+ * a Promise is rejected somewhere.
+ */
 process.on('unhandledRejection', (err: any) => {
   // Just log to console.
   global.log.error('[Application] Unhandled rejection received', err)
