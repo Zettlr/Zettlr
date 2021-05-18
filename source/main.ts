@@ -141,8 +141,8 @@ app.on('second-instance', (event, argv, cwd) => {
 })
 
 /**
-  * This gets executed when the user wants to open a file on macOS.
-  */
+ * This gets executed when the user wants to open a file on macOS.
+ */
 app.on('open-file', (e, p) => {
   e.preventDefault() // Need to explicitly set this b/c we're handling this
   // The user wants to open a file -> simply handle it.
