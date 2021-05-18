@@ -1,8 +1,0 @@
-# Ignore everything except icons, pandoc and the less files
-/*
-
-!icons
-!screenshots
-!templates
-!.gitignore
-!NSIS
