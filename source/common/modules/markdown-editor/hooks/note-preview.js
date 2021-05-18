@@ -25,16 +25,16 @@ module.exports = (cm) => {
 
     // Initialise displayed attributes to 'loading'
     let title = "loading"
-    let words = "loading"
+    let content = "loading"
     let wordCount = "loading"
     let days = "loading"
     // Create a tippy. This will display the loading values
     let tooltip = tippy(a, {
       content: `Searching for file...`,
       allowHTML: true, // Obviously
-      interactive: true, // Allow clicking the link
+      interactive: true, 
       placement: 'top-start', // Display at the beginning of the anchor
-      appendTo: document.body, // As the cma anchors are inline, we need a different anchor-element
+      appendTo: document.body, // anchor
       showOnCreate: true, // Immediately show the tooltip
       arrow: false, // No arrow for these tooltips
       onHidden(instance) {
