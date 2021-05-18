@@ -28,7 +28,7 @@ import extractBibTexAttachments from './assets/extract-bibtex-attachments'
 import BibTexParser from 'astrocite-bibtex'
 import YAML from 'yaml'
 import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
-import IpcModule from '../../IpcModule'
+import * as IpcModule from '../../IpcModule'
 import { IpcCiteService } from '../../IpcCiteService'
 
 interface DatabaseRecord {
