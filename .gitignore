@@ -26,9 +26,6 @@ yarn.log
 # Don't commit ESLint error reports
 eslint_report.htm
 
-# Ignore built files
-dist/**/*
-
 # Taken from https://www.gitignore.io/api/visualstudiocode
 
 ### VisualStudioCode ###

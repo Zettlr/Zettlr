@@ -22,10 +22,6 @@
         "project": "./tsconfig.json",
         "extraFileExtensions": [".vue"]
     },
-    "parser": "@typescript-eslint/parser",
-    "plugins": [
-        "@typescript-eslint"
-    ],
     "rules": {
         "space-before-function-paren": [
             2,
