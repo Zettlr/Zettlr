@@ -61,7 +61,7 @@ module.exports = (cm) => {
               days = Math.floor(dateDif / (86400000)) // The days since modification
 
               // On ready, show a tooltip with the note contents
-              tooltip.setContent(`${title}<br>${content}<br>Word Count: ${wordCount}<br> ${days} days since modification`)
+              tooltip.setContent(`File Name: ${title}<br>${content}<br>Word Count: ${wordCount}<br> ${days} Days Since Modification`)
             }).catch(err => console.error("File content get error: " + err));
         } else {
           tooltip.setContent(`File not found`)
