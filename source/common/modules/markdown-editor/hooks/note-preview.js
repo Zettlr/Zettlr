@@ -1,7 +1,5 @@
 const tippy = require('tippy.js').default
-const openMarkdownLink = require('../open-markdown-link')
 const { ipcRenderer } = require('electron')
-
 
 /**
  * A hook for displaying link tooltips which can be used to visually
@@ -11,7 +9,7 @@ const { ipcRenderer } = require('electron')
  */
 module.exports = (cm) => {
   cm.getWrapperElement().addEventListener('mousemove', (event) => {
-    let a = event.target
+    let a = HTMLSpanElement(event.target)
 
     // Only for note links
     if (!a.classList.contains('cm-zkn-link')) {
@@ -24,36 +22,34 @@ module.exports = (cm) => {
     }
 
     // Initialise displayed attributes to 'loading'
-    let title = "loading"
-    let content = "loading"
-    let wordCount = "loading"
-    let days = "loading"
+    let title = 'loading'
+    let content = 'loading'
+    let wordCount = 'loading'
+    let days = 'loading'
     // Create a tippy. This will display the loading values
     let tooltip = tippy(a, {
-      content: `Searching For File...`,
+      content: 'Searching For File...',
       allowHTML: true, // Obviously
       interactive: true,
       placement: 'top-start', // Display at the beginning of the anchor
       appendTo: document.body, // anchor
       showOnCreate: true, // Immediately show the tooltip
       arrow: false, // No arrow for these tooltips
-      onHidden(instance) {
+      onHidden (instance) {
         instance.destroy() // Destroy the tippy instance.
-      },
+      }
     })
 
     // Find the file's absolute path
     ipcRenderer.invoke('application', { command: 'file-path-find', payload: a.innerText })
       .then((filepath) => {
         // If the file is found
-        if (filepath != "Not Found") {
-
+        if (filepath !== 'Not Found') {
           // Retrieve the file contets
           ipcRenderer.invoke('application', { command: 'get-file-contents', payload: filepath })
             .then((descriptorWithContent) => {
-
-              // Remove html from content so html is displayed normally. escape all special chars
-              descriptorWithContent.content = descriptorWithContent.content.replace(/(<([^>]+)>)/gi, "")
+              // Remove html from content so html is displayed normally. (delete html tags)
+              descriptorWithContent.content = descriptorWithContent.content.replace(/(<([^>]+)>)/gi, '')
 
               // Get the contents of the file such as:
               content = descriptorWithContent.content.substring(0, 50) // 4 lines of 50
@@ -69,19 +65,15 @@ module.exports = (cm) => {
               wordCount = descriptorWithContent.wordCount // The word count
               title = descriptorWithContent.name // The file name
 
-              dateDif = Date.now() - descriptorWithContent.modtime
+              let dateDif = Date.now() - descriptorWithContent.modtime
               days = Math.floor(dateDif / (86400000)) // The days since modification
 
-              // Remove html from content so code is displayed normally. escape all special chars
-
               // On ready, show a tooltip with the note contents
-              tooltip.setContent(`File Name: \"${title}\"<br>\"${content}\"<br>Word Count: ${wordCount}<br> ${days} Days Since Modification`)
-            }).catch(err => console.error("File content get error: " + err));
+              tooltip.setContent(`File Name: "${title}"<br>"${content}"<br>Word Count: ${wordCount}<br> ${days} Days Since Modification`)
+            }).catch(err => console.error('File content get error: ' + err))
         } else {
-          tooltip.setContent(`File Not Found`)
+          tooltip.setContent('File Not Found')
         }
-      }).catch(err => console.error("File path find error: " + err));
-
-
+      }).catch(err => console.error('File path find error: ' + err))
   })
 }
