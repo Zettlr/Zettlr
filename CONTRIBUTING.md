@@ -76,14 +76,18 @@ Be warned that the system must have a GUI library, so systems like the Linux sub
 
 ##### Windows
 
-1. Download Git for Windows user interface, found [here](https://desktop.github.com/)
-2. Download [Yarn](https://classic.yarnpkg.com/en/docs/install/#windows-stable) and [Node](https://nodejs.org/en/)
-3. In a command prompt window inside the cloned Zettlr folder, run 'yarn install'
-4. In this same folder, run 'yarn start'
+Prerequisites: 
+1. Download [Git for Windows user interface](https://desktop.github.com/)
+2. Download [Yarn](https://classic.yarnpkg.com/en/docs/install/#windows-stable)
+3. Download [Node](https://nodejs.org/en/)
+
+Method:
+1. In a command prompt window inside the cloned Zettlr folder, run 'yarn install'
+2. In this same folder, run 'yarn start'
 
 You should have a working zettlr instance running. Get ready to develop your heart out!
 
-You may get an error relating to a pandoc installation. If so undergo the following steps:
+You may get an error relating to a pandoc installation. If so, read the following steps:
 1. Download the latest pandoc version [here](https://github.com/jgm/pandoc/releases/latest)
 2. Extract the file 'pandoc.exe' and move it into 'Zettlr/resources'
 3. Rename this file to 'pandoc-win32-x64'
