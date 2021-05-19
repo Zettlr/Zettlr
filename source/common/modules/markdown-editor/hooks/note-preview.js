@@ -30,7 +30,7 @@ module.exports = (cm) => {
     let days = "loading"
     // Create a tippy. This will display the loading values
     let tooltip = tippy(a, {
-      content: `Searching for file...`,
+      content: `Searching For File...`,
       allowHTML: true, // Obviously
       interactive: true,
       placement: 'top-start', // Display at the beginning of the anchor
@@ -64,7 +64,7 @@ module.exports = (cm) => {
               tooltip.setContent(`File Name: ${title}<br>${content}<br>Word Count: ${wordCount}<br> ${days} Days Since Modification`)
             }).catch(err => console.error("File content get error: " + err));
         } else {
-          tooltip.setContent(`File not found`)
+          tooltip.setContent(`File Not Found`)
         }
       }).catch(err => console.error("File path find error: " + err));
 
