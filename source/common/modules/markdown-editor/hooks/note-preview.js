@@ -9,7 +9,7 @@ const { ipcRenderer } = require('electron')
  */
 module.exports = (cm) => {
   cm.getWrapperElement().addEventListener('mousemove', (event) => {
-    let a = HTMLSpanElement(event.target)
+    let a = event.target
 
     // Only for note links
     if (!a.classList.contains('cm-zkn-link')) {
