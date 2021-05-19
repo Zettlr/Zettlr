@@ -25,7 +25,7 @@ module.exports = (cm) => {
     let title = 'loading'
     let content = 'loading'
     let wordCount = 'loading'
-    let days = 'loading'
+    let time = 'loading'
     // Create a tippy. This will display the loading values
     let tooltip = tippy(a, {
       content: 'Searching For File...',
@@ -52,13 +52,18 @@ module.exports = (cm) => {
               descriptorWithContent.content = descriptorWithContent.content.replace(/(<([^>]+)>)/gi, '')
 
               // Get the contents of the file such as:
-              content = descriptorWithContent.content.substring(0, 50) // 4 lines of 50
+              // 4 lines of 50
+              content = descriptorWithContent.content.substring(0, 50)
               if (descriptorWithContent.content.length >= 50) {
                 content += '\n' + descriptorWithContent.content.substring(50, 100)
-                if (descriptorWithContent.content.length >= 50) {
+                if (descriptorWithContent.content.length >= 100) {
                   content += '\n' + descriptorWithContent.content.substring(100, 150)
-                  if (descriptorWithContent.content.length >= 50) {
+                  if (descriptorWithContent.content.length >= 150) {
                     content += '\n' + descriptorWithContent.content.substring(150, 200)
+                    // Add an elipsis if there is more left
+                    if (descriptorWithContent.content.length >= 200) {
+                      content += '...'
+                    }
                   }
                 }
               }
@@ -66,10 +71,17 @@ module.exports = (cm) => {
               title = descriptorWithContent.name // The file name
 
               let dateDif = Date.now() - descriptorWithContent.modtime
-              days = Math.floor(dateDif / (86400000)) // The days since modification
+              time = (dateDif / (60000)) // The time since modification
+              if (time > 1440) {
+                time = Math.floor(time / 1440) + ' Days'
+              } else if (time > 60) {
+                time = Math.floor(time / 60) + ' Hours'
+              } else {
+                time = Math.floor(time) + ' Minutes'
+              }
 
               // On ready, show a tooltip with the note contents
-              tooltip.setContent(`File Name: "${title}"<br>"${content}"<br>Word Count: ${wordCount}<br> ${days} Days Since Modification`)
+              tooltip.setContent(`File Name: "${title}"<br>"${content}"<br>Word Count: ${wordCount}<br> ${time} Since Modification`)
             }).catch(err => console.error('File content get error: ' + err))
         } else {
           tooltip.setContent('File Not Found')
