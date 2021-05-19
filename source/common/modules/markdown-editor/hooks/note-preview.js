@@ -35,7 +35,7 @@ module.exports = (cm) => {
       appendTo: document.body, // anchor
       showOnCreate: true, // Immediately show the tooltip
       arrow: false, // No arrow for these tooltips
-      onHidden (instance) {
+      onHidden(instance) {
         instance.destroy() // Destroy the tippy instance.
       }
     })
@@ -73,11 +73,20 @@ module.exports = (cm) => {
               let dateDif = Date.now() - descriptorWithContent.modtime
               time = (dateDif / (60000)) // The time since modification
               if (time > 1440) {
-                time = Math.floor(time / 1440) + ' Days'
+                time = Math.floor(time / 1440) + ' Day'
+                if (time != '1 Day') {
+                  time += 's'
+                }
               } else if (time > 60) {
-                time = Math.floor(time / 60) + ' Hours'
+                time = Math.floor(time / 60) + ' Hour'
+                if (time != '1 Hour') {
+                  time += 's'
+                }
               } else {
-                time = Math.floor(time) + ' Minutes'
+                time = Math.floor(time) + ' Minute'
+                if (time != '1 Minute') {
+                  time += 's'
+                }
               }
 
               // On ready, show a tooltip with the note contents
