@@ -2,13 +2,13 @@ const tippy = require('tippy.js').default
 const { ipcRenderer } = require('electron')
 
 /**
- * A hook for displaying link tooltips which can be used to visually
- * enable users to click a link (without having to press down Ctrl/Cmd)
+ * A hook for displaying link tooltips which display metadata
+ * and content of a file
  *
  * @param   {CodeMirror}  cm  The instance to attach to
  */
-module.exports = (cm) => {
-  cm.getWrapperElement().addEventListener('mousemove', (event) => {
+module.exports = (elem) => {
+  elem.getWrapperElement().addEventListener('mousemove', (event) => {
     let a = event.target
 
     // Only for note links
@@ -20,12 +20,13 @@ module.exports = (cm) => {
     if (a.hasOwnProperty('_tippy')) {
       return
     }
+    // TODO: Translate!
 
     // Initialise displayed attributes to 'loading'
-    let title = 'loading'
-    let content = 'loading'
-    let wordCount = 'loading'
-    let time = 'loading'
+    let title = 'null'
+    let content = 'null'
+    let wordCount = 'null'
+    let time = 'null'
     // Create a tippy. This will display the loading values
     let tooltip = tippy(a, {
       content: 'Searching For File...',
@@ -91,9 +92,9 @@ module.exports = (cm) => {
 
               // On ready, show a tooltip with the note contents
               tooltip.setContent(`File Name: "${title}"<br>"${content}"<br>Word Count: ${wordCount}<br> ${time} Since Modification`)
-            }).catch(err => console.error('File content get error: ' + err))
+            }).catch(err => console.error('Could not load file for preview: ' + err))
         } else {
-          tooltip.setContent('File Not Found')
+          tooltip.setContent('File Not Found') // TODO: Translate!
         }
       }).catch(err => console.error('File path find error: ' + err))
   })
