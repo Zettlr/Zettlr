@@ -13,8 +13,6 @@ Zettlr lives through contributions from the community. You do not have to know a
     - [Development](#development)
       - [Our Stack (with linked documentation)](#our-stack-with-linked-documentation)
       - [Issue Labels](#issue-labels)
-      - [Setup](#Setup)
-        - [Windows](#Windows)
   - [Final Remarks](#final-remarks)
 
 ## Where to Get Help
@@ -68,32 +66,6 @@ If you want to help, make sure to _communicate your intent_, that is:
 3. If you have a PR and are not completely sure about whether it's right, or not, just open the PR and outline your questions there. It is much easier to work with something we can see and improve the PR than if you ask without something concrete.
 
 In any case, just remember to just open PRs and dive in. The worst that could happen is that we ask you to rewrite some file, but that has never happened and is pretty unlikely to happen in the future.
-
-#### Setup
-
-Setting up a new development environment is always a big challenge. Here are some guides on how to get the zettlr development environment setup on your computer.
-Be warned that the system must have a GUI library, so systems like the Linux subsystem will not work.
-
-##### Windows
-
-Prerequisites: 
-1. Download [Git for Windows user interface](https://desktop.github.com/)
-2. Download [Yarn](https://classic.yarnpkg.com/en/docs/install/#windows-stable)
-3. Download [Node](https://nodejs.org/en/)
-
-Method:
-1. In a command prompt window inside the cloned Zettlr folder, run 'yarn install'
-2. In this same folder, run 'yarn start'
-
-You should have a working zettlr instance running. Get ready to develop your heart out!
-
-You may get an error relating to a pandoc installation. If so, read the following steps:
-1. Download the latest pandoc version [here](https://github.com/jgm/pandoc/releases/latest)
-2. Extract the file 'pandoc.exe' and move it into 'Zettlr/resources'
-3. Rename this file to 'pandoc-win32-x64'
-4. Try 'yarn start' again
-
-Hopefully this fixes everything!
 
 ## Final Remarks
 
