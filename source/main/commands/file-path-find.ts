@@ -29,7 +29,12 @@ export default class FilePathFind extends ZettlrCommand {
   async run (evt: string, arg: any): Promise<String> {
     // Initialise the file as the result of findExact failing
     let file
-    // Search each type of file
+    // It might be linked by ID
+    file = this._app.getFileSystem().findExact((arg as string), 'id')
+    if (file !== undefined) {
+      return file.path
+    }
+    // It's not an ID, so search each type of file
     for (let type of FILETYPES) {
       file = this._app.getFileSystem().findExact((arg as string) + type, 'name')
       if (file !== undefined) {
