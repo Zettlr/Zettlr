@@ -62,6 +62,10 @@ export default {
       const alt = event.altKey
       const type = this.obj.type
 
+      if (middleClick) {
+        event.preventDefault() // Otherwise, on Windows we'd have a middle-click-scroll
+      }
+
       if (type === 'file' && alt) {
         // QuickLook the file
         ipcRenderer.invoke('application', {
@@ -243,6 +247,13 @@ export default {
                 }).catch(e => console.error(e))
               }
             })
+          } else if (clickedID === 'menu.close_file') {
+            // The close_file item is only shown in the tree view on root files
+            ipcRenderer.invoke('application', {
+              command: 'root-close',
+              payload: this.obj.path
+            })
+              .catch(err => console.error(err))
           }
         })
       }

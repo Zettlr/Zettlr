@@ -19,7 +19,9 @@
   const zknTagRE = getZknTagRE()
   const footnoteRefRE = getFootnoteRefRE()
   // NOTE: The whitespace after ~ are first a normal space, then an NBSP
-  const delim = '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~  «»‹›„“”「」『』–—…÷‘’‚'
+  const delim = '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~  «„「『』–—…÷'
+  // The following list should contain each and every quotation character
+  const allQuotes = '‘’‚ ›‹«»„“”「」『』"\''
 
   // The cache is a simple hashmap
   let spellcheckCache = Object.create(null)
@@ -42,16 +44,19 @@
    * @return  {boolean}       True, if the word is considered correct.
    */
   function check (term) {
+    // Convert smart quotes into the default before checking the term, see #1948
+    const saneTerm = term.replace(/’‘‚‹›»“”」/g, "'")
+
     // Return cache if possible
-    if (spellcheckCache[term] !== undefined) {
-      return spellcheckCache[term]
+    if (spellcheckCache[saneTerm] !== undefined) {
+      return spellcheckCache[saneTerm]
     }
 
     // Save into the corresponding cache and return the query result
     // Return the query result
     let correct = ipcRenderer.sendSync('dictionary-provider', {
       'command': 'check',
-      'term': term
+      'term': saneTerm
     })
 
     if (correct === undefined) {
@@ -60,7 +65,7 @@
     }
 
     // Cache the result
-    spellcheckCache[term] = correct
+    spellcheckCache[saneTerm] = correct
     return correct
   }
 
@@ -128,10 +133,10 @@
         }
 
         // Prevent returning false results because of 'quoted' words.
-        if (word[0] === "'") {
+        if (allQuotes.includes(word[0])) {
           word = word.substr(1)
         }
-        if (word[word.length - 1] === "'") {
+        if (allQuotes.includes(word[word.length - 1])) {
           word = word.substr(0, word.length - 1)
         }
 

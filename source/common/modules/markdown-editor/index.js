@@ -38,7 +38,8 @@ const {
   searchPrevious,
   replaceNext,
   replacePrevious,
-  replaceAll
+  replaceAll,
+  stopSearch
 } = require('./plugins/search')
 
 /**
@@ -172,6 +173,38 @@ module.exports = class MarkdownEditor extends EventEmitter {
     linkTooltipsHook(this._instance)
     noteTooltipsHook(this._instance)
 
+    // Indicate interactive elements while either the Command or Control-key is
+    // held down.
+    document.addEventListener('keydown', (event) => {
+      const cmd = process.platform === 'darwin' && event.metaKey
+      const ctrl = process.platform !== 'darwin' && event.ctrlKey
+
+      if (!cmd && !ctrl) {
+        return
+      }
+
+      const wrapper = this._instance.getWrapperElement()
+      const elements = wrapper.querySelectorAll('.cma, .cm-zkn-link, .cm-zkn-tag')
+
+      elements.forEach(element => {
+        element.classList.add('meta-key')
+      })
+    })
+
+    // And don't forget to remove the classes again
+    document.addEventListener('keyup', (event) => {
+      if (![ 'Meta', 'Control' ].includes(event.key)) {
+        return // Not the right released key
+      }
+
+      const wrapper = this._instance.getWrapperElement()
+      const elements = wrapper.querySelectorAll('.cma, .cm-zkn-link, .cm-zkn-tag')
+
+      elements.forEach(element => {
+        element.classList.remove('meta-key')
+      })
+    })
+
     // Propagate necessary events to the master process
     this._instance.on('change', (cm, changeObj) => {
       this.emit('change', changeObj)
@@ -278,6 +311,10 @@ module.exports = class MarkdownEditor extends EventEmitter {
 
   replaceAll (term, replacement) {
     replaceAll(this._instance, term, replacement)
+  }
+
+  stopSearch () {
+    stopSearch()
   }
 
   /**

@@ -1,12 +1,9 @@
 import { ipcRenderer } from 'electron'
 
 // Import the main.less file which imports CSS for KaTeX, Clarity, Tippy.JS, and
-// the geometry for the application. This will be added to the HTML by WebPack
+// the geometry for the application. This will be added to the HTML by Webpack
 // automatically
-import '../../less/main.less'
-
-// Import the application menu styles
-import './assets/application-menu.less'
+import './assets/main.less'
 
 /**
  * Webpack provides the themes as JavaScript objects with two properties, use

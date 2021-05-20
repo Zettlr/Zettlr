@@ -40,8 +40,8 @@ export default function createQuicklookWindow (file: MDFileDescriptor, conf: Win
     y: conf.top,
     show: false,
     webPreferences: {
-      nodeIntegration: true,
       contextIsolation: false,
+      nodeIntegration: true,
       additionalArguments: [file.hash.toString()]
     }
   }

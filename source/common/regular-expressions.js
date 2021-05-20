@@ -215,7 +215,7 @@ module.exports = {
    */
   'getIframeRE': function () {
     return RegExp(
-      /^<iframe.*?>.*?<\/iframe>$/.source,
+      /^<iframe.*?src="(.+?)".*?>.*?<\/iframe>$/.source,
       'i')
   },
 

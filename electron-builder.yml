@@ -92,6 +92,7 @@ nsis:
   uninstallDisplayName: Uninstall ${productName}
   installerHeader: "./resources/NSIS/NSISinstallerHeader.bmp"
   installerSidebar: "./resources/NSIS/NSISinstallerSidebar.bmp"
+  license: ./LICENSE
 #
 # Configuration for Debian builds
 #

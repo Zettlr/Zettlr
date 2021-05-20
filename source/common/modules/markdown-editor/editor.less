@@ -1,9 +1,186 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Editor stylesheets
+ * CVM-Role:        CSS
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file contains those styles which need to be applied to
+ *                  every instance of the CodeMirror markdown editor. That means
+ *                  wherever the MarkdownEditor class is being included, we need
+ *                  this style. This is being guaranteed by this file being
+ *                  imported by the class itself.
+ *
+ * END HEADER
+ */
+
+// Cursor blink animation
+@keyframes soft-blink {
+  0%   { opacity: 1; }
+  40%  { opacity: 1; }
+  55%  { opacity: 0; }
+  85%  { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+// Use the default mouse cursor on the vertical scrollbar
+.CodeMirror-vscrollbar { cursor: default; }
+
 .CodeMirror {
-  // Indicate clickable links
-  .zkn-link:hover, .zkn-tag:hover {
+  font-size: 1em;
+  line-height: 1.4375;
+  user-select: text;
+  background-color: inherit;
+
+  // STYLING FOR THE COMMON WRAPPER ELEMENTS
+  // ===========================================================================
+
+  // The textarea element needs to have the same
+  // font-size as the editor, even though it is
+  // hidden. This way, pop-ups for non-western
+  // fonts such as Hiragana/Katakana are correctly
+  // aligned. Should also help accessibility-plugins.
+  &.CodeMirror-wrap > div:first-child {
+    textarea {
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit;
+      height: 1.4375em !important;
+      bottom: -1.4375em !important;
+      transform: scaleY(1.1);
+    }
+  }
+
+  // This directive prevents strange colour artifacts when a document is open
+  // that has less lines of code than fit into the window (especially notable
+  // in dark mode, as the sizer is visible with a small green halo).
+  .CodeMirror-sizer { height: 100%; }
+
+  &.CodeMirror-empty {
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    // In the editor.less, we've defined 5em top margin on the code element
+    // which it not present in an empty editor. Therefore, we need to apply
+    // it to the whole content in case of an empty editor.
+    padding-top: 5em;
+  }
+
+  &.CodeMirror-empty.CodeMirror-readonly {
+    // If the editor is empty, display a nice background image
+    background-image: url('../../img/logo.svg');
+  }
+
+  .CodeMirror-cursor {
+    width: 2px;
+    border: 0;
+    z-index: 1;
+    transform: translateZ(0);
+    animation: soft-blink 1s infinite; // Use the "soft-blink" animation
+  }
+
+  /* Implement a "fat" cursor for Windows' overwrite mode (Ins key) */
+  // Also valid for vim and everything that needs a block cursor.
+  .CodeMirror-overwrite .CodeMirror-cursor, &.cm-fat-cursor .CodeMirror-cursor {
+    width: auto;
+    border-top: 2px solid #333;
+    border-bottom: 2px solid #333;
+    background-color: rgba(0, 0, 0, 0.25);
+  }
+
+  // Enable matches on the searchbar to be indicated
+  .CodeMirror-search-match {
+    background-color: rgba(225, 225, 0, 0.7);
+  }
+
+  // SYNTAX-HIGHLIGHTING CLASSES
+  // ===========================================================================
+
+  pre { padding: 0; }
+
+  input[type="checkbox"] {
+    transform: scale(1.2);
+    margin: 0.2em;
+    vertical-align: middle;
+  }
+
+  .cm-table,
+  .cm-zkn-tag {
+    font-weight: bold;
+  }
+
+  .cm-tab { display: inline; }
+  .cm-url, .cm-link { text-decoration: none; }
+
+  // Make the formatting characters and escape sequences nearly invisible
+  .cm-formatting-code,
+  .cm-formatting-code-block,
+  .cm-formatting-quote,
+  .cm-formatting-strong,
+  .cm-formatting-em,
+  .cm-zkn-link-formatting,
+  .cm-escape-char {
+    opacity: 0.3;
+  }
+
+  // A few elements always need to be displayed monospaced
+  .cm-comment,
+  .cm-fenced-code,
+  .cm-table
+  .cm-formatting-task,
+  .cm-formatting-quote,
+  .cm-formatting-list-ul,
+  .cm-formatting-list-ol {
+    font-family: Consolas, 'Inconsolata', Menlo, monospace;
+  }
+
+  // ZETTLR-SPECIFIC CLASSES
+  // ===========================================================================
+
+  // The editor instance adds the .meta-key-class to all elements that become
+  // interactive with the Command or Control key being pressed.
+  .meta-key:hover {
+    cursor: pointer;
     text-decoration: underline;
   }
 
+  // If the user chooses to replace the heading-characters, these elements will
+  // be displayed instead.
+  .heading-tag {
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 3px;
+    padding: 0 4px;
+  
+    span {
+      font-size: 20px;
+      font-weight: normal;
+    }
+  }
+
+  // These classes are being applied by the heading-classes hook
+  .size-header-1 {
+    font-size: 2em;
+    .CodeMirror-gutter-elt { line-height: 1.5em; }
+  }
+  .size-header-2 {
+    font-size: 1.8em;
+    .CodeMirror-gutter-elt { line-height: 1.5em; }
+  }
+  .size-header-3 {
+    font-size: 1.5em;
+    .CodeMirror-gutter-elt { line-height: 1.4em; }
+  }
+  .size-header-4 {
+    font-size: 1.3em;
+    .CodeMirror-gutter-elt { line-height: 1.3em; }
+  }
+  .size-header-5 { font-size: 1em; }
+  .size-header-6 { font-size: 1em; }
+
+  // Deliver a much more fancy UX for images inserted into the editor
   .editor-image-container {
     display: inline-block;
     width: 100%;
@@ -51,6 +228,49 @@
       }
     }
   }
+
+  // The warning if a given hostname is not yet on the whitelist
+  .iframe-warning-wrapper {
+    text-align: center;
+    min-height: 300px;
+    padding: 40px 30%;
+
+    // More spacing for the buttons
+    button {
+      display: block;
+      margin: 20px auto;
+    }
+  }
+
+  // Apply a little bit of styling to the iframes, since we're removing all
+  // attributes due to security reasons.
+  iframe {
+    display: inline-block;
+    border: none;
+    // Always render them 16:9
+    width: 480px;
+    height: 270px;
+    margin: 0 auto;
+  }
+
+  // These two IDs are being used by the renderLines hook to make sure lists and
+  // blockquotes are always inset the right amount
+  #measureWidth {
+    position: absolute;
+    visibility: hidden;
+    height: auto;
+    width: auto;
+    white-space: nowrap;
+  }
+
+  #measureMonoWidth {
+    font-family: Consolas, 'Inconsolata', Menlo, monospace;;
+    position: absolute;
+    visibility: hidden;
+    height: auto;
+    width: auto;
+    white-space: nowrap;
+  }
 }
 
 body .tippy-content {
@@ -88,4 +308,61 @@ body .tippy-content {
     min-width: 200px;
     min-height: 150px;
   }
+}
+
+// Text-folding related stuff
+.CodeMirror-gutters {
+  background-color: transparent;
+  border: none;
+  width: 2em;
+  padding-right: 10px;
+}
+.CodeMirror-foldgutter {
+  width: 2em;
+}
+.CodeMirror-foldgutter-open, .CodeMirror-foldgutter-folded {
+  text-align: right;
+  cursor: pointer;
+  font-size: 18px;
+
+  &:hover { color: var(--c-primary); }
+}
+
+.CodeMirror-foldgutter-open:after { content: "\25BE"; }
+.CodeMirror-foldgutter-folded:after { content: "\25B8"; }
+
+.CodeMirror-foldmarker {
+  border-radius: 3px;
+  display: inline-block;
+  font-size: 75%;
+  margin-left: 10px;
+  padding: 2px;
+  cursor: pointer;
+  vertical-align: baseline;
+}
+// END text-folding
+
+// Hints (tag autocompletion, etc.)
+.CodeMirror-hints {
+  position: absolute;
+  z-index: 10;
+  overflow: hidden;
+  list-style: none;
+  margin: 0;
+  padding: 0px;
+
+  // Restrict the size of the container and make it scrollable
+  max-height: 20em;
+  overflow-y: auto;
+
+  li.CodeMirror-hint {
+    margin: 0;
+    white-space: pre;
+    cursor: pointer;
+    padding: 5px;
+    line-height: 150%;
+  }
+
+  // Apply a bolder font weight to tags that have a specific colour assigned.
+  .cm-hint-colour { font-weight: bold; }
 }
