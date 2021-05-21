@@ -1,5 +1,6 @@
 const tippy = require('tippy.js').default
 const { ipcRenderer } = require('electron')
+const { DateTime } = require('luxon')
 
 /**
  * A hook for displaying link tooltips which display metadata
@@ -66,27 +67,33 @@ module.exports = (elem) => {
           wordCount = descriptorWithContent.wordCount // The word count
           title = descriptorWithContent.name // The file name
 
-          let dateDif = Date.now() - descriptorWithContent.modtime
-          time = (dateDif / (60000)) // The time since modification
-          if (time > 1440) {
-            time = Math.floor(time / 1440) + ' Day'
-            if (time !== '1 Day') {
+          // date_dif = DateTime.fromMillis((DateTime.local().toMillis - descriptorWithContent.modtime))
+          date_dif = DateTime.fromMillis(descriptorWithContent.modtime).diffNow(['days', 'hours', 'minutes', 'seconds']).toObject()
+
+          if (date_dif['days'] * -1 >= 1) {
+            time = Math.floor(date_dif['days']* -1) + ' Day'
+            if (date_dif['days'] * -1 > 1) {
               time += 's'
             }
-          } else if (time > 60) {
-            time = Math.floor(time / 60) + ' Hour'
-            if (time !== '1 Hour') {
+            time += ' ago'
+          } else if (date_dif['hours'] * -1 >= 1) {
+            time = Math.floor(date_dif['hours']* -1) + ' Hour'
+            if (date_dif['hours'] * -1 > 1) {
               time += 's'
             }
+            time += ' ago'
+          } else if (date_dif['minutes'] * -1 >= 1) {
+            time = Math.floor(date_dif['minutes']* -1) + ' Minute'
+            if (date_dif['minutes'] * -1 > 1) {
+              time += 's'
+            }
+            time += ' ago'
           } else {
-            time = Math.floor(time) + ' Minute'
-            if (time !== '1 Minute') {
-              time += 's'
-            }
+            time = 'Just Now'
           }
 
           // On ready, show a tooltip with the note contents
-          tooltip.setContent(`File Name: "${title}"<br>"${content}"<br>Word Count: ${wordCount}<br> ${time} Since Modification`)
+          tooltip.setContent(`File Name: "${title}"<br>"${content}"<br>Word Count: ${wordCount}<br> Modified: ${time}`)
         } else {
           tooltip.setContent('File Not Found') // TODO: Translate!
         }
