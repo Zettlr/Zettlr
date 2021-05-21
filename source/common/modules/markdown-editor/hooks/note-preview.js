@@ -1,8 +1,6 @@
 const tippy = require('tippy.js').default
 const { ipcRenderer } = require('electron')
 const { DateTime } = require('luxon')
-const { sanitizeHtml } = require('sanitize-html')
-
 /**
  * A hook for displaying link tooltips which display metadata
  * and content of a file
@@ -23,7 +21,6 @@ module.exports = (elem) => {
       return
     }
     // TODO: Translate!
-
     // Initialise displayed attributes to 'loading'
     let title = 'null'
     let content = 'null'
@@ -38,9 +35,6 @@ module.exports = (elem) => {
       appendTo: document.body, // anchor
       showOnCreate: true, // Immediately show the tooltip
       arrow: false, // No arrow for these tooltips
-      onHidden(instance) {
-        instance.destroy() // Destroy the tippy instance.
-      }
     })
 
     // Find the file's absolute path
@@ -92,7 +86,7 @@ module.exports = (elem) => {
           // On ready, show a tooltip with the note contents
           tooltip.setContent(`File Name: "${title}"<br>"${content}"<br>Word Count: ${wordCount}<br> Modified: ${time}`)
         } else {
-          tooltip.setContent('File Not Found') // TODO: Translate!
+          // tooltip.setContent('File Not Found') // TODO: Translate!
         }
       }).catch(err => console.error('File path find error: ' + err))
   })

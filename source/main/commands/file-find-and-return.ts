@@ -7,7 +7,8 @@
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     This command finds the absolute path of a file
+ * Description:     This command finds the absolute path of a file, and returns
+ *                  the file's descriptor (including contents)
  *
  * END HEADER
  */
