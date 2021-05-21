@@ -1,6 +1,7 @@
 const tippy = require('tippy.js').default
 const { ipcRenderer } = require('electron')
 const { DateTime } = require('luxon')
+const { sanitizeHtml } = require('sanitize-html')
 
 /**
  * A hook for displaying link tooltips which display metadata
@@ -47,10 +48,6 @@ module.exports = (elem) => {
       .then((descriptorWithContent) => {
         // If the file is found
         if (descriptorWithContent !== null) {
-          // Retrieve the file contets
-          // Remove html from content so html is displayed normally. (delete html tags)
-          descriptorWithContent.content = descriptorWithContent.content.replace(/(<([^>]+)>)/gi, '')
-
           // Get the contents of the file such as:
           // 4 lines of 50
           for (i = 0; i < 4; i++) {
@@ -71,19 +68,19 @@ module.exports = (elem) => {
           date_dif = DateTime.fromMillis(descriptorWithContent.modtime).diffNow(['days', 'hours', 'minutes', 'seconds']).toObject()
 
           if (date_dif['days'] * -1 >= 1) {
-            time = Math.floor(date_dif['days']* -1) + ' Day'
+            time = Math.floor(date_dif['days'] * -1) + ' Day'
             if (date_dif['days'] * -1 > 1) {
               time += 's'
             }
             time += ' ago'
           } else if (date_dif['hours'] * -1 >= 1) {
-            time = Math.floor(date_dif['hours']* -1) + ' Hour'
+            time = Math.floor(date_dif['hours'] * -1) + ' Hour'
             if (date_dif['hours'] * -1 > 1) {
               time += 's'
             }
             time += ' ago'
           } else if (date_dif['minutes'] * -1 >= 1) {
-            time = Math.floor(date_dif['minutes']* -1) + ' Minute'
+            time = Math.floor(date_dif['minutes'] * -1) + ' Minute'
             if (date_dif['minutes'] * -1 > 1) {
               time += 's'
             }
