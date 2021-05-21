@@ -109,7 +109,7 @@
     "electron-builder": "22.11.4",
     "electron-devtools-installer": "^3.2.0",
     "electron-notarize": "^1.0.0",
-    "eslint": "^7.25.0",
+    "eslint": "^7.26.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-config-standard-with-typescript": "^20.0.0",
     "eslint-loader": "^4.0.2",
