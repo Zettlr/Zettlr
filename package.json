@@ -127,7 +127,7 @@
     "mocha": "^8.4.0",
     "node-loader": "^1.0.2",
     "raw-loader": "^4.0.2",
-    "reveal.js": "^4.1.0",
+    "reveal.js": "^4.1.1",
     "style-loader": "^2.0.0",
     "svg-inline-loader": "^0.8.2",
     "ts-loader": "^8.1.0",
