@@ -34,7 +34,7 @@ module.exports = (elem) => {
       placement: 'top-start', // Display at the beginning of the anchor
       appendTo: document.body, // anchor
       showOnCreate: true, // Immediately show the tooltip
-      arrow: false, // No arrow for these tooltips
+      arrow: false // No arrow for these tooltips
     })
 
     // Find the file's absolute path
@@ -44,9 +44,9 @@ module.exports = (elem) => {
         if (descriptorWithContent !== null) {
           // Get the contents of the file such as:
           // 4 lines of 50
-          for (i = 0; i < 4; i++) {
+          for (let i = 0; i < 4; i++) {
             content = descriptorWithContent.content.substring(0 * i, 50 * i)
-            //prepare a newline if needed for the next loop
+            // prepare a newline if needed for the next loop
             if (descriptorWithContent.content.length > 50 * i) {
               content += '\n'
             } else {
@@ -59,25 +59,25 @@ module.exports = (elem) => {
           wordCount = descriptorWithContent.wordCount // The word count
           title = descriptorWithContent.name // The file name
 
-          //use luxon to get a local time difference
-          date_dif = DateTime.fromMillis(descriptorWithContent.modtime).diffNow(['days', 'hours', 'minutes', 'seconds']).toObject()
+          // use luxon to get a local time difference
+          let dateDif = DateTime.fromMillis(descriptorWithContent.modtime).diffNow([ 'days', 'hours', 'minutes', 'seconds' ]).toObject()
 
-          //Display this using top down logic, i.e. use days, and if not, hours, then minutes, then just now
-          if (date_dif['days'] * -1 >= 1) {
-            time = Math.floor(date_dif['days'] * -1) + ' Day'
-            if (date_dif['days'] * -1 > 1) {
+          // Display this using top down logic, i.e. use days, and if not, hours, then minutes, then just now
+          if (dateDif['days'] * -1 >= 1) {
+            time = Math.floor(dateDif['days'] * -1) + ' Day'
+            if (dateDif['days'] * -1 > 1) {
               time += 's'
             }
             time += ' ago'
-          } else if (date_dif['hours'] * -1 >= 1) {
-            time = Math.floor(date_dif['hours'] * -1) + ' Hour'
-            if (date_dif['hours'] * -1 > 1) {
+          } else if (dateDif['hours'] * -1 >= 1) {
+            time = Math.floor(dateDif['hours'] * -1) + ' Hour'
+            if (dateDif['hours'] * -1 > 1) {
               time += 's'
             }
             time += ' ago'
-          } else if (date_dif['minutes'] * -1 >= 1) {
-            time = Math.floor(date_dif['minutes'] * -1) + ' Minute'
-            if (date_dif['minutes'] * -1 > 1) {
+          } else if (dateDif['minutes'] * -1 >= 1) {
+            time = Math.floor(dateDif['minutes'] * -1) + ' Minute'
+            if (dateDif['minutes'] * -1 > 1) {
               time += 's'
             }
             time += ' ago'
