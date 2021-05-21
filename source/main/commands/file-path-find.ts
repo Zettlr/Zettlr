@@ -26,25 +26,23 @@ export default class FilePathFind extends ZettlrCommand {
       * @param  {Object} arg the parameters of the file to be deleted
       * @return {Boolean} Whether the file was successfully deleted.
       */
-  async run (evt: string, arg: any): Promise<String> {
+  async run (evt: string, arg: any): Promise<any> {
     // Initialise the file as the result of findExact failing
     let file
     // It might be linked by ID
     file = this._app.getFileSystem().findExact((arg as string), 'id')
     if (file !== undefined) {
-      return file.path
+      return await this._app.getFileSystem().getFileContents(file)
     }
     // It's not an ID, so search each type of file
     for (let type of FILETYPES) {
       file = this._app.getFileSystem().findExact((arg as string) + type, 'name')
       if (file !== undefined) {
         // If we find it, then return it
-        return file.path
+        return await this._app.getFileSystem().getFileContents(file)
       }
     }
     // We can't find it, so return Not Found
-    return 'Not Found'
+    return null
   }
 }
-
-module.exports = FilePathFind
