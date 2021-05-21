@@ -1,0 +1,2 @@
+# Force lf for sh
+*.sh text eol=lf
