@@ -2,7 +2,7 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        FilePathFind command
+ * Contains:        FileFindAndReturn command
  * CVM-Role:        <none>
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
@@ -17,7 +17,7 @@ import { filetypes as FILETYPES } from '../../common/data.json'
 
 export default class FilePathFind extends ZettlrCommand {
   constructor (app: any) {
-    super(app, ['file-path-find'])
+    super(app, ['file-find-and-return'])
   }
 
   /**

@@ -42,7 +42,7 @@ module.exports = (elem) => {
     })
 
     // Find the file's absolute path
-    ipcRenderer.invoke('application', { command: 'file-path-find', payload: a.innerText })
+    ipcRenderer.invoke('application', { command: 'file-find-and-return', payload: a.innerText })
       .then((descriptorWithContent) => {
         // If the file is found
         if (descriptorWithContent !== null) {
