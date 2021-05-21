@@ -21,7 +21,7 @@ module.exports = (elem) => {
       return
     }
     // TODO: Translate!
-    // Initialise displayed attributes to 'loading'
+    // Initialise displayed attributes to 'null'
     let title = 'null'
     let content = 'null'
     let wordCount = 'null'
@@ -46,6 +46,7 @@ module.exports = (elem) => {
           // 4 lines of 50
           for (i = 0; i < 4; i++) {
             content = descriptorWithContent.content.substring(0 * i, 50 * i)
+            //prepare a newline if needed for the next loop
             if (descriptorWithContent.content.length > 50 * i) {
               content += '\n'
             } else {
@@ -58,9 +59,10 @@ module.exports = (elem) => {
           wordCount = descriptorWithContent.wordCount // The word count
           title = descriptorWithContent.name // The file name
 
-          // date_dif = DateTime.fromMillis((DateTime.local().toMillis - descriptorWithContent.modtime))
+          //use luxon to get a local time difference
           date_dif = DateTime.fromMillis(descriptorWithContent.modtime).diffNow(['days', 'hours', 'minutes', 'seconds']).toObject()
 
+          //Display this using top down logic, i.e. use days, and if not, hours, then minutes, then just now
           if (date_dif['days'] * -1 >= 1) {
             time = Math.floor(date_dif['days'] * -1) + ' Day'
             if (date_dif['days'] * -1 > 1) {
@@ -86,7 +88,7 @@ module.exports = (elem) => {
           // On ready, show a tooltip with the note contents
           tooltip.setContent(`File Name: "${title}"<br>"${content}"<br>Word Count: ${wordCount}<br> Modified: ${time}`)
         } else {
-          // tooltip.setContent('File Not Found') // TODO: Translate!
+          tooltip.setContent('File Not Found') // TODO: Translate!
         }
       }).catch(err => console.error('File path find error: ' + err))
   })
