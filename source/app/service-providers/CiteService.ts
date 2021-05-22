@@ -1,4 +1,4 @@
-export interface IpcCiteService {
+export interface CiteService {
 
   /**
    * Takes IDs as set in Zotero and returns Author-Date citations for them.

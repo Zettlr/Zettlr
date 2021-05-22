@@ -28,7 +28,7 @@ import extractBibTexAttachments from './assets/extract-bibtex-attachments'
 import BibTexParser from 'astrocite-bibtex'
 import YAML from 'yaml'
 import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
-import { IpcCiteService } from '../../IpcCiteService'
+import { CiteService } from './CiteService'
 
 interface DatabaseRecord {
   path: string
@@ -44,7 +44,7 @@ interface DatabaseRecord {
 /**
  * This class enables to export citations from a CSL JSON file to HTML.
  */
-export default class CiteprocProvider implements IpcCiteService {
+export default class CiteprocProvider implements CiteService {
   /**
    * The main library which is being used everywhere where we don't have
    * specific libraries. This variable holds the absolute path.

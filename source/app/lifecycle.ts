@@ -31,7 +31,7 @@ import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 // Providers
 import AppearanceProvider from './service-providers/appearance-provider'
 import AssetsProvider from './service-providers/assets-provider'
-import { IpcCiteService } from './../IpcCiteService'
+import { CiteService } from './service-providers/CiteService'
 import CiteprocProvider from './service-providers/citeproc-provider'
 import ConfigProvider from './service-providers/config-provider'
 import CssProvider from './service-providers/css-provider'
@@ -128,7 +128,7 @@ export async function bootApplication (): Promise<void> {
   statsProvider = new StatsProvider()
 
   // Handle renderer requests
-  IpcModule.registerMain<IpcCiteService>(citeprocProvider)
+  IpcModule.registerMain<CiteService>(citeprocProvider)
 
   // If the user has provided a working path to XeLaTeX, make sure that its
   // directory name is in path for Zettlr to find it.
