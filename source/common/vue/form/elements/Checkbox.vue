@@ -196,4 +196,64 @@ body.win32 {
     }
   }
 }
+
+body.linux {
+  @input-size: 14px;
+
+  label {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 13px;
+  }
+
+  label.checkbox {
+    width: @input-size;
+    height: @input-size;
+
+    .checkmark {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: @input-size;
+      width: @input-size;
+      border-radius: 4px;
+      border: 1px solid rgb(179, 179, 179);
+      background-color: rgb(230, 230, 230);
+      background-image: linear-gradient(transparent, #00000020);
+
+      &:after {
+        left: 4px;
+        top: 1px;
+        width: 3px;
+        height: 6px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+      }
+    }
+
+    input:checked ~ .checkmark {
+      background-color: rgb(230, 230, 230);
+
+      &:after {
+        border-color: rgb(80, 80, 80);
+      }
+    }
+  }
+
+  &.dark {
+    label.checkbox {
+      .checkmark {
+        background-image: radial-gradient(circle at top, rgb(60, 60, 60), rgb(90, 90, 90));
+        border-color: transparent;
+
+        &:after {
+          border-color: solid rgb(228, 228, 228);
+        }
+      }
+
+      input:checked ~ .checkmark {
+        background-image: none;
+      }
+    }
+  }
+}
 </style>
