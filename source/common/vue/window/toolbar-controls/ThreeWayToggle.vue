@@ -133,4 +133,33 @@ body.win32 {
     button.active { background-color: rgb(50, 50, 50); }
   }
 }
+
+body.linux {
+  div#toolbar div.three-way-toggle {
+    margin: 0 10px;
+    border: 2px solid transparent;
+
+    button {
+      margin: 0 -2px;
+      border-radius: 0;
+    }
+
+    button:first-child {
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+      border-right: none;
+    }
+
+    button:last-child {
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+    }
+
+    button.active { background-color: rgb(228, 228, 228); }
+  }
+
+  &.dark div#toolbar div.three-way-toggle {
+    button.active { background-color: rgb(50, 50, 50); }
+  }
+}
 </style>
