@@ -591,10 +591,33 @@ export default {
      */
     editorMousedown (event) {
       if (event.target !== this.$refs.editor) {
-        // return // Only handle if the event's target is the editor itself
+        return 
+      }
+      // if the button is the mouse left button, start selecting lines
+      if(event.button === 0){
+
+        // set the start point of the selection to be where the mouse was clicked
+        let startPoint = this.editor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY});
+
+        // set the end point to be the same y coordinate as the start point and add the width of client page
+        // to get the end of the line. Couldn't find a way from CodeMirror to get the end of the line 
+        // as they treat every line as the whole paragraph 
+        let endPoint = this.editor.codeMirror.coordsChar({ left: event.pageX + this.$refs.editor.clientWidth, top: event.pageY});
+
+        // apply the selection of a single line that corresponds to where the mouse was clicked
+        this.editor.codeMirror.setSelection(startPoint, endPoint);
+
+        // if the mouse is still clicked and moved down or up, change the selection to include the new lines
+        document.querySelector("#editor").onmousemove =  (e) => {
+          // get the point where the mouse has moved 
+          let addPoint = this.editor.codeMirror.coordsChar({ left: e.pageX, top: e.pageY});
+          // use the original start point where the mouse first was clicked 
+          // and change the end point to where the mouse has moved so far
+          this.editor.codeMirror.setSelection(startPoint, addPoint);
+        }
+
       }
 
-      // TODO: Enable selection of full lines on the editor instance
     },
     /**
      * Triggers when the user releases any mouse button
@@ -602,11 +625,20 @@ export default {
      * @param   {MouseEvent}  event  The mouse event
      */
     editorMouseup (event) {
-      if (event.target !== this.$refs.editor) {
-        // return // Only handle if the event's target is the editor itself
-      }
 
-      // TODO: Stop the selection of full lines on the editor instance
+      // we have commented this if condition because when the user presses the mouse from the 
+      // left margin and goes inside this.$refs.editor and releases, the event of mouse release
+      // is not handled 
+
+
+      // if (event.target !== this.$refs.editor) {
+      //   return 
+      // }
+
+      
+      // when the mouse is released, remove event handling of mouse move (no more lines to be added)
+      document.querySelector("#editor").onmousemove = null;
+
     }
   }
 }
