@@ -1,7 +1,7 @@
 /* global define CodeMirror */
 // This plugin renders citations
 
-import { IpcCiteService } from '../../../../../source/IpcCiteService'
+import { CiteService } from '../../../../app/service-providers/CiteService'
 import * as IpcModule from '../../../../../source/IpcModule'
 
 (function (mod) {
@@ -118,7 +118,7 @@ import * as IpcModule from '../../../../../source/IpcModule'
             textMarker: textMarker
           })
 
-          let citeService = IpcModule.forRenderer<IpcCiteService>()
+          let citeService = IpcModule.forRenderer<CiteService>()
           // Find the correct citation and replace the span's text content
           // with the correct, rendered citation
           let spanToRender = toRender.find(elem => elem.citation === citation)
