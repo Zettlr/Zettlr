@@ -219,25 +219,6 @@ export default class CiteprocProvider implements IpcCiteService {
       }
     })
 
-    /**
-     * Listen to renderer requests
-     */
-    ipcMain.handle('citeproc-provider', (event, message) => {
-      const { command } = message
-      if (command === 'get-items') {
-        if (!this.isReady()) {
-          return []
-        } else {
-          return this._databases[this._databaseIdx].cslData
-        }
-      } else if (command === 'get-bibliography') {
-        // The Payload contains the items the renderer wants to have
-        const { payload } = message
-        this.updateItems(payload)
-        return this.makeBibliography()
-      }
-    })
-
     // Finally, begin loading the main library (if not empty)
     if (this._mainLibrary.trim() !== '') {
       this._loadDatabase(this._mainLibrary)
@@ -494,12 +475,7 @@ export default class CiteprocProvider implements IpcCiteService {
    * PUBLIC FUNCTIONS
    */
 
-  /**
-   * Takes IDs as set in Zotero and returns Author-Date citations for them.
-   *
-   * @param  {string}            citation  Array containing the IDs to be returned
-   * @return {string|undefined}            The rendered string
-   */
+  /** @inheritdoc */
   getCitation (citation: string): string|undefined {
     if (!this.isReady()) {
       return undefined
@@ -578,8 +554,22 @@ export default class CiteprocProvider implements IpcCiteService {
     const hasItems = Object.keys(this._items).length > 0
     return hasDatabases && hasItems
   }
+
+  /** @inheritdoc */
+  getItems (): CSLItem[] {
+    if (!this.isReady()) {
+      return []
+    } else {
+      return this._databases[this._databaseIdx].cslData
+    }
+  }
+
+  /** @inheritdoc */
+  getBibliography (citations: string[]): [BibliographyOptions, string[]]|undefined {
+    this.updateItems(citations)
+    return this.makeBibliography()
+  }
 }
 
-// Listen for synchronous citation messages from the renderer
-// Citeproc calls (either single citation or a whole cluster)
+// Handle renderer requests
 IpcModule.registerMain<IpcCiteService>(new CiteprocProvider())

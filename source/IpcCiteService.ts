@@ -9,19 +9,12 @@ export interface IpcCiteService {
   getCitation: (citation: string) => string|undefined
 
   /**
-   * Updates the items that the engine uses for bibliographies. Must be called
-   * prior to makeBibliography()
+   * Directs the engine to create a bibliography from the given items.
    *
    * @param  {string[]} citations A list of IDs
-   * @return {boolean}            True if the registry has been updated correctly.
-   */
-  updateItems: (citations: string[]) => boolean
-
-  /**
-   * Directs the engine to create a bibliography from the items currently in the
-   * registry (this can be updated by calling updateItems with an array of IDs.)
-   *
    * @return {[BibliographyOptions, string[]]|undefined} A CSL object containing the bibliography.
    */
-  makeBibliography: () => [BibliographyOptions, string[]]|undefined
+  getBibliography: (citations: string[]) => [BibliographyOptions, string[]]|undefined
+
+  getItems: () => CSLItem[]
 }

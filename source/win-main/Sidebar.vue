@@ -164,6 +164,7 @@ import { trans } from '../common/i18n'
 import { ClarityIcons } from '@clr/icons'
 import path from 'path'
 import { ipcRenderer } from 'electron'
+import * as IpcModule from '../IpcModule'
 
 const FILETYPES_IMG = [
   '.jpg',
@@ -241,10 +242,8 @@ export default {
   watch: {
     citationKeys: function () {
       // Reload the bibliography
-      ipcRenderer.invoke('citeproc-provider', {
-        command: 'get-bibliography',
-        payload: this.citationKeys
-      })
+      let citeService = IpcModule.forRenderer()
+      citeService.getBibliography(this.citationKeys)
         .then(bibliography => {
           this.bibContents = bibliography
         })

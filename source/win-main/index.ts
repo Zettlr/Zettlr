@@ -19,6 +19,8 @@ import App from './App.vue'
 import createStore from './store'
 import { ipcRenderer } from 'electron'
 import PopupProvider from './popup-provider'
+import { IpcCiteService } from '../IpcCiteService'
+import * as IpcModule from '../IpcModule'
 
 // The first thing we have to do is run the window controller
 windowRegister()
@@ -85,7 +87,8 @@ updateColouredTags()
 // -----------------------------------------------------------------------------
 
 function updateCitationDatabase (): void {
-  ipcRenderer.invoke('citeproc-provider', { command: 'get-items' })
+  let citeService = IpcModule.forRenderer<IpcCiteService>()
+  citeService.getItems()
     .then(cslData => {
       app.$store.commit('updateCSLItems', cslData)
     })
