@@ -28,7 +28,6 @@ import extractBibTexAttachments from './assets/extract-bibtex-attachments'
 import BibTexParser from 'astrocite-bibtex'
 import YAML from 'yaml'
 import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
-import * as IpcModule from '../../IpcModule'
 import { IpcCiteService } from '../../IpcCiteService'
 
 interface DatabaseRecord {
@@ -570,6 +569,3 @@ export default class CiteprocProvider implements IpcCiteService {
     return this.makeBibliography()
   }
 }
-
-// Handle renderer requests
-IpcModule.registerMain<IpcCiteService>(new CiteprocProvider())

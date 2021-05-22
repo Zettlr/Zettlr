@@ -23,6 +23,7 @@ import { loadI18nMain } from '../common/i18n'
 import isFile from '../common/util/is-file'
 import isDir from '../common/util/is-dir'
 import path from 'path'
+import * as IpcModule from '../IpcModule'
 
 // Developer tools
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
@@ -30,6 +31,7 @@ import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 // Providers
 import AppearanceProvider from './service-providers/appearance-provider'
 import AssetsProvider from './service-providers/assets-provider'
+import { IpcCiteService } from './../IpcCiteService'
 import CiteprocProvider from './service-providers/citeproc-provider'
 import ConfigProvider from './service-providers/config-provider'
 import CssProvider from './service-providers/css-provider'
@@ -124,6 +126,9 @@ export async function bootApplication (): Promise<void> {
   updateProvider = new UpdateProvider()
   notificationProvider = new NotificationProvider()
   statsProvider = new StatsProvider()
+
+  // Handle renderer requests
+  IpcModule.registerMain<IpcCiteService>(citeprocProvider)
 
   // If the user has provided a working path to XeLaTeX, make sure that its
   // directory name is in path for Zettlr to find it.
