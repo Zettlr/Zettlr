@@ -4,7 +4,7 @@ import { CiteService } from '../../../../app/service-providers/CiteService'
 import * as IpcModule from '../../../../../source/IpcModule'
 import * as CodeMirror from 'codemirror'
 import { getCitationRE } from '../../../regular-expressions'
-import Citr from '@zettlr/citr'
+import { parseSingle } from '@zettlr/citr'
 
 const citationRE = getCitationRE()
 
@@ -61,7 +61,7 @@ commands.markdownRenderCitations = async function (cm: CodeMirror.Editor) {
       // considerable time.
       let tokenTypeBegin = cm.getTokenTypeAt(curFrom)
       let tokenTypeEnd = cm.getTokenTypeAt(curTo)
-      if (tokenTypeBegin?.includes('comment') === true || tokenTypeEnd?.includes('comment') === true) {
+      if (tokenTypeBegin?.includes('comment') || tokenTypeEnd?.includes('comment')) {
         continue
       }
       // A final check, as there is an edge case where if people use [[]] as
@@ -78,7 +78,7 @@ commands.markdownRenderCitations = async function (cm: CodeMirror.Editor) {
       // The text content will be updated automatically based upon the ID
       try {
         // Try to extract the citekeys for the context menu to list them
-        let key = Citr.parseSingle(citation).map(elem => elem.id).join(',')
+        let key = parseSingle(citation).map(elem => elem.id).join(',')
         span.dataset.citekeys = key // data-citekeys="key1,key2"
       } catch (err) {
         // Do nothing
@@ -115,6 +115,7 @@ commands.markdownRenderCitations = async function (cm: CodeMirror.Editor) {
         // Find the correct citation and replace the span's text content
         // with the correct, rendered citation
         let spanToRender = toRender.find(elem => elem.citation === citation)
+        global.log.info('pre' + Object.prototype.toString.call(citation))
         let contents = await citeService.getCitation(citation)
 
         // If we have a span and the contents are not undefined

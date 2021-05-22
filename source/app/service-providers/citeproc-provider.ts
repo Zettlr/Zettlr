@@ -1,4 +1,3 @@
-/* global */
 /**
  * @ignore
  * BEGIN HEADER
@@ -25,7 +24,7 @@ import { promises as fs, readFileSync } from 'fs'
 import path from 'path'
 import { trans } from '../../common/i18n'
 import extractBibTexAttachments from './assets/extract-bibtex-attachments'
-import BibTexParser from 'astrocite-bibtex'
+import * as BibTexParser from 'astrocite-bibtex'
 import YAML from 'yaml'
 import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
 import { CiteService } from './CiteService'

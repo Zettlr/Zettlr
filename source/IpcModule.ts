@@ -61,7 +61,10 @@ export function registerMain<T> (service: T): void {
   // Register all methods of the service with ipc
   for (const methodName of userFunctions) {
     ipcMain.handle(methodName.toString(), (event, args) => {
-      const fnc = service[methodName] as unknown as Function
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      global.log.verbose(`[IPC] Calling ${methodName.toString()} with arguments ${args}`)
+      let fnc = service[methodName] as unknown as Function
+      fnc = fnc.bind(service)
       return fnc(args)
     })
   }
