@@ -473,4 +473,30 @@ body.win32 {
     }
   }
 }
+
+body.linux {
+  .tree-item {
+    margin: 8px 0px;
+
+    .item-icon, .toggle-icon {
+      display: inline-block;
+      width: 18px; // Size of clr-icon with the margin of the icon
+    }
+
+    .display-text {
+      font-size: 13px;
+      padding: 3px 5px;
+      overflow: hidden;
+
+      &.highlight {
+        background-color: var(--system-accent-color, --c-primary);
+        color: white;
+      }
+    }
+
+    &.selected .display-text {
+      color: var(--system-accent-color, --c-primary);
+    }
+  }
+}
 </style>
