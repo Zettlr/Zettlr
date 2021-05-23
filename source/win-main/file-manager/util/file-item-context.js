@@ -3,6 +3,11 @@ const { ipcRenderer, shell, clipboard } = require('electron')
 
 const TEMPLATE = [
   {
+    label: 'menu.open_new_tab',
+    id: 'new-tab',
+    type: 'normal'
+  },
+  {
     label: 'menu.properties',
     id: 'properties',
     type: 'normal'
@@ -60,7 +65,12 @@ module.exports = function displayFileContext (event, fileObject, el, callback) {
   for (const item of TEMPLATE) {
     const buildItem = {}
 
-    buildItem.id = item.label
+    if (item.id !== undefined) {
+      buildItem.id = item.id
+    } else {
+      buildItem.id = item.label
+    }
+
     if (item.label !== undefined) {
       buildItem.label = trans(item.label)
     }
