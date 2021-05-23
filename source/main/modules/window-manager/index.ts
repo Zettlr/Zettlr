@@ -353,14 +353,10 @@ export default class WindowManager {
           win.close()
         }
       }
-      if (process.platform === 'win32' || process.platform === 'linux') {
-        const leaveAppRunning = Boolean(global.config.get('system.leaveAppRunning'))
-        if (leaveAppRunning) {
-          this._mainWindow?.hide()
-        }
-      }
-
-      if (this._beforeMainWindowCloseCallback !== null) {
+      if (process.platform !== 'darwin' && Boolean(global.config.get('system.leaveAppRunning')) && !global.application.isQuiting()) {
+        this._mainWindow?.hide()
+        event.preventDefault()
+      } else if (this._beforeMainWindowCloseCallback !== null) {
         const shouldClose: boolean = this._beforeMainWindowCloseCallback()
         if (!shouldClose) {
           event.preventDefault()

@@ -34,6 +34,7 @@ import broadcastIpcMessage from '../common/util/broadcast-ipc-message'
 
 export default class Zettlr {
   isBooting: boolean
+  isQuiting: boolean
   editFlag: boolean
   _openPaths: any
   _fsal: FSAL
@@ -47,6 +48,7 @@ export default class Zettlr {
     */
   constructor () {
     this.isBooting = true // Only is true until the main process has fully loaded
+    this.isQuiting = false // Is the app quiting?
     this.editFlag = false // Is the current opened file edited?
     this._openPaths = [] // Holds all currently opened paths.
     this.isShownFor = [] // Contains all files for which remote notifications are currently shown
@@ -64,6 +66,9 @@ export default class Zettlr {
       // Flag indicating whether or not the application is booting
       isBooting: () => {
         return this.isBooting
+      },
+      isQuiting: () => {
+        return this.isQuiting
       },
       showLogViewer: () => {
         this._windowManager.showLogWindow()
@@ -142,9 +147,11 @@ export default class Zettlr {
     // listen to close-events on the main window, we should be able to handle
     // this, if we ever switched to the auto updater.
     app.on('before-quit', (event) => {
+      this.isQuiting = true
       if (!this._fsal.isClean()) {
         // Immediately prevent quitting ...
         event.preventDefault()
+        this.isQuiting = false
         // ... and ask the user if we should *really* quit.
         this._windowManager.askSaveChanges()
           .then(result => {
