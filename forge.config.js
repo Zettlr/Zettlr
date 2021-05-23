@@ -169,22 +169,12 @@ module.exports = {
     },
     postPackage: async (forgeConfig, options) => {
       const isLinux = process.platform === 'linux'
-      if (isLinux) {
-        // bundle libappindicator3 in AppImage and zip packages. Needed for tray icon on Gnome
-        const idxArch = process.argv.indexOf('--arch')
-        let targetArch = process.arch
-        if (idxArch > -1 && process.argv.length > idxArch + 1) {
-          targetArch = process.argv[idxArch + 1]
-        }
-        if (targetArch !== process.arch) {
-          if (options.spinner !== null && options.spinner !== undefined) {
-            options.spinner.info('Unable to bundle \'libappindicator3\' (target is different architecture).')
-          } else {
-            console.log('Unable to bundle \'libappindicator3\' (target is different architecture).')
-          }
-          return
-        }
-
+      const idxArch = process.argv.indexOf('--arch')
+      let targetArch = process.arch
+      if (idxArch > -1 && process.argv.length > idxArch + 1) {
+        targetArch = process.argv[idxArch + 1]
+      }
+      if (isLinux && targetArch === process.arch) {
         try {
           let lib = await getLibraryPath('libappindicator3')
           await fs.mkdir(path.join(options.outputPaths[0], 'usr', 'lib'), { recursive: true })
@@ -195,6 +185,12 @@ module.exports = {
           } else {
             console.log(`Unable to bundle 'libappindicator3' (${err}).`)
           }
+        }
+      } else if (isLinux && targetArch !== process.arch) {
+        if (options.spinner !== null && options.spinner !== undefined) {
+          options.spinner.info('Unable to bundle \'libappindicator3\' (target is different architecture).')
+        } else {
+          console.log('Unable to bundle \'libappindicator3\' (target is different architecture).')
         }
       }
     }
