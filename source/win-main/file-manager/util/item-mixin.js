@@ -191,7 +191,19 @@ export default {
         })
       } else {
         fileContextMenu(event, this.obj, this.$el, (clickedID) => {
-          if (clickedID === 'menu.rename_file') {
+          console.log(clickedID)
+          if (clickedID === 'new-tab') {
+            console.log('Will open in new tab!')
+            // Request the clicked file, explicitly in a new tab
+            ipcRenderer.invoke('application', {
+              command: 'open-file',
+              payload: {
+                path: this.obj.path,
+                newTab: true
+              }
+            })
+              .catch(e => console.error(e))
+          } else if (clickedID === 'menu.rename_file') {
             this.nameEditing = true
           } else if (clickedID === 'menu.duplicate_file') {
             // The user wants to duplicate this file --> instruct the file list
