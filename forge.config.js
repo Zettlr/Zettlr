@@ -176,7 +176,8 @@ module.exports = {
       }
       if (isLinux && targetArch === process.arch) {
         try {
-          let lib = await getLibraryPath('libappindicator3')
+          // bundle libappindicator3 in AppImage and zip packages. Needed for tray icon on Gnome
+          const lib = await getLibraryPath('libappindicator3')
           await fs.mkdir(path.join(options.outputPaths[0], 'usr', 'lib'), { recursive: true })
           await fs.copyFile(lib, path.join(options.outputPaths[0], 'usr', 'lib', path.basename(lib)))
         } catch (err) {
