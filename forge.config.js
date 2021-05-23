@@ -73,7 +73,7 @@ async function getLibraryPath (libraryName) {
       } else {
         let index = out.lastIndexOf(libraryName)
         if (index === -1) {
-          reject(new Error(`'${code}' not found`))
+          reject(new Error(`Library '${libraryName}' not found on the system`))
         }
         let left = out.slice(0, index + 1).search(/\S+$/)
         let right = out.slice(index).search(/\s/)
