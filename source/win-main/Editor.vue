@@ -408,7 +408,7 @@ export default {
         .catch(err => console.error(err))
 
       if (global.config.get('zkn.autoSearch')) {
-        this.$root.$emit('start-global-search', linkContents)      
+        this.$root.$emit('start-global-search', linkContents)
       }
     })
     this.editor.on('zettelkasten-tag', (tag) => {
