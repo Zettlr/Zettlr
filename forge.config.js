@@ -182,16 +182,16 @@ module.exports = {
           await fs.copyFile(lib, path.join(options.outputPaths[0], 'usr', 'lib', path.basename(lib)))
         } catch (err) {
           if (options.spinner !== null && options.spinner !== undefined) {
-            options.spinner.info(`Unable to bundle 'libappindicator3' (${err}).`)
+            options.spinner.info(`Unable to bundle "libappindicator3" (${err}).`)
           } else {
-            console.log(`Unable to bundle 'libappindicator3' (${err}).`)
+            console.log(`Unable to bundle "libappindicator3" (${err}).`)
           }
         }
       } else if (isLinux) {
         if (options.spinner !== null && options.spinner !== undefined) {
-          options.spinner.info('Unable to bundle \'libappindicator3\' (target is different architecture).')
+          options.spinner.info('Unable to bundle "libappindicator3" (target is different architecture).')
         } else {
-          console.log('Unable to bundle \'libappindicator3\' (target is different architecture).')
+          console.log('Unable to bundle "libappindicator3" (target is different architecture).')
         }
       }
     }
