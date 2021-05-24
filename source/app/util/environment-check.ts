@@ -164,8 +164,8 @@ export async function isTraySupported (): Promise<boolean> {
       const shellProcess = spawn('gsettings', [ 'get', 'org.gnome.shell', 'enabled-extensions' ])
       let out = ''
 
-      shellProcess.stdout.on('data', (data) => {
-        out = out.concat(data.toString())
+      shellProcess.stdout.on('data', (data: Buffer | string) => {
+        out += data.toString()
       })
 
       shellProcess.on('close', (code, signal) => {
