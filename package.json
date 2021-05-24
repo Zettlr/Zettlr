@@ -85,7 +85,7 @@
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.55",
-    "@electron-forge/maker-zip": "^6.0.0-beta.53",
+    "@electron-forge/maker-zip": "^6.0.0-beta.57",
     "@electron-forge/plugin-webpack": "^6.0.0-beta.54",
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
     "@types/adm-zip": "^0.4.34",
