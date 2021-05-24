@@ -187,7 +187,7 @@ module.exports = {
             console.log(`Unable to bundle 'libappindicator3' (${err}).`)
           }
         }
-      } else if (isLinux && targetArch !== process.arch) {
+      } else if (isLinux) {
         if (options.spinner !== null && options.spinner !== undefined) {
           options.spinner.info('Unable to bundle \'libappindicator3\' (target is different architecture).')
         } else {
