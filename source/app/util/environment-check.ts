@@ -171,14 +171,14 @@ export async function isTraySupported (): Promise<boolean> {
       shellProcess.on('close', (code, signal) => {
         if (code !== 0) {
           reject(new Error('Tray is not supported. Gnome ' +
-            'Extension \'KStatusNotifierItem/AppIndicator Support\' is ' +
+            'Extension "KStatusNotifierItem/AppIndicator Support" is ' +
             'required for Tray support on the Gnome Desktop.'
           )) // trans('system.error.tray_not_supported')
         } else if (out.includes("'appindicatorsupport@rgcjonas.gmail.com'")) {
           resolve(true)
         } else {
           reject(new Error('Tray is not supported. Gnome ' +
-            'Extension \'KStatusNotifierItem/AppIndicator Support\' is ' +
+            'Extension "KStatusNotifierItem/AppIndicator Support" is ' +
             'required for Tray support on the Gnome Desktop.'
           )) // trans('system.error.tray_not_supported')
         }
