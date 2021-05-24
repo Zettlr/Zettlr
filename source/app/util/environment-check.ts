@@ -190,6 +190,6 @@ export async function isTraySupported (): Promise<boolean> {
       })
     })
   } else {
-    return (true)
+    return true
   }
 }
