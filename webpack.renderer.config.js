@@ -34,6 +34,7 @@ module.exports = {
   module: {
     rules
   },
+  devtool: 'source-map',
   plugins: [
     // Enhanced typescript support (e.g. moves typescript type checking to separate process)
     new ForkTsCheckerWebpackPlugin(),
@@ -45,6 +46,22 @@ module.exports = {
     extensions: [
       '.js', '.ts', '.jsx', '.tsx',
       '.css', '.less', '.vue'
-    ]
+    ],
+    fallback: {
+      // Tell webpack to leave Node.js require's alone.
+      // TODO: Possibly remove once we have switched to imports? Tbd
+      'path': false,
+      'fs': false,
+      'stream': false,
+      'net': false,
+      'tls': false,
+      'http': false,
+      'http2': false,
+      'https': false,
+      'util': false,
+      'zlib': false,
+      'os': false,
+      'dns': false
+    }
   }
 }
