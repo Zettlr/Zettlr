@@ -8,14 +8,10 @@
     "strict": true,
     "noImplicitAny": true,
     "sourceMap": true,
-    "baseUrl": ".",
     "outDir": "dist",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "downlevelIteration": true,
-    "paths": {
-      "*": ["node_modules/*"]
-    }
+    "downlevelIteration": true
   },
   "include": [
     "source/**/*",
