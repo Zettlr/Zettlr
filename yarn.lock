@@ -6701,13 +6701,12 @@ node-libs-browser@^2.2.1:
     util "^0.11.0"
     vm-browserify "^1.0.1"
 
-node-loader@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/node-loader/-/node-loader-1.0.2.tgz#f8a8f117844652642df1f2abb13ca46242643800"
-  integrity sha512-myxAxpyMR7knjA4Uzwf3gjxaMtxSWj2vpm9o6AYWWxQ1S3XMBNeG2vzYcp/5eW03cBGfgSxyP+wntP8qhBJNhQ==
+node-loader@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/node-loader/-/node-loader-2.0.0.tgz#9109a6d828703fd3e0aa03c1baec12a798071562"
+  integrity sha512-I5VN34NO4/5UYJaUBtkrODPWxbobrE4hgDqPrjB25yPkonFhCmZ146vTH+Zg417E9Iwoh1l/MbRs1apc5J295Q==
   dependencies:
     loader-utils "^2.0.0"
-    schema-utils "^3.0.0"
 
 node-pre-gyp@^0.11.0:
   version "0.11.0"
