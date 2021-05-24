@@ -43,9 +43,6 @@ module.exports = {
   },
   externals: {
     // Do not embed fsevents (otherwise this leads to problems on Linux and Windows, see https://github.com/paulmillr/chokidar/issues/618#issuecomment-392618390)
-    'fsevents': "require('fsevents')" // ,
-    // 'path': "require('path')",
-    // 'fs': "require('fs')",
-    // 'util': "require('util')"
+    'fsevents': "require('fsevents')"
   }
 }
