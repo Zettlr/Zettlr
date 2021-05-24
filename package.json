@@ -120,7 +120,7 @@
     "eslint-plugin-vue": "^7.9.0",
     "file-loader": "^6.2.0",
     "fork-ts-checker-webpack-plugin": "^6.2.10",
-    "jsdom": "^16.5.3",
+    "jsdom": "^16.6.0",
     "less": "^4.1.1",
     "less-loader": "^9.0.0",
     "lorem-ipsum": "^2.0.3",
