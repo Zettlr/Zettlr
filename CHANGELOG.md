@@ -36,6 +36,7 @@ A few years ago we implemented auto-saving after a delay of five seconds with no
 - All windows will now remember their last position (new: log window and print window).
 - Some components of the renderer elements will now respect a given accent colour set by your operating system (only available for macOS and Windows).
 - You can now close files by middle-clicking their tabs.
+- Add a tray to the system notification area, off by default. To activate, see Preferences → Advanced → "Leave app running in the notification area" (or "Show app in the notification area" when using MacOS).
 
 ## Under the Hood
 
