@@ -23,9 +23,7 @@ import {
   ipcMain,
   FileFilter,
   MessageBoxOptions,
-  MessageBoxReturnValue,
-  Menu,
-  Tray
+  MessageBoxReturnValue
 } from 'electron'
 import { promises as fs } from 'fs'
 import path from 'path'
@@ -77,7 +75,6 @@ export default class WindowManager {
   private _fileLock: boolean
   private _persistTimeout: ReturnType<typeof setTimeout>|undefined
   private _beforeMainWindowCloseCallback: Function|null
-  private _tray: Tray | null
 
   constructor () {
     this._mainWindow = null
@@ -97,7 +94,6 @@ export default class WindowManager {
     this._configFile = path.join(app.getPath('userData'), 'window_state.json')
     this._fileLock = false
     this._beforeMainWindowCloseCallback = null
-    this._tray = null
 
     // Listen to window control commands
     ipcMain.on('window-controls', (event, message) => {
@@ -179,9 +175,9 @@ export default class WindowManager {
     global.config.on('update', (option: string) => {
       if (option === 'system.leaveAppRunning') {
         if (global.config.get('system.leaveAppRunning') === true) {
-          this._addTray()
+          global.tray.add(() => this.showAnyWindow(), () => app.quit())
         } else {
-          this._removeTray()
+          global.tray.remove()
         }
       }
     })
@@ -226,87 +222,6 @@ export default class WindowManager {
   }
 
   /**
-   *  Return a suitable tray icon size
-   */
-  private _calcTrayIconSize (): number {
-    let size = 32
-    const fitSize = (size: number): number => {
-      const sizeList = [ 32, 48, 64, 96, 128, 256 ]
-      for (let s of sizeList) {
-        if (s >= size) {
-          return s
-        }
-      }
-      return 32
-    }
-    const display = screen.getPrimaryDisplay()
-    size = display.workArea.y
-    if (size >= 8 && size <= 256) {
-      size = fitSize(size)
-    } else {
-      size = display.size.height - display.workArea.height
-      size = fitSize(size)
-    }
-    return size
-  }
-
-  /**
-   * Adds the Zettlr tray to the system notification area.
-   * @private
-   * @memberof WindowManager
-   */
-  private _addTray (): void {
-    if (this._tray == null) {
-      const platformIcons: { [key in 'darwin' | 'win32']: string } = {
-        'darwin': '/png/22x22_white.png',
-        'win32': '/icon.ico'
-      }
-      if (process.platform === 'linux') {
-        const size = this._calcTrayIconSize()
-        this._tray = new Tray(path.join(__dirname, `assets/icons/png/${size}x${size}.png`))
-      } else {
-        let iconPath = '/png/32x32.png'
-        if (process.platform === 'darwin' || process.platform === 'win32') {
-          iconPath = platformIcons[process.platform]
-        }
-        this._tray = new Tray(path.join(__dirname, 'assets/icons', iconPath))
-      }
-
-      const contextMenu = Menu.buildFromTemplate([
-        {
-          label: 'Show Zettlr',
-          click: () => {
-            this.showAnyWindow()
-          },
-          type: 'normal'
-        },
-        { label: '', type: 'separator' },
-        {
-          label: 'Quit',
-          click: () => {
-            app.quit()
-          },
-          type: 'normal'
-        }
-      ])
-      this._tray.setToolTip('This is the Zettlr tray. \n Select Show Zettlr to show the Zettlr app. \n Select Quit to quit the Zettlr app.')
-      this._tray.setContextMenu(contextMenu)
-    }
-  }
-
-  /**
-   * Removes the Zettlr tray from the system notification area.
-   * @private
-   * @memberof WindowManager
-   */
-  private _removeTray (): void {
-    if (this._tray != null) {
-      this._tray.destroy()
-    }
-    this._tray = null
-  }
-
-  /**
    * Listens to events on the main window
    */
   private _hookMainWindow (): void {
@@ -317,7 +232,7 @@ export default class WindowManager {
     this._mainWindow.on('show', () => {
       const leaveAppRunning = Boolean(global.config.get('system.leaveAppRunning'))
       if (leaveAppRunning) {
-        this._addTray()
+        global.tray.add(() => this.showAnyWindow(), () => app.quit())
       }
     })
 
