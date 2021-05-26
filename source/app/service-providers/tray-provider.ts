@@ -105,7 +105,7 @@ export default class TrayProvider extends EventEmitter {
         this._tray = new Tray(path.join(__dirname, `assets/icons/png/${size}x${size}.png`))
       } else {
         let iconPath = '/png/32x32.png'
-        if (process.platform === 'darwin' || process.platform === 'win32') {
+        if ([ 'darwin', 'win32' ].includes(process.platform)) {
           iconPath = platformIcons[process.platform]
         }
         this._tray = new Tray(path.join(__dirname, 'assets/icons', iconPath))
@@ -124,7 +124,7 @@ export default class TrayProvider extends EventEmitter {
           type: 'normal'
         }
       ])
-      this._tray.setToolTip('This is the Zettlr tray. \n Select Show Zettlr to show the Zettlr app. \n Select Quit to quit the Zettlr app.')
+      this._tray.setToolTip('This is the Zettlr tray.\nSelect Show Zettlr to show the Zettlr app.\nSelect Quit to quit the Zettlr app.')
       this._tray.setContextMenu(contextMenu)
     }
   }
