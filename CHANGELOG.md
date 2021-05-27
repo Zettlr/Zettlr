@@ -36,7 +36,7 @@ A few years ago we implemented auto-saving after a delay of five seconds with no
 - All windows will now remember their last position (new: log window and print window).
 - Some components of the renderer elements will now respect a given accent colour set by your operating system (only available for macOS and Windows).
 - You can now close files by middle-clicking their tabs.
-- New File and Edit File can now fast rename without select the type suffix
+- New File and Edit File can now fast rename without selecting the extension
 
 ## Under the Hood
 
