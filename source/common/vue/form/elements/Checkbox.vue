@@ -18,8 +18,8 @@
       >
       </label>
     </div>
-    <div v-if="additionaltext" class="form-control">
-      {{ additionaltext }}
+    <div v-if="info" class="form-control">
+      {{ info }}
     </div>
   </div>
 </template>
@@ -44,7 +44,7 @@ export default {
       type: Boolean,
       default: false
     },
-    additionaltext: {
+    info: {
       type: String,
       default: ''
     }
