@@ -17,6 +17,7 @@ import { app } from 'electron'
 import { promises as fs } from 'fs'
 import { spawn } from 'child_process'
 import isFile from '../../common/util/is-file'
+import { trans } from '../../common/i18n'
 
 /**
  * Contains custom paths that should be present on the process.env.PATH property
@@ -170,17 +171,11 @@ export async function isTraySupported (): Promise<boolean> {
 
       shellProcess.on('close', (code, signal) => {
         if (code !== 0) {
-          reject(new Error('Tray is not supported. Gnome ' +
-            'Extension "KStatusNotifierItem/AppIndicator Support" is ' +
-            'required for Tray support on the Gnome Desktop.'
-          )) // trans('system.error.tray_not_supported')
+          reject(new Error(trans('system.error.tray_not_supported')))
         } else if (out.includes("'appindicatorsupport@rgcjonas.gmail.com'")) {
           resolve(true)
         } else {
-          reject(new Error('Tray is not supported. Gnome ' +
-            'Extension "KStatusNotifierItem/AppIndicator Support" is ' +
-            'required for Tray support on the Gnome Desktop.'
-          )) // trans('system.error.tray_not_supported')
+          reject(new Error(trans('system.error.tray_not_supported')))
         }
       })
 
