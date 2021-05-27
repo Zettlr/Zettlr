@@ -594,32 +594,32 @@ export default {
     editorMousedown (event) {
       // start selecting lines only if we are on the left margin and the left mouse button is pressed
       if (event.target !== this.$refs.editor || event.button !== 0) {
-        return 
+        return
       }
 
       // set the start point of the selection to be where the mouse was clicked
-      this.anchor = this.editor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY});
+      this.anchor = this.editor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY })
 
       // set the end point to be the same y coordinate as the start point and add the width of client page
-      // to get the end of the line. Couldn't find a way from CodeMirror to get the end of the line 
-      // as they treat every line as the whole paragraph 
-      let endPoint = this.editor.codeMirror.coordsChar({ left: event.pageX + this.$refs.editor.clientWidth, top: event.pageY});
+      // to get the end of the line. Couldn't find a way from CodeMirror to get the end of the line
+      // as they treat every line as the whole paragraph
+      let endPoint = this.editor.codeMirror.coordsChar({ left: event.pageX + this.$refs.editor.clientWidth, top: event.pageY })
 
       // apply the selection of a single line that corresponds to where the mouse was clicked
-      this.editor.codeMirror.setSelection(this.anchor, endPoint);
+      this.editor.codeMirror.setSelection(this.anchor, endPoint)
 
       // if the mouse is still clicked and moved down or up, change the selection to include the new lines
     },
 
-    editorMousemove(event){
-      if(this.anchor == undefined){
+    editorMousemove (event) {
+      if (this.anchor === undefined) {
         return
       }
-        // get the point where the mouse has moved 
-        const addPoint = this.editor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY});
-        // use the original start point where the mouse first was clicked 
-        // and change the end point to where the mouse has moved so far
-        this.editor.codeMirror.setSelection(this.anchor, addPoint);
+      // get the point where the mouse has moved
+      const addPoint = this.editor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY })
+      // use the original start point where the mouse first was clicked
+      // and change the end point to where the mouse has moved so far
+      this.editor.codeMirror.setSelection(this.anchor, addPoint)
     },
     /**
      * Triggers when the user releases any mouse button
@@ -627,20 +627,16 @@ export default {
      * @param   {MouseEvent}  event  The mouse event
      */
     editorMouseup (event) {
-
-      // we have commented this if condition because when the user presses the mouse from the 
+      // we have commented this if condition because when the user presses the mouse from the
       // left margin and goes inside this.$refs.editor and releases, the event of mouse release
-      // is not handled 
-
+      // is not handled
 
       // if (event.target !== this.$refs.editor) {
-      //   return 
+      //   return
       // }
 
-      
       // when the mouse is released, set anchor to undefined to stop adding lines
-      this.anchor = undefined;
-
+      this.anchor = undefined
     }
   }
 }
