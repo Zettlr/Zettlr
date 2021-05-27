@@ -97,7 +97,7 @@ export default class TrayProvider extends EventEmitter {
    */
   private _addTray (show: () => void, quit: () => void): void {
     if (this._tray == null) {
-      const platformIcons: { [key in 'darwin' | 'win32']: string } = {
+      const platformIcons: { [key: string]: string } = {
         'darwin': '/png/22x22_white.png',
         'win32': '/icon.ico'
       }
