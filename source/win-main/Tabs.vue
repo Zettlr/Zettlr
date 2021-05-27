@@ -82,7 +82,11 @@ export default {
         // this window as if the user had clicked on the close-button.
         if (currentIdx > -1) {
           // There's an active file, so request the closure
-          this.handleCloseFile(this.openFiles[currentIdx])
+          ipcRenderer.invoke('application', {
+            command: 'file-close',
+            payload: this.openFiles[currentIdx].path
+          })
+            .catch(e => console.error(e))
         } else {
           // No more open files, so request closing of the window
           ipcRenderer.send('window-controls', { command: 'win-close' })
@@ -471,6 +475,35 @@ body.win32 {
         &.active {
           background-color: rgb(50, 50, 50);
         }
+      }
+    }
+  }
+}
+
+body.linux {
+  div#tab-container {
+    border-bottom: 1px solid rgb(200, 200, 200);
+
+    div[role="tab"] {
+      font-size: 12px;
+      background-color: rgb(235, 235, 235); // Almost same colour as toolbar
+      &:hover { background-color: rgb(200, 200, 200); }
+
+      &:not(:last-child) { border-right: 1px solid rgb(200, 200, 200); }
+      &.active { border-bottom: 3px solid var(--system-accent-color, --c-primary); } // TODO: Which colour?
+      .close { font-size: 18px; }
+    }
+  }
+
+  &.dark {
+    div#tab-container {
+      background-color: rgb(11, 11, 11);
+
+      div[role="tab"] {
+        border-color: rgb(120, 120, 120);
+
+        &:hover { background-color: rgb(53, 53, 53); }
+        &.active { background-color: rgb(50, 50, 50); }
       }
     }
   }

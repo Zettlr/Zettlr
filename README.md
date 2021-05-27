@@ -71,7 +71,7 @@ If you have downloaded Zettlr, [head over to our website](https://docs.zettlr.co
 
 Zettlr is an [Electron](https://www.electronjs.org/)-based app, so to start developing, you'll need to have:
 
-1. A [NodeJS](https://nodejs.org/)-stack installed on your computer. Make sure it's at least Node 12 (`lts/erbium`). To test what version you have, run `node -v`.
+1. A [NodeJS](https://nodejs.org/)-stack installed on your computer. Make sure it's at least Node 14 (`lts/fermium`). To test what version you have, run `node -v`.
 2. [Yarn](https://yarnpkg.com/en/) installed. Yarn is the required package manager for the project, as we do not commit `package-lock.json`-files and many commands require yarn. You can install this globally using `npm install -g yarn` or Homebrew, if you are on macOS.
 
 Then, simply clone the repository and install the dependencies on your local computer:
@@ -142,6 +142,8 @@ This simply runs [ESLint](https://eslint.org/) with the configuration and output
 #### `reveal:build`
 
 This re-compiles the source-files needed by the exporter for building [reveal.js](https://revealjs.com/)-presentations. Due to the nature of how [Pandoc](https://pandoc.org/) creates such presentations, Zettlr needs to modify the output by Pandoc, which is why these files need to be pre-compiled.
+
+> Please note, that this command is intended for an automated workflow that runs from time to time on the repository to perform this action. This means: Do **not** commit updated files to the repository. Instead, the updated files will be downloaded whenever you `git fetch`.
 
 #### `test`
 

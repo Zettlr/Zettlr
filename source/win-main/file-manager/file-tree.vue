@@ -182,4 +182,17 @@ body.win32 {
     }
   }
 }
+
+body.linux {
+  #file-tree {
+    background-color: rgb(230, 230, 230);
+
+    #directories-dirs-header, #directories-files-header {
+      border-bottom: 1px solid rgb(160, 160, 160);
+      font-size: 11px;
+      padding: 5px 0px 5px 10px;
+      margin: 0px 0px 5px 0px;
+    }
+  }
+}
 </style>

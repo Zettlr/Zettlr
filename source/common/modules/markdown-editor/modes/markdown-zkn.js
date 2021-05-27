@@ -182,12 +182,12 @@ const {
           // need to check that the tag is preceeded by a space.
           if (stream.sol()) {
             stream.match(zknTagRE)
-            return 'zkn-tag'
+            return `zkn-tag zkn-tag-${stream.current().substring(1).toLowerCase()}`
           } else {
             stream.backUp(1)
             if (stream.next() === ' ') {
               stream.match(zknTagRE)
-              return 'zkn-tag'
+              return `zkn-tag zkn-tag-${stream.current().substring(1).toLowerCase()}`
             } else {
               return mdMode.token(stream, state.mdState)
             }

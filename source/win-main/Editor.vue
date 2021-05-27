@@ -1,5 +1,12 @@
 <template>
-  <div id="editor" ref="editor" v-bind:style="{ 'font-size': `${fontSize}px` }">
+  <div
+    id="editor"
+    ref="editor"
+    v-bind:style="{ 'font-size': `${fontSize}px` }"
+    v-on:wheel="onEditorScroll($event)"
+    v-on:mousedown="editorMousedown($event)"
+    v-on:mouseup="editorMouseup($event)"
+  >
     <div v-show="showSearch" id="editor-search">
       <div class="row">
         <input
@@ -218,7 +225,6 @@ export default {
     fsalFiles: function () {
       const fileDatabase = {}
 
-      console.time('Database allocation')
       for (let file of this.fsalFiles) {
         let fname = file.name.substr(0, file.name.lastIndexOf('.'))
         let displayText = fname // Fallback: Only filename
@@ -241,7 +247,6 @@ export default {
           'id': file.id
         }
       }
-      console.timeEnd('Database allocation')
 
       this.editor.setCompletionDatabase('files', fileDatabase)
     },
@@ -454,6 +459,15 @@ export default {
     this.$root.$on('toc-line', (line) => {
       this.editor.jtl(line)
     })
+
+    // Finally, let's observe if the editor element changes. If so, refresh the
+    // editor. This will keep the cursor correct when the SplitViews are either
+    // opened/closed or resized.
+    const obs = new ResizeObserver(entries => {
+      this.editor.codeMirror.refresh()
+    })
+
+    obs.observe(this.$refs.editor)
   },
   methods: {
     jtl (lineNumber) {
@@ -552,6 +566,47 @@ export default {
     },
     replaceAll () {
       this.editor.replaceAll(this.query, this.replaceString)
+    },
+    /**
+     * Scrolls the editor according to the value if the user scrolls left of the
+     * .CodeMirror-scroll element
+     *
+     * @param   {WheelEvent}  event  The mousewheel event
+     */
+    onEditorScroll (event) {
+      if (event.target !== this.$refs.editor) {
+        return // Only handle if the event's target is the editor itself
+      }
+
+      const scroller = this.$refs.editor.querySelector('.CodeMirror-scroll')
+
+      if (scroller !== null) {
+        scroller.scrollTop += event.deltaY
+      }
+    },
+    /**
+     * Triggers when the user presses any mouse button
+     *
+     * @param   {MouseEvent}  event  The mouse event
+     */
+    editorMousedown (event) {
+      if (event.target !== this.$refs.editor) {
+        // return // Only handle if the event's target is the editor itself
+      }
+
+      // TODO: Enable selection of full lines on the editor instance
+    },
+    /**
+     * Triggers when the user releases any mouse button
+     *
+     * @param   {MouseEvent}  event  The mouse event
+     */
+    editorMouseup (event) {
+      if (event.target !== this.$refs.editor) {
+        // return // Only handle if the event's target is the editor itself
+      }
+
+      // TODO: Stop the selection of full lines on the editor instance
     }
   }
 }
@@ -577,6 +632,8 @@ export default {
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
+  background-color: #ffffff;
+  transition: 0.2s background-color ease;
 
   // .katex {
   //   display: inline-block;
@@ -604,45 +661,49 @@ export default {
     }
   }
 
-    .CodeMirror {
-      // The CodeMirror editor needs to respect the new tabbar; it cannot take
-      // up 100 % all for itself anymore.
-      margin-left: 0.5em;
-      height: 100%;
-      cursor: text;
-      font-family: inherit;
-      background: none;
+  .CodeMirror {
+    // The CodeMirror editor needs to respect the new tabbar; it cannot take
+    // up 100 % all for itself anymore.
+    margin-left: 0.5em;
+    height: 100%;
+    cursor: text;
+    font-family: inherit;
+    background: none;
 
-      @media(min-width: 1025px) { margin-left: @editor-margin-normal-lg; }
-      @media(max-width: 1024px) { margin-left: @editor-margin-normal-md; }
-      @media(max-width:  900px) { margin-left: @editor-margin-normal-sm; }
-    }
-
-    .CodeMirror-code {
-      margin: 5em 0em;
-      @media(max-width: 1024px) { margin: @editor-margin-fullscreen-md 0em; }
-
-      .mute { opacity:0.2; }
-    }
-
-    .CodeMirror-scroll {
-      padding-right: 5em;
-      @media(min-width: 1025px) { padding-right: @editor-margin-normal-lg; }
-      @media(max-width: 1024px) { padding-right: @editor-margin-normal-md; }
-      @media(max-width:  900px) { padding-right: @editor-margin-normal-sm; }
-      overflow-x: hidden !important; // Necessary to hide the horizontal scrollbar
-
-      // We need to override a negative margin
-      // and a bottom padding from the standard
-      // CSS for some calculations to be correct
-      // such as the table editor
-      margin-bottom: 0px;
-      padding-bottom: 0px;
-    }
-
-    // Reduce font size of math a bit
-    .katex { font-size: 1.1em; }
+    @media(min-width: 1025px) { margin-left: @editor-margin-normal-lg; }
+    @media(max-width: 1024px) { margin-left: @editor-margin-normal-md; }
+    @media(max-width:  900px) { margin-left: @editor-margin-normal-sm; }
   }
+
+  .CodeMirror-code {
+    margin: 5em 0em;
+    @media(max-width: 1024px) { margin: @editor-margin-fullscreen-md 0em; }
+
+    .mute { opacity:0.2; }
+  }
+
+  .CodeMirror-scroll {
+    padding-right: 5em;
+    @media(min-width: 1025px) { padding-right: @editor-margin-normal-lg; }
+    @media(max-width: 1024px) { padding-right: @editor-margin-normal-md; }
+    @media(max-width:  900px) { padding-right: @editor-margin-normal-sm; }
+    overflow-x: hidden !important; // Necessary to hide the horizontal scrollbar
+
+    // We need to override a negative margin
+    // and a bottom padding from the standard
+    // CSS for some calculations to be correct
+    // such as the table editor
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+  }
+
+  // Reduce font size of math a bit
+  .katex { font-size: 1.1em; }
+}
+
+body.dark #editor {
+  background-color: rgba(20, 20, 30, 1);
+}
 
 body.darwin #editor {
   // On macOS the tabbar is 30px high.

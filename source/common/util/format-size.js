@@ -15,18 +15,19 @@
  * Takes a size in bytes, and returns a human-readable string in Byte, Kilobyte,
  * Megabyte, or Gigabyte.
  *
- * @param   {number}  size  The size in bytes.
+ * @param   {number}  size          The size in bytes.
+ * @param   {boolean} [short=false] Whether to use short labels or long ones.
  *
- * @return  {string}        The formatted size.
+ * @return  {string}                The formatted size.
  */
-module.exports = function formatSize (size) {
+module.exports = function formatSize (size, short = false) {
   if (size < 1024) {
-    return `${size} Byte`
+    return `${size} ` + (short ? 'B' : 'Byte')
   } else if (size < 1024 * 1000) {
-    return `${Math.round(size / 1000)} Kilobyte`
+    return `${Math.round(size / 1000)} ` + (short ? 'KB' : 'Kilobyte')
   } else if (size < 1024 * 1000 * 1000) {
-    return `${Math.round(size / (1000 * 1000))} Megabyte`
+    return `${Math.round(size / (1000 * 1000))} ` + (short ? 'MB' : 'Megabyte')
   } else {
-    return `${Math.round(size / (1000 * 1000 * 1000))} Gigabyte`
+    return `${Math.round(size / (1000 * 1000 * 1000))} ` + (short ? 'GB' : 'Gigabyte')
   }
 }

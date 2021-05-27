@@ -449,6 +449,22 @@ export default class Zettlr {
       // Return all open files as their metadata objects
       return this._fsal.openFiles.map(file => this._fsal.getMetadataFor(file))
     } else if (command === 'get-file-contents') {
+      if (String(payload).startsWith(':memory:')) {
+        // The renderer has requested an in-memory file, which is not in the
+        // file tree --> simply return the metadata object
+        // NOTE: We're doing this here, since the whole file management logic
+        // in the editor component requires a lot of changes. So it's easier to
+        // simply intercept the request here rather than handling it in the
+        // renderer.
+        const file = this._fsal.openFiles.find(file => file.path === payload)
+        if (file !== undefined) {
+          return this._fsal.getMetadataFor(file)
+        } else {
+          return null
+        }
+      }
+
+      // Handle normal files
       const descriptor = this._fsal.findFile(payload)
       if (descriptor === null) {
         return null
@@ -473,6 +489,8 @@ export default class Zettlr {
     } else if (command === 'open-stats-window') {
       this._windowManager.showStatsWindow()
       return true
+    } else if (command === 'open-update-window') {
+      this._windowManager.showUpdateWindow()
     } else {
       // ELSE: If the command has not yet been found, try to run one of the
       // bigger commands
@@ -800,6 +818,10 @@ export default class Zettlr {
 
   async askFile (filters: FileFilter[]|null = null, multiSel: boolean = false): Promise<string[]> {
     return await this._windowManager.askFile(filters, multiSel)
+  }
+
+  async saveFile (filename: string = ''): Promise<string|undefined> {
+    return await this._windowManager.saveFile(filename)
   }
 
   /**

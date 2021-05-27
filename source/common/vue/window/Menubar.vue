@@ -170,4 +170,20 @@ body.win32 {
     }
   }
 }
+
+body.linux {
+  #menubar {
+    background-color: rgb(180, 180, 180);
+    color: rgb(30, 30, 30);
+
+    span.top-level-item:hover {
+      background-color: rgb(0, 0, 0, .3);
+    }
+  }
+
+  &.dark #menubar {
+    background-color: rgb(30, 30, 30);
+    color: rgb(235, 235, 235);
+  }
+}
 </style>
