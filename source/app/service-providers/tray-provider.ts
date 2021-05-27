@@ -19,6 +19,7 @@ import {
 } from 'electron'
 import path from 'path'
 import EventEmitter from 'events'
+import { trans } from '../../common/i18n'
 
 /**
  * This class generates the Tray in the system notification area
@@ -113,18 +114,18 @@ export default class TrayProvider extends EventEmitter {
 
       const contextMenu = Menu.buildFromTemplate([
         {
-          label: 'Show Zettlr',
+          label: trans('tray.show_zettlr'),
           click: show,
           type: 'normal'
         },
         { label: '', type: 'separator' },
         {
-          label: 'Quit',
+          label: trans('menu.quit'),
           click: quit,
           type: 'normal'
         }
       ])
-      this._tray.setToolTip('This is the Zettlr tray.\nSelect Show Zettlr to show the Zettlr app.\nSelect Quit to quit the Zettlr app.')
+      this._tray.setToolTip(trans('tray.tooltip'))
       this._tray.setContextMenu(contextMenu)
     }
   }
