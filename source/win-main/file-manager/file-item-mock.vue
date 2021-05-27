@@ -68,7 +68,11 @@ export default {
   methods: {
     focusInput: function () {
       this.$refs['name-input'].focus()
-      this.$refs['name-input'].select()
+      // Select from the beginning until the last dot
+      this.$refs['name-input'].setSelectionRange(
+        0,
+        this.$refs['name-input'].value.lastIndexOf('.')
+      )
     }
   }
 }

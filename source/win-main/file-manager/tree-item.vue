@@ -265,7 +265,11 @@ export default {
             this.$refs['new-object-input'].value = generateFilename()
           }
           this.$refs['new-object-input'].focus()
-          this.$refs['new-object-input'].select()
+          // Select from the beginning until the last dot
+          this.$refs['new-object-input'].setSelectionRange(
+            0,
+            this.$refs['new-object-input'].value.lastIndexOf('.')
+          )
         })
       }
     }
