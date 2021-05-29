@@ -1,9 +1,7 @@
 // const { shell, ipcRenderer } = require('electron')
 const makeValidUri = require('../../util/make-valid-uri')
-const { trans } = require('../../i18n-renderer')
 const path = window.path
 const ipcRenderer = window.ipc
-const shell = {} // TODO
 
 const VALID_FILETYPES = require('../../data.json').filetypes
 
