@@ -1,7 +1,7 @@
-const { shell, ipcRenderer } = require('electron')
+// const { shell, ipcRenderer } = require('electron')
 const makeValidUri = require('../../util/make-valid-uri')
-const { trans } = require('../../i18n')
-const path = require('path')
+const path = window.path
+const ipcRenderer = window.ipc
 
 const VALID_FILETYPES = require('../../data.json').filetypes
 
@@ -52,12 +52,7 @@ module.exports = function (url, cm) {
       })
         .catch(e => console.error(e))
     } else {
-      shell.openExternal(validURI).catch((err) => {
-        // Notify the user that we couldn't open the URL
-        if (err) {
-          global.notify(trans('system.error.open_url_error', validURI) + ': ' + err.message)
-        }
-      })
+      window.location.assign(validURI) // Handled by the event listener in the main process
     }
   }
 }

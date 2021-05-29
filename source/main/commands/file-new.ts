@@ -38,9 +38,9 @@ export default class FileNew extends ZettlrCommand {
   async run (evt: string, arg: any): Promise<void> {
     if (evt === 'new-unsaved-file') {
       // We should simply create a new unsaved file that only resides in memory
-      const file = await this._app.getFileSystem().newUnsavedFile()
+      const file = await this._app.getDocumentManager().newUnsavedFile()
       // Set it as active
-      this._app.getFileSystem().activeFile = file.path
+      this._app.getDocumentManager().activeFile = file
       return
     }
 

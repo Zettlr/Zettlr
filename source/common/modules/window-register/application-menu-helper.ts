@@ -1,4 +1,4 @@
-import { ipcRenderer } from 'electron'
+const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
 // This function displays a custom styled popup menu at the given coordinates
 export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[], callback: Function): Function {

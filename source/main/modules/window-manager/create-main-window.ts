@@ -40,10 +40,9 @@ export default function createMainWindow (conf: WindowPosition): BrowserWindow {
     minHeight: 200,
     show: false,
     webPreferences: {
-      // Zettlr needs all the node features, so in preparation for Electron
-      // 5.0 we'll need to explicitly request it.
-      nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: true,
+      // @ts-expect-error
+      preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY
     }
   }
 

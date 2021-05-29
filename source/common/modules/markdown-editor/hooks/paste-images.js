@@ -1,7 +1,8 @@
 // Hook for pasting images
 
-const { clipboard, ipcRenderer } = require('electron')
-const path = require('path')
+const path = window.path
+const ipcRenderer = window.ipc
+const clipboard = window.clipboard
 
 module.exports = (cm) => {
   /**

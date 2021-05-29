@@ -41,8 +41,9 @@ export default function createTagManagerWindow (conf: WindowPosition): BrowserWi
     show: false,
     fullscreenable: false,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: true,
+      // @ts-expect-error
+      preload: TAG_MANAGER_PRELOAD_WEBPACK_ENTRY
     }
   }
 

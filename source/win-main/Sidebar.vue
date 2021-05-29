@@ -160,10 +160,11 @@
 </template>
 
 <script>
-import { trans } from '../common/i18n'
+import { trans } from '../common/i18n-renderer'
 import { ClarityIcons } from '@clr/icons'
-import path from 'path'
-import { ipcRenderer } from 'electron'
+
+const path = window.path
+const ipcRenderer = window.ipc
 
 const FILETYPES_IMG = [
   '.jpg',

@@ -1,5 +1,5 @@
-import { ipcRenderer } from 'electron'
-import { trans } from '../../i18n'
+import { trans } from '../../i18n-renderer'
+const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
 const TEMPLATE: AnyMenuItem[] = [
   {

@@ -97,7 +97,8 @@ import TextControl from '../common/vue/form/elements/Text'
 import ButtonControl from '../common/vue/form/elements/Button'
 import ProgressControl from '../common/vue/form/elements/Progress'
 import AutocompleteText from './AutocompleteText'
-import { ipcRenderer } from 'electron'
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'GlobalSearch',

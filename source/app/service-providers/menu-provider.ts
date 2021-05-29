@@ -94,6 +94,7 @@ export default class MenuProvider {
   * Creates the main application menu and sets it.
   */
   constructor () {
+    global.log.verbose('Menu provider booting up ...')
     this._checkboxState = Object.create(null)
 
     // Begin listening to configuration update events that announce a change in

@@ -1,5 +1,6 @@
-const { trans } = require('../../../common/i18n')
-const { ipcRenderer, shell } = require('electron')
+const { trans } = require('../../../common/i18n-renderer')
+
+const ipcRenderer = window.ipc
 
 const TEMPLATE = [
   {
@@ -108,7 +109,10 @@ module.exports = function displayFileContext (event, dirObject, el, callback) {
     callback(clickedID) // TODO
     switch (clickedID) {
       case 'gui.attachments_open_dir':
-        shell.showItemInFolder(dirObject.path)
+        ipcRenderer.send('window-controls', {
+          command: 'show-item-in-folder',
+          payload: dirObject.path
+        })
         break
       case 'menu.project_properties':
         ipcRenderer.send('message', {

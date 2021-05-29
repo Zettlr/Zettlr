@@ -72,7 +72,8 @@ import Toolbar from './Toolbar.vue'
 import Tabbar from './Tabbar.vue'
 import Statusbar from './Statusbar.vue'
 import WindowControls from './Controls.vue'
-import { ipcRenderer } from 'electron'
+
+const ipcRenderer = window.ipc
 
 // Import the correct styles (the platform styles are namespaced)
 import './assets/generic.less'

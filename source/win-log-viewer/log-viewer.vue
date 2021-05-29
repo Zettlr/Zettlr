@@ -21,9 +21,10 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
 import Message from './message.vue'
 import WindowChrome from '../common/vue/window/Chrome.vue'
+
+const ipcRenderer = window.ipc
 
 export default {
   components: {
