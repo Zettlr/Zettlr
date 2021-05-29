@@ -432,10 +432,12 @@
   dependencies:
     "@types/glob" "*"
 
-"@types/bcp-47@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@types/bcp-47/-/bcp-47-1.0.0.tgz#9b0482cab6cbefe4a18e2aee8d4f061951feb969"
-  integrity sha512-KNuP/hxVUX2+H5Gps3kCm1QtBWczQ82P2GEK61bcKqk7L0UkXWnsLOBoLm6lwmntnQwcGGSl/V3qwAtQM+aGhg==
+"@types/bcp-47@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@types/bcp-47/-/bcp-47-2.0.0.tgz#122ac13ddfd89b01dffb1269fe0146ea322018b8"
+  integrity sha512-Hex9UVfVgC02d1aLXQo/Tszl7h+Awyi8GaiA99fMJNzIG7zfEpWjsuKyRUpSfuocAziSykmmz2Pt7GskgpDiLw==
+  dependencies:
+    bcp-47 "*"
 
 "@types/cacheable-request@^6.0.1":
   version "6.0.1"
@@ -1388,7 +1390,7 @@ batch@0.6.1:
   resolved "https://registry.yarnpkg.com/batch/-/batch-0.6.1.tgz#dc34314f4e679318093fc760272525f94bf25c16"
   integrity sha1-3DQxT05nkxgJP8dgJyUl+UvyXBY=
 
-bcp-47@^2.0.0:
+bcp-47@*, bcp-47@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/bcp-47/-/bcp-47-2.0.0.tgz#c1d5d8bc97b5eef369c1a6d6642f371953394613"
   integrity sha512-a2rxWVfksWjVu8cZR519RR6QFS0231vhhNAn55z20BPTX0Z6ucuIoRYUwsLwnpCixS1PvEwtbwzXXB9c0gEcMQ==
