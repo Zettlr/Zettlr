@@ -23,8 +23,8 @@
       v-bind:class="{
         'list-item': true,
         'project': obj.type === 'directory' && obj.project !== null,
-        'selected': obj === selectedFile,
-        'active': obj === activeFile,
+        'selected': selectedFile !== null && obj.path === selectedFile.path,
+        'active': activeFile !== null && obj.path === activeFile.path,
         'has-meta-info': fileMeta,
         'directory': obj.type === 'directory'
       }"

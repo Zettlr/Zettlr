@@ -4,7 +4,7 @@
       v-for="(file, idx) in openFiles"
       v-bind:key="idx"
       v-bind:class="{
-        active: file === activeFile,
+        active: activeFile !== null && file.path === activeFile.path,
         modified: modifiedDocs.includes(file.path)
       }"
       v-bind:title="file.name"
@@ -63,7 +63,7 @@ export default {
   mounted: function () {
     // Listen for shortcuts so that we can switch tabs programmatically
     ipcRenderer.on('shortcut', (event, shortcut) => {
-      const currentIdx = this.openFiles.findIndex(elem => elem === this.activeFile)
+      const currentIdx = this.openFiles.findIndex(elem => this.activeFile !== null && elem.path === this.activeFile.path)
       if (shortcut === 'previous-tab') {
         if (currentIdx > 0) {
           this.selectFile(this.openFiles[currentIdx - 1])

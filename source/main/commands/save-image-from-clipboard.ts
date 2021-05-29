@@ -33,12 +33,7 @@ export default class SaveImage extends ZettlrCommand {
    * @return {void}        Does not return.
    */
   async run (evt: string /*, target: any */): Promise<any> {
-    const activeHash = this._app.getFileSystem().activeFile
-    if (activeHash === null) {
-      return global.notify.normal(trans('system.error.fnf_message'))
-    }
-
-    const activeFile = this._app.getFileSystem().findFile(activeHash)
+    const activeFile = this._app.getDocumentManager().activeFile
     if (activeFile === null) {
       return global.notify.normal(trans('system.error.fnf_message'))
     }

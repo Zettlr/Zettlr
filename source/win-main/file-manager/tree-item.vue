@@ -21,7 +21,7 @@
       v-bind:class="{
         'tree-item': true,
         [obj.type]: true,
-        'selected': activeFile === obj || selectedDir === obj,
+        'selected': (activeFile !== null && activeFile.path === obj.path) || (selectedDir !== null && selectedDir.path === obj.path),
         'project': obj.project != null,
         'root': isRoot
       }"

@@ -95,7 +95,7 @@ export function metadata (fileObject: CodeFileDescriptor): CodeFileMeta {
 
 export async function parse (
   filePath: string,
-  cache: FSALCache,
+  cache: FSALCache|null,
   parent: DirDescriptor|null = null
 ): Promise<CodeFileDescriptor> {
   // First of all, prepare the file descriptor
@@ -132,7 +132,7 @@ export async function parse (
   // Before reading in the full file and parsing it,
   // let's check if the file has been changed
   let hasCache = false
-  if (cache.has(file.hash.toString())) {
+  if (cache?.has(file.hash.toString()) === true) {
     let cachedFile = cache.get(file.hash.toString())
     // If the modtime is still the same, we can apply the cache
     if (cachedFile.modtime === file.modtime) {
@@ -148,7 +148,9 @@ export async function parse (
     // Read in the file, parse the contents and make sure to cache the file
     let content = await fs.readFile(filePath, { encoding: 'utf8' })
     parseFileContents(file, content)
-    cacheFile(file, cache)
+    if (cache !== null) {
+      cacheFile(file, cache)
+    }
   }
 
   return file

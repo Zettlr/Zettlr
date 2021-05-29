@@ -383,49 +383,10 @@ const config: StoreOptions<ZettlrState> = {
       }
     },
     updateActiveFile: function (state, descriptor) {
-      if (descriptor === null) {
-        state.activeFile = null
-      } else if (descriptor.dir === ':memory:') {
-        const found = state.openFiles.find(file => file.path === descriptor.path)
-        if (found !== undefined) {
-          state.activeFile = found
-        }
-      } else {
-        const ownDescriptor = findPathDescriptor(descriptor.path, state.fileTree)
-
-        if (ownDescriptor !== null) {
-          state.activeFile = ownDescriptor
-        }
-      }
+      state.activeFile = descriptor
     },
     updateOpenFiles: function (state, openFiles) {
-      // First, we must make sure that the open files in memory are retained
-      const memoryFiles = state.openFiles.filter(file => file.dir === ':memory:')
-
-      // Then we can safely reset the open files in the state
-      state.openFiles = []
-
-      // TODO: I know we can create a more sophisticated algorithm that only
-      // updates those necessary
-      for (const file of openFiles) {
-        if (String(file.path).startsWith(':memory:')) {
-          // Fetch the descriptor from the old state
-          const found = memoryFiles.find(f => f.path === file)
-          if (found !== undefined) {
-            state.openFiles.push(found)
-          } else {
-            // In case the descriptor has not been found, add the new descriptor
-            // that has been delivered with the openFiles array
-            state.openFiles.push(file)
-          }
-        } else {
-          const descriptor = findPathDescriptor(file.path, state.fileTree)
-          if (descriptor !== null) {
-            state.openFiles.push(descriptor)
-          }
-        }
-      } // END for
-      console.log(state.openFiles)
+      state.openFiles = openFiles
     },
     colouredTags: function (state, tags) {
       state.colouredTags = tags
