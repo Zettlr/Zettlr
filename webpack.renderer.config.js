@@ -34,6 +34,7 @@ module.exports = {
   module: {
     rules
   },
+  devtool: 'source-map',
   plugins: [
     // Enhanced typescript support (e.g. moves typescript type checking to separate process)
     new ForkTsCheckerWebpackPlugin(),
@@ -41,6 +42,7 @@ module.exports = {
     // Apply webpack rules to the corresponding language blocks in .vue files
     new VueLoaderPlugin()
   ],
+  target: 'electron-renderer',
   resolve: {
     extensions: [
       '.js', '.ts', '.jsx', '.tsx',
