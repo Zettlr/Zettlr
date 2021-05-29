@@ -48,9 +48,10 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
-import { trans } from '../../common/i18n'
+import { trans } from '../../common/i18n-renderer'
 import TreeItem from './tree-item.vue'
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'FileTree',

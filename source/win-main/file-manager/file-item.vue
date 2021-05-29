@@ -134,8 +134,8 @@
 </template>
 
 <script>
-import { trans } from '../../common/i18n.js'
-import formatDate from '../../common/util/format-date.js'
+import { trans } from '../../common/i18n-renderer'
+import formatDate from '../../common/util/format-date'
 import localiseNumber from '../../common/util/localise-number'
 import formatSize from '../../common/util/format-size'
 import itemMixin from './util/item-mixin'

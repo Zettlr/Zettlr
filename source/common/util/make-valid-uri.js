@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-const path = require('path')
+const path = window.path
 // NOTE: fileExists is called "isFile" everywhere else, we have just renamed
 // it because of a naming conflict in the function.
 const fileExists = require('../../common/util/is-file')

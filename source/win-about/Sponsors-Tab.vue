@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import got from 'got'
+import ky from 'ky'
 
 export default {
   name: 'SponsorsTab',
@@ -27,7 +27,7 @@ export default {
     }
   },
   created: function () {
-    got('https://api.zettlr.com/v1/sponsors')
+    ky('https://api.zettlr.com/v1/sponsors')
       .then((response) => {
         this.sponsors = JSON.parse(response.body)
       })

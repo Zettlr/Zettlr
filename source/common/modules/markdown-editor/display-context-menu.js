@@ -1,9 +1,7 @@
 // Displays a context menu for the MarkdownEditor class
-const { trans } = require('../../i18n')
-const {
-  clipboard,
-  ipcRenderer
-} = require('electron')
+const { trans } = require('../../i18n-renderer')
+const ipcRenderer = window.ipc
+const clipboard = window.clipboard
 
 let currentMenu = []
 let currentSuggestions = []

@@ -41,8 +41,9 @@ export default function createCustomCSSWindow (conf: WindowPosition): BrowserWin
     show: false,
     fullscreenable: false,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: true,
+      // @ts-expect-error
+      preload: CUSTOM_CSS_PRELOAD_WEBPACK_ENTRY
     }
   }
 

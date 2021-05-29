@@ -15,14 +15,15 @@
  */
 
 import Vue from 'vue'
-import { ipcRenderer } from 'electron'
-import path from 'path'
 import Vuex, { Store, StoreOptions } from 'vuex'
 import isAttachment from '../common/util/is-attachment'
 import sanitizeHtml from 'sanitize-html'
 import md2html from '../common/util/md-to-html'
 import sort from '../main/modules/fsal/util/sort'
 import { MDFileMeta, CodeFileMeta, DirMeta } from '../main/modules/fsal/types'
+
+const path = (window as any).path
+const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
 interface FSALEvent {
   event: 'remove'|'add'|'change'

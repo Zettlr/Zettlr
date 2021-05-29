@@ -8,7 +8,8 @@
 const MarkdownEditor = require('../common/modules/markdown-editor')
 const CodeMirror = require('codemirror')
 const makeSearchRegEx = require('../common/util/make-search-regex')
-const { ipcRenderer } = require('electron')
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'Editor',

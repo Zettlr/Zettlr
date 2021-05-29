@@ -1,5 +1,5 @@
-import { ipcRenderer } from 'electron'
 import applicationMenuHelper from './application-menu-helper'
+const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
 export default function registerGlobals (): void {
   // Register globals

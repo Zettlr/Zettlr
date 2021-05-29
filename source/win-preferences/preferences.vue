@@ -32,8 +32,7 @@
 <script>
 import Form from '../common/vue/form/Form.vue'
 import WindowChrome from '../common/vue/window/Chrome.vue'
-import { trans } from '../common/i18n'
-import { ipcRenderer } from 'electron'
+import { trans } from '../common/i18n-renderer'
 
 import generalSchema from './schema/general'
 import editorSchema from './schema/editor'
@@ -43,6 +42,8 @@ import displaySchema from './schema/display'
 import spellcheckingSchema from './schema/spellchecking'
 import autocorrectSchema from './schema/autocorrect'
 import advancedSchema from './schema/advanced'
+
+const ipcRenderer = window.ipc
 
 const SCHEMA = {
   'tab-general': generalSchema,

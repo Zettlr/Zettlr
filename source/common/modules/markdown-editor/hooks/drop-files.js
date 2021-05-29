@@ -1,4 +1,4 @@
-const path = require('path')
+const path = window.path
 const IMAGE_REGEXP = require('../../../regular-expressions').getImageFileRE()
 
 module.exports = (cm) => {

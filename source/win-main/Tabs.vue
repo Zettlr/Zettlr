@@ -31,8 +31,9 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
 import displayTabsContextMenu from './tabs-context'
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'Tabs',

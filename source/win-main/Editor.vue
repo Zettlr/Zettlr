@@ -61,12 +61,13 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
 import countWords from '../common/util/count-words'
 import MarkdownEditor from '../common/modules/markdown-editor'
 import CodeMirror from 'codemirror'
 import { util as citrUtil, parseSingle } from '@zettlr/citr'
 import objectToArray from '../common/util/object-to-array'
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'Editor',

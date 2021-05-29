@@ -165,10 +165,11 @@
 
 <script>
 // Tree View item component
-import { ipcRenderer } from 'electron'
-import path from 'path'
 import itemMixin from './util/item-mixin'
 import generateFilename from '../../common/util/generate-filename'
+
+const path = window.path
+const ipcRenderer = window.ipc
 
 export default {
   name: 'TreeItem',

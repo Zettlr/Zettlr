@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
+const ipcRenderer = window.ipc
 
 export default {
   name: 'Menubar',

@@ -2,11 +2,12 @@
 // and contains shared logic that applies to both objects. This way, we have
 // different styling for tree items and file list items, but the same underlying
 // logic, since both represent the same data structures.
-import { ipcRenderer } from 'electron'
 import fileContextMenu from './file-item-context'
 import dirContextMenu from './dir-item-context'
 import PopoverFileProps from './PopoverFileProps'
 import PopoverDirProps from './PopoverDirProps'
+
+const ipcRenderer = window.ipc
 
 export default {
   props: {

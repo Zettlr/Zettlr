@@ -1,4 +1,4 @@
-import { trans } from '../../common/i18n'
+import { trans } from '../../common/i18n-renderer'
 
 export default {
   fieldsets: [

@@ -20,8 +20,5 @@
     "webpack.main.config.js",
     "webpack.renderer.config.js",
     "webpack.rules.js"
-  ],
-  "files": [
-    "source/global.d.ts"
   ]
 }

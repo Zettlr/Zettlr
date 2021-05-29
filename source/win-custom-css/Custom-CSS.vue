@@ -20,9 +20,10 @@
 
 <script>
 import WindowChrome from '../common/vue/window/Chrome'
-import { trans } from '../common/i18n'
+import { trans } from '../common/i18n-renderer'
 import CodeEditor from '../common/vue/CodeEditor'
-import { ipcRenderer } from 'electron'
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'CustomCSS',
