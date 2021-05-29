@@ -21,7 +21,18 @@
       "request": "attach",
       "port": 9223,
       "webRoot": "${workspaceRoot}"
-    }
+    },
+    {
+      "name": "Run Tests For Current File",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+      "args": [
+        "-r ts-node/register",
+        "${file}"
+       ],
+       "cwd": "${workspaceRoot}"
+   }
   ],
   "compounds": [
     {
