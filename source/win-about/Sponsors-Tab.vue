@@ -29,7 +29,12 @@ export default {
   created: function () {
     ky('https://api.zettlr.com/v1/sponsors')
       .then((response) => {
-        this.sponsors = JSON.parse(response.body)
+        console.log(response.body)
+        response.json()
+          .then(res => {
+            this.sponsors = res
+          })
+          .catch(err => console.error(err))
       })
       .catch(e => console.error(e))
   }

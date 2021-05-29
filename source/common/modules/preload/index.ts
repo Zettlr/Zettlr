@@ -22,6 +22,25 @@ contextBridge.exposeInMainWorld('ipc', {
 
 // DEBUG
 contextBridge.exposeInMainWorld('__dirname', '')
-contextBridge.exposeInMainWorld('clipboard', { ...clipboard })
 
-contextBridge.exposeInMainWorld('process', { platform: process.platform })
+// Expose the subset of clipboard functions which we use
+contextBridge.exposeInMainWorld('clipboard', {
+  readText: clipboard.readText,
+  readHTML: clipboard.readHTML,
+  readRTF: clipboard.readRTF,
+  readImage: clipboard.readImage,
+  read: clipboard.read,
+  write: clipboard.write,
+  writeText: clipboard.writeText
+})
+
+// Expose the subset of process properties we need
+contextBridge.exposeInMainWorld('process', {
+  platform: process.platform,
+  version: process.version,
+  versions: process.versions,
+  arch: process.arch,
+  uptime: process.uptime,
+  getSystemVersion: process.getSystemVersion(),
+  env: Object.assign({}, process.env)
+})
