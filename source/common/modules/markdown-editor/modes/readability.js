@@ -267,7 +267,7 @@
       }
     }
 
-    return CodeMirror.overlayMode(CodeMirror.getMode(config, 'gfm'), readability, true)
+    return CodeMirror.overlayMode(CodeMirror.getMode(config, 'markdown-zkn'), readability, true)
   })
 
   // Define the corresponding MIME
