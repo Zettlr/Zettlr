@@ -693,11 +693,14 @@ export default class Zettlr {
       .map(e => { return { 'tag': e, 'path': path.join(tutorialPath, e) } })
       .filter(e => isDir(e.path))
 
-    let { exact, close } = findLangCandidates(global.config.get('appLang'), candidates) as any
+    let { exact, close } = findLangCandidates(global.config.get('appLang'), candidates)
 
     let tutorial = path.join(tutorialPath, 'en')
-    if (exact) tutorial = exact.path
-    if (!exact && close) tutorial = close.path
+    if (exact !== undefined) {
+      tutorial = exact.path
+    } else if (close !== undefined) {
+      tutorial = close.path
+    }
 
     // Now we have both a target and a language candidate, let's copy over the files!
     try {
