@@ -23,7 +23,8 @@ import {
   ipcMain,
   FileFilter,
   MessageBoxOptions,
-  MessageBoxReturnValue
+  MessageBoxReturnValue,
+  shell
 } from 'electron'
 import { promises as fs } from 'fs'
 import path from 'path'
@@ -149,6 +150,9 @@ export default class WindowManager {
               event.sender.startDrag({ file: payload.filePath, icon: icon })
             })
             .catch(err => global.log.error(`[Window Manager] Could not fetch icon for path ${String(payload.filePath)}`, err))
+          break
+        case 'show-item-in-folder':
+          shell.showItemInFolder(payload)
           break
       }
     })

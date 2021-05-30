@@ -56,7 +56,7 @@
 <script>
 import NumberControl from '../../../common/vue/form/elements/Number'
 import SelectControl from '../../../common/vue/form/elements/Select'
-import { trans } from '../../../common/i18n'
+import { trans } from '../../../common/i18n-renderer'
 import formatDate from '../../../common/util/format-date'
 import formatSize from '../../../common/util/format-size'
 import localiseNumber from '../../../common/util/localise-number'

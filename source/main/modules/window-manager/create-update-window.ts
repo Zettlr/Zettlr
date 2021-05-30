@@ -40,8 +40,9 @@ export default function createUpdateWindow (conf: WindowPosition): BrowserWindow
     show: false,
     fullscreenable: false,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: true,
+      // @ts-expect-error
+      preload: UPDATE_PRELOAD_WEBPACK_ENTRY
     }
   }
 

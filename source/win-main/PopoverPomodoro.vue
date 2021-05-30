@@ -51,7 +51,7 @@
 import NumberControl from '../common/vue/form/elements/Number'
 import SelectControl from '../common/vue/form/elements/Select'
 import SliderControl from '../common/vue/form/elements/Slider'
-import { trans } from '../common/i18n'
+import { trans } from '../common/i18n-renderer'
 
 export default {
   name: 'PopoverExport',

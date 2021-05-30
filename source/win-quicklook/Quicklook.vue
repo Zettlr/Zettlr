@@ -33,10 +33,11 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
 import Editor from './editor.vue'
 import WindowChrome from '../common/vue/window/Chrome.vue'
-import { trans } from '../common/i18n'
+import { trans } from '../common/i18n-renderer'
+
+const ipcRenderer = window.ipc
 
 export default {
   components: {

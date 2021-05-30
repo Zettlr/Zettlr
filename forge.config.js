@@ -236,67 +236,106 @@ module.exports = {
             {
               html: './source/win-main/index.htm',
               js: './source/win-main/index.ts',
-              name: 'main_window'
+              name: 'main_window',
+              preload: {
+                js: './source/common/modules/preload/index.ts'
+              }
             },
             {
               html: './source/win-print/index.htm',
               js: './source/win-print/index.ts',
-              name: 'print'
+              name: 'print',
+              preload: {
+                js: './source/common/modules/preload/index.ts'
+              }
             },
             {
               html: './source/win-log-viewer/index.htm',
               js: './source/win-log-viewer/index.ts',
-              name: 'log_viewer'
+              name: 'log_viewer',
+              preload: {
+                js: './source/common/modules/preload/index.ts'
+              }
             },
             {
               html: './source/win-quicklook/index.htm',
               js: './source/win-quicklook/index.ts',
-              name: 'quicklook'
+              name: 'quicklook',
+              preload: {
+                js: './source/common/modules/preload/index.ts'
+              }
             },
             {
               html: './source/win-preferences/index.htm',
               js: './source/win-preferences/index.ts',
-              name: 'preferences'
+              name: 'preferences',
+              preload: {
+                js: './source/common/modules/preload/index.ts'
+              }
             },
             {
               html: './source/win-custom-css/index.htm',
               js: './source/win-custom-css/index.ts',
-              name: 'custom_css'
+              name: 'custom_css',
+              preload: {
+                js: './source/common/modules/preload/index.ts'
+              }
             },
             {
               html: './source/win-tag-manager/index.htm',
               js: './source/win-tag-manager/index.ts',
-              name: 'tag_manager'
+              name: 'tag_manager',
+              preload: {
+                js: './source/common/modules/preload/index.ts'
+              }
             },
             {
               html: './source/win-paste-image/index.htm',
               js: './source/win-paste-image/index.ts',
-              name: 'paste_image'
+              name: 'paste_image',
+              preload: {
+                js: './source/common/modules/preload/index.ts'
+              }
             },
             {
               html: './source/win-error/index.htm',
               js: './source/win-error/index.ts',
-              name: 'error'
+              name: 'error',
+              preload: {
+                js: './source/common/modules/preload/index.ts'
+              }
             },
             {
               html: './source/win-about/index.htm',
               js: './source/win-about/index.ts',
-              name: 'about'
+              name: 'about',
+              preload: {
+                js: './source/common/modules/preload/index.ts'
+              }
             },
             {
               html: './source/win-stats/index.htm',
               js: './source/win-stats/index.ts',
-              name: 'stats'
+              name: 'stats',
+              preload: {
+                js: './source/common/modules/preload/index.ts'
+              }
             },
             {
               html: './source/win-defaults/index.htm',
               js: './source/win-defaults/index.ts',
-              name: 'defaults'
+              name: 'defaults',
+              preload: {
+                js: './source/common/modules/preload/index.ts'
+              }
             },
             {
               html: './source/win-update/index.htm',
               js: './source/win-update/index.ts',
-              name: 'update'
+              name: 'update',
+              preload: {
+                js: './source/common/modules/preload/index.ts'
+              }
             }
           ]
         }

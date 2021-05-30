@@ -17,7 +17,8 @@
 import windowRegister from '../common/modules/window-register'
 import Vue from 'vue'
 import Updater from './Update.vue'
-import { ipcRenderer } from 'electron'
+
+const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
 // Create the Vue app because we need to reference it in our toolbar controls
 const app = new Vue(Updater)

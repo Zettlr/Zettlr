@@ -65,7 +65,6 @@ export default class ForceOpen extends ZettlrCommand {
 
     // Now we have a file (if not, create a new one if the user wishes so)
     if (file != null) {
-      // Normally files from main are opened intransient. But not this one.
       await this._app.openFile(file.path)
     } else if (autoCreate) {
       // Call the file-new command on the application, which'll do all

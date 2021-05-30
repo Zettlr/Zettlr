@@ -19,7 +19,8 @@
 
 <script>
 import WindowChrome from '../common/vue/window/Chrome.vue'
-import { ipcRenderer } from 'electron'
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'PasteImage',

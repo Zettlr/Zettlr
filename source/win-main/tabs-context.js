@@ -1,4 +1,4 @@
-// const { trans } = require('../common/i18n')
+// const { trans } = require('../common/i18n-renderer')
 
 module.exports = function displayTabsContext (event, callback) {
   // TODO: Translate all these items!

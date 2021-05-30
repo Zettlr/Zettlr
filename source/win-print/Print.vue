@@ -17,9 +17,10 @@
 </template>
 
 <script>
-import { trans } from '../common/i18n'
-import path from 'path'
+import { trans } from '../common/i18n-renderer'
 import WindowChrome from '../common/vue/window/Chrome.vue'
+
+const path = window.path
 
 export default {
   name: 'Print',

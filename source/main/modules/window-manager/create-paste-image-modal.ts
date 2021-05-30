@@ -37,9 +37,10 @@ export default function createPasteImageModal (win: BrowserWindow, startPath: st
     show: false,
     fullscreenable: false,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      additionalArguments: [startPath]
+      contextIsolation: true,
+      additionalArguments: [startPath],
+      // @ts-expect-error
+      preload: PASTE_IMAGE_PRELOAD_WEBPACK_ENTRY
     }
   }
 

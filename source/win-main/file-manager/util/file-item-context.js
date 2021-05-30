@@ -1,5 +1,7 @@
-const { trans } = require('../../../common/i18n')
-const { ipcRenderer, shell, clipboard } = require('electron')
+const { trans } = require('../../../common/i18n-renderer')
+
+const ipcRenderer = window.ipc
+const clipboard = window.clipboard
 
 const TEMPLATE = [
   {
@@ -121,7 +123,10 @@ module.exports = function displayFileContext (event, fileObject, el, callback) {
         })
         break
       case 'menu.show_file':
-        shell.showItemInFolder(fileObject.path)
+        ipcRenderer.send('window-controls', {
+          command: 'show-item-in-folder',
+          payload: fileObject.path
+        })
         break
     }
   })

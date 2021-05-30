@@ -41,8 +41,9 @@ export default function createPreferencesWindow (conf: WindowPosition): BrowserW
     show: false,
     fullscreenable: false,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: true,
+      // @ts-expect-error
+      preload: PREFERENCES_PRELOAD_WEBPACK_ENTRY
     }
   }
 
