@@ -4,7 +4,7 @@ const fs = require('fs')
 const path = require('path')
 const log = require('./console-colour.js')
 
-const targetDir = path.join(__dirname, '../source/common/lang')
+const targetDir = path.join(__dirname, '../static/lang')
 
 got('https://translate.zettlr.com/api/languages')
   .then((response) => {

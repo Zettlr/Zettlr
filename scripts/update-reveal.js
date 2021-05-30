@@ -14,8 +14,8 @@ const csso = require('csso')
 
 let revealBasePath = path.join(__dirname, '../node_modules/reveal.js/')
 let themeBasePath = path.join(revealBasePath, 'dist/theme')
-let revealTemplatePath = path.join(__dirname, '../source/main/modules/export/assets/template.revealjs.htm')
-let revealStyleOutputBasePath = path.join(__dirname, '../source/main/modules/export/assets/revealjs-styles')
+let revealTemplatePath = path.join(__dirname, '../static/template.revealjs.htm')
+let revealStyleOutputBasePath = path.join(__dirname, '../static/revealjs-styles')
 
 let zettlrTemplatePath = path.join(__dirname, 'assets/reveal-template.htm')
 let zettlrSyntaxPath = path.join(__dirname, 'assets')

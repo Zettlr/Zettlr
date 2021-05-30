@@ -1,7 +1,7 @@
 import { app } from 'electron'
 import * as bcp47 from 'bcp-47'
 import { v4 as uuid4 } from 'uuid'
-import { getLanguageFile } from '../../../common/i18n'
+import getLanguageFile from '../../../common/util/get-language-file'
 
 const ZETTLR_VERSION = app.getVersion()
 const ATTACHMENT_EXTENSIONS = [
@@ -27,7 +27,7 @@ export default function getConfigTemplate (): ConfigOptions {
     locale = 'en-US'
   } else {
     // Return the best match that the app can find (only the tag).
-    locale = (getLanguageFile(locale) as any).tag
+    locale = getLanguageFile(locale).tag
   }
 
   // Return the complete configuration object

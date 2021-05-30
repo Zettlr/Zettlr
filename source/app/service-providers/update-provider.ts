@@ -26,7 +26,7 @@ import semver from 'semver'
 import md2html from '../../common/util/md-to-html'
 
 import { ipcMain, app, shell } from 'electron'
-import { trans } from '../../common/i18n.js'
+import { trans } from '../../common/i18n-main'
 import { repo_url as REPO_URL } from '../../common/data.json'
 import isFile from '../../common/util/is-file'
 

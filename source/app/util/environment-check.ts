@@ -17,7 +17,7 @@ import { app } from 'electron'
 import { promises as fs } from 'fs'
 import { spawn } from 'child_process'
 import isFile from '../../common/util/is-file'
-import { trans } from '../../common/i18n'
+import { trans } from '../../common/i18n-main'
 
 /**
  * Contains custom paths that should be present on the process.env.PATH property

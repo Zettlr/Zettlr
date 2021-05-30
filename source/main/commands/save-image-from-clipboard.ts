@@ -13,7 +13,7 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { trans } from '../../common/i18n'
+import { trans } from '../../common/i18n-main'
 import sanitize from 'sanitize-filename'
 import path from 'path'
 import { promises as fs } from 'fs'

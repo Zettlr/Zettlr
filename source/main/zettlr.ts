@@ -23,7 +23,8 @@ import WindowManager from './modules/window-manager'
 import DocumentManager from './modules/document-manager'
 
 import FSAL from './modules/fsal'
-import { trans, findLangCandidates } from '../common/i18n'
+import { trans } from '../common/i18n-main'
+import findLangCandidates from '../common/util/find-lang-candidates'
 import ignoreDir from '../common/util/ignore-dir'
 import ignoreFile from '../common/util/ignore-file'
 import isDir from '../common/util/is-dir'
@@ -699,11 +700,14 @@ export default class Zettlr {
       .map(e => { return { 'tag': e, 'path': path.join(tutorialPath, e) } })
       .filter(e => isDir(e.path))
 
-    let { exact, close } = findLangCandidates(global.config.get('appLang'), candidates) as any
+    let { exact, close } = findLangCandidates(global.config.get('appLang'), candidates)
 
     let tutorial = path.join(tutorialPath, 'en')
-    if (exact) tutorial = exact.path
-    if (!exact && close) tutorial = close.path
+    if (exact !== undefined) {
+      tutorial = exact.path
+    } else if (close !== undefined) {
+      tutorial = close.path
+    }
 
     // Now we have both a target and a language candidate, let's copy over the files!
     try {

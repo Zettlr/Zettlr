@@ -13,7 +13,7 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { trans } from '../../common/i18n'
+import { trans } from '../../common/i18n-main'
 import path from 'path'
 import sanitize from 'sanitize-filename'
 import { filetypes as ALLOWED_FILETYPES } from '../../common/data.json'
