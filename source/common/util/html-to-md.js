@@ -12,7 +12,6 @@
  * END HEADER
  */
 
-
 const Turndown = require('joplin-turndown').default
 const turndownGfm = require('joplin-turndown-plugin-gfm')
 
