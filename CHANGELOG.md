@@ -28,6 +28,7 @@ A few years ago we implemented auto-saving after a delay of five seconds with no
 - **Feature**: Now Zettlr can export to PDF even without any LaTeX-distribution installed on the system.
 - **Feature**: The footnote editing logic has been improved. Now, multiline footnotes are handled appropriately, and you can safely use multi-line footnotes alongside the in-place editing feature.
 - 32 bit AppImages and Windows are no longer supported.
+- Double-dollar equations are now rendered in display mode.
 - Removed the Pandoc installation item from the help menu.
 - Moved the Pandoc and XeLaTeX settings to the export tab in preferences.
 - Fixed a bug that would delete file if it got renamed as itself.
@@ -721,7 +722,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Added the week-number as a variable for filenames and the Zettelkasten IDs (use `%W`).
 - Changes to the Pomodoro timer: Now the sound will play each time you release the mouse button on the volume slider to check how loud it is. Furthermore, the mute button has been removed in favor of a volume indication, with 0% equalling the former mute setting.
 - When the tag cloud is filtered, "Copy Tags" will only copy the filtered tags, and no longer all tags. To copy all tags, reset the filter. Furthermore tags will now be copied to clipboard including the leading hashtag.
-- Re-enabled double-dollar inline equations for rendering and syntax highlighting.
+- Re-enabled double-dollar equations for rendering and syntax highlighting.
 - HTML-style comments (`<!-- Lorem Ipsum -->`) are now also exempt from the word counting.
 - Fixed an error in the Table Editor that would assume empty rows to be header rows, leading to false behavior when trying to display a completely empty table.
 - The Table Editor can now also parse and display simple and grid tables, and a wider range of pipe tables, as described in the Pandoc manual.
