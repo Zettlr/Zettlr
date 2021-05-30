@@ -4,7 +4,7 @@ import { getBlockMathRE, getInlineMathRenderRE } from '../../../../common/regula
 import * as CodeMirror from 'codemirror'
 import katex from 'katex'
 
-require('katex/dist/contrib/mhchem.js') // modify katex module
+import 'katex/dist/contrib/mhchem' // modify katex module
 
 const multilineMathRE = getBlockMathRE()
 const commands = (CodeMirror.commands as any)
@@ -33,7 +33,9 @@ commands.markdownRenderMath = function (cm: CodeMirror.Editor) {
     }
 
     // We can only have one marker at any given position at any given time
-    if (cm.getDoc().findMarks(myMarker.curFrom, myMarker.curTo).length > 0) continue
+    if (cm.getDoc().findMarks(myMarker.curFrom, myMarker.curTo).length > 0) {
+      continue
+    }
 
     // Do not render if it's inside a comment (in this case the mode will be
     // markdown, but comments shouldn't be included in rendering)
@@ -127,14 +129,18 @@ export function findEquations (lines: LineInfo[]): EquationMarker[] {
   let equations: EquationMarker[] = []
 
   for (let line of lines) {
-    if (![ 'markdown', 'stex' ].includes(line.modeName)) continue
+    if (![ 'markdown', 'stex' ].includes(line.modeName)) {
+      continue
+    }
     if (line.modeName === 'stex') {
       // Make sure the token list includes "multiline-equation"
       // because otherwise we shouldn't render this as it's within
       // a default LaTeX code block, not an equation.
       let isMultilineBeginning = multilineMathRE.test(line.text)
       let isMultilineEquation = line.tokenType?.includes('multiline-equation') ?? false
-      if (!isMultilineBeginning && !isMultilineEquation) continue
+      if (!isMultilineBeginning && !isMultilineEquation) {
+        continue
+      }
     }
 
     let multilineMathMatch = multilineMathRE.exec(line.text)
