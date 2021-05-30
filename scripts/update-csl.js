@@ -23,8 +23,8 @@ const rimraf = require('rimraf')
 const REPO_LOCALES_URL = 'https://github.com/citation-style-language/locales/archive/master.zip'
 const STYLE_URL = 'https://raw.githubusercontent.com/citation-style-language/styles/master/chicago-author-date.csl'
 
-const LOCALES_TARGET_DIRECTORY = path.join(__dirname, '../source/app/service-providers/assets/csl-locales')
-const STYLES_TARGET_DIRECTORY = path.join(__dirname, '../source/app/service-providers/assets/csl-styles')
+const LOCALES_TARGET_DIRECTORY = path.join(__dirname, '../static/csl-locales')
+const STYLES_TARGET_DIRECTORY = path.join(__dirname, '../static/csl-styles')
 
 // First, let's download the list of contents from
 // the GitHub API.
