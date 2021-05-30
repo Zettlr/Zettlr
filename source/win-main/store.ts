@@ -294,7 +294,7 @@ const config: StoreOptions<ZettlrState> = {
         state.fileTree.push(descriptor)
         // @ts-expect-error TODO: The sorting function currently expects only FSAL descriptors, not metas
         state.fileTree = sort(state.fileTree) // Omit sorting to sort name-up
-      } else {
+      } else if (descriptor.parent == null) {
         const parentPath = descriptor.dir
         const parentDescriptor = findPathDescriptor(parentPath, state.fileTree)
         if (parentDescriptor.children.find((elem: any) => elem.path === descriptor.path) !== undefined) {
@@ -322,6 +322,14 @@ const config: StoreOptions<ZettlrState> = {
           parentDescriptor.children.push(descriptor)
           parentDescriptor.children = sort(parentDescriptor.children, parentDescriptor.sorting)
         }
+      } else {
+        // TODO: When we reach this, there's nothing wrong in the filetree, but
+        // I'd like this warning to never be emitted. I currently suspect it's a
+        // race condition because I'm only receiving this with an awful lot of
+        // files, so I guess it has to do with the filetree reconstruction
+        // taking longer until the next event is being received and processed
+        // here.
+        console.warn('[Store] Received event to add a descriptor to the filetree, but it was a root and already present:', descriptor)
       }
     },
     removeFromFiletree: function (state, pathToRemove) {
