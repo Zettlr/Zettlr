@@ -5,6 +5,7 @@
 
 import { contextBridge, ipcRenderer, clipboard } from 'electron'
 import path from 'path'
+import { exposeInContextBridge } from '../../../IpcModule'
 
 // Path functions are harmless and can be exposed as-is
 contextBridge.exposeInMainWorld('path', { ...path })
@@ -19,6 +20,7 @@ contextBridge.exposeInMainWorld('ipc', {
     listener(undefined, ...args)
   })
 })
+exposeInContextBridge()
 
 // DEBUG
 contextBridge.exposeInMainWorld('__dirname', '')

@@ -1,4 +1,4 @@
-import { ipcRenderer, ipcMain } from 'electron'
+import { ipcRenderer, ipcMain, contextBridge } from 'electron'
 
 // If T is a function returning R, then Promisified<T> is a function with the same arguments returning Promise<R>
 // (or simply the function T if R is already a promise)
@@ -31,10 +31,31 @@ export function forRenderer<T> (): Ipcfied<T> {
     get (target: any, prop: PropertyKey, receiver: any): any {
       const methodName = prop.toString()
       return async function (...args: any[]) {
+        // @ts-expect-error
+        // eslint-disable-next-line @typescript-eslint/return-await
+        return await window.ipc[methodName](args)
+      }
+    }
+  })
+}
+
+/**
+ * Exposes the IPC services to the renderer via the context bridge.
+ */
+export function exposeInContextBridge (): void {
+  const api = new Proxy({}, {
+    get (target: any, prop: PropertyKey, receiver: any): any {
+      const methodName = prop.toString()
+      return async function (...args: any[]) {
         return await ipcRenderer.invoke(methodName, args)
       }
     }
   })
+
+  contextBridge.exposeInMainWorld(
+    'ipc',
+    api
+  )
 }
 
 /**
