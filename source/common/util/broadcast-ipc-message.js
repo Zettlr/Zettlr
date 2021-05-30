@@ -1,3 +1,19 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        broadcastIPCMessage
+ * CVM-Role:        Utility Function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file enables anything in the main process to broadcast
+ *                  an IPC message to every single browser window that is
+ *                  currently open.
+ *
+ * END HEADER
+ */
+
 const { BrowserWindow } = require('electron')
 
 /**

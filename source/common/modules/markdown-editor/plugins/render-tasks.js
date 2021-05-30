@@ -1,5 +1,17 @@
 /* global CodeMirror define */
-// This plugin renders GitHub Flavoured Markdown Task items
+/**
+  * @ignore
+  * BEGIN HEADER
+  *
+  * Contains:        Task rendering Plugin
+  * CVM-Role:        CodeMirror Plugin
+  * Maintainer:      Hendrik Erz
+  * License:         GNU GPL v3
+  *
+  * Description:     This plugin renders task items and makes them checkable.
+  *
+  * END HEADER
+  */
 
 const { getTaskRE } = require('../../../regular-expressions');
 

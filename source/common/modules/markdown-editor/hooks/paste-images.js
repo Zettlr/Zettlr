@@ -1,4 +1,17 @@
-// Hook for pasting images
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CodeMirror paste images hook
+ * CVM-Role:        CodeMirror plugin
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Handles situations where the user pastes image data onto
+ *                  the editor.
+ *
+ * END HEADER
+ */
 
 const path = window.path
 const ipcRenderer = window.ipc

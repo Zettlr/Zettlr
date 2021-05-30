@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Zettelkasten Preferences Schema
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Exports the zettelkasten tab schema.
+ *
+ * END HEADER
+ */
+
 import { trans } from '../../common/i18n-renderer'
 
 export default {

@@ -3,6 +3,22 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CodeEditor
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Renders a small CodeMirror instance. This component can be
+ *                  used wherever we need a code editor rather than the complex,
+ *                  big main editor instance that is used in the main window.
+ *
+ * END HEADER
+ */
+
 import CodeMirror from 'codemirror'
 import 'codemirror/addon/edit/closebrackets'
 

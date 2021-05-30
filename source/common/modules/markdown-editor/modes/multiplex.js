@@ -1,5 +1,19 @@
 /* global CodeMirror define */
-// ZETTLR SPELLCHECKER PLUGIN
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CodeMirror multiplex mode
+ * CVM-Role:        CodeMirror Mode
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This mode provides the correct syntax highlighting depending
+ *                  on the editor contents (code blocks) by multiplexing several
+ *                  other modes.
+ *
+ * END HEADER
+ */
 
 const highlightingModes = {
   'text/javascript': {

@@ -1,5 +1,17 @@
 /* global define CodeMirror */
-// This plugin renders markdown tables for easy editability
+/**
+  * @ignore
+  * BEGIN HEADER
+  *
+  * Contains:        Table rendering Plugin
+  * CVM-Role:        CodeMirror Plugin
+  * Maintainer:      Hendrik Erz
+  * License:         GNU GPL v3
+  *
+  * Description:     This plugin renders tables in place.
+  *
+  * END HEADER
+  */
 
 const TableEditor = require('../table-editor')
 const { getTableHeadingRE } = require('../../../regular-expressions');

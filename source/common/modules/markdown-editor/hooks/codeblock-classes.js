@@ -1,4 +1,18 @@
 /**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CodeMirror codeblock hook
+ * CVM-Role:        CodeMirror plugin
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Adds Codeblock line classes where applicable.
+ *
+ * END HEADER
+ */
+
+/**
  * Hooks onto the cursorActivity event to apply codeblock classes
  *
  * @param   {CodeMirror}  cm  The instance

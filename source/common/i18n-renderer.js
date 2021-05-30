@@ -1,3 +1,18 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Trans-function for the renderer
+ * CVM-Role:        Utility Function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This is the trans-function that is specifically made for
+ *                  sandboxed renderer processes.
+ *
+ * END HEADER
+ */
+
 import sanitizeHtml from 'sanitize-html'
 const ipcRenderer = window.ipc
 

@@ -1,5 +1,17 @@
 /* global CodeMirror define */
-// This plugin renders MathJax parts in CodeMirror instances
+/**
+  * @ignore
+  * BEGIN HEADER
+  *
+  * Contains:        AutoCorrect CodeMirror Plugin
+  * CVM-Role:        CodeMirror Plugin
+  * Maintainer:      Hendrik Erz, Tobias Diez
+  * License:         GNU GPL v3
+  *
+  * Description:     This plugin renders Math equations using KaTeX.
+  *
+  * END HEADER
+  */
 
 const { getBlockMathRE, getInlineMathRenderRE } = require('../../../regular-expressions');
 

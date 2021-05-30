@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Advanced Preferences Schema
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Exports the advanced tab schema.
+ *
+ * END HEADER
+ */
+
 import { trans } from '../../common/i18n-renderer'
 
 export default {

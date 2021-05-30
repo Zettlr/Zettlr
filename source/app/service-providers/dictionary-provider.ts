@@ -3,7 +3,7 @@
  * BEGIN HEADER
  *
  * Contains:        DictionaryProvider class
- * CVM-Role:        Provider
+ * CVM-Role:        Service Provider
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *

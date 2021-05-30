@@ -119,6 +119,23 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Form
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component enables complex forms to be instantiated on a
+ *                  schema-basis. This means: You define a simple schema, and
+ *                  all markup will be handled by this component. See the
+ *                  preferences window for a complete example.
+ *
+ * END HEADER
+ */
+
 // Reference for how to do all this stuff dynamically:
 // https://css-tricks.com/creating-vue-js-component-instances-programmatically/
 

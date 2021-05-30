@@ -1,5 +1,17 @@
 /* global CodeMirror define */
-// This plugin renders Bear-style heading indicators
+/**
+  * @ignore
+  * BEGIN HEADER
+  *
+  * Contains:        Heading tags Plugin
+  * CVM-Role:        CodeMirror Plugin
+  * Maintainer:      Hendrik Erz
+  * License:         GNU GPL v3
+  *
+  * Description:     This plugin renders Bear-style heading indicators.
+  *
+  * END HEADER
+  */
 
 const { getHeadRE } = require('../../../regular-expressions');
 

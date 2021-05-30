@@ -1,5 +1,17 @@
 /* global define CodeMirror */
-// This plugin renders citations
+/**
+  * @ignore
+  * BEGIN HEADER
+  *
+  * Contains:        Citation rendering Plugin
+  * CVM-Role:        CodeMirror Plugin
+  * Maintainer:      Hendrik Erz
+  * License:         GNU GPL v3
+  *
+  * Description:     This plugin renders citations in the document
+  *
+  * END HEADER
+  */
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS

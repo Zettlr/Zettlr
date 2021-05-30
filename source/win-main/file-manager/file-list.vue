@@ -96,6 +96,21 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        FileList
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component renders the contents of a single directory as
+ *                  a flat list.
+ *
+ * END HEADER
+ */
+
 import { trans } from '../../common/i18n-renderer'
 import tippy from 'tippy.js'
 import FileItem from './file-item'

@@ -16,6 +16,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Menubar
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays a custom-styled menu bar on non-macOS platforms.
+ *
+ * END HEADER
+ */
+
 const ipcRenderer = window.ipc
 
 export default {

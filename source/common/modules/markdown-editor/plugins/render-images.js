@@ -1,5 +1,17 @@
 /* global define CodeMirror */
-// This plugin renders markdown block images
+/**
+  * @ignore
+  * BEGIN HEADER
+  *
+  * Contains:        Image rendering Plugin
+  * CVM-Role:        CodeMirror Plugin
+  * Maintainer:      Hendrik Erz
+  * License:         GNU GPL v3
+  *
+  * Description:     This plugin renders images in-place.
+  *
+  * END HEADER
+  */
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS

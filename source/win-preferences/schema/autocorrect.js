@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        AutoCorrect Preferences Schema
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Exports the AutoCorrect tab schema.
+ *
+ * END HEADER
+ */
+
 import { trans } from '../../common/i18n-renderer'
 
 export default {

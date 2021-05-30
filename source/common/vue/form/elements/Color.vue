@@ -34,6 +34,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Color
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component displays a generic color picker
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'FieldColor',
   props: {

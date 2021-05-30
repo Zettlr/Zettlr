@@ -1,5 +1,17 @@
 /* global define CodeMirror */
-// This plugin renders mermaid code blocks.
+/**
+  * @ignore
+  * BEGIN HEADER
+  *
+  * Contains:        Mermaid rendering Plugin
+  * CVM-Role:        CodeMirror Plugin
+  * Maintainer:      Hendrik Erz
+  * License:         GNU GPL v3
+  *
+  * Description:     This plugin renders Mermaid diagrams.
+  *
+  * END HEADER
+  */
 
 const mermaid = require('mermaid')
 

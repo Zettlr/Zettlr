@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Validator
+ * CVM-Role:        Utility Function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This function can validate some data based on validation rules.
+ *
+ * END HEADER
+ */
+
 const ZettlrValidation = require('./zettlr-validation.js')
 const VALIDATE_PROPERTIES = Object.keys(require('./validation.json'))
 const VALIDATE_RULES = Object.values(require('./validation.json'))

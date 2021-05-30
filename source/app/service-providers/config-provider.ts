@@ -2,16 +2,13 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        ZettlrConfig class
- * CVM-Role:        Model
+ * Contains:        ConfigProvider
+ * CVM-Role:        Service Provider
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     This class fulfills two basic tasks: (1) Manage the app's
- *                  configuration, stored in the config.json inside the user
- *                  data directory. (2) Check the environment whether or not
- *                  specific conditions exist (such as the pandoc or xelatex
- *                  binaries)
+ * Description:     This class provides getters and setters for the configuration
+ *                  of the whole application.
  *
  * END HEADER
  */

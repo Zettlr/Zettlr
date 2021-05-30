@@ -1,3 +1,19 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Default context menu handler
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file registers a few event listeners that will display
+ *                  a default context menu for text input elements, containing
+ *                  generic operations such as copy, cut, and paste.
+ *
+ * END HEADER
+ */
+
 import { trans } from '../../i18n-renderer'
 const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 

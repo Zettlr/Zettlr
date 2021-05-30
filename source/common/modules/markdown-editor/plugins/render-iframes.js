@@ -1,5 +1,17 @@
 /* global CodeMirror define */
-// This plugin renders iFrames in CodeMirror instances
+/**
+  * @ignore
+  * BEGIN HEADER
+  *
+  * Contains:        iFrame CodeMirror Plugin
+  * CVM-Role:        CodeMirror Plugin
+  * Maintainer:      Hendrik Erz
+  * License:         GNU GPL v3
+  *
+  * Description:     This plugin renders iFrames in the document.
+  *
+  * END HEADER
+  */
 
 const { getIframeRE } = require('../../../regular-expressions');
 

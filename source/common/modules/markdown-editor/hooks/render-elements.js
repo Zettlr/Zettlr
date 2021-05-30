@@ -1,4 +1,19 @@
 /**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CodeMirror rendering hook
+ * CVM-Role:        CodeMirror plugin
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Calls all available rendering plugins from the plugins-
+ *                  directory.
+ *
+ * END HEADER
+ */
+
+/**
  * Fires the renderers based on the zettlr.render option values
  *
  * @param   {CodeMirror}  cm  The calling instance

@@ -1,17 +1,3 @@
-/**
- * @ignore
- * BEGIN HEADER
- *
- * Contains:        TreeItem Vue Component
- * CVM-Role:        View
- * Maintainer:      Hendrik Erz
- * License:         GNU GPL v3
- *
- * Description:     Controls a single sub-tree in the file manager.
- *
- * END HEADER
- */
-
 <template>
   <div
     class="tree-item-container"
@@ -164,7 +150,20 @@
 </template>
 
 <script>
-// Tree View item component
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        TreeItem Vue Component
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Controls a single sub-tree in the file manager.
+ *
+ * END HEADER
+ */
+
 import itemMixin from './util/item-mixin'
 import generateFilename from '../../common/util/generate-filename'
 

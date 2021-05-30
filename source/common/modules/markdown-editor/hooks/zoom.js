@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CodeMirror zoom hook
+ * CVM-Role:        CodeMirror plugin
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Enables the user to zoom the editor using the mouse wheel
+ *
+ * END HEADER
+ */
+
 module.exports = (cm, zoomHook) => {
   cm.getWrapperElement().addEventListener('wheel', (e) => {
     if (

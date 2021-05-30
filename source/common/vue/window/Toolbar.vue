@@ -58,6 +58,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Toolbar
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays a window-wide toolbar.
+ *
+ * END HEADER
+ */
+
 import ButtonControl from './toolbar-controls/Button.vue'
 import RingControl from './toolbar-controls/RingProgressButton'
 import ToggleControl from './toolbar-controls/Toggle.vue'

@@ -23,6 +23,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Message
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays a single log message nicely.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'Message',
   props: {

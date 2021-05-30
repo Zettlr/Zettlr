@@ -1,4 +1,18 @@
 /**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CodeMirror typewriter hook
+ * CVM-Role:        CodeMirror plugin
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Enables the typewriter mode on the CodeMirror editor.
+ *
+ * END HEADER
+ */
+
+/**
  * Saves the last highlighted line
  *
  * @var {Number}

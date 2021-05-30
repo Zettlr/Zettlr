@@ -30,6 +30,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Preferences
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This is the entry app for the preferences window.
+ *
+ * END HEADER
+ */
+
 import Form from '../common/vue/form/Form.vue'
 import WindowChrome from '../common/vue/window/Chrome.vue'
 import { trans } from '../common/i18n-renderer'

@@ -17,6 +17,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        SponsorsTab
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This tab displays the Patreon sponsors.
+ *
+ * END HEADER
+ */
+
 import ky from 'ky'
 
 export default {

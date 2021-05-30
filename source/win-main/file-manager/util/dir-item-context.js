@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Directory context menu
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file displays a context menu for directories.
+ *
+ * END HEADER
+ */
+
 const { trans } = require('../../../common/i18n-renderer')
 
 const ipcRenderer = window.ipc

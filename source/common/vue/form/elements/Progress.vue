@@ -17,6 +17,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Progress
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component represents a progress bar
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'ProgressBar',
   props: {

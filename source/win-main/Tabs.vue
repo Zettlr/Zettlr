@@ -31,6 +31,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Tabs
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component displays the document tabs on top of the editor.
+ *
+ * END HEADER
+ */
+
 import displayTabsContextMenu from './tabs-context'
 
 const ipcRenderer = window.ipc

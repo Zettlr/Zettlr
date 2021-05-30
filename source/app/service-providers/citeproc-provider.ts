@@ -1,18 +1,15 @@
-/* global */
 /**
  * @ignore
  * BEGIN HEADER
  *
- * Contains:    ZettlrCiteproc
- * CVM-Role:    Model
+ * Contains:    Citeproc Provider
+ * CVM-Role:    Service Provider
  * Maintainer:  Hendrik Erz
  * License:     GNU GPL v3
  *
  * Description:     This class represents an interface between the citeproc-js
- *      library, a Zotero generated BibLaTeX file (ideally in CSL
- *      JSON) and your texts in Markdown. This class is therefore
- *      conceptualised as a model, because it models a whole
- *      database.
+ *                  library, a Zotero generated BibLaTeX file (ideally in CSL
+ *                  JSON), and your texts in Markdown.
  *
  * END HEADER
  */

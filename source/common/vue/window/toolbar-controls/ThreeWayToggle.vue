@@ -35,6 +35,24 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        ThreeWayToggle
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Specific implementation of a toggle with three states on the
+ *                  toolbar. Basically uses two adjacent buttons to model three
+ *                  states: No button pressed, first button pressed, and second
+ *                  button pressed. For an example see the implementation of the
+ *                  file manager/global search views in the main window.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'ThreeWayToggle',
   props: {

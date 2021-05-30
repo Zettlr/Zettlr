@@ -16,6 +16,21 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Button
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This implements a generic button; mainly used on the toolbar
+ *                  but can also be displayed elsewhere.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'ButtonControl',
   props: {

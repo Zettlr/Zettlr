@@ -1,5 +1,16 @@
-// This plugin applies specific line classes to markdown headings to enable you
-// to enlargen them via CSS.
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        generateKeymap
+ * CVM-Role:        Utility function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This plugin returns a keymap for CodeMirror
+ *
+ * END HEADER
+ */
 
 const CodeMirror = require('codemirror')
 

@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Editor Preferences Schema
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Exports the editor tab schema.
+ *
+ * END HEADER
+ */
+
 import { trans } from '../../common/i18n-renderer'
 
 export default {

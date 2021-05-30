@@ -1,5 +1,18 @@
 /* global CodeMirror define */
-// ZETTLR SPELLCHECKER PLUGIN
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CodeMirror readability mode
+ * CVM-Role:        CodeMirror Mode
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This mode extends the Markdown mode and highlights whole
+ *                  sentences using one of four available readability algorithms.
+ *
+ * END HEADER
+ */
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS

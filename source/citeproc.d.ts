@@ -1,4 +1,19 @@
 /**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Citeproc Typings
+ * CVM-Role:        Types
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Contains the types for Citeproc.js, since these are not (yet)
+ *                  added to the types repository.
+ *
+ * END HEADER
+ */
+
+/**
  * Encoding citation data items in properly formatted CSL-JSON is essential to
  * getting correct results from the CSL Processor. Each citation item is
  * composed of fields of various types. Multiple citation items can be packaged

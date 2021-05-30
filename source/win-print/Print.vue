@@ -17,6 +17,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Print
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component displays the print window.
+ *
+ * END HEADER
+ */
+
 import { trans } from '../common/i18n-renderer'
 import WindowChrome from '../common/vue/window/Chrome.vue'
 

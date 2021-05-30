@@ -1,16 +1,3 @@
-/**
- * @ignore
- * BEGIN HEADER
- *
- * Contains:        FileItem Vue component.
- * CVM-Role:        View
- * Maintainer:      Hendrik Erz
- * License:         GNU GPL v3
- *
- * Description:     Controls a single file list item.
- *
- * END HEADER
- */
 <template>
   <div
     v-bind:class="{
@@ -134,6 +121,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        FileItem Vue component.
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Controls a single file list item.
+ *
+ * END HEADER
+ */
+
 import { trans } from '../../common/i18n-renderer'
 import formatDate from '../../common/util/format-date'
 import localiseNumber from '../../common/util/localise-number'

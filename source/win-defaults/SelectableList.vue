@@ -16,6 +16,22 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        SelectableList
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     A component for displaying static, but selectable lists.
+ *                  NOTE: This component is likely going to be relocated to
+ *                  common/vue/form.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'SelectableList',
   props: {

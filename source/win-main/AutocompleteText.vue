@@ -46,6 +46,21 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        AutocompleteText
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays a text input with autocomplete functionality. NOTE:
+ *                  This file is likely going to be relocated to common/vue/form
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'AutocompleteText',
   props: {
