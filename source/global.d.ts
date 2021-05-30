@@ -62,7 +62,10 @@ declare module NodeJS {
     recentDocs: RecentDocumentsProvider
     tags: TagProvider
     stats: StatsProvider
+    // Translation data necessary to facilitate internationalisation
     i18n: any
+    i18nRawData: any
     i18nFallback: any
+    i18nFallbackRawData: any
   }
 }
