@@ -41,8 +41,9 @@ export default function createAboutWindow (conf: WindowPosition): BrowserWindow 
     show: false,
     fullscreenable: false,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: true,
+      // @ts-expect-error
+      preload: ABOUT_PRELOAD_WEBPACK_ENTRY
     }
   }
 

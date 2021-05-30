@@ -168,6 +168,9 @@ export async function bootApplication (): Promise<void> {
   if (metadata.tag !== global.config.get('appLang')) {
     global.config.set('appLang', metadata.tag)
   }
+
+  // Initial setting of the application menu.
+  menuProvider.set()
 }
 
 /**

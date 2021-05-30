@@ -197,7 +197,9 @@ body.linux {
 
   input, select, textarea, button {
     border-radius: 4px;
-    padding: 8px;
+    padding: 4px;
+    border-width: 1px;
+    border-color: rgb(180, 180, 180);
   }
 
   button {

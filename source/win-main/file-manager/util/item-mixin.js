@@ -2,11 +2,12 @@
 // and contains shared logic that applies to both objects. This way, we have
 // different styling for tree items and file list items, but the same underlying
 // logic, since both represent the same data structures.
-import { ipcRenderer } from 'electron'
 import fileContextMenu from './file-item-context'
 import dirContextMenu from './dir-item-context'
 import PopoverFileProps from './PopoverFileProps'
 import PopoverDirProps from './PopoverDirProps'
+
+const ipcRenderer = window.ipc
 
 export default {
   props: {
@@ -191,7 +192,19 @@ export default {
         })
       } else {
         fileContextMenu(event, this.obj, this.$el, (clickedID) => {
-          if (clickedID === 'menu.rename_file') {
+          console.log(clickedID)
+          if (clickedID === 'new-tab') {
+            console.log('Will open in new tab!')
+            // Request the clicked file, explicitly in a new tab
+            ipcRenderer.invoke('application', {
+              command: 'open-file',
+              payload: {
+                path: this.obj.path,
+                newTab: true
+              }
+            })
+              .catch(e => console.error(e))
+          } else if (clickedID === 'menu.rename_file') {
             this.nameEditing = true
           } else if (clickedID === 'menu.duplicate_file') {
             // The user wants to duplicate this file --> instruct the file list

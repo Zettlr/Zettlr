@@ -12,7 +12,7 @@
 })(function (CodeMirror) {
   'use strict'
 
-  const { ipcRenderer } = require('electron')
+  const ipcRenderer = window.ipc
   const { getCodeRE, getFootnoteRefRE, getZknTagRE } = require('../../../regular-expressions.js')
 
   const codeRE = getCodeRE()

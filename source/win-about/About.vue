@@ -37,7 +37,7 @@
 
 <script>
 import WindowChrome from '../common/vue/window/Chrome.vue'
-import { trans } from '../common/i18n'
+import { trans } from '../common/i18n-renderer'
 
 // Import the tabs
 import GeneralTab from './General-Tab.vue'

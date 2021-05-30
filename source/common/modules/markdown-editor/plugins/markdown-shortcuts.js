@@ -4,7 +4,7 @@
 //
 // This plugin defines shortcuts for CodeMirror Markdown (Bold, italic, link, etc)
 
-const { clipboard } = require('electron')
+const clipboard = window.clipboard
 const { getListOrderedRE, getListTaskListRE, getListUnorderedCMRE, getUrlRE, getBlockRE } = require('../../../regular-expressions');
 
 (function (mod) {

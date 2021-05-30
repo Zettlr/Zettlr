@@ -12,7 +12,7 @@
 })(function (CodeMirror) {
   'use strict'
 
-  const { ipcRenderer } = require('electron')
+  const ipcRenderer = window.ipc
   const { getCitationRE } = require('../../../regular-expressions')
 
   const citationRE = getCitationRE()

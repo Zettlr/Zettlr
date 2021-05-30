@@ -1,7 +1,14 @@
-const { trans } = require('../../../common/i18n')
-const { ipcRenderer, shell, clipboard } = require('electron')
+const { trans } = require('../../../common/i18n-renderer')
+
+const ipcRenderer = window.ipc
+const clipboard = window.clipboard
 
 const TEMPLATE = [
+  {
+    label: 'menu.open_new_tab',
+    id: 'new-tab',
+    type: 'normal'
+  },
   {
     label: 'menu.properties',
     id: 'properties',
@@ -60,7 +67,12 @@ module.exports = function displayFileContext (event, fileObject, el, callback) {
   for (const item of TEMPLATE) {
     const buildItem = {}
 
-    buildItem.id = item.label
+    if (item.id !== undefined) {
+      buildItem.id = item.id
+    } else {
+      buildItem.id = item.label
+    }
+
     if (item.label !== undefined) {
       buildItem.label = trans(item.label)
     }
@@ -111,7 +123,10 @@ module.exports = function displayFileContext (event, fileObject, el, callback) {
         })
         break
       case 'menu.show_file':
-        shell.showItemInFolder(fileObject.path)
+        ipcRenderer.send('window-controls', {
+          command: 'show-item-in-folder',
+          payload: fileObject.path
+        })
         break
     }
   })

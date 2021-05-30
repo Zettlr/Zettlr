@@ -40,8 +40,9 @@ export default function createStatsWindow (conf: WindowPosition): BrowserWindow 
     show: false,
     fullscreenable: false,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: true,
+      // @ts-expect-error
+      preload: STATS_PRELOAD_WEBPACK_ENTRY
     }
   }
 

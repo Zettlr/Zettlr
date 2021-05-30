@@ -61,7 +61,8 @@ import SplitView from '../common/vue/window/SplitView'
 import SelectableList from './SelectableList'
 import ButtonControl from '../common/vue/form/elements/Button'
 import CodeEditor from '../common/vue/CodeEditor'
-import { ipcRenderer } from 'electron'
+
+const ipcRenderer = window.ipc
 
 const WRITERS = {
   'html': 'HTML',

@@ -34,6 +34,7 @@ module.exports = {
   module: {
     rules
   },
+  devtool: 'source-map',
   plugins: [
     // Enhanced typescript support (e.g. moves typescript type checking to separate process)
     new ForkTsCheckerWebpackPlugin(),
@@ -45,6 +46,11 @@ module.exports = {
     extensions: [
       '.js', '.ts', '.jsx', '.tsx',
       '.css', '.less', '.vue'
-    ]
+    ],
+    fallback: {
+      // Don't polyfill these modules
+      path: false,
+      fs: false
+    }
   }
 }
