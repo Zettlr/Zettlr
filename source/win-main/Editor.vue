@@ -146,6 +146,7 @@ export default {
           imagePreviewHeight: this.$store.state.config['display.imageHeight'],
           markdownBoldFormatting: this.$store.state.config['editor.boldFormatting'],
           markdownItalicFormatting: this.$store.state.config['editor.italicFormatting'],
+          scrollZoom: this.$store.state.config['editor.scrollZoom'],
           zettelkasten: {
             idRE: this.$store.state.config['zkn.idRE'],
             idGen: this.$store.state.config['zkn.idGen'],

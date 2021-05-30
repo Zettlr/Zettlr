@@ -125,6 +125,22 @@ export default {
     WindowChrome
   },
   data () {
+    // Instantiate the Schemas. We have to do it in such a weird way because
+    // otherwise malformed translation strings will throw errors since the trans
+    // function has access to global.config only AFTER window registration has
+    // been executed. But, since it's a function, without this here we would
+    // automatically execute the trans() function during IMPORT, and as such
+    // BEFORE the window registration has had a chance to register the config
+    // global variable.
+    SCHEMA['tab-general'] = SCHEMA['tab-general']()
+    SCHEMA['tab-editor'] = SCHEMA['tab-editor']()
+    SCHEMA['tab-export'] = SCHEMA['tab-export']()
+    SCHEMA['tab-zettelkasten'] = SCHEMA['tab-zettelkasten']()
+    SCHEMA['tab-display'] = SCHEMA['tab-display']()
+    SCHEMA['tab-spellchecking'] = SCHEMA['tab-spellchecking']()
+    SCHEMA['tab-autocorrect'] = SCHEMA['tab-autocorrect']()
+    SCHEMA['tab-advanced'] = SCHEMA['tab-advanced']()
+
     return {
       currentTab: 0,
       tabs: [

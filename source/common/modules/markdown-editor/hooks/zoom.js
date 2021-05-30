@@ -14,6 +14,11 @@
 
 module.exports = (cm, zoomHook) => {
   cm.getWrapperElement().addEventListener('wheel', (e) => {
+    console.log(cm.getOption('zettlr').scrollZoom)
+    if (cm.getOption('zettlr').scrollZoom !== true) {
+      return
+    }
+
     if (
       (process.platform !== 'darwin' && e.ctrlKey) ||
       (process.platform === 'darwin' && e.metaKey)
