@@ -27,7 +27,7 @@ export default function getConfigTemplate (): ConfigOptions {
     locale = 'en-US'
   } else {
     // Return the best match that the app can find (only the tag).
-    locale = (getLanguageFile(locale) as any).tag
+    locale = getLanguageFile(locale).tag
   }
 
   // Return the complete configuration object
