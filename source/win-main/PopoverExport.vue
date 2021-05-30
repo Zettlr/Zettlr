@@ -34,8 +34,9 @@
 import RadioControl from '../common/vue/form/elements/Radio'
 import SelectControl from '../common/vue/form/elements/Select'
 import Form from '../common/vue/form/Form'
-import { ipcRenderer } from 'electron'
 import Vue from 'vue'
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'PopoverExport',

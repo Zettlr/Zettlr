@@ -39,8 +39,9 @@ export default function createDefaultsWindow (conf: WindowPosition): BrowserWind
     y: conf.top,
     show: false,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: true,
+      // @ts-expect-error
+      preload: DEFAULTS_PRELOAD_WEBPACK_ENTRY
     }
   }
 

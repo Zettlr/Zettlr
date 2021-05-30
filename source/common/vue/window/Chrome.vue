@@ -41,6 +41,7 @@
       <!-- Last but not least, the window controls -->
       <WindowControls
         v-if="showWindowControls"
+        v-bind:platform="platform"
       ></WindowControls>
     </div>
     <div
@@ -71,11 +72,12 @@ import Toolbar from './Toolbar.vue'
 import Tabbar from './Tabbar.vue'
 import Statusbar from './Statusbar.vue'
 import WindowControls from './Controls.vue'
-import { ipcRenderer } from 'electron'
 
 // Import the correct styles (the platform styles are namespaced)
 import './assets/generic.less'
 import './assets/darwin.less'
+
+const ipcRenderer = window.ipc
 
 // First we need some general variables
 const TITLEBAR_MACOS_HEIGHT = 40
@@ -172,7 +174,13 @@ export default {
   },
   data: function () {
     return {
-      // platform: 'win32', // DEBUG process.platform,
+      // NOTE: This is solely for debug purposes so that we can adapt
+      // any styles for the correct platform. In production, this will
+      // ensure "linux" styles are shown on Linux, "darwin" styles are
+      // shown on macOS and "win32" styles are shown on Windows.
+      // Change the value in the Vue dev tools if you want to see how
+      // Zettlr looks on other platforms. Please also note that this
+      // does not affect the native window chrome.
       platform: process.platform,
       useNativeAppearance: global.config.get('window.nativeAppearance')
     }

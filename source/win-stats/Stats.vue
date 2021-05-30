@@ -32,10 +32,11 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
 import WindowChrome from '../common/vue/window/Chrome.vue'
 import CalendarView from './CalendarView.vue'
 import ChartView from './ChartView.vue'
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'Stats',

@@ -42,8 +42,9 @@
 import WindowChrome from '../common/vue/window/Chrome.vue'
 import TextControl from '../common/vue/form/elements/Text.vue'
 import ColorControl from '../common/vue/form/elements/Color.vue'
-import { trans } from '../common/i18n'
-import { ipcRenderer } from 'electron'
+import { trans } from '../common/i18n-renderer'
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'TagManager',

@@ -52,11 +52,12 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
 import WindowChrome from '../common/vue/window/Chrome'
 import ButtonControl from '../common/vue/form/elements/Button'
 import ProgressControl from '../common/vue/form/elements/Progress'
-import { trans } from '../common/i18n'
+import { trans } from '../common/i18n-renderer'
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'Updater',

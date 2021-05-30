@@ -21,7 +21,7 @@
       v-bind:class="{
         'tree-item': true,
         [obj.type]: true,
-        'selected': activeFile === obj || selectedDir === obj,
+        'selected': (activeFile !== null && activeFile.path === obj.path) || (selectedDir !== null && selectedDir.path === obj.path),
         'project': obj.project != null,
         'root': isRoot
       }"
@@ -165,10 +165,11 @@
 
 <script>
 // Tree View item component
-import { ipcRenderer } from 'electron'
-import path from 'path'
 import itemMixin from './util/item-mixin'
 import generateFilename from '../../common/util/generate-filename'
+
+const path = window.path
+const ipcRenderer = window.ipc
 
 export default {
   name: 'TreeItem',
@@ -449,6 +450,32 @@ body.darwin {
 }
 
 body.win32 {
+  .tree-item {
+    margin: 8px 0px;
+
+    .item-icon, .toggle-icon {
+      display: inline-block;
+      width: 18px; // Size of clr-icon with the margin of the icon
+    }
+
+    .display-text {
+      font-size: 13px;
+      padding: 3px 5px;
+      overflow: hidden;
+
+      &.highlight {
+        background-color: var(--system-accent-color, --c-primary);
+        color: white;
+      }
+    }
+
+    &.selected .display-text {
+      color: var(--system-accent-color, --c-primary);
+    }
+  }
+}
+
+body.linux {
   .tree-item {
     margin: 8px 0px;
 

@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
+const ipcRenderer = window.ipc
 
 export default {
   name: 'Menubar',
@@ -168,6 +168,22 @@ body.win32 {
       // Since we can't be sure which colour the menu bar will have, simply add a transparent overlay
       background-color: rgba(0, 0, 0, .3);
     }
+  }
+}
+
+body.linux {
+  #menubar {
+    background-color: rgb(180, 180, 180);
+    color: rgb(30, 30, 30);
+
+    span.top-level-item:hover {
+      background-color: rgb(0, 0, 0, .3);
+    }
+  }
+
+  &.dark #menubar {
+    background-color: rgb(30, 30, 30);
+    color: rgb(235, 235, 235);
   }
 }
 </style>

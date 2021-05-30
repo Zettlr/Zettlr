@@ -29,7 +29,7 @@ export default class Print extends ZettlrCommand {
    * @return {Boolean} Whether the command ran successful
    */
   async run (evt: string, arg?: string): Promise<void> {
-    let filePath = this._app.getFileSystem().activeFile
+    let filePath = this._app.getDocumentManager().activeFile?.path
     if (arg !== undefined) {
       filePath = arg
     }

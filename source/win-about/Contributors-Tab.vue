@@ -20,9 +20,9 @@
 </template>
 
 <script>
-import { trans } from '../common/i18n'
+import { trans } from '../common/i18n-renderer'
 import formatDate from '../common/util/format-date'
-import { ipcRenderer } from 'electron'
+const ipcRenderer = window.ipc
 
 export default {
   name: 'ContributorsTab',

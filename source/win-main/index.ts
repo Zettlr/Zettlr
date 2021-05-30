@@ -17,10 +17,11 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import App from './App.vue'
 import createStore from './store'
-import { ipcRenderer } from 'electron'
 import PopupProvider from './popup-provider'
 import { CiteService } from '../app/service-providers/CiteService'
 import * as IpcModule from '../IpcModule'
+
+const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
 // The first thing we have to do is run the window controller
 windowRegister()

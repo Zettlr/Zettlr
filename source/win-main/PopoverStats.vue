@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { trans } from '../common/i18n'
+import { trans } from '../common/i18n-renderer'
 import localiseNumber from '../common/util/localise-number'
 import { DateTime } from 'luxon'
 

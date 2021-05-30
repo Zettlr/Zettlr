@@ -96,14 +96,15 @@
 </template>
 
 <script>
-import { trans } from '../../common/i18n'
+import { trans } from '../../common/i18n-renderer'
 import tippy from 'tippy.js'
 import FileItem from './file-item'
 import FileItemMock from './file-item-mock'
 import { RecycleScroller } from 'vue-virtual-scroller'
-import { ipcRenderer } from 'electron'
 import generateFileName from '../../common/util/generate-filename'
 import objectToArray from '../../common/util/object-to-array'
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'FileList',

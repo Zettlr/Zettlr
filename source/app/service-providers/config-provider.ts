@@ -24,10 +24,10 @@ import { app, ipcMain } from 'electron'
 import ignoreFile from '../../common/util/ignore-file'
 import safeAssign from '../../common/util/safe-assign'
 import isDir from '../../common/util/is-dir'
-import isDictAvailable from '../../common/util/is-dict-available'
 import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
 import RULES from '../../common/validation.json'
 import getConfigTemplate from './assets/get-config-template'
+import enumDictFiles from '../../common/util/enum-dict-files'
 
 const ZETTLR_VERSION = app.getVersion()
 
@@ -304,10 +304,12 @@ export default class ConfigProvider extends EventEmitter {
     // Now sort the paths.
     this._sortPaths()
 
+    const dicts = enumDictFiles().map(item => item.tag)
+
     // We have to run over the spellchecking dictionaries and see whether or
     // not they are still valid or if they have been deleted.
     for (let i = 0; i < this.config.selectedDicts.length; i++) {
-      if (!isDictAvailable(this.config.selectedDicts[i])) {
+      if (!dicts.includes(this.config.selectedDicts[i])) {
         this.config.selectedDicts.splice(i, 1)
         --i
       }
