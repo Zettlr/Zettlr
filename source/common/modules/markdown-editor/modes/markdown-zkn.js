@@ -233,7 +233,7 @@ const {
         return {
           // 'mode': (state.inFrontmatter) ? yamlMode : markdownZkn,
           // 'state': (state.inFrontmatter) ? state.yamlState : state
-          'mode': (state.inFrontmatter) ? yamlMode : mdMode,
+          'mode': (state.inFrontmatter) ? yamlMode : markdownZkn, // mdMode,
           'state': (state.inFrontmatter) ? state.yamlState : state.mdState
         }
       },

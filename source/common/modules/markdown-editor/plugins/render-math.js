@@ -44,7 +44,7 @@ const { getBlockMathRE, getInlineMathRenderRE } = require('../../../regular-expr
     const viewport = cm.getViewport()
     for (let i = viewport.from; i < viewport.to; i++) {
       let modeName = cm.getModeAt({ 'line': i, 'ch': 0 }).name
-      if (![ 'markdown', 'stex' ].includes(modeName)) continue
+      if (![ 'markdown-zkn', 'stex' ].includes(modeName)) continue
       if (modeName === 'stex') {
         // Make sure the token list includes "multiline-equation"
         // because otherwise we shouldn't render this as it's within

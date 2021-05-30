@@ -40,7 +40,7 @@ const { getIframeRE } = require('../../../regular-expressions');
     // We'll only render the viewport
     const viewport = cm.getViewport()
     for (let i = viewport.from; i < viewport.to; i++) {
-      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
+      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
       // First get the line and test if the contents contain a link
       let line = cm.getLine(i)
       if ((match = iframeRE.exec(line)) == null) {

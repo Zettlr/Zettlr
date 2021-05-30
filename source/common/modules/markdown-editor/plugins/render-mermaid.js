@@ -42,7 +42,7 @@ const mermaid = require('mermaid')
     // We'll only render the viewport
     const viewport = cm.getViewport()
     for (let i = viewport.from; i < viewport.to; i++) {
-      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
+      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
 
       // Cursor is in here, so also don't render (for now)
       if (currentCursorPosition === i) continue
