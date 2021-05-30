@@ -1,4 +1,3 @@
-/* global */
 /**
  * @ignore
  * BEGIN HEADER
@@ -25,9 +24,10 @@ import { promises as fs, readFileSync } from 'fs'
 import path from 'path'
 import { trans } from '../../common/i18n-main'
 import extractBibTexAttachments from './assets/extract-bibtex-attachments'
-import BibTexParser from 'astrocite-bibtex'
+import * as BibTexParser from 'astrocite-bibtex'
 import YAML from 'yaml'
 import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
+import { CiteService } from './CiteService'
 
 interface DatabaseRecord {
   path: string
@@ -43,7 +43,7 @@ interface DatabaseRecord {
 /**
  * This class enables to export citations from a CSL JSON file to HTML.
  */
-export default class CiteprocProvider {
+export default class CiteprocProvider implements CiteService {
   /**
    * The main library which is being used everywhere where we don't have
    * specific libraries. This variable holds the absolute path.
@@ -214,31 +214,6 @@ export default class CiteprocProvider {
 
       if (command === 'get-citation-sync') {
         event.returnValue = this.getCitation(payload.citation)
-      }
-    })
-
-    /**
-     * Listen to renderer requests
-     */
-    ipcMain.handle('citeproc-provider', (event, message) => {
-      const { command } = message
-      if (command === 'get-items') {
-        if (!this.isReady()) {
-          return []
-        } else {
-          return this._databases[this._databaseIdx].cslData
-        }
-      } else if (command === 'get-citation') {
-        const { payload } = message
-        return {
-          'originalCitation': payload,
-          'renderedCitation': this.getCitation(payload)
-        }
-      } else if (command === 'get-bibliography') {
-        // The Payload contains the items the renderer wants to have
-        const { payload } = message
-        this.updateItems(payload)
-        return this.makeBibliography()
       }
     })
 
@@ -498,12 +473,7 @@ export default class CiteprocProvider {
    * PUBLIC FUNCTIONS
    */
 
-  /**
-   * Takes IDs as set in Zotero and returns Author-Date citations for them.
-   *
-   * @param  {string}            citation  Array containing the IDs to be returned
-   * @return {string|undefined}            The rendered string
-   */
+  /** @inheritdoc */
   getCitation (citation: string): string|undefined {
     if (!this.isReady()) {
       return undefined
@@ -581,5 +551,20 @@ export default class CiteprocProvider {
     const hasDatabases = this._databases.length > 0
     const hasItems = Object.keys(this._items).length > 0
     return hasDatabases && hasItems
+  }
+
+  /** @inheritdoc */
+  getItems (): CSLItem[] {
+    if (!this.isReady()) {
+      return []
+    } else {
+      return this._databases[this._databaseIdx].cslData
+    }
+  }
+
+  /** @inheritdoc */
+  getBibliography (citations: string[]): [BibliographyOptions, string[]]|undefined {
+    this.updateItems(citations)
+    return this.makeBibliography()
   }
 }

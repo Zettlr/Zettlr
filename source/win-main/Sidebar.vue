@@ -162,6 +162,7 @@
 <script>
 import { trans } from '../common/i18n-renderer'
 import { ClarityIcons } from '@clr/icons'
+import * as IpcModule from '../IpcModule'
 
 const path = window.path
 const ipcRenderer = window.ipc
@@ -242,10 +243,8 @@ export default {
   watch: {
     citationKeys: function () {
       // Reload the bibliography
-      ipcRenderer.invoke('citeproc-provider', {
-        command: 'get-bibliography',
-        payload: this.citationKeys
-      })
+      let citeService = IpcModule.forRenderer()
+      citeService.getBibliography(this.citationKeys)
         .then(bibliography => {
           this.bibContents = bibliography
         })

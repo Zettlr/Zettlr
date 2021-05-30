@@ -18,6 +18,8 @@ import Vuex from 'vuex'
 import App from './App.vue'
 import createStore from './store'
 import PopupProvider from './popup-provider'
+import { CiteService } from '../app/service-providers/CiteService'
+import * as IpcModule from '../IpcModule'
 
 const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
@@ -86,7 +88,8 @@ updateColouredTags()
 // -----------------------------------------------------------------------------
 
 function updateCitationDatabase (): void {
-  ipcRenderer.invoke('citeproc-provider', { command: 'get-items' })
+  let citeService = IpcModule.forRenderer<CiteService>()
+  citeService.getItems()
     .then(cslData => {
       app.$store.commit('updateCSLItems', cslData)
     })
