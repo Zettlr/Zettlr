@@ -50,7 +50,10 @@ function applyCodeblockClasses (cm) {
     // block. That doesn't trigger the code block variable, but renders only
     // this line as a codeblock.
     if (!isCodeBlock && indentedRE.test(line)) {
-      if (!isCurrentlyCode) {
+      // From CommonMark specs: "there must be a blank line between a paragraph
+      // and a following indented code block"
+      const prevLine = (i > 0) ? cm.lineInfo(i - 1).text : ''
+      if (!isCurrentlyCode && prevLine === '') {
         cm.addLineClass(i, 'wrap', codeblockClass)
         needsRefresh = true
       }
