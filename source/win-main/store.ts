@@ -16,7 +16,7 @@
 
 import Vue from 'vue'
 import Vuex, { Store, StoreOptions } from 'vuex'
-import isAttachment from '../common/util/is-attachment'
+// import isAttachment from '../common/util/is-attachment'
 import sanitizeHtml from 'sanitize-html'
 import md2html from '../common/util/md-to-html'
 import sort from '../main/modules/fsal/util/sort'
@@ -29,6 +29,11 @@ interface FSALEvent {
   event: 'remove'|'add'|'change'
   path: string
   timestamp: number
+}
+
+function isAttachment (p: string): boolean {
+  let ext = global.config.get('attachmentExtensions')
+  return ext.includes(path.extname(p).toLowerCase())
 }
 
 function findPathDescriptor (targetPath: string, tree: any, treatAsAttachment: boolean = false): any|null {
@@ -302,7 +307,7 @@ const config: StoreOptions<ZettlrState> = {
           reconstructTree(descriptor) // Make sure the parent pointers work correctly
         }
 
-        if (isAttachment(descriptor.path, true)) {
+        if (isAttachment(descriptor.path)) {
           parentDescriptor.attachments.push(descriptor)
           parentDescriptor.attachments.sort((a: any, b: any) => {
             if (a.name > b.name) {
@@ -320,7 +325,7 @@ const config: StoreOptions<ZettlrState> = {
       }
     },
     removeFromFiletree: function (state, pathToRemove) {
-      if (isAttachment(pathToRemove, true)) {
+      if (isAttachment(pathToRemove)) {
         const parent = findPathDescriptor(path.dirname(pathToRemove), state.fileTree)
         if (parent === null) {
           return // No descriptor found
