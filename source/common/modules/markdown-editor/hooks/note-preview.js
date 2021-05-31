@@ -1,13 +1,17 @@
 const tippy = require('tippy.js').default
 const { ipcRenderer } = require('electron')
 const { DateTime } = require('luxon')
+
+
 /**
  * A hook for displaying link tooltips which display metadata
  * and content of a file
  *
  * @param   {CodeMirror}  cm  The instance to attach to
  */
-module.exports = (elem) => {
+
+
+ module.exports = (elem) => {
   elem.getWrapperElement().addEventListener('mousemove', (event) => {
     let a = event.target
 
@@ -21,11 +25,7 @@ module.exports = (elem) => {
       return
     }
     // TODO: Translate!
-    // Initialise displayed attributes to 'null'
-    let title = 'null'
-    let content = 'null'
-    let wordCount = 'null'
-    let time = 'null'
+    
     // Create a tippy. This will display the loading values
     let tooltip = tippy(a, {
       content: 'Searching For File...',
@@ -38,55 +38,13 @@ module.exports = (elem) => {
     })
 
     // Find the file's absolute path
-    ipcRenderer.invoke('application', { command: 'file-find-and-return', payload: a.innerText })
-      .then((descriptorWithContent) => {
+    ipcRenderer.invoke('application', { command: 'file-find-and-return-meta-data', payload: a.innerText })
+      .then((metaData) => {
         // If the file is found
-        if (descriptorWithContent !== null) {
-          // Get the contents of the file such as:
-          // 4 lines of 50
-          for (let i = 0; i < 4; i++) {
-            content = descriptorWithContent.content.substring(0 * i, 50 * i)
-            // prepare a newline if needed for the next loop
-            if (descriptorWithContent.content.length > 50 * i) {
-              content += '\n'
-            } else {
-              break
-            }
-          }
-          if (content.length > 200) {
-            content += '...'
-          }
-          wordCount = descriptorWithContent.wordCount // The word count
-          title = descriptorWithContent.name // The file name
-
-          // use luxon to get a local time difference
-          let dateDif = DateTime.fromMillis(descriptorWithContent.modtime).diffNow([ 'days', 'hours', 'minutes', 'seconds' ]).toObject()
-
-          // Display this using top down logic, i.e. use days, and if not, hours, then minutes, then just now
-          if (dateDif['days'] * -1 >= 1) {
-            time = Math.floor(dateDif['days'] * -1) + ' Day'
-            if (dateDif['days'] * -1 > 1) {
-              time += 's'
-            }
-            time += ' ago'
-          } else if (dateDif['hours'] * -1 >= 1) {
-            time = Math.floor(dateDif['hours'] * -1) + ' Hour'
-            if (dateDif['hours'] * -1 > 1) {
-              time += 's'
-            }
-            time += ' ago'
-          } else if (dateDif['minutes'] * -1 >= 1) {
-            time = Math.floor(dateDif['minutes'] * -1) + ' Minute'
-            if (dateDif['minutes'] * -1 > 1) {
-              time += 's'
-            }
-            time += ' ago'
-          } else {
-            time = 'Just Now'
-          }
-
+        if (metaData !== null) {
+          
           // On ready, show a tooltip with the note contents
-          tooltip.setContent(`File Name: "${title}"<br>"${content}"<br>Word Count: ${wordCount}<br> Modified: ${time}`)
+          tooltip.setContent(`File Name: "${metaData[0]}"<br>"${metaData[1]}"<br>Word Count: ${metaData[2]}<br> Modified: ${metaData[3]}`)
         } else {
           tooltip.setContent('File Not Found') // TODO: Translate!
         }
