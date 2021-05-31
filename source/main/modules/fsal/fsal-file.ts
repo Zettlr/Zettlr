@@ -250,7 +250,7 @@ export function metadata (fileObject: MDFileDescriptor): MDFileMeta {
  *
  * @return  {Promise<MDFileDescriptor>}            Resolves with a file descriptor
  */
-export async function parse (filePath: string, cache: FSALCache, parent: DirDescriptor|null = null): Promise<MDFileDescriptor> {
+export async function parse (filePath: string, cache: FSALCache|null, parent: DirDescriptor|null = null): Promise<MDFileDescriptor> {
   // First of all, prepare the file descriptor
   let file: MDFileDescriptor = {
     parent: null, // We have to set this AFTERWARDS, as safeAssign() will traverse down this parent property, thereby introducing a circular structure
@@ -290,7 +290,7 @@ export async function parse (filePath: string, cache: FSALCache, parent: DirDesc
   // Before reading in the full file and parsing it,
   // let's check if the file has been changed
   let hasCache = false
-  if (cache.has(file.hash.toString())) {
+  if (cache?.has(file.hash.toString()) === true) {
     let cachedFile = cache.get(file.hash.toString())
     // If the modtime is still the same, we can apply the cache
     if (cachedFile.modtime === file.modtime) {
@@ -306,7 +306,9 @@ export async function parse (filePath: string, cache: FSALCache, parent: DirDesc
     // Read in the file, parse the contents and make sure to cache the file
     let content = await fs.readFile(filePath, { encoding: 'utf8' })
     parseFileContents(file, content)
-    cacheFile(file, cache)
+    if (cache !== null) {
+      cacheFile(file, cache)
+    }
   }
 
   // Get the target, if applicable
@@ -377,7 +379,7 @@ export async function hasChangedOnDisk (fileObject: MDFileDescriptor): Promise<b
  *
  * @return  {Promise<void>}                 Resolves upon save.
  */
-export async function save (fileObject: MDFileDescriptor, content: string, cache: FSALCache): Promise<void> {
+export async function save (fileObject: MDFileDescriptor, content: string, cache: FSALCache|null): Promise<void> {
   // Make sure to retain the BOM if applicable
   await fs.writeFile(fileObject.path, fileObject.bom + content)
   // Afterwards, retrieve the now current modtime
@@ -387,7 +389,9 @@ export async function save (fileObject: MDFileDescriptor, content: string, cache
   parseFileContents(fileObject, content)
   global.tags.report(fileObject.tags, fileObject.path)
   fileObject.modified = false // Always reset the modification flag.
-  cacheFile(fileObject, cache)
+  if (cache !== null) {
+    cacheFile(fileObject, cache)
+  }
 }
 
 /**

@@ -123,6 +123,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        List
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component displays a tabled list
+ *
+ * END HEADER
+ */
+
 import Checkbox from './Checkbox'
 import TextControl from './Text'
 import NumberControl from './Number'

@@ -59,6 +59,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        ChartView
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays charts with word counts by time.
+ *
+ * END HEADER
+ */
+
 import { DateTime } from 'luxon'
 import Chart from 'chart.js/auto' // Necessary for Chart.js 3.x TODO: Only import what we need!
 import SelectControl from '../common/vue/form/elements/Select.vue'

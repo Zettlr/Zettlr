@@ -66,17 +66,34 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Chrome
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file displays custom-styled WindowChrome on a browser
+ *                  window. This component is being used by every renderer
+ *                  process (similar to the window registration).
+ *
+ * END HEADER
+ */
+
 import Titlebar from './Titlebar.vue'
 import Menubar from './Menubar.vue'
 import Toolbar from './Toolbar.vue'
 import Tabbar from './Tabbar.vue'
 import Statusbar from './Statusbar.vue'
 import WindowControls from './Controls.vue'
-import { ipcRenderer } from 'electron'
 
 // Import the correct styles (the platform styles are namespaced)
 import './assets/generic.less'
 import './assets/darwin.less'
+
+const ipcRenderer = window.ipc
 
 // First we need some general variables
 const TITLEBAR_MACOS_HEIGHT = 40

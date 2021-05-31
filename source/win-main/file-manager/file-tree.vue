@@ -48,9 +48,24 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
-import { trans } from '../../common/i18n'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        FileTree
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays the FSAL file tree contents as a tree.
+ *
+ * END HEADER
+ */
+
+import { trans } from '../../common/i18n-renderer'
 import TreeItem from './tree-item.vue'
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'FileTree',

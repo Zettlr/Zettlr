@@ -12,6 +12,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Slider
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component displays a slider input element.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'SliderControl',
   props: {

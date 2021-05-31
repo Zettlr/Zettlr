@@ -58,7 +58,21 @@
 </template>
 
 <script>
-import { trans } from '../common/i18n'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        GeneralTab
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file contains the initial tab for the about window.
+ *
+ * END HEADER
+ */
+
+import { trans } from '../common/i18n-renderer'
 
 export default {
   name: 'GeneralTab',

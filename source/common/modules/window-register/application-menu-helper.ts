@@ -1,4 +1,22 @@
-import { ipcRenderer } from 'electron'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Application Menu helper
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file controls two types of menus: The menu bar which is
+ *                  shown on non-macOS platforms and the context menus. On macOS
+ *                  this file will not show a custom context menu but rather
+ *                  forward the menu template to the main process to render a
+ *                  native context menu.
+ *
+ * END HEADER
+ */
+
+const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
 // This function displays a custom styled popup menu at the given coordinates
 export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[], callback: Function): Function {

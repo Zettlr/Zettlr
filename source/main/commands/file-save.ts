@@ -37,8 +37,8 @@ export default class SaveFile extends ZettlrCommand {
     }
 
     try {
-      let realFile = this._app.getFileSystem().findFile(file.path)
-      if (realFile === null) {
+      const realFile = this._app.getDocumentManager().openFiles.find(elem => elem.path === file.path)
+      if (realFile === undefined) {
         throw new Error('File to save not found!')
       }
 
@@ -73,10 +73,10 @@ export default class SaveFile extends ZettlrCommand {
         // irrespective of the modification flag). Note additionally that we
         // explicitly open in a new tab to avoid the system asking the user
         // whether or not they want to close the ("modified") file.
-        this._app.getFileSystem().closeFile(realFile)
+        this._app.getDocumentManager().closeFile(realFile)
       } else {
         // Save a normal file
-        await this._app.getFileSystem().saveFile(realFile, file.newContents)
+        await this._app.getDocumentManager().saveFile(realFile, file.newContents)
       }
 
       // Update word count

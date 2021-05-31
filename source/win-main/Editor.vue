@@ -61,12 +61,28 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Editor
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This displays the main editor for the app. It uses the
+ *                  MarkdownEditor class to implement the full CodeMirror editor.
+ *
+ * END HEADER
+ */
+
 import countWords from '../common/util/count-words'
 import MarkdownEditor from '../common/modules/markdown-editor'
 import CodeMirror from 'codemirror'
 import { util as citrUtil, parseSingle } from '@zettlr/citr'
 import objectToArray from '../common/util/object-to-array'
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'Editor',
@@ -130,6 +146,7 @@ export default {
           imagePreviewHeight: this.$store.state.config['display.imageHeight'],
           markdownBoldFormatting: this.$store.state.config['editor.boldFormatting'],
           markdownItalicFormatting: this.$store.state.config['editor.italicFormatting'],
+          scrollZoom: this.$store.state.config['editor.scrollZoom'],
           zettelkasten: {
             idRE: this.$store.state.config['zkn.idRE'],
             idGen: this.$store.state.config['zkn.idGen'],
@@ -163,8 +180,6 @@ export default {
       const tree = this.$store.state.fileTree
       const files = []
 
-      console.time('File allocation')
-
       for (const item of tree) {
         if (item.type === 'directory') {
           const contents = objectToArray(item, 'children').filter(descriptor => descriptor.type === 'file')
@@ -173,8 +188,6 @@ export default {
           files.push(item)
         }
       }
-
-      console.timeEnd('File allocation')
 
       return files
     }

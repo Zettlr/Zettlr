@@ -45,7 +45,21 @@
 </template>
 
 <script>
-import { trans } from '../common/i18n'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Stats Popover
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file displays a comprehensive stats overview.
+ *
+ * END HEADER
+ */
+
+import { trans } from '../common/i18n-renderer'
 import localiseNumber from '../common/util/localise-number'
 import { DateTime } from 'luxon'
 

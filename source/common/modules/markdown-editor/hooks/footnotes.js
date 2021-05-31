@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CodeMirror footnotes hook
+ * CVM-Role:        CodeMirror plugin
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Enables preview & inline-editing of footnotes.
+ *
+ * END HEADER
+ */
+
 // This is a plugin that needs a specific CodeMirror instance to work, hence
 // it's not in the plugins folder.
 

@@ -28,6 +28,22 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Tabbar
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays a "big" tabbar which normally looks different to
+ *                  regular tabs, since it separates several full views instead
+ *                  of, e.g., document tabs.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'SystemTabs',
   props: {

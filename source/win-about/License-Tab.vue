@@ -905,6 +905,21 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        LicenseTab
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Cool that you've managed to scroll this far down! Right now
+ *                  there's not much to be explained anymore, since all this file
+ *                  does is render the full text of the GNU GPL v3.0 license!
+ *
+ * END HEADER
+ */
 export default {
   name: 'LicenseTab'
 }

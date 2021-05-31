@@ -45,8 +45,11 @@ const {
 /**
  * APIs
  */
-const { clipboard, ipcRenderer } = require('electron')
+// const { clipboard, ipcRenderer } = require('electron')
 const EventEmitter = require('events')
+
+const ipcRenderer = window.ipc
+const clipboard = window.clipboard
 
 /**
  * CODEMIRROR & DEPENDENCIES

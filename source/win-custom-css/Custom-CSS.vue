@@ -19,10 +19,25 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CustomCSS
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Entry point app component for the Custom CSS editor.
+ *
+ * END HEADER
+ */
+
 import WindowChrome from '../common/vue/window/Chrome'
-import { trans } from '../common/i18n'
+import { trans } from '../common/i18n-renderer'
 import CodeEditor from '../common/vue/CodeEditor'
-import { ipcRenderer } from 'electron'
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'CustomCSS',

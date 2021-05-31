@@ -43,9 +43,10 @@ export default function createErrorModal (win: BrowserWindow, title: string, mes
     show: false,
     fullscreenable: false,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      additionalArguments: [ title, message, contents ]
+      contextIsolation: true,
+      additionalArguments: [ title, message, contents ],
+      // @ts-expect-error
+      preload: ERROR_PRELOAD_WEBPACK_ENTRY
     }
   }
 

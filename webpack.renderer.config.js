@@ -42,11 +42,15 @@ module.exports = {
     // Apply webpack rules to the corresponding language blocks in .vue files
     new VueLoaderPlugin()
   ],
-  target: 'electron-renderer',
   resolve: {
     extensions: [
       '.js', '.ts', '.jsx', '.tsx',
       '.css', '.less', '.vue'
-    ]
+    ],
+    fallback: {
+      // Don't polyfill these modules
+      path: false,
+      fs: false
+    }
   }
 }

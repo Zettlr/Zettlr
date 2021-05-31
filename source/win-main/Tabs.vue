@@ -4,7 +4,7 @@
       v-for="(file, idx) in openFiles"
       v-bind:key="idx"
       v-bind:class="{
-        active: file === activeFile,
+        active: activeFile !== null && file.path === activeFile.path,
         modified: modifiedDocs.includes(file.path)
       }"
       v-bind:title="file.name"
@@ -31,8 +31,23 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Tabs
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component displays the document tabs on top of the editor.
+ *
+ * END HEADER
+ */
+
 import displayTabsContextMenu from './tabs-context'
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'Tabs',
@@ -63,7 +78,7 @@ export default {
   mounted: function () {
     // Listen for shortcuts so that we can switch tabs programmatically
     ipcRenderer.on('shortcut', (event, shortcut) => {
-      const currentIdx = this.openFiles.findIndex(elem => elem === this.activeFile)
+      const currentIdx = this.openFiles.findIndex(elem => this.activeFile !== null && elem.path === this.activeFile.path)
       if (shortcut === 'previous-tab') {
         if (currentIdx > 0) {
           this.selectFile(this.openFiles[currentIdx - 1])

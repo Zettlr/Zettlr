@@ -1,5 +1,21 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Menu constructor for Windows
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file exposes a getMenu function returning the Windows
+ *                  application menu. NOTE that this menu is also used by all
+ *                  non-darwin platforms currently, so it really is cross-platform.
+ *
+ * END HEADER
+ */
+
 import { app, MenuItemConstructorOptions, shell } from 'electron'
-import { trans } from '../../../common/i18n'
+import { trans } from '../../../common/i18n-main'
 import path from 'path'
 
 export default function getMenu (): MenuItemConstructorOptions[] {

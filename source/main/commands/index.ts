@@ -1,3 +1,18 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Command loader
+ * CVM-Role:        Utility Function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file simply imports all commands, and exports them in
+ *                  a unified object for easy instantiation by zettlr.ts.
+ *
+ * END HEADER
+ */
+
 import DirDelete from './dir-delete'
 import DirNewProject from './dir-new-project'
 import DirNew from './dir-new'

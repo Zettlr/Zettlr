@@ -1,9 +1,21 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        displayContextMenu
+ * CVM-Role:        Utility function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays a context-aware context menu on the editor.
+ *
+ * END HEADER
+ */
+
 // Displays a context menu for the MarkdownEditor class
-const { trans } = require('../../i18n')
-const {
-  clipboard,
-  ipcRenderer
-} = require('electron')
+const { trans } = require('../../i18n-renderer')
+const ipcRenderer = window.ipc
+const clipboard = window.clipboard
 
 let currentMenu = []
 let currentSuggestions = []

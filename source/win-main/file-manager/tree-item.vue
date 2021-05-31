@@ -1,17 +1,3 @@
-/**
- * @ignore
- * BEGIN HEADER
- *
- * Contains:        TreeItem Vue Component
- * CVM-Role:        View
- * Maintainer:      Hendrik Erz
- * License:         GNU GPL v3
- *
- * Description:     Controls a single sub-tree in the file manager.
- *
- * END HEADER
- */
-
 <template>
   <div
     class="tree-item-container"
@@ -21,7 +7,7 @@
       v-bind:class="{
         'tree-item': true,
         [obj.type]: true,
-        'selected': activeFile === obj || selectedDir === obj,
+        'selected': (activeFile !== null && activeFile.path === obj.path) || (selectedDir !== null && selectedDir.path === obj.path),
         'project': obj.project != null,
         'root': isRoot
       }"
@@ -164,11 +150,25 @@
 </template>
 
 <script>
-// Tree View item component
-import { ipcRenderer } from 'electron'
-import path from 'path'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        TreeItem Vue Component
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Controls a single sub-tree in the file manager.
+ *
+ * END HEADER
+ */
+
 import itemMixin from './util/item-mixin'
 import generateFilename from '../../common/util/generate-filename'
+
+const path = window.path
+const ipcRenderer = window.ipc
 
 export default {
   name: 'TreeItem',

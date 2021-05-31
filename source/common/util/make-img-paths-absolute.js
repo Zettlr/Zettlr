@@ -11,7 +11,7 @@
  * END HEADER
  */
 
-const path = require('path')
+let path = (typeof window !== 'undefined') ? window.path : import('path').then(mod => { path = mod })
 const { getImageRE } = require('../regular-expressions')
 
 /**

@@ -1,5 +1,19 @@
 /* global CodeMirror define */
-// ZETTLR SPELLCHECKER PLUGIN
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CodeMirror Markdown mode
+ * CVM-Role:        CodeMirror Mode
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This is the central Markdown mode used by Zettlr. It wraps
+ *                  CodeMirror's Markdown and YAML modes (for the frontmatter).
+ *
+ * END HEADER
+ */
+
 const {
   getZknTagRE, getHeadingRE, getHighlightRE,
   getTableRE, getInlineMathRE, getBlockMathRE, getFnReferenceRE
@@ -219,7 +233,7 @@ const {
         return {
           // 'mode': (state.inFrontmatter) ? yamlMode : markdownZkn,
           // 'state': (state.inFrontmatter) ? state.yamlState : state
-          'mode': (state.inFrontmatter) ? yamlMode : mdMode,
+          'mode': (state.inFrontmatter) ? yamlMode : markdownZkn, // mdMode,
           'state': (state.inFrontmatter) ? state.yamlState : state.mdState
         }
       },

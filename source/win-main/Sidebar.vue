@@ -160,10 +160,25 @@
 </template>
 
 <script>
-import { trans } from '../common/i18n'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Sidebar
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component renders the sidebar.
+ *
+ * END HEADER
+ */
+
+import { trans } from '../common/i18n-renderer'
 import { ClarityIcons } from '@clr/icons'
-import path from 'path'
-import { ipcRenderer } from 'electron'
+
+const path = window.path
+const ipcRenderer = window.ipc
 
 const FILETYPES_IMG = [
   '.jpg',

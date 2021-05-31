@@ -2,16 +2,13 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        ZettlrConfig class
- * CVM-Role:        Model
+ * Contains:        ConfigProvider
+ * CVM-Role:        Service Provider
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     This class fulfills two basic tasks: (1) Manage the app's
- *                  configuration, stored in the config.json inside the user
- *                  data directory. (2) Check the environment whether or not
- *                  specific conditions exist (such as the pandoc or xelatex
- *                  binaries)
+ * Description:     This class provides getters and setters for the configuration
+ *                  of the whole application.
  *
  * END HEADER
  */
@@ -24,10 +21,10 @@ import { app, ipcMain } from 'electron'
 import ignoreFile from '../../common/util/ignore-file'
 import safeAssign from '../../common/util/safe-assign'
 import isDir from '../../common/util/is-dir'
-import isDictAvailable from '../../common/util/is-dict-available'
 import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
 import RULES from '../../common/validation.json'
 import getConfigTemplate from './assets/get-config-template'
+import enumDictFiles from '../../common/util/enum-dict-files'
 
 const ZETTLR_VERSION = app.getVersion()
 
@@ -304,10 +301,12 @@ export default class ConfigProvider extends EventEmitter {
     // Now sort the paths.
     this._sortPaths()
 
+    const dicts = enumDictFiles().map(item => item.tag)
+
     // We have to run over the spellchecking dictionaries and see whether or
     // not they are still valid or if they have been deleted.
     for (let i = 0; i < this.config.selectedDicts.length; i++) {
-      if (!isDictAvailable(this.config.selectedDicts[i])) {
+      if (!dicts.includes(this.config.selectedDicts[i])) {
         this.config.selectedDicts.splice(i, 1)
         --i
       }

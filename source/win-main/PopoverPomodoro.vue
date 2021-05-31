@@ -48,10 +48,24 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Pomodoro Popover
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file controls the pomodoro timer popover.
+ *
+ * END HEADER
+ */
+
 import NumberControl from '../common/vue/form/elements/Number'
 import SelectControl from '../common/vue/form/elements/Select'
 import SliderControl from '../common/vue/form/elements/Slider'
-import { trans } from '../common/i18n'
+import { trans } from '../common/i18n-renderer'
 
 export default {
   name: 'PopoverExport',

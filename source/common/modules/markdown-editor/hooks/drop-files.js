@@ -1,4 +1,18 @@
-const path = require('path')
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CodeMirror drop-files hook
+ * CVM-Role:        CodeMirror plugin
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Handles dropping of data onto the CodeMirror editor.
+ *
+ * END HEADER
+ */
+
+const path = window.path
 const IMAGE_REGEXP = require('../../../regular-expressions').getImageFileRE()
 
 module.exports = (cm) => {

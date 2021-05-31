@@ -13,7 +13,7 @@
  */
 
 const protocolRE = require('../regular-expressions').getProtocolRE()
-const path = require('path')
+const path = window.path
 
 /**
 * Creates a definite absolute URL if the information suffices.

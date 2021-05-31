@@ -40,9 +40,10 @@ export default function createQuicklookWindow (file: MDFileDescriptor, conf: Win
     y: conf.top,
     show: false,
     webPreferences: {
-      contextIsolation: false,
-      nodeIntegration: true,
-      additionalArguments: [file.hash.toString()]
+      contextIsolation: true,
+      additionalArguments: [file.hash.toString()],
+      // @ts-expect-error
+      preload: QUICKLOOK_PRELOAD_WEBPACK_ENTRY
     }
   }
 

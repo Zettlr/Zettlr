@@ -4,10 +4,10 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E",
             "ScaredCoward",
             "Celso Lira",
-            "lukecarrier \u003Cluke@carrier.im\u003E"
+            "Huey"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-04-03T12:00:05.000000Z"
+        "updated_at": "2021-05-23T13:18:47.000000Z"
     },
     "dialog": {
         "about": {
@@ -39,7 +39,7 @@
             "save": "Save"
         },
         "custom_css": {
-            "info": "Here you can override the styles of Zettlr to customise it even further. \u003Cstrong\u003EAttention: This file overrides all CSS directives! Never alter the geometry of elements, otherwise the app may expose unwanted behaviour!\u003C/strong\u003E",
+            "info": "Here you can override the styles of Zettlr to customize it even further. \u003Cstrong\u003EAttention: This file overrides all CSS directives! Never alter the geometry of elements, otherwise the app may expose unwanted behavior!\u003C/strong\u003E",
             "title": "Custom CSS"
         },
         "dir_new": {
@@ -159,7 +159,7 @@
                 "vi-VI": "Vietnamese",
                 "zh-CN": "Chinese (China)"
             },
-            "attachments_info": "Enter all file extensions that you want to see in your attachment sidebar. Separate them with a comma. Changes are recognised after a restart.",
+            "attachments_info": "Enter all file extensions that you want to see in your attachment sidebar. Separate them with a comma. Changes are recognized after a restart.",
             "auto_close_brackets": "Automatically close matching character pairs",
             "auto_dark_mode_explanation": "Automatically switch to dark mode",
             "auto_dark_mode_off": "Off",
@@ -188,7 +188,7 @@
             "default_image_save_path": "Default image path (relative or absolute)",
             "delete_on_fail": "Delete items irreversibly, if moving them to trash fails",
             "display": {
-                "image_size_info": "With these controls you can constrain the image previews.",
+                "image_size_info": "With these controls you can control the dimensions of the image previews.",
                 "preview_info": "These options determine which elements are rendered in documents.",
                 "render_citations": "Render Citations",
                 "render_htags": "Hide heading characters",
@@ -225,7 +225,7 @@
             },
             "file_meta": "Show file information",
             "filemanager_combined": "Combined &mdash; show files and directories in the file tree",
-            "filemanager_expanded": "Expanded &mdash; show both file tree and file list",
+            "filemanager_expanded": "Expanded &mdash; Show both file tree and file list",
             "filemanager_explanation": "File manager mode",
             "filemanager_thin": "Thin &mdash; show either file tree or file list",
             "filename_generator": "Pattern for new filenames",
@@ -297,7 +297,7 @@
             "sorting_time_explanation": "When sorting by time, sort by",
             "spellcheck": "Select the languages for which you want to enable automatic spell checking.",
             "spellcheck_search_placeholder": "Search for dictionaries &hellip;",
-            "spellcheck_warning": "\u003Cem\u003EAttention:\u003C/em\u003E Too many active spell check libraries may slow the app down significantly! Try to stick with three at maximum.",
+            "spellcheck_warning": "\u003Cem\u003EAttention:\u003C/em\u003E Too many active spell check libraries may slow the app down significantly! Try to stick with three at maximum. (1)",
             "spellchecking": {
                 "title": "Spellchecking"
             },
@@ -309,7 +309,7 @@
             "translations": {
                 "download": "Click to download",
                 "downloading": "Downloading %s",
-                "error": "Could not download %s",
+                "error": "Could not download %s.",
                 "not_available": "%s is not available",
                 "success": "Successfully downloaded %s!",
                 "updated": "Updated translations: %s"
@@ -335,7 +335,7 @@
                 "linkend_label": "Link ending",
                 "linkstart_label": "Link start",
                 "pass_check_no": "Your regular expression did not match the generated ID.",
-                "pass_check_yes": "The generated ID was recognised by the regular expression!",
+                "pass_check_yes": "The generated ID was recognized by the regular expression!",
                 "reset_default_generator": "Reset ID generator",
                 "reset_default_id": "Reset ID expression",
                 "reset_default_linkend": "Reset link ending",
@@ -356,7 +356,7 @@
         "statistics": {
             "compare": "Compare with previous time frame",
             "day": "Date",
-            "intro": "Here you can find extended statistics on your writing behaviour, such as a detailed graph of your words per day.",
+            "intro": "Here you can find extended statistics on your writing behavior, such as a detailed graph of your words per day.",
             "month": "Month",
             "previous_frame": "Previous Timeframe",
             "this_frame": "Current Timeframe",
@@ -372,9 +372,9 @@
             "title": "Tag Cloud"
         },
         "tags": {
-            "color_desc": "Colour (e.g. #ff0000 or rgb(255, 0, 0))",
+            "color_desc": "Color (e.g. #ff0000 or rgb(255, 0, 0))",
             "desc_desc": "A short and concise description (max. 100 characters)",
-            "description": "Here you can assign colours to different tags. If a tag is found in a file, its tile in the preview list will receive a coloured indicator. The description will be shown on mouse hover.",
+            "description": "Here you can assign colors to different tags. If a tag is found in a file, its tile in the preview list will receive a colored indicator. The description will be shown on mouse hover.",
             "name_desc": "The Tag (without #)",
             "title": "Manage tags"
         },
@@ -438,7 +438,7 @@
             "ol": "Numbered list",
             "remove_footnote": "Remove footnote",
             "tasklist": "Tasklist",
-            "ul": "Itemised list"
+            "ul": "Itemized list"
         },
         "no_attachments": "No attachments",
         "no_dir_selected": "No directory selected",
@@ -512,12 +512,13 @@
         "open_attachment": "Open Attachment",
         "open_link": "Open Link",
         "open_logs": "Open Logs",
+        "open_new_tab": "Open in a new tab",
         "open_workspace": "Open Workspace \u2026",
         "pandoc": "Get Pandoc",
         "paste": "Paste",
         "paste_plain": "Paste without style",
         "pdf_preferences": "PDF Preferences\u2026",
-        "preferences": "Preferences\u2026",
+        "preferences": "Preferences",
         "print": "Print\u2026",
         "project_build": "Export Project",
         "project_properties": "Project Settings\u2026",

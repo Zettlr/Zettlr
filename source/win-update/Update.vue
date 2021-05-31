@@ -52,11 +52,26 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Update
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     The update window's entry component
+ *
+ * END HEADER
+ */
+
 import WindowChrome from '../common/vue/window/Chrome'
 import ButtonControl from '../common/vue/form/elements/Button'
 import ProgressControl from '../common/vue/form/elements/Progress'
-import { trans } from '../common/i18n'
+import { trans } from '../common/i18n-renderer'
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'Updater',

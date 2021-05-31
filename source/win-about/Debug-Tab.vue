@@ -22,28 +22,6 @@
         <li>OpenSSL <strong>v{{ versions.openssl }}</strong></li>
       </ul>
     </p>
-    <h2>Current System Load</h2>
-    <ul>
-      <li>
-        CPU Load:
-        <strong><span id="realtime-cpu-load">{{ cpu }}</span>%</strong>
-      </li>
-      <li>
-        Resident Set Size:
-        <strong><span id="realtime-rss">{{ memoryRss }}</span></strong> MB
-      </li>
-      <li>
-        C++ memory for JS Objects:
-        <strong><span id="realtime-external">{{ memoryExternal }}</span></strong> MB
-      </li>
-      <li>
-        Heap:
-        <strong><span id="realtime-heap-used">{{ heapUsed }}</span></strong>
-        from
-        <strong><span id="realtime-heap-total">{{ heapTotal }}</span></strong> MB
-        (Limit: <strong>{{ heapLimit }}</strong> MB)
-      </li>
-    </ul>
     <h2>Renderer flags</h2>
     <ul>
       <li v-for="(arg, idx) in argv" v-bind:key="idx">
@@ -61,53 +39,35 @@
 
 <script>
 /**
- * Rounds an integer to the specified amount of floating points.
+ * @ignore
+ * BEGIN HEADER
  *
- * @param {number} num The number to be rounded.
- * @param {number} amount The number of floating point digits to retain.
- * @returns {number}
+ * Contains:        DebugTab
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file contains the debug tab for the about window.
+ *
+ * END HEADER
  */
-function roundDec (num, amount) {
-  let exp = Math.pow(10, amount)
-  return Math.round(num * exp) / exp
-}
 
 export default {
   name: 'DebugTab',
   data: function () {
+    console.log(process)
     return {
       version: global.config.get('version'),
       uuid: global.config.get('uuid'),
-      versions: JSON.parse(JSON.stringify(process.versions)),
-      argv: JSON.parse(JSON.stringify(process.argv)),
+      versions: process.versions,
+      argv: process.argv,
       arch: process.arch,
       env: Object.assign({}, process.env),
       platform: process.platform,
-      platformVersion: process.getSystemVersion(),
-      uptime: Math.floor(process.uptime()), // seconds
-      memoryRss: 0,
-      memoryExternal: 0,
-      cpu: 0,
-      heapTotal: 0,
-      heapUsed: 0,
-      heapLimit: 0
+      platformVersion: process.getSystemVersion
     }
-  },
-  created: function () {
-    setInterval(() => {
-      this.refresh()
-    }, 1000)
   },
   methods: {
-    refresh: function () {
-      const memory = process.memoryUsage()
-      const heap = process.getHeapStatistics()
-      this.memoryRss = roundDec(memory.rss / 1000000, 2)
-      this.memoryExternal = roundDec(memory.external / 1000000, 2)
-      this.heapUsed = roundDec(heap.usedHeapSize / 1000, 2)
-      this.heapTotal = roundDec(heap.totalHeapSize / 1000, 2)
-      this.cpu = roundDec(process.getCPUUsage().percentCPUUsage, 2)
-    }
   }
 }
 </script>

@@ -17,7 +17,22 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Search
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Implements a search field for the toolbar. Depending on where
+ *                  it's displayed, it can even fold itself!
+ *
+ * END HEADER
+ */
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'SearchControl',

@@ -1,5 +1,17 @@
 /* global define CodeMirror */
-// This plugin renders markdown inline links
+/**
+  * @ignore
+  * BEGIN HEADER
+  *
+  * Contains:        Link rendering Plugin
+  * CVM-Role:        CodeMirror Plugin
+  * Maintainer:      Hendrik Erz
+  * License:         GNU GPL v3
+  *
+  * Description:     This plugin renders links and makes them clickable.
+  *
+  * END HEADER
+  */
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
@@ -31,7 +43,7 @@
     // We'll only render the viewport
     const viewport = cm.getViewport()
     for (let i = viewport.from; i < viewport.to; i++) {
-      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
+      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
       // Always reset lastIndex property, because test()-ing on regular
       // expressions advance it.
       linkRE.lastIndex = 0

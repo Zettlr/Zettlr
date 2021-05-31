@@ -40,6 +40,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Text
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     A text input.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'FieldText',
   props: {

@@ -21,6 +21,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Radio
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component contains a generic radio input.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'RadioControl',
   props: {

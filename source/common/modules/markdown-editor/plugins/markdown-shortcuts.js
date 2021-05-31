@@ -1,11 +1,26 @@
 /* global define CodeMirror */
-// CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: http://codemirror.net/LICENSE
-//
-// This plugin defines shortcuts for CodeMirror Markdown (Bold, italic, link, etc)
+/**
+  * @ignore
+  * BEGIN HEADER
+  *
+  * Contains:        Markdown Shortcuts
+  * CVM-Role:        CodeMirror Plugin
+  * Maintainer:      Hendrik Erz
+  * License:         GNU GPL v3
+  *
+  * Description:     This plugin adds common Markdown shortcuts (bold, italic, links, etc.)
+  *
+  * END HEADER
+  */
 
-const { clipboard } = require('electron')
-const { getListOrderedRE, getListTaskListRE, getListUnorderedCMRE, getUrlRE, getBlockRE } = require('../../../regular-expressions');
+const clipboard = window.clipboard
+const {
+  getListOrderedRE,
+  getListTaskListRE,
+  getListUnorderedCMRE,
+  getUrlRE,
+  getBlockRE
+} = require('../../../regular-expressions');
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS

@@ -1,3 +1,18 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        AssetsProvider
+ * CVM-Role:        Service Provider
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This provider manages general assets used by the app which
+ *                  are not handled by the dictionary or translation provider.
+ *
+ * END HEADER
+ */
+
 import EventEmitter from 'events'
 import path from 'path'
 import { app, ipcMain } from 'electron'

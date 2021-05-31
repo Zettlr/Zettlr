@@ -19,7 +19,7 @@ import registerCustomProtocols from './util/custom-protocols'
 import environmentCheck from './util/environment-check'
 import addToPath from './util/add-to-PATH'
 import resolveTimespanMs from './util/resolve-timespan-ms'
-import { loadI18nMain } from '../common/i18n'
+import { loadI18n } from '../common/i18n-main'
 import isFile from '../common/util/is-file'
 import isDir from '../common/util/is-dir'
 import path from 'path'
@@ -161,13 +161,16 @@ export async function bootApplication (): Promise<void> {
   }
 
   // Initiate i18n after the config provider has definitely spun up
-  let metadata: any = loadI18nMain(global.config.get('appLang'))
+  let metadata = await loadI18n(global.config.get('appLang'))
 
   // It may be that only a fallback has been provided or else. In this case we
   // must update the config to reflect this.
   if (metadata.tag !== global.config.get('appLang')) {
     global.config.set('appLang', metadata.tag)
   }
+
+  // Initial setting of the application menu.
+  menuProvider.set()
 }
 
 /**

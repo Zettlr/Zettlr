@@ -15,19 +15,25 @@
  */
 
 import Vue from 'vue'
-import { ipcRenderer } from 'electron'
-import path from 'path'
 import Vuex, { Store, StoreOptions } from 'vuex'
-import isAttachment from '../common/util/is-attachment'
+// import isAttachment from '../common/util/is-attachment'
 import sanitizeHtml from 'sanitize-html'
 import md2html from '../common/util/md-to-html'
 import sort from '../main/modules/fsal/util/sort'
 import { MDFileMeta, CodeFileMeta, DirMeta } from '../main/modules/fsal/types'
 
+const path = (window as any).path
+const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
+
 interface FSALEvent {
   event: 'remove'|'add'|'change'
   path: string
   timestamp: number
+}
+
+function isAttachment (p: string): boolean {
+  let ext = global.config.get('attachmentExtensions')
+  return ext.includes(path.extname(p).toLowerCase())
 }
 
 function findPathDescriptor (targetPath: string, tree: any, treatAsAttachment: boolean = false): any|null {
@@ -288,7 +294,7 @@ const config: StoreOptions<ZettlrState> = {
         state.fileTree.push(descriptor)
         // @ts-expect-error TODO: The sorting function currently expects only FSAL descriptors, not metas
         state.fileTree = sort(state.fileTree) // Omit sorting to sort name-up
-      } else {
+      } else if (descriptor.parent == null) {
         const parentPath = descriptor.dir
         const parentDescriptor = findPathDescriptor(parentPath, state.fileTree)
         if (parentDescriptor.children.find((elem: any) => elem.path === descriptor.path) !== undefined) {
@@ -301,7 +307,7 @@ const config: StoreOptions<ZettlrState> = {
           reconstructTree(descriptor) // Make sure the parent pointers work correctly
         }
 
-        if (isAttachment(descriptor.path, true)) {
+        if (isAttachment(descriptor.path)) {
           parentDescriptor.attachments.push(descriptor)
           parentDescriptor.attachments.sort((a: any, b: any) => {
             if (a.name > b.name) {
@@ -316,10 +322,18 @@ const config: StoreOptions<ZettlrState> = {
           parentDescriptor.children.push(descriptor)
           parentDescriptor.children = sort(parentDescriptor.children, parentDescriptor.sorting)
         }
+      } else {
+        // TODO: When we reach this, there's nothing wrong in the filetree, but
+        // I'd like this warning to never be emitted. I currently suspect it's a
+        // race condition because I'm only receiving this with an awful lot of
+        // files, so I guess it has to do with the filetree reconstruction
+        // taking longer until the next event is being received and processed
+        // here.
+        console.warn('[Store] Received event to add a descriptor to the filetree, but it was a root and already present:', descriptor)
       }
     },
     removeFromFiletree: function (state, pathToRemove) {
-      if (isAttachment(pathToRemove, true)) {
+      if (isAttachment(pathToRemove)) {
         const parent = findPathDescriptor(path.dirname(pathToRemove), state.fileTree)
         if (parent === null) {
           return // No descriptor found
@@ -383,49 +397,10 @@ const config: StoreOptions<ZettlrState> = {
       }
     },
     updateActiveFile: function (state, descriptor) {
-      if (descriptor === null) {
-        state.activeFile = null
-      } else if (descriptor.dir === ':memory:') {
-        const found = state.openFiles.find(file => file.path === descriptor.path)
-        if (found !== undefined) {
-          state.activeFile = found
-        }
-      } else {
-        const ownDescriptor = findPathDescriptor(descriptor.path, state.fileTree)
-
-        if (ownDescriptor !== null) {
-          state.activeFile = ownDescriptor
-        }
-      }
+      state.activeFile = descriptor
     },
     updateOpenFiles: function (state, openFiles) {
-      // First, we must make sure that the open files in memory are retained
-      const memoryFiles = state.openFiles.filter(file => file.dir === ':memory:')
-
-      // Then we can safely reset the open files in the state
-      state.openFiles = []
-
-      // TODO: I know we can create a more sophisticated algorithm that only
-      // updates those necessary
-      for (const file of openFiles) {
-        if (String(file.path).startsWith(':memory:')) {
-          // Fetch the descriptor from the old state
-          const found = memoryFiles.find(f => f.path === file)
-          if (found !== undefined) {
-            state.openFiles.push(found)
-          } else {
-            // In case the descriptor has not been found, add the new descriptor
-            // that has been delivered with the openFiles array
-            state.openFiles.push(file)
-          }
-        } else {
-          const descriptor = findPathDescriptor(file.path, state.fileTree)
-          if (descriptor !== null) {
-            state.openFiles.push(descriptor)
-          }
-        }
-      } // END for
-      console.log(state.openFiles)
+      state.openFiles = openFiles
     },
     colouredTags: function (state, tags) {
       state.colouredTags = tags

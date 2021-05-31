@@ -1,5 +1,17 @@
 /* global CodeMirror define */
-// This plugin renders GitHub Flavoured Markdown Task items
+/**
+  * @ignore
+  * BEGIN HEADER
+  *
+  * Contains:        Task rendering Plugin
+  * CVM-Role:        CodeMirror Plugin
+  * Maintainer:      Hendrik Erz
+  * License:         GNU GPL v3
+  *
+  * Description:     This plugin renders task items and makes them checkable.
+  *
+  * END HEADER
+  */
 
 const { getTaskRE } = require('../../../regular-expressions');
 
@@ -22,7 +34,7 @@ const { getTaskRE } = require('../../../regular-expressions');
     // We'll only render the viewport
     const viewport = cm.getViewport()
     for (let i = viewport.from; i < viewport.to; i++) {
-      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
+      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
       // Always reset lastIndex property, because test()-ing on regular
       // expressions advances it.
       taskRE.lastIndex = 0

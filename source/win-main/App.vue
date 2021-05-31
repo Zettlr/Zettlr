@@ -55,6 +55,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        App
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This is the entry component for the main window.
+ *
+ * END HEADER
+ */
+
 import WindowChrome from '../common/vue/window/Chrome'
 import FileManager from './file-manager/file-manager'
 import Sidebar from './Sidebar'
@@ -66,15 +80,17 @@ import PopoverExport from './PopoverExport'
 import PopoverStats from './PopoverStats'
 import PopoverPomodoro from './PopoverPomodoro'
 import PopoverTable from './PopoverTable'
-import { trans } from '../common/i18n'
+import { trans } from '../common/i18n-renderer'
 import localiseNumber from '../common/util/localise-number'
 import generateId from '../common/util/generate-id'
-import { ipcRenderer, clipboard } from 'electron'
 
 // Import the sound effects for the pomodoro timer
 import glassFile from './assets/glass.wav'
 import alarmFile from './assets/digital_alarm.mp3'
 import chimeFile from './assets/chime.mp3'
+
+const ipcRenderer = window.ipc
+const clipboard = window.clipboard
 
 const SOUND_EFFECTS = [
   {

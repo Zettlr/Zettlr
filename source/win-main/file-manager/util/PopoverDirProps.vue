@@ -58,6 +58,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        DirProps Popover
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Contains a component to display and manage directory properties
+ *
+ * END HEADER
+ */
+
 import formatDate from '../../../common/util/format-date'
 import localiseNumber from '../../../common/util/localise-number'
 import SelectControl from '../../../common/vue/form/elements/Select'

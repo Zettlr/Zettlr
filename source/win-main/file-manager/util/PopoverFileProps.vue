@@ -54,9 +54,23 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        FileProps Popover
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Contains a component for displaying and managing file props.
+ *
+ * END HEADER
+ */
+
 import NumberControl from '../../../common/vue/form/elements/Number'
 import SelectControl from '../../../common/vue/form/elements/Select'
-import { trans } from '../../../common/i18n'
+import { trans } from '../../../common/i18n-renderer'
 import formatDate from '../../../common/util/format-date'
 import formatSize from '../../../common/util/format-size'
 import localiseNumber from '../../../common/util/localise-number'

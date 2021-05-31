@@ -36,8 +36,22 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        About window app
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This is the entry component for the About window.
+ *
+ * END HEADER
+ */
+
 import WindowChrome from '../common/vue/window/Chrome.vue'
-import { trans } from '../common/i18n'
+import { trans } from '../common/i18n-renderer'
 
 // Import the tabs
 import GeneralTab from './General-Tab.vue'

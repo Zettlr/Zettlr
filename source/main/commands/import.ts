@@ -13,7 +13,7 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { trans } from '../../common/i18n'
+import { trans } from '../../common/i18n-main'
 import makeImport from '../modules/import'
 import path from 'path'
 import { import_files as FORMATS } from '../../common/data.json'

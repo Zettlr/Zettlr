@@ -1,5 +1,20 @@
-const { trans } = require('../../../common/i18n')
-const { ipcRenderer, shell } = require('electron')
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Directory context menu
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file displays a context menu for directories.
+ *
+ * END HEADER
+ */
+
+const { trans } = require('../../../common/i18n-renderer')
+
+const ipcRenderer = window.ipc
 
 const TEMPLATE = [
   {
@@ -108,7 +123,10 @@ module.exports = function displayFileContext (event, dirObject, el, callback) {
     callback(clickedID) // TODO
     switch (clickedID) {
       case 'gui.attachments_open_dir':
-        shell.showItemInFolder(dirObject.path)
+        ipcRenderer.send('window-controls', {
+          command: 'show-item-in-folder',
+          payload: dirObject.path
+        })
         break
       case 'menu.project_properties':
         ipcRenderer.send('message', {

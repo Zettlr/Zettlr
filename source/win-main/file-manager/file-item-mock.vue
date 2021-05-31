@@ -1,16 +1,3 @@
-/**
- * @ignore
- * BEGIN HEADER
- *
- * Contains:        FileItem Vue component.
- * CVM-Role:        View
- * Maintainer:      Hendrik Erz
- * License:         GNU GPL v3
- *
- * Description:     Controls a single file list item.
- *
- * END HEADER
- */
 <template>
   <div
     v-bind:class="{
@@ -41,6 +28,22 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Mock FileItem
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     It looks like a file item, but it isn't: This component is
+ *                  being rendered whenever a new file or directory is being
+ *                  created in the file list. Basically a glorified text input.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'FileMockItem',
   // Bind the actual object to the container

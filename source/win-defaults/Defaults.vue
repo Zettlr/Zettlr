@@ -56,12 +56,28 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Defaults
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This is the defaults file editor app. It allows users to
+ *                  modify the provided defaults files.
+ *
+ * END HEADER
+ */
+
 import WindowChrome from '../common/vue/window/Chrome'
 import SplitView from '../common/vue/window/SplitView'
 import SelectableList from './SelectableList'
 import ButtonControl from '../common/vue/form/elements/Button'
 import CodeEditor from '../common/vue/CodeEditor'
-import { ipcRenderer } from 'electron'
+
+const ipcRenderer = window.ipc
 
 const WRITERS = {
   'html': 'HTML',

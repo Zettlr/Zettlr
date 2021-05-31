@@ -1,4 +1,19 @@
-// DEFAULT exporter plugin
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        reveal.JS exporter plugin
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This plugin enables exports into reveal.js. It is not
+ *                  implemented in the default exporter because what we want is
+ *                  that the user can choose a theme and receives additionally
+ *                  a fully standalone file.
+ *
+ * END HEADER
+ */
 
 import commandExists from 'command-exists'
 import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
