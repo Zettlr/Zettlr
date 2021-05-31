@@ -2,13 +2,13 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        FileFindAndReturn command
+ * Contains:        FileFindAndReturnMetaData command
  * CVM-Role:        <none>
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
  * Description:     This command finds the absolute path of a file, and returns
- *                  the file's descriptor (including contents)
+ *                  the file's meta data
  *
  * END HEADER
  */
@@ -18,9 +18,8 @@ import { filetypes as FILETYPES } from '../../common/data.json'
 import { MDFileMeta } from '../modules/fsal/types'
 import formatDate from '../../common/util/format-date'
 
-
 export default class FilePathFindMetaData extends ZettlrCommand {
-  constructor(app: any) {
+  constructor (app: any) {
     super(app, ['file-find-and-return-meta-data'])
   }
 
@@ -30,8 +29,7 @@ export default class FilePathFindMetaData extends ZettlrCommand {
       * @param  {Object} arg the parameters of the file to be deleted
       * @return {Boolean} Whether the file was successfully deleted.
       */
-  async run(evt: string, arg: any): Promise<any> {
-    // Initialise the file as the result of findExact failing
+  async run (evt: string, arg: any): Promise<any> {
     let file
     let MetaData
     // It might be linked by ID
@@ -51,8 +49,8 @@ export default class FilePathFindMetaData extends ZettlrCommand {
     }
     // Get the contents of the file such as:
     if (MetaData !== undefined) {
-      MetaData = <MDFileMeta>MetaData
-      let content = MetaData.content.substring(0, 200)
+      MetaData = MetaData as MDFileMeta //forces MDFileMeta rather than CodeFileMeta
+      let content = MetaData.content.substring(0, 200) // The content
       if (MetaData.content.length > 200) {
         content += '...'
       }
@@ -61,7 +59,7 @@ export default class FilePathFindMetaData extends ZettlrCommand {
 
       // use luxon to get a local time difference
       let time = formatDate(MetaData.modtime)
-      return ([title,content,wordCount,time])
+      return ([ title, content, wordCount, time ])
     }
     // We can't find it, so return Not Found
     return null

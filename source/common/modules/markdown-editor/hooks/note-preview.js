@@ -1,7 +1,6 @@
 const tippy = require('tippy.js').default
 const ipcRenderer = window.ipc
 
-
 /**
  * A hook for displaying link tooltips which display metadata
  * and content of a file
@@ -9,8 +8,7 @@ const ipcRenderer = window.ipc
  * @param   {CodeMirror}  cm  The instance to attach to
  */
 
-
- module.exports = (elem) => {
+module.exports = (elem) => {
   elem.getWrapperElement().addEventListener('mousemove', (event) => {
     let a = event.target
 
@@ -24,7 +22,7 @@ const ipcRenderer = window.ipc
       return
     }
     // TODO: Translate!
-    
+
     // Create a tippy. This will display the loading values
     let tooltip = tippy(a, {
       content: 'Searching For File...',
@@ -41,7 +39,6 @@ const ipcRenderer = window.ipc
       .then((metaData) => {
         // If the file is found
         if (metaData !== null) {
-          
           // On ready, show a tooltip with the note contents
           tooltip.setContent(`File Name: "${metaData[0]}"<br>"${metaData[1]}"<br>Word Count: ${metaData[2]}<br> Modified: ${metaData[3]}`)
         } else {
