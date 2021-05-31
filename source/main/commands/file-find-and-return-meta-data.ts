@@ -16,9 +16,7 @@
 import ZettlrCommand from './zettlr-command'
 import { filetypes as FILETYPES } from '../../common/data.json'
 import { MDFileMeta } from '../modules/fsal/types'
-import { DateTime } from 'luxon'
 import formatDate from '../../common/util/format-date'
-import { systemPreferences } from 'electron'
 
 
 export default class FilePathFindMetaData extends ZettlrCommand {

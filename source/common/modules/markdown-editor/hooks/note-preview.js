@@ -1,6 +1,5 @@
 const tippy = require('tippy.js').default
-const { ipcRenderer } = require('electron')
-const { DateTime } = require('luxon')
+const ipcRenderer = window.ipc
 
 
 /**
