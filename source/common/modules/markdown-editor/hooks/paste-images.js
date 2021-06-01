@@ -30,17 +30,20 @@ module.exports = (cm) => {
     if (changeObj.origin === 'paste') {
       // First check if there's an image in the clipboard. In this case we
       // need to cancel the paste event and handle the image ourselves.
-      let image = clipboard.readImage()
       let plain = clipboard.readText()
       let explicitPaste = plain.replace(/\r/g, '') === changeObj.text.join('\n')
 
-      if (!image.isEmpty() && (explicitPaste || !changeObj.text)) {
+      if (clipboard.hasImage() && (explicitPaste || !changeObj.text)) {
         // We've got an image. So we need to handle it.
         ipcRenderer.invoke('application', {
           command: 'save-image-from-clipboard'
         })
           .then(relativePath => {
-            cm.replaceSelection(`![${path.basename(relativePath)}](${relativePath})`)
+            // If the user aborts the pasting process, the command will return
+            // undefined, so we have to check for this.
+            if (relativePath !== undefined) {
+              cm.replaceSelection(`![${path.basename(relativePath)}](${relativePath})`)
+            }
           })
           .catch(err => console.error(err))
         return changeObj.cancel() // Cancel handling of the event
@@ -53,7 +56,6 @@ module.exports = (cm) => {
    * pasts if there is no text in the clipboard as well.
    */
   cm.getWrapperElement().addEventListener('paste', (e) => {
-    let image = clipboard.readImage()
     // Trigger the image insertion process from here only if there is no text
     // in the clipboard. This is because CodeMirror will only trigger the
     // beforeChange event (where we have similar logic) if there is text in the
@@ -62,12 +64,16 @@ module.exports = (cm) => {
     // ALWAYS (even with text in the clipboard), you'd get the paste-image
     // dialog twice -- once when the beforeChange event triggers, and then here
     // as well.
-    if (!image.isEmpty() && clipboard.readText().length === 0) {
+    if (clipboard.hasImage() && clipboard.readText().length === 0) {
       ipcRenderer.invoke('application', {
         command: 'save-image-from-clipboard'
       })
         .then(relativePath => {
-          cm.replaceSelection(`![${path.basename(relativePath)}](${relativePath})`)
+          // If the user aborts the pasting process, the command will rturn
+          // undefined, so we have to check for this.
+          if (relativePath !== undefined) {
+            cm.replaceSelection(`![${path.basename(relativePath)}](${relativePath})`)
+          }
         })
         .catch(err => console.error(err))
     }

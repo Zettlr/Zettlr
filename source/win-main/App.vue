@@ -376,7 +376,6 @@ export default {
         // so that they are not lost during the operation.
         let text = clipboard.readText()
         let html = clipboard.readHTML()
-        let image = clipboard.readImage()
         let rtf = clipboard.readRTF()
 
         // Write an ID to the clipboard
@@ -389,7 +388,6 @@ export default {
           clipboard.write({
             'text': text,
             'html': html,
-            'image': image,
             'rtf': rtf
           })
         }, 10) // Why do a timeout? Because the paste event is asynchronous.
