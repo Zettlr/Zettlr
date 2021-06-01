@@ -78,9 +78,6 @@ export default class Zettlr {
       showPreferences: () => {
         this._windowManager.showPreferences()
       },
-      showCustomCSS: () => {
-        this._windowManager.showCustomCSS()
-      },
       showAboutWindow: () => {
         this._windowManager.showAboutWindow()
       },

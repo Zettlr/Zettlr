@@ -32,7 +32,6 @@ interface Application {
   isBooting: () => boolean
   showLogViewer: () => void
   showPreferences: () => void
-  showCustomCSS: () => void
   displayErrorMessage: (title: string, message: string, contents?: string) => void
   showAboutWindow: () => void
   showDefaultsPreferences: () => void

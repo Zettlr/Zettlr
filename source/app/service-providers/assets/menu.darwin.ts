@@ -90,13 +90,6 @@ export default function getMenu (): MenuItemConstructorOptions[] {
           }
         },
         {
-          id: 'menu.custom_css',
-          label: trans('menu.custom_css'),
-          click: function (menuitem, focusedWindow) {
-            global.application.showCustomCSS()
-          }
-        },
-        {
           type: 'separator'
         },
         {
