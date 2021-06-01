@@ -284,12 +284,13 @@ export default class DocumentManager extends EventEmitter {
    * @param {string|null} descriptorPath The path of the file to set as active
    */
   public set activeFile (descriptor: MDFileDescriptor|CodeFileDescriptor|null) {
+    console.log('Set active file received', descriptor)
     if (descriptor === null && this._activeFile !== null) {
       this._activeFile = null
       global.citeproc.loadMainDatabase()
       global.config.set('activeFile', this.activeFile)
       this.emit('update', 'activeFile')
-    } else if (descriptor !== null && descriptor !== this.activeFile) {
+    } else if (descriptor !== null && descriptor.path !== this.activeFile?.path) {
       const file = this.openFiles.find(file => file.path === descriptor.path)
 
       if (file !== undefined && this._loadedDocuments.includes(file)) {
@@ -322,7 +323,7 @@ export default class DocumentManager extends EventEmitter {
           this.emit('update', 'activeFile')
         }
       } else {
-        console.error('Could not set active file. Either file was null or not in openFiles')
+        console.error('Could not set active file. Either file was null or not in openFiles', descriptor, this.activeFile)
       }
     } // Else: No update necessary
   }
