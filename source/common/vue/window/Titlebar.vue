@@ -8,6 +8,22 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Titlebar
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Renders a platform-specific titlebar. On macOS, for instance
+ *                  these are used by the preferences, on Windows that's displayed
+ *                  where there is no menu.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'Titlebar',
   props: {

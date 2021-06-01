@@ -207,7 +207,7 @@ function shouldBeginAutocomplete (cm, changeObj) {
     }
     // Check if the mode on the line *before* is still Markdown
     let modeLineBefore = cm.getModeAt({ line: cursor.line - 1, ch: 0 })
-    if (modeLineBefore.name === 'markdown') {
+    if (modeLineBefore.name === 'markdown-zkn') {
       // If our own line starts with a codeblock, but the line before is
       // still in Markdown mode, this means we have the beginning of a codeblock.
       return 'syntaxHighlighting'

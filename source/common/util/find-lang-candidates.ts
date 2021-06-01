@@ -1,3 +1,20 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        findLangCandidates
+ * CVM-Role:        Utility Function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Given a BCP-47 compatible language identifier and an array
+ *                  of language-specific candidates, this function will return
+ *                  a candidate with an exact match regarding the language
+ *                  identifier and/or a close match.
+ *
+ * END HEADER
+ */
+
 import * as bcp47 from 'bcp-47/index.js'
 
 export interface LanguageCandidates<T> {
@@ -23,15 +40,6 @@ const EXACT = 'exact'
   * @type {String}
   */
 const CLOSE = 'close'
-
-/**
- * Returns an object containing a best (as is: exact) and a close (as is: not
- * exactly what was requested) match by checking lang against all provided
- * candidates.
- * @param  {string} lang       The language, bcp47 compatible (e.g. en-US)
- * @param  {Array} candidates An array containing all objects to check. Must expose a "tag"-property
- * @return {Object}            An object containing "close" and "exact" properties, which may be undefined.
- */
 
 /**
  * Returns an object containing a best (that is: exact) and a close match by checking

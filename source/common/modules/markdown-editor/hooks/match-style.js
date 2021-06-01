@@ -1,3 +1,18 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CodeMirror match style hook
+ * CVM-Role:        CodeMirror plugin
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Enables users to paste HTML contents and have them be
+ *                  converted to Markdown.
+ *
+ * END HEADER
+ */
+
 const html2md = require('../../../util/html-to-md')
 const clipboard = window.clipboard
 

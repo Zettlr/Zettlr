@@ -104,7 +104,7 @@ export default class DocumentManager extends EventEmitter {
     // Loads in all openFiles
     const openFiles: string[] = global.config.get('openFiles')
     for (const filePath of openFiles) {
-      const descriptor = await FSALFile.parse(filePath, null, null)
+      const descriptor = await this._loadFile(filePath)
       this._loadedDocuments.push(descriptor)
     }
 

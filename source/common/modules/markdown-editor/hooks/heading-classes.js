@@ -1,4 +1,18 @@
 /**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CodeMirror heading classes hook
+ * CVM-Role:        CodeMirror plugin
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Adds heading line classes where appropriate.
+ *
+ * END HEADER
+ */
+
+/**
  * Hooks onto the cursorActivity event to apply heading classes
  *
  * @param   {CodeMirror}  cm  The instance
@@ -32,7 +46,7 @@ function applyHeadingClasses (cm) {
     const headerClass = retrieveHeaderClass(cm, i)
 
     // Only re-apply a header class if allowed.
-    if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') {
+    if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') {
       if (headerClass > 0) {
         removeHeaderClass(cm, i, headerClass)
       }

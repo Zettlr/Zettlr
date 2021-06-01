@@ -25,6 +25,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        File
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component represents a custom file input.
+ *
+ * END HEADER
+ */
+
 const ipcRenderer = window.ipc
 
 export default {

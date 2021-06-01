@@ -1,3 +1,20 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        enumLangFiles
+ * CVM-Role:        Utility Function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This utility function returns a list of all available
+ *                  translations, both provided by the app and available in the
+ *                  "lang" directory in the user data. Translations in the
+ *                  userData have higher priority since these also contain updates.
+ *
+ * END HEADER
+ */
+
 import { Candidate } from './find-lang-candidates'
 import path from 'path'
 import * as bcp47 from 'bcp-47/index.js'

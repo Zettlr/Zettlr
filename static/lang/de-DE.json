@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-05-23T13:18:25.000000Z"
+        "updated_at": "2021-05-30T13:26:06.000000Z"
     },
     "dialog": {
         "about": {
@@ -206,6 +206,7 @@
                 "rtl_move_visually": "Navigiere visuell mit den Pfeiltasten im RTL-Modus"
             },
             "enable_rmarkdown": "RMarkdown-Dateisupport aktivieren",
+            "enable_scroll_zoom": "Zoom, wenn \u003Ckbd\u003ECmd\u003C/kbd\u003E oder \u003Ckbd\u003EStrg\u003C/kbd\u003E beim Scrollen gehalten wird",
             "enable_table_helper": "Tabelleneditor aktivieren",
             "export": {
                 "dest": "Zielverzeichnis f\u00fcr Exporte. \u003Cem\u003EVorsicht:\u003C/em\u003E Die Auswahl &quot;Aktuelles Verzeichnis&quot; \u00fcberschreibt ohne Warnung eventuell vorhandene Dateien!",

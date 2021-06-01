@@ -1,3 +1,20 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        enumDictFiles
+ * CVM-Role:        Utility Function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This function returns a list of all available dictionaries,
+ *                  more specifically, the absolute paths to both the Affix and
+ *                  Dic files of said dictionaries. It collects both provided
+ *                  dictionaries and user-downloaded ones.
+ *
+ * END HEADER
+ */
+
 import { Candidate } from './find-lang-candidates'
 import path from 'path'
 import * as bcp47 from 'bcp-47/index.js'

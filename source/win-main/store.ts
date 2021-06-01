@@ -16,7 +16,7 @@
 
 import Vue from 'vue'
 import Vuex, { Store, StoreOptions } from 'vuex'
-import isAttachment from '../common/util/is-attachment'
+// import isAttachment from '../common/util/is-attachment'
 import sanitizeHtml from 'sanitize-html'
 import md2html from '../common/util/md-to-html'
 import sort from '../main/modules/fsal/util/sort'
@@ -29,6 +29,11 @@ interface FSALEvent {
   event: 'remove'|'add'|'change'
   path: string
   timestamp: number
+}
+
+function isAttachment (p: string): boolean {
+  let ext = global.config.get('attachmentExtensions')
+  return ext.includes(path.extname(p).toLowerCase())
 }
 
 function findPathDescriptor (targetPath: string, tree: any, treatAsAttachment: boolean = false): any|null {
@@ -289,7 +294,7 @@ const config: StoreOptions<ZettlrState> = {
         state.fileTree.push(descriptor)
         // @ts-expect-error TODO: The sorting function currently expects only FSAL descriptors, not metas
         state.fileTree = sort(state.fileTree) // Omit sorting to sort name-up
-      } else {
+      } else if (descriptor.parent == null) {
         const parentPath = descriptor.dir
         const parentDescriptor = findPathDescriptor(parentPath, state.fileTree)
         if (parentDescriptor.children.find((elem: any) => elem.path === descriptor.path) !== undefined) {
@@ -302,7 +307,7 @@ const config: StoreOptions<ZettlrState> = {
           reconstructTree(descriptor) // Make sure the parent pointers work correctly
         }
 
-        if (isAttachment(descriptor.path, true)) {
+        if (isAttachment(descriptor.path)) {
           parentDescriptor.attachments.push(descriptor)
           parentDescriptor.attachments.sort((a: any, b: any) => {
             if (a.name > b.name) {
@@ -317,10 +322,18 @@ const config: StoreOptions<ZettlrState> = {
           parentDescriptor.children.push(descriptor)
           parentDescriptor.children = sort(parentDescriptor.children, parentDescriptor.sorting)
         }
+      } else {
+        // TODO: When we reach this, there's nothing wrong in the filetree, but
+        // I'd like this warning to never be emitted. I currently suspect it's a
+        // race condition because I'm only receiving this with an awful lot of
+        // files, so I guess it has to do with the filetree reconstruction
+        // taking longer until the next event is being received and processed
+        // here.
+        console.warn('[Store] Received event to add a descriptor to the filetree, but it was a root and already present:', descriptor)
       }
     },
     removeFromFiletree: function (state, pathToRemove) {
-      if (isAttachment(pathToRemove, true)) {
+      if (isAttachment(pathToRemove)) {
         const parent = findPathDescriptor(path.dirname(pathToRemove), state.fileTree)
         if (parent === null) {
           return // No descriptor found

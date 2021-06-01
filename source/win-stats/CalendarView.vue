@@ -61,6 +61,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CalendarView
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays the calendar with the word counts.
+ *
+ * END HEADER
+ */
+
 import { DateTime } from 'luxon'
 import ButtonControl from '../common/vue/form/elements/Button.vue'
 

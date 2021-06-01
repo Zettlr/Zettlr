@@ -4,7 +4,7 @@
   * BEGIN HEADER
   *
   * Contains:        AutoCorrect CodeMirror Plugin
-  * CVM-Role:        <none>
+  * CVM-Role:        CodeMirror Plugin
   * Maintainer:      Hendrik Erz
   * License:         GNU GPL v3
   *

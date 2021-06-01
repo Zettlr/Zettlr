@@ -302,11 +302,13 @@ export async function parse (filePath: string, cache: FSALCache|null, parent: Di
   // Now it is safe to assign the parent
   file.parent = parent
 
-  if (!hasCache && cache !== null) {
+  if (!hasCache) {
     // Read in the file, parse the contents and make sure to cache the file
     let content = await fs.readFile(filePath, { encoding: 'utf8' })
     parseFileContents(file, content)
-    cacheFile(file, cache)
+    if (cache !== null) {
+      cacheFile(file, cache)
+    }
   }
 
   // Get the target, if applicable

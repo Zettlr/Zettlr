@@ -1,5 +1,18 @@
 /* global define CodeMirror */
-// This plugin gives the editor a real WYSIWYG feeling
+/**
+  * @ignore
+  * BEGIN HEADER
+  *
+  * Contains:        WYSIWYG Plugin
+  * CVM-Role:        CodeMirror Plugin
+  * Maintainer:      Hendrik Erz
+  * License:         GNU GPL v3
+  *
+  * Description:     This plugin enables a certain amount of WYSIWYG on the
+  *                  editor. NOTE: This plugin is unsupported and experimental.
+  *
+  * END HEADER
+  */
 
 const { getWysiwygRE } = require('../../../regular-expressions');
 

@@ -61,6 +61,21 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Editor
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This displays the main editor for the app. It uses the
+ *                  MarkdownEditor class to implement the full CodeMirror editor.
+ *
+ * END HEADER
+ */
+
 import countWords from '../common/util/count-words'
 import MarkdownEditor from '../common/modules/markdown-editor'
 import CodeMirror from 'codemirror'
@@ -131,6 +146,7 @@ export default {
           imagePreviewHeight: this.$store.state.config['display.imageHeight'],
           markdownBoldFormatting: this.$store.state.config['editor.boldFormatting'],
           markdownItalicFormatting: this.$store.state.config['editor.italicFormatting'],
+          scrollZoom: this.$store.state.config['editor.scrollZoom'],
           zettelkasten: {
             idRE: this.$store.state.config['zkn.idRE'],
             idGen: this.$store.state.config['zkn.idGen'],

@@ -1,4 +1,18 @@
 /**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CodeMirror line indentation hook
+ * CVM-Role:        CodeMirror plugin
+ * Maintainer:      Tobias Diez
+ * License:         GNU GPL v3
+ *
+ * Description:     Indents wrapped lines in such a way that they visually align.
+ *
+ * END HEADER
+ */
+
+/**
  * Holds the width of a monospace space character
  *
  * @var {Number}

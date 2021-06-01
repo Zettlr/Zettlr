@@ -1,16 +1,3 @@
-/**
- * @ignore
- * BEGIN HEADER
- *
- * Contains:        File manager Vue Component
- * CVM-Role:        View
- * Maintainer:      Hendrik Erz
- * License:         GNU GPL v3
- *
- * Description:     Controls the file manager logic.
- *
- * END HEADER
- */
 <template>
   <div
     id="file-manager"
@@ -58,9 +45,19 @@
 </template>
 
 <script>
-// Please do not ask me why I have to explicitly use the "default" property
-// of some modules, but not others. The vue-loader is a mess when used with
-// ES6 CommonJS-modules in a exports/require-environment.
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        File manager Vue Component
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Controls the file manager logic.
+ *
+ * END HEADER
+ */
 import findObject from '../../common/util/find-object'
 import FileTree from './file-tree.vue'
 import FileList from './file-list.vue'

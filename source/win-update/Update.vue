@@ -52,6 +52,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Update
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     The update window's entry component
+ *
+ * END HEADER
+ */
+
 import WindowChrome from '../common/vue/window/Chrome'
 import ButtonControl from '../common/vue/form/elements/Button'
 import ProgressControl from '../common/vue/form/elements/Progress'

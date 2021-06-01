@@ -1,4 +1,20 @@
-// DEFAULT exporter plugin
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        PDF Exporter plugin
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This plugin enables exports into PDF. It offers two variants:
+ *                  "chromium-pdf" exports by exporting to HTML and then
+ *                  utilising the Chrome print API to generate a PDF. The xelatex
+ *                  exporter is more powerful, but requires a full TeX installation
+ *                  on the system.
+ *
+ * END HEADER
+ */
 
 import commandExists from 'command-exists'
 import path from 'path'

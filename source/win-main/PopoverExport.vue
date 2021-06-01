@@ -31,6 +31,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Export Popover
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file enables single-file exports for the user.
+ *
+ * END HEADER
+ */
+
 import RadioControl from '../common/vue/form/elements/Radio'
 import SelectControl from '../common/vue/form/elements/Select'
 import Form from '../common/vue/form/Form'

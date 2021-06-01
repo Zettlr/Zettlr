@@ -101,6 +101,7 @@ interface ConfigOptions {
     autoCloseBrackets: boolean
     defaultSaveImagePath: string
     homeEndBehaviour: boolean
+    scrollZoom: boolean
     enableTableHelper: boolean
     indentUnit: number
     fontSize: number

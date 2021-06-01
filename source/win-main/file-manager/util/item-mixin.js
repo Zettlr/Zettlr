@@ -1,3 +1,19 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Item Mixin
+ * CVM-Role:        Utility Function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file contains mixin properties for both the TreeItem and
+ *                  FileItem Vue components, since both -- albeit looking
+ *                  completely different -- implement much of the same functionality.
+ *
+ * END HEADER
+ */
+
 // This is a mixin that is being implemented by both the file item and tree item
 // and contains shared logic that applies to both objects. This way, we have
 // different styling for tree items and file list items, but the same underlying

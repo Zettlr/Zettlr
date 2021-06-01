@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Global Typings
+ * CVM-Role:        Types
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file contains global types for the main process's providers.
+ *
+ * END HEADER
+ */
+
 // We cannot have any imports or exports, as otherwise this file would not
 // be read in by TypeScript as an ambient module declaration.
 // More info: https://stackoverflow.com/a/35074833

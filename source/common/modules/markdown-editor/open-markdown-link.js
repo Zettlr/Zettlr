@@ -1,4 +1,18 @@
-// const { shell, ipcRenderer } = require('electron')
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        openMarkdownLink function
+ * CVM-Role:        Utility function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This function opens a Markdown link, performing necessary
+ *                  transformations where applicable.
+ *
+ * END HEADER
+ */
+
 const makeValidUri = require('../../util/make-valid-uri')
 const path = window.path
 const ipcRenderer = window.ipc

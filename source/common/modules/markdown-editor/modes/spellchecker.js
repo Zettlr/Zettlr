@@ -1,5 +1,17 @@
 /* global CodeMirror define */
-// ZETTLR SPELLCHECKER PLUGIN
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CodeMirror spellchecker mode
+ * CVM-Role:        CodeMirror Mode
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     A mode that acts as an overlay, providing spell checking.
+ *
+ * END HEADER
+ */
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS

@@ -1,5 +1,17 @@
 /* global define CodeMirror */
-// This plugin renders markdown tables for easy editability
+/**
+  * @ignore
+  * BEGIN HEADER
+  *
+  * Contains:        Table rendering Plugin
+  * CVM-Role:        CodeMirror Plugin
+  * Maintainer:      Hendrik Erz
+  * License:         GNU GPL v3
+  *
+  * Description:     This plugin renders tables in place.
+  *
+  * END HEADER
+  */
 
 const TableEditor = require('../table-editor')
 const { getTableHeadingRE } = require('../../../regular-expressions');
@@ -31,7 +43,7 @@ const { getTableHeadingRE } = require('../../../regular-expressions');
     // We'll only render the viewport
     const viewport = cm.getViewport()
     for (let i = viewport.from; i < viewport.to; i++) {
-      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
+      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
 
       // First get the line and test if the contents resemble a table. We only
       // search for the heading rows here, because these are the only ones that

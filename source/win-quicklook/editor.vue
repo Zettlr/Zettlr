@@ -5,6 +5,21 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Editor
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file displays the quicklook editor. Basically the same
+ *                  as the main window's Editor component, only with less functions.
+ *
+ * END HEADER
+ */
+
 const MarkdownEditor = require('../common/modules/markdown-editor')
 const CodeMirror = require('codemirror')
 const makeSearchRegEx = require('../common/util/make-search-regex')

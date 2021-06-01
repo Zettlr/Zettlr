@@ -1,7 +1,18 @@
-// PRELOAD SCRIPT
-
-// This script is run on every load of any window. It will introduce necessary
-// nodeJS APIs.
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        BrowserWindow preload script
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file is being executed by every BrowserWindow instance
+ *                  and has the task to provide needed Electron APIs into the
+ *                  sandboxed renderers.
+ *
+ * END HEADER
+ */
 
 import { contextBridge, ipcRenderer, clipboard } from 'electron'
 import path from 'path'

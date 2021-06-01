@@ -50,6 +50,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        PasteImage
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays the paste image modal window.
+ *
+ * END HEADER
+ */
+
 import WindowChrome from '../common/vue/window/Chrome.vue'
 import Checkbox from '../common/vue/form/elements/Checkbox.vue'
 import TextControl from '../common/vue/form/elements/Text.vue'

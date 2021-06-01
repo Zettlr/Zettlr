@@ -21,6 +21,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        LogViewer
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     The main component for the log viewer.
+ *
+ * END HEADER
+ */
+
 import Message from './message.vue'
 import WindowChrome from '../common/vue/window/Chrome.vue'
 

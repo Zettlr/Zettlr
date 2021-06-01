@@ -32,6 +32,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Stats
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     The Statistics window app entry component.
+ *
+ * END HEADER
+ */
+
 import WindowChrome from '../common/vue/window/Chrome.vue'
 import CalendarView from './CalendarView.vue'
 import ChartView from './ChartView.vue'

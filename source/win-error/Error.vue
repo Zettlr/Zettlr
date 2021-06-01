@@ -18,6 +18,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Error
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Entry component for the error modal window.
+ *
+ * END HEADER
+ */
+
 import WindowChrome from '../common/vue/window/Chrome.vue'
 
 const ipcRenderer = window.ipc

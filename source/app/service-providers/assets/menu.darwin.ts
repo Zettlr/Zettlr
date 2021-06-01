@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Menu constructor for macOS
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file exposes a getMenu function returning the macOS application menu.
+ *
+ * END HEADER
+ */
+
 import { app, MenuItemConstructorOptions, shell } from 'electron'
 import { trans } from '../../../common/i18n-main'
 import path from 'path'

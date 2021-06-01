@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        displayTabsContext
+ * CVM-Role:        Utility Function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This function displays a document-tabs-specific context menu.
+ *
+ * END HEADER
+ */
+
 // const { trans } = require('../common/i18n-renderer')
 
 module.exports = function displayTabsContext (event, callback) {

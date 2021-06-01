@@ -160,6 +160,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Sidebar
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component renders the sidebar.
+ *
+ * END HEADER
+ */
+
 import { trans } from '../common/i18n-renderer'
 import { ClarityIcons } from '@clr/icons'
 

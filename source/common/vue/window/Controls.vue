@@ -74,6 +74,22 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        WindowControls
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component renders custom-styled window controls (close,
+ *                  maximise, minimise). NOTE that this component is not rendered
+ *                  on macOS, since we can use the hiddenInset traffic lights.
+ *
+ * END HEADER
+ */
+
 const ipcRenderer = window.ipc
 
 export default {

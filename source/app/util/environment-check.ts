@@ -2,7 +2,7 @@
  * @ignore
  * BEGIN HEADER
  *
- * CVM-Role:        Helper function
+ * CVM-Role:        Utility function
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *

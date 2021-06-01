@@ -5,7 +5,7 @@
             "Chanshik Lim \u003Cchanshik@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-05-25T10:06:40.000000Z"
+        "updated_at": "2021-05-31T17:00:46.000000Z"
     },
     "dialog": {
         "about": {
@@ -207,6 +207,7 @@
                 "rtl_move_visually": "RTL \ubaa8\ub4dc\uc77c \ub54c, \ud654\uc0b4\ud45c \ud0a4 \uc774\ub3d9\uc5d0\ub294 \uc2dc\uac01\uc801 \uc21c\uc11c \uc0ac\uc6a9"
             },
             "enable_rmarkdown": "RMarkdown \ud30c\uc77c \uc9c0\uc6d0 \ud65c\uc131\ud654",
+            "enable_scroll_zoom": "\u003Ckbd\u003ECmd\u003C/kbd\u003E \ud639\uc740 \u003Ckbd\u003ECtrl\u003C/kbd\u003E \ud0a4\ub97c \ub204\ub978 \uc0c1\ud0dc\uc5d0\uc11c \uc2a4\ud06c\ub864 \ud560 \ub54c \ud655\ub300 / \ucd95\uc18c",
             "enable_table_helper": "\ud14c\uc774\ube14 \ud3b8\uc9d1\uae30 \uc0ac\uc6a9",
             "export": {
                 "dest": "\ub0b4\ubcf4\ub0bc \ud30c\uc77c\uc758 \ub300\uc0c1 \ub514\ub809\ud1a0\ub9ac. \u003Cem\u003E\uc8fc\uc758 : \u003C/em\u003E\ud604\uc7ac \uc791\uc5c5 \ub514\ub809\ud1a0\ub9ac\ub97c \uc120\ud0dd\ud558\uba74 \uacbd\uace0\uc5c6\uc774 \ud30c\uc77c\uc744 \ub36e\uc5b4\uc501\ub2c8\ub2e4!",

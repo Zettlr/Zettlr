@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        getConfigTemplate utility function
+ * CVM-Role:        <none>
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Returns a functional template to be used by the config provider.
+ *
+ * END HEADER
+ */
+
 import { app } from 'electron'
 import * as bcp47 from 'bcp-47'
 import { v4 as uuid4 } from 'uuid'
@@ -113,7 +127,8 @@ export default function getConfigTemplate (): ConfigOptions {
       homeEndBehaviour: true, // If checked (true), CodeMirror goes to start/end of a paragraph, not a line.
       enableTableHelper: true, // Enable the table helper plugin
       indentUnit: 4, // The number of spaces to be added
-      fontSize: 16, // The editor's font size in pixels
+      fontSize: 16, // The editor's font size in pixels,
+      scrollZoom: true, // Whether the user can scroll by using Cmd/Ctrl+Wheel
       countChars: false, // Set to true to enable counting characters instead of words
       inputMode: 'default', // Can be default, vim, emacs
       boldFormatting: '**', // Can be ** or __

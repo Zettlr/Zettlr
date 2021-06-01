@@ -1,3 +1,19 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        getLanguageFile
+ * CVM-Role:        Utility Function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This function returns metadata containing the absolute path
+ *                  to a translation file. NOTE that this function will always
+ *                  return a valid path, in worst-cases the en-US translation.
+ *
+ * END HEADER
+ */
+
 import enumLangFiles, { LangFileMetadata } from './enum-lang-files'
 import findLangCandidates, { Candidate } from './find-lang-candidates'
 import path from 'path'

@@ -39,6 +39,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        TagManager
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     The tag manager's app entry component.
+ *
+ * END HEADER
+ */
+
 import WindowChrome from '../common/vue/window/Chrome.vue'
 import TextControl from '../common/vue/form/elements/Text.vue'
 import ColorControl from '../common/vue/form/elements/Color.vue'
