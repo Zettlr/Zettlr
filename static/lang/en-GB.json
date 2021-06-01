@@ -7,7 +7,7 @@
             "lukecarrier \u003Cluke@carrier.im\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-05-23T13:18:05.000000Z"
+        "updated_at": "2021-05-30T13:24:24.000000Z"
     },
     "dialog": {
         "about": {
@@ -209,6 +209,7 @@
                 "rtl_move_visually": "Use visual order for arrow key movement while in RTL-mode"
             },
             "enable_rmarkdown": "Enable RMarkdown file support",
+            "enable_scroll_zoom": "Zoom when scrolling while holding down \u003Ckbd\u003ECmd\u003C/kbd\u003E or \u003Ckbd\u003ECtrl\u003C/kbd\u003E",
             "enable_table_helper": "Enable Table Editor",
             "export": {
                 "dest": "Target directory for exported files. \u003Cem\u003EAttention:\u003C/em\u003E Selecting the current working directory will overwrite files without warning!",

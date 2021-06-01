@@ -4,7 +4,7 @@
             "Ales Nehyba \u003Cneal.cz@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-04-15T05:23:21.000000Z"
+        "updated_at": "2021-05-31T19:24:33.000000Z"
     },
     "dialog": {
         "about": {
@@ -206,6 +206,7 @@
                 "rtl_move_visually": "P\u0159i pohybu pomoc\u00ed \u0161ipek v re\u017eimu RTL pou\u017e\u00edt vizu\u00e1ln\u00ed po\u0159ad\u00ed"
             },
             "enable_rmarkdown": "Povolit podporu soubor\u016f RMarkdown",
+            "enable_scroll_zoom": "P\u0159ibl\u00ed\u017eit p\u0159i rolov\u00e1n\u00ed se stisknutou kl\u00e1vesou \u003Ckbd\u003ECmd\u003C/kbd\u003E nebo \u003Ckbd\u003ECtrl\u003C/kbd\u003E",
             "enable_table_helper": "Povolit Editor tabulek",
             "export": {
                 "dest": "C\u00edlov\u00e1 slo\u017eka pro export soubor\u016f. \u003Cem\u003EPozor:\u003C/em\u003E V\u00fdb\u011br aktu\u00e1ln\u00ed pracovn\u00ed slo\u017eky p\u0159ep\u00ed\u0161e soubory v n\u00ed bez varov\u00e1n\u00ed!",
@@ -508,6 +509,7 @@
         "open_attachment": "Otev\u0159\u00edt p\u0159\u00edlohu",
         "open_link": "Otev\u0159\u00edt odkaz",
         "open_logs": "Otev\u0159\u00edt logy",
+        "open_new_tab": "Otev\u0159\u00edt na nov\u00e9 z\u00e1lo\u017ece",
         "open_workspace": "Otev\u0159\u00edt plochu...",
         "pandoc": "Z\u00edskat Pandoc",
         "paste": "Vlo\u017eit",
