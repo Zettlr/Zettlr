@@ -93,7 +93,7 @@ export async function bootApplication (): Promise<void> {
     // Load Vue developer extension
     installExtension(VUEJS_DEVTOOLS)
       .then((name: string) => global.log.info(`Added DevTools extension:  ${name}`))
-      .catch((err: any) => console.log('An error occurred: ', err))
+      .catch((err: any) => global.log.error(`Could not install DevTools extensions: ${String(err.message)}`, err))
   } catch (e) {
     global.log.verbose('Electron DevTools Installer not found - proceeding without loading developer tools.')
   }
