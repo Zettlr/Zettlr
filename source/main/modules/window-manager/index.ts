@@ -105,6 +105,8 @@ export default class WindowManager {
 
       const { command, payload } = message
 
+      let itemPath: string = payload
+
       switch (command) {
         case 'win-maximise':
           if (callingWindow.isMaximized()) {
@@ -149,7 +151,12 @@ export default class WindowManager {
             .catch(err => global.log.error(`[Window Manager] Could not fetch icon for path ${String(payload.filePath)}`, err))
           break
         case 'show-item-in-folder':
-          shell.showItemInFolder(payload)
+          if (itemPath.startsWith('safe-file://')) {
+            itemPath = itemPath.replace('safe-file://', '')
+          } else if (itemPath.startsWith('file://')) {
+            itemPath = itemPath.replace('file://', '')
+          }
+          shell.showItemInFolder(itemPath)
           break
       }
     })

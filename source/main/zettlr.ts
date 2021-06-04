@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-import { app, BrowserWindow, FileFilter, ipcMain, MessageBoxReturnValue } from 'electron'
+import { app, BrowserWindow, clipboard, FileFilter, ipcMain, MessageBoxReturnValue, nativeImage } from 'electron'
 import path from 'path'
 import fs from 'fs'
 
@@ -434,6 +434,22 @@ export default class Zettlr {
     } else if (command === 'get-open-files') {
       // Return all open files as their metadata objects
       return this._documentManager.openFiles.map(file => this._fsal.getMetadataFor(file))
+    } else if (command === 'copy-img-to-clipboard') {
+      // We should copy the contents of an image file to clipboard. Payload
+      // contains the image path. We can rely on the Electron framework here.
+      let imgPath: string = payload
+      if (imgPath.startsWith('safe-file://')) {
+        imgPath = imgPath.replace('safe-file://', '')
+      } else if (imgPath.startsWith('file://')) {
+        imgPath = imgPath.replace('file://', '')
+      }
+
+      const img = nativeImage.createFromPath(imgPath)
+
+      if (!img.isEmpty()) {
+        clipboard.writeImage(img)
+      }
+      return true
     } else if (command === 'get-file-contents') {
       // First, attempt to get the contents from the document manager
       const file = this._documentManager.openFiles.find(file => file.path === payload)
