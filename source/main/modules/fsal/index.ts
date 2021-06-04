@@ -319,6 +319,14 @@ export default class FSAL extends EventEmitter {
         // searched before the directory tree, so DON'T you change that ever!
         this._recordFiletreeChange('remove', root.path)
         this._recordFiletreeChange('add', root.path)
+
+        // Also, make sure to update the config accordingly
+        const rootPaths: string[] = global.config.get('openPaths')
+
+        if (rootPaths.includes(root.path)) {
+          rootPaths.splice(rootPaths.indexOf(root.path), 1)
+          global.config.set('openPaths', rootPaths)
+        }
       }
     }
   }
