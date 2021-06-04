@@ -3,7 +3,7 @@
     id="toolbar"
     role="toolbar"
     v-bind:style="{ top: marginTop }"
-    v-on:dblclick="$emit('dblclick')"
+    v-on:dblclick="handleDoubleClick"
   >
     <template v-for="(item, idx) in controls">
       <ButtonControl
@@ -106,6 +106,22 @@ export default {
     }
   },
   computed: {
+  },
+  methods: {
+    /**
+     * Handles a double click and emits an event if the target was the toolbar
+     * or one of the spacers.
+     *
+     * @param   {MouseEvent}  event  The triggering mouse event
+     */
+    handleDoubleClick: function (event) {
+      // Only emit a double click event if the user double clicked on the
+      // _toolbar_ or on a spacer, and not just on any button.
+      const t = event.target
+      if (t === this.$el || (t !== null && t.className.includes('spacer') === true)) {
+        this.$emit('dblclick')
+      }
+    }
   }
 }
 </script>
