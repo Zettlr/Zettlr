@@ -110,15 +110,19 @@ export default class DocumentManager extends EventEmitter {
 
     this._watcher.add(openFiles)
 
+    this.emit('update', 'openFiles')
+
     // And make the correct file active
     const activeFile: string = global.config.get('activeFile')
     const activeDescriptor = this._loadedDocuments.find(elem => elem.path === activeFile)
 
     if (activeDescriptor !== undefined) {
       this._activeFile = activeDescriptor
+      this.emit('update', 'activeFile')
     } else if (this._loadedDocuments.length > 0) {
       // Make another file active
       this._activeFile = this._loadedDocuments[0]
+      this.emit('update', 'activeFile')
       // TODO: global.recentDocs.add(this._fsal.getMetadataFor(activeFile))
     }
   }
