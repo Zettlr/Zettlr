@@ -294,9 +294,13 @@ const config: StoreOptions<ZettlrState> = {
         state.fileTree.push(descriptor)
         // @ts-expect-error TODO: The sorting function currently expects only FSAL descriptors, not metas
         state.fileTree = sort(state.fileTree) // Omit sorting to sort name-up
-      } else if (descriptor.parent == null) {
+      } else if (descriptor.parent != null) {
         const parentPath = descriptor.dir
         const parentDescriptor = findPathDescriptor(parentPath, state.fileTree)
+        if (parentDescriptor === null) {
+          console.warn(`Was about to add descriptor ${String(descriptor.path)} to the filetree, but the parent ${String(parentPath)} was null!`)
+          return
+        }
         if (parentDescriptor.children.find((elem: any) => elem.path === descriptor.path) !== undefined) {
           return // We already have this descriptor, nothing to do.
         } else if (parentDescriptor.attachments.find((elem: any) => elem.path === descriptor.path) !== undefined) {
@@ -304,7 +308,8 @@ const config: StoreOptions<ZettlrState> = {
         }
         descriptor.parent = parentDescriptor // Attach the child to its parent
         if (descriptor.type === 'directory') {
-          reconstructTree(descriptor) // Make sure the parent pointers work correctly
+          // Make sure the parent pointers work correctly even inside this subtree
+          reconstructTree(descriptor)
         }
 
         if (isAttachment(descriptor.path)) {
@@ -400,6 +405,7 @@ const config: StoreOptions<ZettlrState> = {
       state.activeFile = descriptor
     },
     updateOpenFiles: function (state, openFiles) {
+      console.warn('Open files', openFiles)
       state.openFiles = openFiles
     },
     colouredTags: function (state, tags) {
@@ -507,6 +513,7 @@ const config: StoreOptions<ZettlrState> = {
     },
     updateOpenFiles: async function (context) {
       const openFiles = await ipcRenderer.invoke('application', { command: 'get-open-files' })
+      console.warn('Open files updated, received!', openFiles)
       const ourDifferentFiles = context.state.openFiles
 
       if (openFiles.length === ourDifferentFiles.length) {
