@@ -82,14 +82,15 @@ export default class DocumentManager extends EventEmitter {
       }
 
       if (event === 'unlink') {
-        this._loadedDocuments.splice(this._loadedDocuments.indexOf(descriptor), 1)
-        this.emit('update', 'openFiles')
-        global.config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
+        // Just close the file (also handles activeFile and config changes)
+        this.closeFile(descriptor)
       } else if (event === 'change') {
         this._loadFile(p)
           .then(newDescriptor => {
             if (newDescriptor.modtime !== descriptor.modtime) {
-              // Notify the caller, if the file has actually changed on disk.
+              // Replace the old descriptor with the newly loaded one
+              this._loadedDocuments.splice(this._loadedDocuments.indexOf(descriptor), 1, newDescriptor)
+              // Notify the caller, that the file has actually changed on disk.
               this.emit('update', 'openFileRemotelyChanged', newDescriptor)
             }
           })
