@@ -31,7 +31,7 @@ module.exports = (elem) => {
       placement: 'top-start', // Display at the beginning of the anchor
       appendTo: document.body, // anchor
       showOnCreate: true, // Immediately show the tooltip
-      arrow: true // No arrow for these tooltips
+      arrow: true // Arrow for these tooltips
     })
 
     // Find the file's absolute path

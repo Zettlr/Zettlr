@@ -44,13 +44,13 @@ export default class FilePathFindMetaData extends ZettlrCommand {
         if (file !== undefined) {
           // If we find it, then return it
           metaData = await this._app.getFileSystem().getFileContents(file)
-          break;
+          break
         }
       }
     }
     // Get the contents of the file such as:
     if (metaData !== undefined) {
-      metaData = metaData as MDFileMeta //forces MDFileMeta rather than CodeFileMeta
+      metaData = metaData as MDFileMeta // forces MDFileMeta rather than CodeFileMeta
       let content = metaData.content.substring(0, 200) // The content
       if (metaData.content.length > 200) {
         content += '...'
