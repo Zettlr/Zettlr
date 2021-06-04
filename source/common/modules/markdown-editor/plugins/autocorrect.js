@@ -187,7 +187,10 @@
     const triggerCharacters = {}
     for (const key in replacementCandidates) {
       const character = key[key.length - 1]
-      if (!triggerCharacters[character]) triggerCharacters[character] = {}
+      if (!(character in triggerCharacters)) {
+        triggerCharacters[character] = {}
+      }
+
       triggerCharacters[character][key] = replacementCandidates[key]
     }
 
@@ -221,31 +224,46 @@
    * @param {string} key The key that is currently being handled.
    */
   function handleKey (cm, candidates, key) {
-    if (cm.isReadOnly()) return CodeMirror.Pass
+    if (cm.isReadOnly()) {
+      return CodeMirror.Pass
+    }
+
     const cursor = cm.getCursor()
     // In case of overlay markdown modes, we need to make sure
     // we only apply this if we're in markdown.
-    if (cm.getModeAt(cursor).name !== 'markdown') return CodeMirror.Pass
+    if (cm.getModeAt(cursor).name !== 'markdown-zkn') {
+      return CodeMirror.Pass
+    }
+
     // Additionally, we only should replace if we're not within comment-style tokens
     let tokens = cm.getTokenTypeAt(cursor)
-    if (tokens && tokens.split(' ').includes('comment')) return CodeMirror.Pass
+    if (tokens && tokens.split(' ').includes('comment')) {
+      return CodeMirror.Pass
+    }
 
     let { cursorBegin, cursorEnd } = cursors(cursor, candidates)
-    if (cursorBegin.ch === cursorEnd.ch) return CodeMirror.Pass // Empty range, no need to check
+    if (cursorBegin.ch === cursorEnd.ch) {
+      return CodeMirror.Pass // Empty range, no need to check
+    }
+
     let replacementOccurred = false
     for (; cursorBegin.ch < cursorEnd.ch; cursorBegin.ch++) {
       for (const candidate in candidates) {
         if (candidate === cm.getRange(cursorBegin, cursorEnd) + key) {
           cm.replaceRange(candidates[candidate], cursorBegin, cursorEnd)
           replacementOccurred = true
-          if (wordStyleAutoCorrect) canPerformReverseReplacement = true // Activate reverse replacement
+          if (wordStyleAutoCorrect) {
+            canPerformReverseReplacement = true // Activate reverse replacement
+          }
           break // No need to go through all of the candidates anymore
         }
       }
     }
 
     // Return CodeMirror.Pass if no replacement happened.
-    if (!replacementOccurred) return CodeMirror.Pass
+    if (!replacementOccurred) {
+      return CodeMirror.Pass
+    }
   }
 
   /**
@@ -253,14 +271,22 @@
    * @param {CodeMirror} cm The CodeMirror instance.
    */
   function handleSpecial (cm) {
-    if (cm.isReadOnly()) return CodeMirror.Pass
+    if (cm.isReadOnly()) {
+      return CodeMirror.Pass
+    }
+
     // In case of overlay markdown modes, we need to make sure
     // we only apply this if we're in markdown.
     const cursor = cm.getCursor()
-    if (cm.getModeAt(cursor).name !== 'markdown') return CodeMirror.Pass
+    if (cm.getModeAt(cursor).name !== 'markdown-zkn') {
+      return CodeMirror.Pass
+    }
+
     // Additionally, we only should replace if we're not within comment-style tokens
     let tokens = cm.getTokenTypeAt(cursor)
-    if (tokens && tokens.split(' ').includes('comment')) return CodeMirror.Pass
+    if (tokens && tokens.split(' ').includes('comment')) {
+      return CodeMirror.Pass
+    }
 
     canPerformReverseReplacement = false // Reset the handleBackspace flag
     hasJustAddedQuote = false // Reset the ability to reset the quote
@@ -274,7 +300,10 @@
 
     // The cursor will now be at the position BEFORE the space has been inserted
     let { cursorBegin, cursorEnd } = cursors(cursor, replacementCandidates)
-    if (cursorBegin.ch === cursorEnd.ch) return CodeMirror.Pass // Empty range, no need to check
+    if (cursorBegin.ch === cursorEnd.ch) {
+      return CodeMirror.Pass // Empty range, no need to check
+    }
+
     for (; cursorBegin.ch < cursorEnd.ch; cursorBegin.ch++) {
       for (const candidate in replacementCandidates) {
         if (candidate === cm.getRange(cursorBegin, cursorEnd)) {
@@ -287,7 +316,10 @@
 
           // Replace! Use the +input origin so that the user can remove it with Cmd/Ctrl+Z
           cm.replaceRange(replacementCandidates[candidate], cursorBegin, cursorEnd)
-          if (wordStyleAutoCorrect) canPerformReverseReplacement = true // Activate reverse replacement
+          if (wordStyleAutoCorrect) {
+            canPerformReverseReplacement = true // Activate reverse replacement
+          }
+
           break // No need to go through all of the candidates anymore
         }
       }
@@ -303,11 +335,16 @@
    * @param {string} type The type of quote to be handled (single or double).
    */
   function handleQuote (cm, type) {
-    if (quotes === false || cm.isReadOnly()) return CodeMirror.Pass
+    if (quotes === false || cm.isReadOnly()) {
+      return CodeMirror.Pass
+    }
+
     const cursor = cm.getCursor()
     // In case of overlay markdown modes, we need to make sure
     // we only apply this if we're in markdown.
-    if (cm.getModeAt(cursor).name !== 'markdown') return CodeMirror.Pass
+    if (cm.getModeAt(cursor).name !== 'markdown-zkn') {
+      return CodeMirror.Pass
+    }
 
     canPerformReverseReplacement = false // Reset the handleBackspace flag
     const cursorBefore = { 'line': cursor.line, 'ch': cursor.ch - 1 }
@@ -328,7 +365,9 @@
    * @param {CodeMirror} cm The CodeMirror instance.
    */
   function handleBackspace (cm) {
-    if (cm.isReadOnly()) return CodeMirror.Pass
+    if (cm.isReadOnly()) {
+      return CodeMirror.Pass
+    }
 
     if (hasJustAddedQuote) {
       hasJustAddedQuote = false // We can already reset this here
@@ -336,7 +375,9 @@
       // If there are selections, simply don't do it, because a selection means
       // the user wants to remove several things, and not want to undo any
       // Magic Quote.
-      if (cm.doc.somethingSelected()) return CodeMirror.Pass
+      if (cm.doc.somethingSelected()) {
+        return CodeMirror.Pass
+      }
 
       // Re-set the last added quote
       let cursor = cm.getCursor()
@@ -354,10 +395,14 @@
 
       // We don't want the algorithm to replace quotes down the line,
       // so we'll only check the previous char
-      if (!allQuotes.includes(currentQuote)) return CodeMirror.Pass
+      if (!allQuotes.includes(currentQuote)) {
+        return CodeMirror.Pass
+      }
 
       let replacement = '"'
-      if (allQuotes.slice(0, 2).includes(currentQuote)) replacement = "'"
+      if (allQuotes.slice(0, 2).includes(currentQuote)) {
+        replacement = "'"
+      }
 
       cm.doc.replaceRange(
         replacement,
@@ -367,7 +412,9 @@
       return // We are done here
     }
 
-    if (!wordStyleAutoCorrect || !canPerformReverseReplacement) return CodeMirror.Pass
+    if (!wordStyleAutoCorrect || !canPerformReverseReplacement) {
+      return CodeMirror.Pass
+    }
 
     // What do we do here? Easy: Check if the characters preceeding the cursor equal a replacement table value. If they do,
     // replace that with the original replacement *key*.
@@ -409,7 +456,11 @@
       'line': cursor.line,
       'ch': cursor.ch - getMaxCandidateLength(candidates)
     }
-    if (cursorBegin.ch < 0) cursorBegin.ch = 0
+
+    if (cursorBegin.ch < 0) {
+      cursorBegin.ch = 0
+    }
+
     return {
       'cursorBegin': cursorBegin,
       'cursorEnd': cursor
