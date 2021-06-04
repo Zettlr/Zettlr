@@ -684,7 +684,6 @@ export default {
     // up 100 % all for itself anymore.
     margin-left: 0.5em;
     height: 100%;
-    cursor: text;
     font-family: inherit;
     background: none;
 
