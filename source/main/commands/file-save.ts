@@ -30,7 +30,7 @@ export default class SaveFile extends ZettlrCommand {
     * @return {void}      This function does not return.
     */
   async run (evt: string, file: any): Promise<boolean> {
-    if ((file == null) || !file.hasOwnProperty('newContents')) {
+    if ((file == null) || !('newContents' in file)) {
       global.log.error('Could not save file, it\'s either null or has no content', file)
       // No file given -> abort saving process
       return false
