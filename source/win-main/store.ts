@@ -405,7 +405,6 @@ const config: StoreOptions<ZettlrState> = {
       state.activeFile = descriptor
     },
     updateOpenFiles: function (state, openFiles) {
-      console.warn('Open files', openFiles)
       state.openFiles = openFiles
     },
     colouredTags: function (state, tags) {
@@ -513,7 +512,6 @@ const config: StoreOptions<ZettlrState> = {
     },
     updateOpenFiles: async function (context) {
       const openFiles = await ipcRenderer.invoke('application', { command: 'get-open-files' })
-      console.warn('Open files updated, received!', openFiles)
       const ourDifferentFiles = context.state.openFiles
 
       if (openFiles.length === ourDifferentFiles.length) {
