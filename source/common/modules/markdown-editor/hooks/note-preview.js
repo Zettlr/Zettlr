@@ -31,7 +31,7 @@ module.exports = (elem) => {
       placement: 'top-start', // Display at the beginning of the anchor
       appendTo: document.body, // anchor
       showOnCreate: true, // Immediately show the tooltip
-      arrow: false // No arrow for these tooltips
+      arrow: true // No arrow for these tooltips
     })
 
     // Find the file's absolute path
@@ -44,6 +44,6 @@ module.exports = (elem) => {
         } else {
           tooltip.setContent('File Not Found') // TODO: Translate!
         }
-      }).catch(err => console.error('File path find error: ' + err))
+      }).catch(err => console.log('File path find error: ' + err))
   })
 }

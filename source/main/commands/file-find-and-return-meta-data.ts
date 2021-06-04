@@ -31,11 +31,11 @@ export default class FilePathFindMetaData extends ZettlrCommand {
       */
   async run (evt: string, arg: any): Promise<any> {
     let file
-    let MetaData
+    let metaData
     // It might be linked by ID
     file = this._app.getFileSystem().findExact((arg as string), 'id')
     if (file !== undefined) {
-      MetaData = await this._app.getFileSystem().getFileContents(file)
+      metaData = await this._app.getFileSystem().getFileContents(file)
     }
     // It's not an ID, so search each type of file
     if (file === undefined) {
@@ -43,22 +43,23 @@ export default class FilePathFindMetaData extends ZettlrCommand {
         file = this._app.getFileSystem().findExact((arg as string) + type, 'name')
         if (file !== undefined) {
           // If we find it, then return it
-          MetaData = await this._app.getFileSystem().getFileContents(file)
+          metaData = await this._app.getFileSystem().getFileContents(file)
+          break;
         }
       }
     }
     // Get the contents of the file such as:
-    if (MetaData !== undefined) {
-      MetaData = MetaData as MDFileMeta //forces MDFileMeta rather than CodeFileMeta
-      let content = MetaData.content.substring(0, 200) // The content
-      if (MetaData.content.length > 200) {
+    if (metaData !== undefined) {
+      metaData = metaData as MDFileMeta //forces MDFileMeta rather than CodeFileMeta
+      let content = metaData.content.substring(0, 200) // The content
+      if (metaData.content.length > 200) {
         content += '...'
       }
-      let wordCount = MetaData.wordCount // The word count
-      let title = MetaData.name // The file name
+      let wordCount = metaData.wordCount // The word count
+      let title = metaData.name // The file name
 
       // use luxon to get a local time difference
-      let time = formatDate(MetaData.modtime)
+      let time = formatDate(metaData.modtime)
       return ([ title, content, wordCount, time ])
     }
     // We can't find it, so return Not Found
