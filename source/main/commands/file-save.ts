@@ -26,9 +26,9 @@ export default class SaveFile extends ZettlrCommand {
     * Saves a file. A file MUST be given, for the content is needed to write to
     * a file. Content is always freshly grabbed from the CodeMirror content.
     *
-    * @param {String} evt The event name
-    * @param  {Object} file An object containing some properties of the file.
-    * @return {void}      This function does not return.
+    * @param  {string}            evt   The event name
+    * @param  {any}               file  An object containing some properties of the file.
+    * @return {Promise<boolean>}        Returns true on successful run.
     */
   async run (evt: string, file: any): Promise<boolean> {
     if ((file == null) || !('newContents' in file)) {
