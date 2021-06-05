@@ -27,6 +27,12 @@
           v-bind:inline="true"
           v-on:click="saveDefaultsFile()"
         ></ButtonControl>
+        <ButtonControl
+          v-bind:primary="false"
+          v-bind:label="'Restore defaults file'"
+          v-bind:inline="true"
+          v-on:click="restoreDefaultsFile()"
+        ></ButtonControl>
         <span v-if="savingStatus !== ''" class="saving-status">{{ savingStatus }}</span>
       </div>
     </template>
@@ -209,6 +215,43 @@ export default {
           }, 1000)
         })
         .catch(err => console.error(err))
+    },
+    restoreDefaultsFile: function () {
+      const isWriter = this.which === 'tab-export-control'
+      const isReader = this.which === 'tab-import-control'
+
+      if (!isWriter && !isReader) {
+        // Nothing to do
+        return
+      }
+
+      this.savingStatus = 'Restoring defaults file ...'
+
+      let format
+      if (isWriter) {
+        format = Object.keys(WRITERS)[this.currentItem]
+      } else if (isReader) {
+        format = Object.keys(READERS)[this.currentItem]
+      }
+
+      ipcRenderer.invoke('assets-provider', {
+        command: 'restore-defaults-file',
+        payload: {
+          format: format,
+          type: (isWriter) ? 'export' : 'import'
+        }
+      })
+        .then((result) => {
+          if (result === true) {
+            this.savingStatus = 'Defaults file restored.' // TODO: Translate
+            // Immediately re-fetch the now restored defaults file
+            this.loadDefaultsForState()
+            setTimeout(() => { this.savingStatus = '' }, 1000)
+          } else {
+            this.savingStatus = 'Could not restore defaults file!'
+          }
+        })
+        .catch(err => { console.error(err) })
     }
   }
 }
