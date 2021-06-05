@@ -1,4 +1,7 @@
----
+# ZETTLR DEFAULTS FILE
+# ====================
+# Conversion: Markdown --> Microsoft Word
+# More info: https://pandoc.org/MANUAL.html
 reader: markdown
 writer: docx
 self-contained: true

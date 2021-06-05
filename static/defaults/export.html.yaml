@@ -1,4 +1,7 @@
----
+# ZETTLR DEFAULTS FILE
+# ====================
+# Conversion: Markdown --> HTML Document
+# More info: https://pandoc.org/MANUAL.html
 reader: markdown
 writer: html
 self-contained: false

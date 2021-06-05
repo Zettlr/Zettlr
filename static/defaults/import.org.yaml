@@ -1,3 +1,7 @@
+# ZETTLR DEFAULTS FILE
+# ====================
+# Conversion: Orgmode document --> Markdown
+# More info: https://pandoc.org/MANUAL.html
 reader: org
 writer: markdown
 wrap: none

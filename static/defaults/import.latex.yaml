@@ -1,3 +1,7 @@
+# ZETTLR DEFAULTS FILE
+# ====================
+# Conversion: LaTeX document --> Markdown
+# More info: https://pandoc.org/MANUAL.html
 reader: latex
 writer: markdown
 wrap: none

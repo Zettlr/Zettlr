@@ -1,4 +1,7 @@
----
+# ZETTLR DEFAULTS FILE
+# ====================
+# Conversion: Markdown --> PDF (requires TeX suite installed)
+# More info: https://pandoc.org/MANUAL.html
 reader: markdown
 writer: pdf
 self-contained: true
@@ -12,7 +15,7 @@ filters:
 - type: citeproc
 file-scope: false
 top-level-division: chapter
-pdf-engine: xelatex
+pdf-engine: xelatex # Change this if you want to use a different engine.
 dpi: 72
 toc: false
 toc-depth: 2

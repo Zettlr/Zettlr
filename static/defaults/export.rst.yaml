@@ -1,4 +1,7 @@
----
+# ZETTLR DEFAULTS FILE
+# ====================
+# Conversion: Markdown --> reStructuredText
+# More info: https://pandoc.org/MANUAL.html
 reader: markdown
 writer: rst
 self-contained: false

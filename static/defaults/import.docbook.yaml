@@ -1,3 +1,7 @@
+# ZETTLR DEFAULTS FILE
+# ====================
+# Conversion: DocBook --> Markdown
+# More info: https://pandoc.org/MANUAL.html
 reader: docbook
 writer: markdown
 wrap: none
