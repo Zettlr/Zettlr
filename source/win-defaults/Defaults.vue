@@ -121,7 +121,9 @@ export default {
   },
   watch: {
     which: function (newValue, oldValue) {
-      this.loadDefaultsForState()
+      // Reset to the beginning of the list. The watcher right below will pick
+      // that change up and re-load the defaults.
+      this.currentItem = 0
     },
     currentItem: function (newValue, oldValue) {
       this.loadDefaultsForState()
