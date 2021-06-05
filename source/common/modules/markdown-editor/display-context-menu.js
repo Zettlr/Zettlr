@@ -99,13 +99,6 @@ const TEMPLATE_TEXT = [
   }
 ]
 
-const TEMPLATE_IMG = [
-  {
-    label: 'menu.show_img_in_folder',
-    id: 'show-img-in-folder'
-  }
-]
-
 // Contains a list of all labels that should be disabled
 // in readonly mode of the editor
 const readOnlyDisabled = [
