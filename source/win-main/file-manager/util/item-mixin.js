@@ -129,6 +129,7 @@ export default {
 
       if (this.isDirectory === true) {
         dirContextMenu(event, this.obj, this.$el, (clickedID) => {
+          console.log(clickedID)
           if (clickedID === 'menu.rename_dir') {
             this.nameEditing = true
           } else if (clickedID === 'menu.new_file') {
@@ -147,6 +148,12 @@ export default {
             ipcRenderer.invoke('application', {
               command: 'dir-delete',
               payload: { path: this.obj.path }
+            })
+              .catch(err => console.error(err))
+          } else if (clickedID === 'menu.close_workspace') {
+            ipcRenderer.invoke('application', {
+              command: 'root-close',
+              payload: this.obj.path
             })
               .catch(err => console.error(err))
           } else if (clickedID === 'menu.properties') {
@@ -208,9 +215,7 @@ export default {
         })
       } else {
         fileContextMenu(event, this.obj, this.$el, (clickedID) => {
-          console.log(clickedID)
           if (clickedID === 'new-tab') {
-            console.log('Will open in new tab!')
             // Request the clicked file, explicitly in a new tab
             ipcRenderer.invoke('application', {
               command: 'open-file',

@@ -140,12 +140,6 @@ module.exports = function displayFileContext (event, dirObject, el, callback) {
           content: { hash: dirObject.hash }
         })
         break
-      case 'menu.close_workspace':
-        ipcRenderer.send('message', {
-          command: 'root-close',
-          content: dirObject.hash
-        })
-        break
       case 'menu.rescan_dir':
         ipcRenderer.send('message', {
           command: 'rescan-dir',
