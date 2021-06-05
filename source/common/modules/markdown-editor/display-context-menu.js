@@ -169,7 +169,6 @@ function getTargetType (target) {
 module.exports = function displayContextMenu (event, isReadOnly, commandCallback, replaceCallback) {
   // First, determine which kind of context menu we should display
   const contextMenuType = getTargetType(event.target)
-  console.log(contextMenuType)
 
   // Now, determine the appropriate template to use. In most cases, we use the
   // text template, but that doesn't make sense to rendered links, citations, or

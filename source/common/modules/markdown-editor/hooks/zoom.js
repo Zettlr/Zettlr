@@ -14,7 +14,6 @@
 
 module.exports = (cm, zoomHook) => {
   cm.getWrapperElement().addEventListener('wheel', (e) => {
-    console.log(cm.getOption('zettlr').scrollZoom)
     if (cm.getOption('zettlr').scrollZoom !== true) {
       return
     }
