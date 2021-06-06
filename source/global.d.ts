@@ -35,9 +35,6 @@ interface Application {
   showAboutWindow: () => void
   showDefaultsPreferences: () => void
   showTagManager: () => void
-  // TODO: Match the signatures of fileUpdate and dirUpdate
-  fileUpdate: (oldHash: number, fileMetadata: any) => void
-  dirUpdate: (oldHash: number, newHash: number) => void
   notifyChange: (msg: string) => void
   findFile: (prop: any) => MDFileDescriptor | CodeFileDescriptor | null
   findDir: (prop: any) => DirDescriptor | null

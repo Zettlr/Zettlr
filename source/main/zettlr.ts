@@ -81,17 +81,6 @@ export default class Zettlr {
       showTagManager: () => {
         this._windowManager.showTagManager()
       },
-      // TODO: Match the signatures of fileUpdate and dirUpdate
-      fileUpdate: (oldHash: number, fileMetadata: any) => {
-        if (typeof fileMetadata === 'number') {
-          // NOTE: This will become permanent later on
-          fileMetadata = this._fsal.findFile(fileMetadata)
-        }
-        // TODO: DEAD CODE
-      },
-      dirUpdate: (oldHash: number, newHash: number) => {
-        // TODO DEAD CODE
-      },
       notifyChange: (msg: string) => {
         global.notify.normal(msg)
       },
