@@ -29,7 +29,6 @@ declare module '*.png'
  */
 interface Application {
   runCommand: (command: string, payload?: any) => Promise<any>
-  isBooting: () => boolean
   showLogViewer: () => void
   showPreferences: () => void
   displayErrorMessage: (title: string, message: string, contents?: string) => void

@@ -36,7 +36,6 @@ import { CodeFileDescriptor, CodeFileMeta, DirDescriptor, MDFileDescriptor, MDFi
 import broadcastIpcMessage from '../common/util/broadcast-ipc-message'
 
 export default class Zettlr {
-  isBooting: boolean
   editFlag: boolean
   _openPaths: any
   _fsal: FSAL
@@ -50,7 +49,6 @@ export default class Zettlr {
     * @param {electron.app} parentApp The app object.
     */
   constructor () {
-    this.isBooting = true // Only is true until the main process has fully loaded
     this.editFlag = false // Is the current opened file edited?
     this._openPaths = [] // Holds all currently opened paths.
     this.isShownFor = [] // Contains all files for which remote notifications are currently shown
@@ -64,10 +62,6 @@ export default class Zettlr {
     global.application = {
       runCommand: async (command: string, payload?: any) => {
         return await this.runCommand(command, payload)
-      },
-      // Flag indicating whether or not the application is booting
-      isBooting: () => {
-        return this.isBooting
       },
       showLogViewer: () => {
         this._windowManager.showLogWindow()
@@ -323,42 +317,67 @@ export default class Zettlr {
     // main window.
     this.openWindow()
 
-    let start = Date.now()
+    // Start a timer to measure how long the roots take to load.
+    const start = Date.now()
+
+    // A note on allPromises and the Promise.all().finally()-chain below:
+    // In this function we have two main tasks: Load the file tree and the
+    // document manager. Since both processes are isolated from each other,
+    // loading the FSAL before the DocumentManager could lead to visual lag,
+    // just as vice versa (if the user is a maniac and has, like, 100 files
+    // open). Since asynchronous code is written as if it were procedural using
+    // async/await, we must forcefully detach both from each other. We do so by
+    // simply not awaiting the promises the FSAL generates, and collect them.
+    // Then, we stack all remaining set up code into the finally() below while
+    // the document manager is simply awaited. This way everything loads as fast
+    // as it can, and thus users with many files (as me) will have their
+    // documents load slightly before the file tree is fully visible.
+    const allPromises: Array<Promise<boolean>> = []
+
     // First: Initially load all paths
     for (let p of global.config.get('openPaths') as string[]) {
-      try {
-        await this._fsal.loadPath(p)
-      } catch (e) {
+      const prom = this._fsal.loadPath(p)
+      prom.catch(e => {
         console.error(e)
         global.log.info(`[Application] Removing path ${p}, as it does no longer exist.`)
         global.config.removePath(p)
+      })
+
+      allPromises.push(prom)
+    }
+
+    Promise.all(allPromises).finally(() => {
+      // We allow some promises to fail, but after all have been dealt with,
+      // we need to continue the set up process
+
+      // Set the pointers either to null or last opened dir/file
+      let openDirectory = null
+
+      try {
+        openDirectory = this._fsal.findDir(global.config.get('openDirectory'))
+      } catch (e) {
+        console.log('Error on finding last dir or file', e)
       }
-    }
 
-    // Set the pointers either to null or last opened dir/file
-    let openDirectory = null
+      this._fsal.openDirectory = openDirectory
 
-    try {
-      openDirectory = this._fsal.findDir(global.config.get('openDirectory'))
-    } catch (e) {
-      console.log('Error on finding last dir or file', e)
-    }
+      // Verify the integrity of the targets
+      global.targets.verify()
+
+      // Second: handleAddRoots with global.filesToOpen
+      this.handleAddRoots(global.filesToOpen) // TODO
+        .finally(() => {
+          // Last step of the FSAL set up: Clean up
+          // Reset the global so that no old paths are re-added
+          global.filesToOpen = []
+
+          const duration = Date.now() - start
+          global.log.info(`Loaded all roots in ${duration / 1000} seconds`)
+        })
+    })
 
     // Pre-set the state based on the configuration
     await this._documentManager.init()
-
-    this._fsal.openDirectory = openDirectory
-    // Second: handleAddRoots with global.filesToOpen
-    await this.handleAddRoots(global.filesToOpen) // TODO
-
-    // Reset the global so that no old paths are re-added
-    global.filesToOpen = []
-    // Verify the integrity of the targets after all paths have been loaded
-    global.targets.verify()
-    this.isBooting = false // Now we're done booting
-    let duration = Date.now() - start
-    duration /= 1000 // Convert to seconds
-    global.log.info(`Loaded all roots in ${duration} seconds`)
 
     // Finally, initiate a first check for updates
     global.updates.check()
