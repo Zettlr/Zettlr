@@ -90,6 +90,7 @@
           v-if="field.type === 'list'"
           v-bind:key="f_idx"
           v-bind:value="getModelValue(field.model)"
+          v-bind:label="field.label"
           v-bind:labels="field.labels"
           v-bind:name="field.model"
           v-bind:deletable="field.deletable"

@@ -31,6 +31,7 @@ export default function () {
           type: 'list',
           label: trans('dialog.preferences.user_dictionary'),
           model: 'userDictionaryContents',
+          labels: ['Dictionary entry'], // TODO: Translate!
           deletable: true,
           searchable: true,
           searchLabel: 'Search for entries …'
