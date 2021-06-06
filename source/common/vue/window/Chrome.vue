@@ -409,9 +409,6 @@ body {
     }
   }
 
-  // win32 OPERATIONG SYSTEM STYLES TODO
-  // Linux OPERATING SYSTEM STYLES TODO
-
   div#window-chrome {
     // position: absolute;
     // left: 0;

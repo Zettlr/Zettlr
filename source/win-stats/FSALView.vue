@@ -44,9 +44,13 @@
     padding-top on a relatively positioned container with width 100 %, any
     absolutely positioned child that is supposed to fill the whole container
     will be resized relatively. padding-top in the parent container
-    corresponds to the wanted aspect ratio (e.g. 16:9 -> about 56 %)
+    corresponds to the wanted aspect ratio (e.g. 16:9 -> about 56 %), which
+    means we'll just directly compute this here on the element.
     -->
-    <div id="box-plot-fsal-stats-words">
+    <div
+      id="box-plot-fsal-stats-words"
+      v-bind:style="`padding-top: ${boxPlotData.height/boxPlotData.width*100}%`"
+    >
       <!--
       This SVG has an aspect ratio of around 8:1. By setting preserveAspectRatio
       to xMidYMid, we ensure the graphic will be centered (regardless of the viewBox).
@@ -234,13 +238,11 @@ export default {
       // non standard compliant window sizes, but alas. We assume Zettlr will
       // -- most of the time -- be run in default maximized/full screen state on
       // landscape displays.
-      const height = 200
-      const width = 1400
 
       // Helper function
-      const zTransform = function (val) {
+      const zTransform = (val) => {
         const percent = val / (data.maxWords - data.minWords)
-        return width * percent
+        return this.boxPlotData.width * percent
       }
 
       // Calculate the necessary measurements for the box plot
@@ -251,8 +253,8 @@ export default {
 
       // Update the internal variables
       this.boxPlotData = {
-        width: width,
-        height: height,
+        width: this.boxPlotData.width,
+        height: this.boxPlotData.height,
         mean: zTransform(data.meanWords),
         interval68Start: ninetyFiveStart,
         interval68End: ninetyFiveEnd - ninetyFiveStart,
@@ -312,7 +314,7 @@ div#fsal-container {
 #box-plot-fsal-stats-words {
   position: relative;
   width: 100%;
-  padding-top: 15%; // NOTE: This must correspond to the width and height of the SVG!
+  // padding-top: 15%; // NOTE: This must correspond to the width and height of the SVG!
 
   svg#box-plot {
     background-color: #2d2d42;
