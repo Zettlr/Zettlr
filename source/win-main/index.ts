@@ -49,11 +49,14 @@ document.addEventListener('drop', (event) => {
   // Retrieve all paths
   let f = []
   for (let i = 0; i < event.dataTransfer.files.length; i++) {
-    f.push(event.dataTransfer.files.item(i)?.path)
+    const file = event.dataTransfer.files.item(i)
+    if (file !== null) {
+      f.push(file.path)
+    }
   }
-  console.log('The user dropped some files onto the main window, but the handler is not yet implemented.')
-  console.log(f)
-  // this._renderer.handleDrop(f)
+
+  ipcRenderer.invoke('application', { command: 'handle-drop', payload: f })
+    .catch(e => console.error(e))
   return false
 }, false)
 

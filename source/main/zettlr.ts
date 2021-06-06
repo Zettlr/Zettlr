@@ -412,6 +412,9 @@ export default class Zettlr {
       return await this.openWorkspace()
     } else if (command === 'open-root-file') {
       return await this.openRootFile()
+    } else if (command === 'handle-drop') {
+      // Handle any files dropped onto the editor
+      return await this.handleAddRoots(payload)
     } else if (command === 'get-statistics-data') {
       return this._fsal.statistics
     } else if (command === 'get-filetree-events') {
