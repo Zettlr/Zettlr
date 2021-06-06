@@ -759,10 +759,10 @@
   resolved "https://registry.yarnpkg.com/@ungap/promise-all-settled/-/promise-all-settled-1.1.2.tgz#aa58042711d6e3275dd37dc597e5d31e8c290a44"
   integrity sha512-sL/cEvJWAnClXw0wHk85/2L0G6Sj8UB0Ctc1TEMbKSsmpRosqhwj9gWgFRZSrBr2f9tiXISwNhCPmlfqUqyb9Q==
 
-"@vercel/webpack-asset-relocator-loader@^1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@vercel/webpack-asset-relocator-loader/-/webpack-asset-relocator-loader-1.4.0.tgz#48b52c59280d8d4c5490d0ad18826294ba5a4ece"
-  integrity sha512-AIEvl+wSzp8U4EoNnvpEelx2+dtRJT5zOm4X9wFVyLbOg3VqdKPQSqJ7ptVqr8z1X4CvqB9XK46uU3u6JAJuNg==
+"@vercel/webpack-asset-relocator-loader@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@vercel/webpack-asset-relocator-loader/-/webpack-asset-relocator-loader-1.4.1.tgz#c55fc0f46503b99a6f2321380c9b0f44b4faa703"
+  integrity sha512-p0P5sSfzhZ0HkNgvtOKs62cOZCK6avE28A8fEIE5vpKkhPXOlcXFtbUmIOqH3jYC4CjLOqwTU48cx3ewkGKQ9g==
 
 "@vue/component-compiler-utils@^3.1.0":
   version "3.1.1"
