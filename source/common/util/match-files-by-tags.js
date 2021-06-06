@@ -16,6 +16,8 @@
 
 const objectToArray = require('./object-to-array')
 
+// TODO: Apparently this is dead code, since the function is nowhere included.
+// Check if we can need it, otherwise, remove it.
 module.exports = function matchFilesByTags (sourceFileDescriptor, tree) {
   let tagsToMatch = sourceFileDescriptor.tags
 
@@ -29,7 +31,7 @@ module.exports = function matchFilesByTags (sourceFileDescriptor, tree) {
 
   // Make sure we have just files & all of these files have at least one tag
   treeArray = treeArray.filter(e => e.type === 'file' && e.tags.length > 0)
-  treeArray = treeArray.map(e => { return { 'hash': e.hash, 'tags': e.tags } })
+  treeArray = treeArray.map(e => { return { 'path': e.path, 'tags': e.tags } })
 
   let candidates = []
 
@@ -37,10 +39,10 @@ module.exports = function matchFilesByTags (sourceFileDescriptor, tree) {
   // source file descriptor
   for (let file of treeArray) {
     // Prevent (potential) duplicates
-    if (file.hash === sourceFileDescriptor.hash) continue
+    if (file.path === sourceFileDescriptor.path) continue
 
     let candidate = {
-      'hash': file.hash,
+      'path': file.path,
       'matches': 0
     }
 

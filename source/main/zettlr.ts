@@ -233,14 +233,14 @@ export default class Zettlr {
 
     // Handle Quicklook window requests for files TODO: Move this someplace else!
     ipcMain.handle('quicklook-controller', async (event, payload) => {
-      const { command, hash } = payload
+      const { command, filePath } = payload
       // Last possibility: A quicklook window has requested a file. In this case
       // we mustn't obliterate the "event" because this way we don't need to
       // search for the window.
       if (command === 'get-file') {
-        const fileDescriptor = this._fsal.findFile(hash)
+        const fileDescriptor = this._fsal.findFile(filePath)
         if (fileDescriptor === null) {
-          global.log.error(`[Application] Could not get file descriptor for file ${String(hash)}.`)
+          global.log.error(`[Application] Could not get file descriptor for file ${String(filePath)}.`)
           return
         }
         const fileMeta = await this._fsal.getFileContents(fileDescriptor)
@@ -641,11 +641,11 @@ export default class Zettlr {
   //   return console.log(`Marking directory ${dir.name} as dead!`)
   // }
 
-  findFile (arg: string | number): MDFileDescriptor | CodeFileDescriptor | null {
+  findFile (arg: string): MDFileDescriptor | CodeFileDescriptor | null {
     return this._fsal.findFile(arg)
   }
 
-  findDir (arg: string | number): DirDescriptor | null {
+  findDir (arg: string): DirDescriptor | null {
     return this._fsal.findDir(arg)
   }
 
@@ -687,22 +687,6 @@ export default class Zettlr {
     */
   setModified (isModified: boolean): void {
     this._windowManager.setModified(isModified)
-  }
-
-  /**
-    * Remove the modification flag.
-    * @return {void} Nothing to return.
-    */
-  clearModified (hash: number): void {
-    let file = this._fsal.findFile(hash)
-    if (file !== null) {
-      this._documentManager.markClean(file)
-      if (this._documentManager.isClean()) {
-        this._windowManager.setModified(false)
-      }
-    } else {
-      global.log.warning('The renderer reported a saved file, but the FSAL did not find that file.')
-    }
   }
 
   /**

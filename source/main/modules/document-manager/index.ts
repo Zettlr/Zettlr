@@ -473,7 +473,7 @@ export default class DocumentManager extends EventEmitter {
 
     // Notify that a file has saved, which strictly speaking does not
     // modify the openFiles array, but does change the modification flag.
-    this.emit('update', 'fileSaved', { fileHash: src.hash })
+    this.emit('update', 'fileSaved', src)
 
     // Also, make sure to (re)load the file's bibliography file, if applicable.
     if (src.type === 'file' && src.frontmatter !== null && 'bibliography' in src.frontmatter) {

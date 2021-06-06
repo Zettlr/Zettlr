@@ -17,7 +17,6 @@ import DirDelete from './dir-delete'
 import DirNewProject from './dir-new-project'
 import DirNew from './dir-new'
 import DirProjectExport from './dir-project-export'
-import DirProjectProperties from './dir-project-properties'
 import DirRemoveProject from './dir-remove-project'
 import DirRename from './dir-rename'
 import DirRescan from './dir-rescan'
@@ -49,7 +48,6 @@ export const commands = [
   DirNewProject,
   DirNew,
   DirProjectExport,
-  DirProjectProperties,
   DirRemoveProject,
   DirRename,
   DirRescan,

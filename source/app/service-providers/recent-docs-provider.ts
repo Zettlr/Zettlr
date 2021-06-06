@@ -38,7 +38,7 @@ export default class RecentDocsProvider extends EventEmitter {
        * @param {Object} doc A document exposing at least the metadata of the file
        */
       add: (doc: MDFileMeta|CodeFileMeta) => {
-        const found = this._recentDocs.find((e) => e.hash === doc.hash)
+        const found = this._recentDocs.find((e) => e.path === doc.path)
         if (found !== undefined) {
           this._recentDocs.splice(this._recentDocs.indexOf(found), 1)
         }

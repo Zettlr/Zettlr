@@ -20,13 +20,13 @@ import isDir from '../../../common/util/is-dir'
 import isAttachment from '../../../common/util/is-attachment'
 import objectToArray from '../../../common/util/object-to-array'
 import findObject from '../../../common/util/find-object'
+import locateByPath from './util/locate-by-path'
 import * as FSALFile from './fsal-file'
 import * as FSALCodeFile from './fsal-code-file'
 import * as FSALDir from './fsal-directory'
 import * as FSALAttachment from './fsal-attachment'
 import FSALWatchdog from './fsal-watchdog'
 import FSALCache from './fsal-cache'
-import hash from '../../../common/util/hash'
 import sort from './util/sort'
 import {
   DirDescriptor,
@@ -529,129 +529,69 @@ export default class FSAL extends EventEmitter {
   /**
    * Attempts to find a directory in the FSAL. Returns null if not found.
    *
-   * @param  {string|number}       val  Either an absolute path or a hash. NOTE: Using hashes is deprecated behaviour!
+   * @param  {string}       val  An absolute path to search for.
    *
    * @return {DirDescriptor|null}       Either null or the wanted directory
    */
-  public findDir (val: string|number, baseTree = this._state.filetree): DirDescriptor|null {
-    // We'll only search for hashes, so if the user searches for a path,
-    // convert it to the hash prior to searching the tree.
-    if (typeof val === 'string' && path.isAbsolute(val)) val = hash(val)
-    if (typeof val !== 'number') val = parseInt(val, 10)
+  public findDir (val: string, baseTree = this._state.filetree): DirDescriptor|null {
+    const descriptor = locateByPath(baseTree, val)
+    if (descriptor === undefined || descriptor.type !== 'directory') {
+      return null
+    }
 
-    let found = findObject(baseTree, 'hash', val, 'children')
-    if (!found || found.type !== 'directory') return null
-    return found
+    return descriptor
   }
 
   /**
    * Attempts to find a file in the FSAL. Returns null if not found.
    *
-   * @param {string|number}                             val       The value to be searched for. NOTE: Using hashes is deprecated behaviour!
+   * @param {string}                             val       An absolute path to search for.
    * @param {MaybeRootDescriptor[]|MaybeRootDescriptor} baseTree  The tree to search within
    *
    * @return  {MDFileDescriptor|CodeFileDescriptor|null}          Either the corresponding descriptor, or null
    */
-  public findFile (
-    val: string|number,
-    baseTree = this._state.filetree
-  ): MDFileDescriptor|CodeFileDescriptor|null {
-    // We'll only search for hashes, so if the user searches for a path,
-    // convert it to the hash prior to searching the tree.
-    if (typeof val === 'string' && path.isAbsolute(val)) val = hash(val)
-    if (typeof val !== 'number') val = parseInt(val, 10)
-
-    let found = findObject(baseTree, 'hash', val, 'children')
-    if (!found || ![ 'code', 'file' ].includes(found.type)) {
+  public findFile (val: string, baseTree = this._state.filetree): MDFileDescriptor|CodeFileDescriptor|null {
+    const descriptor = locateByPath(baseTree, val)
+    if (descriptor === undefined || (descriptor.type !== 'file' && descriptor.type !== 'code')) {
       return null
     }
 
-    return found
+    return descriptor
   }
 
   /**
    * Finds a non-markdown file within the filetree
    *
-   * @param {string|number} val The value to be searched for. NOTE: Using hashes is deprecated behaviour!
+   * @param {string} val An absolute path to search for.
    * @param {MaybeRootDescriptor[]|MaybeRootDescriptor} baseTree The tree to search within
    *
    * @return  {OtherFileDescriptor|null}  Either the corresponding file, or null
    */
-  public findOther (
-    val: string|number,
-    baseTree: MaybeRootDescriptor[]|MaybeRootDescriptor = this._state.filetree
-  ): OtherFileDescriptor|null {
-    // We'll only search for hashes, so if the user searches for a path,
-    // convert it to the hash prior to searching the tree.
-    if (typeof val === 'string' && path.isAbsolute(val)) val = hash(val)
-    if (typeof val !== 'number') val = parseInt(val, 10)
+  public findOther (val: string, baseTree: MaybeRootDescriptor[]|MaybeRootDescriptor = this._state.filetree): OtherFileDescriptor|null {
+    const descriptor = locateByPath(baseTree, val)
 
-    // Since the attachments are not recursive, we cannot employ findObject here,
-    // but have to do it "zu Fuß", as we say in Germany. NOTE: This approach is
-    // ugly as hell, and might break easily. So we definitely need to come to a
-    // better way of implmenting this. But in the end the larger goal here is to
-    // merge the "attachments" (a.k.a. non-Markdown files) into the children-array
-    // either way.
-    const findInDirectory = (dir: DirDescriptor, val: number): OtherFileDescriptor|null => {
-      let found = dir.attachments.find(elem => elem.hash === val)
-      if (found !== undefined) {
-        return found
-      } else {
-        const children = dir.children.filter(elem => elem.type === 'directory') as DirDescriptor[]
-        for (const childDir of children) {
-          let found = findInDirectory(childDir, val)
-          if (found !== null) {
-            return found
-          }
-        }
-      }
-
+    if (descriptor === undefined || descriptor.type !== 'other') {
       return null
     }
 
-    if (Array.isArray(baseTree)) {
-      for (const root of baseTree) {
-        if (root.type !== 'directory') {
-          continue
-        }
-
-        let found = findInDirectory(root, val)
-        if (found !== null) {
-          return found
-        }
-      }
-    } else if (baseTree.type === 'directory') {
-      let found = findInDirectory(baseTree, val)
-      if (found !== null) {
-        return found
-      }
-    }
-
-    return null
+    return descriptor
   }
 
   /**
    * Finds a descriptor that is loaded.
    *
-   * @param   {number|string}       val  The value. NOTE: Using hashes is deprecated behaviour!
+   * @param   {number|string}       val  The value.
    *
    * @return  {AnyDescriptor|null}       Returns either the descriptor, or null.
    */
-  public find (val: number|string): AnyDescriptor|null {
-    // First attempt to find a file ...
-    let res: AnyDescriptor|null = this.findFile(val)
+  public find (val: string): AnyDescriptor|null {
+    const descriptor = locateByPath(this._state.filetree, val)
 
-    // ... and if that fails, attempt to find a directory.
-    if (res === null) {
-      res = this.findDir(val)
+    if (descriptor === undefined) {
+      return null
+    } else {
+      return descriptor
     }
-
-    // Last but not least, attempt to find a non-markdown file
-    if (res === null) {
-      res = this.findOther(val)
-    }
-
-    return res
   }
 
   /**
@@ -792,10 +732,6 @@ export default class FSAL extends EventEmitter {
     this._fsalIsBusy = true
     await FSALDir.sort(src, sorting)
     this._recordFiletreeChange('change', src.path)
-    this.emit('fsal-state-changed', 'directory', {
-      oldHash: src.hash,
-      newHash: src.hash
-    })
     this._fsalIsBusy = false
     this._afterRemoteChange()
   }
@@ -811,10 +747,6 @@ export default class FSAL extends EventEmitter {
     await FSALDir.createFile(src, options, this._cache)
     await this.sortDirectory(src)
     this._recordFiletreeChange('add', path.join(src.path, options.name))
-    this.emit('fsal-state-changed', 'directory', {
-      oldHash: src.hash,
-      newHash: src.hash
-    })
     this._fsalIsBusy = false
     this._afterRemoteChange()
   }
@@ -873,12 +805,6 @@ export default class FSAL extends EventEmitter {
     // In case it was a root file, we need to splice it
     if (src.parent === null) {
       this.unloadPath(src)
-    } else {
-      // If it was not, we need to issue a directory update
-      this.emit('fsal-state-changed', 'directory', {
-        oldHash: src.parent.hash,
-        newHash: src.parent.hash
-      })
     }
 
     this._recordFiletreeChange('remove', src.path)
@@ -901,11 +827,6 @@ export default class FSAL extends EventEmitter {
     this._fsalIsBusy = true
     // Sets a setting on the directory
     await FSALDir.setSetting(src, settings)
-    // Notify the renderer
-    this.emit('fsal-state-changed', 'directory', {
-      oldHash: src.hash,
-      newHash: src.hash
-    })
 
     this._recordFiletreeChange('change', src.path)
 
@@ -917,10 +838,6 @@ export default class FSAL extends EventEmitter {
     this._fsalIsBusy = true
     // NOTE: Generates no events as dotfiles are not watched
     await FSALDir.makeProject(src, initialProps)
-    this.emit('fsal-state-changed', 'directory', {
-      oldHash: src.hash,
-      newHash: src.hash
-    })
 
     this._recordFiletreeChange('change', src.path)
 
@@ -933,10 +850,6 @@ export default class FSAL extends EventEmitter {
     // NOTE: Generates no events as dotfiles are not watched
     // Updates the project properties on a directory.
     await FSALDir.updateProjectProperties(src, options)
-    this.emit('fsal-state-changed', 'directory', {
-      oldHash: src.hash,
-      newHash: src.hash
-    })
 
     this._recordFiletreeChange('change', src.path)
 
@@ -948,10 +861,6 @@ export default class FSAL extends EventEmitter {
     this._fsalIsBusy = true
     // NOTE: Generates no events as dotfiles are not watched
     await FSALDir.removeProject(src)
-    this.emit('fsal-state-changed', 'directory', {
-      oldHash: src.hash,
-      newHash: src.hash
-    })
 
     this._recordFiletreeChange('change', src.path)
 
@@ -978,11 +887,6 @@ export default class FSAL extends EventEmitter {
     await FSALDir.create(src, newName, this._cache)
     this._recordFiletreeChange('add', absolutePath)
 
-    // Notify the event listeners
-    this.emit('fsal-state-changed', 'directory', {
-      'oldHash': src.hash,
-      'newHash': src.hash
-    })
     this._fsalIsBusy = false
     this._afterRemoteChange()
   }
@@ -1079,13 +983,6 @@ export default class FSAL extends EventEmitter {
         this.openDirectory = src.parent
       }
 
-      // In any case, we need to update the parent directory (so that it
-      // doesn't include the old dir anymore.
-      this.emit('fsal-state-changed', 'directory', {
-        oldHash: (src.parent as DirDescriptor).hash,
-        newHash: (src.parent as DirDescriptor).hash
-      })
-
       this._recordFiletreeChange('remove', src.path)
     }
     this._fsalIsBusy = false
@@ -1100,7 +997,7 @@ export default class FSAL extends EventEmitter {
     const hasOpenDir = this.openDirectory !== null
     const srcIsDir = src.type === 'directory'
     const srcIsOpenDir = src === this.openDirectory
-    const srcContainsOpenDir = srcIsDir && hasOpenDir && this.findDir((this.openDirectory as DirDescriptor).hash, [src as DirDescriptor]) !== null
+    const srcContainsOpenDir = srcIsDir && hasOpenDir && this.findDir((this.openDirectory as DirDescriptor).path, [src as DirDescriptor]) !== null
 
     // Next, check if the open directory is affected
     if (srcIsOpenDir || srcContainsOpenDir) {
@@ -1134,18 +1031,6 @@ export default class FSAL extends EventEmitter {
 
     this._recordFiletreeChange('remove', src.path)
     this._recordFiletreeChange('add', path.join(target.path, src.name))
-
-    // Now update both the source's parent and the target
-    this.emit('fsal-state-changed', 'directory', {
-      // We cannot move roots, so the source WILL have a parent
-      'oldHash': src.parent?.hash, // NOTE that src still points to the old location
-      'newHash': src.parent?.hash
-    })
-    this.emit('fsal-state-changed', 'directory', {
-      // We cannot move into files, so target WILL be a directory
-      'oldHash': target.hash,
-      'newHash': target.hash
-    })
 
     if (newOpenDir !== undefined) {
       this.openDirectory = this.findDir(newOpenDir)
