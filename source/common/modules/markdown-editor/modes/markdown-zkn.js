@@ -38,6 +38,21 @@ const {
   const blockMathRE = getBlockMathRE()
   const fnReferenceRE = getFnReferenceRE()
 
+  function shouldMatchTag (text) {
+    if (/^#\d+$/.test(text)) {
+      // It is common in English to write #1 as a shortcut for "number 1"
+      // I hope that it is also uncommon to generally use number-only tags. If
+      // not, we may have to remove this again.
+      return false
+    }
+
+    if (/^#[a-f0-9]{3}$|^#[a-f0-9]{6,8}$/i.test(text)) {
+      return false // It's likely an RGB hex-value
+    }
+
+    return true
+  }
+
   /**
     * This defines the Markdown Zettelkasten system mode, which highlights IDs
     * and tags for easy use of linking and searching for files.
@@ -188,9 +203,15 @@ const {
         // Next on are tags in the form of #hashtag. We have to check for
         // headings first, as the tagRE will also match these, but they are not
         // real tags, so we need to hand them over to the mdMode.
-        if (stream.match(headingRE, false)) {
+        let match
+        if (stream.match(headingRE, false) !== null) {
           return mdMode.token(stream, state.mdState)
-        } else if (stream.match(zknTagRE, false)) {
+        } else if ((match = stream.match(zknTagRE, false)) !== null) {
+          if (!shouldMatchTag(match[0])) {
+            // We should not match it, let the underlying mode handle it
+            return mdMode.token(stream, state.mdState)
+          }
+
           // Two possibilities: sol, which will definitely be a tag, because
           // the headingRE did not match. Otherwise, not SOL, in which case we
           // need to check that the tag is preceeded by a space.
