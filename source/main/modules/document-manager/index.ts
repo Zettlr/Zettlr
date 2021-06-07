@@ -82,14 +82,15 @@ export default class DocumentManager extends EventEmitter {
       }
 
       if (event === 'unlink') {
-        this._loadedDocuments.splice(this._loadedDocuments.indexOf(descriptor), 1)
-        this.emit('update', 'openFiles')
-        global.config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
+        // Just close the file (also handles activeFile and config changes)
+        this.closeFile(descriptor)
       } else if (event === 'change') {
         this._loadFile(p)
           .then(newDescriptor => {
             if (newDescriptor.modtime !== descriptor.modtime) {
-              // Notify the caller, if the file has actually changed on disk.
+              // Replace the old descriptor with the newly loaded one
+              this._loadedDocuments.splice(this._loadedDocuments.indexOf(descriptor), 1, newDescriptor)
+              // Notify the caller, that the file has actually changed on disk.
               this.emit('update', 'openFileRemotelyChanged', newDescriptor)
             }
           })
@@ -110,15 +111,19 @@ export default class DocumentManager extends EventEmitter {
 
     this._watcher.add(openFiles)
 
+    this.emit('update', 'openFiles')
+
     // And make the correct file active
     const activeFile: string = global.config.get('activeFile')
     const activeDescriptor = this._loadedDocuments.find(elem => elem.path === activeFile)
 
     if (activeDescriptor !== undefined) {
       this._activeFile = activeDescriptor
+      this.emit('update', 'activeFile')
     } else if (this._loadedDocuments.length > 0) {
       // Make another file active
       this._activeFile = this._loadedDocuments[0]
+      this.emit('update', 'activeFile')
       // TODO: global.recentDocs.add(this._fsal.getMetadataFor(activeFile))
     }
   }
@@ -284,12 +289,13 @@ export default class DocumentManager extends EventEmitter {
    * @param {string|null} descriptorPath The path of the file to set as active
    */
   public set activeFile (descriptor: MDFileDescriptor|CodeFileDescriptor|null) {
+    console.log('Set active file received', descriptor)
     if (descriptor === null && this._activeFile !== null) {
       this._activeFile = null
       global.citeproc.loadMainDatabase()
       global.config.set('activeFile', this.activeFile)
       this.emit('update', 'activeFile')
-    } else if (descriptor !== null && descriptor !== this.activeFile) {
+    } else if (descriptor !== null && descriptor.path !== this.activeFile?.path) {
       const file = this.openFiles.find(file => file.path === descriptor.path)
 
       if (file !== undefined && this._loadedDocuments.includes(file)) {
@@ -322,7 +328,7 @@ export default class DocumentManager extends EventEmitter {
           this.emit('update', 'activeFile')
         }
       } else {
-        console.error('Could not set active file. Either file was null or not in openFiles')
+        console.error('Could not set active file. Either file was null or not in openFiles', descriptor, this.activeFile)
       }
     } // Else: No update necessary
   }
@@ -467,7 +473,7 @@ export default class DocumentManager extends EventEmitter {
 
     // Notify that a file has saved, which strictly speaking does not
     // modify the openFiles array, but does change the modification flag.
-    this.emit('update', 'fileSaved', { fileHash: src.hash })
+    this.emit('update', 'fileSaved', src)
 
     // Also, make sure to (re)load the file's bibliography file, if applicable.
     if (src.type === 'file' && src.frontmatter !== null && 'bibliography' in src.frontmatter) {

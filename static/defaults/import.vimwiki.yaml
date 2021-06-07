@@ -1,3 +1,7 @@
+# ZETTLR DEFAULTS FILE
+# ====================
+# Conversion: VimWiki Document --> Markdown
+# More info: https://pandoc.org/MANUAL.html
 reader: vimwiki
 writer: markdown
 wrap: none

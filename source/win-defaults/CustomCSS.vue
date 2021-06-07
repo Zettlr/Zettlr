@@ -1,21 +1,19 @@
 <template>
-  <WindowChrome
-    v-bind:title="customCSSTitle"
-    v-bind:titlebar="true"
-    v-bind:menubar="false"
-    v-bind:show-statusbar="true"
-    v-bind:statusbar-controls="statusbarControls"
-    v-bind:disable-vibrancy="true"
-    v-on:statusbar-click="handleClick($event)"
-  >
-    <div id="custom-css">
-      <p id="custom-css-info" v-html="customCSSInfo"></p>
-      <CodeEditor
-        v-model="css"
-        v-bind:mode="'css'"
-      ></CodeEditor>
-    </div>
-  </WindowChrome>
+  <div id="custom-css">
+    <p id="custom-css-info" v-html="customCSSInfo"></p>
+    <CodeEditor
+      ref="code-editor"
+      v-model="css"
+      v-bind:mode="'css'"
+    ></CodeEditor>
+    <ButtonControl
+      v-bind:primary="true"
+      v-bind:label="'Save'"
+      v-bind:inline="true"
+      v-on:click="handleClick('save')"
+    ></ButtonControl>
+    <span v-if="savingStatus !== ''" class="saving-status">{{ savingStatus }}</span>
+  </div>
 </template>
 
 <script>
@@ -33,23 +31,24 @@
  * END HEADER
  */
 
-import WindowChrome from '../common/vue/window/Chrome'
 import { trans } from '../common/i18n-renderer'
 import CodeEditor from '../common/vue/CodeEditor'
+import ButtonControl from '../common/vue/form/elements/Button'
 
 const ipcRenderer = window.ipc
 
 export default {
   name: 'CustomCSS',
   components: {
-    WindowChrome,
-    CodeEditor
+    CodeEditor,
+    ButtonControl
   },
   data: function () {
     return {
       customCSSTitle: trans('dialog.custom_css.title'),
       customCSSInfo: trans('dialog.custom_css.info'),
-      css: ''
+      css: '',
+      savingStatus: ''
     }
   },
   computed: {
@@ -71,6 +70,15 @@ export default {
       ]
     }
   },
+  watch: {
+    css: function () {
+      if (this.$refs['code-editor'].isClean() === true) {
+        this.savingStatus = ''
+      } else {
+        this.savingStatus = 'Unsaved changes' // TODO translate
+      }
+    }
+  },
   created: function () {
     ipcRenderer.invoke('css-provider', {
       command: 'get-custom-css'
@@ -80,20 +88,28 @@ export default {
       })
       .catch(e => console.error(e))
   },
+  mounted: function () {
+    ipcRenderer.on('shortcut', (event, shortcut) => {
+      if (shortcut === 'save-file') {
+        this.handleClick('save')
+      }
+    })
+  },
   methods: {
     handleClick: function (controlID) {
       if (controlID === 'save') {
+        this.savingStatus = 'Saving ...'
         ipcRenderer.invoke('css-provider', {
           command: 'set-custom-css',
           css: this.css
         })
           .then(() => {
-            // After we have successfully saved, close the window
-            ipcRenderer.send('window-controls', { command: 'win-close' })
+            this.savingStatus = ''
           })
-          .catch(e => console.error(e))
-      } else if (controlID === 'cancel') {
-        ipcRenderer.send('window-controls', { command: 'win-close' })
+          .catch(e => {
+            this.savingStatus = 'Could not save CSS!'
+            console.error(e)
+          })
       }
     }
   }

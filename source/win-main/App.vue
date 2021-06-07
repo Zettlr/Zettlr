@@ -78,6 +78,7 @@ import GlobalSearch from './GlobalSearch'
 import Editor from './Editor'
 import PopoverExport from './PopoverExport'
 import PopoverStats from './PopoverStats'
+import PopoverTags from './PopoverTags'
 import PopoverPomodoro from './PopoverPomodoro'
 import PopoverTable from './PopoverTable'
 import { trans } from '../common/i18n-renderer'
@@ -376,7 +377,6 @@ export default {
         // so that they are not lost during the operation.
         let text = clipboard.readText()
         let html = clipboard.readHTML()
-        let image = clipboard.readImage()
         let rtf = clipboard.readRTF()
 
         // Write an ID to the clipboard
@@ -389,7 +389,6 @@ export default {
           clipboard.write({
             'text': text,
             'html': html,
-            'image': image,
             'rtf': rtf
           })
         }, 10) // Why do a timeout? Because the paste event is asynchronous.
@@ -486,8 +485,30 @@ export default {
             this.$closePopover()
           })
         }).catch(e => console.error(e))
+      } else if (clickedID === 'show-tag-cloud') {
+        const allTags = Object.keys(this.$store.state.tagDatabase)
+        const tagMap = allTags.map(tag => {
+          // Tags have the properties "className", "count", and "text"
+          const storeTag = this.$store.state.tagDatabase[tag]
+
+          return {
+            className: storeTag.className,
+            count: storeTag.count,
+            text: storeTag.text
+          }
+        })
+
+        const data = { tags: tagMap }
+        const button = document.getElementById('toolbar-show-tag-cloud')
+
+        this.$showPopover(PopoverTags, button, data, (data) => {
+          if (data.searchForTag !== '') {
+            // The user has clicked a tag and wants to search for it
+            this.$emit('start-global-search', '#' + data.searchForTag)
+            this.$closePopover()
+          }
+        })
       } else if (clickedID === 'pomodoro') {
-        // TODO: Show pomodoro progress
         const data = {
           taskDuration: this.pomodoro.durations.task / 60,
           shortDuration: this.pomodoro.durations.short / 60,

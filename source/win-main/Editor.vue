@@ -532,10 +532,15 @@ export default {
       const citations = citrUtil.extractCitations(value)
       const keys = []
       for (const citation of citations) {
-        const cslArray = parseSingle(citation)
-
-        for (const csl of cslArray) {
-          keys.push(csl.id)
+        try {
+          const cslArray = parseSingle(citation)
+          for (const csl of cslArray) {
+            keys.push(csl.id)
+          }
+        } catch (err) {
+          // If an invalid citation was passed, make sure to include the rest
+          // either way. But log the error just in case.
+          console.error(err)
         }
       }
       this.$store.commit('updateCitationKeys', keys)
@@ -679,7 +684,6 @@ export default {
     // up 100 % all for itself anymore.
     margin-left: 0.5em;
     height: 100%;
-    cursor: text;
     font-family: inherit;
     background: none;
 

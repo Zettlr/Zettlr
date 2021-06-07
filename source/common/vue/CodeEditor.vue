@@ -26,6 +26,63 @@ import 'codemirror/lib/codemirror.css'
 import 'codemirror/mode/css/css'
 import 'codemirror/mode/yaml/yaml'
 
+/**
+ * Small drop-in plugin that assigns 'cm-link'-classes to everything that looks
+ * like a link. Those links must have a protocol and only contain alphanumerics,
+ * plus ., -, #, %, and /.
+ *
+ * @param   {CodeMirror}  cm  The CodeMirror instance
+ */
+function markLinks (cm) {
+  // Very small drop in that marks URLs inside the code editor
+  for (let i = 0; i < cm.doc.lineCount(); i++) {
+    const line = String(cm.doc.getLine(i))
+    // Can contain a-z0-9, ., -, /, %, and #, but must end
+    // with an alphanumeric, a slash or a hashtag.
+    const match = /[a-z0-9-]+:\/\/[a-z0-9.-/#%]+[a-z0-9/#]/i.exec(line)
+    if (match === null) {
+      continue
+    }
+
+    const from = { line: i, ch: match.index }
+    const to = { line: i, ch: match.index + match[0].length }
+
+    // We can only have one marker at any given position at any given time
+    if (cm.doc.findMarks(from, to).length > 0) {
+      continue
+    }
+
+    cm.doc.markText(
+      from, to,
+      {
+        className: 'cm-link',
+        inclusiveLeft: false,
+        inclusiveRight: true,
+        attributes: { title: `Cmd/Ctrl+Click to open ${match[0]}` } // TODO: Translate
+      }
+    )
+  }
+}
+
+/**
+ * If applicable, follows a link from the editor.
+ *
+ * @param   {MouseEvent}  event  The triggering MouseEvent
+ */
+function maybeOpenLink (event) {
+  const t = event.target
+  const cmd = process.platform === 'darwin' && event.metaKey
+  const ctrl = process.platform !== 'darwin' && event.ctrlKey
+
+  if (!cmd && !ctrl) {
+    return
+  }
+
+  if (t.className.includes('cm-link') === true) {
+    window.location.assign(t.textContent)
+  }
+}
+
 export default {
   name: 'CodeEditor',
   props: {
@@ -59,9 +116,7 @@ export default {
       mode: this.mode,
       cursorScrollMargin: 20,
       lineWrapping: true,
-      autoCloseBrackets: true,
-      // Disable cursor blinking, as we apply a @keyframes animation
-      cursorBlinkRate: 0
+      autoCloseBrackets: true
     })
 
     this.cmInstance.setValue(this.value)
@@ -69,6 +124,10 @@ export default {
     this.cmInstance.on('change', (event, changeObj) => {
       this.$emit('input', this.cmInstance.getValue())
     })
+
+    // Detect links inside the source code and listen for clicks on these.
+    this.cmInstance.on('cursorActivity', markLinks)
+    this.cmInstance.getWrapperElement().addEventListener('mousedown', maybeOpenLink)
   },
   beforeDestroy: function () {
     const cmWrapper = this.cmInstance.getWrapperElement()

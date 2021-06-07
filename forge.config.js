@@ -274,14 +274,6 @@ module.exports = {
               }
             },
             {
-              html: './source/win-custom-css/index.htm',
-              js: './source/win-custom-css/index.ts',
-              name: 'custom_css',
-              preload: {
-                js: './source/common/modules/preload/index.ts'
-              }
-            },
-            {
               html: './source/win-tag-manager/index.htm',
               js: './source/win-tag-manager/index.ts',
               name: 'tag_manager',

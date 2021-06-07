@@ -64,6 +64,15 @@ export default function () {
           type: 'token',
           label: trans('dialog.preferences.attachments_info'),
           model: 'attachmentExtensions'
+        },
+        {
+          type: 'list',
+          label: trans('dialog.preferences.whitelist'),
+          model: 'system.iframeWhitelist',
+          deletable: true,
+          labels: ['Hostname'], // TODO: Translate!
+          searchable: true,
+          searchLabel: 'Search for entries …'
         }
       ],
       [

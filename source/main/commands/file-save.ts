@@ -25,12 +25,13 @@ export default class SaveFile extends ZettlrCommand {
   /**
     * Saves a file. A file MUST be given, for the content is needed to write to
     * a file. Content is always freshly grabbed from the CodeMirror content.
-    * @param {String} evt The event name
-    * @param  {Object} file An object containing some properties of the file.
-    * @return {void}      This function does not return.
+    *
+    * @param  {string}            evt   The event name
+    * @param  {any}               file  An object containing some properties of the file.
+    * @return {Promise<boolean>}        Returns true on successful run.
     */
   async run (evt: string, file: any): Promise<boolean> {
-    if ((file == null) || !file.hasOwnProperty('newContents')) {
+    if ((file == null) || !('newContents' in file)) {
       global.log.error('Could not save file, it\'s either null or has no content', file)
       // No file given -> abort saving process
       return false
@@ -66,14 +67,13 @@ export default class SaveFile extends ZettlrCommand {
         // get added as a root if it's not within the file tree.
         await fs.writeFile(newPath, file.newContents)
 
-        // Now we can open the file ...
-        await this._app.handleAddRoots([newPath])
-        this._app.openFile(newPath)
-        // ... and close the old one (note that closeFile will close a file
-        // irrespective of the modification flag). Note additionally that we
-        // explicitly open in a new tab to avoid the system asking the user
-        // whether or not they want to close the ("modified") file.
+        // Now that the file exists we can close the "untitled" file and
+        // immediately open the file just created. Also, don't forget to set it
+        // as "active" so that the user doesn't notice that we actually replaced
+        // the file.
         this._app.getDocumentManager().closeFile(realFile)
+        const descriptor = await this._app.getDocumentManager().openFile(newPath)
+        this._app.getDocumentManager().activeFile = descriptor
       } else {
         // Save a normal file
         await this._app.getDocumentManager().saveFile(realFile, file.newContents)

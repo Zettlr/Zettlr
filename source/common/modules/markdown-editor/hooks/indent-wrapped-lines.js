@@ -106,7 +106,10 @@ function measureCharWidth (cm, id) {
  */
 function indentLine (cm, line, elt) {
   // Disable on non-Markdown text
-  if (cm.getModeAt({ 'line': cm.doc.getLineNumber(line), 'ch': 0 }).name !== 'markdown') return
+  const idx = cm.doc.getLineNumber(line)
+  if (cm.getModeAt({ 'line': idx, 'ch': 0 }).name !== 'markdown-zkn') {
+    return
+  }
 
   // Need to calculate indent and padding in order to provide a proper hanging indent
   // Originally based on https://discuss.codemirror.net/t/hanging-indent/243/2

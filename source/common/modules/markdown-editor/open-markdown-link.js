@@ -60,7 +60,7 @@ module.exports = function (url, cm) {
       ipcRenderer.invoke('application', {
         command: 'open-file',
         payload: {
-          path: this.obj.path,
+          path: localPath,
           newTab: false
         }
       })

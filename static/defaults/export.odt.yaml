@@ -1,4 +1,7 @@
----
+# ZETTLR DEFAULTS FILE
+# ====================
+# Conversion: Markdown --> LibreOffice/OpenOffice file
+# More info: https://pandoc.org/MANUAL.html
 reader: markdown
 writer: odt
 self-contained: true

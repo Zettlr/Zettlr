@@ -1,4 +1,7 @@
----
+# ZETTLR DEFAULTS FILE
+# ====================
+# Conversion: Markdown --> Adobe InDesign ICML file
+# More info: https://pandoc.org/MANUAL.html
 reader: markdown
 writer: icml
 self-contained: true

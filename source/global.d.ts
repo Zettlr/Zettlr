@@ -29,18 +29,13 @@ declare module '*.png'
  */
 interface Application {
   runCommand: (command: string, payload?: any) => Promise<any>
-  isBooting: () => boolean
   isQuiting: () => boolean
   showLogViewer: () => void
   showPreferences: () => void
-  showCustomCSS: () => void
   displayErrorMessage: (title: string, message: string, contents?: string) => void
   showAboutWindow: () => void
   showDefaultsPreferences: () => void
   showTagManager: () => void
-  // TODO: Match the signatures of fileUpdate and dirUpdate
-  fileUpdate: (oldHash: number, fileMetadata: any) => void
-  dirUpdate: (oldHash: number, newHash: number) => void
   notifyChange: (msg: string) => void
   findFile: (prop: any) => MDFileDescriptor | CodeFileDescriptor | null
   findDir: (prop: any) => DirDescriptor | null

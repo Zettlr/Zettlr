@@ -128,28 +128,16 @@ module.exports = function displayFileContext (event, dirObject, el, callback) {
           payload: dirObject.path
         })
         break
-      case 'menu.project_properties':
-        ipcRenderer.send('message', {
-          command: 'dir-project-properties',
-          content: { hash: dirObject.hash }
-        })
-        break
       case 'menu.project_build':
         ipcRenderer.send('message', {
           command: 'dir-project-export',
-          content: { hash: dirObject.hash }
-        })
-        break
-      case 'menu.close_workspace':
-        ipcRenderer.send('message', {
-          command: 'root-close',
-          content: dirObject.hash
+          content: { path: dirObject.path }
         })
         break
       case 'menu.rescan_dir':
         ipcRenderer.send('message', {
           command: 'rescan-dir',
-          content: dirObject.hash
+          content: { path: dirObject.path }
         })
     }
   })

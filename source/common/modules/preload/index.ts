@@ -36,13 +36,46 @@ contextBridge.exposeInMainWorld('__dirname', '')
 
 // Expose the subset of clipboard functions which we use
 contextBridge.exposeInMainWorld('clipboard', {
-  readText: clipboard.readText,
-  readHTML: clipboard.readHTML,
-  readRTF: clipboard.readRTF,
-  readImage: clipboard.readImage,
-  read: clipboard.read,
-  write: clipboard.write,
-  writeText: clipboard.writeText
+  readText: function () {
+    return clipboard.readText()
+  },
+  readHTML: function () {
+    return clipboard.readHTML()
+  },
+  readRTF: function () {
+    return clipboard.readRTF()
+  },
+  hasImage: function () {
+    // NOTE: We cannot send NativeImages across the context bridge,
+    // so we have to do it the hard way here.
+    return !clipboard.readImage().isEmpty()
+  },
+  getImageData: function () {
+    // NOTE: This function is used only in the Paste-Image dialog in order to
+    // show a preview of the image and populate the dialog with the necessary
+    // information.
+    const image = clipboard.readImage()
+    const size = image.getSize() // First get the original size
+    const aspect = image.getAspectRatio() // Then the aspect
+    const dataUrl = image.resize({ 'height': 200 }).toDataURL()
+
+    return {
+      size,
+      aspect,
+      dataUrl
+    }
+  },
+  write: function (data: Electron.Data) {
+    // We cannot transfer images, so make sure the function is safe to call
+    return clipboard.write({
+      text: data.text,
+      html: data.html,
+      rtf: data.rtf
+    })
+  },
+  writeText: function (text: string) {
+    return clipboard.writeText(text)
+  }
 })
 
 // Expose the subset of process properties we need
@@ -53,5 +86,6 @@ contextBridge.exposeInMainWorld('process', {
   arch: process.arch,
   uptime: process.uptime,
   getSystemVersion: process.getSystemVersion(),
-  env: Object.assign({}, process.env)
+  env: Object.assign({}, process.env),
+  argv: process.argv
 })

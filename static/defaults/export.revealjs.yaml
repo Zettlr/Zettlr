@@ -1,6 +1,12 @@
----
+# ZETTLR DEFAULTS FILE
+# ====================
+# Conversion: Markdown --> revealJS file
+# More info: https://pandoc.org/MANUAL.html
 reader: markdown
 writer: revealjs
+# NOTE: The next two variables must be false. The reason is that Zettlr must
+# perform additional steps after Pandoc has exported your Markdown document
+# in order for themes to work.
 self-contained: false
 standalone: false
 metadata-files: []

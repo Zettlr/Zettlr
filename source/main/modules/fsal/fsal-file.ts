@@ -142,8 +142,21 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
   file.tags = [] // Reset tags
   while ((match = tagRE.exec(mdWithoutCode)) != null) {
     let tag = match[1]
+    // Prevent RGB hex colors and pure numbers from being counted as tags.
+    // NOTE: This has its equivalent in the markdown-zkn mode for highlighting.
+    if (/^#\d+$/.test(tag)) {
+      continue
+    }
+
+    if (/^#[a-f0-9]{3}$|^#[a-f0-9]{6,8}$/i.test(tag)) {
+      continue
+    }
+
     tag = tag.replace(/#/g, '') // Prevent headings levels 2-6 from showing up in the tag list
-    if (tag.length > 0) file.tags.push(match[1].toLowerCase())
+
+    if (tag.length > 0) {
+      file.tags.push(match[1].toLowerCase())
+    }
   }
 
   // Merge possible keywords from the frontmatter

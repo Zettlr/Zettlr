@@ -86,13 +86,14 @@ export default {
     File
   },
   data: function () {
-    const image = clipboard.readImage()
-    const size = image.getSize() // First get the original size
-    const aspect = image.getAspectRatio() // Then the aspect
-    const dataUrl = image.resize({ 'height': 200 }).toDataURL()
+    // const image = clipboard.readImage()
+    // const size = image.getSize() // First get the original size
+    // const aspect = image.getAspectRatio() // Then the aspect
+    // const dataUrl = image.resize({ 'height': 200 }).toDataURL()
+    const { size, aspect, dataUrl } = clipboard.getImageData()
     // Get the hash from the window arguments
     let startPath
-    [startPath] = window.process.argv.slice(-1)
+    [startPath] = process.argv.slice(-1)
 
     let name = ''
     if (clipboard.readText().length > 0) {

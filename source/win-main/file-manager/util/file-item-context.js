@@ -130,12 +130,6 @@ module.exports = function displayFileContext (event, fileObject, el, callback) {
       case 'menu.copy_id':
         clipboard.writeText(fileObject.id)
         break
-      case 'menu.quicklook':
-        ipcRenderer.send('message', {
-          command: 'open-quicklook',
-          content: fileObject.hash
-        })
-        break
       case 'menu.show_file':
         ipcRenderer.send('window-controls', {
           command: 'show-item-in-folder',

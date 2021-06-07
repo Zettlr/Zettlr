@@ -20,6 +20,10 @@ The idea of "transitive files" we implemented in previous iterations of Zettlr p
 
 A few years ago we implemented auto-saving after a delay of five seconds with no change to the current file. However, that feature was always a little bit counter-intuitive. Instead, the new Zettlr version removes auto-saving and re-instates manual saving (since the "Save" menu option was never gone). We did this for several reasons. First, Zettlr is first and foremost a text editor working with files on your computer, so you are used to having to save files manually, and Zettlr should've never deviated from that. Furthermore, if we would implement a data-safe autosaving ability, this would put unnecessary strain on your computer's hard drive. Thus we opted for the traditional way and thus you need to manually save changes to files now. We found during beta that this is much more consistent and easy to work with.
 
+## Custom CSS has moved
+
+The Custom CSS can now be edited directly in the assets dialog where you can also edit your defaults files.
+
 ## GUI and Functionality
 
 - **Feature**: Switched the Exporting process in a way that allows more flexibility in setting options.

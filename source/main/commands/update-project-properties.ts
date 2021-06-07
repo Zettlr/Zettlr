@@ -15,6 +15,7 @@
 import ZettlrCommand from './zettlr-command'
 import expandOptionObject from '../../common/util/expand-option-object'
 
+// TODO: Re-implement project properties!!
 export default class UpdateProjectProperties extends ZettlrCommand {
   constructor (app: any) {
     super(app, 'update-project-properties')
@@ -30,11 +31,11 @@ export default class UpdateProjectProperties extends ZettlrCommand {
     // expects them already in their expanded state.
     let expanded = expandOptionObject(arg.properties)
     // Find the directory, and apply the properties to it!
-    let dir = this._app.findDir(arg.hash)
+    let dir = this._app.findDir(arg.path)
     if (dir !== null) {
       await this._app.getFileSystem().updateProject(dir, expanded)
     } else {
-      global.log.warning(`Could not update project properties for ${String(arg.hash)}: No directory found!`)
+      global.log.warning(`Could not update project properties for ${String(arg.path)}: No directory found!`)
     }
   }
 }

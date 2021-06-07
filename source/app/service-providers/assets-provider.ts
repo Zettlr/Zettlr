@@ -56,6 +56,8 @@ export default class AssetsProvider extends EventEmitter {
         return await this.getDefaultsFor(payload.format, payload.type, true)
       } else if (command === 'set-defaults-file') {
         return await this.setDefaultsFor(payload.format, payload.type, payload.contents, true)
+      } else if (command === 'restore-defaults-file') {
+        return await this.restoreDefaultsFor(payload.format, payload.type)
       }
     })
   }
@@ -121,5 +123,29 @@ export default class AssetsProvider extends EventEmitter {
       global.log.error(`[Assets Provider] Could not save defaults file: ${String(err.message)}`, err)
       return false
     }
+  }
+
+  /**
+   * Restores the requested defaults file by copying it from the directory
+   * within Zettlr into the defaults path (user data).
+   *
+   * @param   {string}             format  The format to copy over
+   * @param   {'export'|'import'}  type    The type of defaults file
+   *
+   * @return  {Promise<boolean>}           Returns true on success
+   */
+  async restoreDefaultsFor (format: string, type: 'export'|'import'): Promise<boolean> {
+    const file = `${type}.${format}.yaml`
+    const source = path.join(__dirname, './assets/defaults', file)
+    const target = path.join(this._defaultsPath, file)
+
+    try {
+      await fs.copyFile(source, target)
+    } catch (err) {
+      global.log.error(`[Assets Provider] Could not restore defaults file ${type} for ${format}!`, err)
+      return false
+    }
+
+    return true
   }
 }

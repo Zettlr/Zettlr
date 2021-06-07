@@ -1,3 +1,7 @@
+# ZETTLR DEFAULTS FILE
+# ====================
+# Conversion: text2text Document --> Markdown
+# More info: https://pandoc.org/MANUAL.html
 reader: t2t
 writer: markdown
 wrap: none

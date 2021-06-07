@@ -183,7 +183,7 @@ export default class DictionaryProvider extends EventEmitter {
 
   /**
    * (Re)Loads the dictionaries efficiently based upon the selected dictionaries
-   * @return {Promise} Does not throw, as we catch errors. TODO: Log misloads!
+   * @return {Promise} Does not throw, as we catch errors.
    */
   async _load (): Promise<void> {
     if (this._reloadLock) {

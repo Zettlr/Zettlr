@@ -1,4 +1,7 @@
----
+# ZETTLR DEFAULTS FILE
+# ====================
+# Conversion: Markdown --> RichTextFormat
+# More info: https://pandoc.org/MANUAL.html
 reader: markdown
 writer: rtf
 self-contained: false
