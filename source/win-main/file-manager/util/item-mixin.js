@@ -237,7 +237,7 @@ export default {
               payload: { path: this.obj.path }
             })
               .catch(err => console.error(err))
-          } else if (clickedID === 'menu.properties') {
+          } else if (clickedID === 'properties') {
             const data = {
               filename: this.obj.name,
               creationtime: this.obj.creationtime,
