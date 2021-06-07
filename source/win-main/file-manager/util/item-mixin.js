@@ -129,7 +129,6 @@ export default {
 
       if (this.isDirectory === true) {
         dirContextMenu(event, this.obj, this.$el, (clickedID) => {
-          console.log(clickedID)
           if (clickedID === 'menu.rename_dir') {
             this.nameEditing = true
           } else if (clickedID === 'menu.new_file') {
