@@ -18,6 +18,7 @@ import { spawn } from 'child_process'
 import YAML from 'yaml'
 import { app } from 'electron'
 import { promises as fs } from 'fs'
+import makeDefaultsFile from '@lackadaisical/defaults-generator'
 
 // Utilities
 import isFile from '../../../common/util/is-file'
@@ -138,7 +139,7 @@ async function runPandoc (defaultsFile: string): Promise<PandocRunnerOutput> {
 
 async function writeDefaults (
   writer: string, // The writer to use (e.g. html or pdf)
-  properties: any // Contains properties that will be written to the defaults
+  properties: Record<string, unknown> // Contains properties that will be written to the defaults
 ): Promise<string> {
   const dataDir = app.getPath('temp')
   const defaultsFile = path.join(dataDir, 'defaults.yml')
@@ -174,17 +175,18 @@ async function writeDefaults (
     defaults.csl = cslStyle
   }
 
-  // After we have added our default keys, let the plugin add their keys, which
-  // enables them to override certain keys if necessary.
-  for (const key in properties) {
-    defaults[key] = properties[key]
-  }
+  // makeDefaultsFile will take our input, put 'default' properties where they need to go,
+  // and write any extra properties to an appropriate location within the object.
+  // Finally input and output is validated against a JSONSchema and will throw an error if
+  // validation fails.
+  // It also merges in any keys from the plugin, with plugin keys taking precedence.
+  const defaultsOutput = makeDefaultsFile(defaults, { additionalConfig: properties })
 
   const YAMLOptions: YAML.Options = {
     indent: 4,
     simpleKeys: false
   }
-  await fs.writeFile(defaultsFile, YAML.stringify(defaults, YAMLOptions), { encoding: 'utf8' })
+  await fs.writeFile(defaultsFile, YAML.stringify(defaultsOutput, YAMLOptions), { encoding: 'utf8' })
 
   // Return the path to the defaults file
   return defaultsFile
