@@ -86,6 +86,9 @@ export default class Zettlr {
       showTagManager: () => {
         this._windowManager.showTagManager()
       },
+      showAnyWindow: () => {
+        this._windowManager.showAnyWindow()
+      },
       notifyChange: (msg: string) => {
         global.notify.normal(msg)
       },
