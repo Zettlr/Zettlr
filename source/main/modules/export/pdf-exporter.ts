@@ -20,8 +20,8 @@ import commandExists from 'command-exists'
 import path from 'path'
 import { promises as fs } from 'fs'
 import { BrowserWindow } from 'electron'
-import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
 import { trans } from '../../../common/i18n-main'
+import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI, PreparedFiles } from './types'
 
 export const plugin: ExporterPlugin = {
   pluginInformation: function () {
@@ -34,7 +34,7 @@ export const plugin: ExporterPlugin = {
       options: []
     }
   },
-  run: async function (options: ExporterOptions, sourceFiles: string[], formatOptions: any, ctx: ExporterAPI): Promise<ExporterOutput> {
+  run: async function (options: ExporterOptions, processedSource: PreparedFiles, formatOptions: any, ctx: ExporterAPI): Promise<ExporterOutput> {
     // Determine the availability of Pandoc. As the Pandoc path is added to
     // process.env.PATH during the environment check, this should always work
     // if a supported Zettlr variant is being used. In other cases (e.g. custom
@@ -61,16 +61,16 @@ export const plugin: ExporterPlugin = {
 
     // Get the corresponding defaults file
     const defaultKeys = {
-      'input-files': sourceFiles,
+      'input-files': processedSource.filenames,
       'output-file': (options.format === 'xelatex-pdf') ? pdfFilePath : htmlFilePath
     }
     let defaultsFile = ''
     if (options.format === 'xelatex-pdf') {
       // Immediately write to PDF
-      defaultsFile = await ctx.getDefaultsFor('pdf', defaultKeys)
+      defaultsFile = await ctx.getDefaultsFor('pdf', defaultKeys, processedSource.frontmatter)
     } else {
       // Write to an intermediary HTML file which we will convert to PDF below.
-      defaultsFile = await ctx.getDefaultsFor('html', defaultKeys)
+      defaultsFile = await ctx.getDefaultsFor('html', defaultKeys, processedSource.frontmatter)
     }
 
     // Run Pandoc

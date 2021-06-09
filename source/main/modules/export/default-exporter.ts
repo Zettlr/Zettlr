@@ -14,8 +14,12 @@
 
 import commandExists from 'command-exists'
 import path from 'path'
+<<<<<<< HEAD
 import { trans } from '../../../common/i18n-main'
 import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
+=======
+import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI, PreparedFiles } from './types'
+>>>>>>> 6877d156 (Implement basic frontmatter extraction for defaults file generation)
 
 // TODO: Enable these additional writers
 // // Pandoc formats that can be passed directly to the engine
@@ -42,7 +46,7 @@ export const plugin: ExporterPlugin = {
       options: []
     }
   },
-  run: async function (options: ExporterOptions, sourceFiles: string[], formatOptions: any, ctx: ExporterAPI): Promise<ExporterOutput> {
+  run: async function (options: ExporterOptions, processedSource: PreparedFiles, formatOptions: any, ctx: ExporterAPI): Promise<ExporterOutput> {
     // Determine the availability of Pandoc. As the Pandoc path is added to
     // process.env.PATH during the environment check, this should always work
     // if a supported Zettlr variant is being used. In other cases (e.g. custom
@@ -68,10 +72,10 @@ export const plugin: ExporterPlugin = {
 
     // Get the corresponding defaults file
     const defaultKeys = {
-      'input-files': sourceFiles,
+      'input-files': processedSource.filenames,
       'output-file': target
     }
-    const defaultsFile = await ctx.getDefaultsFor(options.format, defaultKeys)
+    const defaultsFile = await ctx.getDefaultsFor(options.format, defaultKeys, processedSource.frontmatter)
 
     // Run Pandoc
     const pandocOutput = await ctx.runPandoc(defaultsFile)

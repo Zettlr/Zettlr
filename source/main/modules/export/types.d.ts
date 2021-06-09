@@ -111,11 +111,12 @@ export interface ExporterAPI {
    * writes the file to disk. Returns the absolute path to the file.
    *
    * @param   {string}           writer      The writer for which the defaults apply
-   * @param   {any}              properties  Any additional properties to add to the defaults.
+   * @param   {Object}           properties  Any additional properties to add to the defaults.
+   * @param   {Object}           frontmatter Frontmatter extracted from document content.
    *
    * @return  {Promise<string>}              Resolves with an absolute path to the written file.
    */
-  getDefaultsFor: (writer: string, properties: any) => Promise<string>
+  getDefaultsFor: (writer: string, properties: Record<string, unknown>, frontmatter: Record<string, unknown>) => Promise<string>
 }
 
 export interface ExporterPlugin {
@@ -130,12 +131,26 @@ export interface ExporterPlugin {
    * Called whenever this specific exporter needs to run. That is, when the
    * requested format (see ExporterOptions) is available on this exporter.
    *
-   * @param   {ExporterOptions}      options        The options passed to the exporter
-   * @param   {string[]}             sourceFiles    These are the actual, pre-processed source files, named <file-name>.intermediary.<file-ext>
-   * @param   {any}                  formatOptions  A key-value object of all options the user set (if the plugin supports them)
-   * @param   {any}                  context        This is a small API that can be used to retrieve defaults and call Pandoc.
+   * @param   {ExporterOptions}      options            The options passed to the exporter
+   * @param   {string[]}             processedSource    These are the actual, pre-processed source files, named <file-name>.intermediary.<file-ext>
+   * @param   {any}                  formatOptions      A key-value object of all options the user set (if the plugin supports them)
+   * @param   {any}                  context            This is a small API that can be used to retrieve defaults and call Pandoc.
    *
-   * @return  {Promise<ExporterOutput>}             Returns an ExporterOutput after finishing the export.
+   * @return  {Promise<ExporterOutput>}                 Returns an ExporterOutput after finishing the export.
    */
-  run: (options: ExporterOptions, sourceFiles: string[], formatOptions: any, context: ExporterAPI) => Promise<ExporterOutput>
+  run: (options: ExporterOptions, processedSource: PreparedFiles, formatOptions: any, context: ExporterAPI) => Promise<ExporterOutput>
+}
+
+/**
+ * When the exporter pre-processes files it returns a list of intermediary filenames,
+ * as well as an object containing frontmatter extracted from each processed file.
+ *
+ * @param   {string}           writer      The writer for which the defaults apply
+ * @param   {any}              properties  Any additional properties to add to the defaults.
+ *
+ * @return  {Promise<string>}              Resolves with an absolute path to the written file.
+ */
+export interface PreparedFiles {
+  filenames: string[]
+  frontmatter: Record<string, unknown>
 }

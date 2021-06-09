@@ -14,13 +14,21 @@
 
 import { app } from 'electron'
 import { EOL } from 'os'
-import { ExporterOptions } from './types'
+import { ExporterOptions, PreparedFiles } from './types'
 import { getFnExportRE } from '../../../common/regular-expressions'
 import { promises as fs } from 'fs'
 import makeImgPathsAbsolute from '../../../common/util/make-img-paths-absolute'
 import path from 'path'
+import extractYamlFrontmatter from '../../../common/util/extract-yaml-frontmatter'
 
-export default async function prepareFiles (options: ExporterOptions): Promise<string[]> {
+export default async function prepareFiles (options: ExporterOptions): Promise<PreparedFiles> {
+  // Retain all absolute filepaths so we can return these. We will save the
+  // intermediary files to the temporary directory.
+  const output: PreparedFiles = {
+    frontmatter: {},
+    filenames: []
+  }
+
   // Retrieve our options
   const { sourceFiles, targetDirectory, absoluteImagePaths } = options
   // TODO; Matt. Push this back up to be a selectable option. Default true.
@@ -37,9 +45,6 @@ export default async function prepareFiles (options: ExporterOptions): Promise<s
   const absolutePathsOverride = absoluteImagePaths !== undefined && absoluteImagePaths
   const isTextBundle = [ 'textbundle', 'textpack' ].includes(options.format)
 
-  // Retain all absolute filepaths so we can return these. We will save the
-  // intermediary files to the temporary directory.
-  const returnFilenames: string[] = []
   const tempDir = app.getPath('temp')
 
   // Get configuration options which determine how we prepare the files
@@ -59,13 +64,17 @@ export default async function prepareFiles (options: ExporterOptions): Promise<s
   })
   const contentsArr = await Promise.all(promiseArr)
 
-  // We can start our file output within the loop to save time.
-  // We can resolve this array of promises before we leave the function.
+  // Store all extracted frontmatter in an array that we can flatten later on.
+  const frontmatter: Array<Record<string, unknown>> = []
+
+  // We can start our file output within the loop to save time and
+  // resolve this array of promises before we leave the function.
   const outputPromiseArr: Array<Promise<void>> = []
 
   /* Process our document content depending on set options.
   *
   * - Generate intermediary file path
+  * - Extract Frontmatter
   * - Make image paths absolute
   * - Replace Footnote IDs
   * - Strip Tags
@@ -77,9 +86,15 @@ export default async function prepareFiles (options: ExporterOptions): Promise<s
   */
   contentsArr.forEach((value, index) => {
     let fileContent = value
+
     const intermediaryFilename = `${path.basename(sourceFiles[index].path, sourceFiles[index].ext)}.intermediary${sourceFiles[index].ext}`
     const intermediaryAbsolutePath = path.join(tempDir, intermediaryFilename)
-    returnFilenames.push(intermediaryAbsolutePath)
+    output.filenames.push(intermediaryAbsolutePath)
+
+    // This should actually do the following things:
+    // - Extract frontmatter values from each YAML 'document' in a file (multiple is a valid configuration, and pandoc will parse them all!)
+    // - Return markdown content without frontmatter (to prevent pandoc from parsing values that we've extracted and treated.)
+    frontmatter.push(extractYamlFrontmatter(fileContent))
 
     // Make image paths absolute, if applicable
     if (!willExportToSameDir || isTextBundle || absolutePathsOverride) {
@@ -115,8 +130,9 @@ export default async function prepareFiles (options: ExporterOptions): Promise<s
     // Start our IO here and tidyup later on.
     outputPromiseArr.push(fs.writeFile(intermediaryAbsolutePath, `${fileContent.trim()}${EOL}${EOL}`))
   })
-
+  // Flatten our array of objects into a single object.
+  output.frontmatter = Object.assign(frontmatter)
   await Promise.all(outputPromiseArr)
 
-  return returnFilenames
+  return output
 }

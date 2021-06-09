@@ -16,7 +16,7 @@
  */
 
 import commandExists from 'command-exists'
-import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
+import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI, PreparedFiles } from './types'
 import { promises as fs } from 'fs'
 import path from 'path'
 import { trans } from '../../../common/i18n-main'
@@ -48,7 +48,7 @@ export const plugin: ExporterPlugin = {
       ]
     }
   },
-  run: async function (options: ExporterOptions, sourceFiles: string[], formatOptions: any, ctx: ExporterAPI): Promise<ExporterOutput> {
+  run: async function (options: ExporterOptions, processedSource: PreparedFiles, formatOptions: any, ctx: ExporterAPI): Promise<ExporterOutput> {
     // Determine the availability of Pandoc. As the Pandoc path is added to
     // process.env.PATH during the environment check, this should always work
     // if a supported Zettlr variant is being used. In other cases (e.g. custom
@@ -66,11 +66,11 @@ export const plugin: ExporterPlugin = {
 
     // Get the corresponding defaults file
     const defaultKeys = {
-      'input-files': sourceFiles,
+      'input-files': processedSource.filenames,
       'output-file': targetPath,
       'standalone': false // Make sure to override funny stuff by the user
     }
-    const defaultsFile = await ctx.getDefaultsFor('revealjs', defaultKeys)
+    const defaultsFile = await ctx.getDefaultsFor('revealjs', defaultKeys, processedSource.frontmatter)
     console.log(defaultsFile)
 
     // Run Pandoc
