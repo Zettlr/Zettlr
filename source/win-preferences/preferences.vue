@@ -274,7 +274,7 @@ export default {
         global.config.set('system.leaveAppRunning', false)
         leaveAppRunningField.disabled = true
         if (process.env.ZETTLR_TRAY_ERROR !== undefined) {
-          leaveAppRunningField.info = '⚠️ ' + process.env.ZETTLR_TRAY_ERROR
+          leaveAppRunningField.info = process.env.ZETTLR_TRAY_ERROR
         }
       }
     }
