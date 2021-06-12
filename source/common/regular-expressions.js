@@ -220,7 +220,13 @@ module.exports = {
   },
 
   /**
-   * Returns a regular expression that can detect Markdown images globally
+   * Returns a regular expression that can detect Markdown images globally.
+   * Matches the following groups:
+   *
+   * 1. The ALT-text in square brackets
+   * 2. The full contents of the round brackets
+   * 3. Only the title-text in quotes within group 2
+   * 4. Pandoc-specific attributes in curly braces
    *
    * @param   {boolean}  multiline  Whether or not the regular expression should be multiline
    *

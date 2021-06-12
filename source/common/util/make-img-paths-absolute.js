@@ -23,28 +23,33 @@ const { getImageRE } = require('../regular-expressions')
  */
 module.exports = function (basePath, mdstring) {
   let imgRE = getImageRE(true) // We need the multiline version
-  return mdstring.replace(imgRE, (match, p1, p2, p3, p4, offset, string) => {
+  return mdstring.replace(imgRE, (match, alt, targetAndTitle, title, pandocAttrs, offset, string) => {
     // We'll make use of path for file system URIs, and the URL() constructor
     // for web links. We know that new URL() will throw a TypeError if the URL
     // is not valid, so we can distinct two cases: If URL does not throw, it's
     // a valid URL and we can simply pass that one. But if it throws, use some
     // path-magic to convert it into an absolute path.
 
-    // There was an alt-text
-    if (p3) p2 = p2.replace(`"${p3}"`, '').trim()
+    // There was a title-text
+    let targetOnly = targetAndTitle
+    if (title !== undefined) {
+      targetOnly = targetOnly.replace(`"${title}"`, '').trim()
+    }
 
     try {
       // Short explainer for "throwawayVariable": If we instantiate URL
       // without "new" it'll throw an error always. But if we simply use "new"
       // there may be side effects. So we'll stuff it into an unused variable
       // and disable that line ...
-      let throwawayVariable = new URL(p2) // eslint-disable-line
+      let throwawayVariable = new URL(targetOnly) // eslint-disable-line
     } catch (e) {
       // It's not a valid URL, so pathify it! Luckily, path.resolve does all
       // the work for us.
-      p2 = path.resolve(basePath, p2)
+      if (!path.isAbsolute(targetOnly)) {
+        targetOnly = path.resolve(basePath, targetOnly)
+      }
     }
 
-    return `![${p1}](${p2}${(p3 !== undefined) ? ' "' + p3 + '"' : ''})${(p4 !== undefined) ? p4 : ''}`
+    return `![${alt}](${targetOnly}${(title !== undefined) ? ' "' + title + '"' : ''})${(pandocAttrs !== undefined) ? pandocAttrs : ''}`
   })
 }
