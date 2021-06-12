@@ -29,6 +29,7 @@ import { plugin as DefaultExporter } from './default-exporter'
 import { plugin as PDFExporter } from './pdf-exporter'
 import { plugin as RevealJSExporter } from './revealjs-exporter'
 import { plugin as TextbundleExporter } from './textbundle-exporter'
+import askDirectory from '../window-manager/dialog/ask-directory'
 
 const PLUGINS = [
   DefaultExporter,

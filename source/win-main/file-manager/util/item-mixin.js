@@ -50,7 +50,11 @@ export default {
 
       this.$nextTick(() => {
         this.$refs['name-editing-input'].focus()
-        this.$refs['name-editing-input'].select()
+        // Select from the beginning until the last dot
+        this.$refs['name-editing-input'].setSelectionRange(
+          0,
+          this.$refs['name-editing-input'].value.lastIndexOf('.')
+        )
       })
     }
   },
@@ -209,6 +213,8 @@ export default {
                   }
                 }).catch(e => console.error(e))
               }
+
+              // Set the export formats TODO
             })
           }
         })

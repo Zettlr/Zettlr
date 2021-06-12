@@ -63,30 +63,8 @@ const MARKDOWN_FILES = [
 const PROJECT_TEMPLATE = {
   // General values that not only pertain to the PDF generation
   title: 'Untitled', // Default project title is the directory's name
-  format: 'pdf', // Can be PDF, HTML, DOCX, and ODT.
-  cslStyle: '', // A path to an optional CSL style file.
-  pdf: {
-    // PDF keywords are seldomly used
-    keywords: '',
-    // papertype is a value that XeLaTeX expects
-    papertype: 'a4paper',
-    // pagenumbering must also be a value that XeLaTeX accepts
-    pagenumbering: 'arabic',
-    // All four paper margins
-    tmargin: 3,
-    rmargin: 3,
-    bmargin: 3,
-    lmargin: 3,
-    margin_unit: 'cm',
-    lineheight: '1.2', // TODO: Why is this a string?
-    mainfont: 'Times New Roman',
-    sansfont: 'Arial',
-    fontsize: 12,
-    toc: true, // Default: generate table of contents
-    tocDepth: 2, // Default: Include headings 1+2 in TOCs
-    titlepage: true, // Generate a title page by default
-    textpl: '' // Can be used to store a custom TeX template
-  }
+  formats: ['chromium-pdf'], // A list of formats the project can be exported to
+  cslStyle: '' // A path to an optional CSL style file.
 }
 
 /**
