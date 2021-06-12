@@ -759,10 +759,10 @@
   resolved "https://registry.yarnpkg.com/@ungap/promise-all-settled/-/promise-all-settled-1.1.2.tgz#aa58042711d6e3275dd37dc597e5d31e8c290a44"
   integrity sha512-sL/cEvJWAnClXw0wHk85/2L0G6Sj8UB0Ctc1TEMbKSsmpRosqhwj9gWgFRZSrBr2f9tiXISwNhCPmlfqUqyb9Q==
 
-"@vercel/webpack-asset-relocator-loader@^1.4.1":
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/@vercel/webpack-asset-relocator-loader/-/webpack-asset-relocator-loader-1.4.1.tgz#c55fc0f46503b99a6f2321380c9b0f44b4faa703"
-  integrity sha512-p0P5sSfzhZ0HkNgvtOKs62cOZCK6avE28A8fEIE5vpKkhPXOlcXFtbUmIOqH3jYC4CjLOqwTU48cx3ewkGKQ9g==
+"@vercel/webpack-asset-relocator-loader@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@vercel/webpack-asset-relocator-loader/-/webpack-asset-relocator-loader-1.5.0.tgz#3b74caf02db3617c6f67e8f90f5696b51447f354"
+  integrity sha512-O5pHMhMz4H8YhaRjsJYnZ818kHF7V4Uz0DIn4AnITpqAiW7shgEbjDlTFZBX8hHOx53jTfhF8dWKCe+ffK3aeg==
 
 "@vue/component-compiler-utils@^3.1.0":
   version "3.1.1"
@@ -3128,10 +3128,10 @@ electron-to-chromium@^1.3.723:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.735.tgz#fa1a8660f2790662291cb2136f0e446a444cdfdc"
   integrity sha512-cp7MWzC3NseUJV2FJFgaiesdrS+A8ZUjX5fLAxdRlcaPDkaPGFplX930S5vf84yqDp4LjuLdKouWuVOTwUfqHQ==
 
-electron@^13.0.1:
-  version "13.0.1"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-13.0.1.tgz#7dd3666f0f966ab83a1f9868d84add2e6205d43a"
-  integrity sha512-ds1cf0m46nStil0jbM2r9W/p+Kprdq22+2MikIUqEu69eGl1c86IinQVrpmJ9bR4RshDSF4j3uD32a0bsHDMnQ==
+electron@^13.1.2:
+  version "13.1.2"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-13.1.2.tgz#8c9abf9015766c9cbc16f10c99282d00d6ae1b90"
+  integrity sha512-aNT9t+LgdQaZ7FgN36pN7MjSEoj+EWc2T9yuOqBApbmR4HavGRadSz7u9N2Erw2ojdIXtei2RVIAvVm8mbDZ0g==
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^14.6.2"
