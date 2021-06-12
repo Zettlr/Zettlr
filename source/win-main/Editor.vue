@@ -715,7 +715,7 @@ export default {
     margin-left: 0.5em;
     height: 100%;
     font-family: inherit;
-    background: none;
+    // background: none;
 
     @media(min-width: 1025px) { margin-left: @editor-margin-normal-lg; }
     @media(max-width: 1024px) { margin-left: @editor-margin-normal-md; }
