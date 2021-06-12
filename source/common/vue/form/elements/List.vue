@@ -239,7 +239,6 @@ export default {
      * @return  {string}  Can be simpleArray, multiArray, or object.
      */
     valueType: function () {
-      console.log('Value changed!')
       if (this.value.length === 0) {
         return 'simpleArray'
       }
@@ -448,6 +447,7 @@ div.table-view {
     // Optional filter field
   }
   break-inside: avoid; // Avoid breaking table views when inside column views
+  margin: 5px;
 
   table {
     // font-family: @font-system;
