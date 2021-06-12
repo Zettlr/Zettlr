@@ -744,6 +744,10 @@ export default {
     padding-bottom: 0px;
   }
 
+  .CodeMirror.CodeMirror-readonly {
+    .CodeMirror-cursor { display: none !important; }
+  }
+
   // Reduce font size of math a bit
   .katex { font-size: 1.1em; }
 }
