@@ -7440,10 +7440,10 @@ reusify@^1.0.4:
   resolved "https://registry.yarnpkg.com/reusify/-/reusify-1.0.4.tgz#90da382b1e126efc02146e90845a88db12925d76"
   integrity sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==
 
-reveal.js@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/reveal.js/-/reveal.js-4.1.1.tgz#4a7c70377cf320e28672db103de1513179f19f41"
-  integrity sha512-Ol+/3LF4sZKQQOaG7/Jsa7t5Kix1I+dx9UEYL8mOOn2sWROtLcbI3AGHZbNQPWeuvnQ/y1R3MJ0vN9ZI5nBPUg==
+reveal.js@^4.1.3:
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/reveal.js/-/reveal.js-4.1.3.tgz#f0a805a3cbc7c4e5553d66f91404b036f0f331cf"
+  integrity sha512-5VbL4nVDUedVKnOIIM3UQAIUlp+CvR/SrUkrN5GDoVfcWJAxH2oIh7PWyShy7+pE7tgkH2q+3e5EikGRpgE+oA==
 
 rimraf@^2.6.1, rimraf@^2.6.3, rimraf@^2.7.1:
   version "2.7.1"
