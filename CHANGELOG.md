@@ -40,6 +40,8 @@ The Custom CSS can now be edited directly in the assets dialog where you can als
 - All windows will now remember their last position (new: log window and print window).
 - Some components of the renderer elements will now respect a given accent colour set by your operating system (only available for macOS and Windows).
 - You can now close files by middle-clicking their tabs.
+- Fix the visibility problems under night mode mentioned in issue #1845
+
 
 ## Under the Hood
 
