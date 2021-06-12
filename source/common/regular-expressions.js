@@ -325,7 +325,7 @@ module.exports = {
   },
 
   /**
-   * Returns a regular expression that matches MarkDown Ordered lists.
+   * Returns a regular expression that matches Markdown Ordered lists.
    *
    * @return  {RegExp}              The compiled Regular Expression
    */
@@ -336,7 +336,7 @@ module.exports = {
   },
 
   /**
-   * Returns a regular expression that matches MarkDown task lists.
+   * Returns a regular expression that matches Markdown task lists.
    *
    * @return  {RegExp}              The compiled Regular Expression
    */
@@ -347,20 +347,24 @@ module.exports = {
   },
 
   /**
-   * Returns a regular expression that matches unordered Markdown lists.
+   * Returns a regular expression that matches ordered lists, unordered lists,
+   * task lists, and blockquotes. Captures the following:
    *
-   * Includes a capture group to capture list tokens.
+   * 1. The amount of whitespace before the list token
+   * 2. The list token itself
+   * 3. In case of an ordered list the list number
+   * 4. The amount of following whitespace (after the list token)
    *
    * @return  {RegExp}              The compiled Regular Expression
    */
   'getListTokenRE': function () {
     return RegExp(
-      /^(\s*)(>[> ]*|[*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s*)$/.source
+      /^(\s*)(>[> ]*|[*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s*)/.source
     )
   },
 
   /**
-   * Returns a regular expression that matches unordered MarkDown lists.
+   * Returns a regular expression that matches unordered Markdown lists.
    *
    * @return  {RegExp}              The compiled Regular Expression
    */
@@ -371,7 +375,7 @@ module.exports = {
   },
 
   /**
-   * Returns a regular expression that matches unordered MarkDown lists.
+   * Returns a regular expression that matches unordered Markdown lists.
    *
    * Used in CodeMirror MarkDown shortcuts.
    *
@@ -384,7 +388,7 @@ module.exports = {
   },
 
   /**
-   * Returns a regular expression that matches MarkDown files.
+   * Returns a regular expression that matches Markdown files.
    *
    * @return  {RegExp}              The compiled Regular Expression
    */
@@ -410,7 +414,7 @@ module.exports = {
   },
 
   /**
-   * Returns a regular expression that matches MarkDown Tables.
+   * Returns a regular expression that matches Markdown Tables.
    *
    * @return  {RegExp}              The compiled Regular Expression
    */
@@ -421,7 +425,7 @@ module.exports = {
   },
 
   /**
-   * Returns a regular expression that matches MarkDown table headings.
+   * Returns a regular expression that matches Markdown table headings.
    *
    * @return  {RegExp}              The compiled Regular Expression
    */
