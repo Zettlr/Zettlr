@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h4>Properties: {{ filename }}</h4>
+    <h4>{{ filename }}</h4>
     <div class="properties-info-container">
       <div><span>Created: {{ creationTime }}</span></div>
       <div v-if="type === 'file'">
