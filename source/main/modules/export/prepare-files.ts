@@ -17,15 +17,15 @@ import { EOL } from 'os'
 import { ExporterOptions, PreparedFiles } from './types'
 import { getFnExportRE } from '../../../common/regular-expressions'
 import { promises as fs } from 'fs'
+import extractMetadataBlocks from '@lackadaisical/metadata-extractor'
 import makeImgPathsAbsolute from '../../../common/util/make-img-paths-absolute'
 import path from 'path'
-import extractYamlFrontmatter from '../../../common/util/extract-yaml-frontmatter'
 
 export default async function prepareFiles (options: ExporterOptions): Promise<PreparedFiles> {
   // Retain all absolute filepaths so we can return these. We will save the
   // intermediary files to the temporary directory.
   const output: PreparedFiles = {
-    frontmatter: {},
+    metadata: {},
     filenames: []
   }
 
@@ -64,8 +64,8 @@ export default async function prepareFiles (options: ExporterOptions): Promise<P
   })
   const contentsArr = await Promise.all(promiseArr)
 
-  // Store all extracted frontmatter in an array that we can flatten later on.
-  const frontmatter: Array<Record<string, unknown>> = []
+  // Store all extracted metadata in an array that we can flatten later on.
+  const metadata: Array<Record<string, unknown>> = []
 
   // We can start our file output within the loop to save time and
   // resolve this array of promises before we leave the function.
@@ -74,7 +74,7 @@ export default async function prepareFiles (options: ExporterOptions): Promise<P
   /* Process our document content depending on set options.
   *
   * - Generate intermediary file path
-  * - Extract Frontmatter
+  * - Extract metadata
   * - Make image paths absolute
   * - Replace Footnote IDs
   * - Strip Tags
@@ -85,16 +85,20 @@ export default async function prepareFiles (options: ExporterOptions): Promise<P
   * - Promise that we'll write the intermediary file.
   */
   contentsArr.forEach((value, index) => {
-    let fileContent = value
+    let fileContent
 
     const intermediaryFilename = `${path.basename(sourceFiles[index].path, sourceFiles[index].ext)}.intermediary${sourceFiles[index].ext}`
     const intermediaryAbsolutePath = path.join(tempDir, intermediaryFilename)
     output.filenames.push(intermediaryAbsolutePath)
 
-    // This should actually do the following things:
-    // - Extract frontmatter values from each YAML 'document' in a file (multiple is a valid configuration, and pandoc will parse them all!)
-    // - Return markdown content without frontmatter (to prevent pandoc from parsing values that we've extracted and treated.)
-    frontmatter.push(extractYamlFrontmatter(fileContent))
+    // Extract any metadata blocks within the content.
+    // We're asking for the returned content string to be stripped of metadata blocks.
+    const metadataExtraction = extractMetadataBlocks(value, true)
+    metadataExtraction.metadata.forEach((value) => {
+      metadata.push(value)
+    })
+
+    fileContent = metadataExtraction.content
 
     // Make image paths absolute, if applicable
     if (!willExportToSameDir || isTextBundle || absolutePathsOverride) {
@@ -131,7 +135,7 @@ export default async function prepareFiles (options: ExporterOptions): Promise<P
     outputPromiseArr.push(fs.writeFile(intermediaryAbsolutePath, `${fileContent.trim()}${EOL}${EOL}`))
   })
   // Flatten our array of objects into a single object.
-  output.frontmatter = Object.assign(frontmatter)
+  output.metadata = Object.assign(metadata)
   await Promise.all(outputPromiseArr)
 
   return output

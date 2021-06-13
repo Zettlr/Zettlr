@@ -145,12 +145,12 @@ export interface ExporterPlugin {
  * When the exporter pre-processes files it returns a list of intermediary filenames,
  * as well as an object containing frontmatter extracted from each processed file.
  *
- * @param   {string}           writer      The writer for which the defaults apply
- * @param   {any}              properties  Any additional properties to add to the defaults.
+ * @param   {string[]}         filenames   An array of intermediary files
+ * @param   {Object}           metadata    An object containing consolidated metadata blocks.
  *
  * @return  {Promise<string>}              Resolves with an absolute path to the written file.
  */
 export interface PreparedFiles {
   filenames: string[]
-  frontmatter: Record<string, unknown>
+  metadata: Record<string, unknown>
 }

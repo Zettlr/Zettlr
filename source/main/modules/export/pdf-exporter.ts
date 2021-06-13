@@ -67,10 +67,10 @@ export const plugin: ExporterPlugin = {
     let defaultsFile = ''
     if (options.format === 'xelatex-pdf') {
       // Immediately write to PDF
-      defaultsFile = await ctx.getDefaultsFor('pdf', defaultKeys, processedSource.frontmatter)
+      defaultsFile = await ctx.getDefaultsFor('pdf', defaultKeys, processedSource.metadata)
     } else {
       // Write to an intermediary HTML file which we will convert to PDF below.
-      defaultsFile = await ctx.getDefaultsFor('html', defaultKeys, processedSource.frontmatter)
+      defaultsFile = await ctx.getDefaultsFor('html', defaultKeys, processedSource.metadata)
     }
 
     // Run Pandoc

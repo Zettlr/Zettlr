@@ -357,6 +357,13 @@
     lodash "^4.17.20"
     path "^0.12.7"
 
+"@lackadaisical/metadata-extractor@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@lackadaisical/metadata-extractor/-/metadata-extractor-0.1.1.tgz#16db632d869a011c9c7637741c736707d2183d9d"
+  integrity sha512-p8DEA95BLlO0T2fFe29jnwPMGziMo5i15ZMipwCSIYhqpNHS1PHmf04NTWgVJXwG6g4hY5cyDtf1Z4JFow3Nzg==
+  dependencies:
+    yaml "^1.10.2"
+
 "@malept/cross-spawn-promise@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@malept/cross-spawn-promise/-/cross-spawn-promise-1.1.0.tgz#258fde4098f5004a56db67c35f33033af64810f6"

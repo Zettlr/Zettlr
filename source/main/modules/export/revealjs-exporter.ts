@@ -70,7 +70,7 @@ export const plugin: ExporterPlugin = {
       'output-file': targetPath,
       'standalone': false // Make sure to override funny stuff by the user
     }
-    const defaultsFile = await ctx.getDefaultsFor('revealjs', defaultKeys, processedSource.frontmatter)
+    const defaultsFile = await ctx.getDefaultsFor('revealjs', defaultKeys, processedSource.metadata)
     console.log(defaultsFile)
 
     // Run Pandoc
