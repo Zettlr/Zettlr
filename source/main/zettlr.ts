@@ -445,7 +445,6 @@ export default class Zettlr {
       }
       return true
     } else if (command === 'get-file-contents') {
-      console.log('Get File Contents has been invoked!')
       // First, attempt to get the contents from the document manager
       const file = this._documentManager.openFiles.find(file => file.path === payload)
       if (file !== undefined) {
@@ -457,8 +456,6 @@ export default class Zettlr {
       if (descriptor === null) {
         return null
       }
-
-      console.log('Found the descriptor :)')
 
       return await this._fsal.getFileContents(descriptor)
     } else if (command === 'update-modified-files') {
