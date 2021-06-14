@@ -348,9 +348,9 @@
   integrity sha512-wdppn25U8z/2yiaT6YGquE6X8sSv7hNMWSXYSSU1jGv/yd6XqjXgTDJ8KP4NgjTXfJ3GbRjeeb8RTV7a/VpM+w==
 
 "@lackadaisical/defaults-generator@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@lackadaisical/defaults-generator/-/defaults-generator-0.4.0.tgz#a380d724a4cf12643bbbfe3fa288e65421535d98"
-  integrity sha512-5KGUPPO+BXqf2RHL8np0GebB6fSqwxdKbFYrkb3hLTR9F7xEWTGZG4vE1Q6aqI8PIKRyvSgyXcspXBISP5BY8Q==
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@lackadaisical/defaults-generator/-/defaults-generator-0.4.1.tgz#cd41d8b8b533ad1ae0d1108c7673174fed803a99"
+  integrity sha512-hd5lcMPyZnxkoEwTb89MycqDYiJoQyin/bmuVnxHU+A8hEx6+7uHv0XAYa83DVxuRmm+KxgDSLk0FbizU8lq8A==
   dependencies:
     ajv "^7.0.3"
     ajv-formats "^1.5.1"
@@ -8589,9 +8589,9 @@ update-notifier@^5.1.0:
     xdg-basedir "^4.0.0"
 
 uri-js@^4.2.2:
-  version "4.2.2"
-  resolved "https://registry.yarnpkg.com/uri-js/-/uri-js-4.2.2.tgz#94c540e1ff772956e2299507c010aea6c8838eb0"
-  integrity sha512-KY9Frmirql91X2Qgjry0Wd4Y+YTdrdZheS8TFwvkbLWf/G5KNJDCh6pKL5OZctEW4+0Baa5idK2ZQuELRwPznQ==
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/uri-js/-/uri-js-4.4.1.tgz#9b1a52595225859e55f669d928f88c6c57f2a77e"
+  integrity sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==
   dependencies:
     punycode "^2.1.0"
 
