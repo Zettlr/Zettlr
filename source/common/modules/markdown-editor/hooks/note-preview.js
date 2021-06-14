@@ -40,7 +40,16 @@ module.exports = (elem) => {
         // If the file is found
         if (metaData !== null) {
           // On ready, show a tooltip with the note contents
-          tooltip.setContent(`File Name: "${metaData[0]}"<br>"${metaData[1]}"<br>Word Count: ${metaData[2]}<br> Modified: ${metaData[3]}`)
+          const content = `
+          <div class="editor-note-preview">
+            <h4 class="filename">${metaData[0]}</h4>
+            <div class="note-content">${metaData[1]}</div>
+            <div class="metadata">
+              Word Count: ${metaData[2]}<br>Modified: ${metaData[3]}
+            </div>
+          </div>
+          `
+          tooltip.setContent(content)
         } else {
           tooltip.setContent('File Not Found') // TODO: Translate!
         }
