@@ -6,7 +6,9 @@
       >
         <input
           v-bind:id="fieldID"
-          type="checkbox" v-bind:name="name" value="yes"
+          type="checkbox"
+          v-bind:name="name"
+          value="yes"
           v-bind:checked="value"
           v-bind:disabled="disabled"
           v-on:input="$emit('input', $event.target.checked)"
@@ -18,7 +20,7 @@
       >
       </label>
     </div>
-    <div v-if="info" class="form-control">
+    <div v-if="info" class="form-control info">
       {{ info }}
     </div>
   </div>
@@ -135,10 +137,15 @@ body {
     }
   }
 
-  label{
+  label {
     &[disabled] {
       color: grey;
     }
+  }
+
+  div.info {
+    color: grey;
+    font-size: 80%;
   }
 }
 
