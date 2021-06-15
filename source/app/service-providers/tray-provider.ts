@@ -136,6 +136,11 @@ export default class TrayProvider extends EventEmitter {
    * @memberof TrayProvider
    */
   private _removeTray (): void {
+    // Linux with Gnome Desktop cannot destroy the tray due to bug
+    // https://github.com/electron/electron/issues/17622
+    if (process.platform === 'linux' && process.env.XDG_CURRENT_DESKTOP === 'GNOME') {
+      return
+    }
     if (this._tray != null) {
       this._tray.destroy()
     }
