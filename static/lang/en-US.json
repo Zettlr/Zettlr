@@ -7,7 +7,7 @@
             "Huey"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-05-30T13:24:41.000000Z"
+        "updated_at": "2021-06-04T20:14:18.000000Z"
     },
     "dialog": {
         "about": {
@@ -471,6 +471,7 @@
         "copy_filename": "Copy filename",
         "copy_html": "Copy as HTML",
         "copy_id": "Copy ID",
+        "copy_img_to_clipboard": "Copy image to clipboard",
         "copy_link": "Copy Link",
         "copy_mail": "Copy Mail Address",
         "custom_css": "Custom CSS\u2026",
@@ -511,6 +512,7 @@
         "no_suggestions": "No suggestions",
         "open": "Open\u2026",
         "open_attachment": "Open Attachment",
+        "open_in_browser": "Open in browser",
         "open_link": "Open Link",
         "open_logs": "Open Logs",
         "open_new_tab": "Open in a new tab",

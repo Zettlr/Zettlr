@@ -5,7 +5,7 @@
             "vfc"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-05-30T17:21:13.000000Z"
+        "updated_at": "2021-06-05T07:42:01.000000Z"
     },
     "dialog": {
         "about": {
@@ -207,6 +207,7 @@
                 "rtl_move_visually": "Utitlitza l'ordre visual per als moviments de les tecles del cursor en el mode RTL"
             },
             "enable_rmarkdown": "Activa el suport de fitxers RMarkdown",
+            "enable_scroll_zoom": "Fes zoom en despla\u00e7ar-se i mantenir premut \u003Ckbd\u003ECmd\u003C/kbd\u003E o \u003Ckbd\u003ECtrl\u003C/kbd\u003E",
             "enable_table_helper": "Activa l'editor de taules",
             "export": {
                 "dest": "Directori de dest\u00ed pels fitxers exportats. \u003Cem\u003EAtenci\u00f3:\u003C/em\u003E Si seleccioneu el directori on esteu treballant ara mateix els fitxers es sobreescriuran sense cap av\u00eds!",
@@ -468,6 +469,7 @@
         "copy_filename": "Copia el nom del fitxer",
         "copy_html": "Copia com a HTML",
         "copy_id": "Copia la ID",
+        "copy_img_to_clipboard": "Copia la imatge al porta-retalls",
         "copy_link": "Copia l'enlla\u00e7",
         "copy_mail": "Copia l'adre\u00e7a electr\u00f2nica",
         "custom_css": "CSS personalitzat...",
@@ -508,6 +510,7 @@
         "no_suggestions": "Sense suggeriments",
         "open": "Obre...",
         "open_attachment": "Obre l'adjunt",
+        "open_in_browser": "Obre amb el navegador",
         "open_link": "Obre l'enlla\u00e7",
         "open_logs": "Obre el registre",
         "open_new_tab": "Obre en una pestanya nova",

@@ -2,10 +2,11 @@
     "metadata": {
         "authors": [
             "Hasan Erken \u003Cerkenh79@gmail.com\u003E",
-            "Taylan TATLI"
+            "Taylan TATLI",
+            "Furkan Taskin \u003Ctaskinfurkan1@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-07-06T14:07:34.000000Z"
+        "updated_at": "2021-06-08T22:06:57.000000Z"
     },
     "dialog": {
         "about": {
@@ -74,10 +75,12 @@
             "replace_placeholder": "\u0130le de\u011fi\u015ftir"
         },
         "paste_image": {
+            "current_directory": "Mevcut dizin",
             "dimensions": "Resim boyutu",
             "info": "Bu \u015fu anda panonuzda bulunan resmin \u00f6nizlemesidir. Mevcut dizine kaydetmek i\u00e7in Enter'a bas\u0131n veya farkl\u0131 bir dizin se\u00e7in.",
             "name_label": "Dosya ad\u0131",
             "name_placeholder": "Benzersiz bir dosya ad\u0131",
+            "resize_to": "G\u00f6rseli \u015fu boyuta bi\u00e7imlendir",
             "retain_aspect_label": "En boy oran\u0131n\u0131 koru",
             "save_cwd": "Mevcut dizine kaydet",
             "title": "Panodan Resim Ekle"
@@ -108,6 +111,7 @@
                 "es-ES": "\u0130spanyolca (\u0130spanya)",
                 "et-ET": "Estonya Dili",
                 "eu-EU": "Bask",
+                "fa-IR": "Fars\u00e7a (Farsi)",
                 "fi-FI": "Fince",
                 "fo-FO": "Faroe Dili",
                 "fr-FR": "Frans\u0131zca (Fransa)",
@@ -161,6 +165,7 @@
             "auto_dark_mode_schedule": "Program",
             "auto_dark_mode_schedule_format": "SS:DD (24 saat format\u0131)",
             "auto_dark_mode_system": "\u0130\u015fletim Sistemini Takip Et",
+            "autocomplete_accept_space": "Otomatik tamamlama esnas\u0131nda bo\u015fluklar\u0131 kabul et",
             "autocorrect": {
                 "active_label": "OtomatikD\u00fczeltme'yi a\u00e7",
                 "quick_select_label": "H\u0131zl\u0131 se\u00e7",
@@ -172,6 +177,7 @@
                 "style_word_label": "Word stili",
                 "title": "OtomatikD\u00fczeltme"
             },
+            "avoid_new_tabs": "M\u00fcmk\u00fcnse dosyalar\u0131 yeni sekmede a\u00e7ma",
             "checkForBeta": "Beta s\u00fcr\u00fcmler hakk\u0131nda beni haberdar et",
             "choose_file": "Dosya se\u00e7 ...",
             "citation_database": "At\u0131f Veritaban\u0131 (CSL JSON veya BibTex)",
@@ -179,6 +185,7 @@
             "creationtime": "Dosya olu\u015fturulma zaman\u0131",
             "debug": "Hata ay\u0131klama modunu aktif et",
             "default_image_save_path": "Varsay\u0131lan resim yolu (g\u00f6receli veya mutlak)",
+            "delete_on_fail": "\u00d6gelerin \u00e7\u00f6p kutusuna ta\u015f\u0131nmas\u0131 m\u00fcmk\u00fcn de\u011filse kal\u0131c\u0131 olarak sil",
             "display": {
                 "image_size_info": "Bu kontroller ile g\u00f6r\u00fcnt\u00fc \u00f6nizlemelerini s\u0131n\u0131rland\u0131rabilirsiniz.",
                 "preview_info": "Bu ayarlar belgelerde hangi elementlerin g\u00f6sterilece\u011fini belirler.",
@@ -189,16 +196,19 @@
                 "render_links": "Linkleri g\u00f6ster",
                 "render_math": "Form\u00fclleri g\u00f6ster",
                 "render_tasks": "G\u00f6revleri g\u00f6ster",
-                "title": "G\u00f6ster"
+                "title": "G\u00f6ster",
+                "use_first_headings": "Mevcutsa, dosya ad\u0131 yerine birinci ba\u015fl\u0131\u011f\u0131 kullan"
             },
             "display_time_explanation": "Dosya meta veri ekran\u0131nda",
             "editor": "Edit\u00f6r",
+            "editor_font_size": "Editor yaz\u0131 boyutu",
             "editor_setting": {
                 "direction_ltr": "Metin y\u00f6n\u00fcn\u00fc soldan sa\u011fa (LTR) yap",
                 "direction_rtl": "Metin y\u00f6n\u00fcn\u00fc sa\u011fdan sola (RTL) yap",
                 "rtl_move_visually": "Metin y\u00f6n\u00fc sa\u011fdan sola (RTL) oldu\u011funda ok tu\u015flar\u0131n\u0131n hareketi i\u00e7in g\u00f6rsel s\u0131ray\u0131 kullan"
             },
             "enable_rmarkdown": "RMarkdown dosya deste\u011fini aktif et",
+            "enable_scroll_zoom": "\u003Ckbd\u003ECmd\u003C/kbd\u003E veya \u003Ckbd\u003ECtrl\u003C/kbd\u003E tu\u015funa bas\u0131l\u0131 tutarak fare ile yak\u0131nla\u015f/uzakla\u015f",
             "enable_table_helper": "Tablo D\u00fczenleyiciyi aktif et",
             "export": {
                 "dest": "D\u0131\u015fa aktar\u0131lacak dosyalar i\u00e7in hedef dizini. \u003Cem\u003EDikkat:\u003C/em\u003E Mevcut \u00e7al\u0131\u015fma dizinini se\u00e7mek uyarmadan dosyalar\u0131n \u00fczerine yaz\u0131lmas\u0131na neden olacakt\u0131r!",
@@ -210,9 +220,14 @@
                 "strip_links_unlink_label": "Dahili ba\u011flant\u0131lar\u0131n ba\u011flant\u0131lar\u0131n\u0131 kald\u0131r",
                 "strip_tags_label": "Dosyalardan etiketleri kald\u0131r",
                 "stripping": "ZKN elementleri i\u00e7in ayarlar",
-                "title": "D\u0131\u015fa Aktar"
+                "title": "D\u0131\u015fa Aktar",
+                "use_bundled_pandoc": "D\u0131\u015far\u0131 aktarma i\u00e7in dahili Pandoc'u kullan"
             },
             "file_meta": "Dosya bilgisini g\u00f6ster",
+            "filemanager_combined": "Birle\u015ftirilmi\u015f &mdash; dosya a\u011faca\u0131nda dosyalar\u0131 ve dizinleri g\u00f6ster",
+            "filemanager_expanded": "Geni\u015fletilmi\u015f &mdash; dosya a\u011fac\u0131 ile dosya listesini birlikte g\u00f6ster",
+            "filemanager_explanation": "Dosya y\u00f6neticisi modu",
+            "filemanager_thin": "\u0130nce &mdash; dosya a\u011fac\u0131n\u0131 veya listesini g\u00f6ster",
             "filename_generator": "Yeni dosya adlar\u0131 i\u00e7in \u015fablon",
             "formatting_characters_explanation": "Kal\u0131n/vurgu komutlar\u0131n\u0131n kullan\u0131lmas\u0131 gereken bi\u00e7imlendirme karakterlerini se\u00e7in",
             "general": "Genel",
@@ -299,6 +314,7 @@
                 "success": "%s ba\u015far\u0131l\u0131 bir \u015fekilde indirildi!",
                 "updated": "G\u00fcncellenen \u00e7eviriler: %s"
             },
+            "use_native_appearance": "Dahili pencere g\u00f6r\u00fcn\u00fcm\u00fcn kullan",
             "user_dictionary": "Kullan\u0131c\u0131 s\u00f6zl\u00fc\u011f\u00fc. Kelimelere t\u0131klayarak silin.",
             "watchdog_checkbox_label": "Zamanlay\u0131c\u0131 sorgulama se\u00e7ene\u011fini etkinle\u015ftir",
             "watchdog_explainer": "Baz\u0131 bilgisayarlarda Zettlr, \u00e7ok say\u0131da uygulama d\u0131\u015f\u0131nda de\u011fi\u015fen dosya bildirimi g\u00f6sterebilir. O durumda bu se\u00e7ene\u011fi i\u015faretleyin.",
@@ -307,6 +323,7 @@
             "xelatex_default": "Varsay\u0131lan: xelatex",
             "zkn": {
                 "auto_create_file": "\u0130\u015f ba\u011flant\u0131lar\u0131 takip ederken var olmayan dosyalar\u0131 otomatik olarak olu\u015ftur",
+                "auto_search": "Zettelkasten ba\u011flant\u0131lar\u0131n\u0131 takip ederken aramay\u0131 ba\u015flat",
                 "generated_id": "Olu\u015fturulan ID",
                 "id_generator_label": "Yeni IDler olu\u015fturmak i\u00e7in kullan\u0131lacak \u015fablon",
                 "id_label": "ID d\u00fczenli ifade",
@@ -330,8 +347,10 @@
                 "var_minute": "Dakika (s\u0131f\u0131r ba\u015fta)",
                 "var_month": "Ay (s\u0131f\u0131r ba\u015fta)",
                 "var_second": "Saniye (s\u0131f\u0131r ba\u015fta)",
+                "var_unix_epoch": "Unit zaman\u0131",
                 "var_week_number": "Y\u0131l\u0131n haftas\u0131 (s\u0131f\u0131r ba\u015fta)",
-                "var_year": "Y\u0131l (d\u00f6rt haneli)"
+                "var_year": "Y\u0131l (d\u00f6rt haneli)",
+                "var_year_two": "Y\u0131l (iki rakam)"
             }
         },
         "statistics": {
@@ -424,9 +443,14 @@
         "no_attachments": "Ek yok",
         "no_dir_selected": "Dizin se\u00e7ilmedi",
         "no_search_results": "Sonu\u00e7 yok",
+        "number_selections": "%s se\u00e7im",
+        "statistics_more": "Daha fazla istatistik...",
+        "table_of_contents": "\u0130\u00e7indekiler",
         "today_words": "kelime bug\u00fcn",
         "words": "%s kelime",
-        "words_last_month": "kelime ge\u00e7en ay"
+        "words_last_month": "kelime ge\u00e7en ay",
+        "words_selected": "%s se\u00e7ili",
+        "workspaces": "\u00c7al\u0131\u015fma alanlar\u0131"
     },
     "localise": {
         "decimal_delimiter": ",",
@@ -438,12 +462,15 @@
         "all_front": "Hepsini \u00f6ne getir",
         "bold": "Kal\u0131n",
         "clear_recent_docs": "Bo\u015f",
+        "close_all_tabs": "T\u00fcm sekmeleri kapat",
         "close_dir": "Dizini kapat",
         "close_file": "Dosyay\u0131 kapat",
+        "close_workspace": "\u00c7al\u0131\u015fma Alan\u0131n\u0131 Temizle",
         "copy": "Kopyala",
         "copy_filename": "Dosya ad\u0131n\u0131 kopyala",
         "copy_html": "HTML olarak kopyala",
         "copy_id": "ID'yi kopyala",
+        "copy_img_to_clipboard": "G\u00f6rseli panoya kopyala",
         "copy_link": "Link'i kopyala",
         "copy_mail": "Mail adresini kopyala",
         "custom_css": "\u00d6zel CSS...",
@@ -484,8 +511,11 @@
         "no_suggestions": "\u00d6neri yok",
         "open": "A\u00e7...",
         "open_attachment": "Ek A\u00e7",
+        "open_in_browser": "Taray\u0131c\u0131da a\u00e7",
         "open_link": "Link A\u00e7",
         "open_logs": "Loglar\u0131 g\u00f6r\u00fcnt\u00fcle",
+        "open_new_tab": "Yeni sekmede a\u00e7",
+        "open_workspace": "\u00c7al\u0131\u015fma Alan\u0131n\u0131 A\u00e7 ...",
         "pandoc": "Pandoc'u Edin",
         "paste": "Yap\u0131\u015ft\u0131r",
         "paste_plain": "Stilsiz yap\u0131\u015ft\u0131r",
@@ -494,6 +524,7 @@
         "print": "Yazd\u0131r...",
         "project_build": "Projeyi D\u0131\u015far\u0131 Aktar",
         "project_properties": "Proje Ayarlar\u0131...",
+        "properties": "\u00d6zellikler",
         "quicklook": "H\u0131zl\u0131 bak\u0131\u015f",
         "quit": "\u00c7\u0131k",
         "recent_docs": "Son dosyalar",
@@ -520,9 +551,11 @@
         "toggle_devtools": "Geli\u015ftirici ara\u00e7lar\u0131n\u0131 a\u00e7/kapat",
         "toggle_distraction_free": "Rahats\u0131z etme modu",
         "toggle_file_meta": "Ek Bilgi",
+        "toggle_filemanager": "Dosya y\u00f6neticisni de\u011fi\u015ftir",
         "toggle_fullscreen": "Tam ekran a\u00e7/kapat",
         "toggle_sidebar": "Kenar \u00c7ubu\u011funu A\u00e7/Kapat",
         "toggle_theme": "Gece modu",
+        "toggle_typewriter_mode": "Yaz\u0131 (Yazar) Modu",
         "undo": "Geri Al",
         "unhide": "G\u00f6ster",
         "update": "G\u00fcncellemeleri kontrol et",
@@ -544,6 +577,7 @@
     "system": {
         "all_files": "T\u00fcm Dosyalar",
         "cancel": "\u0130ptal",
+        "directories": "Dizinler",
         "directory_removed": "%s dizini kald\u0131r\u0131ld\u0131.",
         "error": {
             "already_exists_message": "%s dosyas\u0131/dizini hedefte zaten mevcut.",
@@ -582,6 +616,7 @@
         "export_success": "%s i\u00e7ine aktar\u0131l\u0131yor.",
         "file_changed": "%s dosyas\u0131 uzaktan de\u011fi\u015ftirildi.",
         "file_removed": "%s dosyas\u0131 silindi.",
+        "files": "Dosyalar",
         "import_error": "%s i\u00e7eri aktar\u0131lamad\u0131.",
         "import_fail": "%s dosyalar\u0131 i\u00e7eri aktar\u0131lamad\u0131, \u00e7\u00fcnk\u00fc dosya uzant\u0131lar\u0131 bilinmiyor: %s",
         "import_lang_file": "Yeni \u00e7eviri i\u00e7eri aktar",
@@ -592,11 +627,13 @@
         "lang_import_success": "Dil dosyas\u0131 i\u00e7eri aktar\u0131ld\u0131: %s",
         "no_command": "Komutu olmayan bir mesaj al\u0131nd\u0131: %s",
         "ok": "Tamam",
+        "open_file": "Dosyay\u0131 a\u00e7",
         "open_folder": "Proje klas\u00f6r\u00fcn\u00fc a\u00e7",
         "open_root_directory": "Yeni k\u00f6k %s a\u00e7\u0131l\u0131yor ...",
         "open_root_directory_success": "%s y\u00fcklendi.",
         "overwrite_file_message": "%s dosyas\u0131 zaten bu dizinde mevcut. \u00dczerine yaz\u0131ls\u0131n m\u0131?",
         "overwrite_file_title": "Mevcut dosyan\u0131n \u00fczerine yaz",
+        "please_select_directory": "L\u00fctfen \u00f6ncelikle bir dizin se\u00e7in",
         "replace_file_message": "%s uygulama d\u0131\u015f\u0131nda de\u011fi\u015ftirildi. Uygulamada a\u00e7\u0131k olan\u0131n yerine diskte kay\u0131tl\u0131 olan yeni s\u00fcr\u00fcm\u00fc y\u00fcklemek ister misiniz?",
         "replace_file_title": "Dosyay\u0131 yenisiyle de\u011fi\u015ftir",
         "save_changes_cancel": "\u0130ptal",
@@ -611,6 +648,7 @@
         "dir_new": "Yeni bir dizin olu\u015ftur",
         "dir_open": "Mevcut dizini a\u00e7",
         "file_delete": "Mevcut dosyay\u0131 kald\u0131r",
+        "file_info": "Dosya bilgisini g\u00f6ster",
         "file_new": "Yeni dosya olu\u015ftur",
         "file_rename": "Mevcut dosyay\u0131 yeniden adland\u0131r",
         "file_save": "Mevcut dosyay\u0131 kaydet",
