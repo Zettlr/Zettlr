@@ -183,16 +183,6 @@ export default class WindowManager {
       let dir = await this.askDir(focusedWindow)
       return dir
     })
-
-    global.config.on('update', (option: string) => {
-      if (option === 'system.leaveAppRunning') {
-        if (global.config.get('system.leaveAppRunning') === true) {
-          global.tray.add(() => this.showAnyWindow(), () => app.quit())
-        } else {
-          global.tray.remove()
-        }
-      }
-    })
   }
 
   /**
@@ -242,10 +232,7 @@ export default class WindowManager {
     }
 
     this._mainWindow.on('show', () => {
-      const leaveAppRunning = Boolean(global.config.get('system.leaveAppRunning'))
-      if (leaveAppRunning) {
-        global.tray.add(() => this.showAnyWindow(), () => app.quit())
-      }
+      global.tray.add()
     })
 
     // Listens to events from the window
