@@ -280,7 +280,7 @@ export default class WindowManager {
           win.close()
         }
       }
-      if (process.platform !== 'darwin' && Boolean(global.config.get('system.leaveAppRunning')) && !global.application.isQuiting()) {
+      if (process.platform !== 'darwin' && Boolean(global.config.get('system.leaveAppRunning')) && !global.application.isQuitting()) {
         this._mainWindow?.hide()
         event.preventDefault()
       } else if (this._beforeMainWindowCloseCallback !== null) {

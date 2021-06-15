@@ -36,7 +36,7 @@ import { CodeFileDescriptor, CodeFileMeta, DirDescriptor, MDFileDescriptor, MDFi
 import broadcastIpcMessage from '../common/util/broadcast-ipc-message'
 
 export default class Zettlr {
-  isQuiting: boolean
+  isQuitting: boolean
   editFlag: boolean
   _openPaths: any
   _fsal: FSAL
@@ -50,7 +50,9 @@ export default class Zettlr {
     * @param {electron.app} parentApp The app object.
     */
   constructor () {
-    this.isQuiting = false // Is the app quiting?
+    // Is the app quitting? True if quitting via menu, tray or keyboard shortcut.
+    // False if titlebar `x` close, and all other times.
+    this.isQuitting = false
     this.editFlag = false // Is the current opened file edited?
     this._openPaths = [] // Holds all currently opened paths.
     this.isShownFor = [] // Contains all files for which remote notifications are currently shown
@@ -65,8 +67,8 @@ export default class Zettlr {
       runCommand: async (command: string, payload?: any) => {
         return await this.runCommand(command, payload)
       },
-      isQuiting: () => {
-        return this.isQuiting
+      isQuitting: () => {
+        return this.isQuitting
       },
       showLogViewer: () => {
         this._windowManager.showLogWindow()
@@ -134,11 +136,11 @@ export default class Zettlr {
     // listen to close-events on the main window, we should be able to handle
     // this, if we ever switched to the auto updater.
     app.on('before-quit', (event) => {
-      this.isQuiting = true
+      this.isQuitting = true
       if (!this._documentManager.isClean()) {
         // Immediately prevent quitting ...
         event.preventDefault()
-        this.isQuiting = false
+        this.isQuitting = false
         // ... and ask the user if we should *really* quit.
         this._windowManager.askSaveChanges()
           .then(result => {
