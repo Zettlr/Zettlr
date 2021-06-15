@@ -70,30 +70,32 @@ async function getLibraryPath (libraryName) {
     shellProcess.on('close', (code, signal) => {
       if (code !== 0) {
         reject(new Error(`Failed to run ldconfig: Process quit with code ${code}`))
+        return
+      }
+      // Search for the `libraryName` in the ldconfig output to find the
+      // library's full path and filename.
+      // '/sbin/ldconfig -p' print the lists of directories and candidate
+      // libraries stored in the current cache. Example output:
+      //         libappindicator3.so.1 (libc6,x86-64) => /lib64/libappindicator3.so.1
+      //                                                 ^      ^
+      //                                                left  index
+      // If `libraryName` is 'libappindicator3' this function returns '/lib64/libappindicator3.so.1'
+      let index = out.lastIndexOf(libraryName)
+      if (index === -1) {
+        reject(new Error(`Library '${libraryName}' not found on the system`))
+        return
+      }
+      // Search for last non white space (left of index)
+      let left = out.slice(0, index + 1).search(/\S+$/)
+      // Search for the next white space (right of index)
+      // Example output:
+      //         libappindicator3.so.1 (libc6,x86-64) => /lib64/libappindicator3.so.1
+      //                                                        ^^^^^^^^^^^^^^^^^^^^^
+      //                                                         filenameLength = 21
+      let filenameLength = out.slice(index).search(/\s/)
+      if (filenameLength < 0) {
+        resolve(out.slice(left))
       } else {
-        // Search for the `libraryName` in the ldconfig output to find the
-        // library's full path and filename.
-        // '/sbin/ldconfig -p' print the lists of directories and candidate
-        // libraries stored in the current cache. Example output:
-        //         libappindicator3.so.1 (libc6,x86-64) => /lib64/libappindicator3.so.1
-        //                                                 ^      ^
-        //                                                left  index
-        // If `libraryName` is 'libappindicator3' this function returns '/lib64/libappindicator3.so.1'
-        let index = out.lastIndexOf(libraryName)
-        if (index === -1) {
-          reject(new Error(`Library '${libraryName}' not found on the system`))
-        }
-        // Search for last non white space (left of index)
-        let left = out.slice(0, index + 1).search(/\S+$/)
-        // Search for the next white space (right of index)
-        // Example output:
-        //         libappindicator3.so.1 (libc6,x86-64) => /lib64/libappindicator3.so.1
-        //                                                        ^^^^^^^^^^^^^^^^^^^^^
-        //                                                         filenameLength = 21
-        let filenameLength = out.slice(index).search(/\s/)
-        if (filenameLength < 0) {
-          resolve(out.slice(left))
-        }
         resolve(out.slice(left, index + filenameLength))
       }
     })
