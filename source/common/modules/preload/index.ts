@@ -75,6 +75,40 @@ contextBridge.exposeInMainWorld('clipboard', {
   },
   writeText: function (text: string) {
     return clipboard.writeText(text)
+  },
+  hasSelectionClipboard: function () {
+    if (process.platform !== 'linux') {
+      return false
+    }
+
+    if (clipboard.readText('selection') !== '') {
+      return true
+    }
+
+    if (clipboard.readHTML('selection') !== '') {
+      return true
+    }
+
+    return false
+  },
+  /**
+   * Returns the plain text and HTML contents of the selection clipboard on
+   * linux.
+   *
+   * @return  {{text: string, html: string}}}  Returns an object containing HTML and text contents
+   */
+  getSelectionClipboard: function () {
+    if (process.platform !== 'linux') {
+      return {
+        text: '',
+        html: ''
+      }
+    } else {
+      return {
+        text: clipboard.readText('selection'),
+        html: clipboard.readHTML('selection')
+      }
+    }
   }
 })
 

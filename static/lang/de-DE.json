@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-05-30T13:26:06.000000Z"
+        "updated_at": "2021-06-04T20:14:46.000000Z"
     },
     "dialog": {
         "about": {
@@ -468,6 +468,7 @@
         "copy_filename": "Dateinamen kopieren",
         "copy_html": "Als HTML kopieren",
         "copy_id": "ID kopieren",
+        "copy_img_to_clipboard": "Bild in Zwischenablage kopieren",
         "copy_link": "Link kopieren",
         "copy_mail": "Email-Adresse kopieren",
         "custom_css": "Benutzerdefiniertes CSS\u2026",
@@ -508,6 +509,7 @@
         "no_suggestions": "Keine Vorschl\u00e4ge",
         "open": "\u00d6ffnen\u2026",
         "open_attachment": "Dateianhang \u00f6ffnen",
+        "open_in_browser": "Im Browser \u00f6ffnen",
         "open_link": "Link \u00f6ffnen",
         "open_logs": "Logs \u00f6ffnen",
         "open_new_tab": "In neuem Tab \u00f6ffnen",

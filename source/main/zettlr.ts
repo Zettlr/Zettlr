@@ -243,23 +243,6 @@ export default class Zettlr {
       }
     })
 
-    // Handle Quicklook window requests for files TODO: Move this someplace else!
-    ipcMain.handle('quicklook-controller', async (event, payload) => {
-      const { command, filePath } = payload
-      // Last possibility: A quicklook window has requested a file. In this case
-      // we mustn't obliterate the "event" because this way we don't need to
-      // search for the window.
-      if (command === 'get-file') {
-        const fileDescriptor = this._fsal.findFile(filePath)
-        if (fileDescriptor === null) {
-          global.log.error(`[Application] Could not get file descriptor for file ${String(filePath)}.`)
-          return
-        }
-        const fileMeta = await this._fsal.getFileContents(fileDescriptor)
-        return fileMeta
-      }
-    })
-
     // Runs a command through the application
     ipcMain.handle('application', async (event, { command, payload }) => {
       return await this.runCommand(command, payload)

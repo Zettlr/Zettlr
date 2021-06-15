@@ -6,6 +6,7 @@
     v-on:wheel="onEditorScroll($event)"
     v-on:mousedown="editorMousedown($event)"
     v-on:mouseup="editorMouseup($event)"
+    v-on:mousemove="editorMousemove($event)"
   >
     <div v-show="showSearch" id="editor-search">
       <div class="row">
@@ -106,7 +107,8 @@ export default {
       replaceString: '', // Models the replace string
       findTimeout: undefined, // Holds a timeout so that not every single keypress results in a searchNext
       // END: Search options
-      activeDocument: null // Almost like activeFile, only with additional info
+      activeDocument: null, // Almost like activeFile, only with additional info
+      anchor: undefined
     }
   },
   computed: {
@@ -608,11 +610,34 @@ export default {
      * @param   {MouseEvent}  event  The mouse event
      */
     editorMousedown (event) {
-      if (event.target !== this.$refs.editor) {
-        // return // Only handle if the event's target is the editor itself
+      // start selecting lines only if we are on the left margin and the left mouse button is pressed
+      if (event.target !== this.$refs.editor || event.button !== 0) {
+        return
       }
 
-      // TODO: Enable selection of full lines on the editor instance
+      // set the start point of the selection to be where the mouse was clicked
+      this.anchor = this.editor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY })
+
+      // set the end point to be the same y coordinate as the start point and add the width of client page
+      // to get the end of the line. Couldn't find a way from CodeMirror to get the end of the line
+      // as they treat every line as the whole paragraph
+      let endPoint = this.editor.codeMirror.coordsChar({ left: event.pageX + this.$refs.editor.clientWidth, top: event.pageY })
+
+      // apply the selection of a single line that corresponds to where the mouse was clicked
+      this.editor.codeMirror.setSelection(this.anchor, endPoint)
+
+      // if the mouse is still clicked and moved down or up, change the selection to include the new lines
+    },
+
+    editorMousemove (event) {
+      if (this.anchor === undefined) {
+        return
+      }
+      // get the point where the mouse has moved
+      const addPoint = this.editor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY })
+      // use the original start point where the mouse first was clicked
+      // and change the end point to where the mouse has moved so far
+      this.editor.codeMirror.setSelection(this.anchor, addPoint)
     },
     /**
      * Triggers when the user releases any mouse button
@@ -620,11 +645,16 @@ export default {
      * @param   {MouseEvent}  event  The mouse event
      */
     editorMouseup (event) {
-      if (event.target !== this.$refs.editor) {
-        // return // Only handle if the event's target is the editor itself
-      }
+      // we have commented this if condition because when the user presses the mouse from the
+      // left margin and goes inside this.$refs.editor and releases, the event of mouse release
+      // is not handled
 
-      // TODO: Stop the selection of full lines on the editor instance
+      // if (event.target !== this.$refs.editor) {
+      //   return
+      // }
+
+      // when the mouse is released, set anchor to undefined to stop adding lines
+      this.anchor = undefined
     }
   }
 }
@@ -685,7 +715,7 @@ export default {
     margin-left: 0.5em;
     height: 100%;
     font-family: inherit;
-    background: none;
+    // background: none;
 
     @media(min-width: 1025px) { margin-left: @editor-margin-normal-lg; }
     @media(max-width: 1024px) { margin-left: @editor-margin-normal-md; }
@@ -712,6 +742,10 @@ export default {
     // such as the table editor
     margin-bottom: 0px;
     padding-bottom: 0px;
+  }
+
+  .CodeMirror.CodeMirror-readonly {
+    .CodeMirror-cursor { display: none !important; }
   }
 
   // Reduce font size of math a bit

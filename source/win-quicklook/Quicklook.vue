@@ -142,3 +142,10 @@ export default {
   }
 }
 </script>
+
+<style lang="less">
+.CodeMirror .CodeMirror-gutters {
+  border-right: none;
+  background-color: transparent;
+}
+</style>

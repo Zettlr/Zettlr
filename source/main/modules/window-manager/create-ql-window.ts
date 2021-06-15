@@ -41,7 +41,7 @@ export default function createQuicklookWindow (file: MDFileDescriptor, conf: Win
     show: false,
     webPreferences: {
       contextIsolation: true,
-      additionalArguments: [`"${file.path}"`],
+      additionalArguments: [file.path],
       // @ts-expect-error
       preload: QUICKLOOK_PRELOAD_WEBPACK_ENTRY
     }

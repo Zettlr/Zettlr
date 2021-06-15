@@ -99,7 +99,7 @@
         v-on:drag="onDragHandler"
       >
         <template v-if="!nameEditing">
-          {{ obj.name }}
+          {{ basename }}
         </template>
         <template v-else>
           <input
@@ -248,6 +248,19 @@ export default {
     },
     indicatorARIALabel: function () {
       return this.collapsed ? 'Uncollapse directory' : 'Collapse directory'
+    },
+    basename: function () {
+      if (this.obj.type === 'directory') {
+        return this.obj.name
+      }
+
+      if (this.obj.frontmatter && this.obj.frontmatter.hasOwnProperty('title')) {
+        return this.obj.frontmatter.title
+      } else if (this.obj.firstHeading && this.$store.state.config['display.useFirstHeadings']) {
+        return this.obj.firstHeading
+      } else {
+        return this.obj.name.replace(this.obj.ext, '')
+      }
     }
   },
   watch: {
@@ -265,7 +278,11 @@ export default {
             this.$refs['new-object-input'].value = generateFilename()
           }
           this.$refs['new-object-input'].focus()
-          this.$refs['new-object-input'].select()
+          // Select from the beginning until the last dot
+          this.$refs['new-object-input'].setSelectionRange(
+            0,
+            this.$refs['new-object-input'].value.lastIndexOf('.')
+          )
         })
       }
     }

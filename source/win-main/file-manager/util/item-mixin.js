@@ -50,7 +50,11 @@ export default {
 
       this.$nextTick(() => {
         this.$refs['name-editing-input'].focus()
-        this.$refs['name-editing-input'].select()
+        // Select from the beginning until the last dot
+        this.$refs['name-editing-input'].setSelectionRange(
+          0,
+          this.$refs['name-editing-input'].value.lastIndexOf('.')
+        )
       })
     }
   },
@@ -129,7 +133,6 @@ export default {
 
       if (this.isDirectory === true) {
         dirContextMenu(event, this.obj, this.$el, (clickedID) => {
-          console.log(clickedID)
           if (clickedID === 'menu.rename_dir') {
             this.nameEditing = true
           } else if (clickedID === 'menu.new_file') {
@@ -210,6 +213,8 @@ export default {
                   }
                 }).catch(e => console.error(e))
               }
+
+              // Set the export formats TODO
             })
           }
         })
@@ -238,7 +243,7 @@ export default {
               payload: { path: this.obj.path }
             })
               .catch(err => console.error(err))
-          } else if (clickedID === 'menu.properties') {
+          } else if (clickedID === 'properties') {
             const data = {
               filename: this.obj.name,
               creationtime: this.obj.creationtime,

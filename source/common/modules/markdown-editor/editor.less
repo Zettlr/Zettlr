@@ -312,6 +312,25 @@ body .tippy-content {
     min-width: 200px;
     min-height: 150px;
   }
+
+  .editor-note-preview {
+    // Style the little preview note tooltips better
+    h4.filename {
+      font-size: 120%; // Not that much larger than the rest of the text
+    }
+
+    .note-content {
+      font-family: monospace; // TODO: Better font list for all operating systems
+      line-height: 100%;
+      margin: 10px 0;
+      white-space: pre-wrap;
+    }
+
+    .metadata {
+      color: rgb(200, 200, 200);
+      font-size: 80%;
+    }
+  }
 }
 
 // Text-folding related stuff

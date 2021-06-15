@@ -56,6 +56,8 @@
 })(function (CodeMirror) {
   'use strict'
 
+  // These characters can be directly followed by a magic quote, but a starting
+  // one. E.g.: ("some quote") should yield one starting and one ending quote.
   const startChars = ' ([{-–—'
 
   // This variable holds the generated keymap
@@ -310,8 +312,8 @@
           // We have found a suitable candidate and can replace. However, we
           // need to check that both range endings are actually in the Markdown
           // mode (common case: the end delimiter of a YAML frontmatter)
-          let beginInMd = cm.getModeAt(cursorBegin).name === 'markdown'
-          let endInMd = cm.getModeAt(cursorEnd).name === 'markdown'
+          let beginInMd = cm.getModeAt(cursorBegin).name === 'markdown-zkn'
+          let endInMd = cm.getModeAt(cursorEnd).name === 'markdown-zkn'
           if (!beginInMd || !endInMd) return CodeMirror.Pass
 
           // Replace! Use the +input origin so that the user can remove it with Cmd/Ctrl+Z

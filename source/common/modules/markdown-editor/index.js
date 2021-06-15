@@ -29,6 +29,7 @@ const getCodeMirrorDefaultOptions = require('./get-cm-options')
 const safeAssign = require('../../util/safe-assign')
 const countWords = require('../../util/count-words')
 const md2html = require('../../util/md-to-html')
+const html2md = require('../../util/html-to-md')
 const generateKeymap = require('./generate-keymap.js')
 const generateTableOfContents = require('./util/generate-toc')
 
@@ -75,6 +76,7 @@ const renderElementsHook = require('./hooks/render-elements')
 const typewriterHook = require('./hooks/typewriter')
 const { autocompleteHook, setAutocompleteDatabase } = require('./hooks/autocomplete')
 const linkTooltipsHook = require('./hooks/link-tooltips')
+const noteTooltipsHook = require('./hooks/note-preview')
 
 const displayContextMenu = require('./display-context-menu')
 
@@ -175,6 +177,7 @@ module.exports = class MarkdownEditor extends EventEmitter {
     typewriterHook(this._instance)
     autocompleteHook(this._instance)
     linkTooltipsHook(this._instance)
+    noteTooltipsHook(this._instance)
 
     // Indicate interactive elements while either the Command or Control-key is
     // held down.
@@ -276,6 +279,29 @@ module.exports = class MarkdownEditor extends EventEmitter {
       // If applicable, select the word under cursor
       if (shouldSelectWordUnderCursor) {
         this._instance.execCommand('selectWordUnderCursor')
+      }
+    })
+
+    this._instance.getWrapperElement().addEventListener('mousedown', (event) => {
+      if (event.button !== 1 || process.platform !== 'linux' || clipboard.hasSelectionClipboard() === false) {
+        return
+      }
+
+      // The user has pressed middle mouse button on Linux. On Linux, there's
+      // the concept of some form of a "quick selection", that is: The user
+      // selects some text, and, without pressing Ctrl+C, the text is
+      // immediately present in the "selection" clipboard. A middle mouse button
+      // is assumed to paste that to wherever the focus currently sits. For
+      // more info, see issue #1882 and https://unix.stackexchange.com/a/139193
+      const { text, html } = clipboard.getSelectionClipboard()
+
+      if (html.trim() !== '') {
+        // We have HTML to paste
+        const toPaste = html2md(html)
+        this._instance.doc.replaceSelection(toPaste)
+      } else {
+        // There is text to paste
+        this._instance.doc.replaceSelection(text)
       }
     })
 

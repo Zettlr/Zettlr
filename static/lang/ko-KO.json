@@ -5,7 +5,7 @@
             "Chanshik Lim \u003Cchanshik@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-05-31T17:00:46.000000Z"
+        "updated_at": "2021-06-05T05:45:12.000000Z"
     },
     "dialog": {
         "about": {
@@ -469,6 +469,7 @@
         "copy_filename": "\ud30c\uc77c \uc774\ub984 \ubcf5\uc0ac",
         "copy_html": "HTML\ub85c \ubcf5\uc0ac",
         "copy_id": "ID \ubcf5\uc0ac",
+        "copy_img_to_clipboard": "\uc774\ubbf8\uc9c0\ub97c \ud074\ub9bd \ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac",
         "copy_link": "\ub9c1\ud06c \ubcf5\uc0ac",
         "copy_mail": "\uba54\uc77c \uc8fc\uc18c \ubcf5\uc0ac",
         "custom_css": "\uc0ac\uc6a9\uc790 \uc815\uc758 CSS...",
@@ -509,6 +510,7 @@
         "no_suggestions": "\uc81c\uc548 \uc5c6\uc74c",
         "open": "\uc5f4\uae30...",
         "open_attachment": "\ucca8\ubd80 \ud30c\uc77c \uc5f4\uae30",
+        "open_in_browser": "\ube0c\ub77c\uc6b0\uc800\uc5d0\uc11c \uc5f4\uae30",
         "open_link": "\ub9c1\ud06c \uc5f4\uae30",
         "open_logs": "\ub85c\uadf8 \uc5f4\uae30",
         "open_new_tab": "\uc0c8 \ud0ed\uc5d0\uc11c \uc5f4\uae30",
