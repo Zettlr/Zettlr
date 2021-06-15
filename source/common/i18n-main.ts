@@ -49,9 +49,18 @@ export async function loadI18n (lang = 'en-US'): Promise<Candidate & LangFileMet
  * @return {String}        The translation with all potential replacements applied.
  */
 export function trans (identifier: string, ...args: any[]): string {
+  if (global.i18n === undefined) {
+    // If you see this error while developing, you're doing something wrong
+    // (e.g. call `trans` in one of the constructors of the service providers).
+    global.log.error(`Cannot translate ${identifier}, since the translations have not yet been loaded!`)
+    return identifier
+  }
   if (!identifier.includes('.')) {
-    // Wtf? But alright, return the string and log an error
-    global.log.warning('The translation string was malformed: ' + identifier + '!')
+    // This happens especially if you, e.g., call the `trans` function with a
+    // yet-to-translate string that does not contain dots. In these cases we
+    // log a warning and return the identifier (which might even be a normal
+    // string).
+    global.log.warning(`The translation string was malformed: ${identifier}!`)
     return identifier
   }
 
