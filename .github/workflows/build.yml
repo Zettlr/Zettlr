@@ -25,6 +25,9 @@ on:
     tags:
       # Build on every tag in the form v1.2.3-something.4
       - 'v*'
+  schedule:
+    # Every Friday at noon, we're building a nightly.
+    - cron:  '0 12 * * 5'
 
 # Defaults for every job and step in this workflow
 defaults:
@@ -50,6 +53,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '>=14.17.0'
+      - name: Set tag version to nightly
+        # If this a scheduled workflow, we know that we should build a nightly
+        if: ${{ github.event == 'schedule' }}
+        run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
         run: |
@@ -115,6 +122,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '>=14.17.0'
+      - name: Set tag version to nightly
+        # If this a scheduled workflow, we know that we should build a nightly
+        if: ${{ github.event == 'schedule' }}
+        run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
         run: |
@@ -184,6 +195,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '>=14.17.0'
+      - name: Set tag version to nightly
+        # If this a scheduled workflow, we know that we should build a nightly
+        if: ${{ github.event == 'schedule' }}
+        run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
         run: |
@@ -237,7 +252,9 @@ jobs:
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
   # After the three builds, this job downloads all assets, creates and verifies
   # SHA256 checksums, and finally creates a release draft and uploads all
-  # assets to it.
+  # assets to it. NOTE: If the workflow detects it is being run on schedule,
+  # this means that it does NOT create a release draft, but rather upload all
+  # assets to the Zettlr server to offer a new nightly.
   prepare_release:
     name: Prepare release draft
     # Make sure (and wait until) the builds have succeeded
@@ -250,66 +267,73 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '>=14.17.0'
+      - name: Set tag version to nightly
+        # If this a scheduled workflow, we know that we should build a nightly
+        if: ${{ github.event == 'schedule' }}
+        run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
         run: |
           pkgver=$(node ./scripts/get-pkg-version.js)
           echo ::set-output name=version::$pkgver
+      - name: Make release directory
+        run: mkdir ./release
       # First, download all resulting assets from the previous steps.
       - name: Download NSIS installer (x64)
         uses: actions/download-artifact@v1
         with:
           name: Zettlr-${{steps.ref.outputs.version}}-x64.exe
-          path: .
+          path: ./release
       - name: Download NSIS installer (arm64)
         uses: actions/download-artifact@v1
         with:
           name: Zettlr-${{steps.ref.outputs.version}}-arm64.exe
-          path: .
+          path: ./release
       - name: Download macOS image (x64)
         uses: actions/download-artifact@v1
         with:
           name: Zettlr-${{steps.ref.outputs.version}}-x64.dmg
-          path: .
+          path: ./release
       - name: Download macOS image (arm64)
         uses: actions/download-artifact@v1
         with:
           name: Zettlr-${{steps.ref.outputs.version}}-arm64.dmg
-          path: .
+          path: ./release
       - name: Download .deb-installer (x64)
         uses: actions/download-artifact@v1
         with:
           name: Zettlr-${{steps.ref.outputs.version}}-amd64.deb
-          path: .
+          path: ./release
       - name: Download .rpm-installer (x64)
         uses: actions/download-artifact@v1
         with:
           name: Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm
-          path: .
+          path: ./release
       - name: Download AppImage binary (x64)
         uses: actions/download-artifact@v1
         with:
           name: Zettlr-${{steps.ref.outputs.version}}-x86_64.AppImage
-          path: .
+          path: ./release
       - name: Download .deb-installer (arm64)
         uses: actions/download-artifact@v1
         with:
           name: Zettlr-${{steps.ref.outputs.version}}-arm64.deb
-          path: .
+          path: ./release
       - name: Download .rpm-installer (arm64)
         uses: actions/download-artifact@v1
         with:
           name: Zettlr-${{steps.ref.outputs.version}}-arm64.rpm
-          path: .
+          path: ./release
       - name: Download AppImage binary (arm64)
         uses: actions/download-artifact@v1
         with:
           name: Zettlr-${{steps.ref.outputs.version}}-arm64.AppImage
-          path: .
+          path: ./release
       # Now we are set, we have all five release assets on the VM. It's time to create the
       # SHA-checksums file and then upload everything!
       - name: Generate SHA256 checksums
         run: |
+          cd ./release
           sha256sum "Zettlr-${{steps.ref.outputs.version}}-x64.exe" > "SHA256SUMS.txt"
           sha256sum "Zettlr-${{steps.ref.outputs.version}}-arm64.exe" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{steps.ref.outputs.version}}-x64.dmg" >> "SHA256SUMS.txt"
@@ -320,10 +344,27 @@ jobs:
           sha256sum "Zettlr-${{steps.ref.outputs.version}}-arm64.deb" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{steps.ref.outputs.version}}-arm64.rpm" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{steps.ref.outputs.version}}-arm64.AppImage" >> "SHA256SUMS.txt"
+          cd ..
       - name: Verify checksums
-        run: sha256sum -c SHA256SUMS.txt
+        run: |
+          cd ./release
+          sha256sum -c SHA256SUMS.txt
+          cd ..
+      # IF WE BUILD A NIGHTLY, AT THIS POINT JUST UPLOAD TO THE SERVER.
+      - name: Upload nightlies to the server
+        if: ${{ github.event == 'schedule' }}
+        uses: easingthemes/ssh-deploy@v2.0.7
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.NIGHTLY_SSH_PRIVATE_KEY }}
+          ARGS: "-vzhr"
+          SOURCE: "release/"
+          REMOTE_HOST: ${{ secrets.NIGHTLY_REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.NIGHTLY_REMOTE_USER }}
+          TARGET: ${{ secrets.NIGHTLY_TARGET }}
+      # OTHERWISE:
       # Create a new release draft
       - name: Create a new release draft
+        if: ${{ github.event != 'schedule' }} # We cannot exit early, please kill me
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -336,101 +377,112 @@ jobs:
 
       # And finally, upload that shit
       - name: Upload NSIS installer (x64)
+        if: ${{ github.event != 'schedule' }} # We cannot exit early, please kill me
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{steps.ref.outputs.version}}-x64.exe
+          asset_path: ./release/Zettlr-${{steps.ref.outputs.version}}-x64.exe
           asset_name: Zettlr-${{steps.ref.outputs.version}}-x64.exe
           asset_content_type: application/x-msdownload
       - name: Upload NSIS installer (arm64)
+        if: ${{ github.event != 'schedule' }} # We cannot exit early, please kill me
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{steps.ref.outputs.version}}-arm64.exe
+          asset_path: ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.exe
           asset_name: Zettlr-${{steps.ref.outputs.version}}-arm64.exe
           asset_content_type: application/x-msdownload
       - name: Upload macOS image (x64)
+        if: ${{ github.event != 'schedule' }} # We cannot exit early, please kill me
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{steps.ref.outputs.version}}-x64.dmg
+          asset_path: ./release/Zettlr-${{steps.ref.outputs.version}}-x64.dmg
           asset_name: Zettlr-${{steps.ref.outputs.version}}-x64.dmg
           asset_content_type: application/octet-stream
       - name: Upload macOS image (arm64)
+        if: ${{ github.event != 'schedule' }} # We cannot exit early, please kill me
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{steps.ref.outputs.version}}-arm64.dmg
+          asset_path: ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.dmg
           asset_name: Zettlr-${{steps.ref.outputs.version}}-arm64.dmg
           asset_content_type: application/octet-stream
       - name: Upload .deb installer (x64)
+        if: ${{ github.event != 'schedule' }} # We cannot exit early, please kill me
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{steps.ref.outputs.version}}-amd64.deb
+          asset_path: ./release/Zettlr-${{steps.ref.outputs.version}}-amd64.deb
           asset_name: Zettlr-${{steps.ref.outputs.version}}-amd64.deb
           asset_content_type: application/octet-stream
       - name: Upload .rpm installer (x64)
+        if: ${{ github.event != 'schedule' }} # We cannot exit early, please kill me
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm
+          asset_path: ./release/Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm
           asset_name: Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm
           asset_content_type: application/octet-stream
       - name: Upload AppImage binary (x64)
+        if: ${{ github.event != 'schedule' }} # We cannot exit early, please kill me
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{steps.ref.outputs.version}}-x86_64.AppImage
+          asset_path: ./release/Zettlr-${{steps.ref.outputs.version}}-x86_64.AppImage
           asset_name: Zettlr-${{steps.ref.outputs.version}}-x86_64.AppImage
           asset_content_type: application/octet-stream
       - name: Upload .deb installer (arm64)
+        if: ${{ github.event != 'schedule' }} # We cannot exit early, please kill me
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{steps.ref.outputs.version}}-arm64.deb
+          asset_path: ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.deb
           asset_name: Zettlr-${{steps.ref.outputs.version}}-arm64.deb
           asset_content_type: application/octet-stream
       - name: Upload .rpm installer (arm64)
+        if: ${{ github.event != 'schedule' }} # We cannot exit early, please kill me
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{steps.ref.outputs.version}}-arm64.rpm
+          asset_path: ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.rpm
           asset_name: Zettlr-${{steps.ref.outputs.version}}-arm64.rpm
           asset_content_type: application/octet-stream
       - name: Upload AppImage binary (arm64)
+        if: ${{ github.event != 'schedule' }} # We cannot exit early, please kill me
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{steps.ref.outputs.version}}-arm64.AppImage
+          asset_path: ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.AppImage
           asset_name: Zettlr-${{steps.ref.outputs.version}}-arm64.AppImage
           asset_content_type: application/octet-stream
       - name: Upload the checksums
+        if: ${{ github.event != 'schedule' }} # We cannot exit early, please kill me
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./SHA256SUMS.txt
+          asset_path: ./release/SHA256SUMS.txt
           asset_name: SHA256SUMS.txt
           asset_content_type: text/plain
