@@ -405,7 +405,9 @@ const config: StoreOptions<ZettlrState> = {
       state.activeFile = descriptor
     },
     updateOpenFiles: function (state, openFiles) {
-      state.openFiles = openFiles
+      console.log('Setting open files ...')
+      Vue.set(state, 'openFiles', openFiles)
+      // state.openFiles = openFiles
     },
     colouredTags: function (state, tags) {
       state.colouredTags = tags
@@ -512,27 +514,7 @@ const config: StoreOptions<ZettlrState> = {
     },
     updateOpenFiles: async function (context) {
       const openFiles = await ipcRenderer.invoke('application', { command: 'get-open-files' })
-      const ourDifferentFiles = context.state.openFiles
-
-      if (openFiles.length === ourDifferentFiles.length) {
-        let hasChanged = false
-        for (let i = 0; i < openFiles.length; i++) {
-          if (openFiles[i].path !== ourDifferentFiles[i].path) {
-            hasChanged = true
-            break
-          }
-        }
-
-        if (!hasChanged) {
-          return // No need to update
-        }
-      }
-
       context.commit('updateOpenFiles', openFiles)
-
-      // Again, in case the event hooks don't follow suit with quickly opening
-      // and closing, we need to re-fetch the files from main
-      context.dispatch('updateOpenFiles').catch(e => console.error(e))
     }
   }
 }
