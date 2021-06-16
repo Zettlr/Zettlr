@@ -51,7 +51,7 @@
     "bcp-47": "^2.0.0",
     "chalk": "^4.1.1",
     "chart.js": "^3.3.2",
-    "chokidar": "^3.5.1",
+    "chokidar": "^3.5.2",
     "citeproc": "^2.4.59",
     "codemirror": "^5.61.1",
     "command-exists": "^1.2.9",
