@@ -47,8 +47,17 @@ jobs:
     name: Windows build
     runs-on: windows-latest
     steps:
-      - name: Clone repository
+      # Check out master for a regular release, or develop branch for a nightly
+      - name: Clone repository (master branch)
+        if: ${{ github.event != 'schedule' }}
         uses: actions/checkout@v2
+        with:
+          ref: 'master'
+      - name: Clone repository (develop branch)
+        if: ${{ github.event == 'schedule' }}
+        uses: actions/checkout@v2
+        with:
+          ref: 'develop'
       - name: Setup NodeJS 14.17
         uses: actions/setup-node@v1
         with:
@@ -116,8 +125,17 @@ jobs:
     name: macOS build
     runs-on: macos-latest
     steps:
-      - name: Clone repository
+      # Check out master for a regular release, or develop branch for a nightly
+      - name: Clone repository (master branch)
+        if: ${{ github.event != 'schedule' }}
         uses: actions/checkout@v2
+        with:
+          ref: 'master'
+      - name: Clone repository (develop branch)
+        if: ${{ github.event == 'schedule' }}
+        uses: actions/checkout@v2
+        with:
+          ref: 'develop'
       - name: Setup NodeJS 14.17
         uses: actions/setup-node@v1
         with:
@@ -189,8 +207,17 @@ jobs:
     name: Linux build
     runs-on: ubuntu-latest
     steps:
-      - name: Clone repository
+      # Check out master for a regular release, or develop branch for a nightly
+      - name: Clone repository (master branch)
+        if: ${{ github.event != 'schedule' }}
         uses: actions/checkout@v2
+        with:
+          ref: 'master'
+      - name: Clone repository (develop branch)
+        if: ${{ github.event == 'schedule' }}
+        uses: actions/checkout@v2
+        with:
+          ref: 'develop'
       - name: Setup NodeJS 14.17
         uses: actions/setup-node@v1
         with:
@@ -261,6 +288,8 @@ jobs:
     needs: [build_win, build_macos, build_linux]
     runs-on: ubuntu-latest
     steps:
+      # NOTE: Here we do not care about which branch is checked out since we
+      # just need the two scripts which are present in both.
       - name: Clone repository
         uses: actions/checkout@v2
       - name: Setup NodeJS 14.17
