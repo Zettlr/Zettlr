@@ -17,17 +17,16 @@ name: Build
 # finally upload all generated assets to the release draft.                   #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-# Whenever a tag is being created on the master branch, trigger this build.
+# This build can be triggered by two actions:
+# * "push" to the master branch. In that case, a regular release (incl. tag)
+#   will be created.
+# * "workflow_dispatch". This builds a nightly. Bonus: We can manually trigger it.
 on:
   push:
     branches:
       - master
-    tags:
-      # Build on every tag in the form v1.2.3-something.4
-      - 'v*'
-  schedule:
-    # Every Friday at noon, we're building a nightly.
-    - cron:  '0 12 * * 5'
+  workflow_dispatch:
+    # No additional properties.
 
 # Defaults for every job and step in this workflow
 defaults:
@@ -49,12 +48,12 @@ jobs:
     steps:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Clone repository (master branch)
-        if: ${{ github.event != 'schedule' }}
+        if: ${{ github.event_name != 'workflow_dispatch' }}
         uses: actions/checkout@v2
         with:
           ref: 'master'
       - name: Clone repository (develop branch)
-        if: ${{ github.event == 'schedule' }}
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         uses: actions/checkout@v2
         with:
           ref: 'develop'
@@ -64,7 +63,7 @@ jobs:
           node-version: '>=14.17.0'
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
-        if: ${{ github.event == 'schedule' }}
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
@@ -127,12 +126,12 @@ jobs:
     steps:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Clone repository (master branch)
-        if: ${{ github.event != 'schedule' }}
+        if: ${{ github. event_name != 'schedule' }}
         uses: actions/checkout@v2
         with:
           ref: 'master'
       - name: Clone repository (develop branch)
-        if: ${{ github.event == 'schedule' }}
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         uses: actions/checkout@v2
         with:
           ref: 'develop'
@@ -142,7 +141,7 @@ jobs:
           node-version: '>=14.17.0'
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
-        if: ${{ github.event == 'schedule' }}
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
@@ -209,12 +208,12 @@ jobs:
     steps:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Clone repository (master branch)
-        if: ${{ github.event != 'schedule' }}
+        if: ${{ github.event_name != 'workflow_dispatch' }}
         uses: actions/checkout@v2
         with:
           ref: 'master'
       - name: Clone repository (develop branch)
-        if: ${{ github.event == 'schedule' }}
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         uses: actions/checkout@v2
         with:
           ref: 'develop'
@@ -224,7 +223,7 @@ jobs:
           node-version: '>=14.17.0'
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
-        if: ${{ github.event == 'schedule' }}
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
@@ -298,7 +297,7 @@ jobs:
           node-version: '>=14.17.0'
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
-        if: ${{ github.event == 'schedule' }}
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
@@ -381,7 +380,7 @@ jobs:
           cd ..
       # IF WE BUILD A NIGHTLY, AT THIS POINT JUST UPLOAD TO THE SERVER.
       - name: Upload nightlies to the server
-        if: ${{ github.event == 'schedule' }}
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         uses: easingthemes/ssh-deploy@v2.0.7
         env:
           SSH_PRIVATE_KEY: ${{ secrets.NIGHTLY_SSH_PRIVATE_KEY }}
@@ -393,7 +392,7 @@ jobs:
       # OTHERWISE:
       # Create a new release draft
       - name: Create a new release draft
-        if: ${{ github.event != 'schedule' }} # We cannot exit early, please kill me
+        if: ${{ github.event_name != 'workflow_dispatch' }} # We cannot exit early, please kill me
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -406,7 +405,7 @@ jobs:
 
       # And finally, upload that shit
       - name: Upload NSIS installer (x64)
-        if: ${{ github.event != 'schedule' }} # We cannot exit early, please kill me
+        if: ${{ github.event_name != 'workflow_dispatch' }} # We cannot exit early, please kill me
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -416,7 +415,7 @@ jobs:
           asset_name: Zettlr-${{steps.ref.outputs.version}}-x64.exe
           asset_content_type: application/x-msdownload
       - name: Upload NSIS installer (arm64)
-        if: ${{ github.event != 'schedule' }} # We cannot exit early, please kill me
+        if: ${{ github.event_name != 'workflow_dispatch' }} # We cannot exit early, please kill me
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -426,7 +425,7 @@ jobs:
           asset_name: Zettlr-${{steps.ref.outputs.version}}-arm64.exe
           asset_content_type: application/x-msdownload
       - name: Upload macOS image (x64)
-        if: ${{ github.event != 'schedule' }} # We cannot exit early, please kill me
+        if: ${{ github.event_name != 'workflow_dispatch' }} # We cannot exit early, please kill me
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -436,7 +435,7 @@ jobs:
           asset_name: Zettlr-${{steps.ref.outputs.version}}-x64.dmg
           asset_content_type: application/octet-stream
       - name: Upload macOS image (arm64)
-        if: ${{ github.event != 'schedule' }} # We cannot exit early, please kill me
+        if: ${{ github.event_name != 'workflow_dispatch' }} # We cannot exit early, please kill me
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -446,7 +445,7 @@ jobs:
           asset_name: Zettlr-${{steps.ref.outputs.version}}-arm64.dmg
           asset_content_type: application/octet-stream
       - name: Upload .deb installer (x64)
-        if: ${{ github.event != 'schedule' }} # We cannot exit early, please kill me
+        if: ${{ github.event_name != 'workflow_dispatch' }} # We cannot exit early, please kill me
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -456,7 +455,7 @@ jobs:
           asset_name: Zettlr-${{steps.ref.outputs.version}}-amd64.deb
           asset_content_type: application/octet-stream
       - name: Upload .rpm installer (x64)
-        if: ${{ github.event != 'schedule' }} # We cannot exit early, please kill me
+        if: ${{ github.event_name != 'workflow_dispatch' }} # We cannot exit early, please kill me
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -466,7 +465,7 @@ jobs:
           asset_name: Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm
           asset_content_type: application/octet-stream
       - name: Upload AppImage binary (x64)
-        if: ${{ github.event != 'schedule' }} # We cannot exit early, please kill me
+        if: ${{ github.event_name != 'workflow_dispatch' }} # We cannot exit early, please kill me
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -476,7 +475,7 @@ jobs:
           asset_name: Zettlr-${{steps.ref.outputs.version}}-x86_64.AppImage
           asset_content_type: application/octet-stream
       - name: Upload .deb installer (arm64)
-        if: ${{ github.event != 'schedule' }} # We cannot exit early, please kill me
+        if: ${{ github.event_name != 'workflow_dispatch' }} # We cannot exit early, please kill me
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -486,7 +485,7 @@ jobs:
           asset_name: Zettlr-${{steps.ref.outputs.version}}-arm64.deb
           asset_content_type: application/octet-stream
       - name: Upload .rpm installer (arm64)
-        if: ${{ github.event != 'schedule' }} # We cannot exit early, please kill me
+        if: ${{ github.event_name != 'workflow_dispatch' }} # We cannot exit early, please kill me
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -496,7 +495,7 @@ jobs:
           asset_name: Zettlr-${{steps.ref.outputs.version}}-arm64.rpm
           asset_content_type: application/octet-stream
       - name: Upload AppImage binary (arm64)
-        if: ${{ github.event != 'schedule' }} # We cannot exit early, please kill me
+        if: ${{ github.event_name != 'workflow_dispatch' }} # We cannot exit early, please kill me
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -506,7 +505,7 @@ jobs:
           asset_name: Zettlr-${{steps.ref.outputs.version}}-arm64.AppImage
           asset_content_type: application/octet-stream
       - name: Upload the checksums
-        if: ${{ github.event != 'schedule' }} # We cannot exit early, please kill me
+        if: ${{ github.event_name != 'workflow_dispatch' }} # We cannot exit early, please kill me
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
