@@ -350,7 +350,7 @@ jobs:
       - name: Download .rpm-installer (arm64)
         uses: actions/download-artifact@v1
         with:
-          name: Zettlr-${{steps.ref.outputs.version}}-arm64.rpm
+          name: Zettlr-${{steps.ref.outputs.version}}-aarch64.rpm
           path: ./release
       - name: Download AppImage binary (arm64)
         uses: actions/download-artifact@v1
@@ -370,7 +370,7 @@ jobs:
           sha256sum "Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{steps.ref.outputs.version}}-x86_64.AppImage" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{steps.ref.outputs.version}}-arm64.deb" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{steps.ref.outputs.version}}-arm64.rpm" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{steps.ref.outputs.version}}-aarch64.rpm" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{steps.ref.outputs.version}}-arm64.AppImage" >> "SHA256SUMS.txt"
           cd ..
       - name: Verify checksums
@@ -391,126 +391,27 @@ jobs:
           TARGET: ${{ secrets.NIGHTLY_TARGET }}
       # OTHERWISE:
       # Create a new release draft
-      - name: Create a new release draft
-        if: ${{ github.event_name != 'workflow_dispatch' }} # We cannot exit early, please kill me
-        id: create_release
-        uses: actions/create-release@v1
+      - name: Create release draft
+        if: ${{ github.event_name != 'workflow_dispatch' }}
+        uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{steps.ref.outputs.version}} # tag_name is required, but can be overridden during edit
-          release_name: Release v${{steps.ref.outputs.version}} # release_name is required
+          # Populate the inputs of the release already
+          tag_name: v${{steps.ref.outputs.version}}
+          name: Release v${{steps.ref.outputs.version}}
           body: If you can read this, we have forgotten to fill in the changelog. Sorry!
           draft: true # Always create as draft, so that we can populate the remaining values easily
-
-      # And finally, upload that shit
-      - name: Upload NSIS installer (x64)
-        if: ${{ github.event_name != 'workflow_dispatch' }} # We cannot exit early, please kill me
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./release/Zettlr-${{steps.ref.outputs.version}}-x64.exe
-          asset_name: Zettlr-${{steps.ref.outputs.version}}-x64.exe
-          asset_content_type: application/x-msdownload
-      - name: Upload NSIS installer (arm64)
-        if: ${{ github.event_name != 'workflow_dispatch' }} # We cannot exit early, please kill me
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.exe
-          asset_name: Zettlr-${{steps.ref.outputs.version}}-arm64.exe
-          asset_content_type: application/x-msdownload
-      - name: Upload macOS image (x64)
-        if: ${{ github.event_name != 'workflow_dispatch' }} # We cannot exit early, please kill me
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./release/Zettlr-${{steps.ref.outputs.version}}-x64.dmg
-          asset_name: Zettlr-${{steps.ref.outputs.version}}-x64.dmg
-          asset_content_type: application/octet-stream
-      - name: Upload macOS image (arm64)
-        if: ${{ github.event_name != 'workflow_dispatch' }} # We cannot exit early, please kill me
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.dmg
-          asset_name: Zettlr-${{steps.ref.outputs.version}}-arm64.dmg
-          asset_content_type: application/octet-stream
-      - name: Upload .deb installer (x64)
-        if: ${{ github.event_name != 'workflow_dispatch' }} # We cannot exit early, please kill me
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./release/Zettlr-${{steps.ref.outputs.version}}-amd64.deb
-          asset_name: Zettlr-${{steps.ref.outputs.version}}-amd64.deb
-          asset_content_type: application/octet-stream
-      - name: Upload .rpm installer (x64)
-        if: ${{ github.event_name != 'workflow_dispatch' }} # We cannot exit early, please kill me
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./release/Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm
-          asset_name: Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm
-          asset_content_type: application/octet-stream
-      - name: Upload AppImage binary (x64)
-        if: ${{ github.event_name != 'workflow_dispatch' }} # We cannot exit early, please kill me
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./release/Zettlr-${{steps.ref.outputs.version}}-x86_64.AppImage
-          asset_name: Zettlr-${{steps.ref.outputs.version}}-x86_64.AppImage
-          asset_content_type: application/octet-stream
-      - name: Upload .deb installer (arm64)
-        if: ${{ github.event_name != 'workflow_dispatch' }} # We cannot exit early, please kill me
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.deb
-          asset_name: Zettlr-${{steps.ref.outputs.version}}-arm64.deb
-          asset_content_type: application/octet-stream
-      - name: Upload .rpm installer (arm64)
-        if: ${{ github.event_name != 'workflow_dispatch' }} # We cannot exit early, please kill me
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.rpm
-          asset_name: Zettlr-${{steps.ref.outputs.version}}-arm64.rpm
-          asset_content_type: application/octet-stream
-      - name: Upload AppImage binary (arm64)
-        if: ${{ github.event_name != 'workflow_dispatch' }} # We cannot exit early, please kill me
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.AppImage
-          asset_name: Zettlr-${{steps.ref.outputs.version}}-arm64.AppImage
-          asset_content_type: application/octet-stream
-      - name: Upload the checksums
-        if: ${{ github.event_name != 'workflow_dispatch' }} # We cannot exit early, please kill me
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./release/SHA256SUMS.txt
-          asset_name: SHA256SUMS.txt
-          asset_content_type: text/plain
+          # Gosh, is that convenient as opposed to earlier!
+          files: |
+            ./release/Zettlr-${{steps.ref.outputs.version}}-x64.exe
+            ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.exe
+            ./release/Zettlr-${{steps.ref.outputs.version}}-x64.dmg
+            ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.dmg
+            ./release/Zettlr-${{steps.ref.outputs.version}}-amd64.deb
+            ./release/Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm
+            ./release/Zettlr-${{steps.ref.outputs.version}}-x86_64.AppImage
+            ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.deb
+            ./release/Zettlr-${{steps.ref.outputs.version}}-aarch64.rpm
+            ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.AppImage
+            ./release/SHA256SUMS.txt
