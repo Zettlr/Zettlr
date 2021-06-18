@@ -262,8 +262,8 @@ jobs:
       - name: Cache .rpm release (arm64)
         uses: actions/upload-artifact@v1
         with:
-          name: Zettlr-${{steps.ref.outputs.version}}-arm64.rpm
-          path: ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.rpm
+          name: Zettlr-${{steps.ref.outputs.version}}-aarch64.rpm
+          path: ./release/Zettlr-${{steps.ref.outputs.version}}-aarch64.rpm
       - name: Cache AppImage release (arm64)
         uses: actions/upload-artifact@v1
         with:
