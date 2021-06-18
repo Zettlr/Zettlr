@@ -95,8 +95,11 @@ jobs:
         env:
           CSC_LINK: ${{ secrets.WIN_CERT }}
           CSC_KEY_PASSWORD: ${{ secrets.WIN_CERT_PASS }}
-      # - name: Rename arm64 artifact
-      #   run: mv ./release/Zettlr-${{steps.ref.outputs.version}}.exe ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.exe
+      # The ARM64 artifact is being output simply as .exe w/o arch, since we
+      # have to include --ia32 in the build flags for ARM builds (thus,
+      # strictly speaking it has two architectures).
+      - name: Rename arm64 artifact
+        run: mv ./release/Zettlr-${{steps.ref.outputs.version}}.exe ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.exe
       - name: Cache NSIS installer (x64)
         uses: actions/upload-artifact@v1
         with:
