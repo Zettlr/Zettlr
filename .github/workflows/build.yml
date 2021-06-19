@@ -165,7 +165,7 @@ jobs:
       # This step also signs and notarizes the app. NOTE that forge does this,
       # as we shall not notarize and/or sign the resulting DMG file as well!
       - name: Package macOS (arm64)
-        run: DEBUG='*' yarn package:mac-arm # DEBUG: This takes way too long
+        run: yarn package:mac-arm
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
@@ -174,25 +174,16 @@ jobs:
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
-      - name: Build macOS image file (x64)
-        run: yarn release:mac-x64
-        # We need to rename the artifact prior to uploading so that the x64 and
-        # arm64 releases do not overwrite themselves.
-      - name: Rename x64 artifact
-        run: mv ./release/Zettlr-${{steps.ref.outputs.version}}.dmg ./release/Zettlr-${{steps.ref.outputs.version}}-x64.dmg
-      # Now the same procedure for arm64: First build ...
       - name: Build macOS image file (arm64)
         run: yarn release:mac-arm
-      # ... then rename
-      - name: Rename arm64 artifact
-        run: mv ./release/Zettlr-${{steps.ref.outputs.version}}.dmg ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.dmg
+      - name: Build macOS image file (x64)
+        run: yarn release:mac-x64
       # Finally upload both
       - name: Cache macOS release (x64)
         uses: actions/upload-artifact@v1
         with:
           name: Zettlr-${{steps.ref.outputs.version}}-x64.dmg
           path: ./release/Zettlr-${{steps.ref.outputs.version}}-x64.dmg
-      # And now the same for arm64
       - name: Cache macOS release (arm64)
         uses: actions/upload-artifact@v1
         with:
