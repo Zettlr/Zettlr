@@ -164,13 +164,13 @@ jobs:
       # the next two steps use electron builder to create the DMG files.
       # This step also signs and notarizes the app. NOTE that forge does this,
       # as we shall not notarize and/or sign the resulting DMG file as well!
-      - name: Package macOS (x64)
-        run: yarn package:mac-x64
+      - name: Package macOS (arm64)
+        run: DEBUG='*' yarn package:mac-arm # DEBUG: This takes way too long
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
-      - name: Package macOS (arm64)
-        run: yarn package:mac-arm
+      - name: Package macOS (x64)
+        run: yarn package:mac-x64
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
