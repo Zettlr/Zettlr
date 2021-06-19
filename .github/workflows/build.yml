@@ -103,19 +103,16 @@ jobs:
       # strictly speaking it has two architectures).
       - name: Rename arm64 artifact
         run: mv ./release/Zettlr-${{steps.ref.outputs.version}}.exe ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.exe
-      - name: Cache NSIS installer (x64)
-        uses: actions/upload-artifact@v1
+      # Now we need to cache all artifacts. We create one artifact per build
+      # step. It should be noted that "artifacts" are more like file shares.
+      # Thus they can contain multiple files.
+      - name: Cache installers
+        uses: actions/upload-artifact@v2
         with:
-          name: Zettlr-${{steps.ref.outputs.version}}-x64.exe
-          path: ./release/Zettlr-${{steps.ref.outputs.version}}-x64.exe
-      - name: Cache NSIS installer (arm64)
-        uses: actions/upload-artifact@v1
-        with:
-          # It is important to understand that "name" does NOT refer to the
-          # uploaded file's name, but it's rather an ID, so the file needs to
-          # be renamed prior to uploading (see step above).
-          name: Zettlr-${{steps.ref.outputs.version}}-arm64.exe
-          path: ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.exe
+          name: win32
+          path: |
+            ./release/Zettlr-${{steps.ref.outputs.version}}-x64.exe
+            ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.exe
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
   #                                                                           #
@@ -179,16 +176,13 @@ jobs:
       - name: Build macOS image file (x64)
         run: yarn release:mac-x64
       # Finally upload both
-      - name: Cache macOS release (x64)
-        uses: actions/upload-artifact@v1
+      - name: Cache image files
+        uses: actions/upload-artifact@v2
         with:
-          name: Zettlr-${{steps.ref.outputs.version}}-x64.dmg
-          path: ./release/Zettlr-${{steps.ref.outputs.version}}-x64.dmg
-      - name: Cache macOS release (arm64)
-        uses: actions/upload-artifact@v1
-        with:
-          name: Zettlr-${{steps.ref.outputs.version}}-arm64.dmg
-          path: ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.dmg
+          name: darwin
+          path: |
+            ./release/Zettlr-${{steps.ref.outputs.version}}-x64.dmg
+            ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.dmg
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
   #                                                                           #
@@ -233,36 +227,18 @@ jobs:
         run: yarn package:linux-arm
       - name: Create Linux installers (arm64)
         run: yarn release:linux-arm
-      - name: Cache .deb release (x64)
-        uses: actions/upload-artifact@v1
+      # After everything has been created, now we need to cache them.
+      - name: Cache installers
+        uses: actions/upload-artifact@v2
         with:
-          name: Zettlr-${{steps.ref.outputs.version}}-amd64.deb
-          path: ./release/Zettlr-${{steps.ref.outputs.version}}-amd64.deb
-      - name: Cache .rpm release (x64)
-        uses: actions/upload-artifact@v1
-        with:
-          name: Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm
-          path: ./release/Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm
-      - name: Cache AppImage release (x64)
-        uses: actions/upload-artifact@v1
-        with:
-          name: Zettlr-${{steps.ref.outputs.version}}-x86_64.AppImage
-          path: ./release/Zettlr-${{steps.ref.outputs.version}}-x86_64.AppImage
-      - name: Cache .deb release (arm64)
-        uses: actions/upload-artifact@v1
-        with:
-          name: Zettlr-${{steps.ref.outputs.version}}-arm64.deb
-          path: ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.deb
-      - name: Cache .rpm release (arm64)
-        uses: actions/upload-artifact@v1
-        with:
-          name: Zettlr-${{steps.ref.outputs.version}}-aarch64.rpm
-          path: ./release/Zettlr-${{steps.ref.outputs.version}}-aarch64.rpm
-      - name: Cache AppImage release (arm64)
-        uses: actions/upload-artifact@v1
-        with:
-          name: Zettlr-${{steps.ref.outputs.version}}-arm64.AppImage
-          path: ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.AppImage
+          name: linux
+          path: |
+            ./release/Zettlr-${{steps.ref.outputs.version}}-amd64.deb
+            ./release/Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm
+            ./release/Zettlr-${{steps.ref.outputs.version}}-x86_64.AppImage
+            ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.deb
+            ./release/Zettlr-${{steps.ref.outputs.version}}-aarch64.rpm
+            ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.AppImage
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
   #                                                                           #
@@ -300,55 +276,20 @@ jobs:
       - name: Make release directory
         run: mkdir ./release
       # First, download all resulting assets from the previous steps.
-      - name: Download NSIS installer (x64)
-        uses: actions/download-artifact@v1
+      - name: Retrieve windows installers
+        uses: actions/download-artifact@v2
         with:
-          name: Zettlr-${{steps.ref.outputs.version}}-x64.exe
+          name: win32
           path: ./release
-      - name: Download NSIS installer (arm64)
-        uses: actions/download-artifact@v1
+      - name: Retrieve macOS images
+        uses: actions/download-artifact@v2
         with:
-          name: Zettlr-${{steps.ref.outputs.version}}-arm64.exe
+          name: darwin
           path: ./release
-      - name: Download macOS image (x64)
-        uses: actions/download-artifact@v1
+      - name: Retrieve Linux installers
+        uses: actions/download-artifact@v2
         with:
-          name: Zettlr-${{steps.ref.outputs.version}}-x64.dmg
-          path: ./release
-      - name: Download macOS image (arm64)
-        uses: actions/download-artifact@v1
-        with:
-          name: Zettlr-${{steps.ref.outputs.version}}-arm64.dmg
-          path: ./release
-      - name: Download .deb-installer (x64)
-        uses: actions/download-artifact@v1
-        with:
-          name: Zettlr-${{steps.ref.outputs.version}}-amd64.deb
-          path: ./release
-      - name: Download .rpm-installer (x64)
-        uses: actions/download-artifact@v1
-        with:
-          name: Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm
-          path: ./release
-      - name: Download AppImage binary (x64)
-        uses: actions/download-artifact@v1
-        with:
-          name: Zettlr-${{steps.ref.outputs.version}}-x86_64.AppImage
-          path: ./release
-      - name: Download .deb-installer (arm64)
-        uses: actions/download-artifact@v1
-        with:
-          name: Zettlr-${{steps.ref.outputs.version}}-arm64.deb
-          path: ./release
-      - name: Download .rpm-installer (arm64)
-        uses: actions/download-artifact@v1
-        with:
-          name: Zettlr-${{steps.ref.outputs.version}}-aarch64.rpm
-          path: ./release
-      - name: Download AppImage binary (arm64)
-        uses: actions/download-artifact@v1
-        with:
-          name: Zettlr-${{steps.ref.outputs.version}}-arm64.AppImage
+          name: linux
           path: ./release
       # Now we are set, we have all five release assets on the VM. It's time to
       # create the SHA-checksums file and then upload everything!
@@ -382,8 +323,7 @@ jobs:
           REMOTE_HOST: ${{ secrets.NIGHTLY_REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.NIGHTLY_REMOTE_USER }}
           TARGET: ${{ secrets.NIGHTLY_TARGET }}
-      # OTHERWISE:
-      # Create a new release draft
+      # OTHERWISE: Create a new release draft
       - name: Create release draft
         if: ${{ github.event_name != 'workflow_dispatch' }}
         uses: softprops/action-gh-release@v1
