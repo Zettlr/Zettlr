@@ -26,9 +26,16 @@ security default-keychain -s $KEYCHAIN_PATH
 # Unlock the keychain using the previously chosen, very secure password
 security unlock-keychain -p actions $KEYCHAIN_PATH
 
+# The next line comes from https://github.com/MarshallOfSound/Google-Play-Music-Desktop-Player-UNOFFICIAL-/blob/master/sig/import.sh
+# Set keychain locking timeout to 3600 seconds
+security set-keychain-settings -t 3600 -u $KEYCHAIN_PATH
+
 # Import our certificate into the (now default) created keychain and also allow
 # the codesign binary to access said certificate.
 security import $CERT_FILE -k $KEYCHAIN_PATH -P "$MACOS_CERT_PASS" -T /usr/bin/codesign;
+
+# Add keychain to keychain-list (also from MarshallOfSound repo)
+security list-keychains -s $KEYCHAIN_PATH
 
 # Since macOS Sierra, the following command is necessary.
 # Further information: https://stackoverflow.com/a/40039594
