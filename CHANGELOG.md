@@ -1,9 +1,3 @@
-# 2.0.1
-
-## Supports MDX as a type of markdown file
-
-Now `.mdx` files in your notes folders will appear in the file manager and open like any other markdown file. They do not get special treatment, though they may contain ::gasp:: `javascript`.
-
 # 2.0.0
 
 ## DEPRECATION: 32 bit
@@ -42,6 +36,7 @@ A few years ago we implemented auto-saving after a delay of five seconds with no
 - All windows will now remember their last position (new: log window and print window).
 - Some components of the renderer elements will now respect a given accent colour set by your operating system (only available for macOS and Windows).
 - You can now close files by middle-clicking their tabs.
+- MDX supported as a type of markdown file
 
 ## Under the Hood
 
