@@ -1,68 +1,66 @@
 <template>
-  <WindowChrome
-    v-bind:title="windowTitle"
-    v-bind:titlebar="true"
-    v-bind:menubar="false"
-    v-bind:show-tabbar="true"
-    v-bind:tabbar-tabs="tabs"
-    v-bind:tabbar-label="'Defaults'"
-    v-bind:disable-vibrancy="true"
-    v-on:tab="currentTab = $event"
+  <SplitView
+    v-bind:initial-size-percent="[ 20, 80 ]"
+    v-bind:minimum-size-percent="[ 20, 20 ]"
+    v-bind:split="'horizontal'"
+    v-bind:initial-total-width="100"
   >
-    <!--
-      To comply with ARIA, we have to wrap the form in a tab container because
-      we make use of the tabbar on the window chrome.
-    -->
-    <div
-      v-bind:id="tabs[currentTab].controls"
-      role="tabpanel"
-      v-bind:aria-labelledby="tabs[currentTab].id"
-      style="height: 100%;"
-    >
-      <SplitView
-        v-bind:initial-size-percent="[ 20, 80 ]"
-        v-bind:minimum-size-percent="[ 20, 20 ]"
-        v-bind:split="'horizontal'"
-        v-bind:initial-total-width="$el.getBoundingClientRect().width"
-      >
-        <template #view1>
-          <SelectableList
-            v-bind:items="listItems"
-            v-bind:selected-item="currentItem"
-            v-on:select="currentItem = $event"
-          ></SelectableList>
-        </template>
-        <template #view2>
-          <div style="padding: 10px;">
-            <p>Edit the corresponding defaults file here.</p>
+    <template #view1>
+      <SelectableList
+        v-bind:items="listItems"
+        v-bind:selected-item="currentItem"
+        v-on:select="currentItem = $event"
+      ></SelectableList>
+    </template>
+    <template #view2>
+      <div style="padding: 10px;">
+        <p>Edit the corresponding defaults file here.</p>
 
-            <CodeEditor
-              ref="code-editor"
-              v-model="editorContents"
-              v-bind:mode="'yaml'"
-            ></CodeEditor>
-            <ButtonControl
-              v-bind:primary="true"
-              v-bind:label="'Save'"
-              v-bind:inline="true"
-              v-on:click="saveDefaultsFile()"
-            ></ButtonControl>
-            <span v-if="savingStatus !== ''" class="saving-status">{{ savingStatus }}</span>
-          </div>
-        </template>
-      </SplitView>
-    </div>
-  </WindowChrome>
+        <CodeEditor
+          ref="code-editor"
+          v-model="editorContents"
+          v-bind:mode="'yaml'"
+        ></CodeEditor>
+        <ButtonControl
+          v-bind:primary="true"
+          v-bind:label="'Save'"
+          v-bind:inline="true"
+          v-on:click="saveDefaultsFile()"
+        ></ButtonControl>
+        <ButtonControl
+          v-bind:primary="false"
+          v-bind:label="'Restore defaults file'"
+          v-bind:inline="true"
+          v-on:click="restoreDefaultsFile()"
+        ></ButtonControl>
+        <span v-if="savingStatus !== ''" class="saving-status">{{ savingStatus }}</span>
+      </div>
+    </template>
+  </SplitView>
 </template>
 
 <script>
-import WindowChrome from '../common/vue/window/Chrome'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Defaults
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This is the defaults file editor view. It allows users to
+ *                  modify the provided defaults files.
+ *
+ * END HEADER
+ */
+
 import SplitView from '../common/vue/window/SplitView'
 import SelectableList from './SelectableList'
 import ButtonControl from '../common/vue/form/elements/Button'
 import CodeEditor from '../common/vue/CodeEditor'
-import { ipcRenderer } from 'electron'
-import YAML from 'yaml'
+
+const ipcRenderer = window.ipc
 
 const WRITERS = {
   'html': 'HTML',
@@ -77,53 +75,61 @@ const WRITERS = {
   'rst': 'reStructured Text'
 }
 
+const READERS = {
+  'docbook': 'DocBook',
+  'docx': 'Word',
+  'epub': 'ePub',
+  'haddock': 'Haddock',
+  'html': 'HTML',
+  'latex': 'LaTeX',
+  'muse': 'Muse',
+  'odt': 'OpenDocument Text',
+  'opml': 'OPML',
+  'org': 'Orgmode',
+  'rst': 'reStructured Text',
+  't2t': 'text2tags',
+  'textile': 'Textile',
+  'vimwiki': 'VimWiki'
+}
+
 export default {
   name: 'DefaultsApp',
   components: {
-    WindowChrome,
     SplitView,
     SelectableList,
     CodeEditor,
     ButtonControl
   },
+  props: {
+    // "which" contains the tab ID from the app. Beware before breaking.
+    which: {
+      type: String,
+      required: true
+    }
+  },
   data: function () {
     return {
-      tabs: [
-        {
-          label: 'Exporting',
-          controls: 'tab-export',
-          id: 'tab-export-control',
-          icon: 'export'
-        },
-        {
-          label: 'Importing',
-          controls: 'tab-import',
-          id: 'tab-import-control',
-          icon: 'import'
-        }
-      ],
-      currentTab: 0,
       currentItem: 0,
       editorContents: '',
       savingStatus: ''
     }
   },
   computed: {
-    windowTitle: function () {
-      if (document.body.classList.contains('darwin')) {
-        return this.tabs[this.currentTab].label
-      } else {
-        return 'Defaults Preferences'
-      }
-    },
     listItems: function () {
-      // TODO: Possibly different values for import and export!
-      return Object.values(WRITERS)
+      if (this.which === 'tab-export-control') {
+        return Object.values(WRITERS)
+      } else if (this.which === 'tab-import-control') {
+        return Object.values(READERS)
+      } else {
+        return [] // TODO: We need list items for every tab!
+      }
     }
   },
   watch: {
-    currentTab: function (newValue, oldValue) {
-      this.loadDefaultsForState()
+    which: function (newValue, oldValue) {
+      // Reset to the beginning of the list. The watcher right below will pick
+      // that change up and re-load the defaults.
+      this.currentItem = 0
     },
     currentItem: function (newValue, oldValue) {
       this.loadDefaultsForState()
@@ -147,45 +153,105 @@ export default {
   },
   methods: {
     loadDefaultsForState: function () {
+      const isWriter = this.which === 'tab-export-control'
+      const isReader = this.which === 'tab-import-control'
+
+      if (!isWriter && !isReader) {
+        return // Potentially different tab selected
+      }
+
+      let format
       // Loads a defaults file from main for the given state (tab + list item)
-      const writer = Object.keys(WRITERS)[this.currentItem]
+      if (isWriter) {
+        format = Object.keys(WRITERS)[this.currentItem]
+      } else if (isReader) {
+        format = Object.keys(READERS)[this.currentItem]
+      }
 
       ipcRenderer.invoke('assets-provider', {
         command: 'get-defaults-file',
         payload: {
-          format: writer,
-          type: 'export' // TODO
+          format: format,
+          type: (isWriter) ? 'export' : 'import'
         }
       })
         .then(data => {
-          // The data is a simple object, which we need to transform into YAML
-          const yaml = YAML.stringify(data)
-          this.editorContents = yaml
+          this.editorContents = data
           this.$refs['code-editor'].markClean()
           this.savingStatus = ''
         })
         .catch(err => console.error(err))
     },
     saveDefaultsFile: function () {
+      const isWriter = this.which === 'tab-export-control'
+      const isReader = this.which === 'tab-import-control'
+
+      if (!isWriter && !isReader) {
+        // Nothing to do
+        return
+      }
+
       this.savingStatus = 'Saving ...' // TODO translate
-      const writer = Object.keys(WRITERS)[this.currentItem]
-      const data = YAML.parse(this.editorContents)
+
+      let format
+      if (isWriter) {
+        format = Object.keys(WRITERS)[this.currentItem]
+      } else if (isReader) {
+        format = Object.keys(READERS)[this.currentItem]
+      }
 
       ipcRenderer.invoke('assets-provider', {
         command: 'set-defaults-file',
         payload: {
-          format: writer,
-          type: 'export', // TODO
-          contents: data
+          format: format,
+          type: (isWriter) ? 'export' : 'import',
+          contents: this.editorContents
         }
       })
         .then(() => {
-          this.savingStatus = 'Saved!'
+          this.savingStatus = 'Saved!' // TODO: Translate
           setTimeout(() => {
             this.savingStatus = ''
           }, 1000)
-        }) // TODO: Translate
+        })
         .catch(err => console.error(err))
+    },
+    restoreDefaultsFile: function () {
+      const isWriter = this.which === 'tab-export-control'
+      const isReader = this.which === 'tab-import-control'
+
+      if (!isWriter && !isReader) {
+        // Nothing to do
+        return
+      }
+
+      this.savingStatus = 'Restoring defaults file ...'
+
+      let format
+      if (isWriter) {
+        format = Object.keys(WRITERS)[this.currentItem]
+      } else if (isReader) {
+        format = Object.keys(READERS)[this.currentItem]
+      }
+
+      ipcRenderer.invoke('assets-provider', {
+        command: 'restore-defaults-file',
+        payload: {
+          format: format,
+          type: (isWriter) ? 'export' : 'import'
+        }
+      })
+        .then((result) => {
+          if (result === true) {
+            this.savingStatus = 'Defaults file restored.' // TODO: Translate
+            // Immediately re-fetch the now restored defaults file
+            this.loadDefaultsForState()
+            setTimeout(() => { this.savingStatus = '' }, 1000)
+          } else {
+            this.savingStatus = 'Could not restore defaults file!'
+          }
+        })
+        .catch(err => { console.error(err) })
     }
   }
 }

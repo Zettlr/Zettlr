@@ -1,5 +1,17 @@
 /* global CodeMirror define */
-// This plugin renders MathJax parts in CodeMirror instances
+/**
+  * @ignore
+  * BEGIN HEADER
+  *
+  * Contains:        AutoCorrect CodeMirror Plugin
+  * CVM-Role:        CodeMirror Plugin
+  * Maintainer:      Hendrik Erz, Tobias Diez
+  * License:         GNU GPL v3
+  *
+  * Description:     This plugin renders Math equations using KaTeX.
+  *
+  * END HEADER
+  */
 
 const { getBlockMathRE, getInlineMathRenderRE } = require('../../../regular-expressions');
 
@@ -32,7 +44,7 @@ const { getBlockMathRE, getInlineMathRenderRE } = require('../../../regular-expr
     const viewport = cm.getViewport()
     for (let i = viewport.from; i < viewport.to; i++) {
       let modeName = cm.getModeAt({ 'line': i, 'ch': 0 }).name
-      if (![ 'markdown', 'stex' ].includes(modeName)) continue
+      if (![ 'markdown-zkn', 'stex' ].includes(modeName)) continue
       if (modeName === 'stex') {
         // Make sure the token list includes "multiline-equation"
         // because otherwise we shouldn't render this as it's within

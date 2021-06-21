@@ -1,7 +1,28 @@
-const { trans } = require('../../../common/i18n')
-const { ipcRenderer, shell, clipboard } = require('electron')
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        File context menu
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file displays a context menu for files.
+ *
+ * END HEADER
+ */
+
+const { trans } = require('../../../common/i18n-renderer')
+
+const ipcRenderer = window.ipc
+const clipboard = window.clipboard
 
 const TEMPLATE = [
+  {
+    label: 'menu.open_new_tab',
+    id: 'new-tab',
+    type: 'normal'
+  },
   {
     label: 'menu.properties',
     id: 'properties',
@@ -60,7 +81,12 @@ module.exports = function displayFileContext (event, fileObject, el, callback) {
   for (const item of TEMPLATE) {
     const buildItem = {}
 
-    buildItem.id = item.label
+    if (item.id !== undefined) {
+      buildItem.id = item.id
+    } else {
+      buildItem.id = item.label
+    }
+
     if (item.label !== undefined) {
       buildItem.label = trans(item.label)
     }
@@ -104,19 +130,10 @@ module.exports = function displayFileContext (event, fileObject, el, callback) {
       case 'menu.copy_id':
         clipboard.writeText(fileObject.id)
         break
-      case 'menu.quicklook':
-        ipcRenderer.send('message', {
-          command: 'open-quicklook',
-          content: fileObject.hash
-        })
-        break
       case 'menu.show_file':
-        shell.showItemInFolder(fileObject.path)
-        break
-      case 'menu.close_file':
-        ipcRenderer.send('message', {
-          command: 'root-close',
-          content: fileObject.hash
+        ipcRenderer.send('window-controls', {
+          command: 'show-item-in-folder',
+          payload: fileObject.path
         })
         break
     }

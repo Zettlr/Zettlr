@@ -1,3 +1,18 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        _getSaneWindowPosition function
+ * CVM-Role:        Utility Function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Given a WindowPosition, this function will return one that
+ *                  is guaranteed to be sane (i.e. visible on screen).
+ *
+ * END HEADER
+ */
+
 import { screen } from 'electron'
 import { WindowPosition } from './types.d'
 

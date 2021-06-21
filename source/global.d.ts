@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Global Typings
+ * CVM-Role:        Types
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file contains global types for the main process's providers.
+ *
+ * END HEADER
+ */
+
 // We cannot have any imports or exports, as otherwise this file would not
 // be read in by TypeScript as an ambient module declaration.
 // More info: https://stackoverflow.com/a/35074833
@@ -15,17 +29,12 @@ declare module '*.png'
  */
 interface Application {
   runCommand: (command: string, payload?: any) => Promise<any>
-  isBooting: () => boolean
   showLogViewer: () => void
   showPreferences: () => void
-  showCustomCSS: () => void
   displayErrorMessage: (title: string, message: string, contents?: string) => void
   showAboutWindow: () => void
   showDefaultsPreferences: () => void
   showTagManager: () => void
-  // TODO: Match the signatures of fileUpdate and dirUpdate
-  fileUpdate: (oldHash: number, fileMetadata: any) => void
-  dirUpdate: (oldHash: number, newHash: number) => void
   notifyChange: (msg: string) => void
   findFile: (prop: any) => MDFileDescriptor | CodeFileDescriptor | null
   findDir: (prop: any) => DirDescriptor | null
@@ -62,7 +71,10 @@ declare module NodeJS {
     recentDocs: RecentDocumentsProvider
     tags: TagProvider
     stats: StatsProvider
+    // Translation data necessary to facilitate internationalisation
     i18n: any
+    i18nRawData: any
     i18nFallback: any
+    i18nFallbackRawData: any
   }
 }

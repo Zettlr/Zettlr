@@ -2,8 +2,8 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        Notification provider
- * CVM-Role:        Controller
+ * Contains:        NotificationProvider
+ * CVM-Role:        Service Provider
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
@@ -35,8 +35,9 @@ export default class NotificationProvider {
        *
        * @param   {string}   msg       The message
        * @param   {boolean}  showInOS  Whether to also initiate an OS notification
+       * @param   {Function} callback  An optional callback that gets called when the user clicks the notification
        */
-      normal: (msg: string, showInOS: boolean = false) => {
+      normal: (msg: string, showInOS: boolean = false, callback?: Function) => {
         broadcastIpcMessage('notification-provider', 'normal', msg)
         if (this._osSupportsNotification && showInOS) {
           let notification = new Notification({
@@ -52,6 +53,12 @@ export default class NotificationProvider {
 
           // Now show the notification
           notification.show()
+
+          if (callback !== undefined) {
+            notification.on('click', (event) => {
+              callback()
+            })
+          }
         }
       },
       /**

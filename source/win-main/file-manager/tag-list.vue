@@ -1,17 +1,3 @@
-/**
- * @ignore
- * BEGIN HEADER
- *
- * Contains:        TagList Vue component
- * CVM-Role:        View
- * Maintainer:      Hendrik Erz
- * License:         GNU GPL v3
- *
- * Description:     Controls a tag list for a file item.
- *
- * END HEADER
- */
-
 <template>
   <div class="taglist">
     <div
@@ -31,6 +17,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        TagList Vue component
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Controls a tag list for a file item.
+ *
+ * END HEADER
+ */
+
 export default {
   props: {
     tags: {

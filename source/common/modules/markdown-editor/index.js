@@ -29,6 +29,7 @@ const getCodeMirrorDefaultOptions = require('./get-cm-options')
 const safeAssign = require('../../util/safe-assign')
 const countWords = require('../../util/count-words')
 const md2html = require('../../util/md-to-html')
+const html2md = require('../../util/html-to-md')
 const generateKeymap = require('./generate-keymap.js')
 const generateTableOfContents = require('./util/generate-toc')
 
@@ -38,14 +39,18 @@ const {
   searchPrevious,
   replaceNext,
   replacePrevious,
-  replaceAll
+  replaceAll,
+  stopSearch
 } = require('./plugins/search')
 
 /**
  * APIs
  */
-const { clipboard, ipcRenderer } = require('electron')
+// const { clipboard, ipcRenderer } = require('electron')
 const EventEmitter = require('events')
+
+const ipcRenderer = window.ipc
+const clipboard = window.clipboard
 
 /**
  * CODEMIRROR & DEPENDENCIES
@@ -64,12 +69,14 @@ const matchStyleHook = require('./hooks/match-style')
 const { indentLinesHook, clearLineIndentationCache } = require('./hooks/indent-wrapped-lines')
 const headingClassHook = require('./hooks/heading-classes')
 const codeblockClassHook = require('./hooks/codeblock-classes')
+const taskItemClassHook = require('./hooks/task-item-classes')
 const zoomHook = require('./hooks/zoom')
 const muteLinesHook = require('./hooks/mute-lines')
 const renderElementsHook = require('./hooks/render-elements')
 const typewriterHook = require('./hooks/typewriter')
 const { autocompleteHook, setAutocompleteDatabase } = require('./hooks/autocomplete')
 const linkTooltipsHook = require('./hooks/link-tooltips')
+const noteTooltipsHook = require('./hooks/note-preview')
 
 const displayContextMenu = require('./display-context-menu')
 
@@ -163,12 +170,46 @@ module.exports = class MarkdownEditor extends EventEmitter {
     indentLinesHook(this._instance)
     headingClassHook(this._instance)
     codeblockClassHook(this._instance)
+    taskItemClassHook(this._instance)
     zoomHook(this._instance, this.zoom.bind(this))
     muteLinesHook(this._instance)
     renderElementsHook(this._instance)
     typewriterHook(this._instance)
     autocompleteHook(this._instance)
     linkTooltipsHook(this._instance)
+    noteTooltipsHook(this._instance)
+
+    // Indicate interactive elements while either the Command or Control-key is
+    // held down.
+    document.addEventListener('keydown', (event) => {
+      const cmd = process.platform === 'darwin' && event.metaKey
+      const ctrl = process.platform !== 'darwin' && event.ctrlKey
+
+      if (!cmd && !ctrl) {
+        return
+      }
+
+      const wrapper = this._instance.getWrapperElement()
+      const elements = wrapper.querySelectorAll('.cma, .cm-zkn-link, .cm-zkn-tag')
+
+      elements.forEach(element => {
+        element.classList.add('meta-key')
+      })
+    })
+
+    // And don't forget to remove the classes again
+    document.addEventListener('keyup', (event) => {
+      if (![ 'Meta', 'Control' ].includes(event.key)) {
+        return // Not the right released key
+      }
+
+      const wrapper = this._instance.getWrapperElement()
+      const elements = wrapper.querySelectorAll('.cma, .cm-zkn-link, .cm-zkn-tag')
+
+      elements.forEach(element => {
+        element.classList.remove('meta-key')
+      })
+    })
 
     // Propagate necessary events to the master process
     this._instance.on('change', (cm, changeObj) => {
@@ -241,6 +282,29 @@ module.exports = class MarkdownEditor extends EventEmitter {
       }
     })
 
+    this._instance.getWrapperElement().addEventListener('mousedown', (event) => {
+      if (event.button !== 1 || process.platform !== 'linux' || clipboard.hasSelectionClipboard() === false) {
+        return
+      }
+
+      // The user has pressed middle mouse button on Linux. On Linux, there's
+      // the concept of some form of a "quick selection", that is: The user
+      // selects some text, and, without pressing Ctrl+C, the text is
+      // immediately present in the "selection" clipboard. A middle mouse button
+      // is assumed to paste that to wherever the focus currently sits. For
+      // more info, see issue #1882 and https://unix.stackexchange.com/a/139193
+      const { text, html } = clipboard.getSelectionClipboard()
+
+      if (html.trim() !== '') {
+        // We have HTML to paste
+        const toPaste = html2md(html)
+        this._instance.doc.replaceSelection(toPaste)
+      } else {
+        // There is text to paste
+        this._instance.doc.replaceSelection(text)
+      }
+    })
+
     // Listen to zoom-shortcuts from main
     ipcRenderer.on('shortcut', (event, shortcut) => {
       switch (shortcut) {
@@ -276,6 +340,10 @@ module.exports = class MarkdownEditor extends EventEmitter {
 
   replaceAll (term, replacement) {
     replaceAll(this._instance, term, replacement)
+  }
+
+  stopSearch () {
+    stopSearch()
   }
 
   /**

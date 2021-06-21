@@ -1,7 +1,21 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        getConfigTemplate utility function
+ * CVM-Role:        <none>
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Returns a functional template to be used by the config provider.
+ *
+ * END HEADER
+ */
+
 import { app } from 'electron'
 import * as bcp47 from 'bcp-47'
 import { v4 as uuid4 } from 'uuid'
-import { getLanguageFile } from '../../../common/i18n'
+import getLanguageFile from '../../../common/util/get-language-file'
 
 const ZETTLR_VERSION = app.getVersion()
 const ATTACHMENT_EXTENSIONS = [
@@ -27,7 +41,7 @@ export default function getConfigTemplate (): ConfigOptions {
     locale = 'en-US'
   } else {
     // Return the best match that the app can find (only the tag).
-    locale = (getLanguageFile(locale) as any).tag
+    locale = getLanguageFile(locale).tag
   }
 
   // Return the complete configuration object
@@ -113,7 +127,8 @@ export default function getConfigTemplate (): ConfigOptions {
       homeEndBehaviour: true, // If checked (true), CodeMirror goes to start/end of a paragraph, not a line.
       enableTableHelper: true, // Enable the table helper plugin
       indentUnit: 4, // The number of spaces to be added
-      fontSize: 16, // The editor's font size in pixels
+      fontSize: 16, // The editor's font size in pixels,
+      scrollZoom: true, // Whether the user can scroll by using Cmd/Ctrl+Wheel
       countChars: false, // Set to true to enable counting characters instead of words
       inputMode: 'default', // Can be default, vim, emacs
       boldFormatting: '**', // Can be ** or __
@@ -211,7 +226,8 @@ export default function getConfigTemplate (): ConfigOptions {
     },
     system: {
       deleteOnFail: false, // Whether to delete files if trashing them fails
-      avoidNewTabs: true // Whether to avoid opening new tabs for documents if possible
+      avoidNewTabs: true, // Whether to avoid opening new tabs for documents if possible
+      iframeWhitelist: [ 'www.youtube.com', 'player.vimeo.com' ] // Contains a list of whitelisted iFrame prerendering domains
     },
     checkForBeta: false, // Should the user be notified of beta releases?
     uuid: uuid4() // The app's unique anonymous identifier

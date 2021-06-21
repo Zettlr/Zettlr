@@ -39,8 +39,9 @@ export default function createLogWindow (conf: WindowPosition): BrowserWindow {
     y: conf.top,
     show: false,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: true,
+      // @ts-expect-error
+      preload: LOG_VIEWER_PRELOAD_WEBPACK_ENTRY
     }
   }
 

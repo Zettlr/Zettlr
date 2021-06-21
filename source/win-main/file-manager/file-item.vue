@@ -1,3 +1,126 @@
+<template>
+  <div
+    v-bind:class="{
+      'list-item-wrapper': true,
+      'odd': index % 2 === 1,
+      'even': index % 2 === 0
+    }"
+  >
+    <div
+      v-bind:class="{
+        'list-item': true,
+        'project': obj.type === 'directory' && obj.project !== null,
+        'selected': selectedFile !== null && obj.path === selectedFile.path,
+        'active': activeFile !== null && obj.path === activeFile.path,
+        'has-meta-info': fileMeta,
+        'directory': obj.type === 'directory'
+      }"
+      v-bind:data-id="obj.id"
+      v-bind:data-filename="getFilename"
+      v-bind:draggable="isDraggable"
+      v-bind:style="getStyle"
+      v-on:mousedown.stop="requestSelection"
+      v-on:dragstart.stop="beginDragging"
+      v-on:drag="onDragHandler"
+      v-on:contextmenu="handleContextMenu"
+    >
+      <div class="filename">
+        <!-- Display the date in the top-right corner -->
+        <div v-if="fileMeta" class="date">
+          {{ getDate }}
+        </div>
+        <clr-icon
+          v-if="isProject"
+          aria-label="Project"
+          shape="blocks-group"
+          class="is-solid"
+        ></clr-icon>
+        <input
+          v-if="nameEditing"
+          ref="name-editing-input"
+          type="text"
+          v-bind:value="obj.name"
+          v-on:keyup.enter="finishNameEditing($event.target.value)"
+          v-on:keyup.esc="nameEditing = false"
+          v-on:blur="nameEditing = false"
+          v-on:click.stop=""
+        >
+        <span v-else>
+          {{ basename }}
+        </span>
+      </div>
+      <div v-if="fileMeta" class="meta-info">
+        <div v-if="isDirectory">
+          <span class="badge">{{ countDirs }}</span>
+          <span class="badge">{{ countFiles }}</span>
+        </div>
+        <template v-else>
+          <div v-if="hasTags">
+            <!-- First line -->
+            <div v-for="(tag, idx) in obj.tags" v-bind:key="idx" class="tag badge">
+              <span
+                v-if="retrieveTagColour(tag)"
+                class="color-circle"
+                v-bind:style="{
+                  'background-color': retrieveTagColour(tag)
+                }"
+              ></span>
+              <span>#{{ tag }}</span>
+            </div>
+          </div>
+          <div>
+            <!-- Second line -->
+            <!-- Is this a code file? -->
+            <span
+              v-if="isCode"
+              aria-label="Code-file"
+              class="code-indicator badge"
+            >
+              {{ obj.ext.substr(1) }}
+            </span>
+            <!-- Display the ID, if there is one -->
+            <span v-if="obj.id" class="id badge">{{ obj.id }}</span>
+            <!-- Display the file size if we have a code file -->
+            <span v-if="obj.type === 'code'" class="badge">{{ formattedSize }}</span>
+            <!--
+              Next, the user will want to know how many words are in here. To save
+              space, we will either display only the words, OR the word count in
+              relation to a set writing target, if there is one.
+            -->
+            <span v-else-if="!hasWritingTarget" class="badge">
+              {{ formattedWordCount }}
+            </span>
+            <span v-else class="badge">
+              <svg
+                class="target-progress-indicator"
+                width="16"
+                height="16"
+                viewBox="-1 -1 2 2"
+              >
+                <circle
+                  class="indicator-meter"
+                  cx="0"
+                  cy="0"
+                  r="1"
+                  shape-rendering="geometricPrecision"
+                ></circle>
+                <path
+                  v-bind:d="writingTargetPath"
+                  fill=""
+                  class="indicator-value"
+                  shape-rendering="geometricPrecision"
+                ></path>
+              </svg>
+              {{ writingTargetInfo }}
+            </span>
+          </div>
+        </template> <!-- END meta info for files -->
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
 /**
  * @ignore
  * BEGIN HEADER
@@ -11,123 +134,9 @@
  *
  * END HEADER
  */
-<template>
-  <div
-    v-bind:class="{
-      'list-item': true,
-      'project': obj.type === 'directory' && obj.project !== null,
-      'selected': obj === selectedFile,
-      'active': obj === activeFile,
-      'has-meta-info': fileMeta,
-      'directory': obj.type === 'directory'
-    }"
-    v-bind:data-id="obj.id"
-    v-bind:data-filename="getFilename"
-    v-bind:draggable="isDraggable"
-    v-bind:style="getStyle"
-    v-on:mousedown.stop="requestSelection"
-    v-on:dragstart.stop="beginDragging"
-    v-on:drag="onDragHandler"
-    v-on:contextmenu="handleContextMenu"
-  >
-    <div class="filename">
-      <!-- Display the date in the top-right corner -->
-      <div v-if="fileMeta" class="date">
-        {{ getDate }}
-      </div>
-      <clr-icon
-        v-if="isProject"
-        aria-label="Project"
-        shape="blocks-group"
-        class="is-solid"
-      ></clr-icon>
-      <input
-        v-if="nameEditing"
-        ref="name-editing-input"
-        type="text"
-        v-bind:value="obj.name"
-        v-on:keyup.enter="finishNameEditing($event.target.value)"
-        v-on:keyup.esc="nameEditing = false"
-        v-on:blur="nameEditing = false"
-        v-on:click.stop=""
-      >
-      <span v-else>
-        {{ basename }}
-      </span>
-    </div>
-    <div v-if="fileMeta" class="meta-info">
-      <div v-if="isDirectory">
-        <span class="badge">{{ countDirs }}</span>
-        <span class="badge">{{ countFiles }}</span>
-      </div>
-      <template v-else>
-        <div v-if="hasTags">
-          <!-- First line -->
-          <div v-for="(tag, idx) in obj.tags" v-bind:key="idx" class="tag badge">
-            <span
-              v-if="retrieveTagColour(tag)"
-              class="color-circle"
-              v-bind:style="{
-                'background-color': retrieveTagColour(tag)
-              }"
-            ></span>
-            <span>#{{ tag }}</span>
-          </div>
-        </div>
-        <div>
-          <!-- Second line -->
-          <!-- Is this a code file? -->
-          <span
-            v-if="isCode"
-            aria-label="Code-file"
-            class="code-indicator badge"
-          >
-            {{ obj.ext.substr(1) }}
-          </span>
-          <!-- Display the ID, if there is one -->
-          <span v-if="obj.id" class="id badge">{{ obj.id }}</span>
-          <!-- Display the file size if we have a code file -->
-          <span v-if="obj.type === 'code'" class="badge">{{ formattedSize }}</span>
-          <!--
-            Next, the user will want to know how many words are in here. To save
-            space, we will either display only the words, OR the word count in
-            relation to a set writing target, if there is one.
-          -->
-          <span v-else-if="!hasWritingTarget" class="badge">
-            {{ formattedWordCount }}
-          </span>
-          <span v-else class="badge">
-            <svg
-              class="target-progress-indicator"
-              width="16"
-              height="16"
-              viewBox="-1 -1 2 2"
-            >
-              <circle
-                class="indicator-meter"
-                cx="0"
-                cy="0"
-                r="1"
-                shape-rendering="geometricPrecision"
-              ></circle>
-              <path
-                v-bind:d="writingTargetPath"
-                fill=""
-                class="indicator-value"
-                shape-rendering="geometricPrecision"
-              ></path>
-            </svg>
-            {{ writingTargetInfo }}
-          </span>
-        </div>
-      </template> <!-- END meta info for files -->
-    </div>
-  </div>
-</template>
 
-<script>
-import { trans } from '../../common/i18n.js'
-import formatDate from '../../common/util/format-date.js'
+import { trans } from '../../common/i18n-renderer'
+import formatDate from '../../common/util/format-date'
 import localiseNumber from '../../common/util/localise-number'
 import formatSize from '../../common/util/format-size'
 import itemMixin from './util/item-mixin'
@@ -139,6 +148,10 @@ export default {
     activeFile: {
       type: Object,
       default: function () { return {} }
+    },
+    index: {
+      type: Number,
+      required: true
     }
   },
   computed: {
@@ -303,254 +316,371 @@ export default {
 
 <style lang="less">
 body {
-  div.list-item {
-    overflow: hidden;
-    padding-left: 5px;
-    position: relative;
-    height: 30px;
-    border-left: 5px solid transparent;
-
-    &.directory {
-      color: var(--system-accent-color, --c-primary);
-      border-left-color: var(--system-accent-color, --c-primary);
-    }
-
-    &.has-meta-info {
-      height: 70px;
-    }
-
-    &.selected {
-      border-left: 5px solid var(--c-primary);
-    }
-
-    // The meta information div in the extended file list
-    div.meta-info {
-      white-space: nowrap;
-      height: 30px;
-      line-height: inherit;
-
-      // Small info blocks inside the file meta
-      .badge {
-        font-size: 11px;
-        line-height: 11px;
-        padding: 2px 4px;
-        margin: 2px;
-        display: inline-block;
-      }
-
-      // Optional target progress meter, if a target has been set
-      .target-progress-indicator {
-        vertical-align: middle;
-        transform: rotateZ(-90deg); // Beginning must be at the top
-      }
-    }
-
-    div.filename {
-      // Prevent line breaking in the titles and give a little spacing
-      // before and after
-      font-size: 13px;
-      white-space: nowrap;
-      display: block;
-      width: 100%;
+  div.list-item-wrapper {
+    div.list-item {
       overflow: hidden;
+      padding-left: 5px;
       position: relative;
-      margin: 5px 0px 0px 0px;
+      height: 30px;
 
-      // These inputs should be more or less "invisible"
-      input {
-        border: none;
-        width: 100%;
-        color: inherit;
-        font-family: inherit;
-        font-size: inherit;
-        background-color: transparent;
-        padding: 0;
+      &.directory {
+        color: var(--system-accent-color, --c-primary);
+        border-left-color: var(--system-accent-color, --c-primary);
       }
 
-      div.date {
-        position: absolute;
-        font-size: 11px;
-        color: rgb(130, 130, 130);
-        background-color: inherit;
-        top: 0;
-        right: 0;
-        padding: 2px 5px;
-      }
-    }
+      &.has-meta-info { height: 70px; }
 
-    &.directory {
-      white-space: nowrap;
+      // The meta information div in the extended file list
+      div.meta-info {
+        white-space: nowrap;
+        height: 30px;
+        line-height: inherit;
 
-      .sorter {
-        display: block;
-        position: absolute;
-        top: 0;
-        right: 0;
-        text-align: right;
-        margin: 0;
-
-        .sortDirection, .sortType {
+        // Small info blocks inside the file meta
+        .badge {
+          font-size: 11px;
+          line-height: 11px;
+          padding: 2px 4px;
+          margin: 2px;
           display: inline-block;
-          margin: 3px;
+        }
+
+        // Optional target progress meter, if a target has been set
+        .target-progress-indicator {
+          vertical-align: middle;
+          transform: rotateZ(-90deg); // Beginning must be at the top
         }
       }
-    }
-  } // END list item
+
+      div.filename {
+        // Prevent line breaking in the titles and give a little spacing
+        // before and after
+        font-size: 13px;
+        white-space: nowrap;
+        display: block;
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+        margin: 5px 0px 0px 0px;
+
+        // These inputs should be more or less "invisible"
+        input {
+          border: none;
+          width: 100%;
+          color: inherit;
+          font-family: inherit;
+          font-size: inherit;
+          background-color: transparent;
+          padding: 0;
+        }
+
+        div.date {
+          position: absolute;
+          font-size: 11px;
+          color: rgb(130, 130, 130);
+          background-color: inherit;
+          top: 0;
+          right: 0;
+          padding: 2px 5px;
+        }
+      }
+
+      &.directory {
+        white-space: nowrap;
+
+        .sorter {
+          display: block;
+          position: absolute;
+          top: 0;
+          right: 0;
+          text-align: right;
+          margin: 0;
+
+          .sortDirection, .sortType {
+            display: inline-block;
+            margin: 3px;
+          }
+        }
+      }
+    } // END list item
+  }
 }
 
 body.darwin {
-  div.list-item {
-    border-bottom: 1px solid rgb(213, 213, 213);
-    background-color: rgb(235, 235, 235);
+  div.list-item-wrapper {
+    // On macOS, the lists have a small margin left and right
+    padding: 0px 10px;
+    background-color: white;
 
-    &.active {
-      background-color: rgb(200, 200, 200);
+    div.list-item {
+      // Make the borders to the side as thick as the border radius
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: 1px solid rgb(213, 213, 213);
+      background-color: white;
+      border-radius: 6px;
+
       div.filename div.date {
-        background-color: rgb(200, 200, 200);
+        background-color: white;
+        padding-right: 0px;
       }
-    }
 
-    div.filename div.date { background-color: rgb(235, 235, 235); }
+      &.selected {
+        border-left: 5px solid var(--system-accent-color, --c-primary);
+        background-color: var(--system-accent-color, --c-primary);
+        color: var(--system-accent-color-contrast, white);
 
-    div.meta-info {
-      .badge {
-        background-color: rgb(220, 220, 220);
-        color: rgb(80, 80, 80);
-        border-radius: 4px;
-
-        &.code-indicator {
+        div.filename div.date {
           background-color: var(--system-accent-color, --c-primary);
-          color: white;
+          color: var(--system-accent-color-contrast, rgb(235, 235, 235));
         }
+      }
 
-        &.tag {
-          background-color: rgba(90, 90, 90, 0.5); // Make those tags a little bit translucent
-          color: rgb(240, 240, 240);
+      &.active {
+        background-color: rgb(200, 200, 200);
+        div.filename div.date {
+          background-color: rgb(200, 200, 200);
+        }
+      }
 
-          .color-circle {
-            // If there's a coloured tag in there, display that as well
-            display: inline-block;
-            width: 9px;
-            height: 9px;
-            border: 1px solid white;
-            border-radius: 50%;
+      div.meta-info {
+        .badge {
+          background-color: rgb(220, 220, 220);
+          color: rgb(80, 80, 80);
+          border-radius: 4px;
+
+          &.code-indicator {
+            background-color: var(--system-accent-color, --c-primary);
+            color: white;
           }
-        }
 
-        svg {
-          display: inline-block;
-          width: 11px;
-          height: 11px;
-          margin: 0;
+          &.tag {
+            background-color: rgba(90, 90, 90, 0.5); // Make those tags a little bit translucent
+            color: rgb(240, 240, 240);
 
-          circle { fill: rgb(200, 200, 200); }
-          path { fill: rgb(90, 90, 90); }
+            .color-circle {
+              // If there's a coloured tag in there, display that as well
+              display: inline-block;
+              width: 9px;
+              height: 9px;
+              border: 1px solid white;
+              border-radius: 50%;
+            }
+          }
+
+          svg {
+            display: inline-block;
+            width: 11px;
+            height: 11px;
+            margin: 0;
+
+            circle { fill: rgb(200, 200, 200); }
+            path { fill: rgb(90, 90, 90); }
+          }
         }
       }
     }
   }
 
   &.dark {
-    div.list-item {
-      border-bottom-color: #505050;
+    div.list-item-wrapper {
       background-color: rgb(40, 40, 50);
 
-      &.active {
-      background-color: rgb(80, 80, 80);
-      div.filename div.date {
-        background-color: rgb(80, 80, 80);
-      }
-    }
+      div.list-item {
+        border-bottom-color: #505050;
+        background-color: rgb(40, 40, 50);
 
-      div.filename div.date { background-color: rgb(40, 40, 50); }
+        div.filename div.date {
+          background-color: rgb(40, 40, 50);
+        }
 
-      &.active {
-        background-color: rgb(80, 80, 80);
-      }
+        &.selected {
+          background-color: var(--system-accent-color, --c-primary);
 
-      div.meta-info .badge {
-        background-color: rgb(80, 80, 80);
-        color: rgb(220, 220, 220);
+          div.filename div.date {
+            background-color: var(--system-accent-color, --c-primary);
+            color: var(--system-accent-color-contrast, rgb(40, 40, 50));
+          }
+        }
+
+        &.active {
+          background-color: rgb(80, 80, 80);
+
+          div.filename div.date {
+            background-color: rgb(80, 80, 80);
+          }
+        }
+
+        div.meta-info .badge {
+          background-color: rgb(80, 80, 80);
+          color: rgb(220, 220, 220);
+        }
       }
     }
   }
 }
 
 body.win32 {
-  div.list-item {
-    border-bottom: 1px solid rgb(213, 213, 213);
-    background-color: rgb(230, 230, 230);
-
-    &.active {
-      background-color: rgb(200, 200, 200);
-      div.filename div.date {
-        background-color: rgb(200, 200, 200);
-      }
-    }
-
-    &.selected {
+  div.list-item-wrapper {
+    div.list-item {
+      border-bottom: 1px solid rgb(213, 213, 213);
       background-color: rgb(230, 230, 230);
 
-      div.filename div.date { background-color: rgb(230, 230, 230); }
-    }
+      &.active {
+        background-color: rgb(200, 200, 200);
+        div.filename div.date { background-color: rgb(200, 200, 200); }
+      }
 
-    div.filename div.date { background-color: rgb(230, 230, 230); }
+      &.selected {
+        background-color: var(--system-accent-color, --c-primary);
+        color: var(--system-accent-color-contrast, white);
 
-    div.meta-info {
-      .badge {
-        &.code-indicator {
+        div.filename div.date {
           background-color: var(--system-accent-color, --c-primary);
-          color: white;
+          color: var(--system-accent-color-contrast, white);
         }
+      }
 
-        &.tag {
-          background-color: rgba(90, 90, 90, 0.5); // Make those tags a little bit translucent
-          color: rgb(240, 240, 240);
+      div.filename div.date { background-color: rgb(230, 230, 230); }
 
-          .color-circle {
-            // If there's a coloured tag in there, display that as well
-            display: inline-block;
-            width: 9px;
-            height: 9px;
-            border: 1px solid white;
-            border-radius: 50%;
+      div.meta-info {
+        .badge {
+          &.code-indicator {
+            background-color: var(--system-accent-color, --c-primary);
+            color: white;
           }
-        }
 
-        svg {
-          display: inline-block;
-          width: 11px;
-          height: 11px;
-          margin: 0;
+          &.tag {
+            background-color: rgba(90, 90, 90, 0.5); // Make those tags a little bit translucent
+            color: rgb(240, 240, 240);
 
-          circle { fill: rgb(200, 200, 200); }
-          path { fill: rgb(90, 90, 90); }
+            .color-circle {
+              // If there's a coloured tag in there, display that as well
+              display: inline-block;
+              width: 9px;
+              height: 9px;
+              border: 1px solid white;
+              border-radius: 50%;
+            }
+          }
+
+          svg {
+            display: inline-block;
+            width: 11px;
+            height: 11px;
+            margin: 0;
+
+            circle { fill: rgb(200, 200, 200); }
+            path { fill: rgb(90, 90, 90); }
+          }
         }
       }
     }
   }
 
   &.dark {
-    div.list-item {
-      border-bottom-color: #505050;
-      background-color: rgb(40, 40, 50);
+    div.list-item-wrapper {
+      div.list-item {
+        border-bottom-color: #505050;
+        background-color: rgb(40, 40, 50);
 
-      &.active {
-      background-color: rgb(80, 80, 80);
-      div.filename div.date {
+        &.active {
         background-color: rgb(80, 80, 80);
+        div.filename div.date {
+          background-color: rgb(80, 80, 80);
+        }
+      }
+
+        div.filename div.date { background-color: rgb(40, 40, 50); }
+        &.active { background-color: rgb(80, 80, 80); }
+
+        div.meta-info .badge {
+          background-color: rgb(80, 80, 80);
+          color: rgb(220, 220, 220);
+        }
       }
     }
+  }
+}
 
-      div.filename div.date { background-color: rgb(40, 40, 50); }
+body.linux {
+  div.list-item-wrapper {
+    div.list-item {
+      border-bottom: 1px solid rgb(213, 213, 213);
+      background-color: rgb(230, 230, 230);
 
       &.active {
-        background-color: rgb(80, 80, 80);
+        background-color: rgb(200, 200, 200);
+        div.filename div.date { background-color: rgb(200, 200, 200); }
       }
 
-      div.meta-info .badge {
+      &.selected {
+        background-color: var(--system-accent-color, --c-primary);
+        color: var(--system-accent-color-contrast, white);
+
+        div.filename div.date {
+          background-color: var(--system-accent-color, --c-primary);
+          color: var(--system-accent-color-contrast, white);
+        }
+      }
+
+      div.filename div.date { background-color: rgb(230, 230, 230); }
+
+      div.meta-info {
+        .badge {
+          &.code-indicator {
+            background-color: var(--system-accent-color, --c-primary);
+            color: white;
+          }
+
+          &.tag {
+            background-color: rgba(90, 90, 90, 0.5); // Make those tags a little bit translucent
+            color: rgb(240, 240, 240);
+
+            .color-circle {
+              // If there's a coloured tag in there, display that as well
+              display: inline-block;
+              width: 9px;
+              height: 9px;
+              border: 1px solid white;
+              border-radius: 50%;
+            }
+          }
+
+          svg {
+            display: inline-block;
+            width: 11px;
+            height: 11px;
+            margin: 0;
+
+            circle { fill: rgb(200, 200, 200); }
+            path { fill: rgb(90, 90, 90); }
+          }
+        }
+      }
+    }
+  }
+
+  &.dark {
+    div.list-item-wrapper {
+      div.list-item {
+        border-bottom-color: #505050;
+        background-color: rgb(40, 40, 50);
+
+        &.active {
         background-color: rgb(80, 80, 80);
-        color: rgb(220, 220, 220);
+        div.filename div.date {
+          background-color: rgb(80, 80, 80);
+        }
+      }
+
+        div.filename div.date { background-color: rgb(40, 40, 50); }
+        &.active { background-color: rgb(80, 80, 80); }
+
+        div.meta-info .badge {
+          background-color: rgb(80, 80, 80);
+          color: rgb(220, 220, 220);
+        }
       }
     }
   }

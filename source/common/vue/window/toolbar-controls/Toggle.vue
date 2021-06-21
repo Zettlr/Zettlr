@@ -17,6 +17,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Toggle
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     A button that supports an "on" state.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'ToggleControl',
   props: {

@@ -33,7 +33,7 @@ export default class DirProjectExport extends ZettlrCommand {
     */
   async run (evt: string, arg: any): Promise<boolean> {
     // First get the directory
-    let dir = this._app.findDir(arg.hash)
+    let dir = this._app.findDir(arg.path)
 
     if (dir === null) {
       global.log.error('Could not export project: Directory not found.')

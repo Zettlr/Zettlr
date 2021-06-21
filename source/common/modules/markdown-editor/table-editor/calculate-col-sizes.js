@@ -3,7 +3,7 @@
 * BEGIN HEADER
 *
 * Contains:        Utility function
-* CVM-Role:        <None>
+* CVM-Role:        Utility
 * Maintainer:      Hendrik Erz
 * License:         GNU GPL v3
 *

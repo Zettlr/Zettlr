@@ -13,6 +13,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Time
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Enables users to input a time
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'FieldText',
   props: {

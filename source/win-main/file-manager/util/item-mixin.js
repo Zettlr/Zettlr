@@ -1,12 +1,29 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Item Mixin
+ * CVM-Role:        Utility Function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file contains mixin properties for both the TreeItem and
+ *                  FileItem Vue components, since both -- albeit looking
+ *                  completely different -- implement much of the same functionality.
+ *
+ * END HEADER
+ */
+
 // This is a mixin that is being implemented by both the file item and tree item
 // and contains shared logic that applies to both objects. This way, we have
 // different styling for tree items and file list items, but the same underlying
 // logic, since both represent the same data structures.
-import { ipcRenderer } from 'electron'
 import fileContextMenu from './file-item-context'
 import dirContextMenu from './dir-item-context'
 import PopoverFileProps from './PopoverFileProps'
 import PopoverDirProps from './PopoverDirProps'
+
+const ipcRenderer = window.ipc
 
 export default {
   props: {
@@ -33,7 +50,11 @@ export default {
 
       this.$nextTick(() => {
         this.$refs['name-editing-input'].focus()
-        this.$refs['name-editing-input'].select()
+        // Select from the beginning until the last dot
+        this.$refs['name-editing-input'].setSelectionRange(
+          0,
+          this.$refs['name-editing-input'].value.lastIndexOf('.')
+        )
       })
     }
   },
@@ -61,6 +82,10 @@ export default {
       const middleClick = (event.type === 'mousedown' && event.button === 1)
       const alt = event.altKey
       const type = this.obj.type
+
+      if (middleClick) {
+        event.preventDefault() // Otherwise, on Windows we'd have a middle-click-scroll
+      }
 
       if (type === 'file' && alt) {
         // QuickLook the file
@@ -128,6 +153,12 @@ export default {
               payload: { path: this.obj.path }
             })
               .catch(err => console.error(err))
+          } else if (clickedID === 'menu.close_workspace') {
+            ipcRenderer.invoke('application', {
+              command: 'root-close',
+              payload: this.obj.path
+            })
+              .catch(err => console.error(err))
           } else if (clickedID === 'menu.properties') {
             const data = {
               dirname: this.obj.name,
@@ -182,12 +213,24 @@ export default {
                   }
                 }).catch(e => console.error(e))
               }
+
+              // Set the export formats TODO
             })
           }
         })
       } else {
         fileContextMenu(event, this.obj, this.$el, (clickedID) => {
-          if (clickedID === 'menu.rename_file') {
+          if (clickedID === 'new-tab') {
+            // Request the clicked file, explicitly in a new tab
+            ipcRenderer.invoke('application', {
+              command: 'open-file',
+              payload: {
+                path: this.obj.path,
+                newTab: true
+              }
+            })
+              .catch(e => console.error(e))
+          } else if (clickedID === 'menu.rename_file') {
             this.nameEditing = true
           } else if (clickedID === 'menu.duplicate_file') {
             // The user wants to duplicate this file --> instruct the file list
@@ -200,7 +243,7 @@ export default {
               payload: { path: this.obj.path }
             })
               .catch(err => console.error(err))
-          } else if (clickedID === 'menu.properties') {
+          } else if (clickedID === 'properties') {
             const data = {
               filename: this.obj.name,
               creationtime: this.obj.creationtime,
@@ -243,6 +286,13 @@ export default {
                 }).catch(e => console.error(e))
               }
             })
+          } else if (clickedID === 'menu.close_file') {
+            // The close_file item is only shown in the tree view on root files
+            ipcRenderer.invoke('application', {
+              command: 'root-close',
+              payload: this.obj.path
+            })
+              .catch(err => console.error(err))
           }
         })
       }

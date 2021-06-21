@@ -17,8 +17,9 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import App from './App.vue'
 import createStore from './store'
-import { ipcRenderer } from 'electron'
 import PopupProvider from './popup-provider'
+
+const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
 // The first thing we have to do is run the window controller
 windowRegister()
@@ -48,11 +49,14 @@ document.addEventListener('drop', (event) => {
   // Retrieve all paths
   let f = []
   for (let i = 0; i < event.dataTransfer.files.length; i++) {
-    f.push(event.dataTransfer.files.item(i)?.path)
+    const file = event.dataTransfer.files.item(i)
+    if (file !== null) {
+      f.push(file.path)
+    }
   }
-  console.log('The user dropped some files onto the main window, but the handler is not yet implemented.')
-  console.log(f)
-  // this._renderer.handleDrop(f)
+
+  ipcRenderer.invoke('application', { command: 'handle-drop', payload: f })
+    .catch(e => console.error(e))
   return false
 }, false)
 
@@ -131,7 +135,6 @@ ipcRenderer.invoke('tag-provider', { command: 'get-tags-database' })
 let filetreeUpdateLock = false
 let openDirectoryLock = false
 let activeFileUpdateLock = false
-let openFilesUpdateLock = false
 // Listen for broadcasts from main in order to update the filetree
 ipcRenderer.on('fsal-state-changed', (event, kind: string) => {
   if (kind === 'filetree') {
@@ -162,14 +165,8 @@ ipcRenderer.on('fsal-state-changed', (event, kind: string) => {
       .catch(e => console.error(e))
       .finally(() => { activeFileUpdateLock = false })
   } else if (kind === 'openFiles') {
-    if (openFilesUpdateLock) {
-      return
-    }
-
-    openFilesUpdateLock = true
     app.$store.dispatch('updateOpenFiles')
       .catch(e => console.error(e))
-      .finally(() => { openFilesUpdateLock = false })
   }
 })
 
@@ -177,7 +174,6 @@ ipcRenderer.on('fsal-state-changed', (event, kind: string) => {
 filetreeUpdateLock = true
 openDirectoryLock = true
 activeFileUpdateLock = true
-openFilesUpdateLock = true
 app.$store.dispatch('filetreeUpdate')
   .catch(e => console.error(e))
   .finally(() => { filetreeUpdateLock = false })
@@ -189,4 +185,3 @@ app.$store.dispatch('updateActiveFile')
   .finally(() => { activeFileUpdateLock = false })
 app.$store.dispatch('updateOpenFiles')
   .catch(e => console.error(e))
-  .finally(() => { openFilesUpdateLock = false })

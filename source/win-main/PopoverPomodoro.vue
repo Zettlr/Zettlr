@@ -1,10 +1,9 @@
 <template>
   <div>
-    <h4>{{ pomodoroTitle }}</h4>
     <template v-if="isRunning">
       <!-- Display running time -->
       <p class="pomodoro-big">
-        {{ elapsedTimeFormatted }}
+        {{ remainingTimeFormatted }}
       </p>
       <p class="pomodoro-big">
         {{ currentPhaseLabel }}
@@ -49,10 +48,24 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Pomodoro Popover
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file controls the pomodoro timer popover.
+ *
+ * END HEADER
+ */
+
 import NumberControl from '../common/vue/form/elements/Number'
 import SelectControl from '../common/vue/form/elements/Select'
 import SliderControl from '../common/vue/form/elements/Slider'
-import { trans } from '../common/i18n'
+import { trans } from '../common/i18n-renderer'
 
 export default {
   name: 'PopoverExport',
@@ -85,15 +98,24 @@ export default {
         volume: this.volume / 100
       }
     },
-    elapsedTimeFormatted: function () {
-      const minutes = Math.floor(this.elapsed / 60)
-      const seconds = this.elapsed % 60
+    remainingTimeFormatted: function () {
+      let timeRemaining = this.elapsed
+      switch (this.currentPhase) {
+        case 'task':
+          timeRemaining = this.taskDuration * 60 - this.elapsed
+          break
+        case 'short':
+          timeRemaining = this.shortDuration * 60 - this.elapsed
+          break
+        case 'long':
+          timeRemaining = this.longDuration * 60 - this.elapsed
+      }
+
+      const minutes = Math.floor(timeRemaining / 60)
+      const seconds = timeRemaining % 60
       const minStr = (minutes < 10) ? `0${minutes}` : String(minutes)
       const secStr = (seconds < 10) ? `0${seconds}` : String(seconds)
       return `${minStr}:${secStr}`
-    },
-    pomodoroTitle: function () {
-      return trans('toolbar.pomodoro')
     },
     startLabel: function () {
       return trans('pomodoro.start')

@@ -22,6 +22,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Statusbar
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays a statusbar at the bottom of a window.
+ *
+ * END HEADER
+ */
+
 // Regular form button, but a static text display
 import ButtonControl from '../form/elements/Button.vue'
 import TextControl from './toolbar-controls/Text.vue'

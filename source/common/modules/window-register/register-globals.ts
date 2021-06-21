@@ -1,5 +1,22 @@
-import { ipcRenderer } from 'electron'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        registerGlobals
+ * CVM-Role:        Utility function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This utility function registers necessary globals inside the
+ *                  renderer; notably the configuration getters and setters so
+ *                  that every file running in a BrowserWindow can access config
+ *                  variables and other providers.
+ *
+ * END HEADER
+ */
+
 import applicationMenuHelper from './application-menu-helper'
+const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
 export default function registerGlobals (): void {
   // Register globals

@@ -20,6 +20,10 @@ The idea of "transitive files" we implemented in previous iterations of Zettlr p
 
 A few years ago we implemented auto-saving after a delay of five seconds with no change to the current file. However, that feature was always a little bit counter-intuitive. Instead, the new Zettlr version removes auto-saving and re-instates manual saving (since the "Save" menu option was never gone). We did this for several reasons. First, Zettlr is first and foremost a text editor working with files on your computer, so you are used to having to save files manually, and Zettlr should've never deviated from that. Furthermore, if we would implement a data-safe autosaving ability, this would put unnecessary strain on your computer's hard drive. Thus we opted for the traditional way and thus you need to manually save changes to files now. We found during beta that this is much more consistent and easy to work with.
 
+## Custom CSS has moved
+
+The Custom CSS can now be edited directly in the assets dialog where you can also edit your defaults files.
+
 ## GUI and Functionality
 
 - **Feature**: Switched the Exporting process in a way that allows more flexibility in setting options.
@@ -37,6 +41,7 @@ A few years ago we implemented auto-saving after a delay of five seconds with no
 - Some components of the renderer elements will now respect a given accent colour set by your operating system (only available for macOS and Windows).
 - You can now close files by middle-clicking their tabs.
 - MDX supported as a type of markdown file
+- New File and Edit File can now fast rename without selecting the extension
 
 ## Under the Hood
 
@@ -63,6 +68,21 @@ A few years ago we implemented auto-saving after a delay of five seconds with no
 - Zettlr is now completely jQuery-free.
 - Migrated the FSAL cache from unstable Objects to Maps and Sets.
 - Migrated the TagProvider to a Map as well.
+
+# 1.8.8
+
+## HOTFIX FOR ELECTRON CVEs
+
+This is a hotfix that updates a vulnerable Electron version to a safe one. This
+is in response to a row of CVEs that have been detected in the source code of
+Chromium in the past days. With an outdated Electron-version (<12.0.6), it was
+possible for an attacker to take over your computer via Zettlr using a crafted
+HTML webpage.
+
+This release fixes Zettlr 1.8.7, which was vulnerable to this kind of attack. It
+upgrades Electron from a vulnerable 11.x.x-version to the safe version 12.0.6.
+
+> **DO NO LONGER USE ZETTLR 1.8.7! RELEASES PRIOR TO 1.8.8 MUST BE REGARDED AS UNSAFE!**
 
 # 1.8.7
 

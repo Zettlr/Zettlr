@@ -28,15 +28,15 @@ export default class FileClose extends ZettlrCommand {
   async run (evt: string, arg: any): Promise<boolean> {
     if (evt === 'file-close-all') {
       // The renderer wants to close not just one, but all open files
-      this._app.getFileSystem().closeAllFiles()
-      this._app.getFileSystem().activeFile = null
+      this._app.getDocumentManager().closeAllFiles()
+      this._app.getDocumentManager().activeFile = null
       return true
     }
 
     // Close one specific file
     try {
-      const file = this._app.getFileSystem().findFile(arg)
-      if (file === null) {
+      const file = this._app.getDocumentManager().openFiles.find(elem => elem.path === arg)
+      if (file === undefined) {
         return false
       }
 
@@ -48,9 +48,9 @@ export default class FileClose extends ZettlrCommand {
         // 1 = 'Save changes'
         if (result.response === 0) {
           // Clear the modification flag
-          this._app.getFileSystem().markClean(file)
+          this._app.getDocumentManager().markClean(file)
           // Mark the whole application as clean if applicable
-          this._app.setModified(!this._app.getFileSystem().isClean())
+          this._app.setModified(!this._app.getDocumentManager().isClean())
         } else {
           // Don't close the file
           global.log.info('[Command] Not closing file, as the user did not want that.')
@@ -60,20 +60,20 @@ export default class FileClose extends ZettlrCommand {
 
       // If we're here the user really wants to close the file.
       // Get the index of the next open file so that we can switch the active one.
-      const openFiles = this._app.getFileSystem().openFiles
-      const currentIdx = openFiles.findIndex(filePath => filePath === file.path)
+      const openFiles = this._app.getDocumentManager().openFiles
+      const currentIdx = openFiles.indexOf(file)
 
-      if (this._app.getFileSystem().activeFile === file.path) {
+      if (this._app.getDocumentManager().activeFile === file && openFiles.length > 1) {
         if (currentIdx === 0) {
-          const nextFile = this._app.getFileSystem().findFile(openFiles[currentIdx + 1])
-          this._app.getFileSystem().activeFile = (nextFile === null) ? null : nextFile.path
+          const nextFile = openFiles[currentIdx + 1]
+          this._app.getDocumentManager().activeFile = (nextFile === null) ? null : nextFile
         } else {
-          const prevFile = this._app.getFileSystem().findFile(openFiles[currentIdx - 1])
-          this._app.getFileSystem().activeFile = (prevFile === null) ? null : prevFile.path
+          const prevFile = openFiles[currentIdx - 1]
+          this._app.getDocumentManager().activeFile = (prevFile === null) ? null : prevFile
         }
       }
 
-      if (!this._app.getFileSystem().closeFile(file)) {
+      if (!this._app.getDocumentManager().closeFile(file)) {
         throw new Error('Could not close file!')
       }
 

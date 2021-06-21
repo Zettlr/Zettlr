@@ -1,4 +1,22 @@
-import { ipcRenderer } from 'electron'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Application Menu helper
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file controls two types of menus: The menu bar which is
+ *                  shown on non-macOS platforms and the context menus. On macOS
+ *                  this file will not show a custom context menu but rather
+ *                  forward the menu template to the main process to render a
+ *                  native context menu.
+ *
+ * END HEADER
+ */
+
+const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
 // This function displays a custom styled popup menu at the given coordinates
 export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[], callback: Function): Function {
@@ -17,6 +35,28 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
     targetRect.top = (position as Point).y
     targetRect.left = (position as Point).x
   }
+
+  if (process.platform === 'darwin') {
+    // NOTE: On macOS, we don't want the custom styled menus, but rather we want
+    // the native context menus (since the custom styled menus are only
+    // necessary on those platforms where you have a menu bar we have to manage)
+    ipcRenderer.invoke('menu-provider', {
+      command: 'display-native-context-menu',
+      payload: {
+        menu: items,
+        x: targetRect.left,
+        y: targetRect.top
+      }
+    })
+      .then(clickedID => {
+        // If the user did click a menu item, notify the caller
+        if (clickedID !== undefined) {
+          callback(clickedID)
+        }
+      })
+      .catch(err => { console.error(err) })
+    return () => { /* Noop-function, since no cleanup is required */ }
+  } // END darwin specific code
 
   // We have just received a serialized submenu which we should now display
   const appMenu = document.createElement('div')

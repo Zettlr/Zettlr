@@ -20,6 +20,7 @@
           type="search"
           placeholder="Filter …"
           v-on:focus="$event.target.select()"
+          v-on:blur="activeDescriptor = null"
         />
       </div>
       <template v-if="getFilteredDirectoryContents.length === 0">
@@ -37,7 +38,7 @@
         performance incredibly!
         -->
         <RecycleScroller
-          v-slot="{ item }"
+          v-slot="{ item, index }"
           v-bind:items="getFilteredDirectoryContents"
           v-bind:item-size="itemHeight"
           v-bind:emit-update="true"
@@ -47,6 +48,7 @@
           <FileItemMock
             v-if="item.mock !== undefined && item.mock === true"
             v-bind:obj="item.props"
+            v-bind:index="index"
             v-on:submit="handleOperationFinish($event)"
             v-on:cancel="handleOperationFinish('')"
           >
@@ -55,6 +57,7 @@
             v-else
             v-bind:obj="item.props"
             v-bind:active-file="activeDescriptor"
+            v-bind:index="index"
             v-on:duplicate="startOperation('duplicate', item.id)"
             v-on:create-file="startOperation('createFile', item.id)"
             v-on:create-dir="startOperation('createDir', item.id)"
@@ -93,14 +96,30 @@
 </template>
 
 <script>
-import { trans } from '../../common/i18n'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        FileList
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component renders the contents of a single directory as
+ *                  a flat list.
+ *
+ * END HEADER
+ */
+
+import { trans } from '../../common/i18n-renderer'
 import tippy from 'tippy.js'
 import FileItem from './file-item'
 import FileItemMock from './file-item-mock'
 import { RecycleScroller } from 'vue-virtual-scroller'
-import { ipcRenderer } from 'electron'
 import generateFileName from '../../common/util/generate-filename'
 import objectToArray from '../../common/util/object-to-array'
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'FileList',
@@ -568,15 +587,19 @@ body {
 }
 
 body.darwin {
-  #file-list #file-manager-filter {
-    background-color: rgb(230, 230, 230);
-    height: 30px;
-    padding: 4px;
+  #file-list {
+    background-color: white;
 
-    #file-manager-filter-input {
-      width: 100%;
-      font-size: 11px;
-      height: calc(30px - 8px);
+    #file-manager-filter {
+      background-color: rgb(230, 230, 230);
+      height: 30px;
+      padding: 4px;
+
+      #file-manager-filter-input {
+        width: 100%;
+        font-size: 11px;
+        height: calc(30px - 8px);
+      }
     }
   }
 

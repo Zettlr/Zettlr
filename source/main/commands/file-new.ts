@@ -13,7 +13,7 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { trans } from '../../common/i18n'
+import { trans } from '../../common/i18n-main'
 import path from 'path'
 import sanitize from 'sanitize-filename'
 import { filetypes as ALLOWED_FILETYPES } from '../../common/data.json'
@@ -26,7 +26,7 @@ const CODEFILE_TYPES = [
 
 export default class FileNew extends ZettlrCommand {
   constructor (app: any) {
-    super(app, 'file-new')
+    super(app, [ 'file-new', 'new-unsaved-file' ])
   }
 
   /**
@@ -36,6 +36,14 @@ export default class FileNew extends ZettlrCommand {
    * @return {void}     This function does not return anything.
    */
   async run (evt: string, arg: any): Promise<void> {
+    if (evt === 'new-unsaved-file') {
+      // We should simply create a new unsaved file that only resides in memory
+      const file = await this._app.getDocumentManager().newUnsavedFile()
+      // Set it as active
+      this._app.getDocumentManager().activeFile = file
+      return
+    }
+
     let dir = this._app.getFileSystem().findDir(arg.path)
 
     if (dir === null) {

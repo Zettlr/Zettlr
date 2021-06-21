@@ -90,6 +90,7 @@
           v-if="field.type === 'list'"
           v-bind:key="f_idx"
           v-bind:value="getModelValue(field.model)"
+          v-bind:label="field.label"
           v-bind:labels="field.labels"
           v-bind:name="field.model"
           v-bind:deletable="field.deletable"
@@ -119,6 +120,23 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Form
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component enables complex forms to be instantiated on a
+ *                  schema-basis. This means: You define a simple schema, and
+ *                  all markup will be handled by this component. See the
+ *                  preferences window for a complete example.
+ *
+ * END HEADER
+ */
+
 // Reference for how to do all this stuff dynamically:
 // https://css-tricks.com/creating-vue-js-component-instances-programmatically/
 
@@ -197,7 +215,9 @@ body.linux {
 
   input, select, textarea, button {
     border-radius: 4px;
-    padding: 8px;
+    padding: 4px;
+    border-width: 1px;
+    border-color: rgb(180, 180, 180);
   }
 
   button {

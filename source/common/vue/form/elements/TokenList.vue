@@ -25,6 +25,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        TokenList
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Implements a token list (similar to, e.g., tag inputs in Wordpress).
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'TokenList',
   props: {

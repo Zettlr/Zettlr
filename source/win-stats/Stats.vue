@@ -27,22 +27,42 @@
         v-if="currentTab === 1"
         v-bind:word-counts="wordCounts"
       ></ChartView>
+      <FSALView
+        v-if="currentTab === 2"
+      ></FSALView>
     </div>
   </WindowChrome>
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Stats
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     The Statistics window app entry component.
+ *
+ * END HEADER
+ */
+
 import WindowChrome from '../common/vue/window/Chrome.vue'
 import CalendarView from './CalendarView.vue'
 import ChartView from './ChartView.vue'
+import FSALView from './FSALView.vue'
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'Stats',
   components: {
     WindowChrome,
     CalendarView,
-    ChartView
+    ChartView,
+    FSALView
   },
   data: function () {
     return {
@@ -59,6 +79,12 @@ export default {
           controls: 'tab-charts',
           id: 'tab-charts-control',
           icon: 'line-chart'
+        },
+        {
+          label: 'FSAL Stats', // TODO: Translate
+          controls: 'tab-fsal',
+          id: 'tab-fsal-control',
+          icon: 'file-group'
         }
       ],
       // After the data has been loaded, it will contain the following

@@ -112,7 +112,22 @@
 </template>
 
 <script>
-import { trans } from '../common/i18n'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        ProjectsTab
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component simply offers some explanation to the "bigger"
+ *                  projects Zettlr uses under the hood.
+ *
+ * END HEADER
+ */
+
+import { trans } from '../common/i18n-renderer'
 
 export default {
   name: 'ProjectsTab',

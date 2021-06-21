@@ -1,39 +1,49 @@
-/**
- * @ignore
- * BEGIN HEADER
- *
- * Contains:        FileItem Vue component.
- * CVM-Role:        View
- * Maintainer:      Hendrik Erz
- * License:         GNU GPL v3
- *
- * Description:     Controls a single file list item.
- *
- * END HEADER
- */
 <template>
   <div
     v-bind:class="{
-      'list-item': true,
-      'has-meta-info': fileMeta,
-      'directory': obj.type === 'directory'
+      'list-item-wrapper': true,
+      'odd': index % 2 === 1,
+      'even': index % 2 === 0
     }"
   >
-    <div class="filename">
-      <input
-        ref="name-input"
-        type="text"
-        v-bind:value="obj.name"
-        v-on:keyup.enter="$emit('submit', $event.target.value)"
-        v-on:keyup.esc="$emit('cancel')"
-        v-on:blur="$emit('cancel')"
-        v-on:click.stop=""
-      >
+    <div
+      v-bind:class="{
+        'list-item': true,
+        'has-meta-info': fileMeta
+      }"
+    >
+      <div class="filename">
+        <input
+          ref="name-input"
+          type="text"
+          v-bind:value="obj.name"
+          v-on:keyup.enter="$emit('submit', $event.target.value)"
+          v-on:keyup.esc="$emit('cancel')"
+          v-on:blur="$emit('cancel')"
+          v-on:click.stop=""
+        >
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Mock FileItem
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     It looks like a file item, but it isn't: This component is
+ *                  being rendered whenever a new file or directory is being
+ *                  created in the file list. Basically a glorified text input.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'FileMockItem',
   // Bind the actual object to the container
@@ -61,7 +71,11 @@ export default {
   methods: {
     focusInput: function () {
       this.$refs['name-input'].focus()
-      this.$refs['name-input'].select()
+      // Select from the beginning until the last dot
+      this.$refs['name-input'].setSelectionRange(
+        0,
+        this.$refs['name-input'].value.lastIndexOf('.')
+      )
     }
   }
 }

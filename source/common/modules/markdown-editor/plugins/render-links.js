@@ -1,5 +1,17 @@
 /* global define CodeMirror */
-// This plugin renders markdown inline links
+/**
+  * @ignore
+  * BEGIN HEADER
+  *
+  * Contains:        Link rendering Plugin
+  * CVM-Role:        CodeMirror Plugin
+  * Maintainer:      Hendrik Erz
+  * License:         GNU GPL v3
+  *
+  * Description:     This plugin renders links and makes them clickable.
+  *
+  * END HEADER
+  */
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
@@ -31,7 +43,7 @@
     // We'll only render the viewport
     const viewport = cm.getViewport()
     for (let i = viewport.from; i < viewport.to; i++) {
-      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
+      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
       // Always reset lastIndex property, because test()-ing on regular
       // expressions advance it.
       linkRE.lastIndex = 0
@@ -168,6 +180,7 @@
           regularLinkCaption = regularLinkCaption.replace(/\s_([^_]+?)_/g, ' <em>$1</em>')
           regularLinkCaption = regularLinkCaption.replace(/^_([^_]+?)_/, '<em>$1</em>')
           regularLinkCaption = regularLinkCaption.replace(/~~([^~]+?)~~/g, '<del>$1</del>')
+          regularLinkCaption = regularLinkCaption.replace(/`([^`]+?)`/g, '<code>$1</code>')
           if (/^!\[.+\]\(.+\)$/.test(regularLinkCaption)) {
             regularLinkCaption = regularLinkCaption.replace(/^!\[(.*)\]\((.+)\)$/, '<img src="$2" title="$1">')
           }
@@ -183,8 +196,12 @@
         let tk = cm.getTokenAt(curFrom, true).type
         if (tk) {
           tk = tk.split(' ')
-          if (tk.includes('strong')) a.style.fontWeight = 'bold'
-          if (tk.includes('em')) a.style.fontStyle = 'italic'
+          if (tk.includes('strong')) {
+            a.style.fontWeight = 'bold'
+          }
+          if (tk.includes('em')) {
+            a.style.fontStyle = 'italic'
+          }
         }
 
         // Apply TextMarker

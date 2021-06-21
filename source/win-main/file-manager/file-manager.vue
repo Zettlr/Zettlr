@@ -1,16 +1,3 @@
-/**
- * @ignore
- * BEGIN HEADER
- *
- * Contains:        File manager Vue Component
- * CVM-Role:        View
- * Maintainer:      Hendrik Erz
- * License:         GNU GPL v3
- *
- * Description:     Controls the file manager logic.
- *
- * END HEADER
- */
 <template>
   <div
     id="file-manager"
@@ -58,9 +45,19 @@
 </template>
 
 <script>
-// Please do not ask me why I have to explicitly use the "default" property
-// of some modules, but not others. The vue-loader is a mess when used with
-// ES6 CommonJS-modules in a exports/require-environment.
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        File manager Vue Component
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Controls the file manager logic.
+ *
+ * END HEADER
+ */
 import findObject from '../../common/util/find-object'
 import FileTree from './file-tree.vue'
 import FileList from './file-list.vue'
@@ -375,40 +372,44 @@ export default {
 
 <style lang="less">
 body #file-manager {
-    // display: inline-block;
-    // position: relative;
+  // display: inline-block;
+  // position: relative;
+  width: 100%;
+  height: 100%;
+
+  #component-container {
+    overflow-x: hidden;
+    overflow-y: hidden; // TODO: Due to everything being relative right now, the component container is file-tree + file-list high
+    position: relative;
     width: 100%;
     height: 100%;
+  } // End component container
 
-    #component-container {
-      overflow-x: hidden;
-      overflow-y: hidden; // TODO: Due to everything being relative right now, the component container is file-tree + file-list high
-      position: relative;
-      width: 100%;
-      height: 100%;
-    } // End component container
+  &.expanded {
+    #file-tree, #file-list { width: 50%; }
+    #file-list, #file-list.hidden { left: 50%; }
+    #file-tree, #file-tree.hidden { left: 0%; }
+  }
 
-    &.expanded {
-        #file-tree, #file-list { width: 50%; }
-        #file-list, #file-list.hidden { left: 50%; }
-        #file-tree, #file-tree.hidden { left: 0%; }
-    }
+  // File manager arrow button
+  #arrow-button {
+    line-height: 25px;
+    text-align: center;
+    vertical-align: middle;
+    background-color: white;
+    border-radius: 100%;
+    box-shadow: 1px 1px 10px 0px rgba(0, 0, 0, .25);
+    z-index: 400;
 
-    #arrow-button {
-        line-height: 25px;
-        text-align: center;
-        vertical-align: middle;
-        z-index: 400;
+    position: absolute;
+    top: 50px;
+    left: 10px;
+    width: 30px;
+    height: 30px;
+    transition: 0.4s left ease;
 
-        position: absolute;
-        top: 50px;
-        left: 10px;
-        width: 30px;
-        height: 30px;
-        transition: 0.4s left ease;
-
-        &.hidden { left:-60px; }
-    }
+    &.hidden { left:-60px; }
+  }
 }
 
 body.dark #file-manager {

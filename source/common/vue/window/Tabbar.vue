@@ -28,6 +28,22 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Tabbar
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays a "big" tabbar which normally looks different to
+ *                  regular tabs, since it separates several full views instead
+ *                  of, e.g., document tabs.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'SystemTabs',
   props: {
@@ -179,7 +195,7 @@ body.linux {
     height: 30px;
     justify-content: center;
     list-style-type: none;
-    background-color: white;
+    background-color: rgb(240, 240, 240); // Same colour as titlebar
     color: var(--grey-4);
     padding-bottom: 0px;
 
@@ -188,7 +204,7 @@ body.linux {
       padding: 2px 6px;
       border-radius: 0px;
       background-color: transparent;
-      border-right: 1px solid rgb(230, 230, 230);
+      border-right: 1px solid rgb(210, 210, 210);
 
       &:last-child {
         border-right: none;

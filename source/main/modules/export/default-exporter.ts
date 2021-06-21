@@ -1,4 +1,16 @@
-// DEFAULT exporter plugin
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Default exporter plugin
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This plugin facilitates exports in most formats Pandoc supports.
+ *
+ * END HEADER
+ */
 
 import commandExists from 'command-exists'
 import path from 'path'
@@ -23,7 +35,8 @@ export const plugin: ExporterPlugin = {
         'org': 'Orgmode',
         'plain': 'Plain Text',
         'rst': 'reStructured Text',
-        'rtf': 'RichText Format'
+        'rtf': 'RichText Format',
+        'icml': 'InDesign Markup Language (ICML)'
       },
       options: []
     }

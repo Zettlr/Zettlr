@@ -25,9 +25,14 @@ export default class RootClose extends ZettlrCommand {
    * @param  {Object} arg The hash of a root directory or file.
    */
   async run (evt: string, arg: any): Promise<boolean> {
-    let root = this._app.getFileSystem().find(arg)
+    const root = this._app.getFileSystem().find(arg)
     if (root === null) {
       global.log.error(`Cannot close root identified by ${arg as string}: Not found.`)
+      return false
+    }
+
+    if (root.type === 'other') {
+      global.log.warning(`Called root-close but passed the path of a non-Markdown file: ${arg as string}`)
       return false
     }
 

@@ -1,5 +1,13 @@
 <template>
-  <div id="editor" ref="editor" v-bind:style="{ 'font-size': `${fontSize}px` }">
+  <div
+    id="editor"
+    ref="editor"
+    v-bind:style="{ 'font-size': `${fontSize}px` }"
+    v-on:wheel="onEditorScroll($event)"
+    v-on:mousedown="editorMousedown($event)"
+    v-on:mouseup="editorMouseup($event)"
+    v-on:mousemove="editorMousemove($event)"
+  >
     <div v-show="showSearch" id="editor-search">
       <div class="row">
         <input
@@ -12,12 +20,16 @@
           v-on:keypress.shift.enter.exact="searchPrevious()"
         >
         <button
+          title="Toggle regular expression search"
           v-bind:class="{ 'active': regexpSearch }"
           v-on:click="toggleQueryRegexp()"
         >
           <clr-icon shape="regexp"></clr-icon>
         </button>
-        <button v-on:click="showSearch = false">
+        <button
+          title="Hide search"
+          v-on:click="showSearch = false"
+        >
           <clr-icon shape="times"></clr-icon>
         </button>
       </div>
@@ -31,10 +43,16 @@
           v-on:keypress.shift.enter.exact="replacePrevious()"
           v-on:keypress.alt.enter.exact="replaceAll()"
         >
-        <button v-on:click="replaceNext()">
+        <button
+          title="Replace this occurrence"
+          v-on:click="replaceNext()"
+        >
           <clr-icon shape="two-way-arrows"></clr-icon>
         </button>
-        <button v-on:click="replaceAll()">
+        <button
+          title="Replace all occurrences"
+          v-on:click="replaceAll()"
+        >
           <clr-icon shape="step-forward-2"></clr-icon>
         </button>
       </div>
@@ -44,12 +62,28 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Editor
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This displays the main editor for the app. It uses the
+ *                  MarkdownEditor class to implement the full CodeMirror editor.
+ *
+ * END HEADER
+ */
+
 import countWords from '../common/util/count-words'
 import MarkdownEditor from '../common/modules/markdown-editor'
 import CodeMirror from 'codemirror'
 import { util as citrUtil, parseSingle } from '@zettlr/citr'
 import objectToArray from '../common/util/object-to-array'
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'Editor',
@@ -73,7 +107,8 @@ export default {
       replaceString: '', // Models the replace string
       findTimeout: undefined, // Holds a timeout so that not every single keypress results in a searchNext
       // END: Search options
-      activeDocument: null // Almost like activeFile, only with additional info
+      activeDocument: null, // Almost like activeFile, only with additional info
+      anchor: undefined
     }
   },
   computed: {
@@ -113,6 +148,7 @@ export default {
           imagePreviewHeight: this.$store.state.config['display.imageHeight'],
           markdownBoldFormatting: this.$store.state.config['editor.boldFormatting'],
           markdownItalicFormatting: this.$store.state.config['editor.italicFormatting'],
+          scrollZoom: this.$store.state.config['editor.scrollZoom'],
           zettelkasten: {
             idRE: this.$store.state.config['zkn.idRE'],
             idGen: this.$store.state.config['zkn.idGen'],
@@ -146,8 +182,6 @@ export default {
       const tree = this.$store.state.fileTree
       const files = []
 
-      console.time('File allocation')
-
       for (const item of tree) {
         if (item.type === 'directory') {
           const contents = objectToArray(item, 'children').filter(descriptor => descriptor.type === 'file')
@@ -156,8 +190,6 @@ export default {
           files.push(item)
         }
       }
-
-      console.timeEnd('File allocation')
 
       return files
     }
@@ -208,7 +240,6 @@ export default {
     fsalFiles: function () {
       const fileDatabase = {}
 
-      console.time('Database allocation')
       for (let file of this.fsalFiles) {
         let fname = file.name.substr(0, file.name.lastIndexOf('.'))
         let displayText = fname // Fallback: Only filename
@@ -231,12 +262,10 @@ export default {
           'id': file.id
         }
       }
-      console.timeEnd('Database allocation')
 
       this.editor.setCompletionDatabase('files', fileDatabase)
     },
     activeFile: function () {
-      console.log('Active file changed')
       if (this.editor === null) {
         console.error('Received a file update but the editor was not yet initiated!')
         return
@@ -358,6 +387,10 @@ export default {
           this.$refs['search-input'].focus()
           this.searchNext()
         })
+      } else if (newValue === false) {
+        // Always "stopSearch" if the input is not shown, since this will clear
+        // out, e.g., the matches on the scrollbar
+        this.editor.stopSearch()
       }
     }
   },
@@ -441,6 +474,15 @@ export default {
     this.$root.$on('toc-line', (line) => {
       this.editor.jtl(line)
     })
+
+    // Finally, let's observe if the editor element changes. If so, refresh the
+    // editor. This will keep the cursor correct when the SplitViews are either
+    // opened/closed or resized.
+    const obs = new ResizeObserver(entries => {
+      this.editor.codeMirror.refresh()
+    })
+
+    obs.observe(this.$refs.editor)
   },
   methods: {
     jtl (lineNumber) {
@@ -492,10 +534,15 @@ export default {
       const citations = citrUtil.extractCitations(value)
       const keys = []
       for (const citation of citations) {
-        const cslArray = parseSingle(citation)
-
-        for (const csl of cslArray) {
-          keys.push(csl.id)
+        try {
+          const cslArray = parseSingle(citation)
+          for (const csl of cslArray) {
+            keys.push(csl.id)
+          }
+        } catch (err) {
+          // If an invalid citation was passed, make sure to include the rest
+          // either way. But log the error just in case.
+          console.error(err)
         }
       }
       this.$store.commit('updateCitationKeys', keys)
@@ -539,6 +586,75 @@ export default {
     },
     replaceAll () {
       this.editor.replaceAll(this.query, this.replaceString)
+    },
+    /**
+     * Scrolls the editor according to the value if the user scrolls left of the
+     * .CodeMirror-scroll element
+     *
+     * @param   {WheelEvent}  event  The mousewheel event
+     */
+    onEditorScroll (event) {
+      if (event.target !== this.$refs.editor) {
+        return // Only handle if the event's target is the editor itself
+      }
+
+      const scroller = this.$refs.editor.querySelector('.CodeMirror-scroll')
+
+      if (scroller !== null) {
+        scroller.scrollTop += event.deltaY
+      }
+    },
+    /**
+     * Triggers when the user presses any mouse button
+     *
+     * @param   {MouseEvent}  event  The mouse event
+     */
+    editorMousedown (event) {
+      // start selecting lines only if we are on the left margin and the left mouse button is pressed
+      if (event.target !== this.$refs.editor || event.button !== 0) {
+        return
+      }
+
+      // set the start point of the selection to be where the mouse was clicked
+      this.anchor = this.editor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY })
+
+      // set the end point to be the same y coordinate as the start point and add the width of client page
+      // to get the end of the line. Couldn't find a way from CodeMirror to get the end of the line
+      // as they treat every line as the whole paragraph
+      let endPoint = this.editor.codeMirror.coordsChar({ left: event.pageX + this.$refs.editor.clientWidth, top: event.pageY })
+
+      // apply the selection of a single line that corresponds to where the mouse was clicked
+      this.editor.codeMirror.setSelection(this.anchor, endPoint)
+
+      // if the mouse is still clicked and moved down or up, change the selection to include the new lines
+    },
+
+    editorMousemove (event) {
+      if (this.anchor === undefined) {
+        return
+      }
+      // get the point where the mouse has moved
+      const addPoint = this.editor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY })
+      // use the original start point where the mouse first was clicked
+      // and change the end point to where the mouse has moved so far
+      this.editor.codeMirror.setSelection(this.anchor, addPoint)
+    },
+    /**
+     * Triggers when the user releases any mouse button
+     *
+     * @param   {MouseEvent}  event  The mouse event
+     */
+    editorMouseup (event) {
+      // we have commented this if condition because when the user presses the mouse from the
+      // left margin and goes inside this.$refs.editor and releases, the event of mouse release
+      // is not handled
+
+      // if (event.target !== this.$refs.editor) {
+      //   return
+      // }
+
+      // when the mouse is released, set anchor to undefined to stop adding lines
+      this.anchor = undefined
     }
   }
 }
@@ -564,6 +680,8 @@ export default {
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
+  background-color: #ffffff;
+  transition: 0.2s background-color ease;
 
   // .katex {
   //   display: inline-block;
@@ -591,45 +709,52 @@ export default {
     }
   }
 
-    .CodeMirror {
-      // The CodeMirror editor needs to respect the new tabbar; it cannot take
-      // up 100 % all for itself anymore.
-      margin-left: 0.5em;
-      height: 100%;
-      cursor: text;
-      font-family: inherit;
-      background: none;
+  .CodeMirror {
+    // The CodeMirror editor needs to respect the new tabbar; it cannot take
+    // up 100 % all for itself anymore.
+    margin-left: 0.5em;
+    height: 100%;
+    font-family: inherit;
+    // background: none;
 
-      @media(min-width: 1025px) { margin-left: @editor-margin-normal-lg; }
-      @media(max-width: 1024px) { margin-left: @editor-margin-normal-md; }
-      @media(max-width:  900px) { margin-left: @editor-margin-normal-sm; }
-    }
-
-    .CodeMirror-code {
-      margin: 5em 0em;
-      @media(max-width: 1024px) { margin: @editor-margin-fullscreen-md 0em; }
-
-      .mute { opacity:0.2; }
-    }
-
-    .CodeMirror-scroll {
-      padding-right: 5em;
-      @media(min-width: 1025px) { padding-right: @editor-margin-normal-lg; }
-      @media(max-width: 1024px) { padding-right: @editor-margin-normal-md; }
-      @media(max-width:  900px) { padding-right: @editor-margin-normal-sm; }
-      overflow-x: hidden !important; // Necessary to hide the horizontal scrollbar
-
-      // We need to override a negative margin
-      // and a bottom padding from the standard
-      // CSS for some calculations to be correct
-      // such as the table editor
-      margin-bottom: 0px;
-      padding-bottom: 0px;
-    }
-
-    // Reduce font size of math a bit
-    .katex { font-size: 1.1em; }
+    @media(min-width: 1025px) { margin-left: @editor-margin-normal-lg; }
+    @media(max-width: 1024px) { margin-left: @editor-margin-normal-md; }
+    @media(max-width:  900px) { margin-left: @editor-margin-normal-sm; }
   }
+
+  .CodeMirror-code {
+    margin: 5em 0em;
+    @media(max-width: 1024px) { margin: @editor-margin-fullscreen-md 0em; }
+
+    .mute { opacity:0.2; }
+  }
+
+  .CodeMirror-scroll {
+    padding-right: 5em;
+    @media(min-width: 1025px) { padding-right: @editor-margin-normal-lg; }
+    @media(max-width: 1024px) { padding-right: @editor-margin-normal-md; }
+    @media(max-width:  900px) { padding-right: @editor-margin-normal-sm; }
+    overflow-x: hidden !important; // Necessary to hide the horizontal scrollbar
+
+    // We need to override a negative margin
+    // and a bottom padding from the standard
+    // CSS for some calculations to be correct
+    // such as the table editor
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+  }
+
+  .CodeMirror.CodeMirror-readonly {
+    .CodeMirror-cursor { display: none !important; }
+  }
+
+  // Reduce font size of math a bit
+  .katex { font-size: 1.1em; }
+}
+
+body.dark #editor {
+  background-color: rgba(20, 20, 30, 1);
+}
 
 body.darwin #editor {
   // On macOS the tabbar is 30px high.
@@ -660,6 +785,17 @@ body.darwin.dark #editor {
 body.win32 #editor {
   // On Windows, the tab bar is 30px high
   height: calc(100% - 30px);
+
+  div#editor-search {
+    background-color: rgba(230, 230, 230, 1);
+    box-shadow: -2px 2px 4px 1px rgba(0, 0, 0, .3);
+
+    button { max-width: fit-content; }
+    button, input { border-width: 1px; }
+
+    button:hover { background-color: rgb(240, 240, 240); }
+    button.active { background-color: rgb(200, 200, 200) }
+  }
 }
 
 // CodeMirror fullscreen

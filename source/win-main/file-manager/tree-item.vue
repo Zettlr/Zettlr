@@ -1,17 +1,3 @@
-/**
- * @ignore
- * BEGIN HEADER
- *
- * Contains:        TreeItem Vue Component
- * CVM-Role:        View
- * Maintainer:      Hendrik Erz
- * License:         GNU GPL v3
- *
- * Description:     Controls a single sub-tree in the file manager.
- *
- * END HEADER
- */
-
 <template>
   <div
     class="tree-item-container"
@@ -21,7 +7,7 @@
       v-bind:class="{
         'tree-item': true,
         [obj.type]: true,
-        'selected': activeFile === obj || selectedDir === obj,
+        'selected': (activeFile !== null && activeFile.path === obj.path) || (selectedDir !== null && selectedDir.path === obj.path),
         'project': obj.project != null,
         'root': isRoot
       }"
@@ -113,7 +99,7 @@
         v-on:drag="onDragHandler"
       >
         <template v-if="!nameEditing">
-          {{ obj.name }}
+          {{ basename }}
         </template>
         <template v-else>
           <input
@@ -164,11 +150,25 @@
 </template>
 
 <script>
-// Tree View item component
-import { ipcRenderer } from 'electron'
-import path from 'path'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        TreeItem Vue Component
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Controls a single sub-tree in the file manager.
+ *
+ * END HEADER
+ */
+
 import itemMixin from './util/item-mixin'
 import generateFilename from '../../common/util/generate-filename'
+
+const path = window.path
+const ipcRenderer = window.ipc
 
 export default {
   name: 'TreeItem',
@@ -248,6 +248,19 @@ export default {
     },
     indicatorARIALabel: function () {
       return this.collapsed ? 'Uncollapse directory' : 'Collapse directory'
+    },
+    basename: function () {
+      if (this.obj.type === 'directory') {
+        return this.obj.name
+      }
+
+      if (this.obj.frontmatter && this.obj.frontmatter.hasOwnProperty('title')) {
+        return this.obj.frontmatter.title
+      } else if (this.obj.firstHeading && this.$store.state.config['display.useFirstHeadings']) {
+        return this.obj.firstHeading
+      } else {
+        return this.obj.name.replace(this.obj.ext, '')
+      }
     }
   },
   watch: {
@@ -265,7 +278,11 @@ export default {
             this.$refs['new-object-input'].value = generateFilename()
           }
           this.$refs['new-object-input'].focus()
-          this.$refs['new-object-input'].select()
+          // Select from the beginning until the last dot
+          this.$refs['new-object-input'].setSelectionRange(
+            0,
+            this.$refs['new-object-input'].value.lastIndexOf('.')
+          )
         })
       }
     }
@@ -449,6 +466,32 @@ body.darwin {
 }
 
 body.win32 {
+  .tree-item {
+    margin: 8px 0px;
+
+    .item-icon, .toggle-icon {
+      display: inline-block;
+      width: 18px; // Size of clr-icon with the margin of the icon
+    }
+
+    .display-text {
+      font-size: 13px;
+      padding: 3px 5px;
+      overflow: hidden;
+
+      &.highlight {
+        background-color: var(--system-accent-color, --c-primary);
+        color: white;
+      }
+    }
+
+    &.selected .display-text {
+      color: var(--system-accent-color, --c-primary);
+    }
+  }
+}
+
+body.linux {
   .tree-item {
     margin: 8px 0px;
 

@@ -40,6 +40,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Number
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component represents a generic number input
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'FieldNumber',
   props: {

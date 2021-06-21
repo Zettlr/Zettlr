@@ -15,19 +15,25 @@
  */
 
 import Vue from 'vue'
-import { ipcRenderer } from 'electron'
-import path from 'path'
 import Vuex, { Store, StoreOptions } from 'vuex'
-import isAttachment from '../common/util/is-attachment'
+// import isAttachment from '../common/util/is-attachment'
 import sanitizeHtml from 'sanitize-html'
 import md2html from '../common/util/md-to-html'
 import sort from '../main/modules/fsal/util/sort'
 import { MDFileMeta, CodeFileMeta, DirMeta } from '../main/modules/fsal/types'
 
+const path = (window as any).path
+const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
+
 interface FSALEvent {
   event: 'remove'|'add'|'change'
   path: string
   timestamp: number
+}
+
+function isAttachment (p: string): boolean {
+  let ext = global.config.get('attachmentExtensions')
+  return ext.includes(path.extname(p).toLowerCase())
 }
 
 function findPathDescriptor (targetPath: string, tree: any, treatAsAttachment: boolean = false): any|null {
@@ -288,9 +294,13 @@ const config: StoreOptions<ZettlrState> = {
         state.fileTree.push(descriptor)
         // @ts-expect-error TODO: The sorting function currently expects only FSAL descriptors, not metas
         state.fileTree = sort(state.fileTree) // Omit sorting to sort name-up
-      } else {
+      } else if (descriptor.parent != null) {
         const parentPath = descriptor.dir
         const parentDescriptor = findPathDescriptor(parentPath, state.fileTree)
+        if (parentDescriptor === null) {
+          console.warn(`Was about to add descriptor ${String(descriptor.path)} to the filetree, but the parent ${String(parentPath)} was null!`)
+          return
+        }
         if (parentDescriptor.children.find((elem: any) => elem.path === descriptor.path) !== undefined) {
           return // We already have this descriptor, nothing to do.
         } else if (parentDescriptor.attachments.find((elem: any) => elem.path === descriptor.path) !== undefined) {
@@ -298,10 +308,11 @@ const config: StoreOptions<ZettlrState> = {
         }
         descriptor.parent = parentDescriptor // Attach the child to its parent
         if (descriptor.type === 'directory') {
-          reconstructTree(descriptor) // Make sure the parent pointers work correctly
+          // Make sure the parent pointers work correctly even inside this subtree
+          reconstructTree(descriptor)
         }
 
-        if (isAttachment(descriptor.path, true)) {
+        if (isAttachment(descriptor.path)) {
           parentDescriptor.attachments.push(descriptor)
           parentDescriptor.attachments.sort((a: any, b: any) => {
             if (a.name > b.name) {
@@ -316,10 +327,18 @@ const config: StoreOptions<ZettlrState> = {
           parentDescriptor.children.push(descriptor)
           parentDescriptor.children = sort(parentDescriptor.children, parentDescriptor.sorting)
         }
+      } else {
+        // TODO: When we reach this, there's nothing wrong in the filetree, but
+        // I'd like this warning to never be emitted. I currently suspect it's a
+        // race condition because I'm only receiving this with an awful lot of
+        // files, so I guess it has to do with the filetree reconstruction
+        // taking longer until the next event is being received and processed
+        // here.
+        console.warn('[Store] Received event to add a descriptor to the filetree, but it was a root and already present:', descriptor)
       }
     },
     removeFromFiletree: function (state, pathToRemove) {
-      if (isAttachment(pathToRemove, true)) {
+      if (isAttachment(pathToRemove)) {
         const parent = findPathDescriptor(path.dirname(pathToRemove), state.fileTree)
         if (parent === null) {
           return // No descriptor found
@@ -383,27 +402,12 @@ const config: StoreOptions<ZettlrState> = {
       }
     },
     updateActiveFile: function (state, descriptor) {
-      if (descriptor === null) {
-        state.activeFile = null
-      } else {
-        const ownDescriptor = findPathDescriptor(descriptor.path, state.fileTree)
-
-        if (ownDescriptor !== null) {
-          state.activeFile = ownDescriptor
-        }
-      }
+      state.activeFile = descriptor
     },
     updateOpenFiles: function (state, openFiles) {
-      state.openFiles = []
-
-      // TODO: I know we can create a more sophisticated algorithm that only
-      // updates those necessary
-      for (const file of openFiles) {
-        const descriptor = findPathDescriptor(file.path, state.fileTree)
-        if (descriptor !== null) {
-          state.openFiles.push(descriptor)
-        }
-      }
+      console.log('Setting open files ...')
+      Vue.set(state, 'openFiles', openFiles)
+      // state.openFiles = openFiles
     },
     colouredTags: function (state, tags) {
       state.colouredTags = tags
@@ -441,17 +445,13 @@ const config: StoreOptions<ZettlrState> = {
       // account for this. We do so by first sanitizing the events that need
       // to be processed.
       const saneEvents = sanitizeFiletreeUpdates(events)
-      // DEBUG: Somehow, in rare occations, some root directories are added
-      // multiple times. The console output here is intended to help us pin down
-      // that issue.
-      console.log(saneEvents.map(item => `${item.event}: ${item.path} (${item.timestamp})`))
 
       for (const event of saneEvents) {
         if (event.timestamp <= context.state.lastFiletreeUpdate) {
           console.warn('FSAL event had an outdated timestamp -- skipping', event.event, event.path, event.timestamp)
           continue
         }
-        console.log('Processing FSAL event', event.event, event.path, event.timestamp)
+
         // In the end, we also need to update our filetree update timestamp
         context.commit('lastFiletreeUpdate', event.timestamp)
 
@@ -514,27 +514,7 @@ const config: StoreOptions<ZettlrState> = {
     },
     updateOpenFiles: async function (context) {
       const openFiles = await ipcRenderer.invoke('application', { command: 'get-open-files' })
-      const ourDifferentFiles = context.state.openFiles
-
-      if (openFiles.length === ourDifferentFiles.length) {
-        let hasChanged = false
-        for (let i = 0; i < openFiles.length; i++) {
-          if (openFiles[i].path !== ourDifferentFiles[i].path) {
-            hasChanged = true
-            break
-          }
-        }
-
-        if (!hasChanged) {
-          return // No need to update
-        }
-      }
-
       context.commit('updateOpenFiles', openFiles)
-
-      // Again, in case the event hooks don't follow suit with quickly opening
-      // and closing, we need to re-fetch the files from main
-      context.dispatch('updateOpenFiles').catch(e => console.error(e))
     }
   }
 }

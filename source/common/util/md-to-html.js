@@ -1,6 +1,21 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        md2html function
+ * CVM-Role:        Utility function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     md2html converts a Markdown string to valid HTML
+ *
+ * END HEADER
+ */
+
 const { Converter } = require('showdown')
 const Citr = require('@zettlr/citr')
-const { ipcRenderer } = require('electron')
+
+const ipcRenderer = (typeof window !== 'undefined') ? window.ipc : undefined
 
 // Spin up a showdown converter which can be used across the app
 const showdownConverter = new Converter({
@@ -21,22 +36,11 @@ showdownConverter.setFlavor('github')
  * electron shell to prevent them overriding the content of the window.
  *
  * @param   {string}   markdown                   The input Markdown text
- * @param   {boolean}  [rendererSafeLinks=false]  Whether or not to make any <a> tag renderer-safe
  *
  * @return  {string}                              The final HTML string
  */
-module.exports = (markdown, rendererSafeLinks = false) => {
+module.exports = (markdown) => {
   let html = showdownConverter.makeHtml(markdown)
-
-  if (rendererSafeLinks) {
-    const aRE = /<a\s+(.+?)>(.*?)<\/a>/g
-    // These two injected attributes make sure none of these anchors will be
-    // opened within Electron itself.
-    const safetyHandler = 'onclick="require(\'electron\').shell.openExternal(this.getAttribute(\'href\')); return false;"'
-    html = html.replace(aRE, function (match, p1, p2, offset, string) {
-      return `<a ${p1} ${safetyHandler} target="_blank">${p2}</a>`
-    })
-  }
   return html
 }
 

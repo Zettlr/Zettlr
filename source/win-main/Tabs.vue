@@ -1,10 +1,10 @@
 <template>
-  <div id="tab-container" role="tablist">
+  <div id="tab-container" ref="container" role="tablist">
     <div
       v-for="(file, idx) in openFiles"
       v-bind:key="idx"
       v-bind:class="{
-        active: file === activeFile,
+        active: activeFile !== null && file.path === activeFile.path,
         modified: modifiedDocs.includes(file.path)
       }"
       v-bind:title="file.name"
@@ -31,8 +31,23 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Tabs
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component displays the document tabs on top of the editor.
+ *
+ * END HEADER
+ */
+
 import displayTabsContextMenu from './tabs-context'
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'Tabs',
@@ -50,21 +65,31 @@ export default {
       return this.$store.state.config['display.useFirstHeadings']
     }
   },
+  watch: {
+    activeFile: function () {
+      // Make sure the activeFile is in view
+      this.$nextTick(() => {
+        // We must wait until Vue has actually applied the active class to the
+        // new file tab so that our handler retrieves the correct one, not the old.
+        this.scrollActiveFileIntoView()
+      })
+    }
+  },
   mounted: function () {
     // Listen for shortcuts so that we can switch tabs programmatically
     ipcRenderer.on('shortcut', (event, shortcut) => {
-      const currentIdx = this.openFiles.findIndex(elem => elem === this.activeFile)
+      const currentIdx = this.openFiles.findIndex(elem => this.activeFile !== null && elem.path === this.activeFile.path)
       if (shortcut === 'previous-tab') {
         if (currentIdx > 0) {
-          this.handleSelectFile(this.openFiles[currentIdx - 1])
+          this.selectFile(this.openFiles[currentIdx - 1])
         } else {
-          this.handleSelectFile(this.openFiles[this.openFiles.length - 1])
+          this.selectFile(this.openFiles[this.openFiles.length - 1])
         }
       } else if (shortcut === 'next-tab') {
         if (currentIdx < this.openFiles.length - 1) {
-          this.handleSelectFile(this.openFiles[currentIdx + 1])
+          this.selectFile(this.openFiles[currentIdx + 1])
         } else {
-          this.handleSelectFile(this.openFiles[0])
+          this.selectFile(this.openFiles[0])
         }
       } else if (shortcut === 'close-window') {
         // The tab bar has the responsibility to first close the activeFile if
@@ -72,7 +97,11 @@ export default {
         // this window as if the user had clicked on the close-button.
         if (currentIdx > -1) {
           // There's an active file, so request the closure
-          this.handleCloseFile(this.openFiles[currentIdx])
+          ipcRenderer.invoke('application', {
+            command: 'file-close',
+            payload: this.openFiles[currentIdx].path
+          })
+            .catch(e => console.error(e))
         } else {
           // No more open files, so request closing of the window
           ipcRenderer.send('window-controls', { command: 'win-close' })
@@ -81,6 +110,28 @@ export default {
     })
   },
   methods: {
+    scrollActiveFileIntoView: function () {
+      // First, we need to find the tab displaying the active file
+      const elem = this.$refs.container.querySelector('.active')
+      if (elem === null) {
+        return // The container is not yet present
+      }
+      // Then, find out where the element is ...
+      const left = elem.offsetLeft
+      const right = left + elem.getBoundingClientRect().width
+      // ... with respect to the container
+      const leftEdge = this.$refs.container.scrollLeft
+      const containerWidth = this.$refs.container.getBoundingClientRect().width
+      const rightEdge = leftEdge + containerWidth
+
+      if (left < leftEdge) {
+        // The active tab is (partially) hidden to the left -> Decrease scrollLeft
+        this.$refs.container.scrollLeft -= leftEdge - left
+      } else if (right > rightEdge) {
+        // The active tab is (partially) hidden to the right -> Increase scrollLeft
+        this.$refs.container.scrollLeft += right - rightEdge
+      }
+    },
     getTabText: function (file) {
       // Returns a more appropriate tab text based on the user settings
       if (file.type !== 'file') {
@@ -128,6 +179,7 @@ export default {
       if (event.button === 1) {
         // It was a middle-click (auxiliary button), so we should instead close
         // the file.
+        event.preventDefault() // Otherwise, on Windows we'd have a middle-click-scroll
         this.handleClickClose(event, file)
       } else if (event.button === 0) {
         // It was a left-click. (We must check because otherwise we would also
@@ -139,6 +191,13 @@ export default {
         })
           .catch(e => console.error(e))
       }
+    },
+    selectFile: function (file) {
+      ipcRenderer.invoke('application', {
+        command: 'set-active-file',
+        payload: file.path
+      })
+        .catch(e => console.error(e))
     },
     handleContextMenu: function (event, file) {
       displayTabsContextMenu(event, async (clickedID) => {
@@ -431,6 +490,35 @@ body.win32 {
         &.active {
           background-color: rgb(50, 50, 50);
         }
+      }
+    }
+  }
+}
+
+body.linux {
+  div#tab-container {
+    border-bottom: 1px solid rgb(200, 200, 200);
+
+    div[role="tab"] {
+      font-size: 12px;
+      background-color: rgb(235, 235, 235); // Almost same colour as toolbar
+      &:hover { background-color: rgb(200, 200, 200); }
+
+      &:not(:last-child) { border-right: 1px solid rgb(200, 200, 200); }
+      &.active { border-bottom: 3px solid var(--system-accent-color, --c-primary); } // TODO: Which colour?
+      .close { font-size: 18px; }
+    }
+  }
+
+  &.dark {
+    div#tab-container {
+      background-color: rgb(11, 11, 11);
+
+      div[role="tab"] {
+        border-color: rgb(120, 120, 120);
+
+        &:hover { background-color: rgb(53, 53, 53); }
+        &.active { background-color: rgb(50, 50, 50); }
       }
     }
   }

@@ -1,7 +1,21 @@
-const { shell, ipcRenderer } = require('electron')
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        openMarkdownLink function
+ * CVM-Role:        Utility function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This function opens a Markdown link, performing necessary
+ *                  transformations where applicable.
+ *
+ * END HEADER
+ */
+
 const makeValidUri = require('../../util/make-valid-uri')
-const { trans } = require('../../i18n')
-const path = require('path')
+const path = window.path
+const ipcRenderer = window.ipc
 
 const VALID_FILETYPES = require('../../data.json').filetypes
 
@@ -46,18 +60,13 @@ module.exports = function (url, cm) {
       ipcRenderer.invoke('application', {
         command: 'open-file',
         payload: {
-          path: this.obj.path,
+          path: localPath,
           newTab: false
         }
       })
         .catch(e => console.error(e))
     } else {
-      shell.openExternal(validURI).catch((err) => {
-        // Notify the user that we couldn't open the URL
-        if (err) {
-          global.notify(trans('system.error.open_url_error', validURI) + ': ' + err.message)
-        }
-      })
+      window.location.assign(validURI) // Handled by the event listener in the main process
     }
   }
 }

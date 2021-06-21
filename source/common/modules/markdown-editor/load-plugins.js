@@ -1,8 +1,16 @@
-/*
- * This file is only used to keep the main ZettlrEditor class a little bit
- * cleaner. It requires all plugins necessary for CodeMirror to run, but
- * this layers this task out. After all, we've won about 70 lines of less code
- * in the main class.
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Plugin loader
+ * CVM-Role:        <none>
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file requires all necessary CodeMirror plugins, modes
+ *                  and addons.
+ *
+ * END HEADER
  */
 
 // 1. CodeMirror modes
@@ -88,6 +96,7 @@ require('codemirror/addon/hint/show-hint')
 require('./plugins/markdown-shortcuts.js')
 require('./plugins/autocorrect')
 require('./plugins/footnotes.js')
+require('./plugins/smart-go-line.js')
 require('./plugins/render-images.js')
 require('./plugins/render-links.js')
 require('./plugins/render-citations.js')

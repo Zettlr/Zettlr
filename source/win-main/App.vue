@@ -55,6 +55,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        App
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This is the entry component for the main window.
+ *
+ * END HEADER
+ */
+
 import WindowChrome from '../common/vue/window/Chrome'
 import FileManager from './file-manager/file-manager'
 import Sidebar from './Sidebar'
@@ -64,17 +78,20 @@ import GlobalSearch from './GlobalSearch'
 import Editor from './Editor'
 import PopoverExport from './PopoverExport'
 import PopoverStats from './PopoverStats'
+import PopoverTags from './PopoverTags'
 import PopoverPomodoro from './PopoverPomodoro'
 import PopoverTable from './PopoverTable'
-import { trans } from '../common/i18n'
+import { trans } from '../common/i18n-renderer'
 import localiseNumber from '../common/util/localise-number'
 import generateId from '../common/util/generate-id'
-import { ipcRenderer, clipboard } from 'electron'
 
 // Import the sound effects for the pomodoro timer
 import glassFile from './assets/glass.wav'
 import alarmFile from './assets/digital_alarm.mp3'
 import chimeFile from './assets/chime.mp3'
+
+const ipcRenderer = window.ipc
+const clipboard = window.clipboard
 
 const SOUND_EFFECTS = [
   {
@@ -114,6 +131,7 @@ export default {
         currentEffectFile: glassFile,
         soundEffect: new Audio(glassFile),
         intervalHandle: undefined,
+        popover: undefined,
         durations: {
           task: 1500,
           short: 300,
@@ -359,7 +377,6 @@ export default {
         // so that they are not lost during the operation.
         let text = clipboard.readText()
         let html = clipboard.readHTML()
-        let image = clipboard.readImage()
         let rtf = clipboard.readRTF()
 
         // Write an ID to the clipboard
@@ -372,7 +389,6 @@ export default {
           clipboard.write({
             'text': text,
             'html': html,
-            'image': image,
             'rtf': rtf
           })
         }, 10) // Why do a timeout? Because the paste event is asynchronous.
@@ -469,8 +485,30 @@ export default {
             this.$closePopover()
           })
         }).catch(e => console.error(e))
+      } else if (clickedID === 'show-tag-cloud') {
+        const allTags = Object.keys(this.$store.state.tagDatabase)
+        const tagMap = allTags.map(tag => {
+          // Tags have the properties "className", "count", and "text"
+          const storeTag = this.$store.state.tagDatabase[tag]
+
+          return {
+            className: storeTag.className,
+            count: storeTag.count,
+            text: storeTag.text
+          }
+        })
+
+        const data = { tags: tagMap }
+        const button = document.getElementById('toolbar-show-tag-cloud')
+
+        this.$showPopover(PopoverTags, button, data, (data) => {
+          if (data.searchForTag !== '') {
+            // The user has clicked a tag and wants to search for it
+            this.$emit('start-global-search', '#' + data.searchForTag)
+            this.$closePopover()
+          }
+        })
       } else if (clickedID === 'pomodoro') {
-        // TODO: Show pomodoro progress
         const data = {
           taskDuration: this.pomodoro.durations.task / 60,
           shortDuration: this.pomodoro.durations.short / 60,
@@ -484,7 +522,7 @@ export default {
           volume: this.pomodoro.soundEffect.volume * 100
         }
 
-        this.$showPopover(PopoverPomodoro, document.getElementById('toolbar-pomodoro'), data, (data) => {
+        this.pomodoro.popover = this.$showPopover(PopoverPomodoro, document.getElementById('toolbar-pomodoro'), data, (data) => {
           // Update the durations as necessary
           this.pomodoro.durations.task = data.taskDuration
           this.pomodoro.durations.short = data.shortDuration
@@ -592,6 +630,19 @@ export default {
         }
 
         this.pomodoro.soundEffect.play().catch(e => { /* We will be getting errors when pausing quickly */ })
+      }
+
+      // Finally handle the popover logic
+      if (this.pomodoro.popover !== undefined && this.pomodoro.popover.isClosed() === false) {
+        // The popover is visible, so let's update the data. Good thing is, we
+        // only really need to update two things: The current task, and the
+        // elapsed time.
+        this.pomodoro.popover.updateData({
+          currentPhase: this.pomodoro.phase.type,
+          elapsed: this.pomodoro.phase.elapsed
+        })
+      } else if (this.pomodoro.popover !== undefined && this.pomodoro.popover.isClosed() === true) {
+        this.pomodoro.popover = undefined // Cleanup
       }
     },
     stopPomodoro: function () {

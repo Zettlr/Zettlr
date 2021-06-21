@@ -1,20 +1,20 @@
 <template>
   <div v-bind:class="{ 'inline': inline, 'form-control': true }">
     <label v-if="label" v-bind:for="fieldID" v-html="label"></label>
-    <!-- Else: Normal input w/o reset button -->
+    <!-- AutocompleteText is being implemented as a search for easy emptying of the field -->
     <input
       v-bind:id="fieldID"
       ref="input"
-      type="text"
+      type="search"
       v-bind:value="value"
       v-bind:class="{ 'inline': inline }"
       v-bind:placeholder="placeholder"
       v-on:input="$emit('input', $event.target.value)"
-      v-on:keyup.enter="confirmSelection()"
-      v-on:keyup.tab="confirmSelection()"
-      v-on:keyup.esc="$emit('escape', $event.target.value)"
-      v-on:keyup.down="selectNextMatch()"
-      v-on:keyup.up="selectPrevMatch()"
+      v-on:keydown.enter="confirmSelection()"
+      v-on:keydown.tab.prevent="confirmSelection()"
+      v-on:keydown.esc="$emit('escape', $event.target.value)"
+      v-on:keydown.down="selectNextMatch()"
+      v-on:keydown.up="selectPrevMatch()"
       v-on:focus="onFocusHandler"
       v-on:blur="onBlurHandler"
     >
@@ -46,6 +46,21 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        AutocompleteText
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays a text input with autocomplete functionality. NOTE:
+ *                  This file is likely going to be relocated to common/vue/form
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'AutocompleteText',
   props: {
@@ -99,7 +114,6 @@ export default {
       if (this.selectedMatch > -1) {
         this.$emit('confirm', this.matches[this.selectedMatch])
       } else {
-        console.log('Confirming value only ...')
         this.$emit('confirm', this.value)
       }
       this.$refs.input.blur() // We are done here and can blur the list

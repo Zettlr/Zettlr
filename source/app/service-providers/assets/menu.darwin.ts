@@ -1,5 +1,19 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Menu constructor for macOS
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file exposes a getMenu function returning the macOS application menu.
+ *
+ * END HEADER
+ */
+
 import { app, MenuItemConstructorOptions, shell } from 'electron'
-import { trans } from '../../../common/i18n'
+import { trans } from '../../../common/i18n-main'
 import path from 'path'
 
 export default function getMenu (): MenuItemConstructorOptions[] {
@@ -31,7 +45,11 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         id: recent.name,
         label: recent.name,
         click: function (menuitem, focusedWindow) {
-          // TODO: Run open command on the application
+          global.application.runCommand('open-file', {
+            path: recent.path,
+            newTab: false
+          })
+            .catch(err => global.log.error(String(err.message), err))
         }
       })
     }
@@ -69,13 +87,6 @@ export default function getMenu (): MenuItemConstructorOptions[] {
           label: trans('menu.tags'),
           click: function (menuitem, focusedWindow) {
             global.application.showTagManager()
-          }
-        },
-        {
-          id: 'menu.custom_css',
-          label: trans('menu.custom_css'),
-          click: function (menuitem, focusedWindow) {
-            global.application.showCustomCSS()
           }
         },
         {
@@ -124,8 +135,11 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         {
           id: 'menu.new_file',
           label: trans('menu.new_file'),
-          accelerator: 'Cmd+N' // ,
-          // command: 'file-new' TODO
+          accelerator: 'Cmd+N',
+          click: function (menuitem, focusedWindow) {
+            global.application.runCommand('new-unsaved-file')
+              .catch(e => global.log.error(String(e.message), e))
+          }
         },
         {
           id: 'menu.new_dir',
@@ -617,8 +631,18 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         },
         {
           id: 'menu.update',
-          label: trans('menu.update') // ,
-          // command: 'update-check' TODO
+          label: trans('menu.update'),
+          click: function (menuitem, focusedWindow) {
+            if (global.updates.applicationUpdateAvailable()) {
+              // Immediately open the window instead of first checking
+              global.application.runCommand('open-update-window')
+                .catch(e => global.log.error(String(e.message), e))
+
+              return
+            }
+
+            global.updates.check()
+          }
         }
       ]
     }

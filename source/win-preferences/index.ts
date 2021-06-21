@@ -41,7 +41,8 @@
 import Vue from 'vue'
 import Preferences from './preferences.vue'
 import windowRegister from '../common/modules/window-register'
-import { ipcRenderer } from 'electron'
+
+const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
 // The first thing we have to do is run the window controller
 windowRegister()

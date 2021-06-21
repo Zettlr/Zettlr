@@ -7,6 +7,7 @@
     'form-control': true
   }"
   >
+    <label v-if="label !== ''" v-html="label"></label>
     <input
       v-if="searchable"
       v-model="query"
@@ -17,8 +18,8 @@
       <!-- Head row -->
       <thead>
         <tr>
-          <th v-for="(label, idx) in columnLabels" v-bind:key="idx">
-            {{ label }}
+          <th v-for="(colLabel, idx) in columnLabels" v-bind:key="idx">
+            {{ colLabel }}
           </th>
           <th v-if="deletable || addable">
             Actions <!-- TODO: Translate -->
@@ -88,25 +89,25 @@
         </tr>
         <!-- If users may add something, allow them to do so here -->
         <tr v-if="addable">
-          <td v-for="(label, idx) in columnLabels" v-bind:key="idx">
+          <td v-for="(colLabel, idx) in columnLabels" v-bind:key="idx">
             <Checkbox
               v-if="columnType(idx) === 'boolean'"
               ref="add_row"
-              v-bind:placeholder="label"
+              v-bind:placeholder="colLabel"
               v-on:input="valuesToAdd[idx] = $event"
             >
             </Checkbox>
             <NumberControl
               v-else-if="columnType(idx) === 'number'"
               ref="add_row"
-              v-bind:placeholder="label"
+              v-bind:placeholder="colLabel"
               v-on:input="valuesToAdd[idx] = $event"
             >
             </NumberControl>
             <TextControl
               v-else
               ref="add_row"
-              v-bind:placeholder="label"
+              v-bind:placeholder="colLabel"
               v-on:input="valuesToAdd[idx] = $event"
             >
             </TextControl>
@@ -123,6 +124,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        List
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component displays a tabled list
+ *
+ * END HEADER
+ */
+
 import Checkbox from './Checkbox'
 import TextControl from './Text'
 import NumberControl from './Number'
@@ -145,6 +160,10 @@ export default {
     value: {
       type: Array,
       default: function () { return [] }
+    },
+    label: {
+      type: String,
+      default: ''
     },
     /**
      * Optional user-defined labels for the columns
@@ -220,7 +239,6 @@ export default {
      * @return  {string}  Can be simpleArray, multiArray, or object.
      */
     valueType: function () {
-      console.log('Value changed!')
       if (this.value.length === 0) {
         return 'simpleArray'
       }
@@ -259,7 +277,9 @@ export default {
         }
         return labels
       }
-      return [1] // Apparently we have a simple array, so exactly one column
+
+      // Apparently we have a simple array, so exactly one column
+      return ['Item'] // TODO: Translate!
     },
     platform: function () {
       return process.platform
@@ -427,6 +447,7 @@ div.table-view {
     // Optional filter field
   }
   break-inside: avoid; // Avoid breaking table views when inside column views
+  margin: 5px;
 
   table {
     // font-family: @font-system;

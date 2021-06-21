@@ -1,4 +1,18 @@
 /**
+  * @ignore
+  * BEGIN HEADER
+  *
+  * Contains:        generateTableOfContents
+  * CVM-Role:        Utility function
+  * Maintainer:      Hendrik Erz
+  * License:         GNU GPL v3
+  *
+  * Description:     This function generates a table of contents for a Markdown string.
+  *
+  * END HEADER
+  */
+
+/**
  * Generates a table of contents from the given mdString and returns it
  *
  * @param   {string}  mdString  The Markdown to be used for generation

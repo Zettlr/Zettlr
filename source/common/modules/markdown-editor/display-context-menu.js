@@ -1,15 +1,27 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        displayContextMenu
+ * CVM-Role:        Utility function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays a context-aware context menu on the editor.
+ *
+ * END HEADER
+ */
+
 // Displays a context menu for the MarkdownEditor class
-const { trans } = require('../../i18n')
-const {
-  clipboard,
-  ipcRenderer
-} = require('electron')
+const { trans } = require('../../i18n-renderer')
+const ipcRenderer = window.ipc
+const clipboard = window.clipboard
 
 let currentMenu = []
 let currentSuggestions = []
 let linkToCopy = null
 
-const TEMPLATE = [
+const TEMPLATE_TEXT = [
   {
     label: 'menu.bold',
     accelerator: 'CmdOrCtrl+B',
@@ -103,17 +115,119 @@ const readOnlyDisabled = [
   'menu.paste_plain'
 ]
 
+/**
+ * Returns the event target
+ *
+ * @param   {Element|null}  target  The target element
+ *
+ * @return  {'text'|'citation'|'link'|'spell-error'|'image'} What type of target this is
+ */
+function getTargetType (target) {
+  if (target === null) {
+    return 'text'
+  }
+
+  // Citations are identified by their class name
+  if (target.classList.contains('citeproc-citation')) {
+    return 'citation'
+  }
+
+  if (target.classList.contains('cma')) {
+    return 'link'
+  }
+
+  if (target.classList.contains('cm-spell-error')) {
+    return 'spell-error'
+  }
+
+  // Images in the editor are wrapped in figures
+  if (target.closest('figure') !== null) {
+    return 'image'
+  }
+
+  // Fallback: Default context menu
+  return 'text'
+}
+
+/**
+ * Displays a context menu for the CodeMirror editor
+ *
+ * @param   {MouseEvent}  event            The triggering mouse event
+ * @param   {boolean}     isReadOnly       Whether the editor instance is readonly
+ * @param   {Function}    commandCallback  The Callback for commands
+ * @param   {Function}    replaceCallback  The callback for replacements
+ *
+ * @return  {boolean}                      Whether the editor should additionally select the word under cursor
+ */
 module.exports = function displayContextMenu (event, isReadOnly, commandCallback, replaceCallback) {
+  // First, determine which kind of context menu we should display
+  const contextMenuType = getTargetType(event.target)
+
+  // Now, determine the appropriate template to use. In most cases, we use the
+  // text template, but that doesn't make sense to rendered links, citations, or
+  // images.
+  let MENU_TEMPLATE = TEMPLATE_TEXT
+  if (contextMenuType === 'image') {
+    const src = String(event.target.src)
+    if (!src.startsWith('safe-file://') && !src.startsWith('file://')) {
+      // If we're here, it's a valid URL, so we must disable the menu item to
+      // copy it to clipboard, since Electron doesn't support that. Also, we
+      // can only open it in the default browser.
+      MENU_TEMPLATE = [
+        {
+          label: 'menu.copy_img_to_clipboard',
+          id: 'copy-img-to-clipboard',
+          enabled: false
+        },
+        {
+          label: 'menu.open_in_browser',
+          id: 'open-img-in-browser',
+          enabled: true
+        }
+      ]
+    } else {
+      // We have a local image
+      MENU_TEMPLATE = [
+        {
+          label: 'menu.copy_img_to_clipboard',
+          id: 'copy-img-to-clipboard',
+          enabled: true
+        },
+        {
+          label: 'menu.show_file',
+          id: 'show-img-in-folder',
+          enabled: true
+        }
+      ]
+    }
+
+    // Second item varies: If it's a local file, we can show it in folder.
+    // Otherwise, we'll open it in the default browser.
+  } else if ([ 'link', 'citation' ].includes(contextMenuType)) {
+    MENU_TEMPLATE = [] // Only contains the link/citation actions
+  }
+
   const elem = event.target
   let buildMenu = []
   let shouldSelectWordUnderCursor = true
 
   // First build the context menu
-  for (const item of TEMPLATE) {
+  for (const item of MENU_TEMPLATE) {
     let buildItem = {}
     if (item.hasOwnProperty('label')) {
-      buildItem.id = item.label
       buildItem.label = trans(item.label)
+    }
+
+    if ('id' in item) {
+      buildItem.id = item.id
+    } else if ('label' in item) {
+      buildItem.id = item.label
+    }
+
+    if ('enabled' in item) {
+      buildItem.enabled = item.enabled
+    } else if (isReadOnly && readOnlyDisabled.includes(item.label)) {
+      buildItem.enabled = false
     }
 
     if (item.hasOwnProperty('type')) {
@@ -130,19 +244,13 @@ module.exports = function displayContextMenu (event, isReadOnly, commandCallback
       buildItem.command = item.command
     }
 
-    if (isReadOnly && readOnlyDisabled.includes(item.label)) {
-      buildItem.enabled = false
-    } else {
-      buildItem.enabled = true
-    }
-
     buildMenu.push(buildItem)
   }
 
   // If the user has right-clicked a link, select the link contents to make it
   // look better and give visual feedback that the user is indeed about to copy
   // the whole link into the clipboard, not a part of it.
-  if (elem.classList.contains('cma')) {
+  if (contextMenuType === 'link') {
     shouldSelectWordUnderCursor = false
     let selection = window.getSelection()
     let range = document.createRange()
@@ -153,6 +261,13 @@ module.exports = function displayContextMenu (event, isReadOnly, commandCallback
     let url = elem.getAttribute('title')
     linkToCopy = (url.indexOf('mailto:') === 0) ? url.substr(7) : url
     buildMenu.unshift({
+      id: 'none',
+      label: url,
+      enabled: false,
+      type: 'normal'
+    }, {
+      type: 'separator'
+    }, {
       id: 'menu.open_link',
       label: trans('menu.open_link'),
       enabled: true,
@@ -163,13 +278,16 @@ module.exports = function displayContextMenu (event, isReadOnly, commandCallback
       enabled: true,
       type: 'normal',
       label: (url.indexOf('mailto:') === 0) ? trans('menu.copy_mail') : trans('menu.copy_link')
-    }, {
-      type: 'separator'
     })
+
+    if (buildMenu.length > 4) {
+      // If we have additional elements, add a separator beneath the link options
+      buildMenu.splice(4, 0, { type: 'separator' })
+    }
   }
 
   // Don't select the word under cursor if we've right-clicked a citation
-  if (elem.classList.contains('citeproc-citation')) {
+  if (contextMenuType === 'citation') {
     shouldSelectWordUnderCursor = false
     // Also, remove the selected part of the citation
     let selection = window.getSelection()
@@ -177,7 +295,10 @@ module.exports = function displayContextMenu (event, isReadOnly, commandCallback
 
     let keys = elem.dataset.citekeys.split(',')
     // Add menu items for all cite keys to open the corresponding PDFs
-    buildMenu.push({ type: 'separator' })
+    if (buildMenu.length !== 0) {
+      buildMenu.push({ type: 'separator' })
+    }
+
     buildMenu.push({
       label: trans('menu.open_attachment'),
       type: 'submenu',
@@ -194,7 +315,7 @@ module.exports = function displayContextMenu (event, isReadOnly, commandCallback
 
   // If the word is spelled wrong, request suggestions
   let typoPrefix = []
-  if (elem.classList.contains('cm-spell-error')) {
+  if (contextMenuType === 'spell-error') {
     currentSuggestions = ipcRenderer.sendSync('dictionary-provider', {
       command: 'suggest',
       term: elem.textContent
@@ -256,8 +377,31 @@ module.exports = function displayContextMenu (event, isReadOnly, commandCallback
         command: 'add',
         term: clickedID.substr(9) // Extract the word from the ID
       })
+      return
     }
 
+    if (clickedID === 'copy-img-to-clipboard' && 'src' in event.target) {
+      ipcRenderer.invoke('application', {
+        command: 'copy-img-to-clipboard',
+        payload: event.target.src // Direct main to copy that source
+      })
+        .catch(err => console.error(err))
+        .finally(() => { closeCallback() })
+      return
+    } else if (clickedID === 'show-img-in-folder' && 'src' in event.target) {
+      ipcRenderer.send('window-controls', {
+        command: 'show-item-in-folder',
+        payload: event.target.src // Show the item in folder
+      })
+      return
+    } else if (clickedID === 'open-img-in-browser' && 'src' in event.target) {
+      // Open the image in the system browser. (Works because main intercepts
+      // any redirect.)
+      window.location.assign(event.target.src)
+      return
+    }
+
+    // All other commands are simply executed from here
     let found = currentMenu.find((elem) => {
       return elem.id === clickedID
     })

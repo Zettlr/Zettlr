@@ -12,11 +12,12 @@
  * END HEADER
  */
 
-import { ipcRenderer } from 'electron'
 import Vue from 'vue'
 import Print from './Print.vue'
 
 import windowRegister from '../common/modules/window-register'
+
+const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
 // Register all window stuff
 windowRegister()

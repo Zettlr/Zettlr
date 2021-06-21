@@ -1,5 +1,17 @@
 /* global define CodeMirror */
-// This plugin renders markdown block images
+/**
+  * @ignore
+  * BEGIN HEADER
+  *
+  * Contains:        Image rendering Plugin
+  * CVM-Role:        CodeMirror Plugin
+  * Maintainer:      Hendrik Erz
+  * License:         GNU GPL v3
+  *
+  * Description:     This plugin renders images in-place.
+  *
+  * END HEADER
+  */
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
@@ -31,7 +43,7 @@
     // We'll only render the viewport
     const viewport = cm.getViewport()
     for (let i = viewport.from; i < viewport.to; i++) {
-      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
+      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
 
       // Always reset lastIndex property, because test()-ing on regular
       // expressions advance it.

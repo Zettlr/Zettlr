@@ -14,6 +14,21 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Text
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Not to be confused with the form Text component. This one
+ *                  here displays text read-only.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'TextControl',
   props: {
@@ -29,6 +44,6 @@ export default {
 body .toolbar-text {
   font-size: 11px;
   padding: 0 10px;
-  width: 100px; // constrain the text width to accomodate content changes.
+  width: 150px; // constrain the text width to accomodate content changes.
 }
 </style>

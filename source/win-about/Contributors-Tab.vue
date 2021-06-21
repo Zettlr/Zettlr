@@ -20,9 +20,23 @@
 </template>
 
 <script>
-import { trans } from '../common/i18n'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        ContributorsTab
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     The contributors tab inside the about window
+ *
+ * END HEADER
+ */
+
+import { trans } from '../common/i18n-renderer'
 import formatDate from '../common/util/format-date'
-import { ipcRenderer } from 'electron'
+const ipcRenderer = window.ipc
 
 export default {
   name: 'ContributorsTab',

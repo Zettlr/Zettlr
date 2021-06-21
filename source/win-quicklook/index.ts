@@ -18,8 +18,9 @@ import Vue from 'vue'
 import Quicklook from './Quicklook.vue'
 import windowRegister from '../common/modules/window-register'
 // import { ToolbarControl } from '../common/modules/window-register/register-toolbar'
-import { ipcRenderer } from 'electron'
 import { CodeFileMeta, MDFileMeta } from '../main/modules/fsal/types'
+
+const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
 // The first thing we have to do is run the window controller
 windowRegister()
@@ -45,12 +46,13 @@ ipcRenderer.on('config-provider', (event, message) => {
 const app = new Vue(Quicklook)
 
 // Get the hash from the window arguments
-let hash: string
-[hash] = window.process.argv.slice(-1)
+let filePath: string
+[filePath] = window.process.argv.slice(-1)
 
 setTimeout(() => {
-  ipcRenderer.invoke('quicklook-controller', { command: 'get-file', hash: hash })
+  ipcRenderer.invoke('application', { command: 'get-file-contents', payload: filePath })
     .then((file: MDFileMeta|CodeFileMeta) => {
+      console.log(file, filePath)
       app.$data.name = file.name
       app.$data.dir = file.dir
       app.$data.hash = file.hash
