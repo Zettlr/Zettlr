@@ -31,6 +31,19 @@ interface FSALEvent {
   timestamp: number
 }
 
+// This interface is being produced by the MarkdownEditor module in source/common
+interface DocumentInfo {
+  words: number
+  chars: number
+  chars_wo_spaces: number
+  cursor: { ch: number, line: number }
+  selections: Array<{
+    selectionLength: number
+    start: { ch: number, line: number }
+    end: { ch: number, line: number }
+  }>
+}
+
 function isAttachment (p: string): boolean {
   let ext = global.config.get('attachmentExtensions')
   return ext.includes(path.extname(p).toLowerCase())
@@ -204,7 +217,7 @@ interface ZettlrState {
   /**
    * Info about the currently active document
    */
-  activeDocumentInfo: any|null
+  activeDocumentInfo: DocumentInfo|null
   /**
    * Modified files are stored here (only the paths, though)
    */

@@ -52,6 +52,7 @@
         v-if="item.type === 'text'"
         v-bind:key="idx"
         v-bind:control="item"
+        v-on:click="$emit('click', item.id)"
       ></TextControl>
     </template>
   </div>
