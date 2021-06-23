@@ -50,7 +50,7 @@ import displayTabsContextMenu from './tabs-context'
 const ipcRenderer = window.ipc
 
 export default {
-  name: 'Tabs',
+  name: 'DocumentTabs',
   computed: {
     openFiles: function () {
       return this.$store.state.openFiles

@@ -38,7 +38,7 @@
         >
           <template #view1>
             <!-- First side: Editor -->
-            <Tabs></Tabs>
+            <DocumentTabs></DocumentTabs>
             <Editor
               ref="editor"
               v-bind:readability-mode="readabilityActive"
@@ -72,7 +72,7 @@
 import WindowChrome from '../common/vue/window/Chrome'
 import FileManager from './file-manager/file-manager'
 import Sidebar from './Sidebar'
-import Tabs from './Tabs'
+import DocumentTabs from './DocumentTabs'
 import SplitView from '../common/vue/window/SplitView'
 import GlobalSearch from './GlobalSearch'
 import Editor from './Editor'
@@ -114,7 +114,7 @@ export default {
   components: {
     WindowChrome,
     FileManager,
-    Tabs,
+    DocumentTabs,
     SplitView,
     Editor,
     GlobalSearch,
