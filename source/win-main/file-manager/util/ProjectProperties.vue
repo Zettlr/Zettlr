@@ -1,40 +1,54 @@
 <template>
   <div id="project-lists">
     <!-- ATTENTION: Limited leeway! Be sparse with the space you use! -->
-    <ListControl
-      v-bind:label="''"
-      style="float: left;"
-      v-bind:value="exportFormatList"
-      v-bind:labels="['Use', 'Format']"
-      v-bind:editable="[0]"
-      v-on:input="selectExportFormat($event)"
-    ></ListControl>
+    <Tabs
+      v-bind:tabs="tabs"
+      v-bind:current-tab="currentTab"
+      v-on:tab="currentTab = $event"
+    ></Tabs>
 
-    <ListControl
-      v-bind:label="'The file list is not yet implemented'"
-      style="float: right;"
-      v-bind:value="[
-        { selected: true, format: 'introduction.md' },
-        { selected: true, format: 'chapter 2.md' },
-        { selected: false, format: 'My Notes.md' },
-        { selected: true, format: 'conclusion.md' }
-      ]"
-      v-bind:labels="['Include', 'Filename']"
-      v-bind:editable="[0]"
-    ></ListControl>
+    <div
+      v-show="currentTab === 'formats'"
+      id="formats-panel"
+      role="tabpanel"
+    >
+      <ListControl
+        v-bind:label="''"
+        v-bind:value="exportFormatList"
+        v-bind:labels="['Use', 'Format']"
+        v-bind:editable="[0]"
+        v-on:input="selectExportFormat($event)"
+      ></ListControl>
+    </div>
+    <div
+      v-show="currentTab === 'files'"
+      id="files-panel"
+      role="tabpanel"
+    >
+      <ListControl
+        v-model="patterns"
+        v-bind:label="'Add Glob patterns to include only specific files'"
+        v-bind:labels="['Glob Pattern']"
+        v-bind:editable="[0]"
+        v-bind:addable="true"
+        v-bind:deletable="true"
+      ></ListControl>
+    </div>
   </div>
 </template>
 
 <script>
 import ListControl from '../../../common/vue/form/elements/List'
 import Vue from 'vue'
+import Tabs from '../../../common/vue/Tabs'
 
 const ipcRenderer = window.ipc
 
 export default {
   name: 'ProjectProperties',
   components: {
-    ListControl
+    ListControl,
+    Tabs
   },
   props: {
     fullPath: {
@@ -45,7 +59,21 @@ export default {
   data: function () {
     return {
       exportFormatMap: {},
-      selectedExportFormats: []
+      selectedExportFormats: [],
+      patterns: [],
+      tabs: [
+        {
+          id: 'formats',
+          target: 'formats-panel',
+          label: 'Formats'
+        },
+        {
+          id: 'files',
+          target: 'files-panel',
+          label: 'Files'
+        }
+      ],
+      currentTab: 'formats'
     }
   },
   computed: {
@@ -91,6 +119,7 @@ export default {
         // might then just select something and save the changes afterwards.
         if (descriptor.project !== null) {
           this.selectedExportFormats = descriptor.project.formats
+          this.patterns = descriptor.project.filters
         }
       })
       .catch(err => console.error(err))
@@ -108,7 +137,8 @@ export default {
         command: 'update-project-properties',
         payload: {
           properties: {
-            'formats': this.selectedExportFormats
+            formats: this.selectedExportFormats,
+            filters: this.patterns
           },
           path: this.fullPath
         }
@@ -119,9 +149,4 @@ export default {
 </script>
 
 <style lang="less">
-div#project-lists {
-  display: flex;
-
-  & > * { flex: 1; }
-}
 </style>

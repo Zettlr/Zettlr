@@ -15,6 +15,7 @@
 import ZettlrCommand from './zettlr-command'
 import objectToArray from '../../common/util/object-to-array'
 import { makeExport } from '../modules/export'
+import { filter as minimatch } from 'minimatch'
 
 export default class DirProjectExport extends ZettlrCommand {
   constructor (app: any) {
@@ -45,8 +46,17 @@ export default class DirProjectExport extends ZettlrCommand {
     // Receive a two dimensional array of all directory contents
     let files = objectToArray(dir, 'children')
 
-    // Reduce to files-only
-    files = files.filter((elem) => { return elem.type === 'file' })
+    // Use minimatch to filter against the project's filter patterns
+    for (const pattern of config.filters as string[]) {
+      global.log.info(`[Project] Filtering fileset: Matching against "${pattern}"`)
+      // NOTE: minimatch is actually just the "filter" function
+      files = files.filter(minimatch(pattern, { matchBase: true }))
+    }
+
+    if (files.length === 0) {
+      global.log.warning('[Project] Aborting export: No files remained after filtering.')
+      return false
+    }
 
     for (const format of config.formats as string[]) {
       // Spin up one exporter per format.

@@ -63,7 +63,8 @@ const MARKDOWN_FILES = [
 const PROJECT_TEMPLATE = {
   // General values that not only pertain to the PDF generation
   title: 'Untitled', // Default project title is the directory's name
-  formats: ['chromium-pdf'], // A list of formats the project can be exported to
+  formats: [], // A list of formats the project can be exported to
+  filters: [], // A list of filters (glob patterns) to exclude certain files
   cslStyle: '' // A path to an optional CSL style file.
 }
 
