@@ -203,11 +203,11 @@ export default {
       // Only show the button if the mouse is in the top of the file manager.
       // We're adding 10px padding to make sure we have some leeway in case of
       // sudden mouse movements.
-      const { top, left, right, bottom } = this.$el.getBoundingClientRect()
+      const { top, left, right } = this.$el.getBoundingClientRect()
       if (
         canShowFileTree &&
         evt.clientX >= left && evt.clientX <= right - 10 &&
-        evt.clientY >= top + 10 && evt.clientY <= bottom
+        evt.clientY >= top + 10 && evt.clientY <= top + 200
       ) {
         this.$refs.arrowButton.classList.remove('hidden')
       } else {
