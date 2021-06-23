@@ -51,62 +51,6 @@ async function downloadPandoc (platform, arch) {
   })
 }
 
-/**
- * This function returns the full path and filename to the library specified
- * by `libraryName`. Uses ldconfig to determine the library location because
- * libraries location varies.
- *
- * @param   {string}  libraryName  The name of the library.
- * @returns {string}  The full path of the matching library. If library is not
- *                    found, throws an Error.
- */
-async function getLibraryPath (libraryName) {
-  return new Promise((resolve, reject) => {
-    const shellProcess = spawn('/sbin/ldconfig', ['-p'])
-    let out = ''
-    shellProcess.stdout.on('data', (data) => {
-      out += data.toString()
-    })
-    shellProcess.on('close', (code, signal) => {
-      if (code !== 0) {
-        reject(new Error(`Failed to run ldconfig: Process quit with code ${code}`))
-        return
-      }
-      // Search for the `libraryName` in the ldconfig output to find the
-      // library's full path and filename.
-      // '/sbin/ldconfig -p' print the lists of directories and candidate
-      // libraries stored in the current cache. Example output:
-      //         libappindicator3.so.1 (libc6,x86-64) => /lib64/libappindicator3.so.1
-      //                                                 ^      ^
-      //                                                left  index
-      // If `libraryName` is 'libappindicator3' this function returns '/lib64/libappindicator3.so.1'
-      let index = out.lastIndexOf(libraryName)
-      if (index === -1) {
-        reject(new Error(`Library '${libraryName}' not found on the system`))
-        return
-      }
-      // Search for last non white space (left of index)
-      let left = out.slice(0, index + 1).search(/\S+$/)
-      // Search for the next white space (right of index)
-      // Example output:
-      //         libappindicator3.so.1 (libc6,x86-64) => /lib64/libappindicator3.so.1
-      //                                                        ^^^^^^^^^^^^^^^^^^^^^
-      //                                                         filenameLength = 21
-      let filenameLength = out.slice(index).search(/\s/)
-      if (filenameLength < 0) {
-        resolve(out.slice(left))
-      } else {
-        resolve(out.slice(left, index + filenameLength))
-      }
-    })
-
-    // Reject on errors.
-    shellProcess.on('error', (err) => {
-      reject(err)
-    })
-  })
-}
-
 module.exports = {
   hooks: {
     generateAssets: async (forgeConfig) => {
@@ -167,34 +111,6 @@ module.exports = {
       } else {
         // If someone is building this on an unsupported platform, drop a warning.
         console.log(`\nBuilding for an unsupported platform/arch-combination ${targetPlatform}/${targetArch} - not bundling Pandoc.`)
-      }
-    },
-    postPackage: async (forgeConfig, options) => {
-      const isLinux = process.platform === 'linux'
-      const idxArch = process.argv.indexOf('--arch')
-      let targetArch = process.arch
-      if (idxArch > -1 && process.argv.length > idxArch + 1) {
-        targetArch = process.argv[idxArch + 1]
-      }
-      if (isLinux && targetArch === process.arch) {
-        try {
-          // bundle libappindicator3 in AppImage and zip packages. Needed for tray icon on Gnome
-          const lib = await getLibraryPath('libappindicator3')
-          await fs.mkdir(path.join(options.outputPaths[0], 'usr', 'lib'), { recursive: true })
-          await fs.copyFile(lib, path.join(options.outputPaths[0], 'usr', 'lib', path.basename(lib)))
-        } catch (err) {
-          if (options.spinner !== null && options.spinner !== undefined) {
-            options.spinner.info(`Unable to bundle "libappindicator3" (${err}).`)
-          } else {
-            console.log(`Unable to bundle "libappindicator3" (${err}).`)
-          }
-        }
-      } else if (isLinux) {
-        if (options.spinner !== null && options.spinner !== undefined) {
-          options.spinner.info('Unable to bundle "libappindicator3" (target is different architecture).')
-        } else {
-          console.log('Unable to bundle "libappindicator3" (target is different architecture).')
-        }
       }
     }
   },
