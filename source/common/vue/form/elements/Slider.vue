@@ -7,6 +7,7 @@
       v-bind:max="max"
       v-bind:value="value"
       v-on:input="$emit('input', parseInt($event.target.value, 10))"
+      v-on:change="$emit('change', parseInt($event.target.value, 10))"
     >
   </div>
 </template>

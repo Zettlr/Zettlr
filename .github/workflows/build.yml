@@ -1,40 +1,79 @@
 name: Build
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# ZETTLR GITHUB ACTIONS WORKFLOW FILE                                         #
+#                                                                             #
+#                    ZETTLR MAIN BUILD GITHUB ACTIONS FILE                    #
+#                                                                             #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #                                                                             #
 # This file contains the logic necessary to build a full release from source. #
 #                                                                             #
-# Whenever someone creates a new git tag on the master branch, this workflow  #
-# will be triggered, building the corresponding release for all platforms.    #
-# This entails running three workers, one on Ubuntu, one on macos, and one on #
-# Windows, in order to build the application. Each build worker clones the    #
-# repository, installs the dependencies, then runs the actual build, before   #
-# uploading the resulting artifact(s) to the worker's temporary space. After  #
-# all three builds have been successfully completed, the last job worker will #
-# start, download all created assets, generate the SHA256 checksums for them, #
-# verify the sums, create a new release draft with the corresponding tag, and #
-# finally upload all generated assets to the release draft.                   #
+# WHEN IT RUNS:                                                               #
+#                                                                             #
+# * Whenever someone successfully pushes develop --> master.                  #
+# * Every Friday at noon (UTC)                                                #
+# * Manually                                                                  #
+#                                                                             #
+# The last two events are being used to create nightly releases. The first    #
+# event type indicates that the pipeline should build a regular release.      #
+#                                                                             #
+# HOW IT RUNS:                                                                #
+#                                                                             #
+# 1. Three virtual machines are spun up in parallel: A Windows VM, a Ubuntu   #
+#    VM, and a macOS VM. All three are tasked with building all releases that #
+#    we offer for the given platform. The Ubuntu VM builds the most since we  #
+#    have many more Linux releases. Windows and macOS only build one x64 and  #
+#    one ARM release. However, they also perform code signing (and            #
+#    notarization in case of the macOS VM), which the Ubuntu VM doesn't do.   #
+# 2. Each VM uploads all resulting artifacts into their respective artifact   #
+#    space, named "linux", "darwin", and "win32" respectively (analogous to   #
+#    node.js's process.platform-variable).                                    #
+# 3. Iff (if and only if) all three runners have shut down successfully,      #
+#    indicating successful builds, another Ubuntu VM will be started. That    #
+#    one is tasked with downloading all releases from the three artifact      #
+#    spaces, calculate the SHA-256 checksums for every file and afterwards    #
+#    upload all files: In case of a nightly to the Zettlr server, where they  #
+#    can be downloaded from nightly.zettlr.com, or, in case of a regular      #
+#    release, to a newly created release draft here on GitHub.                #
+#                                                                             #
+# THINGS TO NOTE:                                                             #
+#                                                                             #
+# * Every runner will retrieve the package.json's "version" field by running  #
+#   a somewhat weird-looking command. This is necessary to make finding the   #
+#   releases easier which are being produced by electron-forge and electron-  #
+#   builder.                                                                  #
+# * Especially the macOS runner can often produce problems, because there     #
+#   have been rumors that apparently even the macOS server operating systems  #
+#   tend to open modal windows -- even though they're running headless. This  #
+#   means that in case the macOS runners seem to hang it's likely we again    #
+#   need to update the add-osx-cert.sh script.                                #
+# * Everything is being run on Bash. Although PowerShell can do a lot, this   #
+#   way all steps are within one language, making it easier to maintain.      #
+#                                                                             #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-# This build can be triggered by two actions:
-# * "push" to the master branch. In that case, a regular release (incl. tag)
-#   will be created.
-# * "workflow_dispatch". This builds a nightly. Bonus: We can manually trigger it.
 on:
   push:
     branches:
       - master
-  workflow_dispatch:
-    # No additional properties.
+  workflow_dispatch: {} # Used to manually trigger a nightly build.
+  schedule: # Every Friday at noon (UTC) we run a scheduled nightly build
+    - cron: '0 12 * * 5'
 
 # Defaults for every job and step in this workflow
 defaults:
   run:
     shell: bash # Run everything using bash
 
+# Global environment variables
 env:
+  # Easy way to set the node version
   NODE_VERSION: '16'
+  # Whenever we either trigger a build manually *or* a scheduled run starts,
+  # this indicates a nightly build, and NOT a regular, stable release. We are
+  # writing it here into the environment variable to keep the code DRY and for
+  # easier reference.
+  BUILD_NIGHTLY: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
 
 # This workflow file contains four jobs, three to build the corresponding
 # releases on all three supported platforms, and a last one, which will
@@ -51,12 +90,12 @@ jobs:
     steps:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Clone repository (master branch)
-        if: ${{ github.event_name != 'workflow_dispatch' }}
+        if: ${{ !env.BUILD_NIGHTLY }}
         uses: actions/checkout@v2
         with:
           ref: 'master'
       - name: Clone repository (develop branch)
-        if: ${{ github.event_name == 'workflow_dispatch' }}
+        if: ${{ env.BUILD_NIGHTLY }}
         uses: actions/checkout@v2
         with:
           ref: 'develop'
@@ -66,7 +105,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
-        if: ${{ github.event_name == 'workflow_dispatch' }}
+        if: ${{ env.BUILD_NIGHTLY }}
         run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
@@ -125,12 +164,12 @@ jobs:
     steps:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Clone repository (master branch)
-        if: ${{ github. event_name != 'schedule' }}
+        if: ${{ !env.BUILD_NIGHTLY }}
         uses: actions/checkout@v2
         with:
           ref: 'master'
       - name: Clone repository (develop branch)
-        if: ${{ github.event_name == 'workflow_dispatch' }}
+        if: ${{ env.BUILD_NIGHTLY }}
         uses: actions/checkout@v2
         with:
           ref: 'develop'
@@ -140,7 +179,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
-        if: ${{ github.event_name == 'workflow_dispatch' }}
+        if: ${{ env.BUILD_NIGHTLY }}
         run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
@@ -195,12 +234,12 @@ jobs:
     steps:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Clone repository (master branch)
-        if: ${{ github.event_name != 'workflow_dispatch' }}
+        if: ${{ !env.BUILD_NIGHTLY }}
         uses: actions/checkout@v2
         with:
           ref: 'master'
       - name: Clone repository (develop branch)
-        if: ${{ github.event_name == 'workflow_dispatch' }}
+        if: ${{ env.BUILD_NIGHTLY }}
         uses: actions/checkout@v2
         with:
           ref: 'develop'
@@ -210,7 +249,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
-        if: ${{ github.event_name == 'workflow_dispatch' }}
+        if: ${{ env.BUILD_NIGHTLY }}
         run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
@@ -247,9 +286,9 @@ jobs:
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
   # After the three builds, this job downloads all assets, creates and verifies
   # SHA256 checksums, and finally creates a release draft and uploads all
-  # assets to it. NOTE: If the workflow detects it is being run on schedule,
-  # this means that it does NOT create a release draft, but rather upload all
-  # assets to the Zettlr server to offer a new nightly.
+  # assets to it. NOTE: If the workflow detects a nightly is being built, this
+  # step rather uploads the binaries to the Zettlr server instead of creating
+  # a release draft.
   prepare_release:
     name: Prepare release draft
     # Make sure (and wait until) the builds have succeeded
@@ -266,7 +305,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
-        if: ${{ github.event_name == 'workflow_dispatch' }}
+        if: ${{ env.BUILD_NIGHTLY }}
         run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
@@ -314,23 +353,23 @@ jobs:
           cd ..
       # IF WE BUILD A NIGHTLY, AT THIS POINT JUST UPLOAD TO THE SERVER.
       - name: Upload nightlies to the server
-        if: ${{ github.event_name == 'workflow_dispatch' }}
+        if: ${{ env.BUILD_NIGHTLY }}
         uses: easingthemes/ssh-deploy@v2.0.7
         env:
           SSH_PRIVATE_KEY: ${{ secrets.NIGHTLY_SSH_PRIVATE_KEY }}
-          ARGS: "-vzhr"
+          ARGS: "-vzhr" # verbose, compress, human-readble, recursive
           SOURCE: "release/"
           REMOTE_HOST: ${{ secrets.NIGHTLY_REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.NIGHTLY_REMOTE_USER }}
           TARGET: ${{ secrets.NIGHTLY_TARGET }}
       # OTHERWISE: Create a new release draft
       - name: Create release draft
-        if: ${{ github.event_name != 'workflow_dispatch' }}
+        if: ${{ !env.BUILD_NIGHTLY }}
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          # Populate the inputs of the release already
+          # Populate the inputs of the release we already know
           tag_name: v${{steps.ref.outputs.version}}
           name: Release v${{steps.ref.outputs.version}}
           body: If you can read this, we have forgotten to fill in the changelog. Sorry!

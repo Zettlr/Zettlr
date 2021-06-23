@@ -2,7 +2,7 @@
 
 ## DEPRECATION: 32 bit
 
-No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supported. On Linux, ARM is not available until we find a good solution of running Pandoc there.
+No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supported. For Windows ARM builds, Pandoc cannot be shipped as of now.
 
 ## New Configuration Options
 
