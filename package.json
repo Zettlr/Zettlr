@@ -100,7 +100,7 @@
     "@types/rimraf": "^3.0.0",
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.26.1",
-    "@typescript-eslint/parser": "^4.26.1",
+    "@typescript-eslint/parser": "^4.28.0",
     "@vercel/webpack-asset-relocator-loader": "^1.5.0",
     "copy-webpack-plugin": "^9.0.0",
     "cross-env": "^7.0.3",
