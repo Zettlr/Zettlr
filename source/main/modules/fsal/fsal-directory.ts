@@ -116,7 +116,7 @@ export function metadata (dirObject: DirDescriptor): DirMeta {
     size: dirObject.size,
     // The project itself is not needed, renderer only checks if it equals
     // null, or not (then it means there is a project)
-    project: (dirObject._settings.project !== null) ? true : null,
+    project: dirObject._settings.project,
     children: children,
     attachments: dirObject.attachments.map(elem => FSALAttachment.metadata(elem)),
     type: dirObject.type,
