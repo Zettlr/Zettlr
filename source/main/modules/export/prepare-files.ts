@@ -23,8 +23,14 @@ export default async function prepareFiles (options: ExporterOptions): Promise<s
   const { sourceFiles, targetDirectory, absoluteImagePaths } = options
 
   // Prepare some variables we will need throughout preparation
-  const sourceDirectory = sourceFiles[0].dir
-  const willExportToSameDir = path.relative(targetDirectory, sourceDirectory) === ''
+  let willExportToSameDir = true
+  for (const file of sourceFiles) {
+    if (path.relative(targetDirectory, file.dir) !== '') {
+      willExportToSameDir = false
+      break
+    }
+  }
+
   const absolutePathsOverride = absoluteImagePaths !== undefined && absoluteImagePaths
 
   const isTextBundle = [ 'textbundle', 'textpack' ].includes(options.format)

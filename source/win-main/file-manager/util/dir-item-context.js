@@ -92,16 +92,11 @@ module.exports = function displayFileContext (event, dirObject, el, callback) {
 
   // Now check for a project
   if (dirObject.project !== null && dirObject.dirNotFoundFlag !== true) {
-    items = items.concat([{
-      id: 'menu.project_properties',
-      label: trans('menu.project_properties'),
-      enabled: true
-    },
-    {
+    items.push({
       id: 'menu.project_build',
       label: trans('menu.project_build'),
       enabled: true
-    }])
+    })
   }
 
   // Finally, check for it being root

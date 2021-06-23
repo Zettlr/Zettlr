@@ -159,6 +159,13 @@ export default {
               payload: this.obj.path
             })
               .catch(err => console.error(err))
+          } else if (clickedID === 'menu.project_build') {
+            // We should trigger an export of this project.
+            ipcRenderer.invoke('application', {
+              command: 'dir-project-export',
+              payload: this.obj.path
+            })
+              .catch(err => console.error(err))
           } else if (clickedID === 'menu.properties') {
             const data = {
               dirname: this.obj.name,

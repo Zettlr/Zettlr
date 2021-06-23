@@ -74,6 +74,7 @@ export const plugin: ExporterPlugin = {
 
     // Run Pandoc
     const pandocOutput = await ctx.runPandoc(defaultsFile)
+    console.log(pandocOutput)
 
     // Make sure to propagate the results
     return {
