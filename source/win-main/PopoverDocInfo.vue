@@ -3,19 +3,19 @@
     <table v-if="docInfo">
       <tr>
         <td colspan="3" style="text-align:right">
-          <strong>{{ docInfo.words }}</strong>
+          <strong>{{ selectedWords }}</strong>
         </td>
         <td>{{ wordsLabel }}</td>
       </tr>
       <tr>
         <td colspan="3" style="text-align:right">
-          <strong>{{ docInfo.chars }}</strong>
+          <strong>{{ selectedChars }}</strong>
         </td>
         <td>{{ charsLabel }}</td>
       </tr>
       <tr>
         <td colspan="3" style="text-align:right">
-          <strong>{{ docInfo.chars_wo_spaces }}</strong>
+          <strong>{{ selectedCharsWithout }}</strong>
         </td>
         <td>{{ withoutSpacesLabel }}</td>
       </tr>
@@ -58,6 +58,7 @@
  * END HEADER
  */
 import { trans } from '../common/i18n-renderer'
+import localiseNumber from '../common/util/localise-number'
 
 export default {
   name: 'PopoverDocInfo',
@@ -80,11 +81,32 @@ export default {
     },
     withoutSpacesLabel: function () {
       return trans('gui.file_chars_wo_spaces')
+    },
+    selectedWords: function () {
+      if (this.docInfo === null) {
+        return '0'
+      } else {
+        return localiseNumber(this.docInfo.words)
+      }
+    },
+    selectedChars: function () {
+      if (this.docInfo === null) {
+        return '0'
+      } else {
+        return localiseNumber(this.docInfo.chars)
+      }
+    },
+    selectedCharsWithout: function () {
+      if (this.docInfo === null) {
+        return '0'
+      } else {
+        return localiseNumber(this.docInfo.chars_wo_spaces)
+      }
     }
   },
   methods: {
     getWdSelectedLabel: function (words) {
-      return trans('gui.words_selected', words)
+      return trans('gui.words_selected', localiseNumber(words))
     }
   }
 }
