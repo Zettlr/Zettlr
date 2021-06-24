@@ -36,6 +36,10 @@ import {
   MaybeRootDescriptor
 } from './types'
 import FSALCache from './fsal-cache'
+import {
+  codeFileExtensions,
+  mdFileExtensions
+} from '../../../common/get-file-extensions'
 
 /**
  * Determines what will be written to file (.ztr-directory)
@@ -46,17 +50,8 @@ const SETTINGS_TEMPLATE = {
   icon: null // Default: no icon
 }
 
-const ALLOWED_CODE_FILES = [
-  '.tex'
-]
-
-const MARKDOWN_FILES = [
-  '.md',
-  '.rmd',
-  '.markdown',
-  '.txt',
-  '.mdx'
-]
+const ALLOWED_CODE_FILES = codeFileExtensions(true)
+const MARKDOWN_FILES = mdFileExtensions(true)
 
 /**
  * Used to insert a default project

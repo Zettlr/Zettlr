@@ -13,11 +13,12 @@
  * END HEADER
  */
 
+const { mdFileExtensions } = require('../../get-file-extensions')
 const makeValidUri = require('../../util/make-valid-uri')
 const path = window.path
 const ipcRenderer = window.ipc
 
-const VALID_FILETYPES = require('../../data.json').filetypes
+const VALID_FILETYPES = mdFileExtensions(true)
 
 /**
  * Resolves and opens a link safely (= not inside Zettlr, except it's a local MD file)

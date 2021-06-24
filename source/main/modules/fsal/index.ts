@@ -41,6 +41,7 @@ import {
   CodeFileMeta,
   OtherFileDescriptor
 } from './types'
+import { codeFileExtensions, mdFileExtensions } from '../../../common/get-file-extensions'
 
 // Re-export all interfaces necessary for other parts of the code (Document Manager)
 export {
@@ -50,17 +51,8 @@ export {
   FSALAttachment
 }
 
-const ALLOWED_CODE_FILES = [
-  '.tex'
-]
-
-const MARKDOWN_FILES = [
-  '.md',
-  '.rmd',
-  '.markdown',
-  '.txt',
-  '.mdx'
-]
+const ALLOWED_CODE_FILES = codeFileExtensions(true)
+const MARKDOWN_FILES = mdFileExtensions(true)
 
 interface FSALState {
   openDirectory: DirDescriptor|null

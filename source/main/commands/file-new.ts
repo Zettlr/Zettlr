@@ -16,13 +16,10 @@ import ZettlrCommand from './zettlr-command'
 import { trans } from '../../common/i18n-main'
 import path from 'path'
 import sanitize from 'sanitize-filename'
-import { filetypes as ALLOWED_FILETYPES } from '../../common/data.json'
+import { codeFileExtensions, mdFileExtensions } from '../../common/get-file-extensions'
 
-const CODEFILE_TYPES = [
-  '.yml',
-  '.yaml',
-  '.tex'
-]
+const CODEFILE_TYPES = codeFileExtensions(true)
+const ALLOWED_FILETYPES = mdFileExtensions(true)
 
 export default class FileNew extends ZettlrCommand {
   constructor (app: any) {

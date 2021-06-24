@@ -3,6 +3,9 @@
     id="editor"
     ref="editor"
     v-bind:style="{ 'font-size': `${fontSize}px` }"
+    v-bind:class="{
+      'monospace': !isMarkdown
+    }"
     v-on:wheel="onEditorScroll($event)"
     v-on:mousedown="editorMousedown($event)"
     v-on:mouseup="editorMouseup($event)"
@@ -114,6 +117,13 @@ export default {
   computed: {
     activeFile: function () {
       return this.$store.state.activeFile
+    },
+    isMarkdown: function () {
+      if (this.activeFile === null) {
+        return true // By default, assume Markdown
+      }
+
+      return this.resolveMode(this.activeFile.ext) === 'multiplex'
     },
     openFiles: function () {
       return this.$store.state.openFiles
@@ -300,7 +310,7 @@ export default {
         this.currentlyFetchingFiles.push(this.activeFile.path)
         ipcRenderer.invoke('application', { command: 'get-file-contents', payload: this.activeFile.path })
           .then((descriptorWithContent) => {
-            const mode = (this.activeFile.ext === '.tex') ? 'stex' : 'multiplex'
+            const mode = this.resolveMode(this.activeFile.ext)
             const newDoc = {
               path: descriptorWithContent.path,
               mode: mode, // Save the mode for later swaps
@@ -489,6 +499,26 @@ export default {
     jtl (lineNumber) {
       if (this.editor !== null) {
         this.editor.jtl(lineNumber)
+      }
+    },
+    /**
+     * Resolves a file extension to a valid CodeMirror mode
+     *
+     * @param   {string}  ext  The file extension (with leading dot!)
+     *
+     * @return  {string}       The corresponding CodeMirror mode. Defaults to multiplex
+     */
+    resolveMode (ext) {
+      switch (ext) {
+        case '.tex':
+          return 'stex'
+        case '.yaml':
+        case '.yml':
+          return 'yaml'
+        case '.json':
+          return 'javascript'
+        default:
+          return 'multiplex'
       }
     },
     save () {
@@ -721,6 +751,46 @@ export default {
     @media(min-width: 1025px) { margin-left: @editor-margin-normal-lg; }
     @media(max-width: 1024px) { margin-left: @editor-margin-normal-md; }
     @media(max-width:  900px) { margin-left: @editor-margin-normal-sm; }
+  }
+
+  // If a code file is loaded, we need to display the editor contents in monospace.
+  &.monospace .CodeMirror {
+    font-family: monospace;
+
+    // We're using this solarized theme here: https://ethanschoonover.com/solarized/
+    // See also the CodeEditor.vue component, which uses the same colours
+    @base03:    #002b36;
+    @base02:    #073642;
+    @base01:    #586e75;
+    @base00:    #657b83;
+    @base0:     #839496;
+    @base1:     #93a1a1;
+    @base2:     #eee8d5;
+    @base3:     #fdf6e3;
+    @yellow:    #b58900;
+    @orange:    #cb4b16;
+    @red:       #dc322f;
+    @magenta:   #d33682;
+    @violet:    #6c71c4;
+    @blue:      #268bd2;
+    @cyan:      #2aa198;
+    @green:     #859900;
+
+    color: @base01;
+    .cm-string     { color: @green; }
+    .cm-string-2   { color: @green; }
+    .cm-keyword    { color: @green; }
+    .cm-atom       { color: @green; }
+    .cm-tag        { color: @blue; }
+    .cm-qualifier  { color: @blue; }
+    .cm-builtin    { color: @blue; }
+    .cm-variable-2 { color: @yellow; }
+    .cm-variable   { color: @yellow; }
+    .cm-comment    { color: @base1; }
+    .cm-attribute  { color: @orange; }
+    .cm-property   { color: @magenta; }
+    .cm-type       { color: @red; }
+    .cm-number     { color: @violet; }
   }
 
   .CodeMirror-code {

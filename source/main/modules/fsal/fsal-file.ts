@@ -427,7 +427,7 @@ export async function save (fileObject: MDFileDescriptor, content: string, cache
  *
  * @return  {Promise<void>}                 Resolves upon success
  */
-export async function rename (fileObject: MDFileDescriptor, cache: FSALCache, newName: string): Promise<void> {
+export async function rename (fileObject: MDFileDescriptor, cache: FSALCache|null, newName: string): Promise<void> {
   let oldPath = fileObject.path
   let newPath = path.join(fileObject.dir, newName)
   await fs.rename(oldPath, newPath)
@@ -437,7 +437,9 @@ export async function rename (fileObject: MDFileDescriptor, cache: FSALCache, ne
   fileObject.name = newName
   // Afterwards, retrieve the now current modtime
   await updateFileMetadata(fileObject)
-  cacheFile(fileObject, cache)
+  if (cache !== null) {
+    cacheFile(fileObject, cache)
+  }
 }
 
 /**
@@ -483,7 +485,7 @@ export function markClean (fileObject: MDFileDescriptor): void {
   fileObject.modified = false
 }
 
-export async function reparseChangedFile (fileObject: MDFileDescriptor, cache: FSALCache): Promise<void> {
+export async function reparseChangedFile (fileObject: MDFileDescriptor, cache: FSALCache|null): Promise<void> {
   // Literally the same as the save() function only without prior writing of contents
   const contents = await load(fileObject)
   await updateFileMetadata(fileObject)
@@ -492,5 +494,7 @@ export async function reparseChangedFile (fileObject: MDFileDescriptor, cache: F
   parseFileContents(fileObject, contents)
   global.tags.report(fileObject.tags, fileObject.path)
   fileObject.modified = false // Always reset the modification flag.
-  cacheFile(fileObject, cache)
+  if (cache !== null) {
+    cacheFile(fileObject, cache)
+  }
 }

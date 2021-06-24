@@ -180,7 +180,9 @@ export async function save (fileObject: CodeFileDescriptor, content: string, cac
   // Make sure to keep the file object itself as well as the tags updated
   parseFileContents(fileObject, content)
   fileObject.modified = false // Always reset the modification flag.
-  cacheFile(fileObject, cache)
+  if (cache !== null) {
+    cacheFile(fileObject, cache)
+  }
 }
 
 export async function rename (fileObject: CodeFileDescriptor, cache: any, newName: string): Promise<void> {
@@ -193,7 +195,9 @@ export async function rename (fileObject: CodeFileDescriptor, cache: any, newNam
   fileObject.name = newName
   // Afterwards, retrieve the now current modtime
   await updateFileMetadata(fileObject)
-  cacheFile(fileObject, cache)
+  if (cache !== null) {
+    cacheFile(fileObject, cache)
+  }
 }
 
 export async function remove (fileObject: CodeFileDescriptor): Promise<void> {
@@ -232,5 +236,7 @@ export async function reparseChangedFile (fileObject: CodeFileDescriptor, cache:
   // Make sure to keep the file object itself as well as the tags updated
   parseFileContents(fileObject, contents)
   fileObject.modified = false // Always reset the modification flag.
-  cacheFile(fileObject, cache)
+  if (cache !== null) {
+    cacheFile(fileObject, cache)
+  }
 }

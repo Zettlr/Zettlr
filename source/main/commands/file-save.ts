@@ -15,7 +15,10 @@
 import ZettlrCommand from './zettlr-command'
 import { promises as fs } from 'fs'
 import path from 'path'
-import { filetypes as ALLOWED_FILETYPES } from '../../common/data.json'
+import { codeFileExtensions, mdFileExtensions } from '../../common/get-file-extensions'
+
+const ALLOWED_FILETYPES = mdFileExtensions(true)
+const CODE_FILETYPES = codeFileExtensions(true)
 
 export default class SaveFile extends ZettlrCommand {
   constructor (app: any) {
@@ -56,7 +59,8 @@ export default class SaveFile extends ZettlrCommand {
         }
 
         // Make sure there is a correct ending supplied
-        if (!ALLOWED_FILETYPES.includes(path.extname(newPath).toLowerCase())) {
+        const ext = path.extname(newPath).toLowerCase()
+        if (!ALLOWED_FILETYPES.includes(ext) && !CODE_FILETYPES.includes(ext)) {
           newPath += '.md'
         }
 

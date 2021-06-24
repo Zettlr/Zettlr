@@ -16,7 +16,9 @@
 import path from 'path'
 import ZettlrCommand from './zettlr-command'
 import { getIDRE } from '../../common/regular-expressions'
-import { filetypes as FILETYPES } from '../../common/data.json'
+import { mdFileExtensions } from '../../common/get-file-extensions'
+
+const FILETYPES = mdFileExtensions(true)
 
 export default class ForceOpen extends ZettlrCommand {
   constructor (app: any) {

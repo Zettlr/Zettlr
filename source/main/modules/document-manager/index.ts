@@ -20,17 +20,10 @@ import path from 'path'
 import chokidar from 'chokidar'
 import { CodeFileDescriptor, CodeFileMeta, MDFileDescriptor, MDFileMeta } from '../fsal/types'
 import { FSALCodeFile, FSALFile } from '../fsal'
+import { codeFileExtensions, mdFileExtensions } from '../../../common/get-file-extensions'
 
-const ALLOWED_CODE_FILES = [
-  '.tex'
-]
-
-const MARKDOWN_FILES = [
-  '.md',
-  '.rmd',
-  '.markdown',
-  '.txt'
-]
+const ALLOWED_CODE_FILES = codeFileExtensions(true)
+const MARKDOWN_FILES = mdFileExtensions(true)
 
 export default class DocumentManager extends EventEmitter {
   private _loadedDocuments: Array<MDFileDescriptor|CodeFileDescriptor>
@@ -289,7 +282,6 @@ export default class DocumentManager extends EventEmitter {
    * @param {string|null} descriptorPath The path of the file to set as active
    */
   public set activeFile (descriptor: MDFileDescriptor|CodeFileDescriptor|null) {
-    console.log('Set active file received', descriptor)
     if (descriptor === null && this._activeFile !== null) {
       this._activeFile = null
       global.citeproc.loadMainDatabase()

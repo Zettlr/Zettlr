@@ -14,9 +14,11 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { filetypes as FILETYPES } from '../../common/data.json'
 import { MDFileMeta } from '../modules/fsal/types'
 import formatDate from '../../common/util/format-date'
+import { mdFileExtensions } from '../../common/get-file-extensions'
+
+const FILETYPES = mdFileExtensions(true)
 
 export default class FilePathFindMetaData extends ZettlrCommand {
   constructor (app: any) {

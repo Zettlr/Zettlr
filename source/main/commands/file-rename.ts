@@ -15,7 +15,9 @@
 import path from 'path'
 import ZettlrCommand from './zettlr-command'
 import sanitize from 'sanitize-filename'
-import { filetypes as ALLOWED_FILETYPES } from '../../common/data.json'
+import { mdFileExtensions } from '../../common/get-file-extensions'
+
+const ALLOWED_FILETYPES = mdFileExtensions(true)
 
 export default class FileRename extends ZettlrCommand {
   constructor (app: any) {
