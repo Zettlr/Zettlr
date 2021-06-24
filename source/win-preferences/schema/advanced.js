@@ -50,6 +50,13 @@ export default function () {
           type: 'checkbox',
           label: trans('dialog.preferences.delete_on_fail'),
           model: 'system.deleteOnFail'
+        },
+        {
+          type: 'checkbox',
+          label: process.platform === 'darwin'
+            ? trans('dialog.preferences.show_app_in_the_notification_area')
+            : trans('dialog.preferences.leave_app_running_in_the_notification_area'),
+          model: 'system.leaveAppRunning'
         }
       ],
       [

@@ -29,12 +29,14 @@ declare module '*.png'
  */
 interface Application {
   runCommand: (command: string, payload?: any) => Promise<any>
+  isQuitting: () => boolean
   showLogViewer: () => void
   showPreferences: () => void
   displayErrorMessage: (title: string, message: string, contents?: string) => void
   showAboutWindow: () => void
   showDefaultsPreferences: () => void
   showTagManager: () => void
+  showAnyWindow: () => void
   notifyChange: (msg: string) => void
   findFile: (prop: any) => MDFileDescriptor | CodeFileDescriptor | null
   findDir: (prop: any) => DirDescriptor | null
@@ -76,5 +78,6 @@ declare module NodeJS {
     i18nRawData: any
     i18nFallback: any
     i18nFallbackRawData: any
+    tray: TrayProvider
   }
 }

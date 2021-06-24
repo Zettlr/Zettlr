@@ -42,6 +42,7 @@ The Custom CSS can now be edited directly in the assets dialog where you can als
 - You can now close files by middle-clicking their tabs.
 - MDX supported as a type of markdown file
 - New File and Edit File can now fast rename without selecting the extension
+- Add a tray to the system notification area, off by default. To activate, see Preferences → Advanced → "Leave app running in the notification area" (or "Show app in the notification area" when using MacOS).
 
 ## Under the Hood
 

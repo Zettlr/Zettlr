@@ -16,6 +16,7 @@ import path from 'path'
 import { app } from 'electron'
 import { promises as fs } from 'fs'
 import isFile from '../../common/util/is-file'
+import isTraySupported from './is-tray-supported'
 
 /**
  * Contains custom paths that should be present on the process.env.PATH property
@@ -128,6 +129,14 @@ export default async function environmentCheck (): Promise<void> {
       global.log.info(`Creating required directory ${p} ...`)
       await fs.mkdir(p, { recursive: true })
     }
+  }
+
+  try {
+    process.env.ZETTLR_IS_TRAY_SUPPORTED = await isTraySupported() ? '1' : '0'
+  } catch (err) {
+    process.env.ZETTLR_IS_TRAY_SUPPORTED = '0'
+    process.env.ZETTLR_TRAY_ERROR = err.message
+    global.log.warning(err.message)
   }
 
   global.log.info('Environment check complete.')

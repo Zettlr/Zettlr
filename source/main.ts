@@ -157,12 +157,14 @@ app.on('open-file', (e, p) => {
 })
 
 /**
- * Quit as soon as all windows are closed and we are not on macOS.
+ * Quit as soon as all windows are closed. Except if
+ * `system.leaveAppRunning` is true or on macOS.
  */
 app.on('window-all-closed', function () {
-  // On OS X it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
+  const leaveAppRunning = Boolean(global.config.get('system.leaveAppRunning'))
+  if (!leaveAppRunning && process.platform !== 'darwin') {
+    // On OS X it is common for applications and their menu bar
+    // to stay active until the user quits explicitly with Cmd + Q
     app.quit()
   }
 })

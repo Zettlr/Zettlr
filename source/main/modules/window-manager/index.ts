@@ -114,7 +114,7 @@ export default class WindowManager {
           } else {
             callingWindow.maximize()
           }
-          // fall through
+        // fall through
         case 'get-maximised-status':
           event.reply('window-controls', {
             command: 'get-maximised-status',
@@ -231,6 +231,10 @@ export default class WindowManager {
       return
     }
 
+    this._mainWindow.on('show', () => {
+      global.tray.add()
+    })
+
     // Listens to events from the window
     this._mainWindow.on('close', (event) => {
       // The user has requested the window to be closed -> first close
@@ -263,8 +267,10 @@ export default class WindowManager {
           win.close()
         }
       }
-
-      if (this._beforeMainWindowCloseCallback !== null) {
+      if (process.platform !== 'darwin' && Boolean(global.config.get('system.leaveAppRunning')) && !global.application.isQuitting()) {
+        this._mainWindow?.hide()
+        event.preventDefault()
+      } else if (this._beforeMainWindowCloseCallback !== null) {
         const shouldClose: boolean = this._beforeMainWindowCloseCallback()
         if (!shouldClose) {
           event.preventDefault()
