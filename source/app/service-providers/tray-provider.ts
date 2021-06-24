@@ -31,7 +31,6 @@ export default class TrayProvider extends EventEmitter {
    * The tray
    */
   private _tray: Tray | null
-  private readonly _menu: MenuItemConstructorOptions[]
 
   /**
    * Create the instance on program start and setup services.
@@ -40,19 +39,6 @@ export default class TrayProvider extends EventEmitter {
     super()
     global.log.verbose('Tray provider booting up ...')
     this._tray = null
-    this._menu = [
-      {
-        label: trans('tray.show_zettlr'),
-        click: () => global.application.showAnyWindow(),
-        type: 'normal'
-      },
-      { label: '', type: 'separator' },
-      {
-        label: trans('menu.quit'),
-        click: () => app.quit(),
-        type: 'normal'
-      }
-    ]
 
     global.tray = {
       /**
@@ -138,7 +124,20 @@ export default class TrayProvider extends EventEmitter {
         this._tray = new Tray(path.join(__dirname, 'assets/icons', iconPath))
       }
 
-      const contextMenu = Menu.buildFromTemplate(this._menu)
+      const menu: MenuItemConstructorOptions[] = [
+        {
+          label: trans('tray.show_zettlr'),
+          click: () => global.application.showAnyWindow(),
+          type: 'normal'
+        },
+        { label: '', type: 'separator' },
+        {
+          label: trans('menu.quit'),
+          click: () => app.quit(),
+          type: 'normal'
+        }
+      ]
+      const contextMenu = Menu.buildFromTemplate(menu)
       this._tray.setToolTip(trans('tray.tooltip'))
       this._tray.setContextMenu(contextMenu)
     }
