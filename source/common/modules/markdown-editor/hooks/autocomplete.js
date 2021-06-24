@@ -118,7 +118,8 @@ function collectHeadingIDs (cm) {
     // Convert all alphabetic characters to lowercase.
     text = text.toLowerCase()
     // Remove everything up to the first letter (identifiers may not begin with a number or punctuation mark).
-    const firstLetter = /[a-z]/.exec(text).index
+    const letterMatch = /[a-z]/.exec(text)
+    const firstLetter = (letterMatch !== null) ? letterMatch.index : 0
     text = text.substr(firstLetter)
     // If nothing is left after this, use the identifier section.
     if (text.length === 0) {
