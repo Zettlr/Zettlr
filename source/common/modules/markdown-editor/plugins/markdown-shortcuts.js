@@ -107,8 +107,15 @@ const {
       } else {
         // TODO: Check whether the user just selected the text itself and
         // not the formatting marks!
-        // We got no bold so bolden
-        replacements.push(pre + selection + post)
+
+        // NOTE: Since the user can triple-click a line, that selection will
+        // extend beyond the line. So check if the last char of selection is
+        // a newline, and, if so, pluck that and push it after post.
+        if (selection[selection.length - 1] === '\n') {
+          replacements.push(pre + String(selection).substr(0, selection.length - 1) + post + '\n')
+        } else {
+          replacements.push(pre + selection + post)
+        }
       }
     }
 
