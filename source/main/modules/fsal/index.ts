@@ -58,7 +58,8 @@ const MARKDOWN_FILES = [
   '.md',
   '.rmd',
   '.markdown',
-  '.txt'
+  '.txt',
+  '.mdx'
 ]
 
 interface FSALState {
