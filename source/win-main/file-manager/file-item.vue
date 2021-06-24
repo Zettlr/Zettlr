@@ -161,6 +161,10 @@ export default {
     // We have to explicitly transform ALL properties to computed ones for
     // the reactivity in conjunction with the recycle-scroller.
     basename: function () {
+      if (this.obj.type === 'code') {
+        return this.obj.name
+      }
+
       if (this.obj.frontmatter && this.obj.frontmatter.hasOwnProperty('title')) {
         return this.obj.frontmatter.title
       } else if (this.obj.firstHeading && this.$store.state.config['display.useFirstHeadings']) {

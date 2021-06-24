@@ -30,7 +30,7 @@
       >
         <!-- Is this a project? -->
         <clr-icon
-          v-if="obj.project !== null && hasChildren"
+          v-if="isDirectory && obj.project !== null && hasChildren"
           shape="blocks-group"
           class="is-solid"
         />
@@ -62,7 +62,7 @@
         />
         <!-- Is this a project? -->
         <clr-icon
-          v-else-if="obj.project !== null && !hasChildren"
+          v-else-if="isDirectory && obj.project !== null && !hasChildren"
           aria-label="Project"
           shape="blocks-group"
           class="is-solid"
@@ -83,8 +83,13 @@
         />
         <!-- Display a file icon -->
         <clr-icon
-          v-else-if="obj.type === 'file' && !hasChildren"
+          v-else-if="obj.type === 'file'"
           shape="file"
+          aria-hidden="true"
+        />
+        <clr-icon
+          v-else-if="obj.type === 'code'"
+          shape="code"
           aria-hidden="true"
         />
       </span>
@@ -250,7 +255,7 @@ export default {
       return this.collapsed ? 'Uncollapse directory' : 'Collapse directory'
     },
     basename: function () {
-      if (this.obj.type === 'directory') {
+      if (this.obj.type === 'directory' || this.obj.type === 'code') {
         return this.obj.name
       }
 
