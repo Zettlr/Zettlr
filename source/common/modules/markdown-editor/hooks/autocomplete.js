@@ -13,15 +13,19 @@
  */
 
 const { getCodeBlockRE } = require('../../../regular-expressions')
-const codeBlockRE = getCodeBlockRE()
+// We need two code block REs: First the line-wise, and then the full one.
+const codeBlockRE = getCodeBlockRE(false)
+const codeBlockMultiline = getCodeBlockRE(true)
+const CodeMirror = require('codemirror')
 
 let autocompleteStart = null
 let currentDatabase = null
-let availableDatabases = {
-  'tags': [],
-  'citekeys': [],
-  'files': [],
-  'syntaxHighlighting': [
+const availableDatabases = {
+  tags: [],
+  citekeys: [],
+  files: [],
+  headings: [],
+  syntaxHighlighting: [
     { text: '', displayText: 'No highlighting' }, // TODO: translate
     { text: 'javascript', displayText: 'JavaScript/Node.JS' },
     { text: 'json', displayText: 'JSON' },
@@ -74,12 +78,67 @@ let availableDatabases = {
   ]
 }
 
-const CodeMirror = require('codemirror')
+/**
+ * This function runs over the full document to extract ATX heading IDs and
+ * saves them to the local variable `currentHeadingIDs`.
+ *
+ * @param   {CodeMirror}  cm  The CodeMirror instance
+ */
+function collectHeadingIDs (cm) {
+  availableDatabases.headings = []
+
+  const atxRE = /^#{1,6}\s(.+)$/
+
+  let val = cm.getValue()
+  // Remove all code blocks
+  val = val.replace(codeBlockMultiline, '')
+  codeBlockMultiline.lastIndex = 0 // IMPORTANT: Remember to reset this (global flag)
+
+  for (const line of val.split('\n')) {
+    const match = atxRE.exec(line)
+
+    if (match === null) {
+      continue
+    }
+
+    // We got an ATX heading. Now we need to transform it into a Pandoc ID.
+    // The algorithm is described here: https://pandoc.org/MANUAL.html#extension-auto_identifiers
+    let text = match[1]
+
+    // Remove all formatting, links, etc.
+    text = text.replace(/[*_]{1,3}(.+)[*_]{1,3}/g, '$1')
+    text = text.replace(/`[^`]+`/g, '$1')
+    text = text.replace(/\[.+\]\(.+\)/g, '')
+    // Remove all footnotes.
+    text = text.replace(/\[\^.+\]/g, '')
+    // Replace all spaces and newlines with hyphens.
+    text = text.replace(/[\s\n]/g, '-')
+    // Remove all non-alphanumeric characters, except underscores, hyphens, and periods.
+    text = text.replace(/[^a-zA-Z0-9_.-]/g, '')
+    // Convert all alphabetic characters to lowercase.
+    text = text.toLowerCase()
+    // Remove everything up to the first letter (identifiers may not begin with a number or punctuation mark).
+    const firstLetter = /[a-z]/.exec(text).index
+    text = text.substr(firstLetter)
+    // If nothing is left after this, use the identifier section.
+    if (text.length === 0) {
+      text = 'section'
+    }
+
+    availableDatabases.headings.push({
+      text: text,
+      displayText: '#' + text
+    })
+  }
+}
 
 module.exports = {
   'autocompleteHook': (cm) => {
     // Listen to change events
     cm.on('change', (cm, changeObj) => {
+      // On every change event, make sure to update the heading IDs
+      collectHeadingIDs(cm)
+
       if (autocompleteStart !== null && currentDatabase !== null) {
         // We are currently autocompleting something, let's finish that first.
         return
@@ -168,6 +227,7 @@ function shouldBeginAutocomplete (cm, changeObj) {
   const isSOL = cursor.ch === 1
   // charAt returns an empty string if the index is out of range (e.g. -1)
   const charBefore = line.charAt(cursor.ch - 2)
+  const charTwoBefore = line.charAt(cursor.ch - 3)
 
   // Can we begin citekey autocompletion?
   // A valid citekey position is: Beginning of the line (citekey without square
@@ -185,6 +245,12 @@ function shouldBeginAutocomplete (cm, changeObj) {
     changeObj.text[0] === '#' && (isSOL || charBefore === ' ')
   ) {
     return 'tags'
+  }
+
+  // This will return true if the user began typing a hashtag within a link,
+  // e.g. [some text](#), indicating they want to refer a heading within the doc.
+  if (changeObj.text[0] === '#' && charTwoBefore + charBefore === '](') {
+    return 'headings'
   }
 
   // Can we begin file autocompletion?
@@ -269,9 +335,9 @@ function getHints (term) {
 function hintFunction (cm, opt) {
   let term = cm.getRange(autocompleteStart, cm.getCursor()).toLowerCase()
   let completionObject = {
-    'list': getHints(term),
-    'from': autocompleteStart,
-    'to': cm.getCursor()
+    list: getHints(term),
+    from: autocompleteStart,
+    to: cm.getCursor()
   }
 
   // Set the autocomplete to false as soon as the user has actively selected something.
