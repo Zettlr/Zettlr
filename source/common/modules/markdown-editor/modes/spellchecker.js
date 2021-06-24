@@ -163,10 +163,10 @@
         }
 
         // Prevent returning false results because of 'quoted' words.
-        if (allQuotes.includes(word[0])) {
+        while (allQuotes.includes(word[0])) {
           word = word.substr(1)
         }
-        if (allQuotes.includes(word[word.length - 1])) {
+        while (allQuotes.includes(word[word.length - 1])) {
           word = word.substr(0, word.length - 1)
         }
 
