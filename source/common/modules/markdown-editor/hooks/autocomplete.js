@@ -17,6 +17,9 @@ const { getCodeBlockRE } = require('../../../regular-expressions')
 const codeBlockRE = getCodeBlockRE(false)
 const codeBlockMultiline = getCodeBlockRE(true)
 const CodeMirror = require('codemirror')
+const { DateTime } = require('luxon')
+const uuid = require('uuid').v4
+const generateId = require('../../../util/generate-id')
 
 let autocompleteStart = null
 let currentDatabase = null
@@ -24,6 +27,7 @@ const availableDatabases = {
   tags: [],
   citekeys: [],
   files: [],
+  snippets: [],
   headings: [],
   syntaxHighlighting: [
     { text: '', displayText: 'No highlighting' }, // TODO: translate
@@ -77,6 +81,30 @@ const availableDatabases = {
     { text: 'diff', displayText: 'Diff' }
   ]
 }
+
+/**
+ * This keymap is being used to cycle through the tabstops of a recently added
+ * snippet. You can stop the process early by pressing Escape.
+ *
+ * @var {CodeMirror.KeyMap}
+ */
+const snippetsKeymap = {
+  'Tab': nextTabstop,
+  'Esc': (cm) => {
+    for (const marker of currentTabStops) {
+      marker.clear()
+    }
+    currentTabStops = []
+    cm.removeKeyMap(snippetsKeymap)
+  }
+}
+
+/**
+ * An array containing all textmarkers used by the templating system.
+ *
+ * @var {any[]}
+ */
+let currentTabStops = []
 
 /**
  * This function runs over the full document to extract ATX heading IDs and
@@ -152,7 +180,15 @@ module.exports = {
       }
 
       // Determine if we accept spaces within the autocomplete
-      const space = Boolean(global.config.get('editor.autocompleteAcceptSpace'))
+      const spaceCfg = Boolean(global.config.get('editor.autocompleteAcceptSpace'))
+
+      // We do not allow spaces for these databases:
+      const DISALLOW_SPACES = [
+        'tags',
+        'headings'
+      ]
+
+      const space = spaceCfg && !DISALLOW_SPACES.includes(autocompleteDatabase)
 
       // If we're here, we can begin an autocompletion
       autocompleteStart = Object.assign({}, cm.getCursor())
@@ -188,8 +224,8 @@ module.exports = {
       })
 
       availableDatabases[type] = tagHints
-    } else if (type === 'citekeys') {
-      // This database works as-is
+    } else if ([ 'citekeys', 'snippets' ].includes(type)) {
+      // These databases work as they are
       availableDatabases[type] = database
     } else if (type === 'files') {
       let fileHints = Object.keys(database).map(key => {
@@ -242,10 +278,13 @@ function shouldBeginAutocomplete (cm, changeObj) {
   }
 
   // Can we begin tag autocompletion?
-  if (
-    changeObj.text[0] === '#' && (isSOL || charBefore === ' ')
-  ) {
+  if (changeObj.text[0] === '#' && (isSOL || charBefore === ' ')) {
     return 'tags'
+  }
+
+  // Can we begin autocompleting a snippet?
+  if (changeObj.text[0] === ':' && (isSOL || charBefore === ' ')) {
+    return 'snippets'
   }
 
   // This will return true if the user began typing a hashtag within a link,
@@ -328,7 +367,7 @@ function getHints (term) {
 /**
  * Hinting function used for the autocomplete functionality
  *
- * @param   {CodeMirror}  cm   The editor instance
+ * @param   {CodeMirror.Editor}  cm   The editor instance
  * @param   {any}  opt         The options passed to the showHint option
  *
  * @return  {any}              The completion object
@@ -451,6 +490,33 @@ function hintFunction (cm, opt) {
         // Now back up one character to set the cursor inside the brackets
         cm.setCursor({ line: lineNo, ch: toCh + 1 })
       }
+    } else if (currentDatabase === availableDatabases['snippets']) {
+      // For this database, we must remove the leading colon
+      const insertedLines = completion.text.split('\n')
+      cm.setSelection(
+        { line: autocompleteStart.line, ch: autocompleteStart.ch - 1 },
+        { line: autocompleteStart.line + insertedLines.length - 1, ch: insertedLines[insertedLines.length - 1].length },
+        { scroll: false }
+      )
+
+      // First, insert the text, but with all variables replaced and only the
+      // tabstops remaining.
+      const actualTextToInsert = replaceSnippetVariables(completion.text)
+      const actualInsertedLines = actualTextToInsert.split('\n').length
+      cm.replaceSelection(actualTextToInsert)
+
+      currentTabStops = getTabMarkers(cm, autocompleteStart.line, autocompleteStart.line + actualInsertedLines)
+
+      // Now, we need to mark every tabstop within this section of text and
+      // store those text markers so that we can find them again by tabbing
+      // through them.
+
+      // Now activate our special snippets keymap which will ensure the user can
+      // cycle through all placeholders which we have identified.
+      cm.addKeyMap(snippetsKeymap)
+
+      // Plus, move to the first tabstop already so the user can start immediately.
+      nextTabstop(cm)
     }
     autocompleteStart = null
     currentDatabase = null // Reset the database used for the hints.
@@ -466,4 +532,147 @@ function hintFunction (cm, opt) {
   })
 
   return completionObject
+}
+
+/**
+ * Creates markers within the CodeMirror instance corresponding to the tabstops
+ * and returns the list.
+ *
+ * @param   {CodeMirror.Editor}  cm    The Editor instance
+ * @param   {number}             from  The line from which to begin analysing the text
+ * @param   {number}             to    The final line (exclusive) until which to analyse.
+ *
+ * @return  {TextMarkers[]}            An array of created text markers
+ */
+function getTabMarkers (cm, from, to) {
+  const tabStops = []
+  for (let i = from; i < to; i++) {
+    let line = cm.getLine(i)
+    let match = null
+
+    const varRE = /\$(\d+)|\$\{(\d+):(.+?)\}/g
+
+    while ((match = varRE.exec(line)) !== null) {
+      const ch = match.index
+      const index = parseInt(match[1] || match[2], 10)
+      const replaceWith = match[3]
+
+      const from = { line: i, ch: ch }
+      const to = { line: i, ch: ch + match[0].length }
+      cm.setSelection(from, to)
+      cm.replaceSelection((replaceWith !== undefined) ? replaceWith : '')
+      // After the replacement, we need to "re-get" the line because it has
+      // changed now and otherwise the regexp will get confused.
+      varRE.lastIndex = ch
+      line = cm.getLine(i)
+
+      if (replaceWith !== undefined) {
+        // In this case, we must replace the marker with the default text
+        // and create a TextMarker.
+        const marker = cm.markText(
+          from,
+          { line: from.line, ch: from.ch + replaceWith.length },
+          { className: 'tabstop' }
+        )
+        tabStops.push({ index: index, marker: marker })
+      } else {
+        // Here we don't need a TextMarker, but rather a Bookmark,
+        // since it's basically a single-char range.
+        const elem = document.createElement('span')
+        elem.classList.add('tabstop')
+        elem.textContent = index
+        const marker = cm.setBookmark(from, { widget: elem })
+        tabStops.push({ index: index, marker: marker })
+      }
+    }
+  }
+
+  // Now we just need to sort the currentTabStops and map it so only the
+  // marker remains.
+  tabStops.sort((a, b) => { return a.index - b.index })
+  // Now put the 0 to the top (if there is a zero)
+  if (tabStops[0].index === 0) {
+    tabStops.push(tabStops.shift())
+  }
+
+  // Make the array marker only
+  return tabStops.map(elem => elem.marker)
+}
+
+/**
+ * A utility function that replaces snippet variables with their correct values
+ * dynamically.
+ *
+ * @param   {string}  text  The text to modify
+ *
+ * @return  {string}        The text with all variables replaced accordingly.
+ */
+function replaceSnippetVariables (text) {
+  // First, prepare our replacement table
+  const now = DateTime.now()
+  const month = now.month
+  const day = now.day
+  const hour = now.hour
+  const minute = now.minute
+  const second = now.second
+  const clipboard = window.clipboard.readText()
+
+  const REPLACEMENTS = {
+    CURRENT_YEAR: now.year,
+    CURRENT_YEAR_SHORT: now.year.toString().substr(2),
+    CURRENT_MONTH: (month < 10) ? '0' + month : month,
+    CURRENT_MONTH_NAME: now.monthLong,
+    CURRENT_MONTH_NAME_SHORT: now.monthShort,
+    CURRENT_DATE: (day < 10) ? '0' + day : day,
+    CURRENT_HOUR: (hour < 10) ? '0' + hour : hour,
+    CURRENT_MINUTE: (minute < 10) ? '0' + minute : minute,
+    CURRENT_SECOND: (second < 10) ? '0' + second : second,
+    CURRENT_SECONDS_UNIX: now.toSeconds(),
+    UUID: uuid(),
+    CLIPBOARD: (clipboard !== '') ? clipboard : undefined,
+    ZKN_ID: generateId(global.config.get('zkn.idGen'))
+  }
+
+  // Second: Replace those variables, and return the text
+  return text.replace(/\$([A-Z_]+)|\$\{([A-Z_]+):(.+?)\}/g, (match, p1, p2, p3) => {
+    if (p1 !== undefined) {
+      // We have a single variable, so only replace if it's a supported one
+      if (REPLACEMENTS[p1] !== undefined) {
+        return REPLACEMENTS[p1]
+      } else {
+        return match
+      }
+    } else {
+      // We have a variable with placeholder, so replace it potentially with the default
+      if (REPLACEMENTS[p2] !== undefined) {
+        return REPLACEMENTS[p2]
+      } else {
+        return p3
+      }
+    }
+  })
+}
+
+/**
+ * A utility function bound to Tabs. Whenever called, this function jumps to the
+ * next tabstop/placeholder.
+ *
+ * @param   {CodeMirror.Editor}  cm  The editor instance
+ */
+function nextTabstop (cm) {
+  const marker = currentTabStops.shift()
+  if (marker === undefined) {
+    // We're done
+    cm.removeKeyMap(snippetsKeymap)
+    return
+  }
+
+  // Set the current selection, differentiating between tabstops and placeholders.
+  const position = marker.find()
+  if ('from' in position && 'to' in position) {
+    cm.setSelection(position.from, position.to)
+  } else {
+    cm.setCursor(position)
+  }
+  marker.clear()
 }

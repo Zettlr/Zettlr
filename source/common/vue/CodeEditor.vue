@@ -25,6 +25,86 @@ import 'codemirror/addon/edit/closebrackets'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/mode/css/css'
 import 'codemirror/mode/yaml/yaml'
+import 'codemirror/mode/gfm/gfm'
+import 'codemirror/addon/mode/overlay'
+
+/**
+ * Define a snippets mode that extends the GFM mode with TextMate syntax.
+ *
+ * @param  {Object}       config     The original mode config
+ * @param  {Object}       parsercfg  The parser config
+ *
+ * @return {OverlayMode}             The generated overlay mode
+ */
+CodeMirror.defineMode('markdown-snippets', function (config, parsercfg) {
+  // Create the overlay and such
+  // Only matches simple $0 or $14 tabstops
+  const tabstopRE = /\$\d+/
+  // Matches tabstops with defaults
+  const placeholderRE = /\$\{\d+:.+?\}/
+  // Matches only valid variables
+  const onlyVarRE = /\$([A-Z_]+)/
+  // Matches only valid variables plus their placeholder
+  const variableRE = /\$\{([A-Z_]+):.+?\}/
+
+  // NOTE: This array corresponds to whatever is defined in autocomplete.js
+  const SUPPORTED_VARIABLES = [
+    'CURRENT_YEAR',
+    'CURRENT_YEAR_SHORT',
+    'CURRENT_MONTH',
+    'CURRENT_MONTH_NAME',
+    'CURRENT_MONTH_NAME_SHORT',
+    'CURRENT_DATE',
+    'CURRENT_HOUR',
+    'CURRENT_MINUTE',
+    'CURRENT_SECOND',
+    'CURRENT_SECONDS_UNIX',
+    'UUID',
+    'CLIPBOARD',
+    'ZKN_ID'
+  ]
+
+  const markdownSnippets = {
+    token: function (stream) {
+      if (stream.match(tabstopRE) !== null) {
+        return 'tm-tabstop'
+      }
+
+      if (stream.match(placeholderRE) !== null) {
+        return 'tm-placeholder'
+      }
+
+      if (stream.match(onlyVarRE, false) !== null) {
+        const variable = stream.match(onlyVarRE)[1]
+        if (SUPPORTED_VARIABLES.includes(variable)) {
+          return 'tm-variable'
+        } else {
+          return 'tm-false-variable'
+        }
+      }
+
+      if (stream.match(variableRE, false) !== null) {
+        const variable = stream.match(variableRE)[1]
+        if (SUPPORTED_VARIABLES.includes(variable)) {
+          return 'tm-variable-placeholder'
+        } else {
+          return 'tm-false-variable'
+        }
+      }
+
+      // We didn't match anything, so try again next time.
+      stream.next()
+      return null
+    }
+  }
+
+  const mode = CodeMirror.getMode(config, {
+    name: 'gfm',
+    highlightFormatting: true,
+    gitHubSpice: false
+  })
+  return CodeMirror.overlayMode(mode, markdownSnippets, true)
+})
 
 /**
  * Small drop-in plugin that assigns 'cm-link'-classes to everything that looks
@@ -189,6 +269,13 @@ body {
     .cm-number     { color: @violet; }
     .CodeMirror-gutters { background-color: @base1; }
     .CodeMirror-linenumber { color: @base00; }
+
+    // Additional styles only for the GFM snippets editor
+    .cm-tm-tabstop { color: @cyan; }
+    .cm-tm-placeholder { color: @cyan; }
+    .cm-tm-variable { color: @yellow; }
+    .cm-tm-variable-placeholder { color: @violet; }
+    .cm-tm-false-variable { color: @red; }
   }
 
   &.dark {

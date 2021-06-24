@@ -90,9 +90,12 @@
     background-color: rgba(0, 0, 0, 0.25);
   }
 
-  // Enable matches on the searchbar to be indicated
-  .CodeMirror-search-match {
-    background-color: rgba(225, 225, 0, 0.7);
+  // These tab stops are used by the autocomplete hook to indicate next stops.
+  .tabstop {
+    display: inline-block;
+    min-width: 10px; // So that the bookmarks are at least a little bit visible.
+    background-color: rgba(0, 217, 225, 0.7);
+    border-radius: 3px;
   }
 
   // SYNTAX-HIGHLIGHTING CLASSES

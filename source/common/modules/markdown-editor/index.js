@@ -319,6 +319,17 @@ module.exports = class MarkdownEditor extends EventEmitter {
           break
       }
     })
+
+    // Listen to updates from the assets provider
+    ipcRenderer.on('assets-provider', (event, which) => {
+      if (which === 'snippets-updated') {
+        // The snippet list has been updated, so we must reflect this.
+        this.updateSnippetAutocomplete().catch(err => console.error(err))
+      }
+    })
+
+    // Initial retrieval of snippets
+    this.updateSnippetAutocomplete().catch(err => console.error(err))
   } // END CONSTRUCTOR
 
   // SEARCH FUNCTIONALITY
@@ -531,6 +542,29 @@ module.exports = class MarkdownEditor extends EventEmitter {
    */
   setCompletionDatabase (type, database) {
     setAutocompleteDatabase(type, database)
+  }
+
+  /**
+   * Updates the list of available snippets.
+   */
+  async updateSnippetAutocomplete () {
+    const snippetList = await ipcRenderer.invoke('assets-provider', { command: 'list-snippets' })
+
+    const snippetsDB = []
+
+    for (const snippet of snippetList) {
+      const content = await ipcRenderer.invoke('assets-provider', {
+        command: 'get-snippet',
+        payload: { name: snippet }
+      })
+
+      snippetsDB.push({
+        displayText: snippet,
+        text: content
+      })
+    }
+
+    this.setCompletionDatabase('snippets', snippetsDB)
   }
 
   /* * * * * * * * * * * *

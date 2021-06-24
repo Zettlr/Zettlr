@@ -49,7 +49,8 @@ const REQUIRED_DIRECTORIES = [
   path.join(app.getPath('userData'), 'dict'), // Custom dictionary path
   path.join(app.getPath('userData'), 'lang'), // Custom translation path
   path.join(app.getPath('userData'), 'logs'), // Log path
-  path.join(app.getPath('userData'), 'defaults') // Defaults files
+  path.join(app.getPath('userData'), 'defaults'), // Defaults files
+  path.join(app.getPath('userData'), 'snippets') // Snippets files
 ]
 
 /**

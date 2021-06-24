@@ -13,25 +13,26 @@
  * END HEADER
  */
 
-import EventEmitter from 'events'
 import path from 'path'
 import { app, ipcMain } from 'electron'
 import { promises as fs } from 'fs'
 import YAML from 'yaml'
+import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
 
-export default class AssetsProvider extends EventEmitter {
+export default class AssetsProvider {
   /**
    * Holds the path where defaults files can be found.
    *
    * @var {string}
    */
   private readonly _defaultsPath: string
+  private readonly _snippetsPath: string
 
   constructor () {
-    super()
     global.log.verbose('Assets provider starting up ...')
 
     this._defaultsPath = path.join(app.getPath('userData'), '/defaults')
+    this._snippetsPath = path.join(app.getPath('userData'), '/snippets')
 
     global.assets = {
       // These two global functions get the defaults as a JavaScript object,
@@ -58,6 +59,16 @@ export default class AssetsProvider extends EventEmitter {
         return await this.setDefaultsFor(payload.format, payload.type, payload.contents, true)
       } else if (command === 'restore-defaults-file') {
         return await this.restoreDefaultsFor(payload.format, payload.type)
+      } else if (command === 'get-snippet') {
+        return await this.getSnippet(payload.name)
+      } else if (command === 'set-snippet') {
+        return await this.setSnippet(payload.name, payload.contents)
+      } else if (command === 'remove-snippet') {
+        return await this.removeSnippet(payload.name)
+      } else if (command === 'list-snippets') {
+        return await this.listSnippets()
+      } else if (command === 'rename-snippet') {
+        return await this.renameSnippet(payload.name, payload.newName)
       }
     })
   }
@@ -147,5 +158,89 @@ export default class AssetsProvider extends EventEmitter {
     }
 
     return true
+  }
+
+  /**
+   * Retrieves a snippet with the given name. Throws an error if the file does not exist.
+   *
+   * @param   {string}           name  The snippet file name (sans extension)
+   *
+   * @return  {Promise<string>}        The file contents
+   */
+  async getSnippet (name: string): Promise<string> {
+    const filePath = path.join(this._snippetsPath, name + '.tpl.md')
+    return await fs.readFile(filePath, { encoding: 'utf-8' })
+  }
+
+  /**
+   * Sets a snippet file with the given content. Overwrites existing files. Can
+   * be used to create new snippet files.
+   *
+   * @param   {string}            name     The snippet file name (sans extension)
+   * @param   {string}            content  The new contents of the file
+   *
+   * @return  {Promise<boolean>}           Returns false if there was an error
+   */
+  async setSnippet (name: string, content: string): Promise<boolean> {
+    try {
+      const filePath = path.join(this._snippetsPath, name + '.tpl.md')
+      await fs.writeFile(filePath, content)
+      broadcastIpcMessage('assets-provider', 'snippets-updated')
+      return true
+    } catch (err) {
+      global.log.error(`[Assets Provider] Could not save snippets file: ${String(err.message)}`, err)
+      return false
+    }
+  }
+
+  /**
+   * Removes a snippet from disk
+   *
+   * @param   {string}            name  The snippet file name (sans extension)
+   *
+   * @return  {Promise<boolean>}        Returns false if there was an error
+   */
+  async removeSnippet (name: string): Promise<boolean> {
+    try {
+      const filePath = path.join(this._snippetsPath, name + '.tpl.md')
+      await fs.unlink(filePath)
+      broadcastIpcMessage('assets-provider', 'snippets-updated')
+      return true
+    } catch (err) {
+      global.log.error(`[Assets Provider] Could not remove snippets file: ${String(err.message)}`, err)
+      return false
+    }
+  }
+
+  /**
+   * Renames a snippet
+   *
+   * @param   {string}            name     The old name
+   * @param   {string}            newName  The new snippet name
+   *
+   * @return  {Promise<boolean>}           Returns false if there was an error.
+   */
+  async renameSnippet (name: string, newName: string): Promise<boolean> {
+    try {
+      const oldPath = path.join(this._snippetsPath, name + '.tpl.md')
+      const newPath = path.join(this._snippetsPath, newName + '.tpl.md')
+      await fs.rename(oldPath, newPath)
+      broadcastIpcMessage('assets-provider', 'snippets-updated')
+      return true
+    } catch (err) {
+      global.log.error(`[Assets Provider] Could not rename snippets file: ${String(err.message)}`, err)
+      return false
+    }
+  }
+
+  /**
+   * Lists all snippets that are stored on this computer.
+   *
+   * @return  {Promise<string[]>}  The promise resolves with a list of existing snippets.
+   */
+  async listSnippets (): Promise<string[]> {
+    const files = await fs.readdir(this._snippetsPath)
+    const snippetFiles = files.filter(file => /\.tpl\.md$/.test(file))
+    return snippetFiles.map(file => file.replace(/\.tpl\.md$/, ''))
   }
 }
