@@ -62,6 +62,13 @@
     // Convert smart quotes into the default before checking the term, see #1948
     const saneTerm = term.replace(/’‘‚‹›»“”」/g, "'")
 
+    // Don't check the empty string, which can arise when
+    // a 'word' consists of just opening/closing quotes,
+    // which is then removed
+    if (term === '') {
+      return true
+    }
+
     // Return cache if possible
     if (spellcheckCache[saneTerm] !== undefined) {
       return spellcheckCache[saneTerm]
