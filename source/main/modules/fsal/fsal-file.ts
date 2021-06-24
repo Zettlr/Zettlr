@@ -18,7 +18,7 @@ import hash from '../../../common/util/hash'
 import searchFile from './util/search-file'
 import countWords from '../../../common/util/count-words'
 import extractYamlFrontmatter from '../../../common/util/extract-yaml-frontmatter'
-import { getIDRE } from '../../../common/regular-expressions'
+import { getIDRE, getCodeBlockRE } from '../../../common/regular-expressions'
 import { shell } from 'electron'
 import safeAssign from '../../../common/util/safe-assign'
 // Import the interfaces that we need
@@ -129,7 +129,9 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
 
   // Create a copy of the text contents without any code blocks and inline
   // code for the tag and ID extraction methods.
-  let mdWithoutCode = content.replace(/^`{3,}.+`{3,}$|`[^`]+`|~{3,}[^~]+~{3,}/gms, '')
+  const codeBlockRE = getCodeBlockRE(true)
+  let mdWithoutCode = content.replace(codeBlockRE, '')
+  mdWithoutCode = mdWithoutCode.replace(/`[^`]+`/g, '')
 
   // Determine linefeed to preserve on saving so that version control
   // systems don't complain.

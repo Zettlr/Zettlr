@@ -73,10 +73,21 @@ module.exports = {
    *
    * @return  {RegExp}              The compiled Regular Expression
    */
-  'getCodeBlockRE': function () {
-    return RegExp(
-      /^\s{0,3}(`{3,}|~{3,})/.source
-    )
+  'getCodeBlockRE': function (multiline = false) {
+    if (!multiline) {
+      // The user only wants to match a single line
+      return RegExp(
+        /^\s{0,3}(`{3,}|~{3,})/.source
+      )
+    } else {
+      // `multiline` indicates the user has a complete Markdown document.
+      // This RegExp matches backtick and tilde code blocks, and indented code
+      // blocks.
+      return RegExp(
+        /^`{3,}.+?^`{3,}|^[ \t]{4,}.+?$|^~{3,}.+?^~{3,}/gms.source,
+        'gms'
+      )
+    }
   },
 
   /**
