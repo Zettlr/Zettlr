@@ -93,7 +93,7 @@ module.exports = {
 
         await fs.copyFile(path.join(__dirname, './resources/pandoc-win32-x64.exe'), path.join(__dirname, './resources/pandoc.exe'))
 
-        forgeConfig.packagerConfig.extraResource.push('./resources/pandoc.exe')
+        forgeConfig.packagerConfig.extraResource.push(path.join(__dirname, './resources/pandoc.exe'))
       } else if (supportsPandoc && (isMacOS || isLinux)) {
         // Download Pandoc either for macOS or Linux ...
         const platform = (isMacOS) ? 'darwin' : 'linux'
@@ -107,7 +107,7 @@ module.exports = {
 
         await fs.copyFile(path.join(__dirname, `./resources/pandoc-${platform}-${arch}`), path.join(__dirname, './resources/pandoc'))
 
-        forgeConfig.packagerConfig.extraResource.push('./resources/pandoc')
+        forgeConfig.packagerConfig.extraResource.push(path.join(__dirname, './resources/pandoc'))
       } else {
         // If someone is building this on an unsupported platform, drop a warning.
         console.log(`\nBuilding for an unsupported platform/arch-combination ${targetPlatform}/${targetArch} - not bundling Pandoc.`)

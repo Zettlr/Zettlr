@@ -460,16 +460,11 @@ export default class DocumentManager extends EventEmitter {
   }
 
   public async saveFile (src: MDFileDescriptor|CodeFileDescriptor, content: string): Promise<void> {
-    // NOTE: Generates 1x change
-    // this._watchdog.ignoreEvents([{ 'event': 'change', 'path': src.path }])
-
     if (src.type === 'file') {
       await FSALFile.save(src, content, null)
     } else {
       await FSALCodeFile.save(src, content, null)
     }
-
-    // this._recordFiletreeChange('change', src.path)
 
     // Notify that a file has saved, which strictly speaking does not
     // modify the openFiles array, but does change the modification flag.

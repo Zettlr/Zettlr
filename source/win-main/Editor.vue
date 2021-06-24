@@ -129,6 +129,7 @@ export default {
       const doubleQuotes = this.$store.state.config['editor.autoCorrect.magicQuotes.primary'].split('…')
       const singleQuotes = this.$store.state.config['editor.autoCorrect.magicQuotes.secondary'].split('…')
       return {
+        keyMap: this.$store.state.config['editor.inputMode'],
         autoCorrect: {
           style: this.$store.state.config['editor.autoCorrect.style'],
           quotes: {

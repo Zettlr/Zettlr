@@ -95,6 +95,7 @@
               ref="add_row"
               v-bind:placeholder="colLabel"
               v-on:input="valuesToAdd[idx] = $event"
+              v-on:keydown.enter="handleAddition()"
             >
             </Checkbox>
             <NumberControl
@@ -102,6 +103,7 @@
               ref="add_row"
               v-bind:placeholder="colLabel"
               v-on:input="valuesToAdd[idx] = $event"
+              v-on:keydown.enter="handleAddition()"
             >
             </NumberControl>
             <TextControl
@@ -109,6 +111,7 @@
               ref="add_row"
               v-bind:placeholder="colLabel"
               v-on:input="valuesToAdd[idx] = $event"
+              v-on:keydown.enter="handleAddition()"
             >
             </TextControl>
           </td>

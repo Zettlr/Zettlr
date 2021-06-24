@@ -143,8 +143,6 @@ export default {
 // Project boxes on the about panel
 
 // About dialog project boxes
-    div.project-box {
-    }
 div#project-container {
   display: flex;
   flex-wrap: wrap;

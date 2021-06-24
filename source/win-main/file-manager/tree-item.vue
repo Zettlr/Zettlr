@@ -30,7 +30,7 @@
       >
         <!-- Is this a project? -->
         <clr-icon
-          v-if="obj.project && hasChildren"
+          v-if="obj.project !== null && hasChildren"
           shape="blocks-group"
           class="is-solid"
         />
@@ -62,7 +62,7 @@
         />
         <!-- Is this a project? -->
         <clr-icon
-          v-else-if="obj.project && !hasChildren"
+          v-else-if="obj.project !== null && !hasChildren"
           aria-label="Project"
           shape="blocks-group"
           class="is-solid"

@@ -5,10 +5,10 @@
 # because this gives us more control over the built-in pandoc binary.
 
 # Retrieve the versions from https://github.com/jgm/pandoc/releases/latest
-PANDOC_LINUX_X64="https://github.com/jgm/pandoc/releases/download/2.14.0.1/pandoc-2.14.0.1-linux-amd64.tar.gz"
-PANDOC_LINUX_ARM="https://github.com/jgm/pandoc/releases/download/2.14.0.1/pandoc-2.14.0.1-linux-arm64.tar.gz"
-PANDOC_WIN32_X64="https://github.com/jgm/pandoc/releases/download/2.14.0.1/pandoc-2.14.0.1-windows-x86_64.zip"
-PANDOC_MACOS_X64="https://github.com/jgm/pandoc/releases/download/2.14.0.1/pandoc-2.14.0.1-macOS.zip"
+PANDOC_LINUX_X64="https://github.com/jgm/pandoc/releases/download/2.14.0.3/pandoc-2.14.0.3-linux-amd64.tar.gz"
+PANDOC_LINUX_ARM="https://github.com/jgm/pandoc/releases/download/2.14.0.3/pandoc-2.14.0.3-linux-arm64.tar.gz"
+PANDOC_WIN32_X64="https://github.com/jgm/pandoc/releases/download/2.14.0.3/pandoc-2.14.0.3-windows-x86_64.zip"
+PANDOC_MACOS_X64="https://github.com/jgm/pandoc/releases/download/2.14.0.3/pandoc-2.14.0.3-macOS.zip"
 
 # Prepare our global variables
 PLATFORM="$1"

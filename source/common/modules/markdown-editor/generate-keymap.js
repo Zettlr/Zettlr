@@ -15,7 +15,7 @@
 const CodeMirror = require('codemirror')
 
 module.exports = function (editor) {
-  let homeEndBehaviour = global.config.get('editor.homeEndBehaviour')
+  let homeEndBehaviour = Boolean(global.config.get('editor.homeEndBehaviour'))
   let keymap = {}
 
   // Crossplatform shortcuts

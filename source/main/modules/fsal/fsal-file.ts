@@ -18,7 +18,7 @@ import hash from '../../../common/util/hash'
 import searchFile from './util/search-file'
 import countWords from '../../../common/util/count-words'
 import extractYamlFrontmatter from '../../../common/util/extract-yaml-frontmatter'
-import { getIDRE } from '../../../common/regular-expressions'
+import { getIDRE, getCodeBlockRE } from '../../../common/regular-expressions'
 import { shell } from 'electron'
 import safeAssign from '../../../common/util/safe-assign'
 // Import the interfaces that we need
@@ -38,6 +38,12 @@ const FRONTMATTER_VARS = [
   'tags',
   'lang',
   'bibliography'
+]
+
+// Enum of all YAML frontmatter properties that can contain tags
+const KEYWORD_PROPERTIES = [
+  'keywords',
+  'tags'
 ]
 
 /**
@@ -123,7 +129,9 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
 
   // Create a copy of the text contents without any code blocks and inline
   // code for the tag and ID extraction methods.
-  let mdWithoutCode = content.replace(/^`{3,}.+`{3,}$|`[^`]+`|~{3,}[^~]+~{3,}/gms, '')
+  const codeBlockRE = getCodeBlockRE(true)
+  let mdWithoutCode = content.replace(codeBlockRE, '')
+  mdWithoutCode = mdWithoutCode.replace(/`[^`]+`/g, '')
 
   // Determine linefeed to preserve on saving so that version control
   // systems don't complain.
@@ -159,26 +167,29 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
     }
   }
 
-  // Merge possible keywords from the frontmatter
-  if (file.frontmatter?.keywords != null) {
-    // The user can just write "keywords: something", in which case it won't be
-    // an array, but a simple string (or even a number <.<). I am beginning to
-    // understand why programmers despise the YAML-format.
-    if (!Array.isArray(file.frontmatter.keywords)) {
-      const keys = file.frontmatter.keywords.split(',')
-      if (keys.length > 1) {
-        // The user decided to split the tags by comma
-        file.frontmatter.keywords = keys.map((tag: string) => tag.trim())
-      } else {
-        file.frontmatter.keywords = [file.frontmatter.keywords]
+  // Merge possible keywords from the frontmatter, e.g. from the "keywords" or
+  // the "tags" property.
+  for (const prop of KEYWORD_PROPERTIES) {
+    if (file.frontmatter?.[prop] != null) {
+      // The user can just write "keywords: something", in which case it won't be
+      // an array, but a simple string (or even a number <.<). I am beginning to
+      // understand why programmers despise the YAML-format.
+      if (!Array.isArray(file.frontmatter[prop])) {
+        const keys = file.frontmatter[prop].split(',')
+        if (keys.length > 1) {
+          // The user decided to split the tags by comma
+          file.frontmatter[prop] = keys.map((tag: string) => tag.trim())
+        } else {
+          file.frontmatter[prop] = [file.frontmatter[prop]]
+        }
       }
-    }
 
-    // If the user decides to use just numbers for the keywords (e.g. #1997),
-    // the YAML parser will obviously cast those to numbers, but we don't want
-    // this, so forcefully cast everything to string (see issue #1433).
-    const sanitizedKeywords = file.frontmatter.keywords.map((tag: any) => String(tag).toString())
-    file.tags = file.tags.concat(sanitizedKeywords)
+      // If the user decides to use just numbers for the keywords (e.g. #1997),
+      // the YAML parser will obviously cast those to numbers, but we don't want
+      // this, so forcefully cast everything to string (see issue #1433).
+      const sanitizedKeywords = file.frontmatter[prop].map((tag: any) => String(tag).toString())
+      file.tags = file.tags.concat(sanitizedKeywords)
+    }
   }
 
   // Now the same for the tags-property.

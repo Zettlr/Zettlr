@@ -135,7 +135,6 @@ ipcRenderer.invoke('tag-provider', { command: 'get-tags-database' })
 let filetreeUpdateLock = false
 let openDirectoryLock = false
 let activeFileUpdateLock = false
-let openFilesUpdateLock = false
 // Listen for broadcasts from main in order to update the filetree
 ipcRenderer.on('fsal-state-changed', (event, kind: string) => {
   if (kind === 'filetree') {
@@ -166,14 +165,8 @@ ipcRenderer.on('fsal-state-changed', (event, kind: string) => {
       .catch(e => console.error(e))
       .finally(() => { activeFileUpdateLock = false })
   } else if (kind === 'openFiles') {
-    if (openFilesUpdateLock) {
-      return
-    }
-
-    openFilesUpdateLock = true
     app.$store.dispatch('updateOpenFiles')
       .catch(e => console.error(e))
-      .finally(() => { openFilesUpdateLock = false })
   }
 })
 
@@ -181,7 +174,6 @@ ipcRenderer.on('fsal-state-changed', (event, kind: string) => {
 filetreeUpdateLock = true
 openDirectoryLock = true
 activeFileUpdateLock = true
-openFilesUpdateLock = true
 app.$store.dispatch('filetreeUpdate')
   .catch(e => console.error(e))
   .finally(() => { filetreeUpdateLock = false })
@@ -193,4 +185,3 @@ app.$store.dispatch('updateActiveFile')
   .finally(() => { activeFileUpdateLock = false })
 app.$store.dispatch('updateOpenFiles')
   .catch(e => console.error(e))
-  .finally(() => { openFilesUpdateLock = false })

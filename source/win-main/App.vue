@@ -38,7 +38,7 @@
         >
           <template #view1>
             <!-- First side: Editor -->
-            <Tabs></Tabs>
+            <DocumentTabs></DocumentTabs>
             <Editor
               ref="editor"
               v-bind:readability-mode="readabilityActive"
@@ -72,7 +72,7 @@
 import WindowChrome from '../common/vue/window/Chrome'
 import FileManager from './file-manager/file-manager'
 import Sidebar from './Sidebar'
-import Tabs from './Tabs'
+import DocumentTabs from './DocumentTabs'
 import SplitView from '../common/vue/window/SplitView'
 import GlobalSearch from './GlobalSearch'
 import Editor from './Editor'
@@ -81,6 +81,7 @@ import PopoverStats from './PopoverStats'
 import PopoverTags from './PopoverTags'
 import PopoverPomodoro from './PopoverPomodoro'
 import PopoverTable from './PopoverTable'
+import PopoverDocInfo from './PopoverDocInfo'
 import { trans } from '../common/i18n-renderer'
 import localiseNumber from '../common/util/localise-number'
 import generateId from '../common/util/generate-id'
@@ -113,7 +114,7 @@ export default {
   components: {
     WindowChrome,
     FileManager,
-    Tabs,
+    DocumentTabs,
     SplitView,
     Editor,
     GlobalSearch,
@@ -329,6 +330,7 @@ export default {
         {
           type: 'text',
           align: 'center',
+          id: 'document-info',
           content: this.parsedDocumentInfo
         },
         {
@@ -565,7 +567,9 @@ export default {
         })
       } else if (clickedID === 'insert-table') {
         // Display the insertion popover
-        this.$showPopover(PopoverTable, document.getElementById('toolbar-insert-table'), {}, (data) => {
+        const data = {}
+        const elem = document.getElementById('toolbar-insert-table')
+        this.$showPopover(PopoverTable, elem, data, (data) => {
           // Generate a simple table based on the info, and insert it.
           let table = ''
           for (let i = 0; i < data.tableSize.rows; i++) {
@@ -579,6 +583,14 @@ export default {
           // This seems hacky, but it's not that bad, I think.
           this.$refs['editor'].editor.codeMirror.replaceSelection(table)
           this.$closePopover()
+        })
+      } else if (clickedID === 'document-info') {
+        const data = {
+          docInfo: this.$store.state.activeDocumentInfo
+        }
+        const elem = document.getElementById('toolbar-document-info')
+        this.$showPopover(PopoverDocInfo, elem, data, (data) => {
+          // Do nothing
         })
       } else if (clickedID.startsWith('markdown') === true && clickedID.length > 8) {
         // The user clicked a command button, so we just have to run that.

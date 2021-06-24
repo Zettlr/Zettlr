@@ -35,30 +35,16 @@
       v-model="isProject"
       v-bind:label="'Enable Project'"
     ></SwitchControl>
-    <div v-if="isProject" id="project-lists">
-      <!-- TODO: Insert some generic project properties -->
-      <ListControl
-        v-bind:label="''"
-        style="float: left;"
-        v-bind:value="exportFormatList"
-        v-bind:labels="['Use', 'Format']"
-        v-bind:editable="[0]"
-        v-on:input="selectExportFormat($event)"
-      ></ListControl>
-
-      <ListControl
-        v-bind:label="'The file list is not yet implemented'"
-        style="float: right;"
-        v-bind:value="[
-          { selected: true, format: 'introduction.md' },
-          { selected: true, format: 'chapter 2.md' },
-          { selected: false, format: 'My Notes.md' },
-          { selected: true, format: 'conclusion.md' }
-        ]"
-        v-bind:labels="['Include', 'Filename']"
-        v-bind:editable="[0]"
-      ></ListControl>
-    </div>
+    <!--
+      ATTENTION !!! DO NOT, UNDER NO CIRCUMSTANCES change v-if into v-show !!!
+      The reason is that the ProjectProperties component uses some async magic
+      to retrieve the needed project settings (which are managed by the main
+      process) ONLY if the directory has for sure a project. On v-show that
+      magic would completely break if the user opens the popover with no project
+      active and then activates the project feature.
+    -->
+    <ProjectProperties v-if="isProject" id="project-lists" v-bind:full-path="fullPath">
+    </ProjectProperties>
     <hr style="clear: both;">
     <!-- Directory icon -->
     <div class="icon-selector">
@@ -97,10 +83,7 @@ import formatDate from '../../../common/util/format-date'
 import localiseNumber from '../../../common/util/localise-number'
 import SelectControl from '../../../common/vue/form/elements/Select'
 import SwitchControl from '../../../common/vue/form/elements/Switch'
-import ListControl from '../../../common/vue/form/elements/List'
-import Vue from 'vue'
-
-const ipcRenderer = window.ipc
+import ProjectProperties from './ProjectProperties'
 
 const ICONS = [
   { shape: null, title: 'Reset' },
@@ -180,11 +163,12 @@ export default {
   components: {
     SelectControl,
     SwitchControl,
-    ListControl
+    ProjectProperties
   },
   data: function () {
     return {
       dirname: '',
+      fullPath: '',
       creationtime: 0,
       modtime: 0,
       files: 0,
@@ -192,9 +176,7 @@ export default {
       sortingType: 'name',
       sortingDirection: 'up',
       isProject: false,
-      icon: null,
-      exportFormatMap: {},
-      selectedExportFormats: []
+      icon: null
     }
   },
   computed: {
@@ -204,7 +186,6 @@ export default {
       return {
         sorting: `${this.sortingType}-${this.sortingDirection}`,
         isProject: this.isProject,
-        exportFormats: this.selectedExportFormats,
         icon: this.icon
       }
     },
@@ -222,43 +203,9 @@ export default {
     },
     icons: function () {
       return ICONS
-    },
-    exportFormatList: function () {
-      // We need to return a list of { selected: boolean, format: 'string' }
-      return Object.keys(this.exportFormatMap).map(e => {
-        return {
-          selected: this.selectedExportFormats.includes(this.exportFormatMap[e]),
-          format: e
-        }
-      })
     }
   },
   created: function () {
-    ipcRenderer.invoke('application', {
-      command: 'get-available-export-formats'
-    })
-      .then(exporterInformation => {
-        // We only need to know the readable string for an exportable format
-        // and the identifier. The list will be populated using the keys
-        // (human-readable string), and the actual value will consist of the
-        // values (the identifiers).
-        for (const info of exporterInformation) {
-          // NOTE: We are switching id: readable to readable: string here so
-          // that it's much easier to retrieve the identifier later on.
-          for (const key in info.formats) {
-            Vue.set(this.exportFormatMap, info.formats[key], key)
-          }
-        }
-      })
-      .catch(err => console.error(err))
-  },
-  methods: {
-    selectExportFormat: function (newListVal) {
-      const newFormats = newListVal.filter(e => e.selected).map(e => {
-        return this.exportFormatMap[e.format]
-      })
-      this.selectedExportFormats = newFormats
-    }
   }
 }
 </script>
@@ -288,11 +235,5 @@ body.darwin {
   &.dark .icon-selector div:hover {
     background-color: rgb(90, 90, 90);
   }
-}
-
-div#project-lists {
-  display: flex;
-
-  & > * { flex: 1; }
 }
 </style>

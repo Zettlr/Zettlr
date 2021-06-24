@@ -159,6 +159,13 @@ export default {
               payload: this.obj.path
             })
               .catch(err => console.error(err))
+          } else if (clickedID === 'menu.project_build') {
+            // We should trigger an export of this project.
+            ipcRenderer.invoke('application', {
+              command: 'dir-project-export',
+              payload: this.obj.path
+            })
+              .catch(err => console.error(err))
           } else if (clickedID === 'menu.properties') {
             const data = {
               dirname: this.obj.name,
@@ -167,6 +174,7 @@ export default {
               files: this.obj.children.filter(e => e.type !== 'directory').length,
               dirs: this.obj.children.filter(e => e.type === 'directory').length,
               isProject: this.isProject === true,
+              fullPath: this.obj.path,
               icon: this.obj.icon
             }
 
@@ -213,8 +221,6 @@ export default {
                   }
                 }).catch(e => console.error(e))
               }
-
-              // Set the export formats TODO
             })
           }
         })

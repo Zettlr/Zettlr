@@ -200,21 +200,14 @@ export default class Zettlr {
     this._documentManager.on('update', (scope: string, changedDescriptor?: MDFileDescriptor|CodeFileDescriptor) => {
       switch (scope) {
         case 'fileSaved':
-          if (!this.isModified()) {
-            this._windowManager.setModified(false)
-          }
+        case 'openFiles':
+          this._windowManager.setModified(this.isModified())
           broadcastIpcMessage('fsal-state-changed', 'openFiles') // TODO: Do we need this?
           break
         case 'activeFile':
           // The active file has changed; set it in the config and notify the
           // renderer process to switch to this file again.
           broadcastIpcMessage('fsal-state-changed', 'activeFile')
-          break
-        case 'openFiles':
-          broadcastIpcMessage('fsal-state-changed', 'openFiles')
-          if (!this.isModified()) {
-            this._windowManager.setModified(false)
-          }
           break
         case 'openFileRemotelyChanged':
           if (changedDescriptor !== undefined) {
