@@ -491,7 +491,8 @@ function hintFunction (cm, opt) {
         cm.setCursor({ line: lineNo, ch: toCh + 1 })
       }
     } else if (currentDatabase === availableDatabases['snippets']) {
-      // For this database, we must remove the leading colon
+      // For this database, we must remove the leading colon and also fiddle
+      // with the text. So first, let's select everything.
       const insertedLines = completion.text.split('\n')
       cm.setSelection(
         { line: autocompleteStart.line, ch: autocompleteStart.ch - 1 },
@@ -499,17 +500,16 @@ function hintFunction (cm, opt) {
         { scroll: false }
       )
 
-      // First, insert the text, but with all variables replaced and only the
+      // Then, insert the text, but with all variables replaced and only the
       // tabstops remaining.
       const actualTextToInsert = replaceSnippetVariables(completion.text)
       const actualInsertedLines = actualTextToInsert.split('\n').length
       cm.replaceSelection(actualTextToInsert)
 
-      currentTabStops = getTabMarkers(cm, autocompleteStart.line, autocompleteStart.line + actualInsertedLines)
-
       // Now, we need to mark every tabstop within this section of text and
       // store those text markers so that we can find them again by tabbing
       // through them.
+      currentTabStops = getTabMarkers(cm, autocompleteStart.line, autocompleteStart.line + actualInsertedLines)
 
       // Now activate our special snippets keymap which will ensure the user can
       // cycle through all placeholders which we have identified.
@@ -593,6 +593,17 @@ function getTabMarkers (cm, from, to) {
   // Now put the 0 to the top (if there is a zero)
   if (tabStops[0].index === 0) {
     tabStops.push(tabStops.shift())
+  } else {
+    // If there is no zero, we must make sure to add one "pseudo-$0" after the
+    // selection so that the cursor ends up there afterwards.
+    const elem = document.createElement('span')
+    elem.classList.add('tabstop')
+    elem.textContent = '0'
+    const marker = cm.setBookmark(
+      { line: to - 1, ch: cm.getLine(to - 1).length },
+      { widget: elem }
+    )
+    tabStops.push({ index: 0, marker: marker })
   }
 
   // Make the array marker only
