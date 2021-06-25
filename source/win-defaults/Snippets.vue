@@ -12,6 +12,7 @@
         v-bind:editable="true"
         v-on:select="currentItem = $event"
         v-on:add="addSnippet()"
+        v-on:remove="removeSnippet()"
       ></SelectableList>
     </template>
     <template #view2>
@@ -185,11 +186,20 @@ export default {
         })
         .catch(err => console.error(err))
     },
+    removeSnippet: function () {
+      // Remove the current snippet.
+      ipcRenderer.invoke('assets-provider', {
+        command: 'remove-snippet',
+        payload: { name: this.availableSnippets[this.currentItem] }
+      })
+        .then(() => { this.updateAvailableSnippets() })
+        .catch(err => console.error(err))
+    },
     renameSnippet: function () {
       let newVal = this.currentSnippetText
 
       // Sanitise the name
-      newVal = newVal.replace(/[^a-zA-Z0-9_-]/, '-')
+      newVal = newVal.replace(/[^a-zA-Z0-9_-]/g, '-')
 
       ipcRenderer.invoke('assets-provider', {
         command: 'rename-snippet',
