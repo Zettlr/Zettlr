@@ -20,10 +20,10 @@
       <!-- Add an optional footer -->
       <div v-if="editable" class="selectable-list-footer">
         <div class="add" v-on:click="$emit('add')">
-          <clr-icon shape="plus"></clr-icon>
+          <clr-icon shape="plus" size="16"></clr-icon>
         </div>
         <div class="remove" v-on:click="$emit('remove')">
-          <clr-icon shape="minus"></clr-icon>
+          <clr-icon shape="minus" size="16"></clr-icon>
         </div>
       </div>
     </div>
@@ -76,7 +76,7 @@ body .selectable-list-wrapper {
     min-height: 30px;
 
     &.has-footer {
-      padding-bottom: 25px;
+      padding-bottom: 20px;
       position: relative;
     }
 
@@ -97,12 +97,13 @@ body .selectable-list-wrapper {
       height: 20px;
       display: flex;
       justify-content: flex-start;
-      background-color: rgb(230, 230, 230);
+      background-color: rgb(255, 255, 255);
 
       .add, .remove {
         width: 20px;
         height: 20px;
-        background-color: white;
+        line-height: 20px;
+        text-align: center;
       }
     }
   }
@@ -120,6 +121,12 @@ body.darwin {
       line-height: 20px;
       padding: 5px;
     }
+
+    .selectable-list-footer {
+      .add, .remove {
+        border-right: 1px solid rgb(230, 230, 230);
+      }
+    }
   }
 
   &.dark {
@@ -134,6 +141,28 @@ body.darwin {
         &.selected {
           background-color: rgb(80, 80, 80);
         }
+      }
+
+      .selectable-list-footer {
+        background-color: rgb(68, 68, 68);
+
+        .add, .remove {
+          color: rgb(230, 230, 230);
+          border-right-color: rgb(90, 90, 90);
+        }
+      }
+    }
+  }
+}
+
+// TODO: Only rudimentary styles currently
+body.win32, body.linux {
+  &.dark {
+    .selectable-list-container {
+      .selectable-list-footer {
+        background-color: rgb(70, 70, 70);
+
+        .add, .remove { color: rgb(230, 230, 230); }
       }
     }
   }
