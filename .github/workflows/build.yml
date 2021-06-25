@@ -352,12 +352,21 @@ jobs:
           sha256sum -c SHA256SUMS.txt
           cd ..
       # IF WE BUILD A NIGHTLY, AT THIS POINT JUST UPLOAD TO THE SERVER.
+      # We must make sure to copy the three additional files
+      # to the release folder because of the --delete flag in rsync below.
+      - name: Copy Nightly Static Files
+        if: ${{ env.BUILD_NIGHTLY }}
+        run: |
+          cp ./scripts/assets/nightly-index.php ./release/index.php
+          cp ./scripts/assets/nightly-sm_preview.png ./release/sm_preview.png
+          cp ./resources/icons/png/512x512.png ./release/logo.png
       - name: Upload nightlies to the server
         if: ${{ env.BUILD_NIGHTLY }}
         uses: easingthemes/ssh-deploy@v2.0.7
         env:
           SSH_PRIVATE_KEY: ${{ secrets.NIGHTLY_SSH_PRIVATE_KEY }}
-          ARGS: "-vzhr" # verbose, compress, human-readble, recursive
+          # --delete so that no old releases remain on the server. Each iteration is approx. 1GB in size.
+          ARGS: "-vzhr --delete" # verbose, compress, human-readble, recursive, delete
           SOURCE: "release/"
           REMOTE_HOST: ${{ secrets.NIGHTLY_REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.NIGHTLY_REMOTE_USER }}
