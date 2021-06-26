@@ -16,7 +16,7 @@
 
 const {
   getZknTagRE, getHeadingRE, getHighlightRE,
-  getTableRE, getInlineMathRE, getBlockMathRE, getFnReferenceRE
+  getTableRE, getInlineMathRE, getFnReferenceRE
 } = require('../../../regular-expressions');
 
 (function (mod) {
