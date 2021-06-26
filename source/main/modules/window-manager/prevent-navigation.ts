@@ -12,10 +12,7 @@
  * END HEADER
  */
 
-import {
-  BrowserWindow,
-  shell
-} from 'electron'
+import { app, BrowserWindow, shell } from 'electron'
 
 /**
  * Attaches an event listener to win's webContents that prevents any navigation
@@ -28,6 +25,16 @@ import {
  */
 export default function preventNavigation (win: BrowserWindow): void {
   win.webContents.on('will-navigate', (event, url) => {
+    // NOTE: app.isPackaged is false if the executable is called electron (instead of Zettlr)
+    if (!app.isPackaged) {
+      // We are in development, so we must make sure to allow webpack to
+      // actually reload the windows. Webpack will always spin up devServers
+      // at localhost.
+      if (url.startsWith('http://localhost:3000')) {
+        return true
+      }
+    }
+
     // Prevent any navigation from within the window. Instead,
     // transform this into a shell command to open in an actual
     // browser, not within our own browser windows.
