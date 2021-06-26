@@ -36,7 +36,7 @@ export default {
   props: {
     split: {
       type: String,
-      default: 'horizontal' // TODO: Not yet implemented b/c I don't need it yet
+      default: 'horizontal' // NOTE: Not yet implemented b/c I don't need it yet
     },
     minimumSizePercent: {
       type: Array,

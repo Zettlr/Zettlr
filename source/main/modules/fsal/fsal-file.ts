@@ -139,13 +139,6 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
   if (content.includes('\r\n')) file.linefeed = '\r\n'
   if (content.includes('\n\r')) file.linefeed = '\n\r'
 
-  // Makes footnotes unique by prefixing them with this file's hash (which is unique)
-  // Pandoc will make sure the footnotes are numbered correctly.
-  // TODO
-  // if (options.hasOwnProperty('uniqueFootnotes') && options.uniqueFootnotes === true) {
-  //   cnt = cnt.replace(/\[\^([\w]+?)\]/gm, (match, p1, offset, string) => `[^${String(this.hash)}${p1}]`)
-  // }
-
   // Now read all tags
   file.tags = [] // Reset tags
   while ((match = tagRE.exec(mdWithoutCode)) != null) {

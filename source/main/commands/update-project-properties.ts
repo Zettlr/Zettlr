@@ -15,7 +15,6 @@
 import ZettlrCommand from './zettlr-command'
 import expandOptionObject from '../../common/util/expand-option-object'
 
-// TODO: Re-implement project properties!!
 export default class UpdateProjectProperties extends ZettlrCommand {
   constructor (app: any) {
     super(app, 'update-project-properties')
