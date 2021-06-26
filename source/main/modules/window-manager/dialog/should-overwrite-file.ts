@@ -38,9 +38,7 @@ export default async function shouldOverwriteFileDialog (win: BrowserWindow|null
 
   // showMessageBox returns a Promise, resolves to:
   let response: MessageBoxReturnValue
-  // DEBUG: Testing out to never make dialogs modal in response to issue #1645
-  // Currently, we only make dialogs modal on macOS and Windows.
-  if (win !== null && [ 'darwin', 'win32' ].includes(process.platform)) {
+  if (win !== null) {
     response = await dialog.showMessageBox(win, options)
   } else {
     response = await dialog.showMessageBox(options)

@@ -40,9 +40,7 @@ export default async function askDirectory (win: BrowserWindow|null): Promise<st
   }
 
   let response: OpenDialogReturnValue
-  // DEBUG: Testing out to never make dialogs modal in response to issue #1645
-  // Currently, we only make dialogs modal on macOS and Windows.
-  if (win !== null && [ 'darwin', 'win32' ].includes(process.platform)) {
+  if (win !== null) {
     response = await dialog.showOpenDialog(win, options)
   } else {
     response = await dialog.showOpenDialog(options)

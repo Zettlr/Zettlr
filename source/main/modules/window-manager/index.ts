@@ -883,13 +883,14 @@ export default class WindowManager {
     }
 
     let response: MessageBoxReturnValue
-    if (this._mainWindow !== null) {
+    // DEBUG: Again trying to resolve the bug #1645.
+    if (this._mainWindow !== null && [ 'darwin', 'win32' ].includes(process.platform)) {
       response = await dialog.showMessageBox(this._mainWindow, options)
     } else {
       response = await dialog.showMessageBox(options)
     }
 
     // 0 = Ok, 1 = Cancel
-    return (response.response === 0)
+    return response.response === 0
   }
 }
