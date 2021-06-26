@@ -51,6 +51,7 @@ import sanitizeWindowPosition from './sanitize-window-position'
 import { WindowPosition } from './types.d'
 import askFileDialog from './dialog/ask-file'
 import saveFileDialog from './dialog/save-dialog'
+import confirmRemove from './dialog/confirm-remove'
 // import dragIcon from '../../assets/dragicon.png'
 
 interface QuicklookRecord {
@@ -873,24 +874,6 @@ export default class WindowManager {
     * @return {boolean}                                   True if user wishes to remove it.
     */
   async confirmRemove (descriptor: MDFileDescriptor|CodeFileDescriptor|DirDescriptor): Promise<boolean> {
-    const options: MessageBoxOptions = {
-      type: 'warning',
-      buttons: [ 'Ok', trans('system.error.cancel_remove') ],
-      defaultId: 0,
-      cancelId: 1,
-      title: trans('system.error.remove_title'),
-      message: trans('system.error.remove_message', descriptor.name)
-    }
-
-    let response: MessageBoxReturnValue
-    // DEBUG: Again trying to resolve the bug #1645.
-    if (this._mainWindow !== null && [ 'darwin', 'win32' ].includes(process.platform)) {
-      response = await dialog.showMessageBox(this._mainWindow, options)
-    } else {
-      response = await dialog.showMessageBox(options)
-    }
-
-    // 0 = Ok, 1 = Cancel
-    return response.response === 0
+    return await confirmRemove(this._mainWindow, descriptor)
   }
 }
