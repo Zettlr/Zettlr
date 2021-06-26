@@ -117,7 +117,9 @@
             event.stopPropagation()
             // Make sure there are no quotes since these will break the image
             const newCaption = caption.textContent.replace(/"/g, '')
-            const newImageTag = `![${altText}](${url} "${newCaption}")${p4}`
+            // "Why are you setting the caption both as the image description and title?"
+            // Well, since all exports sometimes us this, sometimes the other value.
+            const newImageTag = `![${newCaption}](${url} "${newCaption}")${p4}`
             // Now replace the underlying image
             cm.replaceRange(newImageTag, curFrom, curTo)
           }
