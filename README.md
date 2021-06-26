@@ -265,7 +265,7 @@ Whenever the app is built, the following steps will run:
 1. Electron forge will perform steps 1 and 2 above, but instead of running the app, it will package the resulting code into a functional app package.
 2. Electron builder will then take these pre-built packages and wrap them in a platform-specific installer (DMG-files, Windows installer, or Linux packages).
 
-Electron forge will put the packages applications into the directory `./out` while Electron builder will put the installers into the directory `./release`.
+Electron forge will put the packaged applications into the directory `./out` while Electron builder will put the installers into the directory `./release`.
 
 ## Command-Line Switches
 
