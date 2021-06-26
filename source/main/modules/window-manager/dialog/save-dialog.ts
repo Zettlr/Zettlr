@@ -40,7 +40,9 @@ export default async function saveFileDialog (win: BrowserWindow|null, filename:
   }
 
   let response: SaveDialogReturnValue
-  if (win !== null) {
+  // DEBUG: Testing out to never make dialogs modal in response to issue #1645
+  // Currently, we only make dialogs modal on macOS and Windows.
+  if (win !== null && [ 'darwin', 'win32' ].includes(process.platform)) {
     response = await dialog.showSaveDialog(win, opt)
   } else {
     response = await dialog.showSaveDialog(opt)
