@@ -74,9 +74,19 @@
  */
 
 import { DateTime } from 'luxon'
-import Chart from 'chart.js/auto' // Necessary for Chart.js 3.x TODO: Only import what we need!
+import {
+  Chart,
+  CategoryScale,
+  LinearScale,
+  LineController,
+  PointElement,
+  LineElement
+} from 'chart.js'
 import SelectControl from '../common/vue/form/elements/Select.vue'
 import ButtonControl from '../common/vue/form/elements/Button.vue'
+
+// Register the components of Chart.js which we need
+Chart.register(CategoryScale, LinearScale, LineController, PointElement, LineElement)
 
 export default {
   name: 'ChartView',
