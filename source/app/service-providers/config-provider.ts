@@ -173,7 +173,7 @@ export default class ConfigProvider extends EventEmitter {
       }
     } // END globals for the configuration
 
-    // Listen for renderer events TODO: Migrate to the handler
+    // Listen for renderer events. These must be synchronous.
     ipcMain.on('config-provider', (event, message) => {
       const { command, payload } = message
 

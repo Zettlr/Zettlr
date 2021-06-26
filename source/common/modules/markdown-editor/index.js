@@ -437,30 +437,42 @@ module.exports = class MarkdownEditor extends EventEmitter {
    * @param   {Object}  newOptions  The new options
    */
   setOptions (newOptions) {
-    // First, merge the new options into the CodeMirror options
-    this._cmOptions = safeAssign(newOptions, this._cmOptions)
+    // Before actually merging the options, we have to detect changes in the
+    // rendering preferences.
+    let shouldRemoveMarkers = false
 
-    if (newOptions.hasOwnProperty('zettlr') && newOptions.zettlr.hasOwnProperty('render')) {
-      // If this property is set this mostly means that the rendering preferences
-      // have changed. We need to remove all text markers so that only those
-      // that are wanted are re-rendered. This will always execute on preferences
-      // setting until we have established some cool "what has actually changed?"
-      // indication in the settings provider, but this should not be too annoying.
+    if ('zettlr' in newOptions && 'render' in newOptions.zettlr) {
+      // If one of these options has changed from true to false, remove all
+      // markers below and have the remaining markers re-rendered afterwards.
+      const oldOpt = this._cmOptions.zettlr.render
+      const newOpt = newOptions.zettlr.render
 
-      // DEBUG: This function is always called during document swap which
-      // increases load time and induces a significant visual lag.
-      // Right now it seems prudent to simply leave "unwanted" markers in place.
-      // TODO: Devise a better mechanism of value caching to determine which
-      // marks need to be removed, and only do so when one of the values have
-      // indeed changed.
+      for (const key in oldOpt) {
+        if (!(key in newOpt)) {
+          continue
+        }
 
-      // const markers = this._instance.doc.getAllMarks()
-      // for (let marker of markers) {
-      //   marker.clear()
-      // }
+        if (oldOpt[key] === true && newOpt[key] === false) {
+          shouldRemoveMarkers = true
+          break
+        }
+      }
     }
 
-    // Second, set all options on the CodeMirror instance. This will internally
+    if (shouldRemoveMarkers) {
+      // If shouldRemoveMarkers is true, one of the rendering options has been
+      // disabled, so we must remove all markers and then re-render only those
+      // that should still be displayed.
+      const markers = this._instance.doc.getAllMarks()
+      for (const marker of markers) {
+        marker.clear()
+      }
+    }
+
+    // Now, we can safely merge the options
+    this._cmOptions = safeAssign(newOptions, this._cmOptions)
+
+    // Next, set all options on the CodeMirror instance. This will internally
     // fire all necessary events, apart from those we need to fire manually.
     for (const name in this._cmOptions) {
       if (this._cmOptions.hasOwnProperty(name)) {

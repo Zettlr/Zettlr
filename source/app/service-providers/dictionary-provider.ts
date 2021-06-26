@@ -402,11 +402,6 @@ export default class DictionaryProvider extends EventEmitter {
    * @return {void} Does not return.
    */
   reload (): void {
-    // TODO: Below's if will never return true, so we can refactor this to look
-    // cleaner for sure. (The load mechanism will make sure we never perform
-    // unnecessary operations).
-    if (global.config.get('selectedDicts') === this._loadedDicts) return
-
     // Reload the dictionary based upon the new selected dictionaries.
     this._load()
       .catch(err => {
