@@ -213,7 +213,7 @@ export default {
             id: items.length,
             mock: true, // This will help getFilteredDirectoryContents to never exclude it in display
             props: {
-              name: generateFileName(), // TODO: Generate file name!
+              name: generateFileName(),
               type: 'file' // TODO: Enable file extensions on the mock object so the user can create code files
             }
           })
@@ -450,7 +450,7 @@ export default {
 
       let modifier = this.itemHeight
       let position = index * modifier
-      const quickFilterModifier = 40 // Height of the quick filter TODO: This is monkey patched
+      const quickFilterModifier = 40 // Height of the quick filter
 
       if (position < scrollTop) {
         this.$el.scrollTop = position

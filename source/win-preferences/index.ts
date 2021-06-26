@@ -48,7 +48,6 @@ const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 windowRegister()
 
 // This window will be closed immediately on a window-close command
-// TODO: Move this to the window register function?
 ipcRenderer.on('shortcut', (event, shortcut) => {
   if (shortcut === 'close-window') {
     ipcRenderer.send('window-controls', { command: 'win-close' })

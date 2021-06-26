@@ -39,7 +39,7 @@ document.addEventListener('dragover', function (event) {
 }, false)
 
 // On drop, tell the renderer to tell main that there's something to
-// handle. TODO: TO IMPLEMENT
+// handle.
 document.addEventListener('drop', (event) => {
   event.preventDefault()
   if (event.dataTransfer === null) {

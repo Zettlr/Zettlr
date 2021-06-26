@@ -379,7 +379,8 @@ body #file-manager {
 
   #component-container {
     overflow-x: hidden;
-    overflow-y: hidden; // TODO: Due to everything being relative right now, the component container is file-tree + file-list high
+    // NOTE: Due to everything being relative, the component container is file-tree + file-list high
+    overflow-y: hidden;
     position: relative;
     width: 100%;
     height: 100%;

@@ -131,6 +131,9 @@ export default {
     fontSize: function () {
       return this.$store.state.config['editor.fontSize']
     },
+    shouldCountChars: function () {
+      return this.$store.state.config['editor.countChars']
+    },
     editorConfiguration: function () {
       // We update everything, because not so many values are actually updated
       // right after setting the new configurations. Plus, the user won't update
@@ -316,7 +319,7 @@ export default {
               mode: mode, // Save the mode for later swaps
               cmDoc: CodeMirror.Doc(descriptorWithContent.content, mode),
               modified: false,
-              lastWordCount: countWords(descriptorWithContent.content, false) // TODO: re-enable countChars
+              lastWordCount: countWords(descriptorWithContent.content, this.shouldCountChars)
             }
 
             // Listen to change events on the doc, because if the user pastes
@@ -327,9 +330,9 @@ export default {
                 return
               }
 
-              const newTextWords = countWords(changeObj.text.join(' '), false) // TODO: re-enable countChars
+              const newTextWords = countWords(changeObj.text.join(' '), this.shouldCountChars)
               if (newTextWords > 10) {
-                newDoc.lastWordCount = countWords(newDoc.cmDoc.getValue(), false) // TODO: re-enable countChars
+                newDoc.lastWordCount = countWords(newDoc.cmDoc.getValue(), this.shouldCountChars)
               }
             })
             this.openDocuments.push(newDoc)
@@ -528,7 +531,7 @@ export default {
       }
 
       const newContents = this.activeDocument.cmDoc.getValue()
-      const currentWordCount = countWords(newContents, false) // TODO: Re-enable char count
+      const currentWordCount = countWords(newContents, this.shouldCountChars)
       const descriptor = {
         path: this.activeDocument.path,
         newContents: this.activeDocument.cmDoc.getValue(),

@@ -121,7 +121,7 @@ export default {
       } else if (this.which === 'tab-import-control') {
         return Object.values(READERS)
       } else {
-        return [] // TODO: We need list items for every tab!
+        return [] // Should never get executed, but this way the linter is happy.
       }
     }
   },
