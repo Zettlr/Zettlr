@@ -47,9 +47,8 @@ export default function setWindowChrome (winConf: BrowserWindowConstructorOption
     winConf.frame = false
   } // Else: We have Linux with native appearance.
 
-  // Application icon for Linux. Cannot not be embedded in the executable.
+  // Application icon for Linux. Cannot be embedded in the executable.
   if (process.platform === 'linux') {
-    // TODO
-    winConf.icon = path.join(__dirname, 'assets/icons/128x128.png')
+    winConf.icon = path.join(__dirname, 'assets/icons/png/128x128.png')
   }
 }
