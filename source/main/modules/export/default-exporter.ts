@@ -18,9 +18,9 @@ import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './
 
 // TODO: Enable these additional writers
 // // Pandoc formats that can be passed directly to the engine
-// 'asciidoc'|'beamer'|'context'|'docbook5'|'docx'|'docuwiki'|'epub'|'fb2'|
-// 'haddock'|'icml'|'ipynb'|'jats'|'jira'|'json'|'latex'|'man'|'mediawiki'|'ms'|
-// 'muse'|'native'|'odt'|'opml'|'opendocument'|'org'|'plain'|'pptx'|'rst'|'rtf'|
+// 'asciidoc'|'beamer'|'context'|'docbook5'|'docuwiki'|'epub'|'fb2'|
+// 'haddock'|'ipynb'|'jats'|'jira'|'json'|'man'|'mediawiki'|'ms'|
+// 'muse'|'native'|'opml'|'opendocument'|'pptx'
 // 'texinfo'|'textile'|'slideous'|'slidy'|'dzslides'|'s5'|'tei'|'xwiki'|'zimwiki'|
 
 export const plugin: ExporterPlugin = {
