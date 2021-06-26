@@ -100,8 +100,7 @@ export default class UpdateProvider {
 
           if (this._lastResponse.isNewer) {
             global.log.info(`[Update Provider] Update available: ${this._lastResponse.newVer}`)
-            // TODO: Translate
-            global.notify.normal(`An update to version ${this._lastResponse.newVer} is available!`, true, () => {
+            global.notify.normal(trans('dialog.update.new_update_available', this._lastResponse.newVer), true, () => {
               // The user has clicked the notification, so we can show the update window here
               global.application.runCommand('open-update-window')
                 .catch(e => global.log.error(String(e.message), e))
@@ -193,9 +192,9 @@ export default class UpdateProvider {
         // offline.
         throw new Error(trans('dialog.update.connection_error'))
       } else {
-        // Something else has occurred. TODO: Translate!
+        // Something else has occurred.
         // GotError objects have a name property.
-        throw new Error(`Could not check for updates. ${error.name as string}: ${error.message as string}`)
+        throw new Error(trans('dialog.update.other_error', error.name, error.message))
       }
     }
   }

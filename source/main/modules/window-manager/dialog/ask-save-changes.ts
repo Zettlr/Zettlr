@@ -18,6 +18,7 @@ import {
   MessageBoxOptions,
   MessageBoxReturnValue
 } from 'electron'
+import { trans } from '../../../../common/i18n-main'
 
 /**
  * Displays a prompt to ask the user if they want to save the files first
@@ -28,8 +29,8 @@ export default async function askSaveChanges (win: BrowserWindow|null): Promise<
   const boxOptions: MessageBoxOptions = {
     type: 'warning',
     buttons: [
-      'Close without saving changes',
-      'Save changes'
+      trans('dialog.button.close_without_saving'),
+      trans('dialog.button.save')
     ],
     defaultId: 1,
     title: 'Zettlr',

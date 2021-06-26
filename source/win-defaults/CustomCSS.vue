@@ -75,7 +75,7 @@ export default {
       if (this.$refs['code-editor'].isClean() === true) {
         this.savingStatus = ''
       } else {
-        this.savingStatus = 'Unsaved changes' // TODO translate
+        this.savingStatus = trans('gui.assets_man.status.unsaved_changes')
       }
     }
   },
@@ -98,7 +98,7 @@ export default {
   methods: {
     handleClick: function (controlID) {
       if (controlID === 'save') {
-        this.savingStatus = 'Saving ...'
+        this.savingStatus = trans('gui.assets_man.status.saving')
         ipcRenderer.invoke('css-provider', {
           command: 'set-custom-css',
           css: this.css
@@ -107,7 +107,7 @@ export default {
             this.savingStatus = ''
           })
           .catch(e => {
-            this.savingStatus = 'Could not save CSS!'
+            this.savingStatus = trans('gui.assets_man.status.save_error')
             console.error(e)
           })
       }

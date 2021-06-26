@@ -22,7 +22,7 @@
             {{ colLabel }}
           </th>
           <th v-if="deletable || addable">
-            Actions <!-- TODO: Translate -->
+            {{ actionsLabel }}
           </th>
         </tr>
       </thead>
@@ -117,7 +117,7 @@
           </td>
           <td style="text-align: center">
             <button v-on:click="handleAddition()">
-              Add <!-- TODO: Translate -->
+              {{ addButtonLabel }}
             </button>
           </td>
         </tr>
@@ -144,6 +144,8 @@
 import Checkbox from './Checkbox'
 import TextControl from './Text'
 import NumberControl from './Number'
+
+import { trans } from '../../../i18n-renderer'
 
 export default {
   name: 'ListField',
@@ -262,6 +264,12 @@ export default {
         return 'object'
       }
     },
+    addButtonLabel: function () {
+      return trans('system.common.list_add_button')
+    },
+    actionsLabel: function () {
+      return trans('system.common.list_actions_label')
+    },
     columnLabels: function () {
       if (this.labels.length !== 0) {
         return this.labels // The user provided labels for us
@@ -282,7 +290,7 @@ export default {
       }
 
       // Apparently we have a simple array, so exactly one column
-      return ['Item'] // TODO: Translate!
+      return [trans('system.common.list_default_column_label')]
     },
     platform: function () {
       return process.platform

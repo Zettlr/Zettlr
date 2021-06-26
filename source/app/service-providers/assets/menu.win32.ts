@@ -149,8 +149,8 @@ export default function getMenu (): MenuItemConstructorOptions[] {
               }
             },
             {
-              id: 'menu.defaults_preferences',
-              label: trans('menu.defaults_preferences'),
+              id: 'menu.assets_manager',
+              label: trans('menu.assets_manager'),
               accelerator: 'Ctrl+Alt+,',
               click: function (menuitem, focusedWindow) {
                 global.application.showDefaultsPreferences()

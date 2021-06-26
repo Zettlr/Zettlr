@@ -94,6 +94,7 @@ import SelectableList from './SelectableList'
 import ButtonControl from '../common/vue/form/elements/Button'
 import TextControl from '../common/vue/form/elements/Text.vue'
 import CodeEditor from '../common/vue/CodeEditor'
+import { trans } from '../common/i18n-renderer'
 
 const ipcRenderer = window.ipc
 
@@ -123,7 +124,7 @@ export default {
       if (this.$refs['code-editor'].isClean() === true) {
         this.savingStatus = ''
       } else {
-        this.savingStatus = 'Unsaved changes' // TODO translate
+        this.savingStatus = trans('gui.assets_man.status.unsaved_changes')
       }
     }
   },
@@ -173,7 +174,7 @@ export default {
         .catch(err => console.error(err))
     },
     saveSnippet: function () {
-      this.savingStatus = 'Saving ...' // TODO translate
+      this.savingStatus = trans('gui.assets_man.status.saving')
 
       ipcRenderer.invoke('assets-provider', {
         command: 'set-snippet',
@@ -183,7 +184,7 @@ export default {
         }
       })
         .then(() => {
-          this.savingStatus = 'Saved!' // TODO: Translate
+          this.savingStatus = trans('gui.assets_man.status.saved')
           setTimeout(() => {
             this.savingStatus = ''
           }, 1000)

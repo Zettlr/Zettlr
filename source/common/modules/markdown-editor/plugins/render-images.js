@@ -27,6 +27,7 @@
   // GENERAL PLUGIN VARIABLES
   const { getImageRE } = require('../../../regular-expressions')
   const makeAbsoluteURL = require('../../../util/make-absolute-url')
+  const { trans } = require('../../../i18n-renderer')
 
   // Image detection regex
   const imageRE = getImageRE()
@@ -175,7 +176,7 @@
         // Display a replacement image in case the correct one is not found
         img.onerror = () => {
           img.src = img404
-          caption.textContent = `Image not found: ${url}` // TODO: Translate
+          caption.textContent = trans('system.error.image_not_found', url)
         }
         img.onclick = () => { textMarker.clear() }
 

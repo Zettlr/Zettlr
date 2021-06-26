@@ -222,7 +222,7 @@ export default {
             id: items.length,
             mock: true, // This will help getFilteredDirectoryContents to never exclude it in display
             props: {
-              name: 'New Directory', // TODO: Translate
+              name: trans('toolbar.dir_new'),
               type: 'directory'
             }
           })

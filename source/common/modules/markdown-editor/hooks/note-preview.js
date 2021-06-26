@@ -1,5 +1,7 @@
 const tippy = require('tippy.js').default
 const ipcRenderer = window.ipc
+const { trans } = require('../../../i18n-renderer')
+const formatDate = require('../../../util/format-date')
 
 /**
  * A hook for displaying link tooltips which display metadata
@@ -21,11 +23,10 @@ module.exports = (elem) => {
     if (a.hasOwnProperty('_tippy')) {
       return
     }
-    // TODO: Translate!
 
     // Create a tippy. This will display the loading values
     let tooltip = tippy(a, {
-      content: 'Searching For File...',
+      content: trans('gui.preview_searching_label'),
       allowHTML: true, // Obviously
       interactive: true,
       placement: 'top-start', // Display at the beginning of the anchor
@@ -45,14 +46,14 @@ module.exports = (elem) => {
             <h4 class="filename">${metaData[0]}</h4>
             <div class="note-content">${metaData[1]}</div>
             <div class="metadata">
-              Word Count: ${metaData[2]}<br>Modified: ${metaData[3]}
+              ${trans('gui.preview_word_count')}: ${metaData[2]}<br>${trans('gui.preview_modification_date')}: ${formatDate(metaData[3])}
             </div>
           </div>
           `
           tooltip.setContent(content)
         } else {
-          tooltip.setContent('File Not Found') // TODO: Translate!
+          tooltip.setContent(trans('system.error.fnf_message'))
         }
-      }).catch(err => console.log('File path find error: ' + err))
+      }).catch(err => console.error(err))
   })
 }

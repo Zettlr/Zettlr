@@ -59,6 +59,7 @@ import SplitView from '../common/vue/window/SplitView'
 import SelectableList from './SelectableList'
 import ButtonControl from '../common/vue/form/elements/Button'
 import CodeEditor from '../common/vue/CodeEditor'
+import { trans } from '../common/i18n-renderer'
 
 const ipcRenderer = window.ipc
 
@@ -138,7 +139,7 @@ export default {
       if (this.$refs['code-editor'].isClean() === true) {
         this.savingStatus = ''
       } else {
-        this.savingStatus = 'Unsaved changes' // TODO translate
+        this.savingStatus = trans('gui.assets_man.status.unsaved_changes')
       }
     }
   },
@@ -191,7 +192,7 @@ export default {
         return
       }
 
-      this.savingStatus = 'Saving ...' // TODO translate
+      this.savingStatus = trans('gui.assets_man.status.saving')
 
       let format
       if (isWriter) {
@@ -209,7 +210,7 @@ export default {
         }
       })
         .then(() => {
-          this.savingStatus = 'Saved!' // TODO: Translate
+          this.savingStatus = trans('gui.assets_man.status.saved')
           setTimeout(() => {
             this.savingStatus = ''
           }, 1000)
@@ -225,7 +226,7 @@ export default {
         return
       }
 
-      this.savingStatus = 'Restoring defaults file ...'
+      this.savingStatus = trans('gui.assets_man.defaults_restoring')
 
       let format
       if (isWriter) {
@@ -243,12 +244,12 @@ export default {
       })
         .then((result) => {
           if (result === true) {
-            this.savingStatus = 'Defaults file restored.' // TODO: Translate
+            this.savingStatus = trans('Defaults file restored.')
             // Immediately re-fetch the now restored defaults file
             this.loadDefaultsForState()
             setTimeout(() => { this.savingStatus = '' }, 1000)
           } else {
-            this.savingStatus = 'Could not restore defaults file!'
+            this.savingStatus = trans('gui.assets_man.defaults_restore_error')
           }
         })
         .catch(err => { console.error(err) })

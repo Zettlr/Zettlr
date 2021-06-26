@@ -28,6 +28,8 @@ import 'codemirror/mode/yaml/yaml'
 import 'codemirror/mode/gfm/gfm'
 import 'codemirror/addon/mode/overlay'
 
+import { trans } from '../i18n-renderer'
+
 /**
  * Define a snippets mode that extends the GFM mode with TextMate syntax.
  *
@@ -138,7 +140,7 @@ function markLinks (cm) {
         className: 'cm-link',
         inclusiveLeft: false,
         inclusiveRight: true,
-        attributes: { title: `Cmd/Ctrl+Click to open ${match[0]}` } // TODO: Translate
+        attributes: { title: trans('gui.ctrl_click_to_open', match[0]) }
       }
     )
   }

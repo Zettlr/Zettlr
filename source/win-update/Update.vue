@@ -82,10 +82,10 @@ export default {
   },
   data: function () {
     return {
-      windowTitle: 'Updater', // TODO: Translate
+      windowTitle: trans('dialog.update.window_title'),
       lastResponse: null, // Type: ParsedAPIResponse
       disableStartButton: false, // True as soon as the update starts
-      startButtonLabel: 'Click to start update', // The initial label of the start button TODO: Translate
+      startButtonLabel: trans('dialog.update.start_update_label'),
       downloadProgress: {
         name: '',
         full_path: '',
@@ -157,7 +157,7 @@ export default {
     },
     startUpdate: function () {
       this.disableStartButton = true
-      this.startButtonLabel = 'Starting update …' // TODO: Translate
+      this.startButtonLabel = trans('dialog.update.start_update_message')
       ipcRenderer.invoke('update-provider', { command: 'begin-update' })
         .catch(e => {
           this.disableStartButton = false

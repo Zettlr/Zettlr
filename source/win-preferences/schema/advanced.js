@@ -70,9 +70,9 @@ export default function () {
           label: trans('dialog.preferences.whitelist'),
           model: 'system.iframeWhitelist',
           deletable: true,
-          labels: ['Hostname'], // TODO: Translate!
+          labels: [trans('dialog.preferences.whitelist_hostname')],
           searchable: true,
-          searchLabel: 'Search for entries …'
+          searchLabel: trans('system.common.list_search_placeholder')
         }
       ],
       [

@@ -147,7 +147,6 @@ export default class Zettlr {
         // ... and ask the user if we should *really* quit.
         this._windowManager.askSaveChanges()
           .then(result => {
-            // TODO translate and agree on buttons!
             // 0 = 'Close without saving changes',
             // 1 = 'Save changes'
             if (result.response === 0) {
@@ -177,7 +176,6 @@ export default class Zettlr {
       if (!this._documentManager.isClean()) {
         this.askSaveChanges()
           .then(result => {
-            // TODO translate and agree on buttons!
             // 0 = 'Close without saving changes',
             // 1 = 'Save changes'
             if (result.response === 0) {

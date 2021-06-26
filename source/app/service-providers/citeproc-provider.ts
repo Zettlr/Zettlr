@@ -387,7 +387,7 @@ export default class CiteprocProvider {
         this._items[id] = item
       } catch (err) {
         global.log.warning(`[Citeproc Provider] Malformed CiteKey @${id}` + String(err.message))
-        global.notify.normal(`Malformed CiteKey @${id}`) // TODO translate
+        global.notify.normal(trans('system.error.malformed_citekey', id))
       }
     }
 

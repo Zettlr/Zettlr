@@ -31,10 +31,10 @@ export default function () {
           type: 'list',
           label: trans('dialog.preferences.user_dictionary'),
           model: 'userDictionaryContents',
-          labels: ['Dictionary entry'], // TODO: Translate!
+          labels: [trans('dialog.preferences.user_dictionary_label')],
           deletable: true,
           searchable: true,
-          searchLabel: 'Search for entries …'
+          searchLabel: trans('system.common.list_search_placeholder')
         }
       ]
     ]

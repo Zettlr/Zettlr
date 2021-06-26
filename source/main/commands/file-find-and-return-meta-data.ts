@@ -15,7 +15,6 @@
 
 import ZettlrCommand from './zettlr-command'
 import { MDFileMeta } from '../modules/fsal/types'
-import formatDate from '../../common/util/format-date'
 import { mdFileExtensions } from '../../common/get-file-extensions'
 
 const FILETYPES = mdFileExtensions(true)
@@ -61,8 +60,7 @@ export default class FilePathFindMetaData extends ZettlrCommand {
       let title = metaData.name // The file name
 
       // use luxon to get a local time difference
-      let time = formatDate(metaData.modtime)
-      return ([ title, content, wordCount, time ])
+      return ([ title, content, wordCount, metaData.modtime ])
     }
     // We can't find it, so return Not Found
     return null

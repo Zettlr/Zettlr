@@ -86,7 +86,7 @@ export default {
       if (document.body.classList.contains('darwin')) {
         return this.tabs[this.currentTab].label
       } else {
-        return 'Defaults Preferences' // TODO: Translate!
+        return trans('gui.assets_man.win_title')
       }
     }
   }

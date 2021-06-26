@@ -108,7 +108,7 @@ export default function () {
       [
         {
           type: 'slider',
-          label: 'Maximum image width (in percent)', // TODO: Translate
+          label: trans('dialog.preferences.display.image_width'),
           name: 'slider-image-width',
           min: 0,
           max: 100,
@@ -116,7 +116,7 @@ export default function () {
         },
         {
           type: 'slider',
-          label: 'Maximum image height (in percent)', // TODO: Translate
+          label: trans('dialog.preferences.display.image_height'),
           name: 'slider-image-height',
           min: 0,
           max: 100,

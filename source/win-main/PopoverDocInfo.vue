@@ -38,7 +38,7 @@
       </tr>
     </table>
     <p v-else>
-      No document open. <!-- TODO: Translate! -->
+      {{ noDocumentLabel }}
     </p>
   </div>
 </template>
@@ -72,6 +72,9 @@ export default {
   computed: {
     popoverData: function () {
       return {} // This popover doesn't return anything
+    },
+    noDocumentLabel: function () {
+      return trans('gui.no_open_document')
     },
     wordsLabel: function () {
       return trans('gui.file_words')

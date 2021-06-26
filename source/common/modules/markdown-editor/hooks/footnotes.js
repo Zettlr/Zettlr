@@ -17,6 +17,7 @@
 
 const tippy = require('tippy.js').default
 const md2html = require('../../../util/md-to-html')
+const { trans } = require('../../../i18n-renderer')
 
 /**
  * No footnote tooltips while we're editing a footnote
@@ -94,8 +95,8 @@ function showFootnoteTooltip (cm, element) {
   const fnref = getFootnoteTextForRef(cm, ref)
 
   tippy(element, {
-    // Display the text as HTML TODO: Translate the no reference message
-    content: (fnref !== undefined && fnref.trim() !== '') ? md2html(fnref, true) : md2html('_No reference text_'),
+    // Display the text as HTML
+    content: (fnref !== undefined && fnref.trim() !== '') ? md2html(fnref, true) : md2html('_' + trans('gui.no_reference_message') + '_'),
     allowHTML: true,
     onHidden (instance) {
       instance.destroy() // Destroy the tippy instance.

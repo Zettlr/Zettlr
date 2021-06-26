@@ -193,7 +193,7 @@ export default {
       return trans('gui.table_of_contents')
     },
     relatedFilesLabel: function () {
-      return 'Related Files' // TODO: Translate!
+      return trans('gui.related_files_label')
     },
     openDirLabel: function () {
       return trans('gui.attachments_open_dir')
