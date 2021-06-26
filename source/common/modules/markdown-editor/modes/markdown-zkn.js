@@ -35,7 +35,6 @@ const {
   const highlightRE = getHighlightRE()
   const tableRE = getTableRE()
   const inlineMathRE = getInlineMathRE()
-  const blockMathRE = getBlockMathRE()
   const fnReferenceRE = getFnReferenceRE()
 
   function shouldMatchTag (text) {
@@ -141,31 +140,10 @@ const {
           } // Else: It might be sol(), but don't escape
         }
 
-        // Then handle block equations.
-        // NOTE: We have to check for inEquation first, because
-        // otherwise, stream.match() will ALWAYS be executed, hence
-        // falsifying the otherwise correct else-if!!
-        // TODO: We are currently using the multiplex mode to enhance block
-        // equations with syntax highlight, so I'm unsure if this code is
-        // executed at all or if we can just trash it …?
-        if (stream.sol() && !state.inEquation && stream.match(blockMathRE)) {
-          // We have a multiline equation
-          state.inEquation = true
-          return 'comment'
-        } else if (stream.sol() && state.inEquation && stream.match(blockMathRE)) {
-          // We're leaving the multiline equation
-          state.inEquation = false
-          return 'comment'
-        } else if (state.inEquation) {
-          // While we're in an equation, simply return fenced-codes.
-          stream.skipToEnd()
-          return 'comment'
-        }
-
         // Now let's check for footnotes. Other than reference style links these
         // require a different formatting, which we'll implement here.
         if (stream.sol() && stream.match(fnReferenceRE)) {
-          return 'footnote-formatting' // TODO: Do we want rendering in footnotes?
+          return 'footnote-formatting'
         }
 
         // Are we in a link?
