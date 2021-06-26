@@ -110,12 +110,15 @@
           v-bind:name="field.model"
           v-on:input="$emit('input', field.model, $event)"
         ></TokenInput>
-        <Theme
-          v-if="field.type === 'theme'"
+        <!-- NOTE: For sliders we only listen to change events -->
+        <SliderInput
+          v-if="field.type === 'slider'"
           v-bind:key="f_idx"
-          v-bind:options="field.options"
-          v-on:input="$emit('input', field.model, $event)"
-        ></Theme>
+          v-bind:value="getModelValue(field.model)"
+          v-bind:label="field.label"
+          v-bind:name="field.model"
+          v-on:change="$emit('input', field.model, $event)"
+        ></SliderInput>
       </template>
     </fieldset>
   </div>
@@ -151,9 +154,9 @@ import CheckboxInput from './elements/Checkbox.vue'
 import SwitchInput from './elements/Switch.vue'
 import RadioInput from './elements/Radio.vue'
 import SelectInput from './elements/Select.vue'
+import SliderInput from './elements/Slider.vue'
 import ListInput from './elements/List.vue'
 import TokenInput from './elements/TokenList.vue'
-import Theme from './elements/Theme.vue'
 
 export default {
   name: 'Form',
@@ -167,9 +170,9 @@ export default {
     SwitchInput,
     RadioInput,
     SelectInput,
+    SliderInput,
     ListInput,
-    TokenInput,
-    Theme
+    TokenInput
   },
   props: {
     model: {

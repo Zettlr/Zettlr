@@ -1,11 +1,12 @@
 <template>
   <div class="slider-group">
-    <p v-html="label"></p>
+    <label v-if="label !== ''" v-html="label"></label>
     <input
       type="range"
       v-bind:min="min"
       v-bind:max="max"
       v-bind:value="value"
+      v-bind:name="name"
       v-on:input="$emit('input', parseInt($event.target.value, 10))"
       v-on:change="$emit('change', parseInt($event.target.value, 10))"
     >

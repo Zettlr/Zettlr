@@ -104,10 +104,25 @@ export default function () {
             }
           }
         }
+      ],
+      [
+        {
+          type: 'slider',
+          label: 'Maximum image width (in percent)', // TODO: Translate
+          name: 'slider-image-width',
+          min: 0,
+          max: 100,
+          model: 'display.imageWidth'
+        },
+        {
+          type: 'slider',
+          label: 'Maximum image height (in percent)', // TODO: Translate
+          name: 'slider-image-height',
+          min: 0,
+          max: 100,
+          model: 'display.imageHeight'
+        }
       ]
-    ],
-    fields: [
-      // TODO: Image size constrainer input!
     ]
   }
 }
