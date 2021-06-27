@@ -199,12 +199,12 @@ export default {
 
               // Set the project flag if applicable
               const projectChanged = data.isProject !== this.isProject
-              if (projectChanged && data.isProject) {
+              if (projectChanged && data.isProject === true) {
                 ipcRenderer.invoke('application', {
                   command: 'dir-new-project',
                   payload: { path: this.obj.path }
                 }).catch(e => console.error(e))
-              } else if (projectChanged && !data.isProject) {
+              } else if (projectChanged && data.isProject === false) {
                 ipcRenderer.invoke('application', {
                   command: 'dir-remove-project',
                   payload: { path: this.obj.path }

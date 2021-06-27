@@ -18,7 +18,6 @@
       v-bind:data-id="obj.id"
       v-bind:data-filename="getFilename"
       v-bind:draggable="isDraggable"
-      v-bind:style="getStyle"
       v-on:mousedown.stop="requestSelection"
       v-on:dragstart.stop="beginDragging"
       v-on:drag="onDragHandler"
@@ -165,9 +164,9 @@ export default {
         return this.obj.name
       }
 
-      if (this.obj.frontmatter && this.obj.frontmatter.hasOwnProperty('title')) {
+      if (this.obj.frontmatter != null && 'title' in this.obj.frontmatter) {
         return this.obj.frontmatter.title
-      } else if (this.obj.firstHeading && this.$store.state.config['display.useFirstHeadings']) {
+      } else if (this.obj.firstHeading != null && this.$store.state.config['display.useFirstHeadings'] === true) {
         return this.obj.firstHeading
       } else {
         return this.obj.name.replace(this.obj.ext, '')
@@ -183,7 +182,7 @@ export default {
         const ret = []
         const colouredTags = this.$store.state.colouredTags
         for (const colouredTag in colouredTags) {
-          if (this.obj.tags.includes(colouredTag.name)) {
+          if (this.obj.tags.includes(colouredTag.name) === true) {
             ret.push(colouredTag)
           }
         }
@@ -215,18 +214,6 @@ export default {
       } else {
         return formatDate(this.obj.creationtime, true)
       }
-    },
-    getStyle: function () {
-      if (this.obj.hasOwnProperty('results')) {
-        let w = 0
-        let hue = window.getComputedStyle(document.documentElement).getPropertyValue('--search-hue') || '159'
-        for (let r of this.obj.results) w += r.weight
-        w = Math.round(w / this.$store.state.maxWeight * 100) // Percentage
-        let style = `background-color:hsl(${hue}, ${w}%, 50%);`
-        style += ` color: ${(w > 50) ? 'black' : 'white'};`
-        return style
-      }
-      return ''
     },
     countDirs: function () {
       if (this.isDirectory === false) {

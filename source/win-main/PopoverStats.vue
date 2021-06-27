@@ -108,7 +108,7 @@ export default {
         }
 
         const currentKey = `${year}-${m}-${day}`
-        if (allKeys.includes(currentKey)) {
+        if (allKeys.includes(currentKey) === true) {
           dailyCounts.push(this.wordCounts[currentKey])
         } else {
           dailyCounts.push(0)

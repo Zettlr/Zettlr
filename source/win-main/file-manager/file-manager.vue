@@ -141,14 +141,14 @@ export default {
       fileTree.classList.remove('hidden')
       // Then we want to do some additional
       // failsafes for the different modes
-      if (this.isThin || this.isCombined) {
+      if (this.isThin === true || this.isCombined === true) {
         this.fileListVisible = false
       }
-      if (this.isExpanded) {
+      if (this.isExpanded === true) {
         this.fileListVisible = true
       }
       // Enlargen the file manager, if applicable
-      if (this.isExpanded && this.$el.offsetWidth < 100) {
+      if (this.isExpanded === true && this.$el.offsetWidth < 100) {
         this.$el.style.width = '100px'
       }
     }
@@ -158,23 +158,23 @@ export default {
      * Toggles the fileList's visibility, if applicable.
      */
     toggleFileList: function () {
-      if (this.lockedTree) {
+      if (this.lockedTree === true) {
         return // Don't toggle in case of a lockdown
       }
 
       // Switch back to directories in case of fileManagerMode changes
-      if (!this.isThin && this.isFileListVisible) {
+      if (this.isThin === false && this.isFileListVisible === true) {
         this.fileTreeVisible = true
         this.fileListVisible = false
         this.$refs.arrowButton.classList.add('hidden') // Hide the arrow button
         return
       }
 
-      if (this.fileTreeVisible && !this.isThin) {
+      if (this.fileTreeVisible === true && this.isThin === false) {
         return // Can't show the file list
       }
 
-      if (this.isFileListVisible) {
+      if (this.isFileListVisible === true) {
         // Display directories
         this.fileTreeVisible = true
         this.fileListVisible = false
@@ -253,18 +253,16 @@ export default {
       // will make sure to catch things such as whether we are in combined mode
       if (event.deltaX > 0) {
         // Switch to the file list
-        if (!this.isFileListVisible) {
+        if (this.isFileListVisible === false) {
           event.preventDefault()
           event.stopPropagation()
           this.toggleFileList()
         }
-      } else if (event.deltaX < 0) {
+      } else if (event.deltaX < 0 && this.isFileListVisible === true) {
         // Switch to the tree view
-        if (this.isFileListVisible) {
-          event.preventDefault()
-          event.stopPropagation()
-          this.toggleFileList()
-        }
+        event.preventDefault()
+        event.stopPropagation()
+        this.toggleFileList()
       }
     },
     /**
@@ -274,24 +272,29 @@ export default {
      */
     selectionListener: function (evt) {
       // No hash property? Nothing to do.
-      if (!evt.target.dataset.hasOwnProperty('hash')) return
-      let obj = findObject(this.$store.state.fileTree, 'hash', parseInt(evt.target.dataset.hash), 'children')
+      if (evt.target === null || !('hash' in evt.target.dataset)) {
+        return
+      }
+
+      const obj = findObject(this.$store.state.fileTree, 'hash', parseInt(evt.target.dataset.hash), 'children')
       // Nothing found/type is a file? Return.
-      if (!obj || obj.type === 'file') return
-      if (!this.isFileListVisible) this.toggleFileList()
+      if (obj != null || obj.type === 'file') return
+      if (this.isFileListVisible === false) {
+        this.toggleFileList()
+      }
     },
     /**
      * Locks the directory tree (mostly in preparation for a drag operation)
      */
     lockDirectoryTree: function () {
-      if (!this.isThin) {
+      if (this.isThin === false) {
         return // Don't lock the file tree if we aren't in a thin mode
       }
 
       // This function is called whenever the file list
       // should be hidden and only the file tree should
       // be visible
-      if (this.isFileListVisible) {
+      if (this.isFileListVisible === true) {
         this.previous = 'file-list'
         this.toggleFileList()
       }
@@ -302,7 +305,7 @@ export default {
      * Unlocks the directory tree (mostly after a completed drag and drop operation)
      */
     unlockDirectoryTree: function () {
-      if (!this.isThin) {
+      if (this.isThin === false) {
         return // Don't unlock the file tree if we aren't in a thin mode
       }
 
@@ -328,7 +331,7 @@ export default {
      * @param {MouseEvent} evt The associated event.
      */
     fileManagerInnerResize: function (evt) {
-      if (!this.fileManagerInnerResizing) {
+      if (this.fileManagerInnerResizing === false) {
         return
       }
 
@@ -339,11 +342,7 @@ export default {
       // x < 0 means: Direction <--
       let x = evt.clientX - this.fileManagerInnerResizeX
       // Make sure both the fileList and the tree view are at least 50 px in width
-      if (!this.isThin && fileTree.offsetWidth <= 50 && x < 0) {
-        x = 0
-      }
-
-      if (!this.isThin && fileList.offsetWidth <= 50 && x > 0) {
+      if (this.isThin === false && fileTree.offsetWidth <= 50 && x !== 0) {
         x = 0
       }
 

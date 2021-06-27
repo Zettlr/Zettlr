@@ -249,19 +249,19 @@ export default {
      * Returns the correct indicator shape
      */
     indicatorShape: function () {
-      return this.collapsed ? 'caret right' : 'caret down'
+      return this.collapsed === true ? 'caret right' : 'caret down'
     },
     indicatorARIALabel: function () {
-      return this.collapsed ? 'Uncollapse directory' : 'Collapse directory'
+      return this.collapsed === true ? 'Uncollapse directory' : 'Collapse directory'
     },
     basename: function () {
       if (this.obj.type === 'directory' || this.obj.type === 'code') {
         return this.obj.name
       }
 
-      if (this.obj.frontmatter && this.obj.frontmatter.hasOwnProperty('title')) {
+      if (this.obj.frontmatter != null && 'title' in this.obj.frontmatter) {
         return this.obj.frontmatter.title
-      } else if (this.obj.firstHeading && this.$store.state.config['display.useFirstHeadings']) {
+      } else if (this.obj.firstHeading != null && this.$store.state.config['display.useFirstHeadings'] === true) {
         return this.obj.firstHeading
       } else {
         return this.obj.name.replace(this.obj.ext, '')
@@ -297,8 +297,8 @@ export default {
   },
   methods: {
     uncollapseIfApplicable: function () {
-      const filePath = (this.activeFile !== null) ? this.activeFile.path : ''
-      const dirPath = (this.selectedDir !== null) ? this.selectedDir.path : ''
+      const filePath = (this.activeFile !== null) ? String(this.activeFile.path) : ''
+      const dirPath = (this.selectedDir !== null) ? String(this.selectedDir.path) : ''
 
       // Open the tree, if the selected file is contained in this dir somewhere
       if (filePath.startsWith(this.obj.path)) {
