@@ -13,9 +13,9 @@
       role="tabpanel"
     >
       <ListControl
-        v-bind:label="''"
+        v-bind:label="exportFormatLabel"
         v-bind:value="exportFormatList"
-        v-bind:labels="['Use', 'Format']"
+        v-bind:labels="[exportFormatUseLabel, exportFormatNameLabel]"
         v-bind:editable="[0]"
         v-on:input="selectExportFormat($event)"
       ></ListControl>
@@ -27,8 +27,8 @@
     >
       <ListControl
         v-model="patterns"
-        v-bind:label="'Add Glob patterns to include only specific files'"
-        v-bind:labels="['Glob Pattern']"
+        v-bind:label="exportPatternLabel"
+        v-bind:labels="[exportPatternNameLabel]"
         v-bind:editable="[0]"
         v-bind:addable="true"
         v-bind:deletable="true"
@@ -41,6 +41,7 @@
 import ListControl from '../../../common/vue/form/elements/List'
 import Vue from 'vue'
 import Tabs from '../../../common/vue/Tabs'
+import { trans } from '../../../common/i18n-renderer'
 
 const ipcRenderer = window.ipc
 
@@ -85,6 +86,21 @@ export default {
           format: e
         }
       })
+    },
+    exportFormatLabel: function () {
+      return trans('dialog.preferences.project.format')
+    },
+    exportFormatUseLabel: function () {
+      return trans('dialog.preferences.project.use_label')
+    },
+    exportFormatNameLabel: function () {
+      return trans('dialog.preferences.project.name_label')
+    },
+    exportPatternLabel: function () {
+      return trans('dialog.preferences.project.pattern')
+    },
+    exportPatternNameLabel: function () {
+      return trans('dialog.preferences.project.pattern_name')
     }
   },
   created: function () {

@@ -33,6 +33,7 @@
  */
 
 import WindowChrome from '../common/vue/window/Chrome.vue'
+import { trans } from '../common/i18n-renderer'
 
 const ipcRenderer = window.ipc
 
@@ -65,7 +66,7 @@ export default {
       return [
         {
           type: 'button',
-          label: 'Ok', // TODO
+          label: trans('system.ok'),
           id: 'ok',
           icon: '',
           buttonClass: 'primary' // It's a primary button

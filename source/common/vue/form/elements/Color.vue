@@ -13,7 +13,7 @@
       >
       <button
         type="button"
-        data-tippy-content="dialog.preferences.zkn.reset_default_id"
+        v-bind:title="resetLabel"
         v-on:click="resetValue"
       >
         <clr-icon shape="refresh"></clr-icon>
@@ -47,6 +47,7 @@
  *
  * END HEADER
  */
+import { trans } from '../../../i18n-renderer'
 
 export default {
   name: 'FieldColor',
@@ -79,6 +80,9 @@ export default {
   computed: {
     fieldID: function () {
       return 'field-input-' + this.name
+    },
+    resetLabel: function () {
+      return trans('gui.reset')
     }
   },
   methods: {

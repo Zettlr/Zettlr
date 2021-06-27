@@ -21,6 +21,7 @@ import path from 'path'
 import { promises as fs } from 'fs'
 import { BrowserWindow } from 'electron'
 import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
+import { trans } from '../../../common/i18n-main'
 
 export const plugin: ExporterPlugin = {
   pluginInformation: function () {
@@ -42,14 +43,14 @@ export const plugin: ExporterPlugin = {
     try {
       await commandExists('pandoc')
     } catch (err) {
-      throw new Error('Cannot export: Pandoc has not been found.')
+      throw new Error(trans('system.error.no_pandoc_message'))
     }
 
     if (options.format === 'xelatex-pdf') {
       try {
         await commandExists('xelatex')
       } catch (err) {
-        throw new Error('Cannot run exporter: XeLaTeX has not been found.')
+        throw new Error(trans('system.error.no_xelatex_message'))
       }
     }
 

@@ -14,6 +14,7 @@
 
 import commandExists from 'command-exists'
 import path from 'path'
+import { trans } from '../../../common/i18n-main'
 import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
 
 // TODO: Enable these additional writers
@@ -50,7 +51,7 @@ export const plugin: ExporterPlugin = {
     try {
       await commandExists('pandoc')
     } catch (err) {
-      throw new Error('Cannot export: Pandoc has not been found.')
+      throw new Error(trans('system.error.no_pandoc_message'))
     }
 
     // Get the correct file extension

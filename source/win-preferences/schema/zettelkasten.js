@@ -45,6 +45,10 @@ export default function () {
       ],
       [
         {
+          type: 'fieldset-label', // TODO: Create this type
+          text: trans('dialog.preferences.export.stripping')
+        },
+        {
           type: 'radio',
           label: trans('dialog.preferences.zkn.link_behaviour_description'),
           model: 'zkn.linkWithFilename',

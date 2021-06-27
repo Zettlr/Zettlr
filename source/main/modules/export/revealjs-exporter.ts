@@ -19,6 +19,7 @@ import commandExists from 'command-exists'
 import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
 import { promises as fs } from 'fs'
 import path from 'path'
+import { trans } from '../../../common/i18n-main'
 
 export const plugin: ExporterPlugin = {
   pluginInformation: function () {
@@ -56,7 +57,7 @@ export const plugin: ExporterPlugin = {
     try {
       await commandExists('pandoc')
     } catch (err) {
-      throw new Error('Cannot export: Pandoc has not been found.')
+      throw new Error(trans('system.error.no_pandoc_message'))
     }
 
     // First file determines the target name

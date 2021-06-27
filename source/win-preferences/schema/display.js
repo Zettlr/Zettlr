@@ -19,6 +19,10 @@ export default function () {
     fieldsets: [
       [
         {
+          type: 'fieldset-label', // TODO: Create this type
+          text: trans('dialog.preferences.display.preview_info')
+        },
+        {
           type: 'checkbox',
           label: trans('dialog.preferences.display.render_citations'),
           model: 'display.renderCitations'
@@ -106,6 +110,10 @@ export default function () {
         }
       ],
       [
+        {
+          type: 'fieldset-label', // TODO: Create this type
+          text: trans('dialog.preferences.display.image_size_info')
+        },
         {
           type: 'slider',
           label: trans('dialog.preferences.display.image_width'),

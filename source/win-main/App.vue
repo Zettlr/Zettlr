@@ -239,7 +239,7 @@ export default {
           type: 'button',
           class: 'share',
           id: 'export',
-          title: 'Export', // title: trans('toolbar.share'),
+          title: trans('toolbar.share'),
           icon: 'export'
         },
         {

@@ -13,7 +13,7 @@ import { trans } from '../../../../common/i18n-main'
 export default async function confirmRemove (win: BrowserWindow|null, descriptor: MDFileDescriptor|CodeFileDescriptor|DirDescriptor): Promise<boolean> {
   const options: MessageBoxOptions = {
     type: 'warning',
-    buttons: [ 'Ok', trans('system.error.cancel_remove') ],
+    buttons: [ trans('system.ok'), trans('system.error.cancel_remove') ],
     defaultId: 0,
     cancelId: 1,
     title: trans('system.error.remove_title'),

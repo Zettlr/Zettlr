@@ -2,14 +2,14 @@
   <div>
     <h4>{{ dirname }}</h4>
     <div class="properties-info-container">
-      <div><span>Created: {{ creationTime }}</span></div>
+      <div><span>{{ createdLabel }}: {{ creationTime }}</span></div>
       <div>
-        <span>Files: {{ formattedFiles }}</span>
+        <span>{{ filesLabel }}: {{ formattedFiles }}</span>
       </div>
     </div>
     <div class="properties-info-container">
-      <div><span>Modified: {{ modificationTime }}</span></div>
-      <div><span>Folders: {{ formattedDirs }}</span></div>
+      <div><span>{{ modifiedLabel }}: {{ modificationTime }}</span></div>
+      <div><span>{{ foldersLabel }}: {{ formattedDirs }}</span></div>
     </div>
     <hr>
     <!-- Sorting options -->
@@ -84,6 +84,7 @@ import localiseNumber from '../../../common/util/localise-number'
 import SelectControl from '../../../common/vue/form/elements/Select'
 import SwitchControl from '../../../common/vue/form/elements/Switch'
 import ProjectProperties from './ProjectProperties'
+import { trans } from '../../../common/i18n-renderer'
 
 const ICONS = [
   { shape: null, title: 'Reset' },
@@ -200,6 +201,18 @@ export default {
     },
     formattedDirs: function () {
       return localiseNumber(this.dirs)
+    },
+    foldersLabel: function () {
+      return trans('gui.dirs')
+    },
+    modifiedLabel: function () {
+      return trans('gui.modified')
+    },
+    createdLabel: function () {
+      return trans('gui.created')
+    },
+    filesLabel: function () {
+      return trans('gui.files')
     },
     icons: function () {
       return ICONS

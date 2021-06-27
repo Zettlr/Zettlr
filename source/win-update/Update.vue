@@ -25,7 +25,7 @@
         </template>
         <template v-else-if="isDownloading && !isFinished">
           <!-- We are currently downloading an update -->
-          <p>Downloading your update: {{ downloadProgress.download_percent }} % ({{ getETA }})</p>
+          <p>{{ downloadProgressLabel }}: {{ downloadProgress.download_percent }} % ({{ getETA }})</p>
           <ProgressControl
             v-bind:max="downloadProgress.size_total"
             v-bind:value="downloadProgress.size_downloaded"
@@ -45,7 +45,7 @@
         <div id="changelog" v-html="lastResponse.changelog"></div>
       </template>
       <template v-else>
-        No update available. You have the most recent version installed.
+        {{ noUpdateMessage }}
       </template>
     </div>
   </WindowChrome>
@@ -121,6 +121,12 @@ export default {
     },
     updateNotification: function () {
       return trans('dialog.update.notification')
+    },
+    downloadProgressLabel: function () {
+      return trans('dialog.update.download_progress_label')
+    },
+    noUpdateMessage: function () {
+      return trans('dialog.update.no_new_update')
     },
     getETA: function () {
       let seconds = this.downloadProgress.eta_seconds

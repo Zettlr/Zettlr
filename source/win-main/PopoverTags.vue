@@ -1,11 +1,11 @@
 <template>
   <div class="tag-cloud">
-    <h3>Tag Cloud</h3>
+    <h3>{{ tagCloudTitle }}</h3>
 
     <TextControl
       ref="filter"
       v-model="query"
-      v-bind:placeholder="'Filter …'"
+      v-bind:placeholder="filterPlaceholder"
     ></TextControl>
 
     <div
@@ -36,6 +36,7 @@
  */
 
 import TextControl from '../common/vue/form/elements/Text.vue'
+import { trans } from '../common/i18n-renderer'
 
 export default {
   name: 'PopoverTags',
@@ -55,6 +56,12 @@ export default {
         // As soon as this is !== '', the app will begin a search for the tag
         searchForTag: this.searchForTag
       }
+    },
+    filterPlaceholder: function () {
+      return trans('dialog.filter_tags')
+    },
+    tagCloudTitle: function () {
+      return trans('dialog.tag_cloud.title')
     },
     filteredTags: function () {
       return this.tags.filter(tag => {

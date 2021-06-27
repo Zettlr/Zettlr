@@ -13,6 +13,7 @@
  */
 
 import { BrowserWindow, dialog, MessageBoxOptions } from 'electron'
+import { trans } from '../../../../common/i18n-main'
 
 /**
  * Displays a prompt with information
@@ -27,7 +28,7 @@ export default function promptDialog (win: BrowserWindow|null, options: any): vo
 
   const boxOptions: MessageBoxOptions = {
     type: 'info',
-    buttons: ['Ok'],
+    buttons: [trans('system.ok')],
     defaultId: 0,
     title: 'Zettlr',
     message: options.message

@@ -2,17 +2,17 @@
   <div>
     <h4>{{ filename }}</h4>
     <div class="properties-info-container">
-      <div><span>Created: {{ creationTime }}</span></div>
+      <div><span>{{ createdLabel }}: {{ creationTime }}</span></div>
       <div v-if="type === 'file'">
-        <span>Words: {{ formattedWords }}</span>
+        <span>{{ formattedWords }}</span>
       </div>
       <div v-else>
         <span>Type: <span class="badge primary">{{ ext.substr(1) }}</span></span>
       </div>
     </div>
     <div class="properties-info-container">
-      <div><span>Modified: {{ modificationTime }}</span></div>
-      <div><span>Size: {{ formattedSize }}</span></div>
+      <div><span>{{ modifiedLabel }}: {{ modificationTime }}</span></div>
+      <div><span>{{ formattedSize }}</span></div>
     </div>
     <template v-if="type === 'file' && tags.length > 0">
       <hr>
@@ -32,7 +32,7 @@
     <template v-if="type === 'file'">
       <hr>
       <p>
-        Writing Target
+        {{ writingTargetTitle }}
       </p>
       <NumberControl
         v-model="targetValue"
@@ -47,7 +47,7 @@
         }"
       ></SelectControl>
       <button v-on:click="reset">
-        Reset
+        {{ resetLabel }}
       </button>
     </template>
   </div>
@@ -112,6 +112,18 @@ export default {
     wordsLabel: function () {
       return trans('dialog.target.words')
     },
+    createdLabel: function () {
+      return trans('gui.created')
+    },
+    modifiedLabel: function () {
+      return trans('gui.modified')
+    },
+    resetLabel: function () {
+      return trans('gui.reset')
+    },
+    writingTargetTitle: function () {
+      return trans('menu.set_target')
+    },
     charactersLabel: function () {
       return trans('dialog.target.chars')
     },
@@ -125,7 +137,7 @@ export default {
       return formatSize(this.fileSize)
     },
     formattedWords: function () {
-      return localiseNumber(this.words)
+      return trans('gui.words', localiseNumber(this.words))
     }
   },
   methods: {

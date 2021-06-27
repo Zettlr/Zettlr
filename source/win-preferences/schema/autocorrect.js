@@ -83,7 +83,7 @@ export default function () {
         },
         {
           type: 'list',
-          label: 'AutoCorrect',
+          label: trans('dialog.preferences.autocorrect.replacement_info'),
           model: 'editor.autoCorrect.replacements',
           deletable: true,
           searchable: true,

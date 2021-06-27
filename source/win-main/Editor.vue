@@ -17,20 +17,21 @@
           ref="search-input"
           v-model="query"
           type="text"
-          placeholder="Find"
+          v-bind:placeholder="findPlaceholder"
           v-bind:class="{'monospace': regexpSearch }"
           v-on:keypress.enter.exact="searchNext()"
           v-on:keypress.shift.enter.exact="searchPrevious()"
+          v-on:keydown.esc.exact="showSearch = false"
         >
         <button
-          title="Toggle regular expression search"
+          v-bind:title="regexLabel"
           v-bind:class="{ 'active': regexpSearch }"
           v-on:click="toggleQueryRegexp()"
         >
           <clr-icon shape="regexp"></clr-icon>
         </button>
         <button
-          title="Hide search"
+          v-bind:title="closeLabel"
           v-on:click="showSearch = false"
         >
           <clr-icon shape="times"></clr-icon>
@@ -40,20 +41,21 @@
         <input
           v-model="replaceString"
           type="text"
-          placeholder="Replace"
+          v-bind:placeholder="replacePlaceholder"
           v-bind:class="{'monospace': regexpSearch }"
           v-on:keypress.enter.exact="replaceNext()"
           v-on:keypress.shift.enter.exact="replacePrevious()"
           v-on:keypress.alt.enter.exact="replaceAll()"
+          v-on:keydown.esc.exact="showSearch = false"
         >
         <button
-          title="Replace this occurrence"
+          v-bind:title="replaceNextLabel"
           v-on:click="replaceNext()"
         >
           <clr-icon shape="two-way-arrows"></clr-icon>
         </button>
         <button
-          title="Replace all occurrences"
+          v-bind:title="replaceAllLabel"
           v-on:click="replaceAll()"
         >
           <clr-icon shape="step-forward-2"></clr-icon>
@@ -85,6 +87,7 @@ import MarkdownEditor from '../common/modules/markdown-editor'
 import CodeMirror from 'codemirror'
 import { util as citrUtil, parseSingle } from '@zettlr/citr'
 import objectToArray from '../common/util/object-to-array'
+import { trans } from '../common/i18n-renderer'
 
 const ipcRenderer = window.ipc
 
@@ -115,6 +118,24 @@ export default {
     }
   },
   computed: {
+    findPlaceholder: function () {
+      return trans('dialog.find.find_placeholder')
+    },
+    replacePlaceholder: function () {
+      return trans('dialog.find.replace_placeholder')
+    },
+    replaceNextLabel: function () {
+      return trans('dialog.find.replace_next_label')
+    },
+    replaceAllLabel: function () {
+      return trans('dialog.find.replace_all_label')
+    },
+    closeLabel: function () {
+      return trans('dialog.find.close_label')
+    },
+    regexLabel: function () {
+      return trans('dialog.find.regex_label')
+    },
     activeFile: function () {
       return this.$store.state.activeFile
     },

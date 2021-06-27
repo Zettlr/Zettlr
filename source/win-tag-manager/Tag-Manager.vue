@@ -86,7 +86,7 @@ export default {
       return trans('dialog.tags.description')
     },
     windowTitle: function () {
-      return 'Tag Manager'
+      return trans('dialog.tags.title')
     },
     statusbarControls: function () {
       return [

@@ -46,7 +46,7 @@ module.exports = (elem) => {
             <h4 class="filename">${metaData[0]}</h4>
             <div class="note-content">${metaData[1]}</div>
             <div class="metadata">
-              ${trans('gui.preview_word_count')}: ${metaData[2]}<br>${trans('gui.preview_modification_date')}: ${formatDate(metaData[3])}
+              ${trans('gui.preview_word_count')}: ${metaData[2]}<br>${trans('gui.modified')}: ${formatDate(metaData[3])}
             </div>
           </div>
           `

@@ -45,7 +45,7 @@
     >
       <!-- Other files contents -->
       <h1>
-        {{ attachmentsLabel }}
+        {{ otherFilesLabel }}
         <clr-icon
           id="open-dir-external"
           v-bind:title="openDirLabel"
@@ -183,8 +183,8 @@ export default {
     }
   },
   computed: {
-    attachmentsLabel: function () {
-      return trans('gui.attachments')
+    otherFilesLabel: function () {
+      return trans('gui.other_files')
     },
     referencesLabel: function () {
       return trans('gui.citeproc.references_heading')
@@ -199,7 +199,7 @@ export default {
       return trans('gui.attachments_open_dir')
     },
     noAttachmentsMessage: function () {
-      return trans('gui.no_attachments')
+      return trans('gui.no_other_files')
     },
     attachments: function () {
       const currentDir = this.$store.state.selectedDirectory

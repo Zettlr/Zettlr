@@ -29,16 +29,14 @@ export default async function askSaveChanges (win: BrowserWindow|null): Promise<
   const boxOptions: MessageBoxOptions = {
     type: 'warning',
     buttons: [
-      trans('dialog.button.close_without_saving'),
-      trans('dialog.button.save')
+      trans('system.save_changes_omit'),
+      trans('system.save_changes_save')
     ],
     defaultId: 1,
-    title: 'Zettlr',
-    message: 'There are unsaved changes. Do you want to save them before closing the window?'
+    title: trans('system.save_changes_title'),
+    message: trans('system.save_changes_message')
   }
 
-  // The showmessageBox-function returns a promise,
-  // nevertheless, we don't need a return.
   if (win !== null) {
     return await dialog.showMessageBox(win, boxOptions)
   } else {
