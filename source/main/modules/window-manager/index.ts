@@ -19,16 +19,12 @@ import {
   app,
   screen,
   BrowserWindow,
-  dialog,
   ipcMain,
   FileFilter,
-  MessageBoxOptions,
-  MessageBoxReturnValue,
   shell
 } from 'electron'
 import { promises as fs } from 'fs'
 import path from 'path'
-import { trans } from '../../../common/i18n-main'
 import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '../fsal/types'
 import createMainWindow from './create-main-window'
 import createPrintWindow from './create-print-window'
