@@ -55,7 +55,8 @@ export default async function askFileDialog (win: BrowserWindow|null, filters: F
   }
 
   let response: OpenDialogReturnValue
-  if (win !== null) {
+  // DEBUG: Trying to resolve bug #1645, which seems to relate to modal status vs. promise awaits.
+  if (win !== null && [ 'darwin', 'win32' ].includes(process.platform)) {
     response = await dialog.showOpenDialog(win, opt)
   } else {
     response = await dialog.showOpenDialog(opt)

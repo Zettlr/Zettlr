@@ -38,7 +38,8 @@ export default async function shouldOverwriteFileDialog (win: BrowserWindow|null
 
   // showMessageBox returns a Promise, resolves to:
   let response: MessageBoxReturnValue
-  if (win !== null) {
+  // DEBUG: Trying to resolve bug #1645, which seems to relate to modal status vs. promise awaits.
+  if (win !== null && [ 'darwin', 'win32' ].includes(process.platform)) {
     response = await dialog.showMessageBox(win, options)
   } else {
     response = await dialog.showMessageBox(options)

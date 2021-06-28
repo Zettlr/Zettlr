@@ -37,7 +37,8 @@ export default async function askSaveChanges (win: BrowserWindow|null): Promise<
     message: trans('system.save_changes_message')
   }
 
-  if (win !== null) {
+  // DEBUG: Trying to resolve bug #1645, which seems to relate to modal status vs. promise awaits.
+  if (win !== null && [ 'darwin', 'win32' ].includes(process.platform)) {
     return await dialog.showMessageBox(win, boxOptions)
   } else {
     return await dialog.showMessageBox(boxOptions)

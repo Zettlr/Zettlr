@@ -44,7 +44,8 @@ export default function promptDialog (win: BrowserWindow|null, options: any): vo
 
   // The showmessageBox-function returns a promise,
   // nevertheless, we don't need a return.
-  if (win !== null) {
+  // DEBUG: Trying to resolve bug #1645, which seems to relate to modal status vs. promise awaits.
+  if (win !== null && [ 'darwin', 'win32' ].includes(process.platform)) {
     dialog.showMessageBox(win, options)
       .catch(e => global.log.error('[Window Manager] Prompt threw an error', e))
   } else {
