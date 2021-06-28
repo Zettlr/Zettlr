@@ -115,6 +115,7 @@ module.exports = {
     }
   },
   packagerConfig: {
+    appBundleId: 'com.zettlr.app',
     asar: true,
     darwinDarkModeSupport: 'true',
     // Electron-forge automatically adds the file extension based on OS
