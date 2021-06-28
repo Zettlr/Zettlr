@@ -7,6 +7,3 @@ contact_links:
   - name: Discuss Your Feature Ideas (on the Forum)
     url: https://forum.zettlr.com/
     about: Before actually requesting a new feature, make sure to discuss it with fellow users first.
-  - name: Report a Security Vulnerability
-    url: https://github.com/Zettlr/Zettlr/blob/develop/SECURITY.md
-    about: Do not open security vulnerabilities as issues. Report them to us directly.
