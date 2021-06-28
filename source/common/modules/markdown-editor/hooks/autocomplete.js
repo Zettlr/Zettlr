@@ -545,7 +545,7 @@ function hintFunction (cm, opt) {
  * @return  {TextMarkers[]}            An array of created text markers
  */
 function getTabMarkers (cm, from, to) {
-  const tabStops = []
+  let tabStops = []
   for (let i = from; i < to; i++) {
     let line = cm.getLine(i)
     let match = null
@@ -587,6 +587,25 @@ function getTabMarkers (cm, from, to) {
     }
   }
 
+  // Next on, group markers with the same index together. This will later enable
+  // mirroring of input by the user (since multiple markers can be active at the
+  // same time).
+  tabStops = tabStops.reduce((acc, val) => {
+    // acc contains the resultant array, val the current marker
+    const existingValue = acc.find(elem => elem.index === val.index)
+    if (existingValue !== undefined) {
+      // The marker already exists
+      existingValue.markers.push(val.marker)
+    } else {
+      // The marker doesn't yet exist -> create
+      acc.push({
+        index: val.index,
+        markers: [val.marker]
+      })
+    }
+    return acc // We just have to return the reference to the array again
+  }, []) // initialValue: An empty array
+
   // Now we just need to sort the currentTabStops and map it so only the
   // marker remains.
   tabStops.sort((a, b) => { return a.index - b.index })
@@ -603,11 +622,11 @@ function getTabMarkers (cm, from, to) {
       { line: to - 1, ch: cm.getLine(to - 1).length },
       { widget: elem }
     )
-    tabStops.push({ index: 0, marker: marker })
+    tabStops.push({ index: 0, markers: [marker] })
   }
 
   // Make the array marker only
-  return tabStops.map(elem => elem.marker)
+  return tabStops // .map(elem => elem.marker)
 }
 
 /**
@@ -671,19 +690,25 @@ function replaceSnippetVariables (text) {
  * @param   {CodeMirror.Editor}  cm  The editor instance
  */
 function nextTabstop (cm) {
-  const marker = currentTabStops.shift()
-  if (marker === undefined) {
+  const elem = currentTabStops.shift()
+  if (elem === undefined) {
     // We're done
     cm.removeKeyMap(snippetsKeymap)
     return
   }
 
-  // Set the current selection, differentiating between tabstops and placeholders.
-  const position = marker.find()
-  if ('from' in position && 'to' in position) {
-    cm.setSelection(position.from, position.to)
-  } else {
-    cm.setCursor(position)
+  const allSelections = []
+  for (const marker of elem.markers) {
+    // Set the current selection, differentiating between tabstops and placeholders.
+    const position = marker.find()
+    if ('from' in position && 'to' in position) {
+      allSelections.push({ anchor: position.from, head: position.to })
+    } else {
+      allSelections.push({ anchor: position })
+    }
+    marker.clear()
   }
-  marker.clear()
+
+  // Finally apply all selections at once
+  cm.setSelections(allSelections)
 }
