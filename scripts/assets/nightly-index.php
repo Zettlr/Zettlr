@@ -168,6 +168,7 @@
         <thead>
           <tr>
             <th>File</th>
+            <th>Size</th>
             <th>Last modified</th>
           </tr>
         </thead>
@@ -195,9 +196,29 @@
                 $time = date('D M jS, Y H:i:s', $time);
               }
 
+              $size = filesize('.' . DIRECTORY_SEPARATOR . $name);
+
+              if ($size === false) {
+                // An error occurred
+                $size = 'unknown';
+              } else if ($size > 1000000000) {
+                // Size in Gigabyte
+                $size = round($size / 1000000000, 2) . ' GB';
+              } else if ($size > 1000000) {
+                // Size in Megabyte
+                $size = round($size / 1000000, 2) . ' MB';
+              } else if ($size > 1000) {
+                // Size in Kilobyte
+                $size = round($size / 1000, 2) . ' KB';
+              } else {
+                // Size in Byte
+                $size = $size . ' B';
+              }
+
               echo "<tr>";
               echo "<td><a href=\"$name\">$name</a></td>";
-              echo "<td>$time</td>";
+              echo "<td style=\"text-align: right;\">$size</td>";
+              echo "<td style=\"text-align: right;\">$time</td>";
               echo "</tr>";
             }
           ?>
