@@ -12,8 +12,8 @@ body:
     id: description
     attributes:
       label: Description
-      description: "Please be holistic in your description: Even seemingly trivial stuff might contain the important clue to fix the bug!"
-      placeholder: Describe your bug here
+      description: "Please be holistic in your description: Even seemingly trivial stuff might contain the important clue to fix the bug! If applicable, also make tell us what you expect to happen instead."
+      placeholder: Describe your bug and the expected behaviour here.
     validations:
       required: true
   # Also ask them to describe reproducing the bug
@@ -22,14 +22,14 @@ body:
     attributes:
       label: Reproducing
       description: "Please tell us an easy way how we can reproduce the bug so we know where to look. The more contextual information you include, the better!"
-      placeholder: Describe the steps necessary to reproduce this bug
+      placeholder: Describe the steps necessary to reproduce this bug.
     validations:
       required: true
   # Now the version
   - type: dropdown
     id: version
     attributes:
-      label: Version
+      label: Zettlr Version
       description: "What version of Zettlr are you running? Choose **Stable** if you are simply using the regular install."
       options:
         - Stable (most recent version)
@@ -44,7 +44,7 @@ body:
     id: specific-version
     attributes:
       label: Specify version
-      description: Optional, but it is encouraged to add this information (especially if we release many versions in a short span of time)
+      description: Optional, but it is encouraged to add this information (especially if we release many versions in a short span of time).
       placeholder: e.g. 1.8.9 or 1.8.9+nightly-20210628
     validations:
       required: false
@@ -52,8 +52,8 @@ body:
   - type: checkboxes
     id: scope
     attributes:
-      label: Your Operating System
-      description: Please tell us what operating system you are using. If you were able to check other operating systems and they have the same bug, please check all operating systems that apply!
+      label: Your Platform
+      description: "Please tell us what platform you're on. If you were able to check other operating systems and they have the same bug, please check all operating systems that apply!"
       options:
         - label: Windows
         - label: macOS
@@ -74,8 +74,8 @@ body:
   - type: input
     id: os-version
     attributes:
-      label: Operating System
-      description: Which operating system(s) are you running?
+      label: Operating System Version
+      description: Which operating system(s) are you running? Include all on which you experience this bug.
       placeholder: e.g. Big Sur 11.4, Linux Mate, pop!_OS, Windows 10
     validations:
       required: true
@@ -88,7 +88,4 @@ body:
     id: outro
     attributes:
       value: |
-        Thank you for taking the time to fill out this bug report.
-        We'll get back to you as soon as possible.
-        Note that we might have additional questions so
-        please make sure to check your notifications in case need some more info!
+        Thank you for taking the time to fill out this bug report. We'll get back to you as soon as possible. Note that we might have additional questions so please make sure to check your notifications in case need some more info!
