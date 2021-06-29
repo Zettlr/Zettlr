@@ -19,7 +19,7 @@ const codeBlockMultiline = getCodeBlockRE(true)
 const CodeMirror = require('codemirror')
 const { DateTime } = require('luxon')
 const uuid = require('uuid').v4
-const generateId = require('../../../util/generate-id')
+const generateId = require('../../../util/generate-id').default
 
 let autocompleteStart = null
 let currentDatabase = null
@@ -550,7 +550,8 @@ function getTabMarkers (cm, from, to) {
     let line = cm.getLine(i)
     let match = null
 
-    const varRE = /\$(\d+)|\$\{(\d+):(.+?)\}/g
+    // NOTE: The negative lookbehind
+    const varRE = /(?<!\\)\$(\d+)|(?<!\\)\$\{(\d+):(.+?)\}/g
 
     while ((match = varRE.exec(line)) !== null) {
       const ch = match.index
@@ -663,8 +664,9 @@ function replaceSnippetVariables (text) {
     ZKN_ID: generateId(global.config.get('zkn.idGen'))
   }
 
-  // Second: Replace those variables, and return the text
-  return text.replace(/\$([A-Z_]+)|\$\{([A-Z_]+):(.+?)\}/g, (match, p1, p2, p3) => {
+  // Second: Replace those variables, and return the text. NOTE we're adding a
+  // negative lookbehind -- (?<!\\) -- to make sure we're not including escaped ones.
+  return text.replace(/(?<!\\)\$([A-Z_]+)|(?<!\\)\$\{([A-Z_]+):(.+?)\}/g, (match, p1, p2, p3) => {
     if (p1 !== undefined) {
       // We have a single variable, so only replace if it's a supported one
       if (REPLACEMENTS[p1] !== undefined) {
