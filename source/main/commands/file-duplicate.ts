@@ -64,8 +64,8 @@ export default class FileDuplicate extends ZettlrCommand {
     }
 
     // Afterwards, make sure the name is correct.
-    let filename = sanitize(arg.name, { 'replacement': '-' })
-    if (filename.trim() === '') {
+    let filename = (arg.name !== undefined) ? sanitize(arg.name.trim(), { 'replacement': '-' }) : 'Copy of ' + file.name // TODO: Translate
+    if (filename === '') {
       throw new Error('Could not create file: Filename was not valid')
     }
 

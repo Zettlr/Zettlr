@@ -171,6 +171,7 @@
 
 import itemMixin from './util/item-mixin'
 import generateFilename from '../../common/util/generate-filename'
+import { trans } from '../../common/i18n-renderer'
 
 const path = window.path
 const ipcRenderer = window.ipc
@@ -281,6 +282,9 @@ export default {
           if (this.operationType === 'createFile') {
             // If we're generating a file, generate a filename
             this.$refs['new-object-input'].value = generateFilename()
+          } else if (this.operationType === 'createDir') {
+            // Else standard val for new dirs.
+            this.$refs['new-object-input'].value = trans('dialog.dir_new.value')
           }
           this.$refs['new-object-input'].focus()
           // Select from the beginning until the last dot

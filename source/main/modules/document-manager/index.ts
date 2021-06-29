@@ -21,6 +21,7 @@ import chokidar from 'chokidar'
 import { CodeFileDescriptor, CodeFileMeta, MDFileDescriptor, MDFileMeta } from '../fsal/types'
 import { FSALCodeFile, FSALFile } from '../fsal'
 import { codeFileExtensions, mdFileExtensions } from '../../../common/get-file-extensions'
+import generateFilename from '../../../common/util/generate-filename'
 
 const ALLOWED_CODE_FILES = codeFileExtensions(true)
 const MARKDOWN_FILES = mdFileExtensions(true)
@@ -414,16 +415,19 @@ export default class DocumentManager extends EventEmitter {
     }
 
     // The appendix of the filename will be a number related to the amount of
-    // untitled files in the array
-    const post = this.openFiles.filter(f => f.dir === ':memory:').length + 1
+    // duplicate files in the open files array
+    const fname = generateFilename()
+    const post = (this.openFiles.filter(f => f.name === fname).length > 0) ? '-1' : ''
+    // Splice the "post" into the filename
+    const finalFname = path.basename(fname, path.extname(fname)) + post + path.extname(fname)
 
     // Now create the file object. It's basically treated like a root file, but
     // with no real location on the file system associated.
     const file: MDFileDescriptor = {
       parent: null,
-      name: `Untitled-${post}.md`,
+      name: finalFname,
       dir: ':memory:', // Special location
-      path: `:memory:/Untitled-${post}.md`,
+      path: ':memory:/' + finalFname,
       // NOTE: Many properties are strictly speaking invalid
       hash: 0,
       size: 0,

@@ -11,8 +11,8 @@
  * END HEADER
  */
 
-const uuid4 = require('uuid').v4
-const moment = require('moment')
+import { v4 as uuid4 } from 'uuid'
+import moment from 'moment'
 
 /**
  * A utility function that can replace a bunch of variables in strings, used
@@ -20,7 +20,7 @@ const moment = require('moment')
  * @param       {string} string The input string
  * @return      {string}        The output string, with all %-variables replaced
  */
-module.exports = function (string) {
+export default function replaceStringVariables (string) {
   // Get the current date
   let d = moment()
 
