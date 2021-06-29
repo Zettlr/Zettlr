@@ -125,7 +125,7 @@ export default {
   data: function () {
     return {
       filterQuery: '',
-      activeDescriptor: null, // Can contain the active ("focused") item
+      activeDescriptor: null // Can contain the active ("focused") item
     }
   },
   computed: {
