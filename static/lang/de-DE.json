@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-06-04T20:14:46.000000Z"
+        "updated_at": "2021-06-27T12:02:19.000000Z"
     },
     "dialog": {
         "about": {
@@ -33,6 +33,7 @@
             "cancel": "Abbrechen",
             "choose_path": "Verzeichnis ausw\u00e4hlen \u2026",
             "close": "Schlie\u00dfen",
+            "close_without_saving": "Schlie\u00dfen ohne Speichern",
             "save": "Speichern"
         },
         "custom_css": {
@@ -66,10 +67,13 @@
         },
         "filter_tags": "Schlagworte filtern\u2026",
         "find": {
+            "close_label": "Suche schlie\u00dfen",
             "find_label": "Finden",
             "find_placeholder": "Finden\u2026",
-            "replace_all_label": "Alle",
+            "regex_label": "Suche mittels regul\u00e4ren Ausdr\u00fccken",
+            "replace_all_label": "Alle Vorkommnisse ersetzen",
             "replace_label": "Ersetzen",
+            "replace_next_label": "N\u00e4chstes Vorkommnis ersetzen",
             "replace_placeholder": "Ersetzen mit"
         },
         "paste_image": {
@@ -185,7 +189,9 @@
             "default_image_save_path": "Standard-Bildspeicherort (relativ oder absolut)",
             "delete_on_fail": "L\u00f6sche Objekte unwiderruflich, wenn sie nicht in den Papierkorb verschoben werden k\u00f6nnen",
             "display": {
+                "image_height": "Maximale Bildh\u00f6he (Prozent)",
                 "image_size_info": "Hiermit bestimmst du die maximale Gr\u00f6\u00dfe der Bildvorschauen",
+                "image_width": "Maximale Bildbreite (Prozent)",
                 "preview_info": "Hiermit bestimmst du, welche Elemente Zettlr darstellt",
                 "render_citations": "Zitationen darstellen",
                 "render_htags": "\u00dcberschrift-Zeichen verstecken",
@@ -233,6 +239,7 @@
             "homeEndBehaviour": "Nutze die CodeMirror-Standardaktionen f\u00fcr \u003Ckbd\u003EHome\u003C/kbd\u003E und \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
             "indent_unit": "R\u00fccke um folgende Anzahl Leerzeichen ein",
             "input_mode": "Eingabemodus des Editors",
+            "leave_app_running_in_the_notification_area": "App in der Statusleiste anzeigen",
             "modtime": "Letzter Bearbeitungszeitpunkt",
             "mute_lines": "Blende nicht fokussierte Zeilen im ablenkungsfreien Modus ab",
             "new_file_dont_prompt": "Dateinamen bei Dateierstellung nicht abfragen",
@@ -284,11 +291,16 @@
             "project": {
                 "csl_style": "CSL-Styledatei (optional)",
                 "format": "Exportiere Projekt nach:",
+                "name_label": "Format",
+                "pattern": "Filtere die Dateien mittels Glob-Mustern",
+                "pattern_name": "Glob-Muster",
                 "title": "Projekteinstellungen",
-                "title_label": "Name des Projektes"
+                "title_label": "Name des Projektes",
+                "use_label": "Aktiv"
             },
             "readability_algorithm": "Algorithmus f\u00fcr den Lesbarkeits-Modus",
             "reset_pandoc_command": "Pandoc-Befehl auf Werkseinstellungen zur\u00fccksetzen",
+            "show_app_in_the_notification_area": "App-Icon in der Men\u00fcleiste anzeigen",
             "sorting_ascii": "ASCII-Reihenfolge (2 kommt nach 10)",
             "sorting_explanation": "Sortierreihenfolge f\u00fcr Dateien (bei Sortierung nach Dateinamen)",
             "sorting_natural": "Nat\u00fcrliche Reihenfolge (10 kommt nach 2)",
@@ -314,9 +326,11 @@
             },
             "use_native_appearance": "Nutze natives Fensterdesign",
             "user_dictionary": "Benutzerdefiniertes W\u00f6rterbuch. Entferne W\u00f6rter mittels Klick.",
+            "user_dictionary_label": "W\u00f6rterbucheintrag",
             "watchdog_checkbox_label": "Aktiviere Watchdog-Polling",
             "watchdog_explainer": "Auf einigen Computern kann es passieren, dass Zettlr zu oft warnt, eine Datei sei au\u00dferhalb der App bearbeitet worden. Falls dies passiert, versuche, diese Einstellung zu aktivieren.",
             "watchdog_threshold_label": "Wartezeit, bis das Schreiben einer Datei als beendet erachtet wird (in Millisekunden)",
+            "whitelist_hostname": "Hostname",
             "xelatex": "Pfad zum XeLaTeX-Programm. Bitte \u00e4ndere dies nur, wenn Pandoc einen Fehler ausgibt, dass er die Bibliothek nicht finden kann.",
             "xelatex_default": "Standard: xelatex",
             "zkn": {
@@ -357,6 +371,11 @@
             "intro": "Hier findest du erweiterte Statistiken \u00fcber dein Schreibverhalten.",
             "month": "Monat",
             "previous_frame": "Vorhergehender Zeitabschnitt",
+            "tabs": {
+                "calendar_label": "Kalender",
+                "chart_label": "Charts",
+                "fsal_label": "FSAL-Statistiken"
+            },
             "this_frame": "Aktueller Zeitabschnitt",
             "title": "Schreibstatistiken",
             "week": "Woche",
@@ -385,16 +404,35 @@
             "client_error": "Konnte nicht nach Updates suchen: Clientfehler (Statuscode: %s)",
             "connection_error": "Konnte nicht nach Updates suchen: Verbindung konnte nicht hergestellt werden",
             "current_version": "Deine Version",
+            "download_progress_label": "Lade Aktualisierung herunter",
+            "new_update_available": "Eine Aktualisierung auf Version %s ist verf\u00fcgbar!",
             "no_data": "Konnte nicht nach Updates suchen: Server hat keine Daten gesendet",
+            "no_new_update": "Keine Aktualisierung verf\u00fcgbar. Du nutzt die aktuelle Version.",
             "notification": "Eine neue Version von Zettlr steht zum Download bereit. Bitte lies die \u00c4nderungsdatei unten.",
+            "other_error": "Konnte nicht auf Aktualisierungen pr\u00fcfen. %s: %s",
             "redirect_error": "Konnte nicht nach Updates suchen: Der Server hat eine Weiterleitung gesendet (Statuscode: %s)",
             "release_url": "Zum Download",
             "server_error": "Konnte nicht nach Updates suchen: Server Error (Statuscode: %s)",
+            "start_update_label": "Update starten",
+            "start_update_message": "Aktualisiere \u2026",
             "title": "Neue Version",
-            "transmission_error": "Konnte nicht nach Updates suchen: Verbindung abgebrochen"
+            "transmission_error": "Konnte nicht nach Updates suchen: Verbindung abgebrochen",
+            "window_title": "Updates"
         }
     },
     "gui": {
+        "assets_man": {
+            "defaults_restore_error": "Konnte Standards nicht wiederherstellen!",
+            "defaults_restored": "Standards wiederhergestellt!",
+            "defaults_restoring": "Stelle Standards wieder her \u2026",
+            "status": {
+                "save_error": "Fehler beim Speichern",
+                "saved": "Gespeichert!",
+                "saving": "Speichere \u2026",
+                "unsaved_changes": "Ungespeicherte \u00c4nderungen"
+            },
+            "win_title": "Assets Manager"
+        },
         "attachments": "Anh\u00e4nge",
         "attachments_open_dir": "\u00d6ffne Verzeichnis",
         "avg_close_to": "\ud83d\udcaa Fast geschafft!",
@@ -412,6 +450,9 @@
             "references_none": "In diesem Dokument wurden keine Zitationen gefunden.",
             "reloading": "\u00c4nderung in der Bibliothek entdeckt. Lade neu \u2026"
         },
+        "created": "Erstellt",
+        "ctrl_click_to_open": "\u00d6ffne %s mit Cmd/Strg+Klick",
+        "date_just_now_label": "gerade eben",
         "dirs": "Verzeichnisse",
         "display_search_results": "Suchergebnisse",
         "empty_dir": "Leeres Verzeichnis",
@@ -438,10 +479,20 @@
             "tasklist": "Aufgabenliste",
             "ul": "Liste"
         },
+        "modified": "Ver\u00e4ndert",
         "no_attachments": "Keine Anh\u00e4nge",
         "no_dir_selected": "Kein Verzeichnis ausgew\u00e4hlt",
+        "no_open_document": "Kein offenes Dokument",
+        "no_other_files": "Keine anderen Dateien",
+        "no_reference_message": "Kein Fu\u00dfnotentext",
         "no_search_results": "Keine Ergebnisse",
         "number_selections": "%s Selektionen",
+        "other_files": "Andere Dateien",
+        "preview_modification_date": "Bearbeitet",
+        "preview_searching_label": "Suche Datei \u2026",
+        "preview_word_count": "W\u00f6rter",
+        "related_files_label": "Verwandte Dateien",
+        "reset": "Zur\u00fccksetzen",
         "statistics_more": "Mehr Statistiken \u2026",
         "table_of_contents": "Inhaltsverzeichnis",
         "today_words": "W\u00f6rter heute",
@@ -458,6 +509,7 @@
         "about": "\u00dcber Zettlr",
         "add_to_dictionary": "Zum W\u00f6rterbuch hinzuf\u00fcgen",
         "all_front": "Alle in den Vordergrund",
+        "assets_manager": "Assets Manager",
         "bold": "Fett",
         "clear_recent_docs": "Liste leeren",
         "close_all_tabs": "Alle Tabs schlie\u00dfen",
@@ -543,6 +595,8 @@
         "start_speaking": "Sprechen beginnen",
         "stop_speaking": "Sprechen anhalten",
         "tab_close": "Tab schlie\u00dfen",
+        "tab_close_all": "Alle Tabs schlie\u00dfen",
+        "tab_close_others": "Alle anderen Tabs schlie\u00dfen",
         "tab_next": "N\u00e4chster Tab",
         "tab_previous": "Voriger Tab",
         "tags": "Schlagw\u00f6rter\u2026",
@@ -575,6 +629,12 @@
     "system": {
         "all_files": "Alle Dateien",
         "cancel": "Abbrechen",
+        "common": {
+            "list_actions_label": "Aktionen",
+            "list_add_button": "Neu",
+            "list_default_column_label": "Eintrag",
+            "list_search_placeholder": "Nach Eintr\u00e4gen suchen \u2026"
+        },
         "directories": "Verzeichnisse",
         "directory_removed": "Das Verzeichnis %s wurde entfernt.",
         "error": {
@@ -596,6 +656,8 @@
             "fnf_title": "Datei nicht gefunden",
             "ignored_dir_message": "Das Verzeichnis &quot;%s&quot; kann von Zettlr nicht ge\u00f6ffnet werden.",
             "ignored_dir_title": "Kann Verzeichnis nicht \u00f6ffnen",
+            "image_not_found": "Bild nicht gefunden: %s",
+            "malformed_citekey": "Fehlerhafter Citekey: @%s",
             "malformed_textbundle": "Fehlerhaftes Textbundle: %s",
             "move_into_child_message": "Du kannst kein Verzeichnis in eines seiner Unterverzeichnisse verschieben.",
             "move_into_child_title": "Kann Verzeichnis nicht verschieben",
@@ -609,7 +671,8 @@
             "pandoc_error_message": "Pandoc hat beim Export folgenden Fehler ausgegeben: %s",
             "pandoc_error_title": "Fehler bei Dateiexport",
             "remove_message": "M\u00f6chtest du %s wirklich l\u00f6schen?",
-            "remove_title": "Wirklich l\u00f6schen?"
+            "remove_title": "Wirklich l\u00f6schen?",
+            "tray_not_supported": "Tray-Icon in der Statusleiste nicht unterst\u00fctzt. &quot;KStatusNotifierItem/AppIndicator Support&quot; wird auf Gnome Desktop ben\u00f6tigt."
         },
         "export_success": "Exportiere nach %s",
         "file_changed": "Datei %s wurde au\u00dferhalb bearbeitet.",
@@ -669,6 +732,10 @@
         "stats": "Statistiken anzeigen",
         "tag_cloud": "Schlagworte",
         "toggle_attachments": "Anh\u00e4nge anzeigen"
+    },
+    "tray": {
+        "show_zettlr": "Zettlr anzeigen",
+        "tooltip": "Zettlr"
     },
     "validation": {
         "error_empty": "Option %s ist erforderlich.",

@@ -68,7 +68,6 @@
         "find": {
             "find_label": "Aurkitu",
             "find_placeholder": "Aurkitu...",
-            "replace_all_label": "Guztiak",
             "replace_label": "Ordezkatu",
             "replace_placeholder": "Honekin ordezkatu"
         },

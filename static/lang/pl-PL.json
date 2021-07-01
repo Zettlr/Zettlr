@@ -70,7 +70,6 @@
         "find": {
             "find_label": "Znajd\u017a",
             "find_placeholder": "Znajd\u017a...",
-            "replace_all_label": "Wszystkie",
             "replace_label": "Zast\u0105p",
             "replace_placeholder": "Zast\u0105p przez"
         },

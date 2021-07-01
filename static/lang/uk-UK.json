@@ -69,7 +69,6 @@
         "find": {
             "find_label": "\u0428\u0443\u043a\u0430\u0442\u0438",
             "find_placeholder": "\u0428\u0443\u043a\u0430\u0442\u0438...",
-            "replace_all_label": "\u0423\u0441\u0456",
             "replace_label": "\u0417\u0430\u043c\u0456\u043d\u0438\u0442\u0438",
             "replace_placeholder": "\u0417\u0430\u043c\u0456\u043d\u0438\u0442\u0438 \u043d\u0430"
         },

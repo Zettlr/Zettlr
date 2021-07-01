@@ -69,7 +69,6 @@
         "find": {
             "find_label": "Find",
             "find_placeholder": "Find ...",
-            "replace_all_label": "Alle",
             "replace_label": "Erstat",
             "replace_placeholder": "Erstat med"
         },

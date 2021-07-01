@@ -71,7 +71,6 @@
         "find": {
             "find_label": "Caut\u0103",
             "find_placeholder": "Caut\u0103...",
-            "replace_all_label": "Tot",
             "replace_label": "\u00cenlocuie\u0219te",
             "replace_placeholder": "\u00cenlocuie\u0219te cu..."
         },

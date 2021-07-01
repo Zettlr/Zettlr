@@ -3,15 +3,15 @@
         "authors": [
             "ScaredCoward",
             "Renzo Sparta \u003Cexequiel0210@gmail.com\u003E",
-            "Diego Tra\u00edd",
             "vfc",
+            "Diego Tra\u00edd",
             "Z_Moz",
             "Miren",
             "Tim",
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-06-05T07:49:46.000000Z"
+        "updated_at": "2021-06-29T20:19:15.000000Z"
     },
     "dialog": {
         "about": {
@@ -40,6 +40,7 @@
             "cancel": "Cancelar",
             "choose_path": "Seleccionar carpeta ....",
             "close": "Cerrar",
+            "close_without_saving": "Cierra sin guardar los cambios",
             "save": "Guardar"
         },
         "custom_css": {
@@ -73,10 +74,12 @@
         },
         "filter_tags": "Filtrar tags...",
         "find": {
+            "close_label": "Cierra la b\u00fasqueda",
             "find_label": "Buscar",
             "find_placeholder": "Buscar\u2026",
-            "replace_all_label": "Todo",
+            "replace_all_label": "Reemplaza todas las ocurrencias",
             "replace_label": "Reemplazar",
+            "replace_next_label": "Reemplaza la siguiente ocurrencia",
             "replace_placeholder": "Reemplazar con"
         },
         "paste_image": {
@@ -240,6 +243,7 @@
             "homeEndBehaviour": "Usa las acciones por defecto de CodeMirror de \u003Ckbd\u003EHome\u003C/kbd\u003E y \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
             "indent_unit": "Sangrado por el siguiente n\u00famero de espacios",
             "input_mode": "Modo de entrada del editor",
+            "leave_app_running_in_the_notification_area": "Deja la aplicaci\u00f3n funcionando en el \u00e1rea de notificaci\u00f3n",
             "modtime": "Hora de la \u00faltima modificaci\u00f3n",
             "mute_lines": "Reducir brillo de las l\u00edneas no enfocadas en modo sin distracci\u00f3n.",
             "new_file_dont_prompt": "No pedir nombre al crear nuevos archivos",
@@ -291,11 +295,14 @@
             "project": {
                 "csl_style": "Estilo CSL (opcional)",
                 "format": "Exportar proyecto a:",
+                "name_label": "Formato",
                 "title": "Ajustes del proyecto",
-                "title_label": "T\u00edtulo del proyecto"
+                "title_label": "T\u00edtulo del proyecto",
+                "use_label": "Usa"
             },
             "readability_algorithm": "Algoritmo a utilizar para el modo de legibilidad",
             "reset_pandoc_command": "Reseatear instrucci\u00f3n Pandoc",
+            "show_app_in_the_notification_area": "Muestra la aplicaci\u00f3n en el \u00e1rea de notificaci\u00f3n",
             "sorting_ascii": "Orden ASCII (2 despu\u00e9s de 10)",
             "sorting_explanation": "Orden de archivos (se utiliza para ordenar por nombre)",
             "sorting_natural": "Orden natural (10 despu\u00e9s de 2)",
@@ -321,6 +328,7 @@
             },
             "use_native_appearance": "Utiliza la apariencia nativa de ventanas",
             "user_dictionary": "Diccionario del usuario. Elimine las palabras haciendo clic en ellas.",
+            "user_dictionary_label": "Entrada de diccionario",
             "watchdog_checkbox_label": "Activar la monitorizaci\u00f3n de encuesta",
             "watchdog_explainer": "En algunos ordenadores, Zettlr puede dar un aviso de demasioados cambios en ficheros remotos. Si eso sucede, pruebe activando este par\u00e1metro.",
             "watchdog_threshold_label": "Tiempo de espera (en ms), antes de que la escritura de un fichero se considere realizada.",
@@ -364,6 +372,10 @@
             "intro": "Aqu\u00ed puedes encontrar estad\u00edsticas extendidas sobre tu progreso, como un diagrama detallado de tus palabras escritas por d\u00eda.",
             "month": "Mes",
             "previous_frame": "Per\u00edodo anterior",
+            "tabs": {
+                "calendar_label": "Calendario",
+                "fsal_label": "Estad\u00edsticas FSAL"
+            },
             "this_frame": "Per\u00edodo actual",
             "title": "Estadisticas de escribir",
             "week": "Semana",
@@ -392,16 +404,29 @@
             "client_error": "No se ha podido comprobar la existencia de actualizaciones: Error de cliente (C\u00f3digo de estado: %s)",
             "connection_error": "No se ha podido comprobar la existencia de actualizaciones: No se pudo establecer la conexi\u00f3n",
             "current_version": "Tu versi\u00f3n",
+            "download_progress_label": "Descargando la actualizaci\u00f3n",
             "no_data": "No se ha podido comprobar la existencia de actualizaciones: El servidor no ha enviado datos",
+            "no_new_update": "No hay actualizaciones disponibles. Esta es la versi\u00f3n m\u00e1s reciente",
             "notification": "Hay una nueva versi\u00f3n de Zettlr disponible para descargar. Por favor, lee el changelog (registro de cambios) a continuaci\u00f3n.",
+            "other_error": "No se ha pod",
             "redirect_error": "No se ha podido comprobar la existencia de actualizaciones: El servidor intent\u00f3 redirigir (C\u00f3digo de estado: %s)",
             "release_url": "Abrir la p\u00e1gina de descargas",
             "server_error": "No se ha podido comprobar la existencia de actualizaciones: Error del servidor (C\u00f3digo de estado: %s)",
+            "start_update_label": "Clica para empezar la actualizaci\u00f3n",
+            "start_update_message": "Empezando la actualizaci\u00f3n...",
             "title": "Nueva actualizaci\u00f3n disponible",
-            "transmission_error": "No se ha podido comprobar la existencia de actualizaciones: Conexi\u00f3n interrumpida"
+            "transmission_error": "No se ha podido comprobar la existencia de actualizaciones: Conexi\u00f3n interrumpida",
+            "window_title": "Actualizador"
         }
     },
     "gui": {
+        "assets_man": {
+            "status": {
+                "saved": "Guardado!",
+                "saving": "Guardando..."
+            },
+            "win_title": "Gestor de recursos"
+        },
         "attachments": "Adjuntos",
         "attachments_open_dir": "Abrir carpeta",
         "avg_close_to": "\ud83d\udcaa \u00a1Est\u00e1s cerca de llegar a tu promedio diario!",
@@ -419,6 +444,8 @@
             "references_none": "No hay citas en este documento.",
             "reloading": "Se han detectado cambios en el archivo de la biblioteca. Recargando...."
         },
+        "created": "Creado",
+        "date_just_now_label": "ahora mismo",
         "dirs": "Carpetas",
         "display_search_results": "Mostrar resultados de b\u00fasqueda",
         "empty_dir": "Directorio vac\u00edo",
@@ -445,10 +472,19 @@
             "tasklist": "Lista de tareas",
             "ul": "Lista con vi\u00f1etas"
         },
+        "modified": "Modificado",
         "no_attachments": "Sin adjuntos",
         "no_dir_selected": "Ning\u00fan directorio seleccionado",
+        "no_open_document": "No hay ning\u00fan documento abierto",
+        "no_other_files": "No hay otros archivos",
         "no_search_results": "Sin resultados",
         "number_selections": "%s selecciones",
+        "other_files": "Otros archivos",
+        "preview_modification_date": "Modificado",
+        "preview_searching_label": "Buscando el archivo...",
+        "preview_word_count": "Recuento de palabras",
+        "related_files_label": "Archivos relacionados",
+        "reset": "Reinicia",
         "statistics_more": "M\u00e1s estad\u00edsticas...",
         "table_of_contents": "Tabla de contenidos",
         "today_words": "palabras hoy",
@@ -465,6 +501,7 @@
         "about": "Acerca de Zettlr",
         "add_to_dictionary": "A\u00f1adir al diccionario",
         "all_front": "Traer todo al frente",
+        "assets_manager": "Gestor de recursos",
         "bold": "Negrita",
         "clear_recent_docs": "Borrar lista documentos recientes",
         "close_all_tabs": "Cerrar todas las pesta\u00f1as",
@@ -550,6 +587,8 @@
         "start_speaking": "Empieza a hablar",
         "stop_speaking": "Deja de hablar",
         "tab_close": "Cerrar Pesta\u00f1a",
+        "tab_close_all": "Cierra todas las pesta\u00f1as",
+        "tab_close_others": "Cierra las otras pesta\u00f1as",
         "tab_next": "Siguiente pesta\u00f1a",
         "tab_previous": "Pesta\u00f1a Anterior",
         "tags": "Gestionar tags...",
@@ -582,6 +621,11 @@
     "system": {
         "all_files": "Todos los archivos",
         "cancel": "Cancelar",
+        "common": {
+            "list_actions_label": "Acciones",
+            "list_add_button": "A\u00f1adir",
+            "list_default_column_label": "\u00cdtem"
+        },
         "directories": "Directorios",
         "directory_removed": "La carpeta %s ha sido eliminada.",
         "error": {
@@ -603,6 +647,7 @@
             "fnf_title": "Archivo no encontrado",
             "ignored_dir_message": "Directorio &quot;%s&quot; no se puede abrir por Zettlr.",
             "ignored_dir_title": "No se puede abrir la carpeta",
+            "image_not_found": "Imagen no encontrada: %s",
             "malformed_textbundle": "Paquete de texto malformado: %s",
             "move_into_child_message": "No puede mover una carpeta a una de sus sub-carpetas.",
             "move_into_child_title": "No se puede mover la carpeta",
@@ -676,6 +721,10 @@
         "stats": "Ver estad\u00edsticas",
         "tag_cloud": "tags",
         "toggle_attachments": "Ver archivos adjuntos"
+    },
+    "tray": {
+        "show_zettlr": "Muestra Zettlr",
+        "tooltip": "Zettlr"
     },
     "validation": {
         "error_empty": "Opci\u00f3n %s es necesaria.",

@@ -69,7 +69,6 @@
         "find": {
             "find_label": "Cari",
             "find_placeholder": "Cari...",
-            "replace_all_label": "Semua",
             "replace_label": "Ganti",
             "replace_placeholder": "Ganti dengan"
         },
