@@ -69,7 +69,6 @@
         "find": {
             "find_label": "Localizar",
             "find_placeholder": "Localizar...",
-            "replace_all_label": "Todas",
             "replace_label": "Substituir",
             "replace_placeholder": "Substituir por"
         },

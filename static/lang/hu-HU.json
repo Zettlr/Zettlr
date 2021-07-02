@@ -68,7 +68,6 @@
         "find": {
             "find_label": "Keresni",
             "find_placeholder": "Ezt keresni \u2026",
-            "replace_all_label": "\u003Cem\u003En\u003C/em\u003E\u00d7 cser\u00e9lni",
             "replace_label": "\u003Cem\u003E1\u003C/em\u003E\u00d7 cser\u00e9lni",
             "replace_placeholder": "Erre \u2026"
         },

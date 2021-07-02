@@ -83,7 +83,6 @@
         "find": {
             "find_label": "\u67e5\u627e",
             "find_placeholder": "\u67e5\u627e\u2026",
-            "replace_all_label": "\u66ff\u6362\u5168\u90e8",
             "replace_label": "\u66ff\u6362",
             "replace_placeholder": "\u66ff\u6362\u4e3a"
         },

@@ -72,7 +72,6 @@
         "find": {
             "find_label": "Cerca",
             "find_placeholder": "Cerca...",
-            "replace_all_label": "Tutto",
             "replace_label": "Sostituisci",
             "replace_placeholder": "Sostituisci con"
         },

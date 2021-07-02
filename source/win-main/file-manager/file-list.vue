@@ -45,22 +45,13 @@
           v-bind:page-mode="true"
           v-on:update="updateDynamics"
         >
-          <FileItemMock
-            v-if="item.mock !== undefined && item.mock === true"
-            v-bind:obj="item.props"
-            v-bind:index="index"
-            v-on:submit="handleOperationFinish($event)"
-            v-on:cancel="handleOperationFinish('')"
-          >
-          </FileItemMock>
           <FileItem
-            v-else
             v-bind:obj="item.props"
             v-bind:active-file="activeDescriptor"
             v-bind:index="index"
-            v-on:duplicate="startOperation('duplicate', item.id)"
-            v-on:create-file="startOperation('createFile', item.id)"
-            v-on:create-dir="startOperation('createDir', item.id)"
+            v-on:duplicate="handleOperation('file-duplicate', item.id)"
+            v-on:create-file="handleOperation('file-new', item.id)"
+            v-on:create-dir="handleOperation('dir-new', item.id)"
             v-on:begin-dragging="$emit('lock-file-tree')"
           ></FileItem>
         </RecycleScroller>
@@ -75,8 +66,8 @@
         v-for="item in getDirectoryContents"
         v-bind:key="item.hash"
         v-bind:obj="item.props"
-        v-on:create-file="startOperation('createFile', item.id)"
-        v-on:create-dir="startOperation('createDir', item.id)"
+        v-on:create-file="handleOperation('file-new', item.id)"
+        v-on:create-dir="handleOperation('dir-new', item.id)"
       >
       </FileItem>
       <div
@@ -114,9 +105,7 @@
 import { trans } from '../../common/i18n-renderer'
 import tippy from 'tippy.js'
 import FileItem from './file-item'
-import FileItemMock from './file-item-mock'
 import { RecycleScroller } from 'vue-virtual-scroller'
-import generateFileName from '../../common/util/generate-filename'
 import objectToArray from '../../common/util/object-to-array'
 
 const ipcRenderer = window.ipc
@@ -125,7 +114,6 @@ export default {
   name: 'FileList',
   components: {
     FileItem,
-    FileItemMock,
     RecycleScroller
   },
   props: {
@@ -137,13 +125,7 @@ export default {
   data: function () {
     return {
       filterQuery: '',
-      activeDescriptor: null, // Can contain the active ("focused") item
-      // The next two properties are needed for three operations: Create a new
-      // file, create a new directory, and duplicate a file.
-      // operationType will indicate what we want to do, while the index points
-      // to our reference (a file in case of duplication, otherwise a dir).
-      operationType: '', // Can be createFile, createDir, duplicate
-      operationIndex: null
+      activeDescriptor: null // Can contain the active ("focused") item
     }
   },
   computed: {
@@ -183,50 +165,11 @@ export default {
 
       let ret = []
       const items = objectToArray(this.$store.state.selectedDirectory, 'children')
-      // TODO: Right now I've built everything around the first list item having
-      // the index -1, but that's obviously bullshit, so fix that soon!
-      for (let i = -1; i < items.length - 1; i++) {
+      for (let i = 0; i < items.length; i++) {
         ret.push({
           id: i, // This helps the virtual scroller to adequately position the items
-          props: items[i + 1] // The actual item
+          props: items[i] // The actual item
         })
-      }
-
-      // Afterwards, if there is a file-duplication in progress, splice in the
-      // mock object at the right position.
-      if (this.operationType !== '' && this.operationIndex !== null) {
-        const mirroredItem = ret.find(item => item.id === this.operationIndex).props
-        if (this.operationType === 'duplicate') {
-          // Why plus 2? Because we're actually starting at -1, and we have to
-          // add that thing AFTER the item to be duplicated. The index is not
-          // the array index but the object's ID.
-          ret.splice(this.operationIndex + 2, 0, {
-            id: items.length,
-            mock: true, // This will help getFilteredDirectoryContents to never exclude it in display
-            props: {
-              name: 'Copy of ' + mirroredItem.name, // TODO: Translate
-              type: mirroredItem.type
-            }
-          })
-        } else if (this.operationType === 'createFile') {
-          ret.splice(this.operationIndex + 2, 0, {
-            id: items.length,
-            mock: true, // This will help getFilteredDirectoryContents to never exclude it in display
-            props: {
-              name: generateFileName(),
-              type: 'file' // TODO: Enable file extensions on the mock object so the user can create code files
-            }
-          })
-        } else if (this.operationType === 'createDir') {
-          ret.splice(this.operationIndex + 2, 0, {
-            id: items.length,
-            mock: true, // This will help getFilteredDirectoryContents to never exclude it in display
-            props: {
-              name: trans('dialog.dir_new.value'),
-              type: 'directory'
-            }
-          })
-        }
       }
       return ret
     },
@@ -490,53 +433,15 @@ export default {
     focusFilter: function () {
       this.$refs.quickFilter.focus()
     },
-    startOperation: function (type, idx) {
-      // We are told that the user wants to perform operation type on reference
-      // object idx.
-      this.operationType = type
-      this.operationIndex = idx
-    },
-    handleOperationFinish: function (name) {
-      // Called whenever a mock object reports a "submit" event after the user
-      // has confirmed the operation.
-      const mirroredItem = this.getDirectoryContents.find(item => item.id === this.operationIndex).props
-      console.log(this.operationIndex, mirroredItem)
-      if (this.operationType === 'duplicate') {
-        if (name.trim() !== '') {
-          ipcRenderer.invoke('application', {
-            command: 'file-duplicate',
-            payload: {
-              path: mirroredItem.path,
-              name: name.trim()
-            }
-          }).catch(e => console.error(e))
-        }
-      } else if (this.operationType === 'createFile') {
-        if (name.trim() !== '') {
-          ipcRenderer.invoke('application', {
-            command: 'file-new',
-            payload: {
-              path: mirroredItem.path,
-              name: name.trim()
-            }
-          }).catch(e => console.error(e))
-        }
-      } else if (this.operationType === 'createDir') {
-        if (name.trim() !== '') {
-          ipcRenderer.invoke('application', {
-            command: 'dir-new',
-            payload: {
-              path: mirroredItem.path,
-              name: name.trim()
-            }
-          }).catch(e => console.error(e))
-        } else {
-          console.log('Canceling operation.')
-        }
-      }
+    handleOperation: async function (type, idx) {
+      // Creates files and directories, or duplicates a file.
+      const source = this.getDirectoryContents.find(item => item.id === idx).props
+      const result = await ipcRenderer.invoke('application', {
+        command: type,
+        payload: { path: source.path }
+      })
 
-      this.operationType = ''
-      this.operationIndex = null
+      console.log(result)
     }
   }
 }

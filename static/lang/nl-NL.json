@@ -71,7 +71,6 @@
         "find": {
             "find_label": "Zoeken",
             "find_placeholder": "Zoeken...",
-            "replace_all_label": "Alles",
             "replace_label": "Vervangen",
             "replace_placeholder": "Vervang met"
         },

@@ -7,7 +7,7 @@
             "lukecarrier \u003Cluke@carrier.im\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-06-04T20:13:56.000000Z"
+        "updated_at": "2021-06-27T11:58:37.000000Z"
     },
     "dialog": {
         "about": {
@@ -36,6 +36,7 @@
             "cancel": "Cancel",
             "choose_path": "Choose directory \u2026",
             "close": "Close",
+            "close_without_saving": "Close without saving changes",
             "save": "Save"
         },
         "custom_css": {
@@ -69,10 +70,13 @@
         },
         "filter_tags": "Filter tags\u2026",
         "find": {
+            "close_label": "Close search",
             "find_label": "Find",
             "find_placeholder": "Find\u2026",
-            "replace_all_label": "All",
+            "regex_label": "Toggle regular expression search",
+            "replace_all_label": "Replace all occurrences",
             "replace_label": "Replace",
+            "replace_next_label": "Replace next occurrence",
             "replace_placeholder": "Replace with"
         },
         "paste_image": {
@@ -188,7 +192,9 @@
             "default_image_save_path": "Default image path (relative or absolute)",
             "delete_on_fail": "Delete items irreversibly, if moving them to trash fails",
             "display": {
+                "image_height": "Maximum height of images (percent)",
                 "image_size_info": "With these controls you can constrain the image previews.",
+                "image_width": "Maximum width of images (percent)",
                 "preview_info": "These options determine which elements are rendered in documents.",
                 "render_citations": "Render Citations",
                 "render_htags": "Hide heading characters",
@@ -236,6 +242,7 @@
             "homeEndBehaviour": "Use the CodeMirror default actions for \u003Ckbd\u003EHome\u003C/kbd\u003E and \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
             "indent_unit": "Indent by the following number of spaces",
             "input_mode": "Editor input mode",
+            "leave_app_running_in_the_notification_area": "Leave app running in the notification area",
             "modtime": "Last modification time",
             "mute_lines": "Mute non-focused lines in distraction-free mode",
             "new_file_dont_prompt": "Do not prompt for filename when creating new files",
@@ -287,11 +294,16 @@
             "project": {
                 "csl_style": "CSL-Style (optional)",
                 "format": "Export project to:",
+                "name_label": "Format",
+                "pattern": "Add Glob patterns to include only specific files",
+                "pattern_name": "Glob Pattern",
                 "title": "Project settings",
-                "title_label": "Project Title"
+                "title_label": "Project Title",
+                "use_label": "Use"
             },
             "readability_algorithm": "Algorithm to use for the readability mode",
             "reset_pandoc_command": "Reset pandoc command",
+            "show_app_in_the_notification_area": "Show app in the notification area",
             "sorting_ascii": "ASCII order (2 after 10)",
             "sorting_explanation": "Sorting order for files (used for sorting by name)",
             "sorting_natural": "Natural order (10 after 2)",
@@ -317,9 +329,11 @@
             },
             "use_native_appearance": "Use native window appearance",
             "user_dictionary": "User dictionary. Remove words by clicking them.",
+            "user_dictionary_label": "Dictionary entry",
             "watchdog_checkbox_label": "Activate Watchdog polling",
             "watchdog_explainer": "On some computers, Zettlr may report too many remote file changes. If this happens, try activating this setting.",
             "watchdog_threshold_label": "Time to wait before writing a file is considered done (in ms)",
+            "whitelist_hostname": "Hostname",
             "xelatex": "Path to xelatex executable. Please only change, if Zettlr is unable to locate it.",
             "xelatex_default": "Default: xelatex",
             "zkn": {
@@ -360,6 +374,11 @@
             "intro": "Here you can find extended statistics on your writing behaviour, such as a detailed graph of your words per day.",
             "month": "Month",
             "previous_frame": "Previous Timeframe",
+            "tabs": {
+                "calendar_label": "Calendar",
+                "chart_label": "Charts",
+                "fsal_label": "FSAL Stats"
+            },
             "this_frame": "Current Timeframe",
             "title": "Writing statistics",
             "week": "Week",
@@ -388,16 +407,35 @@
             "client_error": "Could not check for updates: Client Error (Status code: %s)",
             "connection_error": "Could not check for updates: Could not establish connection",
             "current_version": "Your version",
+            "download_progress_label": "Downloading your update",
+            "new_update_available": "An update to version %s is available!",
             "no_data": "Could not check for updates: Server hasn't sent any data",
+            "no_new_update": "No update available. You have the most recent version.",
             "notification": "There is a new version of Zettlr available to download. Please read the changelog below.",
+            "other_error": "Could not check for updates. %s: %s",
             "redirect_error": "Could not check for updates: The server tried to redirect (Status code: %s)",
             "release_url": "Open download page",
             "server_error": "Could not check for updates: Server Error (Status code: %s)",
+            "start_update_label": "Click to start update",
+            "start_update_message": "Starting update \u2026",
             "title": "New update available",
-            "transmission_error": "Could not check for updates: Connection interrupted"
+            "transmission_error": "Could not check for updates: Connection interrupted",
+            "window_title": "Updater"
         }
     },
     "gui": {
+        "assets_man": {
+            "defaults_restore_error": "Could not restore defaults file!",
+            "defaults_restored": "Defaults file restored!",
+            "defaults_restoring": "Restoring defaults file \u2026",
+            "status": {
+                "save_error": "Saving failed",
+                "saved": "Saved!",
+                "saving": "Saving \u2026",
+                "unsaved_changes": "Unsaved changes"
+            },
+            "win_title": "Assets Manager"
+        },
         "attachments": "Attachments",
         "attachments_open_dir": "Open directory",
         "avg_close_to": "\ud83d\udcaa You're close to hitting your daily average!",
@@ -415,6 +453,9 @@
             "references_none": "There are no citations in this document.",
             "reloading": "Changes to the library file detected. Reloading \u2026"
         },
+        "created": "Created",
+        "ctrl_click_to_open": "Cmd/Ctrl+Click to open %s",
+        "date_just_now_label": "just now",
         "dirs": "Directories",
         "display_search_results": "Display search results",
         "empty_dir": "Empty directory",
@@ -441,10 +482,20 @@
             "tasklist": "Tasklist",
             "ul": "Itemised list"
         },
+        "modified": "Modified",
         "no_attachments": "No attachments",
         "no_dir_selected": "No directory selected",
+        "no_open_document": "No open document",
+        "no_other_files": "No other files",
+        "no_reference_message": "No reference text",
         "no_search_results": "No results",
         "number_selections": "%s selections",
+        "other_files": "Other files",
+        "preview_modification_date": "Modified",
+        "preview_searching_label": "Searching For File \u2026",
+        "preview_word_count": "Word count",
+        "related_files_label": "Related files",
+        "reset": "Reset",
         "statistics_more": "More statistics \u2026",
         "table_of_contents": "Table of Contents",
         "today_words": "words today",
@@ -461,6 +512,7 @@
         "about": "About Zettlr",
         "add_to_dictionary": "Add to dictionary",
         "all_front": "Bring All to Front",
+        "assets_manager": "Assets Manager",
         "bold": "Bold",
         "clear_recent_docs": "Empty",
         "close_all_tabs": "Close all tabs",
@@ -546,6 +598,8 @@
         "start_speaking": "Start speaking",
         "stop_speaking": "Stop speaking",
         "tab_close": "Close Tab",
+        "tab_close_all": "Close all tabs",
+        "tab_close_others": "Close other tabs",
         "tab_next": "Next Tab",
         "tab_previous": "Previous Tab",
         "tags": "Manage Tags\u2026",
@@ -578,6 +632,12 @@
     "system": {
         "all_files": "All Files",
         "cancel": "Cancel",
+        "common": {
+            "list_actions_label": "Actions",
+            "list_add_button": "Add",
+            "list_default_column_label": "Item",
+            "list_search_placeholder": "Search for entries \u2026"
+        },
         "directories": "Directories",
         "directory_removed": "Directory %s has been removed.",
         "error": {
@@ -599,6 +659,8 @@
             "fnf_title": "File not found",
             "ignored_dir_message": "Directory &quot;%s&quot; cannot be opened by Zettlr.",
             "ignored_dir_title": "Cannot open directory",
+            "image_not_found": "Image not found: %s",
+            "malformed_citekey": "Malformed Citekey: @%s",
             "malformed_textbundle": "Malformed Textbundle: %s",
             "move_into_child_message": "You cannot move a directory into one of its subdirectories.",
             "move_into_child_title": "Cannot move directory",
@@ -612,7 +674,8 @@
             "pandoc_error_message": "Pandoc reported an error: %s",
             "pandoc_error_title": "Could not export file",
             "remove_message": "Do you really want to remove %s?",
-            "remove_title": "Really delete?"
+            "remove_title": "Really delete?",
+            "tray_not_supported": "Tray is not supported. Gnome Extension &quot;KStatusNotifierItem/AppIndicator Support&quot; is required for Tray support on the Gnome Desktop."
         },
         "export_success": "Exporting to %s",
         "file_changed": "File %s has changed remotely.",
@@ -672,6 +735,10 @@
         "stats": "View stats",
         "tag_cloud": "Tags",
         "toggle_attachments": "View attachments"
+    },
+    "tray": {
+        "show_zettlr": "Show Zettlr",
+        "tooltip": "Zettlr"
     },
     "validation": {
         "error_empty": "Option %s is required.",

@@ -22,6 +22,13 @@ import Zettlr from './main/zettlr'
 // Helper function to extract files to open from process.argv
 import extractFilesFromArgv from './common/util/extract-files-from-argv'
 
+// On systems with virtual GPUs (i.e. VMs), it might be necessary to disable
+// hardware acceleration. If the corresponding flag is set, we do so.
+// See for more info https://github.com/Zettlr/Zettlr/issues/2127
+if (process.argv.includes('--disable-hardware-acceleration')) {
+  app.disableHardwareAcceleration()
+}
+
 // Immediately after launch, check if there is already another instance of
 // Zettlr running, and, if so, exit immediately. The arguments (including files)
 // from this instance will already be passed to the first instance.

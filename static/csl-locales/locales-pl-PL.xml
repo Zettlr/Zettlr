@@ -7,6 +7,9 @@
     <translator>
       <name>Michal</name>
     </translator>
+    <translator>
+      <name>Pendzoncymisio</name>
+    </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
     <updated>2012-07-04T23:31:02+00:00</updated>
   </info>
@@ -22,7 +25,7 @@
     <date-part name="year"/>
   </date>
   <terms>
-    <term name="accessed">udostępniono</term>
+    <term name="accessed">dostęp</term>
     <term name="and">i</term>
     <term name="and others">i inni</term>
     <term name="anonymous">anonim</term>

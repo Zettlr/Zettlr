@@ -5,7 +5,7 @@
             "vfc"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-06-05T07:42:01.000000Z"
+        "updated_at": "2021-06-27T18:08:46.000000Z"
     },
     "dialog": {
         "about": {
@@ -34,6 +34,7 @@
             "cancel": "Cancel\u00b7lar",
             "choose_path": "Escull directori ...",
             "close": "Tanca",
+            "close_without_saving": "Tanca sense desar els canvis",
             "save": "Desa"
         },
         "custom_css": {
@@ -67,10 +68,13 @@
         },
         "filter_tags": "Filtrar etiquetes...",
         "find": {
+            "close_label": "Tanca la cerca",
             "find_label": "Trobar",
             "find_placeholder": "Trobar...",
-            "replace_all_label": "Tot",
+            "regex_label": "Canvia a la cerca d'expressions regulars",
+            "replace_all_label": "Reempla\u00e7a totes les ocurr\u00e8ncies",
             "replace_label": "Substituir",
+            "replace_next_label": "Reempla\u00e7a la pr\u00f2xima coincid\u00e8ncia",
             "replace_placeholder": "Substituir amb"
         },
         "paste_image": {
@@ -186,7 +190,9 @@
             "default_image_save_path": "Cam\u00ed per defecte a les imatges (relatiu o absolut)",
             "delete_on_fail": "Elimina els elements de manera irreversible si el trasllat a la paperera provoca errors",
             "display": {
+                "image_height": "M\u00e0xima al\u00e7ada de les imatges (en %)",
                 "image_size_info": "Amb aquests ajustaments podeu restringir les previsualitzacions de les imatges",
+                "image_width": "M\u00e0xima amplada de les imatges (%)",
                 "preview_info": "Aquestes opcions determinen quins elements es renderitzaran als documents",
                 "render_citations": "Renderitza les cites",
                 "render_htags": "Amaga els car\u00e0cters d'encap\u00e7alament",
@@ -234,6 +240,7 @@
             "homeEndBehaviour": "Utilitza les accions per defecte del CodeMirror per \u003Ckbd\u003EHome\u003C/kbd\u003E i \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
             "indent_unit": "Sagna a partir del n\u00famero d'espais",
             "input_mode": "Mode d'input de l'editor",
+            "leave_app_running_in_the_notification_area": "Deixa l'aplicaci\u00f3 funcionant a l'\u00e0rea de notificaci\u00f3",
             "modtime": "Hora de la \u00faltima modificaci\u00f3",
             "mute_lines": "Silencia les l\u00ednies que no s'estan utilitzant en el mode lliure de distraccions",
             "new_file_dont_prompt": "No preguntis pel nom del fitxer al crear nous arxius",
@@ -285,11 +292,16 @@
             "project": {
                 "csl_style": "Estil CSL (opcional)",
                 "format": "Exporta el projecte a:",
+                "name_label": "Format",
+                "pattern": "Afegeix plantilles globals per incloure nom\u00e9s fitxers espec\u00edfics",
+                "pattern_name": "Plantilla global",
                 "title": "Configuraci\u00f3 del projecte",
-                "title_label": "T\u00edtol del projecte"
+                "title_label": "T\u00edtol del projecte",
+                "use_label": "Utilitza"
             },
             "readability_algorithm": "Algorisme a utilitzar per al mode de llegibilitat",
             "reset_pandoc_command": "Reinicialitza l'ordre pandoc",
+            "show_app_in_the_notification_area": "Mostra l'aplicaci\u00f3 a l'\u00e0rea de notificaci\u00f3",
             "sorting_ascii": "Ordre ASCII (2 va despr\u00e9s de 10)",
             "sorting_explanation": "Ordre en el que s'ordenen els fitxers (quan s'ordenen per nom)",
             "sorting_natural": "Ordre natural (10 va despr\u00e9s de 2)",
@@ -315,9 +327,11 @@
             },
             "use_native_appearance": "Utilitza l'aspecte de la finestra del sistema operatiu",
             "user_dictionary": "Diccionari de la usu\u00e0ria. Elimina les paraules clicant-les",
+            "user_dictionary_label": "Entrada de diccionari",
             "watchdog_checkbox_label": "Activeu la connexi\u00f3 Watchdog",
             "watchdog_explainer": "En alguns ordinadors, Zettlr pot informar de massa canvis de fitxers remots. Si aix\u00f2 passa, intenteu activar aquesta configuraci\u00f3.",
             "watchdog_threshold_label": "Temps que cal esperar per considerar que un fitxer escrit est\u00e0 acabat (en ms)",
+            "whitelist_hostname": "Nom de la m\u00e0quina",
             "xelatex": "Cam\u00ed a l'exectubale del Xelatex. Si us plau, canvieu-lo nom\u00e9s si Zettlr no aconsegueix localitzar-lo.",
             "xelatex_default": "Per defecte: xelatex",
             "zkn": {
@@ -358,6 +372,11 @@
             "intro": "Aqu\u00ed podeu trobar estad\u00edstiques extenses sobre el vostre comportament d\u2019escriptura, com ara un gr\u00e0fic detallat de les paraules per dia.",
             "month": "Mes",
             "previous_frame": "Per\u00edode de temps anterior",
+            "tabs": {
+                "calendar_label": "Calendari",
+                "chart_label": "Gr\u00e0fics",
+                "fsal_label": "Estad\u00edstiques FSAL"
+            },
             "this_frame": "Per\u00edode de temps actual",
             "title": "Estad\u00edstiques d'escriptura",
             "week": "Setmana",
@@ -386,16 +405,35 @@
             "client_error": "No s'ha pogut comprovar si hi ha actualitzacions: Error del client (codi d'estat: %s)",
             "connection_error": "No s'ha pogut comprovar si hi ha actualitzacions: no s'ha pogut establir la connexi\u00f3",
             "current_version": "La teva versi\u00f3",
+            "download_progress_label": "Descarregant l'actualitzaci\u00f3",
+            "new_update_available": "Hi ha una actualitzaci\u00f3 a la versi\u00f3 %s disponible!",
             "no_data": "No s'ha pogut comprovar si hi ha actualitzacions: el servidor no ha enviat cap dada",
+            "no_new_update": "No hi ha actualitzacions disponibles. Ja tens la versi\u00f3 m\u00e9s recent.",
             "notification": "Hi ha una nova versi\u00f3 de Zettlr disponible per descarregar. Llegiu el registre de canvis a sota.",
+            "other_error": "No s'ha pogut comprovar si hi ha actualitzacions. %s:%s",
             "redirect_error": "No s'ha pogut comprovar si hi ha actualitzacions: el servidor ha intentat redirigir (Codi d'estat: %s)",
             "release_url": "Obre la p\u00e0gina de desc\u00e0rrega",
             "server_error": "No s'ha pogut comprovar si hi ha actualitzacions: Error del servidor (codi d'estat: %s)",
+            "start_update_label": "Clica per comen\u00e7ar l'actualitzaci\u00f3",
+            "start_update_message": "Comen\u00e7ant l'actualitzaci\u00f3...",
             "title": "Nova actualitaci\u00f3 disponible",
-            "transmission_error": "No s'ha pogut comprovar si hi ha actualitzacions: la connexi\u00f3 s'ha interromput"
+            "transmission_error": "No s'ha pogut comprovar si hi ha actualitzacions: la connexi\u00f3 s'ha interromput",
+            "window_title": "Actualitzador"
         }
     },
     "gui": {
+        "assets_man": {
+            "defaults_restore_error": "No s'ha pogut restaurar el fitxer amb la configuraci\u00f3 b\u00e0sica",
+            "defaults_restored": "S'ha restaurat el fitxer amb la configuraci\u00f3 b\u00e0sica!",
+            "defaults_restoring": "Restaurant els fitxers per defecte...",
+            "status": {
+                "save_error": "Vaja! No s'ha pogut desar",
+                "saved": "Desat!",
+                "saving": "Desant...",
+                "unsaved_changes": "Canvis no desats"
+            },
+            "win_title": "Gestor de recursos"
+        },
         "attachments": "Adjunts",
         "attachments_open_dir": "Obre la carpeta",
         "avg_close_to": "\ud83d\udcaa Est\u00e0s a punt de superar la mitjana di\u00e0ria!",
@@ -413,6 +451,9 @@
             "references_none": "No hi ha cites en aquest document",
             "reloading": "S'han detectat canvis a la biblioteca. Recarregant..."
         },
+        "created": "Creat",
+        "ctrl_click_to_open": "Cmd/Ctrl+Click per obrir %s",
+        "date_just_now_label": "ara mateix",
         "dirs": "Carpetes",
         "display_search_results": "Mostra els resultats de la cerca",
         "empty_dir": "Carpeta buida",
@@ -439,10 +480,20 @@
             "tasklist": "Llista de tasques",
             "ul": "Llista d'elements"
         },
+        "modified": "Modificat",
         "no_attachments": "Sense adjunts",
         "no_dir_selected": "No s'ha seleccionat cap carpeta",
+        "no_open_document": "Cap document obert",
+        "no_other_files": "Cap altre fitxer",
+        "no_reference_message": "Cap text de refer\u00e8ncia",
         "no_search_results": "Sense resultats",
         "number_selections": "%s seleccions",
+        "other_files": "Altres fitxers",
+        "preview_modification_date": "Modificat",
+        "preview_searching_label": "Cercant el fitxer--",
+        "preview_word_count": "Recompte de paraules",
+        "related_files_label": "Fitxers relacionats",
+        "reset": "Reinicia",
         "statistics_more": "M\u00e9s estad\u00edstiques...",
         "table_of_contents": "Taula de continguts",
         "today_words": "Paraules escrites avui",
@@ -459,6 +510,7 @@
         "about": "Sobre el Zettlr",
         "add_to_dictionary": "Afegeix al diccionari",
         "all_front": "Portar tot al capdavant",
+        "assets_manager": "Gestor de recursos",
         "bold": "Negreta",
         "clear_recent_docs": "Buit",
         "close_all_tabs": "Tanca totes les pestanyes",
@@ -544,6 +596,8 @@
         "start_speaking": "Comen\u00e7a a parlar",
         "stop_speaking": "Deixa de parlar",
         "tab_close": "Tanca la pestanya",
+        "tab_close_all": "Tanca totes les pestanyes",
+        "tab_close_others": "Tanca les altres pestanyes",
         "tab_next": "Pestanya seg\u00fcent",
         "tab_previous": "Pestanya anterior",
         "tags": "Gestiona les etiquetes...",
@@ -576,6 +630,12 @@
     "system": {
         "all_files": "Tots els fitxers",
         "cancel": "Cancel\u00b7lar",
+        "common": {
+            "list_actions_label": "Accions",
+            "list_add_button": "Afegeix",
+            "list_default_column_label": "\u00cdtem",
+            "list_search_placeholder": "Cerca les entrades..."
+        },
         "directories": "Carpetes",
         "directory_removed": "S'ha eliminat la carpeta %s",
         "error": {
@@ -597,6 +657,8 @@
             "fnf_title": "No s'ha trobat el fitxer",
             "ignored_dir_message": "Zettlr no pot obrir la carpeta &quot;%s&quot;",
             "ignored_dir_title": "No s'ha pogut obrir la carpeta",
+            "image_not_found": "Imatge no trobada: %s",
+            "malformed_citekey": "La Citekey est\u00e0 mal formada: @%s",
             "malformed_textbundle": "Paquet de text amb malformacions: %s",
             "move_into_child_message": "No podeu moure una carpeta a una subcarpeta",
             "move_into_child_title": "No es pot moure la carpeta",
@@ -610,7 +672,8 @@
             "pandoc_error_message": "Hi ha un problema amb el Pandoc: %s",
             "pandoc_error_title": "No s'ha pogut exportar el fitxer",
             "remove_message": "Realment voleu esborrar %s?",
-            "remove_title": "Realment esborrar?"
+            "remove_title": "Realment esborrar?",
+            "tray_not_supported": "La safata no \u00e9s compatible. L'extensi\u00f3 del Gnome &quot;KStatusNotifierItem/AppIndicator Support&quot; \u00e9s necess\u00e0ria per a la integraci\u00f3 de la safata a l'entorn Gnome"
         },
         "export_success": "Exporta a %s",
         "file_changed": "El fitxer %s ha estat canviat remotament",
@@ -670,6 +733,10 @@
         "stats": "Mostra les estad\u00edstiques",
         "tag_cloud": "Etiquetes",
         "toggle_attachments": "Mostra els adjunts"
+    },
+    "tray": {
+        "show_zettlr": "Mostra el Zettlr",
+        "tooltip": "Zettlr"
     },
     "validation": {
         "error_empty": "L'opci\u00f3 %s \u00e9s obligat\u00f2ria",

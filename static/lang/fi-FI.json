@@ -6,7 +6,7 @@
             "ritvje"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-03-14T16:10:54.000000Z"
+        "updated_at": "2021-06-19T08:29:45.000000Z"
     },
     "dialog": {
         "about": {
@@ -70,7 +70,6 @@
         "find": {
             "find_label": "Etsi",
             "find_placeholder": "Etsi\u2026",
-            "replace_all_label": "Kaikki",
             "replace_label": "Korvaa",
             "replace_placeholder": "Korvaava sana"
         },
@@ -177,6 +176,7 @@
                 "style_word_label": "Word-tyyli",
                 "title": "AutoCorrect"
             },
+            "avoid_new_tabs": "V\u00e4lt\u00e4 tiedostojen avaamista uusissa v\u00e4lilehdiss\u00e4, jos mahdollista",
             "checkForBeta": "Ilmoita betaversioista",
             "choose_file": "Valitse tiedosto\u2026",
             "citation_database": "Viittaustietokanta (CSL JSON tai BibTex)",
@@ -468,6 +468,7 @@
         "copy_filename": "Kopioi tiedostonnimi",
         "copy_html": "Kopioi HTML",
         "copy_id": "Kopioi ID-numero",
+        "copy_img_to_clipboard": "Kopioi kuva leikep\u00f6yd\u00e4lle",
         "copy_link": "Kopioi linkki",
         "copy_mail": "Kopioi osoite",
         "custom_css": "Mukauta k\u00e4ytt\u00f6liittym\u00e4\u00e4\u2026",
@@ -508,8 +509,10 @@
         "no_suggestions": "Ei ehdotuksia",
         "open": "Avaa\u2026",
         "open_attachment": "Avaa liite",
+        "open_in_browser": "Avaa selaimessa",
         "open_link": "Avaa linkki",
         "open_logs": "Avaa loki",
+        "open_new_tab": "Avaa uudessa v\u00e4lilehdess\u00e4",
         "open_workspace": "Avaa ty\u00f6tila",
         "pandoc": "Asenna Pandoc",
         "paste": "Liit\u00e4",
@@ -519,6 +522,7 @@
         "print": "Tulosta\u2026",
         "project_build": "Vie projekti",
         "project_properties": "Projektin asetukset\u2026",
+        "properties": "Ominaisuudet",
         "quicklook": "Pikakatselu",
         "quit": "Lopeta",
         "recent_docs": "Viimeaikaiset tiedostot",

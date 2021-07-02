@@ -72,7 +72,6 @@
         "find": {
             "find_label": "\u041f\u043e\u0438\u0441\u043a",
             "find_placeholder": "\u041f\u043e\u0438\u0441\u043a...",
-            "replace_all_label": "\u0412\u0441\u0451",
             "replace_label": "\u0417\u0430\u043c\u0435\u043d\u0438\u0442\u044c",
             "replace_placeholder": "\u0417\u0430\u043c\u0435\u043d\u0438\u0442\u044c \u043d\u0430..."
         },

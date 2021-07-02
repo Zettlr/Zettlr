@@ -109,10 +109,6 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
   file.wordCount = countWords(content)
   file.charCount = countWords(content, true)
 
-  file.firstHeading = null
-  let h1Match = /^#{1}\s(.+)$/m.exec(content)
-  if (h1Match !== null) file.firstHeading = h1Match[1]
-
   // Extract a potential YAML frontmatter
   file.frontmatter = null // Reset first
   let frontmatter = extractYamlFrontmatter(content)
@@ -132,6 +128,18 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
   const codeBlockRE = getCodeBlockRE(true)
   let mdWithoutCode = content.replace(codeBlockRE, '')
   mdWithoutCode = mdWithoutCode.replace(/`[^`]+`/g, '')
+  /**
+   * plainMd contains only the Markdown part, no code and no YAML blocks.
+   */
+  const plainMd = mdWithoutCode.replace(/-{3}(?:.+)[-.]{3}/gms, '') // global, multiline + dotall
+
+  // At this point we can extract the first heading since the code (with
+  // potential comments that could be interpreted as "headings") is gone.
+  file.firstHeading = null
+  const h1Match = /^#{1}\s(.+)$/m.exec(plainMd)
+  if (h1Match !== null) {
+    file.firstHeading = h1Match[1]
+  }
 
   // Determine linefeed to preserve on saving so that version control
   // systems don't complain.
