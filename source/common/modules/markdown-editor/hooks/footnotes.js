@@ -40,7 +40,7 @@ module.exports = (cm) => {
       return true
     }
 
-    if (Boolean(cm.isReadOnly()) || cm.getModeAt(cursor).name !== 'markdown') {
+    if (Boolean(cm.isReadOnly()) || cm.getModeAt(cursor).name !== 'markdown-zkn') {
       return true
     }
 
