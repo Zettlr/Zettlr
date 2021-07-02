@@ -112,7 +112,7 @@ export default class LogProvider {
    * @param {any} details Optional details (completely customisable)
    */
   log (logLevel: LogLevel, message: string, details: any): void {
-    if (details === undefined) {
+    if (details == null) {
       details = {} // No details -> empty object
     }
 
