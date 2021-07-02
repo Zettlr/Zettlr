@@ -99,13 +99,21 @@ export default class DocumentManager extends EventEmitter {
     // Loads in all openFiles
     const openFiles: string[] = global.config.get('openFiles')
     for (const filePath of openFiles) {
-      const descriptor = await this._loadFile(filePath)
-      this._loadedDocuments.push(descriptor)
+      try {
+        const descriptor = await this._loadFile(filePath)
+        this._loadedDocuments.push(descriptor)
+      } catch (err) {
+        global.log.error(`[Document Manager] Boot: Could not load file ${filePath}: ${String(err.message)}`, err)
+      }
     }
 
-    this._watcher.add(openFiles)
+    const actuallyLoadedPaths = this._loadedDocuments.map(file => file.path)
+
+    this._watcher.add(actuallyLoadedPaths)
 
     this.emit('update', 'openFiles')
+    // In case some of the files couldn't be loaded, make sure to re-set the config option accordingly.
+    global.config.set('openFiles', actuallyLoadedPaths)
 
     // And make the correct file active
     const activeFile: string = global.config.get('activeFile')

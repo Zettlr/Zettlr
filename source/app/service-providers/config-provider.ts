@@ -286,6 +286,10 @@ export default class ConfigProvider extends EventEmitter {
         delete (entry as any).val
       }
     }
+
+    // Next: We've completely abandoned the hashing system, so if we encounter a
+    // hash where the new engine expects a string, set it to default.
+    this.config.openFiles = this.config.openFiles.filter(e => typeof e === 'string')
     return this
   }
 

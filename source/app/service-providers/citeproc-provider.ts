@@ -247,6 +247,9 @@ export default class CiteprocProvider {
         })
         .catch(err => {
           global.log.error(`[Citeproc Provider] Could not load main library: ${String(err.message)}`, err)
+          if (!('application' in global)) {
+            return // If the main library wasn't found on start, do not attempt to display an error message.
+          }
           global.application.displayErrorMessage(
             trans('gui.citeproc.error_db'),
             err.message,
