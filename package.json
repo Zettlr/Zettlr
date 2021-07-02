@@ -139,6 +139,6 @@
     "typings-for-css-modules-loader": "^1.7.0",
     "vue-loader": "^15.9.7",
     "vue-template-compiler": "^2.6.14",
-    "webpack": "^5.40.0"
+    "webpack": "^5.41.1"
   }
 }
