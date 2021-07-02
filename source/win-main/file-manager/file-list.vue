@@ -436,12 +436,10 @@ export default {
     handleOperation: async function (type, idx) {
       // Creates files and directories, or duplicates a file.
       const source = this.getDirectoryContents.find(item => item.id === idx).props
-      const result = await ipcRenderer.invoke('application', {
+      await ipcRenderer.invoke('application', {
         command: type,
         payload: { path: source.path }
       })
-
-      console.log(result)
     }
   }
 }
