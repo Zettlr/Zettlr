@@ -123,8 +123,9 @@ export default class DocumentManager extends EventEmitter {
   }
 
   /**
-   * Called by the main object once to set the open files for the editor to pull.
-   * @param {Array} fileArray An array with paths to open
+   * Allows to set the open files.
+   *
+   * @param {Array<MDFileDescriptor|CodeFileDescriptor>} fileArray  An array with paths to open
    */
   public set openFiles (files: Array<MDFileDescriptor|CodeFileDescriptor>) {
     this._watcher.unwatch(this._loadedDocuments.map(file => file.path))
@@ -135,7 +136,9 @@ export default class DocumentManager extends EventEmitter {
   }
 
   /**
-   * Returns a list of paths for all open files
+   * Returns all open files
+   * 
+   * @returns {Array<MDFileDescriptor|CodeFileDescriptor>} A list of open file descriptors
    */
   public get openFiles (): Array<MDFileDescriptor|CodeFileDescriptor> {
     return this._loadedDocuments
@@ -286,7 +289,7 @@ export default class DocumentManager extends EventEmitter {
     if (descriptor === null && this._activeFile !== null) {
       this._activeFile = null
       global.citeproc.loadMainDatabase()
-      global.config.set('activeFile', this.activeFile)
+      global.config.set('activeFile', null)
       this.emit('update', 'activeFile')
     } else if (descriptor !== null && descriptor.path !== this.activeFile?.path) {
       const file = this.openFiles.find(file => file.path === descriptor.path)
@@ -311,13 +314,13 @@ export default class DocumentManager extends EventEmitter {
             .finally(() => {
               // No matter what, we need to make the file active
               this._activeFile = file
-              global.config.set('activeFile', this.activeFile)
+              global.config.set('activeFile', this._activeFile.path)
               this.emit('update', 'activeFile')
             })
             .catch(err => global.log.error(`[DocumentManager] Could not load file-specific database ${dbFile}`, err))
         } else {
           this._activeFile = file
-          global.config.set('activeFile', this.activeFile)
+          global.config.set('activeFile', this._activeFile.path)
           this.emit('update', 'activeFile')
         }
       } else {
