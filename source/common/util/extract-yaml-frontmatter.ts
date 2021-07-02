@@ -11,9 +11,17 @@
  * END HEADER
  */
 
-const YAML = require('yaml')
+import YAML from 'yaml'
 
-module.exports = function (markdown) {
+/**
+ * Takes Markdown source and returns a parsed YAML frontmatter as an object or
+ * null (if there was no frontmatter).
+ *
+ * @param   {string}    markdown  The Markdown source
+ *
+ * @return  {any|null}            The parsed frontmatter as an object, or null.
+ */
+export default function extractYamlFrontmatter (markdown: string): any|null {
   let lines = markdown.split(/\r?\n/)
   lines.unshift('') // For the start algorithm
   let start = -1
@@ -28,7 +36,9 @@ module.exports = function (markdown) {
     }
   }
 
-  if (start < 0) return null // No frontmatter
+  if (start < 0) {
+    return null // No frontmatter
+  }
 
   for (let i = start + 1; i < lines.length; i++) {
     if ([ '---', '...' ].includes(lines[i])) {
@@ -37,7 +47,9 @@ module.exports = function (markdown) {
     }
   }
 
-  if (end < 0) return null // The frontmatter did not end
+  if (end < 0) {
+    return null // The frontmatter did not end
+  }
 
   // Now we have a frontmatter (if there was any) -> extract!
   let frontmatter = ''
