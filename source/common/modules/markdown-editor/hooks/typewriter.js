@@ -35,7 +35,7 @@ module.exports = (cm) => {
  * @param   {CodeMirror}  cm  The CodeMirror instance
  */
 function typewriter (cm) {
-  if (!cm.getOption('zettlr').typewriterMode) {
+  if (cm.getOption('zettlr').typewriterMode === false) {
     if (lastHighlightLine > -1) {
       // Cleanup after option change
       cm.removeLineClass(lastHighlightLine, 'background', 'typewriter-active-line')

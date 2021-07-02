@@ -437,7 +437,7 @@ export default {
       this.$refs['add_row'].forEach(elem => { elem.$refs['input'].value = '' })
     },
     handleDoubleClick: function (row, col) {
-      if (this.isColumnEditable(col)) {
+      if (this.isColumnEditable(col) === true) {
         this.editing.row = row
         this.editing.col = col
       }
@@ -454,9 +454,9 @@ export default {
 // Maps to AppKit's TableView. See:
 // https://developer.apple.com/design/human-interface-guidelines/macos/windows-and-views/table-views/
 div.table-view {
-  .filter {
-    // Optional filter field
-  }
+  // .filter {
+  //   // Optional filter field
+  // }
   break-inside: avoid; // Avoid breaking table views when inside column views
   margin: 5px;
 

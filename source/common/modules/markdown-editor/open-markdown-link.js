@@ -54,7 +54,7 @@ module.exports = function (url, cm) {
     // internally, without having to switch to an external program.
     const localPath = validURI.replace('file://', '')
     const isValidFile = VALID_FILETYPES.includes(path.extname(localPath))
-    const isLocalMdFile = path.isAbsolute(localPath) && isValidFile
+    const isLocalMdFile = path.isAbsolute(localPath) === true && isValidFile
 
     if (isLocalMdFile) {
       // Attempt to open internally

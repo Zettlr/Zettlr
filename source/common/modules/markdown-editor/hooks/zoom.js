@@ -19,8 +19,8 @@ module.exports = (cm, zoomHook) => {
     }
 
     if (
-      (process.platform !== 'darwin' && e.ctrlKey) ||
-      (process.platform === 'darwin' && e.metaKey)
+      (process.platform !== 'darwin' && e.ctrlKey === true) ||
+      (process.platform === 'darwin' && e.metaKey === true)
     ) {
       // Did you know that pinching events get reported
       // as "wheel" events as well? Me neither.

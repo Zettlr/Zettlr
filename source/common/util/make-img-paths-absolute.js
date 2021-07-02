@@ -45,7 +45,7 @@ module.exports = function (basePath, mdstring) {
     } catch (e) {
       // It's not a valid URL, so pathify it! Luckily, path.resolve does all
       // the work for us.
-      if (!path.isAbsolute(targetOnly)) {
+      if (path.isAbsolute(targetOnly) === false) {
         targetOnly = path.resolve(basePath, targetOnly)
       }
     }

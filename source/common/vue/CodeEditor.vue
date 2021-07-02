@@ -156,7 +156,7 @@ function maybeOpenLink (event) {
   const cmd = process.platform === 'darwin' && event.metaKey
   const ctrl = process.platform !== 'darwin' && event.ctrlKey
 
-  if (!cmd && !ctrl) {
+  if (cmd === false && ctrl === false) {
     return
   }
 

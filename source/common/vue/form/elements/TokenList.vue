@@ -74,7 +74,7 @@ export default {
       if ([ 'Space', 'Enter', 'Comma', 'Tab' ].includes(event.code)) {
         const arr = this.value.map(token => token)
         // Don't add duplicates
-        if (!arr.includes(this.inputValue.trim())) {
+        if (arr.includes(this.inputValue.trim()) === false) {
           arr.push(this.inputValue.trim())
           this.$emit('input', arr)
         }

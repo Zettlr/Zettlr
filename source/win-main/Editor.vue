@@ -457,7 +457,7 @@ export default {
       })
         .catch(err => console.error(err))
 
-      if (global.config.get('zkn.autoSearch')) {
+      if (global.config.get('zkn.autoSearch') === true) {
         this.$root.$emit('start-global-search', linkContents)
       }
     })

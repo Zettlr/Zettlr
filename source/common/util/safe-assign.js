@@ -26,7 +26,7 @@ function safeAssign (obj, referenceObject) {
   // Overwrite all given attributes (and leave the not given in place)
   // This will ensure sane defaults.
   for (const prop in referenceObject) {
-    if (obj.hasOwnProperty(prop)) {
+    if (prop in obj) {
       // safeAssign updates even nested objects, which we'll
       // do here. The "else" is for primitives. "Why do you
       // check for the prop being null, when you also made

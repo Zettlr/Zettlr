@@ -26,7 +26,7 @@ const converter = new Turndown({
     if (node.nodeName === 'SPAN') {
       return ' '
     }
-    return node.isBlock ? '\n\n' : ''
+    return node.isBlock === true ? '\n\n' : ''
   }
 })
 

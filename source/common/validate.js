@@ -18,7 +18,9 @@ const VALIDATE_RULES = Object.values(require('./validation.json'))
 
 module.exports = function (data) {
   // Validate the given form data.
-  if (!data) throw new Error('No data given!')
+  if (data === undefined) {
+    throw new Error('No data given!')
+  }
 
   let unvalidated = []
   for (let key in data) {
