@@ -110,7 +110,7 @@ const highlightingModes = {
   },
   'text/x-rsrc': {
     'mode': 'r',
-    'selectors': ['r']
+    'selectors': [ 'r', '{r' ] // NOTE: This is a monkey patch since RStudio will contain that in curly brackets. TODO: Make general
   },
   'text/x-ruby': {
     'mode': 'ruby',
