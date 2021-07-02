@@ -34,7 +34,7 @@
   const zknTagRE = getZknTagRE()
   const footnoteRefRE = getFootnoteRefRE()
   // NOTE: The whitespace after ~ are first a normal space, then an NBSP
-  const delim = '!"#$%&()*+,-./:;<=>¿?@[\\]^_`{|}~  «„「『』–—…÷'
+  const delim = '¡!"“”#$%&()*+,-./:;<=>¿?@[\\]^_`{|}~  «„「『』–—…÷'
   // The following list should contain each and every quotation character
   const allQuotes = '‘’‚ ›‹«»„“”「」『』"\''
 
@@ -61,6 +61,13 @@
   function check (term) {
     // Convert smart quotes into the default before checking the term, see #1948
     const saneTerm = term.replace(/’‘‚‹›»“”」/g, "'")
+
+    // Don't check the empty string, which can arise when
+    // a 'word' consists of just opening/closing quotes,
+    // which is then removed
+    if (term === '') {
+      return true
+    }
 
     // Return cache if possible
     if (spellcheckCache[saneTerm] !== undefined) {
@@ -156,10 +163,10 @@
         }
 
         // Prevent returning false results because of 'quoted' words.
-        if (allQuotes.includes(word[0])) {
+        while (allQuotes.includes(word[0])) {
           word = word.substr(1)
         }
-        if (allQuotes.includes(word[word.length - 1])) {
+        while (allQuotes.includes(word[word.length - 1])) {
           word = word.substr(0, word.length - 1)
         }
 
