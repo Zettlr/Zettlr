@@ -64,6 +64,7 @@ const availableDatabases = {
     { text: 'yaml', displayText: 'YAML' },
     { text: 'go', displayText: 'Go' },
     { text: 'rust', displayText: 'Rust' },
+    { text: 'perl', displayText: 'Perl' },
     { text: 'julia', displayText: 'Julia' },
     { text: 'turtle', displayText: 'Turtle' },
     { text: 'sparql', displayText: 'SparQL' },

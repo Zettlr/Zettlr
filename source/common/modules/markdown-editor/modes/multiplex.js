@@ -148,6 +148,10 @@ const highlightingModes = {
     'mode': 'julia',
     'selectors': [ 'julia', 'jl' ]
   },
+  'text/x-perl': {
+    'mode': 'perl',
+    'selectors': [ 'perl', 'pl' ]
+  },
   'text/turtle': {
     'mode': 'turtle',
     'selectors': [ 'turtle', 'ttl' ]
