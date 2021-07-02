@@ -137,7 +137,7 @@ export default class DocumentManager extends EventEmitter {
 
   /**
    * Returns all open files
-   * 
+   *
    * @returns {Array<MDFileDescriptor|CodeFileDescriptor>} A list of open file descriptors
    */
   public get openFiles (): Array<MDFileDescriptor|CodeFileDescriptor> {

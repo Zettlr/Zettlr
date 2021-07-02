@@ -112,7 +112,9 @@ export default class LogProvider {
    * @param {any} details Optional details (completely customisable)
    */
   log (logLevel: LogLevel, message: string, details: any): void {
-    if (!details) details = {} // No details -> empty object
+    if (details === undefined) {
+      details = {} // No details -> empty object
+    }
 
     // Simply append to log
     let msg = {
