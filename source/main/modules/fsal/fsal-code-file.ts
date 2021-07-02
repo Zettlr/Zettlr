@@ -126,7 +126,8 @@ export async function parse (
     file.creationtime = stat.birthtime.getTime()
   } catch (e) {
     global.log.error('Error reading file ' + filePath, e)
-    throw e // Rethrow
+    // Re-throw a nicer and more meaningful message
+    throw new Error(`Could not read file ${filePath}: ${String(e.message)}`)
   }
 
   // Before reading in the full file and parsing it,

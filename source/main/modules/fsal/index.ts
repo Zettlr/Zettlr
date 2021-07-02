@@ -757,6 +757,8 @@ export default class FSAL extends EventEmitter {
       'path': path.join(src.dir, newName)
     }])
 
+    const oldPath = src.path // Cache the old path
+
     if (src.type === 'file') {
       await FSALFile.rename(src, this._cache, newName)
     } else if (src.type === 'code') {
@@ -768,8 +770,9 @@ export default class FSAL extends EventEmitter {
       await FSALDir.sort(src.parent) // Omit sorting
     }
 
-    this._recordFiletreeChange('remove', src.path)
-    this._recordFiletreeChange('add', path.join(src.dir, newName))
+    // src.path already points to the new path
+    this._recordFiletreeChange('remove', oldPath)
+    this._recordFiletreeChange('add', src.path)
 
     // Notify of a state change
     this.emit('fsal-state-changed', 'filetree')

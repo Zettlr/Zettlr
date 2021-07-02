@@ -15,9 +15,10 @@
 import path from 'path'
 import ZettlrCommand from './zettlr-command'
 import sanitize from 'sanitize-filename'
-import { mdFileExtensions } from '../../common/get-file-extensions'
+import { codeFileExtensions, mdFileExtensions } from '../../common/get-file-extensions'
 
 const ALLOWED_FILETYPES = mdFileExtensions(true)
+const CODE_FILETYPES = codeFileExtensions(true)
 
 export default class FileRename extends ZettlrCommand {
   constructor (app: any) {
@@ -39,11 +40,11 @@ export default class FileRename extends ZettlrCommand {
 
     // If no valid filename is provided, assume .md
     let ext = path.extname(newName).toLowerCase()
-    if (!ALLOWED_FILETYPES.includes(ext)) {
+    if (!ALLOWED_FILETYPES.includes(ext) && !CODE_FILETYPES.includes(ext)) {
       newName += '.md'
     }
 
-    let file = this._app.findFile(arg.path)
+    const file = this._app.findFile(arg.path)
     if (file === null) {
       return global.log.error(`Could not find file ${String(arg.path)}`)
     }
@@ -67,8 +68,27 @@ export default class FileRename extends ZettlrCommand {
       }
     }
 
+    // Check if the file was currently open. Since only the FSAL will get the
+    // info, we should close immediately, in order to prevent a "zombie" file
+    // to remain open in the document manager.
+    const wasActive = this._app.getDocumentManager().activeFile?.path === file.path
+    const documentDescriptor = this._app.getDocumentManager().openFiles.find(e => e.path === file.path)
+    const wasOpen = documentDescriptor !== undefined
+    if (documentDescriptor !== undefined) {
+      // Will also reset activeFile
+      this._app.getDocumentManager().closeFile(documentDescriptor)
+    }
+
     try {
       await this._app.getFileSystem().renameFile(file, newName)
+      // NOTE: At this point, `file` will contain the _new_ information which
+      // we can now use to re-set the documentManager's state if need be.
+      if (wasOpen) {
+        await this._app.getDocumentManager().openFile(file.path)
+      }
+      if (wasActive) {
+        this._app.getDocumentManager().activeFile = file
+      }
     } catch (e) {
       global.log.error(`Error during renaming file: ${e.message as string}`, e)
     }
