@@ -326,15 +326,15 @@ export default class Zettlr {
       // we need to continue the set up process
 
       // Set the pointers either to null or last opened dir/file
-      let openDirectory = null
-
-      try {
-        openDirectory = this._fsal.findDir(global.config.get('openDirectory'))
-      } catch (e) {
-        console.log('Error on finding last dir or file', e)
-      }
-
-      this._fsal.openDirectory = openDirectory
+      const openDir = global.config.get('openDirectory')
+      if (typeof openDir === 'string') {
+        try {
+          const descriptor = this._fsal.findDir(openDir)
+          this._fsal.openDirectory = descriptor
+        } catch (err) {
+          global.log.error(`[Application] Could not set open directory ${openDir}.`, err)
+        }
+      } // else: openDir was null
 
       // Verify the integrity of the targets
       global.targets.verify()
