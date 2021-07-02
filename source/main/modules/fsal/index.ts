@@ -754,7 +754,7 @@ export default class FSAL extends EventEmitter {
     }])
     this._watchdog.ignoreEvents([{
       'event': 'add',
-      'path': path.join(path.dirname(src.path), newName)
+      'path': path.join(src.dir, newName)
     }])
 
     if (src.type === 'file') {
@@ -769,7 +769,7 @@ export default class FSAL extends EventEmitter {
     }
 
     this._recordFiletreeChange('remove', src.path)
-    this._recordFiletreeChange('add', path.join(path.dirname(src.path), newName))
+    this._recordFiletreeChange('add', path.join(src.dir, newName))
 
     // Notify of a state change
     this.emit('fsal-state-changed', 'filetree')
