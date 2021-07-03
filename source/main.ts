@@ -16,31 +16,28 @@
 import { app } from 'electron'
 import path from 'path'
 
-// Setting custom dir for user configuration files.
+// Setting custom data dir for user configuration files.
 // Full path or relative path is OK. '~' does not work as expected.
-const configDirFlag = process.argv.find(elem => elem.indexOf('--config-dir=') === 0)
+const dataDirFlag = process.argv.find(elem => elem.indexOf('--data-dir=') === 0)
 
-if (configDirFlag !== undefined) {
+if (dataDirFlag !== undefined) {
   // a path to a custom config dir is provided
-  const match = /^--config-dir="?([^"]+)"?$/.exec(configDirFlag)
+  const match = /^--data-dir="?([^"]+)"?$/.exec(dataDirFlag)
   if (match !== null) {
-    let temporaryConfigDir = match[1]
-    //console.log('custom config dir 2: ' + temporaryConfigDir)
+    let dataDir = match[1]
 
-    if (!path.isAbsolute(temporaryConfigDir)) {
-
+    if (!path.isAbsolute(dataDir)) {
       if (app.isPackaged) {
-        // Attempt to use the executable file's path
-        temporaryConfigDir = path.join(path.dirname(app.getPath('exe')), temporaryConfigDir)
+        // Attempt to use the executable file's path as the basis
+        dataDir = path.join(path.dirname(app.getPath('exe')), dataDir)
       } else {
-        // Attempt to use the repository's root directory
-        temporaryConfigDir = path.join(__dirname, '../../', temporaryConfigDir)
-        console.log('custom config dir in notpackaged: ' + temporaryConfigDir)
+        // Attempt to use the repository's root directory as the basis
+        dataDir = path.join(__dirname, '../../', dataDir)
       }
     }
-    console.log('Using custom config dir: ' + temporaryConfigDir)
-    app.setPath('userData', temporaryConfigDir)
-    app.setAppLogsPath(path.join(temporaryConfigDir, 'logs'))
+    console.log('Using custom data dir: ' + dataDir)
+    app.setPath('userData', dataDir)
+    app.setAppLogsPath(path.join(dataDir, 'logs'))
   }
 }
 
