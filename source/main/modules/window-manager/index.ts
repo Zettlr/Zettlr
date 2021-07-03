@@ -288,17 +288,14 @@ export default class WindowManager {
    */
   private _makeVisible (win: BrowserWindow): void {
     if (win.isMinimized()) {
-      // Maximise and move on top
       win.maximize()
-      win.moveTop()
+      win.focus()
     } else if (!win.isVisible()) {
-      // Show and move to top
       win.show()
-      win.moveTop()
     }
 
+    win.moveTop()
     // Afterwards, in any case: focus the window
-    win.focus()
   }
 
   /**
