@@ -75,30 +75,6 @@ export default class ConfigProvider extends EventEmitter {
     global.log.verbose('Config provider booting up ...')
     this.configFile = path.join(app.getPath('userData'), 'config.json')
 
-    // The user may provide a temporary config to the process, which
-    // leaves the "original" one untouched. This is very handy for
-    // testing.
-    const configFlag = process.argv.find(elem => elem.indexOf('--config=') === 0)
-    if (configFlag !== undefined) {
-      // A different configuration was, provided, so let's use that one instead!
-      const match = /^--config="?([^"]+)"?$/.exec(configFlag)
-      if (match !== null) {
-        let temporaryConfig = match[1]
-
-        if (!path.isAbsolute(temporaryConfig)) {
-          if (app.isPackaged) {
-            // Attempt to use the executable file's path
-            temporaryConfig = path.join(path.dirname(app.getPath('exe')), temporaryConfig)
-          } else {
-            // Attempt to use the repository's root directory
-            temporaryConfig = path.join(__dirname, '../../../', temporaryConfig)
-          }
-        }
-        global.log.info('Using temporary configuration file at ' + temporaryConfig)
-        this.configFile = temporaryConfig
-      }
-    }
-
     this.config = getConfigTemplate()
     this._rules = [] // This array holds all validation rules
     this._firstStart = false // Only true if a config file has been created
