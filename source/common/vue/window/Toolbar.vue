@@ -3,6 +3,9 @@
     id="toolbar"
     role="toolbar"
     v-bind:style="{ top: marginTop }"
+    v-bind:class="{
+      'has-rtl-traffic-lights': hasRTLTrafficLights
+    }"
     v-on:dblclick="handleDoubleClick"
   >
     <template v-for="(item, idx) in controls">
@@ -81,6 +84,8 @@ import SearchControl from './toolbar-controls/Search.vue'
 import SpacerControl from './toolbar-controls/Spacer.vue'
 import TextControl from './toolbar-controls/Text.vue'
 
+const ipcRenderer = window.ipc
+
 export default {
   name: 'Toolbar',
   components: {
@@ -106,7 +111,24 @@ export default {
       default: false
     }
   },
+  data: function () {
+    return {
+      hasRTLTrafficLights: false
+    }
+  },
   computed: {
+  },
+  mounted: function () {
+    // Make sure that (on macOS) we have the correct spacing of the toolbar.
+    ipcRenderer.on('window-controls', (event, message) => {
+      const { command, payload } = message
+      if (command === 'traffic-lights-rtl') {
+        this.hasRTLTrafficLights = payload
+      }
+    })
+
+    // Also send an initial request
+    ipcRenderer.send('window-controls', { command: 'get-traffic-lights-rtl' })
   },
   methods: {
     /**
@@ -166,7 +188,15 @@ body.darwin {
     height: @toolbar-height;
     font-size: @font-size;
     background-color: rgb(245, 245, 245);
-    padding-left: 80px; // Make space for the traffic lights
+
+    // Make space for the traffic lights, either on the left side or the right.
+    &:not(.has-rtl-traffic-lights) {
+      padding-left: 80px;
+    }
+    &.has-rtl-traffic-lights {
+      padding-right: 80px;
+    }
+
     color: rgb(100, 100, 100);
 
     button {

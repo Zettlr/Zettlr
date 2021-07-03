@@ -48,6 +48,7 @@ import { WindowPosition } from './types.d'
 import askFileDialog from './dialog/ask-file'
 import saveFileDialog from './dialog/save-dialog'
 import confirmRemove from './dialog/confirm-remove'
+import * as bcp47 from 'bcp-47'
 // import dragIcon from '../../assets/dragicon.png'
 
 interface QuicklookRecord {
@@ -74,6 +75,7 @@ export default class WindowManager {
   private _fileLock: boolean
   private _persistTimeout: ReturnType<typeof setTimeout>|undefined
   private _beforeMainWindowCloseCallback: Function|null
+  private readonly _hasRTLLocale: boolean
 
   constructor () {
     this._mainWindow = null
@@ -94,11 +96,29 @@ export default class WindowManager {
     this._fileLock = false
     this._beforeMainWindowCloseCallback = null
 
+    // Detect whether we have an RTL locale for correct traffic light positions.
+    const schema = bcp47.parse(app.getLocale())
+
+    /**
+     * List of RTL languages, taken from https://ask.libreoffice.org/en/question/250893/
+     */
+    const LTR_SCRIPTS = [
+      'ar', 'he', 'yi', 'ur', 'fa', 'ks', 'sd', 'ug',
+      'ky', 'nqo', 'ckb', 'sdh', 'ku', 'hu', 'ms'
+    ]
+
+    if (schema.language !== null && LTR_SCRIPTS.includes(schema.language)) {
+      this._hasRTLLocale = true
+    } else {
+      this._hasRTLLocale = false
+    }
+
     // Listen to window control commands
     ipcMain.on('window-controls', (event, message) => {
       const callingWindow = BrowserWindow.fromWebContents(event.sender)
-
-      if (callingWindow === null) return
+      if (callingWindow === null) {
+        return
+      }
 
       const { command, payload } = message
 
@@ -123,6 +143,13 @@ export default class WindowManager {
           break
         case 'win-close':
           callingWindow.close()
+          break
+        // This event is only important for macOS
+        case 'get-traffic-lights-rtl':
+          event.reply('window-controls', {
+            command: 'traffic-lights-rtl',
+            payload: this._hasRTLLocale // if RTL then also RTL traffic lights
+          })
           break
         // Convenience APIs for the renderers to execute these commands
         case 'cut':
