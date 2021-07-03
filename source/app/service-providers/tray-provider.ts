@@ -17,7 +17,8 @@ import {
   Menu,
   MenuItemConstructorOptions,
   screen,
-  app
+  app,
+  nativeTheme
 } from 'electron'
 import path from 'path'
 import EventEmitter from 'events'
@@ -60,6 +61,21 @@ export default class TrayProvider extends EventEmitter {
         } else {
           this._removeTray()
         }
+      }
+    })
+
+    nativeTheme.on('updated', () => {
+      if (process.platform !== 'darwin') {
+        return // Only important on macOS
+      }
+
+      // On macOS we have two different icons, one for light mode and one for
+      // dark Mode. So whenever the mode changes, re-create the Tray to reflect
+      // this fact. NOTE: Here we do NOT listen to configuration changes, since
+      // the Tray icon is not bound to the GUI. Rather, the icon must use the
+      // correct color according to the SYSTEM, and NOT the GUI!
+      if (global.config.get('system.leaveAppRunning') === true) {
+        this._addTray()
       }
     })
   }
@@ -108,39 +124,51 @@ export default class TrayProvider extends EventEmitter {
    */
   private _addTray (): void {
     const leaveAppRunning = Boolean(global.config.get('system.leaveAppRunning'))
-    if (this._tray == null && leaveAppRunning) {
-      const platformIcons: { [key: string]: string } = {
-        'darwin': '/png/22x22_white.png',
-        'win32': '/icon.ico'
-      }
-      if (process.platform === 'linux') {
-        const size = this._calcTrayIconSize()
-        this._tray = new Tray(path.join(__dirname, `assets/icons/png/${size}x${size}.png`))
-      } else {
-        let iconPath = '/png/32x32.png'
-        if ([ 'darwin', 'win32' ].includes(process.platform)) {
-          iconPath = platformIcons[process.platform]
-        }
-        this._tray = new Tray(path.join(__dirname, 'assets/icons', iconPath))
-      }
 
-      const menu: MenuItemConstructorOptions[] = [
-        {
-          label: trans('tray.show_zettlr'),
-          click: () => global.application.showAnyWindow(),
-          type: 'normal'
-        },
-        { label: '', type: 'separator' },
-        {
-          label: trans('menu.quit'),
-          click: () => app.quit(),
-          type: 'normal'
-        }
-      ]
-      const contextMenu = Menu.buildFromTemplate(menu)
-      this._tray.setToolTip(trans('tray.tooltip'))
-      this._tray.setContextMenu(contextMenu)
+    if (!leaveAppRunning) {
+      return // No need to add a tray.
     }
+
+    if (this._tray !== null) {
+      // Destroy the tray before recreating it.
+      this._removeTray()
+    }
+
+    // Default: 32x32 coloured PNG icon
+    let iconPath = path.join(__dirname, 'assets/icons/png/32x32.png')
+
+    if (process.platform === 'linux') {
+      // On Linux, we're using the appropriate size
+      const size = this._calcTrayIconSize()
+      iconPath = path.join(__dirname, `assets/icons/png/${size}x${size}.png`)
+    } else if (process.platform === 'darwin') {
+      // On macOS, we're using the appropriate colour
+      const mode = (nativeTheme.shouldUseDarkColors) ? 'white' : 'black'
+      iconPath = path.join(__dirname, `assets/icons/png/22x22_${mode}.png`)
+    } else if (process.platform === 'win32') {
+      // On Windows, we're using the ICO-file.
+      iconPath = path.join(__dirname, 'assets/icons/icon.ico')
+    }
+
+    this._tray = new Tray(iconPath)
+
+    const menu: MenuItemConstructorOptions[] = [
+      {
+        label: trans('tray.show_zettlr'),
+        click: () => global.application.showAnyWindow(),
+        type: 'normal'
+      },
+      { label: '', type: 'separator' },
+      {
+        label: trans('menu.quit'),
+        click: () => app.quit(),
+        type: 'normal'
+      }
+    ]
+
+    const contextMenu = Menu.buildFromTemplate(menu)
+    this._tray.setToolTip(trans('tray.tooltip'))
+    this._tray.setContextMenu(contextMenu)
   }
 
   /**
