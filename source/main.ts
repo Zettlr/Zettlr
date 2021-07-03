@@ -14,6 +14,36 @@
  */
 
 import { app } from 'electron'
+import path from 'path'
+
+// Setting custom dir for user configuration files.
+// Full path or relative path is OK. '~' does not work as expected.
+const configDirFlag = process.argv.find(elem => elem.indexOf('--config-dir=') === 0)
+
+if (configDirFlag !== undefined) {
+  // a path to a custom config dir is provided
+  const match = /^--config-dir="?([^"]+)"?$/.exec(configDirFlag)
+  if (match !== null) {
+    let temporaryConfigDir = match[1]
+    //console.log('custom config dir 2: ' + temporaryConfigDir)
+
+    if (!path.isAbsolute(temporaryConfigDir)) {
+
+      if (app.isPackaged) {
+        // Attempt to use the executable file's path
+        temporaryConfigDir = path.join(path.dirname(app.getPath('exe')), temporaryConfigDir)
+      } else {
+        // Attempt to use the repository's root directory
+        temporaryConfigDir = path.join(__dirname, '../../', temporaryConfigDir)
+        console.log('custom config dir in notpackaged: ' + temporaryConfigDir)
+      }
+    }
+    console.log('Using custom config dir: ' + temporaryConfigDir)
+    app.setPath('userData', temporaryConfigDir)
+    app.setAppLogsPath(path.join(temporaryConfigDir, 'logs'))
+  }
+}
+
 import { bootApplication, shutdownApplication } from './app/lifecycle'
 
 // Include the global Zettlr class
@@ -22,12 +52,16 @@ import Zettlr from './main/zettlr'
 // Helper function to extract files to open from process.argv
 import extractFilesFromArgv from './common/util/extract-files-from-argv'
 
+
+
 // On systems with virtual GPUs (i.e. VMs), it might be necessary to disable
 // hardware acceleration. If the corresponding flag is set, we do so.
 // See for more info https://github.com/Zettlr/Zettlr/issues/2127
 if (process.argv.includes('--disable-hardware-acceleration')) {
   app.disableHardwareAcceleration()
 }
+
+
 
 // Immediately after launch, check if there is already another instance of
 // Zettlr running, and, if so, exit immediately. The arguments (including files)
