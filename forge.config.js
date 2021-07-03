@@ -116,6 +116,8 @@ module.exports = {
   },
   packagerConfig: {
     appBundleId: 'com.zettlr.app',
+    // This info.plist file contains file association for the app on macOS.
+    extendInfo: './scripts/assets/info.plist',
     asar: true,
     darwinDarkModeSupport: 'true',
     // Electron-forge automatically adds the file extension based on OS
