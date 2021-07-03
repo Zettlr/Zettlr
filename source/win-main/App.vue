@@ -38,10 +38,13 @@
         >
           <template #view1>
             <!-- First side: Editor -->
-            <DocumentTabs></DocumentTabs>
+            <DocumentTabs
+              v-show="!distractionFree"
+            ></DocumentTabs>
             <Editor
               ref="editor"
               v-bind:readability-mode="readabilityActive"
+              v-bind:distraction-free="distractionFree"
             ></Editor>
           </template>
           <template #view2>
@@ -126,6 +129,7 @@ export default {
       readabilityActive: false,
       sidebarVisible: false,
       fileManagerVisible: true,
+      distractionFree: false,
       mainSplitViewVisibleComponent: 'fileManager',
       // Pomodoro state
       pomodoro: {
@@ -152,6 +156,10 @@ export default {
           short: '#ddff00',
           long: '#33ffcc'
         }
+      },
+      sidebarsBeforeDistractionfree: {
+        fileManager: true,
+        sidebar: false
       }
     }
   },
@@ -368,7 +376,7 @@ export default {
     }
   },
   mounted: function () {
-    ipcRenderer.on('shortcut', (event, shortcut) => {
+    ipcRenderer.on('shortcut', (event, shortcut, state) => {
       if (shortcut === 'toggle-sidebar') {
         this.sidebarVisible = this.sidebarVisible === false
       } else if (shortcut === 'insert-id') {
@@ -417,6 +425,26 @@ export default {
         // -- in the next tick -- focus its filter input.
         this.fileManagerVisible = true
         this.mainSplitViewVisibleComponent = 'fileManager'
+      } else if (shortcut === 'export') {
+        this.showExportPopover()
+      } else if (shortcut === 'toggle-distraction-free') {
+        // State will now have a boolean indicating if the checkbox was checked.
+        if (state === true) {
+          // Enter distraction free mode
+          this.sidebarsBeforeDistractionfree = {
+            fileManager: this.fileManagerVisible,
+            sidebar: this.sidebarVisible
+          }
+
+          this.distractionFree = true
+          this.sidebarVisible = false
+          this.fileManagerVisible = false
+        } else {
+          // Leave distraction free mode
+          this.distractionFree = false
+          this.sidebarVisible = this.sidebarsBeforeDistractionfree.sidebar
+          this.fileManagerVisible = this.sidebarsBeforeDistractionfree.fileManager
+        }
       }
     })
 
@@ -442,31 +470,7 @@ export default {
         ipcRenderer.invoke('application', { command: 'open-preferences' })
           .catch(e => console.error(e))
       } else if (clickedID === 'export') {
-        if (this.$store.state.activeFile === null) {
-          return // Can't export a non-open file
-        }
-        const data = {
-          exportDirectory: this.$store.state.config['export.dir'],
-          format: this.$store.state.config['export.singleFileLastExporter']
-        }
-        this.$showPopover(PopoverExport, document.getElementById('toolbar-export'), data, (data) => {
-          if (data.shouldExport === true) {
-            // Remember the last choice
-            global.config.set('export.singleFileLastExporter', data.format)
-            // Run the exporter
-            ipcRenderer.invoke('application', {
-              command: 'export',
-              payload: {
-                format: data.format,
-                options: data.formatOptions,
-                exportTo: data.exportTo,
-                file: this.$store.state.activeFile.path
-              }
-            })
-              .catch(e => console.error(e))
-            this.$closePopover()
-          }
-        })
+        this.showExportPopover()
       } else if (clickedID === 'show-stats') {
         // The user wants to display the stats
         ipcRenderer.invoke('stats-provider', { command: 'get-data' }).then(stats => {
@@ -667,6 +671,33 @@ export default {
 
       clearInterval(this.pomodoro.intervalHandle)
       this.pomodoro.intervalHandle = undefined
+    },
+    showExportPopover: function () {
+      if (this.$store.state.activeFile === null) {
+        return // Can't export a non-open file
+      }
+      const data = {
+        exportDirectory: this.$store.state.config['export.dir'],
+        format: this.$store.state.config['export.singleFileLastExporter']
+      }
+      this.$showPopover(PopoverExport, document.getElementById('toolbar-export'), data, (data) => {
+        if (data.shouldExport === true) {
+          // Remember the last choice
+          global.config.set('export.singleFileLastExporter', data.format)
+          // Run the exporter
+          ipcRenderer.invoke('application', {
+            command: 'export',
+            payload: {
+              format: data.format,
+              options: data.formatOptions,
+              exportTo: data.exportTo,
+              file: this.$store.state.activeFile.path
+            }
+          })
+            .catch(e => console.error(e))
+          this.$closePopover()
+        }
+      })
     }
   }
 }

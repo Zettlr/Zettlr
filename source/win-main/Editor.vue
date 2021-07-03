@@ -4,7 +4,8 @@
     ref="editor"
     v-bind:style="{ 'font-size': `${fontSize}px` }"
     v-bind:class="{
-      'monospace': !isMarkdown
+      'monospace': !isMarkdown,
+      'fullscreen': distractionFree
     }"
     v-on:wheel="onEditorScroll($event)"
     v-on:mousedown="editorMousedown($event)"
@@ -99,6 +100,10 @@ export default {
     readabilityMode: {
       type: Boolean,
       default: false
+    },
+    distractionFree: {
+      type: Boolean,
+      default: false
     }
   },
   data: function () {
@@ -183,6 +188,7 @@ export default {
           imagePreviewHeight: this.$store.state.config['display.imageHeight'],
           markdownBoldFormatting: this.$store.state.config['editor.boldFormatting'],
           markdownItalicFormatting: this.$store.state.config['editor.italicFormatting'],
+          muteLines: this.$store.state.config['muteLines'],
           scrollZoom: this.$store.state.config['editor.scrollZoom'],
           zettelkasten: {
             idRE: this.$store.state.config['zkn.idRE'],
@@ -264,6 +270,9 @@ export default {
     },
     readabilityMode: function () {
       this.editor.readabilityMode = this.readabilityMode
+    },
+    distractionFree: function () {
+      this.editor.distractionFree = this.distractionFree
     },
     editorConfiguration: function () {
       // Update the editor configuration, if anything changes.
@@ -725,10 +734,10 @@ export default {
 // Editor margins left and right for all breakpoints in both fullscreen and
 // normal mode.
 @editor-margin-fullscreen-sm:   50px;
-@editor-margin-fullscreen-md:  100px;
-@editor-margin-fullscreen-lg:  150px;
-@editor-margin-fullscreen-xl:  200px;
-@editor-margin-fullscreen-xxl: 350px;
+@editor-margin-fullscreen-md:  5vw;
+@editor-margin-fullscreen-lg:  10vw;
+@editor-margin-fullscreen-xl:  20vw;
+@editor-margin-fullscreen-xxl: 30vw;
 
 @editor-margin-normal-sm:  20px;
 @editor-margin-normal-md:  50px;
@@ -857,7 +866,9 @@ body.dark #editor {
 
 body.darwin #editor {
   // On macOS the tabbar is 30px high.
-  height: calc(100% - 30px);
+  &:not(.fullscreen) {
+    height: calc(100% - 30px);
+  }
 
   div#editor-search {
     background-color: rgba(230, 230, 230, 1);
@@ -883,7 +894,9 @@ body.darwin.dark #editor {
 
 body.win32 #editor {
   // On Windows, the tab bar is 30px high
-  height: calc(100% - 30px);
+  &:not(.fullscreen) {
+    height: calc(100% - 30px);
+  }
 
   div#editor-search {
     background-color: rgba(230, 230, 230, 1);
@@ -898,15 +911,7 @@ body.win32 #editor {
 }
 
 // CodeMirror fullscreen
-.CodeMirror-fullscreen {
-  position: fixed !important; // Have to override another relative
-  margin-top: 0px !important; // Normally 25px for tab bar, but not in distraction free
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: auto;
-  z-index: 500;
-
+#editor.fullscreen .CodeMirror {
   @media(min-width: 1301px) { margin-left: @editor-margin-fullscreen-xxl !important; }
   @media(max-width: 1300px) { margin-left: @editor-margin-fullscreen-xl  !important; }
   @media(max-width: 1100px) { margin-left: @editor-margin-fullscreen-lg  !important; }

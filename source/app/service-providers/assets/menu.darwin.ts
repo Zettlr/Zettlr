@@ -144,8 +144,10 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         {
           id: 'menu.new_dir',
           label: trans('menu.new_dir'),
-          accelerator: 'Cmd+Shift+N' // ,
-          // command: 'dir-new' TODO
+          accelerator: 'Cmd+Shift+N',
+          click: function (menuitem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'new-dir')
+          }
         },
         {
           type: 'separator'
@@ -191,8 +193,10 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         {
           id: 'menu.export',
           label: trans('menu.export'),
-          accelerator: 'Cmd+E' // ,
-          // command: 'export' TODO
+          accelerator: 'Cmd+E',
+          click: function (menuItem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'export')
+          }
         },
         {
           id: 'menu.print',
@@ -208,8 +212,11 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         },
         {
           id: 'menu.import_lang_file',
-          label: trans('menu.import_lang_file') // ,
-          // command: 'import-lang-file' TODO
+          label: trans('menu.import_lang_file'),
+          click: function (menuItem, focusedWindow) {
+            global.application.runCommand('import-lang-file')
+              .catch(e => global.log.error('[Menu Provider] Cannot import translation', e))
+          }
         },
         {
           id: 'menu.import_dict_file',
@@ -233,14 +240,18 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         {
           id: 'menu.rename_file',
           label: trans('menu.rename_file'),
-          accelerator: 'Cmd+R' // ,
-          // command: 'file-rename' TODO
+          accelerator: 'Cmd+R',
+          click: function (menuitem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'rename-file')
+          }
         },
         {
           id: 'menu.rename_dir',
           label: trans('menu.rename_dir'),
-          accelerator: 'Cmd+Shift+R' // ,
-          // command: 'dir-rename'
+          accelerator: 'Cmd+Shift+R',
+          click: function (menuitem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'rename-dir')
+          }
         },
         {
           type: 'separator'
@@ -248,14 +259,18 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         {
           id: 'menu.delete_file',
           label: trans('menu.delete_file'),
-          accelerator: 'Cmd+Backspace' // ,
-          // command: 'file-delete'
+          accelerator: 'Cmd+Backspace',
+          click: function (menuitem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'delete-file')
+          }
         },
         {
           id: 'menu.delete_dir',
           label: trans('menu.delete_dir'),
-          accelerator: 'Cmd+Shift+Backspace' // ,
-          // command: 'dir-delete'
+          accelerator: 'Cmd+Shift+Backspace',
+          click: function (menuitem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'delete-dir')
+          }
         }
       ]
     },
@@ -416,8 +431,10 @@ export default function getMenu (): MenuItemConstructorOptions[] {
           label: trans('menu.toggle_distraction_free'),
           accelerator: 'Cmd+J',
           type: 'checkbox',
-          checked: false // , // TODO
-          // command: 'toggle-distraction-free'
+          checked: false,
+          click: function (menuitem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'toggle-distraction-free', menuitem.checked)
+          }
         },
         {
           id: 'menu.toggle_typewriter_mode',
@@ -490,11 +507,6 @@ export default function getMenu (): MenuItemConstructorOptions[] {
       id: 'debug-menu',
       label: trans('menu.labels.debug'),
       submenu: [
-        {
-          id: 'menu.inspect_clipboard',
-          label: trans('menu.inspect_clipboard') // ,
-          // command: 'inspect-clipboard' TODO
-        },
         {
           id: 'menu.reload',
           label: trans('menu.reload'),

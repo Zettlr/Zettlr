@@ -26,6 +26,8 @@ module.exports = function () {
   return {
     // Default mode: Markdown multiplex (+ syntax highlighting for code blocks)
     mode: 'multiplex',
+    // Indicates if we're in distraction free
+    fullScreen: false,
     // Apply this theme class to prevent the default theme from overriding
     theme: 'zettlr-markdown', // Can be zettlr-markdown or zettlr-code
     // We have different line heights (headings, e.g.)

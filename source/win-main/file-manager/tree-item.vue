@@ -7,7 +7,7 @@
       v-bind:class="{
         'tree-item': true,
         [obj.type]: true,
-        'selected': (activeFile !== null && activeFile.path === obj.path) || (selectedDir !== null && selectedDir.path === obj.path),
+        'selected': (selectedFile !== null && selectedFile.path === obj.path) || (selectedDir !== null && selectedDir.path === obj.path),
         'project': obj.project != null,
         'root': isRoot
       }"
@@ -205,15 +205,6 @@ export default {
       return this.obj.parent == null
     },
     /**
-     * Shortcut methods to access the store
-     */
-    activeFile: function () {
-      return this.$store.state.activeFile
-    },
-    selectedDir: function () {
-      return this.$store.state.selectedDirectory
-    },
-    /**
      * Returns true if the file manager mode is set to "combined"
      */
     combined: function () {
@@ -270,7 +261,7 @@ export default {
     }
   },
   watch: {
-    activeFile: function (newVal, oldVal) {
+    selectedFile: function (newVal, oldVal) {
       this.uncollapseIfApplicable()
     },
     selectedDir: function (newVal, oldVal) {
@@ -301,7 +292,7 @@ export default {
   },
   methods: {
     uncollapseIfApplicable: function () {
-      const filePath = (this.activeFile !== null) ? String(this.activeFile.path) : ''
+      const filePath = (this.selectedFile !== null) ? String(this.selectedFile.path) : ''
       const dirPath = (this.selectedDir !== null) ? String(this.selectedDir.path) : ''
 
       // Open the tree, if the selected file is contained in this dir somewhere

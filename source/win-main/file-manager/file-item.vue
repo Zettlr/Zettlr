@@ -154,9 +154,6 @@ export default {
     }
   },
   computed: {
-    selectedFile: function () {
-      return this.$store.state.activeFile
-    },
     // We have to explicitly transform ALL properties to computed ones for
     // the reactivity in conjunction with the recycle-scroller.
     basename: function () {

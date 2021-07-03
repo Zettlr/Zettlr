@@ -40,6 +40,12 @@ export default {
   computed: {
     isDirectory: function () {
       return this.obj.type === 'directory'
+    },
+    selectedFile: function () {
+      return this.$store.state.activeFile
+    },
+    selectedDir: function () {
+      return this.$store.state.selectedDirectory
     }
   },
   watch: {
@@ -57,6 +63,17 @@ export default {
         )
       })
     }
+  },
+  mounted: function () {
+    // As soon as this element is mounted (irrespective of tree/list item),
+    // listen to events that trigger something on this object.
+    ipcRenderer.on('shortcut', (event, command) => {
+      if (command === 'rename-file' && this.obj.path === this.selectedFile.path) {
+        this.nameEditing = true
+      } else if (command === 'rename-dir' && this.obj.path === this.selectedDir.path) {
+        this.nameEditing = true
+      }
+    })
   },
   methods: {
     /**

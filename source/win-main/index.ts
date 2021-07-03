@@ -185,3 +185,44 @@ app.$store.dispatch('updateActiveFile')
   .finally(() => { activeFileUpdateLock = false })
 app.$store.dispatch('updateOpenFiles')
   .catch(e => console.error(e))
+
+// -----------------------------------------------
+
+// Further shortcuts we have to listen to
+ipcRenderer.on('shortcut', (event, command) => {
+  // Retrieve the correct contexts first
+  const dirDescriptor = app.$store.state.selectedDirectory
+  const fileDescriptor = app.$store.state.activeFile
+
+  if (command === 'new-dir') {
+    if (dirDescriptor === null) {
+      return // Cannot create a new directory
+    }
+
+    ipcRenderer.invoke('application', {
+      command: 'dir-new',
+      payload: { path: dirDescriptor.path }
+    })
+      .catch(err => console.error(err))
+  } else if (command === 'delete-file') {
+    if (fileDescriptor === null) {
+      return // Cannot remove file
+    }
+
+    ipcRenderer.invoke('application', {
+      command: 'file-delete',
+      payload: { path: fileDescriptor.path }
+    })
+      .catch(err => console.error(err))
+  } else if (command === 'delete-dir') {
+    if (dirDescriptor === null) {
+      return // Cannot remove dir
+    }
+
+    ipcRenderer.invoke('application', {
+      command: 'dir-delete',
+      payload: { path: dirDescriptor.path }
+    })
+      .catch(err => console.error(err))
+  }
+})

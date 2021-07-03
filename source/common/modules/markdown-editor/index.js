@@ -662,6 +662,24 @@ module.exports = class MarkdownEditor extends EventEmitter {
   }
 
   /**
+   * Determines whether the editor is in distraction free mode
+   *
+   * @return  {boolean}  True or false
+   */
+  get distractionFree () {
+    return this._cmOptions.fullScreen
+  }
+
+  /**
+   * Sets the editor into or out of distraction free
+   *
+   * @param   {boolean}  shouldBeFullscreen  Whether the editor should be in distraction free
+   */
+  set distractionFree (shouldBeFullscreen) {
+    this.setOptions({ fullScreen: shouldBeFullscreen })
+  }
+
+  /**
    * Returns whether or not the readability mode is currently active
    *
    * @return  {boolean}  True if the readability mode is active
