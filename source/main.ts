@@ -18,6 +18,8 @@ import path from 'path'
 
 // Setting custom data dir for user configuration files.
 // Full path or relative path is OK. '~' does not work as expected.
+// This code block needs to come before the imports below, even though ESLint
+// will complain.
 const dataDirFlag = process.argv.find(elem => elem.indexOf('--data-dir=') === 0)
 
 if (dataDirFlag !== undefined) {
@@ -49,16 +51,12 @@ import Zettlr from './main/zettlr'
 // Helper function to extract files to open from process.argv
 import extractFilesFromArgv from './common/util/extract-files-from-argv'
 
-
-
 // On systems with virtual GPUs (i.e. VMs), it might be necessary to disable
 // hardware acceleration. If the corresponding flag is set, we do so.
 // See for more info https://github.com/Zettlr/Zettlr/issues/2127
 if (process.argv.includes('--disable-hardware-acceleration')) {
   app.disableHardwareAcceleration()
 }
-
-
 
 // Immediately after launch, check if there is already another instance of
 // Zettlr running, and, if so, exit immediately. The arguments (including files)
