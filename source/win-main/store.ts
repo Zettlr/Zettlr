@@ -455,7 +455,7 @@ const config: StoreOptions<ZettlrState> = {
       const saneEvents = sanitizeFiletreeUpdates(events)
 
       for (const event of saneEvents) {
-        if (event.timestamp < context.state.lastFiletreeUpdate) {
+        if (event.timestamp <= context.state.lastFiletreeUpdate) {
           console.warn('FSAL event had an outdated timestamp -- skipping', event.event, event.path, event.timestamp)
           continue
         }
