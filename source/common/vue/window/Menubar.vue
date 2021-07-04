@@ -191,7 +191,7 @@ body.linux {
     color: rgb(30, 30, 30);
 
     span.top-level-item:hover {
-      background-color: rgb(0, 0, 0, .3);
+      background-color: rgba(0, 0, 0, .3);
     }
   }
 
