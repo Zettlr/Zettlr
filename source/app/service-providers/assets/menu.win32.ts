@@ -19,44 +19,6 @@ import { trans } from '../../../common/i18n-main'
 import path from 'path'
 
 export default function getMenu (): MenuItemConstructorOptions[] {
-  // Prepare the dynamically generated recent docs menu here
-  const recentDocsItem: MenuItemConstructorOptions = {
-    id: 'menu.recent_docs',
-    label: trans('menu.recent_docs'),
-    submenu: [{
-      id: 'menu.clear_recent_docs',
-      label: trans('menu.clear_recent_docs'),
-      enabled: global.recentDocs.hasDocs(),
-      click: (menuitem, focusedWindow) => {
-        global.recentDocs.clear()
-      }
-    }]
-  }
-
-  if (global.recentDocs.hasDocs() &&
-    // TypeScript can be a pain in the ass sometimes
-    recentDocsItem.submenu !== undefined &&
-    Array.isArray(recentDocsItem.submenu)
-  ) {
-    recentDocsItem.submenu.push({
-      type: 'separator'
-    })
-
-    for (const recent of global.recentDocs.get().slice(0, 10)) {
-      recentDocsItem.submenu.push({
-        id: recent.name,
-        label: recent.name,
-        click: function (menuitem, focusedWindow) {
-          global.application.runCommand('open-file', {
-            path: recent.path,
-            newTab: false
-          })
-            .catch(err => global.log.error(String(err.message), err))
-        }
-      })
-    }
-  }
-
   // Now generate the menu itself
 
   const menu: MenuItemConstructorOptions[] = [
@@ -104,6 +66,19 @@ export default function getMenu (): MenuItemConstructorOptions[] {
           }
         },
         {
+          id: 'menu.recent_docs',
+          label: trans('menu.recent_docs'),
+          role: 'recentDocuments',
+          submenu: [{
+            id: 'menu.clear_recent_docs',
+            label: trans('menu.clear_recent_docs'),
+            role: 'clearRecentDocuments'
+          }]
+        },
+        {
+          type: 'separator'
+        },
+        {
           id: 'menu.save',
           label: trans('menu.save'),
           accelerator: 'Ctrl+S',
@@ -111,7 +86,6 @@ export default function getMenu (): MenuItemConstructorOptions[] {
             focusedWindow?.webContents.send('shortcut', 'save-file')
           }
         },
-        recentDocsItem,
         {
           type: 'separator'
         },

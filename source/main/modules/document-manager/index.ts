@@ -22,6 +22,7 @@ import { CodeFileDescriptor, CodeFileMeta, MDFileDescriptor, MDFileMeta } from '
 import { FSALCodeFile, FSALFile } from '../fsal'
 import { codeFileExtensions, mdFileExtensions } from '../../../common/get-file-extensions'
 import generateFilename from '../../../common/util/generate-filename'
+import { app } from 'electron'
 
 const ALLOWED_CODE_FILES = codeFileExtensions(true)
 const MARKDOWN_FILES = mdFileExtensions(true)
@@ -211,9 +212,13 @@ export default class DocumentManager extends EventEmitter {
     const isMD = MARKDOWN_FILES.includes(path.extname(filePath).toLowerCase())
 
     if (isCode) {
-      return await FSALCodeFile.parse(filePath, null)
+      const file = await FSALCodeFile.parse(filePath, null)
+      app.addRecentDocument(file.path)
+      return file
     } else if (isMD) {
-      return await FSALFile.parse(filePath, null)
+      const file = await FSALFile.parse(filePath, null)
+      app.addRecentDocument(file.path)
+      return file
     } else {
       throw new Error(`Could not load file ${filePath}: Invalid path provided`)
     }

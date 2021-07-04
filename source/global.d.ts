@@ -69,7 +69,6 @@ declare module NodeJS {
     updates: UpdateProvider
     translations: any
     targets: TargetProvider
-    recentDocs: RecentDocumentsProvider
     tags: TagProvider
     stats: StatsProvider
     // Translation data necessary to facilitate internationalisation

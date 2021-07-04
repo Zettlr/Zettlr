@@ -364,7 +364,6 @@ export default class Zettlr {
     if (!this._documentManager.isClean()) {
       global.log.error('[Application] Attention! The FSAL reported there were unsaved changes to certain files. This indicates a critical logical bug in the application!')
     }
-    // TODO: Document Manager shutdown
     this._windowManager.shutdown()
     // Finally shut down the file system
     await this._fsal.shutdown()
@@ -645,7 +644,6 @@ export default class Zettlr {
     // We only need to call the underlying function, it'll trigger a state
     // change event and will set in motion all other necessary processes.
     const file = await this._documentManager.openFile(filePath)
-    global.recentDocs.add(this._fsal.getMetadataFor(file))
     // Also, add to last opened files to persist during reboots
     global.config.addFile(file.path)
 

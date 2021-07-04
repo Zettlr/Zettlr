@@ -35,7 +35,6 @@ import ConfigProvider from './service-providers/config-provider'
 import CssProvider from './service-providers/css-provider'
 import DictionaryProvider from './service-providers/dictionary-provider'
 import LogProvider from './service-providers/log-provider'
-import RecentDocsProvider from './service-providers/recent-docs-provider'
 import MenuProvider from './service-providers/menu-provider'
 import TagProvider from './service-providers/tag-provider'
 import TargetProvider from './service-providers/target-provider'
@@ -54,7 +53,6 @@ let configProvider: ConfigProvider
 let cssProvider: CssProvider
 let dictionaryProvider: DictionaryProvider
 let logProvider: LogProvider
-let recentDocsProvider: RecentDocsProvider
 let tagProvider: TagProvider
 let targetProvider: TargetProvider
 let translationProvider: TranslationProvider
@@ -117,7 +115,6 @@ export async function bootApplication (): Promise<void> {
   await assetsProvider.init()
   citeprocProvider = new CiteprocProvider()
   dictionaryProvider = new DictionaryProvider()
-  recentDocsProvider = new RecentDocsProvider()
   menuProvider = new MenuProvider()
   tagProvider = new TagProvider()
   targetProvider = new TargetProvider()
@@ -191,7 +188,6 @@ export async function shutdownApplication (): Promise<void> {
   await safeShutdown(targetProvider)
   await safeShutdown(tagProvider)
   await safeShutdown(menuProvider)
-  await safeShutdown(recentDocsProvider)
   await safeShutdown(dictionaryProvider)
   await safeShutdown(citeprocProvider)
   await safeShutdown(appearanceProvider)
