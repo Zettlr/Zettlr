@@ -64,7 +64,6 @@ declare module NodeJS {
     config: ConfigProvider
     application: Application
     typo: any
-    filesToOpen: string[]
     preBootLog: BootLog[]
     tippy: any
     updates: UpdateProvider

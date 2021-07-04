@@ -20,7 +20,7 @@ import { bootApplication, shutdownApplication } from './app/lifecycle'
 import Zettlr from './main/zettlr'
 
 // Helper function to extract files to open from process.argv
-import extractFilesFromArgv from './common/util/extract-files-from-argv'
+import extractFilesFromArgv from './app/util/extract-files-from-argv'
 
 // On systems with virtual GPUs (i.e. VMs), it might be necessary to disable
 // hardware acceleration. If the corresponding flag is set, we do so.
@@ -48,8 +48,12 @@ if (!app.requestSingleInstanceLock()) {
 // Set up the pre-boot log
 global.preBootLog = []
 
-// NOTE: This has to be set even before the application has been booted.
-global.filesToOpen = []
+// This array will be only useful for macOS since there we have the "open-file"
+// event indicating that the user wants to open a file. But this event might be
+// emitted before the app is ready and the main Zettlr object has been
+// instantiated. This is why we need to cache those in this array. After the app
+// is booted, we won't need this anymore.
+const filesBeforeOpen: string[] = []
 
 /**
  * This will be overwritten by the log provider, once it has booted
@@ -108,10 +112,16 @@ app.whenReady().then(() => {
   bootApplication().then(() => {
     // Now instantiate the main class which will care about everything else
     zettlr = new Zettlr()
-    zettlr.init().catch(err => {
-      console.error(err)
-      app.exit(1)
-    })
+    zettlr.init()
+      .then(() => {
+        // After the app has been booted, open any files that we amassed in the
+        // meantime.
+        zettlr?.handleAddRoots(filesBeforeOpen)
+      })
+      .catch(err => {
+        console.error(err)
+        app.exit(1)
+      })
   }).catch(err => {
     console.error(err)
     app.exit(1)
@@ -133,18 +143,14 @@ app.on('second-instance', (event, argv, cwd) => {
     return
   }
 
-  let files = extractFilesFromArgv(argv) // Override process.argv with the correct one
-
-  if (files.length === 0) return // Nothing to do
-
-  global.log.info(`Opening ${files.length} files from a second instance.`, files)
+  global.log.info('[Application] A second instance has been opened.')
 
   // openWindow calls the appropriate function of the windowManager, which deals
   // with the nitty-gritty of actually making the main window visible.
   zettlr.openWindow()
 
   // In case the user wants to open a file/folder with this running instance
-  zettlr.handleAddRoots(files).catch(err => { console.error(err) })
+  zettlr.handleAddRoots(extractFilesFromArgv(argv)).catch(err => { console.error(err) })
 })
 
 /**
@@ -158,8 +164,8 @@ app.on('open-file', (e, p) => {
       global.log.error('[Application] Error while adding new roots', err)
     })
   } else {
-    // The Zettlr object has yet to be created -> use the global.
-    global.filesToOpen.push(p)
+    // The Zettlr object has yet to be created -> cache it
+    filesBeforeOpen.push(p)
   }
 })
 

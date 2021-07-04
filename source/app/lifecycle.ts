@@ -14,7 +14,7 @@
  */
 
 // Helper/Utility functions
-import extractFilesFromArgv from '../common/util/extract-files-from-argv'
+import extractFilesFromArgv from './util/extract-files-from-argv'
 import registerCustomProtocols from './util/custom-protocols'
 import environmentCheck from './util/environment-check'
 import addToPath from './util/add-to-PATH'

@@ -34,6 +34,7 @@ import hash from '../common/util/hash'
 
 import { CodeFileDescriptor, CodeFileMeta, DirDescriptor, MDFileDescriptor, MDFileMeta } from './modules/fsal/types'
 import broadcastIpcMessage from '../common/util/broadcast-ipc-message'
+import extractFilesFromArgv from '../app/util/extract-files-from-argv'
 
 export default class Zettlr {
   isQuitting: boolean
@@ -339,13 +340,10 @@ export default class Zettlr {
       // Verify the integrity of the targets
       global.targets.verify()
 
-      // Second: handleAddRoots with global.filesToOpen
-      this.handleAddRoots(global.filesToOpen) // TODO
+      // Finally: Open any new files we have in the process arguments.
+      this.handleAddRoots(extractFilesFromArgv())
         .finally(() => {
-          // Last step of the FSAL set up: Clean up
-          // Reset the global so that no old paths are re-added
-          global.filesToOpen = []
-
+          // Now we are done.
           const duration = Date.now() - start
           global.log.info(`Loaded all roots in ${duration / 1000} seconds`)
         })
