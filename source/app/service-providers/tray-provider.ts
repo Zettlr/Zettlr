@@ -17,8 +17,7 @@ import {
   Menu,
   MenuItemConstructorOptions,
   screen,
-  app,
-  nativeTheme
+  app
 } from 'electron'
 import path from 'path'
 import EventEmitter from 'events'
@@ -61,21 +60,6 @@ export default class TrayProvider extends EventEmitter {
         } else {
           this._removeTray()
         }
-      }
-    })
-
-    nativeTheme.on('updated', () => {
-      if (process.platform !== 'darwin') {
-        return // Only important on macOS
-      }
-
-      // On macOS we have two different icons, one for light mode and one for
-      // dark Mode. So whenever the mode changes, re-create the Tray to reflect
-      // this fact. NOTE: Here we do NOT listen to configuration changes, since
-      // the Tray icon is not bound to the GUI. Rather, the icon must use the
-      // correct color according to the SYSTEM, and NOT the GUI!
-      if (global.config.get('system.leaveAppRunning') === true) {
-        this._addTray()
       }
     })
   }
@@ -142,9 +126,11 @@ export default class TrayProvider extends EventEmitter {
       const size = this._calcTrayIconSize()
       iconPath = path.join(__dirname, `assets/icons/png/${size}x${size}.png`)
     } else if (process.platform === 'darwin') {
-      // On macOS, we're using the appropriate colour
-      const mode = (nativeTheme.shouldUseDarkColors) ? 'white' : 'black'
-      iconPath = path.join(__dirname, `assets/icons/png/22x22_${mode}.png`)
+      // NOTE: We are using an image that ends in "Template.png". This indicates
+      // to the Electron runtime that the image should be treated as a "template"
+      // and this means it will automatically be displayed white or black
+      // depending on the color of the menu bar.
+      iconPath = path.join(__dirname, 'assets/icons/png/22x22_Tray_Template.png')
     } else if (process.platform === 'win32') {
       // On Windows, we're using the ICO-file.
       iconPath = path.join(__dirname, 'assets/icons/icon.ico')
