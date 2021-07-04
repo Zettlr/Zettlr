@@ -31,8 +31,6 @@ export default class FileRename extends ZettlrCommand {
    * @param  {Object} arg An object containing hash of containing and name of new dir.
    */
   async run (evt: string, arg: any): Promise<void> {
-    // { 'hash': hash, 'name': val }
-
     // We need to prepare the name to be correct for
     // accurate checking whether or not the file
     // already exists
