@@ -144,7 +144,9 @@ module.exports = {
       appleId: process.env['APPLE_ID'],
       appleIdPassword: process.env['APPLE_ID_PASS']
     },
-    extraResource: [] // NOTE: This will be filled in the generateAssets hook
+    extraResource: [
+      'resources/icons/icon.code.icns'
+    ]
   },
   plugins: [
     [
