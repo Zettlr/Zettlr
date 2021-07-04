@@ -410,12 +410,8 @@ body {
   }
 
   div#window-chrome {
-    // position: absolute;
-    // left: 0;
-    // right: 0;
     // The window chrome gets the system font
     font-family: inherit;
-    // font-family: -apple-system, BlinkMacSystemFont, 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, Ubuntu, Roboto, Noto, 'Segoe UI', Arial, sans-serif;
   }
 
   div#window-content {
@@ -427,6 +423,18 @@ body {
     right: 0;
     bottom: 0;
     overflow: auto;
+  }
+
+  &:not(.darwin) {
+    div#window-content {
+      background-color: rgb(235, 235, 235);
+    }
+  }
+
+  &.dark:not(.darwin) {
+    div#window-content {
+      background-color: rgb(30, 30, 30);
+    }
   }
 }
 </style>
