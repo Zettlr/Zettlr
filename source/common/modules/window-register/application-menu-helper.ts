@@ -61,7 +61,7 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
   // We have just received a serialized submenu which we should now display
   const appMenu = document.createElement('div')
   appMenu.setAttribute('id', 'application-menu')
-  appMenu.style.zIndex = '99999' // Ensure it always stays on top of anything, including modals
+  appMenu.style.zIndex = '99999' // Ensure it always stays on top of anything
 
   for (let item of items) {
     const menuItem = renderMenuItem(item)
@@ -126,7 +126,6 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
     })
 
     menuItem.addEventListener('mousedown', (event) => {
-      console.log('Inspecting!')
       ipcRenderer.send('window-controls', {
         command: 'inspect-element',
         payload: {
