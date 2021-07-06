@@ -22,7 +22,7 @@ import { trans } from '../i18n-renderer'
  *
  * @return  {string}                     The formatted date string
  */
-export default function (dateObj, relative = false) {
+export default function formatDate (dateObj, relative = false) {
   // NOTE: This function does not work during any tests, as Node.js needs Intl
   // locales which it does not provide by default. For Electron, this works fine.
   const isDate = dateObj instanceof Date
