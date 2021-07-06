@@ -41,7 +41,6 @@ export default function createMainWindow (conf: WindowPosition): BrowserWindow {
     show: false,
     webPreferences: {
       contextIsolation: true,
-      // @ts-expect-error
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY
     }
   }
@@ -52,11 +51,9 @@ export default function createMainWindow (conf: WindowPosition): BrowserWindow {
 
   // Load the index.html of the app.
   // The variable MAIN_WINDOW_WEBPACK_ENTRY is automatically resolved by electron forge / webpack
-  // @ts-expect-error
   window.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
     .catch(e => {
-      // @ts-expect-error
-      global.log.error(`Could not load URL ${MAIN_WINDOW_WEBPACK_ENTRY as string}: ${e.message as string}`, e)
+      global.log.error(`Could not load URL ${MAIN_WINDOW_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })
 
   // EVENT LISTENERS

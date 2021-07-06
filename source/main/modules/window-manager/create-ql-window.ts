@@ -42,7 +42,6 @@ export default function createQuicklookWindow (file: MDFileDescriptor, conf: Win
     webPreferences: {
       contextIsolation: true,
       additionalArguments: [file.path],
-      // @ts-expect-error
       preload: QUICKLOOK_PRELOAD_WEBPACK_ENTRY
     }
   }
@@ -54,11 +53,9 @@ export default function createQuicklookWindow (file: MDFileDescriptor, conf: Win
 
   // Load the index.html of the app.
   // The variable QUICKLOOK_WEBPACK_ENTRY is automatically resolved by electron forge / webpack
-  // @ts-expect-error
   window.loadURL(QUICKLOOK_WEBPACK_ENTRY)
     .catch(e => {
-      // @ts-expect-error
-      global.log.error(`Could not load URL ${QUICKLOOK_WEBPACK_ENTRY as string}: ${e.message as string}`, e)
+      global.log.error(`Could not load URL ${QUICKLOOK_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })
 
   // EVENT LISTENERS

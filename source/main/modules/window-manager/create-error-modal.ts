@@ -45,7 +45,6 @@ export default function createErrorModal (win: BrowserWindow, title: string, mes
     webPreferences: {
       contextIsolation: true,
       additionalArguments: [ title, message, contents ],
-      // @ts-expect-error
       preload: ERROR_PRELOAD_WEBPACK_ENTRY
     }
   }
@@ -56,11 +55,9 @@ export default function createErrorModal (win: BrowserWindow, title: string, mes
   const window = new BrowserWindow(winConf)
 
   // Load the index.html of the app.
-  // @ts-expect-error
   window.loadURL(ERROR_WEBPACK_ENTRY)
     .catch(e => {
-      // @ts-expect-error
-      global.log.error(`Could not load URL ${ERROR_WEBPACK_ENTRY as string}: ${e.message as string}`, e)
+      global.log.error(`Could not load URL ${ERROR_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })
 
   // EVENT LISTENERS

@@ -25,6 +25,37 @@
 declare module '*.png'
 
 /**
+ * DECLARE ELECTRON-FORGE INSERTION VARIABLES
+ *
+ * These variables are set by electron-forge to point to the relevant entrypoints.
+ */
+
+declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
+declare const MAIN_WINDOW_WEBPACK_ENTRY: string
+declare const ABOUT_PRELOAD_WEBPACK_ENTRY: string
+declare const ABOUT_WEBPACK_ENTRY: string
+declare const DEFAULTS_PRELOAD_WEBPACK_ENTRY: string
+declare const DEFAULTS_WEBPACK_ENTRY: string
+declare const ERROR_PRELOAD_WEBPACK_ENTRY: string
+declare const ERROR_WEBPACK_ENTRY: string
+declare const LOG_VIEWER_PRELOAD_WEBPACK_ENTRY: string
+declare const LOG_VIEWER_WEBPACK_ENTRY: string
+declare const PASTE_IMAGE_PRELOAD_WEBPACK_ENTRY: string
+declare const PASTE_IMAGE_WEBPACK_ENTRY: string
+declare const PREFERENCES_PRELOAD_WEBPACK_ENTRY: string
+declare const PREFERENCES_WEBPACK_ENTRY: string
+declare const PRINT_PRELOAD_WEBPACK_ENTRY: string
+declare const PRINT_WEBPACK_ENTRY: string
+declare const QUICKLOOK_PRELOAD_WEBPACK_ENTRY: string
+declare const QUICKLOOK_WEBPACK_ENTRY: string
+declare const STATS_PRELOAD_WEBPACK_ENTRY: string
+declare const STATS_WEBPACK_ENTRY: string
+declare const TAG_MANAGER_PRELOAD_WEBPACK_ENTRY: string
+declare const TAG_MANAGER_WEBPACK_ENTRY: string
+declare const UPDATE_PRELOAD_WEBPACK_ENTRY: string
+declare const UPDATE_WEBPACK_ENTRY: string
+
+/**
  * DECLARE THE GLOBAL INTERFACES
  */
 interface Application {
