@@ -430,10 +430,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/archiver@^5.1.0":
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/@types/archiver/-/archiver-5.1.0.tgz#869f4ce4028e49cf9a0243cf914415f4cc3d1f3d"
-  integrity sha512-baFOhanb/hxmcOd1Uey2TfFg43kTSmM6py1Eo7Rjbv/ivcl7PXLhY0QgXGf50Hx/eskGCFqPfhs/7IZLb15C5g==
+"@types/archiver@^5.1.1":
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/@types/archiver/-/archiver-5.1.1.tgz#d6d7610de4386b293abd5c1cb1875e0a4f4e1c30"
+  integrity sha512-heuaCk0YH5m274NOLSi66H1zX6GtZoMsdE6TYFcpFFjBjg0FoU4i4/M/a/kNlgNg26Xk3g364mNOYe1JaiEPOQ==
   dependencies:
     "@types/glob" "*"
 
@@ -454,10 +454,10 @@
     "@types/node" "*"
     "@types/responselike" "*"
 
-"@types/codemirror@^5.60.1":
-  version "5.60.1"
-  resolved "https://registry.yarnpkg.com/@types/codemirror/-/codemirror-5.60.1.tgz#726dd754756f9ea8094a9411c59de00052a5b89c"
-  integrity sha512-yV14LQ5VvghnW0uSuCw2bEfZC6NvxHQEckl2w3dEk5l0yPGzQh14dCaWvG5KD/2l3cgFSifR+6nIUD7LDLdUTg==
+"@types/codemirror@^5.60.2":
+  version "5.60.2"
+  resolved "https://registry.yarnpkg.com/@types/codemirror/-/codemirror-5.60.2.tgz#1f8b604964efb4fa2f5a6d6d8c5656f93a050d8a"
+  integrity sha512-tk8YxckrdU49GaJYRKxdzzzXrTlyT2nQGnobb8rAk34jt+kYXOxPKGqNgr7SJpl5r6YGaRD4CDfqiL+6A+/z7w==
   dependencies:
     "@types/tern" "*"
 
