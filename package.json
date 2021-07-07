@@ -92,7 +92,7 @@
     "@electron-forge/plugin-webpack": "^6.0.0-beta.57",
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
     "@types/adm-zip": "^0.4.34",
-    "@types/archiver": "^5.1.0",
+    "@types/archiver": "^5.1.1",
     "@types/bcp-47": "^2.0.0",
     "@types/command-exists": "^1.2.0",
     "@types/electron-devtools-installer": "^2.2.0",
