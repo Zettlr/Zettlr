@@ -190,7 +190,7 @@ export default {
               modtime: this.obj.modtime,
               files: this.obj.children.filter(e => e.type !== 'directory').length,
               dirs: this.obj.children.filter(e => e.type === 'directory').length,
-              isProject: this.isProject === true,
+              isProject: this.obj.type === 'directory' && this.obj.project !== null,
               fullPath: this.obj.path,
               icon: this.obj.icon
             }

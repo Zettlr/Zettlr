@@ -46,10 +46,6 @@ const TEMPLATE = [
     command: 'dir-new'
   },
   {
-    label: 'menu.set_icon',
-    command: 'select-icon'
-  },
-  {
     type: 'separator'
   }
 ]

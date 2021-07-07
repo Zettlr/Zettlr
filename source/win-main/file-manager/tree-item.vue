@@ -23,75 +23,33 @@
       v-on:drop="handleDrop"
       v-on:contextmenu="handleContextMenu"
     >
-      <!-- First: Primary icon (either directory icon, file icon, or project icon) -->
+      <!-- First: Secondary icon (only if primaryIcon displays the chevron) -->
       <span
         class="item-icon"
         aria-hidden="true"
       >
-        <!-- Is this a project? -->
         <clr-icon
-          v-if="isDirectory && obj.project !== null && hasChildren"
-          shape="blocks-group"
-          class="is-solid"
-        />
-        <!-- Display a custom icon, if applicable -->
-        <clr-icon
-          v-else-if="isDirectory && hasChildren"
-          v-show="obj.icon"
+          v-if="secondaryIcon !== false"
+          v-bind:shape="secondaryIcon"
           role="presentation"
-          v-bind:shape="obj.icon"
+          v-bind:class="{
+            'is-solid': [ 'disconnect', 'blocks-group' ].includes(secondaryIcon)
+          }"
         />
-        <!-- Display a file icon -->
-        <clr-icon
-          v-else-if="obj.type === 'file' && hasChildren"
-          shape="file"
-        />
-      </span> <!-- End primary (item) icon -->
-      <!-- Second: Secondary icon (the collapse/expand icon) -->
+      </span>
+      <!-- Second: Primary icon (either the chevron, or the custom icon) -->
       <span
         class="toggle-icon"
       >
-        <!-- Display a toggle to collapse/expand the file list -->
-        <!-- Only display in this position if the item has a primary icon -->
         <clr-icon
-          v-if="hasChildren"
-          role="button"
-          v-bind:shape="indicatorShape"
-          v-bind:aria-label="indicatorARIALabel"
-          v-on:mousedown.stop="collapsed = collapsed === false"
-        />
-        <!-- Is this a project? -->
-        <clr-icon
-          v-else-if="isDirectory && obj.project !== null && !hasChildren"
-          aria-label="Project"
-          shape="blocks-group"
-          class="is-solid"
-        />
-        <!-- Indicate if this is a dead directory -->
-        <clr-icon
-          v-else-if="obj.dirNotFoundFlag === true"
-          aria-label="Directory not found"
-          shape="disconnect"
-          class="is-solid"
-        />
-        <!-- Display a custom icon, if applicable -->
-        <clr-icon
-          v-else-if="isDirectory && !hasChildren"
-          v-show="obj.icon"
-          v-bind:shape="obj.icon"
-          aria-hidden="true"
-        />
-        <!-- Display a file icon -->
-        <clr-icon
-          v-else-if="obj.type === 'file'"
-          shape="file"
-          aria-hidden="true"
-        />
-        <clr-icon
-          v-else-if="obj.type === 'code'"
-          shape="code"
-          aria-hidden="true"
-        />
+          v-if="primaryIcon !== false"
+          v-bind:shape="primaryIcon"
+          role="presentation"
+          v-bind:class="{
+            'is-solid': [ 'disconnect', 'blocks-group' ].includes(primaryIcon)
+          }"
+          v-on:mousedown.stop="handlePrimaryIconClick"
+        ></clr-icon>
       </span>
       <span
         ref="display-text"
@@ -128,7 +86,7 @@
     <div
       v-if="operationType !== undefined"
       v-bind:style="{
-        'padding-left': `${(depth + 1) * 15 + 10}px`
+        'padding-left': `${(depth + 2) * 15 + 10}px`
       }"
     >
       <input
@@ -198,6 +156,64 @@ export default {
   },
   computed: {
     /**
+     * The secondary icon's shape -- this is the visually FIRST icon to be displayed
+     *
+     * @return  {string|boolean}  False if no secondary icon
+     */
+    secondaryIcon: function () {
+      if (this.hasChildren === false) {
+        // If whatever the object we're representing has no children, we do not
+        // need the secondary icon, since the primary icon will display whatever
+        // is necessary.
+        return false
+      } else {
+        // Otherwise, the primaryIcon will display the chevron and we need to
+        // transfer the customIcon to this position.
+        return this.customIcon
+      }
+    },
+    /**
+     * The primary icon's shape -- this is the visually SECOND icon to be displayed
+     *
+     * @return  {string|boolean}  False if no primary icon
+     */
+    primaryIcon: function () {
+      // The primary icon is _always_ the chevron if we're dealing with a
+      // directory and it has children. Otherwise, it will display the custom icon.
+      if (this.hasChildren === true) {
+        return this.collapsed === true ? 'caret right' : 'caret down'
+      } else {
+        return this.customIcon
+      }
+    },
+    /**
+     * Returns an icon appropriate to the item we are representing, or false if
+     * there is no icon available.
+     *
+     * @return  {string|boolean}  False if no custom icon.
+     */
+    customIcon: function () {
+      if (this.obj.type !== 'directory') {
+        // Indicate that this is a file.
+        if (this.obj.type === 'file') {
+          return 'file'
+        } else {
+          return 'code'
+        }
+      } else if (this.obj.dirNotFoundFlag === true) {
+        return 'disconnect'
+      } else if (this.obj.project !== null) {
+        // Indicate that this directory has a project.
+        return 'blocks-group'
+      } else if (this.obj.icon !== null) {
+        // Display the custom icon
+        return this.obj.icon
+      }
+
+      // No icon available
+      return false
+    },
+    /**
      * Returns true if this item is a root item
      */
     isRoot: function () {
@@ -212,6 +228,8 @@ export default {
     },
     /**
      * Returns true if there are children that can be displayed
+     *
+     * @return {boolean} Whether or not this object has children.
      */
     hasChildren: function () {
       // Return true if it's a directory, with at least one directory as children
@@ -236,15 +254,6 @@ export default {
       } else {
         return this.obj.children.filter(e => e.type === 'directory')
       }
-    },
-    /**
-     * Returns the correct indicator shape
-     */
-    indicatorShape: function () {
-      return this.collapsed === true ? 'caret right' : 'caret down'
-    },
-    indicatorARIALabel: function () {
-      return this.collapsed === true ? 'Uncollapse directory' : 'Collapse directory'
     },
     basename: function () {
       if (this.obj.type === 'directory' || this.obj.type === 'code') {
@@ -412,6 +421,11 @@ export default {
       }
 
       this.operationType = undefined
+    },
+    handlePrimaryIconClick: function () {
+      if (this.hasChildren === true) {
+        this.collapsed = this.collapsed === false
+      }
     }
   }
 }
