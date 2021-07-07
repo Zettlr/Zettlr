@@ -137,7 +137,7 @@
     "ts-node": "^9.1.1",
     "typescript": "^4.3.5",
     "typings-for-css-modules-loader": "^1.7.0",
-    "vue-loader": "^15.9.7",
+    "vue-loader": "^16.3.0",
     "vue-template-compiler": "^2.6.14",
     "webpack": "^5.43.0"
   }
