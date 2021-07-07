@@ -12,7 +12,7 @@
       v-show="currentTab === 'relatedFiles'"
       role="tabpanel"
     >
-      <h1>Related files</h1>
+      <h1>{{ relatedFilesLabel }}</h1>
       <div v-if="relatedFiles.length === 0" class="related-files-container">
         No related files.
       </div>
