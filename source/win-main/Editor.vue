@@ -685,16 +685,7 @@ export default {
 
       // set the start point of the selection to be where the mouse was clicked
       this.anchor = this.editor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY })
-
-      // set the end point to be the same y coordinate as the start point and add the width of client page
-      // to get the end of the line. Couldn't find a way from CodeMirror to get the end of the line
-      // as they treat every line as the whole paragraph
-      let endPoint = this.editor.codeMirror.coordsChar({ left: event.pageX + this.$refs.editor.clientWidth, top: event.pageY })
-
-      // apply the selection of a single line that corresponds to where the mouse was clicked
-      this.editor.codeMirror.setSelection(this.anchor, endPoint)
-
-      // if the mouse is still clicked and moved down or up, change the selection to include the new lines
+      this.editor.codeMirror.setSelection(this.anchor)
     },
 
     editorMousemove (event) {
@@ -717,12 +708,10 @@ export default {
       // left margin and goes inside this.$refs.editor and releases, the event of mouse release
       // is not handled
 
-      // if (event.target !== this.$refs.editor) {
-      //   return
-      // }
-
       // when the mouse is released, set anchor to undefined to stop adding lines
       this.anchor = undefined
+      // Also, make sure the editor is focused.
+      this.editor.codeMirror.focus()
     }
   }
 }
