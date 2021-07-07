@@ -625,10 +625,10 @@
     "@types/glob" "*"
     "@types/node" "*"
 
-"@types/sanitize-html@^2.3.1":
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/@types/sanitize-html/-/sanitize-html-2.3.1.tgz#094d696b83b7394b016e96342bbffa6a028795ce"
-  integrity sha512-+UT/XRluJuCunRftwO6OzG6WOBgJ+J3sROIoSJWX+7PB2FtTJTEJLrHCcNwzCQc0r60bej3WAbaigK+VZtZCGw==
+"@types/sanitize-html@^2.3.2":
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/@types/sanitize-html/-/sanitize-html-2.3.2.tgz#ed234985fd8a07af8dd7ced488021f44ccfa2e91"
+  integrity sha512-DnmoXsiqG2/RoSf6/lD3Hrs+TCM8ILtzNuuSjmOtRaP/ud9Sy3M3ctwD+SB50EIDs5GzVFF1dJk2Fq/ID/PNCQ==
   dependencies:
     htmlparser2 "^6.0.0"
 
