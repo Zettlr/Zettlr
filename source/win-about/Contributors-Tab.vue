@@ -68,8 +68,6 @@ export default {
             }
           })
         }
-
-        console.log(this.translationMetadata)
       })
       .catch(e => console.error(e))
   },

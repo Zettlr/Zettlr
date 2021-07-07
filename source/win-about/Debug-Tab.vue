@@ -55,7 +55,6 @@
 export default {
   name: 'DebugTab',
   data: function () {
-    console.log(process)
     return {
       version: global.config.get('version'),
       uuid: global.config.get('uuid'),

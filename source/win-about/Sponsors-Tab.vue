@@ -43,7 +43,6 @@ export default {
   created: function () {
     ky('https://api.zettlr.com/v1/sponsors')
       .then((response) => {
-        console.log(response.body)
         response.json()
           .then(res => {
             this.sponsors = res

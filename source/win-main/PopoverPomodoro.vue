@@ -149,11 +149,6 @@ export default {
       }
     }
   },
-  watch: {
-    volume: function (newVal, oldVal) {
-      console.log('Volume changed!', newVal, oldVal)
-    }
-  },
   methods: {
     startPomodoro: function () {
       this.isRunning = true

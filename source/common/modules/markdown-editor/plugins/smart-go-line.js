@@ -49,7 +49,6 @@ const { getListTokenRE } = require('../../../regular-expressions');
     // First, check for two conditions: We are in a list, and the cursor is
     // farther to the right than the beginning of the list.
     const match = listRE.exec(line)
-    console.log(match, line)
 
     if (match === null) {
       cm.execCommand('goLineLeft')
@@ -59,7 +58,6 @@ const { getListTokenRE } = require('../../../regular-expressions');
       const leadingWhite = (match[1] !== undefined) ? match[1].length : 0
       const tokenLength = (match[2] !== undefined) ? match[2].length : 0
       const afterWhite = (match[4] !== undefined) ? match[4].length : 0
-      console.log('Match!', leadingWhite, tokenLength, afterWhite)
 
       const startOfItem = leadingWhite + tokenLength + afterWhite
 
