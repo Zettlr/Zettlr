@@ -103,7 +103,7 @@
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.28.2",
     "@typescript-eslint/parser": "^4.28.2",
-    "@vercel/webpack-asset-relocator-loader": "^1.5.0",
+    "@vercel/webpack-asset-relocator-loader": "^1.6.0",
     "copy-webpack-plugin": "^9.0.1",
     "cross-env": "^7.0.3",
     "css-loader": "^5.2.6",
