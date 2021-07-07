@@ -42,7 +42,6 @@ export default function createAboutWindow (conf: WindowPosition): BrowserWindow 
     fullscreenable: false,
     webPreferences: {
       contextIsolation: true,
-      // @ts-expect-error
       preload: ABOUT_PRELOAD_WEBPACK_ENTRY
     }
   }
@@ -53,11 +52,9 @@ export default function createAboutWindow (conf: WindowPosition): BrowserWindow 
   const window = new BrowserWindow(winConf)
 
   // Load the index.html of the app.
-  // @ts-expect-error
   window.loadURL(ABOUT_WEBPACK_ENTRY)
     .catch(e => {
-      // @ts-expect-error
-      global.log.error(`Could not load URL ${ABOUT_WEBPACK_ENTRY as string}: ${e.message as string}`, e)
+      global.log.error(`Could not load URL ${ABOUT_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })
 
   // EVENT LISTENERS

@@ -92,7 +92,7 @@
     "@electron-forge/plugin-webpack": "^6.0.0-beta.57",
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
     "@types/adm-zip": "^0.4.34",
-    "@types/archiver": "^5.1.0",
+    "@types/archiver": "^5.1.1",
     "@types/bcp-47": "^2.0.0",
     "@types/command-exists": "^1.2.0",
     "@types/electron-devtools-installer": "^2.2.0",
@@ -101,7 +101,7 @@
     "@types/nspell": "^2.1.0",
     "@types/rimraf": "^3.0.0",
     "@types/uuid": "^8.3.0",
-    "@typescript-eslint/eslint-plugin": "^4.28.1",
+    "@typescript-eslint/eslint-plugin": "^4.28.2",
     "@typescript-eslint/parser": "^4.28.2",
     "@vercel/webpack-asset-relocator-loader": "^1.5.0",
     "copy-webpack-plugin": "^9.0.1",
@@ -139,6 +139,6 @@
     "typings-for-css-modules-loader": "^1.7.0",
     "vue-loader": "^15.9.7",
     "vue-template-compiler": "^2.6.14",
-    "webpack": "^5.42.0"
+    "webpack": "^5.43.0"
   }
 }

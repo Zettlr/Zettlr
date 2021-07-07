@@ -40,7 +40,6 @@ export default function createDefaultsWindow (conf: WindowPosition): BrowserWind
     show: false,
     webPreferences: {
       contextIsolation: true,
-      // @ts-expect-error
       preload: DEFAULTS_PRELOAD_WEBPACK_ENTRY
     }
   }
@@ -52,11 +51,9 @@ export default function createDefaultsWindow (conf: WindowPosition): BrowserWind
 
   // Load the index.html of the app.
   // The variable LOG_VIEWER_WEBPACK_ENTRY is automatically resolved by electron forge / webpack
-  // @ts-expect-error
   window.loadURL(DEFAULTS_WEBPACK_ENTRY)
     .catch(e => {
-      // @ts-expect-error
-      global.log.error(`Could not load URL ${DEFAULTS_WEBPACK_ENTRY as string}: ${e.message as string}`, e)
+      global.log.error(`Could not load URL ${DEFAULTS_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })
 
   // EVENT LISTENERS
