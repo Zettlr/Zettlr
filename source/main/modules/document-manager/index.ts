@@ -127,7 +127,6 @@ export default class DocumentManager extends EventEmitter {
       // Make another file active
       this._activeFile = this._loadedDocuments[0]
       this.emit('update', 'activeFile')
-      // TODO: global.recentDocs.add(this._fsal.getMetadataFor(activeFile))
     }
   }
 
