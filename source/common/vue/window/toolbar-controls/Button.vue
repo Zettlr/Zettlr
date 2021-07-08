@@ -9,7 +9,13 @@
       v-bind:title="titleWithFallback"
       v-on:click="$emit('click')"
     >
-      <clr-icon v-if="control.icon" v-bind:shape="control.icon"></clr-icon>
+      <clr-icon
+        v-if="control.icon"
+        v-bind:shape="control.icon"
+        v-bind:class="{
+          'has-badge': control.badge
+        }"
+      ></clr-icon>
     </button>
     <span v-if="showLabel" class="toolbar-label" v-html="labelWithFallback"></span>
   </div>
