@@ -639,13 +639,16 @@ export default class Zettlr {
    * @param   {boolean}  newTab    Optional. If true, will always prevent exchanging the currently active file.
    */
   async openFile (filePath: string, newTab?: boolean): Promise<void> {
-    // TODO: Make active?
+    console.log('openfile called')
     // Add the file's metadata object to the recent docs
     // We only need to call the underlying function, it'll trigger a state
     // change event and will set in motion all other necessary processes.
+
+    // Remember if the file that should be opened was already opened. Because in
+    // this case we shouldn't close the active file (since we're not opening any
+    // new tabs in any case.)
+    const isFileAlreadyOpen = this._documentManager.openFiles.find(e => e.path === filePath) !== undefined
     const file = await this._documentManager.openFile(filePath)
-    // Also, add to last opened files to persist during reboots
-    global.config.addFile(file.path)
 
     // The user determines if we should avoid new tabs. If we should do so,
     // only open new tabs if the user has checked this setting.
@@ -656,7 +659,10 @@ export default class Zettlr {
       // have an active file to close.
       const activeFile = this._documentManager.activeFile
 
-      if (activeFile !== null && !activeFile.modified) {
+      // However, one caveat: If the new file that we are about to set active
+      // was already open somewhere, we don't have to close this one, but rather
+      // switch to the next file.
+      if (activeFile !== null && !activeFile.modified && !isFileAlreadyOpen) {
         this._documentManager.closeFile(activeFile)
       }
     }
@@ -711,9 +717,9 @@ export default class Zettlr {
       // Now the last thing to do is set it as open
       global.config.addPath(targetPath)
       // Also set the welcome.md as open
-      global.config.addFile(path.join(targetPath, 'welcome.md'))
+      global.config.set('openFiles', [path.join(targetPath, 'welcome.md')])
       // ALSO the directory needs to be opened
-      global.config.set('lastDir', hash(targetPath))
+      global.config.set('openDirectory', targetPath)
     }
   }
 

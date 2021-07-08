@@ -19,8 +19,6 @@ interface ConfigProvider {
    * @return {Boolean}   Whether or not the call succeeded
    */
   removePath: (p: string) => boolean
-  addFile: (f: string) => boolean
-  removeFile: (f: string) => boolean
   /**
    * If true, Zettlr assumes this is the first start of the app
    */

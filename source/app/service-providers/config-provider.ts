@@ -153,12 +153,6 @@ export default class ConfigProvider extends EventEmitter {
       removePath: (p: string) => {
         return this.removePath(p)
       },
-      addFile: (f: string) => {
-        return this.addFile(f)
-      },
-      removeFile: (f: string) => {
-        return this.removeFile(f)
-      },
       /**
        * If true, Zettlr assumes this is the first start of the app
        */
@@ -341,33 +335,6 @@ export default class ConfigProvider extends EventEmitter {
   removePath (p: string): boolean {
     if (this.config.openPaths.includes(p)) {
       this.config.openPaths.splice(this.config.openPaths.indexOf(p), 1)
-      return true
-    }
-    return false
-  }
-
-  /**
-   * Adds a file to the array of open files.
-   * @param {String} f The path of the file to add
-   */
-  addFile (f: string): boolean {
-    // Only add valid and unique files
-    if ((!ignoreFile(f) || isDir(f)) && !this.config.openFiles.includes(f)) {
-      this.config.openFiles.push(f)
-      return true
-    }
-
-    return false
-  }
-
-  /**
-    * Removes a file from the open files
-    * @param  {String} f The file to be removed
-    * @return {Boolean} Whether or not the call succeeded.
-    */
-  removeFile (f: string): boolean {
-    if (this.config.openFiles.includes(f)) {
-      this.config.openFiles.splice(this.config.openFiles.indexOf(f), 1)
       return true
     }
     return false

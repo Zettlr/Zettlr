@@ -62,14 +62,6 @@ export default function registerGlobals (): void {
       console.warn('[Window Registration] Called global.config.removePath in a renderer context.', p)
       return false
     },
-    addFile: (f: string) => {
-      console.warn('[Window Registration] Called global.config.addFile in a renderer context.', f)
-      return false
-    },
-    removeFile: (f: string) => {
-      console.warn('[Window Registration] Called global.config.removeFile in a renderer context.', f)
-      return false
-    },
     /**
      * If true, Zettlr assumes this is the first start of the app
      */
