@@ -314,15 +314,7 @@ export default class WindowManager {
    * @param  {BrowserWindow}  win  The window to make visible
    */
   private _makeVisible (win: BrowserWindow): void {
-    if (win.isMinimized()) {
-      win.maximize()
-      win.focus()
-    } else if (!win.isVisible()) {
-      win.show()
-    }
-
-    win.moveTop()
-    // Afterwards, in any case: focus the window
+    win.show()
   }
 
   /**
