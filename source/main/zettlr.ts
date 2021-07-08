@@ -30,7 +30,6 @@ import ignoreFile from '../common/util/ignore-file'
 import isDir from '../common/util/is-dir'
 import isFile from '../common/util/is-file'
 import { commands } from './commands'
-import hash from '../common/util/hash'
 
 import { CodeFileDescriptor, CodeFileMeta, DirDescriptor, MDFileDescriptor, MDFileMeta } from './modules/fsal/types'
 import broadcastIpcMessage from '../common/util/broadcast-ipc-message'
