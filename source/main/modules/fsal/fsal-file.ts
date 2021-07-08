@@ -109,9 +109,18 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
   file.wordCount = countWords(content)
   file.charCount = countWords(content, true)
 
+  // Determine linefeed to preserve on saving so that version control
+  // systems don't complain.
+  file.linefeed = '\n'
+  if (content.includes('\r\n')) file.linefeed = '\r\n'
+  if (content.includes('\n\r')) file.linefeed = '\n\r'
+
   // Extract a potential YAML frontmatter
   file.frontmatter = null // Reset first
-  let frontmatter = extractYamlFrontmatter(content)
+  const extracted = extractYamlFrontmatter(content, file.linefeed)
+  const frontmatter = extracted.frontmatter
+  content = extracted.content
+
   if (frontmatter !== null) {
     if (file.frontmatter === null) {
       file.frontmatter = {}
@@ -140,12 +149,6 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
   if (h1Match !== null) {
     file.firstHeading = h1Match[1]
   }
-
-  // Determine linefeed to preserve on saving so that version control
-  // systems don't complain.
-  file.linefeed = '\n'
-  if (content.includes('\r\n')) file.linefeed = '\r\n'
-  if (content.includes('\n\r')) file.linefeed = '\n\r'
 
   // Now read all tags
   file.tags = [] // Reset tags

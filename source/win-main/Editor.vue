@@ -89,6 +89,8 @@ import CodeMirror from 'codemirror'
 import { util as citrUtil, parseSingle } from '@zettlr/citr'
 import objectToArray from '../common/util/object-to-array'
 import { trans } from '../common/i18n-renderer'
+import extractYamlFrontmatter from '../common/util/extract-yaml-frontmatter'
+import YAML from 'yaml'
 
 const ipcRenderer = window.ipc
 
@@ -586,6 +588,7 @@ export default {
 
           // Everything worked out, so clean up
           this.activeDocument.cmDoc.markClean()
+          this.$store.dispatch('regenerateTagSuggestions').catch(e => console.error(e))
           this.$store.commit('announceModifiedFile', {
             filePath: this.activeDocument.path,
             isClean: this.activeDocument.cmDoc.isClean()
@@ -712,6 +715,31 @@ export default {
       this.anchor = undefined
       // Also, make sure the editor is focused.
       this.editor.codeMirror.focus()
+    },
+    addKeywordsToFile (keywords) {
+      // Split the contents of the editor into frontmatter and contents, then
+      // add the keywords to the frontmatter, slice everything back together
+      // and then overwrite the editor's contents.
+      let { frontmatter, content } = extractYamlFrontmatter(this.editor.value) // NOTE: We can keep the linefeed to \n since CodeMirror is set to ALWAYS use \n
+
+      let postFrontmatter = '\n'
+      if (frontmatter !== null) {
+        if ('keywords' in frontmatter) {
+          frontmatter.keywords = frontmatter.keywords.concat(keywords)
+        } else if ('tags' in frontmatter) {
+          frontmatter.tags = frontmatter.tags.concat(keywords)
+        } else {
+          frontmatter.keywords = keywords
+        }
+      } else {
+        // Frontmatter was null, so create one
+        frontmatter = {}
+        frontmatter.keywords = keywords
+        postFrontmatter += '\n' // Make sure if we're now ADDING a frontmatter to space it from the content
+      }
+
+      // Glue it back together and set it as content
+      this.activeDocument.cmDoc.setValue('---\n' + YAML.stringify(frontmatter) + '---' + postFrontmatter + content)
     }
   }
 }

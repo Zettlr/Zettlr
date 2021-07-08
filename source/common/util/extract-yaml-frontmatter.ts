@@ -13,6 +13,11 @@
 
 import YAML from 'yaml'
 
+interface ExtractYamlFrontmatterReturn {
+  frontmatter: any|null
+  content: string
+}
+
 /**
  * Takes Markdown source and returns a parsed YAML frontmatter as an object or
  * null (if there was no frontmatter).
@@ -21,8 +26,14 @@ import YAML from 'yaml'
  *
  * @return  {any|null}            The parsed frontmatter as an object, or null.
  */
-export default function extractYamlFrontmatter (markdown: string): any|null {
-  let lines = markdown.split(/\r?\n/)
+export default function extractYamlFrontmatter (markdown: string, linefeed: string = '\n'): ExtractYamlFrontmatterReturn {
+  const ret = {
+    frontmatter: null,
+    content: markdown
+  }
+
+  const lines = markdown.split(linefeed)
+
   lines.unshift('') // For the start algorithm
   let start = -1
   let end = -1
@@ -37,7 +48,7 @@ export default function extractYamlFrontmatter (markdown: string): any|null {
   }
 
   if (start < 0) {
-    return null // No frontmatter
+    return ret // No frontmatter
   }
 
   for (let i = start + 1; i < lines.length; i++) {
@@ -48,7 +59,7 @@ export default function extractYamlFrontmatter (markdown: string): any|null {
   }
 
   if (end < 0) {
-    return null // The frontmatter did not end
+    return ret // The frontmatter did not end
   }
 
   // Now we have a frontmatter (if there was any) -> extract!
@@ -59,8 +70,11 @@ export default function extractYamlFrontmatter (markdown: string): any|null {
 
   // Parse and return
   try {
-    return YAML.parse(frontmatter)
+    ret.frontmatter = YAML.parse(frontmatter)
+    // Remove frontmatter from content.
+    ret.content = lines.slice(end + 2).join(linefeed)
+    return ret
   } catch (err) {
-    return null
+    return ret
   }
 }

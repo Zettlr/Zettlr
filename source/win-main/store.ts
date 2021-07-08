@@ -526,7 +526,7 @@ const config: StoreOptions<ZettlrState> = {
       // In case the user quickly switched, re-run this dispatcher
       context.dispatch('updateActiveFile').catch(e => console.error(e))
       // Update the tag suggestions
-      context.dispatch('regenerateTagSuggestions', openFile).catch(e => console.error(e))
+      context.dispatch('regenerateTagSuggestions').catch(e => console.error(e))
     },
     updateOpenFiles: async function (context) {
       const openFiles = await ipcRenderer.invoke('application', { command: 'get-open-files' })

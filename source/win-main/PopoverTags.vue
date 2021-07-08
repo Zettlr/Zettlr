@@ -7,6 +7,11 @@
       <span v-for="tag, idx in suggestions" v-bind:key="idx" class="tag">
         #{{ tag }}
       </span>
+
+      <ButtonControl
+        v-bind:label="'Add to file'"
+        v-on:click="shouldAddSuggestions = true"
+      ></ButtonControl>
     </p>
 
     <hr v-if="suggestions.length > 0">
@@ -45,26 +50,30 @@
  */
 
 import TextControl from '../common/vue/form/elements/Text.vue'
+import ButtonControl from '../common/vue/form/elements/Button.vue'
 import { trans } from '../common/i18n-renderer'
 
 export default {
   name: 'PopoverTags',
   components: {
-    TextControl
+    TextControl,
+    ButtonControl
   },
   data: function () {
     return {
       tags: [],
       suggestions: [], // Tag suggestions for the currently active file
       query: '',
-      searchForTag: ''
+      searchForTag: '',
+      shouldAddSuggestions: false
     }
   },
   computed: {
     popoverData: function () {
       return {
         // As soon as this is !== '', the app will begin a search for the tag
-        searchForTag: this.searchForTag
+        searchForTag: this.searchForTag,
+        addSuggestionsToFile: this.shouldAddSuggestions
       }
     },
     filterPlaceholder: function () {
