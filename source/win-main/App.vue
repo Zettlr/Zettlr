@@ -199,6 +199,9 @@ export default {
 
       return cnt
     },
+    hasTagSuggestions: function () {
+      return this.$store.state.tagSuggestions.length > 0
+    },
     toolbarControls: function () {
       return [
         {
@@ -232,7 +235,8 @@ export default {
           type: 'button',
           id: 'show-tag-cloud',
           title: trans('toolbar.tag_cloud'),
-          icon: 'tags'
+          icon: 'tags',
+          badge: this.hasTagSuggestions
         },
         {
           type: 'button',
@@ -504,7 +508,11 @@ export default {
           }
         })
 
-        const data = { tags: tagMap }
+        const data = {
+          tags: tagMap,
+          suggestions: this.$store.state.tagSuggestions
+        }
+
         const button = document.getElementById('toolbar-show-tag-cloud')
 
         this.$showPopover(PopoverTags, button, data, (data) => {

@@ -2,6 +2,15 @@
   <div class="tag-cloud">
     <h3>{{ tagCloudTitle }}</h3>
 
+    <p v-if="suggestions.length > 0">
+      {{ tagSuggestionsLabel }}:
+      <span v-for="tag, idx in suggestions" v-bind:key="idx" class="tag">
+        #{{ tag }}
+      </span>
+    </p>
+
+    <hr v-if="suggestions.length > 0">
+
     <TextControl
       ref="filter"
       v-model="query"
@@ -46,6 +55,7 @@ export default {
   data: function () {
     return {
       tags: [],
+      suggestions: [], // Tag suggestions for the currently active file
       query: '',
       searchForTag: ''
     }
@@ -62,6 +72,9 @@ export default {
     },
     tagCloudTitle: function () {
       return trans('dialog.tag_cloud.title')
+    },
+    tagSuggestionsLabel: function () {
+      return trans('dialog.tag_cloud.suggestions_label')
     },
     filteredTags: function () {
       return this.tags.filter(tag => {

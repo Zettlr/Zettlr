@@ -209,6 +209,10 @@ interface ZettlrState {
    */
   tagDatabase: any[]
   /**
+   * Contains a list of suggested tags for the current active file.
+   */
+  tagSuggestions: string[]
+  /**
    * Holds all configuration options. These need to be stored here separately
    * to make use of the reactivity of Vue. We'll basically be binding the config
    * listener to this store state. It's basically a dictionary for quick access.
@@ -245,6 +249,7 @@ const config: StoreOptions<ZettlrState> = {
     openFiles: [],
     colouredTags: [],
     tagDatabase: [],
+    tagSuggestions: [],
     config: {},
     activeDocumentInfo: null,
     modifiedDocuments: [],
@@ -413,15 +418,16 @@ const config: StoreOptions<ZettlrState> = {
       state.activeFile = descriptor
     },
     updateOpenFiles: function (state, openFiles) {
-      console.log('Setting open files ...')
       Vue.set(state, 'openFiles', openFiles)
-      // state.openFiles = openFiles
     },
     colouredTags: function (state, tags) {
       state.colouredTags = tags
     },
     updateTagDatabase: function (state, tags) {
       state.tagDatabase = tags
+    },
+    setTagSuggestions: function (state, suggestions) {
+      state.tagSuggestions = suggestions
     },
     updateCitationKeys: function (state, newKeys: string[]) {
       // Update the citations, removing possible duplicates
@@ -519,10 +525,31 @@ const config: StoreOptions<ZettlrState> = {
 
       // In case the user quickly switched, re-run this dispatcher
       context.dispatch('updateActiveFile').catch(e => console.error(e))
+      // Update the tag suggestions
+      context.dispatch('regenerateTagSuggestions', openFile).catch(e => console.error(e))
     },
     updateOpenFiles: async function (context) {
       const openFiles = await ipcRenderer.invoke('application', { command: 'get-open-files' })
       context.commit('updateOpenFiles', openFiles)
+    },
+    regenerateTagSuggestions: async function (context) {
+      if (context.state.activeFile === null) {
+        return // Nothing to do
+      }
+
+      const descriptor = await ipcRenderer.invoke('application', {
+        command: 'get-file-contents',
+        payload: context.state.activeFile.path
+      })
+
+      const suggestions = []
+      for (const tag of Object.keys(context.state.tagDatabase)) {
+        if (String(descriptor.content).includes(tag) && descriptor.tags.includes(tag) === false) {
+          suggestions.push(tag)
+        }
+      }
+
+      context.commit('setTagSuggestions', suggestions)
     }
   }
 }
