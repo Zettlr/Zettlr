@@ -195,6 +195,11 @@ export default class Zettlr {
       return this._documentManager.isClean()
     })
 
+    this._windowManager.on('main-window-closed', () => {
+      // Reset the FSAL state history so that any new window will have a clean start
+      this._fsal.resetFiletreeHistory()
+    })
+
     // Listen to document manager changes
     this._documentManager.on('update', (scope: string, changedDescriptor?: MDFileDescriptor|CodeFileDescriptor) => {
       switch (scope) {

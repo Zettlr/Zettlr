@@ -75,7 +75,7 @@ export default class FSAL extends EventEmitter {
   private _fsalIsBusy: boolean
   private readonly _remoteChangeBuffer: WatchdogEvent[]
   private _state: FSALState
-  private readonly _history: FSALHistoryEvent[]
+  private _history: FSALHistoryEvent[]
 
   constructor (cachedir: string) {
     super()
@@ -144,6 +144,27 @@ export default class FSAL extends EventEmitter {
     })
 
     this.emit('fsal-state-changed', 'filetree', changedPath)
+  }
+
+  /**
+   * Calling this function will reset the filetree history so that it looks
+   * clean. This might prevent breakages if there are too many changes for the
+   * main window to cope.
+   */
+  resetFiletreeHistory (): void {
+    this._history = []
+
+    let timestamp = Date.now()
+
+    for (const descriptor of this._state.filetree) {
+      this._history.push({
+        event: 'add',
+        path: descriptor.path,
+        timestamp: timestamp
+      })
+
+      timestamp++
+    }
   }
 
   /**

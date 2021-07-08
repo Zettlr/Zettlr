@@ -24,6 +24,7 @@ import {
   shell
 } from 'electron'
 import { promises as fs } from 'fs'
+import EventEmitter from 'events'
 import path from 'path'
 import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '../fsal/types'
 import createMainWindow from './create-main-window'
@@ -56,7 +57,7 @@ interface QuicklookRecord {
   win: BrowserWindow
 }
 
-export default class WindowManager {
+export default class WindowManager extends EventEmitter {
   private _mainWindow: BrowserWindow|null
   private readonly _qlWindows: QuicklookRecord[]
   private _printWindow: BrowserWindow|null
@@ -78,6 +79,7 @@ export default class WindowManager {
   private readonly _hasRTLLocale: boolean
 
   constructor () {
+    super()
     this._mainWindow = null
     this._qlWindows = []
     this._printWindow = null
@@ -305,6 +307,7 @@ export default class WindowManager {
     this._mainWindow.on('closed', () => {
       // The window has been closed -> dereference
       this._mainWindow = null
+      this.emit('main-window-closed')
     })
   }
 
