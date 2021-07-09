@@ -110,6 +110,7 @@ body.darwin {
     border-radius: 4px;
     margin: 0 10px;
     border: 1px solid transparent;
+    display: flex;
 
     &:hover { border-color: rgb(180, 180, 180); }
     &.active { background-color: rgb(230, 230, 230); }

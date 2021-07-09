@@ -266,24 +266,6 @@ export default {
         },
         {
           type: 'button',
-          id: 'markdownBold',
-          title: trans('gui.formatting.bold'),
-          icon: 'bold'
-        },
-        {
-          type: 'button',
-          id: 'markdownItalic',
-          title: trans('gui.formatting.italic'),
-          icon: 'italic'
-        },
-        {
-          type: 'button',
-          id: 'markdownCode',
-          title: trans('gui.formatting.code'),
-          icon: 'code-alt'
-        },
-        {
-          type: 'button',
           id: 'markdownComment',
           title: trans('gui.formatting.comment'),
           icon: 'code'
@@ -299,24 +281,6 @@ export default {
           id: 'markdownImage',
           title: trans('gui.formatting.image'),
           icon: 'image'
-        },
-        {
-          type: 'button',
-          id: 'markdownBlockquote',
-          title: trans('gui.formatting.blockquote'),
-          icon: 'block-quote'
-        },
-        {
-          type: 'button',
-          id: 'markdownMakeOrderedList',
-          title: trans('gui.formatting.ol'),
-          icon: 'number-list'
-        },
-        {
-          type: 'button',
-          id: 'markdownMakeUnorderedList',
-          title: trans('gui.formatting.ul'),
-          icon: 'bullet-list'
         },
         {
           type: 'button',
