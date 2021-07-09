@@ -277,7 +277,7 @@ This will direct the File System Abstraction Layer to fully clear its cache on b
 
 #### `--data-dir=path`
 
-Use this switch to specify custom data directory, which holds your configuration files. Without this switch data directory defaults to `%AppData%/Zettlr` (on Windows 10), `~/.config/Zettlr` (on Linux), etc. The path can be absolute or relative. Basis for the relative path will be either the binary's directory (when running a packaged app) or the repository root (when running an app that is not packaged). If the path contains spaces, do not forget to escape it in quotes. `~` to denote home directory do not work. Due to the bug in Electron an empty `Dictionaries` subdirectory is created in the default data directory, but it does not impact functionality.
+Use this switch to specify custom data directory, which holds your configuration files. Without this switch data directory defaults to `%AppData%/Zettlr` (on Windows 10), `~/.config/Zettlr` (on Linux), etc. The path can be absolute or relative. Basis for the relative path will be either the binary's directory (when running a packaged app) or the repository root directory (when running an app that is not packaged). If the path contains spaces, do not forget to escape it in quotes. `~` to denote home directory does not work. Due to the bug in Electron an empty `Dictionaries` subdirectory is created in the default data directory, but it does not impact functionality.
 
 #### `--disable-hardware-acceleration`
 
