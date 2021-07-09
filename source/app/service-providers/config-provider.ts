@@ -269,21 +269,34 @@ export default class ConfigProvider extends EventEmitter {
     * @return {ZettlrConfig} This for chainability.
     */
   runMigrations (): this {
-    // In 1.8.7 the replacements were provided as key-val pairs, but we've since
-    // moved to key-value since it's more verbose. So we need to make sure these
-    // conform to the new rules.
-    const replacements = this.config.editor.autoCorrect.replacements
-    for (const entry of replacements) {
-      if ('val' in entry && !('value' in entry)) {
-        global.log.info(`[Config Provider] Migrating Autocorrect replacement ${(entry as any).key as string} from 'val' to 'value' ...`);
-        (entry as any).value = (entry as any).val
-        delete (entry as any).val
+    const replacements = this.config.editor.autoCorrect.replacements as any
+    if (isIterable(replacements) && replacements != null) {
+      // In 1.8.7 the replacements were provided as key-val pairs, but we've since
+      // moved to key-value since it's more verbose. So we need to make sure these
+      // conform to the new rules.
+      for (const entry of replacements) {
+        if ('val' in entry && !('value' in entry)) {
+          global.log.info(`[Config Provider] Migrating Autocorrect replacement ${entry.key as string} from 'val' to 'value' ...`)
+          entry.value = entry.val
+          delete entry.val
+        }
       }
+    } else if (replacements != null) {
+      // Previous versions stored the replacements as objects of the form
+      // { "-->": "→", ... }
+      const newReplacements: Array<{ key: string, value: string }> = []
+      for (const [ key, value ] of Object.entries(replacements)) {
+        if (typeof value === 'string') {
+          newReplacements.push({ key, value })
+        }
+      }
+      this.config.editor.autoCorrect.replacements = newReplacements
     }
 
     // Next: We've completely abandoned the hashing system, so if we encounter a
     // hash where the new engine expects a string, set it to default.
     this.config.openFiles = this.config.openFiles.filter(e => typeof e === 'string')
+
     return this
   }
 
@@ -508,4 +521,8 @@ export default class ConfigProvider extends EventEmitter {
     // There are some options for which there is no validation.
     return true
   }
+}
+
+function isIterable (value: any): boolean {
+  return Symbol.iterator in Object(value)
 }
