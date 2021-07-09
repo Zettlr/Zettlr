@@ -11,7 +11,7 @@ name: Build
 # WHEN IT RUNS:                                                               #
 #                                                                             #
 # * Whenever someone successfully pushes develop --> master.                  #
-# * Every Friday at noon (UTC)                                                #
+# * Every Monday at noon (UTC)                                                #
 # * Manually                                                                  #
 #                                                                             #
 # The last two events are being used to create nightly releases. The first    #
@@ -57,8 +57,8 @@ on:
     branches:
       - master
   workflow_dispatch: {} # Used to manually trigger a nightly build.
-  schedule: # Every Friday at noon (UTC) we run a scheduled nightly build
-    - cron: '0 12 * * 5'
+  schedule: # Every Monday at noon (UTC) we run a scheduled nightly build
+    - cron: '0 12 * * 1'
 
 # Defaults for every job and step in this workflow
 defaults:

@@ -153,7 +153,7 @@
     </p>
     <p>
       Below you can find nightlies after they are being built. Generally, nightlies
-      are being built automatically on schedule every Friday noon (UTC), but there
+      are being built automatically on schedule every Monday noon (UTC), but there
       may be exceptions.
     </p>
     <p>
