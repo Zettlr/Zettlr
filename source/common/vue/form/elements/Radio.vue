@@ -127,10 +127,12 @@ body.darwin {
     width: @input-size;
     height: @input-size;
     padding: 0;
+    margin-right: 5px;
 
     .toggle {
       border: 1px solid rgb(179, 179, 179);
       border-radius: @input-size;
+      width: @input-size; // Prevent squashed inputs for long labels
       background-color: white;
 
       // Inner part

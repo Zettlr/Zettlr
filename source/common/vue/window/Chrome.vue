@@ -91,7 +91,6 @@ import WindowControls from './Controls.vue'
 
 // Import the correct styles (the platform styles are namespaced)
 import './assets/generic.less'
-import './assets/darwin.less'
 
 const ipcRenderer = window.ipc
 
