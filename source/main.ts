@@ -14,6 +14,7 @@
  */
 
 import { app } from 'electron'
+import path from 'path'
 import { bootApplication, shutdownApplication } from './app/lifecycle'
 
 // Include the global Zettlr class
@@ -21,6 +22,31 @@ import Zettlr from './main/zettlr'
 
 // Helper function to extract files to open from process.argv
 import extractFilesFromArgv from './app/util/extract-files-from-argv'
+
+// Setting custom data dir for user configuration files.
+// Full path or relative path is OK. '~' does not work as expected.
+const dataDirFlag = process.argv.find(elem => elem.indexOf('--data-dir=') === 0)
+
+if (dataDirFlag !== undefined) {
+  // a path to a custom config dir is provided
+  const match = /^--data-dir="?([^"]+)"?$/.exec(dataDirFlag)
+  if (match !== null) {
+    let dataDir = match[1]
+
+    if (!path.isAbsolute(dataDir)) {
+      if (app.isPackaged) {
+        // Attempt to use the executable file's path as the basis
+        dataDir = path.join(path.dirname(app.getPath('exe')), dataDir)
+      } else {
+        // Attempt to use the repository's root directory as the basis
+        dataDir = path.join(__dirname, '../../', dataDir)
+      }
+    }
+    console.log('Using custom data dir: ' + dataDir)
+    app.setPath('userData', dataDir)
+    app.setAppLogsPath(path.join(dataDir, 'logs'))
+  }
+}
 
 // On systems with virtual GPUs (i.e. VMs), it might be necessary to disable
 // hardware acceleration. If the corresponding flag is set, we do so.

@@ -31,6 +31,7 @@ The Custom CSS can now be edited directly in the assets dialog where you can als
 - **Feature**: Zettlr now supports bibliography files on a per-file basis. Just set the wanted bibliography in your YAML frontmatter, within the `bibliography`-property.
 - **Feature**: Now Zettlr can export to PDF even without any LaTeX-distribution installed on the system.
 - **Feature**: The footnote editing logic has been improved. Now, multiline footnotes are handled appropriately, and you can safely use multi-line footnotes alongside the in-place editing feature.
+- **Feature**: Custom data directory via `--data-dir=<path_to_directory>` switch.
 - 32 bit AppImages and Windows are no longer supported.
 - Removed the Pandoc installation item from the help menu.
 - Moved the Pandoc and XeLaTeX settings to the export tab in preferences.
