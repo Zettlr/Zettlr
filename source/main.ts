@@ -15,11 +15,16 @@
 
 import { app } from 'electron'
 import path from 'path'
+import { bootApplication, shutdownApplication } from './app/lifecycle'
+
+// Include the global Zettlr class
+import Zettlr from './main/zettlr'
+
+// Helper function to extract files to open from process.argv
+import extractFilesFromArgv from './common/util/extract-files-from-argv'
 
 // Setting custom data dir for user configuration files.
 // Full path or relative path is OK. '~' does not work as expected.
-// This code block needs to come before the imports below, even though ESLint
-// will complain.
 const dataDirFlag = process.argv.find(elem => elem.indexOf('--data-dir=') === 0)
 
 if (dataDirFlag !== undefined) {
@@ -42,14 +47,6 @@ if (dataDirFlag !== undefined) {
     app.setAppLogsPath(path.join(dataDir, 'logs'))
   }
 }
-
-import { bootApplication, shutdownApplication } from './app/lifecycle'
-
-// Include the global Zettlr class
-import Zettlr from './main/zettlr'
-
-// Helper function to extract files to open from process.argv
-import extractFilesFromArgv from './common/util/extract-files-from-argv'
 
 // On systems with virtual GPUs (i.e. VMs), it might be necessary to disable
 // hardware acceleration. If the corresponding flag is set, we do so.
