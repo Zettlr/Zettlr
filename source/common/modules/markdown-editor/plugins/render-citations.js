@@ -1,5 +1,17 @@
 /* global define CodeMirror */
-// This plugin renders citations
+/**
+  * @ignore
+  * BEGIN HEADER
+  *
+  * Contains:        Citation rendering Plugin
+  * CVM-Role:        CodeMirror Plugin
+  * Maintainer:      Hendrik Erz
+  * License:         GNU GPL v3
+  *
+  * Description:     This plugin renders citations in the document
+  *
+  * END HEADER
+  */
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
@@ -12,7 +24,7 @@
 })(function (CodeMirror) {
   'use strict'
 
-  const { ipcRenderer } = require('electron')
+  const ipcRenderer = window.ipc
   const { getCitationRE } = require('../../../regular-expressions')
 
   const citationRE = getCitationRE()
@@ -31,7 +43,7 @@
     // We'll only render the viewport
     const viewport = cm.getViewport()
     for (let i = viewport.from; i < viewport.to; i++) {
-      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
+      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
       // Always reset lastIndex property, because test()-ing on regular
       // expressions advance it.
       citationRE.lastIndex = 0

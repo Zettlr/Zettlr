@@ -1,11 +1,26 @@
 /* global define CodeMirror */
-// CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: http://codemirror.net/LICENSE
-//
-// This plugin defines shortcuts for CodeMirror Markdown (Bold, italic, link, etc)
+/**
+  * @ignore
+  * BEGIN HEADER
+  *
+  * Contains:        Markdown Shortcuts
+  * CVM-Role:        CodeMirror Plugin
+  * Maintainer:      Hendrik Erz
+  * License:         GNU GPL v3
+  *
+  * Description:     This plugin adds common Markdown shortcuts (bold, italic, links, etc.)
+  *
+  * END HEADER
+  */
 
-const { clipboard } = require('electron')
-const { getListOrderedRE, getListTaskListRE, getListUnorderedCMRE, getUrlRE, getBlockRE } = require('../../../regular-expressions');
+const clipboard = window.clipboard
+const {
+  getListOrderedRE,
+  getListTaskListRE,
+  getListUnorderedCMRE,
+  getUrlRE,
+  getBlockRE
+} = require('../../../regular-expressions');
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
@@ -92,8 +107,15 @@ const { getListOrderedRE, getListTaskListRE, getListUnorderedCMRE, getUrlRE, get
       } else {
         // TODO: Check whether the user just selected the text itself and
         // not the formatting marks!
-        // We got no bold so bolden
-        replacements.push(pre + selection + post)
+
+        // NOTE: Since the user can triple-click a line, that selection will
+        // extend beyond the line. So check if the last char of selection is
+        // a newline, and, if so, pluck that and push it after post.
+        if (selection[selection.length - 1] === '\n') {
+          replacements.push(pre + String(selection).substr(0, selection.length - 1) + post + '\n')
+        } else {
+          replacements.push(pre + selection + post)
+        }
       }
     }
 

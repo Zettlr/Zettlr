@@ -1,0 +1,3 @@
+interface TrayProvider {
+  add: () => void
+}

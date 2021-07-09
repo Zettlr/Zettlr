@@ -40,8 +40,8 @@ export default function createUpdateWindow (conf: WindowPosition): BrowserWindow
     show: false,
     fullscreenable: false,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: true,
+      preload: UPDATE_PRELOAD_WEBPACK_ENTRY
     }
   }
 
@@ -51,11 +51,9 @@ export default function createUpdateWindow (conf: WindowPosition): BrowserWindow
   const window = new BrowserWindow(winConf)
 
   // Load the index.html of the app.
-  // @ts-expect-error
   window.loadURL(UPDATE_WEBPACK_ENTRY)
     .catch(e => {
-      // @ts-expect-error
-      global.log.error(`Could not load URL ${UPDATE_WEBPACK_ENTRY as string}: ${e.message as string}`, e)
+      global.log.error(`Could not load URL ${UPDATE_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })
 
   // EVENT LISTENERS

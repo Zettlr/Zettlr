@@ -61,7 +61,7 @@ export async function makeExport (options: ExporterOptions, formatOptions: any =
 
   // Now we can prepare our return
   let exporterReturn: ExporterOutput = {
-    code: 1, // TODO: Find the applicable Pandoc exit code for faulty options
+    code: 6, // See https://pandoc.org/MANUAL.html#exit-codes
     stdout: [],
     stderr: [],
     targetFile: '' // This will be returned if no exporter has been found

@@ -39,7 +39,7 @@ export default function setWindowChrome (winConf: BrowserWindowConstructorOption
     // chrome. Additionally, we'll be setting the window's vibrancy so that the
     // app looks even more native.
     winConf.titleBarStyle = 'hiddenInset'
-    winConf.vibrancy = 'sidebar'
+    winConf.vibrancy = 'under-window' // See https://developer.apple.com/design/human-interface-guidelines/macos/visual-design/translucency/
     winConf.visualEffectState = 'followWindow'
   } else if (process.platform !== 'linux' || !shouldUseNativeAppearance) {
     // On Windows, we need a frameless window. On Linux, only if the
@@ -47,9 +47,8 @@ export default function setWindowChrome (winConf: BrowserWindowConstructorOption
     winConf.frame = false
   } // Else: We have Linux with native appearance.
 
-  // Application icon for Linux. Cannot not be embedded in the executable.
+  // Application icon for Linux. Cannot be embedded in the executable.
   if (process.platform === 'linux') {
-    // TODO
-    winConf.icon = path.join(__dirname, 'assets/icons/128x128.png')
+    winConf.icon = path.join(__dirname, 'assets/icons/png/128x128.png')
   }
 }

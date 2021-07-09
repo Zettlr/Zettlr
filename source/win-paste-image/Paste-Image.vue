@@ -50,15 +50,31 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        PasteImage
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays the paste image modal window.
+ *
+ * END HEADER
+ */
+
 import WindowChrome from '../common/vue/window/Chrome.vue'
 import Checkbox from '../common/vue/form/elements/Checkbox.vue'
 import TextControl from '../common/vue/form/elements/Text.vue'
 import NumberControl from '../common/vue/form/elements/Number.vue'
 import File from '../common/vue/form/elements/File.vue'
-import { trans } from '../common/i18n'
-import { ipcRenderer, clipboard } from 'electron'
-import path from 'path'
+import { trans } from '../common/i18n-renderer'
 import md5 from 'md5'
+
+const path = window.path
+const ipcRenderer = window.ipc
+const clipboard = window.clipboard
 
 export default {
   name: 'PasteImage',
@@ -70,13 +86,14 @@ export default {
     File
   },
   data: function () {
-    const image = clipboard.readImage()
-    const size = image.getSize() // First get the original size
-    const aspect = image.getAspectRatio() // Then the aspect
-    const dataUrl = image.resize({ 'height': 200 }).toDataURL()
+    // const image = clipboard.readImage()
+    // const size = image.getSize() // First get the original size
+    // const aspect = image.getAspectRatio() // Then the aspect
+    // const dataUrl = image.resize({ 'height': 200 }).toDataURL()
+    const { size, aspect, dataUrl } = clipboard.getImageData()
     // Get the hash from the window arguments
     let startPath
-    [startPath] = window.process.argv.slice(-1)
+    [startPath] = process.argv.slice(-1)
 
     let name = ''
     if (clipboard.readText().length > 0) {

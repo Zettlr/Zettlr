@@ -1,5 +1,17 @@
 /* global CodeMirror define */
-// Insert and edit markdown footnotes
+/**
+  * @ignore
+  * BEGIN HEADER
+  *
+  * Contains:        Footnotes CodeMirror Plugin
+  * CVM-Role:        CodeMirror Plugin
+  * Maintainer:      Hendrik Erz
+  * License:         GNU GPL v3
+  *
+  * Description:     Enables shortcuts for inserting and removing footnotes.
+  *
+  * END HEADER
+  */
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS

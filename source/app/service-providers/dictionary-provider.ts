@@ -3,7 +3,7 @@
  * BEGIN HEADER
  *
  * Contains:        DictionaryProvider class
- * CVM-Role:        Provider
+ * CVM-Role:        Service Provider
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
@@ -19,8 +19,9 @@ import path from 'path'
 import { promises as fs } from 'fs'
 
 import { ipcMain, app } from 'electron'
-import { getDictionaryFile } from '../../common/i18n'
 import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
+import findLangCandidates, { Candidate } from '../../common/util/find-lang-candidates'
+import enumDictFiles, { DictFileMetadata } from '../../common/util/enum-dict-files'
 
 /**
  * This class loads and unloads dictionaries according to the configuration set
@@ -154,8 +155,35 @@ export default class DictionaryProvider extends EventEmitter {
   }
 
   /**
+ * Returns metadata for a given dictionary dir and provides a status code.
+ * @param  {string} query         The language metadata is requested for (BCP 47 compatible)
+ * @return {Object}               A language metadata object.
+ */
+  private _getDictionaryFile (query: string): Candidate & DictFileMetadata {
+    // First of all, create the fallback object.
+    const fallback: Candidate & DictFileMetadata = {
+      tag: 'en-US',
+      status: 'fallback',
+      aff: path.join(__dirname, 'dict/en-US/en-US.aff'),
+      dic: path.join(__dirname, 'dict/en-US/en-US.dic')
+    }
+
+    // Now we should have a list of all available dictionaries. Next, we need to
+    // search for a best and a close match.
+    const { exact, close } = findLangCandidates(query, enumDictFiles())
+
+    if (exact !== undefined) {
+      return exact
+    } else if (close !== undefined) {
+      return close
+    } else {
+      return fallback
+    }
+  }
+
+  /**
    * (Re)Loads the dictionaries efficiently based upon the selected dictionaries
-   * @return {Promise} Does not throw, as we catch errors. TODO: Log misloads!
+   * @return {Promise} Does not throw, as we catch errors.
    */
   async _load (): Promise<void> {
     if (this._reloadLock) {
@@ -194,7 +222,7 @@ export default class DictionaryProvider extends EventEmitter {
 
     for (let dict of dictsToLoad) {
       // First request a dictionary.
-      let dictMeta = getDictionaryFile(dict) as any // TODO
+      let dictMeta = this._getDictionaryFile(dict)
       if (dictMeta.status !== 'exact') {
         global.log.error(`[Dictionary Provider] Could not load ${dict}: No exact match found.`, dictMeta)
         continue // Only consider exact matches
@@ -374,11 +402,6 @@ export default class DictionaryProvider extends EventEmitter {
    * @return {void} Does not return.
    */
   reload (): void {
-    // TODO: Below's if will never return true, so we can refactor this to look
-    // cleaner for sure. (The load mechanism will make sure we never perform
-    // unnecessary operations).
-    if (global.config.get('selectedDicts') === this._loadedDicts) return
-
     // Reload the dictionary based upon the new selected dictionaries.
     this._load()
       .catch(err => {

@@ -1,18 +1,18 @@
 <template>
   <div>
-    <h4>Properties: {{ filename }}</h4>
+    <h4>{{ filename }}</h4>
     <div class="properties-info-container">
-      <div><span>Created: {{ creationTime }}</span></div>
+      <div><span>{{ createdLabel }}: {{ creationTime }}</span></div>
       <div v-if="type === 'file'">
-        <span>Words: {{ formattedWords }}</span>
+        <span>{{ formattedWords }}</span>
       </div>
       <div v-else>
         <span>Type: <span class="badge primary">{{ ext.substr(1) }}</span></span>
       </div>
     </div>
     <div class="properties-info-container">
-      <div><span>Modified: {{ modificationTime }}</span></div>
-      <div><span>Size: {{ formattedSize }}</span></div>
+      <div><span>{{ modifiedLabel }}: {{ modificationTime }}</span></div>
+      <div><span>{{ formattedSize }}</span></div>
     </div>
     <template v-if="type === 'file' && tags.length > 0">
       <hr>
@@ -32,7 +32,7 @@
     <template v-if="type === 'file'">
       <hr>
       <p>
-        Writing Target
+        {{ writingTargetTitle }}
       </p>
       <NumberControl
         v-model="targetValue"
@@ -47,16 +47,30 @@
         }"
       ></SelectControl>
       <button v-on:click="reset">
-        Reset
+        {{ resetLabel }}
       </button>
     </template>
   </div>
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        FileProps Popover
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Contains a component for displaying and managing file props.
+ *
+ * END HEADER
+ */
+
 import NumberControl from '../../../common/vue/form/elements/Number'
 import SelectControl from '../../../common/vue/form/elements/Select'
-import { trans } from '../../../common/i18n'
+import { trans } from '../../../common/i18n-renderer'
 import formatDate from '../../../common/util/format-date'
 import formatSize from '../../../common/util/format-size'
 import localiseNumber from '../../../common/util/localise-number'
@@ -98,6 +112,18 @@ export default {
     wordsLabel: function () {
       return trans('dialog.target.words')
     },
+    createdLabel: function () {
+      return trans('gui.created')
+    },
+    modifiedLabel: function () {
+      return trans('gui.modified')
+    },
+    resetLabel: function () {
+      return trans('gui.reset')
+    },
+    writingTargetTitle: function () {
+      return trans('menu.set_target')
+    },
     charactersLabel: function () {
       return trans('dialog.target.chars')
     },
@@ -111,7 +137,7 @@ export default {
       return formatSize(this.fileSize)
     },
     formattedWords: function () {
-      return localiseNumber(this.words)
+      return trans('gui.words', localiseNumber(this.words))
     }
   },
   methods: {

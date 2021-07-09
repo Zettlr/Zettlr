@@ -2,7 +2,7 @@
 
 ## DEPRECATION: 32 bit
 
-No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supported. On Linux, ARM is not available until we find a good solution of running Pandoc there.
+No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supported. For Windows ARM builds, Pandoc cannot be shipped as of now.
 
 ## New Configuration Options
 
@@ -20,6 +20,10 @@ The idea of "transitive files" we implemented in previous iterations of Zettlr p
 
 A few years ago we implemented auto-saving after a delay of five seconds with no change to the current file. However, that feature was always a little bit counter-intuitive. Instead, the new Zettlr version removes auto-saving and re-instates manual saving (since the "Save" menu option was never gone). We did this for several reasons. First, Zettlr is first and foremost a text editor working with files on your computer, so you are used to having to save files manually, and Zettlr should've never deviated from that. Furthermore, if we would implement a data-safe autosaving ability, this would put unnecessary strain on your computer's hard drive. Thus we opted for the traditional way and thus you need to manually save changes to files now. We found during beta that this is much more consistent and easy to work with.
 
+## Custom CSS has moved
+
+The Custom CSS can now be edited directly in the assets dialog where you can also edit your defaults files.
+
 ## GUI and Functionality
 
 - **Feature**: Switched the Exporting process in a way that allows more flexibility in setting options.
@@ -36,6 +40,10 @@ A few years ago we implemented auto-saving after a delay of five seconds with no
 - All windows will now remember their last position (new: log window and print window).
 - Some components of the renderer elements will now respect a given accent colour set by your operating system (only available for macOS and Windows).
 - You can now close files by middle-clicking their tabs.
+- MDX supported as a type of markdown file
+- New File and Edit File can now fast rename without selecting the extension
+- Add a tray to the system notification area, off by default. To activate, see Preferences → Advanced → "Leave app running in the notification area" (or "Show app in the notification area" when using MacOS).
+- Fixed a bug that would mark some quotation marks as misspelled.
 
 ## Under the Hood
 

@@ -1,5 +1,17 @@
 /* global define CodeMirror */
-// This plugin renders markdown block images
+/**
+  * @ignore
+  * BEGIN HEADER
+  *
+  * Contains:        Image rendering Plugin
+  * CVM-Role:        CodeMirror Plugin
+  * Maintainer:      Hendrik Erz
+  * License:         GNU GPL v3
+  *
+  * Description:     This plugin renders images in-place.
+  *
+  * END HEADER
+  */
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
@@ -15,6 +27,7 @@
   // GENERAL PLUGIN VARIABLES
   const { getImageRE } = require('../../../regular-expressions')
   const makeAbsoluteURL = require('../../../util/make-absolute-url')
+  const { trans } = require('../../../i18n-renderer')
 
   // Image detection regex
   const imageRE = getImageRE()
@@ -31,7 +44,7 @@
     // We'll only render the viewport
     const viewport = cm.getViewport()
     for (let i = viewport.from; i < viewport.to; i++) {
-      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
+      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
 
       // Always reset lastIndex property, because test()-ing on regular
       // expressions advance it.
@@ -105,7 +118,9 @@
             event.stopPropagation()
             // Make sure there are no quotes since these will break the image
             const newCaption = caption.textContent.replace(/"/g, '')
-            const newImageTag = `![${altText}](${url} "${newCaption}")${p4}`
+            // "Why are you setting the caption both as the image description and title?"
+            // Well, since all exports sometimes us this, sometimes the other value.
+            const newImageTag = `![${newCaption}](${url} "${newCaption}")${p4}`
             // Now replace the underlying image
             cm.replaceRange(newImageTag, curFrom, curTo)
           }
@@ -161,7 +176,7 @@
         // Display a replacement image in case the correct one is not found
         img.onerror = () => {
           img.src = img404
-          caption.textContent = `Image not found: ${url}` // TODO: Translate
+          caption.textContent = trans('system.error.image_not_found', url)
         }
         img.onclick = () => { textMarker.clear() }
 

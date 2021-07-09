@@ -41,13 +41,13 @@
 import Vue from 'vue'
 import Preferences from './preferences.vue'
 import windowRegister from '../common/modules/window-register'
-import { ipcRenderer } from 'electron'
+
+const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
 // The first thing we have to do is run the window controller
 windowRegister()
 
 // This window will be closed immediately on a window-close command
-// TODO: Move this to the window register function?
 ipcRenderer.on('shortcut', (event, shortcut) => {
   if (shortcut === 'close-window') {
     ipcRenderer.send('window-controls', { command: 'win-close' })

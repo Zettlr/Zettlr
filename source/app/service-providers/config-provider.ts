@@ -2,16 +2,13 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        ZettlrConfig class
- * CVM-Role:        Model
+ * Contains:        ConfigProvider
+ * CVM-Role:        Service Provider
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     This class fulfills two basic tasks: (1) Manage the app's
- *                  configuration, stored in the config.json inside the user
- *                  data directory. (2) Check the environment whether or not
- *                  specific conditions exist (such as the pandoc or xelatex
- *                  binaries)
+ * Description:     This class provides getters and setters for the configuration
+ *                  of the whole application.
  *
  * END HEADER
  */
@@ -24,10 +21,10 @@ import { app, ipcMain } from 'electron'
 import ignoreFile from '../../common/util/ignore-file'
 import safeAssign from '../../common/util/safe-assign'
 import isDir from '../../common/util/is-dir'
-import isDictAvailable from '../../common/util/is-dict-available'
 import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
 import RULES from '../../common/validation.json'
 import getConfigTemplate from './assets/get-config-template'
+import enumDictFiles from '../../common/util/enum-dict-files'
 
 const ZETTLR_VERSION = app.getVersion()
 
@@ -156,12 +153,6 @@ export default class ConfigProvider extends EventEmitter {
       removePath: (p: string) => {
         return this.removePath(p)
       },
-      addFile: (f: string) => {
-        return this.addFile(f)
-      },
-      removeFile: (f: string) => {
-        return this.removeFile(f)
-      },
       /**
        * If true, Zettlr assumes this is the first start of the app
        */
@@ -176,7 +167,7 @@ export default class ConfigProvider extends EventEmitter {
       }
     } // END globals for the configuration
 
-    // Listen for renderer events TODO: Migrate to the handler
+    // Listen for renderer events. These must be synchronous.
     ipcMain.on('config-provider', (event, message) => {
       const { command, payload } = message
 
@@ -279,12 +270,7 @@ export default class ConfigProvider extends EventEmitter {
     */
   runMigrations (): this {
     const replacements = this.config.editor.autoCorrect.replacements as any
-    if (replacements == null) {
-      // Nothing to do
-      return this
-    }
-
-    if (isIterable(replacements)) {
+    if (isIterable(replacements) && replacements != null) {
       // In 1.8.7 the replacements were provided as key-val pairs, but we've since
       // moved to key-value since it's more verbose. So we need to make sure these
       // conform to the new rules.
@@ -295,7 +281,7 @@ export default class ConfigProvider extends EventEmitter {
           delete entry.val
         }
       }
-    } else {
+    } else if (replacements != null) {
       // Previous versions stored the replacements as objects of the form
       // { "-->": "→", ... }
       const newReplacements: Array<{ key: string, value: string }> = []
@@ -306,6 +292,10 @@ export default class ConfigProvider extends EventEmitter {
       }
       this.config.editor.autoCorrect.replacements = newReplacements
     }
+
+    // Next: We've completely abandoned the hashing system, so if we encounter a
+    // hash where the new engine expects a string, set it to default.
+    this.config.openFiles = this.config.openFiles.filter(e => typeof e === 'string')
 
     return this
   }
@@ -322,10 +312,12 @@ export default class ConfigProvider extends EventEmitter {
     // Now sort the paths.
     this._sortPaths()
 
+    const dicts = enumDictFiles().map(item => item.tag)
+
     // We have to run over the spellchecking dictionaries and see whether or
     // not they are still valid or if they have been deleted.
     for (let i = 0; i < this.config.selectedDicts.length; i++) {
-      if (!isDictAvailable(this.config.selectedDicts[i])) {
+      if (!dicts.includes(this.config.selectedDicts[i])) {
         this.config.selectedDicts.splice(i, 1)
         --i
       }
@@ -356,33 +348,6 @@ export default class ConfigProvider extends EventEmitter {
   removePath (p: string): boolean {
     if (this.config.openPaths.includes(p)) {
       this.config.openPaths.splice(this.config.openPaths.indexOf(p), 1)
-      return true
-    }
-    return false
-  }
-
-  /**
-   * Adds a file to the array of open files.
-   * @param {String} f The path of the file to add
-   */
-  addFile (f: string): boolean {
-    // Only add valid and unique files
-    if ((!ignoreFile(f) || isDir(f)) && !this.config.openFiles.includes(f)) {
-      this.config.openFiles.push(f)
-      return true
-    }
-
-    return false
-  }
-
-  /**
-    * Removes a file from the open files
-    * @param  {String} f The file to be removed
-    * @return {Boolean} Whether or not the call succeeded.
-    */
-  removeFile (f: string): boolean {
-    if (this.config.openFiles.includes(f)) {
-      this.config.openFiles.splice(this.config.openFiles.indexOf(f), 1)
       return true
     }
     return false

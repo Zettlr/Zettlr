@@ -15,19 +15,38 @@
  */
 
 import Vue from 'vue'
-import { ipcRenderer } from 'electron'
-import path from 'path'
 import Vuex, { Store, StoreOptions } from 'vuex'
-import isAttachment from '../common/util/is-attachment'
+// import isAttachment from '../common/util/is-attachment'
 import sanitizeHtml from 'sanitize-html'
 import md2html from '../common/util/md-to-html'
 import sort from '../main/modules/fsal/util/sort'
 import { MDFileMeta, CodeFileMeta, DirMeta } from '../main/modules/fsal/types'
 
+const path = (window as any).path
+const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
+
 interface FSALEvent {
   event: 'remove'|'add'|'change'
   path: string
   timestamp: number
+}
+
+// This interface is being produced by the MarkdownEditor module in source/common
+interface DocumentInfo {
+  words: number
+  chars: number
+  chars_wo_spaces: number
+  cursor: { ch: number, line: number }
+  selections: Array<{
+    selectionLength: number
+    start: { ch: number, line: number }
+    end: { ch: number, line: number }
+  }>
+}
+
+function isAttachment (p: string): boolean {
+  let ext = global.config.get('attachmentExtensions')
+  return ext.includes(path.extname(p).toLowerCase())
 }
 
 function findPathDescriptor (targetPath: string, tree: any, treatAsAttachment: boolean = false): any|null {
@@ -190,6 +209,10 @@ interface ZettlrState {
    */
   tagDatabase: any[]
   /**
+   * Contains a list of suggested tags for the current active file.
+   */
+  tagSuggestions: string[]
+  /**
    * Holds all configuration options. These need to be stored here separately
    * to make use of the reactivity of Vue. We'll basically be binding the config
    * listener to this store state. It's basically a dictionary for quick access.
@@ -198,7 +221,7 @@ interface ZettlrState {
   /**
    * Info about the currently active document
    */
-  activeDocumentInfo: any|null
+  activeDocumentInfo: DocumentInfo|null
   /**
    * Modified files are stored here (only the paths, though)
    */
@@ -226,6 +249,7 @@ const config: StoreOptions<ZettlrState> = {
     openFiles: [],
     colouredTags: [],
     tagDatabase: [],
+    tagSuggestions: [],
     config: {},
     activeDocumentInfo: null,
     modifiedDocuments: [],
@@ -286,11 +310,15 @@ const config: StoreOptions<ZettlrState> = {
           reconstructTree(descriptor)
         }
         state.fileTree.push(descriptor)
-        // @ts-expect-error TODO: The sorting function currently expects only FSAL descriptors, not metas
+        // @ts-expect-error sort() doesn't expect meta descriptors.
         state.fileTree = sort(state.fileTree) // Omit sorting to sort name-up
-      } else {
+      } else if (descriptor.parent != null) {
         const parentPath = descriptor.dir
         const parentDescriptor = findPathDescriptor(parentPath, state.fileTree)
+        if (parentDescriptor === null) {
+          console.warn(`Was about to add descriptor ${String(descriptor.path)} to the filetree, but the parent ${String(parentPath)} was null!`)
+          return
+        }
         if (parentDescriptor.children.find((elem: any) => elem.path === descriptor.path) !== undefined) {
           return // We already have this descriptor, nothing to do.
         } else if (parentDescriptor.attachments.find((elem: any) => elem.path === descriptor.path) !== undefined) {
@@ -298,10 +326,11 @@ const config: StoreOptions<ZettlrState> = {
         }
         descriptor.parent = parentDescriptor // Attach the child to its parent
         if (descriptor.type === 'directory') {
-          reconstructTree(descriptor) // Make sure the parent pointers work correctly
+          // Make sure the parent pointers work correctly even inside this subtree
+          reconstructTree(descriptor)
         }
 
-        if (isAttachment(descriptor.path, true)) {
+        if (isAttachment(descriptor.path)) {
           parentDescriptor.attachments.push(descriptor)
           parentDescriptor.attachments.sort((a: any, b: any) => {
             if (a.name > b.name) {
@@ -316,10 +345,13 @@ const config: StoreOptions<ZettlrState> = {
           parentDescriptor.children.push(descriptor)
           parentDescriptor.children = sort(parentDescriptor.children, parentDescriptor.sorting)
         }
+      } else {
+        // NOTE: This is just in case we accidentally introduce a race condition.
+        console.warn('[Store] Received event to add a descriptor to the filetree, but it was a root and already present:', descriptor)
       }
     },
     removeFromFiletree: function (state, pathToRemove) {
-      if (isAttachment(pathToRemove, true)) {
+      if (isAttachment(pathToRemove)) {
         const parent = findPathDescriptor(path.dirname(pathToRemove), state.fileTree)
         if (parent === null) {
           return // No descriptor found
@@ -383,55 +415,19 @@ const config: StoreOptions<ZettlrState> = {
       }
     },
     updateActiveFile: function (state, descriptor) {
-      if (descriptor === null) {
-        state.activeFile = null
-      } else if (descriptor.dir === ':memory:') {
-        const found = state.openFiles.find(file => file.path === descriptor.path)
-        if (found !== undefined) {
-          state.activeFile = found
-        }
-      } else {
-        const ownDescriptor = findPathDescriptor(descriptor.path, state.fileTree)
-
-        if (ownDescriptor !== null) {
-          state.activeFile = ownDescriptor
-        }
-      }
+      state.activeFile = descriptor
     },
     updateOpenFiles: function (state, openFiles) {
-      // First, we must make sure that the open files in memory are retained
-      const memoryFiles = state.openFiles.filter(file => file.dir === ':memory:')
-
-      // Then we can safely reset the open files in the state
-      state.openFiles = []
-
-      // TODO: I know we can create a more sophisticated algorithm that only
-      // updates those necessary
-      for (const file of openFiles) {
-        if (String(file.path).startsWith(':memory:')) {
-          // Fetch the descriptor from the old state
-          const found = memoryFiles.find(f => f.path === file)
-          if (found !== undefined) {
-            state.openFiles.push(found)
-          } else {
-            // In case the descriptor has not been found, add the new descriptor
-            // that has been delivered with the openFiles array
-            state.openFiles.push(file)
-          }
-        } else {
-          const descriptor = findPathDescriptor(file.path, state.fileTree)
-          if (descriptor !== null) {
-            state.openFiles.push(descriptor)
-          }
-        }
-      } // END for
-      console.log(state.openFiles)
+      Vue.set(state, 'openFiles', openFiles)
     },
     colouredTags: function (state, tags) {
       state.colouredTags = tags
     },
     updateTagDatabase: function (state, tags) {
       state.tagDatabase = tags
+    },
+    setTagSuggestions: function (state, suggestions) {
+      state.tagSuggestions = suggestions
     },
     updateCitationKeys: function (state, newKeys: string[]) {
       // Update the citations, removing possible duplicates
@@ -529,30 +525,31 @@ const config: StoreOptions<ZettlrState> = {
 
       // In case the user quickly switched, re-run this dispatcher
       context.dispatch('updateActiveFile').catch(e => console.error(e))
+      // Update the tag suggestions
+      context.dispatch('regenerateTagSuggestions').catch(e => console.error(e))
     },
     updateOpenFiles: async function (context) {
       const openFiles = await ipcRenderer.invoke('application', { command: 'get-open-files' })
-      const ourDifferentFiles = context.state.openFiles
+      context.commit('updateOpenFiles', openFiles)
+    },
+    regenerateTagSuggestions: async function (context) {
+      if (context.state.activeFile === null) {
+        return // Nothing to do
+      }
 
-      if (openFiles.length === ourDifferentFiles.length) {
-        let hasChanged = false
-        for (let i = 0; i < openFiles.length; i++) {
-          if (openFiles[i].path !== ourDifferentFiles[i].path) {
-            hasChanged = true
-            break
-          }
-        }
+      const descriptor = await ipcRenderer.invoke('application', {
+        command: 'get-file-contents',
+        payload: context.state.activeFile.path
+      })
 
-        if (!hasChanged) {
-          return // No need to update
+      const suggestions = []
+      for (const tag of Object.keys(context.state.tagDatabase)) {
+        if (String(descriptor.content).includes(tag) && descriptor.tags.includes(tag) === false) {
+          suggestions.push(tag)
         }
       }
 
-      context.commit('updateOpenFiles', openFiles)
-
-      // Again, in case the event hooks don't follow suit with quickly opening
-      // and closing, we need to re-fetch the files from main
-      context.dispatch('updateOpenFiles').catch(e => console.error(e))
+      context.commit('setTagSuggestions', suggestions)
     }
   }
 }

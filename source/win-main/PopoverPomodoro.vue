@@ -33,11 +33,18 @@
         v-bind:label="'Sound Effect'"
         v-bind:options="soundEffects"
       ></SelectControl>
+      <!--
+        NOTE: In below's component we are not using model, since we only want to
+        report a change after the user has released the mouse to avoid audio
+        glitches. However, Vue doesn't support the "v-model.lazy" modifier on
+        custom elements yet. See: https://github.com/vuejs/vue/issues/6914
+      -->
       <SliderControl
-        v-model="volume"
+        v-bind:value="volume"
         v-bind:label="'Volume'"
         v-bind:min="0"
         v-bind:max="100"
+        v-on:change="volume = $event"
       ></SliderControl>
       <hr>
       <button v-on:click="startPomodoro">
@@ -48,10 +55,24 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Pomodoro Popover
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file controls the pomodoro timer popover.
+ *
+ * END HEADER
+ */
+
 import NumberControl from '../common/vue/form/elements/Number'
 import SelectControl from '../common/vue/form/elements/Select'
 import SliderControl from '../common/vue/form/elements/Slider'
-import { trans } from '../common/i18n'
+import { trans } from '../common/i18n-renderer'
 
 export default {
   name: 'PopoverExport',

@@ -34,6 +34,13 @@ module.exports = {
   module: {
     rules
   },
+  // The following line of code serves two purposes: While we're in develop
+  // (NODE_ENV = develop), emit source maps so we have an easy time finding the
+  // origin of bugs or performance bottlenecks. But since source maps are a
+  // whopping 60MB large at the time of writing (July 2021), we disable these
+  // in production (i.e. when we ship to users). NOTE, however, that these env-
+  // variables must be set, which we're doing using cross-env in package.json.
+  devtool: (process.env.NODE_ENV === 'production') ? false : 'source-map',
   plugins: [
     // Enhanced typescript support (e.g. moves typescript type checking to separate process)
     new ForkTsCheckerWebpackPlugin(),
@@ -45,6 +52,11 @@ module.exports = {
     extensions: [
       '.js', '.ts', '.jsx', '.tsx',
       '.css', '.less', '.vue'
-    ]
+    ],
+    fallback: {
+      // Don't polyfill these modules
+      path: false,
+      fs: false
+    }
   }
 }

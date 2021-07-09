@@ -25,6 +25,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        TokenList
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Implements a token list (similar to, e.g., tag inputs in Wordpress).
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'TokenList',
   props: {
@@ -60,7 +74,7 @@ export default {
       if ([ 'Space', 'Enter', 'Comma', 'Tab' ].includes(event.code)) {
         const arr = this.value.map(token => token)
         // Don't add duplicates
-        if (!arr.includes(this.inputValue.trim())) {
+        if (arr.includes(this.inputValue.trim()) === false) {
           arr.push(this.inputValue.trim())
           this.$emit('input', arr)
         }

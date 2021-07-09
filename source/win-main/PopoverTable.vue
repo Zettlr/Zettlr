@@ -21,6 +21,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Table Popover
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     A popover which allows you to select a number of rows and
+ *                  columns to create a new table.
+ *
+ * END HEADER
+ */
 export default {
   name: 'PopoverTable',
   components: {

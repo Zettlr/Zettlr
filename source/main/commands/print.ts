@@ -29,7 +29,7 @@ export default class Print extends ZettlrCommand {
    * @return {Boolean} Whether the command ran successful
    */
   async run (evt: string, arg?: string): Promise<void> {
-    let filePath = this._app.getFileSystem().activeFile
+    let filePath = this._app.getDocumentManager().activeFile?.path
     if (arg !== undefined) {
       filePath = arg
     }
@@ -56,7 +56,9 @@ export default class Print extends ZettlrCommand {
     // Call the exporter.
     try {
       const output = await makeExport(opt)
-      // TODO: Check for errors!
+      if (output.code !== 0) {
+        throw new Error(`Export failed with code ${output.code}`)
+      }
       // Now we'll need to open the print window.
       this._app.showPrintWindow(output.targetFile)
     } catch (err) {

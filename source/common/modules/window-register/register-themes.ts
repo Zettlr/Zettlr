@@ -1,9 +1,24 @@
-import { ipcRenderer } from 'electron'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Theme registration routines
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file loads in the main CSS files into the renderer
+ *                  process and enables switching between themes.
+ *
+ * END HEADER
+ */
 
 // Import the main.less file which imports CSS for KaTeX, Clarity, Tippy.JS, and
 // the geometry for the application. This will be added to the HTML by Webpack
 // automatically
 import './assets/main.less'
+
+const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
 /**
  * Webpack provides the themes as JavaScript objects with two properties, use

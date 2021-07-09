@@ -39,13 +39,11 @@ export default function createPrintWindow (file: string, conf: WindowPosition): 
     y: conf.top,
     show: false,
     webPreferences: {
-      // Zettlr needs all the node features, so in preparation for Electron
-      // 5.0 we'll need to explicitly request it.
-      contextIsolation: false,
-      nodeIntegration: true,
+      contextIsolation: true,
       additionalArguments: [file],
       // We are loading an iFrame with a local resource, so we must disable webSecurity for this window
-      webSecurity: false
+      webSecurity: false,
+      preload: PRINT_PRELOAD_WEBPACK_ENTRY
     }
   }
 
@@ -56,11 +54,9 @@ export default function createPrintWindow (file: string, conf: WindowPosition): 
 
   // Load the index.html of the app.
   // The variable PRINT_WEBPACK_ENTRY is automatically resolved by electron forge / webpack
-  // @ts-expect-error
   window.loadURL(PRINT_WEBPACK_ENTRY)
     .catch(e => {
-      // @ts-expect-error
-      global.log.error(`Could not load URL ${PRINT_WEBPACK_ENTRY as string}: ${e.message as string}`, e)
+      global.log.error(`Could not load URL ${PRINT_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })
 
   // EVENT LISTENERS

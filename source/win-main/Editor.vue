@@ -3,9 +3,14 @@
     id="editor"
     ref="editor"
     v-bind:style="{ 'font-size': `${fontSize}px` }"
+    v-bind:class="{
+      'monospace': !isMarkdown,
+      'fullscreen': distractionFree
+    }"
     v-on:wheel="onEditorScroll($event)"
     v-on:mousedown="editorMousedown($event)"
     v-on:mouseup="editorMouseup($event)"
+    v-on:mousemove="editorMousemove($event)"
   >
     <div v-show="showSearch" id="editor-search">
       <div class="row">
@@ -13,20 +18,21 @@
           ref="search-input"
           v-model="query"
           type="text"
-          placeholder="Find"
+          v-bind:placeholder="findPlaceholder"
           v-bind:class="{'monospace': regexpSearch }"
           v-on:keypress.enter.exact="searchNext()"
           v-on:keypress.shift.enter.exact="searchPrevious()"
+          v-on:keydown.esc.exact="showSearch = false"
         >
         <button
-          title="Toggle regular expression search"
+          v-bind:title="regexLabel"
           v-bind:class="{ 'active': regexpSearch }"
           v-on:click="toggleQueryRegexp()"
         >
           <clr-icon shape="regexp"></clr-icon>
         </button>
         <button
-          title="Hide search"
+          v-bind:title="closeLabel"
           v-on:click="showSearch = false"
         >
           <clr-icon shape="times"></clr-icon>
@@ -36,20 +42,21 @@
         <input
           v-model="replaceString"
           type="text"
-          placeholder="Replace"
+          v-bind:placeholder="replacePlaceholder"
           v-bind:class="{'monospace': regexpSearch }"
           v-on:keypress.enter.exact="replaceNext()"
           v-on:keypress.shift.enter.exact="replacePrevious()"
           v-on:keypress.alt.enter.exact="replaceAll()"
+          v-on:keydown.esc.exact="showSearch = false"
         >
         <button
-          title="Replace this occurrence"
+          v-bind:title="replaceNextLabel"
           v-on:click="replaceNext()"
         >
           <clr-icon shape="two-way-arrows"></clr-icon>
         </button>
         <button
-          title="Replace all occurrences"
+          v-bind:title="replaceAllLabel"
           v-on:click="replaceAll()"
         >
           <clr-icon shape="step-forward-2"></clr-icon>
@@ -61,12 +68,31 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Editor
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This displays the main editor for the app. It uses the
+ *                  MarkdownEditor class to implement the full CodeMirror editor.
+ *
+ * END HEADER
+ */
+
 import countWords from '../common/util/count-words'
 import MarkdownEditor from '../common/modules/markdown-editor'
 import CodeMirror from 'codemirror'
 import { util as citrUtil, parseSingle } from '@zettlr/citr'
 import objectToArray from '../common/util/object-to-array'
+import { trans } from '../common/i18n-renderer'
+import extractYamlFrontmatter from '../common/util/extract-yaml-frontmatter'
+import YAML from 'yaml'
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'Editor',
@@ -74,6 +100,10 @@ export default {
   },
   props: {
     readabilityMode: {
+      type: Boolean,
+      default: false
+    },
+    distractionFree: {
       type: Boolean,
       default: false
     }
@@ -90,18 +120,47 @@ export default {
       replaceString: '', // Models the replace string
       findTimeout: undefined, // Holds a timeout so that not every single keypress results in a searchNext
       // END: Search options
-      activeDocument: null // Almost like activeFile, only with additional info
+      activeDocument: null, // Almost like activeFile, only with additional info
+      anchor: undefined
     }
   },
   computed: {
+    findPlaceholder: function () {
+      return trans('dialog.find.find_placeholder')
+    },
+    replacePlaceholder: function () {
+      return trans('dialog.find.replace_placeholder')
+    },
+    replaceNextLabel: function () {
+      return trans('dialog.find.replace_next_label')
+    },
+    replaceAllLabel: function () {
+      return trans('dialog.find.replace_all_label')
+    },
+    closeLabel: function () {
+      return trans('dialog.find.close_label')
+    },
+    regexLabel: function () {
+      return trans('dialog.find.regex_label')
+    },
     activeFile: function () {
       return this.$store.state.activeFile
+    },
+    isMarkdown: function () {
+      if (this.activeFile === null) {
+        return true // By default, assume Markdown
+      }
+
+      return this.resolveMode(this.activeFile.ext) === 'multiplex'
     },
     openFiles: function () {
       return this.$store.state.openFiles
     },
     fontSize: function () {
       return this.$store.state.config['editor.fontSize']
+    },
+    shouldCountChars: function () {
+      return this.$store.state.config['editor.countChars']
     },
     editorConfiguration: function () {
       // We update everything, because not so many values are actually updated
@@ -111,6 +170,7 @@ export default {
       const doubleQuotes = this.$store.state.config['editor.autoCorrect.magicQuotes.primary'].split('…')
       const singleQuotes = this.$store.state.config['editor.autoCorrect.magicQuotes.secondary'].split('…')
       return {
+        keyMap: this.$store.state.config['editor.inputMode'],
         autoCorrect: {
           style: this.$store.state.config['editor.autoCorrect.style'],
           quotes: {
@@ -130,6 +190,8 @@ export default {
           imagePreviewHeight: this.$store.state.config['display.imageHeight'],
           markdownBoldFormatting: this.$store.state.config['editor.boldFormatting'],
           markdownItalicFormatting: this.$store.state.config['editor.italicFormatting'],
+          muteLines: this.$store.state.config['muteLines'],
+          scrollZoom: this.$store.state.config['editor.scrollZoom'],
           zettelkasten: {
             idRE: this.$store.state.config['zkn.idRE'],
             idGen: this.$store.state.config['zkn.idGen'],
@@ -163,8 +225,6 @@ export default {
       const tree = this.$store.state.fileTree
       const files = []
 
-      console.time('File allocation')
-
       for (const item of tree) {
         if (item.type === 'directory') {
           const contents = objectToArray(item, 'children').filter(descriptor => descriptor.type === 'file')
@@ -173,8 +233,6 @@ export default {
           files.push(item)
         }
       }
-
-      console.timeEnd('File allocation')
 
       return files
     }
@@ -214,6 +272,9 @@ export default {
     },
     readabilityMode: function () {
       this.editor.readabilityMode = this.readabilityMode
+    },
+    distractionFree: function () {
+      this.editor.distractionFree = this.distractionFree
     },
     editorConfiguration: function () {
       // Update the editor configuration, if anything changes.
@@ -284,13 +345,13 @@ export default {
         this.currentlyFetchingFiles.push(this.activeFile.path)
         ipcRenderer.invoke('application', { command: 'get-file-contents', payload: this.activeFile.path })
           .then((descriptorWithContent) => {
-            const mode = (this.activeFile.ext === '.tex') ? 'stex' : 'multiplex'
+            const mode = this.resolveMode(this.activeFile.ext)
             const newDoc = {
               path: descriptorWithContent.path,
               mode: mode, // Save the mode for later swaps
               cmDoc: CodeMirror.Doc(descriptorWithContent.content, mode),
               modified: false,
-              lastWordCount: countWords(descriptorWithContent.content, false) // TODO: re-enable countChars
+              lastWordCount: countWords(descriptorWithContent.content, this.shouldCountChars)
             }
 
             // Listen to change events on the doc, because if the user pastes
@@ -301,9 +362,9 @@ export default {
                 return
               }
 
-              const newTextWords = countWords(changeObj.text.join(' '), false) // TODO: re-enable countChars
+              const newTextWords = countWords(changeObj.text.join(' '), this.shouldCountChars)
               if (newTextWords > 10) {
-                newDoc.lastWordCount = countWords(newDoc.cmDoc.getValue(), false) // TODO: re-enable countChars
+                newDoc.lastWordCount = countWords(newDoc.cmDoc.getValue(), this.shouldCountChars)
               }
             })
             this.openDocuments.push(newDoc)
@@ -406,6 +467,10 @@ export default {
         payload: linkContents
       })
         .catch(err => console.error(err))
+
+      if (global.config.get('zkn.autoSearch') === true) {
+        this.$root.$emit('start-global-search', linkContents)
+      }
     })
     this.editor.on('zettelkasten-tag', (tag) => {
       this.$root.$emit('start-global-search', tag)
@@ -475,14 +540,34 @@ export default {
         this.editor.jtl(lineNumber)
       }
     },
+    /**
+     * Resolves a file extension to a valid CodeMirror mode
+     *
+     * @param   {string}  ext  The file extension (with leading dot!)
+     *
+     * @return  {string}       The corresponding CodeMirror mode. Defaults to multiplex
+     */
+    resolveMode (ext) {
+      switch (ext) {
+        case '.tex':
+          return 'stex'
+        case '.yaml':
+        case '.yml':
+          return 'yaml'
+        case '.json':
+          return 'javascript'
+        default:
+          return 'multiplex'
+      }
+    },
     save () {
       // Go through all open files, and, if they are modified, save them
-      if (this.activeDocument.cmDoc.isClean()) {
+      if (this.activeDocument.cmDoc.isClean() === true) {
         return // Nothing to save
       }
 
       const newContents = this.activeDocument.cmDoc.getValue()
-      const currentWordCount = countWords(newContents, false) // TODO: Re-enable char count
+      const currentWordCount = countWords(newContents, this.shouldCountChars)
       const descriptor = {
         path: this.activeDocument.path,
         newContents: this.activeDocument.cmDoc.getValue(),
@@ -503,6 +588,7 @@ export default {
 
           // Everything worked out, so clean up
           this.activeDocument.cmDoc.markClean()
+          this.$store.dispatch('regenerateTagSuggestions').catch(e => console.error(e))
           this.$store.commit('announceModifiedFile', {
             filePath: this.activeDocument.path,
             isClean: this.activeDocument.cmDoc.isClean()
@@ -519,10 +605,15 @@ export default {
       const citations = citrUtil.extractCitations(value)
       const keys = []
       for (const citation of citations) {
-        const cslArray = parseSingle(citation)
-
-        for (const csl of cslArray) {
-          keys.push(csl.id)
+        try {
+          const cslArray = parseSingle(citation)
+          for (const csl of cslArray) {
+            keys.push(csl.id)
+          }
+        } catch (err) {
+          // If an invalid citation was passed, make sure to include the rest
+          // either way. But log the error just in case.
+          console.error(err)
         }
       }
       this.$store.commit('updateCitationKeys', keys)
@@ -590,11 +681,25 @@ export default {
      * @param   {MouseEvent}  event  The mouse event
      */
     editorMousedown (event) {
-      if (event.target !== this.$refs.editor) {
-        // return // Only handle if the event's target is the editor itself
+      // start selecting lines only if we are on the left margin and the left mouse button is pressed
+      if (event.target !== this.$refs.editor || event.button !== 0) {
+        return
       }
 
-      // TODO: Enable selection of full lines on the editor instance
+      // set the start point of the selection to be where the mouse was clicked
+      this.anchor = this.editor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY })
+      this.editor.codeMirror.setSelection(this.anchor)
+    },
+
+    editorMousemove (event) {
+      if (this.anchor === undefined) {
+        return
+      }
+      // get the point where the mouse has moved
+      const addPoint = this.editor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY })
+      // use the original start point where the mouse first was clicked
+      // and change the end point to where the mouse has moved so far
+      this.editor.codeMirror.setSelection(this.anchor, addPoint)
     },
     /**
      * Triggers when the user releases any mouse button
@@ -602,11 +707,39 @@ export default {
      * @param   {MouseEvent}  event  The mouse event
      */
     editorMouseup (event) {
-      if (event.target !== this.$refs.editor) {
-        // return // Only handle if the event's target is the editor itself
+      // we have commented this if condition because when the user presses the mouse from the
+      // left margin and goes inside this.$refs.editor and releases, the event of mouse release
+      // is not handled
+
+      // when the mouse is released, set anchor to undefined to stop adding lines
+      this.anchor = undefined
+      // Also, make sure the editor is focused.
+      this.editor.codeMirror.focus()
+    },
+    addKeywordsToFile (keywords) {
+      // Split the contents of the editor into frontmatter and contents, then
+      // add the keywords to the frontmatter, slice everything back together
+      // and then overwrite the editor's contents.
+      let { frontmatter, content } = extractYamlFrontmatter(this.editor.value) // NOTE: We can keep the linefeed to \n since CodeMirror is set to ALWAYS use \n
+
+      let postFrontmatter = '\n'
+      if (frontmatter !== null) {
+        if ('keywords' in frontmatter) {
+          frontmatter.keywords = frontmatter.keywords.concat(keywords)
+        } else if ('tags' in frontmatter) {
+          frontmatter.tags = frontmatter.tags.concat(keywords)
+        } else {
+          frontmatter.keywords = keywords
+        }
+      } else {
+        // Frontmatter was null, so create one
+        frontmatter = {}
+        frontmatter.keywords = keywords
+        postFrontmatter += '\n' // Make sure if we're now ADDING a frontmatter to space it from the content
       }
 
-      // TODO: Stop the selection of full lines on the editor instance
+      // Glue it back together and set it as content
+      this.activeDocument.cmDoc.setValue('---\n' + YAML.stringify(frontmatter) + '---' + postFrontmatter + content)
     }
   }
 }
@@ -618,10 +751,10 @@ export default {
 // Editor margins left and right for all breakpoints in both fullscreen and
 // normal mode.
 @editor-margin-fullscreen-sm:   50px;
-@editor-margin-fullscreen-md:  100px;
-@editor-margin-fullscreen-lg:  150px;
-@editor-margin-fullscreen-xl:  200px;
-@editor-margin-fullscreen-xxl: 350px;
+@editor-margin-fullscreen-md:  5vw;
+@editor-margin-fullscreen-lg:  10vw;
+@editor-margin-fullscreen-xl:  20vw;
+@editor-margin-fullscreen-xxl: 30vw;
 
 @editor-margin-normal-sm:  20px;
 @editor-margin-normal-md:  50px;
@@ -666,13 +799,52 @@ export default {
     // up 100 % all for itself anymore.
     margin-left: 0.5em;
     height: 100%;
-    cursor: text;
     font-family: inherit;
-    background: none;
+    // background: none;
 
     @media(min-width: 1025px) { margin-left: @editor-margin-normal-lg; }
     @media(max-width: 1024px) { margin-left: @editor-margin-normal-md; }
     @media(max-width:  900px) { margin-left: @editor-margin-normal-sm; }
+  }
+
+  // If a code file is loaded, we need to display the editor contents in monospace.
+  &.monospace .CodeMirror {
+    font-family: monospace;
+
+    // We're using this solarized theme here: https://ethanschoonover.com/solarized/
+    // See also the CodeEditor.vue component, which uses the same colours
+    @base03:    #002b36;
+    @base02:    #073642;
+    @base01:    #586e75;
+    @base00:    #657b83;
+    @base0:     #839496;
+    @base1:     #93a1a1;
+    @base2:     #eee8d5;
+    @base3:     #fdf6e3;
+    @yellow:    #b58900;
+    @orange:    #cb4b16;
+    @red:       #dc322f;
+    @magenta:   #d33682;
+    @violet:    #6c71c4;
+    @blue:      #268bd2;
+    @cyan:      #2aa198;
+    @green:     #859900;
+
+    color: @base01;
+    .cm-string     { color: @green; }
+    .cm-string-2   { color: @green; }
+    .cm-keyword    { color: @green; }
+    .cm-atom       { color: @green; }
+    .cm-tag        { color: @blue; }
+    .cm-qualifier  { color: @blue; }
+    .cm-builtin    { color: @blue; }
+    .cm-variable-2 { color: @yellow; }
+    .cm-variable   { color: @yellow; }
+    .cm-comment    { color: @base1; }
+    .cm-attribute  { color: @orange; }
+    .cm-property   { color: @magenta; }
+    .cm-type       { color: @red; }
+    .cm-number     { color: @violet; }
   }
 
   .CodeMirror-code {
@@ -697,6 +869,10 @@ export default {
     padding-bottom: 0px;
   }
 
+  .CodeMirror.CodeMirror-readonly {
+    .CodeMirror-cursor { display: none !important; }
+  }
+
   // Reduce font size of math a bit
   .katex { font-size: 1.1em; }
 }
@@ -707,7 +883,9 @@ body.dark #editor {
 
 body.darwin #editor {
   // On macOS the tabbar is 30px high.
-  height: calc(100% - 30px);
+  &:not(.fullscreen) {
+    height: calc(100% - 30px);
+  }
 
   div#editor-search {
     background-color: rgba(230, 230, 230, 1);
@@ -733,7 +911,9 @@ body.darwin.dark #editor {
 
 body.win32 #editor {
   // On Windows, the tab bar is 30px high
-  height: calc(100% - 30px);
+  &:not(.fullscreen) {
+    height: calc(100% - 30px);
+  }
 
   div#editor-search {
     background-color: rgba(230, 230, 230, 1);
@@ -748,15 +928,7 @@ body.win32 #editor {
 }
 
 // CodeMirror fullscreen
-.CodeMirror-fullscreen {
-  position: fixed !important; // Have to override another relative
-  margin-top: 0px !important; // Normally 25px for tab bar, but not in distraction free
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: auto;
-  z-index: 500;
-
+#editor.fullscreen .CodeMirror {
   @media(min-width: 1301px) { margin-left: @editor-margin-fullscreen-xxl !important; }
   @media(max-width: 1300px) { margin-left: @editor-margin-fullscreen-xl  !important; }
   @media(max-width: 1100px) { margin-left: @editor-margin-fullscreen-lg  !important; }

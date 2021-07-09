@@ -18,13 +18,14 @@ import hash from '../../../common/util/hash'
 import searchFile from './util/search-file'
 import countWords from '../../../common/util/count-words'
 import extractYamlFrontmatter from '../../../common/util/extract-yaml-frontmatter'
-import { getIDRE } from '../../../common/regular-expressions'
+import { getIDRE, getCodeBlockRE, getZknTagRE } from '../../../common/regular-expressions'
 import { shell } from 'electron'
 import safeAssign from '../../../common/util/safe-assign'
 // Import the interfaces that we need
 import { DirDescriptor, MDFileDescriptor, MDFileMeta } from './types'
 import FSALCache from './fsal-cache'
 import extractBOM from './util/extract-bom'
+import shouldMatchTag from '../../../common/util/should-match-tag'
 
 // Here are all supported variables for Pandoc:
 // https://pandoc.org/MANUAL.html#variables
@@ -38,6 +39,12 @@ const FRONTMATTER_VARS = [
   'tags',
   'lang',
   'bibliography'
+]
+
+// Enum of all YAML frontmatter properties that can contain tags
+const KEYWORD_PROPERTIES = [
+  'keywords',
+  'tags'
 ]
 
 /**
@@ -97,19 +104,24 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
   // or a space.
   // Positive lookbehind: Assert either a space, a newline or the start of the
   // string.
-  let tagRE = /(?<= |\n|^)#(#?[^\s,.:;…!?"'`»«“”‘’—–@$%&*^+~÷\\/|<=>[\](){}]+#?)/g
+  const tagRE = getZknTagRE(true)
   let match
   // Get the word and character count
   file.wordCount = countWords(content)
   file.charCount = countWords(content, true)
 
-  file.firstHeading = null
-  let h1Match = /^#{1}\s(.+)$/m.exec(content)
-  if (h1Match !== null) file.firstHeading = h1Match[1]
+  // Determine linefeed to preserve on saving so that version control
+  // systems don't complain.
+  file.linefeed = '\n'
+  if (content.includes('\r\n')) file.linefeed = '\r\n'
+  if (content.includes('\n\r')) file.linefeed = '\n\r'
 
   // Extract a potential YAML frontmatter
   file.frontmatter = null // Reset first
-  let frontmatter = extractYamlFrontmatter(content)
+  const extracted = extractYamlFrontmatter(content, file.linefeed)
+  const frontmatter = extracted.frontmatter
+  content = extracted.content
+
   if (frontmatter !== null) {
     if (file.frontmatter === null) {
       file.frontmatter = {}
@@ -123,49 +135,61 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
 
   // Create a copy of the text contents without any code blocks and inline
   // code for the tag and ID extraction methods.
-  let mdWithoutCode = content.replace(/^`{3,}.+`{3,}$|`[^`]+`|~{3,}[^~]+~{3,}/gms, '')
+  const codeBlockRE = getCodeBlockRE(true)
+  let mdWithoutCode = content.replace(codeBlockRE, '')
+  mdWithoutCode = mdWithoutCode.replace(/`[^`]+`/g, '')
+  /**
+   * plainMd contains only the Markdown part, no code and no YAML blocks.
+   */
+  const plainMd = mdWithoutCode.replace(/-{3}(?:.+)[-.]{3}/gms, '') // global, multiline + dotall
 
-  // Determine linefeed to preserve on saving so that version control
-  // systems don't complain.
-  file.linefeed = '\n'
-  if (content.includes('\r\n')) file.linefeed = '\r\n'
-  if (content.includes('\n\r')) file.linefeed = '\n\r'
-
-  // Makes footnotes unique by prefixing them with this file's hash (which is unique)
-  // Pandoc will make sure the footnotes are numbered correctly.
-  // TODO
-  // if (options.hasOwnProperty('uniqueFootnotes') && options.uniqueFootnotes === true) {
-  //   cnt = cnt.replace(/\[\^([\w]+?)\]/gm, (match, p1, offset, string) => `[^${String(this.hash)}${p1}]`)
-  // }
+  // At this point we can extract the first heading since the code (with
+  // potential comments that could be interpreted as "headings") is gone.
+  file.firstHeading = null
+  const h1Match = /^#{1}\s(.+)$/m.exec(plainMd)
+  if (h1Match !== null) {
+    file.firstHeading = h1Match[1]
+  }
 
   // Now read all tags
   file.tags = [] // Reset tags
   while ((match = tagRE.exec(mdWithoutCode)) != null) {
-    let tag = match[1]
-    tag = tag.replace(/#/g, '') // Prevent headings levels 2-6 from showing up in the tag list
-    if (tag.length > 0) file.tags.push(match[1].toLowerCase())
-  }
-
-  // Merge possible keywords from the frontmatter
-  if (file.frontmatter?.keywords != null) {
-    // The user can just write "keywords: something", in which case it won't be
-    // an array, but a simple string (or even a number <.<). I am beginning to
-    // understand why programmers despise the YAML-format.
-    if (!Array.isArray(file.frontmatter.keywords)) {
-      const keys = file.frontmatter.keywords.split(',')
-      if (keys.length > 1) {
-        // The user decided to split the tags by comma
-        file.frontmatter.keywords = keys.map((tag: string) => tag.trim())
-      } else {
-        file.frontmatter.keywords = [file.frontmatter.keywords]
-      }
+    if (!shouldMatchTag(match[0])) {
+      continue
     }
 
-    // If the user decides to use just numbers for the keywords (e.g. #1997),
-    // the YAML parser will obviously cast those to numbers, but we don't want
-    // this, so forcefully cast everything to string (see issue #1433).
-    const sanitizedKeywords = file.frontmatter.keywords.map((tag: any) => String(tag).toString())
-    file.tags = file.tags.concat(sanitizedKeywords)
+    let tag = match[1]
+
+    tag = tag.replace(/#/g, '') // Prevent headings levels 2-6 from showing up in the tag list
+
+    if (tag.length > 0) {
+      file.tags.push(match[1].toLowerCase())
+    }
+  }
+
+  // Merge possible keywords from the frontmatter, e.g. from the "keywords" or
+  // the "tags" property.
+  for (const prop of KEYWORD_PROPERTIES) {
+    if (file.frontmatter?.[prop] != null) {
+      // The user can just write "keywords: something", in which case it won't be
+      // an array, but a simple string (or even a number <.<). I am beginning to
+      // understand why programmers despise the YAML-format.
+      if (!Array.isArray(file.frontmatter[prop])) {
+        const keys = file.frontmatter[prop].split(',')
+        if (keys.length > 1) {
+          // The user decided to split the tags by comma
+          file.frontmatter[prop] = keys.map((tag: string) => tag.trim())
+        } else {
+          file.frontmatter[prop] = [file.frontmatter[prop]]
+        }
+      }
+
+      // If the user decides to use just numbers for the keywords (e.g. #1997),
+      // the YAML parser will obviously cast those to numbers, but we don't want
+      // this, so forcefully cast everything to string (see issue #1433).
+      const sanitizedKeywords = file.frontmatter[prop].map((tag: any) => String(tag).toString())
+      file.tags = file.tags.concat(sanitizedKeywords)
+    }
   }
 
   // Now the same for the tags-property.
@@ -250,7 +274,7 @@ export function metadata (fileObject: MDFileDescriptor): MDFileMeta {
  *
  * @return  {Promise<MDFileDescriptor>}            Resolves with a file descriptor
  */
-export async function parse (filePath: string, cache: FSALCache, parent: DirDescriptor|null = null): Promise<MDFileDescriptor> {
+export async function parse (filePath: string, cache: FSALCache|null, parent: DirDescriptor|null = null): Promise<MDFileDescriptor> {
   // First of all, prepare the file descriptor
   let file: MDFileDescriptor = {
     parent: null, // We have to set this AFTERWARDS, as safeAssign() will traverse down this parent property, thereby introducing a circular structure
@@ -284,13 +308,14 @@ export async function parse (filePath: string, cache: FSALCache, parent: DirDesc
     file.size = stat.size
   } catch (e) {
     global.log.error('Error reading file ' + filePath, e)
-    throw e // Rethrow
+    // Re-throw a nicer and more meaningful message
+    throw new Error(`Could not read file ${filePath}: ${String(e.message)}`)
   }
 
   // Before reading in the full file and parsing it,
   // let's check if the file has been changed
   let hasCache = false
-  if (cache.has(file.hash.toString())) {
+  if (cache?.has(file.hash.toString()) === true) {
     let cachedFile = cache.get(file.hash.toString())
     // If the modtime is still the same, we can apply the cache
     if (cachedFile.modtime === file.modtime) {
@@ -306,7 +331,9 @@ export async function parse (filePath: string, cache: FSALCache, parent: DirDesc
     // Read in the file, parse the contents and make sure to cache the file
     let content = await fs.readFile(filePath, { encoding: 'utf8' })
     parseFileContents(file, content)
-    cacheFile(file, cache)
+    if (cache !== null) {
+      cacheFile(file, cache)
+    }
   }
 
   // Get the target, if applicable
@@ -377,7 +404,7 @@ export async function hasChangedOnDisk (fileObject: MDFileDescriptor): Promise<b
  *
  * @return  {Promise<void>}                 Resolves upon save.
  */
-export async function save (fileObject: MDFileDescriptor, content: string, cache: FSALCache): Promise<void> {
+export async function save (fileObject: MDFileDescriptor, content: string, cache: FSALCache|null): Promise<void> {
   // Make sure to retain the BOM if applicable
   await fs.writeFile(fileObject.path, fileObject.bom + content)
   // Afterwards, retrieve the now current modtime
@@ -387,7 +414,9 @@ export async function save (fileObject: MDFileDescriptor, content: string, cache
   parseFileContents(fileObject, content)
   global.tags.report(fileObject.tags, fileObject.path)
   fileObject.modified = false // Always reset the modification flag.
-  cacheFile(fileObject, cache)
+  if (cache !== null) {
+    cacheFile(fileObject, cache)
+  }
 }
 
 /**
@@ -399,7 +428,7 @@ export async function save (fileObject: MDFileDescriptor, content: string, cache
  *
  * @return  {Promise<void>}                 Resolves upon success
  */
-export async function rename (fileObject: MDFileDescriptor, cache: FSALCache, newName: string): Promise<void> {
+export async function rename (fileObject: MDFileDescriptor, cache: FSALCache|null, newName: string): Promise<void> {
   let oldPath = fileObject.path
   let newPath = path.join(fileObject.dir, newName)
   await fs.rename(oldPath, newPath)
@@ -409,7 +438,9 @@ export async function rename (fileObject: MDFileDescriptor, cache: FSALCache, ne
   fileObject.name = newName
   // Afterwards, retrieve the now current modtime
   await updateFileMetadata(fileObject)
-  cacheFile(fileObject, cache)
+  if (cache !== null) {
+    cacheFile(fileObject, cache)
+  }
 }
 
 /**
@@ -455,7 +486,7 @@ export function markClean (fileObject: MDFileDescriptor): void {
   fileObject.modified = false
 }
 
-export async function reparseChangedFile (fileObject: MDFileDescriptor, cache: FSALCache): Promise<void> {
+export async function reparseChangedFile (fileObject: MDFileDescriptor, cache: FSALCache|null): Promise<void> {
   // Literally the same as the save() function only without prior writing of contents
   const contents = await load(fileObject)
   await updateFileMetadata(fileObject)
@@ -464,5 +495,7 @@ export async function reparseChangedFile (fileObject: MDFileDescriptor, cache: F
   parseFileContents(fileObject, contents)
   global.tags.report(fileObject.tags, fileObject.path)
   fileObject.modified = false // Always reset the modification flag.
-  cacheFile(fileObject, cache)
+  if (cache !== null) {
+    cacheFile(fileObject, cache)
+  }
 }

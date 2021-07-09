@@ -17,7 +17,7 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { trans } from '../../common/i18n'
+import { trans } from '../../common/i18n-main'
 import got from 'got'
 import { shell } from 'electron'
 import pdfSorter from '../../common/util/sort-by-pdf'

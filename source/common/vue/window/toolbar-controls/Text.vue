@@ -6,6 +6,7 @@
     v-bind:style="{
       textAlign: control.align
     }"
+    v-on:click="$emit('click')"
   >
     <strong v-if="control.style === 'strong'" v-html="control.content"></strong>
     <em v-else-if="control.style === 'emphasis'" v-html="control.content"></em>
@@ -14,6 +15,21 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Text
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Not to be confused with the form Text component. This one
+ *                  here displays text read-only.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'TextControl',
   props: {

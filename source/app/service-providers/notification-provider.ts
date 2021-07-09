@@ -2,8 +2,8 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        Notification provider
- * CVM-Role:        Controller
+ * Contains:        NotificationProvider
+ * CVM-Role:        Service Provider
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *

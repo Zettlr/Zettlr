@@ -8,8 +8,7 @@ daysUntilClose: 7
 
 # Bugs are never to consider stale.
 exemptLabels:
-  - "bug [critical]"
-  - "bug [non-critical]"
+  - "bug"
   - "pinned" # Easy way out to prevent issues from being automatically closed
 
 # Label to use when marking an issue as stale

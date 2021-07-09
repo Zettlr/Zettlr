@@ -18,8 +18,24 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Error
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Entry component for the error modal window.
+ *
+ * END HEADER
+ */
+
 import WindowChrome from '../common/vue/window/Chrome.vue'
-import { ipcRenderer } from 'electron'
+import { trans } from '../common/i18n-renderer'
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'PasteImage',
@@ -50,7 +66,7 @@ export default {
       return [
         {
           type: 'button',
-          label: 'Ok', // TODO
+          label: trans('system.ok'),
           id: 'ok',
           icon: '',
           buttonClass: 'primary' // It's a primary button

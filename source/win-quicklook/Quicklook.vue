@@ -33,10 +33,25 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        QuickLook
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays a quicklook window
+ *
+ * END HEADER
+ */
+
 import Editor from './editor.vue'
 import WindowChrome from '../common/vue/window/Chrome.vue'
-import { trans } from '../common/i18n'
+import { trans } from '../common/i18n-renderer'
+
+const ipcRenderer = window.ipc
 
 export default {
   components: {
@@ -127,3 +142,10 @@ export default {
   }
 }
 </script>
+
+<style lang="less">
+.CodeMirror .CodeMirror-gutters {
+  border-right: none;
+  background-color: transparent;
+}
+</style>

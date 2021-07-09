@@ -18,6 +18,7 @@ import {
   MessageBoxOptions,
   MessageBoxReturnValue
 } from 'electron'
+import { trans } from '../../../../common/i18n-main'
 
 /**
  * Displays a prompt to ask the user if they want to save the files first
@@ -28,17 +29,16 @@ export default async function askSaveChanges (win: BrowserWindow|null): Promise<
   const boxOptions: MessageBoxOptions = {
     type: 'warning',
     buttons: [
-      'Close without saving changes',
-      'Save changes'
+      trans('system.save_changes_omit'),
+      trans('system.save_changes_save')
     ],
     defaultId: 1,
-    title: 'Zettlr',
-    message: 'There are unsaved changes. Do you want to save them before closing the window?'
+    title: trans('system.save_changes_title'),
+    message: trans('system.save_changes_message')
   }
 
-  // The showmessageBox-function returns a promise,
-  // nevertheless, we don't need a return.
-  if (win !== null) {
+  // DEBUG: Trying to resolve bug #1645, which seems to relate to modal status vs. promise awaits.
+  if (win !== null && [ 'darwin', 'win32' ].includes(process.platform)) {
     return await dialog.showMessageBox(win, boxOptions)
   } else {
     return await dialog.showMessageBox(boxOptions)

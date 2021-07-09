@@ -1,8 +1,26 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CodeMirror zoom hook
+ * CVM-Role:        CodeMirror plugin
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Enables the user to zoom the editor using the mouse wheel
+ *
+ * END HEADER
+ */
+
 module.exports = (cm, zoomHook) => {
   cm.getWrapperElement().addEventListener('wheel', (e) => {
+    if (cm.getOption('zettlr').scrollZoom !== true) {
+      return
+    }
+
     if (
-      (process.platform !== 'darwin' && e.ctrlKey) ||
-      (process.platform === 'darwin' && e.metaKey)
+      (process.platform !== 'darwin' && e.ctrlKey === true) ||
+      (process.platform === 'darwin' && e.metaKey === true)
     ) {
       // Did you know that pinching events get reported
       // as "wheel" events as well? Me neither.

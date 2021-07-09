@@ -1,3 +1,20 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        WindowRegistration module
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This module exports the windowRegister function which must
+ *                  be run by every renderer process before anything else. It
+ *                  will register certain globals, the necessary stylesheets and
+ *                  other important assets.
+ *
+ * END HEADER
+ */
+
 import registerGlobals from './register-globals'
 import registerThemes from './register-themes'
 import registerDefaultContextMenu from './register-default-context'

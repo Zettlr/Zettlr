@@ -1,4 +1,18 @@
 /**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CodeMirror heading classes hook
+ * CVM-Role:        CodeMirror plugin
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Adds heading line classes where appropriate.
+ *
+ * END HEADER
+ */
+
+/**
  * Hooks onto the cursorActivity event to apply heading classes
  *
  * @param   {CodeMirror}  cm  The instance
@@ -26,13 +40,15 @@ module.exports = (cm) => {
 function applyHeadingClasses (cm) {
   // We'll only render the viewport
   const viewport = cm.getViewport()
+  const discardClasses = []
+
   for (let i = viewport.from; i < viewport.to; i++) {
     const line = cm.getLine(i)
 
     const headerClass = retrieveHeaderClass(cm, i)
 
     // Only re-apply a header class if allowed.
-    if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') {
+    if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') {
       if (headerClass > 0) {
         removeHeaderClass(cm, i, headerClass)
       }
@@ -45,8 +61,10 @@ function applyHeadingClasses (cm) {
       maybeUpdateHeaderClass(cm, i, match[1].length)
       continue // Finished
     } else if (headerClass > 0) {
-      removeHeaderClass(cm, i, headerClass)
-      continue
+      // Mark this line for removal. Will be removed after we've checked for
+      // Setext headings, but the Setext detection will remove those lines from
+      // here which are valid Setext headings.
+      discardClasses.push([ i, headerClass ])
     }
 
     if (i === 0) {
@@ -55,10 +73,10 @@ function applyHeadingClasses (cm) {
 
     // Check for Setext headers. According to the CommonMark
     // spec: At most 3 preceeding spaces, no internal spaces
-    match = /^[ ]{0,3}[=]+[ ]*$|^[ ]{0,3}[-]+[ ]*$/.exec(line)
-    if (match) {
+    match = /^\s{0,3}[=-]+\s*$/.exec(line)
+    if (match !== null && i > 0) {
       // We got a match, so first determine its level
-      let level = (match[0].indexOf('=') > -1) ? 1 : 2
+      const level = (match[0].indexOf('=') > -1) ? 1 : 2
       // Now determine the span of the heading, because
       // the heading can span an arbitrary number (but
       // not contain a blank line, obviously)
@@ -70,12 +88,18 @@ function applyHeadingClasses (cm) {
           begin = i
           break
         }
-        // First empty line stops the heading. Also, check for
-        // lists, because strictly speaking, this might also
-        // return truthy for a Setext heading. Also, we need to
-        // check for code block endings (backticks)
+
+        // If anything within the heading can be interpreted as code, a block
+        // quote, an ATX heading or something else that is not a paragraph, the
+        // Setext rendering must be aborted.
         let beginningLine = cm.getLine(begin)
-        if (/^\s*$/.test(beginningLine) || /^\s*-\s+|^\s{0,3}`{3,}/.test(beginningLine)) {
+        if (/^\s*[-+>]\s+|^\s{0,3}[`=-]{3,}|^#+/.test(beginningLine)) {
+          begin = i
+          break
+        }
+
+        // First empty line stops the heading.
+        if (/^\s*$/.test(beginningLine)) {
           begin++
           break
         }
@@ -85,11 +109,25 @@ function applyHeadingClasses (cm) {
         continue // False alarm
       }
 
-      // Add the correct line classes to both lines
+      // Add the correct line classes to all lines that belong to this heading
       for (let line = begin; line <= i; line++) {
+        // At this point, we must remove all lines from the discard array that
+        // are part of this Setext heading and thus should not have any class
+        // removed
+        const found = discardClasses.find(elem => elem[0] === line)
+        if (found !== undefined) {
+          discardClasses.splice(discardClasses.indexOf(found), 1)
+        }
+
         maybeUpdateHeaderClass(cm, line, level)
       }
     }
+  } // END for
+
+  // Clean up by removing detected header classes from
+  // every line that is not a valid heading anymore.
+  for (const line of discardClasses) {
+    removeHeaderClass(cm, line[0], line[1])
   }
 }
 
@@ -121,6 +159,10 @@ function retrieveHeaderClass (cm, line) {
  * @param   {number}      classNumber  The class to remove
  */
 function removeHeaderClass (cm, line, classNumber) {
+  if (classNumber === 0) {
+    return
+  }
+
   cm.doc.removeLineClass(line, 'wrap', `size-header-${classNumber}`)
 }
 
@@ -132,11 +174,13 @@ function removeHeaderClass (cm, line, classNumber) {
  * @param   {number}      newClass  The new class 1-6 to be applied
  */
 function maybeUpdateHeaderClass (cm, line, newClass) {
+  if (line < 0 || line > cm.doc.lineCount()) {
+    return
+  }
+
   const headerClass = retrieveHeaderClass(cm, line)
   if (headerClass !== newClass) {
-    if (headerClass > 0) {
-      removeHeaderClass(cm, line, headerClass)
-    }
+    removeHeaderClass(cm, line, headerClass)
     cm.doc.addLineClass(line, 'wrap', `size-header-${newClass}`)
   }
 }

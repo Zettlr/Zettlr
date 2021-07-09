@@ -3,7 +3,10 @@
     id="toolbar"
     role="toolbar"
     v-bind:style="{ top: marginTop }"
-    v-on:dblclick="$emit('dblclick')"
+    v-bind:class="{
+      'has-rtl-traffic-lights': hasRTLTrafficLights
+    }"
+    v-on:dblclick="handleDoubleClick"
   >
     <template v-for="(item, idx) in controls">
       <ButtonControl
@@ -52,12 +55,27 @@
         v-if="item.type === 'text'"
         v-bind:key="idx"
         v-bind:control="item"
+        v-on:click="$emit('click', item.id)"
       ></TextControl>
     </template>
   </div>
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Toolbar
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays a window-wide toolbar.
+ *
+ * END HEADER
+ */
+
 import ButtonControl from './toolbar-controls/Button.vue'
 import RingControl from './toolbar-controls/RingProgressButton'
 import ToggleControl from './toolbar-controls/Toggle.vue'
@@ -65,6 +83,8 @@ import ThreeWayToggle from './toolbar-controls/ThreeWayToggle'
 import SearchControl from './toolbar-controls/Search.vue'
 import SpacerControl from './toolbar-controls/Spacer.vue'
 import TextControl from './toolbar-controls/Text.vue'
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'Toolbar',
@@ -91,7 +111,40 @@ export default {
       default: false
     }
   },
+  data: function () {
+    return {
+      hasRTLTrafficLights: false
+    }
+  },
   computed: {
+  },
+  mounted: function () {
+    // Make sure that (on macOS) we have the correct spacing of the toolbar.
+    ipcRenderer.on('window-controls', (event, message) => {
+      const { command, payload } = message
+      if (command === 'traffic-lights-rtl') {
+        this.hasRTLTrafficLights = payload
+      }
+    })
+
+    // Also send an initial request
+    ipcRenderer.send('window-controls', { command: 'get-traffic-lights-rtl' })
+  },
+  methods: {
+    /**
+     * Handles a double click and emits an event if the target was the toolbar
+     * or one of the spacers.
+     *
+     * @param   {MouseEvent}  event  The triggering mouse event
+     */
+    handleDoubleClick: function (event) {
+      // Only emit a double click event if the user double clicked on the
+      // _toolbar_ or on a spacer, and not just on any button.
+      const t = event.target
+      if (t === this.$el || (t !== null && t.className.includes('spacer') === true)) {
+        this.$emit('dblclick')
+      }
+    }
   }
 }
 </script>
@@ -135,7 +188,15 @@ body.darwin {
     height: @toolbar-height;
     font-size: @font-size;
     background-color: rgb(245, 245, 245);
-    padding-left: 80px; // Make space for the traffic lights
+
+    // Make space for the traffic lights, either on the left side or the right.
+    &:not(.has-rtl-traffic-lights) {
+      padding-left: 80px;
+    }
+    &.has-rtl-traffic-lights {
+      padding-right: 80px;
+    }
+
     color: rgb(100, 100, 100);
 
     button {
@@ -182,6 +243,54 @@ body.win32 {
       background-color: transparent;
       border: none;
       padding: 4px 8px;
+
+      &:hover {
+        background-color: rgb(230, 230, 230);
+      }
+    }
+  }
+
+  &.dark {
+    // Dark styling
+    div#toolbar {
+      background-color: rgb(51, 51, 51);
+      color: rgb(172, 172, 172);
+
+      button{
+        color: white;
+
+        &:hover {
+          background-color: rgb(60, 60, 60,);
+        }
+      }
+
+      &:window-inactive {
+        background-color: rgb(34, 34, 34);
+        color: rgb(100, 100, 100);
+      }
+    }
+  }
+}
+
+body.linux {
+  @toolbar-height: 40px;
+  @font-size: 14px;
+  @border-radius: 4px;
+
+  div#toolbar {
+    height: @toolbar-height;
+    font-size: @font-size;
+    background-color: rgb(245, 245, 245);
+    color: rgb(100, 100, 100);
+
+    button {
+      background-color: transparent;
+      border: 1px solid rgb(180, 180, 180);
+      padding: 4px 8px;
+      border-radius: @border-radius;
+      width: 45px;
+      height: 30px;
+      margin: 0 4px;
 
       &:hover {
         background-color: rgb(230, 230, 230);

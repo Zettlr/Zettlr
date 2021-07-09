@@ -1,15 +1,15 @@
 <template>
   <div>
-    <h4>Properties: {{ dirname }}</h4>
+    <h4>{{ dirname }}</h4>
     <div class="properties-info-container">
-      <div><span>Created: {{ creationTime }}</span></div>
+      <div><span>{{ createdLabel }}: {{ creationTime }}</span></div>
       <div>
-        <span>Files: {{ formattedFiles }}</span>
+        <span>{{ filesLabel }}: {{ formattedFiles }}</span>
       </div>
     </div>
     <div class="properties-info-container">
-      <div><span>Modified: {{ modificationTime }}</span></div>
-      <div><span>Folders: {{ formattedDirs }}</span></div>
+      <div><span>{{ modifiedLabel }}: {{ modificationTime }}</span></div>
+      <div><span>{{ foldersLabel }}: {{ formattedDirs }}</span></div>
     </div>
     <hr>
     <!-- Sorting options -->
@@ -35,10 +35,17 @@
       v-model="isProject"
       v-bind:label="'Enable Project'"
     ></SwitchControl>
-    <template v-if="isProject">
-      <!-- TODO: Insert some generic project properties -->
-    </template>
-    <hr>
+    <!--
+      ATTENTION !!! DO NOT, UNDER NO CIRCUMSTANCES change v-if into v-show !!!
+      The reason is that the ProjectProperties component uses some async magic
+      to retrieve the needed project settings (which are managed by the main
+      process) ONLY if the directory has for sure a project. On v-show that
+      magic would completely break if the user opens the popover with no project
+      active and then activates the project feature.
+    -->
+    <ProjectProperties v-if="isProject" id="project-lists" v-bind:full-path="fullPath">
+    </ProjectProperties>
+    <hr style="clear: both;">
     <!-- Directory icon -->
     <div class="icon-selector">
       <div
@@ -58,10 +65,26 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        DirProps Popover
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Contains a component to display and manage directory properties
+ *
+ * END HEADER
+ */
+
 import formatDate from '../../../common/util/format-date'
 import localiseNumber from '../../../common/util/localise-number'
 import SelectControl from '../../../common/vue/form/elements/Select'
 import SwitchControl from '../../../common/vue/form/elements/Switch'
+import ProjectProperties from './ProjectProperties'
+import { trans } from '../../../common/i18n-renderer'
 
 const ICONS = [
   { shape: null, title: 'Reset' },
@@ -140,11 +163,13 @@ export default {
   name: 'PopoverDirProps',
   components: {
     SelectControl,
-    SwitchControl
+    SwitchControl,
+    ProjectProperties
   },
   data: function () {
     return {
       dirname: '',
+      fullPath: '',
       creationtime: 0,
       modtime: 0,
       files: 0,
@@ -177,11 +202,23 @@ export default {
     formattedDirs: function () {
       return localiseNumber(this.dirs)
     },
+    foldersLabel: function () {
+      return trans('gui.dirs')
+    },
+    modifiedLabel: function () {
+      return trans('gui.modified')
+    },
+    createdLabel: function () {
+      return trans('gui.created')
+    },
+    filesLabel: function () {
+      return trans('gui.files')
+    },
     icons: function () {
       return ICONS
     }
   },
-  methods: {
+  created: function () {
   }
 }
 </script>

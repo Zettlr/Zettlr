@@ -21,6 +21,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Radio
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component contains a generic radio input.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'RadioControl',
   props: {
@@ -60,6 +74,10 @@ body {
       display: flex;
       align-items: center;
     }
+  }
+
+  .cb-group, .radio-group {
+    margin: 6px 0px;
   }
 
   label.radio {
@@ -105,18 +123,16 @@ body.darwin {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
-  .cb-group, .radio-group {
-    margin: 6px 0px;
-  }
-
   label.radio {
     width: @input-size;
     height: @input-size;
     padding: 0;
+    margin-right: 5px;
 
     .toggle {
       border: 1px solid rgb(179, 179, 179);
       border-radius: @input-size;
+      width: @input-size; // Prevent squashed inputs for long labels
       background-color: white;
 
       // Inner part
@@ -164,10 +180,6 @@ body.darwin {
 body.win32 {
   @input-size: 20px;
 
-  .cb-group, .radio-group {
-    margin: 6px 0px;
-  }
-
   label.radio {
     width: @input-size;
     height: @input-size;
@@ -184,6 +196,7 @@ body.win32 {
     .toggle {
       position: absolute;
       cursor: pointer;
+      width: @input-size; // Prevent too small radio buttons
       top: 0;
       left: 0;
       right: 0;
@@ -203,6 +216,64 @@ body.win32 {
         background-color: transparent;
         border-radius: @input-size;
         transition: .4s;
+      }
+    }
+  }
+}
+
+body.linux {
+  @input-size: 14px;
+
+  label {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  label.radio {
+    width: @input-size;
+    height: @input-size;
+    padding: 0;
+
+    .toggle {
+      border: 1px solid rgb(179, 179, 179);
+      border-radius: @input-size;
+      background-color: rgb(230, 230, 230);
+      background-image: linear-gradient(transparent, #00000020);
+
+      // Inner part
+      &:before {
+        height: 6px;
+        width: 6px;
+        left: 3px;
+        top: 3px;
+        background-color: transparent;
+      }
+    }
+
+    input:checked + .toggle:before {
+      background-color: rgb(80, 80, 80);
+    }
+  }
+
+  &.dark {
+    label.radio {
+
+      .toggle {
+        background: radial-gradient(circle at top, rgb(60, 60, 60), rgb(90, 90, 90));
+        border-color: transparent;
+
+        &:before {
+          background-color: transparent;
+        }
+      }
+
+      input:checked + .toggle {
+        background: none;
+        background-color: var(--system-accent-color, --c-primary);
+        border-color: transparent;
+
+        &:before {
+          background-color: rgb(228, 228, 228);
+        }
       }
     }
   }
