@@ -34,8 +34,8 @@ declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const ABOUT_PRELOAD_WEBPACK_ENTRY: string
 declare const ABOUT_WEBPACK_ENTRY: string
-declare const DEFAULTS_PRELOAD_WEBPACK_ENTRY: string
-declare const DEFAULTS_WEBPACK_ENTRY: string
+declare const ASSETS_PRELOAD_WEBPACK_ENTRY: string
+declare const ASSETS_WEBPACK_ENTRY: string
 declare const ERROR_PRELOAD_WEBPACK_ENTRY: string
 declare const ERROR_WEBPACK_ENTRY: string
 declare const LOG_VIEWER_PRELOAD_WEBPACK_ENTRY: string

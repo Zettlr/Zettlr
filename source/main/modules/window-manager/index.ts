@@ -36,7 +36,7 @@ import createQuicklookWindow from './create-ql-window'
 import createPreferencesWindow from './create-preferences-window'
 import createAboutWindow from './create-about-window'
 import createTagManagerWindow from './create-tag-manager-window'
-import createDefaultsWindow from './create-defaults-window'
+import createAssetsWindow from './create-assets-window'
 import createPasteImageModal from './create-paste-image-modal'
 import createErrorModal from './create-error-modal'
 import shouldOverwriteFileDialog from './dialog/should-overwrite-file'
@@ -64,7 +64,7 @@ export default class WindowManager extends EventEmitter {
   private _updateWindow: BrowserWindow|null
   private _logWindow: BrowserWindow|null
   private _statsWindow: BrowserWindow|null
-  private _defaultsWindow: BrowserWindow|null
+  private _assetsWindow: BrowserWindow|null
   private _preferences: BrowserWindow|null
   private _aboutWindow: BrowserWindow|null
   private _tagManager: BrowserWindow|null
@@ -92,7 +92,7 @@ export default class WindowManager extends EventEmitter {
     this._printWindowFile = undefined
     this._logWindow = null
     this._statsWindow = null
-    this._defaultsWindow = null
+    this._assetsWindow = null
     this._windowState = []
     this._configFile = path.join(app.getPath('userData'), 'window_state.json')
     this._fileLock = false
@@ -587,17 +587,17 @@ export default class WindowManager extends EventEmitter {
    * Displays the defaults window
    */
   showDefaultsWindow (): void {
-    if (this._defaultsWindow === null) {
+    if (this._assetsWindow === null) {
       const conf = this._retrieveWindowPosition('log', null)
-      this._defaultsWindow = createDefaultsWindow(conf)
-      this._hookWindowResize(this._defaultsWindow, conf)
+      this._assetsWindow = createAssetsWindow(conf)
+      this._hookWindowResize(this._assetsWindow, conf)
 
       // Dereference the window as soon as it is closed
-      this._defaultsWindow.on('closed', () => {
-        this._defaultsWindow = null
+      this._assetsWindow.on('closed', () => {
+        this._assetsWindow = null
       })
     } else {
-      this._makeVisible(this._defaultsWindow)
+      this._makeVisible(this._assetsWindow)
     }
   }
 

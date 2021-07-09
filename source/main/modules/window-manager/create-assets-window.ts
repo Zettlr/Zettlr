@@ -22,13 +22,13 @@ import setWindowChrome from './set-window-chrome'
 import { WindowPosition } from './types'
 
 /**
- * Creates a BrowserWindow with defaults window configuration and loads the
+ * Creates a BrowserWindow with assets window configuration and loads the
  * corresponding renderer.
  *
  * @param   {WindowPosition}  conf  The configuration to load
  * @return  {BrowserWindow}         The loaded log window
  */
-export default function createDefaultsWindow (conf: WindowPosition): BrowserWindow {
+export default function createAssetsWindow (conf: WindowPosition): BrowserWindow {
   const winConf: BrowserWindowConstructorOptions = {
     acceptFirstMouse: true,
     minWidth: 300,
@@ -40,7 +40,7 @@ export default function createDefaultsWindow (conf: WindowPosition): BrowserWind
     show: false,
     webPreferences: {
       contextIsolation: true,
-      preload: DEFAULTS_PRELOAD_WEBPACK_ENTRY
+      preload: ASSETS_PRELOAD_WEBPACK_ENTRY
     }
   }
 
@@ -50,10 +50,9 @@ export default function createDefaultsWindow (conf: WindowPosition): BrowserWind
   const window = new BrowserWindow(winConf)
 
   // Load the index.html of the app.
-  // The variable LOG_VIEWER_WEBPACK_ENTRY is automatically resolved by electron forge / webpack
-  window.loadURL(DEFAULTS_WEBPACK_ENTRY)
+  window.loadURL(ASSETS_WEBPACK_ENTRY)
     .catch(e => {
-      global.log.error(`Could not load URL ${DEFAULTS_WEBPACK_ENTRY}: ${e.message as string}`, e)
+      global.log.error(`Could not load URL ${ASSETS_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })
 
   // EVENT LISTENERS

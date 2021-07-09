@@ -237,9 +237,9 @@ module.exports = {
               }
             },
             {
-              html: './source/win-defaults/index.htm',
-              js: './source/win-defaults/index.ts',
-              name: 'defaults',
+              html: './source/win-assets/index.htm',
+              js: './source/win-assets/index.ts',
+              name: 'assets',
               preload: {
                 js: './source/common/modules/preload/index.ts'
               }
