@@ -491,12 +491,13 @@ module.exports = {
   /**
    * Returns a regular expression that matches Zettelkasten IDs.
    *
-   * @return  {RegExp}              The compiled Regular Expression
+   * @param   {boolean}  [global=false]  Whether this RegExp should have the global flag.
+   * @return  {RegExp}                   The compiled Regular Expression
    */
-  'getZknTagRE': function () {
+  'getZknTagRE': function (global = false) {
     return RegExp(
-      /##?[^\s,.:;…!?"'`»«“”‘’—–@$%&*#^+~÷\\/|<=>[\](){}]+#?/.source,
-      'i')
+      /(?<!\\)#(#?[^\s,.:;…!?"'`»«“”‘’—–@$%&*#^+~÷\\/|<=>[\](){}]+#?)/.source,
+      (global) ? 'gi' : 'i')
   }
 
 }

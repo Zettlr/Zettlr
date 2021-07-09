@@ -18,13 +18,14 @@ import hash from '../../../common/util/hash'
 import searchFile from './util/search-file'
 import countWords from '../../../common/util/count-words'
 import extractYamlFrontmatter from '../../../common/util/extract-yaml-frontmatter'
-import { getIDRE, getCodeBlockRE } from '../../../common/regular-expressions'
+import { getIDRE, getCodeBlockRE, getZknTagRE } from '../../../common/regular-expressions'
 import { shell } from 'electron'
 import safeAssign from '../../../common/util/safe-assign'
 // Import the interfaces that we need
 import { DirDescriptor, MDFileDescriptor, MDFileMeta } from './types'
 import FSALCache from './fsal-cache'
 import extractBOM from './util/extract-bom'
+import shouldMatchTag from '../../../common/util/should-match-tag'
 
 // Here are all supported variables for Pandoc:
 // https://pandoc.org/MANUAL.html#variables
@@ -103,7 +104,7 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
   // or a space.
   // Positive lookbehind: Assert either a space, a newline or the start of the
   // string.
-  let tagRE = /(?<= |\n|^)#(#?[^\s,.:;…!?"'`»«“”‘’—–@$%&*^+~÷\\/|<=>[\](){}]+#?)/g
+  const tagRE = getZknTagRE(true)
   let match
   // Get the word and character count
   file.wordCount = countWords(content)
@@ -153,16 +154,11 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
   // Now read all tags
   file.tags = [] // Reset tags
   while ((match = tagRE.exec(mdWithoutCode)) != null) {
-    let tag = match[1]
-    // Prevent RGB hex colors and pure numbers from being counted as tags.
-    // NOTE: This has its equivalent in the markdown-zkn mode for highlighting.
-    if (/^#\d+$/.test(tag)) {
+    if (!shouldMatchTag(match[0])) {
       continue
     }
 
-    if (/^#[a-f0-9]{3}$|^#[a-f0-9]{6,8}$/i.test(tag)) {
-      continue
-    }
+    let tag = match[1]
 
     tag = tag.replace(/#/g, '') // Prevent headings levels 2-6 from showing up in the tag list
 

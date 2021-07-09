@@ -14,6 +14,7 @@
  * END HEADER
  */
 
+const shouldMatchTag = require('../../../util/should-match-tag').default
 const {
   getZknTagRE, getHeadingRE, getHighlightRE,
   getTableRE, getInlineMathRE, getFnReferenceRE
@@ -36,21 +37,6 @@ const {
   const tableRE = getTableRE()
   const inlineMathRE = getInlineMathRE()
   const fnReferenceRE = getFnReferenceRE()
-
-  function shouldMatchTag (text) {
-    if (/^#\d+$/.test(text)) {
-      // It is common in English to write #1 as a shortcut for "number 1"
-      // I hope that it is also uncommon to generally use number-only tags. If
-      // not, we may have to remove this again.
-      return false
-    }
-
-    if (/^#[a-f0-9]{3}$|^#[a-f0-9]{6,8}$/i.test(text)) {
-      return false // It's likely an RGB hex-value
-    }
-
-    return true
-  }
 
   /**
     * This defines the Markdown Zettelkasten system mode, which highlights IDs
