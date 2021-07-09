@@ -211,6 +211,14 @@ body.win32 {
     border-radius: 0px;
     padding: 8px 8px;
   }
+
+  &.dark {
+    input, select, textarea, button {
+      background-color: rgb(90, 90, 90);
+      color: white;
+      border-color: rgb(120, 120, 120);
+    }
+  }
 }
 
 body.linux {

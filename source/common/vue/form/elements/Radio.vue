@@ -194,6 +194,7 @@ body.win32 {
     .toggle {
       position: absolute;
       cursor: pointer;
+      width: @input-size; // Prevent too small radio buttons
       top: 0;
       left: 0;
       right: 0;

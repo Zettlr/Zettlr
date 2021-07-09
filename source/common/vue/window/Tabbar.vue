@@ -180,6 +180,12 @@ body.win32 {
       color: rgb(172, 172, 172);
 
       button[role="tab"] {
+        color: rgb(238, 238, 238);
+
+        &.active {
+          color: var(--system-accent-color, --c-primary);
+        }
+
         &:hover, &.active {
           background-color: rgb(64, 64, 64);
         }
