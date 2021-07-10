@@ -3,10 +3,10 @@
     <h3>{{ tagCloudTitle }}</h3>
 
     <p v-if="suggestions.length > 0">
-      {{ tagSuggestionsLabel }}:
-      <span v-for="tag, idx in suggestions" v-bind:key="idx" class="tag">
-        #{{ tag }}
-      </span>
+      <TokenList
+        v-model="suggestions"
+        v-bind:label="tagSuggestionsLabel"
+      ></TokenList>
 
       <ButtonControl
         v-bind:label="'Add to file'"
@@ -51,12 +51,14 @@
 
 import TextControl from '../common/vue/form/elements/Text.vue'
 import ButtonControl from '../common/vue/form/elements/Button.vue'
+import TokenList from '../common/vue/form/elements/TokenList.vue'
 import { trans } from '../common/i18n-renderer'
 
 export default {
   name: 'PopoverTags',
   components: {
     TextControl,
+    TokenList,
     ButtonControl
   },
   data: function () {
@@ -73,7 +75,8 @@ export default {
       return {
         // As soon as this is !== '', the app will begin a search for the tag
         searchForTag: this.searchForTag,
-        addSuggestionsToFile: this.shouldAddSuggestions
+        addSuggestionsToFile: this.shouldAddSuggestions,
+        suggestions: this.suggestions
       }
     },
     filterPlaceholder: function () {

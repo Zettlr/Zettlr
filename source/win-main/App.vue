@@ -485,7 +485,7 @@ export default {
             this.$emit('start-global-search', '#' + data.searchForTag)
             this.$closePopover()
           } else if (data.addSuggestionsToFile === true) {
-            this.$refs.editor.addKeywordsToFile(this.$store.state.tagSuggestions)
+            this.$refs.editor.addKeywordsToFile(data.suggestions)
             this.$closePopover()
           }
         })
