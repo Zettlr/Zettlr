@@ -23,6 +23,41 @@ import Zettlr from './main/zettlr'
 // Helper function to extract files to open from process.argv
 import extractFilesFromArgv from './app/util/extract-files-from-argv'
 
+// Immediately after launch, check if there is already another instance of
+// Zettlr running, and, if so, exit immediately. The arguments (including files)
+// from this instance will already be passed to the first instance.
+if (!app.requestSingleInstanceLock()) {
+  if (!app.isPackaged) {
+    // I always forget to close my system install before starting the
+    // development app, so let's just add a small reminder to myself.
+    console.log('There is another instance of Zettlr running. Did you forget to close that one?')
+  }
+  app.exit(0)
+}
+
+// If we reach this point, we are now booting the first instance of Zettlr.
+
+// Set up the pre-boot log
+global.preBootLog = []
+
+/**
+ * This will be overwritten by the log provider, once it has booted
+ */
+global.log = {
+  verbose: (message: string) => {
+    global.preBootLog.push({ 'level': 1, 'message': message })
+  },
+  info: (message: string) => {
+    global.preBootLog.push({ 'level': 2, 'message': message })
+  },
+  warning: (message: string) => {
+    global.preBootLog.push({ 'level': 3, 'message': message })
+  },
+  error: (message: string) => {
+    global.preBootLog.push({ 'level': 4, 'message': message })
+  }
+}
+
 // Setting custom data dir for user configuration files.
 // Full path or relative path is OK. '~' does not work as expected.
 const dataDirFlag = process.argv.find(elem => elem.indexOf('--data-dir=') === 0)
@@ -42,7 +77,7 @@ if (dataDirFlag !== undefined) {
         dataDir = path.join(__dirname, '../../', dataDir)
       }
     }
-    console.log('Using custom data dir: ' + dataDir)
+    global.log.info('[Application] Using custom data dir: ' + dataDir)
     app.setPath('userData', dataDir)
     app.setAppLogsPath(path.join(dataDir, 'logs'))
   }
@@ -55,24 +90,7 @@ if (process.argv.includes('--disable-hardware-acceleration')) {
   app.disableHardwareAcceleration()
 }
 
-// Immediately after launch, check if there is already another instance of
-// Zettlr running, and, if so, exit immediately. The arguments (including files)
-// from this instance will already be passed to the first instance.
-if (!app.requestSingleInstanceLock()) {
-  if (!app.isPackaged) {
-    // I always forget to close my system install before starting the
-    // development app, so let's just add a small reminder to myself.
-    console.log('There is another instance of Zettlr running. Did you forget to close that one?')
-  }
-  app.exit(0)
-}
-
-// If we reach this point, we are now booting the first instance of Zettlr.
-
 // *****************************************************************************
-
-// Set up the pre-boot log
-global.preBootLog = []
 
 // This array will be only useful for macOS since there we have the "open-file"
 // event indicating that the user wants to open a file. But this event might be
@@ -80,24 +98,6 @@ global.preBootLog = []
 // instantiated. This is why we need to cache those in this array. After the app
 // is booted, we won't need this anymore.
 const filesBeforeOpen: string[] = []
-
-/**
- * This will be overwritten by the log provider, once it has booted
- */
-global.log = {
-  verbose: (message: string) => {
-    global.preBootLog.push({ 'level': 1, 'message': message })
-  },
-  info: (message: string) => {
-    global.preBootLog.push({ 'level': 2, 'message': message })
-  },
-  warning: (message: string) => {
-    global.preBootLog.push({ 'level': 3, 'message': message })
-  },
-  error: (message: string) => {
-    global.preBootLog.push({ 'level': 4, 'message': message })
-  }
-}
 
 /**
  * The main Zettlr object. As long as this exists in memory, the app will run.
