@@ -883,7 +883,9 @@ body.dark #editor {
 
 body.darwin #editor {
   // On macOS the tabbar is 30px high.
-  height: calc(100% - 30px);
+  &:not(.fullscreen) {
+    height: calc(100% - 30px);
+  }
 
   div#editor-search {
     background-color: rgba(230, 230, 230, 1);
@@ -909,7 +911,9 @@ body.darwin.dark #editor {
 
 body.win32 #editor, body.linux #editor {
   // On Windows, the tab bar is 30px high
-  height: calc(100% - 30px);
+  &:not(.fullscreen) {
+    height: calc(100% - 30px);
+  }
 
   div#editor-search {
     background-color: rgba(230, 230, 230, 1);

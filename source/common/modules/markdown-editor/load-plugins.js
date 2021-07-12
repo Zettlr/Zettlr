@@ -35,7 +35,7 @@ require('codemirror/keymap/vim') // This will load the extra commands from Vim
 require('codemirror/keymap/emacs') // This will load the extra commands from Emacs
 
 // 4. Display addons
-require('codemirror/addon/display/fullscreen')
+// require('codemirror/addon/display/fullscreen')
 require('codemirror/addon/display/placeholder')
 
 // 5. Search addons

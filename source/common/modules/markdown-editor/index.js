@@ -677,6 +677,12 @@ module.exports = class MarkdownEditor extends EventEmitter {
    */
   set distractionFree (shouldBeFullscreen) {
     this.setOptions({ fullScreen: shouldBeFullscreen })
+
+    if (this.distractionFree) {
+      this._instance.getWrapperElement().classList.add('CodeMirror-fullscreen')
+    } else {
+      this._instance.getWrapperElement().classList.remove('CodeMirror-fullscreen')
+    }
   }
 
   /**
