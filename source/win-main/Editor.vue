@@ -707,9 +707,12 @@ export default {
      * @param   {MouseEvent}  event  The mouse event
      */
     editorMouseup (event) {
-      // we have commented this if condition because when the user presses the mouse from the
-      // left margin and goes inside this.$refs.editor and releases, the event of mouse release
-      // is not handled
+      if (this.anchor === undefined) {
+        // This event gets also fired when someone, e.g., wants to edit an image
+        // caption, so we must explicitly check if we are currently in a left-
+        // side selection event, and if we aren't, don't do anything.
+        return
+      }
 
       // when the mouse is released, set anchor to undefined to stop adding lines
       this.anchor = undefined
