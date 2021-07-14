@@ -497,12 +497,12 @@ body.darwin {
       background-color: rgb(230, 230, 230);
       height: 30px;
       padding: 4px;
-      border-right: 1px solid rgb(180, 180, 180);
+      border-right: 1px solid #d5d5d5;
 
       #file-manager-filter-input {
         width: 100%;
         font-size: 11px;
-        height: calc(30px - 8px);
+        height: calc(30px - 9px);
       }
     }
   }

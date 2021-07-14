@@ -421,7 +421,7 @@ body.dark #file-manager {
 
 body.darwin {
   #file-manager {
-    border-top: 1px solid rgb(180, 180, 180);
+    border-top: 1px solid #d5d5d5;
   }
 
   &.dark {
