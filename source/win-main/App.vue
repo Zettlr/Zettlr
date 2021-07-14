@@ -341,6 +341,13 @@ export default {
       } else {
         this.$refs['file-manager-split'].hideView(1)
       }
+    },
+    mainSplitViewVisibleComponent: function (newValue, oldValue) {
+      if (newValue === 'globalSearch') {
+        // The global search just became visible, so make sure to change the
+        // current directory.
+        this.$refs['global-search'].setCurrentDirectory()
+      }
     }
   },
   mounted: function () {

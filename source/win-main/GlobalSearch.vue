@@ -206,6 +206,22 @@ export default {
       // Remove duplicates
       this.directorySuggestions = [...new Set(dirList)]
     },
+    setCurrentDirectory: function () {
+      if (this.restrictToDir.trim() !== '') {
+        return // Do not overwrite anything
+      }
+
+      // Immediately preset the restrictToDir with the currently selected directory
+      if (this.selectedDir !== null) {
+        // We cut off the origin of the root (i.e. the path of the containing root dir)
+        let rootItem = this.selectedDir
+        while (rootItem.parent != null) {
+          rootItem = rootItem.parent
+        }
+
+        this.restrictToDir = this.selectedDir.path.replace(rootItem.dir, '').substr(1)
+      }
+    },
     startSearch: function () {
       // We should start a search. We need two types of information for that:
       // 1. A list of files to be searched
