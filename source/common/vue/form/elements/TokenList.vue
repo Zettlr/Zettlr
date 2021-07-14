@@ -96,6 +96,7 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-size: 12px;
     padding: 6px;
+    cursor: text;
 
     .token {
       display: inline-block;
@@ -104,6 +105,7 @@ body {
       border-radius: 4px;
       margin: 2px;
       padding: 2px;
+      cursor: default;
 
       &:hover {
         background-color: rgb(175, 56, 56);
