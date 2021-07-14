@@ -405,7 +405,7 @@ const config: StoreOptions<ZettlrState> = {
     },
     updateOpenDirectory: function (state, descriptor) {
       if (descriptor === null) {
-        state.selectedDirectory.Directory = null
+        state.selectedDirectory = null
       } else {
         const ownDescriptor = findPathDescriptor(descriptor.path, state.fileTree)
 
