@@ -497,6 +497,7 @@ body.darwin {
       background-color: rgb(230, 230, 230);
       height: 30px;
       padding: 4px;
+      border-right: 1px solid rgb(180, 180, 180);
 
       #file-manager-filter-input {
         width: 100%;
@@ -508,6 +509,10 @@ body.darwin {
 
   &.dark #file-list {
     background-color: rgb(40, 40, 50);
+
+    #file-manager-filter {
+      border-right-color: #505050;
+    }
   }
 }
 
