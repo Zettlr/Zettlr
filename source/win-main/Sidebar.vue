@@ -14,7 +14,7 @@
     >
       <h1>{{ relatedFilesLabel }}</h1>
       <div v-if="relatedFiles.length === 0" class="related-files-container">
-        No related files.
+        {{ noRelatedFilesMessage }}
       </div>
       <div v-else class="related-files-container">
         <div
@@ -200,6 +200,9 @@ export default {
     },
     noAttachmentsMessage: function () {
       return trans('gui.no_other_files')
+    },
+    noRelatedFilesMessage: function () {
+      return trans('gui.no_related_files')
     },
     attachments: function () {
       const currentDir = this.$store.state.selectedDirectory
