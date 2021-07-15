@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-07-14T12:17:12.000000Z"
+        "updated_at": "2021-07-15T09:41:47.000000Z"
     },
     "dialog": {
         "about": {
@@ -442,6 +442,7 @@
         "avg_not_reached": "\u270d\ud83c\udffc Schreibe, um deinen Durchschnitt zu \u00fcbertreffen.",
         "avg_surpassed": "\ud83d\udd25 Weiter so!",
         "avg_words": "durchschnittlich",
+        "chars": "%s Zeichen",
         "citeproc": {
             "error_db": "Die Zitationsdatenbank konnte nicht geladen werden",
             "error_report_message": "%s Zitationen konnten aufgrund von Fehlern nicht geladen werden. Bitte \u00fcberpr\u00fcfe die unten stehenden CiteKeys anhand des mit ausgegebenen Fehlertextes.",
@@ -482,12 +483,36 @@
             "tasklist": "Aufgabenliste",
             "ul": "Liste"
         },
+        "global_search": {
+            "clear_label": "Neue Suche",
+            "query_label": "Suchbegriffe",
+            "query_placeholder": "Suche nach \u2026",
+            "restrict_dir_label": "Begrenze Suche auf ein Verzeichnis",
+            "restrict_dir_placeholder": "Verzeichnis \u2026",
+            "search_label": "Suchen",
+            "toggle_label": "Ergebnisse umschalten"
+        },
         "modified": "Ver\u00e4ndert",
+        "months": {
+            "apr": "April",
+            "aug": "August",
+            "dec": "Dezember",
+            "feb": "Februar",
+            "jan": "Januar",
+            "jul": "Juli",
+            "jun": "Juni",
+            "mar": "M\u00e4rz",
+            "may": "Mai",
+            "nov": "November",
+            "oct": "Oktober",
+            "sep": "September"
+        },
         "no_attachments": "Keine Anh\u00e4nge",
         "no_dir_selected": "Kein Verzeichnis ausgew\u00e4hlt",
         "no_open_document": "Kein offenes Dokument",
         "no_other_files": "Keine anderen Dateien",
         "no_reference_message": "Kein Fu\u00dfnotentext",
+        "no_related_files": "Keine verwandten Dateien",
         "no_search_results": "Keine Ergebnisse",
         "number_selections": "%s Selektionen",
         "other_files": "Andere Dateien",
@@ -735,7 +760,9 @@
         "show_toc": "Inhaltsverzeichnis anzeigen",
         "stats": "Statistiken anzeigen",
         "tag_cloud": "Schlagworte",
-        "toggle_attachments": "Anh\u00e4nge anzeigen"
+        "toggle_attachments": "Anh\u00e4nge anzeigen",
+        "toggle_file_manager": "Dateimanager",
+        "toggle_global_search": "Volltextsuche"
     },
     "tray": {
         "show_zettlr": "Zettlr anzeigen",
