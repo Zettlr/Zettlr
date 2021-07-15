@@ -204,7 +204,7 @@ export default {
   },
   computed: {
     windowTitle: function () {
-      if (document.body.classList.contains('darwin')) {
+      if (process.platform === 'darwin') {
         return this.tabs[this.currentTab].label
       } else {
         return trans('dialog.preferences.title')
