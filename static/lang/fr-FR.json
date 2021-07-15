@@ -17,7 +17,7 @@
             "Joris"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-06-20T15:31:59.000000Z"
+        "updated_at": "2021-07-02T13:39:07.000000Z"
     },
     "dialog": {
         "about": {
@@ -46,6 +46,7 @@
             "cancel": "Annuler",
             "choose_path": "Choisir un dossier",
             "close": "Fermer",
+            "close_without_saving": "Fermer sans enregistrer les modifications",
             "save": "Enregistrer"
         },
         "custom_css": {
@@ -79,9 +80,12 @@
         },
         "filter_tags": "filtrer les mots-cl\u00e9s",
         "find": {
+            "close_label": "Fermer la recherche",
             "find_label": "Trouver",
             "find_placeholder": "Trouver\u2026",
+            "replace_all_label": "Remplacer toutes les occurrences",
             "replace_label": "Remplacer",
+            "replace_next_label": "Remplacer la prochaine occurrence",
             "replace_placeholder": "Remplacer par"
         },
         "paste_image": {
@@ -197,7 +201,9 @@
             "default_image_save_path": "Chemin par d\u00e9faut des images (relatif ou absolu)",
             "delete_on_fail": "Supprimer les \u00e9l\u00e9ments de mani\u00e8re irr\u00e9versible, si leur d\u00e9placement vers la corbeille \u00e9choue",
             "display": {
+                "image_height": "Hauteur maximale des images (pourcentage)",
                 "image_size_info": "Contr\u00f4ler la taille des aper\u00e7us d\u2019images.",
+                "image_width": "Largeur maximale des images (pourcentage)",
                 "preview_info": "Choisir les \u00e9l\u00e9ments qui sont visibles dans les documents.",
                 "render_citations": "Visualiser des citations",
                 "render_htags": "Cacher les \"#\" dans les titres",
@@ -245,6 +251,7 @@
             "homeEndBehaviour": "Utilise les actions par d\u00e9faut de CodeMirror pour \u003Ckbd\u003EHome\u003C/kbd\u003E et \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
             "indent_unit": "Largeur d\u2019indentation en nombre d\u2019espaces",
             "input_mode": "Mode de saisie de l'\u00e9diteur",
+            "leave_app_running_in_the_notification_area": "Laisser l'application en cours d'ex\u00e9cution dans la zone de notification",
             "modtime": "Heure de la derni\u00e8re modification",
             "mute_lines": "Masquer les lignes hors focus dans le mode sans distraction",
             "new_file_dont_prompt": "Ne pas demander de nom lors de la cr\u00e9ation de nouveaux fichiers",
@@ -296,11 +303,16 @@
             "project": {
                 "csl_style": "Fichier de format de r\u00e9f\u00e9rences bibliographiques CSL (optionnel)",
                 "format": "Exporter le projet dans :",
+                "name_label": "Format",
+                "pattern": "Ajouter des mod\u00e8les Glob pour inclure uniquement des fichiers sp\u00e9cifiques",
+                "pattern_name": "Mod\u00e8le Glob",
                 "title": "Param\u00e8tres du projet",
-                "title_label": "Titre du projet"
+                "title_label": "Titre du projet",
+                "use_label": "Utiliser"
             },
             "readability_algorithm": "Algorithme \u00e0 utiliser pour le mode de lisibilit\u00e9",
             "reset_pandoc_command": "R\u00e9initialiser la commande Pandoc",
+            "show_app_in_the_notification_area": "Afficher l'application dans la zone de notification",
             "sorting_ascii": "Ordre ASCII (2 apr\u00e8s 10)",
             "sorting_explanation": "Ordre de tri des fichiers (utilis\u00e9 pour le tri par nom)",
             "sorting_natural": "Ordre naturel (10 apr\u00e8s 2)",
@@ -326,6 +338,7 @@
             },
             "use_native_appearance": "Utiliser l'apparence native des fen\u00eatres",
             "user_dictionary": "Dictionnaire personnalis\u00e9. Enlever des mots avec un clic.",
+            "user_dictionary_label": "Entr\u00e9e du dictionnaire",
             "watchdog_checkbox_label": "Activer le d\u00e9compte du chien de garde",
             "watchdog_explainer": "Sur certains ordinateurs, Zettlr peut signaler trop de modifications de fichiers \u00e0 distance. Si cela se produit, essayez d'activer ce param\u00e8tre.",
             "watchdog_threshold_label": "Temps d'attente avant de consid\u00e9rer l\u2019\u00e9criture d\u2019un fichier comme termin\u00e9e (en ms)",
@@ -369,6 +382,10 @@
             "intro": "Vous trouverez ici les statistiques d\u00e9taill\u00e9es de votre comportement d\u2019\u00e9criture, \u00e0 l\u2019aide d\u2019un graphique de vos mots quotidiens.",
             "month": "Mois",
             "previous_frame": "P\u00e9riode pr\u00e9c\u00e9dente",
+            "tabs": {
+                "calendar_label": "Calendrier",
+                "chart_label": "Graphiques"
+            },
             "this_frame": "P\u00e9riode courante",
             "title": "Statistiques d\u2019\u00e9criture",
             "week": "Semaine",
@@ -397,16 +414,34 @@
             "client_error": "Impossible de v\u00e9rifier les mises \u00e0 jour : Erreur Client (Code d'\u00e9tat : %s)",
             "connection_error": "Impossible de v\u00e9rifier les mises \u00e0 jour : pas de connexion",
             "current_version": "Votre version",
+            "download_progress_label": "T\u00e9l\u00e9chargement de votre mise \u00e0 jour",
+            "new_update_available": "Une mise \u00e0 jour vers la version %s est disponible !",
             "no_data": "Impossible de v\u00e9rifier les mises \u00e0 jour : le serveur n\u2019a pas envoy\u00e9 de donn\u00e9es",
+            "no_new_update": "Pas de mise a jour disponible. Vous avez la version la plus r\u00e9cente.",
             "notification": "Une nouvelle version de Zettlr est disponible. La liste des changements est ci-dessous.",
+            "other_error": "Impossible de v\u00e9rifier les mises \u00e0 jour. %s : %s",
             "redirect_error": "Impossible de v\u00e9rifier les mises \u00e0 jour : le serveur a essay\u00e9 de rediriger (Code d'\u00e9tat : %s)",
             "release_url": "Ouvrir la page de t\u00e9l\u00e9chargement",
             "server_error": "Impossible de v\u00e9rifier les mises \u00e0 jour : Erreur Serveur (Code d'\u00e9tat : %s)",
+            "start_update_label": "Cliquez pour lancer la mise \u00e0 jour",
+            "start_update_message": "D\u00e9marrage de la mise \u00e0 jour\u2026",
             "title": "Nouvelle version disponible",
-            "transmission_error": "Impossible de v\u00e9rifier les mises \u00e0 jour : connexion interrompue"
+            "transmission_error": "Impossible de v\u00e9rifier les mises \u00e0 jour : connexion interrompue",
+            "window_title": "Mise \u00e0 jour"
         }
     },
     "gui": {
+        "assets_man": {
+            "defaults_restore_error": "Impossible de restaurer le fichier par d\u00e9faut !",
+            "defaults_restored": "Fichier d\u00e9faut restaur\u00e9 !",
+            "defaults_restoring": "Restauration du fichier par d\u00e9faut\u2026",
+            "status": {
+                "save_error": "\u00c9chec de l'enregistrement",
+                "saved": "Enregistr\u00e9\u00a0!",
+                "saving": "Sauvegarde en cours\u2026",
+                "unsaved_changes": "Modifications non enregistr\u00e9es"
+            }
+        },
         "attachments": "Annexes",
         "attachments_open_dir": "Ouvrir le dossier",
         "avg_close_to": "\ud83d\udcaa Vous \u00eates proche de la moyenne par jour !",
@@ -424,6 +459,9 @@
             "references_none": "Il n'y a pas de citation dans ce document",
             "reloading": "Le fichier de la bibliographie a \u00e9t\u00e9 modifi\u00e9. Rechargement\u2026"
         },
+        "created": "Cr\u00e9\u00e9",
+        "ctrl_click_to_open": "Cmd/Ctrl+Clic pour ouvrir %s",
+        "date_just_now_label": "maintenant",
         "dirs": "Dossiers",
         "display_search_results": "Afficher les r\u00e9sultats de la recherche",
         "empty_dir": "R\u00e9pertoire vide",
@@ -450,10 +488,20 @@
             "tasklist": "Liste de t\u00e2ches",
             "ul": "Liste non ordonn\u00e9e"
         },
+        "modified": "Modifi\u00e9",
         "no_attachments": "Aucun annexe",
         "no_dir_selected": "Aucun r\u00e9pertoire s\u00e9lectionn\u00e9",
+        "no_open_document": "Aucun document ouvert",
+        "no_other_files": "Pas d'autres fichiers",
+        "no_reference_message": "Pas de texte de r\u00e9f\u00e9rence",
         "no_search_results": "Aucun r\u00e9sultat",
         "number_selections": "%s s\u00e9lections",
+        "other_files": "Autres fichiers",
+        "preview_modification_date": "Modifi\u00e9",
+        "preview_searching_label": "Recherche de fichier\u2026",
+        "preview_word_count": "Nombre de mots",
+        "related_files_label": "Fichiers connexes",
+        "reset": "R\u00e9initialiser",
         "statistics_more": "Plus de statistiques\u2026",
         "table_of_contents": "Table des mati\u00e8res",
         "today_words": "mots aujourd'hui",
@@ -555,6 +603,8 @@
         "start_speaking": "Commencer \u00e0 parler",
         "stop_speaking": "Arr\u00eater de parler",
         "tab_close": "Fermer l\u2019onglet",
+        "tab_close_all": "Fermer tous les onglets",
+        "tab_close_others": "Fermer les autres onglets",
         "tab_next": "Onglet suivant",
         "tab_previous": "Onglet pr\u00e9c\u00e9dent",
         "tags": "G\u00e9rer les mots-cl\u00e9s",
@@ -587,6 +637,11 @@
     "system": {
         "all_files": "Tous les fichiers",
         "cancel": "Annuler",
+        "common": {
+            "list_actions_label": "Actions",
+            "list_add_button": "Ajouter",
+            "list_search_placeholder": "Rechercher des entr\u00e9es\u2026"
+        },
         "directories": "Dossiers",
         "directory_removed": "Le dossier %s a \u00e9t\u00e9 supprim\u00e9.",
         "error": {
@@ -608,6 +663,8 @@
             "fnf_title": "Fichier non trouv\u00e9",
             "ignored_dir_message": "Impossible d\u2019ouvrir le dossier &quot;%s&quot; avec Zettlr.",
             "ignored_dir_title": "Impossible d'ouvrir le dossier",
+            "image_not_found": "Image non trouv\u00e9e : %s",
+            "malformed_citekey": "Citekey mal form\u00e9e : @%s",
             "malformed_textbundle": "Textbundle incorrect: %s",
             "move_into_child_message": "Vous ne pouvez pas d\u00e9placer un dossier dans l\u2019un de ses sous-dossiers.",
             "move_into_child_title": "Impossible de d\u00e9placer le dossier",
@@ -681,6 +738,10 @@
         "stats": "Voir les statistiques",
         "tag_cloud": "Mots-cl\u00e9s",
         "toggle_attachments": "Voir les annexes"
+    },
+    "tray": {
+        "show_zettlr": "Afficher Zettlr",
+        "tooltip": "Zettlr"
     },
     "validation": {
         "error_empty": "L\u2019option %s est obligatoire.",

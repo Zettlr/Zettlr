@@ -6,7 +6,7 @@
             "ritvje"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-06-19T08:29:45.000000Z"
+        "updated_at": "2021-07-03T17:34:58.000000Z"
     },
     "dialog": {
         "about": {
@@ -35,6 +35,7 @@
             "cancel": "Peruuta",
             "choose_path": "Valitse hakemisto\u2026",
             "close": "Sulje",
+            "close_without_saving": "Sulje tallentamatta muutoksia",
             "save": "Tallenna"
         },
         "custom_css": {
@@ -68,6 +69,7 @@
         },
         "filter_tags": "Suodata tunnisteet\u2026",
         "find": {
+            "close_label": "Sulje haku",
             "find_label": "Etsi",
             "find_placeholder": "Etsi\u2026",
             "replace_label": "Korvaa",
@@ -395,6 +397,13 @@
         }
     },
     "gui": {
+        "assets_man": {
+            "status": {
+                "saved": "Tallennettu!",
+                "saving": "Tallennetaan...",
+                "unsaved_changes": "Tallentamattomia muutoksia"
+            }
+        },
         "attachments": "Liitteet",
         "attachments_open_dir": "Avaa hakemisto",
         "avg_close_to": "\ud83d\udcaa Olet l\u00e4hell\u00e4 p\u00e4ivitt\u00e4ist\u00e4 keskiarvoasi!",
@@ -412,6 +421,8 @@
             "references_none": "T\u00e4ss\u00e4 tiedostossa ei ole viitteit\u00e4",
             "reloading": "citeproc: Havaittiin kirjastotiedostoon tehtyj\u00e4 muutoksia. Ladataan uudelleen\u2026"
         },
+        "created": "Luotu",
+        "date_just_now_label": "juuri nyt",
         "dirs": "hakemistoa",
         "display_search_results": "N\u00e4yt\u00e4 hakutulokset",
         "empty_dir": "Tyhj\u00e4 hakemisto",
@@ -438,10 +449,13 @@
             "tasklist": "Teht\u00e4v\u00e4lista",
             "ul": "Lista"
         },
+        "modified": "Muokattu",
         "no_attachments": "Ei liitteit\u00e4",
         "no_dir_selected": "Hakemistoa ei ole valittu",
         "no_search_results": "Ei tuloksia",
         "number_selections": "%s valintaa",
+        "preview_modification_date": "Muokattu",
+        "preview_word_count": "Sanam\u00e4\u00e4r\u00e4",
         "statistics_more": "Lis\u00e4\u00e4 tilastoja...",
         "table_of_contents": "Sis\u00e4llysluettelo",
         "today_words": "sanaa t\u00e4n\u00e4\u00e4n",
@@ -543,6 +557,8 @@
         "start_speaking": "Aloita puhuminen",
         "stop_speaking": "Lopeta puhuminen",
         "tab_close": "Sulje v\u00e4lilehti",
+        "tab_close_all": "Sulje kaikki v\u00e4lilehdet",
+        "tab_close_others": "Sulje muut v\u00e4lilehdet",
         "tab_next": "Seuraava v\u00e4lilehti",
         "tab_previous": "Edellinen v\u00e4lilehti",
         "tags": "Hallitse tunnisteita\u2026",
@@ -669,6 +685,9 @@
         "stats": "Tilastot",
         "tag_cloud": "Tunnisteet",
         "toggle_attachments": "Liitteet"
+    },
+    "tray": {
+        "tooltip": "Zettlr"
     },
     "validation": {
         "error_empty": "Valinta %s on pakollinen.",

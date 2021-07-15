@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-06-27T12:02:19.000000Z"
+        "updated_at": "2021-07-14T12:17:12.000000Z"
     },
     "dialog": {
         "about": {
@@ -330,6 +330,7 @@
             "watchdog_checkbox_label": "Aktiviere Watchdog-Polling",
             "watchdog_explainer": "Auf einigen Computern kann es passieren, dass Zettlr zu oft warnt, eine Datei sei au\u00dferhalb der App bearbeitet worden. Falls dies passiert, versuche, diese Einstellung zu aktivieren.",
             "watchdog_threshold_label": "Wartezeit, bis das Schreiben einer Datei als beendet erachtet wird (in Millisekunden)",
+            "whitelist": "Whitelist f\u00fcr iFrames",
             "whitelist_hostname": "Hostname",
             "xelatex": "Pfad zum XeLaTeX-Programm. Bitte \u00e4ndere dies nur, wenn Pandoc einen Fehler ausgibt, dass er die Bibliothek nicht finden kann.",
             "xelatex_default": "Standard: xelatex",
@@ -384,8 +385,10 @@
             "year": "Jahr"
         },
         "tag_cloud": {
+            "add_to_file": "Hinzuf\u00fcgen",
             "copy": "In die Zwischenablage kopieren",
             "info": "Hier siehst du alle Schlagworte, die du in deinen Dateien verwendet hast. Du kannst die gesamte Liste in die Zwischenablage kopieren. Fahre mit der Maus \u00fcber die Tags, um zu sehen, wie oft sie verwandt wurden.",
+            "suggestions_label": "Vorgeschlagene Schlagworte f\u00fcr die aktuelle Datei",
             "title": "Tag Cloud"
         },
         "tags": {
@@ -531,6 +534,7 @@
         "donate": "Unterst\u00fctzen",
         "duplicate_file": "Datei duplizieren",
         "export": "Exportieren\u2026",
+        "filter_files": "Dateien filtern",
         "find_dir": "In Verzeichnis finden",
         "find_file": "In Datei finden",
         "generate_id": "Neue ID generieren",

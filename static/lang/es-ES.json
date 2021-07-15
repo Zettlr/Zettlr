@@ -11,7 +11,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-06-29T20:19:15.000000Z"
+        "updated_at": "2021-07-09T07:41:10.000000Z"
     },
     "dialog": {
         "about": {
@@ -77,6 +77,7 @@
             "close_label": "Cierra la b\u00fasqueda",
             "find_label": "Buscar",
             "find_placeholder": "Buscar\u2026",
+            "regex_label": "Cambia a la b\u00fasqueda de expresiones regulares",
             "replace_all_label": "Reemplaza todas las ocurrencias",
             "replace_label": "Reemplazar",
             "replace_next_label": "Reemplaza la siguiente ocurrencia",
@@ -195,7 +196,9 @@
             "default_image_save_path": "Path(ruta) predeterminada para imagenes (relativa o absoluta)",
             "delete_on_fail": "Eliminar elementos de forma irreversible si falla enviar a la papelera",
             "display": {
+                "image_height": "Altura m\u00e1xima de las im\u00e1genes (en %)",
                 "image_size_info": "Con estos controles puedes reducir las vistas previas de la imagen.",
+                "image_width": "Anchura m\u00e1xima de las im\u00e1genes (en %)",
                 "preview_info": "Estas opciones determinan qu\u00e9 elementos se renderizan en los documentos.",
                 "render_citations": "Renderizar citas",
                 "render_htags": "Ocultar caracteres de cabecera",
@@ -296,6 +299,8 @@
                 "csl_style": "Estilo CSL (opcional)",
                 "format": "Exportar proyecto a:",
                 "name_label": "Formato",
+                "pattern": "A\u00f1ade patrones globales para incluir solo archivos espec\u00edficos",
+                "pattern_name": "Patrones globales",
                 "title": "Ajustes del proyecto",
                 "title_label": "T\u00edtulo del proyecto",
                 "use_label": "Usa"
@@ -332,6 +337,7 @@
             "watchdog_checkbox_label": "Activar la monitorizaci\u00f3n de encuesta",
             "watchdog_explainer": "En algunos ordenadores, Zettlr puede dar un aviso de demasioados cambios en ficheros remotos. Si eso sucede, pruebe activando este par\u00e1metro.",
             "watchdog_threshold_label": "Tiempo de espera (en ms), antes de que la escritura de un fichero se considere realizada.",
+            "whitelist_hostname": "Nombre de la m\u00e1quina",
             "xelatex": "Path (ruta de acceso) al ejecutable de XeLaTeX. Por favor, s\u00f3lo cambielo si Zettlr no puede localizarlo.",
             "xelatex_default": "Predeterminado: XeLaTeX",
             "zkn": {
@@ -374,6 +380,7 @@
             "previous_frame": "Per\u00edodo anterior",
             "tabs": {
                 "calendar_label": "Calendario",
+                "chart_label": "Gr\u00e1ficos",
                 "fsal_label": "Estad\u00edsticas FSAL"
             },
             "this_frame": "Per\u00edodo actual",
@@ -386,6 +393,7 @@
         "tag_cloud": {
             "copy": "Copiar en el portapapeles",
             "info": "Aqu\u00ed encontrar\u00e1s todas las tags (etiquetas) que has utilizado en alg\u00fan lugar de tus archivos. Puedes copiar toda la lista en el portapapeles. Pasa el rat\u00f3n por encima de las etiquetas para ver el n\u00famero de veces que las has usado.",
+            "suggestions_label": "Etiquetas sugeridas para el archivo actual",
             "title": "Nube de Tags (etiquetas)"
         },
         "tags": {
@@ -405,6 +413,7 @@
             "connection_error": "No se ha podido comprobar la existencia de actualizaciones: No se pudo establecer la conexi\u00f3n",
             "current_version": "Tu versi\u00f3n",
             "download_progress_label": "Descargando la actualizaci\u00f3n",
+            "new_update_available": "\u00a1Hay una actualizaci\u00f3n a la versi\u00f3n %s disponible!",
             "no_data": "No se ha podido comprobar la existencia de actualizaciones: El servidor no ha enviado datos",
             "no_new_update": "No hay actualizaciones disponibles. Esta es la versi\u00f3n m\u00e1s reciente",
             "notification": "Hay una nueva versi\u00f3n de Zettlr disponible para descargar. Por favor, lee el changelog (registro de cambios) a continuaci\u00f3n.",
@@ -421,9 +430,14 @@
     },
     "gui": {
         "assets_man": {
+            "defaults_restore_error": "No se han podido restaurar los par\u00e1metros por defecto",
+            "defaults_restored": "Se ha restaurado el archivo de los par\u00e1metros por defecto",
+            "defaults_restoring": "Restuarando el archivo de los par\u00e1metros por defecto",
             "status": {
+                "save_error": "Ha fallado el guardado",
                 "saved": "Guardado!",
-                "saving": "Guardando..."
+                "saving": "Guardando...",
+                "unsaved_changes": "Cambios no guardados"
             },
             "win_title": "Gestor de recursos"
         },
@@ -445,6 +459,7 @@
             "reloading": "Se han detectado cambios en el archivo de la biblioteca. Recargando...."
         },
         "created": "Creado",
+        "ctrl_click_to_open": "Cmd/Ctrl + Click para abrir %s",
         "date_just_now_label": "ahora mismo",
         "dirs": "Carpetas",
         "display_search_results": "Mostrar resultados de b\u00fasqueda",
@@ -477,6 +492,7 @@
         "no_dir_selected": "Ning\u00fan directorio seleccionado",
         "no_open_document": "No hay ning\u00fan documento abierto",
         "no_other_files": "No hay otros archivos",
+        "no_reference_message": "No hay texto de referencia",
         "no_search_results": "Sin resultados",
         "number_selections": "%s selecciones",
         "other_files": "Otros archivos",
@@ -624,7 +640,8 @@
         "common": {
             "list_actions_label": "Acciones",
             "list_add_button": "A\u00f1adir",
-            "list_default_column_label": "\u00cdtem"
+            "list_default_column_label": "\u00cdtem",
+            "list_search_placeholder": "Buscando entradas..."
         },
         "directories": "Directorios",
         "directory_removed": "La carpeta %s ha sido eliminada.",
@@ -648,6 +665,7 @@
             "ignored_dir_message": "Directorio &quot;%s&quot; no se puede abrir por Zettlr.",
             "ignored_dir_title": "No se puede abrir la carpeta",
             "image_not_found": "Imagen no encontrada: %s",
+            "malformed_citekey": "La Citekey est\u00e1 mal formada: @%s",
             "malformed_textbundle": "Paquete de texto malformado: %s",
             "move_into_child_message": "No puede mover una carpeta a una de sus sub-carpetas.",
             "move_into_child_title": "No se puede mover la carpeta",
@@ -661,7 +679,8 @@
             "pandoc_error_message": "Pandoc ha reportado un error: %s",
             "pandoc_error_title": "No se pudo exportar el archivo",
             "remove_message": "\u00bfSeguro que quieres eliminar %s?",
-            "remove_title": "\u00bfSeguro que quieres eliminar?"
+            "remove_title": "\u00bfSeguro que quieres eliminar?",
+            "tray_not_supported": "La bandeja a\u00fan no est\u00e0 preparada. Se necesita la extensi\u00f3n de Gnome &quot;KStatusNotifierItem/AppIndicator Support&quot; para poder implementar la bandeja en Gnome"
         },
         "export_success": "Exportando a %s",
         "file_changed": "Archivo %s ha cambiado de manera remota.",

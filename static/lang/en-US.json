@@ -7,7 +7,7 @@
             "Huey"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-06-27T12:00:06.000000Z"
+        "updated_at": "2021-07-14T12:16:52.000000Z"
     },
     "dialog": {
         "about": {
@@ -333,6 +333,7 @@
             "watchdog_checkbox_label": "Activate Watchdog polling",
             "watchdog_explainer": "On some computers, Zettlr may report too many remote file changes. If this happens, try activating this setting.",
             "watchdog_threshold_label": "Time to wait before writing a file is considered done (in ms)",
+            "whitelist": "iFrame rendering whitelist",
             "whitelist_hostname": "Hostname",
             "xelatex": "Path to xelatex executable. Please only change, if Zettlr is unable to locate it.",
             "xelatex_default": "Default: xelatex",
@@ -387,8 +388,10 @@
             "year": "Year"
         },
         "tag_cloud": {
+            "add_to_file": "Add to file",
             "copy": "Copy to clipboard",
             "info": "Here you find all tags that you've used somewhere in your files. You can copy the whole list to the clipboard. Hover over the tags to see the number of times you've used them.",
+            "suggestions_label": "Suggested tags for the current file",
             "title": "Tag Cloud"
         },
         "tags": {
@@ -534,6 +537,7 @@
         "donate": "Support Zettlr",
         "duplicate_file": "Duplicate file",
         "export": "Export\u2026",
+        "filter_files": "Filter files",
         "find_dir": "Find in directory",
         "find_file": "Find in file",
         "generate_id": "Generate new ID",
