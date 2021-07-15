@@ -164,6 +164,9 @@ export default {
     }
   },
   computed: {
+    shouldCountChars: function () {
+      return this.$store.state.config['editor.countChars']
+    },
     parsedDocumentInfo: function () {
       const info = this.$store.state.activeDocumentInfo
       if (info === null) {
@@ -191,8 +194,10 @@ export default {
           cnt += trans('gui.number_selections', info.selections.length)
         }
       } else {
-        // No selection. NOTE: words always contains the count of chars OR words.
-        cnt = trans('gui.words', localiseNumber(info.words))
+        // No selection.
+        const locID = (this.shouldCountChars === true) ? 'gui.chars' : 'gui.words'
+        const num = (this.shouldCountChars === true) ? info.chars : info.words
+        cnt = trans(locID, localiseNumber(num))
         cnt += '<br>'
         cnt += (info.cursor.line + 1) + ':' + (info.cursor.ch + 1)
       }
@@ -209,12 +214,12 @@ export default {
           id: 'toggle-file-manager',
           stateOne: {
             id: 'fileManager',
-            title: 'Toggle file manager',
+            title: trans('toolbar.toggle_file_manager'),
             icon: 'hard-disk'
           },
           stateTwo: {
             id: 'globalSearch',
-            title: 'Toggle search window',
+            title: trans('toolbar.toggle_global_search'),
             icon: 'search'
           },
           initialState: (this.fileManagerVisible === true) ? this.mainSplitViewVisibleComponent : undefined
@@ -320,7 +325,7 @@ export default {
         {
           type: 'toggle',
           id: 'toggle-sidebar',
-          title: 'menu.toggle_sidebar',
+          title: trans('menu.toggle_sidebar'),
           icon: 'view-columns',
           initialState: (this.sidebarVisible === true) ? 'active' : ''
         }
