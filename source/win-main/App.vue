@@ -335,6 +335,10 @@ export default {
   watch: {
     sidebarVisible: function (newValue, oldValue) {
       if (newValue === true) {
+        if (this.distractionFree === true) {
+          this.distractionFree = false
+        }
+
         this.$refs['editor-sidebar-split'].unhide()
       } else {
         this.$refs['editor-sidebar-split'].hideView(2)
@@ -342,6 +346,10 @@ export default {
     },
     fileManagerVisible: function (newValue, oldValue) {
       if (newValue === true) {
+        if (this.distractionFree === true) {
+          this.distractionFree = false
+        }
+
         this.$refs['file-manager-split'].unhide()
       } else {
         this.$refs['file-manager-split'].hideView(1)
@@ -408,8 +416,7 @@ export default {
       } else if (shortcut === 'export') {
         this.showExportPopover()
       } else if (shortcut === 'toggle-distraction-free') {
-        // State will now have a boolean indicating if the checkbox was checked.
-        if (state === true) {
+        if (this.distractionFree === false) {
           // Enter distraction free mode
           this.sidebarsBeforeDistractionfree = {
             fileManager: this.fileManagerVisible,

@@ -931,19 +931,33 @@ body.win32 #editor, body.linux #editor {
 }
 
 // CodeMirror fullscreen
-#editor.fullscreen .CodeMirror {
-  @media(min-width: 1301px) { margin-left: @editor-margin-fullscreen-xxl !important; }
-  @media(max-width: 1300px) { margin-left: @editor-margin-fullscreen-xl  !important; }
-  @media(max-width: 1100px) { margin-left: @editor-margin-fullscreen-lg  !important; }
-  @media(max-width: 1000px) { margin-left: @editor-margin-fullscreen-md  !important; }
-  @media(max-width:  800px) { margin-left: @editor-margin-fullscreen-sm  !important; }
+#editor.fullscreen {
+    .CodeMirror {
+    @media(min-width: 1301px) { margin-left: @editor-margin-fullscreen-xxl !important; }
+    @media(max-width: 1300px) { margin-left: @editor-margin-fullscreen-xl  !important; }
+    @media(max-width: 1100px) { margin-left: @editor-margin-fullscreen-lg  !important; }
+    @media(max-width: 1000px) { margin-left: @editor-margin-fullscreen-md  !important; }
+    @media(max-width:  800px) { margin-left: @editor-margin-fullscreen-sm  !important; }
 
-  .CodeMirror-scroll {
-    @media(min-width: 1301px) { padding-right: @editor-margin-fullscreen-xxl !important; }
-    @media(max-width: 1300px) { padding-right: @editor-margin-fullscreen-xl  !important; }
-    @media(max-width: 1100px) { padding-right: @editor-margin-fullscreen-lg  !important; }
-    @media(max-width: 1000px) { padding-right: @editor-margin-fullscreen-md  !important; }
-    @media(max-width:  800px) { padding-right: @editor-margin-fullscreen-sm  !important; }
+    .CodeMirror-scroll {
+      @media(min-width: 1301px) { padding-right: @editor-margin-fullscreen-xxl !important; }
+      @media(max-width: 1300px) { padding-right: @editor-margin-fullscreen-xl  !important; }
+      @media(max-width: 1100px) { padding-right: @editor-margin-fullscreen-lg  !important; }
+      @media(max-width: 1000px) { padding-right: @editor-margin-fullscreen-md  !important; }
+      @media(max-width:  800px) { padding-right: @editor-margin-fullscreen-sm  !important; }
+    }
+  }
+}
+
+body.darwin {
+    #editor.fullscreen {
+     border-top: 1px solid #d5d5d5;
+  }
+
+  &.dark {
+    #editor.fullscreen {
+      border-top-color: #505050;
+    }
   }
 }
 
