@@ -1,6 +1,6 @@
 <template>
   <div id="global-search-pane">
-    <h4>Search</h4>
+    <h4>{{ searchTitle }}</h4>
     <!-- First: Two text controls for search terms and to restrict the search -->
     <TextControl
       ref="query-input"
@@ -164,6 +164,9 @@ export default {
     },
     activeDocumentInfo: function () {
       return this.$store.state.activeDocumentInfo
+    },
+    searchTitle: function () {
+      return trans('gui.global_search.title')
     },
     queryInputLabel: function () {
       return trans('gui.global_search.query_label')
