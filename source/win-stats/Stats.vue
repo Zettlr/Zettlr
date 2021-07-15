@@ -5,7 +5,7 @@
     v-bind:menubar="false"
     v-bind:show-tabbar="true"
     v-bind:tabbar-tabs="tabs"
-    v-bind:tabbar-label="'Preferences'"
+    v-bind:tabbar-label="tabs[currentTab].label"
     v-bind:disable-vibrancy="true"
     v-on:tab="currentTab = $event"
   >
@@ -104,7 +104,7 @@ export default {
       if (document.body.classList.contains('darwin')) {
         return this.tabs[this.currentTab].label
       } else {
-        return 'Stats'
+        return trans('dialog.statistics.title')
       }
     },
     wordCounts: function () {
