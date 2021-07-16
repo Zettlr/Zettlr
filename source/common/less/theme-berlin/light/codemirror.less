@@ -105,26 +105,84 @@
     }
 
     // Mermaid charts
+    --mermaid-bg0: var(--grey-0);
+    --mermaid-bg1: var(--grey-1);
+    --mermaid-lines: var(--grey-4);
+    --mermaid-text: var(--grey-4);
+    --mermaid-pop: var(--c-primary);
     .mermaid-chart {
-      // THEMING
-      // For now, a simple background
-      // for easy recognition
-      svg {
-        background-color: var(--grey-4);
+      --mermaid-bg0: var(--grey-0);
+      --mermaid-bg1: var(--grey-1);
+      --mermaid-lines: var(--grey-4);
+      --mermaid-text: var(--grey-4);
+      --mermaid-pop: var(--c-primary);
+      // main body is grey to see extend of diagram
+      // this needs to be set here as the setting for background
+      // in the mermaid API only uses the background color info
+      // for computation, not to actually set it
+      svg{
+        background-color: var(--mermaid-bg0);
+      }
+      // stroke-width can't be controlled through API directly
+      // some connectors inconsistently scale arrows with
+      // lines, we can't make these thicker without breaking
+      // the overall look
+      *:not(.relation, .transition) {stroke-width: 2px;}
+      // bold text-elements should not be as bold
+      .messageText{stroke-width: 1px;}
+      // some diagram types inconsistenly use transparency
+      // the only place where we need transparency is to mute
+      // the pie-chart colors
+      *:not(.pieCircle) { opacity: 1.0; }
+      // first-level containers use background color
+      /*.node *, .actor, .activation0, .activation1, .activation2,
+      .labelBox{
+        fill: var(--mermaid-bg0);
+      }
+      .edgeLabel * {
+        background-color: var(--mermaid-bg0);
+      }
+      // second-level containers are darker
+      .cluster rect, .note{
+        fill: var(--mermaid-bg1);
+      }*/
+      // all containers use bold strokes
+      // .node *, .cluster rect, .actor, .note, .loopLine,
+      // .labelBox, .pieCircle, .actor-line, .relation,
+      // .classGroup *{
+      //   stroke-width: 2px;
+      // }
+      /*// large containers use rounded corners
+      svg, .cluster rect, .actor{
+        rx: 5px;
+        ry: 5px;
         border-radius: 5px;
       }
-      // .edgePaths {
-      //   stroke: #333;
-      // }
-
-      // .nodes {
-      //   rect {
-      //     fill: #fff;
-      //     stroke: #333;
-      //   }
-      //   color: #333;
-      // }
-
+      // connectors use primary color
+      .flowchart-link, .marker, .edgePath *, .messageLine0,
+      .messageLine1, #arrowhead path, #crosshead path{
+        stroke: var(--mermaid-pop);
+        fill: var(--mermaid-pop);
+      }
+      // highlighted elements use primary color
+      .activation0, .activation1, .activation2{
+        stroke-width: 2px;
+        stroke: var(--mermaid-pop);
+      }
+      // text
+      .node .label, .nodeLabel, .edgeLabel, rect.actor{
+        color: var(--mermaid-text);
+      }
+      text.actor > tspan, .noteText > tspan, text.messageText,
+      text.labelText, .loopText > tspan, text.pieTitleText,
+      .legend text{
+        fill: var(--mermaid-text);
+      }
+      text.messageText{
+        stroke: 1px;
+        stroke: var(--mermaid-text);
+      }
+      */
       cursor: default; // No text cursor
       &.error {
         font-family: @font-code; // For the error messages
