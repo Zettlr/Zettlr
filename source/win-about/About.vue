@@ -77,7 +77,7 @@ export default {
       currentTab: 0,
       tabs: [
         {
-          label: trans('dialog.about.main'),
+          label: trans('dialog.about.title'),
           controls: 'tab-general',
           id: 'tab-general-control',
           icon: 'info-standard'
@@ -117,7 +117,11 @@ export default {
   },
   computed: {
     windowTitle: function () {
-      return trans('dialog.about.title') + ' ' + global.config.get('version')
+      if (process.platform === 'darwin') {
+        return this.tabs[this.currentTab].label
+      } else {
+        return trans('dialog.about.title') + ' ' + global.config.get('version')
+      }
     }
   }
 }
