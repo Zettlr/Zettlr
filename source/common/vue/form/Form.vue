@@ -48,6 +48,7 @@
           v-bind:key="f_idx"
           v-bind:value="getModelValue(field.model)"
           v-bind:label="field.label"
+          v-bind:reset="field.reset"
           v-bind:name="field.model"
           v-bind:filter="field.filter"
           v-on:input="$emit('input', field.model, $event)"
