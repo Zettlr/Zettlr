@@ -98,7 +98,7 @@
     "@types/electron-devtools-installer": "^2.2.0",
     "@types/luxon": "^1.27.1",
     "@types/mocha": "^8.2.3",
-    "@types/nspell": "^2.1.0",
+    "@types/nspell": "^2.1.1",
     "@types/rimraf": "^3.0.1",
     "@types/uuid": "^8.3.1",
     "@typescript-eslint/eslint-plugin": "^4.28.3",
