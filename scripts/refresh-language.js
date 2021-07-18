@@ -11,7 +11,7 @@ got('https://translate.zettlr.com/api/languages')
     const languages = JSON.parse(response.body)
 
     for (const language of languages) {
-      log.info(`Downloading language ${language.bcp47} (${language.completion}%, updated ${languages.updated_at})`)
+      log.info(`Downloading language ${language.bcp47} (${language.completion}%, updated ${language.updated_at.split('T')[0]})`)
 
       got(language.download_url)
         .then((data) => {

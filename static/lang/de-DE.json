@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-06-27T12:02:19.000000Z"
+        "updated_at": "2021-07-15T10:08:03.000000Z"
     },
     "dialog": {
         "about": {
@@ -330,6 +330,7 @@
             "watchdog_checkbox_label": "Aktiviere Watchdog-Polling",
             "watchdog_explainer": "Auf einigen Computern kann es passieren, dass Zettlr zu oft warnt, eine Datei sei au\u00dferhalb der App bearbeitet worden. Falls dies passiert, versuche, diese Einstellung zu aktivieren.",
             "watchdog_threshold_label": "Wartezeit, bis das Schreiben einer Datei als beendet erachtet wird (in Millisekunden)",
+            "whitelist": "Whitelist f\u00fcr iFrames",
             "whitelist_hostname": "Hostname",
             "xelatex": "Pfad zum XeLaTeX-Programm. Bitte \u00e4ndere dies nur, wenn Pandoc einen Fehler ausgibt, dass er die Bibliothek nicht finden kann.",
             "xelatex_default": "Standard: xelatex",
@@ -384,8 +385,10 @@
             "year": "Jahr"
         },
         "tag_cloud": {
+            "add_to_file": "Hinzuf\u00fcgen",
             "copy": "In die Zwischenablage kopieren",
             "info": "Hier siehst du alle Schlagworte, die du in deinen Dateien verwendet hast. Du kannst die gesamte Liste in die Zwischenablage kopieren. Fahre mit der Maus \u00fcber die Tags, um zu sehen, wie oft sie verwandt wurden.",
+            "suggestions_label": "Vorgeschlagene Schlagworte f\u00fcr die aktuelle Datei",
             "title": "Tag Cloud"
         },
         "tags": {
@@ -439,6 +442,7 @@
         "avg_not_reached": "\u270d\ud83c\udffc Schreibe, um deinen Durchschnitt zu \u00fcbertreffen.",
         "avg_surpassed": "\ud83d\udd25 Weiter so!",
         "avg_words": "durchschnittlich",
+        "chars": "%s Zeichen",
         "citeproc": {
             "error_db": "Die Zitationsdatenbank konnte nicht geladen werden",
             "error_report_message": "%s Zitationen konnten aufgrund von Fehlern nicht geladen werden. Bitte \u00fcberpr\u00fcfe die unten stehenden CiteKeys anhand des mit ausgegebenen Fehlertextes.",
@@ -479,12 +483,37 @@
             "tasklist": "Aufgabenliste",
             "ul": "Liste"
         },
+        "global_search": {
+            "clear_label": "Neue Suche",
+            "query_label": "Suchbegriffe",
+            "query_placeholder": "Suche nach \u2026",
+            "restrict_dir_label": "Begrenze Suche auf ein Verzeichnis",
+            "restrict_dir_placeholder": "Verzeichnis \u2026",
+            "search_label": "Suchen",
+            "title": "Volltextsuche",
+            "toggle_label": "Ergebnisse umschalten"
+        },
         "modified": "Ver\u00e4ndert",
+        "months": {
+            "apr": "April",
+            "aug": "August",
+            "dec": "Dezember",
+            "feb": "Februar",
+            "jan": "Januar",
+            "jul": "Juli",
+            "jun": "Juni",
+            "mar": "M\u00e4rz",
+            "may": "Mai",
+            "nov": "November",
+            "oct": "Oktober",
+            "sep": "September"
+        },
         "no_attachments": "Keine Anh\u00e4nge",
         "no_dir_selected": "Kein Verzeichnis ausgew\u00e4hlt",
         "no_open_document": "Kein offenes Dokument",
         "no_other_files": "Keine anderen Dateien",
         "no_reference_message": "Kein Fu\u00dfnotentext",
+        "no_related_files": "Keine verwandten Dateien",
         "no_search_results": "Keine Ergebnisse",
         "number_selections": "%s Selektionen",
         "other_files": "Andere Dateien",
@@ -531,6 +560,7 @@
         "donate": "Unterst\u00fctzen",
         "duplicate_file": "Datei duplizieren",
         "export": "Exportieren\u2026",
+        "filter_files": "Dateien filtern",
         "find_dir": "In Verzeichnis finden",
         "find_file": "In Datei finden",
         "generate_id": "Neue ID generieren",
@@ -731,7 +761,9 @@
         "show_toc": "Inhaltsverzeichnis anzeigen",
         "stats": "Statistiken anzeigen",
         "tag_cloud": "Schlagworte",
-        "toggle_attachments": "Anh\u00e4nge anzeigen"
+        "toggle_attachments": "Anh\u00e4nge anzeigen",
+        "toggle_file_manager": "Dateimanager",
+        "toggle_global_search": "Volltextsuche"
     },
     "tray": {
         "show_zettlr": "Zettlr anzeigen",

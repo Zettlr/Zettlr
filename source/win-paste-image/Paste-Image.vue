@@ -1,7 +1,7 @@
 <template>
   <WindowChrome
     v-bind:title="windowTitle"
-    v-bind:titlebar="true"
+    v-bind:titlebar="false"
     v-bind:menubar="false"
     v-bind:show-statusbar="true"
     v-bind:statusbar-controls="statusbarControls"
@@ -16,8 +16,11 @@
         {{ dimensionsLabel }}: <strong>{{ imgWidth }}&times;{{ imgHeight }}px</strong>
       </p>
       <TextControl
+        ref="filename"
         v-model="fileName"
         v-bind:label="filenameLabel"
+        v-on:confirm="handleClick('save')"
+        v-on:escape="handleClick('cancel')"
       >
       </TextControl>
       <File
@@ -33,6 +36,8 @@
         v-bind:max="imgWidth"
         v-bind:placeholder="imgWidth"
         v-bind:inline="true"
+        v-on:confirm="handleClick('save')"
+        v-on:escape="handleClick('cancel')"
       ></NumberControl>
       <NumberControl
         v-model="imgHeight"
@@ -40,6 +45,8 @@
         v-bind:max="imgHeight"
         v-bind:placeholder="imgHeight"
         v-bind:inline="true"
+        v-on:confirm="handleClick('save')"
+        v-on:escape="handleClick('cancel')"
       ></NumberControl>
       <Checkbox
         v-model="retainAspect"
@@ -169,6 +176,11 @@ export default {
     retainAspect: function () {
       this.recalculateDimensions('width')
     }
+  },
+  mounted: function () {
+    // On instantiation, already focus and select the filename input
+    this.$refs.filename.focus()
+    this.$refs.filename.select()
   },
   methods: {
     recalculateDimensions: function (type) {

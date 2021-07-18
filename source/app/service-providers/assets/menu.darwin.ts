@@ -404,10 +404,10 @@ export default function getMenu (): MenuItemConstructorOptions[] {
           id: 'menu.toggle_distraction_free',
           label: trans('menu.toggle_distraction_free'),
           accelerator: 'Cmd+J',
-          type: 'checkbox',
-          checked: false,
+          // type: 'checkbox',
+          // checked: false,
           click: function (menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'toggle-distraction-free', menuitem.checked)
+            focusedWindow?.webContents.send('shortcut', 'toggle-distraction-free' /*, menuitem.checked */)
           }
         },
         {

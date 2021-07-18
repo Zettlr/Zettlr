@@ -42,10 +42,10 @@ export default class FileNew extends ZettlrCommand {
       return // Return early
     }
 
-    let dir = this._app.getFileSystem().findDir(arg.path)
+    let dir = this._app.getFileSystem().openDirectory
 
-    if (dir === null) {
-      dir = this._app.getFileSystem().openDirectory
+    if ('path' in arg) {
+      dir = this._app.getFileSystem().findDir(arg.path)
     }
 
     if (dir === null) {

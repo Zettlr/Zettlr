@@ -418,4 +418,16 @@ body.dark #file-manager {
     color: rgb(230, 230, 230);
   }
 }
+
+body.darwin {
+  #file-manager {
+    border-top: 1px solid #d5d5d5;
+  }
+
+  &.dark {
+    #file-manager {
+      border-top-color: #505050;
+    }
+  }
+}
 </style>

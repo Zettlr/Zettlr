@@ -9,7 +9,7 @@
       ></TokenList>
 
       <ButtonControl
-        v-bind:label="'Add to file'"
+        v-bind:label="addButtonLabel"
         v-on:click="shouldAddSuggestions = true"
       ></ButtonControl>
     </p>
@@ -87,6 +87,9 @@ export default {
     },
     tagSuggestionsLabel: function () {
       return trans('dialog.tag_cloud.suggestions_label')
+    },
+    addButtonLabel: function () {
+      return trans('dialog.tag_cloud.add_to_file')
     },
     filteredTags: function () {
       return this.tags.filter(tag => {

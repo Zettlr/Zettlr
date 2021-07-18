@@ -14,7 +14,7 @@ bibliography: []
 filters:
 - type: citeproc
 file-scope: false
-top-level-division: chapter
+top-level-division: default
 pdf-engine: xelatex # Change this if you want to use a different engine.
 dpi: 72
 toc: false

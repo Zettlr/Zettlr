@@ -21,7 +21,7 @@
       the first people will have a decade of years, but even then it would only
       be ten lines. I think anything below 52 is okay-ish :D
     -->
-    <h1>Word counts {{ currentYear }}</h1>
+    <h1>{{ chartLabel }} {{ currentYear }}</h1>
     <ButtonControl
       v-bind:disabled="unit === 'year' || currentYear <= earliestYear"
       v-bind:icon="'angle left'"
@@ -74,6 +74,7 @@
  */
 
 import { DateTime } from 'luxon'
+import { trans } from '../common/i18n-renderer'
 import {
   Chart,
   CategoryScale,
@@ -110,6 +111,9 @@ export default {
     }
   },
   computed: {
+    chartLabel: function () {
+      return trans('dialog.statistics.tabs.chart_label')
+    },
     earliestYear: function () {
       const years = Object.keys(this.wordCounts).map(k => parseInt(k.substr(0, 4), 10))
       let min = +Infinity

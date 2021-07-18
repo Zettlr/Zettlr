@@ -44,7 +44,7 @@ export default function createPasteImageModal (win: BrowserWindow, startPath: st
   }
 
   // Set the correct window chrome
-  setWindowChrome(winConf)
+  setWindowChrome(winConf, true)
 
   const window = new BrowserWindow(winConf)
 

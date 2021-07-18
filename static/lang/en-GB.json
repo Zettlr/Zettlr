@@ -7,7 +7,7 @@
             "lukecarrier \u003Cluke@carrier.im\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-06-27T11:58:37.000000Z"
+        "updated_at": "2021-07-15T10:07:22.000000Z"
     },
     "dialog": {
         "about": {
@@ -333,6 +333,7 @@
             "watchdog_checkbox_label": "Activate Watchdog polling",
             "watchdog_explainer": "On some computers, Zettlr may report too many remote file changes. If this happens, try activating this setting.",
             "watchdog_threshold_label": "Time to wait before writing a file is considered done (in ms)",
+            "whitelist": "iFrame rendering whitelist",
             "whitelist_hostname": "Hostname",
             "xelatex": "Path to xelatex executable. Please only change, if Zettlr is unable to locate it.",
             "xelatex_default": "Default: xelatex",
@@ -387,8 +388,10 @@
             "year": "Year"
         },
         "tag_cloud": {
+            "add_to_file": "Add to file",
             "copy": "Copy to clipboard",
             "info": "Here you find all tags that you've used somewhere in your files. You can copy the whole list to the clipboard. Hover over the tags to see the number of times you've used them.",
+            "suggestions_label": "Suggested tags for the current file",
             "title": "Tag Cloud"
         },
         "tags": {
@@ -442,6 +445,7 @@
         "avg_not_reached": "\u270d\ud83c\udffc Get writing to surpass your daily average.",
         "avg_surpassed": "\ud83d\udd25 You're on fire!",
         "avg_words": "daily average",
+        "chars": "%s characters",
         "citeproc": {
             "error_db": "The citation database could not be loaded",
             "error_report_message": "%s items in your library could not be loaded due to errors. Please check the error messages below to see which CiteKeys are malformed and what the error was.",
@@ -482,12 +486,37 @@
             "tasklist": "Tasklist",
             "ul": "Itemised list"
         },
+        "global_search": {
+            "clear_label": "Clear search",
+            "query_label": "Enter your search terms below",
+            "query_placeholder": "Find \u2026",
+            "restrict_dir_label": "Restrict search to directory",
+            "restrict_dir_placeholder": "Restrict to directory \u2026",
+            "search_label": "Search",
+            "title": "Full-Text Search",
+            "toggle_label": "Toggle results"
+        },
         "modified": "Modified",
+        "months": {
+            "apr": "April",
+            "aug": "August",
+            "dec": "December",
+            "feb": "February",
+            "jan": "January",
+            "jul": "July",
+            "jun": "June",
+            "mar": "March",
+            "may": "May",
+            "nov": "November",
+            "oct": "October",
+            "sep": "September"
+        },
         "no_attachments": "No attachments",
         "no_dir_selected": "No directory selected",
         "no_open_document": "No open document",
         "no_other_files": "No other files",
         "no_reference_message": "No reference text",
+        "no_related_files": "No related files",
         "no_search_results": "No results",
         "number_selections": "%s selections",
         "other_files": "Other files",
@@ -534,6 +563,7 @@
         "donate": "Support Zettlr",
         "duplicate_file": "Duplicate file",
         "export": "Export\u2026",
+        "filter_files": "Filter files",
         "find_dir": "Find in directory",
         "find_file": "Find in file",
         "generate_id": "Generate new ID",
@@ -734,7 +764,9 @@
         "show_toc": "Show the table of contents",
         "stats": "View stats",
         "tag_cloud": "Tags",
-        "toggle_attachments": "View attachments"
+        "toggle_attachments": "View attachments",
+        "toggle_file_manager": "File manager",
+        "toggle_global_search": "Global search"
     },
     "tray": {
         "show_zettlr": "Show Zettlr",

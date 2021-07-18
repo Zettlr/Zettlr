@@ -50,7 +50,7 @@ export default function createErrorModal (win: BrowserWindow, title: string, mes
   }
 
   // Set the correct window chrome
-  setWindowChrome(winConf)
+  setWindowChrome(winConf, true)
 
   const window = new BrowserWindow(winConf)
 

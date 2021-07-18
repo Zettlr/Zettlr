@@ -32,6 +32,7 @@ export default class ForceOpen extends ZettlrCommand {
     * @return {Boolean} Whether the file was successfully deleted.
     */
   async run (evt: string, arg: any): Promise<void> {
+    console.log(arg)
     // Determine if the file should be created, if it can't be found. For this
     // we need both the respective preferences setting and an auto-search
     // command.

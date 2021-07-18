@@ -310,9 +310,17 @@ export default {
 
 <style lang="less">
 body #editor {
+  background-color: #ffffff;
+  height: 100%;
+
   .CodeMirror {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     height: 100%;
+    background: none;
   }
+}
+
+body.dark #editor {
+  background-color: rgba(20, 20, 30, 1);
 }
 </style>

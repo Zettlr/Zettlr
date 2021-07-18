@@ -1,5 +1,11 @@
 <template>
   <div id="about-general">
+    <h1 id="main-heading">
+      Zettlr {{ version }}
+    </h1>
+    <p id="uuid">
+      UUID: {{ uuid }}
+    </p>
     <p v-html="dialogIntro"></p>
 
     <div class="projects">
@@ -82,6 +88,14 @@ export default {
       CSLInfo: trans('dialog.about.citationstyle'),
       nodeTrademark: trans('dialog.about.trademark')
     }
+  },
+  computed: {
+    version: function () {
+      return global.config.get('version')
+    },
+    uuid: function () {
+      return global.config.get('uuid')
+    }
   }
 }
 </script>
@@ -92,6 +106,19 @@ div#about-general {
     // Reset the default removed margin on simple p-elements etc., which is
     // currently applied in the geometry CSS.
     margin: revert;
+  }
+
+  h1#main-heading {
+    margin-bottom: 0px;
+  }
+
+  p#uuid {
+    font-family: Menlo, Monaco, 'Liberation Mono', 'Courier New', monospace;
+    color: rgb(80, 80, 80);
+    font-size: 80%;
+    margin-top: 0px;
+    user-select: text;
+    cursor: text;
   }
 
   div.projects {
