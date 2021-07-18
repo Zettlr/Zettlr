@@ -112,19 +112,14 @@
       // for computation, not to actually set it
       svg{
         background-color: var(--mermaid-bg0);
+        border-radius: 5px;
       }
-      // * {
-      //   font-size: 16px;
-      // }
       // stroke-width can't be controlled through API directly
       // some connectors inconsistently scale arrows with
       // lines, we can't make these thicker without breaking
       // the overall look
       *:not(.relation, .transition, .relationshipLine) {stroke-width: 2px;}
       [class="er relationshipLine"]{stroke-width: 1px;}
-      // thicker arrows don't stand out enough
-      // doesn't work at the moment
-      // .edge-thickness-thick {stroke-width: 4px;}
       // bold text-elements should not be as bold
       text.messageText{stroke-width: 1px;}
       // some diagram types inconsistenly use transparency
@@ -138,8 +133,9 @@
       // mermaid doesn't adjust the legend colors automatically
       .legend rect {opacity: 0.8;}
       // relationship diagram
-      // odd-numbered lines are not controlled by other variables
+      // attribute boxes are not controlled by theme
       .attributeBoxOdd {fill: var(--mermaid-bg0)}
+      .attributeBoxEven {fill: var(--mermaid-bg0)}
       // multiplicities should use correct colors
       #ZERO_OR_MORE_START *, #ZERO_OR_MORE_END *, #ONE_OR_MORE_START *,
       #ONE_OR_MORE_END *, #ONLY_ONE_START *, #ONLY_ONE_END *,
@@ -189,73 +185,14 @@
         stroke: var(--mermaid-lines);
       }
       // text color of critical tasks can't be controlled directly
-      // [class*=critText]{fill: var(--mermaid-bg0)}
-      [class*=activeText], [class*=activeCritText]{fill: var(--mermaid-bg0) !important}
+      [class*=activeText], [class*=activeCritText]{
+        fill: var(--mermaid-text-contrast) !important
+      }
       // section need opacity because grid-lines are rendered beneath them
       // we remove the fill for odd sections and re-order even sections to
       // render in the background
       .section0, .section2 {fill: none;}
-      // .section1, .section3 {
-      //   // z-index: 1;
-      //   // position: relative;
-      //   stroke: var(--mermaid-lines);
-      // }
-      // svg {perspective: 1000px;}
-      // .grid {
-        // z-index: 100;
-        // position: relative;
-        // transform: translateZ(100px);
-        // transform-origin: 0 0;
-      // }
-      // first-level containers use background color
-      /*.node *, .actor, .activation0, .activation1, .activation2,
-      .labelBox{
-        fill: var(--mermaid-bg0);
-      }
-      .edgeLabel * {
-        background-color: var(--mermaid-bg0);
-      }
-      // second-level containers are darker
-      .cluster rect, .note{
-        fill: var(--mermaid-bg1);
-      }*/
-      // all containers use bold strokes
-      // .node *, .cluster rect, .actor, .note, .loopLine,
-      // .labelBox, .pieCircle, .actor-line, .relation,
-      // .classGroup *{
-      //   stroke-width: 2px;
-      // }
-      /*// large containers use rounded corners
-      svg, .cluster rect, .actor{
-        rx: 5px;
-        ry: 5px;
-        border-radius: 5px;
-      }
-      // connectors use primary color
-      .flowchart-link, .marker, .edgePath *, .messageLine0,
-      .messageLine1, #arrowhead path, #crosshead path{
-        stroke: var(--mermaid-pop);
-        fill: var(--mermaid-pop);
-      }
-      // highlighted elements use primary color
-      .activation0, .activation1, .activation2{
-        stroke-width: 2px;
-        stroke: var(--mermaid-pop);
-      }
-      // text
-      .node .label, .nodeLabel, .edgeLabel, rect.actor{
-        color: var(--mermaid-text);
-      }
-      text.actor > tspan, .noteText > tspan, text.messageText,
-      text.labelText, .loopText > tspan, text.pieTitleText,
-      .legend text{
-        fill: var(--mermaid-text);
-      }
-      text.messageText{
-        stroke: 1px;
-        stroke: var(--mermaid-text);
-      }
-      */
+      
       cursor: default; // No text cursor
       &.error {
         font-family: @font-code; // For the error messages

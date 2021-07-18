@@ -27,29 +27,41 @@ const mermaid = require('mermaid')
   'use strict'
 
   // Initialise the mermaid API
-  // We could get the CSS variables like this, but CSS is loaded _after_ this
-  // code snippet, so the property will just return an empty string
-  // let mermaid_bg0   = getComputedStyle(document.documentElement).getPropertyValue('--grey-0')
-  let mermaid_bg0   = 'rgba(240, 240, 240, 1)' // grey 0
-  let mermaid_bg1   = 'rgba(220, 220, 220, 1)' // grey 1
-  let mermaid_lines = 'rgba(100, 100, 110, 1)' // grey 4
-  let mermaid_text  = 'rgba(100, 100, 110, 1)' // grey 4
-  let mermaid_pop   = 'rgba( 28, 178, 126, 1)' // primary
-  let mermaid_pop_shade   = 'rgba(  4, 125, 101, 1)' // primary shade
-  let mermaid_pie1  = 'rgba( 28, 178, 126, 1)' // green 0
-  let mermaid_pie2  = 'rgba(  4, 125, 101, 1)' // green 1
-  let mermaid_pie3  = 'rgba( 40,  80,  40, 1)' // green 2
-  let mermaid_pie4  = 'rgba( 29, 117, 179, 1)' // blue 0
-  let mermaid_pie5  = 'rgba( 37,  53, 146, 1)' // blue 1
-  let mermaid_pie6  = 'rgba( 70,  90, 120, 1)' // blue 2
-  let mermaid_pie7  = 'rgba(255, 180, 108, 1)' // orange 0
-  let mermaid_pie8  = 'rgba(255, 124,  69, 1)' // orange 1
-  let mermaid_pie9  = 'rgba(240,  87,  52, 1)' // orange 2
-  let mermaid_pie10 = 'rgba(240,  50,  50, 1)' // red 0
-  let mermaid_pie11 = 'rgba(180,  35,  35, 1)' // red 3
-  let mermaid_pie12 = 'rgba(100,  20,  20, 1)' // red 6
-  let mermaid_font  = 'Segoe UI' // theme font
-  mermaid.mermaidAPI.initialize({ startOnLoad: false, theme: 'base',
+  // mermaid.mermaidAPI.initialize({ startOnLoad: false, theme: 'base'})
+
+  /**
+   * Defines the CodeMirror command to render all found markdown images.
+   * @param  {CodeMirror} cm The calling CodeMirror instance
+   * @return {void}    Commands do not return.
+   */
+  CodeMirror.commands.markdownRenderMermaid = function (cm) {
+    let codeblock = [] // Holds a mermaid code block
+    let currentCursorPosition = cm.getCursor('from').line
+
+    // we need to initialize the mermaid API here, since we can only get the
+    // CSS color variables by querying the computed style of created documents
+    // get theme colors and font
+    let mermaid_bg0   = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-bg0').replace(/\s+/g, '')
+    let mermaid_bg1   = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-bg1').replace(/\s+/g, '')
+    let mermaid_lines = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-lines').replace(/\s+/g, '')
+    let mermaid_text  = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-text').replace(/\s+/g, '')
+    let mermaid_text_contrast  = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-text-contrast').replace(/\s+/g, '')
+    let mermaid_pop   = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pop').replace(/\s+/g, '')
+    let mermaid_pie1  = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pie1').replace(/\s+/g, '')
+    let mermaid_pie2  = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pie2').replace(/\s+/g, '')
+    let mermaid_pie3  = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pie3').replace(/\s+/g, '')
+    let mermaid_pie4  = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pie4').replace(/\s+/g, '')
+    let mermaid_pie5  = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pie5').replace(/\s+/g, '')
+    let mermaid_pie6  = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pie6').replace(/\s+/g, '')
+    let mermaid_pie7  = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pie7').replace(/\s+/g, '')
+    let mermaid_pie8  = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pie8').replace(/\s+/g, '')
+    let mermaid_pie9  = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pie9').replace(/\s+/g, '')
+    let mermaid_pie10 = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pie10').replace(/\s+/g, '')
+    let mermaid_pie11 = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pie11').replace(/\s+/g, '')
+    let mermaid_pie12 = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pie12').replace(/\s+/g, '')
+    let mermaid_font  = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('font-family')
+    // re-initialize mermaid API
+    mermaid.mermaidAPI.initialize({ startOnLoad: false, theme: 'base',
     themeVariables: {
       // main body is colored to see extend of diagram
       // first-level containers use same background color
@@ -85,7 +97,6 @@ const mermaid = require('mermaid')
       'signalColor': mermaid_pop,
       'activationBorderColor': mermaid_pop,
       'signalTextColor': mermaid_text,
-      // 'loopLine': mermaid_pop,
       // pie chart
       'pie1': mermaid_pie1,
       'pie2': mermaid_pie2,
@@ -100,16 +111,10 @@ const mermaid = require('mermaid')
       'pie11': mermaid_pie11,
       'pie12': mermaid_pie12,
       'pieOpacity': '0.8',
-      'pieSectionTextColor': mermaid_bg0,
+      'pieSectionTextColor': mermaid_text_contrast,
       'pieStrokeColor': mermaid_bg0,
-      // class diagram
-      // can we increase font-size?
-      // can we increase multiplicity font-size?
       // state chart
-      // 'compositeBackground': mermaid_bg1,
-      // 'compositeTitelBackground': mermaid_bg1,
       'altBackground'   : mermaid_bg1,
-      // 'innerEndBackground' : mermaid_pop,
       // user journey diagram
       'fillType0': mermaid_bg0,
       'fillType1': mermaid_bg1,
@@ -120,7 +125,6 @@ const mermaid = require('mermaid')
       'fillType6': mermaid_bg0,
       'fillType7': mermaid_bg1,
       // gantt chart
-      'altSectionBkgColor': mermaid_lines,
       'gridColor': mermaid_lines,
       'todayLineColor': mermaid_pop,
       'doneTaskBkgColor': mermaid_bg1,
@@ -129,19 +133,13 @@ const mermaid = require('mermaid')
       'activeTaskBorderColor': mermaid_pop,
       'taskBkgColor': mermaid_bg0,
       'taskBorderColor': mermaid_lines,
-      // 'taskTextDarkColor': mermaid_bg0,
       'critBkgColor': mermaid_bg0,
       'critBorderColor': mermaid_pop,
+      // this should be mermaid_bg1, but the element must be transparent to
+      // show the gridlines underneath. with mermaid_lines, the result is roughly
+      // the correct color
+      'altSectionBkgColor': mermaid_lines,
     }})
-
-  /**
-   * Defines the CodeMirror command to render all found markdown images.
-   * @param  {CodeMirror} cm The calling CodeMirror instance
-   * @return {void}    Commands do not return.
-   */
-  CodeMirror.commands.markdownRenderMermaid = function (cm) {
-    let codeblock = [] // Holds a mermaid code block
-    let currentCursorPosition = cm.getCursor('from').line
 
     // We'll only render the viewport
     const viewport = cm.getViewport()
@@ -192,13 +190,7 @@ const mermaid = require('mermaid')
         let code = codeblock.join('\n')
         let svg = document.createElement('span')
         svg.classList.add('mermaid-chart')
-        // we can use a workaround like this to prepend all styling via
-        // theme-variables to each block's code
-        // this has the advantage that by the time this code is run, the
-        // overall elements are set up and we can use the getComputedStyle()
-        // function to pass CSS-variables
-        // let test   = getComputedStyle(document.documentElement).getPropertyValue('--red-0')
-        // code = "%%{init: {'themeVariables': {'clusterBkg': '" + test + "'}}}%%\n" + code
+
         try {
           let graph = mermaid.mermaidAPI.render(`graphDivL${startLine}-L${endLine}${Date.now()}`, code)
           svg.innerHTML = graph
