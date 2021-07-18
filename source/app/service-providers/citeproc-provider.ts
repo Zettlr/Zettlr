@@ -451,6 +451,10 @@ export default class CiteprocProvider {
           global.log.info('[Citeproc Provider] Not unloading main library.')
         }
         this._mainLibrary = global.config.get('export.cslLibrary')
+        if (this._mainLibrary.trim() === '') {
+          return // The user removed the csl library
+        }
+
         this._loadDatabase(this._mainLibrary)
           .then(db => {
             this._selectDatabase(db.path)

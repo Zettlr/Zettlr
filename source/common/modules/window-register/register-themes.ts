@@ -100,9 +100,9 @@ export default function registerThemes (): void {
       const style = document.createElement('style')
       // style.setAttribute('type', 'text/css')
 
-      const color = '#' + accentColor.accent.substr(0, 6)
-      const contrast = '#' + accentColor.contrast.substr(0, 6)
-      style.textContent = `:root { --system-accent-color:${color}; --system-accent-color-contrast:${contrast}}`
+      const color = '#' + accentColor.accent
+      const contrast = '#' + accentColor.contrast
+      style.textContent = `:root { --system-accent-color: ${color}; --system-accent-color-contrast: ${contrast}}`
       document.head.prepend(style)
     })
     .catch(e => console.error(e))
