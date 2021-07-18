@@ -105,23 +105,6 @@
     }
 
     // Mermaid charts
-    --mermaid-bg0: var(--grey-0);
-    --mermaid-bg1: var(--grey-1);
-    --mermaid-lines: var(--grey-4);
-    --mermaid-text: var(--grey-4);
-    --mermaid-pop: var(--c-primary);
-    --mermaid-pie1: var(--green-0);
-    --mermaid-pie2: var(--green-1);
-    --mermaid-pie3: var(--green-2);
-    --mermaid-pie4: var(--blue-0);
-    --mermaid-pie5: var(--blue-1);
-    --mermaid-pie6: var(--blue-2);
-    --mermaid-pie7: var(--orange-0);
-    --mermaid-pie8: var(--orange-1);
-    --mermaid-pie9: var(--orange-2);
-    --mermaid-pie10: var(--red-0);
-    --mermaid-pie11: var(--red-1);
-    --mermaid-pie12: var(--red-2);
     .mermaid-chart {
       // main body is grey to see extend of diagram
       // this needs to be set here as the setting for background
@@ -130,6 +113,9 @@
       svg{
         background-color: var(--mermaid-bg0);
       }
+      // * {
+      //   font-size: 16px;
+      // }
       // stroke-width can't be controlled through API directly
       // some connectors inconsistently scale arrows with
       // lines, we can't make these thicker without breaking
@@ -143,8 +129,12 @@
       text.messageText{stroke-width: 1px;}
       // some diagram types inconsistenly use transparency
       // the only place where we need transparency is to mute
-      // the pie-chart colors
-      *:not(.pieCircle) {opacity: 1.0; fill-opacity: 1.0;}
+      // the pie-chart colors and for the GANTT sections
+      *:not(.pieCircle, .section1, .section3) {
+        opacity: 1.0;
+        fill-opacity: 1.0;
+      }
+      // pie chart
       // mermaid doesn't adjust the legend colors automatically
       .legend rect {opacity: 0.8;}
       // relationship diagram
@@ -161,11 +151,14 @@
         fill: var(--mermaid-bg0);
       }
       // user journey diagram
-      // tasks should have borders. actor-<number> classes are generated
-      // on demand, all of them are with the method below
-      .journey-section, .task{
+      // tasks should have borders, but the task class is also used in
+      // GANTT charts, so we need to select only elements without sublasses
+      .journey-section, .task:not([class*="crit"], [class*="Crit"],
+      [class*="active"], [class*="done"]){
         stroke: var(--mermaid-lines);
       }
+      // actor-<number> classes are generated on demand, we need to capture
+      // all of them are with the method below
       [class^="actor-"]:not(.actor-line){stroke: var(--mermaid-bg0)}
       // faces should have highlight color with high-contrast lines
       // to capture the eyes, a workaround with the circle radius is used
@@ -190,6 +183,30 @@
       .actor-9{fill: var(--mermaid-pie10)}
       .actor-10{fill: var(--mermaid-pie11)}
       .actor-11{fill: var(--mermaid-pie12)}
+      // gantt chart
+      // line color is overwritten in some internal function, fix it here
+      .tick [stroke="currentColor"], .grid [stroke="currentColor"]{
+        stroke: var(--mermaid-lines);
+      }
+      // text color of critical tasks can't be controlled directly
+      // [class*=critText]{fill: var(--mermaid-bg0)}
+      [class*=activeText], [class*=activeCritText]{fill: var(--mermaid-bg0) !important}
+      // section need opacity because grid-lines are rendered beneath them
+      // we remove the fill for odd sections and re-order even sections to
+      // render in the background
+      .section0, .section2 {fill: none;}
+      // .section1, .section3 {
+      //   // z-index: 1;
+      //   // position: relative;
+      //   stroke: var(--mermaid-lines);
+      // }
+      // svg {perspective: 1000px;}
+      // .grid {
+        // z-index: 100;
+        // position: relative;
+        // transform: translateZ(100px);
+        // transform-origin: 0 0;
+      // }
       // first-level containers use background color
       /*.node *, .actor, .activation0, .activation1, .activation2,
       .labelBox{

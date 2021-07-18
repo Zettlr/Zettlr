@@ -35,6 +35,7 @@ const mermaid = require('mermaid')
   let mermaid_lines = 'rgba(100, 100, 110, 1)' // grey 4
   let mermaid_text  = 'rgba(100, 100, 110, 1)' // grey 4
   let mermaid_pop   = 'rgba( 28, 178, 126, 1)' // primary
+  let mermaid_pop_shade   = 'rgba(  4, 125, 101, 1)' // primary shade
   let mermaid_pie1  = 'rgba( 28, 178, 126, 1)' // green 0
   let mermaid_pie2  = 'rgba(  4, 125, 101, 1)' // green 1
   let mermaid_pie3  = 'rgba( 40,  80,  40, 1)' // green 2
@@ -84,6 +85,7 @@ const mermaid = require('mermaid')
       'signalColor': mermaid_pop,
       'activationBorderColor': mermaid_pop,
       'signalTextColor': mermaid_text,
+      // 'loopLine': mermaid_pop,
       // pie chart
       'pie1': mermaid_pie1,
       'pie2': mermaid_pie2,
@@ -100,6 +102,9 @@ const mermaid = require('mermaid')
       'pieOpacity': '0.8',
       'pieSectionTextColor': mermaid_bg0,
       'pieStrokeColor': mermaid_bg0,
+      // class diagram
+      // can we increase font-size?
+      // can we increase multiplicity font-size?
       // state chart
       // 'compositeBackground': mermaid_bg1,
       // 'compositeTitelBackground': mermaid_bg1,
@@ -114,6 +119,19 @@ const mermaid = require('mermaid')
       'fillType5': mermaid_bg1,
       'fillType6': mermaid_bg0,
       'fillType7': mermaid_bg1,
+      // gantt chart
+      'altSectionBkgColor': mermaid_lines,
+      'gridColor': mermaid_lines,
+      'todayLineColor': mermaid_pop,
+      'doneTaskBkgColor': mermaid_bg1,
+      'doneTaskBorderColor': mermaid_lines,
+      'activeTaskBkgColor': mermaid_pop,
+      'activeTaskBorderColor': mermaid_pop,
+      'taskBkgColor': mermaid_bg0,
+      'taskBorderColor': mermaid_lines,
+      // 'taskTextDarkColor': mermaid_bg0,
+      'critBkgColor': mermaid_bg0,
+      'critBorderColor': mermaid_pop,
     }})
 
   /**
