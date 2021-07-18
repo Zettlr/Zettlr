@@ -5,7 +5,7 @@
   *
   * Contains:        Mermaid rendering Plugin
   * CVM-Role:        CodeMirror Plugin
-  * Maintainer:      Hendrik Erz
+  * Maintainer:      Hendrik Erz, Thaddäus Wiedemer
   * License:         GNU GPL v3
   *
   * Description:     This plugin renders Mermaid diagrams.
