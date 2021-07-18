@@ -27,7 +27,6 @@ const mermaid = require('mermaid')
   'use strict'
 
   // Initialise the mermaid API
-  // TODO: Theming!
   // We could get the CSS variables like this, but CSS is loaded _after_ this
   // code snippet, so the property will just return an empty string
   // let mermaid_bg0   = getComputedStyle(document.documentElement).getPropertyValue('--grey-0')
@@ -105,7 +104,16 @@ const mermaid = require('mermaid')
       // 'compositeBackground': mermaid_bg1,
       // 'compositeTitelBackground': mermaid_bg1,
       'altBackground'   : mermaid_bg1,
-      // should I adjust notes?
+      // 'innerEndBackground' : mermaid_pop,
+      // user journey diagram
+      'fillType0': mermaid_bg0,
+      'fillType1': mermaid_bg1,
+      'fillType2': mermaid_bg0,
+      'fillType3': mermaid_bg1,
+      'fillType4': mermaid_bg0,
+      'fillType5': mermaid_bg1,
+      'fillType6': mermaid_bg0,
+      'fillType7': mermaid_bg1,
     }})
 
   /**
@@ -166,6 +174,13 @@ const mermaid = require('mermaid')
         let code = codeblock.join('\n')
         let svg = document.createElement('span')
         svg.classList.add('mermaid-chart')
+        // we can use a workaround like this to prepend all styling via
+        // theme-variables to each block's code
+        // this has the advantage that by the time this code is run, the
+        // overall elements are set up and we can use the getComputedStyle()
+        // function to pass CSS-variables
+        // let test   = getComputedStyle(document.documentElement).getPropertyValue('--red-0')
+        // code = "%%{init: {'themeVariables': {'clusterBkg': '" + test + "'}}}%%\n" + code
         try {
           let graph = mermaid.mermaidAPI.render(`graphDivL${startLine}-L${endLine}${Date.now()}`, code)
           svg.innerHTML = graph
