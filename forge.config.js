@@ -133,6 +133,13 @@ module.exports = {
       '@electron-forge/plugin-webpack',
       {
         mainConfig: './webpack.main.config.js',
+        // Since electron-forge v6.0.0-beta.58, this property controls the CSP
+        // for the development process. Since the defaults electron-forge are
+        // not suitable for our needs (since they prevent the usage of our
+        // custom safe-file:// protocol), we must manually set this. Here we are
+        // basically copying the CSP from the HTML-files, but with 'unsafe-eval'
+        // added (which webpack needs for the sourcemaps).
+        devContentSecurityPolicy: "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
         renderer: {
           config: './webpack.renderer.config.js',
           entryPoints: [
