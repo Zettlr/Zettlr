@@ -27,10 +27,10 @@ import md2html from '../../common/util/md-to-html'
 
 import { ipcMain, app, shell } from 'electron'
 import { trans } from '../../common/i18n-main'
-import { repo_url as REPO_URL } from '../../common/data.json'
 import isFile from '../../common/util/is-file'
 
 const CUR_VER = app.getVersion()
+const REPO_URL = 'https://www.zettlr.com/api/releases/latest'
 
 // Mimicks the API response for a downloadable asset
 interface UpdateAsset {
@@ -158,13 +158,14 @@ export default class UpdateProvider {
    */
   async _check (): Promise<void> {
     try {
+      global.log.info(`[Updater] Checking ${REPO_URL} for updates ...`)
       const response: Response<string> = await got(REPO_URL, {
         method: 'GET',
         searchParams: new URLSearchParams([
-          [ 'uuid', global.config.get('uuid') ],
-          [ 'accept-beta', global.config.get('checkForBeta') ],
-          [ 'platform', process.platform ],
-          [ 'version', CUR_VER ]
+          [ 'accept-beta', global.config.get('checkForBeta') ] // ,
+          //  [ 'uuid', global.config.get('uuid') ],
+          //  [ 'platform', process.platform ],
+          //  [ 'version', CUR_VER ]
         ])
       })
 

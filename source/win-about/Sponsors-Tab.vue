@@ -41,7 +41,7 @@ export default {
     }
   },
   created: function () {
-    ky('https://api.zettlr.com/v1/sponsors')
+    ky('https://zettlr.com/api/sponsors')
       .then((response) => {
         response.json()
           .then(res => {
