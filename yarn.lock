@@ -1890,10 +1890,10 @@ code-point-at@^1.0.0:
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
 
-codemirror@^5.62.0:
-  version "5.62.0"
-  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.62.0.tgz#e9ecd012e6f9eaf2e05ff4a449ff750f51619e22"
-  integrity sha512-Xnl3304iCc8nyVZuRkzDVVwc794uc9QNX0UcPGeNic1fbzkSrO4l4GVXho9tRNKBgPYZXgocUqXyfIv3BILhCQ==
+codemirror@^5.62.1:
+  version "5.62.1"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.62.1.tgz#917c7406c7b7f05b974c7fe4c4f2088ae64cc874"
+  integrity sha512-39ce8tHh/M9J+Epa90R5zMGg06pxVXc1+Y0SRR6eKaUjjzuj5iYkk7rHc2uU+FzvfsWYGEYKPFf0pBVBLmYXNQ==
 
 color-convert@^1.9.0:
   version "1.9.3"
@@ -7986,10 +7986,10 @@ strip-outer@^1.0.1:
   dependencies:
     escape-string-regexp "^1.0.2"
 
-style-loader@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/style-loader/-/style-loader-3.1.0.tgz#e52a22ca2fd1f54c03f2c3e69b10182e68120908"
-  integrity sha512-HYVvBMX3RX7zx71pquZV6EcnPN7Deba+zQteSxCLqt3bxYRphmeMr+2mZMrIZjZ7IMa6aOUhNGn8cXGvWMjClw==
+style-loader@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/style-loader/-/style-loader-3.2.1.tgz#63cb920ec145c8669e9a50e92961452a1ef5dcde"
+  integrity sha512-1k9ZosJCRFaRbY6hH49JFlRB0fVSbmnyq1iTPjNxUmGVjBNEmwrrHPenhlp+Lgo51BojHSf6pl2FcqYaN3PfVg==
 
 stylis@^3.5.2:
   version "3.5.4"
