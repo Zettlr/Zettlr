@@ -229,7 +229,13 @@ const {
         // The underlying mode needs
         // to be aware of blank lines
         return mdMode.blankLine(state.mdState)
-      }
+      },
+      // Since in innerMode() we are returning the ZKN mode instead of the
+      // Markdown mode when we are not inside the frontmatter, the foldcode
+      // addon will have no clue how to fold the Markdown code. By adding this
+      // property to the mode, we tell the foldcode addon that it can use the
+      // markdown foldcode helper for that.
+      fold: 'markdown'
     }
 
     return markdownZkn
