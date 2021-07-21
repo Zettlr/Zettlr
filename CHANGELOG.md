@@ -24,6 +24,10 @@ A few years ago we implemented auto-saving after a delay of five seconds with no
 
 The Custom CSS can now be edited directly in the assets dialog where you can also edit your defaults files.
 
+## Better Mermaid Diagrams
+
+Mermaid diagrams now follow the Zettlr style and current theme. Provided by Thaddäus Wiedemer (https://github.com/ThaddaeusWiedemer).
+
 ## GUI and Functionality
 
 - **Feature**: Switched the Exporting process in a way that allows more flexibility in setting options.
