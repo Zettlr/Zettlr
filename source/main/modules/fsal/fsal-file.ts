@@ -414,11 +414,9 @@ export async function rename (fileObject: MDFileDescriptor, cache: FSALCache|nul
   fileObject.path = newPath
   fileObject.hash = hash(newPath)
   fileObject.name = newName
-  // Afterwards, retrieve the now current modtime
-  await updateFileMetadata(fileObject)
-  if (cache !== null) {
-    cacheFile(fileObject, cache)
-  }
+  // Afterwards, reparse the file (this is important if the user switches from
+  // an ID in the filename to an ID in the file, or vice versa)
+  await reparseChangedFile(fileObject, cache)
 }
 
 /**
