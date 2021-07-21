@@ -57,6 +57,17 @@
     ora "^5.0.0"
     pretty-ms "^7.0.0"
 
+"@electron-forge/async-ora@6.0.0-beta.58":
+  version "6.0.0-beta.58"
+  resolved "https://registry.yarnpkg.com/@electron-forge/async-ora/-/async-ora-6.0.0-beta.58.tgz#3a118fb5010c16ab1fd8214d31d12a0a460a8ec1"
+  integrity sha512-osJoCA+Mxda0ToHnVh0c52UiqG0vYRChFp7YZnXSOFAyv/pJhO1gaSfJeTX+2ddki0SLvWQbgiJS5ysMax6Veg==
+  dependencies:
+    colors "^1.4.0"
+    debug "^4.3.1"
+    log-symbols "^4.0.0"
+    ora "^5.0.0"
+    pretty-ms "^7.0.0"
+
 "@electron-forge/cli@^6.0.0-beta.57":
   version "6.0.0-beta.57"
   resolved "https://registry.yarnpkg.com/@electron-forge/cli/-/cli-6.0.0-beta.57.tgz#62d42e7b242e257ab639dc88bb6023ae295ea9b1"
@@ -205,15 +216,22 @@
   dependencies:
     "@electron-forge/shared-types" "6.0.0-beta.57"
 
-"@electron-forge/plugin-webpack@^6.0.0-beta.57":
-  version "6.0.0-beta.57"
-  resolved "https://registry.yarnpkg.com/@electron-forge/plugin-webpack/-/plugin-webpack-6.0.0-beta.57.tgz#c0a8b96c0cc9cd43be2c484fa188926605dfd63b"
-  integrity sha512-jedAwcMpwKh+YMehKbuFcfhvNq3BjMQtF9DbjShJpJH7KrYii/ZPIWVMRiJIVUxNcmXAMXGqDY2mDFmfjMQ8OA==
+"@electron-forge/plugin-base@6.0.0-beta.58":
+  version "6.0.0-beta.58"
+  resolved "https://registry.yarnpkg.com/@electron-forge/plugin-base/-/plugin-base-6.0.0-beta.58.tgz#9719d9161d8fb6525c9a63be992a0047c9969ade"
+  integrity sha512-RMRjw8iRqkPChSMKdTSWCSubvDMSdJx+9Q9eO8n3GRN0jx4ExizhSIkxWpLSuze5dPyJXm3i24YUZjKOAR21EA==
   dependencies:
-    "@electron-forge/async-ora" "6.0.0-beta.57"
-    "@electron-forge/plugin-base" "6.0.0-beta.57"
-    "@electron-forge/shared-types" "6.0.0-beta.57"
-    "@electron-forge/web-multi-logger" "6.0.0-beta.57"
+    "@electron-forge/shared-types" "6.0.0-beta.58"
+
+"@electron-forge/plugin-webpack@^6.0.0-beta.58":
+  version "6.0.0-beta.58"
+  resolved "https://registry.yarnpkg.com/@electron-forge/plugin-webpack/-/plugin-webpack-6.0.0-beta.58.tgz#3c9c48bd128a860c11ef5c4218b1ddd58ca28504"
+  integrity sha512-VFpJjvrQtIg8SUmfWAbOKkT3852mgiydPuKNaykSQ4X1IEsEVce6zpVBGGNgl2xDqULJa5lL214Vmq4jETKMtA==
+  dependencies:
+    "@electron-forge/async-ora" "6.0.0-beta.58"
+    "@electron-forge/plugin-base" "6.0.0-beta.58"
+    "@electron-forge/shared-types" "6.0.0-beta.58"
+    "@electron-forge/web-multi-logger" "6.0.0-beta.58"
     debug "^4.3.1"
     fs-extra "^10.0.0"
     global "^4.3.2"
@@ -235,6 +253,16 @@
   integrity sha512-8jRAf7HsfQC5BA8MTOwh8cXmqJ8JJqzO7WzDW9A50tHOKbpBxPW9YM8036SZzZ4GNZYBSWmJt3d3vW+KFLeYXg==
   dependencies:
     "@electron-forge/async-ora" "6.0.0-beta.57"
+    electron-packager "^15.0.0"
+    electron-rebuild "^2.3.2"
+    ora "^5.0.0"
+
+"@electron-forge/shared-types@6.0.0-beta.58":
+  version "6.0.0-beta.58"
+  resolved "https://registry.yarnpkg.com/@electron-forge/shared-types/-/shared-types-6.0.0-beta.58.tgz#3ee98a0996454c06b4cd6aed10b59f9fa362d73b"
+  integrity sha512-Kz21kMg+EnINGK3H6qW4YXjFbXYvRv24O8PBnVaQiFXYIaUOXpaXj42QeytDXR/zMSA/jy78GoGodJLKE+gbdA==
+  dependencies:
+    "@electron-forge/async-ora" "6.0.0-beta.58"
     electron-packager "^15.0.0"
     electron-rebuild "^2.3.2"
     ora "^5.0.0"
@@ -280,13 +308,13 @@
     "@electron-forge/template-base" "6.0.0-beta.57"
     fs-extra "^10.0.0"
 
-"@electron-forge/web-multi-logger@6.0.0-beta.57":
-  version "6.0.0-beta.57"
-  resolved "https://registry.yarnpkg.com/@electron-forge/web-multi-logger/-/web-multi-logger-6.0.0-beta.57.tgz#1c3dcb15c2a9738148ccd737b929cacf755c00a4"
-  integrity sha512-sJ4YCuZBGu/LvHHvmNmvbXSXvYa/16AbNcNNJOVR87YTj/MzW8aeGuIGcG3QidEp0lREnUfIq4L/S4p/geQAmQ==
+"@electron-forge/web-multi-logger@6.0.0-beta.58":
+  version "6.0.0-beta.58"
+  resolved "https://registry.yarnpkg.com/@electron-forge/web-multi-logger/-/web-multi-logger-6.0.0-beta.58.tgz#1fc2ebb57dbd311899412a52279802f018e2adf0"
+  integrity sha512-CUwrCg7vzMNFgNF3CNJv+5b9X+oEgABF/NfrQAJHnRa61cU7D2jkEEEnhmxPLNBW5H0UP7f8+1MEMxR8xm8Idg==
   dependencies:
     express "^4.17.1"
-    express-ws "^4.0.0"
+    express-ws "^5.0.2"
     xterm "^4.9.0"
     xterm-addon-fit "^0.5.0"
     xterm-addon-search "^0.8.0"
@@ -1312,11 +1340,6 @@ async-exit-hook@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/async-exit-hook/-/async-exit-hook-2.0.1.tgz#8bd8b024b0ec9b1c01cccb9af9db29bd717dfaf3"
   integrity sha512-NW2cX8m1Q7KPA7a5M2ULQeZ2wR5qI5PAbw5L0UOMxdioVk9PMZ0h1TmyZEkPYrCvYjDlFICusOu1dlEKAAeXBw==
-
-async-limiter@~1.0.0:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/async-limiter/-/async-limiter-1.0.1.tgz#dd379e94f0db8310b08291f9d64c3209766617fd"
-  integrity sha512-csOlWGAcRFJaI6m+F2WKdnMKr4HhdhFVBk0H/QbJFMCr+uO2kwohwXQPxw/9OCxp05r5ghVBFSyioixx3gfkNQ==
 
 async@0.9.x:
   version "0.9.2"
@@ -3578,12 +3601,12 @@ expand-tilde@^2.0.0, expand-tilde@^2.0.2:
   dependencies:
     homedir-polyfill "^1.0.1"
 
-express-ws@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/express-ws/-/express-ws-4.0.0.tgz#dabd8dc974516418902a41fe6e30ed949b4d36c4"
-  integrity sha512-KEyUw8AwRET2iFjFsI1EJQrJ/fHeGiJtgpYgEWG3yDv4l/To/m3a2GaYfeGyB3lsWdvbesjF5XCMx+SVBgAAYw==
+express-ws@^5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/express-ws/-/express-ws-5.0.2.tgz#5b02d41b937d05199c6c266d7cc931c823bda8eb"
+  integrity sha512-0uvmuk61O9HXgLhGl3QhNSEtRsQevtmbL94/eILaliEADZBHZOQUAiHFrGPrgsjikohyrmSG5g+sCfASTt0lkQ==
   dependencies:
-    ws "^5.2.0"
+    ws "^7.4.6"
 
 express@^4.17.1:
   version "4.17.1"
@@ -8940,17 +8963,15 @@ write-file-atomic@^3.0.0:
     signal-exit "^3.0.2"
     typedarray-to-buffer "^3.1.5"
 
-ws@^5.2.0:
-  version "5.2.2"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-5.2.2.tgz#dffef14866b8e8dc9133582514d1befaf96e980f"
-  integrity sha512-jaHFD6PFv6UgoIVda6qZllptQsMlDEJkTQcybzzXDYM1XO9Y8em691FGMPmM46WGyLU4z9KMgQN+qrux/nhlHA==
-  dependencies:
-    async-limiter "~1.0.0"
-
 ws@^7.0.0, ws@^7.4.5:
   version "7.4.5"
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.4.5.tgz#a484dd851e9beb6fdb420027e3885e8ce48986c1"
   integrity sha512-xzyu3hFvomRfXKH8vOFMU3OguG6oOvhXMo3xsGy3xWExqaM2dxBbVxuD99O7m3ZUFMvvscsZDqxfgMaRr/Nr1g==
+
+ws@^7.4.6:
+  version "7.5.3"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.3.tgz#160835b63c7d97bfab418fc1b8a9fced2ac01a74"
+  integrity sha512-kQ/dHIzuLrS6Je9+uv81ueZomEwH0qVYstcAQ4/Z93K8zeko9gtAbttJWzoC5ukqXY1PpoouV3+VSOqEAFt5wg==
 
 xdg-basedir@^4.0.0:
   version "4.0.0"
