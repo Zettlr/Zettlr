@@ -28,6 +28,10 @@ module.exports = {
   ],
   resolve: {
     extensions: [ '.js', '.ts', '.jsx', '.tsx', '.css', '.json' ],
+    fallback: {
+      'ajv': path.resolve(__dirname, './node_modules/@lackadaisical/defaults-generator/node_modules/ajv'),
+      'ajv-formats': path.resolve(__dirname, './node_modules/@lackadaisical/defaults-generator/node_modules/ajv-formats')
+    },
     alias: {
       // NOTE: The following alias is necessary since we have two versions of
       // readable-stream installed. Archiver needs (transitively via lazystream)
