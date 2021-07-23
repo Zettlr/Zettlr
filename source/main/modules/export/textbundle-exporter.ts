@@ -20,7 +20,7 @@ import path from 'path'
 import archiver from 'archiver'
 import rimraf from 'rimraf'
 import isFile from '../../../common/util/is-file'
-import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
+import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI, PreparedFiles } from './types'
 
 export const plugin: ExporterPlugin = {
   pluginInformation: function () {
@@ -33,7 +33,7 @@ export const plugin: ExporterPlugin = {
       options: []
     }
   },
-  run: async function (options: ExporterOptions, sourceFiles, formatOptions: any, ctx: ExporterAPI): Promise<ExporterOutput> {
+  run: async function (options: ExporterOptions, processedSource: PreparedFiles, formatOptions: any, ctx: ExporterAPI): Promise<ExporterOutput> {
     const output: ExporterOutput = {
       code: 0,
       stdout: [],
@@ -41,7 +41,7 @@ export const plugin: ExporterPlugin = {
       targetFile: ''
     }
 
-    if (sourceFiles.length > 1) {
+    if (processedSource.filenames.length > 1) {
       throw new Error('Cannot export to Textbundle: Please only pass one single file.')
     }
 
@@ -50,10 +50,10 @@ export const plugin: ExporterPlugin = {
     const targetPath = path.join(options.targetDirectory, baseName + ext)
     try {
       output.targetFile = await makeTextbundle(
-        sourceFiles[0],
+        processedSource.filenames[0],
         targetPath,
         options.format === 'textpack',
-        path.basename(sourceFiles[0])
+        path.basename(processedSource.filenames[0])
       )
     } catch (err) {
       output.code = 1

@@ -18,6 +18,7 @@ import { spawn } from 'child_process'
 import YAML from 'yaml'
 import { app } from 'electron'
 import { promises as fs } from 'fs'
+import makeDefaultsFile from '@lackadaisical/defaults-generator'
 
 // Utilities
 import isFile from '../../../common/util/is-file'
@@ -68,15 +69,15 @@ export async function makeExport (options: ExporterOptions, formatOptions: any =
   }
 
   // Now, pre-process the input files
-  const inputFiles = await prepareFiles(options)
+  const processedFileDetails = await prepareFiles(options)
 
   // This is basically the "plugin API"
   const ctx: ExporterAPI = {
     runPandoc: async (defaults: string) => {
       return await runPandoc(defaults)
     },
-    getDefaultsFor: async (writer: string, properties: any) => {
-      return await writeDefaults(writer, properties)
+    getDefaultsFor: async (writer: string, properties: Record<string, unknown>, frontmatter: Record<string, unknown>) => {
+      return await writeDefaults(writer, properties, frontmatter)
     }
   }
 
@@ -84,7 +85,7 @@ export async function makeExport (options: ExporterOptions, formatOptions: any =
   for (const plugin of PLUGINS) {
     const formats = plugin.pluginInformation().formats
     if (options.format in formats) {
-      exporterReturn = await plugin.run(options, inputFiles, formatOptions, ctx)
+      exporterReturn = await plugin.run(options, processedFileDetails, formatOptions, ctx)
       break
     }
   }
@@ -138,7 +139,8 @@ async function runPandoc (defaultsFile: string): Promise<PandocRunnerOutput> {
 
 async function writeDefaults (
   writer: string, // The writer to use (e.g. html or pdf)
-  properties: any // Contains properties that will be written to the defaults
+  properties: Record<string, unknown>, // Contains properties that will be written to the defaults
+  frontmatter: Record<string, unknown> // Extracted frontmatter details
 ): Promise<string> {
   const dataDir = app.getPath('temp')
   const defaultsFile = path.join(dataDir, 'defaults.yml')
@@ -174,17 +176,18 @@ async function writeDefaults (
     defaults.csl = cslStyle
   }
 
-  // After we have added our default keys, let the plugin add their keys, which
-  // enables them to override certain keys if necessary.
-  for (const key in properties) {
-    defaults[key] = properties[key]
-  }
+  // makeDefaultsFile will take our input, put 'default' properties where they need to go,
+  // and write any extra properties to an appropriate location within the object.
+  // Finally input and output is validated against a JSONSchema and will throw an error if
+  // validation fails.
+  // frontmatter > additionalConfig > projectSettings when there are duplicate keys.
+  const defaultsOutput = makeDefaultsFile(frontmatter, { additionalConfig: properties, projectSettings: defaults })
 
   const YAMLOptions: YAML.Options = {
     indent: 4,
     simpleKeys: false
   }
-  await fs.writeFile(defaultsFile, YAML.stringify(defaults, YAMLOptions), { encoding: 'utf8' })
+  await fs.writeFile(defaultsFile, YAML.stringify(defaultsOutput, YAMLOptions), { encoding: 'utf8' })
 
   // Return the path to the defaults file
   return defaultsFile
