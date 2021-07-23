@@ -14,12 +14,8 @@
 
 import commandExists from 'command-exists'
 import path from 'path'
-<<<<<<< HEAD
 import { trans } from '../../../common/i18n-main'
-import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
-=======
 import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI, PreparedFiles } from './types'
->>>>>>> 6877d156 (Implement basic frontmatter extraction for defaults file generation)
 
 // TODO: Enable these additional writers
 // // Pandoc formats that can be passed directly to the engine
