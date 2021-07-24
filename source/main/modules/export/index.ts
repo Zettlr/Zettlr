@@ -67,6 +67,8 @@ export async function makeExport (options: ExporterOptions, formatOptions: any =
     targetFile: '' // This will be returned if no exporter has been found
   }
 
+  global.log.verbose(`[Exporter] Exporting ${options.sourceFiles.length} files to ${options.targetDirectory}`)
+
   // Now, pre-process the input files
   const inputFiles = await prepareFiles(options)
 
@@ -84,6 +86,7 @@ export async function makeExport (options: ExporterOptions, formatOptions: any =
   for (const plugin of PLUGINS) {
     const formats = plugin.pluginInformation().formats
     if (options.format in formats) {
+      global.log.verbose(`[Exporter] Running ${plugin.pluginInformation().id} exporter ...`)
       exporterReturn = await plugin.run(options, inputFiles, formatOptions, ctx)
       break
     }
