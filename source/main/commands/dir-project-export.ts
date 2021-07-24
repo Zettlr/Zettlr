@@ -89,6 +89,7 @@ export default class DirProjectExport extends ZettlrCommand {
       }
     }
 
+    // TODO: Translate!
     global.notify.normal('Project successfully exported. Click to show.', async () => {
       // Whoever thought it would be great to have an async function RESOLVE
       // with the error instead of rejecting was definitely a f***ing genius.

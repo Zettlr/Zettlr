@@ -91,7 +91,8 @@ module.exports = function displayFileContext (event, dirObject, el, callback) {
     items.push({
       id: 'menu.project_build',
       label: trans('menu.project_build'),
-      enabled: true
+      // Only enable if there are formats to export to
+      enabled: dirObject.project.formats.length > 0
     })
   }
 

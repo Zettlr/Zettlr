@@ -1,6 +1,14 @@
 <template>
   <div id="project-lists">
     <!-- ATTENTION: Limited leeway! Be sparse with the space you use! -->
+    <p
+      v-if="selectedExportFormats.length === 0"
+      class="warning"
+    >
+      <clr-icon shape="warning"></clr-icon>
+      <!-- TODO: Translate! -->
+      <span>Please select at least one export format to build this project.</span>
+    </p>
     <Tabs
       v-bind:tabs="tabs"
       v-bind:current-tab="currentTab"
@@ -170,4 +178,16 @@ export default {
 </script>
 
 <style lang="less">
+div#project-lists p.warning {
+  display: flex;
+  color: rgb(97, 97, 0);
+  background-color: rgb(209, 209, 23);
+  border: 1px solid rgb(170, 170, 0);
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+
+  // More spacing between the icon and the text
+  span { padding-left: 5px; }
+}
 </style>
