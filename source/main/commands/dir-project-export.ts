@@ -16,6 +16,7 @@ import ZettlrCommand from './zettlr-command'
 import objectToArray from '../../common/util/object-to-array'
 import { makeExport } from '../modules/export'
 import { filter as minimatch } from 'minimatch'
+import { shell } from 'electron'
 
 export default class DirProjectExport extends ZettlrCommand {
   constructor (app: any) {
@@ -87,6 +88,18 @@ export default class DirProjectExport extends ZettlrCommand {
         )
       }
     }
+
+    global.notify.normal('Project successfully exported. Click to show.', async () => {
+      // Whoever thought it would be great to have an async function RESOLVE
+      // with the error instead of rejecting was definitely a f***ing genius.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      shell.openPath(dir.path)
+        .then((error) => {
+          if (error !== '') {
+            global.log.error(`[Project Export] Error opening the directory: ${error}`, error)
+          }
+        })
+    })
 
     return true
   }

@@ -153,7 +153,7 @@ async function persistSettings (dir: DirDescriptor): Promise<void> {
  * @param   {DirDescriptor}  dir  The directory descriptor.
  */
 async function parseSettings (dir: DirDescriptor): Promise<void> {
-  let configPath = path.join(dir.path, '.ztr-directory')
+  const configPath = path.join(dir.path, '.ztr-directory')
   try {
     let settings: any = await fs.readFile(configPath, { encoding: 'utf8' })
     settings = JSON.parse(settings)
@@ -202,7 +202,7 @@ export async function parse (currentPath: string, cache: FSALCache, parent: DirD
 
   // Retrieve the metadata
   try {
-    let stats = await fs.lstat(dir.path)
+    const stats = await fs.lstat(dir.path)
     dir.modtime = stats.ctimeMs
     dir.creationtime = stats.birthtimeMs
   } catch (e) {
