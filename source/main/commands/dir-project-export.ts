@@ -43,14 +43,18 @@ export default class DirProjectExport extends ZettlrCommand {
       return false
     }
 
-    // Receive a two dimensional array of all directory contents and remove all dirs.
+    // Receive a two dimensional array of all directory contents and remove all dirs.x
     let files = objectToArray(dir, 'children').filter(e => e.type !== 'directory')
 
     // Use minimatch to filter against the project's filter patterns
     for (const pattern of config.filters as string[]) {
       global.log.info(`[Project] Filtering fileset: Matching against "${pattern}"`)
       // NOTE: minimatch is actually just the "filter" function
-      files = files.filter(minimatch(pattern, { matchBase: true }))
+      const match = minimatch(pattern, { matchBase: true })
+      // NOTE: Since we're dealing with descriptors, and not paths, we have to
+      // manually call the filter function providing the path-property rather
+      // than the full object.
+      files = files.filter((descriptor, index, arr) => match(descriptor.path, index, arr))
     }
 
     if (files.length === 0) {

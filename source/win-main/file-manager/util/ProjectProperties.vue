@@ -103,6 +103,11 @@ export default {
       return trans('dialog.preferences.project.pattern_name')
     }
   },
+  watch: {
+    patterns: function (newValue, oldValue) {
+      this.updateProperties()
+    }
+  },
   created: function () {
     // First, we need to get the available export formats
     ipcRenderer.invoke('application', {
