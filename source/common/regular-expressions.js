@@ -496,7 +496,7 @@ module.exports = {
    */
   'getZknTagRE': function (global = false) {
     return RegExp(
-      /(?<!\\)#(#?[^\s,.:;…!?"'`»«“”‘’—–@$%&*#^+~÷\\/|<=>[\](){}]+#?)/.source,
+      /(?<=^|\s|[({[])#(#?[^\s,.:;…!?"'`»«“”‘’—–@$%&*#^+~÷\\/|<=>[\](){}]+#?)/.source,
       (global) ? 'gi' : 'i')
   }
 
