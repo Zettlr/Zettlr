@@ -91,9 +91,6 @@ export default class Zettlr {
       showAnyWindow: () => {
         this._windowManager.showAnyWindow()
       },
-      notifyChange: (msg: string) => {
-        global.notify.normal(msg)
-      },
       findFile: (prop: any) => {
         return this._fsal.findFile(prop)
       },

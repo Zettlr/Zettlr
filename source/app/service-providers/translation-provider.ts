@@ -136,8 +136,7 @@ export default class TranslationProvider {
       trans(
         'dialog.preferences.translations.updated',
         toUpdate.map(elem => trans(`dialog.preferences.app_lang.${elem.bcp47}`)).join(', ')
-      ),
-      true // Show the notification on OS level
+      )
     )
   }
 

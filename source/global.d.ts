@@ -68,7 +68,6 @@ interface Application {
   showDefaultsPreferences: () => void
   showTagManager: () => void
   showAnyWindow: () => void
-  notifyChange: (msg: string) => void
   findFile: (prop: any) => MDFileDescriptor | CodeFileDescriptor | null
   findDir: (prop: any) => DirDescriptor | null
   // Same as findFile, only with content
