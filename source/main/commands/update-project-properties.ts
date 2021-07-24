@@ -26,7 +26,6 @@ export default class UpdateProjectProperties extends ZettlrCommand {
     * @param  {Object} arg The hash of a directory.
     */
   async run (evt: string, arg: any): Promise<void> {
-    console.log(arg)
     // The properties come from the renderer with dot notation, but the action
     // expects them already in their expanded state.
     // let expanded = expandOptionObject(arg.properties)
