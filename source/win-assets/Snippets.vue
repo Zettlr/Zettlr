@@ -23,6 +23,7 @@
           <TextControl
             v-model="currentSnippetText"
             v-bind:inline="true"
+            v-bind:disabled="currentItem < 0"
           ></TextControl>
           <ButtonControl
             v-bind:label="'Rename snippet'"
@@ -36,6 +37,7 @@
           ref="code-editor"
           v-model="editorContents"
           v-bind:mode="'markdown-snippets'"
+          v-bind:readonly="currentItem < 0"
         ></CodeEditor>
 
         <!-- TODO: This list belongs in the docs, but during the test phase, this is okay. -->
@@ -65,6 +67,7 @@
           v-bind:primary="true"
           v-bind:label="'Save'"
           v-bind:inline="true"
+          v-bind:disabled="currentItem < 0 || $refs['code-editor'].isClean()"
           v-on:click="saveSnippet()"
         ></ButtonControl>
         <span v-if="savingStatus !== ''" class="saving-status">{{ savingStatus }}</span>
@@ -91,7 +94,7 @@
 
 import SplitView from '../common/vue/window/SplitView'
 import SelectableList from './SelectableList'
-import ButtonControl from '../common/vue/form/elements/Button'
+import ButtonControl from '../common/vue/form/elements/Button.vue'
 import TextControl from '../common/vue/form/elements/Text.vue'
 import CodeEditor from '../common/vue/CodeEditor'
 import { trans } from '../common/i18n-renderer'
@@ -109,7 +112,7 @@ export default {
   },
   data: function () {
     return {
-      currentItem: 0,
+      currentItem: -1,
       currentSnippetText: '',
       editorContents: '',
       savingStatus: '',
@@ -143,9 +146,6 @@ export default {
       ipcRenderer.invoke('assets-provider', { command: 'list-snippets' })
         .then(data => {
           this.availableSnippets = data
-          if (this.currentItem >= this.availableSnippets.length) {
-            this.currentItem = this.availableSnippets.length - 1
-          }
           this.loadState()
         })
         .catch(err => console.error(err))
@@ -156,7 +156,14 @@ export default {
         this.$refs['code-editor'].markClean()
         this.savingStatus = ''
         this.currentSnippetText = ''
+        this.currentItem = -1
         return // No state to load, only an error to avoid
+      }
+
+      if (this.currentItem >= this.availableSnippets.length) {
+        this.currentItem = this.availableSnippets.length - 1
+      } else if (this.currentItem < 0) {
+        this.currentItem = 0
       }
 
       ipcRenderer.invoke('assets-provider', {

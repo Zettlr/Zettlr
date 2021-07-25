@@ -5,10 +5,11 @@
       <input
         v-bind:id="fieldID"
         ref="input"
+        type="text"
         v-bind:value="value"
         v-bind:class="{ 'inline': inline }"
         v-bind:placeholder="placeholder"
-        type="text"
+        v-bind:disabled="disabled"
         v-on:input="$emit('input', $event.target.value)"
         v-on:keyup.enter="$emit('confirm', $event.target.value)"
         v-on:keyup.esc="$emit('escape', $event.target.value)"
@@ -27,10 +28,11 @@
       v-else
       v-bind:id="fieldID"
       ref="input"
+      type="text"
       v-bind:value="value"
       v-bind:class="{ 'inline': inline }"
       v-bind:placeholder="placeholder"
-      type="text"
+      v-bind:disabled="disabled"
       v-on:input="$emit('input', $event.target.value)"
       v-on:keyup.enter="$emit('confirm', $event.target.value)"
       v-on:keyup.esc="$emit('escape', $event.target.value)"
@@ -61,6 +63,10 @@ export default {
     value: {
       type: String,
       default: ''
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     },
     placeholder: {
       type: String,

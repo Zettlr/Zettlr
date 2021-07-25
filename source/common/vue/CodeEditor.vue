@@ -175,6 +175,10 @@ export default {
     mode: {
       type: String,
       default: 'css'
+    },
+    readonly: {
+      type: Boolean,
+      default: false
     }
   },
   data: function () {
@@ -189,6 +193,13 @@ export default {
         this.cmInstance.setValue(this.value)
         this.cmInstance.setCursor(cur)
       }
+    },
+    readonly: function () {
+      if (this.readonly === true) {
+        this.cmInstance.setOption('readOnly', 'nocursor')
+      } else {
+        this.cmInstance.setOption('readOnly', false)
+      }
     }
   },
   mounted: function () {
@@ -198,7 +209,8 @@ export default {
       mode: this.mode,
       cursorScrollMargin: 20,
       lineWrapping: true,
-      autoCloseBrackets: true
+      autoCloseBrackets: true,
+      readOnly: (this.readonly === true) ? 'nocursor' : false
     })
 
     this.cmInstance.setValue(this.value)
