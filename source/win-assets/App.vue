@@ -19,15 +19,21 @@
       v-bind:aria-labelledby="tabs[currentTab].id"
       style="height: 100%;"
     >
-      <!-- Defaults tab(s): The first two NOTE: Beware if you change the order! -->
-      <!-- We pass the actual tab to the component so that it knows which of the two to display -->
+      <!-- Export defaults -->
       <Defaults
-        v-if="['tab-export-control', 'tab-import-control'].includes(tabs[currentTab].id)"
-        v-bind:which="tabs[currentTab].id"
+        v-if="tabs[currentTab].id === 'tab-export-control'"
+        v-bind:which="'export'"
       ></Defaults>
+      <!-- Import defaults -->
+      <Defaults
+        v-if="tabs[currentTab].id === 'tab-import-control'"
+        v-bind:which="'import'"
+      ></Defaults>
+      <!-- Custom CSS -->
       <CustomCSS
         v-else-if="tabs[currentTab].id === 'tab-custom-css-control'"
       ></CustomCSS>
+      <!-- Snippets Editor -->
       <Snippets
         v-else-if="tabs[currentTab].id === 'tab-snippets-control'"
       ></Snippets>

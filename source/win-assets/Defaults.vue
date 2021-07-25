@@ -102,10 +102,14 @@ export default {
     ButtonControl
   },
   props: {
-    // "which" contains the tab ID from the app. Beware before breaking.
+    // "which" describes which kind of defaults files this instance controls
+    // can be "import" (for any --> Markdown) or "export" (for Markdown --> any)
     which: {
       type: String,
-      required: true
+      required: true,
+      validator: function (value) {
+        return [ 'import', 'export' ].includes(value)
+      }
     }
   },
   data: function () {
@@ -117,13 +121,8 @@ export default {
   },
   computed: {
     listItems: function () {
-      if (this.which === 'tab-export-control') {
-        return Object.values(WRITERS)
-      } else if (this.which === 'tab-import-control') {
-        return Object.values(READERS)
-      } else {
-        return [] // Should never get executed, but this way the linter is happy.
-      }
+      const formatList = (this.which === 'export') ? WRITERS : READERS
+      return Object.values(formatList)
     }
   },
   watch: {
@@ -154,26 +153,16 @@ export default {
   },
   methods: {
     loadDefaultsForState: function () {
-      const isWriter = this.which === 'tab-export-control'
-      const isReader = this.which === 'tab-import-control'
+      const formatList = (this.which === 'export') ? WRITERS : READERS
 
-      if (!isWriter && !isReader) {
-        return // Potentially different tab selected
-      }
-
-      let format
       // Loads a defaults file from main for the given state (tab + list item)
-      if (isWriter) {
-        format = Object.keys(WRITERS)[this.currentItem]
-      } else if (isReader) {
-        format = Object.keys(READERS)[this.currentItem]
-      }
+      const format = Object.keys(formatList)[this.currentItem]
 
       ipcRenderer.invoke('assets-provider', {
         command: 'get-defaults-file',
         payload: {
           format: format,
-          type: (isWriter) ? 'export' : 'import'
+          type: this.which
         }
       })
         .then(data => {
@@ -184,62 +173,36 @@ export default {
         .catch(err => console.error(err))
     },
     saveDefaultsFile: function () {
-      const isWriter = this.which === 'tab-export-control'
-      const isReader = this.which === 'tab-import-control'
-
-      if (!isWriter && !isReader) {
-        // Nothing to do
-        return
-      }
-
       this.savingStatus = trans('gui.assets_man.status.saving')
 
-      let format
-      if (isWriter) {
-        format = Object.keys(WRITERS)[this.currentItem]
-      } else if (isReader) {
-        format = Object.keys(READERS)[this.currentItem]
-      }
+      const formatList = (this.which === 'export') ? WRITERS : READERS
+      const format = Object.keys(formatList)[this.currentItem]
 
       ipcRenderer.invoke('assets-provider', {
         command: 'set-defaults-file',
         payload: {
           format: format,
-          type: (isWriter) ? 'export' : 'import',
+          type: this.which,
           contents: this.editorContents
         }
       })
         .then(() => {
           this.savingStatus = trans('gui.assets_man.status.saved')
-          setTimeout(() => {
-            this.savingStatus = ''
-          }, 1000)
+          setTimeout(() => { this.savingStatus = '' }, 1000)
         })
         .catch(err => console.error(err))
     },
     restoreDefaultsFile: function () {
-      const isWriter = this.which === 'tab-export-control'
-      const isReader = this.which === 'tab-import-control'
-
-      if (!isWriter && !isReader) {
-        // Nothing to do
-        return
-      }
-
       this.savingStatus = trans('gui.assets_man.defaults_restoring')
 
-      let format
-      if (isWriter) {
-        format = Object.keys(WRITERS)[this.currentItem]
-      } else if (isReader) {
-        format = Object.keys(READERS)[this.currentItem]
-      }
+      const formatList = (this.which === 'export') ? WRITERS : READERS
+      const format = Object.keys(formatList)[this.currentItem]
 
       ipcRenderer.invoke('assets-provider', {
         command: 'restore-defaults-file',
         payload: {
           format: format,
-          type: (isWriter) ? 'export' : 'import'
+          type: this.which
         }
       })
         .then((result) => {
