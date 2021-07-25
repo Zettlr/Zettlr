@@ -45,6 +45,7 @@ The Custom CSS can now be edited directly in the assets dialog where you can als
 - New File and Edit File can now fast rename without selecting the extension
 - Add a tray to the system notification area, off by default. To activate, see Preferences → Advanced → "Leave app running in the notification area" (or "Show app in the notification area" when using MacOS).
 - Fixed a bug that would mark some quotation marks as misspelled.
+- Fix the visibility problems under night mode mentioned in issue #1845
 
 ## Under the Hood
 
