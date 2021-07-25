@@ -1,22 +1,35 @@
-// const { trans } = require('../common/i18n')
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        displayTabsContext
+ * CVM-Role:        Utility Function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This function displays a document-tabs-specific context menu.
+ *
+ * END HEADER
+ */
+
+const { trans } = require('../common/i18n-renderer')
 
 module.exports = function displayTabsContext (event, callback) {
-  // TODO: Translate all these items!
   let items = [
     {
-      label: 'Close',
+      label: trans('menu.tab_close'),
       id: 'close-this',
       type: 'normal',
       enabled: true
     },
     {
-      label: 'Close Others',
+      label: trans('menu.tab_close_others'),
       id: 'close-others',
       type: 'normal',
       enabled: true
     },
     {
-      label: 'Close All',
+      label: trans('menu.tab_close_all'),
       id: 'close-all',
       type: 'normal',
       enabled: true

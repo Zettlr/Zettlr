@@ -56,8 +56,8 @@ const { getListTokenRE } = require('../../../regular-expressions');
 
       if (!ranges[i].empty() || !matchListToken(pos, cm)) {
         /* If no match, call regular Tab handler */
-        cm.execCommand('indentMore')
-        return
+        // cm.execCommand('indentMore')
+        return CodeMirror.Pass
       }
 
       /* Select the whole list line and indent it by one unit */

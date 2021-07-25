@@ -30,10 +30,23 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Preferences
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This is the entry app for the preferences window.
+ *
+ * END HEADER
+ */
+
 import Form from '../common/vue/form/Form.vue'
 import WindowChrome from '../common/vue/window/Chrome.vue'
-import { trans } from '../common/i18n'
-import { ipcRenderer } from 'electron'
+import { trans } from '../common/i18n-renderer'
 
 import generalSchema from './schema/general'
 import editorSchema from './schema/editor'
@@ -43,6 +56,8 @@ import displaySchema from './schema/display'
 import spellcheckingSchema from './schema/spellchecking'
 import autocorrectSchema from './schema/autocorrect'
 import advancedSchema from './schema/advanced'
+
+const ipcRenderer = window.ipc
 
 const SCHEMA = {
   'tab-general': generalSchema,
@@ -110,6 +125,22 @@ export default {
     WindowChrome
   },
   data () {
+    // Instantiate the Schemas. We have to do it in such a weird way because
+    // otherwise malformed translation strings will throw errors since the trans
+    // function has access to global.config only AFTER window registration has
+    // been executed. But, since it's a function, without this here we would
+    // automatically execute the trans() function during IMPORT, and as such
+    // BEFORE the window registration has had a chance to register the config
+    // global variable.
+    SCHEMA['tab-general'] = SCHEMA['tab-general']()
+    SCHEMA['tab-editor'] = SCHEMA['tab-editor']()
+    SCHEMA['tab-export'] = SCHEMA['tab-export']()
+    SCHEMA['tab-zettelkasten'] = SCHEMA['tab-zettelkasten']()
+    SCHEMA['tab-display'] = SCHEMA['tab-display']()
+    SCHEMA['tab-spellchecking'] = SCHEMA['tab-spellchecking']()
+    SCHEMA['tab-autocorrect'] = SCHEMA['tab-autocorrect']()
+    SCHEMA['tab-advanced'] = SCHEMA['tab-advanced']()
+
     return {
       currentTab: 0,
       tabs: [
@@ -173,7 +204,7 @@ export default {
   },
   computed: {
     windowTitle: function () {
-      if (document.body.classList.contains('darwin')) {
+      if (process.platform === 'darwin') {
         return this.tabs[this.currentTab].label
       } else {
         return trans('dialog.preferences.title')
@@ -236,6 +267,16 @@ export default {
         this.populateDynamicValues()
       }
     })
+
+    if (process.env.ZETTLR_IS_TRAY_SUPPORTED === '0') {
+      const leaveAppRunningField = modelToField('system.leaveAppRunning', SCHEMA['tab-advanced'])
+      if (leaveAppRunningField !== undefined) {
+        leaveAppRunningField.disabled = true
+        if (process.env.ZETTLR_TRAY_ERROR !== undefined) {
+          leaveAppRunningField.info = process.env.ZETTLR_TRAY_ERROR
+        }
+      }
+    }
   },
   methods: {
     /**

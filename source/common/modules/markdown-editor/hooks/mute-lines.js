@@ -1,4 +1,20 @@
 /**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CodeMirror mute-lines hook
+ * CVM-Role:        CodeMirror plugin
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Mutes lines that do not contain a cursor by regulating down
+ *                  the opacity of the text. NOTE that this plugin is currently
+ *                  not used since the distraction free mode is not implemented.
+ *
+ * END HEADER
+ */
+
+/**
  * Saves the last highlighted line
  *
  * @var {Number}

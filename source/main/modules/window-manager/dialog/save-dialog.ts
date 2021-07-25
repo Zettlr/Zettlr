@@ -12,10 +12,10 @@
  * END HEADER
  */
 
-import { app, BrowserWindow, dialog, FileFilter, SaveDialogOptions, SaveDialogReturnValue } from 'electron'
+import { app, BrowserWindow, dialog, SaveDialogOptions, SaveDialogReturnValue } from 'electron'
 import path from 'path'
 import isDir from '../../../../common/util/is-dir'
-import { trans } from '../../../../common/i18n'
+import { trans } from '../../../../common/i18n-main'
 
 /**
 * Displays a dialog to prompt the user for a file path
@@ -40,7 +40,8 @@ export default async function saveFileDialog (win: BrowserWindow|null, filename:
   }
 
   let response: SaveDialogReturnValue
-  if (win !== null) {
+  // DEBUG: Trying to resolve bug #1645, which seems to relate to modal status vs. promise awaits.
+  if (win !== null && [ 'darwin', 'win32' ].includes(process.platform)) {
     response = await dialog.showSaveDialog(win, opt)
   } else {
     response = await dialog.showSaveDialog(opt)

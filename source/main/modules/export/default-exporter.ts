@@ -1,14 +1,27 @@
-// DEFAULT exporter plugin
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Default exporter plugin
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This plugin facilitates exports in most formats Pandoc supports.
+ *
+ * END HEADER
+ */
 
 import commandExists from 'command-exists'
 import path from 'path'
+import { trans } from '../../../common/i18n-main'
 import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
 
 // TODO: Enable these additional writers
 // // Pandoc formats that can be passed directly to the engine
-// 'asciidoc'|'beamer'|'context'|'docbook5'|'docx'|'docuwiki'|'epub'|'fb2'|
-// 'haddock'|'icml'|'ipynb'|'jats'|'jira'|'json'|'latex'|'man'|'mediawiki'|'ms'|
-// 'muse'|'native'|'odt'|'opml'|'opendocument'|'org'|'plain'|'pptx'|'rst'|'rtf'|
+// 'asciidoc'|'beamer'|'context'|'docbook5'|'docuwiki'|'epub'|'fb2'|
+// 'haddock'|'ipynb'|'jats'|'jira'|'json'|'man'|'mediawiki'|'ms'|
+// 'muse'|'native'|'opml'|'opendocument'|'pptx'
 // 'texinfo'|'textile'|'slideous'|'slidy'|'dzslides'|'s5'|'tei'|'xwiki'|'zimwiki'|
 
 export const plugin: ExporterPlugin = {
@@ -38,7 +51,7 @@ export const plugin: ExporterPlugin = {
     try {
       await commandExists('pandoc')
     } catch (err) {
-      throw new Error('Cannot export: Pandoc has not been found.')
+      throw new Error(trans('system.error.no_pandoc_message'))
     }
 
     // Get the correct file extension
@@ -62,6 +75,7 @@ export const plugin: ExporterPlugin = {
 
     // Run Pandoc
     const pandocOutput = await ctx.runPandoc(defaultsFile)
+    console.log(pandocOutput)
 
     // Make sure to propagate the results
     return {

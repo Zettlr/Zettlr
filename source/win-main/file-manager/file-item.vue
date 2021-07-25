@@ -1,16 +1,3 @@
-/**
- * @ignore
- * BEGIN HEADER
- *
- * Contains:        FileItem Vue component.
- * CVM-Role:        View
- * Maintainer:      Hendrik Erz
- * License:         GNU GPL v3
- *
- * Description:     Controls a single file list item.
- *
- * END HEADER
- */
 <template>
   <div
     v-bind:class="{
@@ -23,15 +10,14 @@
       v-bind:class="{
         'list-item': true,
         'project': obj.type === 'directory' && obj.project !== null,
-        'selected': obj === selectedFile,
-        'active': obj === activeFile,
+        'selected': selectedFile !== null && obj.path === selectedFile.path,
+        'active': activeFile !== null && obj.path === activeFile.path,
         'has-meta-info': fileMeta,
         'directory': obj.type === 'directory'
       }"
       v-bind:data-id="obj.id"
       v-bind:data-filename="getFilename"
       v-bind:draggable="isDraggable"
-      v-bind:style="getStyle"
       v-on:mousedown.stop="requestSelection"
       v-on:dragstart.stop="beginDragging"
       v-on:drag="onDragHandler"
@@ -134,8 +120,22 @@
 </template>
 
 <script>
-import { trans } from '../../common/i18n.js'
-import formatDate from '../../common/util/format-date.js'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        FileItem Vue component.
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Controls a single file list item.
+ *
+ * END HEADER
+ */
+
+import { trans } from '../../common/i18n-renderer'
+import formatDate from '../../common/util/format-date'
 import localiseNumber from '../../common/util/localise-number'
 import formatSize from '../../common/util/format-size'
 import itemMixin from './util/item-mixin'
@@ -154,15 +154,16 @@ export default {
     }
   },
   computed: {
-    selectedFile: function () {
-      return this.$store.state.activeFile
-    },
     // We have to explicitly transform ALL properties to computed ones for
     // the reactivity in conjunction with the recycle-scroller.
     basename: function () {
-      if (this.obj.frontmatter && this.obj.frontmatter.hasOwnProperty('title')) {
+      if (this.obj.type === 'code') {
+        return this.obj.name
+      }
+
+      if (this.obj.frontmatter != null && 'title' in this.obj.frontmatter) {
         return this.obj.frontmatter.title
-      } else if (this.obj.firstHeading && this.$store.state.config['display.useFirstHeadings']) {
+      } else if (this.obj.firstHeading != null && this.$store.state.config['display.useFirstHeadings'] === true) {
         return this.obj.firstHeading
       } else {
         return this.obj.name.replace(this.obj.ext, '')
@@ -178,7 +179,7 @@ export default {
         const ret = []
         const colouredTags = this.$store.state.colouredTags
         for (const colouredTag in colouredTags) {
-          if (this.obj.tags.includes(colouredTag.name)) {
+          if (this.obj.tags.includes(colouredTag.name) === true) {
             ret.push(colouredTag)
           }
         }
@@ -210,18 +211,6 @@ export default {
       } else {
         return formatDate(this.obj.creationtime, true)
       }
-    },
-    getStyle: function () {
-      if (this.obj.hasOwnProperty('results')) {
-        let w = 0
-        let hue = window.getComputedStyle(document.documentElement).getPropertyValue('--search-hue') || '159'
-        for (let r of this.obj.results) w += r.weight
-        w = Math.round(w / this.$store.state.maxWeight * 100) // Percentage
-        let style = `background-color:hsl(${hue}, ${w}%, 50%);`
-        style += ` color: ${(w > 50) ? 'black' : 'white'};`
-        return style
-      }
-      return ''
     },
     countDirs: function () {
       if (this.isDirectory === false) {
@@ -520,6 +509,89 @@ body.darwin {
 }
 
 body.win32 {
+  div.list-item-wrapper {
+    div.list-item {
+      border-bottom: 1px solid rgb(213, 213, 213);
+      background-color: rgb(230, 230, 230);
+
+      &.active {
+        background-color: rgb(200, 200, 200);
+        div.filename div.date { background-color: rgb(200, 200, 200); }
+      }
+
+      &.selected {
+        background-color: var(--system-accent-color, --c-primary);
+        color: var(--system-accent-color-contrast, white);
+
+        div.filename div.date {
+          background-color: var(--system-accent-color, --c-primary);
+          color: var(--system-accent-color-contrast, white);
+        }
+      }
+
+      div.filename div.date { background-color: rgb(230, 230, 230); }
+
+      div.meta-info {
+        .badge {
+          &.code-indicator {
+            background-color: var(--system-accent-color, --c-primary);
+            color: white;
+          }
+
+          &.tag {
+            background-color: rgba(90, 90, 90, 0.5); // Make those tags a little bit translucent
+            color: rgb(240, 240, 240);
+
+            .color-circle {
+              // If there's a coloured tag in there, display that as well
+              display: inline-block;
+              width: 9px;
+              height: 9px;
+              border: 1px solid white;
+              border-radius: 50%;
+            }
+          }
+
+          svg {
+            display: inline-block;
+            width: 11px;
+            height: 11px;
+            margin: 0;
+
+            circle { fill: rgb(200, 200, 200); }
+            path { fill: rgb(90, 90, 90); }
+          }
+        }
+      }
+    }
+  }
+
+  &.dark {
+    div.list-item-wrapper {
+      div.list-item {
+        border-bottom-color: #505050;
+        background-color: rgb(40, 40, 50);
+
+        &.active {
+        background-color: rgb(80, 80, 80);
+        div.filename div.date {
+          background-color: rgb(80, 80, 80);
+        }
+      }
+
+        div.filename div.date { background-color: rgb(40, 40, 50); }
+        &.active { background-color: rgb(80, 80, 80); }
+
+        div.meta-info .badge {
+          background-color: rgb(80, 80, 80);
+          color: rgb(220, 220, 220);
+        }
+      }
+    }
+  }
+}
+
+body.linux {
   div.list-item-wrapper {
     div.list-item {
       border-bottom: 1px solid rgb(213, 213, 213);

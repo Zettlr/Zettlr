@@ -21,6 +21,7 @@
     <!-- Display the completion list -->
     <div
       v-if="inputHasFocus && value !== ''"
+      ref="autocomplete-dropdown"
       class="autocomplete-list"
       v-bind:style="{
         'left': $refs.input.getBoundingClientRect().left + 'px',
@@ -46,6 +47,21 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        AutocompleteText
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays a text input with autocomplete functionality. NOTE:
+ *                  This file is likely going to be relocated to common/vue/form
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'AutocompleteText',
   props: {
@@ -109,6 +125,12 @@ export default {
       } else {
         this.selectedMatch = 0
       }
+
+      // After the changes have been applied to the DOM,
+      // scroll the new match into view
+      this.$nextTick(() => {
+        this.scrollMatchIntoView()
+      })
     },
     selectPrevMatch: function () {
       if (this.selectedMatch - 1 >= 0) {
@@ -116,6 +138,28 @@ export default {
       } else {
         this.selectedMatch = this.matches.length - 1
       }
+      // After the changes have been applied to the DOM,
+      // scroll the new match into view
+      this.$nextTick(() => {
+        this.scrollMatchIntoView()
+      })
+    },
+    scrollMatchIntoView: function () {
+      // Called whenever the match changes to scroll it into view.
+      const dropdown = this.$refs['autocomplete-dropdown']
+
+      if (dropdown == null) {
+        return // The dropdown was not shown
+      }
+
+      const activeElem = dropdown.querySelector('.active')
+
+      if (activeElem === null) {
+        return // No active element in the list
+      }
+
+      // You have no idea how much code I wrote before I found that function lol
+      activeElem.scrollIntoView({ block: 'nearest' })
     },
     updateMatches: function () {
       // This function updates the matches with a list of strings that match

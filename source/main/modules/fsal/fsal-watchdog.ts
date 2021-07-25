@@ -78,7 +78,7 @@ export default class FSALWatchdog extends EventEmitter {
       ignored: ignoreDirs,
       persistent: true,
       ignoreInitial: true, // Do not track the initial watch as changes
-      followSymlinks: true, // Follow symlinks TODO need to implement that in the FSAL as well
+      followSymlinks: true, // Follow symlinks
       ignorePermissionErrors: true, // In the worst case one has to reboot the software, but so it looks nicer.
 
       // Chokidar is an asshole to deal with, and as long as we cannot get fsevents

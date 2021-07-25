@@ -41,8 +41,8 @@ export default function createTagManagerWindow (conf: WindowPosition): BrowserWi
     show: false,
     fullscreenable: false,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: true,
+      preload: TAG_MANAGER_PRELOAD_WEBPACK_ENTRY
     }
   }
 
@@ -52,11 +52,9 @@ export default function createTagManagerWindow (conf: WindowPosition): BrowserWi
   const window = new BrowserWindow(winConf)
 
   // Load the index.html of the app.
-  // @ts-expect-error
   window.loadURL(TAG_MANAGER_WEBPACK_ENTRY)
     .catch(e => {
-      // @ts-expect-error
-      global.log.error(`Could not load URL ${TAG_MANAGER_WEBPACK_ENTRY as string}: ${e.message as string}`, e)
+      global.log.error(`Could not load URL ${TAG_MANAGER_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })
 
   // EVENT LISTENERS

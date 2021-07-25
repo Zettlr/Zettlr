@@ -11,7 +11,7 @@
  * END HEADER
  */
 
-import { trans } from '../i18n'
+import { trans } from '../i18n-renderer'
 
 /**
  * Adds delimiters to numbers.

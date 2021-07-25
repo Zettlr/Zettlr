@@ -35,6 +35,24 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        ThreeWayToggle
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Specific implementation of a toggle with three states on the
+ *                  toolbar. Basically uses two adjacent buttons to model three
+ *                  states: No button pressed, first button pressed, and second
+ *                  button pressed. For an example see the implementation of the
+ *                  file manager/global search views in the main window.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'ThreeWayToggle',
   props: {
@@ -92,6 +110,7 @@ body.darwin {
     border-radius: 4px;
     margin: 0 10px;
     border: 1px solid transparent;
+    display: flex;
 
     &:hover { border-color: rgb(180, 180, 180); }
     &.active { background-color: rgb(230, 230, 230); }
@@ -130,6 +149,35 @@ body.win32 {
   &.dark div#toolbar div.three-way-toggle {
     &:hover { border-color: rgb(80, 80, 80); }
     &.active { background-color: rgb(60, 60, 60); }
+    button.active { background-color: rgb(50, 50, 50); }
+  }
+}
+
+body.linux {
+  div#toolbar div.three-way-toggle {
+    margin: 0 10px;
+    border: 2px solid transparent;
+
+    button {
+      margin: 0 -2px;
+      border-radius: 0;
+    }
+
+    button:first-child {
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+      border-right: none;
+    }
+
+    button:last-child {
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+    }
+
+    button.active { background-color: rgb(228, 228, 228); }
+  }
+
+  &.dark div#toolbar div.three-way-toggle {
     button.active { background-color: rgb(50, 50, 50); }
   }
 }

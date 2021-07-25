@@ -20,6 +20,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Select
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component displays a generic dropdown.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'SelectControl',
   props: {

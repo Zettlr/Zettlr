@@ -1,5 +1,20 @@
-const { trans } = require('../../../common/i18n')
-const { ipcRenderer, shell } = require('electron')
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Directory context menu
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file displays a context menu for directories.
+ *
+ * END HEADER
+ */
+
+const { trans } = require('../../../common/i18n-renderer')
+
+const ipcRenderer = window.ipc
 
 const TEMPLATE = [
   {
@@ -29,10 +44,6 @@ const TEMPLATE = [
   {
     label: 'menu.new_dir',
     command: 'dir-new'
-  },
-  {
-    label: 'menu.set_icon',
-    command: 'select-icon'
   },
   {
     type: 'separator'
@@ -77,16 +88,12 @@ module.exports = function displayFileContext (event, dirObject, el, callback) {
 
   // Now check for a project
   if (dirObject.project !== null && dirObject.dirNotFoundFlag !== true) {
-    items = items.concat([{
-      id: 'menu.project_properties',
-      label: trans('menu.project_properties'),
-      enabled: true
-    },
-    {
+    items.push({
       id: 'menu.project_build',
       label: trans('menu.project_build'),
-      enabled: true
-    }])
+      // Only enable if there are formats to export to
+      enabled: dirObject.project.formats.length > 0
+    })
   }
 
   // Finally, check for it being root
@@ -108,30 +115,21 @@ module.exports = function displayFileContext (event, dirObject, el, callback) {
     callback(clickedID) // TODO
     switch (clickedID) {
       case 'gui.attachments_open_dir':
-        shell.showItemInFolder(dirObject.path)
-        break
-      case 'menu.project_properties':
-        ipcRenderer.send('message', {
-          command: 'dir-project-properties',
-          content: { hash: dirObject.hash }
+        ipcRenderer.send('window-controls', {
+          command: 'show-item-in-folder',
+          payload: dirObject.path
         })
         break
       case 'menu.project_build':
         ipcRenderer.send('message', {
           command: 'dir-project-export',
-          content: { hash: dirObject.hash }
-        })
-        break
-      case 'menu.close_workspace':
-        ipcRenderer.send('message', {
-          command: 'root-close',
-          content: dirObject.hash
+          content: { path: dirObject.path }
         })
         break
       case 'menu.rescan_dir':
         ipcRenderer.send('message', {
           command: 'rescan-dir',
-          content: dirObject.hash
+          content: { path: dirObject.path }
         })
     }
   })

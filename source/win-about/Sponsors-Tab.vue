@@ -17,7 +17,21 @@
 </template>
 
 <script>
-import got from 'got'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        SponsorsTab
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This tab displays the Patreon sponsors.
+ *
+ * END HEADER
+ */
+
+import ky from 'ky'
 
 export default {
   name: 'SponsorsTab',
@@ -27,9 +41,13 @@ export default {
     }
   },
   created: function () {
-    got('https://api.zettlr.com/v1/sponsors')
+    ky('https://zettlr.com/api/sponsors')
       .then((response) => {
-        this.sponsors = JSON.parse(response.body)
+        response.json()
+          .then(res => {
+            this.sponsors = res
+          })
+          .catch(err => console.error(err))
       })
       .catch(e => console.error(e))
   }

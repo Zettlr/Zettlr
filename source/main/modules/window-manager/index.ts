@@ -19,15 +19,13 @@ import {
   app,
   screen,
   BrowserWindow,
-  dialog,
   ipcMain,
   FileFilter,
-  MessageBoxOptions,
-  MessageBoxReturnValue
+  shell
 } from 'electron'
 import { promises as fs } from 'fs'
+import EventEmitter from 'events'
 import path from 'path'
-import { trans } from '../../../common/i18n'
 import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '../fsal/types'
 import createMainWindow from './create-main-window'
 import createPrintWindow from './create-print-window'
@@ -36,10 +34,9 @@ import createLogWindow from './create-log-window'
 import createStatsWindow from './create-stats-window'
 import createQuicklookWindow from './create-ql-window'
 import createPreferencesWindow from './create-preferences-window'
-import createCustomCSSWindow from './create-custom-css-window'
 import createAboutWindow from './create-about-window'
 import createTagManagerWindow from './create-tag-manager-window'
-import createDefaultsWindow from './create-defaults-window'
+import createAssetsWindow from './create-assets-window'
 import createPasteImageModal from './create-paste-image-modal'
 import createErrorModal from './create-error-modal'
 import shouldOverwriteFileDialog from './dialog/should-overwrite-file'
@@ -51,6 +48,8 @@ import sanitizeWindowPosition from './sanitize-window-position'
 import { WindowPosition } from './types.d'
 import askFileDialog from './dialog/ask-file'
 import saveFileDialog from './dialog/save-dialog'
+import confirmRemove from './dialog/confirm-remove'
+import * as bcp47 from 'bcp-47'
 // import dragIcon from '../../assets/dragicon.png'
 
 interface QuicklookRecord {
@@ -58,16 +57,15 @@ interface QuicklookRecord {
   win: BrowserWindow
 }
 
-export default class WindowManager {
+export default class WindowManager extends EventEmitter {
   private _mainWindow: BrowserWindow|null
   private readonly _qlWindows: QuicklookRecord[]
   private _printWindow: BrowserWindow|null
   private _updateWindow: BrowserWindow|null
   private _logWindow: BrowserWindow|null
   private _statsWindow: BrowserWindow|null
-  private _defaultsWindow: BrowserWindow|null
+  private _assetsWindow: BrowserWindow|null
   private _preferences: BrowserWindow|null
-  private _customCSS: BrowserWindow|null
   private _aboutWindow: BrowserWindow|null
   private _tagManager: BrowserWindow|null
   private _pasteImageModal: BrowserWindow|null
@@ -78,14 +76,15 @@ export default class WindowManager {
   private _fileLock: boolean
   private _persistTimeout: ReturnType<typeof setTimeout>|undefined
   private _beforeMainWindowCloseCallback: Function|null
+  private readonly _hasRTLLocale: boolean
 
   constructor () {
+    super()
     this._mainWindow = null
     this._qlWindows = []
     this._printWindow = null
     this._updateWindow = null
     this._preferences = null
-    this._customCSS = null
     this._aboutWindow = null
     this._tagManager = null
     this._pasteImageModal = null
@@ -93,19 +92,39 @@ export default class WindowManager {
     this._printWindowFile = undefined
     this._logWindow = null
     this._statsWindow = null
-    this._defaultsWindow = null
+    this._assetsWindow = null
     this._windowState = []
     this._configFile = path.join(app.getPath('userData'), 'window_state.json')
     this._fileLock = false
     this._beforeMainWindowCloseCallback = null
 
+    // Detect whether we have an RTL locale for correct traffic light positions.
+    const schema = bcp47.parse(app.getLocale())
+
+    /**
+     * List of RTL languages, taken from https://ask.libreoffice.org/en/question/250893/
+     */
+    const LTR_SCRIPTS = [
+      'ar', 'he', 'yi', 'ur', 'fa', 'ks', 'sd', 'ug',
+      'ky', 'nqo', 'ckb', 'sdh', 'ku', 'hu', 'ms'
+    ]
+
+    if (schema.language !== null && LTR_SCRIPTS.includes(schema.language)) {
+      this._hasRTLLocale = true
+    } else {
+      this._hasRTLLocale = false
+    }
+
     // Listen to window control commands
     ipcMain.on('window-controls', (event, message) => {
       const callingWindow = BrowserWindow.fromWebContents(event.sender)
-
-      if (callingWindow === null) return
+      if (callingWindow === null) {
+        return
+      }
 
       const { command, payload } = message
+
+      let itemPath: string = payload
 
       switch (command) {
         case 'win-maximise':
@@ -114,7 +133,7 @@ export default class WindowManager {
           } else {
             callingWindow.maximize()
           }
-          // fall through
+        // fall through
         case 'get-maximised-status':
           event.reply('window-controls', {
             command: 'get-maximised-status',
@@ -126,6 +145,13 @@ export default class WindowManager {
           break
         case 'win-close':
           callingWindow.close()
+          break
+        // This event is only important for macOS
+        case 'get-traffic-lights-rtl':
+          event.reply('window-controls', {
+            command: 'traffic-lights-rtl',
+            payload: this._hasRTLLocale // if RTL then also RTL traffic lights
+          })
           break
         // Convenience APIs for the renderers to execute these commands
         case 'cut':
@@ -149,6 +175,14 @@ export default class WindowManager {
               event.sender.startDrag({ file: payload.filePath, icon: icon })
             })
             .catch(err => global.log.error(`[Window Manager] Could not fetch icon for path ${String(payload.filePath)}`, err))
+          break
+        case 'show-item-in-folder':
+          if (itemPath.startsWith('safe-file://')) {
+            itemPath = itemPath.replace('safe-file://', '')
+          } else if (itemPath.startsWith('file://')) {
+            itemPath = itemPath.replace('file://', '')
+          }
+          shell.showItemInFolder(itemPath)
           break
       }
     })
@@ -223,6 +257,10 @@ export default class WindowManager {
       return
     }
 
+    this._mainWindow.on('show', () => {
+      global.tray.add()
+    })
+
     // Listens to events from the window
     this._mainWindow.on('close', (event) => {
       // The user has requested the window to be closed -> first close
@@ -255,8 +293,10 @@ export default class WindowManager {
           win.close()
         }
       }
-
-      if (this._beforeMainWindowCloseCallback !== null) {
+      if (process.platform !== 'darwin' && Boolean(global.config.get('system.leaveAppRunning')) && !global.application.isQuitting()) {
+        this._mainWindow?.hide()
+        event.preventDefault()
+      } else if (this._beforeMainWindowCloseCallback !== null) {
         const shouldClose: boolean = this._beforeMainWindowCloseCallback()
         if (!shouldClose) {
           event.preventDefault()
@@ -267,6 +307,7 @@ export default class WindowManager {
     this._mainWindow.on('closed', () => {
       // The window has been closed -> dereference
       this._mainWindow = null
+      this.emit('main-window-closed')
     })
   }
 
@@ -276,18 +317,7 @@ export default class WindowManager {
    * @param  {BrowserWindow}  win  The window to make visible
    */
   private _makeVisible (win: BrowserWindow): void {
-    if (win.isMinimized()) {
-      // Maximise and move on top
-      win.maximize()
-      win.moveTop()
-    } else if (!win.isVisible()) {
-      // Show and move to top
-      win.show()
-      win.moveTop()
-    }
-
-    // Afterwards, in any case: focus the window
-    win.focus()
+    win.show()
   }
 
   /**
@@ -557,17 +587,17 @@ export default class WindowManager {
    * Displays the defaults window
    */
   showDefaultsWindow (): void {
-    if (this._defaultsWindow === null) {
+    if (this._assetsWindow === null) {
       const conf = this._retrieveWindowPosition('log', null)
-      this._defaultsWindow = createDefaultsWindow(conf)
-      this._hookWindowResize(this._defaultsWindow, conf)
+      this._assetsWindow = createAssetsWindow(conf)
+      this._hookWindowResize(this._assetsWindow, conf)
 
       // Dereference the window as soon as it is closed
-      this._defaultsWindow.on('closed', () => {
-        this._defaultsWindow = null
+      this._assetsWindow.on('closed', () => {
+        this._assetsWindow = null
       })
     } else {
-      this._makeVisible(this._defaultsWindow)
+      this._makeVisible(this._assetsWindow)
     }
   }
 
@@ -607,31 +637,7 @@ export default class WindowManager {
   }
 
   /**
-   * Shows the custom CSS window
-   */
-  showCustomCSS (): void {
-    if (this._customCSS === null) {
-      const display = screen.getPrimaryDisplay()
-      const conf = this._retrieveWindowPosition('custom-css', {
-        width: 600,
-        height: 500,
-        top: (display.workArea.height - 500) / 2,
-        left: (display.workArea.width - 600) / 2
-      })
-      this._customCSS = createCustomCSSWindow(conf)
-      this._hookWindowResize(this._customCSS, conf)
-
-      // Dereference the window as soon as it is closed
-      this._customCSS.on('closed', () => {
-        this._customCSS = null
-      })
-    } else {
-      this._makeVisible(this._customCSS)
-    }
-  }
-
-  /**
-   * Shows the custom CSS window
+   * Shows the About window
    */
   showAboutWindow (): void {
     if (this._aboutWindow === null) {
@@ -883,23 +889,6 @@ export default class WindowManager {
     * @return {boolean}                                   True if user wishes to remove it.
     */
   async confirmRemove (descriptor: MDFileDescriptor|CodeFileDescriptor|DirDescriptor): Promise<boolean> {
-    const options: MessageBoxOptions = {
-      type: 'warning',
-      buttons: [ 'Ok', trans('system.error.cancel_remove') ],
-      defaultId: 0,
-      cancelId: 1,
-      title: trans('system.error.remove_title'),
-      message: trans('system.error.remove_message', descriptor.name)
-    }
-
-    let response: MessageBoxReturnValue
-    if (this._mainWindow !== null) {
-      response = await dialog.showMessageBox(this._mainWindow, options)
-    } else {
-      response = await dialog.showMessageBox(options)
-    }
-
-    // 0 = Ok, 1 = Cancel
-    return (response.response === 0)
+    return await confirmRemove(this._mainWindow, descriptor)
   }
 }

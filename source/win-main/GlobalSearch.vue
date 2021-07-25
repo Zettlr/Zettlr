@@ -1,37 +1,37 @@
 <template>
   <div id="global-search-pane">
-    <h4>Search</h4>
+    <h4>{{ searchTitle }}</h4>
     <!-- First: Two text controls for search terms and to restrict the search -->
     <TextControl
       ref="query-input"
       v-model="query"
-      v-bind:placeholder="'Find …'"
-      v-bind:label="'Enter your search terms below'"
+      v-bind:placeholder="queryInputPlaceholder"
+      v-bind:label="queryInputLabel"
       v-on:confirm="startSearch()"
     ></TextControl>
     <AutocompleteText
       v-model="restrictToDir"
-      v-bind:label="'Restrict search to directory'"
+      v-bind:label="restrictDirLabel"
       v-bind:autocomplete-values="directorySuggestions"
-      v-bind:placeholder="'Restrict to directory ...'"
+      v-bind:placeholder="restrictDirPlaceholder"
       v-on:confirm="restrictToDir = $event"
     ></AutocompleteText>
     <!-- Then an always-visible search button ... -->
     <ButtonControl
-      v-bind:label="'Search'"
+      v-bind:label="searchButtonLabel"
       v-bind:inline="true"
       v-on:click="startSearch()"
     ></ButtonControl>
     <!-- ... as well as two buttons to clear the results or toggle them. -->
     <ButtonControl
       v-if="searchResults.length > 0 && filesToSearch.length === 0"
-      v-bind:label="'Clear search results'"
+      v-bind:label="clearButtonLabel"
       v-bind:inline="true"
       v-on:click="emptySearchResults()"
     ></ButtonControl>
     <ButtonControl
       v-if="searchResults.length > 0 && filesToSearch.length === 0"
-      v-bind:label="'Toggle result display'"
+      v-bind:label="toggleButtonLabel"
       v-bind:inline="true"
       v-on:click="toggleIndividualResults()"
     ></ButtonControl>
@@ -91,13 +91,29 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        GlobalSearch
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component provides the global search functionality.
+ *
+ * END HEADER
+ */
+
 import objectToArray from '../common/util/object-to-array'
 import compileSearchTerms from '../common/util/compile-search-terms'
 import TextControl from '../common/vue/form/elements/Text'
 import ButtonControl from '../common/vue/form/elements/Button'
 import ProgressControl from '../common/vue/form/elements/Progress'
 import AutocompleteText from './AutocompleteText'
-import { ipcRenderer } from 'electron'
+import { trans } from '../common/i18n-renderer'
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'GlobalSearch',
@@ -148,6 +164,30 @@ export default {
     },
     activeDocumentInfo: function () {
       return this.$store.state.activeDocumentInfo
+    },
+    searchTitle: function () {
+      return trans('gui.global_search.title')
+    },
+    queryInputLabel: function () {
+      return trans('gui.global_search.query_label')
+    },
+    queryInputPlaceholder: function () {
+      return trans('gui.global_search.query_placeholder')
+    },
+    restrictDirLabel: function () {
+      return trans('gui.global_search.restrict_dir_label')
+    },
+    restrictDirPlaceholder: function () {
+      return trans('gui.global_search.restrict_dir_placeholder')
+    },
+    searchButtonLabel: function () {
+      return trans('gui.global_search.search_label')
+    },
+    clearButtonLabel: function () {
+      return trans('gui.global_search.clear_label')
+    },
+    toggleButtonLabel: function () {
+      return trans('gui.global_search.toggle_label')
     }
   },
   watch: {
@@ -190,6 +230,22 @@ export default {
 
       // Remove duplicates
       this.directorySuggestions = [...new Set(dirList)]
+    },
+    setCurrentDirectory: function () {
+      if (this.restrictToDir.trim() !== '') {
+        return // Do not overwrite anything
+      }
+
+      // Immediately preset the restrictToDir with the currently selected directory
+      if (this.selectedDir !== null) {
+        // We cut off the origin of the root (i.e. the path of the containing root dir)
+        let rootItem = this.selectedDir
+        while (rootItem.parent != null) {
+          rootItem = rootItem.parent
+        }
+
+        this.restrictToDir = this.selectedDir.path.replace(rootItem.dir, '').substr(1)
+      }
     },
     startSearch: function () {
       // We should start a search. We need two types of information for that:

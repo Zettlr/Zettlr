@@ -16,12 +16,13 @@
 import path from 'path'
 import ZettlrCommand from './zettlr-command'
 import { getIDRE } from '../../common/regular-expressions'
-import { filetypes as FILETYPES } from '../../common/data.json'
+import { mdFileExtensions } from '../../common/get-file-extensions'
+
+const FILETYPES = mdFileExtensions(true)
 
 export default class ForceOpen extends ZettlrCommand {
   constructor (app: any) {
-    // TODO: Do we need the force-open-if-exists event for anything?
-    super(app, [ 'force-open', 'force-open-if-exists' ])
+    super(app, ['force-open'])
   }
 
   /**
@@ -31,10 +32,11 @@ export default class ForceOpen extends ZettlrCommand {
     * @return {Boolean} Whether the file was successfully deleted.
     */
   async run (evt: string, arg: any): Promise<void> {
+    console.log(arg)
     // Determine if the file should be created, if it can't be found. For this
     // we need both the respective preferences setting and an auto-search
     // command.
-    let autoCreate = Boolean(global.config.get('zkn.autoCreateLinkedFiles')) && evt === 'force-open'
+    const autoCreate = Boolean(global.config.get('zkn.autoCreateLinkedFiles'))
 
     const idRE = getIDRE()
     let file = null
@@ -65,7 +67,6 @@ export default class ForceOpen extends ZettlrCommand {
 
     // Now we have a file (if not, create a new one if the user wishes so)
     if (file != null) {
-      // Normally files from main are opened intransient. But not this one.
       await this._app.openFile(file.path)
     } else if (autoCreate) {
       // Call the file-new command on the application, which'll do all

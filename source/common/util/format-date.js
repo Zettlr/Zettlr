@@ -12,6 +12,7 @@
  */
 
 import { DateTime } from 'luxon'
+import { trans } from '../i18n-renderer'
 
 /**
  * Formats a date based on the user's locale.
@@ -21,7 +22,7 @@ import { DateTime } from 'luxon'
  *
  * @return  {string}                     The formatted date string
  */
-export default function (dateObj, relative = false) {
+export default function formatDate (dateObj, relative = false) {
   // NOTE: This function does not work during any tests, as Node.js needs Intl
   // locales which it does not provide by default. For Electron, this works fine.
   const isDate = dateObj instanceof Date
@@ -30,7 +31,7 @@ export default function (dateObj, relative = false) {
     // Check if there is at least a minute difference between the datetime object
     // and now. If not, simply output "just now", else the actual relative difference.
     if (dt.diff(DateTime.now(), 'minutes').toObject().minutes * -1 < 1) {
-      return 'just now' // TODO: Translate
+      return trans('gui.date_just_now_label')
     } else {
       return dt.toRelative({
         style: 'short', // Can be short, narrow, or long

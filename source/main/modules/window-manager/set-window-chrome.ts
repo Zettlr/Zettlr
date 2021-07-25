@@ -23,33 +23,33 @@ import path from 'path'
  * the user preferences with regard to BrowserWindow chrome (native or
  * non-native), respecting the current platform.
  *
- * @param   {BrowserWindowConstructorOptions}  winConf  The configuration
+ * @param  {BrowserWindowConstructorOptions}  winConf        The configuration
+ * @param  {boolean}                          [modal=false]  If set to true, will assign a modal chrome
  */
-export default function setWindowChrome (winConf: BrowserWindowConstructorOptions): void {
+export default function setWindowChrome (winConf: BrowserWindowConstructorOptions, modal: boolean = false): void {
   const shouldUseNativeAppearance: boolean = global.config.get('window.nativeAppearance')
 
-  if (process.platform !== 'darwin') {
+  if (process.platform !== 'darwin' || modal) {
     // It is recommended to set a background color for the windows, however, on
     // macOS we can't do so because that would render nil the vibrancy.
     winConf.backgroundColor = '#fff'
   }
 
-  if (process.platform === 'darwin') {
+  if (process.platform === 'darwin' && !modal) {
     // On macOS, we want slightly inset traffic lights without any other window
     // chrome. Additionally, we'll be setting the window's vibrancy so that the
     // app looks even more native.
     winConf.titleBarStyle = 'hiddenInset'
-    winConf.vibrancy = 'sidebar'
+    winConf.vibrancy = 'under-window' // See https://developer.apple.com/design/human-interface-guidelines/macos/visual-design/translucency/
     winConf.visualEffectState = 'followWindow'
-  } else if (process.platform !== 'linux' || !shouldUseNativeAppearance) {
+  } else if ((process.platform !== 'linux' || !shouldUseNativeAppearance) && !modal && process.platform !== 'darwin') {
     // On Windows, we need a frameless window. On Linux, only if the
     // shouldUseNativeAppearance flag is set to false.
     winConf.frame = false
   } // Else: We have Linux with native appearance.
 
-  // Application icon for Linux. Cannot not be embedded in the executable.
+  // Application icon for Linux. Cannot be embedded in the executable.
   if (process.platform === 'linux') {
-    // TODO
-    winConf.icon = path.join(__dirname, 'assets/icons/128x128.png')
+    winConf.icon = path.join(__dirname, 'assets/icons/png/128x128.png')
   }
 }

@@ -1,5 +1,17 @@
 /* global define CodeMirror */
-// This plugin renders mermaid code blocks.
+/**
+  * @ignore
+  * BEGIN HEADER
+  *
+  * Contains:        Mermaid rendering Plugin
+  * CVM-Role:        CodeMirror Plugin
+  * Maintainer:      Hendrik Erz
+  * License:         GNU GPL v3
+  *
+  * Description:     This plugin renders Mermaid diagrams.
+  *
+  * END HEADER
+  */
 
 const mermaid = require('mermaid')
 
@@ -30,7 +42,7 @@ const mermaid = require('mermaid')
     // We'll only render the viewport
     const viewport = cm.getViewport()
     for (let i = viewport.from; i < viewport.to; i++) {
-      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
+      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
 
       // Cursor is in here, so also don't render (for now)
       if (currentCursorPosition === i) continue

@@ -2,7 +2,7 @@
  * @ignore
  * BEGIN HEADER
  *
- * CVM-Role:        Helper function
+ * CVM-Role:        Utility function
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
@@ -16,50 +16,52 @@ import path from 'path'
 import { app } from 'electron'
 import { promises as fs } from 'fs'
 import isFile from '../../common/util/is-file'
-
-/**
- * Contains custom paths that should be present on the process.env.PATH property
- * for the given operating system as reported by process.platform.
- */
-const CUSTOM_PATHS = {
-  win32: [],
-  linux: ['/usr/bin'],
-  darwin: [
-    '/usr/local/bin',
-    '/Library/TeX/texbin'
-  ],
-  aix: [],
-  android: [],
-  freebsd: [],
-  openbsd: [],
-  sunos: [],
-  cygwin: [],
-  netbsd: []
-}
-
-/**
- * Required directories that must exist on the system in order for certain
- * functionality to work and not bring down Zettlr to its knees on startup.
- *
- * @var {string[]}
- */
-const REQUIRED_DIRECTORIES = [
-  app.getPath('userData'), // Main config directory
-  path.join(app.getPath('userData'), 'dict'), // Custom dictionary path
-  path.join(app.getPath('userData'), 'lang'), // Custom translation path
-  path.join(app.getPath('userData'), 'logs'), // Log path
-  path.join(app.getPath('userData'), 'defaults') // Defaults files
-]
-
-/**
- * Platform specific delimiter (; on Windows, : everywhere else)
- *
- * @var {string}
- */
-const DELIM = (process.platform === 'win32') ? ';' : ':'
+import isTraySupported from './is-tray-supported'
 
 export default async function environmentCheck (): Promise<void> {
   global.log.info('Performing environment check ...')
+
+  /**
+   * Contains custom paths that should be present on the process.env.PATH property
+   * for the given operating system as reported by process.platform.
+   */
+  const CUSTOM_PATHS = {
+    win32: [],
+    linux: ['/usr/bin'],
+    darwin: [
+      '/usr/local/bin',
+      '/Library/TeX/texbin'
+    ],
+    aix: [],
+    android: [],
+    freebsd: [],
+    openbsd: [],
+    sunos: [],
+    cygwin: [],
+    netbsd: []
+  }
+
+  /**
+   * Required directories that must exist on the system in order for certain
+   * functionality to work and not bring down Zettlr to its knees on startup.
+   *
+   * @var {string[]}
+   */
+  const REQUIRED_DIRECTORIES = [
+    app.getPath('userData'), // Main config directory
+    path.join(app.getPath('userData'), 'dict'), // Custom dictionary path
+    path.join(app.getPath('userData'), 'lang'), // Custom translation path
+    path.join(app.getPath('userData'), 'logs'), // Log path
+    path.join(app.getPath('userData'), 'defaults'), // Defaults files
+    path.join(app.getPath('userData'), 'snippets') // Snippets files
+  ]
+
+  /**
+   * Platform specific delimiter (; on Windows, : everywhere else)
+   *
+   * @var {string}
+   */
+  const DELIM = (process.platform === 'win32') ? ';' : ':'
 
   const is64Bit = process.arch === 'x64'
   const isARM64 = process.arch === 'arm64'
@@ -128,6 +130,14 @@ export default async function environmentCheck (): Promise<void> {
       global.log.info(`Creating required directory ${p} ...`)
       await fs.mkdir(p, { recursive: true })
     }
+  }
+
+  try {
+    process.env.ZETTLR_IS_TRAY_SUPPORTED = await isTraySupported() ? '1' : '0'
+  } catch (err) {
+    process.env.ZETTLR_IS_TRAY_SUPPORTED = '0'
+    process.env.ZETTLR_TRAY_ERROR = err.message
+    global.log.warning(err.message)
   }
 
   global.log.info('Environment check complete.')

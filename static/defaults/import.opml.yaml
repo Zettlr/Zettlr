@@ -1,0 +1,9 @@
+# ZETTLR DEFAULTS FILE
+# ====================
+# Conversion: OPML Document --> Markdown
+# More info: https://pandoc.org/MANUAL.html
+reader: opml
+writer: markdown
+wrap: none
+# Set to setext to produce underlined h1 and h2
+markdown-headings: atx

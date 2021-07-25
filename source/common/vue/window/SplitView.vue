@@ -16,12 +16,27 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        SplitView
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Implements split views (two horizontal panes with a movable
+ *                  separator in the middle). Split views can also be hidden.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'SplitView',
   props: {
     split: {
       type: String,
-      default: 'horizontal' // TODO: Not yet implemented b/c I don't need it yet
+      default: 'horizontal' // NOTE: Not yet implemented b/c I don't need it yet
     },
     minimumSizePercent: {
       type: Array,

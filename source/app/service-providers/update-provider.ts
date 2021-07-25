@@ -26,11 +26,11 @@ import semver from 'semver'
 import md2html from '../../common/util/md-to-html'
 
 import { ipcMain, app, shell } from 'electron'
-import { trans } from '../../common/i18n.js'
-import { repo_url as REPO_URL } from '../../common/data.json'
+import { trans } from '../../common/i18n-main'
 import isFile from '../../common/util/is-file'
 
 const CUR_VER = app.getVersion()
+const REPO_URL = 'https://www.zettlr.com/api/releases/latest'
 
 // Mimicks the API response for a downloadable asset
 interface UpdateAsset {
@@ -100,8 +100,7 @@ export default class UpdateProvider {
 
           if (this._lastResponse.isNewer) {
             global.log.info(`[Update Provider] Update available: ${this._lastResponse.newVer}`)
-            // TODO: Translate
-            global.notify.normal(`An update to version ${this._lastResponse.newVer} is available!`, true, () => {
+            global.notify.normal(trans('dialog.update.new_update_available', this._lastResponse.newVer), () => {
               // The user has clicked the notification, so we can show the update window here
               global.application.runCommand('open-update-window')
                 .catch(e => global.log.error(String(e.message), e))
@@ -159,13 +158,14 @@ export default class UpdateProvider {
    */
   async _check (): Promise<void> {
     try {
+      global.log.info(`[Updater] Checking ${REPO_URL} for updates ...`)
       const response: Response<string> = await got(REPO_URL, {
         method: 'GET',
         searchParams: new URLSearchParams([
-          [ 'uuid', global.config.get('uuid') ],
-          [ 'accept-beta', global.config.get('checkForBeta') ],
-          [ 'platform', process.platform ],
-          [ 'version', CUR_VER ]
+          [ 'accept-beta', global.config.get('checkForBeta') ] // ,
+          //  [ 'uuid', global.config.get('uuid') ],
+          //  [ 'platform', process.platform ],
+          //  [ 'version', CUR_VER ]
         ])
       })
 
@@ -193,9 +193,9 @@ export default class UpdateProvider {
         // offline.
         throw new Error(trans('dialog.update.connection_error'))
       } else {
-        // Something else has occurred. TODO: Translate!
+        // Something else has occurred.
         // GotError objects have a name property.
-        throw new Error(`Could not check for updates. ${error.name as string}: ${error.message as string}`)
+        throw new Error(trans('dialog.update.other_error', error.name, error.message))
       }
     }
   }
@@ -318,7 +318,7 @@ export default class UpdateProvider {
 
     this._downloadReadStream.on('end', () => {
       global.log.info(`Successfully downloaded ${this._downloadProgress.name}. Transferred ${this._downloadProgress.size_downloaded} bytes overall.`)
-      global.notify.normal(`Download of ${this._downloadProgress.name} successful!`, true, () => {
+      global.notify.normal(`Download of ${this._downloadProgress.name} successful!`, () => {
         // The user has clicked the notification, so we can show the update window here
         global.application.runCommand('open-update-window')
           .catch(e => global.log.error(String(e.message), e))
@@ -390,11 +390,11 @@ export default class UpdateProvider {
     // 2. Check that the file is correct
     // 3. Launch the file
     // 4. Quit the app
-    global.notify.normal('Verifying update ...', true)
+    global.notify.normal('Verifying update ...')
     let res = await this._retrieveSHA256Sums()
     if (!res) {
       this._cleanup(true)
-      global.notify.normal('Could not verify the download!', true)
+      global.notify.normal('Could not verify the download!')
       return
     }
 
@@ -405,7 +405,7 @@ export default class UpdateProvider {
     if (correctSHA === undefined) {
       this._cleanup(true)
       global.log.error('[Update Provider] Could not verify checksums: No corresponding SHA256 found in data.')
-      global.notify.normal('Could not verify the download!', true)
+      global.notify.normal('Could not verify the download!')
       return
     }
 
@@ -416,7 +416,7 @@ export default class UpdateProvider {
     if (downloadSHA !== correctSHA.sha256) {
       this._cleanup(true)
       global.log.error(`[Update Provider] The SHA256 checksums did not match. Expected ${correctSHA.sha256}, but got ${downloadSHA}.`)
-      global.notify.normal('Could not verify update. Aborting update process!', true)
+      global.notify.normal('Could not verify update. Aborting update process!')
       return
     } else {
       global.log.info(`[Update Provider] Successfully verified the checksum of ${this._downloadProgress.name} (${downloadSHA})!`)
@@ -427,7 +427,7 @@ export default class UpdateProvider {
       await shell.openPath(this._downloadProgress.full_path)
       app.quit()
     } catch (err) {
-      global.notify.normal('Could not start update. Please install manually.', true)
+      global.notify.normal('Could not start update. Please install manually.')
       global.log.error(`[Update Provider] Could not start update: ${err.message as string}.`, err)
     }
   }

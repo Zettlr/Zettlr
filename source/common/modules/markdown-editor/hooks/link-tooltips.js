@@ -1,3 +1,18 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CodeMirror link tooltip hook
+ * CVM-Role:        CodeMirror plugin
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Shows a tooltip when hovering over links, enabling
+ *                  point-and-click link opening.
+ *
+ * END HEADER
+ */
+
 const tippy = require('tippy.js').default
 const openMarkdownLink = require('../open-markdown-link')
 

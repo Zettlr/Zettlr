@@ -1,9 +1,24 @@
-const { shell, ipcRenderer } = require('electron')
-const makeValidUri = require('../../util/make-valid-uri')
-const { trans } = require('../../i18n')
-const path = require('path')
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        openMarkdownLink function
+ * CVM-Role:        Utility function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This function opens a Markdown link, performing necessary
+ *                  transformations where applicable.
+ *
+ * END HEADER
+ */
 
-const VALID_FILETYPES = require('../../data.json').filetypes
+const { mdFileExtensions } = require('../../get-file-extensions')
+const makeValidUri = require('../../util/make-valid-uri')
+const path = window.path
+const ipcRenderer = window.ipc
+
+const VALID_FILETYPES = mdFileExtensions(true)
 
 /**
  * Resolves and opens a link safely (= not inside Zettlr, except it's a local MD file)
@@ -39,25 +54,20 @@ module.exports = function (url, cm) {
     // internally, without having to switch to an external program.
     const localPath = validURI.replace('file://', '')
     const isValidFile = VALID_FILETYPES.includes(path.extname(localPath))
-    const isLocalMdFile = path.isAbsolute(localPath) && isValidFile
+    const isLocalMdFile = path.isAbsolute(localPath) === true && isValidFile
 
     if (isLocalMdFile) {
       // Attempt to open internally
       ipcRenderer.invoke('application', {
         command: 'open-file',
         payload: {
-          path: this.obj.path,
+          path: localPath,
           newTab: false
         }
       })
         .catch(e => console.error(e))
     } else {
-      shell.openExternal(validURI).catch((err) => {
-        // Notify the user that we couldn't open the URL
-        if (err) {
-          global.notify(trans('system.error.open_url_error', validURI) + ': ' + err.message)
-        }
-      })
+      window.location.assign(validURI) // Handled by the event listener in the main process
     }
   }
 }

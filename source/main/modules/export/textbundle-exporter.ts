@@ -1,4 +1,16 @@
-// DEFAULT exporter plugin
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Textbundle exporter
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This plugin facilitates TextBundle and TextPack exports.
+ *
+ * END HEADER
+ */
 
 import {
   promises as fs,

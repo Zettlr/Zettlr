@@ -16,14 +16,11 @@ import path from 'path'
 import { promises as fs } from 'fs'
 import { app, ipcMain } from 'electron'
 import got from 'got'
-import {
-  enumLangFiles,
-  enumDictFiles,
-  getTranslationMetadata,
-  trans
-} from '../../common/i18n.js'
+import { trans } from '../../common/i18n-main'
 import moment from 'moment'
 import { translation_api_url as TRANSLATION_API_URL } from '../../common/data.json'
+import enumDictFiles from '../../common/util/enum-dict-files'
+import enumLangFiles from '../../common/util/enum-lang-files'
 
 interface APIResponse {
   bcp47: string
@@ -65,7 +62,7 @@ export default class TranslationProvider {
       }
     })
 
-    ipcMain.handle('translation-provider', (event, message) => {
+    ipcMain.handle('translation-provider', async (event, message) => {
       const { command } = message
 
       if (command === 'get-supported-languages') {
@@ -80,7 +77,7 @@ export default class TranslationProvider {
       } else if (command === 'get-available-dictionaries') {
         return enumDictFiles().map(elem => elem.tag)
       } else if (command === 'get-translation-metadata') {
-        return getTranslationMetadata()
+        return await this._getTranslationMetadata()
       }
     })
   }
@@ -105,7 +102,7 @@ export default class TranslationProvider {
 
     // Now we have all the languages available. We also need the translation
     // metadata.
-    let metadata = getTranslationMetadata()
+    let metadata = await this._getTranslationMetadata()
 
     let toUpdate = [] // Holds all languages that need updates.
 
@@ -139,8 +136,7 @@ export default class TranslationProvider {
       trans(
         'dialog.preferences.translations.updated',
         toUpdate.map(elem => trans(`dialog.preferences.app_lang.${elem.bcp47}`)).join(', ')
-      ),
-      true // Show the notification on OS level
+      )
     )
   }
 
@@ -153,6 +149,46 @@ export default class TranslationProvider {
     let l = await got(language.download_url, { method: 'GET' })
     let file = path.join(this._languageDirectory, language.bcp47 + '.json')
     await fs.writeFile(file, l.body, { encoding: 'utf8' })
+  }
+
+  /**
+   * Asynchronous function to retrieve the metadata from all available languages
+   * @param  {Array}  [paths=[ __dirname,    path.join(app.getPath('userData'] Paths to be searched for
+   * @return {Array}          An array containing the language metadata (keys = bcp-47 tags)
+   */
+  private async _getTranslationMetadata (paths = [ path.join(app.getPath('userData'), '/lang'), path.join(__dirname, '/lang') ]): Promise<any> {
+    let metadata = []
+
+    // First get all translations available
+    let files = enumLangFiles(paths).map(elem => elem.path)
+    // Now loop through them and extract the metadata section
+    for (let f of files) {
+      let lang = path.basename(f, path.extname(f)) // bcp-47 tag
+      if (metadata.find(elem => elem.bcp47 === lang) !== undefined) {
+        continue // Already included
+      }
+
+      const data = await fs.readFile(f, 'utf-8')
+      const stat = await fs.lstat(f)
+      const parsedData = JSON.parse(data)
+
+      if (!('metadata' in parsedData)) {
+        // Only the language tag and last file modification date
+        metadata.push({
+          'bcp47': lang,
+          'updated_at': stat.mtime.toISOString()
+        })
+      } else {
+        parsedData.metadata.bcp47 = lang // Add language tag
+        // Make sure we have a last updated property.
+        if (!('updated_at' in parsedData.metadata)) {
+          parsedData.metadata.updated_at = stat.mtime.toISOString()
+        }
+        metadata.push(parsedData.metadata)
+      }
+    }
+
+    return metadata
   }
 
   /**

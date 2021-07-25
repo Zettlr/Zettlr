@@ -90,9 +90,12 @@
     background-color: rgba(0, 0, 0, 0.25);
   }
 
-  // Enable matches on the searchbar to be indicated
-  .CodeMirror-search-match {
-    background-color: rgba(225, 225, 0, 0.7);
+  // These tab stops are used by the autocomplete hook to indicate next stops.
+  .tabstop {
+    display: inline-block;
+    min-width: 10px; // So that the bookmarks are at least a little bit visible.
+    background-color: rgba(0, 217, 225, 0.7);
+    border-radius: 3px;
   }
 
   // SYNTAX-HIGHLIGHTING CLASSES
@@ -179,6 +182,10 @@
   }
   .size-header-5 { font-size: 1em; }
   .size-header-6 { font-size: 1em; }
+
+  .task-item-done {
+    text-decoration: line-through;
+  }
 
   // Deliver a much more fancy UX for images inserted into the editor
   .editor-image-container {
@@ -307,6 +314,25 @@ body .tippy-content {
     border: none;
     min-width: 200px;
     min-height: 150px;
+  }
+
+  .editor-note-preview {
+    // Style the little preview note tooltips better
+    h4.filename {
+      font-size: 120%; // Not that much larger than the rest of the text
+    }
+
+    .note-content {
+      font-family: monospace; // TODO: Better font list for all operating systems
+      line-height: 100%;
+      margin: 10px 0;
+      white-space: pre-wrap;
+    }
+
+    .metadata {
+      color: rgb(200, 200, 200);
+      font-size: 80%;
+    }
   }
 }
 

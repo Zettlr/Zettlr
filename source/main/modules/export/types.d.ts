@@ -1,3 +1,18 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Exporter Types
+ * CVM-Role:        Types
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file exports a few types that are used by the exporter
+ *                  PopOver in the main window and the exporter itself.
+ *
+ * END HEADER
+ */
+
 import { CodeFileDescriptor, MDFileDescriptor } from '../fsal/types'
 
 /**

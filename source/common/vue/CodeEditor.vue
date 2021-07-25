@@ -3,12 +3,167 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CodeEditor
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Renders a small CodeMirror instance. This component can be
+ *                  used wherever we need a code editor rather than the complex,
+ *                  big main editor instance that is used in the main window.
+ *
+ * END HEADER
+ */
+
 import CodeMirror from 'codemirror'
 import 'codemirror/addon/edit/closebrackets'
 
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/mode/css/css'
 import 'codemirror/mode/yaml/yaml'
+import 'codemirror/mode/gfm/gfm'
+import 'codemirror/addon/mode/overlay'
+
+import { trans } from '../i18n-renderer'
+
+/**
+ * Define a snippets mode that extends the GFM mode with TextMate syntax.
+ *
+ * @param  {Object}       config     The original mode config
+ * @param  {Object}       parsercfg  The parser config
+ *
+ * @return {OverlayMode}             The generated overlay mode
+ */
+CodeMirror.defineMode('markdown-snippets', function (config, parsercfg) {
+  // Create the overlay and such
+  // Only matches simple $0 or $14 tabstops
+  const tabstopRE = /\$\d+/
+  // Matches tabstops with defaults
+  const placeholderRE = /\$\{\d+:.+?\}/
+  // Matches only valid variables
+  const onlyVarRE = /\$([A-Z_]+)/
+  // Matches only valid variables plus their placeholder
+  const variableRE = /\$\{([A-Z_]+):.+?\}/
+
+  // NOTE: This array corresponds to whatever is defined in autocomplete.js
+  const SUPPORTED_VARIABLES = [
+    'CURRENT_YEAR',
+    'CURRENT_YEAR_SHORT',
+    'CURRENT_MONTH',
+    'CURRENT_MONTH_NAME',
+    'CURRENT_MONTH_NAME_SHORT',
+    'CURRENT_DATE',
+    'CURRENT_HOUR',
+    'CURRENT_MINUTE',
+    'CURRENT_SECOND',
+    'CURRENT_SECONDS_UNIX',
+    'UUID',
+    'CLIPBOARD',
+    'ZKN_ID'
+  ]
+
+  const markdownSnippets = {
+    token: function (stream) {
+      if (stream.match(tabstopRE) !== null) {
+        return 'tm-tabstop'
+      }
+
+      if (stream.match(placeholderRE) !== null) {
+        return 'tm-placeholder'
+      }
+
+      if (stream.match(onlyVarRE, false) !== null) {
+        const variable = stream.match(onlyVarRE)[1]
+        if (SUPPORTED_VARIABLES.includes(variable)) {
+          return 'tm-variable'
+        } else {
+          return 'tm-false-variable'
+        }
+      }
+
+      if (stream.match(variableRE, false) !== null) {
+        const variable = stream.match(variableRE)[1]
+        if (SUPPORTED_VARIABLES.includes(variable)) {
+          return 'tm-variable-placeholder'
+        } else {
+          return 'tm-false-variable'
+        }
+      }
+
+      // We didn't match anything, so try again next time.
+      stream.next()
+      return null
+    }
+  }
+
+  const mode = CodeMirror.getMode(config, {
+    name: 'gfm',
+    highlightFormatting: true,
+    gitHubSpice: false
+  })
+  return CodeMirror.overlayMode(mode, markdownSnippets, true)
+})
+
+/**
+ * Small drop-in plugin that assigns 'cm-link'-classes to everything that looks
+ * like a link. Those links must have a protocol and only contain alphanumerics,
+ * plus ., -, #, %, and /.
+ *
+ * @param   {CodeMirror}  cm  The CodeMirror instance
+ */
+function markLinks (cm) {
+  // Very small drop in that marks URLs inside the code editor
+  for (let i = 0; i < cm.doc.lineCount(); i++) {
+    const line = String(cm.doc.getLine(i))
+    // Can contain a-z0-9, ., -, /, %, and #, but must end
+    // with an alphanumeric, a slash or a hashtag.
+    const match = /[a-z0-9-]+:\/\/[a-z0-9.-/#%]+[a-z0-9/#]/i.exec(line)
+    if (match === null) {
+      continue
+    }
+
+    const from = { line: i, ch: match.index }
+    const to = { line: i, ch: match.index + match[0].length }
+
+    // We can only have one marker at any given position at any given time
+    if (cm.doc.findMarks(from, to).length > 0) {
+      continue
+    }
+
+    cm.doc.markText(
+      from, to,
+      {
+        className: 'cm-link',
+        inclusiveLeft: false,
+        inclusiveRight: true,
+        attributes: { title: trans('gui.ctrl_click_to_open', match[0]) }
+      }
+    )
+  }
+}
+
+/**
+ * If applicable, follows a link from the editor.
+ *
+ * @param   {MouseEvent}  event  The triggering MouseEvent
+ */
+function maybeOpenLink (event) {
+  const t = event.target
+  const cmd = process.platform === 'darwin' && event.metaKey
+  const ctrl = process.platform !== 'darwin' && event.ctrlKey
+
+  if (cmd === false && ctrl === false) {
+    return
+  }
+
+  if (t.className.includes('cm-link') === true) {
+    window.location.assign(t.textContent)
+  }
+}
 
 export default {
   name: 'CodeEditor',
@@ -20,6 +175,10 @@ export default {
     mode: {
       type: String,
       default: 'css'
+    },
+    readonly: {
+      type: Boolean,
+      default: false
     }
   },
   data: function () {
@@ -34,6 +193,13 @@ export default {
         this.cmInstance.setValue(this.value)
         this.cmInstance.setCursor(cur)
       }
+    },
+    readonly: function () {
+      if (this.readonly === true) {
+        this.cmInstance.setOption('readOnly', 'nocursor')
+      } else {
+        this.cmInstance.setOption('readOnly', false)
+      }
     }
   },
   mounted: function () {
@@ -44,8 +210,7 @@ export default {
       cursorScrollMargin: 20,
       lineWrapping: true,
       autoCloseBrackets: true,
-      // Disable cursor blinking, as we apply a @keyframes animation
-      cursorBlinkRate: 0
+      readOnly: (this.readonly === true) ? 'nocursor' : false
     })
 
     this.cmInstance.setValue(this.value)
@@ -53,6 +218,10 @@ export default {
     this.cmInstance.on('change', (event, changeObj) => {
       this.$emit('input', this.cmInstance.getValue())
     })
+
+    // Detect links inside the source code and listen for clicks on these.
+    this.cmInstance.on('cursorActivity', markLinks)
+    this.cmInstance.getWrapperElement().addEventListener('mousedown', maybeOpenLink)
   },
   beforeDestroy: function () {
     const cmWrapper = this.cmInstance.getWrapperElement()
@@ -114,6 +283,13 @@ body {
     .cm-number     { color: @violet; }
     .CodeMirror-gutters { background-color: @base1; }
     .CodeMirror-linenumber { color: @base00; }
+
+    // Additional styles only for the GFM snippets editor
+    .cm-tm-tabstop { color: @cyan; }
+    .cm-tm-placeholder { color: @cyan; }
+    .cm-tm-variable { color: @yellow; }
+    .cm-tm-variable-placeholder { color: @violet; }
+    .cm-tm-false-variable { color: @red; }
   }
 
   &.dark {

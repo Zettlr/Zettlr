@@ -1,18 +1,15 @@
-/* global */
 /**
  * @ignore
  * BEGIN HEADER
  *
- * Contains:    ZettlrCiteproc
- * CVM-Role:    Model
+ * Contains:    Citeproc Provider
+ * CVM-Role:    Service Provider
  * Maintainer:  Hendrik Erz
  * License:     GNU GPL v3
  *
  * Description:     This class represents an interface between the citeproc-js
- *      library, a Zotero generated BibLaTeX file (ideally in CSL
- *      JSON) and your texts in Markdown. This class is therefore
- *      conceptualised as a model, because it models a whole
- *      database.
+ *                  library, a Zotero generated BibLaTeX file (ideally in CSL
+ *                  JSON), and your texts in Markdown.
  *
  * END HEADER
  */
@@ -23,7 +20,7 @@ import { ipcMain } from 'electron'
 import { parseSingle } from '@zettlr/citr'
 import { promises as fs, readFileSync } from 'fs'
 import path from 'path'
-import { trans } from '../../common/i18n'
+import { trans } from '../../common/i18n-main'
 import extractBibTexAttachments from './assets/extract-bibtex-attachments'
 import BibTexParser from 'astrocite-bibtex'
 import YAML from 'yaml'
@@ -250,6 +247,9 @@ export default class CiteprocProvider {
         })
         .catch(err => {
           global.log.error(`[Citeproc Provider] Could not load main library: ${String(err.message)}`, err)
+          if (!('application' in global)) {
+            return // If the main library wasn't found on start, do not attempt to display an error message.
+          }
           global.application.displayErrorMessage(
             trans('gui.citeproc.error_db'),
             err.message,
@@ -390,7 +390,7 @@ export default class CiteprocProvider {
         this._items[id] = item
       } catch (err) {
         global.log.warning(`[Citeproc Provider] Malformed CiteKey @${id}` + String(err.message))
-        global.notify.normal(`Malformed CiteKey @${id}`) // TODO translate
+        global.notify.normal(trans('system.error.malformed_citekey', id))
       }
     }
 
@@ -451,6 +451,10 @@ export default class CiteprocProvider {
           global.log.info('[Citeproc Provider] Not unloading main library.')
         }
         this._mainLibrary = global.config.get('export.cslLibrary')
+        if (this._mainLibrary.trim() === '') {
+          return // The user removed the csl library
+        }
+
         this._loadDatabase(this._mainLibrary)
           .then(db => {
             this._selectDatabase(db.path)

@@ -48,9 +48,24 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
-import { trans } from '../../common/i18n'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        FileTree
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays the FSAL file tree contents as a tree.
+ *
+ * END HEADER
+ */
+
+import { trans } from '../../common/i18n-renderer'
 import TreeItem from './tree-item.vue'
+
+const ipcRenderer = window.ipc
 
 export default {
   name: 'FileTree',
@@ -171,6 +186,19 @@ body.darwin {
 }
 
 body.win32 {
+  #file-tree {
+    background-color: rgb(230, 230, 230);
+
+    #directories-dirs-header, #directories-files-header {
+      border-bottom: 1px solid rgb(160, 160, 160);
+      font-size: 11px;
+      padding: 5px 0px 5px 10px;
+      margin: 0px 0px 5px 0px;
+    }
+  }
+}
+
+body.linux {
   #file-tree {
     background-color: rgb(230, 230, 230);
 

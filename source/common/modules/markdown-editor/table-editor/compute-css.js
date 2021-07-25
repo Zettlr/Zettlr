@@ -44,6 +44,14 @@ module.exports = (edgeButtonSize) => {
     min-width: 10px;
   }
 
+  /* We must pull to the front these buttons, lest they be overlaid by some
+     elements of CodeMirror */
+  .table-helper-align-button-container,
+  .table-helper-remove-button-container,
+  .table-helper-add-button {
+    z-index: 2;
+  }
+
   .table-helper-align-button-container {
     opacity: 0.25;
     transition: 0.2s opacity ease;

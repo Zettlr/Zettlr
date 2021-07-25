@@ -23,6 +23,7 @@ import checkImportIntegrity from './check-import-integrity'
 import importTextbundle from './import-textbundle'
 import { DirDescriptor } from '../fsal/types'
 import { app } from 'electron'
+import { trans } from '../../../common/i18n-main'
 
 export default async function makeImport (fileList: string[], dirToImport: DirDescriptor, errorCallback: Function|null = null, successCallback: Function|null = null): Promise<string[]> {
   // Determine the availability of Pandoc. As the Pandoc path is added to
@@ -33,7 +34,7 @@ export default async function makeImport (fileList: string[], dirToImport: DirDe
   try {
     await commandExists('pandoc')
   } catch (err) {
-    throw new Error('Cannot run importer: Pandoc has not been found.')
+    throw new Error(trans('system.error.no_pandoc_message'))
   }
 
   let files = await checkImportIntegrity(fileList)

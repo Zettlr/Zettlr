@@ -1,6 +1,6 @@
 <template>
   <div id="calendar-container">
-    <h1>Word counts {{ year }}</h1>
+    <h1>{{ calendarLabel }} {{ year }}</h1>
     <div>
       <ButtonControl
         v-bind:disabled="isMinimumYear"
@@ -61,7 +61,22 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CalendarView
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays the calendar with the word counts.
+ *
+ * END HEADER
+ */
+
 import { DateTime } from 'luxon'
+import { trans } from '../common/i18n-renderer'
 import ButtonControl from '../common/vue/form/elements/Button.vue'
 
 export default {
@@ -100,6 +115,9 @@ export default {
     isCurrentYear: function () {
       return this.now.year === DateTime.local().year
     },
+    calendarLabel: function () {
+      return trans('dialog.statistics.tabs.calendar_label')
+    },
     isMinimumYear: function () {
       // Returns true if this.now holds the minimum year for which there is
       // data available
@@ -116,18 +134,18 @@ export default {
     months: function () {
       const ret = []
       const MONTHS = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December'
+        trans('gui.months.jan'),
+        trans('gui.months.feb'),
+        trans('gui.months.mar'),
+        trans('gui.months.apr'),
+        trans('gui.months.may'),
+        trans('gui.months.jun'),
+        trans('gui.months.jul'),
+        trans('gui.months.aug'),
+        trans('gui.months.sep'),
+        trans('gui.months.oct'),
+        trans('gui.months.nov'),
+        trans('gui.months.dec')
       ]
 
       for (let i = 1; i <= 12; i++) {

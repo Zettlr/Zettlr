@@ -13,7 +13,7 @@
  */
 
 import { BrowserWindow, dialog, MessageBoxOptions } from 'electron'
-import { trans } from '../../../../common/i18n'
+import { trans } from '../../../../common/i18n-main'
 
 /**
  * Asks the user for confirmation, if the file identified by filename should
@@ -40,7 +40,8 @@ export default async function shouldReplaceFileDialog (win: BrowserWindow, filen
   }
 
   // Asynchronous message box to not block the main process
-  let response = await dialog.showMessageBox(win, options)
+  // DEBUG: Trying to resolve bug #1645, which seems to relate to modal status vs. promise awaits.
+  const response = ([ 'darwin', 'win32' ].includes(process.platform)) ? await dialog.showMessageBox(win, options) : await dialog.showMessageBox(options)
 
   global.config.set('alwaysReloadFiles', response.checkboxChecked)
 

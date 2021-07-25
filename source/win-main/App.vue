@@ -38,10 +38,13 @@
         >
           <template #view1>
             <!-- First side: Editor -->
-            <Tabs></Tabs>
+            <DocumentTabs
+              v-show="!distractionFree"
+            ></DocumentTabs>
             <Editor
               ref="editor"
               v-bind:readability-mode="readabilityActive"
+              v-bind:distraction-free="distractionFree"
             ></Editor>
           </template>
           <template #view2>
@@ -55,26 +58,44 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        App
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This is the entry component for the main window.
+ *
+ * END HEADER
+ */
+
 import WindowChrome from '../common/vue/window/Chrome'
 import FileManager from './file-manager/file-manager'
 import Sidebar from './Sidebar'
-import Tabs from './Tabs'
+import DocumentTabs from './DocumentTabs'
 import SplitView from '../common/vue/window/SplitView'
 import GlobalSearch from './GlobalSearch'
 import Editor from './Editor'
 import PopoverExport from './PopoverExport'
 import PopoverStats from './PopoverStats'
+import PopoverTags from './PopoverTags'
 import PopoverPomodoro from './PopoverPomodoro'
 import PopoverTable from './PopoverTable'
-import { trans } from '../common/i18n'
+import PopoverDocInfo from './PopoverDocInfo'
+import { trans } from '../common/i18n-renderer'
 import localiseNumber from '../common/util/localise-number'
 import generateId from '../common/util/generate-id'
-import { ipcRenderer, clipboard } from 'electron'
 
 // Import the sound effects for the pomodoro timer
 import glassFile from './assets/glass.wav'
 import alarmFile from './assets/digital_alarm.mp3'
 import chimeFile from './assets/chime.mp3'
+
+const ipcRenderer = window.ipc
+const clipboard = window.clipboard
 
 const SOUND_EFFECTS = [
   {
@@ -96,7 +117,7 @@ export default {
   components: {
     WindowChrome,
     FileManager,
-    Tabs,
+    DocumentTabs,
     SplitView,
     Editor,
     GlobalSearch,
@@ -108,6 +129,7 @@ export default {
       readabilityActive: false,
       sidebarVisible: false,
       fileManagerVisible: true,
+      distractionFree: false,
       mainSplitViewVisibleComponent: 'fileManager',
       // Pomodoro state
       pomodoro: {
@@ -134,10 +156,17 @@ export default {
           short: '#ddff00',
           long: '#33ffcc'
         }
+      },
+      sidebarsBeforeDistractionfree: {
+        fileManager: true,
+        sidebar: false
       }
     }
   },
   computed: {
+    shouldCountChars: function () {
+      return this.$store.state.config['editor.countChars']
+    },
     parsedDocumentInfo: function () {
       const info = this.$store.state.activeDocumentInfo
       if (info === null) {
@@ -165,13 +194,18 @@ export default {
           cnt += trans('gui.number_selections', info.selections.length)
         }
       } else {
-        // No selection. NOTE: words always contains the count of chars OR words.
-        cnt = trans('gui.words', localiseNumber(info.words))
+        // No selection.
+        const locID = (this.shouldCountChars === true) ? 'gui.chars' : 'gui.words'
+        const num = (this.shouldCountChars === true) ? info.chars : info.words
+        cnt = trans(locID, localiseNumber(num))
         cnt += '<br>'
         cnt += (info.cursor.line + 1) + ':' + (info.cursor.ch + 1)
       }
 
       return cnt
+    },
+    hasTagSuggestions: function () {
+      return this.$store.state.tagSuggestions.length > 0
     },
     toolbarControls: function () {
       return [
@@ -180,12 +214,12 @@ export default {
           id: 'toggle-file-manager',
           stateOne: {
             id: 'fileManager',
-            title: 'Toggle file manager',
+            title: trans('toolbar.toggle_file_manager'),
             icon: 'hard-disk'
           },
           stateTwo: {
             id: 'globalSearch',
-            title: 'Toggle search window',
+            title: trans('toolbar.toggle_global_search'),
             icon: 'search'
           },
           initialState: (this.fileManagerVisible === true) ? this.mainSplitViewVisibleComponent : undefined
@@ -206,7 +240,8 @@ export default {
           type: 'button',
           id: 'show-tag-cloud',
           title: trans('toolbar.tag_cloud'),
-          icon: 'tags'
+          icon: 'tags',
+          badge: this.hasTagSuggestions
         },
         {
           type: 'button',
@@ -221,7 +256,7 @@ export default {
           type: 'button',
           class: 'share',
           id: 'export',
-          title: 'Export', // title: trans('toolbar.share'),
+          title: trans('toolbar.share'),
           icon: 'export'
         },
         {
@@ -233,24 +268,6 @@ export default {
         {
           type: 'spacer',
           size: '1x'
-        },
-        {
-          type: 'button',
-          id: 'markdownBold',
-          title: trans('gui.formatting.bold'),
-          icon: 'bold'
-        },
-        {
-          type: 'button',
-          id: 'markdownItalic',
-          title: trans('gui.formatting.italic'),
-          icon: 'italic'
-        },
-        {
-          type: 'button',
-          id: 'markdownCode',
-          title: trans('gui.formatting.code'),
-          icon: 'code-alt'
         },
         {
           type: 'button',
@@ -269,24 +286,6 @@ export default {
           id: 'markdownImage',
           title: trans('gui.formatting.image'),
           icon: 'image'
-        },
-        {
-          type: 'button',
-          id: 'markdownBlockquote',
-          title: trans('gui.formatting.blockquote'),
-          icon: 'block-quote'
-        },
-        {
-          type: 'button',
-          id: 'markdownMakeOrderedList',
-          title: trans('gui.formatting.ol'),
-          icon: 'number-list'
-        },
-        {
-          type: 'button',
-          id: 'markdownMakeUnorderedList',
-          title: trans('gui.formatting.ul'),
-          icon: 'bullet-list'
         },
         {
           type: 'button',
@@ -312,6 +311,7 @@ export default {
         {
           type: 'text',
           align: 'center',
+          id: 'document-info',
           content: this.parsedDocumentInfo
         },
         {
@@ -325,7 +325,7 @@ export default {
         {
           type: 'toggle',
           id: 'toggle-sidebar',
-          title: 'menu.toggle_sidebar',
+          title: trans('menu.toggle_sidebar'),
           icon: 'view-columns',
           initialState: (this.sidebarVisible === true) ? 'active' : ''
         }
@@ -335,6 +335,10 @@ export default {
   watch: {
     sidebarVisible: function (newValue, oldValue) {
       if (newValue === true) {
+        if (this.distractionFree === true) {
+          this.distractionFree = false
+        }
+
         this.$refs['editor-sidebar-split'].unhide()
       } else {
         this.$refs['editor-sidebar-split'].hideView(2)
@@ -342,14 +346,25 @@ export default {
     },
     fileManagerVisible: function (newValue, oldValue) {
       if (newValue === true) {
+        if (this.distractionFree === true) {
+          this.distractionFree = false
+        }
+
         this.$refs['file-manager-split'].unhide()
       } else {
         this.$refs['file-manager-split'].hideView(1)
       }
+    },
+    mainSplitViewVisibleComponent: function (newValue, oldValue) {
+      if (newValue === 'globalSearch') {
+        // The global search just became visible, so make sure to change the
+        // current directory.
+        this.$refs['global-search'].setCurrentDirectory()
+      }
     }
   },
   mounted: function () {
-    ipcRenderer.on('shortcut', (event, shortcut) => {
+    ipcRenderer.on('shortcut', (event, shortcut, state) => {
       if (shortcut === 'toggle-sidebar') {
         this.sidebarVisible = this.sidebarVisible === false
       } else if (shortcut === 'insert-id') {
@@ -360,7 +375,6 @@ export default {
         // so that they are not lost during the operation.
         let text = clipboard.readText()
         let html = clipboard.readHTML()
-        let image = clipboard.readImage()
         let rtf = clipboard.readRTF()
 
         // Write an ID to the clipboard
@@ -373,7 +387,6 @@ export default {
           clipboard.write({
             'text': text,
             'html': html,
-            'image': image,
             'rtf': rtf
           })
         }, 10) // Why do a timeout? Because the paste event is asynchronous.
@@ -400,6 +413,25 @@ export default {
         // -- in the next tick -- focus its filter input.
         this.fileManagerVisible = true
         this.mainSplitViewVisibleComponent = 'fileManager'
+      } else if (shortcut === 'export') {
+        this.showExportPopover()
+      } else if (shortcut === 'toggle-distraction-free') {
+        if (this.distractionFree === false) {
+          // Enter distraction free mode
+          this.sidebarsBeforeDistractionfree = {
+            fileManager: this.fileManagerVisible,
+            sidebar: this.sidebarVisible
+          }
+
+          this.distractionFree = true
+          this.sidebarVisible = false
+          this.fileManagerVisible = false
+        } else {
+          // Leave distraction free mode
+          this.distractionFree = false
+          this.sidebarVisible = this.sidebarsBeforeDistractionfree.sidebar
+          this.fileManagerVisible = this.sidebarsBeforeDistractionfree.fileManager
+        }
       }
     })
 
@@ -425,31 +457,7 @@ export default {
         ipcRenderer.invoke('application', { command: 'open-preferences' })
           .catch(e => console.error(e))
       } else if (clickedID === 'export') {
-        if (this.$store.state.activeFile === null) {
-          return // Can't export a non-open file
-        }
-        const data = {
-          exportDirectory: this.$store.state.config['export.dir'],
-          format: this.$store.state.config['export.singleFileLastExporter']
-        }
-        this.$showPopover(PopoverExport, document.getElementById('toolbar-export'), data, (data) => {
-          if (data.shouldExport === true) {
-            // Remember the last choice
-            global.config.set('export.singleFileLastExporter', data.format)
-            // Run the exporter
-            ipcRenderer.invoke('application', {
-              command: 'export',
-              payload: {
-                format: data.format,
-                options: data.formatOptions,
-                exportTo: data.exportTo,
-                file: this.$store.state.activeFile.path
-              }
-            })
-              .catch(e => console.error(e))
-            this.$closePopover()
-          }
-        })
+        this.showExportPopover()
       } else if (clickedID === 'show-stats') {
         // The user wants to display the stats
         ipcRenderer.invoke('stats-provider', { command: 'get-data' }).then(stats => {
@@ -470,8 +478,37 @@ export default {
             this.$closePopover()
           })
         }).catch(e => console.error(e))
+      } else if (clickedID === 'show-tag-cloud') {
+        const allTags = Object.keys(this.$store.state.tagDatabase)
+        const tagMap = allTags.map(tag => {
+          // Tags have the properties "className", "count", and "text"
+          const storeTag = this.$store.state.tagDatabase[tag]
+
+          return {
+            className: storeTag.className,
+            count: storeTag.count,
+            text: storeTag.text
+          }
+        })
+
+        const data = {
+          tags: tagMap,
+          suggestions: this.$store.state.tagSuggestions
+        }
+
+        const button = document.getElementById('toolbar-show-tag-cloud')
+
+        this.$showPopover(PopoverTags, button, data, (data) => {
+          if (data.searchForTag !== '') {
+            // The user has clicked a tag and wants to search for it
+            this.$emit('start-global-search', '#' + data.searchForTag)
+            this.$closePopover()
+          } else if (data.addSuggestionsToFile === true) {
+            this.$refs.editor.addKeywordsToFile(data.suggestions)
+            this.$closePopover()
+          }
+        })
       } else if (clickedID === 'pomodoro') {
-        // TODO: Show pomodoro progress
         const data = {
           taskDuration: this.pomodoro.durations.task / 60,
           shortDuration: this.pomodoro.durations.short / 60,
@@ -528,7 +565,9 @@ export default {
         })
       } else if (clickedID === 'insert-table') {
         // Display the insertion popover
-        this.$showPopover(PopoverTable, document.getElementById('toolbar-insert-table'), {}, (data) => {
+        const data = {}
+        const elem = document.getElementById('toolbar-insert-table')
+        this.$showPopover(PopoverTable, elem, data, (data) => {
           // Generate a simple table based on the info, and insert it.
           let table = ''
           for (let i = 0; i < data.tableSize.rows; i++) {
@@ -542,6 +581,14 @@ export default {
           // This seems hacky, but it's not that bad, I think.
           this.$refs['editor'].editor.codeMirror.replaceSelection(table)
           this.$closePopover()
+        })
+      } else if (clickedID === 'document-info') {
+        const data = {
+          docInfo: this.$store.state.activeDocumentInfo
+        }
+        const elem = document.getElementById('toolbar-document-info')
+        this.$showPopover(PopoverDocInfo, elem, data, (data) => {
+          // Do nothing
         })
       } else if (clickedID.startsWith('markdown') === true && clickedID.length > 8) {
         // The user clicked a command button, so we just have to run that.
@@ -618,6 +665,33 @@ export default {
 
       clearInterval(this.pomodoro.intervalHandle)
       this.pomodoro.intervalHandle = undefined
+    },
+    showExportPopover: function () {
+      if (this.$store.state.activeFile === null) {
+        return // Can't export a non-open file
+      }
+      const data = {
+        exportDirectory: this.$store.state.config['export.dir'],
+        format: this.$store.state.config['export.singleFileLastExporter']
+      }
+      this.$showPopover(PopoverExport, document.getElementById('toolbar-export'), data, (data) => {
+        if (data.shouldExport === true) {
+          // Remember the last choice
+          global.config.set('export.singleFileLastExporter', data.format)
+          // Run the exporter
+          ipcRenderer.invoke('application', {
+            command: 'export',
+            payload: {
+              format: data.format,
+              options: data.formatOptions,
+              exportTo: data.exportTo,
+              file: this.$store.state.activeFile.path
+            }
+          })
+            .catch(e => console.error(e))
+          this.$closePopover()
+        }
+      })
     }
   }
 }

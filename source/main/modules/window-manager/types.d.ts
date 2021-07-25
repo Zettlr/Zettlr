@@ -1,4 +1,19 @@
 /**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        WindowPosition type
+ * CVM-Role:        Types
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file exports a single interface used by the window
+ *                  manager to manage the positions of all windows.
+ *
+ * END HEADER
+ */
+
+/**
  * An interface used to save the last sizes and screens from all windows,
  * if applicable.
  */

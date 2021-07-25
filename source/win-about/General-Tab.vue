@@ -1,5 +1,11 @@
 <template>
   <div id="about-general">
+    <h1 id="main-heading">
+      Zettlr {{ version }}
+    </h1>
+    <p id="uuid">
+      UUID: {{ uuid }}
+    </p>
     <p v-html="dialogIntro"></p>
 
     <div class="projects">
@@ -58,7 +64,21 @@
 </template>
 
 <script>
-import { trans } from '../common/i18n'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        GeneralTab
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file contains the initial tab for the about window.
+ *
+ * END HEADER
+ */
+
+import { trans } from '../common/i18n-renderer'
 
 export default {
   name: 'GeneralTab',
@@ -67,6 +87,14 @@ export default {
       dialogIntro: trans('dialog.about.lead'),
       CSLInfo: trans('dialog.about.citationstyle'),
       nodeTrademark: trans('dialog.about.trademark')
+    }
+  },
+  computed: {
+    version: function () {
+      return global.config.get('version')
+    },
+    uuid: function () {
+      return global.config.get('uuid')
     }
   }
 }
@@ -78,6 +106,19 @@ div#about-general {
     // Reset the default removed margin on simple p-elements etc., which is
     // currently applied in the geometry CSS.
     margin: revert;
+  }
+
+  h1#main-heading {
+    margin-bottom: 0px;
+  }
+
+  p#uuid {
+    font-family: Menlo, Monaco, 'Liberation Mono', 'Courier New', monospace;
+    color: rgb(80, 80, 80);
+    font-size: 80%;
+    margin-top: 0px;
+    user-select: text;
+    cursor: text;
   }
 
   div.projects {
