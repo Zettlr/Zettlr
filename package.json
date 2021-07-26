@@ -119,7 +119,7 @@
     "eslint-plugin-standard": "^5.0.0",
     "eslint-plugin-vue": "^7.14.0",
     "file-loader": "^6.2.0",
-    "fork-ts-checker-webpack-plugin": "^6.2.12",
+    "fork-ts-checker-webpack-plugin": "^6.2.13",
     "jsdom": "^16.6.0",
     "less": "^4.1.1",
     "less-loader": "^10.0.1",
