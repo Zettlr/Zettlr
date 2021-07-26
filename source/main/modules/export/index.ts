@@ -148,12 +148,14 @@ async function writeDefaults (
 
   const defaults: any = await global.assets.getDefaultsFor(writer, 'export')
 
-  // Use an HTML template if applicable TODO: Don't override that property, if it
-  // has been customised by the user
+  // Use an HTML template if applicable
   if (writer === 'html') {
-    let tpl = await fs.readFile(path.join(__dirname, 'assets/export.tpl.htm'), { encoding: 'utf8' })
-    defaults.template = path.join(dataDir, 'template.tpl')
-    await fs.writeFile(defaults.template, tpl, { encoding: 'utf8' })
+    if (!('template' in defaults) || typeof defaults.template !== 'string' || !isFile(defaults.template)) {
+      // There's definitely no template in the defaults we've just read
+      const tpl = await fs.readFile(path.join(__dirname, 'assets/export.tpl.htm'), { encoding: 'utf8' })
+      defaults.template = path.join(dataDir, 'template.tpl')
+      await fs.writeFile(defaults.template, tpl, { encoding: 'utf8' })
+    }
   }
 
   // Populate the variables section TODO: Migrate that to its own property
