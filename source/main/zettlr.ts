@@ -640,7 +640,7 @@ export default class Zettlr {
    * @param   {boolean}  newTab    Optional. If true, will always prevent exchanging the currently active file.
    */
   async openFile (filePath: string, newTab?: boolean): Promise<void> {
-    console.log('openfile called')
+    global.log.info(`[Application] Opening file ${filePath}`)
     // Add the file's metadata object to the recent docs
     // We only need to call the underlying function, it'll trigger a state
     // change event and will set in motion all other necessary processes.
