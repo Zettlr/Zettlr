@@ -84,7 +84,6 @@ export default function getConfigTemplate (): ConfigOptions {
     xelatex: '',
     export: {
       dir: 'temp', // Can either be "temp" or "cwd" (current working directory)
-      stripIDs: false, // Strip ZKN IDs such as @ID:<id>
       stripTags: false, // Strip tags a.k.a. #tag
       stripLinks: 'full', // Strip internal links: "full" - remove completely, "unlink" - only remove brackets, "no" - don't alter
       cslLibrary: '', // Path to a CSL JSON library file

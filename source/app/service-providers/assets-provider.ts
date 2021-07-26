@@ -27,12 +27,14 @@ export default class AssetsProvider {
    */
   private readonly _defaultsPath: string
   private readonly _snippetsPath: string
+  private readonly _filterPath: string
 
   constructor () {
     global.log.verbose('Assets provider starting up ...')
 
     this._defaultsPath = path.join(app.getPath('userData'), '/defaults')
     this._snippetsPath = path.join(app.getPath('userData'), '/snippets')
+    this._filterPath = path.join(app.getPath('userData'), '/lua-filter')
 
     global.assets = {
       // These two global functions get the defaults as a JavaScript object,
@@ -42,6 +44,12 @@ export default class AssetsProvider {
       },
       setDefaultsFor: async (format: string, type: 'import'|'export', newDefaults: any) => {
         return await this.setDefaultsFor(format, type, newDefaults, false)
+      },
+      // This one simply returns all filter in the filter directory.
+      getAllFilters: async () => {
+        const files = await fs.readdir(path.join(__dirname, './assets/lua-filter'))
+        const filter = files.filter(file => /\.lua$/.test(file))
+        return filter.map(file => path.join(this._filterPath, file))
       }
     }
 
@@ -74,11 +82,12 @@ export default class AssetsProvider {
   }
 
   async init (): Promise<void> {
-    const files = await fs.readdir(path.join(__dirname, './assets/defaults'))
-    const defaults = files.filter(file => /^(?:import|export)\..+?\.yaml$/.test(file))
     // First, ensure all required default files are where they should be.
     // Required are those defaults files which are in the assets/defaults directory
     // and correspond to the format (import|export).(writer|reader).yaml
+
+    const defaultsFiles = await fs.readdir(path.join(__dirname, './assets/defaults'))
+    const defaults = defaultsFiles.filter(file => /^(?:import|export)\..+?\.yaml$/.test(file))
     for (const file of defaults) {
       const absolutePath = path.join(this._defaultsPath, file)
       try {
@@ -86,6 +95,19 @@ export default class AssetsProvider {
       } catch (err) {
         global.log.warning(`[Assets Provider] Required defaults file ${file} not found. Copying ...`)
         await fs.copyFile(path.join(__dirname, './assets/defaults', file), absolutePath)
+      }
+    }
+
+    // Next, do the same for the filters
+    const filterFiles = await fs.readdir(path.join(__dirname, './assets/lua-filter'))
+    const filters = filterFiles.filter(file => /\.lua$/.test(file))
+    for (const file of filters) {
+      const absolutePath = path.join(this._filterPath, file)
+      try {
+        await fs.lstat(absolutePath)
+      } catch (err) {
+        global.log.warning(`[Assets Provider] Required filter ${file} not found. Copying ...`)
+        await fs.copyFile(path.join(__dirname, './assets/lua-filter', file), absolutePath)
       }
     }
   }

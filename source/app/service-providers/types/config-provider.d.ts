@@ -62,7 +62,6 @@ interface ConfigOptions {
   xelatex: string
   export: {
     dir: 'temp'|'cwd'
-    stripIDs: boolean
     stripTags: boolean
     stripLinks: 'full'|'unlink'|'no'
     cslLibrary: string

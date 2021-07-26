@@ -18,4 +18,11 @@ interface AssetsProvider {
    * @return  {Promise<boolean>}               True on success, false otherwise.
    */
   setDefaultsFor: (writer: string, type: 'import'|'export', newDefaults: any) => Promise<boolean>
+
+  /**
+   * Returns the absolute paths for all filter that reside in the filter directory.
+   *
+   * @return  {<string>[]}  The list of absolute paths.
+   */
+  getAllFilters: () => Promise<string[]>
 }

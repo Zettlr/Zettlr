@@ -21,6 +21,7 @@ module.exports = {
         { from: 'static/export.tpl.htm', to: 'assets' },
         { from: 'static/template.revealjs.htm', to: 'assets' },
         { from: 'static/revealjs-styles', to: 'assets/revealjs-styles' },
+        { from: 'static/lua-filter', to: 'assets/lua-filter' },
         { from: 'resources/icons/icon.ico', to: 'assets/icons' },
         { from: 'resources/icons/png', to: 'assets/icons/png' }
       ]

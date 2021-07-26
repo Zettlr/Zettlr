@@ -53,7 +53,8 @@ export default async function environmentCheck (): Promise<void> {
     path.join(app.getPath('userData'), 'lang'), // Custom translation path
     path.join(app.getPath('userData'), 'logs'), // Log path
     path.join(app.getPath('userData'), 'defaults'), // Defaults files
-    path.join(app.getPath('userData'), 'snippets') // Snippets files
+    path.join(app.getPath('userData'), 'snippets'), // Snippets files
+    path.join(app.getPath('userData'), 'lua-filter') // Lua filters
   ]
 
   /**

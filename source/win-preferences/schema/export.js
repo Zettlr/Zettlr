@@ -20,11 +20,6 @@ export default function () {
       [
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.export.strip_id_label'),
-          model: 'export.stripIDs'
-        },
-        {
-          type: 'checkbox',
           label: trans('dialog.preferences.export.strip_tags_label'),
           model: 'export.stripTags'
         }
