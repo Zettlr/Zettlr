@@ -53,27 +53,7 @@ async function downloadPandoc (platform, arch) {
 
 module.exports = {
   hooks: {
-    generateAssets: async (forgeConfig /*, targetPlatform, targetArch */) => {
-      // Check if we can bundle Pandoc. To mimick electron forge's behaviour,
-      // we check the same CLI arguments, and fall back to the current platform,
-      // if applicable.
-      const idxPlatform = process.argv.indexOf('--platform')
-      const idxArch = process.argv.indexOf('--arch')
-
-      // Default: process.platform. If a platform has been explicitly defined,
-      // use that one.
-      let targetPlatform = process.platform
-      if (idxPlatform > -1 && process.argv.length > idxPlatform + 1) {
-        targetPlatform = process.argv[idxPlatform + 1]
-      }
-
-      // Default: process.arch. If an architecture has been explicitly defined,
-      // use that one.
-      let targetArch = process.arch
-      if (idxArch > -1 && process.argv.length > idxArch + 1) {
-        targetArch = process.argv[idxArch + 1]
-      }
-
+    generateAssets: async (forgeConfig, targetPlatform, targetArch) => {
       const isMacOS = targetPlatform === 'darwin'
       const isLinux = targetPlatform === 'linux'
       const isWin32 = targetPlatform === 'win32'
@@ -160,7 +140,7 @@ module.exports = {
         // basically copying the CSP from the HTML-files, but with 'unsafe-eval'
         // added (which webpack needs for the sourcemaps).
         // DEBUG: Re-enable once we can move back to a version after v6.0.0-beta.57
-        // devContentSecurityPolicy: "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+        devContentSecurityPolicy: "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
         renderer: {
           config: './webpack.renderer.config.js',
           entryPoints: [
