@@ -497,8 +497,6 @@ body.win32 {
 
 body.linux {
   div#tab-container {
-    border-bottom: 1px solid rgb(200, 200, 200);
-
     div[role="tab"] {
       font-size: 12px;
       background-color: rgb(235, 235, 235); // Almost same colour as toolbar
@@ -516,6 +514,7 @@ body.linux {
 
       div[role="tab"] {
         border-color: rgb(120, 120, 120);
+        background-color: #5a5a5a;
 
         &:hover { background-color: rgb(53, 53, 53); }
         &.active { background-color: rgb(50, 50, 50); }
