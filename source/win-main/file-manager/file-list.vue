@@ -65,6 +65,7 @@
       <FileItem
         v-for="item in getDirectoryContents"
         v-bind:key="item.hash"
+        v-bind:index="0"
         v-bind:obj="item.props"
         v-on:create-file="handleOperation('file-new', item.id)"
         v-on:create-dir="handleOperation('dir-new', item.id)"
