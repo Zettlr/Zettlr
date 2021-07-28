@@ -129,12 +129,18 @@ export default {
         })
           .catch(e => console.error(e))
       } else if (type === 'directory') {
-        // Select this directory
-        ipcRenderer.invoke('application', {
-          command: 'set-open-directory',
-          payload: this.obj.path
-        })
-          .catch(e => console.error(e))
+        if (this.selectedDir === this.obj) {
+          // The clicked directory was already the selected directory, so just
+          // tell the application to show the file list, if applicable.
+          this.$root.$emit('toggle-file-list')
+        } else {
+          // Select this directory
+          ipcRenderer.invoke('application', {
+            command: 'set-open-directory',
+            payload: this.obj.path
+          })
+            .catch(e => console.error(e))
+        }
       }
     },
     /**

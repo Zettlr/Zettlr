@@ -19,6 +19,7 @@
         <!-- File manager in the left side of the split view -->
         <FileManager
           v-show="mainSplitViewVisibleComponent === 'fileManager'"
+          ref="file-manager"
         ></FileManager>
         <!-- ... or the global search, if selected -->
         <GlobalSearch
@@ -446,6 +447,12 @@ export default {
         this.$refs['global-search'].$data.query = terms
         this.$refs['global-search'].startSearch()
       })
+    })
+
+    this.$on('toggle-file-list', () => {
+      // This event can be used by various components to ask the file manager to
+      // toggle its file list visibility
+      this.$refs['file-manager'].toggleFileList()
     })
   },
   methods: {
