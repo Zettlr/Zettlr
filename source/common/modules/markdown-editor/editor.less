@@ -278,6 +278,103 @@
     width: auto;
     white-space: nowrap;
   }
+
+  // MERMAID CHARTS
+  // ===========================================================================
+  .mermaid-chart {
+    // main body is grey to see extend of diagram
+    // this needs to be set here as the setting for background
+    // in the mermaid API only uses the background color info
+    // for computation, not to actually set it
+    svg{
+      background-color: var(--mermaid-bg0);
+      border-radius: 5px;
+    }
+    // stroke-width can't be controlled through API directly
+    // some connectors inconsistently scale arrows with
+    // lines, we can't make these thicker without breaking
+    // the overall look
+    *:not(.relation, .transition, .relationshipLine) {stroke-width: 2px;}
+    [class="er relationshipLine"]{stroke-width: 1px;}
+    // bold text-elements should not be as bold
+    text.messageText{stroke-width: 1px;}
+    // some diagram types inconsistenly use transparency
+    // the only place where we need transparency is to mute
+    // the pie-chart colors and for the GANTT sections
+    *:not(.pieCircle, .section1, .section3) {
+      opacity: 1.0;
+      fill-opacity: 1.0;
+    }
+    // pie chart
+    // mermaid doesn't adjust the legend colors automatically
+    .legend rect {opacity: 0.8;}
+    // relationship diagram
+    // attribute boxes are not controlled by theme
+    .attributeBoxOdd {fill: var(--mermaid-bg0) !important}
+    .attributeBoxEven {fill: var(--mermaid-bg0) !important}
+    // multiplicities should use correct colors
+    #ZERO_OR_MORE_START *, #ZERO_OR_MORE_END *, #ONE_OR_MORE_START *,
+    #ONE_OR_MORE_END *, #ONLY_ONE_START *, #ONLY_ONE_END *,
+    #ZERO_OR_ONE_START *, #ZERO_OR_ONE_END *{
+      stroke: var(--mermaid-pop);
+    }
+    #ZERO_OR_ONE_START circle, #ZERO_OR_ONE_END circle,
+    #ZERO_OR_MORE_START circle, #ZERO_OR_MORE_END circle{
+      fill: var(--mermaid-bg0);
+    }
+    // user journey diagram
+    // tasks should have borders, but the task class is also used in
+    // GANTT charts, so we need to select only elements without sublasses
+    .journey-section, .task:not([class*="crit"], [class*="Crit"],
+    [class*="active"], [class*="done"]){
+      stroke: var(--mermaid-lines);
+    }
+    // actor-<number> classes are generated on demand, we need to capture
+    // all of them are with the method below
+    [class^="actor-"]:not(.actor-line){stroke: var(--mermaid-bg0)}
+    // faces should have highlight color with high-contrast lines
+    // to capture the eyes, a workaround with the circle radius is used
+    circle.face {
+      stroke: var(--mermaid-pop) !important;
+      fill: var(--mermaid-bg0) !important;
+    }
+    path.mouth, [r="1.5"] {
+      stroke: var(--mermaid-pop) !important;
+      fill: var(--mermaid-pop) !important;
+    }
+    // recolor actors
+    .actor-0{fill: var(--mermaid-pie1)}
+    .actor-1{fill: var(--mermaid-pie2)}
+    .actor-2{fill: var(--mermaid-pie3)}
+    .actor-3{fill: var(--mermaid-pie4)}
+    .actor-4{fill: var(--mermaid-pie5)}
+    .actor-5{fill: var(--mermaid-pie6)}
+    .actor-6{fill: var(--mermaid-pie7)}
+    .actor-7{fill: var(--mermaid-pie8)}
+    .actor-8{fill: var(--mermaid-pie9)}
+    .actor-9{fill: var(--mermaid-pie10)}
+    .actor-10{fill: var(--mermaid-pie11)}
+    .actor-11{fill: var(--mermaid-pie12)}
+    // gantt chart
+    // line color is overwritten in some internal function, fix it here
+    .tick [stroke="currentColor"], .grid [stroke="currentColor"]{
+      stroke: var(--mermaid-lines);
+    }
+    // text color of critical tasks can't be controlled directly
+    [class*=activeText], [class*=activeCritText]{
+      fill: var(--mermaid-text-contrast) !important
+    }
+    // section need opacity because grid-lines are rendered beneath them
+    // we remove the fill for odd sections and re-order even sections to
+    // render in the background
+    .section0, .section2 {fill: none;}
+    
+    cursor: default; // No text cursor
+    &.error {
+      font-family: Consolas, 'Inconsolata', Menlo, monospace; // For the error messages
+      color: var(--fg-error);
+    }
+  }
 }
 
 body .tippy-content {

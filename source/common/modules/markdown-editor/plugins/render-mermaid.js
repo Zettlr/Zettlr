@@ -26,9 +26,6 @@ const mermaid = require('mermaid')
 })(function (CodeMirror) {
   'use strict'
 
-  // Initialise the mermaid API
-  // mermaid.mermaidAPI.initialize({ startOnLoad: false, theme: 'base'})
-
   /**
    * Defines the CodeMirror command to render all found markdown images.
    * @param  {CodeMirror} cm The calling CodeMirror instance
@@ -41,105 +38,109 @@ const mermaid = require('mermaid')
     // we need to initialize the mermaid API here, since we can only get the
     // CSS color variables by querying the computed style of created documents
     // get theme colors and font
-    let mermaid_bg0   = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-bg0').replace(/\s+/g, '')
-    let mermaid_bg1   = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-bg1').replace(/\s+/g, '')
-    let mermaid_lines = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-lines').replace(/\s+/g, '')
-    let mermaid_text  = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-text').replace(/\s+/g, '')
-    let mermaid_text_contrast  = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-text-contrast').replace(/\s+/g, '')
-    let mermaid_pop   = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pop').replace(/\s+/g, '')
-    let mermaid_pie1  = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pie1').replace(/\s+/g, '')
-    let mermaid_pie2  = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pie2').replace(/\s+/g, '')
-    let mermaid_pie3  = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pie3').replace(/\s+/g, '')
-    let mermaid_pie4  = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pie4').replace(/\s+/g, '')
-    let mermaid_pie5  = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pie5').replace(/\s+/g, '')
-    let mermaid_pie6  = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pie6').replace(/\s+/g, '')
-    let mermaid_pie7  = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pie7').replace(/\s+/g, '')
-    let mermaid_pie8  = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pie8').replace(/\s+/g, '')
-    let mermaid_pie9  = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pie9').replace(/\s+/g, '')
-    let mermaid_pie10 = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pie10').replace(/\s+/g, '')
-    let mermaid_pie11 = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pie11').replace(/\s+/g, '')
-    let mermaid_pie12 = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('--mermaid-pie12').replace(/\s+/g, '')
-    let mermaid_font  = getComputedStyle(document.querySelector(".CodeMirror")).getPropertyValue('font-family')
+    const style = getComputedStyle(document.querySelector('.CodeMirror'))
+    const mermaidBg0 = style.getPropertyValue('--mermaid-bg0').replace(/\s+/g, '')
+    const mermaidBg1 = style.getPropertyValue('--mermaid-bg1').replace(/\s+/g, '')
+    const mermaidLines = style.getPropertyValue('--mermaid-lines').replace(/\s+/g, '')
+    const mermaidText = style.getPropertyValue('--mermaid-text').replace(/\s+/g, '')
+    const mermaidTextContrast = style.getPropertyValue('--mermaid-text-contrast').replace(/\s+/g, '')
+    const mermaidPop = style.getPropertyValue('--mermaid-pop').replace(/\s+/g, '')
+    const mermaidPie1 = style.getPropertyValue('--mermaid-pie1').replace(/\s+/g, '')
+    const mermaidPie2 = style.getPropertyValue('--mermaid-pie2').replace(/\s+/g, '')
+    const mermaidPie3 = style.getPropertyValue('--mermaid-pie3').replace(/\s+/g, '')
+    const mermaidPie4 = style.getPropertyValue('--mermaid-pie4').replace(/\s+/g, '')
+    const mermaidPie5 = style.getPropertyValue('--mermaid-pie5').replace(/\s+/g, '')
+    const mermaidPie6 = style.getPropertyValue('--mermaid-pie6').replace(/\s+/g, '')
+    const mermaidPie7 = style.getPropertyValue('--mermaid-pie7').replace(/\s+/g, '')
+    const mermaidPie8 = style.getPropertyValue('--mermaid-pie8').replace(/\s+/g, '')
+    const mermaidPie9 = style.getPropertyValue('--mermaid-pie9').replace(/\s+/g, '')
+    const mermaidPie10 = style.getPropertyValue('--mermaid-pie10').replace(/\s+/g, '')
+    const mermaidPie11 = style.getPropertyValue('--mermaid-pie11').replace(/\s+/g, '')
+    const mermaidPie12 = style.getPropertyValue('--mermaid-pie12').replace(/\s+/g, '')
+    const mermaidFont = style.getPropertyValue('font-family')
     // re-initialize mermaid API
-    mermaid.mermaidAPI.initialize({ startOnLoad: false, theme: 'base',
-    themeVariables: {
-      // main body is colored to see extend of diagram
-      // first-level containers use same background color
-      'background'  : mermaid_bg0,
-      'primaryColor': mermaid_bg0,
-      'secondaryColor': mermaid_bg0,
-      'tertiaryColor': mermaid_bg0,
-      'mainBkg'     : mermaid_bg0,
-      // second-level containers are a shade darker
-      // fields in loop
-      'noteBkgColor': mermaid_bg1,
-      // all borders use the same color
-      'primaryBorderColor' : mermaid_lines,
-      'secondrayBorderColor' : mermaid_lines,
-      'tertiaryBorderColor' : mermaid_lines,
-      'noteBorderColor' : mermaid_bg1,
-      // lines and highlited elements use theme color
-      'lineColor': mermaid_pop,
-      // all text to uses the same color
-      'fontFamily': mermaid_font,
-      'primaryTextColor': mermaid_text,
-      'secondaryTextColor': mermaid_text,
-      'tertiaryTextColor': mermaid_text,
-      'textColor': mermaid_text,
-      'noteTextColor': mermaid_text,
-      // graph
-      'arrowheadColor': mermaid_pop,
-      // flowchart
-      'clusterBkg'  : mermaid_bg1,
-      // sequence chart
-      'actorLineColor': mermaid_lines,
-      'labelBoxBorderColor': mermaid_lines,
-      'signalColor': mermaid_pop,
-      'activationBorderColor': mermaid_pop,
-      'signalTextColor': mermaid_text,
-      // pie chart
-      'pie1': mermaid_pie1,
-      'pie2': mermaid_pie2,
-      'pie3': mermaid_pie3,
-      'pie4': mermaid_pie4,
-      'pie5': mermaid_pie5,
-      'pie6': mermaid_pie6,
-      'pie7': mermaid_pie7,
-      'pie8': mermaid_pie8,
-      'pie9': mermaid_pie9,
-      'pie10': mermaid_pie10,
-      'pie11': mermaid_pie11,
-      'pie12': mermaid_pie12,
-      'pieOpacity': '0.8',
-      'pieSectionTextColor': mermaid_text_contrast,
-      'pieStrokeColor': mermaid_bg0,
-      // state chart
-      'altBackground'   : mermaid_bg1,
-      // user journey diagram
-      'fillType0': mermaid_bg0,
-      'fillType1': mermaid_bg1,
-      'fillType2': mermaid_bg0,
-      'fillType3': mermaid_bg1,
-      'fillType4': mermaid_bg0,
-      'fillType5': mermaid_bg1,
-      'fillType6': mermaid_bg0,
-      'fillType7': mermaid_bg1,
-      // gantt chart
-      'gridColor': mermaid_lines,
-      'todayLineColor': mermaid_pop,
-      'doneTaskBkgColor': mermaid_bg1,
-      'doneTaskBorderColor': mermaid_lines,
-      'activeTaskBkgColor': mermaid_pop,
-      'activeTaskBorderColor': mermaid_pop,
-      'taskBkgColor': mermaid_bg0,
-      'taskBorderColor': mermaid_lines,
-      'critBkgColor': mermaid_bg0,
-      'critBorderColor': mermaid_pop,
-      // this should be mermaid_bg1, but the element must be transparent to
-      // show the gridlines underneath. with mermaid_lines, the result is roughly
-      // the correct color
-      'altSectionBkgColor': mermaid_lines,
-    }})
+    mermaid.mermaidAPI.initialize({
+      startOnLoad: false,
+      theme: 'base',
+      themeVariables: {
+        // main body is colored to see extend of diagram
+        // first-level containers use same background color
+        'background': mermaidBg0,
+        'primaryColor': mermaidBg0,
+        'secondaryColor': mermaidBg0,
+        'tertiaryColor': mermaidBg0,
+        'mainBkg': mermaidBg0,
+        // second-level containers are a shade darker
+        // fields in loop
+        'noteBkgColor': mermaidBg1,
+        // all borders use the same color
+        'primaryBorderColor': mermaidLines,
+        'secondrayBorderColor': mermaidLines,
+        'tertiaryBorderColor': mermaidLines,
+        'noteBorderColor': mermaidBg1,
+        // lines and highlited elements use theme color
+        'lineColor': mermaidPop,
+        // all text to uses the same color
+        'fontFamily': mermaidFont,
+        'primaryTextColor': mermaidText,
+        'secondaryTextColor': mermaidText,
+        'tertiaryTextColor': mermaidText,
+        'textColor': mermaidText,
+        'noteTextColor': mermaidText,
+        // graph
+        'arrowheadColor': mermaidPop,
+        // flowchart
+        'clusterBkg': mermaidBg1,
+        // sequence chart
+        'actorLineColor': mermaidLines,
+        'labelBoxBorderColor': mermaidLines,
+        'signalColor': mermaidPop,
+        'activationBorderColor': mermaidPop,
+        'signalTextColor': mermaidText,
+        // pie chart
+        'pie1': mermaidPie1,
+        'pie2': mermaidPie2,
+        'pie3': mermaidPie3,
+        'pie4': mermaidPie4,
+        'pie5': mermaidPie5,
+        'pie6': mermaidPie6,
+        'pie7': mermaidPie7,
+        'pie8': mermaidPie8,
+        'pie9': mermaidPie9,
+        'pie10': mermaidPie10,
+        'pie11': mermaidPie11,
+        'pie12': mermaidPie12,
+        'pieOpacity': '0.8',
+        'pieSectionTextColor': mermaidTextContrast,
+        'pieStrokeColor': mermaidBg0,
+        // state chart
+        'altBackground': mermaidBg1,
+        // user journey diagram
+        'fillType0': mermaidBg0,
+        'fillType1': mermaidBg1,
+        'fillType2': mermaidBg0,
+        'fillType3': mermaidBg1,
+        'fillType4': mermaidBg0,
+        'fillType5': mermaidBg1,
+        'fillType6': mermaidBg0,
+        'fillType7': mermaidBg1,
+        // gantt chart
+        'gridColor': mermaidLines,
+        'todayLineColor': mermaidPop,
+        'doneTaskBkgColor': mermaidBg1,
+        'doneTaskBorderColor': mermaidLines,
+        'activeTaskBkgColor': mermaidPop,
+        'activeTaskBorderColor': mermaidPop,
+        'taskBkgColor': mermaidBg0,
+        'taskBorderColor': mermaidLines,
+        'critBkgColor': mermaidBg0,
+        'critBorderColor': mermaidPop,
+        // this should be mermaid_bg1, but the element must be transparent to
+        // show the gridlines underneath. with mermaid_lines, the result is roughly
+        // the correct color
+        'altSectionBkgColor': mermaidLines
+      }
+    })
 
     // We'll only render the viewport
     const viewport = cm.getViewport()
