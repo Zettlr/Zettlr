@@ -523,10 +523,17 @@ const {
       cur.ch = 0
       cm.setCursor(cur)
       let line = cm.doc.getLineHandle(cur.line)
-      if (taskListRE.test(line.text)) {
-        // Line is already unordered -> remove
+      let match = taskListRE.exec(line.text)
+      if (match) {
         cm.doc.setSelection(cur, { 'line': cur.line, 'ch': line.text.length })
-        cm.doc.replaceSelection(cm.doc.getSelection().replace(taskListRE, ''))
+        // Line is already task item
+        if (match[2] === '- [ ]') {
+          // Line is un-checked task item -> check
+          cm.doc.replaceSelection(cm.doc.getSelection().replace('- [ ]', '- [x]'))
+        } else {
+          // Line is checked task item -> remove
+          cm.doc.replaceSelection(cm.doc.getSelection().replace(taskListRE, ''))
+        }
       } else {
         // Line is not a list -> Insert a task list item at cursor position
         let num = '- [ ]'
@@ -554,12 +561,19 @@ const {
         // bullets to them
         cm.doc.eachLine(lineFrom, lineTo, (line) => {
           let no = line.lineNo()
-          if (taskListRE.test(line.text)) {
-            // Line is already a task item -> remove
+          let match = taskListRE.exec(line.text)
+          if (match) {
+            // Line is already a task item
             cm.doc.setCursor(no, 0)
             let curFrom = cm.doc.getCursor()
             cm.doc.setSelection(curFrom, { 'line': no, 'ch': line.text.length })
-            cm.doc.replaceSelection(cm.doc.getSelection().replace(taskListRE, ''))
+            if (match[2] === '- [ ]') {
+              // Line is un-checked task item -> check
+              cm.doc.replaceSelection(cm.doc.getSelection().replace('- [ ]', '- [x]'))
+            } else {
+              // Line is checked task item -> remove
+              cm.doc.replaceSelection(cm.doc.getSelection().replace(taskListRE, ''))
+            }
           } else {
             // Just prepend task list items
             cm.doc.setCursor(no, 0)

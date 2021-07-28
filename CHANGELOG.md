@@ -46,6 +46,7 @@ The Custom CSS can now be edited directly in the assets dialog where you can als
 - Add a tray to the system notification area, off by default. To activate, see Preferences → Advanced → "Leave app running in the notification area" (or "Show app in the notification area" when using MacOS).
 - Fixed a bug that would mark some quotation marks as misspelled.
 - Fix the visibility problems under night mode mentioned in issue #1845
+- `Cmd/Ctrl+T` now cycles between normal line/task list/checked task list to allow for ticking task list boxes using only the keyboard. Provided by Thaddäus Wiedemer (https://github.com/ThaddaeusWiedemer).
 
 ## Under the Hood
 
