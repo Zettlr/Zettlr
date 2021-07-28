@@ -503,11 +503,7 @@ const config: StoreOptions<ZettlrState> = {
         return // Same directory, nothing to update
       }
 
-      if (directory === null) {
-        context.commit('updateOpenDirectory', null)
-      } else {
-        context.commit('updateOpenDirectory', directory)
-      }
+      context.commit('updateOpenDirectory', directory)
 
       // In case the user quickly switched, we need to re-run this
       context.dispatch('updateOpenDirectory').catch(e => console.error(e))
