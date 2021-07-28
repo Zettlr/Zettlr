@@ -533,6 +533,10 @@ const config: StoreOptions<ZettlrState> = {
         return // Nothing to do
       }
 
+      if (context.state.activeFile.type !== 'file') {
+        return // Can only generate suggestions for Markdown files
+      }
+
       const descriptor = await ipcRenderer.invoke('application', {
         command: 'get-file-contents',
         payload: context.state.activeFile.path
