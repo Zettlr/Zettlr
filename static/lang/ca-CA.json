@@ -5,7 +5,7 @@
             "vfc"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-07-09T07:40:21.000000Z"
+        "updated_at": "2021-07-16T09:17:02.000000Z"
     },
     "dialog": {
         "about": {
@@ -331,6 +331,7 @@
             "watchdog_checkbox_label": "Activeu la connexi\u00f3 Watchdog",
             "watchdog_explainer": "En alguns ordinadors, Zettlr pot informar de massa canvis de fitxers remots. Si aix\u00f2 passa, intenteu activar aquesta configuraci\u00f3.",
             "watchdog_threshold_label": "Temps que cal esperar per considerar que un fitxer escrit est\u00e0 acabat (en ms)",
+            "whitelist": "Llista blanca de renderitzacions iFrame",
             "whitelist_hostname": "Nom de la m\u00e0quina",
             "xelatex": "Cam\u00ed a l'exectubale del Xelatex. Si us plau, canvieu-lo nom\u00e9s si Zettlr no aconsegueix localitzar-lo.",
             "xelatex_default": "Per defecte: xelatex",
@@ -385,6 +386,7 @@
             "year": "Any"
         },
         "tag_cloud": {
+            "add_to_file": "Afegeix al fitxer",
             "copy": "Copia al porta-retalls",
             "info": "Aqu\u00ed trobareu totes les etiquetes que heu fet servir en els vostres fitxers. Podeu copiar tota la llista al porta-retalls. Passeu el cursor per sobre de les etiquetes per veure el nombre de vegades que les heu utilitzat.",
             "suggestions_label": "Etiquetes suggerides per al fitxer actual",
@@ -441,6 +443,7 @@
         "avg_not_reached": "\u270d\ud83c\udffc Segueix escrivint per a superar la mitjana di\u00e0ria",
         "avg_surpassed": "\ud83d\udd25 Ho est\u00e0s petant!",
         "avg_words": "Mitjana di\u00e0ria",
+        "chars": "%s car\u00e0cters",
         "citeproc": {
             "error_db": "No s'ha pogut carregar la base de dades de refer\u00e8ncies",
             "error_report_message": "No s'han pogut carregar %s elements de la vostra biblioteca a causa d'errors. Comproveu els missatges d\u2019error seg\u00fcents per veure quines CiteKeys tenen un format incorrecte i quin \u00e9s l\u2019error.",
@@ -481,12 +484,37 @@
             "tasklist": "Llista de tasques",
             "ul": "Llista d'elements"
         },
+        "global_search": {
+            "clear_label": "Neteja la cerca",
+            "query_label": "Escriu les paraules a cercar aqu\u00ed sota",
+            "query_placeholder": "Troba ...",
+            "restrict_dir_label": "Restringeix  la cerca a la carpeta",
+            "restrict_dir_placeholder": "Restringeix la cerca a la carpeta...",
+            "search_label": "Busca",
+            "title": "Busca a tot el text",
+            "toggle_label": "Activa/Desactiva els resultats"
+        },
         "modified": "Modificat",
+        "months": {
+            "apr": "Abril",
+            "aug": "Agost",
+            "dec": "Desembre",
+            "feb": "Febrer",
+            "jan": "Gener",
+            "jul": "Juliol",
+            "jun": "Juny",
+            "mar": "Mar\u00e7",
+            "may": "Maig",
+            "nov": "Novembre",
+            "oct": "Octubre",
+            "sep": "Setembre"
+        },
         "no_attachments": "Sense adjunts",
         "no_dir_selected": "No s'ha seleccionat cap carpeta",
         "no_open_document": "Cap document obert",
         "no_other_files": "Cap altre fitxer",
         "no_reference_message": "Cap text de refer\u00e8ncia",
+        "no_related_files": "No hi ha fitxers relacionats",
         "no_search_results": "Sense resultats",
         "number_selections": "%s seleccions",
         "other_files": "Altres fitxers",
@@ -533,6 +561,7 @@
         "donate": "D\u00f3na suport a Zettlr",
         "duplicate_file": "Duplica el fitxer",
         "export": "Exporta...",
+        "filter_files": "Filtra els fitxers",
         "find_dir": "Troba a la carpeta",
         "find_file": "Troba al fitxer",
         "generate_id": "Genera una nova ID",
@@ -733,7 +762,9 @@
         "show_toc": "Mostra la taula de continguts",
         "stats": "Mostra les estad\u00edstiques",
         "tag_cloud": "Etiquetes",
-        "toggle_attachments": "Mostra els adjunts"
+        "toggle_attachments": "Mostra els adjunts",
+        "toggle_file_manager": "Gestor der fitxers",
+        "toggle_global_search": "Cerca global"
     },
     "tray": {
         "show_zettlr": "Mostra el Zettlr",
