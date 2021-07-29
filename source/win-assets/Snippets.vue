@@ -40,29 +40,6 @@
           v-bind:readonly="currentItem < 0"
         ></CodeEditor>
 
-        <!-- TODO: This list belongs in the docs, but during the test phase, this is okay. -->
-        <p>
-          <small>
-            Supported variables:
-            CURRENT_YEAR (4 digits),
-            CURRENT_YEAR_SHORT (2 digits),
-            CURRENT_MONTH (2 digits),
-            CURRENT_MONTH_NAME (localised),
-            CURRENT_MONTH_NAME_SHORT (localised),
-            CURRENT_DATE (2 digits),
-            CURRENT_HOUR (2 digits),
-            CURRENT_MINUTE (2 digits),
-            CURRENT_SECOND (2 digits),
-            CURRENT_SECONDS_UNIX (timestamp),
-            UUID,
-            CLIPBOARD (text clipboard only),
-            ZKN_ID (according to your pattern)
-          </small>
-        </p>
-        <p>
-          <small><strong>Note: The variables list will move to the docs before release.</strong></small>
-        </p>
-
         <ButtonControl
           v-bind:primary="true"
           v-bind:label="saveButtonLabel"
