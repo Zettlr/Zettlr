@@ -79,7 +79,10 @@ env:
   # this indicates a nightly build, and NOT a regular, stable release. We are
   # writing it here into the environment variable to keep the code DRY and for
   # easier reference.
-  BUILD_NIGHTLY: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.target == 'nightly') || github.event_name == 'schedule' }}
+  # BUG: Disabled due to a bug in Github Actions that will not resolve this
+  # environment variable, thus rendering this approach unusable. We have to
+  # manually copy this into the appropriate places.
+  # BUILD_NIGHTLY: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
 
 # This workflow file contains four jobs, three to build the corresponding
 # releases on all three supported platforms, and a last one, which will
@@ -96,12 +99,12 @@ jobs:
     steps:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Clone repository (master branch)
-        if: ${{ env.BUILD_NIGHTLY == false }}
+        if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
         uses: actions/checkout@v2
         with:
           ref: 'master'
       - name: Clone repository (develop branch)
-        if: ${{ env.BUILD_NIGHTLY == true }}
+        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
         uses: actions/checkout@v2
         with:
           ref: 'develop'
@@ -113,7 +116,7 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
-        if: ${{ env.BUILD_NIGHTLY == true }}
+        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
         run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
@@ -170,12 +173,12 @@ jobs:
     steps:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Clone repository (master branch)
-        if: ${{ env.BUILD_NIGHTLY == false }}
+        if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
         uses: actions/checkout@v2
         with:
           ref: 'master'
       - name: Clone repository (develop branch)
-        if: ${{ env.BUILD_NIGHTLY == true }}
+        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
         uses: actions/checkout@v2
         with:
           ref: 'develop'
@@ -187,7 +190,7 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
-        if: ${{ env.BUILD_NIGHTLY == true }}
+        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
         run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
@@ -240,12 +243,12 @@ jobs:
     steps:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Clone repository (master branch)
-        if: ${{ env.BUILD_NIGHTLY == false }}
+        if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
         uses: actions/checkout@v2
         with:
           ref: 'master'
       - name: Clone repository (develop branch)
-        if: ${{ env.BUILD_NIGHTLY == true }}
+        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
         uses: actions/checkout@v2
         with:
           ref: 'develop'
@@ -257,7 +260,7 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
-        if: ${{ env.BUILD_NIGHTLY == true }}
+        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
         run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
@@ -313,7 +316,7 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
-        if: ${{ env.BUILD_NIGHTLY }}
+        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
         run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
@@ -363,13 +366,13 @@ jobs:
       # We must make sure to copy the three additional files
       # to the release folder because of the --delete flag in rsync below.
       - name: Copy Nightly Static Files
-        if: ${{ env.BUILD_NIGHTLY }}
+        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
         run: |
           cp ./scripts/assets/nightly-index.php ./release/index.php
           cp ./scripts/assets/nightly-sm_preview.png ./release/sm_preview.png
           cp ./resources/icons/png/512x512.png ./release/logo.png
       - name: Upload nightlies to the server
-        if: ${{ env.BUILD_NIGHTLY }}
+        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
         uses: easingthemes/ssh-deploy@v2.0.7
         env:
           SSH_PRIVATE_KEY: ${{ secrets.NIGHTLY_SSH_PRIVATE_KEY }}
@@ -381,7 +384,7 @@ jobs:
           TARGET: ${{ secrets.NIGHTLY_TARGET }}
       # OTHERWISE: Create a new release draft
       - name: Create release draft
-        if: ${{ !env.BUILD_NIGHTLY }}
+        if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
