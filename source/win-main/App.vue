@@ -600,6 +600,8 @@ export default {
       } else if (clickedID.startsWith('markdown') === true && clickedID.length > 8) {
         // The user clicked a command button, so we just have to run that.
         this.$refs['editor'].executeCommand(clickedID)
+      } else if (clickedID === 'insertFootnote') {
+        this.$refs.editor.executeCommand(clickedID)
       }
     },
     handleToggle: function (controlState) {
