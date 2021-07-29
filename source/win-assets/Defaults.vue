@@ -14,7 +14,7 @@
     </template>
     <template #view2>
       <div style="padding: 10px;">
-        <p>Edit the corresponding defaults file here.</p>
+        <p>{{ defaultsExplanation }}</p>
 
         <CodeEditor
           ref="code-editor"
@@ -23,13 +23,13 @@
         ></CodeEditor>
         <ButtonControl
           v-bind:primary="true"
-          v-bind:label="'Save'"
+          v-bind:label="saveButtonLabel"
           v-bind:inline="true"
           v-on:click="saveDefaultsFile()"
         ></ButtonControl>
         <ButtonControl
           v-bind:primary="false"
-          v-bind:label="'Restore defaults file'"
+          v-bind:label="restoreButtonLabel"
           v-bind:inline="true"
           v-on:click="restoreDefaultsFile()"
         ></ButtonControl>
@@ -123,6 +123,15 @@ export default {
     listItems: function () {
       const formatList = (this.which === 'export') ? WRITERS : READERS
       return Object.values(formatList)
+    },
+    defaultsExplanation: function () {
+      return trans('dialog.defaults.explanation') // Edit the corresponding defaults file here.
+    },
+    saveButtonLabel: function () {
+      return trans('dialog.button.save')
+    },
+    restoreButtonLabel: function () {
+      return trans('dialog.defaults.restore')
     }
   },
   watch: {

@@ -60,13 +60,13 @@ export default {
     return {
       tabs: [
         {
-          label: 'Exporting',
+          label: trans('dialog.defaults.exporting_title'),
           controls: 'tab-export',
           id: 'tab-export-control',
           icon: 'export'
         },
         {
-          label: 'Importing',
+          label: trans('dialog.defaults.importing_title'),
           controls: 'tab-import',
           id: 'tab-import-control',
           icon: 'import'
@@ -78,10 +78,10 @@ export default {
           icon: 'code'
         },
         {
-          label: 'Snippets',
+          label: trans('dialog.snippets.title'),
           controls: 'tab-snippets',
           id: 'tab-snippets-control',
-          icon: 'pinboard' // TODO: Up for discussion
+          icon: 'pinboard'
         }
       ],
       currentTab: 0

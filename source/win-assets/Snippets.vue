@@ -17,7 +17,7 @@
     </template>
     <template #view2>
       <div style="padding: 10px;">
-        <p>Edit your snippets here.</p>
+        <p>{{ snippetsExplanation }}</p>
 
         <p>
           <TextControl
@@ -26,7 +26,7 @@
             v-bind:disabled="currentItem < 0"
           ></TextControl>
           <ButtonControl
-            v-bind:label="'Rename snippet'"
+            v-bind:label="renameSnippetLabel"
             v-bind:inline="true"
             v-bind:disabled="availableSnippets.length === 0 || currentSnippetText === availableSnippets[currentItem]"
             v-on:click="renameSnippet()"
@@ -65,7 +65,7 @@
 
         <ButtonControl
           v-bind:primary="true"
-          v-bind:label="'Save'"
+          v-bind:label="saveButtonLabel"
           v-bind:inline="true"
           v-bind:disabled="currentItem < 0 || $refs['code-editor'].isClean()"
           v-on:click="saveSnippet()"
@@ -117,6 +117,17 @@ export default {
       editorContents: '',
       savingStatus: '',
       availableSnippets: []
+    }
+  },
+  computed: {
+    saveButtonLabel: function () {
+      return trans('dialog.button.save')
+    },
+    renameSnippetLabel: function () {
+      return trans('dialog.snippets.rename')
+    },
+    snippetsExplanation: function () {
+      return trans('dialog.snippets.explanation')
     }
   },
   watch: {

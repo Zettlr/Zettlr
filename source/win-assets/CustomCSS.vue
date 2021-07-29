@@ -8,7 +8,7 @@
     ></CodeEditor>
     <ButtonControl
       v-bind:primary="true"
-      v-bind:label="'Save'"
+      v-bind:label="saveButtonLabel"
       v-bind:inline="true"
       v-on:click="handleClick('save')"
     ></ButtonControl>
@@ -68,6 +68,9 @@ export default {
           icon: ''
         }
       ]
+    },
+    saveButtonLabel: function () {
+      return trans('dialog.button.save')
     }
   },
   watch: {
