@@ -1,9 +1,24 @@
-import { ipcRenderer } from 'electron'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Theme registration routines
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file loads in the main CSS files into the renderer
+ *                  process and enables switching between themes.
+ *
+ * END HEADER
+ */
 
 // Import the main.less file which imports CSS for KaTeX, Clarity, Tippy.JS, and
-// the geometry for the application. This will be added to the HTML by WebPack
+// the geometry for the application. This will be added to the HTML by Webpack
 // automatically
-import '../../less/main.less'
+import './assets/main.less'
+
+const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
 /**
  * Webpack provides the themes as JavaScript objects with two properties, use
@@ -15,13 +30,21 @@ interface ThemeLoader {
 }
 
 /**
+ * Defines a SystemColour interface as is being returned by the appearance provider
+ */
+interface SystemColour {
+  accent: string
+  contrast: string
+}
+
+/**
  * This type holds all available themes for the application, which are
  * present in the availableThemes variable and can be indexed using Theme.
  */
 type Theme = 'berlin'|'bielefeld'|'frankfurt'|'karl-marx-stadt'|'bordeaux'
 
 /* eslint-disable @typescript-eslint/no-var-requires */
-var availableThemes: Record<Theme, ThemeLoader> = {
+const availableThemes: Record<Theme, ThemeLoader> = {
   'berlin': require('../../less/theme-berlin/theme-main.less').default as ThemeLoader,
   'bielefeld': require('../../less/theme-bielefeld/theme-main.less').default as ThemeLoader,
   'frankfurt': require('../../less/theme-frankfurt/theme-main.less').default as ThemeLoader,
@@ -34,30 +57,29 @@ var availableThemes: Record<Theme, ThemeLoader> = {
  *
  * @var {ThemeLoader|null}
  */
-var currentTheme: ThemeLoader|null = null
+let currentTheme: ThemeLoader|null = null
 
 /**
  * Listens for theming changes (main theme + custom CSS) and handles dark mode
  */
 export default function registerThemes (): void {
   // Listen for configuration changes
-  ipcRenderer.on('config-provider', (event, message) => {
-    const { command } = message
-
+  ipcRenderer.on('config-provider', (event, { command, payload }) => {
     if (command === 'update') {
-      // Switch the theme based on the current configuration value
-      switchTheme(global.config.get('display.theme'))
-
-      // Switch to light/dark mode based on the configuration variable
-      document.body.classList.toggle('dark', global.config.get('darkMode'))
+      if (payload === 'display.theme') {
+        // Switch the theme based on the current configuration value
+        switchTheme(global.config.get('display.theme'))
+      } else if (payload === 'darkMode') {
+        // Switch to light/dark mode based on the configuration variable
+        document.body.classList.toggle('dark', global.config.get('darkMode'))
+      }
     }
   })
 
   // Listen for custom CSS changes
-  ipcRenderer.on('css-provider', (evt, message) => {
-    const { command } = message
+  ipcRenderer.on('css-provider', (evt, { command, payload }) => {
     if (command === 'get-custom-css-path') {
-      setCustomCss(message.payload)
+      setCustomCss(payload)
     }
   })
 
@@ -68,6 +90,21 @@ export default function registerThemes (): void {
   // Initial rendering of the Custom CSS
   ipcRenderer.invoke('css-provider', { command: 'get-custom-css-path' })
     .then(cssPath => setCustomCss(cssPath))
+    .catch(e => console.error(e))
+
+  // Create the custom stylesheet which includes certain system colours which
+  // will be referenced by the components as necessary.
+  ipcRenderer.invoke('appearance-provider', { command: 'get-accent-color' })
+    .then((accentColor: SystemColour) => {
+      // TODO: Currently this is not scalable, just an exploratory implementation!
+      const style = document.createElement('style')
+      // style.setAttribute('type', 'text/css')
+
+      const color = '#' + accentColor.accent
+      const contrast = '#' + accentColor.contrast
+      style.textContent = `:root { --system-accent-color: ${color}; --system-accent-color-contrast: ${contrast}}`
+      document.head.prepend(style)
+    })
     .catch(e => console.error(e))
 }
 

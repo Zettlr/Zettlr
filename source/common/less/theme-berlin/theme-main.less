@@ -27,20 +27,6 @@ body {
     // Now the light theming
     @import "light/main.less";
 
-    // Fallback for all systems not identified as win32, darwin, or linux.
-    font-family: @font-main;
-
-    &.win32 {
-        // Lato on Windows looks bad b/c of very strange font antialiasing,
-        // therefore we have to use Segoe UI, if available.
-        font-family: @font-main-win;
-    }
-
-    &.darwin, &.linux {
-        // Use built-in Lato for other systems.
-        font-family: @font-main;
-    }
-
 }
 
 // now import the dark styles

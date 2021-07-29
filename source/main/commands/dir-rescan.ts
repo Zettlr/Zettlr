@@ -22,15 +22,15 @@ export default class DirRescan extends ZettlrCommand {
   /**
     * Rescans a directory
     * @param {String} evt The event name
-    * @param  {Object} arg The hash of the descriptor
+    * @param  {Object} arg The path of the descriptor
     */
   async run (evt: string, arg: any): Promise<void> {
-    const deadDir = this._app.getFileSystem().findDir(arg)
+    const deadDir = this._app.getFileSystem().findDir(arg.path)
     if (deadDir === null) {
       global.log.error('Could not find directory descriptor to rescan.')
       return
     }
 
-    this._app.getFileSystem().rescanForDirectory(deadDir)
+    await this._app.getFileSystem().rescanForDirectory(deadDir)
   }
 }

@@ -19,6 +19,7 @@ import {
 import attachLogger from './attach-logger'
 import preventNavigation from './prevent-navigation'
 import setWindowChrome from './set-window-chrome'
+import { WindowPosition } from './types'
 
 /**
  * Creates a BrowserWindow with print window configuration and loads the
@@ -27,22 +28,23 @@ import setWindowChrome from './set-window-chrome'
  * @param   {string}  file  The file to load in the print preview
  * @return  {BrowserWindow}           The loaded print window
  */
-export default function createPrintWindow (file: string): BrowserWindow {
+export default function createPrintWindow (file: string, conf: WindowPosition): BrowserWindow {
   const winConf: BrowserWindowConstructorOptions = {
     acceptFirstMouse: true,
     minWidth: 300,
     minHeight: 200,
+    width: conf.width,
+    height: conf.height,
+    x: conf.left,
+    y: conf.top,
     show: false,
     webPreferences: {
-      // Zettlr needs all the node features, so in preparation for Electron
-      // 5.0 we'll need to explicitly request it.
-      contextIsolation: false,
-      nodeIntegration: true,
+      contextIsolation: true,
       additionalArguments: [file],
       // We are loading an iFrame with a local resource, so we must disable webSecurity for this window
-      webSecurity: false
-    },
-    backgroundColor: '#fff'
+      webSecurity: false,
+      preload: PRINT_PRELOAD_WEBPACK_ENTRY
+    }
   }
 
   // Set the correct window chrome
@@ -52,11 +54,9 @@ export default function createPrintWindow (file: string): BrowserWindow {
 
   // Load the index.html of the app.
   // The variable PRINT_WEBPACK_ENTRY is automatically resolved by electron forge / webpack
-  // @ts-expect-error
   window.loadURL(PRINT_WEBPACK_ENTRY)
     .catch(e => {
-      // @ts-expect-error
-      global.log.error(`Could not load URL ${PRINT_WEBPACK_ENTRY as string}: ${e.message as string}`, e)
+      global.log.error(`Could not load URL ${PRINT_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })
 
   // EVENT LISTENERS

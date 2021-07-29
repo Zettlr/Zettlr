@@ -1,8 +1,22 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Command loader
+ * CVM-Role:        Utility Function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file simply imports all commands, and exports them in
+ *                  a unified object for easy instantiation by zettlr.ts.
+ *
+ * END HEADER
+ */
+
 import DirDelete from './dir-delete'
 import DirNewProject from './dir-new-project'
 import DirNew from './dir-new'
 import DirProjectExport from './dir-project-export'
-import DirProjectProperties from './dir-project-properties'
 import DirRemoveProject from './dir-remove-project'
 import DirRename from './dir-rename'
 import DirRescan from './dir-rescan'
@@ -17,8 +31,7 @@ import FileRename from './file-rename'
 import FileSave from './file-save'
 import FileSearch from './file-search'
 import ForceOpen from './force-open'
-import GetPreferences from './get-preferences'
-import GetSponsors from './get-sponsors'
+import FileFindAndReturnMetaData from './file-find-and-return-meta-data'
 import ImportLangFile from './import-lang-file'
 import ImportFiles from './import'
 import IncreasePomodoro from './increase-pomodoro'
@@ -36,7 +49,6 @@ export const commands = [
   DirNewProject,
   DirNew,
   DirProjectExport,
-  DirProjectProperties,
   DirRemoveProject,
   DirRename,
   DirRescan,
@@ -50,9 +62,8 @@ export const commands = [
   FileRename,
   FileSave,
   FileSearch,
+  FileFindAndReturnMetaData,
   ForceOpen,
-  GetPreferences,
-  GetSponsors,
   ImportFiles,
   ImportLangFile,
   IncreasePomodoro,

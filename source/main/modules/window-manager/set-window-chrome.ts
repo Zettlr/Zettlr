@@ -23,30 +23,33 @@ import path from 'path'
  * the user preferences with regard to BrowserWindow chrome (native or
  * non-native), respecting the current platform.
  *
- * @param   {BrowserWindowConstructorOptions}  winConf  The configuration
+ * @param  {BrowserWindowConstructorOptions}  winConf        The configuration
+ * @param  {boolean}                          [modal=false]  If set to true, will assign a modal chrome
  */
-export default function setWindowChrome (winConf: BrowserWindowConstructorOptions): void {
+export default function setWindowChrome (winConf: BrowserWindowConstructorOptions, modal: boolean = false): void {
   const shouldUseNativeAppearance: boolean = global.config.get('window.nativeAppearance')
 
-  // If the user wants to use native appearance, this means to use a frameless
-  // window with the traffic lights slightly inset for macOS.
-  if (process.platform === 'darwin' && shouldUseNativeAppearance) {
-    winConf.titleBarStyle = 'hiddenInset'
-  } else if (process.platform === 'darwin' && !shouldUseNativeAppearance) {
-    // Now we're simply creating a frameless window without everything.
-    winConf.frame = false
+  if (process.platform !== 'darwin' || modal) {
+    // It is recommended to set a background color for the windows, however, on
+    // macOS we can't do so because that would render nil the vibrancy.
+    winConf.backgroundColor = '#fff'
   }
 
-  // If the user wants to use non-native appearance on non-macOS platforms,
-  // this means we need a frameless window (so that the renderer instead can
-  // display the menu and window controls).
-  if (process.platform !== 'darwin' && !shouldUseNativeAppearance) {
+  if (process.platform === 'darwin' && !modal) {
+    // On macOS, we want slightly inset traffic lights without any other window
+    // chrome. Additionally, we'll be setting the window's vibrancy so that the
+    // app looks even more native.
+    winConf.titleBarStyle = 'hiddenInset'
+    winConf.vibrancy = 'under-window' // See https://developer.apple.com/design/human-interface-guidelines/macos/visual-design/translucency/
+    winConf.visualEffectState = 'followWindow'
+  } else if ((process.platform !== 'linux' || !shouldUseNativeAppearance) && !modal && process.platform !== 'darwin') {
+    // On Windows, we need a frameless window. On Linux, only if the
+    // shouldUseNativeAppearance flag is set to false.
     winConf.frame = false
-  } // Else: Leave title- and menu-bar in place.
+  } // Else: We have Linux with native appearance.
 
-  // Application icon for Linux. Cannot not be embedded in the executable.
+  // Application icon for Linux. Cannot be embedded in the executable.
   if (process.platform === 'linux') {
-    // TODO
-    winConf.icon = path.join(__dirname, 'assets/icons/128x128.png')
+    winConf.icon = path.join(__dirname, 'assets/icons/png/128x128.png')
   }
 }

@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-const parsePipeTable = require('../source/renderer/modules/table-editor/parse-pipe')
+const parsePipeTable = require('../source/common/modules/markdown-editor/table-editor/parse-pipe')
 const assert = require('assert')
 
 const table = []

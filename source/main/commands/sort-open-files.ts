@@ -29,7 +29,6 @@ export default class SortOpenFiles extends ZettlrCommand {
     // need to propagate that both to the FSAL and then to the config. The
     // FSAL will make sure its internal state is correct, so just feed it to
     // the FSAL and feed its return then back to the config for persisting.
-    let newOpenFiles = this._app.getFileSystem().sortOpenFiles(arg)
-    global.config.set('openFiles', newOpenFiles.map(f => f.hash))
+    this._app.getDocumentManager().sortOpenFiles(arg)
   }
 }

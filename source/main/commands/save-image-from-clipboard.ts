@@ -13,10 +13,10 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { trans } from '../../common/i18n'
+import { trans } from '../../common/i18n-main'
 import sanitize from 'sanitize-filename'
 import path from 'path'
-import fs from 'fs'
+import { promises as fs } from 'fs'
 import { clipboard } from 'electron'
 import isDir from '../../common/util/is-dir'
 
@@ -32,19 +32,25 @@ export default class SaveImage extends ZettlrCommand {
    * @param  {Object} target Options on the image
    * @return {void}        Does not return.
    */
-  async run (evt: string, target: any): Promise<void> {
-    // First check the name for sanity
-    let targetFile = sanitize(target.name, { replacement: '-' })
-
-    const activeHash = this._app.getFileSystem().activeFile
-    if (activeHash === null) {
-      return global.notify.normal(trans('system.error.fnf_message'))
-    }
-
-    const activeFile = this._app.getFileSystem().findFile(activeHash)
+  async run (evt: string /*, target: any */): Promise<any> {
+    const activeFile = this._app.getDocumentManager().activeFile
     if (activeFile === null) {
       return global.notify.normal(trans('system.error.fnf_message'))
     }
+
+    const startPath = path.resolve(
+      activeFile.dir,
+      global.config.get('editor.defaultSaveImagePath')
+    )
+
+    const target = await this._app.showPasteImageModal(startPath)
+    if (target === undefined) {
+      global.log.info('[Application] Aborted image pasting process.')
+      return
+    }
+
+    // First check the name for sanity
+    let targetFile = sanitize(target.name, { replacement: '-' })
 
     // A file must be opened and active, and the name valid
     if (targetFile === '') {
@@ -53,49 +59,35 @@ export default class SaveImage extends ZettlrCommand {
 
     // Now check the extension of the name (some users may
     // prefer to choose to provide it already)
-    if (path.extname(targetFile) !== '.png') {
+    if (![ '.png', '.jpg' ].includes(path.extname(targetFile).toLowerCase())) {
       targetFile += '.png'
     }
 
     // Now resolve the path correctly, taking into account a potential relative
     // path the user has chosen.
-    let targetPath = path.resolve(
-      path.dirname(activeFile.path),
-      global.config.get('editor.defaultSaveImagePath') || ''
-    )
-
-    // Did the user want to choose the directory for this one? In this case,
-    // that choice overrides the resolved path from earlier.
-    if (target.mode === 'save-other') {
-      let dirs = await this._app.askDir()
-      targetPath = dirs[0] // We only take one directory
-    }
-
-    // Failsafe. Shouldn't be necessary, but you never know. (In that case log
-    // an error, just to be safe)
-    if (!path.isAbsolute(targetPath)) {
-      global.log.error(`Error while saving image to ${targetPath}: Not absolute. This should not have happened.`)
-      targetPath = path.resolve(path.dirname(activeFile.path), targetPath)
-    }
 
     // Now we need to make sure the directory exists.
     try {
-      fs.lstatSync(targetPath)
+      await fs.lstat(target.targetDir)
     } catch (e) {
-      fs.mkdirSync(targetPath, { recursive: true })
+      await fs.mkdir(target.targetDir, { recursive: true })
     }
 
     // If something went wrong or the user did not provide a directory, abort
-    if (!isDir(targetPath)) return global.notify.normal(trans('system.error.dnf_message'))
+    if (!isDir(target.targetDir)) {
+      return global.notify.normal(trans('system.error.dnf_message'))
+    }
 
     // Build the correct path
-    let imagePath = path.join(targetPath, targetFile)
+    let imagePath = path.join(target.targetDir, targetFile)
 
     // And now save the image
     let image = clipboard.readImage()
 
     // Somebody may have remotely overwritten the clipboard in the meantime
-    if (image.isEmpty()) return global.notify.normal(trans('system.error.could_not_save_image'))
+    if (image.isEmpty()) {
+      return global.notify.normal(trans('system.error.could_not_save_image'))
+    }
 
     let size = image.getSize()
     let resizeWidth = parseInt(target.width)
@@ -116,14 +108,15 @@ export default class SaveImage extends ZettlrCommand {
 
     global.log.info(`Saving image ${targetFile} to ${imagePath} ...`)
 
-    fs.writeFile(imagePath, image.toPNG(), (err) => {
-      if (err) return global.notify.normal(trans('system.error.could_not_save_image'))
-      // Insert a relative path instead of an absolute one
-      let pathToInsert = path.relative(path.dirname(activeFile.path), imagePath)
+    if (path.extname(imagePath).toLowerCase() === '.png') {
+      await fs.writeFile(imagePath, image.toPNG())
+    } else if (path.extname(imagePath).toLowerCase() === '.jpg') {
+      await fs.writeFile(imagePath, image.toJPEG(100))
+    }
 
-      // Everything worked out - now tell the editor to insert some text
-      this._app.ipc.send('insert-text', `![${targetFile}](${pathToInsert})\n`)
-      // Tada!
-    })
+    // Insert a relative path instead of an absolute one
+    let pathToInsert = path.relative(path.dirname(activeFile.path), imagePath)
+
+    return pathToInsert
   }
 }

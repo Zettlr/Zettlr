@@ -8,20 +8,17 @@
     "strict": true,
     "noImplicitAny": true,
     "sourceMap": true,
-    "baseUrl": ".",
     "outDir": "dist",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "downlevelIteration": true,
-    "paths": {
-      "*": ["node_modules/*"]
-    }
+    "downlevelIteration": true
   },
   "include": [
-    "source/**/*"
-  ],
-  "files": [
-    "source/renderer/renderer.d.ts",
-    "source/global.d.ts"
+    "source/**/*",
+    "test/**/*",
+    "forge.config.js",
+    "webpack.main.config.js",
+    "webpack.renderer.config.js",
+    "webpack.rules.js"
   ]
 }

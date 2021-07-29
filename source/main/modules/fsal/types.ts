@@ -40,6 +40,7 @@ interface FSMetaInfo {
   path: string // absolutePath
   hash: number // Hashed absolute path
   type: 'file' | 'directory' | 'code' | 'other'
+  size: number
   modtime: number
   creationtime: number
 }

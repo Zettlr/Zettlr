@@ -19,25 +19,29 @@ import {
 import attachLogger from './attach-logger'
 import preventNavigation from './prevent-navigation'
 import setWindowChrome from './set-window-chrome'
+import { WindowPosition } from './types'
 
 /**
- * Creates a BrowserWindow with print window configuration and loads the
+ * Creates a BrowserWindow with log window configuration and loads the
  * corresponding renderer.
  *
- * @param   {string}  file  The file to load in the print preview
- * @return  {BrowserWindow}           The loaded print window
+ * @param   {WindowPosition}  conf  The configuration to load
+ * @return  {BrowserWindow}         The loaded log window
  */
-export default function createLogWindow (): BrowserWindow {
+export default function createLogWindow (conf: WindowPosition): BrowserWindow {
   const winConf: BrowserWindowConstructorOptions = {
     acceptFirstMouse: true,
     minWidth: 300,
     minHeight: 200,
+    width: conf.width,
+    height: conf.height,
+    x: conf.left,
+    y: conf.top,
     show: false,
     webPreferences: {
-      contextIsolation: false,
-      nodeIntegration: true
-    },
-    backgroundColor: '#fff'
+      contextIsolation: true,
+      preload: LOG_VIEWER_PRELOAD_WEBPACK_ENTRY
+    }
   }
 
   // Set the correct window chrome
@@ -47,11 +51,9 @@ export default function createLogWindow (): BrowserWindow {
 
   // Load the index.html of the app.
   // The variable LOG_VIEWER_WEBPACK_ENTRY is automatically resolved by electron forge / webpack
-  // @ts-expect-error
   window.loadURL(LOG_VIEWER_WEBPACK_ENTRY)
     .catch(e => {
-      // @ts-expect-error
-      global.log.error(`Could not load URL ${LOG_VIEWER_WEBPACK_ENTRY as string}: ${e.message as string}`, e)
+      global.log.error(`Could not load URL ${LOG_VIEWER_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })
 
   // EVENT LISTENERS

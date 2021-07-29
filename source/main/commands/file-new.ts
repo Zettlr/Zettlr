@@ -13,15 +13,18 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { trans } from '../../common/i18n'
-import hash from '../../common/util/hash'
+import { trans } from '../../common/i18n-main'
 import path from 'path'
 import sanitize from 'sanitize-filename'
-import { filetypes as ALLOWED_FILETYPES } from '../../common/data.json'
+import { codeFileExtensions, mdFileExtensions } from '../../common/get-file-extensions'
+import generateFilename from '../../common/util/generate-filename'
+
+const CODEFILE_TYPES = codeFileExtensions(true)
+const ALLOWED_FILETYPES = mdFileExtensions(true)
 
 export default class FileNew extends ZettlrCommand {
   constructor (app: any) {
-    super(app, 'file-new')
+    super(app, [ 'file-new', 'new-unsaved-file' ])
   }
 
   /**
@@ -31,14 +34,18 @@ export default class FileNew extends ZettlrCommand {
    * @return {void}     This function does not return anything.
    */
   async run (evt: string, arg: any): Promise<void> {
-    let dir = null
+    if (evt === 'new-unsaved-file') {
+      // We should simply create a new unsaved file that only resides in memory
+      const file = await this._app.getDocumentManager().newUnsavedFile()
+      // Set it as active
+      this._app.getDocumentManager().activeFile = file
+      return // Return early
+    }
 
-    // There should be also a hash in the argument.
-    if (arg.hasOwnProperty('hash')) {
-      dir = this._app.getFileSystem().findDir(arg.hash)
-    } else {
-      global.log.warning('No directory selected. Using currently selected directory ...')
-      dir = this._app.getCurrentDir()
+    let dir = this._app.getFileSystem().openDirectory
+
+    if ('path' in arg) {
+      dir = this._app.getFileSystem().findDir(arg.path)
     }
 
     if (dir === null) {
@@ -48,14 +55,14 @@ export default class FileNew extends ZettlrCommand {
 
     try {
       // Then, make sure the name is correct.
-      let filename = sanitize(arg.name, { 'replacement': '-' })
-      if (filename.trim() === '') {
+      let filename = (arg.name !== undefined) ? sanitize(arg.name.trim(), { 'replacement': '-' }) : generateFilename()
+      if (filename === '') {
         throw new Error('Could not create file: Filename was not valid')
       }
 
       // If no valid filename is provided, assume .md
       let ext = path.extname(filename).toLowerCase()
-      if (!ALLOWED_FILETYPES.includes(ext)) {
+      if (!ALLOWED_FILETYPES.includes(ext) && !CODEFILE_TYPES.includes(ext)) {
         filename += '.md'
       }
 
@@ -80,8 +87,7 @@ export default class FileNew extends ZettlrCommand {
       })
 
       // And directly thereafter, open the file
-      let fileHash = hash(path.join(dir.path, filename))
-      await this._app.openFile(fileHash)
+      await this._app.openFile(path.join(dir.path, filename))
     } catch (e) {
       global.log.error(`Could not create file: ${e.message as string}`)
       this._app.prompt({

@@ -14,7 +14,11 @@
  */
 
 import EventEmitter from 'events'
-import { nativeTheme } from 'electron'
+import {
+  ipcMain,
+  nativeTheme,
+  systemPreferences
+} from 'electron'
 
 /**
  * This class manages automatic changes in the appearance of the app. It won't
@@ -25,7 +29,6 @@ import { nativeTheme } from 'electron'
 export default class AppearanceProvider extends EventEmitter {
   private _mode: 'off'|'system'|'schedule'|'auto'
   private _scheduleWasDark: boolean
-  private _isDarkMode: boolean
   private _startHour: number
   private _startMin: number
   private _endHour: number
@@ -39,13 +42,11 @@ export default class AppearanceProvider extends EventEmitter {
     // Possible modes:
     // - off: Do nothing in here
     // - schedule: Ask the clock when to switch
-    // - system: Only on macOS (probably Windows as well): Listen to mode changes
-    // - auto: Basically schedule, only calculated based on timezone (to be implemented)
+    // - system: Listen to mode changes based on the operating system (macOS and Windows, some Linux distributions)
 
     // Initiate everything
     this._mode = global.config.get('autoDarkMode')
     this._scheduleWasDark = this._isItDark() // Preset where we currently are
-    this._isDarkMode = global.config.get('darkMode')
 
     // The TypeScript linter is not clever enough to see that the function will
     // definitely set the initial values ...
@@ -91,14 +92,51 @@ export default class AppearanceProvider extends EventEmitter {
       // Set internal vars accordingly
       if (option === 'autoDarkMode') {
         this._mode = global.config.get('autoDarkMode')
-      }
-
-      if (option === 'darkMode') {
-        this._isDarkMode = global.config.get('darkMode')
-      }
-
-      if ([ 'autoDarkModeEnd', 'autoDarkModeStart' ].includes(option)) {
+      } else if ([ 'autoDarkModeEnd', 'autoDarkModeStart' ].includes(option)) {
         this._recalculateSchedule()
+      }
+    })
+
+    ipcMain.handle('appearance-provider', (event, { command, payload }) => {
+      // This command returns the accent colour including a contrast colour to be used
+      // as the opposite colour, if a good visible contrast is wished for.
+      if (command === 'get-accent-color') {
+        const colorFallback = {
+          accent: '1cb27eff', // Fully opaque Zettlr green
+          contrast: 'ffffffff' // White as a contrast
+        }
+        // A renderer has requested the current accent colour. The accent colour
+        // MUST be returned, and can be retrieved automatically for macOS and
+        // Windows, and will be the Zettlr green on Linux systems. Format is
+        // always RGBA hexadecimal without preceeding #-sign.
+        if ([ 'darwin', 'win32' ].includes(process.platform)) {
+          try {
+            // This method may fail because it is only available on macOS >=10.14
+            const accentColor = systemPreferences.getAccentColor()
+            // Electron is unspecific about what "available" means so we listen
+            // for errors and check the return value
+            if (typeof accentColor !== 'string') {
+              return colorFallback
+            } else {
+              // Calculate the contrast before returning
+              const dark = '33333333'
+              const light = 'eeeeeeee'
+              const r = parseInt(accentColor.substring(0, 2), 16) // hexToR
+              const g = parseInt(accentColor.substring(2, 4), 16) // hexToG
+              const b = parseInt(accentColor.substring(4, 6), 16) // hexToB
+              const ratio = (r * 0.299) + (g * 0.587) + (b * 0.114)
+              const threshold = 186 // NOTE: We can adapt this later on
+              return {
+                accent: accentColor,
+                contrast: (ratio > threshold) ? dark : light
+              }
+            }
+          } catch (e) {
+            return colorFallback // Probably macOS < 10.14
+          }
+        } else {
+          return colorFallback // Unsupported platform
+        }
       }
     })
 

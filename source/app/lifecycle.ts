@@ -13,14 +13,15 @@
  * END HEADER
  */
 
-// Helper functions
-import extractFilesFromArgv from '../common/util/extract-files-from-argv'
+// Helper/Utility functions
+import extractFilesFromArgv from './util/extract-files-from-argv'
 import registerCustomProtocols from './util/custom-protocols'
 import environmentCheck from './util/environment-check'
-
-// Utility functions
+import addToPath from './util/add-to-PATH'
 import resolveTimespanMs from './util/resolve-timespan-ms'
-import { loadI18nMain } from '../common/i18n'
+import { loadI18n } from '../common/i18n-main'
+import isFile from '../common/util/is-file'
+import isDir from '../common/util/is-dir'
 import path from 'path'
 
 // Developer tools
@@ -28,12 +29,12 @@ import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 
 // Providers
 import AppearanceProvider from './service-providers/appearance-provider'
+import AssetsProvider from './service-providers/assets-provider'
 import CiteprocProvider from './service-providers/citeproc-provider'
 import ConfigProvider from './service-providers/config-provider'
 import CssProvider from './service-providers/css-provider'
 import DictionaryProvider from './service-providers/dictionary-provider'
 import LogProvider from './service-providers/log-provider'
-import RecentDocsProvider from './service-providers/recent-docs-provider'
 import MenuProvider from './service-providers/menu-provider'
 import TagProvider from './service-providers/tag-provider'
 import TargetProvider from './service-providers/target-provider'
@@ -41,26 +42,28 @@ import TranslationProvider from './service-providers/translation-provider'
 import UpdateProvider from './service-providers/update-provider'
 import NotificationProvider from './service-providers/notification-provider'
 import StatsProvider from './service-providers/stats-provider'
+import TrayProvider from './service-providers/tray-provider'
 
 // We need module-global variables so that garbage collect won't shut down the
 // providers before the app is shut down.
-var appearanceProvider: AppearanceProvider
-var citeprocProvider: CiteprocProvider
-var configProvider: ConfigProvider
-var cssProvider: CssProvider
-var dictionaryProvider: DictionaryProvider
-var logProvider: LogProvider
-var recentDocsProvider: RecentDocsProvider
-var tagProvider: TagProvider
-var targetProvider: TargetProvider
-var translationProvider: TranslationProvider
-var updateProvider: UpdateProvider
-var menuProvider: MenuProvider
-var notificationProvider: NotificationProvider
-var statsProvider: StatsProvider
+let appearanceProvider: AppearanceProvider
+let assetsProvider: AssetsProvider
+let citeprocProvider: CiteprocProvider
+let configProvider: ConfigProvider
+let cssProvider: CssProvider
+let dictionaryProvider: DictionaryProvider
+let logProvider: LogProvider
+let tagProvider: TagProvider
+let targetProvider: TargetProvider
+let translationProvider: TranslationProvider
+let updateProvider: UpdateProvider
+let menuProvider: MenuProvider
+let notificationProvider: NotificationProvider
+let statsProvider: StatsProvider
+let trayProvider: TrayProvider
 
 // Statistics: Record the uptime of the application
-var upTimestamp: number
+let upTimestamp: number
 
 /**
  * Catches potential errors during shutdown of certain providers.
@@ -90,7 +93,7 @@ export async function bootApplication (): Promise<void> {
     // Load Vue developer extension
     installExtension(VUEJS_DEVTOOLS)
       .then((name: string) => global.log.info(`Added DevTools extension:  ${name}`))
-      .catch((err: any) => console.log('An error occurred: ', err))
+      .catch((err: any) => global.log.error(`Could not install DevTools extensions: ${String(err.message)}`, err))
   } catch (e) {
     global.log.verbose('Electron DevTools Installer not found - proceeding without loading developer tools.')
   }
@@ -108,9 +111,10 @@ export async function bootApplication (): Promise<void> {
   logProvider = new LogProvider()
   configProvider = new ConfigProvider()
   appearanceProvider = new AppearanceProvider()
+  assetsProvider = new AssetsProvider()
+  await assetsProvider.init()
   citeprocProvider = new CiteprocProvider()
   dictionaryProvider = new DictionaryProvider()
-  recentDocsProvider = new RecentDocsProvider()
   menuProvider = new MenuProvider()
   tagProvider = new TagProvider()
   targetProvider = new TargetProvider()
@@ -119,28 +123,54 @@ export async function bootApplication (): Promise<void> {
   updateProvider = new UpdateProvider()
   notificationProvider = new NotificationProvider()
   statsProvider = new StatsProvider()
+  trayProvider = new TrayProvider()
+
+  // If the user has provided a working path to XeLaTeX, make sure that its
+  // directory name is in path for Zettlr to find it.
+  const xelatexPath: string = global.config.get('xelatex').trim()
+  const xelatexPathIsFile = isFile(xelatexPath)
+  const xelatexPathIsDir = isDir(xelatexPath)
+  if (xelatexPath !== '' && (xelatexPathIsFile || xelatexPathIsDir)) {
+    if (xelatexPathIsFile) {
+      addToPath(path.dirname(xelatexPath), 'unshift')
+    } else {
+      addToPath(xelatexPath, 'unshift')
+    }
+  }
+
+  // If the user has provided a working path to Pandoc, make sure that its
+  // directory name is in path for Zettlr to find it.
+  const pandocPath: string = global.config.get('pandoc').trim()
+  const pandocPathIsFile = isFile(pandocPath)
+  const pandocPathIsDir = isDir(pandocPath)
+  if (pandocPath !== '' && (pandocPathIsFile || pandocPathIsDir)) {
+    if (pandocPathIsFile) {
+      addToPath(path.dirname(pandocPath), 'unshift')
+    } else {
+      addToPath(pandocPath, 'unshift')
+    }
+  }
 
   // If we have a bundled pandoc, unshift its path to env.PATH in order to have
   // the system search there first for the binary, and not use the internal
-  // one. NOTE: This effectively means users have to restart Zettlr for a change
-  // of the "Use bundled Pandoc?" setting to take effect.
+  // one.
   const useBundledPandoc = Boolean(global.config.get('export.useBundledPandoc'))
   if (process.env.PANDOC_PATH !== undefined && useBundledPandoc) {
-    const DELIM = (process.platform === 'win32') ? ';' : ':'
-    const tempPATH = (process.env.PATH as string).split(DELIM)
-    tempPATH.unshift(path.dirname(process.env.PANDOC_PATH))
-    process.env.PATH = tempPATH.join(DELIM)
+    addToPath(path.dirname(process.env.PANDOC_PATH), 'unshift')
     global.log.info('[Application] The bundled pandoc executable is now in PATH. If you do not want to use the bundled pandoc, uncheck the corresponding setting and reboot the app.')
   }
 
   // Initiate i18n after the config provider has definitely spun up
-  let metadata: any = loadI18nMain(global.config.get('appLang'))
+  let metadata = await loadI18n(global.config.get('appLang'))
 
   // It may be that only a fallback has been provided or else. In this case we
   // must update the config to reflect this.
   if (metadata.tag !== global.config.get('appLang')) {
     global.config.set('appLang', metadata.tag)
   }
+
+  // Initial setting of the application menu.
+  menuProvider.set()
 }
 
 /**
@@ -158,12 +188,13 @@ export async function shutdownApplication (): Promise<void> {
   await safeShutdown(targetProvider)
   await safeShutdown(tagProvider)
   await safeShutdown(menuProvider)
-  await safeShutdown(recentDocsProvider)
   await safeShutdown(dictionaryProvider)
   await safeShutdown(citeprocProvider)
   await safeShutdown(appearanceProvider)
   await safeShutdown(configProvider)
   await safeShutdown(statsProvider)
+  await safeShutdown(assetsProvider)
+  await safeShutdown(trayProvider)
 
   const downTimestamp = Date.now()
 

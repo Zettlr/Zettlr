@@ -32,19 +32,18 @@ import attachLogger from './attach-logger'
 export default function createQuicklookWindow (file: MDFileDescriptor, conf: WindowPosition): BrowserWindow {
   const winConf: BrowserWindowConstructorOptions = {
     acceptFirstMouse: true,
+    minWidth: 300,
+    minHeight: 200,
     width: conf.width,
     height: conf.height,
     x: conf.left,
     y: conf.top,
-    minWidth: 300,
-    minHeight: 200,
     show: false,
     webPreferences: {
-      contextIsolation: false,
-      nodeIntegration: true,
-      additionalArguments: [file.hash.toString()]
-    },
-    backgroundColor: '#fff'
+      contextIsolation: true,
+      additionalArguments: [file.path],
+      preload: QUICKLOOK_PRELOAD_WEBPACK_ENTRY
+    }
   }
 
   // Set the correct window chrome
@@ -54,11 +53,9 @@ export default function createQuicklookWindow (file: MDFileDescriptor, conf: Win
 
   // Load the index.html of the app.
   // The variable QUICKLOOK_WEBPACK_ENTRY is automatically resolved by electron forge / webpack
-  // @ts-expect-error
   window.loadURL(QUICKLOOK_WEBPACK_ENTRY)
     .catch(e => {
-      // @ts-expect-error
-      global.log.error(`Could not load URL ${QUICKLOOK_WEBPACK_ENTRY as string}: ${e.message as string}`, e)
+      global.log.error(`Could not load URL ${QUICKLOOK_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })
 
   // EVENT LISTENERS

@@ -26,11 +26,11 @@ import semver from 'semver'
 import md2html from '../../common/util/md-to-html'
 
 import { ipcMain, app, shell } from 'electron'
-import { trans } from '../../common/i18n.js'
-import { repo_url as REPO_URL } from '../../common/data.json'
+import { trans } from '../../common/i18n-main'
 import isFile from '../../common/util/is-file'
 
 const CUR_VER = app.getVersion()
+const REPO_URL = 'https://www.zettlr.com/api/releases/latest'
 
 // Mimicks the API response for a downloadable asset
 interface UpdateAsset {
@@ -54,31 +54,6 @@ interface ServerAPIResponse {
   body: string
   published_at: string
   assets: UpdateAsset[]
-}
-
-// Holds information about an update being downloaded right now
-interface UpdateDownloadProgress {
-  name: string
-  full_path: string
-  size_total: number
-  size_downloaded: number
-  start_time: number
-  eta_seconds: number
-  download_percent: number
-  finished: boolean
-  isCurrentlyDownloading: boolean
-}
-
-// Basically the API response with a few additional properties
-interface ParsedAPIResponse {
-  newVer: string
-  curVer: string
-  isNewer: boolean
-  changelog: string
-  releaseURL: string
-  isBeta: boolean
-  assets: UpdateAsset[]
-  sha256Asset: UpdateAsset|undefined
 }
 
 export default class UpdateProvider {
@@ -125,9 +100,11 @@ export default class UpdateProvider {
 
           if (this._lastResponse.isNewer) {
             global.log.info(`[Update Provider] Update available: ${this._lastResponse.newVer}`)
-            // TODO: Translate
-            global.notify.normal(`An update to version ${this._lastResponse.newVer} is available!`, true)
-            // TODO broadcast message to notify the renderers so that they actually display the update notification
+            global.notify.normal(trans('dialog.update.new_update_available', this._lastResponse.newVer), () => {
+              // The user has clicked the notification, so we can show the update window here
+              global.application.runCommand('open-update-window')
+                .catch(e => global.log.error(String(e.message), e))
+            })
           }
         }).catch((err) => {
           global.log.error(`[Update Provider] Error during update check: ${err.message as string}`, err)
@@ -148,35 +125,29 @@ export default class UpdateProvider {
     }
 
     // Handle events
-    ipcMain.on('update-provider', (event, data) => {
-      let { command, content } = data
+    ipcMain.handle('update-provider', async (event, data) => {
+      let { command, payload } = data
 
       if (command === 'update-check' && global.updates.applicationUpdateAvailable()) {
-        this._check()
-          .then(() => {
-            event.reply('update-provider', {
-              'command': 'update-data',
-              'content': this._lastResponse
-            })
-          })
-          .catch(e => {
-            global.log.error(`[Update Provider] Update check resulted in an error: ${e.message as string}`, e)
-          })
+        // TODO: Is this event really necessary?
+        await this._check()
+        return this._lastResponse
+      } else if (command === 'update-status') {
+        // Just provide the caller with our response
+        return this._lastResponse
       } else if (command === 'request-app-update') {
         // We shall download the URL which is in the content variable
-        global.log.info('[Update Provider] Requesting update ' + (content as string))
-        this._downloadAppUpdate(content)
+        global.log.info('[Update Provider] Requesting update ' + (payload as string))
+        this._downloadAppUpdate(payload)
       } else if (command === 'download-progress') {
-        event.reply('update-provider', {
-          'command': 'download-progress',
-          'content': this._downloadProgress
-        })
+        return this._downloadProgress
       } else if (command === 'begin-update') {
-        // Begin the actual update process
-        this._beginUpdate()
+        // Begin the actual update process NOTE We're not blocking the handler
+        await this._beginUpdate()
           .catch(e => {
             global.log.error(`[Update Provider] Unexpected error during update process: ${e.message as string}`, e)
           })
+        return true
       }
     })
   }
@@ -187,13 +158,14 @@ export default class UpdateProvider {
    */
   async _check (): Promise<void> {
     try {
+      global.log.info(`[Updater] Checking ${REPO_URL} for updates ...`)
       const response: Response<string> = await got(REPO_URL, {
         method: 'GET',
         searchParams: new URLSearchParams([
-          [ 'uuid', global.config.get('uuid') ],
-          [ 'accept-beta', global.config.get('checkForBeta') ],
-          [ 'platform', process.platform ],
-          [ 'version', CUR_VER ]
+          [ 'accept-beta', global.config.get('checkForBeta') ] // ,
+          //  [ 'uuid', global.config.get('uuid') ],
+          //  [ 'platform', process.platform ],
+          //  [ 'version', CUR_VER ]
         ])
       })
 
@@ -221,9 +193,9 @@ export default class UpdateProvider {
         // offline.
         throw new Error(trans('dialog.update.connection_error'))
       } else {
-        // Something else has occurred. TODO: Translate!
+        // Something else has occurred.
         // GotError objects have a name property.
-        throw new Error(`Could not check for updates. ${error.name as string}: ${error.message as string}`)
+        throw new Error(trans('dialog.update.other_error', error.name, error.message))
       }
     }
   }
@@ -346,7 +318,11 @@ export default class UpdateProvider {
 
     this._downloadReadStream.on('end', () => {
       global.log.info(`Successfully downloaded ${this._downloadProgress.name}. Transferred ${this._downloadProgress.size_downloaded} bytes overall.`)
-      global.notify.normal(`Download of ${this._downloadProgress.name} successful!`, true)
+      global.notify.normal(`Download of ${this._downloadProgress.name} successful!`, () => {
+        // The user has clicked the notification, so we can show the update window here
+        global.application.runCommand('open-update-window')
+          .catch(e => global.log.error(String(e.message), e))
+      })
 
       this._downloadProgress.finished = true
       // Also, clean up, but don't remove the file
@@ -354,12 +330,12 @@ export default class UpdateProvider {
     })
 
     this._downloadReadStream.on('error', (err) => {
-      global.log.error(`[Update Provider] Download Read Stream Error: ${err.message as string}`, err)
+      global.log.error(`[Update Provider] Download Read Stream Error: ${err.message}`, err)
       this._cleanup(true)
     })
 
     this._downloadWriteStream.on('error', (err) => {
-      global.log.error(`[Update Provider] Download Write Stream Error: ${err.message as string}`, err)
+      global.log.error(`[Update Provider] Download Write Stream Error: ${err.message}`, err)
       this._cleanup(true)
     })
   }
@@ -418,7 +394,7 @@ export default class UpdateProvider {
     let res = await this._retrieveSHA256Sums()
     if (!res) {
       this._cleanup(true)
-      global.notify.normal('Could not verify the download!', true)
+      global.notify.normal('Could not verify the download!')
       return
     }
 
@@ -429,7 +405,7 @@ export default class UpdateProvider {
     if (correctSHA === undefined) {
       this._cleanup(true)
       global.log.error('[Update Provider] Could not verify checksums: No corresponding SHA256 found in data.')
-      global.notify.normal('Could not verify the download!', true)
+      global.notify.normal('Could not verify the download!')
       return
     }
 
@@ -440,7 +416,7 @@ export default class UpdateProvider {
     if (downloadSHA !== correctSHA.sha256) {
       this._cleanup(true)
       global.log.error(`[Update Provider] The SHA256 checksums did not match. Expected ${correctSHA.sha256}, but got ${downloadSHA}.`)
-      global.notify.normal('Could not verify update. Aborting update process!', true)
+      global.notify.normal('Could not verify update. Aborting update process!')
       return
     } else {
       global.log.info(`[Update Provider] Successfully verified the checksum of ${this._downloadProgress.name} (${downloadSHA})!`)
@@ -451,7 +427,7 @@ export default class UpdateProvider {
       await shell.openPath(this._downloadProgress.full_path)
       app.quit()
     } catch (err) {
-      global.notify.normal('Could not start update. Please install manually.', true)
+      global.notify.normal('Could not start update. Please install manually.')
       global.log.error(`[Update Provider] Could not start update: ${err.message as string}.`, err)
     }
   }

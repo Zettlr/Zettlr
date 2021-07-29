@@ -13,7 +13,7 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { trans } from '../../common/i18n'
+import { trans } from '../../common/i18n-main'
 import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '../modules/fsal/types'
 
 export default class RequestMove extends ZettlrCommand {
@@ -46,7 +46,7 @@ export default class RequestMove extends ZettlrCommand {
     }
 
     // Let's check if the destination is a child of the source:
-    if (fsal.findFile(to.hash, [from]) !== null || fsal.findDir(to.hash, [from]) !== null) {
+    if (fsal.findFile(to.path, [from]) !== null || fsal.findDir(to.path, [from]) !== null) {
       this._app.prompt({
         type: 'error',
         title: trans('system.error.move_into_child_title'),

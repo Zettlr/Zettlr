@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-const parseGridTable = require('../source/renderer/modules/table-editor/parse-grid')
+const parseGridTable = require('../source/common/modules/markdown-editor/table-editor/parse-grid')
 const assert = require('assert')
 
 const table = []

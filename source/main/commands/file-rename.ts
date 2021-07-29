@@ -15,7 +15,10 @@
 import path from 'path'
 import ZettlrCommand from './zettlr-command'
 import sanitize from 'sanitize-filename'
-import { filetypes as ALLOWED_FILETYPES } from '../../common/data.json'
+import { codeFileExtensions, mdFileExtensions } from '../../common/get-file-extensions'
+
+const ALLOWED_FILETYPES = mdFileExtensions(true)
+const CODE_FILETYPES = codeFileExtensions(true)
 
 export default class FileRename extends ZettlrCommand {
   constructor (app: any) {
@@ -28,8 +31,6 @@ export default class FileRename extends ZettlrCommand {
    * @param  {Object} arg An object containing hash of containing and name of new dir.
    */
   async run (evt: string, arg: any): Promise<void> {
-    // { 'hash': hash, 'name': val }
-
     // We need to prepare the name to be correct for
     // accurate checking whether or not the file
     // already exists
@@ -37,19 +38,25 @@ export default class FileRename extends ZettlrCommand {
 
     // If no valid filename is provided, assume .md
     let ext = path.extname(newName).toLowerCase()
-    if (!ALLOWED_FILETYPES.includes(ext)) {
+    if (!ALLOWED_FILETYPES.includes(ext) && !CODE_FILETYPES.includes(ext)) {
       newName += '.md'
     }
 
-    let file = this._app.findFile(arg.hash)
+    const file = this._app.findFile(arg.path)
     if (file === null) {
-      return global.log.error(`Could not find file ${String(arg.hash)}`)
+      return global.log.error(`Could not find file ${String(arg.path)}`)
+    }
+
+    // If the new name equals the old one, don't do anything, see #1942
+    if (file.name.toLowerCase() === newName.toLowerCase()) {
+      global.log.info(`[App] Didn't rename file to ${newName} since it's the same name`)
+      return
     }
 
     // Test if we are about to override a file
     const dir = file.parent
     let found = dir?.children.find(e => e.name.toLowerCase() === newName.toLowerCase())
-    if (found !== undefined && found.type !== 'directory') {
+    if (found !== undefined && found.type !== 'directory' && file !== found) {
       // Ask for override
       if (!await this._app.shouldOverwriteFile(newName)) {
         return // No override wanted
@@ -59,8 +66,27 @@ export default class FileRename extends ZettlrCommand {
       }
     }
 
+    // Check if the file was currently open. Since only the FSAL will get the
+    // info, we should close immediately, in order to prevent a "zombie" file
+    // to remain open in the document manager.
+    const wasActive = this._app.getDocumentManager().activeFile?.path === file.path
+    const documentDescriptor = this._app.getDocumentManager().openFiles.find(e => e.path === file.path)
+    const wasOpen = documentDescriptor !== undefined
+    if (documentDescriptor !== undefined) {
+      // Will also reset activeFile
+      this._app.getDocumentManager().closeFile(documentDescriptor)
+    }
+
     try {
       await this._app.getFileSystem().renameFile(file, newName)
+      // NOTE: At this point, `file` will contain the _new_ information which
+      // we can now use to re-set the documentManager's state if need be.
+      if (wasOpen) {
+        await this._app.getDocumentManager().openFile(file.path)
+      }
+      if (wasActive) {
+        this._app.getDocumentManager().activeFile = file
+      }
     } catch (e) {
       global.log.error(`Error during renaming file: ${e.message as string}`, e)
     }

@@ -28,29 +28,52 @@ export default class FileClose extends ZettlrCommand {
   async run (evt: string, arg: any): Promise<boolean> {
     if (evt === 'file-close-all') {
       // The renderer wants to close not just one, but all open files
-      this._app.getFileSystem().closeAllFiles()
+      this._app.getDocumentManager().closeAllFiles()
+      this._app.getDocumentManager().activeFile = null
       return true
     }
 
     // Close one specific file
     try {
-      if (!arg || !arg.hash) throw new Error('Could not close file! No hash provided!')
-      let file = this._app.getFileSystem().findFile(arg.hash)
-      if (file === null) {
-        throw new Error(`Could not close file! No file with hash ${String(arg.hash)} found!`)
+      const file = this._app.getDocumentManager().openFiles.find(elem => elem.path === arg)
+      if (file === undefined) {
+        return false
       }
 
       // Now check if we can safely close the file
       if (file.modified) {
-        global.log.error('[Command] Could not close file: The file has the modified flag set.')
-        return false
+        const result = await this._app.askSaveChanges()
+        // 0 = 'Close without saving changes',
+        // 1 = 'Save changes'
+        if (result.response === 0) {
+          // Clear the modification flag
+          this._app.getDocumentManager().markClean(file)
+          // Mark the whole application as clean if applicable
+          this._app.setModified(!this._app.getDocumentManager().isClean())
+        } else {
+          // Don't close the file
+          global.log.info('[Command] Not closing file, as the user did not want that.')
+          return false
+        }
       }
 
       // If we're here the user really wants to close the file.
-      if (!this._app.getFileSystem().closeFile(file)) {
+      // Get the index of the next open file so that we can switch the active one.
+      const openFiles = this._app.getDocumentManager().openFiles
+      const currentIdx = openFiles.indexOf(file)
+
+      if (this._app.getDocumentManager().activeFile === file && openFiles.length > 1) {
+        if (currentIdx === 0) {
+          const nextFile = openFiles[currentIdx + 1]
+          this._app.getDocumentManager().activeFile = (nextFile === null) ? null : nextFile
+        } else {
+          const prevFile = openFiles[currentIdx - 1]
+          this._app.getDocumentManager().activeFile = (prevFile === null) ? null : prevFile
+        }
+      }
+
+      if (!this._app.getDocumentManager().closeFile(file)) {
         throw new Error('Could not close file!')
-      } else {
-        console.log('File closed successfully.')
       }
 
       return true
