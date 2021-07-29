@@ -96,12 +96,12 @@ jobs:
     steps:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Clone repository (master branch)
-        if: ${{ !env.BUILD_NIGHTLY }}
+        if: ${{ env.BUILD_NIGHTLY == false }}
         uses: actions/checkout@v2
         with:
           ref: 'master'
       - name: Clone repository (develop branch)
-        if: ${{ env.BUILD_NIGHTLY }}
+        if: ${{ env.BUILD_NIGHTLY == true }}
         uses: actions/checkout@v2
         with:
           ref: 'develop'
@@ -113,7 +113,7 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
-        if: ${{ env.BUILD_NIGHTLY }}
+        if: ${{ env.BUILD_NIGHTLY == true }}
         run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
@@ -170,12 +170,12 @@ jobs:
     steps:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Clone repository (master branch)
-        if: ${{ !env.BUILD_NIGHTLY }}
+        if: ${{ env.BUILD_NIGHTLY == false }}
         uses: actions/checkout@v2
         with:
           ref: 'master'
       - name: Clone repository (develop branch)
-        if: ${{ env.BUILD_NIGHTLY }}
+        if: ${{ env.BUILD_NIGHTLY == true }}
         uses: actions/checkout@v2
         with:
           ref: 'develop'
@@ -187,7 +187,7 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
-        if: ${{ env.BUILD_NIGHTLY }}
+        if: ${{ env.BUILD_NIGHTLY == true }}
         run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
@@ -240,12 +240,12 @@ jobs:
     steps:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Clone repository (master branch)
-        if: ${{ !env.BUILD_NIGHTLY }}
+        if: ${{ env.BUILD_NIGHTLY == false }}
         uses: actions/checkout@v2
         with:
           ref: 'master'
       - name: Clone repository (develop branch)
-        if: ${{ env.BUILD_NIGHTLY }}
+        if: ${{ env.BUILD_NIGHTLY == true }}
         uses: actions/checkout@v2
         with:
           ref: 'develop'
@@ -257,7 +257,7 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
-        if: ${{ env.BUILD_NIGHTLY }}
+        if: ${{ env.BUILD_NIGHTLY == true }}
         run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
