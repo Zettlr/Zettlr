@@ -4,7 +4,7 @@
             "Ales Nehyba \u003Cneal.cz@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-06-25T19:05:13.000000Z"
+        "updated_at": "2021-07-26T16:51:47.000000Z"
     },
     "dialog": {
         "about": {
@@ -33,6 +33,7 @@
             "cancel": "Zru\u0161it",
             "choose_path": "Vybrat slo\u017eku ...",
             "close": "Zav\u0159\u00edt",
+            "close_without_saving": "Zav\u0159\u00edt bez ulo\u017een\u00ed zm\u011bn",
             "save": "Ulo\u017eit"
         },
         "custom_css": {
@@ -66,9 +67,12 @@
         },
         "filter_tags": "Filtrovat \u0161t\u00edtky...",
         "find": {
+            "close_label": "Zav\u0159\u00edt vyhled\u00e1v\u00e1n\u00ed",
             "find_label": "Naj\u00edt",
             "find_placeholder": "Naj\u00edt ...",
+            "replace_all_label": "Nahradit v\u0161e",
             "replace_label": "Nahradit",
+            "replace_next_label": "Nahradit dal\u0161\u00ed",
             "replace_placeholder": "Nahradit \u010d\u00edm"
         },
         "paste_image": {
@@ -184,7 +188,9 @@
             "default_image_save_path": "V\u00fdchoz\u00ed cesta k obr\u00e1zk\u016fm (relativn\u00ed nebo absolutn\u00ed)",
             "delete_on_fail": "Polo\u017eku, kterou nelze p\u0159esunout do ko\u0161e, smazat trvale",
             "display": {
+                "image_height": "Maxim\u00e1ln\u00ed v\u00fd\u0161ka obr\u00e1zk\u016f (procenta)",
                 "image_size_info": "Zde m\u016f\u017eete omezit n\u00e1hledy obr\u00e1zk\u016f.",
+                "image_width": "Maxim\u00e1ln\u00ed \u0161\u00ed\u0159ka obr\u00e1zk\u016f (procenta)",
                 "preview_info": "Tato nastaven\u00ed ur\u010duj\u00ed, kter\u00e9 prvky se v dokumentech vygeneruj\u00ed.",
                 "render_citations": "Generovat citace",
                 "render_htags": "Skr\u00fdt znaky z\u00e1hlav\u00ed",
@@ -285,7 +291,8 @@
                 "csl_style": "CSL style (voliteln\u00e9)",
                 "format": "Exportovat projekt do:",
                 "title": "Nastaven\u00ed projektu",
-                "title_label": "N\u00e1zev projektu"
+                "title_label": "N\u00e1zev projektu",
+                "use_label": "Pou\u017e\u00edt"
             },
             "readability_algorithm": "Algoritmus pro ov\u011b\u0159en\u00ed \u010ditelnosti",
             "reset_pandoc_command": "Resetovat pandoc p\u0159\u00edkaz",
@@ -315,6 +322,7 @@
             },
             "use_native_appearance": "Pou\u017e\u00edt nativn\u00ed vzhled oken",
             "user_dictionary": "U\u017eivatelsk\u00fd slovn\u00edk. Slova odstran\u00edte klepnut\u00edm na n\u011b.",
+            "user_dictionary_label": "Z\u00e1znam ve slovn\u00edku",
             "watchdog_checkbox_label": "Aktivovat hl\u00edd\u00e1n\u00ed zm\u011bn",
             "watchdog_explainer": "N\u011bkdy m\u016f\u017ee Zettlr hl\u00e1sit p\u0159\u00edli\u0161 mnoho zm\u011bn ve vzd\u00e1len\u00fdch souborech. Pokud se to d\u011bje, zkuste aktivovat toto nastaven\u00ed.",
             "watchdog_threshold_label": "Jak dlouho \u010dekat ne\u017e je z\u00e1pis souboru pova\u017eov\u00e1n za ukon\u010den\u00fd (v ms)",
@@ -358,6 +366,9 @@
             "intro": "Zde najdete roz\u0161\u00ed\u0159en\u00e9 statistiky va\u0161eho stylu psan\u00ed, jako nap\u0159\u00edklad detailn\u00ed p\u0159ehled slov za den.",
             "month": "M\u011bs\u00edc",
             "previous_frame": "P\u0159edchoz\u00ed \u010dasov\u00fd r\u00e1mec",
+            "tabs": {
+                "calendar_label": "Kalend\u00e1\u0159"
+            },
             "this_frame": "Aktu\u00e1ln\u00ed \u010dasov\u00fd r\u00e1mec",
             "title": "Autorsk\u00e9 statistiky",
             "week": "T\u00fdden",
@@ -366,8 +377,10 @@
             "year": "Rok"
         },
         "tag_cloud": {
+            "add_to_file": "P\u0159idat do souboru",
             "copy": "Zkop\u00edrovat do schr\u00e1nky",
             "info": "Zde najdete v\u0161echny \u0161t\u00edtky, kter\u00e9 jste pou\u017eili ve sv\u00fdch souborech. Cel\u00fd seznam m\u016f\u017eete zkop\u00edrovat do schr\u00e1nky. Naje\u010fte my\u0161\u00ed na \u0161t\u00edtek, abyste vid\u011bli, kolikr\u00e1t jste ho pou\u017eili.",
+            "suggestions_label": "Navrhovan\u00e9 \u0161t\u00edtky pro aktu\u00e1ln\u00ed soubor",
             "title": "Tag cloud"
         },
         "tags": {
@@ -386,22 +399,40 @@
             "client_error": "Nelze zkontrolovat aktualizace: Chyba na stran\u011b klienta (Stavov\u00fd k\u00f3d: %s)",
             "connection_error": "Nelze zkontrolovat aktualizace: Nelze se spojit",
             "current_version": "Va\u0161e verze",
+            "download_progress_label": "Aktualizace se stahuje",
+            "new_update_available": "Je dostupn\u00e1 nov\u011bj\u0161\u00ed verze %s.",
             "no_data": "Nelze zkontrolovat aktualizace: Server neodeslal \u017e\u00e1dn\u00e1 data",
+            "no_new_update": "M\u00e1te nejnov\u011bj\u0161\u00ed verzi.",
             "notification": "Zettlr je k dispozici v nov\u011bj\u0161\u00ed verzi. P\u0159e\u010dt\u011bte si changelog n\u00ed\u017ee.",
+            "other_error": "Aktualizace nelze ov\u011b\u0159it. %s: %s",
             "redirect_error": "Nelze zkontrolovat aktualizace: Server se pokou\u0161el o p\u0159esm\u011brov\u00e1n\u00ed (Stavov\u00fd k\u00f3d: %s)",
             "release_url": "Otev\u0159\u00edt str\u00e1nku pro sta\u017een\u00ed",
             "server_error": "Nelze zkontrolovat aktualizace: Chyba serveru (Stavov\u00fd k\u00f3d: %s)",
+            "start_update_label": "Klepnut\u00edm spust\u00edte aktualizaci",
+            "start_update_message": "Spou\u0161t\u00ed se aktualizace ...",
             "title": "Je dostupn\u00e1 aktualizace",
             "transmission_error": "Nelze zkontrolovat aktualizace: Spojen\u00ed p\u0159eru\u0161eno."
         }
     },
     "gui": {
+        "assets_man": {
+            "defaults_restore_error": "Nelze obnovit v\u00fdchoz\u00ed nastaven\u00ed!",
+            "defaults_restored": "V\u00fdchoz\u00ed nastaven\u00ed obnoveno!",
+            "defaults_restoring": "Obnovuje se v\u00fdchoz\u00ed nastaven\u00ed ...",
+            "status": {
+                "save_error": "Ukl\u00e1d\u00e1n\u00ed selhalo",
+                "saved": "Ulo\u017eeno!",
+                "saving": "Ukl\u00e1d\u00e1 se ...",
+                "unsaved_changes": "Neulo\u017een\u00e9 zm\u011bny"
+            }
+        },
         "attachments": "P\u0159\u00edlohy",
         "attachments_open_dir": "Otev\u0159\u00edt slo\u017eku",
         "avg_close_to": "\ud83d\udcaa Jste bl\u00edzko dosa\u017een\u00ed sv\u00e9ho denn\u00edho pr\u016fm\u011bru!",
         "avg_not_reached": "\u270d\ud83c\udffc Pi\u0161te, a p\u0159ekon\u00e1te sv\u016fj denn\u00ed pr\u016fm\u011br.",
         "avg_surpassed": "\ud83e\udd47 Jste \u0161ampi\u00f3n!",
         "avg_words": "denn\u00ed pr\u016fm\u011br",
+        "chars": "%s znak\u016f",
         "citeproc": {
             "error_db": "Datab\u00e1zi citac\u00ed nelze nahr\u00e1t",
             "error_report_message": "%s polo\u017eek ve va\u0161\u00ed knihovn\u011b nelze nahr\u00e1t kv\u016fli chyb\u00e1m. Chybov\u00e1 hl\u00e1\u0161en\u00ed dole ukazuj\u00ed, kter\u00e9 cita\u010dn\u00ed kl\u00ed\u010de jsou chybn\u00e9 a jak\u00fd je s nimi probl\u00e9m.",
@@ -413,6 +444,9 @@
             "references_none": "V dokumentu nejsou \u017e\u00e1dn\u00e9 citace.",
             "reloading": "Zji\u0161t\u011bna zm\u011bna souboru knihovny. Na\u010d\u00edt\u00e1 se znovu..."
         },
+        "created": "Vytvo\u0159eno",
+        "ctrl_click_to_open": "Cmd/Ctrl+klik otev\u0159e %s",
+        "date_just_now_label": "pr\u00e1v\u011b te\u010f",
         "dirs": "Slo\u017eky",
         "display_search_results": "Zobrazit v\u00fdsledky hled\u00e1n\u00ed",
         "empty_dir": "Vymazat slo\u017eku",
@@ -439,9 +473,37 @@
             "tasklist": "Seznam \u00faloh",
             "ul": "Odr\u00e1\u017ekov\u00fd seznam"
         },
+        "global_search": {
+            "query_placeholder": "Naj\u00edt ...",
+            "restrict_dir_label": "Hledat pouze ve slo\u017ece",
+            "restrict_dir_placeholder": "Hledat ve slo\u017ece ...",
+            "search_label": "Hledat"
+        },
+        "modified": "Zm\u011bn\u011bno",
+        "months": {
+            "apr": "Duben",
+            "aug": "Srpen",
+            "dec": "Prosinec",
+            "feb": "\u00danor",
+            "jan": "Leden",
+            "jul": "\u010cervenec",
+            "jun": "\u010cerven",
+            "mar": "B\u0159ezen",
+            "may": "Kv\u011bten",
+            "nov": "Listopad",
+            "oct": "\u0158\u00edjen",
+            "sep": "Z\u00e1\u0159\u00ed"
+        },
         "no_attachments": "\u017d\u00e1dn\u00e9 p\u0159\u00edlohy",
         "no_dir_selected": "Nen\u00ed vybr\u00e1na \u017e\u00e1dn\u00e1 slo\u017eka",
+        "no_open_document": "\u017d\u00e1dn\u00fd otev\u0159en\u00fd dokument",
+        "no_other_files": "\u017d\u00e1dn\u00e9 dal\u0161\u00ed soubory",
+        "no_related_files": "\u017d\u00e1dn\u00e9 souvisej\u00edc\u00ed soubory",
         "no_search_results": "\u017d\u00e1dn\u00e9 v\u00fdsledky",
+        "preview_modification_date": "Upraveno",
+        "preview_searching_label": "Hled\u00e1 se soubor ...",
+        "preview_word_count": "Po\u010det slov",
+        "related_files_label": "Souvisej\u00edc\u00ed soubory",
         "statistics_more": "Dal\u0161\u00ed statistiky ...",
         "table_of_contents": "Obsah",
         "today_words": "slov dnes",
@@ -543,6 +605,8 @@
         "start_speaking": "Spustit p\u0159ed\u010d\u00edt\u00e1n\u00ed",
         "stop_speaking": "Zastavit p\u0159ed\u010d\u00edt\u00e1n\u00ed",
         "tab_close": "Zav\u0159\u00edt panel",
+        "tab_close_all": "Zav\u0159\u00edt v\u0161echny karty",
+        "tab_close_others": "Zav\u0159\u00edt ostatn\u00ed karty",
         "tab_next": "Dal\u0161\u00ed panel",
         "tab_previous": "P\u0159edchoz\u00ed panel",
         "tags": "Spr\u00e1va \u0161t\u00edtk\u016f...",
@@ -575,6 +639,10 @@
     "system": {
         "all_files": "V\u0161echny soubory",
         "cancel": "Zru\u0161it",
+        "common": {
+            "list_add_button": "P\u0159idat",
+            "list_default_column_label": "Polo\u017eka"
+        },
         "directories": "Slo\u017eky",
         "directory_removed": "Slo\u017eka %s byla odstran\u011bna.",
         "error": {
@@ -669,7 +737,8 @@
         "show_toc": "Zobrazit obsah",
         "stats": "Zobrazit statistiky",
         "tag_cloud": "\u0160t\u00edtky",
-        "toggle_attachments": "Zobrazit p\u0159\u00edlohy"
+        "toggle_attachments": "Zobrazit p\u0159\u00edlohy",
+        "toggle_file_manager": "Spr\u00e1vce soubor\u016f"
     },
     "tray": {
         "show_zettlr": "Zobrazit Zettlr",

@@ -4,6 +4,7 @@
             "ScaredCoward",
             "Renzo Sparta \u003Cexequiel0210@gmail.com\u003E",
             "vfc",
+            "das_kultural",
             "Diego Tra\u00edd",
             "Z_Moz",
             "Miren",
@@ -11,7 +12,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-07-09T07:41:10.000000Z"
+        "updated_at": "2021-07-30T22:07:50.000000Z"
     },
     "dialog": {
         "about": {
@@ -46,6 +47,12 @@
         "custom_css": {
             "info": "Aqu\u00ed puedes sobrepasar los estilos de Zettlr para personalizarlo a\u00fan m\u00e1s. \u003Cstrong\u003EAtenci\u00f3n: Este archivo sobrescribe todas las directivas CSS! Nunca altere la geometr\u00eda de los elementos, de lo contrario la aplicaci\u00f3n puede exponer comportamientos no deseados!\u003C/strong\u003E",
             "title": "CSS personalizado"
+        },
+        "defaults": {
+            "explanation": "Editar aqu\u00ed la configuraci\u00f3n por defecto para importaciones o exportaciones.",
+            "exporting_title": "Exportar",
+            "importing_title": "Importar",
+            "restore": "Restaurar archivo por defecto"
         },
         "dir_new": {
             "placeholder": "Nombre de la carpeta",
@@ -337,6 +344,7 @@
             "watchdog_checkbox_label": "Activar la monitorizaci\u00f3n de encuesta",
             "watchdog_explainer": "En algunos ordenadores, Zettlr puede dar un aviso de demasioados cambios en ficheros remotos. Si eso sucede, pruebe activando este par\u00e1metro.",
             "watchdog_threshold_label": "Tiempo de espera (en ms), antes de que la escritura de un fichero se considere realizada.",
+            "whitelist": "Lista blanca de renderizaci\u00f3n de iFrame",
             "whitelist_hostname": "Nombre de la m\u00e1quina",
             "xelatex": "Path (ruta de acceso) al ejecutable de XeLaTeX. Por favor, s\u00f3lo cambielo si Zettlr no puede localizarlo.",
             "xelatex_default": "Predeterminado: XeLaTeX",
@@ -372,6 +380,11 @@
                 "var_year_two": "A\u00f1o (dos d\u00edgitos)"
             }
         },
+        "snippets": {
+            "explanation": "Los fragmentos te permiten definir trozos de texto reutilizables con variables.",
+            "rename": "Renombrar fragmento",
+            "title": "Fragmentos"
+        },
         "statistics": {
             "compare": "Comparar con el per\u00edodo anterior",
             "day": "Fecha",
@@ -391,6 +404,7 @@
             "year": "A\u00f1o"
         },
         "tag_cloud": {
+            "add_to_file": "A\u00f1adir al archivo",
             "copy": "Copiar en el portapapeles",
             "info": "Aqu\u00ed encontrar\u00e1s todas las tags (etiquetas) que has utilizado en alg\u00fan lugar de tus archivos. Puedes copiar toda la lista en el portapapeles. Pasa el rat\u00f3n por encima de las etiquetas para ver el n\u00famero de veces que las has usado.",
             "suggestions_label": "Etiquetas sugeridas para el archivo actual",
@@ -447,6 +461,7 @@
         "avg_not_reached": "\u270d\ud83c\udffc \u00a1A escribir para superar tu promedio diario!",
         "avg_surpassed": "\ud83d\udd25 \u00a1No hay quien te detenga!",
         "avg_words": "promedio diario",
+        "chars": "Caracteres %",
         "citeproc": {
             "error_db": "La base de datos de citaciones no se ha podido cargar",
             "error_report_message": "Los art\u00edculos %s de su librer\u00eda no se han podido cargar debido a errores. Por favor, compruebe los mensajes de error que se muestran m\u00e1s abajo para ver que CiteKeys est\u00e1n defectuosos y que errores contienen.",
@@ -487,12 +502,37 @@
             "tasklist": "Lista de tareas",
             "ul": "Lista con vi\u00f1etas"
         },
+        "global_search": {
+            "clear_label": "Limpiar b\u00fasqueda",
+            "query_label": "Introduce tus t\u00e9rminos de b\u00fasqueda a continuaci\u00f3n",
+            "query_placeholder": "Buscar ...",
+            "restrict_dir_label": "Restringir b\u00fasqueda al directorio",
+            "restrict_dir_placeholder": "Restringir a directorio ...",
+            "search_label": "B\u00fasqueda",
+            "title": "B\u00fasqueda de texto completo",
+            "toggle_label": "Alternar resultados"
+        },
         "modified": "Modificado",
+        "months": {
+            "apr": "abril",
+            "aug": "Agosto",
+            "dec": "diciembre",
+            "feb": "febrero",
+            "jan": "enero",
+            "jul": "julio",
+            "jun": "junio",
+            "mar": "marzo",
+            "may": "mayo",
+            "nov": "noviembre",
+            "oct": "octubre",
+            "sep": "septiembre"
+        },
         "no_attachments": "Sin adjuntos",
         "no_dir_selected": "Ning\u00fan directorio seleccionado",
         "no_open_document": "No hay ning\u00fan documento abierto",
         "no_other_files": "No hay otros archivos",
         "no_reference_message": "No hay texto de referencia",
+        "no_related_files": "Archivos no relacionados",
         "no_search_results": "Sin resultados",
         "number_selections": "%s selecciones",
         "other_files": "Otros archivos",
@@ -539,6 +579,7 @@
         "donate": "Soporta a Zettlr",
         "duplicate_file": "Archivo duplicado",
         "export": "Exportar...",
+        "filter_files": "Filtrar archivos",
         "find_dir": "Buscar en carpeta",
         "find_file": "Buscar en archivo",
         "generate_id": "Generar nueva ID",
@@ -739,7 +780,9 @@
         "show_toc": "Mostrar el sumario",
         "stats": "Ver estad\u00edsticas",
         "tag_cloud": "tags",
-        "toggle_attachments": "Ver archivos adjuntos"
+        "toggle_attachments": "Ver archivos adjuntos",
+        "toggle_file_manager": "Gestor de archivos",
+        "toggle_global_search": "B\u00fasqueda global"
     },
     "tray": {
         "show_zettlr": "Muestra Zettlr",
