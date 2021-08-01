@@ -4,15 +4,15 @@
             "ScaredCoward",
             "Renzo Sparta \u003Cexequiel0210@gmail.com\u003E",
             "vfc",
+            "das_kultural",
             "Diego Tra\u00edd",
             "Z_Moz",
             "Miren",
-            "das_kultural",
             "Tim",
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-07-21T07:20:05.000000Z"
+        "updated_at": "2021-07-30T22:07:50.000000Z"
     },
     "dialog": {
         "about": {
@@ -47,6 +47,12 @@
         "custom_css": {
             "info": "Aqu\u00ed puedes sobrepasar los estilos de Zettlr para personalizarlo a\u00fan m\u00e1s. \u003Cstrong\u003EAtenci\u00f3n: Este archivo sobrescribe todas las directivas CSS! Nunca altere la geometr\u00eda de los elementos, de lo contrario la aplicaci\u00f3n puede exponer comportamientos no deseados!\u003C/strong\u003E",
             "title": "CSS personalizado"
+        },
+        "defaults": {
+            "explanation": "Editar aqu\u00ed la configuraci\u00f3n por defecto para importaciones o exportaciones.",
+            "exporting_title": "Exportar",
+            "importing_title": "Importar",
+            "restore": "Restaurar archivo por defecto"
         },
         "dir_new": {
             "placeholder": "Nombre de la carpeta",
@@ -373,6 +379,11 @@
                 "var_year": "A\u00f1o (cuatro cifras)",
                 "var_year_two": "A\u00f1o (dos d\u00edgitos)"
             }
+        },
+        "snippets": {
+            "explanation": "Los fragmentos te permiten definir trozos de texto reutilizables con variables.",
+            "rename": "Renombrar fragmento",
+            "title": "Fragmentos"
         },
         "statistics": {
             "compare": "Comparar con el per\u00edodo anterior",

@@ -6,7 +6,7 @@
             "ritvje"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-07-03T17:34:58.000000Z"
+        "updated_at": "2021-07-29T19:26:31.000000Z"
     },
     "dialog": {
         "about": {
@@ -42,6 +42,12 @@
             "info": "T\u00e4ss\u00e4 voit ohittaa ohjelman vakiotyylit mukauttaaksesi k\u00e4ytt\u00f6liittym\u00e4\u00e4. \u003Cstrong\u003EHuomio: T\u00e4m\u00e4 tiedosto ohittaa kaikki CSS-direktiivit! \u00c4l\u00e4 vaihda elementtien muotoa, tai ohjelma voi toimia v\u00e4\u00e4rin.\u003C/strong\u003E",
             "title": "Mukautettu CSS"
         },
+        "defaults": {
+            "explanation": "Muokkaa tuonnin ja viennin oletusasetuksia t\u00e4\u00e4ll\u00e4.",
+            "exporting_title": "Vied\u00e4\u00e4n",
+            "importing_title": "Tuodaan",
+            "restore": "Palauta oletustiedosto"
+        },
         "dir_new": {
             "placeholder": "Hakemiston nimi",
             "value": "Uusi hakemisto"
@@ -72,7 +78,10 @@
             "close_label": "Sulje haku",
             "find_label": "Etsi",
             "find_placeholder": "Etsi\u2026",
+            "regex_label": "N\u00e4yt\u00e4 s\u00e4\u00e4nn\u00f6llisen lausekkeen haku",
+            "replace_all_label": "Korvaa kaikki esiintym\u00e4t",
             "replace_label": "Korvaa",
+            "replace_next_label": "Korvaama seuraava esiintym\u00e4",
             "replace_placeholder": "Korvaava sana"
         },
         "paste_image": {
@@ -188,7 +197,9 @@
             "default_image_save_path": "Kuvien oletustallennuspolku (suhteellinen tai absoluuttinen)",
             "delete_on_fail": "Poista nimikkeet peruuttamattomasti, jos niiden siirto roskakoriin ep\u00e4onnistuu",
             "display": {
+                "image_height": "Kuvien maksimikorkeus (prosenttia)",
                 "image_size_info": "T\u00e4ss\u00e4 voit m\u00e4\u00e4ritt\u00e4\u00e4 kuvien esikatselulle maksimikoon.",
+                "image_width": "Kuvien maksimileveys (prosenttia)",
                 "preview_info": "Seuraavassa m\u00e4\u00e4ritell\u00e4\u00e4n, mitk\u00e4 elementit n\u00e4ytet\u00e4\u00e4n dokumenteissa.",
                 "render_citations": "N\u00e4yt\u00e4 lainaukset",
                 "render_htags": "Piilota otsakemerkit",
@@ -209,6 +220,7 @@
                 "rtl_move_visually": "K\u00e4yt\u00e4 visuaalista j\u00e4rjestyst\u00e4 nuolin\u00e4pp\u00e4imille RTL-tilassa"
             },
             "enable_rmarkdown": "RMarkdown-tiedostojen tuki",
+            "enable_scroll_zoom": "Zoomaa vieritt\u00e4ess\u00e4 kun \u003Ckbd\u003ECmd\u003C/kbd\u003E tai \u003Ckbd\u003ECtrl\u003C/kbd\u003E on pohjassa",
             "enable_table_helper": "K\u00e4yt\u00e4 taulukkomuokkainta",
             "export": {
                 "dest": "Viennin kohdehakemisto. \u003Cem\u003EHuomio:\u003C/em\u003ENykyisen hakemiston valitseminen korvaa tiedostoja kysym\u00e4tt\u00e4 vahvistusta!",
@@ -235,6 +247,7 @@
             "homeEndBehaviour": "(Use the CodeMirror default actions for \u003Ckbd\u003EHome\u003C/kbd\u003E and \u003Ckbd\u003EEnd\u003C/kbd\u003E.)",
             "indent_unit": "Sisennyksess\u00e4 k\u00e4ytett\u00e4vien v\u00e4lily\u00f6ntien m\u00e4\u00e4r\u00e4",
             "input_mode": "Tekstieditorin sy\u00f6tt\u00f6tila",
+            "leave_app_running_in_the_notification_area": "J\u00e4t\u00e4 sovellus p\u00e4\u00e4lle ilmoitusalueelle",
             "modtime": "Viimeksi muokattu",
             "mute_lines": "H\u00e4iri\u00f6tt\u00f6m\u00e4n tilan ollessa k\u00e4yt\u00f6ss\u00e4, mykist\u00e4 muut rivit",
             "new_file_dont_prompt": "\u00c4l\u00e4 kysy tiedostonime\u00e4 uusia tiedostoja luotaessa",
@@ -286,11 +299,16 @@
             "project": {
                 "csl_style": "CSL-tyyli (valinnainen)",
                 "format": "Vie projekti kohteeseen:",
+                "name_label": "Muoto",
+                "pattern": "Lis\u00e4\u00e4 Glob-malleja vain tiettyjen tiedostojen sis\u00e4llytt\u00e4miseksi",
+                "pattern_name": "Glob-malli",
                 "title": "Projektin asetukset",
-                "title_label": "Projektin otsikko"
+                "title_label": "Projektin otsikko",
+                "use_label": "K\u00e4yt\u00e4"
             },
             "readability_algorithm": "Helppolukuisessa tilassa k\u00e4ytett\u00e4v\u00e4 algoritmi",
             "reset_pandoc_command": "Palauta pandocin oletuskomento",
+            "show_app_in_the_notification_area": "N\u00e4yt\u00e4 sovellus ilmoitusalueella",
             "sorting_ascii": "ASCII:n mukainen j\u00e4rjestys (2 n\u00e4ytet\u00e4\u00e4n 10:n j\u00e4lkeen)",
             "sorting_explanation": "Tiedostojen j\u00e4rjestys",
             "sorting_natural": "Luonnollinen j\u00e4rjestys (10 n\u00e4ytet\u00e4\u00e4n 2:n j\u00e4lkeen)",
@@ -316,9 +334,12 @@
             },
             "use_native_appearance": "K\u00e4yt\u00e4 alkuper\u00e4ist\u00e4 ikkunoiden ulkon\u00e4k\u00f6\u00e4",
             "user_dictionary": "Mukautettu sanakirja. Poista sanoja klikkaamalla.",
+            "user_dictionary_label": "Sanakirjan merkint\u00e4",
             "watchdog_checkbox_label": "Aktivoi Watchdog kysely",
             "watchdog_explainer": "Joissain tietokoneissa Zettlr voi ilmoittaa liian monista muualla tapahtuneista tiedostomuutoksista. Jos n\u00e4in tapahtuu, yrit\u00e4 korjata ongelma aktivoimalla t\u00e4m\u00e4 asetus.",
             "watchdog_threshold_label": "Odotusaika ennen kuin tiedoston kirjoittaminen on todettu valmiiksi (ms)",
+            "whitelist": "iFrame-render\u00f6inti valkoinen lista",
+            "whitelist_hostname": "Is\u00e4nt\u00e4nimi",
             "xelatex": "Polku xelatex-komennolle. Muuta vain, jos xelatexia ei l\u00f6ydy.",
             "xelatex_default": "Oletus: xelatex",
             "zkn": {
@@ -353,12 +374,22 @@
                 "var_year_two": "Vuosi (kaksi numeroa)"
             }
         },
+        "snippets": {
+            "explanation": "Katkelmat antavat sinun m\u00e4\u00e4ritt\u00e4\u00e4 uudelleenk\u00e4ytett\u00e4vi\u00e4 tekstip\u00e4tki\u00e4, muuttujien avulla.",
+            "rename": "Uudelleennime\u00e4 katkelma",
+            "title": "Katkelmat"
+        },
         "statistics": {
             "compare": "Vertaa edelliseen ajanjaksoon",
             "day": "P\u00e4iv\u00e4",
             "intro": "T\u00e4ss\u00e4 n\u00e4kyv\u00e4 tilasto kertoo kirjoittamistyylist\u00e4si.",
             "month": "Kuukausi",
             "previous_frame": "Edellinen ajanjakso",
+            "tabs": {
+                "calendar_label": "Kalenteri",
+                "chart_label": "Kaaviot",
+                "fsal_label": "FSAL tilastot"
+            },
             "this_frame": "Kuluva ajanjakso",
             "title": "Kirjoitustilastot",
             "week": "Viikko",
@@ -367,8 +398,10 @@
             "year": "Vuosi"
         },
         "tag_cloud": {
+            "add_to_file": "Lis\u00e4\u00e4 tiedostoon",
             "copy": "Kopioi leikep\u00f6yd\u00e4lle",
             "info": "T\u00e4ss\u00e4 n\u00e4kyv\u00e4t kaikki tunnisteet, joita on k\u00e4ytetty tiedostoissasi. Voit kopioida kaikki listana leikep\u00f6yd\u00e4lle. Vie hiiri tunnisteen p\u00e4\u00e4lle n\u00e4hd\u00e4ksesi, montako kertaa tunnistetta on k\u00e4ytetty.",
+            "suggestions_label": "Nykyiselle tiedostolle ehdotetut tunnisteet",
             "title": "Tunnistepilvi"
         },
         "tags": {
@@ -387,22 +420,34 @@
             "client_error": "P\u00e4ivitysten tarkistaminen ei onnistunut: asiakasohjelman virhe (status %s)",
             "connection_error": "P\u00e4ivitysten tarkistaminen ei onnistunut: yhteytt\u00e4 ei voitu muodostaa",
             "current_version": "K\u00e4ytt\u00e4m\u00e4si versio",
+            "download_progress_label": "Ladataan p\u00e4ivityst\u00e4",
+            "new_update_available": "P\u00e4ivitys versioon %s on saatavilla!",
             "no_data": "P\u00e4ivitysten tarkistaminen ei onnistunut: tyhj\u00e4 vastaus palvelimelta",
+            "no_new_update": "Ei p\u00e4ivityksi\u00e4 saatavilla. Sinulla on viimeisin version.",
             "notification": "Uusi versio Zettlrist\u00e4 on saatavilla. Katso muutoshistoria alta.",
+            "other_error": "Ei voitu tarkistaa p\u00e4ivityksi\u00e4: %s: %s",
             "redirect_error": "P\u00e4ivitysten tarkistaminen ei onnistunut: palvelimen uudelleenohjaus (status %s)",
             "release_url": "Avaa lataussivu",
             "server_error": "P\u00e4ivitysten tarkistaminen ei onnistunut: palvelinvirhe (status %s)",
+            "start_update_label": "Klikkaa p\u00e4ivityksen k\u00e4ynnist\u00e4miseksi",
+            "start_update_message": "Aloitetaan p\u00e4ivityst\u00e4...",
             "title": "P\u00e4ivitys saatavilla",
-            "transmission_error": "P\u00e4ivitysten tarkastaminen ei onnistunut: yhteys keskeytyi"
+            "transmission_error": "P\u00e4ivitysten tarkastaminen ei onnistunut: yhteys keskeytyi",
+            "window_title": "P\u00e4ivitt\u00e4j\u00e4"
         }
     },
     "gui": {
         "assets_man": {
+            "defaults_restore_error": "Ei voitu palauttaa oletustiedostoa!",
+            "defaults_restored": "Oletustiedosto palautettu!",
+            "defaults_restoring": "Palautetaan oletustiedostoa...",
             "status": {
+                "save_error": "Tallennus ep\u00e4onnistui",
                 "saved": "Tallennettu!",
                 "saving": "Tallennetaan...",
                 "unsaved_changes": "Tallentamattomia muutoksia"
-            }
+            },
+            "win_title": "Ominaisuuksien hallinta"
         },
         "attachments": "Liitteet",
         "attachments_open_dir": "Avaa hakemisto",
@@ -410,6 +455,7 @@
         "avg_not_reached": "\u270d\ud83c\udffc Aloita kirjoittaminen parantaaksesi keskiarvoasi.",
         "avg_surpassed": "\ud83d\udd25 Olet liekeiss\u00e4!",
         "avg_words": "p\u00e4ivitt\u00e4inen keskiarvo",
+        "chars": "%s merkki\u00e4",
         "citeproc": {
             "error_db": "citeproc: Viittaustietokantaa ei voitu ladata",
             "error_report_message": "%s nimikett\u00e4 kirjastossasi ei voitu ladata virheiden takia. Tarkista alla olevat virheilmoitukset n\u00e4hd\u00e4ksesi mitk\u00e4 viittausavaimet ovat virheellisi\u00e4 ja mik\u00e4 virhe oli.",
@@ -422,6 +468,7 @@
             "reloading": "citeproc: Havaittiin kirjastotiedostoon tehtyj\u00e4 muutoksia. Ladataan uudelleen\u2026"
         },
         "created": "Luotu",
+        "ctrl_click_to_open": "Cmd/Ctrl+Click avaa %s",
         "date_just_now_label": "juuri nyt",
         "dirs": "hakemistoa",
         "display_search_results": "N\u00e4yt\u00e4 hakutulokset",
@@ -449,13 +496,45 @@
             "tasklist": "Teht\u00e4v\u00e4lista",
             "ul": "Lista"
         },
+        "global_search": {
+            "clear_label": "Tyhjenn\u00e4 haku",
+            "query_label": "Sy\u00f6t\u00e4 hakutermit alle",
+            "query_placeholder": "Etsi...",
+            "restrict_dir_label": "Rajaa haku hakemistoon",
+            "restrict_dir_placeholder": "Rajaa hakemistoon...",
+            "search_label": "Etsi",
+            "title": "Kokotekstihaku",
+            "toggle_label": "Vaihtele tulokset"
+        },
         "modified": "Muokattu",
+        "months": {
+            "apr": "Huhtikuu",
+            "aug": "Elokuu",
+            "dec": "Joulukuu",
+            "feb": "Helmikuu",
+            "jan": "Tammikuu",
+            "jul": "Hein\u00e4kuu",
+            "jun": "Kes\u00e4kuu",
+            "mar": "Maaliskuu",
+            "may": "Toukokuu",
+            "nov": "Marraskuu",
+            "oct": "Lokakuu",
+            "sep": "Syyskuu"
+        },
         "no_attachments": "Ei liitteit\u00e4",
         "no_dir_selected": "Hakemistoa ei ole valittu",
+        "no_open_document": "Ei avoimia tiedostoja",
+        "no_other_files": "Ei muita tiedostoja",
+        "no_reference_message": "Ei viiteteksti\u00e4",
+        "no_related_files": "Ei liittyvi\u00e4 tiedostoja",
         "no_search_results": "Ei tuloksia",
         "number_selections": "%s valintaa",
+        "other_files": "Muut tiedostot",
         "preview_modification_date": "Muokattu",
+        "preview_searching_label": "Etsit\u00e4\u00e4n tiedostoa...",
         "preview_word_count": "Sanam\u00e4\u00e4r\u00e4",
+        "related_files_label": "Liittyv\u00e4t tiedostot",
+        "reset": "Nollaa",
         "statistics_more": "Lis\u00e4\u00e4 tilastoja...",
         "table_of_contents": "Sis\u00e4llysluettelo",
         "today_words": "sanaa t\u00e4n\u00e4\u00e4n",
@@ -472,6 +551,7 @@
         "about": "Tietoja",
         "add_to_dictionary": "Lis\u00e4\u00e4 sanakirjaan",
         "all_front": "Tuo kaikki eteen",
+        "assets_manager": "Ominaisuuksien hallinta",
         "bold": "Lihavoitu",
         "clear_recent_docs": "Tyhjenn\u00e4",
         "close_all_tabs": "Sulje kaikki v\u00e4lilehdet",
@@ -493,6 +573,7 @@
         "donate": "Lahjoita",
         "duplicate_file": "Monista tiedosto",
         "export": "Vie\u2026",
+        "filter_files": "Suodata tiedostoja",
         "find_dir": "Etsi hakemistosta",
         "find_file": "Etsi tiedostosta",
         "generate_id": "Luo uusi ID-numero",
@@ -591,6 +672,12 @@
     "system": {
         "all_files": "Kaikki tiedostot",
         "cancel": "Peruuta",
+        "common": {
+            "list_actions_label": "Toiminnot",
+            "list_add_button": "Lis\u00e4\u00e4",
+            "list_default_column_label": "Nimike",
+            "list_search_placeholder": "Etsi..."
+        },
         "directories": "Hakemistot",
         "directory_removed": "Hakemisto %s poistettiin.",
         "error": {
@@ -612,6 +699,8 @@
             "fnf_title": "Tiedostoa ei l\u00f6ydy",
             "ignored_dir_message": "Zettlr ei voi avata hakemistoa &quot;%s&quot;.",
             "ignored_dir_title": "Hakemistoa ei voitu avata",
+            "image_not_found": "Kuvaa ei l\u00f6ytynyt: %s",
+            "malformed_citekey": "Ep\u00e4muotoinen Citekey: @%s",
             "malformed_textbundle": "Ep\u00e4kelpo Textbundle: %s",
             "move_into_child_message": "Hakemistoa ei voi siirt\u00e4\u00e4 sen alahakemistoon.",
             "move_into_child_title": "Hakemistoa ei voi siirt\u00e4\u00e4",
@@ -684,9 +773,12 @@
         "show_toc": "N\u00e4yt\u00e4 sis\u00e4llysluettelo",
         "stats": "Tilastot",
         "tag_cloud": "Tunnisteet",
-        "toggle_attachments": "Liitteet"
+        "toggle_attachments": "Liitteet",
+        "toggle_file_manager": "Tiedostoselain",
+        "toggle_global_search": "Globaalihaku"
     },
     "tray": {
+        "show_zettlr": "N\u00e4yt\u00e4 Zettlr",
         "tooltip": "Zettlr"
     },
     "validation": {
