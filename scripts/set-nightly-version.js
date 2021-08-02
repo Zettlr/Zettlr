@@ -19,13 +19,9 @@
 const fs = require('fs')
 const path = require('path')
 const pkg = require('../package.json')
-const semver = require('semver')
 
 // Just don't run this script, would ya? :)
 console.error('WARNING: BUMPING VERSION TO NIGHTLY! IF YOU RAN THIS SCRIPT, REVERT THE CHANGES TO PACKAGE.JSON IMMEDIATELY!')
-
-// This coerces even something like 1.8.9-beta.5 to just the version number itself.
-const BASE_VERSION = semver.coerce(pkg.version).version
 
 const now = new Date()
 
@@ -44,7 +40,7 @@ if (day < 10) {
 // This yields something in the format of 2.0.0+nightly-20211006
 // Note the "+" that will make the nightly to be higher-ranked than 2.0.0
 // according to semver (which Zettlr uses internally to compare update versions)
-pkg.version = BASE_VERSION + '+nightly-' + year + month + day
+pkg.version = pkg.version + '+nightly-' + year + month + day
 
 // Write the package.json back.
 fs.writeFileSync(path.join(__dirname, '../package.json'), JSON.stringify(pkg), { encoding: 'utf8' })
