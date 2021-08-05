@@ -23,14 +23,18 @@
  * @return  {RegExp}                The regex
  */
 module.exports = function generateRegexForHighlightMode (selectors) {
-    // The following regex will match fenced code block headers with or without attribute lists.
-    // Without attribute lists, the language selector is matched on the first word.
-    // In attribute lists, the language is matched on the first word prefixed with a dot (.).
-    return new RegExp(
-        '^\\s*(?:`{3}|~{3})' +      // ``` or ~~~ preceded by zero or more whitespace
-        '\\s*(?:' +                 // zero or more whitespace followed by either...
-            '\\b|' +                // - word boundary
-            '{\\.|'+                // - {.
-            '{([^\\.]*\\s)\\.)' +       // - { followed by anything up until first dot (.) preceded by whitespace
+  // The following regex will match fenced code block headers with or without attribute lists.
+  // Without attribute lists, the language selector is matched on the first word.
+  // In attribute lists, the language is matched on the first word prefixed with a dot (.).
+  return new RegExp(
+    // ``` or ~~~ preceded by zero or more whitespace
+    '^\\s*(?:`{3}|~{3})' +
+        '\\s*(?:' + // zero or more whitespace followed by either...
+            // ... word boundary ...
+            '\\b|' +
+            // ... { ...
+            '{\\.|' +
+            // ... { followed by anything up until first dot (.) preceded by whitespace
+            '{([^\\.]*\\s)\\.)' +
         '(' + selectors.join('|') + ')\\b.*$')
 }
