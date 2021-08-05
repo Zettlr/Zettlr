@@ -26,7 +26,7 @@ commands.markdownRenderMath = function (cm: CodeMirror.Editor) {
   const viewport = cm.getViewport()
   let lines: LineInfo[] = []
   for (let i = viewport.from; i < viewport.to; i++) {
-    let modeName = cm.getModeAt({ 'line': i, 'ch': 0 }).name
+    let modeName = cm.getModeAt({ 'line': i, 'ch': 0 }).name ?? ''
     let tokenType = cm.getTokenTypeAt({ 'line': i, 'ch': 0 })
     lines.push(new LineInfo(i, cm.getLine(i), modeName, tokenType))
   }
