@@ -191,7 +191,6 @@ export default {
           markdownBoldFormatting: this.$store.state.config['editor.boldFormatting'],
           markdownItalicFormatting: this.$store.state.config['editor.italicFormatting'],
           muteLines: this.$store.state.config['muteLines'],
-          scrollZoom: this.$store.state.config['editor.scrollZoom'],
           zettelkasten: {
             idRE: this.$store.state.config['zkn.idRE'],
             idGen: this.$store.state.config['zkn.idGen'],

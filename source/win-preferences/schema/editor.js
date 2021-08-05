@@ -87,11 +87,6 @@ export default function () {
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.enable_scroll_zoom'),
-          model: 'editor.scrollZoom'
-        },
-        {
-          type: 'checkbox',
           label: trans('dialog.preferences.enable_table_helper'),
           model: 'editor.enableTableHelper'
         },

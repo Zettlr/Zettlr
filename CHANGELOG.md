@@ -24,6 +24,10 @@ A few years ago we implemented auto-saving after a delay of five seconds with no
 
 The Custom CSS can now be edited directly in the assets dialog where you can also edit your defaults files.
 
+## Zoom Functionality has changed
+
+While in the past it was possible to use the common zoom shortcuts to only zoom the editor itself in or out, and additionally you could zoom while scrolling, this functionality has been deprecated in favour of enabling the zooming of the whole application. This will enable especially visually impaired people to work better with Zettlr. To zoom in and out only the font size of the editor itself, you can make use of the new preference setting allowing you to set the editor's font size.
+
 ## GUI and Functionality
 
 - **Feature**: Switched the Exporting process in a way that allows more flexibility in setting options.

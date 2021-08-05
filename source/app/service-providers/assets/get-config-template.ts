@@ -126,8 +126,7 @@ export default function getConfigTemplate (): ConfigOptions {
       homeEndBehaviour: true, // If checked (true), CodeMirror goes to start/end of a paragraph, not a line.
       enableTableHelper: true, // Enable the table helper plugin
       indentUnit: 4, // The number of spaces to be added
-      fontSize: 16, // The editor's font size in pixels,
-      scrollZoom: true, // Whether the user can scroll by using Cmd/Ctrl+Wheel
+      fontSize: 16, // The editor's font size in pixels
       countChars: false, // Set to true to enable counting characters instead of words
       inputMode: 'default', // Can be default, vim, emacs
       boldFormatting: '**', // Can be ** or __

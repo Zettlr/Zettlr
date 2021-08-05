@@ -70,7 +70,6 @@ const { indentLinesHook, clearLineIndentationCache } = require('./hooks/indent-w
 const headingClassHook = require('./hooks/heading-classes')
 const codeblockClassHook = require('./hooks/codeblock-classes')
 const taskItemClassHook = require('./hooks/task-item-classes')
-const zoomHook = require('./hooks/zoom')
 const muteLinesHook = require('./hooks/mute-lines')
 const renderElementsHook = require('./hooks/render-elements')
 const typewriterHook = require('./hooks/typewriter')
@@ -121,13 +120,6 @@ module.exports = class MarkdownEditor extends EventEmitter {
     this._currentDocumentMode = 'multiplex'
 
     /**
-     * Holds the font size of the CodeMirror instance (in em)
-     *
-     * @var {Number}
-     */
-    this._fontsize = 1
-
-    /**
      * Can hold a close-callback from an opened context menu
      *
      * @var {Function}
@@ -171,7 +163,6 @@ module.exports = class MarkdownEditor extends EventEmitter {
     headingClassHook(this._instance)
     codeblockClassHook(this._instance)
     taskItemClassHook(this._instance)
-    zoomHook(this._instance, this.zoom.bind(this))
     muteLinesHook(this._instance)
     renderElementsHook(this._instance)
     typewriterHook(this._instance)
@@ -305,21 +296,6 @@ module.exports = class MarkdownEditor extends EventEmitter {
       }
     })
 
-    // Listen to zoom-shortcuts from main
-    ipcRenderer.on('shortcut', (event, shortcut) => {
-      switch (shortcut) {
-        case 'zoom-reset':
-          this.zoom(0)
-          break
-        case 'zoom-in':
-          this.zoom(1)
-          break
-        case 'zoom-out':
-          this.zoom(-1)
-          break
-      }
-    })
-
     // Listen to updates from the assets provider
     ipcRenderer.on('assets-provider', (event, which) => {
       if (which === 'snippets-updated') {
@@ -411,24 +387,6 @@ module.exports = class MarkdownEditor extends EventEmitter {
         ch: 0
       }
     })
-  }
-
-  /**
-   * Alter the font size of the editor.
-   * @param  {Number} direction The direction, can be 1 (increase), -1 (decrease) or 0 (reset)
-   */
-  zoom (direction) {
-    if (direction === 0) {
-      this._fontsize = 1
-    } else {
-      let newSize = this._fontsize + 0.1 * direction
-      // Constrain the size so it doesn't run into errors
-      if (newSize < 0.3) newSize = 0.3 // Less than 30% and CodeMirror doesn't display the text anymore.
-      if (newSize > 4.0) newSize = 4.0 // More than 400% and you'll run into problems concerning headings 1
-      this._fontsize = newSize
-    }
-    this._instance.getWrapperElement().style.fontSize = this._fontsize + 'em'
-    this._instance.refresh()
   }
 
   /**

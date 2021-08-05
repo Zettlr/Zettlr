@@ -398,25 +398,19 @@ export default function getMenu (): MenuItemConstructorOptions[] {
           id: 'menu.reset_zoom',
           label: trans('menu.reset_zoom'),
           accelerator: 'Ctrl+0',
-          click: function (menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'zoom-reset')
-          }
+          role: 'resetZoom'
         },
         {
           id: 'menu.zoom_in',
           label: trans('menu.zoom_in'),
           accelerator: 'Ctrl+Plus',
-          click: function (menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'zoom-in')
-          }
+          role: 'zoomIn'
         },
         {
           id: 'menu.zoom_out',
           label: trans('menu.zoom_out'),
           accelerator: 'Ctrl+-',
-          click: function (menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'zoom-out')
-          }
+          role: 'zoomOut'
         },
         {
           type: 'separator'
