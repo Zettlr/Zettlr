@@ -99,7 +99,7 @@ describe('findInlineEquations()', function () {
 
 describe('findEquations()', function () {
   it('should recognize equation wrapped in two dollar symbols', function () {
-    deepStrictEqual(findEquations([new LineInfo(0, '$$asd$$', 'markdown', '')]), [new EquationMarker(
+    deepStrictEqual(findEquations([new LineInfo(0, '$$asd$$', 'markdown-zkn', '')]), [new EquationMarker(
       {
         ch: 0,
         line: 0
@@ -114,7 +114,7 @@ describe('findEquations()', function () {
   })
 
   it('should recognize equation wrapped in single dollar symbols', function () {
-    deepStrictEqual(findEquations([new LineInfo(0, '$asd$', 'markdown', '')]), [new EquationMarker(
+    deepStrictEqual(findEquations([new LineInfo(0, '$asd$', 'markdown-zkn', '')]), [new EquationMarker(
       {
         ch: 0,
         line: 0
@@ -129,19 +129,19 @@ describe('findEquations()', function () {
   })
 
   it('should not recognize when opening dollar is followed by space', function () {
-    deepStrictEqual(findEquations([new LineInfo(0, '$ asd$', 'markdown', '')]), [])
+    deepStrictEqual(findEquations([new LineInfo(0, '$ asd$', 'markdown-zkn', '')]), [])
   })
 
   it('should not recognize when closing dollar is preceded by space', function () {
-    deepStrictEqual(findEquations([new LineInfo(0, '$ asd$', 'markdown', '')]), [])
+    deepStrictEqual(findEquations([new LineInfo(0, '$ asd$', 'markdown-zkn', '')]), [])
   })
 
   it('should not recognize empty equation', function () {
-    deepStrictEqual(findEquations([new LineInfo(0, '$$', 'markdown', '')]), [])
+    deepStrictEqual(findEquations([new LineInfo(0, '$$', 'markdown-zkn', '')]), [])
   })
 
   it('should recognize single character equation wrapped in single dollar symbols', function () {
-    deepStrictEqual(findEquations([new LineInfo(0, '$a$', 'markdown', '')]), [new EquationMarker(
+    deepStrictEqual(findEquations([new LineInfo(0, '$a$', 'markdown-zkn', '')]), [new EquationMarker(
       {
         ch: 0,
         line: 0
@@ -156,7 +156,7 @@ describe('findEquations()', function () {
   })
 
   it('should recognize single character equation wrapped in double dollar symbols', function () {
-    deepStrictEqual(findEquations([new LineInfo(0, '$$a$$', 'markdown', '')]), [new EquationMarker(
+    deepStrictEqual(findEquations([new LineInfo(0, '$$a$$', 'markdown-zkn', '')]), [new EquationMarker(
       {
         ch: 0,
         line: 0
@@ -172,9 +172,9 @@ describe('findEquations()', function () {
 
   it('should recognize single character equation wrapped in double dollar symbols on separate lines', function () {
     deepStrictEqual(findEquations([
-      new LineInfo(0, '$$', 'markdown', ''),
-      new LineInfo(1, 'a', 'markdown', ''),
-      new LineInfo(2, '$$', 'markdown', '')
+      new LineInfo(0, '$$', 'markdown-zkn', ''),
+      new LineInfo(1, 'a', 'markdown-zkn', ''),
+      new LineInfo(2, '$$', 'markdown-zkn', '')
     ]), [new EquationMarker(
       {
         ch: 0,
@@ -191,12 +191,12 @@ describe('findEquations()', function () {
 
   it('should recognize multiple equations following each other on separate lines', function () {
     deepStrictEqual(findEquations([
-      new LineInfo(0, '$$', 'markdown', ''),
-      new LineInfo(1, 'a', 'markdown', ''),
-      new LineInfo(2, '$$', 'markdown', ''),
-      new LineInfo(3, '$$', 'markdown', ''),
-      new LineInfo(4, 'b', 'markdown', ''),
-      new LineInfo(5, '$$', 'markdown', '')
+      new LineInfo(0, '$$', 'markdown-zkn', ''),
+      new LineInfo(1, 'a', 'markdown-zkn', ''),
+      new LineInfo(2, '$$', 'markdown-zkn', ''),
+      new LineInfo(3, '$$', 'markdown-zkn', ''),
+      new LineInfo(4, 'b', 'markdown-zkn', ''),
+      new LineInfo(5, '$$', 'markdown-zkn', '')
     ]), [ new EquationMarker(
       {
         ch: 0,
@@ -223,10 +223,10 @@ describe('findEquations()', function () {
   })
 
   it('should not recognize not properly closed equation', function () {
-    deepStrictEqual(findEquations([new LineInfo(0, '$$ad$', 'markdown', '')]), [])
+    deepStrictEqual(findEquations([new LineInfo(0, '$$ad$', 'markdown-zkn', '')]), [])
   })
 
   it('should not recognize escaped', function () {
-    deepStrictEqual(findEquations([new LineInfo(0, '\\$asd\\$', 'markdown', '')]), [])
+    deepStrictEqual(findEquations([new LineInfo(0, '\\$asd\\$', 'markdown-zkn', '')]), [])
   })
 })
