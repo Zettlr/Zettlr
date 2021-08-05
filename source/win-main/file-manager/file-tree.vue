@@ -130,7 +130,7 @@ body {
     overflow-x: hidden;
     overflow-y: auto;
     outline: none;
-    transition: left 0.3s ease;
+    transition: left 0.3s ease, background-color 0.2s ease;
 
     &.hidden { left:-100%; }
 

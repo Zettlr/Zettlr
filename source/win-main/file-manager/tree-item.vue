@@ -446,6 +446,16 @@ body {
         background-color: transparent;
         padding: 0;
       }
+
+      &.project {
+        color: rgb(220, 45, 45);
+      }
+    }
+  }
+
+  &.dark div.tree-item-container {
+    .tree-item.project {
+      color: rgb(240, 98, 98);
     }
   }
 }
@@ -453,6 +463,7 @@ body {
 body.darwin {
   .tree-item {
     margin: 6px 0px;
+    color: rgb(53, 53, 53);
 
     .item-icon, .toggle-icon {
       display: inline-block;
@@ -475,6 +486,12 @@ body.darwin {
       background-color: var(--system-accent-color, --c-primary);
       background-image: linear-gradient(#00000000, #00000022);
       color: white;
+    }
+  }
+
+  &.dark {
+    .tree-item {
+      color: rgb(240, 240, 240);
     }
   }
 }

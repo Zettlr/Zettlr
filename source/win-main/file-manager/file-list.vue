@@ -513,6 +513,7 @@ body.darwin {
 
     #file-manager-filter {
       border-right-color: #505050;
+      background-color: rgb(40, 40, 50);
     }
   }
 }

@@ -483,13 +483,22 @@ body {
   }
 }
 
-body.darwin div#sidebar {
-  // On macOS the toolbar is 40px high and the documents titlebar is 30px high,
-  // so we want to offset the sidebar by that.
-  top: calc(40px + 30px);
+body.darwin {
+  div#sidebar {
+    // On macOS the toolbar is 40px high and the documents titlebar is 30px high,
+    // so we want to offset the sidebar by that.
+    top: calc(40px + 30px);
+    background-color: transparent;
 
-  div.related-files-container {
-    div.related-file span.filename { border-radius: 4px; }
+    div.related-files-container {
+      div.related-file span.filename { border-radius: 4px; }
+    }
+  }
+
+  &.dark {
+    div#sidebar {
+      background-color: transparent;
+    }
   }
 }
 </style>
