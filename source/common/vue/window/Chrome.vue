@@ -66,6 +66,22 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Chrome
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file displays custom-styled WindowChrome on a browser
+ *                  window. This component is being used by every renderer
+ *                  process (similar to the window registration).
+ *
+ * END HEADER
+ */
+
 import Titlebar from './Titlebar.vue'
 import Menubar from './Menubar.vue'
 import Toolbar from './Toolbar.vue'
@@ -75,7 +91,6 @@ import WindowControls from './Controls.vue'
 
 // Import the correct styles (the platform styles are namespaced)
 import './assets/generic.less'
-import './assets/darwin.less'
 
 const ipcRenderer = window.ipc
 
@@ -393,16 +408,9 @@ body {
     }
   }
 
-  // win32 OPERATIONG SYSTEM STYLES TODO
-  // Linux OPERATING SYSTEM STYLES TODO
-
   div#window-chrome {
-    // position: absolute;
-    // left: 0;
-    // right: 0;
     // The window chrome gets the system font
     font-family: inherit;
-    // font-family: -apple-system, BlinkMacSystemFont, 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, Ubuntu, Roboto, Noto, 'Segoe UI', Arial, sans-serif;
   }
 
   div#window-content {
@@ -414,6 +422,18 @@ body {
     right: 0;
     bottom: 0;
     overflow: auto;
+  }
+
+  &:not(.darwin) {
+    div#window-content {
+      background-color: rgb(235, 235, 235);
+    }
+  }
+
+  &.dark:not(.darwin) {
+    div#window-content {
+      background-color: rgb(30, 30, 30);
+    }
   }
 }
 </style>

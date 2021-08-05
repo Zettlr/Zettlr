@@ -1,8 +1,23 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CodeMirror footnotes hook
+ * CVM-Role:        CodeMirror plugin
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Enables preview & inline-editing of footnotes.
+ *
+ * END HEADER
+ */
+
 // This is a plugin that needs a specific CodeMirror instance to work, hence
 // it's not in the plugins folder.
 
 const tippy = require('tippy.js').default
 const md2html = require('../../../util/md-to-html')
+const { trans } = require('../../../i18n-renderer')
 
 /**
  * No footnote tooltips while we're editing a footnote
@@ -25,7 +40,7 @@ module.exports = (cm) => {
       return true
     }
 
-    if (Boolean(cm.isReadOnly()) || cm.getModeAt(cursor).name !== 'markdown') {
+    if (Boolean(cm.isReadOnly()) || cm.getModeAt(cursor).name !== 'markdown-zkn') {
       return true
     }
 
@@ -80,8 +95,8 @@ function showFootnoteTooltip (cm, element) {
   const fnref = getFootnoteTextForRef(cm, ref)
 
   tippy(element, {
-    // Display the text as HTML TODO: Translate the no reference message
-    content: (fnref !== undefined && fnref.trim() !== '') ? md2html(fnref, true) : md2html('_No reference text_'),
+    // Display the text as HTML
+    content: (fnref !== undefined && fnref.trim() !== '') ? md2html(fnref, true) : md2html('_' + trans('gui.no_reference_message') + '_'),
     allowHTML: true,
     onHidden (instance) {
       instance.destroy() // Destroy the tippy instance.

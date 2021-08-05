@@ -1,7 +1,21 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        getConfigTemplate utility function
+ * CVM-Role:        <none>
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Returns a functional template to be used by the config provider.
+ *
+ * END HEADER
+ */
+
 import { app } from 'electron'
 import * as bcp47 from 'bcp-47'
 import { v4 as uuid4 } from 'uuid'
-import { getLanguageFile } from '../../../common/i18n'
+import getLanguageFile from '../../../common/util/get-language-file'
 
 const ZETTLR_VERSION = app.getVersion()
 const ATTACHMENT_EXTENSIONS = [
@@ -27,7 +41,7 @@ export default function getConfigTemplate (): ConfigOptions {
     locale = 'en-US'
   } else {
     // Return the best match that the app can find (only the tag).
-    locale = (getLanguageFile(locale) as any).tag
+    locale = getLanguageFile(locale).tag
   }
 
   // Return the complete configuration object
@@ -70,7 +84,6 @@ export default function getConfigTemplate (): ConfigOptions {
     xelatex: '',
     export: {
       dir: 'temp', // Can either be "temp" or "cwd" (current working directory)
-      stripIDs: false, // Strip ZKN IDs such as @ID:<id>
       stripTags: false, // Strip tags a.k.a. #tag
       stripLinks: 'full', // Strip internal links: "full" - remove completely, "unlink" - only remove brackets, "no" - don't alter
       cslLibrary: '', // Path to a CSL JSON library file
@@ -211,6 +224,7 @@ export default function getConfigTemplate (): ConfigOptions {
     },
     system: {
       deleteOnFail: false, // Whether to delete files if trashing them fails
+      leaveAppRunning: false, // Whether to leave app running in the notification area (tray)
       avoidNewTabs: true, // Whether to avoid opening new tabs for documents if possible
       iframeWhitelist: [ 'www.youtube.com', 'player.vimeo.com' ] // Contains a list of whitelisted iFrame prerendering domains
     },

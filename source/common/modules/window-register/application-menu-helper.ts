@@ -1,3 +1,21 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Application Menu helper
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file controls two types of menus: The menu bar which is
+ *                  shown on non-macOS platforms and the context menus. On macOS
+ *                  this file will not show a custom context menu but rather
+ *                  forward the menu template to the main process to render a
+ *                  native context menu.
+ *
+ * END HEADER
+ */
+
 const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
 // This function displays a custom styled popup menu at the given coordinates
@@ -43,7 +61,7 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
   // We have just received a serialized submenu which we should now display
   const appMenu = document.createElement('div')
   appMenu.setAttribute('id', 'application-menu')
-  appMenu.style.zIndex = '99999' // Ensure it always stays on top of anything, including modals
+  appMenu.style.zIndex = '99999' // Ensure it always stays on top of anything
 
   for (let item of items) {
     const menuItem = renderMenuItem(item)
@@ -108,7 +126,6 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
     })
 
     menuItem.addEventListener('mousedown', (event) => {
-      console.log('Inspecting!')
       ipcRenderer.send('window-controls', {
         command: 'inspect-element',
         payload: {

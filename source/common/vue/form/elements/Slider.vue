@@ -1,17 +1,33 @@
 <template>
   <div class="slider-group">
-    <p v-html="label"></p>
+    <label v-if="label !== ''" v-html="label"></label>
     <input
       type="range"
       v-bind:min="min"
       v-bind:max="max"
       v-bind:value="value"
+      v-bind:name="name"
       v-on:input="$emit('input', parseInt($event.target.value, 10))"
+      v-on:change="$emit('change', parseInt($event.target.value, 10))"
     >
   </div>
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Slider
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component displays a slider input element.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'SliderControl',
   props: {

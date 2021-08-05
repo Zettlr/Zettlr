@@ -48,6 +48,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        FileTree
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays the FSAL file tree contents as a tree.
+ *
+ * END HEADER
+ */
+
 import { trans } from '../../common/i18n-renderer'
 import TreeItem from './tree-item.vue'
 
@@ -116,7 +130,7 @@ body {
     overflow-x: hidden;
     overflow-y: auto;
     outline: none;
-    transition: left 0.3s ease;
+    transition: left 0.3s ease, background-color 0.2s ease;
 
     &.hidden { left:-100%; }
 

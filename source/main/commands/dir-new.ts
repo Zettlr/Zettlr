@@ -13,7 +13,7 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { trans } from '../../common/i18n'
+import { trans } from '../../common/i18n-main'
 import path from 'path'
 import sanitize from 'sanitize-filename'
 
@@ -39,7 +39,7 @@ export default class DirNew extends ZettlrCommand {
       return false
     }
 
-    const sanitizedName = sanitize(arg.name, { replacement: '-' }).trim()
+    const sanitizedName = (arg.name !== undefined) ? sanitize(arg.name.trim(), { replacement: '-' }) : trans('dialog.dir_new.value')
 
     if (sanitizedName.length === 0) {
       global.log.error('New directory name was empty after sanitization.', arg)

@@ -1,3 +1,18 @@
+/**
+  * @ignore
+  * BEGIN HEADER
+  *
+  * Contains:        TableEditor
+  * CVM-Role:        Model
+  * Maintainer:      Hendrik Erz
+  * License:         GNU GPL v3
+  *
+  * Description:     This class models Markdown tables using an internal AST and
+  *                  enables easy WYSIWYG-style editing of tables.
+  *
+  * END HEADER
+  */
+
 const TableEditor = require('./table-editor')
 const parsePipeTable = require('./parse-pipe')
 const parseSimpleTable = require('./parse-simple')

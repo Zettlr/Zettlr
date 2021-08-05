@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        displayContextMenu
+ * CVM-Role:        Utility function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays a context-aware context menu on the editor.
+ *
+ * END HEADER
+ */
+
 // Displays a context menu for the MarkdownEditor class
 const { trans } = require('../../i18n-renderer')
 const ipcRenderer = window.ipc
@@ -148,14 +162,47 @@ function getTargetType (target) {
 module.exports = function displayContextMenu (event, isReadOnly, commandCallback, replaceCallback) {
   // First, determine which kind of context menu we should display
   const contextMenuType = getTargetType(event.target)
-  console.log(contextMenuType)
 
   // Now, determine the appropriate template to use. In most cases, we use the
   // text template, but that doesn't make sense to rendered links, citations, or
   // images.
   let MENU_TEMPLATE = TEMPLATE_TEXT
   if (contextMenuType === 'image') {
-    return // Images don't have a context menu (yet)
+    const src = String(event.target.src)
+    if (!src.startsWith('safe-file://') && !src.startsWith('file://')) {
+      // If we're here, it's a valid URL, so we must disable the menu item to
+      // copy it to clipboard, since Electron doesn't support that. Also, we
+      // can only open it in the default browser.
+      MENU_TEMPLATE = [
+        {
+          label: 'menu.copy_img_to_clipboard',
+          id: 'copy-img-to-clipboard',
+          enabled: false
+        },
+        {
+          label: 'menu.open_in_browser',
+          id: 'open-img-in-browser',
+          enabled: true
+        }
+      ]
+    } else {
+      // We have a local image
+      MENU_TEMPLATE = [
+        {
+          label: 'menu.copy_img_to_clipboard',
+          id: 'copy-img-to-clipboard',
+          enabled: true
+        },
+        {
+          label: 'menu.show_file',
+          id: 'show-img-in-folder',
+          enabled: true
+        }
+      ]
+    }
+
+    // Second item varies: If it's a local file, we can show it in folder.
+    // Otherwise, we'll open it in the default browser.
   } else if ([ 'link', 'citation' ].includes(contextMenuType)) {
     MENU_TEMPLATE = [] // Only contains the link/citation actions
   }
@@ -168,8 +215,19 @@ module.exports = function displayContextMenu (event, isReadOnly, commandCallback
   for (const item of MENU_TEMPLATE) {
     let buildItem = {}
     if (item.hasOwnProperty('label')) {
-      buildItem.id = item.label
       buildItem.label = trans(item.label)
+    }
+
+    if ('id' in item) {
+      buildItem.id = item.id
+    } else if ('label' in item) {
+      buildItem.id = item.label
+    }
+
+    if ('enabled' in item) {
+      buildItem.enabled = item.enabled
+    } else if (isReadOnly && readOnlyDisabled.includes(item.label)) {
+      buildItem.enabled = false
     }
 
     if (item.hasOwnProperty('type')) {
@@ -184,12 +242,6 @@ module.exports = function displayContextMenu (event, isReadOnly, commandCallback
 
     if (item.command !== undefined) {
       buildItem.command = item.command
-    }
-
-    if (isReadOnly && readOnlyDisabled.includes(item.label)) {
-      buildItem.enabled = false
-    } else {
-      buildItem.enabled = true
     }
 
     buildMenu.push(buildItem)
@@ -325,8 +377,31 @@ module.exports = function displayContextMenu (event, isReadOnly, commandCallback
         command: 'add',
         term: clickedID.substr(9) // Extract the word from the ID
       })
+      return
     }
 
+    if (clickedID === 'copy-img-to-clipboard' && 'src' in event.target) {
+      ipcRenderer.invoke('application', {
+        command: 'copy-img-to-clipboard',
+        payload: event.target.src // Direct main to copy that source
+      })
+        .catch(err => console.error(err))
+        .finally(() => { closeCallback() })
+      return
+    } else if (clickedID === 'show-img-in-folder' && 'src' in event.target) {
+      ipcRenderer.send('window-controls', {
+        command: 'show-item-in-folder',
+        payload: event.target.src // Show the item in folder
+      })
+      return
+    } else if (clickedID === 'open-img-in-browser' && 'src' in event.target) {
+      // Open the image in the system browser. (Works because main intercepts
+      // any redirect.)
+      window.location.assign(event.target.src)
+      return
+    }
+
+    // All other commands are simply executed from here
     let found = currentMenu.find((elem) => {
       return elem.id === clickedID
     })

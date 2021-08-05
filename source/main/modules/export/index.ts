@@ -21,7 +21,6 @@ import { promises as fs } from 'fs'
 
 // Utilities
 import isFile from '../../../common/util/is-file'
-import prepareFiles from './prepare-files'
 
 // Exporters
 import { ExporterAPI, ExporterOptions, ExporterOutput, PandocRunnerOutput } from './types'
@@ -61,14 +60,15 @@ export async function makeExport (options: ExporterOptions, formatOptions: any =
 
   // Now we can prepare our return
   let exporterReturn: ExporterOutput = {
-    code: 1, // TODO: Find the applicable Pandoc exit code for faulty options
+    code: 6, // See https://pandoc.org/MANUAL.html#exit-codes
     stdout: [],
     stderr: [],
     targetFile: '' // This will be returned if no exporter has been found
   }
 
-  // Now, pre-process the input files
-  const inputFiles = await prepareFiles(options)
+  global.log.verbose(`[Exporter] Exporting ${options.sourceFiles.length} files to ${options.targetDirectory}`)
+
+  const inputFiles = options.sourceFiles.map(file => file.path)
 
   // This is basically the "plugin API"
   const ctx: ExporterAPI = {
@@ -84,6 +84,7 @@ export async function makeExport (options: ExporterOptions, formatOptions: any =
   for (const plugin of PLUGINS) {
     const formats = plugin.pluginInformation().formats
     if (options.format in formats) {
+      global.log.verbose(`[Exporter] Running ${plugin.pluginInformation().id} exporter ...`)
       exporterReturn = await plugin.run(options, inputFiles, formatOptions, ctx)
       break
     }
@@ -145,12 +146,14 @@ async function writeDefaults (
 
   const defaults: any = await global.assets.getDefaultsFor(writer, 'export')
 
-  // Use an HTML template if applicable TODO: Don't override that property, if it
-  // has been customised by the user
+  // Use an HTML template if applicable
   if (writer === 'html') {
-    let tpl = await fs.readFile(path.join(__dirname, 'assets/export.tpl.htm'), { encoding: 'utf8' })
-    defaults.template = path.join(dataDir, 'template.tpl')
-    await fs.writeFile(defaults.template, tpl, { encoding: 'utf8' })
+    if (!('template' in defaults) || typeof defaults.template !== 'string' || !isFile(defaults.template)) {
+      // There's definitely no template in the defaults we've just read
+      const tpl = await fs.readFile(path.join(__dirname, 'assets/export.tpl.htm'), { encoding: 'utf8' })
+      defaults.template = path.join(dataDir, 'template.tpl')
+      await fs.writeFile(defaults.template, tpl, { encoding: 'utf8' })
+    }
   }
 
   // Populate the variables section TODO: Migrate that to its own property
@@ -173,6 +176,31 @@ async function writeDefaults (
   if (isFile(cslStyle)) {
     defaults.csl = cslStyle
   }
+
+  // Now add metadata values for our GUI settings the user can choose. NOTE that
+  // users can also add these manually to their files if they prefer. This way
+  // any file's metadata will overwrite anything defined programmatically here
+  // in the defaults.
+  if (!('metadata' in defaults)) {
+    defaults.metadata = {}
+  }
+
+  if (!('zettlr' in defaults.metadata)) {
+    defaults.metadata.zettlr = {}
+  }
+
+  defaults.metadata.zettlr.strip_tags = Boolean(global.config.get('export.stripTags'))
+  defaults.metadata.zettlr.strip_links = String(global.config.get('export.stripLinks'))
+  defaults.metadata.zettlr.link_start = String(global.config.get('zkn.linkStart'))
+  defaults.metadata.zettlr.link_end = String(global.config.get('zkn.linkEnd'))
+
+  // Add all filters which are within the userData/lua-filter directory.
+  if (!('filters' in defaults)) {
+    defaults.filters = []
+  }
+
+  const filters = await global.assets.getAllFilters()
+  defaults.filters = defaults.filters.concat(filters)
 
   // After we have added our default keys, let the plugin add their keys, which
   // enables them to override certain keys if necessary.

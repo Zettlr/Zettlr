@@ -11,7 +11,7 @@
  * END HEADER
  */
 
-const replaceStringVariables = require('./replace-string-variables.js')
+import replaceStringVariables from './replace-string-variables'
 
 /**
  * This function generates an ID using the given pattern (default: YYYYMMDDhhmmss)
@@ -21,6 +21,6 @@ const replaceStringVariables = require('./replace-string-variables.js')
  *
  * @return  {String}                            The final string after replacements.
  */
-module.exports = function (pattern = '%Y%M%D%h%m%s') {
+export default function generateId (pattern = '%Y%M%D%h%m%s') {
   return replaceStringVariables(pattern)
 }

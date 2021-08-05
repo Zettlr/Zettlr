@@ -17,8 +17,8 @@
 @import "../theme-karl-marx-stadt/theme-main.less";
 
 // Primary colours
-@c-primary: #657b83;
-@c-primary-shade: #839496;
+@c-primary: #1bd4e9;
+@c-primary-shade: #1bd4e9;
 @c-secondary: #002b36;
 @c-secondary-shade: #073642;
 
@@ -31,11 +31,15 @@
 }
 
 body {
-  // LIGHT THEME
-  .cm-fenced-code.cm-comment { font-style: normal; }
-  .cm-string { font-family: inherit; }
 
-  #file-manager #file-manager-resize { background-color: #fffff8; }
+  // LIGHT THEME
+  .cm-fenced-code.cm-comment {
+    font-style: normal;
+  }
+
+  .cm-string {
+    font-family: inherit;
+  }
 
   // GENERAL EDITOR STYLES
   #editor {
@@ -54,18 +58,28 @@ body {
     }
 
     .CodeMirror {
+
       // EDITOR SPECIFIC
       // Formattings
-      .cm-hr, .cm-em, .cm-strong,
-      .cm-formatting-list-ul, .cm-formatting-list-ol { color: inherit; }
+      .cm-hr,
+      .cm-em,
+      .cm-strong,
+      .cm-formatting-list-ul,
+      .cm-formatting-list-ol {
+        color: inherit;
+      }
 
       .cm-quote,
       .cm-quote.cm-em,
-      .cm-quote.cm-strong { color: #555; }
+      .cm-quote.cm-strong {
+        color: #555;
+      }
 
       .cm-fenced-code.cm-link,
       .cm-fenced-code.cm-comment,
-      .cm-string { color: #999999; }
+      .cm-string {
+        color: #999999;
+      }
 
       .cm-fenced-code.cm-atom,
       .cm-formatting-header-1,
@@ -79,7 +93,10 @@ body {
         color: #d02325;
       }
 
-      .cm-link, .cma { color: inherit; }
+      .cm-link,
+      .cma {
+        color: inherit;
+      }
 
       .cm-table {
         font-family: @font-inconsolata;
@@ -89,26 +106,30 @@ body {
   }
 
   &.dark {
+
     // DARK THEME
     #editor {
       background-color: #002b36;
+
       // Style the code block line wrapper classes
-      .CodeMirror .code-block-line { background-color: #111111; }
+      .CodeMirror .code-block-line {
+        background-color: #111111;
+      }
     }
 
-    #file-manager #file-manager-resize { background-color: #002b36; }
-
-    #editor .CodeMirror,
-    #file-list div.container div.list-item p.filename { color: #839496; }
-
-    #file-list {
-      background-color: #073642;
-
-      div.list-item { border-bottom: 1px solid #586e75; }
+    #editor .CodeMirror {
+      color: #839496;
     }
 
-    .cm-quote, .cm-link, .cm-strong, .cm-em { color: #93a1a1; }
+    .cm-quote,
+    .cm-link,
+    .cm-strong,
+    .cm-em {
+      color: #93a1a1;
+    }
 
-    .citeproc-citation { color: #dc322f; }
+    .citeproc-citation {
+      color: #dc322f;
+    }
   }
 }

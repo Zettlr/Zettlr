@@ -14,6 +14,21 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Switch
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component displays a switch, that is: A glorified,
+ *                  bigger checkbox input.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'SwitchField',
   props: {

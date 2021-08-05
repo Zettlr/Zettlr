@@ -21,6 +21,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Radio
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component contains a generic radio input.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'RadioControl',
   props: {
@@ -113,10 +127,12 @@ body.darwin {
     width: @input-size;
     height: @input-size;
     padding: 0;
+    margin-right: 5px;
 
     .toggle {
       border: 1px solid rgb(179, 179, 179);
       border-radius: @input-size;
+      width: @input-size; // Prevent squashed inputs for long labels
       background-color: white;
 
       // Inner part
@@ -180,6 +196,7 @@ body.win32 {
     .toggle {
       position: absolute;
       cursor: pointer;
+      width: @input-size; // Prevent too small radio buttons
       top: 0;
       left: 0;
       right: 0;

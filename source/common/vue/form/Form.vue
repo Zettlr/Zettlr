@@ -48,6 +48,7 @@
           v-bind:key="f_idx"
           v-bind:value="getModelValue(field.model)"
           v-bind:label="field.label"
+          v-bind:reset="field.reset"
           v-bind:name="field.model"
           v-bind:filter="field.filter"
           v-on:input="$emit('input', field.model, $event)"
@@ -58,6 +59,8 @@
           v-bind:value="getModelValue(field.model)"
           v-bind:label="field.label"
           v-bind:name="field.model"
+          v-bind:disabled="field.disabled"
+          v-bind:info="field.info"
           v-on:input="$emit('input', field.model, $event)"
         ></CheckboxInput>
         <SwitchInput
@@ -90,6 +93,7 @@
           v-if="field.type === 'list'"
           v-bind:key="f_idx"
           v-bind:value="getModelValue(field.model)"
+          v-bind:label="field.label"
           v-bind:labels="field.labels"
           v-bind:name="field.model"
           v-bind:deletable="field.deletable"
@@ -107,18 +111,38 @@
           v-bind:name="field.model"
           v-on:input="$emit('input', field.model, $event)"
         ></TokenInput>
-        <Theme
-          v-if="field.type === 'theme'"
+        <!-- NOTE: For sliders we only listen to change events -->
+        <SliderInput
+          v-if="field.type === 'slider'"
           v-bind:key="f_idx"
-          v-bind:options="field.options"
-          v-on:input="$emit('input', field.model, $event)"
-        ></Theme>
+          v-bind:value="getModelValue(field.model)"
+          v-bind:label="field.label"
+          v-bind:name="field.model"
+          v-on:change="$emit('input', field.model, $event)"
+        ></SliderInput>
       </template>
     </fieldset>
   </div>
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Form
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component enables complex forms to be instantiated on a
+ *                  schema-basis. This means: You define a simple schema, and
+ *                  all markup will be handled by this component. See the
+ *                  preferences window for a complete example.
+ *
+ * END HEADER
+ */
+
 // Reference for how to do all this stuff dynamically:
 // https://css-tricks.com/creating-vue-js-component-instances-programmatically/
 
@@ -131,9 +155,9 @@ import CheckboxInput from './elements/Checkbox.vue'
 import SwitchInput from './elements/Switch.vue'
 import RadioInput from './elements/Radio.vue'
 import SelectInput from './elements/Select.vue'
+import SliderInput from './elements/Slider.vue'
 import ListInput from './elements/List.vue'
 import TokenInput from './elements/TokenList.vue'
-import Theme from './elements/Theme.vue'
 
 export default {
   name: 'Form',
@@ -147,9 +171,9 @@ export default {
     SwitchInput,
     RadioInput,
     SelectInput,
+    SliderInput,
     ListInput,
-    TokenInput,
-    Theme
+    TokenInput
   },
   props: {
     model: {
@@ -176,34 +200,5 @@ export default {
 </script>
 
 <style lang="less">
-body.win32 {
-  fieldset {
-    border: none;
-  }
 
-  // Generic inputs
-  input, select, textarea, button {
-    background-color: white;
-    border: 2px solid rgb(90, 90, 90);
-    border-radius: 0px;
-    padding: 8px 8px;
-  }
-}
-
-body.linux {
-  fieldset {
-    border: none;
-  }
-
-  input, select, textarea, button {
-    border-radius: 4px;
-    padding: 4px;
-    border-width: 1px;
-    border-color: rgb(180, 180, 180);
-  }
-
-  button {
-    background-color: rgb(230, 230, 230);
-  }
-}
 </style>

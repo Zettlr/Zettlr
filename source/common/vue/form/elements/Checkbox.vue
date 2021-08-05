@@ -1,20 +1,46 @@
 <template>
-  <div class="form-control cb-group">
-    <label class="checkbox">
-      <input
-        v-bind:id="fieldID"
-        type="checkbox" v-bind:name="name" value="yes"
-        v-bind:checked="value"
-        v-bind:disabled="disabled"
-        v-on:input="$emit('input', $event.target.checked)"
+  <div>
+    <div class="form-control cb-group">
+      <label class="checkbox"
+             v-bind:disabled="disabled"
       >
-      <span class="checkmark"></span>
-    </label>
-    <label v-if="label" v-bind:for="fieldID" v-html="label"></label>
+        <input
+          v-bind:id="fieldID"
+          type="checkbox"
+          v-bind:name="name"
+          value="yes"
+          v-bind:checked="value"
+          v-bind:disabled="disabled"
+          v-on:input="$emit('input', $event.target.checked)"
+        >
+        <span class="checkmark"></span>
+      </label>
+      <label v-if="label" v-bind:for="fieldID" v-bind:disabled="disabled"
+             v-html="label"
+      >
+      </label>
+    </div>
+    <div v-if="info" class="form-control info">
+      {{ info }}
+    </div>
   </div>
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Checkbox
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component represents a generic checkbox
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'CheckboxField',
   props: {
@@ -33,6 +59,10 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    info: {
+      type: String,
+      default: ''
     }
   },
   computed: {
@@ -96,6 +126,26 @@ body {
         opacity: 1;
       }
     }
+
+    &[disabled] {
+      input:checked ~ .checkmark {
+        background-color: lightgrey;
+      }
+      input:checked ~ .checkmark {
+        border-color: rgb(90, 90, 90);
+      }
+    }
+  }
+
+  label {
+    &[disabled] {
+      color: grey;
+    }
+  }
+
+  div.info {
+    color: grey;
+    font-size: 80%;
   }
 }
 

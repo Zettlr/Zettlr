@@ -7,6 +7,7 @@
     'form-control': true
   }"
   >
+    <label v-if="label !== ''" v-html="label"></label>
     <input
       v-if="searchable"
       v-model="query"
@@ -17,11 +18,11 @@
       <!-- Head row -->
       <thead>
         <tr>
-          <th v-for="(label, idx) in columnLabels" v-bind:key="idx">
-            {{ label }}
+          <th v-for="(colLabel, idx) in columnLabels" v-bind:key="idx">
+            {{ colLabel }}
           </th>
           <th v-if="deletable || addable">
-            Actions <!-- TODO: Translate -->
+            {{ actionsLabel }}
           </th>
         </tr>
       </thead>
@@ -88,32 +89,35 @@
         </tr>
         <!-- If users may add something, allow them to do so here -->
         <tr v-if="addable">
-          <td v-for="(label, idx) in columnLabels" v-bind:key="idx">
+          <td v-for="(colLabel, idx) in columnLabels" v-bind:key="idx">
             <Checkbox
               v-if="columnType(idx) === 'boolean'"
               ref="add_row"
-              v-bind:placeholder="label"
+              v-bind:placeholder="colLabel"
               v-on:input="valuesToAdd[idx] = $event"
+              v-on:keydown.enter="handleAddition()"
             >
             </Checkbox>
             <NumberControl
               v-else-if="columnType(idx) === 'number'"
               ref="add_row"
-              v-bind:placeholder="label"
+              v-bind:placeholder="colLabel"
               v-on:input="valuesToAdd[idx] = $event"
+              v-on:keydown.enter="handleAddition()"
             >
             </NumberControl>
             <TextControl
               v-else
               ref="add_row"
-              v-bind:placeholder="label"
+              v-bind:placeholder="colLabel"
               v-on:input="valuesToAdd[idx] = $event"
+              v-on:keydown.enter="handleAddition()"
             >
             </TextControl>
           </td>
           <td style="text-align: center">
             <button v-on:click="handleAddition()">
-              Add <!-- TODO: Translate -->
+              {{ addButtonLabel }}
             </button>
           </td>
         </tr>
@@ -123,9 +127,25 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        List
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component displays a tabled list
+ *
+ * END HEADER
+ */
+
 import Checkbox from './Checkbox'
 import TextControl from './Text'
 import NumberControl from './Number'
+
+import { trans } from '../../../i18n-renderer'
 
 export default {
   name: 'ListField',
@@ -145,6 +165,10 @@ export default {
     value: {
       type: Array,
       default: function () { return [] }
+    },
+    label: {
+      type: String,
+      default: ''
     },
     /**
      * Optional user-defined labels for the columns
@@ -220,7 +244,6 @@ export default {
      * @return  {string}  Can be simpleArray, multiArray, or object.
      */
     valueType: function () {
-      console.log('Value changed!')
       if (this.value.length === 0) {
         return 'simpleArray'
       }
@@ -241,6 +264,12 @@ export default {
         return 'object'
       }
     },
+    addButtonLabel: function () {
+      return trans('system.common.list_add_button')
+    },
+    actionsLabel: function () {
+      return trans('system.common.list_actions_label')
+    },
     columnLabels: function () {
       if (this.labels.length !== 0) {
         return this.labels // The user provided labels for us
@@ -259,7 +288,9 @@ export default {
         }
         return labels
       }
-      return [1] // Apparently we have a simple array, so exactly one column
+
+      // Apparently we have a simple array, so exactly one column
+      return [trans('system.common.list_default_column_label')]
     },
     platform: function () {
       return process.platform
@@ -406,7 +437,7 @@ export default {
       this.$refs['add_row'].forEach(elem => { elem.$refs['input'].value = '' })
     },
     handleDoubleClick: function (row, col) {
-      if (this.isColumnEditable(col)) {
+      if (this.isColumnEditable(col) === true) {
         this.editing.row = row
         this.editing.col = col
       }
@@ -423,10 +454,11 @@ export default {
 // Maps to AppKit's TableView. See:
 // https://developer.apple.com/design/human-interface-guidelines/macos/windows-and-views/table-views/
 div.table-view {
-  .filter {
-    // Optional filter field
-  }
+  // .filter {
+  //   // Optional filter field
+  // }
   break-inside: avoid; // Avoid breaking table views when inside column views
+  margin: 5px;
 
   table {
     // font-family: @font-system;

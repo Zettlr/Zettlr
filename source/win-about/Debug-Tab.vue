@@ -38,10 +38,23 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        DebugTab
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file contains the debug tab for the about window.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'DebugTab',
   data: function () {
-    console.log(process)
     return {
       version: global.config.get('version'),
       uuid: global.config.get('uuid'),

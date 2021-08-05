@@ -21,6 +21,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        LogViewer
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     The main component for the log viewer.
+ *
+ * END HEADER
+ */
+
 import Message from './message.vue'
 import WindowChrome from '../common/vue/window/Chrome.vue'
 
@@ -46,19 +60,19 @@ export default {
   computed: {
     filteredMessages: function () {
       const preFiltered = this.messages.filter(message => {
-        if (this.includeVerbose && message.level === 1) {
+        if (this.includeVerbose === true && message.level === 1) {
           return true
         }
 
-        if (this.includeInfo && message.level === 2) {
+        if (this.includeInfo === true && message.level === 2) {
           return true
         }
 
-        if (this.includeWarning && message.level === 3) {
+        if (this.includeWarning === true && message.level === 3) {
           return true
         }
 
-        if (this.includeError && message.level === 4) {
+        if (this.includeError === true && message.level === 4) {
           return true
         }
 
@@ -143,7 +157,7 @@ export default {
       this.nextIndex += newLogs.length
       this.messages = this.messages.concat(newLogs)
       // Vue will update itself only on the next tick, so let's await that
-      if (shouldScroll) {
+      if (shouldScroll === true) {
         this.$nextTick(() => {
           this.scrollToBottom()
         })

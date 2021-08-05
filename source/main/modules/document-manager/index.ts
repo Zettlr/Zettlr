@@ -20,17 +20,12 @@ import path from 'path'
 import chokidar from 'chokidar'
 import { CodeFileDescriptor, CodeFileMeta, MDFileDescriptor, MDFileMeta } from '../fsal/types'
 import { FSALCodeFile, FSALFile } from '../fsal'
+import { codeFileExtensions, mdFileExtensions } from '../../../common/get-file-extensions'
+import generateFilename from '../../../common/util/generate-filename'
+import { app } from 'electron'
 
-const ALLOWED_CODE_FILES = [
-  '.tex'
-]
-
-const MARKDOWN_FILES = [
-  '.md',
-  '.rmd',
-  '.markdown',
-  '.txt'
-]
+const ALLOWED_CODE_FILES = codeFileExtensions(true)
+const MARKDOWN_FILES = mdFileExtensions(true)
 
 export default class DocumentManager extends EventEmitter {
   private _loadedDocuments: Array<MDFileDescriptor|CodeFileDescriptor>
@@ -82,14 +77,15 @@ export default class DocumentManager extends EventEmitter {
       }
 
       if (event === 'unlink') {
-        this._loadedDocuments.splice(this._loadedDocuments.indexOf(descriptor), 1)
-        this.emit('update', 'openFiles')
-        global.config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
+        // Just close the file (also handles activeFile and config changes)
+        this.closeFile(descriptor)
       } else if (event === 'change') {
         this._loadFile(p)
           .then(newDescriptor => {
             if (newDescriptor.modtime !== descriptor.modtime) {
-              // Notify the caller, if the file has actually changed on disk.
+              // Replace the old descriptor with the newly loaded one
+              this._loadedDocuments.splice(this._loadedDocuments.indexOf(descriptor), 1, newDescriptor)
+              // Notify the caller, that the file has actually changed on disk.
               this.emit('update', 'openFileRemotelyChanged', newDescriptor)
             }
           })
@@ -104,11 +100,21 @@ export default class DocumentManager extends EventEmitter {
     // Loads in all openFiles
     const openFiles: string[] = global.config.get('openFiles')
     for (const filePath of openFiles) {
-      const descriptor = await FSALFile.parse(filePath, null, null)
-      this._loadedDocuments.push(descriptor)
+      try {
+        const descriptor = await this._loadFile(filePath)
+        this._loadedDocuments.push(descriptor)
+      } catch (err) {
+        global.log.error(`[Document Manager] Boot: Could not load file ${filePath}: ${String(err.message)}`, err)
+      }
     }
 
-    this._watcher.add(openFiles)
+    const actuallyLoadedPaths = this._loadedDocuments.map(file => file.path)
+
+    this._watcher.add(actuallyLoadedPaths)
+
+    this.emit('update', 'openFiles')
+    // In case some of the files couldn't be loaded, make sure to re-set the config option accordingly.
+    global.config.set('openFiles', actuallyLoadedPaths)
 
     // And make the correct file active
     const activeFile: string = global.config.get('activeFile')
@@ -116,16 +122,18 @@ export default class DocumentManager extends EventEmitter {
 
     if (activeDescriptor !== undefined) {
       this._activeFile = activeDescriptor
+      this.emit('update', 'activeFile')
     } else if (this._loadedDocuments.length > 0) {
       // Make another file active
       this._activeFile = this._loadedDocuments[0]
-      // TODO: global.recentDocs.add(this._fsal.getMetadataFor(activeFile))
+      this.emit('update', 'activeFile')
     }
   }
 
   /**
-   * Called by the main object once to set the open files for the editor to pull.
-   * @param {Array} fileArray An array with paths to open
+   * Allows to set the open files.
+   *
+   * @param {Array<MDFileDescriptor|CodeFileDescriptor>} fileArray  An array with paths to open
    */
   public set openFiles (files: Array<MDFileDescriptor|CodeFileDescriptor>) {
     this._watcher.unwatch(this._loadedDocuments.map(file => file.path))
@@ -136,7 +144,9 @@ export default class DocumentManager extends EventEmitter {
   }
 
   /**
-   * Returns a list of paths for all open files
+   * Returns all open files
+   *
+   * @returns {Array<MDFileDescriptor|CodeFileDescriptor>} A list of open file descriptors
    */
   public get openFiles (): Array<MDFileDescriptor|CodeFileDescriptor> {
     return this._loadedDocuments
@@ -201,9 +211,13 @@ export default class DocumentManager extends EventEmitter {
     const isMD = MARKDOWN_FILES.includes(path.extname(filePath).toLowerCase())
 
     if (isCode) {
-      return await FSALCodeFile.parse(filePath, null)
+      const file = await FSALCodeFile.parse(filePath, null)
+      app.addRecentDocument(file.path)
+      return file
     } else if (isMD) {
-      return await FSALFile.parse(filePath, null)
+      const file = await FSALFile.parse(filePath, null)
+      app.addRecentDocument(file.path)
+      return file
     } else {
       throw new Error(`Could not load file ${filePath}: Invalid path provided`)
     }
@@ -287,9 +301,9 @@ export default class DocumentManager extends EventEmitter {
     if (descriptor === null && this._activeFile !== null) {
       this._activeFile = null
       global.citeproc.loadMainDatabase()
-      global.config.set('activeFile', this.activeFile)
+      global.config.set('activeFile', null)
       this.emit('update', 'activeFile')
-    } else if (descriptor !== null && descriptor !== this.activeFile) {
+    } else if (descriptor !== null && descriptor.path !== this.activeFile?.path) {
       const file = this.openFiles.find(file => file.path === descriptor.path)
 
       if (file !== undefined && this._loadedDocuments.includes(file)) {
@@ -312,17 +326,17 @@ export default class DocumentManager extends EventEmitter {
             .finally(() => {
               // No matter what, we need to make the file active
               this._activeFile = file
-              global.config.set('activeFile', this.activeFile)
+              global.config.set('activeFile', this._activeFile.path)
               this.emit('update', 'activeFile')
             })
             .catch(err => global.log.error(`[DocumentManager] Could not load file-specific database ${dbFile}`, err))
         } else {
           this._activeFile = file
-          global.config.set('activeFile', this.activeFile)
+          global.config.set('activeFile', this._activeFile.path)
           this.emit('update', 'activeFile')
         }
       } else {
-        console.error('Could not set active file. Either file was null or not in openFiles')
+        console.error('Could not set active file. Either file was null or not in openFiles', descriptor, this.activeFile)
       }
     } // Else: No update necessary
   }
@@ -416,16 +430,19 @@ export default class DocumentManager extends EventEmitter {
     }
 
     // The appendix of the filename will be a number related to the amount of
-    // untitled files in the array
-    const post = this.openFiles.filter(f => f.dir === ':memory:').length + 1
+    // duplicate files in the open files array
+    const fname = generateFilename()
+    const post = (this.openFiles.filter(f => f.name === fname).length > 0) ? '-1' : ''
+    // Splice the "post" into the filename
+    const finalFname = path.basename(fname, path.extname(fname)) + post + path.extname(fname)
 
     // Now create the file object. It's basically treated like a root file, but
     // with no real location on the file system associated.
     const file: MDFileDescriptor = {
       parent: null,
-      name: `Untitled-${post}.md`,
+      name: finalFname,
       dir: ':memory:', // Special location
-      path: `:memory:/Untitled-${post}.md`,
+      path: ':memory:/' + finalFname,
       // NOTE: Many properties are strictly speaking invalid
       hash: 0,
       size: 0,
@@ -454,20 +471,15 @@ export default class DocumentManager extends EventEmitter {
   }
 
   public async saveFile (src: MDFileDescriptor|CodeFileDescriptor, content: string): Promise<void> {
-    // NOTE: Generates 1x change
-    // this._watchdog.ignoreEvents([{ 'event': 'change', 'path': src.path }])
-
     if (src.type === 'file') {
       await FSALFile.save(src, content, null)
     } else {
       await FSALCodeFile.save(src, content, null)
     }
 
-    // this._recordFiletreeChange('change', src.path)
-
     // Notify that a file has saved, which strictly speaking does not
     // modify the openFiles array, but does change the modification flag.
-    this.emit('update', 'fileSaved', { fileHash: src.hash })
+    this.emit('update', 'fileSaved', src)
 
     // Also, make sure to (re)load the file's bibliography file, if applicable.
     if (src.type === 'file' && src.frontmatter !== null && 'bibliography' in src.frontmatter) {

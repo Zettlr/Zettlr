@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-import { app, BrowserWindow, FileFilter, ipcMain, MessageBoxReturnValue } from 'electron'
+import { app, BrowserWindow, clipboard, FileFilter, ipcMain, MessageBoxReturnValue, nativeImage } from 'electron'
 import path from 'path'
 import fs from 'fs'
 
@@ -23,19 +23,20 @@ import WindowManager from './modules/window-manager'
 import DocumentManager from './modules/document-manager'
 
 import FSAL from './modules/fsal'
-import { trans, findLangCandidates } from '../common/i18n'
+import { trans } from '../common/i18n-main'
+import findLangCandidates from '../common/util/find-lang-candidates'
 import ignoreDir from '../common/util/ignore-dir'
 import ignoreFile from '../common/util/ignore-file'
 import isDir from '../common/util/is-dir'
 import isFile from '../common/util/is-file'
 import { commands } from './commands'
-import hash from '../common/util/hash'
 
 import { CodeFileDescriptor, CodeFileMeta, DirDescriptor, MDFileDescriptor, MDFileMeta } from './modules/fsal/types'
 import broadcastIpcMessage from '../common/util/broadcast-ipc-message'
+import extractFilesFromArgv from '../app/util/extract-files-from-argv'
 
 export default class Zettlr {
-  isBooting: boolean
+  isQuitting: boolean
   editFlag: boolean
   _openPaths: any
   _fsal: FSAL
@@ -49,7 +50,9 @@ export default class Zettlr {
     * @param {electron.app} parentApp The app object.
     */
   constructor () {
-    this.isBooting = true // Only is true until the main process has fully loaded
+    // Is the app quitting? True if quitting via menu, tray or keyboard shortcut.
+    // False if titlebar `x` close, and all other times.
+    this.isQuitting = false
     this.editFlag = false // Is the current opened file edited?
     this._openPaths = [] // Holds all currently opened paths.
     this.isShownFor = [] // Contains all files for which remote notifications are currently shown
@@ -64,9 +67,8 @@ export default class Zettlr {
       runCommand: async (command: string, payload?: any) => {
         return await this.runCommand(command, payload)
       },
-      // Flag indicating whether or not the application is booting
-      isBooting: () => {
-        return this.isBooting
+      isQuitting: () => {
+        return this.isQuitting
       },
       showLogViewer: () => {
         this._windowManager.showLogWindow()
@@ -77,9 +79,6 @@ export default class Zettlr {
       showPreferences: () => {
         this._windowManager.showPreferences()
       },
-      showCustomCSS: () => {
-        this._windowManager.showCustomCSS()
-      },
       showAboutWindow: () => {
         this._windowManager.showAboutWindow()
       },
@@ -89,19 +88,8 @@ export default class Zettlr {
       showTagManager: () => {
         this._windowManager.showTagManager()
       },
-      // TODO: Match the signatures of fileUpdate and dirUpdate
-      fileUpdate: (oldHash: number, fileMetadata: any) => {
-        if (typeof fileMetadata === 'number') {
-          // NOTE: This will become permanent later on
-          fileMetadata = this._fsal.findFile(fileMetadata)
-        }
-        // TODO: DEAD CODE
-      },
-      dirUpdate: (oldHash: number, newHash: number) => {
-        // TODO DEAD CODE
-      },
-      notifyChange: (msg: string) => {
-        global.notify.normal(msg)
+      showAnyWindow: () => {
+        this._windowManager.showAnyWindow()
       },
       findFile: (prop: any) => {
         return this._fsal.findFile(prop)
@@ -148,13 +136,14 @@ export default class Zettlr {
     // listen to close-events on the main window, we should be able to handle
     // this, if we ever switched to the auto updater.
     app.on('before-quit', (event) => {
+      this.isQuitting = true
       if (!this._documentManager.isClean()) {
         // Immediately prevent quitting ...
         event.preventDefault()
+        this.isQuitting = false
         // ... and ask the user if we should *really* quit.
         this._windowManager.askSaveChanges()
           .then(result => {
-            // TODO translate and agree on buttons!
             // 0 = 'Close without saving changes',
             // 1 = 'Save changes'
             if (result.response === 0) {
@@ -184,7 +173,6 @@ export default class Zettlr {
       if (!this._documentManager.isClean()) {
         this.askSaveChanges()
           .then(result => {
-            // TODO translate and agree on buttons!
             // 0 = 'Close without saving changes',
             // 1 = 'Save changes'
             if (result.response === 0) {
@@ -203,25 +191,23 @@ export default class Zettlr {
       return this._documentManager.isClean()
     })
 
+    this._windowManager.on('main-window-closed', () => {
+      // Reset the FSAL state history so that any new window will have a clean start
+      this._fsal.resetFiletreeHistory()
+    })
+
     // Listen to document manager changes
     this._documentManager.on('update', (scope: string, changedDescriptor?: MDFileDescriptor|CodeFileDescriptor) => {
       switch (scope) {
         case 'fileSaved':
-          if (!this.isModified()) {
-            this._windowManager.setModified(false)
-          }
+        case 'openFiles':
+          this._windowManager.setModified(this.isModified())
           broadcastIpcMessage('fsal-state-changed', 'openFiles') // TODO: Do we need this?
           break
         case 'activeFile':
           // The active file has changed; set it in the config and notify the
           // renderer process to switch to this file again.
           broadcastIpcMessage('fsal-state-changed', 'activeFile')
-          break
-        case 'openFiles':
-          broadcastIpcMessage('fsal-state-changed', 'openFiles')
-          if (!this.isModified()) {
-            this._windowManager.setModified(false)
-          }
           break
         case 'openFileRemotelyChanged':
           if (changedDescriptor !== undefined) {
@@ -247,23 +233,6 @@ export default class Zettlr {
           global.config.set('openDirectory', (openDir !== null) ? openDir.path : null)
           broadcastIpcMessage('fsal-state-changed', 'openDirectory')
           break
-      }
-    })
-
-    // Handle Quicklook window requests for files TODO: Move this someplace else!
-    ipcMain.handle('quicklook-controller', async (event, payload) => {
-      const { command, hash } = payload
-      // Last possibility: A quicklook window has requested a file. In this case
-      // we mustn't obliterate the "event" because this way we don't need to
-      // search for the window.
-      if (command === 'get-file') {
-        const fileDescriptor = this._fsal.findFile(hash)
-        if (fileDescriptor === null) {
-          global.log.error(`[Application] Could not get file descriptor for file ${String(hash)}.`)
-          return
-        }
-        const fileMeta = await this._fsal.getFileContents(fileDescriptor)
-        return fileMeta
       }
     })
 
@@ -325,42 +294,64 @@ export default class Zettlr {
     // main window.
     this.openWindow()
 
-    let start = Date.now()
+    // Start a timer to measure how long the roots take to load.
+    const start = Date.now()
+
+    // A note on allPromises and the Promise.all().finally()-chain below:
+    // In this function we have two main tasks: Load the file tree and the
+    // document manager. Since both processes are isolated from each other,
+    // loading the FSAL before the DocumentManager could lead to visual lag,
+    // just as vice versa (if the user is a maniac and has, like, 100 files
+    // open). Since asynchronous code is written as if it were procedural using
+    // async/await, we must forcefully detach both from each other. We do so by
+    // simply not awaiting the promises the FSAL generates, and collect them.
+    // Then, we stack all remaining set up code into the finally() below while
+    // the document manager is simply awaited. This way everything loads as fast
+    // as it can, and thus users with many files (as me) will have their
+    // documents load slightly before the file tree is fully visible.
+    const allPromises: Array<Promise<boolean>> = []
+
     // First: Initially load all paths
     for (let p of global.config.get('openPaths') as string[]) {
-      try {
-        await this._fsal.loadPath(p)
-      } catch (e) {
+      const prom = this._fsal.loadPath(p)
+      prom.catch(e => {
         console.error(e)
         global.log.info(`[Application] Removing path ${p}, as it does no longer exist.`)
         global.config.removePath(p)
-      }
+      })
+
+      allPromises.push(prom)
     }
 
-    // Set the pointers either to null or last opened dir/file
-    let openDirectory = null
+    Promise.all(allPromises).finally(() => {
+      // We allow some promises to fail, but after all have been dealt with,
+      // we need to continue the set up process
 
-    try {
-      openDirectory = this._fsal.findDir(global.config.get('openDirectory'))
-    } catch (e) {
-      console.log('Error on finding last dir or file', e)
-    }
+      // Set the pointers either to null or last opened dir/file
+      const openDir = global.config.get('openDirectory')
+      if (typeof openDir === 'string') {
+        try {
+          const descriptor = this._fsal.findDir(openDir)
+          this._fsal.openDirectory = descriptor
+        } catch (err) {
+          global.log.error(`[Application] Could not set open directory ${openDir}.`, err)
+        }
+      } // else: openDir was null
+
+      // Verify the integrity of the targets
+      global.targets.verify()
+
+      // Finally: Open any new files we have in the process arguments.
+      this.handleAddRoots(extractFilesFromArgv())
+        .finally(() => {
+          // Now we are done.
+          const duration = Date.now() - start
+          global.log.info(`Loaded all roots in ${duration / 1000} seconds`)
+        })
+    })
 
     // Pre-set the state based on the configuration
     await this._documentManager.init()
-
-    this._fsal.openDirectory = openDirectory
-    // Second: handleAddRoots with global.filesToOpen
-    await this.handleAddRoots(global.filesToOpen) // TODO
-
-    // Reset the global so that no old paths are re-added
-    global.filesToOpen = []
-    // Verify the integrity of the targets after all paths have been loaded
-    global.targets.verify()
-    this.isBooting = false // Now we're done booting
-    let duration = Date.now() - start
-    duration /= 1000 // Convert to seconds
-    global.log.info(`Loaded all roots in ${duration} seconds`)
 
     // Finally, initiate a first check for updates
     global.updates.check()
@@ -374,7 +365,6 @@ export default class Zettlr {
     if (!this._documentManager.isClean()) {
       global.log.error('[Application] Attention! The FSAL reported there were unsaved changes to certain files. This indicates a critical logical bug in the application!')
     }
-    // TODO: Document Manager shutdown
     this._windowManager.shutdown()
     // Finally shut down the file system
     await this._fsal.shutdown()
@@ -395,6 +385,9 @@ export default class Zettlr {
       return await this.openWorkspace()
     } else if (command === 'open-root-file') {
       return await this.openRootFile()
+    } else if (command === 'handle-drop') {
+      // Handle any files dropped onto the editor
+      return await this.handleAddRoots(payload)
     } else if (command === 'get-statistics-data') {
       return this._fsal.statistics
     } else if (command === 'get-filetree-events') {
@@ -436,6 +429,22 @@ export default class Zettlr {
     } else if (command === 'get-open-files') {
       // Return all open files as their metadata objects
       return this._documentManager.openFiles.map(file => this._fsal.getMetadataFor(file))
+    } else if (command === 'copy-img-to-clipboard') {
+      // We should copy the contents of an image file to clipboard. Payload
+      // contains the image path. We can rely on the Electron framework here.
+      let imgPath: string = payload
+      if (imgPath.startsWith('safe-file://')) {
+        imgPath = imgPath.replace('safe-file://', '')
+      } else if (imgPath.startsWith('file://')) {
+        imgPath = imgPath.replace('file://', '')
+      }
+
+      const img = nativeImage.createFromPath(imgPath)
+
+      if (!img.isEmpty()) {
+        clipboard.writeImage(img)
+      }
+      return true
     } else if (command === 'get-file-contents') {
       // First, attempt to get the contents from the document manager
       const file = this._documentManager.openFiles.find(file => file.path === payload)
@@ -616,11 +625,11 @@ export default class Zettlr {
   //   return console.log(`Marking directory ${dir.name} as dead!`)
   // }
 
-  findFile (arg: string | number): MDFileDescriptor | CodeFileDescriptor | null {
+  findFile (arg: string): MDFileDescriptor | CodeFileDescriptor | null {
     return this._fsal.findFile(arg)
   }
 
-  findDir (arg: string | number): DirDescriptor | null {
+  findDir (arg: string): DirDescriptor | null {
     return this._fsal.findDir(arg)
   }
 
@@ -631,14 +640,16 @@ export default class Zettlr {
    * @param   {boolean}  newTab    Optional. If true, will always prevent exchanging the currently active file.
    */
   async openFile (filePath: string, newTab?: boolean): Promise<void> {
-    // TODO: Make active?
+    global.log.info(`[Application] Opening file ${filePath}`)
     // Add the file's metadata object to the recent docs
     // We only need to call the underlying function, it'll trigger a state
     // change event and will set in motion all other necessary processes.
+
+    // Remember if the file that should be opened was already opened. Because in
+    // this case we shouldn't close the active file (since we're not opening any
+    // new tabs in any case.)
+    const isFileAlreadyOpen = this._documentManager.openFiles.find(e => e.path === filePath) !== undefined
     const file = await this._documentManager.openFile(filePath)
-    global.recentDocs.add(this._fsal.getMetadataFor(file))
-    // Also, add to last opened files to persist during reboots
-    global.config.addFile(file.path)
 
     // The user determines if we should avoid new tabs. If we should do so,
     // only open new tabs if the user has checked this setting.
@@ -649,7 +660,10 @@ export default class Zettlr {
       // have an active file to close.
       const activeFile = this._documentManager.activeFile
 
-      if (activeFile !== null && !activeFile.modified) {
+      // However, one caveat: If the new file that we are about to set active
+      // was already open somewhere, we don't have to close this one, but rather
+      // switch to the next file.
+      if (activeFile !== null && !activeFile.modified && !isFileAlreadyOpen) {
         this._documentManager.closeFile(activeFile)
       }
     }
@@ -665,22 +679,6 @@ export default class Zettlr {
   }
 
   /**
-    * Remove the modification flag.
-    * @return {void} Nothing to return.
-    */
-  clearModified (hash: number): void {
-    let file = this._fsal.findFile(hash)
-    if (file !== null) {
-      this._documentManager.markClean(file)
-      if (this._documentManager.isClean()) {
-        this._windowManager.setModified(false)
-      }
-    } else {
-      global.log.warning('The renderer reported a saved file, but the FSAL did not find that file.')
-    }
-  }
-
-  /**
    * This function prepares the app on first start, which includes copying over the tutorial.
    */
   _prepareFirstStart (): void {
@@ -692,11 +690,14 @@ export default class Zettlr {
       .map(e => { return { 'tag': e, 'path': path.join(tutorialPath, e) } })
       .filter(e => isDir(e.path))
 
-    let { exact, close } = findLangCandidates(global.config.get('appLang'), candidates) as any
+    let { exact, close } = findLangCandidates(global.config.get('appLang'), candidates)
 
     let tutorial = path.join(tutorialPath, 'en')
-    if (exact) tutorial = exact.path
-    if (!exact && close) tutorial = close.path
+    if (exact !== undefined) {
+      tutorial = exact.path
+    } else if (close !== undefined) {
+      tutorial = close.path
+    }
 
     // Now we have both a target and a language candidate, let's copy over the files!
     try {
@@ -717,9 +718,9 @@ export default class Zettlr {
       // Now the last thing to do is set it as open
       global.config.addPath(targetPath)
       // Also set the welcome.md as open
-      global.config.addFile(path.join(targetPath, 'welcome.md'))
+      global.config.set('openFiles', [path.join(targetPath, 'welcome.md')])
       // ALSO the directory needs to be opened
-      global.config.set('lastDir', hash(targetPath))
+      global.config.set('openDirectory', targetPath)
     }
   }
 

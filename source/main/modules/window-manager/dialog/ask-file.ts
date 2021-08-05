@@ -15,7 +15,7 @@
 import { app, BrowserWindow, dialog, FileFilter, OpenDialogOptions, OpenDialogReturnValue } from 'electron'
 import path from 'path'
 import isDir from '../../../../common/util/is-dir'
-import { trans } from '../../../../common/i18n'
+import { trans } from '../../../../common/i18n-main'
 
 /**
  * Displays a dialog to prompt the user for file paths
@@ -55,7 +55,8 @@ export default async function askFileDialog (win: BrowserWindow|null, filters: F
   }
 
   let response: OpenDialogReturnValue
-  if (win !== null) {
+  // DEBUG: Trying to resolve bug #1645, which seems to relate to modal status vs. promise awaits.
+  if (win !== null && [ 'darwin', 'win32' ].includes(process.platform)) {
     response = await dialog.showOpenDialog(win, opt)
   } else {
     response = await dialog.showOpenDialog(opt)

@@ -112,6 +112,21 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        ProjectsTab
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component simply offers some explanation to the "bigger"
+ *                  projects Zettlr uses under the hood.
+ *
+ * END HEADER
+ */
+
 import { trans } from '../common/i18n-renderer'
 
 export default {
@@ -128,8 +143,6 @@ export default {
 // Project boxes on the about panel
 
 // About dialog project boxes
-    div.project-box {
-    }
 div#project-container {
   display: flex;
   flex-wrap: wrap;

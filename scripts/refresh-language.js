@@ -4,14 +4,14 @@ const fs = require('fs')
 const path = require('path')
 const log = require('./console-colour.js')
 
-const targetDir = path.join(__dirname, '../source/common/lang')
+const targetDir = path.join(__dirname, '../static/lang')
 
 got('https://translate.zettlr.com/api/languages')
   .then((response) => {
     const languages = JSON.parse(response.body)
 
     for (const language of languages) {
-      log.info(`Downloading language ${language.bcp47} (${language.completion}%, updated ${languages.updated_at})`)
+      log.info(`Downloading language ${language.bcp47} (${language.completion}%, updated ${language.updated_at.split('T')[0]})`)
 
       got(language.download_url)
         .then((data) => {

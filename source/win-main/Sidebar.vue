@@ -1,59 +1,10 @@
 <template>
   <div id="sidebar">
-    <div id="sidebar-tabs" role="tablist">
-      <button
-        role="tab"
-        v-bind:aria-label="tocLabel"
-        data-target="sidebar-toc"
-        v-bind:class="{
-          'sidebar-tab': true,
-          'active': currentTab === 'toc'
-        }"
-        v-bind:title="tocLabel"
-        v-on:click="currentTab = 'toc'"
-      >
-        <clr-icon shape="indented-view-list" role="presentation"></clr-icon>
-      </button>
-      <button
-        role="tab"
-        v-bind:aria-label="referencesLabel"
-        data-target="sidebar-bibliography"
-        v-bind:class="{
-          'sidebar-tab': true,
-          'active': currentTab === 'references'
-        }"
-        v-bind:title="referencesLabel"
-        v-on:click="currentTab = 'references'"
-      >
-        <clr-icon shape="book" role="presentation"></clr-icon>
-      </button>
-      <button
-        role="tab"
-        v-bind:aria-label="relatedFilesLabel"
-        data-target="sidebar-related-files"
-        v-bind:class="{
-          'sidebar-tab': true,
-          'active': currentTab === 'relatedFiles'
-        }"
-        v-bind:title="relatedFilesLabel"
-        v-on:click="currentTab = 'relatedFiles'"
-      >
-        <clr-icon shape="file-group" role="presentation"></clr-icon>
-      </button>
-      <button
-        role="tab"
-        v-bind:aria-label="attachmentsLabel"
-        data-target="sidebar-files"
-        v-bind:class="{
-          'sidebar-tab': true,
-          'active': currentTab === 'attachments'
-        }"
-        v-bind:title="attachmentsLabel"
-        v-on:click="currentTab = 'attachments'"
-      >
-        <clr-icon shape="attachment" role="presentation"></clr-icon>
-      </button>
-    </div>
+    <Tabs
+      v-bind:tabs="tabs"
+      v-bind:current-tab="currentTab"
+      v-on:tab="currentTab = $event"
+    ></Tabs>
 
     <!-- Now the tab containers -->
 
@@ -61,9 +12,9 @@
       v-show="currentTab === 'relatedFiles'"
       role="tabpanel"
     >
-      <h1>Related files</h1>
+      <h1>{{ relatedFilesLabel }}</h1>
       <div v-if="relatedFiles.length === 0" class="related-files-container">
-        No related files.
+        {{ noRelatedFilesMessage }}
       </div>
       <div v-else class="related-files-container">
         <div
@@ -94,7 +45,7 @@
     >
       <!-- Other files contents -->
       <h1>
-        {{ attachmentsLabel }}
+        {{ otherFilesLabel }}
         <clr-icon
           id="open-dir-external"
           v-bind:title="openDirLabel"
@@ -160,8 +111,23 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Sidebar
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component renders the sidebar.
+ *
+ * END HEADER
+ */
+
 import { trans } from '../common/i18n-renderer'
 import { ClarityIcons } from '@clr/icons'
+import Tabs from '../common/vue/Tabs'
 
 const path = window.path
 const ipcRenderer = window.ipc
@@ -178,18 +144,47 @@ const FILETYPES_IMG = [
 
 export default {
   name: 'Sidebar',
+  components: {
+    Tabs
+  },
   props: {
   },
   data: function () {
     return {
+      tabs: [
+        {
+          icon: 'indented-view-list',
+          id: 'toc',
+          target: 'sidebar-toc',
+          label: this.tocLabel
+        },
+        {
+          icon: 'book',
+          id: 'references',
+          target: 'sidebar-bibliography',
+          label: this.referencesLabel
+        },
+        {
+          icon: 'file-group',
+          id: 'relatedFiles',
+          target: 'sidebar-related-files',
+          label: this.relatedFilesLabel
+        },
+        {
+          icon: 'attachment',
+          id: 'attachments',
+          target: 'sidebar-files',
+          label: this.attachmentsLabel
+        }
+      ],
       currentTab: 'toc',
       bibContents: undefined,
       relatedFiles: []
     }
   },
   computed: {
-    attachmentsLabel: function () {
-      return trans('gui.attachments')
+    otherFilesLabel: function () {
+      return trans('gui.other_files')
     },
     referencesLabel: function () {
       return trans('gui.citeproc.references_heading')
@@ -198,13 +193,16 @@ export default {
       return trans('gui.table_of_contents')
     },
     relatedFilesLabel: function () {
-      return 'Related Files' // TODO: Translate!
+      return trans('gui.related_files_label')
     },
     openDirLabel: function () {
       return trans('gui.attachments_open_dir')
     },
     noAttachmentsMessage: function () {
-      return trans('gui.no_attachments')
+      return trans('gui.no_other_files')
+    },
+    noRelatedFilesMessage: function () {
+      return trans('gui.no_related_files')
     },
     attachments: function () {
       const currentDir = this.$store.state.selectedDirectory
@@ -364,33 +362,22 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
 
-    // Enable tabs
-    #sidebar-tabs {
-      display: flex;
-      justify-content: space-evenly;
+    #open-dir-external {
+      padding: @button-margin;
+      border-radius: @border-radius;
+      display: inline-block;
+      width: @button-size;
+      height: @button-size;
 
-      .sidebar-tab {
-        flex-grow: 1;
-        text-align: center;
+      clr-icon {
+        width: @button-icon-size;
+        height: @button-icon-size;
       }
     }
 
-    #open-dir-external {
-        padding: @button-margin;
-        border-radius: @border-radius;
-        display: inline-block;
-        width: @button-size;
-        height: @button-size;
-
-        clr-icon {
-            width: @button-icon-size;
-            height: @button-icon-size;
-        }
-    }
-
     h1 {
-        padding: 10px;
-        font-size: 16px;
+      padding: 10px;
+      font-size: 16px;
     }
 
     p { padding: 10px; }
@@ -496,55 +483,22 @@ body {
   }
 }
 
-body.darwin div#sidebar {
-  // On macOS the toolbar is 40px high and the documents titlebar is 30px high,
-  // so we want to offset the sidebar by that.
-  top: calc(40px + 30px);
+body.darwin {
+  div#sidebar {
+    // On macOS the toolbar is 40px high and the documents titlebar is 30px high,
+    // so we want to offset the sidebar by that.
+    top: calc(40px + 30px);
+    background-color: transparent;
 
-  div.related-files-container {
-    div.related-file span.filename { border-radius: 4px; }
-  }
-
-  #sidebar-tabs {
-    justify-content: space-around;
-    padding: 10px 20px 0px 20px;
-
-    .sidebar-tab {
-      &.active { background-color: rgb(230, 230, 230); }
-
-      &:not(:first-child) {
-        border-top-left-radius: 0px;
-        border-bottom-left-radius: 0px;
-        border-left: 0px; // We only want 1px border between the buttons
-      }
-
-      &:not(:last-child) {
-        border-top-right-radius: 0px;
-        border-bottom-right-radius: 0px;
-      }
+    div.related-files-container {
+      div.related-file span.filename { border-radius: 4px; }
     }
   }
-}
 
-body.darwin.dark div#sidebar {
-  #sidebar-tabs .sidebar-tab {
-    &.active { background-color: rgb(120, 120, 120); }
-
-    &:not(:last-child) {
-      // We need a border here
-      border-right: 1px solid rgb(120, 120, 120);
+  &.dark {
+    div#sidebar {
+      background-color: transparent;
     }
-  }
-}
-
-body.win32 {
-
-  #sidebar #sidebar-tabs .sidebar-tab.active {
-    background-color: rgb(230, 230, 230);
-  }
-
-  &.dark #sidebar #sidebar-tabs .sidebar-tab.active {
-    background-color: rgb(120, 120, 120);
   }
 }
 </style>

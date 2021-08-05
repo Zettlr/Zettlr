@@ -1,22 +1,40 @@
-import EventEmitter from 'events'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        AssetsProvider
+ * CVM-Role:        Service Provider
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This provider manages general assets used by the app which
+ *                  are not handled by the dictionary or translation provider.
+ *
+ * END HEADER
+ */
+
 import path from 'path'
 import { app, ipcMain } from 'electron'
 import { promises as fs } from 'fs'
 import YAML from 'yaml'
+import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
 
-export default class AssetsProvider extends EventEmitter {
+export default class AssetsProvider {
   /**
    * Holds the path where defaults files can be found.
    *
    * @var {string}
    */
   private readonly _defaultsPath: string
+  private readonly _snippetsPath: string
+  private readonly _filterPath: string
 
   constructor () {
-    super()
     global.log.verbose('Assets provider starting up ...')
 
     this._defaultsPath = path.join(app.getPath('userData'), '/defaults')
+    this._snippetsPath = path.join(app.getPath('userData'), '/snippets')
+    this._filterPath = path.join(app.getPath('userData'), '/lua-filter')
 
     global.assets = {
       // These two global functions get the defaults as a JavaScript object,
@@ -26,6 +44,12 @@ export default class AssetsProvider extends EventEmitter {
       },
       setDefaultsFor: async (format: string, type: 'import'|'export', newDefaults: any) => {
         return await this.setDefaultsFor(format, type, newDefaults, false)
+      },
+      // This one simply returns all filter in the filter directory.
+      getAllFilters: async () => {
+        const files = await fs.readdir(path.join(__dirname, './assets/lua-filter'))
+        const filter = files.filter(file => /\.lua$/.test(file))
+        return filter.map(file => path.join(this._filterPath, file))
       }
     }
 
@@ -41,16 +65,29 @@ export default class AssetsProvider extends EventEmitter {
         return await this.getDefaultsFor(payload.format, payload.type, true)
       } else if (command === 'set-defaults-file') {
         return await this.setDefaultsFor(payload.format, payload.type, payload.contents, true)
+      } else if (command === 'restore-defaults-file') {
+        return await this.restoreDefaultsFor(payload.format, payload.type)
+      } else if (command === 'get-snippet') {
+        return await this.getSnippet(payload.name)
+      } else if (command === 'set-snippet') {
+        return await this.setSnippet(payload.name, payload.contents)
+      } else if (command === 'remove-snippet') {
+        return await this.removeSnippet(payload.name)
+      } else if (command === 'list-snippets') {
+        return await this.listSnippets()
+      } else if (command === 'rename-snippet') {
+        return await this.renameSnippet(payload.name, payload.newName)
       }
     })
   }
 
   async init (): Promise<void> {
-    const files = await fs.readdir(path.join(__dirname, './assets/defaults'))
-    const defaults = files.filter(file => /^(?:import|export)\..+?\.yaml$/.test(file))
     // First, ensure all required default files are where they should be.
     // Required are those defaults files which are in the assets/defaults directory
     // and correspond to the format (import|export).(writer|reader).yaml
+
+    const defaultsFiles = await fs.readdir(path.join(__dirname, './assets/defaults'))
+    const defaults = defaultsFiles.filter(file => /^(?:import|export)\..+?\.yaml$/.test(file))
     for (const file of defaults) {
       const absolutePath = path.join(this._defaultsPath, file)
       try {
@@ -58,6 +95,19 @@ export default class AssetsProvider extends EventEmitter {
       } catch (err) {
         global.log.warning(`[Assets Provider] Required defaults file ${file} not found. Copying ...`)
         await fs.copyFile(path.join(__dirname, './assets/defaults', file), absolutePath)
+      }
+    }
+
+    // Next, do the same for the filters
+    const filterFiles = await fs.readdir(path.join(__dirname, './assets/lua-filter'))
+    const filters = filterFiles.filter(file => /\.lua$/.test(file))
+    for (const file of filters) {
+      const absolutePath = path.join(this._filterPath, file)
+      try {
+        await fs.lstat(absolutePath)
+      } catch (err) {
+        global.log.warning(`[Assets Provider] Required filter ${file} not found. Copying ...`)
+        await fs.copyFile(path.join(__dirname, './assets/lua-filter', file), absolutePath)
       }
     }
   }
@@ -106,5 +156,113 @@ export default class AssetsProvider extends EventEmitter {
       global.log.error(`[Assets Provider] Could not save defaults file: ${String(err.message)}`, err)
       return false
     }
+  }
+
+  /**
+   * Restores the requested defaults file by copying it from the directory
+   * within Zettlr into the defaults path (user data).
+   *
+   * @param   {string}             format  The format to copy over
+   * @param   {'export'|'import'}  type    The type of defaults file
+   *
+   * @return  {Promise<boolean>}           Returns true on success
+   */
+  async restoreDefaultsFor (format: string, type: 'export'|'import'): Promise<boolean> {
+    const file = `${type}.${format}.yaml`
+    const source = path.join(__dirname, './assets/defaults', file)
+    const target = path.join(this._defaultsPath, file)
+
+    try {
+      await fs.copyFile(source, target)
+    } catch (err) {
+      global.log.error(`[Assets Provider] Could not restore defaults file ${type} for ${format}!`, err)
+      return false
+    }
+
+    return true
+  }
+
+  /**
+   * Retrieves a snippet with the given name. Throws an error if the file does not exist.
+   *
+   * @param   {string}           name  The snippet file name (sans extension)
+   *
+   * @return  {Promise<string>}        The file contents
+   */
+  async getSnippet (name: string): Promise<string> {
+    const filePath = path.join(this._snippetsPath, name + '.tpl.md')
+    return await fs.readFile(filePath, { encoding: 'utf-8' })
+  }
+
+  /**
+   * Sets a snippet file with the given content. Overwrites existing files. Can
+   * be used to create new snippet files.
+   *
+   * @param   {string}            name     The snippet file name (sans extension)
+   * @param   {string}            content  The new contents of the file
+   *
+   * @return  {Promise<boolean>}           Returns false if there was an error
+   */
+  async setSnippet (name: string, content: string): Promise<boolean> {
+    try {
+      const filePath = path.join(this._snippetsPath, name + '.tpl.md')
+      await fs.writeFile(filePath, content)
+      broadcastIpcMessage('assets-provider', 'snippets-updated')
+      return true
+    } catch (err) {
+      global.log.error(`[Assets Provider] Could not save snippets file: ${String(err.message)}`, err)
+      return false
+    }
+  }
+
+  /**
+   * Removes a snippet from disk
+   *
+   * @param   {string}            name  The snippet file name (sans extension)
+   *
+   * @return  {Promise<boolean>}        Returns false if there was an error
+   */
+  async removeSnippet (name: string): Promise<boolean> {
+    try {
+      const filePath = path.join(this._snippetsPath, name + '.tpl.md')
+      await fs.unlink(filePath)
+      broadcastIpcMessage('assets-provider', 'snippets-updated')
+      return true
+    } catch (err) {
+      global.log.error(`[Assets Provider] Could not remove snippets file: ${String(err.message)}`, err)
+      return false
+    }
+  }
+
+  /**
+   * Renames a snippet
+   *
+   * @param   {string}            name     The old name
+   * @param   {string}            newName  The new snippet name
+   *
+   * @return  {Promise<boolean>}           Returns false if there was an error.
+   */
+  async renameSnippet (name: string, newName: string): Promise<boolean> {
+    try {
+      const oldPath = path.join(this._snippetsPath, name + '.tpl.md')
+      const newPath = path.join(this._snippetsPath, newName + '.tpl.md')
+      await fs.rename(oldPath, newPath)
+      broadcastIpcMessage('assets-provider', 'snippets-updated')
+      return true
+    } catch (err) {
+      global.log.error(`[Assets Provider] Could not rename snippets file: ${String(err.message)}`, err)
+      return false
+    }
+  }
+
+  /**
+   * Lists all snippets that are stored on this computer.
+   *
+   * @return  {Promise<string[]>}  The promise resolves with a list of existing snippets.
+   */
+  async listSnippets (): Promise<string[]> {
+    const files = await fs.readdir(this._snippetsPath)
+    const snippetFiles = files.filter(file => /\.tpl\.md$/.test(file))
+    return snippetFiles.map(file => file.replace(/\.tpl\.md$/, ''))
   }
 }

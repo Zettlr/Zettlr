@@ -17,6 +17,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        SponsorsTab
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This tab displays the Patreon sponsors.
+ *
+ * END HEADER
+ */
+
 import ky from 'ky'
 
 export default {
@@ -27,9 +41,8 @@ export default {
     }
   },
   created: function () {
-    ky('https://api.zettlr.com/v1/sponsors')
+    ky('https://zettlr.com/api/sponsors')
       .then((response) => {
-        console.log(response.body)
         response.json()
           .then(res => {
             this.sponsors = res

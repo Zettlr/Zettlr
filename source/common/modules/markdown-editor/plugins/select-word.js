@@ -1,5 +1,18 @@
 /* global CodeMirror define */
-// This plugin selects a word under the cursor. Intended for use with Markdown.
+/**
+  * @ignore
+  * BEGIN HEADER
+  *
+  * Contains:        Select-Word Plugin
+  * CVM-Role:        CodeMirror Plugin
+  * Maintainer:      Hendrik Erz
+  * License:         GNU GPL v3
+  *
+  * Description:     This plugin selects a word under the cursor, taking into
+  *                  account words such as "don't" and sentence-boundaries.
+  *
+  * END HEADER
+  */
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS

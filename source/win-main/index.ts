@@ -39,7 +39,7 @@ document.addEventListener('dragover', function (event) {
 }, false)
 
 // On drop, tell the renderer to tell main that there's something to
-// handle. TODO: TO IMPLEMENT
+// handle.
 document.addEventListener('drop', (event) => {
   event.preventDefault()
   if (event.dataTransfer === null) {
@@ -49,11 +49,14 @@ document.addEventListener('drop', (event) => {
   // Retrieve all paths
   let f = []
   for (let i = 0; i < event.dataTransfer.files.length; i++) {
-    f.push(event.dataTransfer.files.item(i)?.path)
+    const file = event.dataTransfer.files.item(i)
+    if (file !== null) {
+      f.push(file.path)
+    }
   }
-  console.log('The user dropped some files onto the main window, but the handler is not yet implemented.')
-  console.log(f)
-  // this._renderer.handleDrop(f)
+
+  ipcRenderer.invoke('application', { command: 'handle-drop', payload: f })
+    .catch(e => console.error(e))
   return false
 }, false)
 
@@ -132,7 +135,6 @@ ipcRenderer.invoke('tag-provider', { command: 'get-tags-database' })
 let filetreeUpdateLock = false
 let openDirectoryLock = false
 let activeFileUpdateLock = false
-let openFilesUpdateLock = false
 // Listen for broadcasts from main in order to update the filetree
 ipcRenderer.on('fsal-state-changed', (event, kind: string) => {
   if (kind === 'filetree') {
@@ -163,14 +165,8 @@ ipcRenderer.on('fsal-state-changed', (event, kind: string) => {
       .catch(e => console.error(e))
       .finally(() => { activeFileUpdateLock = false })
   } else if (kind === 'openFiles') {
-    if (openFilesUpdateLock) {
-      return
-    }
-
-    openFilesUpdateLock = true
     app.$store.dispatch('updateOpenFiles')
       .catch(e => console.error(e))
-      .finally(() => { openFilesUpdateLock = false })
   }
 })
 
@@ -178,7 +174,6 @@ ipcRenderer.on('fsal-state-changed', (event, kind: string) => {
 filetreeUpdateLock = true
 openDirectoryLock = true
 activeFileUpdateLock = true
-openFilesUpdateLock = true
 app.$store.dispatch('filetreeUpdate')
   .catch(e => console.error(e))
   .finally(() => { filetreeUpdateLock = false })
@@ -190,4 +185,44 @@ app.$store.dispatch('updateActiveFile')
   .finally(() => { activeFileUpdateLock = false })
 app.$store.dispatch('updateOpenFiles')
   .catch(e => console.error(e))
-  .finally(() => { openFilesUpdateLock = false })
+
+// -----------------------------------------------
+
+// Further shortcuts we have to listen to
+ipcRenderer.on('shortcut', (event, command) => {
+  // Retrieve the correct contexts first
+  const dirDescriptor = app.$store.state.selectedDirectory
+  const fileDescriptor = app.$store.state.activeFile
+
+  if (command === 'new-dir') {
+    if (dirDescriptor === null) {
+      return // Cannot create a new directory
+    }
+
+    ipcRenderer.invoke('application', {
+      command: 'dir-new',
+      payload: { path: dirDescriptor.path }
+    })
+      .catch(err => console.error(err))
+  } else if (command === 'delete-file') {
+    if (fileDescriptor === null) {
+      return // Cannot remove file
+    }
+
+    ipcRenderer.invoke('application', {
+      command: 'file-delete',
+      payload: { path: fileDescriptor.path }
+    })
+      .catch(err => console.error(err))
+  } else if (command === 'delete-dir') {
+    if (dirDescriptor === null) {
+      return // Cannot remove dir
+    }
+
+    ipcRenderer.invoke('application', {
+      command: 'dir-delete',
+      payload: { path: dirDescriptor.path }
+    })
+      .catch(err => console.error(err))
+  }
+})

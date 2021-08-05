@@ -1,4 +1,16 @@
-// This plugin renders MathJax parts in CodeMirror instances
+/**
+  * @ignore
+  * BEGIN HEADER
+  *
+  * Contains:        AutoCorrect CodeMirror Plugin
+  * CVM-Role:        CodeMirror Plugin
+  * Maintainer:      Hendrik Erz, Tobias Diez
+  * License:         GNU GPL v3
+  *
+  * Description:     This plugin renders Math equations using KaTeX.
+  *
+  * END HEADER
+  */
 
 import { getBlockMathRE, getInlineMathRenderRE } from '../../../../common/regular-expressions'
 import * as CodeMirror from 'codemirror'
@@ -129,7 +141,7 @@ export function findEquations (lines: LineInfo[]): EquationMarker[] {
   let equations: EquationMarker[] = []
 
   for (let line of lines) {
-    if (![ 'markdown', 'stex' ].includes(line.modeName)) {
+    if (![ 'markdown-zkn', 'stex' ].includes(line.modeName)) {
       continue
     }
     if (line.modeName === 'stex') {

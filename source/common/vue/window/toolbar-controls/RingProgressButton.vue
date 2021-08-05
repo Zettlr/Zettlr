@@ -43,6 +43,24 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        RingProgressButton
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     The combination of a progress bar with a button. This
+ *                  component basically allows you to display a button with a
+ *                  ring-shaped progress bar inside. NOTE that this component
+ *                  has a lot of specific styling for the toolbar, so it's
+ *                  probably not going to work elsewhere.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'RingProgressControl',
   props: {

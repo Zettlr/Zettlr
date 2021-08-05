@@ -20,11 +20,35 @@
       >
         <clr-icon shape="file"></clr-icon>
       </button>
+      <button
+        v-if="reset !== false"
+        type="button"
+        v-bind:title="resetLabel"
+        v-on:click="resetValue"
+      >
+        <clr-icon shape="refresh"></clr-icon>
+      </button>
     </div>
   </div>
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        File
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component represents a custom file input.
+ *
+ * END HEADER
+ */
+
+import { trans } from '../../../i18n-renderer'
+
 const ipcRenderer = window.ipc
 
 export default {
@@ -41,6 +65,10 @@ export default {
     name: {
       type: String,
       default: ''
+    },
+    reset: {
+      type: [ Boolean, String ],
+      default: false
     },
     placeholder: {
       type: String,
@@ -60,9 +88,17 @@ export default {
   computed: {
     fieldID: function () {
       return 'field-input-' + this.name
+    },
+    resetLabel: function () {
+      return trans('gui.reset')
     }
   },
   methods: {
+    resetValue: function () {
+      const newVal = (typeof this.reset === 'string') ? this.reset : ''
+      this.$refs.input.value = newVal
+      this.$emit('input', newVal)
+    },
     requestFile: function () {
       const payload = {
         filters: [],

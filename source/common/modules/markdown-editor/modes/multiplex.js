@@ -1,5 +1,19 @@
 /* global CodeMirror define */
-// ZETTLR SPELLCHECKER PLUGIN
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CodeMirror multiplex mode
+ * CVM-Role:        CodeMirror Mode
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This mode provides the correct syntax highlighting depending
+ *                  on the editor contents (code blocks) by multiplexing several
+ *                  other modes.
+ *
+ * END HEADER
+ */
 
 const highlightingModes = {
   'text/javascript': {
@@ -96,7 +110,7 @@ const highlightingModes = {
   },
   'text/x-rsrc': {
     'mode': 'r',
-    'selectors': ['r']
+    'selectors': [ 'r', '{r' ] // NOTE: This is a monkey patch since RStudio will contain that in curly brackets. TODO: Make general
   },
   'text/x-ruby': {
     'mode': 'ruby',
@@ -133,6 +147,10 @@ const highlightingModes = {
   'text/x-julia': {
     'mode': 'julia',
     'selectors': [ 'julia', 'jl' ]
+  },
+  'text/x-perl': {
+    'mode': 'perl',
+    'selectors': [ 'perl', 'pl' ]
   },
   'text/turtle': {
     'mode': 'turtle',

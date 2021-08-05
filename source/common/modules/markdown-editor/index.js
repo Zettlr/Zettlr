@@ -29,6 +29,7 @@ const getCodeMirrorDefaultOptions = require('./get-cm-options')
 const safeAssign = require('../../util/safe-assign')
 const countWords = require('../../util/count-words')
 const md2html = require('../../util/md-to-html')
+const html2md = require('../../util/html-to-md')
 const generateKeymap = require('./generate-keymap.js')
 const generateTableOfContents = require('./util/generate-toc')
 
@@ -68,12 +69,13 @@ const matchStyleHook = require('./hooks/match-style')
 const { indentLinesHook, clearLineIndentationCache } = require('./hooks/indent-wrapped-lines')
 const headingClassHook = require('./hooks/heading-classes')
 const codeblockClassHook = require('./hooks/codeblock-classes')
-const zoomHook = require('./hooks/zoom')
+const taskItemClassHook = require('./hooks/task-item-classes')
 const muteLinesHook = require('./hooks/mute-lines')
 const renderElementsHook = require('./hooks/render-elements')
 const typewriterHook = require('./hooks/typewriter')
 const { autocompleteHook, setAutocompleteDatabase } = require('./hooks/autocomplete')
 const linkTooltipsHook = require('./hooks/link-tooltips')
+const noteTooltipsHook = require('./hooks/note-preview')
 
 const displayContextMenu = require('./display-context-menu')
 
@@ -118,13 +120,6 @@ module.exports = class MarkdownEditor extends EventEmitter {
     this._currentDocumentMode = 'multiplex'
 
     /**
-     * Holds the font size of the CodeMirror instance (in em)
-     *
-     * @var {Number}
-     */
-    this._fontsize = 1
-
-    /**
      * Can hold a close-callback from an opened context menu
      *
      * @var {Function}
@@ -167,12 +162,13 @@ module.exports = class MarkdownEditor extends EventEmitter {
     indentLinesHook(this._instance)
     headingClassHook(this._instance)
     codeblockClassHook(this._instance)
-    zoomHook(this._instance, this.zoom.bind(this))
+    taskItemClassHook(this._instance)
     muteLinesHook(this._instance)
     renderElementsHook(this._instance)
     typewriterHook(this._instance)
     autocompleteHook(this._instance)
     linkTooltipsHook(this._instance)
+    noteTooltipsHook(this._instance)
 
     // Indicate interactive elements while either the Command or Control-key is
     // held down.
@@ -277,20 +273,39 @@ module.exports = class MarkdownEditor extends EventEmitter {
       }
     })
 
-    // Listen to zoom-shortcuts from main
-    ipcRenderer.on('shortcut', (event, shortcut) => {
-      switch (shortcut) {
-        case 'zoom-reset':
-          this.zoom(0)
-          break
-        case 'zoom-in':
-          this.zoom(1)
-          break
-        case 'zoom-out':
-          this.zoom(-1)
-          break
+    this._instance.getWrapperElement().addEventListener('mousedown', (event) => {
+      if (event.button !== 1 || process.platform !== 'linux' || clipboard.hasSelectionClipboard() === false) {
+        return
+      }
+
+      // The user has pressed middle mouse button on Linux. On Linux, there's
+      // the concept of some form of a "quick selection", that is: The user
+      // selects some text, and, without pressing Ctrl+C, the text is
+      // immediately present in the "selection" clipboard. A middle mouse button
+      // is assumed to paste that to wherever the focus currently sits. For
+      // more info, see issue #1882 and https://unix.stackexchange.com/a/139193
+      const { text, html } = clipboard.getSelectionClipboard()
+
+      if (html.trim() !== '') {
+        // We have HTML to paste
+        const toPaste = html2md(html)
+        this._instance.doc.replaceSelection(toPaste)
+      } else {
+        // There is text to paste
+        this._instance.doc.replaceSelection(text)
       }
     })
+
+    // Listen to updates from the assets provider
+    ipcRenderer.on('assets-provider', (event, which) => {
+      if (which === 'snippets-updated') {
+        // The snippet list has been updated, so we must reflect this.
+        this.updateSnippetAutocomplete().catch(err => console.error(err))
+      }
+    })
+
+    // Initial retrieval of snippets
+    this.updateSnippetAutocomplete().catch(err => console.error(err))
   } // END CONSTRUCTOR
 
   // SEARCH FUNCTIONALITY
@@ -375,53 +390,47 @@ module.exports = class MarkdownEditor extends EventEmitter {
   }
 
   /**
-   * Alter the font size of the editor.
-   * @param  {Number} direction The direction, can be 1 (increase), -1 (decrease) or 0 (reset)
-   */
-  zoom (direction) {
-    if (direction === 0) {
-      this._fontsize = 1
-    } else {
-      let newSize = this._fontsize + 0.1 * direction
-      // Constrain the size so it doesn't run into errors
-      if (newSize < 0.3) newSize = 0.3 // Less than 30% and CodeMirror doesn't display the text anymore.
-      if (newSize > 4.0) newSize = 4.0 // More than 400% and you'll run into problems concerning headings 1
-      this._fontsize = newSize
-    }
-    this._instance.getWrapperElement().style.fontSize = this._fontsize + 'em'
-    this._instance.refresh()
-  }
-
-  /**
    * Sets the current options with a new options object, which will be merged
    *
    * @param   {Object}  newOptions  The new options
    */
   setOptions (newOptions) {
-    // First, merge the new options into the CodeMirror options
-    this._cmOptions = safeAssign(newOptions, this._cmOptions)
+    // Before actually merging the options, we have to detect changes in the
+    // rendering preferences.
+    let shouldRemoveMarkers = false
 
-    if (newOptions.hasOwnProperty('zettlr') && newOptions.zettlr.hasOwnProperty('render')) {
-      // If this property is set this mostly means that the rendering preferences
-      // have changed. We need to remove all text markers so that only those
-      // that are wanted are re-rendered. This will always execute on preferences
-      // setting until we have established some cool "what has actually changed?"
-      // indication in the settings provider, but this should not be too annoying.
+    if ('zettlr' in newOptions && 'render' in newOptions.zettlr) {
+      // If one of these options has changed from true to false, remove all
+      // markers below and have the remaining markers re-rendered afterwards.
+      const oldOpt = this._cmOptions.zettlr.render
+      const newOpt = newOptions.zettlr.render
 
-      // DEBUG: This function is always called during document swap which
-      // increases load time and induces a significant visual lag.
-      // Right now it seems prudent to simply leave "unwanted" markers in place.
-      // TODO: Devise a better mechanism of value caching to determine which
-      // marks need to be removed, and only do so when one of the values have
-      // indeed changed.
+      for (const key in oldOpt) {
+        if (!(key in newOpt)) {
+          continue
+        }
 
-      // const markers = this._instance.doc.getAllMarks()
-      // for (let marker of markers) {
-      //   marker.clear()
-      // }
+        if (oldOpt[key] === true && newOpt[key] === false) {
+          shouldRemoveMarkers = true
+          break
+        }
+      }
     }
 
-    // Second, set all options on the CodeMirror instance. This will internally
+    if (shouldRemoveMarkers) {
+      // If shouldRemoveMarkers is true, one of the rendering options has been
+      // disabled, so we must remove all markers and then re-render only those
+      // that should still be displayed.
+      const markers = this._instance.doc.getAllMarks()
+      for (const marker of markers) {
+        marker.clear()
+      }
+    }
+
+    // Now, we can safely merge the options
+    this._cmOptions = safeAssign(newOptions, this._cmOptions)
+
+    // Next, set all options on the CodeMirror instance. This will internally
     // fire all necessary events, apart from those we need to fire manually.
     for (const name in this._cmOptions) {
       if (this._cmOptions.hasOwnProperty(name)) {
@@ -505,6 +514,29 @@ module.exports = class MarkdownEditor extends EventEmitter {
     setAutocompleteDatabase(type, database)
   }
 
+  /**
+   * Updates the list of available snippets.
+   */
+  async updateSnippetAutocomplete () {
+    const snippetList = await ipcRenderer.invoke('assets-provider', { command: 'list-snippets' })
+
+    const snippetsDB = []
+
+    for (const snippet of snippetList) {
+      const content = await ipcRenderer.invoke('assets-provider', {
+        command: 'get-snippet',
+        payload: { name: snippet }
+      })
+
+      snippetsDB.push({
+        displayText: snippet,
+        text: content
+      })
+    }
+
+    this.setCompletionDatabase('snippets', snippetsDB)
+  }
+
   /* * * * * * * * * * * *
    * GETTERS AND SETTERS *
    * * * * * * * * * * * */
@@ -585,6 +617,30 @@ module.exports = class MarkdownEditor extends EventEmitter {
    */
   set hasTypewriterMode (shouldBeTypewriter) {
     this.setOptions({ 'zettlr': { 'typewriterMode': shouldBeTypewriter } })
+  }
+
+  /**
+   * Determines whether the editor is in distraction free mode
+   *
+   * @return  {boolean}  True or false
+   */
+  get distractionFree () {
+    return this._cmOptions.fullScreen
+  }
+
+  /**
+   * Sets the editor into or out of distraction free
+   *
+   * @param   {boolean}  shouldBeFullscreen  Whether the editor should be in distraction free
+   */
+  set distractionFree (shouldBeFullscreen) {
+    this.setOptions({ fullScreen: shouldBeFullscreen })
+
+    if (this.distractionFree) {
+      this._instance.getWrapperElement().classList.add('CodeMirror-fullscreen')
+    } else {
+      this._instance.getWrapperElement().classList.remove('CodeMirror-fullscreen')
+    }
   }
 
   /**

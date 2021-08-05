@@ -14,12 +14,12 @@
  */
 
 // Helper/Utility functions
-import extractFilesFromArgv from '../common/util/extract-files-from-argv'
+import extractFilesFromArgv from './util/extract-files-from-argv'
 import registerCustomProtocols from './util/custom-protocols'
 import environmentCheck from './util/environment-check'
 import addToPath from './util/add-to-PATH'
 import resolveTimespanMs from './util/resolve-timespan-ms'
-import { loadI18nMain } from '../common/i18n'
+import { loadI18n } from '../common/i18n-main'
 import isFile from '../common/util/is-file'
 import isDir from '../common/util/is-dir'
 import path from 'path'
@@ -35,7 +35,6 @@ import ConfigProvider from './service-providers/config-provider'
 import CssProvider from './service-providers/css-provider'
 import DictionaryProvider from './service-providers/dictionary-provider'
 import LogProvider from './service-providers/log-provider'
-import RecentDocsProvider from './service-providers/recent-docs-provider'
 import MenuProvider from './service-providers/menu-provider'
 import TagProvider from './service-providers/tag-provider'
 import TargetProvider from './service-providers/target-provider'
@@ -43,6 +42,7 @@ import TranslationProvider from './service-providers/translation-provider'
 import UpdateProvider from './service-providers/update-provider'
 import NotificationProvider from './service-providers/notification-provider'
 import StatsProvider from './service-providers/stats-provider'
+import TrayProvider from './service-providers/tray-provider'
 
 // We need module-global variables so that garbage collect won't shut down the
 // providers before the app is shut down.
@@ -53,7 +53,6 @@ let configProvider: ConfigProvider
 let cssProvider: CssProvider
 let dictionaryProvider: DictionaryProvider
 let logProvider: LogProvider
-let recentDocsProvider: RecentDocsProvider
 let tagProvider: TagProvider
 let targetProvider: TargetProvider
 let translationProvider: TranslationProvider
@@ -61,6 +60,7 @@ let updateProvider: UpdateProvider
 let menuProvider: MenuProvider
 let notificationProvider: NotificationProvider
 let statsProvider: StatsProvider
+let trayProvider: TrayProvider
 
 // Statistics: Record the uptime of the application
 let upTimestamp: number
@@ -93,7 +93,7 @@ export async function bootApplication (): Promise<void> {
     // Load Vue developer extension
     installExtension(VUEJS_DEVTOOLS)
       .then((name: string) => global.log.info(`Added DevTools extension:  ${name}`))
-      .catch((err: any) => console.log('An error occurred: ', err))
+      .catch((err: any) => global.log.error(`Could not install DevTools extensions: ${String(err.message)}`, err))
   } catch (e) {
     global.log.verbose('Electron DevTools Installer not found - proceeding without loading developer tools.')
   }
@@ -115,7 +115,6 @@ export async function bootApplication (): Promise<void> {
   await assetsProvider.init()
   citeprocProvider = new CiteprocProvider()
   dictionaryProvider = new DictionaryProvider()
-  recentDocsProvider = new RecentDocsProvider()
   menuProvider = new MenuProvider()
   tagProvider = new TagProvider()
   targetProvider = new TargetProvider()
@@ -124,6 +123,7 @@ export async function bootApplication (): Promise<void> {
   updateProvider = new UpdateProvider()
   notificationProvider = new NotificationProvider()
   statsProvider = new StatsProvider()
+  trayProvider = new TrayProvider()
 
   // If the user has provided a working path to XeLaTeX, make sure that its
   // directory name is in path for Zettlr to find it.
@@ -161,7 +161,7 @@ export async function bootApplication (): Promise<void> {
   }
 
   // Initiate i18n after the config provider has definitely spun up
-  let metadata: any = loadI18nMain(global.config.get('appLang'))
+  let metadata = await loadI18n(global.config.get('appLang'))
 
   // It may be that only a fallback has been provided or else. In this case we
   // must update the config to reflect this.
@@ -188,13 +188,13 @@ export async function shutdownApplication (): Promise<void> {
   await safeShutdown(targetProvider)
   await safeShutdown(tagProvider)
   await safeShutdown(menuProvider)
-  await safeShutdown(recentDocsProvider)
   await safeShutdown(dictionaryProvider)
   await safeShutdown(citeprocProvider)
   await safeShutdown(appearanceProvider)
   await safeShutdown(configProvider)
   await safeShutdown(statsProvider)
   await safeShutdown(assetsProvider)
+  await safeShutdown(trayProvider)
 
   const downTimestamp = Date.now()
 

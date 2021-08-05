@@ -77,6 +77,9 @@ export default class AppearanceProvider extends EventEmitter {
     // Initially set the dark mode after startup, if the mode is set to "system"
     if (this._mode === 'system') {
       global.config.set('darkMode', nativeTheme.shouldUseDarkColors)
+    } else if (process.platform === 'darwin') {
+      // Override the app level appearance immediately
+      systemPreferences.appLevelAppearance = (global.config.get('darkMode') === true) ? 'dark' : 'light'
     }
 
     // It may be that it was already dark when the user started the app, but the
@@ -92,8 +95,18 @@ export default class AppearanceProvider extends EventEmitter {
       // Set internal vars accordingly
       if (option === 'autoDarkMode') {
         this._mode = global.config.get('autoDarkMode')
+        if (this._mode === 'system' && process.platform === 'darwin' && systemPreferences.getEffectiveAppearance() !== 'unknown') {
+          // The user switched to system, so now we must make sure to reset the
+          // app level appearance to respect the system settings.
+          // DEBUG: See issue https://github.com/electron/electron/issues/30413
+          // @ts-expect-error
+          systemPreferences.appLevelAppearance = null
+        }
       } else if ([ 'autoDarkModeEnd', 'autoDarkModeStart' ].includes(option)) {
         this._recalculateSchedule()
+      } else if (option === 'darkMode' && process.platform === 'darwin' && this._mode !== 'system') {
+        // Make sure the appLevelAppearance follows suit.
+        systemPreferences.appLevelAppearance = (global.config.get('darkMode') === true) ? 'dark' : 'light'
       }
     })
 
@@ -152,7 +165,14 @@ export default class AppearanceProvider extends EventEmitter {
       // mode has been active or not.
       if (this._scheduleWasDark !== this._isItDark()) {
         // The schedule just changed -> change the theme
-        global.log.info('Switching appearance to ' + (this._isItDark() ? 'dark' : 'light'))
+        const mode = (this._isItDark() ? 'dark' : 'light')
+        global.log.info('Switching appearance to ' + mode)
+
+        if (process.platform === 'darwin') {
+          // We're not in system mode, so we forcefully override the app level appearance
+          systemPreferences.appLevelAppearance = mode
+        }
+
         global.config.set('darkMode', this._isItDark())
         this._scheduleWasDark = this._isItDark()
       }

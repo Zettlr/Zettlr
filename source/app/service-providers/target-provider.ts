@@ -2,8 +2,8 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        ZettlrTargets class
- * CVM-Role:        Model
+ * Contains:        TargetProvider
+ * CVM-Role:        Service Provider
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *

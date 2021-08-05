@@ -1,0 +1,127 @@
+name: Enhancement Request
+description: Do you miss that one inch of performance? Go this way!
+title: "[Enhancement] "
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for proposing an enhancement to the app! This might include super
+        simple things like small design fixes, but it can also encompass retrofitting
+        bigger features with enhanced functionality from new preferences to new actions.
+
+        We know that it's sometimes difficult to distinguish between enhancements and
+        new features, so don't worry if your enhancement turns out to actually become
+        a new feature (we are asking for the same info in both issue forms).
+
+        Just ask yourself this question: Do you propose to take something that's already
+        there and improve it, or is it some function that you cannot do with the app
+        right now? In the latter case, please open a feature request!
+  # First let's ask the user about their proposal
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: |
+        Please describe what feature you would like to see enhanced, and motivate why.
+      placeholder: Here, try to focus on whom this enhancement would benefit, and why existing features can't do that.
+    validations:
+      required: true
+  # Now let's ask for the specific enhancement itself.
+  - type: textarea
+    id: changes
+    attributes:
+      label: Proposed Changes
+      description: |
+        Now it's time for the enhancement: What would you specifically like to
+        see changed? Please be as precise as possible, even if it seems pedantic.
+        The more information we have and the more precise you describe exactly
+        what you want, the faster we can get to work.
+      placeholder: Try to be as thorough as possible.
+    validations:
+      required: true
+  # Any caveats?
+  - type: textarea
+    id: caveats
+    attributes:
+      label: Caveats
+      description: |
+        Sometimes, an enhancement can impede another feature. Try to think of any
+        way in which adding the enhancement you are proposing might make other
+        ways of using the app less efficient. This helps us discuss options to
+        get your enhancement request into the app without losing others!
+      placeholder: If there are no caveats, just say so!
+    validations:
+      required: true
+  # Give the user the opportunity to volunteer to implement the feature!
+  - type: dropdown
+    id: volunteer
+    attributes:
+      label: Do you Wish to Attempt Implementing this Yourself?
+      description: |
+        Zettlr runs on a dedicated Open Source community. We welcome anyone who
+        wants to tackle an issue. Here you can already indicate if you'd like to
+        try implementing this feature yourself. If you are unsure if you possess
+        the knowledge to do so, but still would like to tinker with the code,
+        choose "Yes", since we'll obviously help you get your own code running!
+      options:
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+  # Now the version
+  - type: dropdown
+    id: version
+    attributes:
+      label: Zettlr Version
+      description: |
+        What version of Zettlr are you running? Choose **Stable** if you are simply using the regular install.
+      options:
+        - Stable (most recent version)
+        - Stable (but an older version)
+        - Beta (if applicable)
+        - Nightly
+        - Right off the develop branch
+    validations:
+      required: false
+  # Also, we need to know the operating system(s) where this happens
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Your Platform
+      description: |
+        Please tell us which platform you're using. This helps us identify, for
+        example if the enhancement only applies to a single platform, or to all.
+      options:
+        - label: Windows
+        - label: macOS
+        - label: Linux
+    validations:
+      required: true
+  - type: input
+    id: os-version
+    attributes:
+      label: Operating System Version
+      description: |
+        Which operating system(s) are you running? This is especially useful if
+        you're using Linux, and even more so if you're proposing a stylistic
+        enhancement.
+      placeholder: e.g. Big Sur 11.4, Linux Mate, pop!_OS, Windows 10
+    validations:
+      required: false
+  - type: textarea
+    id: more-info
+    attributes:
+      label: Additional Information
+      description: |
+        If applicable, feel free to include more info, such as mockups,
+        screenshots, or whatever helps make your request easier for us to
+        understand!
+  - type: markdown
+    id: outro
+    attributes:
+      value: |
+        Thank you for filing this enhancement request! We will be looking into it
+        shortly. Please make sure you check your GitHub notifications frequently,
+        over the next days, since in most cases we have some questions for
+        clarification, or would like to discuss options.

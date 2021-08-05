@@ -5,7 +5,7 @@
     v-bind:menubar="false"
     v-bind:show-tabbar="true"
     v-bind:tabbar-tabs="tabs"
-    v-bind:tabbar-label="'Preferences'"
+    v-bind:tabbar-label="tabs[currentTab].label"
     v-bind:disable-vibrancy="true"
     v-on:tab="currentTab = $event"
   >
@@ -27,14 +27,33 @@
         v-if="currentTab === 1"
         v-bind:word-counts="wordCounts"
       ></ChartView>
+      <FSALView
+        v-if="currentTab === 2"
+      ></FSALView>
     </div>
   </WindowChrome>
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Stats
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     The Statistics window app entry component.
+ *
+ * END HEADER
+ */
+
 import WindowChrome from '../common/vue/window/Chrome.vue'
 import CalendarView from './CalendarView.vue'
 import ChartView from './ChartView.vue'
+import FSALView from './FSALView.vue'
+import { trans } from '../common/i18n-renderer'
 
 const ipcRenderer = window.ipc
 
@@ -43,23 +62,30 @@ export default {
   components: {
     WindowChrome,
     CalendarView,
-    ChartView
+    ChartView,
+    FSALView
   },
   data: function () {
     return {
       currentTab: 0,
       tabs: [
         {
-          label: 'Calendar', // TODO: Translate
+          label: trans('dialog.statistics.tabs.calendar_label'),
           controls: 'tab-calendar',
           id: 'tab-calendar-control',
           icon: 'calendar'
         },
         {
-          label: 'Charts', // TODO: Translate
+          label: trans('dialog.statistics.tabs.chart_label'),
           controls: 'tab-charts',
           id: 'tab-charts-control',
           icon: 'line-chart'
+        },
+        {
+          label: trans('dialog.statistics.tabs.fsal_label'),
+          controls: 'tab-fsal',
+          id: 'tab-fsal-control',
+          icon: 'file-group'
         }
       ],
       // After the data has been loaded, it will contain the following
@@ -75,10 +101,10 @@ export default {
   },
   computed: {
     windowTitle: function () {
-      if (document.body.classList.contains('darwin')) {
+      if (process.platform === 'darwin') {
         return this.tabs[this.currentTab].label
       } else {
-        return 'Stats'
+        return trans('dialog.statistics.title')
       }
     },
     wordCounts: function () {

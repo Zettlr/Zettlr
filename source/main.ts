@@ -14,13 +14,14 @@
  */
 
 import { app } from 'electron'
+import path from 'path'
 import { bootApplication, shutdownApplication } from './app/lifecycle'
 
 // Include the global Zettlr class
 import Zettlr from './main/zettlr'
 
 // Helper function to extract files to open from process.argv
-import extractFilesFromArgv from './common/util/extract-files-from-argv'
+import extractFilesFromArgv from './app/util/extract-files-from-argv'
 
 // Immediately after launch, check if there is already another instance of
 // Zettlr running, and, if so, exit immediately. The arguments (including files)
@@ -36,13 +37,8 @@ if (!app.requestSingleInstanceLock()) {
 
 // If we reach this point, we are now booting the first instance of Zettlr.
 
-// *****************************************************************************
-
 // Set up the pre-boot log
 global.preBootLog = []
-
-// NOTE: This has to be set even before the application has been booted.
-global.filesToOpen = []
 
 /**
  * This will be overwritten by the log provider, once it has booted
@@ -61,6 +57,47 @@ global.log = {
     global.preBootLog.push({ 'level': 4, 'message': message })
   }
 }
+
+// Setting custom data dir for user configuration files.
+// Full path or relative path is OK. '~' does not work as expected.
+const dataDirFlag = process.argv.find(elem => elem.indexOf('--data-dir=') === 0)
+
+if (dataDirFlag !== undefined) {
+  // a path to a custom config dir is provided
+  const match = /^--data-dir="?([^"]+)"?$/.exec(dataDirFlag)
+  if (match !== null) {
+    let dataDir = match[1]
+
+    if (!path.isAbsolute(dataDir)) {
+      if (app.isPackaged) {
+        // Attempt to use the executable file's path as the basis
+        dataDir = path.join(path.dirname(app.getPath('exe')), dataDir)
+      } else {
+        // Attempt to use the repository's root directory as the basis
+        dataDir = path.join(__dirname, '../../', dataDir)
+      }
+    }
+    global.log.info('[Application] Using custom data dir: ' + dataDir)
+    app.setPath('userData', dataDir)
+    app.setAppLogsPath(path.join(dataDir, 'logs'))
+  }
+}
+
+// On systems with virtual GPUs (i.e. VMs), it might be necessary to disable
+// hardware acceleration. If the corresponding flag is set, we do so.
+// See for more info https://github.com/Zettlr/Zettlr/issues/2127
+if (process.argv.includes('--disable-hardware-acceleration')) {
+  app.disableHardwareAcceleration()
+}
+
+// *****************************************************************************
+
+// This array will be only useful for macOS since there we have the "open-file"
+// event indicating that the user wants to open a file. But this event might be
+// emitted before the app is ready and the main Zettlr object has been
+// instantiated. This is why we need to cache those in this array. After the app
+// is booted, we won't need this anymore.
+const filesBeforeOpen: string[] = []
 
 /**
  * The main Zettlr object. As long as this exists in memory, the app will run.
@@ -101,10 +138,16 @@ app.whenReady().then(() => {
   bootApplication().then(() => {
     // Now instantiate the main class which will care about everything else
     zettlr = new Zettlr()
-    zettlr.init().catch(err => {
-      console.error(err)
-      app.exit(1)
-    })
+    zettlr.init()
+      .then(() => {
+        // After the app has been booted, open any files that we amassed in the
+        // meantime.
+        zettlr?.handleAddRoots(filesBeforeOpen)
+      })
+      .catch(err => {
+        console.error(err)
+        app.exit(1)
+      })
   }).catch(err => {
     console.error(err)
     app.exit(1)
@@ -126,18 +169,14 @@ app.on('second-instance', (event, argv, cwd) => {
     return
   }
 
-  let files = extractFilesFromArgv(argv) // Override process.argv with the correct one
-
-  if (files.length === 0) return // Nothing to do
-
-  global.log.info(`Opening ${files.length} files from a second instance.`, files)
+  global.log.info('[Application] A second instance has been opened.')
 
   // openWindow calls the appropriate function of the windowManager, which deals
   // with the nitty-gritty of actually making the main window visible.
   zettlr.openWindow()
 
   // In case the user wants to open a file/folder with this running instance
-  zettlr.handleAddRoots(files).catch(err => { console.error(err) })
+  zettlr.handleAddRoots(extractFilesFromArgv(argv)).catch(err => { console.error(err) })
 })
 
 /**
@@ -151,18 +190,20 @@ app.on('open-file', (e, p) => {
       global.log.error('[Application] Error while adding new roots', err)
     })
   } else {
-    // The Zettlr object has yet to be created -> use the global.
-    global.filesToOpen.push(p)
+    // The Zettlr object has yet to be created -> cache it
+    filesBeforeOpen.push(p)
   }
 })
 
 /**
- * Quit as soon as all windows are closed and we are not on macOS.
+ * Quit as soon as all windows are closed. Except if
+ * `system.leaveAppRunning` is true or on macOS.
  */
 app.on('window-all-closed', function () {
-  // On OS X it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
+  const leaveAppRunning = Boolean(global.config.get('system.leaveAppRunning'))
+  if (!leaveAppRunning && process.platform !== 'darwin') {
+    // On OS X it is common for applications and their menu bar
+    // to stay active until the user quits explicitly with Cmd + Q
     app.quit()
   }
 })

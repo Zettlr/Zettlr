@@ -99,7 +99,6 @@ export default class MenuProvider {
 
     // Begin listening to configuration update events that announce a change in
     // the recent docs list so that we can make sure the menu is always updated.
-    global.recentDocs.on('update', () => { this.set() })
     global.config.on('update', () => { this.set() })
 
     ipcMain.on('menu-provider', (event, message) => {

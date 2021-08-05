@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        File context menu
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file displays a context menu for files.
+ *
+ * END HEADER
+ */
+
 const { trans } = require('../../../common/i18n-renderer')
 
 const ipcRenderer = window.ipc
@@ -115,12 +129,6 @@ module.exports = function displayFileContext (event, fileObject, el, callback) {
         break
       case 'menu.copy_id':
         clipboard.writeText(fileObject.id)
-        break
-      case 'menu.quicklook':
-        ipcRenderer.send('message', {
-          command: 'open-quicklook',
-          content: fileObject.hash
-        })
         break
       case 'menu.show_file':
         ipcRenderer.send('window-controls', {

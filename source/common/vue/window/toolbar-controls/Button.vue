@@ -9,13 +9,34 @@
       v-bind:title="titleWithFallback"
       v-on:click="$emit('click')"
     >
-      <clr-icon v-if="control.icon" v-bind:shape="control.icon"></clr-icon>
+      <clr-icon
+        v-if="control.icon"
+        v-bind:shape="control.icon"
+        v-bind:class="{
+          'has-badge': control.badge
+        }"
+      ></clr-icon>
     </button>
     <span v-if="showLabel" class="toolbar-label" v-html="labelWithFallback"></span>
   </div>
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Button
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This implements a generic button; mainly used on the toolbar
+ *                  but can also be displayed elsewhere.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'ButtonControl',
   props: {

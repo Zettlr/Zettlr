@@ -1,8 +1,23 @@
 /* global CodeMirror define */
-// ZETTLR SPELLCHECKER PLUGIN
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CodeMirror Markdown mode
+ * CVM-Role:        CodeMirror Mode
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This is the central Markdown mode used by Zettlr. It wraps
+ *                  CodeMirror's Markdown and YAML modes (for the frontmatter).
+ *
+ * END HEADER
+ */
+
+const shouldMatchTag = require('../../../util/should-match-tag').default
 const {
   getZknTagRE, getHeadingRE, getHighlightRE,
-  getTableRE, getInlineMathRE, getBlockMathRE, getFnReferenceRE
+  getTableRE, getInlineMathRE, getFnReferenceRE
 } = require('../../../regular-expressions');
 
 (function (mod) {
@@ -21,7 +36,6 @@ const {
   const highlightRE = getHighlightRE()
   const tableRE = getTableRE()
   const inlineMathRE = getInlineMathRE()
-  const blockMathRE = getBlockMathRE()
   const fnReferenceRE = getFnReferenceRE()
 
   /**
@@ -112,31 +126,10 @@ const {
           } // Else: It might be sol(), but don't escape
         }
 
-        // Then handle block equations.
-        // NOTE: We have to check for inEquation first, because
-        // otherwise, stream.match() will ALWAYS be executed, hence
-        // falsifying the otherwise correct else-if!!
-        // TODO: We are currently using the multiplex mode to enhance block
-        // equations with syntax highlight, so I'm unsure if this code is
-        // executed at all or if we can just trash it …?
-        if (stream.sol() && !state.inEquation && stream.match(blockMathRE)) {
-          // We have a multiline equation
-          state.inEquation = true
-          return 'comment'
-        } else if (stream.sol() && state.inEquation && stream.match(blockMathRE)) {
-          // We're leaving the multiline equation
-          state.inEquation = false
-          return 'comment'
-        } else if (state.inEquation) {
-          // While we're in an equation, simply return fenced-codes.
-          stream.skipToEnd()
-          return 'comment'
-        }
-
         // Now let's check for footnotes. Other than reference style links these
         // require a different formatting, which we'll implement here.
         if (stream.sol() && stream.match(fnReferenceRE)) {
-          return 'footnote-formatting' // TODO: Do we want rendering in footnotes?
+          return 'footnote-formatting'
         }
 
         // Are we in a link?
@@ -174,9 +167,15 @@ const {
         // Next on are tags in the form of #hashtag. We have to check for
         // headings first, as the tagRE will also match these, but they are not
         // real tags, so we need to hand them over to the mdMode.
-        if (stream.match(headingRE, false)) {
+        let match
+        if (stream.match(headingRE, false) !== null) {
           return mdMode.token(stream, state.mdState)
-        } else if (stream.match(zknTagRE, false)) {
+        } else if ((match = stream.match(zknTagRE, false)) !== null) {
+          if (!shouldMatchTag(match[0])) {
+            // We should not match it, let the underlying mode handle it
+            return mdMode.token(stream, state.mdState)
+          }
+
           // Two possibilities: sol, which will definitely be a tag, because
           // the headingRE did not match. Otherwise, not SOL, in which case we
           // need to check that the tag is preceeded by a space.
@@ -219,7 +218,7 @@ const {
         return {
           // 'mode': (state.inFrontmatter) ? yamlMode : markdownZkn,
           // 'state': (state.inFrontmatter) ? state.yamlState : state
-          'mode': (state.inFrontmatter) ? yamlMode : mdMode,
+          'mode': (state.inFrontmatter) ? yamlMode : markdownZkn, // mdMode,
           'state': (state.inFrontmatter) ? state.yamlState : state.mdState
         }
       },
@@ -230,7 +229,13 @@ const {
         // The underlying mode needs
         // to be aware of blank lines
         return mdMode.blankLine(state.mdState)
-      }
+      },
+      // Since in innerMode() we are returning the ZKN mode instead of the
+      // Markdown mode when we are not inside the frontmatter, the foldcode
+      // addon will have no clue how to fold the Markdown code. By adding this
+      // property to the mode, we tell the foldcode addon that it can use the
+      // markdown foldcode helper for that.
+      fold: 'markdown'
     }
 
     return markdownZkn

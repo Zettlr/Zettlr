@@ -1,17 +1,3 @@
-/**
- * @ignore
- * BEGIN HEADER
- *
- * Contains:        TreeItem Vue Component
- * CVM-Role:        View
- * Maintainer:      Hendrik Erz
- * License:         GNU GPL v3
- *
- * Description:     Controls a single sub-tree in the file manager.
- *
- * END HEADER
- */
-
 <template>
   <div
     class="tree-item-container"
@@ -21,7 +7,7 @@
       v-bind:class="{
         'tree-item': true,
         [obj.type]: true,
-        'selected': (activeFile !== null && activeFile.path === obj.path) || (selectedDir !== null && selectedDir.path === obj.path),
+        'selected': (selectedFile !== null && selectedFile.path === obj.path) || (selectedDir !== null && selectedDir.path === obj.path),
         'project': obj.project != null,
         'root': isRoot
       }"
@@ -37,70 +23,33 @@
       v-on:drop="handleDrop"
       v-on:contextmenu="handleContextMenu"
     >
-      <!-- First: Primary icon (either directory icon, file icon, or project icon) -->
+      <!-- First: Secondary icon (only if primaryIcon displays the chevron) -->
       <span
         class="item-icon"
         aria-hidden="true"
       >
-        <!-- Is this a project? -->
         <clr-icon
-          v-if="obj.project && hasChildren"
-          shape="blocks-group"
-          class="is-solid"
-        />
-        <!-- Display a custom icon, if applicable -->
-        <clr-icon
-          v-else-if="isDirectory && hasChildren"
-          v-show="obj.icon"
+          v-if="secondaryIcon !== false"
+          v-bind:shape="secondaryIcon"
           role="presentation"
-          v-bind:shape="obj.icon"
+          v-bind:class="{
+            'is-solid': [ 'disconnect', 'blocks-group' ].includes(secondaryIcon)
+          }"
         />
-        <!-- Display a file icon -->
-        <clr-icon
-          v-else-if="obj.type === 'file' && hasChildren"
-          shape="file"
-        />
-      </span> <!-- End primary (item) icon -->
-      <!-- Second: Secondary icon (the collapse/expand icon) -->
+      </span>
+      <!-- Second: Primary icon (either the chevron, or the custom icon) -->
       <span
         class="toggle-icon"
       >
-        <!-- Display a toggle to collapse/expand the file list -->
-        <!-- Only display in this position if the item has a primary icon -->
         <clr-icon
-          v-if="hasChildren"
-          role="button"
-          v-bind:shape="indicatorShape"
-          v-bind:aria-label="indicatorARIALabel"
-          v-on:mousedown.stop="collapsed = collapsed === false"
-        />
-        <!-- Is this a project? -->
-        <clr-icon
-          v-else-if="obj.project && !hasChildren"
-          aria-label="Project"
-          shape="blocks-group"
-          class="is-solid"
-        />
-        <!-- Indicate if this is a dead directory -->
-        <clr-icon
-          v-else-if="obj.dirNotFoundFlag === true"
-          aria-label="Directory not found"
-          shape="disconnect"
-          class="is-solid"
-        />
-        <!-- Display a custom icon, if applicable -->
-        <clr-icon
-          v-else-if="isDirectory && !hasChildren"
-          v-show="obj.icon"
-          v-bind:shape="obj.icon"
-          aria-hidden="true"
-        />
-        <!-- Display a file icon -->
-        <clr-icon
-          v-else-if="obj.type === 'file' && !hasChildren"
-          shape="file"
-          aria-hidden="true"
-        />
+          v-if="primaryIcon !== false"
+          v-bind:shape="primaryIcon"
+          role="presentation"
+          v-bind:class="{
+            'is-solid': [ 'disconnect', 'blocks-group' ].includes(primaryIcon)
+          }"
+          v-on:mousedown.stop="handlePrimaryIconClick"
+        ></clr-icon>
       </span>
       <span
         ref="display-text"
@@ -113,7 +62,7 @@
         v-on:drag="onDragHandler"
       >
         <template v-if="!nameEditing">
-          {{ obj.name }}
+          {{ basename }}
         </template>
         <template v-else>
           <input
@@ -137,7 +86,7 @@
     <div
       v-if="operationType !== undefined"
       v-bind:style="{
-        'padding-left': `${(depth + 1) * 15 + 10}px`
+        'padding-left': `${(depth + 2) * 15 + 10}px`
       }"
     >
       <input
@@ -164,9 +113,23 @@
 </template>
 
 <script>
-// Tree View item component
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        TreeItem Vue Component
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Controls a single sub-tree in the file manager.
+ *
+ * END HEADER
+ */
+
 import itemMixin from './util/item-mixin'
 import generateFilename from '../../common/util/generate-filename'
+import { trans } from '../../common/i18n-renderer'
 
 const path = window.path
 const ipcRenderer = window.ipc
@@ -193,20 +156,69 @@ export default {
   },
   computed: {
     /**
+     * The secondary icon's shape -- this is the visually FIRST icon to be displayed
+     *
+     * @return  {string|boolean}  False if no secondary icon
+     */
+    secondaryIcon: function () {
+      if (this.hasChildren === false) {
+        // If whatever the object we're representing has no children, we do not
+        // need the secondary icon, since the primary icon will display whatever
+        // is necessary.
+        return false
+      } else {
+        // Otherwise, the primaryIcon will display the chevron and we need to
+        // transfer the customIcon to this position.
+        return this.customIcon
+      }
+    },
+    /**
+     * The primary icon's shape -- this is the visually SECOND icon to be displayed
+     *
+     * @return  {string|boolean}  False if no primary icon
+     */
+    primaryIcon: function () {
+      // The primary icon is _always_ the chevron if we're dealing with a
+      // directory and it has children. Otherwise, it will display the custom icon.
+      if (this.hasChildren === true) {
+        return this.collapsed === true ? 'caret right' : 'caret down'
+      } else {
+        return this.customIcon
+      }
+    },
+    /**
+     * Returns an icon appropriate to the item we are representing, or false if
+     * there is no icon available.
+     *
+     * @return  {string|boolean}  False if no custom icon.
+     */
+    customIcon: function () {
+      if (this.obj.type !== 'directory') {
+        // Indicate that this is a file.
+        if (this.obj.type === 'file') {
+          return 'file'
+        } else {
+          return 'code'
+        }
+      } else if (this.obj.dirNotFoundFlag === true) {
+        return 'disconnect'
+      } else if (this.obj.project !== null) {
+        // Indicate that this directory has a project.
+        return 'blocks-group'
+      } else if (this.obj.icon !== null) {
+        // Display the custom icon
+        return this.obj.icon
+      }
+
+      // No icon available
+      return false
+    },
+    /**
      * Returns true if this item is a root item
      */
     isRoot: function () {
       // Parent apparently can also be undefined BUG
       return this.obj.parent == null
-    },
-    /**
-     * Shortcut methods to access the store
-     */
-    activeFile: function () {
-      return this.$store.state.activeFile
-    },
-    selectedDir: function () {
-      return this.$store.state.selectedDirectory
     },
     /**
      * Returns true if the file manager mode is set to "combined"
@@ -216,6 +228,8 @@ export default {
     },
     /**
      * Returns true if there are children that can be displayed
+     *
+     * @return {boolean} Whether or not this object has children.
      */
     hasChildren: function () {
       // Return true if it's a directory, with at least one directory as children
@@ -241,18 +255,22 @@ export default {
         return this.obj.children.filter(e => e.type === 'directory')
       }
     },
-    /**
-     * Returns the correct indicator shape
-     */
-    indicatorShape: function () {
-      return this.collapsed ? 'caret right' : 'caret down'
-    },
-    indicatorARIALabel: function () {
-      return this.collapsed ? 'Uncollapse directory' : 'Collapse directory'
+    basename: function () {
+      if (this.obj.type === 'directory' || this.obj.type === 'code') {
+        return this.obj.name
+      }
+
+      if (this.obj.frontmatter != null && 'title' in this.obj.frontmatter) {
+        return this.obj.frontmatter.title
+      } else if (this.obj.firstHeading != null && this.$store.state.config['display.useFirstHeadings'] === true) {
+        return this.obj.firstHeading
+      } else {
+        return this.obj.name.replace(this.obj.ext, '')
+      }
     }
   },
   watch: {
-    activeFile: function (newVal, oldVal) {
+    selectedFile: function (newVal, oldVal) {
       this.uncollapseIfApplicable()
     },
     selectedDir: function (newVal, oldVal) {
@@ -264,9 +282,16 @@ export default {
           if (this.operationType === 'createFile') {
             // If we're generating a file, generate a filename
             this.$refs['new-object-input'].value = generateFilename()
+          } else if (this.operationType === 'createDir') {
+            // Else standard val for new dirs.
+            this.$refs['new-object-input'].value = trans('dialog.dir_new.value')
           }
           this.$refs['new-object-input'].focus()
-          this.$refs['new-object-input'].select()
+          // Select from the beginning until the last dot
+          this.$refs['new-object-input'].setSelectionRange(
+            0,
+            this.$refs['new-object-input'].value.lastIndexOf('.')
+          )
         })
       }
     }
@@ -276,8 +301,8 @@ export default {
   },
   methods: {
     uncollapseIfApplicable: function () {
-      const filePath = (this.activeFile !== null) ? this.activeFile.path : ''
-      const dirPath = (this.selectedDir !== null) ? this.selectedDir.path : ''
+      const filePath = (this.selectedFile !== null) ? String(this.selectedFile.path) : ''
+      const dirPath = (this.selectedDir !== null) ? String(this.selectedDir.path) : ''
 
       // Open the tree, if the selected file is contained in this dir somewhere
       if (filePath.startsWith(this.obj.path)) {
@@ -396,6 +421,11 @@ export default {
       }
 
       this.operationType = undefined
+    },
+    handlePrimaryIconClick: function () {
+      if (this.hasChildren === true) {
+        this.collapsed = this.collapsed === false
+      }
     }
   }
 }
@@ -416,6 +446,16 @@ body {
         background-color: transparent;
         padding: 0;
       }
+
+      &.project {
+        color: rgb(220, 45, 45);
+      }
+    }
+  }
+
+  &.dark div.tree-item-container {
+    .tree-item.project {
+      color: rgb(240, 98, 98);
     }
   }
 }
@@ -423,6 +463,7 @@ body {
 body.darwin {
   .tree-item {
     margin: 6px 0px;
+    color: rgb(53, 53, 53);
 
     .item-icon, .toggle-icon {
       display: inline-block;
@@ -445,6 +486,12 @@ body.darwin {
       background-color: var(--system-accent-color, --c-primary);
       background-image: linear-gradient(#00000000, #00000022);
       color: white;
+    }
+  }
+
+  &.dark {
+    .tree-item {
+      color: rgb(240, 240, 240);
     }
   }
 }

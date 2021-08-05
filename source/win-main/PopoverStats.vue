@@ -45,6 +45,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Stats Popover
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file displays a comprehensive stats overview.
+ *
+ * END HEADER
+ */
+
 import { trans } from '../common/i18n-renderer'
 import localiseNumber from '../common/util/localise-number'
 import { DateTime } from 'luxon'
@@ -94,7 +108,7 @@ export default {
         }
 
         const currentKey = `${year}-${m}-${day}`
-        if (allKeys.includes(currentKey)) {
+        if (allKeys.includes(currentKey) === true) {
           dailyCounts.push(this.wordCounts[currentKey])
         } else {
           dailyCounts.push(0)

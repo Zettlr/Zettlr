@@ -13,16 +13,14 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { trans } from '../../common/i18n'
+import { trans } from '../../common/i18n-main'
 import path from 'path'
 import sanitize from 'sanitize-filename'
-import { filetypes as ALLOWED_FILETYPES } from '../../common/data.json'
+import { codeFileExtensions, mdFileExtensions } from '../../common/get-file-extensions'
+import generateFilename from '../../common/util/generate-filename'
 
-const CODEFILE_TYPES = [
-  '.yml',
-  '.yaml',
-  '.tex'
-]
+const CODEFILE_TYPES = codeFileExtensions(true)
+const ALLOWED_FILETYPES = mdFileExtensions(true)
 
 export default class FileNew extends ZettlrCommand {
   constructor (app: any) {
@@ -41,13 +39,13 @@ export default class FileNew extends ZettlrCommand {
       const file = await this._app.getDocumentManager().newUnsavedFile()
       // Set it as active
       this._app.getDocumentManager().activeFile = file
-      return
+      return // Return early
     }
 
-    let dir = this._app.getFileSystem().findDir(arg.path)
+    let dir = this._app.getFileSystem().openDirectory
 
-    if (dir === null) {
-      dir = this._app.getFileSystem().openDirectory
+    if ('path' in arg) {
+      dir = this._app.getFileSystem().findDir(arg.path)
     }
 
     if (dir === null) {
@@ -57,8 +55,8 @@ export default class FileNew extends ZettlrCommand {
 
     try {
       // Then, make sure the name is correct.
-      let filename = sanitize(arg.name, { 'replacement': '-' })
-      if (filename.trim() === '') {
+      let filename = (arg.name !== undefined) ? sanitize(arg.name.trim(), { 'replacement': '-' }) : generateFilename()
+      if (filename === '') {
         throw new Error('Could not create file: Filename was not valid')
       }
 

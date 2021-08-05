@@ -16,6 +16,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Menubar
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays a custom-styled menu bar on non-macOS platforms.
+ *
+ * END HEADER
+ */
+
 const ipcRenderer = window.ipc
 
 export default {
@@ -177,7 +191,7 @@ body.linux {
     color: rgb(30, 30, 30);
 
     span.top-level-item:hover {
-      background-color: rgb(0, 0, 0, .3);
+      background-color: rgba(0, 0, 0, .3);
     }
   }
 

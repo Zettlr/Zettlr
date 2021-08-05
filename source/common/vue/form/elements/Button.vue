@@ -19,6 +19,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Button
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Represents a generic button
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'ButtonControl',
   props: {

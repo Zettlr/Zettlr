@@ -4,7 +4,8 @@
         ".rmd",
         ".markdown",
         ".txt",
-        ".tex"
+        ".tex",
+        ".mdx"
     ],
     "ignoreDirs": [
         "^\\.",
@@ -13,11 +14,9 @@
         ".+?\\.textbundle"
     ],
     "poll_time": 5000,
-    "repo_url": "https://api.zettlr.com/v1/releases/latest",
-    "sponsors_url": "https://api.zettlr.com/v1/sponsors",
     "translation_api_url": "https://translate.zettlr.com/api/languages",
     "import_files": [
-        [ "markdown",   "Markdown",                          "md", "markdown", "rmd" ],
+        [ "markdown",   "Markdown",                          "md", "markdown", "rmd", "mdx" ],
         [ "txt",        "Text",                              "txt" ],
         [ "docbook",    "DocBook",                           "docbook" ],
         [ "docx",       "Microsoft Word",                    "docx", "doc" ],

@@ -28,7 +28,6 @@ pandocCommand: pandoc "$infile$" -f markdown $outflag$ $tpl$ $toc$ $tocdepth$ $c
   $standalone$ --pdf-engine=xelatex --mathjax -o "$outfile$"
 export:
   dir: temp # temp|cwd
-  stripIDs: false
   stripTags: true
   stripLinks: unlink # full|unlink|no
 pdf:

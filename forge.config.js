@@ -53,27 +53,7 @@ async function downloadPandoc (platform, arch) {
 
 module.exports = {
   hooks: {
-    generateAssets: async (forgeConfig) => {
-      // Check if we can bundle Pandoc. To mimick electron forge's behaviour,
-      // we check the same CLI arguments, and fall back to the current platform,
-      // if applicable.
-      const idxPlatform = process.argv.indexOf('--platform')
-      const idxArch = process.argv.indexOf('--arch')
-
-      // Default: process.platform. If a platform has been explicitly defined,
-      // use that one.
-      let targetPlatform = process.platform
-      if (idxPlatform > -1 && process.argv.length > idxPlatform + 1) {
-        targetPlatform = process.argv[idxPlatform + 1]
-      }
-
-      // Default: process.arch. If an architecture has been explicitly defined,
-      // use that one.
-      let targetArch = process.arch
-      if (idxArch > -1 && process.argv.length > idxArch + 1) {
-        targetArch = process.argv[idxArch + 1]
-      }
-
+    generateAssets: async (forgeConfig, targetPlatform, targetArch) => {
       const isMacOS = targetPlatform === 'darwin'
       const isLinux = targetPlatform === 'linux'
       const isWin32 = targetPlatform === 'win32'
@@ -93,7 +73,7 @@ module.exports = {
 
         await fs.copyFile(path.join(__dirname, './resources/pandoc-win32-x64.exe'), path.join(__dirname, './resources/pandoc.exe'))
 
-        forgeConfig.packagerConfig.extraResource.push('./resources/pandoc.exe')
+        forgeConfig.packagerConfig.extraResource.push(path.join(__dirname, './resources/pandoc.exe'))
       } else if (supportsPandoc && (isMacOS || isLinux)) {
         // Download Pandoc either for macOS or Linux ...
         const platform = (isMacOS) ? 'darwin' : 'linux'
@@ -107,7 +87,7 @@ module.exports = {
 
         await fs.copyFile(path.join(__dirname, `./resources/pandoc-${platform}-${arch}`), path.join(__dirname, './resources/pandoc'))
 
-        forgeConfig.packagerConfig.extraResource.push('./resources/pandoc')
+        forgeConfig.packagerConfig.extraResource.push(path.join(__dirname, './resources/pandoc'))
       } else {
         // If someone is building this on an unsupported platform, drop a warning.
         console.log(`\nBuilding for an unsupported platform/arch-combination ${targetPlatform}/${targetArch} - not bundling Pandoc.`)
@@ -115,6 +95,9 @@ module.exports = {
     }
   },
   packagerConfig: {
+    appBundleId: 'com.zettlr.app',
+    // This info.plist file contains file association for the app on macOS.
+    extendInfo: './scripts/assets/info.plist',
     asar: true,
     darwinDarkModeSupport: 'true',
     // Electron-forge automatically adds the file extension based on OS
@@ -141,13 +124,23 @@ module.exports = {
       appleId: process.env['APPLE_ID'],
       appleIdPassword: process.env['APPLE_ID_PASS']
     },
-    extraResource: [] // NOTE: This will be filled in the generateAssets hook
+    extraResource: [
+      'resources/icons/icon.code.icns'
+    ]
   },
   plugins: [
     [
       '@electron-forge/plugin-webpack',
       {
         mainConfig: './webpack.main.config.js',
+        // Since electron-forge v6.0.0-beta.58, this property controls the CSP
+        // for the development process. Since the defaults by electron-forge are
+        // not suitable for our needs (since they prevent the usage of our
+        // custom safe-file:// protocol), we must manually set this. Here we are
+        // basically copying the CSP from the HTML-files, but with 'unsafe-eval'
+        // added (which webpack needs for the sourcemaps).
+        // DEBUG: Re-enable once we can move back to a version after v6.0.0-beta.57
+        devContentSecurityPolicy: "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
         renderer: {
           config: './webpack.renderer.config.js',
           entryPoints: [
@@ -187,14 +180,6 @@ module.exports = {
               html: './source/win-preferences/index.htm',
               js: './source/win-preferences/index.ts',
               name: 'preferences',
-              preload: {
-                js: './source/common/modules/preload/index.ts'
-              }
-            },
-            {
-              html: './source/win-custom-css/index.htm',
-              js: './source/win-custom-css/index.ts',
-              name: 'custom_css',
               preload: {
                 js: './source/common/modules/preload/index.ts'
               }
@@ -240,9 +225,9 @@ module.exports = {
               }
             },
             {
-              html: './source/win-defaults/index.htm',
-              js: './source/win-defaults/index.ts',
-              name: 'defaults',
+              html: './source/win-assets/index.htm',
+              js: './source/win-assets/index.ts',
+              name: 'assets',
               preload: {
                 js: './source/common/modules/preload/index.ts'
               }

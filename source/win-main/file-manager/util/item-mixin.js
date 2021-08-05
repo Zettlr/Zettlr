@@ -1,3 +1,19 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Item Mixin
+ * CVM-Role:        Utility Function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file contains mixin properties for both the TreeItem and
+ *                  FileItem Vue components, since both -- albeit looking
+ *                  completely different -- implement much of the same functionality.
+ *
+ * END HEADER
+ */
+
 // This is a mixin that is being implemented by both the file item and tree item
 // and contains shared logic that applies to both objects. This way, we have
 // different styling for tree items and file list items, but the same underlying
@@ -24,6 +40,12 @@ export default {
   computed: {
     isDirectory: function () {
       return this.obj.type === 'directory'
+    },
+    selectedFile: function () {
+      return this.$store.state.activeFile
+    },
+    selectedDir: function () {
+      return this.$store.state.selectedDirectory
     }
   },
   watch: {
@@ -34,9 +56,24 @@ export default {
 
       this.$nextTick(() => {
         this.$refs['name-editing-input'].focus()
-        this.$refs['name-editing-input'].select()
+        // Select from the beginning until the last dot
+        this.$refs['name-editing-input'].setSelectionRange(
+          0,
+          this.$refs['name-editing-input'].value.lastIndexOf('.')
+        )
       })
     }
+  },
+  mounted: function () {
+    // As soon as this element is mounted (irrespective of tree/list item),
+    // listen to events that trigger something on this object.
+    ipcRenderer.on('shortcut', (event, command) => {
+      if (command === 'rename-file' && this.obj.path === this.selectedFile.path) {
+        this.nameEditing = true
+      } else if (command === 'rename-dir' && this.obj.path === this.selectedDir.path) {
+        this.nameEditing = true
+      }
+    })
   },
   methods: {
     /**
@@ -92,12 +129,18 @@ export default {
         })
           .catch(e => console.error(e))
       } else if (type === 'directory') {
-        // Select this directory
-        ipcRenderer.invoke('application', {
-          command: 'set-open-directory',
-          payload: this.obj.path
-        })
-          .catch(e => console.error(e))
+        if (this.selectedDir === this.obj) {
+          // The clicked directory was already the selected directory, so just
+          // tell the application to show the file list, if applicable.
+          this.$root.$emit('toggle-file-list')
+        } else {
+          // Select this directory
+          ipcRenderer.invoke('application', {
+            command: 'set-open-directory',
+            payload: this.obj.path
+          })
+            .catch(e => console.error(e))
+        }
       }
     },
     /**
@@ -133,6 +176,19 @@ export default {
               payload: { path: this.obj.path }
             })
               .catch(err => console.error(err))
+          } else if (clickedID === 'menu.close_workspace') {
+            ipcRenderer.invoke('application', {
+              command: 'root-close',
+              payload: this.obj.path
+            })
+              .catch(err => console.error(err))
+          } else if (clickedID === 'menu.project_build') {
+            // We should trigger an export of this project.
+            ipcRenderer.invoke('application', {
+              command: 'dir-project-export',
+              payload: this.obj.path
+            })
+              .catch(err => console.error(err))
           } else if (clickedID === 'menu.properties') {
             const data = {
               dirname: this.obj.name,
@@ -140,7 +196,8 @@ export default {
               modtime: this.obj.modtime,
               files: this.obj.children.filter(e => e.type !== 'directory').length,
               dirs: this.obj.children.filter(e => e.type === 'directory').length,
-              isProject: this.isProject === true,
+              isProject: this.obj.type === 'directory' && this.obj.project !== null,
+              fullPath: this.obj.path,
               icon: this.obj.icon
             }
 
@@ -165,12 +222,12 @@ export default {
 
               // Set the project flag if applicable
               const projectChanged = data.isProject !== this.isProject
-              if (projectChanged && data.isProject) {
+              if (projectChanged && data.isProject === true) {
                 ipcRenderer.invoke('application', {
                   command: 'dir-new-project',
                   payload: { path: this.obj.path }
                 }).catch(e => console.error(e))
-              } else if (projectChanged && !data.isProject) {
+              } else if (projectChanged && data.isProject === false) {
                 ipcRenderer.invoke('application', {
                   command: 'dir-remove-project',
                   payload: { path: this.obj.path }
@@ -192,9 +249,7 @@ export default {
         })
       } else {
         fileContextMenu(event, this.obj, this.$el, (clickedID) => {
-          console.log(clickedID)
           if (clickedID === 'new-tab') {
-            console.log('Will open in new tab!')
             // Request the clicked file, explicitly in a new tab
             ipcRenderer.invoke('application', {
               command: 'open-file',
@@ -217,7 +272,7 @@ export default {
               payload: { path: this.obj.path }
             })
               .catch(err => console.error(err))
-          } else if (clickedID === 'menu.properties') {
+          } else if (clickedID === 'properties') {
             const data = {
               filename: this.obj.name,
               creationtime: this.obj.creationtime,

@@ -1,46 +1,24 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Menu constructor for Windows
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file exposes a getMenu function returning the Windows
+ *                  application menu. NOTE that this menu is also used by all
+ *                  non-darwin platforms currently, so it really is cross-platform.
+ *
+ * END HEADER
+ */
+
 import { app, MenuItemConstructorOptions, shell } from 'electron'
-import { trans } from '../../../common/i18n'
+import { trans } from '../../../common/i18n-main'
 import path from 'path'
 
 export default function getMenu (): MenuItemConstructorOptions[] {
-  // Prepare the dynamically generated recent docs menu here
-  const recentDocsItem: MenuItemConstructorOptions = {
-    id: 'menu.recent_docs',
-    label: trans('menu.recent_docs'),
-    submenu: [{
-      id: 'menu.clear_recent_docs',
-      label: trans('menu.clear_recent_docs'),
-      enabled: global.recentDocs.hasDocs(),
-      click: (menuitem, focusedWindow) => {
-        global.recentDocs.clear()
-      }
-    }]
-  }
-
-  if (global.recentDocs.hasDocs() &&
-    // TypeScript can be a pain in the ass sometimes
-    recentDocsItem.submenu !== undefined &&
-    Array.isArray(recentDocsItem.submenu)
-  ) {
-    recentDocsItem.submenu.push({
-      type: 'separator'
-    })
-
-    for (const recent of global.recentDocs.get().slice(0, 10)) {
-      recentDocsItem.submenu.push({
-        id: recent.name,
-        label: recent.name,
-        click: function (menuitem, focusedWindow) {
-          global.application.runCommand('open-file', {
-            path: recent.path,
-            newTab: false
-          })
-            .catch(err => global.log.error(String(err.message), err))
-        }
-      })
-    }
-  }
-
   // Now generate the menu itself
 
   const menu: MenuItemConstructorOptions[] = [
@@ -61,8 +39,10 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         {
           id: 'menu.new_dir',
           label: trans('menu.new_dir'),
-          accelerator: 'Ctrl+Shift+N' // ,
-          // command: 'dir-new' TODO
+          accelerator: 'Ctrl+Shift+N',
+          click: function (menuitem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'new-dir')
+          }
         },
         {
           type: 'separator'
@@ -86,6 +66,19 @@ export default function getMenu (): MenuItemConstructorOptions[] {
           }
         },
         {
+          id: 'menu.recent_docs',
+          label: trans('menu.recent_docs'),
+          role: 'recentDocuments',
+          submenu: [{
+            id: 'menu.clear_recent_docs',
+            label: trans('menu.clear_recent_docs'),
+            role: 'clearRecentDocuments'
+          }]
+        },
+        {
+          type: 'separator'
+        },
+        {
           id: 'menu.save',
           label: trans('menu.save'),
           accelerator: 'Ctrl+S',
@@ -93,7 +86,6 @@ export default function getMenu (): MenuItemConstructorOptions[] {
             focusedWindow?.webContents.send('shortcut', 'save-file')
           }
         },
-        recentDocsItem,
         {
           type: 'separator'
         },
@@ -108,8 +100,10 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         {
           id: 'menu.export',
           label: trans('menu.export'),
-          accelerator: 'Ctrl+E' // ,
-          // command: 'export' TODO
+          accelerator: 'Ctrl+E',
+          click: function (menuItem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'export')
+          }
         },
         {
           id: 'menu.print',
@@ -133,8 +127,8 @@ export default function getMenu (): MenuItemConstructorOptions[] {
               }
             },
             {
-              id: 'menu.defaults_preferences',
-              label: trans('menu.defaults_preferences'),
+              id: 'menu.assets_manager',
+              label: trans('menu.assets_manager'),
               accelerator: 'Ctrl+Alt+,',
               click: function (menuitem, focusedWindow) {
                 global.application.showDefaultsPreferences()
@@ -146,13 +140,6 @@ export default function getMenu (): MenuItemConstructorOptions[] {
               click: function (menuitem, focusedWindow) {
                 global.application.showTagManager()
               }
-            },
-            {
-              id: 'menu.custom_css',
-              label: trans('menu.custom_css'),
-              click: function (menuitem, focusedWindow) {
-                global.application.showCustomCSS()
-              }
             }
           ]
         },
@@ -161,8 +148,11 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         },
         {
           id: 'menu.import_lang_file',
-          label: trans('menu.import_lang_file') // ,
-          // command: 'import-lang-file' TODO
+          label: trans('menu.import_lang_file'),
+          click: function (menuItem, focusedWindow) {
+            global.application.runCommand('import-lang-file')
+              .catch(e => global.log.error('[Menu Provider] Cannot import translation', e))
+          }
         },
         {
           id: 'menu.import_dict_file',
@@ -186,14 +176,18 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         {
           id: 'menu.rename_file',
           label: trans('menu.rename_file'),
-          accelerator: 'Ctrl+R' //,
-          // command: 'file-rename' TODO
+          accelerator: 'Ctrl+R',
+          click: function (menuitem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'rename-file')
+          }
         },
         {
           id: 'menu.rename_dir',
           label: trans('menu.rename_dir'),
-          accelerator: 'Ctrl+Shift+R' // ,
-          // command: 'dir-rename' TODO
+          accelerator: 'Ctrl+Shift+R',
+          click: function (menuitem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'rename-dir')
+          }
         },
         {
           type: 'separator'
@@ -201,14 +195,18 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         {
           id: 'menu.delete_file',
           label: trans('menu.delete_file'),
-          accelerator: 'Delete' // ,
-          // command: 'file-delete' TODO
+          accelerator: 'Delete',
+          click: function (menuitem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'delete-file')
+          }
         },
         {
           id: 'menu.delete_dir',
           label: trans('menu.delete_dir'),
-          accelerator: 'Ctrl+Delete' // ,
-          // command: 'dir-delete' TODO
+          accelerator: 'Ctrl+Delete',
+          click: function (menuitem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'delete-dir')
+          }
         },
         {
           type: 'separator'
@@ -358,9 +356,11 @@ export default function getMenu (): MenuItemConstructorOptions[] {
           id: 'menu.toggle_distraction_free',
           label: trans('menu.toggle_distraction_free'),
           accelerator: 'Ctrl+J',
-          type: 'checkbox',
-          checked: false // ,
-          // command: 'toggle-distraction-free' TODO
+          // type: 'checkbox',
+          // checked: false,
+          click: function (menuitem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'toggle-distraction-free' /*, menuitem.checked */)
+          }
         },
         {
           id: 'menu.toggle_typewriter_mode',
@@ -398,25 +398,19 @@ export default function getMenu (): MenuItemConstructorOptions[] {
           id: 'menu.reset_zoom',
           label: trans('menu.reset_zoom'),
           accelerator: 'Ctrl+0',
-          click: function (menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'zoom-reset')
-          }
+          role: 'resetZoom'
         },
         {
           id: 'menu.zoom_in',
           label: trans('menu.zoom_in'),
           accelerator: 'Ctrl+Plus',
-          click: function (menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'zoom-in')
-          }
+          role: 'zoomIn'
         },
         {
           id: 'menu.zoom_out',
           label: trans('menu.zoom_out'),
           accelerator: 'Ctrl+-',
-          click: function (menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'zoom-out')
-          }
+          role: 'zoomOut'
         },
         {
           type: 'separator'
@@ -434,11 +428,6 @@ export default function getMenu (): MenuItemConstructorOptions[] {
       id: 'debug-menu',
       label: trans('menu.labels.debug'),
       submenu: [
-        {
-          id: 'menu.inspect_clipboard',
-          label: trans('menu.inspect_clipboard') // ,
-          // command: 'inspect-clipboard' TODO
-        },
         {
           id: 'menu.reload',
           label: trans('menu.reload'),

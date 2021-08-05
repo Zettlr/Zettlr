@@ -1,7 +1,7 @@
 <template>
   <WindowChrome
     v-bind:title="windowTitle"
-    v-bind:titlebar="true"
+    v-bind:titlebar="false"
     v-bind:menubar="false"
     v-bind:show-statusbar="true"
     v-bind:statusbar-controls="statusbarControls"
@@ -16,8 +16,11 @@
         {{ dimensionsLabel }}: <strong>{{ imgWidth }}&times;{{ imgHeight }}px</strong>
       </p>
       <TextControl
+        ref="filename"
         v-model="fileName"
         v-bind:label="filenameLabel"
+        v-on:confirm="handleClick('save')"
+        v-on:escape="handleClick('cancel')"
       >
       </TextControl>
       <File
@@ -33,6 +36,8 @@
         v-bind:max="imgWidth"
         v-bind:placeholder="imgWidth"
         v-bind:inline="true"
+        v-on:confirm="handleClick('save')"
+        v-on:escape="handleClick('cancel')"
       ></NumberControl>
       <NumberControl
         v-model="imgHeight"
@@ -40,6 +45,8 @@
         v-bind:max="imgHeight"
         v-bind:placeholder="imgHeight"
         v-bind:inline="true"
+        v-on:confirm="handleClick('save')"
+        v-on:escape="handleClick('cancel')"
       ></NumberControl>
       <Checkbox
         v-model="retainAspect"
@@ -50,6 +57,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        PasteImage
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays the paste image modal window.
+ *
+ * END HEADER
+ */
+
 import WindowChrome from '../common/vue/window/Chrome.vue'
 import Checkbox from '../common/vue/form/elements/Checkbox.vue'
 import TextControl from '../common/vue/form/elements/Text.vue'
@@ -72,13 +93,14 @@ export default {
     File
   },
   data: function () {
-    const image = clipboard.readImage()
-    const size = image.getSize() // First get the original size
-    const aspect = image.getAspectRatio() // Then the aspect
-    const dataUrl = image.resize({ 'height': 200 }).toDataURL()
+    // const image = clipboard.readImage()
+    // const size = image.getSize() // First get the original size
+    // const aspect = image.getAspectRatio() // Then the aspect
+    // const dataUrl = image.resize({ 'height': 200 }).toDataURL()
+    const { size, aspect, dataUrl } = clipboard.getImageData()
     // Get the hash from the window arguments
     let startPath
-    [startPath] = window.process.argv.slice(-1)
+    [startPath] = process.argv.slice(-1)
 
     let name = ''
     if (clipboard.readText().length > 0) {
@@ -154,6 +176,11 @@ export default {
     retainAspect: function () {
       this.recalculateDimensions('width')
     }
+  },
+  mounted: function () {
+    // On instantiation, already focus and select the filename input
+    this.$refs.filename.focus()
+    this.$refs.filename.select()
   },
   methods: {
     recalculateDimensions: function (type) {

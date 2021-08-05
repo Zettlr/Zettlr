@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        md2html function
+ * CVM-Role:        Utility function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     md2html converts a Markdown string to valid HTML
+ *
+ * END HEADER
+ */
+
 const { Converter } = require('showdown')
 const Citr = require('@zettlr/citr')
 

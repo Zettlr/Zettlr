@@ -65,33 +65,17 @@
  * ADDITIONAL STUFF
  */
 
- @c-primary: @orange-0;
- @c-primary-shade: @orange-1;
+@c-primary: @orange-0;
+@c-primary-shade: @orange-1;
 
 body {
-  #editor .CodeMirror {
-    // We only need to change the editor's font
-    font-family: @font-liberation;
-  }
-
   #editor {
     // In light mode, use a beige background colour
     background-color: var(--beige-0);
-  }
 
-  #file-tree { background-color: var(--beige-1); }
-  #file-list {
-    background-color: var(--beige-1);
-    div.directory {
-      color: var(--orange-1);
+    .CodeMirror {
+      // We only need to change the editor's font
+      font-family: @font-liberation;
     }
   }
-
-  #file-manager #file-manager-resize { background-color: var(--beige-0); }
-}
-
-// Exchange the colour of the preview image in the display settings to accomodate
-// for the primary colour of this theme.
-.modal .dialog div.image-size .image {
-  filter: hue-rotate(230deg) saturate(100%) contrast(100%) brightness(119%);
 }

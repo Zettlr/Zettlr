@@ -11,17 +11,19 @@
  * END HEADER
  */
 
-const path = require('path')
+import path from 'path'
+import { mdFileExtensions, codeFileExtensions } from '../get-file-extensions'
 
-// Supported filetypes
-const filetypes = require('../data.json').filetypes
+const MD_FILES = mdFileExtensions(true)
+const CODE_FILES = codeFileExtensions(true)
 
 /**
 * Returns true, if a given file should be ignored.
-* @param  {String} p The path to the file.
-* @return {Boolean}   True or false, depending on whether the file should be ignored.
+*
+* @param  {string}   p  The path to the file.
+* @return {boolean}     True or false, depending on whether the file should be ignored.
 */
-module.exports = function (p) {
+export default function ignoreFile (p) {
   let ext = path.extname(p).toLowerCase()
-  return (!filetypes.includes(ext))
+  return (!MD_FILES.includes(ext) && !CODE_FILES.includes(ext))
 }

@@ -1,4 +1,18 @@
 /**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        CodeMirror typewriter hook
+ * CVM-Role:        CodeMirror plugin
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Enables the typewriter mode on the CodeMirror editor.
+ *
+ * END HEADER
+ */
+
+/**
  * Saves the last highlighted line
  *
  * @var {Number}
@@ -21,7 +35,7 @@ module.exports = (cm) => {
  * @param   {CodeMirror}  cm  The CodeMirror instance
  */
 function typewriter (cm) {
-  if (!cm.getOption('zettlr').typewriterMode) {
+  if (cm.getOption('zettlr').typewriterMode === false) {
     if (lastHighlightLine > -1) {
       // Cleanup after option change
       cm.removeLineClass(lastHighlightLine, 'background', 'typewriter-active-line')

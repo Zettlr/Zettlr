@@ -25,7 +25,7 @@
         </template>
         <template v-else-if="isDownloading && !isFinished">
           <!-- We are currently downloading an update -->
-          <p>Downloading your update: {{ downloadProgress.download_percent }} % ({{ getETA }})</p>
+          <p>{{ downloadProgressLabel }}: {{ downloadProgress.download_percent }} % ({{ getETA }})</p>
           <ProgressControl
             v-bind:max="downloadProgress.size_total"
             v-bind:value="downloadProgress.size_downloaded"
@@ -45,13 +45,27 @@
         <div id="changelog" v-html="lastResponse.changelog"></div>
       </template>
       <template v-else>
-        No update available. You have the most recent version installed.
+        {{ noUpdateMessage }}
       </template>
     </div>
   </WindowChrome>
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Update
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     The update window's entry component
+ *
+ * END HEADER
+ */
+
 import WindowChrome from '../common/vue/window/Chrome'
 import ButtonControl from '../common/vue/form/elements/Button'
 import ProgressControl from '../common/vue/form/elements/Progress'
@@ -68,10 +82,10 @@ export default {
   },
   data: function () {
     return {
-      windowTitle: 'Updater', // TODO: Translate
+      windowTitle: trans('dialog.update.window_title'),
       lastResponse: null, // Type: ParsedAPIResponse
       disableStartButton: false, // True as soon as the update starts
-      startButtonLabel: 'Click to start update', // The initial label of the start button TODO: Translate
+      startButtonLabel: trans('dialog.update.start_update_label'),
       downloadProgress: {
         name: '',
         full_path: '',
@@ -108,6 +122,12 @@ export default {
     updateNotification: function () {
       return trans('dialog.update.notification')
     },
+    downloadProgressLabel: function () {
+      return trans('dialog.update.download_progress_label')
+    },
+    noUpdateMessage: function () {
+      return trans('dialog.update.no_new_update')
+    },
     getETA: function () {
       let seconds = this.downloadProgress.eta_seconds
       if (seconds > 60) {
@@ -143,7 +163,7 @@ export default {
     },
     startUpdate: function () {
       this.disableStartButton = true
-      this.startButtonLabel = 'Starting update …' // TODO: Translate
+      this.startButtonLabel = trans('dialog.update.start_update_message')
       ipcRenderer.invoke('update-provider', { command: 'begin-update' })
         .catch(e => {
           this.disableStartButton = false

@@ -15,7 +15,7 @@
 import ZettlrCommand from './zettlr-command'
 import { app, shell } from 'electron'
 import { makeExport, getAvailableFormats } from '../modules/export'
-import { trans } from '../../common/i18n'
+import { trans } from '../../common/i18n-main'
 import { ExporterOptions } from '../modules/export/types'
 
 export default class Export extends ZettlrCommand {
@@ -56,7 +56,7 @@ export default class Export extends ZettlrCommand {
       const output = await makeExport(exporterOptions, options)
       if (output.code === 0) {
         global.log.info(`Successfully exported file to ${output.targetFile}`)
-        global.notify.normal(trans('system.export_success', format.toUpperCase()), true)
+        global.notify.normal(trans('system.export_success', format.toUpperCase()))
 
         // In case of a textbundle/pack it's a folder, else it's a file
         if ([ 'textbundle', 'textpack' ].includes(arg.format)) {

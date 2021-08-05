@@ -2,7 +2,7 @@
 
 ## DEPRECATION: 32 bit
 
-No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supported. On Linux, ARM is not available until we find a good solution of running Pandoc there.
+No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supported. For Windows ARM builds, Pandoc cannot be shipped as of now.
 
 ## New Configuration Options
 
@@ -20,6 +20,14 @@ The idea of "transitive files" we implemented in previous iterations of Zettlr p
 
 A few years ago we implemented auto-saving after a delay of five seconds with no change to the current file. However, that feature was always a little bit counter-intuitive. Instead, the new Zettlr version removes auto-saving and re-instates manual saving (since the "Save" menu option was never gone). We did this for several reasons. First, Zettlr is first and foremost a text editor working with files on your computer, so you are used to having to save files manually, and Zettlr should've never deviated from that. Furthermore, if we would implement a data-safe autosaving ability, this would put unnecessary strain on your computer's hard drive. Thus we opted for the traditional way and thus you need to manually save changes to files now. We found during beta that this is much more consistent and easy to work with.
 
+## Custom CSS has moved
+
+The Custom CSS can now be edited directly in the assets dialog where you can also edit your defaults files.
+
+## Zoom Functionality has changed
+
+While in the past it was possible to use the common zoom shortcuts to only zoom the editor itself in or out, and additionally you could zoom while scrolling, this functionality has been deprecated in favour of enabling the zooming of the whole application. This will enable especially visually impaired people to work better with Zettlr. To zoom in and out only the font size of the editor itself, you can make use of the new preference setting allowing you to set the editor's font size.
+
 ## GUI and Functionality
 
 - **Feature**: Switched the Exporting process in a way that allows more flexibility in setting options.
@@ -27,6 +35,7 @@ A few years ago we implemented auto-saving after a delay of five seconds with no
 - **Feature**: Zettlr now supports bibliography files on a per-file basis. Just set the wanted bibliography in your YAML frontmatter, within the `bibliography`-property.
 - **Feature**: Now Zettlr can export to PDF even without any LaTeX-distribution installed on the system.
 - **Feature**: The footnote editing logic has been improved. Now, multiline footnotes are handled appropriately, and you can safely use multi-line footnotes alongside the in-place editing feature.
+- **Feature**: Custom data directory via `--data-dir=<path_to_directory>` switch.
 - 32 bit AppImages and Windows are no longer supported.
 - Double-dollar equations are now rendered in display mode.
 - Removed the Pandoc installation item from the help menu.
@@ -37,6 +46,11 @@ A few years ago we implemented auto-saving after a delay of five seconds with no
 - All windows will now remember their last position (new: log window and print window).
 - Some components of the renderer elements will now respect a given accent colour set by your operating system (only available for macOS and Windows).
 - You can now close files by middle-clicking their tabs.
+- MDX supported as a type of markdown file
+- New File and Edit File can now fast rename without selecting the extension
+- Add a tray to the system notification area, off by default. To activate, see Preferences → Advanced → "Leave app running in the notification area" (or "Show app in the notification area" when using MacOS).
+- Fixed a bug that would mark some quotation marks as misspelled.
+- Fix the visibility problems under night mode mentioned in issue #1845
 
 ## Under the Hood
 
@@ -63,6 +77,38 @@ A few years ago we implemented auto-saving after a delay of five seconds with no
 - Zettlr is now completely jQuery-free.
 - Migrated the FSAL cache from unstable Objects to Maps and Sets.
 - Migrated the TagProvider to a Map as well.
+
+# 1.8.9
+
+## HOTFIX FOR JPCERT#90544144
+
+> Read our Postmortem on this issue and the last one on our blog.
+
+This is a hotfix that fixes a potentially severe security-issue, reported to us
+by the Japanese cybersecurity organisation JPCERT/CC. It was reported that due
+to insecure iFrame handling on our side, malicious actors could take over users'
+computers using specially crafted iFrame-embed codes or Markdown-documents
+containing such an iFrame.
+
+This release closes this vulnerability. Specifically, the following precautions
+were taken:
+
+1. Now, whenever Zettlr renders an iFrame, it will omit all attributes except
+   `src` -- in the security disclosure, the attribute `srcdoc` has been used to
+   maliciously access the test system. While this means that certain features
+   are not supported during preview (e.g., `allowfullscreen`), remember that the
+   attributes will still be exported so that in HTML exports, they will work.
+2. We have added a global whitelist that by default only contains the hostnames
+   of YouTube and Vimeo players so that those embeds work out of the box. For
+   all other hostnames, rendering of iFrames will be blocked by default.
+   Instead, you will be presented with a warning and be asked whether or not you
+   want to render content from the given hostname. You can then choose to render
+   it _once_, or permanently add the named hostname to the whitelist.
+
+> Note that you can completely disable any iFrame pre-rendering in your display preferences.
+
+We would like to apologise for the inconvenience. If you are interested in how
+it came to this situation, please read our Postmortem on this issue.
 
 # 1.8.8
 

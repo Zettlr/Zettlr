@@ -21,7 +21,7 @@
       the first people will have a decade of years, but even then it would only
       be ten lines. I think anything below 52 is okay-ish :D
     -->
-    <h1>Word counts {{ currentYear }}</h1>
+    <h1>{{ chartLabel }} {{ currentYear }}</h1>
     <ButtonControl
       v-bind:disabled="unit === 'year' || currentYear <= earliestYear"
       v-bind:icon="'angle left'"
@@ -59,10 +59,35 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        ChartView
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays charts with word counts by time.
+ *
+ * END HEADER
+ */
+
 import { DateTime } from 'luxon'
-import Chart from 'chart.js/auto' // Necessary for Chart.js 3.x TODO: Only import what we need!
+import { trans } from '../common/i18n-renderer'
+import {
+  Chart,
+  CategoryScale,
+  LinearScale,
+  LineController,
+  PointElement,
+  LineElement
+} from 'chart.js'
 import SelectControl from '../common/vue/form/elements/Select.vue'
 import ButtonControl from '../common/vue/form/elements/Button.vue'
+
+// Register the components of Chart.js which we need
+Chart.register(CategoryScale, LinearScale, LineController, PointElement, LineElement)
 
 export default {
   name: 'ChartView',
@@ -86,6 +111,9 @@ export default {
     }
   },
   computed: {
+    chartLabel: function () {
+      return trans('dialog.statistics.tabs.chart_label')
+    },
     earliestYear: function () {
       const years = Object.keys(this.wordCounts).map(k => parseInt(k.substr(0, 4), 10))
       let min = +Infinity

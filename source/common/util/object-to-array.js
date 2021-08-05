@@ -1,4 +1,19 @@
 /**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        objectToArray
+ * CVM-Role:        Utility function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     objectToArray converts a tree-like object with nested
+ *                  properties into a one-dimensional array.
+ *
+ * END HEADER
+ */
+
+/**
  * Crunches a recursive object tree into a one-dimensional array.
  * @param {Object} tree The tree to be transformed
  * @param {String} traverse The property over which the recursion takes place

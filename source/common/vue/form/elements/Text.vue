@@ -1,14 +1,15 @@
 <template>
   <div v-bind:class="{ 'inline': inline, 'form-control': true }">
     <label v-if="label" v-bind:for="fieldID" v-html="label"></label>
-    <div v-if="reset" class="input-button-group">
+    <div v-if="reset !== false" class="input-button-group">
       <input
         v-bind:id="fieldID"
         ref="input"
+        type="text"
         v-bind:value="value"
         v-bind:class="{ 'inline': inline }"
         v-bind:placeholder="placeholder"
-        type="text"
+        v-bind:disabled="disabled"
         v-on:input="$emit('input', $event.target.value)"
         v-on:keyup.enter="$emit('confirm', $event.target.value)"
         v-on:keyup.esc="$emit('escape', $event.target.value)"
@@ -16,7 +17,7 @@
       >
       <button
         type="button"
-        data-tippy-content="dialog.preferences.zkn.reset_default_id"
+        v-bind:title="resetLabel"
         v-on:click="resetValue"
       >
         <clr-icon shape="refresh"></clr-icon>
@@ -27,10 +28,11 @@
       v-else
       v-bind:id="fieldID"
       ref="input"
+      type="text"
       v-bind:value="value"
       v-bind:class="{ 'inline': inline }"
       v-bind:placeholder="placeholder"
-      type="text"
+      v-bind:disabled="disabled"
       v-on:input="$emit('input', $event.target.value)"
       v-on:keyup.enter="$emit('confirm', $event.target.value)"
       v-on:keyup.esc="$emit('escape', $event.target.value)"
@@ -40,12 +42,31 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Text
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     A text input.
+ *
+ * END HEADER
+ */
+import { trans } from '../../../i18n-renderer'
+
 export default {
   name: 'FieldText',
   props: {
     value: {
       type: String,
       default: ''
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     },
     placeholder: {
       type: String,
@@ -60,8 +81,8 @@ export default {
       default: ''
     },
     reset: {
-      type: String,
-      default: ''
+      type: [ String, Boolean ],
+      default: false
     },
     inline: {
       type: Boolean,
@@ -71,6 +92,9 @@ export default {
   computed: {
     fieldID: function () {
       return 'field-input-' + this.name
+    },
+    resetLabel: function () {
+      return trans('gui.reset')
     }
   },
   methods: {

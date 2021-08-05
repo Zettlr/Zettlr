@@ -10,6 +10,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Spacer
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Does what it says on the can: Adds space to the toolbar.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'SpacerControl',
   props: {

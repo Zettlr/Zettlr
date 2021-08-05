@@ -36,6 +36,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Theme
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays a theme selector including preview. NOTE: Currently not in use.
+ *
+ * END HEADER
+ */
+
 export default {
   name: 'ThemeField',
   props: {

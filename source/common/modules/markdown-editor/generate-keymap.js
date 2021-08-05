@@ -1,10 +1,21 @@
-// This plugin applies specific line classes to markdown headings to enable you
-// to enlargen them via CSS.
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        generateKeymap
+ * CVM-Role:        Utility function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This plugin returns a keymap for CodeMirror
+ *
+ * END HEADER
+ */
 
 const CodeMirror = require('codemirror')
 
 module.exports = function (editor) {
-  let homeEndBehaviour = global.config.get('editor.homeEndBehaviour')
+  let homeEndBehaviour = Boolean(global.config.get('editor.homeEndBehaviour'))
   let keymap = {}
 
   // Crossplatform shortcuts
@@ -32,6 +43,7 @@ module.exports = function (editor) {
     keymap['Cmd-F'] = false // Disable the internal search
     keymap['Alt-B'] = false // Disable word-backwarding on macOS (handled by Alt+ArrowLeft)
     keymap['Alt-F'] = false // Disable word-forwarding on macOS (handled by Alt+ArrowRight)
+    keymap['Cmd-Left'] = 'goLineLeftMarkdown'
     keymap['Cmd-Alt-R'] = 'insertFootnote'
     keymap['Cmd-T'] = 'markdownMakeTaskList'
     keymap['Shift-Cmd-C'] = 'markdownComment'
@@ -44,7 +56,7 @@ module.exports = function (editor) {
     keymap['Ctrl-F'] = false // Disable the internal search
     // If homeEndBehaviour is true, use defaults (paragraph start/end), if it's
     // false, use visible lines.
-    keymap['Home'] = (homeEndBehaviour) ? 'goLineStart' : 'goLineLeftSmart'
+    keymap['Home'] = (homeEndBehaviour) ? 'goLineStart' : 'goLineLeftMarkdown'
     keymap['End'] = (homeEndBehaviour) ? 'golineEnd' : 'goLineRight'
     keymap['Ctrl-Alt-F'] = 'insertFootnote'
     keymap['Ctrl-T'] = 'markdownMakeTaskList'

@@ -36,6 +36,20 @@
 </template>
 
 <script>
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        About window app
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This is the entry component for the About window.
+ *
+ * END HEADER
+ */
+
 import WindowChrome from '../common/vue/window/Chrome.vue'
 import { trans } from '../common/i18n-renderer'
 
@@ -63,7 +77,7 @@ export default {
       currentTab: 0,
       tabs: [
         {
-          label: trans('dialog.about.main'),
+          label: trans('dialog.about.title'),
           controls: 'tab-general',
           id: 'tab-general-control',
           icon: 'info-standard'
@@ -103,7 +117,11 @@ export default {
   },
   computed: {
     windowTitle: function () {
-      return trans('dialog.about.title') + ' ' + global.config.get('version')
+      if (process.platform === 'darwin') {
+        return this.tabs[this.currentTab].label
+      } else {
+        return trans('dialog.about.title') + ' ' + global.config.get('version')
+      }
     }
   }
 }
