@@ -29,12 +29,14 @@ module.exports = function generateRegexForHighlightMode (selectors) {
   return new RegExp(
     // ``` or ~~~ preceded by zero or more whitespace
     '^\\s*(?:`{3}|~{3})' +
-        '\\s*(?:' + // zero or more whitespace followed by either...
-            // ... word boundary ...
-            '\\b|' +
-            // ... { ...
+        // zero or more whitespace followed by either...
+        '\\s*(?:' +
+            // ... empty pattern, i.e. go directly to selectors ...
+            '|' +
+            // ... {. as a special case with no whitespace between the brace and dot...
             '{\\.|' +
-            // ... { followed by anything up until first dot (.) preceded by whitespace
-            '{([^\\.]*\\s)\\.)' +
-        '(' + selectors.join('|') + ')\\b.*$')
+            // ... { followed by anything up until first dot (.) preceded by whitespace.
+            '{[^\\.]*\\s\\.' +
+        // any of the given selectors
+        ')(' + selectors.join('|') + ')\\b.*$')
 }
