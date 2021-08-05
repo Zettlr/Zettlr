@@ -221,6 +221,8 @@ const highlightingModes = {
 })(function (CodeMirror) {
   'use strict'
 
+  const generateRegexForHighlightMode = require('../util/generate-regex-for-highlight-mode')
+
   /*  This function is a copy of CodeMirror.multiplexingMode with a small modification made to
       the token function.  CodeMirror's multiplexing mode addon involves a brute force check of
       every internal mode object, and when these checks are regular expressions on long lines
@@ -388,12 +390,8 @@ const highlightingModes = {
     let codeModes = []
 
     for (let [ mimeType, highlightingMode ] of Object.entries(highlightingModes)) {
-      // The following regex will match fenced code block headers with or without attribute lists.
-      // Without attribute lists, the language selector is matched on the first word.
-      // In attribute lists, the language is matched on the first word prefixed with a dot (.).
-      let openRegex = new RegExp('^\\s*(?:`{3}|~{3})\\s*(?:\\b|{\\.|{\\s*(.*?\\s)\\.)(' + highlightingMode.selectors.join('|') + ')\\b.*$')
       codeModes.push({
-        open: openRegex,
+        open: generateRegexForHighlightMode(highlightingMode.selectors),
         close: /`{3}|~{3}/,
         mode: CodeMirror.getMode(config, mimeType),
         delimStyle: 'formatting-code-block',
