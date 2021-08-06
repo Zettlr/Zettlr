@@ -221,7 +221,7 @@ const highlightingModes = {
 })(function (CodeMirror) {
   'use strict'
 
-  const generateRegexForHighlightMode = require('../util/generate-regex-for-highlight-mode')
+  const generateRegexForHighlightMode = require('../util/generate-regex-for-highlight-mode').default
 
   /*  This function is a copy of CodeMirror.multiplexingMode with a small modification made to
       the token function.  CodeMirror's multiplexing mode addon involves a brute force check of

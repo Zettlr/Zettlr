@@ -13,8 +13,8 @@
  * END HEADER
  */
 
-const assert = require('assert')
-const generateRegexForHighlightMode = require('../source/common/modules/markdown-editor/util/generate-regex-for-highlight-mode')
+import assert from 'assert'
+import generateRegexForHighlightMode from '../source/common/modules/markdown-editor/util/generate-regex-for-highlight-mode'
 
 const testers = [
     { selectors: ['js'], input: '```js', expected: true },

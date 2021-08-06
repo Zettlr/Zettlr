@@ -22,7 +22,7 @@
  *
  * @return  {RegExp}                The regex
  */
-module.exports = function generateRegexForHighlightMode (selectors) {
+export default function generateRegexForHighlightMode (selectors: string[]) {
   // The following regex will match fenced code block headers with or without attribute lists.
   // Without attribute lists, the language selector is matched on the first word.
   // In attribute lists, the language is matched on the first word prefixed with a dot (.).
