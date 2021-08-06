@@ -92,14 +92,14 @@ In order to provide code, you should have basic familiarity with the following t
 
 * [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) (especially asynchronous code) and [TypeScript](https://www.typescriptlang.org/docs/)
 * [Node.js](https://nodejs.org/api/)
-* [ESLint](https://eslint.org/)
 * [Electron](https://www.electronjs.org/docs)
-* [CodeMirror](https://codemirror.net/doc/manual.html) (5.x)
 * [Vue.js](https://vuejs.org/v2/guide/) (2.x) and [Vuex](https://vuex.vuejs.org/)
+* [CodeMirror](https://codemirror.net/doc/manual.html) (5.x)
+* [ESLint](https://eslint.org/)
+* [LESS](https://lesscss.org/#)
+* [Webpack 5.x](https://webpack.js.org/concepts/)
 * [Electron forge](https://www.electronforge.io/)
 * [Electron builder](https://www.electron.build/)
-* [Webpack 5.x](https://webpack.js.org/concepts/)
-* [LESS](https://lesscss.org/#)
 
 > Note: See the "Directory Structure" section below to get an idea of how Zettlr specifically works.
 
@@ -113,26 +113,27 @@ Starts `electron-forge`, which will build the application and launch it in devel
 
 #### `package`
 
-Packages the application, but not bundle it into an installer. Without any suffix, this command will package the application for your current platform. To create specific packages (may require running on the corresponding platform), the following suffixes are available:
+Packages the application, but not bundle it into an installer. Without any suffix, this command will package the application for your current platform and architecture. To create specific packages (may require running on the corresponding platform), the following suffixes are available:
 
-- `package:mac`
-- `package:win`
-- `package:win-arm`
-- `package:linux-x32`
-- `package:linux-x64`
+- `package:mac-x64` (Intel-based Macs)
+- `package:mac-arm` (Apple Silicon-based Macs)
+- `package:win-x64` (Intel-based Windows)
+- `package:win-arm` (ARM-based Windows)
+- `package:linux-x64` (Intel-based Linux)
+- `package:linux-arm` (ARM-based Linux)
 
 The resulting application packages are stored in `./out`.
 
-#### `release:{platform}`
+#### `release:{platform-arch}`
 
-Packages the application and then bundles it into an installer for the corresponding platform. To create such a bundle (may require running on the corresponding platform), one of the following values for `{platform}` is required:
+Packages the application and then bundles it into an installer for the corresponding platform and architecture. To create such a bundle (may require running on the corresponding platform), one of the following values for `{platform-arch}` is required:
 
-- `release:mac`
-- `release:win`
-- `release:win-arm`
-- `release:linux-x32`
-- `release:linux-x64`
-- `release:linux` (shorthand for calling `yarn release:linux-x32 && yarn release:linux-x64`)
+- `release:mac-x64` (Intel-based Macs)
+- `release:mac-arm` (Apple Silicon-based Macs)
+- `release:win-x64` (Intel-based Windows)
+- `release:win-arm` (ARM-based Windows)
+- `release:linux-x64` (Intel-based Linux)
+- `release:linux-arm` (ARM-based Linux)
 
 The resulting setup bundles are stored in `./release`.
 
@@ -281,7 +282,7 @@ Use this switch to specify custom data directory, which holds your configuration
 
 #### `--disable-hardware-acceleration`
 
-This switch causes Zettlr to disable hardware acceleration, which could be necessary in certain setups. For more information on why this flag was added, see #2127.
+This switch causes Zettlr to disable hardware acceleration, which could be necessary in certain setups. For more information on why this flag was added, see issue [#2127](https://github.com/Zettlr/Zettlr/issues/2127).
 
 ## License
 
