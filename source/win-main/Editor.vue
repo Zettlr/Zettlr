@@ -770,12 +770,6 @@ export default {
   background-color: #ffffff;
   transition: 0.2s background-color ease;
 
-  // .katex {
-  //   display: inline-block;
-  //   width: 100%;
-  //   text-align: center;
-  // }
-
   div#editor-search {
     position: absolute;
     width: 300px;
@@ -875,8 +869,18 @@ export default {
     .CodeMirror-cursor { display: none !important; }
   }
 
-  // Reduce font size of math a bit
-  .katex { font-size: 1.1em; }
+  // Math equations in text mode
+  .katex {
+    font-size: 1.1em; // reduce font-size of math a bit
+    display: inline-block; // needed for display math to behave properly
+  }
+
+  // Math equations in display mode
+  .katex-display, .katex-display > .katex > .katex-html {
+    display: inline-block; // needed for display math to behave properly
+    width: 100%; // display math should be centred
+    margin-bottom: -0.5em; // counterbalance additional empty line that is added by code mirror due to a bug https://github.com/codemirror/CodeMirror/issues/6600
+  }
 }
 
 body.dark #editor {

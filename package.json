@@ -42,7 +42,6 @@
   },
   "dependencies": {
     "@clr/icons": "^5.4.1",
-    "@types/codemirror": "^5.60.2",
     "@types/sanitize-html": "^2.3.2",
     "@types/semver": "^7.3.7",
     "@zettlr/citr": "^1.2.2",
@@ -91,8 +90,10 @@
     "@types/adm-zip": "^0.4.34",
     "@types/archiver": "^5.1.1",
     "@types/bcp-47": "^2.0.0",
+    "@types/codemirror": "^5.60.2",
     "@types/command-exists": "^1.2.0",
     "@types/electron-devtools-installer": "^2.2.0",
+    "@types/katex": "^0.11.0",
     "@types/luxon": "^1.27.1",
     "@types/mocha": "^9.0.0",
     "@types/nspell": "^2.1.1",
