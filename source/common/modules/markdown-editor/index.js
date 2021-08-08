@@ -74,7 +74,7 @@ const muteLinesHook = require('./hooks/mute-lines')
 const renderElementsHook = require('./hooks/render-elements')
 const typewriterHook = require('./hooks/typewriter')
 const { autocompleteHook, setAutocompleteDatabase } = require('./hooks/autocomplete')
-const linkTooltipsHook = require('./hooks/link-tooltips')
+const linkTooltipsHook = require('./hooks/link-tooltips').default
 const noteTooltipsHook = require('./hooks/note-preview')
 
 const displayContextMenu = require('./display-context-menu')
