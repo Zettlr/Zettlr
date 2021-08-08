@@ -228,6 +228,8 @@ module.exports = function displayContextMenu (event, isReadOnly, commandCallback
       buildItem.enabled = item.enabled
     } else if (isReadOnly && readOnlyDisabled.includes(item.label)) {
       buildItem.enabled = false
+    } else {
+      buildItem.enabled = true
     }
 
     if (item.hasOwnProperty('type')) {
