@@ -110,12 +110,19 @@ function startApp(argv = []) {
     log.warn('Supplying additional arguments to process: [' + argv.join(', ') + ']')
   }
 
-  const proc = spawn('electron-forge', [ 'start', '--', `--data-dir="${CONF_DIRECTORY}"`, ...argv ], {
-    // Use the root directory as working dir
-    'cwd': path.join(__dirname, '../../'),
-    // Directly pipe stdio from the child process to the main process
-    'stdio': [ process.stdin, process.stdout, process.stderr ]
-  })
+  // Make sure the correct command is run
+  const command = (process.platform === 'win32') ? '.\\node_modules\\.bin\\electron-forge.cmd' : 'electron-forge'
+  // Arguments for electron-forge
+  const forgeArgs = ['start', '--', `--data-dir="${CONF_DIRECTORY}"`, ...argv ]
+  // Spawn's options: Use the root as CWD and pipe the process's stdio to the parent process.
+  const spawnOptions = {
+    cwd: path.join(__dirname, '../../'),
+    stdio: [ process.stdin, process.stdout, process.stderr ]
+  }
+
+  // Finally spawn the process
+  const proc = spawn(command, forgeArgs, spawnOptions)
+
   proc.on('close', (code) => {
     log.info(`Child process exited with code ${code}`)
   })
