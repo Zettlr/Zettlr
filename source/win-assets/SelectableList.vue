@@ -157,12 +157,33 @@ body.darwin {
 
 // TODO: Only rudimentary styles currently
 body.win32, body.linux {
-  &.dark {
+  .selectable-list-wrapper {
     .selectable-list-container {
-      .selectable-list-footer {
-        background-color: rgb(70, 70, 70);
+      div.item {
+        border: none;
+        height: 30px;
+        line-height: 30px;
+        padding: 0 5px;
+      }
+    }
+  }
+  &.dark {
+    .selectable-list-wrapper {
+      .selectable-list-container {
+        div.item {
+          background-color: rgb(70, 70, 70);
+          color: white;
 
-        .add, .remove { color: rgb(230, 230, 230); }
+          &.selected {
+            background-color: rgb(90, 90, 90);
+          }
+
+        }
+        .selectable-list-footer {
+          background-color: rgb(70, 70, 70);
+
+          .add, .remove { color: rgb(230, 230, 230); }
+        }
       }
     }
   }

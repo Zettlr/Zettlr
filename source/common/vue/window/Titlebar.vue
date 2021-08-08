@@ -71,12 +71,6 @@ body.win32 {
     background-color: var(--system-accent-color, --c-primary);
     color: var(--system-accent-color-contrast, white);
   }
-
-  &.dark {
-    div#titlebar {
-      color: black;
-    }
-  }
 }
 
 // Linux styles

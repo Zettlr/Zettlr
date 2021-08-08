@@ -530,5 +530,15 @@ body.win32 {
       #file-manager-filter-input { height: 30px; }
     }
   }
+
+  &.dark {
+    #file-list {
+      background-color: rgb(40, 40, 50);
+
+      #file-manager-filter {
+        border-bottom-color: rgb(40, 40, 50);
+      }
+    }
+  }
 }
 </style>

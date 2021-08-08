@@ -101,4 +101,46 @@ body.darwin {
 
   &.dark .progress-bar-container {}
 }
+
+body.win32 {
+  .progress-bar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 25px;
+
+    progress {
+      width: 100%;
+      height: 6px;
+      border: none;
+      border-radius: 3px;
+    }
+
+    progress::-webkit-progress-bar {
+      background-color: rgb(200, 200, 200);
+      border-radius: 3px;
+    }
+
+    progress::-webkit-progress-value {
+      background-color: var(--system-accent-color, --c-primary);
+      border-radius: 3px;
+      transition: 0.4s width ease;
+    }
+
+    .interrupt-button {
+      border: none;
+      margin-left: 10px;
+      background-color: transparent;
+      &:hover {
+        background-color: rgb(200, 200, 200);
+      }
+    }
+  }
+
+  &.dark .progress-bar-container {
+    .interrupt-button:hover {
+      background-color: rgb(120, 120, 120);
+    }
+  }
+}
 </style>

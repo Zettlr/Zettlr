@@ -196,6 +196,12 @@ body.win32 {
       margin: 0px 0px 5px 0px;
     }
   }
+
+  &.dark {
+    #file-tree {
+      background-color: rgb(30, 30, 40);
+    }
+  }
 }
 
 body.linux {
@@ -207,6 +213,12 @@ body.linux {
       font-size: 11px;
       padding: 5px 0px 5px 10px;
       margin: 0px 0px 5px 0px;
+    }
+  }
+
+  &.dark {
+    #file-tree {
+      background-color: rgb(rgb(40, 40, 50));
     }
   }
 }

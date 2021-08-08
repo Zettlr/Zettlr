@@ -39,14 +39,14 @@
       During searching, display a progress bar that indicates how far we are and
       that allows to interrupt the search, if it takes too long.
     -->
-    <div v-if="filesToSearch.length > 0">
-      <ProgressControl
-        v-bind:max="sumFilesToSearch"
-        v-bind:value="sumFilesToSearch - filesToSearch.length"
-        v-bind:interruptible="true"
-        v-on:interrupt="filesToSearch = []"
-      ></ProgressControl>
-    </div>
+    <!--<div v-if="filesToSearch.length > 0">-->
+    <ProgressControl
+      v-bind:max="sumFilesToSearch"
+      v-bind:value="sumFilesToSearch - filesToSearch.length"
+      v-bind:interruptible="true"
+      v-on:interrupt="filesToSearch = []"
+    ></ProgressControl>
+    <!--</div>-->
     <!-- Finally, display all search results, per file and line. -->
     <template v-if="searchResults.length > 0">
       <div
