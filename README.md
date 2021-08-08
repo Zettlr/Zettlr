@@ -284,6 +284,17 @@ Use this switch to specify custom data directory, which holds your configuration
 
 This switch causes Zettlr to disable hardware acceleration, which could be necessary in certain setups. For more information on why this flag was added, see issue [#2127](https://github.com/Zettlr/Zettlr/issues/2127).
 
+
+## VSCode Extension Recommendations
+
+This repository makes use of Visual Studio Code's [recommended extensions feature](https://go.microsoft.com/fwlink/?LinkId=827846). This means: If you use VS Code and open the repository for the first time, VS Code will tell you that the repository recommends to install a handful of extensions. These extensions are recommended if you work with Zettlr and will make contributing much easier. The recommendations are specified in the file `.vscode/extensions.json`.
+
+Since installing extensions is sometimes a matter of taste, we have added short descriptions for each recommended extension within that file to explain why we recommend it. This way you can make your own decision whether or not you want to install any of these extensions (for example, the SVG extension is not necessary if you do not work with the SVG files provided in the repository).
+
+If you choose not to install all of the recommended extensions at once (which we recommend), VS Code will show you the recommendations in the extensions sidebar so you can first decide which of the ones you'd like to install and then manually install those you'd like to have.
+
+> Using the same extensions as the core developer team will make the code generally more consistent since you will have the same visual feedback.
+
 ## License
 
 This software is licensed via the [GNU GPL v3-License](https://www.gnu.org/licenses/gpl-3.0.en.html).
