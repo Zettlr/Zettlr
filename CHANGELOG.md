@@ -51,6 +51,7 @@ While in the past it was possible to use the common zoom shortcuts to only zoom 
 - Add a tray to the system notification area, off by default. To activate, see Preferences → Advanced → "Leave app running in the notification area" (or "Show app in the notification area" when using MacOS).
 - Fixed a bug that would mark some quotation marks as misspelled.
 - Fix the visibility problems under night mode mentioned in issue #1845
+- Enabled syntax higlighting for fenced code blocks that use attribute lists as per issue #2259
 
 ## Under the Hood
 
