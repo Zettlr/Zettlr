@@ -64,7 +64,7 @@
             <clr-icon v-if="result.weight / maxWeight < 0.3" shape="dot-circle" style="fill: #aaaaaa"></clr-icon>
             <clr-icon v-else-if="result.weight / maxWeight < 0.7" shape="dot-circle" style="fill: #2975d9"></clr-icon>
             <clr-icon v-else shape="dot-circle" style="fill: #33aa33"></clr-icon>
-            {{ result.file.filename }}
+            {{ result.file.displayName }}
           </div>
 
           <div class="collapse-icon">
@@ -72,7 +72,7 @@
           </div>
         </div>
         <div class="filepath">
-          {{ result.file.relativeDirectoryPath }}
+          {{ result.file.relativeDirectoryPath }}{{ (result.file.relativeDirectoryPath !== '') ? sep : '' }}{{ result.file.filename }}
         </div>
         <div v-if="!result.hideResultSet" class="results-container">
           <div
@@ -114,6 +114,7 @@ import AutocompleteText from './AutocompleteText'
 import { trans } from '../common/i18n-renderer'
 
 const ipcRenderer = window.ipc
+const path = window.path
 
 export default {
   name: 'GlobalSearch',
@@ -188,6 +189,9 @@ export default {
     },
     toggleButtonLabel: function () {
       return trans('gui.global_search.toggle_label')
+    },
+    sep: function () {
+      return path.sep
     }
   },
   watch: {
@@ -255,12 +259,22 @@ export default {
 
       let fileList = []
 
+      const useH1 = Boolean(global.config.get('display.useFirstHeadings'))
+
       for (const treeItem of this.fileTree) {
         if (treeItem.type !== 'directory') {
+          let displayName = treeItem.name
+          if (treeItem.frontmatter != null && 'title' in treeItem.frontmatter) {
+            displayName = treeItem.frontmatter.title
+          } else if (useH1 && treeItem.firstHeading !== null) {
+            displayName = treeItem.firstHeading
+          }
+
           fileList.push({
             path: treeItem.path,
             relativeDirectoryPath: '',
-            filename: treeItem.name
+            filename: treeItem.name,
+            displayName: displayName
           })
           continue
         }
@@ -268,12 +282,20 @@ export default {
         let dirContents = objectToArray(treeItem, 'children')
         dirContents = dirContents.filter(item => item.type !== 'directory')
         dirContents = dirContents.map(item => {
+          let displayName = item.name
+          if (item.frontmatter != null && 'title' in item.frontmatter) {
+            displayName = item.frontmatter.title
+          } else if (useH1 && item.firstHeading !== null) {
+            displayName = item.firstHeading
+          }
+
           return {
             path: item.path,
             // Remove the workspace directory path itself so only the
             // app-internal relative path remains. Also, we're removing the leading (back)slash
             relativeDirectoryPath: item.dir.replace(treeItem.dir, '').substr(1),
-            filename: item.name
+            filename: item.name,
+            displayName: displayName
           }
         })
 
