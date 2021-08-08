@@ -262,10 +262,11 @@ export default {
           } else if (clickedID === 'menu.rename_file') {
             this.nameEditing = true
           } else if (clickedID === 'menu.duplicate_file') {
-            // The user wants to duplicate this file --> instruct the file list
-            // controller to display a mock file object below this file for the
-            // user to enter a new file name.
-            this.$emit('duplicate')
+            ipcRenderer.invoke('application', {
+              command: 'file-duplicate',
+              payload: { path: this.obj.path }
+            })
+              .catch(err => console.error(err))
           } else if (clickedID === 'menu.delete_file') {
             ipcRenderer.invoke('application', {
               command: 'file-delete',
