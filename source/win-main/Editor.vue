@@ -171,6 +171,8 @@ export default {
       const singleQuotes = this.$store.state.config['editor.autoCorrect.magicQuotes.secondary'].split('…')
       return {
         keyMap: this.$store.state.config['editor.inputMode'],
+        direction: this.$store.state.config['editor.direction'],
+        rtlMoveVisually: this.$store.state.config['editor.rtlMoveVisually'],
         autoCorrect: {
           style: this.$store.state.config['editor.autoCorrect.style'],
           quotes: {
@@ -196,9 +198,7 @@ export default {
             idGen: this.$store.state.config['zkn.idGen'],
             linkStart: this.$store.state.config['zkn.linkStart'],
             linkEnd: this.$store.state.config['zkn.linkEnd'],
-            linkWithFilename: this.$store.state.config['zkn.linkWithFilename'] // ,
-            // autoCreateLinkedFiles: this.$store.state.config['zkn.autoCreateLinkedFiles'],
-            // autoSearch: this.$store.state.config['zkn.autoSearch']
+            linkWithFilename: this.$store.state.config['zkn.linkWithFilename']
           },
           readabilityAlgorithm: this.$store.state.config['editor.readabilityAlgorithm'],
           render: {
