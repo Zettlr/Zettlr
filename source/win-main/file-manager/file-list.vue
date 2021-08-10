@@ -107,6 +107,7 @@ import tippy from 'tippy.js'
 import FileItem from './file-item'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import objectToArray from '../../common/util/object-to-array'
+import matchQuery from './util/match-query'
 
 const ipcRenderer = window.ipc
 
@@ -183,59 +184,11 @@ export default {
         return originalContents
       }
 
-      const queries = q.toLowerCase().split(' ').filter(query => query.trim() !== '')
+      const filter = matchQuery(q, this.$store.state.config['display.useFirstHeadings'])
 
       // Filter based on the query (remember: there's an ID and a "props" property)
       return originalContents.filter(element => {
-        if (element.mock !== undefined && element.mock === true) {
-          // Never hide mocked elements
-          return true
-        }
-
-        const item = element.props
-
-        for (const q of queries) {
-          // If the query only consists of a "#" also include files that
-          // contain tags, no matter which
-          if (q === '#') {
-            if (item.type === 'file' && item.tags.length > 0) {
-              return true
-            }
-          }
-
-          // Let's check for tag matches
-          if (q.startsWith('#') && item.type === 'file') {
-            const tagMatch = item.tags.find(tag => tag.indexOf(q.substr(1)) >= 0)
-            if (tagMatch !== undefined) {
-              return true
-            }
-          }
-
-          // First, see if the name gives a match.
-          if (item.name.toLowerCase().indexOf(q) >= 0) {
-            return true
-          }
-
-          const hasFrontmatter = item.frontmatter != null
-          const hasTitle = hasFrontmatter && item.frontmatter.title !== undefined
-
-          // Does the frontmatter work?
-          if (item.type === 'file' && hasTitle) {
-            if (item.frontmatter.title.toLowerCase().indexOf(q) >= 0) {
-              return true
-            }
-          }
-
-          // Third, should we use headings 1 and, if so, does it match?
-          const useH1 = Boolean(this.$store.state.config['display.useFirstHeadings'])
-          if (useH1 && item.type === 'file' && item.firstHeading != null) {
-            if (item.firstHeading.toLowerCase().indexOf(q) >= 0) {
-              return true
-            }
-          }
-        } // END for
-
-        return false
+        return filter(element.props)
       })
     }
   },
