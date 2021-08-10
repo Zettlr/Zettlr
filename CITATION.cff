@@ -1,5 +1,3 @@
-# YAML 1.2
----
 abstract: "A Markdown Editor for the 21st century."
 authors: 
   -
@@ -13,4 +11,3 @@ license: "GPL-3.0"
 message: "You can cite this software using the metadata provided in this file or by copying the suggested citation:"
 repository-code: "https://github.com/Zettlr/Zettlr"
 title: Zettlr
-...
