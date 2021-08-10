@@ -23,11 +23,9 @@
           v-on:blur="activeDescriptor = null"
         />
       </div>
-      <template v-if="getFilteredDirectoryContents.length === 0">
-        <div class="empty-file-list">
-          {{ noResultsMessage }}
-        </div>
-      </template>
+      <div v-if="getFilteredDirectoryContents.length === 0" class="empty-file-list">
+        {{ noResultsMessage }}
+      </div>
       <template v-else>
         <!--
         For the "real" file list, we need the virtual scroller to maintain
