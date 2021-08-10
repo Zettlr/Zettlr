@@ -13,11 +13,12 @@
  */
 
 // Modules
-import path from 'path'
-import { spawn } from 'child_process'
-import YAML from 'yaml'
 import { app } from 'electron'
 import { promises as fs } from 'fs'
+import { spawn } from 'child_process'
+import generateDefaults from '@lackadaisical/defaults-generator'
+import path from 'path'
+import YAML from 'yaml'
 
 // Utilities
 import isFile from '../../../common/util/is-file'
@@ -204,15 +205,14 @@ async function writeDefaults (
 
   // After we have added our default keys, let the plugin add their keys, which
   // enables them to override certain keys if necessary.
-  for (const key in properties) {
-    defaults[key] = properties[key]
-  }
+  // Also validate the pandoc configuration values in the case of user input.
+  const output = generateDefaults(properties, defaults)
 
   const YAMLOptions: YAML.Options = {
     indent: 4,
     simpleKeys: false
   }
-  await fs.writeFile(defaultsFile, YAML.stringify(defaults, YAMLOptions), { encoding: 'utf8' })
+  await fs.writeFile(defaultsFile, YAML.stringify(output, YAMLOptions), { encoding: 'utf8' })
 
   // Return the path to the defaults file
   return defaultsFile

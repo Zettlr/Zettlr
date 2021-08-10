@@ -43,6 +43,12 @@ module.exports = {
       // or if we find a replacement.
       'readable-stream/passthrough': [
         path.resolve(__dirname, 'node_modules/lazystream/node_modules/readable-stream/')
+      ],
+      'ajv': [
+        path.resolve(__dirname, 'node_modules/@lackadaisical/defaults-generator/node_modules/ajv')
+      ],
+      'ajv-formats': [
+        path.resolve(__dirname, 'node_modules/@lackadaisical/defaults-generator/node_modules/ajv-formats')
       ]
     }
   },
