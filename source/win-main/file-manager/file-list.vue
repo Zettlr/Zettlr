@@ -12,11 +12,11 @@
     v-on:blur="activeDescriptor = null"
   >
     <template v-if="getDirectoryContents.length > 1">
-      <div id="file-manager-filter">
+      <div class="file-manager-filter">
         <input
-          id="file-manager-filter-input"
           ref="quickFilter"
           v-model="filterQuery"
+          class="file-manager-filter-input"
           type="search"
           placeholder="Filter …"
           v-on:focus="$event.target.select()"
@@ -414,80 +414,35 @@ body {
 
     &.hidden { left: 100%; }
 
-      #file-manager-filter {
-        padding: 5px;
-        position: sticky;
-        top: 0;
-        z-index: 2;
-        left: 0;
-        right: 0;
-
-        #file-manager-filter-input {
-          border: 1px solid transparent;
-          padding: 5px;
-          width: 100%;
-        }
-      }
-
-      .empty-file-list, .empty-directory {
-          display: block;
-          text-align: center;
-          padding: 10px;
-          margin-top: 50%;
-          font-weight: bold;
-          font-size: 200%;
-      }
+    .empty-file-list, .empty-directory {
+      display: block;
+      text-align: center;
+      padding: 10px;
+      margin-top: 50%;
+      font-weight: bold;
+      font-size: 200%;
+    }
   }
 }
 
 body.darwin {
   #file-list {
     background-color: white;
-
-    #file-manager-filter {
-      background-color: rgb(230, 230, 230);
-      height: 30px;
-      padding: 4px;
-      border-right: 1px solid #d5d5d5;
-
-      #file-manager-filter-input {
-        width: 100%;
-        font-size: 11px;
-        height: calc(30px - 9px);
-      }
-    }
   }
 
   &.dark #file-list {
     background-color: rgb(40, 40, 50);
-
-    #file-manager-filter {
-      border-right-color: #505050;
-      background-color: rgb(40, 40, 50);
-    }
   }
 }
 
 body.win32 {
   #file-list {
     background-color: rgb(230, 230, 230);
-
-    #file-manager-filter {
-      padding: 0;
-      border-bottom: 2px solid rgb(230, 230, 230);
-      height: 32px; // The border should be *below* the 30px mark
-
-      #file-manager-filter-input { height: 30px; }
-    }
   }
 
   &.dark {
     #file-list {
       background-color: rgb(40, 40, 50);
-
-      #file-manager-filter {
-        border-bottom-color: rgb(40, 40, 50);
-      }
     }
   }
 }

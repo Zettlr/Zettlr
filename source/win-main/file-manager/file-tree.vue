@@ -7,7 +7,21 @@
     v-bind:aria-hidden="!isVisible"
     v-on:click="clickHandler"
   >
-    <template v-if="$store.state.fileTree.length > 0">
+    <template v-if="fileTree.length > 0">
+      <div class="file-manager-filter">
+        <input
+          ref="quickFilter"
+          v-model="filterQuery"
+          class="file-manager-filter-input"
+          type="search"
+          placeholder="Filter …"
+          v-on:focus="$event.target.select()"
+        />
+      </div>
+      <div v-if="getFilteredTree.length === 0" class="empty-file-list">
+        {{ noResultsMessage }}
+      </div>
+
       <div v-show="getFiles.length > 0" id="directories-files-header">
         <clr-icon
           shape="file"
@@ -64,6 +78,8 @@
 
 import { trans } from '../../common/i18n-renderer'
 import TreeItem from './tree-item.vue'
+import matchQuery from './util/match-query'
+import matchTree from './util/match-tree'
 
 const ipcRenderer = window.ipc
 
@@ -73,21 +89,51 @@ export default {
     TreeItem
   },
   props: {
-    fileTree: {
-      type: Array,
-      default: function () { return [] }
-    },
     isVisible: {
       type: Boolean,
       required: true
     }
   },
+  data: function () {
+    return {
+      filterQuery: ''
+    }
+  },
   computed: {
+    fileTree: function () {
+      return this.$store.state.fileTree
+    },
+    getFilteredTree: function () {
+      const q = String(this.filterQuery).trim().toLowerCase() // Easy access
+
+      if (q === '') {
+        return this.fileTree
+      }
+
+      const filter = matchQuery(q, this.$store.state.config['display.useFirstHeadings'])
+      // Now we can actually filter out the file tree. We have to do this recursively.
+      // We will perform a depth-first search and keep every directory which either
+      // (a) matches directly or (b) has an amount of filtered children > 0
+      const filteredTree = []
+      for (const item of this.fileTree) {
+        if (item.type === 'directory') {
+          // Recursively match the directory
+          const result = matchTree(item, filter)
+          if (result !== undefined) {
+            filteredTree.push(result)
+          }
+        } else if (filter(item)) {
+          // Add the file, since it matches
+          filteredTree.push(item)
+        }
+      }
+      return filteredTree
+    },
     getFiles: function () {
-      return this.fileTree.filter(item => item.type !== 'directory')
+      return this.getFilteredTree.filter(item => item.type !== 'directory')
     },
     getDirectories: function () {
-      return this.fileTree.filter(item => item.type === 'directory')
+      return this.getFilteredTree.filter(item => item.type === 'directory')
     },
     fileSectionHeading: function () {
       return trans('gui.files')

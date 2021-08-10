@@ -30,7 +30,6 @@
       <!-- Render a the file-tree -->
       <FileTree
         ref="directories"
-        v-bind:file-tree="$store.state.fileTree"
         v-bind:is-visible="fileTreeVisible"
         v-on:selection="selectionListener"
       ></FileTree>
@@ -410,6 +409,21 @@ body #file-manager {
 
     &.hidden { left:-60px; }
   }
+
+  .file-manager-filter {
+    padding: 5px;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    left: 0;
+    right: 0;
+
+    .file-manager-filter-input {
+      border: 1px solid transparent;
+      padding: 5px;
+      width: 100%;
+    }
+  }
 }
 
 body.dark #file-manager {
@@ -422,11 +436,47 @@ body.dark #file-manager {
 body.darwin {
   #file-manager {
     border-top: 1px solid #d5d5d5;
+
+    .file-manager-filter {
+      background-color: rgb(230, 230, 230);
+      height: 30px;
+      padding: 4px;
+      border-right: 1px solid #d5d5d5;
+
+      .file-manager-filter-input {
+        width: 100%;
+        font-size: 11px;
+        height: calc(30px - 9px);
+      }
+    }
   }
 
   &.dark {
     #file-manager {
       border-top-color: #505050;
+
+      .file-manager-filter {
+        border-right-color: #505050;
+        background-color: rgb(40, 40, 50);
+      }
+    }
+  }
+}
+
+body.win32 {
+  #file-manager {
+    .file-manager-filter {
+      padding: 0;
+      border-bottom: 2px solid rgb(230, 230, 230);
+      height: 32px; // The border should be *below* the 30px mark
+
+      .file-manager-filter-input { height: 30px; }
+    }
+  }
+
+  &.dark #file-manager {
+    .file-manager-filter {
+      border-bottom-color: rgb(40, 40, 50);
     }
   }
 }
