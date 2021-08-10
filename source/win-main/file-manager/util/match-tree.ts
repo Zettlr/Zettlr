@@ -45,12 +45,12 @@ export default function matchTree (directory: DirMeta, filter: FilterFunction): 
       if (result !== undefined) {
         reslist.push(result)
       }
-    } else if (filter(child) === true) {
+    } else if (filter(child)) {
       reslist.push(child)
     }
   }
 
-  if (reslist.length === 0 && filter(directory) === true) {
+  if (reslist.length === 0 && filter(directory)) {
     // None of the children matched, but the directory
     return {
       ...directory,
