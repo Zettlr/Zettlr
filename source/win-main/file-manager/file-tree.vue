@@ -31,8 +31,6 @@
       <TreeItem
         v-for="item in getFiles"
         v-bind:key="item.hash"
-        v-bind:filtered-tree="getFilteredTree"
-        v-bind:filter-query="filterQuery"
         v-bind:obj="item"
         v-bind:depth="0"
         v-bind:has-duplicate-name="getFiles.filter(i => i.name === item.name).length > 1"
@@ -47,8 +45,6 @@
       <TreeItem
         v-for="item in getDirectories"
         v-bind:key="item.hash"
-        v-bind:filtered-tree="getFilteredTree"
-        v-bind:filter-query="filterQuery"
         v-bind:obj="item"
         v-bind:depth="0"
         v-bind:has-duplicate-name="getDirectories.filter(i => i.name === item.name).length > 1"
@@ -134,10 +130,10 @@ export default {
       return filteredTree
     },
     getFiles: function () {
-      return this.fileTree.filter(item => item.type !== 'directory')
+      return this.getFilteredTree.filter(item => item.type !== 'directory')
     },
     getDirectories: function () {
-      return this.fileTree.filter(item => item.type === 'directory')
+      return this.getFilteredTree.filter(item => item.type === 'directory')
     },
     fileSectionHeading: function () {
       return trans('gui.files')

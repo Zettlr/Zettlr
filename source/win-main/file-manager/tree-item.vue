@@ -1,6 +1,5 @@
 <template>
   <div
-    v-show="inFilteredTree"
     class="tree-item-container"
     v-bind:data-hash="obj.hash"
   >
@@ -99,15 +98,10 @@
         v-on:keyup.enter="handleOperationFinish($event.target.value)"
       >
     </div>
-    <div
-      v-if="isDirectory"
-      v-show="!collapsed"
-    >
+    <div v-if="isDirectory && !collapsed">
       <TreeItem
         v-for="child in filteredChildren"
         v-bind:key="child.hash"
-        v-bind:filtered-tree="filteredTree"
-        v-bind:filter-query="filterQuery"
         v-bind:obj="child"
         v-bind:depth="depth + 1"
       >
@@ -134,7 +128,6 @@
 import itemMixin from './util/item-mixin'
 import generateFilename from '../../common/util/generate-filename'
 import { trans } from '../../common/i18n-renderer'
-import locateByPath from '../../main/modules/fsal/util/locate-by-path'
 
 const path = window.path
 const ipcRenderer = window.ipc
@@ -151,14 +144,6 @@ export default {
     hasDuplicateName: {
       type: Boolean,
       default: false // Can only be true if root and actually has a duplicate name
-    },
-    filteredTree: {
-      type: Array,
-      required: true
-    },
-    filterQuery: {
-      type: String,
-      default: ''
     }
   },
   data: () => {
@@ -280,13 +265,6 @@ export default {
       } else {
         return this.obj.name.replace(this.obj.ext, '')
       }
-    },
-    inFilteredTree: function () {
-      if (this.filterQuery.trim() === '') {
-        return true // Much quicker to check a string than to traverse a tree
-      }
-
-      return locateByPath(this.filteredTree, this.obj.path) !== undefined
     }
   },
   watch: {
