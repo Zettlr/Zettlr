@@ -1,13 +1,16 @@
-abstract: "A Markdown Editor for the 21st century."
-authors: 
-  -
-    family-names: Erz
-    given-names: Hendrik
-    orcid: "https://orcid.org/0000-0003-0775-5919"
-cff-version: "1.2.0"
-date-released: 2017-12-26
-doi: "10.5281/zenodo.2580173"
-license: "GPL-3.0"
-message: "You can cite this software using the metadata provided in this file or by copying the suggested citation:"
-repository-code: "https://github.com/Zettlr/Zettlr"
+cff-version: 1.2.0
+message: You can cite Zettlr by using the following metadata
 title: Zettlr
+abstract: A Markdown Editor for the 21st century.
+authors: 
+  - family-names: Erz
+    given-names: Hendrik
+    orcid: https://orcid.org/0000-0003-0775-5919
+keywords:
+- a
+- b
+# version: 2.0.0
+doi: 10.5281/zenodo.2580173
+date-released: 2017-12-26
+license: GPL-3.0
+repository-code: https://github.com/Zettlr/Zettlr
