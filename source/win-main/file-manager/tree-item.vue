@@ -448,6 +448,17 @@ body {
       &.project {
         color: rgb(220, 45, 45);
       }
+
+      &.highlight {
+        // This class is applied on drag & drop
+        background-color: var(--system-accent-color, --c-primary);
+        color: var(--system-accent-color-contrast, --c-primary-contrast);
+      }
+
+      &.selected .display-text {
+        background-color: var(--system-accent-color, --c-primary);
+        color: var(--system-accent-color-contrast, --c-primary-contrast);
+      }
     }
   }
 
@@ -473,17 +484,10 @@ body.darwin {
       padding: 3px 5px;
       border-radius: 4px;
       overflow: hidden;
-
-      &.highlight {
-        background-color: var(--system-accent-color, --c-primary);
-        color: white;
-      }
     }
 
     &.selected .display-text {
-      background-color: var(--system-accent-color, --c-primary);
       background-image: linear-gradient(#00000000, #00000022);
-      color: white;
     }
   }
 
@@ -507,15 +511,6 @@ body.win32 {
       font-size: 13px;
       padding: 3px 5px;
       overflow: hidden;
-
-      &.highlight {
-        background-color: var(--system-accent-color, --c-primary);
-        color: white;
-      }
-    }
-
-    &.selected .display-text {
-      color: var(--system-accent-color, --c-primary);
     }
   }
 }
@@ -533,15 +528,6 @@ body.linux {
       font-size: 13px;
       padding: 3px 5px;
       overflow: hidden;
-
-      &.highlight {
-        background-color: var(--system-accent-color, --c-primary);
-        color: white;
-      }
-    }
-
-    &.selected .display-text {
-      color: var(--system-accent-color, --c-primary);
     }
   }
 }

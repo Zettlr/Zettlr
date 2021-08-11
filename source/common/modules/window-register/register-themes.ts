@@ -72,6 +72,9 @@ export default function registerThemes (): void {
       } else if (payload === 'darkMode') {
         // Switch to light/dark mode based on the configuration variable
         document.body.classList.toggle('dark', global.config.get('darkMode'))
+      } else if (payload === 'display.useSystemAccentColor') {
+        // The accent color setting has been changed, so re-set the customCSS
+        setSystemCss()
       }
     }
   })
@@ -94,18 +97,7 @@ export default function registerThemes (): void {
 
   // Create the custom stylesheet which includes certain system colours which
   // will be referenced by the components as necessary.
-  ipcRenderer.invoke('appearance-provider', { command: 'get-accent-color' })
-    .then((accentColor: SystemColour) => {
-      // TODO: Currently this is not scalable, just an exploratory implementation!
-      const style = document.createElement('style')
-      // style.setAttribute('type', 'text/css')
-
-      const color = '#' + accentColor.accent
-      const contrast = '#' + accentColor.contrast
-      style.textContent = `:root { --system-accent-color: ${color}; --system-accent-color-contrast: ${contrast}}`
-      document.head.prepend(style)
-    })
-    .catch(e => console.error(e))
+  setSystemCss()
 }
 
 /**
@@ -145,4 +137,43 @@ function setCustomCss (cssPath: string): void {
   link.setAttribute('type', 'text/css')
   link.setAttribute('id', 'custom-css-link')
   document.head.appendChild(link)
+}
+
+/**
+ * (Re)loads the system CSS
+ */
+function setSystemCss (): void {
+  // Remove any former system CSS stylesheet, if appicable
+  const formerSystemCSS = document.getElementById('system-css')
+  if (formerSystemCSS !== null) {
+    formerSystemCSS.parentElement?.removeChild(formerSystemCSS)
+  }
+
+  ipcRenderer.invoke('appearance-provider', { command: 'get-accent-color' })
+    .then((accentColor: SystemColour) => {
+      const style = document.createElement('style')
+      style.setAttribute('id', 'system-css')
+
+      const useSystemAccent: boolean = global.config.get('display.useSystemAccentColor')
+
+      // We can put all CSS variables we would like to output into this map. All
+      // will be appended to the stylesheet below.
+      const variables = new Map<string, string>()
+      if (useSystemAccent) {
+        variables.set('--system-accent-color', '#' + accentColor.accent)
+        variables.set('--system-accent-color-contrast', '#' + accentColor.contrast)
+      } else {
+        variables.set('--system-accent-color', 'var(--c-primary)')
+        variables.set('--system-accent-color-contrast', 'var(--c-primary-contrast)')
+      }
+
+      // Why do we format it nicely? I don't know, but I like to keep things tidy.
+      style.textContent = ':root {\n'
+      for (const [ key, val ] of variables.entries()) {
+        style.textContent += `  ${key}: ${val};\n`
+      }
+      style.textContent += '}'
+      document.head.prepend(style)
+    })
+    .catch(e => console.error(e))
 }
