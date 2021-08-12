@@ -66,6 +66,8 @@ export default class ConfigProvider extends EventEmitter {
    */
   private _newVersion: boolean
 
+  private _saveTimeout: any|undefined
+
   /**
     * Preset sane defaults, then load the config and perform a system check.
     * @param {Zettlr} parent Parent Zettlr object.
@@ -79,6 +81,7 @@ export default class ConfigProvider extends EventEmitter {
     this._rules = [] // This array holds all validation rules
     this._firstStart = false // Only true if a config file has been created
     this._newVersion = false // True if the last read config had a different version
+    this._saveTimeout = undefined
 
     // Load the configuration
     this.load()
@@ -103,7 +106,9 @@ export default class ConfigProvider extends EventEmitter {
       },
       // The setter is a simply pass-through
       set: (key: string, val: any) => {
-        return this.set(key, val)
+        const res = this.set(key, val)
+        this._maybeSave()
+        return res
       },
       // Enable global event listening to updates of the config
       on: (evt: string, callback: (...args: any[]) => void) => {
@@ -151,6 +156,7 @@ export default class ConfigProvider extends EventEmitter {
         event.returnValue = this.get(payload.key)
       } else if (command === 'set-config-single') {
         event.returnValue = this.set(payload.key, payload.val)
+        this._maybeSave()
       }
     })
 
@@ -162,12 +168,13 @@ export default class ConfigProvider extends EventEmitter {
         // Sets the complete config object
         const { payload } = message
         let ret = true
-        for (let opt in payload) {
+        for (const opt in payload) {
           if (!this.set(opt, payload[opt])) {
             ret = false
           }
         }
 
+        this._maybeSave()
         return ret
       }
     })
@@ -215,6 +222,7 @@ export default class ConfigProvider extends EventEmitter {
     // Don't forget to update the version
     if (this._newVersion) {
       this.set('version', ZETTLR_VERSION)
+      this._maybeSave()
     }
 
     return this
@@ -229,7 +237,7 @@ export default class ConfigProvider extends EventEmitter {
       this.load()
     }
     // (Over-)write the configuration
-    global.log.verbose(`[Config Provider] Writing configuration file to ${this.configFile}...`)
+    global.log.info(`[Config Provider] Writing configuration file to ${this.configFile}...`)
 
     try {
       fs.writeFileSync(this.configFile, JSON.stringify(this.config), { encoding: 'utf8' })
@@ -238,6 +246,18 @@ export default class ConfigProvider extends EventEmitter {
     }
 
     return this
+  }
+
+  /**
+   * (Re)start a countdown to save the configuration intermittently.
+   */
+  _maybeSave (): void {
+    if (this._saveTimeout !== undefined) {
+      clearTimeout(this._saveTimeout)
+      this._saveTimeout = undefined
+    }
+
+    this._saveTimeout = setTimeout(() => { this.save() }, 5000)
   }
 
   /**
