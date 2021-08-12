@@ -123,7 +123,7 @@ export default function getConfigTemplate (): ConfigOptions {
       autocompleteAcceptSpace: false, // Whether you can type spaces in autocorrect
       autoCloseBrackets: true,
       defaultSaveImagePath: '',
-      homeEndBehaviour: true, // If checked (true), CodeMirror goes to start/end of a paragraph, not a line.
+      homeEndBehaviour: false, // If true, Home/End goes to start/end of a paragraph, false means start/end of line.
       enableTableHelper: true, // Enable the table helper plugin
       indentUnit: 4, // The number of spaces to be added
       fontSize: 16, // The editor's font size in pixels
