@@ -76,7 +76,9 @@ export async function makeExport (options: ExporterOptions, formatOptions: any =
       return await runPandoc(defaults)
     },
     getDefaultsFor: async (writer: string, properties: any) => {
-      return await writeDefaults(writer, properties)
+      // Inject additional properties from the global exporter options here
+      const cslOverride = (typeof options.cslStyle === 'string') ? options.cslStyle : undefined
+      return await writeDefaults(writer, properties, cslOverride)
     }
   }
 
@@ -139,7 +141,8 @@ async function runPandoc (defaultsFile: string): Promise<PandocRunnerOutput> {
 
 async function writeDefaults (
   writer: string, // The writer to use (e.g. html or pdf)
-  properties: any // Contains properties that will be written to the defaults
+  properties: any, // Contains properties that will be written to the defaults
+  cslOverride?: string
 ): Promise<string> {
   const dataDir = app.getPath('temp')
   const defaultsFile = path.join(dataDir, 'defaults.yml')
@@ -173,7 +176,9 @@ async function writeDefaults (
   }
 
   const cslStyle: string = global.config.get('export.cslStyle')
-  if (isFile(cslStyle)) {
+  if (cslOverride !== undefined && isFile(cslOverride)) {
+    defaults.csl = cslOverride
+  } else if (isFile(cslStyle)) {
     defaults.csl = cslStyle
   }
 

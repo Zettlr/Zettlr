@@ -17,6 +17,7 @@ import objectToArray from '../../common/util/object-to-array'
 import { makeExport } from '../modules/export'
 import { filter as minimatch } from 'minimatch'
 import { shell } from 'electron'
+import { ExporterOptions } from '../modules/export/types'
 
 export default class DirProjectExport extends ZettlrCommand {
   constructor (app: any) {
@@ -67,10 +68,14 @@ export default class DirProjectExport extends ZettlrCommand {
       // Spin up one exporter per format.
       global.log.info(`[Project] Exporting ${dir.name} as ${format}.`)
       try {
-        const opt = {
+        const opt: ExporterOptions = {
           format: format,
           sourceFiles: files,
           targetDirectory: dir.path
+        }
+
+        if (typeof config.cslStyle === 'string' && config.cslStyle.length > 0) {
+          opt.cslStyle = config.cslStyle
         }
 
         const result = await makeExport(opt)

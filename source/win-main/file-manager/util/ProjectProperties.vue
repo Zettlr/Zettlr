@@ -33,6 +33,7 @@
       id="files-panel"
       role="tabpanel"
     >
+      <!-- First the glob patterns -->
       <ListControl
         v-model="patterns"
         v-bind:label="exportPatternLabel"
@@ -41,12 +42,22 @@
         v-bind:addable="true"
         v-bind:deletable="true"
       ></ListControl>
+
+      <!-- Then the CSL file -->
+      <FileControl
+        v-model="cslStyle"
+        v-bind:label="'CSL Stylesheet'"
+        v-bind:reset="true"
+        v-bind:filter="{'csl': 'CSL Stylesheet'}"
+      ></FileControl>
     </div>
   </div>
 </template>
 
 <script>
 import ListControl from '../../../common/vue/form/elements/List'
+import FileControl from '../../../common/vue/form/elements/File'
+
 import Vue from 'vue'
 import Tabs from '../../../common/vue/Tabs'
 import { trans } from '../../../common/i18n-renderer'
@@ -57,6 +68,7 @@ export default {
   name: 'ProjectProperties',
   components: {
     ListControl,
+    FileControl,
     Tabs
   },
   props: {
@@ -70,6 +82,7 @@ export default {
       exportFormatMap: {},
       selectedExportFormats: [],
       patterns: [],
+      cslStyle: '',
       tabs: [
         {
           id: 'formats',
@@ -114,6 +127,9 @@ export default {
   watch: {
     patterns: function (newValue, oldValue) {
       this.updateProperties()
+    },
+    cslStyle: function (newValue, oldValue) {
+      this.updateProperties()
     }
   },
   created: function () {
@@ -149,6 +165,7 @@ export default {
         if (descriptor.project !== null) {
           this.selectedExportFormats = descriptor.project.formats
           this.patterns = descriptor.project.filters
+          this.cslStyle = descriptor.project.cslStyle
         }
       })
       .catch(err => console.error(err))
@@ -167,7 +184,8 @@ export default {
         payload: {
           properties: {
             formats: this.selectedExportFormats,
-            filters: this.patterns
+            filters: this.patterns,
+            cslStyle: this.cslStyle
           },
           path: this.fullPath
         }

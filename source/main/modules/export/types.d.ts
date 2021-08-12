@@ -37,6 +37,11 @@ export interface ExporterOptions {
    * make sure to convert all image paths to absolute paths prior to export.
    */
   absoluteImagePaths?: boolean
+  /**
+   * This is an optional property. It allows to override the global CSL Stylesheet
+   * defined in the preferences for the given export.
+   */
+  cslStyle?: string
 }
 
 /**
