@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-07-29T11:56:43.000000Z"
+        "updated_at": "2021-08-11T10:16:56.000000Z"
     },
     "dialog": {
         "about": {
@@ -318,6 +318,8 @@
                 "title": "Rechtschreibung"
             },
             "theme": {
+                "accent_color_info": "Diese Einstellung ist nur f\u00fcr Windows und macOS verf\u00fcgbar",
+                "accent_color_label": "Nutze die Akzentfarbe des Betriebssystems statt der Theme-Farbe",
                 "info": "W\u00e4hle hier das Theme der App aus.",
                 "title": "Design"
             },
