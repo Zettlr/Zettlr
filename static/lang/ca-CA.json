@@ -5,7 +5,7 @@
             "vfc"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-07-30T08:47:55.000000Z"
+        "updated_at": "2021-08-03T10:10:45.000000Z"
     },
     "dialog": {
         "about": {
@@ -43,8 +43,8 @@
         },
         "defaults": {
             "explanation": "Edita els par\u00e0metres per importar i exportar aqu\u00ed",
-            "exporting_title": "Exportant",
-            "importing_title": "Important",
+            "exporting_title": "Exportar",
+            "importing_title": "Importar",
             "restore": "Restaura els fitxers per defecte"
         },
         "dir_new": {

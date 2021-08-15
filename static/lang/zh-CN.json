@@ -8,6 +8,7 @@
             "Aixue Wang \u003Cgz_wax@hotmail.com\u003E",
             "pluwen \u003Cpluwen@gmail.com\u003E",
             "marisa \u003Chermitpurple@foxmail.com\u003E",
+            "Steve OU",
             "HRC",
             "Retaw Jin \u003Cretaw106@hotmail.com\u003E",
             "ihipop \u003Cihipop+zettlr@gmail.com\u003E",
@@ -21,7 +22,7 @@
             "Taylan TATLI"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-07-19T15:01:24.000000Z"
+        "updated_at": "2021-08-04T17:22:22.000000Z"
     },
     "dialog": {
         "about": {
@@ -56,6 +57,12 @@
         "custom_css": {
             "info": "\u4f60\u53ef\u4ee5\u4fee\u6539Zettlr\u7684\u6837\u5f0f\u4ee5\u81ea\u5b9a\u4e49\u81ea\u5df1\u7684\u6837\u5f0f\u3002\u003Cstrong\u003E\u6ce8\u610f: \u8be5\u6587\u4ef6\u4f1a\u8986\u76d6\u6240\u6709\u7684CSS\u6307\u4ee4\uff01 \u4e0d\u8981\u968f\u610f\u6539\u52a8\u51e0\u4f55\u53c2\u6570\uff0c\u5e94\u7528\u7a0b\u5e8f\u53ef\u80fd\u4f1a\u62a5\u9519\uff01\u003C/strong\u003E",
             "title": "\u81ea\u5b9a\u4e49CSS"
+        },
+        "defaults": {
+            "explanation": "\u7f16\u8f91\u5bfc\u5165\u6216\u5bfc\u51fa\u7684\u9ed8\u8ba4\u8bbe\u7f6e",
+            "exporting_title": "\u5bfc\u51fa",
+            "importing_title": "\u5bfc\u5165",
+            "restore": "\u6062\u590d\u4e3a\u9ed8\u8ba4\u6587\u4ef6"
         },
         "dir_new": {
             "placeholder": "\u76ee\u5f55\u540d",
@@ -95,7 +102,7 @@
         },
         "paste_image": {
             "current_directory": "\u5f53\u524d\u76ee\u5f55",
-            "dimensions": "\u56fe\u7247\u5927\u5c0f",
+            "dimensions": "\u56fe\u7247\u5c3a\u5bf8",
             "info": "\u4ee5\u4e0b\u662f\u526a\u8d34\u677f\u4e2d\u5f53\u524d\u56fe\u50cf\u7684\u9884\u89c8\u3002 \u70b9\u51fb\u8fd4\u56de\u5c06\u5176\u4fdd\u5b58\u5230\u5f53\u524d\u76ee\u5f55\uff0c\u6216\u9009\u62e9\u5176\u4ed6\u76ee\u5f55\u3002",
             "name_label": "\u6587\u6863\u540d\u79f0",
             "name_placeholder": "\u552f\u4e00\u7684\u6587\u4ef6\u540d",
@@ -382,6 +389,11 @@
                 "var_year_two": "\u5e74\uff08\u4e24\u4f4d\u6570\u5b57\uff09"
             }
         },
+        "snippets": {
+            "explanation": "\u7247\u6bb5\u53ef\u4ee5\u8ba9\u60a8\u53ef\u4ee5\u4f7f\u7528\u53d8\u91cf\u5b9a\u4e49\u53ef\u91cd\u590d\u4f7f\u7528\u7684\u6587\u672c\u7247\u6bb5",
+            "rename": "\u7247\u6bb5\u91cd\u547d\u540d",
+            "title": "\u7247\u6bb5"
+        },
         "statistics": {
             "compare": "\u4e0e\u4e4b\u524d\u7684\u65f6\u95f4\u8868\u6bd4\u8f83",
             "day": "\u65e5",
@@ -400,6 +412,7 @@
             "year": "\u5e74"
         },
         "tag_cloud": {
+            "add_to_file": "\u6dfb\u52a0\u5230\u6587\u4ef6",
             "copy": "\u590d\u5236\u5230\u526a\u8d34\u677f",
             "info": "\u4f60\u53ef\u4ee5\u627e\u5230\u4f60\u4f7f\u7528\u8fc7\u7684\u6240\u6709\u6807\u7b7e\u3002\u4f60\u53ef\u4ee5\u628a\u6574\u4e2a\u5217\u8868\u590d\u5236\u5230\u526a\u8d34\u677f\u3002\u5c06\u9f20\u6807\u60ac\u505c\u5728\u6807\u7b7e\u4e0a\u4f60\u53ef\u4ee5\u67e5\u770b\u4ed6\u4eec\u7684\u4f7f\u7528\u6b21\u6570\u3002",
             "suggestions_label": "\u5f53\u524d\u6587\u4ef6\u7684\u5efa\u8bae\u6807\u7b7e",
@@ -422,9 +435,11 @@
             "connection_error": "\u65e0\u6cd5\u68c0\u67e5\u66f4\u65b0\uff1a\u65e0\u6cd5\u5efa\u7acb\u8fde\u63a5",
             "current_version": "\u5f53\u524d\u7248\u672c",
             "download_progress_label": "\u6b63\u5728\u4e0b\u8f7d\u66f4\u65b0\u6570\u636e",
+            "new_update_available": "\u53ef\u4ee5\u66f4\u65b0\u5230\u6700\u65b0\u7248\u672c  %s \uff01",
             "no_data": "\u65e0\u6cd5\u68c0\u67e5\u66f4\u65b0\uff1a\u670d\u52a1\u5668\u5c1a\u672a\u53d1\u9001\u4efb\u4f55\u6570\u636e",
             "no_new_update": "\u65e0\u9700\u66f4\u65b0\uff0c\u5f53\u524d\u5df2\u662f\u6700\u65b0\u7248\u672c\u3002",
             "notification": "\u6709\u65b0\u7248\u672c Zettlr \u53ef\u4f9b\u4e0b\u8f7d\u3002\u8bf7\u9605\u8bfb\u4e0b\u65b9\u7684\u66f4\u65b0\u8bf4\u660e\u3002",
+            "other_error": "\u65e0\u6cd5\u68c0\u67e5\u6700\u65b0\u7248\u672c %s: %s",
             "redirect_error": "\u65e0\u6cd5\u68c0\u67e5\u66f4\u65b0\uff1a\u670d\u52a1\u5668\u5c1d\u8bd5\u91cd\u5b9a\u5411\uff08\u72b6\u6001\u4ee3\u7801\uff1a\uff05s\uff09",
             "release_url": "\u6253\u5f00\u4e0b\u8f7d\u9875",
             "server_error": "\u65e0\u6cd5\u68c0\u67e5\u66f4\u65b0\uff1a\u670d\u52a1\u5668\u9519\u8bef\uff08\u72b6\u6001\u4ee3\u7801\uff1a\uff05s\uff09",
@@ -441,7 +456,8 @@
                 "saved": "\u5df2\u4fdd\u5b58\uff01",
                 "saving": "\u4fdd\u5b58\u4e2d\u2026",
                 "unsaved_changes": "\u672a\u4fdd\u5b58\u7684\u4fee\u6539"
-            }
+            },
+            "win_title": "\u8d44\u6e90\u7ba1\u7406\u5668"
         },
         "attachments": "\u9644\u4ef6",
         "attachments_open_dir": "\u6253\u5f00\u76ee\u5f55",
@@ -449,6 +465,7 @@
         "avg_not_reached": "\u270d\ud83c\udffc\u7ee7\u7eed\u5199\u4f5c\u8d85\u8fc7\u4f60\u7684\u65e5\u5e73\u5747\u5b57\u6570\u3002",
         "avg_surpassed": "\ud83d\udd25 \u4f60\u4eca\u5929\u7684\u72b6\u6001\u771f\u4e0d\u9519\uff01",
         "avg_words": "\u65e5\u5e73\u5747",
+        "chars": "%s \u5b57",
         "citeproc": {
             "error_db": "\u65e0\u6cd5\u52a0\u8f7d\u5f15\u6587\u6570\u636e\u5e93",
             "error_report_message": "\u60a8\u5e93\u4e2d\u6709 %s \u4e2a\u9879\u76ee\u56e0\u53d1\u751f\u9519\u8bef\u800c\u65e0\u6cd5\u52a0\u8f7d\u3002\u8bf7\u68c0\u67e5\u4e0b\u9762\u7684\u9519\u8bef\u4fe1\u606f\uff0c\u4ee5\u786e\u5b9a\u51fa\u73b0\u5f02\u5e38\u7684\u5f15\u7528\u952e\u503c\u548c\u9519\u8bef\u6027\u8d28\u3002",
@@ -460,6 +477,8 @@
             "references_none": "\u6587\u4ef6\u4e2d\u4e0d\u5b58\u5728\u53c2\u8003\u6587\u732e",
             "reloading": "\u68c0\u6d4b\u5230\u5e93\u6587\u4ef6\u66f4\u6539\uff0c\u91cd\u65b0\u52a0\u8f7d\u4e2d\u2026"
         },
+        "created": "\u521b\u5efa",
+        "ctrl_click_to_open": "\u4f7f\u7528 Cmd/Ctrl + \u5355\u51fb\u6253\u5f00 %s",
         "date_just_now_label": "\u521a\u624d",
         "dirs": "\u76ee\u5f55",
         "display_search_results": "\u663e\u793a\u641c\u7d22\u7ed3\u679c",
@@ -489,11 +508,42 @@
         },
         "global_search": {
             "clear_label": "\u6e05\u7a7a\u641c\u7d22",
-            "query_placeholder": "\u641c\u7d22\u2026"
+            "query_label": "\u8bf7\u8f93\u5165\u60a8\u9700\u8981\u641c\u7d22\u7684\u5185\u5bb9",
+            "query_placeholder": "\u641c\u7d22\u2026",
+            "restrict_dir_label": "\u53ea\u4ee5\u4e0b\u641c\u7d22\u76ee\u5f55",
+            "restrict_dir_placeholder": "\u9650\u5236\u641c\u7d22\u7684\u76ee\u5f55 ...",
+            "search_label": "\u641c\u7d22",
+            "title": "\u5168\u6587\u641c\u7d22"
         },
         "modified": "\u5df2\u4fee\u6539",
+        "months": {
+            "apr": "\u56db\u6708",
+            "aug": "\u516b\u6708",
+            "dec": "\u5341\u4e8c\u6708",
+            "feb": "\u4e8c\u6708",
+            "jan": "\u4e00\u6708",
+            "jul": "\u4e03\u6708",
+            "jun": "\u516d\u6708",
+            "mar": "\u4e09\u6708",
+            "may": "\u4e94\u6708",
+            "nov": "\u5341\u4e00\u6708",
+            "oct": "\u5341\u6708",
+            "sep": "\u4e5d\u6708"
+        },
         "no_attachments": "\u9644\u4ef6\u4e0d\u5b58\u5728",
+        "no_dir_selected": "\u672a\u9009\u4e2d\u4efb\u4f55\u76ee\u5f55",
+        "no_open_document": "\u672a\u6253\u5f00\u4efb\u4f55\u6587\u6863",
+        "no_other_files": "\u5176\u4ed6\u6587\u4ef6\u4e0d\u5b58\u5728",
+        "no_reference_message": "\u5f15\u7528\u6587\u672c\u4e0d\u5b58\u5728",
+        "no_related_files": "\u76f8\u5173\u6587\u4ef6\u4e0d\u5b58\u5728",
+        "no_search_results": "\u6ca1\u6709\u7ed3\u679c",
         "number_selections": "\u5df2\u9009\u62e9 %s \u4e2a\u4f4d\u7f6e",
+        "other_files": "\u5176\u4ed6\u6587\u4ef6",
+        "preview_modification_date": "\u5df2\u4fee\u6539",
+        "preview_searching_label": "\u641c\u7d22\u6587\u4ef6 ...",
+        "preview_word_count": "\u8bcd\u6570",
+        "related_files_label": "\u76f8\u5173\u6587\u4ef6",
+        "reset": "\u91cd\u7f6e",
         "statistics_more": "\u66f4\u591a\u6570\u636e",
         "table_of_contents": "\u76ee\u5f55",
         "today_words": "\u4eca\u65e5\u5b57\u6570",
@@ -510,6 +560,7 @@
         "about": "\u5173\u4e8e Zettlr",
         "add_to_dictionary": "\u52a0\u5165\u5b57\u5178",
         "all_front": "\u524d\u7f6e",
+        "assets_manager": "\u8d44\u6e90\u7ba1\u7406\u5668",
         "bold": "\u9ed1\u4f53",
         "clear_recent_docs": "\u6e05\u7a7a\u8fd1\u671f\u6587\u6863",
         "close_all_tabs": "\u5173\u95ed\u6240\u6709\u6807\u7b7e\u9875",
@@ -520,6 +571,7 @@
         "copy_filename": "\u590d\u5236\u6587\u4ef6\u540d",
         "copy_html": "\u590d\u5236\u4e3aHTML",
         "copy_id": "\u590d\u5236ID",
+        "copy_img_to_clipboard": "\u590d\u5236\u56fe\u7247\u5230\u526a\u8d34\u677f",
         "copy_link": "\u590d\u5236\u94fe\u63a5",
         "copy_mail": "\u590d\u5236\u90ae\u4ef6\u5730\u5740",
         "custom_css": "\u81ea\u5b9a\u4e49\u6837\u5f0f",
@@ -528,7 +580,9 @@
         "delete_file": "\u5220\u9664\u6587\u6863",
         "docs": "\u6253\u5f00\u7528\u6237\u624b\u518c",
         "donate": "\u652f\u6301 Zettlr",
+        "duplicate_file": "\u521b\u5efa\u6587\u4ef6\u526f\u672c",
         "export": "\u5bfc\u51fa\u2026",
+        "filter_files": "\u8fc7\u6ee4\u6587\u4ef6",
         "find_dir": "\u5728\u76ee\u5f55\u4e2d\u67e5\u627e",
         "find_file": "\u5728\u6587\u6863\u4e2d\u67e5\u627e",
         "generate_id": "\u751f\u6210\u65b0\u7684ID",
@@ -558,8 +612,10 @@
         "no_suggestions": "\u65e0\u610f\u89c1",
         "open": "\u6253\u5f00\u2026",
         "open_attachment": "\u6253\u5f00\u9644\u4ef6",
+        "open_in_browser": "\u5728\u6d4f\u89c8\u5668\u4e2d\u6253\u5f00",
         "open_link": "\u6253\u5f00\u94fe\u63a5",
         "open_logs": "\u6253\u5f00\u65e5\u5fd7",
+        "open_new_tab": "\u5728\u65b0\u6807\u7b7e\u9875\u4e2d\u6253\u5f00",
         "open_workspace": "\u6253\u5f00\u5de5\u4f5c\u533a...",
         "pandoc": "\u5b89\u88c5 Pandoc",
         "paste": "\u7c98\u8d34",
@@ -569,6 +625,7 @@
         "print": "\u6253\u5370\u2026",
         "project_build": "\u5bfc\u51fa\u9879\u76ee",
         "project_properties": "\u9879\u76ee\u8bbe\u7f6e\u2026",
+        "properties": "\u5c5e\u6027",
         "quicklook": "\u5feb\u901f\u9605\u89c8",
         "quit": "\u9000\u51fa",
         "recent_docs": "\u6700\u8fd1\u7684\u6587\u4ef6",
@@ -589,6 +646,8 @@
         "start_speaking": "\u5f00\u59cb\u8bb2\u8bdd",
         "stop_speaking": "\u7ed3\u675f\u8bb2\u8bdd",
         "tab_close": "\u5173\u95ed\u6807\u7b7e",
+        "tab_close_all": "\u5173\u95ed\u6240\u6709\u6807\u7b7e",
+        "tab_close_others": "\u5173\u95ed\u5176\u4ed6\u6807\u7b7e",
         "tab_next": "\u4e0b\u4e00\u4e2a\u6807\u7b7e",
         "tab_previous": "\u4e0a\u4e00\u4e2a\u6807\u7b7e",
         "tags": "\u7ba1\u7406\u6807\u7b7e\u2026",
@@ -621,6 +680,10 @@
     "system": {
         "all_files": "\u6240\u6709\u6587\u6863",
         "cancel": "\u53d6\u6d88",
+        "common": {
+            "list_add_button": "\u6dfb\u52a0",
+            "list_search_placeholder": "\u641c\u7d22\u5185\u5bb9 ..."
+        },
         "directories": "\u76ee\u5f55",
         "directory_removed": "\u76ee\u5f55\uff05s\u5df2\u88ab\u5220\u9664",
         "error": {
@@ -642,6 +705,7 @@
             "fnf_title": "\u627e\u4e0d\u5230\u6587\u6863",
             "ignored_dir_message": "\u76ee\u5f55&quot;%s&quot; \u65e0\u6cd5\u6253\u5f00",
             "ignored_dir_title": "\u65e0\u6cd5\u6253\u5f00\u76ee\u5f55",
+            "image_not_found": "\u672a\u627e\u5230\u56fe\u7247\uff1a%s",
             "malformed_textbundle": "\u683c\u5f0f\u9519\u8bef\u7684Textbundle\uff1a\uff05s",
             "move_into_child_message": "\u60a8\u65e0\u6cd5\u5c06\u76ee\u5f55\u79fb\u52a8\u5230\u5176\u5b50\u76ee\u5f55\u4e4b\u4e00\u3002",
             "move_into_child_title": "\u65e0\u6cd5\u79fb\u52a8\u76ee\u5f55",
@@ -714,7 +778,9 @@
         "show_toc": "\u663e\u793a\u76ee\u5f55",
         "stats": "\u67e5\u770b\u4e66\u5199\u7edf\u8ba1",
         "tag_cloud": "\u6807\u7b7e",
-        "toggle_attachments": "\u67e5\u770b\u9644\u4ef6"
+        "toggle_attachments": "\u67e5\u770b\u9644\u4ef6",
+        "toggle_file_manager": "\u6587\u4ef6\u7ba1\u7406\u5668",
+        "toggle_global_search": "\u5168\u5c40\u641c\u7d22"
     },
     "validation": {
         "error_empty": "\u9009\u9879\uff05s\u662f\u5fc5\u9700\u7684\u3002",
