@@ -323,6 +323,12 @@ export default {
               payload: this.obj.path
             })
               .catch(err => console.error(err))
+          } else if (clickedID === 'menu.quicklook') {
+            ipcRenderer.invoke('application', {
+              command: 'open-quicklook',
+              payload: this.obj.path
+            })
+              .catch(err => console.error(err))
           }
         })
       }
