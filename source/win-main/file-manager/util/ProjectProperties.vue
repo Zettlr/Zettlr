@@ -80,7 +80,7 @@ export default {
   data: function () {
     return {
       exportFormatMap: {},
-      selectedExportFormats: [],
+      selectedExportFormats: [ 'html', 'chromium-pdf' ], // NOTE: Must correspond to the defaults in fsal-directory.ts
       patterns: [],
       cslStyle: '',
       tabs: [
@@ -132,7 +132,7 @@ export default {
       this.updateProperties()
     }
   },
-  created: function () {
+  mounted: function () {
     // First, we need to get the available export formats
     ipcRenderer.invoke('application', {
       command: 'get-available-export-formats'
@@ -153,22 +153,7 @@ export default {
       .catch(err => console.error(err))
 
     // Second, we need to get the formats actually being used.
-    ipcRenderer.invoke('application', {
-      command: 'get-descriptor',
-      payload: this.fullPath
-    })
-      .then(descriptor => {
-        // Save the actually used formats. NOTE: It can be that the project of
-        // the descriptor is still null in case the user switched on the project
-        // capabilities just yet. In that case, simply don't do anything. They
-        // might then just select something and save the changes afterwards.
-        if (descriptor.project !== null) {
-          this.selectedExportFormats = descriptor.project.formats
-          this.patterns = descriptor.project.filters
-          this.cslStyle = descriptor.project.cslStyle
-        }
-      })
-      .catch(err => console.error(err))
+    this.fetchProperties()
   },
   methods: {
     selectExportFormat: function (newListVal) {
@@ -190,6 +175,21 @@ export default {
           path: this.fullPath
         }
       }).catch(err => console.error(err))
+    },
+    fetchProperties: function () {
+      ipcRenderer.invoke('application', {
+        command: 'get-descriptor',
+        payload: this.fullPath
+      })
+        .then(descriptor => {
+          // Save the actually used formats.
+          if (descriptor.project !== null) {
+            this.selectedExportFormats = descriptor.project.formats
+            this.patterns = descriptor.project.filters
+            this.cslStyle = descriptor.project.cslStyle
+          }
+        })
+        .catch(err => console.error(err))
     }
   }
 }
