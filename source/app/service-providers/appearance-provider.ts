@@ -134,8 +134,8 @@ export default class AppearanceProvider extends EventEmitter {
               return colorFallback
             } else {
               // Calculate the contrast before returning
-              const dark = '33333333'
-              const light = 'eeeeeeee'
+              const dark = '333333ff'
+              const light = 'ffffffff'
               const r = parseInt(accentColor.substring(0, 2), 16) // hexToR
               const g = parseInt(accentColor.substring(2, 4), 16) // hexToG
               const b = parseInt(accentColor.substring(4, 6), 16) // hexToB
