@@ -19,7 +19,16 @@
 const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
 // This function displays a custom styled popup menu at the given coordinates
-export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[], callback: Function): Function {
+export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[], callback: Function, cleanup = true): Function {
+  // Before we do anything, we first must make sure any rogue old context menus
+  // are gone.
+  if (cleanup) { // NOTE: we need a flag because of submenus
+    const menus = document.querySelectorAll('.application-menu')
+    for (const menu of menus) {
+      menu.parentElement?.removeChild(menu)
+    }
+  }
+
   // Get the correct rect to use for submenu placement
   let targetRect: Rect = {
     top: 0,
@@ -60,7 +69,7 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
 
   // We have just received a serialized submenu which we should now display
   const appMenu = document.createElement('div')
-  appMenu.setAttribute('id', 'application-menu')
+  appMenu.classList.add('application-menu')
   appMenu.style.zIndex = '99999' // Ensure it always stays on top of anything
 
   for (let item of items) {
@@ -99,7 +108,7 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
             appMenu.parentElement?.removeChild(appMenu)
           }
 
-          closeSubmenu = showPopupMenu(target, (item as SubmenuItem).submenu, subCB)
+          closeSubmenu = showPopupMenu(target, (item as SubmenuItem).submenu, subCB, false) // NOTE: Prevent cleanup ONLY here!
         } else if (
           pointInRect(point, menuRect) &&
           !pointInRect(point, rect) &&
