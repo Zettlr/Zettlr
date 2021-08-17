@@ -5,6 +5,6 @@ interface ErrorNotification {
 }
 
 interface NotificationProvider {
-  normal: (message: string, callback?: Function) => void
-  error: (error: ErrorNotification) => void
+  normal: (message: string, callback?: Function) => boolean
+  error: (error: ErrorNotification) => boolean
 }

@@ -38,7 +38,7 @@ export default class NotificationProvider {
        */
       normal: (msg: string, callback?: Function) => {
         if (!this._osSupportsNotification) {
-          return
+          return false
         }
 
         const notification = new Notification({
@@ -60,6 +60,8 @@ export default class NotificationProvider {
             callback()
           })
         }
+
+        return true
       },
       /**
        * Displays a notification with critical urgency across the app
@@ -69,7 +71,7 @@ export default class NotificationProvider {
        */
       error: (msg: ErrorNotification) => {
         if (!this._osSupportsNotification) {
-          return
+          return false
         }
 
         const notification = new Notification({
@@ -85,6 +87,8 @@ export default class NotificationProvider {
 
         // Now show the notification
         notification.show()
+
+        return true
       }
     }
   }

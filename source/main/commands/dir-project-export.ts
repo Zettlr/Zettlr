@@ -95,18 +95,26 @@ export default class DirProjectExport extends ZettlrCommand {
     }
 
     // TODO: Translate!
-    global.notify.normal('Project successfully exported. Click to show.', async () => {
-      // Whoever thought it would be great to have an async function RESOLVE
-      // with the error instead of rejecting was definitely a f***ing genius.
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      shell.openPath(dir.path)
-        .then((error) => {
-          if (error !== '') {
-            global.log.error(`[Project Export] Error opening the directory: ${error}`, error)
-          }
-        })
+    const notificationShown = global.notify.normal('Project successfully exported. Click to show.', async () => {
+      openDirectory(dir.path)
     })
+
+    if (!notificationShown) {
+      openDirectory(dir.path)
+    }
 
     return true
   }
+}
+
+function openDirectory (dirPath: string): void {
+  // Whoever thought it would be great to have an async function RESOLVE
+  // with the error instead of rejecting was definitely a f***ing genius.
+  // eslint-disable-next-line @typescript-eslint/no-floating-promises
+  shell.openPath(dirPath)
+    .then((error) => {
+      if (error !== '') {
+        global.log.error(`[Project Export] Error opening the directory: ${error}`, error)
+      }
+    })
 }
