@@ -39,7 +39,8 @@ export default class Export extends ZettlrCommand {
 
     const fileDescriptor = this._app.getFileSystem().findFile(file)
     if (fileDescriptor === null) {
-      return global.notify.normal(trans('system.error.fnf_message'))
+      global.notify.normal(trans('system.error.fnf_message'))
+      return
     }
 
     // Determine the target directory
