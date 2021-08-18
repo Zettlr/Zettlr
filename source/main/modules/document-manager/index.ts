@@ -404,6 +404,10 @@ export default class DocumentManager extends EventEmitter {
         }
       }
     }
+
+    if (this.isClean()) {
+      this.emit('documents-all-clean')
+    }
   }
 
   /**

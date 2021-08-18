@@ -481,8 +481,8 @@ export default {
 
     // Listen to shortcuts from the main process
     ipcRenderer.on('shortcut', (event, shortcut) => {
-      if (shortcut === 'save-file') {
-        this.save()
+      if (shortcut === 'save-file' && this.activeDocument !== null) {
+        this.save(this.activeDocument).catch(e => console.error(e))
       } else if (shortcut === 'copy-as-html') {
         this.editor.copyAsHTML()
       } else if (shortcut === 'paste-as-plain') {
@@ -515,6 +515,14 @@ export default {
             isClean: doc.cmDoc.isClean()
           })
         })
+      }
+    })
+
+    ipcRenderer.on('save-all-documents', async (event) => {
+      // If this event gets emitted, the main process wants
+      // all open and modified documents to be saved.
+      for (const doc of this.openDocuments) {
+        await this.save(doc)
       }
     })
 
@@ -559,44 +567,41 @@ export default {
           return 'multiplex'
       }
     },
-    save () {
-      // Go through all open files, and, if they are modified, save them
-      if (this.activeDocument.cmDoc.isClean() === true) {
+    async save (doc) {
+      if (doc.cmDoc.isClean() === true) {
         return // Nothing to save
       }
 
-      const newContents = this.activeDocument.cmDoc.getValue()
+      const newContents = doc.cmDoc.getValue()
       const currentWordCount = countWords(newContents, this.shouldCountChars)
       const descriptor = {
-        path: this.activeDocument.path,
-        newContents: this.activeDocument.cmDoc.getValue(),
-        offsetWordCount: currentWordCount - this.activeDocument.lastWordCount
+        path: doc.path,
+        newContents: doc.cmDoc.getValue(),
+        offsetWordCount: currentWordCount - doc.lastWordCount
       }
 
-      this.activeDocument.lastWordCount = currentWordCount
+      doc.lastWordCount = currentWordCount
 
-      ipcRenderer.invoke('application', {
+      const result = await ipcRenderer.invoke('application', {
         command: 'file-save',
         payload: descriptor
       })
-        .then((result) => {
-          if (result !== true) {
-            console.error('Retrieved a falsy result from main, indicating an error with saving the file.')
-            return
-          }
 
-          // Everything worked out, so clean up
-          this.activeDocument.cmDoc.markClean()
-          this.$store.dispatch('regenerateTagSuggestions').catch(e => console.error(e))
-          this.$store.commit('announceModifiedFile', {
-            filePath: this.activeDocument.path,
-            isClean: this.activeDocument.cmDoc.isClean()
-          })
+      if (result !== true) {
+        console.error('Retrieved a falsy result from main, indicating an error with saving the file.')
+        return
+      }
 
-          // Also, extract all cited keys
-          this.updateCitationKeys()
-        })
-        .catch((err) => { console.error(err) })
+      // Everything worked out, so clean up
+      doc.cmDoc.markClean()
+      this.$store.dispatch('regenerateTagSuggestions').catch(e => console.error(e))
+      this.$store.commit('announceModifiedFile', {
+        filePath: doc.path,
+        isClean: doc.cmDoc.isClean()
+      })
+
+      // Also, extract all cited keys
+      this.updateCitationKeys()
     },
     updateCitationKeys: function () {
       const value = this.editor.value

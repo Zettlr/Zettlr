@@ -142,19 +142,26 @@ export default class Zettlr {
         event.preventDefault()
         this.isQuitting = false
         // ... and ask the user if we should *really* quit.
-        this._windowManager.askSaveChanges()
+        this.askSaveChanges()
           .then(result => {
             // 0 = 'Close without saving changes',
             // 1 = 'Save changes'
+            // 2 = 'Cancel
             if (result.response === 0) {
               // Clear the modification flags and close again
               this._documentManager.updateModifiedFlags([]) // Empty array = no modified files
               app.quit()
-            } else {
-              // TODO: Following strategy for the "Save and then quit" behaviour:
-              // 1. Broadcast an event to all renderers to immediately save all their changes
-              // 2. Once that is done, quit. So we should watch the modification files, shouldn't we ...?
-            }
+            } else if (result.response === 1) {
+              // First, listen once to the event that all documents are clean
+              // (i.e. it's safe to shut down) ...
+              this._documentManager.once('documents-all-clean', () => {
+                // The document manager reports all documents are clean now
+                app.quit()
+              })
+
+              // ... and then have the renderer begin saving all changed docs.
+              broadcastIpcMessage('save-all-documents')
+            } // Else: Do nothing (abort quitting)
           })
           .catch(e => global.log.error('[Application] Could not ask the user to save their changes, because the message box threw an error. Not quitting!', e))
       }
@@ -175,15 +182,22 @@ export default class Zettlr {
           .then(result => {
             // 0 = 'Close without saving changes',
             // 1 = 'Save changes'
+            // 2 = 'Cancel
             if (result.response === 0) {
               // Clear the modification flags and close again
               this._documentManager.updateModifiedFlags([]) // Empty array = no modified files
               this._windowManager.closeMainWindow()
-            } else {
-              // TODO: Following strategy for the "Save and then quit" behaviour:
-              // 1. Broadcast an event to all renderers to immediately save all their changes
-              // 2. Once that is done, quit. So we should watch the modification files, shouldn't we ...?
-            }
+            } else if (result.response === 1) {
+              // First, listen once to the event that all documents are clean
+              // (i.e. it's safe to shut down) ...
+              this._documentManager.once('documents-all-clean', () => {
+                // The document manager reports all documents are clean now
+                this._windowManager.closeMainWindow()
+              })
+
+              // ... and then have the renderer begin saving all changed docs.
+              broadcastIpcMessage('save-all-documents')
+            } // Else: Do nothing (abort quitting)
           })
           .catch(e => global.log.error('[Application] Could not ask the user to save their changes, because the message box threw an error. Not quitting!', e))
       }

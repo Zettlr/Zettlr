@@ -29,8 +29,9 @@ export default async function askSaveChanges (win: BrowserWindow|null): Promise<
   const boxOptions: MessageBoxOptions = {
     type: 'warning',
     buttons: [
-      trans('system.save_changes_omit'),
-      trans('system.save_changes_save')
+      trans('system.save_changes_omit'), // 0: Omit all changes
+      trans('system.save_changes_save'), // 1: Save all changes
+      trans('system.cancel') // 2: Abort whatever is happening
     ],
     defaultId: 1,
     title: trans('system.save_changes_title'),
