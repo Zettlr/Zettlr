@@ -38,6 +38,16 @@ export default function () {
       ],
       [
         {
+          type: 'radio',
+          label: trans('dialog.preferences.auto_save.label'),
+          model: 'editor.autoSave',
+          options: {
+            'off': trans('dialog.preferences.auto_save.off'),
+            'immediately': trans('dialog.preferences.auto_save.immediately'),
+            'delayed': trans('dialog.preferences.auto_save.delayed')
+          }
+        },
+        {
           type: 'text',
           label: trans('dialog.preferences.default_image_save_path'),
           model: 'editor.defaultSaveImagePath'

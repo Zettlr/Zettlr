@@ -214,6 +214,9 @@ export default {
         }
       }
     },
+    autoSave: function () {
+      return this.$store.state.config['editor.autoSave']
+    },
     tagDatabase: function () {
       return this.$store.state.tagDatabase
     },
@@ -350,7 +353,8 @@ export default {
               mode: mode, // Save the mode for later swaps
               cmDoc: CodeMirror.Doc(descriptorWithContent.content, mode),
               modified: false,
-              lastWordCount: countWords(descriptorWithContent.content, this.shouldCountChars)
+              lastWordCount: countWords(descriptorWithContent.content, this.shouldCountChars),
+              saveTimeout: undefined // Only used below to save the saveTimeout
             }
 
             // Listen to change events on the doc, because if the user pastes
@@ -366,6 +370,31 @@ export default {
                 newDoc.lastWordCount = countWords(newDoc.cmDoc.getValue(), this.shouldCountChars)
               }
             })
+
+            // Implement autosaving
+            newDoc.cmDoc.on('change', (doc, changeObj) => {
+              if (this.autoSave === 'off') {
+                return
+              }
+
+              if (newDoc.saveTimeout !== undefined) {
+                clearTimeout(newDoc.saveTimeout)
+                newDoc.saveTimeout = undefined
+              }
+
+              // Even "immediately" doesn't save RIGHT after you have typed a
+              // character. Rather, we take a 250ms window so that the filesystem
+              // won't be too stressed. This should still feel very immediate to
+              // the user, since the file will more or less be saved once they
+              // stop typing.
+              const delay = (this.autoSave === 'immediately') ? 250 : 5000
+
+              newDoc.saveTimeout = setTimeout(() => {
+                this.save(newDoc).catch(e => console.error(e))
+                newDoc.saveTimeout = undefined
+              }, delay)
+            })
+
             this.openDocuments.push(newDoc)
             const idx = this.currentlyFetchingFiles.findIndex(e => e === descriptorWithContent.path)
             this.currentlyFetchingFiles.splice(idx, 1)

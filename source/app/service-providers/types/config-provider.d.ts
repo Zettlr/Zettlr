@@ -95,6 +95,7 @@ interface ConfigOptions {
   }
   editor: {
     autocompleteAcceptSpace: boolean
+    autoSave: 'off'|'immediately'|'delayed'
     autoCloseBrackets: boolean
     defaultSaveImagePath: string
     homeEndBehaviour: boolean
