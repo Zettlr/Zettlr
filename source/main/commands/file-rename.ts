@@ -47,6 +47,16 @@ export default class FileRename extends ZettlrCommand {
       return global.log.error(`Could not find file ${String(arg.path)}`)
     }
 
+    // Find the file within the open documents
+    const documentDescriptor = this._app.getDocumentManager().openFiles.find(e => e.path === file.path)
+    if (documentDescriptor?.modified === true) {
+      // Make sure to not rename a file if it contains unsaved changes. People who
+      // have autosave activated are pretty likely to never see this message box
+      // either way.
+      this._app.prompt('Cannot rename file: Please save your changes first.')
+      return
+    }
+
     // If the new name equals the old one, don't do anything, see #1942
     if (file.name.toLowerCase() === newName.toLowerCase()) {
       global.log.info(`[App] Didn't rename file to ${newName} since it's the same name`)
@@ -70,7 +80,6 @@ export default class FileRename extends ZettlrCommand {
     // info, we should close immediately, in order to prevent a "zombie" file
     // to remain open in the document manager.
     const wasActive = this._app.getDocumentManager().activeFile?.path === file.path
-    const documentDescriptor = this._app.getDocumentManager().openFiles.find(e => e.path === file.path)
     const wasOpen = documentDescriptor !== undefined
     if (documentDescriptor !== undefined) {
       // Will also reset activeFile
