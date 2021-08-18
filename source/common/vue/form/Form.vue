@@ -23,6 +23,7 @@
           v-bind:name="field.model"
           v-bind:reset="field.reset"
           v-bind:inline="field.inline"
+          v-bind:disabled="field.disabled"
           v-on:input="$emit('input', field.model, $event)"
         ></NumberInput>
         <TimeInput

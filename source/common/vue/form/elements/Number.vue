@@ -9,6 +9,7 @@
         v-bind:max="max"
         v-bind:value="value"
         v-bind:class="{ 'inline': inline }"
+        v-bind:disabled="disabled"
         type="number"
         v-on:input="$emit('input', sanitize($event.target.value))"
         v-on:keyup.enter="$emit('confirm', sanitize($event.target.value))"
@@ -83,6 +84,10 @@ export default {
       default: 0
     },
     inline: {
+      type: Boolean,
+      default: false
+    },
+    disabled: {
       type: Boolean,
       default: false
     }

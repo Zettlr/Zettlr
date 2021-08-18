@@ -15,6 +15,7 @@
 import { trans } from '../../common/i18n-renderer'
 
 export default function () {
+  console.log(global.config.get('watchdog.activatePolling'))
   return {
     fieldsets: [
       [
@@ -44,7 +45,8 @@ export default function () {
         {
           type: 'checkbox',
           label: trans('dialog.preferences.use_native_appearance'),
-          model: 'window.nativeAppearance'
+          model: 'window.nativeAppearance',
+          disabled: process.platform !== 'linux'
         },
         {
           type: 'checkbox',
@@ -84,7 +86,8 @@ export default function () {
         {
           type: 'number',
           label: trans('dialog.preferences.watchdog_threshold_label'),
-          model: 'watchdog.stabilityThreshold'
+          model: 'watchdog.stabilityThreshold',
+          disabled: global.config.get('watchdog.activatePolling') === false
         }
       ]
     ]
