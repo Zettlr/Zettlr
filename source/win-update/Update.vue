@@ -25,7 +25,7 @@
         </template>
         <template v-else-if="isDownloading && !isFinished">
           <!-- We are currently downloading an update -->
-          <p>{{ downloadProgressLabel }}: {{ downloadProgress.download_percent }} % ({{ getETA }})</p>
+          <p>{{ downloadProgressLabel }}: {{ formatSize(downloadProgress.size_downloaded) }} of {{ formatSize(downloadProgress.size_total) }} ({{ getETA }})</p>
           <ProgressControl
             v-bind:max="downloadProgress.size_total"
             v-bind:value="downloadProgress.size_downloaded"
@@ -70,6 +70,7 @@ import WindowChrome from '../common/vue/window/Chrome'
 import ButtonControl from '../common/vue/form/elements/Button'
 import ProgressControl from '../common/vue/form/elements/Progress'
 import { trans } from '../common/i18n-renderer'
+import formatSize from '../common/util/format-size'
 
 const ipcRenderer = window.ipc
 
@@ -169,6 +170,9 @@ export default {
           this.disableStartButton = false
           console.error(e)
         })
+    },
+    formatSize: function (bytes) {
+      return formatSize(bytes, true)
     }
   }
 }
