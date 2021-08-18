@@ -19,7 +19,7 @@
  *
  * @var {Number}
  */
-let lastHighlightLine = -1
+const highlights = new Set()
 
 /**
  * Enables muting of lines in the editor if the option is set
@@ -34,28 +34,43 @@ module.exports = (cm) => {
 /**
  * Adds the mute class to all lines if the option is set
  *
- * @param   {CodeMirror}  cm  The CodeMirror instance
+ * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
  */
 function muteLines (cm) {
   if (!cm.getOption('zettlr').muteLines || !cm.getOption('fullScreen')) {
-    if (lastHighlightLine > -1) {
+    if (highlights.size > 0) {
       // Clean up after the option has been disabled
       for (let i = 0; i < cm.lineCount(); i++) {
         cm.removeLineClass(i, 'text', 'mute')
       }
-      lastHighlightLine = -1
+      highlights.clear()
     }
     return
   }
 
-  let highlightLine = cm.getCursor().line
+  highlights.clear()
+
+  if (cm.somethingSelected()) {
+    const sels = cm.listSelections()
+    for (const sel of sels) {
+      // Determine the beginning and end of the current selection
+      const startLine = (sel.anchor.line > sel.head.line) ? sel.head.line : sel.anchor.line
+      const endLine = (startLine === sel.head.line) ? sel.anchor.line : sel.head.line
+      // Add all lines in between to the set
+      for (let i = startLine; i <= endLine; i++) {
+        highlights.add(i)
+      }
+    }
+  } else {
+    // If nothing was selected, we only need the cursor line
+    highlights.add(cm.getCursor().line)
+  }
+
   for (let i = 0; i < cm.lineCount(); i++) {
-    if (highlightLine === i) {
+    if (highlights.has(i)) {
       cm.removeLineClass(i, 'text', 'mute')
     } else {
       cm.addLineClass(i, 'text', 'mute')
     }
   }
-
-  lastHighlightLine = highlightLine
 }
