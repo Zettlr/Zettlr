@@ -286,10 +286,10 @@ body.linux {
     button {
       background-color: transparent;
       border: 1px solid rgb(180, 180, 180);
-      padding: 4px 8px;
+      padding: 0px;
       border-radius: @border-radius;
-      width: 45px;
-      height: 30px;
+      width: 35px;
+      height: 25px;
       margin: 0 4px;
 
       &:hover {

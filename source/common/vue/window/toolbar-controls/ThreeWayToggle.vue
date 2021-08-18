@@ -157,9 +157,10 @@ body.linux {
   div#toolbar div.three-way-toggle {
     margin: 0 10px;
     border: 2px solid transparent;
+    display: flex;
 
     button {
-      margin: 0 -2px;
+      margin: 0;
       border-radius: 0;
     }
 

@@ -5,11 +5,10 @@
     v-on:click="$emit('click')"
   >
     <svg
+      class="progress-ring"
       v-bind:style="{
         width: circleSize,
-        height: circleSize,
-        margin: 0,
-        padding: 0
+        height: circleSize
       }"
     >
       <!-- Always-on circle -->
@@ -101,5 +100,12 @@ export default {
 </script>
 
 <style lang="less">
-//
+body button svg.progress-ring {
+  margin: 0;
+  padding: 0;
+}
+
+body.linux button svg.progress-ring {
+  margin: 1px; // Center the SVG on the middle of the button, see also Toolbar.vue
+}
 </style>
