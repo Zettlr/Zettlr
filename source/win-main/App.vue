@@ -467,24 +467,15 @@ export default {
         this.showExportPopover()
       } else if (clickedID === 'show-stats') {
         // The user wants to display the stats
-        ipcRenderer.invoke('stats-provider', { command: 'get-data' }).then(stats => {
-          const data = {
-            sumMonth: stats.sumMonth,
-            averageMonth: stats.avgMonth,
-            sumToday: stats.today,
-            wordCounts: stats.wordCount
+        this.$togglePopover(PopoverStats, document.getElementById('toolbar-show-stats'), {}, (data) => {
+          if (data.showMoreStats === true) {
+            ipcRenderer.invoke('application', {
+              command: 'open-stats-window'
+            })
+              .catch(err => console.error(err))
           }
-
-          this.$showPopover(PopoverStats, document.getElementById('toolbar-show-stats'), data, (data) => {
-            if (data.showMoreStats === true) {
-              ipcRenderer.invoke('application', {
-                command: 'open-stats-window'
-              })
-                .catch(err => console.error(err))
-            }
-            this.$closePopover()
-          })
-        }).catch(e => console.error(e))
+          this.$closePopover()
+        })
       } else if (clickedID === 'show-tag-cloud') {
         const allTags = Object.keys(this.$store.state.tagDatabase)
         const tagMap = allTags.map(tag => {
@@ -505,7 +496,7 @@ export default {
 
         const button = document.getElementById('toolbar-show-tag-cloud')
 
-        this.$showPopover(PopoverTags, button, data, (data) => {
+        this.$togglePopover(PopoverTags, button, data, (data) => {
           if (data.searchForTag !== '') {
             // The user has clicked a tag and wants to search for it
             this.$emit('start-global-search', '#' + data.searchForTag)
@@ -529,7 +520,7 @@ export default {
           volume: this.pomodoro.soundEffect.volume * 100
         }
 
-        this.pomodoro.popover = this.$showPopover(PopoverPomodoro, document.getElementById('toolbar-pomodoro'), data, (data) => {
+        this.pomodoro.popover = this.$togglePopover(PopoverPomodoro, document.getElementById('toolbar-pomodoro'), data, (data) => {
           // Update the durations as necessary
           this.pomodoro.durations.task = data.taskDuration
           this.pomodoro.durations.short = data.shortDuration
@@ -574,7 +565,7 @@ export default {
         // Display the insertion popover
         const data = {}
         const elem = document.getElementById('toolbar-insert-table')
-        this.$showPopover(PopoverTable, elem, data, (data) => {
+        this.$togglePopover(PopoverTable, elem, data, (data) => {
           // Generate a simple table based on the info, and insert it.
           let table = ''
           for (let i = 0; i < data.tableSize.rows; i++) {
@@ -594,7 +585,7 @@ export default {
           docInfo: this.$store.state.activeDocumentInfo
         }
         const elem = document.getElementById('toolbar-document-info')
-        this.$showPopover(PopoverDocInfo, elem, data, (data) => {
+        this.$togglePopover(PopoverDocInfo, elem, data, (data) => {
           // Do nothing
         })
       } else if (clickedID.startsWith('markdown') === true && clickedID.length > 8) {
@@ -683,7 +674,7 @@ export default {
         exportDirectory: this.$store.state.config['export.dir'],
         format: this.$store.state.config['export.singleFileLastExporter']
       }
-      this.$showPopover(PopoverExport, document.getElementById('toolbar-export'), data, (data) => {
+      this.$togglePopover(PopoverExport, document.getElementById('toolbar-export'), data, (data) => {
         if (data.shouldExport === true) {
           // Remember the last choice
           global.config.set('export.singleFileLastExporter', data.format)

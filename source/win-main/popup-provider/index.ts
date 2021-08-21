@@ -42,11 +42,48 @@ function closeFunction (): void {
   currentPopoverTarget = null
 }
 
+function showFunction (
+  component: typeof Vue,
+  element: HTMLElement,
+  initialData: any,
+  shouldToggle: boolean,
+  callback: Function|null = null
+): Popover|undefined {
+  // Do not re-open this popover, if the toggle flag is set, the current target
+  // still points to the same element (indicating the same popover being opened)
+  // and there is a popover and it is not actually closed.
+  console.log('Should toggle?', shouldToggle)
+  console.log('Same element as last time?', currentPopoverTarget === element)
+  console.log('Popover still being shown?', currentPopover?.isClosed() === false)
+  const dontReopen = shouldToggle && (currentPopoverTarget === element) && currentPopover?.isClosed() === false
+  if (currentPopover !== null && currentPopoverTarget !== null) {
+    // Close the previous popover, since only one is allowed
+    closeFunction()
+  }
+
+  if (dontReopen) {
+    return undefined
+  }
+
+  // Display the popover and save it to the various variables
+  currentPopover = new Popover(component, element, initialData, (data: any) => {
+    if (callback !== null) {
+      callback(data)
+    }
+  })
+
+  currentPopoverTarget = element
+
+  // Return the popup instance so that the caller may hook into some
+  // functions, e.g. to indicate a change in the popup's contents.
+  return currentPopover
+}
+
 // <void> indicates the Plugin does not support options
 export default {
   install (VueInstance: typeof Vue, options?: any): void {
     /**
-     * Shows the given popup
+     * Shows the given popup.
      *
      * @param   {Vue}          component        The popover contents (Vue component)
      * @param   {HTMLElement}  element          The element to align the popover to
@@ -59,24 +96,28 @@ export default {
       element: HTMLElement,
       initialData: any,
       callback: Function|null = null
-    ) => {
-      if (currentPopover !== null && currentPopoverTarget !== null) {
-        // Close the previous popover, since only one is allowed
-        closeFunction()
-      }
+    ): Popover => {
+      // Note: Since we are not toggling, there *will* be a Popover returned.
+      return showFunction(component, element, initialData, false, callback) as Popover
+    }
 
-      // Display the popover and save it to the various variables
-      currentPopover = new Popover(component, element, initialData, (data: any) => {
-        if (callback !== null) {
-          callback(data)
-        }
-      })
-
-      currentPopoverTarget = element
-
-      // Return the popup instance so that the caller may hook into some
-      // functions, e.g. to indicate a change in the popup's contents.
-      return currentPopover
+    /**
+     * Toggles the given popup.
+     *
+     * @param   {Vue}          component        The popover contents (Vue component)
+     * @param   {HTMLElement}  element          The element to align the popover to
+     * @param   {Function}     [callback=null]  A callback that receives any changes
+     *
+     * @return  {Popover|undefined}             Returns undefined if the corresponding popover has been closed.
+     */
+    VueInstance.prototype.$togglePopover = (
+      component: typeof Vue,
+      element: HTMLElement,
+      initialData: any,
+      callback: Function|null = null
+    ): Popover|undefined => {
+      // May return undefined
+      return showFunction(component, element, initialData, true, callback)
     }
 
     VueInstance.prototype.$closePopover = closeFunction

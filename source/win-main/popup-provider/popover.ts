@@ -31,6 +31,7 @@ export default class ZettlrPopover {
   private readonly _popover: Vue
   private _arrow: HTMLElement|null
   private readonly _watcher: Function
+  private _isClosing: boolean
 
   /**
     * Creates and mounts a new popup
@@ -47,6 +48,7 @@ export default class ZettlrPopover {
   ) {
     this._elem = elem
     this._callback = callback
+    this._isClosing = false
 
     // Where the small arrow should point to.
     this._x = 0
@@ -274,7 +276,7 @@ export default class ZettlrPopover {
    * @return  {boolean} True if the popup has been closed.
    */
   isClosed (): boolean {
-    return this._arrow === null || this._popup === null
+    return (this._arrow === null || this._popup === null) && !this._isClosing
   }
 
   /**
@@ -286,6 +288,8 @@ export default class ZettlrPopover {
       return
     }
 
+    this._isClosing = true
+
     this._watcher() // Calling this function unwatches the Vue instance
     this._arrow.parentElement?.removeChild(this._arrow)
     this._popup.parentElement?.removeChild(this._popup)
@@ -295,6 +299,27 @@ export default class ZettlrPopover {
     document.removeEventListener('mousedown', this._boundClickHandler)
     document.removeEventListener('contextmenu', this._boundClickHandler)
     window.removeEventListener('resize', this._boundResizeHandler)
+
+    // NOTE: We need to do these gymnastics since most components will only
+    // trigger on a click event while the popover must react to mousedown events
+    // to allow selection of something inside the popover without having it
+    // close just because you released the mouse outside the popover. To
+    // mitigate we have to understand the order in which events are triggered.
+    // This is the event chain, given that the user clicks again on a *toggle*
+    // element:
+    // 1. Mousedown event outside of the popup (on the toggle element)
+    // 2. Close the popup (set isClosing to true)
+    // 3. Click event on the toggle element (the events bubble *up* to document)
+    // 4. Vue plugin realizes the popover is still being shown due to the flag
+    // 5. Vue plugin doesn't re-show the popover
+    // 6. Click event on the document, setting the isClosing flag back to false.
+    // This magic also works if the user just clicked somewhere else.
+    const afterCloseCallback = (): void => {
+      this._isClosing = false
+      document.removeEventListener('click', afterCloseCallback)
+    }
+
+    document.addEventListener('click', afterCloseCallback)
   }
 
   /**

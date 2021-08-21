@@ -63,6 +63,8 @@ import { trans } from '../common/i18n-renderer'
 import localiseNumber from '../common/util/localise-number'
 import { DateTime } from 'luxon'
 
+const ipcRenderer = window.ipc
+
 export default {
   name: 'PopoverExport',
   components: {
@@ -171,6 +173,15 @@ export default {
     buttonLabel: function () {
       return trans('gui.statistics_more')
     }
+  },
+  created: function () {
+    // Asynchronously pull in the data
+    ipcRenderer.invoke('stats-provider', { command: 'get-data' }).then(stats => {
+      this.sumMonth = stats.sumMonth
+      this.averageMonth = stats.avgMonth
+      this.sumToday = stats.today
+      this.wordCounts = stats.wordCount
+    }).catch(e => console.error(e))
   },
   methods: {
     buttonClick: function () {
