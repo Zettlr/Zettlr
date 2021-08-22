@@ -101,6 +101,7 @@ declare module NodeJS {
     targets: TargetProvider
     tags: TagProvider
     stats: StatsProvider
+    recentDocs: RecentDocumentsProvider
     // Translation data necessary to facilitate internationalisation
     i18n: any
     i18nRawData: any

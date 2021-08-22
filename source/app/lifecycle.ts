@@ -41,6 +41,7 @@ import TargetProvider from './service-providers/target-provider'
 import TranslationProvider from './service-providers/translation-provider'
 import UpdateProvider from './service-providers/update-provider'
 import NotificationProvider from './service-providers/notification-provider'
+import RecentDocumentsProvider from './service-providers/recent-docs-provider'
 import StatsProvider from './service-providers/stats-provider'
 import TrayProvider from './service-providers/tray-provider'
 
@@ -59,6 +60,7 @@ let translationProvider: TranslationProvider
 let updateProvider: UpdateProvider
 let menuProvider: MenuProvider
 let notificationProvider: NotificationProvider
+let recentDocsProvider: RecentDocumentsProvider
 let statsProvider: StatsProvider
 let trayProvider: TrayProvider
 
@@ -122,6 +124,7 @@ export async function bootApplication (): Promise<void> {
   translationProvider = new TranslationProvider()
   updateProvider = new UpdateProvider()
   notificationProvider = new NotificationProvider()
+  recentDocsProvider = new RecentDocumentsProvider()
   statsProvider = new StatsProvider()
   trayProvider = new TrayProvider()
 
@@ -181,6 +184,7 @@ export async function bootApplication (): Promise<void> {
 export async function shutdownApplication (): Promise<void> {
   global.log.info(`さようなら！ Shutting down at ${(new Date()).toString()}`)
   // Shutdown all providers in the reverse order
+  await safeShutdown(recentDocsProvider)
   await safeShutdown(notificationProvider)
   await safeShutdown(updateProvider)
   await safeShutdown(translationProvider)

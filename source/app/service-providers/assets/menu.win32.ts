@@ -19,7 +19,51 @@ import { trans } from '../../../common/i18n-main'
 import path from 'path'
 
 export default function getMenu (): MenuItemConstructorOptions[] {
-  // Now generate the menu itself
+  // While on macOS we can just drop the following menuItem into the menu, the
+  // win32-menu is also being used on Linux. Therefore, we use as fallback the
+  // default, but ...
+  let recentDocsItem: MenuItemConstructorOptions = {
+    id: 'menu.recent_docs',
+    label: trans('menu.recent_docs'),
+    role: 'recentDocuments',
+    submenu: [{
+      id: 'menu.clear_recent_docs',
+      label: trans('menu.clear_recent_docs'),
+      role: 'clearRecentDocuments'
+    }]
+  }
+
+  // ... if we're somewhere else, display our custom implementation of recent docs.
+  if (process.platform !== 'win32') {
+    const docs = global.recentDocs.get()
+    recentDocsItem = {
+      id: 'menu.recent_docs',
+      label: trans('menu.recent_docs'),
+      submenu: [
+        {
+          id: 'menu.clear_recent_docs',
+          label: trans('menu.clear_recent_docs'),
+          click: function (menuitem, focusedWindow) {
+            global.recentDocs.clear()
+          },
+          enabled: docs.length > 0
+        },
+        ...docs.map(item => {
+          const ret: MenuItemConstructorOptions = {
+            label: path.basename(item),
+            click: function (menuitem, focusedWindow) {
+              global.application.runCommand('file-open', {
+                path: item,
+                newTab: true
+              }).catch(e => global.log.error(`[Menu] Could not open recent document ${item}`, e))
+            }
+          }
+
+          return ret
+        })
+      ]
+    }
+  }
 
   const menu: MenuItemConstructorOptions[] = [
     // FILE MENU
@@ -65,16 +109,7 @@ export default function getMenu (): MenuItemConstructorOptions[] {
               .catch(e => global.log.error(String(e.message), e))
           }
         },
-        {
-          id: 'menu.recent_docs',
-          label: trans('menu.recent_docs'),
-          role: 'recentDocuments',
-          submenu: [{
-            id: 'menu.clear_recent_docs',
-            label: trans('menu.clear_recent_docs'),
-            role: 'clearRecentDocuments'
-          }]
-        },
+        recentDocsItem,
         {
           type: 'separator'
         },

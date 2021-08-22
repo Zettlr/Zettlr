@@ -212,11 +212,13 @@ export default class DocumentManager extends EventEmitter {
 
     if (isCode) {
       const file = await FSALCodeFile.parse(filePath, null)
-      app.addRecentDocument(file.path)
+      // app.addRecentDocument(file.path)
+      global.recentDocs.add(file.path)
       return file
     } else if (isMD) {
       const file = await FSALFile.parse(filePath, null)
-      app.addRecentDocument(file.path)
+      // app.addRecentDocument(file.path)
+      global.recentDocs.add(file.path)
       return file
     } else {
       throw new Error(`Could not load file ${filePath}: Invalid path provided`)
