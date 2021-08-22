@@ -25,7 +25,7 @@ const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 windowRegister()
 
 Vue.use(Vuex)
-Vue.use(PopupProvider) // Exposes $showPopover and $closePopover
+Vue.use(PopupProvider) // Exposes $showPopover, $togglePopover, and $closePopover
 
 // Create the Vue app
 const app = new Vue({

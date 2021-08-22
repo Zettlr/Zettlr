@@ -160,7 +160,7 @@ export default class Zettlr {
               })
 
               // ... and then have the renderer begin saving all changed docs.
-              broadcastIpcMessage('save-all-documents')
+              broadcastIpcMessage('save-documents', []) // Empty path list so the Editor saves all
             } // Else: Do nothing (abort quitting)
           })
           .catch(e => global.log.error('[Application] Could not ask the user to save their changes, because the message box threw an error. Not quitting!', e))
@@ -196,7 +196,7 @@ export default class Zettlr {
               })
 
               // ... and then have the renderer begin saving all changed docs.
-              broadcastIpcMessage('save-all-documents')
+              broadcastIpcMessage('save-documents', []) // Empty path list so the Editor saves all
             } // Else: Do nothing (abort quitting)
           })
           .catch(e => global.log.error('[Application] Could not ask the user to save their changes, because the message box threw an error. Not quitting!', e))

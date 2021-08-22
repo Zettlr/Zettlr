@@ -405,7 +405,11 @@ export default class DocumentManager extends EventEmitter {
       }
     }
 
+    // Notify whomever it concerns that the modification status has changed
+    this.emit('document-modified-changed')
+
     if (this.isClean()) {
+      // Indicate that now there are no modified documents anymore
       this.emit('documents-all-clean')
     }
   }

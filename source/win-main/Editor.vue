@@ -500,6 +500,7 @@ export default {
         this.$root.$emit('start-global-search', linkContents)
       }
     })
+
     this.editor.on('zettelkasten-tag', (tag) => {
       this.$root.$emit('start-global-search', tag)
     })
@@ -547,10 +548,16 @@ export default {
       }
     })
 
-    ipcRenderer.on('save-all-documents', async (event) => {
+    ipcRenderer.on('save-documents', async (event, pathList = []) => {
       // If this event gets emitted, the main process wants
-      // all open and modified documents to be saved.
-      for (const doc of this.openDocuments) {
+      // some open and modified documents to be saved.
+      if (pathList.length === 0) {
+        pathList = this.openDocuments.map(doc => doc.path)
+      }
+
+      const docsToSave = this.openDocuments.filter(doc => pathList.includes(doc.path))
+
+      for (const doc of docsToSave) {
         await this.save(doc)
       }
     })
