@@ -22,7 +22,6 @@ import { CodeFileDescriptor, CodeFileMeta, MDFileDescriptor, MDFileMeta } from '
 import { FSALCodeFile, FSALFile } from '../fsal'
 import { codeFileExtensions, mdFileExtensions } from '../../../common/get-file-extensions'
 import generateFilename from '../../../common/util/generate-filename'
-import { app } from 'electron'
 
 const ALLOWED_CODE_FILES = codeFileExtensions(true)
 const MARKDOWN_FILES = mdFileExtensions(true)
