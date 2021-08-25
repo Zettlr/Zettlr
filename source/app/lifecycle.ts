@@ -117,14 +117,14 @@ export async function bootApplication (): Promise<void> {
   await assetsProvider.init()
   citeprocProvider = new CiteprocProvider()
   dictionaryProvider = new DictionaryProvider()
-  menuProvider = new MenuProvider()
+  recentDocsProvider = new RecentDocumentsProvider()
+  menuProvider = new MenuProvider() // Requires config & recent docs providers
   tagProvider = new TagProvider()
   targetProvider = new TargetProvider()
   cssProvider = new CssProvider()
   translationProvider = new TranslationProvider()
   updateProvider = new UpdateProvider()
   notificationProvider = new NotificationProvider()
-  recentDocsProvider = new RecentDocumentsProvider()
   statsProvider = new StatsProvider()
   trayProvider = new TrayProvider()
 
@@ -184,7 +184,8 @@ export async function bootApplication (): Promise<void> {
 export async function shutdownApplication (): Promise<void> {
   global.log.info(`さようなら！ Shutting down at ${(new Date()).toString()}`)
   // Shutdown all providers in the reverse order
-  await safeShutdown(recentDocsProvider)
+  await safeShutdown(trayProvider)
+  await safeShutdown(statsProvider)
   await safeShutdown(notificationProvider)
   await safeShutdown(updateProvider)
   await safeShutdown(translationProvider)
@@ -192,13 +193,12 @@ export async function shutdownApplication (): Promise<void> {
   await safeShutdown(targetProvider)
   await safeShutdown(tagProvider)
   await safeShutdown(menuProvider)
+  await safeShutdown(recentDocsProvider)
   await safeShutdown(dictionaryProvider)
   await safeShutdown(citeprocProvider)
+  await safeShutdown(assetsProvider)
   await safeShutdown(appearanceProvider)
   await safeShutdown(configProvider)
-  await safeShutdown(statsProvider)
-  await safeShutdown(assetsProvider)
-  await safeShutdown(trayProvider)
 
   const downTimestamp = Date.now()
 
