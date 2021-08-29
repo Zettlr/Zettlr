@@ -42,6 +42,7 @@
   },
   "dependencies": {
     "@clr/icons": "^5.4.1",
+    "@lackadaisical/defaults-generator": "^0.4.2",
     "@types/sanitize-html": "^2.3.2",
     "@types/semver": "^7.3.8",
     "@zettlr/citr": "^1.2.2",
