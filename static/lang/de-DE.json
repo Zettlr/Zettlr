@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-08-11T10:16:56.000000Z"
+        "updated_at": "2021-08-18T16:36:51.000000Z"
     },
     "dialog": {
         "about": {
@@ -173,6 +173,12 @@
             "auto_dark_mode_schedule": "Zeit",
             "auto_dark_mode_schedule_format": "HH:MM",
             "auto_dark_mode_system": "Folge Betriebssystem",
+            "auto_save": {
+                "delayed": "Mit Verz\u00f6gerung",
+                "immediately": "Sofort",
+                "label": "Automatisches Speichern",
+                "off": "Aus"
+            },
             "autocomplete_accept_space": "Erlaube Leerzeichen in der Autovervollst\u00e4ndigung",
             "autocorrect": {
                 "active_label": "AutoCorrect einschalten",

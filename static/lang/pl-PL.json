@@ -6,7 +6,7 @@
             "malpunek"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-01-12T16:19:18.000000Z"
+        "updated_at": "2021-08-29T14:06:47.000000Z"
     },
     "dialog": {
         "about": {
@@ -35,11 +35,15 @@
             "cancel": "Anuluj",
             "choose_path": "Wybierz katalog...",
             "close": "Zamknij",
+            "close_without_saving": "Zamknij bez zapisywania",
             "save": "Zapisz"
         },
         "custom_css": {
             "info": "Mo\u017cesz tutaj nadpisywa\u0107 style programu. \u003Cstrong\u003ETen plik nadpisuje wszystkie dyrektywy CSS. Nie zmieniaj geometrii element\u00f3w, program mo\u017ce przesta\u0107 dzia\u0142a\u0107 poprawnie!\u003C/strong\u003E",
             "title": "W\u0142asny CSS"
+        },
+        "defaults": {
+            "explanation": "Domy\u015blne ustawiania importu i eksportu"
         },
         "dir_new": {
             "placeholder": "Nazwa katalogu",
@@ -68,9 +72,13 @@
         },
         "filter_tags": "Flitruj tagi",
         "find": {
+            "close_label": "Zamknij wyszukiwanie",
             "find_label": "Znajd\u017a",
             "find_placeholder": "Znajd\u017a...",
+            "regex_label": "Prze\u0142\u0105cz wyszukiwanie wyra\u017ce\u0144 regularnych",
+            "replace_all_label": "Zamie\u0144 wszystkie wyst\u0105pienia",
             "replace_label": "Zast\u0105p",
+            "replace_next_label": "Zast\u0105p nast\u0119pne wyst\u0105pienie",
             "replace_placeholder": "Zast\u0105p przez"
         },
         "paste_image": {
@@ -164,6 +172,12 @@
             "auto_dark_mode_schedule": "W godzinach",
             "auto_dark_mode_schedule_format": "HH:MM (format 24-godzinny)",
             "auto_dark_mode_system": "Na\u015bladuj system operacyjny",
+            "auto_save": {
+                "delayed": "Z kr\u00f3tkim op\u00f3\u017anieniem",
+                "immediately": "Natychmiast",
+                "label": "Zapis automatyczny",
+                "off": "Wy\u0142\u0105czony"
+            },
             "autocomplete_accept_space": "Akceptuj spacje podczas autouzupe\u0142niania",
             "autocorrect": {
                 "active_label": "W\u0142\u0105cz autokorekt\u0119",
@@ -176,6 +190,7 @@
                 "style_word_label": "Styl Worda",
                 "title": "Autokorekta"
             },
+            "avoid_new_tabs": "Unikaj otwierania plik\u00f3w w nowych kartach",
             "checkForBeta": "Powiadamiaj mnie o wydaniach beta",
             "choose_file": "Wybierz plik",
             "citation_database": "Baza cytowa\u0144 (CSL JSON albo BibTex)",
@@ -185,7 +200,9 @@
             "default_image_save_path": "Domy\u015blna \u015bcie\u017cka obrazu (wzgl\u0119dna lub bezwzgl\u0119dna)",
             "delete_on_fail": "Usuwaj pliki, je\u015bli nie uda si\u0119\u00a0przenie\u015b\u0107\u00a0ich do kosza",
             "display": {
+                "image_height": "Maksymalna wysoko\u015b\u0107 obrazu (%)",
                 "image_size_info": "Regulacja podgl\u0105du obrazu",
+                "image_width": "Maksymalna szeroko\u015b\u0107 obrazu (%)",
                 "preview_info": "Ustawienia wy\u015bwietlanych element\u00f3w",
                 "render_citations": "Wy\u015bwietlaj cytowania",
                 "render_htags": "Wy\u015bwietlaj nag\u0142\u00f3wki",
@@ -206,6 +223,7 @@
                 "rtl_move_visually": "U\u017cywaj porz\u0105dku wizualnego dla ruchu kursor\u00f3w w trybie RTL"
             },
             "enable_rmarkdown": "W\u0142\u0105cz obs\u0142ug\u0119 formatu RMarkdown",
+            "enable_scroll_zoom": "Zmie\u0144 skal\u0119 trzymaj\u0105c \u003Ckbd\u003ECmd\u003C/kbd\u003E albo \u003Ckbd\u003ECtrl\u003C/kbd\u003E",
             "enable_table_helper": "W\u0142\u0105cz edytor tabeli",
             "export": {
                 "dest": "Katalog docelowy dla eksportu. \u003Cem\u003EUwaga:\u003C/em\u003E wyb\u00f3r katalogu roboczego b\u0119dzie wi\u0105za\u0142 sie z nadpisywaniem bez ostrze\u017cenia!",
@@ -232,6 +250,7 @@
             "homeEndBehaviour": "U\u017cywaj domy\u015blnych akcji CodeMirror dla \u003Ckbd\u003EHome\u003C/kbd\u003E i \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
             "indent_unit": "Liczba spacji wci\u0119cia",
             "input_mode": "Tryb wprowadzania",
+            "leave_app_running_in_the_notification_area": "Pozostaw w obszarze powiadomie\u0144",
             "modtime": "Czas ostatniej modyfikacji",
             "mute_lines": "Wyga\u015b pozosta\u0142e linie w trybie bez rozprosze\u0144",
             "new_file_dont_prompt": "Nie pytaj o nazw\u0119 pliku przy tworzeniu",
@@ -283,6 +302,7 @@
             "project": {
                 "csl_style": "Styl CSL (opcjonalnie)",
                 "format": "Eksportuj projekt do:",
+                "name_label": "Format",
                 "title": "Ustawienia projektu",
                 "title_label": "Tytu\u0142 projektu"
             },
@@ -299,6 +319,8 @@
                 "title": "Sprawdzanie b\u0142\u0119d\u00f3w"
             },
             "theme": {
+                "accent_color_info": "Ustawienie dost\u0119pne tylko w Windows i MacOS",
+                "accent_color_label": "U\u017cyj systemowego akcentu kolorystecznego",
                 "info": "Wybierz wygl\u0105d aplikacji",
                 "title": "Wygl\u0105d"
             },
@@ -313,6 +335,7 @@
             },
             "use_native_appearance": "U\u017cywaj systemowego wygl\u0105du okna",
             "user_dictionary": "S\u0142ownik osobisty. Klikni\u0119cie usuwa s\u0142owa.",
+            "user_dictionary_label": "Wpis s\u0142ownika",
             "watchdog_checkbox_label": "Monitoruj aktywno\u015b\u0107 systemu plik\u00f3w",
             "watchdog_explainer": "Je\u015bli Zettlr raportuje zbyt wiele zmian zdalnych plik\u00f3w, zaznacz t\u0119 opcj\u0119",
             "watchdog_threshold_label": "Czas oczekiwania, zanim zapis pliku zostanie uznany za dokonany (w ms)",
@@ -356,6 +379,9 @@
             "intro": "Znajdziesz tu dok\u0142adne statystyki swojej pracy, przede wszystkim wykres s\u0142\u00f3w pisanych danego dnia.",
             "month": "Miesi\u0105c",
             "previous_frame": "Poprzedni okres",
+            "tabs": {
+                "calendar_label": "Kalendarz"
+            },
             "this_frame": "Obecny okres",
             "title": "Statystyki pisania",
             "week": "Tydzie\u0144",
@@ -364,8 +390,10 @@
             "year": "Rok"
         },
         "tag_cloud": {
+            "add_to_file": "Dodaj do pliku",
             "copy": "Kopiuj do schowka",
             "info": "Znajdziesz tu wszystkie zastosowane tagi. Mo\u017cesz skopiowa\u0107 list\u0119 do schowka. Liczba u\u017cy\u0107 pojawi si\u0119 po najechaniu kursorem.",
+            "suggestions_label": "Sugerowane tagi",
             "title": "Chmura tag\u00f3w"
         },
         "tags": {
@@ -384,22 +412,39 @@
             "client_error": "Nie mo\u017cna sprawdzi\u0107 aktualizacji: B\u0142\u0105d klienta (kod b\u0142\u0119du: %s)",
             "connection_error": "Nie mo\u017cna sprawdzi\u0107 aktualizacji: Nie mo\u017cna si\u0119\u00a0po\u0142\u0105czy\u0107",
             "current_version": "Twoja wersja",
+            "download_progress_label": "Pobieram aktualizacj\u0119",
+            "new_update_available": "Dost\u0119pna jest wersja %s",
             "no_data": "Nie mo\u017cna sprawdzi\u0107 aktualizacji: Serwer nie przes\u0142a\u0142 danych",
+            "no_new_update": "Zettlr jest aktualny",
             "notification": "Jest nowa wersja Zettlr. Zobacz list\u0119 zmian.",
+            "other_error": "Nie mog\u0119\u00a0sprawdzi\u0107 aktualizacji. %s: %s",
             "redirect_error": "Nie mo\u017cna sprawdzi\u0107 aktualizacji: Serwer stara\u0142 si\u0119\u00a0przekierow\u0105\u0107 (kod: %s)",
             "release_url": "Otw\u00f3rz stron\u0119 pobierania",
             "server_error": "Nie mo\u017cna sprawdzi\u0107 aktualizacji: B\u0142\u0105d serwera (kod: %s)",
+            "start_update_label": "Rozpocznij aktualizacj\u0119",
+            "start_update_message": "Aktualizuj\u0119...",
             "title": "Dost\u0119pna jest aktualizacja",
-            "transmission_error": "Nie mo\u017cna sprawdzi\u0107 aktualizacji: Po\u0142\u0105czenie przerwane"
+            "transmission_error": "Nie mo\u017cna sprawdzi\u0107 aktualizacji: Po\u0142\u0105czenie przerwane",
+            "window_title": "Aktualizacje"
         }
     },
     "gui": {
+        "assets_man": {
+            "status": {
+                "save_error": "Zapis nie powi\u00f3d\u0142 si\u0119",
+                "saved": "Zapisano!",
+                "saving": "Zapisuj\u0119...",
+                "unsaved_changes": "Niezapisane zmiany"
+            },
+            "win_title": "Mened\u017cer zasob\u00f3w"
+        },
         "attachments": "Za\u0142\u0105czniki",
         "attachments_open_dir": "Otw\u00f3rz katalog",
         "avg_close_to": "\ud83d\udcaa Zbli\u017casz si\u0119 do swojej dziennej \u015bredniej!",
         "avg_not_reached": "\u270d\ud83c\udffc Pobij dzienn\u0105 \u015bredni\u0105.",
         "avg_surpassed": "\ud83d\udd25 Wymiatasz!",
         "avg_words": "dzienna \u015brednia",
+        "chars": "Znaki: %s",
         "citeproc": {
             "error_db": "Nie uda\u0142o si\u0119 za\u0142adowa\u0107 bazy cytowa\u0144",
             "error_report_message": "%s element\u00f3w biblioteki nie mog\u0142o zosta\u0107 za\u0142adowane. Poni\u017csze komunikaty zawieraj\u0105 b\u0142\u0119dy i kt\u00f3re CiteKeys zosta\u0142y uszkodzone.",
@@ -411,6 +456,7 @@
             "references_none": "Nie ma cytowa\u0144 w tym dokumencie",
             "reloading": "Wykryto zmiany w pliku biblioteki. Trwa \u0142adowanie..."
         },
+        "date_just_now_label": "teraz",
         "dirs": "Katalogi",
         "display_search_results": "Wy\u015bwietl wyniki wyszukiwania",
         "empty_dir": "Pusty katalog",
@@ -437,10 +483,33 @@
             "tasklist": "Lista zada\u0144",
             "ul": "Lista wypunktowana"
         },
+        "global_search": {
+            "clear_label": "Wyczy\u015b\u0107\u00a0wyszukiwanie",
+            "query_label": "Wprowad\u017a has\u0142a do wyszukania",
+            "query_placeholder": "Znajd\u017a...",
+            "search_label": "Szukaj",
+            "title": "Wyszukiwanie pe\u0142notekstowe",
+            "toggle_label": "Prze\u0142\u0105cz rezultaty"
+        },
+        "months": {
+            "apr": "Kwiecie\u0144",
+            "aug": "Sierpie\u0144",
+            "dec": "Grudzie\u0144",
+            "feb": "Luty",
+            "jan": "Stycze\u0144",
+            "jul": "Lipiec",
+            "jun": "Czerwiec",
+            "mar": "Marzec",
+            "may": "Maj",
+            "nov": "Listopad",
+            "oct": "Pa\u017adziernik",
+            "sep": "Wrzesie\u0144"
+        },
         "no_attachments": "Brak za\u0142\u0105cznik\u00f3w",
         "no_dir_selected": "Nie wybrano katalogu",
         "no_search_results": "Brak wynik\u00f3w",
         "number_selections": "%s zaznaczonych",
+        "reset": "Reset",
         "statistics_more": "Wi\u0119cej statystyk...",
         "table_of_contents": "Spis tre\u015bci",
         "today_words": "s\u0142\u00f3w dzisiaj",
@@ -457,6 +526,7 @@
         "about": "O programie",
         "add_to_dictionary": "Dodaj do s\u0142ownika",
         "all_front": "Wysu\u0144 wszystkie",
+        "assets_manager": "Mened\u017cer zasob\u00f3w",
         "bold": "Pogrubienie",
         "clear_recent_docs": "Puste",
         "close_all_tabs": "Zamknij wszystkie karty",
@@ -467,6 +537,7 @@
         "copy_filename": "Kopiuj nazw\u0119 pliku",
         "copy_html": "Kopiuj jako HTML",
         "copy_id": "Kopiuj ID",
+        "copy_img_to_clipboard": "Skopiuj obraz do schowka",
         "copy_link": "Kopiuj link",
         "copy_mail": "Kopiuj adres email",
         "custom_css": "Dostosuj CSS...",
@@ -477,6 +548,7 @@
         "donate": "Wspieraj Zettlr",
         "duplicate_file": "Duplikuj plik",
         "export": "Eksportuj...",
+        "filter_files": "Filtruj pliki",
         "find_dir": "Znajd\u017a w katalogu",
         "find_file": "Znajd\u017a w pliku",
         "generate_id": "Wygeneruj nowe ID",
@@ -507,8 +579,10 @@
         "no_suggestions": "Brak sugestii",
         "open": "Otw\u00f3rz...",
         "open_attachment": "Otw\u00f3rz za\u0142\u0105cznik",
+        "open_in_browser": "Otw\u00f3rz w przegl\u0105darce",
         "open_link": "Otw\u00f3rz link",
         "open_logs": "Otw\u00f3rz logi",
+        "open_new_tab": "Otw\u00f3rz w nowej karcie",
         "open_workspace": "Otw\u00f3rz obszar roboczy",
         "pandoc": "Pobierz pandoc",
         "paste": "Wklej",
@@ -518,6 +592,7 @@
         "print": "Drukuj...",
         "project_build": "Eksportuj projekt",
         "project_properties": "Ustawienia projektu...",
+        "properties": "W\u0142a\u015bciwo\u015bci",
         "quicklook": "Szybki podgl\u0105d",
         "quit": "Wyjd\u017a",
         "recent_docs": "Ostatnie dokumenty",
@@ -538,6 +613,8 @@
         "start_speaking": "Zacznij m\u00f3wi\u0107",
         "stop_speaking": "Przesta\u0144 m\u00f3wi\u0107",
         "tab_close": "Zamknij kart\u0119",
+        "tab_close_all": "Zamknij wszystkie karty",
+        "tab_close_others": "Zamknij pozosta\u0142e karty",
         "tab_next": "Nast\u0119pna karta",
         "tab_previous": "Poprzednia karta",
         "tags": "Zarz\u0105dzaj tagami",
@@ -570,6 +647,10 @@
     "system": {
         "all_files": "Wszystkie pliki",
         "cancel": "Anuluj",
+        "common": {
+            "list_actions_label": "Dzia\u0142ania",
+            "list_add_button": "Dodaj"
+        },
         "directories": "Foldery",
         "directory_removed": "Katalog %s zosta\u0142 usuni\u0119ty.",
         "error": {
@@ -663,7 +744,11 @@
         "show_toc": "Spis tre\u015bci",
         "stats": "Statystyki",
         "tag_cloud": "Tagi",
-        "toggle_attachments": "Wy\u015bwietl/Schowaj za\u0142\u0105czniki"
+        "toggle_attachments": "Wy\u015bwietl/Schowaj za\u0142\u0105czniki",
+        "toggle_file_manager": "Mened\u017cer plik\u00f3w"
+    },
+    "tray": {
+        "tooltip": "Zettlr"
     },
     "validation": {
         "error_empty": "Opcja %s jest obowi\u0105zkowa.",

@@ -4,7 +4,7 @@
             "Ryota Abe"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-08-03T02:01:22.000000Z"
+        "updated_at": "2021-08-20T08:15:19.000000Z"
     },
     "dialog": {
         "about": {
@@ -173,6 +173,12 @@
             "auto_dark_mode_schedule": "\u30b9\u30b1\u30b8\u30e5\u30fc\u30eb",
             "auto_dark_mode_schedule_format": "HH:MM (24\u6642\u9593\u5236)",
             "auto_dark_mode_system": "OS\u306e\u8a2d\u5b9a\u306b\u5f93\u3046",
+            "auto_save": {
+                "delayed": "\u9045\u5ef6\u6709\u308a",
+                "immediately": "\u5373\u6642",
+                "label": "\u81ea\u52d5\u4fdd\u5b58",
+                "off": "\u30aa\u30d5"
+            },
             "autocomplete_accept_space": "\u88dc\u5b8c\u4e2d\u306b\u7a7a\u767d\u3092\u53d7\u3051\u4ed8\u3051\u308b",
             "autocorrect": {
                 "active_label": "\u30aa\u30fc\u30c8\u30b3\u30ec\u30af\u30c8\u3092\u6709\u52b9\u5316",
@@ -318,6 +324,8 @@
                 "title": "\u30b9\u30da\u30eb\u30c1\u30a7\u30c3\u30af"
             },
             "theme": {
+                "accent_color_info": "\u3053\u306e\u8a2d\u5b9a\u306fWindows\u3068macOS\u3067\u306e\u307f\u5229\u7528\u53ef\u80fd\u3067\u3059",
+                "accent_color_label": "\u30c6\u30fc\u30de\u306e\u8272\u306e\u4ee3\u308f\u308a\u306bOS\u306e\u30a2\u30af\u30bb\u30f3\u30c8\u30ab\u30e9\u30fc\u3092\u4f7f\u7528\u3059\u308b",
                 "info": "\u30a2\u30d7\u30ea\u30b1\u30fc\u30b7\u30e7\u30f3\u306e\u30c6\u30fc\u30de\u3092\u9078\u629e\u3057\u307e\u3059\u3002",
                 "title": "\u30c6\u30fc\u30de"
             },
