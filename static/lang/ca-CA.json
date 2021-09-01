@@ -5,7 +5,7 @@
             "vfc"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-08-03T10:10:45.000000Z"
+        "updated_at": "2021-08-21T03:27:37.000000Z"
     },
     "dialog": {
         "about": {
@@ -174,6 +174,12 @@
             "auto_dark_mode_schedule": "Planificiaci\u00f3",
             "auto_dark_mode_schedule_format": "HH:MM (format 24h)",
             "auto_dark_mode_system": "Segueix el sistema operatiu",
+            "auto_save": {
+                "delayed": "Despr\u00e9s d'una petita pausa",
+                "immediately": "Inmediatament",
+                "label": "Desa autom\u00e0ticament",
+                "off": "No desis autom\u00e0ticament"
+            },
             "autocomplete_accept_space": "Accepta espais durant la compleci\u00f3 autom\u00e0tica",
             "autocorrect": {
                 "active_label": "Enc\u00e9n l'Autocorrector",
@@ -319,6 +325,8 @@
                 "title": "Verificaci\u00f3 ortogr\u00e0fica"
             },
             "theme": {
+                "accent_color_info": "Aquesta opci\u00f3 nom\u00e9s est\u00e0 disponible per a Windows i macOS",
+                "accent_color_label": "Utilitza l'esquema de colors del sistema operatiu",
                 "info": "Aqu\u00ed pots triar l'aparen\u00e7a de l'aplicaci\u00f3",
                 "title": "Tema"
             },

@@ -12,7 +12,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-07-30T22:07:50.000000Z"
+        "updated_at": "2021-08-22T18:31:59.000000Z"
     },
     "dialog": {
         "about": {
@@ -181,6 +181,12 @@
             "auto_dark_mode_schedule": "Horario",
             "auto_dark_mode_schedule_format": "HH:MM (formato 24h)",
             "auto_dark_mode_system": "Seguir el sistema operativo",
+            "auto_save": {
+                "delayed": "Despu\u00e9s de un breve retraso",
+                "immediately": "Inmediatamente",
+                "label": "Autoguardado",
+                "off": "Apagado"
+            },
             "autocomplete_accept_space": "Acepta espacios durante la autocorrecci\u00f3n",
             "autocorrect": {
                 "active_label": "Activar Autocorrecci\u00f3n",
@@ -326,6 +332,8 @@
                 "title": "Corrector ortogr\u00e1fico"
             },
             "theme": {
+                "accent_color_info": "Esta configuraci\u00f3n solo est\u00e1 disponible en Windows y macOS",
+                "accent_color_label": "Utilice el color de acento del sistema operativo en lugar del color del tema",
                 "info": "Aqu\u00ed puedes elegir el tema para la app.",
                 "title": "Tema"
             },
