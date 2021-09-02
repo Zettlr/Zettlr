@@ -94,13 +94,13 @@
     "@types/command-exists": "^1.2.0",
     "@types/electron-devtools-installer": "^2.2.0",
     "@types/katex": "^0.11.1",
-    "@types/luxon": "^2.0.0",
+    "@types/luxon": "^2.0.2",
     "@types/mocha": "^9.0.0",
     "@types/nspell": "^2.1.1",
-    "@types/rimraf": "^3.0.1",
+    "@types/rimraf": "^3.0.2",
     "@types/uuid": "^8.3.1",
-    "@typescript-eslint/eslint-plugin": "^4.29.1",
-    "@typescript-eslint/parser": "^4.29.1",
+    "@typescript-eslint/eslint-plugin": "^4.30.0",
+    "@typescript-eslint/parser": "^4.30.0",
     "@vercel/webpack-asset-relocator-loader": "^1.6.0",
     "copy-webpack-plugin": "^9.0.1",
     "cross-env": "^7.0.3",
@@ -133,10 +133,10 @@
     "svg-inline-loader": "^0.8.2",
     "ts-loader": "^9.2.5",
     "ts-node": "^10.2.0",
-    "typescript": "^4.3.5",
+    "typescript": "^4.4.2",
     "typings-for-css-modules-loader": "^1.7.0",
     "vue-loader": "^15.9.8",
     "vue-template-compiler": "^2.6.14",
-    "webpack": "^5.50.0"
+    "webpack": "^5.51.2"
   }
 }
