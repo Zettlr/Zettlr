@@ -1006,7 +1006,7 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  public async move (src: AnyDescriptor, target: DirDescriptor): Promise<void> {
+  public async move (src: MaybeRootDescriptor, target: DirDescriptor): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates 1x unlink, 1x add for each child, src and on the target!
     let activeFileUpdateNeeded = false
@@ -1014,7 +1014,7 @@ export default class FSAL extends EventEmitter {
     const hasOpenDir = this.openDirectory !== null
     const srcIsDir = src.type === 'directory'
     const srcIsOpenDir = src === this.openDirectory
-    const srcContainsOpenDir = srcIsDir && hasOpenDir && this.findDir((this.openDirectory as DirDescriptor).path, [src as DirDescriptor]) !== null
+    const srcContainsOpenDir = srcIsDir && hasOpenDir && this.findDir((this.openDirectory as DirDescriptor).path, [src]) !== null
 
     // Next, check if the open directory is affected
     if (srcIsOpenDir || srcContainsOpenDir) {
