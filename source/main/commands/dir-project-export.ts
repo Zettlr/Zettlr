@@ -84,7 +84,7 @@ export default class DirProjectExport extends ZettlrCommand {
           throw new Error(`Export failed: ${result.stderr.join('\n')}`)
         }
         global.log.info(`[Project] Exported ${dir.name} as ${result.targetFile}`)
-      } catch (err) {
+      } catch (err: any) {
         global.log.error(err.message, err)
         global.application.displayErrorMessage(
           err.title || err.message,

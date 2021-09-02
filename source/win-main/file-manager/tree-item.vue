@@ -369,7 +369,7 @@ export default {
           eventData = event.dataTransfer.getData('text/x-zettlr-dir')
         }
         data = JSON.parse(eventData) // Throws error if eventData === ''
-      } catch (e) {
+      } catch (err) {
         // Error in JSON stringifying (either b/c malformed or no text)
         return
       }

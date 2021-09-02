@@ -109,8 +109,8 @@ export default class FileClose extends ZettlrCommand {
       }
 
       return true
-    } catch (e) {
-      global.log.error(e.message, e)
+    } catch (err: any) {
+      global.log.error(err.message, err)
       return false
     }
   }

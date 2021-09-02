@@ -388,7 +388,7 @@ export default class CiteprocProvider {
       try {
         parseSingle(`@${id}`)
         this._items[id] = item
-      } catch (err) {
+      } catch (err: any) {
         global.log.warning(`[Citeproc Provider] Malformed CiteKey @${id}` + String(err.message))
         global.notify.normal(trans('system.error.malformed_citekey', id))
       }
@@ -492,7 +492,7 @@ export default class CiteprocProvider {
       // NOTE that this System function must be synchronous, so we cannot use
       // the asynchronous promises API here.
       return readFileSync(localePath, { encoding: 'utf8' })
-    } catch (e) {
+    } catch (err) {
       // File not found -> Let the engine fall back to a default.
       return false
     }
@@ -518,7 +518,7 @@ export default class CiteprocProvider {
       // NOTE: Citr.parseSingle returns a "Citation" type. This "Citation" type
       // is equivalent of the CSL engine's "CiteItem" type.
       citations = parseSingle(citation)
-    } catch (err) {
+    } catch (err: any) {
       global.log.error(`[Citeproc Provider] Citr.parseSingle: Could not parse citation ${citation}. ` + String(err.message), err)
       return undefined
     }
@@ -529,9 +529,9 @@ export default class CiteprocProvider {
 
     try {
       return this._engine.makeCitationCluster(citations)
-    } catch (e) {
+    } catch (err: any) {
       const msg = citations.map(elem => elem.id).join(', ')
-      global.log.error(`[citeproc] makeCitationCluster: Could not create citation cluster ${msg}: ${String(e.message)}`, e)
+      global.log.error(`[citeproc] makeCitationCluster: Could not create citation cluster ${msg}: ${String(err.message)}`, err)
       return undefined
     }
   }
@@ -552,8 +552,8 @@ export default class CiteprocProvider {
       })
       this._engine.updateItems(sanitizedCitations)
       return true
-    } catch (e) {
-      global.log.error('[citeproc] Could not update engine registry: ' + String(e.message), citations)
+    } catch (err: any) {
+      global.log.error('[citeproc] Could not update engine registry: ' + String(err.message), citations)
       return false
     }
   }
@@ -571,8 +571,8 @@ export default class CiteprocProvider {
 
     try {
       return this._engine.makeBibliography()
-    } catch (e) {
-      global.log.warning(e.message, e)
+    } catch (err: any) {
+      global.log.warning(err.message, err)
       return undefined // Something went wrong (e.g. falsy items in the registry)
     }
   }

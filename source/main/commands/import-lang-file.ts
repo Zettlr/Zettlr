@@ -44,7 +44,7 @@ export default class ImportLangFile extends ZettlrCommand {
     // First test if the lang directory already exists
     try {
       fs.lstatSync(langDir)
-    } catch (e) {
+    } catch (err) {
       // Create
       fs.mkdirSync(langDir)
     }
@@ -57,7 +57,7 @@ export default class ImportLangFile extends ZettlrCommand {
         try {
           fs.copyFileSync(f, path.join(langDir, path.basename(f)))
           global.notify.normal(trans('system.lang_import_success', path.basename(f)))
-        } catch (e) {
+        } catch (err) {
           global.notify.normal(trans('system.lang_import_error', path.basename(f)))
         }
       } else {

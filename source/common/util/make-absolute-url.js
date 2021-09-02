@@ -26,7 +26,7 @@ module.exports = function makeAbsoluteURL (base, fragment) {
   try {
     // If it's already a correct URL, we are almost done
     urlObject = new URL(fragment)
-  } catch (e) {
+  } catch (err) {
     // Obviously not a correct URL. In the context of this limited
     // application, we can be sure base is always a path to a Markdown file.
     let resolvedPath = path.resolve(base, fragment)

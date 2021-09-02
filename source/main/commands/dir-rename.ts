@@ -36,12 +36,12 @@ export default class DirRename extends ZettlrCommand {
 
     try {
       await this._app.getFileSystem().renameDir(sourceDir, sanitizedName)
-    } catch (e) {
-      console.error(e)
+    } catch (err: any) {
+      console.error(err)
       this._app.prompt({
         type: 'error',
-        title: e.name,
-        message: e.message
+        title: err.name,
+        message: err.message
       })
       return false
     }

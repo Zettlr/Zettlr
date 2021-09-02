@@ -180,7 +180,7 @@ export default class TagProvider {
     try {
       fs.lstatSync(this._file)
       this._colouredTags = JSON.parse(fs.readFileSync(this._file, { encoding: 'utf8' }))
-    } catch (e) {
+    } catch (err) {
       fs.writeFileSync(this._file, JSON.stringify([]), { encoding: 'utf8' })
       return this // No need to iterate over objects anymore
     }

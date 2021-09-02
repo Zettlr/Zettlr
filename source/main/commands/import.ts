@@ -70,10 +70,10 @@ export default class ImportFiles extends ZettlrCommand {
         // Some files failed to import.
         global.notify.normal(trans('system.import_fail', ret.length, ret.map((x) => { return path.basename(x) }).join(', ')))
       }
-    } catch (e) {
+    } catch (err: any) {
       // There has been an error on importing (e.g. Pandoc was not found)
       // This catches this and displays it.
-      global.log.error(`[Importer] Could not import files: ${String(e.message)}`, e)
+      global.log.error(`[Importer] Could not import files: ${String(err.message)}`, err)
       global.notify.normal(trans('system.import_fail', fileList.length, ''))
     }
 

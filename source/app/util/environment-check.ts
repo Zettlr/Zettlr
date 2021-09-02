@@ -127,7 +127,7 @@ export default async function environmentCheck (): Promise<void> {
   for (let p of REQUIRED_DIRECTORIES) {
     try {
       await fs.lstat(p)
-    } catch (e) {
+    } catch (err) {
       global.log.info(`Creating required directory ${p} ...`)
       await fs.mkdir(p, { recursive: true })
     }
@@ -135,7 +135,7 @@ export default async function environmentCheck (): Promise<void> {
 
   try {
     process.env.ZETTLR_IS_TRAY_SUPPORTED = await isTraySupported() ? '1' : '0'
-  } catch (err) {
+  } catch (err: any) {
     process.env.ZETTLR_IS_TRAY_SUPPORTED = '0'
     process.env.ZETTLR_TRAY_ERROR = err.message
     global.log.warning(err.message)

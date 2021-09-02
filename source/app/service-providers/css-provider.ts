@@ -97,8 +97,8 @@ export default class CssProvider extends EventEmitter {
         payload: this._filePath
       })
       return true
-    } catch (e) {
-      global.log.error(`[CSS Provider] Could not set custom css: ${e.message as string}`, e)
+    } catch (err: any) {
+      global.log.error(`[CSS Provider] Could not set custom css: ${err.message as string}`, err)
       return false
     }
   }

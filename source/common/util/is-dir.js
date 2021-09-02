@@ -22,7 +22,7 @@ module.exports = function (p) {
   try {
     let s = fs.lstatSync(p)
     return s.isDirectory()
-  } catch (e) {
+  } catch (err) {
     return false
   }
 }

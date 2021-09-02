@@ -500,8 +500,8 @@ export default class Zettlr {
         // Return the return value of the command, if there is any
         try {
           return cmd.run(command, payload)
-        } catch (e) {
-          global.log.error('[Application] Error received while running command: ' + String(e.message), e)
+        } catch (err: any) {
+          global.log.error('[Application] Error received while running command: ' + String(err.message), err)
           return false
         }
       } else {
@@ -719,7 +719,7 @@ export default class Zettlr {
       // Already exists! Abort!
       global.log.error(`The directory ${targetPath} already exists - won't overwrite!`)
       return
-    } catch (e) {
+    } catch (err) {
       fs.mkdirSync(targetPath)
 
       // Now copy over every file from the directory

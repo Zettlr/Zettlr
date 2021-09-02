@@ -37,7 +37,7 @@ export default class FileSearch extends ZettlrCommand {
     try {
       let result = await this._app.getFileSystem().searchFile(file, arg.terms)
       return result
-    } catch (e) {
+    } catch (e: any) {
       global.log.error(`Could not search file ${file.name}: ${e.message as string}`, e)
       return false
     }

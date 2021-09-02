@@ -154,7 +154,7 @@
               }
             })
             .catch(e => console.error(e))
-        } catch (e) {
+        } catch (err) {
           // CodeMirror throws errors if one tries to paper over an existing
           // mark with a new marker. In this case, don't mark the text and simply
           // do nothing.

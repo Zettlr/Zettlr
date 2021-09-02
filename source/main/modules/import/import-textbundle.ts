@@ -65,7 +65,7 @@ export default async function importTextbundle (bundle: any, target: DirDescript
   // Now the assets
   try {
     bdl = await fs.readdir(path.join(bundle.path, 'assets'))
-  } catch (e) {
+  } catch (err) {
     throw new Error(trans('system.error.malformed_textbundle', path.basename(bundle.path)))
   }
 
@@ -73,7 +73,7 @@ export default async function importTextbundle (bundle: any, target: DirDescript
     // If there are assets to be copied, make sure the directory exists
     try {
       await fs.lstat(assets)
-    } catch (e) {
+    } catch (err) {
       await fs.mkdir(assets)
     }
   }

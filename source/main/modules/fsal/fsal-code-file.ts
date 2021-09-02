@@ -57,8 +57,8 @@ async function updateFileMetadata (fileObject: CodeFileDescriptor): Promise<void
     fileObject.modtime = stat.mtime.getTime()
     fileObject.size = stat.size
     global.log.info(`Updated modtime for fileDescriptor ${fileObject.name} to ${fileObject.modtime}`)
-  } catch (e) {
-    global.log.error(`Could not update the metadata for file ${fileObject.name}: ${String(e.message).toString()}`, e)
+  } catch (err: any) {
+    global.log.error(`Could not update the metadata for file ${fileObject.name}: ${String(err.message).toString()}`, err)
   }
 }
 
@@ -124,10 +124,10 @@ export async function parse (
     file.modtime = stat.mtime.getTime()
     file.size = stat.size
     file.creationtime = stat.birthtime.getTime()
-  } catch (e) {
-    global.log.error('Error reading file ' + filePath, e)
+  } catch (err: any) {
+    global.log.error('Error reading file ' + filePath, err)
     // Re-throw a nicer and more meaningful message
-    throw new Error(`Could not read file ${filePath}: ${String(e.message)}`)
+    throw new Error(`Could not read file ${filePath}: ${String(err.message)}`)
   }
 
   // Before reading in the full file and parsing it,
@@ -204,7 +204,7 @@ export async function rename (fileObject: CodeFileDescriptor, cache: any, newNam
 export async function remove (fileObject: CodeFileDescriptor): Promise<void> {
   try {
     await shell.trashItem(fileObject.path)
-  } catch (err) {
+  } catch (err: any) {
     if (global.config.get('system.deleteOnFail') === true) {
       // If this function throws, there's really something off and we shouldn't recover.
       await fs.unlink(fileObject.path)

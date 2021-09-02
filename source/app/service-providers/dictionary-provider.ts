@@ -232,15 +232,15 @@ export default class DictionaryProvider extends EventEmitter {
 
       try {
         aff = await fs.readFile(dictMeta.aff, 'utf8')
-      } catch (e) {
-        global.log.error(`[Dictionary Provider] Could not load affix file for ${dict}`, e)
+      } catch (err: any) {
+        global.log.error(`[Dictionary Provider] Could not load affix file for ${dict}`, err)
         continue
       }
 
       try {
         dic = await fs.readFile(dictMeta.dic, 'utf8')
-      } catch (e) {
-        global.log.error(`[Dictionary Provider] Could not load .dic-file for ${dict}`, e)
+      } catch (err: any) {
+        global.log.error(`[Dictionary Provider] Could not load .dic-file for ${dict}`, err)
         continue
       }
 
@@ -271,7 +271,7 @@ export default class DictionaryProvider extends EventEmitter {
   async _loadUserDict (): Promise<void> {
     try {
       await fs.lstat(this._userDictionaryPath)
-    } catch (e) {
+    } catch (err) {
       // Create a new file and add the current user dictionary to it
       await this._persist()
     }

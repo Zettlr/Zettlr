@@ -146,7 +146,7 @@ export default class AppearanceProvider extends EventEmitter {
                 contrast: (ratio > threshold) ? dark : light
               }
             }
-          } catch (e) {
+          } catch (err) {
             return colorFallback // Probably macOS < 10.14
           }
         } else {

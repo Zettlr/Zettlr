@@ -42,7 +42,7 @@ module.exports = function (basePath, mdstring) {
       // there may be side effects. So we'll stuff it into an unused variable
       // and disable that line ...
       let throwawayVariable = new URL(targetOnly) // eslint-disable-line
-    } catch (e) {
+    } catch (err) {
       // It's not a valid URL, so pathify it! Luckily, path.resolve does all
       // the work for us.
       if (path.isAbsolute(targetOnly) === false) {

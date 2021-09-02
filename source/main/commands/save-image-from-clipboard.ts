@@ -69,7 +69,7 @@ export default class SaveImage extends ZettlrCommand {
     // Now we need to make sure the directory exists.
     try {
       await fs.lstat(target.targetDir)
-    } catch (e) {
+    } catch (err) {
       await fs.mkdir(target.targetDir, { recursive: true })
     }
 

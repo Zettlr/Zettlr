@@ -41,9 +41,9 @@ export async function parse (absPath: string, parent: DirDescriptor): Promise<Ot
     attachment.modtime = stat.mtime.getTime() // stat.ctimeMs DEBUG: Switch to mtimeMs for the time being
     attachment.creationtime = stat.birthtime.getTime()
     attachment.size = stat.size
-  } catch (e) {
-    global.log.error('Error reading file ' + absPath, e)
-    throw e // Rethrow
+  } catch (err: any) {
+    global.log.error('Error reading file ' + absPath, err)
+    throw err // Rethrow
   }
 
   return attachment

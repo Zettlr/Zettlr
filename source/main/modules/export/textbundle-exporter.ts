@@ -55,7 +55,7 @@ export const plugin: ExporterPlugin = {
         options.format === 'textpack',
         path.basename(sourceFiles[0])
       )
-    } catch (err) {
+    } catch (err: any) {
       output.code = 1
       output.stderr.push(err.message)
     }
@@ -117,7 +117,7 @@ async function makeTextbundle (sourceFile: string, targetFile: string, textpack:
   // Create the textbundle folder
   try {
     await fs.lstat(targetFile)
-  } catch (e) {
+  } catch (err) {
     await fs.mkdir(targetFile)
   }
 
@@ -127,7 +127,7 @@ async function makeTextbundle (sourceFile: string, targetFile: string, textpack:
   // Create the assets folder
   try {
     await fs.lstat(path.join(targetFile, 'assets'))
-  } catch (e) {
+  } catch (err) {
     await fs.mkdir(path.join(targetFile, 'assets'))
   }
 

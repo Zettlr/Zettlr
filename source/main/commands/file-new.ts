@@ -88,12 +88,12 @@ export default class FileNew extends ZettlrCommand {
 
       // And directly thereafter, open the file
       await this._app.openFile(path.join(dir.path, filename))
-    } catch (e) {
-      global.log.error(`Could not create file: ${e.message as string}`)
+    } catch (err: any) {
+      global.log.error(`Could not create file: ${err.message as string}`)
       this._app.prompt({
         type: 'error',
         title: trans('system.error.could_not_create_file'),
-        message: e.message
+        message: err.message
       })
     }
   }

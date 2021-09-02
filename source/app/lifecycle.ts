@@ -75,7 +75,7 @@ let upTimestamp: number
 async function safeShutdown (provider: any): Promise<void> {
   try {
     await provider.shutdown()
-  } catch (err) {
+  } catch (err: any) {
     global.log.error(`[Shutdown] Could not shut down provider ${provider.constructor.name as string}: ${err.message as string}`, err)
   }
 }
@@ -96,7 +96,7 @@ export async function bootApplication (): Promise<void> {
     installExtension(VUEJS_DEVTOOLS)
       .then((name: string) => global.log.info(`Added DevTools extension:  ${name}`))
       .catch((err: any) => global.log.error(`Could not install DevTools extensions: ${String(err.message)}`, err))
-  } catch (e) {
+  } catch (err) {
     global.log.verbose('Electron DevTools Installer not found - proceeding without loading developer tools.')
   }
 

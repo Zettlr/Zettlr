@@ -81,8 +81,8 @@ async function updateFileMetadata (fileObject: MDFileDescriptor): Promise<void> 
     fileObject.modtime = stat.mtime.getTime()
     fileObject.size = stat.size
     global.log.info(`Updated modtime for fileDescriptor ${fileObject.name} to ${fileObject.modtime}`)
-  } catch (e) {
-    global.log.error(`Could not update the metadata for file ${fileObject.name}: ${String(e.message).toString()}`, e)
+  } catch (err: any) {
+    global.log.error(`Could not update the metadata for file ${fileObject.name}: ${String(err.message).toString()}`, err)
   }
 }
 
@@ -284,10 +284,10 @@ export async function parse (filePath: string, cache: FSALCache|null, parent: Di
     file.modtime = stat.mtime.getTime()
     file.creationtime = stat.birthtime.getTime()
     file.size = stat.size
-  } catch (e) {
-    global.log.error('Error reading file ' + filePath, e)
+  } catch (err: any) {
+    global.log.error('Error reading file ' + filePath, err)
     // Re-throw a nicer and more meaningful message
-    throw new Error(`Could not read file ${filePath}: ${String(e.message)}`)
+    throw new Error(`Could not read file ${filePath}: ${String(err.message)}`)
   }
 
   // Before reading in the full file and parsing it,
@@ -427,7 +427,7 @@ export async function rename (fileObject: MDFileDescriptor, cache: FSALCache|nul
 export async function remove (fileObject: MDFileDescriptor): Promise<void> {
   try {
     await shell.trashItem(fileObject.path)
-  } catch (err) {
+  } catch (err: any) {
     if (global.config.get('system.deleteOnFail') === true) {
       // If this function throws, there's really something off and we shouldn't recover.
       await fs.unlink(fileObject.path)

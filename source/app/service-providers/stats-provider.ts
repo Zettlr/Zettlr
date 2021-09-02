@@ -149,7 +149,7 @@ export default class StatsProvider {
         sumMonth: parsedData.sumMonth
       }
       this._recompute().catch(e => global.log.error(`[Stats Provider] Error during recomputing: ${e.message as string}`, e))
-    } catch (e) {
+    } catch (err) {
       // Write initial file
       await this.save()
     }

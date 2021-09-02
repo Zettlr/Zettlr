@@ -102,7 +102,7 @@ export default class DocumentManager extends EventEmitter {
       try {
         const descriptor = await this._loadFile(filePath)
         this._loadedDocuments.push(descriptor)
-      } catch (err) {
+      } catch (err: any) {
         global.log.error(`[Document Manager] Boot: Could not load file ${filePath}: ${String(err.message)}`, err)
       }
     }

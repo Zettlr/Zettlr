@@ -88,8 +88,8 @@ export default class SaveFile extends ZettlrCommand {
 
       global.log.info(`File ${realFile.name} saved.`)
       return true
-    } catch (e) {
-      global.log.error(`Error saving file: ${e.message as string}`, e)
+    } catch (err: any) {
+      global.log.error(`Error saving file: ${err.message as string}`, err)
       return false
     }
   }

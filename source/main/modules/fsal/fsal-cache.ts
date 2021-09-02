@@ -47,7 +47,7 @@ export default class FSALCache {
 
     try {
       fs.lstatSync(this._datadir)
-    } catch (e) {
+    } catch (err) {
       global.log.warning(`[FSAL Cache] Cache data dir does not yet exist: ${this._datadir}.`)
       // Make sure the path exists
       fs.mkdirSync(this._datadir, { 'recursive': true })
@@ -82,7 +82,7 @@ export default class FSALCache {
   set (key: string, value: any): boolean {
     try {
       JSON.stringify(value)
-    } catch (error) {
+    } catch (err) {
       global.log.error(`[FSAL Cache] Could not cache value for key ${key}: Not JSONable!`)
       return false
     }
@@ -155,8 +155,8 @@ export default class FSALCache {
         // which is JSONable. This will then be correctly read into a new map
         // whenever we load this shard.
         fs.writeFileSync(path.join(this._datadir, shardKey), JSON.stringify(Array.from(shard.entries())))
-      } catch (e) {
-        global.log.error(`[FSAL Cache] Could not persist shard ${shardKey}!`, e)
+      } catch (err) {
+        global.log.error(`[FSAL Cache] Could not persist shard ${shardKey}!`, err)
       }
     }
 

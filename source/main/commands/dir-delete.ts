@@ -41,8 +41,8 @@ export default class DirDelete extends ZettlrCommand {
     // First, remove the directory
     try {
       await this._app.getFileSystem().removeDir(dirToDelete)
-    } catch (e) {
-      console.error(e)
+    } catch (err) {
+      console.error(err)
       return false
     }
 

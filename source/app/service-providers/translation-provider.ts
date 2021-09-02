@@ -90,7 +90,7 @@ export default class TranslationProvider {
     let response
     try {
       response = await got(TRANSLATION_API_URL, { method: 'GET' })
-    } catch (err) {
+    } catch (err: any) {
       // Not critical.
       global.log.warning(`[Translation Provider] Could not update translations: ${String(err.code)}`, err)
       return

@@ -74,7 +74,7 @@ export default class Export extends ZettlrCommand {
         const contents = output.stderr.join('\n')
         global.application.displayErrorMessage(title, message, contents)
       }
-    } catch (err) {
+    } catch (err: any) {
       global.application.displayErrorMessage(err.message, err.message)
       global.log.error(err.message, err)
     }

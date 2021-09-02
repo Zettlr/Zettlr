@@ -203,7 +203,7 @@ export default class ConfigProvider extends EventEmitter {
       fs.lstatSync(this.configFile)
       readConfig = JSON.parse(fs.readFileSync(this.configFile, { encoding: 'utf8' }))
       global.log.verbose('[Config Provider] Successfully loaded configuration')
-    } catch (e) {
+    } catch (err) {
       global.log.info('[Config Provider] No configuration file found - using defaults.')
       fs.writeFileSync(this.configFile, JSON.stringify(this.config), { encoding: 'utf8' })
       this._firstStart = true // Assume first start
@@ -241,8 +241,8 @@ export default class ConfigProvider extends EventEmitter {
 
     try {
       fs.writeFileSync(this.configFile, JSON.stringify(this.config), { encoding: 'utf8' })
-    } catch (e) {
-      global.log.error(`[Config Provider] Error during file write: ${String(e.message)}`, e)
+    } catch (err: any) {
+      global.log.error(`[Config Provider] Error during file write: ${String(err.message)}`, err)
     }
 
     return this

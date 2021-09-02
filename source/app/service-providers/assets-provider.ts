@@ -152,7 +152,7 @@ export default class AssetsProvider {
       const yaml = (verbatim) ? newDefaults : YAML.stringify(newDefaults)
       await fs.writeFile(file, yaml)
       return true
-    } catch (err) {
+    } catch (err: any) {
       global.log.error(`[Assets Provider] Could not save defaults file: ${String(err.message)}`, err)
       return false
     }
@@ -209,7 +209,7 @@ export default class AssetsProvider {
       await fs.writeFile(filePath, content)
       broadcastIpcMessage('assets-provider', 'snippets-updated')
       return true
-    } catch (err) {
+    } catch (err: any) {
       global.log.error(`[Assets Provider] Could not save snippets file: ${String(err.message)}`, err)
       return false
     }
@@ -228,7 +228,7 @@ export default class AssetsProvider {
       await fs.unlink(filePath)
       broadcastIpcMessage('assets-provider', 'snippets-updated')
       return true
-    } catch (err) {
+    } catch (err: any) {
       global.log.error(`[Assets Provider] Could not remove snippets file: ${String(err.message)}`, err)
       return false
     }
@@ -249,7 +249,7 @@ export default class AssetsProvider {
       await fs.rename(oldPath, newPath)
       broadcastIpcMessage('assets-provider', 'snippets-updated')
       return true
-    } catch (err) {
+    } catch (err: any) {
       global.log.error(`[Assets Provider] Could not rename snippets file: ${String(err.message)}`, err)
       return false
     }

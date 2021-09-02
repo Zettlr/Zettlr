@@ -56,7 +56,7 @@ export default async function makeImport (fileList: string[], dirToImport: DirDe
         if (successCallback !== null) {
           successCallback(file.path)
         }
-      } catch (err) {
+      } catch (err: any) {
         if (errorCallback !== null) {
           errorCallback(file.path, err.message)
         }

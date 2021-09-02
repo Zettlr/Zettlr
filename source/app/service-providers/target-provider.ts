@@ -109,7 +109,7 @@ export default class TargetProvider extends EventEmitter {
     try {
       fs.lstatSync(this._file)
       this._targets = JSON.parse(fs.readFileSync(this._file, { encoding: 'utf8' }))
-    } catch (e) {
+    } catch (err) {
       fs.writeFileSync(this._file, JSON.stringify([]), { encoding: 'utf8' })
     }
   }

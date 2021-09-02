@@ -96,7 +96,7 @@ export default class FileRename extends ZettlrCommand {
       if (wasActive) {
         this._app.getDocumentManager().activeFile = file
       }
-    } catch (e) {
+    } catch (e: any) {
       global.log.error(`Error during renaming file: ${e.message as string}`, e)
     }
   }

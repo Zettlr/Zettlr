@@ -53,11 +53,11 @@ export default class DirNew extends ZettlrCommand {
 
     try {
       await this._app.getFileSystem().createDir(sourceDir, sanitizedName)
-    } catch (e) {
+    } catch (err: any) {
       this._app.prompt({
         type: 'error',
         title: trans('system.error.could_not_create_dir'),
-        message: e.message
+        message: err.message
       })
       return false
     }

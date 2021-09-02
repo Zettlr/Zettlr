@@ -171,22 +171,22 @@ export default class UpdateProvider {
 
       // Next: Parse the result
       return await this._parseResponse(response)
-    } catch (error) {
+    } catch (err: any) {
       // Determine the error
-      let notFoundError = error.code === 'ENOTFOUND'
+      let notFoundError = err.code === 'ENOTFOUND'
       // If we have an ENOTFOUND error there is no response and no statusCode
       // so we'll use TypeScript shortcuts to save us from ugly errors.
-      let serverError = error?.response?.statusCode >= 500
-      let clientError = error?.response?.statusCode >= 400
-      let redirectError = error?.response?.statusCode >= 300
+      let serverError = err?.response?.statusCode >= 500
+      let clientError = err?.response?.statusCode >= 400
+      let redirectError = err?.response?.statusCode >= 300
 
       // Give a more detailed error message
       if (serverError) {
-        throw new Error(trans('dialog.update.server_error', error.response.statusCode))
+        throw new Error(trans('dialog.update.server_error', err.response.statusCode))
       } else if (clientError) {
-        throw new Error(trans('dialog.update.client_error', error.response.statusCode))
+        throw new Error(trans('dialog.update.client_error', err.response.statusCode))
       } else if (redirectError) {
-        throw new Error(trans('dialog.update.redirect_error', error.response.statusCode))
+        throw new Error(trans('dialog.update.redirect_error', err.response.statusCode))
       } else if (notFoundError) {
         // getaddrinfo has reported that the host has not been found.
         // This normally only happens if the networking interface is
@@ -195,7 +195,7 @@ export default class UpdateProvider {
       } else {
         // Something else has occurred.
         // GotError objects have a name property.
-        throw new Error(trans('dialog.update.other_error', error.name, error.message))
+        throw new Error(trans('dialog.update.other_error', err.name, err.message))
       }
     }
   }
@@ -351,7 +351,7 @@ export default class UpdateProvider {
     if (this._downloadWriteStream !== undefined) {
       try {
         this._downloadWriteStream.close()
-      } catch (err) {
+      } catch (err: any) {
         global.log.warning(`[Update Provider] Could not close write stream: ${err.message as string}`, err)
       }
       this._downloadWriteStream = undefined
@@ -360,7 +360,7 @@ export default class UpdateProvider {
     if (this._downloadReadStream !== undefined) {
       try {
         this._downloadReadStream.close()
-      } catch (err) {
+      } catch (err: any) {
         global.log.warning(`[Update Provider] Could not close read stream: ${err.message as string}`, err)
       }
       this._downloadWriteStream = undefined
@@ -426,7 +426,7 @@ export default class UpdateProvider {
     try {
       await shell.openPath(this._downloadProgress.full_path)
       app.quit()
-    } catch (err) {
+    } catch (err: any) {
       global.notify.normal('Could not start update. Please install manually.')
       global.log.error(`[Update Provider] Could not start update: ${err.message as string}.`, err)
     }
@@ -467,8 +467,8 @@ export default class UpdateProvider {
 
       this._sha256Data = releases
       return true
-    } catch (error) {
-      global.log.error('[Update Provider] Could not download the SHA256 data for the new release', error)
+    } catch (err) {
+      global.log.error('[Update Provider] Could not download the SHA256 data for the new release', err)
       return false
     }
   }

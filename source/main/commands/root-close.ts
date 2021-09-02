@@ -41,8 +41,8 @@ export default class RootClose extends ZettlrCommand {
       this._app.getFileSystem().unloadPath(root)
       global.config.removePath(root.path)
       // We do not need to update the renderer, will be done automatically.
-    } catch (e) {
-      global.log.error(`Could not unload root: ${e.message as string}`, e)
+    } catch (err: any) {
+      global.log.error(`Could not unload root: ${err.message as string}`, err)
     }
     return true
   }

@@ -139,9 +139,9 @@ async function persistSettings (dir: DirDescriptor): Promise<void> {
     // remove a possible .ztr-directory-file
     try {
       await fs.unlink(settingsFile)
-    } catch (e) {
-      const msg = e.message as string
-      global.log.error(`Error removing default .ztr-directory: ${msg}`, e)
+    } catch (err: any) {
+      const msg = err.message as string
+      global.log.error(`Error removing default .ztr-directory: ${msg}`, err)
     }
   }
   await fs.writeFile(path.join(dir.path, '.ztr-directory'), JSON.stringify(dir._settings))
@@ -168,9 +168,9 @@ async function parseSettings (dir: DirDescriptor): Promise<void> {
       // The settings are the default, so no need to write them to file
       await fs.unlink(configPath)
     }
-  } catch (e) {
+  } catch (err) {
     // Something went wrong
-    global.log.error(`Could not parse settings file for ${dir.name}`, e)
+    global.log.error(`Could not parse settings file for ${dir.name}`, err)
   }
 }
 
@@ -205,10 +205,10 @@ export async function parse (currentPath: string, cache: FSALCache, parent: DirD
     const stats = await fs.lstat(dir.path)
     dir.modtime = stats.ctimeMs
     dir.creationtime = stats.birthtimeMs
-  } catch (e) {
-    global.log.error(`Error reading metadata for directory ${dir.path}!`, e)
+  } catch (err: any) {
+    global.log.error(`Error reading metadata for directory ${dir.path}!`, err)
     // Re-throw so that the caller knows something's afoul
-    throw new Error(e)
+    throw new Error(err)
   }
 
   // Now parse the directory contents recursively
@@ -426,7 +426,7 @@ export async function remove (dirObject: DirDescriptor): Promise<void> {
   let parentDir = dirObject.parent
   try {
     await shell.trashItem(dirObject.path)
-  } catch (err) {
+  } catch (err: any) {
     if (global.config.get('system.deleteOnFail') === true) {
       // If this function throws, there's really something off and we shouldn't recover.
       await fs.rmdir(dirObject.path, { recursive: true })
