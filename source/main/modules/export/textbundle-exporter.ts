@@ -174,7 +174,7 @@ async function makeTextbundle (sourceFile: string, targetFile: string, textpack:
 
       // Afterwards remove the source file
       rimraf(targetFile.replace('.textpack', '.textbundle'), (error) => {
-        if (error !== undefined) {
+        if (error != null) {
           global.log.error(`[Export] Could not remove the temporary textbundle: ${error.message}`, error)
           reject(error)
         }
