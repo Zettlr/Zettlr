@@ -94,13 +94,13 @@
     "@types/command-exists": "^1.2.0",
     "@types/electron-devtools-installer": "^2.2.0",
     "@types/katex": "^0.11.1",
-    "@types/luxon": "^2.0.0",
+    "@types/luxon": "^2.0.2",
     "@types/mocha": "^9.0.0",
     "@types/nspell": "^2.1.1",
-    "@types/rimraf": "^3.0.1",
+    "@types/rimraf": "^3.0.2",
     "@types/uuid": "^8.3.1",
-    "@typescript-eslint/eslint-plugin": "^4.29.1",
-    "@typescript-eslint/parser": "^4.29.1",
+    "@typescript-eslint/eslint-plugin": "^4.30.0",
+    "@typescript-eslint/parser": "^4.30.0",
     "@vercel/webpack-asset-relocator-loader": "^1.6.0",
     "copy-webpack-plugin": "^9.0.1",
     "cross-env": "^7.0.3",
@@ -112,7 +112,7 @@
     "electron-notarize": "^1.0.1",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
-    "eslint-config-standard-with-typescript": "^20.0.0",
+    "eslint-config-standard-with-typescript": "^21.0.1",
     "eslint-loader": "^4.0.2",
     "eslint-plugin-import": "^2.24.0",
     "eslint-plugin-node": "^11.1.0",
@@ -137,6 +137,6 @@
     "typings-for-css-modules-loader": "^1.7.0",
     "vue-loader": "^15.9.8",
     "vue-template-compiler": "^2.6.14",
-    "webpack": "^5.50.0"
+    "webpack": "^5.51.2"
   }
 }
