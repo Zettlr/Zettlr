@@ -431,6 +431,7 @@ body {
   }
 
   &.dark:not(.darwin) {
+    background-color: rgb(30, 30, 30);
     div#window-content {
       background-color: rgb(30, 30, 30);
     }

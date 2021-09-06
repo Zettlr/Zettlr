@@ -232,6 +232,7 @@ body.linux {
       color: rgb(172, 172, 172);
 
       button[role="tab"] {
+      border-right: 1px solid rgb(30, 30, 30);
         &:hover, &.active {
           background-color: rgb(64, 64, 64);
         }
