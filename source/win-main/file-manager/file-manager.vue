@@ -411,7 +411,6 @@ body #file-manager {
   }
 
   .file-manager-filter {
-    padding: 5px;
     position: sticky;
     top: 0;
     z-index: 2;
@@ -422,6 +421,9 @@ body #file-manager {
       border: 1px solid transparent;
       padding: 5px;
       width: 100%;
+      padding-top: 7px;
+      padding-bottom: 7px;
+      border-radius: 0;
     }
   }
 }
@@ -430,6 +432,10 @@ body.dark #file-manager {
   #arrow-button {
     background-color: rgb(80, 80, 80);
     color: rgb(230, 230, 230);
+  }
+
+  .file-manager-filter-input {
+    background-color: rgb(30, 30, 30)
   }
 }
 
