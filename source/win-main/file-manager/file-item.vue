@@ -392,6 +392,12 @@ body {
       }
     } // END list item
   }
+
+  &.dark {
+    div.list-item-wrapper div.list-item {
+      border-bottom-color: rgba(255, 255, 255, 0.05) !important;
+    }
+  }
 }
 
 body.darwin {
