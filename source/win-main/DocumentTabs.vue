@@ -316,6 +316,14 @@ export default {
 <style lang="less">
 @tabbar-height: 30px;
 
+body {
+  &.dark {
+    div #tab-container {
+      border-top: 1px solid rgb(30, 30, 30);
+    }
+  }
+}
+
 body div#tab-container {
   width: 100%;
   height: 30px;
@@ -385,10 +393,6 @@ body div#tab-container {
     }
 
     transition: 0.2s background-color ease;
-  }
-
-  &.dark {
-    border-top: 1px solid rgb(30, 30, 30) !important;
   }
 }
 
