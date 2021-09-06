@@ -52,6 +52,7 @@ While in the past it was possible to use the common zoom shortcuts to only zoom 
 - Fixed a bug that would mark some quotation marks as misspelled.
 - Fix the visibility problems under night mode mentioned in issue #1845
 - Enabled syntax higlighting for fenced code blocks that use attribute lists as per issue #2259
+- Improved accessibility and dark mode adoption
 
 ## Under the Hood
 
