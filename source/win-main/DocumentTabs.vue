@@ -320,7 +320,7 @@ body div#tab-container {
   width: 100%;
   height: 30px;
   background-color: rgb(215, 215, 215);
-  border-bottom: 1px solid grey;
+  border-top: 1px solid grey;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -341,7 +341,17 @@ body div#tab-container {
     overflow: hidden;
     padding-right: @tabbar-height; // Push the filename back
 
-    &:hover { background-color: rgb(200, 200, 210); }
+    &:hover { background-color: rgb(200, 200, 210);
+      .close {
+        display: block;
+      }
+    }
+
+    &.active {
+      .close {
+        display: block;
+      }
+    }
 
     .filename {
       line-height: 30px;
@@ -371,9 +381,14 @@ body div#tab-container {
       text-align: center;
       border-radius: @tabbar-height;
       display: inline-block;
+      display: none;
     }
 
     transition: 0.2s background-color ease;
+  }
+
+  &.dark {
+    border-top: 1px solid rgb(30, 30, 30) !important;
   }
 }
 
@@ -435,15 +450,16 @@ body.darwin {
 
   &.dark {
     div#tab-container {
-      border-bottom-color: rgb(11, 11, 11);
+      border-top-color: rgb(11, 11, 11);
 
       div[role="tab"] {
         color: rgb(233, 233, 233);
         background-color: rgb(22, 22, 22);
         border-color: rgb(22, 22, 22);
+        cursor: pointer;
 
         &:hover {
-          background-color: rgb(32, 34, 36);
+          background-color: rgb(48, 50, 52);
         }
 
         &.active {
@@ -457,7 +473,7 @@ body.darwin {
 
 body.win32 {
   div#tab-container {
-    border-bottom: none;
+    border-top: none;
 
     div[role="tab"] {
       font-size: 12px;
@@ -514,10 +530,21 @@ body.linux {
 
       div[role="tab"] {
         border-color: rgb(120, 120, 120);
-        background-color: #5a5a5a;
+        background-color: rgb(40, 40, 40);
+        cursor: pointer;
 
-        &:hover { background-color: rgb(53, 53, 53); }
-        &.active { background-color: rgb(50, 50, 50); }
+        &:hover { background-color: rgb(45, 45, 45); }
+        &.active {
+          background-color: rgb(50, 50, 50);
+        &.hover {
+          background-color: rgb(55, 55, 55);
+        }
+          }
+
+      &:not(:last-child) {
+        border-right: 1px solid rgb(30, 30, 30);
+      }
+
       }
     }
   }
