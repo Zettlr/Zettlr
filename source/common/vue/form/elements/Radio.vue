@@ -85,6 +85,7 @@ body {
     display: inline-block !important;
     width: @input-size;
     height: @input-size;
+    margin-right: 5px;
 
     input {
       display: none !important;
