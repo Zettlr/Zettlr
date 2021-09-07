@@ -17,6 +17,7 @@ import { app } from 'electron'
 import { promises as fs } from 'fs'
 import isFile from '../../common/util/is-file'
 import isTraySupported from './is-tray-supported'
+import commandExists from 'command-exists'
 
 export default async function environmentCheck (): Promise<void> {
   global.log.info('Performing environment check ...')
@@ -133,12 +134,21 @@ export default async function environmentCheck (): Promise<void> {
     }
   }
 
+  // Determine if the platform as Tray support
   try {
     process.env.ZETTLR_IS_TRAY_SUPPORTED = await isTraySupported() ? '1' : '0'
   } catch (err: any) {
     process.env.ZETTLR_IS_TRAY_SUPPORTED = '0'
     process.env.ZETTLR_TRAY_ERROR = err.message
     global.log.warning(err.message)
+  }
+
+  // Determine if git is installed on this machine
+  try {
+    await commandExists('git')
+    process.env.GIT_SUPPORT = '1'
+  } catch (err) {
+    process.env.GIT_SUPPORT = '0'
   }
 
   global.log.info('Environment check complete.')
