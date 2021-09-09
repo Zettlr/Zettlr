@@ -671,7 +671,6 @@ export default {
         return // Can't export a non-open file
       }
       const data = {
-        exportDirectory: this.$store.state.config['export.dir'],
         format: this.$store.state.config['export.singleFileLastExporter']
       }
       this.$togglePopover(PopoverExport, document.getElementById('toolbar-export'), data, (data) => {

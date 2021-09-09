@@ -42,7 +42,7 @@ export default function () {
           label: trans('dialog.preferences.export.dest'),
           model: 'export.dir',
           options: {
-            'tmp': trans('dialog.preferences.export.dest_temp_label'),
+            'temp': trans('dialog.preferences.export.dest_temp_label'),
             'cwd': trans('dialog.preferences.export.dest_cwd_label')
           }
         }
