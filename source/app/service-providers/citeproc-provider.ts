@@ -326,7 +326,6 @@ export default class CiteprocProvider {
       // Parse as BibTex
       global.log.info(`[Citeproc Provider] Parsing file ${databasePath} as BibTex ...`)
       record.cslData = parseBibTex(data)
-      global.log.info(`[Citeproc Provider] After parsing file ${databasePath}`)
       record.type = 'bibtex'
 
       // If we're here, we had a BibTex library --> extract the attachments
