@@ -12,7 +12,7 @@
     <SplitView
       ref="file-manager-split"
       v-bind:initial-size-percent="[ 20, 80 ]"
-      v-bind:minimum-size-percent="[ 10, 70 ]"
+      v-bind:minimum-size-percent="[ 10, 50 ]"
       v-bind:split="'horizontal'"
     >
       <template #view1>
