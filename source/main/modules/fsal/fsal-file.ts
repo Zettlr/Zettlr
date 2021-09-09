@@ -432,7 +432,7 @@ export async function remove (fileObject: MDFileDescriptor): Promise<void> {
       // If this function throws, there's really something off and we shouldn't recover.
       await fs.unlink(fileObject.path)
     } else {
-      global.log.info(`[FSAL File] Could not remove file ${fileObject.path}: ${String(err.message)}`)
+      global.log.error(`[FSAL File] Could not remove file ${fileObject.path}: ${String(err.message)}`)
       return
     }
   }
