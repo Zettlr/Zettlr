@@ -22,7 +22,7 @@ import { promises as fs, readFileSync } from 'fs'
 import path from 'path'
 import { trans } from '../../common/i18n-main'
 import extractBibTexAttachments from './assets/extract-bibtex-attachments'
-import BibTexParser from 'astrocite-bibtex'
+import { parse as parseBibTex } from 'astrocite-bibtex'
 import YAML from 'yaml'
 import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
 
@@ -325,7 +325,8 @@ export default class CiteprocProvider {
     } else if (libraryType === '.bib') {
       // Parse as BibTex
       global.log.info(`[Citeproc Provider] Parsing file ${databasePath} as BibTex ...`)
-      record.cslData = BibTexParser.parse(data)
+      record.cslData = parseBibTex(data)
+      global.log.info(`[Citeproc Provider] After parsing file ${databasePath}`)
       record.type = 'bibtex'
 
       // If we're here, we had a BibTex library --> extract the attachments
