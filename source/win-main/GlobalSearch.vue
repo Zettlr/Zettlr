@@ -79,7 +79,8 @@
             v-for="singleRes, idx2 in result.result"
             v-bind:key="idx2"
             class="result-line"
-            v-on:mousedown.stop.prevent="jumpToLine($event, result.file.path, singleRes.line)"
+            v-on:contextmenu.stop.prevent="fileContextMenu($event, result.file.path, singleRes.line)"
+            v-on:mousedown.stop.prevent="onResultClick($event, result.file.path, singleRes.line)"
           >
             <strong>{{ singleRes.line }}</strong>:
             <span v-html="markText(singleRes)"></span>
@@ -147,7 +148,20 @@ export default {
       maxWeight: 0,
       // Is set to a line number if this component is waiting for a file to
       // become active.
-      jtlIntent: undefined
+      jtlIntent: undefined,
+      contextMenu: [
+        {
+          label: trans('menu.open_new_tab'),
+          id: 'new-tab',
+          type: 'normal',
+          enabled: true
+        },
+        {
+          label: trans('menu.quicklook'),
+          id: 'open-quicklook',
+          enabled: true
+        }
+      ]
     }
   },
   computed: {
@@ -372,10 +386,36 @@ export default {
         result.hideResultSet = this.toggleState
       }
     },
-    jumpToLine: function (event, filePath, lineNumber) {
+    fileContextMenu: function (event, filePath, lineNumber) {
+      const point = { x: event.clientX, y: event.clientY }
+      global.menuProvider.show(point, this.contextMenu, (clickedID) => {
+        switch (clickedID) {
+          case 'new-tab':
+            this.jumpToLine(filePath, lineNumber, true)
+            break
+          case 'open-quicklook':
+            ipcRenderer.invoke('application', {
+              command: 'open-quicklook',
+              payload: filePath
+            })
+              .catch(e => console.error(e))
+            break
+        }
+      })
+    },
+    onResultClick: function (event, filePath, lineNumber) {
+      // This intermediary function is needed to make sure that jumpToLine can
+      // also be called from within the context menu (see above).
+      if (event.button === 2) {
+        return // Do not handle right-clicks
+      }
+
+      const isMiddleClick = (event.type === 'mousedown' && event.button === 1)
+      this.jumpToLine(filePath, lineNumber, isMiddleClick)
+    },
+    jumpToLine: function (filePath, lineNumber, openInNewTab = false) {
       const isFileOpen = this.openFiles.find(file => file.path === filePath)
       const isActiveFile = (this.activeFile !== null) ? this.activeFile.path === filePath : false
-      const isMiddleClick = (event.type === 'mousedown' && event.button === 1)
 
       if (isActiveFile) {
         this.$emit('jtl', lineNumber)
@@ -386,7 +426,7 @@ export default {
           command: 'open-file',
           payload: {
             path: filePath,
-            newTab: isMiddleClick // Open in a new tab if wanted
+            newTab: openInNewTab // Open in a new tab if wanted
           }
         })
           .then(() => {
