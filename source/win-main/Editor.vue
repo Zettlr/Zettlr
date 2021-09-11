@@ -286,32 +286,7 @@ export default {
       this.editor.setCompletionDatabase('tags', this.tagDatabase)
     },
     fsalFiles: function () {
-      const fileDatabase = {}
-
-      for (let file of this.fsalFiles) {
-        let fname = file.name.substr(0, file.name.lastIndexOf('.'))
-        let displayText = fname // Fallback: Only filename
-        if ('frontmatter' in file && file.frontmatter !== null && file.frontmatter.title !== undefined) {
-          // (Else) if there is a frontmatter, use that title
-          displayText = file.frontmatter.title
-        } else if (Boolean(this.$store.state.config['display.useFirstHeadings']) && file.firstHeading != null) {
-          // The user wants to use first headings as fallbacks
-          displayText = file.firstHeading
-        }
-
-        if (file.id !== '') {
-          displayText = `${file.id}: ${displayText}`
-        }
-
-        fileDatabase[fname] = {
-          // Use the ID, if given, or the filename
-          'text': (file.id !== '') ? file.id : fname,
-          'displayText': displayText,
-          'id': file.id
-        }
-      }
-
-      this.editor.setCompletionDatabase('files', fileDatabase)
+      this.updateFileDatabase()
     },
     activeFile: function () {
       if (this.editor === null) {
@@ -638,6 +613,9 @@ export default {
 
       // Also, extract all cited keys
       this.updateCitationKeys()
+      // Saving can additionally do some changes to the files which are relevant
+      // to the autocomplete, so make sure to update that as well. See #2330
+      this.updateFileDatabase()
     },
     updateCitationKeys: function () {
       const value = this.editor.value
@@ -657,6 +635,34 @@ export default {
         }
       }
       this.$store.commit('updateCitationKeys', keys)
+    },
+    updateFileDatabase () {
+      const fileDatabase = {}
+
+      for (let file of this.fsalFiles) {
+        let fname = file.name.substr(0, file.name.lastIndexOf('.'))
+        let displayText = fname // Fallback: Only filename
+        if ('frontmatter' in file && file.frontmatter !== null && file.frontmatter.title !== undefined) {
+          // (Else) if there is a frontmatter, use that title
+          displayText = file.frontmatter.title
+        } else if (Boolean(this.$store.state.config['display.useFirstHeadings']) && file.firstHeading != null) {
+          // The user wants to use first headings as fallbacks
+          displayText = file.firstHeading
+        }
+
+        if (file.id !== '') {
+          displayText = `${file.id}: ${displayText}`
+        }
+
+        fileDatabase[fname] = {
+          // Use the ID, if given, or the filename
+          'text': (file.id !== '') ? file.id : fname,
+          'displayText': displayText,
+          'id': file.id
+        }
+      }
+
+      this.editor.setCompletionDatabase('files', fileDatabase)
     },
     toggleQueryRegexp () {
       const isRegexp = /^\/.+\/[gimy]{0,4}$/.test(this.query.trim())
