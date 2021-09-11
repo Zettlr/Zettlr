@@ -6,10 +6,11 @@
     v-bind:show-toolbar="true"
     v-bind:toolbar-controls="toolbarControls"
     v-bind:disable-vibrancy="true"
-    v-on:toolbar-search="query = $event"
+    v-on:toolbar-search="searchNext($event)"
   >
     <Editor
       v-bind:id="id"
+      ref="editor"
       v-bind:font-size="fontSize"
       v-bind:query="query"
       v-bind:name="name"
@@ -139,6 +140,10 @@ export default {
     })
   },
   methods: {
+    searchNext: function (query) {
+      this.query = query
+      this.$refs.editor.searchNext()
+    }
   }
 }
 </script>

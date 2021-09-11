@@ -22,7 +22,6 @@
 
 const MarkdownEditor = require('../common/modules/markdown-editor')
 const CodeMirror = require('codemirror')
-const makeSearchRegEx = require('../common/util/make-search-regex')
 
 const ipcRenderer = window.ipc
 
@@ -202,107 +201,7 @@ export default {
       })
     },
     searchNext () {
-      if (this.query.trim() === '') {
-        // Stop search if the field is empty
-        this.stopSearch()
-        return
-      }
-
-      if (this.searchCursor === null || this.currentLocalSearch !== this.query.trim()) {
-        // (Re)start search in case there was none or the term has changed
-        this.startSearch()
-      } else if (this.searchCursor.findNext() === true) {
-        this.editor.codeMirror.setSelection(this.searchCursor.from(), this.searchCursor.to())
-      } else {
-        // Start from beginning
-        this.searchCursor = this.editor.codeMirror.getSearchCursor(makeSearchRegEx(this.query), { 'line': 0, 'ch': 0 })
-        if (this.searchCursor.findNext() === true) {
-          this.editor.codeMirror.setSelection(this.searchCursor.from(), this.searchCursor.to())
-        }
-      }
-    },
-
-    /**
-      * Starts the search by preparing a search cursor we can use to forward the
-      * search.
-      */
-    startSearch () {
-      // Create a new search cursor
-      this.currentLocalSearch = this.query
-      const cursor = this.editor.codeMirror.getCursor()
-      let regex = makeSearchRegEx(this.currentLocalSearch)
-      this.searchCursor = this.editor.codeMirror.getSearchCursor(regex, cursor)
-
-      // Find all matches
-      let tRE = makeSearchRegEx(this.currentLocalSearch, 'gi')
-      let res = []
-      let match = null
-      for (let i = 0; i < this.editor.codeMirror.lineCount(); i++) {
-        let l = this.editor.codeMirror.getLine(i)
-        tRE.lastIndex = 0
-        while ((match = tRE.exec(l)) != null) {
-          res.push({
-            'from': { 'line': i, 'ch': match.index },
-            'to': { 'line': i, 'ch': match.index + this.currentLocalSearch.length }
-          })
-        }
-      }
-
-      // Mark these in document and on the scroll bar
-      this.mark(res)
-
-      return this
-    },
-
-    /**
-      * Stops the search by destroying the search cursor
-      * @return {ZettlrEditor}   This for chainability.
-      */
-    stopSearch () {
-      this.searchCursor = null
-      this.unmarkResults()
-
-      return this
-    },
-
-    // MARK FUNCTIONS ALSO STOLEN FROM ZETTLREDITOR
-
-    /**
-      * Why do you have a second _mark-function, when there is markResults?
-      * Because the local search also generates search results that have to be
-      * marked without retrieving anything from the ZettlrPreview.
-      * @param  {Array} res An Array containing all positions to be rendered.
-      */
-    mark (res) {
-      this.unmarkResults() // Clear potential previous marks
-
-      let sbannotate = []
-      for (let result of res) {
-        if (result.from === undefined || result.to === undefined) {
-          // One of these was undefined. And somehow this if-clause has made
-          // searching approximately three times faster. Crazy.
-          continue
-        }
-        sbannotate.push({ 'from': result.from, 'to': result.to })
-        this.editor.codeMirror.markText(
-          result.from, result.to,
-          { className: 'search-result' }
-        )
-      }
-
-      this.scrollbarAnnotations.update(sbannotate)
-    },
-
-    /**
-      * Removes all marked search results
-      */
-    unmarkResults () {
-      // Simply remove all markers
-      for (let mark of this.editor.codeMirror.getAllMarks()) {
-        mark.clear()
-      }
-
-      this.scrollbarAnnotations.update([])
+      this.editor.searchNext(this.query)
     }
   }
 }

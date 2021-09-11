@@ -12,6 +12,7 @@
       class="toolbar-search"
       v-bind:placeholder="control.placeholder"
       v-on:input="$emit('input', $event.target.value)"
+      v-on:keypress.enter="$emit('input', $event.target.value)"
     >
   </div>
 </template>
