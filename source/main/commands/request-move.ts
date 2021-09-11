@@ -27,7 +27,7 @@ export default class RequestMove extends ZettlrCommand {
    * @param  {Object} arg The origin and the destination
    * @return {Boolean}     Whether or not the command succeeded.
    */
-  async run (evt: string, arg: any): Promise<boolean> {
+  async run (evt: string, arg: { from: string, to: string }): Promise<boolean> {
     // arg contains from and to. Prepare the necessary variables
     const fsal = this._app.getFileSystem() // We need this quite often here
 
@@ -63,6 +63,14 @@ export default class RequestMove extends ZettlrCommand {
         message: trans('system.error.already_exists_message', from.name)
       })
 
+      return false
+    }
+
+    // A final check: If from is a file, and the file is modified, we cannot
+    // move, lest we want to induce data loss, see issue #2347
+    const openFile = this._app.getDocumentManager().openFiles.find(elem => elem.path === arg.from)
+    if (openFile?.modified === true) {
+      global.log.error(`[Application] Cannot move file ${arg.from} to ${arg.to}, since it is modified.`)
       return false
     }
 
