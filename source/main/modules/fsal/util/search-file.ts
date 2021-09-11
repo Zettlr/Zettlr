@@ -263,7 +263,6 @@ export default function searchFile (
   }
 
   if (termsMatched === termsToSearch.length) {
-    console.log(combinedResults)
     return combinedResults
   } else {
     // Empty array indicating that not all required terms have matched

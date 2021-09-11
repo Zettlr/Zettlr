@@ -15,7 +15,6 @@
 import { trans } from '../../common/i18n-renderer'
 
 export default function () {
-  console.log(global.config.get('watchdog.activatePolling'))
   return {
     fieldsets: [
       [

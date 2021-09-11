@@ -52,9 +52,6 @@ function showFunction (
   // Do not re-open this popover, if the toggle flag is set, the current target
   // still points to the same element (indicating the same popover being opened)
   // and there is a popover and it is not actually closed.
-  console.log('Should toggle?', shouldToggle)
-  console.log('Same element as last time?', currentPopoverTarget === element)
-  console.log('Popover still being shown?', currentPopover?.isClosed() === false)
   const dontReopen = shouldToggle && (currentPopoverTarget === element) && currentPopover?.isClosed() === false
   if (currentPopover !== null && currentPopoverTarget !== null) {
     // Close the previous popover, since only one is allowed
