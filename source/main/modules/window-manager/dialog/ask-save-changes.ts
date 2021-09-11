@@ -34,6 +34,7 @@ export default async function askSaveChanges (win: BrowserWindow|null): Promise<
       trans('system.cancel') // 2: Abort whatever is happening
     ],
     defaultId: 1,
+    cancelId: 2, // If the user cancels, do not omit (the default) but actually cancel
     title: trans('system.save_changes_title'),
     message: trans('system.save_changes_message')
   }
