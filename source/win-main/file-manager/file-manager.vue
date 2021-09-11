@@ -137,12 +137,8 @@ export default {
       fileList.style.removeProperty('left')
       this.fileTreeVisible = true
       this.fileListVisible = false
-      fileTree.classList.remove('hidden')
       // Then we want to do some additional
       // failsafes for the different modes
-      if (this.isThin === true || this.isCombined === true) {
-        this.fileListVisible = false
-      }
       if (this.isExpanded === true) {
         this.fileListVisible = true
       }
