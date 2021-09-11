@@ -84,6 +84,8 @@ body .selectable-list-wrapper {
       background-color: white;
       color: rgb(33, 33, 33);
       border-bottom: 1px solid rgb(180, 180, 180);
+      white-space: nowrap;
+      overflow: hidden;
 
       &.selected { background-color: rgb(230, 230, 230); }
 
@@ -115,8 +117,6 @@ body.darwin {
     font-size: 12px;
 
     .item {
-      white-space: nowrap;
-      overflow: hidden;
       height: 30px;
       line-height: 20px;
       padding: 5px;
