@@ -60,12 +60,12 @@ const matchesInDocument = []
  * @param   {boolean}            forward  If true, searches next, else previous
  */
 function search (cm, term, forward = true) {
-  if (term.trim() === '') {
+  if (term.length === 0) {
     stopSearch()
     return
   }
 
-  if (searchCursor === null || currentLocalSearch !== term.trim()) {
+  if (searchCursor === null || currentLocalSearch !== term) {
     // Start a new search
     startSearch(cm, term, cm.getCursor())
     search(cm, term, forward)
@@ -104,7 +104,7 @@ function search (cm, term, forward = true) {
  * @param   {boolean}            forward      The replacement direction (default: true)
  */
 function replace (cm, term, replacement, forward = true) {
-  if (searchCursor === null || currentLocalSearch !== term.trim()) {
+  if (searchCursor === null || currentLocalSearch !== term) {
     startSearch(cm, term)
     search(cm, term, forward)
   }
@@ -142,7 +142,7 @@ function replaceAll (cm, term, replacement) {
   while (result !== false) {
     let localReplacement = replacement
     for (let i = 1; i < result.length; i++) {
-      localReplacement = localReplacement.replace(new RegExp('\\$' + i, 'g'), result[i])
+      localReplacement = localReplacement.replaceAll(`$${i}`, result[i])
     }
 
     searchCursor.replace(localReplacement)
@@ -160,7 +160,7 @@ function replaceAll (cm, term, replacement) {
  */
 function startSearch (cm, term, startPosition) {
   stopSearch()
-  currentLocalSearch = term.trim()
+  currentLocalSearch = term
   const regex = makeSearchRegex(currentLocalSearch)
   searchCursor = cm.getSearchCursor(regex, startPosition)
 
@@ -228,7 +228,7 @@ function unhighlightSearchResults () {
  */
 function containsSearchTerm (cm, term) {
   const val = cm.getValue()
-  const regex = makeSearchRegex(term.trim())
+  const regex = makeSearchRegex(term)
   return regex.test(val)
 }
 
