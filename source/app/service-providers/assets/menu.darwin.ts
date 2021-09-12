@@ -16,7 +16,10 @@ import { app, MenuItemConstructorOptions, shell } from 'electron'
 import { trans } from '../../../common/i18n-main'
 import path from 'path'
 
-export default function getMenu (): MenuItemConstructorOptions[] {
+export default function getMenu (
+  getCheckboxState: (id: string, init: boolean) => boolean,
+  setCheckboxState: (id: string, val: boolean) => void
+): MenuItemConstructorOptions[] {
   const menu: MenuItemConstructorOptions[] = [
     // APP MENU
     {
@@ -404,9 +407,11 @@ export default function getMenu (): MenuItemConstructorOptions[] {
           id: 'menu.toggle_distraction_free',
           label: trans('menu.toggle_distraction_free'),
           accelerator: 'Cmd+J',
-          // type: 'checkbox',
-          // checked: false,
+          type: 'checkbox',
+          checked: getCheckboxState('menu.toggle_distraction_free', false),
           click: function (menuitem, focusedWindow) {
+            const currentState = getCheckboxState('menu.toggle_distraction_free', false)
+            setCheckboxState('menu.toggle_distraction_free', !currentState)
             focusedWindow?.webContents.send('shortcut', 'toggle-distraction-free' /*, menuitem.checked */)
           }
         },
@@ -414,9 +419,11 @@ export default function getMenu (): MenuItemConstructorOptions[] {
           id: 'menu.toggle_typewriter_mode',
           label: trans('menu.toggle_typewriter_mode'),
           accelerator: 'Cmd+Alt+T',
-          // type: 'checkbox',
-          // checked: false, // TODO
+          type: 'checkbox',
+          checked: getCheckboxState('menu.toggle_typewriter_mode', false),
           click: function (menuitem, focusedWindow) {
+            const currentState = getCheckboxState('menu.toggle_typewriter_mode', false)
+            setCheckboxState('menu.toggle_typewriter_mode', !currentState)
             focusedWindow?.webContents.send('shortcut', 'toggle-typewriter-mode')
           }
         },
@@ -447,9 +454,6 @@ export default function getMenu (): MenuItemConstructorOptions[] {
           label: trans('menu.reset_zoom'),
           accelerator: 'Cmd+0',
           role: 'resetZoom'
-          // click: function (menuitem, focusedWindow) {
-          //   focusedWindow?.webContents.send('shortcut', 'zoom-reset')
-          // }
         },
         {
           id: 'menu.zoom_in',

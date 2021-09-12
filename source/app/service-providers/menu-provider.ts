@@ -88,14 +88,14 @@ export default class MenuProvider {
    * Keeps track of the state of checkboxes which are not controlled by a
    * configuration setting.
    */
-  _checkboxState: any
+  _checkboxState: Map<string, boolean>
 
   /**
   * Creates the main application menu and sets it.
   */
   constructor () {
     global.log.verbose('Menu provider booting up ...')
-    this._checkboxState = Object.create(null)
+    this._checkboxState = new Map()
 
     // Begin listening to configuration update events that announce a change in
     // the recent docs list so that we can make sure the menu is always updated.
@@ -257,7 +257,27 @@ export default class MenuProvider {
    * Generates the application menu from the blueprint.
    */
   _build (): Menu {
-    const blueprint = BLUEPRINTS[process.platform]()
+    // Create a small helper function that will manage a volatile checkbox state.
+    // Volatile means: The menu will attempt to retrieve a checkbox state that
+    // is not controlled by a setting (and as such cannot be retrieved with
+    // global.config.get). For those checkboxes, the menu provider will maintain
+    // a map that persists the checkbox state for as long as the program runs.
+    const getState = (id: string, init: boolean): boolean => {
+      const result = this._checkboxState.get(id)
+      if (result === undefined) {
+        this._checkboxState.set(id, init)
+        return init
+      } else {
+        return result
+      }
+    }
+
+    // Also allow the menu handlers to set the state
+    const setState = (id: string, val: boolean): void => {
+      this._checkboxState.set(id, val)
+    }
+
+    const blueprint = BLUEPRINTS[process.platform](getState, setState)
     // Last but not least build the template
     return Menu.buildFromTemplate(blueprint)
   }
