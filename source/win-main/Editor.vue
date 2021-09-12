@@ -326,6 +326,7 @@ export default {
             const mode = this.resolveMode(this.activeFile.ext)
             const newDoc = {
               path: descriptorWithContent.path,
+              dir: descriptorWithContent.dir, // Save the dir to distinguish memory-files from others
               mode: mode, // Save the mode for later swaps
               cmDoc: CodeMirror.Doc(descriptorWithContent.content, mode),
               modified: false,
@@ -349,7 +350,8 @@ export default {
 
             // Implement autosaving
             newDoc.cmDoc.on('change', (doc, changeObj) => {
-              if (this.autoSave === 'off') {
+              // Do not attempt to autosave if it's off or we're dealing with an in-memory file.
+              if (this.autoSave === 'off' || newDoc.dir === ':memory:') {
                 return
               }
 
