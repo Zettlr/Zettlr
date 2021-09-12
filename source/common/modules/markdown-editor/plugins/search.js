@@ -46,11 +46,18 @@ let lastSearchResult = false
 let matchAnnotationBar = null
 
 /**
+ * Contains all the text markers which highlight the search results on the scrollbar.
+ *
+ * @var {CodeMirror.TextMarker[]}
+ */
+const matchesInDocument = []
+
+/**
  * Performs a one-shot search, either forward or backward
  *
- * @param   {CodeMirror}  cm       The CodeMirror instance
- * @param   {string}      term     The term to be searched
- * @param   {boolean}     forward  If true, searches next, else previous
+ * @param   {CodeMirror.Editor}  cm       The CodeMirror instance
+ * @param   {string}             term     The term to be searched
+ * @param   {boolean}            forward  If true, searches next, else previous
  */
 function search (cm, term, forward = true) {
   if (term.trim() === '') {
@@ -64,11 +71,7 @@ function search (cm, term, forward = true) {
     search(cm, term, forward)
   } else if (searchCursor !== null) {
     // Search next/previous
-    if (forward === true) {
-      lastSearchResult = searchCursor.findNext()
-    } else {
-      lastSearchResult = searchCursor.findPrevious()
-    }
+    lastSearchResult = (forward) ? searchCursor.findNext() : searchCursor.findPrevious()
 
     if (lastSearchResult !== false) {
       // Another match
@@ -77,7 +80,7 @@ function search (cm, term, forward = true) {
       // If the last search result returned false, but the document does contain
       // the term somewhere, this indicates we're past the last/first occurence
       // of the term and should start over.
-      if (forward !== true) {
+      if (!forward) {
         // Start from the end of the document
         const lastLine = cm.doc.lastLine()
         const lastCh = cm.doc.getLine(lastLine).length
@@ -95,10 +98,10 @@ function search (cm, term, forward = true) {
  * Replaces the current found search result. If no search is active, searches
  * for the first occurrence of term and then replaces.
  *
- * @param   {CodeMirror}  cm           The CodeMirror instance
- * @param   {string}      term         The term to be searched for
- * @param   {string}      replacement  The replacement string
- * @param   {boolean}     forward      The replacement direction (default: true)
+ * @param   {CodeMirror.Editor}  cm           The CodeMirror instance
+ * @param   {string}             term         The term to be searched for
+ * @param   {string}             replacement  The replacement string
+ * @param   {boolean}            forward      The replacement direction (default: true)
  */
 function replace (cm, term, replacement, forward = true) {
   if (searchCursor === null || currentLocalSearch !== term.trim()) {
@@ -126,9 +129,9 @@ function replace (cm, term, replacement, forward = true) {
 /**
  * Replaces all occurrences of term with replacement.
  *
- * @param   {CodeMirror}  cm           The CodeMirror instance
- * @param   {string}      term         The term to be replaced
- * @param   {string}      replacement  The replacement string.
+ * @param   {CodeMirror.Editor}  cm           The CodeMirror instance
+ * @param   {string}             term         The term to be replaced
+ * @param   {string}             replacement  The replacement string.
  */
 function replaceAll (cm, term, replacement) {
   // Start a new search from the beginning of the document
@@ -151,11 +154,12 @@ function replaceAll (cm, term, replacement) {
 /**
  * Starts a new search (internal function)
  *
- * @param   {CodeMirror}  cm            The CodeMirror instance
- * @param   {string}      term          The search term
- * @param   {Cursor?}     startPosition An optional start position. Undefined defaults to beginning of document.
+ * @param   {CodeMirror.Editor}  cm            The CodeMirror instance
+ * @param   {string}             term          The search term
+ * @param   {Cursor?}            startPosition An optional start position. Undefined defaults to beginning of document.
  */
 function startSearch (cm, term, startPosition) {
+  stopSearch()
   currentLocalSearch = term.trim()
   const regex = makeSearchRegex(currentLocalSearch)
   searchCursor = cm.getSearchCursor(regex, startPosition)
@@ -167,6 +171,9 @@ function startSearch (cm, term, startPosition) {
   // Also show all occurrences on the scrollbar
   // NOTE: Doesn't work on macOS since there scrollbars are hidden by default
   matchAnnotationBar = cm.showMatchesOnScrollbar(regex)
+
+  // Finally, highlight the matches inside the actual document content
+  highlightSearchResults(cm, regex)
 }
 
 /**
@@ -180,15 +187,44 @@ function stopSearch () {
     matchAnnotationBar.clear()
     matchAnnotationBar = null
   }
+
+  unhighlightSearchResults()
+}
+
+/**
+ * Highlights all occurrences of the search term within the document
+ *
+ * @param   {CodeMirror.Editor}  cm    The editor instance
+ * @param   {RegExp}             term  The term, as a regular expression
+ */
+function highlightSearchResults (cm, term) {
+  unhighlightSearchResults()
+  const cursor = cm.getSearchCursor(term)
+  while (cursor.findNext() !== false) {
+    const mark = cm.markText(cursor.from(), cursor.to(), { className: 'cm-highlight' })
+    matchesInDocument.push(mark)
+  }
+}
+
+/**
+ * Removes all markers that highlight search results within the document.
+ */
+function unhighlightSearchResults () {
+  while (matchesInDocument.length > 0) {
+    const marker = matchesInDocument.shift()
+    if (marker.find() !== undefined) {
+      marker.clear()
+    }
+  }
 }
 
 /**
  * Checks if a given term occurs in the current CodeMirror editor at all
  *
- * @param   {CodeMirror}  cm    The CodeMirror instance
- * @param   {string}      term  The search term
+ * @param   {CodeMirror.Editor}  cm    The CodeMirror instance
+ * @param   {string}             term  The search term
  *
- * @return  {boolean}           Returns true if there is at least one occurrence, false otherwise.
+ * @return  {boolean}                  Returns true if there is at least one occurrence, false otherwise.
  */
 function containsSearchTerm (cm, term) {
   const val = cm.getValue()
