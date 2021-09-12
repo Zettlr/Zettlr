@@ -34,7 +34,9 @@ export default class FileNew extends ZettlrCommand {
    * @return {void}     This function does not return anything.
    */
   async run (evt: string, arg: any): Promise<void> {
-    if (evt === 'new-unsaved-file') {
+    const newFileDontPrompt: boolean = global.config.get('newFileDontPrompt')
+
+    if (evt === 'new-unsaved-file' && !newFileDontPrompt) {
       // We should simply create a new unsaved file that only resides in memory
       const file = await this._app.getDocumentManager().newUnsavedFile()
       // Set it as active
@@ -44,7 +46,7 @@ export default class FileNew extends ZettlrCommand {
 
     let dir = this._app.getFileSystem().openDirectory
 
-    if ('path' in arg) {
+    if (arg?.path !== undefined) {
       dir = this._app.getFileSystem().findDir(arg.path)
     }
 
@@ -53,9 +55,36 @@ export default class FileNew extends ZettlrCommand {
       return
     }
 
+    // Make sure we have a filename
+    if (arg.name === undefined) {
+      arg.name = generateFilename()
+    }
+
+    if (!newFileDontPrompt) {
+      console.log(dir.path, arg.name)
+      // The user wishes to confirm the filename
+      const chosenPath = await this._app.saveFile(path.join(dir.path, arg.name))
+      if (chosenPath === undefined) {
+        global.log.error('Could not create new file since the dialog was aborted.')
+        return
+      }
+
+      arg.name = path.basename(chosenPath)
+      // The user may also have selected a different directory altogether. If
+      // that directory exists and is loaded by the FSAL, overwrite the dir.
+      if (path.dirname(chosenPath) !== dir.path) {
+        dir = this._app.getFileSystem().findDir(path.dirname(chosenPath))
+        if (dir === null) {
+          // TODO: Better feedback to the user!
+          global.log.error(`Could not create new file ${arg.name as string}: The selected directory is not loaded in Zettlr!`)
+          return
+        }
+      }
+    }
+
     try {
       // Then, make sure the name is correct.
-      let filename = (arg.name !== undefined) ? sanitize(arg.name.trim(), { 'replacement': '-' }) : generateFilename()
+      let filename = sanitize(arg.name.trim(), { 'replacement': '-' })
       if (filename === '') {
         throw new Error('Could not create file: Filename was not valid')
       }

@@ -79,7 +79,7 @@ export default function getMenu (
           label: trans('menu.new_file'),
           accelerator: 'Ctrl+N',
           click: function (menuitem, focusedWindow) {
-            global.application.runCommand('new-unsaved-file')
+            global.application.runCommand('new-unsaved-file', {})
               .catch(e => global.log.error(String(e.message), e))
           }
         },

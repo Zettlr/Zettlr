@@ -847,9 +847,10 @@ export default class WindowManager extends EventEmitter {
    *
    * @param  {FileFilter[]|null}   [filters=null]    An array of extension filters.
    * @param  {boolean}             [multiSel=false]  Determines if multiple files are allowed
+   * @param  {string?}             startdir          Optional start directory override
    * @param  {BrowserWindow|null}  [win]             An optional window to attach to
    *
-   * @return {string[]}                             An array containing all selected files.
+   * @return {string[]}                              An array containing all selected files.
    */
   async askFile (filters: FileFilter[]|null = null, multiSel: boolean = false, win?: BrowserWindow|null): Promise<string[]> {
     if (win != null) {

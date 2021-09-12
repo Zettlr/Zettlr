@@ -35,7 +35,9 @@ export default async function saveFileDialog (win: BrowserWindow|null, filename:
   // Prepare options
   let opt: SaveDialogOptions = {
     title: trans('system.save_file'),
-    defaultPath: path.join(startDir, filename),
+    // If the caller has provided an absolute path to a file, start there. Otherwise,
+    // concatenate the startdir
+    defaultPath: (isDir(path.dirname(filename))) ? path.join(startDir, filename) : filename,
     properties: [ 'createDirectory', 'showOverwriteConfirmation' ]
   }
 
