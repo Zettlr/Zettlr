@@ -173,6 +173,7 @@ export default {
         keyMap: this.$store.state.config['editor.inputMode'],
         direction: this.$store.state.config['editor.direction'],
         rtlMoveVisually: this.$store.state.config['editor.rtlMoveVisually'],
+        indentUnit: this.$store.state.config['editor.indentUnit'],
         autoCorrect: {
           style: this.$store.state.config['editor.autoCorrect.style'],
           quotes: {
