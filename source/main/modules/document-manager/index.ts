@@ -430,7 +430,7 @@ export default class DocumentManager extends EventEmitter {
   /**
    * Create a new file in memory (= unsaved and with no path assigned).
    */
-  public async newUnsavedFile (): Promise<MDFileDescriptor> {
+  public async newUnsavedFile (type?: 'md'|'yaml'|'json'|'tex'): Promise<MDFileDescriptor|CodeFileDescriptor> {
     // First, find out where we should create the file -- either behind the
     // activeFile, or at the end of the list of open files.
     let activeIdx = this.openFiles.findIndex(file => file === this.activeFile)
@@ -440,35 +440,73 @@ export default class DocumentManager extends EventEmitter {
 
     // The appendix of the filename will be a number related to the amount of
     // duplicate files in the open files array
-    const fname = generateFilename()
+    let fname = generateFilename()
+    const ext = path.extname(fname).toLowerCase()
+    if (type !== 'md' && !ALLOWED_CODE_FILES.includes(ext)) {
+      // The user has explicitly requested a code file so we must respect
+      // the decision.
+      if (type === 'tex' && ext !== '.tex') {
+        fname += '.tex'
+      } else if (type === 'json' && ext !== '.json') {
+        fname += '.json'
+      } else if (type === 'yaml' && ![ '.yaml', '.yml' ].includes(ext)) {
+        fname += '.yaml'
+      }
+    } else if (!MARKDOWN_FILES.includes(ext)) {
+      fname += '.md'
+    }
+
     const post = (this.openFiles.filter(f => f.name === fname).length > 0) ? '-1' : ''
     // Splice the "post" into the filename
     const finalFname = path.basename(fname, path.extname(fname)) + post + path.extname(fname)
 
     // Now create the file object. It's basically treated like a root file, but
     // with no real location on the file system associated.
-    const file: MDFileDescriptor = {
-      parent: null,
-      name: finalFname,
-      dir: ':memory:', // Special location
-      path: ':memory:/' + finalFname,
-      // NOTE: Many properties are strictly speaking invalid
-      hash: 0,
-      size: 0,
-      modtime: 0, // I'm waiting for that 01.01.1970 bug to appear ( ͡° ͜ʖ ͡°)
-      creationtime: 0,
-      ext: '.md',
-      id: '',
-      type: 'file',
-      tags: [],
-      bom: '',
-      wordCount: 0,
-      charCount: 0,
-      target: undefined,
-      firstHeading: null,
-      frontmatter: null,
-      linefeed: '\n',
-      modified: false
+    let file: MDFileDescriptor|CodeFileDescriptor
+
+    if (type === 'md') {
+      file = {
+        parent: null,
+        name: finalFname,
+        dir: ':memory:', // Special location
+        path: ':memory:/' + finalFname,
+        // NOTE: Many properties are strictly speaking invalid
+        hash: 0,
+        size: 0,
+        modtime: 0, // I'm waiting for that 01.01.1970 bug to appear ( ͡° ͜ʖ ͡°)
+        creationtime: 0,
+        ext: '.md',
+        id: '',
+        type: 'file',
+        tags: [],
+        bom: '',
+        wordCount: 0,
+        charCount: 0,
+        target: undefined,
+        firstHeading: null,
+        frontmatter: null,
+        linefeed: '\n',
+        modified: false
+      }
+    } else {
+      file = {
+        parent: null,
+        name: finalFname,
+        dir: ':memory:', // Special location
+        path: ':memory:/' + finalFname,
+        // NOTE: Many properties are strictly speaking invalid
+        hash: 0,
+        size: 0,
+        modtime: 0, // I'm waiting for that 01.01.1970 bug to appear ( ͡° ͜ʖ ͡°)
+        creationtime: 0,
+        ext: path.extname(finalFname),
+        id: '',
+        type: 'code',
+        tags: [],
+        bom: '',
+        linefeed: '\n',
+        modified: false
+      }
     }
 
     // Now splice it at the correct position

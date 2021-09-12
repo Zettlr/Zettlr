@@ -33,12 +33,14 @@ export default class FileNew extends ZettlrCommand {
    * @param  {Object} arg An object containing a hash of containing directory and a file name.
    * @return {void}     This function does not return anything.
    */
-  async run (evt: string, arg: any): Promise<void> {
+  async run (evt: string, arg: { name?: string, path?: string, type?: 'md'|'yaml'|'json'|'tex' }): Promise<void> {
     const newFileDontPrompt: boolean = global.config.get('newFileDontPrompt')
+
+    const type = (arg.type !== undefined) ? arg.type : 'md'
 
     if (evt === 'new-unsaved-file' && !newFileDontPrompt) {
       // We should simply create a new unsaved file that only resides in memory
-      const file = await this._app.getDocumentManager().newUnsavedFile()
+      const file = await this._app.getDocumentManager().newUnsavedFile(type)
       // Set it as active
       this._app.getDocumentManager().activeFile = file
       return // Return early
@@ -76,7 +78,7 @@ export default class FileNew extends ZettlrCommand {
         dir = this._app.getFileSystem().findDir(path.dirname(chosenPath))
         if (dir === null) {
           // TODO: Better feedback to the user!
-          global.log.error(`Could not create new file ${arg.name as string}: The selected directory is not loaded in Zettlr!`)
+          global.log.error(`Could not create new file ${arg.name}: The selected directory is not loaded in Zettlr!`)
           return
         }
       }
@@ -90,8 +92,18 @@ export default class FileNew extends ZettlrCommand {
       }
 
       // If no valid filename is provided, assume .md
-      let ext = path.extname(filename).toLowerCase()
-      if (!ALLOWED_FILETYPES.includes(ext) && !CODEFILE_TYPES.includes(ext)) {
+      const ext = path.extname(filename).toLowerCase()
+      if (type !== 'md') {
+        // The user has explicitly requested a code file so we must respect
+        // the decision.
+        if (type === 'tex' && ext !== '.tex') {
+          filename += '.tex'
+        } else if (type === 'json' && ext !== '.json') {
+          filename += '.json'
+        } else if (type === 'yaml' && ![ '.yaml', '.yml' ].includes(ext)) {
+          filename += '.yaml'
+        }
+      } else if (!ALLOWED_FILETYPES.includes(ext) && !CODEFILE_TYPES.includes(ext)) {
         filename += '.md'
       }
 
@@ -112,7 +124,8 @@ export default class FileNew extends ZettlrCommand {
       // First create the file
       await this._app.getFileSystem().createFile(dir, {
         name: filename,
-        content: ''
+        content: '',
+        type: (type === 'md') ? 'md' : 'code'
       })
 
       // And directly thereafter, open the file

@@ -373,12 +373,17 @@ export async function create (dirObject: DirDescriptor, newName: string, cache: 
  * @param   {FSALCache}      cache      The FSAL cache to cache the resulting file
  */
 export async function createFile (dirObject: DirDescriptor, options: any, cache: FSALCache): Promise<void> {
-  let filename = options.name
-  let content = options.content
-  let fullPath = path.join(dirObject.path, filename)
+  const filename = options.name
+  const content = options.content
+  const fullPath = path.join(dirObject.path, filename)
   await fs.writeFile(fullPath, content)
-  let file = await FSALFile.parse(fullPath, cache, dirObject)
-  dirObject.children.push(file)
+  if ('type' in options && options.type === 'code') {
+    const file = await FSALCodeFile.parse(fullPath, cache, dirObject)
+    dirObject.children.push(file)
+  } else {
+    const file = await FSALFile.parse(fullPath, cache, dirObject)
+    dirObject.children.push(file)
+  }
   sortChildren(dirObject)
 }
 

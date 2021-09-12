@@ -98,13 +98,42 @@ export default function getMenu (
       label: trans('menu.labels.file'),
       submenu: [
         {
-          id: 'menu.new_file',
           label: trans('menu.new_file'),
-          accelerator: 'Cmd+N',
-          click: function (menuitem, focusedWindow) {
-            global.application.runCommand('new-unsaved-file', {})
-              .catch(e => global.log.error(String(e.message), e))
-          }
+          submenu: [
+            {
+              id: 'menu.new_file',
+              label: 'Markdown', // TODO: Translate
+              accelerator: 'Cmd+N',
+              click: function (menuitem, focusedWindow) {
+                global.application.runCommand('new-unsaved-file', { type: 'md' })
+                  .catch(e => global.log.error(String(e.message), e))
+              }
+            },
+            {
+              id: 'menu.new_tex_file',
+              label: 'TeX', // TODO: Translate
+              click: function (menuitem, focusedWindow) {
+                global.application.runCommand('new-unsaved-file', { type: 'tex' })
+                  .catch(e => global.log.error(String(e.message), e))
+              }
+            },
+            {
+              id: 'menu.new_yaml_file',
+              label: 'YAML', // TODO: Translate
+              click: function (menuitem, focusedWindow) {
+                global.application.runCommand('new-unsaved-file', { type: 'yaml' })
+                  .catch(e => global.log.error(String(e.message), e))
+              }
+            },
+            {
+              id: 'menu.new_json_file',
+              label: 'JSON', // TODO: Translate
+              click: function (menuitem, focusedWindow) {
+                global.application.runCommand('new-unsaved-file', { type: 'json' })
+                  .catch(e => global.log.error(String(e.message), e))
+              }
+            }
+          ]
         },
         {
           id: 'menu.new_dir',
