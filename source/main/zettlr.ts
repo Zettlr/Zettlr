@@ -586,21 +586,36 @@ export default class Zettlr {
     // As long as it's not a forbidden file or ignored directory, add it.
     let newFile = null
     let newDir = null
-    for (let f of filelist) {
+    for (const f of filelist) {
       // First check if this thing is already added. If so, simply write
       // the existing file/dir into the newFile/newDir vars. They will be
       // opened accordingly.
       if ((newFile = this._fsal.findFile(f)) != null) {
+        // Open the file immediately
+        await this.openFile(newFile.path, true)
         // Also set the newDir variable so that Zettlr will automatically
-        // navigate to the directory.
+        // navigate to the directory. The directory of the latest file will
+        // remain open afterwards.
         newDir = newFile.parent
       } else if ((newDir = this._fsal.findDir(f)) != null) {
         // Do nothing
       } else if (global.config.addPath(f)) {
-        let loaded = await this._fsal.loadPath(f)
-        if (!loaded) continue
-        let file = this._fsal.findFile(f)
-        if (file !== null) await this.openFile(file.path)
+        try {
+          const loaded = await this._fsal.loadPath(f)
+          if (loaded) {
+            // If it was a file and not a directory, immediately open it.
+            let file = this._fsal.findFile(f)
+            if (file !== null) {
+              await this.openFile(file.path, true)
+            }
+          } else {
+            global.config.removePath(f)
+          }
+        } catch (err: any) {
+          // Something went wrong, so remove the path again.
+          global.config.removePath(f)
+          throw err // The caller needs to handle this.
+        }
       } else {
         global.notify.normal(trans('system.error.open_root_error', path.basename(f)))
         global.log.error(`Could not open new root file ${f}!`)
