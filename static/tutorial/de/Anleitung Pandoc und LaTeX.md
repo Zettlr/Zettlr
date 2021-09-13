@@ -39,7 +39,6 @@ Wenn du Homebrew installiert hast, kannst du Pandoc installieren, indem du die f
 
 ```bash
 $ brew install pandoc
-$ brew install pandoc-citeproc
 ```
 
 > `pandoc-citeproc` musst du nur separat installieren, wenn deine Pandoc-Version kleiner als 2.11 ist. Auf anderen Plattformen wird Citeproc in jedem Fall automatisch mit installiert.

@@ -32,7 +32,6 @@ Sous macOS, il est recommandé d'installer Pandoc en utilisant Homebrew. Homebre
 
 ```bash
 $ brew install pandoc
-$ brew install pandoc-citeproc
 ```
 
 `pandoc-citeproc` est le moteur dont vous avez besoin pour citer vos références avec Zettlr. (Il est automatiquement installé sur les autres systèmes d'exploitation ou si vous utilisez l'installateur de paquets.)
