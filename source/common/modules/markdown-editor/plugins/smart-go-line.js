@@ -32,8 +32,14 @@ const { getListTokenRE } = require('../../../regular-expressions');
 
   const listRE = getListTokenRE()
 
+  /**
+   * Goes to the start of the line, but takes into account list formatting
+   * characters (so that the cursor initially only lands *after* the character).
+   *
+   * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
+   */
   CodeMirror.commands.goLineLeftMarkdown = function (cm) {
-    if (cm.getOption('disableInput')) {
+    if (cm.getOption('disableInput') === true) {
       return CodeMirror.Pass
     }
 
@@ -62,11 +68,13 @@ const { getListTokenRE } = require('../../../regular-expressions');
       const startOfItem = leadingWhite + tokenLength + afterWhite
 
       if (cur.ch <= startOfItem) {
+        // The cursor is either directly at the start of the list item's
+        // contents or before that, so simply execute the "goLineLeft" command.
         cm.execCommand('goLineLeft')
       } else {
         // We are in a list and we also are more to the right than the start of
         // the item, so move to that.
-        cm.setSelection({ line: cur.line, ch: startOfItem })
+        cm.extendSelection({ line: cur.line, ch: startOfItem })
       }
     }
   }
