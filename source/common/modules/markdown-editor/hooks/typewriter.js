@@ -39,6 +39,7 @@ function typewriter (cm) {
     if (lastHighlightLine > -1) {
       // Cleanup after option change
       cm.removeLineClass(lastHighlightLine, 'background', 'typewriter-active-line')
+      cm.removeLineClass(lastHighlightLine, 'text', 'typewriter-active-line')
       const codeElement = cm.getWrapperElement().querySelector('.CodeMirror-code')
       codeElement.style.marginTop = ''
       codeElement.style.marginBottom = ''
@@ -56,8 +57,10 @@ function typewriter (cm) {
     for (let i = 0; i < cm.lineCount(); i++) {
       if (highlightLine === i) {
         cm.addLineClass(i, 'background', 'typewriter-active-line')
+        cm.addLineClass(i, 'text', 'typewriter-active-line')
       } else {
         cm.removeLineClass(i, 'background', 'typewriter-active-line')
+        cm.removeLineClass(i, 'text', 'typewriter-active-line')
       }
     }
 
