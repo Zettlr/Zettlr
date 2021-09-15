@@ -6,7 +6,7 @@
             "Furkan Taskin \u003Ctaskinfurkan1@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-06-08T22:06:57.000000Z"
+        "updated_at": "2021-09-02T15:40:13.000000Z"
     },
     "dialog": {
         "about": {
@@ -35,11 +35,18 @@
             "cancel": "\u0130ptal",
             "choose_path": "Klas\u00f6r se\u00e7 ...",
             "close": "Kapat",
+            "close_without_saving": "De\u011fi\u015fiklikleri kaydetmeden kapat",
             "save": "Kaydet"
         },
         "custom_css": {
             "info": "Burada daha da ileri \u00f6zelle\u015ftirmeler i\u00e7in Zettlr'\u0131n stillerini d\u00fczenleyebilirsiniz. \u003Cstrong\u003EDikkat: Bu dosya t\u00fcm CSS y\u00f6nergelerinin de\u011fi\u015fmesine sebebiyet verir! Asla elementlerin geometrisini de\u011fi\u015ftirmeyin, di\u011fer t\u00fcrl\u00fc uygulama beklenmedik davran\u0131\u015flar sergileyebilir!\u003C/strong\u003E",
             "title": "\u00d6zel CSS"
+        },
+        "defaults": {
+            "explanation": "\u0130\u00e7e veya d\u0131\u015far\u0131 aktarmalar i\u00e7in varsay\u0131lan ayarlar\u0131 buradan d\u00fczenleyin",
+            "exporting_title": "D\u0131\u015far\u0131 Aktarma",
+            "importing_title": "\u0130\u00e7eri Aktarma",
+            "restore": "Varsay\u0131lanlar dosyas\u0131n\u0131 geri y\u00fckle"
         },
         "dir_new": {
             "placeholder": "Dizin Ad\u0131",
@@ -68,9 +75,13 @@
         },
         "filter_tags": "Etiketleri filtrele",
         "find": {
+            "close_label": "Aramay\u0131 kapat",
             "find_label": "Bul",
             "find_placeholder": "Bul...",
+            "regex_label": "Kurall\u0131 ifade (RegEx) aramas\u0131n\u0131 a\u00e7/kapat",
+            "replace_all_label": "T\u00fcm kullan\u0131mlar\u0131 de\u011fi\u015ftir",
             "replace_label": "De\u011fi\u015ftir",
+            "replace_next_label": "Sonraki kullan\u0131m\u0131 de\u011fi\u015ftir",
             "replace_placeholder": "\u0130le de\u011fi\u015ftir"
         },
         "paste_image": {
@@ -164,6 +175,12 @@
             "auto_dark_mode_schedule": "Program",
             "auto_dark_mode_schedule_format": "SS:DD (24 saat format\u0131)",
             "auto_dark_mode_system": "\u0130\u015fletim Sistemini Takip Et",
+            "auto_save": {
+                "delayed": "K\u0131sa bir s\u00fcre sonra",
+                "immediately": "Hemen",
+                "label": "Otomatik kaydet",
+                "off": "Kapal\u0131"
+            },
             "autocomplete_accept_space": "Otomatik tamamlama esnas\u0131nda bo\u015fluklar\u0131 kabul et",
             "autocorrect": {
                 "active_label": "OtomatikD\u00fczeltme'yi a\u00e7",
@@ -186,7 +203,9 @@
             "default_image_save_path": "Varsay\u0131lan resim yolu (g\u00f6receli veya mutlak)",
             "delete_on_fail": "\u00d6gelerin \u00e7\u00f6p kutusuna ta\u015f\u0131nmas\u0131 m\u00fcmk\u00fcn de\u011filse kal\u0131c\u0131 olarak sil",
             "display": {
+                "image_height": "G\u00f6rsellerin maksimum y\u00fcksekli\u011fi (y\u00fczdelik)",
                 "image_size_info": "Bu kontroller ile g\u00f6r\u00fcnt\u00fc \u00f6nizlemelerini s\u0131n\u0131rland\u0131rabilirsiniz.",
+                "image_width": "G\u00f6rsellerin minimum y\u00fcksekli\u011fi (y\u00fczdelik)",
                 "preview_info": "Bu ayarlar belgelerde hangi elementlerin g\u00f6sterilece\u011fini belirler.",
                 "render_citations": "At\u0131flar\u0131 g\u00f6ster",
                 "render_htags": "Ba\u015fl\u0131k karakterlerini gizle",
@@ -234,6 +253,7 @@
             "homeEndBehaviour": "\u003Ckbd\u003EHome\u003C/kbd\u003E ve \u003Ckbd\u003EEnd\u003C/kbd\u003E i\u00e7in CodeMirror varsay\u0131lan eylemlerini kullan.",
             "indent_unit": "Bu bo\u015fluk say\u0131s\u0131na g\u00f6re girinti ekle",
             "input_mode": "Edit\u00f6r 'girdi' y\u00f6ntemi",
+            "leave_app_running_in_the_notification_area": "Uygulamay\u0131 bildirim alan\u0131nda \u00e7al\u0131\u015f\u0131r halde b\u0131rak",
             "modtime": "Son d\u00fczenleme zaman\u0131",
             "mute_lines": "Rahats\u0131z etme modunda odaklan\u0131lmam\u0131\u015f sat\u0131rlar\u0131 sustur",
             "new_file_dont_prompt": "Yeni dosya olu\u015ftururken dosya ad\u0131 sorma",
@@ -285,6 +305,7 @@
             "project": {
                 "csl_style": "CSL-Stili (opsiyonel)",
                 "format": "Projeyi \u015furaya aktar:",
+                "name_label": "Format",
                 "title": "Proje ayarlar",
                 "title_label": "Proje Ba\u015fl\u0131\u011f\u0131"
             },

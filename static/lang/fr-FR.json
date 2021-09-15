@@ -17,7 +17,7 @@
             "Joris"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-07-02T13:39:07.000000Z"
+        "updated_at": "2021-09-02T16:54:17.000000Z"
     },
     "dialog": {
         "about": {
@@ -53,6 +53,12 @@
             "info": "Vous pouvez modifier l'apparence de l'application ici. \u003Cstrong\u003EAttention : ce fichier peut \u00e9craser toutes les directives de CSS ! Ne jamais modifier la g\u00e9om\u00e9trie des \u00e9l\u00e9ments, sinon l'application pourrait avoir un comportement d'affichage ind\u00e9sirable !\u003C/strong\u003E",
             "title": "CSS personnalis\u00e9"
         },
+        "defaults": {
+            "explanation": "Modifier les param\u00e8tres par d\u00e9faut pour les importations ou les exportations.",
+            "exporting_title": "Exportation",
+            "importing_title": "Importation",
+            "restore": "Restaurer le fichier par d\u00e9faut"
+        },
         "dir_new": {
             "placeholder": "Nom du dossier",
             "value": "Sans nom"
@@ -83,6 +89,7 @@
             "close_label": "Fermer la recherche",
             "find_label": "Trouver",
             "find_placeholder": "Trouver\u2026",
+            "regex_label": "Basculer la recherche d'expressions r\u00e9guli\u00e8res",
             "replace_all_label": "Remplacer toutes les occurrences",
             "replace_label": "Remplacer",
             "replace_next_label": "Remplacer la prochaine occurrence",
@@ -179,6 +186,12 @@
             "auto_dark_mode_schedule": "Horaires",
             "auto_dark_mode_schedule_format": "HH:MM (format 24h)",
             "auto_dark_mode_system": "Utiliser l'horloge syst\u00e8me",
+            "auto_save": {
+                "delayed": "Apr\u00e8s un court d\u00e9lai",
+                "immediately": "Imm\u00e9diatement",
+                "label": "Sauvegarde automatique",
+                "off": "D\u00e9sactiv\u00e9"
+            },
             "autocomplete_accept_space": "Accepter les espaces lors de la saisie semi-automatique",
             "autocorrect": {
                 "active_label": "Activer AutoCorrect",
@@ -324,6 +337,8 @@
                 "title": "V\u00e9rification orthographique"
             },
             "theme": {
+                "accent_color_info": "Ce param\u00e8tre est uniquement disponible sur Windows et macOS",
+                "accent_color_label": "Utilisez la couleur d'accentuation du syst\u00e8me d'exploitation au lieu de la couleur du th\u00e8me",
                 "info": "Choisir le th\u00e8me de l'application.",
                 "title": "Th\u00e8me"
             },
@@ -342,6 +357,7 @@
             "watchdog_checkbox_label": "Activer le d\u00e9compte du chien de garde",
             "watchdog_explainer": "Sur certains ordinateurs, Zettlr peut signaler trop de modifications de fichiers \u00e0 distance. Si cela se produit, essayez d'activer ce param\u00e8tre.",
             "watchdog_threshold_label": "Temps d'attente avant de consid\u00e9rer l\u2019\u00e9criture d\u2019un fichier comme termin\u00e9e (en ms)",
+            "whitelist_hostname": "Nom d'h\u00f4te",
             "xelatex": "Chemin d'acc\u00e8s \u00e0 xelatex. \u00c0 ne changer que si Zettlr ne parvient pas \u00e0 trouver le programme.",
             "xelatex_default": "Par d\u00e9faut : xelatex",
             "zkn": {
@@ -376,6 +392,11 @@
                 "var_year_two": "Ann\u00e9e (deux chiffres)"
             }
         },
+        "snippets": {
+            "explanation": "Les extraits vous permettent de d\u00e9finir des morceaux de texte r\u00e9utilisables avec des variables.",
+            "rename": "Renommer l'extrait",
+            "title": "Extraits"
+        },
         "statistics": {
             "compare": "Comparer \u00e0 la p\u00e9riode pr\u00e9c\u00e9dente",
             "day": "Date",
@@ -384,7 +405,8 @@
             "previous_frame": "P\u00e9riode pr\u00e9c\u00e9dente",
             "tabs": {
                 "calendar_label": "Calendrier",
-                "chart_label": "Graphiques"
+                "chart_label": "Graphiques",
+                "fsal_label": "Statistiques FSAL"
             },
             "this_frame": "P\u00e9riode courante",
             "title": "Statistiques d\u2019\u00e9criture",
@@ -394,8 +416,10 @@
             "year": "Ann\u00e9e"
         },
         "tag_cloud": {
+            "add_to_file": "Ajouter au fichier",
             "copy": "Copier dans le presse-papier",
             "info": "Vous trouverez ici tous les mots-cl\u00e9s que vous avez utilis\u00e9s dans l\u2019ensemble de vos fichiers. Vous pouvez copier la liste compl\u00e8te dans le presse-papier. Survolez les mots-cl\u00e9s pour voir le nombre de fois o\u00f9 vous les avez utilis\u00e9s.",
+            "suggestions_label": "\u00c9tiquettes sugg\u00e9r\u00e9es pour le fichier actuel",
             "title": "Nuage de mots-cl\u00e9s"
         },
         "tags": {
@@ -448,6 +472,7 @@
         "avg_not_reached": "\u270d\ud83c\udffc \u00c9crire pour d\u00e9passer votre moyenne.",
         "avg_surpassed": "\ud83d\udd25 Vous \u00eates en feu !",
         "avg_words": "Moyenne quotidienne",
+        "chars": "%s caract\u00e8res",
         "citeproc": {
             "error_db": "Le fichier de bibliographie n'a pas \u00e9t\u00e9 charg\u00e9",
             "error_report_message": "%s d\u2019\u00e9l\u00e9ments de votre biblioth\u00e8que qui n\u2019ont pas pu \u00eatre charg\u00e9s en raison d\u2019erreurs. Merci de lire les messages d\u2019erreur ci-dessous pour voir quelles CiteKeys ont \u00e9t\u00e9 mal form\u00e9es et quelle \u00e9tait l\u2019erreur.",
@@ -488,12 +513,35 @@
             "tasklist": "Liste de t\u00e2ches",
             "ul": "Liste non ordonn\u00e9e"
         },
+        "global_search": {
+            "clear_label": "Effacer la recherche",
+            "query_label": "Entrez vos termes de recherche ci-dessous",
+            "query_placeholder": "Trouver\u2026",
+            "restrict_dir_label": "Restreindre la recherche au r\u00e9pertoire",
+            "restrict_dir_placeholder": "Restreindre au r\u00e9pertoire\u2026",
+            "search_label": "Chercher"
+        },
         "modified": "Modifi\u00e9",
+        "months": {
+            "apr": "avril",
+            "aug": "aout",
+            "dec": "d\u00e9cembre",
+            "feb": "f\u00e9vrier",
+            "jan": "janvier",
+            "jul": "juillet",
+            "jun": "juin",
+            "mar": "mars",
+            "may": "mai",
+            "nov": "novembre",
+            "oct": "octobre",
+            "sep": "septembre"
+        },
         "no_attachments": "Aucun annexe",
         "no_dir_selected": "Aucun r\u00e9pertoire s\u00e9lectionn\u00e9",
         "no_open_document": "Aucun document ouvert",
         "no_other_files": "Pas d'autres fichiers",
         "no_reference_message": "Pas de texte de r\u00e9f\u00e9rence",
+        "no_related_files": "Aucun fichier associ\u00e9",
         "no_search_results": "Aucun r\u00e9sultat",
         "number_selections": "%s s\u00e9lections",
         "other_files": "Autres fichiers",
@@ -539,6 +587,7 @@
         "donate": "Soutenir Zettlr",
         "duplicate_file": "Dupliquer le fichier",
         "export": "Exporter\u2026",
+        "filter_files": "Filtrer les fichiers",
         "find_dir": "Trouver dans le dossier",
         "find_file": "Trouver dans le fichier",
         "generate_id": "Cr\u00e9er un nouvel identifiant",
@@ -737,7 +786,8 @@
         "show_toc": "Afficher la table des mati\u00e8res",
         "stats": "Voir les statistiques",
         "tag_cloud": "Mots-cl\u00e9s",
-        "toggle_attachments": "Voir les annexes"
+        "toggle_attachments": "Voir les annexes",
+        "toggle_file_manager": "Gestionnaire de fichiers"
     },
     "tray": {
         "show_zettlr": "Afficher Zettlr",
