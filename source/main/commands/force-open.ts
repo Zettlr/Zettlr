@@ -70,7 +70,7 @@ export default class ForceOpen extends ZettlrCommand {
     } else if (autoCreate) {
       // Call the file-new command on the application, which'll do all
       // necessary steps for us.
-      await this._app.runCommand('file-new', { 'name': arg })
+      await this._app.runCommand('file-new', { name: arg })
     }
   }
 }
