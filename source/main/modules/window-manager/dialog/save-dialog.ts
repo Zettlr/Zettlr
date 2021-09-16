@@ -37,7 +37,7 @@ export default async function saveFileDialog (win: BrowserWindow|null, filename:
     title: trans('system.save_file'),
     // If the caller has provided an absolute path to a file, start there. Otherwise,
     // concatenate the startdir
-    defaultPath: (isDir(path.dirname(filename))) ? path.join(startDir, filename) : filename,
+    defaultPath: (isDir(path.dirname(filename))) ? filename : path.join(startDir, filename),
     properties: [ 'createDirectory', 'showOverwriteConfirmation' ]
   }
 
