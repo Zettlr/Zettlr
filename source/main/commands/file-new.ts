@@ -34,11 +34,17 @@ export default class FileNew extends ZettlrCommand {
    * @return {void}     This function does not return anything.
    */
   async run (evt: string, arg: { name?: string, path?: string, type?: 'md'|'yaml'|'json'|'tex' }): Promise<void> {
-    const newFileDontPrompt: boolean = global.config.get('newFileDontPrompt')
-
+    // A few notes on how this command works with respect to its input. As you
+    // can see, all parameters are optional and all which are missing will be
+    // inferred from context (otherwise the command will fail). The type
+    // defaults to Markdown, obviously, the path to the current directory and
+    // the name has the following function: If it is given, the user will not
+    // be asked for a filename, but if it's missing, a new name will be
+    // generated and the user is asked to confirm the name.
+    const shouldPromptUser = global.config.get('newFileDontPrompt') === false
     const type = (arg.type !== undefined) ? arg.type : 'md'
 
-    if (evt === 'new-unsaved-file' && !newFileDontPrompt) {
+    if (evt === 'new-unsaved-file' && shouldPromptUser) {
       // We should simply create a new unsaved file that only resides in memory
       const file = await this._app.getDocumentManager().newUnsavedFile(type)
       // Set it as active
@@ -49,6 +55,7 @@ export default class FileNew extends ZettlrCommand {
     let dir = this._app.getFileSystem().openDirectory
 
     if (arg?.path !== undefined) {
+      console.log('Path given: Selecting the directory:', arg.path)
       dir = this._app.getFileSystem().findDir(arg.path)
     }
 
@@ -57,17 +64,12 @@ export default class FileNew extends ZettlrCommand {
       return
     }
 
-    // Make sure we have a filename
-    if (arg.name === undefined) {
-      arg.name = generateFilename()
-    }
-
-    if (!newFileDontPrompt) {
-      console.log(dir.path, arg.name)
+    // Make sure we have a filename and have the user confirm this if applicable
+    if (arg.name === undefined && shouldPromptUser) {
       // The user wishes to confirm the filename
-      const chosenPath = await this._app.saveFile(path.join(dir.path, arg.name))
+      const chosenPath = await this._app.saveFile(path.join(dir.path, generateFilename()))
       if (chosenPath === undefined) {
-        global.log.error('Could not create new file since the dialog was aborted.')
+        global.log.info('Did not create new file since the dialog was aborted.')
         return
       }
 
@@ -82,6 +84,9 @@ export default class FileNew extends ZettlrCommand {
           return
         }
       }
+    } else if (arg.name === undefined) {
+      // Just generate a name.
+      arg.name = generateFilename()
     }
 
     try {
