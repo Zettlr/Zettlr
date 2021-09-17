@@ -120,10 +120,17 @@ module.exports = {
       'entitlements-inherit': 'scripts/assets/entitlements.plist',
       'signature-flags': 'library'
     },
-    osxNotarize: {
-      appleId: process.env['APPLE_ID'],
-      appleIdPassword: process.env['APPLE_ID_PASS']
-    },
+    // Since electron-notarize 1.1.0 it will throw instead of simply print a
+    // warning to the console, so we have to actively check if we should
+    // notarize or not. We do so by checking for the necessary environment
+    // variables and set the osxNotarize option to false otherwise to prevent
+    // notarization.
+    osxNotarize: ('APPLE_ID' in process.env && 'APPLE_ID_PASS' in process.env)
+      ? {
+          appleId: process.env['APPLE_ID'],
+          appleIdPassword: process.env['APPLE_ID_PASS']
+        }
+      : false,
     extraResource: [
       'resources/icons/icon.code.icns'
     ]
