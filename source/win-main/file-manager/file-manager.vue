@@ -34,9 +34,17 @@
         v-on:selection="selectionListener"
       ></FileTree>
       <!-- Now render the file list -->
+      <!--
+        Why are we using both class: hidden (via isFileListVisible) as well
+        as v-show? Well, there is a super weird display glitch that will show
+        the file list and overlay it over the file tree if we start the app in
+        combined mode sometimes. This somehow fixes it, but if anyone has an
+        idea what is happening, please come forward.
+      -->
       <FileList
+        v-show="!isCombined"
         ref="fileList"
-        v-bind:is-visible="fileListVisible"
+        v-bind:is-visible="isFileListVisible"
         v-on:lock-file-tree="lockDirectoryTree()"
       ></FileList>
     </div>
@@ -153,6 +161,10 @@ export default {
      * Toggles the fileList's visibility, if applicable.
      */
     toggleFileList: function () {
+      if (this.isThin === false) {
+        return // Do not toggle if we're not in thin mode.
+      }
+
       if (this.lockedTree === true) {
         return // Don't toggle in case of a lockdown
       }
@@ -163,10 +175,6 @@ export default {
         this.fileListVisible = false
         this.$refs.arrowButton.classList.add('hidden') // Hide the arrow button
         return
-      }
-
-      if (this.fileTreeVisible === true && this.isThin === false) {
-        return // Can't show the file list
       }
 
       if (this.isFileListVisible === true) {

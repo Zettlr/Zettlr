@@ -4,7 +4,7 @@
     tabindex="1"
     role="region"
     aria-label="File List"
-    v-bind:class="{ 'hidden': !isVisible }"
+    v-bind:class="{ hidden: !isVisible }"
     v-bind:aria-hidden="!isVisible"
     v-bind:data-hash="selectedDirectoryHash"
     v-on:keydown="navigate"
