@@ -196,6 +196,10 @@ export default {
               modtime: this.obj.modtime,
               files: this.obj.children.filter(e => e.type !== 'directory').length,
               dirs: this.obj.children.filter(e => e.type === 'directory').length,
+              totalWords: this.obj.children
+                .filter(file => file.type === 'file')
+                .map(file => file.wordCount)
+                .reduce((prev, cur) => prev + cur, 0),
               isProject: this.obj.type === 'directory' && this.obj.project !== null,
               fullPath: this.obj.path,
               icon: this.obj.icon

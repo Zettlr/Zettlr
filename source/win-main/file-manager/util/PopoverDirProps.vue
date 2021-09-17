@@ -11,6 +11,10 @@
       <div><span>{{ modifiedLabel }}: {{ modificationTime }}</span></div>
       <div><span>{{ foldersLabel }}: {{ formattedDirs }}</span></div>
     </div>
+    <div class="properties-info-container">
+      <div><!-- Placeholder to have the word count flush right --></div>
+      <div><span>{{ formattedWordCount }}</span></div>
+    </div>
     <hr>
     <!-- Sorting options -->
     <SelectControl
@@ -174,6 +178,7 @@ export default {
       modtime: 0,
       files: 0,
       dirs: 0,
+      totalWords: 0,
       sortingType: 'name',
       sortingDirection: 'up',
       isProject: false,
@@ -201,6 +206,9 @@ export default {
     },
     formattedDirs: function () {
       return localiseNumber(this.dirs)
+    },
+    formattedWordCount: function () {
+      return trans('gui.words', localiseNumber(this.totalWords))
     },
     foldersLabel: function () {
       return trans('gui.dirs')

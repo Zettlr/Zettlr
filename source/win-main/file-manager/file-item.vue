@@ -9,11 +9,11 @@
     <div
       v-bind:class="{
         'list-item': true,
-        'project': obj.type === 'directory' && obj.project !== null,
-        'selected': selectedFile !== null && obj.path === selectedFile.path,
-        'active': activeFile !== null && obj.path === activeFile.path,
+        project: obj.type === 'directory' && obj.project !== null,
+        selected: selectedFile !== null && obj.path === selectedFile.path,
+        active: activeFile !== null && obj.path === activeFile.path,
         'has-meta-info': fileMeta,
-        'directory': obj.type === 'directory'
+        directory: obj.type === 'directory'
       }"
       v-bind:data-id="obj.id"
       v-bind:data-filename="getFilename"
@@ -52,6 +52,7 @@
         <div v-if="isDirectory">
           <span class="badge">{{ countDirs }}</span>
           <span class="badge">{{ countFiles }}</span>
+          <span class="badge">{{ countWords }}</span>
         </div>
         <template v-else>
           <div v-if="hasTags">
@@ -223,6 +224,18 @@ export default {
         return 0
       }
       return this.obj.children.filter(e => [ 'file', 'code' ].includes(e.type)).length + ' ' + trans('system.files') || 0
+    },
+    countWords: function () {
+      if (this.isDirectory === false) {
+        return 0
+      }
+
+      const wordCount = this.obj.children
+        .filter(file => file.type === 'file')
+        .map(file => file.wordCount)
+        .reduce((prev, cur) => prev + cur, 0)
+
+      return trans('gui.words', localiseNumber(wordCount))
     },
     countTags: function () {
       if (this.obj.type !== 'file') {
