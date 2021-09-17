@@ -280,6 +280,12 @@
   }
 }
 
+// Hacky theming to remove the padding from the tippy since we don't want that
+// See: https://atomiks.github.io/tippyjs/v6/themes/
+body .tippy-box[data-theme~='no-padding'] {
+  .tippy-content { padding: 0; }
+}
+
 body .tippy-content {
   .editor-formatting-bar {
     // Style the formatting bar
@@ -289,6 +295,9 @@ body .tippy-content {
     .button {
       display: inline-block;
       padding: 4px 8px;
+      width: 35px;
+      height: 35px;
+      line-height: 25px;
 
       &:first-child {
         border-top-left-radius: 4px;

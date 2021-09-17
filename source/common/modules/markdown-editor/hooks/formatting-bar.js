@@ -98,7 +98,8 @@ function showFormattingBar (cm) {
         formattingBar.destroy()
         formattingBar = undefined
       }
-    }
+    },
+    theme: 'no-padding'
   })
 
   /**
