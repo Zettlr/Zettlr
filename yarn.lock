@@ -1098,10 +1098,10 @@ acorn@^8.4.1:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.4.1.tgz#56c36251fc7cabc7096adc18f05afe814321a28c"
   integrity sha512-asabaBSkEKosYKMITunzX177CXxQ4Q8BSSzMTKD+FefUhipQC70gfW5SiUDhYQ3vk8G+81HqQk7Fv9OXwwn9KA==
 
-adm-zip@^0.5.5:
-  version "0.5.5"
-  resolved "https://registry.yarnpkg.com/adm-zip/-/adm-zip-0.5.5.tgz#b6549dbea741e4050309f1bb4d47c47397ce2c4f"
-  integrity sha512-IWwXKnCbirdbyXSfUDvCCrmYrOHANRZcc8NcRrvTlIApdl7PwE9oGcsYvNeJPAVY1M+70b4PxXGKIf8AEuiQ6w==
+adm-zip@^0.5.6:
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/adm-zip/-/adm-zip-0.5.6.tgz#c540f4d62b0f07a716bce4c8a24545b1f0b33027"
+  integrity sha512-nUeYhBHLG08VFOkVwai0pLXge6NNlahH+ccwxXodvl+SLa5l9mXHjg40jRVzofRPz29goiTGze7vIKmCltKtSA==
 
 agent-base@6, agent-base@^6.0.2:
   version "6.0.2"
