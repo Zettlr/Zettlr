@@ -57,10 +57,7 @@ function findPathDescriptor (targetPath: string, tree: any, treatAsAttachment: b
       if (targetPath === descriptor.path) {
         // We have the correct element
         return descriptor
-        // I "fixed" eslint's complaint that both descriptor.path and path.sep must be explicit strings, but since I am new to JavaScript and 
-        // its relationship to node.js, why do I need to do this? Isn't path.sep defined in node.js as to return a string? Perhaps, when building the 
-        // directory "tree" should paths be coerced to strings there? 
-      } else if (targetPath.startsWith((descriptor.path as string) + (path.sep as string)) && descriptor.type === 'directory') {
+      } else if (targetPath.startsWith(String(descriptor.path) + String(path.sep)) && descriptor.type === 'directory') {
         // We have the correct tree
         return findPathDescriptor(targetPath, descriptor[prop], treatAsAttachment)
       }
@@ -76,7 +73,7 @@ function findPathDescriptor (targetPath: string, tree: any, treatAsAttachment: b
       if (targetPath === child.path) {
         // We got the correct child
         return child
-      } else if (targetPath.startsWith((child.path as string) + (path.sep as string)) && child.type === 'directory') {
+      } else if (targetPath.startsWith(String(child.path) + String(path.sep)) && child.type === 'directory') {
         // Traverse further down
         return findPathDescriptor(targetPath, child[prop], treatAsAttachment)
       }
