@@ -36,6 +36,7 @@ export const plugin: ExporterPlugin = {
         'org': 'Orgmode',
         'plain': 'Plain Text',
         'rst': 'reStructured Text',
+        'markdown': 'Markdown',
         'rtf': 'RichText Format',
         'icml': 'InDesign Markup Language (ICML)'
       },
