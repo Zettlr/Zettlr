@@ -25,6 +25,7 @@ import { MDFileMeta, CodeFileMeta, DirMeta } from '../main/modules/fsal/types'
 const path = (window as any).path
 const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
+
 interface FSALEvent {
   event: 'remove'|'add'|'change'
   path: string
@@ -54,10 +55,11 @@ function findPathDescriptor (targetPath: string, tree: any, treatAsAttachment: b
   // We need to find a target
   if (Array.isArray(tree)) {
     for (const descriptor of tree) {
+      console.warn(`Descriptor path ${String(descriptor.path)}, target ${String(targetPath)}`)
       if (targetPath === descriptor.path) {
         // We have the correct element
         return descriptor
-      } else if (targetPath.startsWith(descriptor.path) && descriptor.type === 'directory') {
+      } else if (targetPath.startsWith(descriptor.path+path.sep) && descriptor.type === 'directory') {
         // We have the correct tree
         return findPathDescriptor(targetPath, descriptor[prop], treatAsAttachment)
       }
@@ -73,7 +75,7 @@ function findPathDescriptor (targetPath: string, tree: any, treatAsAttachment: b
       if (targetPath === child.path) {
         // We got the correct child
         return child
-      } else if (targetPath.startsWith(child.path) && child.type === 'directory') {
+      } else if (targetPath.startsWith(child.path+path.sep) && child.type === 'directory') {
         // Traverse further down
         return findPathDescriptor(targetPath, child[prop], treatAsAttachment)
       }
