@@ -55,7 +55,6 @@ function findPathDescriptor (targetPath: string, tree: any, treatAsAttachment: b
   // We need to find a target
   if (Array.isArray(tree)) {
     for (const descriptor of tree) {
-      console.warn(`Descriptor path ${String(descriptor.path)}, target ${String(targetPath)}`)
       if (targetPath === descriptor.path) {
         // We have the correct element
         return descriptor
