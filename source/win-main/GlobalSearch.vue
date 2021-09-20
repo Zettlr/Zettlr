@@ -49,8 +49,16 @@
     </div>
     <!-- Finally, display all search results, per file and line. -->
     <template v-if="searchResults.length > 0">
+      <!-- First, display a filter ... -->
+      <TextControl
+        ref="filter"
+        v-model="filter"
+        v-bind:placeholder="filterPlaceholder"
+        v-bind:label="filterLabel"
+      ></TextControl>
+      <!-- ... then the search results. -->
       <div
-        v-for="result, idx in searchResults"
+        v-for="result, idx in filteredSearchResults"
         v-bind:key="idx"
         class="search-result-container"
       >
@@ -129,6 +137,8 @@ export default {
     return {
       // The current search
       query: '',
+      // An additional query allowing search results to be filtered further
+      filter: '',
       // Whether or not we should restrict search to a given directory
       restrictToDir: '',
       // All directories we've found in the file tree
@@ -189,6 +199,12 @@ export default {
     queryInputPlaceholder: function () {
       return trans('gui.global_search.query_placeholder')
     },
+    filterPlaceholder: function () {
+      return trans('system.common.filter')
+    },
+    filterLabel: function () {
+      return trans('gui.global_search.filter_label')
+    },
     restrictDirLabel: function () {
       return trans('gui.global_search.restrict_dir_label')
     },
@@ -206,6 +222,53 @@ export default {
     },
     sep: function () {
       return path.sep
+    },
+    /**
+     * Allows search results to be further filtered
+     */
+    filteredSearchResults: function () {
+      if (this.filter === '') {
+        return this.searchResults
+      }
+
+      // Search results have the following structure:
+      // {
+      //   file: {
+      //     path: Full path to the file
+      //     relativeDirectoryPath: Relative to the containing root
+      //     filename: The filename
+      //     displayName: If applicable the title/h1, else filename
+      //   }
+      //   result: [{
+      //     restext: The line's text content
+      //     line: The line number
+      //     ranges: The from-to ranges (array with from and to numbers)
+      //   }]
+      // }
+      const lowercase = this.filter.toLowerCase()
+
+      return this.searchResults.filter(result => {
+        // First check the actual results in the files
+        for (const lineResult of result.result) {
+          if (lineResult.restext.toLowerCase().includes(lowercase) === true) {
+            return true
+          }
+        }
+
+        // Next, try the different variations on filename and displayName
+        if (result.file.filename.toLowerCase().includes(lowercase) === true) {
+          return true
+        }
+        if (result.file.displayName.toLowerCase().includes(lowercase) === true) {
+          return true
+        }
+        if (result.file.path.toLowerCase().includes(lowercase) === true) {
+          return true
+        }
+
+        // No luck here.
+        return false
+      })
     }
   },
   watch: {
@@ -335,6 +398,7 @@ export default {
 
       // Now we're good to go!
       this.emptySearchResults()
+      this.filter = '' // Reset the filter
       this.sumFilesToSearch = fileList.length
       this.filesToSearch = fileList
       this.maxWeight = 0
