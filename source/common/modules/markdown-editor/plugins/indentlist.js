@@ -48,25 +48,44 @@ const { getListTokenRE } = require('../../../regular-expressions');
     }
   }
 
+  /**
+   * Automatically indents a Markdown list if applicable
+   *
+   * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
+   *
+   * @return  {undefined|CodeMirror.Pass}      The command return
+   */
   CodeMirror.commands.autoIndentMarkdownList = function (cm) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (cm.isReadOnly()) {
+      return CodeMirror.Pass
+    }
+
     const ranges = cm.listSelections()
     for (let i = 0; i < ranges.length; i++) {
       const pos = ranges[i].head
 
       if (!ranges[i].empty() || !matchListToken(pos, cm)) {
         /* If no match, call regular Tab handler */
-        // cm.execCommand('indentMore')
-        return CodeMirror.Pass
+        cm.execCommand('indentMore')
+      } else {
+        /* Select the whole list line and indent it by one unit */
+        cm.indentLine(pos.line, 'add')
       }
-
-      /* Select the whole list line and indent it by one unit */
-      cm.indentLine(pos.line, 'add')
     }
   }
 
+  /**
+   * Automatically unindents a Markdown list if applicable
+   *
+   * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
+   *
+   * @return  {undefined|CodeMirror.Editor.Pass}      The command return
+   */
   CodeMirror.commands.autoUnindentMarkdownList = function (cm) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (cm.isReadOnly()) {
+      return CodeMirror.Pass
+    }
+
     const ranges = cm.listSelections()
     for (let i = 0; i < ranges.length; i++) {
       const pos = ranges[i].head
@@ -74,11 +93,10 @@ const { getListTokenRE } = require('../../../regular-expressions');
       if (!ranges[i].empty() || !matchListToken(pos, cm)) {
         /* If no match, call regular Shift-Tab handler */
         cm.execCommand('indentLess')
-        return
+      } else {
+        /* Select the whole list line and unindent it by one unit */
+        cm.indentLine(pos.line, 'subtract')
       }
-
-      /* Select the whole list line and unindent it by one unit */
-      cm.indentLine(pos.line, 'subtract')
     }
   }
 })
