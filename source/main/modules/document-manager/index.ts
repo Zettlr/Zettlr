@@ -82,6 +82,7 @@ export default class DocumentManager extends EventEmitter {
         this._loadFile(p)
           .then(newDescriptor => {
             if (newDescriptor.modtime !== descriptor.modtime) {
+              global.log.info(`[Document Manager] Emitting remote change event for file ${newDescriptor.path}`)
               // Replace the old descriptor with the newly loaded one
               this._loadedDocuments.splice(this._loadedDocuments.indexOf(descriptor), 1, newDescriptor)
               // Notify the caller, that the file has actually changed on disk.
