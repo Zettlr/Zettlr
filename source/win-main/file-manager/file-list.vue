@@ -18,7 +18,7 @@
           v-model="filterQuery"
           class="file-manager-filter-input"
           type="search"
-          placeholder="Filter …"
+          v-bind:placeholder="filterPlaceholder"
           v-on:focus="$event.target.select()"
           v-on:blur="activeDescriptor = null"
         />
@@ -146,6 +146,9 @@ export default {
     },
     emptyDirectoryMessage: function () {
       return trans('gui.empty_dir')
+    },
+    filterPlaceholder: function () {
+      return trans('system.common.filter')
     },
     selectedFile: function () {
       return this.$store.state.activeFile

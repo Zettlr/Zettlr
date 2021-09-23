@@ -88,6 +88,13 @@ export default function () {
           model: 'watchdog.stabilityThreshold',
           disabled: global.config.get('watchdog.activatePolling') === false
         }
+      ],
+      [
+        {
+          type: 'checkbox',
+          label: 'EXPERIMENTAL: Relax modification time condition (see issue #1621)',
+          model: 'system.ignoreOlderRevisions'
+        }
       ]
     ]
   }

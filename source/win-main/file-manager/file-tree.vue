@@ -14,7 +14,7 @@
           v-model="filterQuery"
           class="file-manager-filter-input"
           type="search"
-          placeholder="Filter …"
+          v-bind:placeholder="filterPlaceholder"
           v-on:focus="$event.target.select()"
         />
       </div>
@@ -137,6 +137,9 @@ export default {
     },
     fileSectionHeading: function () {
       return trans('gui.files')
+    },
+    filterPlaceholder: function () {
+      return trans('system.common.filter')
     },
     workspaceSectionHeading: function () {
       return trans('gui.workspaces')

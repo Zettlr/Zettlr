@@ -73,7 +73,8 @@ const WRITERS = {
   'org': 'Orgmode',
   'revealjs': 'Reveal.js',
   'plain': 'Plain Text',
-  'rst': 'reStructured Text'
+  'rst': 'reStructured Text',
+  'markdown': 'Markdown'
 }
 
 const READERS = {

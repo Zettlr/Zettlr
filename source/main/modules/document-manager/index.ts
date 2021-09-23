@@ -81,7 +81,12 @@ export default class DocumentManager extends EventEmitter {
       } else if (event === 'change') {
         this._loadFile(p)
           .then(newDescriptor => {
-            if (newDescriptor.modtime !== descriptor.modtime) {
+            const ignoreOlder: boolean = global.config.get('system.ignoreOlderRevisions')
+            // DEBUG: Relax the condition that the modification time must be exactly the same
+            // simply to "must be newer"
+            const condition = (ignoreOlder) ? newDescriptor.modtime > descriptor.modtime : newDescriptor.modtime !== descriptor.modtime
+            if (condition) {
+              global.log.info(`[Document Manager] Emitting remote change event for file ${newDescriptor.path}`)
               // Replace the old descriptor with the newly loaded one
               this._loadedDocuments.splice(this._loadedDocuments.indexOf(descriptor), 1, newDescriptor)
               // Notify the caller, that the file has actually changed on disk.
