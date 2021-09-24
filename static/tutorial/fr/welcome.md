@@ -61,7 +61,7 @@ Mais Zettlr ne prend pas seulement en charge les liens internet courants. Si vou
 
 Maintenant que nous vous avons présenté les bases du Markdown, il est temps de vous montrer d'autres trucs que Zettlr peut faire ! Cliquez maintenant sur l'icône « trois-colonnes » dans le coin supérieur droit de la barre d'outils. Cela ouvrira la barre latérale, qui contient une section « Annexes ». Zettlr vous y montre tous les fichiers non Markdown que vous stockez dans le répertoire sélectionné. Vous pouvez aussi glisser et déposer des fichiers à partir de là vers l'éditeur pour les inclure dans vos documents.
 
-En outre, vous pouvez voir le fichier « Pandoc and LaTeX Guide.pdf ». Vous vous demandez ce que c'est ? Voyons voir : maintenant, cliquez dessus pour ouvrir le fichier avec votre visionneuse PDF par défaut !
+En outre, vous pouvez voir le fichier « LaTeX Guide.pdf ». Vous vous demandez ce que c'est ? Voyons voir : maintenant, cliquez dessus pour ouvrir le fichier avec votre visionneuse PDF par défaut !
 
 Mais la barre latérale ne vous montre pas seulement les fichiers. Dans les deuxième et troisième onglets, vous trouverez les références bibliographiques et une table des matières. La section bibliographie répertorie toutes les références citées du fichier actuellement ouvert — exactement comme la bibliographie d'un article.
 
@@ -75,7 +75,7 @@ La table des matières du troisième onglet est une liste des liens vers chaque 
 
 - [ ] travailler avec des fichiers et des répertoires,
 - [ ] apprendre les bases du Markdown,
-- [ ] installer Pandoc et LaTeX pour exporter mes fichiers.
+- [ ] installer LaTeX pour exporter mes fichiers.
 
 Certains éléments de l'éditeur sont interactifs, tout comme les cases à cocher. Une autre chose qui est très interactive, ce sont les tableaux. Il suffit de jeter un coup d'œil au tableau suivant : survolez-le avec votre souris pour voir apparaître quelques boutons qui vous permettent d'interagir avec !
 

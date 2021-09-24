@@ -71,7 +71,7 @@ Bis hierhin hast du bereits viel über Zettlr und Markdown gelernt. Viele Elemen
 
 - [ ] Mit dem Dateimanager umgehen lernen
 - [ ] Erste Markdown-Elemente lernen
-- [ ] Pandoc und LaTeX für das Exportieren von Dokumenten installiert
+- [ ] LaTeX für das Exportieren von Dokumenten installiert
 
 Auch Tabellen sind interaktiv. Wenn du mit der Maus über Tabellen fährst, werden dir einige Buttons angezeigt, mit welchen du die Tabelle bearbeiten kannst. Mit einem Klick in die einzelnen Tabellenzellen lässt sich ihr Inhalt bearbeiten.
 
