@@ -15,11 +15,11 @@
       v-on:drag="handleDrag"
       v-on:dragend="handleDragEnd"
       v-on:contextmenu="handleContextMenu($event, file)"
+      v-on:mousedown="handleClickFilename($event, file)"
     >
       <span
         class="filename"
         role="button"
-        v-on:mousedown="handleClickFilename($event, file)"
       >{{ getTabText(file) }}</span>
       <span
         class="close"
