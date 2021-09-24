@@ -193,7 +193,7 @@ module.exports = {
 
       // If we're here, we can begin an autocompletion
       autocompleteStart = Object.assign({}, cm.getCursor())
-      currentDatabase = availableDatabases[autocompleteDatabase]
+      currentDatabase = autocompleteDatabase
       cm.showHint({
         hint: hintFunction,
         completeSingle: false,
@@ -333,7 +333,7 @@ function shouldBeginAutocomplete (cm, changeObj) {
  * @return  {any[]}         An array of completion items
  */
 function getHints (term) {
-  let results = currentDatabase.filter((entry) => {
+  let results = availableDatabases[currentDatabase].filter((entry) => {
     // First search the display text, then the entry text itself
     if (
       entry.displayText !== undefined &&
@@ -386,7 +386,7 @@ function hintFunction (cm, opt) {
     // In case the user wants to link a file, intercept during
     // the process and add the file link according to the user's
     // preference settings.
-    if (currentDatabase === availableDatabases['files']) {
+    if (currentDatabase === 'files') {
       // Get the correct setting
       let linkPref = global.config.get('zkn.linkWithFilename')
       // Prepare the text to insert, removing the ID if found in the filename
@@ -435,7 +435,7 @@ function hintFunction (cm, opt) {
         // We need to add the text after the link.
         cm.replaceSelection(prefix + text)
       }
-    } else if (currentDatabase === availableDatabases['syntaxHighlighting']) {
+    } else if (currentDatabase === 'syntaxHighlighting') {
       // In the case of an accepted syntax highlighting, we can assume the user
       // has manually begun writing a code block, so we are probably right
       // to assume that the user would think it's nice if we also add the
@@ -447,7 +447,7 @@ function hintFunction (cm, opt) {
         cm.replaceSelection('\n\n' + match[1])
         cm.setCursor({ line: autocompleteStart.line + 1, ch: 0 })
       }
-    } else if (currentDatabase === availableDatabases['citekeys']) {
+    } else if (currentDatabase === 'citekeys') {
       // Here, what we will add are square brackets, if these are not yet
       // present around the citekey. We know that the cursor is now behind the
       // inserted key. It's easiest to perform a forward search (as most
@@ -491,7 +491,7 @@ function hintFunction (cm, opt) {
         // Now back up one character to set the cursor inside the brackets
         cm.setCursor({ line: lineNo, ch: toCh + 1 })
       }
-    } else if (currentDatabase === availableDatabases['snippets']) {
+    } else if (currentDatabase === 'snippets') {
       // For this database, we must remove the leading colon and also fiddle
       // with the text. So first, let's select everything.
       const insertedLines = completion.text.split('\n')
