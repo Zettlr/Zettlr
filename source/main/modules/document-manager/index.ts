@@ -81,11 +81,11 @@ export default class DocumentManager extends EventEmitter {
       } else if (event === 'change') {
         this._loadFile(p)
           .then(newDescriptor => {
-            const ignoreOlder: boolean = global.config.get('system.ignoreOlderRevisions')
-            // DEBUG: Relax the condition that the modification time must be exactly the same
-            // simply to "must be newer"
-            const condition = (ignoreOlder) ? newDescriptor.modtime > descriptor.modtime : newDescriptor.modtime !== descriptor.modtime
-            if (condition) {
+            // In response to issue #1621: We will not check for equal modtime
+            // but only for newer modtime to prevent sluggish cloud synchronization
+            // services (OneDrive and Box do that) from having text appear to "jump"
+            // from time to time.
+            if (newDescriptor.modtime > descriptor.modtime) {
               global.log.info(`[Document Manager] Emitting remote change event for file ${newDescriptor.path}`)
               // Replace the old descriptor with the newly loaded one
               this._loadedDocuments.splice(this._loadedDocuments.indexOf(descriptor), 1, newDescriptor)
@@ -158,7 +158,9 @@ export default class DocumentManager extends EventEmitter {
 
   /**
    * Sorts the openFiles according to hashArray, and returns the new sorting.
-   * @param {Array} hashArray An array with hashes to sort with
+   *
+   * @param {Array} pathArray An array with absolute paths to sort with
+   *
    * @return {Array} The new sorting
    */
   public sortOpenFiles (pathArray: string[]): Array<MDFileDescriptor|CodeFileDescriptor> {
@@ -177,7 +179,10 @@ export default class DocumentManager extends EventEmitter {
 
   /**
    * Returns a file's metadata including the contents.
-   * @param {Object} file The file descriptor
+   *
+   * @param {string} file The absolute file path
+   *
+   * @return {Promise<MDFileDescriptor|CodeFileDescriptor>} The file's descriptor
    */
   public async openFile (filePath: string): Promise<MDFileDescriptor|CodeFileDescriptor> {
     const openFile = this._loadedDocuments.find(file => file.path === filePath)
@@ -207,7 +212,10 @@ export default class DocumentManager extends EventEmitter {
 
   /**
    * Opens, reads, and parses a file to be loaded.
+   *
    * @param {String} filePath The file to be loaded
+   *
+   * @return {Promise<MDFileDescriptor|CodeFileDescriptor>} The file's descriptor
    */
   private async _loadFile (filePath: string): Promise<MDFileDescriptor|CodeFileDescriptor> {
     // Loads a standalone file
