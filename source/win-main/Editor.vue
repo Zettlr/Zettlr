@@ -119,6 +119,7 @@ export default {
       query: '', // Models the search value
       replaceString: '', // Models the replace string
       findTimeout: undefined, // Holds a timeout so that not every single keypress results in a searchNext
+      docInfoTimeout: undefined, // Holds a timeout to not update the docInfo every millisecond
       // END: Search options
       activeDocument: null, // Almost like activeFile, only with additional info
       anchor: undefined
@@ -452,8 +453,6 @@ export default {
 
     // Update the document info on corresponding events
     this.editor.on('change', (changeObj) => {
-      this.$store.commit('activeDocumentInfo', this.editor.documentInfo)
-      // this.activeDocument.modified = this.activeDocument.cmDoc.isClean()
       // Announce that the file is modified (if applicable) to the whole application
       this.$store.commit('announceModifiedFile', {
         filePath: this.activeDocument.path,
@@ -464,7 +463,10 @@ export default {
     })
 
     this.editor.on('cursorActivity', () => {
-      this.$store.commit('activeDocumentInfo', this.editor.documentInfo)
+      // Don't update every keystroke to not run into performance problems with
+      // very long documents, since calculating the word count needs considerable
+      // time, and without the delay, typing seems "laggy".
+      this.maybeUpdateActiveDocumentInfo()
     })
 
     this.editor.on('zettelkasten-link', (linkContents) => {
@@ -556,6 +558,16 @@ export default {
     obs.observe(this.$refs.editor)
   },
   methods: {
+    maybeUpdateActiveDocumentInfo () {
+      if (this.docInfoTimeout !== undefined) {
+        return // There will be an update soon enough.
+      }
+
+      this.docInfoTimeout = setTimeout(() => {
+        this.$store.commit('activeDocumentInfo', this.editor.documentInfo)
+        this.docInfoTimeout = undefined
+      }, 1000)
+    },
     jtl (lineNumber) {
       if (this.editor !== null) {
         this.editor.jtl(lineNumber)

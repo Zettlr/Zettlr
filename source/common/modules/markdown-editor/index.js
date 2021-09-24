@@ -27,7 +27,7 @@ require('./editor.less')
 
 const getCodeMirrorDefaultOptions = require('./get-cm-options')
 const safeAssign = require('../../util/safe-assign')
-const countWords = require('../../util/count-words')
+const countWords = require('../../util/count-words').default
 const md2html = require('../../util/md-to-html')
 const html2md = require('../../util/html-to-md')
 const generateKeymap = require('./generate-keymap.js')
@@ -734,7 +734,7 @@ module.exports = class MarkdownEditor extends EventEmitter {
    * @return  {Number}  The number of chars without spaces
    */
   get charCountWithoutSpaces () {
-    return countWords(this.value.replace(/[\s ]+/g, ''), true)
+    return countWords(this.value.replace(/ +/g, ''), true)
   }
 
   /**

@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-const countWords = require('../source/common/util/count-words')
+const countWords = require('../source/common/util/count-words').default
 const assert = require('assert')
 
 const countWordsTesters = [
@@ -21,7 +21,7 @@ const countWordsTesters = [
   { 'input': 'Lorem\n\n# Ipsum Dolor', 'expected': 3 },
   { 'input': '\n\n', 'expected': 0 },
   { 'input': '* one\n* two\n* three', 'expected': 3 },
-  { 'input': '#', 'expected': 0 },
+  { 'input': '#', 'expected': 1 },
   { 'input': '---\ntitle: "Some title"\nkeywords:\n  - one\n  - two\n  - three\n...\n\n# Heading\n\nLorem Ipsum dolor, sit amet', 'expected': 6 }
 ]
 
