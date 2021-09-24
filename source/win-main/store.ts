@@ -57,7 +57,7 @@ function findPathDescriptor (targetPath: string, tree: any, treatAsAttachment: b
       if (targetPath === descriptor.path) {
         // We have the correct element
         return descriptor
-      } else if (targetPath.startsWith(descriptor.path) && descriptor.type === 'directory') {
+      } else if (targetPath.startsWith(String(descriptor.path) + String(path.sep)) && descriptor.type === 'directory') {
         // We have the correct tree
         return findPathDescriptor(targetPath, descriptor[prop], treatAsAttachment)
       }
@@ -73,7 +73,7 @@ function findPathDescriptor (targetPath: string, tree: any, treatAsAttachment: b
       if (targetPath === child.path) {
         // We got the correct child
         return child
-      } else if (targetPath.startsWith(child.path) && child.type === 'directory') {
+      } else if (targetPath.startsWith(String(child.path) + String(path.sep)) && child.type === 'directory') {
         // Traverse further down
         return findPathDescriptor(targetPath, child[prop], treatAsAttachment)
       }
