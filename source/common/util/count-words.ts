@@ -11,12 +11,11 @@
  * END HEADER
  */
 
-import { getBlockMathRE, getCodeBlockRE, getListRE, getWysiwygRE } from '../regular-expressions'
+import { getBlockMathRE, getCodeBlockRE, getWysiwygRE } from '../regular-expressions'
 import extractYamlFrontmatter from './extract-yaml-frontmatter'
 
 const mathRE = getBlockMathRE()
 const codeRE = getCodeBlockRE(true)
-const listRE = getListRE()
 const inlineRE = getWysiwygRE()
 
 /**
