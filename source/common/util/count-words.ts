@@ -44,7 +44,6 @@ export default function (markdown: string, countChars = false): number {
   if (!countChars) {
     // Will return the length of the resultant array instead of the string
     content = content.split(/[\s ]+/).filter(word => word.trim() !== '')
-    console.log(content)
   }
 
   return content.length
