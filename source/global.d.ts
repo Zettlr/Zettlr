@@ -23,6 +23,7 @@
  * pointing to wherever the file-loader has put these files.
  */
 declare module '*.png'
+declare module '*.svg'
 
 /**
  * DECLARE ELECTRON-FORGE INSERTION VARIABLES
