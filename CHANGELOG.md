@@ -40,6 +40,7 @@ While in the past it was possible to use the common zoom shortcuts to only zoom 
 - Double-dollar equations are now rendered in display mode.
 - Removed the Pandoc installation item from the help menu.
 - Moved the Pandoc and XeLaTeX settings to the export tab in preferences.
+- Updated the tutorial instructions to install Pandoc
 - Fixed a bug that would delete file if it got renamed as itself.
 - All languages will now be downloaded by the CI workflow. Updates will still be pulled via the application on boot.
 - Removed the ability for the translation provider to arbitrarily request languages that have not been installed in order to remove that fragile feature. All languages will now be provided from the application immediately.

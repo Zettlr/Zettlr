@@ -55,7 +55,7 @@ But Zettlr doesn’t only support common weblinks. If you link to a file that is
 
 Now that we got you covered with the Markdown basics, it’s time to show you some more of the stuff Zettlr can do! Click now on the column-like icon in the top right corner of the toolbar. This will open the sidebar, which contains a section “Attachments.” In there Zettlr shows you all non-Markdown files that you store in the currently selected directory. You can also drag and drop files from there onto the editor to include them in your files.
 
-You can also see the file “Pandoc and LaTeX Guide.pdf”. Wondering what it is? Let’s have a look: Click on it to open the file with your default PDF viewer now!
+You can also see the file "LaTeX Guide.pdf". Wondering what it is? Let’s have a look: Click on it to open the file with your default PDF viewer now!
 
 But the sidebar doesn't only show you files. In the second and third tab, you can find references and a table of contents. The reference section lists all the cited works from the currently open file – exactly like a references section of a paper.
 
@@ -69,7 +69,7 @@ By now, you’ve already learned a lot about Zettlr. Can you check all the check
 
 - [ ] Working with files and directories
 - [ ] Learned basic Markdown
-- [ ] Installed Pandoc and LaTeX for exporting my files
+- [ ] Installed LaTeX for exporting my files
 
 Some elements in the editor are interactive, just like the checkboxes. Tables are something else that are highly interactive. Just have a look at the following table: Hover over it with your mouse to see a few buttons appear that allow you to interact with the table!
 
