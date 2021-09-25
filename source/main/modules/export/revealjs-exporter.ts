@@ -20,6 +20,7 @@ import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './
 import { promises as fs } from 'fs'
 import path from 'path'
 import { trans } from '../../../common/i18n-main'
+import sanitize from 'sanitize-filename'
 
 export const plugin: ExporterPlugin = {
   pluginInformation: function () {
@@ -62,7 +63,8 @@ export const plugin: ExporterPlugin = {
 
     // First file determines the target name
     const target = path.basename(options.sourceFiles[0].name, options.sourceFiles[0].ext)
-    const targetPath = path.join(options.targetDirectory, target + '.revealjs')
+    const title = (options.title !== undefined) ? sanitize(options.title, { replacement: '-' }) : target
+    const targetPath = path.join(options.targetDirectory, title + '.revealjs')
 
     // Get the corresponding defaults file
     const defaultKeys = {

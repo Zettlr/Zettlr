@@ -22,6 +22,7 @@ import { promises as fs } from 'fs'
 import { BrowserWindow } from 'electron'
 import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
 import { trans } from '../../../common/i18n-main'
+import sanitize from 'sanitize-filename'
 
 export const plugin: ExporterPlugin = {
   pluginInformation: function () {
@@ -54,10 +55,12 @@ export const plugin: ExporterPlugin = {
       }
     }
 
-    // First file determines the name
+    // First file determines the name of the output path, EXCEPT a title is
+    // explicitly set.
     const firstName = path.basename(options.sourceFiles[0].name, options.sourceFiles[0].ext)
-    const pdfFilePath = path.join(options.targetDirectory, `${firstName}.pdf`)
-    const htmlFilePath = path.join(options.targetDirectory, `${firstName}.html`)
+    const title = (options.title !== undefined) ? sanitize(options.title, { replacement: '-' }) : firstName
+    const pdfFilePath = path.join(options.targetDirectory, `${title}.pdf`)
+    const htmlFilePath = path.join(options.targetDirectory, `${title}.html`)
 
     // Get the corresponding defaults file
     const defaultKeys = {

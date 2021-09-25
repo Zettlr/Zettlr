@@ -21,6 +21,7 @@ import archiver from 'archiver'
 import rimraf from 'rimraf'
 import isFile from '../../../common/util/is-file'
 import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
+import sanitize from 'sanitize-filename'
 
 export const plugin: ExporterPlugin = {
   pluginInformation: function () {
@@ -46,8 +47,9 @@ export const plugin: ExporterPlugin = {
     }
 
     const baseName = path.basename(options.sourceFiles[0].name, options.sourceFiles[0].ext)
+    const title = (options.title !== undefined) ? sanitize(options.title, { replacement: '-' }) : baseName
     const ext = options.format === 'textpack' ? '.textpack' : '.textbundle'
-    const targetPath = path.join(options.targetDirectory, baseName + ext)
+    const targetPath = path.join(options.targetDirectory, title + ext)
     try {
       output.targetFile = await makeTextbundle(
         sourceFiles[0],
