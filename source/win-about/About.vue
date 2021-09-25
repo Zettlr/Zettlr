@@ -29,7 +29,9 @@
       </ContributorsTab>
       <LicenseTab v-else-if="currentTab === 4">
       </LicenseTab>
-      <DebugTab v-else-if="currentTab === 5">
+      <FontLicenseTab v-else-if="currentTab === 5">
+      </FontLicenseTab>
+      <DebugTab v-else-if="currentTab === 6">
       </DebugTab>
     </div>
   </WindowChrome>
@@ -59,6 +61,7 @@ import ProjectsTab from './Projects-Tab.vue'
 import SponsorsTab from './Sponsors-Tab.vue'
 import ContributorsTab from './Contributors-Tab.vue'
 import LicenseTab from './License-Tab.vue'
+import FontLicenseTab from './Font-License-Tab.vue'
 import DebugTab from './Debug-Tab.vue'
 
 export default {
@@ -70,6 +73,7 @@ export default {
     SponsorsTab,
     ContributorsTab,
     LicenseTab,
+    FontLicenseTab,
     DebugTab
   },
   data: function () {
@@ -105,6 +109,12 @@ export default {
           controls: 'tab-license',
           id: 'tab-license-control',
           icon: 'cog'
+        },
+        {
+          label: 'SIL OFL',
+          controls: 'tab-font-license',
+          id: 'tab-font-license-control',
+          icon: 'font-size'
         },
         {
           label: 'Debug Information',
