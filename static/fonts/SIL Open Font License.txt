@@ -1,4 +1,22 @@
+Below follow the individual Copyright statements for the fonts Crimson Text,
+Liberation, and Lato. Afterwards follows the text of the SIL Open Font License,
+which is shared by all four fonts used by Zettlr.
+
+== CRIMSON TEXT ==
+
 Copyright (c) 2010, Sebastian Kosch (sebastian@aldusleaf.org), with Reserved Font Name "Crimson Text".
+
+== LIBERATION ==
+
+Copyright (c) 2012 Red Hat, Inc.
+	with Reserved Font Name Liberation.
+
+== LATO ==
+
+Copyright (c) 2010-2015, Łukasz Dziedzic (dziedzic@typoland.com),
+with Reserved Font Name Lato.
+
+== END COPYRIGHT STATEMENTS ==
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 This license is copied below, and is also available with a FAQ at: http://scripts.sil.org/OFL

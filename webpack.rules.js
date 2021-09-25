@@ -21,7 +21,7 @@ module.exports = [
   {
     test: /\.css$/,
     use: [
-      'vue-style-loader',
+      'style-loader',
       '@teamsupercell/typings-for-css-modules-loader',
       'css-loader'
     ]
@@ -47,20 +47,7 @@ module.exports = [
   {
     // Handle font files: just copy them
     test: /\.(woff|woff2|eot|ttf|otf)$/,
-    use: {
-      loader: 'file-loader',
-      options: {
-        // Do not wrap in js module
-        esModule: false,
-        name: '[path][name].[ext]',
-        // Forge puts the entry points in their own dedicated directory, so we
-        // have to "manually" move up from that directory again
-        publicPath: '..',
-        // The main context is our source directory. The resources are only
-        // important for handlebars, but not for anything else.
-        context: 'source'
-      }
-    }
+    type: 'asset/resource'
   },
   {
     // Handle audio files: just copy them
