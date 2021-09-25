@@ -9,6 +9,13 @@
       <!-- TODO: Translate! -->
       <span>Please select at least one export format to build this project.</span>
     </p>
+
+    <!-- Add the project title field -->
+    <TextControl
+      v-model="projectTitle"
+      v-bind:label="'Project Title'"
+    ></TextControl>
+
     <Tabs
       v-bind:tabs="tabs"
       v-bind:current-tab="currentTab"
@@ -57,6 +64,7 @@
 <script>
 import ListControl from '../../../common/vue/form/elements/List'
 import FileControl from '../../../common/vue/form/elements/File'
+import TextControl from '../../../common/vue/form/elements/Text'
 
 import Vue from 'vue'
 import Tabs from '../../../common/vue/Tabs'
@@ -69,6 +77,7 @@ export default {
   components: {
     ListControl,
     FileControl,
+    TextControl,
     Tabs
   },
   props: {
@@ -83,6 +92,7 @@ export default {
       selectedExportFormats: [ 'html', 'chromium-pdf' ], // NOTE: Must correspond to the defaults in fsal-directory.ts
       patterns: [],
       cslStyle: '',
+      projectTitle: '',
       tabs: [
         {
           id: 'formats',
@@ -170,7 +180,8 @@ export default {
           properties: {
             formats: this.selectedExportFormats,
             filters: this.patterns,
-            cslStyle: this.cslStyle
+            cslStyle: this.cslStyle,
+            title: this.projectTitle
           },
           path: this.fullPath
         }
@@ -187,6 +198,7 @@ export default {
             this.selectedExportFormats = descriptor.project.formats
             this.patterns = descriptor.project.filters
             this.cslStyle = descriptor.project.cslStyle
+            this.projectTitle = descriptor.project.title
           }
         })
         .catch(err => console.error(err))

@@ -78,7 +78,8 @@ export async function makeExport (options: ExporterOptions, formatOptions: any =
     getDefaultsFor: async (writer: string, properties: any) => {
       // Inject additional properties from the global exporter options here
       const cslOverride = (typeof options.cslStyle === 'string') ? options.cslStyle : undefined
-      return await writeDefaults(writer, properties, cslOverride)
+      const titleOverride = (typeof options.title === 'string') ? options.title : undefined
+      return await writeDefaults(writer, properties, cslOverride, titleOverride)
     }
   }
 
@@ -142,7 +143,8 @@ async function runPandoc (defaultsFile: string): Promise<PandocRunnerOutput> {
 async function writeDefaults (
   writer: string, // The writer to use (e.g. html or pdf)
   properties: any, // Contains properties that will be written to the defaults
-  cslOverride?: string
+  cslOverride?: string,
+  titleOverride?: string
 ): Promise<string> {
   const dataDir = app.getPath('temp')
   const defaultsFile = path.join(dataDir, 'defaults.yml')
@@ -198,6 +200,10 @@ async function writeDefaults (
   defaults.metadata.zettlr.strip_links = String(global.config.get('export.stripLinks'))
   defaults.metadata.zettlr.link_start = String(global.config.get('zkn.linkStart'))
   defaults.metadata.zettlr.link_end = String(global.config.get('zkn.linkEnd'))
+
+  if (titleOverride !== undefined) {
+    defaults.metadata.title = titleOverride
+  }
 
   // Add all filters which are within the userData/lua-filter directory.
   if (!('filters' in defaults)) {

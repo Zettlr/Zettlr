@@ -42,6 +42,11 @@ export interface ExporterOptions {
    * defined in the preferences for the given export.
    */
   cslStyle?: string
+  /**
+   * This is an optional property. It allows manually setting a title in the
+   * defaults file metadata.
+   */
+  title?: string
 }
 
 /**
