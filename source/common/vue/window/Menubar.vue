@@ -7,7 +7,7 @@
       v-for="(item, idx) in menu"
       v-bind:key="idx"
       class="top-level-item"
-      v-on:mousedown.stop="getSubmenu(item.id, $event.target)"
+      v-on:mousedown.stop.prevent="getSubmenu(item.id, $event.target)"
       v-on:mouseenter.stop="maybeExchangeSubmenu(item.id, $event.target)"
     >
       {{ item.label }}
