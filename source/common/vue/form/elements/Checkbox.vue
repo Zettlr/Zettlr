@@ -192,6 +192,10 @@ body.darwin {
       border-color: var(--system-accent-color, --c-primary);
       background-image: linear-gradient(transparent, #00000020);
     }
+
+    &[disabled] .checkmark {
+      background-color: #ddd;
+    }
   }
 
   &.dark {
@@ -207,6 +211,10 @@ body.darwin {
 
       input:checked ~ .checkmark {
         background-image: none;
+      }
+
+      &[disabled] .checkmark {
+        background-image: radial-gradient(circle at top, rgb(90, 90, 90), rgb(120, 120, 120));
       }
     }
   }
@@ -251,6 +259,11 @@ body.win32 {
 
     input:checked ~ .checkmark {
       border-color: var(--system-accent-color, --c-primary);
+    }
+
+    &[disabled] .checkmark {
+      background-color: #ddd;
+      border-color: rgb(120, 120, 120);
     }
   }
 }

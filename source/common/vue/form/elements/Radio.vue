@@ -69,6 +69,8 @@ export default {
 body {
   .radio-group {
     break-inside: avoid;
+
+    p { font-size: 13px; }
   }
 
   .cb-group {
