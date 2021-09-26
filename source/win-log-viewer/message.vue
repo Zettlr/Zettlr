@@ -114,12 +114,13 @@ export default {
 
 <style lang="less">
   .message {
-    display: table-row;
+    // display: table-row;
+    width: 100%;
     transition: 0.5s all ease;
+    border-bottom: 1px solid rgb(128, 128, 128);
 
     .timestamp, .msg {
       padding: 4px 10px;
-      border-bottom: 1px solid rgb(128, 128, 128);
       display: table-cell;
       vertical-align: middle;
     }
