@@ -18,9 +18,10 @@ import { app, ipcMain } from 'electron'
 import got from 'got'
 import { trans } from '../../common/i18n-main'
 import moment from 'moment'
-import { translation_api_url as TRANSLATION_API_URL } from '../../common/data.json'
 import enumDictFiles from '../../common/util/enum-dict-files'
 import enumLangFiles from '../../common/util/enum-lang-files'
+
+const TRANSLATION_API_URL = 'https://translate.zettlr.com/api/languages'
 
 interface APIResponse {
   bcp47: string
