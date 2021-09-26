@@ -22,19 +22,24 @@ let lastHighlightLine = -1
 /**
  * Enables a typewriter-like mode if the option is set
  *
- * @param   {CodeMirror}  cm  The instance
+ * @param   {CodeMirror.Editor}  cm  The instance
  */
 module.exports = (cm) => {
-  cm.on('change', typewriter)
-  cm.on('optionChange', typewriter)
+  cm.on('change', typewriterHighlight)
+  cm.on('change', typewriterScroll)
+  cm.on('optionChange', typewriterHighlight)
+  cm.on('optionChange', typewriterScroll)
+
+  // On cursor activity we only adapt the highlights, but we don't scroll
+  cm.on('cursorActivity', typewriterHighlight)
 }
 
 /**
  * Adds the mute class to all lines if the option is set
  *
- * @param   {CodeMirror}  cm  The CodeMirror instance
+ * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
  */
-function typewriter (cm) {
+function typewriterHighlight (cm) {
   if (cm.getOption('zettlr').typewriterMode === false) {
     if (lastHighlightLine > -1) {
       // Cleanup after option change
@@ -75,9 +80,20 @@ function typewriter (cm) {
   }
 
   lastHighlightLine = highlightLine
+}
 
-  // Now the lines are correctly styled, BUT we also need to reposition the
-  // cursor correctly
+/**
+ * Scrolls during typewriter activity
+ *
+ * @param   {CodeMirror.Editor}  cm  The editor instance
+ */
+function typewriterScroll (cm) {
+  if (cm.getOption('zettlr').typewriterMode === false) {
+    // Just return. The cleanup is being done in the highlight function.
+    return
+  }
+
+  // Scroll the cursor line to the center of the screen.
   cm.cursorCoords(cm.getCursor())
   const cursorTop = cm.charCoords(cm.getCursor(), 'local').top
   const middleHeight = cm.getScrollerElement().offsetHeight / 2
