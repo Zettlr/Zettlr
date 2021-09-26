@@ -12,9 +12,9 @@
  * END HEADER
  */
 
-const { trans } = require('../common/i18n-renderer')
+import { trans } from '../common/i18n-renderer'
 
-module.exports = function displayTabsContext (event, callback) {
+export default function displayTabsContext (event, callback) {
   let items = [
     {
       label: trans('menu.tab_close'),
