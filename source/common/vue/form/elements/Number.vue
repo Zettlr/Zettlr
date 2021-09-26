@@ -29,8 +29,11 @@
       v-else
       v-bind:id="fieldID"
       ref="input"
+      v-bind:min="min"
+      v-bind:max="max"
       v-bind:value="value"
       v-bind:class="{ 'inline': inline }"
+      v-bind:disabled="disabled"
       type="number"
       v-on:input="$emit('input', sanitize($event.target.value))"
       v-on:keyup.enter="$emit('confirm', sanitize($event.target.value))"
@@ -108,8 +111,13 @@ export default {
     sanitize: function (value) {
       // If the user completely empties the field, make sure a number is being returned
       if (value === '') {
-        return 0
+        return this.min
       } else {
+        if (value < this.min) {
+          value = this.min
+        } else if (value > this.max) {
+          value = this.max
+        }
         return parseInt(value, 10)
       }
     }

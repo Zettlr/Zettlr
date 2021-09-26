@@ -526,6 +526,18 @@ export default {
           this.pomodoro.durations.short = data.shortDuration
           this.pomodoro.durations.long = data.longDuration
 
+          // Make sure to add a final sanity check for the actual values of the pomodoro since the
+          // user can with some effort completely remove the time value
+          if (typeof this.pomodoro.durations.task !== 'number' || this.pomodoro.durations.task < 1) {
+            this.pomodoro.durations.task = 1
+          }
+          if (typeof this.pomodoro.durations.short !== 'number' || this.pomodoro.durations.short < 1) {
+            this.pomodoro.durations.short = 1
+          }
+          if (typeof this.pomodoro.durations.long !== 'number' || this.pomodoro.durations.long < 1) {
+            this.pomodoro.durations.long = 1
+          }
+
           const effectChanged = data.effect !== this.pomodoro.currentEffectFile
           const volumeChanged = data.volume !== this.pomodoro.soundEffect.volume
           if (effectChanged) {

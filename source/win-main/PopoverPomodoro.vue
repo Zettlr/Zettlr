@@ -18,14 +18,20 @@
       <NumberControl
         v-model="taskDuration"
         v-bind:label="taskLabel"
+        v-bind:min="1"
+        v-bind:max="120"
       ></NumberControl>
       <NumberControl
         v-model="shortDuration"
         v-bind:label="shortLabel"
+        v-bind:min="1"
+        v-bind:max="120"
       ></NumberControl>
       <NumberControl
         v-model="longDuration"
         v-bind:label="longLabel"
+        v-bind:min="1"
+        v-bind:max="120"
       ></NumberControl>
       <hr>
       <SelectControl
