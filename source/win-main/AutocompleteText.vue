@@ -195,27 +195,39 @@ body div.form-control label {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-body div.autocomplete-list {
-  position: absolute;
-  max-height: 250px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  background-color: rgb(250, 250, 250);
-  border: 1px solid rgb(180, 180, 180);
-  box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, .2);
-  border-radius: 6px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-
-  div.autocomplete-list-item {
-    white-space: nowrap;
+body {
+  div.autocomplete-list {
+    position: absolute;
+    max-height: 250px;
+    overflow-y: auto;
     overflow-x: hidden;
-    border-radius: 4px;
-    padding: 4px;
-    font-size: 11px;
-    margin: 5px;
+    background-color: rgb(250, 250, 250);
+    border: 1px solid rgb(180, 180, 180);
+    box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, .2);
+    border-radius: 6px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 
-    &:hover, &.active {
-      background-color: rgb(235, 235, 235);
+    div.autocomplete-list-item {
+      white-space: nowrap;
+      overflow-x: hidden;
+      border-radius: 4px;
+      padding: 4px;
+      font-size: 11px;
+      margin: 5px;
+
+      &:hover, &.active {
+        background-color: rgb(235, 235, 235);
+      }
+    }
+  }
+
+  &.dark {
+    div.autocomplete-list {
+      background-color: rgb(50, 50, 50);
+
+      div.autocomplete-list-item.hover, div.autocomplete-list-item.active {
+        background-color: rgb(120, 120, 120);
+      }
     }
   }
 }
