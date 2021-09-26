@@ -50,7 +50,6 @@ import askFileDialog from './dialog/ask-file'
 import saveFileDialog from './dialog/save-dialog'
 import confirmRemove from './dialog/confirm-remove'
 import * as bcp47 from 'bcp-47'
-// import dragIcon from '../../assets/dragicon.png'
 
 interface QuicklookRecord {
   path: string
