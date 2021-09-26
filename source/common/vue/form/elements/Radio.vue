@@ -78,6 +78,9 @@ body {
 
   .cb-group, .radio-group {
     margin: 6px 0px;
+
+    // The text-labels should fill up 95% width (see below the radio width)
+    label { flex: 0.95; }
   }
 
   label.radio {
@@ -85,6 +88,7 @@ body {
     display: inline-block !important;
     width: @input-size;
     height: @input-size;
+    flex: 0.05; // Basically 5% width
 
     input {
       display: none !important;
@@ -236,6 +240,7 @@ body.linux {
     .toggle {
       border: 1px solid rgb(179, 179, 179);
       border-radius: @input-size;
+      width: @input-size;
       background-color: rgb(230, 230, 230);
       background-image: linear-gradient(transparent, #00000020);
 

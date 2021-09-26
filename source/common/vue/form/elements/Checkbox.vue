@@ -89,6 +89,7 @@ body {
     height: @input-size;
     padding: 0;
     margin-right: 5px;
+    flex: 0.05; // 5% of available width. NOTE: The label's width is defined in Radio.vue!
 
     input {
       display: none !important;
@@ -160,6 +161,7 @@ body.darwin {
   label.checkbox {
     width: @input-size;
     height: @input-size;
+    flex: 0.05;
 
     .checkmark {
       position: absolute;
@@ -211,6 +213,7 @@ body.win32 {
     width: @input-size;
     height: @input-size;
     padding: 0;
+    flex: 0.05;
 
     .checkmark {
       position: absolute;
@@ -258,6 +261,7 @@ body.linux {
   label.checkbox {
     width: @input-size;
     height: @input-size;
+    flex: 0.05;
 
     .checkmark {
       position: absolute;
@@ -280,6 +284,10 @@ body.linux {
       }
     }
 
+    &[disabled] span.checkmark {
+      background-color: #ffffff;
+    }
+
     input:checked ~ .checkmark {
       background-color: rgb(230, 230, 230);
 
@@ -298,6 +306,10 @@ body.linux {
         &:after {
           border-color: solid rgb(228, 228, 228);
         }
+      }
+
+      &[disabled] span.checkmark {
+        background-image: radial-gradient(circle at top, rgb(112, 111, 111), rgb(156, 156, 156));
       }
 
       input:checked ~ .checkmark {

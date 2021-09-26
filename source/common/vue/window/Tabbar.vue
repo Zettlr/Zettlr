@@ -198,7 +198,7 @@ body.win32 {
 body.linux {
   div.tab-list {
     top: 0px;
-    height: 30px;
+    height: 40px;
     justify-content: center;
     list-style-type: none;
     background-color: rgb(240, 240, 240); // Same colour as titlebar
