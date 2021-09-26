@@ -71,7 +71,8 @@ export default class DirProjectExport extends ZettlrCommand {
         const opt: ExporterOptions = {
           format: format,
           sourceFiles: files,
-          targetDirectory: dir.path
+          targetDirectory: dir.path,
+          title: config.title
         }
 
         if (typeof config.cslStyle === 'string' && config.cslStyle.length > 0) {
