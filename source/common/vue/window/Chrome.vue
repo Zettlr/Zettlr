@@ -196,7 +196,7 @@ export default {
       // Change the value in the Vue dev tools if you want to see how
       // Zettlr looks on other platforms. Please also note that this
       // does not affect the native window chrome.
-      platform: 'linux', // process.platform,
+      platform: process.platform,
       useNativeAppearance: global.config.get('window.nativeAppearance')
     }
   },
