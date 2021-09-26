@@ -78,8 +78,12 @@ export default {
 
 body {
   .cb-group {
-    display: flex;
-    align-items: center;
+    display: grid;
+    grid-template-columns: @input-size * 2 auto;
+    grid-template-rows: 100%;
+    grid-template-areas: "input label";
+
+    label { grid-area: label; }
   }
 
   label.checkbox {
@@ -89,7 +93,8 @@ body {
     height: @input-size;
     padding: 0;
     margin-right: 5px;
-    flex: 0.05; // 5% of available width. NOTE: The label's width is defined in Radio.vue!
+    grid-area: input;
+    // flex: 0.05; // 5% of available width. NOTE: The label's width is defined in Radio.vue!
 
     input {
       display: none !important;
@@ -161,7 +166,7 @@ body.darwin {
   label.checkbox {
     width: @input-size;
     height: @input-size;
-    flex: 0.05;
+    grid-area: input;
 
     .checkmark {
       position: absolute;
@@ -213,7 +218,7 @@ body.win32 {
     width: @input-size;
     height: @input-size;
     padding: 0;
-    flex: 0.05;
+    grid-area: input;
 
     .checkmark {
       position: absolute;
@@ -261,7 +266,7 @@ body.linux {
   label.checkbox {
     width: @input-size;
     height: @input-size;
-    flex: 0.05;
+    grid-area: input;
 
     .checkmark {
       position: absolute;

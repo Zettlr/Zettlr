@@ -17,7 +17,6 @@
       v-bind:id="tabs[currentTab].controls"
       role="tabpanel"
       v-bind:aria-labelledby="tabs[currentTab].id"
-      class="columns"
     >
       <Form
         ref="form"

@@ -69,26 +69,27 @@ export default {
 body {
   .radio-group {
     break-inside: avoid;
+  }
 
-    .cb-group {
-      display: flex;
-      align-items: center;
-    }
+  .cb-group {
+    display: grid;
+    grid-template-columns: @input-size * 2 auto;
+    grid-template-rows: 100%;
+    grid-template-areas: "input label";
   }
 
   .cb-group, .radio-group {
     margin: 6px 0px;
-
-    // The text-labels should fill up 95% width (see below the radio width)
-    label { flex: 0.95; }
+    label { grid-area: label; }
   }
 
   label.radio {
     position: relative;
     display: inline-block !important;
-    width: @input-size;
+    width: @input-size * 2;
     height: @input-size;
-    flex: 0.05; // Basically 5% width
+    grid-area: input;
+    //flex: 0.05; // Basically 5% width
 
     input {
       display: none !important;
