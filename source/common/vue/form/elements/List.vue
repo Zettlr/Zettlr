@@ -461,7 +461,6 @@ div.table-view {
   margin: 5px;
 
   table {
-    // font-family: @font-system;
     border: 1px solid rgb(220, 220, 220);
     border-collapse: collapse;
     line-height: 100%;

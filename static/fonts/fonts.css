@@ -1,32 +1,3 @@
-/* Lato */
-@font-face {
-    font-family: 'Lato';
-    src: url(Lato-Light.woff2) format('woff2');
-    font-style: normal;
-    font-weight: normal;
-}
-
-@font-face {
-    font-family: 'Lato';
-    src: url(Lato-LightItalic.woff2) format('woff2');
-    font-style: italic;
-    font-weight: normal;
-}
-
-@font-face {
-    font-family: 'Lato';
-    src: url(Lato-Heavy.woff2) format('woff2');
-    font-style: normal;
-    font-weight: bold;
-}
-
-@font-face {
-    font-family: 'Lato';
-    src: url(Lato-HeavyItalic.woff2) format('woff2');
-    font-style: italic;
-    font-weight: bold;
-}
-
 /* Crimson */
 @font-face {
     font-family: 'Crimson';

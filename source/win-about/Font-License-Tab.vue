@@ -1,14 +1,14 @@
 <template>
   <div id="font-license-text">
     <p>
-      Zettlr ships with four font faces, Crimson Text, Liberation, Lato, and
+      Zettlr ships with three font faces, Crimson Text, Liberation, and
       Inconsolata. To comply with the SIL Open Font License, we provide the full
       license terms here.
     </p>
     <p>
-      Below follow the individual Copyright statements for the fonts Crimson Text,
-      Liberation, and Lato. Afterwards follows the text of the SIL Open Font License,
-      which is shared by all four fonts used by Zettlr.
+      Below follow the individual Copyright statements for the fonts Crimson Text
+      and Liberation. Afterwards follows the text of the SIL Open Font License,
+      which is shared by all fonts used by Zettlr.
     </p>
     <h2>Crimson Text</h2>
     <p>
@@ -17,9 +17,6 @@
 
     <h2>Liberation</h2>
     <p>Copyright (c) 2012 Red Hat, Inc. with Reserved Font Name Liberation.</p>
-
-    <h2>Lato</h2>
-    <p>Copyright (c) 2010-2015, Łukasz Dziedzic (dziedzic@typoland.com), with Reserved Font Name Lato.</p>
 
     <h2>SIL Open Font License</h2>
 
