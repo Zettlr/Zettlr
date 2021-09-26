@@ -55,7 +55,7 @@ export default function getMenu (
           const ret: MenuItemConstructorOptions = {
             label: path.basename(item),
             click: function (menuitem, focusedWindow) {
-              global.application.runCommand('file-open', {
+              global.application.runCommand('open-file', {
                 path: item,
                 newTab: true
               }).catch(e => global.log.error(`[Menu] Could not open recent document ${item}`, e))

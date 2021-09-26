@@ -478,9 +478,6 @@ export default class Zettlr {
       // in the payload.
       this._documentManager.updateModifiedFlags(payload)
       this.setModified(!this._documentManager.isClean())
-    } else if (command === 'open-workspace') {
-      await this.openWorkspace()
-      return true
     } else if (command === 'open-preferences') {
       this._windowManager.showPreferences()
       return true
