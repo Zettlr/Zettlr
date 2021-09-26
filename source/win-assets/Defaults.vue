@@ -56,7 +56,7 @@
  */
 
 import SplitView from '../common/vue/window/SplitView'
-import SelectableList from './SelectableList'
+import SelectableList from '../common/vue/form/elements/SelectableList'
 import ButtonControl from '../common/vue/form/elements/Button'
 import CodeEditor from '../common/vue/CodeEditor'
 import { trans } from '../common/i18n-renderer'

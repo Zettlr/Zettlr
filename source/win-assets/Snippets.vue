@@ -70,7 +70,7 @@
  */
 
 import SplitView from '../common/vue/window/SplitView'
-import SelectableList from './SelectableList'
+import SelectableList from '../common/vue/form/elements/SelectableList'
 import ButtonControl from '../common/vue/form/elements/Button.vue'
 import TextControl from '../common/vue/form/elements/Text.vue'
 import CodeEditor from '../common/vue/CodeEditor'
