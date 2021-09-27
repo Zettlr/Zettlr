@@ -130,10 +130,13 @@ export default {
     })
   },
   methods: {
-    updateAvailableSnippets: function () {
+    updateAvailableSnippets: function (selectAfterUpdate = undefined) {
       ipcRenderer.invoke('assets-provider', { command: 'list-snippets' })
         .then(data => {
           this.availableSnippets = data
+          if (typeof selectAfterUpdate === 'string' && this.availableSnippets.includes(selectAfterUpdate) === true) {
+            this.currentItem = this.availableSnippets.indexOf(selectAfterUpdate)
+          }
           this.loadState()
         })
         .catch(err => console.error(err))
@@ -188,22 +191,16 @@ export default {
     },
     addSnippet: function () {
       // Adds a snippet with empty contents and a generic default name
-      let newName = 1
-
-      while (this.availableSnippets.includes('snippet-' + newName) === true) {
-        newName++
-      }
+      const newName = this.ensureUniqueName('snippet')
 
       ipcRenderer.invoke('assets-provider', {
         command: 'set-snippet',
         payload: {
-          name: 'snippet-' + newName,
+          name: newName,
           contents: ''
         }
       })
-        .then(() => {
-          this.updateAvailableSnippets()
-        })
+        .then(() => { this.updateAvailableSnippets(newName) })
         .catch(err => console.error(err))
     },
     removeSnippet: function () {
@@ -221,6 +218,8 @@ export default {
       // Sanitise the name
       newVal = newVal.replace(/[^a-zA-Z0-9_-]/g, '-')
 
+      newVal = this.ensureUniqueName(newVal)
+
       ipcRenderer.invoke('assets-provider', {
         command: 'rename-snippet',
         payload: {
@@ -228,10 +227,35 @@ export default {
           newName: newVal
         }
       })
-        .then(() => {
-          this.updateAvailableSnippets()
-        })
+        .then(() => { this.updateAvailableSnippets(newVal) })
         .catch(err => console.error(err))
+    },
+    /**
+     * Ensures that the given name candidate describes a unique snippet filename
+     *
+     * @param   {string}  candidate  The candidate's name
+     *
+     * @return  {string}             The candidate's name, with a number suffix (-X) if necessary
+     */
+    ensureUniqueName: function (candidate) {
+      if (this.availableSnippets.includes(candidate) === false) {
+        return candidate // No duplicate detected
+      }
+
+      let count = 1
+      const match = /-(\d+)$/.exec(candidate)
+
+      if (match !== null) {
+        // The candidate name already ends with a number-suffix --> extract it
+        count = parseInt(match[1], 10)
+        candidate = candidate.substr(0, candidate.length - match[1].length - 1)
+      }
+
+      while (this.availableSnippets.includes(candidate + '-' + count) === true) {
+        count++
+      }
+
+      return candidate + '-' + count
     }
   }
 }
