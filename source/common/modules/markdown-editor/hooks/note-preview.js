@@ -7,7 +7,7 @@ const formatDate = require('../../../util/format-date').default
  * A hook for displaying link tooltips which display metadata
  * and content of a file
  *
- * @param   {CodeMirror}  cm  The instance to attach to
+ * @param   {CodeMirror.Editor}  elem  The instance to attach to
  */
 
 module.exports = (elem) => {
@@ -32,7 +32,8 @@ module.exports = (elem) => {
       placement: 'top-start', // Display at the beginning of the anchor
       appendTo: document.body, // anchor
       showOnCreate: true, // Immediately show the tooltip
-      arrow: true // Arrow for these tooltips
+      arrow: true, // Arrow for these tooltips
+      delay: 500
     })
 
     // Find the file's absolute path
