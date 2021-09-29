@@ -26,6 +26,8 @@ function applyCodeblockClasses (cm) {
   let needsRefresh = false // Will be set to true if at least one line has been altered
   let isCodeBlock = false
   let codeblockClass = 'code-block-line'
+  let codeblockClassOpen = 'code-block-line-open'
+  let codeblockClassClose = 'code-block-line-close'
 
   // This matches a line that starts with at most three spaces, followed by at
   // least three backticks or tildes (fenced code block).
@@ -44,6 +46,14 @@ function applyCodeblockClasses (cm) {
     const line = info.text
     const wrapClass = (info.wrapClass !== undefined) ? String(info.wrapClass) : ''
     const isCurrentlyCode = wrapClass.includes(codeblockClass)
+
+    if (i > 0 && codeBlockRE.test(cm.lineInfo(i - 1).text)) {
+      cm.addLineClass(i, 'wrap', codeblockClassOpen)
+    }
+
+    if (i > 0 && i < cm.lineCount() - 1 && codeBlockRE.test(cm.lineInfo(i + 1).text)) {
+      cm.addLineClass(i, 'wrap', codeblockClassClose)
+    }
 
     // Second, check if we are NOT inside a fenced code block. If we're not, but
     // the line is indented by at least four spaces, we have an indented code
