@@ -8,7 +8,6 @@
         class="theme-container-item"
       >
         <!-- NOTE: "index" here is not actually an index number but the theme's name -->
-        <!-- TODO: Translate everything after discussion! -->
         <div
           v-bind:style="{
             color: theme.textColor,
@@ -44,18 +43,21 @@
         </div>
         <!-- Now, add some metadata -->
         <div class="theme-metadata">
+          <p class="theme-name">
+            {{ theme.name }}:
+          </p>
           <div
             v-if="index === value"
             class="selected-button"
           >
-            selected
+            {{ selectedLabel }}
           </div>
           <div
             v-else
             class="not-selected-button"
             v-on:click="selectTheme(index)"
           >
-            click to select
+            {{ selectLabel }}
           </div>
           <p>{{ theme.description }}</p>
         </div>
@@ -79,6 +81,8 @@
  * END HEADER
  */
 
+import { trans } from '../../../i18n-renderer'
+
 export default {
   name: 'ThemeField',
   props: {
@@ -93,6 +97,14 @@ export default {
     options: {
       type: Object,
       required: true
+    }
+  },
+  computed: {
+    selectedLabel: function () {
+      return trans('dialog.preferences.theme.selected_label')
+    },
+    selectLabel: function () {
+      return trans('dialog.preferences.theme.select_label')
     }
   },
   methods: {
@@ -219,6 +231,11 @@ div#theme-container {
     div.theme-metadata {
       padding: 20px;
       grid-area: "description";
+
+      p.theme-name {
+        display: inline-block;
+        font-weight: bold;
+      }
 
       div.selected-button, div.not-selected-button {
         display: inline-block;
