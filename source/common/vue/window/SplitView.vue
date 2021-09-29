@@ -9,7 +9,7 @@
       v-bind:style="{ left: `${view1Width - 5}px` }"
       v-on:mousedown="beginViewResizing"
     ></div> <!-- Enable resizing of the view -->
-    <div ref="view2" class="view" v-bind:style="{ width: `${view2Width}px` }">
+    <div ref="view2" class="view view-border" v-bind:style="{ width: `${view2Width}px` }">
       <slot name="view2"></slot>
     </div>
   </div>
@@ -186,19 +186,23 @@ body div.split-view {
 
   div.view {
     position: relative; // Necessary so that the horizontal resizer sits correct
+
+    &.view-border {
+      border-left: 1px solid rgb(213, 213, 213);
+    }
   }
 
   div.horizontal-resizer {
     cursor: ew-resize;
-    width: 5px;
+    width: 11px; // 1px width plus 5px margin to either side
+    z-index: 20000; // Make sure the resizers are always on top
     position: absolute;
     height: 100%;
-    border-right: 1px solid rgb(213, 213, 213);
   }
 }
 
 body.dark div.split-view {
-  div.horizontal-resizer {
+  div.view.view-border {
     border-color: rgb(80, 80, 80);
   }
 }
