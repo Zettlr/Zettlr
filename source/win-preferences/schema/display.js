@@ -66,46 +66,44 @@ export default function () {
       ],
       [
         {
-          type: 'select',
+          type: 'theme',
           model: 'display.theme',
-          label: trans('dialog.preferences.theme.title'),
+          label: trans('dialog.preferences.theme.info'),
           options: {
-            'berlin': 'Berlin',
-            'frankfurt': 'Frankfurt',
-            'bielefeld': 'Bielefeld',
-            'karl-marx-stadt': 'Karl-Marx-Stadt',
-            'bordeaux': 'Bordeaux'
-          },
-          placeholder_for_reference: {
             'berlin': {
               textColor: 'white',
               backgroundColor: '#1cb27e',
               name: 'Berlin',
-              fontFamily: 'sans-serif'
+              fontFamily: 'inherit',
+              description: 'An all-time classic: This theme has been part of Zettlr since the very beginning. A modern theme featuring the signatory green color and a sans-serif font.'
             },
             'frankfurt': {
               textColor: 'white',
               backgroundColor: '#1d75b3',
               name: 'Frankfurt',
-              fontFamily: 'serif'
+              fontFamily: 'Crimson',
+              description: 'In line with the spirit of the time-honoured Frankfurt School, this theme features a mature serif font paired with royal blue.'
             },
             'bielefeld': {
               textColor: 'black',
               backgroundColor: '#ffffdc',
               name: 'Bielefeld',
-              fontFamily: 'monospace'
+              fontFamily: 'Liberation Mono',
+              description: 'With its mellow orange and a monospaced font, this theme gets you as reminiscent of Niklas Luhmann\'s heyday as possible.'
             },
             'karl-marx-stadt': {
               textColor: 'white',
               backgroundColor: '#dc2d2d',
               name: 'Karl-Marx-Stadt',
-              fontFamily: 'sans-serif'
+              fontFamily: 'inherit',
+              description: 'City names change, but their spirit remains: A forceful red complements this theme\'s progressive appeal and sans-serif font.'
             },
             'bordeaux': {
               textColor: '#dc2d2d',
               backgroundColor: '#fffff8',
               name: 'Bordeaux',
-              fontFamily: 'monospace'
+              fontFamily: 'Inconsolata',
+              description: 'Design made in France: Enjoy writing with this theme\'s unagitated colors and beautiful monospaced font.'
             }
           }
         },

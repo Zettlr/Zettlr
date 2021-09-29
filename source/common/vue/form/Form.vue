@@ -121,6 +121,15 @@
           v-bind:name="field.model"
           v-on:change="$emit('input', field.model, $event)"
         ></SliderInput>
+        <ThemeInput
+          v-if="field.type === 'theme'"
+          v-bind:key="f_idx"
+          v-bind:value="getModelValue(field.model)"
+          v-bind:options="field.options"
+          v-bind:label="field.label"
+          v-bind:name="field.model"
+          v-on:input="$emit('input', field.model, $event)"
+        ></ThemeInput>
       </template>
     </fieldset>
   </div>
@@ -159,6 +168,7 @@ import SelectInput from './elements/Select.vue'
 import SliderInput from './elements/Slider.vue'
 import ListInput from './elements/List.vue'
 import TokenInput from './elements/TokenList.vue'
+import ThemeInput from './elements/Theme.vue'
 
 export default {
   name: 'Form',
@@ -174,7 +184,8 @@ export default {
     SelectInput,
     SliderInput,
     ListInput,
-    TokenInput
+    TokenInput,
+    ThemeInput
   },
   props: {
     model: {
