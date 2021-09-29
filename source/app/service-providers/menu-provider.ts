@@ -76,7 +76,8 @@ const BLUEPRINTS = {
   openbsd: win32Menu,
   sunos: win32Menu,
   cygwin: win32Menu,
-  netbsd: win32Menu
+  netbsd: win32Menu,
+  haiku: win32Menu
 }
 
 /**

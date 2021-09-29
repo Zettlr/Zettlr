@@ -58,7 +58,7 @@ export default function getMenu (
               global.application.runCommand('open-file', {
                 path: item,
                 newTab: true
-              }).catch(e => global.log.error(`[Menu] Could not open recent document ${item}`, e))
+              }).catch((e: any) => global.log.error(`[Menu] Could not open recent document ${item}`, e))
             }
           }
 

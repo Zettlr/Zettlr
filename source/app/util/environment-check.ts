@@ -39,7 +39,8 @@ export default async function environmentCheck (): Promise<void> {
     openbsd: [],
     sunos: [],
     cygwin: [],
-    netbsd: []
+    netbsd: [],
+    haiku: []
   }
 
   /**

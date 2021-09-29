@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 /**
  * @ignore
  * BEGIN HEADER
@@ -82,32 +83,35 @@ interface Application {
  * NOTE: Most service providers define these interfaces in the corresponding
  * types files in ./source/app/service-providers/assets
  */
-declare module NodeJS {
-  interface Global {
-    assets: AssetsProvider
-    css: CssProvider
-    dict: DictionaryProvider
-    log: LogProvider
-    store: any
-    notify: NotificationProvider
-    ipc: any
-    citeproc: CiteprocProvider
-    config: ConfigProvider
-    application: Application
-    typo: any
-    preBootLog: BootLog[]
-    tippy: any
-    updates: UpdateProvider
-    translations: any
-    targets: TargetProvider
-    tags: TagProvider
-    stats: StatsProvider
-    recentDocs: RecentDocumentsProvider
-    // Translation data necessary to facilitate internationalisation
-    i18n: any
-    i18nRawData: any
-    i18nFallback: any
-    i18nFallbackRawData: any
-    tray: TrayProvider
+declare module global {
+  var assets: AssetsProvider
+  var css: CssProvider
+  var dict: DictionaryProvider
+  var log: LogProvider
+  var store: any
+  var notify: NotificationProvider
+  var ipc: any
+  var citeproc: CiteprocProvider
+  var config: ConfigProvider
+  var application: Application
+  var typo: any
+  var preBootLog: BootLog[]
+  var tippy: any
+  var updates: UpdateProvider
+  var translations: any
+  var targets: TargetProvider
+  var tags: TagProvider
+  var stats: StatsProvider
+  var recentDocs: RecentDocumentsProvider
+  // Translation data necessary to facilitate internationalisation
+  var i18n: any
+  var i18nRawData: any
+  var i18nFallback: any
+  var i18nFallbackRawData: any
+  var tray: TrayProvider
+  // This type is only required in the renderer processes since the
+  // applicationMenuHelper is shared via the browser process's window object.
+  var menuProvider: {
+    show: (position: Point | Rect, items: AnyMenuItem[], callback: Function, cleanup?: boolean) => Function
   }
 }
