@@ -42,22 +42,6 @@ module.exports = {
   },
 
   /**
-   * Returns a regular expression that matches MarkDown Citations.
-   *
-   * Should match everything permittible -- first alternative are the huge
-   * blocks, second alternative are the simple @ID-things, both recognised by
-   * Pandoc citeproc.
-   * citationRE is taken from the Citr library (the extraction regex)
-   *
-   * @return  {RegExp}              The compiled Regular Expression
-   */
-  'getCitationRE': function () {
-    return RegExp(
-      /(\[(?:[^[\]]*@[^[\]]+)\])|(?<=\s|^)(@[\p{L}\d_][\p{L}\d_:.#$%&\-+?<>~/]*)/.source,
-      'gu')
-  },
-
-  /**
    * Returns a regular expression that matches MarkDown inline code.
    *
    * @return  {RegExp}              The compiled Regular Expression

@@ -13,7 +13,7 @@
  */
 
 const { Converter } = require('showdown')
-const Citr = require('@zettlr/citr')
+const extractCitations = require('../util/extract-citations').default
 
 const ipcRenderer = (typeof window !== 'undefined') ? window.ipc : undefined
 
@@ -54,24 +54,29 @@ function showdownCitations () {
     type: 'lang',
     filter: function (text, converter, options) {
       // First, extract all citations ...
-      const allCitations = Citr.util.extractCitations(text, false)
-      // ... and retrieve the final ones from the citeproc provider
-      let finalCitations = allCitations.map((elem) => {
+      const allCitations = extractCitations(text)
+      // ... and retrieve the rendered ones from the citeproc provider
+      const finalCitations = allCitations.map((elem) => {
         if (ipcRenderer !== undefined) {
           // We are in the renderer process
           return ipcRenderer.sendSync('citation-renderer', {
             command: 'get-citation-sync',
-            payload: { citation: elem }
+            payload: { citations: elem.citations, composite: elem.composite }
           })
         } else {
           // We are in the main process and can immediately access the provider
-          return global.citeproc.getCitation(elem)
+          return global.citeproc.getCitation(elem.citations, elem.composite)
         }
+      })
+
+      // Now get the citations to be replaced
+      const toBeReplaced = allCitations.map(citation => {
+        return text.substr(citation.from, citation.to - citation.from)
       })
 
       // Finally, replace every citation with its designated replacement
       for (let i = 0; i < allCitations.length; i++) {
-        text = text.replace(allCitations[i], finalCitations[i])
+        text = text.replace(toBeReplaced[i], finalCitations[i])
       }
 
       // Now return the text

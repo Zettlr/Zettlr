@@ -17,7 +17,6 @@
 import CSL from 'citeproc'
 import { FSWatcher } from 'chokidar'
 import { ipcMain } from 'electron'
-import { parseSingle } from '@zettlr/citr'
 import { promises as fs, readFileSync } from 'fs'
 import path from 'path'
 import { trans } from '../../common/i18n-main'
@@ -154,8 +153,8 @@ export default class CiteprocProvider {
 
     // Create a global object so that we can easily pass rendered citations
     global.citeproc = {
-      getCitation: (citation: string) => {
-        return this.getCitation(citation)
+      getCitation: (citations: CiteItem[], composite: boolean) => {
+        return this.getCitation(citations, composite)
       },
       updateItems: (idList: string[]) => {
         return this.updateItems(idList)
@@ -210,7 +209,7 @@ export default class CiteprocProvider {
       const { command, payload } = content
 
       if (command === 'get-citation-sync') {
-        event.returnValue = this.getCitation(payload.citation)
+        event.returnValue = this.getCitation(payload.citations, payload.composite)
       }
     })
 
@@ -226,15 +225,10 @@ export default class CiteprocProvider {
           return this._databases[this._databaseIdx].cslData
         }
       } else if (command === 'get-citation') {
-        const { payload } = message
-        return {
-          'originalCitation': payload,
-          'renderedCitation': this.getCitation(payload)
-        }
+        return this.getCitation(message.payload.citations, message.payload.composite)
       } else if (command === 'get-bibliography') {
         // The Payload contains the items the renderer wants to have
-        const { payload } = message
-        this.updateItems(payload)
+        this.updateItems(message.payload)
         return this.makeBibliography()
       }
     })
@@ -382,16 +376,9 @@ export default class CiteprocProvider {
     // First we need to reorder the read data so that it can be passed to the
     // sys object
     for (let i = 0; i < database.cslData.length; i++) {
-      let item = database.cslData[i]
-      let id = item.id
-      // Check the validity of the citation
-      try {
-        parseSingle(`@${id}`)
-        this._items[id] = item
-      } catch (err: any) {
-        global.log.warning(`[Citeproc Provider] Malformed CiteKey @${id}` + String(err.message))
-        global.notify.normal(trans('system.error.malformed_citekey', id))
-      }
+      const item = database.cslData[i]
+      const id = item.id
+      this._items[id] = item
     }
 
     // Set the database index
@@ -505,21 +492,13 @@ export default class CiteprocProvider {
   /**
    * Takes IDs as set in Zotero and returns Author-Date citations for them.
    *
-   * @param  {string}            citation  Array containing the IDs to be returned
-   * @return {string|undefined}            The rendered string
+   * @param  {CiteItem[]}        citations  Array containing the IDs to be returned
+   * @param  {boolean}           composite  If true, getCitation will mimick the "mode: composite" feature of processCitationCluster
+   *
+   * @return {string|undefined}             The rendered string
    */
-  getCitation (citation: string): string|undefined {
+  getCitation (citations: CiteItem[], composite = false): string|undefined {
     if (!this.isReady()) {
-      return undefined
-    }
-
-    let citations
-    try {
-      // NOTE: Citr.parseSingle returns a "Citation" type. This "Citation" type
-      // is equivalent of the CSL engine's "CiteItem" type.
-      citations = parseSingle(citation)
-    } catch (err: any) {
-      global.log.error(`[Citeproc Provider] Citr.parseSingle: Could not parse citation ${citation}. ` + String(err.message), err)
       return undefined
     }
 
@@ -528,10 +507,22 @@ export default class CiteprocProvider {
     }
 
     try {
-      return this._engine.makeCitationCluster(citations)
+      if (!composite || citations.length > 1) {
+        return this._engine.makeCitationCluster(citations)
+      } else if (composite && citations.length === 1) {
+        // Mimick the composite mode
+        const citation = citations[0]
+        citation['author-only'] = true
+        citation['suppress-author'] = false
+        const author = this._engine.makeCitationCluster([citation])
+        citation['author-only'] = false
+        citation['suppress-author'] = true
+        const rest = this._engine.makeCitationCluster([citation])
+        return author + ' ' + rest
+      }
     } catch (err: any) {
       const msg = citations.map(elem => elem.id).join(', ')
-      global.log.error(`[citeproc] makeCitationCluster: Could not create citation cluster ${msg}: ${String(err.message)}`, err)
+      global.log.error(`[citeproc] makeCitationCluster: Could not create citation cluster ${msg}: ${String(err)}`, err)
       return undefined
     }
   }

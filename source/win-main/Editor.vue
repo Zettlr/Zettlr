@@ -86,7 +86,7 @@
 import countWords from '../common/util/count-words'
 import MarkdownEditor from '../common/modules/markdown-editor'
 import CodeMirror from 'codemirror'
-import { util as citrUtil, parseSingle } from '@zettlr/citr'
+import extractCitations from '../common/util/extract-citations'
 import objectToArray from '../common/util/object-to-array'
 import { trans } from '../common/i18n-renderer'
 import extractYamlFrontmatter from '../common/util/extract-yaml-frontmatter'
@@ -635,19 +635,10 @@ export default {
     updateCitationKeys: function () {
       const value = this.editor.value
 
-      const citations = citrUtil.extractCitations(value)
+      const citations = extractCitations(value)
       const keys = []
       for (const citation of citations) {
-        try {
-          const cslArray = parseSingle(citation)
-          for (const csl of cslArray) {
-            keys.push(csl.id)
-          }
-        } catch (err) {
-          // If an invalid citation was passed, make sure to include the rest
-          // either way. But log the error just in case.
-          console.error(err)
-        }
+        keys.push(...citation.citations.map(elem => elem.id))
       }
       this.$store.commit('updateCitationKeys', keys)
     },

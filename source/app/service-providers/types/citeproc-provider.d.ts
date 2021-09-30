@@ -2,11 +2,12 @@ interface CiteprocProvider {
   /**
    * Returns a correct citation for the one given
    *
-   * @param   {string}  citation  The citation to be rendered
+   * @param   {string}   citation  The citation to be rendered
+   * @param   {boolean}  composite Whether the function should return Author (year) instead of (Author year)
    *
-   * @return  {string}            The fully rendered citation.
+   * @return  {string}             The fully rendered citation.
    */
-  getCitation: (citation: string) => string|undefined
+  getCitation: (citations: CiteItem[], composite: boolean) => string|undefined
   /**
    * Updates the items in the registry depending on the idList
    *
