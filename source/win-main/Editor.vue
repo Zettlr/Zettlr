@@ -195,6 +195,8 @@ export default {
           markdownBoldFormatting: this.$store.state.config['editor.boldFormatting'],
           markdownItalicFormatting: this.$store.state.config['editor.italicFormatting'],
           muteLines: this.$store.state.config['muteLines'],
+          citeStyle: this.$store.state.config['editor.citeStyle'],
+          readabilityAlgorithm: this.$store.state.config['editor.readabilityAlgorithm'],
           zettelkasten: {
             idRE: this.$store.state.config['zkn.idRE'],
             idGen: this.$store.state.config['zkn.idGen'],
@@ -202,7 +204,6 @@ export default {
             linkEnd: this.$store.state.config['zkn.linkEnd'],
             linkWithFilename: this.$store.state.config['zkn.linkWithFilename']
           },
-          readabilityAlgorithm: this.$store.state.config['editor.readabilityAlgorithm'],
           render: {
             citations: this.$store.state.config['display.renderCitations'],
             iframes: this.$store.state.config['display.renderIframes'],

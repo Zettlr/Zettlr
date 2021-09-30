@@ -105,6 +105,8 @@ module.exports = function () {
       markdownBoldFormatting: '**',
       // The characters used for italic formatting
       markdownItalicFormatting: '_',
+      // Maps to the editor.citeStyle setting
+      citeStyle: 'regular',
       // If set to true, lines will be dimmed in distraction free
       muteLines: true,
       // The algorithm to be used for the readability mode

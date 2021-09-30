@@ -124,6 +124,7 @@ export default function getConfigTemplate (): ConfigOptions {
       autocompleteAcceptSpace: false, // Whether you can type spaces in autocorrect
       autoCloseBrackets: true,
       defaultSaveImagePath: '',
+      citeStyle: 'regular', // Determines how autocomplete will complete citations
       homeEndBehaviour: false, // If true, Home/End goes to start/end of a paragraph, false means start/end of line.
       enableTableHelper: true, // Enable the table helper plugin
       indentUnit: 4, // The number of spaces to be added

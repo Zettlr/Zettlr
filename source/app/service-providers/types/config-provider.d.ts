@@ -96,6 +96,7 @@ interface ConfigOptions {
   editor: {
     autocompleteAcceptSpace: boolean
     autoSave: 'off'|'immediately'|'delayed'
+    citeStyle: 'in-text'|'in-text-suffix'|'regular'
     autoCloseBrackets: boolean
     defaultSaveImagePath: string
     homeEndBehaviour: boolean

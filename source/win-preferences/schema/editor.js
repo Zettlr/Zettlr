@@ -39,6 +39,18 @@ export default function () {
       [
         {
           type: 'radio',
+          label: 'How would you like autocomplete to insert your citations?',
+          model: 'editor.citeStyle',
+          options: {
+            'regular': '[@Author2015, p. 123] → (Author 2015, 123)',
+            'in-text': '@Author2015 → Author (2015)',
+            'in-text-suffix': '@Author2015 [p. 123] → Author (2015, 123)'
+          }
+        }
+      ],
+      [
+        {
+          type: 'radio',
           label: trans('dialog.preferences.auto_save.label'),
           model: 'editor.autoSave',
           options: {
@@ -46,7 +58,9 @@ export default function () {
             'immediately': trans('dialog.preferences.auto_save.immediately'),
             'delayed': trans('dialog.preferences.auto_save.delayed')
           }
-        },
+        }
+      ],
+      [
         {
           type: 'text',
           label: trans('dialog.preferences.default_image_save_path'),
@@ -71,6 +85,18 @@ export default function () {
             'gunning-fog': 'Gunning-Fog',
             'coleman-liau': 'Coleman/Liau',
             'automated-readability': 'Automated Readability Index (ARI)'
+          }
+        },
+        {
+          type: 'select',
+          label: trans('dialog.preferences.input_mode'),
+          model: 'editor.inputMode',
+          options: {
+            'default': 'Normal',
+            'emacs': 'Emacs' // ,
+            // NOTE: We had to deactivate vim. The editor will freeze if you
+            // enter the insert mode of VIM.
+            // 'vim': 'Vim'
           }
         }
       ],
@@ -119,20 +145,6 @@ export default function () {
           options: {
             'ltr': trans('dialog.preferences.editor_setting.direction_ltr'),
             'rtl': trans('dialog.preferences.editor_setting.direction_rtl')
-          }
-        }
-      ],
-      [
-        {
-          type: 'select',
-          label: trans('dialog.preferences.input_mode'),
-          model: 'editor.inputMode',
-          options: {
-            'default': 'Normal',
-            'emacs': 'Emacs' // ,
-            // NOTE: We had to deactivate vim. The editor will freeze if you
-            // enter the insert mode of VIM.
-            // 'vim': 'Vim'
           }
         }
       ]

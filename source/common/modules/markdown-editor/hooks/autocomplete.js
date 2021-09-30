@@ -448,49 +448,59 @@ function hintFunction (cm, opt) {
         cm.setCursor({ line: autocompleteStart.line + 1, ch: 0 })
       }
     } else if (currentDatabase === 'citekeys') {
-      // Here, what we will add are square brackets, if these are not yet
-      // present around the citekey. We know that the cursor is now behind the
-      // inserted key. It's easiest to perform a forward search (as most
-      // citations will be written at the end of lines).
-      let notClosed = true
-      let notOpened = true
-      const line = cm.getLine(autocompleteStart.line)
+      const { citeStyle } = cm.getOption('zettlr')
+      if (citeStyle === 'regular') {
+        // Here, what we will add are square brackets, if these are not yet
+        // present around the citekey. We know that the cursor is now behind the
+        // inserted key. It's easiest to perform a forward search (as most
+        // citations will be written at the end of lines).
+        let notClosed = true
+        let notOpened = true
+        const line = cm.getLine(autocompleteStart.line)
 
-      const firstCh = autocompleteStart.ch + completion.text.length
-      for (let i = firstCh; i < line.length; i++) {
-        if (line[i] === ']') {
-          // If we find an opening bracket before a closing one, we are done.
-          notClosed = false
-          break
-        } else if (line[i] === '[') {
-          break // It appears to be closed
+        const firstCh = autocompleteStart.ch + completion.text.length
+        for (let i = firstCh; i < line.length; i++) {
+          if (line[i] === ']') {
+            // If we find an opening bracket before a closing one, we are done.
+            notClosed = false
+            break
+          } else if (line[i] === '[') {
+            break // It appears to be closed
+          }
         }
-      }
-      // We have one half of a square-bracket citation. We need to make sure.
-      for (let i = autocompleteStart.ch; i >= 0; i--) {
-        if (line[i] === '[') {
-          // If we find a closing bracket, we definitely need to surround.
-          notOpened = false
-          break
-        } else if (line[i] === ']') {
-          break // It appears to be opened
+        // We have one half of a square-bracket citation. We need to make sure.
+        for (let i = autocompleteStart.ch; i >= 0; i--) {
+          if (line[i] === '[') {
+            // If we find a closing bracket, we definitely need to surround.
+            notOpened = false
+            break
+          } else if (line[i] === ']') {
+            break // It appears to be opened
+          }
         }
-      }
 
-      if (notOpened && notClosed) {
-        // We need to add square brackets
-        const lineNo = autocompleteStart.line
-        const fromCh = autocompleteStart.ch - 1
-        const toCh = autocompleteStart.ch + completion.text.length
-        cm.setSelection(
-          { line: lineNo, ch: fromCh },
-          { line: lineNo, ch: toCh },
-          { scroll: false }
-        )
-        cm.replaceSelection(`[@${completion.text}]`)
-        // Now back up one character to set the cursor inside the brackets
-        cm.setCursor({ line: lineNo, ch: toCh + 1 })
-      }
+        if (notOpened && notClosed) {
+          // We need to add square brackets
+          const lineNo = autocompleteStart.line
+          const fromCh = autocompleteStart.ch - 1
+          const toCh = autocompleteStart.ch + completion.text.length
+          cm.setSelection(
+            { line: lineNo, ch: fromCh },
+            { line: lineNo, ch: toCh },
+            { scroll: false }
+          )
+          cm.replaceSelection(`[@${completion.text}]`)
+          // Now back up one character to set the cursor inside the brackets
+          cm.setCursor({ line: lineNo, ch: toCh + 1 })
+        }
+      } else if (citeStyle === 'in-text-suffix') {
+        // We should add square brackets after the completion text
+        cm.replaceSelection(' []')
+        cm.setCursor({
+          line: autocompleteStart.line,
+          ch: autocompleteStart.ch + completion.text.length + 2
+        })
+      } // Otherwise: citeStyle was in-text, i.e. we can leave everything as is
     } else if (currentDatabase === 'snippets') {
       // For this database, we must remove the leading colon and also fiddle
       // with the text. So first, let's select everything.
