@@ -100,6 +100,7 @@ const locatorRE = /^[\d, -]*\d/
 interface CitePosition {
   from: number
   to: number
+  composite: boolean
   citations: CiteItem[]
 }
 
@@ -201,6 +202,7 @@ export default function extractCitations (markdown: string): CitePosition[] {
     let from = match.index as number // Here we know index will be set
     let to = from + match[0].length
     const citations = []
+    let composite = false // Is set to true for in-text citations
 
     const fullCitation: string|undefined = match[1]
     const inTextSuppressAuthor: string|undefined = match[2]
@@ -287,6 +289,7 @@ export default function extractCitations (markdown: string): CitePosition[] {
       }
     } else {
       // We have an in-text citation, so we can take a shortcut
+      composite = true
       citations.push({
         prefix: undefined,
         id: inTextCitation.replace(/{(.+)}/, '$1'),
@@ -296,7 +299,7 @@ export default function extractCitations (markdown: string): CitePosition[] {
     }
 
     // After all of our yadda yadda, push the citation
-    retValue.push({ from, to, citations })
+    retValue.push({ from, to, citations, composite })
   }
 
   return retValue

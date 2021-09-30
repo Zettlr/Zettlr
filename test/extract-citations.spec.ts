@@ -41,6 +41,7 @@ const tests = [
       {
         from: 10,
         to: 42,
+        composite: false,
         citations: [{ ...defaults, id: 'doe99' }, { ...defaults, id: 'smith2000' }, { ...defaults, id: 'smith2004' }]
       }
     ],
@@ -52,6 +53,7 @@ const tests = [
       {
         from: 10,
         to: 65,
+        composite: false,
         citations: [
           { ...defaults, id: 'doe99', prefix: 'see', label: 'page', locator: '33-35', suffix: 'and *passim*' },
           { ...defaults, id: 'smith04', label: 'chapter', locator: '1', suffix: '' }
@@ -66,6 +68,7 @@ const tests = [
       {
         from: 0,
         to: 57,
+        composite: false,
         citations: [{ ...defaults, id: 'https://example.com/bib?name=foobar&date=2000', label: 'page', locator: '33', suffix: '' }]
       }
     ],
@@ -77,6 +80,7 @@ const tests = [
       {
         from: 0,
         to: 35,
+        composite: false,
         citations: [{ ...defaults, id: 'smith', label: 'page', locator: 'ii, A, D-Z', suffix: 'with a suffix' }]
       }
     ],
@@ -88,6 +92,7 @@ const tests = [
       {
         from: 0,
         to: 55,
+        composite: false,
         citations: [{ ...defaults, id: 'smith', label: 'page', locator: 'iv, vi-xi, (xv)-(xvii)', suffix: 'with suffix here' }]
       }
     ],
@@ -99,6 +104,7 @@ const tests = [
       {
         from: 0,
         to: 26,
+        composite: false,
         citations: [{ ...defaults, id: 'smith', label: 'page', suffix: '99 years later', locator: '' }]
       }
     ],
@@ -110,6 +116,7 @@ const tests = [
       {
         from: 16,
         to: 27,
+        composite: false,
         citations: [{ ...defaults, id: 'smith04', 'suppress-author': true, prefix: '' }]
       }
     ],
@@ -121,6 +128,7 @@ const tests = [
       {
         from: 36,
         to: 45,
+        composite: true,
         citations: [{ ...defaults, id: 'smith04', 'suppress-author': true }]
       }
     ],
@@ -132,6 +140,7 @@ const tests = [
       {
         from: 0,
         to: 8,
+        composite: true,
         citations: [{ ...defaults, id: 'smith04' }]
       }
     ],
@@ -143,6 +152,7 @@ const tests = [
       {
         from: 0,
         to: 16,
+        composite: true,
         citations: [{ ...defaults, id: 'smith04', label: 'page', locator: '33', suffix: '' }]
       }
     ],
@@ -154,6 +164,7 @@ const tests = [
       {
         from: 0,
         to: 48,
+        composite: true,
         citations: [{ ...defaults, id: 'https://example.com/bib?name=foobar&date=2000' }]
       }
     ],
@@ -165,6 +176,7 @@ const tests = [
       {
         from: 0,
         to: 56,
+        composite: true,
         citations: [{ ...defaults, id: 'https://example.com/bib?name=foobar&date=2000', label: 'page', locator: '33', suffix: '' }]
       }
     ],
