@@ -39,7 +39,7 @@ export default function () {
       [
         {
           type: 'radio',
-          label: 'How would you like autocomplete to insert your citations?',
+          label: trans('dialog.preferences.cite_style_label'),
           model: 'editor.citeStyle',
           options: {
             'regular': '[@Author2015, p. 123] → (Author 2015, 123)',

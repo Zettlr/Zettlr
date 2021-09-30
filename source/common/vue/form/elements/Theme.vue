@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p v-html="label"></p>
+    <p id="theme-selection-label" v-html="label"></p>
     <div id="theme-container">
       <div
         v-for="(theme, index) in options"
@@ -125,11 +125,14 @@ export default {
 * respective themes.
 */
 
+p#theme-selection-label { font-size: 13px; }
+
 div#theme-container {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   justify-content: center;
+  font-size: 13px;
 
   div.theme-container-item {
     padding: 20px;

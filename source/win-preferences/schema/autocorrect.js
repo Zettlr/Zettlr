@@ -80,7 +80,9 @@ export default function () {
             '「…」': '「…」',
             '『…』': '『…』'
           }
-        },
+        }
+      ],
+      [
         {
           type: 'list',
           label: trans('dialog.preferences.autocorrect.replacement_info'),

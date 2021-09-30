@@ -65,7 +65,9 @@ export default function () {
           type: 'token',
           label: trans('dialog.preferences.attachments_info'),
           model: 'attachmentExtensions'
-        },
+        }
+      ],
+      [
         {
           type: 'list',
           label: trans('dialog.preferences.whitelist'),

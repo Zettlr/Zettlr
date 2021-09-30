@@ -20,6 +20,13 @@ export default function () {
       [
         {
           type: 'checkbox',
+          label: trans('dialog.preferences.export.use_bundled_pandoc'),
+          model: 'export.useBundledPandoc'
+        }
+      ],
+      [
+        {
+          type: 'checkbox',
           label: trans('dialog.preferences.export.strip_tags_label'),
           model: 'export.stripTags'
         }
@@ -48,11 +55,6 @@ export default function () {
         }
       ],
       [
-        {
-          type: 'checkbox',
-          label: trans('dialog.preferences.export.use_bundled_pandoc'),
-          model: 'export.useBundledPandoc'
-        },
         {
           type: 'file',
           label: trans('dialog.preferences.citation_database'),
