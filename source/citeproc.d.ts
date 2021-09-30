@@ -283,13 +283,13 @@ declare module 'citeproc' {
      * Use the processCitationCluster() method to generate and maintain
      * citations dynamically in the text of a document.
      *
-     * @param   {CSLItem}   citation       The actual citation to generate
-     * @param   {string[]}  citationsPre   A list of citations cited prior to the citation
-     * @param   {string[]}  citationsPost  A list of citations cited after the citation
+     * @param   {EngineCitation}  citation       The actual citation to generate
+     * @param   {string[]}        citationsPre   A list of citations cited prior to the citation
+     * @param   {string[]}        citationsPost  A list of citations cited after the citation
      *
-     * @return  {any}                      An array of two elements: a data object, and an array of one or more index/string pairs, one for each citation affected by the citation edit or insertion operation.
+     * @return  {any}                            An array of two elements: a data object, and an array of one or more index/string pairs, one for each citation affected by the citation edit or insertion operation.
      */
-    processCitationCluster (citation: CSLItem, citationsPre: string[], citationsPost: string[]): any
+    processCitationCluster (citation: EngineCitation, citationsPre: string[], citationsPost: string[]): any
     /**
      * Use previewCitationCluster() to generate accurately formatted citations
      * as they would appear at a given location within a document managed using
@@ -298,14 +298,14 @@ declare module 'citeproc' {
      * processCitationCluster(). The fourth argument may be used to control the
      * output mode.
      *
-     * @param   {CSLItem}        citation       The actual citation to generate
-     * @param   {string[]}       citationsPre   A list of citations cited prior to the citation
-     * @param   {string[]}       citationsPost  A list of citations cited after the citation
-     * @param   {html|text|rtf}  format         Either HTML, TXT, or RTF, indicating the output format
+     * @param   {EngineCitation}  citation       The actual citation to generate
+     * @param   {string[]}        citationsPre   A list of citations cited prior to the citation
+     * @param   {string[]}        citationsPost  A list of citations cited after the citation
+     * @param   {html|text|rtf}   format         Either HTML, TXT, or RTF, indicating the output format
      *
-     * @return  {string}                        The rendered citation
+     * @return  {string}                         The rendered citation
      */
-    previewCitationCluster (citation: CSLItem, citationsPre: string[], citationsPost: string[], format: 'html'|'text'|'rtf'): string
+    previewCitationCluster (citation: EngineCitation, citationsPre: string[], citationsPost: string[], format?: 'html'|'text'|'rtf'): string
     /**
      * Use makeCitationCluster() to generate citations without the burden of
      * registry adjustments. The method accepts an array of cite-items as its
