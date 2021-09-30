@@ -7,22 +7,10 @@
     v-bind:class="{ hidden: !isVisible }"
     v-bind:aria-hidden="!isVisible"
     v-bind:data-hash="selectedDirectoryHash"
-    v-on:keydown="navigate"
     v-on:focus="onFocusHandler"
     v-on:blur="activeDescriptor = null"
   >
     <template v-if="getDirectoryContents.length > 1">
-      <div class="file-manager-filter">
-        <input
-          ref="quickFilter"
-          v-model="filterQuery"
-          class="file-manager-filter-input"
-          type="search"
-          v-bind:placeholder="filterPlaceholder"
-          v-on:focus="$event.target.select()"
-          v-on:blur="activeDescriptor = null"
-        />
-      </div>
       <div v-if="getFilteredDirectoryContents.length === 0" class="empty-file-list">
         {{ noResultsMessage }}
       </div>
@@ -119,11 +107,14 @@ export default {
     isVisible: {
       type: Boolean,
       required: true
+    },
+    filterQuery: {
+      type: String,
+      required: true
     }
   },
   data: function () {
     return {
-      filterQuery: '',
       activeDescriptor: null // Can contain the active ("focused") item
     }
   },
@@ -146,9 +137,6 @@ export default {
     },
     emptyDirectoryMessage: function () {
       return trans('gui.empty_dir')
-    },
-    filterPlaceholder: function () {
-      return trans('system.common.filter')
     },
     selectedFile: function () {
       return this.$store.state.activeFile
@@ -212,23 +200,9 @@ export default {
       this.$nextTick(function () {
         this.scrollIntoView()
       })
-    },
-    selectedDirectory: function () {
-      // Reset the local search when a new directory has been selected
-      this.filterQuery = ''
     }
   },
   mounted: function () {
-    ipcRenderer.on('shortcut', (event, message) => {
-      if (message === 'filter-files') {
-        // Focus the filter on the next tick. Why? Because it might be that
-        // the file manager is hidden, or the global search is visible. In both
-        // cases we need to wait for the app to display the file manager.
-        this.$nextTick(() => {
-          this.$refs['quickFilter'].focus()
-        })
-      }
-    })
   },
   /**
    * Updates associated stuff whenever an update operation on the file manager

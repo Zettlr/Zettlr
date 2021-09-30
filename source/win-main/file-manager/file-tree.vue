@@ -8,16 +8,6 @@
     v-on:click="clickHandler"
   >
     <template v-if="fileTree.length > 0">
-      <div class="file-manager-filter">
-        <input
-          ref="quickFilter"
-          v-model="filterQuery"
-          class="file-manager-filter-input"
-          type="search"
-          v-bind:placeholder="filterPlaceholder"
-          v-on:focus="$event.target.select()"
-        />
-      </div>
       <div v-if="getFilteredTree.length === 0" class="empty-file-list">
         {{ noResultsMessage }}
       </div>
@@ -92,12 +82,14 @@ export default {
     isVisible: {
       type: Boolean,
       required: true
+    },
+    filterQuery: {
+      type: String,
+      required: true
     }
   },
   data: function () {
-    return {
-      filterQuery: ''
-    }
+    return {}
   },
   computed: {
     fileTree: function () {
@@ -137,9 +129,6 @@ export default {
     },
     fileSectionHeading: function () {
       return trans('gui.files')
-    },
-    filterPlaceholder: function () {
-      return trans('system.common.filter')
     },
     workspaceSectionHeading: function () {
       return trans('gui.workspaces')

@@ -4,6 +4,7 @@
     role="region"
     aria-label="File Manager"
     v-bind:class="{ expanded: isExpanded }"
+    v-on:keydown="maybeNavigate"
     v-on:mouseenter="maybeShowArrowButton"
     v-on:mousemove="maybeShowArrowButton"
     v-on:mouseleave="maybeShowArrowButton"
@@ -26,11 +27,25 @@
         size="20"
       ></clr-icon>
     </div>
+
+    <!-- Filter field -->
+    <div class="file-manager-filter">
+      <input
+        ref="quickFilter"
+        v-model="filterQuery"
+        class="file-manager-filter-input"
+        type="search"
+        v-bind:placeholder="filterPlaceholder"
+        v-on:focus="$event.target.select()"
+      />
+    </div>
+
     <div id="component-container">
       <!-- Render a the file-tree -->
       <FileTree
         ref="directories"
         v-bind:is-visible="fileTreeVisible"
+        v-bind:filter-query="filterQuery"
         v-on:selection="selectionListener"
       ></FileTree>
       <!-- Now render the file list -->
@@ -45,6 +60,7 @@
         v-show="!isCombined"
         ref="fileList"
         v-bind:is-visible="isFileListVisible"
+        v-bind:filter-query="filterQuery"
         v-on:lock-file-tree="lockDirectoryTree()"
       ></FileList>
     </div>
@@ -68,6 +84,9 @@
 import findObject from '../../common/util/find-object'
 import FileTree from './file-tree.vue'
 import FileList from './file-list.vue'
+import { trans } from '../../common/i18n-renderer'
+
+const ipcRenderer = window.ipc
 
 export default {
   components: {
@@ -82,7 +101,8 @@ export default {
       fileManagerInnerResizeX: 0,
       // Whether file tree and list are visible
       fileTreeVisible: true,
-      fileListVisible: false
+      fileListVisible: false,
+      filterQuery: ''
     }
   },
   computed: {
@@ -91,6 +111,9 @@ export default {
      */
     selectedDirectory: function () {
       return this.$store.state.selectedDirectory
+    },
+    filterPlaceholder: function () {
+      return trans('system.common.filter')
     },
     isThin: function () {
       return this.fileManagerMode === 'thin'
@@ -121,6 +144,9 @@ export default {
      * Switches to the fileList, if applicable.
      */
     selectedDirectory: function () {
+      // Reset the local search when a new directory has been selected
+      this.filterQuery = ''
+
       // If the directory just got de-selected and the fileList
       // is visible, switch to the directories.
       if (this.selectedDirectory === null && this.isFileListVisible === true) {
@@ -156,6 +182,18 @@ export default {
       }
     }
   },
+  mounted: function () {
+    ipcRenderer.on('shortcut', (event, message) => {
+      if (message === 'filter-files') {
+        // Focus the filter on the next tick. Why? Because it might be that
+        // the file manager is hidden, or the global search is visible. In both
+        // cases we need to wait for the app to display the file manager.
+        this.$nextTick(() => {
+          this.$refs['quickFilter'].focus()
+        })
+      }
+    })
+  },
   methods: {
     /**
      * Toggles the fileList's visibility, if applicable.
@@ -189,14 +227,6 @@ export default {
       }
     },
     /**
-     * Set focus to the file list filter (the file list will then also have focus)
-     */
-    focusFilter: function () {
-      if (this.isFileListVisible === true) {
-        this.$refs.fileList.focusFilter()
-      }
-    },
-    /**
      * Display the arrow button for nagivation, if applicable.
      * @param {MouseEvent} evt The associated event.
      */
@@ -215,6 +245,12 @@ export default {
         this.$refs.arrowButton.classList.remove('hidden')
       } else {
         this.$refs.arrowButton.classList.add('hidden')
+      }
+    },
+    maybeNavigate: function (evt) {
+      // If the file list is visible we can navigate
+      if (this.isFileListVisible === true) {
+        this.$refs.fileList.navigate(evt)
       }
     },
     /**
@@ -374,8 +410,6 @@ export default {
 
 <style lang="less">
 body #file-manager {
-  // display: inline-block;
-  // position: relative;
   width: 100%;
   height: 100%;
 
@@ -441,6 +475,10 @@ body.darwin {
   #file-manager {
     border-top: 1px solid #d5d5d5;
 
+    #component-container {
+      height: calc(100% - 30px);
+    }
+
     .file-manager-filter {
       background-color: rgb(230, 230, 230);
       height: 30px;
@@ -469,6 +507,10 @@ body.darwin {
 
 body.win32 {
   #file-manager {
+    #component-container {
+      height: calc(100% - 34px);
+    }
+
     .file-manager-filter {
       padding: 0;
       border-bottom: 2px solid rgb(230, 230, 230);
