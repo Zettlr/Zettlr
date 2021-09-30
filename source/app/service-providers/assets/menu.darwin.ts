@@ -649,13 +649,9 @@ export default function getMenu (
           id: 'menu.update',
           label: trans('menu.update'),
           click: function (menuitem, focusedWindow) {
-            if (global.updates.applicationUpdateAvailable()) {
-              // Immediately open the window instead of first checking
-              global.application.runCommand('open-update-window')
-                .catch(e => global.log.error(String(e.message), e))
-
-              return
-            }
+            // Immediately open the window instead of first checking
+            global.application.runCommand('open-update-window')
+              .catch(e => global.log.error(String(e.message), e))
 
             global.updates.check()
           }
