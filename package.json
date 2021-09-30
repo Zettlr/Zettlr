@@ -125,7 +125,7 @@
     "jsdom": "^17.0.0",
     "less": "^4.1.1",
     "less-loader": "^10.0.1",
-    "lorem-ipsum": "^2.0.3",
+    "lorem-ipsum": "^2.0.4",
     "mocha": "^9.1.1",
     "node-loader": "^2.0.0",
     "raw-loader": "^4.0.2",
