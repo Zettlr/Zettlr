@@ -162,10 +162,7 @@ export default class UpdateProvider {
       const response: Response<string> = await got(REPO_URL, {
         method: 'GET',
         searchParams: new URLSearchParams([
-          [ 'accept-beta', global.config.get('checkForBeta') ] // ,
-          //  [ 'uuid', global.config.get('uuid') ],
-          //  [ 'platform', process.platform ],
-          //  [ 'version', CUR_VER ]
+          [ 'accept-beta', global.config.get('checkForBeta') ]
         ])
       })
 
