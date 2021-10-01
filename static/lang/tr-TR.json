@@ -6,7 +6,7 @@
             "Furkan Taskin \u003Ctaskinfurkan1@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-09-02T15:40:13.000000Z"
+        "updated_at": "2021-09-24T05:08:01.000000Z"
     },
     "dialog": {
         "about": {
@@ -690,7 +690,12 @@
         "show_toc": "\u0130\u00e7indekiler tablosunu g\u00f6ster",
         "stats": "\u0130statistikleri g\u00f6ster",
         "tag_cloud": "Etiketler",
-        "toggle_attachments": "Ekleri g\u00f6ster"
+        "toggle_attachments": "Ekleri g\u00f6ster",
+        "toggle_global_search": "Genel arama"
+    },
+    "tray": {
+        "show_zettlr": "Zettlr'\u0131 G\u00f6ster",
+        "tooltip": "Zettlr"
     },
     "validation": {
         "error_empty": "%s ayar\u0131 gereklidir.",

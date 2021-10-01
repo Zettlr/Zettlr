@@ -4,7 +4,7 @@
             "Ryota Abe"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-08-20T08:15:19.000000Z"
+        "updated_at": "2021-09-26T07:42:02.000000Z"
     },
     "dialog": {
         "about": {
@@ -504,9 +504,10 @@
         },
         "global_search": {
             "clear_label": "\u691c\u7d22\u3092\u30af\u30ea\u30a2",
+            "filter_label": "\u691c\u7d22\u7d50\u679c\u3092\u30d5\u30a3\u30eb\u30bf",
             "query_label": "\u691c\u7d22\u6587\u5b57\u5217\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044",
             "query_placeholder": "\u691c\u7d22...",
-            "restrict_dir_label": "\u691c\u7d22\u3092\u30c7\u30a3\u30ec\u30af\u30c8\u30ea\u306b\u9650\u5b9a\u3059\u308b",
+            "restrict_dir_label": "\u691c\u7d22\u5bfe\u8c61\u306e\u30c7\u30a3\u30ec\u30af\u30c8\u30ea",
             "restrict_dir_placeholder": "\u30c7\u30a3\u30ec\u30af\u30c8\u30ea...",
             "search_label": "\u691c\u7d22",
             "title": "\u5168\u6587\u691c\u7d22",
@@ -679,6 +680,7 @@
         "all_files": "\u3059\u3079\u3066\u306e\u30d5\u30a1\u30a4\u30eb",
         "cancel": "\u30ad\u30e3\u30f3\u30bb\u30eb",
         "common": {
+            "filter": "\u30d5\u30a3\u30eb\u30bf...",
             "list_actions_label": "\u30a2\u30af\u30b7\u30e7\u30f3",
             "list_add_button": "\u8ffd\u52a0",
             "list_default_column_label": "\u9805\u76ee",
