@@ -30,7 +30,7 @@ import { trans } from '../../common/i18n-main'
 import isFile from '../../common/util/is-file'
 
 const CUR_VER = app.getVersion()
-const REPO_URL = 'https://www.zettlr.com/api/releases/latest'
+const REPO_URL = 'https://zettlr.com/api/releases/latest'
 
 // Mimicks the API response for a downloadable asset
 interface UpdateAsset {
