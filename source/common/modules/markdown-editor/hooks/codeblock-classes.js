@@ -25,6 +25,7 @@ module.exports = (cm) => {
 function applyCodeblockClasses (cm) {
   let needsRefresh = false // Will be set to true if at least one line has been altered
   let isCodeBlock = false
+  let codeBlockLines = []
   let codeblockClass = 'code-block-line'
   let codeblockClassOpen = 'code-block-first-line'
   let codeblockClassClose = 'code-block-last-line'
@@ -47,11 +48,11 @@ function applyCodeblockClasses (cm) {
     const wrapClass = (info.wrapClass !== undefined) ? String(info.wrapClass) : ''
     const isCurrentlyCode = wrapClass.includes(codeblockClass)
 
-    if (i > 0 && codeBlockRE.test(cm.getLine(i - 1))) {
+    if (codeBlockLines.includes(i - 1)) {
       cm.addLineClass(i, 'wrap', codeblockClassOpen)
     }
 
-    if (i > 0 && i < cm.lineCount() - 1 && codeBlockRE.test(cm.getLine(i + 1))) {
+    if (i < cm.lineCount() - 1 && codeBlockRE.test(cm.getLine(i + 1))) {
       cm.addLineClass(i, 'wrap', codeblockClassClose)
     }
 
@@ -74,6 +75,7 @@ function applyCodeblockClasses (cm) {
     // codeblocks themselves should not be styled)
     if (codeBlockRE.test(line)) {
       isCodeBlock = !isCodeBlock
+      codeBlockLines.push(i)
       if (isCurrentlyCode) {
         cm.removeLineClass(i, 'wrap', codeblockClass)
         needsRefresh = true
