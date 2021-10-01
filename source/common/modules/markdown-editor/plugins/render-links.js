@@ -25,7 +25,8 @@
   'use strict'
 
   const makeAbsoluteURL = require('../../../util/make-absolute-url')
-  const openMarkdownLink = require('../open-markdown-link')
+  // const openMarkdownLink = require('../open-markdown-link')
+  const ipcRenderer = window.ipc
 
   // This regular expression matches three different kinds of URLs:
   // 1. Linked images in the format [![Alt text](image/path.png)](www.link-target.tld)
@@ -225,7 +226,17 @@
             // On ALT-Clicks, use the callback to have the user decide
             // what should happen when they click on links, defined
             // in the markdownOnLinkOpen option.
-            openMarkdownLink(renderedLinkTarget, cm)
+
+            // removing call
+            // openMarkdownLink(renderedLinkTarget, cm)
+            ipcRenderer.invoke('application', {
+              command: 'uri-logic',
+              payload: {
+                path: renderedLinkTarget,
+                cm: cm,
+                newTab: false
+              }
+            })
           } else {
             // Clear the textmarker and set the cursor to where the
             // user has clicked the link.
