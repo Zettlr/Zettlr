@@ -122,23 +122,23 @@ export default class TranslationProvider {
     }
 
     if (toUpdate.length === 0) {
+      global.log.info('[Translation Provider] No updates available.')
       return // Nothing to do here!
     }
 
+    const langList = toUpdate.map(elem => trans(`dialog.preferences.app_lang.${elem.bcp47}`)).join(', ')
+
+    global.log.info(`[Translation Provider] Updating translations for ${langList} ...`)
+
     // At this moment, we should have all languages.
-    for (let language of toUpdate) {
+    for (const language of toUpdate) {
       // What we need to do is rather simple: Simply overwrite the corresponding
       // language files in the language subdirectory!
       await this.downloadLanguage(language)
     }
 
     // Now we are done and can notify the user of all updated translations!
-    global.notify.normal(
-      trans(
-        'dialog.preferences.translations.updated',
-        toUpdate.map(elem => trans(`dialog.preferences.app_lang.${elem.bcp47}`)).join(', ')
-      )
-    )
+    global.notify.normal(trans('dialog.preferences.translations.updated', langList))
   }
 
   /**
@@ -147,9 +147,11 @@ export default class TranslationProvider {
    * @param  {Language}  language A language option containing a bcp47 and a download url.
    */
   async downloadLanguage (language: APIResponse): Promise<void> {
+    global.log.info(`[Translation Provider] Downloading ${language.bcp47} ...`)
     let l = await got(language.download_url, { method: 'GET' })
     let file = path.join(this._languageDirectory, language.bcp47 + '.json')
     await fs.writeFile(file, l.body, { encoding: 'utf8' })
+    global.log.info(`[Translation Provider] Success: ${language.bcp47} updated.`)
   }
 
   /**
