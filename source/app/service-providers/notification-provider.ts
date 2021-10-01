@@ -20,7 +20,7 @@ import path from 'path'
 
 export default class NotificationProvider {
   private readonly _osSupportsNotification: boolean
-  private readonly _icon: nativeImage
+  private readonly _icon: Electron.NativeImage
 
   constructor () {
     global.log.verbose('Notification provider booting up ...')
