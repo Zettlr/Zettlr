@@ -2,12 +2,12 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        UriLogic command
+ * Contains:        OpenMarkdownLink command
  * CVM-Role:        <none>
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     This command ...
+ * Description:     This new command manages the uri logic
  *
  * END HEADER
  */
@@ -17,9 +17,9 @@ import path from 'path'
 import fileExists from '../../common/util/is-file'
 import { getProtocolRE, getLinkRE, getMarkDownFileRE } from '../../common/regular-expressions'
 
-export default class UriLogic extends ZettlrCommand {
+export default class OpenMarkdownLink extends ZettlrCommand {
   constructor (app: any) {
-    super(app, 'uri-logic')
+    super(app, 'open-markdown-link')
   }
 
   /**

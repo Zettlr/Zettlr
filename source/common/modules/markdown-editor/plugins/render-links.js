@@ -230,7 +230,7 @@
             // removing call
             // openMarkdownLink(renderedLinkTarget, cm)
             ipcRenderer.invoke('application', {
-              command: 'uri-logic',
+              command: 'open-markdown-link',
               payload: {
                 path: renderedLinkTarget,
                 cm: cm,
