@@ -526,7 +526,7 @@
   </macro>
   <macro name="description">
     <choose>
-      <if type="interview">
+      <if variable="interviewer" type="interview" match="any">
         <group delimiter=". ">
           <text macro="interviewer"/>
           <text variable="medium" text-case="capitalize-first"/>
