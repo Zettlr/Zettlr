@@ -54,6 +54,8 @@ function applyCodeblockClasses (cm) {
 
     if (i < cm.lineCount() - 1 && codeBlockRE.test(cm.getLine(i + 1))) {
       cm.addLineClass(i, 'wrap', codeblockClassClose)
+    } else {
+      cm.removeLineClass(i, 'wrap', codeblockClassClose)
     }
 
     // Second, check if we are NOT inside a fenced code block. If we're not, but
