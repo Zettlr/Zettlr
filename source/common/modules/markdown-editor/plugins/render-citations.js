@@ -84,9 +84,11 @@
         // If we're at this point, we can actually render something!
         const span = document.createElement('span')
         span.className = 'citeproc-citation'
+        const key = citation.citations.map(elem => elem.id).join(',')
+        span.dataset.citekeys = key // data-citekeys="key1,key2"; necessary for the context menu
         span.textContent = line.substr(citation.from, citation.to - citation.from)
         // Apply TextMarker
-        let textMarker = cm.markText(
+        const textMarker = cm.markText(
           curFrom, curTo,
           {
             clearOnEnter: true,
