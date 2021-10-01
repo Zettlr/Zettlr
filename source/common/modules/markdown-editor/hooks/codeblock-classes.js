@@ -26,8 +26,8 @@ function applyCodeblockClasses (cm) {
   let needsRefresh = false // Will be set to true if at least one line has been altered
   let isCodeBlock = false
   let codeblockClass = 'code-block-line'
-  let codeblockClassOpen = 'code-block-line-open'
-  let codeblockClassClose = 'code-block-line-close'
+  let codeblockClassOpen = 'code-block-first-line'
+  let codeblockClassClose = 'code-block-last-line'
 
   // This matches a line that starts with at most three spaces, followed by at
   // least three backticks or tildes (fenced code block).
@@ -47,11 +47,11 @@ function applyCodeblockClasses (cm) {
     const wrapClass = (info.wrapClass !== undefined) ? String(info.wrapClass) : ''
     const isCurrentlyCode = wrapClass.includes(codeblockClass)
 
-    if (i > 0 && codeBlockRE.test(cm.lineInfo(i - 1).text)) {
+    if (i > 0 && codeBlockRE.test(cm.getLine(i - 1))) {
       cm.addLineClass(i, 'wrap', codeblockClassOpen)
     }
 
-    if (i > 0 && i < cm.lineCount() - 1 && codeBlockRE.test(cm.lineInfo(i + 1).text)) {
+    if (i > 0 && i < cm.lineCount() - 1 && codeBlockRE.test(cm.getLine(i + 1))) {
       cm.addLineClass(i, 'wrap', codeblockClassClose)
     }
 
