@@ -50,6 +50,8 @@ function applyCodeblockClasses (cm) {
 
     if (codeBlockLines.includes(i - 1)) {
       cm.addLineClass(i, 'wrap', codeblockClassOpen)
+    } else {
+      cm.removeLineClass(i, 'wrap', codeblockClassOpen)
     }
 
     if (i < cm.lineCount() - 1 && codeBlockRE.test(cm.getLine(i + 1))) {
