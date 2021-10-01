@@ -7,7 +7,7 @@
             "lukecarrier \u003Cluke@carrier.im\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-08-18T16:35:36.000000Z"
+        "updated_at": "2021-09-30T14:09:03.000000Z"
     },
     "dialog": {
         "about": {
@@ -198,6 +198,7 @@
             "checkForBeta": "Notify me about beta releases",
             "choose_file": "Choose file \u2026",
             "citation_database": "Citation Database (CSL JSON or BibTex)",
+            "cite_style_label": "How would you like autocomplete to insert your citations?",
             "count_chars": "Count characters instead of words (e.g., for Chinese)",
             "creationtime": "File creation time",
             "debug": "Enable debug mode",
@@ -330,6 +331,8 @@
                 "accent_color_info": "This setting is only available on Windows and macOS",
                 "accent_color_label": "Use the operating system's accent colour instead of the theme colour",
                 "info": "Here you can choose the theme for the app.",
+                "select_label": "click to select",
+                "selected_label": "selected",
                 "title": "Theme"
             },
             "title": "Preferences",
@@ -507,6 +510,7 @@
         },
         "global_search": {
             "clear_label": "Clear search",
+            "filter_label": "Filter search results",
             "query_label": "Enter your search terms below",
             "query_placeholder": "Find \u2026",
             "restrict_dir_label": "Restrict search to directory",
@@ -682,6 +686,7 @@
         "all_files": "All Files",
         "cancel": "Cancel",
         "common": {
+            "filter": "Filter \u2026",
             "list_actions_label": "Actions",
             "list_add_button": "Add",
             "list_default_column_label": "Item",

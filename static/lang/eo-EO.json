@@ -2,7 +2,7 @@
     "metadata": {
         "authors": [],
         "license": "GNU GPL v3",
-        "updated_at": "2021-08-22T18:27:34.000000Z"
+        "updated_at": "2021-09-20T17:24:20.000000Z"
     },
     "dialog": {
         "about": {
@@ -99,6 +99,7 @@
                 "ar-AR": "Araba",
                 "be-BE": "Belorusujo",
                 "bg-BG": "Bulgara",
+                "bs-BS": "Bosnia",
                 "ca-CA": "Kataluna (Katalunio)",
                 "cs-CZ": "\u0108e Czecha (\u0108e Czecha Respubliko)",
                 "da-DA": "Dana",
@@ -353,6 +354,8 @@
                 "id_label": "Identiga regula esprimo",
                 "intro": "Sur \u0109i tiu pa\u011do vi povas agordi Zettlr por funkcii kun via ekzistanta Zettelkasten-laborfluo. La identigilo bazi\u011das sur regulaj esprimoj, do bonvolu nepre eviti RegEx-signojn, kiuj la\u016dvorte aperas en viaj identigiloj. Provu la generadon (kaj detekton) de identigiloj alklakante la suban butonon. Kontrolu la manlibron por vidi \u0109iujn eblajn variablojn por la ID-generilo.",
                 "link_behaviour_always": "\u0109iam",
+                "link_behaviour_description": "Kiam vi ligas dosierojn, aldonu la dosiernomon ...",
+                "link_behaviour_id": "nur dum ligado per la ID (identigilo)",
                 "link_behaviour_never": "neniam",
                 "linkend_label": "Ligofino",
                 "linkstart_label": "Ligokomenco",
@@ -368,6 +371,7 @@
                 "var_hour": "Horoj (\u0109efaj nuloj)",
                 "var_minute": "Minutoj (\u0109efaj nuloj)",
                 "var_month": "Monato (\u0109efaj nuloj)",
+                "var_second": "Sekundoj (\u0109efaj nuloj)",
                 "var_unix_epoch": "Uniksa tempo",
                 "var_week_number": "Semajno de la jaro (\u0109efaj nuloj)",
                 "var_year": "Jaro (kvar cifero)",
@@ -384,13 +388,30 @@
             "day": "Dato",
             "intro": "\u0108i tie vi povas trovi plilongajn statistikojn pri via skriba konduto, kiel detala grafika\u0135o de viaj vortoj \u0109iutage.",
             "month": "Monato",
+            "previous_frame": "Anta\u016da Tempokadro",
+            "tabs": {
+                "calendar_label": "Kalendaro",
+                "chart_label": "Diagramoj",
+                "fsal_label": "Statistikoj de FSAL"
+            },
+            "this_frame": "Nuna Tempokadro",
+            "title": "Verki statistikojn",
             "week": "Semajno",
             "words_per_day": "Vortoj tage",
             "words_per_week": "Vortoj semajne",
             "year": "Jaro"
         },
         "tag_cloud": {
-            "copy": "Kopii al tondujo"
+            "add_to_file": "Aldonu al dosiero",
+            "copy": "Kopii al tondujo",
+            "info": "\u0108i tie vi trovas \u0109iujn etikedojn, kiujn vi uzis ie en viaj dosieroj. Vi povas kopii la tutan liston al la tondujo. Suriru la etikedojn por vidi kiom da fojoj vi uzis ilin.",
+            "suggestions_label": "Proponitaj etikedoj por la nuna dosiero",
+            "title": "Etikeda Nubo"
+        },
+        "tags": {
+            "color_desc": "Koloro (ekz. # ff0000 a\u016d rgb (255, 0, 0))",
+            "desc_desc": "Mallonga kaj konciza priskribo (maksimume 100 signoj)",
+            "description": "\u0108i tie vi povas atribui kolorojn al malsamaj etikedoj. Se etikedo trovi\u011das en dosiero, \u011dia kahelo en la anta\u016dvida listo ricevos koloran indikilon. La priskribo montri\u011dos dum muso."
         }
     },
     "toolbar": {

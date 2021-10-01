@@ -2,10 +2,11 @@
     "metadata": {
         "authors": [
             "Nelson Ronald \u003Cid.nelsonronald@gmail.com\u003E",
+            "zulfarahma \u003Czulfarahma@protonmail.ch\u003E",
             "bellacrl"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-12-01T15:25:39.000000Z"
+        "updated_at": "2021-09-25T19:00:02.000000Z"
     },
     "dialog": {
         "about": {
@@ -34,11 +35,18 @@
             "cancel": "Batal",
             "choose_path": "Pilih direktori ...",
             "close": "Tutup",
+            "close_without_saving": "Tutup tanpa menyimpan perubahan",
             "save": "Simpan"
         },
         "custom_css": {
             "info": "Di sini kamu dapat mengganti gaya Zettlr untuk menyesuaikannya lebih jauh. \u003Cstrong\u003EPerhatian: File ini mengganti semua aturan CSS! Jangan pernah mengubah geometri elemen, karena dapat menyebabkan masalah pada aplikasi!\u003C/strong\u003E",
             "title": "Kustom CSS"
+        },
+        "defaults": {
+            "explanation": "Ubah pengaturan bawaan untuk mengimpor atau mengekspor di sini.",
+            "exporting_title": "Mengeskpor",
+            "importing_title": "Mengimpor",
+            "restore": "Kembalikan berkas bawaan"
         },
         "dir_new": {
             "placeholder": "Nama direktori",
@@ -67,9 +75,13 @@
         },
         "filter_tags": "Filter label...",
         "find": {
+            "close_label": "Tutup pencarian",
             "find_label": "Cari",
             "find_placeholder": "Cari...",
+            "regex_label": "Nyalakan/matikan pencarian menggunakan eskpresi reguler (regex)",
+            "replace_all_label": "Ganti semuanya",
             "replace_label": "Ganti",
+            "replace_next_label": "Ganti yang selanjutnya",
             "replace_placeholder": "Ganti dengan"
         },
         "paste_image": {
@@ -163,6 +175,13 @@
             "auto_dark_mode_schedule": "Jadwal",
             "auto_dark_mode_schedule_format": "HH:MM (format 24 jam)",
             "auto_dark_mode_system": "Mengikuti Sistem Operasi",
+            "auto_save": {
+                "delayed": "Setelah jeda singkat",
+                "immediately": "Langsung",
+                "label": "Simpan otomatis",
+                "off": "Mati"
+            },
+            "autocomplete_accept_space": "Ikut terima spasi saat autocomplete",
             "autocorrect": {
                 "active_label": "Aktifkan Koreksi Otomatis",
                 "quick_select_label": "Pilih cepat",
@@ -174,6 +193,7 @@
                 "style_word_label": "Gaya MS Word",
                 "title": "Koreksi Otomatis"
             },
+            "avoid_new_tabs": "Hindari membuka berkas di tab baru jika memungkinkan",
             "checkForBeta": "Beri tahu saya",
             "choose_file": "Pilih File ...",
             "citation_database": "Database Kutipan (CSL JSON or BibTex)",
@@ -181,8 +201,11 @@
             "creationtime": "Waktu pembuatan file",
             "debug": "Aktifkan mode debug",
             "default_image_save_path": "Jalur gambar default (relatif atau absolut)",
+            "delete_on_fail": "Hapus item secara permanen, jika gagal memindahkannya ke Recycle Bin",
             "display": {
+                "image_height": "Tinggi maksimum citra (persen)",
                 "image_size_info": "Dengan kontrol ini, kamu dapat membatasi pratinjau gambar.",
+                "image_width": "Lebar maksimum citra (persen)",
                 "preview_info": "Opsi ini menentukan elemen mana yang ditampilkan dalam dokumen.",
                 "render_citations": "Menampilkan Kutipan",
                 "render_htags": "Sembunyikan karakter judul",
@@ -196,12 +219,14 @@
             },
             "display_time_explanation": "Ditampilkan dalam metadata file",
             "editor": "Editor",
+            "editor_font_size": "Ukuran fon editor",
             "editor_setting": {
                 "direction_ltr": "Arah penulisan dari kiri ke kanan",
                 "direction_rtl": "Arah penulisan dari kanan ke kiri",
                 "rtl_move_visually": "Gunakan urutan visual untuk pergerakan tombol panah saat dalam mode kanan-ke-kiri"
             },
             "enable_rmarkdown": "Aktifkan dukungan file RMarkdown",
+            "enable_scroll_zoom": "Perbesar saat menggulir jika \u003Ckbd\u003ECmd\u003C/kbd\u003E atau \u003Ckbd\u003ECtrl\u003C/kbd\u003E ditekan",
             "enable_table_helper": "Aktifkan Editor Tabel",
             "export": {
                 "dest": "Direktori target untuk file yang diekspor. \u003Cem\u003EPerhatian:\u003C/em\u003E Memilih direktori kerja saat ini akan menimpa file tanpa peringatan!",
@@ -213,9 +238,14 @@
                 "strip_links_unlink_label": "Hapus tautan internal",
                 "strip_tags_label": "Hapus label dari file",
                 "stripping": "Opsi untuk elemen ZKN",
-                "title": "Ekspor"
+                "title": "Ekspor",
+                "use_bundled_pandoc": "Gunakan pandoc internal untuk mengeskpor"
             },
             "file_meta": "Tampilkan informasi file",
+            "filemanager_combined": "Gabungan &mdash; perlihatkan berkas dan direktori di susunan berkas",
+            "filemanager_expanded": "Lengkap &mdash; perlihatkan susunan berkas dan daftar berkas",
+            "filemanager_explanation": "Mode pengelola berkas",
+            "filemanager_thin": "Minimalis &mdash; perlihatkan salah satu saja, susunan berkas atau daftar berkas",
             "filename_generator": "Pola untuk nama file baru",
             "formatting_characters_explanation": "Pilih format karakter untuk membuat huruf tebal/miring",
             "general": "Umum",
@@ -223,6 +253,7 @@
             "homeEndBehaviour": "Gunakan tindakan default CodeMirror untuk \u003Ckbd\u003EHome\u003C/kbd\u003E dan \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
             "indent_unit": "Inden dengan jumlah spasi berikut",
             "input_mode": "Mode masukan editor",
+            "leave_app_running_in_the_notification_area": "Biarkan aplikasi berjalan di area notifikasi",
             "modtime": "Waktu modifikasi terakhir",
             "mute_lines": "Matikan garis non-fokus saat mode bebas gangguan aktif",
             "new_file_dont_prompt": "Tidak",
@@ -274,11 +305,16 @@
             "project": {
                 "csl_style": "CSL-Style (opsional)",
                 "format": "Ekspor proyek ke:",
+                "name_label": "Format",
+                "pattern": "Gunakan pola Glob untuk hanya memasukkan beberapa berkas spesifik",
+                "pattern_name": "Pola Glob",
                 "title": "Pengaturan proyek",
-                "title_label": "Judul Proyek"
+                "title_label": "Judul Proyek",
+                "use_label": "Gunakan"
             },
             "readability_algorithm": "Algoritme yang digunakan untuk mode baca",
             "reset_pandoc_command": "Reset perintah pandoc",
+            "show_app_in_the_notification_area": "Tampilkan aplikasi di area notifikasi",
             "sorting_ascii": "Urutan ASCII (2 lalu 10)",
             "sorting_explanation": "Susunan urutan file (untuk pengurutan berdasarkan nama)",
             "sorting_natural": "Urutan acak (10 lalu 2)",
@@ -290,6 +326,8 @@
                 "title": "Pengecekan ejaan"
             },
             "theme": {
+                "accent_color_info": "Pengaturan ini hanya tersedia pada Windows dan macOS",
+                "accent_color_label": "Gunakan aksen warna dari sistem operasi, bukan dari tema Zettlr",
                 "info": "Di sini kamu dapat memilih tema untuk aplikasi",
                 "title": "Tema"
             },
@@ -302,14 +340,19 @@
                 "success": "Berhasil mengunduh %s!",
                 "updated": "Terjemahan yang diperbarui: %s"
             },
+            "use_native_appearance": "Gunakan tampilan jendela bawaan",
             "user_dictionary": "Kamus pengguna. Klik untuk menghapus kata.",
+            "user_dictionary_label": "Entri kamus",
             "watchdog_checkbox_label": "Aktifkan polling Watchdog",
             "watchdog_explainer": "Zettlr mungkin melaporkan terlalu banyak perubahan file secara remote pada beberapa komputer. Jika ini terjadi, coba aktifkan pengaturan ini.",
             "watchdog_threshold_label": "Waktu tunggu sebelum penulisan file dianggap selesai (dalam milidetik)",
+            "whitelist": "iFrame rendering whitelist",
+            "whitelist_hostname": "Nama host",
             "xelatex": "Jalur ke file eksekusi xelatex. Hanya diubah jika Zettlr tidak dapat menemukannya.",
             "xelatex_default": "Default: xelatex",
             "zkn": {
                 "auto_create_file": "Membuat file yang tidak ada secara otomatis saat mengikuti tautan internal",
+                "auto_search": "Lakukan pencarian ketika mengklik pranala-Zettelkasten",
                 "generated_id": "ID yang dibuat",
                 "id_generator_label": "Pola yang digunakan untuk membuat ID baru",
                 "id_label": "Ekspresi reguler ID",
@@ -333,9 +376,16 @@
                 "var_minute": "Menit (angka nol di depan)",
                 "var_month": "Bulan (angka nol di depan)",
                 "var_second": "Detik (angka nol di depan)",
+                "var_unix_epoch": "Waktu Unix",
                 "var_week_number": "Minggu dalam setahun (angka nol di depan)",
-                "var_year": "Tahun (empat angka)"
+                "var_year": "Tahun (empat angka)",
+                "var_year_two": "Tahun (2 digit)"
             }
+        },
+        "snippets": {
+            "explanation": "Cuplikan adalah potongan teks yang dapat digunakan kembali, definisikan menggunakan peubah",
+            "rename": "Ganti nama cuplikan",
+            "title": "Cuplikan"
         },
         "statistics": {
             "compare": "Bandingkan dengan jangka waktu sebelumnya",
@@ -343,6 +393,11 @@
             "intro": "Kamu dapat melihat statistik tambahan kebiasaan menulismu di sini. Misalnya rincian kata-kata yang ditulis setiap hari dalam tampilan grafik.",
             "month": "Bulan",
             "previous_frame": "Jangka waktu Sebelumnya",
+            "tabs": {
+                "calendar_label": "Kalender",
+                "chart_label": "Grafik",
+                "fsal_label": "Statistik FSAL"
+            },
             "this_frame": "Jangka waktu Saat ini",
             "title": "Statistik Penulisan",
             "week": "Minggu",
@@ -351,8 +406,10 @@
             "year": "Tahun"
         },
         "tag_cloud": {
+            "add_to_file": "Tambahkan ke berkas",
             "copy": "Salin ke clipboard",
             "info": "Semua label yang dibuat pada file dapat ditemukan disini. Kamu dapat menyalin semuanya ke clipboard. Arahkan kursor ke atas label untuk melihat berapa kali label telah digunakan.",
+            "suggestions_label": "Rekomendasi tag untuk berkas ini",
             "title": "Awan Label"
         },
         "tags": {
@@ -371,22 +428,42 @@
             "client_error": "Tidak dapat memeriksa pembaruan: Galat klien (Kode status: %s)",
             "connection_error": "Tidak dapat memeriksa pembaruan: Tidak dapat melakukan koneksi",
             "current_version": "Versi kamu",
+            "download_progress_label": "Mengunduh pembaruan",
+            "new_update_available": "Pembaruan ke versi %s telah tersedia!",
             "no_data": "Tidak dapat memeriksa pembaruan: Server belum mengirim data",
+            "no_new_update": "Pembaruan tidak tersedia. Anda sudah memiliki versi terbaru.",
             "notification": "Versi terbaru dari Zettlr tersedia untuk diunduh. Harap baca log perubahan di bawah ini.",
+            "other_error": "Tidak dapat mengecek pembaruan. %s: %s",
             "redirect_error": "Tidak dapat memeriksa pembaruan: Server mencoba mengalihkan sambungan (Kode status: %s)",
             "release_url": "Buka halaman unduhan",
             "server_error": "Tidak dapat memeriksa pembaruan: Galat Server (Kode status: %s)",
+            "start_update_label": "Klik untuk memulai pembaruan",
+            "start_update_message": "Memulai pembaruan ...",
             "title": "Tersedia pembaruan baru",
-            "transmission_error": "Tidak dapat memeriksa pembaruan: Koneksi terputus"
+            "transmission_error": "Tidak dapat memeriksa pembaruan: Koneksi terputus",
+            "window_title": "Pengecek pembaruan"
         }
     },
     "gui": {
+        "assets_man": {
+            "defaults_restore_error": "Tidak dapat mengembalikan berkas bawaan",
+            "defaults_restored": "Berkas bawaan telah dipulihkan!",
+            "defaults_restoring": "Memulihkan berkas bawaan ...",
+            "status": {
+                "save_error": "Gagal menyimpan",
+                "saved": "Berhasil tersimpan",
+                "saving": "Menyimpan ...",
+                "unsaved_changes": "Perubahan yang belum tersimpan"
+            },
+            "win_title": "Pengelola Aset"
+        },
         "attachments": "Lampiran",
         "attachments_open_dir": "Buka direktori",
         "avg_close_to": "\ud83d\udcaa Kamu hampir mencapai rata-rata harianmu!",
         "avg_not_reached": "\u270d\ud83c\udffc Terus menulis untuk melampaui rata-rata harianmu.",
         "avg_surpassed": "\ud83d\udd25 Kamu sedang bersemangat!",
         "avg_words": "rata-rata harian",
+        "chars": "%s karakter",
         "citeproc": {
             "error_db": "Database kutipan tidak bisa dimuat",
             "error_report_message": "Item %s di library kamu tidak dapat dimuat karena adanya kesalahan. Harap periksa pesan galat di bawah untuk melihat CiteKey mana yang rusak dan apa kesalahannya.",
@@ -398,6 +475,9 @@
             "references_none": "Tidak ada kutipan pada dokumen ini.",
             "reloading": "Perubahan pada file library terdeteksi. Memuat ulang\u2026"
         },
+        "created": "Dibuat",
+        "ctrl_click_to_open": "Cmd/Ctrl+Klik untuk membuka %s",
+        "date_just_now_label": "baru saja",
         "dirs": "Direktori",
         "display_search_results": "Tampilkan hasil pencarian",
         "empty_dir": "Kosongkan direktori",
@@ -424,13 +504,53 @@
             "tasklist": "Daftar tugas",
             "ul": "Daftar terperinci"
         },
+        "global_search": {
+            "clear_label": "Bersihkan pencarian",
+            "filter_label": "Saring hasil pencarian",
+            "query_label": "Masukkan kata pencarian",
+            "query_placeholder": "Cari ...",
+            "restrict_dir_label": "Batasi pencarian dalam direktori",
+            "restrict_dir_placeholder": "Batasi hanya dalam direktori ...",
+            "search_label": "Cari",
+            "title": "Pencarian teks lengkap",
+            "toggle_label": "Alihkan penampilan hasil pencarian"
+        },
+        "modified": "Dimodifikasi",
+        "months": {
+            "apr": "April",
+            "aug": "Agustus",
+            "dec": "Desember",
+            "feb": "Februari",
+            "jan": "Januari",
+            "jul": "Juli",
+            "jun": "Juni",
+            "mar": "Maret",
+            "may": "Mei",
+            "nov": "November",
+            "oct": "Oktober",
+            "sep": "September"
+        },
         "no_attachments": "Tidak ada lampiran",
         "no_dir_selected": "Direktori belum dipilih",
+        "no_open_document": "Tidak ada dokumen yang dibuka",
+        "no_other_files": "Tidak ada berkas lainnya",
+        "no_reference_message": "Tidak ada teks referensi",
+        "no_related_files": "Tidak ada berkas yang berkaitan",
         "no_search_results": "Tidak ada hasil",
+        "number_selections": "%s pilihan",
+        "other_files": "Ber",
+        "preview_modification_date": "Dimodifikasi",
+        "preview_searching_label": "Mencari Berkas ...",
+        "preview_word_count": "Jumlah kata",
+        "related_files_label": "Berkas yang berkaitan",
+        "reset": "Atur ulang",
         "statistics_more": "Statistik selengkapnya ...",
+        "table_of_contents": "Daftar Isi",
         "today_words": "kata hari ini",
         "words": "%s kata",
-        "words_last_month": "kata bulan lalu"
+        "words_last_month": "kata bulan lalu",
+        "words_selected": "%s dipilih",
+        "workspaces": "Workspace"
     },
     "localise": {
         "decimal_delimiter": ".",
@@ -440,15 +560,18 @@
         "about": "Tentang Zettlr",
         "add_to_dictionary": "Tambah ke Kamus",
         "all_front": "Bawa Semua ke Depan",
+        "assets_manager": "Pengelola Aset",
         "bold": "Tebal",
         "clear_recent_docs": "Kosong",
         "close_all_tabs": "Tutup semua tab",
         "close_dir": "Tutup direktori",
         "close_file": "Tutup File",
+        "close_workspace": "Tutup Workspace",
         "copy": "Salin",
         "copy_filename": "Salin nama file",
         "copy_html": "Salin sebagai HTML",
         "copy_id": "Salin ID",
+        "copy_img_to_clipboard": "Salin gambar ke papan klip",
         "copy_link": "Salin tautan",
         "copy_mail": "Salin alamat email",
         "custom_css": "Kustom CSS\u2026",
@@ -459,6 +582,7 @@
         "donate": "Dukung Zettlr",
         "duplicate_file": "File duplikat",
         "export": "Ekspor...",
+        "filter_files": "Saring berkas",
         "find_dir": "Cari dalam direktori",
         "find_file": "Cari dalam file",
         "generate_id": "Buat ID baru",
@@ -489,8 +613,11 @@
         "no_suggestions": "Tidak ada saran",
         "open": "Buka",
         "open_attachment": "Buka Lampiran",
+        "open_in_browser": "Buka di peramban",
         "open_link": "Buka Tautan",
         "open_logs": "Bukan Log",
+        "open_new_tab": "Buka di tab baru",
+        "open_workspace": "Buka Workspace ...",
         "pandoc": "Dapatkan Pandoc",
         "paste": "Tempel",
         "paste_plain": "Tempelkan tanpa gaya",
@@ -499,6 +626,7 @@
         "print": "Cetak...",
         "project_build": "Ekspor Proyek",
         "project_properties": "Pengaturan Proyek...",
+        "properties": "Atribut",
         "quicklook": "Lihat cepat",
         "quit": "Keluar",
         "recent_docs": "Dokumen terkini",
@@ -519,15 +647,19 @@
         "start_speaking": "Mulai bicara",
         "stop_speaking": "Berhenti bicara",
         "tab_close": "Tutup Tab",
+        "tab_close_all": "Tutup semua bilah",
+        "tab_close_others": "Tutup semua bilah lain",
         "tab_next": "Tab Berikutnya",
         "tab_previous": "Tab Sebelumnya",
         "tags": "Kelola Label\u2026",
         "toggle_devtools": "Hidupkan/matikan alat pengembang",
         "toggle_distraction_free": "Mode bebas gangguan",
         "toggle_file_meta": "Informasi tambahan",
+        "toggle_filemanager": "Alihkan pengelola berkas",
         "toggle_fullscreen": "Hidupkan/matikan layar penuh",
         "toggle_sidebar": "Sembunyikan/Tampilkan Sidebar",
         "toggle_theme": "Mode malam",
+        "toggle_typewriter_mode": "Mode Mesin Tik",
         "undo": "Urungkan",
         "unhide": "Tampil",
         "update": "Periksa pembaruan",
@@ -549,6 +681,13 @@
     "system": {
         "all_files": "Semua File",
         "cancel": "Batal",
+        "common": {
+            "filter": "Saring ...",
+            "list_actions_label": "Tindakan",
+            "list_add_button": "Tambahkan",
+            "list_default_column_label": "Item",
+            "list_search_placeholder": "Cari entri"
+        },
         "directories": "Direktori",
         "directory_removed": "Direktori %s sudah dihapus.",
         "error": {
@@ -570,6 +709,8 @@
             "fnf_title": "File tidak ditemukan",
             "ignored_dir_message": "Directori &quot;%s&quot; tidak bisa dibuka oleh Zettlr.",
             "ignored_dir_title": "Tidak dapat membuka direktori",
+            "image_not_found": "Citra tidak ditemukan %s",
+            "malformed_citekey": "Format Citekey salah: @%s",
             "malformed_textbundle": "Textbundle rusak: %s",
             "move_into_child_message": "Kamu tidak dapat memindahkan direktori ke salah satu subdirektorinya.",
             "move_into_child_title": "Tidak dapat memindahkan direktori",
@@ -583,7 +724,8 @@
             "pandoc_error_message": "Pandoc melaporkan kesalahan: %s",
             "pandoc_error_title": "Tidak dapat mengekspor file",
             "remove_message": "Kamu yakin ingin menghapus %s?",
-            "remove_title": "Ingin dihapus?"
+            "remove_title": "Ingin dihapus?",
+            "tray_not_supported": "Tray tidak didukung. Ekstensi Gnome &quot;KStatusNotifierItem/AppIndicator Support&quot; dibutuhkan untuk menjalankan Tray pada Gnome Desktop."
         },
         "export_success": "Mengekspor ke %s",
         "file_changed": "File %s telah diubah secara remote.",
@@ -642,7 +784,13 @@
         "show_toc": "Tampilkan daftar isi",
         "stats": "Lihat statistik",
         "tag_cloud": "Label",
-        "toggle_attachments": "Lihat lampiran"
+        "toggle_attachments": "Lihat lampiran",
+        "toggle_file_manager": "Pengelola berkas",
+        "toggle_global_search": "Pencarian global"
+    },
+    "tray": {
+        "show_zettlr": "Perlihatkan Zettlr",
+        "tooltip": "Zettlr"
     },
     "validation": {
         "error_empty": "Pilihan %s diwajibkan.",

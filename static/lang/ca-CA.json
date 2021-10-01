@@ -5,7 +5,7 @@
             "vfc"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-08-21T03:27:37.000000Z"
+        "updated_at": "2021-09-20T16:26:08.000000Z"
     },
     "dialog": {
         "about": {
@@ -505,6 +505,7 @@
         },
         "global_search": {
             "clear_label": "Neteja la cerca",
+            "filter_label": "Filtra els resultats de la cerca",
             "query_label": "Escriu les paraules a cercar aqu\u00ed sota",
             "query_placeholder": "Troba ...",
             "restrict_dir_label": "Restringeix  la cerca a la carpeta",
@@ -680,6 +681,7 @@
         "all_files": "Tots els fitxers",
         "cancel": "Cancel\u00b7lar",
         "common": {
+            "filter": "Filtre ...",
             "list_actions_label": "Accions",
             "list_add_button": "Afegeix",
             "list_default_column_label": "\u00cdtem",
