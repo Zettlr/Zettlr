@@ -376,6 +376,6 @@ export default {
 div[role="tabpanel"] {
   overflow: auto; // Enable scrolling, if necessary
   padding: 10px;
-  width: 100vw;
+  width: 100%;
 }
 </style>
