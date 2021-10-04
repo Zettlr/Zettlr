@@ -49,7 +49,8 @@ export default class Export extends ZettlrCommand {
     const exporterOptions: ExporterOptions = {
       format: format,
       targetDirectory: dest,
-      sourceFiles: [fileDescriptor]
+      sourceFiles: [fileDescriptor],
+      cwd: fileDescriptor.dir
     }
 
     // Call the exporter. Don't throw the "big" error as this is single-file export

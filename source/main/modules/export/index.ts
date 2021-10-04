@@ -73,7 +73,7 @@ export async function makeExport (options: ExporterOptions, formatOptions: any =
   // This is basically the "plugin API"
   const ctx: ExporterAPI = {
     runPandoc: async (defaults: string) => {
-      return await runPandoc(defaults)
+      return await runPandoc(defaults, options.cwd)
     },
     getDefaultsFor: async (writer: string, properties: any) => {
       // Inject additional properties from the global exporter options here
@@ -96,7 +96,7 @@ export async function makeExport (options: ExporterOptions, formatOptions: any =
   return exporterReturn
 }
 
-async function runPandoc (defaultsFile: string): Promise<PandocRunnerOutput> {
+async function runPandoc (defaultsFile: string, cwd?: string): Promise<PandocRunnerOutput> {
   const output: PandocRunnerOutput = {
     code: 0,
     stdout: [],
@@ -107,7 +107,8 @@ async function runPandoc (defaultsFile: string): Promise<PandocRunnerOutput> {
     const pandocProcess = spawn('pandoc', [ '--defaults', `"${defaultsFile}"` ], {
       // NOTE: This has to be true, because of reasons unbeknownst to me, Pandoc
       // is unable to open the defaultsFile if it is not run from within a shell
-      shell: true
+      shell: true,
+      cwd: cwd
     })
 
     pandocProcess.stdout.on('data', (data) => {

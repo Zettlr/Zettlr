@@ -47,6 +47,12 @@ export interface ExporterOptions {
    * defaults file metadata.
    */
   title?: string
+  /**
+   * The current working directory for the Pandoc executable. Should be set
+   * reasonably so that relative paths can be correctly resolved (especially
+   * paths to images or other files).
+   */
+  cwd?: string
 }
 
 /**
