@@ -90,7 +90,7 @@
     "@types/adm-zip": "^0.4.34",
     "@types/archiver": "^5.1.1",
     "@types/bcp-47": "^2.0.0",
-    "@types/codemirror": "^5.60.3",
+    "@types/codemirror": "^5.60.4",
     "@types/command-exists": "^1.2.0",
     "@types/electron-devtools-installer": "^2.2.0",
     "@types/katex": "^0.11.1",
