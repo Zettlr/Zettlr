@@ -28,12 +28,10 @@
             v-on:mousedown.stop="requestFile($event, fileRecord.path)"
             v-on:dragstart="beginDragRelatedFile($event, fileRecord.path)"
           >{{ getRelatedFileName(fileRecord.path) }}</span>
-          <span
-            v-for="tag, idx2 in fileRecord.tags"
-            v-bind:key="idx2"
-            class="tag"
-          >
-            #{{ tag }}
+          <span class="icons">
+            <!-- TODO: When we implement file links, here we should also add the link -->
+            <clr-icon shape="tag" title="This relation is based on tag similarity."></clr-icon>
+            <!-- <clr-icon shape="link"></clr-icon> -->
           </span>
         </div>
       </div>
@@ -448,22 +446,26 @@ body {
 
       div.related-file {
         margin-bottom: 10px;
+        display: flex;
 
         span.filename {
-          display: block;
+          display: inline-block;
           font-size: 11px;
           padding: 10px 5px;
+          flex-grow: 8;
 
           &:hover {
             background-color: rgb(200, 200, 200);
           }
         }
 
-        span.tag {
-          font-size: 10px;
+        span.icons {
           display: inline-block;
           border-radius: 4px;
           padding: 2px;
+          flex-grow: 2;
+          flex-shrink: 0;
+          text-align: right;
         }
       }
     }
