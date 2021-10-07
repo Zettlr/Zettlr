@@ -42,6 +42,7 @@ export default function setWindowChrome (winConf: BrowserWindowConstructorOption
     winConf.titleBarStyle = 'hiddenInset'
     winConf.vibrancy = 'under-window' // See https://developer.apple.com/design/human-interface-guidelines/macos/visual-design/translucency/
     winConf.visualEffectState = 'followWindow'
+    winConf.transparent = true
   } else if ((process.platform !== 'linux' || !shouldUseNativeAppearance) && !modal && process.platform !== 'darwin') {
     // On Windows, we need a frameless window. On Linux, only if the
     // shouldUseNativeAppearance flag is set to false.
