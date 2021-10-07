@@ -86,10 +86,11 @@ const fullCitationRE = /(?<prefix>.+)?(?:@(?<citekey>[\p{L}\d_][^\s{]*[\p{L}\d_]
  * * 12, 54, 12-23
  * * 1, 1-4
  * * 3
+ * * NEW NEW NEW: Now also matches Roman numerals as sometimes used in forewords!
  *
  * @var {RegExp}
  */
-const locatorRE = /^[\d, -]*\d/
+const locatorRE = /^(?:[\d, -]*\d|[ivxlcdm, -]*[ivxlcdm])/i
 
 /**
  * This is the return interface from this module: It declares a from-to position
@@ -183,6 +184,15 @@ function parseSuffix (suffix: string|undefined, containsLocator: boolean): CiteI
   // the locator.
   if (containsLocator) {
     retValue.locator = suffix
+  } else {
+    // The caller has not indicated that the whole suffix is the locator, so it
+    // can be at the beginning. We only accept simple page/number ranges here.
+    // For everything, the user should please be more specific.
+    const match = locatorRE.exec(suffix)
+    if (match !== null) {
+      retValue.locator = match[0] // Full match is the locator
+      retValue.suffix = suffix.substr(match[0].length).trim() // The rest is the suffix.
+    }
   }
 
   return retValue
