@@ -661,10 +661,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/luxon@^2.0.4":
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-2.0.4.tgz#f7b5a86ccd843c0ccaddfaedd9ee1081bc1cde3b"
-  integrity sha512-l3xuhmyF2kBldy15SeY6d6HbK2BacEcSK1qTF1ISPtPHr29JH0C1fndz9ExXLKpGl0J6pZi+dGp1i5xesMt60Q==
+"@types/luxon@^2.0.5":
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-2.0.5.tgz#29d3b095d55ee50df8f4cf109b16009334d9828e"
+  integrity sha512-GKrG5v16BOs9XGpouu33hOkAFaiSDi3ZaDXG9F2yAoyzHRBtksZnI60VWY5aM/yAENCccBejrxw8jDY+9OVlxw==
 
 "@types/minimatch@*":
   version "3.0.3"
