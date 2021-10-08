@@ -45,7 +45,7 @@
     "@types/node": "^16.10.2",
     "@types/sanitize-html": "^2.3.2",
     "@types/semver": "^7.3.8",
-    "adm-zip": "^0.5.6",
+    "adm-zip": "^0.5.9",
     "archiver": "^5.3.0",
     "astrocite": "^0.16.4",
     "bcp-47": "^2.0.0",
