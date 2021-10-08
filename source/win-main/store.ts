@@ -382,6 +382,11 @@ const config: StoreOptions<ZettlrState> = {
       const attachment = isAttachment(descriptor.path)
       const ownDescriptor = findPathDescriptor(descriptor.path, state.fileTree, attachment)
 
+      if (ownDescriptor === null) {
+        console.error(`[Vuex::patchInFiletree] Could not find descriptor for ${descriptor.path as string}! Not patching.`)
+        return
+      }
+
       const protectedKeys = [ 'parent', 'children', 'attachments' ]
 
       for (const key of Object.keys(descriptor)) {

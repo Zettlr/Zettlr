@@ -36,8 +36,8 @@ export default function createQuicklookWindow (file: MDFileDescriptor, conf: Win
     minHeight: 200,
     width: conf.width,
     height: conf.height,
-    x: conf.left,
-    y: conf.top,
+    x: conf.x,
+    y: conf.y,
     show: false,
     webPreferences: {
       contextIsolation: true,

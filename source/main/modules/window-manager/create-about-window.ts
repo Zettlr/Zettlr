@@ -35,9 +35,9 @@ export default function createAboutWindow (conf: WindowPosition): BrowserWindow 
     minHeight: 200,
     width: conf.width,
     height: conf.height,
+    x: conf.x,
+    y: conf.y,
     minimizable: false, // Disable the minimise button for this utility window
-    x: conf.left,
-    y: conf.top,
     show: false,
     fullscreenable: false,
     webPreferences: {
