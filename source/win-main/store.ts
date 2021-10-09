@@ -402,7 +402,7 @@ const config: StoreOptions<ZettlrState> = {
       // removal and one addition) but rather something else, so we need to make
       // sure to simply re-sort it in case the sorting has changed.
       if (ownDescriptor.type === 'directory') {
-        ownDescriptor.children = sort(ownDescriptor.children, ownDescriptor.sorting)
+        Vue.set(ownDescriptor, 'children', sort(ownDescriptor.children, ownDescriptor.sorting))
       }
     },
     lastFiletreeUpdate: function (state, payload) {
