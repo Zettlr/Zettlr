@@ -53,15 +53,15 @@ But Zettlr doesn’t only support common weblinks. If you link to a file that is
 
 ## The Sidebar 📎
 
-Now that we got you covered with the Markdown basics, it’s time to show you some more of the stuff Zettlr can do! Click now on the column-like icon in the top right corner of the toolbar. This will open the sidebar, which contains a section “Attachments.” In there Zettlr shows you all non-Markdown files that you store in the currently selected directory. You can also drag and drop files from there onto the editor to include them in your files.
+Now that we got you covered with the Markdown basics, it’s time to show you some more of the stuff Zettlr can do! Click now on the column-like icon in the top right corner of the toolbar. This will open the sidebar, which contains four tabs.
 
-You can also see the file "LaTeX Guide.pdf". Wondering what it is? Let’s have a look: Click on it to open the file with your default PDF viewer now!
-
-But the sidebar doesn't only show you files. In the second and third tab, you can find references and a table of contents. The reference section lists all the cited works from the currently open file – exactly like a references section of a paper.
+The first tab displays a dynamically-generated table of contents. You can click the headings to jump to them in the text. The second tab contains a list of references (if you have any in your current document). This is meant as a powerful way for you to check what you have cited in the document.
 
 > Note that the references are only formatted using the built-in citation style. When you export your document, Zettlr will take care to use the citation style you chose, if you set one in the “Export”-preferences.
 
-The table of contents in the third tab is a linked list of all the headings in your current document. Click one of the entries to jump to the corresponding heading immediately. You can also see the same table of contents and even sort your sections by clicking the corresponding toolbar button. The benefit of the sidebar tab is – just with the references tab – that you can keep it open while you work in your document.
+The third tab contains related files, that is: files for which Zettlr thinks they are related to your current file. It does so by looking at the tags you use within all files. The more tags a file has in common with your current file, the higher up it will be in this list.
+
+The last tab contains all non-markdown files that reside in your currently selected directory. You will see a file "LaTeX Guide.pdf". Wondering what it is? Let’s have a look: Click on it to open the file with your default PDF viewer now!
 
 ## Interactive Elements ⏯
 

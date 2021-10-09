@@ -11,11 +11,9 @@ keywords:
 
 Hello again! What you just clicked is what we refer to as “internal link” — these look a lot like wiki-links but actually they are a feature that helps Zettlr recognize how you organize your knowledge. Let’s first sort out what has just happened after you clicked the link.
 
-Whenever you click an internal link, Zettlr will do two things at once: Start a global search for its contents, and try to open the corresponding file. As you can see, the file containing the citation tutorial has disappeared from the file list on the left, the global search field now contains the word “zettelkasten” — and, most importantly, you are looking at this file!
+Whenever you click an internal link, Zettlr will do two things at once: Start a full text search for its contents, and try to open the corresponding file. As you can see, the left sidebar now doesn't show you the files anymore, but instead search results. Also, you are now looking at this file!
 
-To exit the global search (and make the file list look “normal” again), click the small “x” in the search field now!
-
-> If you find yourself searching a lot and switching between search and “normal” file list, try to remember the key combination `Cmd/Ctrl+Shift+F` followed by `Escape`. The first keystroke focuses the search bar, whereas Escape resets the current search.
+To switch to the file manager or the full text search, you can use the three-way toggle in the upper-left corner of the toolbar.
 
 ## Linking Files 🗄
 
