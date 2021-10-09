@@ -50,7 +50,16 @@ interface FSMetaInfo {
  */
 export interface DirDescriptor extends FSMetaInfo {
   parent: DirDescriptor|null
-  _settings: any
+  _settings: {
+    sorting: 'name-up'|'name-down'|'time-up'|'time-down'
+    icon: string
+    project: {
+      title: 'string'
+      formats: string[]
+      filters: string[]
+      cslStyle: string
+    }|null
+  }
   type: 'directory'
   children: Array<MDFileDescriptor|DirDescriptor|CodeFileDescriptor>
   attachments: OtherFileDescriptor[]

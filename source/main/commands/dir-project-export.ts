@@ -49,7 +49,7 @@ export default class DirProjectExport extends ZettlrCommand {
     let files = objectToArray(dir, 'children').filter(e => e.type !== 'directory')
 
     // Use minimatch to filter against the project's filter patterns
-    for (const pattern of config.filters as string[]) {
+    for (const pattern of config.filters) {
       global.log.info(`[Project] Filtering fileset: Matching against "${pattern}"`)
       // NOTE: minimatch is actually just the "filter" function
       const match = minimatch(pattern, { matchBase: true })
@@ -64,7 +64,7 @@ export default class DirProjectExport extends ZettlrCommand {
       return false
     }
 
-    for (const format of config.formats as string[]) {
+    for (const format of config.formats) {
       // Spin up one exporter per format.
       global.log.info(`[Project] Exporting ${dir.name} as ${format}.`)
       try {
