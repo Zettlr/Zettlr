@@ -331,20 +331,12 @@ export default {
         type: 'line',
         data: initialData,
         options: {
-          title: {
-            // Only display title if set
-            display: true,
-            text: 'Chart'
-          },
-          legend: {
-            display: false
-          },
           // Scales configuration
           scales: {
             y: {
-              scaleLabel: {
-                display: true,
-                labelString: 'Words'
+              title: {
+                text: 'Words',
+                display: true
               },
               gridLines: {
                 display: true, // Whether to display them at all
@@ -357,9 +349,9 @@ export default {
               }
             },
             x: {
-              scaleLabel: {
-                display: true,
-                labelString: 'Time'
+              title: {
+                text: 'Time',
+                display: true
               },
               gridLines: {
                 display: true, // Whether to display them at all
