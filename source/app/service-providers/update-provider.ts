@@ -105,6 +105,8 @@ export default class UpdateProvider {
               global.application.runCommand('open-update-window')
                 .catch(e => global.log.error(String(e.message), e))
             })
+          } else {
+            global.notify.normal(trans('dialog.update.no_new_update'))
           }
         }).catch((err) => {
           global.log.error(`[Update Provider] Error during update check: ${err.message as string}`, err)
