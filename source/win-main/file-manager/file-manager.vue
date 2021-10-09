@@ -419,8 +419,8 @@ body #file-manager {
     overflow-y: hidden;
     position: relative;
     width: 100%;
-    height: 100%;
-  } // End component container
+    height: calc(100% - 37px); // 100% minus the filter
+  }
 
   &.expanded {
     #file-tree, #file-list { width: 50%; }
@@ -455,6 +455,7 @@ body #file-manager {
     z-index: 2;
     left: 0;
     right: 0;
+    height: 37px;
 
     .file-manager-filter-input {
       border: 1px solid transparent;
