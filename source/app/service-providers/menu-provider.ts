@@ -16,7 +16,8 @@ import {
   Menu,
   ipcMain,
   BrowserWindow,
-  MenuItemConstructorOptions
+  MenuItemConstructorOptions,
+  app
 } from 'electron'
 
 import broadcastIPCMessage from '../../common/util/broadcast-ipc-message'
@@ -149,7 +150,64 @@ export default class MenuProvider {
         // And now trigger a click! We need to pass the menuItem and the
         // focusedWindow as well.
         const focusedWindow = BrowserWindow.getFocusedWindow()
-        menuItem.click(menuItem, focusedWindow)
+        if (typeof menuItem.role === 'string') {
+          if (focusedWindow === null) {
+            global.log.error(`[Menu Provider] Could not trigger custom click on menuItem ${itemID} with role ${menuItem.role}: No focused Window to trigger on.`)
+            return
+          }
+
+          // Since menuItems with role have a no-op click function, we must manually
+          // implement the functionality here for the custom menus.
+          switch (menuItem.role.toLowerCase()) {
+            case 'copy':
+              focusedWindow.webContents.copy()
+              break
+            case 'cut':
+              focusedWindow.webContents.cut()
+              break
+            case 'paste':
+              focusedWindow.webContents.paste()
+              break
+            case 'pasteandmatchstyle':
+              focusedWindow.webContents.pasteAndMatchStyle()
+              break
+            case 'redo':
+              focusedWindow.webContents.redo()
+              break
+            case 'selectall':
+              focusedWindow.webContents.selectAll()
+              break
+            case 'undo':
+              focusedWindow.webContents.undo()
+              break
+            case 'zoomin':
+              focusedWindow.webContents.zoomLevel++
+              break
+            case 'zoomout':
+              focusedWindow.webContents.zoomLevel--
+              break
+            case 'resetzoom':
+              focusedWindow.webContents.zoomLevel = 0
+              break
+            case 'togglefullscreen':
+              focusedWindow.setFullScreen(!focusedWindow.isFullScreen())
+              break
+            case 'quit':
+              app.quit()
+              break
+            case 'close':
+              focusedWindow.close()
+              break
+            case 'minimize':
+              focusedWindow.minimize()
+              break
+            default:
+              global.log.error(`[Menu Provider] Could not click menu item with role ${menuItem.role}, since no handler is implemented!`)
+          }
+        } else {
+          console.log(`Clicking menu item with ID ${itemID}`)
+          menuItem.click(menuItem, focusedWindow)
+        }
       }
     })
 

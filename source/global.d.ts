@@ -112,6 +112,6 @@ declare module global {
   // This type is only required in the renderer processes since the
   // applicationMenuHelper is shared via the browser process's window object.
   var menuProvider: {
-    show: (position: Point | Rect, items: AnyMenuItem[], callback: Function, cleanup?: boolean) => Function
+    show: (position: Point | Rect, items: AnyMenuItem[], callback: (clickedID: string) => void, cleanup?: boolean) => () => void
   }
 }

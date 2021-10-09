@@ -126,11 +126,15 @@ export default {
       const point = { x: rect.left, y: rect.top + rect.height }
       this.menuCloseCallback = global.menuProvider.show(point, items, (clickedID) => {
         // Trigger a click on the "real" menu item in the back
-        // send('click-menu-item', clickedID)
         ipcRenderer.send('menu-provider', {
           command: 'click-menu-item',
           payload: clickedID
         })
+
+        // Reset the menu state, since the callback indicates the menu is now
+        // closed.
+        this.menuCloseCallback = null
+        this.currentSubMenu = null
       })
 
       // Save the original ID for easy access

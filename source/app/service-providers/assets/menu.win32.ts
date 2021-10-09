@@ -535,9 +535,7 @@ export default function getMenu (
           id: 'menu.win_minimize',
           label: trans('menu.win_minimize'),
           accelerator: 'Ctrl+M',
-          click: function (menuitem, focusedWindow) {
-            focusedWindow?.minimize()
-          }
+          role: 'minimize'
         },
         {
           id: 'menu.win_close',
