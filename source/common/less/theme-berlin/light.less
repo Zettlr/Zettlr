@@ -410,5 +410,10 @@ body {
       border-bottom-right-radius: @border-radius;
       padding-right: 5px;
     }
+
+    // cm-comment should be ignored inside code blocks
+    .code-block-line .cm-comment {
+      background-color: transparent !important;
+    }
   }
 }

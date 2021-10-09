@@ -250,6 +250,11 @@ body.dark {
     .cm-comment:not(.cm-formatting):not(.cm-fenced-code) {
       background-color: var(--grey-5);
     }
+
+    // cm-comment should be ignored inside code blocks
+    .code-block-line .cm-comment {
+      background-color: transparent !important;
+    }
   }
 
   .table-helper-align-button-container,
