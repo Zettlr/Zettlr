@@ -30,8 +30,10 @@ ipcRenderer.on('shortcut', (event, shortcut) => {
 })
 
 // Get additional data passed to the window
-let filePath
-[filePath] = window.process.argv.slice(-1)
+// NOTE: On Windows, the last argument is both in development and in production
+// '/prefetch:1'. I could not find what that is, but for Windows we have to use
+// he *second* to last argument.
+const [filePath] = window.process.argv.slice((window.process.platform === 'win32') ? -2 : -1)
 
 const app = new Vue(Print)
 
