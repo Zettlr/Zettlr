@@ -560,9 +560,9 @@ export default class WindowManager extends EventEmitter {
     if (this._preferences === null) {
       const { workArea } = screen.getPrimaryDisplay()
       const conf = this._retrieveWindowPosition('preferences', {
-        width: 600,
+        width: 700,
         height: 800,
-        x: (workArea.width - 600) / 2,
+        x: (workArea.width - 700) / 2,
         y: (workArea.height - 800) / 2
       })
       this._preferences = createPreferencesWindow(conf)
