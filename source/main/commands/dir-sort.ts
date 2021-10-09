@@ -25,12 +25,12 @@ export default class DirSort extends ZettlrCommand {
     * @param  {Object} arg An object containing both a hash and a sorting type
     */
   async run (evt: string, arg: any): Promise<boolean> {
-    let dir = this._app.findDir(arg.path)
-    if (dir === null) {
-      return false
+    const dir = this._app.findDir(arg.path)
+    if (dir !== null) {
+      await this._app.getFileSystem().sortDirectory(dir, arg.sorting)
+      return true
     }
 
-    await this._app.getFileSystem().sortDirectory(dir, arg.sorting)
-    return true
+    return false
   }
 }
