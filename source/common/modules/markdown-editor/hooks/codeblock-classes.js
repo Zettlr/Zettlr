@@ -47,6 +47,7 @@ function applyCodeblockClasses (cm) {
     const line = info.text
     const wrapClass = (info.wrapClass !== undefined) ? String(info.wrapClass) : ''
     const isCurrentlyCode = wrapClass.includes(codeblockClass)
+    const isIndented = indentedRE.test(line)
 
     if (codeBlockLines.includes(i - 1)) {
       cm.addLineClass(i, 'wrap', codeblockClassOpen)
@@ -64,15 +65,23 @@ function applyCodeblockClasses (cm) {
     // the line is indented by at least four spaces, we have an indented code
     // block. That doesn't trigger the code block variable, but renders only
     // this line as a codeblock.
-    if (!isCodeBlock && indentedRE.test(line)) {
+    if (!isCodeBlock && isIndented) {
       // From CommonMark specs: "there must be a blank line between a paragraph
       // and a following indented code block"
-      const prevLine = (i > 0) ? cm.lineInfo(i - 1).text : ''
+      isCodeBlock = !isCodeBlock
+      codeBlockLines.push(i - 1)
+      cm.addLineClass(i, 'wrap', codeblockClassOpen) // Class checks executed already, so force set
+      const prevLine = (i > 0) ? cm.getLine(i - 1) : ''
       if (!isCurrentlyCode && prevLine === '') {
         cm.addLineClass(i, 'wrap', codeblockClass)
         needsRefresh = true
       }
       continue // No need to check the rest
+    } else if (isIndented && !indentedRE.test(cm.getLine(i + 1))) {
+      cm.addLineClass(i, 'wrap', codeblockClassClose)
+    } else if (!isIndented && indentedRE.test(cm.getLine(i - 1))) {
+      cm.removeLineClass(i, 'wrap', codeblockClass)
+      isCodeBlock = !isCodeBlock
     }
 
     // Each code block line toggles the isCodeBlock variable (but the
