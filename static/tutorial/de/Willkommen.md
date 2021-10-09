@@ -18,7 +18,7 @@ Doch nun: Los geht's!
 
 ## Über diese Einführung 🎬
 
-Viele Markdown-Editoren nutzen solche interaktiven Tutorials, um einen schnellen Einstieg in die Benutzung zu liefern. Im Fall von Zettlr haben wir dir ein Verzeichnis in deinen „Dokumente“-Ordner kopiert und ihn für dich geöffnet. Im Moment siehst du in der linken Seitenleiste den Inhalt dieses Ordners, und eines der darin enthaltenen Dokumente – Willkommen.md – liest du gerade durch. Wenn du mit der Maus in den oberen Bereich der linken Seitenleiste bewegst, erscheint ein kleiner Pfeil, mit welchem du zu den Arbeitsbereichen wechseln kannst. Klicke diesen nun.
+Viele Markdown-Editoren nutzen solche interaktiven Tutorials, um einen schnellen Einstieg in die Benutzung zu liefern. Im Fall von Zettlr haben wir dir ein Verzeichnis in deinen „Dokumente“-Ordner kopiert und ihn für dich geöffnet. Im Moment siehst du in der linken Seitenleiste den Inhalt dieses Ordners, und eines der darin enthaltenen Dokumente – `Willkommen.md` – liest du gerade durch. Wenn du mit der Maus in den oberen Bereich der linken Seitenleiste bewegst, erscheint ein kleiner Pfeil, mit welchem du zu den Arbeitsbereichen wechseln kannst. Klicke diesen nun.
 
 Wie du sehen kannst, ist derzeit genau ein Ordner – nämlich das Tutorial - geladen. Solche Top-Level-Verzeichnisse heißen bei Zettlr „Arbeitsbereiche“ (engl. „Workspaces“). Zettlr ist um das Konzept solcher Arbeitsbereiche herum entwickelt worden, sodass du das beste Erlebnis erhältst, wenn du ein oder mehrere solcher Ordner verwendest, um deine Dokumente zu verwalten. Diese Arbeitsbereiche werden bei jedem Start der App wieder geladen, sodass du direkt dort weiter arbeiten kannst, wo du aufgehört hast.
 
@@ -55,15 +55,17 @@ Zettlr unterstützt aber nicht nur gewöhnliche Weblinks. Wenn einer der Links a
 
 ## Die Seitenleiste 📎
 
-Nachdem die Markdown-Grundlagen geschafft sind, ist es Zeit, noch ein hilfreiches Werkzeug von Zettlr vorzustellen: Die Seitenleiste. Die Seitenleiste öffnest du per Klick auf das rechte Toolbar-Icon, welches aussieht wie drei Spalten. Die Seitenleiste verfügt über drei Reiter mit kontextuellen Informationen.
+Nachdem die Markdown-Grundlagen geschafft sind, ist es Zeit, noch ein hilfreiches Werkzeug von Zettlr vorzustellen: Die Seitenleiste. Die Seitenleiste öffnest du per Klick auf das rechte Toolbar-Icon, welches aussieht wie drei Spalten. Die Seitenleiste verfügt über vier Reiter mit kontextuellen Informationen.
 
-Der erste Reiter zeigt alle nicht-Markdown-Dateien an, die sich im aktuell ausgewählten Verzeichnis befinden. Per Klick öffnest du sie mit ihrer Standard-App, und du kannst sie in den Editor ziehen. Du kannst dort gerade eine PDF-Datei sehen. Versuche, sie nun in deinem PDF-Programm zu öffnen!
+Der erste Reiter enthält ein Inhaltsverzeichnis aller Überschriften im aktuellen Dokument. Mit einem Klick springst du direkt zum entsprechenden Absatz.
 
 Der zweite Reiter ist besonders interessant für Wissenschaftler\*innen und Studierende: Er zeigt ein Literaturverzeichnis aller im aktuellen Dokument zitierten Werke an. Dies dient als eine Vorschau, damit du überprüfen kannst, ob alle Werke, die zitiert werden müssen, auch tatsächlich irgendwo zitiert werden.
 
 > Dieses Literaturverzeichnis verwendet einen internen Zitationsstil zu Vorschauzwecken. Sobald du das Dokument exportierst, kümmert sich Zettlr darum, mit dem Stil deiner Wahl zu zitieren. Diesen Stil kannst du in den Export-Einstellungen auswählen.
 
-Der dritte Reiter enthält ein Inhaltsverzeichnis aller Überschriften im aktuellen Dokument. Mit einem Klick springst du direkt zum entsprechenden Absatz. Dasselbe Inhaltsverzeichnis kannst du dir auch mittels des entsprechenden Toolbar-Buttons anzeigen lassen. Der einzige Unterschied zwischen beiden Methoden ist, dass das Inhaltsverzeichnis in der Seitenleiste die ganze Zeit sichtbar bleibt, während du an deinem Dokument arbeitest.
+Der dritte Reiter enthält eine Liste aller verwandten Dateien. Diese Dateien zeigt dir Zettlr an, weil es denkt, dass sie mit der aktuell geöffneten Datei in Verbindung stehen. Das macht Zettlr daran fest, welche Schlagworte die beiden Dateien enthalten. Ganz oben stehen die Dateien mit den meisten gemeinsamen Schlagworten, ganz unten die mit den wenigsten.
+
+Der letzte Reiter zeigt alle nicht-Markdown-Dateien an, die sich im aktuell ausgewählten Verzeichnis befinden. Per Klick öffnest du sie mit ihrer Standard-App, und du kannst sie in den Editor ziehen. Du kannst dort gerade eine PDF-Datei sehen. Versuche, sie nun in deinem PDF-Programm zu öffnen!
 
 ## Interaktive Elemente ⏯
 
@@ -81,7 +83,7 @@ Auch Tabellen sind interaktiv. Wenn du mit der Maus über Tabellen fährst, werd
 | Mit dem Zettelkasten arbeiten | Einführung in die Zettelkasten-Features | Zettelkasten.md |
 | Zitieren mit Zettlr           | Zitieren mit Literaturdatenbanken       | Zitieren.md     |
 
-Du kannst neue Zeilen und Spalten hinzufügen und entfernen sowie Spalten anordnen. Der Tabelleneditor arbeitet dabei Kontext-sensitiv. Das heißt, es wird bei einem Klick auf einen Ausrichtungs-Button immer die Spalte ausgerichtet, in der sich die aktive Zelle befindet. Genauso funktioniert auch das Löschen und hinzufügen von Spalten und Zeilen.
+Du kannst neue Zeilen und Spalten hinzufügen und entfernen sowie Spalten anordnen. Der Tabelleneditor arbeitet dabei Kontext-sensitiv. Das heißt, es wird bei einem Klick auf einen Ausrichtungs-Button immer die Spalte ausgerichtet, in der sich die aktive Zelle befindet. Genauso funktioniert auch das Löschen und Hinzufügen von Spalten und Zeilen.
 
 > Wenn dir der Tabelleneditor nicht gefällt, kannst du ihn in den Editor-Einstellungen auch deaktivieren. Bitte beachte zudem, dass Markdown-Tabellen nicht für sehr komplexe Daten geeignet sind. Hierfür bietet es sich an, andere Dateiformate zu verwenden und erst beim Export in das Dokument einzupflegen.
 

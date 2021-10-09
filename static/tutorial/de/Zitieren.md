@@ -10,7 +10,7 @@ keywords:
 
 # Zitieren mit Zettlr 💬
 
-In dieser letzten Einführung wollen wir dir zeigen, wie du deine Literatur mit Zettlr verwalten kannst. Wenn du bereits Erfahrung mit dem Zotero- oder Citavi-Plugin für Word gemacht hast: Zettlr funktioniert sehr ähnlich, aber funktioniert wesentlich effizienter.
+In dieser letzten Einführung wollen wir dir zeigen, wie du deine Literatur mit Zettlr verwalten kannst. Wenn du bereits Erfahrung mit dem Zotero- oder Citavi-Plugin für Word gemacht hast: Zettlr funktioniert sehr ähnlich, aber wesentlich effizienter.
 
 Um mit Zettlr zu zitieren, sind einige wenige Vorarbeiten nötig, wie das aufsetzen einer Literaturdatenbank. Das haben wir aber [im Zettlr-Handbuch ausführlich beschrieben](https://docs.zettlr.com/de/academic/citations/). Für dieses Tutorial haben wir dir bereits eine kleine Literaturdatenbank erstellt, sodass du das jetzt noch nicht machen musst. Lass uns diese nun erst laden!
 
@@ -32,8 +32,6 @@ Doch zurück zu obigem Zitat: Kannst du eine Literaturangabe dort machen, die al
 
 Sobald du längere Artikel, oder gar eine Abschlussarbeit mit Zettlr schreibst, wird es irgendwann unübersichtlich, alle Zitationen im Blick zu behalten. Daher bietet dir Zettlr im zweiten Reiter der Seitenleiste eine Vorschau aller verwendeten Zitationen im aktuellen Dokument. Dieses Literaturverzeichnis wird dargestellt, wie es auch beim Export geschieht. Denn nicht vergessen: Alle Zitationen in Zettlr sind nur zu _Vorschauzwecken_, deshalb musst du auch kein Literaturverzeichnis manuell am Ende deiner Dokumente anlegen. Zettlr verwendet zur Darstellung einen eigenen Stil, aber du kannst einen beliebigen Zitationsstil in den Einstellungen auswählen. Dieser wird dann beim finalen Export automatisch verwendet.
 
-> Zum Zitieren benötigst du außer Pandoc noch Pandoc-Citeproc. Letzteres ist bei Pandoc ab Version 2.11 automatisch integriert. Bei früheren Pandoc-Versionen musst du es ggfs. noch manuell installieren. Mehr Informationen hierzu finden sich [im Handbuch](https://docs.zettlr.com/de/install/#pandoc-installieren).
-
 ## Zum Abschluss 🔥
 
 Das war es mit unserer kurzen Einführung zu Zettlr – Jetzt bist du bereit, zu starten!
@@ -44,10 +42,12 @@ Wenn auch du Zettlr unterstützen möchtest, werde Teil der Community! Auch wenn
 
 Unsere Community findest du hier (alles englischsprachig):
 
-- [Im Forum](https://forum.zettlr.com/)
+- [Auf Discord](https://discord.gg/PcfS3DM9Xj)
 - [Auf Reddit](https://www.reddit.com/r/Zettlr/)
 - [Auf GitHub](https://github.com/Zettlr/Zettlr/)
 
-**Viel Spaß mit Zettlr!**
+Wenn du möchtest, kannst du die Entwicklung von Zettlr auch auf [Patreon](https://www.patreon.com/zettlr) oder via [PayPal](https://www.paypal.me/hendrikerz) unterstützen!
+
+Aber nun genug von uns: **Viel Spaß mit Zettlr!**
 
 ![zettlr.png](./zettlr.png)
