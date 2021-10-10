@@ -189,6 +189,8 @@ export default class ZettlrPopover {
       if (showArrow) {
         this._arrow.style.top = `${top + elemRect.height}px`
         this._arrow.style.left = `${left + elemRect.width / 2 - this._arrow.offsetWidth / 2}px`
+      } else {
+        this._arrow.style.display = 'none'
       }
 
       // Ensure the popup is completely visible (move inside the document if it's at an edge)
