@@ -44,9 +44,6 @@ const TEMPLATE = [
   {
     label: 'menu.new_dir',
     command: 'dir-new'
-  },
-  {
-    type: 'separator'
   }
 ]
 
@@ -88,6 +85,7 @@ module.exports = function displayFileContext (event, dirObject, el, callback) {
 
   // Now check for a project
   if (dirObject.project !== null && dirObject.dirNotFoundFlag !== true) {
+    items.push({ type: 'separator' })
     items.push({
       id: 'menu.project_build',
       label: trans('menu.project_build'),
@@ -98,16 +96,12 @@ module.exports = function displayFileContext (event, dirObject, el, callback) {
 
   // Finally, check for it being root
   if (dirObject.parent == null) {
-    items = items.concat([
-      {
-        type: 'separator'
-      },
-      {
-        id: 'menu.close_workspace',
-        label: trans('menu.close_workspace'),
-        enabled: true
-      }
-    ])
+    items.push({ type: 'separator' })
+    items.push({
+      id: 'menu.close_workspace',
+      label: trans('menu.close_workspace'),
+      enabled: true
+    })
   }
 
   const point = { x: event.clientX, y: event.clientY }
