@@ -108,6 +108,14 @@ export default class WindowManager extends EventEmitter {
       this._hasRTLLocale = false
     }
 
+    // Immediately begin loading the data
+    this.loadData()
+      .then(() => {
+        global.log.info('[Window Manager] Window Manager booted. Opening main window.')
+        this.showMainWindow()
+      })
+      .catch((err: Error) => global.log.error(`[Window Manager] Could not load data: ${err.message}`, err))
+
     // Listen to window control commands
     ipcMain.on('window-controls', (event, message) => {
       const callingWindow = BrowserWindow.fromWebContents(event.sender)
@@ -427,10 +435,10 @@ export default class WindowManager extends EventEmitter {
    */
   private _hookWindowResize (window: BrowserWindow, stateId: string): void {
     const callback = (): void => {
-      const { workArea, id } = screen.getDisplayMatching(window.getBounds())
+      const { id } = screen.getDisplayMatching(window.getBounds())
 
       const newPosition: WindowPosition = {
-        ...workArea,
+        ...window.getBounds(),
         lastDisplayId: id,
         isMaximised: window.isMaximized()
       }
