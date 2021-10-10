@@ -24,6 +24,11 @@
   const emptyListRE = getListEmptyRE()
   const unorderedListRE = getListUnorderedRE()
 
+  /**
+   * Declares the newlineAndIndentContinueMarkdownList command
+   *
+   * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
+   */
   CodeMirror.commands.newlineAndIndentContinueMarkdownList = function (cm) {
     if (cm.isReadOnly()) return CodeMirror.Pass
     let ranges = cm.listSelections()

@@ -37,7 +37,7 @@
 
   /**
    * Defines the CodeMirror command to render all found markdown images.
-   * @param  {CodeMirror} cm The calling CodeMirror instance
+   * @param  {CodeMirror.Editor} cm The calling CodeMirror instance
    * @return {void}    Commands do not return.
    */
   CodeMirror.commands.markdownRenderImages = function (cm) {
