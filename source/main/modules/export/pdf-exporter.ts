@@ -30,7 +30,7 @@ export const plugin: ExporterPlugin = {
       id: 'pdfExporter',
       formats: {
         'chromium-pdf': 'PDF Document',
-        'xelatex-pdf': 'PDF (XeLaTeX)'
+        'latex-pdf': 'PDF (LaTeX)'
       },
       options: []
     }
@@ -47,14 +47,6 @@ export const plugin: ExporterPlugin = {
       throw new Error(trans('system.error.no_pandoc_message'))
     }
 
-    if (options.format === 'xelatex-pdf') {
-      try {
-        await commandExists('xelatex')
-      } catch (err) {
-        throw new Error(trans('system.error.no_xelatex_message'))
-      }
-    }
-
     // First file determines the name of the output path, EXCEPT a title is
     // explicitly set.
     const firstName = path.basename(options.sourceFiles[0].name, options.sourceFiles[0].ext)
@@ -65,10 +57,10 @@ export const plugin: ExporterPlugin = {
     // Get the corresponding defaults file
     const defaultKeys = {
       'input-files': sourceFiles,
-      'output-file': (options.format === 'xelatex-pdf') ? pdfFilePath : htmlFilePath
+      'output-file': (options.format === 'latex-pdf') ? pdfFilePath : htmlFilePath
     }
     let defaultsFile = ''
-    if (options.format === 'xelatex-pdf') {
+    if (options.format === 'latex-pdf') {
       // Immediately write to PDF
       defaultsFile = await ctx.getDefaultsFor('pdf', defaultKeys)
     } else {
