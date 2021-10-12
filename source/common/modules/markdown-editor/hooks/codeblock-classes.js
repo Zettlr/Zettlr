@@ -23,95 +23,77 @@ module.exports = (cm) => {
 }
 
 function applyCodeblockClasses (cm) {
-  let needsRefresh = false // Will be set to true if at least one line has been altered
-  let isCodeBlock = false
-  let codeBlockLines = []
+  let codeblockLines = []
   let codeblockClass = 'code-block-line'
   let codeblockClassOpen = 'code-block-first-line'
   let codeblockClassClose = 'code-block-last-line'
-
-  // This matches a line that starts with at most three spaces, followed by at
-  // least three backticks or tildes (fenced code block).
+  let lineNum = 0
+  let blockFenced = false
+  const lineCount = cm.lineCount()
   const codeBlockRE = /^(?:\s{0,3}`{3}|~{3}).*/
-  // This one, on the other hand, matches indented code blocks starting with at
-  // least four spaces.
   const indentedRE = /^\s{4,}.*$/
-  // The old regex was: /^(?:`{3}|~{3}).*/
 
   // Buffer changes
   cm.startOperation()
 
-  for (let i = 0; i < cm.lineCount(); i++) {
-    // First, get the line and the info whether it's currently a code block line
-    const info = cm.lineInfo(i)
-    const line = info.text
-    const wrapClass = (info.wrapClass !== undefined) ? String(info.wrapClass) : ''
-    const isCurrentlyCode = wrapClass.includes(codeblockClass)
-    const isIndented = indentedRE.test(line)
+  // Check lines for code blocks
+  cm.eachLine(function (line) {
+    if (blockFenced) codeblockLines.push(lineNum)
 
-    if (codeBlockLines.includes(i - 1)) {
-      cm.addLineClass(i, 'wrap', codeblockClassOpen)
-    } else {
-      cm.removeLineClass(i, 'wrap', codeblockClassOpen)
+    if (codeBlockRE.test(line.text)) {
+      blockFenced = !blockFenced
+      if (!blockFenced) codeblockLines.pop()
     }
 
-    if (i < cm.lineCount() - 1 && codeBlockRE.test(cm.getLine(i + 1))) {
-      cm.addLineClass(i, 'wrap', codeblockClassClose)
-    } else {
-      cm.removeLineClass(i, 'wrap', codeblockClassClose)
+    if (!blockFenced && indentedRE.test(line.text)) {
+      codeblockLines.push(lineNum)
     }
 
-    // Second, check if we are NOT inside a fenced code block. If we're not, but
-    // the line is indented by at least four spaces, we have an indented code
-    // block. That doesn't trigger the code block variable, but renders only
-    // this line as a codeblock.
-    if (!isCodeBlock && isIndented) {
-      // From CommonMark specs: "there must be a blank line between a paragraph
-      // and a following indented code block"
-      isCodeBlock = !isCodeBlock
-      codeBlockLines.push(i - 1)
-      cm.addLineClass(i, 'wrap', codeblockClassOpen) // Class checks executed already, so force set
-      const prevLine = (i > 0) ? cm.getLine(i - 1) : ''
-      if (!isCurrentlyCode && prevLine === '') {
-        cm.addLineClass(i, 'wrap', codeblockClass)
-        needsRefresh = true
+    lineNum++
+  })
+
+  codeblockLines.forEach(function (lineNum, index, lines) {
+    cm.addLineClass(lineNum, 'wrap', codeblockClass)
+
+    // if previous line is not code
+    if (lines[index - 1] !== lineNum - 1) {
+      cm.addLineClass(lineNum, 'wrap', codeblockClassOpen)
+
+      // If this was caused by backspacing the first line of indented code, we
+      // need to explicitly clean up the classes
+      if (index >= 0) {
+        cm.removeLineClass(lineNum - 1, 'wrap', codeblockClass)
+        cm.removeLineClass(lineNum - 1, 'wrap', codeblockClassOpen)
       }
-      continue // No need to check the rest
-    } else if (isIndented && !indentedRE.test(cm.getLine(i + 1))) {
-      cm.addLineClass(i, 'wrap', codeblockClassClose)
-    } else if (!isIndented && indentedRE.test(cm.getLine(i - 1))) {
-      cm.removeLineClass(i, 'wrap', codeblockClass)
-      isCodeBlock = !isCodeBlock
+    } else {
+      cm.removeLineClass(lineNum, 'wrap', codeblockClassOpen)
     }
 
-    // Each code block line toggles the isCodeBlock variable (but the
-    // codeblocks themselves should not be styled)
-    if (codeBlockRE.test(line)) {
-      isCodeBlock = !isCodeBlock
-      codeBlockLines.push(i)
-      if (isCurrentlyCode) {
-        cm.removeLineClass(i, 'wrap', codeblockClass)
-        needsRefresh = true
+    // if next line is not code
+    if (lines[index + 1] !== lineNum + 1) {
+      cm.addLineClass(lineNum, 'wrap', codeblockClassClose)
+
+      // If this was caused by backspacing the last line of indented code, we
+      // need to explicitly clean up the classes
+      if (index < lineCount) {
+        cm.removeLineClass(lineNum + 1, 'wrap', codeblockClass)
+        cm.removeLineClass(lineNum + 1, 'wrap', codeblockClassClose)
       }
-      continue
+    } else {
+      cm.removeLineClass(lineNum, 'wrap', codeblockClassClose)
     }
 
-    if (isCodeBlock && !isCurrentlyCode) {
-      // We should render as code
-      cm.addLineClass(i, 'wrap', codeblockClass)
-      needsRefresh = true
-    } else if (!isCodeBlock && isCurrentlyCode) {
-      // We should not render as code
-      cm.removeLineClass(i, 'wrap', codeblockClass)
-      needsRefresh = true
-    } // Else: Leave the line as it is
+    // If last line is code, make sure to close the class
+    if (lineNum === lineCount - 1) {
+      cm.addLineClass(lineNum, 'wrap', codeblockClass)
+      cm.addLineClass(lineNum, 'wrap', codeblockClassClose)
+    }
+  })
+
+  if (codeblockLines.length) {
+    cm.refresh()
   }
 
   // End operation (apply the buffer to the layout and force a repaint)
   cm.endOperation()
-
-  // If at least one line was altered, we need a refresh
-  if (needsRefresh) {
-    cm.refresh()
-  }
 }
