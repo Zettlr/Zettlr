@@ -5860,10 +5860,10 @@ lazystream@^1.0.0:
   dependencies:
     readable-stream "^2.0.5"
 
-less-loader@^10.0.1:
-  version "10.0.1"
-  resolved "https://registry.yarnpkg.com/less-loader/-/less-loader-10.0.1.tgz#c05aaba68d00400820275f21c2ad87cb9fa9923f"
-  integrity sha512-Crln//HpW9M5CbtdfWm3IO66Cvx1WhZQvNybXgfB2dD/6Sav9ppw+IWqs/FQKPBFO4B6X0X28Z0WNznshgwUzA==
+less-loader@^10.1.0:
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/less-loader/-/less-loader-10.1.0.tgz#4379bdff409d1eef36c4cb50611b8944a27659b2"
+  integrity sha512-Xz5e/YLoLmdWFu7XzzA6LVX8a2+6onDz5LJb8oLWAkOnIZ5Hjcpe+nf+Sta6UgEoIMfzWVrR3XlIVfPeZDb10A==
   dependencies:
     klona "^2.0.4"
 
