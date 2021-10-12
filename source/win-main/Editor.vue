@@ -446,11 +446,18 @@ export default {
         // out, e.g., the matches on the scrollbar
         this.editor.stopSearch()
       }
+    },
+    shouldCountChars: function (newVal, oldVal) {
+      this.editor.countChars = newVal
     }
   },
   mounted: function () {
     // As soon as the component is mounted, initiate the editor
     this.editor = new MarkdownEditor(this.$refs.textarea, this.editorConfiguration)
+
+    // We have to set this to the appropriate value after mount, afterwards it
+    // will be updated as appropriate.
+    this.editor.countChars = this.shouldCountChars
 
     // Update the document info on corresponding events
     this.editor.on('change', (changeObj) => {

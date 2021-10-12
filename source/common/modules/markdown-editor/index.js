@@ -133,6 +133,14 @@ module.exports = class MarkdownEditor extends EventEmitter {
      */
     this._cmOptions = getCodeMirrorDefaultOptions()
 
+    /**
+     * If true, the selections and potentially other values returned by the
+     * instance will represent char counts instead of word counts.
+     *
+     * @var {boolean}
+     */
+    this._countChars = false
+
     // Parse the anchorElement until we get something useful
     if (typeof anchorElement === 'string' && document.getElementById(anchorElement) !== null) {
       this._anchorElement = document.getElementById(anchorElement)
@@ -578,6 +586,24 @@ module.exports = class MarkdownEditor extends EventEmitter {
     }
 
     return ret
+  }
+
+  /**
+   * Should the editor return char counts instead of word counts where appropriate?
+   *
+   * @param   {boolean}  shouldCountChars  The value
+   */
+  set countChars (shouldCountChars) {
+    this._countChars = shouldCountChars
+  }
+
+  /**
+   * Returns whether the editor returns char counts in appropriate places.
+   *
+   * @return  {boolean}  Whether the editor counts chars or words.
+   */
+  get countChars () {
+    return this._countChars
   }
 
   /**
