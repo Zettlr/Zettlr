@@ -210,7 +210,13 @@ export default {
       cursorScrollMargin: 20,
       lineWrapping: true,
       autoCloseBrackets: true,
-      readOnly: (this.readonly === true) ? 'nocursor' : false
+      readOnly: (this.readonly === true) ? 'nocursor' : false,
+      extraKeys: {
+        // Even though indentWithTabs is false, without remapping Tab to
+        // indentation, it would insert a Tab rather than spaces. So we have
+        // to rebind it here.
+        Tab: (cm) => cm.execCommand('indentMore')
+      }
     })
 
     this.cmInstance.setValue(this.value)
