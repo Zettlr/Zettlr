@@ -1,11 +1,14 @@
 # ZETTLR DEFAULTS FILE
 # ====================
-# Conversion: Markdown --> PDF (requires TeX suite installed)
+# Conversion: Markdown --> PDF (requires TeX suite to be installed)
 # More info: https://pandoc.org/MANUAL.html
 reader: markdown
 writer: pdf
 self-contained: true
-variables: {}
+variables:
+  # Sets the size of the document's pages.
+  papersize: a4 # Possible values: a0-a6, b0-b6, c0-c6,b0j, letter, executive, legal
+  # Further variables are documented here: https://pandoc.org/MANUAL.html#variables-for-latex
 metadata-files: []
 include-before-body: []
 include-after-body: []
@@ -15,10 +18,10 @@ filters:
 - type: citeproc
 file-scope: false
 top-level-division: default
-pdf-engine: xelatex # Change this if you want to use a different engine.
+pdf-engine: xelatex # Change this if you want to use a different engine, e.g. pdflatex
 dpi: 72
-toc: false
-toc-depth: 2
+toc: false # Include a table of contents?
+toc-depth: 2 # 2 means to only include headings level 1 and 2 in the ToC
 number-sections: false
 number-offset:
 - 0
