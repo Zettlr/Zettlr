@@ -224,13 +224,9 @@ export default class DocumentManager extends EventEmitter {
 
     if (isCode) {
       const file = await FSALCodeFile.parse(filePath, null)
-      // app.addRecentDocument(file.path)
-      global.recentDocs.add(file.path)
       return file
     } else if (isMD) {
       const file = await FSALFile.parse(filePath, null)
-      // app.addRecentDocument(file.path)
-      global.recentDocs.add(file.path)
       return file
     } else {
       throw new Error(`Could not load file ${filePath}: Invalid path provided`)
@@ -308,8 +304,9 @@ export default class DocumentManager extends EventEmitter {
   }
 
   /**
-   * Sets the active file to the given hash or null.
-   * @param {string|null} descriptorPath The path of the file to set as active
+   * Sets the given descriptor as active file.
+   *
+   * @param {MDFileDescriptor|CodeFileDescriptor|null} descriptorPath The descriptor to make active file
    */
   public set activeFile (descriptor: MDFileDescriptor|CodeFileDescriptor|null) {
     if (descriptor === null && this._activeFile !== null) {
@@ -321,8 +318,6 @@ export default class DocumentManager extends EventEmitter {
       const file = this.openFiles.find(file => file.path === descriptor.path)
 
       if (file !== undefined && this._loadedDocuments.includes(file)) {
-        // Add the file to the recent docs provider (or move it around)
-        // global.recentDocs.add(this.getMetadataFor(file)) TODO
         // Make sure the main database is set before, and only load an optional
         // bibliography file afterwards.
         global.citeproc.loadMainDatabase()
@@ -340,12 +335,14 @@ export default class DocumentManager extends EventEmitter {
             .finally(() => {
               // No matter what, we need to make the file active
               this._activeFile = file
+              global.recentDocs.add(file.path)
               global.config.set('activeFile', this._activeFile.path)
               this.emit('update', 'activeFile')
             })
             .catch(err => global.log.error(`[DocumentManager] Could not load file-specific database ${dbFile}`, err))
         } else {
           this._activeFile = file
+          global.recentDocs.add(file.path)
           global.config.set('activeFile', this._activeFile.path)
           this.emit('update', 'activeFile')
         }
