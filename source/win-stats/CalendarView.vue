@@ -57,6 +57,11 @@
         </div>
       </div>
     </div>
+    <div id="calendar-legend">
+      <span class="low-mid-activity">{{ lowMidLegend }}</span><br>
+      <span class="high-mid-activity">{{ highMidLegend }}</span><br>
+      <span class="high-activity">{{ highLegend }}</span>
+    </div>
   </div>
 </template>
 
@@ -159,6 +164,15 @@ export default {
       }
 
       return ret
+    },
+    lowMidLegend: function () {
+      return trans('gui.chart.low_mid_legend')
+    },
+    highMidLegend: function () {
+      return trans('gui.chart.high_mid_legend')
+    },
+    highLegend: function () {
+      return trans('gui.chart.high_legend')
     }
   },
   methods: {
@@ -208,6 +222,13 @@ export default {
 </script>
 
 <style lang="less">
+@low-mid-bg: rgba(151, 170, 255, 0.6);
+@low-mid-fg: rgb(8, 5, 167);
+@high-mid-bg: rgba(192, 60, 152, 0.6);
+@high-mid-fg: rgb(77, 2, 60);
+@high-bg: rgba(214, 54, 54, 0.6);
+@high-fg: rgb(87, 0, 0);
+
 body div#calendar-container {
   padding: 10px; // Shift the contents a little bit from the edges
 
@@ -247,19 +268,43 @@ body div#calendar-container {
         }
         &.low-mid-activity {
           // Slightly blue-ish
-          background-color: rgba(151, 170, 255, 0.6);
-          color: rgb(8, 5, 167);
+          background-color: @low-mid-bg;
+          color: @low-mid-fg;
         }
         &.high-mid-activity {
           // Slightly purple
-          background-color: rgba(192, 60, 152, 0.6);
-          color: rgb(77, 2, 60);
+          background-color: @high-mid-bg;
+          color: @high-mid-fg;
         }
         &.high-activity {
           // Reddish
-          background-color: rgba(214, 54, 54, 0.6);
-          color: rgb(87, 0, 0);
+          background-color: @high-bg;
+          color: @high-fg;
         }
+      }
+    }
+  }
+
+  div#calendar-legend {
+
+    span {
+      display: inline-block;
+      font-size: 12px;
+      padding: 6px;
+      margin: 6px 0;
+      border-radius: 6px;
+
+      &.low-mid-activity {
+        background-color: @low-mid-bg;
+        color: @low-mid-fg;
+      }
+      &.high-mid-activity {
+        background-color: @high-mid-bg;
+        color: @high-mid-fg;
+      }
+      &.high-activity {
+        background-color: @high-bg;
+        color: @high-fg;
       }
     }
   }
