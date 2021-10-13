@@ -62,7 +62,7 @@ export default function () {
           reset: '',
           filter: {
             'json, yaml, yml': 'CSL JSON',
-            'bib': 'BibTex'
+            'bib': 'BibTeX'
           }
         },
         {
