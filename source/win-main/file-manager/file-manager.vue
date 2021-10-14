@@ -479,11 +479,12 @@ body.darwin {
     #component-container { height: calc(100% - 30px); }
 
     .file-manager-filter {
-      background-color: rgb(230, 230, 230);
+      background-color: transparent;
       height: 30px;
       padding: 4px;
 
       .file-manager-filter-input {
+        background-color: rgb(255, 255, 255, 0.6);
         width: 100%;
         font-size: 11px;
         height: calc(30px - 9px);
@@ -495,7 +496,11 @@ body.darwin {
     #file-manager {
       border-top-color: #505050;
 
-      .file-manager-filter { background-color: rgb(40, 40, 50); }
+      .file-manager-filter .file-manager-filter-input {
+        background-color: rgb(100, 100, 100, 0.6);
+
+        &::placeholder { color: rgb(150, 150, 150); }
+      }
     }
   }
 }
