@@ -250,6 +250,17 @@ body.dark {
     .cm-comment:not(.cm-formatting):not(.cm-fenced-code) {
       background-color: var(--grey-5);
     }
+
+    // cm-comment should be ignored inside code blocks
+    .code-block-line {
+      // Retain monospaced font from editor.css
+      font-family: Consolas, 'Inconsolata', Menlo, monospace;
+
+      .cm-comment {
+        background-color: transparent !important;
+        padding: 0 !important;
+      }
+    }
   }
 
   .table-helper-align-button-container,
