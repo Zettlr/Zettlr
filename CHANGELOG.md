@@ -1,84 +1,253 @@
 # 2.0.0
 
-## DEPRECATION: 32 bit
+Since the last release, 1.8.9, there have been 1,921 commits and 823 files
+inside the codebase have changed (plus one or two commits after editing this
+changelog and bumping the version string). Thus, the changelog this time does
+not contain a meticulous list of every change. Rather, we focus on notable
+changes here. If you would like to see the full list of every change, please
+follow [this link](https://github.com/Zettlr/Zettlr/compare/v1.8.9...v2.0.0).
 
-No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supported. For Windows ARM builds, Pandoc cannot be shipped as of now.
+## 32bit Builds Are Discontinued
+
+We do not ship any more 32bit builds. From 2.0.0 onwards, only 64bit builds
+(both Intel and ARM) are supported. For Windows ARM builds, Pandoc is not
+available, so to export and import files on Windows ARM you must install Pandoc
+manually, if possible.
 
 ## New Configuration Options
 
-Several configuration values and options have changed their format. This means that changes to these won't be recognised by Zettlr 2.0. In this case, you may have to re-adapt your preferences in several places.
+Several existing configuration options have changed their format. This means
+that changes to these won't be recognised and they will reset to their default.
+In this case, you may have to re-adapt your preferences in several places.
+Please have a look at your settings after updating and see if they still are set
+the way you like.
 
 ## Writing Targets Must Be Re-Applied
 
-Due to a change in the underlying data structure, this version of Zettlr will not recognise any writing target set by a Zettlr version 1.x. This means: Please note down the important writing targets you have set before installing Zettlr 2.0 and then once re-apply them. We would like to apologise for this inconvenience, but believe its benefits by far outweigh the single additional migration effort on your side.
+Due to a change in the underlying data structure, this version of Zettlr will
+not recognise any writing target set by a Zettlr version 1.x. This means: Please
+note down the important writing targets you have set before updating and then
+once re-apply them. We would like to apologise for this inconvenience, but
+believe its benefits by far outweigh the single additional migration effort on
+your side.
 
-## No more transitive files
+## No More Transitive Files / New Browser-Like Behavior
 
-The idea of "transitive files" we implemented in previous iterations of Zettlr proved to be counter-intuitive to many people. We now removed that feature instead of a much better tab-management. By default, every file will be opened in its own tab no matter how you opened it. Instead, you now have an additional option in the preferences that allow you to indicate Zettlr should avoid opening new tabs wherever possible. This means, whenever you open a file, the current open tab will be replaced with whatever file you are opening. However, this does not apply if there are no tabs open, or if the current open tab contains unsaved changes. In that case, a new tab will be preferred. To explicitly open a file in a new tab, use the middle mouse button instead of the primary mouse button. This also applies to Zettelkasten-links inside your files.
+The idea of "transitive files" we implemented in previous iterations of Zettlr
+proved to be counter-intuitive to many people. We now removed that feature
+in favor of a much better tab-management. By default, Zettlr will now try to
+avoid opening new tabs and instead attempt to replace existing tabs whenever you
+open any new file. You can force Zettlr to open a file in a new tab instead by
+either middle-clicking, or right-clicking the file and choosing "Open in a new
+tab." If you generally do not want tabs to be closed in favor of other files,
+you can uncheck the option "Avoid opening new tabs." Files with unsaved changes
+will never be replaced. This behavior is very closely aligned with how modern
+browsers handle links.
 
-## No more Auto-Saving
+## Autosave Is Now A Setting
 
-A few years ago we implemented auto-saving after a delay of five seconds with no change to the current file. However, that feature was always a little bit counter-intuitive. Instead, the new Zettlr version removes auto-saving and re-instates manual saving (since the "Save" menu option was never gone). We did this for several reasons. First, Zettlr is first and foremost a text editor working with files on your computer, so you are used to having to save files manually, and Zettlr should've never deviated from that. Furthermore, if we would implement a data-safe autosaving ability, this would put unnecessary strain on your computer's hard drive. Thus we opted for the traditional way and thus you need to manually save changes to files now. We found during beta that this is much more consistent and easy to work with.
+A few years ago we implemented auto-saving after a delay of five seconds with no
+change to the current file. However, some people mentioned that they'd like to
+choose what to do. Now you can switch between three modes of autosaving. "Off"
+disables autosave and you have to manually save using `Cmd/Ctrl+S`.
+"Immediately" saves files after a very short delay of 250ms, that is basically
+whenever you stop typing. "After a delay" (default) will save files after the 5s
+delay you know from previous versions of Zettlr.
 
-## Custom CSS has moved
+## PDF-Preferences Are Discontinued
 
-The Custom CSS can now be edited directly in the assets dialog where you can also edit your defaults files.
+The PDF-Preferences window has been removed in favor of the new "assets
+manager." While it did prove to be a nice reminiscence of how LibreOffice or
+Word handled layout, it was not a scalable solution. Instead, we have now
+switched to defaults files, which are a little more complex than this dialog,
+but provide much more functionality and flexibility.
 
-## Zoom Functionality has changed
+## New Dialog: Assets Manager
 
-While in the past it was possible to use the common zoom shortcuts to only zoom the editor itself in or out, and additionally you could zoom while scrolling, this functionality has been deprecated in favour of enabling the zooming of the whole application. This will enable especially visually impaired people to work better with Zettlr. To zoom in and out only the font size of the editor itself, you can make use of the new preference setting allowing you to set the editor's font size.
+Instead of the old PDF-Preferences window, Zettlr now contains a so-called
+"assets manager." This is a new preferences window that allows you to customize
+settings which are stored in individual files. The first two tabs feature
+exporting and importing settings using so-called defaults files. Defaults files
+are written using YAML and provide Pandoc with sensible defaults for every
+export. We will shortly after the release of 2.0 include extensive documentation
+for how these work. The defaults we provide should work well for most users.
+
+The third tab contains the custom CSS, and the fourth tab contains the new
+snippets feature.
+
+## Custom CSS Has Moved
+
+The Custom CSS can now be edited directly in the assets manager instead of in
+its own dialog.
+
+## Zoom Functionality Has Changed
+
+Previously, you could increase and decrease the editor's font size using the
+zoom shortcuts. Now, the zoom shortcuts will zoom the complete user interface.
+This is an accessibility feature, since several people with visual impairments
+as well as people with large external displays have mentioned they would like
+the user interface itself to be scalable.
+
+The editor's font size can now directly be edited with a new setting in the
+editor settings tab.
+
+Scroll-to-zoom has been removed, because too many people have accidentally held
+down `Cmd/Ctrl` while using the scrollwheel, causing many accidental zoom
+operations.
+
+## The Pandoc Command Has Been Removed
+
+In the past, you had the ability to modify the command that Zettlr would run to
+export your files. However, several times we had to adapt the command, which
+lead to frustration among users because we had to manually inform everyone of
+these changes and they had to manually "reset" the command. Now that we have
+switched to defaults files, the command that will be run in every case is
+`pandoc --defaults "/path/to/defaults.yaml"`. Instead of modifying the CLI
+arguments, you can now adapt the defaults Pandoc will be run with, which is
+possible because every CLI argument has a corresponding setting in defaults
+files, which can be edited in the assets manager.
+
+## Native User Interface
+
+Another notable change is that now we have switched to a native user interface.
+This means that Zettlr does not have a completely custom design anymore, but
+rather orients itself at the various interface guidelines published by Apple,
+Microsoft, and the GNOME team. Thus, on macOS and Windows Zettlr now follows the
+Big Sur style and the Metro style respectively. On Linux, we have attempted to
+model the GNOME interface but had to make a few changes due to the fact that
+there are numerous different window managers with different aesthetics.
+
+## Two PDF Export Options
+
+You will notice that there are now two different PDF exporting options, one is
+called "PDF Document", the other "PDF (LaTeX)". The first option enables you to
+export a document to PDF without the help of a LaTeX distribution. This way you
+can have PDF exports without installing such a distribution. The second option
+allows you to export to PDF as you know it from previous versions of Zettlr.
+
+## Project Settings Have Moved
+
+With the introduction of defaults files, there is less necessity to ship a full
+dialog just to edit a project's settings. Instead, the project settings have
+been moved to the novel "Properties" dialog of directories, which you can access
+via the context menu.
 
 ## GUI and Functionality
 
-- **Feature**: Switched the Exporting process in a way that allows more flexibility in setting options.
-- **Feature**: The macOS version of Zettlr now boasts a new application icon, adapted to fit the style of the Big Sur operating system. It was provided by Marc Oliver Orth (@marc2o) – thank you!
-- **Feature**: Zettlr now supports bibliography files on a per-file basis. Just set the wanted bibliography in your YAML frontmatter, within the `bibliography`-property.
-- **Feature**: Now Zettlr can export to PDF even without any LaTeX-distribution installed on the system.
-- **Feature**: The footnote editing logic has been improved. Now, multiline footnotes are handled appropriately, and you can safely use multi-line footnotes alongside the in-place editing feature.
-- **Feature**: Custom data directory via `--data-dir=<path_to_directory>` switch.
-- 32 bit AppImages and Windows are no longer supported.
+- **Feature**: Switched to using defaults files in the exporter. Additionally,
+  the exporter is now modular, allowing for more extensions in the future.
+- **Feature**: You can now define snippets, reusable pieces of text that allow
+  you to save some time when writing
+- **Feature**: The "global search" has been renamed "full text search" and has
+  moved to its own sidebar panel -- you can switch between the file manager and
+  the full text search using the three-way toggle in the toolbar
+- **Feature**: A new sidebar tab shows you related files
+- **Feature**: Added a calendar view to the stats dialog, showing you what
+  you've written over the year
+- **Feature**: The macOS version of Zettlr now boasts a new application icon,
+  adapted to fit the style of the Big Sur operating system. It was provided by
+  Marc Oliver Orth (@marc2o) – thank you!
+- **Feature**: Zettlr now supports bibliography files on a per-file basis. Just
+  set the wanted bibliography in your YAML frontmatter, within the
+  `bibliography`-property.
+- **Feature**: The tag cloud now offers you "suggested tags" for the current
+  file. Tag suggestions are words equalling tags found inside your file which
+  are not yet prepended with a hash-character. You can modify the list of
+  suggestions and insert them at once. Zettlr will insert them into the
+  frontmatter so that the actual text will remain untouched. If there are any
+  tag suggestions, the tag cloud icon will feature a small red dot.
+- **Feature**: Now Zettlr can export to PDF even without any LaTeX-distribution
+  installed on the system.
+- **Feature**: The footnote editing logic has been improved. Now, multiline
+  footnotes are handled appropriately, and you can safely use multi-line
+  footnotes alongside the in-place editing feature.
+- **Feature**: You can now customize the data directory using the
+  `--data-dir="/path/to/directory"` switch. This allows portable installations.
+- **Feature**: In addition to the "Glass" sound you can now also have the
+  Pomodoro timer play a "Chime" or a "Digital Alarm" after each step
+- **Feature**: The filter now not only filters the file list but also the file
+  tree
+- **Feature**: New "Properties" popouts give you access to information about
+  your files and folders via the context menu
+- **Feature**: Projects can now be exported into multiple formats at once,
+  allowing you to choose from every available format
+- **Feature**: You can now further filter which files will be exported using
+  glob patterns
+- **Feature**: A new update dialog improves the updating experience
+- 32bit AppImages and Windows builds are no longer supported.
 - Double-dollar equations are now rendered in display mode.
 - Removed the Pandoc installation item from the help menu.
 - Moved the Pandoc and XeLaTeX settings to the export tab in preferences.
 - Updated the tutorial instructions to install Pandoc
 - Fixed a bug that would delete file if it got renamed as itself.
-- All languages will now be downloaded by the CI workflow. Updates will still be pulled via the application on boot.
-- Removed the ability for the translation provider to arbitrarily request languages that have not been installed in order to remove that fragile feature. All languages will now be provided from the application immediately.
-- All windows will now remember their last position (new: log window and print window).
-- Some components of the renderer elements will now respect a given accent colour set by your operating system (only available for macOS and Windows).
-- You can now close files by middle-clicking their tabs.
+- All languages will now be downloaded by the CI workflow. Updates will still be
+  pulled via the application on boot.
+- Removed the ability for the translation provider to arbitrarily request
+  languages that have not been installed in order to remove that fragile
+  feature. All languages will now be provided from the application immediately.
+- All windows will now remember their last position.
+- Some components of the renderer elements will now respect a given accent
+  color set by your operating system (only available for macOS and Windows).
+  You can choose between a theme's accent color and the operating system's in
+  the display settings.
+- You can now close files by middle-clicking their tabs
 - MDX supported as a type of markdown file
 - New File and Edit File can now fast rename without selecting the extension
-- Add a tray to the system notification area, off by default. To activate, see Preferences → Advanced → "Leave app running in the notification area" (or "Show app in the notification area" when using MacOS).
-- Fixed a bug that would mark some quotation marks as misspelled.
+- Add a tray to the system notification area, off by default. To activate, see
+  Preferences → Advanced → "Leave app running in the notification area" (or
+  "Show app in the notification area" when using MacOS).
+- Fixed a bug that would mark some quotation marks as misspelled
 - Fix the visibility problems under night mode mentioned in issue #1845
-- Enabled syntax higlighting for fenced code blocks that use attribute lists as per issue #2259
+- Enabled syntax higlighting for fenced code blocks that use attribute lists as
+  per issue #2259
+- Added the SIL Open Font License to the About dialog
 
 ## Under the Hood
 
 - Removed support for 32 bit AppImages on the CI.
 - Migrated the exporter to TypeScript.
-- Completely rewritten the exporter in order to be able to use defaults files and enable much more flexibility.
+- Completely rewritten the exporter in order to be able to use defaults files
+  and enable much more flexibility.
 - Removed the Pandoc command.
-- Add typings for external modules, remove the internal custom ones for `bcp-47` and `nspell`.
+- Add typings for external modules, remove the internal custom ones for `bcp-47`
+  and `nspell`.
 - Reenabled the Pandoc and XeLaTeX options in preferences.
-- Removed the generic IPC call from the config provider and replaced it with consistent checks as to which options have actually changed. This increases the performance after configuration saves.
+- Removed the generic IPC call from the config provider and replaced it with
+  consistent checks as to which options have actually changed. This increases
+  the performance after configuration saves.
 - Migrated the config provider to TypeScript.
 - Migrated the Citeproc Provider to TypeScript, and cleaned the provider up:
-    - The provider has now the capability to load multiple databases at once and switch between them.
-    - Furthermore, the provider now needs much less variables, the logic is much simpler, and many unnecessary ipc calls have been removed.
-- Migrated extractBibTexAttachments to TypeScript.
-- Migrated the Translation Provider to TypeScript.
-- The translations are now loaded by the `trans` helper to make sure it will always work.
-- Migrated the preferences dialog to Vue.js.
-- Added manifold new Vue components to compose windows from.
-- The menubar and window controls are no longer controlled by the window registration handler.
-- Now tests can be run as JavaScript or as TypeScript files (use `.js` or `.spec.ts` files respectively).
-- Generalised the window state management so that all windows are now able to remember their positions easily.
-- The toolbar is now vue-ified and can be used on WindowChrome components.
+    - The provider has now the capability to load multiple databases at once and
+      switch between them.
+    - Furthermore, the provider now needs much less variables, the logic is much
+      simpler, and many unnecessary ipc calls have been removed.
+- Migrated many utility functions and other scripts to TypeScript.
+- The translations are now loaded by the `trans` helper to make sure it will
+  always work.
+- Migrated the complete GUI to Vue.js, using a reusable component system.
+- The window chrome is no longer controlled by the window registration handler.
+- Now tests can be run as JavaScript or as TypeScript files (use `.js` or
+  `.spec.ts` files respectively).
+- Generalised the window state management so that all windows are now able to
+  remember their positions easily.
 - Zettlr is now completely jQuery-free.
 - Migrated the FSAL cache from unstable Objects to Maps and Sets.
 - Migrated the TagProvider to a Map as well.
+- Added an assets provider responsible for maintaining the various files Zettlr
+  now uses
+- Completely sandboxed the renderer processes. Now, even if an attacker gains
+  access to a browser window, the chances of them causing any damage is greatly
+  reduced
+- Moved all static assets to their own directory
+- Fixed font, image, and resource loading in general via webpack
+- Fixed the debug capabilities; now everyone should be able to debug both the
+  main process as well as the renderer processes using VS Code
+- Added "recommended extensions" to the VS Code setup, allowing for easier
+  interoperability across code contributors
+- Switched to the native "recent documents" functionality on macOS and Windows
+- Switched to a new, completely GDPR compliant API for updates. No piece of data
+  will be transferred anymore (except the update information from our server to
+  the apps)
 
 # 1.8.9
 
