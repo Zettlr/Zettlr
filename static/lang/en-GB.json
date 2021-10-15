@@ -7,7 +7,7 @@
             "lukecarrier \u003Cluke@carrier.im\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-09-30T14:09:03.000000Z"
+        "updated_at": "2021-10-13T17:54:49.000000Z"
     },
     "dialog": {
         "about": {
@@ -468,6 +468,11 @@
         "avg_surpassed": "\ud83d\udd25 You're on fire!",
         "avg_words": "daily average",
         "chars": "%s characters",
+        "chart": {
+            "high_legend": "More than twice the monthly average",
+            "high_mid_legend": "Over the monthly average",
+            "low_mid_legend": "Below the monthly average"
+        },
         "citeproc": {
             "error_db": "The citation database could not be loaded",
             "error_report_message": "%s items in your library could not be loaded due to errors. Please check the error messages below to see which CiteKeys are malformed and what the error was.",

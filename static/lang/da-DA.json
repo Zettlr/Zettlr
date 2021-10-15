@@ -5,7 +5,7 @@
             "Anders Lykke Gade"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-05-30T05:14:35.000000Z"
+        "updated_at": "2021-10-01T14:03:12.000000Z"
     },
     "dialog": {
         "about": {
@@ -34,11 +34,18 @@
             "cancel": "Fortryd",
             "choose_path": "V\u00e6lg mappe ...",
             "close": "Luk",
+            "close_without_saving": "Luk uden at gemme",
             "save": "Gem"
         },
         "custom_css": {
             "info": "Her kan du \u00e6ndre p\u00e5 styles i Zettlr for at tilpasse det yderligere. \u003Cstrong\u003EBem\u00e6rk: Denne fil har forret over alle CSS-instrukser. Man b\u00f8r aldrig \u00e6ndre p\u00e5 elementernes st\u00f8rrelse, s\u00e5 kan app'en opf\u00f8re sig uventet!\u003C/strong\u003E",
             "title": "Custom CSS"
+        },
+        "defaults": {
+            "explanation": "Redig\u00e9r standard indstillingerne for import og export her.",
+            "exporting_title": "Eksporterer",
+            "importing_title": "Importerer",
+            "restore": "Gendan standard filen"
         },
         "dir_new": {
             "placeholder": "Navn p\u00e5 mappe",
@@ -67,9 +74,13 @@
         },
         "filter_tags": "Filtrer tags...",
         "find": {
+            "close_label": "Luk s\u00f8gning",
             "find_label": "Find",
             "find_placeholder": "Find ...",
+            "regex_label": "Sl\u00e5 regular expression s\u00f8gning til eller fra",
+            "replace_all_label": "Erstat alle forekomster",
             "replace_label": "Erstat",
+            "replace_next_label": "Erstat den n\u00e6ste forekomst",
             "replace_placeholder": "Erstat med"
         },
         "paste_image": {
@@ -163,6 +174,12 @@
             "auto_dark_mode_schedule": "Tidsindstillinger",
             "auto_dark_mode_schedule_format": "HH:MM (24-timers format)",
             "auto_dark_mode_system": "F\u00f8lg styresystem",
+            "auto_save": {
+                "delayed": "Efter en kort forsinkelse",
+                "immediately": "Med det samme",
+                "label": "Automatisk gem",
+                "off": "Sl\u00e5et fra"
+            },
             "autocomplete_accept_space": "Accept\u00e9r mellemrum ved autofuldf\u00f8relse",
             "autocorrect": {
                 "active_label": "Sl\u00e5 Auto korrektur til",
@@ -179,13 +196,16 @@
             "checkForBeta": "Orienter om betaudgivelser",
             "choose_file": "V\u00e6lg fil ...",
             "citation_database": "Citations Database (CSL, JSON eller BibTex)",
+            "cite_style_label": "\u00d8nsker du at autofuldf\u00f8r inds\u00e6tter citationer for dig?",
             "count_chars": "T\u00e6l tegn i stedet for ord (f.eks. p\u00e5 kinesisk)",
             "creationtime": "Dato for filoprettelse",
             "debug": "Aktiver debugging",
             "default_image_save_path": "Standardplacering for billeder (relativ eller absolut)",
             "delete_on_fail": "Slet noter fuldst\u00e6ndigt, hvis det fejler at flytte dem til papirskurven",
             "display": {
+                "image_height": "Billeders maksimal h\u00f8jde (i procent)",
                 "image_size_info": "Med disse indstillinger kan du begr\u00e6nse forh\u00e5ndvisningen af billeder",
+                "image_width": "Billeders maksimal vidde (i procent)",
                 "preview_info": "Disse indstillinger afg\u00f8r hvilke elementer der bliver renderet i dokumenter",
                 "render_citations": "Rend\u00e9r citationer",
                 "render_htags": "Skjul Overskrifts tegn",
@@ -206,6 +226,7 @@
                 "rtl_move_visually": "Brug den visuelle orden til navigation med piletaster i RTL tilstand"
             },
             "enable_rmarkdown": "Sl\u00e5 RMarkdown fil support til",
+            "enable_scroll_zoom": "Zoom ind n\u00e5r der scrolles mens \u003Ckbd\u003ECmd\u003C/kbd\u003E eller \u003Ckbd\u003ECtrl\u003C/kbd\u003E holdes nede",
             "enable_table_helper": "Sl\u00e5 tabel editor til",
             "export": {
                 "dest": "M\u00e5l mappe for eksporterede filer. \u003Cem\u003E V\u00e6r opm\u00e6rksom p\u00e5:\u003C/em\u003E Hvis du v\u00e6lger mappen der aktuelt arbejdes i, vil filer blive overskrevet uden advarsel!",
@@ -232,6 +253,7 @@
             "homeEndBehaviour": "Brug CodeMirrors standard handlinger for \u003Ckbd\u003EHome\u003C/kbd\u003E og \u003Ckbd\u003EEnd\u003C/kbd\u003E tasterne.",
             "indent_unit": "Indent\u00e9r med det f\u00f8lgende antal mellemrum",
             "input_mode": "Editor input tilstand",
+            "leave_app_running_in_the_notification_area": "Lad programmet k\u00f8re i systembakken",
             "modtime": "Sidste \u00e6ndringstidspunkt",
             "mute_lines": "Nedton ikke-fokuserede linjer i distraktionsfri tilstand",
             "new_file_dont_prompt": "Sp\u00f8rg ikke efter filnavn, n\u00e5r der oprettes nye filer",
@@ -283,11 +305,16 @@
             "project": {
                 "csl_style": "CSL-stil (valgfri)",
                 "format": "Eksporter projekt til:",
+                "name_label": "Format",
+                "pattern": "Tilf\u00f8j Glob m\u00f8nstre for kun at inkludere specifikke filer",
+                "pattern_name": "Glob m\u00f8nster",
                 "title": "Projekt indstillinger",
-                "title_label": "Projekt titel"
+                "title_label": "Projekt titel",
+                "use_label": "Brug"
             },
             "readability_algorithm": "Algoritme der skal bruges til tilstanden \"Forbedret l\u00e6sbarhed\".",
             "reset_pandoc_command": "Kommando til nulstilling af Pandoc",
+            "show_app_in_the_notification_area": "Vis programmet i notifikationsomr\u00e5det",
             "sorting_ascii": "ASCII r\u00e6kkef\u00f8lge (2 efter 10)",
             "sorting_explanation": "Sorterings r\u00e6kkef\u00f8lge for files (brugt til sortering efter navn)",
             "sorting_natural": "Naturlig r\u00e6kkef\u00f8lge (10 efter 2)",
@@ -299,7 +326,11 @@
                 "title": "Stavekontrol"
             },
             "theme": {
+                "accent_color_info": "Denne indstilling er kun tilg\u00e6ngelig p\u00e5 Windows og macOS",
+                "accent_color_label": "Brug operativ systemet accent farve istedet for tema farven",
                 "info": "Her kan du v\u00e6lge et tema for programmet",
+                "select_label": "Klik for at v\u00e6lge",
+                "selected_label": "Valgt",
                 "title": "Tema"
             },
             "title": "Indstillinger",
@@ -313,9 +344,12 @@
             },
             "use_native_appearance": "Brug nativ vindues udseende",
             "user_dictionary": "Bruger ordbog: Fjern ord ved at klikke p\u00e5 dem.",
+            "user_dictionary_label": "Ordbogs indl\u00e6g",
             "watchdog_checkbox_label": "Aktiv\u00e9r \"vagthunds\" overv\u00e5gning",
             "watchdog_explainer": "P\u00e5 nogle computere kan Zettlr melde om for mange eksterne fil \u00e6ndringer. Hvis det sker, s\u00e5 pr\u00f8v at aktiv\u00e9r denne indstilling.",
             "watchdog_threshold_label": "Tid f\u00f8r skrivning af en fil forventes f\u00e6rdigt (i ms)",
+            "whitelist": "IFrame rendering hvid liste",
+            "whitelist_hostname": "Hostname",
             "xelatex": "Sti til Xelatex ekskverbar fil. Lav venligst kun \u00e6ndringer, hvis Zettlr ikke kan finde den.",
             "xelatex_default": "Standard: Xelatex",
             "zkn": {
@@ -350,12 +384,22 @@
                 "var_year_two": "\u00c5r (to cifre)"
             }
         },
+        "snippets": {
+            "explanation": "Snippets lader dig definere genbrugelige stykker af tekst med variabler.",
+            "rename": "Omd\u00f8b snippet",
+            "title": "Snippets"
+        },
         "statistics": {
             "compare": "Sammenlign med tidligere tidsramme",
             "day": "Dato",
             "intro": "Her kan du se udvidede statistikker om din skrive adf\u00e6rd, som f.eks. en detaljeret graf over dine ord per dag.",
             "month": "M\u00e5ned",
             "previous_frame": "Tidligere tidsramme",
+            "tabs": {
+                "calendar_label": "Kalender",
+                "chart_label": "Diagrammer",
+                "fsal_label": "FSAL statistikker"
+            },
             "this_frame": "Nuv\u00e6rende tidsramme",
             "title": "Skrive statistikker",
             "week": "Uge",
@@ -364,8 +408,10 @@
             "year": "\u00c5r"
         },
         "tag_cloud": {
+            "add_to_file": "Tilf\u00f8j til fil",
             "copy": "Kopier til udklipsholder",
             "info": "Her kan du se alle de m\u00e6rkater du har brugt i dine filer og hvor mange gange du har brugt dem. Du kan kopiere hele listen til udklipsholderen.",
+            "suggestions_label": "Foresl\u00e5ede m\u00e6rkater for den aktuelle fil",
             "title": "M\u00e6rkat sky"
         },
         "tags": {
@@ -384,22 +430,42 @@
             "client_error": "Kunne ikke s\u00f8ge efter opdateringer: Klient fejl (Status kode: %s)",
             "connection_error": "Kunne ikke s\u00f8ge efter opdateringer: Kunne ikke etablere forbindelse",
             "current_version": "Din version",
+            "download_progress_label": "Henter din opdatering",
+            "new_update_available": "En opdatering til version %s er tilg\u00e6ngelig",
             "no_data": "Kunne ikke s\u00f8ge efter opdateringer: Serveren har ikke sendt noget data",
+            "no_new_update": "Ingen opdatering tilg\u00e6ngelig. Du har den seneste version.",
             "notification": "Der er en ny version af Zettlr tilg\u00e6ngelig. L\u00e6s venligst \u00e6ndringer i den nye version nedenfor.",
+            "other_error": "Kunne ikke s\u00f8ge efter opdateringer. %s: %s",
             "redirect_error": "Kunne ikke s\u00f8ge efter opdateringer: Serveren fors\u00f8gte at redirecte (Status kode: %s)",
             "release_url": "\u00c5bn side til download",
             "server_error": "Kunne ikke s\u00f8ge efter opdateringer: Server fejl (Status kode: %s)",
+            "start_update_label": "Klik for at starte opdatering",
+            "start_update_message": "Starter opdatering ...",
             "title": "Ny opdatering tilg\u00e6ngelig",
-            "transmission_error": "Kunne ikke s\u00f8ge efter opdateringer: Forbindelsen blev afbrudt"
+            "transmission_error": "Kunne ikke s\u00f8ge efter opdateringer: Forbindelsen blev afbrudt",
+            "window_title": "Opdatering"
         }
     },
     "gui": {
+        "assets_man": {
+            "defaults_restore_error": "Kunne ikke gendanne standard filen!",
+            "defaults_restored": "Standard fil gendannet!",
+            "defaults_restoring": "Gendanner standard file ...",
+            "status": {
+                "save_error": "Kunne ikke gemme",
+                "saved": "Gemt!",
+                "saving": "Gemmer ...",
+                "unsaved_changes": "Ikke gemte \u00e6ndringer"
+            },
+            "win_title": "Indholdsstyring"
+        },
         "attachments": "Vedh\u00e6ftede filer",
         "attachments_open_dir": "\u00c5bn mappe",
         "avg_close_to": "\ud83d\udcaa Du er t\u00e6t p\u00e5 at n\u00e5 dit daglige gennemsnit",
         "avg_not_reached": "\u270d\ud83c\udffc Kom igang med at skrive s\u00e5 du kan overg\u00e5 dit daglige gennemsnit",
         "avg_surpassed": "\ud83d\udd25 Vi kan ikke br\u00e6nde dig, for du' allerede ild!",
         "avg_words": "Dagligt gennemsnit",
+        "chars": "%s karakterer",
         "citeproc": {
             "error_db": "Citations databasen kunne ikke indl\u00e6ses",
             "error_report_message": "%s emner i dit bibliotek kunne ikke indl\u00e6ses p\u00e5 grund af fejl. Unders\u00f8g venligst fejlbeskederne nedenfor, for at se hvilke CiteKeys der er misformede og hvad fejlen var.",
@@ -411,6 +477,9 @@
             "references_none": "Der er ingen citationer i dette dokument",
             "reloading": "Der er registreret \u00e6ndringer i biblioteksfilen. Genindl\u00e6ser ..."
         },
+        "created": "Oprettet",
+        "ctrl_click_to_open": "Cmd/Ctrl+Klik for at \u00e5bne %s",
+        "date_just_now_label": "Lige nu",
         "dirs": "Mapper",
         "display_search_results": "Vis s\u00f8ge resultater",
         "empty_dir": "Tom mappe",
@@ -437,10 +506,46 @@
             "tasklist": "Opgave liste",
             "ul": "Punktliste"
         },
+        "global_search": {
+            "clear_label": "Ryd s\u00f8gning",
+            "filter_label": "Filtrer s\u00f8ge resultater",
+            "query_label": "Indtast dine s\u00f8getermer nedenfor",
+            "query_placeholder": "Find ...",
+            "restrict_dir_label": "Forbehold s\u00f8gning til mappe",
+            "restrict_dir_placeholder": "Forbehold til mappe ...",
+            "search_label": "S\u00f8g",
+            "title": "Fuld-tekst s\u00f8gning",
+            "toggle_label": "Sl\u00e5 resultater til eller fra"
+        },
+        "modified": "Modificeret",
+        "months": {
+            "apr": "april",
+            "aug": "august",
+            "dec": "december",
+            "feb": "februar",
+            "jan": "januar",
+            "jul": "juli",
+            "jun": "juni",
+            "mar": "marts",
+            "may": "maj",
+            "nov": "november",
+            "oct": "oktober",
+            "sep": "september"
+        },
         "no_attachments": "Ingen vedh\u00e6ftede filer",
         "no_dir_selected": "Intet bibliotek valgt",
+        "no_open_document": "Intet \u00e5bent dokument",
+        "no_other_files": "Ingen andre filer",
+        "no_reference_message": "Ingen reference tekst",
+        "no_related_files": "Ingen relaterede filer",
         "no_search_results": "Ingen resultater",
         "number_selections": "%s markeringer",
+        "other_files": "Andre filer",
+        "preview_modification_date": "Modificeret",
+        "preview_searching_label": "S\u00f8ger efter fil ...",
+        "preview_word_count": "Ordopt\u00e6lling",
+        "related_files_label": "Relaterede filer",
+        "reset": "Nulstil",
         "statistics_more": "Flere statistikker ...",
         "table_of_contents": "Indholdsfortegnelse",
         "today_words": "ord idag",
@@ -457,6 +562,7 @@
         "about": "Om Zettlr",
         "add_to_dictionary": "Tilf\u00f8j til ordbog",
         "all_front": "Bring alle til front",
+        "assets_manager": "Indholdsstyring",
         "bold": "Fed",
         "clear_recent_docs": "Tom",
         "close_all_tabs": "Luk alle faner",
@@ -467,6 +573,7 @@
         "copy_filename": "Kopi\u00e9r filnavn",
         "copy_html": "Kopi\u00e9r som HTML",
         "copy_id": "Kopi\u00e9r ID",
+        "copy_img_to_clipboard": "Kopier billede til udklipsholder",
         "copy_link": "Kopi\u00e9r link",
         "copy_mail": "Kopi\u00e9r email adresse",
         "custom_css": "Brugerdefineret CSS...",
@@ -477,6 +584,7 @@
         "donate": "St\u00f8t Zettlr",
         "duplicate_file": "Duplik\u00e9r fil",
         "export": "Eksporter...",
+        "filter_files": "Filtrer filer",
         "find_dir": "Find i mappe",
         "find_file": "Find i fil",
         "generate_id": "Gener\u00e9r nyt ID",
@@ -507,6 +615,7 @@
         "no_suggestions": "Ingen forslag",
         "open": "\u00c5bn...",
         "open_attachment": "\u00c5bn vedh\u00e6ftning",
+        "open_in_browser": "\u00c5ben i browser",
         "open_link": "\u00c5bn link",
         "open_logs": "\u00c5bn log",
         "open_new_tab": "\u00c5ben i et nyt faneblad",
@@ -540,13 +649,15 @@
         "start_speaking": "Start med at tale",
         "stop_speaking": "Stop med at tale",
         "tab_close": "Luk fane",
+        "tab_close_all": "Luk alle faneblade",
+        "tab_close_others": "Luk andre faneblade",
         "tab_next": "N\u00e6ste fane",
         "tab_previous": "Forrige fane",
         "tags": "Administr\u00e9r m\u00e6rkater",
         "toggle_devtools": "Vis udviklingsv\u00e6rkt\u00f8jer",
         "toggle_distraction_free": "Distraktionsfri tilstand",
         "toggle_file_meta": "Yderligere information",
-        "toggle_filemanager": "Sl\u00e5 fil administrator til/fra",
+        "toggle_filemanager": "Sl\u00e5 mappeoversigt til/fra",
         "toggle_fullscreen": "Fuldsk\u00e6rmstilstand",
         "toggle_sidebar": "Skift tilstand i fil og mappeoversigt",
         "toggle_theme": "M\u00f8rkevisning",
@@ -572,6 +683,13 @@
     "system": {
         "all_files": "Alle filer",
         "cancel": "Annull\u00e9r",
+        "common": {
+            "filter": "Filtrer ...",
+            "list_actions_label": "Handlinger",
+            "list_add_button": "Tilf\u00f8j",
+            "list_default_column_label": "post",
+            "list_search_placeholder": "S\u00f8g efter indl\u00e6g ..."
+        },
         "directories": "Mapper",
         "directory_removed": "Mappen %s er blevet fjernet.",
         "error": {
@@ -593,6 +711,8 @@
             "fnf_title": "Fil ikke fundet",
             "ignored_dir_message": "Mappen &quot;%s&quot; kan ikke \u00e5bnes af Zettlr.",
             "ignored_dir_title": "Kan ikke \u00e5bne mappe",
+            "image_not_found": "Billedet blev ikke fundet: %s",
+            "malformed_citekey": "Fejlformet Citeringsn\u00f8gle: @%s",
             "malformed_textbundle": "misdannet tekstbundt: %s",
             "move_into_child_message": "Du kan ikke flytte en mappe ind i en af dens undermapper.",
             "move_into_child_title": "Kan ikke flytte mappe",
@@ -606,7 +726,8 @@
             "pandoc_error_message": "Pandoc rapporterede en fejl: %s",
             "pandoc_error_title": "Kunne ikke eksportere fil",
             "remove_message": "Vil du virkelig slette %s?",
-            "remove_title": "Bekr\u00e6ft sletning"
+            "remove_title": "Bekr\u00e6ft sletning",
+            "tray_not_supported": "Systembakke er ikke supporteret. Gnome Extension &quot;KStatusNotifierItem/AppIndicator Support&quot; er p\u00e5kr\u00e6vet for underst\u00f8ttelse af System bakke p\u00e5 Gnome Desktop."
         },
         "export_success": "Eksporterer til %s",
         "file_changed": "Filen %s er blevet \u00e6ndret eksternt",
@@ -665,7 +786,13 @@
         "show_toc": "Vis indholdsfortegnelsen",
         "stats": "Vis statistikker",
         "tag_cloud": "M\u00e6rkater",
-        "toggle_attachments": "Se vedh\u00e6ftede filer"
+        "toggle_attachments": "Se vedh\u00e6ftede filer",
+        "toggle_file_manager": "Filstyring",
+        "toggle_global_search": "Global s\u00f8gning"
+    },
+    "tray": {
+        "show_zettlr": "Vis Zettlr",
+        "tooltip": "Zettlr"
     },
     "validation": {
         "error_empty": "Valgmuligheden %s er n\u00f8dvendig",

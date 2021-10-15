@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-09-30T14:09:51.000000Z"
+        "updated_at": "2021-10-13T17:56:38.000000Z"
     },
     "dialog": {
         "about": {
@@ -465,6 +465,11 @@
         "avg_surpassed": "\ud83d\udd25 Weiter so!",
         "avg_words": "durchschnittlich",
         "chars": "%s Zeichen",
+        "chart": {
+            "high_legend": "Mehr als das Doppelte des monatlichen Durchschnitts",
+            "high_mid_legend": "\u00dcber dem monatlichen Durchschnitt",
+            "low_mid_legend": "Unter dem monatlichen Durchschnitt"
+        },
         "citeproc": {
             "error_db": "Die Zitationsdatenbank konnte nicht geladen werden",
             "error_report_message": "%s Zitationen konnten aufgrund von Fehlern nicht geladen werden. Bitte \u00fcberpr\u00fcfe die unten stehenden CiteKeys anhand des mit ausgegebenen Fehlertextes.",
