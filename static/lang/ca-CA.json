@@ -5,7 +5,7 @@
             "vfc"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-09-20T16:26:08.000000Z"
+        "updated_at": "2021-10-14T14:24:17.000000Z"
     },
     "dialog": {
         "about": {
@@ -196,6 +196,7 @@
             "checkForBeta": "Notifica els llan\u00e7aments beta",
             "choose_file": "Tria el fitxer",
             "citation_database": "Base de dades de les refer\u00e8ncies (CSL, JSON o BibTex)",
+            "cite_style_label": "Com vols que s'autocompletin les teves cites?",
             "count_chars": "Compta car\u00e0cters en lloc de paraules (per exemple, per al xin\u00e8s)",
             "creationtime": "Hora de creaci\u00f3 del fitxer",
             "debug": "Habilita el mode de depuraci\u00f3",
@@ -328,6 +329,8 @@
                 "accent_color_info": "Aquesta opci\u00f3 nom\u00e9s est\u00e0 disponible per a Windows i macOS",
                 "accent_color_label": "Utilitza l'esquema de colors del sistema operatiu",
                 "info": "Aqu\u00ed pots triar l'aparen\u00e7a de l'aplicaci\u00f3",
+                "select_label": "Clica per a seleccionar",
+                "selected_label": "Seleccionat",
                 "title": "Tema"
             },
             "title": "Prefer\u00e8ncies",
@@ -463,6 +466,11 @@
         "avg_surpassed": "\ud83d\udd25 Ho est\u00e0s petant!",
         "avg_words": "Mitjana di\u00e0ria",
         "chars": "%s car\u00e0cters",
+        "chart": {
+            "high_legend": "M\u00e9s del doble de la mitjana mensual",
+            "high_mid_legend": "Per sobre de la mitjana mensual",
+            "low_mid_legend": "Sota la mitjana mensual"
+        },
         "citeproc": {
             "error_db": "No s'ha pogut carregar la base de dades de refer\u00e8ncies",
             "error_report_message": "No s'han pogut carregar %s elements de la vostra biblioteca a causa d'errors. Comproveu els missatges d\u2019error seg\u00fcents per veure quines CiteKeys tenen un format incorrecte i quin \u00e9s l\u2019error.",
