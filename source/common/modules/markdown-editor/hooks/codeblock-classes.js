@@ -39,9 +39,9 @@ module.exports = (cm) => {
  * @param   {CodeMirror}  cm  The instance
  * @param   {String}  name  The key pressed
  */
-function handleNewline(cm, name) {
-  if (name == 'Enter') {
-    findCode (cm)
+function handleNewline (cm, name) {
+  if (name === 'Enter') {
+    findCode(cm)
     cm.refresh()
   }
 }
@@ -69,13 +69,13 @@ function findCode (cm) {
   // Check lines for code blocks
   for (let lineNum = 0; lineNum < lineCount; lineNum++) {
     let line = cm.getLine(lineNum)
-
     // Fenced code found
     if (codeBlockRE.test(line)) {
 
       // Find fenced code end
-      while (lineNum + 1 < lineCount && !codeBlockRE.test(cm.getLine(lineNum + 1)))
+      while (lineNum + 1 < lineCount && !codeBlockRE.test(cm.getLine(lineNum + 1))) {
         codeBlockLines.push(++lineNum)
+      }
 
       // Skip line that marks fenced code end
       lineNum++
@@ -93,11 +93,12 @@ function findCode (cm) {
           let probeLine = 1
 
           // Skip ahead to the end of the potential code block
-          while (lineNum + probeLine < lineCount && indentedRE.test(cm.getLine(lineNum + probeLine)))
+          while (lineNum + probeLine < lineCount && indentedRE.test(cm.getLine(lineNum + probeLine))) {
             probeLine++
+          }
 
           // Check if end of file or block appended by empty line, making it a legal code block
-          if (lineNum + probeLine == lineCount || blankishRE.test(cm.getLine(lineNum + probeLine))) {
+          if (lineNum + probeLine === lineCount || blankishRE.test(cm.getLine(lineNum + probeLine))) {
             codeBlockLines.push(...range(lineNum, lineNum + probeLine))
             // Skip ahead until after code block
             lineNum += probeLine - 1
@@ -130,7 +131,6 @@ function findCode (cm) {
     // if next line is not code
     if (lines[index + 1] !== lineNum + 1) {
       cm.addLineClass(lineNum, 'wrap', codeblockClassClose)
-
       // If this was caused by backspacing the last line of indented code, we
       // need to explicitly clean up the classes
       if (index < lineCount) {
