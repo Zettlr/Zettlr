@@ -71,7 +71,6 @@ function findCode (cm) {
     let line = cm.getLine(lineNum)
     // Fenced code found
     if (codeBlockRE.test(line)) {
-
       // Find fenced code end
       while (lineNum + 1 < lineCount && !codeBlockRE.test(cm.getLine(lineNum + 1))) {
         codeBlockLines.push(++lineNum)
@@ -136,7 +135,6 @@ function findCode (cm) {
       if (index < lineCount) {
         cm.removeLineClass(lineNum + 1, 'wrap', codeblockClass, codeblockClassClose)
       }
-
     } else {
       cm.removeLineClass(lineNum, 'wrap', codeblockClassClose)
     }
