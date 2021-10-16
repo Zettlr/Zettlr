@@ -45,10 +45,14 @@ function applyCodeblockClasses (cm) {
       if (!blockFenced) codeblockLines.pop()
     }
 
-    if (!blockFenced && line.styles && !line.styles.includes('formatting') && indentedRE.test(line.text)) {
-      // Temporarily disabled. I need to hook into wherever CodeMirror does its
-      // parsing, because this only applies to what's visible.
-      // codeblockLines.push(lineNum) // Disabled because of issue #2637
+    if (!blockFenced && indentedRE.test(line.text)) {
+      // I need to hook into wherever CodeMirror does its parsing, because now
+      // we're working against Markdown Mode.
+
+      // This is almost a fix for #2637 but the line classes won't update until
+      // return is pressed and that's a problem. So disabled for now.
+      // if (!cm.getLineTokens(lineNum).map(token => token.type).join(',').includes('formatting'))
+      //   codeblockLines.push(lineNum)
     }
 
     lineNum++
