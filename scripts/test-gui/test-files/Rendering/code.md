@@ -1,22 +1,18 @@
 # Code blocks and indented blocks
 
+**Testing:** Make sure all code blocks have round corners everywhere. If some corners are not round, it means some classes were not applied correctly.
+**Testing:** Make sure the page can scroll down using the arrow keys alone. If not, it means the routine triggered an unhandled error.
+
 ### Fenced code
 
-This is a _fenced code block_. It starts with three tildes and optionally a language identifier to change code formatting colors.
+This is a _fenced code block_. It starts with three tildes and optionally a language identifier to change code formatting colors. Fenced code blocks create collapsible code (see the little triangles on the left).
+
+**Testing:** Create new lines from the front and the end of the first, last and middle line. Should behave as expected.
 
 ```javascript
-var js = 432;
-let a = 1;
-let b = 2;
-let c = 3;
-```
-
-Fenced code blocks create collapsible code (see the little triangles on the left):
-
-```js
 while (true) {
     if (!false) {
-        console.log("booya");
+        console.log("world hello?");
     }
 }
 ```
@@ -25,30 +21,40 @@ while (true) {
 
 This is _indented code_. No color coding, but monospaced. Annoyingly wrapped in inline-code classes by CodeMirror. Make sure those classes don't interfere with the block classes.
 
-    var indented = true
+**Testing:** Create new lines from the front and the end of the first, last and middle line. Should behave as expected.
+**Testing:** Remove a prepending space from the first, last and middle line. Should behave as expected.
+
     // Remove a space from the font of this line
     // To test if the code block splits properly
     // and the styled corners are intact.
 
-Testing `inline code`.
+Also make sure indented but markdown formatted code is not converted to a code block.
 
-    `test`
-    `me`
-      `now`
-      `block`
-   `inline`
-   `inline`
+For example, not code:
 
-- Here is a problematic thing
-  - This has two spaces
+- Root
+    - Four spaces, should not be a code block, not even when escaping the `-`.
 
-- This is a problem.
-  - Two spaces.
-    - Four spaces. Should not be code.
+    - Four spaces prepended by empty line should also not be a code block, unless `-` is escaped with `\`.
 
-Okay.
+    \- Break the markdown, and it should be a code block. Test this above.
+
+    1. Also with this list. Should not be code, unless `1.` is prepended with `\` (or anything, really).
+
+### Issues
+
+The following sequence is considered a code block by CodeMirror's Markdown Mode but not by us. I believe CodeMirror is wrong here, as the `\` is prepended with an illegal 3 spaces.
+
+    var indented = true
+    // Remove a space from the font of this line
+   \
+    // To test if the code block splits properly
+
+#### Mind the (forgotten) endings
 
 The next fenced code block is **intentionally left open** to see if the styling is applied properly to the bottom.
+
+**Testing:** Should also work with indented code not followed by an empty line.
 
 ```json
 {
