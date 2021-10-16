@@ -45,8 +45,10 @@ function applyCodeblockClasses (cm) {
       if (!blockFenced) codeblockLines.pop()
     }
 
-    if (!blockFenced && indentedRE.test(line.text)) {
-      codeblockLines.push(lineNum)
+    if (!blockFenced && line.styles && !line.styles.includes('formatting') && indentedRE.test(line.text)) {
+      // Temporarily disabled. I need to hook into wherever CodeMirror does its
+      // parsing, because this only applies to what's visible.
+      // codeblockLines.push(lineNum) // Disabled because of issue #2637
     }
 
     lineNum++

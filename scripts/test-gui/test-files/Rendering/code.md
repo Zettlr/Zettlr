@@ -32,16 +32,21 @@ This is _indented code_. No color coding, but monospaced. Annoyingly wrapped in 
 
 Testing `inline code`.
 
-    readText()
-    Te002 Te002 changeObj.text002-1 changeObj.text002-1
-		// Remember, only lines prepended with four spaces will be part of this block.
-
     `test`
     `me`
       `now`
       `block`
    `inline`
    `inline`
+
+- Here is a problematic thing
+  - This has two spaces
+
+- This is a problem.
+  - Two spaces.
+    - Four spaces. Should not be code.
+
+Okay.
 
 The next fenced code block is **intentionally left open** to see if the styling is applied properly to the bottom.
 
