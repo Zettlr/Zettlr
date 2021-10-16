@@ -88,7 +88,7 @@ function findCode (cm) {
       // If this is the first line and either already indented code or prepended by an empty line
       if (prevLine >= 0 && (codeBlockLines.includes(prevLine) || blankishRE.test(cm.getLine(prevLine)))) {
         // If this is not preformatted markdown (e.g. a list)
-        if (!cm.getLineTokens(lineNum).some(token => String(token.type).includes('formatting-list'))) {
+        if (cm.getLineTokens(lineNum).some(token => String(token.type).includes('formatting-list')) === false) {
           let probeLine = 1
 
           // Skip ahead to the end of the potential code block
