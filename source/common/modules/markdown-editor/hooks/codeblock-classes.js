@@ -46,11 +46,10 @@ function applyCodeblockClasses (cm) {
     }
 
     if (!blockFenced && indentedRE.test(line.text)) {
-      // I need to hook into wherever CodeMirror does its parsing, because now
-      // we're working against Markdown Mode.
-
-      // This is almost a fix for #2637 but the line classes won't update until
-      // return is pressed and that's a problem. So disabled for now.
+      // Temporarily disabled for #2637
+      // Classes won't update until return is pressed and that's a problem.
+      // We really ought to extent the codeMirror GFM Mode to regex on the
+      // token stream, because now we're working against Markdown Mode.
       // if (!cm.getLineTokens(lineNum).map(token => token.type).join(',').includes('formatting'))
       //   codeblockLines.push(lineNum)
     }
