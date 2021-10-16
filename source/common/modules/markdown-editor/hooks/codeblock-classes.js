@@ -96,8 +96,13 @@ function applyCodeblockClasses (cm) {
     }
   })
 
+  // @DEPRECATED
+  // Can we remove this refresh? It isn't supposed to run on every cursor change,
+  // because it prevents the view from scrolling due to cursor move.
   if (codeblockLines.length) {
-    cm.refresh()
+    // cm.refresh causes view not to update when cursor moves out of screen.
+    // See #2643 (keyboard part) and committed to to hotfix for #2637
+    // cm.refresh()
   }
 
   // End operation (apply the buffer to the layout and force a repaint)
