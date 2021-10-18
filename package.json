@@ -68,7 +68,7 @@
     "nspell": "^2.1.5",
     "rimraf": "^3.0.2",
     "sanitize-filename": "^1.6.3",
-    "sanitize-html": "^2.5.1",
+    "sanitize-html": "^2.5.2",
     "semver": "^7.3.5",
     "showdown": "^1.9.1",
     "tippy.js": "^6.3.2",
