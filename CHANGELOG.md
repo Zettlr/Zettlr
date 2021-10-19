@@ -16,6 +16,8 @@ quickly! This patch fixes those initial bugs.
   the window constructor, since on Windows, Electron injects an additional
   property `prefetch:1` afterwards, rendering it pure luck to retrieve the
   correct information across all Platforms.
+- Switched the `Sidebar` and the `SplitView` components from `v-show`-directives
+  to `v-if` directives to prevent rendering while they are not in view.
 
 # 2.0.0
 
