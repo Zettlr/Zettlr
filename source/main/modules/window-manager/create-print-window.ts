@@ -20,7 +20,6 @@ import attachLogger from './attach-logger'
 import preventNavigation from './prevent-navigation'
 import setWindowChrome from './set-window-chrome'
 import { WindowPosition } from './types'
-import url from 'url'
 
 /**
  * Creates a BrowserWindow with print window configuration and loads the
