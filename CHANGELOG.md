@@ -11,7 +11,11 @@ quickly! This patch fixes those initial bugs.
 
 ## Under the Hood
 
-Nothing happened under the hood.
+- Switched to providing necessary information to `BrowserWindow` instances via
+  `URLSearchParam`s instead of utilizing the `additionalArguments` property on
+  the window constructor, since on Windows, Electron injects an additional
+  property `prefetch:1` afterwards, rendering it pure luck to retrieve the
+  correct information across all Platforms.
 
 # 2.0.0
 

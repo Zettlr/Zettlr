@@ -93,14 +93,10 @@ export default {
     File
   },
   data: function () {
-    // const image = clipboard.readImage()
-    // const size = image.getSize() // First get the original size
-    // const aspect = image.getAspectRatio() // Then the aspect
-    // const dataUrl = image.resize({ 'height': 200 }).toDataURL()
     const { size, aspect, dataUrl } = clipboard.getImageData()
-    // Get the hash from the window arguments
-    let startPath
-    [startPath] = process.argv.slice(-1)
+    // Retrieve the correct startPath from the searchParams
+    const searchParams = new URLSearchParams(window.location.search)
+    const startPath = searchParams.get('startPath')
 
     let name = ''
     if (clipboard.readText().length > 0) {
@@ -122,7 +118,7 @@ export default {
       imgHeight: size.height,
       aspectRatio: aspect,
       retainAspect: true,
-      targetPath: startPath,
+      targetPath: (startPath !== null) ? startPath : '',
       fileName: name
     }
   },

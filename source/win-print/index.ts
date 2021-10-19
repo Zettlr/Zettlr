@@ -29,15 +29,16 @@ ipcRenderer.on('shortcut', (event, shortcut) => {
   }
 })
 
-// Get additional data passed to the window
-// NOTE: On Windows, the last argument is both in development and in production
-// '/prefetch:1'. I could not find what that is, but for Windows we have to use
-// he *second* to last argument.
-const [filePath] = window.process.argv.slice((window.process.platform === 'win32') ? -2 : -1)
-
 const app = new Vue(Print)
-
-// In the end: mount the app onto the DOM
 app.$mount('#app')
 
-app.$data.filePath = filePath
+// Finally, pass the correct file to the application to preview
+const searchParams = new URLSearchParams(window.location.search)
+const filePath = searchParams.get('file')
+
+if (filePath === null) {
+  console.error('Could not load file to preview, since the passed file was null!')
+} else {
+  console.log(`Showing file: ${filePath}`)
+  app.$data.filePath = filePath
+}
