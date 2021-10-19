@@ -38,7 +38,6 @@ export default function createPasteImageModal (win: BrowserWindow, startPath: st
     fullscreenable: false,
     webPreferences: {
       contextIsolation: true,
-      additionalArguments: [startPath],
       preload: PASTE_IMAGE_PRELOAD_WEBPACK_ENTRY
     }
   }
@@ -48,8 +47,12 @@ export default function createPasteImageModal (win: BrowserWindow, startPath: st
 
   const window = new BrowserWindow(winConf)
 
+  const effectiveUrl = new URL(PASTE_IMAGE_WEBPACK_ENTRY)
+  // Add the initial target path to the search params
+  effectiveUrl.searchParams.append('startPath', startPath)
+
   // Load the index.html of the app.
-  window.loadURL(PASTE_IMAGE_WEBPACK_ENTRY)
+  window.loadURL(effectiveUrl.toString())
     .catch(e => {
       global.log.error(`Could not load URL ${PASTE_IMAGE_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })

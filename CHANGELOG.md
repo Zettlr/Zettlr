@@ -1,3 +1,22 @@
+# 2.0.1
+
+No stable release works without bugs, and thanks to our community, we found them
+quickly! This patch fixes those initial bugs.
+
+## GUI and Functionality
+
+- Previously, list items were rendered as if they were code blocks if they were
+  indented by at least four spaces, which was not supposed to happen. Thanks to
+  @Redsandro for fixing this!
+
+## Under the Hood
+
+- Switched to providing necessary information to `BrowserWindow` instances via
+  `URLSearchParam`s instead of utilizing the `additionalArguments` property on
+  the window constructor, since on Windows, Electron injects an additional
+  property `prefetch:1` afterwards, rendering it pure luck to retrieve the
+  correct information across all Platforms.
+
 # 2.0.0
 
 Since the last release, 1.8.9, there have been 1,921 commits and 823 files

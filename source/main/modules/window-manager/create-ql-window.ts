@@ -41,7 +41,6 @@ export default function createQuicklookWindow (file: MDFileDescriptor, conf: Win
     show: false,
     webPreferences: {
       contextIsolation: true,
-      additionalArguments: [file.path],
       preload: QUICKLOOK_PRELOAD_WEBPACK_ENTRY
     }
   }
@@ -51,9 +50,12 @@ export default function createQuicklookWindow (file: MDFileDescriptor, conf: Win
 
   const window = new BrowserWindow(winConf)
 
+  const effectiveUrl = new URL(QUICKLOOK_WEBPACK_ENTRY)
+  effectiveUrl.searchParams.append('file', file.path)
+
   // Load the index.html of the app.
   // The variable QUICKLOOK_WEBPACK_ENTRY is automatically resolved by electron forge / webpack
-  window.loadURL(QUICKLOOK_WEBPACK_ENTRY)
+  window.loadURL(effectiveUrl.toString())
     .catch(e => {
       global.log.error(`Could not load URL ${QUICKLOOK_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })

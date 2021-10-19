@@ -54,8 +54,14 @@ export default function createErrorModal (win: BrowserWindow, title: string, mes
 
   const window = new BrowserWindow(winConf)
 
+  const effectiveUrl = new URL(ERROR_WEBPACK_ENTRY)
+  // Add the error message contents to the searchParams
+  effectiveUrl.searchParams.append('title', title)
+  effectiveUrl.searchParams.append('message', message)
+  effectiveUrl.searchParams.append('contents', contents)
+
   // Load the index.html of the app.
-  window.loadURL(ERROR_WEBPACK_ENTRY)
+  window.loadURL(effectiveUrl.toString())
     .catch(e => {
       global.log.error(`Could not load URL ${ERROR_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })

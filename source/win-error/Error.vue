@@ -43,20 +43,17 @@ export default {
     WindowChrome
   },
   data: function () {
-    // Get the hash from the window arguments
-    let title
-    let message
-    let contents
-    [ title, message, contents ] = window.process.argv.slice(-3)
-    // Finally set the data object
-    if (title === message) {
+    // Retrieve the error information from the URL search params
+    const searchParams = new URLSearchParams(window.location.search)
+    const title = searchParams.get('title')
+    const message = searchParams.get('message')
+    const contents = searchParams.get('contents')
+
+    return {
       // Because they HAVE to provide both title AND message, those two
       // variables might be the same for a few error messages. In this
       // case, fall back to "error".
-      title = 'Error'
-    }
-    return {
-      title: title,
+      title: (title === message) ? 'Error' : title,
       message: message,
       additionalInfo: (contents === '<no-contents>') ? '' : contents
     }
