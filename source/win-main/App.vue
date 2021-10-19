@@ -328,7 +328,7 @@ export default {
           id: 'toggle-sidebar',
           title: trans('menu.toggle_sidebar'),
           icon: 'view-columns',
-          initialState: (this.sidebarVisible === true) ? 'active' : ''
+          initialState: this.sidebarVisible === true
         }
       ]
     }
