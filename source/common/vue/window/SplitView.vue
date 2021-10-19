@@ -1,7 +1,7 @@
 <template>
   <div class="split-view">
     <div
-      v-show="hasHiddenView !== 1"
+      v-if="hasHiddenView !== 1"
       ref="view1"
       class="view"
       v-bind:style="{ width: `${view1Width}px` }"
@@ -15,6 +15,7 @@
       v-on:mousedown="beginViewResizing"
     ></div> <!-- Enable resizing of the view -->
     <div
+      v-if="hasHiddenView !== 2"
       ref="view2"
       v-bind:class="{
         view: true,

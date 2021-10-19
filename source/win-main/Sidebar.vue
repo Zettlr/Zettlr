@@ -9,7 +9,7 @@
     <!-- Now the tab containers -->
 
     <div
-      v-show="currentTab === 'relatedFiles'"
+      v-if="currentTab === 'relatedFiles'"
       role="tabpanel"
     >
       <h1>{{ relatedFilesLabel }}</h1>
@@ -38,7 +38,7 @@
     </div>
 
     <div
-      v-show="currentTab === 'attachments'"
+      v-if="currentTab === 'attachments'"
       role="tabpanel"
     >
       <!-- Other files contents -->
@@ -74,7 +74,7 @@
       </template>
     </div>
     <div
-      v-show="currentTab === 'references'"
+      v-if="currentTab === 'references'"
       role="tabpanel"
     >
       <!-- References -->
@@ -84,7 +84,7 @@
       </div>
     </div>
     <div
-      v-show="currentTab === 'toc'"
+      v-if="currentTab === 'toc'"
       role="tabpanel"
     >
       <!-- Table of Contents -->
