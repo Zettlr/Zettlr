@@ -8,6 +8,9 @@ quickly! This patch fixes those initial bugs.
 - Previously, list items were rendered as if they were code blocks if they were
   indented by at least four spaces, which was not supposed to happen. Thanks to
   @Redsandro for fixing this!
+- The autocomplete dropdowns in the editor now only show the top 50 matches. Any
+  more wouldn't be visible either way, and additionally, we have had reports
+  that databases with more than 10,000 items made those lists somewhat slow.
 
 ## Under the Hood
 
