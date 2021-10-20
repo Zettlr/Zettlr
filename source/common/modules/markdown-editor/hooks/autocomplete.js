@@ -362,7 +362,9 @@ function getHints (term) {
     return 0
   })
 
-  return results
+  // Only return the top 50 matches (any more won't be visible in the dropdown either way.)
+  // This is in response to #2678, since 14,000 entries might take a while to render.
+  return results.slice(0, 50)
 }
 
 /**
