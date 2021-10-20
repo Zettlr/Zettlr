@@ -17,6 +17,7 @@
         'padding-left': `${depth * 15 + 10}px`
       }"
       v-on:click.stop="requestSelection"
+      v-on:auxclick.stop="requestSelection"
       v-on:dragover="acceptDrags"
       v-on:dragenter="enterDragging"
       v-on:dragleave="leaveDragging"

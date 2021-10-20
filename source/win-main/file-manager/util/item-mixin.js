@@ -93,10 +93,11 @@ export default {
         return // The user requested a context menu
       }
 
-      // Determine if we have a middle (wheel) click. The event-type checking
-      // is only done so this is only true when we triggered this function using
-      // the mousedown event.
-      const middleClick = (event.type === 'mousedown' && event.button === 1)
+      // Determine if we have a middle (wheel) click. The event-type check is
+      // necessary since the left mouse button will have index 1 on click events,
+      // whereas the middle mouse button will also have index 1, but on auxclick
+      // events.
+      const middleClick = (event.type === 'auxclick' && event.button === 1)
       const alt = event.altKey
       const type = this.obj.type
 
