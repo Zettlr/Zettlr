@@ -16,7 +16,7 @@
       v-bind:style="{
         'padding-left': `${depth * 15 + 10}px`
       }"
-      v-on:mousedown.stop="requestSelection"
+      v-on:click.stop="requestSelection"
       v-on:dragover="acceptDrags"
       v-on:dragenter="enterDragging"
       v-on:dragleave="leaveDragging"

@@ -1,3 +1,14 @@
+# 2.0.2
+
+## GUI and Functionality
+
+- Linking files by dragging them onto the editor from the file manager works
+  again.
+
+## Under the Hood
+
+(nothing here)
+
 # 2.0.1
 
 No stable release works without bugs, and thanks to our community, we found them
