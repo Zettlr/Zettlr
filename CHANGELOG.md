@@ -4,6 +4,7 @@
 
 - Linking files by dragging them onto the editor from the file manager works
   again.
+- Text input is automatically focused on global search (`Ctrl+Shift+F`).
 
 ## Under the Hood
 

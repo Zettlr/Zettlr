@@ -542,6 +542,9 @@ export default {
       }
 
       return marked
+    },
+    focusQueryInput: function () {
+      this.$refs['query-input'].focus()
     }
   }
 }
