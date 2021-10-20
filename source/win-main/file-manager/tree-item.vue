@@ -48,7 +48,7 @@
           v-bind:class="{
             'is-solid': [ 'disconnect', 'blocks-group' ].includes(primaryIcon)
           }"
-          v-on:mousedown.stop="handlePrimaryIconClick"
+          v-on:click.stop="handlePrimaryIconClick"
         ></clr-icon>
       </span>
       <span
