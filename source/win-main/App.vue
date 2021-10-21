@@ -400,6 +400,12 @@ export default {
       } else if (shortcut === 'global-search') {
         this.fileManagerVisible = true
         this.mainSplitViewVisibleComponent = 'globalSearch'
+        // Focus input
+        if (this.$refs['global-search'] !== undefined) {
+          this.$nextTick(() => {
+            this.$refs['global-search'].focusQueryInput()
+          })
+        }
       } else if (shortcut === 'toggle-file-manager') {
         if (this.fileManagerVisible === true && this.mainSplitViewVisibleComponent === 'fileManager') {
           this.fileManagerVisible = false
