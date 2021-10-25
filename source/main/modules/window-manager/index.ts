@@ -822,16 +822,22 @@ export default class WindowManager extends EventEmitter {
   /**
    * Allows the user to save a file.
    *
-   * @param   {string}                 filename  An initial filename to display
-   * @param   {BrowserWindow<string>}  win       The window to attach to
+   * @param   {string}              fileOrPathName   Either an absolute path (in
+   *                                                 which case the directory will
+   *                                                 be set as the starting
+   *                                                 directory) or just a filename,
+   *                                                 in which case the last known
+   *                                                 dialogPaths.askFileDialog path
+   *                                                 will be used.
+   * @param   {BrowserWindow|null}  win              The window to attach to
    *
-   * @return  {Promise<string|undefined>}        Resolves with a path or undefined
+   * @return  {Promise<string|undefined>}            Resolves with a path or undefined
    */
-  async saveFile (filename: string, win?: BrowserWindow|null): Promise<string|undefined> {
+  async saveFile (fileOrPathName: string, win?: BrowserWindow|null): Promise<string|undefined> {
     if (win != null) {
-      return await saveFileDialog(win, filename)
+      return await saveFileDialog(win, fileOrPathName)
     } else {
-      return await saveFileDialog(this._mainWindow, filename)
+      return await saveFileDialog(this._mainWindow, fileOrPathName)
     }
   }
 

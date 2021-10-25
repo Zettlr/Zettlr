@@ -50,8 +50,12 @@ export default class SaveFile extends ZettlrCommand {
       if (realFile.dir === ':memory:') {
         // We should save an in-memory file. We can make use of a few other
         // commands and methods to achieve that.
-        // But first of all, we need to ask for a file path
-        let newPath = await this._app.saveFile(realFile.name)
+        // But first of all, we need to ask for a file path. Prepend the
+        // realFile.name with the currently selected directory, if possible, so
+        // that the dialog starts in an expected place.
+        const selectedDir = this._app.getFileSystem().openDirectory?.path
+        const startPath = (selectedDir !== undefined) ? path.join(selectedDir, realFile.name) : realFile.name
+        let newPath = await this._app.saveFile(startPath)
 
         if (newPath === undefined) {
           global.log.warning('[App] No path for the file to save provided. Aborting save.')
@@ -69,6 +73,7 @@ export default class SaveFile extends ZettlrCommand {
         // user might also select a directory not loaded. However, no matter
         // where a file is located, the openFile() method will make sure it'll
         // get added as a root if it's not within the file tree.
+        global.log.info(`Saving file to ${newPath}...`)
         await fs.writeFile(newPath, file.newContents)
 
         // Now that the file exists we can close the "untitled" file and

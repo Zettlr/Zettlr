@@ -807,8 +807,18 @@ export default class Zettlr {
     return await this._windowManager.askFile(filters, multiSel)
   }
 
-  async saveFile (filename: string = ''): Promise<string|undefined> {
-    return await this._windowManager.saveFile(filename)
+  /**
+   * Asks the user to provide a path to a new file. Takes a filename, in which
+   * case the dialog will start in the last known directory of this specific
+   * dialog, or a full absolute path, in which the dialog will start.
+   *
+   * @param   {string}              fileOrPathName   Either an absolute path or just a filename
+   * @param   {BrowserWindow|null}  win              The window to attach to
+   *
+   * @return  {Promise<string|undefined>}            Resolves with a path or undefined
+   */
+  async saveFile (fileOrPathName: string): Promise<string|undefined> {
+    return await this._windowManager.saveFile(fileOrPathName)
   }
 
   /**
