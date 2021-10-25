@@ -8,6 +8,7 @@
 - Previously, when you saved an in-memory file to disk, the dialog would begin
   in some random directory, but never the currently selected directory. This is
   now fixed.
+- Add syntax highlighting for Octave (Matlab), keyword: `octave`
 
 ## Under the Hood
 

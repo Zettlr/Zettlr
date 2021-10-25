@@ -183,3 +183,32 @@ function method0(x, y::Int; version::VersionNumber=v"0.1.2")
     return 5s / 2
 end
 ```
+
+## Octave (Matlab)
+
+```octave
+% This function computes the angle of rotation to align the projection of
+% two vectors in a plan given the normal to this plan (which is also the 
+% axis of rotation)
+
+function theta = fcn(surfNormVec, vecA, vecB, rightVec)
+
+vecA = vecA/norm(vecA);
+vecB = vecB/norm(vecB);
+surfNormVec = surfNormVec/norm(surfNormVec);
+
+
+% Projection of the two vectors on the plane whose normale is 'sufNormVec'
+Aproj = vecA - dot(vecA, surfNormVec)*surfNormVec;
+Bproj = vecB - dot(vecB, surfNormVec)*surfNormVec;
+
+% Compute the rotation angle to align the projection of vecB with the projection of vecA
+CosTheta = max(min(dot(Bproj,Aproj)/(norm(Aproj)*norm(Bproj)),1),-1);
+% 
+testDir = dot(vecA, rightVec);
+if testDir < 0
+    theta = -real(acos(CosTheta));
+else
+    theta = real(acos(CosTheta));
+end
+```

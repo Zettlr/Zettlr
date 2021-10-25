@@ -80,6 +80,7 @@ require('codemirror/mode/smalltalk/smalltalk')
 require('codemirror/mode/toml/toml')
 require('codemirror/mode/dockerfile/dockerfile')
 require('codemirror/mode/diff/diff')
+require('codemirror/mode/octave/octave')
 
 // 7. The folding addon
 require('codemirror/addon/fold/foldcode')

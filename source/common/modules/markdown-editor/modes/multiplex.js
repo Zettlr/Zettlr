@@ -207,6 +207,10 @@ const highlightingModes = {
   'text/x-diff': {
     'mode': 'diff',
     'selectors': ['diff']
+  },
+  'text/x-octave': {
+    'mode': 'octave',
+    'selectors': ['octave']
   }
 };
 
