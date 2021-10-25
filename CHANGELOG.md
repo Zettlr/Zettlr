@@ -5,6 +5,9 @@
 - Linking files by dragging them onto the editor from the file manager works
   again.
 - Text input is automatically focused on global search (`Ctrl+Shift+F`).
+- Previously, when you saved an in-memory file to disk, the dialog would begin
+  in some random directory, but never the currently selected directory. This is
+  now fixed.
 
 ## Under the Hood
 
