@@ -8,7 +8,9 @@
 - Previously, when you saved an in-memory file to disk, the dialog would begin
   in some random directory, but never the currently selected directory. This is
   now fixed.
-- Add syntax highlighting for Octave (Matlab), keyword: `octave`
+- Added syntax highlighting for Octave (Matlab), keyword: `octave`
+- The sidebar now refreshes also whenever it is shown, preventing wrong messages
+  such as "No citations in document" when a document with citations is open.
 
 ## Under the Hood
 
