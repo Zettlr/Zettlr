@@ -281,7 +281,7 @@ module.exports = class MarkdownEditor extends EventEmitter {
       }
     })
 
-    this._instance.getWrapperElement().addEventListener('mousedown', (event) => {
+    this._instance.getWrapperElement().addEventListener('mouseup', (event) => {
       if (event.button !== 1 || process.platform !== 'linux' || clipboard.hasSelectionClipboard() === false) {
         return
       }
