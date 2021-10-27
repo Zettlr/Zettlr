@@ -238,6 +238,24 @@ export default {
   watch: {
     citationKeys: function () {
       // Reload the bibliography
+      this.updateReferences()
+    },
+    activeFile: function () {
+      this.updateRelatedFiles()
+    }
+  },
+  mounted: function () {
+    ipcRenderer.on('citeproc-renderer', (event, { command, payload }) => {
+      if (command === 'citeproc-bibliography') {
+        this.bibContents = payload
+      }
+    })
+
+    this.updateReferences()
+    this.updateRelatedFiles()
+  },
+  methods: {
+    updateReferences: function () {
       ipcRenderer.invoke('citeproc-provider', {
         command: 'get-bibliography',
         payload: this.citationKeys
@@ -247,14 +265,9 @@ export default {
         })
         .catch(err => console.error(err))
     },
-    activeFile: function () {
-      if (this.activeFile === null) {
-        this.relatedFiles = []
-        return
-      }
-
-      if (this.activeFile.type !== 'file') {
-        this.relatedFiles = []
+    updateRelatedFiles: function () {
+      this.relatedFiles = []
+      if (this.activeFile === null || this.activeFile.type !== 'file') {
         return
       }
 
@@ -264,7 +277,6 @@ export default {
       })
         .then(recommendations => {
           // Recommendations come in the form of [file: string]: string[]
-          this.relatedFiles = []
           for (const filePath of Object.keys(recommendations)) {
             this.relatedFiles.push({
               file: path.basename(filePath),
@@ -278,16 +290,7 @@ export default {
           })
         })
         .catch(err => console.error(err))
-    }
-  },
-  mounted: function () {
-    ipcRenderer.on('citeproc-renderer', (event, { command, payload }) => {
-      if (command === 'citeproc-bibliography') {
-        this.bibContents = payload
-      }
-    })
-  },
-  methods: {
+    },
     getIcon: function (attachmentPath) {
       const fileExtIcon = ClarityIcons.get('file-ext')
       if (typeof fileExtIcon === 'string') {
