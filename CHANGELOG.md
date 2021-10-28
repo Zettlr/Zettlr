@@ -19,6 +19,7 @@
 
 - Switched the Linux middle-mouse-paste code to listen to mouseup events instead
   of mousedown events in response to issue #2321
+- Update Pandoc to 2.15
 
 # 2.0.1
 
