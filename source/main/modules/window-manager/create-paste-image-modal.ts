@@ -31,7 +31,7 @@ export default function createPasteImageModal (win: BrowserWindow, startPath: st
   const winConf: BrowserWindowConstructorOptions = {
     acceptFirstMouse: true,
     width: 700,
-    height: 500,
+    height: 600,
     modal: true,
     parent: win,
     show: false,
