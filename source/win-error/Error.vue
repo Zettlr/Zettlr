@@ -1,7 +1,7 @@
 <template>
   <WindowChrome
     v-bind:title="title"
-    v-bind:titlebar="false"
+    v-bind:titlebar="true"
     v-bind:menubar="false"
     v-bind:show-statusbar="true"
     v-bind:statusbar-controls="statusbarControls"

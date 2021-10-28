@@ -11,6 +11,7 @@
 - Added syntax highlighting for Octave (Matlab), keyword: `octave`
 - The sidebar now refreshes also whenever it is shown, preventing wrong messages
   such as "No citations in document" when a document with citations is open.
+- Modal windows now have a title bar
 
 ## Under the Hood
 
