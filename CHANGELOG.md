@@ -13,6 +13,7 @@
   such as "No citations in document" when a document with citations is open.
 - Modal windows now have a title bar
 - Slightly increased the status bar height
+- Fixed the image size calculator during image pastes
 
 ## Under the Hood
 

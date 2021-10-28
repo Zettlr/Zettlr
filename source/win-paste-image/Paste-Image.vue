@@ -33,7 +33,7 @@
         v-model="imgWidth"
         v-bind:label="resizeToLabel"
         v-bind:min="1"
-        v-bind:max="imgWidth"
+        v-bind:max="originalWidth"
         v-bind:placeholder="imgWidth"
         v-bind:inline="true"
         v-on:confirm="handleClick('save')"
@@ -43,7 +43,7 @@
         v-model="imgHeight"
         v-bind:min="1"
         v-bind:max="imgHeight"
-        v-bind:placeholder="imgHeight"
+        v-bind:placeholder="originalHeight"
         v-bind:inline="true"
         v-on:confirm="handleClick('save')"
         v-on:escape="handleClick('cancel')"
@@ -116,6 +116,8 @@ export default {
       imgBase64: dataUrl,
       imgWidth: size.width,
       imgHeight: size.height,
+      originalWidth: size.width,
+      originalHeight: size.height,
       aspectRatio: aspect,
       retainAspect: true,
       targetPath: (startPath !== null) ? startPath : '',
