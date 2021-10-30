@@ -14,6 +14,8 @@
 - Modal windows now have a title bar
 - Slightly increased the status bar height
 - Fixed the image size calculator during image pastes
+- Fixed a bug that sometimes caused the editor to randomly jump when entering a
+  newline
 
 ## Under the Hood
 
