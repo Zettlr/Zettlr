@@ -42,7 +42,6 @@ module.exports = (cm) => {
 function handleNewline (cm, name) {
   if (name === 'Enter') {
     findCode(cm)
-    cm.refresh()
   }
 }
 
@@ -62,9 +61,6 @@ function findCode (cm) {
   const codeBlockRE = /^(?:\s{0,3}`{3}|~{3}).*/
   const indentedRE = /^\s{4,}.*$/
   const blankishRE = /^\s*$/
-
-  // Buffer changes
-  cm.startOperation()
 
   // Check lines for code blocks
   for (let lineNum = 0; lineNum < lineCount; lineNum++) {
@@ -144,7 +140,4 @@ function findCode (cm) {
       cm.addLineClass(lineNum, 'wrap', codeblockClass, codeblockClassClose)
     }
   })
-
-  // End operation (apply the buffer to the layout and force a repaint)
-  cm.endOperation()
 }
