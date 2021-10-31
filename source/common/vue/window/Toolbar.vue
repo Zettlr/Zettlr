@@ -159,6 +159,11 @@ body div#toolbar {
   align-items: center;
   justify-content: space-around;
 
+  button {
+    // Reset the min-width from generic.less
+    min-width: auto;
+  }
+
   div.spacer {
     .size-1x { flex-grow: 1; }
     .size-3x { flex-grow: 3; }
