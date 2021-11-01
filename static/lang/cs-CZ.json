@@ -4,7 +4,7 @@
             "Ales Nehyba \u003Cneal.cz@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-08-17T19:18:03.000000Z"
+        "updated_at": "2021-10-20T18:07:35.000000Z"
     },
     "dialog": {
         "about": {
@@ -39,6 +39,10 @@
         "custom_css": {
             "info": "Zde si m\u016f\u017eete p\u0159izp\u016fsobit styly, kter\u00e9 Zettlr pou\u017e\u00edv\u00e1. \u003Cstrong\u003EPozor: Tento soubor p\u0159ep\u00ed\u0161e v\u0161echny CSS direktivy! Nikdy nem\u011b\u0148te geometrii prvk\u016f, jinak se m\u016f\u017ee aplikace chovat nep\u0159edv\u00eddateln\u011b!\u003C/strong\u003E",
             "title": "Vlastn\u00ed CSS"
+        },
+        "defaults": {
+            "exporting_title": "Export",
+            "importing_title": "Import"
         },
         "dir_new": {
             "placeholder": "N\u00e1zev slo\u017eky",
@@ -166,6 +170,11 @@
             "auto_dark_mode_schedule": "Pl\u00e1n",
             "auto_dark_mode_schedule_format": "HH:MM (24h form\u00e1t)",
             "auto_dark_mode_system": "Podle opera\u010dn\u00edho syst\u00e9mu",
+            "auto_save": {
+                "delayed": "Po kr\u00e1tk\u00e9 prodlev\u011b",
+                "immediately": "Ihned",
+                "off": "Vyp."
+            },
             "autocomplete_accept_space": "Automatick\u00e9 dopl\u0148ov\u00e1n\u00ed v\u010detn\u011b mezer",
             "autocorrect": {
                 "active_label": "Zapnout automatick\u00e9 opravy",
@@ -182,6 +191,7 @@
             "checkForBeta": "Informovat o beta vyd\u00e1n\u00edch",
             "choose_file": "Vybrat soubor...",
             "citation_database": "Datab\u00e1ze citac\u00ed (CSL JSON nebo BibTex)",
+            "cite_style_label": "Jak m\u00e1 automatick\u00e9 dokon\u010dov\u00e1n\u00ed vkl\u00e1dat citace?",
             "count_chars": "Po\u010d\u00edtat znaky m\u00edsto slov (nap\u0159. pro \u010d\u00edn\u0161tinu)",
             "creationtime": "\u010cas vytvo\u0159en\u00ed souboru",
             "debug": "Povolit v\u00fdvoj\u00e1\u0159sk\u00fd re\u017eim",
@@ -308,6 +318,7 @@
                 "title": "Pravopis"
             },
             "theme": {
+                "accent_color_info": "Tato volba je dostupn\u00e1 pouze na Windows a macOS",
                 "info": "Vyberte grafick\u00e9 t\u00e9ma aplikace.",
                 "title": "T\u00e9ma"
             },
@@ -359,6 +370,11 @@
                 "var_year": "Rok (\u010dty\u0159i \u010d\u00edslice)",
                 "var_year_two": "Rok (2 \u010d\u00edslice)"
             }
+        },
+        "snippets": {
+            "explanation": "\u00datr\u017eky v\u00e1m umo\u017e\u0148uj\u00ed definovat opakovan\u011b pou\u017eiteln\u00e9 \u010d\u00e1sti textu s prom\u011bnn\u00fdmi.",
+            "rename": "P\u0159ejmenovat \u00fatr\u017eek",
+            "title": "\u00datr\u017eky"
         },
         "statistics": {
             "compare": "Porovnat s p\u0159edchoz\u00edm \u010dasov\u00fdm r\u00e1mcem",
@@ -433,6 +449,11 @@
         "avg_surpassed": "\ud83e\udd47 Jste \u0161ampi\u00f3n!",
         "avg_words": "denn\u00ed pr\u016fm\u011br",
         "chars": "%s znak\u016f",
+        "chart": {
+            "high_legend": "V\u00edce ne\u017e dvojn\u00e1sobek m\u011bs\u00ed\u010dn\u00edho pr\u016fm\u011bru",
+            "high_mid_legend": "V\u00edce ne\u017e m\u011bs\u00ed\u010dn\u00ed pr\u016fm\u011br",
+            "low_mid_legend": "M\u00e9n\u011b ne\u017e m\u011bs\u00ed\u010dn\u00ed pr\u016fm\u011br"
+        },
         "citeproc": {
             "error_db": "Datab\u00e1zi citac\u00ed nelze nahr\u00e1t",
             "error_report_message": "%s polo\u017eek ve va\u0161\u00ed knihovn\u011b nelze nahr\u00e1t kv\u016fli chyb\u00e1m. Chybov\u00e1 hl\u00e1\u0161en\u00ed dole ukazuj\u00ed, kter\u00e9 cita\u010dn\u00ed kl\u00ed\u010de jsou chybn\u00e9 a jak\u00fd je s nimi probl\u00e9m.",
@@ -500,6 +521,7 @@
         "no_other_files": "\u017d\u00e1dn\u00e9 dal\u0161\u00ed soubory",
         "no_related_files": "\u017d\u00e1dn\u00e9 souvisej\u00edc\u00ed soubory",
         "no_search_results": "\u017d\u00e1dn\u00e9 v\u00fdsledky",
+        "other_files": "Dal\u0161\u00ed soubory",
         "preview_modification_date": "Upraveno",
         "preview_searching_label": "Hled\u00e1 se soubor ...",
         "preview_word_count": "Po\u010det slov",
@@ -641,6 +663,7 @@
         "all_files": "V\u0161echny soubory",
         "cancel": "Zru\u0161it",
         "common": {
+            "list_actions_label": "Akce",
             "list_add_button": "P\u0159idat",
             "list_default_column_label": "Polo\u017eka"
         },
