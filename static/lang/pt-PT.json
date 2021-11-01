@@ -2,14 +2,15 @@
     "metadata": {
         "authors": [
             "Carlos Bornes \u003Ccbornes3@gmail.com\u003E",
+            "tmpod \u003Ctmpod@pm.me\u003E",
             "Paula Simoes \u003Cppsimoes@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-08-29T16:00:29.000000Z"
+        "updated_at": "2021-10-21T17:31:19.000000Z"
     },
     "dialog": {
         "about": {
-            "astrocite": "Permitir Zettlr mostrar cita\u00e7\u00f5es da biblioteca BibTex",
+            "astrocite": "Permitir ao Zettlr mostrar cita\u00e7\u00f5es de bibliotecas BibTex",
             "chartjs": "Mostra as suas estat\u00edsticas de escrita num belo gr\u00e1fico",
             "chokidar": "Detecta quaisquer altera\u00e7\u00f5es feitas aos seus ficheiros fora da aplica\u00e7\u00e3o",
             "citationstyle": "O Zettler usa o citeproc para mostrar cita\u00e7\u00f5es directamente no editor. Para tal, o Zettlr usa a linguagem CitationStyleLanguage (CLS) e ficheiros de estilo. Estes ficheiros s\u00e3o disponibilizados inalterados e com metadados do autor. Para mais informa\u00e7\u00f5es:",
@@ -34,11 +35,18 @@
             "cancel": "Cancelar",
             "choose_path": "Seleccione uma pasta...",
             "close": "Fechar",
+            "close_without_saving": "Fechar sem guardar altera\u00e7\u00f5es",
             "save": "Guardar"
         },
         "custom_css": {
             "info": "Aqui pode substituir os estilos do Zettlr para personaliz\u00e1-lo ainda mais. \u003Cstrong\u003EAten\u00e7\u00e3o: Este ficheiro substitui todas as directivas CSS! Nunca altere a geometria dos elementos, caso contr\u00e1rio, a aplica\u00e7\u00e3o poder\u00e1 apresentar comportamentos indesejados!\u003C/strong\u003E",
             "title": "CSS personalizado"
+        },
+        "defaults": {
+            "explanation": "Editar as defini\u00e7\u00f5es pr\u00e9-definidas para importa\u00e7\u00f5es ou exporta\u00e7\u00f5es aqui",
+            "exporting_title": "A exportar",
+            "importing_title": "A importar",
+            "restore": "Restaurar ficheiro de pr\u00e9-defini\u00e7\u00f5es"
         },
         "dir_new": {
             "placeholder": "Nome da pasta",
@@ -67,6 +75,7 @@
         },
         "filter_tags": "Filtrar etiquetas...",
         "find": {
+            "close_label": "Fechar pesquisa",
             "find_label": "Localizar",
             "find_placeholder": "Localizar...",
             "replace_label": "Substituir",

@@ -12,7 +12,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-08-22T18:31:59.000000Z"
+        "updated_at": "2021-10-29T06:45:14.000000Z"
     },
     "dialog": {
         "about": {
@@ -203,6 +203,7 @@
             "checkForBeta": "Notifiquame sobre las versiones beta",
             "choose_file": "Elegir archivo ....",
             "citation_database": "Base de datos de citas (CSL JSON o BibTex)",
+            "cite_style_label": "Al insterar una cita \u00bfc\u00f3mo debe autocompletarse?",
             "count_chars": "Contar caracteres en lugar de palabras (p. ej. para el chino)",
             "creationtime": "Hora de creaci\u00f3n del archivo",
             "debug": "Activar el modo de depuraci\u00f3n (debugging)",
@@ -335,6 +336,8 @@
                 "accent_color_info": "Esta configuraci\u00f3n solo est\u00e1 disponible en Windows y macOS",
                 "accent_color_label": "Utilice el color de acento del sistema operativo en lugar del color del tema",
                 "info": "Aqu\u00ed puedes elegir el tema para la app.",
+                "select_label": "Clica para seleccionar",
+                "selected_label": "seleccionado",
                 "title": "Tema"
             },
             "title": "Preferencias",
@@ -470,6 +473,11 @@
         "avg_surpassed": "\ud83d\udd25 \u00a1No hay quien te detenga!",
         "avg_words": "promedio diario",
         "chars": "Caracteres %",
+        "chart": {
+            "high_legend": "M\u00e1s del doble de la media mensual",
+            "high_mid_legend": "Por encima de la media mensual",
+            "low_mid_legend": "Por debajo de la media mensual"
+        },
         "citeproc": {
             "error_db": "La base de datos de citaciones no se ha podido cargar",
             "error_report_message": "Los art\u00edculos %s de su librer\u00eda no se han podido cargar debido a errores. Por favor, compruebe los mensajes de error que se muestran m\u00e1s abajo para ver que CiteKeys est\u00e1n defectuosos y que errores contienen.",
@@ -512,6 +520,7 @@
         },
         "global_search": {
             "clear_label": "Limpiar b\u00fasqueda",
+            "filter_label": "Filtra los resultados",
             "query_label": "Introduce tus t\u00e9rminos de b\u00fasqueda a continuaci\u00f3n",
             "query_placeholder": "Buscar ...",
             "restrict_dir_label": "Restringir b\u00fasqueda al directorio",
@@ -687,6 +696,7 @@
         "all_files": "Todos los archivos",
         "cancel": "Cancelar",
         "common": {
+            "filter": "Filtra ...",
             "list_actions_label": "Acciones",
             "list_add_button": "A\u00f1adir",
             "list_default_column_label": "\u00cdtem",

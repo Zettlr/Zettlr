@@ -17,7 +17,7 @@
             "Joris"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-10-01T11:57:50.000000Z"
+        "updated_at": "2021-10-23T08:32:46.000000Z"
     },
     "dialog": {
         "about": {
@@ -478,6 +478,11 @@
         "avg_surpassed": "\ud83d\udd25 Vous \u00eates en feu !",
         "avg_words": "Moyenne quotidienne",
         "chars": "%s caract\u00e8res",
+        "chart": {
+            "high_legend": "Plus du double de la moyenne mensuelle",
+            "high_mid_legend": "Sup\u00e9rieur \u00e0 la moyenne mensuelle",
+            "low_mid_legend": "Inf\u00e9rieur \u00e0 la moyenne mensuelle"
+        },
         "citeproc": {
             "error_db": "Le fichier de bibliographie n'a pas \u00e9t\u00e9 charg\u00e9",
             "error_report_message": "%s d\u2019\u00e9l\u00e9ments de votre biblioth\u00e8que qui n\u2019ont pas pu \u00eatre charg\u00e9s en raison d\u2019erreurs. Merci de lire les messages d\u2019erreur ci-dessous pour voir quelles CiteKeys ont \u00e9t\u00e9 mal form\u00e9es et quelle \u00e9tait l\u2019erreur.",
