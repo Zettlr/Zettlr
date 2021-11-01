@@ -151,7 +151,7 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
   file.wordCount = countWords(plainMarkdown)
   file.charCount = countWords(plainMarkdown, true)
 
-  const h1Match = h1HeadingRE.exec(plainMarkdown)
+  const h1Match = h1HeadingRE.exec(contentWithoutYAML)
   if (h1Match !== null) {
     file.firstHeading = h1Match[1]
   }
