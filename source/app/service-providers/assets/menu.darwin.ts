@@ -652,8 +652,6 @@ export default function getMenu (
             // Immediately open the window instead of first checking
             global.application.runCommand('open-update-window')
               .catch(e => global.log.error(String(e.message), e))
-
-            global.updates.check()
           }
         }
       ]

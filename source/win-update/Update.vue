@@ -7,33 +7,58 @@
     v-bind:disable-vibrancy="false"
   >
     <div id="update">
-      <template v-if="updateAvailable">
-        <h1>{{ updateTitle }}: {{ lastResponse.newVer }}</h1>
-        <p>{{ updateCurrentVersion }}: {{ lastResponse.curVer }}</p>
+      <!-- First state: There is an error -->
+      <template v-if="hasError">
+        <div>{{ updateState.lastErrorCode }}: {{ updateState.lastErrorMessage }}</div>
+        <!-- In case the user wants to retry -->
+        <ButtonControl
+          v-bind:label="checkForUpdateLabel"
+          v-on:click="checkForUpdate"
+        ></ButtonControl>
+      </template>
+      <!-- Second state: There is no new update -->
+      <template v-else-if="!updateAvailable">
+        <div>{{ noUpdateMessage }}</div>
+        <ButtonControl
+          v-bind:label="checkForUpdateLabel"
+          v-on:click="checkForUpdate"
+        ></ButtonControl>
+      </template>
+      <!-- Third state: An update is available -->
+      <template v-else-if="updateAvailable">
+        <h1>{{ updateTitle }}: {{ updateState.tagName }}</h1>
+        <p>{{ updateCurrentVersion }}: {{ currentVersion }}</p>
+        <!-- State 3.1: An update is available for download -->
         <template v-if="!isDownloading && !isFinished">
-          <!-- No download has been initiated and nothing has been downloaded -->
-          <!-- Show the available download options -->
           <p>{{ updateNotification }}</p>
           <ButtonControl
-            v-for="asset, idx in lastResponse.assets"
+            v-for="asset, idx in updateState.compatibleAssets"
             v-bind:key="idx"
-            v-bind:label="asset.name"
+            v-bind:label="'Download ' + asset.name"
             v-bind:inline="true"
             v-on:click="requestDownload(asset.browser_download_url)"
           >
           </ButtonControl>
+          <!-- Provide default link if no compatible assets found -->
+          <ButtonControl
+            v-if="updateState.compatibleAssets.length === 0"
+            v-bind:label="'Open Releases Page'"
+            v-bind:inline="true"
+            v-on:click="openReleasesPage"
+          >
+          </ButtonControl>
         </template>
+        <!-- State 3.2: An update is currently downloading -->
         <template v-else-if="isDownloading && !isFinished">
-          <!-- We are currently downloading an update -->
-          <p>{{ downloadProgressLabel }}: {{ formatSize(downloadProgress.size_downloaded) }} of {{ formatSize(downloadProgress.size_total) }} ({{ getETA }})</p>
+          <p>{{ downloadProgressLabel }}: {{ formatSize(updateState.size_downloaded) }} of {{ formatSize(updateState.size_total) }} ({{ getETA }})</p>
           <ProgressControl
-            v-bind:max="downloadProgress.size_total"
-            v-bind:value="downloadProgress.size_downloaded"
+            v-bind:max="updateState.size_total"
+            v-bind:value="updateState.size_downloaded"
           >
           </ProgressControl>
         </template>
+        <!-- State 3.3: A downloaded update can be installed -->
         <template v-else>
-          <!-- There is a downloaded update available to install -->
           <ButtonControl
             v-bind:label="startButtonLabel"
             v-bind:disabled="disableStartButton"
@@ -41,11 +66,9 @@
           >
           </ButtonControl>
         </template>
+        <!-- If there's a new update, always display the changelog -->
         <hr>
-        <div id="changelog" v-html="lastResponse.changelog"></div>
-      </template>
-      <template v-else>
-        {{ noUpdateMessage }}
+        <div id="changelog" v-html="updateState.changelog"></div>
       </template>
     </div>
   </WindowChrome>
@@ -71,6 +94,7 @@ import ButtonControl from '../common/vue/form/elements/Button'
 import ProgressControl from '../common/vue/form/elements/Progress'
 import { trans } from '../common/i18n-renderer'
 import formatSize from '../common/util/format-size'
+import PACKAGE_JSON from '../../package.json'
 
 const ipcRenderer = window.ipc
 
@@ -84,35 +108,37 @@ export default {
   data: function () {
     return {
       windowTitle: trans('dialog.update.window_title'),
-      lastResponse: null, // Type: ParsedAPIResponse
       disableStartButton: false, // True as soon as the update starts
       startButtonLabel: trans('dialog.update.start_update_label'),
-      downloadProgress: {
+      updateState: {
+        lastErrorMessage: undefined,
+        lastErrorCode: undefined,
+        updateAvailable: false,
+        prerelease: false,
+        changelog: '',
+        tagName: '',
+        compatibleAssets: [],
         name: '',
         full_path: '',
         size_total: 0,
         size_downloaded: 0,
         start_time: 0,
-        eta_seconds: 0,
-        download_percent: 0,
-        finished: false,
-        isCurrentlyDownloading: false
-      } // Type: UpdateDownloadProgress
+        eta_seconds: 0
+      }
     }
   },
   computed: {
+    hasError: function () {
+      return this.updateState.lastErrorMessage !== undefined && this.updateState.lastErrorCode !== undefined
+    },
     updateAvailable: function () {
-      if (this.lastResponse == null) {
-        return false
-      } else {
-        return this.lastResponse.isNewer
-      }
+      return this.updateState.updateAvailable
     },
     isDownloading: function () {
-      return this.downloadProgress.isCurrentlyDownloading
+      return this.updateState.size_downloaded > 0 && this.updateState.size_downloaded < this.updateState.size_total
     },
     isFinished: function () {
-      return this.downloadProgress.finished
+      return this.updateState.size_downloaded > 0 && this.updateState.size_downloaded === this.updateState.size_total
     },
     updateTitle: function () {
       return trans('dialog.update.title')
@@ -129,8 +155,14 @@ export default {
     noUpdateMessage: function () {
       return trans('dialog.update.no_new_update')
     },
+    currentVersion: function () {
+      return PACKAGE_JSON.version
+    },
+    checkForUpdateLabel: function () {
+      return trans('menu.update')
+    },
     getETA: function () {
-      let seconds = this.downloadProgress.eta_seconds
+      let seconds = this.updateState.eta_seconds
       if (seconds > 60) {
         return Math.floor(seconds / 60) + 'm ' + (seconds % 60) + 's'
       } else {
@@ -139,20 +171,18 @@ export default {
     }
   },
   created: function () {
-    // Immediately retrieve the two status
+    // Immediately retrieve the current update status and set up a listener to
+    // retrieve any updates to the state.
     ipcRenderer.invoke('update-provider', { command: 'update-status' })
-      .then(lastResponse => { this.lastResponse = lastResponse })
+      .then(updateState => { this.updateState = updateState })
       .catch(e => console.error(e))
 
-    ipcRenderer.invoke('update-provider', { command: 'download-progress' })
-      .then(downloadProgress => { this.downloadProgress = downloadProgress })
-      .catch(e => console.error(e))
-
-    setInterval(() => {
-      ipcRenderer.invoke('update-provider', { command: 'download-progress' })
-        .then(downloadProgress => { this.downloadProgress = downloadProgress })
-        .catch(e => console.error(e))
-    }, 1000) // Check every second if there's an update
+    // Whenever the update state changes in the provider, we must update it here
+    ipcRenderer.on('update-provider', (event, command, updateState) => {
+      if (command === 'state-changed') {
+        this.updateState = updateState
+      }
+    })
   },
   methods: {
     requestDownload: function (url) {
@@ -173,6 +203,13 @@ export default {
     },
     formatSize: function (bytes) {
       return formatSize(bytes, true)
+    },
+    checkForUpdate: function () {
+      ipcRenderer.invoke('update-provider', { command: 'check-for-update' })
+        .catch(e => console.error(e))
+    },
+    openReleasesPage: function () {
+      window.location.assign(this.updateState.releasePage)
     }
   }
 }

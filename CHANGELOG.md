@@ -16,12 +16,19 @@
 - Fixed the image size calculator during image pastes
 - Fixed a bug that sometimes caused the editor to randomly jump when entering a
   newline
+- The updater has received a face lift: It should now be more responsive and
+  easier to handle. We now filter out files which wouldn't work on the given
+  platform either way, making it harder to accidentally download the Intel-
+  packages when you're on ARM (or vice versa).
 
 ## Under the Hood
 
 - Switched the Linux middle-mouse-paste code to listen to mouseup events instead
   of mousedown events in response to issue #2321
 - Update Pandoc to 2.15
+- Refactor the `UpdateProvider` so that it now has a unified state and a better
+  error reporting. It should work much better without unrecoverable states and
+  is more responsive. Additionally, removed a lot of old and dead code from it.
 
 # 2.0.1
 
