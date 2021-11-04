@@ -2,7 +2,8 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- The editor dropdown list now won't be wider than the window, even if you have
+  very long citations or keywords.
 
 ## Under the Hood
 
