@@ -3,7 +3,8 @@
 ## GUI and Functionality
 
 - The editor dropdown list now won't be wider than the window, even if you have
-  very long citations or keywords.
+  very long citations or keywords
+- Removed the leading `#` in the tag cloud
 
 ## Under the Hood
 

@@ -29,7 +29,7 @@
       v-on:click="handleClick(tag.text)"
     >
       <!-- Tags have a count, text, and a className -->
-      #{{ tag.text }} ({{ tag.count }}x)
+      {{ tag.text }} ({{ tag.count }}x)
     </div>
   </div>
 </template>
