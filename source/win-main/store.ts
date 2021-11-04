@@ -343,7 +343,7 @@ const config: StoreOptions<ZettlrState> = {
           })
         } else {
           parentDescriptor.children.push(descriptor)
-          parentDescriptor.children = sort(parentDescriptor.children, parentDescriptor.sorting)
+          Vue.set(parentDescriptor, 'children', sort(parentDescriptor.children, parentDescriptor.sorting))
         }
       } else {
         // NOTE: This is just in case we accidentally introduce a race condition.

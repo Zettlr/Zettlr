@@ -781,14 +781,15 @@ export default class FSAL extends EventEmitter {
       await FSALCodeFile.rename(src, this._cache, newName)
     }
 
-    // Now we need to re-sort the parent directory
-    if (src.parent !== null) {
-      await FSALDir.sort(src.parent) // Omit sorting
-    }
-
     // src.path already points to the new path
     this._recordFiletreeChange('remove', oldPath)
     this._recordFiletreeChange('add', src.path)
+
+    // Now we need to re-sort the parent directory
+    if (src.parent !== null) {
+      await FSALDir.sort(src.parent) // Omit sorting
+      this._recordFiletreeChange('change', src.parent.path)
+    }
 
     // Notify of a state change
     this.emit('fsal-state-changed', 'filetree')

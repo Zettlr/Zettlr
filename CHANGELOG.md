@@ -10,6 +10,7 @@
 ## Under the Hood
 
 - Update Pandoc to 2.16.1
+- Improve sorting behavior of directories on creation and renaming of files
 
 # 2.0.2
 
