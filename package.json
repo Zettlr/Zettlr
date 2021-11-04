@@ -105,7 +105,7 @@
     "@vercel/webpack-asset-relocator-loader": "^1.7.0",
     "copy-webpack-plugin": "^9.0.1",
     "cross-env": "^7.0.3",
-    "css-loader": "^6.5.0",
+    "css-loader": "^6.5.1",
     "csso": "^4.2.0",
     "electron": "^15.3.0",
     "electron-builder": "22.13.1",
