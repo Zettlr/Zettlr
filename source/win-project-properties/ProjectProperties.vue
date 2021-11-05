@@ -1,32 +1,30 @@
 <template>
-  <div id="project-lists">
-    <!-- ATTENTION: Limited leeway! Be sparse with the space you use! -->
-    <p
-      v-if="selectedExportFormats.length === 0"
-      class="warning"
-    >
-      <clr-icon shape="warning"></clr-icon>
-      <!-- TODO: Translate! -->
-      <span>Please select at least one export format to build this project.</span>
-    </p>
-
-    <!-- Add the project title field -->
-    <TextControl
-      v-model="projectTitle"
-      v-bind:label="'Project Title'"
-    ></TextControl>
-
-    <Tabs
-      v-bind:tabs="tabs"
-      v-bind:current-tab="currentTab"
-      v-on:tab="currentTab = $event"
-    ></Tabs>
-
+  <WindowChrome
+    v-bind:title="windowTitle"
+    v-bind:titlebar="true"
+    v-bind:menubar="false"
+    v-bind:disable-vibrancy="true"
+    v-bind:show-tabbar="true"
+    v-bind:tabbar-tabs="tabs"
+    v-bind:tabbar-label="'Properties'"
+    v-on:tab="currentTab = $event"
+  >
     <div
-      v-show="currentTab === 'formats'"
+      v-show="currentTab === 0"
       id="formats-panel"
       role="tabpanel"
     >
+      <!-- Add the project title field -->
+      <TextControl
+        v-model="projectTitle"
+        v-bind:label="'Project Title'"
+      ></TextControl>
+
+      <p v-if="selectedExportFormats.length === 0" class="warning">
+        <clr-icon shape="warning"></clr-icon>
+        <!-- TODO: Translate! -->
+        <span>Please select at least one export format to build this project.</span>
+      </p>
       <ListControl
         v-bind:label="exportFormatLabel"
         v-bind:value="exportFormatList"
@@ -36,7 +34,7 @@
       ></ListControl>
     </div>
     <div
-      v-show="currentTab === 'files'"
+      v-show="currentTab === 1"
       id="files-panel"
       role="tabpanel"
     >
@@ -58,36 +56,44 @@
         v-bind:filter="{'csl': 'CSL Stylesheet'}"
       ></FileControl>
     </div>
-  </div>
+  </WindowChrome>
 </template>
 
 <script>
-import ListControl from '../../../common/vue/form/elements/List'
-import FileControl from '../../../common/vue/form/elements/File'
-import TextControl from '../../../common/vue/form/elements/Text'
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Project Properties
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This component displays the project properties.
+ *
+ * END HEADER
+ */
 
+import { trans } from '../common/i18n-renderer'
+import WindowChrome from '../common/vue/window/Chrome.vue'
+import ListControl from '../common/vue/form/elements/List'
+import FileControl from '../common/vue/form/elements/File'
+import TextControl from '../common/vue/form/elements/Text'
 import Vue from 'vue'
-import Tabs from '../../../common/vue/Tabs'
-import { trans } from '../../../common/i18n-renderer'
 
 const ipcRenderer = window.ipc
 
 export default {
   name: 'ProjectProperties',
   components: {
+    WindowChrome,
     ListControl,
     FileControl,
-    TextControl,
-    Tabs
-  },
-  props: {
-    fullPath: {
-      type: String,
-      required: true
-    }
+    TextControl
   },
   data: function () {
     return {
+      dirPath: '',
       exportFormatMap: {},
       selectedExportFormats: [ 'html', 'chromium-pdf' ], // NOTE: Must correspond to the defaults in fsal-directory.ts
       patterns: [],
@@ -95,20 +101,27 @@ export default {
       projectTitle: '',
       tabs: [
         {
-          id: 'formats',
+          id: 'formats-control',
           target: 'formats-panel',
-          label: 'Formats'
+          label: 'General',
+          icon: 'cog',
+          controls: 'formats-panel'
         },
         {
-          id: 'files',
+          id: 'files-control',
           target: 'files-panel',
-          label: 'Files'
+          label: 'Files',
+          icon: 'file-settings',
+          controls: 'formats-panel'
         }
       ],
-      currentTab: 'formats'
+      currentTab: 0
     }
   },
   computed: {
+    windowTitle: function () {
+      return this.projectTitle
+    },
     exportFormatList: function () {
       // We need to return a list of { selected: boolean, format: 'string' }
       return Object.keys(this.exportFormatMap).map(e => {
@@ -135,11 +148,20 @@ export default {
     }
   },
   watch: {
+    selectedExportFormats: function () {
+      this.updateProperties()
+    },
+    projectTitle: function () {
+      this.updateProperties()
+    },
     patterns: function (newValue, oldValue) {
       this.updateProperties()
     },
     cslStyle: function (newValue, oldValue) {
       this.updateProperties()
+    },
+    dirPath: function (newValue, oldValue) {
+      this.fetchProperties()
     }
   },
   mounted: function () {
@@ -162,8 +184,10 @@ export default {
       })
       .catch(err => console.error(err))
 
-    // Second, we need to get the formats actually being used.
-    this.fetchProperties()
+    if (this.dirPath !== '') {
+      // Get the properties if we already have a dirPath
+      this.fetchProperties()
+    }
   },
   methods: {
     selectExportFormat: function (newListVal) {
@@ -183,14 +207,14 @@ export default {
             cslStyle: this.cslStyle,
             title: this.projectTitle
           },
-          path: this.fullPath
+          path: this.dirPath
         }
       }).catch(err => console.error(err))
     },
     fetchProperties: function () {
       ipcRenderer.invoke('application', {
         command: 'get-descriptor',
-        payload: this.fullPath
+        payload: this.dirPath
       })
         .then(descriptor => {
           // Save the actually used formats.
@@ -219,5 +243,11 @@ div#project-lists p.warning {
 
   // More spacing between the icon and the text
   span { padding-left: 5px; }
+}
+
+div[role="tabpanel"] {
+  overflow: auto; // Enable scrolling, if necessary
+  padding: 10px;
+  width: 100%;
 }
 </style>

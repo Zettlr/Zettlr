@@ -492,6 +492,8 @@ export default class Zettlr {
       return true
     } else if (command === 'open-update-window') {
       this._windowManager.showUpdateWindow()
+    } else if (command === 'open-project-preferences') {
+      this._windowManager.showProjectPropertiesWindow(payload)
     } else {
       // ELSE: If the command has not yet been found, try to run one of the
       // bigger commands

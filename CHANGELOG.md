@@ -6,6 +6,9 @@
   very long citations or keywords
 - Removed the leading `#` in the tag cloud
 - Allow tags to be sorted by name or count
+- Re-introduce the project properties window, since the place within the popover
+  was very limited and people have begun calling for more features, so we need
+  the space of a dedicated window
 
 ## Under the Hood
 
