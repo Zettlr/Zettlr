@@ -171,7 +171,8 @@ export default class WindowManager extends EventEmitter {
           event.sender.selectAll()
           break
         case 'inspect-element':
-          event.sender.inspectElement(payload.x, payload.y)
+          console.log(payload)
+          event.sender.inspectElement(Math.round(payload.x), Math.round(payload.y))
           break
         case 'drag-start':
           app.getFileIcon(payload.filePath)
