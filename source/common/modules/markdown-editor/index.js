@@ -281,29 +281,6 @@ module.exports = class MarkdownEditor extends EventEmitter {
       }
     })
 
-    this._instance.getWrapperElement().addEventListener('mouseup', (event) => {
-      if (event.button !== 1 || process.platform !== 'linux' || clipboard.hasSelectionClipboard() === false) {
-        return
-      }
-
-      // The user has pressed middle mouse button on Linux. On Linux, there's
-      // the concept of some form of a "quick selection", that is: The user
-      // selects some text, and, without pressing Ctrl+C, the text is
-      // immediately present in the "selection" clipboard. A middle mouse button
-      // is assumed to paste that to wherever the focus currently sits. For
-      // more info, see issue #1882 and https://unix.stackexchange.com/a/139193
-      const { text, html } = clipboard.getSelectionClipboard()
-
-      if (html.trim() !== '') {
-        // We have HTML to paste
-        const toPaste = html2md(html)
-        this._instance.doc.replaceSelection(toPaste)
-      } else {
-        // There is text to paste
-        this._instance.doc.replaceSelection(text)
-      }
-    })
-
     // Listen to updates from the assets provider
     ipcRenderer.on('assets-provider', (event, which) => {
       if (which === 'snippets-updated') {
