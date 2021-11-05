@@ -112,19 +112,28 @@
         const caption = document.createElement('figcaption')
         caption.textContent = title
         caption.contentEditable = true
-        caption.onkeydown = function (event) {
-          if (event.key === 'Enter') {
-            event.preventDefault()
-            event.stopPropagation()
-            // Make sure there are no quotes since these will break the image
-            const newCaption = caption.textContent.replace(/"/g, '')
-            // "Why are you setting the caption both as the image description and title?"
-            // Well, since all exports sometimes us this, sometimes the other value.
-            const newImageTag = `![${newCaption}](${url} "${newCaption}")${p4}`
-            // Now replace the underlying image
-            cm.replaceRange(newImageTag, curFrom, curTo)
+
+        // Define a quick inline function that takes care of applying a new caption
+        const updateCaptionFunction = function (event) {
+          if (event.key !== undefined && event.key !== 'Enter') {
+            // If this is a KeyboardEvent, only perform the action on Enter
+            return
           }
+
+          event.preventDefault()
+          event.stopPropagation()
+          // Make sure there are no quotes since these will break the image
+          const newCaption = caption.textContent.replace(/"/g, '')
+          // "Why are you setting the caption both as the image description and title?"
+          // Well, since all exports sometimes us this, sometimes the other value.
+          const newImageTag = `![${newCaption}](${url} "${newCaption}")${p4}`
+          // Now replace the underlying image
+          cm.replaceRange(newImageTag, curFrom, curTo)
         }
+
+        // Should work on these events
+        caption.addEventListener('keydown', updateCaptionFunction)
+        caption.addEventListener('focusout', updateCaptionFunction)
 
         const size = document.createElement('span')
         size.classList.add('image-size-info')

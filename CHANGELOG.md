@@ -9,6 +9,7 @@
 - Re-introduce the project properties window, since the place within the popover
   was very limited and people have begun calling for more features, so we need
   the space of a dedicated window
+- Image caption changes are now also saved when the text field loses focus
 
 ## Under the Hood
 
