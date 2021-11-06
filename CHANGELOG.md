@@ -11,6 +11,7 @@
   the space of a dedicated window
 - Image caption changes are now also saved when the text field loses focus
 - Reworded "night mode" to "dark mode" consistently
+- Fix a minor design glitch
 
 ## Under the Hood
 

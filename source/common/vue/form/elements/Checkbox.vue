@@ -83,7 +83,7 @@ body {
     grid-template-rows: 100%;
     grid-template-areas: "input label";
 
-    label { grid-area: label; }
+    label:not(.checkbox):not(.radio) { grid-area: label; }
   }
 
   label.checkbox {

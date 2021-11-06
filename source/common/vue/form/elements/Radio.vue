@@ -82,7 +82,7 @@ body {
 
   .cb-group, .radio-group {
     margin: 6px 0px;
-    label { grid-area: label; }
+    label:not(.radio):not(.checkbox) { grid-area: label; }
   }
 
   label.radio {
