@@ -15,6 +15,9 @@
 - Removed the previous HTML template; now Zettlr uses Pandoc's default
 - Fix a small visual glitch that would show link tooltips in unexpected
   locations
+- Fixed a small bug that would make Zettlr treat numbers at the beginning of a
+  line as a list too often. Now typing, e.g., "21.12.2021" will not yield a
+  "22." on the next line
 
 ## Under the Hood
 
