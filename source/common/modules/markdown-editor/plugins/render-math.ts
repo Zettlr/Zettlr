@@ -16,7 +16,7 @@ import { getBlockMathRE, getInlineMathRenderRE } from '../../../../common/regula
 import * as CodeMirror from 'codemirror'
 import katex from 'katex'
 
-import 'katex/dist/contrib/mhchem' // modify katex module
+import 'katex/contrib/mhchem' // modify katex module
 
 const multilineMathRE = getBlockMathRE()
 const commands = (CodeMirror.commands as any)
