@@ -17,10 +17,10 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: develop
-      - name: Setup NodeJS 14.17
+      - name: Setup NodeJS 16
         uses: actions/setup-node@v1
         with:
-          node-version: '>=14.17.0'
+          node-version: '16'
       # The scripts require some modules that we need to install.
       - name: Install dependencies
         run: yarn install --frozen-lockfile
