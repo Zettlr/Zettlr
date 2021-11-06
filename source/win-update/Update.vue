@@ -129,7 +129,12 @@ export default {
   },
   computed: {
     hasError: function () {
-      return this.updateState.lastErrorMessage !== undefined && this.updateState.lastErrorCode !== undefined
+      // Sometimes, "undefined" properties do not get transferred from main so
+      // we additionally need to check for existence here, cf. #2775
+      return 'lastErrorMessage' in this.updateState &&
+        'lastErrorCode' in this.updateState &&
+        this.updateState.lastErrorMessage !== undefined &&
+        this.updateState.lastErrorCode !== undefined
     },
     updateAvailable: function () {
       return this.updateState.updateAvailable
@@ -180,7 +185,11 @@ export default {
     // Whenever the update state changes in the provider, we must update it here
     ipcRenderer.on('update-provider', (event, command, updateState) => {
       if (command === 'state-changed') {
-        this.updateState = updateState
+        if (updateState !== undefined) {
+          this.updateState = updateState
+        } else {
+          console.error('ERROR: Expected an update state, received undefined!')
+        }
       }
     })
   },

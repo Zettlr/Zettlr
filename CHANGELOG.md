@@ -17,6 +17,7 @@
 - Improve sorting behavior of directories on creation and renaming of files
 - Removed custom middle-click paste code for Linux, cf. #2321
 - Fixed a floating-point to integer conversion failure error
+- Fix potential errors in the updater window with additional sanity checks
 
 # 2.0.2
 
