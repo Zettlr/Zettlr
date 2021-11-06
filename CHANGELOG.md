@@ -12,6 +12,7 @@
 - Image caption changes are now also saved when the text field loses focus
 - Reworded "night mode" to "dark mode" consistently
 - Fix a minor design glitch
+- Removed the previous HTML template; now Zettlr uses Pandoc's default
 
 ## Under the Hood
 
