@@ -304,7 +304,7 @@ module.exports = {
    */
   'getListRE': function () {
     return RegExp(
-      /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]))(\s*)/.source
+      /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]\s))(\s*)/.source
     )
   },
 
