@@ -8694,10 +8694,10 @@ thunky@^1.0.2:
   resolved "https://registry.yarnpkg.com/thunky/-/thunky-1.1.0.tgz#5abaf714a9405db0504732bbccd2cedd9ef9537d"
   integrity sha512-eHY7nBftgThBqOyHGVN+l8gF0BucP09fMo0oO/Lb0w1OF80dJv+lDVpXG60WMQvkcxAkNybKsrEIE3ZtKGmPrA==
 
-tippy.js@^6.3.2:
-  version "6.3.2"
-  resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-6.3.2.tgz#c03a0b88f170dffeba42f569771801dddc1f6340"
-  integrity sha512-35XVQI7Zl/jHZ51+8eHu/vVRXBjWYGobPm5G9FxOchj4r5dWhghKGS0nm0ARUKZTF96V7pPn7EbXS191NTwldw==
+tippy.js@^6.3.4:
+  version "6.3.4"
+  resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-6.3.4.tgz#e5de7067db148824fe370578722cc56c7ae7ee9f"
+  integrity sha512-ZXkQeJQTgDXOt3x6DehdqhpbFDG6b784t7LH0ugMpQSrnbOPi+MGkYQdrd13kzp1jwUPzdCT/95Ce5kw2PPAUQ==
   dependencies:
     "@popperjs/core" "^2.9.0"
 
