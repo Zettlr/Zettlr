@@ -328,11 +328,28 @@ export async function makeProject (dirObject: DirDescriptor, properties: any): P
  *
  * @param   {DirDescriptor}  dirObject   The directory descriptor
  * @param   {any}            properties  The properties to set
+ *
+ * @return {boolean}                     Returns false if no properties changed
  */
-export async function updateProjectProperties (dirObject: DirDescriptor, properties: any): Promise<void> {
+export async function updateProjectProperties (dirObject: DirDescriptor, properties: any): Promise<boolean> {
+  if (dirObject._settings.project === null) {
+    global.log.error(`[FSAL Dir] Attempted to update project settings on dir ${dirObject.path}, but it is not a project!`)
+    return false
+  }
+
+  const titleUnchanged = dirObject._settings.project.title === properties.title
+  const cslUnchanged = dirObject._settings.project.cslStyle === properties.cslStyle
+  const formatsUnchanged = JSON.stringify(dirObject._settings.project.formats) === JSON.stringify(properties.formats)
+  const filtersUnchanged = JSON.stringify(dirObject._settings.project.filters) === JSON.stringify(properties.filters)
+
+  if (titleUnchanged && cslUnchanged && formatsUnchanged && filtersUnchanged) {
+    return false
+  }
+
   dirObject._settings.project = safeAssign(properties, dirObject._settings.project)
   // Immediately reflect on disk
   await persistSettings(dirObject)
+  return true
 }
 
 // Removes a project

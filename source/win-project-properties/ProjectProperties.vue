@@ -188,6 +188,15 @@ export default {
       // Get the properties if we already have a dirPath
       this.fetchProperties()
     }
+
+    // We listen to filetree changes -- in case one of these means that our
+    // dir is no longer a project, fetchProperties will automatically close this
+    // window.
+    ipcRenderer.on('fsal-state-changed', (event, kind) => {
+      if (kind === 'filetree') {
+        this.fetchProperties()
+      }
+    })
   },
   methods: {
     selectExportFormat: function (newListVal) {
@@ -223,6 +232,10 @@ export default {
             this.patterns = descriptor.project.filters
             this.cslStyle = descriptor.project.cslStyle
             this.projectTitle = descriptor.project.title
+          } else {
+            // Apparently the user kept the window open and removed the project
+            // state on this project. So let's close this window silently.
+            ipcRenderer.send('window-controls', { command: 'win-close' })
           }
         })
         .catch(err => console.error(err))

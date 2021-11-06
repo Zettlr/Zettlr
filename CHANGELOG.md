@@ -18,6 +18,7 @@
 - Removed custom middle-click paste code for Linux, cf. #2321
 - Fixed a floating-point to integer conversion failure error
 - Fix potential errors in the updater window with additional sanity checks
+- Project properties are now persisted to disk only if they actually changed
 
 # 2.0.2
 

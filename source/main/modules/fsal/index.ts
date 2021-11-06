@@ -862,9 +862,11 @@ export default class FSAL extends EventEmitter {
     this._fsalIsBusy = true
     // NOTE: Generates no events as dotfiles are not watched
     // Updates the project properties on a directory.
-    await FSALDir.updateProjectProperties(src, options)
+    const hasChanged = await FSALDir.updateProjectProperties(src, options)
 
-    this._recordFiletreeChange('change', src.path)
+    if (hasChanged) {
+      this._recordFiletreeChange('change', src.path)
+    }
 
     this._fsalIsBusy = false
     this._afterRemoteChange()
