@@ -13,6 +13,8 @@
 - Reworded "night mode" to "dark mode" consistently
 - Fix a minor design glitch
 - Removed the previous HTML template; now Zettlr uses Pandoc's default
+- Fix a small visual glitch that would show link tooltips in unexpected
+  locations
 
 ## Under the Hood
 

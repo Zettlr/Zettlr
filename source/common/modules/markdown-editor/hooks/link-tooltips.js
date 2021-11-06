@@ -56,13 +56,16 @@ export default function linkTooltipsHook (cm) {
 }
 
 function showTippy (element, target, cm) {
+  // Find the containing CodeMirror DOM element. We can't unfortunately append
+  // it to the element nor the body
+  const parent = element.closest('.CodeMirror')
   tippy(element, {
     content: `<clr-icon shape="pop-out"></clr-icon> <a href="#" id="editor-cm-tooltip-anchor">${target}</a>`,
     allowHTML: true, // Obviously
     interactive: true, // Allow clicking the link
     placement: 'top', // Display at the beginning of the anchor
     followCursor: 'horizontal', // Necessary for links that begin at the end of a line and end at the beginning of the next one
-    appendTo: document.body, // As the cma anchors are inline, we need a different anchor-element
+    appendTo: parent, // As the cma anchors are inline, we need a different anchor-element
     showOnCreate: true, // Immediately show the tooltip
     arrow: false, // No arrow for these tooltips
     onHidden (instance) {
