@@ -414,7 +414,7 @@ export default function getMenu (
       submenu: [
         {
           id: 'menu.toggle_theme',
-          label: trans('menu.toggle_theme'),
+          label: trans('dialog.preferences.dark_mode'),
           accelerator: 'Cmd+Alt+L',
           type: 'checkbox',
           checked: global.config.get('darkMode'),

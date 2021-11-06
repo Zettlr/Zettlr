@@ -28,7 +28,7 @@ export default function () {
       [
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.nightmode'),
+          label: trans('dialog.preferences.dark_mode'),
           model: 'darkMode'
         },
         {
