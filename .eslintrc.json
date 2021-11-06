@@ -77,16 +77,15 @@
         // decide if the attributes are too long for the 80 character column
         "vue/max-attributes-per-line": [ "error", {
           "singleline": 3,
-          "multiline": {
-            "max": 3,
-            "allowFirstLine": true
-          }
+          "multiline": 3
         }],
         // We allow the use of v-html directives, because we sanitize any user
         // provided HTML to only contain safe tags. The only stuff we currently
         // put in there is translation strings, which we sanitise in the trans()
         // function. NOTE to keep this on my mind!
         "vue/no-v-html": "off",
+
+        "vue/multi-word-component-names": [ "warn" ],
 
         // Disable a few typescript rules as we are not yet there to easily implement them
         "@typescript-eslint/no-floating-promises": [ "warn" ],

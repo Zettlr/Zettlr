@@ -149,7 +149,14 @@ export default {
   },
   data: function () {
     return {
-      tabs: [
+      currentTab: 'toc',
+      bibContents: undefined,
+      relatedFiles: []
+    }
+  },
+  computed: {
+    tabs: function () {
+      return [
         {
           icon: 'indented-view-list',
           id: 'toc',
@@ -174,13 +181,8 @@ export default {
           target: 'sidebar-files',
           label: this.attachmentsLabel
         }
-      ],
-      currentTab: 'toc',
-      bibContents: undefined,
-      relatedFiles: []
-    }
-  },
-  computed: {
+      ]
+    },
     otherFilesLabel: function () {
       return trans('gui.other_files')
     },
