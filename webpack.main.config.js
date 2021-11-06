@@ -1,12 +1,11 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const path = require('path')
+const rules = require('./webpack.rules')
 
 module.exports = {
   // Main entry point: the file that runs in the main process
   entry: './source/main.ts',
-  module: {
-    rules: require('./webpack.rules')
-  },
+  module: { rules },
   plugins: [
     new CopyWebpackPlugin({
       patterns: [

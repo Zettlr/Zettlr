@@ -22,8 +22,6 @@
     "source/**/*",
     "test/**/*",
     "forge.config.js",
-    "webpack.main.config.js",
-    "webpack.renderer.config.js",
-    "webpack.rules.js"
+    "webpack.*.js"
   ]
 }
