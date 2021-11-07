@@ -18,6 +18,8 @@
 - Fixed a small bug that would make Zettlr treat numbers at the beginning of a
   line as a list too often. Now typing, e.g., "21.12.2021" will not yield a
   "22." on the next line
+- Changing heading levels using the context menu on heading markers will no
+  longer insert the new heading level at arbitrary positions in the document
 
 ## Under the Hood
 

@@ -46,10 +46,11 @@ const { getHeadRE } = require('../../../regular-expressions');
       if ((match = headRE.exec(line)) == null) {
         continue
       }
-      let headingLevel = match[1].length
+
+      const headingLevel = match[1].length
 
       let curFrom = cm.getCursor('from')
-      let curTo = { 'line': i, 'ch': headingLevel }
+      const curTo = { 'line': i, 'ch': headingLevel }
 
       if (curFrom.line === i && curFrom.ch < headingLevel && curFrom.ch > 0) {
         // We're directly in the formatting so don't render.
@@ -59,16 +60,18 @@ const { getHeadRE } = require('../../../regular-expressions');
       curFrom = { 'line': i, 'ch': 0 }
 
       // We can only have one marker at any given position at any given time
-      if (cm.doc.findMarks(curFrom, curTo).length > 0) continue
+      if (cm.doc.findMarks(curFrom, curTo).length > 0) {
+        continue
+      }
 
-      let hTagWrapper = document.createElement('div')
+      const hTagWrapper = document.createElement('div')
       hTagWrapper.className = 'heading-tag'
 
-      let hTag = document.createElement('span')
+      const hTag = document.createElement('span')
       hTag.textContent = 'h' + headingLevel
       hTagWrapper.appendChild(hTag)
 
-      let textMarker = cm.doc.markText(
+      const textMarker = cm.doc.markText(
         curFrom, curTo,
         {
           'clearOnEnter': true,
@@ -138,16 +141,15 @@ const { getHeadRE } = require('../../../regular-expressions');
 
         const point = { x: e.clientX, y: e.clientY }
         currentCallback = global.menuProvider.show(point, items, (id) => {
-          const numID = parseInt(id, 10)
+          const newLevel = parseInt(id, 10)
 
-          // Simply adapt the heading level, and clear the text marker.
-          // On the next pass-through, the plugin will re-render the correct
-          // marker for us.
-          cm.replaceRange('#'.repeat(numID), curFrom, curTo)
+          // The heading might have changed position in the meantime
+          const { from, to } = textMarker.find()
+          cm.replaceRange('#'.repeat(newLevel), from, to)
           textMarker.clear()
           currentCallback = null // No need to save it anymore
           // Programmatically trigger a cursor movement ...
-          cm.setCursor({ line: curFrom.line, ch: numID + 1 })
+          cm.setCursor({ line: from.line, ch: newLevel + 1 })
           // ... and re-focus the editor
           cm.focus()
         })
