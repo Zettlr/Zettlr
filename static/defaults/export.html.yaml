@@ -4,7 +4,7 @@
 # More info: https://pandoc.org/MANUAL.html
 reader: markdown
 writer: html
-self-contained: false
+self-contained: true
 variables: {}
 metadata-files: []
 include-before-body: []

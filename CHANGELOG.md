@@ -2,6 +2,9 @@
 
 ## GUI and Functionality
 
+- **Default changed**: The exporter's HTML defaults have now `self-contained: true`
+  instead of previously `self-contained: false` -- make sure to update your
+  settings accordingly!
 - The editor dropdown list now won't be wider than the window, even if you have
   very long citations or keywords
 - Removed the leading `#` in the tag cloud
