@@ -23,6 +23,7 @@
   "22." on the next line
 - Changing heading levels using the context menu on heading markers will no
   longer insert the new heading level at arbitrary positions in the document
+- Fixed the accessibility to screen readers of toolbar search controls
 
 ## Under the Hood
 
