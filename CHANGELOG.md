@@ -1,3 +1,17 @@
+# 2.0.4
+
+## GUI and Functionality
+
+- Fixed an error in the link filtering process that would throw an error when
+  you attempted to remove internal links completely upon export
+
+## Under the Hood
+
+- Added a further check to the filter copying. Since the filters that ship with
+  Zettlr are bound to the inner workings of the app, we should always overwrite
+  them if applicable (to ensure they are updated with the app), unlike the
+  defaults which people should be able to modify with us messing with them
+
 # 2.0.3
 
 ## GUI and Functionality

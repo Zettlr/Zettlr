@@ -104,7 +104,14 @@ export default class AssetsProvider {
     for (const file of filters) {
       const absolutePath = path.join(this._filterPath, file)
       try {
-        await fs.lstat(absolutePath)
+        // If the file doesn't exist, lstat will throw an error. Otherwise, check
+        // that the filter shipped with this version is newer. If so, replace.
+        const existingStat = await fs.lstat(absolutePath)
+        const newStat = await fs.lstat(path.join(__dirname, './assets/lua-filter', file))
+        if (newStat.mtimeMs > existingStat.mtimeMs) {
+          global.log.warning(`[Assets Provider] Found outdated filter ${file}; copying ...`)
+          await fs.copyFile(path.join(__dirname, './assets/lua-filter', file), absolutePath)
+        }
       } catch (err) {
         global.log.warning(`[Assets Provider] Required filter ${file} not found. Copying ...`)
         await fs.copyFile(path.join(__dirname, './assets/lua-filter', file), absolutePath)

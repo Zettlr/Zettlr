@@ -38,37 +38,48 @@ return {
     end
   },
   {
+    -- Since links can contain whitespace, we need to walk a full paragraph at
+    -- a time and remember where we are
     Para = function (paragraph)
-      -- Since links can contain whitespace, we need to walk a full paragraph at
-      -- a time and remember where we are
+      if strip_links == 'no' then
+        return paragraph -- nothing to do
+      end
 
       local in_link = false
 
       return pandoc.walk_block(paragraph, {
+        -- Str is whitespace-separated text
         Str = function (elem)
-          -- Do we have the start of a link?
-          if elem.text:sub(1, #link_start) == link_start then
-            -- Begin a link
-            in_link = true
-            if strip_links == 'unlink' then
+
+          -- We know that we must either unlink or remove internal links
+          local has_link_start = elem.text:sub(1, #link_start) == link_start
+          local has_link_end = elem.text:sub(#elem.text - #link_end + 1) == link_end
+
+          if strip_links == 'unlink' then
+            -- Unlink internal links
+            if has_link_start then
+              -- Only beginning of link
               elem.text = elem.text:sub(#link_start + 1)
             end
-          -- Do we have the end of a link?
-          elseif elem.text:sub(#elem.text - #link_end + 1) == link_end then
-            -- End a link
-            in_link = false
-            if strip_links == 'unlink' then
+            if has_link_end then
+              -- Only ending of link
               elem.text = elem.text:sub(1, #elem.text - #link_end)
-            elseif strip_links == 'full' then
-              -- Since in_link will be false below, we have to return early
-              return pandoc.Null()
             end
-          end
 
-          if in_link and strip_links == 'full' then
-            return pandoc.Null()
-          else
+            -- In any case: Return the (modified) elem
             return elem
+          else
+            -- Remove internal links
+            if has_link_start and not has_link_end then
+              in_link = true
+            elseif has_link_end and not has_link_start then
+              in_link = false
+            end
+
+            -- Remove beginnings, endings, or anything in between
+            if has_link_start or has_link_end or in_link then
+              return pandoc.Str("")
+            end
           end
         end,
       })
