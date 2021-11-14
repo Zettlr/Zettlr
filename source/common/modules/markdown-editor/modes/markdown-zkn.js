@@ -75,24 +75,32 @@ const {
           mdState: CodeMirror.copyState(mdMode, state.mdState)
         }
       },
+      /**
+       * Defines the token function
+       *
+       * @param   {CodeMirror.StringStream}  stream  The stream
+       * @param   {any}                      state   The state
+       *
+       * @return  {string|null|undefined}            Returns a token class or null
+       */
       token: function (stream, state) {
         // First: YAML highlighting. This block will only execute
         // at the beginning of a file.
-        if (state.startOfFile && stream.sol() && stream.match(/---/)) {
+        if (state.startOfFile === true && stream.sol() && stream.match(/---/) !== null) {
           // Assume a frontmatter
           state.startOfFile = false
           state.inFrontmatter = true
           return 'hr yaml-frontmatter-start'
-        } else if (!state.startOfFile && state.inFrontmatter) {
+        } else if (state.startOfFile === false && state.inFrontmatter === true) {
           // Still in frontMatter?
-          if (stream.sol() && stream.match(/---|\.\.\./)) {
+          if (stream.sol() && stream.match(/---|\.\.\./) !== null) {
             state.inFrontmatter = false
             return 'hr yaml-frontmatter-end'
           }
 
           // Continue to parse in YAML mode
           return yamlMode.token(stream, state.yamlState) + ' fenced-code'
-        } else if (state.startOfFile) {
+        } else if (state.startOfFile === true) {
           // If no frontmatter was found, set the state to a desirable state
           state.startOfFile = false
         }
@@ -118,7 +126,7 @@ const {
         // Then check if we have just escaped, and, if so, return an empty class
         // which will also (intentionally) break any rendering that the next()
         // char would have initiated.
-        if (state.hasJustEscaped) {
+        if (state.hasJustEscaped === true) {
           state.hasJustEscaped = false // Needs to be reset always
           if (!stream.eol()) {
             stream.next()
@@ -128,12 +136,12 @@ const {
 
         // Now let's check for footnotes. Other than reference style links these
         // require a different formatting, which we'll implement here.
-        if (stream.sol() && stream.match(fnReferenceRE)) {
+        if (stream.sol() && stream.match(fnReferenceRE) !== null) {
           return 'footnote-formatting'
         }
 
         // Are we in a link?
-        if (state.inZknLink) {
+        if (state.inZknLink === true) {
           if (stream.match(config.zettlr.zettelkasten.linkEnd)) {
             state.inZknLink = false
             return 'zkn-link-formatting'
@@ -150,15 +158,19 @@ const {
         // None of the following has to explicitly check for backspaces.
 
         // Now let's check for inline equations
-        if (stream.match(inlineMathRE)) return 'inline-math'
+        if (stream.match(inlineMathRE) !== null) {
+          return 'inline-math'
+        }
 
         // Implement highlighting
-        if (stream.match(highlightRE)) return 'highlight'
+        if (stream.match(highlightRE) !== null) {
+          return 'highlight'
+        }
 
         // Now dig deeper for more tokens
 
         // This mode should also handle tables, b/c they are rather simple to detect.
-        if (stream.sol() && stream.match(tableRE, false)) {
+        if (stream.sol() && stream.match(tableRE, false) !== null) {
           // Got a table line -> skip to end and convert to table
           stream.skipToEnd()
           return 'table'
@@ -204,7 +216,9 @@ const {
         // as the definition of zkn-links is above this matcher.)
 
         let zknIDRE = new RegExp(config.zettlr.zettelkasten.idRE)
-        if (stream.match(zknIDRE)) return 'zkn-id'
+        if (stream.match(zknIDRE) !== null) {
+          return 'zkn-id'
+        }
 
         // If nothing has triggered until here, let the markdown
         // mode take over as it is responsible for everything else.
@@ -218,8 +232,8 @@ const {
         return {
           // 'mode': (state.inFrontmatter) ? yamlMode : markdownZkn,
           // 'state': (state.inFrontmatter) ? state.yamlState : state
-          'mode': (state.inFrontmatter) ? yamlMode : markdownZkn, // mdMode,
-          'state': (state.inFrontmatter) ? state.yamlState : state.mdState
+          'mode': (state.inFrontmatter === true) ? yamlMode : markdownZkn, // mdMode,
+          'state': (state.inFrontmatter === true) ? state.yamlState : state.mdState
         }
       },
       blankLine: function (state) {

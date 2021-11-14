@@ -12,6 +12,7 @@
   them if applicable (to ensure they are updated with the app), unlike the
   defaults which people should be able to modify with us messing with them
 - Sanitized and standardized all Vue component names and application entry points
+- Fix a whole bunch of linter warnings
 
 # 2.0.3
 
