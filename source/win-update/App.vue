@@ -99,7 +99,6 @@ import PACKAGE_JSON from '../../package.json'
 const ipcRenderer = window.ipc
 
 export default {
-  name: 'Updater',
   components: {
     WindowChrome,
     ButtonControl,

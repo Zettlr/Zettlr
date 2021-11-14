@@ -79,7 +79,7 @@ import { trans } from '../common/i18n-renderer'
 const ipcRenderer = window.ipc
 
 export default {
-  name: 'Snippets',
+  name: 'SnippetsTab',
   components: {
     SplitView,
     SelectableList,

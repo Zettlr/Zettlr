@@ -34,9 +34,9 @@
         v-else-if="tabs[currentTab].id === 'tab-custom-css-control'"
       ></CustomCSS>
       <!-- Snippets Editor -->
-      <Snippets
+      <SnippetsTab
         v-else-if="tabs[currentTab].id === 'tab-snippets-control'"
-      ></Snippets>
+      ></SnippetsTab>
     </div>
   </WindowChrome>
 </template>
@@ -45,16 +45,15 @@
 import WindowChrome from '../common/vue/window/Chrome'
 import Defaults from './Defaults'
 import CustomCSS from './CustomCSS'
-import Snippets from './Snippets'
+import SnippetsTab from './SnippetsTab'
 import { trans } from '../common/i18n-renderer'
 
 export default {
-  name: 'DefaultsWindow',
   components: {
     WindowChrome,
     Defaults,
     CustomCSS,
-    Snippets
+    SnippetsTab
   },
   data: function () {
     return {

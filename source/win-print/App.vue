@@ -37,7 +37,6 @@ import WindowChrome from '../common/vue/window/Chrome.vue'
 const path = window.path
 
 export default {
-  name: 'Print',
   components: {
     WindowChrome
   },

@@ -84,7 +84,6 @@ import Vue from 'vue'
 const ipcRenderer = window.ipc
 
 export default {
-  name: 'ProjectProperties',
   components: {
     WindowChrome,
     ListControl,

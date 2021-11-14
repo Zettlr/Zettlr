@@ -84,7 +84,6 @@ const ipcRenderer = window.ipc
 const clipboard = window.clipboard
 
 export default {
-  name: 'PasteImage',
   components: {
     WindowChrome,
     Checkbox,

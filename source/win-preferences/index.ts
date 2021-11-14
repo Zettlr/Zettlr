@@ -39,7 +39,7 @@
  */
 
 import Vue from 'vue'
-import Preferences from './preferences.vue'
+import App from './App.vue'
 import windowRegister from '../common/modules/window-register'
 
 const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
@@ -65,7 +65,7 @@ ipcRenderer.on('config-provider', (event, message) => {
 })
 
 // Create the Vue app because we need to reference it in our toolbar controls
-const app = new Vue(Preferences)
+const app = new Vue(App)
 
 // In the end: mount the app onto the DOM
 app.$mount('#app')

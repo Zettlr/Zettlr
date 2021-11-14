@@ -16,13 +16,13 @@
 
 import windowRegister from '../common/modules/window-register'
 import Vue from 'vue'
-import Stats from './Stats.vue'
+import App from './App.vue'
 
 const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
-const app = new Vue(Stats)
-
 windowRegister()
+
+const app = new Vue(App)
 
 // This window will be closed immediately on a window-close command
 ipcRenderer.on('shortcut', (event, shortcut) => {

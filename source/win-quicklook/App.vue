@@ -8,7 +8,7 @@
     v-bind:disable-vibrancy="true"
     v-on:toolbar-search="searchNext($event)"
   >
-    <Editor
+    <QuicklookEditor
       v-bind:id="id"
       ref="editor"
       v-bind:font-size="fontSize"
@@ -29,7 +29,7 @@
       v-bind:linefeed="linefeed"
       v-bind:modified="modified"
       v-bind:content="content"
-    ></Editor>
+    ></QuicklookEditor>
   </WindowChrome>
 </template>
 
@@ -48,7 +48,7 @@
  * END HEADER
  */
 
-import Editor from './editor.vue'
+import QuicklookEditor from './QuicklookEditor.vue'
 import WindowChrome from '../common/vue/window/Chrome.vue'
 import { trans } from '../common/i18n-renderer'
 
@@ -57,7 +57,7 @@ const ipcRenderer = window.ipc
 export default {
   components: {
     WindowChrome,
-    Editor
+    QuicklookEditor
   },
   data: function () {
     return {

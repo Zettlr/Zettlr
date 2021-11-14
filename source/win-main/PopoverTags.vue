@@ -16,11 +16,11 @@
 
     <hr v-if="suggestions.length > 0">
 
-    <Tabs
+    <TabBar
       v-bind:tabs="tabs"
       v-bind:current-tab="sorting"
       v-on:tab="sorting = $event"
-    ></Tabs>
+    ></TabBar>
 
     <TextControl
       ref="filter"
@@ -58,7 +58,7 @@
 import TextControl from '../common/vue/form/elements/Text.vue'
 import ButtonControl from '../common/vue/form/elements/Button.vue'
 import TokenList from '../common/vue/form/elements/TokenList.vue'
-import Tabs from '../common/vue/Tabs.vue'
+import TabBar from '../common/vue/TabBar.vue'
 import { trans } from '../common/i18n-renderer'
 
 export default {
@@ -67,7 +67,7 @@ export default {
     TextControl,
     TokenList,
     ButtonControl,
-    Tabs
+    TabBar
   },
   data: function () {
     return {

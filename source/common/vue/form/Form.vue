@@ -171,7 +171,7 @@ import TokenInput from './elements/TokenList.vue'
 import ThemeInput from './elements/Theme.vue'
 
 export default {
-  name: 'Form',
+  name: 'FormBuilder',
   components: {
     TextInput,
     NumberInput,

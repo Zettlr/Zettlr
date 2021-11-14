@@ -11,7 +11,7 @@
     v-on:toolbar-toggle="handleToggle($event)"
   >
     <div id="log-viewer" ref="log-viewer">
-      <Message
+      <LogMessage
         v-for="(entry, idx) in filteredMessages"
         v-bind:key="idx"
         v-bind:message="entry"
@@ -35,14 +35,14 @@
  * END HEADER
  */
 
-import Message from './message.vue'
+import LogMessage from './LogMessage.vue'
 import WindowChrome from '../common/vue/window/Chrome.vue'
 
 const ipcRenderer = window.ipc
 
 export default {
   components: {
-    Message,
+    LogMessage,
     WindowChrome
   },
   data: function () {

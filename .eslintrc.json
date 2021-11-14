@@ -85,8 +85,6 @@
         // function. NOTE to keep this on my mind!
         "vue/no-v-html": "off",
 
-        "vue/multi-word-component-names": [ "warn" ],
-
         // Disable a few typescript rules as we are not yet there to easily implement them
         "@typescript-eslint/no-floating-promises": [ "warn" ],
         "@typescript-eslint/no-misused-promises": [ "warn" ],

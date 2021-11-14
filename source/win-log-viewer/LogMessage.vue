@@ -38,7 +38,7 @@
  */
 
 export default {
-  name: 'Message',
+  name: 'LogMessage',
   props: {
     message: {
       type: Object,

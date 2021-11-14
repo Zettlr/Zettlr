@@ -26,7 +26,7 @@ const CodeMirror = require('codemirror')
 const ipcRenderer = window.ipc
 
 export default {
-  name: 'Editor',
+  name: 'QuicklookEditor',
   props: {
     fontSize: {
       type: Number,

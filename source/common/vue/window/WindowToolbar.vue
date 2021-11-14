@@ -87,7 +87,7 @@ import TextControl from './toolbar-controls/Text.vue'
 const ipcRenderer = window.ipc
 
 export default {
-  name: 'Toolbar',
+  name: 'WindowToolbar',
   components: {
     ButtonControl,
     RingControl,

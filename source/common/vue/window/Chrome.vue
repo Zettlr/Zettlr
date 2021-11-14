@@ -12,16 +12,16 @@
         titlebars, except Zettlr's main window which instead has either a
         menubar or a toolbar as its first element).
       -->
-      <Titlebar
+      <WindowTitlebar
         v-if="showTitlebar"
         v-bind:title-content="title"
         v-on:dblclick="handleDoubleClick('titlebar')"
-      ></Titlebar>
-      <Menubar
+      ></WindowTitlebar>
+      <WindowMenubar
         v-if="showMenubar"
         v-bind:margin-top="menubarMargin"
-      ></Menubar>
-      <Toolbar
+      ></WindowMenubar>
+      <WindowToolbar
         v-if="showToolbar"
         v-bind:margin-top="toolbarMargin"
         v-bind:controls="toolbarControls"
@@ -30,14 +30,14 @@
         v-on:toggle="$emit('toolbar-toggle', $event)"
         v-on:click="$emit('toolbar-click', $event)"
         v-on:dblclick="handleDoubleClick('toolbar')"
-      ></Toolbar>
-      <Tabbar
+      ></WindowToolbar>
+      <WindowTabbar
         v-if="showTabbar"
         v-bind:margin-top="tabbarMargin"
         v-bind:tabs="tabbarTabs"
         v-bind:label="tabbarLabel"
         v-on:tab="$emit('tab', $event)"
-      ></Tabbar>
+      ></WindowTabbar>
       <!-- Last but not least, the window controls -->
       <WindowControls
         v-if="showWindowControls"
@@ -57,11 +57,11 @@
       <!-- The actual window contents will be mounted here -->
       <slot></slot>
     </div>
-    <Statusbar
+    <WindowStatusbar
       v-if="showStatusbar"
       v-bind:controls="statusbarControls"
       v-on:click="$emit('statusbar-click', $event)"
-    ></Statusbar>
+    ></WindowStatusbar>
   </div>
 </template>
 
@@ -82,12 +82,12 @@
  * END HEADER
  */
 
-import Titlebar from './Titlebar.vue'
-import Menubar from './Menubar.vue'
-import Toolbar from './Toolbar.vue'
-import Tabbar from './Tabbar.vue'
-import Statusbar from './Statusbar.vue'
-import WindowControls from './Controls.vue'
+import WindowTitlebar from './WindowTitlebar.vue'
+import WindowMenubar from './WindowMenubar.vue'
+import WindowToolbar from './WindowToolbar.vue'
+import WindowTabbar from './WindowTabbar.vue'
+import WindowStatusbar from './WindowStatusbar.vue'
+import WindowControls from './WindowControls.vue'
 
 // Import the correct styles (the platform styles are namespaced)
 import './assets/generic.less'
@@ -118,11 +118,11 @@ const STATUSBAR_LINUX_HEIGHT = 60
 export default {
   name: 'WindowChrome',
   components: {
-    Titlebar,
-    Menubar,
-    Toolbar,
-    Tabbar,
-    Statusbar,
+    WindowTitlebar,
+    WindowMenubar,
+    WindowToolbar,
+    WindowTabbar,
+    WindowStatusbar,
     WindowControls
   },
   props: {

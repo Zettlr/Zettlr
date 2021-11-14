@@ -42,15 +42,15 @@
             <DocumentTabs
               v-show="!distractionFree"
             ></DocumentTabs>
-            <Editor
+            <MainEditor
               ref="editor"
               v-bind:readability-mode="readabilityActive"
               v-bind:distraction-free="distractionFree"
-            ></Editor>
+            ></MainEditor>
           </template>
           <template #view2>
             <!-- Second side: Sidebar -->
-            <Sidebar></Sidebar>
+            <MainSidebar></MainSidebar>
           </template>
         </SplitView>
       </template>
@@ -75,11 +75,11 @@
 
 import WindowChrome from '../common/vue/window/Chrome'
 import FileManager from './file-manager/file-manager'
-import Sidebar from './Sidebar'
+import MainSidebar from './MainSidebar'
 import DocumentTabs from './DocumentTabs'
 import SplitView from '../common/vue/window/SplitView'
 import GlobalSearch from './GlobalSearch'
-import Editor from './Editor'
+import MainEditor from './MainEditor'
 import PopoverExport from './PopoverExport'
 import PopoverStats from './PopoverStats'
 import PopoverTags from './PopoverTags'
@@ -114,15 +114,14 @@ const SOUND_EFFECTS = [
 ]
 
 export default {
-  name: 'Main',
   components: {
     WindowChrome,
     FileManager,
     DocumentTabs,
     SplitView,
-    Editor,
+    MainEditor,
     GlobalSearch,
-    Sidebar
+    MainSidebar
   },
   data: function () {
     return {

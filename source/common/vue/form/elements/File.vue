@@ -52,7 +52,7 @@ import { trans } from '../../../i18n-renderer'
 const ipcRenderer = window.ipc
 
 export default {
-  name: 'File',
+  name: 'FileControl',
   props: {
     value: {
       type: String,

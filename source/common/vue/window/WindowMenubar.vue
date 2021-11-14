@@ -33,7 +33,7 @@
 const ipcRenderer = window.ipc
 
 export default {
-  name: 'Menubar',
+  name: 'WindowMenubar',
   props: {
     marginTop: {
       type: String,

@@ -45,7 +45,7 @@
  */
 
 export default {
-  name: 'SystemTabs',
+  name: 'WindowTabbar',
   props: {
     marginTop: {
       type: String,

@@ -118,7 +118,6 @@ function modelToField (model, tree) {
 }
 
 export default {
-  name: 'Preferences',
   components: {
     Form,
     WindowChrome

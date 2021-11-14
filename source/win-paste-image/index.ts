@@ -13,14 +13,11 @@
  */
 
 import Vue from 'vue'
-import PasteImage from './Paste-Image.vue'
+import App from './App.vue'
 import windowRegister from '../common/modules/window-register'
 
 // The first thing we have to do is run the window controller
 windowRegister()
 
-// Create the Vue app because we need to reference it in our toolbar controls
-const app = new Vue(PasteImage)
-
-// In the end: mount the app onto the DOM
+const app = new Vue(App)
 app.$mount('#app')

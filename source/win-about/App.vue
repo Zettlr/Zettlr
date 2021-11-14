@@ -65,7 +65,6 @@ import FontLicenseTab from './Font-License-Tab.vue'
 import DebugTab from './Debug-Tab.vue'
 
 export default {
-  name: 'About',
   components: {
     WindowChrome,
     GeneralTab,

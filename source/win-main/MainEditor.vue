@@ -95,7 +95,7 @@ import YAML from 'yaml'
 const ipcRenderer = window.ipc
 
 export default {
-  name: 'Editor',
+  name: 'MainEditor',
   components: {
   },
   props: {

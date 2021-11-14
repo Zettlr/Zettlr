@@ -41,7 +41,7 @@ import ButtonControl from '../form/elements/Button.vue'
 import TextControl from './toolbar-controls/Text.vue'
 
 export default {
-  name: 'Statusbar',
+  name: 'WindowStatusbar',
   components: {
     ButtonControl,
     TextControl

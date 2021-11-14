@@ -1,10 +1,10 @@
 <template>
   <div id="sidebar">
-    <Tabs
+    <TabBar
       v-bind:tabs="tabs"
       v-bind:current-tab="currentTab"
       v-on:tab="currentTab = $event"
-    ></Tabs>
+    ></TabBar>
 
     <!-- Now the tab containers -->
 
@@ -125,7 +125,7 @@
 
 import { trans } from '../common/i18n-renderer'
 import { ClarityIcons } from '@clr/icons'
-import Tabs from '../common/vue/Tabs'
+import TabBar from '../common/vue/TabBar'
 
 const path = window.path
 const ipcRenderer = window.ipc
@@ -141,9 +141,9 @@ const FILETYPES_IMG = [
 ]
 
 export default {
-  name: 'Sidebar',
+  name: 'MainSidebar',
   components: {
-    Tabs
+    TabBar
   },
   props: {
   },

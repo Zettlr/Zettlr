@@ -25,7 +25,7 @@
  */
 
 export default {
-  name: 'Titlebar',
+  name: 'WindowTitlebar',
   props: {
     titleContent: {
       type: String,

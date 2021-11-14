@@ -42,7 +42,7 @@
  * END HEADER
  */
 export default {
-  name: 'Tabs',
+  name: 'TabBar',
   props: {
     // Each tab must have the following properties:
     // * icon (matches clr-icons, if not set, title will become the content)

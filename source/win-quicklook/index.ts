@@ -15,7 +15,7 @@
  */
 
 import Vue from 'vue'
-import Quicklook from './Quicklook.vue'
+import App from './App.vue'
 import windowRegister from '../common/modules/window-register'
 // import { ToolbarControl } from '../common/modules/window-register/register-toolbar'
 import { CodeFileMeta, MDFileMeta } from '../main/modules/fsal/types'
@@ -42,7 +42,7 @@ ipcRenderer.on('config-provider', (event, message) => {
   }
 })
 
-const app = new Vue(Quicklook)
+const app = new Vue(App)
 app.$mount('#app')
 
 // Finally, pass the correct file to the application to view
