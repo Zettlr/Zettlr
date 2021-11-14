@@ -105,7 +105,7 @@ export default class WindowManager extends EventEmitter {
       'ky', 'nqo', 'ckb', 'sdh', 'ku', 'hu', 'ms'
     ]
 
-    if (schema.language !== null && LTR_SCRIPTS.includes(schema.language)) {
+    if (schema.language != null && LTR_SCRIPTS.includes(schema.language)) {
       this._hasRTLLocale = true
     } else {
       this._hasRTLLocale = false
