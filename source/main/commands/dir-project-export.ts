@@ -89,9 +89,9 @@ export default class DirProjectExport extends ZettlrCommand {
       } catch (err: any) {
         global.log.error(err.message, err)
         global.application.displayErrorMessage(
-          err.title || err.message,
+          ('title' in err) ? err.title : err.message,
           err.message,
-          err.additionalInfo || ''
+          ('additionalInfo' in err) ? err.additionalInfo : ''
         )
       }
     }

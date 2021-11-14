@@ -1,8 +1,9 @@
 <template>
   <div>
     <div class="form-control cb-group">
-      <label class="checkbox"
-             v-bind:disabled="disabled"
+      <label
+        class="checkbox"
+        v-bind:disabled="disabled"
       >
         <input
           v-bind:id="fieldID"
@@ -15,8 +16,9 @@
         >
         <span class="checkmark"></span>
       </label>
-      <label v-if="label" v-bind:for="fieldID" v-bind:disabled="disabled"
-             v-html="label"
+      <label
+        v-if="label" v-bind:for="fieldID" v-bind:disabled="disabled"
+        v-html="label"
       >
       </label>
     </div>

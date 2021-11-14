@@ -19,8 +19,9 @@
     <div class="resize" v-on:click="requestResize">
       <!-- Windows (unmaximise) -->
       <template v-if="platform === 'win32' && isMaximised">
-        <svg class="maximise-svg" x="0px" y="0px"
-             viewBox="0 0 10 10"
+        <svg
+          class="maximise-svg" x="0px" y="0px"
+          viewBox="0 0 10 10"
         >
           <mask id="Mask">
             <rect fill="#FFFFFF" width="10" height="10"></rect>
@@ -32,8 +33,9 @@
       </template>
       <template v-else-if="platform === 'win32' && !isMaximised">
         <!-- Windows (maximise) -->
-        <svg class="fullscreen-svg" x="0px" y="0px"
-             viewBox="0 0 10 10"
+        <svg
+          class="fullscreen-svg" x="0px" y="0px"
+          viewBox="0 0 10 10"
         >
           <path d="M 0 0 L 0 10 L 10 10 L 10 0 L 0 0 z M 1 1 L 9 1 L 9 9 L 1 9 L 1 1 z " />
         </svg>
@@ -41,8 +43,9 @@
       <template v-else-if="platform === 'linux'">
         <!-- Linux gets the same icon for both states. Hope that's okay. -->
         <svg x="0px" y="0px" viewBox="0 0 10 10">
-          <rect fill="none" width="10" height="10"
-                stroke-width="4"
+          <rect
+            fill="none" width="10" height="10"
+            stroke-width="4"
           ></rect>
         </svg>
       </template>
@@ -61,11 +64,13 @@
       </template>
       <template v-else-if="platform === 'linux'">
         <svg x="0px" y="0px" viewBox="0 0 10 10">
-          <line x1="0" y1="0" x2="10"
-                y2="10" stroke-width="2"
+          <line
+            x1="0" y1="0" x2="10"
+            y2="10" stroke-width="2"
           />
-          <line x1="10" y1="0" x2="0"
-                y2="10" stroke-width="2"
+          <line
+            x1="10" y1="0" x2="0"
+            y2="10" stroke-width="2"
           />
         </svg>
       </template>

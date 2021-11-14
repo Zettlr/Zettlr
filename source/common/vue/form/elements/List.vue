@@ -2,10 +2,11 @@
   <!--
     On macOS Big Sur, this represents a TableView
   -->
-  <div v-bind:class="{
-    'table-view': platform === 'darwin',
-    'form-control': true
-  }"
+  <div
+    v-bind:class="{
+      'table-view': platform === 'darwin',
+      'form-control': true
+    }"
   >
     <label v-if="label !== ''" v-html="label"></label>
     <input
