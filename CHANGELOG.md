@@ -11,6 +11,7 @@
   Zettlr are bound to the inner workings of the app, we should always overwrite
   them if applicable (to ensure they are updated with the app), unlike the
   defaults which people should be able to modify with us messing with them
+- Updated the display name in the Add/Remove Programs entry for Windows
 
 # 2.0.3
 
