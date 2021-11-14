@@ -53,16 +53,6 @@
             "error",
             "longform"
         ],
-        "vue/component-tags-order": [
-            "error",
-            {
-                "order": [
-                    "template",
-                    "script",
-                    "style"
-                ]
-            }
-        ],
         // Let the implementation decide if self-closing is wanted or not.
         "vue/html-self-closing": [ "warn", {
           "html": {
