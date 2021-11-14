@@ -13,6 +13,8 @@
   defaults which people should be able to modify with us messing with them
 - Sanitized and standardized all Vue component names and application entry points
 - Fix a whole bunch of linter warnings
+- Remove the custom event system (`$on`, `$off`, and `$once`) in preparation for
+  Vue 3
 
 # 2.0.3
 

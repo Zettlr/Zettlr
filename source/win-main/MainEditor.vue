@@ -485,16 +485,12 @@ export default {
         .catch(err => console.error(err))
 
       if (global.config.get('zkn.autoSearch') === true) {
-        this.$root.$emit('start-global-search', linkContents)
+        this.$root.startGlobalSearch(linkContents)
       }
     })
 
     this.editor.on('zettelkasten-tag', (tag) => {
-      this.$root.$emit('start-global-search', tag)
-    })
-
-    this.$root.$on('search-next', () => {
-      this.searchNext()
+      this.$root.startGlobalSearch(tag)
     })
 
     // Listen to shortcuts from the main process
@@ -548,12 +544,6 @@ export default {
       for (const doc of docsToSave) {
         await this.save(doc)
       }
-    })
-
-    // Other elements can emit a toc-line event on $root to request a jump to
-    // a specific line.
-    this.$root.$on('toc-line', (line) => {
-      this.editor.jtl(line)
     })
 
     // Finally, let's observe if the editor element changes. If so, refresh the

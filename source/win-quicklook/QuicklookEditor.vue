@@ -159,14 +159,6 @@ export default {
     this.scrollbarAnnotations = this.editor.codeMirror.annotateScrollbar('sb-annotation')
     this.scrollbarAnnotations.update([])
 
-    this.$root.$on('config-update', (option) => {
-      this.updateConfig(option)
-    })
-
-    this.$root.$on('search-next', () => {
-      this.searchNext()
-    })
-
     // Listen to shortcuts from the main process
     ipcRenderer.on('shortcut', (event, shortcut) => {
       if (shortcut === 'copy-as-html') {

@@ -112,7 +112,7 @@ export default {
             this.query = value
           },
           onSubmitHandler: (value) => {
-            this.$emit('search-next')
+            this.$refs.editor.searchNext()
           }
         }
       ]
@@ -135,7 +135,7 @@ export default {
 
       if (command === 'update') {
         const { payload } = message
-        this.$emit('config-update', payload)
+        this.$refs.editor.updateConfig(payload)
       }
     })
   },

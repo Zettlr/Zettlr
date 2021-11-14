@@ -133,7 +133,7 @@ export default {
         if (this.selectedDir === this.obj) {
           // The clicked directory was already the selected directory, so just
           // tell the application to show the file list, if applicable.
-          this.$root.$emit('toggle-file-list')
+          this.$root.toggleFileList()
         } else {
           // Select this directory
           ipcRenderer.invoke('application', {

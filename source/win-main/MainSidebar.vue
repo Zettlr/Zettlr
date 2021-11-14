@@ -97,7 +97,7 @@
         v-bind:style="{
           'margin-left': `${entry.level * 10}px`
         }"
-        v-on:click="$root.$emit('toc-line', entry.line)"
+        v-on:click="$root.jtl(entry.line)"
       >
         <div class="toc-level">
           {{ entry.renderedLevel }}

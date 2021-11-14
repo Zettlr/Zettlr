@@ -444,23 +444,24 @@ export default {
     // Initially, we need to hide the sidebar, since the view will be visible
     // by default.
     this.$refs['editor-sidebar-split'].hideView(2)
-
-    this.$on('start-global-search', (terms) => {
+  },
+  methods: {
+    jtl: function (lineNumber) {
+      this.$refs.editor.jtl(lineNumber)
+    },
+    startGlobalSearch: function (terms) {
       this.mainSplitViewVisibleComponent = 'globalSearch'
       this.fileManagerVisible = true
       this.$nextTick(() => {
         this.$refs['global-search'].$data.query = terms
         this.$refs['global-search'].startSearch()
       })
-    })
-
-    this.$on('toggle-file-list', () => {
+    },
+    toggleFileList: function () {
       // This event can be used by various components to ask the file manager to
       // toggle its file list visibility
       this.$refs['file-manager'].toggleFileList()
-    })
-  },
-  methods: {
+    },
     handleClick: function (clickedID) {
       if (clickedID === 'open-workspace') {
         ipcRenderer.invoke('application', { command: 'open-workspace' })
@@ -504,7 +505,7 @@ export default {
         this.$togglePopover(PopoverTags, button, data, (data) => {
           if (data.searchForTag !== '') {
             // The user has clicked a tag and wants to search for it
-            this.$emit('start-global-search', '#' + data.searchForTag)
+            this.startGlobalSearch('#' + data.searchForTag)
             this.$closePopover()
           } else if (data.addSuggestionsToFile === true) {
             this.$refs.editor.addKeywordsToFile(data.suggestions)
