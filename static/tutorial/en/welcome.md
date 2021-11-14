@@ -22,7 +22,7 @@ First, you may wonder what this tutorial is. Several Markdown applications make 
 
 What you will see is that there is one directory – the tutorial – loaded. These top-level directories are called workspaces, because they are spaces in which your work lives. You can right-click the directory, and either “close” or “delete” it. When you _close_ a workspace or top-level file in Zettlr, this means that you unload it from the application, but it will remain on your computer. If you _delete_ it, this means that Zettlr will move it into the trash bin. But don’t do that right now, as there are still new things to learn! ✍🏼
 
-> Note: On some Linux distributions, this may not work out of the box, as Zettlr depends upon a common package for moving files into the trash. If you experience problems removing files and folders, please [check our FAQ section](https://docs.zettlr.com/en/faq/#im-using-linux-and-deleting-files-doesnt-move-them-to-the-trash), which got you covered!
+> Note: On some Linux distributions, this may not work out of the box, as Zettlr depends upon a common package for moving files into the trash. If you experience problems removing files and folders, please [check our FAQ section](https://docs.zettlr.com/en/faq/#im-using-linux-and-deleting-files-doesnt-move-them-to-the-trash), which has got you covered!
 
 Zettlr is built around the concept of workspaces. So you will have the best experience having open at least one workspace directory at all times, and do all your work in that. The workspaces are loaded automatically everytime you open the app, and are always displayed in the directory tree that’s visible right now. To view the file list of a directory, simply click the directory.
 
