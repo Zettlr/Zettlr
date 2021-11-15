@@ -17,7 +17,7 @@
             "Joris"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-10-23T08:32:46.000000Z"
+        "updated_at": "2021-11-12T15:14:49.000000Z"
     },
     "dialog": {
         "about": {
@@ -211,6 +211,7 @@
             "cite_style_label": "Choisissez la mani\u00e8re dont vos citations sont ins\u00e9r\u00e9es",
             "count_chars": "Compter caract\u00e8res au lieu des mots (p. ex., pour le chinois)",
             "creationtime": "Temps de cr\u00e9ation du fichier",
+            "dark_mode": "Mode sombre",
             "debug": "Activer le mode debug",
             "default_image_save_path": "Chemin par d\u00e9faut des images (relatif ou absolu)",
             "delete_on_fail": "Supprimer les \u00e9l\u00e9ments de mani\u00e8re irr\u00e9versible, si leur d\u00e9placement vers la corbeille \u00e9choue",
@@ -743,7 +744,8 @@
             "pandoc_error_message": "Pandoc a rapport\u00e9 une erreur : %s",
             "pandoc_error_title": "Erreur lors de l'exportation du fichier",
             "remove_message": "Voulez-vous vraiment supprimer %s ?",
-            "remove_title": "Vraiment supprimer ?"
+            "remove_title": "Vraiment supprimer ?",
+            "tray_not_supported": "Tray n'est pas support\u00e9. L'extension Gnome \"KStatusNotifierItem/AppIndicator Support\" est n\u00e9cessaire pour le fonctionnement de Tray sur Gnome Desktop."
         },
         "export_success": "Exportation vers %s",
         "file_changed": "Le fichier %s a \u00e9t\u00e9 modifi\u00e9 par un programme ext\u00e9rieur.",
