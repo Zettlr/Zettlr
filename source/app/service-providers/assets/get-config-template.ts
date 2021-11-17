@@ -66,6 +66,7 @@ export default function getConfigTemplate (): ConfigOptions {
     attachmentExtensions: ATTACHMENT_EXTENSIONS,
     // UI related options
     darkMode: false,
+    autoUpdate: true,
     alwaysReloadFiles: false, // Should Zettlr automatically load remote changes?
     autoDarkMode: 'off', // Possible values: 'off', 'system', 'schedule', 'auto'
     autoDarkModeStart: '22:00', // Switch into dark mode at this time

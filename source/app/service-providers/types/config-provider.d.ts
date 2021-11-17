@@ -45,6 +45,7 @@ interface ConfigOptions {
   }
   attachmentExtensions: string[]
   darkMode: boolean
+  autoUpdate: boolean
   alwaysReloadFiles: boolean
   autoDarkMode: 'off'|'system'|'schedule'|'auto'
   autoDarkModeStart: string
