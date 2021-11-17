@@ -88,6 +88,12 @@ export default class TranslationProvider {
    * @return {Promise} Resolves if everything worked out, rejects otherwise.
    */
   async init (): Promise<void> {
+    const autoUpdate: boolean = global.config.get('autoUpdate')
+    if (!autoUpdate) {
+      // dont update
+      return
+    }
+
     let response
     try {
       response = await got(TRANSLATION_API_URL, { method: 'GET' })
