@@ -119,7 +119,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.1",
     "eslint-plugin-standard": "^5.0.0",
-    "eslint-plugin-vue": "^8.0.3",
+    "eslint-plugin-vue": "^8.1.1",
     "file-loader": "^6.2.0",
     "fork-ts-checker-webpack-plugin": "^6.4.0",
     "jsdom": "^18.0.1",
