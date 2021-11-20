@@ -116,6 +116,10 @@ export default class WindowManager extends EventEmitter {
       .then(() => {
         global.log.info('[Window Manager] Window Manager booted. Opening main window.')
         this.showMainWindow()
+        if (process.argv.includes('--tray')) {
+          global.tray.add()
+          this.getMainWindow()?.hide()
+        }
       })
       .catch((err: Error) => global.log.error(`[Window Manager] Could not load data: ${err.message}`, err))
 
