@@ -38,6 +38,9 @@ export default class TrayProvider extends EventEmitter {
   constructor () {
     super()
     global.log.verbose('Tray provider booting up ...')
+    if (this._tray != null) {
+      this._removeTray()
+    }
     this._tray = null
 
     global.tray = {
@@ -45,7 +48,15 @@ export default class TrayProvider extends EventEmitter {
        * Adds the Zettlr tray to the system notification area.
        */
       add: () => {
-        this._addTray()
+        // see  _removeTray ()
+        // this does not recreate the tray if there is already one to prevent duplicates
+        if (process.platform === 'linux') {
+          if (this._tray == null) {
+            this._addTray()
+          }
+        } else {
+          this._addTray()
+        }
       }
     }
 
