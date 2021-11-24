@@ -405,8 +405,10 @@ const config: StoreOptions<ZettlrState> = {
       if (ownDescriptor.type === 'directory') {
         Vue.set(ownDescriptor, 'children', sort(ownDescriptor.children, ownDescriptor.sorting))
       } else if (ownDescriptor.type === 'file') {
-        const parentDescriptor = ownDescriptor.parent
-        Vue.set(parentDescriptor, 'children', sort(parentDescriptor.children, parentDescriptor.sorting))
+        if (ownDescriptor.parent != null) {
+          const parentDescriptor = ownDescriptor.parent
+          Vue.set(parentDescriptor, 'children', sort(parentDescriptor.children, parentDescriptor.sorting))
+        }
       }
     },
     lastFiletreeUpdate: function (state, payload) {
