@@ -98,11 +98,14 @@ export default function () {
             'ascii': trans('dialog.preferences.sorting_ascii')
           }
         }
-      ], {
-        type: 'checkbox',
-        label: trans('dialog.preferences.sortFoldersFirst'),
-        model: 'sortFoldersFirst'
-      },
+      ],
+      [
+        {
+          type: 'checkbox',
+          label: trans('dialog.preferences.sortFoldersFirst'),
+          model: 'sortFoldersFirst'
+        }
+      ],
       [
         {
           type: 'radio',
