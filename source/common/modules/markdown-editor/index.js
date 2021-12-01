@@ -219,7 +219,7 @@ module.exports = class MarkdownEditor extends EventEmitter {
     })
 
     this._instance.on('mousedown', (cm, event) => {
-      // Open links on both Cmd and Ctrl clicks - otherwise stop handling event
+      // Open links on Cmd clicks, Ctrl clicks and middle clicks - otherwise stop handling event
       if (process.platform === 'darwin' && !event.metaKey && event.button !== 1) return true
       if (process.platform !== 'darwin' && !event.ctrlKey && event.button !== 1) return true
 
