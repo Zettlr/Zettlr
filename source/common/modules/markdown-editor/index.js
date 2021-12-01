@@ -220,8 +220,8 @@ module.exports = class MarkdownEditor extends EventEmitter {
 
     this._instance.on('mousedown', (cm, event) => {
       // Open links on both Cmd and Ctrl clicks - otherwise stop handling event
-      if (process.platform === 'darwin' && !event.metaKey) return true
-      if (process.platform !== 'darwin' && !event.ctrlKey) return true
+      if (process.platform === 'darwin' && !event.metaKey && event.button !== 1) return true
+      if (process.platform !== 'darwin' && !event.ctrlKey && event.button !== 1) return true
 
       let cursor = this._instance.coordsChar({ left: event.clientX, top: event.clientY })
       let tokenInfo = this._instance.getTokenAt(cursor)
