@@ -4,6 +4,7 @@
 
 - Fixed an error in the link filtering process that would throw an error when
   you attempted to remove internal links completely upon export
+- Follow zettelkasten links on middle clicks
 
 ## Under the Hood
 
