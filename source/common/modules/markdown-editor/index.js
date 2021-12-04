@@ -742,7 +742,7 @@ module.exports = class MarkdownEditor extends EventEmitter {
   /**
    * Returns the underlying CodeMirror instance
    *
-   * @return  {CodeMirror}  The CodeMirror instance
+   * @return  {CodeMirror.Editor}  The CodeMirror instance
    */
   get codeMirror () {
     return this._instance
