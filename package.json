@@ -99,7 +99,7 @@
     "@types/mocha": "^9.0.0",
     "@types/nspell": "^2.1.1",
     "@types/rimraf": "^3.0.2",
-    "@types/uuid": "^8.3.1",
+    "@types/uuid": "^8.3.3",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "@vercel/webpack-asset-relocator-loader": "^1.7.0",
