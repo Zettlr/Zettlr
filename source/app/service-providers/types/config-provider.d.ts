@@ -146,7 +146,7 @@ interface ConfigOptions {
     leaveAppRunning: boolean
     avoidNewTabs: boolean
     iframeWhitelist: string[]
-    autoUpdate: boolean
+    checkUpdates: boolean
   }
   checkForBeta: boolean
   uuid: string

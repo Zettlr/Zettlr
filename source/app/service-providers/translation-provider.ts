@@ -88,8 +88,8 @@ export default class TranslationProvider {
    * @return {Promise} Resolves if everything worked out, rejects otherwise.
    */
   async init (): Promise<void> {
-    const autoUpdate: boolean = global.config.get('system.autoUpdate')
-    if (!autoUpdate) {
+    const checkUpdates: boolean = global.config.get('system.checkUpdates')
+    if (!checkUpdates) {
       // dont update
       return
     }

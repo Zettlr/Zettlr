@@ -231,7 +231,7 @@ export default function getConfigTemplate (): ConfigOptions {
       leaveAppRunning: false, // Whether to leave app running in the notification area (tray)
       avoidNewTabs: true, // Whether to avoid opening new tabs for documents if possible
       iframeWhitelist: [ 'www.youtube.com', 'player.vimeo.com' ], // Contains a list of whitelisted iFrame prerendering domains
-      autoUpdate: true
+      checkUpdates: true
     },
     checkForBeta: false, // Should the user be notified of beta releases?
     uuid: uuid4() // The app's unique anonymous identifier
