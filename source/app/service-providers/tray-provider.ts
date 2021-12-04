@@ -55,7 +55,12 @@ export default class TrayProvider extends EventEmitter {
 
     global.config.on('update', (option: string) => {
       if (option === 'system.leaveAppRunning') {
-        if (global.config.get('system.leaveAppRunning') === true) {
+        // if this is changed during runtime, also update the override.
+        // this allows for the tray to be disabled during runtime.
+        const state = global.config.get('system.leaveAppRunning')
+        global.config.set('system.leaveAppRunningOverride', state)
+
+        if (global.config.get('system.leaveAppRunning') === true || global.config.get('system.leaveAppRunningOverride')) {
           this._addTray()
         } else {
           this._removeTray()
@@ -107,7 +112,7 @@ export default class TrayProvider extends EventEmitter {
    * @memberof TrayProvider
    */
   private _addTray (): void {
-    const leaveAppRunning = Boolean(global.config.get('system.leaveAppRunning'))
+    const leaveAppRunning = Boolean(global.config.get('system.leaveAppRunning')) || Boolean(global.config.get('system.leaveAppRunningOverride'))
 
     if (!leaveAppRunning) {
       return // No need to add a tray.
