@@ -483,22 +483,35 @@ function hintFunction (cm, opt) {
       // For this database, we must remove the leading colon and also fiddle
       // with the text. So first, let's select everything.
       const insertedLines = completion.text.split('\n')
-      cm.setSelection(
-        { line: autocompleteStart.line, ch: autocompleteStart.ch - 1 },
-        { line: autocompleteStart.line + insertedLines.length - 1, ch: insertedLines[insertedLines.length - 1].length },
-        { scroll: false }
-      )
+      const from = { line: autocompleteStart.line, ch: autocompleteStart.ch - 1 }
+      const to = { line: autocompleteStart.line + insertedLines.length - 1, ch: insertedLines[insertedLines.length - 1].length }
+      // If insertedLines is 1, we have to account for the autocompleteStart.ch
+      if (insertedLines.length === 1) {
+        to.ch += autocompleteStart.ch
+      }
 
       // Then, insert the text, but with all variables replaced and only the
       // tabstops remaining.
       const actualTextToInsert = replaceSnippetVariables(completion.text)
       const actualInsertedLines = actualTextToInsert.split('\n').length
-      cm.replaceSelection(actualTextToInsert)
+      cm.replaceRange(actualTextToInsert, from, to)
+
+      // Now adapt the to to account for added newlines during replacement
+      to.line += actualInsertedLines - insertedLines.length
+
+      // If we are still dealing with just a single line, adapt `to.ch`
+      if (from.line === to.line) {
+        to.ch += actualTextToInsert.split('\n')[actualInsertedLines - 1].length - insertedLines[0].length
+        // Also substract the colon from ch, since that has been replaced above
+        to.ch--
+      } else {
+        to.ch = actualTextToInsert.split('\n')[actualInsertedLines - 1].length
+      }
 
       // Now, we need to mark every tabstop within this section of text and
       // store those text markers so that we can find them again by tabbing
       // through them.
-      currentTabStops = getTabMarkers(cm, autocompleteStart.line, autocompleteStart.line + actualInsertedLines)
+      currentTabStops = getTabMarkers(cm, from, to)
 
       // Now activate our special snippets keymap which will ensure the user can
       // cycle through all placeholders which we have identified.
@@ -527,17 +540,24 @@ function hintFunction (cm, opt) {
  * Creates markers within the CodeMirror instance corresponding to the tabstops
  * and returns the list.
  *
- * @param   {CodeMirror.Editor}  cm    The Editor instance
- * @param   {number}             from  The line from which to begin analysing the text
- * @param   {number}             to    The final line (exclusive) until which to analyse.
+ * @param   {CodeMirror.Editor}    cm    The Editor instance
+ * @param   {CodeMirror.Position}  from  The line from which to begin analysing the text
+ * @param   {CodeMirror.Position}  to    The final line (exclusive) until which to analyse.
  *
  * @return  {TextMarkers[]}            An array of created text markers
  */
 function getTabMarkers (cm, from, to) {
   let tabStops = []
-  for (let i = from; i < to; i++) {
+  for (let i = from.line; i < to.line; i++) {
     let line = cm.getLine(i)
     let match = null
+
+    // Account for when some snippet has been inserted in between some text
+    if (i === from.line && from.ch > 0) {
+      line = line.substr(from.ch)
+    } else if (i === to.line && to.ch < line.length) {
+      line = line.substr(0, to.ch)
+    }
 
     // NOTE: The negative lookbehind
     const varRE = /(?<!\\)\$(\d+)|(?<!\\)\$\{(\d+):(.+?)\}/g
@@ -547,10 +567,10 @@ function getTabMarkers (cm, from, to) {
       const index = parseInt(match[1] || match[2], 10)
       const replaceWith = match[3]
 
-      const from = { line: i, ch: ch }
-      const to = { line: i, ch: ch + match[0].length }
-      cm.setSelection(from, to)
-      cm.replaceSelection((replaceWith !== undefined) ? replaceWith : '')
+      const localFrom = { line: i, ch: ch }
+      const localTo = { line: i, ch: ch + match[0].length }
+      cm.replaceRange((replaceWith !== undefined) ? replaceWith : '', localFrom, localTo)
+
       // After the replacement, we need to "re-get" the line because it has
       // changed now and otherwise the regexp will get confused.
       varRE.lastIndex = ch
@@ -560,8 +580,8 @@ function getTabMarkers (cm, from, to) {
         // In this case, we must replace the marker with the default text
         // and create a TextMarker.
         const marker = cm.markText(
-          from,
-          { line: from.line, ch: from.ch + replaceWith.length },
+          localFrom,
+          { line: localFrom.line, ch: localFrom.ch + replaceWith.length },
           { className: 'tabstop' }
         )
         tabStops.push({ index: index, marker: marker })
@@ -571,7 +591,7 @@ function getTabMarkers (cm, from, to) {
         const elem = document.createElement('span')
         elem.classList.add('tabstop')
         elem.textContent = index
-        const marker = cm.setBookmark(from, { widget: elem })
+        const marker = cm.setBookmark(localFrom, { widget: elem })
         tabStops.push({ index: index, marker: marker })
       }
     }
@@ -600,7 +620,7 @@ function getTabMarkers (cm, from, to) {
   // marker remains.
   tabStops.sort((a, b) => { return a.index - b.index })
   // Now put the 0 to the top (if there is a zero)
-  if (tabStops[0].index === 0) {
+  if (tabStops.length > 0 && tabStops[0].index === 0) {
     tabStops.push(tabStops.shift())
   } else {
     // If there is no zero, we must make sure to add one "pseudo-$0" after the
@@ -608,15 +628,11 @@ function getTabMarkers (cm, from, to) {
     const elem = document.createElement('span')
     elem.classList.add('tabstop')
     elem.textContent = '0'
-    const marker = cm.setBookmark(
-      { line: to - 1, ch: cm.getLine(to - 1).length },
-      { widget: elem }
-    )
+    const marker = cm.setBookmark(to, { widget: elem })
     tabStops.push({ index: 0, markers: [marker] })
   }
 
-  // Make the array marker only
-  return tabStops // .map(elem => elem.marker)
+  return tabStops
 }
 
 /**

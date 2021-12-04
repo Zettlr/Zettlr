@@ -8,6 +8,7 @@
 - Dragging and dropping files (both from the desktop and the sidebar) now always
   inserts relative paths.
 - More reactive updating of the related files section
+- Improvements during insertion of snippets
 
 ## Under the Hood
 
@@ -23,6 +24,8 @@
 - The state is now being instantiated using a function which adds reactivity
 - The modified documents are now updated in such a way that attached watchers
   are notified
+- The snippet insertion process is now much more precise and allows snippets to
+  be inserted at any point within non-empty lines without any quirks
 
 # 2.0.3
 
