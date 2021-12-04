@@ -79,7 +79,8 @@ module.exports = [
     use: {
       loader: 'ts-loader',
       options: {
-        transpileOnly: true
+        transpileOnly: true,
+        appendTsSuffixTo: [/\.vue$/] // Enable ts support in Vue SFCs
       }
     }
   }
