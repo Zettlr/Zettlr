@@ -53,7 +53,7 @@ export default function () {
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.autoUpdate'),
+          label: trans('dialog.preferences.auto_update'),
           model: 'autoUpdate'
         }
       ],
