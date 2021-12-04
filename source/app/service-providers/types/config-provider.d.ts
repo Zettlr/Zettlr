@@ -53,6 +53,7 @@ interface ConfigOptions {
   fileMetaTime: 'modtime'|'creationtime'
   hideDirs: boolean
   sorting: 'natural'|'ascii'
+  sortFoldersFirst: boolean
   sortingTime: 'modtime'|'creationtime'
   muteLines: boolean
   fileManagerMode: 'thin'|'combined'|'expanded'

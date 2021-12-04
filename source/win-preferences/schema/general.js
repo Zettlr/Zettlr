@@ -101,6 +101,13 @@ export default function () {
       ],
       [
         {
+          type: 'checkbox',
+          label: trans('dialog.preferences.sort_folders_first'),
+          model: 'sortFoldersFirst'
+        }
+      ],
+      [
+        {
           type: 'radio',
           label: trans('dialog.preferences.sorting_time_explanation'),
           model: 'sortingTime',
