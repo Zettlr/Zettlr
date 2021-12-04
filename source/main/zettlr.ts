@@ -360,7 +360,7 @@ export default class Zettlr {
     await this._documentManager.init()
 
     // Finally, initiate a first check for updates
-    const autoUpdate: boolean = global.config.get('autoUpdate')
+    const autoUpdate: boolean = global.config.get('system.autoUpdate')
     if (autoUpdate) {
       await global.updates.check()
 

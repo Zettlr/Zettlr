@@ -45,7 +45,6 @@ interface ConfigOptions {
   }
   attachmentExtensions: string[]
   darkMode: boolean
-  autoUpdate: boolean
   alwaysReloadFiles: boolean
   autoDarkMode: 'off'|'system'|'schedule'|'auto'
   autoDarkModeStart: string
@@ -147,6 +146,7 @@ interface ConfigOptions {
     leaveAppRunning: boolean
     avoidNewTabs: boolean
     iframeWhitelist: string[]
+    autoUpdate: boolean
   }
   checkForBeta: boolean
   uuid: string

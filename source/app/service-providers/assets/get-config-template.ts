@@ -66,7 +66,6 @@ export default function getConfigTemplate (): ConfigOptions {
     attachmentExtensions: ATTACHMENT_EXTENSIONS,
     // UI related options
     darkMode: false,
-    autoUpdate: true,
     alwaysReloadFiles: false, // Should Zettlr automatically load remote changes?
     autoDarkMode: 'off', // Possible values: 'off', 'system', 'schedule', 'auto'
     autoDarkModeStart: '22:00', // Switch into dark mode at this time
@@ -231,7 +230,8 @@ export default function getConfigTemplate (): ConfigOptions {
       deleteOnFail: false, // Whether to delete files if trashing them fails
       leaveAppRunning: false, // Whether to leave app running in the notification area (tray)
       avoidNewTabs: true, // Whether to avoid opening new tabs for documents if possible
-      iframeWhitelist: [ 'www.youtube.com', 'player.vimeo.com' ] // Contains a list of whitelisted iFrame prerendering domains
+      iframeWhitelist: [ 'www.youtube.com', 'player.vimeo.com' ], // Contains a list of whitelisted iFrame prerendering domains
+      autoUpdate: true
     },
     checkForBeta: false, // Should the user be notified of beta releases?
     uuid: uuid4() // The app's unique anonymous identifier
