@@ -230,6 +230,7 @@ export default function getConfigTemplate (): ConfigOptions {
     system: {
       deleteOnFail: false, // Whether to delete files if trashing them fails
       leaveAppRunning: false, // Whether to leave app running in the notification area (tray)
+      leaveAppRunningOverride: false, // Whether to leave app running in the notification area (tray)
       avoidNewTabs: true, // Whether to avoid opening new tabs for documents if possible
       iframeWhitelist: [ 'www.youtube.com', 'player.vimeo.com' ] // Contains a list of whitelisted iFrame prerendering domains
     },
