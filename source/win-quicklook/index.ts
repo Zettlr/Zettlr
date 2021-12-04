@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 import windowRegister from '../common/modules/window-register'
 // import { ToolbarControl } from '../common/modules/window-register/register-toolbar'
@@ -24,6 +24,8 @@ const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
 // The first thing we have to do is run the window controller
 windowRegister()
+
+const app = createApp(App).mount('#app')
 
 // This window will be closed immediately on a window-close command
 ipcRenderer.on('shortcut', (event, shortcut) => {
@@ -41,9 +43,6 @@ ipcRenderer.on('config-provider', (event, message) => {
     }
   }
 })
-
-const app = new Vue(App)
-app.$mount('#app')
 
 // Finally, pass the correct file to the application to view
 const searchParams = new URLSearchParams(window.location.search)

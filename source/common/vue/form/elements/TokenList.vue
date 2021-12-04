@@ -5,7 +5,7 @@
     <!-- Else: Normal input w/o reset button -->
     <div class="token-list" v-on:click="$refs.input.focus()">
       <span
-        v-for="(token, idx) in value"
+        v-for="(token, idx) in modelValue"
         v-bind:key="idx"
         class="token"
         v-on:click="removeToken(idx)"
@@ -42,7 +42,7 @@
 export default {
   name: 'TokenList',
   props: {
-    value: {
+    modelValue: {
       type: Array,
       default: function () { return [] }
     },
@@ -55,6 +55,7 @@ export default {
       default: ''
     }
   },
+  emits: ['update:modelValue'],
   data: function () {
     return {
       inputValue: ''
@@ -77,18 +78,18 @@ export default {
 
       event.preventDefault()
 
-      const arr = this.value.map(token => token)
+      const arr = this.modelValue.map(token => token)
       // Don't add duplicates
       if (arr.includes(this.inputValue.trim()) === false) {
         arr.push(this.inputValue.trim())
-        this.$emit('input', arr)
+        this.$emit('update:modelValue', arr)
       }
       this.inputValue = ''
     },
     removeToken: function (idx) {
-      const arr = this.value.map(token => token)
+      const arr = this.modelValue.map(token => token)
       arr.splice(idx, 1)
-      this.$emit('input', arr)
+      this.$emit('update:modelValue', arr)
     }
   }
 }

@@ -52,6 +52,7 @@ export default {
       default: function () { return [] }
     }
   },
+  emits: ['click'],
   data: function () {
     return {
     }

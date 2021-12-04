@@ -31,6 +31,15 @@ import 'codemirror/addon/mode/overlay'
 import { trans } from '../i18n-renderer'
 
 /**
+ * We have to define the CodeMirror instance outside of Vue, since the Proxy-
+ * fication messes with CodeMirror. Thus, we must prevent it from falling prey
+ * to Vue's proxy
+ *
+ * @var {CodeMirror.Editor}
+ */
+let cmInstance = null
+
+/**
  * Define a snippets mode that extends the GFM mode with TextMate syntax.
  *
  * @param  {Object}       config     The original mode config
@@ -168,7 +177,7 @@ function maybeOpenLink (event) {
 export default {
   name: 'CodeEditor',
   props: {
-    value: {
+    modelValue: {
       type: String,
       default: ''
     },
@@ -181,29 +190,30 @@ export default {
       default: false
     }
   },
+  emits: ['update:modelValue'],
   data: function () {
     return {
       cmInstance: null
     }
   },
   watch: {
-    value: function () {
-      if (this.cmInstance !== null) {
-        const cur = Object.assign({}, this.cmInstance.getCursor())
-        this.cmInstance.setValue(this.value)
-        this.cmInstance.setCursor(cur)
+    modelValue: function () {
+      if (cmInstance !== null) {
+        const cur = Object.assign({}, cmInstance.getCursor())
+        cmInstance.setValue(this.modelValue)
+        cmInstance.setCursor(cur)
       }
     },
     readonly: function () {
       if (this.readonly === true) {
-        this.cmInstance.setOption('readOnly', 'nocursor')
+        cmInstance.setOption('readOnly', 'nocursor')
       } else {
-        this.cmInstance.setOption('readOnly', false)
+        cmInstance.setOption('readOnly', false)
       }
     }
   },
   mounted: function () {
-    this.cmInstance = CodeMirror.fromTextArea(this.$refs['editor'], {
+    cmInstance = CodeMirror.fromTextArea(this.$refs['editor'], {
       lineNumbers: true,
       theme: 'code-editor',
       mode: this.mode,
@@ -219,30 +229,30 @@ export default {
       }
     })
 
-    this.cmInstance.setValue(this.value)
+    cmInstance.setValue(this.modelValue)
 
-    this.cmInstance.on('change', (event, changeObj) => {
-      this.$emit('input', this.cmInstance.getValue())
+    cmInstance.on('change', (event, changeObj) => {
+      this.$emit('update:modelValue', cmInstance.getValue())
     })
 
     // Detect links inside the source code and listen for clicks on these.
-    this.cmInstance.on('cursorActivity', markLinks)
-    this.cmInstance.getWrapperElement().addEventListener('mousedown', maybeOpenLink)
+    cmInstance.on('cursorActivity', markLinks)
+    cmInstance.getWrapperElement().addEventListener('mousedown', maybeOpenLink)
   },
-  beforeDestroy: function () {
-    const cmWrapper = this.cmInstance.getWrapperElement()
+  beforeUnmount: function () {
+    const cmWrapper = cmInstance.getWrapperElement()
     // "Remove this from your tree to delete an editor instance."
     cmWrapper.parentNode.removeChild(cmWrapper)
   },
   methods: {
     setValue: function (newContents) {
-      this.cmInstance.setValue(newContents)
+      cmInstance.setValue(newContents)
     },
     isClean: function () {
-      return this.cmInstance.isClean()
+      return cmInstance.isClean()
     },
     markClean: function () {
-      this.cmInstance.markClean()
+      cmInstance.markClean()
     }
   }
 }

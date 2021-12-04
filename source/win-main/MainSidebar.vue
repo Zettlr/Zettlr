@@ -79,9 +79,8 @@
     >
       <!-- References -->
       <h1>{{ referencesLabel }}</h1>
-      <div v-html="referenceHTML">
-        <!-- Will contain the actual HTML -->
-      </div>
+      <!-- Will contain the actual HTML -->
+      <div v-html="referenceHTML"></div>
     </div>
     <div
       v-if="currentTab === 'toc'"
@@ -179,7 +178,7 @@ export default {
           icon: 'attachment',
           id: 'attachments',
           target: 'sidebar-files',
-          label: this.attachmentsLabel
+          label: this.otherFilesLabel
         }
       ]
     },
@@ -253,14 +252,20 @@ export default {
       }
     })
 
-    this.updateReferences()
+    try {
+      this.updateReferences()
+    } catch (err) {
+      console.error(err)
+    }
     this.updateRelatedFiles()
   },
   methods: {
     updateReferences: function () {
+      // NOTE We're manually cloning the citationKeys array, since Proxies
+      // cannot be cloned to be sent across the IPC bridge
       ipcRenderer.invoke('citeproc-provider', {
         command: 'get-bibliography',
-        payload: this.citationKeys
+        payload: this.citationKeys.map(e => e)
       })
         .then(bibliography => {
           this.bibContents = bibliography
@@ -275,7 +280,7 @@ export default {
 
       ipcRenderer.invoke('tag-provider', {
         command: 'recommend-matching-files',
-        payload: this.activeFile.tags
+        payload: this.activeFile.tags.map(tag => tag) // De-proxy
       })
         .then(recommendations => {
           // Recommendations come in the form of [file: string]: string[]

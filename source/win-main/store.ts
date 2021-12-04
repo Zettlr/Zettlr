@@ -14,13 +14,11 @@
  * END HEADER
  */
 
-import Vue from 'vue'
-import Vuex, { Store, StoreOptions } from 'vuex'
-// import isAttachment from '../common/util/is-attachment'
+import { StoreOptions } from 'vuex'
 import sanitizeHtml from 'sanitize-html'
 import md2html from '../common/util/md-to-html'
 import sort from '../main/modules/fsal/util/sort'
-import { MDFileMeta, CodeFileMeta, DirMeta } from '../main/modules/fsal/types'
+import { DirMeta } from '../main/modules/fsal/types'
 
 const path = (window as any).path
 const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
@@ -29,19 +27,6 @@ interface FSALEvent {
   event: 'remove'|'add'|'change'
   path: string
   timestamp: number
-}
-
-// This interface is being produced by the MarkdownEditor module in source/common
-interface DocumentInfo {
-  words: number
-  chars: number
-  chars_wo_spaces: number
-  cursor: { ch: number, line: number }
-  selections: Array<{
-    selectionLength: number
-    start: { ch: number, line: number }
-    end: { ch: number, line: number }
-  }>
 }
 
 function isAttachment (p: string): boolean {
@@ -176,70 +161,6 @@ function configToArrayMapper (config: any): any {
   return arr
 }
 
-/**
- * What stuff do we need in our state? This interface defines everything.
- */
-interface ZettlrState {
-  /**
-   * Contains the full file tree that is loaded into the app
-   */
-  fileTree: Array<MDFileMeta|CodeFileMeta|DirMeta>
-  /**
-   * Contains the last update timestamp from main
-   */
-  lastFiletreeUpdate: number
-  /**
-   * Contains the currently selected directory
-   */
-  selectedDirectory: any|null
-  /**
-   * Contains the currently active File in the editor
-   */
-  activeFile: any|null
-  /**
-   * Contains all open files in the editor
-   */
-  openFiles: any[]
-  /**
-   * Contains coloured tags that can be managed in the tag manager
-   */
-  colouredTags: any[]
-  /**
-   * Contains all tags across all files loaded into Zettlr
-   */
-  tagDatabase: any[]
-  /**
-   * Contains a list of suggested tags for the current active file.
-   */
-  tagSuggestions: string[]
-  /**
-   * Holds all configuration options. These need to be stored here separately
-   * to make use of the reactivity of Vue. We'll basically be binding the config
-   * listener to this store state. It's basically a dictionary for quick access.
-   */
-  config: any
-  /**
-   * Info about the currently active document
-   */
-  activeDocumentInfo: DocumentInfo|null
-  /**
-   * Modified files are stored here (only the paths, though)
-   */
-  modifiedDocuments: string[]
-  /**
-   * Contains the current table of contents of the active document
-   */
-  tableOfContents: any|null
-  /**
-   * Citation keys to be found within the current document
-   */
-  citationKeys: string[]
-  /**
-   * All CSL items available in the currently loaded database
-   */
-  cslItems: any[]
-}
-
 const config: StoreOptions<ZettlrState> = {
   state: {
     fileTree: [],
@@ -281,7 +202,7 @@ const config: StoreOptions<ZettlrState> = {
         state.modifiedDocuments.push(filePath)
         ipcRenderer.invoke('application', {
           command: 'update-modified-files',
-          payload: state.modifiedDocuments
+          payload: state.modifiedDocuments.map(e => e) // Manually clone the Proxy
         })
           .catch(e => console.error(e))
       } else if (isClean === true && pathIndex > -1) {
@@ -289,19 +210,16 @@ const config: StoreOptions<ZettlrState> = {
         state.modifiedDocuments.splice(pathIndex, 1)
         ipcRenderer.invoke('application', {
           command: 'update-modified-files',
-          payload: state.modifiedDocuments
+          payload: state.modifiedDocuments.map(e => e) // Manually clone the Proxy
         })
           .catch(e => console.error(e))
       }
     },
     activeDocumentInfo: function (state, info) {
-      Vue.set(state, 'activeDocumentInfo', info)
+      state.activeDocumentInfo = info
     },
     updateConfig: function (state, option) {
-      // Here the same caveat as below applies, we cannot directly set dynamic
-      // properties without losing Vue's reactivity, so we have to explicitly
-      // preserve reactivity by using Vue.set for this.
-      Vue.set(state.config, option, global.config.get(option))
+      state.config[option] = global.config.get(option)
     },
     addToFiletree: function (state, descriptor) {
       if (descriptor.parent == null && !state.fileTree.includes(descriptor)) {
@@ -310,7 +228,6 @@ const config: StoreOptions<ZettlrState> = {
           reconstructTree(descriptor)
         }
         state.fileTree.push(descriptor)
-        // @ts-expect-error sort() doesn't expect meta descriptors.
         state.fileTree = sort(state.fileTree) // Omit sorting to sort name-up
       } else if (descriptor.parent != null) {
         const parentPath = descriptor.dir
@@ -343,7 +260,7 @@ const config: StoreOptions<ZettlrState> = {
           })
         } else {
           parentDescriptor.children.push(descriptor)
-          Vue.set(parentDescriptor, 'children', sort(parentDescriptor.children, parentDescriptor.sorting))
+          parentDescriptor.children = sort(parentDescriptor.children, parentDescriptor.sorting)
         }
       } else {
         // NOTE: This is just in case we accidentally introduce a race condition.
@@ -403,10 +320,10 @@ const config: StoreOptions<ZettlrState> = {
       // sure to simply re-sort it in case the sorting has changed.
       // If we have a file, update the parent instead.
       if (ownDescriptor.type === 'directory') {
-        Vue.set(ownDescriptor, 'children', sort(ownDescriptor.children, ownDescriptor.sorting))
+        ownDescriptor.children = sort(ownDescriptor.children, ownDescriptor.sorting)
       } else if (ownDescriptor.type === 'file' && ownDescriptor.parent != null) {
         const parentDescriptor = ownDescriptor.parent
-        Vue.set(parentDescriptor, 'children', sort(parentDescriptor.children, parentDescriptor.sorting))
+        ownDescriptor.children = sort(parentDescriptor.children, parentDescriptor.sorting)
       }
     },
     lastFiletreeUpdate: function (state, payload) {
@@ -427,7 +344,7 @@ const config: StoreOptions<ZettlrState> = {
       state.activeFile = descriptor
     },
     updateOpenFiles: function (state, openFiles) {
-      Vue.set(state, 'openFiles', openFiles)
+      state.openFiles = openFiles
     },
     colouredTags: function (state, tags) {
       state.colouredTags = tags
@@ -564,9 +481,9 @@ const config: StoreOptions<ZettlrState> = {
 }
 
 // Make the Vuex-Store the default export
-export default function (): Store<ZettlrState> {
+export default function (): StoreOptions<ZettlrState> {
   // Somehow this will otherwise say "config is possibly undefined", which is
   // weird. Maybe we can instantiate the store in a better way.
   (config as any).state.config = configToArrayMapper(global.config.get())
-  return new Vuex.Store(config)
+  return config
 }

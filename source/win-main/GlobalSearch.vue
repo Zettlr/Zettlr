@@ -133,6 +133,7 @@ export default {
     ButtonControl,
     AutocompleteText
   },
+  emits: ['jtl'],
   data: function () {
     return {
       // The current search
@@ -406,6 +407,7 @@ export default {
     },
     singleSearchRun: async function () {
       // Take the file to be searched ...
+      const terms = compileSearchTerms(this.query)
       while (this.filesToSearch.length > 0) {
         const fileToSearch = this.filesToSearch.shift()
         // Now start the search
@@ -413,7 +415,7 @@ export default {
           command: 'file-search',
           payload: {
             path: fileToSearch.path,
-            terms: this.compiledTerms
+            terms: terms
           }
         })
         if (result.length > 0) {
@@ -494,8 +496,12 @@ export default {
           }
         })
           .then(() => {
-            // As soon as the file becomes active, jump to that line
-            this.jtlIntent = lineNumber
+            // As soon as the file becomes active, jump to that line. But only
+            // if it's >= 0. If lineNumber === -1 it means just the file should
+            // be open.
+            if (lineNumber >= 0) {
+              this.jtlIntent = lineNumber
+            }
           })
           .catch(e => console.error(e))
       } else {

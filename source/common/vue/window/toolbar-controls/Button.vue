@@ -7,7 +7,6 @@
         [control.buttonClass]: control.buttonClass !== undefined
       }"
       v-bind:title="titleWithFallback"
-      v-on:click="$emit('click')"
     >
       <clr-icon
         v-if="control.icon"

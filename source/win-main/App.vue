@@ -89,6 +89,7 @@ import PopoverDocInfo from './PopoverDocInfo'
 import { trans } from '../common/i18n-renderer'
 import localiseNumber from '../common/util/localise-number'
 import generateId from '../common/util/generate-id'
+import { nextTick } from 'vue'
 
 // Import the sound effects for the pomodoro timer
 import glassFile from './assets/glass.wav'
@@ -401,9 +402,9 @@ export default {
         this.mainSplitViewVisibleComponent = 'globalSearch'
         // Focus input
         if (this.$refs['global-search'] !== undefined) {
-          this.$nextTick(() => {
-            this.$refs['global-search'].focusQueryInput()
-          })
+          nextTick()
+            .then(() => { this.$refs['global-search'].focusQueryInput() })
+            .catch(err => console.error(err))
         }
       } else if (shortcut === 'toggle-file-manager') {
         if (this.fileManagerVisible === true && this.mainSplitViewVisibleComponent === 'fileManager') {
@@ -452,10 +453,12 @@ export default {
     startGlobalSearch: function (terms) {
       this.mainSplitViewVisibleComponent = 'globalSearch'
       this.fileManagerVisible = true
-      this.$nextTick(() => {
-        this.$refs['global-search'].$data.query = terms
-        this.$refs['global-search'].startSearch()
-      })
+      nextTick()
+        .then(() => {
+          this.$refs['global-search'].$data.query = terms
+          this.$refs['global-search'].startSearch()
+        })
+        .catch(err => console.error(err))
     },
     toggleFileList: function () {
       // This event can be used by various components to ask the file manager to
@@ -693,6 +696,12 @@ export default {
       }
       this.$togglePopover(PopoverExport, document.getElementById('toolbar-export'), data, (data) => {
         if (data.shouldExport === true) {
+          // Remember to de-proxy any non-primitive data types so that they can
+          // be sent over the IPC pipe
+          const options = {}
+          for (const key in data.formatOptions) {
+            options[key] = data.formatOptions[key]
+          }
           // Remember the last choice
           global.config.set('export.singleFileLastExporter', data.format)
           // Run the exporter
@@ -700,7 +709,7 @@ export default {
             command: 'export',
             payload: {
               format: data.format,
-              options: data.formatOptions,
+              options: options,
               exportTo: data.exportTo,
               file: this.$store.state.activeFile.path
             }

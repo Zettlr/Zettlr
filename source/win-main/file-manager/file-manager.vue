@@ -86,6 +86,8 @@ import FileTree from './file-tree.vue'
 import FileList from './file-list.vue'
 import { trans } from '../../common/i18n-renderer'
 
+import { nextTick } from 'vue'
+
 const ipcRenderer = window.ipc
 
 export default {
@@ -188,9 +190,9 @@ export default {
         // Focus the filter on the next tick. Why? Because it might be that
         // the file manager is hidden, or the global search is visible. In both
         // cases we need to wait for the app to display the file manager.
-        this.$nextTick(() => {
-          this.$refs['quickFilter'].focus()
-        })
+        nextTick()
+          .then(() => { this.$refs['quickFilter'].focus() })
+          .catch(err => console.error(err))
       }
     })
   },

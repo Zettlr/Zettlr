@@ -48,7 +48,6 @@
 import RadioControl from '../common/vue/form/elements/Radio'
 import SelectControl from '../common/vue/form/elements/Select'
 import Form from '../common/vue/form/Form'
-import Vue from 'vue'
 
 const ipcRenderer = window.ipc
 
@@ -104,7 +103,7 @@ export default {
       for (const info of this.exporterInfo) {
         if (this.format in info.formats) {
           for (const option of info.options) {
-            Vue.set(this.currentOptions, option.model, option.initialValue)
+            this.currentOptions[option.model] = option.initialValue
           }
         }
       }
@@ -134,7 +133,7 @@ export default {
       this.shouldExport = true
     },
     handleInput: function (prop, val) {
-      Vue.set(this.currentOptions, prop, val)
+      this.currentOptions[prop] = val
     }
   }
 }

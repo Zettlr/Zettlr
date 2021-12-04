@@ -61,6 +61,7 @@ export default {
       default: function () { return {} }
     }
   },
+  emits: ['toggle'],
   data: function () {
     return {
       activeState: this.control.initialState

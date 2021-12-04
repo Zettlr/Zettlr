@@ -1,4 +1,4 @@
-# 2.0.4
+# 2.1.0
 
 ## GUI and Functionality
 
@@ -15,6 +15,7 @@
 - Fix a whole bunch of linter warnings
 - Remove the custom event system (`$on`, `$off`, and `$once`) in preparation for
   Vue 3
+- Switched to Vue 3 (incl. Vuex 4, vue-loader 16, vue-virtual-scroller 2)
 
 # 2.0.3
 

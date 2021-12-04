@@ -37,6 +37,7 @@
 
 import LogMessage from './LogMessage.vue'
 import WindowChrome from '../common/vue/window/Chrome.vue'
+import { nextTick } from 'vue'
 
 const ipcRenderer = window.ipc
 
@@ -158,9 +159,8 @@ export default {
       this.messages = this.messages.concat(newLogs)
       // Vue will update itself only on the next tick, so let's await that
       if (shouldScroll === true) {
-        this.$nextTick(() => {
-          this.scrollToBottom()
-        })
+        await nextTick()
+        this.scrollToBottom()
       }
     },
     /**

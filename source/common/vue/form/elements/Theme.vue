@@ -99,6 +99,7 @@ export default {
       required: true
     }
   },
+  emits: ['update:modelValue'],
   computed: {
     selectedLabel: function () {
       return trans('dialog.preferences.theme.selected_label')
@@ -112,7 +113,7 @@ export default {
       return `color: ${themeObject.textColor}; border-color: ${themeObject.textColor}; background-color: ${themeObject.backgroundColor}; font-family: ${themeObject.fontFamily}`
     },
     selectTheme: function (themeName) {
-      this.$emit('input', themeName)
+      this.$emit('update:modelValue', themeName)
     }
   }
 }

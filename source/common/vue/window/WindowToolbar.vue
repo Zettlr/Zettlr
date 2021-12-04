@@ -44,7 +44,7 @@
         v-bind:key="idx"
         v-bind:control="item"
         v-bind:show-label="showLabels"
-        v-on:input="$emit('search', $event)"
+        v-on:update:modelValue="$emit('search', $event)"
       ></SearchControl>
       <SpacerControl
         v-if="item.type === 'spacer'"
@@ -111,6 +111,7 @@ export default {
       default: false
     }
   },
+  emits: [ 'click', 'dblclick', 'toggle', 'search' ],
   data: function () {
     return {
       hasRTLTrafficLights: false

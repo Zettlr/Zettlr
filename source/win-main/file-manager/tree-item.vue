@@ -130,6 +130,8 @@ import itemMixin from './util/item-mixin'
 import generateFilename from '../../common/util/generate-filename'
 import { trans } from '../../common/i18n-renderer'
 
+import { nextTick } from 'vue'
+
 const path = window.path
 const ipcRenderer = window.ipc
 
@@ -277,7 +279,7 @@ export default {
     },
     operationType: function (newVal, oldVal) {
       if (newVal !== undefined) {
-        this.$nextTick(() => {
+        nextTick().then(() => {
           if (this.operationType === 'createFile') {
             // If we're generating a file, generate a filename
             this.$refs['new-object-input'].value = generateFilename()
@@ -292,6 +294,7 @@ export default {
             this.$refs['new-object-input'].value.lastIndexOf('.')
           )
         })
+          .catch(err => console.error(err))
       }
     }
   },

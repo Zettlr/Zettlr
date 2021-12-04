@@ -43,6 +43,7 @@ export default {
       default: false
     }
   },
+  emits: ['toggle'],
   data: function () {
     return {
       isActive: this.control.initialState === 'active'
