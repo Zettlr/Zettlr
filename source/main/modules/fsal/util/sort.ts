@@ -74,6 +74,7 @@ export default function (
   // Return sorted array files -> directories
   if (global.config.get('sortFoldersFirst')) {
     return ret.concat(d).concat(f)
+  } else {
+    return ret.concat(f).concat(d)
   }
-  return ret.concat(f).concat(d)
 }

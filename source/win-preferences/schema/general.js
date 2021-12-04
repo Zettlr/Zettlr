@@ -102,7 +102,7 @@ export default function () {
       [
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.sortFoldersFirst'),
+          label: trans('dialog.preferences.sort_folders_first'),
           model: 'sortFoldersFirst'
         }
       ],
