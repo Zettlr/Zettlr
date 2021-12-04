@@ -118,6 +118,8 @@ export default class WindowManager extends EventEmitter {
         this.showMainWindow()
         if (process.argv.includes('--tray')) {
           global.config.set('system.leaveAppRunningOverride', true)
+        }
+        if (global.config.get('system.leaveAppRunningOverride')) {
           global.tray.add()
           this.getMainWindow()?.hide()
         }
