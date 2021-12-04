@@ -245,7 +245,7 @@ module.exports = {
   'getImageFileRE': function (multiline = false) {
     let flag = (multiline) ? 'm' : ''
     return RegExp(
-      /(\.jpg|\.jpeg|\.png|\.gif|\.svg|\.tiff|\.tif)$/.source,
+      /(\.jpg|\.jpeg|\.png|\.gif|\.svg|\.tiff?)$/.source,
       // Necessary flags + optional multiline flag
       'i' + flag
     )

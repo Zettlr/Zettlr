@@ -129,16 +129,6 @@ import TabBar from '../common/vue/TabBar'
 const path = window.path
 const ipcRenderer = window.ipc
 
-const FILETYPES_IMG = [
-  '.jpg',
-  '.jpeg',
-  '.svg',
-  '.gif',
-  '.png',
-  '.tiff',
-  '.tif'
-]
-
 export default {
   name: 'MainSidebar',
   components: {
@@ -306,18 +296,15 @@ export default {
         return ''
       }
     },
+    /**
+     * Adds additional data to the dragevent
+     *
+     * @param   {DragEvent}  event           The drag event
+     * @param   {string}  attachmentPath  The path to add as a file
+     */
     handleDragStart: function (event, attachmentPath) {
-      // When dragging files from here onto the editor instance, users want
-      // to have the appropriate link placed automatically, that is: images
-      // should be wrapped in appropriate image tags, whereas documents
-      // should be linked to enable click & open. We have to do this on
-      // this end, because when trying to override data during drop it
-      // won't work.
-      const ext = path.extname(attachmentPath).toLowerCase()
-      const basename = path.basename(attachmentPath)
-      const uri = decodeURIComponent(attachmentPath)
-      const data = FILETYPES_IMG.includes(ext) ? `![${basename}](${uri})` : `[${basename}](${uri})`
-      event.dataTransfer.setData('text', data)
+      // Indicate with custom data that this is a file from the sidebar
+      event.dataTransfer.setData('text/x-zettlr-other-file', attachmentPath)
     },
     requestFile: function (event, filePath) {
       ipcRenderer.invoke('application', {

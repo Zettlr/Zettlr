@@ -5,6 +5,8 @@
 - Fixed an error in the link filtering process that would throw an error when
   you attempted to remove internal links completely upon export
 - Fixed `Cmd/Ctrl-Click`-behavior on footnotes
+- Dragging and dropping files (both from the desktop and the sidebar) now always
+  inserts relative paths.
 
 ## Under the Hood
 
