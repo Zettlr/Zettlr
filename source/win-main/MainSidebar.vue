@@ -204,6 +204,9 @@ export default {
     activeFile: function () {
       return this.$store.state.activeFile
     },
+    modifiedFiles: function () {
+      return this.$store.state.modifiedDocuments
+    },
     tableOfContents: function () {
       return this.$store.state.tableOfContents
     },
@@ -233,6 +236,18 @@ export default {
     },
     activeFile: function () {
       this.updateRelatedFiles()
+    },
+    modifiedFiles: function () {
+      if (this.activeFile == null) {
+        return
+      }
+
+      // Update the related files when the current document is not modified to
+      // immediately account for any changes in the related files.
+      const activePath = this.activeFile.path
+      if (!(activePath in this.modifiedFiles)) {
+        this.updateRelatedFiles()
+      }
     }
   },
   mounted: function () {

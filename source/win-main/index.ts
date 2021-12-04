@@ -14,9 +14,9 @@
 
 import windowRegister from '../common/modules/window-register'
 import { createApp } from 'vue'
-import { createStore } from 'vuex'
+// import { createStore } from 'vuex'
 import App from './App.vue'
-import getStoreConfig from './store'
+import createStore from './store'
 import PopupProvider from './popup-provider'
 
 const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
@@ -24,8 +24,7 @@ const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 // The first thing we have to do is run the window controller
 windowRegister()
 
-const storeConfig = getStoreConfig()
-const appStore = createStore(storeConfig)
+const appStore = createStore()
 
 // Create the Vue app. We additionally use appStore, which exposes $store, and
 // PopupProvider, which exposes $showPopover, $togglePopover, and $closePopover

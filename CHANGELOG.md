@@ -7,6 +7,7 @@
 - Fixed `Cmd/Ctrl-Click`-behavior on footnotes
 - Dragging and dropping files (both from the desktop and the sidebar) now always
   inserts relative paths.
+- More reactive updating of the related files section
 
 ## Under the Hood
 
@@ -19,6 +20,9 @@
 - Remove the custom event system (`$on`, `$off`, and `$once`) in preparation for
   Vue 3
 - Switched to Vue 3 (incl. Vuex 4, vue-loader 16, vue-virtual-scroller 2)
+- The state is now being instantiated using a function which adds reactivity
+- The modified documents are now updated in such a way that attached watchers
+  are notified
 
 # 2.0.3
 

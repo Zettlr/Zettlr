@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-import { StoreOptions } from 'vuex'
+import { StoreOptions, createStore, Store } from 'vuex'
 import sanitizeHtml from 'sanitize-html'
 import md2html from '../common/util/md-to-html'
 import sort from '../main/modules/fsal/util/sort'
@@ -162,21 +162,23 @@ function configToArrayMapper (config: any): any {
 }
 
 const config: StoreOptions<ZettlrState> = {
-  state: {
-    fileTree: [],
-    lastFiletreeUpdate: 0,
-    selectedDirectory: null,
-    activeFile: null,
-    openFiles: [],
-    colouredTags: [],
-    tagDatabase: [],
-    tagSuggestions: [],
-    config: {},
-    activeDocumentInfo: null,
-    modifiedDocuments: [],
-    tableOfContents: null,
-    citationKeys: [],
-    cslItems: []
+  state () {
+    return {
+      fileTree: [],
+      lastFiletreeUpdate: 0,
+      selectedDirectory: null,
+      activeFile: null,
+      openFiles: [],
+      colouredTags: [],
+      tagDatabase: [],
+      tagSuggestions: [],
+      config: configToArrayMapper(global.config.get()),
+      activeDocumentInfo: null,
+      modifiedDocuments: [],
+      tableOfContents: null,
+      citationKeys: [],
+      cslItems: []
+    }
   },
   getters: {
     file: state => (filePath: string, searchAttachments = false) => {
@@ -196,23 +198,31 @@ const config: StoreOptions<ZettlrState> = {
     },
     announceModifiedFile: function (state, payload) {
       const { filePath, isClean } = payload
-      const pathIndex = state.modifiedDocuments.findIndex(e => e === filePath)
+      // Since Proxies cannot intercept push and splice operations, we have to
+      // re-assign the modifiedDocuments if a change occurred, so that attached
+      // watchers are notified of this. An added benefit is that we can already
+      // de-proxy the array here to send it across the IPC bridge.
+      const newModifiedDocuments = state.modifiedDocuments.map(e => e)
+      const pathIndex = newModifiedDocuments.findIndex(e => e === filePath)
+
       if (isClean === false && pathIndex === -1) {
         // Add the path if not already done
-        state.modifiedDocuments.push(filePath)
+        newModifiedDocuments.push(filePath)
         ipcRenderer.invoke('application', {
           command: 'update-modified-files',
-          payload: state.modifiedDocuments.map(e => e) // Manually clone the Proxy
+          payload: newModifiedDocuments
         })
           .catch(e => console.error(e))
+        state.modifiedDocuments = newModifiedDocuments
       } else if (isClean === true && pathIndex > -1) {
         // Remove the path if in array
-        state.modifiedDocuments.splice(pathIndex, 1)
+        newModifiedDocuments.splice(pathIndex, 1)
         ipcRenderer.invoke('application', {
           command: 'update-modified-files',
-          payload: state.modifiedDocuments.map(e => e) // Manually clone the Proxy
+          payload: newModifiedDocuments
         })
           .catch(e => console.error(e))
+        state.modifiedDocuments = newModifiedDocuments
       }
     },
     activeDocumentInfo: function (state, info) {
@@ -477,9 +487,6 @@ const config: StoreOptions<ZettlrState> = {
 }
 
 // Make the Vuex-Store the default export
-export default function (): StoreOptions<ZettlrState> {
-  // Somehow this will otherwise say "config is possibly undefined", which is
-  // weird. Maybe we can instantiate the store in a better way.
-  (config as any).state.config = configToArrayMapper(global.config.get())
-  return config
+export default function (): Store<ZettlrState> {
+  return createStore(config)
 }
