@@ -323,7 +323,7 @@ const config: StoreOptions<ZettlrState> = {
         ownDescriptor.children = sort(ownDescriptor.children, ownDescriptor.sorting)
       } else if (ownDescriptor.type === 'file' && ownDescriptor.parent != null) {
         const parentDescriptor = ownDescriptor.parent
-        ownDescriptor.children = sort(parentDescriptor.children, parentDescriptor.sorting)
+        parentDescriptor.children = sort(parentDescriptor.children, parentDescriptor.sorting)
       }
     },
     lastFiletreeUpdate: function (state, payload) {
