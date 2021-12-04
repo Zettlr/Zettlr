@@ -44,13 +44,13 @@
               <!-- We are currently editing this cell -->
               <Checkbox
                 v-if="typeof column === 'boolean'"
-                v-bind:value="column"
-                v-on:input="handleInput(idx, colIdx, $event)"
+                v-bind:model-value="column"
+                v-on:update:model-value="handleInput(idx, colIdx, $event)"
               >
               </Checkbox>
               <NumberControl
                 v-else-if="typeof column === 'number'"
-                v-bind:value="column"
+                v-bind:model-value="column"
                 v-on:escape="finishEditing()"
                 v-on:blur="handleInput(idx, colIdx, $event)"
                 v-on:confirm="handleInput(idx, colIdx, $event)"
@@ -58,7 +58,7 @@
               </NumberControl>
               <TextControl
                 v-else
-                v-bind:value="column"
+                v-bind:model-value="column"
                 v-on:escape="finishEditing()"
                 v-on:blur="handleInput(idx, colIdx, $event)"
                 v-on:confirm="handleInput(idx, colIdx, $event)"
@@ -69,9 +69,9 @@
               <!-- Display booleans as checkboxes ... -->
               <Checkbox
                 v-if="typeof column === 'boolean'"
-                v-bind:value="column"
+                v-bind:model-value="column"
                 v-bind:disabled="isColumnEditable(colIdx) === false"
-                v-on:input="handleInput(idx, colIdx, $event)"
+                v-on:update:model-value="handleInput(idx, colIdx, $event)"
               >
               </Checkbox>
               <!-- ... and everything else as normal text -->
@@ -93,25 +93,22 @@
           <td v-for="(colLabel, idx) in columnLabels" v-bind:key="idx">
             <Checkbox
               v-if="columnType(idx) === 'boolean'"
-              ref="add_row"
               v-bind:placeholder="colLabel"
-              v-on:input="valuesToAdd[idx] = $event"
+              v-on:update:model-value="valuesToAdd[idx] = $event"
               v-on:keydown.enter="handleAddition()"
             >
             </Checkbox>
             <NumberControl
               v-else-if="columnType(idx) === 'number'"
-              ref="add_row"
               v-bind:placeholder="colLabel"
-              v-on:input="valuesToAdd[idx] = $event"
+              v-on:update:model-value="valuesToAdd[idx] = $event"
               v-on:keydown.enter="handleAddition()"
             >
             </NumberControl>
             <TextControl
               v-else
-              ref="add_row"
               v-bind:placeholder="colLabel"
-              v-on:input="valuesToAdd[idx] = $event"
+              v-on:update:model-value="valuesToAdd[idx] = $event"
               v-on:keydown.enter="handleAddition()"
             >
             </TextControl>
@@ -163,7 +160,7 @@ export default {
     // all inner array must be of the same length. 3.) An object-array. Then,
     // all enumerable properties (returned by Object.keys()) contain the columns.
     // Hence, all objects must have the same properties.
-    value: {
+    modelValue: {
       type: Array,
       default: function () { return [] }
     },
@@ -230,6 +227,7 @@ export default {
       default: ''
     }
   },
+  emits: ['update:modelValue'],
   data: function () {
     return {
       query: '', // Optional filter
@@ -245,11 +243,11 @@ export default {
      * @return  {string}  Can be simpleArray, multiArray, or object.
      */
     valueType: function () {
-      if (this.value.length === 0) {
+      if (this.modelValue.length === 0) {
         return 'simpleArray'
       }
 
-      const testElement = this.value[0]
+      const testElement = this.modelValue[0]
       const isPrimitive = [ 'number', 'boolean', 'string' ].includes(typeof testElement)
       const isNone = testElement === undefined || testElement === null
 
@@ -277,14 +275,14 @@ export default {
       }
 
       // Else: We have to find the labels by looking at the value
-      if (this.valueType === 'object' && this.value.length > 0) {
+      if (this.valueType === 'object' && this.modelValue.length > 0) {
         // We can infer the values from the object keys
-        return Object.keys(this.value[0])
-      } else if (this.valueType === 'multiArray' && this.value.length > 0) {
+        return Object.keys(this.modelValue[0])
+      } else if (this.valueType === 'multiArray' && this.modelValue.length > 0) {
         // We have a multi-array so there are no column names -> return a list
         // of numbers
         const labels = []
-        for (let i = 1; i <= this.value[0].length; i++) {
+        for (let i = 1; i <= this.modelValue[0].length; i++) {
           labels.push(i)
         }
         return labels
@@ -303,10 +301,10 @@ export default {
       const query = this.query.trim().toLowerCase()
       if (query === '') {
         // No filtering
-        return this.value
+        return this.modelValue
       } else {
         // Filtered values
-        return this.value.filter(element => {
+        return this.modelValue.filter(element => {
           if (this.valueType === 'simpleArray') {
             // Return the string coerced index
             return String(element).indexOf(query) > -1
@@ -331,6 +329,10 @@ export default {
       }
     }
   },
+  beforeUpdate: function () {
+    // Reset the available input columns
+    this.valuesToAdd = []
+  },
   methods: {
     columnValues: function (element) {
       // Returns the value of the given element in a way that can be display
@@ -352,35 +354,35 @@ export default {
       return this.editable.includes(idx)
     },
     columnType: function (idx) {
-      if (this.value.length === 0) {
+      if (this.modelValue.length === 0) {
         return 'string' // ¯\_(ツ)_/¯
       }
 
       if (this.valueType === 'simpleArray') {
-        return typeof this.value[0]
+        return typeof this.modelValue[0]
       } else if (this.valueType === 'multiArray') {
-        return typeof this.value[0][idx]
+        return typeof this.modelValue[0][idx]
       } else if (this.valueType === 'object') {
-        const keys = Object.keys(this.value[0])
-        return typeof this.value[0][keys[idx]]
+        const keys = Object.keys(this.modelValue[0])
+        return typeof this.modelValue[0][keys[idx]]
       }
     },
     handleInput: function (row, col, newValue) {
       const emitValue = []
 
-      for (let i = 0; i < this.value.length; i++) {
+      for (let i = 0; i < this.modelValue.length; i++) {
         if (i !== row) {
           // Nothing changed here, so retain the old value
-          emitValue.push(this.value[i])
+          emitValue.push(this.modelValue[i])
         } else if (this.valueType === 'simpleArray') {
           // Simply push the new value instead
           emitValue.push(newValue)
         } else if (this.valueType === 'multiArray') {
           // Exchange the correct column with the new value
           const newRow = []
-          for (let j = 0; j < this.value[i].length; j++) {
+          for (let j = 0; j < this.modelValue[i].length; j++) {
             if (j !== col) {
-              newRow.push(this.value[i][j])
+              newRow.push(this.modelValue[i][j])
             } else {
               newRow.push(newValue)
             }
@@ -388,14 +390,14 @@ export default {
           emitValue.push(newRow)
         } else if (this.valueType === 'object') {
           // Set the correct key to the new value
-          const newObj = Object.assign({}, this.value[i])
+          const newObj = Object.assign({}, this.modelValue[i])
           newObj[Object.keys(newObj)[col]] = newValue
           emitValue.push(newObj)
         }
       }
 
       // After we have amended the value, emit the new array of values.
-      this.$emit('input', emitValue)
+      this.$emit('update:modelValue', emitValue)
 
       // Also, in any case make sure we exit the editing mode after something
       // has changed.
@@ -403,39 +405,40 @@ export default {
     },
     handleDeletion: function (key) {
       // This function deletes elements
-      const realIndex = this.value.indexOf(this.filteredValue[key])
-      const newValue = this.value.filter((elem, index) => {
+      const realIndex = this.modelValue.indexOf(this.filteredValue[key])
+      const newValue = this.modelValue.filter((elem, index) => {
         return index !== realIndex
       })
-      this.$emit('input', newValue)
+      this.$emit('update:modelValue', newValue)
     },
     handleAddition: function () {
       // NOTE: This will break with checkboxes or radio buttons. But, hell,
-      // we only need to add checkboxes.
-      const newValues = this.$refs['add_row'].map(elem => elem.$refs['input'].value)
+      // we only need to add checkboxes. Additionally, this requires that the
+      // components all declare a ref "input" which is an input element ...
+      const newValues = this.valuesToAdd // .map(elem => elem.$refs['input'].value)
 
       // Refs is now an array of all columns
       if (this.valueType === 'simpleArray') {
-        const newValue = this.value.map(elem => elem)
+        const newValue = this.modelValue.map(elem => elem)
         newValue.push(newValues[0])
-        this.$emit('input', newValue)
+        this.$emit('update:modelValue', newValue)
       } else if (this.valueType === 'multiArray') {
-        const newValue = this.value.map(elem => elem.map(elem => elem))
+        const newValue = this.modelValue.map(elem => elem.map(elem => elem))
         newValue.push(newValues)
-        this.$emit('input', newValue)
+        this.$emit('update:modelValue', newValue)
       } else if (this.valueType === 'object') {
-        const newValue = this.value.map(elem => Object.assign({}, elem))
+        const newValue = this.modelValue.map(elem => Object.assign({}, elem))
         const keys = Object.keys(newValue[0])
         const newObject = {}
         for (let i = 0; i < keys.length; i++) {
           newObject[keys[i]] = newValues[i]
         }
         newValue.push(newObject)
-        this.$emit('input', newValue)
+        this.$emit('update:modelValue', newValue)
       }
 
-      // Reset the values
-      this.$refs['add_row'].forEach(elem => { elem.$refs['input'].value = '' })
+      // TODO: Reset the values
+      // this.$refs['add_row'].forEach(elem => { elem.$refs['input'].value = '' })
     },
     handleDoubleClick: function (row, col) {
       if (this.isColumnEditable(col) === true) {

@@ -47,6 +47,8 @@
 
 import displayTabsContextMenu from './tabs-context'
 
+import { nextTick } from 'vue'
+
 const ipcRenderer = window.ipc
 
 export default {
@@ -68,11 +70,11 @@ export default {
   watch: {
     activeFile: function () {
       // Make sure the activeFile is in view
-      this.$nextTick(() => {
-        // We must wait until Vue has actually applied the active class to the
-        // new file tab so that our handler retrieves the correct one, not the old.
-        this.scrollActiveFileIntoView()
-      })
+      // We must wait until Vue has actually applied the active class to the
+      // new file tab so that our handler retrieves the correct one, not the old.
+      nextTick()
+        .then(() => { this.scrollActiveFileIntoView() })
+        .catch(err => console.error(err))
     }
   },
   mounted: function () {

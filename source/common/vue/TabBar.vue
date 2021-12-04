@@ -58,7 +58,8 @@ export default {
       type: String,
       default: ''
     }
-  }
+  },
+  emits: ['tab']
 }
 </script>
 

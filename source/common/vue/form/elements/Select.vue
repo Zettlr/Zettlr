@@ -5,13 +5,13 @@
       v-bind:id="fieldID"
       ref="input"
       v-bind:name="name"
-      v-on:input="$emit('input', $event.target.value)"
+      v-on:input="$emit('update:modelValue', $event.target.value)"
     >
       <option
         v-for="(optionLabel, key) in options"
         v-bind:key="key"
         v-bind:value="key"
-        v-bind:selected="key === value"
+        v-bind:selected="key === modelValue"
       >
         {{ optionLabel }}
       </option>
@@ -37,7 +37,7 @@
 export default {
   name: 'SelectControl',
   props: {
-    value: {
+    modelValue: {
       type: String,
       default: ''
     },
@@ -58,6 +58,7 @@ export default {
       default: function () { return {} }
     }
   },
+  emits: ['update:modelValue'],
   computed: {
     fieldID: function () {
       return 'form-select-' + this.name

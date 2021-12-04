@@ -22,7 +22,7 @@
         ref="form"
         v-bind:model="model"
         v-bind:schema="schema"
-        v-on:input="handleInput"
+        v-on:update:model-value="handleInput"
       ></Form>
     </div>
   </WindowChrome>

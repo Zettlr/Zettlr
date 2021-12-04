@@ -4,8 +4,8 @@
       <input
         v-bind:id="fieldID"
         type="checkbox" v-bind:name="name" value="yes"
-        v-bind:checked="value"
-        v-on:input="$emit('input', $event.target.checked)"
+        v-bind:checked="modelValue"
+        v-on:input="$emit('update:modelValue', $event.target.checked)"
       >
       <div class="toggle"></div>
     </label>
@@ -32,7 +32,7 @@
 export default {
   name: 'SwitchField',
   props: {
-    value: {
+    modelValue: {
       type: Boolean,
       default: false
     },
@@ -45,6 +45,7 @@ export default {
       default: ''
     }
   },
+  emits: ['update:modelValue'],
   computed: {
     fieldID: function () {
       return 'form-input-' + this.name

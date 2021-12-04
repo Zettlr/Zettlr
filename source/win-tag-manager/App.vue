@@ -125,7 +125,7 @@ export default {
       if (controlID === 'save') {
         ipcRenderer.invoke('tag-provider', {
           command: 'set-coloured-tags',
-          payload: this.tags
+          payload: this.tags.map(tag => tag) // De-proxy
         })
           .then(() => {
             ipcRenderer.send('window-controls', { command: 'win-close' })

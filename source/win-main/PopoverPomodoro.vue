@@ -46,7 +46,7 @@
         custom elements yet. See: https://github.com/vuejs/vue/issues/6914
       -->
       <SliderControl
-        v-bind:value="volume"
+        v-bind:model-value="volume"
         v-bind:label="'Volume'"
         v-bind:min="0"
         v-bind:max="100"

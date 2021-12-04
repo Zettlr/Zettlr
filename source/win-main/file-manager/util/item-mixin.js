@@ -23,6 +23,8 @@ import dirContextMenu from './dir-item-context'
 import PopoverFileProps from './PopoverFileProps'
 import PopoverDirProps from './PopoverDirProps'
 
+import { nextTick } from 'vue'
+
 const ipcRenderer = window.ipc
 
 export default {
@@ -54,7 +56,7 @@ export default {
         return // No need to select
       }
 
-      this.$nextTick(() => {
+      nextTick().then(() => {
         this.$refs['name-editing-input'].focus()
         // Select from the beginning until the last dot
         this.$refs['name-editing-input'].setSelectionRange(
@@ -62,6 +64,7 @@ export default {
           this.$refs['name-editing-input'].value.lastIndexOf('.')
         )
       })
+        .catch(err => console.error(err))
     }
   },
   mounted: function () {

@@ -1,7 +1,8 @@
 const rules = require('./webpack.rules')
 
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const { VueLoaderPlugin } = require('vue-loader')
+const { DefinePlugin } = require('webpack')
 
 rules.push({
   test: /\.less$/,
@@ -44,7 +45,13 @@ module.exports = {
     new ForkTsCheckerWebpackPlugin(),
 
     // Apply webpack rules to the corresponding language blocks in .vue files
-    new VueLoaderPlugin()
+    new VueLoaderPlugin(),
+
+    // Set a few Vue 3 options; see: http://link.vuejs.org/feature-flags
+    new DefinePlugin({
+      __VUE_OPTIONS_API__: true,
+      __VUE_PROD_DEVTOOLS__: false
+    })
   ],
   resolve: {
     extensions: [

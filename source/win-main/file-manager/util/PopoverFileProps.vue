@@ -145,8 +145,8 @@ export default {
      * Resets the data, a.k.a. removes the writing target
      */
     reset: function () {
-      this.value = 0
-      this.mode = 'words'
+      this.targetValue = 0
+      this.targetMode = 'words'
     },
     retrieveTagColour: function (tagName) {
       const foundTag = this.colouredTags.find(tag => tag.name === tagName)

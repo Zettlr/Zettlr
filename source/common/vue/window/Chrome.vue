@@ -187,6 +187,7 @@ export default {
       default: false
     }
   },
+  emits: [ 'toolbar-search', 'toolbar-click', 'toolbar-toggle', 'tab', 'statusbar-click' ],
   data: function () {
     return {
       // NOTE: This is solely for debug purposes so that we can adapt

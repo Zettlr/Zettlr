@@ -25,6 +25,9 @@ const CodeMirror = require('codemirror')
 
 const ipcRenderer = window.ipc
 
+let mdEditor = null
+let scrollbarAnnotations = null
+
 export default {
   name: 'QuicklookEditor',
   props: {
@@ -106,12 +109,7 @@ export default {
     }
   },
   data: function () {
-    return {
-      editor: null,
-      searchCursor: null,
-      currentLocalSearch: '',
-      scrollbarAnnotations: null
-    }
+    return {}
   },
   computed: {
     editorStyles: function () {
@@ -122,19 +120,19 @@ export default {
     // We could basically watch any prop, as all are updated simultaneously,
     // but this makes most sense.
     content: function () {
-      if (this.editor === null) {
+      if (mdEditor === null) {
         console.error('Received a file update but the editor was not yet initiated!')
         return
       }
 
-      this.editor.setOptions({
+      mdEditor.setOptions({
         zettlr: {
           markdownImageBasePath: this.dir
         }
       })
 
       const mode = (this.ext === '.tex') ? 'stex' : 'multiplex'
-      this.editor.swapDoc(CodeMirror.Doc(this.content, mode), mode)
+      mdEditor.swapDoc(CodeMirror.Doc(this.content, mode), mode)
     },
     query: function () {
       // Begin a search
@@ -143,7 +141,7 @@ export default {
   },
   mounted: function () {
     // As soon as the component is mounted, initiate the editor
-    this.editor = new MarkdownEditor(this.$refs.editor, {
+    mdEditor = new MarkdownEditor(this.$refs.editor, {
       // If there are images in the Quicklook file, the image renderer needs
       // the directory path of the file to correctly render the images.
       zettlr: {
@@ -156,13 +154,13 @@ export default {
     // this.editor.isFullscreen = true
 
     // Initiate the scrollbar annotations
-    this.scrollbarAnnotations = this.editor.codeMirror.annotateScrollbar('sb-annotation')
-    this.scrollbarAnnotations.update([])
+    scrollbarAnnotations = mdEditor.codeMirror.annotateScrollbar('sb-annotation')
+    scrollbarAnnotations.update([])
 
     // Listen to shortcuts from the main process
     ipcRenderer.on('shortcut', (event, shortcut) => {
       if (shortcut === 'copy-as-html') {
-        this.editor.copyAsHTML()
+        mdEditor.copyAsHTML()
       }
     })
   },
@@ -171,7 +169,7 @@ export default {
       // TODO: Make use of option, too lazy to copy over the boilerplate from
       // the main editor right now. Quicklooks are more static so they shouldn't
       // care too much about these things.
-      this.editor.setOptions({
+      mdEditor.setOptions({
         zettlr: {
           imagePreviewWidth: global.config.get('display.imageWidth'),
           imagePreviewHeight: global.config.get('display.imageHeight'),
@@ -193,7 +191,7 @@ export default {
       })
     },
     searchNext () {
-      this.editor.searchNext(this.query)
+      mdEditor.searchNext(this.query)
     }
   }
 }

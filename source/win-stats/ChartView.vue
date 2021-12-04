@@ -106,6 +106,8 @@ export default {
       now: DateTime.local(),
       currentYear: DateTime.local().year,
       currentMonth: DateTime.local().month,
+      // TODO: Move the Chart out of the Vue proxy hell. There are fortunately
+      // no errors as of now, but you never know.
       chart: null,
       unit: 'month' // Possible display unit
     }
@@ -316,7 +318,7 @@ export default {
   mounted: function () {
     this.createChart(this.currentData)
   },
-  beforeDestroy: function () {
+  beforeUnmount: function () {
     if (this.chart !== null) {
       this.chart.destroy()
     }

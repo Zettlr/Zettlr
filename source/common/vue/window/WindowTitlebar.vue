@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="titlebar"
-    v-on:dblclick="$emit('dblclick')"
-  >
+  <div id="titlebar">
     {{ titleContent }}
   </div>
 </template>

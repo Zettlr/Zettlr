@@ -27,10 +27,10 @@
       </p>
       <ListControl
         v-bind:label="exportFormatLabel"
-        v-bind:value="exportFormatList"
+        v-bind:model-value="exportFormatList"
         v-bind:labels="[exportFormatUseLabel, exportFormatNameLabel]"
         v-bind:editable="[0]"
-        v-on:input="selectExportFormat($event)"
+        v-on:update:model-value="selectExportFormat($event)"
       ></ListControl>
     </div>
     <div
@@ -79,7 +79,6 @@ import WindowChrome from '../common/vue/window/Chrome.vue'
 import ListControl from '../common/vue/form/elements/List'
 import FileControl from '../common/vue/form/elements/File'
 import TextControl from '../common/vue/form/elements/Text'
-import Vue from 'vue'
 
 const ipcRenderer = window.ipc
 
@@ -177,7 +176,7 @@ export default {
           // NOTE: We are switching "id: readable" to "readable: id" here so
           // that it's much easier to retrieve the identifier later on.
           for (const key in info.formats) {
-            Vue.set(this.exportFormatMap, info.formats[key], key)
+            this.exportFormatMap[info.formats[key]] = key
           }
         }
       })
@@ -210,8 +209,8 @@ export default {
         command: 'update-project-properties',
         payload: {
           properties: {
-            formats: this.selectedExportFormats,
-            filters: this.patterns,
+            formats: this.selectedExportFormats.map(e => e), // De-proxy
+            filters: this.patterns.map(e => e), // De-proxy
             cslStyle: this.cslStyle,
             title: this.projectTitle
           },

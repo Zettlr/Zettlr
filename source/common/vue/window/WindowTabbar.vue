@@ -60,6 +60,7 @@ export default {
       default: 'tabs'
     }
   },
+  emits: ['tab'],
   data: function () {
     return {
       currentTab: 0

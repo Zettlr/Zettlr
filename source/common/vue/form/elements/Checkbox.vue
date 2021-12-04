@@ -2,22 +2,25 @@
   <div>
     <div class="form-control cb-group">
       <label
-        class="checkbox"
-        v-bind:disabled="disabled"
+        v-bind:class="{
+          'checkbox': true,
+          'disabled': disabled
+        }"
       >
         <input
           v-bind:id="fieldID"
           type="checkbox"
           v-bind:name="name"
           value="yes"
-          v-bind:checked="value"
+          v-bind:checked="modelValue"
           v-bind:disabled="disabled"
-          v-on:input="$emit('input', $event.target.checked)"
+          v-on:input="$emit('update:modelValue', $event.target.checked)"
         >
         <span class="checkmark"></span>
       </label>
       <label
-        v-if="label" v-bind:for="fieldID" v-bind:disabled="disabled"
+        v-if="label" v-bind:for="fieldID"
+        v-bind:class="{ 'disabled': disabled }"
         v-html="label"
       >
       </label>
@@ -46,7 +49,7 @@
 export default {
   name: 'CheckboxField',
   props: {
-    value: {
+    modelValue: {
       type: Boolean,
       default: false
     },
@@ -135,7 +138,7 @@ body {
       }
     }
 
-    &[disabled] {
+    &.disabled {
       input:checked ~ .checkmark {
         background-color: lightgrey;
       }
@@ -146,7 +149,7 @@ body {
   }
 
   label {
-    &[disabled] {
+    &.disabled {
       color: grey;
     }
   }
@@ -195,7 +198,7 @@ body.darwin {
       background-image: linear-gradient(transparent, #00000020);
     }
 
-    &[disabled] .checkmark {
+    &.disabled .checkmark {
       background-color: #ddd;
     }
   }
@@ -215,7 +218,7 @@ body.darwin {
         background-image: none;
       }
 
-      &[disabled] .checkmark {
+      &.disabled .checkmark {
         background-image: radial-gradient(circle at top, rgb(90, 90, 90), rgb(120, 120, 120));
       }
     }
@@ -263,7 +266,7 @@ body.win32 {
       border-color: var(--system-accent-color, --c-primary);
     }
 
-    &[disabled] .checkmark {
+    &.disabled .checkmark {
       background-color: #ddd;
       border-color: rgb(120, 120, 120);
     }
@@ -304,7 +307,7 @@ body.linux {
       }
     }
 
-    &[disabled] span.checkmark {
+    &.disabled span.checkmark {
       background-color: #ffffff;
     }
 
@@ -328,7 +331,7 @@ body.linux {
         }
       }
 
-      &[disabled] span.checkmark {
+      &.disabled span.checkmark {
         background-image: radial-gradient(circle at top, rgb(112, 111, 111), rgb(156, 156, 156));
       }
 

@@ -92,7 +92,17 @@ import { trans } from '../common/i18n-renderer'
 import extractYamlFrontmatter from '../common/util/extract-yaml-frontmatter'
 import YAML from 'yaml'
 
+import { nextTick } from 'vue'
+
 const ipcRenderer = window.ipc
+
+/**
+ * We must define the Markdown instance outside of Vue, since the proxy-fication
+ * will cause errors with CodeMirror.
+ *
+ * @var {MarkdownEditor|null}
+ */
+let mdEditor = null
 
 export default {
   name: 'MainEditor',
@@ -273,34 +283,34 @@ export default {
           displayText: `${item.id}: ${authors} - ${title}`
         }
       })
-      this.editor.setCompletionDatabase('citekeys', items)
+      mdEditor.setCompletionDatabase('citekeys', items)
     },
     readabilityMode: function () {
-      this.editor.readabilityMode = this.readabilityMode
+      mdEditor.readabilityMode = this.readabilityMode
     },
     distractionFree: function () {
-      this.editor.distractionFree = this.distractionFree
+      mdEditor.distractionFree = this.distractionFree
     },
     editorConfiguration: function () {
       // Update the editor configuration, if anything changes.
-      this.editor.setOptions(this.editorConfiguration)
+      mdEditor.setOptions(this.editorConfiguration)
     },
     tagDatabase: function () {
-      this.editor.setCompletionDatabase('tags', this.tagDatabase)
+      mdEditor.setCompletionDatabase('tags', this.tagDatabase)
     },
     fsalFiles: function () {
       this.updateFileDatabase()
     },
     activeFile: function () {
-      if (this.editor === null) {
+      if (mdEditor === null) {
         console.error('Received a file update but the editor was not yet initiated!')
         return
       }
 
       if (this.activeFile === null) {
-        this.editor.swapDoc(CodeMirror.Doc('', 'multiplex'), 'multiplex')
-        this.editor.readOnly = true
-        this.$store.commit('updateTableOfContents', this.editor.tableOfContents)
+        mdEditor.swapDoc(CodeMirror.Doc('', 'multiplex'), 'multiplex')
+        mdEditor.readOnly = true
+        this.$store.commit('updateTableOfContents', mdEditor.tableOfContents)
         // Update the citation keys with an empty array
         this.updateCitationKeys()
         return
@@ -310,14 +320,14 @@ export default {
 
       if (doc !== undefined) {
         // Simply swap it
-        this.editor.setOptions({
+        mdEditor.setOptions({
           zettlr: { markdownImageBasePath: this.activeFile.dir }
         })
-        this.editor.swapDoc(doc.cmDoc, doc.mode)
+        mdEditor.swapDoc(doc.cmDoc, doc.mode)
         this.activeDocument = doc
-        this.editor.readOnly = false
-        this.$store.commit('updateTableOfContents', this.editor.tableOfContents)
-        this.$store.commit('activeDocumentInfo', this.editor.documentInfo)
+        mdEditor.readOnly = false
+        this.$store.commit('updateTableOfContents', mdEditor.tableOfContents)
+        this.$store.commit('activeDocumentInfo', mdEditor.documentInfo)
         // Update the citation keys
         this.updateCitationKeys()
       } else if (this.currentlyFetchingFiles.includes(this.activeFile.path) === false) {
@@ -381,14 +391,14 @@ export default {
             // Let's check whether the active file has in the meantime changed
             // If it has, don't overwrite the current one
             if (this.activeFile.path === descriptorWithContent.path) {
-              this.editor.setOptions({
+              mdEditor.setOptions({
                 zettlr: { markdownImageBasePath: this.activeFile.dir }
               })
-              this.editor.swapDoc(newDoc.cmDoc, newDoc.mode)
+              mdEditor.swapDoc(newDoc.cmDoc, newDoc.mode)
               this.activeDocument = newDoc
-              this.editor.readOnly = false
-              this.$store.commit('updateTableOfContents', this.editor.tableOfContents)
-              this.$store.commit('activeDocumentInfo', this.editor.documentInfo)
+              mdEditor.readOnly = false
+              this.$store.commit('updateTableOfContents', mdEditor.tableOfContents)
+              this.$store.commit('activeDocumentInfo', mdEditor.documentInfo)
               this.updateCitationKeys()
             }
           })
@@ -437,47 +447,49 @@ export default {
       if (newValue === true && oldValue === false) {
         // The user activated search, so focus the input and run a search (if
         // the query wasnt' empty)
-        this.$nextTick(() => {
-          this.$refs['search-input'].focus()
-          this.searchNext()
-        })
+        nextTick()
+          .then(() => {
+            this.$refs['search-input'].focus()
+            this.searchNext()
+          })
+          .catch(err => console.error(err))
       } else if (newValue === false) {
         // Always "stopSearch" if the input is not shown, since this will clear
         // out, e.g., the matches on the scrollbar
-        this.editor.stopSearch()
+        mdEditor.stopSearch()
       }
     },
     shouldCountChars: function (newVal, oldVal) {
-      this.editor.countChars = newVal
+      mdEditor.countChars = newVal
     }
   },
   mounted: function () {
     // As soon as the component is mounted, initiate the editor
-    this.editor = new MarkdownEditor(this.$refs.textarea, this.editorConfiguration)
+    mdEditor = new MarkdownEditor(this.$refs.textarea, this.editorConfiguration)
 
     // We have to set this to the appropriate value after mount, afterwards it
     // will be updated as appropriate.
-    this.editor.countChars = this.shouldCountChars
+    mdEditor.countChars = this.shouldCountChars
 
     // Update the document info on corresponding events
-    this.editor.on('change', (changeObj) => {
+    mdEditor.on('change', (changeObj) => {
       // Announce that the file is modified (if applicable) to the whole application
       this.$store.commit('announceModifiedFile', {
         filePath: this.activeDocument.path,
         isClean: this.activeDocument.cmDoc.isClean()
       })
 
-      this.$store.commit('updateTableOfContents', this.editor.tableOfContents)
+      this.$store.commit('updateTableOfContents', mdEditor.tableOfContents)
     })
 
-    this.editor.on('cursorActivity', () => {
+    mdEditor.on('cursorActivity', () => {
       // Don't update every keystroke to not run into performance problems with
       // very long documents, since calculating the word count needs considerable
       // time, and without the delay, typing seems "laggy".
       this.maybeUpdateActiveDocumentInfo()
     })
 
-    this.editor.on('zettelkasten-link', (linkContents) => {
+    mdEditor.on('zettelkasten-link', (linkContents) => {
       ipcRenderer.invoke('application', {
         command: 'force-open',
         payload: linkContents
@@ -489,7 +501,7 @@ export default {
       }
     })
 
-    this.editor.on('zettelkasten-tag', (tag) => {
+    mdEditor.on('zettelkasten-tag', (tag) => {
       this.$root.startGlobalSearch(tag)
     })
 
@@ -498,11 +510,11 @@ export default {
       if (shortcut === 'save-file' && this.activeDocument !== null) {
         this.save(this.activeDocument).catch(e => console.error(e))
       } else if (shortcut === 'copy-as-html') {
-        this.editor.copyAsHTML()
+        mdEditor.copyAsHTML()
       } else if (shortcut === 'paste-as-plain') {
-        this.editor.pasteAsPlainText()
+        mdEditor.pasteAsPlainText()
       } else if (shortcut === 'toggle-typewriter-mode') {
-        this.editor.hasTypewriterMode = this.editor.hasTypewriterMode === false
+        mdEditor.hasTypewriterMode = mdEditor.hasTypewriterMode === false
       } else if (shortcut === 'search') {
         this.showSearch = this.showSearch === false
       }
@@ -519,16 +531,18 @@ export default {
       if (doc !== undefined) {
         const cur = Object.assign({}, doc.cmDoc.getCursor())
         doc.cmDoc.setValue(fileDescriptor.content)
-        this.$nextTick(() => {
-          // Wait a little bit for the unwanted modification-events to emit and
-          // then immediately revert that status again.
-          doc.cmDoc.markClean()
-          doc.cmDoc.setCursor(cur)
-          this.$store.commit('announceModifiedFile', {
-            filePath: doc.path,
-            isClean: doc.cmDoc.isClean()
+        nextTick()
+          .then(() => {
+            // Wait a little bit for the unwanted modification-events to emit and
+            // then immediately revert that status again.
+            doc.cmDoc.markClean()
+            doc.cmDoc.setCursor(cur)
+            this.$store.commit('announceModifiedFile', {
+              filePath: doc.path,
+              isClean: doc.cmDoc.isClean()
+            })
           })
-        })
+          .catch(err => console.error(err))
       }
     })
 
@@ -550,7 +564,7 @@ export default {
     // editor. This will keep the cursor correct when the SplitViews are either
     // opened/closed or resized.
     const obs = new ResizeObserver(entries => {
-      this.editor.codeMirror.refresh()
+      mdEditor.codeMirror.refresh()
     })
 
     obs.observe(this.$refs.editor)
@@ -562,13 +576,13 @@ export default {
       }
 
       this.docInfoTimeout = setTimeout(() => {
-        this.$store.commit('activeDocumentInfo', this.editor.documentInfo)
+        this.$store.commit('activeDocumentInfo', mdEditor.documentInfo)
         this.docInfoTimeout = undefined
       }, 1000)
     },
     jtl (lineNumber) {
-      if (this.editor !== null) {
-        this.editor.jtl(lineNumber)
+      if (mdEditor !== null) {
+        mdEditor.jtl(lineNumber)
       }
     },
     /**
@@ -631,7 +645,7 @@ export default {
       this.updateFileDatabase()
     },
     updateCitationKeys: function () {
-      const value = this.editor.value
+      const value = mdEditor.value
 
       const citations = extractCitations(value)
       const keys = []
@@ -666,7 +680,7 @@ export default {
         }
       }
 
-      this.editor.setCompletionDatabase('files', fileDatabase)
+      mdEditor.setCompletionDatabase('files', fileDatabase)
     },
     toggleQueryRegexp () {
       const isRegexp = /^\/.+\/[gimy]{0,4}$/.test(this.query.trim())
@@ -682,8 +696,8 @@ export default {
     },
     executeCommand (cmd) {
       // Executes a markdown command on the editor instance
-      this.editor.runCommand(cmd)
-      this.editor.focus()
+      mdEditor.runCommand(cmd)
+      mdEditor.focus()
     },
     // SEARCH FUNCTIONALITY BLOCK
     searchNext () {
@@ -694,19 +708,19 @@ export default {
         this.findTimeout = undefined
       }
 
-      this.editor.searchNext(this.query)
+      mdEditor.searchNext(this.query)
     },
     searchPrevious () {
-      this.editor.searchPrevious(this.query)
+      mdEditor.searchPrevious(this.query)
     },
     replaceNext () {
-      this.editor.replaceNext(this.query, this.replaceString)
+      mdEditor.replaceNext(this.query, this.replaceString)
     },
     replacePrevious () {
-      this.editor.replacePrevious(this.query, this.replaceString)
+      mdEditor.replacePrevious(this.query, this.replaceString)
     },
     replaceAll () {
-      this.editor.replaceAll(this.query, this.replaceString)
+      mdEditor.replaceAll(this.query, this.replaceString)
     },
     /**
      * Scrolls the editor according to the value if the user scrolls left of the
@@ -737,8 +751,8 @@ export default {
       }
 
       // set the start point of the selection to be where the mouse was clicked
-      this.anchor = this.editor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY })
-      this.editor.codeMirror.setSelection(this.anchor)
+      this.anchor = mdEditor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY })
+      mdEditor.codeMirror.setSelection(this.anchor)
     },
 
     editorMousemove (event) {
@@ -746,10 +760,10 @@ export default {
         return
       }
       // get the point where the mouse has moved
-      const addPoint = this.editor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY })
+      const addPoint = mdEditor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY })
       // use the original start point where the mouse first was clicked
       // and change the end point to where the mouse has moved so far
-      this.editor.codeMirror.setSelection(this.anchor, addPoint)
+      mdEditor.codeMirror.setSelection(this.anchor, addPoint)
     },
     /**
      * Triggers when the user releases any mouse button
@@ -767,13 +781,13 @@ export default {
       // when the mouse is released, set anchor to undefined to stop adding lines
       this.anchor = undefined
       // Also, make sure the editor is focused.
-      this.editor.codeMirror.focus()
+      mdEditor.codeMirror.focus()
     },
     addKeywordsToFile (keywords) {
       // Split the contents of the editor into frontmatter and contents, then
       // add the keywords to the frontmatter, slice everything back together
       // and then overwrite the editor's contents.
-      let { frontmatter, content } = extractYamlFrontmatter(this.editor.value) // NOTE: We can keep the linefeed to \n since CodeMirror is set to ALWAYS use \n
+      let { frontmatter, content } = extractYamlFrontmatter(mdEditor.value) // NOTE: We can keep the linefeed to \n since CodeMirror is set to ALWAYS use \n
 
       let postFrontmatter = '\n'
       if (frontmatter !== null) {

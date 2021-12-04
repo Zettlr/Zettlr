@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 
 import windowRegister from '../common/modules/window-register'
@@ -29,8 +29,7 @@ ipcRenderer.on('shortcut', (event, shortcut) => {
   }
 })
 
-const app = new Vue(App)
-app.$mount('#app')
+const app = createApp(App).mount('#app')
 
 // Finally, pass the correct directory
 const searchParams = new URLSearchParams(window.location.search)

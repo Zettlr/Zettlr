@@ -72,6 +72,7 @@ export default {
       default: 0
     }
   },
+  emits: ['click'],
   computed: {
     lineWidth: function () {
       return 2
