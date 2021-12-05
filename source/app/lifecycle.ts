@@ -25,7 +25,7 @@ import isDir from '../common/util/is-dir'
 import path from 'path'
 
 // Developer tools
-import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
 
 // Providers
 import AppearanceProvider from './service-providers/appearance-provider'
@@ -93,7 +93,7 @@ export async function bootApplication (): Promise<void> {
   // Before we begin, let's load the Vue.js DevTools for debugging
   try {
     // Load Vue developer extension
-    installExtension(VUEJS_DEVTOOLS)
+    installExtension(VUEJS3_DEVTOOLS)
       .then((name: string) => global.log.info(`Added DevTools extension:  ${name}`))
       .catch((err: any) => global.log.error(`Could not install DevTools extensions: ${String(err.message)}`, err))
   } catch (err) {

@@ -93,7 +93,6 @@
     "@types/bcp-47": "^2.0.0",
     "@types/codemirror": "^5.60.5",
     "@types/command-exists": "^1.2.0",
-    "@types/electron-devtools-installer": "^2.2.0",
     "@types/katex": "^0.11.1",
     "@types/luxon": "^2.0.7",
     "@types/mocha": "^9.0.0",
