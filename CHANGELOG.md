@@ -34,6 +34,7 @@
   are notified
 - The snippet insertion process is now much more precise and allows snippets to
   be inserted at any point within non-empty lines without any quirks
+- Update Pandoc to 2.16.2
 
 # 2.0.3
 
