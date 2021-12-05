@@ -16,6 +16,7 @@
   file manager
 - Moved the file renaming process via shortcut to the document tabs since it's
   much more visible there
+- Fix a very rare bug in which selections inside headings would look off
 
 ## Under the Hood
 

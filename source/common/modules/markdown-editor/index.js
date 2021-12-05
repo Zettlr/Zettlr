@@ -452,6 +452,12 @@ module.exports = class MarkdownEditor extends EventEmitter {
     const oldDoc = this._instance.swapDoc(cmDoc)
     this._instance.focus()
 
+    // Rarely, the heading classes will confuse the CodeMirror instance so that
+    // selections will still be of the old line height's size, instead of the
+    // new, bigger one. Since window resizing apparently helps, we'll manually
+    // call said function here (after a timeout to give the hooks time to run)
+    setTimeout(() => { this._instance.refresh() }, 1000)
+
     this._currentDocumentMode = documentMode
 
     if (!this.readabilityMode) {
