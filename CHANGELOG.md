@@ -14,6 +14,8 @@
 - Removed the shortcut to rename directories since that was rarely used and
   could confuse users since it was not obvious where the directory is in the
   file manager
+- Moved the file renaming process via shortcut to the document tabs since it's
+  much more visible there
 
 ## Under the Hood
 

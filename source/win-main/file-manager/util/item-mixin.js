@@ -67,17 +67,6 @@ export default {
         .catch(err => console.error(err))
     }
   },
-  mounted: function () {
-    // As soon as this element is mounted (irrespective of tree/list item),
-    // listen to events that trigger something on this object.
-    ipcRenderer.on('shortcut', (event, command) => {
-      if (command === 'rename-file' && this.obj.path === this.selectedFile.path) {
-        this.nameEditing = true
-      } else if (command === 'rename-dir' && this.obj.path === this.selectedDir.path) {
-        this.nameEditing = true
-      }
-    })
-  },
   methods: {
     /**
      * Requests a file or directory to be selected and sends an appropriate

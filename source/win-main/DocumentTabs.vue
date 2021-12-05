@@ -46,7 +46,7 @@
  */
 
 import displayTabsContextMenu from './tabs-context'
-
+import tippy from 'tippy.js'
 import { nextTick } from 'vue'
 
 const ipcRenderer = window.ipc
@@ -108,6 +108,56 @@ export default {
           // No more open files, so request closing of the window
           ipcRenderer.send('window-controls', { command: 'win-close' })
         }
+      } else if (shortcut === 'rename-file') {
+        // Renaming via shortcut (= Cmd/Ctrl+R) works via a tooltip underneath
+        // the corresponding filetab. First, make sure the container is visible
+        this.scrollActiveFileIntoView()
+
+        const container = this.$refs.container.querySelector('.active')
+
+        const wrapper = document.createElement('div')
+        wrapper.classList.add('file-rename')
+
+        const input = document.createElement('input')
+        input.style.backgroundColor = 'transparent'
+        input.style.border = 'none'
+        input.style.color = 'white'
+        input.value = this.openFiles[currentIdx].name
+
+        wrapper.appendChild(input)
+
+        // Then do the magic
+        const instance = tippy(container, {
+          content: wrapper,
+          allowHTML: true,
+          interactive: true,
+          placement: 'bottom',
+          showOnCreate: true, // Immediately show the tooltip
+          arrow: true, // Arrow for these tooltips
+          onShown: function () {
+            input.focus()
+            // Select from the beginning until the last dot
+            input.setSelectionRange(0, input.value.lastIndexOf('.'))
+          }
+        })
+
+        input.addEventListener('keydown', (event) => {
+          if (![ 'Enter', 'Escape' ].includes(event.key)) {
+            return
+          }
+
+          if (event.key === 'Enter' && input.value.trim() !== '') {
+            ipcRenderer.invoke('application', {
+              command: 'file-rename',
+              payload: {
+                path: this.openFiles[currentIdx].path,
+                name: input.value
+              }
+            })
+              .catch(e => console.error(e))
+          }
+          instance.hide()
+        })
       }
     })
   },
