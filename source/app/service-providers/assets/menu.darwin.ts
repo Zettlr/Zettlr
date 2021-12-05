@@ -252,14 +252,6 @@ export default function getMenu (
           }
         },
         {
-          id: 'menu.rename_dir',
-          label: trans('menu.rename_dir'),
-          accelerator: 'Cmd+Shift+R',
-          click: function (menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'rename-dir')
-          }
-        },
-        {
           type: 'separator'
         },
         {

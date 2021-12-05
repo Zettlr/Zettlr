@@ -11,6 +11,9 @@
 - Improvements during insertion of snippets
 - The footnote editor now has a consistent background color in dark mode
 - You can now open linked files from within the preview tooltips
+- Removed the shortcut to rename directories since that was rarely used and
+  could confuse users since it was not obvious where the directory is in the
+  file manager
 
 ## Under the Hood
 
