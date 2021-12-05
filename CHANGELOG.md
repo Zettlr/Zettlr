@@ -10,6 +10,7 @@
 - More reactive updating of the related files section
 - Improvements during insertion of snippets
 - The footnote editor now has a consistent background color in dark mode
+- You can now open linked files from within the preview tooltips
 
 ## Under the Hood
 
