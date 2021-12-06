@@ -74,7 +74,7 @@
     "showdown": "^1.9.1",
     "tippy.js": "^6.3.7",
     "uuid": "^8.3.2",
-    "vue": "^3.2.21",
+    "vue": "^3.2.23",
     "vue-virtual-scroller": "^2.0.0-alpha.1",
     "vuex": "^4.0.2",
     "yaml": "^1.10.2"
