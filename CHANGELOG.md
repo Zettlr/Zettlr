@@ -35,6 +35,10 @@
 - The snippet insertion process is now much more precise and allows snippets to
   be inserted at any point within non-empty lines without any quirks
 - Update Pandoc to 2.16.2
+- The VS Code debugger now uses the `test-gui` configuration and not the regular
+  (potentially critical) main configuration; NOTE that this means you must run
+  the `test-gui` command first to generate that data-dir in the first place
+  before starting the debugger
 
 # 2.0.3
 
