@@ -548,7 +548,7 @@ function hintFunction (cm, opt) {
  */
 function getTabMarkers (cm, from, to) {
   let tabStops = []
-  for (let i = from.line; i < to.line; i++) {
+  for (let i = from.line; i <= to.line; i++) {
     let line = cm.getLine(i)
     let match = null
 
