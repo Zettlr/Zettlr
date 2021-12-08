@@ -28,47 +28,57 @@ const { getTaskRE } = require('../../../regular-expressions');
 
   const taskRE = getTaskRE() // Matches `- [ ]` and `- [x]`
 
+  /**
+   * Renders task list items
+   *
+   * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
+   */
   CodeMirror.commands.markdownRenderTasks = function (cm) {
     let match
 
     // We'll only render the viewport
     const viewport = cm.getViewport()
-    for (let i = viewport.from; i < viewport.to; i++) {
-      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
+    for (let i = viewport.from; i <= viewport.to; i++) {
+      if (cm.getModeAt({ line: i, ch: 0 }).name !== 'markdown-zkn') continue
       // Always reset lastIndex property, because test()-ing on regular
       // expressions advances it.
       taskRE.lastIndex = 0
 
       // First get the line and test if the contents contain a link
-      let line = cm.getLine(i)
+      const line = cm.getLine(i)
       if ((match = taskRE.exec(line)) == null) {
         continue
       }
-      let leadingSpaces = match[1].length || 0
+
+      const leadingSpaces = match[1].length || 0
 
       if (cm.getCursor('from').line === i && cm.getCursor('from').ch < 5 + leadingSpaces) {
         // We're directly in the formatting so don't render.
         continue
       }
 
-      let curFrom = { 'line': i, 'ch': 0 + leadingSpaces }
-      let curTo = { 'line': i, 'ch': 5 + leadingSpaces }
+      const curFrom = { line: i, ch: 0 + leadingSpaces }
+      const curTo = { line: i, ch: 5 + leadingSpaces }
 
       // We can only have one marker at any given position at any given time
-      if (cm.doc.findMarks(curFrom, curTo).length > 0) continue
+      if (cm.findMarks(curFrom, curTo).length > 0) {
+        continue
+      }
 
       // Now we can render it finally.
-      let checked = (match[3] === 'x')
-      let listSign = match[2] // Save the sign +, -, or * for later
+      const checked = (match[3] === 'x')
+      const listSign = match[2] // Save the sign +, -, or * for later
 
-      let cbox = document.createElement('input')
+      const cbox = document.createElement('input')
       cbox.type = 'checkbox'
-      if (checked) cbox.checked = true
+      if (checked) {
+        cbox.checked = true
+      }
 
       // If the CodeMirror instance is readOnly, disable the checkbox
       cbox.disabled = cm.isReadOnly()
 
-      let textMarker = cm.doc.markText(
+      let textMarker = cm.markText(
         curFrom, curTo,
         {
           'clearOnEnter': true,
@@ -83,24 +93,20 @@ const { getTaskRE } = require('../../../regular-expressions');
       textMarker.on('hide', () => { textMarker.clear() })
 
       cbox.onclick = (e) => {
-        if (cm.isReadOnly()) return // Don't do anything
+        const markerPosition = textMarker.find()
+        if (cm.isReadOnly() || markerPosition === undefined) {
+          return // Don't do anything
+        }
 
-        // First, recalculate where the checkbox actually is.
-        let markerLine = textMarker.find().from.line
-        taskRE.lastIndex = 0
-        let m = taskRE.exec(cm.getLine(markerLine))
-        let leadingSpaces = (m && m[1]) ? m[1].length : 0
-        let curFrom = { 'line': markerLine, 'ch': 0 + leadingSpaces }
-        let curTo = { 'line': markerLine, 'ch': 5 + leadingSpaces }
+        const { from, to } = markerPosition
 
-        // Check or uncheck it
-        // Check the checkbox, alter the underlying text and replace the
-        // text marker in the list of checkboxes.
-        let check = (cbox.checked) ? 'x' : ' '
-        cm.replaceRange(`${listSign} [${check}]`, curFrom, curTo)
+        // Check or uncheck it (NOTE that cbox will already represent the NEW state)
+        const newMark = (cbox.checked) ? 'x' : ' '
+        cm.replaceRange(`${listSign} [${newMark}]`, from, to)
+
         // ReplaceRange removes the marker, so we have to re-initiate it
         textMarker = cm.doc.markText(
-          curFrom, curTo,
+          from, to,
           {
             'clearOnEnter': true,
             'replacedWith': cbox,

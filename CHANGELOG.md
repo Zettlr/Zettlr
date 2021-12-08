@@ -39,6 +39,7 @@
   (potentially critical) main configuration; NOTE that this means you must run
   the `test-gui` command first to generate that data-dir in the first place
   before starting the debugger
+- Cleaned up the handler for rendering task-list items
 
 # 2.0.3
 
