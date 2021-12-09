@@ -665,7 +665,8 @@ export default class Zettlr {
   }
 
   /**
-   * Opens the file passed to this function
+   * Opens the file passed to this function. This function exists because a lot
+   * of commands need it, but it's actually just a pass-through
    *
    * @param   {string}   filePath  The filepath
    * @param   {boolean}  newTab    Optional. If true, will always prevent exchanging the currently active file.
@@ -675,31 +676,7 @@ export default class Zettlr {
     // Add the file's metadata object to the recent docs
     // We only need to call the underlying function, it'll trigger a state
     // change event and will set in motion all other necessary processes.
-
-    // Remember if the file that should be opened was already opened. Because in
-    // this case we shouldn't close the active file (since we're not opening any
-    // new tabs in any case.)
-    const isFileAlreadyOpen = this._documentManager.openFiles.find(e => e.path === filePath) !== undefined
-    const file = await this._documentManager.openFile(filePath)
-
-    // The user determines if we should avoid new tabs. If we should do so,
-    // only open new tabs if the user has checked this setting.
-    const avoidNewTabs = Boolean(global.config.get('system.avoidNewTabs'))
-
-    if (this._documentManager.activeFile !== null && newTab !== true && avoidNewTabs) {
-      // We should avoid tabs, a new tab is not explicitly requested and we
-      // have an active file to close.
-      const activeFile = this._documentManager.activeFile
-
-      // However, one caveat: If the new file that we are about to set active
-      // was already open somewhere, we don't have to close this one, but rather
-      // switch to the next file.
-      if (activeFile !== null && !activeFile.modified && !isFileAlreadyOpen) {
-        this._documentManager.closeFile(activeFile)
-      }
-    }
-
-    this._documentManager.activeFile = file // Also make this thing active.
+    await this._documentManager.openFile(filePath, newTab)
   }
 
   /**
