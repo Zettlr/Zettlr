@@ -232,7 +232,7 @@ export default class DocumentManager extends EventEmitter {
 
     // Close the (formerly active) file if we should avoid new tabs and have not
     // gotten a specific request to open it in a *new* tab
-    if (this.activeFile !== null && avoidNewTabs && newTab !== true) {
+    if (this.activeFile !== null && avoidNewTabs && newTab !== true && !this.activeFile.modified) {
       this.closeFile(this.activeFile)
     }
 
