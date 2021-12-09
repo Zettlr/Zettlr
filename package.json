@@ -69,7 +69,7 @@
     "nspell": "^2.1.5",
     "rimraf": "^3.0.2",
     "sanitize-filename": "^1.6.3",
-    "sanitize-html": "^2.5.3",
+    "sanitize-html": "^2.6.1",
     "semver": "^7.3.5",
     "showdown": "^1.9.1",
     "tippy.js": "^6.3.7",
@@ -136,6 +136,6 @@
     "typescript": "^4.5.2",
     "typings-for-css-modules-loader": "^1.7.0",
     "vue-loader": "^16.8.3",
-    "webpack": "^5.64.4"
+    "webpack": "^5.65.0"
   }
 }
