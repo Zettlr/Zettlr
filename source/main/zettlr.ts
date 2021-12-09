@@ -432,11 +432,14 @@ export default class Zettlr {
       }
 
       return this._fsal.getMetadataFor(descriptor as MDFileDescriptor)
-    } else if (command === 'set-active-file') {
-      const descriptor = this._documentManager.openFiles.find(elem => elem.path === payload) // this._fsal.findFile(payload)
-      if (descriptor !== undefined) {
-        this._documentManager.activeFile = descriptor
-      }
+    } else if (command === 'next-file') {
+      // Trigger a "forward" command on the document manager
+      await this._documentManager.forward()
+      return true
+    } else if (command === 'previous-file') {
+      // Trigger a "back" command on the document manager
+      await this._documentManager.back()
+      return true
     } else if (command === 'set-writing-target') {
       // Sets or updates a file's writing target
       global.targets.set(payload)

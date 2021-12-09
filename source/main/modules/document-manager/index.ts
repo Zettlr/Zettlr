@@ -30,15 +30,15 @@ export default class DocumentManager extends EventEmitter {
   private _loadedDocuments: Array<MDFileDescriptor|CodeFileDescriptor>
   private _activeFile: MDFileDescriptor|CodeFileDescriptor|null
   private readonly _watcher: chokidar.FSWatcher
-  // private readonly _sessionHistory: string[]
-  // private _sessionPointer: number
+  private readonly _sessionHistory: string[]
+  private _sessionPointer: number
 
   constructor () {
     super()
 
     this._loadedDocuments = []
-    // this._sessionHistory = []
-    // this._sessionPointer = -1
+    this._sessionHistory = []
+    this._sessionPointer = -1
     this._activeFile = null
 
     let options: chokidar.WatchOptions = {
@@ -189,18 +189,24 @@ export default class DocumentManager extends EventEmitter {
    *
    * @return {Promise<MDFileDescriptor|CodeFileDescriptor>} The file's descriptor
    */
-  public async openFile (filePath: string, newTab?: boolean): Promise<MDFileDescriptor|CodeFileDescriptor> {
+  public async openFile (filePath: string, newTab?: boolean, modifyHistory?: boolean): Promise<MDFileDescriptor|CodeFileDescriptor> {
     const openFile = this._loadedDocuments.find(file => file.path === filePath)
 
     // Remove the file from the session history if applicable
-    // const sessionIndex = this._sessionHistory.indexOf(filePath)
-    // if (sessionIndex > -1) {
-    //   this._sessionHistory.splice(sessionIndex, 1)
-    // }
+    if (modifyHistory !== false) {
+      const sessionIndex = this._sessionHistory.indexOf(filePath)
+      if (sessionIndex > -1) {
+        this._sessionHistory.splice(sessionIndex, 1)
+      }
+    }
 
     // If the file is already open, we just set it as the active one and be done
     // with it, no further action needed
     if (openFile !== undefined) {
+      if (modifyHistory !== false) {
+        this._sessionHistory.push(filePath)
+        this._sessionPointer = this._sessionHistory.length - 1
+      }
       this.activeFile = openFile
       return openFile
     }
@@ -233,54 +239,12 @@ export default class DocumentManager extends EventEmitter {
     // Set the file as active, which will trigger a second wave of state updates
     this.activeFile = file
 
-    // Always only add the file if it could be successfully loaded
-    // this._sessionHistory.push(filePath)
+    if (modifyHistory !== false) {
+      this._sessionHistory.push(filePath)
+      this._sessionPointer = this._sessionHistory.length - 1
+    }
+
     return file
-  }
-
-  /**
-   * Opens, reads, and parses a file to be loaded.
-   *
-   * @param {String} filePath The file to be loaded
-   *
-   * @return {Promise<MDFileDescriptor|CodeFileDescriptor>} The file's descriptor
-   */
-  private async _loadFile (filePath: string): Promise<MDFileDescriptor|CodeFileDescriptor> {
-    // Loads a standalone file
-    const isCode = ALLOWED_CODE_FILES.includes(path.extname(filePath).toLowerCase())
-    const isMD = MARKDOWN_FILES.includes(path.extname(filePath).toLowerCase())
-
-    if (isCode) {
-      const file = await FSALCodeFile.parse(filePath, null)
-      return file
-    } else if (isMD) {
-      const file = await FSALFile.parse(filePath, null)
-      return file
-    } else {
-      throw new Error(`Could not load file ${filePath}: Invalid path provided`)
-    }
-  }
-
-  /**
-   * Returns a file metadata object including the file contents.
-   * @param {Object} file The file descriptor
-   */
-  public async getFileContents (file: MDFileDescriptor|CodeFileDescriptor): Promise<MDFileMeta|CodeFileMeta> {
-    if (file.type === 'file') {
-      const returnFile = FSALFile.metadata(file)
-      if (file.dir !== ':memory:') {
-        returnFile.content = await FSALFile.load(file)
-      }
-      return returnFile
-    } else if (file.type === 'code') {
-      const returnFile = FSALCodeFile.metadata(file)
-      if (file.dir !== ':memory:') {
-        returnFile.content = await FSALCodeFile.load(file)
-      }
-      return returnFile
-    }
-
-    throw new Error('[FSAL] Could not retrieve file contents: Invalid type or invalid descriptor.')
   }
 
   /**
@@ -329,6 +293,90 @@ export default class DocumentManager extends EventEmitter {
     this._loadedDocuments = []
     this.emit('update', 'openFiles')
     global.config.set('openFiles', [])
+  }
+
+  /**
+   * Goes back in the session history and opens the previous file
+   */
+  public async back (): Promise<void> {
+    await this._moveThroughHistory(-1)
+  }
+
+  /**
+   * Goes forward in the session history and opens the next file
+   */
+  public async forward (): Promise<void> {
+    await this._moveThroughHistory(1)
+  }
+
+  /**
+   * Moves through history using the specified direction
+   *
+   * @param   {number}  direction  The direction to take. Negative = back, positive = forward
+   */
+  private async _moveThroughHistory (direction: number): Promise<void> {
+    // Always make sure the session pointer is valid
+    if (this._sessionPointer < 0 || this._sessionPointer > this._sessionHistory.length - 1) {
+      this._sessionPointer = this._sessionHistory.length - 1
+    }
+
+    const targetIndex = this._sessionPointer + direction
+
+    if (targetIndex > this._sessionHistory.length - 1 || targetIndex < 0) {
+      return // Cannot move: Out of bounds
+    }
+
+    // Move the pointer
+    this._sessionPointer = targetIndex
+    const pathToOpen = this._sessionHistory[this._sessionPointer]
+
+    // Open that file, but tell the opener explicitly not to modify the state
+    await this.openFile(pathToOpen, undefined, false)
+  }
+
+  /**
+   * Opens, reads, and parses a file to be loaded.
+   *
+   * @param {String} filePath The file to be loaded
+   *
+   * @return {Promise<MDFileDescriptor|CodeFileDescriptor>} The file's descriptor
+   */
+  private async _loadFile (filePath: string): Promise<MDFileDescriptor|CodeFileDescriptor> {
+    // Loads a standalone file
+    const isCode = ALLOWED_CODE_FILES.includes(path.extname(filePath).toLowerCase())
+    const isMD = MARKDOWN_FILES.includes(path.extname(filePath).toLowerCase())
+
+    if (isCode) {
+      const file = await FSALCodeFile.parse(filePath, null)
+      return file
+    } else if (isMD) {
+      const file = await FSALFile.parse(filePath, null)
+      return file
+    } else {
+      throw new Error(`Could not load file ${filePath}: Invalid path provided`)
+    }
+  }
+
+  /**
+   * Returns a file metadata object including the file contents.
+   * @param {Object} file The file descriptor
+   */
+  public async getFileContents (file: MDFileDescriptor|CodeFileDescriptor): Promise<MDFileMeta|CodeFileMeta> {
+    if (file.type === 'file') {
+      const returnFile = FSALFile.metadata(file)
+      if (file.dir !== ':memory:') {
+        returnFile.content = await FSALFile.load(file)
+      }
+      return returnFile
+    } else if (file.type === 'code') {
+      const returnFile = FSALCodeFile.metadata(file)
+      if (file.dir !== ':memory:') {
+        returnFile.content = await FSALCodeFile.load(file)
+      }
+      return returnFile
+    }
+
+    throw new Error('[FSAL] Could not retrieve file contents: Invalid type or invalid descriptor.')
   }
 
   /**

@@ -237,17 +237,16 @@ export default {
         // It was a left-click. (We must check because otherwise we would also
         // perform this action on a right-click (button === 2), but that event
         // must be handled by the container).
-        ipcRenderer.invoke('application', {
-          command: 'set-active-file',
-          payload: file.path
-        })
-          .catch(e => console.error(e))
+        this.selectFile(file)
       }
     },
     selectFile: function (file) {
+      // NOTE: We're handling active file setting via the open-file command. As
+      // long as a given file is already open, the document manager will simply
+      // set it as active. That is why we don't provide the newTab property.
       ipcRenderer.invoke('application', {
-        command: 'set-active-file',
-        payload: file.path
+        command: 'open-file',
+        payload: { path: file.path }
       })
         .catch(e => console.error(e))
     },

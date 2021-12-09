@@ -480,14 +480,12 @@ export default {
       this.jumpToLine(filePath, lineNumber, isMiddleClick)
     },
     jumpToLine: function (filePath, lineNumber, openInNewTab = false) {
-      const isFileOpen = this.openFiles.find(file => file.path === filePath)
       const isActiveFile = (this.activeFile !== null) ? this.activeFile.path === filePath : false
 
       if (isActiveFile) {
         this.$emit('jtl', lineNumber)
-      } else if (isFileOpen === undefined) {
-        // The wanted file is not yet open --> open it and afterwards issue the
-        // jtl-command
+      } else {
+        // The wanted file is not yet active -> Do so and then jump to the correct line
         ipcRenderer.invoke('application', {
           command: 'open-file',
           payload: {
@@ -502,16 +500,6 @@ export default {
             if (lineNumber >= 0) {
               this.jtlIntent = lineNumber
             }
-          })
-          .catch(e => console.error(e))
-      } else {
-        ipcRenderer.invoke('application', {
-          command: 'set-active-file',
-          payload: filePath
-        })
-          .then(() => {
-            // As soon as the file becomes active, jump to that line
-            this.jtlIntent = lineNumber
           })
           .catch(e => console.error(e))
       }

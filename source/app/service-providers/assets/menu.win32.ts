@@ -157,6 +157,31 @@ export default function getMenu (
           type: 'separator'
         },
         {
+          id: 'menu.previous_file',
+          label: 'Previous file',
+          accelerator: 'Ctrl+[',
+          click: function (menuitem, focusedWindow) {
+            global.application.runCommand('previous-file')
+              .catch(e => {
+                global.log.error(`[Menu] Error selecting previous file: ${e.message as string}`, e)
+              })
+          }
+        },
+        {
+          id: 'menu.next_file',
+          label: 'Next file',
+          accelerator: 'Ctrl+]',
+          click: function (menuitem, focusedWindow) {
+            global.application.runCommand('next-file')
+              .catch(e => {
+                global.log.error(`[Menu] Error selecting next file: ${e.message as string}`, e)
+              })
+          }
+        },
+        {
+          type: 'separator'
+        },
+        {
           id: 'menu.import_files',
           label: trans('menu.import_files'),
           click: function (menuItem, focusedWindow) {

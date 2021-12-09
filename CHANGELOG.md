@@ -2,6 +2,10 @@
 
 ## GUI and Functionality
 
+- **New Feature**: Implemented "forward" and "back" actions, which are
+  especially useful for people managing a Zettelkasten and frequently follow
+  links: Now you can go back and forth between opened files (shortcuts:
+  `Cmd/Ctrl+[` and `Cmd/Ctrl+]`) so you can more quickly navigate your files
 - Fixed an error in the link filtering process that would throw an error when
   you attempted to remove internal links completely upon export
 - Fixed `Cmd/Ctrl-Click`-behavior on footnotes
