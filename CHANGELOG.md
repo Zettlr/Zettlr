@@ -21,6 +21,8 @@
 - Moved the file renaming process via shortcut to the document tabs since it's
   much more visible there
 - Fix a very rare bug in which selections inside headings would look off
+- Fixed an error that would fail the print preview if you had images with
+  relative paths in your document
 
 ## Under the Hood
 
