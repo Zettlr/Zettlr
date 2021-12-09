@@ -2478,12 +2478,12 @@ css-select@^1.1.0:
     domutils "1.5.1"
     nth-check "~1.0.1"
 
-css-tree@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/css-tree/-/css-tree-1.1.2.tgz#9ae393b5dafd7dae8a622475caec78d3d8fbd7b5"
-  integrity sha512-wCoWush5Aeo48GLhfHPbmvZs59Z+M7k5+B1xDnXbdWNcEF423DoFdqSWE0PM5aNk5nI5cp1q7ms36zGApY/sKQ==
+css-tree@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/css-tree/-/css-tree-2.0.1.tgz#3760ecf06fa0b89474479bbeb49659b6b1672f6d"
+  integrity sha512-rY9547sbMV6T7uD7ZI+b0ncoH7uA4DVil6TLHewrAai28DMDVFxwu0yK/e4wMk4DlP/NFpkpWYWtkZwbpSdpaw==
   dependencies:
-    mdn-data "2.0.14"
+    mdn-data "2.0.23"
     source-map "^0.6.1"
 
 css-what@2.1:
@@ -2506,12 +2506,12 @@ cssesc@^3.0.0:
   resolved "https://registry.yarnpkg.com/cssesc/-/cssesc-3.0.0.tgz#37741919903b868565e1c09ea747445cd18983ee"
   integrity sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==
 
-csso@^4.2.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/csso/-/csso-4.2.0.tgz#ea3a561346e8dc9f546d6febedd50187cf389529"
-  integrity sha512-wvlcdIbf6pwKEk7vHj8/Bkc0B4ylXZruLvOgs9doS5eOsOpuodOV2zJChSpkp+pRpYQLQMeF04nr3Z68Sta9jA==
+csso@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/csso/-/csso-5.0.0.tgz#ba81df315eaef640817e859d5295dbc969baee5f"
+  integrity sha512-z3LEHoehLw5I18vgvJ3hJQMs1JX41sSIxXnlAeGQ15XF4UYoUpUbq+sv+Xn7z3+2F/S5Q1xTEA4fdJVXHgv+MA==
   dependencies:
-    css-tree "^1.1.2"
+    css-tree "2.0.1"
 
 cssom@^0.4.1:
   version "0.4.4"
@@ -6311,10 +6311,10 @@ md5@^2.3.0:
     crypt "0.0.2"
     is-buffer "~1.1.6"
 
-mdn-data@2.0.14:
-  version "2.0.14"
-  resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-2.0.14.tgz#7113fc4281917d63ce29b43446f701e68c25ba50"
-  integrity sha512-dn6wd0uw5GsdswPFfsgMp5NSB0/aDe6fK94YJV/AJDYXL6HVLWBsxeq7js7Ad+mU2K9LAlwpk6kN2D5mwCPVow==
+mdn-data@2.0.23:
+  version "2.0.23"
+  resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-2.0.23.tgz#dfb6c41e50a0edb808cf340973ab29321b70808e"
+  integrity sha512-IonVb7pfla2U4zW8rc7XGrtgq11BvYeCxWN8HS+KFBnLDE7XDK9AAMVhRuG6fj9BBsjc69Fqsp6WEActEdNTDQ==
 
 media-typer@0.3.0:
   version "0.3.0"
