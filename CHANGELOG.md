@@ -25,6 +25,8 @@
   relative paths in your document
 - Internal links to files that contain a period should work now (except what
   follows exactly matches an allowed Markdown file extension)
+- Scrollbars on Windows and Linux should now switch colors according to the
+  app's dark mode setting
 
 ## Under the Hood
 

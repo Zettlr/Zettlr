@@ -91,6 +91,21 @@ body {
   }
 }
 
+// Make sure that scrollbars look dark or light depending on the app's theme on
+// non-macOS systems. The colors and general styles have been taken very
+// professionally from a screenshot of a Windows 10 interface
+body:not(.darwin) {
+  ::-webkit-scrollbar { background-color: rgb(228, 228, 228); }
+  ::-webkit-scrollbar-button { background-color: rgb(172, 172, 172); }
+  ::-webkit-scrollbar-thumb { background-color: rgb(172, 172, 172); }
+
+  &.dark {
+    ::-webkit-scrollbar { background-color: rgb(40, 40, 40); }
+    ::-webkit-scrollbar-button { background-color: rgb(40, 40, 40); }
+    ::-webkit-scrollbar-thumb { background-color: rgb(78, 78, 88); }
+  }
+}
+
 // The application menu class is basically one menu that is shown both if the
 // custom menubar is shown and a top level item submenu is pulled up, as well as
 // if there is a context menu (as we don't use the remote class to display
