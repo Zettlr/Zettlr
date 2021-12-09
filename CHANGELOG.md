@@ -23,6 +23,8 @@
 - Fix a very rare bug in which selections inside headings would look off
 - Fixed an error that would fail the print preview if you had images with
   relative paths in your document
+- Internal links to files that contain a period should work now (except what
+  follows exactly matches an allowed Markdown file extension)
 
 ## Under the Hood
 
