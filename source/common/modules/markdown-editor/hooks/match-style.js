@@ -20,16 +20,16 @@ const clipboard = window.clipboard
  * Parses possible HTML clipboard content to Markdown to enable
  * "Paste and match style" functionality.
  *
- * @param   {CodeMirror}  cm  The instance
+ * @param   {CodeMirror.Editor}  cm  The instance
  */
 module.exports = (cm) => {
   cm.on('beforeChange', (cm, changeObj) => {
     // If text is to be pasted, we may need to exchange some text.
     if (changeObj.origin !== 'paste') return
 
-    let html = clipboard.readHTML()
+    const html = clipboard.readHTML()
     let plain = clipboard.readText()
-    let explicitPaste = plain.replace(/\r/g, '') === changeObj.text.join('\n')
+    const explicitPaste = plain.replace(/\r/g, '') === changeObj.text.join('\n')
 
     // In case there is HTML-formatted text in the clipboard, we'll be sneaky
     // and simply exchange the plain text with the Markdown formatted version.

@@ -13,6 +13,7 @@
  */
 
 const CodeMirror = require('codemirror')
+const clipboard = window.clipboard
 
 module.exports = function (editor) {
   let homeEndBehaviour = Boolean(global.config.get('editor.homeEndBehaviour'))
@@ -62,6 +63,17 @@ module.exports = function (editor) {
     // via Tab and Shift-Tab and Cmd-[/Cmd-] are reserved for file back/forward
     keymap['Ctrl-['] = false
     keymap['Ctrl-]'] = false
+    // NOTE: While on macOS, priority is given to the menu bar handlers, on
+    // Windows a paste event with the shift key held will be handled normally
+    // by the editor, which means that it will ALWAYS fire the beforeChange
+    // handler (defined in match-style.js) and only afterwards trigger the
+    // paste-as-plain method on the main editor instance. By re-mapping that key
+    // here, we effectively intercept it and prevent CodeMirror from doing funky
+    // stuff with it.
+    keymap['Shift-Ctrl-V'] = function (cm) {
+      const plainText = clipboard.readText()
+      cm.replaceSelection(plainText)
+    }
     // If homeEndBehaviour is true, use defaults (paragraph start/end), if it's
     // false, use visible lines.
     keymap['Home'] = (homeEndBehaviour) ? 'goLineStart' : 'goLineLeftMarkdown'

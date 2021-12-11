@@ -30,6 +30,8 @@
 - Zettlr doesn't detect links to other headings in the form of `[link](#target)`
   as tags anymore
 - Reinstated the ability to use pure number tags or hexadecimal numbers as tags
+- Using the shortcut `Ctrl-Shift-V` to paste something as plain text will no
+  longer paste it twice on Windows and Linux
 
 ## Under the Hood
 

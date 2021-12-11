@@ -45,7 +45,6 @@ const {
 /**
  * APIs
  */
-// const { clipboard, ipcRenderer } = require('electron')
 const EventEmitter = require('events')
 
 const ipcRenderer = window.ipc
@@ -322,7 +321,7 @@ module.exports = class MarkdownEditor extends EventEmitter {
    * text present.
    */
   pasteAsPlainText () {
-    let plainText = clipboard.readText()
+    const plainText = clipboard.readText()
 
     // Simple programmatical paste.
     if (plainText.length > 0) {
