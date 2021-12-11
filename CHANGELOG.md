@@ -50,6 +50,8 @@
   the `test-gui` command first to generate that data-dir in the first place
   before starting the debugger
 - Cleaned up the handler for rendering task-list items
+- Switched the windows update, tag-manager, stats, quicklook, project-properties,
+  print, paste-image, log-viewer, error, and about to TypeScript
 
 # 2.0.3
 

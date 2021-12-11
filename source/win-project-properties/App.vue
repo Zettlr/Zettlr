@@ -59,7 +59,7 @@
   </WindowChrome>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -76,13 +76,17 @@
 
 import { trans } from '../common/i18n-renderer'
 import WindowChrome from '../common/vue/window/Chrome.vue'
-import ListControl from '../common/vue/form/elements/List'
-import FileControl from '../common/vue/form/elements/File'
-import TextControl from '../common/vue/form/elements/Text'
+import ListControl from '../common/vue/form/elements/List.vue'
+import FileControl from '../common/vue/form/elements/File.vue'
+import TextControl from '../common/vue/form/elements/Text.vue'
+import { IpcRenderer } from 'electron'
+import { defineComponent } from 'vue'
 
-const ipcRenderer = window.ipc
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
-export default {
+interface ExportFormat { selected: boolean, format: string }
+
+export default defineComponent({
   components: {
     WindowChrome,
     ListControl,
@@ -92,7 +96,7 @@ export default {
   data: function () {
     return {
       dirPath: '',
-      exportFormatMap: {},
+      exportFormatMap: {} as { [key: string]: string },
       selectedExportFormats: [ 'html', 'chromium-pdf' ], // NOTE: Must correspond to the defaults in fsal-directory.ts
       patterns: [],
       cslStyle: '',
@@ -117,10 +121,10 @@ export default {
     }
   },
   computed: {
-    windowTitle: function () {
+    windowTitle: function (): string {
       return this.projectTitle
     },
-    exportFormatList: function () {
+    exportFormatList: function (): ExportFormat[] {
       // We need to return a list of { selected: boolean, format: 'string' }
       return Object.keys(this.exportFormatMap).map(e => {
         return {
@@ -129,19 +133,19 @@ export default {
         }
       })
     },
-    exportFormatLabel: function () {
+    exportFormatLabel: function (): string {
       return trans('dialog.preferences.project.format')
     },
-    exportFormatUseLabel: function () {
+    exportFormatUseLabel: function (): string {
       return trans('dialog.preferences.project.use_label')
     },
-    exportFormatNameLabel: function () {
+    exportFormatNameLabel: function (): string {
       return trans('dialog.preferences.project.name_label')
     },
-    exportPatternLabel: function () {
+    exportPatternLabel: function (): string {
       return trans('dialog.preferences.project.pattern')
     },
-    exportPatternNameLabel: function () {
+    exportPatternNameLabel: function (): string {
       return trans('dialog.preferences.project.pattern_name')
     }
   },
@@ -197,7 +201,7 @@ export default {
     })
   },
   methods: {
-    selectExportFormat: function (newListVal) {
+    selectExportFormat: function (newListVal: ExportFormat[]) {
       const newFormats = newListVal.filter(e => e.selected).map(e => {
         return this.exportFormatMap[e.format]
       })
@@ -239,7 +243,7 @@ export default {
         .catch(err => console.error(err))
     }
   }
-}
+})
 </script>
 
 <style lang="less">

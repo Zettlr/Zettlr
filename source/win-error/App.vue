@@ -17,7 +17,7 @@
   </WindowChrome>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -34,10 +34,12 @@
 
 import WindowChrome from '../common/vue/window/Chrome.vue'
 import { trans } from '../common/i18n-renderer'
+import { IpcRenderer } from 'electron'
+import { defineComponent } from 'vue'
 
-const ipcRenderer = window.ipc
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
-export default {
+export default defineComponent({
   components: {
     WindowChrome
   },
@@ -71,13 +73,13 @@ export default {
     }
   },
   methods: {
-    handleClick: function (controlID) {
+    handleClick: function (controlID: string) {
       if (controlID === 'ok') {
         ipcRenderer.send('window-controls', { command: 'win-close' })
       }
     }
   }
-}
+})
 </script>
 
 <style lang="less">

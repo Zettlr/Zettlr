@@ -58,7 +58,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -77,19 +77,25 @@ import { DateTime } from 'luxon'
 import { trans } from '../common/i18n-renderer'
 import {
   Chart,
+  ChartData,
+  ChartDataset,
   CategoryScale,
   LinearScale,
   LineController,
   PointElement,
-  LineElement
+  LineElement,
+  ChartConfiguration
 } from 'chart.js'
 import SelectControl from '../common/vue/form/elements/Select.vue'
 import ButtonControl from '../common/vue/form/elements/Button.vue'
+import { defineComponent, PropType } from 'vue'
 
 // Register the components of Chart.js which we need
 Chart.register(CategoryScale, LinearScale, LineController, PointElement, LineElement)
 
-export default {
+let chart: Chart|null = null
+
+export default defineComponent({
   name: 'ChartView',
   components: {
     SelectControl,
@@ -97,8 +103,8 @@ export default {
   },
   props: {
     wordCounts: {
-      type: Object,
-      default: function () { return {} }
+      type: Object as PropType<{ [key: string]: number }>,
+      required: true
     }
   },
   data: function () {
@@ -106,17 +112,14 @@ export default {
       now: DateTime.local(),
       currentYear: DateTime.local().year,
       currentMonth: DateTime.local().month,
-      // TODO: Move the Chart out of the Vue proxy hell. There are fortunately
-      // no errors as of now, but you never know.
-      chart: null,
       unit: 'month' // Possible display unit
     }
   },
   computed: {
-    chartLabel: function () {
+    chartLabel: function (): string {
       return trans('dialog.statistics.tabs.chart_label')
     },
-    earliestYear: function () {
+    earliestYear: function (): number {
       const years = Object.keys(this.wordCounts).map(k => parseInt(k.substr(0, 4), 10))
       let min = +Infinity
       for (const year of years) {
@@ -127,7 +130,7 @@ export default {
 
       return min
     },
-    latestYear: function () {
+    latestYear: function (): number {
       const years = Object.keys(this.wordCounts).map(k => parseInt(k.substr(0, 4), 10))
       let max = -Infinity
       for (const year of years) {
@@ -138,7 +141,7 @@ export default {
 
       return max
     },
-    earliestMonth: function () {
+    earliestMonth: function (): number {
       // Returns the earliest month given the current _year_
       const months = Object.keys(this.wordCounts).filter(k => {
         const year = parseInt(k.substr(0, 4), 10)
@@ -155,7 +158,7 @@ export default {
       }
       return min
     },
-    latestMonth: function () {
+    latestMonth: function (): number {
       const months = Object.keys(this.wordCounts).filter(k => {
         const year = parseInt(k.substr(0, 4), 10)
         return year === this.currentYear
@@ -176,10 +179,11 @@ export default {
      *
      * @return  {Array}  An array for year-datasets
      */
-    years: function () {
+    years: function (): ChartData {
       // Years are computed on a week-wise basis
-      const datasets = []
-      const labels = []
+      const datasets: ChartDataset[] = []
+      const labels: string[] = []
+
       for (let i = this.earliestYear; i <= this.latestYear; i++) {
         // Initialise some variables: The beginning (Jan 1st), the end (probably
         // Dec 31st, but I don't take any bets, as to why, see this video:
@@ -195,8 +199,8 @@ export default {
         const randR = Math.random() * 255
         const randG = Math.random() * 255
         const randB = Math.random() * 255
-        const year = {
-          label: pointer.year,
+        const year: ChartDataset = {
+          label: String(pointer.year),
           pointRadius: 0,
           borderColor: `rgba(${randR}, ${randG}, ${randB}, 0.7)`,
           backgroundColor: `rgba(${randR}, ${randG}, ${randB}, 0.7)`, // Necessary for tooltips
@@ -235,7 +239,8 @@ export default {
           // Also, add the data point, using pointer minus 1 day to stay in the
           // last week.
           year.data.push({
-            x: pointer.minus({ days: 1 }).toJSDate(),
+            // BUG: Fix this type annotation, somehow those Dates don't work
+            x: pointer.minus({ days: 1 }).toJSDate() as unknown as number,
             y: weekCount
           })
         }
@@ -249,10 +254,10 @@ export default {
         datasets: datasets
       }
     },
-    months: function () {
+    months: function (): ChartData {
       // Months are calculated on a day-basis per year.
       const datasets = []
-      const labels = []
+      const labels: any[] = []
 
       for (let i = this.earliestMonth; i <= this.latestMonth; i++) {
         let pointer = DateTime.local(this.currentYear, i, 1)
@@ -263,7 +268,7 @@ export default {
         const randR = Math.random() * 255
         const randG = Math.random() * 255
         const randB = Math.random() * 255
-        const month = {
+        const month: ChartDataset = {
           label: pointer.toLocaleString({ month: 'long' }),
           pointRadius: 0,
           borderColor: `rgba(${randR}, ${randG}, ${randB}, 0.7)`,
@@ -288,7 +293,8 @@ export default {
           }
 
           month.data.push({
-            x: pointer.toJSDate(),
+            // BUG: Fix this type annotation, somehow those Dates don't work
+            x: pointer.toJSDate() as unknown as number,
             y: dayCount
           })
           // Progress one day.
@@ -303,7 +309,7 @@ export default {
         datasets: datasets
       }
     },
-    currentData: function () {
+    currentData: function (): ChartData {
       // Just returns the data necessary for the chart library that can then
       // be plugged into it.
       return (this.unit === 'year') ? this.years : this.months
@@ -311,25 +317,27 @@ export default {
   },
   watch: {
     currentData: function () {
-      this.chart.data = this.currentData
-      this.chart.update()
+      if (chart !== null) {
+        chart.data = this.currentData
+        chart.update()
+      }
     }
   },
   mounted: function () {
     this.createChart(this.currentData)
   },
   beforeUnmount: function () {
-    if (this.chart !== null) {
-      this.chart.destroy()
+    if (chart !== null) {
+      chart.destroy()
     }
   },
   methods: {
-    createChart: function (initialData) {
-      if (this.chart !== null) {
+    createChart: function (initialData: ChartData) {
+      if (chart !== null) {
         return // Not gonna recreate the chart, we only need one thing.
       }
 
-      this.chart = new Chart(this.$refs.chart, {
+      chart = new Chart(this.$refs.chart as HTMLCanvasElement, {
         type: 'line',
         data: initialData,
         options: {
@@ -380,22 +388,22 @@ export default {
             }
           }
         }
-      }) // END chart instantiation
+      } as ChartConfiguration) // END chart instantiation
     },
-    prevYear: function () {
+    prevYear: function (): void {
       // Decrease the unit by one if possible
       if (this.currentYear > this.earliestYear) {
         this.currentYear -= 1
       }
     },
-    nextYear: function () {
+    nextYear: function (): void {
       // Increase by one, if possible
       if (this.currentYear < this.latestYear) {
         this.currentYear += 1
       }
     }
   }
-}
+})
 </script>
 
 <style lang="less">

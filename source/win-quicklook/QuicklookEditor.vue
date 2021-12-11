@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -20,15 +20,17 @@
  * END HEADER
  */
 
-const MarkdownEditor = require('../common/modules/markdown-editor')
-const CodeMirror = require('codemirror')
+import MarkdownEditor from '../common/modules/markdown-editor'
+import CodeMirror from 'codemirror'
+import { IpcRenderer } from 'electron'
+import { defineComponent } from 'vue'
 
-const ipcRenderer = window.ipc
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
-let mdEditor = null
+let mdEditor: MarkdownEditor|null = null
 let scrollbarAnnotations = null
 
-export default {
+export default defineComponent({
   name: 'QuicklookEditor',
   props: {
     fontSize: {
@@ -141,7 +143,7 @@ export default {
   },
   mounted: function () {
     // As soon as the component is mounted, initiate the editor
-    mdEditor = new MarkdownEditor(this.$refs.editor, {
+    mdEditor = new MarkdownEditor(this.$refs.editor as HTMLTextAreaElement, {
       // If there are images in the Quicklook file, the image renderer needs
       // the directory path of the file to correctly render the images.
       zettlr: {
@@ -159,13 +161,17 @@ export default {
 
     // Listen to shortcuts from the main process
     ipcRenderer.on('shortcut', (event, shortcut) => {
-      if (shortcut === 'copy-as-html') {
+      if (shortcut === 'copy-as-html' && mdEditor !== null) {
         mdEditor.copyAsHTML()
       }
     })
   },
   methods: {
-    updateConfig: function (option) {
+    updateConfig: function (option: any) {
+      if (mdEditor === null) {
+        return
+      }
+
       // TODO: Make use of option, too lazy to copy over the boilerplate from
       // the main editor right now. Quicklooks are more static so they shouldn't
       // care too much about these things.
@@ -191,10 +197,14 @@ export default {
       })
     },
     searchNext () {
+      if (mdEditor === null) {
+        return
+      }
+
       mdEditor.searchNext(this.query)
     }
   }
-}
+})
 </script>
 
 <style lang="less">

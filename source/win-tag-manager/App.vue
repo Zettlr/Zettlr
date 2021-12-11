@@ -38,7 +38,7 @@
   </WindowChrome>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -57,10 +57,18 @@ import WindowChrome from '../common/vue/window/Chrome.vue'
 import TextControl from '../common/vue/form/elements/Text.vue'
 import ColorControl from '../common/vue/form/elements/Color.vue'
 import { trans } from '../common/i18n-renderer'
+import { IpcRenderer } from 'electron'
+import { defineComponent } from 'vue'
 
-const ipcRenderer = window.ipc
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
-export default {
+interface ColouredTag {
+  name: string
+  color: string
+  desc: string
+}
+
+export default defineComponent({
   components: {
     WindowChrome,
     TextControl,
@@ -68,7 +76,7 @@ export default {
   },
   data: function () {
     return {
-      tags: []
+      tags: [] as ColouredTag[]
     }
   },
   computed: {
@@ -121,11 +129,18 @@ export default {
       .catch(e => console.error(e))
   },
   methods: {
-    handleClick: function (controlID) {
+    handleClick: function (controlID: string) {
       if (controlID === 'save') {
         ipcRenderer.invoke('tag-provider', {
           command: 'set-coloured-tags',
-          payload: this.tags.map(tag => tag) // De-proxy
+          payload: this.tags.map(tag => {
+            // De-proxy the tags so they can be sent over IPC
+            return {
+              name: tag.name,
+              color: tag.color,
+              desc: tag.desc
+            }
+          })
         })
           .then(() => {
             ipcRenderer.send('window-controls', { command: 'win-close' })
@@ -141,11 +156,11 @@ export default {
         })
       }
     },
-    removeTag: function (tagIndex) {
+    removeTag: function (tagIndex: number) {
       this.tags.splice(tagIndex, 1)
     }
   }
-}
+})
 </script>
 
 <style lang="less">

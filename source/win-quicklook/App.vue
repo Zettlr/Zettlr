@@ -33,7 +33,7 @@
   </WindowChrome>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -51,10 +51,12 @@
 import QuicklookEditor from './QuicklookEditor.vue'
 import WindowChrome from '../common/vue/window/Chrome.vue'
 import { trans } from '../common/i18n-renderer'
+import { IpcRenderer } from 'electron'
+import { defineComponent } from 'vue'
 
-const ipcRenderer = window.ipc
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
-export default {
+export default defineComponent({
   components: {
     WindowChrome,
     QuicklookEditor
@@ -83,24 +85,24 @@ export default {
     }
   },
   computed: {
-    shouldShowTitlebar: function () {
+    shouldShowTitlebar: function (): boolean {
       return process.platform !== 'darwin'
     },
-    windowTitle: function () {
+    windowTitle: function (): string {
       let title = this.name
       const firstHeadings = Boolean(global.config.get('display.useFirstHeadings'))
       if (this.type === 'file') {
         if (this.firstHeading !== null && firstHeadings) {
           title = this.firstHeading
         }
-        if (this.frontmatter != null && this.frontmatter.title !== undefined) {
-          title = this.frontmatter.title
+        if (this.frontmatter != null && 'title' in this.frontmatter) {
+          title = (this.frontmatter as any).title
         }
       }
       return title
     },
-    toolbarControls: function () {
-      const ctrl = [
+    toolbarControls: function (): any[] {
+      const ctrl: any[] = [
         {
           type: 'spacer', // Make sure the content is flushed to the left
           size: 'size-5x'
@@ -108,11 +110,11 @@ export default {
         {
           type: 'search',
           placeholder: trans('dialog.find.find_placeholder'),
-          onInputHandler: (value) => {
+          onInputHandler: (value: string) => {
             this.query = value
           },
-          onSubmitHandler: (value) => {
-            this.$refs.editor.searchNext()
+          onSubmitHandler: (value: string) => {
+            (this.$refs.editor as typeof QuicklookEditor).searchNext()
           }
         }
       ]
@@ -135,17 +137,17 @@ export default {
 
       if (command === 'update') {
         const { payload } = message
-        this.$refs.editor.updateConfig(payload)
+        ;(this.$refs.editor as typeof QuicklookEditor).updateConfig(payload)
       }
     })
   },
   methods: {
-    searchNext: function (query) {
+    searchNext: function (query: string) {
       this.query = query
-      this.$refs.editor.searchNext()
+      ;(this.$refs.editor as typeof QuicklookEditor).searchNext()
     }
   }
-}
+})
 </script>
 
 <style lang="less">

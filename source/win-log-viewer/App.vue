@@ -20,7 +20,7 @@
   </WindowChrome>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -37,11 +37,12 @@
 
 import LogMessage from './LogMessage.vue'
 import WindowChrome from '../common/vue/window/Chrome.vue'
-import { nextTick } from 'vue'
+import { nextTick, defineComponent } from 'vue'
+import { IpcRenderer } from 'electron'
 
-const ipcRenderer = window.ipc
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
-export default {
+export default defineComponent({
   components: {
     LogMessage,
     WindowChrome
@@ -50,7 +51,7 @@ export default {
     return {
       filter: '', // Optionally filter the messages with a string
       nextIndex: 0, // Last log message array index; updated from the main process
-      messages: [], // Holds all the log files
+      messages: [] as LogMessage[], // Holds all the log files
       // Filters TODO: Actually enable setting and getting these
       includeVerbose: true,
       includeInfo: true,
@@ -59,7 +60,7 @@ export default {
     }
   },
   computed: {
-    filteredMessages: function () {
+    filteredMessages: function (): LogMessage[] {
       const preFiltered = this.messages.filter(message => {
         if (this.includeVerbose === true && message.level === 1) {
           return true
@@ -138,7 +139,7 @@ export default {
   mounted: function () {
     const self = this
     setInterval(function () {
-      self.fetchData()
+      self.fetchData().catch(e => console.error('Could not fetch new log data', e))
     }, 1000)
   },
   methods: {
@@ -147,7 +148,7 @@ export default {
      *
      * @return  {void}
      */
-    fetchData: async function () {
+    fetchData: async function (): Promise<void> {
       const newLogs = await ipcRenderer.invoke('log-provider', {
         command: 'retrieve-log-chunk',
         nextIndex: this.nextIndex
@@ -169,7 +170,7 @@ export default {
      * @return  {boolean}  Whether the container is at the bottom
      */
     containerScrolledToBottom: function () {
-      const elem = this.$refs['log-viewer']
+      const elem = this.$refs['log-viewer'] as Element
       const lastVisiblePixel = elem.getBoundingClientRect().height + elem.scrollTop
       const leftToShow = elem.scrollHeight - lastVisiblePixel
 
@@ -181,10 +182,10 @@ export default {
      * @return  {void}
      */
     scrollToBottom: function () {
-      const elem = this.$refs['log-viewer']
+      const elem = this.$refs['log-viewer'] as Element
       elem.scrollTop = elem.scrollHeight - elem.getBoundingClientRect().height
     },
-    handleToggle: function (event) {
+    handleToggle: function (event: { id: string, state: any }) {
       const { id, state } = event
       if (id === 'verboseToggle') {
         this.includeVerbose = state
@@ -197,7 +198,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style lang="less">

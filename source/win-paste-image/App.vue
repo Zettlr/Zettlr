@@ -56,7 +56,7 @@
   </WindowChrome>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -77,13 +77,15 @@ import TextControl from '../common/vue/form/elements/Text.vue'
 import NumberControl from '../common/vue/form/elements/Number.vue'
 import File from '../common/vue/form/elements/File.vue'
 import { trans } from '../common/i18n-renderer'
+import { IpcRenderer } from 'electron'
+import { defineComponent } from 'vue'
 import md5 from 'md5'
 
-const path = window.path
-const ipcRenderer = window.ipc
-const clipboard = window.clipboard
+const path = (window as any).path
+const ipcRenderer: IpcRenderer = (window as any).ipc
+const clipboard = (window as any).clipboard
 
-export default {
+export default defineComponent({
   components: {
     WindowChrome,
     Checkbox,
@@ -176,11 +178,12 @@ export default {
   },
   mounted: function () {
     // On instantiation, already focus and select the filename input
-    this.$refs.filename.focus()
-    this.$refs.filename.select()
+    const input = this.$refs.filename as HTMLInputElement
+    input.focus()
+    input.select()
   },
   methods: {
-    recalculateDimensions: function (type) {
+    recalculateDimensions: function (type: 'width'|'height') {
       if (this.retainAspect === false) {
         return
       }
@@ -191,7 +194,7 @@ export default {
         this.imgWidth = Math.round(this.imgHeight * this.aspectRatio)
       }
     },
-    handleClick: function (controlID) {
+    handleClick: function (controlID: string) {
       if (controlID === 'save') {
         // Transmit the collected information to main. It will be received
         // by the window manager, which will pass it on to the caller.
@@ -206,7 +209,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style lang="less">

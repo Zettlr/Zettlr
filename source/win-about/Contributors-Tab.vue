@@ -19,7 +19,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -36,13 +36,16 @@
 
 import { trans } from '../common/i18n-renderer'
 import formatDate from '../common/util/format-date'
-const ipcRenderer = window.ipc
+import { IpcRenderer } from 'electron'
+import { defineComponent } from 'vue'
 
-export default {
+const ipcRenderer: IpcRenderer = (window as any).ipc
+
+export default defineComponent({
   name: 'ContributorsTab',
   data: function () {
     return {
-      translationMetadata: []
+      translationMetadata: [] as any[]
     }
   },
   created: function () {
@@ -54,7 +57,7 @@ export default {
         // Before actually returning, make sure to resolve the author names which
         // may contain email addresses.
         for (const translation of this.translationMetadata) {
-          translation.authors = translation.authors.map(author => {
+          translation.authors = translation.authors.map((author: string) => {
             const match = /(.+)<(.+)>/.exec(author)
             if (match !== null) {
               return {
@@ -72,7 +75,7 @@ export default {
       .catch(e => console.error(e))
   },
   methods: {
-    getLocalisedTranslationName: function (bcp47) {
+    getLocalisedTranslationName: function (bcp47: string) {
       const failsafe = 'dialog.preferences.app_lang.' + bcp47
       const name = trans(failsafe)
       // Return the translation name, but if there is none, just return the
@@ -83,14 +86,14 @@ export default {
         return name
       }
     },
-    formattedDate: function (dateString) {
+    formattedDate: function (dateString: string) {
       return formatDate(new Date(dateString))
     },
-    linkifyEmail: function (email) {
+    linkifyEmail: function (email: string) {
       return `mailto:${email}`
     }
   }
-}
+})
 </script>
 
 <style lang="less">

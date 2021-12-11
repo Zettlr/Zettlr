@@ -16,7 +16,7 @@
   </WindowChrome>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -33,10 +33,11 @@
 
 import { trans } from '../common/i18n-renderer'
 import WindowChrome from '../common/vue/window/Chrome.vue'
+import { defineComponent } from 'vue'
 
-const path = window.path
+const path = (window as any).path
 
-export default {
+export default defineComponent({
   components: {
     WindowChrome
   },
@@ -46,7 +47,7 @@ export default {
     }
   },
   computed: {
-    windowTitle: function () {
+    windowTitle: function (): string {
       if (this.filePath !== '') {
         document.title = path.basename(this.filePath)
         return path.basename(this.filePath)
@@ -55,12 +56,12 @@ export default {
         return trans('menu.print')
       }
     },
-    fileUrl: function () {
+    fileUrl: function (): string {
       // TODO: With safe-file:// added electron crashes as soon as the print
       // window is opened.
       return `file://${this.filePath}`
     },
-    toolbarControls: function () {
+    toolbarControls: function (): any[] {
       return [
         {
           type: 'spacer',
@@ -76,7 +77,7 @@ export default {
     }
   },
   methods: {
-    handleClick: function (buttonID) {
+    handleClick: function (buttonID: string) {
       if (buttonID === 'print') {
         // NOTE: Printing only works in production, as during development
         // contents are served from localhost:3000 (which gives a CORS error)
@@ -84,7 +85,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style lang="less">
