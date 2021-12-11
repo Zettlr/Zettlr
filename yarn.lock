@@ -657,6 +657,13 @@
   resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-2.0.7.tgz#6189930542400e2c48b4d5ed06c4f136ee38bb1a"
   integrity sha512-AxiYycfO+/M4VIH0ribSr2iPFC+APewpJIaQSydwVnzorK3mjSFXkA3HmhQidGx44MpwaatFyEkbW/WD4zdDaQ==
 
+"@types/md5@^2.3.1":
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@types/md5/-/md5-2.3.1.tgz#010bcf3bb50a2cff3a574cb1c0b4051a9c67d6bc"
+  integrity sha512-OK3oe+ALIoPSo262lnhAYwpqFNXbiwH2a+0+Z5YBnkQEwWD8fk5+PIeRhYA48PzvX9I4SGNpWy+9bLj8qz92RQ==
+  dependencies:
+    "@types/node" "*"
+
 "@types/minimatch@*":
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
