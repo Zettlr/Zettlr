@@ -27,6 +27,8 @@
   follows exactly matches an allowed Markdown file extension)
 - Scrollbars on Windows and Linux should now switch colors according to the
   app's dark mode setting
+- Zettlr doesn't detect links to other headings in the form of `[link](#target)`
+  as tags anymore
 
 ## Under the Hood
 
