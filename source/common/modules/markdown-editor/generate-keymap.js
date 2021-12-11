@@ -43,6 +43,10 @@ module.exports = function (editor) {
     keymap['Cmd-F'] = false // Disable the internal search
     keymap['Alt-B'] = false // Disable word-backwarding on macOS (handled by Alt+ArrowLeft)
     keymap['Alt-F'] = false // Disable word-forwarding on macOS (handled by Alt+ArrowRight)
+    // Disable the native indentLess and indentMore shortcuts, since we do that
+    // via Tab and Shift-Tab and Cmd-[/Cmd-] are reserved for file back/forward
+    keymap['Cmd-['] = false
+    keymap['Cmd-]'] = false
     keymap['Cmd-Left'] = 'goLineLeftMarkdown'
     keymap['Cmd-Alt-R'] = 'insertFootnote'
     keymap['Cmd-T'] = 'markdownMakeTaskList'
@@ -54,6 +58,10 @@ module.exports = function (editor) {
   } else {
     // Windows/Linux/other shortcuts
     keymap['Ctrl-F'] = false // Disable the internal search
+    // Disable the native indentLess and indentMore shortcuts, since we do that
+    // via Tab and Shift-Tab and Cmd-[/Cmd-] are reserved for file back/forward
+    keymap['Ctrl-['] = false
+    keymap['Ctrl-]'] = false
     // If homeEndBehaviour is true, use defaults (paragraph start/end), if it's
     // false, use visible lines.
     keymap['Home'] = (homeEndBehaviour) ? 'goLineStart' : 'goLineLeftMarkdown'
