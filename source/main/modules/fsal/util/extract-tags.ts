@@ -18,13 +18,8 @@ import extractYamlFrontmatter from '../../../../common/util/extract-yaml-frontma
 export default function extractTags (markdown: string): string[] {
   let tags: string[] = []
 
-  // The extractYamlFrontmatter expects the linefeed
-  let linefeed = '\n'
-  if (markdown.includes('\r\n')) linefeed = '\r\n'
-  if (markdown.includes('\n\r')) linefeed = '\n\r'
-
   // Extract a potential YAML frontmatter
-  const { content, frontmatter } = extractYamlFrontmatter(markdown, linefeed)
+  const { content, frontmatter } = extractYamlFrontmatter(markdown)
   const tagRE = getZknTagRE(true)
   // Remove links, since these can also point to headings and thus would be
   // detected as tags accidentally

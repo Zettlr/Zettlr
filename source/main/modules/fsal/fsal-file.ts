@@ -107,7 +107,7 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
 
   // Then prepare the file contents as we need it for most of the function:
   // Strip a potential YAML frontmatter, code, and any HTML comments.
-  const extracted = extractYamlFrontmatter(content, file.linefeed)
+  const extracted = extractYamlFrontmatter(content)
   const frontmatter = extracted.frontmatter
 
   const contentWithoutYAML = extracted.content
