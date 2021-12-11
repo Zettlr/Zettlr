@@ -14,7 +14,6 @@
  * END HEADER
  */
 
-const shouldMatchTag = require('../../../util/should-match-tag').default
 const {
   getZknTagRE, getHeadingRE, getHighlightRE,
   getTableRE, getInlineMathRE, getFnReferenceRE
@@ -179,30 +178,11 @@ const {
         // Next on are tags in the form of #hashtag. We have to check for
         // headings first, as the tagRE will also match these, but they are not
         // real tags, so we need to hand them over to the mdMode.
-        let match
         if (stream.match(headingRE, false) !== null) {
           return mdMode.token(stream, state.mdState)
-        } else if ((match = stream.match(zknTagRE, false)) !== null) {
-          if (!shouldMatchTag(match[0])) {
-            // We should not match it, let the underlying mode handle it
-            return mdMode.token(stream, state.mdState)
-          }
-
-          // Two possibilities: sol, which will definitely be a tag, because
-          // the headingRE did not match. Otherwise, not SOL, in which case we
-          // need to check that the tag is preceeded by a space.
-          if (stream.sol()) {
-            stream.match(zknTagRE)
-            return `zkn-tag zkn-tag-${stream.current().substring(1).toLowerCase()}`
-          } else {
-            stream.backUp(1)
-            if (stream.next() === ' ') {
-              stream.match(zknTagRE)
-              return `zkn-tag zkn-tag-${stream.current().substring(1).toLowerCase()}`
-            } else {
-              return mdMode.token(stream, state.mdState)
-            }
-          }
+        } else if (stream.match(zknTagRE, false) !== null) {
+          const match = stream.match(zknTagRE)
+          return `zkn-tag zkn-tag-${match[1].substring(1).toLowerCase()}`
         }
 
         // Now check for a zknLink

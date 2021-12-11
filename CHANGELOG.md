@@ -29,6 +29,7 @@
   app's dark mode setting
 - Zettlr doesn't detect links to other headings in the form of `[link](#target)`
   as tags anymore
+- Reinstated the ability to use pure number tags or hexadecimal numbers as tags
 
 ## Under the Hood
 
