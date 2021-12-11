@@ -2,7 +2,7 @@
   <textarea ref="editor"></textarea>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -30,6 +30,8 @@ import 'codemirror/addon/mode/overlay'
 
 import { trans } from '../i18n-renderer'
 
+import { defineComponent } from 'vue'
+
 /**
  * We have to define the CodeMirror instance outside of Vue, since the Proxy-
  * fication messes with CodeMirror. Thus, we must prevent it from falling prey
@@ -37,7 +39,7 @@ import { trans } from '../i18n-renderer'
  *
  * @var {CodeMirror.Editor}
  */
-let cmInstance = null
+let cmInstance: CodeMirror.Editor|null = null
 
 /**
  * Define a snippets mode that extends the GFM mode with TextMate syntax.
@@ -76,7 +78,7 @@ CodeMirror.defineMode('markdown-snippets', function (config, parsercfg) {
   ]
 
   const markdownSnippets = {
-    token: function (stream) {
+    token: function (stream: CodeMirror.StringStream) {
       if (stream.match(tabstopRE) !== null) {
         return 'tm-tabstop'
       }
@@ -122,12 +124,12 @@ CodeMirror.defineMode('markdown-snippets', function (config, parsercfg) {
  * like a link. Those links must have a protocol and only contain alphanumerics,
  * plus ., -, #, %, and /.
  *
- * @param   {CodeMirror}  cm  The CodeMirror instance
+ * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
  */
-function markLinks (cm) {
+function markLinks (cm: CodeMirror.Editor) {
   // Very small drop in that marks URLs inside the code editor
-  for (let i = 0; i < cm.doc.lineCount(); i++) {
-    const line = String(cm.doc.getLine(i))
+  for (let i = 0; i < cm.lineCount(); i++) {
+    const line = String(cm.getLine(i))
     // Can contain a-z0-9, ., -, /, %, and #, but must end
     // with an alphanumeric, a slash or a hashtag.
     const match = /[a-z0-9-]+:\/\/[a-z0-9.-/#%]+[a-z0-9/#]/i.exec(line)
@@ -139,11 +141,11 @@ function markLinks (cm) {
     const to = { line: i, ch: match.index + match[0].length }
 
     // We can only have one marker at any given position at any given time
-    if (cm.doc.findMarks(from, to).length > 0) {
+    if (cm.findMarks(from, to).length > 0) {
       continue
     }
 
-    cm.doc.markText(
+    cm.markText(
       from, to,
       {
         className: 'cm-link',
@@ -160,7 +162,7 @@ function markLinks (cm) {
  *
  * @param   {MouseEvent}  event  The triggering MouseEvent
  */
-function maybeOpenLink (event) {
+function maybeOpenLink (event: MouseEvent) {
   const t = event.target
   const cmd = process.platform === 'darwin' && event.metaKey
   const ctrl = process.platform !== 'darwin' && event.ctrlKey
@@ -169,12 +171,16 @@ function maybeOpenLink (event) {
     return
   }
 
-  if (t.className.includes('cm-link') === true) {
+  if (t === null || !(t instanceof Element)) {
+    return
+  }
+
+  if (t.className.includes('cm-link') === true && t.textContent !== null) {
     window.location.assign(t.textContent)
   }
 }
 
-export default {
+export default defineComponent({
   name: 'CodeEditor',
   props: {
     modelValue: {
@@ -205,6 +211,10 @@ export default {
       }
     },
     readonly: function () {
+      if (cmInstance === null) {
+        return
+      }
+
       if (this.readonly === true) {
         cmInstance.setOption('readOnly', 'nocursor')
       } else {
@@ -213,7 +223,7 @@ export default {
     }
   },
   mounted: function () {
-    cmInstance = CodeMirror.fromTextArea(this.$refs['editor'], {
+    cmInstance = CodeMirror.fromTextArea(this.$refs['editor'] as HTMLTextAreaElement, {
       lineNumbers: true,
       theme: 'code-editor',
       mode: this.mode,
@@ -232,6 +242,10 @@ export default {
     cmInstance.setValue(this.modelValue)
 
     cmInstance.on('change', (event, changeObj) => {
+      if (cmInstance === null) {
+        return
+      }
+
       this.$emit('update:modelValue', cmInstance.getValue())
     })
 
@@ -240,22 +254,42 @@ export default {
     cmInstance.getWrapperElement().addEventListener('mousedown', maybeOpenLink)
   },
   beforeUnmount: function () {
+    if (cmInstance === null) {
+      return
+    }
+
     const cmWrapper = cmInstance.getWrapperElement()
+    if (cmWrapper.parentNode === null) {
+      return
+    }
+
     // "Remove this from your tree to delete an editor instance."
     cmWrapper.parentNode.removeChild(cmWrapper)
   },
   methods: {
-    setValue: function (newContents) {
+    setValue: function (newContents: string) {
+      if (cmInstance === null) {
+        return
+      }
+
       cmInstance.setValue(newContents)
     },
     isClean: function () {
+      if (cmInstance === null) {
+        return true
+      }
+
       return cmInstance.isClean()
     },
     markClean: function () {
+      if (cmInstance === null) {
+        return
+      }
+
       cmInstance.markClean()
     }
   }
-}
+})
 </script>
 
 <style lang="less">

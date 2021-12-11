@@ -41,14 +41,15 @@
   </WindowChrome>
 </template>
 
-<script>
-import WindowChrome from '../common/vue/window/Chrome'
-import Defaults from './Defaults'
-import CustomCSS from './CustomCSS'
-import SnippetsTab from './SnippetsTab'
+<script lang="ts">
+import WindowChrome from '../common/vue/window/Chrome.vue'
+import Defaults from './Defaults.vue'
+import CustomCSS from './CustomCSS.vue'
+import SnippetsTab from './SnippetsTab.vue'
 import { trans } from '../common/i18n-renderer'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   components: {
     WindowChrome,
     Defaults,
@@ -87,7 +88,7 @@ export default {
     }
   },
   computed: {
-    windowTitle: function () {
+    windowTitle: function (): string {
       if (document.body.classList.contains('darwin')) {
         return this.tabs[this.currentTab].label
       } else {
@@ -95,7 +96,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style lang="less">

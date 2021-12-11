@@ -39,7 +39,7 @@
   </SplitView>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -55,13 +55,16 @@
  * END HEADER
  */
 
-import SplitView from '../common/vue/window/SplitView'
-import SelectableList from '../common/vue/form/elements/SelectableList'
-import ButtonControl from '../common/vue/form/elements/Button'
-import CodeEditor from '../common/vue/CodeEditor'
+import SplitView from '../common/vue/window/SplitView.vue'
+import SelectableList from '../common/vue/form/elements/SelectableList.vue'
+import ButtonControl from '../common/vue/form/elements/Button.vue'
+import CodeEditor from '../common/vue/CodeEditor.vue'
 import { trans } from '../common/i18n-renderer'
 
-const ipcRenderer = window.ipc
+import { IpcRenderer } from 'electron'
+import { defineComponent } from 'vue'
+
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
 const WRITERS = {
   'html': 'HTML',
@@ -94,7 +97,7 @@ const READERS = {
   'vimwiki': 'VimWiki'
 }
 
-export default {
+export default defineComponent({
   name: 'DefaultsApp',
   components: {
     SplitView,
@@ -107,10 +110,7 @@ export default {
     // can be "import" (for any --> Markdown) or "export" (for Markdown --> any)
     which: {
       type: String,
-      required: true,
-      validator: function (value) {
-        return [ 'import', 'export' ].includes(value)
-      }
+      required: true
     }
   },
   data: function () {
@@ -121,17 +121,17 @@ export default {
     }
   },
   computed: {
-    listItems: function () {
+    listItems: function (): string[] {
       const formatList = (this.which === 'export') ? WRITERS : READERS
       return Object.values(formatList)
     },
-    defaultsExplanation: function () {
+    defaultsExplanation: function (): string {
       return trans('dialog.defaults.explanation') // Edit the corresponding defaults file here.
     },
-    saveButtonLabel: function () {
+    saveButtonLabel: function (): string {
       return trans('dialog.button.save')
     },
-    restoreButtonLabel: function () {
+    restoreButtonLabel: function (): string {
       return trans('dialog.defaults.restore')
     }
   },
@@ -145,7 +145,8 @@ export default {
       this.loadDefaultsForState()
     },
     editorContents: function () {
-      if (this.$refs['code-editor'].isClean() === true) {
+      const editor = this.$refs['code-editor'] as typeof CodeEditor
+      if (editor.isClean() === true) {
         this.savingStatus = ''
       } else {
         this.savingStatus = trans('gui.assets_man.status.unsaved_changes')
@@ -177,7 +178,7 @@ export default {
       })
         .then(data => {
           this.editorContents = data
-          this.$refs['code-editor'].markClean()
+          ;(this.$refs['code-editor'] as typeof CodeEditor).markClean()
           this.savingStatus = ''
         })
         .catch(err => console.error(err))
@@ -228,7 +229,7 @@ export default {
         .catch(err => { console.error(err) })
     }
   }
-}
+})
 </script>
 
 <style lang="less">

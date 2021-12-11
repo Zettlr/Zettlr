@@ -44,7 +44,7 @@
           v-bind:primary="true"
           v-bind:label="saveButtonLabel"
           v-bind:inline="true"
-          v-bind:disabled="currentItem < 0 || $refs['code-editor'].isClean()"
+          v-bind:disabled="currentItem < 0 || ($refs['code-editor'] as any).isClean()"
           v-on:click="saveSnippet()"
         ></ButtonControl>
         <span v-if="savingStatus !== ''" class="saving-status">{{ savingStatus }}</span>
@@ -53,7 +53,7 @@
   </SplitView>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -69,16 +69,18 @@
  * END HEADER
  */
 
-import SplitView from '../common/vue/window/SplitView'
-import SelectableList from '../common/vue/form/elements/SelectableList'
+import SplitView from '../common/vue/window/SplitView.vue'
+import SelectableList from '../common/vue/form/elements/SelectableList.vue'
 import ButtonControl from '../common/vue/form/elements/Button.vue'
 import TextControl from '../common/vue/form/elements/Text.vue'
-import CodeEditor from '../common/vue/CodeEditor'
+import CodeEditor from '../common/vue/CodeEditor.vue'
 import { trans } from '../common/i18n-renderer'
+import { IpcRenderer } from 'electron'
+import { defineComponent } from 'vue'
 
-const ipcRenderer = window.ipc
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
-export default {
+export default defineComponent({
   name: 'SnippetsTab',
   components: {
     SplitView,
@@ -93,17 +95,17 @@ export default {
       currentSnippetText: '',
       editorContents: '',
       savingStatus: '',
-      availableSnippets: []
+      availableSnippets: [] as string[]
     }
   },
   computed: {
-    saveButtonLabel: function () {
+    saveButtonLabel: function (): string {
       return trans('dialog.button.save')
     },
-    renameSnippetLabel: function () {
+    renameSnippetLabel: function (): string {
       return trans('dialog.snippets.rename')
     },
-    snippetsExplanation: function () {
+    snippetsExplanation: function (): string {
       return trans('dialog.snippets.explanation')
     }
   },
@@ -112,7 +114,8 @@ export default {
       this.loadState()
     },
     editorContents: function () {
-      if (this.$refs['code-editor'].isClean() === true) {
+      const editor = this.$refs['code-editor'] as typeof CodeEditor
+      if (editor.isClean() === true) {
         this.savingStatus = ''
       } else {
         this.savingStatus = trans('gui.assets_man.status.unsaved_changes')
@@ -130,7 +133,7 @@ export default {
     })
   },
   methods: {
-    updateAvailableSnippets: function (selectAfterUpdate = undefined) {
+    updateAvailableSnippets: function (selectAfterUpdate?: string) {
       ipcRenderer.invoke('assets-provider', { command: 'list-snippets' })
         .then(data => {
           this.availableSnippets = data
@@ -143,8 +146,9 @@ export default {
     },
     loadState: function () {
       if (this.availableSnippets.length === 0) {
+        const editor = this.$refs['code-editor'] as typeof CodeEditor
         this.editorContents = ''
-        this.$refs['code-editor'].markClean()
+        editor.markClean()
         this.savingStatus = ''
         this.currentSnippetText = ''
         this.currentItem = -1
@@ -164,8 +168,9 @@ export default {
         }
       })
         .then(data => {
+          const editor = this.$refs['code-editor'] as typeof CodeEditor
           this.editorContents = data
-          this.$refs['code-editor'].markClean()
+          editor.markClean()
           this.savingStatus = ''
           this.currentSnippetText = this.availableSnippets[this.currentItem]
         })
@@ -237,7 +242,7 @@ export default {
      *
      * @return  {string}             The candidate's name, with a number suffix (-X) if necessary
      */
-    ensureUniqueName: function (candidate) {
+    ensureUniqueName: function (candidate: string) {
       if (this.availableSnippets.includes(candidate) === false) {
         return candidate // No duplicate detected
       }
@@ -251,14 +256,14 @@ export default {
         candidate = candidate.substr(0, candidate.length - match[1].length - 1)
       }
 
-      while (this.availableSnippets.includes(candidate + '-' + count) === true) {
+      while (this.availableSnippets.includes(candidate + '-' + String(count)) === true) {
         count++
       }
 
       return candidate + '-' + count
     }
   }
-}
+})
 </script>
 
 <style lang="less">

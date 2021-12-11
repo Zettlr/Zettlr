@@ -51,7 +51,7 @@
   before starting the debugger
 - Cleaned up the handler for rendering task-list items
 - Switched the windows update, tag-manager, stats, quicklook, project-properties,
-  print, paste-image, log-viewer, error, and about to TypeScript
+  print, paste-image, log-viewer, error, assets, and about to TypeScript
 
 # 2.0.3
 
