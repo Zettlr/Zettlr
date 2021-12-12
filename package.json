@@ -33,7 +33,7 @@
     "lang:refresh": "node scripts/refresh-language.js",
     "csl:refresh": "node scripts/update-csl.js",
     "reveal:build": "node scripts/update-reveal.js",
-    "update:citation": "node scripts/update/citation.js",
+    "update:citation": "node scripts/update-citation.js",
     "test": "mocha",
     "test-gui": "cross-env NODE_ENV=develop node scripts/test-gui/index.js",
     "lint": "eslint --ext js,vue,ts source"
