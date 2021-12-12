@@ -25,6 +25,8 @@
  */
 declare module '*.png'
 declare module '*.svg'
+declare module '*.mp3'
+declare module '*.wav'
 
 /**
  * DECLARE ELECTRON-FORGE INSERTION VARIABLES
