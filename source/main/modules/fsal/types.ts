@@ -75,6 +75,7 @@ export interface MDFileDescriptor extends FSMetaInfo {
   id: string
   type: 'file'
   tags: string[]
+  links: string[] // Any outlinks declared in the file
   bom: string // An optional BOM
   wordCount: number
   charCount: number
@@ -131,6 +132,7 @@ export interface MDFileMeta extends FSMetaInfo {
   id: string
   type: 'file'
   tags: string[]
+  links: string[]
   wordCount: number
   charCount: number
   target: any // TODO

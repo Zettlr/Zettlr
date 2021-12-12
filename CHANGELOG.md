@@ -62,6 +62,7 @@
 - Remove the `openFile` method from the main Zettlr object. Use
   `getDocumentManager().openFile` instead to open a file
 - Add an automatic updater for `CITATION.cff`
+- Zettlr now extracts outlinks from a file and adds them to descriptors
 
 # 2.0.3
 

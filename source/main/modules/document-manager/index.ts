@@ -565,6 +565,7 @@ export default class DocumentManager extends EventEmitter {
         id: '',
         type: 'file',
         tags: [],
+        links: [],
         bom: '',
         wordCount: 0,
         charCount: 0,

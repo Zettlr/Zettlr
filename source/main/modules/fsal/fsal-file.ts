@@ -26,6 +26,7 @@ import { DirDescriptor, MDFileDescriptor, MDFileMeta } from './types'
 import FSALCache from './fsal-cache'
 import extractBOM from './util/extract-bom'
 import extractTags from './util/extract-tags'
+import extractLinks from './util/extract-links'
 
 // Here are all supported variables for Pandoc:
 // https://pandoc.org/MANUAL.html#variables
@@ -120,6 +121,7 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
   file.id = ''
   file.firstHeading = null
   file.tags = extractTags(content)
+  file.links = extractLinks(content, linkStart, linkEnd)
   file.frontmatter = null
 
   // Search for the file's ID first in the file name, and then in the full contents.
@@ -182,6 +184,7 @@ export function metadata (fileObject: MDFileDescriptor): MDFileMeta {
     size: fileObject.size,
     id: fileObject.id,
     tags: fileObject.tags,
+    links: fileObject.links,
     type: fileObject.type,
     wordCount: fileObject.wordCount,
     charCount: fileObject.charCount,
@@ -217,6 +220,7 @@ export async function parse (filePath: string, cache: FSALCache|null, parent: Di
     size: 0,
     id: '', // The ID, if there is one inside the file.
     tags: [], // All tags that are to be found inside the file's contents.
+    links: [], // Any outlinks
     bom: '', // Default: No BOM
     type: 'file',
     wordCount: 0,
