@@ -58,6 +58,8 @@
 - Switched the windows update, tag-manager, stats, quicklook, project-properties,
   print, paste-image, log-viewer, error, assets, and about to TypeScript
 - `extractYamlFrontmatter` does not require the linefeed anymore
+- Remove the `openFile` method from the main Zettlr object. Use
+  `getDocumentManager().openFile` instead to open a file
 
 # 2.0.3
 

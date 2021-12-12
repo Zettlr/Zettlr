@@ -66,7 +66,7 @@ export default class ForceOpen extends ZettlrCommand {
 
     // Now we have a file (if not, create a new one if the user wishes so)
     if (file != null) {
-      await this._app.openFile(file.path)
+      await this._app.getDocumentManager().openFile(file.path)
     } else if (autoCreate) {
       // Call the file-new command on the application, which'll do all
       // necessary steps for us.

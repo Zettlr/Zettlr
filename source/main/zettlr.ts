@@ -444,7 +444,7 @@ export default class Zettlr {
       // Sets or updates a file's writing target
       global.targets.set(payload)
     } else if (command === 'open-file') {
-      await this.openFile(payload.path, payload.newTab)
+      await this._documentManager.openFile(payload.path, payload.newTab)
       return true
     } else if (command === 'get-open-files') {
       // Return all open files as their metadata objects
@@ -597,7 +597,7 @@ export default class Zettlr {
       // opened accordingly.
       if ((newFile = this._fsal.findFile(f)) != null) {
         // Open the file immediately
-        await this.openFile(newFile.path, true)
+        await this._documentManager.openFile(newFile.path, true)
         // Also set the newDir variable so that Zettlr will automatically
         // navigate to the directory. The directory of the latest file will
         // remain open afterwards.
@@ -611,7 +611,7 @@ export default class Zettlr {
             // If it was a file and not a directory, immediately open it.
             let file = this._fsal.findFile(f)
             if (file !== null) {
-              await this.openFile(file.path, true)
+              await this._documentManager.openFile(file.path, true)
             }
           } else {
             global.config.removePath(f)
@@ -665,21 +665,6 @@ export default class Zettlr {
 
   findDir (arg: string): DirDescriptor | null {
     return this._fsal.findDir(arg)
-  }
-
-  /**
-   * Opens the file passed to this function. This function exists because a lot
-   * of commands need it, but it's actually just a pass-through
-   *
-   * @param   {string}   filePath  The filepath
-   * @param   {boolean}  newTab    Optional. If true, will always prevent exchanging the currently active file.
-   */
-  async openFile (filePath: string, newTab?: boolean): Promise<void> {
-    global.log.info(`[Application] Opening file ${filePath}`)
-    // Add the file's metadata object to the recent docs
-    // We only need to call the underlying function, it'll trigger a state
-    // change event and will set in motion all other necessary processes.
-    await this._documentManager.openFile(filePath, newTab)
   }
 
   /**

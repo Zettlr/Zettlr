@@ -134,7 +134,7 @@ export default class FileNew extends ZettlrCommand {
       })
 
       // And directly thereafter, open the file
-      await this._app.openFile(path.join(dir.path, filename))
+      await this._app.getDocumentManager().openFile(path.join(dir.path, filename))
     } catch (err: any) {
       global.log.error(`Could not create file: ${err.message as string}`)
       this._app.prompt({

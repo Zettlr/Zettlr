@@ -85,7 +85,7 @@ export default class FileDuplicate extends ZettlrCommand {
     })
 
     // And directly thereafter, open the file
-    await this._app.openFile(path.join(dir.path, filename))
+    await this._app.getDocumentManager().openFile(path.join(dir.path, filename))
   }
 }
 
