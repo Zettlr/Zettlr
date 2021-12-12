@@ -284,11 +284,6 @@ Use this switch to specify custom data directory, which holds your configuration
 
 This switch causes Zettlr to disable hardware acceleration, which could be necessary in certain setups. For more information on why this flag was added, see issue [#2127](https://github.com/Zettlr/Zettlr/issues/2127).
 
-
-#### `--tray`
-
-This will start Zettlr in Tray, without showing the userinterface. It is ignoring the checkbox in the settings, so that the tray is always created on startup, as to make the application not inaccessible.  
-
 ## VSCode Extension Recommendations
 
 This repository makes use of Visual Studio Code's [recommended extensions feature](https://go.microsoft.com/fwlink/?LinkId=827846). This means: If you use VS Code and open the repository for the first time, VS Code will tell you that the repository recommends to install a handful of extensions. These extensions are recommended if you work with Zettlr and will make contributing much easier. The recommendations are specified in the file `.vscode/extensions.json`.
