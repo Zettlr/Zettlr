@@ -28,7 +28,7 @@
   </WindowChrome>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -55,10 +55,12 @@ import displaySchema from './schema/display'
 import spellcheckingSchema from './schema/spellchecking'
 import autocorrectSchema from './schema/autocorrect'
 import advancedSchema from './schema/advanced'
+import { IpcRenderer } from 'electron'
+import { defineComponent } from 'vue'
 
-const ipcRenderer = window.ipc
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
-const SCHEMA = {
+const SCHEMA: { [key: string]: Function|any } = {
   'tab-general': generalSchema,
   'tab-editor': editorSchema,
   'tab-export': exportSchema,
@@ -78,7 +80,7 @@ const SCHEMA = {
  *
  * @return  {Field|undefined}          The corresponding field or undefined
  */
-function modelToField (model, tree) {
+function modelToField (model: string, tree: any): any {
   if (tree === undefined) {
     throw new Error('Could not map model: tree not defined!')
   }
@@ -117,7 +119,7 @@ function modelToField (model, tree) {
   return undefined
 }
 
-export default {
+export default defineComponent({
   components: {
     Form,
     WindowChrome
@@ -196,23 +198,23 @@ export default {
       // Will be populated afterwards, contains all dictionaries
       availableDictionaries: [],
       // This will return the full object
-      config: global.config.get(),
+      config: (global as any).config.get(),
       schema: SCHEMA['tab-general']
     }
   },
   computed: {
-    windowTitle: function () {
+    windowTitle: function (): string {
       if (process.platform === 'darwin') {
         return this.tabs[this.currentTab].label
       } else {
         return trans('dialog.preferences.title')
       }
     },
-    showTitlebar: function () {
+    showTitlebar: function (): boolean {
       const isDarwin = document.body.classList.contains('darwin')
-      return isDarwin || global.config.get('nativeAppearance') === false
+      return isDarwin || (global as any).config.get('nativeAppearance') === false
     },
-    model: function () {
+    model: function (): any {
       // The model to be passed on will simply be a merger of custom values
       // and the configuration object. This way we can safely change some of
       // these values without risking to overwrite the model (which we have
@@ -254,7 +256,7 @@ export default {
         // Don't waste boilerplate, just overwrite that whole thing
         // and let's hope the Vue algorithm of finding out what has
         // to be re-rendered is good!
-        this.config = global.config.get()
+        this.config = (global as any).config.get()
         this.populateDynamicValues()
       }
     })
@@ -283,7 +285,7 @@ export default {
      * @param   {string}  prop  The property that has changed
      * @param   {any}     val   The value of that property.
      */
-    handleInput: function (prop, val) {
+    handleInput: function (prop: string, val: any) {
       // We do have an easy time here
       if (prop === 'userDictionaryContents') {
         // The user dictionary is not handled by the config
@@ -294,14 +296,14 @@ export default {
           .catch(err => console.error(err))
       } else if (prop === 'availableDictionaries') {
         // We have to extract the selected dictionaries and send their keys only
-        const enabled = val.filter(elem => elem.selected).map(elem => elem.key)
-        global.config.set('selectedDicts', enabled)
+        const enabled = val.filter((elem: any) => elem.selected).map((elem: any) => elem.key)
+        ;(global as any).config.set('selectedDicts', enabled)
         // Additionally, we have to backpropagate the new stuff down the pipe
         // so that the list view has them again
       } else {
         // By default, we should have the correct value already, we just need to
         // treat (complex) lists as special (not even token inputs).
-        global.config.set(prop, val)
+        (global as any).config.set(prop, val)
       }
     },
     /**
@@ -327,8 +329,8 @@ export default {
           const field = modelToField('appLang', SCHEMA['tab-general'])
 
           if (field !== undefined) {
-            const options = {}
-            languages.map(lang => {
+            const options: any = {}
+            languages.map((lang: string) => {
               options[lang] = trans('dialog.preferences.app_lang.' + lang)
               return null
             })
@@ -344,8 +346,8 @@ export default {
         command: 'get-available-dictionaries'
       })
         .then((dictionaries) => {
-          const values = []
-          dictionaries.map(dict => {
+          const values: any = []
+          dictionaries.map((dict: string) => {
             values.push({
               selected: this.model.selectedDicts.includes(dict),
               key: dict,
@@ -368,7 +370,7 @@ export default {
         .catch(err => console.error(err))
     }
   }
-}
+})
 </script>
 
 <style lang="less">

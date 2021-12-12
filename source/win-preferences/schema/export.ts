@@ -14,7 +14,7 @@
 
 import { trans } from '../../common/i18n-renderer'
 
-export default function () {
+export default function (): any {
   return {
     fieldsets: [
       [

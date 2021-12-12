@@ -14,7 +14,7 @@
 
 import { trans } from '../../common/i18n-renderer'
 
-export default function () {
+export default function (): any {
   const isWinOrMac = [ 'darwin', 'win32' ].includes(process.platform)
   return {
     fieldsets: [
