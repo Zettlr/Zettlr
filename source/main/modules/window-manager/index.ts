@@ -116,10 +116,8 @@ export default class WindowManager extends EventEmitter {
       .then(() => {
         global.log.info('[Window Manager] Window Manager booted. Opening main window.')
         this.showMainWindow()
-        if (process.argv.includes('--tray')) {
-          global.config.set('system.leaveAppRunningOverride', true)
-        }
-        if (global.config.get('system.leaveAppRunningOverride')) {
+        if (process.argv.includes('--tray') || Boolean(global.config.get('system.startInTray'))) {
+          global.log.info('[Window Manager] Application should start in Tray. Main Window is minimized to tray on startup.')
           global.tray.add()
           this.getMainWindow()?.hide()
         }

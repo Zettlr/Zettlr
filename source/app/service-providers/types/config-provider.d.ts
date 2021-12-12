@@ -144,7 +144,7 @@ interface ConfigOptions {
   system: {
     deleteOnFail: boolean
     leaveAppRunning: boolean
-    leaveAppRunningOverride: boolean
+    startInTray: boolean
     avoidNewTabs: boolean
     iframeWhitelist: string[]
   }
