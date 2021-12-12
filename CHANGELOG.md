@@ -60,6 +60,7 @@
 - `extractYamlFrontmatter` does not require the linefeed anymore
 - Remove the `openFile` method from the main Zettlr object. Use
   `getDocumentManager().openFile` instead to open a file
+- Add an automatic updater for `CITATION.cff`
 
 # 2.0.3
 

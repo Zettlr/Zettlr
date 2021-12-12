@@ -46,6 +46,12 @@ jobs:
           yarn reveal:build
           git add -A
           git diff-index --quiet HEAD || git commit -m "Update reveal.js build"
+      # Update the CITATION.cff file if applicable
+      - name: Update CITATION.cff
+        run: |
+          yarn update:citation
+          git add -A
+          git diff-index --quiet HEAD || git commit -m "Update CITATION.cff"
       # Test to make sure we don't break anything
       - name: Test build
         run: yarn test
