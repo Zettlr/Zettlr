@@ -27,5 +27,8 @@
     "test/**/*",
     "forge.config.js",
     "webpack.*.js"
-  ]
+  ],
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  }
 }
