@@ -73,7 +73,7 @@
  * END HEADER
  */
 
-import WindowChrome from '../common/vue/window/Chrome'
+import WindowChrome from '@common/vue/window/Chrome'
 import FileManager from './file-manager/file-manager'
 import MainSidebar from './MainSidebar'
 import DocumentTabs from './DocumentTabs'
@@ -86,9 +86,9 @@ import PopoverTags from './PopoverTags'
 import PopoverPomodoro from './PopoverPomodoro'
 import PopoverTable from './PopoverTable'
 import PopoverDocInfo from './PopoverDocInfo'
-import { trans } from '../common/i18n-renderer'
-import localiseNumber from '../common/util/localise-number'
-import generateId from '../common/util/generate-id'
+import { trans } from '@common/i18n-renderer'
+import localiseNumber from '@common/util/localise-number'
+import generateId from '@common/util/generate-id'
 import { nextTick } from 'vue'
 
 // Import the sound effects for the pomodoro timer

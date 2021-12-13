@@ -13,7 +13,7 @@
  */
 
 // Displays a context menu for the MarkdownEditor class
-const { trans } = require('../../i18n-renderer')
+const { trans } = require('@common/i18n-renderer')
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
 

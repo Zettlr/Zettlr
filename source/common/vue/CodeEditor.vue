@@ -28,7 +28,7 @@ import 'codemirror/mode/yaml/yaml'
 import 'codemirror/mode/gfm/gfm'
 import 'codemirror/addon/mode/overlay'
 
-import { trans } from '../i18n-renderer'
+import { trans } from '@common/i18n-renderer'
 
 import { defineComponent } from 'vue'
 

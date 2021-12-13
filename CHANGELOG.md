@@ -65,6 +65,8 @@
   `getDocumentManager().openFile` instead to open a file
 - Add an automatic updater for `CITATION.cff`
 - Zettlr now extracts outlinks from a file and adds them to descriptors
+- Added `@common` as a shorthand for accessing files within the `common`-
+  directory
 
 # 2.0.3
 

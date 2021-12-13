@@ -49,8 +49,8 @@
  */
 
 import QuicklookEditor from './QuicklookEditor.vue'
-import WindowChrome from '../common/vue/window/Chrome.vue'
-import { trans } from '../common/i18n-renderer'
+import WindowChrome from '@common/vue/window/Chrome.vue'
+import { trans } from '@common/i18n-renderer'
 import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
 
@@ -90,7 +90,7 @@ export default defineComponent({
     },
     windowTitle: function (): string {
       let title = this.name
-      const firstHeadings = Boolean(global.config.get('display.useFirstHeadings'))
+      const firstHeadings = Boolean((global as any).config.get('display.useFirstHeadings'))
       if (this.type === 'file') {
         if (this.firstHeading !== null && firstHeadings) {
           title = this.firstHeading

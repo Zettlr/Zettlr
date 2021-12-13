@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-import windowRegister from '../common/modules/window-register'
+import windowRegister from '@common/modules/window-register'
 import { createApp } from 'vue'
 import App from './App.vue'
 

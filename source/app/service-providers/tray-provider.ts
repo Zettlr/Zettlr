@@ -21,7 +21,7 @@ import {
 } from 'electron'
 import path from 'path'
 import EventEmitter from 'events'
-import { trans } from '../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 
 /**
  * This class generates the Tray in the system notification area

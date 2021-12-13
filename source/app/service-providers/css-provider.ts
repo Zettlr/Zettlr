@@ -17,7 +17,7 @@ import { promises as fs } from 'fs'
 import { app, ipcMain } from 'electron'
 import EventEmitter from 'events'
 
-import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
+import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 
 export default class CssProvider extends EventEmitter {
   private readonly _filePath: string

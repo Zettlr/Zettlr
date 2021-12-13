@@ -88,11 +88,11 @@
  * END HEADER
  */
 
-import { trans } from '../../common/i18n-renderer'
+import { trans } from '@common/i18n-renderer'
 import tippy from 'tippy.js'
 import FileItem from './file-item'
 import { RecycleScroller } from 'vue-virtual-scroller'
-import objectToArray from '../../common/util/object-to-array'
+import objectToArray from '@common/util/object-to-array'
 import matchQuery from './util/match-query'
 
 import { nextTick } from 'vue'

@@ -15,11 +15,11 @@
 
 import path from 'path'
 import EventEmitter from 'events'
-import isFile from '../../../common/util/is-file'
-import isDir from '../../../common/util/is-dir'
-import isAttachment from '../../../common/util/is-attachment'
-import objectToArray from '../../../common/util/object-to-array'
-import findObject from '../../../common/util/find-object'
+import isFile from '@common/util/is-file'
+import isDir from '@common/util/is-dir'
+import isAttachment from '@common/util/is-attachment'
+import objectToArray from '@common/util/object-to-array'
+import findObject from '@common/util/find-object'
 import locateByPath from './util/locate-by-path'
 import * as FSALFile from './fsal-file'
 import * as FSALCodeFile from './fsal-code-file'
@@ -41,7 +41,7 @@ import {
   CodeFileMeta,
   OtherFileDescriptor
 } from './types'
-import { codeFileExtensions, mdFileExtensions } from '../../../common/get-file-extensions'
+import { codeFileExtensions, mdFileExtensions } from '@common/get-file-extensions'
 
 // Re-export all interfaces necessary for other parts of the code (Document Manager)
 export {

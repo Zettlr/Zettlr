@@ -20,7 +20,7 @@ import {
   app
 } from 'electron'
 
-import broadcastIPCMessage from '../../common/util/broadcast-ipc-message'
+import broadcastIPCMessage from '@common/util/broadcast-ipc-message'
 
 // Import the menu constructors
 import win32Menu from './assets/menu.win32'

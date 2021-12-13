@@ -14,7 +14,7 @@
   * END HEADER
   */
 
-const { getWysiwygRE } = require('../../../regular-expressions');
+const { getWysiwygRE } = require('@common/regular-expressions');
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS

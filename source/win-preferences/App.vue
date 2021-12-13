@@ -43,9 +43,9 @@
  * END HEADER
  */
 
-import Form from '../common/vue/form/Form.vue'
-import WindowChrome from '../common/vue/window/Chrome.vue'
-import { trans } from '../common/i18n-renderer'
+import Form from '@common/vue/form/Form.vue'
+import WindowChrome from '@common/vue/window/Chrome.vue'
+import { trans } from '@common/i18n-renderer'
 
 import generalSchema from './schema/general'
 import editorSchema from './schema/editor'
@@ -59,17 +59,6 @@ import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
 
 const ipcRenderer: IpcRenderer = (window as any).ipc
-
-const SCHEMA: { [key: string]: Function|any } = {
-  'tab-general': generalSchema,
-  'tab-editor': editorSchema,
-  'tab-export': exportSchema,
-  'tab-zettelkasten': zettelkastenSchema,
-  'tab-display': displaySchema,
-  'tab-spellchecking': spellcheckingSchema,
-  'tab-autocorrect': autocorrectSchema,
-  'tab-advanced': advancedSchema
-}
 
 /**
  * Searches the tree for a given model, traversing as necessary. Uses a depth-
@@ -177,13 +166,15 @@ export default defineComponent({
           icon: 'tools'
         }
       ],
-      // Will be prepopulated afterwards, contains the user dict
+      // Will be populated afterwards, contains the user dict
       userDictionaryContents: [],
       // Will be populated afterwards, contains all dictionaries
       availableDictionaries: [],
+      // Will be populated afterwards, contains the available languages
+      appLangOptions: {} as any,
       // This will return the full object
       config: (global as any).config.get(),
-      schema: SCHEMA['tab-general']()
+      schema: {}
     }
   },
   computed: {
@@ -250,16 +241,6 @@ export default defineComponent({
         this.populateDynamicValues()
       }
     })
-
-    if (process.env.ZETTLR_IS_TRAY_SUPPORTED === '0') {
-      const leaveAppRunningField = modelToField('system.leaveAppRunning', SCHEMA['tab-advanced'])
-      if (leaveAppRunningField !== undefined) {
-        leaveAppRunningField.disabled = true
-        if (process.env.ZETTLR_TRAY_ERROR !== undefined) {
-          leaveAppRunningField.info = process.env.ZETTLR_TRAY_ERROR
-        }
-      }
-    }
   },
   methods: {
     /**
@@ -309,18 +290,15 @@ export default defineComponent({
         command: 'get-available-languages'
       })
         .then((languages) => {
-          const field = modelToField('appLang', SCHEMA['tab-general'])
-
-          if (field !== undefined) {
-            const options: any = {}
-            languages.map((lang: string) => {
-              options[lang] = trans('dialog.preferences.app_lang.' + lang)
-              return null
-            })
-            field.options = options
-          } else {
-            console.error('Could not set available languages')
-          }
+          const options: any = {}
+          languages.map((lang: string) => {
+            options[lang] = trans('dialog.preferences.app_lang.' + lang)
+            return null
+          })
+          this.appLangOptions = options
+          // Since we're setting something on the schema-side of things, we must
+          // regenerate the form here.
+          this.recreateSchema()
         })
         .catch(err => console.error(err))
 
@@ -353,7 +331,40 @@ export default defineComponent({
         .catch(err => console.error(err))
     },
     recreateSchema: function () {
-      this.schema = SCHEMA[this.tabs[this.currentTab].controls]()
+      const currentTab = this.tabs[this.currentTab].controls
+
+      switch (currentTab) {
+        case 'tab-general':
+          this.schema = generalSchema()
+          break
+        case 'tab-editor':
+          this.schema = editorSchema()
+          break
+        case 'tab-export':
+          this.schema = exportSchema()
+          break
+        case 'tab-zettelkasten':
+          this.schema = zettelkastenSchema()
+          break
+        case 'tab-display':
+          this.schema = displaySchema()
+          break
+        case 'tab-spellchecking':
+          this.schema = spellcheckingSchema()
+          break
+        case 'tab-autocorrect':
+          this.schema = autocorrectSchema()
+          break
+        case 'tab-advanced':
+          this.schema = advancedSchema()
+          break
+      }
+
+      // Populate the appLang field with available options
+      if (this.tabs[this.currentTab].controls === 'tab-general') {
+        const field = modelToField('appLang', this.schema)
+        field.options = this.appLangOptions
+      }
     }
   }
 })

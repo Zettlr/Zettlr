@@ -14,7 +14,7 @@
 
 import path from 'path'
 import { bibtex } from 'astrocite'
-import pdfSorter from '../../../common/util/sort-by-pdf'
+import pdfSorter from '@common/util/sort-by-pdf'
 
 const AstrociteAST = bibtex.AST
 

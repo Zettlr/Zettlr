@@ -15,7 +15,7 @@
 import ZettlrCommand from './zettlr-command'
 import { app, shell } from 'electron'
 import { makeExport, getAvailableFormats } from '../modules/export'
-import { trans } from '../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 import { ExporterOptions } from '../modules/export/types'
 
 export default class Export extends ZettlrCommand {

@@ -15,8 +15,8 @@
 
 import path from 'path'
 import ZettlrCommand from './zettlr-command'
-import { getIDRE } from '../../common/regular-expressions'
-import { mdFileExtensions } from '../../common/get-file-extensions'
+import { getIDRE } from '@common/regular-expressions'
+import { mdFileExtensions } from '@common/get-file-extensions'
 
 const FILETYPES = mdFileExtensions(true)
 

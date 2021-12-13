@@ -23,16 +23,16 @@ import WindowManager from './modules/window-manager'
 import DocumentManager from './modules/document-manager'
 
 import FSAL from './modules/fsal'
-import { trans } from '../common/i18n-main'
-import findLangCandidates from '../common/util/find-lang-candidates'
-import ignoreDir from '../common/util/ignore-dir'
-import ignoreFile from '../common/util/ignore-file'
-import isDir from '../common/util/is-dir'
-import isFile from '../common/util/is-file'
+import { trans } from '@common/i18n-main'
+import findLangCandidates from '@common/util/find-lang-candidates'
+import ignoreDir from '@common/util/ignore-dir'
+import ignoreFile from '@common/util/ignore-file'
+import isDir from '@common/util/is-dir'
+import isFile from '@common/util/is-file'
 import { commands } from './commands'
 
 import { CodeFileDescriptor, CodeFileMeta, DirDescriptor, MDFileDescriptor, MDFileMeta } from './modules/fsal/types'
-import broadcastIpcMessage from '../common/util/broadcast-ipc-message'
+import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import extractFilesFromArgv from '../app/util/extract-files-from-argv'
 
 export default class Zettlr {

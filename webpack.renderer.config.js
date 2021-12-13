@@ -1,4 +1,5 @@
 const rules = require('./webpack.rules')
+const path = require('path')
 
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
@@ -58,6 +59,9 @@ module.exports = {
       '.js', '.ts', '.jsx', '.tsx',
       '.css', '.less', '.vue'
     ],
+    alias: {
+      '@common': [path.resolve(__dirname, 'source/common')]
+    },
     fallback: {
       // Don't polyfill these modules
       path: false,

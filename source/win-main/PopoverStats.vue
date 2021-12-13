@@ -59,8 +59,8 @@
  * END HEADER
  */
 
-import { trans } from '../common/i18n-renderer'
-import localiseNumber from '../common/util/localise-number'
+import { trans } from '@common/i18n-renderer'
+import localiseNumber from '@common/util/localise-number'
 import { DateTime } from 'luxon'
 
 const ipcRenderer = window.ipc

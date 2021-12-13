@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-const { trans } = require('../../../common/i18n-renderer')
+const { trans } = require('@common/i18n-renderer')
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard

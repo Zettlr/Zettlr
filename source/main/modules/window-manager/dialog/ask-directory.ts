@@ -13,8 +13,8 @@
  */
 
 import { app, BrowserWindow, dialog, OpenDialogOptions, OpenDialogReturnValue } from 'electron'
-import isDir from '../../../../common/util/is-dir'
-import { trans } from '../../../../common/i18n-main'
+import isDir from '@common/util/is-dir'
+import { trans } from '@common/i18n-main'
 
 /**
  * Asks the user for directory path(s)

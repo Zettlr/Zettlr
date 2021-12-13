@@ -19,7 +19,7 @@
 })(function (CodeMirror) {
   'use strict'
 
-  const { getListUnorderedRE, getListEmptyRE, getListRE } = require('../../../regular-expressions')
+  const { getListUnorderedRE, getListEmptyRE, getListRE } = require('@common/regular-expressions')
   const listRE = getListRE()
   const emptyListRE = getListEmptyRE()
   const unorderedListRE = getListUnorderedRE()

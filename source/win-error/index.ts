@@ -14,7 +14,7 @@
 
 import { createApp } from 'vue'
 import App from './App.vue'
-import windowRegister from '../common/modules/window-register'
+import windowRegister from '@common/modules/window-register'
 
 // The first thing we have to do is run the window controller
 windowRegister()

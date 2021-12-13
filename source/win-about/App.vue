@@ -51,8 +51,8 @@
  * END HEADER
  */
 
-import WindowChrome from '../common/vue/window/Chrome.vue'
-import { trans } from '../common/i18n-renderer'
+import WindowChrome from '@common/vue/window/Chrome.vue'
+import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
 
 // Import the tabs

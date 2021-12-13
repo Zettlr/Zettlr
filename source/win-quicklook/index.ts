@@ -16,8 +16,7 @@
 
 import { createApp } from 'vue'
 import App from './App.vue'
-import windowRegister from '../common/modules/window-register'
-// import { ToolbarControl } from '../common/modules/window-register/register-toolbar'
+import windowRegister from '@common/modules/window-register'
 import { CodeFileMeta, MDFileMeta } from '../main/modules/fsal/types'
 
 const ipcRenderer = (window as any).ipc as Electron.IpcRenderer

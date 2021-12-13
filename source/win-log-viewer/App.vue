@@ -36,7 +36,7 @@
  */
 
 import LogMessage from './LogMessage.vue'
-import WindowChrome from '../common/vue/window/Chrome.vue'
+import WindowChrome from '@common/vue/window/Chrome.vue'
 import { nextTick, defineComponent } from 'vue'
 import { IpcRenderer } from 'electron'
 

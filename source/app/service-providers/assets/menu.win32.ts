@@ -15,7 +15,7 @@
  */
 
 import { app, MenuItemConstructorOptions, shell } from 'electron'
-import { trans } from '../../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 import path from 'path'
 
 export default function getMenu (

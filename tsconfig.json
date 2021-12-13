@@ -16,7 +16,11 @@
     "outDir": "dist",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "baseUrl": ".",
+    "paths": {
+      "@common/*": ["source/common/*"]
+    }
   },
   "include": [
     "source/**/*",

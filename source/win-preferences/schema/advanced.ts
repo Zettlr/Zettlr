@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { trans } from '../../common/i18n-renderer'
+import { trans } from '@common/i18n-renderer'
 
 export default function (): any {
   return {
@@ -58,7 +58,8 @@ export default function (): any {
             ? trans('dialog.preferences.show_app_in_the_notification_area')
             : trans('dialog.preferences.leave_app_running_in_the_notification_area'),
           model: 'system.leaveAppRunning',
-          disabled: process.env.ZETTLR_IS_TRAY_SUPPORTED === '0'
+          disabled: process.env.ZETTLR_IS_TRAY_SUPPORTED === '0',
+          info: process.env.ZETTLR_TRAY_ERROR
         },
         {
           type: 'checkbox',

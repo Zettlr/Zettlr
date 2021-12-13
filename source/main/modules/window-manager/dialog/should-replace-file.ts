@@ -13,7 +13,7 @@
  */
 
 import { BrowserWindow, dialog, MessageBoxOptions } from 'electron'
-import { trans } from '../../../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 
 /**
  * Asks the user for confirmation, if the file identified by filename should

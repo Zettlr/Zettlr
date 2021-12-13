@@ -12,8 +12,8 @@
  * END HEADER
  */
 
-import { getZknTagRE } from '../../../../common/regular-expressions'
-import extractYamlFrontmatter from '../../../../common/util/extract-yaml-frontmatter'
+import { getZknTagRE } from '@common/regular-expressions'
+import extractYamlFrontmatter from '@common/util/extract-yaml-frontmatter'
 
 export default function extractTags (markdown: string): string[] {
   let tags: string[] = []

@@ -81,10 +81,10 @@
  *
  * END HEADER
  */
-import findObject from '../../common/util/find-object'
+import findObject from '@common/util/find-object'
 import FileTree from './file-tree.vue'
 import FileList from './file-list.vue'
-import { trans } from '../../common/i18n-renderer'
+import { trans } from '@common/i18n-renderer'
 
 import { nextTick } from 'vue'
 

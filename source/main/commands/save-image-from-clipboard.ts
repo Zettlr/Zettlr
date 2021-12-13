@@ -13,12 +13,12 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { trans } from '../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 import sanitize from 'sanitize-filename'
 import path from 'path'
 import { promises as fs } from 'fs'
 import { clipboard } from 'electron'
-import isDir from '../../common/util/is-dir'
+import isDir from '@common/util/is-dir'
 
 export default class SaveImage extends ZettlrCommand {
   constructor (app: any) {

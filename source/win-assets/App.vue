@@ -42,11 +42,11 @@
 </template>
 
 <script lang="ts">
-import WindowChrome from '../common/vue/window/Chrome.vue'
+import WindowChrome from '@common/vue/window/Chrome.vue'
 import Defaults from './Defaults.vue'
 import CustomCSS from './CustomCSS.vue'
 import SnippetsTab from './SnippetsTab.vue'
-import { trans } from '../common/i18n-renderer'
+import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
 
 export default defineComponent({

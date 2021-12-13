@@ -136,10 +136,10 @@
  * END HEADER
  */
 
-import { trans } from '../../common/i18n-renderer'
-import formatDate from '../../common/util/format-date'
-import localiseNumber from '../../common/util/localise-number'
-import formatSize from '../../common/util/format-size'
+import { trans } from '@common/i18n-renderer'
+import formatDate from '@common/util/format-date'
+import localiseNumber from '@common/util/localise-number'
+import formatSize from '@common/util/format-size'
 import itemMixin from './util/item-mixin'
 
 export default {

@@ -74,7 +74,7 @@
  */
 
 import { DateTime } from 'luxon'
-import { trans } from '../common/i18n-renderer'
+import { trans } from '@common/i18n-renderer'
 import {
   Chart,
   ChartData,
@@ -86,8 +86,8 @@ import {
   LineElement,
   ChartConfiguration
 } from 'chart.js'
-import SelectControl from '../common/vue/form/elements/Select.vue'
-import ButtonControl from '../common/vue/form/elements/Button.vue'
+import SelectControl from '@common/vue/form/elements/Select.vue'
+import ButtonControl from '@common/vue/form/elements/Button.vue'
 import { defineComponent, PropType } from 'vue'
 
 // Register the components of Chart.js which we need

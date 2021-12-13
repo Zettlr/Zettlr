@@ -13,7 +13,7 @@
   * END HEADER
   */
 
-const { getTaskRE } = require('../../../regular-expressions');
+const { getTaskRE } = require('@common/regular-expressions');
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS

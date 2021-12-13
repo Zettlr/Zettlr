@@ -13,7 +13,7 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { trans } from '../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '../modules/fsal/types'
 
 export default class RequestMove extends ZettlrCommand {

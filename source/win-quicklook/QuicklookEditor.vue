@@ -177,21 +177,21 @@ export default defineComponent({
       // care too much about these things.
       mdEditor.setOptions({
         zettlr: {
-          imagePreviewWidth: global.config.get('display.imageWidth'),
-          imagePreviewHeight: global.config.get('display.imageHeight'),
-          markdownBoldFormatting: global.config.get('editor.boldFormatting'),
-          markdownItalicFormatting: global.config.get('editor.italicFormatting'),
-          zettelkasten: global.config.get('zkn'),
-          readabilityAlgorithm: global.config.get('editor.readabilityAlgorithm'),
+          imagePreviewWidth: (global as any).config.get('display.imageWidth'),
+          imagePreviewHeight: (global as any).config.get('display.imageHeight'),
+          markdownBoldFormatting: (global as any).config.get('editor.boldFormatting'),
+          markdownItalicFormatting: (global as any).config.get('editor.italicFormatting'),
+          zettelkasten: (global as any).config.get('zkn'),
+          readabilityAlgorithm: (global as any).config.get('editor.readabilityAlgorithm'),
           render: {
-            citations: global.config.get('display.renderCitations'),
-            iframes: global.config.get('display.renderIframes'),
-            images: global.config.get('display.renderImages'),
-            links: global.config.get('display.renderLinks'),
-            math: global.config.get('display.renderMath'),
-            tasks: global.config.get('display.renderTasks'),
-            headingTags: global.config.get('display.renderHTags'),
-            tables: global.config.get('editor.enableTableHelper')
+            citations: (global as any).config.get('display.renderCitations'),
+            iframes: (global as any).config.get('display.renderIframes'),
+            images: (global as any).config.get('display.renderImages'),
+            links: (global as any).config.get('display.renderLinks'),
+            math: (global as any).config.get('display.renderMath'),
+            tasks: (global as any).config.get('display.renderTasks'),
+            headingTags: (global as any).config.get('display.renderHTags'),
+            tables: (global as any).config.get('editor.enableTableHelper')
           }
         }
       })

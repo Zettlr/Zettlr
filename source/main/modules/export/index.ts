@@ -20,7 +20,7 @@ import { app } from 'electron'
 import { promises as fs } from 'fs'
 
 // Utilities
-import isFile from '../../../common/util/is-file'
+import isFile from '@common/util/is-file'
 
 // Exporters
 import { ExporterAPI, ExporterOptions, ExporterOutput, PandocRunnerOutput } from './types'

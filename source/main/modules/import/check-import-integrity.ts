@@ -13,9 +13,9 @@
  */
 
 import path from 'path'
-import isFile from '../../../common/util/is-file'
+import isFile from '@common/util/is-file'
 
-import { import_files as FILES } from '../../../common/data.json'
+import { import_files as FILES } from '@common/data.json'
 
 /**
 * This function checks a given file list and checks how good it is at guessing

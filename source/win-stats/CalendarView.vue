@@ -81,8 +81,8 @@
  */
 
 import { DateTime } from 'luxon'
-import { trans } from '../common/i18n-renderer'
-import ButtonControl from '../common/vue/form/elements/Button.vue'
+import { trans } from '@common/i18n-renderer'
+import ButtonControl from '@common/vue/form/elements/Button.vue'
 import { defineComponent, PropType } from 'vue'
 
 export default defineComponent({

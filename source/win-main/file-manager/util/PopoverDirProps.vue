@@ -78,12 +78,12 @@
  * END HEADER
  */
 
-import formatDate from '../../../common/util/format-date'
-import localiseNumber from '../../../common/util/localise-number'
-import SelectControl from '../../../common/vue/form/elements/Select'
-import SwitchControl from '../../../common/vue/form/elements/Switch'
-import ButtonControl from '../../../common/vue/form/elements/Button'
-import { trans } from '../../../common/i18n-renderer'
+import formatDate from '@common/util/format-date'
+import localiseNumber from '@common/util/localise-number'
+import SelectControl from '@common/vue/form/elements/Select'
+import SwitchControl from '@common/vue/form/elements/Switch'
+import ButtonControl from '@common/vue/form/elements/Button'
+import { trans } from '@common/i18n-renderer'
 
 const ipcRenderer = window.ipc
 

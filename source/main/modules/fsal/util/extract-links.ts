@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import extractYamlFrontmatter from '../../../../common/util/extract-yaml-frontmatter'
+import extractYamlFrontmatter from '@common/util/extract-yaml-frontmatter'
 
 export default function extractLinks (markdown: string, linkStart: string = '[[', linkEnd: string = ']]'): string[] {
   const links: string[] = []

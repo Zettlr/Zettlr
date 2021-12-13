@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
+import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import ZettlrCommand from './zettlr-command'
 
 export default class FileClose extends ZettlrCommand {

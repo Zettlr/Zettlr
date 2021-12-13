@@ -17,7 +17,7 @@
 const {
   getZknTagRE, getHeadingRE, getHighlightRE,
   getTableRE, getInlineMathRE, getFnReferenceRE
-} = require('../../../regular-expressions');
+} = require('@common/regular-expressions');
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS

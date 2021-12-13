@@ -14,13 +14,13 @@
 
 import { promises as fs } from 'fs'
 import path from 'path'
-import hash from '../../../common/util/hash'
+import hash from '@common/util/hash'
 import searchFile from './util/search-file'
-import countWords from '../../../common/util/count-words'
-import extractYamlFrontmatter from '../../../common/util/extract-yaml-frontmatter'
-import { getIDRE, getCodeBlockRE } from '../../../common/regular-expressions'
+import countWords from '@common/util/count-words'
+import extractYamlFrontmatter from '@common/util/extract-yaml-frontmatter'
+import { getIDRE, getCodeBlockRE } from '@common/regular-expressions'
 import { shell } from 'electron'
-import safeAssign from '../../../common/util/safe-assign'
+import safeAssign from '@common/util/safe-assign'
 // Import the interfaces that we need
 import { DirDescriptor, MDFileDescriptor, MDFileMeta } from './types'
 import FSALCache from './fsal-cache'

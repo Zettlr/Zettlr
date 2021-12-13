@@ -13,7 +13,7 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import objectToArray from '../../common/util/object-to-array'
+import objectToArray from '@common/util/object-to-array'
 import { makeExport } from '../modules/export'
 import { filter as minimatch } from 'minimatch'
 import { shell } from 'electron'

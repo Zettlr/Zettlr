@@ -25,7 +25,7 @@
   'use strict'
 
   const ipcRenderer = window.ipc
-  const extractCitations = require('../../../util/extract-citations').default
+  const extractCitations = require('@common/util/extract-citations').default
 
   /**
    * Renders Markdown citations in place

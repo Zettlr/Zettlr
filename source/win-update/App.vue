@@ -89,11 +89,11 @@
  * END HEADER
  */
 
-import WindowChrome from '../common/vue/window/Chrome.vue'
-import ButtonControl from '../common/vue/form/elements/Button.vue'
-import ProgressControl from '../common/vue/form/elements/Progress.vue'
-import { trans } from '../common/i18n-renderer'
-import formatSize from '../common/util/format-size'
+import WindowChrome from '@common/vue/window/Chrome.vue'
+import ButtonControl from '@common/vue/form/elements/Button.vue'
+import ProgressControl from '@common/vue/form/elements/Progress.vue'
+import { trans } from '@common/i18n-renderer'
+import formatSize from '@common/util/format-size'
 import PACKAGE_JSON from '../../package.json'
 import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
@@ -119,7 +119,8 @@ export default defineComponent({
         changelog: '',
         tagName: '',
         releasePage: 'https://github.com/Zettlr/Zettlr/releases',
-        compatibleAssets: [],
+        // eslint-disable-next-line camelcase
+        compatibleAssets: [] as Array<{ name: string, browser_download_url: string }>,
         name: '',
         full_path: '',
         size_total: 0,

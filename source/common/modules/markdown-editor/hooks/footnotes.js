@@ -16,8 +16,8 @@
 // it's not in the plugins folder.
 
 const tippy = require('tippy.js').default
-const md2html = require('../../../util/md-to-html')
-const { trans } = require('../../../i18n-renderer')
+const md2html = require('@common/util/md-to-html')
+const { trans } = require('@common/i18n-renderer')
 
 /**
  * No footnote tooltips while we're editing a footnote

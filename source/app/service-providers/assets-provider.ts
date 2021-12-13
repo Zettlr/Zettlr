@@ -17,7 +17,7 @@ import path from 'path'
 import { app, ipcMain } from 'electron'
 import { promises as fs } from 'fs'
 import YAML from 'yaml'
-import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
+import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 
 export default class AssetsProvider {
   /**

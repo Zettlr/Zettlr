@@ -53,10 +53,10 @@
  * END HEADER
  */
 
-import WindowChrome from '../common/vue/window/Chrome.vue'
-import TextControl from '../common/vue/form/elements/Text.vue'
-import ColorControl from '../common/vue/form/elements/Color.vue'
-import { trans } from '../common/i18n-renderer'
+import WindowChrome from '@common/vue/window/Chrome.vue'
+import TextControl from '@common/vue/form/elements/Text.vue'
+import ColorControl from '@common/vue/form/elements/Color.vue'
+import { trans } from '@common/i18n-renderer'
 import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
 

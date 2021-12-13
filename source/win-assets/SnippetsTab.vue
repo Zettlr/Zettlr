@@ -69,12 +69,12 @@
  * END HEADER
  */
 
-import SplitView from '../common/vue/window/SplitView.vue'
-import SelectableList from '../common/vue/form/elements/SelectableList.vue'
-import ButtonControl from '../common/vue/form/elements/Button.vue'
-import TextControl from '../common/vue/form/elements/Text.vue'
-import CodeEditor from '../common/vue/CodeEditor.vue'
-import { trans } from '../common/i18n-renderer'
+import SplitView from '@common/vue/window/SplitView.vue'
+import SelectableList from '@common/vue/form/elements/SelectableList.vue'
+import ButtonControl from '@common/vue/form/elements/Button.vue'
+import TextControl from '@common/vue/form/elements/Text.vue'
+import CodeEditor from '@common/vue/CodeEditor.vue'
+import { trans } from '@common/i18n-renderer'
 import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
 

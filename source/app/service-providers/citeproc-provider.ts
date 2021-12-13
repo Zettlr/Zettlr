@@ -19,11 +19,11 @@ import { FSWatcher } from 'chokidar'
 import { ipcMain } from 'electron'
 import { promises as fs, readFileSync } from 'fs'
 import path from 'path'
-import { trans } from '../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 import extractBibTexAttachments from './assets/extract-bibtex-attachments'
 import { parse as parseBibTex } from 'astrocite-bibtex'
 import YAML from 'yaml'
-import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
+import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 
 interface DatabaseRecord {
   path: string

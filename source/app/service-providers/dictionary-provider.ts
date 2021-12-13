@@ -19,9 +19,9 @@ import path from 'path'
 import { promises as fs } from 'fs'
 
 import { ipcMain, app } from 'electron'
-import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
-import findLangCandidates, { Candidate } from '../../common/util/find-lang-candidates'
-import enumDictFiles, { DictFileMetadata } from '../../common/util/enum-dict-files'
+import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
+import findLangCandidates, { Candidate } from '@common/util/find-lang-candidates'
+import enumDictFiles, { DictFileMetadata } from '@common/util/enum-dict-files'
 
 /**
  * This class loads and unloads dictionaries according to the configuration set

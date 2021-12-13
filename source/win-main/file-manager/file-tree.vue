@@ -66,7 +66,7 @@
  * END HEADER
  */
 
-import { trans } from '../../common/i18n-renderer'
+import { trans } from '@common/i18n-renderer'
 import TreeItem from './tree-item.vue'
 import matchQuery from './util/match-query'
 import matchTree from './util/match-tree'

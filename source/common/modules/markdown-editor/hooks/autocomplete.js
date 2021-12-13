@@ -12,14 +12,14 @@
  * END HEADER
  */
 
-const { getCodeBlockRE } = require('../../../regular-expressions')
+const { getCodeBlockRE } = require('@common/regular-expressions')
 // We need two code block REs: First the line-wise, and then the full one.
 const codeBlockRE = getCodeBlockRE(false)
 const codeBlockMultiline = getCodeBlockRE(true)
 const CodeMirror = require('codemirror')
 const { DateTime } = require('luxon')
 const uuid = require('uuid').v4
-const generateId = require('../../../util/generate-id').default
+const generateId = require('@common/util/generate-id').default
 
 let autocompleteStart = null
 let currentDatabase = null

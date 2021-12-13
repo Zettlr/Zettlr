@@ -55,7 +55,7 @@
  *
  * END HEADER
  */
-import { trans } from '../../../i18n-renderer'
+import { trans } from '@common/i18n-renderer'
 
 export default {
   name: 'FieldText',

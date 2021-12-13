@@ -34,8 +34,8 @@
  * END HEADER
  */
 
-import { trans } from '../common/i18n-renderer'
-import formatDate from '../common/util/format-date'
+import { trans } from '@common/i18n-renderer'
+import formatDate from '@common/util/format-date'
 import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
 

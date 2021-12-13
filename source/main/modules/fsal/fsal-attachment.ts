@@ -14,7 +14,7 @@
 
 import path from 'path'
 import { promises as fs } from 'fs'
-import hash from '../../../common/util/hash'
+import hash from '@common/util/hash'
 import {
   OtherFileDescriptor,
   OtherFileMeta,

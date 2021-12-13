@@ -12,7 +12,7 @@
   * END HEADER
   */
 
-import { getBlockMathRE, getInlineMathRenderRE } from '../../../../common/regular-expressions'
+import { getBlockMathRE, getInlineMathRenderRE } from '@common/regular-expressions'
 import * as CodeMirror from 'codemirror'
 import katex from 'katex'
 

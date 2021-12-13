@@ -55,11 +55,11 @@
  * END HEADER
  */
 
-import TextControl from '../common/vue/form/elements/Text.vue'
-import ButtonControl from '../common/vue/form/elements/Button.vue'
-import TokenList from '../common/vue/form/elements/TokenList.vue'
-import TabBar from '../common/vue/TabBar.vue'
-import { trans } from '../common/i18n-renderer'
+import TextControl from '@common/vue/form/elements/Text.vue'
+import ButtonControl from '@common/vue/form/elements/Button.vue'
+import TokenList from '@common/vue/form/elements/TokenList.vue'
+import TabBar from '@common/vue/TabBar.vue'
+import { trans } from '@common/i18n-renderer'
 
 export default {
   name: 'PopoverTags',

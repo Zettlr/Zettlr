@@ -182,7 +182,7 @@
 </template>
 
 <script lang="ts">
-import localiseNumber from '../common/util/localise-number'
+import localiseNumber from '@common/util/localise-number'
 import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
 

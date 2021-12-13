@@ -57,8 +57,8 @@
  *
  * END HEADER
  */
-import { trans } from '../common/i18n-renderer'
-import localiseNumber from '../common/util/localise-number'
+import { trans } from '@common/i18n-renderer'
+import localiseNumber from '@common/util/localise-number'
 
 export default {
   name: 'PopoverDocInfo',

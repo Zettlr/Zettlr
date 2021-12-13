@@ -19,7 +19,7 @@ import commandExists from 'command-exists'
 import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
 import { promises as fs } from 'fs'
 import path from 'path'
-import { trans } from '../../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 import sanitize from 'sanitize-filename'
 
 export const plugin: ExporterPlugin = {

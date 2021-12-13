@@ -14,14 +14,14 @@
 
 import path from 'path'
 import { promises as fs } from 'fs'
-import hash from '../../../common/util/hash'
+import hash from '@common/util/hash'
 import sortDir from './util/sort'
-import isDir from '../../../common/util/is-dir'
-import isFile from '../../../common/util/is-file'
-import ignoreDir from '../../../common/util/ignore-dir'
-import ignoreFile from '../../../common/util/ignore-file'
-import safeAssign from '../../../common/util/safe-assign'
-import isAttachment from '../../../common/util/is-attachment'
+import isDir from '@common/util/is-dir'
+import isFile from '@common/util/is-file'
+import ignoreDir from '@common/util/ignore-dir'
+import ignoreFile from '@common/util/ignore-file'
+import safeAssign from '@common/util/safe-assign'
+import isAttachment from '@common/util/is-attachment'
 
 import { shell } from 'electron'
 
@@ -39,7 +39,7 @@ import FSALCache from './fsal-cache'
 import {
   codeFileExtensions,
   mdFileExtensions
-} from '../../../common/get-file-extensions'
+} from '@common/get-file-extensions'
 
 /**
  * Determines what will be written to file (.ztr-directory)

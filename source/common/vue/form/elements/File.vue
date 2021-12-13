@@ -47,7 +47,7 @@
  * END HEADER
  */
 
-import { trans } from '../../../i18n-renderer'
+import { trans } from '@common/i18n-renderer'
 
 const ipcRenderer = window.ipc
 

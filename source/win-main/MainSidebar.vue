@@ -122,9 +122,9 @@
  * END HEADER
  */
 
-import { trans } from '../common/i18n-renderer'
+import { trans } from '@common/i18n-renderer'
 import { ClarityIcons } from '@clr/icons'
-import TabBar from '../common/vue/TabBar'
+import TabBar from '@common/vue/TabBar'
 
 const path = window.path
 const ipcRenderer = window.ipc

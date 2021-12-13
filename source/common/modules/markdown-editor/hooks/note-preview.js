@@ -1,7 +1,7 @@
 const tippy = require('tippy.js').default
 const ipcRenderer = window.ipc
-const { trans } = require('../../../i18n-renderer')
-const formatDate = require('../../../util/format-date').default
+const { trans } = require('@common/i18n-renderer')
+const formatDate = require('@common/util/format-date').default
 
 /**
  * A hook for displaying link tooltips which display metadata

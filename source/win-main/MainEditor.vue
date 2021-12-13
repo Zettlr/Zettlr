@@ -83,13 +83,13 @@
  * END HEADER
  */
 
-import countWords from '../common/util/count-words'
-import MarkdownEditor from '../common/modules/markdown-editor'
+import countWords from '@common/util/count-words'
+import MarkdownEditor from '@common/modules/markdown-editor'
 import CodeMirror from 'codemirror'
-import extractCitations from '../common/util/extract-citations'
-import objectToArray from '../common/util/object-to-array'
-import { trans } from '../common/i18n-renderer'
-import extractYamlFrontmatter from '../common/util/extract-yaml-frontmatter'
+import extractCitations from '@common/util/extract-citations'
+import objectToArray from '@common/util/object-to-array'
+import { trans } from '@common/i18n-renderer'
+import extractYamlFrontmatter from '@common/util/extract-yaml-frontmatter'
 import YAML from 'yaml'
 
 import { nextTick } from 'vue'

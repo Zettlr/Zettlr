@@ -127,8 +127,8 @@
  */
 
 import itemMixin from './util/item-mixin'
-import generateFilename from '../../common/util/generate-filename'
-import { trans } from '../../common/i18n-renderer'
+import generateFilename from '@common/util/generate-filename'
+import { trans } from '@common/i18n-renderer'
 
 import { nextTick } from 'vue'
 

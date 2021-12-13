@@ -49,11 +49,11 @@
  * END HEADER
  */
 
-import WindowChrome from '../common/vue/window/Chrome.vue'
+import WindowChrome from '@common/vue/window/Chrome.vue'
 import CalendarView from './CalendarView.vue'
 import ChartView from './ChartView.vue'
 import FSALView from './FSALView.vue'
-import { trans } from '../common/i18n-renderer'
+import { trans } from '@common/i18n-renderer'
 import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
 

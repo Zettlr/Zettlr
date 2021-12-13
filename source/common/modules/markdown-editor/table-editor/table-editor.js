@@ -19,7 +19,7 @@ const buildPipeTable = require('./build-pipe')
 const buildSimpleTable = require('./build-simple')
 const buildGridTable = require('./build-grid')
 
-const md2html = require('../../../util/md-to-html')
+const md2html = require('@common/util/md-to-html')
 
 const computeCSS = require('./compute-css')
 

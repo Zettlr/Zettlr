@@ -16,7 +16,7 @@ import ZettlrCommand from './zettlr-command'
 import path from 'path'
 import fs from 'fs'
 import * as bcp47 from 'bcp-47'
-import { trans } from '../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 import { app } from 'electron'
 
 export default class ImportLangFile extends ZettlrCommand {

@@ -20,8 +20,8 @@ import path from 'path'
 import chokidar from 'chokidar'
 import { CodeFileDescriptor, CodeFileMeta, MDFileDescriptor, MDFileMeta } from '../fsal/types'
 import { FSALCodeFile, FSALFile } from '../fsal'
-import { codeFileExtensions, mdFileExtensions } from '../../../common/get-file-extensions'
-import generateFilename from '../../../common/util/generate-filename'
+import { codeFileExtensions, mdFileExtensions } from '@common/get-file-extensions'
+import generateFilename from '@common/util/generate-filename'
 
 const ALLOWED_CODE_FILES = codeFileExtensions(true)
 const MARKDOWN_FILES = mdFileExtensions(true)

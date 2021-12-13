@@ -15,7 +15,7 @@
 import commandExists from 'command-exists'
 import path from 'path'
 import sanitize from 'sanitize-filename'
-import { trans } from '../../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
 
 // TODO: Enable these additional writers

@@ -24,7 +24,7 @@
 })(function (CodeMirror) {
   'use strict'
 
-  const makeAbsoluteURL = require('../../../util/make-absolute-url')
+  const makeAbsoluteURL = require('@common/util/make-absolute-url')
   const openMarkdownLink = require('../open-markdown-link')
 
   // This regular expression matches three different kinds of URLs:

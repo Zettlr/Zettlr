@@ -17,7 +17,7 @@
  * END HEADER
  */
 
-const makeSearchRegex = require('../../../util/make-search-regex')
+const makeSearchRegex = require('@common/util/make-search-regex')
 
 /**
  * Contains the current search term, necessary to detect changing search terms

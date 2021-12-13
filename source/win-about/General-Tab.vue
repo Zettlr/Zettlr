@@ -78,7 +78,7 @@
  * END HEADER
  */
 
-import { trans } from '../common/i18n-renderer'
+import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
 
 export default defineComponent({

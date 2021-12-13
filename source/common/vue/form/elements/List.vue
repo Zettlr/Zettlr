@@ -143,7 +143,7 @@ import Checkbox from './Checkbox'
 import TextControl from './Text'
 import NumberControl from './Number'
 
-import { trans } from '../../../i18n-renderer'
+import { trans } from '@common/i18n-renderer'
 
 export default {
   name: 'ListField',
