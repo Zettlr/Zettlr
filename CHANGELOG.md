@@ -32,6 +32,8 @@
 - Reinstated the ability to use pure number tags or hexadecimal numbers as tags
 - Using the shortcut `Ctrl-Shift-V` to paste something as plain text will no
   longer paste it twice on Windows and Linux
+- Zettlr can now be started minimized (in the tray/notification area), which
+  means the main window will not be shown after launching the app
 
 ## Under the Hood
 

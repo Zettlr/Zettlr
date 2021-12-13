@@ -125,22 +125,6 @@ export default defineComponent({
     WindowChrome
   },
   data () {
-    // Instantiate the Schemas. We have to do it in such a weird way because
-    // otherwise malformed translation strings will throw errors since the trans
-    // function has access to global.config only AFTER window registration has
-    // been executed. But, since it's a function, without this here we would
-    // automatically execute the trans() function during IMPORT, and as such
-    // BEFORE the window registration has had a chance to register the config
-    // global variable.
-    SCHEMA['tab-general'] = SCHEMA['tab-general']()
-    SCHEMA['tab-editor'] = SCHEMA['tab-editor']()
-    SCHEMA['tab-export'] = SCHEMA['tab-export']()
-    SCHEMA['tab-zettelkasten'] = SCHEMA['tab-zettelkasten']()
-    SCHEMA['tab-display'] = SCHEMA['tab-display']()
-    SCHEMA['tab-spellchecking'] = SCHEMA['tab-spellchecking']()
-    SCHEMA['tab-autocorrect'] = SCHEMA['tab-autocorrect']()
-    SCHEMA['tab-advanced'] = SCHEMA['tab-advanced']()
-
     return {
       currentTab: 0,
       tabs: [
@@ -199,7 +183,7 @@ export default defineComponent({
       availableDictionaries: [],
       // This will return the full object
       config: (global as any).config.get(),
-      schema: SCHEMA['tab-general']
+      schema: SCHEMA['tab-general']()
     }
   },
   computed: {
@@ -232,10 +216,7 @@ export default defineComponent({
      */
     currentTab: function () {
       this.setTitle()
-
-      // Switch out the schema to re-build the form, which makes it appear
-      // as though we have switched tabs. Wicked!
-      this.schema = SCHEMA[this.tabs[this.currentTab].controls]
+      this.recreateSchema()
     }
   },
   /**
@@ -244,6 +225,7 @@ export default defineComponent({
   mounted: function () {
     this.setTitle()
     this.populateDynamicValues()
+    this.recreateSchema()
   },
   /**
    * Listen to events in order to adapt display.
@@ -258,6 +240,7 @@ export default defineComponent({
         // to be re-rendered is good!
         this.config = (global as any).config.get()
         this.populateDynamicValues()
+        this.recreateSchema()
       }
     })
 
@@ -368,6 +351,9 @@ export default defineComponent({
           this.userDictionaryContents = dictionary
         })
         .catch(err => console.error(err))
+    },
+    recreateSchema: function () {
+      this.schema = SCHEMA[this.tabs[this.currentTab].controls]()
     }
   }
 })

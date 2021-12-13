@@ -53,10 +53,23 @@ export default class TrayProvider extends EventEmitter {
       global.config.set('system.leaveAppRunning', false)
     }
 
+    const addToTray: boolean = global.config.get('system.leaveAppRunning')
+    const startMinimized: boolean = global.config.get('system.startInTray')
+
+    if (startMinimized && !addToTray) {
+      // Prevent zombie processes on Windows and Linux. Setting this to false
+      // ensures that the window manager will display the main window.
+      global.config.set('system.startInTray', false)
+    }
+
+    if (addToTray) {
+      this._addTray()
+    }
+
     global.config.on('update', (option: string) => {
       if (option === 'system.leaveAppRunning') {
         // even if the tray should not be shown, since we start in Tray we need to show it anyway
-        if (global.config.get('system.leaveAppRunning') === true || global.config.get('system.startInTray') === true) {
+        if (global.config.get('system.leaveAppRunning') === true) {
           this._addTray()
         } else {
           this._removeTray()

@@ -57,14 +57,14 @@ export default function (): any {
           label: process.platform === 'darwin'
             ? trans('dialog.preferences.show_app_in_the_notification_area')
             : trans('dialog.preferences.leave_app_running_in_the_notification_area'),
-          model: 'system.leaveAppRunning'
+          model: 'system.leaveAppRunning',
+          disabled: process.env.ZETTLR_IS_TRAY_SUPPORTED === '0'
         },
         {
           type: 'checkbox',
-          label: process.platform === 'darwin'
-            ? trans('dialog.preferences.show_app_in_the_notification_area_on_startup')
-            : trans('dialog.preferences.leave_app_running_in_the_notification_area_on_startup'),
-          model: 'system.startInTray'
+          label: trans('dialog.preferences.start_app_minimized'),
+          model: 'system.startInTray',
+          disabled: global.config.get('system.leaveAppRunning') === false
         }
       ],
       [

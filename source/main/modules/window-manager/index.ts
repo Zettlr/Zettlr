@@ -114,12 +114,11 @@ export default class WindowManager extends EventEmitter {
     // Immediately begin loading the data
     this.loadData()
       .then(() => {
-        global.log.info('[Window Manager] Window Manager booted. Opening main window.')
-        this.showMainWindow()
-        if (global.config.get('system.startInTray')) {
-          global.log.info('[Window Manager] Application should start in Tray. Main Window is minimized to tray on startup.')
-          global.tray.add()
-          this.getMainWindow()?.hide()
+        global.log.info('[Window Manager] Window Manager started.')
+        if (global.config.get('system.startInTray') === false) {
+          this.showMainWindow()
+        } else {
+          global.log.info('[Window Manager] Application should start in tray. Main Window is not shown.')
         }
       })
       .catch((err: Error) => global.log.error(`[Window Manager] Could not load data: ${err.message}`, err))
