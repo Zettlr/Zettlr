@@ -7,7 +7,7 @@
       v-bind:class="{
         'tree-item': true,
         [obj.type]: true,
-        'selected': (selectedFile !== null && selectedFile.path === obj.path) || (selectedDir !== null && selectedDir.path === obj.path),
+        'selected': isSelected,
         'project': obj.project != null,
         'root': isRoot
       }"
@@ -268,6 +268,9 @@ export default {
       } else {
         return this.obj.name.replace(this.obj.ext, '')
       }
+    },
+    isSelected: function () {
+      return this.selectedFile.path.startsWith(this.obj.path)
     }
   },
   watch: {
@@ -309,10 +312,13 @@ export default {
       // Open the tree, if the selected file is contained in this dir somewhere
       if (filePath.startsWith(this.obj.path)) {
         this.collapsed = false
+      } else {
+        // we are not in the filepath of the currently open note, do not change the state!
+        return
       }
 
       // If a directory within this has been selected, open up, lads!
-      if (dirPath.startsWith(this.obj.path)) {
+      if (this.obj.path.startsWith(dirPath)) {
         this.collapsed = false
       }
     },
