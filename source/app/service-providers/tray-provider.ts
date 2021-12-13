@@ -55,7 +55,8 @@ export default class TrayProvider extends EventEmitter {
 
     global.config.on('update', (option: string) => {
       if (option === 'system.leaveAppRunning') {
-        if (global.config.get('system.leaveAppRunning') === true) {
+        // even if the tray should not be shown, since we start in Tray we need to show it anyway
+        if (global.config.get('system.leaveAppRunning') === true || global.config.get('system.startInTray') === true) {
           this._addTray()
         } else {
           this._removeTray()
@@ -107,7 +108,7 @@ export default class TrayProvider extends EventEmitter {
    * @memberof TrayProvider
    */
   private _addTray (): void {
-    const leaveAppRunning = Boolean(global.config.get('system.leaveAppRunning'))
+    const leaveAppRunning = Boolean(global.config.get('system.leaveAppRunning')) || Boolean(global.config.get('system.startInTray'))
 
     if (!leaveAppRunning) {
       return // No need to add a tray.

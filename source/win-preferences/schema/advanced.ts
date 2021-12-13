@@ -58,6 +58,13 @@ export default function (): any {
             ? trans('dialog.preferences.show_app_in_the_notification_area')
             : trans('dialog.preferences.leave_app_running_in_the_notification_area'),
           model: 'system.leaveAppRunning'
+        },
+        {
+          type: 'checkbox',
+          label: process.platform === 'darwin'
+            ? trans('dialog.preferences.show_app_in_the_notification_area_on_startup')
+            : trans('dialog.preferences.leave_app_running_in_the_notification_area_on_startup'),
+          model: 'system.startInTray'
         }
       ],
       [
