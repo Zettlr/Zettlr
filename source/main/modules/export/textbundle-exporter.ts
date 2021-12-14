@@ -47,7 +47,7 @@ export const plugin: ExporterPlugin = {
     }
 
     const baseName = path.basename(options.sourceFiles[0].name, options.sourceFiles[0].ext)
-    const title = (options.title !== undefined) ? sanitize(options.title, { replacement: '-' }) : baseName
+    const title = (options.defaultsOverride?.title !== undefined) ? sanitize(options.defaultsOverride.title, { replacement: '-' }) : baseName
     const ext = options.format === 'textpack' ? '.textpack' : '.textbundle'
     const targetPath = path.join(options.targetDirectory, title + ext)
     try {

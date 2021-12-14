@@ -63,7 +63,7 @@ export const plugin: ExporterPlugin = {
 
     // First file determines the target name
     const target = path.basename(options.sourceFiles[0].name, options.sourceFiles[0].ext)
-    const title = (options.title !== undefined) ? sanitize(options.title, { replacement: '-' }) : target
+    const title = (options.defaultsOverride?.title !== undefined) ? sanitize(options.defaultsOverride.title, { replacement: '-' }) : target
     const targetPath = path.join(options.targetDirectory, title + '.revealjs')
 
     // Get the corresponding defaults file

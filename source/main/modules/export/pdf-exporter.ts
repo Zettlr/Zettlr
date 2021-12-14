@@ -50,7 +50,7 @@ export const plugin: ExporterPlugin = {
     // First file determines the name of the output path, EXCEPT a title is
     // explicitly set.
     const firstName = path.basename(options.sourceFiles[0].name, options.sourceFiles[0].ext)
-    const title = (options.title !== undefined) ? sanitize(options.title, { replacement: '-' }) : firstName
+    const title = (options.defaultsOverride?.title !== undefined) ? sanitize(options.defaultsOverride.title, { replacement: '-' }) : firstName
     const pdfFilePath = path.join(options.targetDirectory, `${title}.pdf`)
     const htmlFilePath = path.join(options.targetDirectory, `${title}.html`)
 

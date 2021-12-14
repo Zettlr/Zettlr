@@ -22,6 +22,23 @@ interface MinimalFile {
   ext: string
 }
 
+interface DefaultsOverride {
+  /**
+   * This is an optional property. It allows to override the global CSL Stylesheet
+   * defined in the preferences for the given export.
+   */
+  csl?: string
+  /**
+   * This is an optional property. It allows manually setting a title in the
+   * defaults file metadata.
+   */
+  title?: string
+  /**
+   * This allows overwriting the template as specified in the defaults file
+   */
+  template?: string
+}
+
 /**
  * This interface descripes options that can be passed in general to the
  * exporter to control its behaviour.
@@ -45,21 +62,17 @@ export interface ExporterOptions {
    */
   absoluteImagePaths?: boolean
   /**
-   * This is an optional property. It allows to override the global CSL Stylesheet
-   * defined in the preferences for the given export.
-   */
-  cslStyle?: string
-  /**
-   * This is an optional property. It allows manually setting a title in the
-   * defaults file metadata.
-   */
-  title?: string
-  /**
    * The current working directory for the Pandoc executable. Should be set
    * reasonably so that relative paths can be correctly resolved (especially
    * paths to images or other files).
    */
   cwd?: string
+  /**
+   * This property allows overriding of any defaults value, which comes in handy
+   * specifically for projects, since these feature some slightly divergent
+   * options.
+   */
+  defaultsOverride?: DefaultsOverride
 }
 
 /**

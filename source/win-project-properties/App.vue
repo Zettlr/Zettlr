@@ -55,6 +55,19 @@
         v-bind:reset="true"
         v-bind:filter="{'csl': 'CSL Stylesheet'}"
       ></FileControl>
+      <!-- Also, the other possible files users can override -->
+      <FileControl
+        v-model="texTemplate"
+        v-bind:label="'LaTeX Template'"
+        v-bind:reset="true"
+        v-bind:filter="{'tex': 'LaTeX Source'}"
+      ></FileControl>
+      <FileControl
+        v-model="htmlTemplate"
+        v-bind:label="'HTML Template'"
+        v-bind:reset="true"
+        v-bind:filter="{'html,htm': 'HTML Template'}"
+      ></FileControl>
     </div>
   </WindowChrome>
 </template>
@@ -81,6 +94,7 @@ import FileControl from '@common/vue/form/elements/File.vue'
 import TextControl from '@common/vue/form/elements/Text.vue'
 import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
+import { ProjectSettings } from 'source/main/modules/fsal/types'
 
 const ipcRenderer: IpcRenderer = (window as any).ipc
 
@@ -100,6 +114,8 @@ export default defineComponent({
       selectedExportFormats: [ 'html', 'chromium-pdf' ], // NOTE: Must correspond to the defaults in fsal-directory.ts
       patterns: [],
       cslStyle: '',
+      texTemplate: '',
+      htmlTemplate: '',
       projectTitle: '',
       tabs: [
         {
@@ -162,6 +178,12 @@ export default defineComponent({
     cslStyle: function (newValue, oldValue) {
       this.updateProperties()
     },
+    texTemplate: function (newValue, oldValue) {
+      this.updateProperties()
+    },
+    htmlTemplate: function (newValue, oldValue) {
+      this.updateProperties()
+    },
     dirPath: function (newValue, oldValue) {
       this.fetchProperties()
     }
@@ -216,8 +238,12 @@ export default defineComponent({
             formats: this.selectedExportFormats.map(e => e), // De-proxy
             filters: this.patterns.map(e => e), // De-proxy
             cslStyle: this.cslStyle,
-            title: this.projectTitle
-          },
+            title: this.projectTitle,
+            templates: {
+              tex: this.texTemplate,
+              html: this.htmlTemplate
+            }
+          } as ProjectSettings,
           path: this.dirPath
         }
       }).catch(err => console.error(err))
@@ -233,6 +259,8 @@ export default defineComponent({
             this.selectedExportFormats = descriptor.project.formats
             this.patterns = descriptor.project.filters
             this.cslStyle = descriptor.project.cslStyle
+            this.htmlTemplate = descriptor.project.templates.html
+            this.texTemplate = descriptor.project.templates.tex
             this.projectTitle = descriptor.project.title
           } else {
             // Apparently the user kept the window open and removed the project
