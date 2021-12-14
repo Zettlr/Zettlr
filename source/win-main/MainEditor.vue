@@ -528,6 +528,7 @@ export default {
       const doc = this.openDocuments.find(item => item.path === fileDescriptor.path)
 
       if (doc !== undefined) {
+        const { top } = mdEditor.codeMirror.getScrollInfo()
         const cur = Object.assign({}, doc.cmDoc.getCursor())
         doc.cmDoc.setValue(fileDescriptor.content)
         nextTick()
@@ -536,6 +537,7 @@ export default {
             // then immediately revert that status again.
             doc.cmDoc.markClean()
             doc.cmDoc.setCursor(cur)
+            mdEditor.codeMirror.getWrapperElement().scrollTop = top
             this.$store.commit('announceModifiedFile', {
               filePath: doc.path,
               isClean: doc.cmDoc.isClean()

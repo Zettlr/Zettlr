@@ -38,6 +38,7 @@
 - MagicQuotes can now surround selections
 - File duplication will now make sure to always create new files instead of
   overwriting existing ones
+- Attempt to scroll back to the correct position after applying remote changes
 
 ## Under the Hood
 
