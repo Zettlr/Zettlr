@@ -518,7 +518,7 @@ body.win32 {
       }
 
       &.active {
-        background-color: rgb(100, 100, 100);
+        background-color: rgb(172, 172, 172);
         color: white;
       }
 

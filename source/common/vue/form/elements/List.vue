@@ -2,16 +2,12 @@
   <!--
     On macOS Big Sur, this represents a TableView
   -->
-  <div
-    v-bind:class="{
-      'table-view': platform === 'darwin',
-      'form-control': true
-    }"
-  >
+  <div class="table-view form-control">
     <label v-if="label !== ''" v-html="label"></label>
     <input
       v-if="searchable"
       v-model="query"
+      class="filter"
       type="search"
       v-bind:placeholder="searchLabel"
     >
@@ -457,54 +453,48 @@ export default {
 <style lang="less">
 // Maps to AppKit's TableView. See:
 // https://developer.apple.com/design/human-interface-guidelines/macos/windows-and-views/table-views/
-div.table-view {
-  // .filter {
-  //   // Optional filter field
-  // }
-  break-inside: avoid; // Avoid breaking table views when inside column views
-  margin: 5px;
+body {
+  div.table-view {
+    break-inside: avoid; // Avoid breaking table views when inside column views
+    margin: 5px;
 
-  table {
-    border: 1px solid rgb(220, 220, 220);
-    border-collapse: collapse;
-    line-height: 100%;
-    overflow: auto;
-    width: 100%;
+    table {
+      border: 1px solid rgb(220, 220, 220);
+      border-collapse: collapse;
+      line-height: 100%;
+      overflow: auto;
+      width: 100%;
 
-    thead{
-      tr {
-        border-bottom: 1px solid rgb(220, 220, 220);
-        th {
-          padding: 4px;
-          font-size: small;
-          font-weight: normal;
-          text-align: left;
-          border-right: 1px solid rgb(220, 220, 220);
+      &.striped {
+        border: none;
+        tr:nth-child(2n) {
+          background-color: rgb(220, 220, 220);
         }
       }
-    }
 
-    tbody {
-      tr {
-        td {
-          padding: 1px 4px;
-          margin: 0;
-          &:focus {
-            outline: 0;
-            background-color: var(--system-accent-color, rgb(230, 230, 230));
+      thead{
+        tr {
+          border-bottom: 1px solid rgb(180, 180, 180);
+          th {
+            padding: 4px;
+            font-size: small;
+            font-weight: normal;
+            text-align: left;
+            border-right: 1px solid rgb(180, 180, 180);
           }
         }
       }
-    }
-  }
-}
 
-body.darwin{
-  div.table-view {
-    table {
-      &.striped {
-        tr:nth-child(2n) {
-          background-color: rgb(220, 220, 220);
+      tbody {
+        tr {
+          td {
+            padding: 1px 4px;
+            margin: 0;
+            &:focus {
+              outline: 0;
+              background-color: var(--system-accent-color, rgb(230, 230, 230));
+            }
+          }
         }
       }
     }
@@ -513,13 +503,21 @@ body.darwin{
   &.dark {
     div.table-view {
       table {
-        border-color: rgb(50, 50, 50);
-
         &.striped {
           tr:nth-child(2n) {
             background-color: rgb(50, 50, 50);
           }
         }
+      }
+    }
+  }
+}
+
+body.darwin{
+  &.dark {
+    div.table-view {
+      table {
+        border-color: rgb(50, 50, 50);
 
         thead{
           tr {
@@ -532,6 +530,40 @@ body.darwin{
 
         tbody tr td:focus {
           background-color: rgb(70, 70, 70);
+        }
+      }
+    }
+  }
+}
+
+body.win32 {
+  div.table-view {
+    input.filter {
+      margin-bottom: 5px;
+    }
+
+    table {
+      thead{
+        tr {
+          border-bottom: none;
+          background-color: rgb(220, 220, 220);
+
+          th {
+            font-weight: bold;
+            border-right: none;
+          }
+        }
+      }
+    }
+  }
+
+  &.dark {
+    div.table-view {
+      table {
+        thead {
+          tr {
+            background-color: rgb(50, 50, 50);
+          }
         }
       }
     }
