@@ -70,6 +70,7 @@
   directory
 - The file autocompletion database now uses the full paths to index files
 - You can now copy the underlying equation code for LaTeX equations
+- MagicQuotes can now surround selections
 
 # 2.0.3
 
