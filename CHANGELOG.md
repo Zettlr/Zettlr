@@ -68,6 +68,7 @@
 - Zettlr now extracts outlinks from a file and adds them to descriptors
 - Added `@common` as a shorthand for accessing files within the `common`-
   directory
+- The file autocompletion database now uses the full paths to index files
 
 # 2.0.3
 

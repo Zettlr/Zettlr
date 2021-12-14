@@ -656,8 +656,8 @@ export default {
     updateFileDatabase () {
       const fileDatabase = {}
 
-      for (let file of this.fsalFiles) {
-        let fname = file.name.substr(0, file.name.lastIndexOf('.'))
+      for (const file of this.fsalFiles) {
+        const fname = file.name.substr(0, file.name.lastIndexOf('.'))
         let displayText = fname // Fallback: Only filename
         if ('frontmatter' in file && file.frontmatter !== null && file.frontmatter.title !== undefined) {
           // (Else) if there is a frontmatter, use that title
@@ -671,7 +671,7 @@ export default {
           displayText = `${file.id}: ${displayText}`
         }
 
-        fileDatabase[fname] = {
+        fileDatabase[file.path] = {
           // Use the ID, if given, or the filename
           'text': (file.id !== '') ? file.id : fname,
           'displayText': displayText,
