@@ -13,7 +13,14 @@
  * END HEADER
  */
 
-import { CodeFileDescriptor, MDFileDescriptor } from '../fsal/types'
+// The exporter only needs a few properties, so by defining a minimal type here
+// we can make the exporter more flexible to accept also objects that only
+// contain path information
+interface MinimalFile {
+  path: string
+  name: string
+  ext: string
+}
 
 /**
  * This interface descripes options that can be passed in general to the
@@ -27,7 +34,7 @@ export interface ExporterOptions {
   /**
    * This is an array of source files you wish to compile into the target file.
    */
-  sourceFiles: Array<MDFileDescriptor|CodeFileDescriptor>
+  sourceFiles: MinimalFile[]
   /**
    * This is the directory into which the exporter should put the exported file.
    */

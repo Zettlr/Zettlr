@@ -34,6 +34,7 @@
   longer paste it twice on Windows and Linux
 - Zettlr can now be started minimized (in the tray/notification area), which
   means the main window will not be shown after launching the app
+- On single-file export, unsaved changes are now also exported
 
 ## Under the Hood
 

@@ -120,7 +120,6 @@ export default {
   },
   data: function () {
     return {
-      editor: null,
       openDocuments: [], // Contains all loaded documents if applicable
       currentlyFetchingFiles: [], // Contains the paths of files that are right now being fetched
       // Should we perform a regexp search?
@@ -807,6 +806,13 @@ export default {
 
       // Glue it back together and set it as content
       this.activeDocument.cmDoc.setValue('---\n' + YAML.stringify(frontmatter) + '---' + postFrontmatter + content)
+    },
+    getValue () {
+      if (mdEditor !== null) {
+        return mdEditor.value
+      } else {
+        return ''
+      }
     }
   }
 }
