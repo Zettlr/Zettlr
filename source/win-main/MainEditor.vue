@@ -944,6 +944,7 @@ export default {
   .katex {
     font-size: 1.1em; // reduce font-size of math a bit
     display: inline-block; // needed for display math to behave properly
+    user-select: none; // Disable user text selection
   }
 
   // Math equations in display mode

@@ -69,6 +69,7 @@
 - Added `@common` as a shorthand for accessing files within the `common`-
   directory
 - The file autocompletion database now uses the full paths to index files
+- You can now copy the underlying equation code for LaTeX equations
 
 # 2.0.3
 
