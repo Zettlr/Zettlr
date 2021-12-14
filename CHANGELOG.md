@@ -71,6 +71,8 @@
 - The file autocompletion database now uses the full paths to index files
 - You can now copy the underlying equation code for LaTeX equations
 - MagicQuotes can now surround selections
+- File duplication will now make sure to always create new files instead of
+  overwriting existing ones
 
 # 2.0.3
 
