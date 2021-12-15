@@ -18,12 +18,13 @@
             "Krysl",
             "Herb \u003Chwongbaul.app@outlook.com\u003E",
             "joegege",
+            "gigige",
             "Che Jiang \u003Cjiang@fastmail.net\u003E",
             "\u571f\u8c46 \u003Chewang@mail.bnu.edu.cn\u003E",
             "Taylan TATLI"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-11-27T06:59:56.000000Z"
+        "updated_at": "2021-12-10T19:10:43.000000Z"
     },
     "dialog": {
         "about": {
@@ -334,6 +335,7 @@
             "readability_algorithm": "\u5728\u9605\u8bfb\u6a21\u5f0f\u4e2d\u4f7f\u7528\u7684\u7b97\u6cd5",
             "reset_pandoc_command": "\u91cd\u7f6epandoc\u547d\u4ee4",
             "show_app_in_the_notification_area": "\u5728\u6d88\u606f\u533a\u663e\u793a\u5e94\u7528",
+            "sort_folders_first": "\u5728\u6587\u6863\u4e0a\u65b9\u663e\u793a\u6587\u4ef6\u5939",
             "sorting_ascii": "ASCII\u987a\u5e8f\uff082\u572810\u4e4b\u540e\uff09",
             "sorting_explanation": "\u6587\u4ef6\u7684\u6392\u5e8f\u987a\u5e8f\uff08\u7528\u4e8e\u6309\u540d\u79f0\u6392\u5e8f\uff09",
             "sorting_natural": "\u81ea\u7136\u987a\u5e8f\uff0810\u57282\u4e4b\u540e\uff09",

@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-11-06T15:32:03.000000Z"
+        "updated_at": "2021-12-14T12:21:17.000000Z"
     },
     "dialog": {
         "about": {
@@ -315,6 +315,7 @@
             "readability_algorithm": "Algorithmus f\u00fcr den Lesbarkeits-Modus",
             "reset_pandoc_command": "Pandoc-Befehl auf Werkseinstellungen zur\u00fccksetzen",
             "show_app_in_the_notification_area": "App-Icon in der Men\u00fcleiste anzeigen",
+            "sort_folders_first": "Zeige Ordner vor Dateien",
             "sorting_ascii": "ASCII-Reihenfolge (2 kommt nach 10)",
             "sorting_explanation": "Sortierreihenfolge f\u00fcr Dateien (bei Sortierung nach Dateinamen)",
             "sorting_natural": "Nat\u00fcrliche Reihenfolge (10 kommt nach 2)",
@@ -325,6 +326,7 @@
             "spellchecking": {
                 "title": "Rechtschreibung"
             },
+            "start_app_minimized": "Starte Zettlr minimiert",
             "theme": {
                 "accent_color_info": "Diese Einstellung ist nur f\u00fcr Windows und macOS verf\u00fcgbar",
                 "accent_color_label": "Nutze die Akzentfarbe des Betriebssystems statt der Theme-Farbe",
@@ -575,6 +577,7 @@
         "close_file": "Datei schlie\u00dfen",
         "close_workspace": "Arbeitsverzeichnis schlie\u00dfen",
         "copy": "Kopieren",
+        "copy_equation": "Formel-Code kopieren",
         "copy_filename": "Dateinamen kopieren",
         "copy_html": "Als HTML kopieren",
         "copy_id": "ID kopieren",
