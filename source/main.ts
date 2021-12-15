@@ -22,6 +22,9 @@ import Zettlr from './main/zettlr'
 
 // Helper function to extract files to open from process.argv
 import extractFilesFromArgv from './app/util/extract-files-from-argv'
+import CliProvider from './app/service-providers/cli-provider'
+
+global.cliarguments = new CliProvider()
 
 // Immediately after launch, check if there is already another instance of
 // Zettlr running, and, if so, exit immediately. The arguments (including files)
@@ -66,33 +69,28 @@ if (process.platform === 'win32') {
 
 // Setting custom data dir for user configuration files.
 // Full path or relative path is OK. '~' does not work as expected.
-const dataDirFlag = process.argv.find(elem => elem.indexOf('--data-dir=') === 0)
+let dataDir = global.cliarguments.getArg('data-dir')
 
-if (dataDirFlag !== undefined) {
+if (dataDir !== undefined) {
   // a path to a custom config dir is provided
-  const match = /^--data-dir="?([^"]+)"?$/.exec(dataDirFlag)
-  if (match !== null) {
-    let dataDir = match[1]
-
-    if (!path.isAbsolute(dataDir)) {
-      if (app.isPackaged) {
-        // Attempt to use the executable file's path as the basis
-        dataDir = path.join(path.dirname(app.getPath('exe')), dataDir)
-      } else {
-        // Attempt to use the repository's root directory as the basis
-        dataDir = path.join(__dirname, '../../', dataDir)
-      }
+  if (!path.isAbsolute(dataDir)) {
+    if (app.isPackaged) {
+      // Attempt to use the executable file's path as the basis
+      dataDir = path.join(path.dirname(app.getPath('exe')), dataDir)
+    } else {
+      // Attempt to use the repository's root directory as the basis
+      dataDir = path.join(__dirname, '../../', dataDir)
     }
-    global.log.info('[Application] Using custom data dir: ' + dataDir)
-    app.setPath('userData', dataDir)
-    app.setAppLogsPath(path.join(dataDir, 'logs'))
   }
+  global.log.info('[Application] Using custom data dir: ' + String(dataDir))
+  app.setPath('userData', dataDir)
+  app.setAppLogsPath(path.join(dataDir, 'logs'))
 }
 
 // On systems with virtual GPUs (i.e. VMs), it might be necessary to disable
 // hardware acceleration. If the corresponding flag is set, we do so.
 // See for more info https://github.com/Zettlr/Zettlr/issues/2127
-if (process.argv.includes('--disable-hardware-acceleration')) {
+if (global.cliarguments.getArg('disable-hardware-acceleration')) {
   app.disableHardwareAcceleration()
 }
 

@@ -78,7 +78,8 @@
     "vue": "^3.2.24",
     "vue-virtual-scroller": "^2.0.0-alpha.1",
     "vuex": "^4.0.2",
-    "yaml": "^1.10.2"
+    "yaml": "^1.10.2",
+    "yargs": "^17.3.0"
   },
   "optionalDependencies": {
     "fsevents": "^2.3.2"
