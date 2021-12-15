@@ -19,6 +19,10 @@ import { Arguments, exit } from 'yargs'
 import { app } from 'electron'
 
 export default class CliProvider {
+  static DATA_DIR: string = 'data-dir'
+  static DISABLE_HARDWARE_ACCELERATION: string = 'disable-hardware-acceleration'
+  static CLEAR_CACHE: string = 'clear-cache'
+
   yargs = yargs(process.argv.slice(2))
   values: Arguments
   /**
@@ -26,8 +30,6 @@ export default class CliProvider {
    * @param {electron.app} parentApp The app object.
    */
   constructor () {
-    // custom version implementation used, so disable the original one
-    this.yargs.version(false)
     this.yargs.options({
       c: {
         default: false,
@@ -46,11 +48,6 @@ export default class CliProvider {
         default: false,
         alias: 'help',
         describe: 'Print this help'
-      },
-      v: {
-        default: false,
-        alias: 'version',
-        describe: 'Print the version of Zettlr'
       }
     })
     this.values = this.yargs.parseSync(process.argv)
@@ -58,12 +55,7 @@ export default class CliProvider {
   }
 
   getArg (key: string): any {
-    let value = this.values[key]
-    let t = String(value)
-    console.error('Query Argv: ' + key)
-    console.error('Result:     ' + t)
-    console.error('Result:     ' + this.values[key])
-    return value
+    return this.values[key]
   }
 
   handleGeneralArguments (): void {

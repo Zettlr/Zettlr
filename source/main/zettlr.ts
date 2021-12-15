@@ -34,6 +34,7 @@ import { commands } from './commands'
 import { CodeFileDescriptor, CodeFileMeta, DirDescriptor, MDFileDescriptor, MDFileMeta } from './modules/fsal/types'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import extractFilesFromArgv from '../app/util/extract-files-from-argv'
+import CliProvider from '../app/service-providers/cli-provider'
 
 export default class Zettlr {
   isQuitting: boolean
@@ -118,7 +119,7 @@ export default class Zettlr {
     this._documentManager = new DocumentManager()
 
     // Immediately determine if the cache needs to be cleared
-    let shouldClearCache = process.argv.includes('--clear-cache')
+    let shouldClearCache = global.cliarguments.getArg(CliProvider.CLEAR_CACHE)
     if (global.config.newVersionDetected() || shouldClearCache) {
       global.log.info('Clearing the FSAL cache ...')
       this._fsal.clearCache()

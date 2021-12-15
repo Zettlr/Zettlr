@@ -69,7 +69,7 @@ if (process.platform === 'win32') {
 
 // Setting custom data dir for user configuration files.
 // Full path or relative path is OK. '~' does not work as expected.
-let dataDir = global.cliarguments.getArg('data-dir')
+let dataDir = global.cliarguments.getArg(CliProvider.DATA_DIR)
 
 if (dataDir !== undefined) {
   // a path to a custom config dir is provided
@@ -90,7 +90,7 @@ if (dataDir !== undefined) {
 // On systems with virtual GPUs (i.e. VMs), it might be necessary to disable
 // hardware acceleration. If the corresponding flag is set, we do so.
 // See for more info https://github.com/Zettlr/Zettlr/issues/2127
-if (global.cliarguments.getArg('disable-hardware-acceleration')) {
+if (global.cliarguments.getArg(CliProvider.DISABLE_HARDWARE_ACCELERATION)) {
   app.disableHardwareAcceleration()
 }
 
