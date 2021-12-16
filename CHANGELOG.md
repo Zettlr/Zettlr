@@ -42,6 +42,8 @@
 - Adapt styles on Windows
 - You can now specify a TeX template and an HTML template for projects
 - Fix double titlebars on Windows and Linux when displaying modals
+- Following internal links now also works for systems in which the ID is part of
+  the file name
 
 ## Under the Hood
 
