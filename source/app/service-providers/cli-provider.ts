@@ -14,59 +14,79 @@
  * END HEADER
  */
 
-import yargs from 'yargs/yargs'
-import { Arguments, exit } from 'yargs'
 import { app } from 'electron'
+import path from 'path'
 
 export default class CliProvider {
   static DATA_DIR: string = 'data-dir'
   static DISABLE_HARDWARE_ACCELERATION: string = 'disable-hardware-acceleration'
   static CLEAR_CACHE: string = 'clear-cache'
 
-  yargs = yargs(process.argv.slice(2))
-  values: Arguments
   /**
-   * Create a new application object
-   * @param {electron.app} parentApp The app object.
+   * Create a new CliProvider object
    */
   constructor () {
-    this.yargs.options({
-      c: {
-        default: false,
-        alias: 'clear-cache',
-        describe: 'This will direct the File System Abstraction Layer to fully clear its cache on boot'
-      },
-      d: {
-        default: undefined,
-        alias: 'data-dir'
-      },
-      a: {
-        default: false,
-        alias: 'disable-hardware-acceleration'
-      },
-      h: {
-        default: false,
-        alias: 'help',
-        describe: 'Print this help'
-      }
-    })
-    this.values = this.yargs.parseSync(process.argv)
     this.handleGeneralArguments()
   }
 
   getArg (key: string): any {
-    return this.values[key]
+    switch (key) {
+      case CliProvider.DATA_DIR: {
+        let dataDir = this.getArgumentValue('--data-dir')
+        if (dataDir !== undefined && !path.isAbsolute(dataDir)) {
+          if (app.isPackaged) {
+            // Attempt to use the executable file's path as the basis
+            dataDir = path.join(path.dirname(app.getPath('exe')), dataDir)
+          } else {
+            // Attempt to use the repository's root directory as the basis
+            dataDir = path.join(__dirname, '../../', dataDir)
+          }
+          return dataDir
+        }
+        return undefined
+      }
+      case CliProvider.CLEAR_CACHE: {
+        return process.argv.includes('--clear-cache')
+      }
+      case CliProvider.DISABLE_HARDWARE_ACCELERATION: {
+        return process.argv.includes('--disable-hardware-acceleration')
+      }
+    }
+    return undefined
   }
 
   handleGeneralArguments (): void {
-    if (this.getArg('help')) {
-      this.yargs.showHelp()
-      exit(0, Error('Exit because help was shown!'))
+    if (process.argv.includes('--help') || process.argv.includes('-h')) {
+      this.showHelp()
+      process.exit()
     }
 
-    if (this.getArg('version')) {
+    if (process.argv.includes('--version') || process.argv.includes('-v')) {
       console.log(app.getName() + ' ' + app.getVersion())
-      exit(0, Error('Exit because version was shown!'))
+      process.exit()
+    }
+  }
+
+  showHelp (): void {
+    console.log('This is the Zettlr Help!')
+    console.log('')
+    console.log('Usage:')
+    console.log('-h | --help                            Show this help')
+    console.log('-v | --version                         Show the Version of Zettlr')
+    console.log('   | --clear-cache                     Removes all cached files')
+    console.log('   | --disable-hardware-acceleration   Disables Hardware Accelleration for systems that do not support it.')
+    console.log('   | --data-dir=FILEPATH               Set a custom directory for Zettlr\'s configuration files')
+  }
+
+  getArgumentValue (key: string): string | undefined {
+    const dataDirFlag = process.argv.find(elem => elem.indexOf(key + '=') === 0)
+    if (dataDirFlag === undefined) {
+      return undefined
+    }
+    const regex = new RegExp('^' + key + '="?([^"]+)"?$')
+    const match = regex.exec(dataDirFlag)
+    if (match !== null) {
+      return match[1]
     }
   }
 }
