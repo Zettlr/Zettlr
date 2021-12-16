@@ -44,6 +44,7 @@
 - Fix double titlebars on Windows and Linux when displaying modals
 - Following internal links now also works for systems in which the ID is part of
   the file name
+- Updated the display name in the Add/Remove Programs entry for Windows
 
 ## Under the Hood
 
