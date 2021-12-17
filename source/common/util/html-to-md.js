@@ -12,11 +12,11 @@
  * END HEADER
  */
 
-const Turndown = require('joplin-turndown').default
-const turndownGfm = require('joplin-turndown-plugin-gfm')
+import TurndownService from '@joplin/turndown'
+import * as turndownGfm from 'joplin-turndown-plugin-gfm'
 
 // HTML to Markdown conversion is better done with Turndown.
-const converter = new Turndown({
+const converter = new TurndownService({
   headingStyle: 'atx',
   hr: '---',
   blankReplacement: function (content, node) {
@@ -40,6 +40,6 @@ converter.use(turndownGfm.gfm)
  *
  * @return  {String}        The converted Markdown
  */
-module.exports = (html) => {
+export default function html2md (html) {
   return converter.turndown(html)
 }

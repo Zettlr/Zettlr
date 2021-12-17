@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-const html2md = require('@common/util/html-to-md')
+const html2md = require('@common/util/html-to-md').default
 const clipboard = window.clipboard
 
 /**
