@@ -27,7 +27,7 @@
   <a href="https://www.zettlr.com/" target="_blank">Homepage</a> |
   <a href="https://www.zettlr.com/download">Download</a> |
   <a href="https://docs.zettlr.com/" target="_blank">Documentation</a> |
-  <a href="https://forum.zettlr.com/" target="_blank">Discussion Forum</a> |
+  <a href="https://discord.gg/PcfS3DM9Xj" target="_blank">Discord</a> |
   <a href="#contributing">Contributing</a> |
   <a href="https://www.patreon.com/zettlr" target="_blank">Support Us</a>
 </p>
