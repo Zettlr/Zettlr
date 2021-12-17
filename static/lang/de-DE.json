@@ -326,7 +326,6 @@
             "spellchecking": {
                 "title": "Rechtschreibung"
             },
-            "start_app_minimized": "Starte Zettlr minimiert",
             "theme": {
                 "accent_color_info": "Diese Einstellung ist nur f\u00fcr Windows und macOS verf\u00fcgbar",
                 "accent_color_label": "Nutze die Akzentfarbe des Betriebssystems statt der Theme-Farbe",

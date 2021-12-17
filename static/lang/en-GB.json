@@ -329,7 +329,6 @@
             "spellchecking": {
                 "title": "Spellchecking"
             },
-            "start_app_minimized": "Start app minimised",
             "theme": {
                 "accent_color_info": "This setting is only available on Windows and macOS",
                 "accent_color_label": "Use the operating system's accent colour instead of the theme colour",
