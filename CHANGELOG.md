@@ -32,8 +32,9 @@
 - Reinstated the ability to use pure number tags or hexadecimal numbers as tags
 - Using the shortcut `Ctrl-Shift-V` to paste something as plain text will no
   longer paste it twice on Windows and Linux
-- Zettlr can now be started minimized (in the tray/notification area), which
-  means the main window will not be shown after launching the app
+- Zettlr can now be started minimized (in the tray/notification area) by passing
+  the CLI flag `--launch-minimized`, which means the main window will not be
+  shown after launching the app
 - On single-file export, unsaved changes are now also exported
 - MagicQuotes can now surround selections
 - File duplication will now make sure to always create new files instead of

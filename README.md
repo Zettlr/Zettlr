@@ -272,6 +272,14 @@ Electron forge will put the packaged applications into the directory `./out` whi
 
 The Zettlr binary features a few command line switches that you can make use of for different purposes.
 
+#### `--launch-minimized`
+
+This CLI flag will instruct Zettlr not to show the main window on start. This is useful to create autostart entries. In that case, launching Zettlr with this flag at system boot will make sure that you will only see its icon in the tray.
+
+Since this implies the need to have the app running in the tray bar or notification area when starting the app like this, it will automatically set the corresponding setting `system.leaveAppRunning` to true.
+
+> Note: This flag will not have any effect on Linux systems which do not support displaying an icon in a tray bar or notification area.
+
 #### `--clear-cache`
 
 This will direct the File System Abstraction Layer to fully clear its cache on boot. This can be used to mitigate issues regarding changes in the code base. To ensure compatibility with any changes to the information stored in the cache, the cache is also automatically cleared when the version field in your `config.json` does not match the one in the `package.json`, which means that, as long as you do not explicitly set the `version`-field in your `test-config.yml`, the cache will always be cleared on each run when you type `yarn test-gui`.
