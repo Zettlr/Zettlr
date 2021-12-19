@@ -50,6 +50,7 @@ import askFileDialog from './dialog/ask-file'
 import saveFileDialog from './dialog/save-dialog'
 import confirmRemove from './dialog/confirm-remove'
 import * as bcp47 from 'bcp-47'
+import CliProvider from '../../../app/service-providers/cli-provider'
 
 export default class WindowManager extends EventEmitter {
   private _mainWindow: BrowserWindow|null
@@ -115,7 +116,7 @@ export default class WindowManager extends EventEmitter {
     this.loadData()
       .then(() => {
         global.log.info('[Window Manager] Window Manager started.')
-        const shouldStartMinimized = process.argv.includes('--launch-minimized')
+        const shouldStartMinimized = global.cliarguments.getArgumentValue(CliProvider.LAUNCH_MINIMIZED)
         const traySupported = process.env.ZETTLR_IS_TRAY_SUPPORTED === '1'
         if (!shouldStartMinimized || !traySupported) {
           this.showMainWindow()

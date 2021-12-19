@@ -21,6 +21,7 @@ export default class CliProvider {
   static DATA_DIR: string = 'data-dir'
   static DISABLE_HARDWARE_ACCELERATION: string = 'disable-hardware-acceleration'
   static CLEAR_CACHE: string = 'clear-cache'
+  static LAUNCH_MINIMIZED: string = 'launch-minimized'
 
   /**
    * Create a new CliProvider object
@@ -50,6 +51,9 @@ export default class CliProvider {
       }
       case CliProvider.DISABLE_HARDWARE_ACCELERATION: {
         return process.argv.includes('--disable-hardware-acceleration')
+      }
+      case CliProvider.LAUNCH_MINIMIZED: {
+        return process.argv.includes('--launch-minimized')
       }
     }
     return undefined
