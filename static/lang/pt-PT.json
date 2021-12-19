@@ -6,7 +6,7 @@
             "Paula Simoes \u003Cppsimoes@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-10-21T17:31:19.000000Z"
+        "updated_at": "2021-12-17T15:28:28.000000Z"
     },
     "dialog": {
         "about": {
@@ -647,13 +647,19 @@
         "show_toc": "Mostrar tabela de conte\u00fados",
         "stats": "Ver estat\u00edsticas",
         "tag_cloud": "Etiquetas",
-        "toggle_attachments": "Ver anexos"
+        "toggle_attachments": "Ver anexos",
+        "toggle_file_manager": "Gestor de ficheiros",
+        "toggle_global_search": "Pesquisa global"
+    },
+    "tray": {
+        "show_zettlr": "Mostrar Zettlr",
+        "tooltip": "Zettlr"
     },
     "validation": {
         "error_empty": "A op\u00e7\u00e3o %s \u00e9 obrigat\u00f3ria.",
         "error_range_both": "A op\u00e7\u00e3o %s deve ser entre %s e %s (n\u00famero de caracteres)",
         "error_range_max": "A op\u00e7\u00e3o %s n\u00e3o pode exceder %s (caracteres)",
-        "error_range_min": "A op\u00e7\u00e3o %s tem de ter pelo menos %s (caracteres)",
+        "error_range_min": "A op\u00e7\u00e3o %s tem de ter pelo menos %s (n\u00famero de caracteres)",
         "error_type": "A op\u00e7\u00e3o %s tem de ser do tipo %s.",
         "error_value": "A op\u00e7\u00e3o %s tem de ser uma de: %s."
     }

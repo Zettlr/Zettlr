@@ -37,7 +37,7 @@ export default class ForceOpen extends ZettlrCommand {
     // command.
     const autoCreate = Boolean(global.config.get('zkn.autoCreateLinkedFiles'))
 
-    const idRE = getIDRE()
+    const idRE = getIDRE(true)
     let file = null
 
     // First, let's see if what we got looks like an ID, or not. If it looks

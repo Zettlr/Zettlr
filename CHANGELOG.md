@@ -32,8 +32,20 @@
 - Reinstated the ability to use pure number tags or hexadecimal numbers as tags
 - Using the shortcut `Ctrl-Shift-V` to paste something as plain text will no
   longer paste it twice on Windows and Linux
-- Zettlr can now be started minimized (in the tray/notification area), which
-  means the main window will not be shown after launching the app
+- Zettlr can now be started minimized (in the tray/notification area) by passing
+  the CLI flag `--launch-minimized`, which means the main window will not be
+  shown after launching the app
+- On single-file export, unsaved changes are now also exported
+- MagicQuotes can now surround selections
+- File duplication will now make sure to always create new files instead of
+  overwriting existing ones
+- Attempt to scroll back to the correct position after applying remote changes
+- Adapt styles on Windows
+- You can now specify a TeX template and an HTML template for projects
+- Fix double titlebars on Windows and Linux when displaying modals
+- Following internal links now also works for systems in which the ID is part of
+  the file name
+- Updated the display name in the Add/Remove Programs entry for Windows
 
 ## Under the Hood
 
@@ -67,6 +79,8 @@
 - Zettlr now extracts outlinks from a file and adds them to descriptors
 - Added `@common` as a shorthand for accessing files within the `common`-
   directory
+- The file autocompletion database now uses the full paths to index files
+- You can now copy the underlying equation code for LaTeX equations
 
 # 2.0.3
 

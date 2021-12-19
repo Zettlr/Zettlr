@@ -120,7 +120,6 @@ export default {
   },
   data: function () {
     return {
-      editor: null,
       openDocuments: [], // Contains all loaded documents if applicable
       currentlyFetchingFiles: [], // Contains the paths of files that are right now being fetched
       // Should we perform a regexp search?
@@ -529,6 +528,7 @@ export default {
       const doc = this.openDocuments.find(item => item.path === fileDescriptor.path)
 
       if (doc !== undefined) {
+        const { top } = mdEditor.codeMirror.getScrollInfo()
         const cur = Object.assign({}, doc.cmDoc.getCursor())
         doc.cmDoc.setValue(fileDescriptor.content)
         nextTick()
@@ -537,6 +537,7 @@ export default {
             // then immediately revert that status again.
             doc.cmDoc.markClean()
             doc.cmDoc.setCursor(cur)
+            mdEditor.codeMirror.getWrapperElement().scrollTop = top
             this.$store.commit('announceModifiedFile', {
               filePath: doc.path,
               isClean: doc.cmDoc.isClean()
@@ -657,8 +658,8 @@ export default {
     updateFileDatabase () {
       const fileDatabase = {}
 
-      for (let file of this.fsalFiles) {
-        let fname = file.name.substr(0, file.name.lastIndexOf('.'))
+      for (const file of this.fsalFiles) {
+        const fname = file.name.substr(0, file.name.lastIndexOf('.'))
         let displayText = fname // Fallback: Only filename
         if ('frontmatter' in file && file.frontmatter !== null && file.frontmatter.title !== undefined) {
           // (Else) if there is a frontmatter, use that title
@@ -672,7 +673,7 @@ export default {
           displayText = `${file.id}: ${displayText}`
         }
 
-        fileDatabase[fname] = {
+        fileDatabase[file.path] = {
           // Use the ID, if given, or the filename
           'text': (file.id !== '') ? file.id : fname,
           'displayText': displayText,
@@ -807,6 +808,13 @@ export default {
 
       // Glue it back together and set it as content
       this.activeDocument.cmDoc.setValue('---\n' + YAML.stringify(frontmatter) + '---' + postFrontmatter + content)
+    },
+    getValue () {
+      if (mdEditor !== null) {
+        return mdEditor.value
+      } else {
+        return ''
+      }
     }
   }
 }
@@ -938,6 +946,7 @@ export default {
   .katex {
     font-size: 1.1em; // reduce font-size of math a bit
     display: inline-block; // needed for display math to behave properly
+    user-select: none; // Disable user text selection
   }
 
   // Math equations in display mode

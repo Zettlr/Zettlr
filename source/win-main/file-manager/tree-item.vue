@@ -270,7 +270,17 @@ export default {
       }
     },
     isSelected: function () {
-      return this.selectedFile.path.startsWith(this.obj.path)
+      if (this.obj.type === 'directory') {
+        if (this.selectedDir === null) {
+          return false
+        }
+        return this.selectedDir.path === this.obj.path
+      } else {
+        if (this.selectedFile === null) {
+          return false
+        }
+        return this.selectedFile.path === this.obj.path
+      }
     }
   },
   watch: {
@@ -278,7 +288,7 @@ export default {
       this.uncollapseIfApplicable()
     },
     selectedDir: function (newVal, oldVal) {
-      this.uncollapseIfApplicable()
+      // this.uncollapseIfApplicable() TODO: As of now this would also uncollapse the containing file's directory
     },
     operationType: function (newVal, oldVal) {
       if (newVal !== undefined) {

@@ -53,13 +53,16 @@ export default class TrayProvider extends EventEmitter {
       global.config.set('system.leaveAppRunning', false)
     }
 
-    const addToTray: boolean = global.config.get('system.leaveAppRunning')
-    const startMinimized: boolean = global.config.get('system.startInTray')
+    let addToTray: boolean = global.config.get('system.leaveAppRunning')
+    const shouldStartMinimized = process.argv.includes('--launch-minimized')
+    const traySupported = process.env.ZETTLR_IS_TRAY_SUPPORTED === '1'
 
-    if (startMinimized && !addToTray) {
-      // Prevent zombie processes on Windows and Linux. Setting this to false
-      // ensures that the window manager will display the main window.
-      global.config.set('system.startInTray', false)
+    if (shouldStartMinimized && !addToTray && traySupported) {
+      global.log.info('[Tray Provider] Detected the --launch-minimized flag. Will override the tray setting.')
+      // The user has indicated via CLI flag that they want to start the app
+      // minimized, so we require the corresponding setting to be set
+      global.config.set('system.leaveAppRunning', true)
+      addToTray = true
     }
 
     if (addToTray) {
@@ -121,7 +124,7 @@ export default class TrayProvider extends EventEmitter {
    * @memberof TrayProvider
    */
   private _addTray (): void {
-    const leaveAppRunning = Boolean(global.config.get('system.leaveAppRunning')) || Boolean(global.config.get('system.startInTray'))
+    const leaveAppRunning: boolean = global.config.get('system.leaveAppRunning')
 
     if (!leaveAppRunning) {
       return // No need to add a tray.

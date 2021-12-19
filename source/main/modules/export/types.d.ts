@@ -13,7 +13,31 @@
  * END HEADER
  */
 
-import { CodeFileDescriptor, MDFileDescriptor } from '../fsal/types'
+// The exporter only needs a few properties, so by defining a minimal type here
+// we can make the exporter more flexible to accept also objects that only
+// contain path information
+interface MinimalFile {
+  path: string
+  name: string
+  ext: string
+}
+
+interface DefaultsOverride {
+  /**
+   * This is an optional property. It allows to override the global CSL Stylesheet
+   * defined in the preferences for the given export.
+   */
+  csl?: string
+  /**
+   * This is an optional property. It allows manually setting a title in the
+   * defaults file metadata.
+   */
+  title?: string
+  /**
+   * This allows overwriting the template as specified in the defaults file
+   */
+  template?: string
+}
 
 /**
  * This interface descripes options that can be passed in general to the
@@ -27,7 +51,7 @@ export interface ExporterOptions {
   /**
    * This is an array of source files you wish to compile into the target file.
    */
-  sourceFiles: Array<MDFileDescriptor|CodeFileDescriptor>
+  sourceFiles: MinimalFile[]
   /**
    * This is the directory into which the exporter should put the exported file.
    */
@@ -38,21 +62,17 @@ export interface ExporterOptions {
    */
   absoluteImagePaths?: boolean
   /**
-   * This is an optional property. It allows to override the global CSL Stylesheet
-   * defined in the preferences for the given export.
-   */
-  cslStyle?: string
-  /**
-   * This is an optional property. It allows manually setting a title in the
-   * defaults file metadata.
-   */
-  title?: string
-  /**
    * The current working directory for the Pandoc executable. Should be set
    * reasonably so that relative paths can be correctly resolved (especially
    * paths to images or other files).
    */
   cwd?: string
+  /**
+   * This property allows overriding of any defaults value, which comes in handy
+   * specifically for projects, since these feature some slightly divergent
+   * options.
+   */
+  defaultsOverride?: DefaultsOverride
 }
 
 /**

@@ -7,7 +7,7 @@
             "Huey"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-11-06T15:30:36.000000Z"
+        "updated_at": "2021-12-14T12:20:32.000000Z"
     },
     "dialog": {
         "about": {
@@ -318,6 +318,7 @@
             "readability_algorithm": "Algorithm to use for the readability mode",
             "reset_pandoc_command": "Reset pandoc command",
             "show_app_in_the_notification_area": "Show app in the notification area",
+            "sort_folders_first": "Show folders above files",
             "sorting_ascii": "ASCII order (2 after 10)",
             "sorting_explanation": "Sorting order for files (used for sorting by name)",
             "sorting_natural": "Natural order (10 after 2)",
@@ -578,6 +579,7 @@
         "close_file": "Close file",
         "close_workspace": "Close Workspace",
         "copy": "Copy",
+        "copy_equation": "Copy equation code",
         "copy_filename": "Copy filename",
         "copy_html": "Copy as HTML",
         "copy_id": "Copy ID",

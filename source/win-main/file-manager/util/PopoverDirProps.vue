@@ -242,16 +242,23 @@ export default {
 
 <style lang="less">
 // Most styles are defined in the File popover
-body .icon-selector {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0 auto; // Center the div
-  width: 200px; // Ten icons per row
-  div {
-    display: inline-block;
-    padding: 2px; // The icons are 16x16px
-    width: 20px;
-    height: 20px;
+body {
+  .icon-selector {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 auto; // Center the div
+    width: 200px; // Ten icons per row
+    div {
+      display: inline-block;
+      padding: 2px; // The icons are 16x16px
+      width: 20px;
+      height: 20px;
+      &:hover, &.active { background-color: rgb(180, 180, 180); }
+    }
+  }
+
+  &.dark .icon-selector div:hover, &.dark .icon-selector div.active {
+    background-color: rgb(90, 90, 90);
   }
 }
 

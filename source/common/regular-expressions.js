@@ -184,12 +184,11 @@ module.exports = {
   /**
    * Returns a regular expression that matches file IDs as in the settings
    *
-   * @param   {boolean}  multiline  Whether to match multiline
+   * @param   {boolean}  exact      If true, makes sure that the full string needs to match
    *
    * @return  {RegExp}              The compiled Regular Expression
    */
-  'getIDRE': function (multiline = false) {
-    let flag = (multiline) ? 'm' : ''
+  'getIDRE': function (exact = false) {
     let idRegExpString = global.config.get('zkn.idRE')
     // Make sure the ID definitely has at least one
     // capturing group to not produce errors.
@@ -198,8 +197,8 @@ module.exports = {
     }
 
     return RegExp(
-      idRegExpString,
-      'g' + flag
+      (exact) ? `^${idRegExpString}$` : idRegExpString,
+      'g'
     )
   },
 

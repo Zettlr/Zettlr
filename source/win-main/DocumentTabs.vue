@@ -232,6 +232,7 @@ export default {
         // It was a middle-click (auxiliary button), so we should instead close
         // the file.
         event.preventDefault() // Otherwise, on Windows we'd have a middle-click-scroll
+        event.stopPropagation() // In response to #2663
         this.handleClickClose(event, file)
       } else if (event.button === 0) {
         // It was a left-click. (We must check because otherwise we would also
@@ -518,7 +519,7 @@ body.win32 {
       }
 
       &.active {
-        background-color: rgb(100, 100, 100);
+        background-color: rgb(172, 172, 172);
         color: white;
       }
 

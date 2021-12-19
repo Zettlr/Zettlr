@@ -704,6 +704,12 @@ export default {
           }
           // Remember the last choice
           global.config.set('export.singleFileLastExporter', data.format)
+          // If the file is modified, export the current contents of the editor
+          // rather than what is saved on disk
+          let content
+          if (this.$store.state.modifiedDocuments.includes(this.$store.state.activeFile.path) === true) {
+            content = this.$refs.editor.getValue()
+          }
           // Run the exporter
           ipcRenderer.invoke('application', {
             command: 'export',
@@ -711,7 +717,8 @@ export default {
               format: data.format,
               options: options,
               exportTo: data.exportTo,
-              file: this.$store.state.activeFile.path
+              file: this.$store.state.activeFile.path,
+              content: content
             }
           })
             .catch(e => console.error(e))

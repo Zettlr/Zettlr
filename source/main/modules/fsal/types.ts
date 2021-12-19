@@ -30,6 +30,17 @@ export interface WatchdogEvent {
   path: string
 }
 
+export interface ProjectSettings {
+  title: string
+  formats: string[]
+  filters: string[]
+  cslStyle: string
+  templates: {
+    tex: string
+    html: string
+  }
+}
+
 /**
  * An interface containing meta information all
  * descriptors should provide.
@@ -53,12 +64,7 @@ export interface DirDescriptor extends FSMetaInfo {
   _settings: {
     sorting: 'name-up'|'name-down'|'time-up'|'time-down'
     icon: string
-    project: {
-      title: 'string'
-      formats: string[]
-      filters: string[]
-      cslStyle: string
-    }|null
+    project: ProjectSettings|null
   }
   type: 'directory'
   children: Array<MDFileDescriptor|DirDescriptor|CodeFileDescriptor>

@@ -89,7 +89,7 @@ nsis:
   perMachine: false
   allowElevation: true
   allowToChangeInstallationDirectory: true
-  uninstallDisplayName: Uninstall ${productName}
+  uninstallDisplayName: ${productName}
   installerHeader: "./resources/NSIS/NSISinstallerHeader.bmp"
   installerSidebar: "./resources/NSIS/NSISinstallerSidebar.bmp"
   license: ./LICENSE
