@@ -53,7 +53,7 @@ export default class CliProvider {
         return process.argv.includes('--disable-hardware-acceleration')
       }
       case CliProvider.LAUNCH_MINIMIZED: {
-        return process.argv.includes('--launch-minimized')
+        return process.argv.includes('--launch-minimized') || process.argv.includes('-m')
       }
     }
     return undefined
@@ -80,6 +80,7 @@ export default class CliProvider {
     console.log('   | --clear-cache                     Removes all cached files')
     console.log('   | --disable-hardware-acceleration   Disables Hardware Accelleration for systems that do not support it.')
     console.log('   | --data-dir=FILEPATH               Set a custom directory for Zettlr\'s configuration files')
+    console.log('-m | --launch-minimized                Start Zettlr mimimized in the Systemtray')
   }
 
   getArgumentValue (key: string): string | undefined {
