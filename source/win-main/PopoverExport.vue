@@ -20,7 +20,8 @@
       v-model="exportDirectory"
       v-bind:options="{
         'temp': 'Temporary directory',
-        'cwd': 'Current directory'
+        'cwd': 'Current directory',
+        'ask': 'Select directory'
       }"
     ></RadioControl>
     <!-- Add the exporting button -->

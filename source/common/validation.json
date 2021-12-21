@@ -8,7 +8,7 @@
    "appLang": "required|string|min:5|max:7|default:en_US",
    "fileManagerMode": "required|string|in:thin,expanded,combined|default:thin",
    "muteLines": "required|boolean|default:false",
-   "export.dir": "required|string|in:temp,cwd|default:temp",
+   "export.dir": "required|string|in:temp,cwd,ask|default:temp",
    "export.stripTags": "required|boolean|default:false",
    "export.stripLinks": "required|string|in:full,unlink,no|default:full",
    "zkn.idRE": "required|string|default:",
