@@ -62,7 +62,7 @@ interface ConfigOptions {
   pandoc: string
   xelatex: string
   export: {
-    dir: 'temp'|'cwd'
+    dir: 'temp'|'cwd'|'ask'
     stripTags: boolean
     stripLinks: 'full'|'unlink'|'no'
     cslLibrary: string
