@@ -10,7 +10,7 @@
   you attempted to remove internal links completely upon export
 - Fixed `Cmd/Ctrl-Click`-behavior on footnotes
 - Dragging and dropping files (both from the desktop and the sidebar) now always
-  inserts relative paths.
+  inserts relative paths
 - More reactive updating of the related files section
 - Improvements during insertion of snippets
 - The footnote editor now has a consistent background color in dark mode
@@ -55,8 +55,8 @@
 - Added a further check to the filter copying. Since the filters that ship with
   Zettlr are bound to the inner workings of the app, we should always overwrite
   them if applicable (to ensure they are updated with the app), unlike the
-  defaults which people should be able to modify with us messing with them
-- Sanitized and standardized all Vue component names and application entry points
+  defaults which people should be able to modify without us messing with them
+- Sanitized and standardized all Vue component names and app entry points
 - Fix a whole bunch of linter warnings
 - Remove the custom event system (`$on`, `$off`, and `$once`) in preparation for
   Vue 3
@@ -80,7 +80,7 @@
   `getDocumentManager().openFile` instead to open a file
 - Add an automatic updater for `CITATION.cff`
 - Zettlr now extracts outlinks from a file and adds them to descriptors
-- Added `@common` as a shorthand for accessing files within the `common`-
+- Added `@common` as a shorthand alias for importing files within the `common`-
   directory
 - The file autocompletion database now uses the full paths to index files
 - You can now copy the underlying equation code for LaTeX equations
