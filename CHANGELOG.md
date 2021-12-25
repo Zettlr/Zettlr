@@ -47,6 +47,8 @@
   the file name
 - Updated the display name in the Add/Remove Programs entry for Windows
 - Task list items in the editor are now correctly spaced again
+- Fixed a bug that would render it impossible to open images and files with non-
+  ASCII characters within their path
 
 ## Under the Hood
 
