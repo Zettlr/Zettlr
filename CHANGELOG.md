@@ -49,6 +49,7 @@
 - Task list items in the editor are now correctly spaced again
 - Fixed a bug that would render it impossible to open images and files with non-
   ASCII characters within their path
+- You can now copy the underlying equation code for LaTeX equations
 
 ## Under the Hood
 
@@ -83,7 +84,6 @@
 - Added `@common` as a shorthand alias for importing files within the `common`-
   directory
 - The file autocompletion database now uses the full paths to index files
-- You can now copy the underlying equation code for LaTeX equations
 
 # 2.0.3
 
