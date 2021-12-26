@@ -391,10 +391,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.0.tgz#87de7af9c231826fdd68ac7258f77c429e0e5fcf"
   integrity sha512-wdppn25U8z/2yiaT6YGquE6X8sSv7hNMWSXYSSU1jGv/yd6XqjXgTDJ8KP4NgjTXfJ3GbRjeeb8RTV7a/VpM+w==
 
-"@joplin/turndown@^4.0.60":
-  version "4.0.60"
-  resolved "https://registry.yarnpkg.com/@joplin/turndown/-/turndown-4.0.60.tgz#41e21089d494f0431530dd1aeb8ce1ddfeaa0973"
-  integrity sha512-o7HCjVnai5kFIrRPfjIgixZrgNCGL9qYBK4p0v3S5b6gMz2Xt6NPkvlz09bTv7Ix3uJFJsRr4A6G6gVKZKt0ow==
+"@joplin/turndown@^4.0.61":
+  version "4.0.61"
+  resolved "https://registry.yarnpkg.com/@joplin/turndown/-/turndown-4.0.61.tgz#528b8fc7fdcf241f14850be2381cc8b7b20eb5b9"
+  integrity sha512-sxAwwlKISZYyPwyaw1feLcuTGBFmulLtMEY8fvLk8Q6tgJbRqyIaV55dDHX3zYnn55hrC1RLFSJui0y6C2fhzQ==
   dependencies:
     css "^2.2.4"
     html-entities "^1.2.1"
@@ -2151,10 +2151,10 @@ code-point-at@^1.0.0:
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
 
-codemirror@^5.64.0:
-  version "5.64.0"
-  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.64.0.tgz#182eec65b62178e3cd1de8f9d88ab819cfe5f625"
-  integrity sha512-fqr6CtDQdJ6iNMbD8NX2gH2G876nNDk+TO1rrYkgWnqQdO3O1Xa9tK6q+psqhJJgE5SpbaDcgdfLmukoUVE8pg==
+codemirror@^5.65.0:
+  version "5.65.0"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.65.0.tgz#50344359393579f526ca53797e510ff75477117f"
+  integrity sha512-gWEnHKEcz1Hyz7fsQWpK7P0sPI2/kSkRX2tc7DFA6TmZuDN75x/1ejnH/Pn8adYKrLEA1V2ww6L00GudHZbSKw==
 
 color-convert@^1.9.0:
   version "1.9.3"
