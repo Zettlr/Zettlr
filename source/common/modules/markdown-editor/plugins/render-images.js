@@ -143,8 +143,8 @@
         openExternally.textContent = 'Open image externally'
         openExternally.onclick = function (event) {
           // NOTE: We can only do this because the main process prevents any
-          // navigation, and hence will capture this and instead open it using the shell.
-          window.location.assign(makeAbsoluteURL(cm.getOption('zettlr').markdownImageBasePath, url))
+          // navigation, and will open the "URL" using the shell.
+          window.location.assign(actualURLToLoad)
         }
 
         const figure = document.createElement('figure')

@@ -295,7 +295,16 @@ export default {
       mdEditor.setOptions(this.editorConfiguration)
     },
     tagDatabase: function () {
-      mdEditor.setCompletionDatabase('tags', this.tagDatabase)
+      // We must deproxy the tag database
+      const unproxy = {}
+      for (const tag in this.tagDatabase) {
+        unproxy[tag] = {
+          text: this.tagDatabase[tag].text,
+          count: this.tagDatabase[tag].count,
+          className: this.tagDatabase[tag].className
+        }
+      }
+      mdEditor.setCompletionDatabase('tags', unproxy)
     },
     fsalFiles: function () {
       this.updateFileDatabase()
