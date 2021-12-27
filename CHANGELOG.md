@@ -1,3 +1,14 @@
+# (no version assigned yet)
+
+## GUI and Functionality
+
+- Improved placement of the popup displayed by Input Method for inputting
+  non-alphabetic characters (e.g. Chinese, Japanese, or Korean).
+
+## Under the Hood
+
+- Update to Electron 16
+
 # 2.1.0
 
 ## GUI and Functionality
@@ -50,8 +61,6 @@
 - Fixed a bug that would render it impossible to open images and files with non-
   ASCII characters within their path
 - You can now copy the underlying equation code for LaTeX equations
-- Improved placement of the popup displayed by Input Method for inputting
-  non-alphabetic characters (e.g. Chinese, Japanese, or Korean).
 
 ## Under the Hood
 
