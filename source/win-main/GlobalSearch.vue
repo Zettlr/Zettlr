@@ -87,8 +87,9 @@
             v-for="singleRes, idx2 in result.result"
             v-bind:key="idx2"
             class="result-line"
+            v-bind:class="{'active': idx==activeFileIdx && idx2==activeLineIdx}"
             v-on:contextmenu.stop.prevent="fileContextMenu($event, result.file.path, singleRes.line)"
-            v-on:mousedown.stop.prevent="onResultClick($event, result.file.path, singleRes.line)"
+            v-on:mousedown.stop.prevent="onResultClick($event, idx, idx2, result.file.path, singleRes.line)"
           >
             <strong>{{ singleRes.line }}</strong>:
             <span v-html="markText(singleRes)"></span>
@@ -160,6 +161,10 @@ export default {
       // Is set to a line number if this component is waiting for a file to
       // become active.
       jtlIntent: undefined,
+      // The file list index of the most recently clicked search result.
+      activeFileIdx: undefined,
+      // The result line index of the most recently clicked search result.
+      activeLineIdx: undefined,
       contextMenu: [
         {
           label: trans('menu.open_new_tab'),
@@ -469,12 +474,17 @@ export default {
         }
       })
     },
-    onResultClick: function (event, filePath, lineNumber) {
+    onResultClick: function (event, idx, idx2, filePath, lineNumber) {
       // This intermediary function is needed to make sure that jumpToLine can
       // also be called from within the context menu (see above).
       if (event.button === 2) {
         return // Do not handle right-clicks
       }
+
+      // Update indeces so we can keep track of the most recently clicked
+      // search result.
+      this.activeFileIdx = idx
+      this.activeLineIdx = idx2
 
       const isMiddleClick = (event.type === 'mousedown' && event.button === 1)
       this.jumpToLine(filePath, lineNumber, isMiddleClick)
@@ -583,10 +593,18 @@ body div#global-search-pane {
         background-color: rgb(180, 180, 180);
       }
     }
+
+    div.active {
+      background-color: rgb(160, 160, 160);
+    }
   }
 }
 
-body.dark div#global-search-pane div.search-result-container span.result-line:hover {
+body.dark div#global-search-pane div.search-result-container div.result-line:hover {
   background-color: rgb(60, 60, 60);
+}
+
+body.dark div#global-search-pane div.search-result-container div.active {
+  background-color: rgb(100, 100, 100);
 }
 </style>
