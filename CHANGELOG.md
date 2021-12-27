@@ -3,7 +3,8 @@
 ## GUI and Functionality
 
 - Improved placement of the popup displayed by Input Method for inputting
-  non-alphabetic characters (e.g. Chinese, Japanese, or Korean).
+  non-alphabetic characters (e.g. Chinese, Japanese, or Korean)
+- Fix a rare error that would incapacitate the Math equation renderer
 
 ## Under the Hood
 
