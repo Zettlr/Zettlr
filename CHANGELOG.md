@@ -5,6 +5,8 @@
 - Improved placement of the popup displayed by Input Method for inputting
   non-alphabetic characters (e.g. Chinese, Japanese, or Korean)
 - Fix a rare error that would incapacitate the Math equation renderer
+- Clicking a search result in the global search sidebar will now highlight it
+  in the sidebar
 
 ## Under the Hood
 
