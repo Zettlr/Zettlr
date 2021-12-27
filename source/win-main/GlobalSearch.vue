@@ -595,12 +595,16 @@ body div#global-search-pane {
     }
 
     div.active {
-      background-color: rgb(153, 153, 153);
+      background-color: rgb(160, 160, 160);
     }
   }
 }
 
-body.dark div#global-search-pane div.search-result-container span.result-line:hover {
+body.dark div#global-search-pane div.search-result-container div.result-line:hover {
   background-color: rgb(60, 60, 60);
+}
+
+body.dark div#global-search-pane div.search-result-container div.active {
+  background-color: rgb(100, 100, 100);
 }
 </style>
