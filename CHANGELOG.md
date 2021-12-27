@@ -9,6 +9,7 @@
 ## Under the Hood
 
 - Update to Electron 16
+- Make sure to de-proxy the tag database before sending it to the MdEditor
 
 # 2.1.0
 
