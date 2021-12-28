@@ -34,7 +34,7 @@
           v-bind:shape="secondaryIcon"
           role="presentation"
           v-bind:class="{
-            'is-solid': [ 'disconnect', 'blocks-group' ].includes(secondaryIcon)
+            'is-solid': typeof secondaryIcon !== 'boolean' && [ 'disconnect', 'blocks-group' ].includes(secondaryIcon)
           }"
         />
       </span>
@@ -47,7 +47,7 @@
           v-bind:shape="primaryIcon"
           role="presentation"
           v-bind:class="{
-            'is-solid': [ 'disconnect', 'blocks-group' ].includes(primaryIcon)
+            'is-solid': typeof primaryIcon !== 'boolean' && [ 'disconnect', 'blocks-group' ].includes(primaryIcon)
           }"
           v-on:click.stop="handlePrimaryIconClick"
         ></clr-icon>
@@ -73,7 +73,7 @@
             ref="name-editing-input"
             type="text"
             v-bind:value="obj.name"
-            v-on:keyup.enter="finishNameEditing($event.target.value)"
+            v-on:keyup.enter="finishNameEditing(($event.target as HTMLInputElement).value)"
             v-on:keyup.esc="nameEditing = false"
             v-on:blur="nameEditing = false"
             v-on:click.stop=""
@@ -99,7 +99,7 @@
         type="text"
         v-on:keyup.esc="operationType = undefined"
         v-on:blur="operationType = undefined"
-        v-on:keyup.enter="handleOperationFinish($event.target.value)"
+        v-on:keyup.enter="handleOperationFinish(($event.target as HTMLInputElement).value)"
       >
     </div>
     <div v-if="isDirectory && !collapsed">
@@ -114,7 +114,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -133,12 +133,13 @@ import itemMixin from './util/item-mixin'
 import generateFilename from '@common/util/generate-filename'
 import { trans } from '@common/i18n-renderer'
 
-import { nextTick } from 'vue'
+import { nextTick, defineComponent } from 'vue'
+import { IpcRenderer } from 'electron'
 
-const path = window.path
-const ipcRenderer = window.ipc
+const path = (window as any).path
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
-export default {
+export default defineComponent({
   name: 'TreeItem',
   mixins: [itemMixin],
   props: {
@@ -150,6 +151,10 @@ export default {
     hasDuplicateName: {
       type: Boolean,
       default: false // Can only be true if root and actually has a duplicate name
+    },
+    obj: {
+      type: Object,
+      required: true
     }
   },
   data: () => {
@@ -157,7 +162,7 @@ export default {
       collapsed: true, // Initial: collapsed list (if there are children)
       operationType: undefined, // Can be createFile or createDir
       canAcceptDraggable: false, // Helper var set to true while something hovers over this element
-      uncollapseTimeout: undefined // Used to uncollapse directories during drag&drop ops
+      uncollapseTimeout: undefined as undefined|ReturnType<typeof setTimeout> // Used to uncollapse directories during drag&drop ops
     }
   },
   computed: {
@@ -166,7 +171,7 @@ export default {
      *
      * @return  {string|boolean}  False if no secondary icon
      */
-    secondaryIcon: function () {
+    secondaryIcon: function (): string|boolean {
       if (this.hasChildren === false) {
         // If whatever the object we're representing has no children, we do not
         // need the secondary icon, since the primary icon will display whatever
@@ -183,7 +188,7 @@ export default {
      *
      * @return  {string|boolean}  False if no primary icon
      */
-    primaryIcon: function () {
+    primaryIcon: function (): string|boolean {
       // The primary icon is _always_ the chevron if we're dealing with a
       // directory and it has children. Otherwise, it will display the custom icon.
       if (this.hasChildren === true) {
@@ -198,7 +203,7 @@ export default {
      *
      * @return  {string|boolean}  False if no custom icon.
      */
-    customIcon: function () {
+    customIcon: function (): string|boolean {
       if (this.obj.type !== 'directory') {
         // Indicate that this is a file.
         if (this.obj.type === 'file') {
@@ -222,14 +227,14 @@ export default {
     /**
      * Returns true if this item is a root item
      */
-    isRoot: function () {
+    isRoot: function (): boolean {
       // Parent apparently can also be undefined BUG
       return this.obj.parent == null
     },
     /**
      * Returns true if the file manager mode is set to "combined"
      */
-    combined: function () {
+    combined: function (): boolean {
       return this.$store.state.config['fileManagerMode'] === 'combined'
     },
     /**
@@ -237,7 +242,7 @@ export default {
      *
      * @return {boolean} Whether or not this object has children.
      */
-    hasChildren: function () {
+    hasChildren: function (): boolean {
       // Return true if it's a directory, with at least one directory as children
       if (this.obj.type !== 'directory') {
         return false
@@ -248,20 +253,20 @@ export default {
     /**
      * Returns the (containing) directory name.
      */
-    dirname: function () {
+    dirname: function (): string {
       return path.basename(this.obj.dir)
     },
     /**
      * Returns a list of children that can be displayed inside the tree view
      */
-    filteredChildren: function () {
+    filteredChildren: function (): any[] {
       if (this.combined === true) {
         return this.obj.children
       } else {
-        return this.obj.children.filter(e => e.type === 'directory')
+        return this.obj.children.filter((e: any) => e.type === 'directory')
       }
     },
-    basename: function () {
+    basename: function (): string {
       if (this.obj.type === 'directory' || this.obj.type === 'code') {
         return this.obj.name
       }
@@ -274,7 +279,7 @@ export default {
         return this.obj.name.replace(this.obj.ext, '')
       }
     },
-    isSelected: function () {
+    isSelected: function (): boolean {
       if (this.obj.type === 'directory') {
         if (this.selectedDir === null) {
           return false
@@ -298,19 +303,17 @@ export default {
     operationType: function (newVal, oldVal) {
       if (newVal !== undefined) {
         nextTick().then(() => {
+          const input = this.$refs['new-object-input'] as HTMLInputElement
           if (this.operationType === 'createFile') {
             // If we're generating a file, generate a filename
-            this.$refs['new-object-input'].value = generateFilename()
+            input.value = generateFilename()
           } else if (this.operationType === 'createDir') {
             // Else standard val for new dirs.
-            this.$refs['new-object-input'].value = trans('dialog.dir_new.value')
+            input.value = trans('dialog.dir_new.value')
           }
-          this.$refs['new-object-input'].focus()
+          input.focus()
           // Select from the beginning until the last dot
-          this.$refs['new-object-input'].setSelectionRange(
-            0,
-            this.$refs['new-object-input'].value.lastIndexOf('.')
-          )
+          input.setSelectionRange(0, input.value.lastIndexOf('.'))
         })
           .catch(err => console.error(err))
       }
@@ -333,7 +336,7 @@ export default {
       }
 
       // If a directory within this has been selected, open up, lads!
-      if (this.obj.path.startsWith(dirPath)) {
+      if ((this.obj.path as string).startsWith(dirPath)) {
         this.collapsed = false
       }
     },
@@ -341,7 +344,11 @@ export default {
      * Initiates a drag movement and inserts the correct data
      * @param {DragEvent} event The drag event
      */
-    beginDragging: function (event) {
+    beginDragging: function (event: DragEvent) {
+      if (event.dataTransfer === null) {
+        return
+      }
+
       event.dataTransfer.dropEffect = 'move'
       if (this.obj.type === 'file') {
         event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
@@ -359,7 +366,7 @@ export default {
     /**
      * Called when a drag operation enters this item; adds a highlight class
      */
-    enterDragging: function (event) {
+    enterDragging: function (event: DragEvent) {
       if (this.isDirectory === false) {
         return
       }
@@ -378,7 +385,7 @@ export default {
     /**
      * The oppossite of enterDragging; removes the highlight class
      */
-    leaveDragging: function (event) {
+    leaveDragging: function (event: DragEvent) {
       if (this.isDirectory === false) {
         return
       }
@@ -394,7 +401,7 @@ export default {
      * Called whenever something is dropped onto the element.
      * Only executes if it's a valid tree-item/file-list object.
      */
-    handleDrop: function (event) {
+    handleDrop: function (event: DragEvent) {
       this.canAcceptDraggable = false
       event.preventDefault()
 
@@ -405,6 +412,10 @@ export default {
       if (this.uncollapseTimeout !== undefined) {
         clearTimeout(this.uncollapseTimeout)
         this.uncollapseTimeout = undefined
+      }
+
+      if (event.dataTransfer === null) {
+        return
       }
 
       // Now we have to be careful. The user can now ALSO
@@ -446,13 +457,13 @@ export default {
      * Makes sure the browser doesn't do unexpected stuff when dragging, e.g., external files.
      * @param {DragEvent} event The drag event
      */
-    acceptDrags: function (event) {
+    acceptDrags: function (event: DragEvent) {
       // We need to constantly preventDefault to ensure
       // that, e.g., a Python or other script file doesn't
       // override the location.href to display.
       event.preventDefault()
     },
-    handleOperationFinish: function (newName) {
+    handleOperationFinish: function (newName: string) {
       if (this.operationType === 'createFile' && newName.trim() !== '') {
         ipcRenderer.invoke('application', {
           command: 'file-new',
@@ -479,7 +490,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style lang="less">

@@ -20,8 +20,8 @@
 // logic, since both represent the same data structures.
 import fileContextMenu from './file-item-context'
 import dirContextMenu from './dir-item-context'
-import PopoverFileProps from './PopoverFileProps'
-import PopoverDirProps from './PopoverDirProps'
+import PopoverFileProps from './PopoverFileProps.vue'
+import PopoverDirProps from './PopoverDirProps.vue'
 
 import { nextTick } from 'vue'
 

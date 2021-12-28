@@ -40,7 +40,7 @@
           ref="name-editing-input"
           type="text"
           v-bind:value="obj.name"
-          v-on:keyup.enter="finishNameEditing($event.target.value)"
+          v-on:keyup.enter="finishNameEditing(($event.target as HTMLInputElement).value)"
           v-on:keyup.esc="nameEditing = false"
           v-on:blur="nameEditing = false"
           v-on:click.stop=""
@@ -121,7 +121,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -142,7 +142,9 @@ import localiseNumber from '@common/util/localise-number'
 import formatSize from '@common/util/format-size'
 import itemMixin from './util/item-mixin'
 
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'FileItem',
   mixins: [itemMixin],
   props: {
@@ -152,6 +154,10 @@ export default {
     },
     index: {
       type: Number,
+      required: true
+    },
+    obj: {
+      type: Object,
       required: true
     }
   },
@@ -174,21 +180,6 @@ export default {
     getFilename: function () {
       return this.obj.name
     },
-    getColoredTags: function () {
-      if (this.obj.tags === undefined) {
-        return []
-      } else {
-        const ret = []
-        const colouredTags = this.$store.state.colouredTags
-        for (const colouredTag in colouredTags) {
-          if (this.obj.tags.includes(colouredTag.name) === true) {
-            ret.push(colouredTag)
-          }
-        }
-
-        return ret
-      }
-    },
     hasTags: function () {
       return this.obj.tags !== undefined && this.obj.tags.length > 0
     },
@@ -200,9 +191,6 @@ export default {
     },
     fileMeta: function () {
       return this.$store.state.config['fileMeta']
-    },
-    displayTime: function () {
-      return this.$store.state.displayTime
     },
     isCode: function () {
       return this.obj.type === 'code'
@@ -218,13 +206,13 @@ export default {
       if (this.isDirectory === false) {
         return 0
       }
-      return this.obj.children.filter(e => e.type === 'directory').length + ' ' + trans('system.directories') || 0
+      return this.obj.children.filter((e: any) => e.type === 'directory').length + ' ' + trans('system.directories') || 0
     },
     countFiles: function () {
       if (this.isDirectory === false) {
         return 0
       }
-      return this.obj.children.filter(e => [ 'file', 'code' ].includes(e.type)).length + ' ' + trans('system.files') || 0
+      return this.obj.children.filter((e: any) => [ 'file', 'code' ].includes(e.type)).length + ' ' + trans('system.files') || 0
     },
     countWords: function () {
       if (this.isDirectory === false) {
@@ -232,9 +220,9 @@ export default {
       }
 
       const wordCount = this.obj.children
-        .filter(file => file.type === 'file')
-        .map(file => file.wordCount)
-        .reduce((prev, cur) => prev + cur, 0)
+        .filter((file: any) => file.type === 'file')
+        .map((file: any) => file.wordCount)
+        .reduce((prev: number, cur: number) => prev + cur, 0)
 
       return trans('gui.words', localiseNumber(wordCount))
     },
@@ -292,7 +280,7 @@ export default {
     }
   },
   methods: {
-    retrieveTagColour: function (tagName) {
+    retrieveTagColour: function (tagName: string) {
       const colouredTags = this.$store.state.colouredTags
       const foundTag = colouredTags.find(tag => tag.name === tagName)
       if (foundTag !== undefined) {
@@ -301,7 +289,11 @@ export default {
         return false
       }
     },
-    beginDragging: function (event) {
+    beginDragging: function (event: DragEvent) {
+      if (event.dataTransfer === null) {
+        return
+      }
+
       event.dataTransfer.dropEffect = 'move'
       // Tell the file manager component to lock the directory tree
       // (only necessary for thin mode)
@@ -313,7 +305,7 @@ export default {
       }))
     }
   }
-}
+})
 </script>
 
 <style lang="less">

@@ -28,6 +28,8 @@ declare module '*.svg'
 declare module '*.mp3'
 declare module '*.wav'
 
+declare module 'vue-virtual-scroller'
+
 /**
  * DECLARE ELECTRON-FORGE INSERTION VARIABLES
  *

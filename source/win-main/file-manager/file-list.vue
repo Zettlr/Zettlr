@@ -72,7 +72,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -90,16 +90,17 @@
 
 import { trans } from '@common/i18n-renderer'
 import tippy from 'tippy.js'
-import FileItem from './file-item'
+import FileItem from './file-item.vue'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import objectToArray from '@common/util/object-to-array'
 import matchQuery from './util/match-query'
 
-import { nextTick } from 'vue'
+import { nextTick, defineComponent } from 'vue'
+import { IpcRenderer } from 'electron'
 
-const ipcRenderer = window.ipc
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
-export default {
+export default defineComponent({
   name: 'FileList',
   components: {
     FileItem,
@@ -117,40 +118,40 @@ export default {
   },
   data: function () {
     return {
-      activeDescriptor: null // Can contain the active ("focused") item
+      activeDescriptor: null as any|null // Can contain the active ("focused") item
     }
   },
   computed: {
-    selectedDirectory: function () {
+    selectedDirectory: function (): any {
       return this.$store.state.selectedDirectory
     },
-    selectedDirectoryHash: function () {
+    selectedDirectoryHash: function (): string {
       if (this.selectedDirectory === null) {
         return ''
       } else {
         return this.selectedDirectory.hash
       }
     },
-    noResultsMessage: function () {
+    noResultsMessage: function (): string {
       return trans('gui.no_search_results')
     },
-    emptyFileListMessage: function () {
+    emptyFileListMessage: function (): string {
       return trans('gui.no_dir_selected')
     },
-    emptyDirectoryMessage: function () {
+    emptyDirectoryMessage: function (): string {
       return trans('gui.empty_dir')
     },
-    selectedFile: function () {
+    selectedFile: function (): string {
       return this.$store.state.activeFile
     },
-    itemHeight: function () {
+    itemHeight: function (): number {
       if (this.$store.state.config['fileMeta'] === true) {
         return 70
       } else {
         return 30
       }
     },
-    getDirectoryContents: function () {
+    getDirectoryContents: function (): any[] {
       if (this.$store.state.selectedDirectory === null) {
         return []
       }
@@ -165,7 +166,7 @@ export default {
       }
       return ret
     },
-    getFilteredDirectoryContents: function () {
+    getFilteredDirectoryContents: function (): any[] {
       // Returns a list of directory contents, filtered
       const originalContents = this.getDirectoryContents
 
@@ -221,7 +222,7 @@ export default {
      * Hold Shift for moving by 10 files, Command or Control to
      * jump to the very end.
      */
-    navigate: function (evt) {
+    navigate: function (evt: KeyboardEvent) {
       // Only capture arrow movements
       if (![ 'ArrowDown', 'ArrowUp', 'Enter' ].includes(evt.key)) {
         return
@@ -357,13 +358,13 @@ export default {
         }
       }
     },
-    onFocusHandler: function (event) {
+    onFocusHandler: function (event: any) {
       this.activeDescriptor = this.selectedFile
     },
     focusFilter: function () {
-      this.$refs.quickFilter.focus()
+      (this.$refs.quickFilter as HTMLInputElement).focus()
     },
-    handleOperation: async function (type, idx) {
+    handleOperation: async function (type: string, idx: number) {
       // Creates files and directories, or duplicates a file.
       const source = this.getDirectoryContents.find(item => item.id === idx).props
       await ipcRenderer.invoke('application', {
@@ -372,7 +373,7 @@ export default {
       })
     }
   }
-}
+})
 </script>
 
 <style lang="less">

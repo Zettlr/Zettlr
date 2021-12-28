@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-const { trans } = require('@common/i18n-renderer')
+import { trans } from '@common/i18n-renderer'
 
 const ipcRenderer = window.ipc
 
@@ -55,7 +55,7 @@ const NOT_FOUND_TEMPLATE = [
   }
 ]
 
-module.exports = function displayFileContext (event, dirObject, el, callback) {
+export default function displayFileContext (event, dirObject, el, callback) {
   let items = []
 
   // Determine the template to use
