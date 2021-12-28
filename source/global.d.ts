@@ -164,7 +164,7 @@ interface ZettlrState {
   /**
    * Contains all tags across all files loaded into Zettlr
    */
-  tagDatabase: any[]
+  tagDatabase: TagDatabase[]
   /**
    * Contains a list of suggested tags for the current active file.
    */
