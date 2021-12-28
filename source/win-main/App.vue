@@ -1,9 +1,9 @@
 <template>
   <WindowChrome
     v-bind:title="title"
-    v-bind:titlebar="false"
+    v-bind:titlebar="shouldShowTitlebar"
     v-bind:menubar="true"
-    v-bind:show-toolbar="true"
+    v-bind:show-toolbar="shouldShowToolbar"
     v-bind:toolbar-labels="false"
     v-bind:toolbar-controls="toolbarControls"
     v-on:toolbar-toggle="handleToggle($event)"
@@ -167,6 +167,17 @@ export default {
   computed: {
     shouldCountChars: function () {
       return this.$store.state.config['editor.countChars']
+    },
+    shouldShowToolbar: function () {
+      console.log(this.$store.state.config['display.hideToolbarInDistractionFree'])
+      console.log(this.distractionFree)
+      return this.distractionFree === false || this.$store.state.config['display.hideToolbarInDistractionFree'] === false
+    },
+    shouldShowTitlebar: function () {
+      // We need to display the titlebar in case the user decides to hide the
+      // toolbar. The titlebar is much less distracting, but this way the user
+      // can at least drag the window around.
+      return this.shouldShowToolbar === false
     },
     parsedDocumentInfo: function () {
       const info = this.$store.state.activeDocumentInfo

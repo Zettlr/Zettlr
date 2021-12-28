@@ -7,6 +7,8 @@
 - Fix a rare error that would incapacitate the Math equation renderer
 - Clicking a search result in the global search sidebar will now highlight it
   in the sidebar
+- New setting: You can now choose to hide the toolbar while in distraction-free
+  mode
 
 ## Under the Hood
 
