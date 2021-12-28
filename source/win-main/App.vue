@@ -169,8 +169,6 @@ export default {
       return this.$store.state.config['editor.countChars']
     },
     shouldShowToolbar: function () {
-      console.log(this.$store.state.config['display.hideToolbarInDistractionFree'])
-      console.log(this.distractionFree)
       return this.distractionFree === false || this.$store.state.config['display.hideToolbarInDistractionFree'] === false
     },
     shouldShowTitlebar: function () {
