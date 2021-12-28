@@ -12,6 +12,9 @@
 - If you abort moving a file by dropping it onto its source directory, Zettlr
   will silently abort the move without nagging you about the fact that the
   target directory obviously already contains a file of the same name
+- During drag&drop, you can now rest over a collapsed directory for longer than
+  two seconds to have it automatically uncollapse -- this way you can reach
+  deeper nested directories without having to stop the operation
 
 ## Under the Hood
 

@@ -156,7 +156,8 @@ export default {
     return {
       collapsed: true, // Initial: collapsed list (if there are children)
       operationType: undefined, // Can be createFile or createDir
-      canAcceptDraggable: false // Helper var set to true while something hovers over this element
+      canAcceptDraggable: false, // Helper var set to true while something hovers over this element
+      uncollapseTimeout: undefined // Used to uncollapse directories during drag&drop ops
     }
   },
   computed: {
@@ -359,16 +360,34 @@ export default {
      * Called when a drag operation enters this item; adds a highlight class
      */
     enterDragging: function (event) {
-      if (this.isDirectory === true) {
-        this.canAcceptDraggable = true
+      if (this.isDirectory === false) {
+        return
       }
+
+      this.canAcceptDraggable = true
+
+      if (this.collapsed === false) {
+        return
+      }
+
+      this.uncollapseTimeout = setTimeout(() => {
+        this.collapsed = false
+        this.uncollapseTimeout = undefined
+      }, 2000)
     },
     /**
      * The oppossite of enterDragging; removes the highlight class
      */
     leaveDragging: function (event) {
-      if (this.isDirectory === true) {
-        this.canAcceptDraggable = false
+      if (this.isDirectory === false) {
+        return
+      }
+
+      this.canAcceptDraggable = false
+
+      if (this.uncollapseTimeout !== undefined) {
+        clearTimeout(this.uncollapseTimeout)
+        this.uncollapseTimeout = undefined
       }
     },
     /**
@@ -378,6 +397,16 @@ export default {
     handleDrop: function (event) {
       this.canAcceptDraggable = false
       event.preventDefault()
+
+      if (this.isDirectory === false) {
+        return
+      }
+
+      if (this.uncollapseTimeout !== undefined) {
+        clearTimeout(this.uncollapseTimeout)
+        this.uncollapseTimeout = undefined
+      }
+
       // Now we have to be careful. The user can now ALSO
       // drag and drop files right onto the list. So we need
       // to make sure it's really an element from in here and
@@ -400,11 +429,6 @@ export default {
 
       // The user dropped the file onto itself
       if (data.path === this.obj.path) {
-        return
-      }
-
-      // This is not a directory, thus not a valid target
-      if (this.obj.type !== 'directory') {
         return
       }
 
