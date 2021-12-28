@@ -54,7 +54,10 @@
       </span>
       <span
         ref="display-text"
-        class="display-text"
+        v-bind:class="{
+          'display-text': true,
+          'highlight': canAcceptDraggable
+        }"
         role="button"
         v-bind:aria-label="`Select ${obj.name}`"
         v-bind:data-hash="obj.hash"
@@ -152,7 +155,8 @@ export default {
   data: () => {
     return {
       collapsed: true, // Initial: collapsed list (if there are children)
-      operationType: undefined // Can be createFile or createDir
+      operationType: undefined, // Can be createFile or createDir
+      canAcceptDraggable: false // Helper var set to true while something hovers over this element
     }
   },
   computed: {
@@ -356,7 +360,7 @@ export default {
      */
     enterDragging: function (event) {
       if (this.isDirectory === true) {
-        this.$refs['display-text'].classList.add('highlight')
+        this.canAcceptDraggable = true
       }
     },
     /**
@@ -364,7 +368,7 @@ export default {
      */
     leaveDragging: function (event) {
       if (this.isDirectory === true) {
-        this.$refs['display-text'].classList.remove('highlight')
+        this.canAcceptDraggable = false
       }
     },
     /**
@@ -372,7 +376,7 @@ export default {
      * Only executes if it's a valid tree-item/file-list object.
      */
     handleDrop: function (event) {
-      this.$refs['display-text'].classList.remove('highlight')
+      this.canAcceptDraggable = false
       event.preventDefault()
       // Now we have to be careful. The user can now ALSO
       // drag and drop files right onto the list. So we need
@@ -396,6 +400,11 @@ export default {
 
       // The user dropped the file onto itself
       if (data.path === this.obj.path) {
+        return
+      }
+
+      // This is not a directory, thus not a valid target
+      if (this.obj.type !== 'directory') {
         return
       }
 
@@ -469,12 +478,6 @@ body {
         color: rgb(220, 45, 45);
       }
 
-      &.highlight {
-        // This class is applied on drag & drop
-        background-color: var(--system-accent-color, --c-primary);
-        color: var(--system-accent-color-contrast, --c-primary-contrast);
-      }
-
       &.selected .display-text {
         background-color: var(--system-accent-color, --c-primary);
         color: var(--system-accent-color-contrast, --c-primary-contrast);
@@ -504,6 +507,12 @@ body.darwin {
       padding: 3px 5px;
       border-radius: 4px;
       overflow: hidden;
+
+      &.highlight {
+        outline-width: 2px;
+        outline-color: var(--system-accent-color, --c-primary);
+        outline-style: solid;
+      }
     }
 
     &.selected .display-text {
@@ -531,6 +540,12 @@ body.win32 {
       font-size: 13px;
       padding: 3px 5px;
       overflow: hidden;
+
+      &.highlight {
+        // This class is applied on drag & drop
+        background-color: var(--system-accent-color, --c-primary);
+        color: var(--system-accent-color-contrast, --c-primary-contrast);
+      }
     }
   }
 }
@@ -548,6 +563,12 @@ body.linux {
       font-size: 13px;
       padding: 3px 5px;
       overflow: hidden;
+
+      &.highlight {
+        // This class is applied on drag & drop
+        background-color: var(--system-accent-color, --c-primary);
+        color: var(--system-accent-color-contrast, --c-primary-contrast);
+      }
     }
   }
 }
