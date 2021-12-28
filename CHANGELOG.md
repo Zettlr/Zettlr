@@ -9,6 +9,9 @@
   in the sidebar
 - New setting: You can now choose to hide the toolbar while in distraction-free
   mode
+- If you abort moving a file by dropping it onto its source directory, Zettlr
+  will silently abort the move without nagging you about the fact that the
+  target directory obviously already contains a file of the same name
 
 ## Under the Hood
 

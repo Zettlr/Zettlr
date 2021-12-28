@@ -45,6 +45,14 @@ export default class RequestMove extends ZettlrCommand {
       return false
     }
 
+    // It can happen that the user begins to drag a file but then realizes they
+    // don't want to move the file, so they will just drop it in the origin
+    // directory. Without the following check they would be presented with an
+    // unwanted "file already exists in target directory"-message.
+    if (to.path === from.dir) {
+      return false
+    }
+
     // Let's check if the destination is a child of the source:
     if (fsal.findFile(to.path, [from]) !== null || fsal.findDir(to.path, [from]) !== null) {
       this._app.prompt({
