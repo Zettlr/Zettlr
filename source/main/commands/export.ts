@@ -75,7 +75,7 @@ export default class Export extends ZettlrCommand {
         exporterOptions.sourceFiles.push(fileDescriptor)
         exporterOptions.cwd = fileDescriptor.dir
         switch (exportTo) {
-          case 'ask':
+          case 'ask': {
             const folderSelection = dialog.showOpenDialogSync({
               properties: [ 'openDirectory', 'createDirectory' ],
               defaultPath: fileDescriptor.path,
@@ -88,6 +88,7 @@ export default class Export extends ZettlrCommand {
             }
             exporterOptions.targetDirectory = folderSelection[0]
             break
+          }
           case 'temp':
           case 'cwd':
           default:
