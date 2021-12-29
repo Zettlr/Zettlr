@@ -15,6 +15,8 @@
 - During drag&drop, you can now rest over a collapsed directory for longer than
   two seconds to have it automatically uncollapse -- this way you can reach
   deeper nested directories without having to stop the operation
+- Renaming root-directories will now ensure the new path of the directory is
+  persisted to the configuration
 
 ## Under the Hood
 

@@ -910,8 +910,8 @@ export default class FSAL extends EventEmitter {
     this._fsalIsBusy = true
 
     // Compute the paths to be replaced
-    let oldPrefix = path.join(src.dir, src.name)
-    let newPrefix = path.join(src.dir, newName)
+    const oldPrefix = path.join(src.dir, src.name)
+    const newPrefix = path.join(src.dir, newName)
 
     // Now that we have prepared potential updates,
     // let us perform the rename.
