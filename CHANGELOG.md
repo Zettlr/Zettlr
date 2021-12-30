@@ -22,6 +22,9 @@
   persisted to the configuration
 - Fixed an error that would sometimes prevent the autocomplete popup to close
   until the main window was closed and reopened (or the app is restarted)
+- Fixed an error that would prevent a global search if no directory is selected
+- The search now also starts when you press Enter while the restriction input is
+  focused
 
 ## Under the Hood
 

@@ -15,6 +15,7 @@
       v-bind:autocomplete-values="directorySuggestions"
       v-bind:placeholder="restrictDirPlaceholder"
       v-on:confirm="restrictToDir = $event"
+      v-on:keydown.enter="startSearch()"
     ></AutocompleteText>
     <!-- Then an always-visible search button ... -->
     <ButtonControl
@@ -382,7 +383,7 @@ export default {
           }
         })
 
-        if (this.selectedDir.path.startsWith(treeItem.path) === true) {
+        if (this.selectedDir !== null && this.selectedDir.path.startsWith(treeItem.path) === true) {
           // Append the selected directory's contents BEFORE any other items
           // since that's probably something the user sees as more relevant.
           fileList = dirContents.concat(fileList)
