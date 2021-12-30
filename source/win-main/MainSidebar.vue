@@ -7,32 +7,73 @@
     ></TabBar>
 
     <!-- Now the tab containers -->
+    <div
+      v-if="currentTab === 'toc'"
+      role="tabpanel"
+    >
+      <!-- Table of Contents -->
+      <h1>{{ tocLabel }}</h1>
+      <!-- Show the ToC entries -->
+      <div
+        v-for="(entry, idx) of tableOfContents"
+        v-bind:key="idx"
+        class="toc-entry-container"
+        v-bind:style="{
+          'margin-left': `${entry.level * 10}px`
+        }"
+        v-on:click="$root.jtl(entry.line)"
+      >
+        <div class="toc-level">
+          {{ entry.renderedLevel }}
+        </div>
+        <div class="toc-entry" v-bind:data-line="entry.line" v-html="entry.text"></div>
+      </div>
+    </div>
+
+    <div
+      v-if="currentTab === 'references'"
+      role="tabpanel"
+    >
+      <!-- References -->
+      <h1>{{ referencesLabel }}</h1>
+      <!-- Will contain the actual HTML -->
+      <div v-html="referenceHTML"></div>
+    </div>
 
     <div
       v-if="currentTab === 'relatedFiles'"
       role="tabpanel"
     >
       <h1>{{ relatedFilesLabel }}</h1>
-      <div v-if="relatedFiles.length === 0" class="related-files-container">
-        {{ noRelatedFilesMessage }}
-      </div>
-      <div v-else class="related-files-container">
-        <div
-          v-for="fileRecord, idx in relatedFiles"
-          v-bind:key="idx"
-          class="related-file"
-        >
-          <span
-            class="filename"
-            draggable="true"
-            v-on:mousedown.stop="requestFile($event, fileRecord.path)"
-            v-on:dragstart="beginDragRelatedFile($event, fileRecord.path)"
-          >{{ getRelatedFileName(fileRecord.path) }}</span>
-          <span class="icons">
-            <!-- TODO: When we implement file links, here we should also add the link -->
-            <clr-icon shape="tag" title="This relation is based on tag similarity."></clr-icon>
-            <!-- <clr-icon shape="link"></clr-icon> -->
-          </span>
+      <div class="related-files-container">
+        <div v-if="relatedFiles.length === 0">
+          {{ noRelatedFilesMessage }}
+        </div>
+        <div v-else>
+          <div
+            v-for="fileRecord, idx in relatedFiles"
+            v-bind:key="idx"
+            class="related-file"
+          >
+            <span
+              class="filename"
+              draggable="true"
+              v-on:mousedown.stop="requestFile($event, fileRecord.path)"
+              v-on:dragstart="beginDragRelatedFile($event, fileRecord.path)"
+            >{{ getRelatedFileName(fileRecord.path) }}</span>
+            <span class="icons">
+              <clr-icon
+                v-if="fileRecord.tags.length > 0"
+                shape="tag"
+                title="This relation is based on tag similarity."
+              ></clr-icon>
+              <clr-icon
+                v-if="fileRecord.backlink"
+                shape="link"
+                title="This relation is based on a backlink"
+              ></clr-icon>
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -72,37 +113,6 @@
           {{ attachment.name }}
         </a>
       </template>
-    </div>
-    <div
-      v-if="currentTab === 'references'"
-      role="tabpanel"
-    >
-      <!-- References -->
-      <h1>{{ referencesLabel }}</h1>
-      <!-- Will contain the actual HTML -->
-      <div v-html="referenceHTML"></div>
-    </div>
-    <div
-      v-if="currentTab === 'toc'"
-      role="tabpanel"
-    >
-      <!-- Table of Contents -->
-      <h1>{{ tocLabel }}</h1>
-      <!-- Show the ToC entries -->
-      <div
-        v-for="(entry, idx) of tableOfContents"
-        v-bind:key="idx"
-        class="toc-entry-container"
-        v-bind:style="{
-          'margin-left': `${entry.level * 10}px`
-        }"
-        v-on:click="$root.jtl(entry.line)"
-      >
-        <div class="toc-level">
-          {{ entry.renderedLevel }}
-        </div>
-        <div class="toc-entry" v-bind:data-line="entry.line" v-html="entry.text"></div>
-      </div>
     </div>
   </div>
 </template>
@@ -277,31 +287,74 @@ export default {
         })
         .catch(err => console.error(err))
     },
-    updateRelatedFiles: function () {
+    updateRelatedFiles: async function () {
+      // First reset, default is no related files
       this.relatedFiles = []
       if (this.activeFile === null || this.activeFile.type !== 'file') {
         return
       }
 
-      ipcRenderer.invoke('tag-provider', {
+      const unreactiveList = []
+
+      // Then retrieve the inbound links first, since that is the most important
+      // relation, so they should be on top of the list.
+      const inboundLinks = await ipcRenderer.invoke('link-provider', {
+        command: 'get-inbound-links',
+        payload: {
+          filePath: this.activeFile.path,
+          fileID: this.activeFile.id
+        }
+      })
+
+      for (const absPath of inboundLinks) {
+        unreactiveList.push({
+          file: path.basename(absPath),
+          path: absPath,
+          tags: [],
+          backlink: true
+        })
+      }
+
+      // The second way files can be related to each other is via shared tags.
+      // This relation is not as important as explicit links, so they should
+      // be below the inbound linked files.
+      const recommendations = await ipcRenderer.invoke('tag-provider', {
         command: 'recommend-matching-files',
         payload: this.activeFile.tags.map(tag => tag) // De-proxy
       })
-        .then(recommendations => {
-          // Recommendations come in the form of [file: string]: string[]
-          for (const filePath of Object.keys(recommendations)) {
-            this.relatedFiles.push({
-              file: path.basename(filePath),
-              path: filePath,
-              tags: recommendations[filePath]
-            })
-          }
 
-          this.relatedFiles.sort((a, b) => {
-            return b.tags.length - a.tags.length
+      // Recommendations come in the form of [file: string]: string[]
+      for (const filePath of Object.keys(recommendations)) {
+        const existingFile = unreactiveList.find(elem => elem.path === filePath)
+        if (existingFile !== undefined) {
+          // This file already links here
+          existingFile.tags = recommendations[filePath]
+        } else {
+          // This file doesn't explicitly link here but it shares tags
+          unreactiveList.push({
+            file: path.basename(filePath),
+            path: filePath,
+            tags: recommendations[filePath],
+            backlink: false
           })
-        })
-        .catch(err => console.error(err))
+        }
+      }
+
+      // Now we have all relations based on either tags or backlinks. We must
+      // now order them in such a way that the hierarchy is like that:
+      // 1. Backlinks that also share common tags
+      // 2. Backlinks that do not share common tags
+      // 3. Files that only share common tags
+      const backlinksAndTags = unreactiveList.filter(e => e.backlink && e.tags.length > 0)
+      backlinksAndTags.sort((a, b) => { return b.tags.length - a.tags.length })
+
+      const backlinksOnly = unreactiveList.filter(e => e.backlink && e.tags.length === 0)
+      // No sorting necessary
+
+      const tagsOnly = unreactiveList.filter(e => !e.backlink)
+      tagsOnly.sort((a, b) => { return b.tags.length - a.tags.length })
+
+      this.relatedFiles = [ ...backlinksAndTags, ...backlinksOnly, ...tagsOnly ]
     },
     getIcon: function (attachmentPath) {
       const fileExtIcon = ClarityIcons.get('file-ext')

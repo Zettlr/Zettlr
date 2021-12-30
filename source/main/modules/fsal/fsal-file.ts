@@ -276,6 +276,7 @@ export async function parse (filePath: string, cache: FSALCache|null, parent: Di
 
   // Finally, report the tags
   global.tags.report(file.tags, file.path)
+  global.links.report(file.path, file.links, file.id)
 
   return file
 }
@@ -346,8 +347,10 @@ export async function save (fileObject: MDFileDescriptor, content: string, cache
   await updateFileMetadata(fileObject)
   // Make sure to keep the file object itself as well as the tags updated
   global.tags.remove(fileObject.tags, fileObject.path)
+  global.links.remove(fileObject.path, fileObject.id)
   parseFileContents(fileObject, content)
   global.tags.report(fileObject.tags, fileObject.path)
+  global.links.report(fileObject.path, fileObject.links, fileObject.id)
   fileObject.modified = false // Always reset the modification flag.
   if (cache !== null) {
     cacheFile(fileObject, cache)
@@ -425,8 +428,10 @@ export async function reparseChangedFile (fileObject: MDFileDescriptor, cache: F
   await updateFileMetadata(fileObject)
   // Make sure to keep the file object itself as well as the tags updated
   global.tags.remove(fileObject.tags, fileObject.path)
+  global.links.remove(fileObject.path, fileObject.id)
   parseFileContents(fileObject, contents)
   global.tags.report(fileObject.tags, fileObject.path)
+  global.links.report(fileObject.path, fileObject.links, fileObject.id)
   fileObject.modified = false // Always reset the modification flag.
   if (cache !== null) {
     cacheFile(fileObject, cache)

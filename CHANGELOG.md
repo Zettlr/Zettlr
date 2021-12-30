@@ -2,6 +2,9 @@
 
 ## GUI and Functionality
 
+- **New Feature**: Zettlr now accounts for backlinks to the currently active
+  file, which means it now displays files which link to the current file in the
+  sidebar
 - Improved placement of the popup displayed by Input Method for inputting
   non-alphabetic characters (e.g. Chinese, Japanese, or Korean)
 - Fix a rare error that would incapacitate the Math equation renderer
