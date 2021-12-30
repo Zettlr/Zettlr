@@ -163,6 +163,11 @@ function collectHeadingIDs (cm) {
 }
 
 module.exports = {
+  /**
+   * Hooks autocomplete onto the CodeMirror editor
+   *
+   * @param   {CodeMirror.Editor}  cm  The CM instance
+   */
   'autocompleteHook': (cm) => {
     // Listen to change events
     cm.on('change', (cm, changeObj) => {
@@ -201,11 +206,6 @@ module.exports = {
       }) // END showHint
     })
 
-    // endCompletion
-
-    // The "endCompletion" event (currently undocumented) is only fired on
-    // the CodeMirror instance, and _not_ the completion object. Hence, we
-    // define it here.
     cm.on('endCompletion', () => {
       autocompleteStart = null
       currentDatabase = null
@@ -376,8 +376,8 @@ function getHints (term) {
  * @return  {any}              The completion object
  */
 function hintFunction (cm, opt) {
-  let term = cm.getRange(autocompleteStart, cm.getCursor()).toLowerCase()
-  let completionObject = {
+  const term = cm.getRange(autocompleteStart, cm.getCursor()).toLowerCase()
+  const completionObject = {
     list: getHints(term),
     from: autocompleteStart,
     to: cm.getCursor()
@@ -520,8 +520,6 @@ function hintFunction (cm, opt) {
       // Plus, move to the first tabstop already so the user can start immediately.
       nextTabstop(cm)
     }
-    autocompleteStart = null
-    currentDatabase = null // Reset the database used for the hints.
   })
 
   // If the hint is being closed, always reset the variables.

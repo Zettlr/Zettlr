@@ -104,6 +104,22 @@ const ipcRenderer = window.ipc
  */
 let mdEditor = null
 
+/**
+ * Contains all loaded and currently open documents. Needs to be defined outside
+ * because of the Proxies.
+ *
+ * @var {any[]}
+ */
+const openDocuments = []
+
+/**
+ * Contains the currently displayed activeDocument; needs to be defined outside
+ * due to the same reasons as mdEditor and openDocuments.
+ *
+ * @var {null|any}
+ */
+let activeDocument = null
+
 export default {
   name: 'MainEditor',
   components: {
@@ -120,7 +136,7 @@ export default {
   },
   data: function () {
     return {
-      openDocuments: [], // Contains all loaded documents if applicable
+      // openDocuments: [], // Contains all loaded documents if applicable
       currentlyFetchingFiles: [], // Contains the paths of files that are right now being fetched
       // Should we perform a regexp search?
       regexpSearch: false,
@@ -130,7 +146,7 @@ export default {
       findTimeout: undefined, // Holds a timeout so that not every single keypress results in a searchNext
       docInfoTimeout: undefined, // Holds a timeout to not update the docInfo every millisecond
       // END: Search options
-      activeDocument: null, // Almost like activeFile, only with additional info
+      // activeDocument: null, // Almost like activeFile, only with additional info
       anchor: undefined
     }
   },
@@ -324,7 +340,7 @@ export default {
         return
       }
 
-      const doc = this.openDocuments.find(doc => doc.path === this.activeFile.path)
+      const doc = openDocuments.find(doc => doc.path === this.activeFile.path)
 
       if (doc !== undefined) {
         // Simply swap it
@@ -332,7 +348,7 @@ export default {
           zettlr: { markdownImageBasePath: this.activeFile.dir }
         })
         mdEditor.swapDoc(doc.cmDoc, doc.mode)
-        this.activeDocument = doc
+        activeDocument = doc
         mdEditor.readOnly = false
         this.$store.commit('updateTableOfContents', mdEditor.tableOfContents)
         this.$store.commit('activeDocumentInfo', mdEditor.documentInfo)
@@ -393,7 +409,7 @@ export default {
               }, delay)
             })
 
-            this.openDocuments.push(newDoc)
+            openDocuments.push(newDoc)
             const idx = this.currentlyFetchingFiles.findIndex(e => e === descriptorWithContent.path)
             this.currentlyFetchingFiles.splice(idx, 1)
             // Let's check whether the active file has in the meantime changed
@@ -403,7 +419,7 @@ export default {
                 zettlr: { markdownImageBasePath: this.activeFile.dir }
               })
               mdEditor.swapDoc(newDoc.cmDoc, newDoc.mode)
-              this.activeDocument = newDoc
+              activeDocument = newDoc
               mdEditor.readOnly = false
               this.$store.commit('updateTableOfContents', mdEditor.tableOfContents)
               this.$store.commit('activeDocumentInfo', mdEditor.documentInfo)
@@ -416,12 +432,12 @@ export default {
     openFiles: function () {
       // The openFiles array in the store has changed --> remove all documents
       // that are not present anymore
-      for (const doc of this.openDocuments) {
+      for (const doc of openDocuments) {
         const found = this.openFiles.find(descriptor => descriptor.path === doc.path)
         if (found === undefined) {
           // Remove the document from our array
-          const idx = this.openDocuments.indexOf(doc)
-          this.openDocuments.splice(idx, 1)
+          const idx = openDocuments.indexOf(doc)
+          openDocuments.splice(idx, 1)
         }
       }
     },
@@ -483,8 +499,8 @@ export default {
     mdEditor.on('change', (changeObj) => {
       // Announce that the file is modified (if applicable) to the whole application
       this.$store.commit('announceModifiedFile', {
-        filePath: this.activeDocument.path,
-        isClean: this.activeDocument.cmDoc.isClean()
+        filePath: activeDocument.path,
+        isClean: activeDocument.cmDoc.isClean()
       })
 
       this.$store.commit('updateTableOfContents', mdEditor.tableOfContents)
@@ -515,8 +531,8 @@ export default {
 
     // Listen to shortcuts from the main process
     ipcRenderer.on('shortcut', (event, shortcut) => {
-      if (shortcut === 'save-file' && this.activeDocument !== null) {
-        this.save(this.activeDocument).catch(e => console.error(e))
+      if (shortcut === 'save-file' && activeDocument !== null) {
+        this.save(activeDocument).catch(e => console.error(e))
       } else if (shortcut === 'copy-as-html') {
         mdEditor.copyAsHTML()
       } else if (shortcut === 'paste-as-plain') {
@@ -534,7 +550,7 @@ export default {
       // so all we have to do is find the right file and just swap the contents.
       // We don't need to update anything else, since that has been updated in
       // the application's store already by the time this event arrives.
-      const doc = this.openDocuments.find(item => item.path === fileDescriptor.path)
+      const doc = openDocuments.find(item => item.path === fileDescriptor.path)
 
       if (doc !== undefined) {
         const { top } = mdEditor.codeMirror.getScrollInfo()
@@ -560,10 +576,10 @@ export default {
       // If this event gets emitted, the main process wants
       // some open and modified documents to be saved.
       if (pathList.length === 0) {
-        pathList = this.openDocuments.map(doc => doc.path)
+        pathList = openDocuments.map(doc => doc.path)
       }
 
-      const docsToSave = this.openDocuments.filter(doc => pathList.includes(doc.path))
+      const docsToSave = openDocuments.filter(doc => pathList.includes(doc.path))
 
       for (const doc of docsToSave) {
         await this.save(doc)
@@ -797,7 +813,7 @@ export default {
       // Split the contents of the editor into frontmatter and contents, then
       // add the keywords to the frontmatter, slice everything back together
       // and then overwrite the editor's contents.
-      let { frontmatter, content } = extractYamlFrontmatter(mdEditor.value) // NOTE: We can keep the linefeed to \n since CodeMirror is set to ALWAYS use \n
+      let { frontmatter, content } = extractYamlFrontmatter(mdEditor.value)
 
       let postFrontmatter = '\n'
       if (frontmatter !== null) {
@@ -816,7 +832,7 @@ export default {
       }
 
       // Glue it back together and set it as content
-      this.activeDocument.cmDoc.setValue('---\n' + YAML.stringify(frontmatter) + '---' + postFrontmatter + content)
+      activeDocument.cmDoc.setValue('---\n' + YAML.stringify(frontmatter) + '---' + postFrontmatter + content)
     },
     getValue () {
       if (mdEditor !== null) {

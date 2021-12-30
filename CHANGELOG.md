@@ -20,6 +20,8 @@
   deeper nested directories without having to stop the operation
 - Renaming root-directories will now ensure the new path of the directory is
   persisted to the configuration
+- Fixed an error that would sometimes prevent the autocomplete popup to close
+  until the main window was closed and reopened (or the app is restarted)
 
 ## Under the Hood
 
