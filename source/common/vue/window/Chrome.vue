@@ -431,12 +431,6 @@ body {
     }
   }
 
-  &.win32 {
-    div#window-content {
-      padding: 10px;
-    }
-  }
-
   &.dark:not(.darwin) {
     div#window-content {
       background-color: rgb(30, 30, 30);
