@@ -5,7 +5,7 @@
             "Anders Lykke Gade"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-10-01T14:03:12.000000Z"
+        "updated_at": "2021-12-27T06:53:38.000000Z"
     },
     "dialog": {
         "about": {
@@ -199,6 +199,7 @@
             "cite_style_label": "\u00d8nsker du at autofuldf\u00f8r inds\u00e6tter citationer for dig?",
             "count_chars": "T\u00e6l tegn i stedet for ord (f.eks. p\u00e5 kinesisk)",
             "creationtime": "Dato for filoprettelse",
+            "dark_mode": "M\u00f8rk tilstand",
             "debug": "Aktiver debugging",
             "default_image_save_path": "Standardplacering for billeder (relativ eller absolut)",
             "delete_on_fail": "Slet noter fuldst\u00e6ndigt, hvis det fejler at flytte dem til papirskurven",
@@ -315,6 +316,7 @@
             "readability_algorithm": "Algoritme der skal bruges til tilstanden \"Forbedret l\u00e6sbarhed\".",
             "reset_pandoc_command": "Kommando til nulstilling af Pandoc",
             "show_app_in_the_notification_area": "Vis programmet i notifikationsomr\u00e5det",
+            "sort_folders_first": "Vis mapper over filer",
             "sorting_ascii": "ASCII r\u00e6kkef\u00f8lge (2 efter 10)",
             "sorting_explanation": "Sorterings r\u00e6kkef\u00f8lge for files (brugt til sortering efter navn)",
             "sorting_natural": "Naturlig r\u00e6kkef\u00f8lge (10 efter 2)",
@@ -466,6 +468,11 @@
         "avg_surpassed": "\ud83d\udd25 Vi kan ikke br\u00e6nde dig, for du' allerede ild!",
         "avg_words": "Dagligt gennemsnit",
         "chars": "%s karakterer",
+        "chart": {
+            "high_legend": "Mere end det dobbelte af det m\u00e5nedlige gennemsnit",
+            "high_mid_legend": "Over det m\u00e5nedlige gennemsnit",
+            "low_mid_legend": "Under det m\u00e5nedlige gennemsnit"
+        },
         "citeproc": {
             "error_db": "Citations databasen kunne ikke indl\u00e6ses",
             "error_report_message": "%s emner i dit bibliotek kunne ikke indl\u00e6ses p\u00e5 grund af fejl. Unders\u00f8g venligst fejlbeskederne nedenfor, for at se hvilke CiteKeys der er misformede og hvad fejlen var.",
@@ -570,6 +577,7 @@
         "close_file": "Luk fil",
         "close_workspace": "Luk arbejdsomr\u00e5de",
         "copy": "Kopi\u00e9r",
+        "copy_equation": "Kopier udregning",
         "copy_filename": "Kopi\u00e9r filnavn",
         "copy_html": "Kopi\u00e9r som HTML",
         "copy_id": "Kopi\u00e9r ID",

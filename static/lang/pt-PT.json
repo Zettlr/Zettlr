@@ -3,10 +3,11 @@
         "authors": [
             "Carlos Bornes \u003Ccbornes3@gmail.com\u003E",
             "tmpod \u003Ctmpod@pm.me\u003E",
+            "Nelson Faria",
             "Paula Simoes \u003Cppsimoes@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-12-17T15:28:28.000000Z"
+        "updated_at": "2021-12-21T14:48:05.000000Z"
     },
     "dialog": {
         "about": {
@@ -78,14 +79,19 @@
             "close_label": "Fechar pesquisa",
             "find_label": "Localizar",
             "find_placeholder": "Localizar...",
+            "regex_label": "Alternar procura com express\u00e3o regular",
+            "replace_all_label": "Substituir todas as ocorr\u00eancias",
             "replace_label": "Substituir",
+            "replace_next_label": "Substituir pr\u00f3xima ocorr\u00eancia",
             "replace_placeholder": "Substituir por"
         },
         "paste_image": {
+            "current_directory": "Diret\u00f3rio atual",
             "dimensions": "Tamanho da imagem",
             "info": "Aqui est\u00e1 uma pr\u00e9-visualiza\u00e7\u00e3o da imagem que se encontra na sua \u00e1rea de transfer\u00eancia. Prima return para guard\u00e1-la na pasta actual, ou escolha uma outra pasta.",
             "name_label": "Nome do ficheiro",
             "name_placeholder": "Um nome de ficheiro \u00fanico",
+            "resize_to": "Redimensionar imagem para",
             "retain_aspect_label": "Manter a propor\u00e7\u00e3o da imagem (aspect ratio)",
             "save_cwd": "Guardar na pasta actual",
             "title": "Inserir Imagem da \u00c1rea de Transfer\u00eancia"
@@ -170,6 +176,13 @@
             "auto_dark_mode_schedule": "Hor\u00e1rio",
             "auto_dark_mode_schedule_format": "HH:MM (formato 24h)",
             "auto_dark_mode_system": "Acompanhar o sistema operativo",
+            "auto_save": {
+                "delayed": "Ap\u00f3s uma breve pausa",
+                "immediately": "Imediata",
+                "label": "Grava\u00e7\u00e3o autom\u00e1tica",
+                "off": "Desligada"
+            },
+            "autocomplete_accept_space": "Aceitar espa\u00e7os para completar automaticamente",
             "autocorrect": {
                 "active_label": "Ligar a Correc\u00e7\u00e3o Autom\u00e1tica",
                 "quick_select_label": "Selec\u00e7\u00e3o r\u00e1pida",
@@ -181,15 +194,21 @@
                 "style_word_label": "Estilo Word",
                 "title": "Correc\u00e7\u00e3o Autom\u00e1tica"
             },
+            "avoid_new_tabs": "Se poss\u00edvel evitar abrir ficheiros em novas abas",
             "checkForBeta": "Notifique-me de actualiza\u00e7\u00f5es beta",
             "choose_file": "Escolher ficheiro...",
             "citation_database": "Base de dados de cita\u00e7\u00f5es (CSL JSON ou BibTex)",
+            "cite_style_label": "Qual o comportamento do preenchimento autom\u00e1tico de cita\u00e7\u00f5es?",
             "count_chars": "Contar caracteres em vez de palavras (em Chin\u00eas, p. ex.)",
             "creationtime": "Data de cria\u00e7\u00e3o do ficheiro",
+            "dark_mode": "Modo escuro",
             "debug": "Ligar modo debug",
             "default_image_save_path": "Caminho para imagens por defeito (relativo ou absoluto)",
+            "delete_on_fail": "Apagar itens irreversivelmente, se falhar mover para lixo",
             "display": {
+                "image_height": "Altura m\u00e1xima das imagens (percentagem)",
                 "image_size_info": "Com estes controlos pode ajustar a pr\u00e9-visualiza\u00e7\u00e3o de imagens.",
+                "image_width": "Largura m\u00e1xima das imagens (percentagem)",
                 "preview_info": "Estas op\u00e7\u00f5es determinam os elementos que aparecer\u00e3o nos documentos.",
                 "render_citations": "Mostrar Cita\u00e7\u00f5es",
                 "render_htags": "Ocultar caracteres de cabe\u00e7alho",
@@ -203,12 +222,14 @@
             },
             "display_time_explanation": "Nos metadados de ficheiro mostrar",
             "editor": "Editor",
+            "editor_font_size": "Editor de tamanho de fonte",
             "editor_setting": {
                 "direction_ltr": "Usar sentido da escrita da esquerda para a direita (LTR)",
                 "direction_rtl": "Usar sentido da escrita da direita para a esquerda (RTL)",
                 "rtl_move_visually": "Usar a ordem visual para o movimento das setas do teclado no modo RTL"
             },
             "enable_rmarkdown": "Activar suporte para ficheiros RMarkdown",
+            "enable_scroll_zoom": "Ampliar com scrolling pressionando\u003Ckbd\u003ECmd\u003C/kbd\u003E or \u003Ckbd\u003ECtrl\u003C/kbd\u003E",
             "enable_table_helper": "Activar Editor de Tabelas",
             "export": {
                 "dest": "Pasta de destino para ficheiros exportados. \u003Cem\u003EAten\u00e7\u00e3o:\u003C/em\u003E Escolher a pasta em uso levar\u00e1 a que os ficheiros sejam reescritos sem aviso pr\u00e9vio!",
@@ -220,9 +241,13 @@
                 "strip_links_unlink_label": "Desligar (unlink) os links internos",
                 "strip_tags_label": "Remover etiquetas dos ficheiros",
                 "stripping": "Op\u00e7\u00f5es para elementos ZKN",
-                "title": "Exportar"
+                "title": "Exportar",
+                "use_bundled_pandoc": "Usar o Pandoc interno para exportar"
             },
             "file_meta": "Mostrar informa\u00e7\u00e3o de ficheiro",
+            "filemanager_combined": "Combinado &mdash; Mostra ficheiros e diret\u00f3rios em arvore",
+            "filemanager_expanded": "Expandido &mdash; mostra ambos arvore e lista de ficheiros",
+            "filemanager_explanation": "Modo de gest\u00e3o de ficheiros",
             "filename_generator": "Padr\u00e3o para novos nomes de ficheiro",
             "formatting_characters_explanation": "Escolha os caracteres de formata\u00e7\u00e3o que os comandos de negrito/realce devem usar",
             "general": "Geral",
@@ -281,11 +306,14 @@
             "project": {
                 "csl_style": "Estilo CSL (opcional)",
                 "format": "Exportar o projecto para:",
+                "name_label": "Formatar",
                 "title": "Op\u00e7\u00f5es do projecto",
-                "title_label": "T\u00edtulo do projecto"
+                "title_label": "T\u00edtulo do projecto",
+                "use_label": "Usar"
             },
             "readability_algorithm": "Algoritmo usado para o modo de facilidade de leitura",
             "reset_pandoc_command": "Voltar ao comando pandoc original",
+            "sort_folders_first": "Mostrar direct\u00f3rios acima de ficheiros",
             "sorting_ascii": "Ordem ASCII (2 depois do 10)",
             "sorting_explanation": "Modo de ordena\u00e7\u00e3o dos ficheiros (usado para ordenar por nome)",
             "sorting_natural": "Ordem natural (10 depois do 2)",
@@ -298,6 +326,7 @@
             },
             "theme": {
                 "info": "Aqui pode escolher um Tema para a aplica\u00e7\u00e3o",
+                "selected_label": "Selecionado",
                 "title": "Tema"
             },
             "title": "Prefer\u00eancias",
@@ -313,6 +342,7 @@
             "watchdog_checkbox_label": "Activar monitoriza\u00e7\u00e3o de mudan\u00e7as externas",
             "watchdog_explainer": "Nalguns computadores, o Zettlr pode reportar demasiadas mudan\u00e7as em ficheiros remotos. Se isto acontecer, tente activar esta configura\u00e7\u00e3o.",
             "watchdog_threshold_label": "Tempo de espera at\u00e9 a grava\u00e7\u00e3o do ficheiro estar conclu\u00edda (em ms)",
+            "whitelist_hostname": "Servidor",
             "xelatex": "Caminho para o execut\u00e1vel xelatex. Por favor, apenas altere se o Zettlr n\u00e3o conseguir localiz\u00e1-lo.",
             "xelatex_default": "Default: xelatex",
             "zkn": {
@@ -576,6 +606,7 @@
             "fnf_title": "Ficheiro n\u00e3o encontrado",
             "ignored_dir_message": "A pasta &quot;%s&quot; n\u00e3o pode ser aberta pelo Zettlr.",
             "ignored_dir_title": "N\u00e3o \u00e9 poss\u00edvel abrir pasta",
+            "image_not_found": "Imagem n\u00e3o encontrada: %s",
             "malformed_textbundle": "Textbundle mal formatado: %s",
             "move_into_child_message": "N\u00e3o pode mover uma pasta para uma das suas sub-pastas.",
             "move_into_child_title": "N\u00e3o \u00e9 poss\u00edvel mover a pasta",
@@ -605,6 +636,7 @@
         "lang_import_success": "Ficheiro de idioma importado: %s",
         "no_command": "Uma mensagem sem comando foi recebida: %s",
         "ok": "Ok",
+        "open_file": "Abrir ficheiro",
         "open_folder": "Abrir pasta de projecto",
         "open_root_directory": "A abrir nova ra\u00edz %s ...",
         "open_root_directory_success": "%s foi carregada.",
