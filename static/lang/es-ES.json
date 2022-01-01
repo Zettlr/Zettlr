@@ -13,7 +13,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-12-09T17:59:41.000000Z"
+        "updated_at": "2021-12-16T05:02:10.000000Z"
     },
     "dialog": {
         "about": {
@@ -585,6 +585,7 @@
         "close_file": "Cerrar archivo",
         "close_workspace": "Cerrar \u00e1rea de trabajo",
         "copy": "Copiar",
+        "copy_equation": "Copia el c\u00f3digo de la ecuaci\u00f3n",
         "copy_filename": "Copiar nombre de archivo",
         "copy_html": "Copiar como HTML",
         "copy_id": "Copiar ID",

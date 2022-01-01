@@ -7,7 +7,7 @@
             "lukecarrier \u003Cluke@carrier.im\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-12-14T12:20:10.000000Z"
+        "updated_at": "2021-12-28T14:22:44.000000Z"
     },
     "dialog": {
         "about": {
@@ -206,6 +206,7 @@
             "default_image_save_path": "Default image path (relative or absolute)",
             "delete_on_fail": "Delete items irreversibly, if moving them to trash fails",
             "display": {
+                "hide_toolbar_distraction_free": "Hide toolbar in distraction free mode",
                 "image_height": "Maximum height of images (percent)",
                 "image_size_info": "With these controls you can constrain the image previews.",
                 "image_width": "Maximum width of images (percent)",
@@ -329,7 +330,6 @@
             "spellchecking": {
                 "title": "Spellchecking"
             },
-            "start_app_minimized": "Start app minimised",
             "theme": {
                 "accent_color_info": "This setting is only available on Windows and macOS",
                 "accent_color_label": "Use the operating system's accent colour instead of the theme colour",
