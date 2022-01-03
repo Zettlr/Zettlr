@@ -60,7 +60,8 @@ module.exports = {
       '.css', '.less', '.vue'
     ],
     alias: {
-      '@common': [path.resolve(__dirname, 'source/common')]
+      '@common': [path.resolve(__dirname, 'source/common')],
+      '@providers': [path.resolve(__dirname, 'source/app/service-providers')]
     },
     fallback: {
       // Don't polyfill these modules

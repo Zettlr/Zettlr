@@ -32,6 +32,7 @@
 
 - Update to Electron 16
 - Make sure to de-proxy the tag database before sending it to the MdEditor
+- Added a `@providers` alias for easy referencing of service providers
 
 # 2.1.0
 

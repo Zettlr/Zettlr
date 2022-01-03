@@ -42,7 +42,8 @@ module.exports = {
       'readable-stream/passthrough': [
         path.resolve(__dirname, 'node_modules/lazystream/node_modules/readable-stream/')
       ],
-      '@common': [path.resolve(__dirname, 'source/common')]
+      '@common': [path.resolve(__dirname, 'source/common')],
+      '@providers': [path.resolve(__dirname, 'source/app/service-providers')]
     }
   },
   externals: {
