@@ -28,6 +28,7 @@
 - Fixed a bug that disabled the table insertion toolbar button in the previous
   version
 - Fixed an issue preventing updates of lists in the preferences
+- Fixed an issue not displaying the currently selected theme in the preferences
 
 ## Under the Hood
 

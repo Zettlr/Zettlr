@@ -47,7 +47,7 @@
             {{ theme.name }}:
           </p>
           <div
-            v-if="index === value"
+            v-if="index === modelValue"
             class="selected-button"
           >
             {{ selectedLabel }}
@@ -90,7 +90,7 @@ export default {
       type: String,
       default: ''
     },
-    value: {
+    modelValue: {
       type: String,
       required: true
     },
