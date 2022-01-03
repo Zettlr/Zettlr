@@ -25,6 +25,8 @@
 - Fixed an error that would prevent a global search if no directory is selected
 - The search now also starts when you press Enter while the restriction input is
   focused
+- Fixed a bug that disabled the table insertion toolbar button in the previous
+  version
 
 ## Under the Hood
 

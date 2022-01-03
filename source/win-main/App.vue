@@ -624,8 +624,7 @@ export default defineComponent({
             table += '\n'
           }
 
-          // This seems hacky, but it's not that bad, I think.
-          (this.$refs.editor as any).editor.codeMirror.replaceSelection(table)
+          (this.$refs.editor as any).replaceSelection(table)
           this.$closePopover()
         })
       } else if (clickedID === 'document-info') {

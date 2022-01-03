@@ -721,9 +721,20 @@ export default {
       }
     },
     executeCommand (cmd) {
+      if (mdEditor === null) {
+        return
+      }
+
       // Executes a markdown command on the editor instance
       mdEditor.runCommand(cmd)
       mdEditor.focus()
+    },
+    replaceSelection (value) {
+      if (mdEditor === null) {
+        return
+      }
+
+      mdEditor.codeMirror.replaceSelection(value)
     },
     // SEARCH FUNCTIONALITY BLOCK
     searchNext () {
