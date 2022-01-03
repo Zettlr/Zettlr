@@ -27,6 +27,7 @@
   focused
 - Fixed a bug that disabled the table insertion toolbar button in the previous
   version
+- Fixed an issue preventing updates of lists in the preferences
 
 ## Under the Hood
 

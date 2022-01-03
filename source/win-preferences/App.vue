@@ -267,7 +267,13 @@ export default defineComponent({
       } else {
         // By default, we should have the correct value already, we just need to
         // treat (complex) lists as special (not even token inputs).
-        (global as any).config.set(prop, val)
+
+        // NOTE: Due to Vue 3 we MUST deproxy anything here. Since config values
+        // are always either dictionaries, lists, or primitives, we can safely
+        // do it the brute-force-way and stringify it. This will basically read
+        // out every value from the proxy and store it in vanilla objects/arrays
+        // again.
+        (global as any).config.set(prop, JSON.parse(JSON.stringify(val)))
       }
     },
     /**
