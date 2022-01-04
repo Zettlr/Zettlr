@@ -67,7 +67,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -91,10 +91,21 @@ import objectToArray from '@common/util/object-to-array'
 import { trans } from '@common/i18n-renderer'
 import extractYamlFrontmatter from '@common/util/extract-yaml-frontmatter'
 import YAML from 'yaml'
+import { IpcRenderer } from 'electron'
 
-import { nextTick } from 'vue'
+import { nextTick, defineComponent } from 'vue'
 
-const ipcRenderer = window.ipc
+const ipcRenderer: IpcRenderer = (window as any).ipc
+
+interface DocumentWrapper {
+  path: string
+  dir: string
+  mode: string
+  cmDoc: CodeMirror.Doc
+  modified: boolean
+  lastWordCount: number
+  saveTimeout: any
+}
 
 /**
  * We must define the Markdown instance outside of Vue, since the proxy-fication
@@ -102,7 +113,7 @@ const ipcRenderer = window.ipc
  *
  * @var {MarkdownEditor|null}
  */
-let mdEditor = null
+let mdEditor: MarkdownEditor|null = null
 
 /**
  * Contains all loaded and currently open documents. Needs to be defined outside
@@ -110,17 +121,17 @@ let mdEditor = null
  *
  * @var {any[]}
  */
-const openDocuments = []
+const openDocuments: DocumentWrapper[] = []
 
 /**
  * Contains the currently displayed activeDocument; needs to be defined outside
  * due to the same reasons as mdEditor and openDocuments.
  *
- * @var {null|any}
+ * @var {null|DocumentWrapper}
  */
-let activeDocument = null
+let activeDocument: DocumentWrapper|null = null
 
-export default {
+export default defineComponent({
   name: 'MainEditor',
   components: {
   },
@@ -136,59 +147,56 @@ export default {
   },
   data: function () {
     return {
-      // openDocuments: [], // Contains all loaded documents if applicable
-      currentlyFetchingFiles: [], // Contains the paths of files that are right now being fetched
+      currentlyFetchingFiles: [] as string[], // Contains the paths of files that are right now being fetched
       // Should we perform a regexp search?
       regexpSearch: false,
       showSearch: false, // Set to true to show the search box
       query: '', // Models the search value
       replaceString: '', // Models the replace string
-      findTimeout: undefined, // Holds a timeout so that not every single keypress results in a searchNext
-      docInfoTimeout: undefined, // Holds a timeout to not update the docInfo every millisecond
-      // END: Search options
-      // activeDocument: null, // Almost like activeFile, only with additional info
-      anchor: undefined
+      findTimeout: undefined as any, // Holds a timeout so that not every single keypress results in a searchNext
+      docInfoTimeout: undefined as any, // Holds a timeout to not update the docInfo every millisecond
+      anchor: undefined as undefined|CodeMirror.Position
     }
   },
   computed: {
-    findPlaceholder: function () {
+    findPlaceholder: function (): string {
       return trans('dialog.find.find_placeholder')
     },
-    replacePlaceholder: function () {
+    replacePlaceholder: function (): string {
       return trans('dialog.find.replace_placeholder')
     },
-    replaceNextLabel: function () {
+    replaceNextLabel: function (): string {
       return trans('dialog.find.replace_next_label')
     },
-    replaceAllLabel: function () {
+    replaceAllLabel: function (): string {
       return trans('dialog.find.replace_all_label')
     },
-    closeLabel: function () {
+    closeLabel: function (): string {
       return trans('dialog.find.close_label')
     },
-    regexLabel: function () {
+    regexLabel: function (): string {
       return trans('dialog.find.regex_label')
     },
-    activeFile: function () {
+    activeFile: function (): any {
       return this.$store.state.activeFile
     },
-    isMarkdown: function () {
+    isMarkdown: function (): boolean {
       if (this.activeFile === null) {
         return true // By default, assume Markdown
       }
 
       return this.resolveMode(this.activeFile.ext) === 'multiplex'
     },
-    openFiles: function () {
+    openFiles: function (): any[] {
       return this.$store.state.openFiles
     },
-    fontSize: function () {
+    fontSize: function (): number {
       return this.$store.state.config['editor.fontSize']
     },
-    shouldCountChars: function () {
+    shouldCountChars: function (): boolean {
       return this.$store.state.config['editor.countChars']
     },
-    editorConfiguration: function () {
+    editorConfiguration: function (): any {
       // We update everything, because not so many values are actually updated
       // right after setting the new configurations. Plus, the user won't update
       // everything all the time, but rather do one initial configuration, so
@@ -242,7 +250,7 @@ export default {
         }
       }
     },
-    autoSave: function () {
+    autoSave: function (): any {
       return this.$store.state.config['editor.autoSave']
     },
     tagDatabase: function () {
@@ -269,12 +277,16 @@ export default {
   },
   watch: {
     cslItems: function () {
+      if (mdEditor === null) {
+        return
+      }
+
       // We have received new items, so we should update them in the editor.
       const items = this.cslItems.map(item => {
         // Get a rudimentary author list
         let authors = ''
         if (item.author !== undefined) {
-          authors = item.author.map(author => {
+          authors = item.author.map((author: any) => {
             if (author.family !== undefined) {
               return author.family
             } else if (author.literal !== undefined) {
@@ -282,7 +294,7 @@ export default {
             } else {
               return undefined
             }
-          }).filter(elem => elem !== undefined).join(', ')
+          }).filter((elem: any) => elem !== undefined).join(', ')
         }
 
         let title = ''
@@ -301,18 +313,34 @@ export default {
       mdEditor.setCompletionDatabase('citekeys', items)
     },
     readabilityMode: function () {
+      if (mdEditor === null) {
+        return
+      }
+
       mdEditor.readabilityMode = this.readabilityMode
     },
     distractionFree: function () {
+      if (mdEditor === null) {
+        return
+      }
+
       mdEditor.distractionFree = this.distractionFree
     },
     editorConfiguration: function () {
+      if (mdEditor === null) {
+        return
+      }
+
       // Update the editor configuration, if anything changes.
       mdEditor.setOptions(this.editorConfiguration)
     },
     tagDatabase: function () {
+      if (mdEditor === null) {
+        return
+      }
+
       // We must deproxy the tag database
-      const unproxy = {}
+      const unproxy: any = {}
       for (const tag in this.tagDatabase) {
         unproxy[tag] = {
           text: this.tagDatabase[tag].text,
@@ -360,7 +388,7 @@ export default {
         ipcRenderer.invoke('application', { command: 'get-file-contents', payload: this.activeFile.path })
           .then((descriptorWithContent) => {
             const mode = this.resolveMode(this.activeFile.ext)
-            const newDoc = {
+            const newDoc: DocumentWrapper = {
               path: descriptorWithContent.path,
               dir: descriptorWithContent.dir, // Save the dir to distinguish memory-files from others
               mode: mode, // Save the mode for later swaps
@@ -414,7 +442,7 @@ export default {
             this.currentlyFetchingFiles.splice(idx, 1)
             // Let's check whether the active file has in the meantime changed
             // If it has, don't overwrite the current one
-            if (this.activeFile.path === descriptorWithContent.path) {
+            if (this.activeFile.path === descriptorWithContent.path && mdEditor !== null) {
               mdEditor.setOptions({
                 zettlr: { markdownImageBasePath: this.activeFile.dir }
               })
@@ -473,23 +501,29 @@ export default {
         // the query wasnt' empty)
         nextTick()
           .then(() => {
-            this.$refs['search-input'].focus()
+            (this.$refs['search-input'] as HTMLInputElement).focus()
             this.searchNext()
           })
           .catch(err => console.error(err))
       } else if (newValue === false) {
         // Always "stopSearch" if the input is not shown, since this will clear
         // out, e.g., the matches on the scrollbar
-        mdEditor.stopSearch()
+        if (mdEditor !== null) {
+          mdEditor.stopSearch()
+        }
       }
     },
     shouldCountChars: function (newVal, oldVal) {
+      if (mdEditor === null) {
+        return
+      }
+
       mdEditor.countChars = newVal
     }
   },
   mounted: function () {
     // As soon as the component is mounted, initiate the editor
-    mdEditor = new MarkdownEditor(this.$refs.textarea, this.editorConfiguration)
+    mdEditor = new MarkdownEditor(this.$refs.textarea as HTMLTextAreaElement, this.editorConfiguration)
 
     // We have to set this to the appropriate value after mount, afterwards it
     // will be updated as appropriate.
@@ -497,6 +531,10 @@ export default {
 
     // Update the document info on corresponding events
     mdEditor.on('change', (changeObj) => {
+      if (activeDocument === null || mdEditor === null) {
+        return
+      }
+
       // Announce that the file is modified (if applicable) to the whole application
       this.$store.commit('announceModifiedFile', {
         filePath: activeDocument.path,
@@ -520,24 +558,24 @@ export default {
       })
         .catch(err => console.error(err))
 
-      if (global.config.get('zkn.autoSearch') === true) {
-        this.$root.startGlobalSearch(linkContents)
+      if (this.$store.state.config['zkn.autoSearch'] === true) {
+        (this.$root as any).startGlobalSearch(linkContents)
       }
     })
 
     mdEditor.on('zettelkasten-tag', (tag) => {
-      this.$root.startGlobalSearch(tag)
+      (this.$root as any).startGlobalSearch(tag)
     })
 
     // Listen to shortcuts from the main process
     ipcRenderer.on('shortcut', (event, shortcut) => {
       if (shortcut === 'save-file' && activeDocument !== null) {
         this.save(activeDocument).catch(e => console.error(e))
-      } else if (shortcut === 'copy-as-html') {
+      } else if (shortcut === 'copy-as-html' && mdEditor !== null) {
         mdEditor.copyAsHTML()
-      } else if (shortcut === 'paste-as-plain') {
+      } else if (shortcut === 'paste-as-plain' && mdEditor !== null) {
         mdEditor.pasteAsPlainText()
-      } else if (shortcut === 'toggle-typewriter-mode') {
+      } else if (shortcut === 'toggle-typewriter-mode' && mdEditor !== null) {
         mdEditor.hasTypewriterMode = mdEditor.hasTypewriterMode === false
       } else if (shortcut === 'search') {
         this.showSearch = this.showSearch === false
@@ -553,7 +591,7 @@ export default {
       const doc = openDocuments.find(item => item.path === fileDescriptor.path)
 
       if (doc !== undefined) {
-        const { top } = mdEditor.codeMirror.getScrollInfo()
+        const { top } = (mdEditor as MarkdownEditor).codeMirror.getScrollInfo()
         const cur = Object.assign({}, doc.cmDoc.getCursor())
         doc.cmDoc.setValue(fileDescriptor.content)
         nextTick()
@@ -562,7 +600,7 @@ export default {
             // then immediately revert that status again.
             doc.cmDoc.markClean()
             doc.cmDoc.setCursor(cur)
-            mdEditor.codeMirror.getWrapperElement().scrollTop = top
+            ;(mdEditor as MarkdownEditor).codeMirror.getWrapperElement().scrollTop = top
             this.$store.commit('announceModifiedFile', {
               filePath: doc.path,
               isClean: doc.cmDoc.isClean()
@@ -572,7 +610,7 @@ export default {
       }
     })
 
-    ipcRenderer.on('save-documents', async (event, pathList = []) => {
+    ipcRenderer.on('save-documents', (event, pathList = []) => {
       // If this event gets emitted, the main process wants
       // some open and modified documents to be saved.
       if (pathList.length === 0) {
@@ -582,7 +620,7 @@ export default {
       const docsToSave = openDocuments.filter(doc => pathList.includes(doc.path))
 
       for (const doc of docsToSave) {
-        await this.save(doc)
+        this.save(doc).catch((e: any) => console.error(e))
       }
     })
 
@@ -590,10 +628,12 @@ export default {
     // editor. This will keep the cursor correct when the SplitViews are either
     // opened/closed or resized.
     const obs = new ResizeObserver(entries => {
-      mdEditor.codeMirror.refresh()
+      if (mdEditor !== null) {
+        mdEditor.codeMirror.refresh()
+      }
     })
 
-    obs.observe(this.$refs.editor)
+    obs.observe(this.$refs.editor as any)
   },
   methods: {
     maybeUpdateActiveDocumentInfo () {
@@ -602,11 +642,13 @@ export default {
       }
 
       this.docInfoTimeout = setTimeout(() => {
-        this.$store.commit('activeDocumentInfo', mdEditor.documentInfo)
         this.docInfoTimeout = undefined
+        if (mdEditor !== null) {
+          this.$store.commit('activeDocumentInfo', mdEditor.documentInfo)
+        }
       }, 1000)
     },
-    jtl (lineNumber) {
+    jtl (lineNumber: number) {
       if (mdEditor !== null) {
         mdEditor.jtl(lineNumber)
       }
@@ -618,7 +660,7 @@ export default {
      *
      * @return  {string}       The corresponding CodeMirror mode. Defaults to multiplex
      */
-    resolveMode (ext) {
+    resolveMode (ext: string) {
       switch (ext) {
         case '.tex':
           return 'stex'
@@ -631,7 +673,7 @@ export default {
           return 'multiplex'
       }
     },
-    async save (doc) {
+    async save (doc: DocumentWrapper) {
       if (doc.cmDoc.isClean() === true) {
         return // Nothing to save
       }
@@ -671,6 +713,10 @@ export default {
       this.updateFileDatabase()
     },
     updateCitationKeys: function () {
+      if (mdEditor === null) {
+        return
+      }
+
       const value = mdEditor.value
 
       const citations = extractCitations(value)
@@ -681,7 +727,11 @@ export default {
       this.$store.commit('updateCitationKeys', keys)
     },
     updateFileDatabase () {
-      const fileDatabase = {}
+      if (mdEditor === null) {
+        return
+      }
+
+      const fileDatabase: any = {}
 
       for (const file of this.fsalFiles) {
         const fname = file.name.substr(0, file.name.lastIndexOf('.'))
@@ -720,7 +770,7 @@ export default {
         this.query = `/${this.query}/`
       }
     },
-    executeCommand (cmd) {
+    executeCommand (cmd: string) {
       if (mdEditor === null) {
         return
       }
@@ -729,7 +779,7 @@ export default {
       mdEditor.runCommand(cmd)
       mdEditor.focus()
     },
-    replaceSelection (value) {
+    replaceSelection (value: string) {
       if (mdEditor === null) {
         return
       }
@@ -745,18 +795,38 @@ export default {
         this.findTimeout = undefined
       }
 
+      if (mdEditor === null) {
+        return
+      }
+
       mdEditor.searchNext(this.query)
     },
     searchPrevious () {
+      if (mdEditor === null) {
+        return
+      }
+
       mdEditor.searchPrevious(this.query)
     },
     replaceNext () {
+      if (mdEditor === null) {
+        return
+      }
+
       mdEditor.replaceNext(this.query, this.replaceString)
     },
     replacePrevious () {
+      if (mdEditor === null) {
+        return
+      }
+
       mdEditor.replacePrevious(this.query, this.replaceString)
     },
     replaceAll () {
+      if (mdEditor === null) {
+        return
+      }
+
       mdEditor.replaceAll(this.query, this.replaceString)
     },
     /**
@@ -765,12 +835,12 @@ export default {
      *
      * @param   {WheelEvent}  event  The mousewheel event
      */
-    onEditorScroll (event) {
+    onEditorScroll (event: WheelEvent) {
       if (event.target !== this.$refs.editor) {
         return // Only handle if the event's target is the editor itself
       }
 
-      const scroller = this.$refs.editor.querySelector('.CodeMirror-scroll')
+      const scroller = (this.$refs.editor as HTMLElement).querySelector('.CodeMirror-scroll')
 
       if (scroller !== null) {
         scroller.scrollTop += event.deltaY
@@ -781,9 +851,9 @@ export default {
      *
      * @param   {MouseEvent}  event  The mouse event
      */
-    editorMousedown (event) {
+    editorMousedown (event: MouseEvent) {
       // start selecting lines only if we are on the left margin and the left mouse button is pressed
-      if (event.target !== this.$refs.editor || event.button !== 0) {
+      if (event.target !== this.$refs.editor || event.button !== 0 || mdEditor === null) {
         return
       }
 
@@ -792,8 +862,8 @@ export default {
       mdEditor.codeMirror.setSelection(this.anchor)
     },
 
-    editorMousemove (event) {
-      if (this.anchor === undefined) {
+    editorMousemove (event: MouseEvent) {
+      if (this.anchor === undefined || mdEditor === null) {
         return
       }
       // get the point where the mouse has moved
@@ -807,8 +877,8 @@ export default {
      *
      * @param   {MouseEvent}  event  The mouse event
      */
-    editorMouseup (event) {
-      if (this.anchor === undefined) {
+    editorMouseup (event: MouseEvent) {
+      if (this.anchor === undefined || mdEditor === null) {
         // This event gets also fired when someone, e.g., wants to edit an image
         // caption, so we must explicitly check if we are currently in a left-
         // side selection event, and if we aren't, don't do anything.
@@ -820,7 +890,11 @@ export default {
       // Also, make sure the editor is focused.
       mdEditor.codeMirror.focus()
     },
-    addKeywordsToFile (keywords) {
+    addKeywordsToFile (keywords: string[]) {
+      if (mdEditor === null || activeDocument === null) {
+        return
+      }
+
       // Split the contents of the editor into frontmatter and contents, then
       // add the keywords to the frontmatter, slice everything back together
       // and then overwrite the editor's contents.
@@ -853,7 +927,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style lang="less">
