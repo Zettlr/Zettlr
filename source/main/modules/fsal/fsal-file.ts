@@ -14,18 +14,19 @@
 
 import { promises as fs } from 'fs'
 import path from 'path'
-import hash from '../../../common/util/hash'
+import hash from '@common/util/hash'
 import searchFile from './util/search-file'
-import countWords from '../../../common/util/count-words'
-import extractYamlFrontmatter from '../../../common/util/extract-yaml-frontmatter'
-import { getIDRE, getCodeBlockRE, getZknTagRE } from '../../../common/regular-expressions'
+import countWords from '@common/util/count-words'
+import extractYamlFrontmatter from '@common/util/extract-yaml-frontmatter'
+import { getIDRE, getCodeBlockRE } from '@common/regular-expressions'
 import { shell } from 'electron'
-import safeAssign from '../../../common/util/safe-assign'
+import safeAssign from '@common/util/safe-assign'
 // Import the interfaces that we need
 import { DirDescriptor, MDFileDescriptor, MDFileMeta } from './types'
 import FSALCache from './fsal-cache'
 import extractBOM from './util/extract-bom'
-import shouldMatchTag from '../../../common/util/should-match-tag'
+import extractTags from './util/extract-tags'
+import extractLinks from './util/extract-links'
 
 // Here are all supported variables for Pandoc:
 // https://pandoc.org/MANUAL.html#variables
@@ -39,12 +40,6 @@ const FRONTMATTER_VARS = [
   'tags',
   'lang',
   'bibliography'
-]
-
-// Enum of all YAML frontmatter properties that can contain tags
-const KEYWORD_PROPERTIES = [
-  'keywords',
-  'tags'
 ]
 
 /**
@@ -95,7 +90,6 @@ async function updateFileMetadata (fileObject: MDFileDescriptor): Promise<void> 
 function parseFileContents (file: MDFileDescriptor, content: string): void {
   // Prepare some necessary regular expressions and variables
   const idRE = getIDRE()
-  const tagRE = getZknTagRE(true)
   const codeBlockRE = getCodeBlockRE(true)
   const inlineCodeRE = /`[^`]+`/g
   const h1HeadingRE = /^#{1}\s(.+)$/m
@@ -114,7 +108,7 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
 
   // Then prepare the file contents as we need it for most of the function:
   // Strip a potential YAML frontmatter, code, and any HTML comments.
-  const extracted = extractYamlFrontmatter(content, file.linefeed)
+  const extracted = extractYamlFrontmatter(content)
   const frontmatter = extracted.frontmatter
 
   const contentWithoutYAML = extracted.content
@@ -126,7 +120,8 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
   // file.
   file.id = ''
   file.firstHeading = null
-  file.tags = []
+  file.tags = extractTags(content)
+  file.links = extractLinks(content, linkStart, linkEnd)
   file.frontmatter = null
 
   // Search for the file's ID first in the file name, and then in the full contents.
@@ -151,21 +146,9 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
   file.wordCount = countWords(plainMarkdown)
   file.charCount = countWords(plainMarkdown, true)
 
-  const h1Match = h1HeadingRE.exec(plainMarkdown)
+  const h1Match = h1HeadingRE.exec(contentWithoutYAML)
   if (h1Match !== null) {
     file.firstHeading = h1Match[1]
-  }
-
-  while ((match = tagRE.exec(plainMarkdown)) != null) {
-    if (!shouldMatchTag(match[0])) {
-      continue
-    }
-
-    const tag = match[1].replace(/#/g, '')
-
-    if (tag.length > 0) {
-      file.tags.push(match[1].toLowerCase())
-    }
   }
 
   if (frontmatter !== null) {
@@ -176,35 +159,7 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
         file.frontmatter[key] = value
       }
     }
-
-    // Merge possible keywords from the frontmatter, e.g. from the "keywords" or
-    // the "tags" property.
-    for (const prop of KEYWORD_PROPERTIES) {
-      if (file.frontmatter[prop] != null) {
-        // The user can just write "keywords: something", in which case it won't be
-        // an array, but a simple string (or even a number <.<). I am beginning to
-        // understand why programmers despise the YAML-format.
-        if (!Array.isArray(file.frontmatter[prop])) {
-          const keys = file.frontmatter[prop].split(',')
-          if (keys.length > 1) {
-            // The user decided to split the tags by comma
-            file.frontmatter[prop] = keys.map((tag: string) => tag.trim())
-          } else {
-            file.frontmatter[prop] = [file.frontmatter[prop]]
-          }
-        }
-
-        // If the user decides to use just numbers for the keywords (e.g. #1997),
-        // the YAML parser will obviously cast those to numbers, but we don't want
-        // this, so forcefully cast everything to string (see issue #1433).
-        const sanitizedKeywords = file.frontmatter[prop].map((tag: any) => String(tag).toString())
-        file.tags = file.tags.concat(sanitizedKeywords)
-      }
-    }
   } // END: We got a frontmatter
-
-  // At the end, remove any duplicates in the tags array.
-  file.tags = [...new Set(file.tags)]
 }
 
 /**
@@ -229,6 +184,7 @@ export function metadata (fileObject: MDFileDescriptor): MDFileMeta {
     size: fileObject.size,
     id: fileObject.id,
     tags: fileObject.tags,
+    links: fileObject.links,
     type: fileObject.type,
     wordCount: fileObject.wordCount,
     charCount: fileObject.charCount,
@@ -264,6 +220,7 @@ export async function parse (filePath: string, cache: FSALCache|null, parent: Di
     size: 0,
     id: '', // The ID, if there is one inside the file.
     tags: [], // All tags that are to be found inside the file's contents.
+    links: [], // Any outlinks
     bom: '', // Default: No BOM
     type: 'file',
     wordCount: 0,
@@ -319,6 +276,7 @@ export async function parse (filePath: string, cache: FSALCache|null, parent: Di
 
   // Finally, report the tags
   global.tags.report(file.tags, file.path)
+  global.links.report(file.path, file.links, file.id)
 
   return file
 }
@@ -389,8 +347,10 @@ export async function save (fileObject: MDFileDescriptor, content: string, cache
   await updateFileMetadata(fileObject)
   // Make sure to keep the file object itself as well as the tags updated
   global.tags.remove(fileObject.tags, fileObject.path)
+  global.links.remove(fileObject.path, fileObject.id)
   parseFileContents(fileObject, content)
   global.tags.report(fileObject.tags, fileObject.path)
+  global.links.report(fileObject.path, fileObject.links, fileObject.id)
   fileObject.modified = false // Always reset the modification flag.
   if (cache !== null) {
     cacheFile(fileObject, cache)
@@ -468,8 +428,10 @@ export async function reparseChangedFile (fileObject: MDFileDescriptor, cache: F
   await updateFileMetadata(fileObject)
   // Make sure to keep the file object itself as well as the tags updated
   global.tags.remove(fileObject.tags, fileObject.path)
+  global.links.remove(fileObject.path, fileObject.id)
   parseFileContents(fileObject, contents)
   global.tags.report(fileObject.tags, fileObject.path)
+  global.links.report(fileObject.path, fileObject.links, fileObject.id)
   fileObject.modified = false // Always reset the modification flag.
   if (cache !== null) {
     cacheFile(fileObject, cache)

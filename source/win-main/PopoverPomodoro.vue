@@ -46,7 +46,7 @@
         custom elements yet. See: https://github.com/vuejs/vue/issues/6914
       -->
       <SliderControl
-        v-bind:value="volume"
+        v-bind:model-value="volume"
         v-bind:label="'Volume'"
         v-bind:min="0"
         v-bind:max="100"
@@ -75,10 +75,10 @@
  * END HEADER
  */
 
-import NumberControl from '../common/vue/form/elements/Number'
-import SelectControl from '../common/vue/form/elements/Select'
-import SliderControl from '../common/vue/form/elements/Slider'
-import { trans } from '../common/i18n-renderer'
+import NumberControl from '@common/vue/form/elements/Number'
+import SelectControl from '@common/vue/form/elements/Select'
+import SliderControl from '@common/vue/form/elements/Slider'
+import { trans } from '@common/i18n-renderer'
 
 export default {
   name: 'PopoverExport',

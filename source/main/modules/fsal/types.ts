@@ -30,6 +30,17 @@ export interface WatchdogEvent {
   path: string
 }
 
+export interface ProjectSettings {
+  title: string
+  formats: string[]
+  filters: string[]
+  cslStyle: string
+  templates: {
+    tex: string
+    html: string
+  }
+}
+
 /**
  * An interface containing meta information all
  * descriptors should provide.
@@ -50,7 +61,11 @@ interface FSMetaInfo {
  */
 export interface DirDescriptor extends FSMetaInfo {
   parent: DirDescriptor|null
-  _settings: any
+  _settings: {
+    sorting: 'name-up'|'name-down'|'time-up'|'time-down'
+    icon: string
+    project: ProjectSettings|null
+  }
   type: 'directory'
   children: Array<MDFileDescriptor|DirDescriptor|CodeFileDescriptor>
   attachments: OtherFileDescriptor[]
@@ -66,6 +81,7 @@ export interface MDFileDescriptor extends FSMetaInfo {
   id: string
   type: 'file'
   tags: string[]
+  links: string[] // Any outlinks declared in the file
   bom: string // An optional BOM
   wordCount: number
   charCount: number
@@ -122,6 +138,7 @@ export interface MDFileMeta extends FSMetaInfo {
   id: string
   type: 'file'
   tags: string[]
+  links: string[]
   wordCount: number
   charCount: number
   target: any // TODO

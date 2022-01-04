@@ -12,14 +12,14 @@
  * END HEADER
  */
 
-const { getCodeBlockRE } = require('../../../regular-expressions')
+const { getCodeBlockRE } = require('@common/regular-expressions')
 // We need two code block REs: First the line-wise, and then the full one.
 const codeBlockRE = getCodeBlockRE(false)
 const codeBlockMultiline = getCodeBlockRE(true)
 const CodeMirror = require('codemirror')
 const { DateTime } = require('luxon')
 const uuid = require('uuid').v4
-const generateId = require('../../../util/generate-id').default
+const generateId = require('@common/util/generate-id').default
 
 let autocompleteStart = null
 let currentDatabase = null
@@ -163,6 +163,11 @@ function collectHeadingIDs (cm) {
 }
 
 module.exports = {
+  /**
+   * Hooks autocomplete onto the CodeMirror editor
+   *
+   * @param   {CodeMirror.Editor}  cm  The CM instance
+   */
   'autocompleteHook': (cm) => {
     // Listen to change events
     cm.on('change', (cm, changeObj) => {
@@ -201,11 +206,6 @@ module.exports = {
       }) // END showHint
     })
 
-    // endCompletion
-
-    // The "endCompletion" event (currently undocumented) is only fired on
-    // the CodeMirror instance, and _not_ the completion object. Hence, we
-    // define it here.
     cm.on('endCompletion', () => {
       autocompleteStart = null
       currentDatabase = null
@@ -362,7 +362,9 @@ function getHints (term) {
     return 0
   })
 
-  return results
+  // Only return the top 50 matches (any more won't be visible in the dropdown either way.)
+  // This is in response to #2678, since 14,000 entries might take a while to render.
+  return results.slice(0, 50)
 }
 
 /**
@@ -374,8 +376,8 @@ function getHints (term) {
  * @return  {any}              The completion object
  */
 function hintFunction (cm, opt) {
-  let term = cm.getRange(autocompleteStart, cm.getCursor()).toLowerCase()
-  let completionObject = {
+  const term = cm.getRange(autocompleteStart, cm.getCursor()).toLowerCase()
+  const completionObject = {
     list: getHints(term),
     from: autocompleteStart,
     to: cm.getCursor()
@@ -449,51 +451,27 @@ function hintFunction (cm, opt) {
       }
     } else if (currentDatabase === 'citekeys') {
       const { citeStyle } = cm.getOption('zettlr')
-      if (citeStyle === 'regular') {
-        // Here, what we will add are square brackets, if these are not yet
-        // present around the citekey. We know that the cursor is now behind the
-        // inserted key. It's easiest to perform a forward search (as most
-        // citations will be written at the end of lines).
-        let notClosed = true
-        let notOpened = true
-        const line = cm.getLine(autocompleteStart.line)
-
-        const firstCh = autocompleteStart.ch + completion.text.length
-        for (let i = firstCh; i < line.length; i++) {
-          if (line[i] === ']') {
-            // If we find an opening bracket before a closing one, we are done.
-            notClosed = false
-            break
-          } else if (line[i] === '[') {
-            break // It appears to be closed
-          }
-        }
-        // We have one half of a square-bracket citation. We need to make sure.
-        for (let i = autocompleteStart.ch; i >= 0; i--) {
-          if (line[i] === '[') {
-            // If we find a closing bracket, we definitely need to surround.
-            notOpened = false
-            break
-          } else if (line[i] === ']') {
-            break // It appears to be opened
-          }
-        }
-
-        if (notOpened && notClosed) {
-          // We need to add square brackets
-          const lineNo = autocompleteStart.line
-          const fromCh = autocompleteStart.ch - 1
-          const toCh = autocompleteStart.ch + completion.text.length
-          cm.setSelection(
-            { line: lineNo, ch: fromCh },
-            { line: lineNo, ch: toCh },
-            { scroll: false }
-          )
-          cm.replaceSelection(`[@${completion.text}]`)
-          // Now back up one character to set the cursor inside the brackets
-          cm.setCursor({ line: lineNo, ch: toCh + 1 })
-        }
-      } else if (citeStyle === 'in-text-suffix') {
+      const line = cm.getLine(autocompleteStart.line)
+      const fromCh = autocompleteStart.ch
+      const toCh = autocompleteStart.ch + completion.text.length
+      const afterOpen = line.lastIndexOf('[', fromCh) > line.lastIndexOf(']', fromCh)
+      // Either no open and 1 close bracket or a close bracket after an open bracket
+      const beforeClose = (line.indexOf('[', toCh) < 0 && line.indexOf(']', toCh) >= 0) || (line.indexOf(']', toCh) < line.indexOf('[', toCh))
+      const noBrackets = !afterOpen && !beforeClose
+      if (citeStyle === 'regular' && noBrackets) {
+        // Add square brackets around
+        const lineNo = autocompleteStart.line
+        const fromCh = autocompleteStart.ch - 1
+        const toCh = autocompleteStart.ch + completion.text.length
+        cm.setSelection(
+          { line: lineNo, ch: fromCh },
+          { line: lineNo, ch: toCh },
+          { scroll: false }
+        )
+        cm.replaceSelection(`[@${completion.text}]`)
+        // Now back up one character to set the cursor inside the brackets
+        cm.setCursor({ line: lineNo, ch: toCh + 1 })
+      } else if (citeStyle === 'in-text-suffix' && noBrackets) {
         // We should add square brackets after the completion text
         cm.replaceSelection(' []')
         cm.setCursor({
@@ -505,22 +483,35 @@ function hintFunction (cm, opt) {
       // For this database, we must remove the leading colon and also fiddle
       // with the text. So first, let's select everything.
       const insertedLines = completion.text.split('\n')
-      cm.setSelection(
-        { line: autocompleteStart.line, ch: autocompleteStart.ch - 1 },
-        { line: autocompleteStart.line + insertedLines.length - 1, ch: insertedLines[insertedLines.length - 1].length },
-        { scroll: false }
-      )
+      const from = { line: autocompleteStart.line, ch: autocompleteStart.ch - 1 }
+      const to = { line: autocompleteStart.line + insertedLines.length - 1, ch: insertedLines[insertedLines.length - 1].length }
+      // If insertedLines is 1, we have to account for the autocompleteStart.ch
+      if (insertedLines.length === 1) {
+        to.ch += autocompleteStart.ch
+      }
 
       // Then, insert the text, but with all variables replaced and only the
       // tabstops remaining.
       const actualTextToInsert = replaceSnippetVariables(completion.text)
       const actualInsertedLines = actualTextToInsert.split('\n').length
-      cm.replaceSelection(actualTextToInsert)
+      cm.replaceRange(actualTextToInsert, from, to)
+
+      // Now adapt the to to account for added newlines during replacement
+      to.line += actualInsertedLines - insertedLines.length
+
+      // If we are still dealing with just a single line, adapt `to.ch`
+      if (from.line === to.line) {
+        to.ch += actualTextToInsert.split('\n')[actualInsertedLines - 1].length - insertedLines[0].length
+        // Also substract the colon from ch, since that has been replaced above
+        to.ch--
+      } else {
+        to.ch = actualTextToInsert.split('\n')[actualInsertedLines - 1].length
+      }
 
       // Now, we need to mark every tabstop within this section of text and
       // store those text markers so that we can find them again by tabbing
       // through them.
-      currentTabStops = getTabMarkers(cm, autocompleteStart.line, autocompleteStart.line + actualInsertedLines)
+      currentTabStops = getTabMarkers(cm, from, to)
 
       // Now activate our special snippets keymap which will ensure the user can
       // cycle through all placeholders which we have identified.
@@ -529,8 +520,6 @@ function hintFunction (cm, opt) {
       // Plus, move to the first tabstop already so the user can start immediately.
       nextTabstop(cm)
     }
-    autocompleteStart = null
-    currentDatabase = null // Reset the database used for the hints.
   })
 
   // If the hint is being closed, always reset the variables.
@@ -549,17 +538,24 @@ function hintFunction (cm, opt) {
  * Creates markers within the CodeMirror instance corresponding to the tabstops
  * and returns the list.
  *
- * @param   {CodeMirror.Editor}  cm    The Editor instance
- * @param   {number}             from  The line from which to begin analysing the text
- * @param   {number}             to    The final line (exclusive) until which to analyse.
+ * @param   {CodeMirror.Editor}    cm    The Editor instance
+ * @param   {CodeMirror.Position}  from  The line from which to begin analysing the text
+ * @param   {CodeMirror.Position}  to    The final line (exclusive) until which to analyse.
  *
  * @return  {TextMarkers[]}            An array of created text markers
  */
 function getTabMarkers (cm, from, to) {
   let tabStops = []
-  for (let i = from; i < to; i++) {
+  for (let i = from.line; i <= to.line; i++) {
     let line = cm.getLine(i)
     let match = null
+
+    // Account for when some snippet has been inserted in between some text
+    if (i === from.line && from.ch > 0) {
+      line = line.substr(from.ch)
+    } else if (i === to.line && to.ch < line.length) {
+      line = line.substr(0, to.ch)
+    }
 
     // NOTE: The negative lookbehind
     const varRE = /(?<!\\)\$(\d+)|(?<!\\)\$\{(\d+):(.+?)\}/g
@@ -569,10 +565,10 @@ function getTabMarkers (cm, from, to) {
       const index = parseInt(match[1] || match[2], 10)
       const replaceWith = match[3]
 
-      const from = { line: i, ch: ch }
-      const to = { line: i, ch: ch + match[0].length }
-      cm.setSelection(from, to)
-      cm.replaceSelection((replaceWith !== undefined) ? replaceWith : '')
+      const localFrom = { line: i, ch: ch }
+      const localTo = { line: i, ch: ch + match[0].length }
+      cm.replaceRange((replaceWith !== undefined) ? replaceWith : '', localFrom, localTo)
+
       // After the replacement, we need to "re-get" the line because it has
       // changed now and otherwise the regexp will get confused.
       varRE.lastIndex = ch
@@ -582,8 +578,8 @@ function getTabMarkers (cm, from, to) {
         // In this case, we must replace the marker with the default text
         // and create a TextMarker.
         const marker = cm.markText(
-          from,
-          { line: from.line, ch: from.ch + replaceWith.length },
+          localFrom,
+          { line: localFrom.line, ch: localFrom.ch + replaceWith.length },
           { className: 'tabstop' }
         )
         tabStops.push({ index: index, marker: marker })
@@ -593,7 +589,7 @@ function getTabMarkers (cm, from, to) {
         const elem = document.createElement('span')
         elem.classList.add('tabstop')
         elem.textContent = index
-        const marker = cm.setBookmark(from, { widget: elem })
+        const marker = cm.setBookmark(localFrom, { widget: elem })
         tabStops.push({ index: index, marker: marker })
       }
     }
@@ -622,7 +618,7 @@ function getTabMarkers (cm, from, to) {
   // marker remains.
   tabStops.sort((a, b) => { return a.index - b.index })
   // Now put the 0 to the top (if there is a zero)
-  if (tabStops[0].index === 0) {
+  if (tabStops.length > 0 && tabStops[0].index === 0) {
     tabStops.push(tabStops.shift())
   } else {
     // If there is no zero, we must make sure to add one "pseudo-$0" after the
@@ -630,15 +626,11 @@ function getTabMarkers (cm, from, to) {
     const elem = document.createElement('span')
     elem.classList.add('tabstop')
     elem.textContent = '0'
-    const marker = cm.setBookmark(
-      { line: to - 1, ch: cm.getLine(to - 1).length },
-      { widget: elem }
-    )
+    const marker = cm.setBookmark(to, { widget: elem })
     tabStops.push({ index: 0, markers: [marker] })
   }
 
-  // Make the array marker only
-  return tabStops // .map(elem => elem.marker)
+  return tabStops
 }
 
 /**

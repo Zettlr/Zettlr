@@ -1,18 +1,18 @@
 <template>
   <div
     class="toolbar-search-container"
+    role="search"
     v-on:click="$refs.input.focus()"
   >
-    <clr-icon shape="search"></clr-icon>
+    <clr-icon shape="search" role="presentation"></clr-icon>
     <input
       v-bind:id="`toolbar-${control.id}`"
       ref="input"
       type="search"
-      role="search"
       class="toolbar-search"
       v-bind:placeholder="control.placeholder"
-      v-on:input="$emit('input', $event.target.value)"
-      v-on:keypress.enter="$emit('input', $event.target.value)"
+      v-on:input="$emit('update:modelValue', $event.target.value)"
+      v-on:keypress.enter="$emit('update:modelValue', $event.target.value)"
     >
   </div>
 </template>
@@ -43,6 +43,7 @@ export default {
       default: function () { return {} }
     }
   },
+  emits: ['update:modelValue'],
   created: function () {
     /**
      * Listen to shortcuts from the menu provider

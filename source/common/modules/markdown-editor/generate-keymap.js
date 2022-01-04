@@ -13,6 +13,7 @@
  */
 
 const CodeMirror = require('codemirror')
+const clipboard = window.clipboard
 
 module.exports = function (editor) {
   let homeEndBehaviour = Boolean(global.config.get('editor.homeEndBehaviour'))
@@ -43,6 +44,10 @@ module.exports = function (editor) {
     keymap['Cmd-F'] = false // Disable the internal search
     keymap['Alt-B'] = false // Disable word-backwarding on macOS (handled by Alt+ArrowLeft)
     keymap['Alt-F'] = false // Disable word-forwarding on macOS (handled by Alt+ArrowRight)
+    // Disable the native indentLess and indentMore shortcuts, since we do that
+    // via Tab and Shift-Tab and Cmd-[/Cmd-] are reserved for file back/forward
+    keymap['Cmd-['] = false
+    keymap['Cmd-]'] = false
     keymap['Cmd-Left'] = 'goLineLeftMarkdown'
     keymap['Cmd-Alt-R'] = 'insertFootnote'
     keymap['Cmd-T'] = 'markdownMakeTaskList'
@@ -54,6 +59,21 @@ module.exports = function (editor) {
   } else {
     // Windows/Linux/other shortcuts
     keymap['Ctrl-F'] = false // Disable the internal search
+    // Disable the native indentLess and indentMore shortcuts, since we do that
+    // via Tab and Shift-Tab and Cmd-[/Cmd-] are reserved for file back/forward
+    keymap['Ctrl-['] = false
+    keymap['Ctrl-]'] = false
+    // NOTE: While on macOS, priority is given to the menu bar handlers, on
+    // Windows a paste event with the shift key held will be handled normally
+    // by the editor, which means that it will ALWAYS fire the beforeChange
+    // handler (defined in match-style.js) and only afterwards trigger the
+    // paste-as-plain method on the main editor instance. By re-mapping that key
+    // here, we effectively intercept it and prevent CodeMirror from doing funky
+    // stuff with it.
+    keymap['Shift-Ctrl-V'] = function (cm) {
+      const plainText = clipboard.readText()
+      cm.replaceSelection(plainText)
+    }
     // If homeEndBehaviour is true, use defaults (paragraph start/end), if it's
     // false, use visible lines.
     keymap['Home'] = (homeEndBehaviour) ? 'goLineStart' : 'goLineLeftMarkdown'

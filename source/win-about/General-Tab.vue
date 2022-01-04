@@ -63,7 +63,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -78,9 +78,10 @@
  * END HEADER
  */
 
-import { trans } from '../common/i18n-renderer'
+import { trans } from '@common/i18n-renderer'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   name: 'GeneralTab',
   data: function () {
     return {
@@ -91,13 +92,13 @@ export default {
   },
   computed: {
     version: function () {
-      return global.config.get('version')
+      return (global as any).config.get('version')
     },
     uuid: function () {
-      return global.config.get('uuid')
+      return (global as any).config.get('uuid')
     }
   }
-}
+})
 </script>
 
 <style lang="less">

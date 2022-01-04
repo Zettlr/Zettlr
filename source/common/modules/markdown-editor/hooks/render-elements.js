@@ -43,13 +43,13 @@ module.exports = (cm) => {
 function renderElements (cm) {
   const render = cm.getOption('zettlr').render
   cm.execCommand('markdownRenderMermaid')
-  if (render.tables) cm.execCommand('markdownRenderTables')
-  if (render.iframes) cm.execCommand('markdownRenderIframes')
-  if (render.links) cm.execCommand('markdownRenderLinks')
-  if (render.images) cm.execCommand('markdownRenderImages')
-  if (render.math) cm.execCommand('markdownRenderMath')
-  if (render.citations) cm.execCommand('markdownRenderCitations')
-  if (render.tasks) cm.execCommand('markdownRenderTasks')
-  if (render.headingTags) cm.execCommand('markdownRenderHTags')
-  if (render.wysiwyg) cm.execCommand('markdownWYSIWYG')
+  if (render.tables === true) cm.execCommand('markdownRenderTables')
+  if (render.iframes === true) cm.execCommand('markdownRenderIframes')
+  if (render.links === true) cm.execCommand('markdownRenderLinks')
+  if (render.images === true) cm.execCommand('markdownRenderImages')
+  if (render.math === true) cm.execCommand('markdownRenderMath')
+  if (render.citations === true) cm.execCommand('markdownRenderCitations')
+  if (render.tasks === true) cm.execCommand('markdownRenderTasks')
+  if (render.headingTags === true) cm.execCommand('markdownRenderHTags')
+  if (render.wysiwyg === true) cm.execCommand('markdownWYSIWYG')
 }

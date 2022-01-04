@@ -20,8 +20,10 @@
 // logic, since both represent the same data structures.
 import fileContextMenu from './file-item-context'
 import dirContextMenu from './dir-item-context'
-import PopoverFileProps from './PopoverFileProps'
-import PopoverDirProps from './PopoverDirProps'
+import PopoverFileProps from './PopoverFileProps.vue'
+import PopoverDirProps from './PopoverDirProps.vue'
+
+import { nextTick } from 'vue'
 
 const ipcRenderer = window.ipc
 
@@ -54,7 +56,7 @@ export default {
         return // No need to select
       }
 
-      this.$nextTick(() => {
+      nextTick().then(() => {
         this.$refs['name-editing-input'].focus()
         // Select from the beginning until the last dot
         this.$refs['name-editing-input'].setSelectionRange(
@@ -62,18 +64,8 @@ export default {
           this.$refs['name-editing-input'].value.lastIndexOf('.')
         )
       })
+        .catch(err => console.error(err))
     }
-  },
-  mounted: function () {
-    // As soon as this element is mounted (irrespective of tree/list item),
-    // listen to events that trigger something on this object.
-    ipcRenderer.on('shortcut', (event, command) => {
-      if (command === 'rename-file' && this.obj.path === this.selectedFile.path) {
-        this.nameEditing = true
-      } else if (command === 'rename-dir' && this.obj.path === this.selectedDir.path) {
-        this.nameEditing = true
-      }
-    })
   },
   methods: {
     /**
@@ -93,10 +85,11 @@ export default {
         return // The user requested a context menu
       }
 
-      // Determine if we have a middle (wheel) click. The event-type checking
-      // is only done so this is only true when we triggered this function using
-      // the mousedown event.
-      const middleClick = (event.type === 'mousedown' && event.button === 1)
+      // Determine if we have a middle (wheel) click. The event-type check is
+      // necessary since the left mouse button will have index 1 on click events,
+      // whereas the middle mouse button will also have index 1, but on auxclick
+      // events.
+      const middleClick = (event.type === 'auxclick' && event.button === 1)
       const alt = event.altKey
       const type = this.obj.type
 
@@ -132,7 +125,7 @@ export default {
         if (this.selectedDir === this.obj) {
           // The clicked directory was already the selected directory, so just
           // tell the application to show the file list, if applicable.
-          this.$root.$emit('toggle-file-list')
+          this.$root.toggleFileList()
         } else {
           // Select this directory
           ipcRenderer.invoke('application', {

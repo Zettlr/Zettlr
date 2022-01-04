@@ -14,14 +14,14 @@
 
 import path from 'path'
 import { promises as fs } from 'fs'
-import hash from '../../../common/util/hash'
+import hash from '@common/util/hash'
 import sortDir from './util/sort'
-import isDir from '../../../common/util/is-dir'
-import isFile from '../../../common/util/is-file'
-import ignoreDir from '../../../common/util/ignore-dir'
-import ignoreFile from '../../../common/util/ignore-file'
-import safeAssign from '../../../common/util/safe-assign'
-import isAttachment from '../../../common/util/is-attachment'
+import isDir from '@common/util/is-dir'
+import isFile from '@common/util/is-file'
+import ignoreDir from '@common/util/ignore-dir'
+import ignoreFile from '@common/util/ignore-file'
+import safeAssign from '@common/util/safe-assign'
+import isAttachment from '@common/util/is-attachment'
 
 import { shell } from 'electron'
 
@@ -33,13 +33,14 @@ import {
   DirMeta,
   MaybeRootMeta,
   AnyDescriptor,
-  MaybeRootDescriptor
+  MaybeRootDescriptor,
+  ProjectSettings
 } from './types'
 import FSALCache from './fsal-cache'
 import {
   codeFileExtensions,
   mdFileExtensions
-} from '../../../common/get-file-extensions'
+} from '@common/get-file-extensions'
 
 /**
  * Determines what will be written to file (.ztr-directory)
@@ -56,12 +57,16 @@ const MARKDOWN_FILES = mdFileExtensions(true)
 /**
  * Used to insert a default project
  */
-const PROJECT_TEMPLATE = {
+const PROJECT_TEMPLATE: ProjectSettings = {
   // General values that not only pertain to the PDF generation
   title: 'Untitled', // Default project title is the directory's name
   formats: [ 'html', 'chromium-pdf' ], // NOTE: Must correspond to the defaults in ProjectProperties.vue
   filters: [], // A list of filters (glob patterns) to exclude certain files
-  cslStyle: '' // A path to an optional CSL style file.
+  cslStyle: '', // A path to an optional CSL style file.
+  templates: {
+    tex: '', // An optional tex template
+    html: '' // An optional HTML template
+  }
 }
 
 /**
@@ -328,11 +333,29 @@ export async function makeProject (dirObject: DirDescriptor, properties: any): P
  *
  * @param   {DirDescriptor}  dirObject   The directory descriptor
  * @param   {any}            properties  The properties to set
+ *
+ * @return {boolean}                     Returns false if no properties changed
  */
-export async function updateProjectProperties (dirObject: DirDescriptor, properties: any): Promise<void> {
+export async function updateProjectProperties (dirObject: DirDescriptor, properties: any): Promise<boolean> {
+  if (dirObject._settings.project === null) {
+    global.log.error(`[FSAL Dir] Attempted to update project settings on dir ${dirObject.path}, but it is not a project!`)
+    return false
+  }
+
+  const titleUnchanged = dirObject._settings.project.title === properties.title
+  const cslUnchanged = dirObject._settings.project.cslStyle === properties.cslStyle
+  const formatsUnchanged = JSON.stringify(dirObject._settings.project.formats) === JSON.stringify(properties.formats)
+  const filtersUnchanged = JSON.stringify(dirObject._settings.project.filters) === JSON.stringify(properties.filters)
+  const templatesUnchanged = JSON.stringify(dirObject._settings.project.templates) === JSON.stringify(properties.templates)
+
+  if (titleUnchanged && cslUnchanged && formatsUnchanged && filtersUnchanged && templatesUnchanged) {
+    return false
+  }
+
   dirObject._settings.project = safeAssign(properties, dirObject._settings.project)
   // Immediately reflect on disk
   await persistSettings(dirObject)
+  return true
 }
 
 // Removes a project

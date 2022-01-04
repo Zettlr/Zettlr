@@ -1,7 +1,9 @@
 const rules = require('./webpack.rules')
+const path = require('path')
 
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const { VueLoaderPlugin } = require('vue-loader')
+const { DefinePlugin } = require('webpack')
 
 rules.push({
   test: /\.less$/,
@@ -31,9 +33,7 @@ rules.push({
 })
 
 module.exports = {
-  module: {
-    rules
-  },
+  module: { rules },
   // The following line of code serves two purposes: While we're in develop
   // (NODE_ENV = develop), emit source maps so we have an easy time finding the
   // origin of bugs or performance bottlenecks. But since source maps are a
@@ -46,13 +46,23 @@ module.exports = {
     new ForkTsCheckerWebpackPlugin(),
 
     // Apply webpack rules to the corresponding language blocks in .vue files
-    new VueLoaderPlugin()
+    new VueLoaderPlugin(),
+
+    // Set a few Vue 3 options; see: http://link.vuejs.org/feature-flags
+    new DefinePlugin({
+      __VUE_OPTIONS_API__: true,
+      __VUE_PROD_DEVTOOLS__: false
+    })
   ],
   resolve: {
     extensions: [
       '.js', '.ts', '.jsx', '.tsx',
       '.css', '.less', '.vue'
     ],
+    alias: {
+      '@common': [path.resolve(__dirname, 'source/common')],
+      '@providers': [path.resolve(__dirname, 'source/app/service-providers')]
+    },
     fallback: {
       // Don't polyfill these modules
       path: false,

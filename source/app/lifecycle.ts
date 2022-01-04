@@ -25,7 +25,7 @@ import isDir from '../common/util/is-dir'
 import path from 'path'
 
 // Developer tools
-import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
 
 // Providers
 import AppearanceProvider from './service-providers/appearance-provider'
@@ -37,6 +37,7 @@ import DictionaryProvider from './service-providers/dictionary-provider'
 import LogProvider from './service-providers/log-provider'
 import MenuProvider from './service-providers/menu-provider'
 import TagProvider from './service-providers/tag-provider'
+import LinkProvider from './service-providers/link-provider'
 import TargetProvider from './service-providers/target-provider'
 import TranslationProvider from './service-providers/translation-provider'
 import UpdateProvider from './service-providers/update-provider'
@@ -55,6 +56,7 @@ let cssProvider: CssProvider
 let dictionaryProvider: DictionaryProvider
 let logProvider: LogProvider
 let tagProvider: TagProvider
+let linkProvider: LinkProvider
 let targetProvider: TargetProvider
 let translationProvider: TranslationProvider
 let updateProvider: UpdateProvider
@@ -93,7 +95,7 @@ export async function bootApplication (): Promise<void> {
   // Before we begin, let's load the Vue.js DevTools for debugging
   try {
     // Load Vue developer extension
-    installExtension(VUEJS_DEVTOOLS)
+    installExtension(VUEJS3_DEVTOOLS)
       .then((name: string) => global.log.info(`Added DevTools extension:  ${name}`))
       .catch((err: any) => global.log.error(`Could not install DevTools extensions: ${String(err.message)}`, err))
   } catch (err) {
@@ -112,6 +114,16 @@ export async function bootApplication (): Promise<void> {
   // the config provider, as many providers require those to be alive.
   logProvider = new LogProvider()
   configProvider = new ConfigProvider()
+
+  // Initiate i18n after the config provider has definitely spun up
+  let metadata = await loadI18n(global.config.get('appLang'))
+
+  // It may be that only a fallback has been provided or else. In this case we
+  // must update the config to reflect this.
+  if (metadata.tag !== global.config.get('appLang')) {
+    global.config.set('appLang', metadata.tag)
+  }
+
   appearanceProvider = new AppearanceProvider()
   assetsProvider = new AssetsProvider()
   await assetsProvider.init()
@@ -120,6 +132,7 @@ export async function bootApplication (): Promise<void> {
   recentDocsProvider = new RecentDocumentsProvider()
   menuProvider = new MenuProvider() // Requires config & recent docs providers
   tagProvider = new TagProvider()
+  linkProvider = new LinkProvider()
   targetProvider = new TargetProvider()
   cssProvider = new CssProvider()
   translationProvider = new TranslationProvider()
@@ -163,15 +176,6 @@ export async function bootApplication (): Promise<void> {
     global.log.info('[Application] The bundled pandoc executable is now in PATH. If you do not want to use the bundled pandoc, uncheck the corresponding setting and reboot the app.')
   }
 
-  // Initiate i18n after the config provider has definitely spun up
-  let metadata = await loadI18n(global.config.get('appLang'))
-
-  // It may be that only a fallback has been provided or else. In this case we
-  // must update the config to reflect this.
-  if (metadata.tag !== global.config.get('appLang')) {
-    global.config.set('appLang', metadata.tag)
-  }
-
   // Initial setting of the application menu.
   menuProvider.set()
 }
@@ -192,6 +196,7 @@ export async function shutdownApplication (): Promise<void> {
   await safeShutdown(cssProvider)
   await safeShutdown(targetProvider)
   await safeShutdown(tagProvider)
+  await safeShutdown(linkProvider)
   await safeShutdown(menuProvider)
   await safeShutdown(recentDocsProvider)
   await safeShutdown(dictionaryProvider)

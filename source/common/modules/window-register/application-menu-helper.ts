@@ -19,7 +19,7 @@
 const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
 // This function displays a custom styled popup menu at the given coordinates
-export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[], callback: Function, cleanup = true): Function {
+export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[], callback: (clickedID: string) => void, cleanup = true): () => void {
   // Before we do anything, we first must make sure any rogue old context menus
   // are gone.
   if (cleanup) { // NOTE: we need a flag because of submenus
@@ -72,7 +72,7 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
   appMenu.classList.add('application-menu')
   appMenu.style.zIndex = '99999' // Ensure it always stays on top of anything
 
-  for (let item of items) {
+  for (const item of items) {
     const menuItem = renderMenuItem(item)
 
     if (item.type !== 'submenu' && item.type !== 'separator' && item.enabled) {
@@ -108,7 +108,7 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
             appMenu.parentElement?.removeChild(appMenu)
           }
 
-          closeSubmenu = showPopupMenu(target, (item as SubmenuItem).submenu, subCB, false) // NOTE: Prevent cleanup ONLY here!
+          closeSubmenu = showPopupMenu(target, item.submenu, subCB, false) // NOTE: Prevent cleanup ONLY here!
         } else if (
           pointInRect(point, menuRect) &&
           !pointInRect(point, rect) &&

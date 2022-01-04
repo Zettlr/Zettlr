@@ -22,7 +22,7 @@ First, you may wonder what this tutorial is. Several Markdown applications make 
 
 What you will see is that there is one directory – the tutorial – loaded. These top-level directories are called workspaces, because they are spaces in which your work lives. You can right-click the directory, and either “close” or “delete” it. When you _close_ a workspace or top-level file in Zettlr, this means that you unload it from the application, but it will remain on your computer. If you _delete_ it, this means that Zettlr will move it into the trash bin. But don’t do that right now, as there are still new things to learn! ✍🏼
 
-> Note: On some Linux distributions, this may not work out of the box, as Zettlr depends upon a common package for moving files into the trash. If you experience problems removing files and folders, please [check our FAQ section](https://docs.zettlr.com/en/faq/#im-using-linux-and-deleting-files-doesnt-move-them-to-the-trash), which got you covered!
+> Note: On some Linux distributions, this may not work out of the box, as Zettlr depends upon a common package for moving files into the trash. If you experience problems removing files and folders, please [check our FAQ section](https://docs.zettlr.com/en/faq/#im-using-linux-and-deleting-files-doesnt-move-them-to-the-trash), which has got you covered!
 
 Zettlr is built around the concept of workspaces. So you will have the best experience having open at least one workspace directory at all times, and do all your work in that. The workspaces are loaded automatically everytime you open the app, and are always displayed in the directory tree that’s visible right now. To view the file list of a directory, simply click the directory.
 
@@ -53,15 +53,15 @@ But Zettlr doesn’t only support common weblinks. If you link to a file that is
 
 ## The Sidebar 📎
 
-Now that we got you covered with the Markdown basics, it’s time to show you some more of the stuff Zettlr can do! Click now on the column-like icon in the top right corner of the toolbar. This will open the sidebar, which contains a section “Attachments.” In there Zettlr shows you all non-Markdown files that you store in the currently selected directory. You can also drag and drop files from there onto the editor to include them in your files.
+Now that we got you covered with the Markdown basics, it’s time to show you some more of the stuff Zettlr can do! Click now on the column-like icon in the top right corner of the toolbar. This will open the sidebar, which contains four tabs.
 
-You can also see the file "LaTeX Guide.pdf". Wondering what it is? Let’s have a look: Click on it to open the file with your default PDF viewer now!
-
-But the sidebar doesn't only show you files. In the second and third tab, you can find references and a table of contents. The reference section lists all the cited works from the currently open file – exactly like a references section of a paper.
+The first tab displays a dynamically-generated table of contents. You can click the headings to jump to them in the text. The second tab contains a list of references (if you have any in your current document). This is meant as a powerful way for you to check what you have cited in the document.
 
 > Note that the references are only formatted using the built-in citation style. When you export your document, Zettlr will take care to use the citation style you chose, if you set one in the “Export”-preferences.
 
-The table of contents in the third tab is a linked list of all the headings in your current document. Click one of the entries to jump to the corresponding heading immediately. You can also see the same table of contents and even sort your sections by clicking the corresponding toolbar button. The benefit of the sidebar tab is – just with the references tab – that you can keep it open while you work in your document.
+The third tab contains related files, that is: files for which Zettlr thinks they are related to your current file. It does so by looking at the tags you use within all files. The more tags a file has in common with your current file, the higher up it will be in this list.
+
+The last tab contains all non-markdown files that reside in your currently selected directory. You will see a file "LaTeX Guide.pdf". Wondering what it is? Let’s have a look: Click on it to open the file with your default PDF viewer now!
 
 ## Interactive Elements ⏯
 

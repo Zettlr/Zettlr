@@ -23,7 +23,7 @@ import checkImportIntegrity from './check-import-integrity'
 import importTextbundle from './import-textbundle'
 import { DirDescriptor } from '../fsal/types'
 import { app } from 'electron'
-import { trans } from '../../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 
 export default async function makeImport (fileList: string[], dirToImport: DirDescriptor, errorCallback: Function|null = null, successCallback: Function|null = null): Promise<string[]> {
   // Determine the availability of Pandoc. As the Pandoc path is added to

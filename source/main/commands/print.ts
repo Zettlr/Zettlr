@@ -50,7 +50,8 @@ export default class Print extends ZettlrCommand {
       format: 'html',
       sourceFiles: [fileDescriptor], // The file to be exported
       targetDirectory: app.getPath('temp'), // Export to temporary directory
-      absoluteImagePaths: true // Explicitly request absolute image paths
+      absoluteImagePaths: true, // Explicitly request absolute image paths
+      cwd: fileDescriptor.dir
     }
 
     // Call the exporter.

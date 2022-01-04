@@ -13,7 +13,7 @@
  */
 
 // Displays a context menu for the MarkdownEditor class
-const { trans } = require('../../i18n-renderer')
+const { trans } = require('@common/i18n-renderer')
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
 
@@ -145,6 +145,11 @@ function getTargetType (target) {
     return 'image'
   }
 
+  if (target.closest('.preview-math') !== null) {
+    console.log('Math!')
+    return 'math'
+  }
+
   // Fallback: Default context menu
   return 'text'
 }
@@ -203,7 +208,7 @@ module.exports = function displayContextMenu (event, isReadOnly, commandCallback
 
     // Second item varies: If it's a local file, we can show it in folder.
     // Otherwise, we'll open it in the default browser.
-  } else if ([ 'link', 'citation' ].includes(contextMenuType)) {
+  } else if ([ 'link', 'citation', 'math' ].includes(contextMenuType)) {
     MENU_TEMPLATE = [] // Only contains the link/citation actions
   }
 
@@ -315,6 +320,16 @@ module.exports = function displayContextMenu (event, isReadOnly, commandCallback
     })
   }
 
+  if (contextMenuType === 'math') {
+    shouldSelectWordUnderCursor = false
+    buildMenu.push({
+      label: trans('menu.copy_equation'),
+      id: 'menu.copy_equation',
+      type: 'normal',
+      enabled: true
+    })
+  }
+
   // If the word is spelled wrong, request suggestions
   let typoPrefix = []
   if (contextMenuType === 'spell-error') {
@@ -359,6 +374,14 @@ module.exports = function displayContextMenu (event, isReadOnly, commandCallback
     if (clickedID.startsWith('acceptSuggestion-')) {
       const idx = parseInt(clickedID.substr(17), 10) // Retrieve the ID
       replaceCallback(currentSuggestions[idx])
+      return
+    }
+
+    if (clickedID === 'menu.copy_equation') {
+      const wrapperElement = event.target.closest('.preview-math')
+      if (wrapperElement !== null) {
+        clipboard.writeText(wrapperElement.dataset.equation)
+      }
       return
     }
 

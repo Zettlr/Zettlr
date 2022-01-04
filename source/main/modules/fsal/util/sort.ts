@@ -72,5 +72,9 @@ export default function (
   const ret: Array<MDFileDescriptor | DirDescriptor | CodeFileDescriptor> = []
 
   // Return sorted array files -> directories
-  return ret.concat(f).concat(d)
+  if (global.config.get('sortFoldersFirst')) {
+    return ret.concat(d).concat(f)
+  } else {
+    return ret.concat(f).concat(d)
+  }
 }

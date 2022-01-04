@@ -245,6 +245,14 @@ module.exports = {
               preload: {
                 js: './source/common/modules/preload/index.ts'
               }
+            },
+            {
+              html: './source/win-project-properties/index.htm',
+              js: './source/win-project-properties/index.ts',
+              name: 'project_properties',
+              preload: {
+                js: './source/common/modules/preload/index.ts'
+              }
             }
           ]
         }

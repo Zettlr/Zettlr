@@ -12,10 +12,10 @@
  * END HEADER
  */
 
-import Vue from 'vue'
-import Print from './Print.vue'
+import { createApp } from 'vue'
+import App from './App.vue'
 
-import windowRegister from '../common/modules/window-register'
+import windowRegister from '@common/modules/window-register'
 
 const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
@@ -29,13 +29,15 @@ ipcRenderer.on('shortcut', (event, shortcut) => {
   }
 })
 
-// Get additional data passed to the window
-let filePath
-[filePath] = window.process.argv.slice(-1)
+const app = createApp(App).mount('#app')
 
-const app = new Vue(Print)
+// Finally, pass the correct file to the application to preview
+const searchParams = new URLSearchParams(window.location.search)
+const filePath = searchParams.get('file')
 
-// In the end: mount the app onto the DOM
-app.$mount('#app')
-
-app.$data.filePath = filePath
+if (filePath === null) {
+  console.error('Could not load file to preview, since the passed file was null!')
+} else {
+  console.log(`Showing file: ${filePath}`)
+  app.$data.filePath = filePath
+}

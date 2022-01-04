@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-const { trans } = require('../../../common/i18n-renderer')
+import { trans } from '@common/i18n-renderer'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
@@ -75,7 +75,7 @@ const TEMPLATE = [
   }
 ]
 
-module.exports = function displayFileContext (event, fileObject, el, callback) {
+export default function displayFileContext (event, fileObject, el, callback) {
   let items = []
 
   for (const item of TEMPLATE) {

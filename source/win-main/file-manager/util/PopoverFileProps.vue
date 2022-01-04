@@ -68,12 +68,12 @@
  * END HEADER
  */
 
-import NumberControl from '../../../common/vue/form/elements/Number'
-import SelectControl from '../../../common/vue/form/elements/Select'
-import { trans } from '../../../common/i18n-renderer'
-import formatDate from '../../../common/util/format-date'
-import formatSize from '../../../common/util/format-size'
-import localiseNumber from '../../../common/util/localise-number'
+import NumberControl from '@common/vue/form/elements/Number'
+import SelectControl from '@common/vue/form/elements/Select'
+import { trans } from '@common/i18n-renderer'
+import formatDate from '@common/util/format-date'
+import formatSize from '@common/util/format-size'
+import localiseNumber from '@common/util/localise-number'
 
 export default {
   name: 'PopoverFileProps',
@@ -145,8 +145,8 @@ export default {
      * Resets the data, a.k.a. removes the writing target
      */
     reset: function () {
-      this.value = 0
-      this.mode = 'words'
+      this.targetValue = 0
+      this.targetMode = 'words'
     },
     retrieveTagColour: function (tagName) {
       const foundTag = this.colouredTags.find(tag => tag.name === tagName)

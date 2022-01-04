@@ -23,9 +23,14 @@
  */
 module.exports = function findObject (tree, prop, val, traverse) {
   // Is the tree even defined?
-  if (!tree) return undefined
+  if (tree == null) {
+    return undefined
+  }
+
   // First let's see if we can shortcut
-  if (!Array.isArray(tree) && tree.hasOwnProperty(prop) && tree[prop] === val) return tree
+  if (!Array.isArray(tree) && prop in tree && tree[prop] === val) {
+    return tree
+  }
 
   // Now search the tree
   let ret
@@ -33,15 +38,15 @@ module.exports = function findObject (tree, prop, val, traverse) {
     // The tree itself is an array
     for (let item of tree) {
       ret = findObject(item, prop, val, traverse)
-      if (ret) break // Found it!
+      if (ret !== undefined) break // Found it!
     }
-  } else if (tree.hasOwnProperty(traverse) && Array.isArray(tree[traverse])) {
+  } else if (traverse in tree && Array.isArray(tree[traverse])) {
     // The descendants are an array
     for (let descendant of tree[traverse]) {
       ret = findObject(descendant, prop, val, traverse)
-      if (ret) break // Found it!
+      if (ret !== undefined) break // Found it!
     }
-  } else if (tree.hasOwnProperty(traverse)) {
+  } else if (traverse in tree) {
     // Neither tree nor descendants are an array -> simple traverse
     ret = findObject(tree[traverse], prop, val, traverse)
   }

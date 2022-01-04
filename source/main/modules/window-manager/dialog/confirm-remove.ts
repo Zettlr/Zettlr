@@ -1,6 +1,6 @@
 import { BrowserWindow, dialog, MessageBoxOptions, MessageBoxReturnValue } from 'electron'
 import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '../../fsal/types'
-import { trans } from '../../../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 
 /**
  * Displays a dialog to confirm the removal of the given descriptor.

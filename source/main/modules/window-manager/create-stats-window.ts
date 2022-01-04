@@ -35,8 +35,8 @@ export default function createStatsWindow (conf: WindowPosition): BrowserWindow 
     minHeight: 200,
     width: conf.width,
     height: conf.height,
-    x: conf.left,
-    y: conf.top,
+    x: conf.x,
+    y: conf.y,
     show: false,
     fullscreenable: false,
     webPreferences: {

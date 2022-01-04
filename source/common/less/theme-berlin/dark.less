@@ -5,9 +5,7 @@
 // DARK STYLES
 body.dark {
 
-  #editor .CodeMirror,
-  .quicklook .body .CodeMirror,
-  .dialog .CodeMirror {
+  #editor .CodeMirror {
     color: var(--grey-0);
 
     // First the code blocks
@@ -110,6 +108,16 @@ body.dark {
     // Style the code block line wrapper classes
     .code-block-line {
       background-color: #333;
+    }
+
+    .code-block-first-line {
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+    }
+
+    .code-block-last-line {
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
     }
 
     /* LISTS */
@@ -239,6 +247,17 @@ body.dark {
     // Code background
     .cm-comment:not(.cm-formatting):not(.cm-fenced-code) {
       background-color: var(--grey-5);
+    }
+
+    // cm-comment should be ignored inside code blocks
+    .code-block-line {
+      // Retain monospaced font from editor.css
+      font-family: Consolas, 'Inconsolata', Menlo, monospace;
+
+      .cm-comment {
+        background-color: transparent !important;
+        padding: 0 !important;
+      }
     }
   }
 

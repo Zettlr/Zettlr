@@ -6,7 +6,7 @@
             "bellacrl"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-09-25T19:00:02.000000Z"
+        "updated_at": "2021-10-03T09:17:20.000000Z"
     },
     "dialog": {
         "about": {
@@ -197,6 +197,7 @@
             "checkForBeta": "Beri tahu saya",
             "choose_file": "Pilih File ...",
             "citation_database": "Database Kutipan (CSL JSON or BibTex)",
+            "cite_style_label": "Atur autokomplet sitasi",
             "count_chars": "Hitung berdasarkan karakter daripada berdasarkan kata (misalnya, untuk tulisan China)",
             "creationtime": "Waktu pembuatan file",
             "debug": "Aktifkan mode debug",
@@ -329,6 +330,8 @@
                 "accent_color_info": "Pengaturan ini hanya tersedia pada Windows dan macOS",
                 "accent_color_label": "Gunakan aksen warna dari sistem operasi, bukan dari tema Zettlr",
                 "info": "Di sini kamu dapat memilih tema untuk aplikasi",
+                "select_label": "klik untuk memilih",
+                "selected_label": "dipilih",
                 "title": "Tema"
             },
             "title": "Preferensi",

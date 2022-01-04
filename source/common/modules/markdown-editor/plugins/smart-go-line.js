@@ -17,7 +17,7 @@
  *
  * END HEADER
  */
-const { getListTokenRE } = require('../../../regular-expressions');
+const { getListTokenRE } = require('@common/regular-expressions');
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS

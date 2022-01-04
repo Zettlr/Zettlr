@@ -8,92 +8,92 @@
         <TextInput
           v-if="field.type === 'text'"
           v-bind:key="f_idx"
-          v-bind:value="getModelValue(field.model)"
+          v-bind:model-value="getModelValue(field.model)"
           v-bind:label="field.label"
           v-bind:name="field.model"
           v-bind:reset="field.reset"
           v-bind:inline="field.inline"
-          v-on:input="$emit('input', field.model, $event)"
+          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
         ></TextInput>
         <NumberInput
           v-if="field.type === 'number'"
           v-bind:key="f_idx"
-          v-bind:value="getModelValue(field.model)"
+          v-bind:model-value="getModelValue(field.model)"
           v-bind:label="field.label"
           v-bind:name="field.model"
           v-bind:reset="field.reset"
           v-bind:inline="field.inline"
           v-bind:disabled="field.disabled"
-          v-on:input="$emit('input', field.model, $event)"
+          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
         ></NumberInput>
         <TimeInput
           v-if="field.type === 'time'"
           v-bind:key="f_idx"
-          v-bind:value="getModelValue(field.model)"
+          v-bind:model-value="getModelValue(field.model)"
           v-bind:label="field.label"
           v-bind:name="field.model"
           v-bind:inline="field.inline"
-          v-on:input="$emit('input', field.model, $event)"
+          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
         ></TimeInput>
         <ColorInput
           v-if="field.type === 'color'"
           v-bind:key="f_idx"
-          v-bind:value="getModelValue(field.model)"
+          v-bind:model-value="getModelValue(field.model)"
           v-bind:label="field.label"
           v-bind:name="field.model"
           v-bind:inline="field.inline"
-          v-on:input="$emit('input', field.model, $event)"
+          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
         ></ColorInput>
         <FileInput
           v-if="field.type === 'file'"
           v-bind:key="f_idx"
-          v-bind:value="getModelValue(field.model)"
+          v-bind:model-value="getModelValue(field.model)"
           v-bind:label="field.label"
           v-bind:reset="field.reset"
           v-bind:name="field.model"
           v-bind:filter="field.filter"
-          v-on:input="$emit('input', field.model, $event)"
+          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
         ></FileInput>
         <CheckboxInput
           v-if="field.type === 'checkbox'"
           v-bind:key="f_idx"
-          v-bind:value="getModelValue(field.model)"
+          v-bind:model-value="getModelValue(field.model)"
           v-bind:label="field.label"
           v-bind:name="field.model"
           v-bind:disabled="field.disabled"
           v-bind:info="field.info"
-          v-on:input="$emit('input', field.model, $event)"
+          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
         ></CheckboxInput>
         <SwitchInput
           v-if="field.type === 'switch'"
           v-bind:key="f_idx"
-          v-bind:value="getModelValue(field.model)"
+          v-bind:model-value="getModelValue(field.model)"
           v-bind:label="field.label"
           v-bind:name="field.model"
-          v-on:input="$emit('input', field.model, $event)"
+          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
         ></SwitchInput>
         <RadioInput
           v-if="field.type === 'radio'"
           v-bind:key="f_idx"
-          v-bind:value="getModelValue(field.model)"
+          v-bind:model-value="getModelValue(field.model)"
           v-bind:label="field.label"
           v-bind:name="field.model"
           v-bind:options="field.options"
-          v-on:input="$emit('input', field.model, $event)"
+          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
         ></RadioInput>
         <SelectInput
           v-if="field.type === 'select'"
           v-bind:key="f_idx"
-          v-bind:value="getModelValue(field.model)"
+          v-bind:model-value="getModelValue(field.model)"
           v-bind:label="field.label"
           v-bind:name="field.model"
           v-bind:options="field.options"
-          v-on:input="$emit('input', field.model, $event)"
+          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
         ></SelectInput>
         <ListInput
           v-if="field.type === 'list'"
           v-bind:key="f_idx"
-          v-bind:value="getModelValue(field.model)"
+          v-bind:model-value="getModelValue(field.model)"
           v-bind:label="field.label"
           v-bind:labels="field.labels"
           v-bind:name="field.model"
@@ -102,33 +102,33 @@
           v-bind:addable="field.addable"
           v-bind:searchable="field.searchable"
           v-bind:search-label="field.searchLabel"
-          v-on:input="$emit('input', field.model, $event)"
+          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
         ></ListInput>
         <TokenInput
           v-if="field.type === 'token'"
           v-bind:key="f_idx"
-          v-bind:value="getModelValue(field.model)"
+          v-bind:model-value="getModelValue(field.model)"
           v-bind:label="field.label"
           v-bind:name="field.model"
-          v-on:input="$emit('input', field.model, $event)"
+          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
         ></TokenInput>
         <!-- NOTE: For sliders we only listen to change events -->
         <SliderInput
           v-if="field.type === 'slider'"
           v-bind:key="f_idx"
-          v-bind:value="getModelValue(field.model)"
+          v-bind:model-value="getModelValue(field.model)"
           v-bind:label="field.label"
           v-bind:name="field.model"
-          v-on:change="$emit('input', field.model, $event)"
+          v-on:change="$emit('update:modelValue', field.model, $event)"
         ></SliderInput>
         <ThemeInput
           v-if="field.type === 'theme'"
           v-bind:key="f_idx"
-          v-bind:value="getModelValue(field.model)"
+          v-bind:model-value="getModelValue(field.model)"
           v-bind:options="field.options"
           v-bind:label="field.label"
           v-bind:name="field.model"
-          v-on:input="$emit('input', field.model, $event)"
+          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
         ></ThemeInput>
       </template>
     </fieldset>
@@ -171,7 +171,7 @@ import TokenInput from './elements/TokenList.vue'
 import ThemeInput from './elements/Theme.vue'
 
 export default {
-  name: 'Form',
+  name: 'FormBuilder',
   components: {
     TextInput,
     NumberInput,
@@ -197,6 +197,7 @@ export default {
       required: true
     }
   },
+  emits: ['update:modelValue'],
   methods: {
     getModelValue: function (model) {
       const modelProps = model.split('.')

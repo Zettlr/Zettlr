@@ -14,7 +14,7 @@
   */
 
 const TableEditor = require('../table-editor')
-const { getTableHeadingRE } = require('../../../regular-expressions');
+const { getTableHeadingRE } = require('@common/regular-expressions');
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS

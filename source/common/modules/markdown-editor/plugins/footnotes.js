@@ -23,7 +23,7 @@
   }
 })(function (CodeMirror) {
   'use strict'
-  const { getFnRE, getFnRefRE } = require('../../../regular-expressions')
+  const { getFnRE, getFnRefRE } = require('@common/regular-expressions')
   const fnRE = getFnRE()
   const fnrefRE = getFnRefRE(true) // Get the multiline version
 

@@ -51,7 +51,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -66,14 +66,17 @@
  * END HEADER
  */
 
-import { trans } from '../../common/i18n-renderer'
+import { trans } from '@common/i18n-renderer'
 import TreeItem from './tree-item.vue'
 import matchQuery from './util/match-query'
 import matchTree from './util/match-tree'
 
-const ipcRenderer = window.ipc
+import { defineComponent } from 'vue'
+import { IpcRenderer } from 'electron'
 
-export default {
+const ipcRenderer: IpcRenderer = (window as any).ipc
+
+export default defineComponent({
   name: 'FileTree',
   components: {
     TreeItem
@@ -92,10 +95,10 @@ export default {
     return {}
   },
   computed: {
-    fileTree: function () {
+    fileTree: function (): any[] {
       return this.$store.state.fileTree
     },
-    getFilteredTree: function () {
+    getFilteredTree: function (): any[] {
       const q = String(this.filterQuery).trim().toLowerCase() // Easy access
 
       if (q === '') {
@@ -121,20 +124,23 @@ export default {
       }
       return filteredTree
     },
-    getFiles: function () {
+    getFiles: function (): any[] {
       return this.getFilteredTree.filter(item => item.type !== 'directory')
     },
-    getDirectories: function () {
+    getDirectories: function (): any[] {
       return this.getFilteredTree.filter(item => item.type === 'directory')
     },
-    fileSectionHeading: function () {
+    fileSectionHeading: function (): string {
       return trans('gui.files')
     },
-    workspaceSectionHeading: function () {
+    workspaceSectionHeading: function (): string {
       return trans('gui.workspaces')
     },
-    noRootsMessage: function () {
+    noRootsMessage: function (): string {
       return trans('gui.empty_directories')
+    },
+    noResultsMessage: function () {
+      return trans('gui.no_search_results')
     }
   },
   methods: {
@@ -144,16 +150,16 @@ export default {
      * @param  {MouseEvent} evt The click event.
      * @return {void}     Does not return.
      */
-    requestOpenRoot: function (evt) {
+    requestOpenRoot: function (evt: MouseEvent) {
       ipcRenderer.invoke('application', { command: 'open-workspace' })
         .catch(err => console.error(err))
     },
-    clickHandler: function (event) {
+    clickHandler: function (event: MouseEvent) {
       // We need to bubble this event upwards so that the file manager is informed of the selection
       this.$emit('selection', event)
     }
   }
-}
+})
 </script>
 
 <style lang="less">

@@ -34,18 +34,18 @@ export interface LangFileMetadata {
 export default function enumLangFiles (paths = [ path.join(app.getPath('userData'), '/lang'), path.join(__dirname, '/lang') ]): Array<Candidate & LangFileMetadata> {
   // Now go through all search paths and enumerate all available files of interest
   let candidates = []
-  for (let p of paths) {
-    let list = fs.readdirSync(p)
-    for (let file of list) {
+  for (const p of paths) {
+    for (const file of fs.readdirSync(p)) {
       // Sanity checks
       if (!isFile(path.join(p, file))) continue
       if (path.extname(file) !== '.json') continue
 
-      let schema = bcp47.parse(file.substr(0, file.lastIndexOf('.')))
-      if (schema.language !== undefined) {
+      const schema = bcp47.parse(file.substr(0, file.lastIndexOf('.')))
+      const tag = bcp47.stringify(schema)
+      if (schema.language !== undefined && tag !== undefined) {
         candidates.push({
-          'tag': bcp47.stringify(schema),
-          'path': path.join(p, file)
+          tag: tag,
+          path: path.join(p, file)
         })
       }
     }

@@ -20,10 +20,10 @@ import { app } from 'electron'
 import { promises as fs } from 'fs'
 
 // Utilities
-import isFile from '../../../common/util/is-file'
+import isFile from '@common/util/is-file'
 
 // Exporters
-import { ExporterAPI, ExporterOptions, ExporterOutput, PandocRunnerOutput } from './types'
+import { DefaultsOverride, ExporterAPI, ExporterOptions, ExporterOutput, PandocRunnerOutput } from './types'
 import { plugin as DefaultExporter } from './default-exporter'
 import { plugin as PDFExporter } from './pdf-exporter'
 import { plugin as RevealJSExporter } from './revealjs-exporter'
@@ -73,13 +73,10 @@ export async function makeExport (options: ExporterOptions, formatOptions: any =
   // This is basically the "plugin API"
   const ctx: ExporterAPI = {
     runPandoc: async (defaults: string) => {
-      return await runPandoc(defaults)
+      return await runPandoc(defaults, options.cwd)
     },
     getDefaultsFor: async (writer: string, properties: any) => {
-      // Inject additional properties from the global exporter options here
-      const cslOverride = (typeof options.cslStyle === 'string') ? options.cslStyle : undefined
-      const titleOverride = (typeof options.title === 'string') ? options.title : undefined
-      return await writeDefaults(writer, properties, cslOverride, titleOverride)
+      return await writeDefaults(writer, properties, options.defaultsOverride)
     }
   }
 
@@ -96,7 +93,7 @@ export async function makeExport (options: ExporterOptions, formatOptions: any =
   return exporterReturn
 }
 
-async function runPandoc (defaultsFile: string): Promise<PandocRunnerOutput> {
+async function runPandoc (defaultsFile: string, cwd?: string): Promise<PandocRunnerOutput> {
   const output: PandocRunnerOutput = {
     code: 0,
     stdout: [],
@@ -107,7 +104,8 @@ async function runPandoc (defaultsFile: string): Promise<PandocRunnerOutput> {
     const pandocProcess = spawn('pandoc', [ '--defaults', `"${defaultsFile}"` ], {
       // NOTE: This has to be true, because of reasons unbeknownst to me, Pandoc
       // is unable to open the defaultsFile if it is not run from within a shell
-      shell: true
+      shell: true,
+      cwd: cwd
     })
 
     pandocProcess.stdout.on('data', (data) => {
@@ -143,26 +141,12 @@ async function runPandoc (defaultsFile: string): Promise<PandocRunnerOutput> {
 async function writeDefaults (
   writer: string, // The writer to use (e.g. html or pdf)
   properties: any, // Contains properties that will be written to the defaults
-  cslOverride?: string,
-  titleOverride?: string
+  defaultsOverride?: DefaultsOverride
 ): Promise<string> {
   const dataDir = app.getPath('temp')
   const defaultsFile = path.join(dataDir, 'defaults.yml')
 
   const defaults: any = await global.assets.getDefaultsFor(writer, 'export')
-
-  // Use an HTML template if applicable
-  if (writer === 'html') {
-    if (!('template' in defaults) || typeof defaults.template !== 'string' || !isFile(defaults.template)) {
-      // There's definitely no template in the defaults we've just read
-      const tpl = await fs.readFile(path.join(__dirname, 'assets/export.tpl.htm'), { encoding: 'utf8' })
-      defaults.template = path.join(dataDir, 'template.tpl')
-      await fs.writeFile(defaults.template, tpl, { encoding: 'utf8' })
-    }
-  }
-
-  // Populate the variables section TODO: Migrate that to its own property
-  // defaults.variables = global.config.get('pdf')
 
   // In order to facilitate file-only databases, we need to get the currently
   // selected database. This could break in a lot of places, but until Pandoc
@@ -178,8 +162,8 @@ async function writeDefaults (
   }
 
   const cslStyle: string = global.config.get('export.cslStyle')
-  if (cslOverride !== undefined && isFile(cslOverride)) {
-    defaults.csl = cslOverride
+  if (defaultsOverride?.csl !== undefined && isFile(defaultsOverride.csl)) {
+    defaults.csl = defaultsOverride.csl
   } else if (isFile(cslStyle)) {
     defaults.csl = cslStyle
   }
@@ -201,8 +185,13 @@ async function writeDefaults (
   defaults.metadata.zettlr.link_start = String(global.config.get('zkn.linkStart'))
   defaults.metadata.zettlr.link_end = String(global.config.get('zkn.linkEnd'))
 
-  if (titleOverride !== undefined) {
-    defaults.metadata.title = titleOverride
+  // Potentially override allowed defaults properties
+  if (defaultsOverride?.title !== undefined) {
+    defaults.metadata.title = defaultsOverride.title
+  }
+
+  if (defaultsOverride?.template !== undefined) {
+    defaults.template = defaultsOverride.template
   }
 
   // Add all filters which are within the userData/lua-filter directory.

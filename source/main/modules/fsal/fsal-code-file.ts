@@ -14,10 +14,10 @@
 
 import { promises as fs } from 'fs'
 import path from 'path'
-import hash from '../../../common/util/hash'
+import hash from '@common/util/hash'
 import searchFile from './util/search-file'
 import { shell } from 'electron'
-import safeAssign from '../../../common/util/safe-assign'
+import safeAssign from '@common/util/safe-assign'
 // Import the interfaces that we need
 import { DirDescriptor, CodeFileDescriptor, CodeFileMeta } from './types'
 import FSALCache from './fsal-cache'

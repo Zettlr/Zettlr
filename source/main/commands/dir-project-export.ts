@@ -13,7 +13,7 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import objectToArray from '../../common/util/object-to-array'
+import objectToArray from '@common/util/object-to-array'
 import { makeExport } from '../modules/export'
 import { filter as minimatch } from 'minimatch'
 import { shell } from 'electron'
@@ -49,7 +49,7 @@ export default class DirProjectExport extends ZettlrCommand {
     let files = objectToArray(dir, 'children').filter(e => e.type !== 'directory')
 
     // Use minimatch to filter against the project's filter patterns
-    for (const pattern of config.filters as string[]) {
+    for (const pattern of config.filters) {
       global.log.info(`[Project] Filtering fileset: Matching against "${pattern}"`)
       // NOTE: minimatch is actually just the "filter" function
       const match = minimatch(pattern, { matchBase: true })
@@ -64,19 +64,27 @@ export default class DirProjectExport extends ZettlrCommand {
       return false
     }
 
-    for (const format of config.formats as string[]) {
+    for (const format of config.formats) {
       // Spin up one exporter per format.
       global.log.info(`[Project] Exporting ${dir.name} as ${format}.`)
+      let template
+      if ([ 'html', 'chromium-pdf' ].includes(format) && config.templates.html !== '') {
+        template = config.templates.html
+      } else if (format === 'latex-pdf' && config.templates.tex !== '') {
+        template = config.templates.tex
+      }
+
       try {
         const opt: ExporterOptions = {
           format: format,
           sourceFiles: files,
           targetDirectory: dir.path,
-          title: config.title
-        }
-
-        if (typeof config.cslStyle === 'string' && config.cslStyle.length > 0) {
-          opt.cslStyle = config.cslStyle
+          cwd: dir.path,
+          defaultsOverride: {
+            title: config.title,
+            csl: (typeof config.cslStyle === 'string' && config.cslStyle.length > 0) ? config.cslStyle : undefined,
+            template: template
+          }
         }
 
         const result = await makeExport(opt)
@@ -88,9 +96,9 @@ export default class DirProjectExport extends ZettlrCommand {
       } catch (err: any) {
         global.log.error(err.message, err)
         global.application.displayErrorMessage(
-          err.title || err.message,
+          ('title' in err) ? err.title : err.message,
           err.message,
-          err.additionalInfo || ''
+          ('additionalInfo' in err) ? err.additionalInfo : ''
         )
       }
     }

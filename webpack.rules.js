@@ -18,7 +18,13 @@ module.exports = [
   },
   {
     test: /\.vue$/,
-    loader: 'vue-loader'
+    loader: 'vue-loader',
+    options: {
+      compilerOptions: {
+        // We have a custom element, clr-icon, which Vue shouldn't touch
+        isCustomElement: tag => tag === 'clr-icon'
+      }
+    }
   },
   {
     test: /\.css$/,
@@ -73,7 +79,8 @@ module.exports = [
     use: {
       loader: 'ts-loader',
       options: {
-        transpileOnly: true
+        transpileOnly: true,
+        appendTsSuffixTo: [/\.vue$/] // Enable ts support in Vue SFCs
       }
     }
   }

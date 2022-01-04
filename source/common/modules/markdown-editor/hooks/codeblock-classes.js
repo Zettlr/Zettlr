@@ -11,82 +11,133 @@
  *
  * END HEADER
  */
+const { debounce, range } = require('lodash')
+const codeblockClass = 'code-block-line'
+const codeblockClassOpen = 'code-block-first-line'
+const codeblockClassClose = 'code-block-last-line'
+// The debounce timeout needs to be exactly the same as but no less than the
+// debounce timeout used in CodeMirror Markdown Mode.
+const findCodeDebounced = debounce(findCode, 400, { leading: true })
 
 /**
- * Hooks onto the cursorActivity event to apply codeblock classes
+ * Hooks onto the cursorActivity, optionChange and keyHandled event to apply
+ * codeblock classes. Everything is debounced, except the Enter key because
+ * you'll want styling to be applied instantly when adding a line to a block.
  *
  * @param   {CodeMirror}  cm  The instance
  */
 module.exports = (cm) => {
-  cm.on('cursorActivity', applyCodeblockClasses)
-  cm.on('optionChange', applyCodeblockClasses)
+  cm.on('keyHandled', handleNewline)
+  cm.on('cursorActivity', findCodeDebounced)
+  cm.on('optionChange', findCodeDebounced)
 }
 
-function applyCodeblockClasses (cm) {
-  let needsRefresh = false // Will be set to true if at least one line has been altered
-  let isCodeBlock = false
-  let codeblockClass = 'code-block-line'
+/**
+ * When pressing Enter inside a code block, do not debounce but make sure the
+ * new line is styled properly immediately
+ *
+ * @param   {CodeMirror}  cm  The instance
+ * @param   {String}  name  The key pressed
+ */
+function handleNewline (cm, name) {
+  if (name === 'Enter') {
+    findCode(cm)
+  }
+}
 
-  // This matches a line that starts with at most three spaces, followed by at
-  // least three backticks or tildes (fenced code block).
+/**
+ * Find fenced and indented code blocks. This is a hack.
+ *
+ * We really ought to extent the codeMirror GFM Mode to regex on the token
+ * stream, because now we're mimicking Markdown Mode.
+ *
+ * Overriding means maintaining though, and Markdown Mode is quite complex.
+ *
+ * @param   {CodeMirror}  cm  The instance
+ */
+function findCode (cm) {
+  const codeBlockLines = []
+  const lineCount = cm.lineCount()
   const codeBlockRE = /^(?:\s{0,3}`{3}|~{3}).*/
-  // This one, on the other hand, matches indented code blocks starting with at
-  // least four spaces.
   const indentedRE = /^\s{4,}.*$/
-  // The old regex was: /^(?:`{3}|~{3}).*/
+  const blankishRE = /^\s*$/
 
-  // Buffer changes
-  cm.startOperation()
-
-  for (let i = 0; i < cm.lineCount(); i++) {
-    // First, get the line and the info whether it's currently a code block line
-    const info = cm.lineInfo(i)
-    const line = info.text
-    const wrapClass = (info.wrapClass !== undefined) ? String(info.wrapClass) : ''
-    const isCurrentlyCode = wrapClass.includes(codeblockClass)
-
-    // Second, check if we are NOT inside a fenced code block. If we're not, but
-    // the line is indented by at least four spaces, we have an indented code
-    // block. That doesn't trigger the code block variable, but renders only
-    // this line as a codeblock.
-    if (!isCodeBlock && indentedRE.test(line)) {
-      // From CommonMark specs: "there must be a blank line between a paragraph
-      // and a following indented code block"
-      const prevLine = (i > 0) ? cm.lineInfo(i - 1).text : ''
-      if (!isCurrentlyCode && prevLine === '') {
-        cm.addLineClass(i, 'wrap', codeblockClass)
-        needsRefresh = true
-      }
-      continue // No need to check the rest
-    }
-
-    // Each code block line toggles the isCodeBlock variable (but the
-    // codeblocks themselves should not be styled)
+  // Check lines for code blocks
+  for (let lineNum = 0; lineNum < lineCount; lineNum++) {
+    let line = cm.getLine(lineNum)
+    // Fenced code found
     if (codeBlockRE.test(line)) {
-      isCodeBlock = !isCodeBlock
-      if (isCurrentlyCode) {
-        cm.removeLineClass(i, 'wrap', codeblockClass)
-        needsRefresh = true
+      // Find fenced code end
+      while (lineNum + 1 < lineCount && !codeBlockRE.test(cm.getLine(lineNum + 1))) {
+        codeBlockLines.push(++lineNum)
       }
-      continue
+
+      // Skip line that marks fenced code end
+      lineNum++
     }
 
-    if (isCodeBlock && !isCurrentlyCode) {
-      // We should render as code
-      cm.addLineClass(i, 'wrap', codeblockClass)
-      needsRefresh = true
-    } else if (!isCodeBlock && isCurrentlyCode) {
-      // We should not render as code
-      cm.removeLineClass(i, 'wrap', codeblockClass)
-      needsRefresh = true
-    } // Else: Leave the line as it is
+    // Possible match for indented code found
+    if (indentedRE.test(line)) {
+      let prevLine = lineNum - 1
+
+      // Verify match
+      // If this is the first line and either already indented code or prepended by an empty line
+      if (prevLine >= 0 && (codeBlockLines.includes(prevLine) || blankishRE.test(cm.getLine(prevLine)))) {
+        // If this is not preformatted markdown (e.g. a list)
+        if (cm.getLineTokens(lineNum).some(token => String(token.type).includes('formatting-list')) === false) {
+          let probeLine = 1
+
+          // Skip ahead to the end of the potential code block
+          while (lineNum + probeLine < lineCount && indentedRE.test(cm.getLine(lineNum + probeLine))) {
+            probeLine++
+          }
+
+          // Check if end of file or block appended by empty line, making it a legal code block
+          if (lineNum + probeLine === lineCount || blankishRE.test(cm.getLine(lineNum + probeLine))) {
+            codeBlockLines.push(...range(lineNum, lineNum + probeLine))
+            // Skip ahead until after code block
+            lineNum += probeLine - 1
+          }
+        }
+      }
+    }
+
+    // Finally, after skipping all the code, remove leftover classes
+    cm.removeLineClass(lineNum, 'wrap', codeblockClass, codeblockClassOpen, codeblockClassClose)
   }
 
-  // End operation (apply the buffer to the layout and force a repaint)
-  cm.endOperation()
+  // Apply code classes to code blocks
+  codeBlockLines.forEach(function (lineNum, index, lines) {
+    cm.addLineClass(lineNum, 'wrap', codeblockClass)
 
-  // If at least one line was altered, we need a refresh
-  if (needsRefresh) {
-    cm.refresh()
-  }
+    // if previous line is not code
+    if (lines[index - 1] !== lineNum - 1) {
+      cm.addLineClass(lineNum, 'wrap', codeblockClassOpen)
+
+      // If this was caused by backspacing the first line of indented code, we
+      // need to explicitly clean up the classes
+      if (index >= 0) {
+        cm.removeLineClass(lineNum - 1, 'wrap', codeblockClass, codeblockClassOpen)
+      }
+    } else {
+      cm.removeLineClass(lineNum, 'wrap', codeblockClassOpen)
+    }
+
+    // if next line is not code
+    if (lines[index + 1] !== lineNum + 1) {
+      cm.addLineClass(lineNum, 'wrap', codeblockClassClose)
+      // If this was caused by backspacing the last line of indented code, we
+      // need to explicitly clean up the classes
+      if (index < lineCount) {
+        cm.removeLineClass(lineNum + 1, 'wrap', codeblockClass, codeblockClassClose)
+      }
+    } else {
+      cm.removeLineClass(lineNum, 'wrap', codeblockClassClose)
+    }
+
+    // If last line is code, make sure to close the class
+    if (lineNum === lineCount - 1) {
+      cm.addLineClass(lineNum, 'wrap', codeblockClass, codeblockClassClose)
+    }
+  })
 }

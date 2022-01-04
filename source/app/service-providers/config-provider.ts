@@ -16,15 +16,15 @@
 import fs from 'fs'
 import path from 'path'
 import EventEmitter from 'events'
-import ZettlrValidation from '../../common/zettlr-validation'
+import ZettlrValidation from '@common/zettlr-validation'
 import { app, ipcMain } from 'electron'
-import ignoreFile from '../../common/util/ignore-file'
-import safeAssign from '../../common/util/safe-assign'
-import isDir from '../../common/util/is-dir'
-import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
-import RULES from '../../common/validation.json'
+import ignoreFile from '@common/util/ignore-file'
+import safeAssign from '@common/util/safe-assign'
+import isDir from '@common/util/is-dir'
+import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
+import RULES from '@common/validation.json'
 import getConfigTemplate from './assets/get-config-template'
-import enumDictFiles from '../../common/util/enum-dict-files'
+import enumDictFiles from '@common/util/enum-dict-files'
 
 const ZETTLR_VERSION = app.getVersion()
 

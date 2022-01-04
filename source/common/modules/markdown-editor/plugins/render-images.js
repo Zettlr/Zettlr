@@ -25,9 +25,9 @@
   'use strict'
 
   // GENERAL PLUGIN VARIABLES
-  const { getImageRE } = require('../../../regular-expressions')
-  const makeAbsoluteURL = require('../../../util/make-absolute-url')
-  const { trans } = require('../../../i18n-renderer')
+  const { getImageRE } = require('@common/regular-expressions')
+  const makeAbsoluteURL = require('@common/util/make-absolute-url')
+  const { trans } = require('@common/i18n-renderer')
 
   // Image detection regex
   const imageRE = getImageRE()
@@ -37,7 +37,7 @@
 
   /**
    * Defines the CodeMirror command to render all found markdown images.
-   * @param  {CodeMirror} cm The calling CodeMirror instance
+   * @param  {CodeMirror.Editor} cm The calling CodeMirror instance
    * @return {void}    Commands do not return.
    */
   CodeMirror.commands.markdownRenderImages = function (cm) {
@@ -112,19 +112,28 @@
         const caption = document.createElement('figcaption')
         caption.textContent = title
         caption.contentEditable = true
-        caption.onkeydown = function (event) {
-          if (event.key === 'Enter') {
-            event.preventDefault()
-            event.stopPropagation()
-            // Make sure there are no quotes since these will break the image
-            const newCaption = caption.textContent.replace(/"/g, '')
-            // "Why are you setting the caption both as the image description and title?"
-            // Well, since all exports sometimes us this, sometimes the other value.
-            const newImageTag = `![${newCaption}](${url} "${newCaption}")${p4}`
-            // Now replace the underlying image
-            cm.replaceRange(newImageTag, curFrom, curTo)
+
+        // Define a quick inline function that takes care of applying a new caption
+        const updateCaptionFunction = function (event) {
+          if (event.key !== undefined && event.key !== 'Enter') {
+            // If this is a KeyboardEvent, only perform the action on Enter
+            return
           }
+
+          event.preventDefault()
+          event.stopPropagation()
+          // Make sure there are no quotes since these will break the image
+          const newCaption = caption.textContent.replace(/"/g, '')
+          // "Why are you setting the caption both as the image description and title?"
+          // Well, since all exports sometimes us this, sometimes the other value.
+          const newImageTag = `![${newCaption}](${url} "${newCaption}")${p4}`
+          // Now replace the underlying image
+          cm.replaceRange(newImageTag, curFrom, curTo)
         }
+
+        // Should work on these events
+        caption.addEventListener('keydown', updateCaptionFunction)
+        caption.addEventListener('focusout', updateCaptionFunction)
 
         const size = document.createElement('span')
         size.classList.add('image-size-info')
@@ -134,8 +143,8 @@
         openExternally.textContent = 'Open image externally'
         openExternally.onclick = function (event) {
           // NOTE: We can only do this because the main process prevents any
-          // navigation, and hence will capture this and instead open it using the shell.
-          window.location.assign(makeAbsoluteURL(cm.getOption('zettlr').markdownImageBasePath, url))
+          // navigation, and will open the "URL" using the shell.
+          window.location.assign(actualURLToLoad)
         }
 
         const figure = document.createElement('figure')

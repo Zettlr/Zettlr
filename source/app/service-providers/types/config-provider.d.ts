@@ -53,6 +53,7 @@ interface ConfigOptions {
   fileMetaTime: 'modtime'|'creationtime'
   hideDirs: boolean
   sorting: 'natural'|'ascii'
+  sortFoldersFirst: boolean
   sortingTime: 'modtime'|'creationtime'
   muteLines: boolean
   fileManagerMode: 'thin'|'combined'|'expanded'
@@ -123,6 +124,7 @@ interface ConfigOptions {
   display: {
     theme: 'berlin'|'frankfurt'|'bielefeld'|'karl-marx-stadt'|'bordeaux'
     useSystemAccentColor: boolean
+    hideToolbarInDistractionFree: boolean
     imageWidth: number
     imageHeight: number
     renderCitations: boolean

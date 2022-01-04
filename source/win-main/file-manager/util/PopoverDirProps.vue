@@ -39,16 +39,11 @@
       v-model="isProject"
       v-bind:label="'Enable Project'"
     ></SwitchControl>
-    <!--
-      ATTENTION !!! DO NOT, UNDER NO CIRCUMSTANCES change v-if into v-show !!!
-      The reason is that the ProjectProperties component uses some async magic
-      to retrieve the needed project settings (which are managed by the main
-      process) ONLY if the directory has for sure a project. On v-show that
-      magic would completely break if the user opens the popover with no project
-      active and then activates the project feature.
-    -->
-    <ProjectProperties v-if="isProject" id="project-lists" v-bind:full-path="fullPath">
-    </ProjectProperties>
+    <ButtonControl
+      v-if="isProject"
+      v-bind:label="projectPropertiesLabel"
+      v-on:click="openProjectPreferences"
+    ></ButtonControl>
     <hr style="clear: both;">
     <!-- Directory icon -->
     <div class="icon-selector">
@@ -83,12 +78,14 @@
  * END HEADER
  */
 
-import formatDate from '../../../common/util/format-date'
-import localiseNumber from '../../../common/util/localise-number'
-import SelectControl from '../../../common/vue/form/elements/Select'
-import SwitchControl from '../../../common/vue/form/elements/Switch'
-import ProjectProperties from './ProjectProperties'
-import { trans } from '../../../common/i18n-renderer'
+import formatDate from '@common/util/format-date'
+import localiseNumber from '@common/util/localise-number'
+import SelectControl from '@common/vue/form/elements/Select'
+import SwitchControl from '@common/vue/form/elements/Switch'
+import ButtonControl from '@common/vue/form/elements/Button'
+import { trans } from '@common/i18n-renderer'
+
+const ipcRenderer = window.ipc
 
 const ICONS = [
   { shape: null, title: 'Reset' },
@@ -168,7 +165,7 @@ export default {
   components: {
     SelectControl,
     SwitchControl,
-    ProjectProperties
+    ButtonControl
   },
   data: function () {
     return {
@@ -224,25 +221,44 @@ export default {
     },
     icons: function () {
       return ICONS
+    },
+    projectPropertiesLabel: function () {
+      return trans('menu.project_properties')
     }
   },
   created: function () {
+  },
+  methods: {
+    openProjectPreferences: function () {
+      ipcRenderer.invoke('application', {
+        command: 'open-project-preferences',
+        payload: this.fullPath
+      })
+        .catch(err => console.error(err))
+    }
   }
 }
 </script>
 
 <style lang="less">
 // Most styles are defined in the File popover
-body .icon-selector {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0 auto; // Center the div
-  width: 200px; // Ten icons per row
-  div {
-    display: inline-block;
-    padding: 2px; // The icons are 16x16px
-    width: 20px;
-    height: 20px;
+body {
+  .icon-selector {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 auto; // Center the div
+    width: 200px; // Ten icons per row
+    div {
+      display: inline-block;
+      padding: 2px; // The icons are 16x16px
+      width: 20px;
+      height: 20px;
+      &:hover, &.active { background-color: rgb(180, 180, 180); }
+    }
+  }
+
+  &.dark .icon-selector div:hover, &.dark .icon-selector div.active {
+    background-color: rgb(90, 90, 90);
   }
 }
 

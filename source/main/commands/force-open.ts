@@ -15,8 +15,8 @@
 
 import path from 'path'
 import ZettlrCommand from './zettlr-command'
-import { getIDRE } from '../../common/regular-expressions'
-import { mdFileExtensions } from '../../common/get-file-extensions'
+import { getIDRE } from '@common/regular-expressions'
+import { mdFileExtensions } from '@common/get-file-extensions'
 
 const FILETYPES = mdFileExtensions(true)
 
@@ -37,7 +37,7 @@ export default class ForceOpen extends ZettlrCommand {
     // command.
     const autoCreate = Boolean(global.config.get('zkn.autoCreateLinkedFiles'))
 
-    const idRE = getIDRE()
+    const idRE = getIDRE(true)
     let file = null
 
     // First, let's see if what we got looks like an ID, or not. If it looks
@@ -48,14 +48,14 @@ export default class ForceOpen extends ZettlrCommand {
       file = this._app.getFileSystem().findExact(arg, 'id')
     } else {
       // It's a filename -- now check if an extension is given (likely not)
-      if (path.extname(arg).length > 1) {
+      if (FILETYPES.includes(path.extname(arg))) {
         // file ending given
         file = this._app.getFileSystem().findExact(arg, 'name')
       } else {
         // No file ending given, so let's test all allowed. The filetypes are
         // sorted by probability (first .md, then .markdown), to reduce the
         // amount of time spent on the tree.
-        for (let type of FILETYPES) {
+        for (const type of FILETYPES) {
           file = this._app.getFileSystem().findExact((arg as string) + type, 'name')
           if (file !== null) {
             break
@@ -66,7 +66,7 @@ export default class ForceOpen extends ZettlrCommand {
 
     // Now we have a file (if not, create a new one if the user wishes so)
     if (file != null) {
-      await this._app.openFile(file.path)
+      await this._app.getDocumentManager().openFile(file.path)
     } else if (autoCreate) {
       // Call the file-new command on the application, which'll do all
       // necessary steps for us.

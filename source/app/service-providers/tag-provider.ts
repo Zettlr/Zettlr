@@ -15,7 +15,7 @@
 import fs from 'fs'
 import path from 'path'
 import { app, ipcMain } from 'electron'
-import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
+import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 
 interface InternalTagRecord {
   text: string

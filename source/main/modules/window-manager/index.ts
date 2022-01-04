@@ -37,6 +37,7 @@ import createPreferencesWindow from './create-preferences-window'
 import createAboutWindow from './create-about-window'
 import createTagManagerWindow from './create-tag-manager-window'
 import createAssetsWindow from './create-assets-window'
+import createProjectPropertiesWindow from './create-project-properties-window'
 import createPasteImageModal from './create-paste-image-modal'
 import createErrorModal from './create-error-modal'
 import shouldOverwriteFileDialog from './dialog/should-overwrite-file'
@@ -44,33 +45,28 @@ import shouldReplaceFileDialog from './dialog/should-replace-file'
 import askDirectoryDialog from './dialog/ask-directory'
 import askSaveChanges from './dialog/ask-save-changes'
 import promptDialog from './dialog/prompt'
-import sanitizeWindowPosition from './sanitize-window-position'
 import { WindowPosition } from './types.d'
 import askFileDialog from './dialog/ask-file'
 import saveFileDialog from './dialog/save-dialog'
 import confirmRemove from './dialog/confirm-remove'
 import * as bcp47 from 'bcp-47'
 
-interface QuicklookRecord {
-  path: string
-  win: BrowserWindow
-}
-
 export default class WindowManager extends EventEmitter {
   private _mainWindow: BrowserWindow|null
-  private readonly _qlWindows: QuicklookRecord[]
+  private readonly _qlWindows: Map<string, BrowserWindow>
   private _printWindow: BrowserWindow|null
   private _updateWindow: BrowserWindow|null
   private _logWindow: BrowserWindow|null
   private _statsWindow: BrowserWindow|null
   private _assetsWindow: BrowserWindow|null
+  private _projectProperties: BrowserWindow|null
   private _preferences: BrowserWindow|null
   private _aboutWindow: BrowserWindow|null
   private _tagManager: BrowserWindow|null
   private _pasteImageModal: BrowserWindow|null
   private _errorModal: BrowserWindow|null
   private _printWindowFile: string|undefined
-  private _windowState: WindowPosition[]
+  private _windowState: Map<string, WindowPosition>
   private readonly _configFile: string
   private _fileLock: boolean
   private _persistTimeout: ReturnType<typeof setTimeout>|undefined
@@ -80,7 +76,7 @@ export default class WindowManager extends EventEmitter {
   constructor () {
     super()
     this._mainWindow = null
-    this._qlWindows = []
+    this._qlWindows = new Map()
     this._printWindow = null
     this._updateWindow = null
     this._preferences = null
@@ -92,7 +88,8 @@ export default class WindowManager extends EventEmitter {
     this._logWindow = null
     this._statsWindow = null
     this._assetsWindow = null
-    this._windowState = []
+    this._projectProperties = null
+    this._windowState = new Map()
     this._configFile = path.join(app.getPath('userData'), 'window_state.json')
     this._fileLock = false
     this._beforeMainWindowCloseCallback = null
@@ -108,11 +105,25 @@ export default class WindowManager extends EventEmitter {
       'ky', 'nqo', 'ckb', 'sdh', 'ku', 'hu', 'ms'
     ]
 
-    if (schema.language !== null && LTR_SCRIPTS.includes(schema.language)) {
+    if (schema.language != null && LTR_SCRIPTS.includes(schema.language)) {
       this._hasRTLLocale = true
     } else {
       this._hasRTLLocale = false
     }
+
+    // Immediately begin loading the data
+    this.loadData()
+      .then(() => {
+        global.log.info('[Window Manager] Window Manager started.')
+        const shouldStartMinimized = process.argv.includes('--launch-minimized')
+        const traySupported = process.env.ZETTLR_IS_TRAY_SUPPORTED === '1'
+        if (!shouldStartMinimized || !traySupported) {
+          this.showMainWindow()
+        } else {
+          global.log.info('[Window Manager] Application should start in tray. Not showing main window.')
+        }
+      })
+      .catch((err: Error) => global.log.error(`[Window Manager] Could not load data: ${err.message}`, err))
 
     // Listen to window control commands
     ipcMain.on('window-controls', (event, message) => {
@@ -166,7 +177,8 @@ export default class WindowManager extends EventEmitter {
           event.sender.selectAll()
           break
         case 'inspect-element':
-          event.sender.inspectElement(payload.x, payload.y)
+          console.log(payload)
+          event.sender.inspectElement(Math.round(payload.x), Math.round(payload.y))
           break
         case 'drag-start':
           app.getFileIcon(payload.filePath)
@@ -216,9 +228,17 @@ export default class WindowManager extends EventEmitter {
   async loadData (): Promise<void> {
     try {
       const data = await fs.readFile(this._configFile, 'utf8')
-      this._windowState = JSON.parse(data) as WindowPosition[]
+      const tmpObject = JSON.parse(data)
+      if (Array.isArray(tmpObject)) {
+        // Old configuration object --> do not map!
+        global.log.warning('[Window Manager] Detected an old windowState configuration file. Not retaining values!')
+        return
+      }
+      global.log.info(`[Window Manager] Loading state information from ${this._configFile}`)
+      this._windowState = new Map(Object.entries(tmpObject))
     } catch (err) {
       // Apparently no such file -> we'll leave the original (empty) array.
+      global.log.info('[Window Manager] No window state information found.')
     }
   }
 
@@ -274,24 +294,9 @@ export default class WindowManager extends EventEmitter {
           continue
         }
 
-        // Now find the window to close. Emit a warning if the window is not
-        // handled by the Window manager, as this indicates a bug and helps us
-        // centralise everything here.
-        if (this._qlWindows.find(record => record.win === win) !== undefined) {
-          const idx = this._qlWindows.findIndex(record => record.win === win)
-          win.close()
-          this._qlWindows.splice(idx, 1)
-        } else if (this._printWindow === win) {
-          win.close()
-          this._printWindow = null
-        } else if (this._logWindow === win) {
-          win.close()
-          this._logWindow = null
-        } else {
-          global.log.warning(`[Window Manager] The window "${win.getTitle()}" (ID: ${win.id}) is not managed by the window manager.`)
-          win.close()
-        }
+        win.close()
       }
+
       if (process.platform !== 'darwin' && Boolean(global.config.get('system.leaveAppRunning')) && !global.application.isQuitting()) {
         this._mainWindow?.hide()
         event.preventDefault()
@@ -335,7 +340,7 @@ export default class WindowManager extends EventEmitter {
       return
     }
 
-    const data = JSON.stringify(this._windowState)
+    const data = JSON.stringify(Object.fromEntries(this._windowState))
     this._fileLock = true
     fs.writeFile(this._configFile, data)
       .then(() => {
@@ -351,87 +356,84 @@ export default class WindowManager extends EventEmitter {
    * window states, or a brand new one. If no window position was found, a new
    * one will be created using the given default size.
    *
-   * @param   {string}                          type         The window state to find
-   * @param   {Rect|null}                       defaultSize  An optional size. If null, will use half the screen.
-   * @param   {Record<string><WindowPosition>}  predicate    Optional WindowPosition attributes to look for
+   * @param   {string}                   stateId      The window state to find
+   * @param   {Electron.Rectangle|null}  defaultSize  An optional size. If null, will use half the screen.
    *
-   * @return  {WindowPosition}                               A sanitised WindowPosition
+   * @return  {WindowPosition}                        A sanitised WindowPosition
    */
-  private _retrieveWindowPosition (type: string, defaultSize: Rect|null, predicate?: Record<string, any>): WindowPosition {
-    let windowConfiguration = this._windowState.find(state => {
-      if (state.windowType !== type) {
-        return false
+  private _retrieveWindowPosition (stateId: string, defaultSize: Electron.Rectangle|null): WindowPosition {
+    if (!this._windowState.has(stateId)) {
+      // Generate a default window position
+      const { workArea, id } = screen.getPrimaryDisplay()
+      const defaultPosition: WindowPosition = {
+        // Some displays begin at a y > 0 and/or x > 0
+        y: workArea.y + workArea.height * 0.25,
+        x: workArea.x + workArea.width * 0.25,
+        width: workArea.width / 2,
+        height: workArea.height / 2,
+        lastDisplayId: id,
+        isMaximised: false
       }
 
-      if (predicate !== undefined) {
-        for (const property in predicate) {
-          // If property is not, in fact, a property of WindowPosition, it'll
-          // be undefined, and therefore probably not === to the predicate.
-          if (predicate[property] === state[property as keyof WindowPosition]) {
-            return false
-          }
-        }
+      // If a defaultSize was passed, override the properties
+      if (defaultSize !== null) {
+        defaultPosition.y = defaultSize.y
+        defaultPosition.x = defaultSize.x
+        defaultPosition.width = defaultSize.width
+        defaultPosition.height = defaultSize.height
       }
 
-      return true
-    })
-
-    if (windowConfiguration === undefined) {
-      // Create a new default configuration
-      const display = screen.getPrimaryDisplay()
-
-      // Make a window half the size of the current primary display, if no
-      // sizes were passed.
-      if (defaultSize === null) {
-        const width = Math.min(display.workArea.width, display.workArea.width / 2)
-        const height = Math.min(display.workArea.height, display.workArea.height / 2)
-        const top = (display.workArea.height - height) / 2
-        const left = (display.workArea.width - width) / 2
-        defaultSize = {
-          top: display.workArea.y + top, // Some displays begin at a y > 0
-          left: display.workArea.x + left, // Same as with the y-value
-          width: width,
-          height: height
-        }
-      }
-
-      // Determine if the window should show up maximised
-      let maximised = false
-      if (defaultSize.top === display.workArea.y &&
-        defaultSize.left === display.workArea.x &&
-        defaultSize.width === display.workArea.width &&
-        defaultSize.height === display.workArea.height
-      ) {
-        maximised = true
-      }
-
-      // Create the configuration object
-      windowConfiguration = {
-        windowType: type,
-        top: defaultSize.top,
-        left: defaultSize.left,
-        width: defaultSize.width,
-        height: defaultSize.height,
-        isMaximised: maximised,
-        lastDisplayId: display.id
-      }
-
-      if (predicate !== undefined) {
-        // Add the predicates to the WindowConfiguration so the next filter won't
-        // return undefined.
-        for (const property in predicate) {
-          windowConfiguration[property] = predicate[property]
-        }
-      }
-
-      this._windowState.push(windowConfiguration)
+      this._updateWindowPosition(stateId, defaultPosition)
+    } else {
+      // We already have a position in our map, so retrieve, sanitize, and return.
+      const existingPosition = this._windowState.get(stateId) as WindowPosition
+      this._updateWindowPosition(stateId, existingPosition) // Sanitize the position
     }
 
-    // Sanitise the configuration and then replace the one in our window state
-    const saneConfiguration = sanitizeWindowPosition(windowConfiguration)
-    this._windowState.splice(this._windowState.indexOf(windowConfiguration), 1, saneConfiguration)
+    // At this point we will definitely have a WindowPosition for this window.
+    return this._windowState.get(stateId) as WindowPosition
+  }
 
-    return saneConfiguration
+  /**
+   * Takes a WindowPosition and sets it for the window identified by stateId, after
+   * sanitizing the window position correctly.
+   *
+   * @param   {string}          stateId   The unique stateId of the window, not to be confused with Electron's window ID.
+   * @param   {WindowPosition}  position  The window position to be set.
+   */
+  private _updateWindowPosition (stateId: string, position: WindowPosition): void {
+    // First, get the current display of the position. NOTE: We have to construct
+    // a new object since getDisplayMatching requires integers
+    const { id, workArea } = screen.getDisplayMatching({
+      x: Math.round(position.x),
+      y: Math.round(position.y),
+      width: Math.round(position.width),
+      height: Math.round(position.height)
+    })
+    position.lastDisplayId = id
+
+    // Then, make sure that all bounds are still good to go
+    if (position.width > workArea.width) {
+      position.width = workArea.width
+    }
+
+    if (position.height > workArea.height) {
+      position.height = workArea.height
+    }
+
+    if (position.x + position.width > workArea.x + workArea.width) {
+      position.x = workArea.x
+    }
+
+    if (position.y + position.height > workArea.y + workArea.height) {
+      position.y = workArea.y
+    }
+
+    position.isMaximised = position.width === workArea.width && position.height === workArea.height
+
+    // Finally, overwrite the position we have.
+    this._windowState.set(stateId, position)
+    this._persistWindowPositions()
   }
 
   /**
@@ -441,25 +443,17 @@ export default class WindowManager extends EventEmitter {
    * @param   {BrowserWindow}   window  The window to hook
    * @param   {WindowPosition}  conf    The configuration to update
    */
-  private _hookWindowResize (window: BrowserWindow, conf: WindowPosition): void {
+  private _hookWindowResize (window: BrowserWindow, stateId: string): void {
     const callback = (): void => {
-      let newBounds = window.getBounds()
-      // The configuration object will be edited in place.
-      conf.top = newBounds.y
-      conf.left = newBounds.x
-      conf.width = newBounds.width
-      conf.height = newBounds.height
-      // On macOS there's no "unmaximize", therefore we have to check manually.
-      const workArea = screen.getDisplayMatching(newBounds).workArea
-      conf.isMaximised = (
-        newBounds.width === workArea.width &&
-        newBounds.height === workArea.height &&
-        newBounds.x === workArea.x &&
-        newBounds.y === workArea.y
-      )
-      // Persist the new window positions and notify the window of its own
-      // new size
-      this._persistWindowPositions()
+      const { id } = screen.getDisplayMatching(window.getBounds())
+
+      const newPosition: WindowPosition = {
+        ...window.getBounds(),
+        lastDisplayId: id,
+        isMaximised: window.isMaximized()
+      }
+
+      this._updateWindowPosition(stateId, newPosition)
       window.webContents.send('window-controls', {
         command: 'get-maximised-status',
         payload: window.isMaximized()
@@ -468,28 +462,8 @@ export default class WindowManager extends EventEmitter {
 
     window.on('resize', callback)
     window.on('move', callback)
-
-    // Now hook the resizing events to save the last positions to config
-    window.on('maximize', () => {
-      conf.isMaximised = true
-      // Persist the new window positions and notify the window of its own
-      // new size
-      this._persistWindowPositions()
-      window.webContents.send('window-controls', {
-        command: 'get-maximised-status',
-        payload: window.isMaximized()
-      })
-    })
-    window.on('unmaximize', () => {
-      conf.isMaximised = false
-      // Persist the new window positions and notify the window of its own
-      // new size
-      this._persistWindowPositions()
-      window.webContents.send('window-controls', {
-        command: 'get-maximised-status',
-        payload: window.isMaximized()
-      })
-    })
+    window.on('maximize', callback)
+    window.on('unmaximize', callback)
   }
 
   /**
@@ -497,17 +471,17 @@ export default class WindowManager extends EventEmitter {
    */
   showMainWindow (): void {
     if (this._mainWindow === null) {
-      const display = screen.getPrimaryDisplay()
+      const { workArea } = screen.getPrimaryDisplay()
       const windowConfiguration = this._retrieveWindowPosition('main', {
-        top: display.workArea.y,
-        left: display.workArea.x,
-        width: display.workArea.width,
-        height: display.workArea.height
+        y: workArea.y,
+        x: workArea.x,
+        width: workArea.width,
+        height: workArea.height
       })
 
       this._mainWindow = createMainWindow(windowConfiguration)
       this._hookMainWindow()
-      this._hookWindowResize(this._mainWindow, windowConfiguration)
+      this._hookWindowResize(this._mainWindow, 'main')
     } else {
       this._makeVisible(this._mainWindow)
     }
@@ -531,36 +505,16 @@ export default class WindowManager extends EventEmitter {
    * @param   {MDFileDescriptor}  file  The file to display in the Quicklook
    */
   showQuicklookWindow (file: MDFileDescriptor): void {
-    // Opens a new Quicklook. It's called new because there can be multiple
-    // Quicklook windows.
-
-    // First, let's make sure the file is not yet open
-    const record = this._qlWindows.find(record => record.path === file.path)
-
-    if (record !== undefined) {
+    if (this._qlWindows.has(file.path)) {
       // The window is already open -> make it visible
-      this._makeVisible(record.win)
+      this._makeVisible(this._qlWindows.get(file.path) as BrowserWindow)
     } else {
-      // This particular file is not yet open -> open it
-      // Pass null for default size
-      const conf = this._retrieveWindowPosition('quicklook', null, { quicklookFile: file.path })
-      const window: BrowserWindow = createQuicklookWindow(file, conf)
-      this._hookWindowResize(window, conf)
-
-      const qlWindow: QuicklookRecord = {
-        path: file.path,
-        win: window
-      }
-
-      // As soon as the window is closed, remove it from our array.
-      window.on('closed', () => {
-        const record = this._qlWindows.find(record => record.win === window)
-        if (record !== undefined) {
-          this._qlWindows.splice(this._qlWindows.indexOf(record), 1)
-        }
-      })
-
-      this._qlWindows.push(qlWindow)
+      // This particular file is not yet open
+      const conf = this._retrieveWindowPosition(file.path, null)
+      const window = createQuicklookWindow(file, conf)
+      this._hookWindowResize(window, file.path)
+      this._qlWindows.set(file.path, window)
+      window.on('closed', () => { this._qlWindows.delete(file.path) })
     }
   }
 
@@ -571,7 +525,7 @@ export default class WindowManager extends EventEmitter {
     if (this._logWindow === null) {
       const conf = this._retrieveWindowPosition('log', null)
       this._logWindow = createLogWindow(conf)
-      this._hookWindowResize(this._logWindow, conf)
+      this._hookWindowResize(this._logWindow, 'log')
 
       // Dereference the window as soon as it is closed
       this._logWindow.on('closed', () => {
@@ -587,9 +541,9 @@ export default class WindowManager extends EventEmitter {
    */
   showDefaultsWindow (): void {
     if (this._assetsWindow === null) {
-      const conf = this._retrieveWindowPosition('log', null)
+      const conf = this._retrieveWindowPosition('assets', null)
       this._assetsWindow = createAssetsWindow(conf)
-      this._hookWindowResize(this._assetsWindow, conf)
+      this._hookWindowResize(this._assetsWindow, 'assets')
 
       // Dereference the window as soon as it is closed
       this._assetsWindow.on('closed', () => {
@@ -607,7 +561,7 @@ export default class WindowManager extends EventEmitter {
     if (this._statsWindow === null) {
       const conf = this._retrieveWindowPosition('stats', null)
       this._statsWindow = createStatsWindow(conf)
-      this._hookWindowResize(this._statsWindow, conf)
+      this._hookWindowResize(this._statsWindow, 'stats')
 
       this._statsWindow.on('closed', () => {
         this._statsWindow = null
@@ -622,9 +576,15 @@ export default class WindowManager extends EventEmitter {
    */
   showPreferences (): void {
     if (this._preferences === null) {
-      const conf = this._retrieveWindowPosition('preferences', null)
+      const { workArea } = screen.getPrimaryDisplay()
+      const conf = this._retrieveWindowPosition('preferences', {
+        width: 700,
+        height: 800,
+        x: (workArea.width - 700) / 2,
+        y: (workArea.height - 800) / 2
+      })
       this._preferences = createPreferencesWindow(conf)
-      this._hookWindowResize(this._preferences, conf)
+      this._hookWindowResize(this._preferences, 'preferences')
 
       // Dereference the window as soon as it is closed
       this._preferences.on('closed', () => {
@@ -640,15 +600,15 @@ export default class WindowManager extends EventEmitter {
    */
   showAboutWindow (): void {
     if (this._aboutWindow === null) {
-      const display = screen.getPrimaryDisplay()
+      const { workArea } = screen.getPrimaryDisplay()
       const conf = this._retrieveWindowPosition('about', {
         width: 600,
         height: 500,
-        top: (display.workArea.height - 500) / 2,
-        left: (display.workArea.width - 600) / 2
+        y: (workArea.height - 500) / 2,
+        x: (workArea.width - 600) / 2
       })
       this._aboutWindow = createAboutWindow(conf)
-      this._hookWindowResize(this._aboutWindow, conf)
+      this._hookWindowResize(this._aboutWindow, 'about')
 
       // Dereference the window as soon as it is closed
       this._aboutWindow.on('closed', () => {
@@ -666,7 +626,7 @@ export default class WindowManager extends EventEmitter {
     if (this._tagManager === null) {
       const conf = this._retrieveWindowPosition('tag-manager', null)
       this._tagManager = createTagManagerWindow(conf)
-      this._hookWindowResize(this._tagManager, conf)
+      this._hookWindowResize(this._tagManager, 'tag-manager')
 
       // Dereference the window as soon as it is closed
       this._tagManager.on('closed', () => {
@@ -702,6 +662,13 @@ export default class WindowManager extends EventEmitter {
     })
   }
 
+  /**
+   * Shows an error message.
+   *
+   * @param   {string}  title     The message's title
+   * @param   {string}  message   The actual message
+   * @param   {string}  contents  Optional further contents
+   */
   showErrorMessage (title: string, message: string, contents?: string): void {
     if (this._mainWindow === null) {
       global.log.error('[Application] Could not display error message, because the main window was not open!', message)
@@ -731,7 +698,7 @@ export default class WindowManager extends EventEmitter {
     if (this._printWindow === null) {
       const conf = this._retrieveWindowPosition('print', null)
       this._printWindow = createPrintWindow(filePath, conf)
-      this._hookWindowResize(this._printWindow, conf)
+      this._hookWindowResize(this._printWindow, 'print')
       this._printWindowFile = filePath
 
       // Dereference the window as soon as it is closed
@@ -751,18 +718,44 @@ export default class WindowManager extends EventEmitter {
   }
 
   /**
+   * Opens the project properties window with the given directory
+   *
+   * @param   {string}  dirPath  The directory to load
+   */
+  showProjectPropertiesWindow (dirPath: string): void {
+    if (this._projectProperties === null) {
+      const conf = this._retrieveWindowPosition('print', null)
+      this._projectProperties = createProjectPropertiesWindow(conf, dirPath)
+      this._hookWindowResize(this._projectProperties, 'project-properties')
+
+      // Dereference the window as soon as it is closed
+      this._projectProperties.on('closed', () => {
+        this._projectProperties = null
+      })
+    } else {
+      // We do not re-open the window with a (possibly changed) directory
+      // because it might contain unsaved changes. The user has to manually
+      // close it.
+      this._makeVisible(this._projectProperties)
+    }
+  }
+
+  /**
    * Opens the updater window
    */
   showUpdateWindow (): void {
     if (this._updateWindow === null) {
-      const conf = this._retrieveWindowPosition('updater', null)
-      this._updateWindow = createUpdateWindow(conf)
-      this._hookWindowResize(this._updateWindow, conf)
-
-      // Dereference the window as soon as it is closed
-      this._updateWindow.on('closed', () => {
-        this._updateWindow = null
+      const { workArea } = screen.getPrimaryDisplay()
+      const conf = this._retrieveWindowPosition('updater', {
+        width: 300,
+        height: 500,
+        x: (workArea.height - 500) / 2,
+        y: (workArea.width - 300) / 2
       })
+      this._updateWindow = createUpdateWindow(conf)
+      this._hookWindowResize(this._updateWindow, 'updater')
+
+      this._updateWindow.on('closed', () => { this._updateWindow = null })
     } else {
       this._makeVisible(this._updateWindow)
     }
@@ -862,16 +855,22 @@ export default class WindowManager extends EventEmitter {
   /**
    * Allows the user to save a file.
    *
-   * @param   {string}                 filename  An initial filename to display
-   * @param   {BrowserWindow<string>}  win       The window to attach to
+   * @param   {string}              fileOrPathName   Either an absolute path (in
+   *                                                 which case the directory will
+   *                                                 be set as the starting
+   *                                                 directory) or just a filename,
+   *                                                 in which case the last known
+   *                                                 dialogPaths.askFileDialog path
+   *                                                 will be used.
+   * @param   {BrowserWindow|null}  win              The window to attach to
    *
-   * @return  {Promise<string|undefined>}        Resolves with a path or undefined
+   * @return  {Promise<string|undefined>}            Resolves with a path or undefined
    */
-  async saveFile (filename: string, win?: BrowserWindow|null): Promise<string|undefined> {
+  async saveFile (fileOrPathName: string, win?: BrowserWindow|null): Promise<string|undefined> {
     if (win != null) {
-      return await saveFileDialog(win, filename)
+      return await saveFileDialog(win, fileOrPathName)
     } else {
-      return await saveFileDialog(this._mainWindow, filename)
+      return await saveFileDialog(this._mainWindow, fileOrPathName)
     }
   }
 

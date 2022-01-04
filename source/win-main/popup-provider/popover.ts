@@ -16,7 +16,7 @@
  * END HEADER
  */
 
-import Vue from 'vue'
+import { createApp, defineComponent, ComponentPublicInstance } from 'vue'
 
 const ARROW_SIZE = 20 // in pixels
 
@@ -28,7 +28,7 @@ export default class ZettlrPopover {
   private readonly _boundClickHandler: (event: MouseEvent) => void
   private readonly _boundResizeHandler: (event: UIEvent) => void
   private _popup: HTMLElement|null
-  private readonly _popover: Vue
+  private readonly _popover: ComponentPublicInstance
   private _arrow: HTMLElement|null
   private readonly _watcher: Function
   private _isClosing: boolean
@@ -41,7 +41,7 @@ export default class ZettlrPopover {
     * @param  {Function|null}  [callback=null]  A callback to which the popover data will be sent
     */
   constructor (
-    component: typeof Vue,
+    component: ReturnType<typeof defineComponent>,
     elem: HTMLElement,
     initialData: any,
     callback: (data: any) => void
@@ -67,6 +67,7 @@ export default class ZettlrPopover {
     this._popup = document.createElement('div')
     this._popup.classList.add('popover')
     const popoverMountPoint = document.createElement('div')
+    popoverMountPoint.setAttribute('id', 'popoverMount')
     this._popup.appendChild(popoverMountPoint)
     this._arrow = document.createElement('div')
     this._arrow.classList.add('popover-arrow')
@@ -74,17 +75,16 @@ export default class ZettlrPopover {
     document.body.appendChild(this._arrow)
 
     // Create the Vue instance and mount it into the popover container
-    this._popover = new Vue(component)
+    this._popover = createApp(component).mount('#popoverMount')
     // Preset the data with initial values
     this.updateData(initialData)
     // We need to mount it onto a div inside our container because the Vue component will replace the mount point
-    this._popover.$mount(popoverMountPoint)
 
     // Notify the caller whenever the result-property changes. NOTE that each
     // component that is being used as a popover MUST expose the computed
     // property popoverData, which can either contain a primitive value or an
     // object collecting several values.
-    this._watcher = this._popover.$watch('popoverData', (newValue, oldValue) => {
+    this._watcher = this._popover.$watch('popoverData', (newValue: any, oldValue: any) => {
       this._callback(newValue)
     }, { deep: true })
 
@@ -189,6 +189,8 @@ export default class ZettlrPopover {
       if (showArrow) {
         this._arrow.style.top = `${top + elemRect.height}px`
         this._arrow.style.left = `${left + elemRect.width / 2 - this._arrow.offsetWidth / 2}px`
+      } else {
+        this._arrow.style.display = 'none'
       }
 
       // Ensure the popup is completely visible (move inside the document if it's at an edge)
@@ -261,7 +263,7 @@ export default class ZettlrPopover {
    */
   updateData (data: any): void {
     for (const key in data) {
-      Vue.set(this._popover.$data, key, data[key])
+      this._popover.$data[key] = data[key]
     }
 
     // Also, the data update might have changed the data dimensions, so let's

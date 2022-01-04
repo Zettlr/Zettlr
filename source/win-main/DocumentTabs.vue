@@ -46,6 +46,8 @@
  */
 
 import displayTabsContextMenu from './tabs-context'
+import tippy from 'tippy.js'
+import { nextTick } from 'vue'
 
 const ipcRenderer = window.ipc
 
@@ -68,11 +70,11 @@ export default {
   watch: {
     activeFile: function () {
       // Make sure the activeFile is in view
-      this.$nextTick(() => {
-        // We must wait until Vue has actually applied the active class to the
-        // new file tab so that our handler retrieves the correct one, not the old.
-        this.scrollActiveFileIntoView()
-      })
+      // We must wait until Vue has actually applied the active class to the
+      // new file tab so that our handler retrieves the correct one, not the old.
+      nextTick()
+        .then(() => { this.scrollActiveFileIntoView() })
+        .catch(err => console.error(err))
     }
   },
   mounted: function () {
@@ -106,6 +108,56 @@ export default {
           // No more open files, so request closing of the window
           ipcRenderer.send('window-controls', { command: 'win-close' })
         }
+      } else if (shortcut === 'rename-file') {
+        // Renaming via shortcut (= Cmd/Ctrl+R) works via a tooltip underneath
+        // the corresponding filetab. First, make sure the container is visible
+        this.scrollActiveFileIntoView()
+
+        const container = this.$refs.container.querySelector('.active')
+
+        const wrapper = document.createElement('div')
+        wrapper.classList.add('file-rename')
+
+        const input = document.createElement('input')
+        input.style.backgroundColor = 'transparent'
+        input.style.border = 'none'
+        input.style.color = 'white'
+        input.value = this.openFiles[currentIdx].name
+
+        wrapper.appendChild(input)
+
+        // Then do the magic
+        const instance = tippy(container, {
+          content: wrapper,
+          allowHTML: true,
+          interactive: true,
+          placement: 'bottom',
+          showOnCreate: true, // Immediately show the tooltip
+          arrow: true, // Arrow for these tooltips
+          onShown: function () {
+            input.focus()
+            // Select from the beginning until the last dot
+            input.setSelectionRange(0, input.value.lastIndexOf('.'))
+          }
+        })
+
+        input.addEventListener('keydown', (event) => {
+          if (![ 'Enter', 'Escape' ].includes(event.key)) {
+            return
+          }
+
+          if (event.key === 'Enter' && input.value.trim() !== '') {
+            ipcRenderer.invoke('application', {
+              command: 'file-rename',
+              payload: {
+                path: this.openFiles[currentIdx].path,
+                name: input.value
+              }
+            })
+              .catch(e => console.error(e))
+          }
+          instance.hide()
+        })
       }
     })
   },
@@ -180,22 +232,22 @@ export default {
         // It was a middle-click (auxiliary button), so we should instead close
         // the file.
         event.preventDefault() // Otherwise, on Windows we'd have a middle-click-scroll
+        event.stopPropagation() // In response to #2663
         this.handleClickClose(event, file)
       } else if (event.button === 0) {
         // It was a left-click. (We must check because otherwise we would also
         // perform this action on a right-click (button === 2), but that event
         // must be handled by the container).
-        ipcRenderer.invoke('application', {
-          command: 'set-active-file',
-          payload: file.path
-        })
-          .catch(e => console.error(e))
+        this.selectFile(file)
       }
     },
     selectFile: function (file) {
+      // NOTE: We're handling active file setting via the open-file command. As
+      // long as a given file is already open, the document manager will simply
+      // set it as active. That is why we don't provide the newTab property.
       ipcRenderer.invoke('application', {
-        command: 'set-active-file',
-        payload: file.path
+        command: 'open-file',
+        payload: { path: file.path }
       })
         .catch(e => console.error(e))
     },
@@ -467,7 +519,7 @@ body.win32 {
       }
 
       &.active {
-        background-color: rgb(100, 100, 100);
+        background-color: rgb(172, 172, 172);
         color: white;
       }
 

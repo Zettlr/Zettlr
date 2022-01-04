@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-import Vue from 'vue'
+import { App, defineComponent } from 'vue'
 import Popover from './popover'
 import './popover.less' // We need some generic base styles
 
@@ -43,7 +43,7 @@ function closeFunction (): void {
 }
 
 function showFunction (
-  component: typeof Vue,
+  component: typeof defineComponent,
   element: HTMLElement,
   initialData: any,
   shouldToggle: boolean,
@@ -78,7 +78,7 @@ function showFunction (
 
 // <void> indicates the Plugin does not support options
 export default {
-  install (VueInstance: typeof Vue, options?: any): void {
+  install (app: App<Element>, options?: any): void {
     /**
      * Shows the given popup.
      *
@@ -88,8 +88,8 @@ export default {
      *
      * @return  {Popover}                       The popover instance
      */
-    VueInstance.prototype.$showPopover = (
-      component: typeof Vue,
+    app.config.globalProperties.$showPopover = (
+      component: typeof defineComponent,
       element: HTMLElement,
       initialData: any,
       callback: Function|null = null
@@ -107,8 +107,8 @@ export default {
      *
      * @return  {Popover|undefined}             Returns undefined if the corresponding popover has been closed.
      */
-    VueInstance.prototype.$togglePopover = (
-      component: typeof Vue,
+    app.config.globalProperties.$togglePopover = (
+      component: typeof defineComponent,
       element: HTMLElement,
       initialData: any,
       callback: Function|null = null
@@ -117,6 +117,6 @@ export default {
       return showFunction(component, element, initialData, true, callback)
     }
 
-    VueInstance.prototype.$closePopover = closeFunction
+    app.config.globalProperties.$closePopover = closeFunction
   }
 }

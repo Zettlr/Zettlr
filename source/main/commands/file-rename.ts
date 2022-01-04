@@ -15,7 +15,7 @@
 import path from 'path'
 import ZettlrCommand from './zettlr-command'
 import sanitize from 'sanitize-filename'
-import { codeFileExtensions, mdFileExtensions } from '../../common/get-file-extensions'
+import { codeFileExtensions, mdFileExtensions } from '@common/get-file-extensions'
 
 const ALLOWED_FILETYPES = mdFileExtensions(true)
 const CODE_FILETYPES = codeFileExtensions(true)

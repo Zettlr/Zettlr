@@ -15,7 +15,7 @@
 import commandExists from 'command-exists'
 import path from 'path'
 import sanitize from 'sanitize-filename'
-import { trans } from '../../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
 
 // TODO: Enable these additional writers
@@ -66,7 +66,7 @@ export const plugin: ExporterPlugin = {
 
     // First file determines the name of the exported file.
     const firstName = path.basename(options.sourceFiles[0].name, options.sourceFiles[0].ext)
-    const title = (options.title !== undefined) ? sanitize(options.title, { replacement: '-' }) : firstName
+    const title = (options.defaultsOverride?.title !== undefined) ? sanitize(options.defaultsOverride.title, { replacement: '-' }) : firstName
     const target = path.join(options.targetDirectory, `${title}.${extension}`)
 
     // Get the corresponding defaults file

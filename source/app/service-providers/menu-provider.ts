@@ -16,10 +16,11 @@ import {
   Menu,
   ipcMain,
   BrowserWindow,
-  MenuItemConstructorOptions
+  MenuItemConstructorOptions,
+  app
 } from 'electron'
 
-import broadcastIPCMessage from '../../common/util/broadcast-ipc-message'
+import broadcastIPCMessage from '@common/util/broadcast-ipc-message'
 
 // Import the menu constructors
 import win32Menu from './assets/menu.win32'
@@ -123,6 +124,11 @@ export default class MenuProvider {
 
         // Send the serialized submenu to the renderer
         const menuItem = appMenu.getMenuItemById(itemID)
+        if (menuItem === null) {
+          global.log.error(`[Menu Provider] Could not send app menu ${itemID}: No item found.`)
+          return
+        }
+
         event.reply('menu-provider', {
           command: 'application-submenu',
           payload: {
@@ -142,14 +148,71 @@ export default class MenuProvider {
         const menuItem = appMenu.getMenuItemById(itemID)
 
         if (menuItem === null) {
-          global.log.error(`[Menu Provider] Could not rigger a click on item ${itemID}: No item found.`)
+          global.log.error(`[Menu Provider] Could not trigger a click on item ${itemID}: No item found.`)
           return
         }
 
         // And now trigger a click! We need to pass the menuItem and the
         // focusedWindow as well.
         const focusedWindow = BrowserWindow.getFocusedWindow()
-        menuItem.click(menuItem, focusedWindow)
+        if (typeof menuItem.role === 'string') {
+          if (focusedWindow === null) {
+            global.log.error(`[Menu Provider] Could not trigger custom click on menuItem ${itemID} with role ${menuItem.role}: No focused Window to trigger on.`)
+            return
+          }
+
+          // Since menuItems with role have a no-op click function, we must manually
+          // implement the functionality here for the custom menus.
+          switch (menuItem.role.toLowerCase()) {
+            case 'copy':
+              focusedWindow.webContents.copy()
+              break
+            case 'cut':
+              focusedWindow.webContents.cut()
+              break
+            case 'paste':
+              focusedWindow.webContents.paste()
+              break
+            case 'pasteandmatchstyle':
+              focusedWindow.webContents.pasteAndMatchStyle()
+              break
+            case 'redo':
+              focusedWindow.webContents.redo()
+              break
+            case 'selectall':
+              focusedWindow.webContents.selectAll()
+              break
+            case 'undo':
+              focusedWindow.webContents.undo()
+              break
+            case 'zoomin':
+              focusedWindow.webContents.zoomLevel++
+              break
+            case 'zoomout':
+              focusedWindow.webContents.zoomLevel--
+              break
+            case 'resetzoom':
+              focusedWindow.webContents.zoomLevel = 0
+              break
+            case 'togglefullscreen':
+              focusedWindow.setFullScreen(!focusedWindow.isFullScreen())
+              break
+            case 'quit':
+              app.quit()
+              break
+            case 'close':
+              focusedWindow.close()
+              break
+            case 'minimize':
+              focusedWindow.minimize()
+              break
+            default:
+              global.log.error(`[Menu Provider] Could not click menu item with role ${menuItem.role}, since no handler is implemented!`)
+          }
+        } else {
+          console.log(`Clicking menu item with ID ${itemID}`)
+          menuItem.click(menuItem, focusedWindow)
+        }
       }
     })
 
@@ -229,7 +292,7 @@ export default class MenuProvider {
    *
    * @return  {any}            The serialized item
    */
-  _makeItemSerializable (menuItem: any): AnyMenuItem {
+  _makeItemSerializable (menuItem: Electron.MenuItem): AnyMenuItem {
     let serializableItem: any = {
       label: menuItem.label,
       id: menuItem.id,

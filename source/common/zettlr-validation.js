@@ -179,14 +179,14 @@ class ZettlrValidation {
     if (this._min === undefined && this._max === undefined) return true
     let pass = true
     // Is a string in range?
-    if (typeof this._input === 'string' && this._min && this._input.length < this._min) pass = false
-    if (typeof this._input === 'string' && this._max && this._input.length > this._max) pass = false
+    if (typeof this._input === 'string' && this._min !== undefined && this._input.length < this._min) pass = false
+    if (typeof this._input === 'string' && this._max !== undefined && this._input.length > this._max) pass = false
     // Is a number in range?
-    if (typeof this._input === 'number' && this._min && this._input < this._min) pass = false
-    if (typeof this._input === 'number' && this._max && this._input > this._max) pass = false
+    if (typeof this._input === 'number' && this._min !== undefined && this._input < this._min) pass = false
+    if (typeof this._input === 'number' && this._max !== undefined && this._input > this._max) pass = false
     // Is an array in range?
-    if (Array.isArray(this._input) && this._min && this._input.length < this._min) pass = false
-    if (Array.isArray(this._input) && this._max && this._input.length > this._max) pass = false
+    if (Array.isArray(this._input) && this._min !== undefined && this._input.length < this._min) pass = false
+    if (Array.isArray(this._input) && this._max !== undefined && this._input.length > this._max) pass = false
     return pass
   }
 
@@ -222,9 +222,9 @@ class ZettlrValidation {
     // Returns a message explaining why the validation failed.
     if (!this.isTypeCorrect()) return trans('validation.error_type', this._option, this._type)
     if (!this.isValueCorrect()) return trans('validation.error_value', this._option, this._in.join(', '))
-    if (!this.isInRange() && this._min && this._max) return trans('validation.error_range_both', this._option, this._min, this._max)
-    if (!this.isInRange() && !this._min && this._max) return trans('validation.error_range_max', this._option, this._max)
-    if (!this.isInRange() && this._min && !this._max) return trans('validation.error_range_min', this._option, this._min)
+    if (!this.isInRange() && this._min !== undefined && this._max !== undefined) return trans('validation.error_range_both', this._option, this._min, this._max)
+    if (!this.isInRange() && this._min === undefined && this._max !== undefined) return trans('validation.error_range_max', this._option, this._max)
+    if (!this.isInRange() && this._min !== undefined && this._max === undefined) return trans('validation.error_range_min', this._option, this._min)
     if (this.isEmpty() && this.isRequired()) return trans('validation.error_empty', this._option)
     return '' // Failsafe
   }

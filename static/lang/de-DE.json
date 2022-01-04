@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-09-30T14:09:51.000000Z"
+        "updated_at": "2021-12-28T14:23:20.000000Z"
     },
     "dialog": {
         "about": {
@@ -198,10 +198,12 @@
             "cite_style_label": "Wie soll Autocomplete Zitationen einf\u00fcgen?",
             "count_chars": "Zeichen statt W\u00f6rter z\u00e4hlen (z.B. f\u00fcr Chinesisch)",
             "creationtime": "Dateierstellungszeitpunkt",
+            "dark_mode": "Dunkler Modus",
             "debug": "Entwicklermodus aktivieren",
             "default_image_save_path": "Standard-Bildspeicherort (relativ oder absolut)",
             "delete_on_fail": "L\u00f6sche Objekte unwiderruflich, wenn sie nicht in den Papierkorb verschoben werden k\u00f6nnen",
             "display": {
+                "hide_toolbar_distraction_free": "Blende Werkzeugleiste im ablenkungsfreien Modus aus",
                 "image_height": "Maximale Bildh\u00f6he (Prozent)",
                 "image_size_info": "Hiermit bestimmst du die maximale Gr\u00f6\u00dfe der Bildvorschauen",
                 "image_width": "Maximale Bildbreite (Prozent)",
@@ -314,6 +316,7 @@
             "readability_algorithm": "Algorithmus f\u00fcr den Lesbarkeits-Modus",
             "reset_pandoc_command": "Pandoc-Befehl auf Werkseinstellungen zur\u00fccksetzen",
             "show_app_in_the_notification_area": "App-Icon in der Men\u00fcleiste anzeigen",
+            "sort_folders_first": "Zeige Ordner vor Dateien",
             "sorting_ascii": "ASCII-Reihenfolge (2 kommt nach 10)",
             "sorting_explanation": "Sortierreihenfolge f\u00fcr Dateien (bei Sortierung nach Dateinamen)",
             "sorting_natural": "Nat\u00fcrliche Reihenfolge (10 kommt nach 2)",
@@ -465,6 +468,11 @@
         "avg_surpassed": "\ud83d\udd25 Weiter so!",
         "avg_words": "durchschnittlich",
         "chars": "%s Zeichen",
+        "chart": {
+            "high_legend": "Mehr als das Doppelte des monatlichen Durchschnitts",
+            "high_mid_legend": "\u00dcber dem monatlichen Durchschnitt",
+            "low_mid_legend": "Unter dem monatlichen Durchschnitt"
+        },
         "citeproc": {
             "error_db": "Die Zitationsdatenbank konnte nicht geladen werden",
             "error_report_message": "%s Zitationen konnten aufgrund von Fehlern nicht geladen werden. Bitte \u00fcberpr\u00fcfe die unten stehenden CiteKeys anhand des mit ausgegebenen Fehlertextes.",
@@ -569,6 +577,7 @@
         "close_file": "Datei schlie\u00dfen",
         "close_workspace": "Arbeitsverzeichnis schlie\u00dfen",
         "copy": "Kopieren",
+        "copy_equation": "Formel-Code kopieren",
         "copy_filename": "Dateinamen kopieren",
         "copy_html": "Als HTML kopieren",
         "copy_id": "ID kopieren",

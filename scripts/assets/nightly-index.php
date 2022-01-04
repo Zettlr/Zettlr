@@ -131,7 +131,7 @@
       <a href="https://www.zettlr.com/" target="_blank">Homepage</a> &bullet;
       <a href="https://www.zettlr.com/download" target="_blank">Download stable releases</a> &bullet;
       <a href="https://github.com/Zettlr/Zettlr" target="_blank">GitHub</a> &bullet;
-      <a href="https://forum.zettlr.com" target="_blank">Forum</a>
+      <a href="https://discord.gg/PcfS3DM9Xj" target="_blank">Discord</a>
     </div>
   </div>
 

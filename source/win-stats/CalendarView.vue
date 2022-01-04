@@ -57,10 +57,15 @@
         </div>
       </div>
     </div>
+    <div id="calendar-legend">
+      <span class="low-mid-activity">{{ lowMidLegend }}</span><br>
+      <span class="high-mid-activity">{{ highMidLegend }}</span><br>
+      <span class="high-activity">{{ highLegend }}</span>
+    </div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -76,22 +81,23 @@
  */
 
 import { DateTime } from 'luxon'
-import { trans } from '../common/i18n-renderer'
-import ButtonControl from '../common/vue/form/elements/Button.vue'
+import { trans } from '@common/i18n-renderer'
+import ButtonControl from '@common/vue/form/elements/Button.vue'
+import { defineComponent, PropType } from 'vue'
 
-export default {
+export default defineComponent({
   name: 'CalendarView',
   components: {
     ButtonControl
   },
   props: {
     wordCounts: {
-      type: Object,
-      default: function () { return {} }
+      type: Object as PropType<{ [key: string]: number }>,
+      required: true
     },
     monthlyAverage: {
       type: Number,
-      default: 0
+      required: true
     }
   },
   data: function () {
@@ -109,16 +115,16 @@ export default {
     }
   },
   computed: {
-    year: function () {
+    year: function (): number {
       return this.now.year
     },
-    isCurrentYear: function () {
+    isCurrentYear: function (): boolean {
       return this.now.year === DateTime.local().year
     },
-    calendarLabel: function () {
+    calendarLabel: function (): string {
       return trans('dialog.statistics.tabs.calendar_label')
     },
-    isMinimumYear: function () {
+    isMinimumYear: function (): boolean {
       // Returns true if this.now holds the minimum year for which there is
       // data available
       const years = Object.keys(this.wordCounts).map(k => parseInt(k.substr(0, 4), 10))
@@ -131,7 +137,7 @@ export default {
 
       return this.now.year === min
     },
-    months: function () {
+    months: function (): Array<{ name: string, padding: number, daysInMonth: number }> {
       const ret = []
       const MONTHS = [
         trans('gui.months.jan'),
@@ -159,6 +165,15 @@ export default {
       }
 
       return ret
+    },
+    lowMidLegend: function (): string {
+      return trans('gui.chart.low_mid_legend')
+    },
+    highMidLegend: function (): string {
+      return trans('gui.chart.high_mid_legend')
+    },
+    highLegend: function (): string {
+      return trans('gui.chart.high_legend')
     }
   },
   methods: {
@@ -171,16 +186,19 @@ export default {
      *
      * @return  {number}         The percentage from 0 to 1
      */
-    getActivityScore: function (year, month, date) {
-      if (month < 10) {
-        month = `0${month}`
+    getActivityScore: function (year: number, month: number, date: number): number {
+      let parsedMonth = String(month)
+      let parsedDate = String(date)
+
+      if (parsedMonth.length < 2) {
+        parsedMonth = `0${month}`
       }
 
-      if (date < 10) {
-        date = `0${date}`
+      if (parsedDate.length < 2) {
+        parsedDate = `0${date}`
       }
 
-      const wordCount = this.wordCounts[`${year}-${month}-${date}`]
+      const wordCount = this.wordCounts[`${year}-${parsedMonth}-${parsedDate}`]
 
       if (wordCount === undefined || wordCount < this.monthlyAverage / 2) {
         return 0
@@ -192,10 +210,10 @@ export default {
         return 3 // More than twice the monthly average
       }
     },
-    yearMinus: function () {
+    yearMinus: function (): void {
       this.now = this.now.minus({ years: 1 })
     },
-    yearPlus: function () {
+    yearPlus: function (): void {
       // Prevent going into the future
       if (this.now.year === DateTime.local().year) {
         return
@@ -204,10 +222,17 @@ export default {
       this.now = this.now.plus({ years: 1 })
     }
   }
-}
+})
 </script>
 
 <style lang="less">
+@low-mid-bg: rgba(151, 170, 255, 0.6);
+@low-mid-fg: rgb(8, 5, 167);
+@high-mid-bg: rgba(192, 60, 152, 0.6);
+@high-mid-fg: rgb(77, 2, 60);
+@high-bg: rgba(214, 54, 54, 0.6);
+@high-fg: rgb(87, 0, 0);
+
 body div#calendar-container {
   padding: 10px; // Shift the contents a little bit from the edges
 
@@ -242,24 +267,48 @@ body div#calendar-container {
         line-height: 20px;
         font-size: 10px;
 
-        &.low-activity {
-          // Basically no change
-        }
+        // &.low-activity {
+        //   // Basically no change
+        // }
         &.low-mid-activity {
           // Slightly blue-ish
-          background-color: rgba(151, 170, 255, 0.6);
-          color: rgb(8, 5, 167);
+          background-color: @low-mid-bg;
+          color: @low-mid-fg;
         }
         &.high-mid-activity {
           // Slightly purple
-          background-color: rgba(192, 60, 152, 0.6);
-          color: rgb(77, 2, 60);
+          background-color: @high-mid-bg;
+          color: @high-mid-fg;
         }
         &.high-activity {
           // Reddish
-          background-color: rgba(214, 54, 54, 0.6);
-          color: rgb(87, 0, 0);
+          background-color: @high-bg;
+          color: @high-fg;
         }
+      }
+    }
+  }
+
+  div#calendar-legend {
+
+    span {
+      display: inline-block;
+      font-size: 12px;
+      padding: 6px;
+      margin: 6px 0;
+      border-radius: 6px;
+
+      &.low-mid-activity {
+        background-color: @low-mid-bg;
+        color: @low-mid-fg;
+      }
+      &.high-mid-activity {
+        background-color: @high-mid-bg;
+        color: @high-mid-fg;
+      }
+      &.high-activity {
+        background-color: @high-bg;
+        color: @high-fg;
       }
     }
   }

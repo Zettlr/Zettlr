@@ -15,11 +15,11 @@
 
 import path from 'path'
 import EventEmitter from 'events'
-import isFile from '../../../common/util/is-file'
-import isDir from '../../../common/util/is-dir'
-import isAttachment from '../../../common/util/is-attachment'
-import objectToArray from '../../../common/util/object-to-array'
-import findObject from '../../../common/util/find-object'
+import isFile from '@common/util/is-file'
+import isDir from '@common/util/is-dir'
+import isAttachment from '@common/util/is-attachment'
+import objectToArray from '@common/util/object-to-array'
+import findObject from '@common/util/find-object'
 import locateByPath from './util/locate-by-path'
 import * as FSALFile from './fsal-file'
 import * as FSALCodeFile from './fsal-code-file'
@@ -41,7 +41,7 @@ import {
   CodeFileMeta,
   OtherFileDescriptor
 } from './types'
-import { codeFileExtensions, mdFileExtensions } from '../../../common/get-file-extensions'
+import { codeFileExtensions, mdFileExtensions } from '@common/get-file-extensions'
 
 // Re-export all interfaces necessary for other parts of the code (Document Manager)
 export {
@@ -781,14 +781,15 @@ export default class FSAL extends EventEmitter {
       await FSALCodeFile.rename(src, this._cache, newName)
     }
 
-    // Now we need to re-sort the parent directory
-    if (src.parent !== null) {
-      await FSALDir.sort(src.parent) // Omit sorting
-    }
-
     // src.path already points to the new path
     this._recordFiletreeChange('remove', oldPath)
     this._recordFiletreeChange('add', src.path)
+
+    // Now we need to re-sort the parent directory
+    if (src.parent !== null) {
+      await FSALDir.sort(src.parent) // Omit sorting
+      this._recordFiletreeChange('change', src.parent.path)
+    }
 
     // Notify of a state change
     this.emit('fsal-state-changed', 'filetree')
@@ -861,9 +862,11 @@ export default class FSAL extends EventEmitter {
     this._fsalIsBusy = true
     // NOTE: Generates no events as dotfiles are not watched
     // Updates the project properties on a directory.
-    await FSALDir.updateProjectProperties(src, options)
+    const hasChanged = await FSALDir.updateProjectProperties(src, options)
 
-    this._recordFiletreeChange('change', src.path)
+    if (hasChanged) {
+      this._recordFiletreeChange('change', src.path)
+    }
 
     this._fsalIsBusy = false
     this._afterRemoteChange()
@@ -907,8 +910,8 @@ export default class FSAL extends EventEmitter {
     this._fsalIsBusy = true
 
     // Compute the paths to be replaced
-    let oldPrefix = path.join(src.dir, src.name)
-    let newPrefix = path.join(src.dir, newName)
+    const oldPrefix = path.join(src.dir, src.name)
+    const newPrefix = path.join(src.dir, newName)
 
     // Now that we have prepared potential updates,
     // let us perform the rename.

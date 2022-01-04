@@ -16,6 +16,12 @@
 
     <hr v-if="suggestions.length > 0">
 
+    <TabBar
+      v-bind:tabs="tabs"
+      v-bind:current-tab="sorting"
+      v-on:tab="sorting = $event"
+    ></TabBar>
+
     <TextControl
       ref="filter"
       v-model="query"
@@ -29,7 +35,7 @@
       v-on:click="handleClick(tag.text)"
     >
       <!-- Tags have a count, text, and a className -->
-      #{{ tag.text }} ({{ tag.count }}x)
+      {{ tag.text }} ({{ tag.count }}x)
     </div>
   </div>
 </template>
@@ -49,24 +55,32 @@
  * END HEADER
  */
 
-import TextControl from '../common/vue/form/elements/Text.vue'
-import ButtonControl from '../common/vue/form/elements/Button.vue'
-import TokenList from '../common/vue/form/elements/TokenList.vue'
-import { trans } from '../common/i18n-renderer'
+import TextControl from '@common/vue/form/elements/Text.vue'
+import ButtonControl from '@common/vue/form/elements/Button.vue'
+import TokenList from '@common/vue/form/elements/TokenList.vue'
+import TabBar from '@common/vue/TabBar.vue'
+import { trans } from '@common/i18n-renderer'
 
 export default {
   name: 'PopoverTags',
   components: {
     TextControl,
     TokenList,
-    ButtonControl
+    ButtonControl,
+    TabBar
   },
   data: function () {
     return {
       tags: [],
+      tabs: [
+        // TODO: Translate
+        { id: 'name', label: 'Name' },
+        { id: 'count', label: 'Count' }
+      ],
       suggestions: [], // Tag suggestions for the currently active file
       query: '',
       searchForTag: '',
+      sorting: 'name', // Can be "name" or "count"
       shouldAddSuggestions: false
     }
   },
@@ -91,8 +105,22 @@ export default {
     addButtonLabel: function () {
       return trans('dialog.tag_cloud.add_to_file')
     },
+    sortedTags: function () {
+      // Sorts the tags based on either name or count
+      const sorted = this.tags.map(elem => elem)
+      const languagePreferences = [ global.config.get('appLang'), 'en' ]
+      const coll = new Intl.Collator(languagePreferences, { 'numeric': true })
+      sorted.sort((a, b) => {
+        if (this.sorting === 'name') {
+          return coll.compare(a.text, b.text)
+        } else {
+          return b.count - a.count
+        }
+      })
+      return sorted
+    },
     filteredTags: function () {
-      return this.tags.filter(tag => {
+      return this.sortedTags.filter(tag => {
         return tag.text.toLowerCase().includes(this.query.toLowerCase())
       })
     }

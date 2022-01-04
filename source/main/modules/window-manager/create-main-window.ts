@@ -33,8 +33,8 @@ export default function createMainWindow (conf: WindowPosition): BrowserWindow {
   const winConf: BrowserWindowConstructorOptions = {
     width: conf.width,
     height: conf.height,
-    x: conf.left,
-    y: conf.top,
+    x: conf.x,
+    y: conf.y,
     acceptFirstMouse: true,
     minWidth: 300,
     minHeight: 200,

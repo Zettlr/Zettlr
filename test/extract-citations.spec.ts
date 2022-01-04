@@ -15,17 +15,6 @@
 import assert from 'assert'
 import extractCitations from '../source/common/util/extract-citations'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// interface CiteItem {
-//   id: string
-//   locator?: string
-//   label?: string
-//   'suppress-author'?: boolean
-//   'author-only'?: boolean
-//   prefix?: string
-//   suffix?: string
-// }
-
 const defaults = {
   'suppress-author': false,
   label: 'page',
@@ -181,6 +170,67 @@ const tests = [
       }
     ],
     description: 'extracts an in-text citation with a URL as citekey and optional locator/suffix'
+  },
+  // The next tests check that locators without explicit page number are detected
+  {
+    input: '@{https://example.com/bib?name=foobar&date=2000} [33] says blah.',
+    expected: [
+      {
+        from: 0,
+        to: 53,
+        composite: true,
+        citations: [{ ...defaults, id: 'https://example.com/bib?name=foobar&date=2000', label: 'page', locator: '33', suffix: '' }]
+      }
+    ],
+    description: 'extracts an in-text citation with a URL as citekey and locator without explicit label'
+  },
+  {
+    input: '@Author2015 [33] says blah.',
+    expected: [
+      {
+        from: 0,
+        to: 16,
+        composite: true,
+        citations: [{ ...defaults, id: 'Author2015', label: 'page', locator: '33', suffix: '' }]
+      }
+    ],
+    description: 'extracts an in-text citation with a regular citekey and locator without explicit label'
+  },
+  {
+    input: 'Someone [@Author2015, 33] says blah.',
+    expected: [
+      {
+        from: 8,
+        to: 25,
+        composite: false,
+        citations: [{ ...defaults, id: 'Author2015', label: 'page', locator: '33', suffix: '' }]
+      }
+    ],
+    description: 'extracts a regular citation with a regular citekey and locator without explicit label'
+  },
+  {
+    input: 'Someone [@Author2015, 33 and someplace else] says blah.',
+    expected: [
+      {
+        from: 8,
+        to: 44,
+        composite: false,
+        citations: [{ ...defaults, id: 'Author2015', label: 'page', locator: '33', suffix: 'and someplace else' }]
+      }
+    ],
+    description: 'extracts a regular citation with locator without explicit label and a suffix'
+  },
+  {
+    input: 'Someone [@Author2015, ix-xi and someplace else] says blah.',
+    expected: [
+      {
+        from: 8,
+        to: 47,
+        composite: false,
+        citations: [{ ...defaults, id: 'Author2015', label: 'page', locator: 'ix-xi', suffix: 'and someplace else' }]
+      }
+    ],
+    description: 'extracts a citations and locators with latin numbers and a suffix'
   }
 ]
 

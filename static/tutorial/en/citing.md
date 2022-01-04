@@ -28,10 +28,6 @@ Getting back to our citation, which still needs its reference, can you manage to
 
 As soon as you write longer papers and even books, you may lose oversight over what you’ve already quoted, and which things still need to find their way into your paper. Zettlr is capable of displaying the full list of your references in the sidebar. Open it now by clicking the paper clip icon again, and have a look at the “References”-section. You will notice that the book is visible there — and as you continue to include references, this list will grow!
 
-In order to export these files, make sure to also have `pandoc-citeproc` installed, which is a small extra-program for Pandoc that can parse such citations during export.
-
-> Note that from Pandoc version 2.11 on, citeproc comes bundled with Pandoc, so you don't need to install it in an extra step.
-
 ## Final Thoughts 🔥
 
 This concludes our short introduction to Zettlr. You’re good to go!
@@ -40,10 +36,12 @@ One last thing we’d like to mention is the great Zettlr community. We could ne
 
 You can join our community over here:
 
-- [On the forum](https://forum.zettlr.com/)
+- [On Discord](https://discord.gg/PcfS3DM9Xj)
 - [On our subreddit](https://www.reddit.com/r/Zettlr/)
 - [On GitHub](https://github.com/Zettlr/Zettlr/)
 
-**Enjoy working with Zettlr!**
+Finally, if you want to, you can also support Zettlr on [Patreon](https://www.patreon.com/zettlr) or via [PayPal](https://www.paypal.me/hendrikerz)!
+
+But now we're done with this little introduction: **Enjoy working with Zettlr!**
 
 ![zettlr.png](./zettlr.png)

@@ -58,6 +58,12 @@ global.log = {
   }
 }
 
+// To show notifications properly on Windows, we must manually set the appUserModelID
+// See https://www.electronjs.org/docs/tutorial/notifications#windows
+if (process.platform === 'win32') {
+  app.setAppUserModelId('com.zettlr.app')
+}
+
 // Setting custom data dir for user configuration files.
 // Full path or relative path is OK. '~' does not work as expected.
 const dataDirFlag = process.argv.find(elem => elem.indexOf('--data-dir=') === 0)

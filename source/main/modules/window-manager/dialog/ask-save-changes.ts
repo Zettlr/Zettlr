@@ -18,7 +18,7 @@ import {
   MessageBoxOptions,
   MessageBoxReturnValue
 } from 'electron'
-import { trans } from '../../../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 
 /**
  * Displays a prompt to ask the user if they want to save the files first

@@ -14,16 +14,16 @@
  * END HEADER
  */
 
-import windowRegister from '../common/modules/window-register'
-import Vue from 'vue'
-import LogViewer from './log-viewer.vue'
+import windowRegister from '@common/modules/window-register'
+import { createApp } from 'vue'
+import App from './App.vue'
 
 const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
-// Create the Vue app because we need to reference it in our toolbar controls
-const app = new Vue(LogViewer)
-
 windowRegister()
+
+const app = createApp(App)
+app.mount('#app')
 
 // This window will be closed immediately on a window-close command
 ipcRenderer.on('shortcut', (event, shortcut) => {
@@ -31,6 +31,3 @@ ipcRenderer.on('shortcut', (event, shortcut) => {
     ipcRenderer.send('window-controls', { command: 'win-close' })
   }
 })
-
-// In the end: mount the app onto the DOM
-app.$mount('#app')

@@ -11,12 +11,13 @@
  * END HEADER
  */
 
-import { getBlockMathRE, getCodeBlockRE, getWysiwygRE } from '../regular-expressions'
+import { getBlockMathRE, getCodeBlockRE } from '../regular-expressions'
 import extractYamlFrontmatter from './extract-yaml-frontmatter'
 
 const mathRE = getBlockMathRE()
 const codeRE = getCodeBlockRE(true)
-const inlineRE = getWysiwygRE()
+const inlineRE = /(?:[_*`]{1,3})(.+?)(?:[_*`]{1,3})/gi
+const interpunctionRE = /^[-–—.…:;,'%/\\_¡!¿?()[\]{}]+$/
 
 /**
  * Returns an accurate word count.
@@ -43,6 +44,8 @@ export default function (markdown: string, countChars = false): number {
   if (!countChars) {
     // Will return the length of the resultant array instead of the string
     content = content.split(/[\s ]+/).filter(word => word.trim() !== '')
+    // Additionally, remove interpunction-only words
+    content = content.filter(word => !interpunctionRE.test(word))
   }
 
   return content.length

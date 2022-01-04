@@ -14,8 +14,8 @@
 
 import { app, BrowserWindow, dialog, FileFilter, OpenDialogOptions, OpenDialogReturnValue } from 'electron'
 import path from 'path'
-import isDir from '../../../../common/util/is-dir'
-import { trans } from '../../../../common/i18n-main'
+import isDir from '@common/util/is-dir'
+import { trans } from '@common/i18n-main'
 
 /**
  * Displays a dialog to prompt the user for file paths

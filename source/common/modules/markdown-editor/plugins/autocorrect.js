@@ -99,7 +99,7 @@
 
   /**
    * Triggers on option change and (re-)sets up the AutoCorrect.
-   * @param {CodeMirror} cm The calling CodeMirror instance
+   * @param {CodeMirror.Editor} cm The calling CodeMirror instance
    * @param {Mixed} value The new autoCorrect value
    * @param {Mixed} oldValue The previous autoCorrect value
    */
@@ -141,7 +141,7 @@
     // it also triggers when you type the last character of a
     // oreplacement-value. LibreOffice only replaces on Space
     // or Enter.
-    wordStyleAutoCorrect = (!option.hasOwnProperty('style') || option.style !== 'LibreOffice')
+    wordStyleAutoCorrect = (!('style' in option) || option.style !== 'LibreOffice')
 
     try {
       // If any of these properties is not present,
@@ -174,10 +174,14 @@
       // Define the default handlers
       'Space': handleSpecial,
       'Enter': handleSpecial,
-      'Backspace': handleBackspace,
-      '\'"\'': function (cm) { return handleQuote(cm, 'double') },
-      "'''": function (cm) { return handleQuote(cm, 'single') }
+      'Backspace': handleBackspace
       // Afterwards, we can add characters as we deem fit (only Word-style AutoCorrect)
+    }
+
+    // If the user has special quotes set, attach additional keys
+    if (quotes !== false && quotes['single'].start !== "'" && quotes['double'].start !== '"') {
+      builtKeyMap['\'"\''] = function (cm) { return handleQuote(cm, 'double') }
+      builtKeyMap["'''"] = function (cm) { return handleQuote(cm, 'single') }
     }
 
     // In case of LibreOffice style AutoCorrect only
@@ -221,7 +225,7 @@
 
   /**
    * This function checks whether or not there is a string to be replaced.
-   * @param {CodeMirror} cm The CodeMirror instance
+   * @param {CodeMirror.Editor} cm The CodeMirror instance
    * @param {Object} candidates A subset of the replacement table for the key
    * @param {string} key The key that is currently being handled.
    */
@@ -270,7 +274,7 @@
 
   /**
    * Handles a special character.
-   * @param {CodeMirror} cm The CodeMirror instance.
+   * @param {CodeMirror.Editor} cm The CodeMirror instance.
    */
   function handleSpecial (cm) {
     if (cm.isReadOnly()) {
@@ -333,7 +337,7 @@
 
   /**
    * Handles the insertion of a quote, either single or double.
-   * @param {CodeMirror} cm The CodeMirror instance.
+   * @param {CodeMirror.Editor} cm The CodeMirror instance.
    * @param {string} type The type of quote to be handled (single or double).
    */
   function handleQuote (cm, type) {
@@ -341,30 +345,57 @@
       return CodeMirror.Pass
     }
 
-    const cursor = cm.getCursor()
-    // In case of overlay markdown modes, we need to make sure
-    // we only apply this if we're in markdown.
-    if (cm.getModeAt(cursor).name !== 'markdown-zkn') {
-      return CodeMirror.Pass
+    if (!cm.somethingSelected()) {
+      const cursor = cm.getCursor()
+      // In case of overlay markdown modes, we need to make sure
+      // we only apply this if we're in markdown.
+      if (cm.getModeAt(cursor).name !== 'markdown-zkn') {
+        return CodeMirror.Pass
+      }
+
+      canPerformReverseReplacement = false // Reset the handleBackspace flag
+      const cursorBefore = { 'line': cursor.line, 'ch': cursor.ch - 1 }
+
+      // We have to check for two possibilities:
+      // There's a "startChar" in front of the quote or not.
+      if (cursor.ch === 0 || startChars.includes(cm.getRange(cursorBefore, cursor))) {
+        cm.doc.replaceRange(quotes[type].start, cursor)
+      } else {
+        cm.doc.replaceRange(quotes[type].end, cursor)
+      }
+
+      hasJustAddedQuote = true
+      return
     }
 
     canPerformReverseReplacement = false // Reset the handleBackspace flag
-    const cursorBefore = { 'line': cursor.line, 'ch': cursor.ch - 1 }
 
-    // We have to check for two possibilities:
-    // There's a "startChar" in front of the quote or not.
-    if (cursor.ch === 0 || startChars.includes(cm.getRange(cursorBefore, cursor))) {
-      cm.doc.replaceRange(quotes[type].start, cursor)
-    } else {
-      cm.doc.replaceRange(quotes[type].end, cursor)
+    // We have (at least) one selection, so we need to handle it differently
+    const toBeReplacedWith = []
+    for (let { anchor, head } of cm.listSelections()) {
+      if ((anchor.line === head.line && anchor.ch > head.ch) || anchor.line > head.line) {
+        // We require head to follow after anchor, but if the user selected
+        // text backward, we need to swap the values
+        [ anchor, head ] = [ head, anchor ]
+      }
+      // Make sure the full selection is within Markdown bounds
+      const noMdStart = cm.getModeAt(anchor).name !== 'markdown-zkn'
+      const noMdEnd = cm.getModeAt(head).name !== 'markdown-zkn'
+      const selectionContent = cm.getRange(anchor, head)
+      console.log(anchor, head)
+      if (noMdStart || noMdEnd) {
+        toBeReplacedWith.push(selectionContent)
+      } else {
+        toBeReplacedWith.push(quotes[type].start + selectionContent + quotes[type].end)
+      }
     }
 
-    hasJustAddedQuote = true
+    cm.replaceSelections(toBeReplacedWith, 'around')
   }
 
   /**
    * Handles a backspace keypress if using Word style. It undoes the last replacement.
-   * @param {CodeMirror} cm The CodeMirror instance.
+   * @param {CodeMirror.Editor} cm The CodeMirror instance.
    */
   function handleBackspace (cm) {
     if (cm.isReadOnly()) {
@@ -377,7 +408,7 @@
       // If there are selections, simply don't do it, because a selection means
       // the user wants to remove several things, and not want to undo any
       // Magic Quote.
-      if (cm.doc.somethingSelected()) {
+      if (cm.somethingSelected()) {
         return CodeMirror.Pass
       }
 

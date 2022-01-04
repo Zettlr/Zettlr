@@ -16,8 +16,8 @@
 // it's not in the plugins folder.
 
 const tippy = require('tippy.js').default
-const md2html = require('../../../util/md-to-html')
-const { trans } = require('../../../i18n-renderer')
+const md2html = require('@common/util/md-to-html')
+const { trans } = require('@common/i18n-renderer')
 
 /**
  * No footnote tooltips while we're editing a footnote
@@ -30,8 +30,6 @@ module.exports = (cm) => {
   // Hook into click events
   cm.getWrapperElement().addEventListener('click', (event) => {
     // Open links on both Cmd and Ctrl clicks - otherwise stop handling event
-    const cursor = cm.coordsChar({ left: event.clientX, top: event.clientY })
-
     if (process.platform === 'darwin' && event.metaKey === false) {
       return true
     }
@@ -39,6 +37,8 @@ module.exports = (cm) => {
     if (process.platform !== 'darwin' && event.ctrlKey === false) {
       return true
     }
+
+    const cursor = cm.coordsChar({ left: event.clientX, top: event.clientY })
 
     if (Boolean(cm.isReadOnly()) || cm.getModeAt(cursor).name !== 'markdown-zkn') {
       return true
@@ -51,7 +51,7 @@ module.exports = (cm) => {
     }
 
     const tokenList = tokenInfo.type.split(' ')
-    const startsWithCirc = tokenInfo.string.indexOf('^') === 0
+    const startsWithCirc = Boolean(event.target.textContent.startsWith('^'))
 
     // A link (reference) that starts with a cironflex is a footnote
     if (Boolean(tokenList.includes('link')) && startsWithCirc) {
@@ -258,8 +258,8 @@ function getFnTextRange (cm, ref) {
 
       if ((!isEmpty && !isIndented && isPreviousLineEmpty) || isAnotherFootnote) {
         // The line is neither empty, nor correctly indented, so stop searching.
-        to.line = i - 1
-        to.ch = lines[i - 1].length
+        to.line = i - 2 // -2 because of `isPreviousLineEmpty`, which we must exclude
+        to.ch = lines[i - 2].length
         break
       }
     }

@@ -15,8 +15,9 @@ const fs = require('fs')
 
 /**
  * Checks if a given path is a valid directory
- * @param  {String}  p The path to check
- * @return {Boolean}   True, if p is valid and also a directory
+ * @param  {string}  p The path to check
+ *
+ * @return {boolean}   True, if p is valid and also a directory
  */
 module.exports = function (p) {
   try {

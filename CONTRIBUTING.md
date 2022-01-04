@@ -17,16 +17,15 @@ Zettlr lives through contributions from the community. You do not have to know a
 
 ## Where to Get Help
 
-An active community forms the backbone of every major Open Source project. The community of Zettlr is present on various platforms on the internet, where they actively help each other out – not just with regard to using the application. Each platform yields a specific thematic focus. GitHub is the most tech-focused part of the Zettlr community, albeit discussing here is sometimes difficult, which is why the [forum](https://forum.zettlr.com/) is a good place to start. Furthermore, we have a special Matrix.org-room solely for developers. You can find it [here](https://matrix.to/#/!YUXsCfbfWnQCaaUrCo:matrix.org?via=matrix.org).
+An active community forms the backbone of every major Open Source project. The community of Zettlr is present on various platforms on the internet, where they actively help each other out – not just with regard to using the application. Each platform yields a specific thematic focus. GitHub is the most tech-focused part of the Zettlr community, albeit [discussing here](https://github.com/Zettlr/Zettlr/discussions) is the way to go for more theoretical discussions. Furthermore, we have a [Discord-server](https://discord.gg/PcfS3DM9Xj) where we discuss the app and help each other out.
 
 **Please note: Do NOT open issues on GitHub if you have questions on how to help/with your PR. Please ask these questions on any other platform!**
 
 ### All Communication Channels
 
-- [Forum](https://forum.zettlr.com/)
+- [Discord](https://discord.gg/PcfS3DM9Xj)
 - [Reddit](https://www.reddit.com/r/Zettlr/)
-- [GitHub](https://github.com/Zettlr/Zettlr/issues)
-- [Matrix.org Community](https://matrix.to/#/!IAEXfwZMPRTlvEnIDa:matrix.org) ([Matrix.org developer room](https://matrix.to/#/!YUXsCfbfWnQCaaUrCo:matrix.org))
+- [GitHub](https://github.com/Zettlr/Zettlr)
 
 ## How to Help
 

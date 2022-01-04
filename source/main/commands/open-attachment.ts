@@ -17,10 +17,10 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { trans } from '../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 import got from 'got'
 import { shell } from 'electron'
-import pdfSorter from '../../common/util/sort-by-pdf'
+import pdfSorter from '@common/util/sort-by-pdf'
 
 export default class OpenAttachment extends ZettlrCommand {
   constructor (app: any) {
@@ -33,7 +33,7 @@ export default class OpenAttachment extends ZettlrCommand {
    * @param  {Object} arg An object containing the citekey to open.
    */
   async run (evt: string, arg: any): Promise<boolean> {
-    if (!arg.citekey || typeof arg.citekey !== 'string') {
+    if (!('citekey' in arg) || typeof arg.citekey !== 'string') {
       return false
     }
 
@@ -43,9 +43,9 @@ export default class OpenAttachment extends ZettlrCommand {
     // circumvent the Zotero thing directly
     if (global.citeproc.hasBibTexAttachments()) {
       let attachments = global.citeproc.getBibTexAttachments(arg.citekey)
-      if (attachments && attachments.length === 0) {
+      if (attachments !== undefined && attachments.length === 0) {
         appearsToHaveNoAttachments = true
-      } else if (attachments) {
+      } else if (attachments !== undefined) {
         let potentialError = await shell.openPath(attachments[0])
         if (potentialError !== '') {
           global.log.warning('Error during opening of BibTex attachment', potentialError)

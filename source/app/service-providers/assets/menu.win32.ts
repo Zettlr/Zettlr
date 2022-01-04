@@ -15,7 +15,7 @@
  */
 
 import { app, MenuItemConstructorOptions, shell } from 'electron'
-import { trans } from '../../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 import path from 'path'
 
 export default function getMenu (
@@ -157,6 +157,31 @@ export default function getMenu (
           type: 'separator'
         },
         {
+          id: 'menu.previous_file',
+          label: 'Previous file',
+          accelerator: 'Ctrl+[',
+          click: function (menuitem, focusedWindow) {
+            global.application.runCommand('previous-file')
+              .catch(e => {
+                global.log.error(`[Menu] Error selecting previous file: ${e.message as string}`, e)
+              })
+          }
+        },
+        {
+          id: 'menu.next_file',
+          label: 'Next file',
+          accelerator: 'Ctrl+]',
+          click: function (menuitem, focusedWindow) {
+            global.application.runCommand('next-file')
+              .catch(e => {
+                global.log.error(`[Menu] Error selecting next file: ${e.message as string}`, e)
+              })
+          }
+        },
+        {
+          type: 'separator'
+        },
+        {
           id: 'menu.import_files',
           label: trans('menu.import_files'),
           click: function (menuItem, focusedWindow) {
@@ -246,14 +271,6 @@ export default function getMenu (
           accelerator: 'Ctrl+R',
           click: function (menuitem, focusedWindow) {
             focusedWindow?.webContents.send('shortcut', 'rename-file')
-          }
-        },
-        {
-          id: 'menu.rename_dir',
-          label: trans('menu.rename_dir'),
-          accelerator: 'Ctrl+Shift+R',
-          click: function (menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'rename-dir')
           }
         },
         {
@@ -401,7 +418,7 @@ export default function getMenu (
       submenu: [
         {
           id: 'menu.toggle_theme',
-          label: trans('menu.toggle_theme'),
+          label: trans('dialog.preferences.dark_mode'),
           accelerator: 'Ctrl+Alt+L',
           type: 'checkbox',
           checked: global.config.get('darkMode'),
@@ -535,9 +552,7 @@ export default function getMenu (
           id: 'menu.win_minimize',
           label: trans('menu.win_minimize'),
           accelerator: 'Ctrl+M',
-          click: function (menuitem, focusedWindow) {
-            focusedWindow?.minimize()
-          }
+          role: 'minimize'
         },
         {
           id: 'menu.win_close',
@@ -632,15 +647,9 @@ export default function getMenu (
           id: 'menu.update',
           label: trans('menu.update'),
           click: function (menuitem, focusedWindow) {
-            if (global.updates.applicationUpdateAvailable()) {
-              // Immediately open the window instead of first checking
-              global.application.runCommand('open-update-window')
-                .catch(e => global.log.error(String(e.message), e))
-
-              return
-            }
-
-            global.updates.check()
+            // Immediately open the window instead of first checking
+            global.application.runCommand('open-update-window')
+              .catch(e => global.log.error(String(e.message), e))
           }
         }
       ]

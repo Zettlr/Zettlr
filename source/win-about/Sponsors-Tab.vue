@@ -16,7 +16,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -32,12 +32,19 @@
  */
 
 import ky from 'ky'
+import { defineComponent } from 'vue'
 
-export default {
+interface Sponsor {
+  id: string
+  name: string
+  link?: string
+}
+
+export default defineComponent({
   name: 'SponsorsTab',
   data: function () {
     return {
-      sponsors: []
+      sponsors: [] as Sponsor[]
     }
   },
   created: function () {
@@ -51,7 +58,7 @@ export default {
       })
       .catch(e => console.error(e))
   }
-}
+})
 </script>
 
 <style lang="less">

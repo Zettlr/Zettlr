@@ -7,11 +7,11 @@
         ref="input"
         v-bind:min="min"
         v-bind:max="max"
-        v-bind:value="value"
+        v-bind:value="modelValue"
         v-bind:class="{ 'inline': inline }"
         v-bind:disabled="disabled"
         type="number"
-        v-on:input="$emit('input', sanitize($event.target.value))"
+        v-on:input="$emit('update:modelValue', sanitize($event.target.value))"
         v-on:keyup.enter="$emit('confirm', sanitize($event.target.value))"
         v-on:keyup.esc="$emit('escape', sanitize($event.target.value))"
         v-on:blur="$emit('blur', sanitize($event.target.value))"
@@ -31,11 +31,11 @@
       ref="input"
       v-bind:min="min"
       v-bind:max="max"
-      v-bind:value="value"
+      v-bind:value="modelValue"
       v-bind:class="{ 'inline': inline }"
       v-bind:disabled="disabled"
       type="number"
-      v-on:input="$emit('input', sanitize($event.target.value))"
+      v-on:input="$emit('update:modelValue', sanitize($event.target.value))"
       v-on:keyup.enter="$emit('confirm', sanitize($event.target.value))"
       v-on:keyup.esc="$emit('escape', sanitize($event.target.value))"
       v-on:blur="$emit('blur', sanitize($event.target.value))"
@@ -57,12 +57,12 @@
  *
  * END HEADER
  */
-import { trans } from '../../../i18n-renderer'
+import { trans } from '@common/i18n-renderer'
 
 export default {
   name: 'FieldNumber',
   props: {
-    value: {
+    modelValue: {
       type: Number,
       default: 0
     },
@@ -95,6 +95,7 @@ export default {
       default: false
     }
   },
+  emits: [ 'update:modelValue', 'confirm', 'escape', 'blur' ],
   computed: {
     fieldID: function () {
       return 'field-input-' + this.name
@@ -106,7 +107,7 @@ export default {
   methods: {
     resetValue: function () {
       this.$refs.input.value = this.reset
-      this.$emit('input', this.reset)
+      this.$emit('update:modelValue', this.reset)
     },
     sanitize: function (value) {
       // If the user completely empties the field, make sure a number is being returned

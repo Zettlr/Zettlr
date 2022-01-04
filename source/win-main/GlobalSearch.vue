@@ -15,6 +15,7 @@
       v-bind:autocomplete-values="directorySuggestions"
       v-bind:placeholder="restrictDirPlaceholder"
       v-on:confirm="restrictToDir = $event"
+      v-on:keydown.enter="startSearch()"
     ></AutocompleteText>
     <!-- Then an always-visible search button ... -->
     <ButtonControl
@@ -87,8 +88,9 @@
             v-for="singleRes, idx2 in result.result"
             v-bind:key="idx2"
             class="result-line"
+            v-bind:class="{'active': idx==activeFileIdx && idx2==activeLineIdx}"
             v-on:contextmenu.stop.prevent="fileContextMenu($event, result.file.path, singleRes.line)"
-            v-on:mousedown.stop.prevent="onResultClick($event, result.file.path, singleRes.line)"
+            v-on:mousedown.stop.prevent="onResultClick($event, idx, idx2, result.file.path, singleRes.line)"
           >
             <strong>{{ singleRes.line }}</strong>:
             <span v-html="markText(singleRes)"></span>
@@ -114,13 +116,13 @@
  * END HEADER
  */
 
-import objectToArray from '../common/util/object-to-array'
-import compileSearchTerms from '../common/util/compile-search-terms'
-import TextControl from '../common/vue/form/elements/Text'
-import ButtonControl from '../common/vue/form/elements/Button'
-import ProgressControl from '../common/vue/form/elements/Progress'
-import AutocompleteText from '../common/vue/form/elements/AutocompleteText'
-import { trans } from '../common/i18n-renderer'
+import objectToArray from '@common/util/object-to-array'
+import compileSearchTerms from '@common/util/compile-search-terms'
+import TextControl from '@common/vue/form/elements/Text'
+import ButtonControl from '@common/vue/form/elements/Button'
+import ProgressControl from '@common/vue/form/elements/Progress'
+import AutocompleteText from '@common/vue/form/elements/AutocompleteText'
+import { trans } from '@common/i18n-renderer'
 
 const ipcRenderer = window.ipc
 const path = window.path
@@ -133,6 +135,7 @@ export default {
     ButtonControl,
     AutocompleteText
   },
+  emits: ['jtl'],
   data: function () {
     return {
       // The current search
@@ -159,6 +162,10 @@ export default {
       // Is set to a line number if this component is waiting for a file to
       // become active.
       jtlIntent: undefined,
+      // The file list index of the most recently clicked search result.
+      activeFileIdx: undefined,
+      // The result line index of the most recently clicked search result.
+      activeLineIdx: undefined,
       contextMenu: [
         {
           label: trans('menu.open_new_tab'),
@@ -376,7 +383,7 @@ export default {
           }
         })
 
-        if (this.selectedDir.path.startsWith(treeItem.path) === true) {
+        if (this.selectedDir !== null && this.selectedDir.path.startsWith(treeItem.path) === true) {
           // Append the selected directory's contents BEFORE any other items
           // since that's probably something the user sees as more relevant.
           fileList = dirContents.concat(fileList)
@@ -406,6 +413,7 @@ export default {
     },
     singleSearchRun: async function () {
       // Take the file to be searched ...
+      const terms = compileSearchTerms(this.query)
       while (this.filesToSearch.length > 0) {
         const fileToSearch = this.filesToSearch.shift()
         // Now start the search
@@ -413,7 +421,7 @@ export default {
           command: 'file-search',
           payload: {
             path: fileToSearch.path,
-            terms: this.compiledTerms
+            terms: terms
           }
         })
         if (result.length > 0) {
@@ -467,25 +475,28 @@ export default {
         }
       })
     },
-    onResultClick: function (event, filePath, lineNumber) {
+    onResultClick: function (event, idx, idx2, filePath, lineNumber) {
       // This intermediary function is needed to make sure that jumpToLine can
       // also be called from within the context menu (see above).
       if (event.button === 2) {
         return // Do not handle right-clicks
       }
 
+      // Update indeces so we can keep track of the most recently clicked
+      // search result.
+      this.activeFileIdx = idx
+      this.activeLineIdx = idx2
+
       const isMiddleClick = (event.type === 'mousedown' && event.button === 1)
       this.jumpToLine(filePath, lineNumber, isMiddleClick)
     },
     jumpToLine: function (filePath, lineNumber, openInNewTab = false) {
-      const isFileOpen = this.openFiles.find(file => file.path === filePath)
       const isActiveFile = (this.activeFile !== null) ? this.activeFile.path === filePath : false
 
       if (isActiveFile) {
         this.$emit('jtl', lineNumber)
-      } else if (isFileOpen === undefined) {
-        // The wanted file is not yet open --> open it and afterwards issue the
-        // jtl-command
+      } else {
+        // The wanted file is not yet active -> Do so and then jump to the correct line
         ipcRenderer.invoke('application', {
           command: 'open-file',
           payload: {
@@ -494,18 +505,12 @@ export default {
           }
         })
           .then(() => {
-            // As soon as the file becomes active, jump to that line
-            this.jtlIntent = lineNumber
-          })
-          .catch(e => console.error(e))
-      } else {
-        ipcRenderer.invoke('application', {
-          command: 'set-active-file',
-          payload: filePath
-        })
-          .then(() => {
-            // As soon as the file becomes active, jump to that line
-            this.jtlIntent = lineNumber
+            // As soon as the file becomes active, jump to that line. But only
+            // if it's >= 0. If lineNumber === -1 it means just the file should
+            // be open.
+            if (lineNumber >= 0) {
+              this.jtlIntent = lineNumber
+            }
           })
           .catch(e => console.error(e))
       }
@@ -542,6 +547,9 @@ export default {
       }
 
       return marked
+    },
+    focusQueryInput: function () {
+      this.$refs['query-input'].focus()
     }
   }
 }
@@ -586,10 +594,18 @@ body div#global-search-pane {
         background-color: rgb(180, 180, 180);
       }
     }
+
+    div.active {
+      background-color: rgb(160, 160, 160);
+    }
   }
 }
 
-body.dark div#global-search-pane div.search-result-container span.result-line:hover {
+body.dark div#global-search-pane div.search-result-container div.result-line:hover {
   background-color: rgb(60, 60, 60);
+}
+
+body.dark div#global-search-pane div.search-result-container div.active {
+  background-color: rgb(100, 100, 100);
 }
 </style>

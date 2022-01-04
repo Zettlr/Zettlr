@@ -10,8 +10,8 @@
         <input
           v-bind:id="fieldID(key)"
           type="radio" v-bind:name="name" v-bind:value="key"
-          v-bind:checked="value === key"
-          v-on:input="$emit('input', $event.target.value)"
+          v-bind:checked="modelValue === key"
+          v-on:input="$emit('update:modelValue', $event.target.value)"
         >
         <div class="toggle"></div>
       </label>
@@ -38,7 +38,7 @@
 export default {
   name: 'RadioControl',
   props: {
-    value: {
+    modelValue: {
       type: String,
       default: ''
     },
@@ -55,6 +55,7 @@ export default {
       default: function () { return {} }
     }
   },
+  emits: ['update:modelValue'],
   methods: {
     fieldID: function (key) {
       return 'form-input-' + this.name + '-' + key
@@ -82,7 +83,7 @@ body {
 
   .cb-group, .radio-group {
     margin: 6px 0px;
-    label { grid-area: label; }
+    label:not(.radio):not(.checkbox) { grid-area: label; }
   }
 
   label.radio {

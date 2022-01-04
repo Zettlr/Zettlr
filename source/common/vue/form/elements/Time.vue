@@ -4,7 +4,7 @@
     <input
       v-bind:id="fieldID"
       ref="input"
-      v-bind:value="value"
+      v-bind:value="modelValue"
       v-bind:class="{ 'inline': inline }"
       type="time"
       v-on:input="validateInput($event.target.value)"
@@ -30,7 +30,7 @@
 export default {
   name: 'FieldText',
   props: {
-    value: {
+    modelValue: {
       type: String,
       default: ''
     },
@@ -47,6 +47,7 @@ export default {
       default: false
     }
   },
+  emits: ['update:modelValue'],
   computed: {
     fieldID: function () {
       return 'field-input-' + this.name
@@ -59,7 +60,7 @@ export default {
         this.$refs.input.classList.add('error')
       } else {
         // All good, emit!
-        this.$emit('input', value)
+        this.$emit('update:modelValue', value)
       }
     }
   }

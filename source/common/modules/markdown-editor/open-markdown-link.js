@@ -13,8 +13,8 @@
  * END HEADER
  */
 
-const { mdFileExtensions } = require('../../get-file-extensions')
-const makeValidUri = require('../../util/make-valid-uri')
+const { mdFileExtensions } = require('@common/get-file-extensions')
+const makeValidUri = require('@common/util/make-valid-uri')
 const path = window.path
 const ipcRenderer = window.ipc
 

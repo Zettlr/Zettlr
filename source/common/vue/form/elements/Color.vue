@@ -5,11 +5,11 @@
       <input
         v-bind:id="fieldID"
         ref="input"
-        v-bind:value="value"
+        v-bind:value="modelValue"
         v-bind:class="{ 'inline': inline }"
         v-bind:placeholder="placeholder"
         type="color"
-        v-on:input="$emit('input', $event.target.value)"
+        v-on:input="$emit('update:modelValue', $event.target.value)"
       >
       <button
         type="button"
@@ -24,11 +24,11 @@
       v-else
       v-bind:id="fieldID"
       ref="input"
-      v-bind:value="value"
+      v-bind:value="modelValue"
       v-bind:class="{ 'inline': inline }"
       v-bind:placeholder="placeholder"
       type="color"
-      v-on:input="$emit('input', $event.target.value)"
+      v-on:input="$emit('update:modelValue', $event.target.value)"
     >
   </div>
 </template>
@@ -47,12 +47,12 @@
  *
  * END HEADER
  */
-import { trans } from '../../../i18n-renderer'
+import { trans } from '@common/i18n-renderer'
 
 export default {
   name: 'FieldColor',
   props: {
-    value: {
+    modelValue: {
       type: String,
       default: ''
     },
@@ -88,7 +88,7 @@ export default {
   methods: {
     resetValue: function () {
       this.$refs.input.value = this.reset
-      this.$emit('input', this.reset)
+      this.$emit('update:modelValue', this.reset)
     }
   }
 }

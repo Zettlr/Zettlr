@@ -43,11 +43,10 @@ Une dernière chose que nous aimerions mentionner est la grande communauté de Z
 
 Vous pouvez rejoindre notre communauté ici :
 
-- [Sur le forum](https://forum.zettlr.com/)
+- [Sur Discord](https://discord.gg/PcfS3DM9Xj)
 - [Sur notre subreddit](https://www.reddit.com/r/Zettlr/)
 - [Sur GitHub](https://github.com/Zettlr/Zettlr/)
 
 **Nous vous souhaitons un agréable travail avec Zettlr !**
 
 ![zettlr.png](./zettlr.png)
-

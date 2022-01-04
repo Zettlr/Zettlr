@@ -20,7 +20,7 @@ const {
   getListUnorderedCMRE,
   getUrlRE,
   getBlockRE
-} = require('../../../regular-expressions');
+} = require('@common/regular-expressions');
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
@@ -62,13 +62,14 @@ const {
 
   /**
    * Converts selection into a markdown inline element (or removes formatting)
-   * @param  {CodeMirror} cm   The CodeMirror instance
-   * @param  {String} pre  The formatting mark before the element
-   * @param  {String} post The formatting mark behind the element
+   *
+   * @param  {CodeMirror.Editor} cm   The CodeMirror instance
+   * @param  {string}            pre  The formatting mark before the element
+   * @param  {string}            post The formatting mark behind the element
    */
   function markdownInline (cm, pre, post, tokentype = undefined) {
     // Is something selected?
-    if (!cm.doc.somethingSelected()) {
+    if (!cm.somethingSelected()) {
       // TODO: Check token type state at the cursor position to leave the
       // mode if already in the mode.
       let currentToken = cm.getTokenAt(cm.getCursor()).type
@@ -125,8 +126,9 @@ const {
 
   /**
    * Converts a selection into a block element
-   * @param  {CodeMirror} cm   The codemirror instance
-   * @param  {String} mark The formatting mark to be inserted
+   *
+   * @param  {CodeMirror.Editor} cm   The codemirror instance
+   * @param  {string}            mark The formatting mark to be inserted
    */
   function markdownBlock (cm, mark) {
     // Build the regular expression
@@ -141,7 +143,7 @@ const {
     let re = new RegExp('^' + markregex + ' (.*)$')
 
     // If nothing is selected we have a very short journey.
-    if (!cm.doc.somethingSelected()) {
+    if (!cm.somethingSelected()) {
       // Just jump to the beginning of the line and insert a mark
       let cur = cm.getCursor()
       cur.ch = 0
@@ -209,77 +211,133 @@ const {
     cm.doc.setCursor(finalCursor)
   }
 
-  // Either encapsulates the selection bold or "un-bolds" or inserts new
-  // Bold-characters
+  /**
+   * Toggles bold formatting
+   *
+   * @param   {CodeMirror.Editor}  cm  The editor instance
+   */
   CodeMirror.commands.markdownBold = function (cm) {
     if (cm.isReadOnly()) return CodeMirror.Pass
     let boldChars = cm.getOption('zettlr').markdownBoldFormatting
     markdownInline(cm, boldChars, boldChars, 'strong')
   }
 
-  // The same for italic
+  /**
+   * Toggles italic formatting
+   *
+   * @param   {CodeMirror.Editor}  cm  The editor instance
+   */
   CodeMirror.commands.markdownItalic = function (cm) {
     if (cm.isReadOnly()) return CodeMirror.Pass
     let italicChars = cm.getOption('zettlr').markdownItalicFormatting
     markdownInline(cm, italicChars, italicChars, 'em')
   }
 
-  // Code blocks
+  /**
+   * Toggles code formatting
+   *
+   * @param   {CodeMirror.Editor}  cm  The editor instance
+   */
   CodeMirror.commands.markdownCode = function (cm) {
     if (cm.isReadOnly()) return CodeMirror.Pass
     markdownInline(cm, '`', '`', 'comment')
   }
 
-  // Commenting
+  /**
+   * Toggles comments
+   *
+   * @param   {CodeMirror.Editor}  cm  The editor instance
+   */
   CodeMirror.commands.markdownComment = function (cm) {
     if (cm.isReadOnly()) return CodeMirror.Pass
     // Add spaces so that the commenting out looks nicer
     markdownInline(cm, '<!-- ', ' -->', 'comment')
   }
 
-  // Headings 1-6
+  /**
+   * Toggles heading level 1
+   *
+   * @param   {CodeMirror.Editor}  cm  The editor instance
+   */
   CodeMirror.commands.markdownHeading1 = function (cm) {
     if (cm.isReadOnly()) return CodeMirror.Pass
     markdownBlock(cm, '#')
   }
+  /**
+   * Toggles heading level 2
+   *
+   * @param   {CodeMirror.Editor}  cm  The editor instance
+   */
   CodeMirror.commands.markdownHeading2 = function (cm) {
     if (cm.isReadOnly()) return CodeMirror.Pass
     markdownBlock(cm, '##')
   }
+  /**
+   * Toggles heading level 3
+   *
+   * @param   {CodeMirror.Editor}  cm  The editor instance
+   */
   CodeMirror.commands.markdownHeading3 = function (cm) {
     if (cm.isReadOnly()) return CodeMirror.Pass
     markdownBlock(cm, '###')
   }
+  /**
+   * Toggles heading level 4
+   *
+   * @param   {CodeMirror.Editor}  cm  The editor instance
+   */
   CodeMirror.commands.markdownHeading4 = function (cm) {
     if (cm.isReadOnly()) return CodeMirror.Pass
     markdownBlock(cm, '####')
   }
+  /**
+   * Toggles heading level 5
+   *
+   * @param   {CodeMirror.Editor}  cm  The editor instance
+   */
   CodeMirror.commands.markdownHeading5 = function (cm) {
     if (cm.isReadOnly()) return CodeMirror.Pass
     markdownBlock(cm, '#####')
   }
+  /**
+   * Toggles heading level 6
+   *
+   * @param   {CodeMirror.Editor}  cm  The editor instance
+   */
   CodeMirror.commands.markdownHeading6 = function (cm) {
     if (cm.isReadOnly()) return CodeMirror.Pass
     markdownBlock(cm, '######')
   }
 
-  // Blockquotes
+  /**
+   * Toggles blockquotes
+   *
+   * @param   {CodeMirror.Editor}  cm  The editor instance
+   */
   CodeMirror.commands.markdownBlockquote = function (cm) {
     if (cm.isReadOnly()) return CodeMirror.Pass
     markdownBlock(cm, '>')
   }
 
-  // Divider
+  /**
+   * Toggles a divider
+   *
+   * @param   {CodeMirror.Editor}  cm  The editor instance
+   */
   CodeMirror.commands.markdownDivider = function (cm) {
     if (cm.isReadOnly()) return CodeMirror.Pass
 
-    if (cm.doc.somethingSelected()) {
+    if (cm.somethingSelected()) {
       cm.doc.setCursor(cm.doc.listSelections()[0].anchor)
     }
     cm.doc.replaceSelection('\n***\n')
   }
 
-  // Inserts a link template
+  /**
+   * Inserts a link
+   *
+   * @param   {CodeMirror.Editor}  cm  The editor instance
+   */
   CodeMirror.commands.markdownLink = function (cm) {
     if (cm.isReadOnly()) return CodeMirror.Pass
 
@@ -289,7 +347,7 @@ const {
     }
 
     // Is something selected?
-    if (!cm.doc.somethingSelected()) {
+    if (!cm.somethingSelected()) {
       cm.doc.replaceSelection(`[](${url})`, 'start')
       let cur = cm.doc.getCursor()
       cur.ch = cur.ch + 1
@@ -312,7 +370,11 @@ const {
     cm.doc.replaceSelections(sel)
   }
 
-  // Inserts image template
+  /**
+   * Inserts an image
+   *
+   * @param   {CodeMirror.Editor}  cm  The editor instance
+   */
   CodeMirror.commands.markdownImage = function (cm) {
     if (cm.isReadOnly()) return CodeMirror.Pass
 
@@ -322,7 +384,7 @@ const {
     }
 
     // Is something selected?
-    if (!cm.doc.somethingSelected()) {
+    if (!cm.somethingSelected()) {
       cm.doc.replaceSelection(`![](${url})`, 'start')
       let cur = cm.doc.getCursor()
       cur.ch = cur.ch + 2
@@ -345,12 +407,16 @@ const {
     cm.doc.replaceSelections(sel)
   }
 
-  // Create or uncreate an ordered list
+  /**
+   * Toggles ordered lists
+   *
+   * @param   {CodeMirror.Editor}  cm  The editor instance
+   */
   CodeMirror.commands.markdownMakeOrderedList = function (cm) {
     if (cm.isReadOnly()) return CodeMirror.Pass
 
     // If nothing is selected we have a very short journey.
-    if (!cm.doc.somethingSelected()) {
+    if (!cm.somethingSelected()) {
       // Just jump to the beginning of the line and insert a list indicator
       let cur = cm.getCursor()
       cur.ch = 0
@@ -438,12 +504,16 @@ const {
     }
   }
 
-  // Create or uncreate an unordered list
+  /**
+   * Toggles unordered lists
+   *
+   * @param   {CodeMirror.Editor}  cm  The editor instance
+   */
   CodeMirror.commands.markdownMakeUnorderedList = function (cm) {
     if (cm.isReadOnly()) return CodeMirror.Pass
 
     // If nothing is selected we have a very short journey.
-    if (!cm.doc.somethingSelected()) {
+    if (!cm.somethingSelected()) {
       // Just jump to the beginning of the line and insert a list indicator
       let cur = cm.getCursor()
       cur.ch = 0
@@ -512,12 +582,16 @@ const {
     }
   }
 
-  // Create or uncreate an unordered list
+  /**
+   * Toggles a task list
+   *
+   * @param   {CodeMirror.Editor}  cm  The editor instance
+   */
   CodeMirror.commands.markdownMakeTaskList = function (cm) {
     if (cm.isReadOnly()) return CodeMirror.Pass
 
     // If nothing is selected we have a very short journey.
-    if (!cm.doc.somethingSelected()) {
+    if (!cm.somethingSelected()) {
       // Just jump to the beginning of the line and insert a list indicator
       let cur = cm.getCursor()
       cur.ch = 0

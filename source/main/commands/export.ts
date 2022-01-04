@@ -15,8 +15,11 @@
 import ZettlrCommand from './zettlr-command'
 import { app, shell } from 'electron'
 import { makeExport, getAvailableFormats } from '../modules/export'
-import { trans } from '../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 import { ExporterOptions } from '../modules/export/types'
+import { promises as fs } from 'fs'
+import path from 'path'
+import isDir from '@common/util/is-dir'
 
 export default class Export extends ZettlrCommand {
   constructor (app: any) {
@@ -35,21 +38,50 @@ export default class Export extends ZettlrCommand {
       return getAvailableFormats()
     }
 
-    const { file, format, options, exportTo } = arg
-
-    const fileDescriptor = this._app.getFileSystem().findFile(file)
-    if (fileDescriptor === null) {
-      global.notify.normal(trans('system.error.fnf_message'))
-      return
-    }
-
-    // Determine the target directory
-    let dest = (exportTo === 'temp') ? app.getPath('temp') : fileDescriptor.dir
+    const { file, content, format, options, exportTo } = arg
 
     const exporterOptions: ExporterOptions = {
       format: format,
-      targetDirectory: dest,
-      sourceFiles: [fileDescriptor]
+      targetDirectory: '',
+      sourceFiles: [],
+      cwd: undefined
+    }
+
+    if (content !== undefined && typeof content === 'string') {
+      // We should export some raw content. So targetDirectory must be temp. We
+      // use a default filename so the caller can get away with only specifying
+      // content and format. However, they can also specify an absolute filepath
+      // which we can use to fill in more info about the export
+      exporterOptions.targetDirectory = app.getPath('temp')
+      let filename = `zettlr_export_${Date.now()}.md`
+      if (file !== undefined && typeof file === 'string') {
+        filename = path.basename(file)
+        if (isDir(path.dirname(file))) {
+          exporterOptions.cwd = path.dirname(file)
+        }
+      }
+      // Write the content to file
+      const tempPath = path.join(app.getPath('temp'), filename)
+      await fs.writeFile(tempPath, content, { encoding: 'utf8' })
+      exporterOptions.sourceFiles.push({
+        path: tempPath,
+        name: filename,
+        ext: path.extname(filename)
+      })
+    } else {
+      // We must have an absolute path given in file
+      const fileDescriptor = this._app.getFileSystem().findFile(file)
+      if (fileDescriptor !== null) {
+        exporterOptions.sourceFiles.push(fileDescriptor)
+        exporterOptions.cwd = fileDescriptor.dir
+        exporterOptions.targetDirectory = (exportTo === 'temp') ? app.getPath('temp') : fileDescriptor.dir
+      }
+    }
+
+    // We should have at least one file present now
+    if (exporterOptions.sourceFiles.length === 0) {
+      global.log.error('[Export] Could not run exporter: No source files were given. Arguments provided:', arg)
+      return
     }
 
     // Call the exporter. Don't throw the "big" error as this is single-file export

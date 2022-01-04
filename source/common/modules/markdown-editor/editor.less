@@ -43,13 +43,12 @@
   // fonts such as Hiragana/Katakana are correctly
   // aligned. Should also help accessibility-plugins.
   &.CodeMirror-wrap > div:first-child {
+    margin-top: 0.4375em;
     textarea {
       font-family: inherit;
       font-size: inherit;
       line-height: inherit;
       height: 1.4375em !important;
-      bottom: -1.4375em !important;
-      transform: scaleY(1.1);
     }
   }
 
@@ -92,8 +91,7 @@
 
   // These tab stops are used by the autocomplete hook to indicate next stops.
   .tabstop {
-    display: inline-block;
-    min-width: 10px; // So that the bookmarks are at least a little bit visible.
+    padding: 2px;
     background-color: rgba(0, 217, 225, 0.7);
     border-radius: 3px;
   }
@@ -106,6 +104,7 @@
   input[type="checkbox"] {
     transform: scale(1.2);
     margin: 0.2em;
+    min-width: auto; // Reset the min-width property that applies to other checkboxes
     vertical-align: middle;
   }
 
@@ -342,7 +341,16 @@ body .tippy-content {
       color: rgb(200, 200, 200);
       font-size: 80%;
     }
+
+    .actions {
+      margin: 5px 0;
+    }
   }
+}
+
+body.dark .tippy-content .editor-fn-textarea {
+  background-color: transparent;
+  border: none;
 }
 
 // Text-folding related stuff
@@ -388,6 +396,7 @@ body .tippy-content {
 
   // Restrict the size of the container and make it scrollable
   max-height: 20em;
+  max-width: 95vw;
   overflow-y: auto;
 
   li.CodeMirror-hint {

@@ -53,16 +53,6 @@
             "error",
             "longform"
         ],
-        "vue/component-tags-order": [
-            "error",
-            {
-                "order": [
-                    "template",
-                    "script",
-                    "style"
-                ]
-            }
-        ],
         // Let the implementation decide if self-closing is wanted or not.
         "vue/html-self-closing": [ "warn", {
           "html": {
@@ -77,10 +67,7 @@
         // decide if the attributes are too long for the 80 character column
         "vue/max-attributes-per-line": [ "error", {
           "singleline": 3,
-          "multiline": {
-            "max": 3,
-            "allowFirstLine": true
-          }
+          "multiline": 3
         }],
         // We allow the use of v-html directives, because we sanitize any user
         // provided HTML to only contain safe tags. The only stuff we currently

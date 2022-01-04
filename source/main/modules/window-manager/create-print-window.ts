@@ -35,12 +35,11 @@ export default function createPrintWindow (file: string, conf: WindowPosition): 
     minHeight: 200,
     width: conf.width,
     height: conf.height,
-    x: conf.left,
-    y: conf.top,
+    x: conf.x,
+    y: conf.y,
     show: false,
     webPreferences: {
       contextIsolation: true,
-      additionalArguments: [file],
       // We are loading an iFrame with a local resource, so we must disable webSecurity for this window
       webSecurity: false,
       preload: PRINT_PRELOAD_WEBPACK_ENTRY
@@ -52,9 +51,13 @@ export default function createPrintWindow (file: string, conf: WindowPosition): 
 
   const window = new BrowserWindow(winConf)
 
+  const effectiveUrl = new URL(PRINT_WEBPACK_ENTRY)
+  // Add the print preview file to the search params
+  effectiveUrl.searchParams.append('file', file)
+
   // Load the index.html of the app.
   // The variable PRINT_WEBPACK_ENTRY is automatically resolved by electron forge / webpack
-  window.loadURL(PRINT_WEBPACK_ENTRY)
+  window.loadURL(effectiveUrl.toString())
     .catch(e => {
       global.log.error(`Could not load URL ${PRINT_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })

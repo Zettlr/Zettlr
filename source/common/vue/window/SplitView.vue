@@ -1,6 +1,11 @@
 <template>
   <div class="split-view">
-    <div ref="view1" class="view" v-bind:style="{ width: `${view1Width}px` }">
+    <div
+      v-if="hasHiddenView !== 1"
+      ref="view1"
+      class="view"
+      v-bind:style="{ width: `${view1Width}px` }"
+    >
       <slot name="view1"></slot>
     </div>
     <div
@@ -9,7 +14,15 @@
       v-bind:style="{ left: `${view1Width - 5}px` }"
       v-on:mousedown="beginViewResizing"
     ></div> <!-- Enable resizing of the view -->
-    <div ref="view2" class="view view-border" v-bind:style="{ width: `${view2Width}px` }">
+    <div
+      v-if="hasHiddenView !== 2"
+      ref="view2"
+      v-bind:class="{
+        view: true,
+        'view-border': hasHiddenView === 0
+      }"
+      v-bind:style="{ width: `${view2Width}px` }"
+    >
       <slot name="view2"></slot>
     </div>
   </div>
@@ -68,7 +81,7 @@ export default {
   created: function () {
     window.addEventListener('resize', this.recalculateSizes)
   },
-  destroyed: function () {
+  unmounted: function () {
     // Stop listening to any size changes
     window.removeEventListener('resize', this.recalculateSizes)
     this.observer.unobserve(this.$el)

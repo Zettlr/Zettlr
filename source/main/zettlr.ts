@@ -23,16 +23,16 @@ import WindowManager from './modules/window-manager'
 import DocumentManager from './modules/document-manager'
 
 import FSAL from './modules/fsal'
-import { trans } from '../common/i18n-main'
-import findLangCandidates from '../common/util/find-lang-candidates'
-import ignoreDir from '../common/util/ignore-dir'
-import ignoreFile from '../common/util/ignore-file'
-import isDir from '../common/util/is-dir'
-import isFile from '../common/util/is-file'
+import { trans } from '@common/i18n-main'
+import findLangCandidates from '@common/util/find-lang-candidates'
+import ignoreDir from '@common/util/ignore-dir'
+import ignoreFile from '@common/util/ignore-file'
+import isDir from '@common/util/is-dir'
+import isFile from '@common/util/is-file'
 import { commands } from './commands'
 
 import { CodeFileDescriptor, CodeFileMeta, DirDescriptor, MDFileDescriptor, MDFileMeta } from './modules/fsal/types'
-import broadcastIpcMessage from '../common/util/broadcast-ipc-message'
+import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import extractFilesFromArgv from '../app/util/extract-files-from-argv'
 
 export default class Zettlr {
@@ -58,9 +58,6 @@ export default class Zettlr {
     this.isShownFor = [] // Contains all files for which remote notifications are currently shown
 
     this._windowManager = new WindowManager()
-    // Immediately load persisted session data from disk
-    this._windowManager.loadData()
-      .catch(e => global.log.error('[Application] Window Manager could not load data', e))
 
     // Inject some globals
     global.application = {
@@ -303,11 +300,6 @@ export default class Zettlr {
    * Initiate the main process logic after boot.
    */
   async init (): Promise<void> {
-    // Open the main window as a first thing to make the app feel snappy. The
-    // algorithms will make sure the roots will appear one after another in the
-    // main window.
-    this.openWindow()
-
     // Start a timer to measure how long the roots take to load.
     const start = Date.now()
 
@@ -368,7 +360,18 @@ export default class Zettlr {
     await this._documentManager.init()
 
     // Finally, initiate a first check for updates
-    global.updates.check()
+    await global.updates.check()
+
+    if (global.updates.applicationUpdateAvailable()) {
+      const { tagName } = global.updates.getUpdateState()
+      global.log.info(`Update available: ${tagName}`)
+      global.notify.normal(trans('dialog.update.new_update_available', tagName), () => {
+        // The user has clicked the notification, so we can show the update window here
+        this._windowManager.showUpdateWindow()
+      })
+    } else {
+      global.notify.normal(trans('dialog.update.no_new_update'))
+    }
   }
 
   /**
@@ -429,16 +432,19 @@ export default class Zettlr {
       }
 
       return this._fsal.getMetadataFor(descriptor as MDFileDescriptor)
-    } else if (command === 'set-active-file') {
-      const descriptor = this._documentManager.openFiles.find(elem => elem.path === payload) // this._fsal.findFile(payload)
-      if (descriptor !== undefined) {
-        this._documentManager.activeFile = descriptor
-      }
+    } else if (command === 'next-file') {
+      // Trigger a "forward" command on the document manager
+      await this._documentManager.forward()
+      return true
+    } else if (command === 'previous-file') {
+      // Trigger a "back" command on the document manager
+      await this._documentManager.back()
+      return true
     } else if (command === 'set-writing-target') {
       // Sets or updates a file's writing target
       global.targets.set(payload)
     } else if (command === 'open-file') {
-      await this.openFile(payload.path, payload.newTab)
+      await this._documentManager.openFile(payload.path, payload.newTab)
       return true
     } else if (command === 'get-open-files') {
       // Return all open files as their metadata objects
@@ -489,6 +495,8 @@ export default class Zettlr {
       return true
     } else if (command === 'open-update-window') {
       this._windowManager.showUpdateWindow()
+    } else if (command === 'open-project-preferences') {
+      this._windowManager.showProjectPropertiesWindow(payload)
     } else {
       // ELSE: If the command has not yet been found, try to run one of the
       // bigger commands
@@ -589,7 +597,7 @@ export default class Zettlr {
       // opened accordingly.
       if ((newFile = this._fsal.findFile(f)) != null) {
         // Open the file immediately
-        await this.openFile(newFile.path, true)
+        await this._documentManager.openFile(newFile.path, true)
         // Also set the newDir variable so that Zettlr will automatically
         // navigate to the directory. The directory of the latest file will
         // remain open afterwards.
@@ -603,7 +611,7 @@ export default class Zettlr {
             // If it was a file and not a directory, immediately open it.
             let file = this._fsal.findFile(f)
             if (file !== null) {
-              await this.openFile(file.path, true)
+              await this._documentManager.openFile(file.path, true)
             }
           } else {
             global.config.removePath(f)
@@ -657,44 +665,6 @@ export default class Zettlr {
 
   findDir (arg: string): DirDescriptor | null {
     return this._fsal.findDir(arg)
-  }
-
-  /**
-   * Opens the file passed to this function
-   *
-   * @param   {string}   filePath  The filepath
-   * @param   {boolean}  newTab    Optional. If true, will always prevent exchanging the currently active file.
-   */
-  async openFile (filePath: string, newTab?: boolean): Promise<void> {
-    global.log.info(`[Application] Opening file ${filePath}`)
-    // Add the file's metadata object to the recent docs
-    // We only need to call the underlying function, it'll trigger a state
-    // change event and will set in motion all other necessary processes.
-
-    // Remember if the file that should be opened was already opened. Because in
-    // this case we shouldn't close the active file (since we're not opening any
-    // new tabs in any case.)
-    const isFileAlreadyOpen = this._documentManager.openFiles.find(e => e.path === filePath) !== undefined
-    const file = await this._documentManager.openFile(filePath)
-
-    // The user determines if we should avoid new tabs. If we should do so,
-    // only open new tabs if the user has checked this setting.
-    const avoidNewTabs = Boolean(global.config.get('system.avoidNewTabs'))
-
-    if (this._documentManager.activeFile !== null && newTab !== true && avoidNewTabs) {
-      // We should avoid tabs, a new tab is not explicitly requested and we
-      // have an active file to close.
-      const activeFile = this._documentManager.activeFile
-
-      // However, one caveat: If the new file that we are about to set active
-      // was already open somewhere, we don't have to close this one, but rather
-      // switch to the next file.
-      if (activeFile !== null && !activeFile.modified && !isFileAlreadyOpen) {
-        this._documentManager.closeFile(activeFile)
-      }
-    }
-
-    this._documentManager.activeFile = file // Also make this thing active.
   }
 
   /**
@@ -815,8 +785,18 @@ export default class Zettlr {
     return await this._windowManager.askFile(filters, multiSel)
   }
 
-  async saveFile (filename: string = ''): Promise<string|undefined> {
-    return await this._windowManager.saveFile(filename)
+  /**
+   * Asks the user to provide a path to a new file. Takes a filename, in which
+   * case the dialog will start in the last known directory of this specific
+   * dialog, or a full absolute path, in which the dialog will start.
+   *
+   * @param   {string}              fileOrPathName   Either an absolute path or just a filename
+   * @param   {BrowserWindow|null}  win              The window to attach to
+   *
+   * @return  {Promise<string|undefined>}            Resolves with a path or undefined
+   */
+  async saveFile (fileOrPathName: string): Promise<string|undefined> {
+    return await this._windowManager.saveFile(fileOrPathName)
   }
 
   /**

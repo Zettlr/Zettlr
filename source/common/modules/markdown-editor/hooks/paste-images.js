@@ -42,7 +42,10 @@ module.exports = (cm) => {
             // If the user aborts the pasting process, the command will return
             // undefined, so we have to check for this.
             if (relativePath !== undefined) {
-              cm.replaceSelection(`![${path.basename(relativePath)}](${relativePath})`)
+              // Replace backward slashes with forward slashes to make Windows paths
+              // cross-platform compatible
+              const sanitizedPath = String(relativePath).replace(/\\/g, '/')
+              cm.replaceSelection(`![${path.basename(relativePath)}](${sanitizedPath})`)
             }
           })
           .catch(err => console.error(err))
@@ -72,7 +75,10 @@ module.exports = (cm) => {
           // If the user aborts the pasting process, the command will rturn
           // undefined, so we have to check for this.
           if (relativePath !== undefined) {
-            cm.replaceSelection(`![${path.basename(relativePath)}](${relativePath})`)
+            // Replace backward slashes with forward slashes to make Windows paths
+            // cross-platform compatible
+            const sanitizedPath = String(relativePath).replace(/\\/g, '/')
+            cm.replaceSelection(`![${path.basename(relativePath)}](${sanitizedPath})`)
           }
         })
         .catch(err => console.error(err))

@@ -111,7 +111,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -127,16 +127,17 @@
  * END HEADER
  */
 
-import { trans } from '../common/i18n-renderer'
+import { trans } from '@common/i18n-renderer'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   name: 'ProjectsTab',
   data: function () {
     return {
       projectsIntro: trans('dialog.about.other_projects')
     }
   }
-}
+})
 </script>
 
 <style lang="less">

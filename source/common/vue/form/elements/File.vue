@@ -8,7 +8,7 @@
         type="text"
         readonly="readonly"
         v-bind:name="name"
-        v-bind:value="value"
+        v-bind:value="modelValue"
         v-bind:placeholder="placeholder"
         v-on:click="(directory) ? requestDir() : requestFile()"
       >
@@ -47,14 +47,14 @@
  * END HEADER
  */
 
-import { trans } from '../../../i18n-renderer'
+import { trans } from '@common/i18n-renderer'
 
 const ipcRenderer = window.ipc
 
 export default {
-  name: 'File',
+  name: 'FileControl',
   props: {
-    value: {
+    modelValue: {
       type: String,
       default: ''
     },
@@ -97,7 +97,7 @@ export default {
     resetValue: function () {
       const newVal = (typeof this.reset === 'string') ? this.reset : ''
       this.$refs.input.value = newVal
-      this.$emit('input', newVal)
+      this.$emit('update:modelValue', newVal)
     },
     requestFile: function () {
       const payload = {
@@ -122,7 +122,7 @@ export default {
           // Write the return value into the data-request-target of the clicked
           // button, because each button has a designated text field.
           this.$refs.input.value = result[0]
-          this.$emit('input', result[0])
+          this.$emit('update:modelValue', result[0])
         })
         .catch(e => console.error(e))
     },
@@ -135,7 +135,7 @@ export default {
           }
 
           this.$refs.input.value = result[0]
-          this.$emit('input', result[0])
+          this.$emit('update:modelValue', result[0])
         })
         .catch(e => console.error(e))
     }

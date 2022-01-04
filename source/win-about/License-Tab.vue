@@ -920,9 +920,11 @@
  *
  * END HEADER
  */
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'LicenseTab'
-}
+})
 </script>
 
 <style lang="less">

@@ -181,11 +181,38 @@
   </div>
 </template>
 
-<script>
-import localiseNumber from '../common/util/localise-number'
-const ipcRenderer = window.ipc
+<script lang="ts">
+import localiseNumber from '@common/util/localise-number'
+import { IpcRenderer } from 'electron'
+import { defineComponent } from 'vue'
 
-export default {
+const ipcRenderer: IpcRenderer = (window as any).ipc
+
+interface Stats {
+  minWords: number
+  maxWords: number
+  sumWords: number
+  sdWords: number
+  meanWords: number
+  minChars: number
+  maxChars: number
+  sumChars: number
+  sdChars: number
+  meanChars: number
+  words68PercentLower: number
+  words68PercentUpper: number
+  words95PercentLower: number
+  words95PercentUpper: number
+  chars68PercentLower: number
+  chars68PercentUpper: number
+  chars95PercentLower: number
+  chars95PercentUpper: number
+  mdFileCount: number
+  codeFileCount: number
+  dirCount: number
+}
+
+export default defineComponent({
   name: 'FSALView',
   data: function () {
     return {
@@ -233,14 +260,14 @@ export default {
       .catch(e => console.error(e))
   },
   methods: {
-    recalculateStats: function (data) {
+    recalculateStats: function (data: Stats) {
       // Approximately aspect ratio 8:1. This will be stretched and squeezed on
       // non standard compliant window sizes, but alas. We assume Zettlr will
       // -- most of the time -- be run in default maximized/full screen state on
       // landscape displays.
 
       // Helper function
-      const zTransform = (val) => {
+      const zTransform = (val: number) => {
         const percent = val / (data.maxWords - data.minWords)
         return this.boxPlotData.width * percent
       }
@@ -288,7 +315,7 @@ export default {
       this.dirCount = localiseNumber(data.dirCount)
     }
   }
-}
+})
 </script>
 
 <style lang="less">

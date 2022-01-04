@@ -17,8 +17,8 @@ import { promises as fs } from 'fs'
 import { app } from 'electron'
 import ZIP from 'adm-zip'
 
-import { trans } from '../../../common/i18n-main'
-import isFile from '../../../common/util/is-file'
+import { trans } from '@common/i18n-main'
+import isFile from '@common/util/is-file'
 import { DirDescriptor } from '../fsal/types'
 
 /**

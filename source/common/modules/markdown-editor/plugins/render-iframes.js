@@ -13,7 +13,7 @@
   * END HEADER
   */
 
-const { getIframeRE } = require('../../../regular-expressions');
+const { getIframeRE } = require('@common/regular-expressions');
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
