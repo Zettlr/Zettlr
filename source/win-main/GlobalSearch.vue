@@ -448,6 +448,11 @@ export default {
     },
     emptySearchResults: function () {
       this.searchResults = []
+
+      // Clear indeces of active search result
+      this.activeFileIdx = -1
+      this.activeLineIdx = -1
+
       // Also, for convenience, re-focus and select the input
       this.$refs['query-input'].focus()
       this.$refs['query-input'].select()
