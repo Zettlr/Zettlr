@@ -1,30 +1,30 @@
-# (no version assigned yet)
+# 2.1.1
 
 ## GUI and Functionality
 
 - **New Feature**: Zettlr now accounts for backlinks to the currently active
   file, which means it now displays files which link to the current file in the
   sidebar
-- Improved placement of the popup displayed by Input Method for inputting
-  non-alphabetic characters (e.g. Chinese, Japanese, or Korean)
-- Fix a rare error that would incapacitate the Math equation renderer
-- Clicking a search result in the global search sidebar will now highlight it
-  in the sidebar
 - New setting: You can now choose to hide the toolbar while in distraction-free
   mode
-- If you abort moving a file by dropping it onto its source directory, Zettlr
-  will silently abort the move without nagging you about the fact that the
-  target directory obviously already contains a file of the same name
+- Improved placement of the popup displayed by the Input Method Editor (IME) for
+  writing non-alphabetic characters (e.g. Chinese, Japanese, or Korean)
 - During drag&drop, you can now rest over a collapsed directory for longer than
   two seconds to have it automatically uncollapse -- this way you can reach
   deeper nested directories without having to stop the operation
+- Clicking a search result in the global search sidebar will now highlight it
+  in the sidebar
+- The search now also starts when you press Enter while the restriction input is
+  focused
+- If you abort moving a file by dropping it onto its source directory, Zettlr
+  will silently abort the move without nagging you about the fact that the
+  target directory obviously already contains a file of the same name
 - Renaming root-directories will now ensure the new path of the directory is
   persisted to the configuration
+- Fix a rare error that would incapacitate the Math equation renderer
 - Fixed an error that would sometimes prevent the autocomplete popup to close
   until the main window was closed and reopened (or the app is restarted)
 - Fixed an error that would prevent a global search if no directory is selected
-- The search now also starts when you press Enter while the restriction input is
-  focused
 - Fixed a bug that disabled the table insertion toolbar button in the previous
   version
 - Fixed an issue preventing updates of lists in the preferences
@@ -34,6 +34,8 @@
 
 - Update to Electron 16
 - Make sure to de-proxy the tag database before sending it to the MdEditor
+- Remove the `openDocuments` array from the Vue component data
+- Convert the MainEditor component to TypeScript
 - Added a `@providers` alias for easy referencing of service providers
 
 # 2.1.0
