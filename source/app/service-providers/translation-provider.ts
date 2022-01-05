@@ -88,21 +88,18 @@ export default class TranslationProvider {
    * @return {Promise} Resolves if everything worked out, rejects otherwise.
    */
   async init (): Promise<void> {
-    const checkUpdates: boolean = global.config.get('system.checkUpdates')
-    if (checkUpdates) {
-      let response
-      try {
-        response = await got(TRANSLATION_API_URL, { method: 'GET' })
-      } catch (err: any) {
-        // Not critical.
-        global.log.warning(`[Translation Provider] Could not update translations: ${String(err.code)}`, err)
-        return
-      }
-
-      // Alright, we only need the body
-      response = JSON.parse(response.body)
-      this._availableLanguages = response // Let's save the response
+    let response
+    try {
+      response = await got(TRANSLATION_API_URL, { method: 'GET' })
+    } catch (err: any) {
+      // Not critical.
+      global.log.warning(`[Translation Provider] Could not update translations: ${String(err.code)}`, err)
+      return
     }
+
+    // Alright, we only need the body
+    response = JSON.parse(response.body)
+    this._availableLanguages = response // Let's save the response
 
     // Now we have all the languages available. We also need the translation
     // metadata.

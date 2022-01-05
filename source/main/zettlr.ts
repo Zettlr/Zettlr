@@ -360,7 +360,7 @@ export default class Zettlr {
     await this._documentManager.init()
 
     // Finally, initiate a first check for updates
-    const checkUpdates: boolean = global.config.get('system.checkUpdates')
+    const checkUpdates: boolean = global.config.get('system.checkForUpdates')
     if (checkUpdates) {
       await global.updates.check()
 
@@ -371,8 +371,6 @@ export default class Zettlr {
           // The user has clicked the notification, so we can show the update window here
           this._windowManager.showUpdateWindow()
         })
-      } else {
-        global.notify.normal(trans('dialog.update.no_new_update'))
       }
     }
   }

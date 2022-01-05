@@ -54,7 +54,7 @@ export default function () {
         {
           type: 'checkbox',
           label: trans('dialog.preferences.check_updates'),
-          model: 'system.checkUpdates'
+          model: 'system.checkForUpdates'
         }
       ],
       [
