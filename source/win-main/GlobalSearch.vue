@@ -454,8 +454,10 @@ export default {
       this.activeLineIdx = -1
 
       // Also, for convenience, re-focus and select the input
-      this.$refs['query-input'].focus()
-      this.$refs['query-input'].select()
+      if (this.$refs['query-input'] != null) {
+        this.$refs['query-input'].focus()
+        this.$refs['query-input'].select()
+      }
     },
     toggleIndividualResults: function () {
       this.toggleState = this.toggleState === false

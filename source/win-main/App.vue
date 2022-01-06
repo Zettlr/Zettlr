@@ -379,7 +379,9 @@ export default defineComponent({
       if (newValue === 'globalSearch') {
         // The global search just became visible, so make sure to change the
         // current directory.
-        this.globalSearchComponent.setCurrentDirectory()
+        nextTick().then(() => {
+          this.globalSearchComponent.setCurrentDirectory()
+        }).catch(e => console.error(e))
       }
     }
   },
