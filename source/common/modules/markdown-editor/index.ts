@@ -29,7 +29,7 @@ import getCodeMirrorDefaultOptions from './get-cm-options'
 import safeAssign from '@common/util/safe-assign'
 import countWords from '@common/util/count-words'
 import md2html from '@common/util/md-to-html'
-import generateKeymap from './generate-keymap.js'
+import generateKeymap from './generate-keymap'
 import generateTableOfContents from './util/generate-toc'
 
 // Search plugin (module-namespaced set of utility functions)
@@ -43,7 +43,7 @@ import EventEmitter from 'events'
 /**
  * CODEMIRROR & DEPENDENCIES
  */
-import './load-plugins.js'
+import './load-plugins'
 import CodeMirror, { fromTextArea } from 'codemirror'
 
 /**
@@ -91,7 +91,7 @@ export default class MarkdownEditor extends EventEmitter {
     this._anchorElement = null
     this._readabilityMode = false
     this._currentDocumentMode = 'multiplex'
-    this._cmOptions = getCodeMirrorDefaultOptions()
+    this._cmOptions = getCodeMirrorDefaultOptions(this)
     this._countChars = false
 
     // Parse the anchorElement until we get something useful
@@ -382,7 +382,7 @@ export default class MarkdownEditor extends EventEmitter {
     }
 
     // Perform any after-option-setting-stuff
-    this._instance.setOption('extraKeys', generateKeymap(this))
+    this._instance.setOption('extraKeys', generateKeymap())
 
     // Clear the line indentation cache for the corresponding hook
     clearLineIndentationCache()

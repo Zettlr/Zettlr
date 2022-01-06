@@ -6,7 +6,8 @@
 
 ## Under the Hood
 
-- Convert the MarkdownEditor to ES modules
+- Convert the MarkdownEditor to ES modules and TypeScript
+- Make the `dot-notation` rule optional
 
 # 2.1.1
 

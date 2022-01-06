@@ -12,12 +12,12 @@
  * END HEADER
  */
 
-import { commands, normalizeKeyMap } from 'codemirror'
-const clipboard = window.clipboard
+import { commands, KeyMap, normalizeKeyMap } from 'codemirror'
+const clipboard = (window as any).clipboard
 
-export default function (editor) {
+export default function (): KeyMap {
   let homeEndBehaviour = Boolean(global.config.get('editor.homeEndBehaviour'))
-  let keymap = {}
+  const keymap: KeyMap = {}
 
   // Crossplatform shortcuts
   keymap['Enter'] = 'newlineAndIndentContinueMarkdownList'

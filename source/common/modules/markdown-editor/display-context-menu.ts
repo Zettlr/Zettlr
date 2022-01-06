@@ -14,12 +14,14 @@
 
 // Displays a context menu for the MarkdownEditor class
 import { trans } from '@common/i18n-renderer'
-const ipcRenderer = window.ipc
-const clipboard = window.clipboard
+import { IpcRenderer } from 'electron'
 
-let currentMenu = []
-let currentSuggestions = []
-let linkToCopy = null
+const ipcRenderer: IpcRenderer = (window as any).ipc
+const clipboard = (window as any).clipboard
+
+let currentMenu: any[] = []
+let currentSuggestions: string[] = []
+let linkToCopy: string|null = null
 
 const TEMPLATE_TEXT = [
   {
@@ -122,7 +124,7 @@ const readOnlyDisabled = [
  *
  * @return  {'text'|'citation'|'link'|'spell-error'|'image'} What type of target this is
  */
-function getTargetType (target) {
+function getTargetType (target: HTMLElement) {
   if (target === null) {
     return 'text'
   }
@@ -164,16 +166,27 @@ function getTargetType (target) {
  *
  * @return  {boolean}                      Whether the editor should additionally select the word under cursor
  */
-export default function displayContextMenu (event, isReadOnly, commandCallback, replaceCallback) {
+export default function displayContextMenu (
+  event: MouseEvent,
+  isReadOnly: boolean,
+  commandCallback: (command: string) => void,
+  replaceCallback: (repl: string) => void
+) {
+  if (event.target === null) {
+    return
+  }
+
+  const targetElement = event.target as HTMLElement
+
   // First, determine which kind of context menu we should display
-  const contextMenuType = getTargetType(event.target)
+  const contextMenuType = getTargetType(targetElement)
 
   // Now, determine the appropriate template to use. In most cases, we use the
   // text template, but that doesn't make sense to rendered links, citations, or
   // images.
-  let MENU_TEMPLATE = TEMPLATE_TEXT
+  let MENU_TEMPLATE: any[] = TEMPLATE_TEXT
   if (contextMenuType === 'image') {
-    const src = String(event.target.src)
+    const src = (event.target as HTMLImageElement).src
     if (!src.startsWith('safe-file://') && !src.startsWith('file://')) {
       // If we're here, it's a valid URL, so we must disable the menu item to
       // copy it to clipboard, since Electron doesn't support that. Also, we
@@ -212,13 +225,12 @@ export default function displayContextMenu (event, isReadOnly, commandCallback, 
     MENU_TEMPLATE = [] // Only contains the link/citation actions
   }
 
-  const elem = event.target
   let buildMenu = []
   let shouldSelectWordUnderCursor = true
 
   // First build the context menu
   for (const item of MENU_TEMPLATE) {
-    let buildItem = {}
+    let buildItem: any = {}
     if (item.hasOwnProperty('label')) {
       buildItem.label = trans(item.label)
     }
@@ -259,13 +271,13 @@ export default function displayContextMenu (event, isReadOnly, commandCallback, 
   // the whole link into the clipboard, not a part of it.
   if (contextMenuType === 'link') {
     shouldSelectWordUnderCursor = false
-    let selection = window.getSelection()
+    let selection = window.getSelection() as Selection
     let range = document.createRange()
-    range.selectNodeContents(elem)
+    range.selectNodeContents(targetElement)
     selection.removeAllRanges()
     selection.addRange(range)
 
-    let url = elem.getAttribute('title')
+    let url = targetElement.getAttribute('title') as string
     linkToCopy = (url.indexOf('mailto:') === 0) ? url.substr(7) : url
     buildMenu.unshift({
       id: 'none',
@@ -297,10 +309,10 @@ export default function displayContextMenu (event, isReadOnly, commandCallback, 
   if (contextMenuType === 'citation') {
     shouldSelectWordUnderCursor = false
     // Also, remove the selected part of the citation
-    let selection = window.getSelection()
+    const selection = window.getSelection() as Selection
     selection.removeAllRanges()
 
-    let keys = elem.dataset.citekeys.split(',')
+    let keys = targetElement.dataset.citekeys?.split(',')
     // Add menu items for all cite keys to open the corresponding PDFs
     if (buildMenu.length !== 0) {
       buildMenu.push({ type: 'separator' })
@@ -310,13 +322,13 @@ export default function displayContextMenu (event, isReadOnly, commandCallback, 
       label: trans('menu.open_attachment'),
       type: 'submenu',
       enabled: true,
-      submenu: keys.map(key => {
+      submenu: (keys !== undefined) ? keys.map((key: string) => {
         return {
           id: `citekey-${key}`,
           label: key,
           enabled: true
         }
-      })
+      }) : []
     })
   }
 
@@ -335,7 +347,7 @@ export default function displayContextMenu (event, isReadOnly, commandCallback, 
   if (contextMenuType === 'spell-error') {
     currentSuggestions = ipcRenderer.sendSync('dictionary-provider', {
       command: 'suggest',
-      term: elem.textContent
+      term: targetElement.textContent
     })
     if (currentSuggestions.length > 0) {
       for (let i = 0; i < currentSuggestions.length; i++) {
@@ -356,7 +368,7 @@ export default function displayContextMenu (event, isReadOnly, commandCallback, 
     typoPrefix.push({ type: 'separator' })
     // Always add an option to add a word to the user dictionary
     typoPrefix.push({
-      id: `typo-add-${elem.textContent}`,
+      id: `typo-add-${targetElement.textContent}`,
       label: trans('menu.add_to_dictionary'),
       enabled: true
     })
@@ -378,9 +390,9 @@ export default function displayContextMenu (event, isReadOnly, commandCallback, 
     }
 
     if (clickedID === 'menu.copy_equation') {
-      const wrapperElement = event.target.closest('.preview-math')
+      const wrapperElement = targetElement.closest('.preview-math')
       if (wrapperElement !== null) {
-        clipboard.writeText(wrapperElement.dataset.equation)
+        clipboard.writeText((wrapperElement as HTMLElement).dataset.equation)
       }
       return
     }
@@ -391,7 +403,7 @@ export default function displayContextMenu (event, isReadOnly, commandCallback, 
         command: 'open-attachment',
         payload: { 'citekey': clickedID.substr(8) }
       })
-        .catch(err => console.error(err))
+        .catch((err: any) => console.error(err))
         .finally(() => { closeCallback() })
       return
     }
@@ -405,24 +417,24 @@ export default function displayContextMenu (event, isReadOnly, commandCallback, 
       return
     }
 
-    if (clickedID === 'copy-img-to-clipboard' && 'src' in event.target) {
+    if (clickedID === 'copy-img-to-clipboard' && targetElement instanceof HTMLImageElement) {
       ipcRenderer.invoke('application', {
         command: 'copy-img-to-clipboard',
-        payload: event.target.src // Direct main to copy that source
+        payload: targetElement.src // Direct main to copy that source
       })
-        .catch(err => console.error(err))
+        .catch((err: any) => console.error(err))
         .finally(() => { closeCallback() })
       return
-    } else if (clickedID === 'show-img-in-folder' && 'src' in event.target) {
+    } else if (clickedID === 'show-img-in-folder' && targetElement instanceof HTMLImageElement) {
       ipcRenderer.send('window-controls', {
         command: 'show-item-in-folder',
-        payload: event.target.src // Show the item in folder
+        payload: targetElement.src // Show the item in folder
       })
       return
-    } else if (clickedID === 'open-img-in-browser' && 'src' in event.target) {
+    } else if (clickedID === 'open-img-in-browser' && targetElement instanceof HTMLImageElement) {
       // Open the image in the system browser. (Works because main intercepts
       // any redirect.)
-      window.location.assign(event.target.src)
+      window.location.assign(targetElement.src)
       return
     }
 

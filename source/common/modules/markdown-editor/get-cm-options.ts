@@ -15,14 +15,15 @@
  * END HEADER
  */
 
-import generateKeymap from './generate-keymap.js'
+import generateKeymap from './generate-keymap'
+import MarkdownEditor from './index'
 
 /**
  * Returns CodeMirror default options, with sound settings for Zettlr applied.
  *
- * @return  {Object}  The settings object
+ * @return  {any}  The settings object
  */
-export default function () {
+export default function getCodeMirrorDefaultOptions (mdEditorInstance: MarkdownEditor): any {
   return {
     // Default mode: Markdown multiplex (+ syntax highlighting for code blocks)
     mode: 'multiplex',
@@ -66,7 +67,7 @@ export default function () {
     // Use the default keyMap (needs to be specified for changes to be applied)
     keyMap: 'default',
     // Retrieve any additional keys
-    extraKeys: generateKeymap(this),
+    extraKeys: generateKeymap(),
     /**
      * ZETTLR-SPECIFIC OPTIONS
      *

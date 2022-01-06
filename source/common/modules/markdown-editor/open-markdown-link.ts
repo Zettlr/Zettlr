@@ -15,18 +15,21 @@
 
 import { mdFileExtensions } from '@common/get-file-extensions'
 import makeValidUri from '@common/util/make-valid-uri'
-const path = window.path
-const ipcRenderer = window.ipc
+import CodeMirror from 'codemirror'
+import { IpcRenderer } from 'electron'
+
+const path = (window as any).path
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
 const VALID_FILETYPES = mdFileExtensions(true)
 
 /**
  * Resolves and opens a link safely (= not inside Zettlr, except it's a local MD file)
  *
- * @param   {String}      url  The URL to open
- * @param   {CodeMirror}  cm   The instance to use if it's a heading link
+ * @param   {string}      url  The URL to open
+ * @param   {CodeMirror.Editor}  cm   The instance to use if it's a heading link
  */
-export default function (url, cm) {
+export default function (url: string, cm: CodeMirror.Editor): void {
   if (url[0] === '#') {
     // We should open an internal link
     let re = new RegExp('#\\s[^\\r\\n]*?' +
@@ -47,7 +50,7 @@ export default function (url, cm) {
     // we cannot rely on the errors thrown by new URL(), as,
     // e.g., file://./relative.md will not throw an error albeit
     // we need to convert it to absolute.
-    let base = cm.getOption('zettlr').markdownImageBasePath
+    let base = (cm as any).getOption('zettlr').markdownImageBasePath
     let validURI = makeValidUri(url, base)
 
     // Now we have a valid link. Finally, let's check if we can open the file
