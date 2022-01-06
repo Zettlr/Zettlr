@@ -116,7 +116,7 @@
     "eslint-config-standard": "^16.0.3",
     "eslint-config-standard-with-typescript": "^21.0.1",
     "eslint-loader": "^4.0.2",
-    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.2.0",
     "eslint-plugin-standard": "^5.0.0",
