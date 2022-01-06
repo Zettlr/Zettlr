@@ -15,9 +15,9 @@
 /**
  * Hooks onto the cursorActivity event to apply the classes
  *
- * @param   {CodeMirror}  cm  The instance
+ * @param   {CodeMirror.Editor}  cm  The instance
  */
-module.exports = (cm) => {
+export default function (cm) {
   cm.on('changes', applyTaskItemClasses)
   cm.on('cursorActivity', applyTaskItemClasses)
 }

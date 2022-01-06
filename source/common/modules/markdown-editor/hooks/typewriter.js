@@ -24,7 +24,7 @@ let lastHighlightLine = -1
  *
  * @param   {CodeMirror.Editor}  cm  The instance
  */
-module.exports = (cm) => {
+export default function (cm) {
   cm.on('change', typewriterHighlight)
   cm.on('change', typewriterScroll)
   cm.on('optionChange', typewriterHighlight)

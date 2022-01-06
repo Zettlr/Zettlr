@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-const { default: tippy } = require('tippy.js')
+import tippy from 'tippy.js'
 
 /**
  * The formatting bar is shown while there is a selection
@@ -35,7 +35,7 @@ const FORMATTING_BAR_HTML = `<div class="editor-formatting-bar">
 <div class="button" data-command="markdownComment"><clr-icon shape="code"></clr-icon></div>
 </div>`
 
-module.exports = (cm) => {
+export default function (cm) {
   cm.on('cursorActivity', (cm) => {
     // Whenever we have a single selection, display a nice tooltip with some
     // fundamental formatting options

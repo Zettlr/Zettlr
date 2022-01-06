@@ -15,9 +15,9 @@
 // This is a plugin that needs a specific CodeMirror instance to work, hence
 // it's not in the plugins folder.
 
-const tippy = require('tippy.js').default
-const md2html = require('@common/util/md-to-html')
-const { trans } = require('@common/i18n-renderer')
+import tippy from 'tippy.js'
+import md2html from '@common/util/md-to-html'
+import { trans } from '@common/i18n-renderer'
 
 /**
  * No footnote tooltips while we're editing a footnote
@@ -26,7 +26,7 @@ const { trans } = require('@common/i18n-renderer')
  */
 let isEditingFootnote = false
 
-module.exports = (cm) => {
+export default function (cm) {
   // Hook into click events
   cm.getWrapperElement().addEventListener('click', (event) => {
     // Open links on both Cmd and Ctrl clicks - otherwise stop handling event

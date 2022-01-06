@@ -1,7 +1,7 @@
-const tippy = require('tippy.js').default
+import tippy from 'tippy.js'
+import { trans } from '@common/i18n-renderer'
+import formatDate from '@common/util/format-date'
 const ipcRenderer = window.ipc
-const { trans } = require('@common/i18n-renderer')
-const formatDate = require('@common/util/format-date').default
 
 /**
  * A hook for displaying link tooltips which display metadata
@@ -10,7 +10,7 @@ const formatDate = require('@common/util/format-date').default
  * @param   {CodeMirror.Editor}  elem  The instance to attach to
  */
 
-module.exports = (elem) => {
+export default function (elem) {
   elem.getWrapperElement().addEventListener('mousemove', (event) => {
     const a = event.target
 

@@ -13,7 +13,7 @@
  */
 
 // Displays a context menu for the MarkdownEditor class
-const { trans } = require('@common/i18n-renderer')
+import { trans } from '@common/i18n-renderer'
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
 
@@ -164,7 +164,7 @@ function getTargetType (target) {
  *
  * @return  {boolean}                      Whether the editor should additionally select the word under cursor
  */
-module.exports = function displayContextMenu (event, isReadOnly, commandCallback, replaceCallback) {
+export default function displayContextMenu (event, isReadOnly, commandCallback, replaceCallback) {
   // First, determine which kind of context menu we should display
   const contextMenuType = getTargetType(event.target)
 

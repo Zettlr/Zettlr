@@ -17,7 +17,7 @@
  * END HEADER
  */
 
-const makeSearchRegex = require('@common/util/make-search-regex')
+import makeSearchRegex from '@common/util/make-search-regex'
 
 /**
  * Contains the current search term, necessary to detect changing search terms
@@ -133,7 +133,7 @@ function replace (cm, term, replacement, forward = true) {
  * @param   {string}             term         The term to be replaced
  * @param   {string}             replacement  The replacement string.
  */
-function replaceAll (cm, term, replacement) {
+export function replaceAll (cm, term, replacement) {
   // Start a new search from the beginning of the document
   startSearch(cm, term)
 
@@ -179,7 +179,7 @@ function startSearch (cm, term, startPosition) {
 /**
  * Stops a running search
  */
-function stopSearch () {
+export function stopSearch () {
   currentLocalSearch = ''
   searchCursor = null
   lastSearchResult = false
@@ -232,19 +232,15 @@ function containsSearchTerm (cm, term) {
   return regex.test(val)
 }
 
-module.exports = {
-  searchNext: function (cm, term) {
-    search(cm, term, true)
-  },
-  searchPrevious: function (cm, term) {
-    search(cm, term, false)
-  },
-  replaceNext: function (cm, term, replacement) {
-    replace(cm, term, replacement, true)
-  },
-  replacePrevious: function (cm, term, replacement) {
-    replace(cm, term, replacement, false)
-  },
-  replaceAll,
-  stopSearch
+export function searchNext (cm, term) {
+  search(cm, term, true)
+}
+export function searchPrevious (cm, term) {
+  search(cm, term, false)
+}
+export function replaceNext (cm, term, replacement) {
+  replace(cm, term, replacement, true)
+}
+export function replacePrevious (cm, term, replacement) {
+  replace(cm, term, replacement, false)
 }

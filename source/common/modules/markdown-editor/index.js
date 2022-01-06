@@ -19,65 +19,58 @@
 
 // Import our additional styles we need to put here since we don't have a Vue
 // component for the editor itself.
-require('./editor.less')
+import './editor.less'
 
 /**
  * UTILITY FUNCTIONS
  */
 
-const getCodeMirrorDefaultOptions = require('./get-cm-options')
-const safeAssign = require('@common/util/safe-assign')
-const countWords = require('@common/util/count-words').default
-const md2html = require('@common/util/md-to-html')
-const generateKeymap = require('./generate-keymap.js')
-const generateTableOfContents = require('./util/generate-toc')
+import getCodeMirrorDefaultOptions from './get-cm-options'
+import safeAssign from '@common/util/safe-assign'
+import countWords from '@common/util/count-words'
+import md2html from '@common/util/md-to-html'
+import generateKeymap from './generate-keymap.js'
+import generateTableOfContents from './util/generate-toc'
 
 // Search plugin (module-namespaced set of utility functions)
-const {
-  searchNext,
-  searchPrevious,
-  replaceNext,
-  replacePrevious,
-  replaceAll,
-  stopSearch
-} = require('./plugins/search')
+import { searchNext, searchPrevious, replaceNext, replacePrevious, replaceAll, stopSearch } from './plugins/search'
 
 /**
  * APIs
  */
-const EventEmitter = require('events')
-
-const ipcRenderer = window.ipc
-const clipboard = window.clipboard
+import EventEmitter from 'events'
 
 /**
  * CODEMIRROR & DEPENDENCIES
  */
-require('./load-plugins.js')
-const CodeMirror = require('codemirror')
+import './load-plugins.js'
+import { fromTextArea } from 'codemirror'
 
 /**
  * HOOKS (plugins that hook on to event listeners)
  */
-const dropFilesHook = require('./hooks/drop-files')
-const footnotesHook = require('./hooks/footnotes')
-const formattingBarHook = require('./hooks/formatting-bar')
-const pasteImagesHook = require('./hooks/paste-images')
-const matchStyleHook = require('./hooks/match-style')
-const { indentLinesHook, clearLineIndentationCache } = require('./hooks/indent-wrapped-lines')
-const headingClassHook = require('./hooks/heading-classes')
-const codeblockClassHook = require('./hooks/codeblock-classes')
-const taskItemClassHook = require('./hooks/task-item-classes')
-const muteLinesHook = require('./hooks/mute-lines')
-const renderElementsHook = require('./hooks/render-elements')
-const typewriterHook = require('./hooks/typewriter')
-const { autocompleteHook, setAutocompleteDatabase } = require('./hooks/autocomplete')
-const linkTooltipsHook = require('./hooks/link-tooltips').default
-const noteTooltipsHook = require('./hooks/note-preview')
+import dropFilesHook from './hooks/drop-files'
+import footnotesHook from './hooks/footnotes'
+import formattingBarHook from './hooks/formatting-bar'
+import pasteImagesHook from './hooks/paste-images'
+import matchStyleHook from './hooks/match-style'
+import { indentLinesHook, clearLineIndentationCache } from './hooks/indent-wrapped-lines'
+import headingClassHook from './hooks/heading-classes'
+import codeblockClassHook from './hooks/codeblock-classes'
+import taskItemClassHook from './hooks/task-item-classes'
+import muteLinesHook from './hooks/mute-lines'
+import renderElementsHook from './hooks/render-elements'
+import typewriterHook from './hooks/typewriter'
+import { autocompleteHook, setAutocompleteDatabase } from './hooks/autocomplete'
+import linkTooltipsHook from './hooks/link-tooltips'
+import noteTooltipsHook from './hooks/note-preview'
 
-const displayContextMenu = require('./display-context-menu')
+import displayContextMenu from './display-context-menu'
 
-module.exports = class MarkdownEditor extends EventEmitter {
+const ipcRenderer = window.ipc
+const clipboard = window.clipboard
+
+export default class MarkdownEditor extends EventEmitter {
   /**
    * Creates a new MarkdownEditor instance attached to the anchorElement
    *
@@ -149,7 +142,7 @@ module.exports = class MarkdownEditor extends EventEmitter {
     }
 
     // Now, instantiate CodeMirror with the defaults
-    this._instance = CodeMirror.fromTextArea(this._anchorElement, this._cmOptions)
+    this._instance = fromTextArea(this._anchorElement, this._cmOptions)
 
     // Immediately afterwards, set the new options passed to overwrite
     this.setOptions(cmOptions)

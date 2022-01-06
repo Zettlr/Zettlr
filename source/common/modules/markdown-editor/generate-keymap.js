@@ -12,10 +12,10 @@
  * END HEADER
  */
 
-const CodeMirror = require('codemirror')
+import { commands, normalizeKeyMap } from 'codemirror'
 const clipboard = window.clipboard
 
-module.exports = function (editor) {
+export default function (editor) {
   let homeEndBehaviour = Boolean(global.config.get('editor.homeEndBehaviour'))
   let keymap = {}
 
@@ -25,14 +25,14 @@ module.exports = function (editor) {
   keymap['Shift-Tab'] = 'autoUnindentMarkdownList'
   keymap['Ctrl-Enter'] = (cm) => {
     // Implement middle-of-line insert line below behaviour (see #101)
-    CodeMirror.commands['goLineEnd'](cm)
-    CodeMirror.commands['newlineAndIndent'](cm)
+    commands['goLineEnd'](cm)
+    commands['newlineAndIndent'](cm)
   }
   keymap['Shift-Ctrl-Enter'] = (cm) => {
     // Implement middle-of-line insert line above behaviour (see #101)
-    CodeMirror.commands['goLineUp'](cm)
-    CodeMirror.commands['goLineEnd'](cm)
-    CodeMirror.commands['newlineAndIndent'](cm)
+    commands['goLineUp'](cm)
+    commands['goLineEnd'](cm)
+    commands['newlineAndIndent'](cm)
   }
 
   // Swap lines in the editor (mostly useful for lists)
@@ -88,5 +88,5 @@ module.exports = function (editor) {
   }
 
   // Returns a CodeMirror keymap for the main editor, aware of potential settings.
-  return CodeMirror.normalizeKeyMap(keymap)
+  return normalizeKeyMap(keymap)
 }

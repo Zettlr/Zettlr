@@ -15,14 +15,14 @@
  * END HEADER
  */
 
-const generateKeymap = require('./generate-keymap.js')
+import generateKeymap from './generate-keymap.js'
 
 /**
  * Returns CodeMirror default options, with sound settings for Zettlr applied.
  *
  * @return  {Object}  The settings object
  */
-module.exports = function () {
+export default function () {
   return {
     // Default mode: Markdown multiplex (+ syntax highlighting for code blocks)
     mode: 'multiplex',

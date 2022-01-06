@@ -29,20 +29,19 @@ let nonMonospaceWidth = 0
 /**
  * Adds an event listener to indent soft-wrapped lines (e.g. blockquotes, list items)
  *
- * @param   {CodeMirror}  cm  The CodeMirror instance to attach
+ * @param   {CodeMirror.Editor}  cm  The CodeMirror instance to attach
  */
-module.exports = {
-  'indentLinesHook': (cm) => {
-    cm.on('renderLine', indentLine)
-  },
-  /**
-   * Clears the cached values for the line indentation
-   */
-  'clearLineIndentationCache': () => {
-    // Reset cached widths
-    monospaceWidth = 0
-    nonMonospaceWidth = 0
-  }
+export function indentLinesHook (cm) {
+  cm.on('renderLine', indentLine)
+}
+
+/**
+ * Clears the cached values for the line indentation
+ */
+export function clearLineIndentationCache () {
+  // Reset cached widths
+  monospaceWidth = 0
+  nonMonospaceWidth = 0
 }
 
 /**

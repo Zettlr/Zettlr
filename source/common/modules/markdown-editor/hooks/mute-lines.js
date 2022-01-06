@@ -24,9 +24,9 @@ const highlights = new Set()
 /**
  * Enables muting of lines in the editor if the option is set
  *
- * @param   {CodeMirror}  cm  The instance
+ * @param   {CodeMirror.Editor}  cm  The instance
  */
-module.exports = (cm) => {
+export default function (cm) {
   cm.on('cursorActivity', muteLines)
   cm.on('optionChange', muteLines)
 }

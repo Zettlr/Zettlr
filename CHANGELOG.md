@@ -1,3 +1,13 @@
+# 2.1.2
+
+## GUI and Functionality
+
+(nothing here yet)
+
+## Under the Hood
+
+- Convert the MarkdownEditor to ES modules
+
 # 2.1.1
 
 ## GUI and Functionality

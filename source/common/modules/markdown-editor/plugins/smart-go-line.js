@@ -1,4 +1,3 @@
-/* global CodeMirror define */
 /**
  * @ignore
  * BEGIN HEADER
@@ -17,65 +16,55 @@
  *
  * END HEADER
  */
-const { getListTokenRE } = require('@common/regular-expressions');
 
-(function (mod) {
-  if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
-    mod(require('codemirror/lib/codemirror'))
-  } else if (typeof define === 'function' && define.amd) { // AMD
-    define(['codemirror/lib/codemirror'], mod)
-  } else { // Plain browser env
-    mod(CodeMirror)
+import { commands, Pass } from 'codemirror'
+import { getListTokenRE } from '@common/regular-expressions'
+
+const listRE = getListTokenRE()
+
+/**
+ * Goes to the start of the line, but takes into account list formatting
+ * characters (so that the cursor initially only lands *after* the character).
+ *
+ * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
+ */
+commands.goLineLeftMarkdown = function (cm) {
+  if (cm.getOption('disableInput') === true) {
+    return Pass
   }
-})(function (CodeMirror) {
-  'use strict'
 
-  const listRE = getListTokenRE()
+  if (cm.somethingSelected()) {
+    // Call regular handler
+    cm.execCommand('goLineLeft')
+    return
+  }
 
-  /**
-   * Goes to the start of the line, but takes into account list formatting
-   * characters (so that the cursor initially only lands *after* the character).
-   *
-   * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
-   */
-  CodeMirror.commands.goLineLeftMarkdown = function (cm) {
-    if (cm.getOption('disableInput') === true) {
-      return CodeMirror.Pass
-    }
+  const cur = cm.getCursor()
+  const line = cm.getLine(cur.line)
 
-    if (cm.somethingSelected()) {
-      // Call regular handler
-      cm.execCommand('goLineLeft')
-      return
-    }
+  // First, check for two conditions: We are in a list, and the cursor is
+  // farther to the right than the beginning of the list.
+  const match = listRE.exec(line)
 
-    const cur = cm.getCursor()
-    const line = cm.getLine(cur.line)
+  if (match === null) {
+    cm.execCommand('goLineLeft')
+  } else {
+    // The listRE matched, so now we can check for where the cursor actually
+    // is.
+    const leadingWhite = (match[1] !== undefined) ? match[1].length : 0
+    const tokenLength = (match[2] !== undefined) ? match[2].length : 0
+    const afterWhite = (match[4] !== undefined) ? match[4].length : 0
 
-    // First, check for two conditions: We are in a list, and the cursor is
-    // farther to the right than the beginning of the list.
-    const match = listRE.exec(line)
+    const startOfItem = leadingWhite + tokenLength + afterWhite
 
-    if (match === null) {
+    if (cur.ch <= startOfItem) {
+      // The cursor is either directly at the start of the list item's
+      // contents or before that, so simply execute the "goLineLeft" command.
       cm.execCommand('goLineLeft')
     } else {
-      // The listRE matched, so now we can check for where the cursor actually
-      // is.
-      const leadingWhite = (match[1] !== undefined) ? match[1].length : 0
-      const tokenLength = (match[2] !== undefined) ? match[2].length : 0
-      const afterWhite = (match[4] !== undefined) ? match[4].length : 0
-
-      const startOfItem = leadingWhite + tokenLength + afterWhite
-
-      if (cur.ch <= startOfItem) {
-        // The cursor is either directly at the start of the list item's
-        // contents or before that, so simply execute the "goLineLeft" command.
-        cm.execCommand('goLineLeft')
-      } else {
-        // We are in a list and we also are more to the right than the start of
-        // the item, so move to that.
-        cm.extendSelection({ line: cur.line, ch: startOfItem })
-      }
+      // We are in a list and we also are more to the right than the start of
+      // the item, so move to that.
+      cm.extendSelection({ line: cur.line, ch: startOfItem })
     }
   }
-})
+}

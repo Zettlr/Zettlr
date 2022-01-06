@@ -12,10 +12,11 @@
  * END HEADER
  */
 
+import { getImageFileRE } from '@common/regular-expressions'
 const path = window.path
-const IMAGE_REGEXP = require('@common/regular-expressions').getImageFileRE()
+const IMAGE_REGEXP = getImageFileRE()
 
-module.exports = (cm) => {
+export default function (cm) {
   cm.on('drop', (cm, event) => {
     const zettlrFile = event.dataTransfer.getData('text/x-zettlr-file')
     const otherFile = event.dataTransfer.getData('text/x-zettlr-other-file')

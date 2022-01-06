@@ -16,9 +16,9 @@
 /**
  * Fires the renderers based on the zettlr.render option values
  *
- * @param   {CodeMirror}  cm  The calling instance
+ * @param   {CodeMirror.Editor}  cm  The calling instance
  */
-module.exports = (cm) => {
+export default function (cm) {
   // DEBUG TESTING of requestIdleCallbacks
 
   // While taskHandle is undefined, there's no task scheduled. Else, there is.

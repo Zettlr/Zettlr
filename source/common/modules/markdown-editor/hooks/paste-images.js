@@ -17,7 +17,7 @@ const path = window.path
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
 
-module.exports = (cm) => {
+export default function (cm) {
   /**
    * Hook into the beforeChange event of CodeMirror
    *

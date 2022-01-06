@@ -17,7 +17,7 @@
  *
  * @param   {CodeMirror}  cm  The instance
  */
-module.exports = (cm) => {
+export default function (cm) {
   // While taskHandle is undefined, there's no task scheduled. Else, there is.
   let taskHandle
 

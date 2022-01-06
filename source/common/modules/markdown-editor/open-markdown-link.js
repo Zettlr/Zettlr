@@ -13,8 +13,8 @@
  * END HEADER
  */
 
-const { mdFileExtensions } = require('@common/get-file-extensions')
-const makeValidUri = require('@common/util/make-valid-uri')
+import { mdFileExtensions } from '@common/get-file-extensions'
+import makeValidUri from '@common/util/make-valid-uri'
 const path = window.path
 const ipcRenderer = window.ipc
 
@@ -26,7 +26,7 @@ const VALID_FILETYPES = mdFileExtensions(true)
  * @param   {String}      url  The URL to open
  * @param   {CodeMirror}  cm   The instance to use if it's a heading link
  */
-module.exports = function (url, cm) {
+export default function (url, cm) {
   if (url[0] === '#') {
     // We should open an internal link
     let re = new RegExp('#\\s[^\\r\\n]*?' +

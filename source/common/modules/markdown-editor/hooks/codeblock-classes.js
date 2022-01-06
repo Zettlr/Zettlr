@@ -11,7 +11,7 @@
  *
  * END HEADER
  */
-const { debounce, range } = require('lodash')
+import { debounce, range } from 'lodash'
 const codeblockClass = 'code-block-line'
 const codeblockClassOpen = 'code-block-first-line'
 const codeblockClassClose = 'code-block-last-line'
@@ -24,9 +24,9 @@ const findCodeDebounced = debounce(findCode, 400, { leading: true })
  * codeblock classes. Everything is debounced, except the Enter key because
  * you'll want styling to be applied instantly when adding a line to a block.
  *
- * @param   {CodeMirror}  cm  The instance
+ * @param   {CodeMirror.Editor}  cm  The instance
  */
-module.exports = (cm) => {
+export default function (cm) {
   cm.on('keyHandled', handleNewline)
   cm.on('cursorActivity', findCodeDebounced)
   cm.on('optionChange', findCodeDebounced)

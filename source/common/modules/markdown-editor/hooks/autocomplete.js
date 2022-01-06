@@ -12,14 +12,15 @@
  * END HEADER
  */
 
-const { getCodeBlockRE } = require('@common/regular-expressions')
+import { getCodeBlockRE } from '@common/regular-expressions'
+import { on } from 'codemirror'
+import { DateTime } from 'luxon'
+import { v4 as uuid } from 'uuid'
+import generateId from '@common/util/generate-id'
+
 // We need two code block REs: First the line-wise, and then the full one.
 const codeBlockRE = getCodeBlockRE(false)
 const codeBlockMultiline = getCodeBlockRE(true)
-const CodeMirror = require('codemirror')
-const { DateTime } = require('luxon')
-const uuid = require('uuid').v4
-const generateId = require('@common/util/generate-id').default
 
 let autocompleteStart = null
 let currentDatabase = null
@@ -162,87 +163,86 @@ function collectHeadingIDs (cm) {
   }
 }
 
-module.exports = {
-  /**
-   * Hooks autocomplete onto the CodeMirror editor
-   *
-   * @param   {CodeMirror.Editor}  cm  The CM instance
-   */
-  'autocompleteHook': (cm) => {
-    // Listen to change events
-    cm.on('change', (cm, changeObj) => {
-      // On every change event, make sure to update the heading IDs
-      collectHeadingIDs(cm)
+/**
+ * Hooks autocomplete onto the CodeMirror editor
+ *
+ * @param   {CodeMirror.Editor}  cm  The CM instance
+ */
+export function autocompleteHook (cm) {
+  // Listen to change events
+  cm.on('change', (cm, changeObj) => {
+    // On every change event, make sure to update the heading IDs
+    collectHeadingIDs(cm)
 
-      if (autocompleteStart !== null && currentDatabase !== null) {
-        // We are currently autocompleting something, let's finish that first.
-        return
-      }
-
-      let autocompleteDatabase = shouldBeginAutocomplete(cm, changeObj)
-
-      if (autocompleteDatabase === undefined) {
-        return
-      }
-
-      // Determine if we accept spaces within the autocomplete
-      const spaceCfg = Boolean(global.config.get('editor.autocompleteAcceptSpace'))
-
-      // We do not allow spaces for these databases:
-      const DISALLOW_SPACES = [
-        'tags',
-        'headings'
-      ]
-
-      const space = spaceCfg && !DISALLOW_SPACES.includes(autocompleteDatabase)
-
-      // If we're here, we can begin an autocompletion
-      autocompleteStart = Object.assign({}, cm.getCursor())
-      currentDatabase = autocompleteDatabase
-      cm.showHint({
-        hint: hintFunction,
-        completeSingle: false,
-        closeCharacters: (space) ? /[()[\]{};:>,]/ : undefined
-      }) // END showHint
-    })
-
-    cm.on('endCompletion', () => {
-      autocompleteStart = null
-      currentDatabase = null
-    })
-  },
-  'setAutocompleteDatabase': (type, database) => {
-    // Make additional adjustments if necessary
-    if (type === 'tags') {
-      // Here, we get an object from main which is not in the right data format
-      // (it's a hashmap, not an array)
-      let tagHints = Object.keys(database).map(key => {
-        return {
-          text: database[key].text,
-          displayText: '#' + database[key].text,
-          className: database[key].className // Optional, can be undefined
-        }
-      })
-
-      availableDatabases[type] = tagHints
-    } else if ([ 'citekeys', 'snippets' ].includes(type)) {
-      // These databases work as they are
-      availableDatabases[type] = database
-    } else if (type === 'files') {
-      let fileHints = Object.keys(database).map(key => {
-        return {
-          text: database[key].text,
-          displayText: database[key].displayText,
-          className: database[key].className,
-          id: database[key].id // We need to add the ID property (if applicable)
-        }
-      })
-
-      availableDatabases[type] = fileHints
-    } else {
-      const types = Object.keys(availableDatabases)
-      console.error('Unsupported autocomplete database type! Supported are: ' + types.join(', '))
+    if (autocompleteStart !== null && currentDatabase !== null) {
+      // We are currently autocompleting something, let's finish that first.
+      return
     }
+
+    let autocompleteDatabase = shouldBeginAutocomplete(cm, changeObj)
+
+    if (autocompleteDatabase === undefined) {
+      return
+    }
+
+    // Determine if we accept spaces within the autocomplete
+    const spaceCfg = Boolean(global.config.get('editor.autocompleteAcceptSpace'))
+
+    // We do not allow spaces for these databases:
+    const DISALLOW_SPACES = [
+      'tags',
+      'headings'
+    ]
+
+    const space = spaceCfg && !DISALLOW_SPACES.includes(autocompleteDatabase)
+
+    // If we're here, we can begin an autocompletion
+    autocompleteStart = Object.assign({}, cm.getCursor())
+    currentDatabase = autocompleteDatabase
+    cm.showHint({
+      hint: hintFunction,
+      completeSingle: false,
+      closeCharacters: (space) ? /[()[\]{};:>,]/ : undefined
+    }) // END showHint
+  })
+
+  cm.on('endCompletion', () => {
+    autocompleteStart = null
+    currentDatabase = null
+  })
+}
+
+export function setAutocompleteDatabase (type, database) {
+  // Make additional adjustments if necessary
+  if (type === 'tags') {
+    // Here, we get an object from main which is not in the right data format
+    // (it's a hashmap, not an array)
+    let tagHints = Object.keys(database).map(key => {
+      return {
+        text: database[key].text,
+        displayText: '#' + database[key].text,
+        className: database[key].className // Optional, can be undefined
+      }
+    })
+
+    availableDatabases[type] = tagHints
+  } else if ([ 'citekeys', 'snippets' ].includes(type)) {
+    // These databases work as they are
+    availableDatabases[type] = database
+  } else if (type === 'files') {
+    let fileHints = Object.keys(database).map(key => {
+      return {
+        text: database[key].text,
+        displayText: database[key].displayText,
+        className: database[key].className,
+        id: database[key].id // We need to add the ID property (if applicable)
+      }
+    })
+
+    availableDatabases[type] = fileHints
+  } else {
+    const types = Object.keys(availableDatabases)
+    console.error('Unsupported autocomplete database type! Supported are: ' + types.join(', '))
   }
 }
 
@@ -384,7 +384,7 @@ function hintFunction (cm, opt) {
   }
 
   // Set the autocomplete to false as soon as the user has actively selected something.
-  CodeMirror.on(completionObject, 'pick', (completion) => {
+  on(completionObject, 'pick', (completion) => {
     // In case the user wants to link a file, intercept during
     // the process and add the file link according to the user's
     // preference settings.
@@ -526,7 +526,7 @@ function hintFunction (cm, opt) {
   // NOTE: There's also the endCompletion event, which does the same,
   // only that that event is being fired if the user types an, e.g., space
   // closingCharacters on the hintOption.
-  CodeMirror.on(completionObject, 'close', () => {
+  on(completionObject, 'close', () => {
     autocompleteStart = null
     currentDatabase = null
   })

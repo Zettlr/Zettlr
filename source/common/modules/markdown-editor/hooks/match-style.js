@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-const html2md = require('@common/util/html-to-md').default
+import html2md from '@common/util/html-to-md'
 const clipboard = window.clipboard
 
 /**
@@ -22,7 +22,7 @@ const clipboard = window.clipboard
  *
  * @param   {CodeMirror.Editor}  cm  The instance
  */
-module.exports = (cm) => {
+export default function (cm) {
   cm.on('beforeChange', (cm, changeObj) => {
     // If text is to be pasted, we may need to exchange some text.
     if (changeObj.origin !== 'paste') return

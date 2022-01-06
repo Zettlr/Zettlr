@@ -14,99 +14,97 @@
  */
 
 // 1. CodeMirror modes
-require('codemirror/addon/mode/overlay')
-require('codemirror/addon/mode/multiplex')
-require('codemirror/mode/markdown/markdown')
-require('codemirror/mode/gfm/gfm')
-require('codemirror/mode/stex/stex')
-require('./modes/markdown-zkn.js')
-require('./modes/readability.js')
-require('./modes/multiplex.js')
-require('./modes/spellchecker.js')
+import 'codemirror/addon/mode/overlay'
+import 'codemirror/addon/mode/multiplex'
+import 'codemirror/mode/markdown/markdown'
+import 'codemirror/mode/gfm/gfm'
+import 'codemirror/mode/stex/stex'
+import './modes/markdown-zkn.js'
+import './modes/readability.js'
+import './modes/multiplex.js'
+import './modes/spellchecker.js'
 
 // 2. Editing addons
-require('codemirror/addon/edit/closebrackets')
-require('./plugins/continuelist.js')
-require('./plugins/indentlist.js')
+import 'codemirror/addon/edit/closebrackets'
+import './plugins/continuelist.js'
+import './plugins/indentlist.js'
 
 // 3. Keymaps
-require('codemirror/keymap/sublime') // This will load the extra commands from SublimeText
-require('codemirror/keymap/vim') // This will load the extra commands from Vim
-require('codemirror/keymap/emacs') // This will load the extra commands from Emacs
+import 'codemirror/keymap/sublime' // This will load the extra commands from SublimeText
+import 'codemirror/keymap/vim' // This will load the extra commands from Vim
+import 'codemirror/keymap/emacs' // This will load the extra commands from Emacs
 
 // 4. Display addons
 // require('codemirror/addon/display/fullscreen')
-require('codemirror/addon/display/placeholder')
+import 'codemirror/addon/display/placeholder'
 
 // 5. Search addons
-require('codemirror/addon/scroll/annotatescrollbar')
-require('codemirror/addon/search/searchcursor')
-require('codemirror/addon/search/matchesonscrollbar')
+import 'codemirror/addon/scroll/annotatescrollbar'
+import 'codemirror/addon/search/searchcursor'
+import 'codemirror/addon/search/matchesonscrollbar'
 
-// 6. Code highlighting-only modes
-require('codemirror/mode/clike/clike')
-require('codemirror/mode/clojure/clojure')
-require('codemirror/mode/css/css')
-require('codemirror/mode/dart/dart')
-require('codemirror/mode/elm/elm')
-require('codemirror/mode/gfm/gfm')
-require('codemirror/mode/haskell/haskell')
-require('codemirror/mode/javascript/javascript')
-require('codemirror/mode/mllike/mllike')
-require('codemirror/mode/xml/xml')
-require('codemirror/mode/stex/stex')
-require('codemirror/mode/php/php')
-require('codemirror/mode/python/python')
-require('codemirror/mode/r/r')
-require('codemirror/mode/ruby/ruby')
-require('codemirror/mode/sql/sql')
-require('codemirror/mode/swift/swift')
-require('codemirror/mode/shell/shell')
-require('codemirror/mode/vb/vb')
-require('codemirror/mode/yaml/yaml')
-require('codemirror/mode/go/go')
-require('codemirror/mode/rust/rust')
-require('codemirror/mode/perl/perl')
-require('codemirror/mode/julia/julia')
-require('codemirror/mode/turtle/turtle')
-require('codemirror/mode/sparql/sparql')
-require('codemirror/mode/verilog/verilog')
-require('codemirror/mode/vhdl/vhdl')
-require('codemirror/mode/tcl/tcl')
-require('codemirror/mode/scheme/scheme')
-require('codemirror/mode/commonlisp/commonlisp')
-require('codemirror/mode/powershell/powershell')
-require('codemirror/mode/smalltalk/smalltalk')
-require('codemirror/mode/toml/toml')
-require('codemirror/mode/dockerfile/dockerfile')
-require('codemirror/mode/diff/diff')
-require('codemirror/mode/octave/octave')
+// 6. Additional code highlighting-only modes
+import 'codemirror/mode/clike/clike'
+import 'codemirror/mode/clojure/clojure'
+import 'codemirror/mode/css/css'
+import 'codemirror/mode/dart/dart'
+import 'codemirror/mode/elm/elm'
+import 'codemirror/mode/haskell/haskell'
+import 'codemirror/mode/javascript/javascript'
+import 'codemirror/mode/mllike/mllike'
+import 'codemirror/mode/xml/xml'
+import 'codemirror/mode/php/php'
+import 'codemirror/mode/python/python'
+import 'codemirror/mode/r/r'
+import 'codemirror/mode/ruby/ruby'
+import 'codemirror/mode/sql/sql'
+import 'codemirror/mode/swift/swift'
+import 'codemirror/mode/shell/shell'
+import 'codemirror/mode/vb/vb'
+import 'codemirror/mode/yaml/yaml'
+import 'codemirror/mode/go/go'
+import 'codemirror/mode/rust/rust'
+import 'codemirror/mode/perl/perl'
+import 'codemirror/mode/julia/julia'
+import 'codemirror/mode/turtle/turtle'
+import 'codemirror/mode/sparql/sparql'
+import 'codemirror/mode/verilog/verilog'
+import 'codemirror/mode/vhdl/vhdl'
+import 'codemirror/mode/tcl/tcl'
+import 'codemirror/mode/scheme/scheme'
+import 'codemirror/mode/commonlisp/commonlisp'
+import 'codemirror/mode/powershell/powershell'
+import 'codemirror/mode/smalltalk/smalltalk'
+import 'codemirror/mode/toml/toml'
+import 'codemirror/mode/dockerfile/dockerfile'
+import 'codemirror/mode/diff/diff'
+import 'codemirror/mode/octave/octave'
 
 // 7. The folding addon
-require('codemirror/addon/fold/foldcode')
-require('codemirror/addon/fold/foldgutter')
-require('codemirror/addon/fold/brace-fold')
-require('codemirror/addon/fold/indent-fold')
-require('codemirror/addon/fold/markdown-fold')
-require('codemirror/addon/fold/comment-fold')
-require('./plugins/foldcode-helper')
+import 'codemirror/addon/fold/foldcode'
+import 'codemirror/addon/fold/foldgutter'
+import 'codemirror/addon/fold/brace-fold'
+import 'codemirror/addon/fold/indent-fold'
+import 'codemirror/addon/fold/markdown-fold'
+import 'codemirror/addon/fold/comment-fold'
+import './plugins/foldcode-helper'
 
 // 8. Hinting (tag autocompletion, e.g.)
-require('codemirror/addon/hint/show-hint')
+import 'codemirror/addon/hint/show-hint'
 
 // 9. Zettlr specific addons
-require('./plugins/markdown-shortcuts.js')
-require('./plugins/autocorrect')
-require('./plugins/footnotes.js')
-require('./plugins/smart-go-line.js')
-require('./plugins/render-images.js')
-require('./plugins/render-links.js')
-require('./plugins/render-citations.js')
-require('./plugins/render-tables.js')
-require('./plugins/render-tasks.js')
-require('./plugins/render-h-tags.js')
-require('./plugins/render-iframes.js')
-require('./plugins/render-math.ts')
-require('./plugins/render-mermaid')
-require('./plugins/select-word.js')
-require('./plugins/wysiwyg.js')
+import './plugins/markdown-shortcuts.js'
+import './plugins/autocorrect'
+import './plugins/footnotes.js'
+import './plugins/smart-go-line.js'
+import './plugins/render-images.js'
+import './plugins/render-links.js'
+import './plugins/render-citations.js'
+import './plugins/render-tables.js'
+import './plugins/render-tasks.js'
+import './plugins/render-h-tags.js'
+import './plugins/render-iframes.js'
+import './plugins/render-math.ts'
+import './plugins/render-mermaid'
+import './plugins/select-word.js'
+import './plugins/wysiwyg.js'
