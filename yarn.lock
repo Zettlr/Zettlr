@@ -738,10 +738,10 @@
     "@types/glob" "*"
     "@types/node" "*"
 
-"@types/sanitize-html@^2.6.0":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@types/sanitize-html/-/sanitize-html-2.6.0.tgz#442f845a6cd793d3b1bcb54b4b1905947b409526"
-  integrity sha512-5F2j1f2NITsZQPrGmrw4AH5Wfud81aqvUTNC7a1SrE8aa6fKyKVVX5FZxoRQYrBdqIDluyQGfkkj97faUqq7sw==
+"@types/sanitize-html@^2.6.1":
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/@types/sanitize-html/-/sanitize-html-2.6.1.tgz#970193524df719f716c5bcf8db579859c446cd17"
+  integrity sha512-+JLlZdJkIHdgvlFnMorJeLv5WIORNcI+jHsAoPBWMnhGx5Rbz/D1QN5D4qvmoA7fooDlEVy6zlioWSgqbU0KeQ==
   dependencies:
     htmlparser2 "^6.0.0"
 
