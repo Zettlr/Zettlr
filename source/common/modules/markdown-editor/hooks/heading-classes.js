@@ -15,7 +15,7 @@
 /**
  * Hooks onto the cursorActivity event to apply heading classes
  *
- * @param   {CodeMirror}  cm  The instance
+ * @param   {CodeMirror.Editor}  cm  The instance
  */
 export default function (cm) {
   // While taskHandle is undefined, there's no task scheduled. Else, there is.

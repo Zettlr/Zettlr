@@ -23,7 +23,7 @@ let timeout
  * A hook for displaying link tooltips which can be used to visually
  * enable users to click a link (without having to press down Ctrl/Cmd)
  *
- * @param   {CodeMirror}  cm  The instance to attach to
+ * @param   {CodeMirror.Editor}  cm  The instance to attach to
  */
 export default function linkTooltipsHook (cm) {
   cm.getWrapperElement().addEventListener('mousemove', (event) => {

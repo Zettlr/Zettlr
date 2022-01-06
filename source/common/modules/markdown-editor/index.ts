@@ -44,7 +44,7 @@ import EventEmitter from 'events'
  * CODEMIRROR & DEPENDENCIES
  */
 import './load-plugins.js'
-import { fromTextArea } from 'codemirror'
+import CodeMirror, { fromTextArea } from 'codemirror'
 
 /**
  * HOOKS (plugins that hook on to event listeners)
@@ -67,74 +67,41 @@ import noteTooltipsHook from './hooks/note-preview'
 
 import displayContextMenu from './display-context-menu'
 
-const ipcRenderer = window.ipc
-const clipboard = window.clipboard
+import { IpcRenderer } from 'electron'
+
+const ipcRenderer: IpcRenderer = (window as any).ipc
+const clipboard = (window as any).clipboard
 
 export default class MarkdownEditor extends EventEmitter {
+  private readonly _instance: CodeMirror.Editor
+  private readonly _anchorElement: null|HTMLTextAreaElement
+  private _readabilityMode: boolean
+  private _currentDocumentMode: string
+  private _cmOptions: any
+  private _countChars: boolean
+
   /**
    * Creates a new MarkdownEditor instance attached to the anchorElement
    *
    * @param   {HTMLTextAreaElement|string}  anchorElement   The anchor element (either a DOM node or an ID to be used with document.getElementById)
    * @param   {Object}                      [cmOptions={}]  Optional CodeMirror options. If no object is provided, the instance will be instantiated with default options for Zettlr.
    */
-  constructor (anchorElement, cmOptions = {}) {
+  constructor (anchorElement: HTMLTextAreaElement|string, cmOptions = {}) {
     super() // Set up the event emitter
-    /**
-     * Holds the actual CodeMirror instance
-     *
-     * @var {CodeMirror}
-     */
-    this._instance = null
-
-    /**
-     * Contains the anchor textarea element to which the instance will attach
-     * itself.
-     *
-     * @var {HTMLTextAreaElement}
-     */
     this._anchorElement = null
-
-    /**
-     * Should the editor contents be displayed using the readability mode?
-     *
-     * @var {boolean}
-     */
     this._readabilityMode = false
-
-    /**
-     * Contains the document's current active mode because after switching to
-     * readability we can't retrieve that anymore, and if the user in between
-     * switched documents, that's just awful.
-     *
-     * @var {string|undefined}
-     */
     this._currentDocumentMode = 'multiplex'
-
-    /**
-     * Can hold a close-callback from an opened context menu
-     *
-     * @var {Function}
-     */
-    this._contextCloseCallback = null
-
-    /**
-     * The CodeMirror options
-     *
-     * @var  {Object}
-     */
     this._cmOptions = getCodeMirrorDefaultOptions()
-
-    /**
-     * If true, the selections and potentially other values returned by the
-     * instance will represent char counts instead of word counts.
-     *
-     * @var {boolean}
-     */
     this._countChars = false
 
     // Parse the anchorElement until we get something useful
     if (typeof anchorElement === 'string' && document.getElementById(anchorElement) !== null) {
-      this._anchorElement = document.getElementById(anchorElement)
+      const anchor = document.getElementById(anchorElement)
+      if (anchor instanceof HTMLTextAreaElement) {
+        this._anchorElement = anchor
+      } else {
+        throw new Error('Could not instantiate MarkdownEditor: anchorElement did not describe an HTMLTextAreaElement')
+      }
     } else if (anchorElement instanceof HTMLTextAreaElement) {
       this._anchorElement = anchorElement
     } else {
@@ -226,18 +193,18 @@ export default class MarkdownEditor extends EventEmitter {
 
       if (tokenList.includes('zkn-link')) {
         event.preventDefault()
-        event.codemirrorIgnore = true
+        ;(event as any).codemirrorIgnore = true
         this.emit('zettelkasten-link', tokenInfo.string)
       } else if (tokenList.includes('zkn-tag')) {
         event.preventDefault()
-        event.codemirrorIgnore = true
+        ;(event as any).codemirrorIgnore = true
         this.emit('zettelkasten-tag', tokenInfo.string)
       }
     })
 
     // Display a context menu if appropriate
     this._instance.getWrapperElement().addEventListener('contextmenu', (event) => {
-      const shouldSelectWordUnderCursor = displayContextMenu(event, this._instance.isReadOnly(), (command) => {
+      const shouldSelectWordUnderCursor = displayContextMenu(event, this._instance.isReadOnly(), (command: string) => {
         switch (command) {
           case 'cut':
           case 'copy':
@@ -261,7 +228,7 @@ export default class MarkdownEditor extends EventEmitter {
         // In any case, re-focus the editor, either for cut/copy/paste to work
         // or to resume working afterwards
         this._instance.focus()
-      }, (wordToReplace) => {
+      }, (wordToReplace: string) => {
         // Simply replace the selection with the given word
         this._instance.replaceSelection(wordToReplace)
       })
@@ -285,27 +252,27 @@ export default class MarkdownEditor extends EventEmitter {
   } // END CONSTRUCTOR
 
   // SEARCH FUNCTIONALITY
-  searchNext (term) {
+  searchNext (term: string): void {
     searchNext(this._instance, term)
   }
 
-  searchPrevious (term) {
+  searchPrevious (term: string): void {
     searchPrevious(this._instance, term)
   }
 
-  replaceNext (term, replacement) {
+  replaceNext (term: string, replacement: string): void {
     replaceNext(this._instance, term, replacement)
   }
 
-  replacePrevious (term, replacement) {
+  replacePrevious (term: string, replacement: string): void {
     replacePrevious(this._instance, term, replacement)
   }
 
-  replaceAll (term, replacement) {
+  replaceAll (term: string, replacement: string): void {
     replaceAll(this._instance, term, replacement)
   }
 
-  stopSearch () {
+  stopSearch (): void {
     stopSearch()
   }
 
@@ -313,7 +280,7 @@ export default class MarkdownEditor extends EventEmitter {
    * Pastes the clipboard contents as plain text, regardless of any formatted
    * text present.
    */
-  pasteAsPlainText () {
+  pasteAsPlainText (): void {
     const plainText = clipboard.readText()
 
     // Simple programmatical paste.
@@ -325,7 +292,7 @@ export default class MarkdownEditor extends EventEmitter {
   /**
    * Copies the current editor contents into the clipboard as HTML
    */
-  copyAsHTML () {
+  copyAsHTML (): void {
     if (!this._instance.somethingSelected()) return
     let md = this._instance.getSelections().join(' ')
     let html = md2html(md)
@@ -339,7 +306,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @param  {Number} line The line to pull into view
    */
-  jtl (line) {
+  jtl (line: number): void {
     const { from, to } = this._instance.getViewport()
     const viewportSize = to - from
     // scrollIntoView first and foremost pulls something simply into view, but
@@ -349,8 +316,8 @@ export default class MarkdownEditor extends EventEmitter {
     let lastLine = line + viewportSize
 
     // CodeMirror will not sanitise the viewport size.
-    if (lastLine >= this._instance.doc.lineCount()) {
-      lastLine = this._instance.doc.lineCount() - 1
+    if (lastLine >= this._instance.lineCount()) {
+      lastLine = this._instance.lineCount() - 1
     }
 
     this._instance.scrollIntoView({
@@ -370,7 +337,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @param   {Object}  newOptions  The new options
    */
-  setOptions (newOptions) {
+  setOptions (newOptions: any): void {
     // Before actually merging the options, we have to detect changes in the
     // rendering preferences.
     let shouldRemoveMarkers = false
@@ -397,7 +364,7 @@ export default class MarkdownEditor extends EventEmitter {
       // If shouldRemoveMarkers is true, one of the rendering options has been
       // disabled, so we must remove all markers and then re-render only those
       // that should still be displayed.
-      const markers = this._instance.doc.getAllMarks()
+      const markers = this._instance.getAllMarks()
       for (const marker of markers) {
         marker.clear()
       }
@@ -409,8 +376,8 @@ export default class MarkdownEditor extends EventEmitter {
     // Next, set all options on the CodeMirror instance. This will internally
     // fire all necessary events, apart from those we need to fire manually.
     for (const name in this._cmOptions) {
-      if (this._cmOptions.hasOwnProperty(name)) {
-        this._instance.setOption(name, this._cmOptions[name])
+      if (name in this._cmOptions) {
+        (this._instance as any).setOption(name, this._cmOptions[name])
       }
     }
 
@@ -428,7 +395,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @return  {Mixed}         The value of the key
    */
-  getOption (name) {
+  getOption (name: string): any {
     return this._cmOptions[name]
   }
 
@@ -440,7 +407,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @return  {Doc}                   The previous CodeMirror document instance
    */
-  swapDoc (cmDoc, documentMode) {
+  swapDoc (cmDoc: CodeMirror.Doc, documentMode: string): CodeMirror.Doc {
     const oldDoc = this._instance.swapDoc(cmDoc)
     this._instance.focus()
 
@@ -466,7 +433,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @return  {Boolean}  True, if no changes are recorded
    */
-  isClean () {
+  isClean (): boolean {
     return this._instance.isClean()
   }
 
@@ -475,14 +442,14 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @param   {String}  cmd  The command to run
    */
-  runCommand (cmd) {
+  runCommand (cmd: string): void {
     this._instance.execCommand(cmd)
   }
 
   /**
    * Issues a focus command to the underlying instance
    */
-  focus () {
+  focus (): void {
     this._instance.focus()
   }
 
@@ -492,14 +459,14 @@ export default class MarkdownEditor extends EventEmitter {
    * @param   {String}  type      The type of the database
    * @param   {Object}  database  The show-hint-addon compatible database
    */
-  setCompletionDatabase (type, database) {
+  setCompletionDatabase (type: string, database: any): void {
     setAutocompleteDatabase(type, database)
   }
 
   /**
    * Updates the list of available snippets.
    */
-  async updateSnippetAutocomplete () {
+  async updateSnippetAutocomplete (): Promise<void> {
     const snippetList = await ipcRenderer.invoke('assets-provider', { command: 'list-snippets' })
 
     const snippetsDB = []
@@ -528,7 +495,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @return {Array} An array containing objects with all headings
    */
-  get tableOfContents () {
+  get tableOfContents (): any[] {
     return generateTableOfContents(this.value)
   }
 
@@ -537,13 +504,13 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @return  {Object}  An object containing, e.g., words, chars, selections.
    */
-  get documentInfo () {
-    let ret = {
-      'words': this.wordCount,
-      'chars': this.charCount,
-      'chars_wo_spaces': this.charCountWithoutSpaces,
-      'cursor': Object.assign({}, this._instance.getCursor()),
-      'selections': []
+  get documentInfo (): any {
+    const ret = {
+      words: this.wordCount,
+      chars: this.charCount,
+      chars_wo_spaces: this.charCountWithoutSpaces,
+      cursor: Object.assign({}, this._instance.getCursor()),
+      selections: [] as any[]
     }
 
     if (this._instance.somethingSelected()) {
@@ -552,9 +519,9 @@ export default class MarkdownEditor extends EventEmitter {
       let selectionBounds = this._instance.listSelections()
       for (let i = 0; i < selectionText.length; i++) {
         ret.selections.push({
-          'selectionLength': countWords(selectionText[i], this._countChars),
-          'start': Object.assign({}, selectionBounds[i].anchor),
-          'end': Object.assign({}, selectionBounds[i].head)
+          selectionLength: countWords(selectionText[i], this._countChars),
+          start: Object.assign({}, selectionBounds[i].anchor),
+          end: Object.assign({}, selectionBounds[i].head)
         })
       }
     }
@@ -567,7 +534,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @param   {boolean}  shouldCountChars  The value
    */
-  set countChars (shouldCountChars) {
+  set countChars (shouldCountChars: boolean) {
     this._countChars = shouldCountChars
   }
 
@@ -576,7 +543,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @return  {boolean}  Whether the editor counts chars or words.
    */
-  get countChars () {
+  get countChars (): boolean {
     return this._countChars
   }
 
@@ -585,7 +552,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @return  {Boolean}  True if the editor option for fullScreen is set
    */
-  get isFullscreen () {
+  get isFullscreen (): boolean {
     return this._cmOptions.fullScreen
   }
 
@@ -594,7 +561,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @param   {Boolean}  shouldBeFullscreen  Whether the editor should be in fullscreen
    */
-  set isFullscreen (shouldBeFullscreen) {
+  set isFullscreen (shouldBeFullscreen: boolean) {
     this.setOptions({ 'fullScreen': shouldBeFullscreen })
 
     // Refresh to reflect the size changes
@@ -606,7 +573,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @return  {Boolean}  True if typewriter mode is active
    */
-  get hasTypewriterMode () {
+  get hasTypewriterMode (): boolean {
     return this._cmOptions.zettlr.typewriterMode
   }
 
@@ -615,7 +582,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @param   {Boolean}  shouldBeTypewriter  True or False
    */
-  set hasTypewriterMode (shouldBeTypewriter) {
+  set hasTypewriterMode (shouldBeTypewriter: boolean) {
     this.setOptions({ 'zettlr': { 'typewriterMode': shouldBeTypewriter } })
   }
 
@@ -624,7 +591,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @return  {boolean}  True or false
    */
-  get distractionFree () {
+  get distractionFree (): boolean {
     return this._cmOptions.fullScreen
   }
 
@@ -633,7 +600,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @param   {boolean}  shouldBeFullscreen  Whether the editor should be in distraction free
    */
-  set distractionFree (shouldBeFullscreen) {
+  set distractionFree (shouldBeFullscreen: boolean) {
     this.setOptions({ fullScreen: shouldBeFullscreen })
 
     if (this.distractionFree) {
@@ -648,7 +615,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @return  {boolean}  True if the readability mode is active
    */
-  get readabilityMode () {
+  get readabilityMode (): boolean {
     return this._readabilityMode
   }
 
@@ -657,7 +624,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @param   {boolean}  shouldBeReadability  Whether or not the mode should be active
    */
-  set readabilityMode (shouldBeReadability) {
+  set readabilityMode (shouldBeReadability: boolean) {
     if (shouldBeReadability && !this._readabilityMode) {
       // Switch to readability
       this.setOptions({ 'mode': 'readability' })
@@ -674,7 +641,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @return  {Boolean}  True if users cannot edit the contents
    */
-  get readOnly () {
+  get readOnly (): boolean {
     return this._cmOptions.readOnly
   }
 
@@ -683,7 +650,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @param   {Boolean}  shouldBeReadonly  Whether the editor contents should be readonly
    */
-  set readOnly (shouldBeReadonly) {
+  set readOnly (shouldBeReadonly: boolean) {
     // Make sure we only set readOnly if the state has changed to prevent any
     // lag due to the setOptions handler taking quite some time.
     if (this.readOnly === shouldBeReadonly) {
@@ -706,7 +673,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @return  {String}  The editor contents
    */
-  get value () {
+  get value (): string {
     return this._instance.getValue()
   }
 
@@ -715,7 +682,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @return  {Number}  The word count
    */
-  get wordCount () {
+  get wordCount (): number {
     return countWords(this.value, false)
   }
 
@@ -724,7 +691,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @return  {Number}  The number of characters
    */
-  get charCount () {
+  get charCount (): number {
     return countWords(this.value, true)
   }
 
@@ -733,7 +700,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @return  {Number}  The number of chars without spaces
    */
-  get charCountWithoutSpaces () {
+  get charCountWithoutSpaces (): number {
     return countWords(this.value.replace(/ +/g, ''), true)
   }
 
@@ -742,7 +709,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @return  {CodeMirror.Editor}  The CodeMirror instance
    */
-  get codeMirror () {
+  get codeMirror (): CodeMirror.Editor {
     return this._instance
   }
 }
