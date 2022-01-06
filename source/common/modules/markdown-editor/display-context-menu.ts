@@ -124,7 +124,7 @@ const readOnlyDisabled = [
  *
  * @return  {'text'|'citation'|'link'|'spell-error'|'image'} What type of target this is
  */
-function getTargetType (target: HTMLElement) {
+function getTargetType (target: HTMLElement): 'text'|'citation'|'link'|'spell-error'|'image'|'math' {
   if (target === null) {
     return 'text'
   }
@@ -171,9 +171,9 @@ export default function displayContextMenu (
   isReadOnly: boolean,
   commandCallback: (command: string) => void,
   replaceCallback: (repl: string) => void
-) {
+): boolean {
   if (event.target === null) {
-    return
+    return false
   }
 
   const targetElement = event.target as HTMLElement
@@ -231,7 +231,7 @@ export default function displayContextMenu (
   // First build the context menu
   for (const item of MENU_TEMPLATE) {
     let buildItem: any = {}
-    if (item.hasOwnProperty('label')) {
+    if ('label' in item) {
       buildItem.label = trans(item.label)
     }
 
@@ -249,13 +249,13 @@ export default function displayContextMenu (
       buildItem.enabled = true
     }
 
-    if (item.hasOwnProperty('type')) {
+    if ('type' in item) {
       buildItem.type = item.type
     } else {
       buildItem.type = 'normal'
     }
 
-    if (item.hasOwnProperty('accelerator')) {
+    if ('accelerator' in item) {
       buildItem.accelerator = item.accelerator
     }
 
@@ -318,17 +318,21 @@ export default function displayContextMenu (
       buildMenu.push({ type: 'separator' })
     }
 
+    if (keys === undefined) {
+      keys = []
+    }
+
     buildMenu.push({
       label: trans('menu.open_attachment'),
       type: 'submenu',
       enabled: true,
-      submenu: (keys !== undefined) ? keys.map((key: string) => {
+      submenu: keys.map((key: string) => {
         return {
           id: `citekey-${key}`,
           label: key,
           enabled: true
         }
-      }) : []
+      })
     })
   }
 
@@ -368,7 +372,7 @@ export default function displayContextMenu (
     typoPrefix.push({ type: 'separator' })
     // Always add an option to add a word to the user dictionary
     typoPrefix.push({
-      id: `typo-add-${targetElement.textContent}`,
+      id: `typo-add-${targetElement.textContent as string}`,
       label: trans('menu.add_to_dictionary'),
       enabled: true
     })
