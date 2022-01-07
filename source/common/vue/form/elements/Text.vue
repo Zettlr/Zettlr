@@ -38,6 +38,7 @@
       v-on:keyup.esc="$emit('escape', $event.target.value)"
       v-on:blur="$emit('blur', $event.target.value)"
     >
+    <p v-if="info !== ''" class="info" v-html="info"></p>
   </div>
 </template>
 
@@ -87,6 +88,10 @@ export default {
     inline: {
       type: Boolean,
       default: false
+    },
+    info: {
+      type: String,
+      default: ''
     }
   },
   emits: [ 'update:modelValue', 'confirm', 'escape', 'blur' ],
@@ -114,4 +119,8 @@ export default {
 </script>
 
 <style lang="less">
+body div.form-control p.info {
+  font-size: 70%;
+  opacity: 0.8;
+}
 </style>

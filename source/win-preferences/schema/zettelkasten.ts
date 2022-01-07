@@ -40,7 +40,8 @@ export default function (): any {
           type: 'text',
           label: trans('dialog.preferences.zkn.id_generator_label'),
           model: 'zkn.idGen',
-          reset: '%Y%M%D%h%m%s'
+          reset: '%Y%M%D%h%m%s',
+          info: 'Variables: %Y, %y, %M, %D, %W, %h, %m, %s, %X, %uuid4'
         }
       ],
       [

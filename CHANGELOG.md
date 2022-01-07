@@ -9,6 +9,9 @@
 - Rearranged some preferences
 - On Windows, tabbed windows will automatically hide their labels if the window
   becomes too narrow
+- Reinstated the info on what variables you could use in the Zettelkasten
+  generator
+- Zettlr displays info text below some preferences again
 
 ## Under the Hood
 

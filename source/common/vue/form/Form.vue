@@ -12,6 +12,7 @@
           v-bind:label="field.label"
           v-bind:name="field.model"
           v-bind:reset="field.reset"
+          v-bind:info="field.info"
           v-bind:inline="field.inline"
           v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
         ></TextInput>
