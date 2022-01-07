@@ -7,6 +7,8 @@
   hidden
 - Removed an unused preference
 - Rearranged some preferences
+- On Windows, tabbed windows will automatically hide their labels if the window
+  becomes too narrow
 
 ## Under the Hood
 

@@ -22,7 +22,14 @@
         >
         </clr-icon>
       </div>
-      {{ tab.label }}
+      <!--
+        Below's if-statement makes sure that on Windows, where the tabs are
+        rather wide, we only display the labels when the overall window width
+        is greater than at least 80px per tab
+      -->
+      <template v-if="currentWindowWidth > 80 * tabs.length && platform === 'win32'">
+        {{ tab.label }}
+      </template>
     </button>
   </div>
 </template>
@@ -63,12 +70,26 @@ export default {
   emits: ['tab'],
   data: function () {
     return {
-      currentTab: 0
+      currentTab: 0,
+      // The following are required to hide tab labels on win32 w/ narrow windows
+      currentWindowWidth: window.innerWidth,
+      platform: process.platform
     }
   },
   watch: {
     currentTab: function () {
       this.$emit('tab', this.currentTab)
+    }
+  },
+  mounted () {
+    window.addEventListener('resize', this.onWindowResize)
+  },
+  destroyed () {
+    window.removeEventListener('resize', this.onWindowResize)
+  },
+  methods: {
+    onWindowResize (event) {
+      this.currentWindowWidth = window.innerWidth
     }
   }
 }
