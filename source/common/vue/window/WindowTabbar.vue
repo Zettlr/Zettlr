@@ -27,7 +27,7 @@
         rather wide, we only display the labels when the overall window width
         is greater than at least 80px per tab
       -->
-      <template v-if="currentWindowWidth > 80 * tabs.length && platform === 'win32'">
+      <template v-if="currentWindowWidth > 80 * tabs.length || platform !== 'win32'">
         {{ tab.label }}
       </template>
     </button>
