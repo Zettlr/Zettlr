@@ -78,7 +78,7 @@ export default defineComponent({
       charCount: 0,
       target: null,
       firstHeading: null,
-      frontmatter: null,
+      frontmatter: null as null|any,
       linefeed: '\n',
       modified: false,
       content: ''
@@ -88,18 +88,25 @@ export default defineComponent({
     shouldShowTitlebar: function (): boolean {
       return process.platform !== 'darwin'
     },
+    displayFilenameSettings: function (): string {
+      return (global as any).config.get('fileNameDisplay')
+    },
     windowTitle: function (): string {
-      let title = this.name
-      const firstHeadings = Boolean((global as any).config.get('display.useFirstHeadings'))
-      if (this.type === 'file') {
-        if (this.firstHeading !== null && firstHeadings) {
-          title = this.firstHeading
-        }
-        if (this.frontmatter != null && 'title' in this.frontmatter) {
-          title = (this.frontmatter as any).title
-        }
+      if (this.type !== 'file') {
+        return this.name
       }
-      return title
+
+      const useH1 = this.displayFilenameSettings.includes('heading')
+      const useTitle = this.displayFilenameSettings.includes('title')
+
+      if (useTitle && typeof this.frontmatter?.title === 'string') {
+        return this.frontmatter.title
+      }
+      if (useH1 && this.firstHeading !== null) {
+        return this.firstHeading
+      }
+
+      return this.name
     },
     toolbarControls: function (): any[] {
       const ctrl: any[] = [

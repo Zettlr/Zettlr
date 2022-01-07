@@ -733,13 +733,16 @@ export default defineComponent({
 
       const fileDatabase: any = {}
 
+      const useH1: boolean = this.$store.state.config.fileNameDisplay.includes('heading')
+      const useTitle: boolean = this.$store.state.config.fileNameDisplay.includes('title')
+
       for (const file of this.fsalFiles) {
         const fname = file.name.substr(0, file.name.lastIndexOf('.'))
         let displayText = fname // Fallback: Only filename
-        if ('frontmatter' in file && file.frontmatter !== null && file.frontmatter.title !== undefined) {
+        if (useTitle && typeof file.frontmatter?.title === 'string') {
           // (Else) if there is a frontmatter, use that title
           displayText = file.frontmatter.title
-        } else if (Boolean(this.$store.state.config['display.useFirstHeadings']) && file.firstHeading != null) {
+        } else if (useH1 && file.firstHeading !== null) {
           // The user wants to use first headings as fallbacks
           displayText = file.firstHeading
         }

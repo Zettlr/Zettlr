@@ -166,6 +166,12 @@ export default defineComponent({
       }
       return ret
     },
+    useH1: function (): boolean {
+      return this.$store.state.config.fileNameDisplay.includes('heading')
+    },
+    useTitle: function (): boolean {
+      return this.$store.state.config.fileNameDisplay.includes('title')
+    },
     getFilteredDirectoryContents: function (): any[] {
       // Returns a list of directory contents, filtered
       const originalContents = this.getDirectoryContents
@@ -176,7 +182,7 @@ export default defineComponent({
         return originalContents
       }
 
-      const filter = matchQuery(q, this.$store.state.config['display.useFirstHeadings'])
+      const filter = matchQuery(q, this.useTitle, this.useH1)
 
       // Filter based on the query (remember: there's an ID and a "props" property)
       return originalContents.filter(element => {

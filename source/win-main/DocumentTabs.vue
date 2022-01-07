@@ -65,7 +65,10 @@ export default defineComponent({
       return this.$store.state.modifiedDocuments
     },
     useH1: function (): boolean {
-      return this.$store.state.config['display.useFirstHeadings']
+      return this.$store.state.config.fileNameDisplay.includes('heading')
+    },
+    useTitle: function (): boolean {
+      return this.$store.state.config.fileNameDisplay.includes('title')
     },
     container: function (): HTMLDivElement {
       return this.$refs.container as HTMLDivElement
@@ -192,9 +195,9 @@ export default defineComponent({
       // Returns a more appropriate tab text based on the user settings
       if (file.type !== 'file') {
         return file.name
-      } else if (file.frontmatter !== null && 'title' in file.frontmatter) {
+      } else if (this.useTitle && typeof file.frontmatter?.title === 'string') {
         return file.frontmatter.title
-      } else if (this.useH1 === true && file.firstHeading !== null) {
+      } else if (this.useH1 && file.firstHeading != null) {
         return file.firstHeading
       } else {
         return file.name
@@ -256,13 +259,13 @@ export default defineComponent({
         .catch(e => console.error(e))
     },
     handleContextMenu: function (event: MouseEvent, file: any) {
-      displayTabsContextMenu(event, async (clickedID: string) => {
+      displayTabsContextMenu(event, (clickedID: string) => {
         if (clickedID === 'close-this') {
           // Close only this
-          await ipcRenderer.invoke('application', {
+          ipcRenderer.invoke('application', {
             command: 'file-close',
             payload: file.path
-          })
+          }).catch(e => console.error(e))
         } else if (clickedID === 'close-others') {
           // Close all files ...
           for (const openFile of this.openFiles) {
@@ -270,18 +273,18 @@ export default defineComponent({
               continue // ... except this
             }
 
-            await ipcRenderer.invoke('application', {
+            ipcRenderer.invoke('application', {
               command: 'file-close',
               payload: openFile.path
-            })
+            }).catch(e => console.error(e))
           }
         } else if (clickedID === 'close-all') {
           // Close all files
           for (const openFile of this.openFiles) {
-            await ipcRenderer.invoke('application', {
+            ipcRenderer.invoke('application', {
               command: 'file-close',
               payload: openFile.path
-            })
+            }).catch(e => console.error(e))
           }
         }
       })

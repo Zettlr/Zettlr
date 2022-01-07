@@ -162,6 +162,12 @@ export default defineComponent({
     }
   },
   computed: {
+    useH1: function (): boolean {
+      return this.$store.state.config.fileNameDisplay.includes('heading')
+    },
+    useTitle: function (): boolean {
+      return this.$store.state.config.fileNameDisplay.includes('title')
+    },
     // We have to explicitly transform ALL properties to computed ones for
     // the reactivity in conjunction with the recycle-scroller.
     basename: function () {
@@ -169,9 +175,9 @@ export default defineComponent({
         return this.obj.name
       }
 
-      if (this.obj.frontmatter != null && 'title' in this.obj.frontmatter) {
+      if (this.useTitle && typeof this.obj.frontmatter?.title === 'string') {
         return this.obj.frontmatter.title
-      } else if (this.obj.firstHeading != null && this.$store.state.config['display.useFirstHeadings'] === true) {
+      } else if (this.useH1 && this.obj.firstHeading !== null) {
         return this.obj.firstHeading
       } else {
         return this.obj.name.replace(this.obj.ext, '')

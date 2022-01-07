@@ -98,6 +98,12 @@ export default defineComponent({
     fileTree: function (): any[] {
       return this.$store.state.fileTree
     },
+    useH1: function (): boolean {
+      return this.$store.state.config.fileNameDisplay.includes('heading')
+    },
+    useTitle: function (): boolean {
+      return this.$store.state.config.fileNameDisplay.includes('title')
+    },
     getFilteredTree: function (): any[] {
       const q = String(this.filterQuery).trim().toLowerCase() // Easy access
 
@@ -105,7 +111,7 @@ export default defineComponent({
         return this.fileTree
       }
 
-      const filter = matchQuery(q, this.$store.state.config['display.useFirstHeadings'])
+      const filter = matchQuery(q, this.useTitle, this.useH1)
       // Now we can actually filter out the file tree. We have to do this recursively.
       // We will perform a depth-first search and keep every directory which either
       // (a) matches directly or (b) has an amount of filtered children > 0

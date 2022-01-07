@@ -343,12 +343,13 @@ export default {
 
       let fileList = []
 
-      const useH1 = Boolean(global.config.get('display.useFirstHeadings'))
+      const useH1 = global.config.get('fileNameDisplay').includes('heading') === true
+      const useTitle = global.config.get('fileNameDisplay').includes('title') === true
 
       for (const treeItem of this.fileTree) {
         if (treeItem.type !== 'directory') {
           let displayName = treeItem.name
-          if (treeItem.frontmatter != null && 'title' in treeItem.frontmatter) {
+          if (useTitle && treeItem.frontmatter != null && typeof treeItem.frontmatter.title === 'string') {
             displayName = treeItem.frontmatter.title
           } else if (useH1 && treeItem.firstHeading !== null) {
             displayName = treeItem.firstHeading
@@ -367,7 +368,7 @@ export default {
         dirContents = dirContents.filter(item => item.type !== 'directory')
         dirContents = dirContents.map(item => {
           let displayName = item.name
-          if (item.frontmatter != null && 'title' in item.frontmatter) {
+          if (useTitle && item.frontmatter != null && typeof item.frontmatter.title === 'string') {
             displayName = item.frontmatter.title
           } else if (useH1 && item.firstHeading !== null) {
             displayName = item.firstHeading

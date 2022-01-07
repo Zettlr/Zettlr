@@ -18,6 +18,8 @@ import {
   MDFileDescriptor
 } from '../types'
 
+type FileNameDisplay = 'filename'|'title'|'heading'|'title+heading'
+
 /**
  * Helper function to sort files using a collator
  * @param  {ZettlrFile} a A ZettlrFile exposing a name property
@@ -31,34 +33,33 @@ export default function (
   let aSort = a.name.toLowerCase()
   let bSort = b.name.toLowerCase()
 
-  const useH1: boolean = global.config.get('display.useFirstHeadings')
+  const aTitle = (a.type === 'file') ? typeof a.frontmatter?.title === 'string' : false
+  const bTitle = (b.type === 'file') ? typeof b.frontmatter?.title === 'string' : false
+  const aHeading = (a.type === 'file') ? a.firstHeading != null : false
+  const bHeading = (b.type === 'file') ? b.firstHeading != null : false
 
-  // Check for firstHeadings, if applicable
-  if (useH1 && a.type === 'file') {
-    if (a.firstHeading != null) aSort = a.firstHeading.toLowerCase()
+  const fileNameDisplay: FileNameDisplay = global.config.get('fileNameDisplay')
+
+  const useH1 = fileNameDisplay.includes('heading')
+  const useTitle = fileNameDisplay.includes('title')
+
+  // Use a heading level 1 if applicable, and, optionally, overwrite this with
+  // the YAML frontmatter title variable
+
+  if (aHeading && useH1) {
+    aSort = (a as MDFileDescriptor).firstHeading as string
   }
 
-  if (useH1 && b.type === 'file') {
-    if (b.firstHeading != null) bSort = b.firstHeading.toLowerCase()
+  if (bHeading && useH1) {
+    bSort = (b as MDFileDescriptor).firstHeading as string
   }
 
-  // Second, check for frontmatter, as this overwrites
-  if (a.type === 'file' && a.frontmatter !== null) {
-    if (
-      a.frontmatter.hasOwnProperty('title') === true &&
-      typeof a.frontmatter.title === 'string'
-    ) {
-      aSort = a.frontmatter.title.toLowerCase()
-    }
+  if (aTitle && useTitle) {
+    aSort = (a as MDFileDescriptor).frontmatter.title
   }
 
-  if (b.type === 'file' && b.frontmatter !== null) {
-    if (
-      b.frontmatter.hasOwnProperty('title') === true &&
-      typeof b.frontmatter.title === 'string'
-    ) {
-      bSort = b.frontmatter.title.toLowerCase()
-    }
+  if (bTitle && useTitle) {
+    bSort = (b as MDFileDescriptor).frontmatter.title
   }
 
   const languagePreferences = [ global.config.get('appLang'), 'en' ]

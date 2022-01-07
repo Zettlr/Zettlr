@@ -81,6 +81,17 @@ export default function (): any {
             'expanded': trans('dialog.preferences.filemanager_expanded'),
             'combined': trans('dialog.preferences.filemanager_combined')
           }
+        },
+        {
+          type: 'radio',
+          label: trans('dialog.preferences.filename_display.label'),
+          model: 'fileNameDisplay',
+          options: {
+            'filename': trans('dialog.preferences.filename_display.filename_only'),
+            'title': trans('dialog.preferences.filename_display.title'),
+            'heading': trans('dialog.preferences.filename_display.heading'),
+            'title+heading': trans('dialog.preferences.filename_display.title_heading')
+          }
         }
       ],
       [
@@ -99,11 +110,6 @@ export default function (): any {
           type: 'checkbox',
           label: trans('dialog.preferences.sort_folders_first'),
           model: 'sortFoldersFirst'
-        },
-        {
-          type: 'checkbox',
-          label: trans('dialog.preferences.display.use_first_headings'),
-          model: 'display.useFirstHeadings'
         }
       ],
       [

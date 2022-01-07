@@ -390,9 +390,12 @@ export default {
         return filePath
       }
 
-      if (descriptor.frontmatter !== null && 'title' in descriptor.frontmatter) {
+      const useH1 = global.config.get('fileNameDisplay').includes('heading') === true
+      const useTitle = global.config.get('fileNameDisplay').includes('title') === true
+
+      if (useTitle && descriptor.frontmatter !== null && typeof descriptor.frontmatter.title === 'string') {
         return descriptor.frontmatter.title
-      } else if (descriptor.firstHeading !== null && Boolean(this.$store.state.config['display.useFirstHeadings'])) {
+      } else if (useH1 && descriptor.firstHeading !== null) {
         return descriptor.firstHeading
       } else {
         return descriptor.name.replace(descriptor.ext, '')

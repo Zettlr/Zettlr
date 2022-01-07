@@ -2,6 +2,9 @@
 
 ## GUI and Functionality
 
+- **New Feature**: You now have more fine-grained control over how your files
+  are displayed: You can now select if the filename is always used or a title
+  or first heading level 1 is used (if applicable)
 - Fixed an error that would cause the global search to malfunction if you
   followed a link which then started a global search while the file manager was
   hidden

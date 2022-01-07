@@ -77,6 +77,7 @@ export default function getConfigTemplate (): ConfigOptions {
     sortingTime: 'modtime', // can be modtime or creationtime
     muteLines: true, // Should the editor mute lines in distraction free mode?
     fileManagerMode: 'thin', // thin = Preview or directories visible --- expanded = both visible --- combined = tree view displays also files
+    fileNameDisplay: 'title', // Controls what info is displayed as filenames
     newFileNamePattern: '%id.md',
     newFileDontPrompt: false, // If true immediately creates files
     // Export options
@@ -216,8 +217,7 @@ export default function getConfigTemplate (): ConfigOptions {
       renderLinks: true,
       renderMath: true,
       renderTasks: true,
-      renderHTags: false,
-      useFirstHeadings: false // Should first headings be displayed instead of filenames?
+      renderHTags: false
     },
     // Language
     selectedDicts: [], // By default no spell checking is active to speed up first start.

@@ -266,14 +266,20 @@ export default defineComponent({
         return this.obj.children.filter((e: any) => e.type === 'directory')
       }
     },
+    useH1: function (): boolean {
+      return this.$store.state.config.fileNameDisplay.includes('heading')
+    },
+    useTitle: function (): boolean {
+      return this.$store.state.config.fileNameDisplay.includes('title')
+    },
     basename: function (): string {
-      if (this.obj.type === 'directory' || this.obj.type === 'code') {
+      if (this.obj.type !== 'file') {
         return this.obj.name
       }
 
-      if (this.obj.frontmatter != null && 'title' in this.obj.frontmatter) {
+      if (this.useTitle && typeof this.obj.frontmatter?.title === 'string') {
         return this.obj.frontmatter.title
-      } else if (this.obj.firstHeading != null && this.$store.state.config['display.useFirstHeadings'] === true) {
+      } else if (this.useH1 && this.obj.firstHeading !== null) {
         return this.obj.firstHeading
       } else {
         return this.obj.name.replace(this.obj.ext, '')

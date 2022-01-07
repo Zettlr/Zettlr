@@ -56,6 +56,7 @@ interface ConfigOptions {
   sortingTime: 'modtime'|'creationtime'
   muteLines: boolean
   fileManagerMode: 'thin'|'combined'|'expanded'
+  fileNameDisplay: 'filename'|'title'|'heading'|'title+heading'
   newFileNamePattern: string
   newFileDontPrompt: boolean
   pandoc: string
@@ -133,7 +134,6 @@ interface ConfigOptions {
     renderMath: boolean
     renderTasks: boolean
     renderHTags: boolean
-    useFirstHeadings: boolean
   }
   selectedDicts: string[]
   appLang: string
