@@ -51,7 +51,6 @@ interface ConfigOptions {
   autoDarkModeEnd: string
   fileMeta: boolean
   fileMetaTime: 'modtime'|'creationtime'
-  hideDirs: boolean
   sorting: 'natural'|'ascii'
   sortFoldersFirst: boolean
   sortingTime: 'modtime'|'creationtime'

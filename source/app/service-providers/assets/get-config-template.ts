@@ -72,7 +72,6 @@ export default function getConfigTemplate (): ConfigOptions {
     autoDarkModeEnd: '06:00', // Switch to light mode at this time
     fileMeta: true,
     fileMetaTime: 'modtime', // The time to be displayed in file meta
-    hideDirs: true, // Should the app hide directories during global search?
     sorting: 'natural', // Can be natural or based on ASCII values
     sortFoldersFirst: false, // should folders be shown first in combined fileview
     sortingTime: 'modtime', // can be modtime or creationtime
