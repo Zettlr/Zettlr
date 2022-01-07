@@ -5,6 +5,8 @@
 - Fixed an error that would cause the global search to malfunction if you
   followed a link which then started a global search while the file manager was
   hidden
+- Removed an unused preference
+- Rearranged some preferences
 
 ## Under the Hood
 

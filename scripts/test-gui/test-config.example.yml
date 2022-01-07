@@ -5,7 +5,7 @@
 # likings. The test-config.yml will not be committed to git, so it
 # will stay persistent between pulls.
 
-# Please view the comments in ./source/main/providers/config-provider.js
+# Please view the comments in source/app/service-providers/types/config-provider.d.ts
 # for full explanations on all possible values
 darkTheme: false
 alwaysReloadFiles: false
@@ -14,7 +14,6 @@ autoDarkModeStart: '20:00'
 autoDarkModeEnd: '06:00'
 fileMeta: true
 fileMetaTime: modtime
-hideDirs: true
 sorting: natural
 sortingTime: creationtime
 muteLines: true
@@ -24,8 +23,6 @@ newFileNamePattern: "%id.md"
 newFileDontPrompt: false
 pandoc: pandoc
 xelatex: xelatex
-pandocCommand: pandoc "$infile$" -f markdown $outflag$ $tpl$ $toc$ $tocdepth$ $citeproc$
-  $standalone$ --pdf-engine=xelatex --mathjax -o "$outfile$"
 export:
   dir: temp # temp|cwd
   stripTags: true

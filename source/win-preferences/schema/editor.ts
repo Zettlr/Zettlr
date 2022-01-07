@@ -130,11 +130,6 @@ export default function (): any {
           type: 'checkbox',
           label: trans('dialog.preferences.count_chars'),
           model: 'editor.countChars'
-        },
-        {
-          type: 'checkbox',
-          label: trans('dialog.preferences.editor_setting.rtl_move_visually'),
-          model: 'editor.rtlMoveVisually'
         }
       ],
       [
@@ -146,6 +141,11 @@ export default function (): any {
             'ltr': trans('dialog.preferences.editor_setting.direction_ltr'),
             'rtl': trans('dialog.preferences.editor_setting.direction_rtl')
           }
+        },
+        {
+          type: 'checkbox',
+          label: trans('dialog.preferences.editor_setting.rtl_move_visually'),
+          model: 'editor.rtlMoveVisually'
         }
       ]
     ]

@@ -57,11 +57,6 @@ export default function (): any {
           type: 'checkbox',
           label: trans('dialog.preferences.display.render_htags'),
           model: 'display.renderHTags'
-        },
-        {
-          type: 'checkbox',
-          label: trans('dialog.preferences.display.use_first_headings'),
-          model: 'display.useFirstHeadings'
         }
       ],
       [

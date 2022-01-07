@@ -38,11 +38,6 @@ export default function (): any {
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.hide_dirs'),
-          model: 'hideDirs'
-        },
-        {
-          type: 'checkbox',
           label: trans('dialog.preferences.always_reload_files'),
           model: 'alwaysReloadFiles'
         },
@@ -104,6 +99,11 @@ export default function (): any {
           type: 'checkbox',
           label: trans('dialog.preferences.sort_folders_first'),
           model: 'sortFoldersFirst'
+        },
+        {
+          type: 'checkbox',
+          label: trans('dialog.preferences.display.use_first_headings'),
+          model: 'display.useFirstHeadings'
         }
       ],
       [
