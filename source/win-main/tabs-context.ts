@@ -14,8 +14,8 @@
 
 import { trans } from '@common/i18n-renderer'
 
-export default function displayTabsContext (event, callback) {
-  let items = [
+export default function displayTabsContext (event: MouseEvent, callback: (clickedID: string) => void): void {
+  const items: any = [
     {
       label: trans('menu.tab_close'),
       id: 'close-this',
@@ -37,7 +37,5 @@ export default function displayTabsContext (event, callback) {
   ]
 
   const point = { x: event.clientX, y: event.clientY }
-  global.menuProvider.show(point, items, (clickedID) => {
-    callback(clickedID) // TODO
-  })
+  global.menuProvider.show(point, items, callback)
 }

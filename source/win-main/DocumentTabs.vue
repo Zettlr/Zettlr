@@ -30,7 +30,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -47,24 +47,28 @@
 
 import displayTabsContextMenu from './tabs-context'
 import tippy from 'tippy.js'
-import { nextTick } from 'vue'
+import { nextTick, defineComponent } from 'vue'
+import { IpcRenderer } from 'electron'
 
-const ipcRenderer = window.ipc
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
-export default {
+export default defineComponent({
   name: 'DocumentTabs',
   computed: {
-    openFiles: function () {
+    openFiles: function (): any[] {
       return this.$store.state.openFiles
     },
-    activeFile: function () {
+    activeFile: function (): any {
       return this.$store.state.activeFile
     },
-    modifiedDocs: function () {
+    modifiedDocs: function (): string[] {
       return this.$store.state.modifiedDocuments
     },
-    useH1: function () {
+    useH1: function (): boolean {
       return this.$store.state.config['display.useFirstHeadings']
+    },
+    container: function (): HTMLDivElement {
+      return this.$refs.container as HTMLDivElement
     }
   },
   watch: {
@@ -113,7 +117,7 @@ export default {
         // the corresponding filetab. First, make sure the container is visible
         this.scrollActiveFileIntoView()
 
-        const container = this.$refs.container.querySelector('.active')
+        const container = this.container.querySelector('.active')
 
         const wrapper = document.createElement('div')
         wrapper.classList.add('file-rename')
@@ -127,7 +131,7 @@ export default {
         wrapper.appendChild(input)
 
         // Then do the magic
-        const instance = tippy(container, {
+        const instance = tippy(container as Element, {
           content: wrapper,
           allowHTML: true,
           interactive: true,
@@ -164,7 +168,7 @@ export default {
   methods: {
     scrollActiveFileIntoView: function () {
       // First, we need to find the tab displaying the active file
-      const elem = this.$refs.container.querySelector('.active')
+      const elem = (this.$refs.container as HTMLDivElement).querySelector('.active') as HTMLDivElement|null
       if (elem === null) {
         return // The container is not yet present
       }
@@ -172,19 +176,19 @@ export default {
       const left = elem.offsetLeft
       const right = left + elem.getBoundingClientRect().width
       // ... with respect to the container
-      const leftEdge = this.$refs.container.scrollLeft
-      const containerWidth = this.$refs.container.getBoundingClientRect().width
+      const leftEdge = this.container.scrollLeft
+      const containerWidth = this.container.getBoundingClientRect().width
       const rightEdge = leftEdge + containerWidth
 
       if (left < leftEdge) {
         // The active tab is (partially) hidden to the left -> Decrease scrollLeft
-        this.$refs.container.scrollLeft -= leftEdge - left
+        this.container.scrollLeft -= leftEdge - left
       } else if (right > rightEdge) {
         // The active tab is (partially) hidden to the right -> Increase scrollLeft
-        this.$refs.container.scrollLeft += right - rightEdge
+        this.container.scrollLeft += right - rightEdge
       }
     },
-    getTabText: function (file) {
+    getTabText: function (file: any) {
       // Returns a more appropriate tab text based on the user settings
       if (file.type !== 'file') {
         return file.name
@@ -202,7 +206,7 @@ export default {
      * @param   {MouseEvent}  event  The triggering event
      * @param   {any}  file   The file descriptor
      */
-    handleClickClose: function (event, file) {
+    handleClickClose: function (event: MouseEvent, file: any) {
       if (event.button < 2) {
         // It was either a left-click (button === 0) or an auxiliary/middle
         // click (button === 1), so we should prevent the event from bubbling up
@@ -227,7 +231,7 @@ export default {
      * @param   {MouseEvent}  event  The triggering event
      * @param   {any}         file   The file descriptor
      */
-    handleClickFilename: function (event, file) {
+    handleClickFilename: function (event: MouseEvent, file: any) {
       if (event.button === 1) {
         // It was a middle-click (auxiliary button), so we should instead close
         // the file.
@@ -241,7 +245,7 @@ export default {
         this.selectFile(file)
       }
     },
-    selectFile: function (file) {
+    selectFile: function (file: any) {
       // NOTE: We're handling active file setting via the open-file command. As
       // long as a given file is already open, the document manager will simply
       // set it as active. That is why we don't provide the newTab property.
@@ -251,8 +255,8 @@ export default {
       })
         .catch(e => console.error(e))
     },
-    handleContextMenu: function (event, file) {
-      displayTabsContextMenu(event, async (clickedID) => {
+    handleContextMenu: function (event: MouseEvent, file: any) {
+      displayTabsContextMenu(event, async (clickedID: string) => {
         if (clickedID === 'close-this') {
           // Close only this
           await ipcRenderer.invoke('application', {
@@ -282,12 +286,12 @@ export default {
         }
       })
     },
-    handleDragStart: function (event) {
+    handleDragStart: function (event: DragEvent) {
       // console.log(event)
     },
-    handleDrag: function (event) {
-      const tab = event.target
-      const tablist = tab.parentNode
+    handleDrag: function (event: DragEvent) {
+      const tab = event.target as Element
+      const tablist = tab.parentNode as Element
       let coordsX = event.clientX
       let coordsY = event.clientY
 
@@ -313,9 +317,10 @@ export default {
         coordsY = bottom - middle
       }
 
-      let swapItem = document.elementFromPoint(coordsX, coordsY)
-      if (swapItem === null) {
-        swapItem = tab
+      let swapItem: any = tab
+      const elemAtCoords = document.elementFromPoint(coordsX, coordsY)
+      if (elemAtCoords !== null) {
+        swapItem = elemAtCoords
       }
 
       // We need to make sure we got the DIV, not one of the containing spans
@@ -323,7 +328,7 @@ export default {
         if (swapItem.parentNode === document) {
           break // Don't overdo it
         }
-        swapItem = swapItem.parentNode
+        swapItem = swapItem.parentNode as Element
       }
 
       if (tablist === swapItem.parentNode) {
@@ -331,7 +336,7 @@ export default {
         tablist.insertBefore(tab, swapItem)
       }
     },
-    handleDragEnd: function (event) {
+    handleDragEnd: function (event: DragEvent) {
       // Here we just need to inspect the actual order and notify the main
       // process of that order.
       const newOrder = []
@@ -345,7 +350,11 @@ export default {
       // it needs to keep track of the element ordering, and we just messed with
       // that big time.
       const originalOrdering = this.openFiles.map(file => file.path)
-      const targetElement = event.target
+      const targetElement = event.target as Element|null
+      if (targetElement === null) {
+        return
+      }
+
       const originalIndex = originalOrdering.indexOf(targetElement.getAttribute('data-path'))
       if (originalIndex === 0) {
         this.$el.insertBefore(targetElement, this.$el.children[0])
@@ -362,7 +371,7 @@ export default {
         .catch(err => console.error(err))
     }
   }
-}
+})
 </script>
 
 <style lang="less">
