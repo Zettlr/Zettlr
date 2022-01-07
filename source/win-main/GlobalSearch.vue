@@ -127,6 +127,20 @@ import { trans } from '@common/i18n-renderer'
 const ipcRenderer = window.ipc
 const path = window.path
 
+const contextMenu = [
+  {
+    label: trans('menu.open_new_tab'),
+    id: 'new-tab',
+    type: 'normal',
+    enabled: true
+  },
+  {
+    label: trans('menu.quicklook'),
+    id: 'open-quicklook',
+    enabled: true
+  }
+]
+
 export default {
   name: 'GlobalSearch',
   components: {
@@ -165,20 +179,7 @@ export default {
       // The file list index of the most recently clicked search result.
       activeFileIdx: undefined,
       // The result line index of the most recently clicked search result.
-      activeLineIdx: undefined,
-      contextMenu: [
-        {
-          label: trans('menu.open_new_tab'),
-          id: 'new-tab',
-          type: 'normal',
-          enabled: true
-        },
-        {
-          label: trans('menu.quicklook'),
-          id: 'open-quicklook',
-          enabled: true
-        }
-      ]
+      activeLineIdx: undefined
     }
   },
   computed: {
@@ -468,7 +469,7 @@ export default {
     },
     fileContextMenu: function (event, filePath, lineNumber) {
       const point = { x: event.clientX, y: event.clientY }
-      global.menuProvider.show(point, this.contextMenu, (clickedID) => {
+      global.menuProvider.show(point, contextMenu, (clickedID) => {
         switch (clickedID) {
           case 'new-tab':
             this.jumpToLine(filePath, lineNumber, true)

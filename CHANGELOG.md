@@ -18,6 +18,7 @@
 - Citations are now first-class citizens and got their own preferences tab
 - Fixed a small error that would close additional files when you renamed a file
   that was also currently open
+- Fixed the context menu not showing during a full text search on macOS
 
 ## Under the Hood
 
