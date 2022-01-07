@@ -16,6 +16,8 @@
   generator
 - Zettlr displays info text below some preferences again
 - Citations are now first-class citizens and got their own preferences tab
+- Fixed a small error that would close additional files when you renamed a file
+  that was also currently open
 
 ## Under the Hood
 
