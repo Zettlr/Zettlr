@@ -50,6 +50,7 @@ import { trans } from '@common/i18n-renderer'
 import generalSchema from './schema/general'
 import editorSchema from './schema/editor'
 import exportSchema from './schema/export'
+import citationSchema from './schema/citations'
 import zettelkastenSchema from './schema/zettelkasten'
 import displaySchema from './schema/display'
 import spellcheckingSchema from './schema/spellchecking'
@@ -136,6 +137,12 @@ export default defineComponent({
           icon: 'share'
         },
         {
+          label: trans('dialog.preferences.citations.title'),
+          controls: 'tab-citations',
+          id: 'tab-citations-control',
+          icon: 'block-quote'
+        },
+        {
           label: trans('dialog.preferences.zkn.title'),
           controls: 'tab-zettelkasten',
           id: 'tab-zettelkasten-control',
@@ -157,7 +164,7 @@ export default defineComponent({
           label: trans('dialog.preferences.autocorrect.title'),
           controls: 'tab-autocorrect',
           id: 'tab-autocorrect-control',
-          icon: 'block-quote'
+          icon: 'wand' // 'block-quote'
         },
         {
           label: trans('dialog.preferences.advanced'),
@@ -348,6 +355,9 @@ export default defineComponent({
           break
         case 'tab-export':
           this.schema = exportSchema()
+          break
+        case 'tab-citations':
+          this.schema = citationSchema()
           break
         case 'tab-zettelkasten':
           this.schema = zettelkastenSchema()

@@ -39,18 +39,6 @@ export default function (): any {
       [
         {
           type: 'radio',
-          label: trans('dialog.preferences.cite_style_label'),
-          model: 'editor.citeStyle',
-          options: {
-            'regular': '[@Author2015, p. 123] → (Author 2015, 123)',
-            'in-text': '@Author2015 → Author (2015)',
-            'in-text-suffix': '@Author2015 [p. 123] → Author (2015, 123)'
-          }
-        }
-      ],
-      [
-        {
-          type: 'radio',
           label: trans('dialog.preferences.auto_save.label'),
           model: 'editor.autoSave',
           options: {

@@ -12,6 +12,7 @@
 - Reinstated the info on what variables you could use in the Zettelkasten
   generator
 - Zettlr displays info text below some preferences again
+- Citations are now first-class citizens and got their own preferences tab
 
 ## Under the Hood
 
