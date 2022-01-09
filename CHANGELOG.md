@@ -19,6 +19,8 @@
 - Fixed a small error that would close additional files when you renamed a file
   that was also currently open
 - Fixed the context menu not showing during a full text search on macOS
+- When something goes wrong during opening of a new workspace or root file, the
+  error messages will now be more meaningful
 
 ## Under the Hood
 

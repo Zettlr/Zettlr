@@ -213,7 +213,7 @@ export async function parse (currentPath: string, cache: FSALCache, parent: DirD
   } catch (err: any) {
     global.log.error(`Error reading metadata for directory ${dir.path}!`, err)
     // Re-throw so that the caller knows something's afoul
-    throw new Error(err)
+    throw err
   }
 
   // Now parse the directory contents recursively

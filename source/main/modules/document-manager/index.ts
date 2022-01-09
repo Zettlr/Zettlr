@@ -353,7 +353,10 @@ export default class DocumentManager extends EventEmitter {
       const file = await FSALFile.parse(filePath, null)
       return file
     } else {
-      throw new Error(`Could not load file ${filePath}: Invalid path provided`)
+      const error: any = new Error(`Could not load file ${filePath}: Invalid path provided`)
+      error.path = filePath
+      error.code = 'EINVALIDPATH'
+      throw error
     }
   }
 

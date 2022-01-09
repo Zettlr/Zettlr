@@ -556,7 +556,7 @@ export default class Zettlr {
       retPath === app.getPath('home')
     ) {
       // We cannot add this dir, because it is in the list of ignored directories.
-      global.log.error('The chosen workspace is on the ignore list.', ret)
+      global.log.error(`The chosen workspace "${retPath}" is on the ignore list.`)
       return this._windowManager.prompt({
         'type': 'error',
         'title': trans('system.error.ignored_dir_title'),
@@ -585,45 +585,46 @@ export default class Zettlr {
   /**
     * Handles a list of files and folders that the user in any way wants to add
     * to the app.
-    * @param  {string[]} filelist An array of absolute paths
+    *
+    * @param  {string[]} pathlist An array of absolute paths
     */
-  async handleAddRoots (filelist: string[]): Promise<void> {
+  async handleAddRoots (pathlist: string[]): Promise<void> {
     // As long as it's not a forbidden file or ignored directory, add it.
     let newFile = null
     let newDir = null
-    for (const f of filelist) {
+    for (const absPath of pathlist) {
       // First check if this thing is already added. If so, simply write
       // the existing file/dir into the newFile/newDir vars. They will be
       // opened accordingly.
-      if ((newFile = this._fsal.findFile(f)) != null) {
+      if ((newFile = this._fsal.findFile(absPath)) != null) {
         // Open the file immediately
         await this._documentManager.openFile(newFile.path, true)
         // Also set the newDir variable so that Zettlr will automatically
         // navigate to the directory. The directory of the latest file will
         // remain open afterwards.
         newDir = newFile.parent
-      } else if ((newDir = this._fsal.findDir(f)) != null) {
+      } else if ((newDir = this._fsal.findDir(absPath)) != null) {
         // Do nothing
-      } else if (global.config.addPath(f)) {
+      } else if (global.config.addPath(absPath)) {
         try {
-          const loaded = await this._fsal.loadPath(f)
+          const loaded = await this._fsal.loadPath(absPath)
           if (loaded) {
             // If it was a file and not a directory, immediately open it.
-            let file = this._fsal.findFile(f)
+            let file = this._fsal.findFile(absPath)
             if (file !== null) {
               await this._documentManager.openFile(file.path, true)
             }
           } else {
-            global.config.removePath(f)
+            global.config.removePath(absPath)
           }
         } catch (err: any) {
           // Something went wrong, so remove the path again.
-          global.config.removePath(f)
-          throw err // The caller needs to handle this.
+          global.config.removePath(absPath)
+          this._windowManager.reportFSError('Could not open new root', err)
         }
       } else {
-        global.notify.normal(trans('system.error.open_root_error', path.basename(f)))
-        global.log.error(`Could not open new root file ${f}!`)
+        global.notify.normal(trans('system.error.open_root_error', path.basename(absPath)))
+        global.log.error(`Could not open new root file ${absPath}!`)
       }
     }
 
