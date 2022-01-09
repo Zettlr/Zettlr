@@ -20,7 +20,7 @@
  * @param {String|Array} A markdown table, either as line array or string
  * @returns {Object} An object with properties ast and colAlignments
  */
-module.exports = function (markdownTable) {
+export default function parseSimpleTable (markdownTable) {
   // Let's begin. First we need a line array. Make sure to strip potential
   // newlines from beginning and end, if applicable. Also perform some
   // initial sanity checks on the table.

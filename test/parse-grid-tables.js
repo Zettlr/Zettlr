@@ -13,8 +13,8 @@
  * END HEADER
  */
 
-const parseGridTable = require('../source/common/modules/markdown-editor/table-editor/parse-grid')
-const assert = require('assert')
+import parseGridTable from '../source/common/modules/markdown-editor/table-editor/parse-grid'
+import { deepStrictEqual } from 'assert'
 
 const table = []
 const tableResults = []
@@ -75,7 +75,7 @@ tableResults.push({
 describe('TableEditor#gridParser()', function () {
   for (let i = 0; i < table.length; i++) {
     it(`Should parse test table ${i + 1} correctly`, function () {
-      assert.deepStrictEqual(parseGridTable(table[i]), tableResults[i])
+      deepStrictEqual(parseGridTable(table[i]), tableResults[i])
     })
   }
 })

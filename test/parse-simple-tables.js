@@ -13,8 +13,8 @@
  * END HEADER
  */
 
-const parseSimpleTable = require('../source/common/modules/markdown-editor/table-editor/parse-simple')
-const assert = require('assert')
+import parseSimpleTable from '../source/common/modules/markdown-editor/table-editor/parse-simple'
+import { deepStrictEqual } from 'assert'
 
 const table = []
 const tableResults = []
@@ -90,7 +90,7 @@ tableResults.push({
 describe('TableEditor#simpleParser()', function () {
   for (let i = 0; i < table.length; i++) {
     it(`Should parse test table ${i + 1} correctly`, function () {
-      assert.deepStrictEqual(parseSimpleTable(table[i]), tableResults[i])
+      deepStrictEqual(parseSimpleTable(table[i]), tableResults[i])
     })
   }
 })

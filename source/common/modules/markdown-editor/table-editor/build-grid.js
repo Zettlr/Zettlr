@@ -13,9 +13,9 @@
  * END HEADER
  */
 
-const calculateColSizes = require('./calculate-col-sizes')
+import calculateColSizes from './calculate-col-sizes'
 
-module.exports = function (ast, colAlignment) {
+export default function buildGridTable (ast, colAlignment) {
   const colSizes = calculateColSizes(ast)
   let separatorRow = colSizes.map(elem => '-'.repeat(elem + 2))
   separatorRow = '+' + separatorRow.join('+') + '+\n'

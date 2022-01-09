@@ -20,7 +20,7 @@
  * @param {String|Array} A markdown table, either as line array or string
  * @returns {Object} An object with properties ast and colAlignments
  */
-module.exports = function (markdownTable) {
+export default function parsePipeTable (markdownTable) {
   // First remove whitespace from both sides of the table, e.g. in case
   // a trailing newline is present
   markdownTable = markdownTable.trim()

@@ -15,17 +15,17 @@
 * END HEADER
 */
 
-const buildPipeTable = require('./build-pipe')
-const buildSimpleTable = require('./build-simple')
-const buildGridTable = require('./build-grid')
+import buildPipeTable from './build-pipe'
+import buildSimpleTable from './build-simple'
+import buildGridTable from './build-grid'
 
-const md2html = require('@common/util/md-to-html')
+import md2html from '@common/util/md-to-html'
 
-const computeCSS = require('./compute-css')
+import computeCSS from './compute-css'
 
 // Look what I found: https://www.w3schools.com/jsref/dom_obj_table.asp
 
-module.exports = class TableEditor {
+export default class TableEditor {
   /**
    * Creates a new TableHelper.
    * @param {string[][]} ast           The table AST

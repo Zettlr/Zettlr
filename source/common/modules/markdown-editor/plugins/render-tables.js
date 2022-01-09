@@ -13,7 +13,7 @@
   */
 
 import { commands } from 'codemirror'
-import { fromMarkdown } from '../table-editor'
+import fromMarkdown from '../table-editor'
 import { getTableHeadingRE } from '@common/regular-expressions'
 
 const tables = []

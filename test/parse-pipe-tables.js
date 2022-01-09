@@ -13,8 +13,8 @@
  * END HEADER
  */
 
-const parsePipeTable = require('../source/common/modules/markdown-editor/table-editor/parse-pipe')
-const assert = require('assert')
+import parsePipeTable from '../source/common/modules/markdown-editor/table-editor/parse-pipe'
+import { deepStrictEqual, throws } from 'assert'
 
 const table = []
 const tableResults = []
@@ -80,11 +80,11 @@ const TABLE_ERROR_1 = `| Unequal | cols | table | here |
 describe('TableEditor#pipeParser()', function () {
   for (let i = 0; i < table.length; i++) {
     it(`Should parse the test table ${i + 1} correctly`, function () {
-      assert.deepStrictEqual(parsePipeTable(table[i]), tableResults[i])
+      deepStrictEqual(parsePipeTable(table[i]), tableResults[i])
     })
   }
 
   it('Should throw an error when attempting to parse mismatched columns', function () {
-    assert.throws(function () { parsePipeTable(TABLE_ERROR_1) })
+    throws(function () { parsePipeTable(TABLE_ERROR_1) })
   })
 })

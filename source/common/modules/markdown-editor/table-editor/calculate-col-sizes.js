@@ -20,7 +20,7 @@
  *
  * @return  {number[]}       The maximum sizes for all columns
  */
-module.exports = function calculateColSizes (ast) {
+export default function calculateColSizes (ast) {
   const sizes = []
   for (let col = 0; col < ast[0].length; col++) {
     let colSize = 0

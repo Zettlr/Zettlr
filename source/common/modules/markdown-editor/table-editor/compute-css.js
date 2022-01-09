@@ -19,7 +19,7 @@
  *
  * @return  {Element}                 The rendered element.
  */
-module.exports = (edgeButtonSize) => {
+export default function computeCSS (edgeButtonSize) {
   let styleNode = document.createElement('style')
   styleNode.setAttribute('id', 'tableHelperCSS')
   styleNode.setAttribute('type', 'text/css')
