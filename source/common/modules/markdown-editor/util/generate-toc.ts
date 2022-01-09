@@ -19,7 +19,7 @@
  *
  * @return  {any[]}             The ToC elements
  */
-export default function generateTableOfContents (mdString) {
+export default function generateTableOfContents (mdString: string): any[] {
   let toc = []
 
   let lines = mdString.split('\n')
@@ -48,10 +48,11 @@ export default function generateTableOfContents (mdString) {
     // Now that invalid sections are out of the way, test for a heading
     if (/^#{1,6} /.test(lines[i])) {
       toc.push({
-        'line': i,
+        line: i,
         // From the line remove both the heading indicators and optional ending classes
-        'text': lines[i].replace(/^#{1,6} /, '').replace(/\{.*\}$/, ''),
-        'level': (lines[i].match(/^(#+)/) || [ [], [] ])[1].length
+        text: lines[i].replace(/^#{1,6} /, '').replace(/\{.*\}$/, ''),
+        level: (lines[i].match(/^(#+)/) ?? [ [], [] ])[1].length,
+        renderedLevel: ''
       })
     }
   }
@@ -68,7 +69,7 @@ export default function generateTableOfContents (mdString) {
       case 1:
         h1++
         h2 = h3 = h4 = h5 = h6 = 0
-        entry.renderedLevel = h1
+        entry.renderedLevel = h1.toString()
         break
       case 2:
         h2++
