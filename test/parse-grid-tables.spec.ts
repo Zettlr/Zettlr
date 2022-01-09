@@ -16,8 +16,8 @@
 import parseGridTable from '../source/common/modules/markdown-editor/table-editor/parse-grid'
 import { deepStrictEqual } from 'assert'
 
-const table = []
-const tableResults = []
+const table: string[] = []
+const tableResults: Array<{ ast: string[][], colAlignments: string[] }> = []
 
 /** * * * * * * * * * * * * * * * * * *
  * TABLE ONE

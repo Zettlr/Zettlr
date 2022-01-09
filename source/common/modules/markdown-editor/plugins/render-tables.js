@@ -24,6 +24,11 @@ commands.markdownInsertTable = function (cm) {
   cm.replaceSelection('| | |\n| | |\n')
 }
 
+/**
+ * This function renders tables using the TableEditor
+ *
+ * @param   {CodeMirror.Editor}  cm  The editor instance
+ */
 commands.markdownRenderTables = function (cm) {
   // Now render all potential new tables. We only check one line less
   // because such a table header WILL NEVER be on the last line, plus
@@ -32,7 +37,9 @@ commands.markdownRenderTables = function (cm) {
   // We'll only render the viewport
   const viewport = cm.getViewport()
   for (let i = viewport.from; i < viewport.to; i++) {
-    if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
+    if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') {
+      continue
+    }
 
     // First get the line and test if the contents resemble a table. We only
     // search for the heading rows here, because these are the only ones that
@@ -41,9 +48,13 @@ commands.markdownRenderTables = function (cm) {
     let firstLine // First line of a given table
     let lastLine // Last line of a given table
     let potentialTableType // Can be "grid", "pipe", "simple"
-    let line = cm.getLine(i)
-    let match = tableHeadingRE.exec(line)
-    if (match == null) continue // No table heading
+
+    const line = cm.getLine(i)
+    const match = tableHeadingRE.exec(line)
+
+    if (match == null) {
+      continue // No table heading
+    }
 
     if (match[1]) {
       // Group 1 triggered, so we might have a simple table.
@@ -52,14 +63,19 @@ commands.markdownRenderTables = function (cm) {
         // Either end of document or a setext heading
         continue
       }
+
       if (i === 0 || cm.getLine(i - 1).trim() === '') {
         // We have a headless table, so let's search the end.
         firstLine = i // First line in this case is i
+
         for (let j = i + 1; j < cm.lineCount(); j++) {
-          let l = cm.getLine(j)
-          if (l.trim() === '') break // Leave without setting lastLine
-          let m = tableHeadingRE.exec(l)
-          if (m != null && m[1]) {
+          const l = cm.getLine(j)
+          if (l.trim() === '') {
+            break // Leave without setting lastLine
+          }
+
+          const m = tableHeadingRE.exec(l)
+          if (m !== null && m[1]) {
             lastLine = j
             break
           }
@@ -110,8 +126,9 @@ commands.markdownRenderTables = function (cm) {
     }
 
     // Something went wrong
-    if (lastLine === undefined || firstLine === undefined) continue
-    if (firstLine === lastLine) continue
+    if (lastLine === undefined || firstLine === undefined || firstLine === lastLine) {
+      continue
+    }
 
     // We've got ourselves a table! firstLine and lastLine now demarcate the
     // lines from and to which it goes. But before we continue with the table,
@@ -120,14 +137,18 @@ commands.markdownRenderTables = function (cm) {
     i = lastLine
 
     // First check if the user is not inside that table
-    let cur = cm.getCursor('from')
-    if (cur.line >= firstLine && cur.line <= lastLine) continue
+    const cur = cm.getCursor('from')
+    if (cur.line >= firstLine && cur.line <= lastLine) {
+      continue
+    }
 
-    let curFrom = { 'line': firstLine, 'ch': 0 }
-    let curTo = { 'line': lastLine, 'ch': cm.getLine(lastLine).length }
+    const curFrom = { 'line': firstLine, 'ch': 0 }
+    const curTo = { 'line': lastLine, 'ch': cm.getLine(lastLine).length }
 
     // We can only have one marker at any given position at any given time
-    if (cm.doc.findMarks(curFrom, curTo).length > 0) continue
+    if (cm.doc.findMarks(curFrom, curTo).length > 0) {
+      continue
+    }
 
     // A last sanity check: You could write YAML frontmatters by using only
     // dashes at the beginning and ending, which demarcates an edge condition.
@@ -143,9 +164,24 @@ commands.markdownRenderTables = function (cm) {
     }
 
     // First grab the full table
-    let markdownTable = ''
+    const markdownTable = []
     for (let i = firstLine; i <= lastLine; i++) {
-      markdownTable += cm.getLine(i) + '\n'
+      markdownTable.push(cm.getLine(i))
+    }
+
+    // If the potential type is simple, there is one, last, final sanity check
+    // we have to do: Users oftentimes forget to space out paragraphs when they
+    // use Setext headings. That is, sometimes, the table editor will see
+    // something like this:
+    //
+    // Some heading text
+    // -----------------
+    // The beginning of a paragraph
+    //
+    // This will lead to data loss, so we must make sure to not render simple
+    // tables with one column.
+    if (potentialTableType === 'simple' && markdownTable.length > 2 && /^-+$/.test(markdownTable[1])) {
+      continue
     }
 
     // Now attempt to create a table from it.
@@ -153,29 +189,36 @@ commands.markdownRenderTables = function (cm) {
     let textMarker
     try {
       // Will raise an error if the table is malformed
-      tbl = fromMarkdown(markdownTable, potentialTableType, {
+      tbl = fromMarkdown(markdownTable.join('\n'), potentialTableType, {
         // Detect mouse movement on the scroll element (so that
         // scroll detection in the helper works as expected)
-        'container': '#editor .CodeMirror .CodeMirror-scroll',
-        'onBlur': (t) => {
+        container: '#editor .CodeMirror .CodeMirror-scroll',
+        onBlur: (t) => {
           // Don't replace some arbitrary text somewhere in the document!
-          if (!textMarker || !textMarker.find()) return
+          if (textMarker === undefined || textMarker.find() === false) {
+            return
+          }
 
           let found = tables.indexOf(t)
           let md = t.getMarkdownTable()
           // The markdown table has a trailing newline, which we need to
           // remove at all costs.
-          md = md.substr(0, md.length - 1)
+          md = md.substring(0, md.length - 1)
 
           // We'll simply replace the range with the new table. The plugin will
           // be called to re-render the table once again.
-          let { from, to } = textMarker.find()
+          const { from, to } = textMarker.find()
           cm.replaceRange(md.split('\n'), from, to)
           // If there's still the textmarker, remove it by force to re-render
           // the table immediately.
-          if (textMarker) textMarker.clear()
+          if (textMarker !== undefined) {
+            textMarker.clear()
+          }
+
           // Splice the table and corresponding marker from the arrays
-          if (found) tables.splice(found, 1)
+          if (found) {
+            tables.splice(found, 1)
+          }
         }
       })
     } catch (err) {
@@ -191,10 +234,10 @@ commands.markdownRenderTables = function (cm) {
     textMarker = cm.doc.markText(
       curFrom, curTo,
       {
-        'clearOnEnter': false,
-        'replacedWith': tbl.getDOMElement(),
-        'inclusiveLeft': false,
-        'inclusiveRight': false
+        clearOnEnter: false,
+        replacedWith: tbl.domElement,
+        inclusiveLeft: false,
+        inclusiveRight: false
       }
     )
 

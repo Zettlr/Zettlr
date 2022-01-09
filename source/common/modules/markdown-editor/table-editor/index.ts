@@ -17,8 +17,9 @@ import TableEditor from './table-editor'
 import parsePipeTable from './parse-pipe'
 import parseSimpleTable from './parse-simple'
 import parseGridTable from './parse-grid'
+import { TableEditorOptions } from './types'
 
-export default function fromMarkdown (markdownTable, potentialType = 'pipe', hooks = null) {
+export default function fromMarkdown (markdownTable: string, potentialType: 'pipe'|'simple'|'grid' = 'pipe', hooks: TableEditorOptions = {}): TableEditor {
   let parsed
   switch (potentialType) {
     case 'simple':

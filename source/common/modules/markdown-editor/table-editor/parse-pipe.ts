@@ -15,30 +15,32 @@
 * END HEADER
 */
 
+import { ParsedTable, ColAlignment } from './types'
+
 /**
  * Parses a pipe table
  * @param {String|Array} A markdown table, either as line array or string
  * @returns {Object} An object with properties ast and colAlignments
  */
-export default function parsePipeTable (markdownTable) {
+export default function parsePipeTable (markdownTable: string|string[]): ParsedTable {
   // First remove whitespace from both sides of the table, e.g. in case
   // a trailing newline is present
-  markdownTable = markdownTable.trim()
+  if (typeof markdownTable === 'string') markdownTable = markdownTable.trim()
   if (!Array.isArray(markdownTable)) markdownTable = markdownTable.split('\n')
 
   if (markdownTable.length === 0) throw new Error('MarkdownTable was empty!')
   if (markdownTable.length === 1 && markdownTable[0].trim() === '') throw new Error('MarkdownTable was empty!')
 
   let ast = [] // Two-dimensional array
-  let colAlignments = [] // One-dimensional column alignments
-  let numColumns // If there is an uneven number of columns, throw an error.
+  let colAlignments: ColAlignment[] = [] // One-dimensional column alignments
+  let numColumns = -1 // If there is an uneven number of columns, throw an error.
 
   // Now iterate over all table rows
   for (let i = 0; i < markdownTable.length; i++) {
     // There should not be empty lines in the table.
     // If so, this indicates an error in the render tables plugin!
     if (markdownTable[i].trim() === '') throw new Error(`Line ${i} in the table was empty!`)
-    let row = markdownTable[i].trim() // Clean up whitespace
+    let row: string[]|string = markdownTable[i].trim() // Clean up whitespace
     if (/^[- :+|]+$/.test(row)) {
       // We have an alternative pipetable, separated with + instead of |,
       // so we have to replace all instances of + with |
@@ -55,7 +57,7 @@ export default function parsePipeTable (markdownTable) {
     if (row[row.length - 1].trim() === '') row.pop()
 
     // First row determines the amount of columns expected
-    if (numColumns === undefined) {
+    if (numColumns === -1) {
       numColumns = row.length // First row determines column count ...
     }
 

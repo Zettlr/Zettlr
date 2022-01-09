@@ -21,6 +21,9 @@
 - Fixed the context menu not showing during a full text search on macOS
 - When something goes wrong during opening of a new workspace or root file, the
   error messages will now be more meaningful
+- Small improvement that will not detect Setext headings level 2 without a
+  following empty line. This prevents some instances of data loss where users
+  forget this empty line and thus accidentally create a valid simple table
 
 ## Under the Hood
 

@@ -16,8 +16,8 @@
 import parsePipeTable from '../source/common/modules/markdown-editor/table-editor/parse-pipe'
 import { deepStrictEqual, throws } from 'assert'
 
-const table = []
-const tableResults = []
+const table: string[] = []
+const tableResults: Array<{ ast: string[][], colAlignments: string[] }> = []
 
 /** * * * * * * * * * * * * * * * * * *
  * TABLE ONE
