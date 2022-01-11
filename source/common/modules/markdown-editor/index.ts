@@ -247,6 +247,23 @@ export default class MarkdownEditor extends EventEmitter {
       }
     })
 
+    // Since themes use different fonts, we need to clear the indentation cache
+    ipcRenderer.on('config-provider', (event, { command, payload }) => {
+      if (command === 'update' && payload === 'display.theme') {
+        clearLineIndentationCache()
+        this._instance.refresh()
+      }
+    })
+
+    // The same holds true for custom CSS (not necessarily, but the user won't
+    // play around that much with custom CSS)
+    ipcRenderer.on('css-provider', (event, { command }) => {
+      if (command === 'custom-css-updated') {
+        clearLineIndentationCache()
+        this._instance.refresh()
+      }
+    })
+
     // Initial retrieval of snippets
     this.updateSnippetAutocomplete().catch(err => console.error(err))
   } // END CONSTRUCTOR

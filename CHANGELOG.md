@@ -24,6 +24,8 @@
 - Small improvement that will not detect Setext headings level 2 without a
   following empty line. This prevents some instances of data loss where users
   forget this empty line and thus accidentally create a valid simple table
+- Fixed an issue where the indentation of wrapped lines would look off after
+  changing the theme or modifying the editor font via custom CSS
 
 ## Under the Hood
 
