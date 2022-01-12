@@ -70,6 +70,9 @@ export default defineComponent({
     useTitle: function (): boolean {
       return this.$store.state.config.fileNameDisplay.includes('title')
     },
+    displayMdExtensions: function (): boolean {
+      return this.$store.state.config['display.markdownFileExtensions']
+    },
     container: function (): HTMLDivElement {
       return this.$refs.container as HTMLDivElement
     }
@@ -199,8 +202,10 @@ export default defineComponent({
         return file.frontmatter.title
       } else if (this.useH1 && file.firstHeading != null) {
         return file.firstHeading
-      } else {
+      } else if (this.displayMdExtensions) {
         return file.name
+      } else {
+        return file.name.replace(file.ext, '')
       }
     },
     /**

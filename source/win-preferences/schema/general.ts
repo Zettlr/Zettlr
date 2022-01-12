@@ -92,6 +92,11 @@ export default function (): any {
             'heading': trans('dialog.preferences.filename_display.heading'),
             'title+heading': trans('dialog.preferences.filename_display.title_heading')
           }
+        },
+        {
+          type: 'checkbox',
+          label: trans('dialog.preferences.display_markdown_file_extensions'),
+          model: 'display.markdownFileExtensions'
         }
       ],
       [

@@ -125,6 +125,7 @@ interface ConfigOptions {
     theme: 'berlin'|'frankfurt'|'bielefeld'|'karl-marx-stadt'|'bordeaux'
     useSystemAccentColor: boolean
     hideToolbarInDistractionFree: boolean
+    markdownFileExtensions: boolean
     imageWidth: number
     imageHeight: number
     renderCitations: boolean

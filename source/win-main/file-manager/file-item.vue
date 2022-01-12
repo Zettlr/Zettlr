@@ -168,6 +168,9 @@ export default defineComponent({
     useTitle: function (): boolean {
       return this.$store.state.config.fileNameDisplay.includes('title')
     },
+    displayMdExtensions: function (): boolean {
+      return this.$store.state.config['display.markdownFileExtensions']
+    },
     // We have to explicitly transform ALL properties to computed ones for
     // the reactivity in conjunction with the recycle-scroller.
     basename: function () {
@@ -179,6 +182,8 @@ export default defineComponent({
         return this.obj.frontmatter.title
       } else if (this.useH1 && this.obj.firstHeading !== null) {
         return this.obj.firstHeading
+      } else if (this.displayMdExtensions) {
+        return this.obj.name
       } else {
         return this.obj.name.replace(this.obj.ext, '')
       }

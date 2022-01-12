@@ -237,6 +237,15 @@ export default {
 
         return html.join('\n')
       }
+    },
+    useH1: function () {
+      return this.$store.state.config.fileNameDisplay.includes('heading')
+    },
+    useTitle: function () {
+      return this.$store.state.config.fileNameDisplay.includes('title')
+    },
+    displayMdExtensions: function () {
+      return this.$store.state.config['display.markdownFileExtensions']
     }
   },
   watch: {
@@ -390,13 +399,12 @@ export default {
         return filePath
       }
 
-      const useH1 = global.config.get('fileNameDisplay').includes('heading') === true
-      const useTitle = global.config.get('fileNameDisplay').includes('title') === true
-
-      if (useTitle && descriptor.frontmatter !== null && typeof descriptor.frontmatter.title === 'string') {
+      if (this.useTitle && descriptor.frontmatter !== null && typeof descriptor.frontmatter.title === 'string') {
         return descriptor.frontmatter.title
-      } else if (useH1 && descriptor.firstHeading !== null) {
+      } else if (this.useH1 && descriptor.firstHeading !== null) {
         return descriptor.firstHeading
+      } else if (this.displayMdExtensions) {
+        return descriptor.name
       } else {
         return descriptor.name.replace(descriptor.ext, '')
       }

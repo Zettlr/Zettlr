@@ -6,6 +6,8 @@
   are displayed: You can now select if the filename is always used or a title
   or first heading level 1 is used (if applicable)
 - **New Feature**: You can now also fold nested lists
+- **New Feature**: You can now choose to display the file extensions of Markdown
+  files
 - The Vim input mode of the editor started working again, so we are re-enabling
   it with this update
 - Fixed an error that would cause the global search to malfunction if you
