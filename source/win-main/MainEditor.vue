@@ -159,6 +159,15 @@ export default defineComponent({
     }
   },
   computed: {
+    useH1: function (): boolean {
+      return this.$store.state.config.fileNameDisplay.includes('heading')
+    },
+    useTitle: function (): boolean {
+      return this.$store.state.config.fileNameDisplay.includes('title')
+    },
+    filenameOnly: function (): boolean {
+      return this.$store.state.config['zkn.linkFilenameOnly']
+    },
     findPlaceholder: function (): string {
       return trans('dialog.find.find_placeholder')
     },
@@ -276,6 +285,18 @@ export default defineComponent({
     }
   },
   watch: {
+    useH1: function () {
+      this.updateFileDatabase()
+    },
+    useTitle: function () {
+      this.updateFileDatabase()
+    },
+    filenameOnly: function () {
+      this.updateFileDatabase()
+    },
+    fsalFiles: function () {
+      this.updateFileDatabase()
+    },
     cslItems: function () {
       if (mdEditor === null) {
         return
@@ -349,9 +370,6 @@ export default defineComponent({
         }
       }
       mdEditor.setCompletionDatabase('tags', unproxy)
-    },
-    fsalFiles: function () {
-      this.updateFileDatabase()
     },
     activeFile: function () {
       if (mdEditor === null) {
@@ -730,32 +748,30 @@ export default defineComponent({
       if (mdEditor === null) {
         return
       }
+      console.log('refreshing file database!', this.filenameOnly)
 
       const fileDatabase: any = {}
-
-      const useH1: boolean = this.$store.state.config.fileNameDisplay.includes('heading')
-      const useTitle: boolean = this.$store.state.config.fileNameDisplay.includes('title')
 
       for (const file of this.fsalFiles) {
         const fname = file.name.substr(0, file.name.lastIndexOf('.'))
         let displayText = fname // Fallback: Only filename
-        if (useTitle && typeof file.frontmatter?.title === 'string') {
+        if (this.useTitle && typeof file.frontmatter?.title === 'string') {
           // (Else) if there is a frontmatter, use that title
           displayText = file.frontmatter.title
-        } else if (useH1 && file.firstHeading !== null) {
+        } else if (this.useH1 && file.firstHeading !== null) {
           // The user wants to use first headings as fallbacks
           displayText = file.firstHeading
         }
 
-        if (file.id !== '') {
+        if (file.id !== '' && !this.filenameOnly) {
           displayText = `${file.id}: ${displayText}`
         }
 
         fileDatabase[file.path] = {
           // Use the ID, if given, or the filename
-          'text': (file.id !== '') ? file.id : fname,
-          'displayText': displayText,
-          'id': file.id
+          text: (file.id !== '' && !this.filenameOnly) ? file.id : fname,
+          displayText: displayText,
+          id: (file.id !== '' && !this.filenameOnly) ? file.id : ''
         }
       }
 

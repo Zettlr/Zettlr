@@ -390,7 +390,8 @@ function hintFunction (cm, opt) {
     // preference settings.
     if (currentDatabase === 'files') {
       // Get the correct setting
-      let linkPref = global.config.get('zkn.linkWithFilename')
+      const linkPref = global.config.get('zkn.linkWithFilename')
+      const fnameOnly = global.config.get('zkn.linkFilenameOnly')
       // Prepare the text to insert, removing the ID if found in the filename
       let text = completion.displayText
       if (completion.id !== '') {
@@ -433,7 +434,7 @@ function hintFunction (cm, opt) {
         cm.replaceSelection(end) // Add the link ending
       }
 
-      if (linkPref === 'always' || (linkPref === 'withID' && completion.id !== '')) {
+      if (fnameOnly === false && (linkPref === 'always' || (linkPref === 'withID' && completion.id !== ''))) {
         // We need to add the text after the link.
         cm.replaceSelection(prefix + text)
       }

@@ -7,6 +7,7 @@
   or first heading level 1 is used (if applicable)
 - **New Feature**: You can now also fold nested lists
 - **New Feature**: You can now choose to display the file extensions of Markdown
+- **New Feature**: You can now choose to always only link using filenames
   files
 - The Vim input mode of the editor started working again, so we are re-enabling
   it with this update

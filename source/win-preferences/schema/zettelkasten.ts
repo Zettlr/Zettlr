@@ -50,6 +50,11 @@ export default function (): any {
           text: trans('dialog.preferences.export.stripping')
         },
         {
+          type: 'checkbox',
+          label: 'Link with filename only',
+          model: 'zkn.linkFilenameOnly'
+        },
+        {
           type: 'radio',
           label: trans('dialog.preferences.zkn.link_behaviour_description'),
           model: 'zkn.linkWithFilename',
@@ -57,7 +62,8 @@ export default function (): any {
             'always': trans('dialog.preferences.zkn.link_behaviour_always'),
             'withID': trans('dialog.preferences.zkn.link_behaviour_id'),
             'never': trans('dialog.preferences.zkn.link_behaviour_never')
-          }
+          },
+          disabled: global.config.get('zkn.linkFilenameOnly') === true
         }
       ],
       [

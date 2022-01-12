@@ -90,6 +90,7 @@ interface ConfigOptions {
     idGen: string
     linkStart: string
     linkEnd: string
+    linkFilenameOnly: boolean
     linkWithFilename: 'always'|'never'|'withID'
     autoCreateLinkedFiles: boolean
     autoSearch: boolean
