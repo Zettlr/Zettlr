@@ -79,6 +79,7 @@
           v-bind:model-value="getModelValue(field.model)"
           v-bind:label="field.label"
           v-bind:name="field.model"
+          v-bind:disabled="field.disabled"
           v-bind:options="field.options"
           v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
         ></RadioInput>

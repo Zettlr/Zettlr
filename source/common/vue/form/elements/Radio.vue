@@ -6,16 +6,22 @@
       v-bind:key="key"
       class="cb-group"
     >
-      <label class="radio">
+      <label
+        v-bind:class="{
+          radio: true,
+          disabled: disabled
+        }"
+      >
         <input
           v-bind:id="fieldID(key)"
           type="radio" v-bind:name="name" v-bind:value="key"
           v-bind:checked="modelValue === key"
+          v-bind:disabled="disabled"
           v-on:input="$emit('update:modelValue', $event.target.value)"
         >
         <div class="toggle"></div>
       </label>
-      <label v-bind:for="fieldID(key)">{{ optionLabel }}</label>
+      <label v-bind:for="fieldID(key)" v-bind:class="{ disabled: disabled }">{{ optionLabel }}</label>
     </div>
   </div>
 </template>
@@ -50,6 +56,10 @@ export default {
       type: String,
       default: ''
     },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     options: {
       type: Object,
       default: function () { return {} }
@@ -73,6 +83,8 @@ body {
     margin: 10px 0;
 
     p { font-size: 13px; }
+
+    label:not(.radio).disabled { color: grey; }
   }
 
   .cb-group {
@@ -122,6 +134,15 @@ body {
         transition: .4s;
       }
     }
+
+    &.disabled {
+      input:checked ~ .toggle {
+        background-color: lightgrey;
+      }
+      input:checked ~ .toggle {
+        border-color: rgb(90, 90, 90);
+      }
+    }
   }
 }
 
@@ -158,6 +179,15 @@ body.darwin {
       background-color: var(--system-accent-color, --c-primary);
       border-color: var(--system-accent-color, --c-primary);
       background-image: linear-gradient(transparent, #00000020);
+    }
+
+    &.disabled {
+      .toggle, .toggle:before { background-color: #ddd; }
+
+      input:checked + .toggle {
+        &:before { background-color: white; }
+        background-image: linear-gradient(#ffffff22, #ffffff44);
+      }
     }
   }
 
@@ -226,6 +256,11 @@ body.win32 {
         border-radius: @input-size;
         transition: .4s;
       }
+    }
+
+    &.disabled .toggle {
+      background-color: #ddd;
+      border-color: rgb(120, 120, 120);
     }
   }
 }
