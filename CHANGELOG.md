@@ -30,6 +30,7 @@
 - Fixed an issue where the indentation of wrapped lines would look off after
   changing the theme or modifying the editor font via custom CSS
 - Fixed the vim mode cursor being barely visible in dark mode
+- Done task list items will now be stroked out faster
 
 ## Under the Hood
 

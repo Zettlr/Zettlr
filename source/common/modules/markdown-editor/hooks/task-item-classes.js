@@ -18,8 +18,23 @@
  * @param   {CodeMirror.Editor}  cm  The instance
  */
 export default function (cm) {
-  cm.on('changes', applyTaskItemClasses)
-  cm.on('cursorActivity', applyTaskItemClasses)
+  // While taskHandle is undefined, there's no task scheduled. Else, there is.
+  let taskHandle
+
+  const callback = function (cm) {
+    if (taskHandle !== undefined) {
+      return // There's already a task scheduled
+    }
+
+    taskHandle = requestIdleCallback(function () {
+      applyTaskItemClasses(cm)
+      taskHandle = undefined // Reset task handle
+    }, { timeout: 1000 }) // Execute after 1 seconds, even if there's a performance penalty involved
+  }
+
+  cm.on('cursorActivity', callback)
+  cm.on('viewportChange', callback)
+  cm.on('optionChange', callback)
 }
 
 function applyTaskItemClasses (cm) {
