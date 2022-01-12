@@ -6,6 +6,8 @@
   are displayed: You can now select if the filename is always used or a title
   or first heading level 1 is used (if applicable)
 - **New Feature**: You can now also fold nested lists
+- The Vim input mode of the editor started working again, so we are re-enabling
+  it with this update
 - Fixed an error that would cause the global search to malfunction if you
   followed a link which then started a global search while the file manager was
   hidden
@@ -27,6 +29,7 @@
   forget this empty line and thus accidentally create a valid simple table
 - Fixed an issue where the indentation of wrapped lines would look off after
   changing the theme or modifying the editor font via custom CSS
+- Fixed the vim mode cursor being barely visible in dark mode
 
 ## Under the Hood
 

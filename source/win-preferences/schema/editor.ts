@@ -81,10 +81,8 @@ export default function (): any {
           model: 'editor.inputMode',
           options: {
             'default': 'Normal',
-            'emacs': 'Emacs' // ,
-            // NOTE: We had to deactivate vim. The editor will freeze if you
-            // enter the insert mode of VIM.
-            // 'vim': 'Vim'
+            'emacs': 'Emacs',
+            'vim': 'Vim'
           }
         }
       ],
