@@ -70,6 +70,7 @@ export default {
 body {
   .radio-group {
     break-inside: avoid;
+    margin: 10px 0;
 
     p { font-size: 13px; }
   }
@@ -79,10 +80,10 @@ body {
     grid-template-columns: @input-size * 2 auto;
     grid-template-rows: 100%;
     grid-template-areas: "input label";
+    margin: 6px 0px;
   }
 
   .cb-group, .radio-group {
-    margin: 6px 0px;
     label:not(.radio):not(.checkbox) { grid-area: label; }
   }
 
