@@ -13,7 +13,7 @@
  */
 
 import { getCodeBlockRE } from '@common/regular-expressions'
-import { on } from 'codemirror'
+import CodeMirror, { on } from 'codemirror'
 import { DateTime } from 'luxon'
 import { v4 as uuid } from 'uuid'
 import generateId from '@common/util/generate-id'
@@ -22,14 +22,43 @@ import generateId from '@common/util/generate-id'
 const codeBlockRE = getCodeBlockRE(false)
 const codeBlockMultiline = getCodeBlockRE(true)
 
-let autocompleteStart = null
-let currentDatabase = null
+interface AutocompleteDatabaseEntry {
+  text: string
+  displayText?: string
+  className?: string
+  matches?: number
+}
+
+interface TextSnippetTextMarker {
+  index: number
+  markers: CodeMirror.TextMarker[]
+}
+
+/**
+ * Whenever there is an autocompletion going on, this variable will contain its
+ * starting position
+ *
+ * @var {CodeMirror.Position|null}
+ */
+let autocompleteStart: CodeMirror.Position|null = null
+
+/**
+ * This variable holds the key of the current database used for autocompletion
+ * as long as there is an autocompletion going on.
+ *
+ * @var {keyof typeof availableDatabases|null}
+ */
+let currentDatabase: keyof typeof availableDatabases|null = null
+
+/**
+ * This object holds all available databases for autocompletion
+ */
 const availableDatabases = {
-  tags: [],
-  citekeys: [],
-  files: [],
-  snippets: [],
-  headings: [],
+  tags: [] as AutocompleteDatabaseEntry[],
+  citekeys: [] as AutocompleteDatabaseEntry[],
+  files: [] as AutocompleteDatabaseEntry[],
+  snippets: [] as AutocompleteDatabaseEntry[],
+  headings: [] as AutocompleteDatabaseEntry[],
   syntaxHighlighting: [
     { text: '', displayText: 'No highlighting' }, // TODO: translate
     { text: 'javascript', displayText: 'JavaScript/Node.JS' },
@@ -81,7 +110,7 @@ const availableDatabases = {
     { text: 'toml', displayText: 'TOML/INI' },
     { text: 'docker', displayText: 'Dockerfile' },
     { text: 'diff', displayText: 'Diff' }
-  ]
+  ] as AutocompleteDatabaseEntry[]
 }
 
 /**
@@ -90,11 +119,14 @@ const availableDatabases = {
  *
  * @var {CodeMirror.KeyMap}
  */
-const snippetsKeymap = {
+const snippetsKeymap: CodeMirror.KeyMap = {
   'Tab': nextTabstop,
-  'Esc': (cm) => {
-    for (const marker of currentTabStops) {
-      marker.clear()
+  'Esc': (cm: CodeMirror.Editor) => {
+    // Clear all remaining textmarkers
+    for (const elem of currentTabStops) {
+      for (const textMark of elem.markers) {
+        textMark.clear()
+      }
     }
     currentTabStops = []
     cm.removeKeyMap(snippetsKeymap)
@@ -104,17 +136,17 @@ const snippetsKeymap = {
 /**
  * An array containing all textmarkers used by the templating system.
  *
- * @var {any[]}
+ * @var {TextSnippetTextMarker[]}
  */
-let currentTabStops = []
+let currentTabStops: TextSnippetTextMarker[] = []
 
 /**
  * This function runs over the full document to extract ATX heading IDs and
  * saves them to the local variable `currentHeadingIDs`.
  *
- * @param   {CodeMirror}  cm  The CodeMirror instance
+ * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
  */
-function collectHeadingIDs (cm) {
+function collectHeadingIDs (cm: CodeMirror.Editor): void {
   availableDatabases.headings = []
 
   const atxRE = /^#{1,6}\s(.+)$/
@@ -150,7 +182,7 @@ function collectHeadingIDs (cm) {
     // Remove everything up to the first letter (identifiers may not begin with a number or punctuation mark).
     const letterMatch = /[a-z]/.exec(text)
     const firstLetter = (letterMatch !== null) ? letterMatch.index : 0
-    text = text.substr(firstLetter)
+    text = text.substring(firstLetter)
     // If nothing is left after this, use the identifier section.
     if (text.length === 0) {
       text = 'section'
@@ -168,7 +200,7 @@ function collectHeadingIDs (cm) {
  *
  * @param   {CodeMirror.Editor}  cm  The CM instance
  */
-export function autocompleteHook (cm) {
+export function autocompleteHook (cm: CodeMirror.Editor): void {
   // Listen to change events
   cm.on('change', (cm, changeObj) => {
     // On every change event, make sure to update the heading IDs
@@ -179,7 +211,7 @@ export function autocompleteHook (cm) {
       return
     }
 
-    let autocompleteDatabase = shouldBeginAutocomplete(cm, changeObj)
+    const autocompleteDatabase = shouldBeginAutocomplete(cm, changeObj)
 
     if (autocompleteDatabase === undefined) {
       return
@@ -212,15 +244,19 @@ export function autocompleteHook (cm) {
   })
 }
 
-export function setAutocompleteDatabase (type, database) {
+export function setAutocompleteDatabase (type: string, database: any): void {
+  if (!(type in availableDatabases)) {
+    throw new Error(`Unknown database type ${type}`)
+  }
+
   // Make additional adjustments if necessary
   if (type === 'tags') {
     // Here, we get an object from main which is not in the right data format
     // (it's a hashmap, not an array)
-    let tagHints = Object.keys(database).map(key => {
+    let tagHints = Object.keys(database as { [key: string]: any }).map(key => {
       return {
         text: database[key].text,
-        displayText: '#' + database[key].text,
+        displayText: '#' + String(database[key].text),
         className: database[key].className // Optional, can be undefined
       }
     })
@@ -228,7 +264,7 @@ export function setAutocompleteDatabase (type, database) {
     availableDatabases[type] = tagHints
   } else if ([ 'citekeys', 'snippets' ].includes(type)) {
     // These databases work as they are
-    availableDatabases[type] = database
+    availableDatabases[type as keyof typeof availableDatabases] = database
   } else if (type === 'files') {
     let fileHints = Object.keys(database).map(key => {
       return {
@@ -254,7 +290,7 @@ export function setAutocompleteDatabase (type, database) {
  *
  * @return  {string|undefined}         Either the database name, or undefined
  */
-function shouldBeginAutocomplete (cm, changeObj) {
+function shouldBeginAutocomplete (cm: CodeMirror.Editor, changeObj: any): keyof typeof availableDatabases|undefined {
   // First, get cursor and line.
   const cursor = cm.getCursor()
   const line = cm.getLine(cursor.line)
@@ -295,16 +331,18 @@ function shouldBeginAutocomplete (cm, changeObj) {
   }
 
   // Can we begin file autocompletion?
-  let linkStart = cm.getOption('zettlr').zettelkasten.linkStart
-  let linkStartRange = cm.getRange({
-    'line': cursor.line,
-    'ch': cursor.ch - linkStart.length
+  const linkStart: string = (cm as any).getOption('zettlr').zettelkasten.linkStart
+  const linkStartRange = cm.getRange({
+    line: cursor.line,
+    ch: cursor.ch - linkStart.length
   }, {
-    'line': cursor.line,
-    'ch': cursor.ch
+    line: cursor.line,
+    ch: cursor.ch
   })
 
-  if (linkStartRange === linkStart) return 'files'
+  if (linkStartRange === linkStart) {
+    return 'files'
+  }
 
   // Now check for syntax highlighting
   if (codeBlockRE.test(line)) {
@@ -332,17 +370,18 @@ function shouldBeginAutocomplete (cm, changeObj) {
  *
  * @return  {any[]}         An array of completion items
  */
-function getHints (term) {
+function getHints (term: string): any[] {
+  if (currentDatabase === null) {
+    return []
+  }
+
   let results = availableDatabases[currentDatabase].filter((entry) => {
     // First search the display text, then the entry text itself
-    if (
-      entry.displayText !== undefined &&
-      entry.displayText.toLowerCase().indexOf(term) >= 0
-    ) {
+    if (entry.displayText?.toLowerCase().includes(term) === true) {
       return true
     }
 
-    if (entry.text.toLowerCase().indexOf(term) >= 0) {
+    if (entry.text.toLowerCase().includes(term)) {
       return true
     }
 
@@ -352,10 +391,10 @@ function getHints (term) {
 
   results = results.sort((entryA, entryB) => {
     // This sorter makes sure "special" things are always sorted top
-    let aClass = entryA.className !== undefined
-    let bClass = entryB.className !== undefined
-    let aMatch = (entryA.matches !== undefined) ? entryA.matches : 0
-    let bMatch = (entryB.matches !== undefined) ? entryB.matches : 0
+    const aClass = entryA.className !== undefined
+    const bClass = entryB.className !== undefined
+    const aMatch = (entryA.matches !== undefined) ? entryA.matches : 0
+    const bMatch = (entryB.matches !== undefined) ? entryB.matches : 0
     if (aClass && !bClass) return -1
     if (!aClass && bClass) return 1
     if (aClass && bClass) return aMatch - bMatch
@@ -375,66 +414,68 @@ function getHints (term) {
  *
  * @return  {any}              The completion object
  */
-function hintFunction (cm, opt) {
+function hintFunction (cm: CodeMirror.Editor, opt: CodeMirror.ShowHintOptions): CodeMirror.Hints|undefined {
+  if (autocompleteStart === null) {
+    throw new Error('Could not instantiate completion object: autocompleteStart was null')
+  }
+
   const term = cm.getRange(autocompleteStart, cm.getCursor()).toLowerCase()
-  const completionObject = {
+  const completionObject: CodeMirror.Hints = {
     list: getHints(term),
     from: autocompleteStart,
     to: cm.getCursor()
   }
 
   // Set the autocomplete to false as soon as the user has actively selected something.
-  on(completionObject, 'pick', (completion) => {
+  on(completionObject, 'pick', (completion: any) => {
+    if (autocompleteStart === null) {
+      throw new Error('Could not autocomplete: autocompleteStart was null')
+    }
+
     // In case the user wants to link a file, intercept during
     // the process and add the file link according to the user's
     // preference settings.
     if (currentDatabase === 'files') {
-      // Get the correct setting
-      const linkPref = global.config.get('zkn.linkWithFilename')
-      const fnameOnly = global.config.get('zkn.linkFilenameOnly')
       // Prepare the text to insert, removing the ID if found in the filename
-      let text = completion.displayText
-      if (completion.id !== '') {
-        // The displayText in this regard contains <ID>: <filename>, so remove
-        // the first part because we don't need it.
-        text = text.substring(completion.id.length + 2).trim()
-      }
+      let text: string = completion.displayText
+      const fileId: string = completion.id
 
-      if (completion.id !== '' && text.indexOf(completion.id) >= 0) {
-        text = text.replace(completion.id, '').trim()
+      if (fileId !== '' && text.includes(fileId)) {
+        text = text.replace(fileId, '').trim()
 
         // The file database has this id: filename thing which we need to
         // account for. TODO: Do it like a grown up and retrieve the filename
         // from somewhere else -- CodeMirror allows for arbitrary objects to be
         // present here, so possibly this is the more elegant solution.
-        if (text.substr(0, 2) === ': ') {
-          text = text.substr(2)
+        if (text.substring(0, 2) === ': ') {
+          text = text.substring(2)
+        }
+
+        // If the text now ends up empty because the displayText equals the ID,
+        // make sure we reset it back to using the displayText
+        if (text.length === 0 || text === ':') {
+          text = completion.displayText
         }
       }
-      // In case the whole filename consists of the ID, well.
-      // Then, have your ID duplicated.
-      if (text.length === 0) text = completion.displayText
-      let cur = Object.assign({}, cm.getCursor())
+
+      const cur = cm.getCursor()
       // Check if the linkEnd has been already inserted
-      let line = cm.getLine(cur.line)
-      let end = cm.getOption('zettlr').zettelkasten.linkEnd
+      const line = cm.getLine(cur.line)
+      const end: string = (cm as any).getOption('zettlr').zettelkasten.linkEnd
       let prefix = ' '
-      let linkEndMissing = false
-      if (end !== '' && line.substr(cur.ch, end.length) !== end) {
+
+      if (end !== '' && line.substring(cur.ch, cur.ch + end.length) !== end) {
         // Add the linkend
         prefix = end + prefix
-        linkEndMissing = true
       } else {
         // Advance the cursor so that it is outside of the link again
-        cur.ch += end.length
-        cm.setCursor(cur)
+        cm.setCursor({ line: cur.line, ch: cur.ch + end.length })
       }
 
-      if (linkEndMissing) {
-        cm.replaceSelection(end) // Add the link ending
-      }
+      const linkPref = global.config.get('zkn.linkWithFilename')
+      const fnameOnly: boolean = global.config.get('zkn.linkFilenameOnly')
 
-      if (fnameOnly === false && (linkPref === 'always' || (linkPref === 'withID' && completion.id !== ''))) {
+      if (!fnameOnly && (linkPref === 'always' || (linkPref === 'withID' && completion.id !== ''))) {
         // We need to add the text after the link.
         cm.replaceSelection(prefix + text)
       }
@@ -451,25 +492,25 @@ function hintFunction (cm, opt) {
         cm.setCursor({ line: autocompleteStart.line + 1, ch: 0 })
       }
     } else if (currentDatabase === 'citekeys') {
-      const { citeStyle } = cm.getOption('zettlr')
+      const citeStyle: 'in-text'|'in-text-suffix'|'regular' = (cm as any).getOption('zettlr').citeStyle
       const line = cm.getLine(autocompleteStart.line)
       const fromCh = autocompleteStart.ch
-      const toCh = autocompleteStart.ch + completion.text.length
+      const toCh = autocompleteStart.ch + (completion.text as string).length
       const afterOpen = line.lastIndexOf('[', fromCh) > line.lastIndexOf(']', fromCh)
       // Either no open and 1 close bracket or a close bracket after an open bracket
-      const beforeClose = (line.indexOf('[', toCh) < 0 && line.indexOf(']', toCh) >= 0) || (line.indexOf(']', toCh) < line.indexOf('[', toCh))
+      const beforeClose = (!line.includes('[', toCh) && line.includes(']', toCh)) || (line.indexOf(']', toCh) < line.indexOf('[', toCh))
       const noBrackets = !afterOpen && !beforeClose
       if (citeStyle === 'regular' && noBrackets) {
         // Add square brackets around
         const lineNo = autocompleteStart.line
         const fromCh = autocompleteStart.ch - 1
-        const toCh = autocompleteStart.ch + completion.text.length
+        const toCh = autocompleteStart.ch + (completion.text as string).length
         cm.setSelection(
           { line: lineNo, ch: fromCh },
           { line: lineNo, ch: toCh },
           { scroll: false }
         )
-        cm.replaceSelection(`[@${completion.text}]`)
+        cm.replaceSelection(`[@${completion.text as string}]`)
         // Now back up one character to set the cursor inside the brackets
         cm.setCursor({ line: lineNo, ch: toCh + 1 })
       } else if (citeStyle === 'in-text-suffix' && noBrackets) {
@@ -477,15 +518,21 @@ function hintFunction (cm, opt) {
         cm.replaceSelection(' []')
         cm.setCursor({
           line: autocompleteStart.line,
-          ch: autocompleteStart.ch + completion.text.length + 2
+          ch: autocompleteStart.ch + (completion.text as string).length + 2
         })
       } // Otherwise: citeStyle was in-text, i.e. we can leave everything as is
     } else if (currentDatabase === 'snippets') {
       // For this database, we must remove the leading colon and also fiddle
       // with the text. So first, let's select everything.
-      const insertedLines = completion.text.split('\n')
-      const from = { line: autocompleteStart.line, ch: autocompleteStart.ch - 1 }
-      const to = { line: autocompleteStart.line + insertedLines.length - 1, ch: insertedLines[insertedLines.length - 1].length }
+      const insertedLines: string[] = completion.text.split('\n')
+      const from = {
+        line: autocompleteStart.line,
+        ch: autocompleteStart.ch - 1
+      }
+      const to = {
+        line: autocompleteStart.line + insertedLines.length - 1,
+        ch: insertedLines[insertedLines.length - 1].length
+      }
       // If insertedLines is 1, we have to account for the autocompleteStart.ch
       if (insertedLines.length === 1) {
         to.ch += autocompleteStart.ch
@@ -543,19 +590,19 @@ function hintFunction (cm, opt) {
  * @param   {CodeMirror.Position}  from  The line from which to begin analysing the text
  * @param   {CodeMirror.Position}  to    The final line (exclusive) until which to analyse.
  *
- * @return  {TextMarkers[]}            An array of created text markers
+ * @return  {TextSnippetTextMarker[]}    An array of created text markers
  */
-function getTabMarkers (cm, from, to) {
-  let tabStops = []
+function getTabMarkers (cm: CodeMirror.Editor, from: CodeMirror.Position, to: CodeMirror.Position): TextSnippetTextMarker[] {
+  let tabStops: TextSnippetTextMarker[] = []
   for (let i = from.line; i <= to.line; i++) {
     let line = cm.getLine(i)
     let match = null
 
     // Account for when some snippet has been inserted in between some text
     if (i === from.line && from.ch > 0) {
-      line = line.substr(from.ch)
+      line = line.substring(from.ch)
     } else if (i === to.line && to.ch < line.length) {
-      line = line.substr(0, to.ch)
+      line = line.substring(0, to.ch)
     }
 
     // NOTE: The negative lookbehind
@@ -583,15 +630,15 @@ function getTabMarkers (cm, from, to) {
           { line: localFrom.line, ch: localFrom.ch + replaceWith.length },
           { className: 'tabstop' }
         )
-        tabStops.push({ index: index, marker: marker })
+        tabStops.push({ index: index, markers: [marker] })
       } else {
         // Here we don't need a TextMarker, but rather a Bookmark,
         // since it's basically a single-char range.
         const elem = document.createElement('span')
         elem.classList.add('tabstop')
-        elem.textContent = index
+        elem.textContent = index.toString()
         const marker = cm.setBookmark(localFrom, { widget: elem })
-        tabStops.push({ index: index, marker: marker })
+        tabStops.push({ index: index, markers: [marker] })
       }
     }
   }
@@ -599,18 +646,15 @@ function getTabMarkers (cm, from, to) {
   // Next on, group markers with the same index together. This will later enable
   // mirroring of input by the user (since multiple markers can be active at the
   // same time).
-  tabStops = tabStops.reduce((acc, val) => {
+  tabStops = tabStops.reduce((acc: TextSnippetTextMarker[], val) => {
     // acc contains the resultant array, val the current marker
     const existingValue = acc.find(elem => elem.index === val.index)
     if (existingValue !== undefined) {
       // The marker already exists
-      existingValue.markers.push(val.marker)
+      existingValue.markers = existingValue.markers.concat(val.markers)
     } else {
       // The marker doesn't yet exist -> create
-      acc.push({
-        index: val.index,
-        markers: [val.marker]
-      })
+      acc.push({ index: val.index, markers: val.markers })
     }
     return acc // We just have to return the reference to the array again
   }, []) // initialValue: An empty array
@@ -620,7 +664,7 @@ function getTabMarkers (cm, from, to) {
   tabStops.sort((a, b) => { return a.index - b.index })
   // Now put the 0 to the top (if there is a zero)
   if (tabStops.length > 0 && tabStops[0].index === 0) {
-    tabStops.push(tabStops.shift())
+    tabStops.push(tabStops.shift() as TextSnippetTextMarker)
   } else {
     // If there is no zero, we must make sure to add one "pseudo-$0" after the
     // selection so that the cursor ends up there afterwards.
@@ -642,7 +686,7 @@ function getTabMarkers (cm, from, to) {
  *
  * @return  {string}        The text with all variables replaced accordingly.
  */
-function replaceSnippetVariables (text) {
+function replaceSnippetVariables (text: string): string {
   // First, prepare our replacement table
   const now = DateTime.now()
   const month = now.month
@@ -650,18 +694,18 @@ function replaceSnippetVariables (text) {
   const hour = now.hour
   const minute = now.minute
   const second = now.second
-  const clipboard = window.clipboard.readText()
+  const clipboard = (window as any).clipboard.readText()
 
   const REPLACEMENTS = {
     CURRENT_YEAR: now.year,
-    CURRENT_YEAR_SHORT: now.year.toString().substr(2),
-    CURRENT_MONTH: (month < 10) ? '0' + month : month,
+    CURRENT_YEAR_SHORT: now.year.toString().substring(2),
+    CURRENT_MONTH: (month < 10) ? '0' + month.toString() : month,
     CURRENT_MONTH_NAME: now.monthLong,
     CURRENT_MONTH_NAME_SHORT: now.monthShort,
-    CURRENT_DATE: (day < 10) ? '0' + day : day,
-    CURRENT_HOUR: (hour < 10) ? '0' + hour : hour,
-    CURRENT_MINUTE: (minute < 10) ? '0' + minute : minute,
-    CURRENT_SECOND: (second < 10) ? '0' + second : second,
+    CURRENT_DATE: (day < 10) ? '0' + day.toString() : day,
+    CURRENT_HOUR: (hour < 10) ? '0' + hour.toString() : hour,
+    CURRENT_MINUTE: (minute < 10) ? '0' + minute.toString() : minute,
+    CURRENT_SECOND: (second < 10) ? '0' + second.toString() : second,
     CURRENT_SECONDS_UNIX: now.toSeconds(),
     UUID: uuid(),
     CLIPBOARD: (clipboard !== '') ? clipboard : undefined,
@@ -673,15 +717,15 @@ function replaceSnippetVariables (text) {
   return text.replace(/(?<!\\)\$([A-Z_]+)|(?<!\\)\$\{([A-Z_]+):(.+?)\}/g, (match, p1, p2, p3) => {
     if (p1 !== undefined) {
       // We have a single variable, so only replace if it's a supported one
-      if (REPLACEMENTS[p1] !== undefined) {
-        return REPLACEMENTS[p1]
+      if (REPLACEMENTS[p1 as keyof typeof REPLACEMENTS] !== undefined) {
+        return REPLACEMENTS[p1 as keyof typeof REPLACEMENTS]
       } else {
         return match
       }
     } else {
       // We have a variable with placeholder, so replace it potentially with the default
-      if (REPLACEMENTS[p2] !== undefined) {
-        return REPLACEMENTS[p2]
+      if (REPLACEMENTS[p2 as keyof typeof REPLACEMENTS] !== undefined) {
+        return REPLACEMENTS[p2 as keyof typeof REPLACEMENTS]
       } else {
         return p3
       }
@@ -695,7 +739,7 @@ function replaceSnippetVariables (text) {
  *
  * @param   {CodeMirror.Editor}  cm  The editor instance
  */
-function nextTabstop (cm) {
+function nextTabstop (cm: CodeMirror.Editor): void {
   const elem = currentTabStops.shift()
   if (elem === undefined) {
     // We're done
@@ -703,14 +747,18 @@ function nextTabstop (cm) {
     return
   }
 
-  const allSelections = []
+  const allSelections: Array<{ anchor: CodeMirror.Position, head: CodeMirror.Position }> = []
   for (const marker of elem.markers) {
     // Set the current selection, differentiating between tabstops and placeholders.
     const position = marker.find()
+    if (position === undefined) {
+      continue
+    }
+
     if ('from' in position && 'to' in position) {
       allSelections.push({ anchor: position.from, head: position.to })
     } else {
-      allSelections.push({ anchor: position })
+      allSelections.push({ anchor: position, head: position })
     }
     marker.clear()
   }
