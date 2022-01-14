@@ -26,7 +26,7 @@ function isHeader (cm: CodeMirror.Editor, lineNo: number): boolean {
 
 function getListIndentation (line: string): number {
   // Matches regular lists and task lists
-  const match = /^(\s*)[*+-](?:\s\[[x ]\])?\s/i.exec(line)
+  const match = /^(\s*)(?:[*+-](?:\s\[[x ]\])?|\d+\.)\s/i.exec(line)
   return (match !== null) ? match[1].length : -1
 }
 
