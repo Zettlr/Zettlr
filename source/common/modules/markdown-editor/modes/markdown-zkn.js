@@ -20,8 +20,11 @@ const zknTagRE = getZknTagRE()
 const headingRE = getHeadingRE()
 const highlightRE = getHighlightRE()
 const tableRE = getTableRE()
-const inlineMathRE = getInlineMathRE()
 const fnReferenceRE = getFnReferenceRE()
+
+const inlineMathRE = getInlineMathRE()
+const inlineMathStartRE = /^\${1,2}/i
+const inlineMathEndRE = /^(?<!\\)\${1,2}(?!\d)/i
 
 /**
   * This defines the Markdown Zettelkasten system mode, which highlights IDs
@@ -35,6 +38,7 @@ const fnReferenceRE = getFnReferenceRE()
 defineMode('markdown-zkn', function (config, parserConfig) {
   const yamlMode = getMode(config, 'yaml')
   const mdMode = getMode(config, { name: 'gfm', highlightFormatting: true, gitHubSpice: false })
+  const mathMode = getMode(config, { name: 'stex', inMathMode: true })
 
   const markdownZkn = {
     startState: function () {
@@ -45,7 +49,8 @@ defineMode('markdown-zkn', function (config, parserConfig) {
         inZknLink: false, // Whether or not we're currently within a zkn Link
         hasJustEscaped: false, // Whether the previous iteration had an escape char
         yamlState: _startState(yamlMode),
-        mdState: _startState(mdMode)
+        mdState: _startState(mdMode),
+        mathState: _startState(mathMode)
       }
     },
     copyState: function (state) {
@@ -57,7 +62,8 @@ defineMode('markdown-zkn', function (config, parserConfig) {
         hasJustEscaped: state.hasJustEscaped,
         // Make sure to correctly copy the YAML state
         yamlState: _copyState(yamlMode, state.yamlState),
-        mdState: _copyState(mdMode, state.mdState)
+        mdState: _copyState(mdMode, state.mdState),
+        mathState: _copyState(mathMode, state.mathState)
       }
     },
     /**
@@ -94,6 +100,14 @@ defineMode('markdown-zkn', function (config, parserConfig) {
       // that stuff such as zkn-links are not highlighted:
       if (state.mdState.overlay.code || state.mdState.overlay.codeBlock || state.mdState.baseCur === 'comment') {
         return mdMode.token(stream, state.mdState)
+      }
+
+      // Next, it could be that we're currently inside an inline math equation
+      if (state.inEquation === true && stream.match(inlineMathEndRE) === null) {
+        return mathMode.token(stream, state.mathState) + ' fenced-code'
+      } else if (state.inEquation === true) {
+        state.inEquation = false
+        return 'formatting-code-block'
       }
 
       // In everything that follows, escpaing things is allowed and possible.
@@ -142,9 +156,14 @@ defineMode('markdown-zkn', function (config, parserConfig) {
       // hasJustEscaped-state, we can keep most things very simple.
       // None of the following has to explicitly check for backspaces.
 
-      // Now let's check for inline equations
-      if (stream.match(inlineMathRE) !== null) {
-        return 'inline-math'
+      // Now let's check for inline equations. Since the start/end REs are a tad
+      // stupid, we make sure that whatever follows is definitely a valid RE.
+      // Then, we can safely match the beginning chars and give over to the
+      // mathMode.
+      if (stream.match(inlineMathRE, false) !== null) {
+        stream.match(inlineMathStartRE)
+        state.inEquation = true
+        return 'formatting-code-block'
       }
 
       // Implement highlighting
@@ -195,17 +214,19 @@ defineMode('markdown-zkn', function (config, parserConfig) {
       // other plugins such as AutoCorrect don't
       // trigger in YAML mode as these inspect the
       // mode object.
-      return {
-        // 'mode': (state.inFrontmatter) ? yamlMode : markdownZkn,
-        // 'state': (state.inFrontmatter) ? state.yamlState : state
-        'mode': (state.inFrontmatter === true) ? yamlMode : markdownZkn, // mdMode,
-        'state': (state.inFrontmatter === true) ? state.yamlState : state.mdState
+      if (state.inFrontmatter === true) {
+        return { mode: yamlMode, state: state.yamlState }
+      } else if (state.inEquation === true) {
+        return { mode: mathMode, state: state.mathState }
+      } else {
+        return { mode: markdownZkn, state: state.mdState }
       }
     },
     blankLine: function (state) {
       state.inZknLink = false
       state.hasJustEscaped = false
       state.inZknLink = false
+      state.inEquation = false
       // The underlying mode needs
       // to be aware of blank lines
       return mdMode.blankLine(state.mdState)

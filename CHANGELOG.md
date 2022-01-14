@@ -4,6 +4,7 @@
 
 - Display inline math using monospaced font
 - Right-clicking citations doesn't select parts of it anymore
+- Inline-equations are now properly syntax highlighted
 
 ## Under the Hood
 
