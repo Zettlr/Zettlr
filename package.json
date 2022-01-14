@@ -59,7 +59,7 @@
     "command-exists": "^1.2.9",
     "got": "^11.8.3",
     "joplin-turndown-plugin-gfm": "^1.0.12",
-    "katex": "^0.15.1",
+    "katex": "^0.15.2",
     "ky": "^0.28.7",
     "lodash": "^4.17.21",
     "luxon": "^2.3.0",
