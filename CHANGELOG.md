@@ -10,6 +10,7 @@
 
 - Update Pandoc to 2.17
 - Removed the unused PDF settings from the config
+- Convert all MarkdownEditor hooks to TypeScript
 
 # 2.1.2
 

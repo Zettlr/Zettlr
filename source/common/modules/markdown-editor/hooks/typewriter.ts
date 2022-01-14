@@ -12,6 +12,8 @@
  * END HEADER
  */
 
+import CodeMirror from 'codemirror'
+
 /**
  * Saves the last highlighted line
  *
@@ -24,7 +26,7 @@ let lastHighlightLine = -1
  *
  * @param   {CodeMirror.Editor}  cm  The instance
  */
-export default function (cm) {
+export default function typewriterHook (cm: CodeMirror.Editor): void {
   cm.on('change', typewriterHighlight)
   cm.on('change', typewriterScroll)
   cm.on('optionChange', typewriterHighlight)
@@ -39,13 +41,13 @@ export default function (cm) {
  *
  * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
  */
-function typewriterHighlight (cm) {
-  if (cm.getOption('zettlr').typewriterMode === false) {
+function typewriterHighlight (cm: CodeMirror.Editor): void {
+  if ((cm as any).getOption('zettlr').typewriterMode === false) {
     if (lastHighlightLine > -1) {
       // Cleanup after option change
       cm.removeLineClass(lastHighlightLine, 'background', 'typewriter-active-line')
       cm.removeLineClass(lastHighlightLine, 'text', 'typewriter-active-line')
-      const codeElement = cm.getWrapperElement().querySelector('.CodeMirror-code')
+      const codeElement = cm.getWrapperElement().querySelector('.CodeMirror-code') as HTMLDivElement
       codeElement.style.marginTop = ''
       codeElement.style.marginBottom = ''
       lastHighlightLine = -1
@@ -70,11 +72,11 @@ function typewriterHighlight (cm) {
     }
 
     // (Re-)set the margins, if applicable
-    const codeElement = cm.getWrapperElement().querySelector('.CodeMirror-code')
+    const codeElement = cm.getWrapperElement().querySelector('.CodeMirror-code') as HTMLDivElement
     if (codeElement.style.marginTop === '') {
       const margin = window.innerHeight
-      codeElement.style.marginTop = margin + 'px'
-      codeElement.style.marginBottom = margin + 'px'
+      codeElement.style.marginTop = `${margin}px`
+      codeElement.style.marginBottom = `${margin}px`
       cm.refresh()
     }
   }
@@ -87,8 +89,8 @@ function typewriterHighlight (cm) {
  *
  * @param   {CodeMirror.Editor}  cm  The editor instance
  */
-function typewriterScroll (cm) {
-  if (cm.getOption('zettlr').typewriterMode === false) {
+function typewriterScroll (cm: CodeMirror.Editor): void {
+  if ((cm as any).getOption('zettlr').typewriterMode === false) {
     // Just return. The cleanup is being done in the highlight function.
     return
   }

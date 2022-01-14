@@ -11,6 +11,7 @@
  *
  * END HEADER
  */
+import CodeMirror from 'codemirror'
 import { debounce, range } from 'lodash'
 const codeblockClass = 'code-block-line'
 const codeblockClassOpen = 'code-block-first-line'
@@ -26,7 +27,7 @@ const findCodeDebounced = debounce(findCode, 400, { leading: true })
  *
  * @param   {CodeMirror.Editor}  cm  The instance
  */
-export default function (cm) {
+export default function codeblockClassHook (cm: CodeMirror.Editor): void {
   cm.on('keyHandled', handleNewline)
   cm.on('cursorActivity', findCodeDebounced)
   cm.on('optionChange', findCodeDebounced)
@@ -36,10 +37,10 @@ export default function (cm) {
  * When pressing Enter inside a code block, do not debounce but make sure the
  * new line is styled properly immediately
  *
- * @param   {CodeMirror}  cm  The instance
- * @param   {String}  name  The key pressed
+ * @param   {CodeMirror.Editor}  cm  The instance
+ * @param   {string}  name  The key pressed
  */
-function handleNewline (cm, name) {
+function handleNewline (cm: CodeMirror.Editor, name: string): void {
   if (name === 'Enter') {
     findCode(cm)
   }
@@ -53,9 +54,9 @@ function handleNewline (cm, name) {
  *
  * Overriding means maintaining though, and Markdown Mode is quite complex.
  *
- * @param   {CodeMirror}  cm  The instance
+ * @param   {CodeMirror.Editor}  cm  The instance
  */
-function findCode (cm) {
+function findCode (cm: CodeMirror.Editor): void {
   const codeBlockLines = []
   const lineCount = cm.lineCount()
   const codeBlockRE = /^(?:\s{0,3}`{3}|~{3}).*/
@@ -84,7 +85,7 @@ function findCode (cm) {
       // If this is the first line and either already indented code or prepended by an empty line
       if (prevLine >= 0 && (codeBlockLines.includes(prevLine) || blankishRE.test(cm.getLine(prevLine)))) {
         // If this is not preformatted markdown (e.g. a list)
-        if (cm.getLineTokens(lineNum).some(token => String(token.type).includes('formatting-list')) === false) {
+        if (!cm.getLineTokens(lineNum).some(token => String(token.type).includes('formatting-list'))) {
           let probeLine = 1
 
           // Skip ahead to the end of the potential code block
@@ -103,11 +104,13 @@ function findCode (cm) {
     }
 
     // Finally, after skipping all the code, remove leftover classes
-    cm.removeLineClass(lineNum, 'wrap', codeblockClass, codeblockClassOpen, codeblockClassClose)
+    cm.removeLineClass(lineNum, 'wrap', codeblockClass)
+    cm.removeLineClass(lineNum, 'wrap', codeblockClassOpen)
+    cm.removeLineClass(lineNum, 'wrap', codeblockClassClose)
   }
 
   // Apply code classes to code blocks
-  codeBlockLines.forEach(function (lineNum, index, lines) {
+  codeBlockLines.forEach(function (lineNum: number, index: number, lines: number[]) {
     cm.addLineClass(lineNum, 'wrap', codeblockClass)
 
     // if previous line is not code
@@ -117,7 +120,8 @@ function findCode (cm) {
       // If this was caused by backspacing the first line of indented code, we
       // need to explicitly clean up the classes
       if (index >= 0) {
-        cm.removeLineClass(lineNum - 1, 'wrap', codeblockClass, codeblockClassOpen)
+        cm.removeLineClass(lineNum - 1, 'wrap', codeblockClass)
+        cm.removeLineClass(lineNum - 1, 'wrap', codeblockClassOpen)
       }
     } else {
       cm.removeLineClass(lineNum, 'wrap', codeblockClassOpen)
@@ -129,7 +133,8 @@ function findCode (cm) {
       // If this was caused by backspacing the last line of indented code, we
       // need to explicitly clean up the classes
       if (index < lineCount) {
-        cm.removeLineClass(lineNum + 1, 'wrap', codeblockClass, codeblockClassClose)
+        cm.removeLineClass(lineNum + 1, 'wrap', codeblockClass)
+        cm.removeLineClass(lineNum + 1, 'wrap', codeblockClassClose)
       }
     } else {
       cm.removeLineClass(lineNum, 'wrap', codeblockClassClose)
@@ -137,7 +142,8 @@ function findCode (cm) {
 
     // If last line is code, make sure to close the class
     if (lineNum === lineCount - 1) {
-      cm.addLineClass(lineNum, 'wrap', codeblockClass, codeblockClassClose)
+      cm.addLineClass(lineNum, 'wrap', codeblockClass)
+      cm.addLineClass(lineNum, 'wrap', codeblockClassClose)
     }
   })
 }

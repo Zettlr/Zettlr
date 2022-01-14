@@ -14,7 +14,8 @@
  */
 
 import html2md from '@common/util/html-to-md'
-const clipboard = window.clipboard
+import CodeMirror from 'codemirror'
+const clipboard = (window as any).clipboard
 
 /**
  * Parses possible HTML clipboard content to Markdown to enable
@@ -22,10 +23,12 @@ const clipboard = window.clipboard
  *
  * @param   {CodeMirror.Editor}  cm  The instance
  */
-export default function (cm) {
+export default function matchStyleHook (cm: CodeMirror.Editor): void {
   cm.on('beforeChange', (cm, changeObj) => {
     // If text is to be pasted, we may need to exchange some text.
-    if (changeObj.origin !== 'paste') return
+    if (changeObj.origin !== 'paste' || changeObj.update === undefined) {
+      return
+    }
 
     const html = clipboard.readHTML()
     let plain = clipboard.readText()
@@ -47,7 +50,7 @@ export default function (cm) {
       plain = html2md(html)
       // NOTE that we have to split the resulting string as the update method
       // expects an Array of lines, not a complete string with line breaks.
-      return changeObj.update(changeObj.from, changeObj.to, plain.split('\n'))
+      changeObj.update(changeObj.from, changeObj.to, plain.split('\n'))
     }
   })
 }

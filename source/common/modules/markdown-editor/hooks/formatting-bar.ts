@@ -14,14 +14,15 @@
  * END HEADER
  */
 
-import tippy from 'tippy.js'
+import CodeMirror from 'codemirror'
+import tippy, { Instance } from 'tippy.js'
 
 /**
  * The formatting bar is shown while there is a selection
  *
  * @var {Instance|undefined}
  */
-let formattingBar
+let formattingBar: Instance|undefined
 
 /**
  * Contains the HTML contents of the formatting bar that will be shown.
@@ -35,7 +36,7 @@ const FORMATTING_BAR_HTML = `<div class="editor-formatting-bar">
 <div class="button" data-command="markdownComment"><clr-icon shape="code"></clr-icon></div>
 </div>`
 
-export default function (cm) {
+export default function formattingBarHook (cm: CodeMirror.Editor): void {
   cm.on('cursorActivity', (cm) => {
     // Whenever we have a single selection, display a nice tooltip with some
     // fundamental formatting options
@@ -60,7 +61,7 @@ export default function (cm) {
 /**
  * Hides the formatting bar if it is currently being shown.
  */
-function maybeHideFormattingBar () {
+function maybeHideFormattingBar (): void {
   if (formattingBar !== undefined) {
     formattingBar.destroy()
     formattingBar = undefined
@@ -70,9 +71,9 @@ function maybeHideFormattingBar () {
 /**
  * Shows the formatting bar attached to the current selection element.
  *
- * @param   {CodeMirror}  cm  The CodeMirror instance
+ * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
  */
-function showFormattingBar (cm) {
+function showFormattingBar (cm: CodeMirror.Editor): void {
   const selection = cm.getWrapperElement().querySelector('.CodeMirror-selected')
 
   maybeHideFormattingBar()
@@ -81,7 +82,7 @@ function showFormattingBar (cm) {
     return // Selection is gone or already has a tippy shown
   }
 
-  if (cm.isReadOnly() === true) {
+  if (cm.isReadOnly()) {
     return // The instance is readonly, so we can't edit anything either way.
   }
 
@@ -112,13 +113,15 @@ function showFormattingBar (cm) {
       return // There should always be a target but you never know.
     }
 
-    if (event.target.tagName === 'CLR-ICON') {
-      cm.execCommand(event.target.parentElement.dataset.command)
-      formattingBar.destroy()
+    const target = event.target as HTMLElement
+
+    if (target.tagName === 'CLR-ICON') {
+      cm.execCommand(target.parentElement?.dataset.command as string)
+      ;(formattingBar as Instance).destroy()
       formattingBar = undefined
-    } else if (event.target.classList.contains('button') === true) {
-      cm.execCommand(event.target.dataset.command)
-      formattingBar.destroy()
+    } else if (target.classList.contains('button')) {
+      cm.execCommand(target.dataset.command as string)
+      ;(formattingBar as Instance).destroy()
       formattingBar = undefined
     } // Else: Clicked slightly outside
   }

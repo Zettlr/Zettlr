@@ -12,16 +12,18 @@
  * END HEADER
  */
 
+import CodeMirror from 'codemirror'
+
 /**
  * Hooks onto the cursorActivity event to apply heading classes
  *
  * @param   {CodeMirror.Editor}  cm  The instance
  */
-export default function (cm) {
+export default function headingClassHook (cm: CodeMirror.Editor): void {
   // While taskHandle is undefined, there's no task scheduled. Else, there is.
-  let taskHandle
+  let taskHandle: number|undefined
 
-  const callback = function (cm) {
+  const callback = function (cm: CodeMirror.Editor): void {
     if (taskHandle !== undefined) {
       return // There's already a task scheduled
     }
@@ -37,7 +39,7 @@ export default function (cm) {
   cm.on('optionChange', callback)
 }
 
-function applyHeadingClasses (cm) {
+function applyHeadingClasses (cm: CodeMirror.Editor): void {
   // We'll only render the viewport
   const viewport = cm.getViewport()
   const discardClasses = []
@@ -57,7 +59,7 @@ function applyHeadingClasses (cm) {
 
     // Then re-add the header classes as appropriate.
     let match = /^(#{1,6}) /.exec(line)
-    if (match) {
+    if (match !== null) {
       maybeUpdateHeaderClass(cm, i, match[1].length)
       continue // Finished
     } else if (headerClass > 0) {
@@ -76,7 +78,7 @@ function applyHeadingClasses (cm) {
     match = /^\s{0,3}[=-]+\s*$/.exec(line)
     if (match !== null && i > 0) {
       // We got a match, so first determine its level
-      const level = (match[0].indexOf('=') > -1) ? 1 : 2
+      const level = (match[0].includes('=')) ? 1 : 2
       // Now determine the span of the heading, because
       // the heading can span an arbitrary number (but
       // not contain a blank line, obviously)
@@ -140,8 +142,8 @@ function applyHeadingClasses (cm) {
  *
  * @return  {number}            The header class, between 1 and 6, or 0 if no class was found.
  */
-function retrieveHeaderClass (cm, line) {
-  const lineInfo = cm.doc.lineInfo(line)
+function retrieveHeaderClass (cm: CodeMirror.Editor, line: number): number {
+  const lineInfo = cm.lineInfo(line)
   const match = /size-header-([1-6])/.exec(lineInfo.wrapClass)
 
   if (match !== null) {
@@ -158,12 +160,12 @@ function retrieveHeaderClass (cm, line) {
  * @param   {number}      line         The affected line
  * @param   {number}      classNumber  The class to remove
  */
-function removeHeaderClass (cm, line, classNumber) {
+function removeHeaderClass (cm: CodeMirror.Editor, line: number, classNumber: number): void {
   if (classNumber === 0) {
     return
   }
 
-  cm.doc.removeLineClass(line, 'wrap', `size-header-${classNumber}`)
+  cm.removeLineClass(line, 'wrap', `size-header-${classNumber}`)
 }
 
 /**
@@ -173,14 +175,14 @@ function removeHeaderClass (cm, line, classNumber) {
  * @param   {number}      line      The line
  * @param   {number}      newClass  The new class 1-6 to be applied
  */
-function maybeUpdateHeaderClass (cm, line, newClass) {
-  if (line < 0 || line > cm.doc.lineCount()) {
+function maybeUpdateHeaderClass (cm: CodeMirror.Editor, line: number, newClass: number): void {
+  if (line < 0 || line > cm.lineCount()) {
     return
   }
 
   const headerClass = retrieveHeaderClass(cm, line)
   if (headerClass !== newClass) {
     removeHeaderClass(cm, line, headerClass)
-    cm.doc.addLineClass(line, 'wrap', `size-header-${newClass}`)
+    cm.addLineClass(line, 'wrap', `size-header-${newClass}`)
   }
 }

@@ -13,11 +13,16 @@
  */
 
 import { getImageFileRE } from '@common/regular-expressions'
-const path = window.path
+import CodeMirror from 'codemirror'
+const path = (window as any).path
 const IMAGE_REGEXP = getImageFileRE()
 
-export default function (cm) {
+export default function dropFilesHook (cm: CodeMirror.Editor): void {
   cm.on('drop', (cm, event) => {
+    if (event.dataTransfer === null) {
+      return
+    }
+
     const zettlrFile = event.dataTransfer.getData('text/x-zettlr-file')
     const otherFile = event.dataTransfer.getData('text/x-zettlr-other-file')
     const hasFiles = event.dataTransfer.files.length > 0
@@ -28,7 +33,7 @@ export default function (cm) {
 
     // We have something to insert, so in any case prevent CodeMirror from
     // processing the event
-    event.codemirrorIgnore = true
+    (event as any).codemirrorIgnore = true
     event.stopPropagation()
     event.preventDefault()
 
@@ -36,7 +41,7 @@ export default function (cm) {
     const cursor = cm.coordsChar({ top: event.clientY, left: event.clientX })
     cm.setSelection(cursor)
 
-    const basePath = cm.getOption('zettlr').markdownImageBasePath
+    const basePath = (cm as any).getOption('zettlr').markdownImageBasePath
 
     const filePaths = []
     if (otherFile !== '') {
@@ -51,13 +56,13 @@ export default function (cm) {
       // If the user has dropped a file from the manager onto the editor,
       // this strongly suggest they want to link it using their preferred method.
       const data = JSON.parse(zettlrFile)
-      let textToInsert = cm.getOption('zettlr').zettelkasten.linkStart
-      textToInsert += data.id ? data.id : path.basename(data.path, path.extname(data.path))
-      textToInsert += cm.getOption('zettlr').zettelkasten.linkEnd
+      let textToInsert: string = (cm as any).getOption('zettlr').zettelkasten.linkStart
+      textToInsert += data.id !== undefined ? String(data.id) : String(path.basename(data.path, path.extname(data.path)))
+      textToInsert += (cm as any).getOption('zettlr').zettelkasten.linkEnd as string
       const linkPref = global.config.get('zkn.linkWithFilename')
-      if (linkPref === 'always' || (linkPref === 'withID' && data.id)) {
+      if (linkPref === 'always' || (linkPref === 'withID' && data.id !== undefined)) {
         // We need to add the text after the link.
-        textToInsert += ' ' + path.basename(data.path)
+        textToInsert += ' ' + String(path.basename(data.path))
       }
 
       cm.replaceSelection(textToInsert)
@@ -67,12 +72,12 @@ export default function (cm) {
       const filesToAdd = []
 
       for (const file of filePaths) {
-        const relativePath = path.relative(basePath, file)
+        const relativePath: string = path.relative(basePath, file)
 
         if (IMAGE_REGEXP.test(file)) {
-          filesToAdd.push(`![${path.basename(file)}](${relativePath})`)
+          filesToAdd.push(`![${path.basename(file) as string}](${relativePath})`)
         } else {
-          filesToAdd.push(`[${path.basename(file)}](${relativePath})`)
+          filesToAdd.push(`[${path.basename(file) as string}](${relativePath})`)
         }
       }
 

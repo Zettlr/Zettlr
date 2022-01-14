@@ -1,7 +1,9 @@
 import tippy from 'tippy.js'
 import { trans } from '@common/i18n-renderer'
 import formatDate from '@common/util/format-date'
-const ipcRenderer = window.ipc
+import { IpcRenderer } from 'electron'
+import CodeMirror from 'codemirror'
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
 /**
  * A hook for displaying link tooltips which display metadata
@@ -10,9 +12,9 @@ const ipcRenderer = window.ipc
  * @param   {CodeMirror.Editor}  elem  The instance to attach to
  */
 
-export default function (elem) {
+export default function noteTooltipsHook (elem: CodeMirror.Editor): void {
   elem.getWrapperElement().addEventListener('mousemove', (event) => {
-    const a = event.target
+    const a = event.target as HTMLElement
 
     // Only for note links
     if (!a.classList.contains('cm-zkn-link')) {
@@ -47,7 +49,7 @@ export default function (elem) {
 
           // Also, destroy the tooltip as soon as the button is clicked to
           // prevent visual artifacts
-          wrapper.querySelector('#open-note').addEventListener('click', (event) => {
+          wrapper.querySelector('#open-note')?.addEventListener('click', (event) => {
             tooltip.destroy()
           })
         } else {
@@ -66,7 +68,7 @@ export default function (elem) {
  *
  * @return  {Element}                 The wrapper element
  */
-function getPreviewElement (metadata, linkContents) {
+function getPreviewElement (metadata: [string, string, number, number], linkContents: string): HTMLDivElement {
   const wrapper = document.createElement('div')
   wrapper.classList.add('editor-note-preview')
 
@@ -87,7 +89,7 @@ function getPreviewElement (metadata, linkContents) {
   const actions = document.createElement('div')
   actions.classList.add('actions')
 
-  const openFunc = function () {
+  const openFunc = function (): void {
     ipcRenderer.invoke('application', {
       command: 'force-open',
       payload: linkContents

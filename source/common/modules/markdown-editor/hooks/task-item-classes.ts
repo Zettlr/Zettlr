@@ -12,16 +12,18 @@
  * END HEADER
  */
 
+import CodeMirror from 'codemirror'
+
 /**
  * Hooks onto the cursorActivity event to apply the classes
  *
  * @param   {CodeMirror.Editor}  cm  The instance
  */
-export default function (cm) {
+export default function taskItemClassHook (cm: CodeMirror.Editor): void {
   // While taskHandle is undefined, there's no task scheduled. Else, there is.
-  let taskHandle
+  let taskHandle: number|undefined
 
-  const callback = function (cm) {
+  const callback = function (cm: CodeMirror.Editor): void {
     if (taskHandle !== undefined) {
       return // There's already a task scheduled
     }
@@ -37,7 +39,7 @@ export default function (cm) {
   cm.on('optionChange', callback)
 }
 
-function applyTaskItemClasses (cm) {
+function applyTaskItemClasses (cm: CodeMirror.Editor): void {
   let needsRefresh = false // Will be set to true if at least one line has been altered
   const itemClass = 'task-item-done'
 

@@ -18,6 +18,7 @@
 import tippy from 'tippy.js'
 import md2html from '@common/util/md-to-html'
 import { trans } from '@common/i18n-renderer'
+import CodeMirror from 'codemirror'
 
 /**
  * No footnote tooltips while we're editing a footnote
@@ -26,15 +27,19 @@ import { trans } from '@common/i18n-renderer'
  */
 let isEditingFootnote = false
 
-export default function (cm) {
+export default function footnotesHook (cm: CodeMirror.Editor): void {
   // Hook into click events
   cm.getWrapperElement().addEventListener('click', (event) => {
     // Open links on both Cmd and Ctrl clicks - otherwise stop handling event
-    if (process.platform === 'darwin' && event.metaKey === false) {
+    if (process.platform === 'darwin' && !event.metaKey) {
       return true
     }
 
-    if (process.platform !== 'darwin' && event.ctrlKey === false) {
+    if (process.platform !== 'darwin' && !event.ctrlKey) {
+      return true
+    }
+
+    if (event.target === null) {
       return true
     }
 
@@ -51,21 +56,21 @@ export default function (cm) {
     }
 
     const tokenList = tokenInfo.type.split(' ')
-    const startsWithCirc = Boolean(event.target.textContent.startsWith('^'))
+    const startsWithCirc = (event.target as HTMLSpanElement).textContent?.startsWith('^') ?? false
 
     // A link (reference) that starts with a cironflex is a footnote
     if (Boolean(tokenList.includes('link')) && startsWithCirc) {
       event.preventDefault()
-      event.codemirrorIgnore = true
-      editFootnote(cm, event.target)
+      ;(event as any).codemirrorIgnore = true
+      editFootnote(cm, event.target as HTMLElement)
     }
   })
 
   // Hook into mousemove events to show a footnote tooltip
   cm.getWrapperElement().addEventListener('mousemove', (e) => {
-    const target = e.target
-    const isLink = Boolean(target.classList.contains('cm-link'))
-    const startsWithCircumflex = target.textContent.indexOf('^') === 0
+    const target = e.target as HTMLElement
+    const isLink = target.classList.contains('cm-link')
+    const startsWithCircumflex = target.textContent?.indexOf('^') === 0
     if (isLink && startsWithCircumflex) {
       showFootnoteTooltip(cm, target)
     }
@@ -78,7 +83,7 @@ export default function (cm) {
  * @param   {CodeMirror} cm       The CodeMirror instance
  * @param   {Element}    element  The DOM element to center on
  */
-function showFootnoteTooltip (cm, element) {
+function showFootnoteTooltip (cm: CodeMirror.Editor, element: HTMLElement): void {
   // First let us see if there is already a tippy-instance bound to this.
   // If so, we can abort now.
   if (element.hasOwnProperty('_tippy')) {
@@ -91,12 +96,12 @@ function showFootnoteTooltip (cm, element) {
 
   // Because we highlight the formatting as well, the element's text will
   // only contain ^<id> without the brackets
-  const ref = element.textContent.substr(1)
+  const ref = element.textContent?.substring(1) ?? ''
   const fnref = getFootnoteTextForRef(cm, ref)
 
   tippy(element, {
     // Display the text as HTML
-    content: (fnref !== undefined && fnref.trim() !== '') ? md2html(fnref, true) : md2html('_' + trans('gui.no_reference_message') + '_'),
+    content: (fnref !== undefined && fnref.trim() !== '') ? md2html(fnref) : md2html('_' + trans('gui.no_reference_message') + '_'),
     allowHTML: true,
     onHidden (instance) {
       instance.destroy() // Destroy the tippy instance.
@@ -113,8 +118,8 @@ function showFootnoteTooltip (cm, element) {
  * @param   {CodeMirror} cm       The CodeMirror instance
  * @param   {Element}    element  The target element
  */
-function editFootnote (cm, element) {
-  const ref = element.textContent.substr(1)
+function editFootnote (cm: CodeMirror.Editor, element: HTMLElement): void {
+  const ref = element.textContent?.substring(1) ?? ''
   const fnText = getFootnoteTextForRef(cm, ref)
 
   if (fnText === undefined) {
@@ -164,7 +169,7 @@ function editFootnote (cm, element) {
  *
  * @return  {undefined|string}       Either undefined or the text.
  */
-function getFootnoteTextForRef (cm, ref) {
+function getFootnoteTextForRef (cm: CodeMirror.Editor, ref: string): string|undefined {
   const range = getFnTextRange(cm, ref)
   if (range === undefined) {
     return undefined
@@ -195,7 +200,7 @@ function getFootnoteTextForRef (cm, ref) {
  * @param   {string}      ref       The reference to set the text for
  * @param   {string}      newValue  The text to apply.
  */
-function setFootnoteTextForRef (cm, ref, newValue) {
+function setFootnoteTextForRef (cm: CodeMirror.Editor, ref: string, newValue: string): void {
   const range = getFnTextRange(cm, ref)
   if (range === undefined) {
     return console.warn(`Could not set footnote text for reference ${ref}: No matching text for the reference found.`)
@@ -226,13 +231,10 @@ function setFootnoteTextForRef (cm, ref, newValue) {
  *
  * @return  {undefined|{ from: { line: number, ch: number }, to: { line: number, ch: number } }}  Either undefined or the range
  */
-function getFnTextRange (cm, ref) {
+function getFnTextRange (cm: CodeMirror.Editor, ref: string): CodeMirror.MarkerRange|undefined {
   const lines = String(cm.getValue()).split(/\r\n|\n\r|\n/)
 
-  const from = {
-    line: 0,
-    ch: 0
-  }
+  const from = { line: 0, ch: 0 }
 
   const to = {
     line: lines.length - 1,

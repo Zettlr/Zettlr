@@ -13,11 +13,12 @@
  * END HEADER
  */
 
+import CodeMirror from 'codemirror'
 import tippy, { followCursor } from 'tippy.js'
 // const tippy = require('tippy.js').default
 import openMarkdownLink from '../open-markdown-link'
 
-let timeout
+let timeout: ReturnType<typeof setTimeout>|undefined
 
 /**
  * A hook for displaying link tooltips which can be used to visually
@@ -25,17 +26,17 @@ let timeout
  *
  * @param   {CodeMirror.Editor}  cm  The instance to attach to
  */
-export default function linkTooltipsHook (cm) {
+export default function linkTooltipsHook (cm: CodeMirror.Editor): void {
   cm.getWrapperElement().addEventListener('mousemove', (event) => {
     if (timeout !== undefined) {
       clearTimeout(timeout)
       timeout = undefined
     }
 
-    const a = event.target
+    const a = event.target as HTMLAnchorElement
 
     // Only for links with cma-class
-    if (a.tagName !== 'A' || a.classList.contains('cma') === false) {
+    if (a.tagName !== 'A' || !a.classList.contains('cma')) {
       return
     }
 
@@ -47,6 +48,10 @@ export default function linkTooltipsHook (cm) {
     // Retrieve the link target
     const linkTarget = a.getAttribute('title')
 
+    if (linkTarget === null) {
+      return
+    }
+
     // Immediately show a tooltip with the link contents
     timeout = setTimeout(() => {
       showTippy(a, linkTarget, cm)
@@ -55,11 +60,15 @@ export default function linkTooltipsHook (cm) {
   })
 }
 
-function showTippy (element, target, cm) {
+function showTippy (element: HTMLAnchorElement, target: string, cm: CodeMirror.Editor): void {
   // Find the containing CodeMirror DOM element. We can't unfortunately append
   // it to the element nor the body
   const parent = element.closest('.CodeMirror')
-  tippy(element, {
+  if (parent === null) {
+    return
+  }
+
+  tippy(element as any, {
     content: `<clr-icon shape="pop-out"></clr-icon> <a href="#" id="editor-cm-tooltip-anchor">${target}</a>`,
     allowHTML: true, // Obviously
     interactive: true, // Allow clicking the link
@@ -75,7 +84,7 @@ function showTippy (element, target, cm) {
       // Hook the event listener
       document
         .getElementById('editor-cm-tooltip-anchor')
-        .addEventListener('click', (e) => {
+        ?.addEventListener('click', (e) => {
           openMarkdownLink(target, cm)
         })
     },

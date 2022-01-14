@@ -13,18 +13,18 @@
  * END HEADER
  */
 
+import CodeMirror from 'codemirror'
+
 /**
  * Fires the renderers based on the zettlr.render option values
  *
  * @param   {CodeMirror.Editor}  cm  The calling instance
  */
-export default function (cm) {
-  // DEBUG TESTING of requestIdleCallbacks
-
+export default function renderElementsHook (cm: CodeMirror.Editor): void {
   // While taskHandle is undefined, there's no task scheduled. Else, there is.
-  let taskHandle
+  let taskHandle: number|undefined
 
-  const callback = function (cm) {
+  const callback = function (cm: CodeMirror.Editor): void {
     if (taskHandle !== undefined) {
       return // Already a task registered
     }
@@ -40,8 +40,8 @@ export default function (cm) {
   cm.on('optionChange', callback)
 }
 
-function renderElements (cm) {
-  const render = cm.getOption('zettlr').render
+function renderElements (cm: CodeMirror.Editor): void {
+  const render = (cm as any).getOption('zettlr').render
   cm.execCommand('markdownRenderMermaid')
   if (render.tables === true) cm.execCommand('markdownRenderTables')
   if (render.iframes === true) cm.execCommand('markdownRenderIframes')

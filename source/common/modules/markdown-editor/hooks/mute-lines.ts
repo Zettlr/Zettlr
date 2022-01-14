@@ -14,6 +14,8 @@
  * END HEADER
  */
 
+import CodeMirror from 'codemirror'
+
 /**
  * Saves the last highlighted line
  *
@@ -26,7 +28,7 @@ const highlights = new Set()
  *
  * @param   {CodeMirror.Editor}  cm  The instance
  */
-export default function (cm) {
+export default function muteLinesHook (cm: CodeMirror.Editor): void {
   cm.on('cursorActivity', muteLines)
   cm.on('optionChange', muteLines)
 }
@@ -36,8 +38,8 @@ export default function (cm) {
  *
  * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
  */
-function muteLines (cm) {
-  if (!cm.getOption('zettlr').muteLines || !cm.getOption('fullScreen')) {
+function muteLines (cm: CodeMirror.Editor): void {
+  if ((cm as any).getOption('zettlr').muteLines === false || (cm as any).getOption('fullScreen') === false) {
     if (highlights.size > 0) {
       // Clean up after the option has been disabled
       for (let i = 0; i < cm.lineCount(); i++) {
