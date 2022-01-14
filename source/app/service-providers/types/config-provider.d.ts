@@ -79,6 +79,7 @@ interface ConfigOptions {
     linkWithFilename: 'always'|'never'|'withID'
     autoCreateLinkedFiles: boolean
     autoSearch: boolean
+    customDirectory: string
   }
   editor: {
     autocompleteAcceptSpace: boolean

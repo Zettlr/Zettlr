@@ -69,13 +69,18 @@ export default function (): any {
       [
         {
           type: 'checkbox',
+          label: trans('dialog.preferences.zkn.auto_search'),
+          model: 'zkn.autoSearch'
+        },
+        {
+          type: 'checkbox',
           label: trans('dialog.preferences.zkn.auto_create_file'),
           model: 'zkn.autoCreateLinkedFiles'
         },
         {
-          type: 'checkbox',
-          label: trans('dialog.preferences.zkn.auto_search'),
-          model: 'zkn.autoSearch'
+          type: 'directory',
+          label: trans('dialog.preferences.zkn.custom_directory'),
+          model: 'zkn.customDirectory'
         }
       ]
     ]

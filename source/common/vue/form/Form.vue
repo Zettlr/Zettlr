@@ -52,7 +52,18 @@
           v-bind:label="field.label"
           v-bind:reset="field.reset"
           v-bind:name="field.model"
+          v-bind:directory="false"
           v-bind:filter="field.filter"
+          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
+        ></FileInput>
+        <FileInput
+          v-if="field.type === 'directory'"
+          v-bind:key="f_idx"
+          v-bind:model-value="getModelValue(field.model)"
+          v-bind:label="field.label"
+          v-bind:reset="field.reset"
+          v-bind:name="field.model"
+          v-bind:directory="true"
           v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
         ></FileInput>
         <CheckboxInput

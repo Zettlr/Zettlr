@@ -102,7 +102,8 @@ export default function getConfigTemplate (): ConfigOptions {
       linkWithFilename: 'always', // can be always|never|withID
       // If true, create files that are not found, if forceOpen is called
       autoCreateLinkedFiles: false,
-      autoSearch: true // Automatically start a search upon following a link?
+      autoSearch: true, // Automatically start a search upon following a link?
+      customDirectory: '' // If present, saves auto-created files here
     },
     // Editor related stuff
     editor: {

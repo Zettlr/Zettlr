@@ -55,7 +55,6 @@ export default class FileNew extends ZettlrCommand {
     let dir = this._app.getFileSystem().openDirectory
 
     if (arg?.path !== undefined) {
-      console.log('Path given: Selecting the directory:', arg.path)
       dir = this._app.getFileSystem().findDir(arg.path)
     }
 

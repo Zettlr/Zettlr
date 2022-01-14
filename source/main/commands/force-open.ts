@@ -35,7 +35,8 @@ export default class ForceOpen extends ZettlrCommand {
     // Determine if the file should be created, if it can't be found. For this
     // we need both the respective preferences setting and an auto-search
     // command.
-    const autoCreate = Boolean(global.config.get('zkn.autoCreateLinkedFiles'))
+    const autoCreate: boolean = global.config.get('zkn.autoCreateLinkedFiles')
+    const customDir: string = global.config.get('zkn.customDirectory')
 
     const idRE = getIDRE(true)
     let file = null
@@ -67,9 +68,11 @@ export default class ForceOpen extends ZettlrCommand {
     // Now we have a file (if not, create a new one if the user wishes so)
     if (file != null) {
       await this._app.getDocumentManager().openFile(file.path)
-    } else if (autoCreate) {
+    } else if (autoCreate && customDir !== '') {
       // Call the file-new command on the application, which'll do all
       // necessary steps for us.
+      await this._app.runCommand('file-new', { name: arg, path: customDir })
+    } else if (autoCreate && customDir === '') {
       await this._app.runCommand('file-new', { name: arg })
     }
   }
