@@ -2,7 +2,7 @@
 
 ## GUI and Functionality
 
-(nothing here yet)
+- Display inline math using monospaced font
 
 ## Under the Hood
 
