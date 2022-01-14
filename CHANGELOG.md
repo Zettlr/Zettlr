@@ -1,3 +1,13 @@
+# 2.1.3
+
+## GUI and Functionality
+
+(nothing here yet)
+
+## Under the Hood
+
+- Update Pandoc to 2.17
+
 # 2.1.2
 
 ## GUI and Functionality
