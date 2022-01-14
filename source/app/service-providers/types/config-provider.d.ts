@@ -70,21 +70,6 @@ interface ConfigOptions {
     useBundledPandoc: boolean
     singleFileLastExporter: string
   }
-  pdf: {
-    keywords: string
-    papertype: string
-    pagenumbering: string
-    tmargin: number
-    rmargin: number
-    bmargin: number
-    lmargin: number
-    margin_unit: string
-    lineheight: string
-    mainfont: string
-    sansfont: string
-    fontsize: number
-    textpl: string
-  }
   zkn: {
     idRE: string
     idGen: string

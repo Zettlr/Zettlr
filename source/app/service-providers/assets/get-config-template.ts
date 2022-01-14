@@ -92,22 +92,6 @@ export default function getConfigTemplate (): ConfigOptions {
       useBundledPandoc: true, // Whether to use the bundled Pandoc
       singleFileLastExporter: 'html' // Remembers the last chosen exporter for easy re-exporting
     },
-    // PDF options (for all documents; projects will copy this object over)
-    pdf: {
-      keywords: '', // PDF keywords
-      papertype: 'a4paper', // Paper to use, e.g. A4 or Letter
-      pagenumbering: 'gobble', // By default omit page numbers
-      tmargin: 3, // Margins to paper (top, right, bottom, left)
-      rmargin: 3,
-      bmargin: 3,
-      lmargin: 3,
-      margin_unit: 'cm',
-      lineheight: '1.5', // Default: 150% line height
-      mainfont: 'Times New Roman', // Main font
-      sansfont: 'Arial', // Sans font, used, e.g. for headings
-      fontsize: 12, // Will be translated to pt
-      textpl: '' // Can be used to store a custom TeX template
-    },
     // Zettelkasten stuff (IDs, as well as link matchers)
     zkn: {
       idRE: '(\\d{14})',
