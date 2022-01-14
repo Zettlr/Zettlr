@@ -93,6 +93,12 @@ commands.markdownRenderCitations = function (cm) {
         cm.focus()
       }
 
+      // Prevent the contextmenu handler from selecting anything within the
+      // rendered citation
+      span.oncontextmenu = (e) => {
+        e.preventDefault()
+      }
+
       // Now that everything is done, request the citation and replace the
       // text contents accordingly
 

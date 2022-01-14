@@ -3,6 +3,7 @@
 ## GUI and Functionality
 
 - Display inline math using monospaced font
+- Right-clicking citations doesn't select parts of it anymore
 
 ## Under the Hood
 
