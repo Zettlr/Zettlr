@@ -748,7 +748,6 @@ export default defineComponent({
       if (mdEditor === null) {
         return
       }
-      console.log('refreshing file database!', this.filenameOnly)
 
       const fileDatabase: any = {}
 
