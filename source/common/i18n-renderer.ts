@@ -13,8 +13,9 @@
  * END HEADER
  */
 
+import { IpcRenderer } from 'electron'
 import sanitizeHtml from 'sanitize-html'
-const ipcRenderer = window.ipc
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
 /**
  * This translates a given identifier string into the loaded language
@@ -22,8 +23,8 @@ const ipcRenderer = window.ipc
  * @param  {any} args   Zero or more strings that will replace %s-placeholders in the string
  * @return {String}        The translation with all potential replacements applied.
  */
-export function trans (string, ...args) {
-  if (string.indexOf('.') === -1) {
+export function trans (string: string, ...args: any[]): string {
+  if (!string.includes('.')) {
     // Wtf? But alright, return the string and log an error
     global.log.warning('The translation string was malformed: ' + string + '!')
     return string
@@ -37,8 +38,8 @@ export function trans (string, ...args) {
   }
 
   // Split the string by dots
-  let str = string.split('.')
-  // The function will be called from line 88 as a fallback
+  const str = string.split('.')
+  // The function will be called from line 58 as a fallback
   // if a given string couldn't be found.
   let transString = global.i18n
   let skipFallback = false
@@ -48,7 +49,7 @@ export function trans (string, ...args) {
     args.splice(0, 1) // Remove the first argument as it's only the injected "true"
   }
 
-  for (let obj of str) {
+  for (const obj of str) {
     if (obj in transString) {
       transString = transString[obj]
     } else {
@@ -64,7 +65,7 @@ export function trans (string, ...args) {
     return string
   }
 
-  for (let a of args) {
+  for (const a of args) {
     transString = transString.replace('%s', a) // Always replace one %s with an arg
   }
 
