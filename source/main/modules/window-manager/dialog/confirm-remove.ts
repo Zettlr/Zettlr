@@ -1,5 +1,5 @@
 import { BrowserWindow, dialog, MessageBoxOptions, MessageBoxReturnValue } from 'electron'
-import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '../../fsal/types'
+import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/main/fsal'
 import { trans } from '@common/i18n-main'
 
 /**

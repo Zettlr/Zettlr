@@ -29,18 +29,15 @@ import FSALWatchdog from './fsal-watchdog'
 import FSALCache from './fsal-cache'
 import sort from './util/sort'
 import {
+  WatchdogEvent,
+  AnyDescriptor,
   DirDescriptor,
   MDFileDescriptor,
-  MDFileMeta,
-  AnyDescriptor,
-  MaybeRootMeta,
-  WatchdogEvent,
-  AnyMetaDescriptor,
-  MaybeRootDescriptor,
   CodeFileDescriptor,
-  CodeFileMeta,
-  OtherFileDescriptor
-} from './types'
+  OtherFileDescriptor,
+  MaybeRootDescriptor
+} from '@dts/main/fsal'
+import { MDFileMeta, CodeFileMeta, AnyMetaDescriptor, MaybeRootMeta } from '@dts/common/fsal'
 import { codeFileExtensions, mdFileExtensions } from '@common/get-file-extensions'
 
 // Re-export all interfaces necessary for other parts of the code (Document Manager)
@@ -511,13 +508,13 @@ export default class FSAL extends EventEmitter {
    * Returns a lean directory tree, ready to be stringyfied for IPC calls.
    */
   public getTreeMeta (): MaybeRootMeta[] {
-    let ret = []
+    let ret: MaybeRootMeta[] = []
     for (let root of this._state.filetree) {
-      ret.push(this.getMetadataFor(root))
+      ret.push(this.getMetadataFor(root) as MaybeRootMeta)
     }
 
     // We know there are no undefines in here, so give to correct type
-    return ret as MaybeRootMeta[]
+    return ret
   }
 
   /**
@@ -527,12 +524,16 @@ export default class FSAL extends EventEmitter {
    *
    * @return  {AnyMetaDescriptor}          The metadata for that descriptor
    */
-  public getMetadataFor (descriptor: AnyDescriptor): AnyMetaDescriptor|undefined {
-    if (descriptor.type === 'directory') return FSALDir.metadata(descriptor)
-    if (descriptor.type === 'file') return FSALFile.metadata(descriptor)
-    if (descriptor.type === 'code') return FSALCodeFile.metadata(descriptor)
-    if (descriptor.type === 'other') return FSALAttachment.metadata(descriptor)
-    return undefined
+  public getMetadataFor (descriptor: AnyDescriptor): AnyMetaDescriptor {
+    if (descriptor.type === 'directory') {
+      return FSALDir.metadata(descriptor)
+    } else if (descriptor.type === 'file') {
+      return FSALFile.metadata(descriptor)
+    } else if (descriptor.type === 'code') {
+      return FSALCodeFile.metadata(descriptor)
+    } else {
+      return FSALAttachment.metadata(descriptor)
+    }
   }
 
   /**

@@ -11,7 +11,7 @@
  * END HEADER
  */
 
-import { AnyDescriptor } from '../types'
+import { AnyDescriptor } from '@dts/main/fsal'
 
 /**
  * Helper function to sort files by modification or creation time

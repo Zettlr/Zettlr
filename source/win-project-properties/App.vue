@@ -94,7 +94,7 @@ import FileControl from '@common/vue/form/elements/File.vue'
 import TextControl from '@common/vue/form/elements/Text.vue'
 import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
-import { ProjectSettings } from 'source/main/modules/fsal/types'
+import { ProjectSettings } from '@dts/common/fsal'
 
 const ipcRenderer: IpcRenderer = (window as any).ipc
 

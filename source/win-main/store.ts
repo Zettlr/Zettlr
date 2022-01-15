@@ -18,7 +18,7 @@ import { StoreOptions, createStore, Store } from 'vuex'
 import sanitizeHtml from 'sanitize-html'
 import md2html from '@common/util/md-to-html'
 import sort from '../main/modules/fsal/util/sort'
-import { DirMeta } from '../main/modules/fsal/types'
+import { DirMeta } from '@dts/common/fsal'
 
 const path = (window as any).path
 const ipcRenderer = (window as any).ipc as Electron.IpcRenderer

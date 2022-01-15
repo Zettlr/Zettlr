@@ -17,7 +17,7 @@
  * END HEADER
  */
 
-import { MDFileDescriptor, CodeFileDescriptor } from '../types'
+import { MDFileDescriptor, CodeFileDescriptor } from '@dts/main/fsal'
 
 // TODO: Need to collapse search results. Right now, individual matches on the
 // same line are reported as separate matches, but in order to both save space,

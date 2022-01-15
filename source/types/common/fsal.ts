@@ -1,0 +1,85 @@
+// FSAL types available in both main process and renderer process
+
+export interface ProjectSettings {
+  title: string
+  formats: string[]
+  filters: string[]
+  cslStyle: string
+  templates: {
+    tex: string
+    html: string
+  }
+}
+
+/**
+ * An interface containing meta information all
+ * descriptors should provide.
+ */
+export interface FSMetaInfo {
+  name: string // path.basename(absolutePath)
+  dir: string // path.dirname(absolutePath)
+  path: string // absolutePath
+  hash: number // Hashed absolute path
+  type: 'file' | 'directory' | 'code' | 'other'
+  size: number
+  modtime: number
+  creationtime: number
+}
+
+/**
+ * Represents a non-circular directory
+ */
+export interface DirMeta extends FSMetaInfo {
+  parent: number|null
+  attachments: OtherFileMeta[]
+  children: Array<DirMeta|MDFileMeta|CodeFileMeta>
+  project: any
+  type: 'directory'
+  sorting: string
+  icon: string
+  dirNotFoundFlag?: boolean // If the flag is set & true this directory has not been found
+}
+
+/**
+ * Represents a non-circular file
+ */
+export interface MDFileMeta extends FSMetaInfo {
+  parent: number|null
+  ext: string
+  id: string
+  type: 'file'
+  tags: string[]
+  links: string[]
+  wordCount: number
+  charCount: number
+  target: any // TODO
+  firstHeading: string|null
+  frontmatter: any|null
+  linefeed: string
+  modified: boolean
+  content: string
+}
+
+/**
+ * Represents a non-circular code file (.tex or .yml)
+ */
+export interface CodeFileMeta extends FSMetaInfo {
+  parent: number|null
+  type: 'code'
+  linefeed: string
+  modified: boolean
+  ext: string
+  content: string
+}
+
+/**
+ * Represents a non-circular attachment
+ */
+export interface OtherFileMeta extends FSMetaInfo {
+  parent: number
+  type: 'other'
+  ext: string
+}
+
+export type AnyMetaDescriptor = DirMeta | MDFileMeta | CodeFileMeta | OtherFileMeta
+export type MaybeRootMeta = DirMeta | MDFileMeta

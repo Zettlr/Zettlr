@@ -15,7 +15,7 @@ import asciiSorting from './sort-ascii'
 import naturalSorting from './sort-natural'
 import dateSorting from './sort-date'
 
-import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '../types'
+import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/main/fsal'
 
 /**
 * This function can sort an array of ZettlrFile and ZettlrDir objects

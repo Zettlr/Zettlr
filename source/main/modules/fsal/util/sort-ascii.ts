@@ -15,7 +15,7 @@ import {
   CodeFileDescriptor,
   DirDescriptor,
   MDFileDescriptor
-} from '../types'
+} from '@dts/main/fsal'
 
 type FileNameDisplay = 'filename'|'title'|'heading'|'title+heading'
 

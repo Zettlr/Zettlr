@@ -17,7 +17,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import windowRegister from '@common/modules/window-register'
-import { CodeFileMeta, MDFileMeta } from '../main/modules/fsal/types'
+import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
 
 const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 

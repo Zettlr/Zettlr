@@ -1,4 +1,4 @@
-import { AnyDescriptor } from '../types'
+import { AnyDescriptor } from '@dts/main/fsal'
 
 // This function performs a simple lookup. We know the tree is a file tree, which
 // means that the descriptor we're dealing with MUST be a starting portion of
