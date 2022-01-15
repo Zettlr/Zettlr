@@ -243,8 +243,10 @@ export default defineComponent({
       if (event.button === 1) {
         // It was a middle-click (auxiliary button), so we should instead close
         // the file.
-        event.preventDefault() // Otherwise, on Windows we'd have a middle-click-scroll
-        event.stopPropagation() // In response to #2663
+        if (process.platform !== 'linux') {
+          // Otherwise, on Windows we'd have a middle-click-scroll
+          event.preventDefault()
+        }
         this.handleClickClose(event, file)
       } else if (event.button === 0) {
         // It was a left-click. (We must check because otherwise we would also
