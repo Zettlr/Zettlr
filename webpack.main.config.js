@@ -43,7 +43,8 @@ module.exports = {
         path.resolve(__dirname, 'node_modules/lazystream/node_modules/readable-stream/')
       ],
       '@common': [path.resolve(__dirname, 'source/common')],
-      '@providers': [path.resolve(__dirname, 'source/app/service-providers')]
+      '@providers': [path.resolve(__dirname, 'source/app/service-providers')],
+      '@dts': [path.resolve(__dirname, 'source/types')]
     }
   },
   externals: {

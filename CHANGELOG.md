@@ -12,6 +12,8 @@
 - Removed the unused PDF settings from the config
 - Convert all MarkdownEditor hooks and plugins to TypeScript
 - Tests now simply transpile without type checking
+- Move service provider types to the new types directory
+- Provide `@dts` as an alias to retrieve typings
 
 # 2.1.2
 
