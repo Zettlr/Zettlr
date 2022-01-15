@@ -12,16 +12,18 @@
   *
   * END HEADER
   */
-import { commands } from 'codemirror'
+import CodeMirror, { commands } from 'codemirror'
 
 /**
  * Selects the word under cursor
  *
  * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
  */
-commands.selectWordUnderCursor = function (cm) {
+(commands as any).selectWordUnderCursor = function (cm: CodeMirror.Editor) {
   // Don't overwrite selections.
-  if (cm.somethingSelected()) return
+  if (cm.somethingSelected()) {
+    return
+  }
 
   let cur = cm.getCursor()
   let sel = cm.findWordAt(cur)
@@ -31,28 +33,30 @@ commands.selectWordUnderCursor = function (cm) {
   // two conditions: First: There's an apostrophe and a letter directly in
   // front of this selection - or behind it!
   let line = cm.getLine(sel.anchor.line)
-  if (sel.anchor.ch >= 2 && /[^\s]'/.test(line.substr(sel.anchor.ch - 2, 2))) {
+  if (sel.anchor.ch >= 2 && /[^\s]'/.test(line.substring(sel.anchor.ch - 2, 2))) {
     // There's a part of the word in front of the current selection ->
     // move back until we found it.
     do {
       sel.anchor.ch--
-    } while (sel.anchor.ch >= 0 && !/\s/.test(line.substr(sel.anchor.ch, 1)))
+    } while (sel.anchor.ch >= 0 && !/\s/.test(line.substring(sel.anchor.ch, 1)))
 
-    if (line[sel.anchor.ch] === ' ') sel.anchor.ch++
+    if (line[sel.anchor.ch] === ' ') {
+      sel.anchor.ch++
+    }
   }
 
   // Now the same for the back
-  if (sel.head < line.length - 1 && /'[^\s]/.test(line.substr(sel.head.ch, 2))) {
+  if (sel.head.ch < line.length - 1 && /'[^\s]/.test(line.substring(sel.head.ch, 2))) {
     do {
       sel.head.ch++
-    } while (sel.head <= line.length && !/\s/.test(line.substr(sel.head.ch, 1)))
+    } while (sel.head.ch <= line.length && !/\s/.test(line.substring(sel.head.ch, 1)))
     if (line[sel.head.ch] === ' ') sel.head.ch--
   }
 
   // Last but not least check for formatting marks at the beginning or end
   let formatting = '_*[](){}'.split('')
-  while (formatting.includes(line.substr(sel.anchor.ch, 1)) && sel.anchor.ch < sel.head.ch) sel.anchor.ch++
-  while (formatting.includes(line.substr(sel.head.ch - 1, 1)) && sel.head.ch > sel.anchor.ch) sel.head.ch--
+  while (formatting.includes(line.substring(sel.anchor.ch, 1)) && sel.anchor.ch < sel.head.ch) sel.anchor.ch++
+  while (formatting.includes(line.substring(sel.head.ch - 1, 1)) && sel.head.ch > sel.anchor.ch) sel.head.ch--
 
   // Now we should be all set.
   cm.setSelection(sel.anchor, sel.head)

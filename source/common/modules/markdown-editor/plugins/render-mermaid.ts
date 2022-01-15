@@ -12,7 +12,7 @@
   * END HEADER
   */
 
-import { commands } from 'codemirror'
+import CodeMirror, { commands } from 'codemirror'
 import mermaidAPI from 'mermaid'
 
 // Initialise the mermaid API
@@ -24,7 +24,7 @@ mermaidAPI.initialize({ startOnLoad: false, theme: 'dark'/*, theme: null */ })
  * @param  {CodeMirror} cm The calling CodeMirror instance
  * @return {void}    Commands do not return.
  */
-commands.markdownRenderMermaid = function (cm) {
+;(commands as any).markdownRenderMermaid = function (cm: CodeMirror.Editor) {
   let codeblock = [] // Holds a mermaid code block
   let currentCursorPosition = cm.getCursor('from').line
 
@@ -71,7 +71,9 @@ commands.markdownRenderMermaid = function (cm) {
       const curFrom = { 'line': startLine, 'ch': 0 }
       const curTo = { 'line': endLine, 'ch': 3 }
       // We can only have one marker at any given position at any given time
-      if (cm.doc.findMarks(curFrom, curTo).length > 0) continue
+      if (cm.findMarks(curFrom, curTo).length > 0) {
+        continue
+      }
 
       // Merge the block together
       let code = codeblock.join('\n')
@@ -80,20 +82,20 @@ commands.markdownRenderMermaid = function (cm) {
       try {
         let graph = mermaidAPI.render(`graphDivL${startLine}-L${endLine}${Date.now()}`, code)
         svg.innerHTML = graph
-      } catch (err) {
+      } catch (err: any) {
         svg.classList.add('error')
         // TODO: Localise!
-        svg.innerText = `Could not render Graph:\n\n${err.message}`
+        svg.innerText = `Could not render Graph:\n\n${err.message as string}`
       }
 
       // Now add a line widget to this line.
-      let textMarker = cm.doc.markText(
-        { 'line': startLine, 'ch': 0 },
-        { 'line': endLine, 'ch': 3 },
+      let textMarker = cm.markText(
+        { line: startLine, ch: 0 },
+        { line: endLine, ch: 3 },
         {
-          'clearOnEnter': true,
-          'replacedWith': svg,
-          'handleMouseEvents': true
+          clearOnEnter: true,
+          replacedWith: svg,
+          handleMouseEvents: true
         }
       )
       svg.onclick = (e) => { textMarker.clear() }

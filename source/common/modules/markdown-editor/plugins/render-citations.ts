@@ -12,16 +12,17 @@
   * END HEADER
   */
 
-import { commands } from 'codemirror'
+import CodeMirror, { commands } from 'codemirror'
 import extractCitations from '@common/util/extract-citations'
-const ipcRenderer = window.ipc
+import { IpcRenderer } from 'electron'
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
 /**
  * Renders Markdown citations in place
  *
  * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
  */
-commands.markdownRenderCitations = function (cm) {
+;(commands as any).markdownRenderCitations = function (cm: CodeMirror.Editor) {
   // We'll only render the viewport
   const viewport = cm.getViewport()
   for (let i = viewport.from; i < viewport.to; i++) {
@@ -46,7 +47,7 @@ commands.markdownRenderCitations = function (cm) {
       }
 
       // We can only have one marker at any given position at any given time
-      if (cm.doc.findMarks(curFrom, curTo).length > 0) {
+      if (cm.findMarks(curFrom, curTo).length > 0) {
         continue
       }
 
@@ -54,10 +55,9 @@ commands.markdownRenderCitations = function (cm) {
       // markdown, but comments shouldn't be included in rendering)
       // Final check to avoid it for as long as possible, as getTokenAt takes
       // considerable time.
-      let tokenTypeBegin = cm.getTokenTypeAt(curFrom)
-      let tokenTypeEnd = cm.getTokenTypeAt(curTo)
-      if ((tokenTypeBegin && tokenTypeBegin.includes('comment')) ||
-      (tokenTypeEnd && tokenTypeEnd.includes('comment'))) {
+      const tokenTypeBegin = cm.getTokenTypeAt(curFrom)
+      const tokenTypeEnd = cm.getTokenTypeAt(curTo)
+      if (tokenTypeBegin?.includes('comment') || tokenTypeEnd?.includes('comment')) {
         continue
       }
 
@@ -66,7 +66,7 @@ commands.markdownRenderCitations = function (cm) {
       // there, this plugin will attempt to render this as a citation as well
       // Hence: The citation shall not be encapsulated in square brackets.
       // See https://github.com/Zettlr/Zettlr/issues/1046
-      if (line.substr(curFrom.ch - 1, 2) === '[[' && line.substr(curTo.ch - 1, 2) === ']]') {
+      if (line.substring(curFrom.ch - 1, 2) === '[[' && line.substring(curTo.ch - 1, 2) === ']]') {
         continue
       }
 
@@ -75,7 +75,7 @@ commands.markdownRenderCitations = function (cm) {
       span.className = 'citeproc-citation'
       const key = citation.citations.map(elem => elem.id).join(',')
       span.dataset.citekeys = key // data-citekeys="key1,key2"; necessary for the context menu
-      span.textContent = line.substr(citation.from, citation.to - citation.from)
+      span.textContent = line.substring(citation.from, citation.to - citation.from)
       // Apply TextMarker
       const textMarker = cm.markText(
         curFrom, curTo,

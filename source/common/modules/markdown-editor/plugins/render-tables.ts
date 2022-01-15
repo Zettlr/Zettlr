@@ -12,14 +12,15 @@
   * END HEADER
   */
 
-import { commands } from 'codemirror'
+import CodeMirror, { commands, TextMarker } from 'codemirror'
 import fromMarkdown from '../table-editor'
 import { getTableHeadingRE } from '@common/regular-expressions'
+import TableEditor from '../table-editor/table-editor'
 
-const tables = []
+const tables: TableEditor[] = []
 const tableHeadingRE = getTableHeadingRE()
 
-commands.markdownInsertTable = function (cm) {
+;(commands as any).markdownInsertTable = function (cm: CodeMirror.Editor) {
   // A small command that inserts a 2x2 table at the current cursor position.
   cm.replaceSelection('| | |\n| | |\n')
 }
@@ -29,7 +30,7 @@ commands.markdownInsertTable = function (cm) {
  *
  * @param   {CodeMirror.Editor}  cm  The editor instance
  */
-commands.markdownRenderTables = function (cm) {
+;(commands as any).markdownRenderTables = function (cm: CodeMirror.Editor) {
   // Now render all potential new tables. We only check one line less
   // because such a table header WILL NEVER be on the last line, plus
   // this way we can check for Setext headers without having to worry.
@@ -37,7 +38,7 @@ commands.markdownRenderTables = function (cm) {
   // We'll only render the viewport
   const viewport = cm.getViewport()
   for (let i = viewport.from; i < viewport.to; i++) {
-    if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') {
+    if (cm.getModeAt({ line: i, ch: 0 }).name !== 'markdown-zkn') {
       continue
     }
 
@@ -47,7 +48,7 @@ commands.markdownRenderTables = function (cm) {
     // tables have syntax highlighting -- CodeMirror modes cannot do that).
     let firstLine // First line of a given table
     let lastLine // Last line of a given table
-    let potentialTableType // Can be "grid", "pipe", "simple"
+    let potentialTableType: 'pipe'|'simple'|'grid' = 'pipe' // Can be "grid", "pipe", "simple"
 
     const line = cm.getLine(i)
     const match = tableHeadingRE.exec(line)
@@ -56,7 +57,7 @@ commands.markdownRenderTables = function (cm) {
       continue // No table heading
     }
 
-    if (match[1]) {
+    if (match[1] !== undefined) {
       // Group 1 triggered, so we might have a simple table.
       const nextLine = cm.getLine(i + 1)
       if (nextLine === undefined || nextLine.trim() === '') {
@@ -75,7 +76,7 @@ commands.markdownRenderTables = function (cm) {
           }
 
           const m = tableHeadingRE.exec(l)
-          if (m !== null && m[1]) {
+          if (m?.[1] !== undefined) {
             lastLine = j
             break
           }
@@ -93,7 +94,7 @@ commands.markdownRenderTables = function (cm) {
       }
 
       potentialTableType = 'simple'
-    } else if (match[2]) {
+    } else if (match?.[2] !== undefined) {
       // Group 2 triggered, so we maybe got a grid table. Grid tables may be
       // headerless or have a header. But the very first line will always
       // match the group, so we only have to look downward! As for pipe
@@ -109,7 +110,7 @@ commands.markdownRenderTables = function (cm) {
       }
 
       potentialTableType = 'grid'
-    } else if (match[3]) {
+    } else if (match?.[3] !== undefined) {
       // Group 3 triggered, so we might have a pipe table. A pipe table must
       // have a header, which means we'll have an easy time determining the
       // table boundaries.
@@ -142,11 +143,11 @@ commands.markdownRenderTables = function (cm) {
       continue
     }
 
-    const curFrom = { 'line': firstLine, 'ch': 0 }
-    const curTo = { 'line': lastLine, 'ch': cm.getLine(lastLine).length }
+    const curFrom = { line: firstLine, ch: 0 }
+    const curTo = { line: lastLine, ch: cm.getLine(lastLine).length }
 
     // We can only have one marker at any given position at any given time
-    if (cm.doc.findMarks(curFrom, curTo).length > 0) {
+    if (cm.findMarks(curFrom, curTo).length > 0) {
       continue
     }
 
@@ -186,7 +187,7 @@ commands.markdownRenderTables = function (cm) {
 
     // Now attempt to create a table from it.
     let tbl
-    let textMarker
+    let textMarker: TextMarker|undefined
     try {
       // Will raise an error if the table is malformed
       tbl = fromMarkdown(markdownTable.join('\n'), potentialTableType, {
@@ -195,7 +196,8 @@ commands.markdownRenderTables = function (cm) {
         container: '#editor .CodeMirror .CodeMirror-scroll',
         onBlur: (t) => {
           // Don't replace some arbitrary text somewhere in the document!
-          if (textMarker === undefined || textMarker.find() === false) {
+          const marker = textMarker?.find() as CodeMirror.MarkerRange|undefined
+          if (marker === undefined) {
             return
           }
 
@@ -207,7 +209,7 @@ commands.markdownRenderTables = function (cm) {
 
           // We'll simply replace the range with the new table. The plugin will
           // be called to re-render the table once again.
-          const { from, to } = textMarker.find()
+          const { from, to } = marker
           cm.replaceRange(md.split('\n'), from, to)
           // If there's still the textmarker, remove it by force to re-render
           // the table immediately.
@@ -216,13 +218,13 @@ commands.markdownRenderTables = function (cm) {
           }
 
           // Splice the table and corresponding marker from the arrays
-          if (found) {
+          if (found > -1) {
             tables.splice(found, 1)
           }
         }
       })
-    } catch (err) {
-      console.error(`Could not instantiate table between ${firstLine} and ${lastLine}: ${err.message}`)
+    } catch (err: any) {
+      console.error(`Could not instantiate table between ${firstLine} and ${lastLine}: ${err.message as string}`)
       // Error, so abort rendering.
       continue
     }
@@ -231,7 +233,7 @@ commands.markdownRenderTables = function (cm) {
     // the DOM.
 
     // Apply TextMarker
-    textMarker = cm.doc.markText(
+    textMarker = cm.markText(
       curFrom, curTo,
       {
         clearOnEnter: false,

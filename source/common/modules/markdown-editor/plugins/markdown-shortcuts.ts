@@ -13,8 +13,8 @@
   */
 
 import { getListOrderedRE, getListTaskListRE, getListUnorderedCMRE, getUrlRE, getBlockRE } from '@common/regular-expressions'
-import { commands, Pass } from 'codemirror'
-const clipboard = window.clipboard
+import CodeMirror, { commands, Pass } from 'codemirror'
+const clipboard = (window as any).clipboard
 
 const unorderedListRE = getListUnorderedCMRE()
 const taskListRE = getListTaskListRE()
@@ -30,17 +30,19 @@ const blockRE = getBlockRE()
  * @param {String} formatting The formatting mark to be applied
  * @return {String}      The line without Markdown block formattings.
  */
-function applyBlock (line, formatting) {
+function applyBlock (line: string, formatting: string): string {
   // Only add a space if there is a formatting passed to the function
   formatting = (formatting) ? formatting + ' ' : ''
 
-  // Return the unaltered line if there is no block element contained
-  if (!blockRE.test(line)) return formatting + line
-
   // Return the match, extracting the formatting.
-  let match = blockRE.exec(line)
-  // Replace all whitespace between formatting mark and line contents
-  return match[1] + formatting + match[2]
+  const match = blockRE.exec(line)
+  if (match === null) {
+    // Return the unaltered line if there is no block element contained
+    return formatting + line
+  } else {
+    // Replace all whitespace between formatting mark and line contents
+    return match[1] + formatting + match[2]
+  }
 }
 
 /**
@@ -50,13 +52,13 @@ function applyBlock (line, formatting) {
  * @param  {string}            pre  The formatting mark before the element
  * @param  {string}            post The formatting mark behind the element
  */
-function markdownInline (cm, pre, post, tokentype = undefined) {
+function markdownInline (cm: CodeMirror.Editor, pre: string, post: string, tokentype?: string): void {
   // Is something selected?
   if (!cm.somethingSelected()) {
     // TODO: Check token type state at the cursor position to leave the
     // mode if already in the mode.
     let currentToken = cm.getTokenAt(cm.getCursor()).type
-    if (currentToken != null && (currentToken.indexOf(tokentype) > -1)) { // -- the tokentypes can be multiple (spell-error, e.g.)
+    if (tokentype !== undefined && currentToken !== null && currentToken?.includes(tokentype)) { // -- the tokentypes can be multiple (spell-error, e.g.)
       // We are, indeed, currently in this token. So let's check *how*
       // we are going to leave the state.
       let to = { 'line': cm.getCursor().line, 'ch': cm.getCursor().ch + post.length }
@@ -68,11 +70,11 @@ function markdownInline (cm, pre, post, tokentype = undefined) {
       }
     } else {
       // Not in the mode -> simply do the standard.
-      cm.doc.replaceSelection(pre + '' + post, 'start')
+      cm.replaceSelection(pre + '' + post, 'start')
       // Move cursor forward (to the middle of the insertion)
-      let cur = cm.doc.getCursor()
+      const cur = cm.getCursor()
       cur.ch = cur.ch + pre.length
-      cm.doc.setCursor(cur)
+      cm.setCursor(cur)
     }
     return
   }
@@ -84,7 +86,7 @@ function markdownInline (cm, pre, post, tokentype = undefined) {
   let re = new RegExp('^' + preregex + '.+?' + postregex + '$', 'g')
 
   const replacements = []
-  for (const selection of cm.doc.getSelections()) {
+  for (const selection of cm.getSelections()) {
     if (re.test(selection)) {
       // We got something so unformat.
       replacements.push(selection.substr(pre.length, selection.length - pre.length - post.length))
@@ -104,7 +106,7 @@ function markdownInline (cm, pre, post, tokentype = undefined) {
   }
 
   // Replace with changes selections
-  cm.doc.replaceSelections(replacements, 'around')
+  cm.replaceSelections(replacements, 'around')
 }
 
 /**
@@ -113,7 +115,7 @@ function markdownInline (cm, pre, post, tokentype = undefined) {
  * @param  {CodeMirror.Editor} cm   The codemirror instance
  * @param  {string}            mark The formatting mark to be inserted
  */
-function markdownBlock (cm, mark) {
+function markdownBlock (cm: CodeMirror.Editor, mark: string): void {
   // Build the regular expression
   let markregex = ''
   for (let i = 0; i < mark.length; i++) {
@@ -130,18 +132,17 @@ function markdownBlock (cm, mark) {
     // Just jump to the beginning of the line and insert a mark
     let cur = cm.getCursor()
     cur.ch = 0
-    let line = cm.doc.getLineHandle(cur.line)
-    if (re.test(line.text)) {
-      let match = re.exec(line.text)
-
+    let line = cm.getLineHandle(cur.line)
+    const match = re.exec(line.text)
+    if (match !== null) {
       // Line already contains the formatting -> remove
-      cm.doc.setSelection(cur, { 'line': cur.line, 'ch': line.text.length })
+      cm.setSelection(cur, { 'line': cur.line, 'ch': line.text.length })
       // Replace only with the first capturing group
-      cm.doc.replaceSelection(match[1].trim())
+      cm.replaceSelection(match[1].trim())
     } else {
       // Line is not formatted -> insert a mark
-      cm.doc.setSelection(cur, { 'line': cur.line, 'ch': line.text.length })
-      cm.doc.replaceSelection(applyBlock(line.text, mark))
+      cm.setSelection(cur, { 'line': cur.line, 'ch': line.text.length })
+      cm.replaceSelection(applyBlock(line.text, mark))
     }
     return // Done with formatting
   }
@@ -149,7 +150,7 @@ function markdownBlock (cm, mark) {
   // We've got at least one selection. So first get all line numbers inside
   // the selection.
   let lines = []
-  for (let sel of cm.doc.listSelections()) {
+  for (let sel of cm.listSelections()) {
     // Anchor is greater than head if the user selected "backwards"
     let higher = (sel.anchor.line > sel.head.line) ? sel.anchor : sel.head
     let lower = (sel.anchor.line < sel.head.line) ? sel.anchor : sel.head
@@ -170,18 +171,18 @@ function markdownBlock (cm, mark) {
   let sel = []
   for (let no of lines) {
     from = { 'line': no, 'ch': 0 }
-    finalCursor = { 'line': no, 'ch': cm.doc.getLine(no).length }
+    finalCursor = { 'line': no, 'ch': cm.getLine(no).length }
     sel.push({ 'anchor': from, 'head': finalCursor })
   }
-  cm.doc.setSelections(sel)
+  cm.setSelections(sel)
 
   // Now traverse each selections and either apply a formatting mark or remove it
   let replacements = []
 
-  for (let sel of cm.doc.listSelections()) {
-    let line = cm.doc.getLine(sel.anchor.line)
-    if (re.test(line)) {
-      let match = re.exec(line)
+  for (let sel of cm.listSelections()) {
+    let line = cm.getLine(sel.anchor.line)
+    const match = re.exec(line)
+    if (match !== null) {
       // Line already contains the formatting -> remove
       replacements.push(match[1].trim())
     } else {
@@ -190,8 +191,8 @@ function markdownBlock (cm, mark) {
     }
   }
 
-  cm.doc.replaceSelections(replacements)
-  cm.doc.setCursor(finalCursor)
+  cm.replaceSelections(replacements)
+  cm.setCursor(finalCursor)
 }
 
 /**
@@ -199,9 +200,9 @@ function markdownBlock (cm, mark) {
  *
  * @param   {CodeMirror.Editor}  cm  The editor instance
  */
-commands.markdownBold = function (cm) {
+;(commands as any).markdownBold = function (cm: CodeMirror.Editor) {
   if (cm.isReadOnly()) return Pass
-  let boldChars = cm.getOption('zettlr').markdownBoldFormatting
+  let boldChars = (cm as any).getOption('zettlr').markdownBoldFormatting
   markdownInline(cm, boldChars, boldChars, 'strong')
 }
 
@@ -210,9 +211,12 @@ commands.markdownBold = function (cm) {
  *
  * @param   {CodeMirror.Editor}  cm  The editor instance
  */
-commands.markdownItalic = function (cm) {
-  if (cm.isReadOnly()) return Pass
-  let italicChars = cm.getOption('zettlr').markdownItalicFormatting
+;(commands as any).markdownItalic = function (cm: CodeMirror.Editor) {
+  if (cm.isReadOnly()) {
+    return Pass
+  }
+
+  let italicChars = (cm as any).getOption('zettlr').markdownItalicFormatting
   markdownInline(cm, italicChars, italicChars, 'em')
 }
 
@@ -221,8 +225,11 @@ commands.markdownItalic = function (cm) {
  *
  * @param   {CodeMirror.Editor}  cm  The editor instance
  */
-commands.markdownCode = function (cm) {
-  if (cm.isReadOnly()) return Pass
+;(commands as any).markdownCode = function (cm: CodeMirror.Editor) {
+  if (cm.isReadOnly()) {
+    return Pass
+  }
+
   markdownInline(cm, '`', '`', 'comment')
 }
 
@@ -231,8 +238,11 @@ commands.markdownCode = function (cm) {
  *
  * @param   {CodeMirror.Editor}  cm  The editor instance
  */
-commands.markdownComment = function (cm) {
-  if (cm.isReadOnly()) return Pass
+;(commands as any).markdownComment = function (cm: CodeMirror.Editor) {
+  if (cm.isReadOnly()) {
+    return Pass
+  }
+
   // Add spaces so that the commenting out looks nicer
   markdownInline(cm, '<!-- ', ' -->', 'comment')
 }
@@ -242,8 +252,11 @@ commands.markdownComment = function (cm) {
  *
  * @param   {CodeMirror.Editor}  cm  The editor instance
  */
-commands.markdownHeading1 = function (cm) {
-  if (cm.isReadOnly()) return Pass
+;(commands as any).markdownHeading1 = function (cm: CodeMirror.Editor) {
+  if (cm.isReadOnly()) {
+    return Pass
+  }
+
   markdownBlock(cm, '#')
 }
 /**
@@ -251,8 +264,11 @@ commands.markdownHeading1 = function (cm) {
  *
  * @param   {CodeMirror.Editor}  cm  The editor instance
  */
-commands.markdownHeading2 = function (cm) {
-  if (cm.isReadOnly()) return Pass
+;(commands as any).markdownHeading2 = function (cm: CodeMirror.Editor) {
+  if (cm.isReadOnly()) {
+    return Pass
+  }
+
   markdownBlock(cm, '##')
 }
 /**
@@ -260,8 +276,11 @@ commands.markdownHeading2 = function (cm) {
  *
  * @param   {CodeMirror.Editor}  cm  The editor instance
  */
-commands.markdownHeading3 = function (cm) {
-  if (cm.isReadOnly()) return Pass
+;(commands as any).markdownHeading3 = function (cm: CodeMirror.Editor) {
+  if (cm.isReadOnly()) {
+    return Pass
+  }
+
   markdownBlock(cm, '###')
 }
 /**
@@ -269,8 +288,11 @@ commands.markdownHeading3 = function (cm) {
  *
  * @param   {CodeMirror.Editor}  cm  The editor instance
  */
-commands.markdownHeading4 = function (cm) {
-  if (cm.isReadOnly()) return Pass
+;(commands as any).markdownHeading4 = function (cm: CodeMirror.Editor) {
+  if (cm.isReadOnly()) {
+    return Pass
+  }
+
   markdownBlock(cm, '####')
 }
 /**
@@ -278,8 +300,11 @@ commands.markdownHeading4 = function (cm) {
  *
  * @param   {CodeMirror.Editor}  cm  The editor instance
  */
-commands.markdownHeading5 = function (cm) {
-  if (cm.isReadOnly()) return Pass
+;(commands as any).markdownHeading5 = function (cm: CodeMirror.Editor) {
+  if (cm.isReadOnly()) {
+    return Pass
+  }
+
   markdownBlock(cm, '#####')
 }
 /**
@@ -287,8 +312,11 @@ commands.markdownHeading5 = function (cm) {
  *
  * @param   {CodeMirror.Editor}  cm  The editor instance
  */
-commands.markdownHeading6 = function (cm) {
-  if (cm.isReadOnly()) return Pass
+;(commands as any).markdownHeading6 = function (cm: CodeMirror.Editor) {
+  if (cm.isReadOnly()) {
+    return Pass
+  }
+
   markdownBlock(cm, '######')
 }
 
@@ -297,8 +325,11 @@ commands.markdownHeading6 = function (cm) {
  *
  * @param   {CodeMirror.Editor}  cm  The editor instance
  */
-commands.markdownBlockquote = function (cm) {
-  if (cm.isReadOnly()) return Pass
+;(commands as any).markdownBlockquote = function (cm: CodeMirror.Editor) {
+  if (cm.isReadOnly()) {
+    return Pass
+  }
+
   markdownBlock(cm, '>')
 }
 
@@ -307,13 +338,15 @@ commands.markdownBlockquote = function (cm) {
  *
  * @param   {CodeMirror.Editor}  cm  The editor instance
  */
-commands.markdownDivider = function (cm) {
-  if (cm.isReadOnly()) return Pass
+;(commands as any).markdownDivider = function (cm: CodeMirror.Editor) {
+  if (cm.isReadOnly()) {
+    return Pass
+  }
 
   if (cm.somethingSelected()) {
-    cm.doc.setCursor(cm.doc.listSelections()[0].anchor)
+    cm.setCursor(cm.listSelections()[0].anchor)
   }
-  cm.doc.replaceSelection('\n***\n')
+  cm.replaceSelection('\n***\n')
 }
 
 /**
@@ -321,8 +354,10 @@ commands.markdownDivider = function (cm) {
  *
  * @param   {CodeMirror.Editor}  cm  The editor instance
  */
-commands.markdownLink = function (cm) {
-  if (cm.isReadOnly()) return Pass
+;(commands as any).markdownLink = function (cm: CodeMirror.Editor) {
+  if (cm.isReadOnly()) {
+    return Pass
+  }
 
   let url = ''
   if (urlRE.test(clipboard.readText())) {
@@ -331,15 +366,15 @@ commands.markdownLink = function (cm) {
 
   // Is something selected?
   if (!cm.somethingSelected()) {
-    cm.doc.replaceSelection(`[](${url})`, 'start')
-    let cur = cm.doc.getCursor()
+    cm.replaceSelection(`[](${url})`, 'start')
+    let cur = cm.getCursor()
     cur.ch = cur.ch + 1
-    cm.doc.setCursor(cur)
+    cm.setCursor(cur)
     return
   }
 
   // Retrieve currently selected selections
-  const sel = cm.doc.getSelections()
+  const sel = cm.getSelections()
 
   // Traverse all selections and perform bolden or unbolden on them
   for (let i = 0; i < sel.length; i++) {
@@ -350,7 +385,7 @@ commands.markdownLink = function (cm) {
   }
 
   // Replace with changes selections
-  cm.doc.replaceSelections(sel)
+  cm.replaceSelections(sel)
 }
 
 /**
@@ -358,8 +393,10 @@ commands.markdownLink = function (cm) {
  *
  * @param   {CodeMirror.Editor}  cm  The editor instance
  */
-commands.markdownImage = function (cm) {
-  if (cm.isReadOnly()) return Pass
+;(commands as any).markdownImage = function (cm: CodeMirror.Editor) {
+  if (cm.isReadOnly()) {
+    return Pass
+  }
 
   let url = ''
   if (urlRE.test(clipboard.readText())) {
@@ -368,15 +405,15 @@ commands.markdownImage = function (cm) {
 
   // Is something selected?
   if (!cm.somethingSelected()) {
-    cm.doc.replaceSelection(`![](${url})`, 'start')
-    let cur = cm.doc.getCursor()
+    cm.replaceSelection(`![](${url})`, 'start')
+    let cur = cm.getCursor()
     cur.ch = cur.ch + 2
-    cm.doc.setCursor(cur)
+    cm.setCursor(cur)
     return
   }
 
   // Retrieve currently selected selections
-  const sel = cm.doc.getSelections()
+  const sel = cm.getSelections()
 
   // Traverse all selections and perform bolden or unbolden on them
   for (let i = 0; i < sel.length; i++) {
@@ -387,7 +424,7 @@ commands.markdownImage = function (cm) {
   }
 
   // Replace with changes selections
-  cm.doc.replaceSelections(sel)
+  cm.replaceSelections(sel)
 }
 
 /**
@@ -395,8 +432,10 @@ commands.markdownImage = function (cm) {
  *
  * @param   {CodeMirror.Editor}  cm  The editor instance
  */
-commands.markdownMakeOrderedList = function (cm) {
-  if (cm.isReadOnly()) return Pass
+;(commands as any).markdownMakeOrderedList = function (cm: CodeMirror.Editor) {
+  if (cm.isReadOnly()) {
+    return Pass
+  }
 
   // If nothing is selected we have a very short journey.
   if (!cm.somethingSelected()) {
@@ -404,38 +443,38 @@ commands.markdownMakeOrderedList = function (cm) {
     let cur = cm.getCursor()
     cur.ch = 0
     cm.setCursor(cur)
-    let line = cm.doc.getLineHandle(cur.line)
+    let line = cm.getLineHandle(cur.line)
     if (orderedListRE.test(line.text)) {
       // Line is already ordered -> remove
-      cm.doc.setSelection(cur, { 'line': cur.line, 'ch': line.text.length })
-      cm.doc.replaceSelection(cm.doc.getSelection().replace(orderedListRE, ''))
+      cm.setSelection(cur, { 'line': cur.line, 'ch': line.text.length })
+      cm.replaceSelection(cm.getSelection().replace(orderedListRE, ''))
     } else {
       // Line is not a list -> find out whether the previous line is a list
       let num = 1
       let olSep = '.'
       let olTab = ''
       if (cur.line > 0) {
-        let match = orderedListRE.exec(cm.doc.getLineHandle(cur.line - 1).text)
-        if (match) {
+        let match = orderedListRE.exec(cm.getLineHandle(cur.line - 1).text)
+        if (match !== null) {
           // Third capturing group is the actual number
           num = parseInt(match[3]) + 1
           olSep = match[4] // 4 is either . or )
           olTab = match[1] // Contains the spaces (i.e. the tab position)
         }
       }
-      cm.doc.replaceRange(olTab + num + olSep + ' ', cur)
+      cm.replaceRange(olTab + num.toString() + olSep + ' ', cur)
     }
     return
   }
 
   // Now traverse each selections and either apply a listing or remove it
-  for (let sel of cm.doc.getSelections()) {
-    if (sel.indexOf('\n') > -1) {
+  for (let sel of cm.getSelections()) {
+    if (sel.includes('\n')) {
       // First get the beginning cursor position (anchor)
-      let cur = cm.doc.getCursor('from')
+      let cur = cm.getCursor('from')
       let lineFrom = cur.line
       // Second get the ending cursor position (head)
-      let lineTo = cm.doc.getCursor('to').line + 1 // eachLine will exclude the lineTo line
+      let lineTo = cm.getCursor('to').line + 1 // eachLine will exclude the lineTo line
       // Third traverse each line between both positions and add
       // numbers to them.
 
@@ -444,45 +483,49 @@ commands.markdownMakeOrderedList = function (cm) {
       let olTab = ''
       if (cur.line > 0) {
         // Remember to get a (potential) previous number.
-        let match = orderedListRE.exec(cm.doc.getLineHandle(cur.line - 1).text)
-        if (match) {
+        let match = orderedListRE.exec(cm.getLineHandle(cur.line - 1).text)
+        if (match !== null) {
           // Third capturing group is the actual number
           itemNo = parseInt(match[3]) + 1
           olSep = match[4]
           olTab = match[1]
         }
       }
-      cm.doc.eachLine(lineFrom, lineTo, (line) => {
-        let no = line.lineNo()
+      cm.eachLine(lineFrom, lineTo, (line) => {
+        let no = cm.getLineNumber(line)
+        if (no === null) {
+          return
+        }
+
         if (orderedListRE.test(line.text)) {
           // Line is already ordered -> remove
-          cm.doc.setCursor(no, 0)
-          let curFrom = cm.doc.getCursor()
-          cm.doc.setSelection(curFrom, { 'line': no, 'ch': line.text.length })
-          cm.doc.replaceSelection(cm.doc.getSelection().replace(orderedListRE, ''))
+          cm.setCursor(no, 0)
+          let curFrom = cm.getCursor()
+          cm.setSelection(curFrom, { 'line': no, 'ch': line.text.length })
+          cm.replaceSelection(cm.getSelection().replace(orderedListRE, ''))
         } else {
           // Just prepend item numbers
-          cm.doc.setCursor(no, 0)
-          cm.doc.replaceRange(olTab + (itemNo++) + olSep + ' ', cm.doc.getCursor())
+          cm.setCursor(no, 0)
+          cm.replaceRange(olTab + (itemNo++).toString() + olSep + ' ', cm.getCursor())
         }
       })
     } else {
-      let cur = cm.doc.getCursor()
+      let cur = cm.getCursor()
       cur.ch = 0
-      cm.doc.setCursor(cur)
+      cm.setCursor(cur)
       let num = 1
       let olSep = '.'
       let olTab = ''
       if (cur.line > 0) {
-        let match = orderedListRE.exec(cm.doc.getLineHandle(cur.line - 1).text)
-        if (match) {
+        let match = orderedListRE.exec(cm.getLineHandle(cur.line - 1).text)
+        if (match !== null) {
           // Third capturing group is the actual number
           num = parseInt(match[3]) + 1
           olSep = match[4] // 4 is either . or )
           olTab = match[1] // The prepending spaces
         }
       }
-      cm.doc.replaceRange(olTab + num + olSep + ' ', cur) // Only prepend a number
+      cm.replaceRange(olTab + num.toString() + olSep + ' ', cur) // Only prepend a number
     }
   }
 }
@@ -492,8 +535,10 @@ commands.markdownMakeOrderedList = function (cm) {
  *
  * @param   {CodeMirror.Editor}  cm  The editor instance
  */
-commands.markdownMakeUnorderedList = function (cm) {
-  if (cm.isReadOnly()) return Pass
+;(commands as any).markdownMakeUnorderedList = function (cm: CodeMirror.Editor) {
+  if (cm.isReadOnly()) {
+    return Pass
+  }
 
   // If nothing is selected we have a very short journey.
   if (!cm.somethingSelected()) {
@@ -501,66 +546,69 @@ commands.markdownMakeUnorderedList = function (cm) {
     let cur = cm.getCursor()
     cur.ch = 0
     cm.setCursor(cur)
-    let line = cm.doc.getLineHandle(cur.line)
+    let line = cm.getLineHandle(cur.line)
     if (unorderedListRE.test(line.text)) {
       // Line is already unordered -> remove
-      cm.doc.setSelection(cur, { 'line': cur.line, 'ch': line.text.length })
-      cm.doc.replaceSelection(cm.doc.getSelection().replace(unorderedListRE, ''))
+      cm.setSelection(cur, { 'line': cur.line, 'ch': line.text.length })
+      cm.replaceSelection(cm.getSelection().replace(unorderedListRE, ''))
     } else {
       // Line is not a list -> Insert a bullet at cursor position
       let num = '*'
       let olTab = ''
       if (cur.line > 0) {
-        let match = unorderedListRE.exec(cm.doc.getLineHandle(cur.line - 1).text)
-        if (match) {
+        let match = unorderedListRE.exec(cm.getLineHandle(cur.line - 1).text)
+        if (match !== null) {
           // Third capturing group is the bullet char
           num = match[2]
           olTab = match[1] // Contains the spaces (i.e. the tab position)
         }
       }
-      cm.doc.replaceRange(olTab + num + ' ', cur)
+      cm.replaceRange(olTab + num + ' ', cur)
     }
     return
   }
 
   // Now traverse each selections and either apply a listing or remove it
-  for (let sel of cm.doc.getSelections()) {
-    if (sel.indexOf('\n') > -1) {
+  for (let sel of cm.getSelections()) {
+    if (sel.includes('\n')) {
       // First get the beginning cursor position (anchor)
-      let lineFrom = cm.doc.getCursor('from').line
+      let lineFrom = cm.getCursor('from').line
       // Second get the ending cursor position (head)
-      let lineTo = cm.doc.getCursor('to').line + 1 // eachLine will exclude the lineTo line
+      let lineTo = cm.getCursor('to').line + 1 // eachLine will exclude the lineTo line
       // Third traverse each line between both positions and add
       // bullets to them
-      cm.doc.eachLine(lineFrom, lineTo, (line) => {
-        let no = line.lineNo()
+      cm.eachLine(lineFrom, lineTo, (line) => {
+        let no = cm.getLineNumber(line)
+        if (no === null) {
+          return
+        }
         if (unorderedListRE.test(line.text)) {
           // Line is already unordered -> remove
-          cm.doc.setCursor(no, 0)
-          let curFrom = cm.doc.getCursor()
-          cm.doc.setSelection(curFrom, { 'line': no, 'ch': line.text.length })
-          cm.doc.replaceSelection(cm.doc.getSelection().replace(unorderedListRE, ''))
+          cm.setCursor(no, 0)
+          let curFrom = cm.getCursor()
+          cm.setSelection(curFrom, { 'line': no, 'ch': line.text.length })
+          cm.replaceSelection(cm.getSelection().replace(unorderedListRE, ''))
         } else {
           // Just prepend bullets
-          cm.doc.setCursor(no, 0)
-          cm.doc.replaceRange('* ', cm.doc.getCursor())
+          cm.setCursor(no, 0)
+          cm.replaceRange('* ', cm.getCursor())
         }
       })
     } else {
-      let cur = cm.doc.getCursor()
+      let cur = cm.getCursor()
       cur.ch = 0
-      cm.doc.setCursor(cur)
+      cm.setCursor(cur)
       let num = '*'
       let olTab = ''
       if (cur.line > 0) {
-        let match = unorderedListRE.exec(cm.doc.getLineHandle(cur.line - 1).text)
-        if (match) {
+        let match = unorderedListRE.exec(cm.getLineHandle(cur.line - 1).text)
+        if (match !== null) {
           // Third capturing group is the bullet char
           num = match[2]
           olTab = match[1] // Contains the spaces (i.e. the tab position)
         }
       }
-      cm.doc.replaceRange(olTab + num + ' ', cur)
+      cm.replaceRange(olTab + num + ' ', cur)
     }
   }
 }
@@ -570,8 +618,10 @@ commands.markdownMakeUnorderedList = function (cm) {
  *
  * @param   {CodeMirror.Editor}  cm  The editor instance
  */
-commands.markdownMakeTaskList = function (cm) {
-  if (cm.isReadOnly()) return Pass
+;(commands as any).markdownMakeTaskList = function (cm: CodeMirror.Editor) {
+  if (cm.isReadOnly()) {
+    return Pass
+  }
 
   // If nothing is selected we have a very short journey.
   if (!cm.somethingSelected()) {
@@ -579,63 +629,66 @@ commands.markdownMakeTaskList = function (cm) {
     let cur = cm.getCursor()
     cur.ch = 0
     cm.setCursor(cur)
-    let line = cm.doc.getLineHandle(cur.line)
+    let line = cm.getLineHandle(cur.line)
     if (taskListRE.test(line.text)) {
       // Line is already unordered -> remove
-      cm.doc.setSelection(cur, { 'line': cur.line, 'ch': line.text.length })
-      cm.doc.replaceSelection(cm.doc.getSelection().replace(taskListRE, ''))
+      cm.setSelection(cur, { 'line': cur.line, 'ch': line.text.length })
+      cm.replaceSelection(cm.getSelection().replace(taskListRE, ''))
     } else {
       // Line is not a list -> Insert a task list item at cursor position
       let num = '- [ ]'
       let olTab = ''
       if (cur.line > 0) {
-        let match = taskListRE.exec(cm.doc.getLineHandle(cur.line - 1).text)
-        if (match) {
+        let match = taskListRE.exec(cm.getLineHandle(cur.line - 1).text)
+        if (match !== null) {
           // Third capturing group is the bullet char
           olTab = match[1] // Contains the spaces (i.e. the tab position)
         }
       }
-      cm.doc.replaceRange(olTab + num + ' ', cur)
+      cm.replaceRange(olTab + num + ' ', cur)
     }
     return
   }
 
   // Now traverse each selections and either apply a listing or remove it
-  for (let sel of cm.doc.getSelections()) {
-    if (sel.indexOf('\n') > -1) {
+  for (let sel of cm.getSelections()) {
+    if (sel.includes('\n')) {
       // First get the beginning cursor position (anchor)
-      let lineFrom = cm.doc.getCursor('from').line
+      let lineFrom = cm.getCursor('from').line
       // Second get the ending cursor position (head)
-      let lineTo = cm.doc.getCursor('to').line + 1 // eachLine will exclude the lineTo line
+      let lineTo = cm.getCursor('to').line + 1 // eachLine will exclude the lineTo line
       // Third traverse each line between both positions and add
       // bullets to them
-      cm.doc.eachLine(lineFrom, lineTo, (line) => {
-        let no = line.lineNo()
+      cm.eachLine(lineFrom, lineTo, (line) => {
+        let no = cm.getLineNumber(line)
+        if (no === null) {
+          return
+        }
         if (taskListRE.test(line.text)) {
           // Line is already a task item -> remove
-          cm.doc.setCursor(no, 0)
-          let curFrom = cm.doc.getCursor()
-          cm.doc.setSelection(curFrom, { 'line': no, 'ch': line.text.length })
-          cm.doc.replaceSelection(cm.doc.getSelection().replace(taskListRE, ''))
+          cm.setCursor(no, 0)
+          let curFrom = cm.getCursor()
+          cm.setSelection(curFrom, { 'line': no, 'ch': line.text.length })
+          cm.replaceSelection(cm.getSelection().replace(taskListRE, ''))
         } else {
           // Just prepend task list items
-          cm.doc.setCursor(no, 0)
-          cm.doc.replaceRange('- [ ] ', cm.doc.getCursor())
+          cm.setCursor(no, 0)
+          cm.replaceRange('- [ ] ', cm.getCursor())
         }
       })
     } else {
-      let cur = cm.doc.getCursor()
+      let cur = cm.getCursor()
       cur.ch = 0
-      cm.doc.setCursor(cur)
+      cm.setCursor(cur)
       let num = '- [ ]'
       let olTab = ''
       if (cur.line > 0) {
-        let match = taskListRE.exec(cm.doc.getLineHandle(cur.line - 1).text)
-        if (match) {
+        let match = taskListRE.exec(cm.getLineHandle(cur.line - 1).text)
+        if (match !== null) {
           olTab = match[1] // Contains the spaces (i.e. the tab position)
         }
       }
-      cm.doc.replaceRange(olTab + num + ' ', cur)
+      cm.replaceRange(olTab + num + ' ', cur)
     }
   }
 }

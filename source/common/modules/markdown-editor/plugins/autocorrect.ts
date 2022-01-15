@@ -52,13 +52,13 @@ const startChars = ' ([{-–—'
 
 // This variable holds the generated keymap
 // that triggers the plugin's functionality
-let builtKeyMap
+let builtKeyMap: CodeMirror.KeyMap
 
 // This variable holds the magic quotes
-let quotes = false
+let quotes: boolean|any = false
 
 // This variable holds the replacement table
-let replacementCandidates
+let replacementCandidates: any
 
 // Do we use Word-style AutoCorrect, or LibreOffice?
 // Difference: Word triggers on the last character of
@@ -93,8 +93,8 @@ CodeMirror.defineOption('autoCorrect', false, onOptionChange)
  * @param {any} value The new autoCorrect value
  * @param {any} oldValue The previous autoCorrect value
  */
-function onOptionChange (cm, value, oldValue) {
-  if (oldValue && oldValue !== CodeMirror.Init) cm.removeKeyMap(builtKeyMap)
+function onOptionChange (cm: CodeMirror.Editor, value: any, oldValue: any): void {
+  if (oldValue && oldValue !== (CodeMirror as any).Init) cm.removeKeyMap(builtKeyMap)
 
   if (value) {
     setup(value)
@@ -107,7 +107,7 @@ function onOptionChange (cm, value, oldValue) {
  * Sets up the configuration for AutoCorrect.
  * @param {any} option The new configuration of the AutoCorrect plugin.
  */
-function setup (option) {
+function setup (option: any): void {
   replacementCandidates = {}
   if (option.replacements !== undefined && Array.isArray(option.replacements)) {
     // The user has provided an array of values
@@ -159,7 +159,7 @@ function setup (option) {
 /**
  * This function creates a keyMap to be passed to CodeMirror to handle.
  */
-function makeKeyMap () {
+function makeKeyMap (): void {
   builtKeyMap = {
     // Define the default handlers
     'Space': handleSpecial,
@@ -169,7 +169,7 @@ function makeKeyMap () {
   }
 
   // If the user has special quotes set, attach additional keys
-  if (quotes !== false && quotes['single'].start !== "'" && quotes['double'].start !== '"') {
+  if (quotes !== false && quotes.single.start !== "'" && quotes.double.start !== '"') {
     builtKeyMap['\'"\''] = function (cm) { return handleQuote(cm, 'double') }
     builtKeyMap["'''"] = function (cm) { return handleQuote(cm, 'single') }
   }
@@ -180,7 +180,7 @@ function makeKeyMap () {
 
   // If we're here we should be using Word-style replacement, that is:
   // We need to retrieve the triggering characters
-  const triggerCharacters = {}
+  const triggerCharacters: any = {}
   for (const key in replacementCandidates) {
     const character = key[key.length - 1]
     if (!(character in triggerCharacters)) {
@@ -207,8 +207,8 @@ function makeKeyMap () {
  * @param {Object} candidates A subset of the replacement table for the key
  * @param {string} key The key to be handled.
  */
-function makeHandler (candidates, key = '') {
-  return function (cm) {
+function makeHandler (candidates: any, key = '') {
+  return function (cm: CodeMirror.Editor) {
     return handleKey(cm, candidates, key)
   }
 }
@@ -219,7 +219,7 @@ function makeHandler (candidates, key = '') {
  * @param {Object} candidates A subset of the replacement table for the key
  * @param {string} key The key that is currently being handled.
  */
-function handleKey (cm, candidates, key) {
+function handleKey (cm: CodeMirror.Editor, candidates: any, key: string): typeof CodeMirror.Pass|undefined {
   if (cm.isReadOnly()) {
     return CodeMirror.Pass
   }
@@ -233,7 +233,7 @@ function handleKey (cm, candidates, key) {
 
   // Additionally, we only should replace if we're not within comment-style tokens
   let tokens = cm.getTokenTypeAt(cursor)
-  if (tokens && tokens.split(' ').includes('comment')) {
+  if (tokens?.split(' ').includes('comment')) {
     return CodeMirror.Pass
   }
 
@@ -266,7 +266,7 @@ function handleKey (cm, candidates, key) {
  * Handles a special character.
  * @param {CodeMirror.Editor} cm The CodeMirror instance.
  */
-function handleSpecial (cm) {
+function handleSpecial (cm: CodeMirror.Editor): typeof CodeMirror.Pass {
   if (cm.isReadOnly()) {
     return CodeMirror.Pass
   }
@@ -280,7 +280,7 @@ function handleSpecial (cm) {
 
   // Additionally, we only should replace if we're not within comment-style tokens
   let tokens = cm.getTokenTypeAt(cursor)
-  if (tokens && tokens.split(' ').includes('comment')) {
+  if (tokens?.split(' ').includes('comment')) {
     return CodeMirror.Pass
   }
 
@@ -330,7 +330,7 @@ function handleSpecial (cm) {
  * @param {CodeMirror.Editor} cm The CodeMirror instance.
  * @param {string} type The type of quote to be handled (single or double).
  */
-function handleQuote (cm, type) {
+function handleQuote (cm: CodeMirror.Editor, type: string): typeof CodeMirror.Pass|undefined {
   if (quotes === false || cm.isReadOnly()) {
     return CodeMirror.Pass
   }
@@ -349,9 +349,9 @@ function handleQuote (cm, type) {
     // We have to check for two possibilities:
     // There's a "startChar" in front of the quote or not.
     if (cursor.ch === 0 || startChars.includes(cm.getRange(cursorBefore, cursor))) {
-      cm.doc.replaceRange(quotes[type].start, cursor)
+      cm.replaceRange(quotes[type].start, cursor)
     } else {
-      cm.doc.replaceRange(quotes[type].end, cursor)
+      cm.replaceRange(quotes[type].end, cursor)
     }
 
     hasJustAddedQuote = true
@@ -376,7 +376,7 @@ function handleQuote (cm, type) {
     if (noMdStart || noMdEnd) {
       toBeReplacedWith.push(selectionContent)
     } else {
-      toBeReplacedWith.push(quotes[type].start + selectionContent + quotes[type].end)
+      toBeReplacedWith.push(String(quotes[type].start) + selectionContent + String(quotes[type].end))
     }
   }
 
@@ -387,7 +387,7 @@ function handleQuote (cm, type) {
  * Handles a backspace keypress if using Word style. It undoes the last replacement.
  * @param {CodeMirror.Editor} cm The CodeMirror instance.
  */
-function handleBackspace (cm) {
+function handleBackspace (cm: CodeMirror.Editor): typeof CodeMirror.Pass|undefined {
   if (cm.isReadOnly()) {
     return CodeMirror.Pass
   }
@@ -427,7 +427,7 @@ function handleBackspace (cm) {
       replacement = "'"
     }
 
-    cm.doc.replaceRange(
+    cm.replaceRange(
       replacement,
       { 'line': cursor.line, 'ch': rangeStart },
       { 'line': cursor.line, 'ch': rangeStart + 1 }
@@ -441,7 +441,7 @@ function handleBackspace (cm) {
 
   // What do we do here? Easy: Check if the characters preceeding the cursor equal a replacement table value. If they do,
   // replace that with the original replacement *key*.
-  const reverse = {}
+  const reverse: any = {}
   for (const key in replacementCandidates) {
     reverse[replacementCandidates[key]] = key
   }
@@ -458,7 +458,7 @@ function handleBackspace (cm) {
  * Determines the maximum length of replacement candidates within a given field.
  * @param {Object} candidates The replacement table (or a subset thereof)
  */
-function getMaxCandidateLength (candidates) {
+function getMaxCandidateLength (candidates: any): number {
   let len = 0
   for (let key of Object.keys(candidates)) {
     if (key.length > len) {
@@ -474,18 +474,15 @@ function getMaxCandidateLength (candidates) {
  * @param {Cursor} cursor The CodeMirror cursor from which to begin.
  * @param {Object} candidates An object of replacement candidates.
  */
-function cursors (cursor, candidates) {
+function cursors (cursor: CodeMirror.Position, candidates: any): { cursorBegin: CodeMirror.Position, cursorEnd: CodeMirror.Position } {
   const cursorBegin = {
-    'line': cursor.line,
-    'ch': cursor.ch - getMaxCandidateLength(candidates)
+    line: cursor.line,
+    ch: cursor.ch - getMaxCandidateLength(candidates)
   }
 
   if (cursorBegin.ch < 0) {
     cursorBegin.ch = 0
   }
 
-  return {
-    'cursorBegin': cursorBegin,
-    'cursorEnd': cursor
-  }
+  return { cursorBegin: cursorBegin, cursorEnd: cursor }
 }

@@ -12,7 +12,7 @@
   * END HEADER
   */
 
-import { commands } from 'codemirror'
+import CodeMirror, { commands } from 'codemirror'
 
 // GENERAL PLUGIN VARIABLES
 import { getImageRE } from '@common/regular-expressions'
@@ -30,7 +30,7 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
  * @param  {CodeMirror.Editor} cm The calling CodeMirror instance
  * @return {void}    Commands do not return.
  */
-commands.markdownRenderImages = function (cm) {
+;(commands as any).markdownRenderImages = function (cm: CodeMirror.Editor): void {
   // We'll only render the viewport
   const viewport = cm.getViewport()
   for (let i = viewport.from; i < viewport.to; i++) {
@@ -55,10 +55,10 @@ commands.markdownRenderImages = function (cm) {
       // p2: The complete contents of the round braces
       // p3: If applicable, an image title (within round braces)
       // p4: Anything in curly brackets (mostly commands for Pandoc)
-      let altText = match[1] || '' // Everything inside the square brackets
-      let url = match[2] || '' // The URL
-      let title = match[3] || altText // An optional title in quotes after the image
-      let p4 = match[4] || ''
+      let altText = match[1] ?? '' // Everything inside the square brackets
+      let url = match[2] ?? '' // The URL
+      let title = match[3] ?? altText // An optional title in quotes after the image
+      let p4 = match[4] ?? ''
 
       // If a third group has been captured, we need to extract this from the
       // "bigger" second group again.
@@ -77,16 +77,17 @@ commands.markdownRenderImages = function (cm) {
       }
 
       // We can only have one marker at any given position at any given time
-      if (cm.doc.findMarks(curFrom, curTo).length > 0) continue
+      if (cm.findMarks(curFrom, curTo).length > 0) {
+        continue
+      }
 
       // Do not render if it's inside a comment (in this case the mode will be
       // markdown, but comments shouldn't be included in rendering)
       // Final check to avoid it for as long as possible, as getTokenAt takes
       // considerable time.
-      let tokenTypeBegin = cm.getTokenTypeAt(curFrom)
-      let tokenTypeEnd = cm.getTokenTypeAt(curTo)
-      if ((tokenTypeBegin && tokenTypeBegin.includes('comment')) ||
-      (tokenTypeEnd && tokenTypeEnd.includes('comment'))) {
+      const tokenTypeBegin = cm.getTokenTypeAt(curFrom)
+      const tokenTypeEnd = cm.getTokenTypeAt(curTo)
+      if (tokenTypeBegin?.includes('comment') || tokenTypeEnd?.includes('comment')) {
         continue
       }
 
@@ -96,16 +97,16 @@ commands.markdownRenderImages = function (cm) {
       let actualURLToLoad = url
 
       if (!isDataUrl) {
-        actualURLToLoad = makeAbsoluteURL(cm.getOption('zettlr').markdownImageBasePath, url)
+        actualURLToLoad = makeAbsoluteURL((cm as any).getOption('zettlr').markdownImageBasePath, url)
       }
 
       const caption = document.createElement('figcaption')
       caption.textContent = title
-      caption.contentEditable = true
+      caption.contentEditable = 'true'
 
       // Define a quick inline function that takes care of applying a new caption
-      const updateCaptionFunction = function (event) {
-        if (event.key !== undefined && event.key !== 'Enter') {
+      const updateCaptionFunction = function (event: KeyboardEvent|FocusEvent): void {
+        if (event instanceof KeyboardEvent && event.key !== 'Enter') {
           // If this is a KeyboardEvent, only perform the action on Enter
           return
         }
@@ -113,7 +114,7 @@ commands.markdownRenderImages = function (cm) {
         event.preventDefault()
         event.stopPropagation()
         // Make sure there are no quotes since these will break the image
-        const newCaption = caption.textContent.replace(/"/g, '')
+        const newCaption = caption.textContent?.replace(/"/g, '') ?? ''
         // "Why are you setting the caption both as the image description and title?"
         // Well, since all exports sometimes us this, sometimes the other value.
         const newImageTag = `![${newCaption}](${url} "${newCaption}")${p4}`
@@ -150,7 +151,7 @@ commands.markdownRenderImages = function (cm) {
       container.appendChild(figure)
 
       // Now add a line widget to this line.
-      let textMarker = cm.doc.markText(
+      let textMarker = cm.markText(
         curFrom,
         curTo,
         {
@@ -161,10 +162,10 @@ commands.markdownRenderImages = function (cm) {
       )
 
       // Retrieve the size constraints
-      const maxPreviewWidth = Number(cm.getOption('zettlr').imagePreviewWidth)
-      const maxPreviewHeight = Number(cm.getOption('zettlr').imagePreviewHeight)
-      let width = (!Number.isNaN(maxPreviewWidth)) ? maxPreviewWidth + '%' : '100%'
-      let height = (!Number.isNaN(maxPreviewHeight) && maxPreviewHeight < 100) ? maxPreviewHeight + 'vh' : ''
+      const maxPreviewWidth = Number((cm as any).getOption('zettlr').imagePreviewWidth)
+      const maxPreviewHeight = Number((cm as any).getOption('zettlr').imagePreviewHeight)
+      let width = (!Number.isNaN(maxPreviewWidth)) ? `${maxPreviewWidth}%` : '100%'
+      let height = (!Number.isNaN(maxPreviewHeight) && maxPreviewHeight < 100) ? `${maxPreviewHeight}vh` : ''
 
       // Apply the constraints to the figure and image
       figure.style.maxWidth = width

@@ -18,6 +18,8 @@
  */
 
 import makeSearchRegex from '@common/util/make-search-regex'
+import CodeMirror, { SearchCursor, TextMarker } from 'codemirror'
+import { SearchAnnotation } from 'codemirror/addon/search/matchesonscrollbar'
 
 /**
  * Contains the current search term, necessary to detect changing search terms
@@ -31,26 +33,26 @@ let currentLocalSearch = ''
  *
  * @var {SearchCursor|null}
  */
-let searchCursor = null
+let searchCursor: SearchCursor|null = null
 
 /**
  * Contains the last search result
  *
- * @var {false|array}
+ * @var {boolean|RegExpMatchArray}
  */
-let lastSearchResult = false
+let lastSearchResult: boolean|RegExpMatchArray = false
 
 /**
  * Contains the annotation bar for the matches on the scrollbar
  */
-let matchAnnotationBar = null
+let matchAnnotationBar: SearchAnnotation|null = null
 
 /**
  * Contains all the text markers which highlight the search results on the scrollbar.
  *
  * @var {CodeMirror.TextMarker[]}
  */
-const matchesInDocument = []
+const matchesInDocument: TextMarker[] = []
 
 /**
  * Performs a one-shot search, either forward or backward
@@ -59,7 +61,7 @@ const matchesInDocument = []
  * @param   {string}             term     The term to be searched
  * @param   {boolean}            forward  If true, searches next, else previous
  */
-function search (cm, term, forward = true) {
+function search (cm: CodeMirror.Editor, term: string, forward: boolean = true): void {
   if (term.length === 0) {
     stopSearch()
     return
@@ -82,8 +84,8 @@ function search (cm, term, forward = true) {
       // of the term and should start over.
       if (!forward) {
         // Start from the end of the document
-        const lastLine = cm.doc.lastLine()
-        const lastCh = cm.doc.getLine(lastLine).length
+        const lastLine = cm.lastLine()
+        const lastCh = cm.getLine(lastLine).length
         startSearch(cm, currentLocalSearch, { line: lastLine, ch: lastCh })
       } else {
         // Start from the beginning
@@ -103,13 +105,13 @@ function search (cm, term, forward = true) {
  * @param   {string}             replacement  The replacement string
  * @param   {boolean}            forward      The replacement direction (default: true)
  */
-function replace (cm, term, replacement, forward = true) {
+function replace (cm: CodeMirror.Editor, term: string, replacement: string, forward: boolean = true): void {
   if (searchCursor === null || currentLocalSearch !== term) {
     startSearch(cm, term)
     search(cm, term, forward)
   }
 
-  if (lastSearchResult === false) {
+  if (!Array.isArray(lastSearchResult)) {
     return // Nothing to replace
   }
 
@@ -119,10 +121,14 @@ function replace (cm, term, replacement, forward = true) {
   // multiple occurrences.
   for (let i = 1; i < lastSearchResult.length; i++) {
     // Replaces $1, $2, etc. with the corresponding search result
+    // @ts-expect-error (replaceAll is not available in our lib target)
     replacement = replacement.replaceAll(`$${i}`, lastSearchResult[i])
   }
 
-  searchCursor.replace(replacement)
+  if (searchCursor !== null) {
+    searchCursor.replace(replacement)
+  }
+
   search(cm, term, true)
 }
 
@@ -133,15 +139,20 @@ function replace (cm, term, replacement, forward = true) {
  * @param   {string}             term         The term to be replaced
  * @param   {string}             replacement  The replacement string.
  */
-export function replaceAll (cm, term, replacement) {
+export function replaceAll (cm: CodeMirror.Editor, term: string, replacement: string): void {
   // Start a new search from the beginning of the document
   startSearch(cm, term)
 
+  if (searchCursor === null) {
+    return
+  }
+
   let result = searchCursor.findNext()
 
-  while (result !== false) {
+  while (result !== false && result instanceof Array) {
     let localReplacement = replacement
     for (let i = 1; i < result.length; i++) {
+      // @ts-expect-error (replaceAll is not available in our lib target)
       localReplacement = localReplacement.replaceAll(`$${i}`, result[i])
     }
 
@@ -158,7 +169,7 @@ export function replaceAll (cm, term, replacement) {
  * @param   {string}             term          The search term
  * @param   {Cursor?}            startPosition An optional start position. Undefined defaults to beginning of document.
  */
-function startSearch (cm, term, startPosition) {
+function startSearch (cm: CodeMirror.Editor, term: string, startPosition?: CodeMirror.Position): void {
   stopSearch()
   currentLocalSearch = term
   const regex = makeSearchRegex(currentLocalSearch)
@@ -179,7 +190,7 @@ function startSearch (cm, term, startPosition) {
 /**
  * Stops a running search
  */
-export function stopSearch () {
+export function stopSearch (): void {
   currentLocalSearch = ''
   searchCursor = null
   lastSearchResult = false
@@ -197,7 +208,7 @@ export function stopSearch () {
  * @param   {CodeMirror.Editor}  cm    The editor instance
  * @param   {RegExp}             term  The term, as a regular expression
  */
-function highlightSearchResults (cm, term) {
+function highlightSearchResults (cm: CodeMirror.Editor, term: RegExp): void {
   unhighlightSearchResults()
   const cursor = cm.getSearchCursor(term)
   while (cursor.findNext() !== false) {
@@ -209,10 +220,10 @@ function highlightSearchResults (cm, term) {
 /**
  * Removes all markers that highlight search results within the document.
  */
-function unhighlightSearchResults () {
+function unhighlightSearchResults (): void {
   while (matchesInDocument.length > 0) {
     const marker = matchesInDocument.shift()
-    if (marker.find() !== undefined) {
+    if (marker?.find() !== undefined) {
       marker.clear()
     }
   }
@@ -226,21 +237,21 @@ function unhighlightSearchResults () {
  *
  * @return  {boolean}                  Returns true if there is at least one occurrence, false otherwise.
  */
-function containsSearchTerm (cm, term) {
+function containsSearchTerm (cm: CodeMirror.Editor, term: string): boolean {
   const val = cm.getValue()
   const regex = makeSearchRegex(term)
   return regex.test(val)
 }
 
-export function searchNext (cm, term) {
+export function searchNext (cm: CodeMirror.Editor, term: string): void {
   search(cm, term, true)
 }
-export function searchPrevious (cm, term) {
+export function searchPrevious (cm: CodeMirror.Editor, term: string): void {
   search(cm, term, false)
 }
-export function replaceNext (cm, term, replacement) {
+export function replaceNext (cm: CodeMirror.Editor, term: string, replacement: string): void {
   replace(cm, term, replacement, true)
 }
-export function replacePrevious (cm, term, replacement) {
+export function replacePrevious (cm: CodeMirror.Editor, term: string, replacement: string): void {
   replace(cm, term, replacement, false)
 }

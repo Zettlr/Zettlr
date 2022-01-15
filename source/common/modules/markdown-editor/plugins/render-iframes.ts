@@ -12,18 +12,18 @@
   * END HEADER
   */
 
-import { commands } from 'codemirror'
+import CodeMirror, { commands } from 'codemirror'
 import { getIframeRE } from '@common/regular-expressions'
 
 const iframeRE = getIframeRE() // Matches all iframes
 
-function renderIframe (src) {
+function renderIframe (src: string): HTMLIFrameElement {
   const iframe = document.createElement('iframe')
   iframe.src = src
   return iframe
 }
 
-commands.markdownRenderIframes = function (cm) {
+;(commands as any).markdownRenderIframes = function (cm: CodeMirror.Editor): void {
   let match
 
   // We'll only render the viewport
@@ -45,7 +45,9 @@ commands.markdownRenderIframes = function (cm) {
     let curTo = { 'line': i, 'ch': match[0].length }
 
     // We can only have one marker at any given position at any given time
-    if (cm.doc.findMarks(curFrom, curTo).length > 0) continue
+    if (cm.findMarks(curFrom, curTo).length > 0) {
+      continue
+    }
 
     // Now we can render it. But not quite. In order to prevent XSS attacks,
     // let's not render it immediately, but rather check the domain. If it's
@@ -59,7 +61,7 @@ commands.markdownRenderIframes = function (cm) {
 
     if (whitelist.includes(hostname) === true) {
       // The hostname is part of the whitelist, so let's immediately render it.
-      cm.doc.markText(
+      cm.markText(
         curFrom, curTo,
         {
           'clearOnEnter': true,
@@ -84,7 +86,7 @@ commands.markdownRenderIframes = function (cm) {
       wrapper.appendChild(renderAlways)
       wrapper.appendChild(renderOnce)
 
-      const marker = cm.doc.markText(
+      const marker = cm.markText(
         curFrom, curTo,
         {
           'clearOnEnter': true,

@@ -12,14 +12,12 @@
   * END HEADER
   */
 
-import { commands } from 'codemirror'
+import CodeMirror, { commands } from 'codemirror'
 import { getHeadRE } from '@common/regular-expressions'
 
 const headRE = getHeadRE()
 
-let currentCallback = null
-
-commands.markdownRenderHTags = function (cm) {
+;(commands as any).markdownRenderHTags = function (cm: CodeMirror.Editor): void {
   let match
 
   // We'll only render the viewport
@@ -49,7 +47,7 @@ commands.markdownRenderHTags = function (cm) {
     curFrom = { 'line': i, 'ch': 0 }
 
     // We can only have one marker at any given position at any given time
-    if (cm.doc.findMarks(curFrom, curTo).length > 0) {
+    if (cm.findMarks(curFrom, curTo).length > 0) {
       continue
     }
 
@@ -57,10 +55,10 @@ commands.markdownRenderHTags = function (cm) {
     hTagWrapper.className = 'heading-tag'
 
     const hTag = document.createElement('span')
-    hTag.textContent = 'h' + headingLevel
+    hTag.textContent = `h${headingLevel}`
     hTagWrapper.appendChild(hTag)
 
-    const textMarker = cm.doc.markText(
+    const textMarker = cm.markText(
       curFrom, curTo,
       {
         'clearOnEnter': true,
@@ -76,67 +74,64 @@ commands.markdownRenderHTags = function (cm) {
       // again immediately due to the event bubbling upwards to the window.
       e.stopPropagation()
 
-      // If we have a callback saved, there is a menu still displayed. It may
-      // be that the callback is still there but no menu is shown, but then
-      // calling it is a no-op
-      if (currentCallback !== null) {
-        currentCallback()
-      }
-
       const items = [
         {
           id: '1',
           label: '#',
           type: 'checkbox',
-          enabled: cm.isReadOnly() === false,
+          enabled: !cm.isReadOnly(),
           checked: headingLevel === 1
         },
         {
           id: '2',
           label: '##',
           type: 'checkbox',
-          enabled: cm.isReadOnly() === false,
+          enabled: !cm.isReadOnly(),
           checked: headingLevel === 2
         },
         {
           id: '3',
           label: '###',
           type: 'checkbox',
-          enabled: cm.isReadOnly() === false,
+          enabled: !cm.isReadOnly(),
           checked: headingLevel === 3
         },
         {
           id: '4',
           label: '####',
           type: 'checkbox',
-          enabled: cm.isReadOnly() === false,
+          enabled: !cm.isReadOnly(),
           checked: headingLevel === 4
         },
         {
           id: '5',
           label: '#####',
           type: 'checkbox',
-          enabled: cm.isReadOnly() === false,
+          enabled: !cm.isReadOnly(),
           checked: headingLevel === 5
         },
         {
           id: '6',
           label: '######',
           type: 'checkbox',
-          enabled: cm.isReadOnly() === false,
+          enabled: !cm.isReadOnly(),
           checked: headingLevel === 6
         }
       ]
 
       const point = { x: e.clientX, y: e.clientY }
-      currentCallback = global.menuProvider.show(point, items, (id) => {
+      global.menuProvider.show(point, items as any, (id) => {
         const newLevel = parseInt(id, 10)
 
+        const markerRange = textMarker.find()
+        if (markerRange === undefined) {
+          return
+        }
+
         // The heading might have changed position in the meantime
-        const { from, to } = textMarker.find()
+        const { from, to } = markerRange
         cm.replaceRange('#'.repeat(newLevel), from, to)
         textMarker.clear()
-        currentCallback = null // No need to save it anymore
         // Programmatically trigger a cursor movement ...
         cm.setCursor({ line: from.line, ch: newLevel + 1 })
         // ... and re-focus the editor

@@ -17,7 +17,7 @@
  * END HEADER
  */
 
-import { commands, Pass } from 'codemirror'
+import CodeMirror, { commands, Pass } from 'codemirror'
 import { getListTokenRE } from '@common/regular-expressions'
 
 const listRE = getListTokenRE()
@@ -28,8 +28,8 @@ const listRE = getListTokenRE()
  *
  * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
  */
-commands.goLineLeftMarkdown = function (cm) {
-  if (cm.getOption('disableInput') === true) {
+;(commands as any).goLineLeftMarkdown = function (cm: CodeMirror.Editor) {
+  if ((cm as any).getOption('disableInput') === true) {
     return Pass
   }
 
@@ -51,9 +51,9 @@ commands.goLineLeftMarkdown = function (cm) {
   } else {
     // The listRE matched, so now we can check for where the cursor actually
     // is.
-    const leadingWhite = (match[1] !== undefined) ? match[1].length : 0
-    const tokenLength = (match[2] !== undefined) ? match[2].length : 0
-    const afterWhite = (match[4] !== undefined) ? match[4].length : 0
+    const leadingWhite = match[1].length ?? 0
+    const tokenLength = match[2].length ?? 0
+    const afterWhite = match[4].length ?? 0
 
     const startOfItem = leadingWhite + tokenLength + afterWhite
 

@@ -12,7 +12,7 @@
   * END HEADER
   */
 
-import { commands } from 'codemirror'
+import CodeMirror, { commands } from 'codemirror'
 import makeAbsoluteURL from '@common/util/make-absolute-url'
 import openMarkdownLink from '../open-markdown-link'
 
@@ -31,13 +31,16 @@ const linkRE = /\[!\[([^[]*)\]\((.+)\)\]\((.+)\)|\[([^\]]+)\]\((.+?)\)|(((?:(?:a
  *
  * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
  */
-commands.markdownRenderLinks = function (cm) {
+;(commands as any).markdownRenderLinks = function (cm: CodeMirror.Editor) {
   let match
 
   // We'll only render the viewport
   const viewport = cm.getViewport()
   for (let i = viewport.from; i < viewport.to; i++) {
-    if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
+    if (cm.getModeAt({ line: i, ch: 0 }).name !== 'markdown-zkn') {
+      continue
+    }
+
     // Always reset lastIndex property, because test()-ing on regular
     // expressions advance it.
     linkRE.lastIndex = 0
@@ -63,13 +66,13 @@ commands.markdownRenderLinks = function (cm) {
       // Group 5: Link target of a regular link
       // Group 6 & 7: Link target of a standalone link
       // Group 8: Email address
-      let linkImageCaption = match[1] || ''
-      let linkImagePath = match[2] || ''
-      let linkImageTarget = match[3] || ''
-      let regularLinkCaption = match[4] || ''
-      let regularLinkTarget = match[5] || ''
-      let standaloneLinkTarget = match[6] || ''
-      let email = match[8] || ''
+      let linkImageCaption = match[1] ?? ''
+      let linkImagePath = match[2] ?? ''
+      let linkImageTarget = match[3] ?? ''
+      let regularLinkCaption = match[4] ?? ''
+      let regularLinkTarget = match[5] ?? ''
+      let standaloneLinkTarget = match[6] ?? ''
+      let email = match[8] ?? ''
 
       let isLinkedImage = linkImagePath !== '' && linkImageTarget !== ''
       let isMdLink = regularLinkTarget !== ''
@@ -77,8 +80,8 @@ commands.markdownRenderLinks = function (cm) {
       let isEmail = email !== ''
 
       // Now get the precise beginning of the match and its end
-      let curFrom = { 'line': i, 'ch': match.index }
-      let curTo = { 'line': i, 'ch': match.index + match[0].length }
+      let curFrom = { line: i, ch: match.index }
+      let curTo = { line: i, ch: match.index + match[0].length }
 
       // Now the age-old problem of parenthesis-detection. The regular expression
       // will not match all parenthesis, if a link contains these, so what we need
@@ -119,7 +122,9 @@ commands.markdownRenderLinks = function (cm) {
       }
 
       // We can only have one marker at any given position at any given time
-      if (cm.doc.findMarks(curFrom, curTo).length > 0) continue
+      if (cm.findMarks(curFrom, curTo).length > 0) {
+        continue
+      }
 
       // Do not render if it's inside a comment (in this case the mode will be
       // markdown, but comments shouldn't be included in rendering)
@@ -127,8 +132,7 @@ commands.markdownRenderLinks = function (cm) {
       // considerable time.
       let tokenTypeBegin = cm.getTokenTypeAt(curFrom)
       let tokenTypeEnd = cm.getTokenTypeAt(curTo)
-      if ((tokenTypeBegin && tokenTypeBegin.includes('comment')) ||
-      (tokenTypeEnd && tokenTypeEnd.includes('comment'))) {
+      if (tokenTypeBegin?.includes('comment') || tokenTypeEnd?.includes('comment')) {
         continue
       }
 
@@ -139,14 +143,14 @@ commands.markdownRenderLinks = function (cm) {
         let img = document.createElement('img')
         renderedLinkTarget = linkImageTarget
         img.title = `${linkImageCaption} (${linkImageTarget})`
-        img.src = makeAbsoluteURL(cm.getOption('zettlr').markdownImageBasePath, linkImagePath)
+        img.src = makeAbsoluteURL((cm as any).getOption('zettlr').markdownImageBasePath, linkImagePath)
         img.style.cursor = 'pointer' // Nicer cursor
         // Copied over from the other plugin
         // Retrieve the size constraints
-        const maxPreviewWidth = cm.getOption('zettlr').imagePreviewWidth
-        const maxPreviewHeight = cm.getOption('zettlr').imagePreviewHeight
-        let width = (maxPreviewWidth) ? maxPreviewWidth + '%' : '100%'
-        let height = (maxPreviewHeight && maxPreviewHeight < 100) ? maxPreviewHeight + 'vh' : ''
+        const maxPreviewWidth: number = (cm as any).getOption('zettlr').imagePreviewWidth
+        const maxPreviewHeight: number = (cm as any).getOption('zettlr').imagePreviewHeight
+        let width = (!Number.isNaN(maxPreviewWidth)) ? `${maxPreviewWidth}%` : '100%'
+        let height = (!Number.isNaN(maxPreviewHeight) && maxPreviewHeight < 100) ? `${maxPreviewHeight}vh` : ''
         img.style.maxWidth = width
         img.style.maxHeight = height
         a.appendChild(img)
@@ -188,18 +192,18 @@ commands.markdownRenderLinks = function (cm) {
 
       // Retain the outer formatting, if applicable
       let tk = cm.getTokenAt(curFrom, true).type
-      if (tk) {
-        tk = tk.split(' ')
-        if (tk.includes('strong')) {
+      if (tk !== null) {
+        const tokens = tk.split(' ')
+        if (tokens.includes('strong')) {
           a.style.fontWeight = 'bold'
         }
-        if (tk.includes('em')) {
+        if (tokens.includes('em')) {
           a.style.fontStyle = 'italic'
         }
       }
 
       // Apply TextMarker
-      let textMarker = cm.doc.markText(
+      let textMarker = cm.markText(
         curFrom, curTo,
         {
           'clearOnEnter': true,

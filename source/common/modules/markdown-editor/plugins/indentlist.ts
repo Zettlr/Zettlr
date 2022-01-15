@@ -9,12 +9,12 @@
  * See original repository at https://github.com/joel-porquet/CodeMirror-markdown-list-autoindent
  */
 
-import { Pos, commands, Pass } from 'codemirror'
+import CodeMirror, { Pos, commands, Pass } from 'codemirror'
 import { getListTokenRE } from '@common/regular-expressions'
 
 const listTokenRE = getListTokenRE()
 
-function matchListToken (pos, cm) {
+function matchListToken (pos: CodeMirror.Position, cm: CodeMirror.Editor): boolean {
   /* Get some info about the current state */
   const eolState = cm.getStateAfter(pos.line)
   const inList = eolState.list !== false
@@ -28,7 +28,7 @@ function matchListToken (pos, cm) {
 
   /* Not being in a list, or being in a list but not right after the list
     * token, are both not considered a match */
-  if ((!inList && !inQuote) || !match) {
+  if ((!inList && !inQuote) || match === null) {
     return false
   } else {
     return true
@@ -42,7 +42,7 @@ function matchListToken (pos, cm) {
  *
  * @return  {undefined|CodeMirror.Pass}      The command return
  */
-commands.autoIndentMarkdownList = function (cm) {
+;(commands as any).autoIndentMarkdownList = function (cm: CodeMirror.Editor) {
   if (cm.isReadOnly()) {
     return Pass
   }
@@ -68,7 +68,7 @@ commands.autoIndentMarkdownList = function (cm) {
  *
  * @return  {undefined|CodeMirror.Editor.Pass}      The command return
  */
-commands.autoUnindentMarkdownList = function (cm) {
+;(commands as any).autoUnindentMarkdownList = function (cm: CodeMirror.Editor) {
   if (cm.isReadOnly()) {
     return Pass
   }

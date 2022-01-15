@@ -12,7 +12,7 @@
   * END HEADER
   */
 
-import { commands } from 'codemirror'
+import CodeMirror, { commands } from 'codemirror'
 import { getTaskRE } from '@common/regular-expressions'
 
 const taskRE = getTaskRE() // Matches `- [ ]` and `- [x]`
@@ -22,7 +22,7 @@ const taskRE = getTaskRE() // Matches `- [ ]` and `- [x]`
  *
  * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
  */
-commands.markdownRenderTasks = function (cm) {
+;(commands as any).markdownRenderTasks = function (cm: CodeMirror.Editor) {
   let match
 
   // We'll only render the viewport
@@ -39,7 +39,7 @@ commands.markdownRenderTasks = function (cm) {
       continue
     }
 
-    const leadingSpaces = match[1].length || 0
+    const leadingSpaces = match[1].length ?? 0
 
     if (cm.getCursor('from').line === i && cm.getCursor('from').ch < 5 + leadingSpaces) {
       // We're directly in the formatting so don't render.
@@ -94,7 +94,7 @@ commands.markdownRenderTasks = function (cm) {
       cm.replaceRange(`${listSign} [${newMark}]`, from, to)
 
       // ReplaceRange removes the marker, so we have to re-initiate it
-      textMarker = cm.doc.markText(
+      textMarker = cm.markText(
         from, to,
         {
           'clearOnEnter': true,
@@ -106,7 +106,7 @@ commands.markdownRenderTasks = function (cm) {
     } // END onclick
 
     // We need to listen to readOnly state changes to enable/disable checkboxes
-    const updateHandler = (cm, option) => {
+    const updateHandler = (cm: CodeMirror.Editor, option: any): void => {
       if (!document.body.contains(cbox)) {
         // Remove the event listener again
         cm.off('optionChange', updateHandler)

@@ -7,7 +7,7 @@
 // + Adapt paths for use within Zettlr
 // + Remove the blockquote character (>) from the list regex.
 
-import CodeMirror from 'codemirror'
+import CodeMirror, { commands } from 'codemirror'
 import { getListUnorderedRE, getListEmptyRE, getListRE } from '@common/regular-expressions'
 const listRE = getListRE()
 const emptyListRE = getListEmptyRE()
@@ -18,7 +18,7 @@ const unorderedListRE = getListUnorderedRE()
  *
  * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
  */
-CodeMirror.commands.newlineAndIndentContinueMarkdownList = function (cm) {
+;(commands as any).newlineAndIndentContinueMarkdownList = function (cm: CodeMirror.Editor) {
   if (cm.isReadOnly()) return CodeMirror.Pass
   let ranges = cm.listSelections()
   let replacements = []
@@ -27,12 +27,12 @@ CodeMirror.commands.newlineAndIndentContinueMarkdownList = function (cm) {
     // If we're not in Markdown mode, fall back to normal newlineAndIndent
     let eolState = cm.getStateAfter(pos.line)
     let mode = cm.getMode()
-    if (mode.innerMode !== undefined) {
-      mode = cm.getMode().innerMode(eolState)
+    if ((mode as any).innerMode !== undefined) {
+      mode = (cm.getMode() as any).innerMode(eolState)
     }
 
     // Modes can either be just strings or objects with a name property
-    let modeName = (mode.mode !== undefined) ? mode.mode.name : mode.name
+    let modeName = ((mode as any).mode !== undefined) ? (mode as any).mode.name : mode.name
 
     // innerMode gets the first inner mode, i.e.:
     // multiplex -> spellchecker (not visible the
@@ -41,7 +41,7 @@ CodeMirror.commands.newlineAndIndentContinueMarkdownList = function (cm) {
       cm.execCommand('newlineAndIndent')
       return
     } else {
-      eolState = mode.state
+      eolState = (mode as any).state
     }
 
     const inList = eolState.list !== false
@@ -50,7 +50,7 @@ CodeMirror.commands.newlineAndIndentContinueMarkdownList = function (cm) {
     let line = cm.getLine(pos.line)
     let match = listRE.exec(line)
     const cursorBeforeBullet = /^\s*$/.test(line.slice(0, pos.ch))
-    if (!ranges[i].empty() || (!inList && !inQuote) || !match || cursorBeforeBullet) {
+    if (!ranges[i].empty() || (!inList && !inQuote) || match === null || cursorBeforeBullet) {
       cm.execCommand('newlineAndIndent')
       return
     }
@@ -66,8 +66,8 @@ CodeMirror.commands.newlineAndIndentContinueMarkdownList = function (cm) {
     } else {
       let indent = match[1]
       let after = match[5]
-      let numbered = !(unorderedListRE.test(match[2]) || match[2].indexOf('>') >= 0)
-      let bullet = numbered ? (parseInt(match[3], 10) + 1) + match[4] : match[2].replace('x', ' ')
+      let numbered = !(unorderedListRE.test(match[2]) || match[2].includes('>'))
+      let bullet = numbered ? (parseInt(match[3], 10) + 1).toString() + match[4] : match[2].replace('x', ' ')
       replacements[i] = '\n' + indent + bullet + after
 
       if (numbered) incrementRemainingMarkdownListNumbers(cm, pos)
@@ -79,12 +79,12 @@ CodeMirror.commands.newlineAndIndentContinueMarkdownList = function (cm) {
 
 // Auto-updating Markdown list numbers when a new item is added to the
 // middle of a list
-function incrementRemainingMarkdownListNumbers (cm, pos) {
+function incrementRemainingMarkdownListNumbers (cm: CodeMirror.Editor, pos: CodeMirror.Position): void {
   let startLine = pos.line
   let lookAhead = 0
   let skipCount = 0
   let startItem = listRE.exec(cm.getLine(startLine))
-  let startIndent = startItem[1]
+  let startIndent = startItem?.[1] ?? ''
 
   let nextItem
   do {
@@ -93,9 +93,9 @@ function incrementRemainingMarkdownListNumbers (cm, pos) {
     let nextLine = cm.getLine(nextLineNumber)
     nextItem = listRE.exec(nextLine)
 
-    if (nextItem) {
+    if (nextItem !== null) {
       let nextIndent = nextItem[1]
-      let newNumber = (parseInt(startItem[3], 10) + lookAhead - skipCount)
+      let newNumber = (parseInt(startItem?.[3] ?? '0', 10) + lookAhead - skipCount)
       let nextNumber = (parseInt(nextItem[3], 10))
       let itemNumber = nextNumber
 
@@ -103,7 +103,7 @@ function incrementRemainingMarkdownListNumbers (cm, pos) {
         if (newNumber === nextNumber) itemNumber = nextNumber + 1
         if (newNumber > nextNumber) itemNumber = newNumber + 1
         cm.replaceRange(
-          nextLine.replace(listRE, nextIndent + itemNumber + nextItem[4] + nextItem[5]),
+          nextLine.replace(listRE, nextIndent + itemNumber.toString() + nextItem[4] + nextItem[5]),
           {
             line: nextLineNumber, ch: 0
           }, {
@@ -117,5 +117,5 @@ function incrementRemainingMarkdownListNumbers (cm, pos) {
         skipCount += 1
       }
     }
-  } while (nextItem)
+  } while (nextItem !== null)
 }

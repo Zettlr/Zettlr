@@ -12,7 +12,7 @@
   * END HEADER
   */
 
-import { commands, Pass } from 'codemirror'
+import CodeMirror, { commands, Pass } from 'codemirror'
 import { getFnRE, getFnRefRE } from '@common/regular-expressions'
 const fnRE = getFnRE()
 const fnrefRE = getFnRefRE(true) // Get the multiline version
@@ -22,24 +22,26 @@ const fnrefRE = getFnRefRE(true) // Get the multiline version
  *
  * @param   {CodeMirror.Editor}  cm  The editor instance
  */
-commands.insertFootnote = function (cm) {
+;(commands as any).insertFootnote = function (cm: CodeMirror.Editor) {
   // This is done by parseInt()-ing the existing footnotes and search for the
   // highest identifier. So this function does not include special footnote refs
   // (such as [^a-footnote-ref]). But still it definitely yields unique footnotes.
-  if (cm.isReadOnly()) return Pass
+  if (cm.isReadOnly()) {
+    return Pass
+  }
 
   // Reset search indices
   fnRE.lastIndex = 0
   fnrefRE.lastIndex = 0
 
-  let cur = cm.doc.getCursor()
+  let cur = cm.getCursor()
 
-  if (fnrefRE.test(cm.doc.getLine(cur.line))) {
+  if (fnrefRE.test(cm.getLine(cur.line))) {
     // Let's try to keep inception with fns inside other fns to a minimum.
     return Pass
   }
 
-  let content = cm.doc.getValue()
+  let content = cm.getValue()
 
   // Find all footnotes
   let lastIndex = 0 // Start with 0 because the index WILL be increased.
@@ -47,7 +49,7 @@ commands.insertFootnote = function (cm) {
 
   while ((match = fnRE.exec(content)) !== null) {
     // Find the highest index
-    let fn = match[2] || match[3]
+    let fn = match[2] ?? match[3]
     if (parseInt(fn) > lastIndex) {
       lastIndex = parseInt(fn)
     }
@@ -58,17 +60,17 @@ commands.insertFootnote = function (cm) {
   lastIndex++
 
   // First insert the footnote anchor.
-  cm.doc.replaceRange(`[^${lastIndex}]`, cur)
+  cm.replaceRange(`[^${lastIndex}]`, cur)
   // Then add a reference to the bottom of the document
-  if (cm.doc.getLine(cm.doc.lastLine()).trim() === '') {
+  if (cm.getLine(cm.lastLine()).trim() === '') {
     // If the last line is empty, simply put the ref in it.
-    cm.doc.replaceRange(`[^${lastIndex}]: `, { 'line': cm.doc.lastLine(), 'ch': cm.doc.getLine(cm.doc.lastLine()).length })
-  } else if (fnrefRE.test(cm.doc.getLine(cm.doc.lastLine()))) {
+    cm.replaceRange(`[^${lastIndex}]: `, { 'line': cm.lastLine(), 'ch': cm.getLine(cm.lastLine()).length })
+  } else if (fnrefRE.test(cm.getLine(cm.lastLine()))) {
     // Last line is a footnote reference -> Only add one newline.
-    cm.doc.replaceRange(`\n[^${lastIndex}]: `, { 'line': cm.doc.lastLine(), 'ch': cm.doc.getLine(cm.doc.lastLine()).length })
+    cm.replaceRange(`\n[^${lastIndex}]: `, { 'line': cm.lastLine(), 'ch': cm.getLine(cm.lastLine()).length })
   } else {
     // Line is neither empty nor a footnote reference.
-    cm.doc.replaceRange(`\n\n[^${lastIndex}]: `, { 'line': cm.doc.lastLine(), 'ch': cm.doc.getLine(cm.doc.lastLine()).length })
+    cm.replaceRange(`\n\n[^${lastIndex}]: `, { 'line': cm.lastLine(), 'ch': cm.getLine(cm.lastLine()).length })
   }
 }
 
@@ -78,14 +80,16 @@ commands.insertFootnote = function (cm) {
  *
  * @param   {CodeMirror.Editor}  cm  The codemirror instance
  */
-commands.removeFootnote = function (cm) {
-  if (cm.isReadOnly()) return Pass
+;(commands as any).removeFootnote = function (cm: CodeMirror.Editor) {
+  if (cm.isReadOnly()) {
+    return Pass
+  }
 
   // Reset search indices
   fnRE.lastIndex = 0
   fnrefRE.lastIndex = 0
 
-  let curTo = cm.doc.getCursor()
+  let curTo = cm.getCursor()
 
   // Initialize a head for the selection
   let curFrom = { 'line': curTo.line, 'ch': curTo.ch }
@@ -96,13 +100,13 @@ commands.removeFootnote = function (cm) {
   // Step one: Find the beginning
   do {
     curFrom.ch = curFrom.ch - 1
-    cm.doc.setSelection(curFrom, curTo)
+    cm.setSelection(curFrom, curTo)
     if (--emergencyStop < 0) {
       // Prevent infinite loop
       break
     }
     // Do as long as inside the selection there is no opening bracket.
-  } while (cm.doc.getSelection().indexOf('[') !== 0)
+  } while (cm.getSelection().indexOf('[') !== 0)
 
   emergencyStop = 30
   let match = null
@@ -112,14 +116,14 @@ commands.removeFootnote = function (cm) {
     fnRE.lastIndex = 0
 
     curTo.ch = curTo.ch + 1
-    cm.doc.setSelection(curFrom, curTo)
+    cm.setSelection(curFrom, curTo)
     if (--emergencyStop < 0) {
       // Prevent infinite loop
       break
     }
     // Do as long as we don't recognize the pattern '[^<ref>]'
     // This now should also match strings the end with the closing bracket
-  } while ((match = fnRE.exec(cm.doc.getSelection())) === null)
+  } while ((match = fnRE.exec(cm.getSelection())) === null)
 
   // At this position it may be that the selection also includes exactly
   // 30 chars BEFORE the actual footnote. This may be because the user
@@ -133,11 +137,11 @@ commands.removeFootnote = function (cm) {
   // We can be sure of the following:
   // 1. The match includes the precise footnote that has been matched.
   // 2. The END of the selection is definitely correctly set.
-  if (match.input.indexOf('[') > 0) {
+  if (match !== null && match.input.indexOf('[') > 0) {
     // > 0 indicates there's something selected before the footnote
     // Simply push forward the curFrom.ch to that index and re-select.
     curFrom.ch = curFrom.ch + match.input.indexOf('[')
-    cm.doc.setSelection(curFrom, curTo)
+    cm.setSelection(curFrom, curTo)
   }
 
   // Either we got the complete footnote or again an error.
@@ -146,20 +150,20 @@ commands.removeFootnote = function (cm) {
     // The identifier is either in 2 (if there has been a character after
     // the footnote in the selection) or in 3 (if the selection exactly
     // encompasses the footnote)
-    let fn = match[2] || match[3]
+    let fn = match[2] ?? match[3]
 
     // Now from the end of the document try to find the respective
     // reference and remove the whole line.
-    for (let lineNo = cm.doc.lastLine(); lineNo > -1; lineNo--) {
+    for (let lineNo = cm.lastLine(); lineNo > -1; lineNo--) {
       // Again reset the search begin
       fnrefRE.lastIndex = 0
-      let line = cm.doc.getLine(lineNo)
+      let line = cm.getLine(lineNo)
 
       let match = fnrefRE.exec(line)
-      if (match && (match[1] === fn)) {
+      if (match !== null && (match[1] === fn)) {
         // Replace the whole line -> selection to beginning of next
         // line. CM will automatically clip to safe defaults
-        cm.doc.addSelection({
+        cm.addSelection({
           'line': lineNo,
           'ch': 0
         }, {
@@ -173,10 +177,10 @@ commands.removeFootnote = function (cm) {
 
     // Remove the footnote and its reference in one step (to only account
     // for one single CodeMirror history event)
-    cm.doc.replaceSelections([ '', '' ])
+    cm.replaceSelections([ '', '' ])
 
     // Reset the cursor to the initial beginning
-    cm.doc.setCursor(curFrom)
+    cm.setCursor(curFrom)
   }
   // We did not find any footnote under the cursor :(
 }
