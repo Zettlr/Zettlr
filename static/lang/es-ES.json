@@ -7,13 +7,14 @@
             "das_kultural",
             "Diego Tra\u00edd",
             "Z_Moz",
+            "Humberto P\u00e9rez Romero \u003Chupero@disroot.org\u003E",
             "Miren",
             "Hiperterminal \u003Cdavid@hiperterminal.com\u003E",
             "Tim",
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-12-16T05:02:10.000000Z"
+        "updated_at": "2022-01-14T18:53:40.000000Z"
     },
     "dialog": {
         "about": {
@@ -204,6 +205,9 @@
             "checkForBeta": "Notifiquame sobre las versiones beta",
             "choose_file": "Elegir archivo ....",
             "citation_database": "Base de datos de citas (CSL JSON o BibTex)",
+            "citations": {
+                "title": "Referencias"
+            },
             "cite_style_label": "Al insterar una cita \u00bfc\u00f3mo debe autocompletarse?",
             "count_chars": "Contar caracteres en lugar de palabras (p. ej. para el chino)",
             "creationtime": "Hora de creaci\u00f3n del archivo",
@@ -212,6 +216,7 @@
             "default_image_save_path": "Path(ruta) predeterminada para imagenes (relativa o absoluta)",
             "delete_on_fail": "Eliminar elementos de forma irreversible si falla enviar a la papelera",
             "display": {
+                "hide_toolbar_distraction_free": "Ocultar la barra de herramientas en el modo libre de distracci\u00f3n",
                 "image_height": "Altura m\u00e1xima de las im\u00e1genes (en %)",
                 "image_size_info": "Con estos controles puedes reducir las vistas previas de la imagen.",
                 "image_width": "Anchura m\u00e1xima de las im\u00e1genes (en %)",
@@ -226,6 +231,7 @@
                 "title": "Visualizaci\u00f3n",
                 "use_first_headings": "Si se encuentra presente, utiliza primero la cabecera de nivel 1, en lugar del nombre de archivo."
             },
+            "display_markdown_file_extensions": "Mostrar las extensiones de los archivos Markdown",
             "display_time_explanation": "En la vista de metadatos del archivo",
             "editor": "Editor",
             "editor_font_size": "Tama\u00f1o de la fuente del editor",
@@ -255,6 +261,13 @@
             "filemanager_expanded": "Expandir &mdash; muestra tanto el \u00e1rbol de archivos como la lista de archivos",
             "filemanager_explanation": "Modo de gesti\u00f3n de archivos",
             "filemanager_thin": "Comprimir &mdash; muestra el \u00e1rbol de archivos o la lista de archivos",
+            "filename_display": {
+                "filename_only": "Solo el nombre del archivo",
+                "heading": "Primera cabecera de nivel 1, si procede",
+                "label": "Mostrar los archivos con",
+                "title": "T\u00edtulo, si procede",
+                "title_heading": "T\u00edtulo o primera cabecera de nivel 1, si procede"
+            },
             "filename_generator": "Patr\u00f3n para nombres de archivo nuevos",
             "formatting_characters_explanation": "Elige los car\u00e1cteres de formato que indican el marcado de negrita/\u00e9nfasis",
             "general": "Generales",
@@ -365,6 +378,7 @@
             "zkn": {
                 "auto_create_file": "Crear autom\u00e1ticamente los ficheros inexistentes cuando se siguen v\u00ednculos internos",
                 "auto_search": "Empieza la b\u00fasqueda cuando se sigan los enlaces Zettelkasten",
+                "custom_directory": "Poner los archivos creados autom\u00e1ticamente en este directorio (debe ser cargado en Zettlr)",
                 "generated_id": "ID generada",
                 "id_generator_label": "Formato utilizado para generar nuevos IDs",
                 "id_label": "Expresi\u00f3n regular de ID",
@@ -570,8 +584,8 @@
         "workspaces": "\u00c1reas de trabajo"
     },
     "localise": {
-        "decimal_delimiter": ".",
-        "thousand_delimiter": ","
+        "decimal_delimiter": ",",
+        "thousand_delimiter": "."
     },
     "menu": {
         "about": "Acerca de Zettlr",

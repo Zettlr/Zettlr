@@ -5,7 +5,7 @@
             "vfc"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-12-16T05:00:22.000000Z"
+        "updated_at": "2022-01-09T14:51:53.000000Z"
     },
     "dialog": {
         "about": {
@@ -196,6 +196,9 @@
             "checkForBeta": "Notifica els llan\u00e7aments beta",
             "choose_file": "Tria el fitxer",
             "citation_database": "Base de dades de les refer\u00e8ncies (CSL, JSON o BibTex)",
+            "citations": {
+                "title": "Referpencies"
+            },
             "cite_style_label": "Com vols que s'autocompletin les teves cites?",
             "count_chars": "Compta car\u00e0cters en lloc de paraules (per exemple, per al xin\u00e8s)",
             "creationtime": "Hora de creaci\u00f3 del fitxer",
@@ -204,6 +207,7 @@
             "default_image_save_path": "Cam\u00ed per defecte a les imatges (relatiu o absolut)",
             "delete_on_fail": "Elimina els elements de manera irreversible si el trasllat a la paperera provoca errors",
             "display": {
+                "hide_toolbar_distraction_free": "Amaga la barra lateral en el mode lliure de distraccions",
                 "image_height": "M\u00e0xima al\u00e7ada de les imatges (en %)",
                 "image_size_info": "Amb aquests ajustaments podeu restringir les previsualitzacions de les imatges",
                 "image_width": "M\u00e0xima amplada de les imatges (%)",
@@ -247,6 +251,13 @@
             "filemanager_expanded": "Expandit &mdash; mostra tant l'arbre de fitxers com la llista",
             "filemanager_explanation": "Mode gestor de fitxers",
             "filemanager_thin": "Prim &mdash; mostra l'arbre de fitxers o la llista",
+            "filename_display": {
+                "filename_only": "Nom\u00e9s nom del fitxer",
+                "heading": "Primer encap\u00e7alament de nivell 1 (si \u00e9s possible)",
+                "label": "Mostra el fitxer utilitzant",
+                "title": "T\u00edtol (si \u00e9s aplicable)",
+                "title_heading": "T\u00edtol o primer encap\u00e7alament de nivell 1 (si \u00e9s aplicable)"
+            },
             "filename_generator": "Patr\u00f3 pels noms dels nous fitxers",
             "formatting_characters_explanation": "Tria els car\u00e0cters de format per a negretes o cursives",
             "general": "General",
