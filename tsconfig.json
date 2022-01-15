@@ -21,7 +21,7 @@
     "paths": {
       "@common/*": ["source/common/*"],
       "@providers/*": ["source/app/service-providers/*"],
-      "@dts": ["source/types"]
+      "@dts/*": ["source/types/*"]
     }
   },
   "include": [
