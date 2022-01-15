@@ -13,7 +13,7 @@
  */
 
 import { defineMode, getMode, overlayMode } from 'codemirror'
-import { getCodeRE, getFootnoteRefRE, getZknTagRE } from '@common/regular-expressions.js'
+import { getCodeRE, getFootnoteRefRE, getZknTagRE } from '@common/regular-expressions'
 const ipcRenderer = window.ipc
 
 // Below's monstrosity is taken from https://stackoverflow.com/a/43243160
