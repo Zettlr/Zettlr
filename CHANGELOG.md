@@ -5,6 +5,8 @@
 - Display inline math using monospaced font
 - Right-clicking citations doesn't select parts of it anymore
 - Inline-equations are now properly syntax highlighted
+- Fixed a bug that caused unintentional pastes when closing a tab using the
+  middle mouse button on Linux
 
 ## Under the Hood
 

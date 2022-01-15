@@ -15,6 +15,7 @@
       v-on:drag="handleDrag"
       v-on:dragend="handleDragEnd"
       v-on:contextmenu="handleContextMenu($event, file)"
+      v-on:mouseup="handleMiddleMouseClick($event, file)"
       v-on:mousedown="handleClickFilename($event, file)"
     >
       <span
@@ -240,17 +241,28 @@ export default defineComponent({
      * @param   {any}         file   The file descriptor
      */
     handleClickFilename: function (event: MouseEvent, file: any) {
-      if (event.button === 1) {
-        // It was a middle-click (auxiliary button), so we should instead close
-        // the file.
-        event.preventDefault() // Otherwise, on Windows we'd have a middle-click-scroll
-        event.stopPropagation() // In response to #2663
-        this.handleClickClose(event, file)
-      } else if (event.button === 0) {
+      if (event.button === 0) {
         // It was a left-click. (We must check because otherwise we would also
         // perform this action on a right-click (button === 2), but that event
         // must be handled by the container).
         this.selectFile(file)
+      }
+    },
+    /**
+     * Handles a middle-mouse click on the filename
+     *
+     * Middle-mouse clicks are handled separately through a `mouseup` event,
+     * to prevent unintentional pasting on Linux systems (#2663).
+     *
+     * @param   {MouseEvent}  event  The triggering event
+     * @param   {any}         file   The file descriptor
+     */
+    handleMiddleMouseClick: function (event: MouseEvent, file: any) {
+      if (event.button === 1) {
+        // It was a middle-click (auxiliary button), so we should close
+        // the file.
+        event.preventDefault() // Otherwise, on Windows we'd have a middle-click-scroll
+        this.handleClickClose(event, file)
       }
     },
     selectFile: function (file: any) {
