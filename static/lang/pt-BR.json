@@ -5,12 +5,13 @@
             "Celso Lira",
             "Jo\u00e3o Batista Farias Junior \u003Cjoaobfariasjunior@gmail.com\u003E",
             "dhax",
+            "Myreli \u003Cmyreli@pm.me\u003E",
             "oldbear",
             "Fabio Bianchi",
             "brunnogama \u003Cbrunnogama@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-11-30T01:40:03.000000Z"
+        "updated_at": "2022-01-10T23:33:57.000000Z"
     },
     "dialog": {
         "about": {
@@ -201,6 +202,9 @@
             "checkForBeta": "Notificar sobre vers\u00f5es beta",
             "choose_file": "Escolher arquivo ...",
             "citation_database": "Base de dados de cita\u00e7\u00f5es (CSL JSON ou BibTex)",
+            "citations": {
+                "title": "Cita\u00e7\u00f5es"
+            },
             "cite_style_label": "Como voc\u00ea gostaria que o preenchimento autom\u00e1tico para inserir suas cita\u00e7\u00f5es?",
             "count_chars": "Contar caracteres em vez de palavras (por exemplo, para chin\u00eas)",
             "creationtime": "Hora de cria\u00e7\u00e3o do arquivo",
@@ -209,6 +213,7 @@
             "default_image_save_path": "Caminho de imagem padr\u00e3o (relativo ou absoluto)",
             "delete_on_fail": "Apaga os itens de maneira irrevers\u00edvel, se ocorrer uma falha ao mover para lixeira",
             "display": {
+                "hide_toolbar_distraction_free": "Ocultar barra de ferramentas no modo sem distra\u00e7\u00e3o",
                 "image_height": "Altura m\u00e1xima das imagens (porcentagem)",
                 "image_size_info": "Com esses controles, voc\u00ea pode modificar as pr\u00e9-visualiza\u00e7\u00f5es de imagens.",
                 "image_width": "Largura m\u00e1xima das imagens (porcentagem)",
@@ -232,6 +237,7 @@
                 "rtl_move_visually": "Usar ordem visual para o movimento das setas do teclado no modo DPE"
             },
             "enable_rmarkdown": "Habilitar suporte a arquivos RMarkdown",
+            "enable_scroll_zoom": "Zoom ao rolar o mouse pressionando \u003Ckbd\u003ECmd\u003C/kbd\u003E or \u003Ckbd\u003ECtrl\u003C/kbd\u003E",
             "enable_table_helper": "Habilitar editor de tabela",
             "export": {
                 "dest": "Pasta de destino para arquivos exportados. \u003Cem\u003E Aten\u00e7\u00e3o: \u003C/em\u003E Selecionar a pasta de trabalho atual sobrecrever\u00e1 os arquivos sem aviso!",
@@ -251,6 +257,9 @@
             "filemanager_expanded": "Expandida &mdash; mostrar \u00e1rvore e lista de arquivos",
             "filemanager_explanation": "Modo gerenciador de arquivos",
             "filemanager_thin": "Pequena &mdash; mostrar \u00e1rvore de arquivos ou lista de arquivos",
+            "filename_display": {
+                "filename_only": "Apenas nome do arquivo"
+            },
             "filename_generator": "Padr\u00e3o para novos nomes de arquivos",
             "formatting_characters_explanation": "Escolha os caracteres de formata\u00e7\u00e3o que os comandos negrito/it\u00e1lico devem usar",
             "general": "Geral",
@@ -384,6 +393,10 @@
                 "var_year_two": "Ano (dois digitos)"
             }
         },
+        "snippets": {
+            "rename": "Renomear snippet (fragmento)",
+            "title": "Snippets (fragmentos)"
+        },
         "statistics": {
             "compare": "Compare com o per\u00edodo anterior",
             "day": "Data",
@@ -511,8 +524,16 @@
         },
         "no_attachments": "Sem anexos",
         "no_dir_selected": "Nenhuma pasta selecionada",
+        "no_open_document": "Nenhum arquivo aberto",
+        "no_reference_message": "Sem texto de refer\u00eancia",
+        "no_related_files": "Sem arquivos relacionados",
         "no_search_results": "Sem resultados",
         "number_selections": "%s sele\u00e7\u00f5es",
+        "other_files": "Outros arquivos",
+        "preview_modification_date": "Modificado",
+        "preview_word_count": "Palavras",
+        "related_files_label": "Arquivos relacionados",
+        "reset": "Resetar",
         "statistics_more": "Mais estat\u00edsticas...",
         "table_of_contents": "\u00cdndice",
         "today_words": "palavras hoje",
@@ -536,9 +557,11 @@
         "close_file": "Fechar arquivo",
         "close_workspace": "Fechar \u00c1rea de Trabalho",
         "copy": "Copiar",
+        "copy_equation": "Copiar c\u00f3digo da equa\u00e7\u00e3o",
         "copy_filename": "Copiar nome de arquivo",
         "copy_html": "Copiar como HTML",
         "copy_id": "Copiar ID",
+        "copy_img_to_clipboard": "Copiar imagem para a area de transfer\u00eancia",
         "copy_link": "Copiar Link",
         "copy_mail": "Copiar Email",
         "custom_css": "CSS personalizado...",
@@ -549,6 +572,7 @@
         "donate": "Apoie o Zettlr",
         "duplicate_file": "Duplicate file",
         "export": "Exportar...",
+        "filter_files": "Filtrar arquivos",
         "find_dir": "Localizar na pasta",
         "find_file": "Localizar no arquivo",
         "generate_id": "Gerar novo ID",
@@ -579,6 +603,7 @@
         "no_suggestions": "Nenhuma sugest\u00e3o",
         "open": "Abrir...",
         "open_attachment": "Abrir Anexo",
+        "open_in_browser": "Abrir no navegador",
         "open_link": "Abrir Link",
         "open_logs": "Abrir Logs",
         "open_new_tab": "Abrir em Nova Aba",
@@ -591,6 +616,7 @@
         "print": "Imprimir...",
         "project_build": "Exportar Projeto",
         "project_properties": "Defini\u00e7\u00f5es do Projeto",
+        "properties": "Propriedades",
         "quicklook": "Quicklook",
         "quit": "Sair",
         "recent_docs": "Documentos recentes",
@@ -611,6 +637,8 @@
         "start_speaking": "Comece a falar",
         "stop_speaking": "Pare de falar",
         "tab_close": "Fechar Aba",
+        "tab_close_all": "Fechar todas as abas",
+        "tab_close_others": "Fechar outras abas",
         "tab_next": "Pr\u00f3xima Aba",
         "tab_previous": "Aba Anterior",
         "tags": "Gerenciar tags...",
@@ -643,6 +671,13 @@
     "system": {
         "all_files": "Todos os arquivos",
         "cancel": "Cancelar",
+        "common": {
+            "filter": "Filtro ...",
+            "list_actions_label": "A\u00e7\u00f5es",
+            "list_add_button": "Adicionar",
+            "list_default_column_label": "Item",
+            "list_search_placeholder": "Busque por itens ..."
+        },
         "directories": "Pastas",
         "directory_removed": "A pasta %s foi removida.",
         "error": {
@@ -664,6 +699,7 @@
             "fnf_title": "Arquivo n\u00e3o encontrado",
             "ignored_dir_message": "Pasta &quot;%s&quot; n\u00e3o pode ser aberto pelo Zettlr.",
             "ignored_dir_title": "N\u00e3o \u00e9 poss\u00edvel abrir o diret\u00f3rio",
+            "image_not_found": "Imagem n\u00e3o encontrada: %s",
             "malformed_textbundle": "Pacote de texto malformado: %s",
             "move_into_child_message": "Voc\u00ea n\u00e3o pode mover uma pasta para uma das suas subpastas.",
             "move_into_child_title": "N\u00e3o \u00e9 poss\u00edvel mover a pasta",
@@ -736,7 +772,13 @@
         "show_toc": "Mostrar tabela de conte\u00fados",
         "stats": "Ver estat\u00edsticas",
         "tag_cloud": "Tags",
-        "toggle_attachments": "Ver anexos"
+        "toggle_attachments": "Ver anexos",
+        "toggle_file_manager": "Gerenciador de Arquivos",
+        "toggle_global_search": "Busca global"
+    },
+    "tray": {
+        "show_zettlr": "Mostrar Zettlr",
+        "tooltip": "Zettlr"
     },
     "validation": {
         "error_empty": "A op\u00e7\u00e3o %s \u00e9 necess\u00e1ria.",

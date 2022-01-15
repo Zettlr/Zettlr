@@ -6,10 +6,11 @@
             "cirlo \u003Ccarlo.castoldi@outlook.com\u003E",
             "Fastbyte01 \u003Crogepix@gmail.com\u003E",
             "Giasone17",
-            "Vezzoo"
+            "Vezzoo",
+            "Damiano Parravano \u003Cdamiafix@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-11-24T23:52:47.000000Z"
+        "updated_at": "2022-01-04T09:08:17.000000Z"
     },
     "dialog": {
         "about": {
@@ -208,6 +209,7 @@
             "default_image_save_path": "Percorso predefinito delle immagini (relativo o assoluto)",
             "delete_on_fail": "Cancella gli oggetti irreversibilmente, se non \u00e8 possibile spostarli nel cestino",
             "display": {
+                "hide_toolbar_distraction_free": "Nascondi la barra degli strumenti in modalit\u00e0 senza-distrazioni",
                 "image_height": "Altezza massima delle immagini (percentuale)",
                 "image_size_info": "Con questi controlli puoi vincolare la dimensione delle anteprime delle immagini",
                 "image_width": "Larghezza massima delle immagini (percentuale)",
@@ -320,6 +322,7 @@
             "readability_algorithm": "Algoritmo da utilizzare per i livelli di leggibilit\u00e0",
             "reset_pandoc_command": "Ripristina il comando di pandoc predefinito",
             "show_app_in_the_notification_area": "Mostra l'app nella barra delle notifiche",
+            "sort_folders_first": "Mostra le cartelle sopra i file",
             "sorting_ascii": "Ordine ASCII (il 2 dopo il 10)",
             "sorting_explanation": "Criterio di ordinamento dei file (usato per ordinare per nome):",
             "sorting_natural": "Ordine naturale (il 10 dopo il 2)",
@@ -580,6 +583,7 @@
         "close_file": "Chiudi file",
         "close_workspace": "Chiudi spazio di lavoro",
         "copy": "Copia",
+        "copy_equation": "Copia il codice dell'equazione",
         "copy_filename": "Copia il nome del file",
         "copy_html": "Copia come HTML",
         "copy_id": "Copia ID",
