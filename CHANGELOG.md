@@ -20,6 +20,8 @@
 - Move service provider types to the new types directory
 - Provide `@dts` as an alias to retrieve typings
 - Move FSAL types to the new types directory
+- Convert the remaining utility functions to TypeScript
+- Polyfill the `path` module in renderer processes
 
 # 2.1.2
 

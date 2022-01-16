@@ -14,7 +14,7 @@
 
 import { getImageFileRE } from '@common/regular-expressions'
 import CodeMirror from 'codemirror'
-const path = (window as any).path
+import path from 'path'
 const IMAGE_REGEXP = getImageFileRE()
 
 export default function dropFilesHook (cm: CodeMirror.Editor): void {
@@ -75,9 +75,9 @@ export default function dropFilesHook (cm: CodeMirror.Editor): void {
         const relativePath: string = path.relative(basePath, file)
 
         if (IMAGE_REGEXP.test(file)) {
-          filesToAdd.push(`![${path.basename(file) as string}](${relativePath})`)
+          filesToAdd.push(`![${path.basename(file)}](${relativePath})`)
         } else {
-          filesToAdd.push(`[${path.basename(file) as string}](${relativePath})`)
+          filesToAdd.push(`[${path.basename(file)}](${relativePath})`)
         }
       }
 

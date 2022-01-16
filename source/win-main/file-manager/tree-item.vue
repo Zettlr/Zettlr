@@ -136,8 +136,8 @@ import { trans } from '@common/i18n-renderer'
 import { nextTick, defineComponent } from 'vue'
 import { IpcRenderer } from 'electron'
 import { MDFileMeta, DirMeta, CodeFileMeta } from '@dts/common/fsal'
+import path from 'path'
 
-const path = (window as any).path
 const ipcRenderer: IpcRenderer = (window as any).ipc
 
 export default defineComponent({

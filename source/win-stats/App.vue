@@ -56,6 +56,7 @@ import FSALView from './FSALView.vue'
 import { trans } from '@common/i18n-renderer'
 import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
+import { WindowTab } from '@dts/renderer/window'
 
 const ipcRenderer: IpcRenderer = (window as any).ipc
 
@@ -96,7 +97,7 @@ export default defineComponent({
           id: 'tab-fsal-control',
           icon: 'file-group'
         }
-      ],
+      ] as WindowTab[],
       // After the data has been loaded, it will contain the following
       // properties (as of writing this):
       //

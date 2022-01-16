@@ -85,14 +85,6 @@ export default defineComponent({
       type: Number,
       default: 0
     },
-    target: {
-      type: Object,
-      default: null
-    },
-    firstHeading: {
-      type: String,
-      default: null
-    },
     frontmatter: {
       type: Object,
       default: null

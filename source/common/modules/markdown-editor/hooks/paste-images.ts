@@ -15,8 +15,8 @@
 
 import CodeMirror from 'codemirror'
 import { IpcRenderer } from 'electron'
+import path from 'path'
 
-const path = (window as any).path
 const ipcRenderer: IpcRenderer = (window as any).ipc
 const clipboard = (window as any).clipboard
 
@@ -48,7 +48,7 @@ export default function pasteImagesHook (cm: CodeMirror.Editor): void {
               // Replace backward slashes with forward slashes to make Windows paths
               // cross-platform compatible
               const sanitizedPath = String(relativePath).replace(/\\/g, '/')
-              cm.replaceSelection(`![${path.basename(relativePath) as string}](${sanitizedPath})`)
+              cm.replaceSelection(`![${path.basename(relativePath)}](${sanitizedPath})`)
             }
           })
           .catch(err => console.error(err))
@@ -81,7 +81,7 @@ export default function pasteImagesHook (cm: CodeMirror.Editor): void {
             // Replace backward slashes with forward slashes to make Windows paths
             // cross-platform compatible
             const sanitizedPath = String(relativePath).replace(/\\/g, '/')
-            cm.replaceSelection(`![${path.basename(relativePath) as string}](${sanitizedPath})`)
+            cm.replaceSelection(`![${path.basename(relativePath)}](${sanitizedPath})`)
           }
         })
         .catch(err => console.error(err))
