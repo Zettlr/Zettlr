@@ -19,7 +19,7 @@ import * as turndownGfm from 'joplin-turndown-plugin-gfm'
 const converter = new TurndownService({
   headingStyle: 'atx',
   hr: '---',
-  blankReplacement: function (content, node) {
+  blankReplacement: function (content: string, node: any) {
     // A workaround solution for the whitespace deletion issue when copying HTML content
     // from Chromium-based browsers. This method extends the default blankReplacement
     // rule of Joplin-Turndown, all '<span> </span>' will not be replaced.
@@ -36,10 +36,10 @@ converter.use(turndownGfm.gfm)
 /**
  * Turns the given HTML string to Markdown
  *
- * @param   {String}  html  The HTML input
+ * @param   {string}  html  The HTML input
  *
- * @return  {String}        The converted Markdown
+ * @return  {string}        The converted Markdown
  */
-export default function html2md (html) {
+export default function html2md (html: string): string {
   return converter.turndown(html)
 }

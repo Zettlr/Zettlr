@@ -20,7 +20,7 @@ import { v4 as uuid } from 'uuid'
  * Generates a new filename based on the configured filename pattern.
  * @return {string} The new filename.
  */
-export default function generateFilename () {
+export default function generateFilename (): string {
   let pattern = global.config.get('newFileNamePattern')
   pattern = replaceStringVariables(pattern)
   pattern = pattern.replace(/%id/g, generateId(global.config.get('zkn.idGen')))

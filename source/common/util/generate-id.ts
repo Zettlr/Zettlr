@@ -21,6 +21,6 @@ import replaceStringVariables from './replace-string-variables'
  *
  * @return  {String}                            The final string after replacements.
  */
-export default function generateId (pattern = '%Y%M%D%h%m%s') {
+export default function generateId (pattern: string = '%Y%M%D%h%m%s'): string {
   return replaceStringVariables(pattern)
 }

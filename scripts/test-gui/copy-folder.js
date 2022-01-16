@@ -7,9 +7,19 @@
  */
 
 const fs = require('fs').promises
+const { lstatSync } = require('fs')
 const path = require('path')
 const log = require('../console-colour')
-const isDir = require('../../source/common/util/is-dir')
+
+const isDir = function isDir (p) {
+  try {
+    let s = lstatSync(p)
+    return s.isDirectory()
+  } catch (err) {
+    return false
+  }
+}
+
 
 module.exports = async (destinationPath) => {
   let sourcePath = path.join(__dirname, 'test-files')

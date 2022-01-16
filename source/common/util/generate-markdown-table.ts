@@ -17,7 +17,7 @@
 * @param  {Number} cols Number of columns
 * @return {String}      The generated table.
 */
-module.exports = function (rows = 2, cols = 2) {
+export default function (rows: number = 2, cols: number = 2): string {
   let table = ''
 
   for (let i = 0; i < rows; i++) {

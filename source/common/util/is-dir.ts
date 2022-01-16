@@ -11,7 +11,7 @@
  * END HEADER
  */
 
-const fs = require('fs')
+import { lstatSync } from 'fs'
 
 /**
  * Checks if a given path is a valid directory
@@ -19,9 +19,9 @@ const fs = require('fs')
  *
  * @return {boolean}   True, if p is valid and also a directory
  */
-module.exports = function (p) {
+export default function isDir (p: string): boolean {
   try {
-    let s = fs.lstatSync(p)
+    let s = lstatSync(p)
     return s.isDirectory()
   } catch (err) {
     return false

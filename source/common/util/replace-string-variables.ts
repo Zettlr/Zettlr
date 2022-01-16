@@ -20,9 +20,9 @@ import moment from 'moment'
  * @param       {string} string The input string
  * @return      {string}        The output string, with all %-variables replaced
  */
-export default function replaceStringVariables (string) {
+export default function replaceStringVariables (string: string): string {
   // Get the current date
-  let d = moment()
+  const d = moment()
 
   // Now generate the id by replacing all placeholders in the pattern
   return string

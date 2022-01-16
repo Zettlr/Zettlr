@@ -13,10 +13,10 @@
  * END HEADER
  */
 
-const isFunction = require('../source/common/util/is-function')
-const assert = require('assert')
+import isFunction from '../source/common/util/is-function'
+import assert from 'assert'
 
-var variableFunction = () => { return 'world' }
+const variableFunction = (): string => { return 'world' }
 
 const isFunctionTesters = [
   { 'input': function () { return 'something' }, 'expected': true },
@@ -28,7 +28,7 @@ const isFunctionTesters = [
 
 describe('Utility#isFunction()', function () {
   for (let test of isFunctionTesters) {
-    it(`should return ${test.expected} for ${test.input.toString()}`, function () {
+    it(`should return ${test.expected.toString()} for ${test.input.toString()}`, function () {
       assert.strictEqual(isFunction(test.input), test.expected)
     })
   }

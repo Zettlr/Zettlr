@@ -19,20 +19,29 @@
  *
  * @return {RegExp}                    The regular expression
  */
-module.exports = function (term, injectFlags = []) {
-  let re = {}
+export default function makeSearchRegex (term: string, injectFlags: string|string[] = []): RegExp {
+  const re: { term: string, flags: string[] } = { term: '', flags: [] }
 
   // For ease of access you can simply pass the injectFlags as a string of characters
-  if (typeof injectFlags === 'string') injectFlags = injectFlags.split('')
+  if (typeof injectFlags === 'string') {
+    injectFlags = injectFlags.split('')
+  }
+
   // Failesafe
-  if (!Array.isArray(injectFlags)) injectFlags = [injectFlags]
+  if (!Array.isArray(injectFlags)) {
+    injectFlags = [injectFlags]
+  }
 
   // Test if we have a regular expression
   if (/^\/.+\/[gimy]{0,4}$/.test(term)) {
     // The user wants to do a regex search -> transform
-    let r = term.split('/') // 0 is empty, last index contains flags, everthing else is expression
+    const r = term.split('/') // 0 is empty, last index contains flags, everthing else is expression
     r.shift() // Remove empty index 0
-    re.flags = r.pop().split('').concat(injectFlags) // Retrieve the flags, convert to char array and concat
+    const flags = r.pop()
+    if (flags !== undefined) {
+      re.flags = flags.split('')
+    }
+    re.flags = re.flags.concat(injectFlags) // Retrieve the flags, convert to char array and concat
     re.term = r.join('/') // Reassemble the expression if it contained forward-slashes.
   } else {
     // User wants to do a simple search. Careful: Escape all raw regex chars!

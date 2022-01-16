@@ -13,8 +13,8 @@
  * END HEADER
  */
 
-const makeSearchRegex = require('../source/common/util/make-search-regex')
-const assert = require('assert')
+import makeSearchRegex from '../source/common/util/make-search-regex'
+import { strictEqual } from 'assert'
 
 const makeSearchRegexTesters = [
   { 'input': 'hello', 'expected': /hello/i },
@@ -29,7 +29,7 @@ describe('Utility#makeSearchRegex()', function () {
     // For each tested unit, expect the string representations of both
     // the correct and the input regular expression to be equal.
     it(`should return the regular expression ${String(test.expected)}`, function () {
-      assert.strictEqual(String(makeSearchRegex(test.input)), String(test.expected))
+      strictEqual(String(makeSearchRegex(test.input)), String(test.expected))
     })
   }
 })

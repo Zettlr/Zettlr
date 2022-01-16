@@ -15,10 +15,13 @@ const pdfRE = /\.pdf$/i
 
 /**
  * Sorting function that sorts PDF files to be at the top
- * @param {String} a The first comparator
- * @param {String} b The second comparator
+ *
+ * @param  {string} a The first comparator
+ * @param  {string} b The second comparator
+ *
+ * @return {number}   A number for consumption by Array.sort()
  */
-module.exports = function (a, b) {
+export default function sortByPDF (a: string, b: string): number {
   let isAPDF = pdfRE.test(a)
   let isBPDF = pdfRE.test(b)
 

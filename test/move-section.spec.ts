@@ -13,8 +13,8 @@
  * END HEADER
  */
 
-const moveSection = require('../source/common/util/move-section')
-const assert = require('assert')
+import moveSection from '../source/common/util/move-section'
+import assert from 'assert'
 
 const INPUT = [
   `# Lorem ipsum dolor sit amet

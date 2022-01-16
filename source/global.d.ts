@@ -29,6 +29,8 @@ declare module '*.mp3'
 declare module '*.wav'
 
 declare module 'vue-virtual-scroller'
+declare module '@joplin/turndown'
+declare module 'joplin-turndown-plugin-gfm'
 
 /**
  * DECLARE ELECTRON-FORGE INSERTION VARIABLES

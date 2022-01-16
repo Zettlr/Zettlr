@@ -13,8 +13,8 @@
  * END HEADER
  */
 
-const safeAssign = require('../source/common/util/safe-assign')
-const assert = require('assert')
+import safeAssign from '../source/common/util/safe-assign'
+import { deepStrictEqual } from 'assert'
 
 const inputs = [
   // First an input that is completely valid with regard to the reference.
@@ -111,7 +111,7 @@ const expectedOutputs = [
 describe('Utility#safeAssign()', function () {
   for (let i = 0; i < inputs.length; i++) {
     it('should return a safely assigned object as expected', function () {
-      assert.deepStrictEqual(safeAssign(inputs[i], referenceObjects[i]), expectedOutputs[i])
+      deepStrictEqual(safeAssign(inputs[i], referenceObjects[i]), expectedOutputs[i])
     })
   }
 })

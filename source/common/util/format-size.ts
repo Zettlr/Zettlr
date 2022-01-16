@@ -20,7 +20,7 @@
  *
  * @return  {string}                The formatted size.
  */
-module.exports = function formatSize (size, short = false) {
+export default function formatSize (size: number, short: boolean = false): string {
   if (size < 1024) {
     return `${size} ` + (short ? 'B' : 'Byte')
   } else if (size < 1024 * 1000) {

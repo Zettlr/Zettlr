@@ -15,10 +15,12 @@ import { trans } from '../i18n-renderer'
 
 /**
  * Adds delimiters to numbers.
- * @param  {Number} number The number to be localised.
- * @return {String}        The number with delimiters.
+ *
+ * @param  {number} number The number to be localised.
+ *
+ * @return {string}        The number with delimiters.
  */
-export default function (number) {
+export default function (number: number): string {
   if (typeof number !== 'number' || (number < 1000 && number >= 0)) {
     return number.toString()
   }
@@ -49,7 +51,7 @@ export default function (number) {
   for (let i = ret.length - 1; i > 0; i--) {
     cnt++
     if (cnt === 3) {
-      ret = ret.substr(0, i) + delim + ret.substr(i)
+      ret = ret.substring(0, i) + delim + ret.substring(i)
       cnt = 0
     }
   }

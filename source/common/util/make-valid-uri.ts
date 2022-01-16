@@ -13,11 +13,12 @@
  * END HEADER
  */
 
-const path = window.path
 // NOTE: fileExists is called "isFile" everywhere else, we have just renamed
 // it because of a naming conflict in the function.
-const fileExists = require('../../common/util/is-file')
-const { getProtocolRE, getLinkRE, getMarkDownFileRE } = require('../regular-expressions')
+import fileExists from './is-file'
+import { getProtocolRE, getLinkRE, getMarkDownFileRE } from '../regular-expressions'
+
+const path = (window as any).path
 
 const protocolRE = getProtocolRE()
 const linkRE = getLinkRE()
@@ -31,7 +32,7 @@ const mdFileRE = getMarkDownFileRE()
  *
  * @return  {string}        The absolute, parsed string.
  */
-module.exports = function (uri, base = '') {
+export default function makeValidUri (uri: string, base: string = ''): string {
   // Why do we need a helper function for this?
   // Because it's not only hard to distinguish
   // a URL from a file path, but also there are
@@ -60,10 +61,11 @@ module.exports = function (uri, base = '') {
   let isFile
 
   // First, remove a potential protocol and save it for later use
-  let protocol = protocolRE.exec(uri)
+  let protocol = ''
+  const protoMatch = protocolRE.exec(uri)
   // If there was a protocol, extract the capturing group
-  if (protocol !== null) {
-    protocol = protocol[1]
+  if (protoMatch !== null) {
+    protocol = protoMatch[1]
   }
 
   if (protocol === 'file') {
@@ -72,10 +74,10 @@ module.exports = function (uri, base = '') {
   } else if (uri.startsWith('//') || uri.startsWith('./') || uri.startsWith('../')) {
     // We know it's a file (shared drive, or relative to this directory)
     isFile = true
-  } else if (path.isAbsolute(uri) && fileExists(uri)) {
+  } else if (path.isAbsolute(uri) === true && fileExists(uri)) {
     // The link is already absolute and exists
     isFile = true
-  } else if (!path.isAbsolute(uri) && fileExists(path.join(base, uri))) {
+  } else if (path.isAbsolute(uri) === false && fileExists(path.join(base, uri))) {
     // The link is relative and exists
     isFile = true
   }
@@ -128,9 +130,13 @@ module.exports = function (uri, base = '') {
   // using the current base.
   if (isFile) {
     // Again, extract a possible file-protocol
-    if (uri.indexOf('file://') === 0) uri = uri.substr(7)
+    if (uri.indexOf('file://') === 0) {
+      uri = uri.substring(7)
+    }
     // We've got a relative path
-    if (!path.isAbsolute(uri)) uri = path.join(base, uri)
+    if (path.isAbsolute(uri) === false) {
+      uri = path.join(base, uri)
+    }
     uri = 'file://' + uri
   }
 

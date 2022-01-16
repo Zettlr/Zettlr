@@ -18,12 +18,13 @@ const MD_FILES = mdFileExtensions(true)
 const CODE_FILES = codeFileExtensions(true)
 
 /**
-* Returns true, if a given file should be ignored.
-*
-* @param  {string}   p  The path to the file.
-* @return {boolean}     True or false, depending on whether the file should be ignored.
-*/
-export default function ignoreFile (p) {
+ * Returns true, if a given file should be ignored.
+ *
+ * @param  {string}   p  The path to the file.
+ *
+ * @return {boolean}     True or false, depending on whether the file should be ignored.
+ */
+export default function ignoreFile (p: string): boolean {
   let ext = path.extname(p).toLowerCase()
   return (!MD_FILES.includes(ext) && !CODE_FILES.includes(ext))
 }

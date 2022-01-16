@@ -12,8 +12,10 @@
  * END HEADER
  */
 
-const protocolRE = require('../regular-expressions').getProtocolRE()
-const path = window.path
+import { getProtocolRE } from '../regular-expressions'
+
+const protocolRE = getProtocolRE()
+const path = (window as any).path
 
 /**
 * Creates a definite absolute URL if the information suffices.
@@ -21,7 +23,7 @@ const path = window.path
 * @param {string} fragment The URL to be converted, either relative or absolute
 * @returns {string} The converted absolute URL with a cachefree-parameter.
 */
-module.exports = function makeAbsoluteURL (base, fragment) {
+export default function makeAbsoluteURL (base: string, fragment: string): string {
   let urlObject
   try {
     // If it's already a correct URL, we are almost done
@@ -29,7 +31,7 @@ module.exports = function makeAbsoluteURL (base, fragment) {
   } catch (err) {
     // Obviously not a correct URL. In the context of this limited
     // application, we can be sure base is always a path to a Markdown file.
-    let resolvedPath = path.resolve(base, fragment)
+    let resolvedPath = path.resolve(base, fragment) as string
     if (!protocolRE.test(resolvedPath)) resolvedPath = 'safe-file://' + resolvedPath
     urlObject = new URL(resolvedPath)
   }

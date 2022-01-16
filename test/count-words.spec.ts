@@ -13,8 +13,8 @@
  * END HEADER
  */
 
-const countWords = require('../source/common/util/count-words').default
-const assert = require('assert')
+import countWords from '../source/common/util/count-words'
+import { strictEqual } from 'assert'
 
 const countWordsTesters = [
   { input: 'Lorem\n\n# Ipsum', expected: 2 },
@@ -29,7 +29,7 @@ const countWordsTesters = [
 describe('Utility#countWords()', function () {
   for (let test of countWordsTesters) {
     it(`should return ${test.expected} words`, function () {
-      assert.strictEqual(countWords(test.input), test.expected)
+      strictEqual(countWords(test.input), test.expected)
     })
   }
 })

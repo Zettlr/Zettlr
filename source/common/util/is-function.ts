@@ -17,7 +17,7 @@
 * @param  {Function} callback The callback variable that should be tested
 * @return {Boolean}        Whether or not the given callback is actually callable.
 */
-module.exports = function (callback) {
+export default function (callback: any): boolean {
   // We are calling the toString-function of the object prototype, as we can
   // be sure it returns Function, if the callback was actually a function.
   // We could also use the toString-method from any newly created object {},

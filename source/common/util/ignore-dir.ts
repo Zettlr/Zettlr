@@ -11,17 +11,17 @@
  * END HEADER
  */
 
-const path = require('path')
+import path from 'path'
 
 // Ignored directory patterns
-const ignoreDirs = require('../data.json').ignoreDirs
+import { ignoreDirs } from '../data.json'
 
 /**
 * Returns true, if a directory should be ignored, and false, if not.
 * @param  {String} p The path to the directory. It will be checked against some regexps.
 * @return {Boolean}   True or false, depending on whether or not the dir should be ignored.
 */
-module.exports = function (p) {
+export default function ignoreDir (p: string): boolean {
   let name = path.basename(p)
   // Directories are ignored on a regexp basis
   for (let re of ignoreDirs) {

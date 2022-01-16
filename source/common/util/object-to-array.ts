@@ -15,15 +15,18 @@
 
 /**
  * Crunches a recursive object tree into a one-dimensional array.
- * @param {Object} tree The tree to be transformed
- * @param {String} traverse The property over which the recursion takes place
- * @param {Array} arr An optional array to append to
+ *
+ * @param {any}    tree     The tree to be transformed
+ * @param {string} traverse The property over which the recursion takes place
+ * @param {any[]}  arr      An optional array to append to
+ *
+ * @return {any[]}          The flattened array
  */
-module.exports = function objectToArray (tree, traverse, arr = []) {
+export default function objectToArray (tree: any, traverse: string, arr: any[] = []): any[] {
   // Add the current tree
   arr.push(tree)
 
-  if (tree.hasOwnProperty(traverse) && Array.isArray(tree[traverse]) && tree[traverse].length > 0) {
+  if (traverse in tree && Array.isArray(tree[traverse]) && tree[traverse].length > 0) {
     // We have some children -> concat them
     for (let child of tree[traverse]) {
       arr = objectToArray(child, traverse, arr)

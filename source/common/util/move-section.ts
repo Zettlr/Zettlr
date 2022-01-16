@@ -18,7 +18,7 @@
  * @param  {number} toLine   The target line, above which the section should be inserted.
  * @return {string}    The new file contents with the section moved.
  */
-module.exports = function moveSection (value, fromLine, toLine) {
+export default function moveSection (value: string, fromLine: number, toLine: number): string {
   let lines = value.split('\n')
   let sectionStart = fromLine
   let sectionEnd = fromLine
@@ -26,12 +26,16 @@ module.exports = function moveSection (value, fromLine, toLine) {
 
   // First match of the following regex contains the heading characters, ergo
   // the length is the heading level
-  headingLevel = /^(#{1,6}) (.*)$/.exec(lines[fromLine]).length
+  headingLevel = (/^(#{1,6}) (.*)$/.exec(lines[fromLine]) ?? []).length
+
+  if (headingLevel === 0) {
+    return value // The caller has passed the wrong fromLine
+  }
 
   // Build a regex to be used now. We'll only stop at either a higher or
   // same level heading. We're doing this, because this way we'll include
   // lesser headings in this section.
-  let searchRegex = new RegExp(`^#{1,${headingLevel}} .+$`)
+  const searchRegex = new RegExp(`^#{1,${headingLevel}} .+$`)
   for (let i = sectionStart + 1; i < lines.length; i++) {
     if (searchRegex.test(lines[i])) {
       // We've found a heading of at least this level.
@@ -44,7 +48,9 @@ module.exports = function moveSection (value, fromLine, toLine) {
   // wanted to move the final section -- the RegExp will naturally not yield
   // any result, so we take everything until the very end to be included in
   // the section.
-  if (sectionEnd === fromLine) sectionEnd = lines.length - 1
+  if (sectionEnd === fromLine) {
+    sectionEnd = lines.length - 1
+  }
 
   let section = lines.slice(sectionStart, sectionEnd + 1)
 
@@ -88,17 +94,12 @@ module.exports = function moveSection (value, fromLine, toLine) {
 
     // Now that the file has been truncated by the section, let's make sure
     // it does not end with a newline
-    if (lines[lines.length - 1] === '') lines.pop()
+    if (lines[lines.length - 1] === '') {
+      lines.pop()
+    }
 
-    // Then insert it above the target line. We will make use of Function.apply
-    // to pass the array completely to the function. What do I mean? Splice
-    // basically needs 2 arguments plus a list of unknown length. This means
-    // we create an array containing the first and second argument [toline, 0],
-    // and afterwards add the whole section array. They will be inserted in the
-    // right order and the function will be called accordingly.
-    Array.prototype.splice.apply(lines, [ toLine, 0 ].concat(section))
-    // Splice will be called on "lines" with the argument chain.
-    // Equivalent: lines.splice(toLine, 0, section)
+    // Then insert it above the target line.
+    lines.splice(toLine, 0, ...section)
   }
 
   // Now we have the correct lines. So let's simply replace the whole content

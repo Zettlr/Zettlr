@@ -11,16 +11,18 @@
  * END HEADER
  */
 
-const fs = require('fs')
+import { lstatSync } from 'fs'
 
 /**
  * Checks if a given path is a valid file
- * @param  {String}  p The path to check
- * @return {Boolean}   True, if it is a valid path + file, and false if not
+ *
+ * @param  {string}  p The path to check
+ *
+ * @return {boolean}   True, if it is a valid path + file, and false if not
  */
-module.exports = function (p) {
+export default function isFile (p: string): boolean {
   try {
-    let s = fs.lstatSync(p)
+    let s = lstatSync(p)
     return s.isFile()
   } catch (err) {
     return false

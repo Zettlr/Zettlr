@@ -12,11 +12,12 @@
  */
 
 /**
-* Basic hashing function (thanks to https://stackoverflow.com/a/7616484)
-* @param  {String} string The string that should be hashed
-* @return {Number}        The hash of the given string
-*/
-module.exports = function (string) {
+ * Basic hashing function (thanks to https://stackoverflow.com/a/7616484)
+ *
+ * @param  {string} string The string that should be hashed
+ * @return {number}        The hash of the given string
+ */
+export default function (string: string): number {
   let hash = 0
   let i, chr
 

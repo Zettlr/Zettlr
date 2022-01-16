@@ -22,7 +22,7 @@
  * @param {any} obj The new object to be safe assigned
  * @param {any} referenceObject The reference to use the props from
  */
-function safeAssign (obj, referenceObject) {
+function safeAssign (obj: any, referenceObject: any): void {
   // Overwrite all given attributes (and leave the not given in place)
   // This will ensure sane defaults.
   for (const prop in referenceObject) {
@@ -54,10 +54,10 @@ function safeAssign (obj, referenceObject) {
  *
  * @return  {any}             The clone with keys from reference and values from object.
  */
-module.exports = function (obj, reference) {
+export default function (obj: any, reference: any): any {
   // Make sure to clone the reference object, so that users
   // do not have to worry about doing this themselves.
-  let clone = JSON.parse(JSON.stringify(reference))
+  const clone = JSON.parse(JSON.stringify(reference))
   // After cloning, safely assign the object to the reference
   safeAssign(obj, clone)
   return clone

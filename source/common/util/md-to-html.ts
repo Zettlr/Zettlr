@@ -12,10 +12,11 @@
  * END HEADER
  */
 
-const { Converter } = require('showdown')
-const extractCitations = require('../util/extract-citations').default
+import { IpcRenderer } from 'electron'
+import { Converter, ShowdownExtension } from 'showdown'
+import extractCitations from './extract-citations'
 
-const ipcRenderer = (typeof window !== 'undefined') ? window.ipc : undefined
+const ipcRenderer = (typeof window !== 'undefined') ? (window as any).ipc as IpcRenderer : undefined
 
 // Spin up a showdown converter which can be used across the app
 const showdownConverter = new Converter({
@@ -39,9 +40,8 @@ showdownConverter.setFlavor('github')
  *
  * @return  {string}                              The final HTML string
  */
-module.exports = (markdown) => {
-  let html = showdownConverter.makeHtml(markdown)
-  return html
+export default function md2html (markdown: string): string {
+  return showdownConverter.makeHtml(markdown)
 }
 
 /**
@@ -49,7 +49,7 @@ module.exports = (markdown) => {
  *
  * @return  {any}  The showdown extension
  */
-function showdownCitations () {
+function showdownCitations (): ShowdownExtension {
   return {
     type: 'lang',
     filter: function (text, converter, options) {
@@ -71,7 +71,7 @@ function showdownCitations () {
 
       // Now get the citations to be replaced
       const toBeReplaced = allCitations.map(citation => {
-        return text.substr(citation.from, citation.to - citation.from)
+        return text.substring(citation.from, citation.to - citation.from)
       })
 
       // Finally, replace every citation with its designated replacement
