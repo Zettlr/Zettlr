@@ -93,7 +93,6 @@ interface Application {
  */
 declare module global {
   var assets: AssetsProvider
-  var css: CssProvider
   var dict: DictionaryProvider
   var log: LogProvider
   var store: any

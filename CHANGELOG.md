@@ -30,6 +30,7 @@
 - Move FSAL types to the new types directory
 - Convert the remaining utility functions to TypeScript
 - Polyfill the `path` module in renderer processes
+- Transform the CSS provider into a functional module
 
 # 2.1.2
 
