@@ -10,6 +10,7 @@
   multiple results per line were mostly not reported; additionally, search
   results are now ordered by relevancy and the search results are marked more
   visibly
+- Added "Open in new Tab" button to link preview tooltip, when user has preference "Avoid Opening Files in New Tabs" set to true
 
 ## Under the Hood
 
