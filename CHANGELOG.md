@@ -17,6 +17,7 @@
   the document when it loses focus, and instead the table will be updated
   silently
 - The log viewer now only displays errors and warnings initially
+- Fix a small visual glitch on macOS for toolbar searches
 
 ## Under the Hood
 
