@@ -92,7 +92,10 @@ function getPreviewElement (metadata: [string, string, number, number], linkCont
   const openFunc = function (): void {
     ipcRenderer.invoke('application', {
       command: 'force-open',
-      payload: linkContents
+      payload: {
+                linkContents: linkContents,
+                newTab: false   // let open-file command decide based on preferences
+        }
     })
       .catch(err => console.error(err))
   }
@@ -101,8 +104,30 @@ function getPreviewElement (metadata: [string, string, number, number], linkCont
   openButton.setAttribute('id', 'open-note')
   openButton.textContent = 'Open'
   openButton.addEventListener('click', openFunc)
-
   actions.appendChild(openButton)
+
+  // Only if preference "Avoid New Tabs" is set, 
+  // offer an additional button on preview tooltip
+  // to open the file in a new tab
+  if (Boolean(global.config.get('system.avoidNewTabs'))) {
+    const openFuncNewTab = function (): void {
+      ipcRenderer.invoke('application', {
+        command: 'force-open',
+        payload: {
+                  linkContents: linkContents,
+                  newTab: true
+          }
+      })
+        .catch(err => console.error(err))
+    }
+
+    const openButtonNT = document.createElement('button')
+    openButtonNT.setAttribute('id', 'open-note-new-tab')
+    openButtonNT.textContent = 'Open in new Tab'
+    openButtonNT.addEventListener('click', openFuncNewTab)
+    openButtonNT.style.cssText += ';margin-left :10px;'
+    actions.appendChild(openButtonNT)
+  }
 
   wrapper.appendChild(title)
   wrapper.appendChild(content)

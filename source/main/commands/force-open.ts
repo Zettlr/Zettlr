@@ -26,12 +26,15 @@ export default class ForceOpen extends ZettlrCommand {
   }
 
   /**
-    * Removes a file.
+    * Force-Opens a file, after click on internal link
     * @param {String} evt The event name
-    * @param  {Object} arg the parameters of the file to be deleted
-    * @return {Boolean} Whether the file was successfully deleted.
+    * @param  {Object} payload the parameters of the file to be opened
+    * @return {Boolean} Whether the file was successfully opened.
     */
-  async run (evt: string, arg: any): Promise<void> {
+  async run (evt: string, payload: any): Promise<void> {
+    const arg = payload.linkContents
+    const newTab = payload.newTab
+
     // Determine if the file should be created, if it can't be found. For this
     // we need both the respective preferences setting and an auto-search
     // command.
@@ -67,7 +70,7 @@ export default class ForceOpen extends ZettlrCommand {
 
     // Now we have a file (if not, create a new one if the user wishes so)
     if (file != null) {
-      await this._app.getDocumentManager().openFile(file.path)
+      await this._app.getDocumentManager().openFile(file.path, newTab)
     } else if (autoCreate && customDir !== '') {
       // Call the file-new command on the application, which'll do all
       // necessary steps for us.

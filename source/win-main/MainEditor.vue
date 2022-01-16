@@ -572,7 +572,10 @@ export default defineComponent({
     mdEditor.on('zettelkasten-link', (linkContents) => {
       ipcRenderer.invoke('application', {
         command: 'force-open',
-        payload: linkContents
+        payload: {
+                linkContents: linkContents,
+                newTab: false // let open-file command decide based on preferences
+        }
       })
         .catch(err => console.error(err))
 
