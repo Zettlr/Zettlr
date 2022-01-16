@@ -34,7 +34,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -51,7 +51,10 @@
  * END HEADER
  */
 
-export default {
+import { defineComponent, PropType } from 'vue'
+import { WindowTab } from '@dts/renderer/window'
+
+export default defineComponent({
   name: 'WindowTabbar',
   props: {
     marginTop: {
@@ -59,8 +62,8 @@ export default {
       default: '0px'
     },
     tabs: {
-      type: Array,
-      default: function () { return [] }
+      type: Array as PropType<WindowTab[]>,
+      required: true
     },
     label: {
       type: String,
@@ -88,11 +91,11 @@ export default {
     window.removeEventListener('resize', this.onWindowResize)
   },
   methods: {
-    onWindowResize (event) {
+    onWindowResize (event: UIEvent) {
       this.currentWindowWidth = window.innerWidth
     }
   }
-}
+})
 </script>
 
 <style lang="less">
