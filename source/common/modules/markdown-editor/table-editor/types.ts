@@ -24,4 +24,10 @@ export interface TableEditorOptions {
    * @param   {TableEditor}  instance  The TableEditor instance
    */
   onChange?: (instance: ReturnType<typeof TableEditor>) => void
+  /**
+   * A callback that is fired whenever the user switches the cell of the table
+   *
+   * @param   {TableEditor}  instance     The TableEditor instance
+   */
+  onCellChange?: (instance: ReturnType<typeof TableEditor>) => void
 }

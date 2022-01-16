@@ -17,8 +17,59 @@ import fromMarkdown from '../table-editor'
 import { getTableHeadingRE } from '@common/regular-expressions'
 import TableEditor from '../table-editor/table-editor'
 
-const tables: TableEditor[] = []
 const tableHeadingRE = getTableHeadingRE()
+
+const tableList: Array<{ table: TableEditor, marker: TextMarker }> = []
+
+function writeTableToDocument (cm: CodeMirror.Editor, table: TableEditor): boolean {
+  // First, retrieve our marker-table tuple
+  const elem = tableList.find(item => item.table === table)
+  if (elem === undefined) {
+    return false
+  }
+
+  const { marker } = elem
+  // Don't replace some arbitrary text somewhere in the document!
+  const currentPosition = marker.find() as CodeMirror.MarkerRange|undefined
+  if (currentPosition === undefined) {
+    return false
+  }
+
+  const md = table.getMarkdownTable().split('\n')
+  // The markdown table has a trailing newline, which we need to
+  // remove at all costs.
+  md.pop()
+
+  // Finally, before ripping everything apart, make sure that the table has
+  // indeed changed
+  const { from, to } = currentPosition
+
+  const tableInDocument = cm.getRange(from, to)
+  if (tableInDocument === md.join('\n')) {
+    return false
+  }
+
+  // We'll simply replace the range with the new table.
+  cm.replaceRange(md, from, to)
+  // Remove the textmarker (if necessary) and immediately re-render the
+  // table. Note that we cannot use the previous cursor position since the table
+  // may have more rows now or more characters. The pivot point for us is the
+  // `from` position, since that never changes. The correct `to` is the from-
+  // line plus the amount of lines the table now has, and the character position
+  // is equal to the length of the last line in the table.
+  marker.clear()
+  elem.marker = cm.markText(
+    from,
+    { line: from.line + md.length - 1, ch: md[md.length - 1].length },
+    {
+      clearOnEnter: false,
+      replacedWith: table.domElement,
+      inclusiveLeft: false,
+      inclusiveRight: false
+    }
+  )
+  return true
+}
 
 ;(commands as any).markdownInsertTable = function (cm: CodeMirror.Editor) {
   // A small command that inserts a 2x2 table at the current cursor position.
@@ -34,6 +85,13 @@ const tableHeadingRE = getTableHeadingRE()
   // Now render all potential new tables. We only check one line less
   // because such a table header WILL NEVER be on the last line, plus
   // this way we can check for Setext headers without having to worry.
+
+  // Before checking for new tables, let's remove those that don't exist anymore
+  for (const item of tableList) {
+    if (item.marker.find() === undefined) {
+      tableList.splice(tableList.indexOf(item), 1)
+    }
+  }
 
   // We'll only render the viewport
   const viewport = cm.getViewport()
@@ -186,63 +244,41 @@ const tableHeadingRE = getTableHeadingRE()
     }
 
     // Now attempt to create a table from it.
-    let tbl
-    let textMarker: TextMarker|undefined
     try {
       // Will raise an error if the table is malformed
-      tbl = fromMarkdown(markdownTable.join('\n'), potentialTableType, {
+      const table = fromMarkdown(markdownTable.join('\n'), potentialTableType, {
         // Detect mouse movement on the scroll element (so that
         // scroll detection in the helper works as expected)
         container: '#editor .CodeMirror .CodeMirror-scroll',
-        onBlur: (t) => {
-          // Don't replace some arbitrary text somewhere in the document!
-          const marker = textMarker?.find() as CodeMirror.MarkerRange|undefined
-          if (marker === undefined) {
-            return
-          }
-
-          let found = tables.indexOf(t)
-          let md = t.getMarkdownTable()
-          // The markdown table has a trailing newline, which we need to
-          // remove at all costs.
-          md = md.substring(0, md.length - 1)
-
-          // We'll simply replace the range with the new table. The plugin will
-          // be called to re-render the table once again.
-          const { from, to } = marker
-          cm.replaceRange(md.split('\n'), from, to)
-          // If there's still the textmarker, remove it by force to re-render
-          // the table immediately.
-          if (textMarker !== undefined) {
-            textMarker.clear()
-          }
-
-          // Splice the table and corresponding marker from the arrays
-          if (found > -1) {
-            tables.splice(found, 1)
+        onBlur: (table) => {
+          console.log('On blur triggered, writing table ...')
+          writeTableToDocument(cm, table)
+        },
+        onCellChange: (table) => {
+          console.log('On change triggered, writing table ...')
+          const tableChanged = writeTableToDocument(cm, table)
+          if (tableChanged) {
+            table.selectCell() // In this case, refocus the last selected cell
           }
         }
       })
+
+      // Apply TextMarker
+      const textMarker = cm.markText(
+        curFrom, curTo,
+        {
+          clearOnEnter: false,
+          replacedWith: table.domElement,
+          inclusiveLeft: false,
+          inclusiveRight: false
+        }
+      )
+
+      tableList.push({ table, marker: textMarker })
     } catch (err: any) {
       console.error(`Could not instantiate table between ${firstLine} and ${lastLine}: ${err.message as string}`)
       // Error, so abort rendering.
       continue
     }
-
-    // At this point, we have a fully rendered table and can insert it into
-    // the DOM.
-
-    // Apply TextMarker
-    textMarker = cm.markText(
-      curFrom, curTo,
-      {
-        clearOnEnter: false,
-        replacedWith: tbl.domElement,
-        inclusiveLeft: false,
-        inclusiveRight: false
-      }
-    )
-
-    tables.push(tbl)
   }
 }
