@@ -17,8 +17,7 @@
 // it because of a naming conflict in the function.
 import fileExists from './is-file'
 import { getProtocolRE, getLinkRE, getMarkDownFileRE } from '../regular-expressions'
-
-const path = (window as any).path
+import path from 'path'
 
 const protocolRE = getProtocolRE()
 const linkRE = getLinkRE()
@@ -74,10 +73,10 @@ export default function makeValidUri (uri: string, base: string = ''): string {
   } else if (uri.startsWith('//') || uri.startsWith('./') || uri.startsWith('../')) {
     // We know it's a file (shared drive, or relative to this directory)
     isFile = true
-  } else if (path.isAbsolute(uri) === true && fileExists(uri)) {
+  } else if (path.isAbsolute(uri) && fileExists(uri)) {
     // The link is already absolute and exists
     isFile = true
-  } else if (path.isAbsolute(uri) === false && fileExists(path.join(base, uri))) {
+  } else if (path.isAbsolute(uri) && fileExists(path.join(base, uri))) {
     // The link is relative and exists
     isFile = true
   }
@@ -134,7 +133,7 @@ export default function makeValidUri (uri: string, base: string = ''): string {
       uri = uri.substring(7)
     }
     // We've got a relative path
-    if (path.isAbsolute(uri) === false) {
+    if (path.isAbsolute(uri)) {
       uri = path.join(base, uri)
     }
     uri = 'file://' + uri

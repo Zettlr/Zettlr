@@ -13,9 +13,9 @@
  */
 
 import { getProtocolRE } from '../regular-expressions'
+import path from 'path'
 
 const protocolRE = getProtocolRE()
-const path = (window as any).path
 
 /**
 * Creates a definite absolute URL if the information suffices.
@@ -31,7 +31,7 @@ export default function makeAbsoluteURL (base: string, fragment: string): string
   } catch (err) {
     // Obviously not a correct URL. In the context of this limited
     // application, we can be sure base is always a path to a Markdown file.
-    let resolvedPath = path.resolve(base, fragment) as string
+    let resolvedPath = path.resolve(base, fragment)
     if (!protocolRE.test(resolvedPath)) resolvedPath = 'safe-file://' + resolvedPath
     urlObject = new URL(resolvedPath)
   }

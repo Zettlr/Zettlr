@@ -34,8 +34,7 @@
 import { trans } from '@common/i18n-renderer'
 import WindowChrome from '@common/vue/window/Chrome.vue'
 import { defineComponent } from 'vue'
-
-const path = (window as any).path
+import path from 'path'
 
 export default defineComponent({
   components: {

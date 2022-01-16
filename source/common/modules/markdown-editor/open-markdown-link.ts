@@ -17,8 +17,8 @@ import { mdFileExtensions } from '@common/get-file-extensions'
 import makeValidUri from '@common/util/make-valid-uri'
 import CodeMirror from 'codemirror'
 import { IpcRenderer } from 'electron'
+import path from 'path'
 
-const path = (window as any).path
 const ipcRenderer: IpcRenderer = (window as any).ipc
 
 const VALID_FILETYPES = mdFileExtensions(true)
@@ -57,7 +57,7 @@ export default function (url: string, cm: CodeMirror.Editor): void {
     // internally, without having to switch to an external program.
     const localPath = validURI.replace('file://', '')
     const isValidFile = VALID_FILETYPES.includes(path.extname(localPath))
-    const isLocalMdFile = path.isAbsolute(localPath) === true && isValidFile
+    const isLocalMdFile = path.isAbsolute(localPath) && isValidFile
 
     if (isLocalMdFile) {
       // Attempt to open internally

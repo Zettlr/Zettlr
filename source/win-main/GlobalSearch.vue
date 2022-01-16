@@ -127,9 +127,9 @@ import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
 import { SearchResult, SearchTerm } from '@dts/common/search'
 import { CodeFileMeta, DirMeta, MDFileMeta } from '@dts/common/fsal'
+import path from 'path'
 
 const ipcRenderer: IpcRenderer = (window as any).ipc
-const path = (window as any).path
 
 interface LocalFile {
   path: string
