@@ -189,7 +189,7 @@ export default defineComponent({
       if (info.selections.length > 0) {
         // We have selections to display.
         let length = 0
-        info.selections.forEach(sel => {
+        info.selections.forEach((sel: any) => {
           length += sel.selectionLength
         })
 

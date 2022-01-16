@@ -188,7 +188,7 @@ export interface ZettlrState {
   /**
    * Contains coloured tags that can be managed in the tag manager
    */
-  colouredTags: any[]
+  colouredTags: ColouredTag[]
   /**
    * Contains all tags across all files loaded into Zettlr
    */

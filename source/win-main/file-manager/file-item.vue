@@ -15,7 +15,7 @@
         'has-meta-info': fileMeta,
         directory: obj.type === 'directory'
       }"
-      v-bind:data-id="obj.id"
+      v-bind:data-id="obj.type === 'file' ? obj.id : ''"
       v-bind:data-filename="getFilename"
       v-bind:draggable="isDraggable"
       v-on:click.stop="requestSelection"
@@ -58,7 +58,7 @@
         <template v-else>
           <div v-if="hasTags">
             <!-- First line -->
-            <div v-for="(tag, idx) in obj.tags" v-bind:key="idx" class="tag badge">
+            <div v-for="(tag, idx) in (obj as any).tags" v-bind:key="idx" class="tag badge">
               <span
                 v-if="retrieveTagColour(tag)"
                 class="color-circle"
@@ -77,10 +77,10 @@
               aria-label="Code-file"
               class="code-indicator badge"
             >
-              {{ obj.ext.substr(1) }}
+              {{ (obj as any).ext.substr(1) }}
             </span>
             <!-- Display the ID, if there is one -->
-            <span v-if="obj.id" class="id badge">{{ obj.id }}</span>
+            <span v-if="obj.type === 'file' && obj.id !== ''" class="id badge">{{ obj.id }}</span>
             <!-- Display the file size if we have a code file -->
             <span v-if="obj.type === 'code'" class="badge">{{ formattedSize }}</span>
             <!--
@@ -143,6 +143,7 @@ import formatSize from '@common/util/format-size'
 import itemMixin from './util/item-mixin'
 
 import { defineComponent } from 'vue'
+import { CodeFileMeta, DirMeta, MDFileMeta } from '@dts/common/fsal'
 
 export default defineComponent({
   name: 'FileItem',
@@ -157,7 +158,7 @@ export default defineComponent({
       required: true
     },
     obj: {
-      type: Object,
+      type: Object as () => MDFileMeta|CodeFileMeta|DirMeta,
       required: true
     }
   },
@@ -174,7 +175,7 @@ export default defineComponent({
     // We have to explicitly transform ALL properties to computed ones for
     // the reactivity in conjunction with the recycle-scroller.
     basename: function () {
-      if (this.obj.type === 'code') {
+      if (this.obj.type !== 'file') {
         return this.obj.name
       }
 
@@ -192,10 +193,14 @@ export default defineComponent({
       return this.obj.name
     },
     hasTags: function () {
+      if (this.obj.type !== 'file') {
+        return false
+      }
+
       return this.obj.tags !== undefined && this.obj.tags.length > 0
     },
     isProject: function () {
-      return this.isDirectory === true && this.obj.project !== null
+      return this.obj.type === 'directory' && this.obj.project !== null
     },
     isDraggable: function () {
       return this.isDirectory === false
@@ -214,19 +219,19 @@ export default defineComponent({
       }
     },
     countDirs: function () {
-      if (this.isDirectory === false) {
+      if (this.obj.type !== 'directory') {
         return 0
       }
       return this.obj.children.filter((e: any) => e.type === 'directory').length + ' ' + trans('system.directories') || 0
     },
     countFiles: function () {
-      if (this.isDirectory === false) {
+      if (this.obj.type !== 'directory') {
         return 0
       }
       return this.obj.children.filter((e: any) => [ 'file', 'code' ].includes(e.type)).length + ' ' + trans('system.files') || 0
     },
     countWords: function () {
-      if (this.isDirectory === false) {
+      if (this.obj.type !== 'directory') {
         return 0
       }
 
@@ -252,6 +257,10 @@ export default defineComponent({
       return true
     },
     writingTargetPath: function () {
+      if (this.obj.type !== 'file') {
+        throw new Error('Could not compute writingTargetPath: Was called on non-file object')
+      }
+
       let current = this.obj.charCount
       if (this.obj.target.mode === 'words') current = this.obj.wordCount
       let progress = current / this.obj.target.count
@@ -262,6 +271,10 @@ export default defineComponent({
       return `M 1 0 A 1 1 0 ${large} 1 ${x} ${y} L 0 0`
     },
     writingTargetInfo: function () {
+      if (this.obj.type !== 'file') {
+        throw new Error('Could not compute writingTargetInfo: Was called on non-file object')
+      }
+
       let current = this.obj.charCount
       if (this.obj.target.mode === 'words') {
         current = this.obj.wordCount
@@ -280,7 +293,7 @@ export default defineComponent({
       return `${localiseNumber(current)} / ${localiseNumber(this.obj.target.count)} ${label} (${progress} %)`
     },
     formattedWordCount: function () {
-      if (this.obj.wordCount === undefined) {
+      if (this.obj.type !== 'file') {
         return '' // Failsafe because code files don't have a word count.
       }
       // TODO: Enable char count as well!!
@@ -292,8 +305,8 @@ export default defineComponent({
   },
   methods: {
     retrieveTagColour: function (tagName: string) {
-      const colouredTags = this.$store.state.colouredTags
-      const foundTag = colouredTags.find(tag => tag.name === tagName)
+      const colouredTags: any[] = this.$store.state.colouredTags
+      const foundTag = colouredTags.find((tag) => tag.name === tagName)
       if (foundTag !== undefined) {
         return foundTag.color
       } else {
@@ -312,7 +325,7 @@ export default defineComponent({
       event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
         'type': this.obj.type, // Can be file, code, or directory
         'path': this.obj.path,
-        'id': this.obj.id // Convenience
+        'id': this.obj.type === 'file' ? this.obj.id : '' // Convenience
       }))
     }
   }

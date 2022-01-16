@@ -73,6 +73,7 @@ import matchTree from './util/match-tree'
 
 import { defineComponent } from 'vue'
 import { IpcRenderer } from 'electron'
+import { MDFileMeta, CodeFileMeta, DirMeta } from '@dts/common/fsal'
 
 const ipcRenderer: IpcRenderer = (window as any).ipc
 
@@ -95,7 +96,7 @@ export default defineComponent({
     return {}
   },
   computed: {
-    fileTree: function (): any[] {
+    fileTree: function (): Array<MDFileMeta|CodeFileMeta|DirMeta> {
       return this.$store.state.fileTree
     },
     useH1: function (): boolean {
@@ -104,7 +105,7 @@ export default defineComponent({
     useTitle: function (): boolean {
       return this.$store.state.config.fileNameDisplay.includes('title')
     },
-    getFilteredTree: function (): any[] {
+    getFilteredTree: function (): Array<MDFileMeta|CodeFileMeta|DirMeta> {
       const q = String(this.filterQuery).trim().toLowerCase() // Easy access
 
       if (q === '') {
@@ -130,11 +131,11 @@ export default defineComponent({
       }
       return filteredTree
     },
-    getFiles: function (): any[] {
-      return this.getFilteredTree.filter(item => item.type !== 'directory')
+    getFiles: function (): Array<MDFileMeta|CodeFileMeta> {
+      return this.getFilteredTree.filter(item => item.type !== 'directory') as Array<MDFileMeta|CodeFileMeta>
     },
-    getDirectories: function (): any[] {
-      return this.getFilteredTree.filter(item => item.type === 'directory')
+    getDirectories: function (): DirMeta[] {
+      return this.getFilteredTree.filter(item => item.type === 'directory') as DirMeta[]
     },
     fileSectionHeading: function (): string {
       return trans('gui.files')

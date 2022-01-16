@@ -8,11 +8,11 @@
         'tree-item': true,
         [obj.type]: true,
         'selected': isSelected,
-        'project': obj.project != null,
+        'project': obj.type === 'directory' && obj.project != null,
         'root': isRoot
       }"
       v-bind:data-hash="obj.hash"
-      v-bind:data-id="obj.id || ''"
+      v-bind:data-id="obj.type === 'file' ? obj.id : ''"
       v-bind:style="{
         'padding-left': `${depth * 15 + 10}px`
       }"
@@ -135,6 +135,7 @@ import { trans } from '@common/i18n-renderer'
 
 import { nextTick, defineComponent } from 'vue'
 import { IpcRenderer } from 'electron'
+import { MDFileMeta, DirMeta, CodeFileMeta } from '@dts/common/fsal'
 
 const path = (window as any).path
 const ipcRenderer: IpcRenderer = (window as any).ipc
@@ -153,7 +154,7 @@ export default defineComponent({
       default: false // Can only be true if root and actually has a duplicate name
     },
     obj: {
-      type: Object,
+      type: Object as () => MDFileMeta|DirMeta|CodeFileMeta,
       required: true
     }
   },
@@ -259,7 +260,10 @@ export default defineComponent({
     /**
      * Returns a list of children that can be displayed inside the tree view
      */
-    filteredChildren: function (): any[] {
+    filteredChildren: function (): Array<MDFileMeta|DirMeta|CodeFileMeta> {
+      if (this.obj.type !== 'directory') {
+        return []
+      }
       if (this.combined === true) {
         return this.obj.children
       } else {
