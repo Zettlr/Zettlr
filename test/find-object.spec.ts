@@ -13,8 +13,8 @@
  * END HEADER
  */
 
-const findObject = require('../source/common/util/find-object')
-const assert = require('assert')
+import findObject from '../source/common/util/find-object'
+import assert from 'assert'
 
 const findObjectTree = {
   'attachments': [
@@ -51,7 +51,7 @@ const findObjectTree = {
   'path': '/Users/hendrik/Documents/My Texts'
 }
 
-const findObjectTester = [
+const findObjectTester: Array<{ input: [any, string, any, string], expected: any}> = [
   // Function Signature: tree, prop, val, traverse
   { 'input': [ findObjectTree, 'hash', -570710067, 'children' ], 'expected': findObjectTree },
   { 'input': [ findObjectTree, 'hash', 1712390491, 'children' ], 'expected': findObjectTree.children[2] },
@@ -66,7 +66,7 @@ describe('Utility#findObject()', function () {
     let expression = (test.expected === undefined) ? 'undefined' : 'the correct object'
     it(`should return ${expression}`, function () {
       // We can make use of the ES6 spread operator here
-      assert.strictEqual(findObject(...test.input), test.expected)
+      assert.strictEqual(findObject(test.input[0], test.input[1], test.input[2], test.input[3]), test.expected)
     })
   }
 })

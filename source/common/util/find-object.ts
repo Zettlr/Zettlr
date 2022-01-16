@@ -19,9 +19,9 @@
  * @param   {any}            val      The value that the property should be checked for
  * @param   {string}         traverse The property over which the function traverses the tree
  *
- * @returns {any|undefined}           Either an object with the correct hash, or undefined.
+ * @returns {any|undefined}           Either the correct object, or undefined
  */
-module.exports = function findObject (tree, prop, val, traverse) {
+export default function findObject (tree: any, prop: string, val: any, traverse: string): any|undefined {
   // Is the tree even defined?
   if (tree == null) {
     return undefined
