@@ -53,9 +53,8 @@ export default defineComponent({
       filter: '', // Optionally filter the messages with a string
       nextIndex: 0, // Last log message array index; updated from the main process
       messages: [] as LogMessage[], // Holds all the log files
-      // Filters TODO: Actually enable setting and getting these
-      includeVerbose: true,
-      includeInfo: true,
+      includeVerbose: false,
+      includeInfo: false,
       includeWarning: true,
       includeError: true
     }
@@ -63,19 +62,19 @@ export default defineComponent({
   computed: {
     filteredMessages: function (): LogMessage[] {
       const preFiltered = this.messages.filter(message => {
-        if (this.includeVerbose === true && message.level === 1) {
+        if (this.includeVerbose && message.level === 1) {
           return true
         }
 
-        if (this.includeInfo === true && message.level === 2) {
+        if (this.includeInfo && message.level === 2) {
           return true
         }
 
-        if (this.includeWarning === true && message.level === 3) {
+        if (this.includeWarning && message.level === 3) {
           return true
         }
 
-        if (this.includeError === true && message.level === 4) {
+        if (this.includeError && message.level === 4) {
           return true
         }
 
@@ -104,14 +103,14 @@ export default defineComponent({
           label: 'Verbose',
           id: 'verboseToggle',
           activeClass: 'verbose-control-active',
-          initialState: 'active'
+          initialState: ''
         },
         {
           type: 'toggle',
           label: 'Info',
           id: 'infoToggle',
           activeClass: 'info-control-active',
-          initialState: 'active'
+          initialState: ''
         },
         {
           type: 'toggle',

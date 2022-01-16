@@ -16,6 +16,7 @@
   un-focus the table. Furthermore, the table editor will now not be removed from
   the document when it loses focus, and instead the table will be updated
   silently
+- The log viewer now only displays errors and warnings initially
 
 ## Under the Hood
 
