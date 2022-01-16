@@ -97,6 +97,7 @@ body.darwin {
 
     .toolbar-search {
       width: 0%;
+      opacity: 0;
       &::placeholder { color: rgb(190, 190, 190); }
     }
 
@@ -108,6 +109,7 @@ body.darwin {
 
     &:focus-within .toolbar-search {
       width: 100%;
+      opacity: 1;
     }
   }
 

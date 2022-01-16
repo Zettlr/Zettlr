@@ -672,6 +672,7 @@ export default class TableEditor {
     }
 
     this.selectCell()
+    this._options.onCellChange?.(this)
   }
 
   /**
@@ -703,6 +704,7 @@ export default class TableEditor {
     this._rowIndex = newRowIndex
 
     this.selectCell()
+    this._options.onCellChange?.(this)
   }
 
   /**
@@ -718,6 +720,7 @@ export default class TableEditor {
     this._rowIndex--
 
     this.selectCell()
+    this._options.onCellChange?.(this)
   }
 
   /**
@@ -741,6 +744,7 @@ export default class TableEditor {
     // Set the new index and select the cell
     this._rowIndex = newRowIndex
     this.selectCell()
+    this._options.onCellChange?.(this)
   }
 
   /**
@@ -833,11 +837,10 @@ export default class TableEditor {
 
     if (firstRow) {
       this._rowIndex++
-      this.selectCell()
     } else {
       this._rowIndex--
-      this.selectCell()
     }
+    this.selectCell()
 
     // Now pluck the row.
     this._ast.splice(rowToRemove, 1)
@@ -851,6 +854,7 @@ export default class TableEditor {
     }
 
     this._signalContentChange() // Notify the caller
+    this._options.onCellChange?.(this)
   }
 
   /**
@@ -869,11 +873,10 @@ export default class TableEditor {
 
     if (firstCol) {
       this._cellIndex = 1
-      this.selectCell()
     } else {
       this._cellIndex--
-      this.selectCell()
     }
+    this.selectCell()
 
     // Now pluck the column.
     for (let i = 0; i < this._ast.length; i++) {
@@ -890,6 +893,7 @@ export default class TableEditor {
     }
 
     this._signalContentChange() // Notify the caller
+    this._options.onCellChange?.(this)
   }
 
   /**
@@ -914,6 +918,7 @@ export default class TableEditor {
     }
 
     this._signalContentChange() // Recalculate everything
+    this._options.onCellChange?.(this)
   }
 
   /**

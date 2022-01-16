@@ -32,7 +32,7 @@ import AppearanceProvider from './service-providers/appearance-provider'
 import AssetsProvider from './service-providers/assets-provider'
 import CiteprocProvider from './service-providers/citeproc-provider'
 import ConfigProvider from './service-providers/config-provider'
-import CssProvider from './service-providers/css-provider'
+import { boot as bootCSSProvider, shutdown as shutdownCSSProvider } from './service-providers/css-provider'
 import DictionaryProvider from './service-providers/dictionary-provider'
 import LogProvider from './service-providers/log-provider'
 import MenuProvider from './service-providers/menu-provider'
@@ -52,7 +52,6 @@ let appearanceProvider: AppearanceProvider
 let assetsProvider: AssetsProvider
 let citeprocProvider: CiteprocProvider
 let configProvider: ConfigProvider
-let cssProvider: CssProvider
 let dictionaryProvider: DictionaryProvider
 let logProvider: LogProvider
 let tagProvider: TagProvider
@@ -134,7 +133,7 @@ export async function bootApplication (): Promise<void> {
   tagProvider = new TagProvider()
   linkProvider = new LinkProvider()
   targetProvider = new TargetProvider()
-  cssProvider = new CssProvider()
+  await bootCSSProvider()
   translationProvider = new TranslationProvider()
   updateProvider = new UpdateProvider()
   notificationProvider = new NotificationProvider()
@@ -193,7 +192,7 @@ export async function shutdownApplication (): Promise<void> {
   await safeShutdown(notificationProvider)
   await safeShutdown(updateProvider)
   await safeShutdown(translationProvider)
-  await safeShutdown(cssProvider)
+  await shutdownCSSProvider()
   await safeShutdown(targetProvider)
   await safeShutdown(tagProvider)
   await safeShutdown(linkProvider)

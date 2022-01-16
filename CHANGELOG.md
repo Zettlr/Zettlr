@@ -10,6 +10,14 @@
   multiple results per line were mostly not reported; additionally, search
   results are now ordered by relevancy and the search results are marked more
   visibly
+- Heavily improved the table editor user interface: Now the table editor will on
+  certain actions write all changes back to the document so that the possibility
+  of data loss involves a single table cell at most in case the user forgets to
+  un-focus the table. Furthermore, the table editor will now not be removed from
+  the document when it loses focus, and instead the table will be updated
+  silently
+- The log viewer now only displays errors and warnings initially
+- Fix a small visual glitch on macOS for toolbar searches
 - Added "Open in new Tab" button to link preview tooltip, when user has preference "Avoid Opening Files in New Tabs" set to true
 
 ## Under the Hood
@@ -23,6 +31,7 @@
 - Move FSAL types to the new types directory
 - Convert the remaining utility functions to TypeScript
 - Polyfill the `path` module in renderer processes
+- Transform the CSS provider into a functional module
 
 # 2.1.2
 
