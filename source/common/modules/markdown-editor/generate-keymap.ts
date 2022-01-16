@@ -39,11 +39,6 @@ export default function (): KeyMap {
   keymap['Alt-Up'] = 'swapLineUp'
   keymap['Alt-Down'] = 'swapLineDown'
 
-  // If homeEndBehaviour is true, use defaults (paragraph start/end), if it's
-  // false, use visible lines.
-  keymap['Home'] = (homeEndBehaviour) ? 'goLineStart' : 'goLineLeftMarkdown'
-  keymap['End'] = (homeEndBehaviour) ? 'golineEnd' : 'goLineRight'
-
   // macOS only shortcuts
   if (process.platform === 'darwin') {
     keymap['Cmd-F'] = false // Disable the internal search
@@ -79,6 +74,10 @@ export default function (): KeyMap {
       const plainText = clipboard.readText()
       cm.replaceSelection(plainText)
     }
+    // If homeEndBehaviour is true, use defaults (paragraph start/end), if it's
+    // false, use visible lines.
+    keymap['Home'] = (homeEndBehaviour) ? 'goLineStart' : 'goLineLeftMarkdown'
+    keymap['End'] = (homeEndBehaviour) ? 'golineEnd' : 'goLineRight'
     keymap['Ctrl-Alt-F'] = 'insertFootnote'
     keymap['Ctrl-T'] = 'markdownMakeTaskList'
     keymap['Shift-Ctrl-C'] = 'markdownComment'

@@ -18,7 +18,6 @@
   silently
 - The log viewer now only displays errors and warnings initially
 - Fix a small visual glitch on macOS for toolbar searches
-- Fix `Use the CodeMirror default actions for Home and End` preference not working on MacOS
 
 ## Under the Hood
 
