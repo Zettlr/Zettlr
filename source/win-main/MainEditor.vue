@@ -573,8 +573,8 @@ export default defineComponent({
       ipcRenderer.invoke('application', {
         command: 'force-open',
         payload: {
-                linkContents: linkContents,
-                newTab: false // let open-file command decide based on preferences
+          linkContents: linkContents,
+          newTab: undefined // let open-file command decide based on preferences
         }
       })
         .catch(err => console.error(err))

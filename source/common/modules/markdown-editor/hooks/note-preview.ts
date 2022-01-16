@@ -93,39 +93,39 @@ function getPreviewElement (metadata: [string, string, number, number], linkCont
     ipcRenderer.invoke('application', {
       command: 'force-open',
       payload: {
-                linkContents: linkContents,
-                newTab: false   // let open-file command decide based on preferences
-        }
+        linkContents: linkContents,
+        newTab: undefined // let open-file command decide based on preferences
+      }
     })
       .catch(err => console.error(err))
   }
 
   const openButton = document.createElement('button')
   openButton.setAttribute('id', 'open-note')
-  openButton.textContent = 'Open'
+  openButton.textContent = trans('menu.open').replace('\u2026', '') // remove "...", if any
   openButton.addEventListener('click', openFunc)
   actions.appendChild(openButton)
 
-  // Only if preference "Avoid New Tabs" is set, 
+  // Only if preference "Avoid New Tabs" is set,
   // offer an additional button on preview tooltip
   // to open the file in a new tab
-  if (Boolean(global.config.get('system.avoidNewTabs'))) {
+  if (global.config.get('system.avoidNewTabs')) {
     const openFuncNewTab = function (): void {
       ipcRenderer.invoke('application', {
         command: 'force-open',
         payload: {
-                  linkContents: linkContents,
-                  newTab: true
-          }
+          linkContents: linkContents,
+          newTab: true
+        }
       })
         .catch(err => console.error(err))
     }
 
     const openButtonNT = document.createElement('button')
     openButtonNT.setAttribute('id', 'open-note-new-tab')
-    openButtonNT.textContent = 'Open in new Tab'
+    openButtonNT.textContent = trans('menu.open_new_tab')
     openButtonNT.addEventListener('click', openFuncNewTab)
-    openButtonNT.style.cssText += ';margin-left :10px;'
+    openButtonNT.style.marginLeft = '10px'
     actions.appendChild(openButtonNT)
   }
 
