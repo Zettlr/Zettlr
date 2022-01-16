@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-import { defineMode, overlayMode, getMode, defineMIME } from 'codemirror'
+import { defineMode, overlayMode, getMode, defineMIME, Mode } from 'codemirror'
 
 /**
  * INTRODUCTION
@@ -60,7 +60,7 @@ import { defineMode, overlayMode, getMode, defineMIME } from 'codemirror'
  * @param {Number} targetMin The lower limit of the target scale.
  * @param {Number} targetMax The upper limit of the target scale.
  */
-function zTransform (val, sourceMin, sourceMax, targetMin = 0, targetMax = 10) {
+function zTransform (val: number, sourceMin: number, sourceMax: number, targetMin: number = 0, targetMax: number = 10): number {
   // This algorithm "shrinks" val to the scale 0:1 before extrapolating
   // to the target scale.
 
@@ -87,7 +87,7 @@ const readabilityAlgorithms = {
    * Calculates a score for a sentence, given an Array of words.
    * @type {Function}
    */
-  'dale-chall': (words) => {
+  'dale-chall': (words: string[]) => {
     // Gunning-Fog produces grades between 0 and 11 (tested with Bartleby full text).
     let score = 0
     let difficultWords = 0
@@ -108,10 +108,10 @@ const readabilityAlgorithms = {
 
     for (let word of words) if (word.length > wordThreshold) difficultWords++
 
-    words = words.length // Replace the array
-    let percentageOfDifficultWords = difficultWords / words
+    const totalSize = words.length
+    let percentageOfDifficultWords = difficultWords / totalSize
 
-    score = 0.1579 * percentageOfDifficultWords * 100 + (0.0496 * words)
+    score = 0.1579 * percentageOfDifficultWords * 100 + (0.0496 * totalSize)
 
     if (percentageOfDifficultWords > 0.05) score += 3.6365
 
@@ -126,7 +126,7 @@ const readabilityAlgorithms = {
    * Calculates a score for a sentence following Gunning-Fog, given an Array of words.
    * @type {Function}
    */
-  'gunning-fog': (words) => {
+  'gunning-fog': (words: string[]) => {
     // Gunning-Fog produces grades between 0 and 20 (tested with Bartleby full text).
     let score = 0
     let difficultWords = 0
@@ -155,7 +155,7 @@ const readabilityAlgorithms = {
    * Calculates a score for a sentence following Coleman/Liau, given an Array of words.
    * @type {Function}
    */
-  'coleman-liau': (words) => {
+  'coleman-liau': (words: string[]) => {
     // Coleman-Liau produces grades between 0 and 43 (tested with Bartleby full text).
     let score = 0
     let mean = words.join('').length / words.length
@@ -170,7 +170,7 @@ const readabilityAlgorithms = {
    * Calculates a score for a sentence following ARI, given an Array of words.
    * @type {Function}
    */
-  'automated-readability': (words) => {
+  'automated-readability': (words: string[]) => {
     // The ARI produces grades between -7 and 71 (tested with Bartleby full text).
     let score = 0
     let mean = words.join('').length / words.length
@@ -199,26 +199,28 @@ const sentenceEndings = '!?.:'
 * @return {OverlayMode}              The loaded overlay mode.
 */
 defineMode('readability', function (config, parserConfig) {
-  const readability = {
+  const readability: Mode<{}> = {
     token: function (stream, state) {
       // First extract a sentence, but exclude Markdown formatting.
       let sentence = ''
-      if (delim.includes(stream.peek())) {
+      const ch = stream.peek()
+      if (ch !== null && delim.includes(ch)) {
         // When encountering delimiters outside of a sentence, jump over them.
         stream.next()
         return null
       }
 
       while (!stream.eol()) {
-        if (sentenceEndings.includes(stream.peek())) {
-          sentence += stream.next()
+        const ch = stream.peek()
+        if (ch !== null && sentenceEndings.includes(ch)) {
+          sentence += stream.next() as string
           // Check if this really was the end of the sentence
           if (!stream.eol() && stream.peek() === ' ') {
             // We are done with this sentence
             break // away!
           } // Else: Continue to include characters.
         } else {
-          sentence += stream.next()
+          sentence += stream.next() as string
         }
       }
 
@@ -237,18 +239,22 @@ defineMode('readability', function (config, parserConfig) {
         return null
       }
 
-      let words = sentence.trim().split(' ')
+      const words = sentence.trim().split(' ')
 
       // Pluck empty strings
-      if (words[0] === '') words.shift()
-      if (words[words.length - 1] === '') words.pop()
+      if (words[0] === '') {
+        words.shift()
+      }
+      if (words[words.length - 1] === '') {
+        words.pop()
+      }
 
-      let algorithm = config.zettlr.readabilityAlgorithm || 'dale-chall'
+      const algorithm: keyof typeof readabilityAlgorithms = (config as any).zettlr.readabilityAlgorithm ?? 'dale-chall'
 
-      let score = readabilityAlgorithms[algorithm](words)
+      const score = readabilityAlgorithms[algorithm](words)
 
       // Now return a token corresponding to the score.
-      return 'readability-' + score
+      return 'readability-' + score.toString()
     }
   }
 

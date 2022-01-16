@@ -14,7 +14,7 @@
  */
 
 import { getZknTagRE, getHeadingRE, getHighlightRE, getTableRE, getInlineMathRE, getFnReferenceRE } from '@common/regular-expressions'
-import { defineMode, getMode, startState as _startState, copyState as _copyState, defineMIME } from 'codemirror'
+import { defineMode, getMode, startState as _startState, defineMIME, Mode } from 'codemirror'
 
 const zknTagRE = getZknTagRE()
 const headingRE = getHeadingRE()
@@ -25,6 +25,22 @@ const fnReferenceRE = getFnReferenceRE()
 const inlineMathRE = getInlineMathRE()
 const inlineMathStartRE = /^\${1,2}/i
 const inlineMathEndRE = /^(?<!\\)\${1,2}(?!\d)/i
+
+interface MarkdownModeState {
+  startOfFile: boolean
+  inFrontmatter: boolean
+  inEquation: boolean
+  inZknLink: boolean // Whether or not we're currently within a zkn Link
+  hasJustEscaped: boolean // Whether the previous iteration had an escape char
+  yamlState: ReturnType<typeof _startState>
+  mdState: ReturnType<typeof _startState>
+  mathState: ReturnType<typeof _startState>
+}
+
+interface ModeWithInner<T> extends Mode<T> {
+  innerMode?: (state: T) => any
+  fold: string
+}
 
 /**
   * This defines the Markdown Zettelkasten system mode, which highlights IDs
@@ -40,7 +56,7 @@ defineMode('markdown-zkn', function (config, parserConfig) {
   const mdMode = getMode(config, { name: 'gfm', highlightFormatting: true, gitHubSpice: false })
   const mathMode = getMode(config, { name: 'stex', inMathMode: true })
 
-  const markdownZkn = {
+  const markdownZkn: ModeWithInner<MarkdownModeState> = {
     startState: function () {
       return {
         startOfFile: true,
@@ -48,9 +64,9 @@ defineMode('markdown-zkn', function (config, parserConfig) {
         inEquation: false,
         inZknLink: false, // Whether or not we're currently within a zkn Link
         hasJustEscaped: false, // Whether the previous iteration had an escape char
-        yamlState: _startState(yamlMode),
-        mdState: _startState(mdMode),
-        mathState: _startState(mathMode)
+        yamlState: _startState(yamlMode) as Mode<any>,
+        mdState: _startState(mdMode) as Mode<any>,
+        mathState: _startState(mathMode) as Mode<any>
       }
     },
     copyState: function (state) {
@@ -61,9 +77,9 @@ defineMode('markdown-zkn', function (config, parserConfig) {
         inZknLink: state.inZknLink,
         hasJustEscaped: state.hasJustEscaped,
         // Make sure to correctly copy the YAML state
-        yamlState: _copyState(yamlMode, state.yamlState),
-        mdState: _copyState(mdMode, state.mdState),
-        mathState: _copyState(mathMode, state.mathState)
+        yamlState: yamlMode.copyState?.(state.yamlState),
+        mdState: mdMode.copyState?.(state.mdState),
+        mathState: mathMode.copyState?.(state.mathState)
       }
     },
     /**
@@ -77,12 +93,12 @@ defineMode('markdown-zkn', function (config, parserConfig) {
     token: function (stream, state) {
       // First: YAML highlighting. This block will only execute
       // at the beginning of a file.
-      if (state.startOfFile === true && stream.sol() && stream.match(/---/) !== null) {
+      if (state.startOfFile && stream.sol() && stream.match(/---/) !== null) {
         // Assume a frontmatter
         state.startOfFile = false
         state.inFrontmatter = true
         return 'hr yaml-frontmatter-start'
-      } else if (state.startOfFile === false && state.inFrontmatter === true) {
+      } else if (!state.startOfFile && state.inFrontmatter) {
         // Still in frontMatter?
         if (stream.sol() && stream.match(/---|\.\.\./) !== null) {
           state.inFrontmatter = false
@@ -90,22 +106,22 @@ defineMode('markdown-zkn', function (config, parserConfig) {
         }
 
         // Continue to parse in YAML mode
-        return yamlMode.token(stream, state.yamlState) + ' fenced-code'
-      } else if (state.startOfFile === true) {
+        return (yamlMode.token(stream, state.yamlState) as string) + ' fenced-code'
+      } else if (state.startOfFile) {
         // If no frontmatter was found, set the state to a desirable state
         state.startOfFile = false
       }
 
       // Directly afterwards check for inline code or comments, so
       // that stuff such as zkn-links are not highlighted:
-      if (state.mdState.overlay.code || state.mdState.overlay.codeBlock || state.mdState.baseCur === 'comment') {
+      if ((state.mdState as any).overlay.code || (state.mdState as any).overlay.codeBlock || (state.mdState as any).baseCur === 'comment') {
         return mdMode.token(stream, state.mdState)
       }
 
       // Next, it could be that we're currently inside an inline math equation
-      if (state.inEquation === true && stream.match(inlineMathEndRE) === null) {
-        return mathMode.token(stream, state.mathState) + ' fenced-code'
-      } else if (state.inEquation === true) {
+      if (state.inEquation && stream.match(inlineMathEndRE) === null) {
+        return (mathMode.token(stream, state.mathState) as string) + ' fenced-code'
+      } else if (state.inEquation) {
         state.inEquation = false
         return 'formatting-code-block'
       }
@@ -125,7 +141,7 @@ defineMode('markdown-zkn', function (config, parserConfig) {
       // Then check if we have just escaped, and, if so, return an empty class
       // which will also (intentionally) break any rendering that the next()
       // char would have initiated.
-      if (state.hasJustEscaped === true) {
+      if (state.hasJustEscaped) {
         state.hasJustEscaped = false // Needs to be reset always
         if (!stream.eol()) {
           stream.next()
@@ -140,13 +156,13 @@ defineMode('markdown-zkn', function (config, parserConfig) {
       }
 
       // Are we in a link?
-      if (state.inZknLink === true) {
-        if (stream.match(config.zettlr.zettelkasten.linkEnd)) {
+      if (state.inZknLink) {
+        if (stream.match((config as any).zettlr.zettelkasten.linkEnd)) {
           state.inZknLink = false
           return 'zkn-link-formatting'
         }
 
-        while (!stream.eol() && !stream.match(config.zettlr.zettelkasten.linkEnd, false)) {
+        while (!stream.eol() && !stream.match((config as any).zettlr.zettelkasten.linkEnd, false)) {
           stream.next()
         }
         return 'zkn-link'
@@ -191,7 +207,7 @@ defineMode('markdown-zkn', function (config, parserConfig) {
       }
 
       // Now check for a zknLink
-      if (stream.match(config.zettlr.zettelkasten.linkStart)) {
+      if (stream.match((config as any).zettlr.zettelkasten.linkStart)) {
         state.inZknLink = true
         return 'zkn-link-formatting'
       }
@@ -200,7 +216,7 @@ defineMode('markdown-zkn', function (config, parserConfig) {
       // be treated as _links_ and not as "THE" ID of the file as long
       // as the definition of zkn-links is above this matcher.)
 
-      let zknIDRE = new RegExp(config.zettlr.zettelkasten.idRE)
+      let zknIDRE = new RegExp((config as any).zettlr.zettelkasten.idRE)
       if (stream.match(zknIDRE) !== null) {
         return 'zkn-id'
       }
@@ -214,9 +230,9 @@ defineMode('markdown-zkn', function (config, parserConfig) {
       // other plugins such as AutoCorrect don't
       // trigger in YAML mode as these inspect the
       // mode object.
-      if (state.inFrontmatter === true) {
+      if (state.inFrontmatter) {
         return { mode: yamlMode, state: state.yamlState }
-      } else if (state.inEquation === true) {
+      } else if (state.inEquation) {
         return { mode: mathMode, state: state.mathState }
       } else {
         return { mode: markdownZkn, state: state.mdState }
@@ -229,7 +245,7 @@ defineMode('markdown-zkn', function (config, parserConfig) {
       state.inEquation = false
       // The underlying mode needs
       // to be aware of blank lines
-      return mdMode.blankLine(state.mdState)
+      return mdMode.blankLine?.(state.mdState)
     },
     // Since in innerMode() we are returning the ZKN mode instead of the
     // Markdown mode when we are not inside the frontmatter, the foldcode
