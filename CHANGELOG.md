@@ -18,6 +18,7 @@
   silently
 - The log viewer now only displays errors and warnings initially
 - Fix a small visual glitch on macOS for toolbar searches
+- Added "Open in new Tab" button to link preview tooltip, when user has preference "Avoid Opening Files in New Tabs" set to true
 
 ## Under the Hood
 
