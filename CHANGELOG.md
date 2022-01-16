@@ -18,6 +18,7 @@
   silently
 - The log viewer now only displays errors and warnings initially
 - Fix a small visual glitch on macOS for toolbar searches
+- Added "Open in new Tab" button to link preview tooltip, when user has preference "Avoid Opening Files in New Tabs" set to true
 - Fix `Use the CodeMirror default actions for Home and End` preference not working on MacOS
 
 ## Under the Hood
@@ -32,6 +33,7 @@
 - Convert the remaining utility functions to TypeScript
 - Polyfill the `path` module in renderer processes
 - Transform the CSS provider into a functional module
+- Transform the appearance provider into a functional module
 
 # 2.1.2
 
