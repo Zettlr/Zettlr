@@ -118,11 +118,6 @@ declare module global {
   var i18nFallback: any
   var i18nFallbackRawData: any
   var tray: TrayProvider
-  // This type is only required in the renderer processes since the
-  // applicationMenuHelper is shared via the browser process's window object.
-  var menuProvider: {
-    show: (position: Point | Rect, items: AnyMenuItem[], callback: (clickedID: string) => void, cleanup?: boolean) => () => void
-  }
 }
 
 // This interface is being produced by the MarkdownEditor module in source/common

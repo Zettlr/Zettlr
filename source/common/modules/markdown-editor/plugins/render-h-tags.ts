@@ -14,6 +14,7 @@
 
 import CodeMirror, { commands } from 'codemirror'
 import { getHeadRE } from '@common/regular-expressions'
+import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 
 const headRE = getHeadRE()
 
@@ -120,7 +121,7 @@ const headRE = getHeadRE()
       ]
 
       const point = { x: e.clientX, y: e.clientY }
-      global.menuProvider.show(point, items as any, (id) => {
+      showPopupMenu(point, items as any, (id) => {
         const newLevel = parseInt(id, 10)
 
         const markerRange = textMarker.find()

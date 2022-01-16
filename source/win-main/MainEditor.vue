@@ -303,7 +303,7 @@ export default defineComponent({
       }
 
       // We have received new items, so we should update them in the editor.
-      const items = this.cslItems.map(item => {
+      const items = this.cslItems.map((item: any) => {
         // Get a rudimentary author list
         let authors = ''
         if (item.author !== undefined) {

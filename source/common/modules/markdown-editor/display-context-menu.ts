@@ -15,6 +15,7 @@
 // Displays a context menu for the MarkdownEditor class
 import { trans } from '@common/i18n-renderer'
 import { IpcRenderer } from 'electron'
+import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 
 const ipcRenderer: IpcRenderer = (window as any).ipc
 const clipboard = (window as any).clipboard
@@ -386,9 +387,9 @@ export default function displayContextMenu (
 
   // Now we can display the menu
   const point = { x: event.clientX, y: event.clientY }
-  const closeCallback = global.menuProvider.show(point, buildMenu, (clickedID) => {
+  const closeCallback = showPopupMenu(point, buildMenu, (clickedID) => {
     if (clickedID.startsWith('acceptSuggestion-')) {
-      const idx = parseInt(clickedID.substr(17), 10) // Retrieve the ID
+      const idx = parseInt(clickedID.substring(17), 10) // Retrieve the ID
       replaceCallback(currentSuggestions[idx])
       return
     }
