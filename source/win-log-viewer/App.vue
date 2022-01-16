@@ -39,6 +39,7 @@ import LogMessage from './LogMessage.vue'
 import WindowChrome from '@common/vue/window/Chrome.vue'
 import { nextTick, defineComponent } from 'vue'
 import { IpcRenderer } from 'electron'
+import { ToolbarControl } from '@dts/renderer/window'
 
 const ipcRenderer: IpcRenderer = (window as any).ipc
 
@@ -94,6 +95,7 @@ export default defineComponent({
     toolbarControls: function () {
       return [
         {
+          id: 'filter-text',
           type: 'text',
           content: 'Filter messages:'
         },
@@ -127,13 +129,15 @@ export default defineComponent({
         },
         {
           type: 'spacer', // Make sure the content is flushed to the left
+          id: 'spacer-one',
           size: '3x'
         },
         {
           type: 'search',
+          id: 'log-filter',
           placeholder: 'Filter …'
         }
-      ]
+      ] as ToolbarControl[]
     }
   },
   mounted: function () {
