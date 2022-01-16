@@ -28,6 +28,7 @@ import FSALCache from './fsal-cache'
 import extractBOM from './util/extract-bom'
 import extractTags from './util/extract-tags'
 import extractLinks from './util/extract-links'
+import { SearchTerm } from '@dts/common/search'
 
 // Here are all supported variables for Pandoc:
 // https://pandoc.org/MANUAL.html#variables
@@ -289,7 +290,7 @@ export async function parse (filePath: string, cache: FSALCache|null, parent: Di
  *
  * @return  {Promise<any>}                  Resolves with search results
  */
-export async function search (fileObject: MDFileDescriptor, terms: any[]): Promise<any> {
+export async function search (fileObject: MDFileDescriptor, terms: SearchTerm[]): Promise<any> {
   // Initialise the content variables (needed to check for NOT operators)
   let cnt = await fs.readFile(fileObject.path, { encoding: 'utf8' })
   return searchFile(fileObject, terms, cnt)

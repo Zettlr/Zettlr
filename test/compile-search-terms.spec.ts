@@ -13,47 +13,54 @@
  * END HEADER
  */
 
-const compileSearchTerms = require('../source/common/util/compile-search-terms')
-const assert = require('assert')
+import compileSearchTerms from '../source/common/util/compile-search-terms'
+import assert from 'assert'
 
 const testSearches = [
   // First the searches from the docs
   {
     'terms': 'boat ship',
-    'expected': [{ word: 'boat', operator: 'AND' }, { word: 'ship', operator: 'AND' }]
+    'expected': [{ words: ['boat'], operator: 'AND' }, { words: ['ship'], operator: 'AND' }]
   },
   {
     'terms': 'boat | ship',
-    'expected': [{ word: [ 'boat', 'ship' ], operator: 'OR' }]
+    'expected': [{ words: [ 'boat', 'ship' ], operator: 'OR' }]
   },
   {
     'terms': '"boat ship"',
-    'expected': [{ word: 'boat ship', operator: 'AND' }]
+    'expected': [{ words: ['boat ship'], operator: 'AND' }]
+  },
+  {
+    'terms': 'test | done rendering',
+    expected: [
+      { words: [ 'test', 'done' ], operator: 'OR' },
+      { words: ['rendering'], operator: 'AND' }
+    ]
   },
   // Now some fancy ones!
   {
     'terms': 'sovereignty | "state of exception" Agamben',
     'expected': [
-      { word: [ 'sovereignty', 'state of exception' ], operator: 'OR' },
-      { word: 'Agamben', operator: 'AND' }
+      { words: [ 'sovereignty', 'state of exception' ], operator: 'OR' },
+      { words: ['Agamben'], operator: 'AND' }
     ]
   },
   {
     'terms': '"sovereign decision" !"Carl Schmitt"',
     'expected': [
-      { word: 'sovereign decision', operator: 'AND' },
-      { word: 'Carl Schmitt', operator: 'NOT' }
+      { words: ['sovereign decision'], operator: 'AND' },
+      { words: ['Carl Schmitt'], operator: 'NOT' }
     ]
   },
   {
     'terms': 'this should turn out "really" boring!',
     'expected': [
-      { word: 'this', operator: 'AND' },
-      { word: 'should', operator: 'AND' },
-      { word: 'turn', operator: 'AND' },
-      { word: 'out', operator: 'AND' },
-      { word: 'really', operator: 'AND' },
-      { word: 'boring!', operator: 'AND' }
+      { words: ['this'], operator: 'AND' },
+      { words: ['should'], operator: 'AND' },
+      { words: ['turn'], operator: 'AND' },
+      { words: ['out'], operator: 'AND' },
+      { words: ['really'], operator: 'AND' },
+      { words: ['boring!'], operator: 'AND' }
     ]
   },
   {

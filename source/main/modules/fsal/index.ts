@@ -39,6 +39,7 @@ import {
 } from '@dts/main/fsal'
 import { MDFileMeta, CodeFileMeta, AnyMetaDescriptor, MaybeRootMeta } from '@dts/common/fsal'
 import { codeFileExtensions, mdFileExtensions } from '@common/get-file-extensions'
+import { SearchTerm } from '@dts/common/search'
 
 // Re-export all interfaces necessary for other parts of the code (Document Manager)
 export {
@@ -827,7 +828,7 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  public async searchFile (src: MDFileDescriptor|CodeFileDescriptor, searchTerms: any): Promise<any> { // TODO: Implement search results type
+  public async searchFile (src: MDFileDescriptor|CodeFileDescriptor, searchTerms: SearchTerm[]): Promise<any> { // TODO: Implement search results type
     // NOTE: Generates no events
     // Searches a file and returns the result
     if (src.type === 'file') {

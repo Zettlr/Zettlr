@@ -16,46 +16,54 @@
  * END HEADER
  */
 
-module.exports = function (term) {
+import { SearchTerm } from '@dts/common/search'
+
+export default function compileSearchTerms (term: string): SearchTerm[] {
   // First sanitize the terms
-  let myTerms = []
+  const myTerms: SearchTerm[] = []
   let curWord = ''
   let hasExact = false
-  let operator = 'AND'
+  let operator: 'AND'|'OR'|'NOT' = 'AND'
 
   for (let i = 0; i < term.length; i++) {
-    let c = term.charAt(i)
-    if ((c === ' ') && !hasExact) {
-      // Eat word and next
+    const c = term.charAt(i)
+    if (c === ' ' && !hasExact) {
+      // Spaces mark the end of one search term (except we're in an exact match)
       if (curWord.trim() !== '') {
-        myTerms.push({ 'word': curWord.trim(), 'operator': operator })
+        myTerms.push({ words: [curWord.trim()], operator: operator })
         curWord = ''
         operator = 'AND' // Reset the operator
       }
       continue
     } else if (c === '|') {
       // We got an OR operator
-      // So change the last word's operator and set current operator to OR
-      operator = 'OR'
-      // Take a look forward and if the next char is also a space, eat it right now
-      if (term.charAt(i + 1) === ' ') ++i
-      // Also the previous operator should also be set to or
-      myTerms[myTerms.length - 1].operator = 'OR'
+      // If the next character is a space, we can use a shortcut here
+      if (term.charAt(i + 1) === ' ') {
+        ++i
+      }
+
+      // We know additionally know that the previous operator was an or. But
+      // let's check that the user hasn't accidentally deleted one OR-word and
+      // now their current search STARTS with a pipe character. If not, we will
+      // disregard this OR character and treat what's coming as an AND
+      if (myTerms.length > 0) {
+        myTerms[myTerms.length - 1].operator = 'OR'
+        operator = 'OR'
+      }
       continue
     } else if (c === '"') {
       if (!hasExact) {
+        // Begin an exact phrase
         hasExact = true
-        continue
       } else {
         hasExact = false
         // Do not trim the word to account for trailing and
         // ending whitespace within an exact capturing group
-        myTerms.push({ 'word': curWord, 'operator': operator })
+        myTerms.push({ words: [curWord], operator: operator })
         curWord = ''
-        operator = 'AND' // Reset the operator
-        continue
+        operator = 'AND'
       }
-      // Don't eat the quote
+      continue
     } else if (c === '!' && !hasExact && curWord === '') {
       // An exclamation mark only has meaning if it is preceeded
       // by a space and not within an exact match. Preceeded by
@@ -67,34 +75,38 @@ module.exports = function (term) {
     curWord += term.charAt(i)
   }
 
-  // Afterwards eat the last word if its not empty
+  // Now that we're through the search terms, clean up
+
+  // If there is a last word (in most cases it should be), add it to the list
   if (curWord.trim() !== '') {
-    myTerms.push({ 'word': curWord.trim(), 'operator': operator })
+    myTerms.push({ words: [curWord.trim()], operator: operator })
   }
 
   // Now pack together all consecutive ORs
   // to make it easier for the search in the main process
-  let currentOr = {}
-  currentOr.operator = 'OR'
-  currentOr.word = []
-  let newTerms = []
+  let currentOr: SearchTerm = {
+    operator: 'OR',
+    words: []
+  }
+
+  const newTerms: SearchTerm[] = []
 
   for (let i = 0; i < myTerms.length; i++) {
     if (myTerms[i].operator !== 'OR') {
-      if (currentOr.word.length > 0) {
+      if (currentOr.words.length > 0) {
         // Duplicate object so that the words are retained
-        newTerms.push(JSON.parse(JSON.stringify(currentOr)))
-        currentOr.word = []
+        newTerms.push(currentOr)
+        currentOr = { operator: 'OR', words: [] }
       }
       newTerms.push(myTerms[i])
-    } else if (myTerms[i].operator === 'OR') {
-      currentOr.word.push(myTerms[i].word)
+    } else {
+      currentOr.words = currentOr.words.concat(myTerms[i].words)
     }
   }
 
   // Now push the currentOr if not empty
-  if (currentOr.word.length > 0) {
-    newTerms.push(JSON.parse(JSON.stringify(currentOr)))
+  if (currentOr.words.length > 0) {
+    newTerms.push(currentOr)
   }
 
   return newTerms
