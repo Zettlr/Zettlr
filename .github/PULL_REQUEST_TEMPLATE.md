@@ -8,7 +8,7 @@ following points:
   - [ ] I target the develop-branch, and *not* the master branch.
   - [ ] I have tested this extensively and paid extra attention to
         potential cross-platform issues (e.g. Cmd/Ctrl/Super-key bindings)
-  - [ ] I have made use of ESLint using the provided configuration from the
+  - [ ] I have made use of ESLint (e.g., `yarn lint`) using the provided configuration from the
         repository's .eslintrc.json file, and it did not complain.
   - [ ] I have added an entry to the CHANGELOG.md.
   - [ ] I matched my code-style to the repository (as far as possible).
