@@ -2,6 +2,7 @@ import { Store } from 'vuex'
 
 declare module '@vue/runtime-core' {
   // provide typings for `this.$store`
+  import { ZettlrState } from './win-main/store'
   interface ComponentCustomProperties {
     $store: Store<ZettlrState>
     $data: any
