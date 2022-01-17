@@ -154,6 +154,6 @@ function indentLine (cm: CodeMirror.Editor, line: LineHandle, elt: HTMLElement):
   // finds the cause, please shoot me a few lines!
   const selectionLeftPadFix = 4
 
-  elt.style.textIndent = `-${numberOfSpaces * nonMonospaceWidth + numberOfOrdinal * monospaceWidth}px'`
+  elt.style.textIndent = `-${numberOfSpaces * nonMonospaceWidth + numberOfOrdinal * monospaceWidth}px`
   elt.style.paddingLeft = `${numberOfSpaces * nonMonospaceWidth + numberOfOrdinal * monospaceWidth + selectionLeftPadFix}px`
 }
