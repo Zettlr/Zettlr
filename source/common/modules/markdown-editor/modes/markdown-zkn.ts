@@ -14,7 +14,8 @@
  */
 
 import { getZknTagRE, getHeadingRE, getHighlightRE, getTableRE, getInlineMathRE, getFnReferenceRE } from '@common/regular-expressions'
-import { defineMode, getMode, startState as _startState, defineMIME, Mode } from 'codemirror'
+// @ts-expect-error
+import { defineMode, getMode, startState as _startState, copyState as _copyState, defineMIME, Mode } from 'codemirror'
 
 const zknTagRE = getZknTagRE()
 const headingRE = getHeadingRE()
@@ -77,9 +78,9 @@ defineMode('markdown-zkn', function (config, parserConfig) {
         inZknLink: state.inZknLink,
         hasJustEscaped: state.hasJustEscaped,
         // Make sure to correctly copy the YAML state
-        yamlState: yamlMode.copyState?.(state.yamlState),
-        mdState: mdMode.copyState?.(state.mdState),
-        mathState: mathMode.copyState?.(state.mathState)
+        yamlState: _copyState(yamlMode, state.yamlState),
+        mdState: _copyState(mdMode, state.mdState),
+        mathState: _copyState(mathMode, state.mathState)
       }
     },
     /**
