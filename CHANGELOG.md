@@ -23,6 +23,7 @@
 - Fix `Use the CodeMirror default actions for Home and End` preference not
   working on MacOS
 - Fix task item strikethrough appearing laggy
+- Fix task item strikethrough covering the preceding whitespace
 
 ## Under the Hood
 

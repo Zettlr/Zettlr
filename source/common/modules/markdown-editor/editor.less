@@ -182,8 +182,12 @@
   .size-header-5 { font-size: 1em; }
   .size-header-6 { font-size: 1em; }
 
+  // The underlying gfm mode is funny. For top level task items, it applies the
+  // class cm-variable-2 for the full text. For second-level task items, it
+  // applies cm-variable-3, and for the third level it applies cm-keyword. And
+  // then it toggles around. Why would you do that ...?
   .task-item-done {
-    text-decoration: line-through;
+    .cm-variable-2, .cm-variable-3, .cm-keyword { text-decoration: line-through; }
   }
 
   // Deliver a much more fancy UX for images inserted into the editor
