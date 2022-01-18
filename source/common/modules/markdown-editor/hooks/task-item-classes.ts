@@ -37,6 +37,7 @@ export default function taskItemClassHook (cm: CodeMirror.Editor): void {
   cm.on('cursorActivity', callback)
   cm.on('viewportChange', callback)
   cm.on('optionChange', callback)
+  cm.on('change', callback)
 }
 
 function applyTaskItemClasses (cm: CodeMirror.Editor): void {
@@ -51,7 +52,7 @@ function applyTaskItemClasses (cm: CodeMirror.Editor): void {
     // First, get the line and the info whether it's currently a code block line
     const info = cm.lineInfo(i)
     const line = info.text
-    const wrapClass = (info.wrapClass !== undefined) ? String(info.wrapClass) : ''
+    const wrapClass = info.wrapClass ?? ''
     const classIsApplied = wrapClass.includes(itemClass)
     const isDone = taskItemRE.test(line)
 
