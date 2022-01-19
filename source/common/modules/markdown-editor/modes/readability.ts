@@ -189,6 +189,23 @@ const readabilityAlgorithms = {
 const delim = '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~ «»“”–—…÷‘’‚'
 const sentenceEndings = '!?.:'
 
+interface ReadabilityModeState {
+  /**
+   * A variable holding information about whether the mode is currently
+   * processing a frontmatter
+   */
+  inFrontmatter: boolean
+  /**
+   * A variable that will be true only when we are at the very start of a file
+   */
+  startOfFile: boolean
+  /**
+   * This variable holds the amount of characters the mode should skip over
+   * before processing the next sentence
+   */
+  eatCharacters: number
+}
+
 /**
 * This defines the readability mode. It will highlight sentences according
 * to readability formulae. I don't specifically know what these formulae
@@ -199,9 +216,55 @@ const sentenceEndings = '!?.:'
 * @return {OverlayMode}              The loaded overlay mode.
 */
 defineMode('readability', function (config, parserConfig) {
-  const readability: Mode<{}> = {
+  const readability: Mode<ReadabilityModeState> = {
+    startState: function () {
+      return {
+        startOfFile: true,
+        inFrontmatter: false,
+        eatCharacters: 0
+      }
+    },
+    copyState: function (state) {
+      return {
+        startOfFile: state.startOfFile,
+        inFrontmatter: state.inFrontmatter,
+        eatCharacters: state.eatCharacters
+      }
+    },
     token: function (stream, state) {
-      // First extract a sentence, but exclude Markdown formatting.
+      // As in the Markdown mode (basically just copied over the logic), we also
+      // have to keep track of a frontmatter to not render it using readability
+      if (state.startOfFile && stream.sol() && stream.match(/---/) !== null) {
+        // Assume a frontmatter
+        state.startOfFile = false
+        state.inFrontmatter = true
+        return null
+      } else if (!state.startOfFile && state.inFrontmatter) {
+        // Still in frontMatter?
+        if (stream.sol() && stream.match(/---|\.\.\./) !== null) {
+          state.inFrontmatter = false
+          return null
+        }
+
+        // Skip over the line
+        stream.skipToEnd()
+        return null
+      } else if (state.startOfFile) {
+        // If no frontmatter was found, set the state to a desirable state
+        state.startOfFile = false
+      }
+
+      // After the frontmatter, next possibility is that we have to jump over
+      // a few characters. This can happen below if the end of a detected
+      // sentence includes delimiters. We exclude them both from calculation and
+      // from rendering, so we have to assign them the null-class first before
+      // continuing to render sentences.
+      while (state.eatCharacters > 0) {
+        --state.eatCharacters
+        stream.next()
+      }
+
+      // Now that the frontmatter has been dealt with, extract a sentence.
       let sentence = ''
       const ch = stream.peek()
       if (ch !== null && delim.includes(ch)) {
@@ -214,17 +277,46 @@ defineMode('readability', function (config, parserConfig) {
         const ch = stream.peek()
         if (ch !== null && sentenceEndings.includes(ch)) {
           sentence += stream.next() as string
-          // Check if this really was the end of the sentence
+          // Check if this really was the end of the sentence. Else, continue to
+          // include characters.
           if (!stream.eol() && stream.peek() === ' ') {
-            // We are done with this sentence
-            break // away!
-          } // Else: Continue to include characters.
+            break
+          }
         } else {
           sentence += stream.next() as string
         }
       }
 
-      // Post-production of the sentence -> remove Markdown-characters, etc
+      // Post-production of the sentence -> First, remove delims at the end of
+      // the sentence.
+      while (delim.includes(sentence[sentence.length - 1]) &&
+        !sentenceEndings.includes(sentence[sentence.length - 1])) {
+        // Special case: Brackets. If the sentence ends with one and somewhere
+        // inside there is just the opening pendant, include it in rendering.
+        let shouldBreak = false
+        const minusLastChar = sentence.substring(0, sentence.length - 1)
+        for (const [ start, end ] of [ [ '(', ')' ], [ '[', ']' ], [ '{', '}' ] ]) {
+          if (
+            sentence[sentence.length - 1] === end &&
+            minusLastChar.lastIndexOf(start) > minusLastChar.lastIndexOf(end)
+          ) {
+            shouldBreak = true
+            break
+          }
+        }
+
+        if (shouldBreak) {
+          break
+        }
+
+        sentence = sentence.substring(0, sentence.length - 1)
+        // Also back up so that the rendered class does not include these
+        // characters
+        stream.backUp(1)
+        ++state.eatCharacters
+      }
+
+      // Now, remove some Markdown formattings
       sentence = sentence.replace(/[*_]{1,3}[^_*]+[_*]{1,3}/g, '')
       sentence = sentence.replace(/\[\[[^\]]+\[\[/g, '')
       // Remove images completely
