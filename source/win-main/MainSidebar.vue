@@ -3,7 +3,7 @@
     <TabBar
       v-bind:tabs="tabs"
       v-bind:current-tab="currentTab"
-      v-on:tab="currentTab = $event"
+      v-on:tab="setCurrentTab($event)"
     ></TabBar>
 
     <!-- Now the tab containers -->
@@ -148,12 +148,14 @@ export default {
   },
   data: function () {
     return {
-      currentTab: 'toc',
       bibContents: undefined,
       relatedFiles: []
     }
   },
   computed: {
+    currentTab: function () {
+      return this.$store.state.config['window.currentSidebarTab']
+    },
     tabs: function () {
       return [
         {
@@ -284,6 +286,9 @@ export default {
     this.updateRelatedFiles()
   },
   methods: {
+    setCurrentTab: function (which) {
+      global.config.set('window.currentSidebarTab', which)
+    },
     updateReferences: function () {
       // NOTE We're manually cloning the citationKeys array, since Proxies
       // cannot be cloned to be sent across the IPC bridge

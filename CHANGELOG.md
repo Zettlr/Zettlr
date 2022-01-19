@@ -34,6 +34,7 @@
 - Enable resetting of the custom Zettelkasten directory
 - The default value for "Use system accent color" is now off for all platforms
   except macOS
+- The app now remembers if you had the sidebar open, and which tab you selected
 
 ## Under the Hood
 

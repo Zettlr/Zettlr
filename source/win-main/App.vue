@@ -130,7 +130,6 @@ export default defineComponent({
     return {
       title: 'Zettlr',
       readabilityActive: false,
-      sidebarVisible: false,
       fileManagerVisible: true,
       distractionFree: false,
       mainSplitViewVisibleComponent: 'fileManager',
@@ -167,6 +166,9 @@ export default defineComponent({
     }
   },
   computed: {
+    sidebarVisible: function (): boolean {
+      return this.$store.state.config['window.sidebarVisible']
+    },
     shouldCountChars: function (): boolean {
       return this.$store.state.config['editor.countChars']
     },
@@ -342,7 +344,7 @@ export default defineComponent({
           id: 'toggle-sidebar',
           title: trans('menu.toggle_sidebar'),
           icon: 'view-columns',
-          initialState: this.sidebarVisible === true
+          initialState: this.sidebarVisible ? 'active' : ''
         }
       ]
     },
@@ -392,7 +394,7 @@ export default defineComponent({
   mounted: function () {
     ipcRenderer.on('shortcut', (event, shortcut, state) => {
       if (shortcut === 'toggle-sidebar') {
-        this.sidebarVisible = this.sidebarVisible === false
+        (global as any).config.set('window.sidebarVisible', !this.sidebarVisible)
       } else if (shortcut === 'insert-id') {
         // Generates an ID based upon the configured pattern, writes it into the
         // clipboard and then triggers the paste command on these webcontents.
@@ -456,12 +458,12 @@ export default defineComponent({
           }
 
           this.distractionFree = true
-          this.sidebarVisible = false
+          ;(global as any).config.set('window.sidebarVisible', false)
           this.fileManagerVisible = false
         } else {
           // Leave distraction free mode
           this.distractionFree = false
-          this.sidebarVisible = this.sidebarsBeforeDistractionfree.sidebar
+          ;(global as any).config.set('window.sidebarVisible', this.sidebarsBeforeDistractionfree.sidebar)
           this.fileManagerVisible = this.sidebarsBeforeDistractionfree.fileManager
         }
       }
@@ -469,7 +471,9 @@ export default defineComponent({
 
     // Initially, we need to hide the sidebar, since the view will be visible
     // by default.
-    this.editorSidebarSplitComponent.hideView(2)
+    if (!this.sidebarVisible) {
+      this.editorSidebarSplitComponent.hideView(2)
+    }
   },
   methods: {
     jtl: function (lineNumber: number) {
@@ -653,7 +657,7 @@ export default defineComponent({
       if (id === 'toggle-readability') {
         this.readabilityActive = state // For simple toggles, the state is just a boolean
       } else if (id === 'toggle-sidebar') {
-        this.sidebarVisible = state
+        ;(global as any).config.set('window.sidebarVisible', state)
       } else if (id === 'toggle-file-manager') {
         // Since this is a three-way-toggle, we have to inspect the state.
         this.fileManagerVisible = state !== undefined
