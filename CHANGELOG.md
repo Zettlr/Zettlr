@@ -29,6 +29,8 @@
   `body .tree-item clr-icon.special` (including platform/mode selectors)
 - Improve the readability mode: Now it will not render a YAML frontmatter and it
   will additionally treat sentences smarter than before
+- Fixed an issue that would sometimes break images when you edited the caption
+  in the rendered image caption.
 
 ## Under the Hood
 

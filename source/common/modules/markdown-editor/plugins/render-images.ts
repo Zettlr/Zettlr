@@ -34,7 +34,9 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
   // We'll only render the viewport
   const viewport = cm.getViewport()
   for (let i = viewport.from; i < viewport.to; i++) {
-    if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
+    if (cm.getModeAt({ line: i, ch: 0 }).name !== 'markdown-zkn') {
+      continue
+    }
 
     // Always reset lastIndex property, because test()-ing on regular
     // expressions advance it.
@@ -104,28 +106,6 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
       caption.textContent = title
       caption.contentEditable = 'true'
 
-      // Define a quick inline function that takes care of applying a new caption
-      const updateCaptionFunction = function (event: KeyboardEvent|FocusEvent): void {
-        if (event instanceof KeyboardEvent && event.key !== 'Enter') {
-          // If this is a KeyboardEvent, only perform the action on Enter
-          return
-        }
-
-        event.preventDefault()
-        event.stopPropagation()
-        // Make sure there are no quotes since these will break the image
-        const newCaption = caption.textContent?.replace(/"/g, '') ?? ''
-        // "Why are you setting the caption both as the image description and title?"
-        // Well, since all exports sometimes us this, sometimes the other value.
-        const newImageTag = `![${newCaption}](${url} "${newCaption}")${p4}`
-        // Now replace the underlying image
-        cm.replaceRange(newImageTag, curFrom, curTo)
-      }
-
-      // Should work on these events
-      caption.addEventListener('keydown', updateCaptionFunction)
-      caption.addEventListener('focusout', updateCaptionFunction)
-
       const size = document.createElement('span')
       size.classList.add('image-size-info')
 
@@ -151,7 +131,7 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
       container.appendChild(figure)
 
       // Now add a line widget to this line.
-      let textMarker = cm.markText(
+      const textMarker = cm.markText(
         curFrom,
         curTo,
         {
@@ -160,6 +140,38 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
           'handleMouseEvents': false
         }
       )
+
+      // Define a quick inline function that takes care of applying a new caption
+      const updateCaptionFunction = function (event: KeyboardEvent|FocusEvent): void {
+        if (event instanceof KeyboardEvent && event.key !== 'Enter') {
+          // If this is a KeyboardEvent, only perform the action on Enter
+          return
+        }
+
+        // Get the correct, current position where the token is now
+        const currentPosition = textMarker.find()
+
+        if (currentPosition === undefined) {
+          return // Could not locate the textmarker
+        }
+
+        event.preventDefault()
+        event.stopPropagation()
+        // Make sure there are no quotes since these will break the image
+        const newCaption = caption.textContent?.replace(/"/g, '') ?? ''
+        // "Why are you setting the caption both as the image description and title?"
+        // Well, since all exports sometimes us this, sometimes the other value.
+        const newImageTag = `![${newCaption}](${url} "${newCaption}")${p4}`
+        // Clear the text marker so that this hook can immediately rerender it.
+        textMarker.clear()
+        // Then replace the range, which will trigger a "change" event which in
+        // turn will rerender this image.
+        cm.replaceRange(newImageTag, currentPosition.from, currentPosition.to)
+      }
+
+      // Should work on these events
+      caption.addEventListener('keydown', updateCaptionFunction)
+      caption.addEventListener('focusout', updateCaptionFunction)
 
       // Retrieve the size constraints
       const maxPreviewWidth = Number((cm as any).getOption('zettlr').imagePreviewWidth)
@@ -173,6 +185,7 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
       img.style.maxWidth = width
       img.style.maxHeight = height
       img.alt = altText
+
       // Display a replacement image in case the correct one is not found
       img.onerror = () => {
         img.src = img404
