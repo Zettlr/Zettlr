@@ -36,6 +36,7 @@
         v-for="item in getDirectories"
         v-bind:key="item.hash"
         v-bind:obj="item"
+        v-bind:is-currently-filtering="filterQuery.length > 0"
         v-bind:depth="0"
         v-bind:has-duplicate-name="getDirectories.filter(i => i.name === item.name).length > 1"
       >

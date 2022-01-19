@@ -104,11 +104,12 @@
         v-on:keyup.enter="handleOperationFinish(($event.target as HTMLInputElement).value)"
       >
     </div>
-    <div v-if="isDirectory && !collapsed">
+    <div v-if="isDirectory && !shouldBeCollapsed">
       <TreeItem
         v-for="child in filteredChildren"
         v-bind:key="child.hash"
         v-bind:obj="child"
+        v-bind:is-currently-filtering="isCurrentlyFiltering"
         v-bind:depth="depth + 1"
       >
       </TreeItem>
@@ -158,6 +159,10 @@ export default defineComponent({
     obj: {
       type: Object as () => MDFileMeta|DirMeta|CodeFileMeta,
       required: true
+    },
+    isCurrentlyFiltering: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => {
@@ -169,6 +174,15 @@ export default defineComponent({
     }
   },
   computed: {
+    shouldBeCollapsed: function (): boolean {
+      if (this.isCurrentlyFiltering) {
+        // If the application is currently running a filter, uncollapse everything
+        return false
+      } else {
+        // Else, just uncollapse if the user wishes so
+        return this.collapsed
+      }
+    },
     /**
      * The secondary icon's shape -- this is the visually FIRST icon to be displayed
      *
