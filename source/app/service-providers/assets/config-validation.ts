@@ -33,8 +33,6 @@ const RULES = {
   'zkn.idGen': 'required|string|min:2|default:',
   'zkn.autoCreateLinkedFiles': 'required|boolean|default:false',
   'attachmentExtensions': 'optional|array',
-  'pandoc': 'optional|string|min:6|default:',
-  'xelatex': 'optional|string|min:7|default:',
   'debug': 'required|boolean|default:false',
   'title': 'required|string|default:',
   'editor.indentUnit': 'required|number|min:1|max:24',

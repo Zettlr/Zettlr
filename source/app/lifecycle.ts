@@ -139,32 +139,6 @@ export async function bootApplication (): Promise<void> {
   statsProvider = new StatsProvider()
   trayProvider = new TrayProvider()
 
-  // If the user has provided a working path to XeLaTeX, make sure that its
-  // directory name is in path for Zettlr to find it.
-  const xelatexPath: string = global.config.get('xelatex').trim()
-  const xelatexPathIsFile = isFile(xelatexPath)
-  const xelatexPathIsDir = isDir(xelatexPath)
-  if (xelatexPath !== '' && (xelatexPathIsFile || xelatexPathIsDir)) {
-    if (xelatexPathIsFile) {
-      addToPath(path.dirname(xelatexPath), 'unshift')
-    } else {
-      addToPath(xelatexPath, 'unshift')
-    }
-  }
-
-  // If the user has provided a working path to Pandoc, make sure that its
-  // directory name is in path for Zettlr to find it.
-  const pandocPath: string = global.config.get('pandoc').trim()
-  const pandocPathIsFile = isFile(pandocPath)
-  const pandocPathIsDir = isDir(pandocPath)
-  if (pandocPath !== '' && (pandocPathIsFile || pandocPathIsDir)) {
-    if (pandocPathIsFile) {
-      addToPath(path.dirname(pandocPath), 'unshift')
-    } else {
-      addToPath(pandocPath, 'unshift')
-    }
-  }
-
   // If we have a bundled pandoc, unshift its path to env.PATH in order to have
   // the system search there first for the binary, and not use the internal
   // one.

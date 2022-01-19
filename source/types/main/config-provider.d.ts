@@ -59,8 +59,6 @@ interface ConfigOptions {
   fileNameDisplay: 'filename'|'title'|'heading'|'title+heading'
   newFileNamePattern: string
   newFileDontPrompt: boolean
-  pandoc: string
-  xelatex: string
   export: {
     dir: 'temp'|'cwd'
     stripTags: boolean

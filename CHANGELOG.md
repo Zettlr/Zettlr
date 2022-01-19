@@ -36,6 +36,7 @@
 
 - Update Pandoc to 2.17
 - Removed the unused PDF settings from the config
+- Removed the unused `pandoc` and `xelatex` config options
 - Convert all MarkdownEditor hooks and plugins to TypeScript
 - Tests now simply transpile without type checking
 - Move service provider types to the new types directory

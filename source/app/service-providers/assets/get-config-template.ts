@@ -80,9 +80,6 @@ export default function getConfigTemplate (): ConfigOptions {
     fileNameDisplay: 'title', // Controls what info is displayed as filenames
     newFileNamePattern: '%id.md',
     newFileDontPrompt: false, // If true immediately creates files
-    // Export options
-    pandoc: '',
-    xelatex: '',
     export: {
       dir: 'temp', // Can either be "temp" or "cwd" (current working directory)
       stripTags: false, // Strip tags a.k.a. #tag
