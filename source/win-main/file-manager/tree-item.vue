@@ -34,7 +34,8 @@
           v-bind:shape="secondaryIcon"
           role="presentation"
           v-bind:class="{
-            'is-solid': typeof secondaryIcon !== 'boolean' && [ 'disconnect', 'blocks-group' ].includes(secondaryIcon)
+            'is-solid': typeof secondaryIcon !== 'boolean' && [ 'disconnect', 'blocks-group' ].includes(secondaryIcon),
+            'special': typeof secondaryIcon !== 'boolean'
           }"
         />
       </span>
@@ -47,7 +48,8 @@
           v-bind:shape="primaryIcon"
           role="presentation"
           v-bind:class="{
-            'is-solid': typeof primaryIcon !== 'boolean' && [ 'disconnect', 'blocks-group' ].includes(primaryIcon)
+            'is-solid': typeof primaryIcon !== 'boolean' && [ 'disconnect', 'blocks-group' ].includes(primaryIcon),
+            'special': typeof primaryIcon !== 'boolean' && ![ 'caret right', 'caret down' ].includes(primaryIcon)
           }"
           v-on:click.stop="handlePrimaryIconClick"
         ></clr-icon>
@@ -546,6 +548,9 @@ body.darwin {
   .tree-item {
     margin: 6px 0px;
     color: rgb(53, 53, 53);
+
+    // On macOS, non-standard icons are normally displayed in color
+    clr-icon.special { color: var(--system-accent-color, --c-primary); }
 
     .item-icon, .toggle-icon {
       display: inline-block;

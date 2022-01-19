@@ -24,6 +24,9 @@
   working on MacOS
 - Fix task item strikethrough appearing laggy
 - Fix task item strikethrough covering the preceding whitespace
+- On macOS, file tree icons are now displayed using the theme/system color. On
+  all platforms, you can customize the appearance using the selector
+  `body .tree-item clr-icon.special` (including platform/mode selectors)
 
 ## Under the Hood
 
