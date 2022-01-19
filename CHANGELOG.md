@@ -50,6 +50,7 @@
 - Polyfill the `path` module in renderer processes
 - Transform the CSS provider into a functional module
 - Transform the appearance provider into a functional module
+- Convert the MainSidebar component to TypeScript
 
 # 2.1.2
 

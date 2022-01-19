@@ -18,7 +18,7 @@ import { StoreOptions, createStore, Store } from 'vuex'
 import sanitizeHtml from 'sanitize-html'
 import md2html from '@common/util/md-to-html'
 import sort from '../main/modules/fsal/util/sort'
-import { CodeFileMeta, DirMeta, MDFileMeta } from '@dts/common/fsal'
+import { CodeFileMeta, DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
 import path from 'path'
 
 const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
@@ -245,7 +245,7 @@ const config: StoreOptions<ZettlrState> = {
     }
   },
   getters: {
-    file: state => (filePath: string, searchAttachments = false) => {
+    file: state => (filePath: string, searchAttachments = false): MDFileMeta|CodeFileMeta|OtherFileMeta|DirMeta|null => {
       return findPathDescriptor(filePath, state.fileTree, searchAttachments)
     }
   },

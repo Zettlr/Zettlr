@@ -21,7 +21,7 @@
         v-bind:style="{
           'margin-left': `${entry.level * 10}px`
         }"
-        v-on:click="$root.jtl(entry.line)"
+        v-on:click="($root as any).jtl(entry.line)"
       >
         <div class="toc-level">
           {{ entry.renderedLevel }}
@@ -117,7 +117,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -134,12 +134,23 @@
 
 import { trans } from '@common/i18n-renderer'
 import { ClarityIcons } from '@clr/icons'
-import TabBar from '@common/vue/TabBar'
+import TabBar from '@common/vue/TabBar.vue'
+import { defineComponent } from 'vue'
+import path from 'path'
+import { IpcRenderer } from 'electron'
+import { MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
+import { TabbarControl } from '@dts/renderer/window'
 
-const path = window.path
-const ipcRenderer = window.ipc
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
-export default {
+interface RelatedFile {
+  file: string
+  path: string
+  tags: string[]
+  backlink: boolean
+}
+
+export default defineComponent({
   name: 'MainSidebar',
   components: {
     TabBar
@@ -148,15 +159,15 @@ export default {
   },
   data: function () {
     return {
-      bibContents: undefined,
-      relatedFiles: []
+      bibContents: undefined as undefined|any[],
+      relatedFiles: [] as RelatedFile[]
     }
   },
   computed: {
-    currentTab: function () {
+    currentTab: function (): string {
       return this.$store.state.config['window.currentSidebarTab']
     },
-    tabs: function () {
+    tabs: function (): TabbarControl[] {
       return [
         {
           icon: 'indented-view-list',
@@ -184,28 +195,28 @@ export default {
         }
       ]
     },
-    otherFilesLabel: function () {
+    otherFilesLabel: function (): string {
       return trans('gui.other_files')
     },
-    referencesLabel: function () {
+    referencesLabel: function (): string {
       return trans('gui.citeproc.references_heading')
     },
-    tocLabel: function () {
+    tocLabel: function (): string {
       return trans('gui.table_of_contents')
     },
-    relatedFilesLabel: function () {
+    relatedFilesLabel: function (): string {
       return trans('gui.related_files_label')
     },
-    openDirLabel: function () {
+    openDirLabel: function (): string {
       return trans('gui.attachments_open_dir')
     },
-    noAttachmentsMessage: function () {
+    noAttachmentsMessage: function (): string {
       return trans('gui.no_other_files')
     },
-    noRelatedFilesMessage: function () {
+    noRelatedFilesMessage: function (): string {
       return trans('gui.no_related_files')
     },
-    attachments: function () {
+    attachments: function (): OtherFileMeta[] {
       const currentDir = this.$store.state.selectedDirectory
       if (currentDir === null) {
         return []
@@ -213,19 +224,19 @@ export default {
         return currentDir.attachments
       }
     },
-    activeFile: function () {
+    activeFile: function (): MDFileMeta|null {
       return this.$store.state.activeFile
     },
-    modifiedFiles: function () {
+    modifiedFiles: function (): string[] {
       return this.$store.state.modifiedDocuments
     },
-    tableOfContents: function () {
+    tableOfContents: function (): any|null {
       return this.$store.state.tableOfContents
     },
-    citationKeys: function () {
+    citationKeys: function (): string[] {
       return this.$store.state.citationKeys
     },
-    referenceHTML: function () {
+    referenceHTML: function (): string {
       if (this.bibContents === undefined || this.bibContents[1].length === 0) {
         return `<p>${trans('gui.citeproc.references_none')}</p>`
       } else {
@@ -240,23 +251,23 @@ export default {
         return html.join('\n')
       }
     },
-    useH1: function () {
+    useH1: function (): boolean {
       return this.$store.state.config.fileNameDisplay.includes('heading')
     },
-    useTitle: function () {
+    useTitle: function (): boolean {
       return this.$store.state.config.fileNameDisplay.includes('title')
     },
-    displayMdExtensions: function () {
+    displayMdExtensions: function (): boolean {
       return this.$store.state.config['display.markdownFileExtensions']
     }
   },
   watch: {
     citationKeys: function () {
       // Reload the bibliography
-      this.updateReferences()
+      this.updateReferences().catch(e => console.error('Could not update references', e))
     },
     activeFile: function () {
-      this.updateRelatedFiles()
+      this.updateRelatedFiles().catch(e => console.error('Could not update related files', e))
     },
     modifiedFiles: function () {
       if (this.activeFile == null) {
@@ -267,7 +278,7 @@ export default {
       // immediately account for any changes in the related files.
       const activePath = this.activeFile.path
       if (!(activePath in this.modifiedFiles)) {
-        this.updateRelatedFiles()
+        this.updateRelatedFiles().catch(e => console.error('Could not update related files', e))
       }
     }
   },
@@ -279,27 +290,23 @@ export default {
     })
 
     try {
-      this.updateReferences()
+      this.updateReferences().catch(e => console.error('Could not update references', e))
     } catch (err) {
       console.error(err)
     }
-    this.updateRelatedFiles()
+    this.updateRelatedFiles().catch(e => console.error('Could not update related files', e))
   },
   methods: {
-    setCurrentTab: function (which) {
-      global.config.set('window.currentSidebarTab', which)
+    setCurrentTab: function (which: string) {
+      (global as any).config.set('window.currentSidebarTab', which)
     },
-    updateReferences: function () {
+    updateReferences: async function () {
       // NOTE We're manually cloning the citationKeys array, since Proxies
       // cannot be cloned to be sent across the IPC bridge
-      ipcRenderer.invoke('citeproc-provider', {
+      this.bibContents = await ipcRenderer.invoke('citeproc-provider', {
         command: 'get-bibliography',
         payload: this.citationKeys.map(e => e)
       })
-        .then(bibliography => {
-          this.bibContents = bibliography
-        })
-        .catch(err => console.error(err))
     },
     updateRelatedFiles: async function () {
       // First reset, default is no related files
@@ -308,7 +315,7 @@ export default {
         return
       }
 
-      const unreactiveList = []
+      const unreactiveList: RelatedFile[] = []
 
       // Then retrieve the inbound links first, since that is the most important
       // relation, so they should be on top of the list.
@@ -370,7 +377,7 @@ export default {
 
       this.relatedFiles = [ ...backlinksAndTags, ...backlinksOnly, ...tagsOnly ]
     },
-    getIcon: function (attachmentPath) {
+    getIcon: function (attachmentPath: string) {
       const fileExtIcon = ClarityIcons.get('file-ext')
       if (typeof fileExtIcon === 'string') {
         return fileExtIcon.replace('EXT', path.extname(attachmentPath).slice(1, 4))
@@ -384,11 +391,11 @@ export default {
      * @param   {DragEvent}  event           The drag event
      * @param   {string}  attachmentPath  The path to add as a file
      */
-    handleDragStart: function (event, attachmentPath) {
+    handleDragStart: function (event: DragEvent, attachmentPath: string) {
       // Indicate with custom data that this is a file from the sidebar
-      event.dataTransfer.setData('text/x-zettlr-other-file', attachmentPath)
+      event.dataTransfer?.setData('text/x-zettlr-other-file', attachmentPath)
     },
-    requestFile: function (event, filePath) {
+    requestFile: function (event: MouseEvent, filePath: string) {
       ipcRenderer.invoke('application', {
         command: 'open-file',
         payload: {
@@ -398,7 +405,7 @@ export default {
       })
         .catch(e => console.error(e))
     },
-    getRelatedFileName: function (filePath) {
+    getRelatedFileName: function (filePath: string) {
       const descriptor = this.$store.getters.file(filePath)
       if (descriptor === null) {
         return filePath
@@ -414,17 +421,17 @@ export default {
         return descriptor.name.replace(descriptor.ext, '')
       }
     },
-    beginDragRelatedFile: function (event, filePath) {
+    beginDragRelatedFile: function (event: DragEvent, filePath: string) {
       const descriptor = this.$store.getters.file(filePath)
 
-      event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
-        'type': descriptor.type, // Can be file, code, or directory
-        'path': descriptor.path,
-        'id': descriptor.id // Convenience
+      event.dataTransfer?.setData('text/x-zettlr-file', JSON.stringify({
+        type: descriptor.type, // Can be file, code, or directory
+        path: descriptor.path,
+        id: descriptor.id // Convenience
       }))
     }
   }
-}
+})
 </script>
 
 <style lang="less">

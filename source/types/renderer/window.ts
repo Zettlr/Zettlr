@@ -104,3 +104,25 @@ export interface ToolbarControl {
    */
   style?: 'strong'|'emphasis'
 }
+
+/**
+ * This interface represents a Tabbar control
+ */
+export interface TabbarControl {
+  /**
+   * This should match a Clarity icon shape
+   */
+  icon: string
+  /**
+   * A unique ID for the tab
+   */
+  id: string
+  /**
+   * The target ID of whichever tab this represents (for a11y purposes)
+   */
+  target: string
+  /**
+   * A label, may be displayed.
+   */
+  label: string
+}
