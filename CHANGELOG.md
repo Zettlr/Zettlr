@@ -32,6 +32,8 @@
 - Fixed an issue that would sometimes break images when you edited the caption
   in the rendered image caption.
 - Enable resetting of the custom Zettelkasten directory
+- The default value for "Use system accent color" is now off for all platforms
+  except macOS
 
 ## Under the Hood
 

@@ -189,8 +189,8 @@ export default function getConfigTemplate (): ConfigOptions {
     },
     display: {
       theme: 'berlin', // The theme, can be berlin|frankfurt|bielefeld|karl-marx-stadt|bordeaux
-      // By default, Windows and macOS systems use the system accent color instead of the theme
-      useSystemAccentColor: [ 'darwin', 'win32' ].includes(process.platform),
+      // By default, macOS computers use the system accent color instead of the theme's one
+      useSystemAccentColor: process.platform === 'darwin',
       hideToolbarInDistractionFree: false,
       markdownFileExtensions: false,
       imageWidth: 100, // Maximum preview image width
