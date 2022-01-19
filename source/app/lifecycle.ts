@@ -20,8 +20,6 @@ import environmentCheck from './util/environment-check'
 import addToPath from './util/add-to-PATH'
 import resolveTimespanMs from './util/resolve-timespan-ms'
 import { loadI18n } from '../common/i18n-main'
-import isFile from '../common/util/is-file'
-import isDir from '../common/util/is-dir'
 import path from 'path'
 
 // Developer tools
