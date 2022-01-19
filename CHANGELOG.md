@@ -31,6 +31,7 @@
   will additionally treat sentences smarter than before
 - Fixed an issue that would sometimes break images when you edited the caption
   in the rendered image caption.
+- Enable resetting of the custom Zettelkasten directory
 
 ## Under the Hood
 
