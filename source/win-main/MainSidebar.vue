@@ -155,8 +155,6 @@ export default defineComponent({
   components: {
     TabBar
   },
-  props: {
-  },
   data: function () {
     return {
       bibContents: undefined as undefined|any[],
