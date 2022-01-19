@@ -8,11 +8,11 @@
         'tree-item': true,
         [obj.type]: true,
         'selected': isSelected,
-        'project': obj.project != null,
+        'project': obj.type === 'directory' && obj.project != null,
         'root': isRoot
       }"
       v-bind:data-hash="obj.hash"
-      v-bind:data-id="obj.id || ''"
+      v-bind:data-id="obj.type === 'file' ? obj.id : ''"
       v-bind:style="{
         'padding-left': `${depth * 15 + 10}px`
       }"
@@ -34,7 +34,8 @@
           v-bind:shape="secondaryIcon"
           role="presentation"
           v-bind:class="{
-            'is-solid': typeof secondaryIcon !== 'boolean' && [ 'disconnect', 'blocks-group' ].includes(secondaryIcon)
+            'is-solid': typeof secondaryIcon !== 'boolean' && [ 'disconnect', 'blocks-group' ].includes(secondaryIcon),
+            'special': typeof secondaryIcon !== 'boolean'
           }"
         />
       </span>
@@ -47,7 +48,8 @@
           v-bind:shape="primaryIcon"
           role="presentation"
           v-bind:class="{
-            'is-solid': typeof primaryIcon !== 'boolean' && [ 'disconnect', 'blocks-group' ].includes(primaryIcon)
+            'is-solid': typeof primaryIcon !== 'boolean' && [ 'disconnect', 'blocks-group' ].includes(primaryIcon),
+            'special': typeof primaryIcon !== 'boolean' && ![ 'caret right', 'caret down' ].includes(primaryIcon)
           }"
           v-on:click.stop="handlePrimaryIconClick"
         ></clr-icon>
@@ -135,8 +137,9 @@ import { trans } from '@common/i18n-renderer'
 
 import { nextTick, defineComponent } from 'vue'
 import { IpcRenderer } from 'electron'
+import { MDFileMeta, DirMeta, CodeFileMeta } from '@dts/common/fsal'
+import path from 'path'
 
-const path = (window as any).path
 const ipcRenderer: IpcRenderer = (window as any).ipc
 
 export default defineComponent({
@@ -153,7 +156,7 @@ export default defineComponent({
       default: false // Can only be true if root and actually has a duplicate name
     },
     obj: {
-      type: Object,
+      type: Object as () => MDFileMeta|DirMeta|CodeFileMeta,
       required: true
     }
   },
@@ -259,7 +262,10 @@ export default defineComponent({
     /**
      * Returns a list of children that can be displayed inside the tree view
      */
-    filteredChildren: function (): any[] {
+    filteredChildren: function (): Array<MDFileMeta|DirMeta|CodeFileMeta> {
+      if (this.obj.type !== 'directory') {
+        return []
+      }
       if (this.combined === true) {
         return this.obj.children
       } else {
@@ -542,6 +548,9 @@ body.darwin {
   .tree-item {
     margin: 6px 0px;
     color: rgb(53, 53, 53);
+
+    // On macOS, non-standard icons are normally displayed in color
+    clr-icon.special { color: var(--system-accent-color, --c-primary); }
 
     .item-icon, .toggle-icon {
       display: inline-block;

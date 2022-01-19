@@ -96,6 +96,7 @@ import { IpcRenderer } from 'electron'
 import glassFile from './assets/glass.wav'
 import alarmFile from './assets/digital_alarm.mp3'
 import chimeFile from './assets/chime.mp3'
+import { ToolbarControl } from '@dts/renderer/window'
 
 const ipcRenderer: IpcRenderer = (window as any).ipc
 const clipboard = (window as any).clipboard
@@ -189,7 +190,7 @@ export default defineComponent({
       if (info.selections.length > 0) {
         // We have selections to display.
         let length = 0
-        info.selections.forEach(sel => {
+        info.selections.forEach((sel: any) => {
           length += sel.selectionLength
         })
 
@@ -218,7 +219,7 @@ export default defineComponent({
     hasTagSuggestions: function (): boolean {
       return this.$store.state.tagSuggestions.length > 0
     },
-    toolbarControls: function (): any[] {
+    toolbarControls: function (): ToolbarControl[] {
       return [
         {
           type: 'three-way-toggle',
@@ -261,7 +262,8 @@ export default defineComponent({
           icon: 'cog'
         },
         {
-          type: 'spacer'
+          type: 'spacer',
+          id: 'spacer-one'
         },
         {
           type: 'button',
@@ -278,6 +280,7 @@ export default defineComponent({
         },
         {
           type: 'spacer',
+          id: 'spacer-two',
           size: '1x'
         },
         {
@@ -317,7 +320,8 @@ export default defineComponent({
           icon: 'footnote'
         },
         {
-          type: 'spacer'
+          type: 'spacer',
+          id: 'spacer-three'
         },
         {
           type: 'text',

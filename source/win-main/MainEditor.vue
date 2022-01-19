@@ -303,7 +303,7 @@ export default defineComponent({
       }
 
       // We have received new items, so we should update them in the editor.
-      const items = this.cslItems.map(item => {
+      const items = this.cslItems.map((item: any) => {
         // Get a rudimentary author list
         let authors = ''
         if (item.author !== undefined) {
@@ -572,7 +572,10 @@ export default defineComponent({
     mdEditor.on('zettelkasten-link', (linkContents) => {
       ipcRenderer.invoke('application', {
         command: 'force-open',
-        payload: linkContents
+        payload: {
+          linkContents: linkContents,
+          newTab: undefined // let open-file command decide based on preferences
+        }
       })
         .catch(err => console.error(err))
 

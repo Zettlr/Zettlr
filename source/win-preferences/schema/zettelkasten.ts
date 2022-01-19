@@ -80,7 +80,8 @@ export default function (): any {
         {
           type: 'directory',
           label: trans('dialog.preferences.zkn.custom_directory'),
-          model: 'zkn.customDirectory'
+          model: 'zkn.customDirectory',
+          reset: ''
         }
       ]
     ]

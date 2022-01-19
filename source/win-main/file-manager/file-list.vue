@@ -49,7 +49,7 @@
       -->
       <FileItem
         v-for="item in getDirectoryContents"
-        v-bind:key="item.hash"
+        v-bind:key="item.id"
         v-bind:index="0"
         v-bind:obj="item.props"
         v-on:create-file="handleOperation('file-new', item.id)"
@@ -57,7 +57,7 @@
       >
       </FileItem>
       <div
-        v-if="getDirectoryContents[0].type === 'directory'"
+        v-if="getDirectoryContents[0].props.type === 'directory'"
         class="empty-directory"
       >
         {{ emptyDirectoryMessage }}
@@ -97,6 +97,7 @@ import matchQuery from './util/match-query'
 
 import { nextTick, defineComponent } from 'vue'
 import { IpcRenderer } from 'electron'
+import { MDFileMeta, CodeFileMeta, DirMeta } from '@dts/common/fsal'
 
 const ipcRenderer: IpcRenderer = (window as any).ipc
 
@@ -151,12 +152,12 @@ export default defineComponent({
         return 30
       }
     },
-    getDirectoryContents: function (): any[] {
+    getDirectoryContents: function (): Array<{ id: number, props: MDFileMeta|CodeFileMeta|DirMeta}> {
       if (this.$store.state.selectedDirectory === null) {
         return []
       }
 
-      let ret = []
+      const ret: Array<{ id: number, props: MDFileMeta|CodeFileMeta|DirMeta}> = []
       const items = objectToArray(this.$store.state.selectedDirectory, 'children')
       for (let i = 0; i < items.length; i++) {
         ret.push({
@@ -372,7 +373,11 @@ export default defineComponent({
     },
     handleOperation: async function (type: string, idx: number) {
       // Creates files and directories, or duplicates a file.
-      const source = this.getDirectoryContents.find(item => item.id === idx).props
+      const source = this.getDirectoryContents.find(item => item.id === idx)?.props
+      if (source === undefined) {
+        throw new Error('Could not handle file list operation: Source was undefined')
+      }
+
       await ipcRenderer.invoke('application', {
         command: type,
         payload: { path: source.path }

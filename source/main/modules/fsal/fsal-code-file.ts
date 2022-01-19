@@ -19,7 +19,8 @@ import searchFile from './util/search-file'
 import { shell } from 'electron'
 import safeAssign from '@common/util/safe-assign'
 // Import the interfaces that we need
-import { DirDescriptor, CodeFileDescriptor, CodeFileMeta } from './types'
+import { DirDescriptor, CodeFileDescriptor } from '@dts/main/fsal'
+import { CodeFileMeta } from '@dts/common/fsal'
 import FSALCache from './fsal-cache'
 import extractBOM from './util/extract-bom'
 

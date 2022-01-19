@@ -28,11 +28,11 @@ import path from 'path'
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
 
 // Providers
-import AppearanceProvider from './service-providers/appearance-provider'
+import { boot as bootAppearanceProvider, shutdown as shutdownAppearanceProvider } from './service-providers/appearance-provider'
 import AssetsProvider from './service-providers/assets-provider'
 import CiteprocProvider from './service-providers/citeproc-provider'
 import ConfigProvider from './service-providers/config-provider'
-import CssProvider from './service-providers/css-provider'
+import { boot as bootCSSProvider, shutdown as shutdownCSSProvider } from './service-providers/css-provider'
 import DictionaryProvider from './service-providers/dictionary-provider'
 import LogProvider from './service-providers/log-provider'
 import MenuProvider from './service-providers/menu-provider'
@@ -48,11 +48,9 @@ import TrayProvider from './service-providers/tray-provider'
 
 // We need module-global variables so that garbage collect won't shut down the
 // providers before the app is shut down.
-let appearanceProvider: AppearanceProvider
 let assetsProvider: AssetsProvider
 let citeprocProvider: CiteprocProvider
 let configProvider: ConfigProvider
-let cssProvider: CssProvider
 let dictionaryProvider: DictionaryProvider
 let logProvider: LogProvider
 let tagProvider: TagProvider
@@ -124,7 +122,7 @@ export async function bootApplication (): Promise<void> {
     global.config.set('appLang', metadata.tag)
   }
 
-  appearanceProvider = new AppearanceProvider()
+  await bootAppearanceProvider()
   assetsProvider = new AssetsProvider()
   await assetsProvider.init()
   citeprocProvider = new CiteprocProvider()
@@ -134,38 +132,12 @@ export async function bootApplication (): Promise<void> {
   tagProvider = new TagProvider()
   linkProvider = new LinkProvider()
   targetProvider = new TargetProvider()
-  cssProvider = new CssProvider()
+  await bootCSSProvider()
   translationProvider = new TranslationProvider()
   updateProvider = new UpdateProvider()
   notificationProvider = new NotificationProvider()
   statsProvider = new StatsProvider()
   trayProvider = new TrayProvider()
-
-  // If the user has provided a working path to XeLaTeX, make sure that its
-  // directory name is in path for Zettlr to find it.
-  const xelatexPath: string = global.config.get('xelatex').trim()
-  const xelatexPathIsFile = isFile(xelatexPath)
-  const xelatexPathIsDir = isDir(xelatexPath)
-  if (xelatexPath !== '' && (xelatexPathIsFile || xelatexPathIsDir)) {
-    if (xelatexPathIsFile) {
-      addToPath(path.dirname(xelatexPath), 'unshift')
-    } else {
-      addToPath(xelatexPath, 'unshift')
-    }
-  }
-
-  // If the user has provided a working path to Pandoc, make sure that its
-  // directory name is in path for Zettlr to find it.
-  const pandocPath: string = global.config.get('pandoc').trim()
-  const pandocPathIsFile = isFile(pandocPath)
-  const pandocPathIsDir = isDir(pandocPath)
-  if (pandocPath !== '' && (pandocPathIsFile || pandocPathIsDir)) {
-    if (pandocPathIsFile) {
-      addToPath(path.dirname(pandocPath), 'unshift')
-    } else {
-      addToPath(pandocPath, 'unshift')
-    }
-  }
 
   // If we have a bundled pandoc, unshift its path to env.PATH in order to have
   // the system search there first for the binary, and not use the internal
@@ -193,7 +165,7 @@ export async function shutdownApplication (): Promise<void> {
   await safeShutdown(notificationProvider)
   await safeShutdown(updateProvider)
   await safeShutdown(translationProvider)
-  await safeShutdown(cssProvider)
+  await shutdownCSSProvider()
   await safeShutdown(targetProvider)
   await safeShutdown(tagProvider)
   await safeShutdown(linkProvider)
@@ -202,7 +174,7 @@ export async function shutdownApplication (): Promise<void> {
   await safeShutdown(dictionaryProvider)
   await safeShutdown(citeprocProvider)
   await safeShutdown(assetsProvider)
-  await safeShutdown(appearanceProvider)
+  await shutdownAppearanceProvider()
   await safeShutdown(configProvider)
 
   const downTimestamp = Date.now()

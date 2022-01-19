@@ -13,7 +13,6 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-// import expandOptionObject from '../../common/util/expand-option-object'
 
 export default class UpdateProjectProperties extends ZettlrCommand {
   constructor (app: any) {

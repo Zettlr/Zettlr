@@ -23,8 +23,6 @@
       v-bind:tags="tags"
       v-bind:word-count="wordCount"
       v-bind:char-count="charCount"
-      v-bind:target="target"
-      v-bind:first-heading="firstHeading"
       v-bind:frontmatter="frontmatter"
       v-bind:linefeed="linefeed"
       v-bind:modified="modified"
@@ -53,6 +51,7 @@ import WindowChrome from '@common/vue/window/Chrome.vue'
 import { trans } from '@common/i18n-renderer'
 import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
+import { ToolbarControl } from '@dts/renderer/window'
 
 const ipcRenderer: IpcRenderer = (window as any).ipc
 
@@ -76,7 +75,6 @@ export default defineComponent({
       tags: [],
       wordCount: 0,
       charCount: 0,
-      target: null,
       firstHeading: null,
       frontmatter: null as null|any,
       linefeed: '\n',
@@ -108,14 +106,16 @@ export default defineComponent({
 
       return this.name
     },
-    toolbarControls: function (): any[] {
-      const ctrl: any[] = [
+    toolbarControls: function (): ToolbarControl[] {
+      const ctrl: ToolbarControl[] = [
         {
           type: 'spacer', // Make sure the content is flushed to the left
-          size: 'size-5x'
+          size: '5x',
+          id: 'spacer-one'
         },
         {
           type: 'search',
+          id: 'filter-input',
           placeholder: trans('dialog.find.find_placeholder'),
           onInputHandler: (value: string) => {
             this.query = value
@@ -130,6 +130,7 @@ export default defineComponent({
         // On macOS, we don't have a titlebar. There it is customary to add the window title to the toolbar.
         ctrl.push({
           type: 'text',
+          id: 'toolbar-title',
           content: (this.windowTitle === undefined) ? 'QuickLook' : this.windowTitle,
           style: 'strong'
         })

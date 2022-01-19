@@ -7,13 +7,50 @@
 - Inline-equations are now properly syntax highlighted
 - Fixed a bug that caused unintentional pastes when closing a tab using the
   middle mouse button on Linux
+- Heavily improved the full text search: Previously, certain files that should
+  have been returned for specific search terms were not considered a match, and
+  multiple results per line were mostly not reported; additionally, search
+  results are now ordered by relevancy and the search results are marked more
+  visibly
+- Heavily improved the table editor user interface: Now the table editor will on
+  certain actions write all changes back to the document so that the possibility
+  of data loss involves a single table cell at most in case the user forgets to
+  un-focus the table. Furthermore, the table editor will now not be removed from
+  the document when it loses focus, and instead the table will be updated
+  silently
+- The log viewer now only displays errors and warnings initially
+- Fix a small visual glitch on macOS for toolbar searches
+- Added "Open in new Tab" button to link preview tooltip, when user has
+  preference "Avoid Opening Files in New Tabs" set to true
+- Fix `Use the CodeMirror default actions for Home and End` preference not
+  working on MacOS
+- Fix task item strikethrough appearing laggy
+- Fix task item strikethrough covering the preceding whitespace
+- On macOS, file tree icons are now displayed using the theme/system color. On
+  all platforms, you can customize the appearance using the selector
+  `body .tree-item clr-icon.special` (including platform/mode selectors)
+- Improve the readability mode: Now it will not render a YAML frontmatter and it
+  will additionally treat sentences smarter than before
+- Fixed an issue that would sometimes break images when you edited the caption
+  in the rendered image caption.
+- Enable resetting of the custom Zettelkasten directory
+- The default value for "Use system accent color" is now off for all platforms
+  except macOS
 
 ## Under the Hood
 
 - Update Pandoc to 2.17
 - Removed the unused PDF settings from the config
+- Removed the unused `pandoc` and `xelatex` config options
 - Convert all MarkdownEditor hooks and plugins to TypeScript
 - Tests now simply transpile without type checking
+- Move service provider types to the new types directory
+- Provide `@dts` as an alias to retrieve typings
+- Move FSAL types to the new types directory
+- Convert the remaining utility functions to TypeScript
+- Polyfill the `path` module in renderer processes
+- Transform the CSS provider into a functional module
+- Transform the appearance provider into a functional module
 
 # 2.1.2
 

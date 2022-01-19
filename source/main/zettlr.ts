@@ -31,7 +31,9 @@ import isDir from '@common/util/is-dir'
 import isFile from '@common/util/is-file'
 import { commands } from './commands'
 
-import { CodeFileDescriptor, CodeFileMeta, DirDescriptor, MDFileDescriptor, MDFileMeta } from './modules/fsal/types'
+import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/main/fsal'
+import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
+
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import extractFilesFromArgv from '../app/util/extract-files-from-argv'
 

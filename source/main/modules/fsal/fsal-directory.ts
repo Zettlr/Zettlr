@@ -28,14 +28,8 @@ import { shell } from 'electron'
 import * as FSALFile from './fsal-file'
 import * as FSALCodeFile from './fsal-code-file'
 import * as FSALAttachment from './fsal-attachment'
-import {
-  DirDescriptor,
-  DirMeta,
-  MaybeRootMeta,
-  AnyDescriptor,
-  MaybeRootDescriptor,
-  ProjectSettings
-} from './types'
+import { ProjectSettings, DirMeta } from '@dts/common/fsal'
+import { DirDescriptor, AnyDescriptor, MaybeRootDescriptor } from '@dts/main/fsal'
 import FSALCache from './fsal-cache'
 import {
   codeFileExtensions,
@@ -98,12 +92,10 @@ export function metadata (dirObject: DirDescriptor): DirMeta {
       return metadata(elem)
     } else if (elem.type === 'file') {
       return FSALFile.metadata(elem)
-    } else if (elem.type === 'code') {
-      return FSALCodeFile.metadata(elem)
     } else {
-      return undefined
+      return FSALCodeFile.metadata(elem)
     }
-  }).filter(elem => elem !== undefined) as MaybeRootMeta[]
+  }).filter(elem => elem !== undefined)
 
   return {
     // By only passing the hash, the object becomes
@@ -489,7 +481,7 @@ export async function move (sourceObject: AnyDescriptor, targetDir: DirDescripto
   // Now remove the source from its parent (which in any case is a directory)
   let oldChildren = sourceObject.parent?.children
   if (oldChildren !== undefined) {
-    oldChildren.splice(oldChildren.indexOf(sourceObject as MaybeRootDescriptor), 1)
+    oldChildren.splice(oldChildren.indexOf(sourceObject as unknown as MaybeRootDescriptor), 1)
   }
 
   // Re-read the source

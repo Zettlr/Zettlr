@@ -34,8 +34,8 @@
 import { trans } from '@common/i18n-renderer'
 import WindowChrome from '@common/vue/window/Chrome.vue'
 import { defineComponent } from 'vue'
-
-const path = (window as any).path
+import path from 'path'
+import { ToolbarControl } from '@dts/renderer/window'
 
 export default defineComponent({
   components: {
@@ -61,11 +61,12 @@ export default defineComponent({
       // window is opened.
       return `file://${this.filePath}`
     },
-    toolbarControls: function (): any[] {
+    toolbarControls: function (): ToolbarControl[] {
       return [
         {
           type: 'spacer',
-          size: 'size-5x'
+          id: 'spacer-one',
+          size: '5x'
         },
         {
           type: 'button',

@@ -13,6 +13,7 @@
  */
 
 import { trans } from '@common/i18n-renderer'
+import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 
 export default function displayTabsContext (event: MouseEvent, callback: (clickedID: string) => void): void {
   const items: any = [
@@ -37,5 +38,5 @@ export default function displayTabsContext (event: MouseEvent, callback: (clicke
   ]
 
   const point = { x: event.clientX, y: event.clientY }
-  global.menuProvider.show(point, items, callback)
+  showPopupMenu(point, items, callback)
 }

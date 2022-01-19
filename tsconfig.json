@@ -20,7 +20,8 @@
     "baseUrl": ".",
     "paths": {
       "@common/*": ["source/common/*"],
-      "@providers/*": ["source/app/service-providers/*"]
+      "@providers/*": ["source/app/service-providers/*"],
+      "@dts/*": ["source/types/*"]
     }
   },
   "include": [

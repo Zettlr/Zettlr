@@ -58,6 +58,7 @@ import autocorrectSchema from './schema/autocorrect'
 import advancedSchema from './schema/advanced'
 import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
+import { WindowTab } from '@dts/renderer/window'
 
 const ipcRenderer: IpcRenderer = (window as any).ipc
 
@@ -172,7 +173,7 @@ export default defineComponent({
           id: 'tab-advanced-control',
           icon: 'tools'
         }
-      ],
+      ] as WindowTab[],
       // Will be populated afterwards, contains the user dict
       userDictionaryContents: [],
       // Will be populated afterwards, contains all dictionaries
