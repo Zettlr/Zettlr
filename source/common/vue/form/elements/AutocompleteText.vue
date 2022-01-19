@@ -190,6 +190,12 @@ export default {
     onBlurHandler: function (event) {
       this.inputHasFocus = false
       this.$emit('blur', event.target.modelValue)
+    },
+    focus: function () {
+      this.$refs.input.focus()
+    },
+    select: function () {
+      this.$refs.input.select()
     }
   }
 }

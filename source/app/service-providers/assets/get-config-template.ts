@@ -63,7 +63,8 @@ export default function getConfigTemplate (): ConfigOptions {
       nativeAppearance: process.platform === 'darwin',
       // Store a few GUI related settings here as well
       sidebarVisible: false,
-      currentSidebarTab: 'toc'
+      currentSidebarTab: 'toc',
+      recentGlobalSearches: []
     },
     // Visible attachment filetypes
     attachmentExtensions: ATTACHMENT_EXTENSIONS,

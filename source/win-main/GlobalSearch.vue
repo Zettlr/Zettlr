@@ -2,13 +2,14 @@
   <div id="global-search-pane">
     <h4>{{ searchTitle }}</h4>
     <!-- First: Two text controls for search terms and to restrict the search -->
-    <TextControl
+    <AutocompleteText
       ref="query-input"
       v-model="query"
-      v-bind:placeholder="queryInputPlaceholder"
       v-bind:label="queryInputLabel"
+      v-bind:autocomplete-values="recentGlobalSearches"
+      v-bind:placeholder="queryInputPlaceholder"
       v-on:confirm="startSearch()"
-    ></TextControl>
+    ></AutocompleteText>
     <AutocompleteText
       v-model="restrictToDir"
       v-bind:label="restrictDirLabel"
@@ -207,6 +208,9 @@ export default defineComponent({
     }
   },
   computed: {
+    recentGlobalSearches: function (): string[] {
+      return this.$store.state.config['window.recentGlobalSearches']
+    },
     selectedDir: function (): DirMeta|null {
       return this.$store.state.selectedDirectory
     },
@@ -422,6 +426,18 @@ export default defineComponent({
       }
 
       this.compiledTerms = compileSearchTerms(this.query)
+
+      // One last thing: Add the query to the recent searches
+      const recentSearches: string[] = this.$store.state.config['window.recentGlobalSearches']
+
+      const idx = recentSearches.indexOf(this.query)
+
+      if (idx > -1) {
+        recentSearches.splice(idx, 1)
+      }
+
+      recentSearches.unshift(this.query)
+      ;(global as any).config.set('window.recentGlobalSearches', recentSearches.slice(0, 10))
 
       // Now we're good to go!
       this.emptySearchResults()

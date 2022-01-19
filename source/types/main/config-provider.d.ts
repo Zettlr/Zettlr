@@ -44,6 +44,7 @@ interface ConfigOptions {
     nativeAppearance: boolean
     sidebarVisible: boolean
     currentSidebarTab: 'toc'|'references'|'relatedFiles'|'attachments'
+    recentGlobalSearches: string[]
   }
   attachmentExtensions: string[]
   darkMode: boolean

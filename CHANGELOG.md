@@ -35,6 +35,7 @@
 - The default value for "Use system accent color" is now off for all platforms
   except macOS
 - The app now remembers if you had the sidebar open, and which tab you selected
+- The app now remembers your recent global searches
 
 ## Under the Hood
 
