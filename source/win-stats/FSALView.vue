@@ -183,34 +183,11 @@
 
 <script lang="ts">
 import localiseNumber from '@common/util/localise-number'
+import { FSALStats } from '@dts/common/fsal'
 import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
 
 const ipcRenderer: IpcRenderer = (window as any).ipc
-
-interface Stats {
-  minWords: number
-  maxWords: number
-  sumWords: number
-  sdWords: number
-  meanWords: number
-  minChars: number
-  maxChars: number
-  sumChars: number
-  sdChars: number
-  meanChars: number
-  words68PercentLower: number
-  words68PercentUpper: number
-  words95PercentLower: number
-  words95PercentUpper: number
-  chars68PercentLower: number
-  chars68PercentUpper: number
-  chars95PercentLower: number
-  chars95PercentUpper: number
-  mdFileCount: number
-  codeFileCount: number
-  dirCount: number
-}
 
 export default defineComponent({
   name: 'FSALView',
@@ -260,7 +237,7 @@ export default defineComponent({
       .catch(e => console.error(e))
   },
   methods: {
-    recalculateStats: function (data: Stats) {
+    recalculateStats: function (data: FSALStats) {
       // Approximately aspect ratio 8:1. This will be stretched and squeezed on
       // non standard compliant window sizes, but alas. We assume Zettlr will
       // -- most of the time -- be run in default maximized/full screen state on

@@ -56,6 +56,7 @@
 - Transform the tag provider into a functional module
 - Convert the MainSidebar component to TypeScript
 - Builds are now done without type checking, increasing performance
+- Move out the statistics calculation from the FSAL
 
 # 2.1.2
 
