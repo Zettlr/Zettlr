@@ -59,14 +59,9 @@ import ColorControl from '@common/vue/form/elements/Color.vue'
 import { trans } from '@common/i18n-renderer'
 import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
+import { ColouredTag } from '@dts/common/tag-provider'
 
 const ipcRenderer: IpcRenderer = (window as any).ipc
-
-interface ColouredTag {
-  name: string
-  color: string
-  desc: string
-}
 
 export default defineComponent({
   components: {
@@ -121,7 +116,7 @@ export default defineComponent({
   },
   created: function () {
     ipcRenderer.invoke('tag-provider', {
-      command: 'get-coloured-tags'
+      command: 'get-colored-tags'
     })
       .then((tags) => {
         this.tags = tags
@@ -132,7 +127,7 @@ export default defineComponent({
     handleClick: function (controlID: string) {
       if (controlID === 'save') {
         ipcRenderer.invoke('tag-provider', {
-          command: 'set-coloured-tags',
+          command: 'set-colored-tags',
           payload: this.tags.map(tag => {
             // De-proxy the tags so they can be sent over IPC
             return {

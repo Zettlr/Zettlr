@@ -12,10 +12,11 @@
  * END HEADER
  */
 
-import fs from 'fs'
+import { promises as fs } from 'fs'
 import path from 'path'
 import { app, ipcMain } from 'electron'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
+import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
 
 interface InternalTagRecord {
   text: string
@@ -23,206 +24,172 @@ interface InternalTagRecord {
   className: string
 }
 
-/**
- * This class manages the coloured tags of the app. It reads the tags on each
- * start of the app and writes them after they have been changed.
- */
-export default class TagProvider {
-  private readonly _file: string
-  private _colouredTags: ColouredTag[]
-  private readonly _globalTagDatabase: Map<string, InternalTagRecord>
-  /**
-   * Create the instance on program start and initially load the tags.
-   */
-  constructor () {
-    global.log.verbose('Tag provider booting up ...')
-    this._file = path.join(app.getPath('userData'), 'tags.json')
-    this._colouredTags = []
-    // The global tag database; it contains all tags that are used in any of the
-    // files.
-    this._globalTagDatabase = new Map()
+// Internal module state
+const colouredTags: Set<ColouredTag> = new Set()
+const globalTagDatabase: Map<string, InternalTagRecord> = new Map()
 
-    this._load()
+// Internal functions
+function getTagsFile (): string {
+  return path.join(app.getPath('userData'), 'tags.json')
+}
 
-    // Register a global helper for the tag database
-    global.tags = {
-      /**
-       * Adds an array of tags to the database
-       * @param  {string[]} tagArray An array containing the tags to be added
-       * @return {void}          Does not return.
-       */
-      report: (tagArray: string[], filePath: string) => {
-        for (let tag of tagArray) {
-          // Either init or modify accordingly
-          const record = this._globalTagDatabase.get(tag)
-          if (record === undefined) {
-            const cInfo = this._colouredTags.find(e => e.name === tag)
-            const newRecord: InternalTagRecord = {
-              text: tag,
-              files: [filePath],
-              className: (cInfo !== undefined) ? 'cm-hint-colour' : ''
-            }
+async function save (): Promise<void> {
+  await fs.writeFile(getTagsFile(), JSON.stringify([...colouredTags]), { encoding: 'utf8' })
+}
 
-            this._globalTagDatabase.set(tag, newRecord)
-            // Set a special class to all tags that have a highlight colour
-          } else {
-            if (!record.files.includes(filePath)) {
-              record.files.push(filePath)
-            }
-          }
-        }
+// General functions (boot/shutdown)
+export async function boot (): Promise<void> {
+  global.log.verbose('Tag provider booting up ...')
+  const filePath = getTagsFile()
 
-        broadcastIpcMessage('tags')
-      },
-      /**
-       * Removes the given tagArray from the database, i.e. decreases the
-       * counter until zero and then removes the tag.
-       * @param  {string[]} tagArray The tags to remove from the database
-       * @return {void}          Does not return.
-       */
-      remove: (tagArray: string[], filePath: string) => {
-        for (let tag of tagArray) {
-          const record = this._globalTagDatabase.get(tag)
-          if (record !== undefined) {
-            const idx = record.files.indexOf(filePath)
-            if (idx > -1) {
-              record.files.splice(idx, 1)
-            }
-
-            // Remove the tag altogether if its count is zero.
-            if (record.files.length === 0) {
-              this._globalTagDatabase.delete(tag)
-            }
-          }
-        }
-
-        broadcastIpcMessage('tags')
-      },
-      /**
-       * Returns the global tag database
-       * @return {TagDatabase} An object containing all tags.
-       */
-      getTagDatabase: () => {
-        return this._getSimplifiedTagDatabase()
-      },
-      /**
-       * Returns the special (= coloured) tags
-       * @param  {string} name An optional name to get one. Otherwise, will return all.
-       * @return {ColouredTag[]}      The special tag array.
-       */
-      getColouredTags: () => {
-        return this._colouredTags
-      },
-      /**
-       * Updates the special tags with an array of new ones.
-       * @param  {any[]} newTags An array containing the tags to be set.
-       * @return {boolean} True if all succeeded, false if at least one failed.
-       */
-      setColouredTags: (newTags: ColouredTag[]) => {
-        this.setColouredTags(newTags)
-      }
-    }
-
-    ipcMain.handle('tag-provider', (event, message) => {
-      const { command } = message
-
-      if (command === 'get-tags-database') {
-        return this._getSimplifiedTagDatabase()
-      } else if (command === 'set-coloured-tags') {
-        const { payload } = message
-        this.setColouredTags(payload)
-      } else if (command === 'get-coloured-tags') {
-        return this._colouredTags
-      } else if (command === 'recommend-matching-files') {
-        const { payload } = message
-        // We cannot use a Map for the return value since Maps are not JSONable.
-        const ret: { [key: string]: string[] } = {}
-
-        for (const tag of payload) {
-          const record = this._globalTagDatabase.get(tag)
-          if (record === undefined) {
-            continue
-          }
-
-          for (const file of record.files) {
-            if (ret[file] === undefined) {
-              ret[file] = [tag]
-            } else if (!ret[file].includes(tag)) {
-              ret[file].push(tag)
-            }
-          }
-        }
-
-        return ret
+  try {
+    await fs.lstat(filePath)
+    const fileContents = await fs.readFile(filePath, { encoding: 'utf8' })
+    const fileArray: any[] = JSON.parse(fileContents)
+    // The next line will throw an error if the file contents are not an array,
+    // so we can focus on filtering invalid elements
+    fileArray.forEach(elem => {
+      if (typeof elem.name === 'string' &&
+          typeof elem.color === 'string' &&
+          typeof elem.desc === 'string'
+      ) {
+        colouredTags.add(elem)
       }
     })
+  } catch (err: any) {
+    global.log.error(`[Tag Provider] Couldn't load colored tags from disk: ${err.message as string}`, err)
+    await fs.writeFile(filePath, JSON.stringify([]), { encoding: 'utf8' })
   }
 
-  /**
-   * Shuts down the service provider
-   * @return {Boolean} Returns true after successful shutdown
-   */
-  async shutdown (): Promise<boolean> {
-    global.log.verbose('Tag provider shutting down ...')
-    this._save()
-    return true
-  }
+  ipcMain.handle('tag-provider', (event, message) => {
+    const { command } = message
 
-  /**
-   * This function only (re-)reads the tags on disk.
-   * @return {ZettlrTags} This for chainability.
-   */
-  _load (): TagProvider {
-    // We are not checking if the user directory exists, b/c this file will
-    // be loaded after the ZettlrConfig, which makes sure the dir exists.
+    if (command === 'get-tags-database') {
+      return getTagDatabase()
+    } else if (command === 'set-colored-tags') {
+      const { payload } = message
+      setColoredTags(payload)
+    } else if (command === 'get-colored-tags') {
+      return getColoredTags()
+    } else if (command === 'recommend-matching-files') {
+      const { payload } = message
+      // We cannot use a Map for the return value since Maps are not JSONable.
+      const ret: { [key: string]: string[] } = {}
 
-    // Does the file already exist?
-    try {
-      fs.lstatSync(this._file)
-      this._colouredTags = JSON.parse(fs.readFileSync(this._file, { encoding: 'utf8' }))
-    } catch (err) {
-      fs.writeFileSync(this._file, JSON.stringify([]), { encoding: 'utf8' })
-      return this // No need to iterate over objects anymore
+      for (const tag of payload) {
+        const record = globalTagDatabase.get(tag)
+        if (record === undefined) {
+          continue
+        }
+
+        for (const file of record.files) {
+          if (ret[file] === undefined) {
+            ret[file] = [tag]
+          } else if (!ret[file].includes(tag)) {
+            ret[file].push(tag)
+          }
+        }
+      }
+
+      return ret
     }
+  })
+}
 
-    return this
+export async function shutdown (): Promise<void> {
+  global.log.verbose('Tag provider shutting down ...')
+  await save()
+}
+
+// Public functions
+
+/**
+ * Adds an array of tags to the database
+ *
+ * @param  {string[]} tagArray An array containing the tags to be added
+ */
+export function reportTags (tagArray: string[], filePath: string): void {
+  for (let tag of tagArray) {
+    // Either init or modify accordingly
+    const record = globalTagDatabase.get(tag)
+    if (record === undefined) {
+      const cInfo = [...colouredTags].find(e => e.name === tag)
+      const newRecord: InternalTagRecord = {
+        text: tag,
+        files: [filePath],
+        className: (cInfo !== undefined) ? 'cm-hint-colour' : ''
+      }
+
+      globalTagDatabase.set(tag, newRecord)
+      // Set a special class to all tags that have a highlight colour
+    } else if (!record.files.includes(filePath)) {
+      record.files.push(filePath)
+    }
   }
 
-  /**
-   * Simply writes the tag data to disk.
-   * @return {ZettlrTags} This for chainability.
-   */
-  _save (): TagProvider {
-    // (Over-)write the tags
-    fs.writeFileSync(this._file, JSON.stringify(this._colouredTags), { encoding: 'utf8' })
+  broadcastIpcMessage('tags')
+}
 
-    return this
+/**
+ * Removes the given tagArray from the database, i.e. decreases the
+ * counter until zero and then removes the tag.
+ *
+ * @param  {string[]} tagArray The tags to remove from the database
+ *
+ * @return {void}          Does not return.
+ */
+export function removeTags (tagArray: string[], filePath: string): void {
+  for (let tag of tagArray) {
+    const record = globalTagDatabase.get(tag)
+    if (record !== undefined) {
+      const idx = record.files.indexOf(filePath)
+      if (idx > -1) {
+        record.files.splice(idx, 1)
+      }
+
+      // Remove the tag altogether if its count is zero.
+      if (record.files.length === 0) {
+        globalTagDatabase.delete(tag)
+      }
+    }
   }
 
-  /**
-   * Updates all tags (i.e. replaces them)
-   * @param  {ColouredTag[]} tags The new tags as an array
-   */
-  setColouredTags (tags: ColouredTag[]): void {
-    this._colouredTags = tags
-    this._save()
-    broadcastIpcMessage('coloured-tags')
-  }
+  broadcastIpcMessage('tags')
+}
 
-  /**
+/**
+ * Returns the collection of colored tags
+ *
+ * @return  {ColouredTag[]}  The colored tags
+ */
+export function getColoredTags (): ColouredTag[] {
+  return [...colouredTags]
+}
+
+/**
+ * Updates all tags (i.e. replaces them)
+ * @param  {ColouredTag[]} tags The new tags as an array
+ */
+export function setColoredTags (tags: ColouredTag[]): void {
+  colouredTags.clear()
+  tags.forEach(tag => colouredTags.add(tag))
+  save().catch((err: any) => global.log.error(`[Link Provider] Could not persist colored tags: ${err.message as string}`, err))
+  broadcastIpcMessage('colored-tags')
+}
+
+/**
    * Returns a simplified version of the internal tag database for external use.
    *
    * @return  {TagDatabase}  The database
    */
-  _getSimplifiedTagDatabase (): TagDatabase {
-    const ret: TagDatabase = {}
-    for (const [ tag, record ] of this._globalTagDatabase.entries()) {
-      ret[tag] = {
-        text: record.text,
-        count: record.files.length,
-        className: record.className
-      }
+export function getTagDatabase (): TagDatabase {
+  const ret: TagDatabase = {}
+  for (const [ tag, record ] of globalTagDatabase.entries()) {
+    ret[tag] = {
+      text: record.text,
+      count: record.files.length,
+      className: record.className
     }
-    return ret
   }
+  return ret
 }
