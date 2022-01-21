@@ -55,8 +55,9 @@
 - Transform the link provider into a functional module
 - Transform the tag provider into a functional module
 - Convert the MainSidebar component to TypeScript
-- Builds are now done without type checking, increasing performance
 - Move out the statistics calculation from the FSAL
+- The `yarn package` and `yarn test-gui` commands now skip typechecking,
+  reducing build time by a large margin
 
 # 2.1.2
 
