@@ -18,6 +18,7 @@
         v-for="(entry, idx) of tableOfContents"
         v-bind:key="idx"
         class="toc-entry-container"
+        v-bind:class="{'toc-active': tocIsActive(entry.line, idx)}"
         v-bind:style="{
           'margin-left': `${entry.level * 10}px`
         }"
@@ -427,6 +428,25 @@ export default defineComponent({
         path: descriptor.path,
         id: descriptor.id // Convenience
       }))
+    },
+    /**
+     * Whether the cursor is within the corresponding document section
+     *
+     * @param   {number}  tocEntryLine          Line number of section heading
+     * @param   {number}  tocIdx                Index of heading in ToC
+     */
+    tocIsActive: function (tocEntryLine: number, tocIdx: number) {
+      const cursorLine = this.$store.state.activeDocumentInfo.cursor.line
+      // Determine index of next heading
+      const nextTocIdx = Math.min(tocIdx + 1, this.tableOfContents.length - 1)
+      var nextTocEntryLine = this.tableOfContents[nextTocIdx].line
+      // When this is the last heading, use Infinity as the next "heading"
+      if (nextTocEntryLine === tocEntryLine) {
+        nextTocEntryLine = Infinity
+      }
+
+      // True, when cursor lies between current and next heading
+      return (cursorLine >= tocEntryLine && cursorLine < nextTocEntryLine)
     }
   }
 })
@@ -512,6 +532,7 @@ body {
       // margin-left: calc(attr(data-level) * 10px);
       display: flex;
       margin-bottom: 10px;
+      margin-right: 10px;
 
       div.toc-level {
         flex-shrink: 1;
@@ -525,6 +546,11 @@ body {
         cursor: pointer;
         &:hover { text-decoration: underline; }
       }
+
+    }
+
+    div.toc-active {
+      background-color: rgb(200, 200, 200);
     }
 
     div.related-files-container {
