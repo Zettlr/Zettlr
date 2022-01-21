@@ -56,7 +56,7 @@
     "chart.js": "^3.7.0",
     "chokidar": "^3.5.3",
     "citeproc": "^2.4.62",
-    "codemirror": "^5.65.0",
+    "codemirror": "^5.65.1",
     "command-exists": "^1.2.9",
     "got": "^11.8.3",
     "joplin-turndown-plugin-gfm": "^1.0.12",
