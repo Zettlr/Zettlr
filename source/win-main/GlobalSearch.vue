@@ -129,6 +129,8 @@ import { defineComponent } from 'vue'
 import { SearchResult, SearchTerm } from '@dts/common/search'
 import { CodeFileMeta, DirMeta, MDFileMeta } from '@dts/common/fsal'
 import path from 'path'
+import showPopupMenu from '@common/modules/window-register/application-menu-helper'
+import { AnyMenuItem } from '@dts/renderer/context'
 
 const ipcRenderer: IpcRenderer = (window as any).ipc
 
@@ -152,7 +154,7 @@ interface LocalSearchResult {
   weight: number
 }
 
-const contextMenu = [
+const contextMenu: AnyMenuItem[] = [
   {
     label: trans('menu.open_new_tab'),
     id: 'new-tab',
@@ -162,6 +164,7 @@ const contextMenu = [
   {
     label: trans('menu.quicklook'),
     id: 'open-quicklook',
+    type: 'normal',
     enabled: true
   }
 ]
@@ -505,7 +508,7 @@ export default defineComponent({
     },
     fileContextMenu: function (event: MouseEvent, filePath: string, lineNumber: number) {
       const point = { x: event.clientX, y: event.clientY }
-      ;(global as any).menuProvider.show(point, contextMenu, (clickedID: string) => {
+      showPopupMenu(point, contextMenu, (clickedID: string) => {
         switch (clickedID) {
           case 'new-tab':
             this.jumpToLine(filePath, lineNumber, true)

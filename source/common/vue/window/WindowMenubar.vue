@@ -7,15 +7,15 @@
       v-for="(item, idx) in menu"
       v-bind:key="idx"
       class="top-level-item"
-      v-on:mousedown.stop.prevent="getSubmenu(item.id, $event.target)"
-      v-on:mouseenter.stop="maybeExchangeSubmenu(item.id, $event.target)"
+      v-on:mousedown.stop.prevent="getSubmenu(item.id, $event.target as HTMLElement)"
+      v-on:mouseenter.stop="maybeExchangeSubmenu(item.id, $event.target as HTMLElement)"
     >
       {{ item.label }}
     </span>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -30,9 +30,14 @@
  * END HEADER
  */
 
-const ipcRenderer = window.ipc
+import showPopupMenu from '@common/modules/window-register/application-menu-helper'
+import { AnyMenuItem, SubmenuItem } from '@dts/renderer/context'
+import { IpcRenderer } from 'electron'
+import { defineComponent } from 'vue'
 
-export default {
+const ipcRenderer: IpcRenderer = (window as any).ipc
+
+export default defineComponent({
   name: 'WindowMenubar',
   props: {
     marginTop: {
@@ -42,14 +47,12 @@ export default {
   },
   data: function () {
     return {
-      menu: [],
-      currentSubMenu: null, // string|null = null
-      applicationMenu: null, // SubmenuItem[]|null = null
-      menuCloseCallback: null, // Function|null = null
-      targetElement: null // Can contain a target if a submenu is right now being requested
+      menu: [] as SubmenuItem[],
+      currentSubMenu: null as string|null, // string|null = null
+      applicationMenu: null as SubmenuItem[]|null, // SubmenuItem[]|null = null
+      menuCloseCallback: null as Function|null, // Function|null = null
+      targetElement: null as HTMLElement|null // Can contain a target if a submenu is right now being requested
     }
-  },
-  computed: {
   },
   created: function () {
     // Listen to messages from the menu provider
@@ -78,14 +81,14 @@ export default {
     })
   },
   methods: {
-    getSubmenu: function (menuID, targetElement) {
+    getSubmenu: function (menuID: string, targetElement: HTMLElement) {
       this.targetElement = targetElement
       ipcRenderer.send('menu-provider', {
         command: 'get-application-submenu',
         payload: menuID
       })
     },
-    maybeExchangeSubmenu: function (menuID, targetElement) {
+    maybeExchangeSubmenu: function (menuID: string, targetElement: HTMLElement) {
       if (this.currentSubMenu === null) {
         return
       }
@@ -97,10 +100,10 @@ export default {
     /**
      * Displays a submenu of a top-level menu item
      *
-     * @param   {MenuItem[]}  items     The items in serialized form
+     * @param   {AnyMenuItem[]}  items     The items in serialized form
      * @param   {string}      attachTo  The MenuItem.id of the item to attach to
      */
-    showSubmenu: function (items, attachTo) {
+    showSubmenu: function (items: AnyMenuItem[], attachTo: string) {
       if (this.targetElement === null) {
         return console.error('Cannot show application menu: Target item has not been found.')
       }
@@ -124,7 +127,7 @@ export default {
 
       // Display a new menu
       const point = { x: rect.left, y: rect.top + rect.height }
-      this.menuCloseCallback = global.menuProvider.show(point, items, (clickedID) => {
+      this.menuCloseCallback = showPopupMenu(point, items, (clickedID) => {
         // Trigger a click on the "real" menu item in the back
         ipcRenderer.send('menu-provider', {
           command: 'click-menu-item',
@@ -142,7 +145,7 @@ export default {
       this.targetElement = null // Reset
     }
   }
-}
+})
 </script>
 
 <style lang="less">
