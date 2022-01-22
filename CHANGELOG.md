@@ -37,6 +37,7 @@
 - The app now remembers if you had the sidebar open, and which tab you selected
 - The app now remembers your recent global searches
 - The file tree now expands when you are filtering for files/directories
+- Translate the auto dark mode start/end setting strings
 
 ## Under the Hood
 
