@@ -18,7 +18,6 @@
         v-for="(entry, idx) of tableOfContents"
         v-bind:key="idx"
         class="toc-entry-container"
-        v-bind:class="{'toc-active': tocIsActive(entry.line, idx)}"
         v-bind:style="{
           'margin-left': `${entry.level * 10}px`
         }"
@@ -27,7 +26,12 @@
         <div class="toc-level">
           {{ entry.renderedLevel }}
         </div>
-        <div class="toc-entry" v-bind:data-line="entry.line" v-html="entry.text"></div>
+        <div
+          class="toc-entry"
+          v-bind:class="{'toc-entry-active': tocEntryIsActive(entry.line, idx)}"
+          v-bind:data-line="entry.line"
+          v-html="entry.text"
+        ></div>
       </div>
     </div>
 
@@ -433,16 +437,18 @@ export default defineComponent({
      * Whether the cursor is within the corresponding document section
      *
      * @param   {number}  tocEntryLine          Line number of section heading
-     * @param   {number}  tocIdx                Index of heading in ToC
+     * @param   {number}  tocEntryIdx           Index of heading in ToC
      */
-    tocIsActive: function (tocEntryLine: number, tocIdx: number) {
+    tocEntryIsActive: function (tocEntryLine: number, tocEntryIdx: number) {
       const cursorLine = this.$store.state.activeDocumentInfo.cursor.line
-      // Determine index of next heading
-      const nextTocIdx = Math.min(tocIdx + 1, this.tableOfContents.length - 1)
-      var nextTocEntryLine = this.tableOfContents[nextTocIdx].line
-      // When this is the last heading, use Infinity as the next "heading"
-      if (nextTocEntryLine === tocEntryLine) {
-        nextTocEntryLine = Infinity
+
+      // Determine index of next heading in ToC list
+      const nextTocEntryIdx = Math.min(tocEntryIdx + 1, this.tableOfContents.length - 1)
+
+      // Now, determine the next heading's line number
+      let nextTocEntryLine = Infinity
+      if (tocEntryIdx !== nextTocEntryIdx) {
+        nextTocEntryLine = this.tableOfContents[nextTocEntryIdx].line
       }
 
       // True, when cursor lies between current and next heading
@@ -547,10 +553,10 @@ body {
         &:hover { text-decoration: underline; }
       }
 
-    }
-
-    div.toc-active {
-      background-color: rgb(200, 200, 200);
+      div.toc-entry-active {
+        font-weight: bold;
+        color: var(--system-accent-color);
+      }
     }
 
     div.related-files-container {
