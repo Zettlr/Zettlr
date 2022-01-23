@@ -60,13 +60,13 @@ export default function (): any {
         },
         {
           type: 'time',
-          label: trans('dialog.preferences.dark_mode.schedule_start'),
+          label: trans('dialog.preferences.dark_mode_schedule.start'),
           model: 'autoDarkModeStart',
           inline: true
         },
         {
           type: 'time',
-          label: trans('dialog.preferences.dark_mode.schedule_end'),
+          label: trans('dialog.preferences.dark_mode_schedule.end'),
           model: 'autoDarkModeEnd',
           inline: true
         }
