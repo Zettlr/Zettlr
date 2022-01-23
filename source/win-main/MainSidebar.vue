@@ -27,8 +27,7 @@
           {{ entry.renderedLevel }}
         </div>
         <div
-          class="toc-entry"
-          v-bind:class="{'toc-entry-active': tocEntryIsActive(entry.line, idx)}"
+          v-bind:class="{ 'toc-entry': true, 'toc-entry-active': tocEntryIsActive(entry.line, idx) }"
           v-bind:data-line="entry.line"
           v-html="entry.text"
         ></div>
