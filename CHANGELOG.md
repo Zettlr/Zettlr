@@ -38,6 +38,7 @@
 - The app now remembers your recent global searches
 - The file tree now expands when you are filtering for files/directories
 - Translate the auto dark mode start/end setting strings
+- The ToC now displays the currently active section
 
 ## Under the Hood
 
