@@ -566,7 +566,9 @@ export default defineComponent({
       // Don't update every keystroke to not run into performance problems with
       // very long documents, since calculating the word count needs considerable
       // time, and without the delay, typing seems "laggy".
-      this.maybeUpdateActiveDocumentInfo()
+      if (mdEditor !== null) {
+        this.$store.commit('activeDocumentInfo', mdEditor.documentInfo)
+      }
     })
 
     mdEditor.on('zettelkasten-link', (linkContents) => {
