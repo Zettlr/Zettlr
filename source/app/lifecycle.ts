@@ -34,8 +34,8 @@ import { boot as bootCSSProvider, shutdown as shutdownCSSProvider } from './serv
 import DictionaryProvider from './service-providers/dictionary-provider'
 import LogProvider from './service-providers/log-provider'
 import MenuProvider from './service-providers/menu-provider'
-import { boot as bootTagProvider, shutdown as shutdownTagProvider } from './service-providers/tag-provider'
 import LinkProvider from './service-providers/link-provider'
+import TagProvider from './service-providers/tag-provider'
 import TargetProvider from './service-providers/target-provider'
 import TranslationProvider from './service-providers/translation-provider'
 import UpdateProvider from './service-providers/update-provider'
@@ -53,6 +53,7 @@ let configProvider: ConfigProvider
 let dictionaryProvider: DictionaryProvider
 let logProvider: LogProvider
 let linkProvider: LinkProvider
+let tagProvider: TagProvider
 let targetProvider: TargetProvider
 let translationProvider: TranslationProvider
 let updateProvider: UpdateProvider
@@ -127,8 +128,8 @@ export async function bootApplication (): Promise<void> {
   dictionaryProvider = new DictionaryProvider()
   recentDocsProvider = new RecentDocumentsProvider()
   menuProvider = new MenuProvider() // Requires config & recent docs providers
-  await bootTagProvider()
   linkProvider = new LinkProvider()
+  tagProvider = new TagProvider()
   targetProvider = new TargetProvider()
   await bootCSSProvider()
   translationProvider = new TranslationProvider()
@@ -165,8 +166,8 @@ export async function shutdownApplication (): Promise<void> {
   await safeShutdown(translationProvider)
   await shutdownCSSProvider()
   await safeShutdown(targetProvider)
-  await shutdownTagProvider()
   await safeShutdown(linkProvider)
+  await safeShutdown(tagProvider)
   await safeShutdown(menuProvider)
   await safeShutdown(recentDocsProvider)
   await safeShutdown(dictionaryProvider)

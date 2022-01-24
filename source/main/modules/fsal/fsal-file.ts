@@ -29,7 +29,6 @@ import extractBOM from './util/extract-bom'
 import extractTags from './util/extract-tags'
 import extractLinks from './util/extract-links'
 import { SearchTerm } from '@dts/common/search'
-import { reportTags, removeTags } from '@providers/tag-provider'
 
 // Here are all supported variables for Pandoc:
 // https://pandoc.org/MANUAL.html#variables
@@ -277,8 +276,8 @@ export async function parse (filePath: string, cache: FSALCache|null, parent: Di
   file.target = global.targets.get(file.path)
 
   // Finally, report the tags
-  reportTags(file.tags, file.path)
   global.links.report(file.path, file.links, file.id)
+  global.tags.report(file.tags, file.path)
 
   return file
 }
@@ -348,10 +347,10 @@ export async function save (fileObject: MDFileDescriptor, content: string, cache
   // Afterwards, retrieve the now current modtime
   await updateFileMetadata(fileObject)
   // Make sure to keep the file object itself as well as the tags updated
-  removeTags(fileObject.tags, fileObject.path)
   global.links.remove(fileObject.path, fileObject.id)
+  global.tags.remove(fileObject.tags, fileObject.path)
   parseFileContents(fileObject, content)
-  reportTags(fileObject.tags, fileObject.path)
+  global.tags.report(fileObject.tags, fileObject.path)
   global.links.report(fileObject.path, fileObject.links, fileObject.id)
   fileObject.modified = false // Always reset the modification flag.
   if (cache !== null) {
@@ -429,10 +428,10 @@ export async function reparseChangedFile (fileObject: MDFileDescriptor, cache: F
   const contents = await load(fileObject)
   await updateFileMetadata(fileObject)
   // Make sure to keep the file object itself as well as the tags updated
-  removeTags(fileObject.tags, fileObject.path)
+  global.tags.remove(fileObject.tags, fileObject.path)
   global.links.remove(fileObject.path, fileObject.id)
   parseFileContents(fileObject, contents)
-  reportTags(fileObject.tags, fileObject.path)
+  global.tags.report(fileObject.tags, fileObject.path)
   global.links.report(fileObject.path, fileObject.links, fileObject.id)
   fileObject.modified = false // Always reset the modification flag.
   if (cache !== null) {
