@@ -1,20 +1,20 @@
-interface ColouredTag {
+export interface ColouredTag {
   name: string
   color: string
   desc: string
 }
 
-interface TagRecord {
+export interface TagRecord {
   text: string
   count: number
   className: string
 }
 
-interface TagDatabase {
+export interface TagDatabase {
   [name: string]: TagRecord
 }
 
-interface TagProvider {
+export interface TagProvider {
   /**
    * Adds an array of tags to the database
    *

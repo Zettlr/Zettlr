@@ -92,6 +92,7 @@ interface Application {
  * types files in ./source/app/service-providers/assets
  */
 declare module global {
+  import { TagProvider } from '@dts/common/tag-provider'
   var assets: AssetsProvider
   var css: CssProvider
   var dict: DictionaryProvider
