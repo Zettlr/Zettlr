@@ -29,7 +29,6 @@ import extractBOM from './util/extract-bom'
 import extractTags from './util/extract-tags'
 import extractLinks from './util/extract-links'
 import { SearchTerm } from '@dts/common/search'
-import { removeLinks, reportLinks } from '@providers/link-provider'
 import { reportTags, removeTags } from '@providers/tag-provider'
 
 // Here are all supported variables for Pandoc:
@@ -279,7 +278,7 @@ export async function parse (filePath: string, cache: FSALCache|null, parent: Di
 
   // Finally, report the tags
   reportTags(file.tags, file.path)
-  reportLinks(file.path, file.links, file.id)
+  global.links.report(file.path, file.links, file.id)
 
   return file
 }
@@ -350,10 +349,10 @@ export async function save (fileObject: MDFileDescriptor, content: string, cache
   await updateFileMetadata(fileObject)
   // Make sure to keep the file object itself as well as the tags updated
   removeTags(fileObject.tags, fileObject.path)
-  removeLinks(fileObject.path, fileObject.id)
+  global.links.remove(fileObject.path, fileObject.id)
   parseFileContents(fileObject, content)
   reportTags(fileObject.tags, fileObject.path)
-  reportLinks(fileObject.path, fileObject.links, fileObject.id)
+  global.links.report(fileObject.path, fileObject.links, fileObject.id)
   fileObject.modified = false // Always reset the modification flag.
   if (cache !== null) {
     cacheFile(fileObject, cache)
@@ -431,10 +430,10 @@ export async function reparseChangedFile (fileObject: MDFileDescriptor, cache: F
   await updateFileMetadata(fileObject)
   // Make sure to keep the file object itself as well as the tags updated
   removeTags(fileObject.tags, fileObject.path)
-  removeLinks(fileObject.path, fileObject.id)
+  global.links.remove(fileObject.path, fileObject.id)
   parseFileContents(fileObject, contents)
   reportTags(fileObject.tags, fileObject.path)
-  reportLinks(fileObject.path, fileObject.links, fileObject.id)
+  global.links.report(fileObject.path, fileObject.links, fileObject.id)
   fileObject.modified = false // Always reset the modification flag.
   if (cache !== null) {
     cacheFile(fileObject, cache)

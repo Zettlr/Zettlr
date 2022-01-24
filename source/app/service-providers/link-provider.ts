@@ -16,88 +16,104 @@ import { ipcMain } from 'electron'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import path from 'path'
 
-const fileLinkDatabase: Map<string, string[]> = new Map()
-const idLinkDatabase: Map<string, string[]> = new Map()
+/**
+ * This class manages the coloured tags of the app. It reads the tags on each
+ * start of the app and writes them after they have been changed.
+ */
+export default class LinkProvider {
+  private readonly _fileLinkDatabase: Map<string, string[]>
+  private readonly _idLinkDatabase: Map<string, string[]>
+  /**
+   * Create the instance on program start and initially load the tags.
+   */
+  constructor () {
+    global.log.verbose('Link provider booting up ...')
 
-export async function boot (): Promise<void> {
-  global.log.verbose('Link provider booting up ...')
-  ipcMain.handle('link-provider', (event, message) => {
-    const { command } = message
+    this._fileLinkDatabase = new Map()
+    this._idLinkDatabase = new Map()
+    // TODO: Add a set of duplicate IDs so we can inform the user so they can
+    // fix this
 
-    if (command === 'get-inbound-links') {
-      const sourceFiles: string[] = []
-      // Return whatever links to the given file
-      const { filePath, fileID } = message.payload
-      const basenameExt = path.basename(filePath)
-      const basenameNoExt = path.basename(filePath, path.extname(filePath))
-
-      // Search all recorded links
-      for (const [ file, outbound ] of fileLinkDatabase.entries()) {
-        if (outbound.includes(basenameExt) || outbound.includes(basenameNoExt)) {
-          sourceFiles.push(file)
-        } else if (fileID !== undefined && outbound.includes(fileID)) {
-          sourceFiles.push(file)
+    // Register a global helper for the tag database
+    global.links = {
+      /**
+       * Adds an array of links from a specific file to the database. This
+       * function assumes sourceIDs to be unique, so in case of a duplicate, the
+       * later-loaded file overrides the earlier loaded one.
+       *
+       * @param   {string}            sourcePath     The full path to the source file
+       * @param   {string[]}          outboundLinks  A collection of links
+       * @param   {string|undefined}  sourceID       The ID of the source (if applicable)
+       */
+      report: (sourcePath: string, outboundLinks: string[], sourceID?: string) => {
+        // NOTE: The FSAL by now defaults to an empty string instead of undefined
+        if (sourceID === '') {
+          sourceID = undefined
         }
+
+        this._fileLinkDatabase.set(sourcePath, outboundLinks)
+        if (sourceID !== undefined) {
+          this._idLinkDatabase.set(sourceID, outboundLinks)
+        }
+        broadcastIpcMessage('links')
+      },
+      /**
+       * Removes any outbound links emanating from the given file from the
+       * database. This function assumes sourceIDs to be unique, so in case of
+       * a duplicate, removing any of these files will delete the links for all.
+       *
+       * @param   {string}            sourcePath     The full path to the source file
+       * @param   {string|undefined}  sourceID       The ID of the source (if applicable)
+       */
+      remove: (sourcePath: string, sourceID?: string) => {
+        // NOTE: The FSAL by now defaults to an empty string instead of undefined
+        if (sourceID === '') {
+          sourceID = undefined
+        }
+
+        if (this._fileLinkDatabase.has(sourcePath)) {
+          this._fileLinkDatabase.delete(sourcePath)
+        }
+
+        if (sourceID !== undefined && this._idLinkDatabase.has(sourceID)) {
+          this._idLinkDatabase.delete(sourceID)
+        }
+        broadcastIpcMessage('links')
       }
-
-      // NOTE: The resolution of these files will take place from within the
-      // renderer on-demand
-      return sourceFiles
     }
-  })
-}
 
-/**
- * Shuts down the service provider
- * @return {Boolean} Returns true after successful shutdown
- */
-export async function shutdown (): Promise<boolean> {
-  global.log.verbose('Link provider shutting down ...')
-  return true
-}
+    ipcMain.handle('link-provider', (event, message) => {
+      const { command } = message
 
-/**
-* Adds an array of links from a specific file to the database. This
-* function assumes sourceIDs to be unique, so in case of a duplicate, the
-* later-loaded file overrides the earlier loaded one.
-*
-* @param   {string}            sourcePath     The full path to the source file
-* @param   {string[]}          outboundLinks  A collection of links
-* @param   {string|undefined}  sourceID       The ID of the source (if applicable)
-*/
-export function reportLinks (sourcePath: string, outboundLinks: string[], sourceID?: string): void {
-  // NOTE: The FSAL by now defaults to an empty string instead of undefined
-  if (sourceID === '') {
-    sourceID = undefined
+      if (command === 'get-inbound-links') {
+        const sourceFiles: string[] = []
+        // Return whatever links to the given file
+        const { filePath, fileID } = message.payload
+        const basenameExt = path.basename(filePath)
+        const basenameNoExt = path.basename(filePath, path.extname(filePath))
+
+        // Search all recorded links
+        for (const [ file, outbound ] of this._fileLinkDatabase.entries()) {
+          if (outbound.includes(basenameExt) || outbound.includes(basenameNoExt)) {
+            sourceFiles.push(file)
+          } else if (fileID !== undefined && outbound.includes(fileID)) {
+            sourceFiles.push(file)
+          }
+        }
+
+        // NOTE: The resolution of these files will take place from within the
+        // renderer on-demand
+        return sourceFiles
+      }
+    })
   }
 
-  fileLinkDatabase.set(sourcePath, outboundLinks)
-  if (sourceID !== undefined) {
-    idLinkDatabase.set(sourceID, outboundLinks)
+  /**
+   * Shuts down the service provider
+   * @return {Boolean} Returns true after successful shutdown
+   */
+  async shutdown (): Promise<boolean> {
+    global.log.verbose('Link provider shutting down ...')
+    return true
   }
-  broadcastIpcMessage('links')
-}
-
-/**
- * Removes any outbound links emanating from the given file from the
- * database. This function assumes sourceIDs to be unique, so in case of
- * a duplicate, removing any of these files will delete the links for all.
- *
- * @param   {string}            sourcePath     The full path to the source file
- * @param   {string|undefined}  sourceID       The ID of the source (if applicable)
- */
-export function removeLinks (sourcePath: string, sourceID?: string): void {
-  // NOTE: The FSAL by now defaults to an empty string instead of undefined
-  if (sourceID === '') {
-    sourceID = undefined
-  }
-
-  if (fileLinkDatabase.has(sourcePath)) {
-    fileLinkDatabase.delete(sourcePath)
-  }
-
-  if (sourceID !== undefined && idLinkDatabase.has(sourceID)) {
-    idLinkDatabase.delete(sourceID)
-  }
-  broadcastIpcMessage('links')
 }

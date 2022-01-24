@@ -107,6 +107,7 @@ declare module global {
   var updates: UpdateProvider
   var translations: any
   var targets: TargetProvider
+  var links: LinkProvider
   var stats: StatsProvider
   var recentDocs: RecentDocumentsProvider
   // Translation data necessary to facilitate internationalisation
