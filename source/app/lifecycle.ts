@@ -26,7 +26,7 @@ import path from 'path'
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
 
 // Providers
-import { boot as bootAppearanceProvider, shutdown as shutdownAppearanceProvider } from './service-providers/appearance-provider'
+import AppearanceProvider from './service-providers/appearance-provider'
 import AssetsProvider from './service-providers/assets-provider'
 import CiteprocProvider from './service-providers/citeproc-provider'
 import ConfigProvider from './service-providers/config-provider'
@@ -46,6 +46,7 @@ import TrayProvider from './service-providers/tray-provider'
 
 // We need module-global variables so that garbage collect won't shut down the
 // providers before the app is shut down.
+let appearanceProvider: AppearanceProvider
 let assetsProvider: AssetsProvider
 let citeprocProvider: CiteprocProvider
 let configProvider: ConfigProvider
@@ -118,7 +119,7 @@ export async function bootApplication (): Promise<void> {
     global.config.set('appLang', metadata.tag)
   }
 
-  await bootAppearanceProvider()
+  appearanceProvider = new AppearanceProvider()
   assetsProvider = new AssetsProvider()
   await assetsProvider.init()
   citeprocProvider = new CiteprocProvider()
@@ -170,7 +171,7 @@ export async function shutdownApplication (): Promise<void> {
   await safeShutdown(dictionaryProvider)
   await safeShutdown(citeprocProvider)
   await safeShutdown(assetsProvider)
-  await shutdownAppearanceProvider()
+  await safeShutdown(appearanceProvider)
   await safeShutdown(configProvider)
 
   const downTimestamp = Date.now()
