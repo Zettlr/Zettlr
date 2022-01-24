@@ -26,7 +26,11 @@
         <div class="toc-level">
           {{ entry.renderedLevel }}
         </div>
-        <div class="toc-entry" v-bind:data-line="entry.line" v-html="entry.text"></div>
+        <div
+          v-bind:class="{ 'toc-entry': true, 'toc-entry-active': tocEntryIsActive(entry.line, idx) }"
+          v-bind:data-line="entry.line"
+          v-html="entry.text"
+        ></div>
       </div>
     </div>
 
@@ -427,6 +431,27 @@ export default defineComponent({
         path: descriptor.path,
         id: descriptor.id // Convenience
       }))
+    },
+    /**
+     * Whether the cursor is within the corresponding document section
+     *
+     * @param   {number}  tocEntryLine          Line number of section heading
+     * @param   {number}  tocEntryIdx           Index of heading in ToC
+     */
+    tocEntryIsActive: function (tocEntryLine: number, tocEntryIdx: number) {
+      const cursorLine = this.$store.state.activeDocumentInfo.cursor.line
+
+      // Determine index of next heading in ToC list
+      const nextTocEntryIdx = Math.min(tocEntryIdx + 1, this.tableOfContents.length - 1)
+
+      // Now, determine the next heading's line number
+      let nextTocEntryLine = Infinity
+      if (tocEntryIdx !== nextTocEntryIdx) {
+        nextTocEntryLine = this.tableOfContents[nextTocEntryIdx].line
+      }
+
+      // True, when cursor lies between current and next heading
+      return (cursorLine >= tocEntryLine && cursorLine < nextTocEntryLine)
     }
   }
 })
@@ -512,6 +537,7 @@ body {
       // margin-left: calc(attr(data-level) * 10px);
       display: flex;
       margin-bottom: 10px;
+      margin-right: 10px;
 
       div.toc-level {
         flex-shrink: 1;
@@ -524,6 +550,11 @@ body {
         flex-grow: 3;
         cursor: pointer;
         &:hover { text-decoration: underline; }
+      }
+
+      div.toc-entry-active {
+        font-weight: bold;
+        color: var(--system-accent-color);
       }
     }
 
