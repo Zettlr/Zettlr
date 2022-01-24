@@ -52,7 +52,6 @@
 - Move FSAL types to the new types directory
 - Convert the remaining utility functions to TypeScript
 - Polyfill the `path` module in renderer processes
-- Transform the CSS provider into a functional module
 - Convert the MainSidebar component to TypeScript
 - Move out the statistics calculation from the FSAL
 - The `yarn package` and `yarn test-gui` commands now skip typechecking,
