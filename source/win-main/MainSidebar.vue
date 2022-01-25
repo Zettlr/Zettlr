@@ -19,8 +19,7 @@
         v-bind:key="idx"
         class="toc-entry-container"
         v-bind:style="{
-          'margin-left': `${entry.level * 10}px`
-        }"
+          'margin-left': `${entry.level * 10}px`, 'background-color': tocEntryContainerShade(idx)}"
         v-on:click="($root as any).jtl(entry.line)"
       >
         <div class="toc-level">
@@ -162,7 +161,9 @@ export default defineComponent({
   data: function () {
     return {
       bibContents: undefined as undefined|any[],
-      relatedFiles: [] as RelatedFile[]
+      relatedFiles: [] as RelatedFile[],
+      // Contains the ToC index of the currently active section
+      activeTocEntryIdx: undefined as undefined|number
     }
   },
   computed: {
@@ -451,7 +452,30 @@ export default defineComponent({
       }
 
       // True, when cursor lies between current and next heading
-      return (cursorLine >= tocEntryLine && cursorLine < nextTocEntryLine)
+      const isActive = (cursorLine >= tocEntryLine && cursorLine < nextTocEntryLine)
+      if (isActive) {
+        this.activeTocEntryIdx = tocEntryIdx
+      }
+      return isActive
+    },
+    /**
+     * Applies a background shade to the entry container depending on the
+     * distance to the active heading.
+     *
+     * @param   {number}  tocEntryIdx           Index of heading in ToC
+     */
+    tocEntryContainerShade: function (tocEntryIdx: number) {
+      const dist = Math.abs(tocEntryIdx - this.activeTocEntryIdx)
+
+      if (dist === 0) {
+        return 'rgba(255,255,255,1)'
+      } else if (dist === 1) {
+        return 'rgba(255,255,255,0.5)'
+      } else if (dist === 2) {
+        return 'rgba(255,255,255,0.25)'
+      } else if (dist === 3) {
+        return 'rgba(255,255,255,0.125)'
+      }
     }
   }
 })
