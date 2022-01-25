@@ -235,22 +235,14 @@ export default defineComponent({
     },
     countWordsOrCharsOfDirectory: function () {
       if (this.obj.type !== 'directory') {
-        return 0
+        return ''
       }
 
-      if (this.shouldCountChars) {
-        const charCount = this.obj.children
-          .filter((file: any) => file.type === 'file')
-          .map((file: any) => file.charCount)
-          .reduce((prev: number, cur: number) => prev + cur, 0)
-        return trans('gui.chars', localiseNumber(charCount))
-      } else {
-        const wordCount = this.obj.children
-          .filter((file: any) => file.type === 'file')
-          .map((file: any) => file.wordCount)
-          .reduce((prev: number, cur: number) => prev + cur, 0)
-        return trans('gui.words', localiseNumber(wordCount))
-      }
+      const wordOrCharCount = this.obj.children
+        .filter((file: any) => file.type === 'file')
+        .map((file: any) => this.shouldCountChars ? file.charCount : file.wordCount)
+        .reduce((prev: number, cur: number) => prev + cur, 0)
+      return trans((this.shouldCountChars ? 'gui.chars' : 'gui.words'), localiseNumber(wordOrCharCount))
     },
     countTags: function () {
       if (this.obj.type !== 'file') {
