@@ -124,6 +124,8 @@ Packages the application, but not bundle it into an installer. Without any suffi
 
 The resulting application packages are stored in `./out`.
 
+> This command will skip typechecking to speed up builds, so be extra cautious.
+
 #### `release:{platform-arch}`
 
 Packages the application and then bundles it into an installer for the corresponding platform and architecture. To create such a bundle (may require running on the corresponding platform), one of the following values for `{platform-arch}` is required:
@@ -170,6 +172,8 @@ This runs the unit tests in the directory `./test`. Make sure to run this comman
 #### `test-gui`
 
 Use this command to carefree test any changes you make to the application. This command will start the application as if you ran `yarn start`, but will provide a custom configuration and a custom directory.
+
+> This command will skip typechecking to speed up builds, so be extra cautious.
 
 **The first time you start this command**, pass the `--clean`-flag to copy a bunch of test-files to your `./resources`-directory, create a `test-config.yml` in your project root, and start the application with this clean configuration. Then, you can adapt the `test-config.yml` to your liking (so that certain settings which you would otherwise _always_ set will be pre-set without you having to open the preferences).
 
