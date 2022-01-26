@@ -14,14 +14,22 @@
 
 import fs from 'fs'
 import path from 'path'
-import { app, ipcMain } from 'electron'
+import { app } from 'electron'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
+import { ipcMain } from '@common/ipc'
 
 interface InternalTagRecord {
   text: string
   files: string[]
   className: string
+}
+
+export interface TagProviderProtocol {
+  getTagsDatabase: () => TagDatabase
+  setColouredTags: (tags: ColouredTag[]) => void
+  getColouredTags: () => ColouredTag[]
+  recommendMatchingFiles: (tags: string[]) => { [key: string]: string[] }
 }
 
 /**
@@ -124,17 +132,17 @@ export default class TagProvider {
       }
     }
 
-    ipcMain.handle('tag-provider', (event, message) => {
+    ipcMain.handle('tagProvider', (event, message) => {
       const { command } = message
 
-      if (command === 'get-tags-database') {
+      if (command === 'getTagsDatabase') {
         return this._getSimplifiedTagDatabase()
-      } else if (command === 'set-coloured-tags') {
+      } else if (command === 'setColouredTags') {
         const { payload } = message
         this.setColouredTags(payload)
-      } else if (command === 'get-coloured-tags') {
+      } else if (command === 'getColouredTags') {
         return this._colouredTags
-      } else if (command === 'recommend-matching-files') {
+      } else if (command === 'recommendMatchingFiles') {
         const { payload } = message
         // We cannot use a Map for the return value since Maps are not JSONable.
         const ret: { [key: string]: string[] } = {}
@@ -155,6 +163,10 @@ export default class TagProvider {
         }
 
         return ret
+      } else {
+        // Check at compile time that we don't miss to define any command
+        const _exhaustiveCheck: never = command
+        return _exhaustiveCheck
       }
     })
   }

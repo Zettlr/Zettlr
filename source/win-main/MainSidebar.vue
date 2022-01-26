@@ -141,11 +141,9 @@ import { ClarityIcons } from '@clr/icons'
 import TabBar from '@common/vue/TabBar.vue'
 import { defineComponent } from 'vue'
 import path from 'path'
-import { IpcRenderer } from 'electron'
 import { MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
 import { TabbarControl } from '@dts/renderer/window'
-
-const ipcRenderer: IpcRenderer = (window as any).ipc
+import { ipcRenderer } from '@common/ipc'
 
 interface RelatedFile {
   file: string
@@ -341,10 +339,9 @@ export default defineComponent({
       // The second way files can be related to each other is via shared tags.
       // This relation is not as important as explicit links, so they should
       // be below the inbound linked files.
-      const recommendations = await ipcRenderer.invoke('tag-provider', {
-        command: 'recommend-matching-files',
-        payload: this.activeFile.tags.map(tag => tag) // De-proxy
-      })
+      const recommendations = await ipcRenderer.tagProvider.recommendMatchingFiles(
+        this.activeFile.tags.map(tag => tag) // De-proxy
+      )
 
       // Recommendations come in the form of [file: string]: string[]
       for (const filePath of Object.keys(recommendations)) {
