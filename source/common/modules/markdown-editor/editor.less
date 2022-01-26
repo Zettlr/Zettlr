@@ -217,6 +217,9 @@
         font-size: 12px;
         border-radius: 6px;
         padding: 10px;
+        // If we have images in a list, they will inherit the textIndent applied
+        // by CodeMirror, so we have to set it explicitly
+        text-indent: 0;
       }
 
       span.image-size-info {
