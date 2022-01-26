@@ -53,7 +53,7 @@
         <div v-if="isDirectory">
           <span class="badge">{{ countDirs }}</span>
           <span class="badge">{{ countFiles }}</span>
-          <span class="badge">{{ countWords }}</span>
+          <span class="badge">{{ countWordsOrCharsOfDirectory }}</span>
         </div>
         <template v-else>
           <div v-if="hasTags">
@@ -89,7 +89,7 @@
               relation to a set writing target, if there is one.
             -->
             <span v-else-if="!hasWritingTarget" class="badge">
-              {{ formattedWordCount }}
+              {{ formattedWordCharCountOfFile }}
             </span>
             <span v-else class="badge">
               <svg
@@ -163,6 +163,9 @@ export default defineComponent({
     }
   },
   computed: {
+    shouldCountChars: function (): boolean {
+      return this.$store.state.config['editor.countChars']
+    },
     useH1: function (): boolean {
       return this.$store.state.config.fileNameDisplay.includes('heading')
     },
@@ -230,17 +233,16 @@ export default defineComponent({
       }
       return this.obj.children.filter((e: any) => [ 'file', 'code' ].includes(e.type)).length + ' ' + trans('system.files') || 0
     },
-    countWords: function () {
+    countWordsOrCharsOfDirectory: function () {
       if (this.obj.type !== 'directory') {
-        return 0
+        return ''
       }
 
-      const wordCount = this.obj.children
+      const wordOrCharCount = this.obj.children
         .filter((file: any) => file.type === 'file')
-        .map((file: any) => file.wordCount)
+        .map((file: any) => this.shouldCountChars ? file.charCount : file.wordCount)
         .reduce((prev: number, cur: number) => prev + cur, 0)
-
-      return trans('gui.words', localiseNumber(wordCount))
+      return trans((this.shouldCountChars ? 'gui.chars' : 'gui.words'), localiseNumber(wordOrCharCount))
     },
     countTags: function () {
       if (this.obj.type !== 'file') {
@@ -292,12 +294,15 @@ export default defineComponent({
 
       return `${localiseNumber(current)} / ${localiseNumber(this.obj.target.count)} ${label} (${progress} %)`
     },
-    formattedWordCount: function () {
+    formattedWordCharCountOfFile: function () {
       if (this.obj.type !== 'file') {
         return '' // Failsafe because code files don't have a word count.
       }
-      // TODO: Enable char count as well!!
-      return trans('gui.words', localiseNumber(this.obj.wordCount))
+      if (this.shouldCountChars) {
+        return trans('gui.chars', localiseNumber(this.obj.charCount))
+      } else {
+        return trans('gui.words', localiseNumber(this.obj.wordCount))
+      }
     },
     formattedSize: function () {
       return formatSize(this.obj.size)

@@ -39,6 +39,7 @@
 - The file tree now expands when you are filtering for files/directories
 - Translate the auto dark mode start/end setting strings
 - The ToC now displays the currently active section
+- Fix file manager always showing word count, even if user selected character count in preferences
 
 ## Under the Hood
 
