@@ -53,6 +53,7 @@ export default function getMenu (
         },
         ...docs.map(item => {
           const ret: MenuItemConstructorOptions = {
+            id: 'menu.recent_docs.' + item,
             label: path.basename(item),
             click: function (menuitem, focusedWindow) {
               global.application.runCommand('open-file', {
