@@ -476,8 +476,8 @@ export default defineComponent({
     }
   },
   methods: {
-    jtl: function (lineNumber: number) {
-      (this.$refs.editor as any).jtl(lineNumber)
+    jtl: function (lineNumber: number, setCursor: boolean = false) {
+      (this.$refs.editor as any).jtl(lineNumber, setCursor)
     },
     startGlobalSearch: function (terms: string) {
       this.mainSplitViewVisibleComponent = 'globalSearch'
