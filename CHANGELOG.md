@@ -43,6 +43,7 @@
   count in preferences
 - When clicking on a heading in the ToC, the cursor is now set to that heading
   and the editor is focused immediately
+- Fix recent documents items not being clickable in Linux
 
 ## Under the Hood
 
