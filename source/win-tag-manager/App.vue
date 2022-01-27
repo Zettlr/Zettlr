@@ -120,8 +120,8 @@ export default defineComponent({
     }
   },
   created: function () {
-    ipcRenderer.invoke('tag-provider', {
-      command: 'get-coloured-tags'
+    ipcRenderer.invoke('tagProvider', {
+      command: 'getColouredTags'
     })
       .then((tags) => {
         this.tags = tags
@@ -131,8 +131,8 @@ export default defineComponent({
   methods: {
     handleClick: function (controlID: string) {
       if (controlID === 'save') {
-        ipcRenderer.invoke('tag-provider', {
-          command: 'set-coloured-tags',
+        ipcRenderer.invoke('tagProvider', {
+          command: 'setColouredTags',
           payload: this.tags.map(tag => {
             // De-proxy the tags so they can be sent over IPC
             return {

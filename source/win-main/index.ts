@@ -63,8 +63,8 @@ document.addEventListener('drop', (event) => {
  * Listen to update events
  */
 function updateColouredTags (): void {
-  ipcRenderer.invoke('tag-provider', {
-    command: 'get-coloured-tags'
+  ipcRenderer.invoke('tagProvider', {
+    command: 'getColouredTags'
   })
     .then(tags => {
       app.$store.commit('colouredTags', tags)
@@ -111,7 +111,7 @@ ipcRenderer.on('config-provider', (event, { command, payload }) => {
 
 // Listen for updates to the tag database
 ipcRenderer.on('tags', (event) => {
-  ipcRenderer.invoke('tag-provider', { command: 'get-tags-database' })
+  ipcRenderer.invoke('tagProvider', { command: 'getTagsDatabase' })
     .then(tags => {
       app.$store.commit('updateTagDatabase', tags)
     })
@@ -119,7 +119,7 @@ ipcRenderer.on('tags', (event) => {
 })
 
 // Also send an initial update
-ipcRenderer.invoke('tag-provider', { command: 'get-tags-database' })
+ipcRenderer.invoke('tagProvider', { command: 'getTagsDatabase' })
   .then(tags => {
     app.$store.commit('updateTagDatabase', tags)
   })
