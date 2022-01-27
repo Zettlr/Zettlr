@@ -1,5 +1,5 @@
 import { TagProviderProtocol } from '@providers/tag-provider'
-import { IpcMainInvokeEvent, ipcMain as electronIpcMain, ipcRenderer as electronIpcRenderer, IpcRenderer } from 'electron'
+import { IpcMainInvokeEvent, ipcMain as electronIpcMain } from 'electron'
 
 /**
  * Defines all channels of the Ipc, and which commands are supported on this channel.
@@ -47,7 +47,7 @@ type PromisfiedAll<T> = {
 /**
  * Replaces all functions in all channels by functions that return a Promise.
  */
-type PromisfiedProtocol = {
+export type PromisfiedProtocol = {
   [K in keyof IpcProtocol]: PromisfiedAll<IpcProtocol[K]>
 }
 
@@ -117,22 +117,3 @@ class IpcMain {
   }
 }
 export const ipcMain = new IpcMain()
-
-export const ipcRenderer: PromisfiedProtocol & IpcRenderer = new Proxy({}, {
-  get (target: any, propChannel: PropertyKey, receiver: any): any {
-    const channel = propChannel.toString()
-    if (channel === 'invoke') {
-      // For backwards compatibility
-      return electronIpcRenderer.invoke
-    }
-
-    return new Proxy({}, {
-      get (target: any, propMessage: PropertyKey, receiver: any): any {
-        const message = propMessage.toString()
-        return async function (...args: any[]) {
-          return await electronIpcRenderer.invoke(channel, { command: message, payload: args })
-        }
-      }
-    })
-  }
-})

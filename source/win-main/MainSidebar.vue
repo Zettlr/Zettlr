@@ -143,7 +143,7 @@ import { defineComponent } from 'vue'
 import path from 'path'
 import { MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
 import { TabbarControl } from '@dts/renderer/window'
-import { ipcRenderer } from '@common/ipc'
+import { ipcRenderer } from '../app/ipcRenderer'
 
 interface RelatedFile {
   file: string
