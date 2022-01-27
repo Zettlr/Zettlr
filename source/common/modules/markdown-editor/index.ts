@@ -321,9 +321,10 @@ export default class MarkdownEditor extends EventEmitter {
   /**
    * Small function that jumps to a specific line in the editor.
    *
-   * @param  {Number} line The line to pull into view
+   * @param  {number} line The line to pull into view
+   * @param {boolean} setCursor If set to true, will also change the cursor position to line
    */
-  jtl (line: number): void {
+  jtl (line: number, setCursor: boolean = false): void {
     const { from, to } = this._instance.getViewport()
     const viewportSize = to - from
     // scrollIntoView first and foremost pulls something simply into view, but
@@ -338,15 +339,15 @@ export default class MarkdownEditor extends EventEmitter {
     }
 
     this._instance.scrollIntoView({
-      from: {
-        line: line,
-        ch: 0
-      },
-      to: {
-        line: lastLine,
-        ch: 0
-      }
+      from: { line: line, ch: 0 },
+      to: { line: lastLine, ch: 0 }
     })
+
+    if (setCursor) {
+      console.log('Setting cursor!')
+      this._instance.setCursor({ line: line, ch: 0 })
+      this._instance.focus()
+    }
   }
 
   /**

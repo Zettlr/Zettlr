@@ -671,9 +671,9 @@ export default defineComponent({
         }
       }, 1000)
     },
-    jtl (lineNumber: number) {
+    jtl (lineNumber: number, setCursor: boolean = false) {
       if (mdEditor !== null) {
-        mdEditor.jtl(lineNumber)
+        mdEditor.jtl(lineNumber, setCursor)
       }
     },
     /**
