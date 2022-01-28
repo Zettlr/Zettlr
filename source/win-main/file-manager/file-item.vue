@@ -328,9 +328,9 @@ export default defineComponent({
       // (only necessary for thin mode)
       this.$emit('begin-dragging')
       event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
-        'type': this.obj.type, // Can be file, code, or directory
-        'path': this.obj.path,
-        'id': this.obj.type === 'file' ? this.obj.id : '' // Convenience
+        type: this.obj.type, // Can be file, code, or directory
+        path: this.obj.path,
+        id: this.obj.type === 'file' ? this.obj.id : '' // Convenience
       }))
     }
   }

@@ -381,18 +381,11 @@ export default defineComponent({
       }
 
       event.dataTransfer.dropEffect = 'move'
-      if (this.obj.type === 'file') {
-        event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
-          type: this.obj.type,
-          path: this.obj.path,
-          id: this.obj.id
-        }))
-      } else {
-        event.dataTransfer.setData('text/x-zettlr-dir', JSON.stringify({
-          path: this.obj.path,
-          type: this.obj.type
-        }))
-      }
+      event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
+        type: this.obj.type,
+        path: this.obj.path,
+        id: (this.obj.type === 'file') ? this.obj.id : ''
+      }))
     },
     /**
      * Called when a drag operation enters this item; adds a highlight class
@@ -457,12 +450,7 @@ export default defineComponent({
       let data
 
       try {
-        let eventData = event.dataTransfer.getData('text/x-zettlr-file')
-        if (eventData === '') {
-          // If the eventData is empty, this suggests there was no corresponding
-          // data available, so it might be a directory.
-          eventData = event.dataTransfer.getData('text/x-zettlr-dir')
-        }
+        const eventData = event.dataTransfer.getData('text/x-zettlr-file')
         data = JSON.parse(eventData) // Throws error if eventData === ''
       } catch (err) {
         // Error in JSON stringifying (either b/c malformed or no text)

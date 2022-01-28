@@ -17,6 +17,12 @@ import CodeMirror from 'codemirror'
 import path from 'path'
 const IMAGE_REGEXP = getImageFileRE()
 
+interface XFileObject {
+  type: 'directory'|'file'|'code'
+  path: string
+  id: string
+}
+
 export default function dropFilesHook (cm: CodeMirror.Editor): void {
   cm.on('drop', (cm, event) => {
     if (event.dataTransfer === null) {
@@ -56,23 +62,15 @@ export default function dropFilesHook (cm: CodeMirror.Editor): void {
       // If the user has dropped a file from the manager onto the editor,
       // this strongly suggest they want to link it using their preferred method.
       const data = JSON.parse(zettlrFile)
-      let textToInsert: string = (cm as any).getOption('zettlr').zettelkasten.linkStart
-      textToInsert += data.id !== undefined ? String(data.id) : String(path.basename(data.path, path.extname(data.path)))
-      textToInsert += (cm as any).getOption('zettlr').zettelkasten.linkEnd as string
-      const linkPref = global.config.get('zkn.linkWithFilename')
-      if (linkPref === 'always' || (linkPref === 'withID' && data.id !== undefined)) {
-        // We need to add the text after the link.
-        textToInsert += ' ' + String(path.basename(data.path))
-      }
-
-      cm.replaceSelection(textToInsert)
+      const { linkStart, linkEnd } = (cm as any).getOption('zettlr').zettelkasten
+      cm.replaceSelection(getInternalLink(data, linkStart, linkEnd, basePath))
     } else if (filePaths.length > 0) {
       // We have an other file to insert. This means to either link them as a
       // (relative) path or an image.
       const filesToAdd = []
 
       for (const file of filePaths) {
-        const relativePath: string = path.relative(basePath, file)
+        const relativePath = path.relative(basePath, file)
 
         if (IMAGE_REGEXP.test(file)) {
           filesToAdd.push(`![${path.basename(file)}](${relativePath})`)
@@ -85,4 +83,42 @@ export default function dropFilesHook (cm: CodeMirror.Editor): void {
     }
     cm.focus() // Last but not least, make sure the editor is focused
   })
+}
+
+/**
+ * Returns an internal link representation of the data object passed, respecting
+ * user settings.
+ *
+ * @param   {XFileObject}  data       The object containing the object data
+ * @param   {string}       linkStart  The internal link start string
+ * @param   {string}       linkEnd    The internal link end string
+ * @param   {string}       basePath   The Markdown base path
+ *
+ * @return  {string}                  The correct string
+ */
+function getInternalLink (data: XFileObject, linkStart: string, linkEnd: string, basePath: string): string {
+  if (data.type === 'directory') {
+    return `[${path.basename(data.path)}](${path.relative(basePath, data.path)})`
+  }
+
+  const fnameOnly: boolean = global.config.get('zkn.linkFilenameOnly')
+
+  if (fnameOnly) {
+    return `${linkStart}${path.basename(data.path)}${linkEnd}`
+  }
+
+  const linkPref: 'always'|'never'|'withID' = global.config.get('zkn.linkWithFilename')
+
+  if (data.id === '' && linkPref !== 'always') {
+    return `${linkStart}${path.basename(data.path)}${linkEnd}`
+  } else if (data.id === '' && linkPref === 'always') {
+    return `${linkStart}${path.basename(data.path)}${linkEnd} ${path.basename(data.path)}`
+  } else if (data.id !== '' && linkPref !== 'never') {
+    return `${linkStart}${data.id}${linkEnd} ${path.basename(data.path)}`
+  } else if (data.id !== '' && linkPref === 'never') {
+    return `${linkStart}${data.id}${linkEnd}`
+  }
+
+  // Fallback to make the linter happy
+  return `${linkStart}${path.basename(data.path)}${linkEnd}`
 }
