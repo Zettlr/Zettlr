@@ -76,7 +76,7 @@ export default function makeValidUri (uri: string, base: string = ''): string {
   } else if (path.isAbsolute(uri) && fileExists(uri)) {
     // The link is already absolute and exists
     isFile = true
-  } else if (path.isAbsolute(uri) && fileExists(path.join(base, uri))) {
+  } else if (path.isAbsolute(uri) && fileExists(path.resolve(base, uri))) {
     // The link is relative and exists
     isFile = true
   }
@@ -91,7 +91,7 @@ export default function makeValidUri (uri: string, base: string = ''): string {
     // we assume a link. If not, we assume a file. Remember
     // that the subdomain may be omitted. So what we're really
     // searching for is <host>.<tld>.
-    if (protocol !== null) {
+    if (protocol !== '') {
       // It may be that the protocol is given, but not a file
       // In this case, it's not a file, but we don't care which
       // protocol it uses.
@@ -113,7 +113,7 @@ export default function makeValidUri (uri: string, base: string = ''): string {
   // At this point, we definitely know the isFile. If the protocol
   // is still not known we can now derive it from the information
   // we have gathered so far.
-  if (protocol === null) {
+  if (protocol === '') {
     if (isFile) {
       protocol = 'file'
     } else {
@@ -132,11 +132,13 @@ export default function makeValidUri (uri: string, base: string = ''): string {
     if (uri.indexOf('file://') === 0) {
       uri = uri.substring(7)
     }
+
     // We've got a relative path
-    if (path.isAbsolute(uri)) {
-      uri = path.join(base, uri)
+    if (!path.isAbsolute(uri)) {
+      uri = path.resolve(base, uri)
     }
-    uri = 'file://' + uri
+
+    protocol = 'safe-file'
   }
 
   // Now we can return the correct uri, made absolute

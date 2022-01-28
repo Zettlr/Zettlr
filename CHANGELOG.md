@@ -45,6 +45,7 @@
   and the editor is focused immediately
 - Fix recent documents items not being clickable in Linux
 - Fix drag & drop of files onto the editor
+- Fix some bugs in the link opener
 
 ## Under the Hood
 
