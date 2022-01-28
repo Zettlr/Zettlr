@@ -17,7 +17,9 @@ import { mdFileExtensions } from '@common/get-file-extensions'
 import makeValidUri from '@common/util/make-valid-uri'
 import CodeMirror from 'codemirror'
 import { IpcRenderer } from 'electron'
-import path from 'path'
+import { PlatformPath } from '@dts/renderer/path'
+
+const path: PlatformPath = (window as any).path
 
 const ipcRenderer: IpcRenderer = (window as any).ipc
 

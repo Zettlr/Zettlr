@@ -128,10 +128,11 @@ import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
 import { SearchResult, SearchTerm } from '@dts/common/search'
 import { CodeFileMeta, DirMeta, MDFileMeta } from '@dts/common/fsal'
-import path from 'path'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { AnyMenuItem } from '@dts/renderer/context'
+import { PlatformPath } from '@dts/renderer/path'
 
+const path: PlatformPath = (window as any).path
 const ipcRenderer: IpcRenderer = (window as any).ipc
 
 interface LocalFile {

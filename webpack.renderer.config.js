@@ -72,7 +72,7 @@ module.exports = {
     },
     fallback: {
       // Don't polyfill these modules
-      path: require.resolve('path-browserify'),
+      path: false,
       fs: false
     }
   }

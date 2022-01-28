@@ -15,6 +15,9 @@
  */
 
 import { contextBridge, ipcRenderer, clipboard } from 'electron'
+import path from 'path'
+
+contextBridge.exposeInMainWorld('path', path)
 
 // We need a few ipc methods
 contextBridge.exposeInMainWorld('ipc', {

@@ -14,7 +14,9 @@
 
 import { getImageFileRE } from '@common/regular-expressions'
 import CodeMirror from 'codemirror'
-import path from 'path'
+import { PlatformPath } from '@dts/renderer/path'
+
+const path: PlatformPath = (window as any).path
 const IMAGE_REGEXP = getImageFileRE()
 
 interface XFileObject {
