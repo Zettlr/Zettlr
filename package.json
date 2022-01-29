@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git://github.com/Zettlr/Zettlr.git"
   },
-  "version": "2.1.2",
+  "version": "2.1.3",
   "license": "GPL-3.0",
   "description": "A Markdown Editor for the 21st century.",
   "main": ".webpack/main",
