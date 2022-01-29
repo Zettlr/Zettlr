@@ -72,7 +72,15 @@ export default function dropFilesHook (cm: CodeMirror.Editor): void {
       const filesToAdd = []
 
       for (const file of filePaths) {
-        const relativePath = path.relative(basePath, file)
+        let relativePath = path.relative(basePath, file)
+
+        // If the file resides in the same directory, it will just return the
+        // basename of the file. However, since the bias for links is --
+        // obviously -- weblinks, not file links, we should help the resolver
+        // determine that the user is referring to a local file.
+        if (!relativePath.startsWith('.')) {
+          relativePath = './' + relativePath
+        }
 
         if (IMAGE_REGEXP.test(file)) {
           filesToAdd.push(`![${path.basename(file)}](${relativePath})`)
