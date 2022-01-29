@@ -31,6 +31,7 @@ import countWords from '@common/util/count-words'
 import md2html from '@common/util/md-to-html'
 import generateKeymap from './generate-keymap'
 import generateTableOfContents from './util/generate-toc'
+import { LatexCommand } from '@providers/latex-commands'
 
 // Search plugin (module-namespaced set of utility functions)
 import { searchNext, searchPrevious, replaceNext, replacePrevious, replaceAll, stopSearch } from './plugins/search'
@@ -248,10 +249,17 @@ export default class MarkdownEditor extends EventEmitter {
     })
 
     // Listen to updates from the assets provider
-    ipcRenderer.on('assets-provider', (event, which) => {
-      if (which === 'snippets-updated') {
-        // The snippet list has been updated, so we must reflect this.
-        this.updateSnippetAutocomplete().catch(err => console.error(err))
+    ipcRenderer.on('assets-provider', async (event, which) => {
+      try {
+        if (which === 'snippets-updated') {
+          // The snippet list has been updated, so we must reflect this.
+          await this.updateSnippetAutocomplete()
+        } else if (which === 'latexcommands-updated') {
+          // The latex command list has been updated, so we must reflect this.
+          await this.updateLatexAutocomplete()
+        }
+      } catch (err) {
+        console.error(err)
       }
     })
 
@@ -272,8 +280,9 @@ export default class MarkdownEditor extends EventEmitter {
       }
     })
 
-    // Initial retrieval of snippets
+    // Initial retrieval of snippets and latex commands
     this.updateSnippetAutocomplete().catch(err => console.error(err))
+    this.updateLatexAutocomplete().catch(err => console.error(err))
   } // END CONSTRUCTOR
 
   // SEARCH FUNCTIONALITY
@@ -516,19 +525,15 @@ export default class MarkdownEditor extends EventEmitter {
    * Updates the list of available latex commands.
    */
   async updateLatexAutocomplete (): Promise<void> {
-    const fs = require('fs')
-    const latexCommandsFile = 'C:\\Users\\Tobi\\AppData\\Roaming\\Sublime Text 3\\Packages\\User\\cwl\\latex.cwl'
-    const latexCommands = fs.readFileSync(latexCommandsFile, { encoding: 'utf8' })
-      .split(/\r?\n/)
-      .filter(text => text.startsWith('\\'))
+    const commands = await ipcRenderer.invoke('assets-provider', { command: 'getLatexCommands' }) as LatexCommand[]
+    const database = commands
       .map(command => {
-        var commandText = command.substring(1)
         return {
-          'text': commandText,
-          'displayText': command
+          'text': command.snippet,
+          'displayText': '\\' + command.name
         }
       })
-    this.setCompletionDatabase('latex', latexCommands)
+    this.setCompletionDatabase('latexCommands', database)
   }
 
   /* * * * * * * * * * * *

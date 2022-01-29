@@ -13,11 +13,12 @@
  * END HEADER
  */
 
-import path from 'path'
-import { app, ipcMain } from 'electron'
-import { promises as fs } from 'fs'
-import YAML from 'yaml'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
+import { app, ipcMain } from 'electron'
+import { promises as fs, constants as fsConstants } from 'fs'
+import path from 'path'
+import YAML from 'yaml'
+import { parse as parseLatexCommands, getDefault as getDefaultLatexCommands } from './latex-commands'
 
 export default class AssetsProvider {
   /**
@@ -28,6 +29,7 @@ export default class AssetsProvider {
   private readonly _defaultsPath: string
   private readonly _snippetsPath: string
   private readonly _filterPath: string
+  private readonly _latexCommandsFile: string
 
   constructor () {
     global.log.verbose('Assets provider starting up ...')
@@ -35,6 +37,7 @@ export default class AssetsProvider {
     this._defaultsPath = path.join(app.getPath('userData'), '/defaults')
     this._snippetsPath = path.join(app.getPath('userData'), '/snippets')
     this._filterPath = path.join(app.getPath('userData'), '/lua-filter')
+    this._latexCommandsFile = path.join(app.getPath('userData'), '/latex-commands.json')
 
     global.assets = {
       // These two global functions get the defaults as a JavaScript object,
@@ -77,6 +80,13 @@ export default class AssetsProvider {
         return await this.listSnippets()
       } else if (command === 'rename-snippet') {
         return await this.renameSnippet(payload.name, payload.newName)
+      } else if (command === 'getLatexCommands') {
+        try {
+          await fs.access(this._latexCommandsFile, fsConstants.F_OK)
+          return await parseLatexCommands(this._latexCommandsFile)
+        } catch {
+          return getDefaultLatexCommands()
+        }
       }
     })
   }
