@@ -41,6 +41,19 @@ ipcRenderer.on('dictionary-provider', (event, message) => {
   }
 })
 
+let autoCorrectValues = Object.create(null)
+
+/**
+ * Refreshes the autocorrect value object with the current state of the config
+ */
+function refreshAutocorrectValues (replacementTable: Array<{ key: string, value: string }>): void {
+  autoCorrectValues = Object.create(null)
+  const values = replacementTable.map(elem => elem.value)
+  for (const value of values) {
+    autoCorrectValues[value] = true
+  }
+}
+
 /**
  * Checks whether a term is spelled correctly, or not
  *
@@ -64,11 +77,16 @@ function check (term: string): boolean {
     return spellcheckCache[saneTerm]
   }
 
+  // Autocorrect values are also always correct
+  if (saneTerm in autoCorrectValues) {
+    return true
+  }
+
   // Save into the corresponding cache and return the query result
   // Return the query result
   const correct = ipcRenderer.sendSync('dictionary-provider', {
-    'command': 'check',
-    'term': saneTerm
+    command: 'check',
+    term: saneTerm
   })
 
   if (correct === undefined) {
@@ -89,7 +107,15 @@ function check (term: string): boolean {
   * @return {OverlayMode}           The generated overlay mode
   */
 defineMode('spellchecker', function (config, parsercfg) {
-  // word separators including special interpunction
+  // We need the replacementTable. The modes will be re-instantiated as soon
+  // as some options in config change, so we can rest assured that we have
+  // the replacements available. However, shortly after opening the main window
+  // the property will not be set, so we have to check that we're getting an
+  // array. If we are, we can set the autocorrect values.
+  const replacementTable = (config as any).autoCorrect?.replacements
+  if (Array.isArray(replacementTable)) {
+    refreshAutocorrectValues(replacementTable)
+  }
 
   // Create the overlay and such
   const spellchecker: Mode<{}> = {
@@ -179,7 +205,7 @@ defineMode('spellchecker', function (config, parsercfg) {
     }
   }
 
-  let mode = getMode(config, {
+  const mode = getMode(config, {
     name: 'markdown-zkn',
     highlightFormatting: true
   })

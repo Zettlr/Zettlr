@@ -3,6 +3,10 @@
 ## GUI and Functionality
 
 - Tags and keywords within a YAML frontmatter are now clickable
+- AutoCorrect values are no longer detected as spelling mistakes
+- Fix an issue with false detection of footnote reference texts
+- Fix link resolving: Now files dropped onto the editor will be easier to detect
+  as files (rather than weblinks) so that more documents should easily be opened
 
 ## Under the Hood
 

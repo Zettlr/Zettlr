@@ -49,7 +49,7 @@ export default function (url: string, cm: CodeMirror.Editor): void {
     }
   } else if (url.startsWith('.')) {
     // We are definitely dealing with a relative URL. So let's resolve it
-    const absPath = path.resolve(url, base)
+    const absPath = path.resolve(base, url)
     window.location.assign(`safe-file://${absPath}`)
   } else if (url.startsWith('/') || url.startsWith('\\')) {
     // We are definitely dealing with an absolute URL.
@@ -62,6 +62,7 @@ export default function (url: string, cm: CodeMirror.Editor): void {
     // e.g., file://./relative.md will not throw an error albeit
     // we need to convert it to absolute.
     let validURI = makeValidUri(url, base)
+    console.log(validURI)
 
     // Now we have a valid link. Finally, let's check if we can open the file
     // internally, without having to switch to an external program.
