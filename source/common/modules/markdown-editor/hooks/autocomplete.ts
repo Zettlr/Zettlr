@@ -17,6 +17,7 @@ import CodeMirror, { on } from 'codemirror'
 import { DateTime } from 'luxon'
 import { v4 as uuid } from 'uuid'
 import generateId from '@common/util/generate-id'
+import { findEquations, LineInfo } from '../plugins/render-math'
 
 // We need two code block REs: First the line-wise, and then the full one.
 const codeBlockRE = getCodeBlockRE(false)
@@ -327,8 +328,18 @@ function shouldBeginAutocomplete (cm: CodeMirror.Editor, changeObj: any): Autoco
   }
 
   // Can we begin autocompleting a latex command?
-  if (changeObj.text[0] === '\\' && (isSOL || charBefore === ' ')) {
-    return 'latexCommands'
+  if (changeObj.text[0] === '\\') {
+    // Check if we are in an equation
+    const lines: LineInfo[] = []
+    for (let i = 0; i < cm.lineCount(); i++) {
+      lines.push(LineInfo.from(i, cm))
+    }
+    const equations = findEquations(lines)
+    for (const equation of equations) {
+      if (equation.isInEquation(cursor)) {
+        return 'latexCommands'
+      }
+    }
   }
 
   // This will return true if the user began typing a hashtag within a link,
@@ -529,51 +540,9 @@ function hintFunction (cm: CodeMirror.Editor, opt: CodeMirror.ShowHintOptions): 
         })
       } // Otherwise: citeStyle was in-text, i.e. we can leave everything as is
     } else if (currentDatabase === 'snippets') {
-      // For this database, we must remove the leading colon and also fiddle
-      // with the text. So first, let's select everything.
-      const insertedLines: string[] = completion.text.split('\n')
-      const from = {
-        line: autocompleteStart.line,
-        ch: autocompleteStart.ch - 1
-      }
-      const to = {
-        line: autocompleteStart.line + insertedLines.length - 1,
-        ch: insertedLines[insertedLines.length - 1].length
-      }
-      // If insertedLines is 1, we have to account for the autocompleteStart.ch
-      if (insertedLines.length === 1) {
-        to.ch += autocompleteStart.ch
-      }
-
-      // Then, insert the text, but with all variables replaced and only the
-      // tabstops remaining.
-      const actualTextToInsert = replaceSnippetVariables(completion.text)
-      const actualInsertedLines = actualTextToInsert.split('\n').length
-      cm.replaceRange(actualTextToInsert, from, to)
-
-      // Now adapt the to to account for added newlines during replacement
-      to.line += actualInsertedLines - insertedLines.length
-
-      // If we are still dealing with just a single line, adapt `to.ch`
-      if (from.line === to.line) {
-        to.ch += actualTextToInsert.split('\n')[actualInsertedLines - 1].length - insertedLines[0].length
-        // Also substract the colon from ch, since that has been replaced above
-        to.ch--
-      } else {
-        to.ch = actualTextToInsert.split('\n')[actualInsertedLines - 1].length
-      }
-
-      // Now, we need to mark every tabstop within this section of text and
-      // store those text markers so that we can find them again by tabbing
-      // through them.
-      currentTabStops = getTabMarkers(cm, from, to)
-
-      // Now activate our special snippets keymap which will ensure the user can
-      // cycle through all placeholders which we have identified.
-      cm.addKeyMap(snippetsKeymap)
-
-      // Plus, move to the first tabstop already so the user can start immediately.
-      nextTabstop(cm)
+      insertSnippet(completion.text, cm)
+    } else if (currentDatabase === 'latexCommands') {
+      insertSnippet(completion.text, cm)
     }
   })
 
@@ -587,6 +556,58 @@ function hintFunction (cm: CodeMirror.Editor, opt: CodeMirror.ShowHintOptions): 
   })
 
   return completionObject
+}
+
+function insertSnippet (snippet: string, cm: CodeMirror.Editor): void {
+  if (autocompleteStart === null) {
+    throw new Error('Could not autocomplete: autocompleteStart was null')
+  }
+
+  // For this database, we must remove the leading colon and also fiddle
+  // with the text. So first, let's select everything.
+  const insertedLines = snippet.split('\n')
+  const from = {
+    line: autocompleteStart.line,
+    ch: autocompleteStart.ch - 1
+  }
+  const to = {
+    line: autocompleteStart.line + insertedLines.length - 1,
+    ch: insertedLines[insertedLines.length - 1].length
+  }
+  // If insertedLines is 1, we have to account for the autocompleteStart.ch
+  if (insertedLines.length === 1) {
+    to.ch += autocompleteStart.ch
+  }
+
+  // Then, insert the text, but with all variables replaced and only the
+  // tabstops remaining.
+  const actualTextToInsert = replaceSnippetVariables(snippet)
+  const actualInsertedLines = actualTextToInsert.split('\n').length
+  cm.replaceRange(actualTextToInsert, from, to)
+
+  // Now adapt the to to account for added newlines during replacement
+  to.line += actualInsertedLines - insertedLines.length
+
+  // If we are still dealing with just a single line, adapt `to.ch`
+  if (from.line === to.line) {
+    to.ch += actualTextToInsert.split('\n')[actualInsertedLines - 1].length - insertedLines[0].length
+    // Also substract the colon from ch, since that has been replaced above
+    to.ch--
+  } else {
+    to.ch = actualTextToInsert.split('\n')[actualInsertedLines - 1].length
+  }
+
+  // Now, we need to mark every tabstop within this section of text and
+  // store those text markers so that we can find them again by tabbing
+  // through them.
+  currentTabStops = getTabMarkers(cm, from, to)
+
+  // Now activate our special snippets keymap which will ensure the user can
+  // cycle through all placeholders which we have identified.
+  cm.addKeyMap(snippetsKeymap)
+
+  // Plus, move to the first tabstop already so the user can start immediately.
+  nextTabstop(cm)
 }
 
 /**
