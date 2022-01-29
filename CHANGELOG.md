@@ -3,6 +3,7 @@
 ## GUI and Functionality
 
 - Tags and keywords within a YAML frontmatter are now clickable
+- AutoCorrect values are no longer detected as spelling mistakes
 
 ## Under the Hood
 
