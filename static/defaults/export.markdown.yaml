@@ -1,0 +1,27 @@
+# ZETTLR DEFAULTS FILE
+# ====================
+# Conversion: Markdown --> Markdown
+# More info: https://pandoc.org/MANUAL.html
+# ====================
+# This export target can be used if you, for example, just want to render
+# the citations in your document. Helpful if you want to publish your text
+# on some platform that supports Markdown, but not all of Pandoc's features.
+# NOTE that Zettlr will output the file with the ending `.markdown` instead of
+# `.md`. This is by design to prevent you from accidentally overwriting your
+# current working file when exporting to the current directory.
+reader: markdown
+# The default `markdown`-writer will output Pandoc's Markdown which is less
+# compatible than the gfm (=GitHub Flavored Markdown) writer. Feel free to
+# change the following line to any writer that supports Markdown.
+writer: gfm+raw_html
+self-contained: false
+variables: {}
+metadata-files: []
+bibliography: []
+filters:
+- type: citeproc
+section-divs: true
+eol: lf
+strip-comments: false
+ascii: false
+fail-if-warnings: false

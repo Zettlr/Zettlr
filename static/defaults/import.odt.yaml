@@ -1,0 +1,11 @@
+# ZETTLR DEFAULTS FILE
+# ====================
+# Conversion: LibreOffice/OpenOffice --> Markdown
+# More info: https://pandoc.org/MANUAL.html
+reader: odt
+writer: markdown
+# Extract images etc. from the document into this directory
+extract-media: ./assets
+wrap: none
+# Set to setext to produce underlined h1 and h2
+markdown-headings: atx

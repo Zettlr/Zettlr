@@ -1,0 +1,62 @@
+name: Update static assets (CSL files, translations, revealJS builds)
+
+on:
+  push:
+    paths:
+      - '.github/workflows/refresh.yml'
+  schedule:
+    # Run on 1st and 15th of each month
+    - cron: '1 2 1,15 * *'
+
+jobs:
+  refresh:
+    name: Update static assets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+        with:
+          ref: develop
+      - name: Setup NodeJS 16
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16'
+      # The scripts require some modules that we need to install.
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Config git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+      # Update CSL files
+      - name: Update CSL files
+        run: |
+          yarn csl:refresh
+          git add -A
+          git diff-index --quiet HEAD || git commit -m "Update CSL files"
+      # Update translations
+      - name: Update translations
+        run: |
+          yarn lang:refresh
+          git add -A
+          git diff-index --quiet HEAD || git commit -m "Update translations"
+      # Update the reveal.js build
+      - name: Update reveal.js
+        run: |
+          yarn reveal:build
+          git add -A
+          git diff-index --quiet HEAD || git commit -m "Update reveal.js build"
+      # Update the CITATION.cff file if applicable
+      - name: Update CITATION.cff
+        run: |
+          yarn update:citation
+          git add -A
+          git diff-index --quiet HEAD || git commit -m "Update CITATION.cff"
+      # Test to make sure we don't break anything
+      - name: Test build
+        run: yarn test
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.5.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: develop

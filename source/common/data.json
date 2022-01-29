@@ -1,247 +1,36 @@
 {
     "filetypes": [
-        ".txt",
         ".md",
+        ".rmd",
         ".markdown",
+        ".txt",
         ".tex",
-        ".rmd"
+        ".mdx"
     ],
     "ignoreDirs": [
         "^\\.",
+        "^\\.git",
         ".+?\\.app",
         ".+?\\.textbundle"
     ],
-    "poll_time": 5000,
-    "repo_url": "https://api.zettlr.com/v1/releases/latest",
-    "sponsors_url": "https://api.zettlr.com/v1/sponsors",
-    "translation_api_url": "https://translate.zettlr.com/api/languages",
-    "additional_paths": {
-        "win32": [],
-        "linux": [
-            "/usr/bin"
-        ],
-        "macos": [
-            "/usr/local/bin",
-            "/Library/TeX/texbin"
-        ]
-    },
-    "attachmentExtensions": [
-      ".pdf",
-      ".odt",
-      ".odp",
-      ".ods",
-      ".doc",
-      ".docx",
-      ".xls",
-      ".xlsx",
-      ".ppt",
-      ".pptx",
-      ".do",
-      ".r",
-      ".py",
-      ".sav",
-      ".zsav",
-      ".csv",
-      ".png",
-      ".jpg",
-      ".jpeg",
-      ".gif",
-      ".tiff"
-    ],
     "import_files": [
-        [ "docbook",    "DocBook",                           ".docbook" ],
-        [ "docx",       "Microsoft Word",                    ".docx", ".doc" ],
-        [ "epub",       "EPUB",                              ".epub" ],
-        [ "haddock",    "Haddock",                           ".haddock" ],
-        [ "html",       "Hypertext Markup Language",         ".html", ".htm" ],
-        [ "latex",      "LaTeX",                             ".tex", ".latex" ],
-        [ "muse",       "Muse",                              ".muse" ],
-        [ "odt",        "Open Document Text",                ".odt" ],
-        [ "opml",       "Outline Processor Markup Language", ".opml" ],
-        [ "org",        "Emacs .org file",                   ".org" ],
-        [ "rst",        "reStructured Text",                 ".rst" ],
-        [ "t2t",        "txt2tags",                          ".t2t" ],
-        [ "textbundle", "TextBundle",                        ".textbundle" ],
-        [ "textile",    "Textile",                           ".textile" ],
-        [ "textpack",   "TextPack (Compressed TextBundle)",  ".textpack" ],
-        [ "vimwiki",    "VimWiki",                           ".wiki" ]
-    ],
-    "block_elements": [
-        "#",
-        "##",
-        "###",
-        "####",
-        "#####",
-        "######",
-        ">",
-        "*",
-        "-",
-        "1.",
-        "2.",
-        "3.",
-        "4.",
-        "5.",
-        "6.",
-        "7.",
-        "8.",
-        "9.",
-        "10.",
-        "11.",
-        "12.",
-        "13.",
-        "14.",
-        "15.",
-        "16.",
-        "17.",
-        "18.",
-        "19.",
-        "20."
-    ],
-    "papertypes": [
-        "a0paper",
-        "a1paper",
-        "a2paper",
-        "a3paper",
-        "a4paper",
-        "a5paper",
-        "a6paper",
-        "b0paper",
-        "b1paper",
-        "b2paper",
-        "b3paper",
-        "b4paper",
-        "b5paper",
-        "b6paper",
-        "c0paper",
-        "c1paper",
-        "c2paper",
-        "c3paper",
-        "c4paper",
-        "c5paper",
-        "c6paper",
-        "letterpaper",
-        "executivepaper",
-        "legalpaper"
-    ],
-    "papernames": {
-      "a0paper": "DIN A0",
-      "a1paper": "DIN A1",
-      "a2paper": "DIN A2",
-      "a3paper": "DIN A3",
-      "a4paper": "DIN A4",
-      "a5paper": "DIN A5",
-      "a6paper": "DIN A6",
-      "b0paper": "DIN B0",
-      "b1paper": "DIN B1",
-      "b2paper": "DIN B2",
-      "b3paper": "DIN B3",
-      "b4paper": "DIN B4",
-      "b5paper": "DIN B5",
-      "b6paper": "DIN B6",
-      "c0paper": "DIN C0",
-      "c1paper": "DIN C1",
-      "c2paper": "DIN C2",
-      "c3paper": "DIN C3",
-      "c4paper": "DIN C4",
-      "c5paper": "DIN C5",
-      "c6paper": "DIN C6",
-      "letterpaper": "Letter",
-      "executivepaper": "Executive",
-      "legalpaper": "Legal"
-    },
-    "events": [],
-    "highlightingModes": {
-      "text/javascript": {
-        "mode": "javascript",
-        "selectors": [ "javascript", "js", "node" ]
-      },
-      "application/json": {
-        "mode": "javascript",
-        "selectors": [ "json" ]
-      },
-      "text/typescript": {
-        "mode": "javascript",
-        "selectors": [ "typescript", "ts" ]
-      },
-      "text/x-csrc": {
-        "mode": "clike",
-        "selectors": [ "c" ]
-      },
-      "text/x-c++src": {
-        "mode": "clike",
-        "selectors": [ "c\\+\\+", "cpp" ]
-      },
-      "text/x-csharp": {
-        "mode": "clike",
-        "selectors": [ "c\\#", "csharp", "cs" ]
-      },
-      "text/x-java": {
-        "mode": "clike",
-        "selectors": [ "java" ]
-      },
-      "text/x-kotlin": {
-        "mode": "clike",
-        "selectors": [ "kotlin", "kt" ]
-      },
-      "text/x-objectivec": {
-        "mode": "clike",
-        "selectors": [ "objective-c", "objectivec", "objc" ]
-      },
-      "text/x-scala": {
-        "mode": "clike",
-        "selectors": [ "scala" ]
-      },
-      "text/css": {
-        "mode": "css",
-        "selectors": [ "css" ]
-      },
-      "text/x-scss": {
-        "mode": "css",
-        "selectors": [ "scss" ]
-      },
-      "text/x-less": {
-        "mode": "css",
-        "selectors": [ "less" ]
-      },
-      "text/x-php": {
-        "mode": "php",
-        "selectors": [ "php" ]
-      },
-      "text/x-python": {
-        "mode": "python",
-        "selectors": [ "python", "py" ]
-      },
-      "text/x-rsrc": {
-        "mode": "r",
-        "selectors": [ "r" ]
-      },
-      "text/x-ruby": {
-        "mode": "ruby",
-        "selectors": [ "ruby", "rb" ]
-      },
-      "text/x-sql": {
-        "mode": "sql",
-        "selectors": [ "sql" ]
-      },
-      "text/x-swift": {
-        "mode": "swift",
-        "selectors": [ "swift" ]
-      },
-      "text/x-sh": {
-        "mode": "shell",
-        "selectors": [ "shell", "sh", "bash" ]
-      },
-      "text/x-yaml": {
-        "mode": "yaml",
-        "selectors": [ "yaml", "yml" ]
-      },
-      "text/x-go": {
-        "mode": "go",
-        "selectors": [ "go" ]
-      },
-      "text/x-rustsrc": {
-        "mode": "rust",
-        "selectors": [ "rust", "rs" ]
-      }
-    }
+        [ "markdown",   "Markdown",                          "md", "markdown", "rmd", "mdx" ],
+        [ "txt",        "Text",                              "txt" ],
+        [ "docbook",    "DocBook",                           "docbook" ],
+        [ "docx",       "Microsoft Word",                    "docx", "doc" ],
+        [ "epub",       "EPUB",                              "epub" ],
+        [ "haddock",    "Haddock",                           "haddock" ],
+        [ "html",       "Hypertext Markup Language",         "html", "htm" ],
+        [ "latex",      "LaTeX",                             "tex", "latex" ],
+        [ "muse",       "Muse",                              "muse" ],
+        [ "odt",        "Open Document Text",                "odt" ],
+        [ "opml",       "Outline Processor Markup Language", "opml" ],
+        [ "org",        "Emacs .org file",                   "org" ],
+        [ "rst",        "reStructured Text",                 "rst" ],
+        [ "t2t",        "txt2tags",                          "t2t" ],
+        [ "textbundle", "TextBundle",                        "textbundle" ],
+        [ "textile",    "Textile",                           "textile" ],
+        [ "textpack",   "TextPack (Compressed TextBundle)",  "textpack" ],
+        [ "vimwiki",    "VimWiki",                           "wiki" ]
+    ]
 }

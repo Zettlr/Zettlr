@@ -1,0 +1,43 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Main Process",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/@electron-forge/cli/script/vscode.sh",
+      "windows": {
+        "runtimeExecutable": "${workspaceFolder}/node_modules/@electron-forge/cli/script/vscode.cmd"
+      },
+      "runtimeArgs": [
+        "--remote-debugging-port=9223",
+        "--data-dir=resources/test-cfg"
+      ]
+    },
+    {
+      "name": "Attach to Renderer Process",
+      "type": "chrome",
+      "request": "attach",
+      "port": 9223,
+      "webRoot": "${workspaceRoot}"
+    },
+    {
+      "name": "Run Tests For Current File",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+      "args": [
+        "-r ts-node/register",
+        "${file}"
+       ],
+       "cwd": "${workspaceRoot}"
+   }
+  ],
+  "compounds": [
+    {
+      "name": "Debug All",
+      "configurations": ["Debug Main Process", "Attach to Renderer Process"]
+    }
+  ]
+}

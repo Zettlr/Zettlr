@@ -1,0 +1,614 @@
+<?xml version="1.0" encoding="utf-8"?>
+<locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="ru-RU">
+  <info>
+    <translator>
+      <name>Alexei Kouprianov</name>
+      <email>alexei.kouprianov@gmail.com</email>
+    </translator>
+    <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
+    <updated>2012-07-04T23:31:02+00:00</updated>
+  </info>
+  <style-options punctuation-in-quote="false"/>
+  <date form="text">
+    <date-part name="day" suffix=" "/>
+    <date-part name="month" suffix=" "/>
+    <date-part name="year" suffix=" г."/>
+  </date>
+  <date form="numeric">
+    <date-part name="day" form="numeric-leading-zeros" suffix="."/>
+    <date-part name="month" form="numeric-leading-zeros" suffix="."/>
+    <date-part name="year"/>
+  </date>
+  <terms>
+    <term name="advance-online-publication">advance online publication</term>
+    <term name="album">album</term>
+    <term name="audio-recording">audio recording</term>
+    <term name="film">film</term>
+    <term name="henceforth">henceforth</term>
+    <term name="loc-cit">loc. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
+    <term name="no-place">no place</term>
+    <term name="no-place" form="short">n.p.</term>
+    <term name="no-publisher">no publisher</term> <!-- sine nomine -->
+    <term name="no-publisher" form="short">n.p.</term>
+    <term name="on">on</term>
+    <term name="op-cit">op. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
+    <term name="original-work-published">original work published</term>
+    <term name="personal-communication">личная переписка</term>
+    <term name="podcast">podcast</term>
+    <term name="podcast-episode">podcast episode</term>
+    <term name="preprint">preprint</term>
+    <term name="radio-broadcast">radio broadcast</term>
+    <term name="radio-series">radio series</term>
+    <term name="radio-series-episode">radio series episode</term>
+    <term name="special-issue">special issue</term>
+    <term name="special-section">special section</term>
+    <term name="television-broadcast">television broadcast</term>
+    <term name="television-series">television series</term>
+    <term name="television-series-episode">television series episode</term>
+    <term name="video">video</term>
+    <term name="working-paper">working paper</term>
+    <term name="accessed">просмотрено</term>
+    <term name="and">и</term>
+    <term name="and others">и др.</term>
+    <term name="anonymous">аноним</term>
+    <term name="anonymous" form="short">анон.</term>
+    <term name="at">на</term>
+    <term name="available at">доступно на</term>
+    <term name="by"></term>
+    <term name="circa">около</term>
+    <term name="circa" form="short">ок.</term>
+    <term name="cited">цитируется по</term>
+    <term name="cited" form="short">цит. по</term>
+    <term name="edition"> <!-- gender="neuter" -->
+      <single>издание</single>
+      <multiple>издания</multiple>
+    </term>
+    <term name="edition" form="short">изд.</term>
+    <term name="et-al">и др.</term>
+    <term name="forthcoming">ожидается</term>
+    <term name="from">от</term>
+    <term name="ibid">там же</term>
+    <term name="in">в</term>
+    <term name="in press">в печати</term>
+    <term name="internet">Интернет</term>
+    <term name="interview">интервью</term>
+    <term name="letter">письмо</term>
+    <term name="no date">без даты</term>
+    <term name="no date" form="short">б. д.</term>
+    <term name="online">онлайн</term>
+    <term name="presented at">представлено на</term>
+    <!-- Сложно подобрать один перевод для следующего термина. В зависимости от контекста это может быть "работа" или "источник" или вообще опускаться -->
+    <term name="reference">
+      <single>ссылка</single>
+      <multiple>ссылки</multiple>
+    </term>
+    <!-- сокращения для "ссылка" не используются, но для некоторых случаев может подойти "ист." -->
+    <term name="reference" form="short">
+      <single>ссылка</single>
+      <multiple>ссылки</multiple>
+    </term>
+    <term name="retrieved">извлечено</term>
+    <term name="scale">масштаб</term>
+    <term name="version">версия</term>
+
+    <!-- LONG ITEM TYPE FORMS -->
+    <term name="article">preprint</term>
+    <term name="article-journal">journal article</term>
+    <term name="article-magazine">magazine article</term>
+    <term name="article-newspaper">newspaper article</term>
+    <term name="bill">bill</term>
+    <term name="book">book</term>
+    <term name="broadcast">broadcast</term>
+    <term name="chapter">book chapter</term>
+    <term name="classic">classic</term>
+    <term name="collection">collection</term>
+    <term name="dataset">dataset</term>
+    <term name="document">document</term>
+    <term name="entry">entry</term>
+    <term name="entry-dictionary">dictionary entry</term>
+    <term name="entry-encyclopedia">encyclopedia entry</term>
+    <term name="event">event</term>
+    <!-- figure is in the list of locator terms -->
+    <term name="graphic">graphic</term>
+    <term name="hearing">hearing</term>
+    <term name="interview">interview</term>
+    <term name="legal_case">legal case</term>
+    <term name="legislation">legislation</term>
+    <term name="manuscript">manuscript</term>
+    <term name="map">map</term>
+    <term name="motion_picture">video recording</term>
+    <term name="musical_score">musical score</term>
+    <term name="pamphlet">pamphlet</term>
+    <term name="paper-conference">conference paper</term>
+    <term name="patent">patent</term>
+    <term name="performance">performance</term>
+    <term name="periodical">periodical</term>
+    <term name="personal_communication">личная переписка</term>
+    <term name="post">post</term>
+    <term name="post-weblog">blog post</term>
+    <term name="regulation">regulation</term>
+    <term name="report">report</term>
+    <term name="review">review</term>
+    <term name="review-book">book review</term>
+    <term name="software">software</term>
+    <term name="song">audio recording</term>
+    <term name="speech">presentation</term>
+    <term name="standard">standard</term>
+    <term name="thesis">thesis</term>
+    <term name="treaty">treaty</term>
+    <term name="webpage">webpage</term>
+
+    <!-- SHORT ITEM TYPE FORMS -->
+    <term name="article-journal" form="short">journal art.</term>
+    <term name="article-magazine" form="short">mag. art.</term>
+    <term name="article-newspaper" form="short">newspaper art.</term>
+    <term name="book" form="short">bk.</term>
+    <term name="chapter" form="short">bk. chap.</term>
+    <term name="document" form="short">doc.</term>
+    <!-- figure is in the list of locator terms -->
+    <term name="graphic" form="short">graph.</term>
+    <term name="interview" form="short">interv.</term>
+    <term name="manuscript" form="short">MS</term>
+    <term name="motion_picture" form="short">video rec.</term>
+    <term name="report" form="short">rep.</term>
+    <term name="review" form="short">rev.</term>
+    <term name="review-book" form="short">bk. rev.</term>
+    <term name="song" form="short">audio rec.</term>
+
+    <!-- HISTORICAL ERA TERMS -->
+    <term name="ad">н. э.</term>
+    <term name="bc">до н. э.</term>
+    <term name="bce">BCE</term>
+    <term name="ce">CE</term>
+
+    <!-- PUNCTUATION -->
+    <term name="open-quote">«</term>
+    <term name="close-quote">»</term>
+    <term name="open-inner-quote">„</term>
+    <term name="close-inner-quote">“</term>
+    <term name="page-range-delimiter">–</term>
+    <term name="colon">:</term>
+    <term name="comma">,</term>
+    <term name="semicolon">;</term>
+
+    <!-- ORDINALS -->
+    <term name="ordinal">-е</term>
+    <term name="ordinal" gender-form="masculine">-й</term>
+    <term name="ordinal" gender-form="feminine">-я</term>
+
+    <!-- LONG ORDINALS -->
+    <term name="long-ordinal-01">первое</term>
+    <term name="long-ordinal-02">второе</term>
+    <term name="long-ordinal-03">третье</term>
+    <term name="long-ordinal-04">четвертое</term>
+    <term name="long-ordinal-05">пятое</term>
+    <term name="long-ordinal-06">шестое</term>
+    <term name="long-ordinal-07">седьмое</term>
+    <term name="long-ordinal-08">восьмое</term>
+    <term name="long-ordinal-09">девятое</term>
+    <term name="long-ordinal-10">десятое</term>
+    <term name="long-ordinal-01" gender-form="masculine">первый</term>
+    <term name="long-ordinal-02" gender-form="masculine">второй</term>
+    <term name="long-ordinal-03" gender-form="masculine">третий</term>
+    <term name="long-ordinal-04" gender-form="masculine">четвертый</term>
+    <term name="long-ordinal-05" gender-form="masculine">пятый</term>
+    <term name="long-ordinal-06" gender-form="masculine">шестой</term>
+    <term name="long-ordinal-07" gender-form="masculine">седьмой</term>
+    <term name="long-ordinal-08" gender-form="masculine">восьмой</term>
+    <term name="long-ordinal-09" gender-form="masculine">девятый</term>
+    <term name="long-ordinal-10" gender-form="masculine">десятый</term>
+    <term name="long-ordinal-01" gender-form="feminine">первая</term>
+    <term name="long-ordinal-02" gender-form="feminine">вторая</term>
+    <term name="long-ordinal-03" gender-form="feminine">третья</term>
+    <term name="long-ordinal-04" gender-form="feminine">четвертая</term>
+    <term name="long-ordinal-05" gender-form="feminine">пятая</term>
+    <term name="long-ordinal-06" gender-form="feminine">шестая</term>
+    <term name="long-ordinal-07" gender-form="feminine">седьмая</term>
+    <term name="long-ordinal-08" gender-form="feminine">восьмая</term>
+    <term name="long-ordinal-09" gender-form="feminine">девятая</term>
+    <term name="long-ordinal-10" gender-form="feminine">десятая</term>
+    <!-- LONG LOCATOR FORMS -->
+    <term name="act">			 
+      <single>act</single>
+      <multiple>acts</multiple>						 
+    </term>
+    <term name="appendix">			 
+      <single>appendix</single>
+      <multiple>appendices</multiple>						 
+    </term>
+    <term name="article-locator">			 
+      <single>article</single>
+      <multiple>articles</multiple>						 
+    </term>
+    <term name="canon">			 
+      <single>canon</single>
+      <multiple>canons</multiple>						 
+    </term>
+    <term name="elocation">			 
+      <single>location</single>
+      <multiple>locations</multiple>						 
+    </term>
+    <term name="equation">			 
+      <single>equation</single>
+      <multiple>equations</multiple>						 
+    </term>
+    <term name="rule">			 
+      <single>rule</single>
+      <multiple>rules</multiple>						 
+    </term>
+    <term name="scene">			 
+      <single>scene</single>
+      <multiple>scenes</multiple>						 
+    </term>
+    <term name="table">			 
+      <single>table</single>
+      <multiple>tables</multiple>						 
+    </term>
+    <term name="timestamp"> <!-- generally blank -->
+      <single></single>
+      <multiple></multiple>						 
+    </term>
+    <term name="title-locator">			 
+      <single>title</single>
+      <multiple>titles</multiple>						 
+    </term>
+    <!-- Currently only a few of locator terms are gender-assignable -->
+    <term name="book">
+      <single>книга</single>
+      <multiple>книги</multiple>
+    </term>
+    <term name="chapter">
+      <single>глава</single>
+      <multiple>главы</multiple>
+    </term>
+    <term name="column">
+      <single>столбец</single>
+      <multiple>столбцы</multiple>
+    </term>
+    <term name="figure">
+      <single>рисунок</single>
+      <multiple>рисунки</multiple>
+    </term>
+    <term name="folio">
+      <single>лист</single>
+      <multiple>листы</multiple>
+    </term>
+    <term name="issue" gender="masculine">
+      <single>выпуск</single>
+      <multiple>выпуски</multiple>
+    </term>
+    <term name="line">
+      <single>строка</single>
+      <multiple>строки</multiple>
+    </term>
+    <term name="note">
+      <single>примечание</single>
+      <multiple>примечания</multiple>
+    </term>
+    <term name="opus">
+      <single>сочинение</single>
+      <multiple>сочинения</multiple>
+    </term>
+    <term name="page">
+      <single>страница</single>
+      <multiple>страницы</multiple>
+    </term>
+    <!-- для однообразности здесь тоже указали род, но использование кол-ва страниц с порядковым числительным маловероятно -->
+    <term name="number-of-pages" gender="feminine">
+      <single>страница</single>
+      <multiple>страницы</multiple>
+    </term>
+    <term name="paragraph">
+      <single>параграф</single>
+      <multiple>параграфы</multiple>
+    </term>
+    <term name="part">
+      <single>часть</single>
+      <multiple>части</multiple>
+    </term>
+    <term name="section">
+      <single>раздел</single>
+      <multiple>разделы</multiple>
+    </term>
+    <term name="sub-verbo">смотри</term>
+    <term name="verse">
+      <single>стих</single>
+      <multiple>стихи</multiple>
+    </term>
+    <term name="volume" gender="masculine">
+      <single>том</single>
+      <multiple>тома</multiple>
+    </term>
+
+    <!-- SHORT LOCATOR FORMS -->
+    <term name="appendix">			 
+      <single>app.</single>
+      <multiple>apps.</multiple>						 
+    </term>
+    <term name="article-locator">			 
+      <single>art.</single>
+      <multiple>arts.</multiple>
+    </term>
+    <term name="elocation">			 
+      <single>loc.</single>
+      <multiple>locs.</multiple>
+    </term>
+    <term name="equation">			 
+      <single>eq.</single>
+      <multiple>eqs.</multiple>
+    </term>
+    <term name="rule">			 
+      <single>r.</single>
+      <multiple>rr.</multiple>						 
+    </term>
+    <term name="scene">			 
+      <single>sc.</single>
+      <multiple>scs.</multiple>						 
+    </term>
+    <term name="table">			 
+      <single>tbl.</single>
+      <multiple>tbls.</multiple>						 
+    </term>
+    <term name="timestamp"> <!-- generally blank -->
+      <single></single>
+      <multiple></multiple>						 
+    </term>
+    <term name="title-locator">			 
+      <single>tit.</single>
+      <multiple>tits.</multiple>
+    </term>
+    <!-- Ниже для всех однобуквенных сокращений приведены двухбуквенные варианты множественного числа. Если последние нежелательны (например, по ГОСТу для библиографии "С. 23-35") то это должно определяться в самом стиле (plural="never") -->
+    <term name="book" form="short">кн.</term>
+    <term name="chapter" form="short">гл.</term>
+    <term name="column" form="short">стб.</term>
+    <term name="figure" form="short">рис.</term>
+    <term name="folio" form="short">
+      <single>л.</single>
+      <multiple>лл.</multiple>
+    </term>
+    <term name="issue" form="short">вып.</term>
+    <term name="line" form="short">стр.</term>
+    <term name="note" form="short">прим.</term>
+    <term name="opus" form="short">соч.</term>
+    <term name="page" form="short">
+      <single>с.</single>
+      <multiple>сс.</multiple>
+    </term>
+    <term name="number-of-pages" form="short">
+      <single>с.</single>
+      <multiple>сс.</multiple>
+    </term>
+    <term name="paragraph" form="short">
+      <single>п.</single>
+      <multiple>пп.</multiple>
+    </term>
+    <term name="part" form="short">
+      <single>ч.</single>
+      <multiple>чч.</multiple>
+    </term>
+    <term name="section" form="short">разд.</term>
+    <term name="sub-verbo" form="short">см.</term>
+    <term name="verse" form="short">ст.</term>
+    <term name="volume" form="short">
+      <single>т.</single>
+      <multiple>тт.</multiple>
+    </term>
+
+    <!-- SYMBOL LOCATOR FORMS -->
+    <term name="paragraph" form="symbol">
+      <single>¶</single>
+      <multiple>¶¶</multiple>
+    </term>
+    <term name="section" form="symbol">
+      <single>§</single>
+      <multiple>§§</multiple>
+    </term>
+
+    <!-- LONG ROLE FORMS -->
+    <term name="chair">
+      <single>chair</single>
+      <multiple>chairs</multiple>
+    </term>
+    <term name="compiler">
+      <single>compiler</single>
+      <multiple>compilers</multiple>
+    </term>
+    <term name="contributor">
+      <single>contributor</single>
+      <multiple>contributors</multiple>
+    </term>
+    <term name="curator">
+      <single>curator</single>
+      <multiple>curators</multiple>
+    </term>
+    <term name="executive-producer">
+      <single>executive producer</single>
+      <multiple>executive producers</multiple>
+    </term>
+    <term name="guest">
+      <single>guest</single>
+      <multiple>guests</multiple>
+    </term>
+    <term name="host">
+      <single>host</single>
+      <multiple>hosts</multiple>
+    </term>
+    <term name="narrator">
+      <single>narrator</single>
+      <multiple>narrators</multiple>
+    </term>
+    <term name="organizer">
+      <single>organizer</single>
+      <multiple>organizers</multiple>
+    </term>
+    <term name="performer">
+      <single>performer</single>
+      <multiple>performers</multiple>
+    </term>
+    <term name="producer">
+      <single>producer</single>
+      <multiple>producers</multiple>
+    </term>
+    <term name="script-writer">
+      <single>writer</single>
+      <multiple>writers</multiple>
+    </term>
+    <term name="series-creator">
+      <single>series creator</single>
+      <multiple>series creators</multiple>
+    </term>
+    <term name="director">
+      <single>режиссер</single>
+      <multiple>режиссеры</multiple>
+    </term>
+    <term name="editor">
+      <single>редактор</single>
+      <multiple>редакторы</multiple>
+    </term>
+    <term name="editorial-director">
+      <single>ответственный редактор</single>
+      <multiple>ответственные редакторы</multiple>
+    </term>
+    <term name="illustrator">
+      <single>иллюстратор</single>
+      <multiple>иллюстраторы</multiple>
+    </term>
+    <term name="translator">
+      <single>переводчик</single>
+      <multiple>переводчики</multiple>
+    </term>
+    <term name="editortranslator">
+      <single>редактор и переводчик</single>
+      <multiple>редакторы и переводчики</multiple>
+    </term>
+
+    <!-- SHORT ROLE FORMS -->
+    <term name="compiler" form="short">
+      <single>comp.</single>
+      <multiple>comps.</multiple>
+    </term>
+    <term name="contributor" form="short">
+      <single>contrib.</single>
+      <multiple>contribs.</multiple>
+    </term>
+    <term name="curator" form="short">
+      <single>cur.</single>
+      <multiple>curs.</multiple>
+    </term>
+    <term name="executive-producer" form="short">
+      <single>exec. prod.</single>
+      <multiple>exec. prods.</multiple>
+    </term>
+    <term name="narrator" form="short">
+      <single>narr.</single>
+      <multiple>narrs.</multiple>
+    </term>
+    <term name="organizer" form="short">
+      <single>org.</single>
+      <multiple>orgs.</multiple>
+    </term>
+    <term name="performer" form="short">
+      <single>perf.</single>
+      <multiple>perfs.</multiple>
+    </term>
+    <term name="producer" form="short">
+      <single>prod.</single>
+      <multiple>prods.</multiple>
+    </term>
+    <term name="script-writer" form="short">
+      <single>writ.</single>
+      <multiple>writs.</multiple>
+    </term>
+    <term name="series-creator" form="short">
+      <single>cre.</single>
+      <multiple>cres.</multiple>
+    </term>
+    <term name="director" form="short">реж.</term>
+    <term name="editor" form="short">ред.</term>
+    <term name="editorial-director" form="short">отв. ред.</term>
+    <term name="illustrator" form="short">ил.</term>
+    <term name="translator" form="short">пер.</term>
+    <term name="editortranslator" form="short">ред. и пер.</term>
+
+    <!-- VERB ROLE FORMS -->
+    <term name="chair" form="verb">chaired by</term>
+    <term name="compiler" form="verb">compiled by</term>
+    <term name="contributor" form="verb">with</term>
+    <term name="curator" form="verb">curated by</term>
+    <term name="executive-producer" form="verb">executive produced by</term>
+    <term name="guest" form="verb">with guest</term>
+    <term name="host" form="verb">hosted by</term>
+    <term name="narrator" form="verb">narrated by</term>
+    <term name="organizer" form="verb">organized by</term>
+    <term name="performer" form="verb">performed by</term>
+    <term name="producer" form="verb">produced by</term>
+    <term name="script-writer" form="verb">written by</term>
+    <term name="series-creator" form="verb">created by</term>
+    <!-- В этом и следующем разделе приведены наиболее широко используемые термины (например, "под редакцией" вместо "отредактировано"). Единственным недостатком является то, что разные термины требует разного падежа для последующих фамилий -->
+    <term name="container-author" form="verb"></term>
+    <term name="director" form="verb">режиссировано</term>
+    <term name="editor" form="verb">под редакцией</term>
+    <term name="editorial-director" form="verb">под ответственной редакцией</term>
+    <term name="illustrator" form="verb">иллюстрировано</term>
+    <term name="interviewer" form="verb">интервью проведено</term>
+    <term name="recipient" form="verb">к</term>
+    <term name="reviewed-author" form="verb"></term>
+    <term name="translator" form="verb">переведено</term>
+    <term name="editortranslator" form="verb">под редакцией и переведено</term>
+
+    <!-- SHORT VERB ROLE FORMS -->
+    <term name="compiler" form="verb-short">comp. by</term>
+    <term name="contributor" form="verb-short">w.</term>
+    <term name="curator" form="verb-short">cur. by</term>
+    <term name="executive-producer" form="verb-short">exec. prod. by</term>
+    <term name="guest" form="verb-short">w. guest</term>
+    <term name="host" form="verb-short">hosted by</term>
+    <term name="narrator" form="verb-short">narr. by</term>
+    <term name="organizer" form="verb-short">org. by</term>
+    <term name="performer" form="verb-short">perf. by</term>
+    <term name="producer" form="verb-short">prod. by</term>
+    <term name="script-writer" form="verb-short">writ. by</term>
+    <term name="series-creator" form="verb-short">cre. by</term>
+    <term name="director" form="verb-short">реж.</term>
+    <term name="editor" form="verb-short">под ред.</term>
+    <term name="editorial-director" form="verb-short">под отв. ред.</term>
+    <term name="illustrator" form="verb-short">ил.</term>
+    <term name="translator" form="verb-short">пер.</term>
+    <term name="editortranslator" form="verb-short">под ред. и пер.</term>
+
+    <!-- LONG MONTH FORMS -->
+    <!-- род месяцев не указываем, поскольку даже если использовать порядковые числительные в дате, то они должны соответствовать среднему роду, например "второе февраля" -->
+    <term name="month-01">январь</term>
+    <term name="month-02">февраль</term>
+    <term name="month-03">март</term>
+    <term name="month-04">апрель</term>
+    <term name="month-05">май</term>
+    <term name="month-06">июнь</term>
+    <term name="month-07">июль</term>
+    <term name="month-08">август</term>
+    <term name="month-09">сентябрь</term>
+    <term name="month-10">октябрь</term>
+    <term name="month-11">ноябрь</term>
+    <term name="month-12">декабрь</term>
+
+    <!-- SHORT MONTH FORMS -->
+    <term name="month-01" form="short">янв.</term>
+    <term name="month-02" form="short">фев.</term>
+    <term name="month-03" form="short">мар.</term>
+    <term name="month-04" form="short">апр.</term>
+    <term name="month-05" form="short">май</term>
+    <term name="month-06" form="short">июн.</term>
+    <term name="month-07" form="short">июл.</term>
+    <term name="month-08" form="short">авг.</term>
+    <term name="month-09" form="short">сен.</term>
+    <term name="month-10" form="short">окт.</term>
+    <term name="month-11" form="short">ноя.</term>
+    <term name="month-12" form="short">дек.</term>
+
+    <!-- SEASONS -->
+    <term name="season-01">весна</term>
+    <term name="season-02">лето</term>
+    <term name="season-03">осень</term>
+    <term name="season-04">зима</term>
+  </terms>
+</locale>

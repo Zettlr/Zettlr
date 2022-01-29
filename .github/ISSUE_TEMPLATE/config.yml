@@ -1,0 +1,12 @@
+# I can see that for some issues we'll need that
+blank_issues_enabled: true
+contact_links:
+  - name: Discuss Your Feature Ideas (on Reddit)
+    url: https://www.reddit.com/r/Zettlr
+    about: Before actually requesting a new feature, make sure to discuss it with fellow users first.
+  - name: Discuss Your Feature Ideas (on GitHub Discussions)
+    url: https://github.com/Zettlr/Zettlr/discussions
+    about: Before actually requesting a new feature, make sure to discuss it with fellow users first.
+  - name: Discuss Your Feature Ideas (on Discord)
+    url: https://discord.gg/PcfS3DM9Xj
+    about: Before actually requesting a new feature, make sure to discuss it with fellow users first.

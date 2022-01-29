@@ -4,26 +4,37 @@ const fs = require('fs')
 const path = require('path')
 const log = require('./console-colour.js')
 
-const targetDir = path.join(__dirname, '../source/common/lang')
+const targetDir = path.join(__dirname, '../static/lang')
 
-const bcp47 = [
-  'de-DE',
-  'en-GB',
-  'en-US',
-  'fr-FR'
-]
+got('https://translate.zettlr.com/api/languages')
+  .then((response) => {
+    const languages = JSON.parse(response.body)
 
-log.info(`Refreshing language files for ${bcp47.join(', ')} ...`)
+    for (const language of languages) {
+      log.info(`Downloading language ${language.bcp47} (${language.completion}%, updated ${language.updated_at.split('T')[0]})`)
 
-for (let lang of bcp47) {
-  got(`https://translate.zettlr.com/download/${lang}.json`).then((data) => {
-    log.success(`${lang} successfully downloaded!`)
-    // Write to file
-    fs.writeFile(path.join(targetDir, lang + '.json'), data.body, 'utf8', (err) => {
-      if (err) return log.error(err)
-      log.success(`${lang} successfully written to file!`)
-    })
-  }).catch((err) => {
-    if (err) log.error(err)
+      got(language.download_url)
+        .then((data) => {
+          log.success(`${language.bcp47} successfully downloaded!`)
+          // Write to file
+          fs.writeFile(path.join(targetDir, language.bcp47 + '.json'), data.body, 'utf8', (err) => {
+            if (err) {
+              log.error(err)
+              // We have to exit the process with an
+              // error signal for correct behaviour on CI
+              process.exit(1)
+            }
+            log.success(`${language.bcp47} successfully written to file!`)
+          })
+        }).catch((err) => {
+          log.error(err)
+          // We have to exit the process with an
+          // error signal for correct behaviour on CI
+          process.exit(1)
+        })
+    }
   })
-}
+  .catch((err) => {
+    log.error(err)
+    process.exit(1)
+  })

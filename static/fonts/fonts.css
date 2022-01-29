@@ -1,0 +1,72 @@
+/* Crimson */
+@font-face {
+    font-family: 'Crimson';
+    src: url(CrimsonText-Regular.woff2) format('woff2');
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'Crimson';
+    src: url(CrimsonText-RegularItalic.woff2) format('woff2');
+    font-style: italic;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'Crimson';
+    src: url(CrimsonText-Bold.woff2) format('woff2');
+    font-style: normal;
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'Crimson';
+    src: url(CrimsonText-BoldItalic.woff2) format('woff2');
+    font-style: italic;
+    font-weight: bold;
+}
+
+/* Liberation Mono */
+@font-face {
+    font-family: 'Liberation Mono';
+    src: url(LiberationMono-Regular.woff) format('woff');
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'Liberation Mono';
+    src: url(LiberationMono-Italic.woff) format('woff');
+    font-style: italic;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'Liberation Mono';
+    src: url(LiberationMono-Bold.woff) format('woff');
+    font-style: normal;
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'Liberation Mono';
+    src: url(LiberationMono-BoldItalic.woff) format('woff');
+    font-style: italic;
+    font-weight: bold;
+}
+
+/* Inconsolata */
+@font-face {
+    font-family: 'Inconsolata';
+    src: url(Inconsolata.woff) format('woff');
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'Inconsolata';
+    src: url(Inconsolata-Bold.woff) format('woff');
+    font-style: normal;
+    font-weight: bold;
+}

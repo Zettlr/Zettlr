@@ -1,0 +1,106 @@
+# Electron Builder configuration file: Directs Electron builder to produce
+# packages for our officially supported distributions.
+#
+# Formerly the "build" key in the package.json.
+appId: com.zettlr.app
+productName: Zettlr
+npmRebuild: false
+copyright: Zettlr is licensed under GNU GPL v3.
+fileAssociations:
+- ext: md
+  name: Markdown
+  description: Markdown document
+  mimeType: text/markdown
+  role: Editor
+  isPackage: false
+- ext: markdown
+  name: Markdown
+  description: Markdown document
+  mimeType: text/markdown
+  role: Editor
+  isPackage: false
+- ext: rmd
+  name: RMarkdown
+  description: RMarkdown document
+  mimeType: text/markdown
+  role: Editor
+  isPackage: false
+directories:
+  output: release
+#
+# Generic macOS options
+#
+mac:
+  category: "public.app-category.productivity"
+  target:
+  - dmg
+  artifactName: "Zettlr-${version}-${arch}.${ext}"
+  icon: "./resources/icons/icon.icns"
+  darkModeSupport: true
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: "./scripts/assets/entitlements.plist"
+  entitlementsInherit: "./scripts/assets/entitlements.plist"
+#
+# Generic Windows options
+#
+win:
+  target:
+  - nsis
+  artifactName: "Zettlr-${version}-${arch}.${ext}"
+  icon: "./resources/icons/icon.ico"
+#
+# Generic Linux options
+#
+linux:
+  target:
+  - AppImage
+  - deb
+  - rpm
+  - zip
+  artifactName: "Zettlr-${version}-${arch}.${ext}"
+  executableName: Zettlr
+  synopsis: Markdown editor
+  category: Office
+  icon: "./resources/icons/png"
+  desktop:
+    StartupWMClass: zettlr
+#
+# Configuration for DMG builds
+#
+dmg:
+  background: "./resources/icons/dmg/dmg_back.tiff"
+  icon: "./resources/icons/icon.icns"
+  contents:
+  - x: 130
+    y: 220
+  - x: 410
+    y: 220
+    type: link
+    path: "/Applications"
+  window:
+    width: 540
+    height: 400
+#
+# Configuration for NSIS builds
+#
+nsis:
+  oneClick: false
+  perMachine: false
+  allowElevation: true
+  allowToChangeInstallationDirectory: true
+  uninstallDisplayName: ${productName}
+  installerHeader: "./resources/NSIS/NSISinstallerHeader.bmp"
+  installerSidebar: "./resources/NSIS/NSISinstallerSidebar.bmp"
+  license: ./LICENSE
+#
+# Configuration for Debian builds
+#
+deb:
+  priority: optional
+  compression: xz
+#
+# Configuration for Fedora builds
+#
+rpm:
+  compression: xz

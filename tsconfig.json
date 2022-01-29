@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",
+    "allowJs": true,
+    "module": "commonjs",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "strict": true,
+    // Do not enforce strict property initialization. This allows us to init
+    // states in classes by calling an init-function rather than doing it
+    // manually, which is helpful for classes in which we need to reset the
+    // state sometimes, so we can save some code.
+    "strictPropertyInitialization": false,
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "downlevelIteration": true,
+    "baseUrl": ".",
+    "paths": {
+      "@common/*": ["source/common/*"],
+      "@providers/*": ["source/app/service-providers/*"],
+      "@dts/*": ["source/types/*"]
+    }
+  },
+  "include": [
+    "source/**/*",
+    "test/**/*",
+    "forge.config.js",
+    "webpack.*.js"
+  ],
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  }
+}

@@ -1,0 +1,658 @@
+<?xml version="1.0" encoding="utf-8"?>
+<locale xmlns="http://purl.org/net/xbiblio/csl" version="1.0" xml:lang="lv-LV">
+  <info>
+    <translator>
+      <name>Andris Lupgins</name>
+    </translator>
+    <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
+    <updated>2012-12-27T11:40:58+02:00</updated>
+  </info>
+  <style-options punctuation-in-quote="false"/>
+  <date form="text" delimiter=" ">
+    <!-- "2012. gada 28. martā" -->
+    <date-part name="year" suffix=". gada"/>
+    <date-part name="day" form="numeric" suffix="."/>
+    <date-part name="month"/>
+  </date>
+  <date form="numeric" delimiter=".">
+    <!-- "28.03.2012." -->
+    <date-part name="day" form="numeric"/>
+    <date-part name="month" form="numeric"/>
+    <date-part name="year"/>
+  </date>
+  <terms>
+    <term name="advance-online-publication">advance online publication</term>
+    <term name="album">album</term>
+    <term name="audio-recording">audio recording</term>
+    <term name="film">film</term>
+    <term name="henceforth">henceforth</term>
+    <term name="loc-cit">loc. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
+    <term name="no-place">no place</term>
+    <term name="no-place" form="short">n.p.</term>
+    <term name="no-publisher">no publisher</term> <!-- sine nomine -->
+    <term name="no-publisher" form="short">n.p.</term>
+    <term name="on">on</term>
+    <term name="op-cit">op. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
+    <term name="original-work-published">original work published</term>
+    <term name="personal-communication">personīga komunikācija</term>
+    <term name="podcast">podcast</term>
+    <term name="podcast-episode">podcast episode</term>
+    <term name="preprint">preprint</term>
+    <term name="radio-broadcast">radio broadcast</term>
+    <term name="radio-series">radio series</term>
+    <term name="radio-series-episode">radio series episode</term>
+    <term name="special-issue">special issue</term>
+    <term name="special-section">special section</term>
+    <term name="television-broadcast">television broadcast</term>
+    <term name="television-series">television series</term>
+    <term name="television-series-episode">television series episode</term>
+    <term name="video">video</term>
+    <term name="working-paper">working paper</term>
+    <term name="accessed">skatīts</term>
+    <term name="ad">m.ē.</term>
+    <term name="and">un</term>
+    <term name="and others">un citi</term>
+    <term name="anonymous">anonīms</term>
+    <term name="anonymous" form="short">anon.</term>
+    <term name="at"></term>
+    <term name="available at">pieejams</term>
+    <term name="bc">p.m.ē.</term>
+    <term name="by"></term>
+    <term name="circa">apmēram</term>
+    <term name="circa" form="short">apm.</term>
+    <term name="cited">citēts</term>
+    <term name="edition" gender="feminine">
+      <single>redakcija</single>
+      <multiple>redakcijas</multiple>
+    </term>
+    <term name="edition" form="short">red.</term>
+    <term name="et-al">u.c.</term>
+    <term name="forthcoming">gaidāms</term>
+    <term name="from">no</term>
+    <term name="ibid">turpat</term>
+    <term name="in">no</term>
+    <term name="in press">presē</term>
+    <term name="internet">internets</term>
+    <term name="interview">intervija</term>
+    <term name="letter">vēstule</term>
+    <term name="no date">bez datuma</term>
+    <term name="no date" form="short">b.g.</term>
+    <term name="online">tiešsaiste</term>
+    <term name="presented at">iesniegts</term>
+    <term name="reference">
+      <single>atsauce</single>
+      <multiple>atsauces</multiple>
+    </term>
+    <term name="reference" form="short">
+      <single>ats.</single>
+      <multiple>ats.</multiple>
+    </term>
+    <term name="retrieved">iegūts</term>
+    <term name="scale">mērogs</term>
+    <term name="version">versija</term>
+
+    <!-- LONG ITEM TYPE FORMS -->
+    <term name="article">preprint</term>
+    <term name="article-journal">journal article</term>
+    <term name="article-magazine">magazine article</term>
+    <term name="article-newspaper">newspaper article</term>
+    <term name="bill">bill</term>
+    <term name="book">book</term>
+    <term name="broadcast">broadcast</term>
+    <term name="chapter">book chapter</term>
+    <term name="classic">classic</term>
+    <term name="collection">collection</term>
+    <term name="dataset">dataset</term>
+    <term name="document">document</term>
+    <term name="entry">entry</term>
+    <term name="entry-dictionary">dictionary entry</term>
+    <term name="entry-encyclopedia">encyclopedia entry</term>
+    <term name="event">event</term>
+    <!-- figure is in the list of locator terms -->
+    <term name="graphic">graphic</term>
+    <term name="hearing">hearing</term>
+    <term name="interview">interview</term>
+    <term name="legal_case">legal case</term>
+    <term name="legislation">legislation</term>
+    <term name="manuscript">manuscript</term>
+    <term name="map">map</term>
+    <term name="motion_picture">video recording</term>
+    <term name="musical_score">musical score</term>
+    <term name="pamphlet">pamphlet</term>
+    <term name="paper-conference">conference paper</term>
+    <term name="patent">patent</term>
+    <term name="performance">performance</term>
+    <term name="periodical">periodical</term>
+    <term name="personal_communication">personīga komunikācija</term>
+    <term name="post">post</term>
+    <term name="post-weblog">blog post</term>
+    <term name="regulation">regulation</term>
+    <term name="report">report</term>
+    <term name="review">review</term>
+    <term name="review-book">book review</term>
+    <term name="software">software</term>
+    <term name="song">audio recording</term>
+    <term name="speech">presentation</term>
+    <term name="standard">standard</term>
+    <term name="thesis">thesis</term>
+    <term name="treaty">treaty</term>
+    <term name="webpage">webpage</term>
+
+    <!-- SHORT ITEM TYPE FORMS -->
+    <term name="article-journal" form="short">journal art.</term>
+    <term name="article-magazine" form="short">mag. art.</term>
+    <term name="article-newspaper" form="short">newspaper art.</term>
+    <term name="book" form="short">bk.</term>
+    <term name="chapter" form="short">bk. chap.</term>
+    <term name="document" form="short">doc.</term>
+    <!-- figure is in the list of locator terms -->
+    <term name="graphic" form="short">graph.</term>
+    <term name="interview" form="short">interv.</term>
+    <term name="manuscript" form="short">MS</term>
+    <term name="motion_picture" form="short">video rec.</term>
+    <term name="report" form="short">rep.</term>
+    <term name="review" form="short">rev.</term>
+    <term name="review-book" form="short">bk. rev.</term>
+    <term name="song" form="short">audio rec.</term>
+
+    <!-- HISTORICAL ERA TERMS -->
+    <term name="ad">AD</term>
+    <term name="bc">BC</term>
+    <term name="bce">BCE</term>
+    <term name="ce">CE</term>
+
+    <!-- PUNCTUATION -->
+    <term name="open-quote">"</term>
+    <term name="close-quote">"</term>
+    <term name="open-inner-quote">"</term>
+    <term name="close-inner-quote">"</term>
+    <term name="page-range-delimiter">–</term>
+    <term name="colon">:</term>
+    <term name="comma">,</term>
+    <term name="semicolon">;</term>
+
+    <!-- ORDINALS -->
+    <term name="ordinal">-ais</term>
+    <term name="ordinal" gender-form="feminine">-ā</term>
+    
+    <!-- LONG ORDINALS -->
+    <term name="long-ordinal-01">pirmais</term>
+    <term name="long-ordinal-02">otrais</term>
+    <term name="long-ordinal-03">trešais</term>
+    <term name="long-ordinal-04">ceturtais</term>
+    <term name="long-ordinal-05">piektais</term>
+    <term name="long-ordinal-06">sestais</term>
+    <term name="long-ordinal-07">septītais</term>
+    <term name="long-ordinal-08">astotais</term>
+    <term name="long-ordinal-09">devītais</term>
+    <term name="long-ordinal-10">desmitais</term>
+
+    <term name="long-ordinal-01" gender-form="feminine">pirmā</term>
+    <term name="long-ordinal-02" gender-form="feminine">otrā</term>
+    <term name="long-ordinal-03" gender-form="feminine">trešā</term>
+    <term name="long-ordinal-04" gender-form="feminine">ceturtā</term>
+    <term name="long-ordinal-05" gender-form="feminine">piektā</term>
+    <term name="long-ordinal-06" gender-form="feminine">sestā</term>
+    <term name="long-ordinal-07" gender-form="feminine">septītā</term>
+    <term name="long-ordinal-08" gender-form="feminine">astotā</term>
+    <term name="long-ordinal-09" gender-form="feminine">devītā</term>
+    <term name="long-ordinal-10" gender-form="feminine">desmitā</term>
+
+    <!-- LONG LOCATOR FORMS -->
+    <term name="act">			 
+      <single>act</single>
+      <multiple>acts</multiple>						 
+    </term>
+    <term name="appendix">			 
+      <single>appendix</single>
+      <multiple>appendices</multiple>						 
+    </term>
+    <term name="article-locator">			 
+      <single>article</single>
+      <multiple>articles</multiple>						 
+    </term>
+    <term name="canon">			 
+      <single>canon</single>
+      <multiple>canons</multiple>						 
+    </term>
+    <term name="elocation">			 
+      <single>location</single>
+      <multiple>locations</multiple>						 
+    </term>
+    <term name="equation">			 
+      <single>equation</single>
+      <multiple>equations</multiple>						 
+    </term>
+    <term name="rule">			 
+      <single>rule</single>
+      <multiple>rules</multiple>						 
+    </term>
+    <term name="scene">			 
+      <single>scene</single>
+      <multiple>scenes</multiple>						 
+    </term>
+    <term name="table">			 
+      <single>table</single>
+      <multiple>tables</multiple>						 
+    </term>
+    <term name="timestamp"> <!-- generally blank -->
+      <single></single>
+      <multiple></multiple>						 
+    </term>
+    <term name="title-locator">			 
+      <single>title</single>
+      <multiple>titles</multiple>						 
+    </term>
+    <term name="book">
+      <single>grāmata</single>
+      <multiple>grāmatas</multiple>
+    </term>
+    <term name="chapter">
+      <single>nodaļa</single>
+      <multiple>nodaļas</multiple>
+    </term>
+    <term name="column">
+      <single>sleja</single>
+      <multiple>slejas</multiple>
+    </term>
+    <term name="figure">
+      <single>ilustrācija</single>
+      <multiple>ilustrācijas</multiple>
+    </term>
+    <term name="folio">
+      <single>folio</single>
+      <multiple>folio</multiple>
+    </term>
+    <term name="issue">
+      <single>numurs</single>
+      <multiple>numuri</multiple>
+    </term>
+    <term name="line">
+      <single>rinda</single>
+      <multiple>rindas</multiple>
+    </term>
+    <term name="note">
+      <single>piezīme</single>
+      <multiple>piezīmes</multiple>
+    </term>
+    <term name="opus">
+      <single>opuss</single>
+      <multiple>opusi</multiple>
+    </term>
+    <term name="page">
+      <single>lappuse</single>
+      <multiple>lappuses</multiple>
+    </term>
+    <term name="number-of-pages">
+      <single>lappuse</single>
+      <multiple>lappuses</multiple>
+    </term>
+    <term name="paragraph">
+      <single>rindkopa</single>
+      <multiple>rindkopas</multiple>
+    </term>
+    <term name="part">
+      <single>daļa</single>
+      <multiple>daļas</multiple>
+    </term>
+    <term name="section">
+      <single>apakšnodaļa</single>
+      <multiple>apakšnodaļas</multiple>
+    </term>
+    <term name="sub-verbo">
+      <single>skatīt</single>
+      <multiple>skatīt</multiple>
+    </term>
+    <term name="verse">
+      <single>pants</single>
+      <multiple>panti</multiple>
+    </term>
+    <term name="volume">
+      <single>sējums</single>
+      <multiple>sējumi</multiple>
+    </term>
+    
+    <!-- SHORT LOCATOR FORMS -->
+    <term name="appendix">			 
+      <single>app.</single>
+      <multiple>apps.</multiple>						 
+    </term>
+    <term name="article-locator">			 
+      <single>art.</single>
+      <multiple>arts.</multiple>
+    </term>
+    <term name="elocation">			 
+      <single>loc.</single>
+      <multiple>locs.</multiple>
+    </term>
+    <term name="equation">			 
+      <single>eq.</single>
+      <multiple>eqs.</multiple>
+    </term>
+    <term name="rule">			 
+      <single>r.</single>
+      <multiple>rr.</multiple>						 
+    </term>
+    <term name="scene">			 
+      <single>sc.</single>
+      <multiple>scs.</multiple>						 
+    </term>
+    <term name="table">			 
+      <single>tbl.</single>
+      <multiple>tbls.</multiple>						 
+    </term>
+    <term name="timestamp"> <!-- generally blank -->
+      <single></single>
+      <multiple></multiple>						 
+    </term>
+    <term name="title-locator">			 
+      <single>tit.</single>
+      <multiple>tits.</multiple>
+    </term>
+    <term name="book" form="short">grām.</term>
+    <term name="chapter" form="short">nod.</term>
+    <term name="column" form="short">sl.</term>
+    <term name="figure" form="short">il.</term>
+    <term name="folio" form="short">fo.</term>
+    <term name="issue" form="short">nr.</term>
+    <term name="line" form="short">r.</term>
+    <term name="note" form="short">piez.</term>
+    <term name="opus" form="short">op.</term>
+    <term name="page" form="short">
+      <single>lpp.</single>
+      <multiple>lpp.</multiple>
+    </term>
+    <term name="number-of-pages" form="short">
+      <single>lpp.</single>
+      <multiple>lpp.</multiple>
+    </term>
+    <term name="paragraph" form="short">rindk.</term>
+    <term name="part" form="short">d.</term>
+    <term name="section" form="short">apakšnod.</term>
+    <term name="sub-verbo" form="short">
+      <single>sk.</single>
+      <multiple>sk.</multiple>
+    </term>
+    <term name="verse" form="short">
+      <single>p.</single>
+      <multiple>p.</multiple>
+    </term>
+    <term name="volume" form="short">
+      <single>sēj.</single>
+      <multiple>sēj.</multiple>
+    </term>
+
+    <!-- SYMBOL LOCATOR FORMS -->
+    <term name="paragraph" form="symbol">
+      <single>¶</single>
+      <multiple>¶¶</multiple>
+    </term>
+    <term name="section" form="symbol">
+      <single>§</single>
+      <multiple>§§</multiple>
+    </term>
+
+    <!-- LONG ROLE FORMS -->
+    <term name="chair">
+      <single>chair</single>
+      <multiple>chairs</multiple>
+    </term>
+    <term name="compiler">
+      <single>compiler</single>
+      <multiple>compilers</multiple>
+    </term>
+    <term name="contributor">
+      <single>contributor</single>
+      <multiple>contributors</multiple>
+    </term>
+    <term name="curator">
+      <single>curator</single>
+      <multiple>curators</multiple>
+    </term>
+    <term name="executive-producer">
+      <single>executive producer</single>
+      <multiple>executive producers</multiple>
+    </term>
+    <term name="guest">
+      <single>guest</single>
+      <multiple>guests</multiple>
+    </term>
+    <term name="host">
+      <single>host</single>
+      <multiple>hosts</multiple>
+    </term>
+    <term name="narrator">
+      <single>narrator</single>
+      <multiple>narrators</multiple>
+    </term>
+    <term name="organizer">
+      <single>organizer</single>
+      <multiple>organizers</multiple>
+    </term>
+    <term name="performer">
+      <single>performer</single>
+      <multiple>performers</multiple>
+    </term>
+    <term name="producer">
+      <single>producer</single>
+      <multiple>producers</multiple>
+    </term>
+    <term name="script-writer">
+      <single>writer</single>
+      <multiple>writers</multiple>
+    </term>
+    <term name="series-creator">
+      <single>series creator</single>
+      <multiple>series creators</multiple>
+    </term>
+    <term name="collection-editor">
+      <single>krājuma redaktors</single>
+      <multiple>krājuma redaktori</multiple>
+    </term>
+    <term name="composer">
+      <single>sastādītājs</single>
+      <multiple>sastādītāji</multiple>
+    </term>
+    <term name="container-author">
+      <single>pamatmateriāla autors</single>
+      <multiple>pamatmateriāla autori</multiple>
+    </term>
+    <term name="director">
+      <single>vadītājs</single>
+      <multiple>vadītāji</multiple>
+    </term>
+    <term name="editor">
+      <single>redaktors</single>
+      <multiple>redaktors</multiple>
+    </term>
+    <term name="editorial-director">
+      <single>galvenais redaktors</single>
+      <multiple>galvenie redaktori</multiple>
+    </term>
+    <term name="editortranslator">
+      <single>redaktors un tulkotājs</single>
+      <multiple>redaktors un tulkotājs</multiple>
+    </term>
+    <term name="illustrator">
+      <single>ilustrators</single>
+      <multiple>ilustratori</multiple>
+    </term>
+    <term name="interviewer">
+      <single>intervētājs</single>
+      <multiple>intervētāji</multiple>
+    </term>
+    <term name="recipient">
+      <single>saņēmējs</single>
+      <multiple>saņēmēji</multiple>
+    </term>
+    <term name="translator">
+      <single>tulkotājs</single>
+      <multiple>tulkotāji</multiple>
+    </term>
+
+    <!-- SHORT ROLE FORMS -->
+    <term name="compiler" form="short">
+      <single>comp.</single>
+      <multiple>comps.</multiple>
+    </term>
+    <term name="contributor" form="short">
+      <single>contrib.</single>
+      <multiple>contribs.</multiple>
+    </term>
+    <term name="curator" form="short">
+      <single>cur.</single>
+      <multiple>curs.</multiple>
+    </term>
+    <term name="executive-producer" form="short">
+      <single>exec. prod.</single>
+      <multiple>exec. prods.</multiple>
+    </term>
+    <term name="narrator" form="short">
+      <single>narr.</single>
+      <multiple>narrs.</multiple>
+    </term>
+    <term name="organizer" form="short">
+      <single>org.</single>
+      <multiple>orgs.</multiple>
+    </term>
+    <term name="performer" form="short">
+      <single>perf.</single>
+      <multiple>perfs.</multiple>
+    </term>
+    <term name="producer" form="short">
+      <single>prod.</single>
+      <multiple>prods.</multiple>
+    </term>
+    <term name="script-writer" form="short">
+      <single>writ.</single>
+      <multiple>writs.</multiple>
+    </term>
+    <term name="series-creator" form="short">
+      <single>cre.</single>
+      <multiple>cres.</multiple>
+    </term>
+    <term name="collection-editor" form="short">
+      <single>kr. red.</single>
+      <multiple>kr. red.</multiple>
+    </term>
+    <term name="composer" form="short">
+      <single>sast.</single>
+      <multiple>sast.</multiple>
+    </term>
+    <term name="container-author" form="short">
+      <single>pamatmat. aut.</single>
+      <multiple>pamatmat. aut.</multiple>
+    </term>
+    <term name="director" form="short">
+      <single>vad.</single>
+      <multiple>vad.</multiple>
+    </term>
+    <term name="editor" form="short">
+      <single>red.</single>
+      <multiple>red.</multiple>
+    </term>
+    <term name="editorial-director" form="short">
+      <single>galv. red.</single>
+      <multiple>galv. red.</multiple>
+    </term>
+    <term name="editortranslator" form="short">
+      <single>red. un tulk.</single>
+      <multiple>red. un tulk.</multiple>
+    </term>
+    <term name="illustrator" form="short">
+      <single>ilustr.</single>
+      <multiple>ilustr.</multiple>
+    </term>
+    <term name="interviewer" form="short">
+      <single>interv.</single>
+      <multiple>interv.</multiple>
+    </term>
+    <term name="recipient" form="short">
+      <single>saņ.</single>
+      <multiple>saņ.</multiple>
+    </term>
+    <term name="translator" form="short">
+      <single>tulk.</single>
+      <multiple>tulk.</multiple>
+    </term>
+
+    <!-- VERB ROLE FORMS -->
+    <term name="chair" form="verb">chaired by</term>
+    <term name="compiler" form="verb">compiled by</term>
+    <term name="contributor" form="verb">with</term>
+    <term name="curator" form="verb">curated by</term>
+    <term name="executive-producer" form="verb">executive produced by</term>
+    <term name="guest" form="verb">with guest</term>
+    <term name="host" form="verb">hosted by</term>
+    <term name="narrator" form="verb">narrated by</term>
+    <term name="organizer" form="verb">organized by</term>
+    <term name="performer" form="verb">performed by</term>
+    <term name="producer" form="verb">produced by</term>
+    <term name="script-writer" form="verb">written by</term>
+    <term name="series-creator" form="verb">created by</term>
+    <term name="container-author" form="verb"></term>
+    <term name="composer" form="verb">sastādīja</term>
+    <term name="director" form="verb">vadīja</term>
+    <term name="editor" form="verb">sagatavoja</term>
+    <term name="editorial-director" form="verb">sagatavoja</term>
+    <term name="editortranslator" form="verb">sagatavoja un tulkoja</term>
+    <term name="illustrator" form="verb">ilustrēja</term>
+    <term name="interviewer" form="verb">intervēja</term>
+    <term name="recipient" form="verb">saņēma</term>
+    <term name="translator" form="verb">tulkoja</term>
+
+    <!-- SHORT VERB ROLE FORMS -->
+    <term name="compiler" form="verb-short">comp. by</term>
+    <term name="contributor" form="verb-short">w.</term>
+    <term name="curator" form="verb-short">cur. by</term>
+    <term name="executive-producer" form="verb-short">exec. prod. by</term>
+    <term name="guest" form="verb-short">w. guest</term>
+    <term name="host" form="verb-short">hosted by</term>
+    <term name="narrator" form="verb-short">narr. by</term>
+    <term name="organizer" form="verb-short">org. by</term>
+    <term name="performer" form="verb-short">perf. by</term>
+    <term name="producer" form="verb-short">prod. by</term>
+    <term name="script-writer" form="verb-short">writ. by</term>
+    <term name="series-creator" form="verb-short">cre. by</term>
+    <term name="director" form="verb-short">sast.</term>
+    <term name="editor" form="verb-short">sag.</term>
+    <term name="editorial-director" form="verb-short">sag.</term>
+    <term name="illustrator" form="verb-short">ilustr.</term>
+    <term name="translator" form="verb-short">tulk.</term>
+    <term name="editortranslator" form="verb-short">sag. un tulk.</term>
+
+    <!-- LONG MONTH FORMS -->
+    <term name="month-01">janvārī</term>
+    <term name="month-02">februārī</term>
+    <term name="month-03">martā</term>
+    <term name="month-04">aprīlī</term>
+    <term name="month-05">maijā</term>
+    <term name="month-06">jūnijā</term>
+    <term name="month-07">jūlijā</term>
+    <term name="month-08">augustā</term>
+    <term name="month-09">septembrī</term>
+    <term name="month-10">oktobrī</term>
+    <term name="month-11">novembrī</term>
+    <term name="month-12">decembrī</term>
+
+    <!-- SHORT MONTH FORMS -->
+    <term name="month-01" form="short">janv.</term>
+    <term name="month-02" form="short">febr.</term>
+    <term name="month-03" form="short">mar.</term>
+    <term name="month-04" form="short">apr.</term>
+    <term name="month-05" form="short">mai.</term>
+    <term name="month-06" form="short">jūn.</term>
+    <term name="month-07" form="short">jūl.</term>
+    <term name="month-08" form="short">aug.</term>
+    <term name="month-09" form="short">sept.</term>
+    <term name="month-10" form="short">okt.</term>
+    <term name="month-11" form="short">nov.</term>
+    <term name="month-12" form="short">dec.</term>
+
+    <!-- SEASONS -->
+    <term name="season-01">pavasaris</term>
+    <term name="season-02">vasara</term>
+    <term name="season-03">rudens</term>
+    <term name="season-04">ziema</term>
+  </terms>
+</locale>

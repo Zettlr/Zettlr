@@ -2,7 +2,6 @@
 const path = require('path')
 const fs = require('fs').promises
 const log = require('./console-colour.js')
-const UglifyJS = require('uglify-js')
 const csso = require('csso')
 
 // What we need to do is the following:
@@ -14,9 +13,15 @@ const csso = require('csso')
 // 6. Minify the themes and overwrite the respective files.
 
 let revealBasePath = path.join(__dirname, '../node_modules/reveal.js/')
-let themeBasePath = path.join(revealBasePath, 'css/theme')
-let revealTemplatePath = path.join(__dirname, '../source/main/assets/template.revealjs.htm')
-let revealStyleOutputBasePath = path.join(__dirname, '../source/main/assets/revealjs-styles')
+let themeBasePath = path.join(revealBasePath, 'dist/theme')
+let revealTemplatePath = path.join(__dirname, '../static/template.revealjs.htm')
+let revealStyleOutputBasePath = path.join(__dirname, '../static/revealjs-styles')
+
+let zettlrTemplatePath = path.join(__dirname, 'assets/reveal-template.htm')
+let zettlrSyntaxPath = path.join(__dirname, 'assets')
+let revealCSSPath = path.join(revealBasePath, 'dist/reveal.css')
+let resetCSSPath = path.join(revealBasePath, 'dist/reset.css')
+let revealJSPath = path.join(revealBasePath, 'dist/reveal.js')
 let themes = [
   'beige',
   'black',
@@ -28,45 +33,34 @@ let themes = [
   'white'
 ]
 
+let codeHighlightingTheme = [
+  'skylighting-dark.css',
+  'skylighting-light.css'
+]
+
 async function run () {
   let revealJS = ''
   let revealCSS = ''
-  let file
   // First retrieve the JS file
-  file = await fs.open(path.join(revealBasePath, '/js/reveal.js'))
-  revealJS = await file.readFile({ encoding: 'utf8' })
-  await file.close()
+  revealJS = await fs.readFile(revealJSPath, 'utf8')
   // Now retrieve the CSS
-  file = await fs.open(path.join(revealBasePath, 'css/reset.css'))
-  revealCSS = await file.readFile({ encoding: 'utf8' })
-  await file.close()
-  file = await fs.open(path.join(revealBasePath, 'css/reveal.css'))
-  let tmp = await file.readFile({ encoding: 'utf8' })
-  await file.close()
+  revealCSS = await fs.readFile(resetCSSPath, 'utf8')
+  let tmp = await fs.readFile(revealCSSPath, 'utf8')
   revealCSS += '\n' + tmp
   // Display debugging information
   log.info(`[INPUT] revealJS:  ${revealJS.length} characters, ${revealJS.split('\n').length} lines`)
   log.info(`[INPUT] revealCSS: ${revealCSS.length} characters, ${revealCSS.split('\n').length} lines`)
 
-  // Now minify the JS
-  let minificationResult = UglifyJS.minify(revealJS)
-  if (minificationResult.error) {
-    log.error(minificationResult.error)
-    throw new Error(minificationResult.error)
+  // Make sure the CSS path is available
+  try {
+    await fs.lstat(revealStyleOutputBasePath)
+  } catch (err) {
+    await fs.mkdir(revealStyleOutputBasePath)
   }
-  revealJS = minificationResult.code
-
-  // Now the CSS
-  revealCSS = csso.minify(revealCSS).css
-
-  log.success(`[OUTPUT] revealJS:  ${revealJS.length} characters, ${revealJS.split('\n').length} lines`)
-  log.success(`[OUTPUT] revealCSS: ${revealCSS.length} characters, ${revealCSS.split('\n').length} lines`)
 
   // Now we can build the template file.
   // First read it in.
-  file = await fs.open(path.join(__dirname, 'assets/reveal-template.htm'))
-  let template = await file.readFile({ encoding: 'utf8' })
-  await file.close()
+  let template = await fs.readFile(zettlrTemplatePath, 'utf8')
   template = template.replace('$REVEAL_CSS$', revealCSS)
   template = template.replace('$REVEAL_JS$', revealJS)
   // Now write the template into the assets folder.
@@ -77,13 +71,18 @@ async function run () {
   for (let theme of themes) {
     log.info(`Processing theme ${theme} ...`)
     // Read ...
-    file = await fs.open(path.join(themeBasePath, theme + '.css'))
-    tmp = await file.readFile({ encoding: 'utf8' })
-    await file.close()
+    tmp = await fs.readFile(path.join(themeBasePath, theme + '.css'), 'utf8')
     // ... minify ...
     tmp = csso.minify(tmp).css
     // ... and write!
     await fs.writeFile(path.join(revealStyleOutputBasePath, theme + '.css'), tmp)
+    log.success(`Written theme ${theme} to ${path.relative(__dirname, revealStyleOutputBasePath)}!`)
+  }
+
+  for (let theme of codeHighlightingTheme) {
+    log.info(`Processing theme ${theme}`)
+    // The syntax highlighting themes need to be simply copied over
+    await fs.copyFile(path.join(zettlrSyntaxPath, theme), path.join(revealStyleOutputBasePath, theme))
     log.success(`Written theme ${theme} to ${path.relative(__dirname, revealStyleOutputBasePath)}!`)
   }
 }
@@ -91,6 +90,9 @@ async function run () {
 run().then(() => {
   log.success('reveal.JS has been updated successfully!')
 }).catch((err) => {
-  console.error(err)
   log.error('Could not update reveal.JS')
+  console.error(err)
+  // We have to exit the process with an
+  // error signal for correct behaviour on CI
+  process.exit(1)
 })

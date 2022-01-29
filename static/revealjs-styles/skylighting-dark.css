@@ -1,0 +1,43 @@
+/* List of classes taken from the skylighting lib */
+/* See: https://github.com/jgm/skylighting/blob/master/skylighting-core/src/Skylighting/Format/HTML.hs */
+
+/* Colors: Solarized theme (dark) */
+/* See: https://ethanschoonover.com/solarized/ */
+
+/* Specific implementation: Taken from the GEdit theme (dark) */
+/* See: https://github.com/altercation/solarized/blob/master/gedit/solarized-light.xml */
+
+/* Generic styles */
+pre.sourceCode { color: #93a1a1; background-color: #002b36; }
+
+/* All classes, taken from skylighting lib */
+.sourceCode .kw { color: #859900; font-weight: bold; } /* Keyword */
+.sourceCode .dt { color: #b58900; } /* Datatype */
+.sourceCode .df { color: #d33682; } /* Decimal values*/
+.sourceCode .bn { color: #d33682; } /* base-n-integers */
+.sourceCode .fl { color: #d33682; } /* Floats */
+.sourceCode .ch { color: #2aa198; } /* Character */
+.sourceCode .st { color: #2aa198; } /* String */
+.sourceCode .vs { color: #2aa198; } /* Verbatim String */
+.sourceCode .ss { color: #2aa198; } /* Special String */
+.sourceCode .co { color: #586e75; font-style: italic; } /* Comment */
+.sourceCode .ot { font-weight: bold; } /* Other token */
+.sourceCode .al { color: #d33682; background-color: #073642; } /* Alert */
+.sourceCode .fu { color: #268bd2; } /* Function name */
+.sourceCode .re {} /* Region marker */
+.sourceCode .er { color: #dc322f; font-weight: bold; } /* Error */
+.sourceCode .cn { color: #2aa198; } /* Constant */
+.sourceCode .sc { color: #dc322f; } /* Special character */
+.sourceCode .im { color: #6c71c4; font-weight: bold; } /* Import statement */
+.sourceCode .do { color: #dc322f; } /* Documentation string */
+.sourceCode .an { color: #2aa198; } /* Annotation */
+.sourceCode .cv { color: #6c71c4; } /* Comment var */
+.sourceCode .va { color: #268bd2; } /* Variable */
+.sourceCode .cf { color: #859900; } /* Control Flow (if, else, return) */
+.sourceCode .op {} /* Operator */
+.sourceCode .bu { color: #b58900; } /* Builtin function/class/identifier */
+.sourceCode .ex { color: #268bd2; } /* Extension */
+.sourceCode .pp { color: #cb4b16; } /* Preprocessor, like #import in C++ */
+.sourceCode .at { color: #dc322f; } /* Attribute */
+.sourceCode .in { color: #586e75; } /* Information */
+.sourceCode .wa { color: #cb4b16; } /* Warning */

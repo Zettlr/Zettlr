@@ -1,0 +1,115 @@
+name: Feature Request
+description: Something missing? Come along!
+title: "[Feature] "
+labels: [feature]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for proposing a new feature! We strive to make the app better
+        every day, but we also have limited time. By taking time to fill in this
+        form, you're already giving us a lot of information to make sure the
+        request can be handled quickly!
+
+        We know that it's sometimes difficult to distinguish between enhancements and
+        new features, so don't worry if your feature turns out to actually become
+        an enhancement (we are asking for the same info in both issue forms).
+
+        Just make sure you cannot think of any way to improve an existing feature
+        to accomplish whatever you propose!
+  # First, mandatory stuff: Checkboxes!
+  - type: checkboxes
+    id: mandatory
+    attributes:
+      label: Checklist
+      description: |
+        Please make sure you can tick all of these checkboxes before proceeding
+        to fill out this form.
+      options:
+        - label: Zettlr does not possess this feature (if it does, but the feature doesn't work out for you, propose an enhancement instead.)
+        - label: Zettlr's current features cannot be used to approximate this behaviour (otherwise, propose an enhancement instead.)
+        - label: I have searched the documentation to make sure I did not overlook it.
+        - label: I have searched both open and closed issues to see if someone has already proposed this.
+    validations:
+      required: true
+  # First let's ask the user about their proposal
+  - type: textarea
+    id: description
+    attributes:
+      label: Feature Proposal
+      description: |
+        Please describe what feature you would like to see implemented, and motivate why.
+      placeholder: Here, try to focus on different aspects in which this feature increases the usefulness of Zettlr.
+    validations:
+      required: true
+  # Now let's ask for the specific enhancement itself.
+  - type: textarea
+    id: changes
+    attributes:
+      label: Example Workflow
+      description: |
+        Please use this opportunity to describe how you or others might be able
+        to use the feature to accomplish something. This will give us the ability
+        to judge where we might steer the feature request to further improve it
+        or prevent any problems with existing features.
+      placeholder: Try to be as thorough as possible.
+    validations:
+      required: true
+  # Any caveats?
+  - type: textarea
+    id: caveats
+    attributes:
+      label: Caveats
+      description: |
+        Sometimes, one feature can impede another feature. Try to think of any
+        way in which adding the feature you are proposing might make other
+        ways of using the app less efficient. This helps us discuss options to
+        get your feature request into the app without losing others.
+      placeholder: If there are no caveats, just say so!
+    validations:
+      required: true
+  # Give the user the opportunity to volunteer to implement the feature!
+  - type: dropdown
+    id: volunteer
+    attributes:
+      label: Do you wish to attempt implementing this yourself?
+      description: |
+        Zettlr runs on a dedicated Open Source community. We welcome anyone who
+        wants to tackle an issue. Here you can already indicate if you'd like to
+        try implementing this feature yourself. If you are unsure if you possess
+        the knowledge to do so, but still would like to tinker with the code,
+        choose "Yes", since we'll obviously help you get your own code running!
+      options:
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+  # Also, we need to know the operating system(s)
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Platforms
+      description: |
+        Please check all platforms to which this feature request applies.
+      options:
+        - label: Windows
+        - label: macOS
+        - label: Linux
+    validations:
+      required: true
+  - type: textarea
+    id: more-info
+    attributes:
+      label: Additional Information
+      description: |
+        If applicable, feel free to include more info, such as mockups,
+        screenshots, or whatever helps make your request easier for us to
+        understand!
+  - type: markdown
+    id: outro
+    attributes:
+      value: |
+        Thank you for filing this feature request! We will be looking into it
+        shortly. Please make sure you check your GitHub notifications frequently,
+        over the next days, since in most cases we have some questions for
+        clarification, or would like to discuss options.

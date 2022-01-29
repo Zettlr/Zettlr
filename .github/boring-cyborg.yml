@@ -1,0 +1,75 @@
+# Configure the Boring Cyborg App. Cf.: https://github.com/kaxil/boring-cyborg
+
+# Let's greet new users!
+firstPRWelcomeComment: >
+  Thank you for opening your first PR! 🎉 We are very happy and would like
+  to thank you very much for your contribution. If everything checks out, we'll
+  make sure to review the PR as soon as possible and give feedback. In the
+  meantime, to make the reviewing process as fast as possible, you can help us
+  by checking the following things:
+
+  - Did you follow the JSStandard coding style?
+  - Did you comment everywhere where the necessity of a piece of code or the
+    way it was implemented is not immediately obvious?
+  - Did you attempt to stick as much to current coding habits as possible?
+    (Note that this does not apply to pieces of code where we ourselves
+    obviously violated good coding practices, which unfortunately happens
+    sometimes. But please indicate this in your PR so that we know what you
+    rectified!)
+
+  Furthermore, make sure that the linter does not complain, which will check
+  your code on every new commit. If the linter task fails, make sure to run
+  `yarn lint` locally and check the file `eslint_report.htm` which will tell
+  you precisely what went wrong.
+
+  Stay sharp, and thanks again!
+
+# Comment to be posted to congratulate user on their first merged PR
+firstPRMergeComment: >
+  There we go, your PR got merged! Welcome to the party! 🔥
+
+# Comment to be posted to on first time issues
+firstIssueWelcomeComment: >
+  Thanks so much for opening up your first issue here on the repository! 🎉
+  We would like to warmly welcome you to the community behind the app! ☺️
+  We'll check in soon and have a look at your issue. In the meantime, you can
+  check your issue and make sure it aligns with our contribution guidelines!
+  Here's the comprehensive list:
+
+  ## Enhancements
+
+  An enhancement takes a feature and improves or alters its behaviour. Please
+  make sure to argue how your proposition will aid non-technical text workers,
+  and why it can't be emulated easily with other features or apps!
+
+  ## Feature requests
+
+  Feature requests introduce whole new features into the app. This requires a
+  lot of work, so these might be turned down if the implementation costs
+  supersede the benefits we expect to see from implementing it. Please do not
+  be disappointed if that happens. It likely has nothing to do with your great
+  request but simply with us and our missing resources!
+
+  You can of course always ask someone to implement this feature, because a PR
+  with a working new feature has much higher chances of being merged! :)
+
+  ## Bug reports
+
+  Please note that one of the main reasons for why bug reports cannot be
+  addressed is that there's not enough information for us to find and fix the
+  bug you describe, so make sure you try to pinpoint the bug as close as
+  possible.
+
+  The ideal bug report for us has two qualities:
+
+  1. The bug is always reproducible, at least within a certain context.
+  2. We know exactly what specifically goes wrong, and there is consensus on
+     what should happen instead.
+
+  Please note that if you encounter behaviour that does not align with your
+  expectations of what would happen, this might as well be simply intended
+  behaviour and we need to simply _clarify_ why the behaviour is the way it is.
+  This is not to be considered a bug and such issues may be closed! Suggest an
+  enhancement instead!
+
+  But now, have a great day and thank you again!

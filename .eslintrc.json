@@ -4,17 +4,29 @@
         "es6": true,
         "node": true
     },
+    "plugins": [
+        "@typescript-eslint"
+    ],
     "extends": [
-        "standard"
+        "standard-with-typescript",
+        "plugin:vue/recommended"
     ],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
     },
+    "parser": "vue-eslint-parser",
     "parserOptions": {
-        "ecmaVersion": 2018
+        "parser": "@typescript-eslint/parser",
+        "ecmaVersion": 2018,
+        "project": "./tsconfig.json",
+        "extraFileExtensions": [".vue"]
     },
     "rules": {
+        "space-before-function-paren": [
+            2,
+            "always"
+        ],
         // The following rule-changes to JSStandard Coding Style are tradition,
         // as they were included with the default configuration of Atom's ESLint
         // plugin, so we'll keep them here for the time being.
@@ -22,9 +34,53 @@
         "quote-props": "off",
         "no-prototype-builtins": "off",
         "dot-notation": "off",
-        "array-bracket-spacing": [ 2, "always", {
-            "objectsInArrays": false,
-            "singleValue": false
-        } ]
+        "@typescript-eslint/dot-notation": ["warn"],
+        "array-bracket-spacing": [
+            2,
+            "always",
+            {
+                "objectsInArrays": false,
+                "singleValue": false
+            }
+        ],
+        // Here follow vue-styles. While the short form is recommended
+        // I tend to value verbose code. At least for now, discussion is
+        // well received.
+        "vue/v-bind-style": [
+            "error",
+            "longform"
+        ],
+        "vue/v-on-style": [
+            "error",
+            "longform"
+        ],
+        // Let the implementation decide if self-closing is wanted or not.
+        "vue/html-self-closing": [ "warn", {
+          "html": {
+            "void": "any",
+            "normal": "any",
+            "component": "any"
+          },
+          "svg": "any",
+          "math": "any"
+        }],
+        // Allow up to three attributes per line so that the contributor can
+        // decide if the attributes are too long for the 80 character column
+        "vue/max-attributes-per-line": [ "error", {
+          "singleline": 3,
+          "multiline": 3
+        }],
+        // We allow the use of v-html directives, because we sanitize any user
+        // provided HTML to only contain safe tags. The only stuff we currently
+        // put in there is translation strings, which we sanitise in the trans()
+        // function. NOTE to keep this on my mind!
+        "vue/no-v-html": "off",
+
+        // Disable a few typescript rules as we are not yet there to easily implement them
+        "@typescript-eslint/no-floating-promises": [ "warn" ],
+        "@typescript-eslint/no-misused-promises": [ "warn" ],
+        "@typescript-eslint/strict-boolean-expressions": [ "warn" ],
+        // Only warn if there's no array comparison given
+        "@typescript-eslint/require-array-sort-compare": [ "warn" ]
     }
 }

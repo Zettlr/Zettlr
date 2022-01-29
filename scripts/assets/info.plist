@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>CFBundleDocumentTypes</key>
+		<array>
+      <dict>
+        <key>CFBundleTypeName</key>
+        <string>Zettlr Markdown document</string>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleTypeOSTypes</key>
+        <array>
+          <string>TEXT</string>
+          <string>utxt</string>
+          <string>TUTX</string>
+          <string>****</string>
+        </array>
+        <key>CFBundleTypeExtensions</key>
+        <array>
+          <string>md</string>
+          <string>rmd</string>
+          <string>markdown</string>
+          <string>mdx</string>
+          <string>mkd</string>
+        </array>
+        <key>CFBundleTypeIconFile</key>
+        <string>electron.icns</string>
+      </dict>
+      <dict>
+        <key>CFBundleTypeName</key>
+        <string>Zettlr text document</string>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleTypeOSTypes</key>
+        <array>
+          <string>TEXT</string>
+          <string>utxt</string>
+          <string>TUTX</string>
+          <string>****</string>
+        </array>
+        <key>CFBundleTypeExtensions</key>
+        <array>
+          <string>txt</string>
+        </array>
+        <key>CFBundleTypeIconFile</key>
+        <string>electron.icns</string>
+      </dict>
+      <dict>
+        <key>CFBundleTypeName</key>
+        <string>Zettlr Code Document</string>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleTypeOSTypes</key>
+        <array>
+          <string>TEXT</string>
+          <string>utxt</string>
+          <string>TUTX</string>
+          <string>****</string>
+        </array>
+        <key>CFBundleTypeExtensions</key>
+        <array>
+          <string>tex</string>
+          <string>json</string>
+          <string>yaml</string>
+          <string>yml</string>
+        </array>
+        <key>CFBundleTypeIconFile</key>
+        <string>icon.code.icns</string>
+      </dict>
+		</array>
+	</dict>
+</plist>
