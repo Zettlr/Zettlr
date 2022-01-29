@@ -4,6 +4,7 @@
 
 - Tags and keywords within a YAML frontmatter are now clickable
 - AutoCorrect values are no longer detected as spelling mistakes
+- Fix an issue with false detection of footnote reference texts
 
 ## Under the Hood
 

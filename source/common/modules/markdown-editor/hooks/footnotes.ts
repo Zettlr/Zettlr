@@ -242,7 +242,7 @@ function getFnTextRange (cm: CodeMirror.Editor, ref: string): CodeMirror.MarkerR
   }
 
   for (let i = 0; i < lines.length; i++) {
-    if (lines[i].startsWith(`[^${ref}]:`)) {
+    if (from.ch === 0 && lines[i].startsWith(`[^${ref}]:`)) {
       // We have found the beginning of the footnote text: extract the position.
       from.line = i
       from.ch = 5 + ref.length
@@ -256,12 +256,14 @@ function getFnTextRange (cm: CodeMirror.Editor, ref: string): CodeMirror.MarkerR
       const isEmpty = lines[i].trim() === ''
       const isIndented = /^\s{4,}\S+/.test(lines[i])
       const isPreviousLineEmpty = i > 0 && lines[i - 1].trim() === ''
-      const isAnotherFootnote = /^\[\^[^\]]+\]:/.test(lines[i])
 
-      if ((!isEmpty && !isIndented && isPreviousLineEmpty) || isAnotherFootnote) {
-        // The line is neither empty, nor correctly indented, so stop searching.
-        to.line = i - 2 // -2 because of `isPreviousLineEmpty`, which we must exclude
-        to.ch = lines[i - 2].length
+      if (!isEmpty && !isIndented) {
+        to.line = i - 1
+        to.ch = lines[i - 1].length
+        if (isPreviousLineEmpty) {
+          to.line--
+          to.ch = lines[i - 2].length
+        }
         break
       }
     }

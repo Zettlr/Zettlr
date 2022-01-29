@@ -113,6 +113,14 @@ defineMode('markdown-zkn', function (config, parserConfig) {
         state.startOfFile = false
       }
 
+      // Now let's check for footnotes. Other than reference style links these
+      // require a different formatting, which we'll implement here. NOTE: We
+      // must perform the check before below's check if we are in a codeblock,
+      // because multi-paragraph footnotes will set those
+      if (stream.sol() && stream.match(fnReferenceRE) !== null) {
+        return 'footnote-formatting'
+      }
+
       // Directly afterwards check for inline code or comments, so
       // that stuff such as zkn-links are not highlighted:
       if ((state.mdState as any).overlay.code || (state.mdState as any).overlay.codeBlock || (state.mdState as any).baseCur === 'comment') {
@@ -148,12 +156,6 @@ defineMode('markdown-zkn', function (config, parserConfig) {
           stream.next()
           return null // No highlighting for escaped characters
         } // Else: It might be sol(), but don't escape
-      }
-
-      // Now let's check for footnotes. Other than reference style links these
-      // require a different formatting, which we'll implement here.
-      if (stream.sol() && stream.match(fnReferenceRE) !== null) {
-        return 'footnote-formatting'
       }
 
       // Are we in a link?
