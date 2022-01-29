@@ -5,6 +5,8 @@
 - Display inline math using monospaced font
 - Right-clicking citations doesn't select parts of it anymore
 - Inline-equations are now properly syntax highlighted
+- Fixed a bug that caused unintentional pastes when closing a tab using the
+  middle mouse button on Linux
 - Heavily improved the full text search: Previously, certain files that should
   have been returned for specific search terms were not considered a match, and
   multiple results per line were mostly not reported; additionally, search
