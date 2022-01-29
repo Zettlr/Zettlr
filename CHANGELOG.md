@@ -2,7 +2,7 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- Tags and keywords within a YAML frontmatter are now clickable
 
 ## Under the Hood
 

@@ -199,6 +199,14 @@ export default class MarkdownEditor extends EventEmitter {
         event.preventDefault()
         ;(event as any).codemirrorIgnore = true
         this.emit('zettelkasten-tag', tokenInfo.string)
+      } else if (event.target !== null) {
+        // It could be that it's a frontmatter tag. In that case, we shouldn't
+        // check the tokenType, but rather class names
+        if ((event.target as HTMLElement).classList.contains('zkn-tag')) {
+          event.preventDefault()
+          ;(event as any).codemirrorIgnore = true
+          this.emit('zettelkasten-tag', `#${(event.target as HTMLElement).textContent as string}`)
+        }
       }
     })
 

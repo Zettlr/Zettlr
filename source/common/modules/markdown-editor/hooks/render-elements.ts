@@ -43,6 +43,7 @@ export default function renderElementsHook (cm: CodeMirror.Editor): void {
 function renderElements (cm: CodeMirror.Editor): void {
   const render = (cm as any).getOption('zettlr').render
   cm.execCommand('markdownRenderMermaid')
+  cm.execCommand('clickableYAMLTags')
   if (render.tables === true) cm.execCommand('markdownRenderTables')
   if (render.iframes === true) cm.execCommand('markdownRenderIframes')
   if (render.links === true) cm.execCommand('markdownRenderLinks')
