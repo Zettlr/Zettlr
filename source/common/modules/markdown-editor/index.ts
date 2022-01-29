@@ -61,7 +61,7 @@ import taskItemClassHook from './hooks/task-item-classes'
 import muteLinesHook from './hooks/mute-lines'
 import renderElementsHook from './hooks/render-elements'
 import typewriterHook from './hooks/typewriter'
-import { autocompleteHook, setAutocompleteDatabase } from './hooks/autocomplete'
+import { autocompleteHook, AutocompletionDatabaseType, setAutocompleteDatabase } from './hooks/autocomplete'
 import linkTooltipsHook from './hooks/link-tooltips'
 import noteTooltipsHook from './hooks/note-preview'
 
@@ -482,10 +482,10 @@ export default class MarkdownEditor extends EventEmitter {
   /**
    * Sets an autocomplete database of given type to a new value
    *
-   * @param   {String}  type      The type of the database
+   * @param   {AutocompletionDatabaseType}  type      The type of the database
    * @param   {Object}  database  The show-hint-addon compatible database
    */
-  setCompletionDatabase (type: string, database: any): void {
+  setCompletionDatabase (type: AutocompletionDatabaseType, database: any): void {
     setAutocompleteDatabase(type, database)
   }
 

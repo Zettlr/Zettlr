@@ -46,9 +46,9 @@ let autocompleteStart: CodeMirror.Position|null = null
  * This variable holds the key of the current database used for autocompletion
  * as long as there is an autocompletion going on.
  *
- * @var {keyof typeof availableDatabases|null}
+ * @var {AutocompleteDatabase|null}
  */
-let currentDatabase: keyof typeof availableDatabases|null = null
+let currentDatabase: AutocompletionDatabaseType|null = null
 
 /**
  * This object holds all available databases for autocompletion
@@ -113,6 +113,11 @@ const availableDatabases = {
     { text: 'diff', displayText: 'Diff' }
   ] as AutocompleteDatabaseEntry[]
 }
+
+/**
+ * The name or type of the autocompletion database.
+ */
+export type AutocompletionDatabaseType = keyof typeof availableDatabases
 
 /**
  * This keymap is being used to cycle through the tabstops of a recently added
@@ -245,11 +250,7 @@ export function autocompleteHook (cm: CodeMirror.Editor): void {
   })
 }
 
-export function setAutocompleteDatabase (type: string, database: any): void {
-  if (!(type in availableDatabases)) {
-    throw new Error(`Unknown database type ${type}`)
-  }
-
+export function setAutocompleteDatabase (type: AutocompletionDatabaseType, database: any): void {
   // Make additional adjustments if necessary
   if (type === 'tags') {
     // Here, we get an object from main which is not in the right data format
@@ -265,7 +266,7 @@ export function setAutocompleteDatabase (type: string, database: any): void {
     availableDatabases[type] = tagHints
   } else if ([ 'citekeys', 'snippets', 'latexCommands' ].includes(type)) {
     // These databases work as they are
-    availableDatabases[type as keyof typeof availableDatabases] = database
+    availableDatabases[type] = database
   } else if (type === 'files') {
     let fileHints = Object.keys(database).map(key => {
       return {
@@ -291,7 +292,7 @@ export function setAutocompleteDatabase (type: string, database: any): void {
  *
  * @return  {string|undefined}         Either the database name, or undefined
  */
-function shouldBeginAutocomplete (cm: CodeMirror.Editor, changeObj: any): keyof typeof availableDatabases|undefined {
+function shouldBeginAutocomplete (cm: CodeMirror.Editor, changeObj: any): AutocompletionDatabaseType|undefined {
   // First, get cursor and line.
   const cursor = cm.getCursor()
   const line = cm.getLine(cursor.line)
