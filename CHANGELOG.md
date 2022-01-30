@@ -9,6 +9,7 @@
   as files (rather than weblinks) so that more documents should easily be opened
 - Fixed some reloading issues with very large citation databases
 - Fixed a visual glitch when choosing to "Open in a new tab" in a note preview
+- Fix a regression that inserting pasted image paths into the editor didn't work
 
 ## Under the Hood
 
