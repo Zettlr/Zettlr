@@ -8,6 +8,7 @@
 - Fix link resolving: Now files dropped onto the editor will be easier to detect
   as files (rather than weblinks) so that more documents should easily be opened
 - Fixed some reloading issues with very large citation databases
+- Fixed a visual glitch when choosing to "Open in a new tab" in a note preview
 
 ## Under the Hood
 
