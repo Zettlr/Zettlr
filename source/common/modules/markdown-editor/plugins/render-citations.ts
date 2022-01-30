@@ -75,7 +75,7 @@ const ipcRenderer: IpcRenderer = (window as any).ipc
       span.className = 'citeproc-citation'
       const key = citation.citations.map(elem => elem.id).join(',')
       span.dataset.citekeys = key // data-citekeys="key1,key2"; necessary for the context menu
-      span.textContent = line.substring(citation.from, citation.to - citation.from)
+      span.textContent = line.substring(citation.from, citation.to)
       // Apply TextMarker
       const textMarker = cm.markText(
         curFrom, curTo,
