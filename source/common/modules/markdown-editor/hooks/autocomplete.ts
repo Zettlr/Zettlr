@@ -635,7 +635,7 @@ function getTabMarkers (cm: CodeMirror.Editor, from: CodeMirror.Position, to: Co
 
     while ((match = varRE.exec(line)) !== null) {
       const ch = match.index
-      const index = parseInt(match[1] || match[2], 10)
+      const index = parseInt(match[1] ?? match[2], 10)
       const replaceWith = match[3]
 
       const localFrom = { line: i, ch: ch }
