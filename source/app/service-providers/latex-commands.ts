@@ -3,19 +3,25 @@ import defaultCommands from '../../../static/latex-commands.json'
 
 export interface LatexCommand {
   name: string
+  displayText: string
   snippet: string
-  description: string
+  description?: string
+  definition?: string
 }
 
-function convert(command: {
+function convert (command: {
   name: string
-  snippet: string
-  description: string
+  displayText?: string
+  snippet?: string
+  description?: string
+  definition?: string
 }): LatexCommand {
   return {
     name: command.name,
+    displayText: command.displayText ?? `\\${command.name}`,
     snippet: command.snippet ?? `\\${command.name}`,
-    description: command.description
+    description: command.description,
+    definition: command.definition
   }
 }
 

@@ -530,7 +530,7 @@ export default class MarkdownEditor extends EventEmitter {
       .map(command => {
         return {
           'text': command.snippet,
-          'displayText': '\\' + command.name
+          'displayText': command.displayText
         }
       })
     this.setCompletionDatabase('latexCommands', database)
