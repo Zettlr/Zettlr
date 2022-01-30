@@ -13,6 +13,8 @@
 - Fix wrong display of citations if there was an error rendering the citation
 - The tutorial is now also available after the first start; you can reopen it
   any time from the Help menu
+- The autocompletion popup doesn't disappear anymore if you completely remove
+  anything already written to begin anew
 
 ## Under the Hood
 
