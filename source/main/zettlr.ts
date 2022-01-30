@@ -14,9 +14,15 @@
  * END HEADER
  */
 
-import { app, BrowserWindow, clipboard, FileFilter, ipcMain, MessageBoxReturnValue, nativeImage } from 'electron'
-import path from 'path'
-import fs from 'fs'
+import {
+  app,
+  BrowserWindow,
+  clipboard,
+  FileFilter,
+  ipcMain,
+  MessageBoxReturnValue,
+  nativeImage
+} from 'electron'
 
 // Internal classes
 import WindowManager from './modules/window-manager'
@@ -24,8 +30,6 @@ import DocumentManager from './modules/document-manager'
 
 import FSAL from './modules/fsal'
 import { trans } from '@common/i18n-main'
-import findLangCandidates from '@common/util/find-lang-candidates'
-import isDir from '@common/util/is-dir'
 import { commands } from './commands'
 
 import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/main/fsal'
@@ -41,7 +45,7 @@ export default class Zettlr {
   _openPaths: any
   _fsal: FSAL
   _documentManager: DocumentManager
-  _commands: any[]
+  _commands: ZettlrCommand[]
   private readonly _windowManager: WindowManager
   private readonly isShownFor: string[]
 
@@ -106,8 +110,9 @@ export default class Zettlr {
     // Now that the config provider is definitely set up, let's see if we
     // should copy the interactive tutorial to the documents directory.
     if (global.config.isFirstStart()) {
-      global.log.info(`[First Start] Copying over the interactive tutorial to ${app.getPath('documents')}!`)
-      this._prepareFirstStart()
+      global.log.info('[First Start] Copying over the interactive tutorial!')
+      this.runCommand('tutorial-open', {})
+        .catch(err => global.log.error('[Application] Could not open tutorial', err))
     }
 
     // File System Abstraction Layer, pass the folder
@@ -569,52 +574,6 @@ export default class Zettlr {
     */
   setModified (isModified: boolean): void {
     this._windowManager.setModified(isModified)
-  }
-
-  /**
-   * This function prepares the app on first start, which includes copying over the tutorial.
-   */
-  _prepareFirstStart (): void {
-    let tutorialPath = path.join(__dirname, 'tutorial')
-    let targetPath = path.join(app.getPath('documents'), 'Zettlr Tutorial')
-    let availableLanguages = fs.readdirSync(tutorialPath, { 'encoding': 'utf8' })
-
-    let candidates = availableLanguages
-      .map(e => { return { 'tag': e, 'path': path.join(tutorialPath, e) } })
-      .filter(e => isDir(e.path))
-
-    let { exact, close } = findLangCandidates(global.config.get('appLang'), candidates)
-
-    let tutorial = path.join(tutorialPath, 'en')
-    if (exact !== undefined) {
-      tutorial = exact.path
-    } else if (close !== undefined) {
-      tutorial = close.path
-    }
-
-    // Now we have both a target and a language candidate, let's copy over the files!
-    try {
-      fs.lstatSync(targetPath)
-      // Already exists! Abort!
-      global.log.error(`The directory ${targetPath} already exists - won't overwrite!`)
-      return
-    } catch (err) {
-      fs.mkdirSync(targetPath)
-
-      // Now copy over every file from the directory
-      let contents = fs.readdirSync(tutorial, { 'encoding': 'utf8' })
-      for (let file of contents) {
-        fs.copyFileSync(path.join(tutorial, file), path.join(targetPath, file))
-      }
-      global.log.info('Successfully copied the tutorial files', contents)
-
-      // Now the last thing to do is set it as open
-      global.config.addPath(targetPath)
-      // Also set the welcome.md as open
-      global.config.set('openFiles', [path.join(targetPath, 'welcome.md')])
-      // ALSO the directory needs to be opened
-      global.config.set('openDirectory', targetPath)
-    }
   }
 
   // Getters

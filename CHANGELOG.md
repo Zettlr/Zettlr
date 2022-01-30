@@ -11,6 +11,8 @@
 - Fixed a visual glitch when choosing to "Open in a new tab" in a note preview
 - Fix a regression that inserting pasted image paths into the editor didn't work
 - Fix wrong display of citations if there was an error rendering the citation
+- The tutorial is now also available after the first start; you can reopen it
+  any time from the Help menu
 
 ## Under the Hood
 

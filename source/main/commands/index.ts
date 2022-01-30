@@ -42,6 +42,7 @@ import RootClose from './root-close'
 import RootOpen from './root-open'
 import SaveImageFromClipboard from './save-image-from-clipboard'
 import SortOpenFiles from './sort-open-files'
+import TutorialOpen from './tutorial-open'
 import UpdateProjectProperties from './update-project-properties'
 import UpdateUserDictionary from './update-user-dictionary'
 
@@ -75,6 +76,7 @@ export const commands = [
   RootOpen,
   SaveImageFromClipboard,
   SortOpenFiles,
+  TutorialOpen,
   UpdateProjectProperties,
   UpdateUserDictionary
 ]

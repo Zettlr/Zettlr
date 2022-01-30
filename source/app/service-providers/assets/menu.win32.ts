@@ -645,6 +645,14 @@ export default function getMenu (
           }
         },
         {
+          id: 'menu.open_tutorial',
+          label: trans('menu.open_tutorial'),
+          click: function (menuitem, focusedWindow) {
+            global.application.runCommand('tutorial-open')
+              .catch(e => global.log.error(String(e.message), e))
+          }
+        },
+        {
           id: 'menu.update',
           label: trans('menu.update'),
           click: function (menuitem, focusedWindow) {
