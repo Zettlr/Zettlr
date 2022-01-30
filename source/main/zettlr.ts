@@ -33,6 +33,7 @@ import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
 
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import extractFilesFromArgv from '../app/util/extract-files-from-argv'
+import ZettlrCommand from './commands/zettlr-command'
 
 export default class Zettlr {
   isQuitting: boolean
@@ -359,7 +360,7 @@ export default class Zettlr {
     await this._documentManager.init()
 
     // Finally, initiate a first check for updates
-    await global.updates.check()
+    global.updates.check()
 
     if (global.updates.applicationUpdateAvailable()) {
       const { tagName } = global.updates.getUpdateState()
@@ -492,11 +493,11 @@ export default class Zettlr {
     } else {
       // ELSE: If the command has not yet been found, try to run one of the
       // bigger commands
-      let cmd = this._commands.find((elem: any) => elem.respondsTo(command))
+      const cmd: ZettlrCommand|undefined = this._commands.find((elem: ZettlrCommand) => elem.respondsTo(command))
       if (cmd !== undefined) {
         // Return the return value of the command, if there is any
         try {
-          return cmd.run(command, payload)
+          return await cmd.run(command, payload)
         } catch (err: any) {
           global.log.error('[Application] Error received while running command: ' + String(err.message), err)
           return false
