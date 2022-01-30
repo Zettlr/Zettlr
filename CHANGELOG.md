@@ -7,10 +7,16 @@
 - Fix an issue with false detection of footnote reference texts
 - Fix link resolving: Now files dropped onto the editor will be easier to detect
   as files (rather than weblinks) so that more documents should easily be opened
+- Fixed some reloading issues with very large citation databases
 
 ## Under the Hood
 
 - Update Pandoc to 2.17.0.1
+- Activate watchdog polling for the citeproc provider. This should reduce issues
+  with very large citation databases.
+- If the error message upon a failed database reload indicates that the file was
+  simply incomplete, the citeproc provider now attempts a second reload after a
+  delay of 5 seconds
 
 # 2.1.3
 
