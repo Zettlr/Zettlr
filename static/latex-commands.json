@@ -1,10 +1,5 @@
 [
     {
-        "name": "mytest",
-        "snippet": "\\mytest{$0}",
-        "definition": "\\mathbf{#1}"
-    },
-    {
         "name": "begin",
         "snippet": "\\begin{",
         "description": "Begin a new environment"
