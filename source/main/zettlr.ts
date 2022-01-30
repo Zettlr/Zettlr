@@ -25,10 +25,7 @@ import DocumentManager from './modules/document-manager'
 import FSAL from './modules/fsal'
 import { trans } from '@common/i18n-main'
 import findLangCandidates from '@common/util/find-lang-candidates'
-import ignoreDir from '@common/util/ignore-dir'
-import ignoreFile from '@common/util/ignore-file'
 import isDir from '@common/util/is-dir'
-import isFile from '@common/util/is-file'
 import { commands } from './commands'
 
 import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/main/fsal'
@@ -350,7 +347,7 @@ export default class Zettlr {
       global.targets.verify()
 
       // Finally: Open any new files we have in the process arguments.
-      this.handleAddRoots(extractFilesFromArgv())
+      this.runCommand('roots-add', extractFilesFromArgv())
         .finally(() => {
           // Now we are done.
           const duration = Date.now() - start
@@ -400,14 +397,7 @@ export default class Zettlr {
   async runCommand (command: string, payload: any): Promise<any> {
     // FIRST: Try to run a minimal command for which its own custom function
     // wouldn't make sense.
-    if (command === 'open-workspace') {
-      return await this.openWorkspace()
-    } else if (command === 'open-root-file') {
-      return await this.openRootFile()
-    } else if (command === 'handle-drop') {
-      // Handle any files dropped onto the editor
-      return await this.handleAddRoots(payload)
-    } else if (command === 'get-statistics-data') {
+    if (command === 'get-statistics-data') {
       return this._fsal.statistics
     } else if (command === 'get-filetree-events') {
       return this._fsal.filetreeHistorySince(payload)
@@ -540,103 +530,6 @@ export default class Zettlr {
   }
 
   /**
-    * Open a new workspace.
-    */
-  async openWorkspace (): Promise<void> {
-    // TODO: Move this to a command
-    // The user wants to open another file or directory.
-    let ret = await this._windowManager.askDir()
-    if (ret.length === 0) {
-      return
-    }
-
-    let retPath = ret[0] // We only need one path
-
-    if (
-      (isDir(retPath) && ignoreDir(retPath)) ||
-      (isFile(retPath) && ignoreFile(retPath)) ||
-      retPath === app.getPath('home')
-    ) {
-      // We cannot add this dir, because it is in the list of ignored directories.
-      global.log.error(`The chosen workspace "${retPath}" is on the ignore list.`)
-      return this._windowManager.prompt({
-        'type': 'error',
-        'title': trans('system.error.ignored_dir_title'),
-        'message': trans('system.error.ignored_dir_message', path.basename(retPath))
-      })
-    }
-
-    global.notify.normal(trans('system.open_root_directory', path.basename(retPath)))
-    await this.handleAddRoots([retPath])
-    global.notify.normal(trans('system.open_root_directory_success', path.basename(retPath)))
-  }
-
-  /**
-   * Open a new root file
-   */
-  async openRootFile (): Promise<void> {
-    // TODO: Move this to a command
-    // The user wants to open another file or directory.
-    const extensions = [ 'markdown', 'md', 'txt', 'rmd' ]
-    const filter = [{ 'name': trans('system.files'), 'extensions': extensions }]
-
-    let ret = await this._windowManager.askFile(filter, true)
-    await this.handleAddRoots(ret)
-  }
-
-  /**
-    * Handles a list of files and folders that the user in any way wants to add
-    * to the app.
-    *
-    * @param  {string[]} pathlist An array of absolute paths
-    */
-  async handleAddRoots (pathlist: string[]): Promise<void> {
-    // As long as it's not a forbidden file or ignored directory, add it.
-    let newFile = null
-    let newDir = null
-    for (const absPath of pathlist) {
-      // First check if this thing is already added. If so, simply write
-      // the existing file/dir into the newFile/newDir vars. They will be
-      // opened accordingly.
-      if ((newFile = this._fsal.findFile(absPath)) != null) {
-        // Open the file immediately
-        await this._documentManager.openFile(newFile.path, true)
-        // Also set the newDir variable so that Zettlr will automatically
-        // navigate to the directory. The directory of the latest file will
-        // remain open afterwards.
-        newDir = newFile.parent
-      } else if ((newDir = this._fsal.findDir(absPath)) != null) {
-        // Do nothing
-      } else if (global.config.addPath(absPath)) {
-        try {
-          const loaded = await this._fsal.loadPath(absPath)
-          if (loaded) {
-            // If it was a file and not a directory, immediately open it.
-            let file = this._fsal.findFile(absPath)
-            if (file !== null) {
-              await this._documentManager.openFile(file.path, true)
-            }
-          } else {
-            global.config.removePath(absPath)
-          }
-        } catch (err: any) {
-          // Something went wrong, so remove the path again.
-          global.config.removePath(absPath)
-          this._windowManager.reportFSError('Could not open new root', err)
-        }
-      } else {
-        global.notify.normal(trans('system.error.open_root_error', path.basename(absPath)))
-        global.log.error(`Could not open new root file ${absPath}!`)
-      }
-    }
-
-    // Open the newly added path(s) directly.
-    if (newDir !== null) {
-      this._fsal.openDirectory = newDir
-    }
-  }
-
-  /**
    * Opens a standalone quicklook window when the renderer requests it
    * @param  {number} hash The hash of the file to be displayed in the window
    * @return {void}      No return.
@@ -734,6 +627,8 @@ export default class Zettlr {
    * Returns the document manager
    */
   getDocumentManager (): DocumentManager { return this._documentManager }
+
+  getWindowManager (): WindowManager { return this._windowManager }
 
   /**
     * Are there unsaved changes currently in the file system?

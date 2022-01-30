@@ -240,7 +240,7 @@ export default defineComponent({
         },
         {
           type: 'button',
-          id: 'open-workspace',
+          id: 'root-open-workspaces',
           title: trans('menu.open_workspace'),
           icon: 'folder-open'
         },
@@ -495,8 +495,8 @@ export default defineComponent({
       (this.$refs['file-manager'] as any).toggleFileList()
     },
     handleClick: function (clickedID: string) {
-      if (clickedID === 'open-workspace') {
-        ipcRenderer.invoke('application', { command: 'open-workspace' })
+      if (clickedID === 'root-open-workspaces') {
+        ipcRenderer.invoke('application', { command: 'root-open-workspaces' })
           .catch(e => console.error(e))
       } else if (clickedID === 'open-preferences') {
         ipcRenderer.invoke('application', { command: 'open-preferences' })

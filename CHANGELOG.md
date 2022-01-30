@@ -20,6 +20,7 @@
 - If the error message upon a failed database reload indicates that the file was
   simply incomplete, the citeproc provider now attempts a second reload after a
   delay of 5 seconds
+- Moved the workspace and root file opening logic into their own command.
 
 # 2.1.3
 

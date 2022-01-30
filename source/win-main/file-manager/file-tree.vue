@@ -159,7 +159,7 @@ export default defineComponent({
      * @return {void}     Does not return.
      */
     requestOpenRoot: function (evt: MouseEvent) {
-      ipcRenderer.invoke('application', { command: 'open-workspace' })
+      ipcRenderer.invoke('application', { command: 'root-open-workspaces' })
         .catch(err => console.error(err))
     },
     clickHandler: function (event: MouseEvent) {

@@ -129,7 +129,7 @@ export default function getMenu (
           label: trans('menu.open'),
           accelerator: 'Ctrl+O',
           click: function (menuitem, focusedWindow) {
-            global.application.runCommand('open-root-file')
+            global.application.runCommand('root-open-files')
               .catch(e => global.log.error(String(e.message), e))
           }
         },
@@ -138,7 +138,7 @@ export default function getMenu (
           label: trans('menu.open_workspace'),
           accelerator: 'Ctrl+Shift+O',
           click: function (menuitem, focusedWindow) {
-            global.application.runCommand('open-workspace')
+            global.application.runCommand('root-open-workspaces')
               .catch(e => global.log.error(String(e.message), e))
           }
         },

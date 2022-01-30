@@ -39,6 +39,7 @@ import OpenAttachment from './open-attachment'
 import Print from './print'
 import RequestMove from './request-move'
 import RootClose from './root-close'
+import RootOpen from './root-open'
 import SaveImageFromClipboard from './save-image-from-clipboard'
 import SortOpenFiles from './sort-open-files'
 import UpdateProjectProperties from './update-project-properties'
@@ -71,6 +72,7 @@ export const commands = [
   Print,
   RequestMove,
   RootClose,
+  RootOpen,
   SaveImageFromClipboard,
   SortOpenFiles,
   UpdateProjectProperties,
