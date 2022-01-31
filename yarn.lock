@@ -2375,10 +2375,10 @@ copy-anything@^2.0.1:
   dependencies:
     is-what "^3.7.1"
 
-copy-webpack-plugin@^10.2.1:
-  version "10.2.1"
-  resolved "https://registry.yarnpkg.com/copy-webpack-plugin/-/copy-webpack-plugin-10.2.1.tgz#115a41f913070ac236a1b576066204cbf35341a1"
-  integrity sha512-nr81NhCAIpAWXGCK5thrKmfCQ6GDY0L5RN0U+BnIn/7Us55+UCex5ANNsNKmIVtDRnk0Ecf+/kzp9SUVrrBMLg==
+copy-webpack-plugin@^10.2.3:
+  version "10.2.3"
+  resolved "https://registry.yarnpkg.com/copy-webpack-plugin/-/copy-webpack-plugin-10.2.3.tgz#16fa11ce3bb34f9fd4e4f22a252a5ed88c57c730"
+  integrity sha512-DKg4/ijemcJmpo2vBQiwiL2u+t2XN6YYlr2v2Ejqltnn2vbPfXLAz/v0Rv8uB4UmlbB7NH4cGhLxCmtaVppvEQ==
   dependencies:
     fast-glob "^3.2.7"
     glob-parent "^6.0.1"
