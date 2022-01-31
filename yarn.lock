@@ -59,10 +59,10 @@
   resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-3.1.0.tgz#8ff71d51053cd5ee4981e5a501d80a536244f7fd"
   integrity sha512-GcIY79elgB+azP74j8vqkiXz8xLFfIzbQJdlwOPisgbKT00tviJQuEghOXSMVxJ00HoYJbGswr4kcllUc4xCcg==
 
-"@clr/icons@^12.0.9":
-  version "12.0.9"
-  resolved "https://registry.yarnpkg.com/@clr/icons/-/icons-12.0.9.tgz#eac0d36c53d0eab3a8c50e7966f175925a8a3a30"
-  integrity sha512-LoiNOKis+bLXhPFcdZ4CToTC8YowK6MyBYqunAzwe5lTQhlRcmOoJxHU/UimEvbuwi24GfCza4Ax4fESlHmuwQ==
+"@clr/icons@^13.0.0":
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/@clr/icons/-/icons-13.0.0.tgz#0f8203cbf50721b746236974d4fb4f7d212e6d31"
+  integrity sha512-cpxbGXm6LgyZBwZvphzOJ75N/vz4qVRiln0h/ENHxjwer1/zRTkjhH3/VB5gZ5N6qC6jlX5r9ieKmDQ4aJkxxQ==
 
 "@cspotcode/source-map-consumer@0.8.0":
   version "0.8.0"
