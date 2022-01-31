@@ -217,6 +217,7 @@ export default defineComponent({
         direction: this.$store.state.config['editor.direction'],
         rtlMoveVisually: this.$store.state.config['editor.rtlMoveVisually'],
         indentUnit: this.$store.state.config['editor.indentUnit'],
+        autoCloseBrackets: this.$store.state.config['editor.autoCloseBrackets'],
         autoCorrect: {
           style: this.$store.state.config['editor.autoCorrect.style'],
           quotes: {
