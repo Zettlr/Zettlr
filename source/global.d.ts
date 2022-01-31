@@ -79,9 +79,6 @@ interface Application {
   showTagManager: () => void
   showAnyWindow: () => void
   findFile: (prop: any) => MDFileDescriptor | CodeFileDescriptor | null
-  findDir: (prop: any) => DirDescriptor | null
-  // Same as findFile, only with content
-  getFile: (fileDescriptor: MDFileDescriptor | CodeFileDescriptor) => Promise<MDFileMeta | CodeFileMeta>
 }
 
 /**

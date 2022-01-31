@@ -94,13 +94,6 @@ export default class Zettlr {
       },
       findFile: (prop: any) => {
         return this._fsal.findFile(prop)
-      },
-      findDir: (prop: any) => {
-        return this._fsal.findDir(prop)
-      },
-      // Same as findFile, only with content
-      getFile: async (fileDescriptor: any) => {
-        return await this._fsal.getFileContents(fileDescriptor)
       }
     }
 
