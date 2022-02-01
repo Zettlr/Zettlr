@@ -26,11 +26,11 @@ import { trans } from '@common/i18n-main'
  *
  * @return  {Promise<string>[]}             Resolves with an array of paths
  */
-export default async function askFileDialog (win: BrowserWindow|null, filters: FileFilter[]|null, multiSel: boolean): Promise<string[]> {
+export default async function askFileDialog (config: ConfigProvider, win: BrowserWindow|null, filters: FileFilter[]|null, multiSel: boolean): Promise<string[]> {
   let startDir = app.getPath('home')
 
-  if (isDir(global.config.get('dialogPaths.askFileDialog'))) {
-    startDir = global.config.get('dialogPaths.askFileDialog')
+  if (isDir(config.get('dialogPaths.askFileDialog'))) {
+    startDir = config.get('dialogPaths.askFileDialog')
   }
 
   // Fallback filter: All files
@@ -64,7 +64,7 @@ export default async function askFileDialog (win: BrowserWindow|null, filters: F
 
   // Save the path of the containing dir of the first file into the config
   if (!response.canceled && response.filePaths.length > 0) {
-    global.config.set('dialogPaths.askFileDialog', path.dirname(response.filePaths[0]))
+    config.set('dialogPaths.askFileDialog', path.dirname(response.filePaths[0]))
   }
 
   // Return an empty array if the dialog was cancelled

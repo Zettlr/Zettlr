@@ -2,13 +2,12 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        createUpdateWindow function
+ * Contains:        createLogWindow function
  * CVM-Role:        Utility function
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     Creates a BrowserWindow with an entry point according to
- *                  the function arguments.
+ * Description:     Creates a BrowserWindow using the print configuration.
  *
  * END HEADER
  */
@@ -23,46 +22,47 @@ import setWindowChrome from './set-window-chrome'
 import { WindowPosition } from './types'
 
 /**
- * Creates a BrowserWindow with update window functionality
+ * Creates a BrowserWindow with log window configuration and loads the
+ * corresponding renderer.
  *
- * @return  {BrowserWindow}           The loaded update window
+ * @param   {WindowPosition}  conf  The configuration to load
+ * @return  {BrowserWindow}         The loaded log window
  */
-export default function createUpdateWindow (conf: WindowPosition): BrowserWindow {
+export default function createLogWindow (logger: LogProvider, config: ConfigProvider, conf: WindowPosition): BrowserWindow {
   const winConf: BrowserWindowConstructorOptions = {
     acceptFirstMouse: true,
     minWidth: 300,
     minHeight: 200,
     width: conf.width,
     height: conf.height,
-    minimizable: false, // Disable the minimise button for this utility window
     x: conf.x,
     y: conf.y,
     show: false,
-    fullscreenable: false,
     webPreferences: {
       contextIsolation: true,
-      preload: UPDATE_PRELOAD_WEBPACK_ENTRY
+      preload: LOG_VIEWER_PRELOAD_WEBPACK_ENTRY
     }
   }
 
   // Set the correct window chrome
-  setWindowChrome(winConf)
+  setWindowChrome(config, winConf)
 
   const window = new BrowserWindow(winConf)
 
   // Load the index.html of the app.
-  window.loadURL(UPDATE_WEBPACK_ENTRY)
+  // The variable LOG_VIEWER_WEBPACK_ENTRY is automatically resolved by electron forge / webpack
+  window.loadURL(LOG_VIEWER_WEBPACK_ENTRY)
     .catch(e => {
-      global.log.error(`Could not load URL ${UPDATE_WEBPACK_ENTRY}: ${e.message as string}`, e)
+      logger.error(`Could not load URL ${LOG_VIEWER_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })
 
   // EVENT LISTENERS
 
   // Prevent arbitrary navigation away from our WEBPACK_ENTRY
-  preventNavigation(window)
+  preventNavigation(logger, window)
 
   // Implement main process logging
-  attachLogger(window, 'Update Window')
+  attachLogger(logger, window, 'Log Window')
 
   // Only show window once it is completely initialized + maximize it
   window.once('ready-to-show', function () {
@@ -82,7 +82,7 @@ export default function createUpdateWindow (conf: WindowPosition): BrowserWindow
         'websql'
       ]
     }).catch(e => {
-      global.log.error(`Could not clear session data: ${e.message as string}`, e)
+      logger.error(`Could not clear session data: ${e.message as string}`, e)
     })
   })
 

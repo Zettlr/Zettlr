@@ -13,12 +13,12 @@
  * END HEADER
  */
 
-import EventEmitter from 'events'
 import {
   ipcMain,
   nativeTheme,
   systemPreferences
 } from 'electron'
+import ProviderContract from './provider-contract'
 
 /**
  * This class manages automatic changes in the appearance of the app. It won't
@@ -26,26 +26,31 @@ import {
  * operating system's appearance if set to system, and switch the mode on a given
  * time if set to schedule.
  */
-export default class AppearanceProvider extends EventEmitter {
+export default class AppearanceProvider extends ProviderContract {
   private _mode: 'off'|'system'|'schedule'|'auto'
   private _scheduleWasDark: boolean
   private _startHour: number
   private _startMin: number
   private _endHour: number
   private _endMin: number
+
+  private readonly _logger: LogProvider
+  private readonly _config: ConfigProvider
   /**
    * Create the instance on program start and initially load the settings.
    */
-  constructor () {
+  constructor (logger: LogProvider, config: ConfigProvider) {
     super()
-    global.log.verbose('Appearance provider booting up ...')
+    this._logger = logger
+    this._config = config
+    this._logger.verbose('Appearance provider booting up ...')
     // Possible modes:
     // - off: Do nothing in here
     // - schedule: Ask the clock when to switch
     // - system: Listen to mode changes based on the operating system (macOS and Windows, some Linux distributions)
 
     // Initiate everything
-    this._mode = global.config.get('autoDarkMode')
+    this._mode = this._config.get('autoDarkMode')
     this._scheduleWasDark = this._isItDark() // Preset where we currently are
 
     // The TypeScript linter is not clever enough to see that the function will
@@ -63,43 +68,43 @@ export default class AppearanceProvider extends EventEmitter {
     nativeTheme.on('updated', () => {
       // Only react to these notifications if the schedule is set to 'system'
       if (this._mode === 'system') {
-        global.log.info(
+        this._logger.info(
           'Switching to ' +
           (nativeTheme.shouldUseDarkColors ? 'dark' : 'light') +
           ' mode'
         )
 
         // Set the var accordingly
-        global.config.set('darkMode', nativeTheme.shouldUseDarkColors)
+        this._config.set('darkMode', nativeTheme.shouldUseDarkColors)
       }
     })
 
     // Initially set the dark mode after startup, if the mode is set to "system"
     if (this._mode === 'system') {
-      global.config.set('darkMode', nativeTheme.shouldUseDarkColors)
+      this._config.set('darkMode', nativeTheme.shouldUseDarkColors)
     } else if (process.platform === 'darwin') {
       // Override the app level appearance immediately
-      systemPreferences.appLevelAppearance = (global.config.get('darkMode') === true) ? 'dark' : 'light'
+      systemPreferences.appLevelAppearance = (this._config.get('darkMode') === true) ? 'dark' : 'light'
     }
 
     // It may be that it was already dark when the user started the app, but the
     // theme was light. This makes sure the theme gets set once after application
     // start --- But if the user decides to change it back, it'll not be altered.
-    if (this._mode === 'schedule' && global.config.get('darkMode') !== this._isItDark()) {
-      global.config.set('darkMode', this._isItDark())
+    if (this._mode === 'schedule' && this._config.get('darkMode') !== this._isItDark()) {
+      this._config.set('darkMode', this._isItDark())
       this._scheduleWasDark = this._isItDark()
     }
 
     // Subscribe to configuration updates
-    global.config.on('update', (option: string) => {
+    this._config.on('update', (option: string) => {
       // Set internal vars accordingly
       if (option === 'autoDarkMode') {
-        this._mode = global.config.get('autoDarkMode')
+        this._mode = this._config.get('autoDarkMode')
       } else if ([ 'autoDarkModeEnd', 'autoDarkModeStart' ].includes(option)) {
         this._recalculateSchedule()
       } else if (option === 'darkMode' && process.platform === 'darwin') {
         const shouldBeDark = nativeTheme.shouldUseDarkColors
-        const isDark = Boolean(global.config.get('darkMode'))
+        const isDark = Boolean(this._config.get('darkMode'))
         if (shouldBeDark !== isDark) {
           // Explicitly set the appLevelAppearance in case the internal theme
           // differs from the operating system.
@@ -158,6 +163,10 @@ export default class AppearanceProvider extends EventEmitter {
     this.tick() // Begin the tick
   }
 
+  async boot (): Promise<void> {
+    // Nothing to do
+  }
+
   tick (): void {
     if (this._mode === 'schedule') {
       // By tracking the status of the time, we avoid annoying people by forcing
@@ -168,9 +177,9 @@ export default class AppearanceProvider extends EventEmitter {
       if (this._scheduleWasDark !== this._isItDark()) {
         // The schedule just changed -> change the theme
         const mode = (this._isItDark()) ? 'dark' : 'light'
-        global.log.info('Switching appearance to ' + mode)
+        this._logger.info('Switching appearance to ' + mode)
 
-        global.config.set('darkMode', this._isItDark())
+        this._config.set('darkMode', this._isItDark())
         this._scheduleWasDark = this._isItDark()
       }
     }
@@ -184,8 +193,8 @@ export default class AppearanceProvider extends EventEmitter {
    * Parses the current auto dark mode start and end times for quick access.
    */
   _recalculateSchedule (): void {
-    let start = global.config.get('autoDarkModeStart').split(':')
-    let end = global.config.get('autoDarkModeEnd').split(':')
+    let start = this._config.get('autoDarkModeStart').split(':')
+    let end = this._config.get('autoDarkModeEnd').split(':')
 
     this._startHour = parseInt(start[0], 10)
     this._startMin = parseInt(start[1], 10)
@@ -229,11 +238,8 @@ export default class AppearanceProvider extends EventEmitter {
 
   /**
    * Shuts down the provider
-   *
-   * @return {boolean} Always returns true
    */
-  shutdown (): boolean {
-    global.log.verbose('Appearance provider shutting down ...')
-    return true
+  async shutdown (): Promise<void> {
+    this._logger.verbose('Appearance provider shutting down ...')
   }
 }

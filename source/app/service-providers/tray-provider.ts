@@ -20,60 +20,44 @@ import {
   app
 } from 'electron'
 import path from 'path'
-import EventEmitter from 'events'
 import { trans } from '@common/i18n-main'
+import ProviderContract from './provider-contract'
+import WindowProvider from './window-provider'
 
 /**
  * This class generates the Tray in the system notification area
  */
-export default class TrayProvider extends EventEmitter {
+export default class TrayProvider extends ProviderContract {
   /**
    * The tray
    */
   private _tray: Tray | null
 
+  private readonly _logger: LogProvider
+  private readonly _config: ConfigProvider
+  private readonly _windows: WindowProvider
+
   /**
    * Create the instance on program start and setup services.
    */
-  constructor () {
+  constructor (logger: LogProvider, config: ConfigProvider, windows: WindowProvider) {
     super()
-    global.log.verbose('Tray provider booting up ...')
+    this._logger = logger
+    this._config = config
+    this._windows = windows
+
+    this._logger.verbose('Tray provider booting up ...')
     this._tray = null
 
-    global.tray = {
-      /**
-       * Adds the Zettlr tray to the system notification area.
-       */
-      add: () => {
-        this._addTray()
-      }
-    }
-
     if (process.env.ZETTLR_IS_TRAY_SUPPORTED === '0') {
-      global.config.set('system.leaveAppRunning', false)
+      this._config.set('system.leaveAppRunning', false)
     }
 
-    let addToTray: boolean = global.config.get('system.leaveAppRunning')
-    const shouldStartMinimized = process.argv.includes('--launch-minimized')
-    const traySupported = process.env.ZETTLR_IS_TRAY_SUPPORTED === '1'
-
-    if (shouldStartMinimized && !addToTray && traySupported) {
-      global.log.info('[Tray Provider] Detected the --launch-minimized flag. Will override the tray setting.')
-      // The user has indicated via CLI flag that they want to start the app
-      // minimized, so we require the corresponding setting to be set
-      global.config.set('system.leaveAppRunning', true)
-      addToTray = true
-    }
-
-    if (addToTray) {
-      this._addTray()
-    }
-
-    global.config.on('update', (option: string) => {
+    this._config.on('update', (option: string) => {
       if (option === 'system.leaveAppRunning') {
         // even if the tray should not be shown, since we start in Tray we need to show it anyway
-        if (global.config.get('system.leaveAppRunning') === true) {
-          this._addTray()
+        if (this._config.get('system.leaveAppRunning') === true) {
+          this.add()
         } else {
           this._removeTray()
         }
@@ -81,14 +65,31 @@ export default class TrayProvider extends EventEmitter {
     })
   }
 
+  async boot (): Promise<void> {
+    let addToTray: boolean = this._config.get('system.leaveAppRunning')
+    const shouldStartMinimized = process.argv.includes('--launch-minimized')
+    const traySupported = process.env.ZETTLR_IS_TRAY_SUPPORTED === '1'
+
+    if (shouldStartMinimized && !addToTray && traySupported) {
+      this._logger.info('[Tray Provider] Detected the --launch-minimized flag. Will override the tray setting.')
+      // The user has indicated via CLI flag that they want to start the app
+      // minimized, so we require the corresponding setting to be set
+      this._config.set('system.leaveAppRunning', true)
+      addToTray = true
+    }
+
+    if (addToTray) {
+      this.add()
+    }
+  }
+
   /**
    * Shuts down the provider
    *
    * @return  {boolean} Always returns true
    */
-  shutdown (): boolean {
-    global.log.verbose('Tray provider shutting down ...')
-    return true // This provider needs no special shutdown logic
+  async shutdown (): Promise<void> {
+    this._logger.verbose('Tray provider shutting down ...')
   }
 
   /**
@@ -123,8 +124,8 @@ export default class TrayProvider extends EventEmitter {
    * @private
    * @memberof TrayProvider
    */
-  private _addTray (): void {
-    const leaveAppRunning: boolean = global.config.get('system.leaveAppRunning')
+  public add (): void {
+    const leaveAppRunning: boolean = this._config.get('system.leaveAppRunning')
 
     if (!leaveAppRunning) {
       return // No need to add a tray.
@@ -158,7 +159,7 @@ export default class TrayProvider extends EventEmitter {
     const menu: MenuItemConstructorOptions[] = [
       {
         label: trans('tray.show_zettlr'),
-        click: () => global.application.showAnyWindow(),
+        click: () => this._windows.showAnyWindow(),
         type: 'normal'
       },
       { label: '', type: 'separator' },

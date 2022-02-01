@@ -23,11 +23,11 @@ import { trans } from '@common/i18n-main'
  *
  * @return  {Promise<string>[]}        Resolves with an array of paths
  */
-export default async function askDirectory (win: BrowserWindow|null): Promise<string[]> {
+export default async function askDirectory (config: ConfigProvider, win: BrowserWindow|null): Promise<string[]> {
   let startDir = app.getPath('home')
 
-  if (isDir(global.config.get('dialogPaths.askDirDialog'))) {
-    startDir = global.config.get('dialogPaths.askDirDialog')
+  if (isDir(config.get('dialogPaths.askDirDialog'))) {
+    startDir = config.get('dialogPaths.askDirDialog')
   }
 
   const options: OpenDialogOptions = {
@@ -49,7 +49,7 @@ export default async function askDirectory (win: BrowserWindow|null): Promise<st
 
   // Save the path of the dir into the config
   if (!response.canceled && response.filePaths.length > 0) {
-    global.config.set('dialogPaths.askDirDialog', response.filePaths[0])
+    config.set('dialogPaths.askDirDialog', response.filePaths[0])
   }
 
   if (response.canceled) {

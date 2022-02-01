@@ -18,14 +18,20 @@ import { app, ipcMain } from 'electron'
 import EventEmitter from 'events'
 
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
+import ProviderContract from './provider-contract'
 
-export default class CssProvider extends EventEmitter {
+export default class CssProvider extends ProviderContract {
   private readonly _filePath: string
+  private readonly _emitter: EventEmitter
+  private readonly _logger: LogProvider
 
-  constructor () {
+  constructor (logger: LogProvider) {
     super()
-    global.log.verbose('CSS provider booting up ...')
+    this._logger = logger
+    this._logger.verbose('CSS provider booting up ...')
     this._filePath = path.join(app.getPath('userData'), 'custom.css')
+
+    this._emitter = new EventEmitter()
 
     // Check for the existence of the custom CSS file. If it is not existent,
     // create an empty one.
@@ -34,14 +40,14 @@ export default class CssProvider extends EventEmitter {
         // Create an empty file with a nice initial comment in it.
         fs.writeFile(this._filePath, '/* Enter your custom CSS here */\n\n', { encoding: 'utf8' })
           .catch(e => {
-            global.log.error(`[CSS Provider] Could not create Custom CSS file: ${e.message as string}`, e)
+            this._logger.error(`[CSS Provider] Could not create Custom CSS file: ${e.message as string}`, e)
           })
       })
 
     // Inject the global provider functions
     global.css = {
-      on: (event, callback) => { this.on(event, callback) },
-      off: (event, callback) => { this.off(event, callback) },
+      on: (event, callback) => { this._emitter.on(event, callback) },
+      off: (event, callback) => { this._emitter.off(event, callback) },
       getPath: () => { return this.getPath() }
     }
 
@@ -59,13 +65,16 @@ export default class CssProvider extends EventEmitter {
     })
   }
 
+  async boot (): Promise<void> {
+    // Nothing to do
+  }
+
   /**
    * Shuts down the provider
    * @return {boolean} Whether or not the shutdown was successful
    */
-  shutdown (): boolean {
-    global.log.verbose('CSS provider shutting down ...')
-    return true
+  async shutdown (): Promise<void> {
+    this._logger.verbose('CSS provider shutting down ...')
   }
 
   /**
@@ -91,7 +100,7 @@ export default class CssProvider extends EventEmitter {
   async set (newContent: string): Promise<boolean> {
     try {
       await fs.writeFile(this._filePath, newContent, { encoding: 'utf8' })
-      this.emit('update', this._filePath)
+      this._emitter.emit('update', this._filePath)
       broadcastIpcMessage('css-provider', {
         command: 'get-custom-css-path',
         payload: this._filePath
@@ -99,7 +108,7 @@ export default class CssProvider extends EventEmitter {
       broadcastIpcMessage('css-provider', { command: 'custom-css-updated' })
       return true
     } catch (err: any) {
-      global.log.error(`[CSS Provider] Could not set custom css: ${err.message as string}`, err)
+      this._logger.error(`[CSS Provider] Could not set custom css: ${err.message as string}`, err)
       return false
     }
   }

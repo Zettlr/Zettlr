@@ -16,6 +16,7 @@ import path from 'path'
 import { promises as fs } from 'fs'
 import { app, ipcMain } from 'electron'
 import chalk from 'chalk'
+import ProviderContract from './provider-contract'
 const hasProp = Object.prototype.hasOwnProperty
 
 /**
@@ -43,17 +44,18 @@ const debugConsole = {
   verbose: function (message: string) { console.log(chalk.grey(message)) }
 }
 
-export default class LogProvider {
+export default class LogProvider extends ProviderContract {
   private readonly _logPath: string
   private readonly _log: LogMessage[]
   private _entryPointer: number
   private _fileLock: boolean
 
   constructor () {
+    super()
     this._logPath = path.join(app.getPath('userData'), 'logs')
     this._cleanLogs() // Remove all older logs
       .catch(err => {
-        global.log.error(`[Log Provider] Error while removing old logs: ${err.message as string}`, err)
+        this.error(`[Log Provider] Error while removing old logs: ${err.message as string}`, err)
       })
     this._log = []
     this._entryPointer = 0 // Set the log entry file pointer to zero
@@ -67,16 +69,16 @@ export default class LogProvider {
     // Inject the global provider functions
     global.log = {
       verbose: (msg, details = null) => {
-        this.log(LogLevel.verbose, msg, details)
+        this.verbose(msg, details)
       },
       info: (msg, details = null) => {
-        this.log(LogLevel.info, msg, details)
+        this.info(msg, details)
       },
       warning: (msg, details = null) => {
-        this.log(LogLevel.warning, msg, details)
+        this.warning(msg, details)
       },
       error: (msg, details = null) => {
-        this.log(LogLevel.error, msg, details)
+        this.error(msg, details)
       }
     }
 
@@ -95,14 +97,33 @@ export default class LogProvider {
     })
   }
 
+  public verbose (msg: string, details: any = null): void {
+    this.log(LogLevel.verbose, msg, details)
+  }
+
+  public info (msg: string, details: any = null): void {
+    this.log(LogLevel.info, msg, details)
+  }
+
+  public warning (msg: string, details: any = null): void {
+    this.log(LogLevel.warning, msg, details)
+  }
+
+  public error (msg: string, details: any = null): void {
+    this.log(LogLevel.error, msg, details)
+  }
+
+  async boot (): Promise<void> {
+    // Nothing to do
+  }
+
   /**
    * Shuts down the provider
    * @return {Boolean} Whether or not the shutdown was successful
    */
-  async shutdown (): Promise<boolean> {
+  async shutdown (): Promise<void> {
     this.log(LogLevel.verbose, 'Log provider shutting down ...', null)
     await this._append() // One final append to flush the log
-    return true
   }
 
   /**
@@ -148,7 +169,7 @@ export default class LogProvider {
     }
 
     this._append()
-      .catch(err => global.log.error(`[Log Provider] Unexpected error during write: ${err.message as string}`, err))
+      .catch(err => this.error(`[Log Provider] Unexpected error during write: ${err.message as string}`, err))
   }
 
   /**

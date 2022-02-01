@@ -24,13 +24,13 @@ import { trans } from '@common/i18n-main'
  *
  * @return  {Promise<boolean>}            Resolves to true, if the file should be replaced
  */
-export default async function shouldReplaceFileDialog (win: BrowserWindow, filename: string): Promise<boolean> {
+export default async function shouldReplaceFileDialog (config: ConfigProvider, win: BrowserWindow, filename: string): Promise<boolean> {
   let options: MessageBoxOptions = {
     type: 'question',
     title: trans('system.replace_file_title'),
     message: trans('system.replace_file_message', filename),
     checkboxLabel: trans('dialog.preferences.always_reload_files'),
-    checkboxChecked: global.config.get('alwaysReloadFiles'),
+    checkboxChecked: config.get('alwaysReloadFiles'),
     buttons: [
       trans('system.cancel'),
       trans('system.ok')
@@ -43,7 +43,7 @@ export default async function shouldReplaceFileDialog (win: BrowserWindow, filen
   // DEBUG: Trying to resolve bug #1645, which seems to relate to modal status vs. promise awaits.
   const response = ([ 'darwin', 'win32' ].includes(process.platform)) ? await dialog.showMessageBox(win, options) : await dialog.showMessageBox(options)
 
-  global.config.set('alwaysReloadFiles', response.checkboxChecked)
+  config.set('alwaysReloadFiles', response.checkboxChecked)
 
   return response.response === 1
 }

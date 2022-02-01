@@ -31,18 +31,18 @@ import { trans } from '@common/i18n-main'
 *
 * @return  {Promise<string|undefined>}            Resolves with a path or undefined
 */
-export default async function saveFileDialog (win: BrowserWindow|null, fileOrPathName: string): Promise<string|undefined> {
+export default async function saveFileDialog (logger: LogProvider, config: ConfigProvider, win: BrowserWindow|null, fileOrPathName: string): Promise<string|undefined> {
   let startDir = app.getPath('home')
 
-  if (isDir(global.config.get('dialogPaths.askFileDialog'))) {
-    startDir = global.config.get('dialogPaths.askFileDialog')
+  if (isDir(config.get('dialogPaths.askFileDialog'))) {
+    startDir = config.get('dialogPaths.askFileDialog')
   }
 
   if (!isDir(path.dirname(fileOrPathName))) {
     // Add a deprecation warning so that we can perspectively remove the config
     // option dialogPaths.askFileDialog and just keep the home directory as kind
     // of a fallback. TODO
-    global.log.warning(`Warning: saveFileDialog has been called with a relative path: ${fileOrPathName}. This behavior is deprecated. Please always provide an absolute path.`)
+    logger.warning(`Warning: saveFileDialog has been called with a relative path: ${fileOrPathName}. This behavior is deprecated. Please always provide an absolute path.`)
   }
 
   // Prepare options
@@ -64,7 +64,7 @@ export default async function saveFileDialog (win: BrowserWindow|null, fileOrPat
 
   // Save the path of the containing dir of the first file into the config
   if (!response.canceled && response.filePath !== undefined) {
-    global.config.set('dialogPaths.askFileDialog', path.dirname(response.filePath))
+    config.set('dialogPaths.askFileDialog', path.dirname(response.filePath))
   }
 
   // Return an empty array if the dialog was cancelled

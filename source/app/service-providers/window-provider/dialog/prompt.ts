@@ -21,7 +21,7 @@ import { trans } from '@common/i18n-main'
  * @param   {BrowserWindow|null}  win      The window to attach to
  * @param   {any}            options  Options for the message box
  */
-export default function promptDialog (win: BrowserWindow|null, options: any): void {
+export default function promptDialog (logger: LogProvider, win: BrowserWindow|null, options: any): void {
   if (typeof options === 'string') {
     options = { 'message': options }
   }
@@ -47,9 +47,9 @@ export default function promptDialog (win: BrowserWindow|null, options: any): vo
   // DEBUG: Trying to resolve bug #1645, which seems to relate to modal status vs. promise awaits.
   if (win !== null && [ 'darwin', 'win32' ].includes(process.platform)) {
     dialog.showMessageBox(win, options)
-      .catch(e => global.log.error('[Window Manager] Prompt threw an error', e))
+      .catch(e => logger.error('[Window Manager] Prompt threw an error', e))
   } else {
     dialog.showMessageBox(options)
-      .catch(e => global.log.error('[Window Manager] Prompt threw an error', e))
+      .catch(e => logger.error('[Window Manager] Prompt threw an error', e))
   }
 }

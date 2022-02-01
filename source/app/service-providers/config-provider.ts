@@ -24,6 +24,7 @@ import isDir from '@common/util/is-dir'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import getConfigTemplate from './assets/get-config-template'
 import enumDictFiles from '@common/util/enum-dict-files'
+import ProviderContract from './provider-contract'
 
 const ZETTLR_VERSION = app.getVersion()
 
@@ -33,7 +34,7 @@ const ZETTLR_VERSION = app.getVersion()
  * variables. Basically, this class tells Zettlr what the user wants and what
  * the environment Zettlr is running in is capable of.
  */
-export default class ConfigProvider extends EventEmitter {
+export default class ConfigProvider extends ProviderContract {
   /**
    * The absolute path to the used configuration
    *
@@ -67,14 +68,21 @@ export default class ConfigProvider extends EventEmitter {
 
   private _saveTimeout: any|undefined
 
+  private readonly _emitter: EventEmitter
+
+  private readonly _logger: LogProvider
+
   /**
     * Preset sane defaults, then load the config and perform a system check.
     * @param {Zettlr} parent Parent Zettlr object.
     */
-  constructor () {
-    super() // Initiate the emitter
-    global.log.verbose('Config provider booting up ...')
+  constructor (logger: LogProvider) {
+    super()
+    this._logger = logger
+    this._logger.verbose('Config provider booting up ...')
     this.configFile = path.join(app.getPath('userData'), 'config.json')
+
+    this._emitter = new EventEmitter() // Initiate the emitter
 
     this.config = getConfigTemplate()
     this._rules = [] // This array holds all validation rules
@@ -98,23 +106,20 @@ export default class ConfigProvider extends EventEmitter {
 
     // Put a global setter and getter for config keys into the globals.
     global.config = {
-      // Clone the properties to prevent intrusion
       get: (key?: string) => {
-        return JSON.parse(JSON.stringify(this.get(key)))
+        return this.get(key)
       },
       // The setter is a simply pass-through
       set: (key: string, val: any) => {
-        const res = this.set(key, val)
-        this._maybeSave()
-        return res
+        return this.set(key, val)
       },
       // Enable global event listening to updates of the config
       on: (evt: string, callback: (...args: any[]) => void) => {
-        this.on(evt, callback)
+        this._emitter.on(evt, callback)
       },
       // Also do the same for the removal of listeners
       off: (evt: string, callback: (...args: any[]) => void) => {
-        this.off(evt, callback)
+        this._emitter.off(evt, callback)
       },
       /**
        * Adds a path to the startup path array
@@ -136,13 +141,13 @@ export default class ConfigProvider extends EventEmitter {
        * If true, Zettlr assumes this is the first start of the app
        */
       isFirstStart: () => {
-        return this._firstStart
+        return this.isFirstStart()
       },
       /**
        * If true, Zettlr has detected a change in version in the config
        */
       newVersionDetected: () => {
-        return this._newVersion
+        return this.newVersionDetected()
       }
     } // END globals for the configuration
 
@@ -178,14 +183,35 @@ export default class ConfigProvider extends EventEmitter {
     })
   }
 
+  isFirstStart (): boolean {
+    return this._firstStart
+  }
+
+  newVersionDetected (): boolean {
+    return this._newVersion
+  }
+
+  async boot (): Promise<void> {
+    // Nothing to do
+  }
+
   /**
    * Shutdown the service provider -- here save the config to disk
    * @return {Boolean} Returns true after successful shutdown.
    */
-  async shutdown (): Promise<boolean> {
-    global.log.verbose('Config provider shutting down ...')
+  async shutdown (): Promise<void> {
+    this._logger.verbose('Config provider shutting down ...')
     this.save()
-    return true
+  }
+
+  // Enable global event listening to updates of the config
+  on (evt: string, callback: (...args: any[]) => void): void {
+    this._emitter.on(evt, callback)
+  }
+
+  // Also do the same for the removal of listeners
+  off (evt: string, callback: (...args: any[]) => void): void {
+    this._emitter.off(evt, callback)
   }
 
   /**
@@ -194,15 +220,15 @@ export default class ConfigProvider extends EventEmitter {
     */
   load (): this {
     let readConfig = null
-    global.log.verbose(`[Config Provider] Loading configuration file from ${this.configFile} ...`)
+    this._logger.verbose(`[Config Provider] Loading configuration file from ${this.configFile} ...`)
 
     // Does the file already exist?
     try {
       fs.lstatSync(this.configFile)
       readConfig = JSON.parse(fs.readFileSync(this.configFile, { encoding: 'utf8' }))
-      global.log.verbose('[Config Provider] Successfully loaded configuration')
+      this._logger.verbose('[Config Provider] Successfully loaded configuration')
     } catch (err) {
-      global.log.info('[Config Provider] No configuration file found - using defaults.')
+      this._logger.info('[Config Provider] No configuration file found - using defaults.')
       fs.writeFileSync(this.configFile, JSON.stringify(this.config), { encoding: 'utf8' })
       this._firstStart = true // Assume first start
       this._newVersion = true // Obviously
@@ -212,7 +238,7 @@ export default class ConfigProvider extends EventEmitter {
     // Determine if this is a different version
     this._newVersion = readConfig.version !== this.config.version
     if (this._newVersion) {
-      global.log.info(`Migrating from ${String(readConfig.version)} to ${String(this.config.version)}!`)
+      this._logger.info(`Migrating from ${String(readConfig.version)} to ${String(this.config.version)}!`)
     }
 
     this.update(readConfig)
@@ -235,12 +261,12 @@ export default class ConfigProvider extends EventEmitter {
       this.load()
     }
     // (Over-)write the configuration
-    global.log.info(`[Config Provider] Writing configuration file to ${this.configFile}...`)
+    this._logger.info(`[Config Provider] Writing configuration file to ${this.configFile}...`)
 
     try {
       fs.writeFileSync(this.configFile, JSON.stringify(this.config), { encoding: 'utf8' })
     } catch (err: any) {
-      global.log.error(`[Config Provider] Error during file write: ${String(err.message)}`, err)
+      this._logger.error(`[Config Provider] Error during file write: ${String(err.message)}`, err)
     }
 
     return this
@@ -270,7 +296,7 @@ export default class ConfigProvider extends EventEmitter {
       // conform to the new rules.
       for (const entry of replacements) {
         if ('val' in entry && !('value' in entry)) {
-          global.log.info(`[Config Provider] Migrating Autocorrect replacement ${entry.key as string} from 'val' to 'value' ...`)
+          this._logger.info(`[Config Provider] Migrating Autocorrect replacement ${entry.key as string} from 'val' to 'value' ...`)
           entry.value = entry.val
           delete entry.val
         }
@@ -367,7 +393,7 @@ export default class ConfigProvider extends EventEmitter {
           // arg will be a keyof ConfigOptions at this point
           cfg = cfg[arg as keyof ConfigOptions] as unknown as any
         } else {
-          global.log.warning(`[Config Provider] Someone has requested a non-existent key: ${attr}`)
+          this._logger.warning(`[Config Provider] Someone has requested a non-existent key: ${attr}`)
           return null // The config option must match exactly
         }
       }
@@ -379,7 +405,7 @@ export default class ConfigProvider extends EventEmitter {
     if (attr in this.config) {
       return this.config[attr as keyof ConfigOptions]
     } else {
-      global.log.warning(`[Config Provider] Someone has requested a non-existent key: ${attr}`)
+      this._logger.warning(`[Config Provider] Someone has requested a non-existent key: ${attr}`)
       return null
     }
   }
@@ -409,13 +435,14 @@ export default class ConfigProvider extends EventEmitter {
       // Set the new value and inform the listeners
       // @ts-expect-error Since we're dynamically assigning a value here.
       this.config[option as keyof ConfigOptions] = value
-      this.emit('update', option) // Pass the option for info
+      this._emitter.emit('update', option) // Pass the option for info
 
       // Broadcast to all open windows
       broadcastIpcMessage('config-provider', {
         command: 'update',
         payload: option
       })
+      this._maybeSave()
       return true
     }
 
@@ -443,12 +470,13 @@ export default class ConfigProvider extends EventEmitter {
         // Set the new value and inform the listeners
         // @ts-expect-error Since we're dynamically assigning a value here
         cfg[prop as keyof ConfigOptions] = value
-        this.emit('update', option) // Pass the option for info
+        this._emitter.emit('update', option) // Pass the option for info
         // Broadcast to all open windows
         broadcastIpcMessage('config-provider', {
           command: 'update',
           payload: option
         })
+        this._maybeSave()
         return true
       }
     }
@@ -466,7 +494,7 @@ export default class ConfigProvider extends EventEmitter {
     // are retained, and no rogue values (which can also simply be
     // old deprecated values).
     this.config = safeAssign(newcfg, this.config)
-    this.emit('update') // Emit an event to all listeners
+    this._emitter.emit('update') // Emit an event to all listeners
     // Broadcast to all open windows
     broadcastIpcMessage('config-provider', { command: 'update', payload: undefined })
   }

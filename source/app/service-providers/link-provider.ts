@@ -15,19 +15,23 @@
 import { ipcMain } from 'electron'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import path from 'path'
+import ProviderContract from './provider-contract'
 
 /**
  * This class manages the coloured tags of the app. It reads the tags on each
  * start of the app and writes them after they have been changed.
  */
-export default class LinkProvider {
+export default class LinkProvider extends ProviderContract {
   private readonly _fileLinkDatabase: Map<string, string[]>
   private readonly _idLinkDatabase: Map<string, string[]>
+  private readonly _logger: LogProvider
   /**
    * Create the instance on program start and initially load the tags.
    */
-  constructor () {
-    global.log.verbose('Link provider booting up ...')
+  constructor (logger: LogProvider) {
+    super()
+    this._logger = logger
+    this._logger.verbose('Link provider booting up ...')
 
     this._fileLinkDatabase = new Map()
     this._idLinkDatabase = new Map()
@@ -108,12 +112,15 @@ export default class LinkProvider {
     })
   }
 
+  async boot (): Promise<void> {
+    // Nothing to do
+  }
+
   /**
    * Shuts down the service provider
    * @return {Boolean} Returns true after successful shutdown
    */
-  async shutdown (): Promise<boolean> {
-    global.log.verbose('Link provider shutting down ...')
-    return true
+  async shutdown (): Promise<void> {
+    this._logger.verbose('Link provider shutting down ...')
   }
 }

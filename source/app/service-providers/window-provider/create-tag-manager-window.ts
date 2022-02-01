@@ -28,7 +28,7 @@ import { WindowPosition } from './types'
  *
  * @return  {BrowserWindow}           The loaded print window
  */
-export default function createTagManagerWindow (conf: WindowPosition): BrowserWindow {
+export default function createTagManagerWindow (logger: LogProvider, config: ConfigProvider, conf: WindowPosition): BrowserWindow {
   const winConf: BrowserWindowConstructorOptions = {
     acceptFirstMouse: true,
     minWidth: 300,
@@ -47,23 +47,23 @@ export default function createTagManagerWindow (conf: WindowPosition): BrowserWi
   }
 
   // Set the correct window chrome
-  setWindowChrome(winConf)
+  setWindowChrome(config, winConf)
 
   const window = new BrowserWindow(winConf)
 
   // Load the index.html of the app.
   window.loadURL(TAG_MANAGER_WEBPACK_ENTRY)
     .catch(e => {
-      global.log.error(`Could not load URL ${TAG_MANAGER_WEBPACK_ENTRY}: ${e.message as string}`, e)
+      logger.error(`Could not load URL ${TAG_MANAGER_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })
 
   // EVENT LISTENERS
 
   // Prevent arbitrary navigation away from our WEBPACK_ENTRY
-  preventNavigation(window)
+  preventNavigation(logger, window)
 
   // Implement main process logging
-  attachLogger(window, 'Tag Manager')
+  attachLogger(logger, window, 'Tag Manager')
 
   // Only show window once it is completely initialized + maximize it
   window.once('ready-to-show', function () {
@@ -83,7 +83,7 @@ export default function createTagManagerWindow (conf: WindowPosition): BrowserWi
         'websql'
       ]
     }).catch(e => {
-      global.log.error(`Could not clear session data: ${e.message as string}`, e)
+      logger.error(`Could not clear session data: ${e.message as string}`, e)
     })
   })
 

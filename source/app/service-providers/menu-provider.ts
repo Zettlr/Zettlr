@@ -25,6 +25,9 @@ import broadcastIPCMessage from '@common/util/broadcast-ipc-message'
 // Import the menu constructors
 import win32Menu from './assets/menu.win32'
 import macOSMenu from './assets/menu.darwin'
+import ProviderContract from './provider-contract'
+import RecentDocumentsProvider from './recent-docs-provider'
+import WindowProvider from './window-provider'
 
 // Types from the global.d.ts of the window-register module
 interface CheckboxRadioItem {
@@ -85,25 +88,35 @@ const BLUEPRINTS = {
 * This class generates the menu based upon the menu.tpl.json as well as additional
 * config variables and the platform.
 */
-export default class MenuProvider {
+export default class MenuProvider extends ProviderContract {
   /**
    * Keeps track of the state of checkboxes which are not controlled by a
    * configuration setting.
    */
   _checkboxState: Map<string, boolean>
 
+  private readonly _logger: LogProvider
+  private readonly _config: ConfigProvider
+  private readonly _recentDocs: RecentDocumentsProvider
+  private readonly _windows: WindowProvider
+
   /**
   * Creates the main application menu and sets it.
   */
-  constructor () {
-    global.log.verbose('Menu provider booting up ...')
+  constructor (logger: LogProvider, config: ConfigProvider, recentDocs: RecentDocumentsProvider, windows: WindowProvider) {
+    super()
+    this._logger = logger
+    this._config = config
+    this._recentDocs = recentDocs
+    this._windows = windows
+    this._logger.verbose('Menu provider booting up ...')
     this._checkboxState = new Map()
 
     // Begin listening to configuration update events that announce a change in
     // the recent docs list so that we can make sure the menu is always updated.
-    global.config.on('update', () => { this.set() })
+    this._config.on('update', () => { this.set() })
     if (![ 'darwin', 'win32' ].includes(process.platform)) {
-      global.recentDocs.on('update', () => { this.set() })
+      this._recentDocs.on('update', () => { this.set() })
     }
 
     ipcMain.on('menu-provider', (event, message) => {
@@ -125,7 +138,7 @@ export default class MenuProvider {
         // Send the serialized submenu to the renderer
         const menuItem = appMenu.getMenuItemById(itemID)
         if (menuItem === null) {
-          global.log.error(`[Menu Provider] Could not send app menu ${itemID}: No item found.`)
+          this._logger.error(`[Menu Provider] Could not send app menu ${itemID}: No item found.`)
           return
         }
 
@@ -141,14 +154,14 @@ export default class MenuProvider {
 
         const appMenu = Menu.getApplicationMenu()
         if (appMenu === null) {
-          global.log.error(`[Menu Provider] Could not trigger a click on item ${itemID}: No menu set.`)
+          this._logger.error(`[Menu Provider] Could not trigger a click on item ${itemID}: No menu set.`)
           return
         }
 
         const menuItem = appMenu.getMenuItemById(itemID)
 
         if (menuItem === null) {
-          global.log.error(`[Menu Provider] Could not trigger a click on item ${itemID}: No item found.`)
+          this._logger.error(`[Menu Provider] Could not trigger a click on item ${itemID}: No item found.`)
           return
         }
 
@@ -157,7 +170,7 @@ export default class MenuProvider {
         const focusedWindow = BrowserWindow.getFocusedWindow()
         if (typeof menuItem.role === 'string') {
           if (focusedWindow === null) {
-            global.log.error(`[Menu Provider] Could not trigger custom click on menuItem ${itemID} with role ${menuItem.role}: No focused Window to trigger on.`)
+            this._logger.error(`[Menu Provider] Could not trigger custom click on menuItem ${itemID} with role ${menuItem.role}: No focused Window to trigger on.`)
             return
           }
 
@@ -207,7 +220,7 @@ export default class MenuProvider {
               focusedWindow.minimize()
               break
             default:
-              global.log.error(`[Menu Provider] Could not click menu item with role ${menuItem.role}, since no handler is implemented!`)
+              this._logger.error(`[Menu Provider] Could not click menu item with role ${menuItem.role}, since no handler is implemented!`)
           }
         } else {
           console.log(`Clicking menu item with ID ${itemID}`)
@@ -224,14 +237,17 @@ export default class MenuProvider {
     })
   }
 
+  async boot (): Promise<void> {
+    // Nothing to do
+  }
+
   /**
    * Shuts down the provider
    *
    * @return  {boolean} Always returns true
    */
-  shutdown (): boolean {
-    global.log.verbose('Menu provider shutting down ...')
-    return true // This provider needs no special shutdown logic
+  async shutdown (): Promise<void> {
+    this._logger.verbose('Menu provider shutting down ...')
   }
 
   /**
@@ -324,7 +340,7 @@ export default class MenuProvider {
     // Create a small helper function that will manage a volatile checkbox state.
     // Volatile means: The menu will attempt to retrieve a checkbox state that
     // is not controlled by a setting (and as such cannot be retrieved with
-    // global.config.get). For those checkboxes, the menu provider will maintain
+    // this._config.get). For those checkboxes, the menu provider will maintain
     // a map that persists the checkbox state for as long as the program runs.
     const getState = (id: string, init: boolean): boolean => {
       const result = this._checkboxState.get(id)
@@ -341,7 +357,7 @@ export default class MenuProvider {
       this._checkboxState.set(id, val)
     }
 
-    const blueprint = BLUEPRINTS[process.platform](getState, setState)
+    const blueprint = BLUEPRINTS[process.platform](this._logger, this._config, this._recentDocs, this._windows, getState, setState)
     // Last but not least build the template
     return Menu.buildFromTemplate(blueprint)
   }

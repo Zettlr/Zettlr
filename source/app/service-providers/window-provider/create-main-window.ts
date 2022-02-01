@@ -2,13 +2,14 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        createPreferencesWindow function
+ * Contains:        createMainWindow function
  * CVM-Role:        Utility function
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     Creates a BrowserWindow with an entry point according to
- *                  the function arguments.
+ * Description:     Creates a new BrowserWindow instance with main window
+ *                  configuration, as well as registering all hooks that have
+ *                  to be called either way.
  *
  * END HEADER
  */
@@ -17,57 +18,57 @@ import {
   BrowserWindow,
   BrowserWindowConstructorOptions
 } from 'electron'
-import attachLogger from './attach-logger'
-import preventNavigation from './prevent-navigation'
-import setWindowChrome from './set-window-chrome'
 import { WindowPosition } from './types'
+import setWindowChrome from './set-window-chrome'
+import preventNavigation from './prevent-navigation'
+import attachLogger from './attach-logger'
 
 /**
- * Creates a BrowserWindow with print window configuration and loads the
- * corresponding renderer.
+ * Creates a BrowserWindow with main window configuration and loads the main
+ * renderer.
  *
- * @return  {BrowserWindow}           The loaded print window
+ * @return  {BrowserWindow}  The loaded main window
  */
-export default function createPreferencesWindow (conf: WindowPosition): BrowserWindow {
+export default function createMainWindow (logger: LogProvider, config: ConfigProvider, conf: WindowPosition): BrowserWindow {
   const winConf: BrowserWindowConstructorOptions = {
+    width: conf.width,
+    height: conf.height,
+    x: conf.x,
+    y: conf.y,
     acceptFirstMouse: true,
     minWidth: 300,
     minHeight: 200,
-    width: conf.width,
-    height: conf.height,
-    minimizable: false, // Disable the minimise button for this utility window
-    x: conf.x,
-    y: conf.y,
     show: false,
-    fullscreenable: false,
     webPreferences: {
       contextIsolation: true,
-      preload: PREFERENCES_PRELOAD_WEBPACK_ENTRY
+      preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY
     }
   }
 
-  // Set the correct window chrome
-  setWindowChrome(winConf)
+  setWindowChrome(config, winConf)
 
   const window = new BrowserWindow(winConf)
 
   // Load the index.html of the app.
-  window.loadURL(PREFERENCES_WEBPACK_ENTRY)
+  // The variable MAIN_WINDOW_WEBPACK_ENTRY is automatically resolved by electron forge / webpack
+  window.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
     .catch(e => {
-      global.log.error(`Could not load URL ${PREFERENCES_WEBPACK_ENTRY}: ${e.message as string}`, e)
+      logger.error(`Could not load URL ${MAIN_WINDOW_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })
 
   // EVENT LISTENERS
 
   // Prevent arbitrary navigation away from our WEBPACK_ENTRY
-  preventNavigation(window)
-
+  preventNavigation(logger, window)
   // Implement main process logging
-  attachLogger(window, 'Preferences')
+  attachLogger(logger, window, 'Main Window')
 
   // Only show window once it is completely initialized + maximize it
   window.once('ready-to-show', function () {
     window.show()
+    if (conf.isMaximised) {
+      window.maximize()
+    }
   })
 
   // Emitted when the user wants to close the window.
@@ -83,7 +84,7 @@ export default function createPreferencesWindow (conf: WindowPosition): BrowserW
         'websql'
       ]
     }).catch(e => {
-      global.log.error(`Could not clear session data: ${e.message as string}`, e)
+      logger.error(`Could not clear session data: ${e.message as string}`, e)
     })
   })
 

@@ -17,6 +17,7 @@ import path from 'path'
 import { app, ipcMain } from 'electron'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
+import ProviderContract from './provider-contract'
 
 interface InternalTagRecord {
   text: string
@@ -28,15 +29,18 @@ interface InternalTagRecord {
  * This class manages the coloured tags of the app. It reads the tags on each
  * start of the app and writes them after they have been changed.
  */
-export default class TagProvider {
+export default class TagProvider extends ProviderContract {
   private readonly _file: string
   private _colouredTags: ColouredTag[]
   private readonly _globalTagDatabase: Map<string, InternalTagRecord>
+  private readonly _logger
   /**
    * Create the instance on program start and initially load the tags.
    */
-  constructor () {
-    global.log.verbose('Tag provider booting up ...')
+  constructor (logger: LogProvider) {
+    super()
+    this._logger = logger
+    this._logger.verbose('Tag provider booting up ...')
     this._file = path.join(app.getPath('userData'), 'tags.json')
     this._colouredTags = []
     // The global tag database; it contains all tags that are used in any of the
@@ -159,14 +163,17 @@ export default class TagProvider {
     })
   }
 
+  async boot (): Promise<void> {
+    // Nothing to do
+  }
+
   /**
    * Shuts down the service provider
    * @return {Boolean} Returns true after successful shutdown
    */
-  async shutdown (): Promise<boolean> {
-    global.log.verbose('Tag provider shutting down ...')
+  async shutdown (): Promise<void> {
+    this._logger.verbose('Tag provider shutting down ...')
     this._save()
-    return true
   }
 
   /**

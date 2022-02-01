@@ -2,12 +2,13 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        createQuicklookWindow function
+ * Contains:        createUpdateWindow function
  * CVM-Role:        Utility function
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     Creates a BrowserWindow using the Quicklook configuration
+ * Description:     Creates a BrowserWindow with an entry point according to
+ *                  the function arguments.
  *
  * END HEADER
  */
@@ -16,64 +17,56 @@ import {
   BrowserWindow,
   BrowserWindowConstructorOptions
 } from 'electron'
-import { MDFileDescriptor } from '@dts/main/fsal'
-import { WindowPosition } from './types'
-import setWindowChrome from './set-window-chrome'
-import preventNavigation from './prevent-navigation'
 import attachLogger from './attach-logger'
+import preventNavigation from './prevent-navigation'
+import setWindowChrome from './set-window-chrome'
+import { WindowPosition } from './types'
 
 /**
- * Creates a BrowserWindow with Quicklook Window configuration and loads the
- * corresponding renderer.
+ * Creates a BrowserWindow with update window functionality
  *
- * @param   {MDFileDescriptor}  file  The file to load in the Quicklook
- * @return  {BrowserWindow}           The loaded main window
+ * @return  {BrowserWindow}           The loaded update window
  */
-export default function createQuicklookWindow (file: MDFileDescriptor, conf: WindowPosition): BrowserWindow {
+export default function createUpdateWindow (logger: LogProvider, config: ConfigProvider, conf: WindowPosition): BrowserWindow {
   const winConf: BrowserWindowConstructorOptions = {
     acceptFirstMouse: true,
     minWidth: 300,
     minHeight: 200,
     width: conf.width,
     height: conf.height,
+    minimizable: false, // Disable the minimise button for this utility window
     x: conf.x,
     y: conf.y,
     show: false,
+    fullscreenable: false,
     webPreferences: {
       contextIsolation: true,
-      preload: QUICKLOOK_PRELOAD_WEBPACK_ENTRY
+      preload: UPDATE_PRELOAD_WEBPACK_ENTRY
     }
   }
 
   // Set the correct window chrome
-  setWindowChrome(winConf)
+  setWindowChrome(config, winConf)
 
   const window = new BrowserWindow(winConf)
 
-  const effectiveUrl = new URL(QUICKLOOK_WEBPACK_ENTRY)
-  effectiveUrl.searchParams.append('file', file.path)
-
   // Load the index.html of the app.
-  // The variable QUICKLOOK_WEBPACK_ENTRY is automatically resolved by electron forge / webpack
-  window.loadURL(effectiveUrl.toString())
+  window.loadURL(UPDATE_WEBPACK_ENTRY)
     .catch(e => {
-      global.log.error(`Could not load URL ${QUICKLOOK_WEBPACK_ENTRY}: ${e.message as string}`, e)
+      logger.error(`Could not load URL ${UPDATE_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })
 
   // EVENT LISTENERS
 
   // Prevent arbitrary navigation away from our WEBPACK_ENTRY
-  preventNavigation(window)
+  preventNavigation(logger, window)
 
   // Implement main process logging
-  attachLogger(window, 'Quicklook Window')
+  attachLogger(logger, window, 'Update Window')
 
   // Only show window once it is completely initialized + maximize it
   window.once('ready-to-show', function () {
     window.show()
-    if (conf.isMaximised) {
-      window.maximize()
-    }
   })
 
   // Emitted when the user wants to close the window.
@@ -89,7 +82,7 @@ export default function createQuicklookWindow (file: MDFileDescriptor, conf: Win
         'websql'
       ]
     }).catch(e => {
-      global.log.error(`Could not clear session data: ${e.message as string}`, e)
+      logger.error(`Could not clear session data: ${e.message as string}`, e)
     })
   })
 

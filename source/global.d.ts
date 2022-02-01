@@ -71,13 +71,7 @@ declare const PROJECT_PROPERTIES_WEBPACK_ENTRY: string
 interface Application {
   runCommand: (command: string, payload?: any) => Promise<any>
   isQuitting: () => boolean
-  showLogViewer: () => void
-  showPreferences: () => void
   displayErrorMessage: (title: string, message: string, contents?: string) => void
-  showAboutWindow: () => void
-  showDefaultsPreferences: () => void
-  showTagManager: () => void
-  showAnyWindow: () => void
   findFile: (prop: any) => MDFileDescriptor | CodeFileDescriptor | null
 }
 
@@ -95,7 +89,6 @@ declare module global {
   var dict: DictionaryProvider
   var log: LogProvider
   var store: any
-  var notify: NotificationProvider
   var ipc: any
   var citeproc: CiteprocProvider
   var config: ConfigProvider
@@ -109,7 +102,6 @@ declare module global {
   var links: LinkProvider
   var tags: TagProvider
   var stats: StatsProvider
-  var recentDocs: RecentDocumentsProvider
   // Translation data necessary to facilitate internationalisation
   var i18n: any
   var i18nRawData: any

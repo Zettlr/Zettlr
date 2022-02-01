@@ -16,6 +16,7 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import { app, ipcMain } from 'electron'
+import ProviderContract from './provider-contract'
 
 /**
  * ZettlrStats works like the ZettlrConfig object, only with a different file.
@@ -24,17 +25,20 @@ import { app, ipcMain } from 'electron'
  * (In case anyone is worried: No, there will be no transmission of stats to
  * anyone.)
  */
-export default class StatsProvider {
+export default class StatsProvider extends ProviderContract {
   private readonly statsPath: string
   private readonly statsFile: string
+  private readonly _logger: LogProvider
   private stats: Stats
 
   /**
    * Preset sane defaults and load an existing stats file if present
    * @param {Zettlr} parent The main zettlr object.
    */
-  constructor () {
-    global.log.verbose('Stats provider booting up')
+  constructor (logger: LogProvider) {
+    super()
+    this._logger = logger
+    this._logger.verbose('Stats provider booting up')
     this.statsPath = app.getPath('userData')
     this.statsFile = path.join(this.statsPath, 'stats.json')
     this.stats = {
@@ -66,15 +70,19 @@ export default class StatsProvider {
 
     this.load()
       .catch(e => {
-        global.log.error(`[Stats Provider] Could not load stats data from disk: ${e.message as string}`, e)
+        this._logger.error(`[Stats Provider] Could not load stats data from disk: ${e.message as string}`, e)
       })
+  }
+
+  async boot (): Promise<void> {
+    // Nothing to do
   }
 
   /**
    * Shuts down the provider
    */
   async shutdown (): Promise<void> {
-    global.log.verbose('Stats provider shutting down ...')
+    this._logger.verbose('Stats provider shutting down ...')
     await this.save()
   }
 
@@ -148,7 +156,7 @@ export default class StatsProvider {
         today: parsedData.today,
         sumMonth: parsedData.sumMonth
       }
-      this._recompute().catch(e => global.log.error(`[Stats Provider] Error during recomputing: ${e.message as string}`, e))
+      this._recompute().catch(e => this._logger.error(`[Stats Provider] Error during recomputing: ${e.message as string}`, e))
     } catch (err) {
       // Write initial file
       await this.save()
@@ -173,7 +181,7 @@ export default class StatsProvider {
       this.stats.wordCount[this.today] = this.stats.wordCount[this.today] + val
     }
 
-    this._recompute().catch(e => global.log.error(`[Stats Provider] Error during recomputing: ${e.message as string}`, e))
+    this._recompute().catch(e => this._logger.error(`[Stats Provider] Error during recomputing: ${e.message as string}`, e))
   }
 
   /**
@@ -187,7 +195,7 @@ export default class StatsProvider {
       this.stats.pomodoros[this.today] = this.stats.pomodoros[this.today] + 1
     }
 
-    this._recompute().catch(e => global.log.error(`[Stats Provider] Error during recomputing: ${e.message as string}`, e))
+    this._recompute().catch(e => this._logger.error(`[Stats Provider] Error during recomputing: ${e.message as string}`, e))
   }
 
   /**
@@ -195,7 +203,7 @@ export default class StatsProvider {
    */
   async save (): Promise<void> {
     // (Over-)write the configuration
-    global.log.info('[Stats Provider] Writing statistics to file')
+    this._logger.info('[Stats Provider] Writing statistics to file')
     await fs.writeFile(this.statsFile, JSON.stringify(this.stats), { encoding: 'utf8' })
   }
 

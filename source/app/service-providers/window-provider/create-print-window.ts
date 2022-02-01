@@ -2,7 +2,7 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        createLogWindow function
+ * Contains:        createPrintWindow function
  * CVM-Role:        Utility function
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
@@ -22,13 +22,13 @@ import setWindowChrome from './set-window-chrome'
 import { WindowPosition } from './types'
 
 /**
- * Creates a BrowserWindow with log window configuration and loads the
+ * Creates a BrowserWindow with print window configuration and loads the
  * corresponding renderer.
  *
- * @param   {WindowPosition}  conf  The configuration to load
- * @return  {BrowserWindow}         The loaded log window
+ * @param   {string}  file  The file to load in the print preview
+ * @return  {BrowserWindow}           The loaded print window
  */
-export default function createLogWindow (conf: WindowPosition): BrowserWindow {
+export default function createPrintWindow (logger: LogProvider, config: ConfigProvider, file: string, conf: WindowPosition): BrowserWindow {
   const winConf: BrowserWindowConstructorOptions = {
     acceptFirstMouse: true,
     minWidth: 300,
@@ -40,29 +40,35 @@ export default function createLogWindow (conf: WindowPosition): BrowserWindow {
     show: false,
     webPreferences: {
       contextIsolation: true,
-      preload: LOG_VIEWER_PRELOAD_WEBPACK_ENTRY
+      // We are loading an iFrame with a local resource, so we must disable webSecurity for this window
+      webSecurity: false,
+      preload: PRINT_PRELOAD_WEBPACK_ENTRY
     }
   }
 
   // Set the correct window chrome
-  setWindowChrome(winConf)
+  setWindowChrome(config, winConf)
 
   const window = new BrowserWindow(winConf)
 
+  const effectiveUrl = new URL(PRINT_WEBPACK_ENTRY)
+  // Add the print preview file to the search params
+  effectiveUrl.searchParams.append('file', file)
+
   // Load the index.html of the app.
-  // The variable LOG_VIEWER_WEBPACK_ENTRY is automatically resolved by electron forge / webpack
-  window.loadURL(LOG_VIEWER_WEBPACK_ENTRY)
+  // The variable PRINT_WEBPACK_ENTRY is automatically resolved by electron forge / webpack
+  window.loadURL(effectiveUrl.toString())
     .catch(e => {
-      global.log.error(`Could not load URL ${LOG_VIEWER_WEBPACK_ENTRY}: ${e.message as string}`, e)
+      logger.error(`Could not load URL ${PRINT_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })
 
   // EVENT LISTENERS
 
   // Prevent arbitrary navigation away from our WEBPACK_ENTRY
-  preventNavigation(window)
+  preventNavigation(logger, window)
 
   // Implement main process logging
-  attachLogger(window, 'Log Window')
+  attachLogger(logger, window, 'Print Window')
 
   // Only show window once it is completely initialized + maximize it
   window.once('ready-to-show', function () {
@@ -82,7 +88,7 @@ export default function createLogWindow (conf: WindowPosition): BrowserWindow {
         'websql'
       ]
     }).catch(e => {
-      global.log.error(`Could not clear session data: ${e.message as string}`, e)
+      logger.error(`Could not clear session data: ${e.message as string}`, e)
     })
   })
 

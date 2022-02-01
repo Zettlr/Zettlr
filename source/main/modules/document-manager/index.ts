@@ -23,6 +23,7 @@ import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
 import { FSALCodeFile, FSALFile } from '../fsal'
 import { codeFileExtensions, mdFileExtensions } from '@common/get-file-extensions'
 import generateFilename from '@common/util/generate-filename'
+import RecentDocumentsProvider from '@providers/recent-docs-provider'
 
 const ALLOWED_CODE_FILES = codeFileExtensions(true)
 const MARKDOWN_FILES = mdFileExtensions(true)
@@ -32,15 +33,24 @@ export default class DocumentManager extends EventEmitter {
   private _activeFile: MDFileDescriptor|CodeFileDescriptor|null
   private readonly _watcher: chokidar.FSWatcher
   private readonly _sessionHistory: string[]
+  private readonly _logger: LogProvider
+  private readonly _config: ConfigProvider
+  private readonly _recentDocs: RecentDocumentsProvider
+  private readonly _citeproc: CiteprocProvider
   private _sessionPointer: number
 
-  constructor () {
+  constructor (logger: LogProvider, config: ConfigProvider, recentDocs: RecentDocumentsProvider, citeproc: CiteprocProvider) {
     super()
 
     this._loadedDocuments = []
     this._sessionHistory = []
     this._sessionPointer = -1
     this._activeFile = null
+
+    this._logger = logger
+    this._config = config
+    this._recentDocs = recentDocs
+    this._citeproc = citeproc
 
     let options: chokidar.WatchOptions = {
       persistent: true,
@@ -52,8 +62,8 @@ export default class DocumentManager extends EventEmitter {
       binaryInterval: 5000
     }
 
-    if (global.config.get('watchdog.activatePolling') as boolean) {
-      let threshold: number = global.config.get('watchdog.stabilityThreshold')
+    if (this._config.get('watchdog.activatePolling') as boolean) {
+      let threshold: number = this._config.get('watchdog.stabilityThreshold')
       if (typeof threshold !== 'number' || threshold < 0) {
         threshold = 1000
       }
@@ -65,7 +75,7 @@ export default class DocumentManager extends EventEmitter {
         'pollInterval': 100
       }
 
-      global.log.info(`[DocumentManager] Activating file polling with a threshold of ${threshold}ms.`)
+      this._logger.info(`[DocumentManager] Activating file polling with a threshold of ${threshold}ms.`)
     }
 
     // Start up the chokidar process
@@ -76,7 +86,7 @@ export default class DocumentManager extends EventEmitter {
 
       if (descriptor === undefined) {
         // Should not happen, but just in case
-        global.log.warning(`[DocumentManager] Received a ${event}-event for ${p} but couldn't handle it.`)
+        this._logger.warning(`[DocumentManager] Received a ${event}-event for ${p} but couldn't handle it.`)
         return
       }
 
@@ -91,29 +101,29 @@ export default class DocumentManager extends EventEmitter {
             // services (OneDrive and Box do that) from having text appear to "jump"
             // from time to time.
             if (newDescriptor.modtime > descriptor.modtime) {
-              global.log.info(`[Document Manager] Emitting remote change event for file ${newDescriptor.path}`)
+              this._logger.info(`[Document Manager] Emitting remote change event for file ${newDescriptor.path}`)
               // Replace the old descriptor with the newly loaded one
               this._loadedDocuments.splice(this._loadedDocuments.indexOf(descriptor), 1, newDescriptor)
               // Notify the caller, that the file has actually changed on disk.
               this.emit('update', 'openFileRemotelyChanged', newDescriptor)
             }
           })
-          .catch(err => global.log.error(`[Document Manager] Could not reload remotely changed file ${p}!`, err))
+          .catch(err => this._logger.error(`[Document Manager] Could not reload remotely changed file ${p}!`, err))
       } else {
-        global.log.warning(`[DocumentManager] Received unexpected event ${event} for ${p}.`)
+        this._logger.warning(`[DocumentManager] Received unexpected event ${event} for ${p}.`)
       }
     })
   } // END constructor
 
   async init (): Promise<void> {
     // Loads in all openFiles
-    const openFiles: string[] = global.config.get('openFiles')
+    const openFiles: string[] = this._config.get('openFiles')
     for (const filePath of openFiles) {
       try {
         const descriptor = await this._loadFile(filePath)
         this._loadedDocuments.push(descriptor)
       } catch (err: any) {
-        global.log.error(`[Document Manager] Boot: Could not load file ${filePath}: ${String(err.message)}`, err)
+        this._logger.error(`[Document Manager] Boot: Could not load file ${filePath}: ${String(err.message)}`, err)
       }
     }
 
@@ -123,10 +133,10 @@ export default class DocumentManager extends EventEmitter {
 
     this.emit('update', 'openFiles')
     // In case some of the files couldn't be loaded, make sure to re-set the config option accordingly.
-    global.config.set('openFiles', actuallyLoadedPaths)
+    this._config.set('openFiles', actuallyLoadedPaths)
 
     // And make the correct file active
-    const activeFile: string = global.config.get('activeFile')
+    const activeFile: string = this._config.get('activeFile')
     const activeDescriptor = this._loadedDocuments.find(elem => elem.path === activeFile)
 
     if (activeDescriptor !== undefined) {
@@ -148,7 +158,7 @@ export default class DocumentManager extends EventEmitter {
     this._watcher.unwatch(this._loadedDocuments.map(file => file.path))
     this._loadedDocuments = files
     this._watcher.add(files.map(file => file.path))
-    global.config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
+    this._config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
     this.emit('update', 'openFiles')
   }
 
@@ -176,7 +186,7 @@ export default class DocumentManager extends EventEmitter {
       })
 
       this.emit('update', 'openFiles')
-      global.config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
+      this._config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
     }
 
     return this._loadedDocuments
@@ -227,9 +237,9 @@ export default class DocumentManager extends EventEmitter {
     // Update all required states
     this._watcher.add(file.path)
     this.emit('update', 'openFiles')
-    global.config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
+    this._config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
 
-    const avoidNewTabs = Boolean(global.config.get('system.avoidNewTabs'))
+    const avoidNewTabs = Boolean(this._config.get('system.avoidNewTabs'))
 
     // Close the (formerly active) file if we should avoid new tabs and have not
     // gotten a specific request to open it in a *new* tab
@@ -270,7 +280,7 @@ export default class DocumentManager extends EventEmitter {
     this._loadedDocuments.splice(this._loadedDocuments.indexOf(file), 1)
     this._watcher.unwatch(file.path)
     this.emit('update', 'openFiles')
-    global.config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
+    this._config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
 
     // Now, if we just closed the active file, we need to make another file
     // active, or none, if there are no more open files active.
@@ -293,7 +303,7 @@ export default class DocumentManager extends EventEmitter {
     this._watcher.unwatch(this._loadedDocuments.map(file => file.path))
     this._loadedDocuments = []
     this.emit('update', 'openFiles')
-    global.config.set('openFiles', [])
+    this._config.set('openFiles', [])
   }
 
   /**
@@ -391,8 +401,8 @@ export default class DocumentManager extends EventEmitter {
   public set activeFile (descriptor: MDFileDescriptor|CodeFileDescriptor|null) {
     if (descriptor === null && this._activeFile !== null) {
       this._activeFile = null
-      global.citeproc.loadMainDatabase()
-      global.config.set('activeFile', null)
+      this._citeproc.loadMainDatabase()
+      this._config.set('activeFile', null)
       this.emit('update', 'activeFile')
     } else if (descriptor !== null && descriptor.path !== this.activeFile?.path) {
       const file = this.openFiles.find(file => file.path === descriptor.path)
@@ -400,7 +410,7 @@ export default class DocumentManager extends EventEmitter {
       if (file !== undefined && this._loadedDocuments.includes(file)) {
         // Make sure the main database is set before, and only load an optional
         // bibliography file afterwards.
-        global.citeproc.loadMainDatabase()
+        this._citeproc.loadMainDatabase()
         // Make sure before selecting the file to load a potential file-specific
         // database. This can be defined (as for Pandoc) either directly in the
         // frontmatter OR in the metadata.
@@ -411,19 +421,19 @@ export default class DocumentManager extends EventEmitter {
             dbFile = path.resolve(file.dir, dbFile)
           }
           // We have a bibliography
-          global.citeproc.loadAndSelect(dbFile)
+          this._citeproc.loadAndSelect(dbFile)
             .finally(() => {
               // No matter what, we need to make the file active
               this._activeFile = file
-              global.recentDocs.add(file.path)
-              global.config.set('activeFile', this._activeFile.path)
+              this._recentDocs.add(file.path)
+              this._config.set('activeFile', this._activeFile.path)
               this.emit('update', 'activeFile')
             })
-            .catch(err => global.log.error(`[DocumentManager] Could not load file-specific database ${dbFile}`, err))
+            .catch(err => this._logger.error(`[DocumentManager] Could not load file-specific database ${dbFile}`, err))
         } else {
           this._activeFile = file
-          global.recentDocs.add(file.path)
-          global.config.set('activeFile', this._activeFile.path)
+          this._recentDocs.add(file.path)
+          this._config.set('activeFile', this._activeFile.path)
           this.emit('update', 'activeFile')
         }
       } else {
@@ -445,7 +455,7 @@ export default class DocumentManager extends EventEmitter {
    */
   public markDirty (file: MDFileDescriptor|CodeFileDescriptor): void {
     if (!this._loadedDocuments.includes(file)) {
-      global.log.error('[DocumentManager] Cannot mark dirty a non-open file!', file.path)
+      this._logger.error('[DocumentManager] Cannot mark dirty a non-open file!', file.path)
       return
     }
 
@@ -461,7 +471,7 @@ export default class DocumentManager extends EventEmitter {
    */
   public markClean (file: MDFileDescriptor|CodeFileDescriptor): void {
     if (!this._loadedDocuments.includes(file)) {
-      global.log.error('[DocumentManager] Cannot mark clean a non-open file!', file.path)
+      this._logger.error('[DocumentManager] Cannot mark clean a non-open file!', file.path)
       return
     }
 
@@ -627,8 +637,8 @@ export default class DocumentManager extends EventEmitter {
         dbFile = path.resolve(src.dir, dbFile)
       }
       // We have a bibliography
-      global.citeproc.loadAndSelect(dbFile)
-        .catch(err => global.log.error(`[FSAL] Could not load file-specific database ${dbFile}`, err))
+      this._citeproc.loadAndSelect(dbFile)
+        .catch(err => this._logger.error(`[FSAL] Could not load file-specific database ${dbFile}`, err))
     }
   }
 }

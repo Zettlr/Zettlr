@@ -15,7 +15,7 @@
 
 import { app } from 'electron'
 import path from 'path'
-import { bootApplication, shutdownApplication } from './app/lifecycle'
+import { bootApplication, shutdownApplication, getServiceContainer } from './app/lifecycle'
 
 // Include the global Zettlr class
 import Zettlr from './main/zettlr'
@@ -143,7 +143,7 @@ app.whenReady().then(() => {
   // up the providers.
   bootApplication().then(() => {
     // Now instantiate the main class which will care about everything else
-    zettlr = new Zettlr()
+    zettlr = new Zettlr(getServiceContainer())
     zettlr.init()
       .then(() => {
         // After the app has been booted, open any files that we amassed in the

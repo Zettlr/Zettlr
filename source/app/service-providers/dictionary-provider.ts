@@ -22,16 +22,20 @@ import { ipcMain, app } from 'electron'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import findLangCandidates, { Candidate } from '@common/util/find-lang-candidates'
 import enumDictFiles, { DictFileMetadata } from '@common/util/enum-dict-files'
+import ProviderContract from './provider-contract'
 
 /**
  * This class loads and unloads dictionaries according to the configuration set
  * by the user on runtime. It provides functions that allow to search all
  * loaded dictionaries for words and even change the dictionaries during runtime.
  */
-export default class DictionaryProvider extends EventEmitter {
+export default class DictionaryProvider extends ProviderContract {
   private readonly _typos: NSpell[]
   private readonly _loadedDicts: string[]
   private readonly _userDictionaryPath: string
+  private readonly _emitter: EventEmitter
+  private readonly _logger: LogProvider
+  private readonly _config: ConfigProvider
   private _userDictionary: string[]
   private _fileLock: boolean
   private _unwrittenChanges: boolean
@@ -39,9 +43,11 @@ export default class DictionaryProvider extends EventEmitter {
   private _reloadWanted: boolean
   private _reloadLock: boolean
 
-  constructor () {
+  constructor (logger: LogProvider, config: ConfigProvider) {
     super()
-    global.log.verbose('Dictionary provider booting up ...')
+    this._logger = logger
+    this._config = config
+    this._logger.verbose('Dictionary provider booting up ...')
     // Array containing all loaded NSpell dictionaries
     this._typos = []
     // Array containing the language codes for which checking currently works
@@ -52,6 +58,8 @@ export default class DictionaryProvider extends EventEmitter {
     this._userDictionary = ['Zettlr']
 
     this._cachedAutocorrect = []
+
+    this._emitter = new EventEmitter()
 
     // If this flag is set, this indicates that a reload is wanted
     this._reloadWanted = false
@@ -64,10 +72,10 @@ export default class DictionaryProvider extends EventEmitter {
     // Inject global methods
     global.dict = {
       on: (message: string, callback: Function) => {
-        this.on(message, callback as any)
+        this._emitter.on(message, callback as any)
       },
       off: (message: string, callback: Function) => {
-        this.off(message, callback as any)
+        this._emitter.off(message, callback as any)
       },
       /**
        * Returns a copy of the full user dictionary.
@@ -120,7 +128,7 @@ export default class DictionaryProvider extends EventEmitter {
     })
 
     // Reload as soon as the config has been updated
-    global.config.on('update', (opt: string) => {
+    this._config.on('update', (opt: string) => {
       // Reload the dictionaries (if applicable) ...
       this.reload()
       // ... and add cache the autocorrect replacements so they are not seen as "wrong"
@@ -132,17 +140,20 @@ export default class DictionaryProvider extends EventEmitter {
     this._cacheAutoCorrectValues()
     this._loadUserDict() // On first start, load the user dictionary as well
       .catch(err => {
-        global.log.error(`[Dictionary Provider] Could not read user dictionary: ${err.message as string}`, err)
+        this._logger.error(`[Dictionary Provider] Could not read user dictionary: ${err.message as string}`, err)
       })
+  }
+
+  async boot (): Promise<void> {
+    // Nothing to do
   }
 
   /**
    * Shuts down the provider
    */
-  async shutdown (): Promise<boolean> {
-    global.log.verbose('Dictionary provider shutting down ...')
+  async shutdown (): Promise<void> {
+    this._logger.verbose('Dictionary provider shutting down ...')
     await this._persist()
-    return true
   }
 
   /**
@@ -150,7 +161,7 @@ export default class DictionaryProvider extends EventEmitter {
    * as correct.
    */
   _cacheAutoCorrectValues (): void {
-    const table = global.config.get('editor.autoCorrect.replacements')
+    const table = this._config.get('editor.autoCorrect.replacements')
     this._cachedAutocorrect = Object.values(table)
   }
 
@@ -195,7 +206,7 @@ export default class DictionaryProvider extends EventEmitter {
     this._reloadWanted = false
     this._reloadLock = true
 
-    let selectedDicts = global.config.get('selectedDicts') as string[]
+    let selectedDicts = this._config.get('selectedDicts') as string[]
     let dictsToLoad = []
 
     let changeWanted = false
@@ -224,7 +235,7 @@ export default class DictionaryProvider extends EventEmitter {
       // First request a dictionary.
       let dictMeta = this._getDictionaryFile(dict)
       if (dictMeta.status !== 'exact') {
-        global.log.error(`[Dictionary Provider] Could not load ${dict}: No exact match found.`, dictMeta)
+        this._logger.error(`[Dictionary Provider] Could not load ${dict}: No exact match found.`, dictMeta)
         continue // Only consider exact matches
       }
       let aff = null
@@ -233,14 +244,14 @@ export default class DictionaryProvider extends EventEmitter {
       try {
         aff = await fs.readFile(dictMeta.aff, 'utf8')
       } catch (err: any) {
-        global.log.error(`[Dictionary Provider] Could not load affix file for ${dict}`, err)
+        this._logger.error(`[Dictionary Provider] Could not load affix file for ${dict}`, err)
         continue
       }
 
       try {
         dic = await fs.readFile(dictMeta.dic, 'utf8')
       } catch (err: any) {
-        global.log.error(`[Dictionary Provider] Could not load .dic-file for ${dict}`, err)
+        this._logger.error(`[Dictionary Provider] Could not load .dic-file for ${dict}`, err)
         continue
       }
 
@@ -251,8 +262,8 @@ export default class DictionaryProvider extends EventEmitter {
     if (changeWanted) {
       // Don't be noisy: Only emit if necessary
       // Finally emit the update event
-      this.emit('update', this._loadedDicts)
-      global.log.info(`[Dictionary Provider] Loaded dictionaries: ${this._loadedDicts.join(', ')}`)
+      this._emitter.emit('update', this._loadedDicts)
+      this._logger.info(`[Dictionary Provider] Loaded dictionaries: ${this._loadedDicts.join(', ')}`)
 
       // Send an invalidation message to the renderer
       broadcastIpcMessage('dictionary-provider', { command: 'invalidate-dict' })
@@ -322,7 +333,7 @@ export default class DictionaryProvider extends EventEmitter {
    */
   check (term: string): boolean {
     // Don't check until all are loaded
-    if (global.config.get('selectedDicts').length !== this._typos.length) {
+    if (this._config.get('selectedDicts').length !== this._typos.length) {
       return true
     }
 
@@ -359,7 +370,7 @@ export default class DictionaryProvider extends EventEmitter {
    */
   suggest (term: string): string[] {
     // Return no suggestions
-    if (global.config.get('selectedDicts').length !== this._typos.length) {
+    if (this._config.get('selectedDicts').length !== this._typos.length) {
       return []
     }
 
@@ -405,7 +416,7 @@ export default class DictionaryProvider extends EventEmitter {
     // Reload the dictionary based upon the new selected dictionaries.
     this._load()
       .catch(err => {
-        global.log.error(`[Dictionary Provider] Could not (re)load dictionaries: ${err.message as string}`, err)
+        this._logger.error(`[Dictionary Provider] Could not (re)load dictionaries: ${err.message as string}`, err)
       })
   }
 

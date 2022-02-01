@@ -16,28 +16,31 @@ import fs from 'fs'
 import EventEmitter from 'events'
 import path from 'path'
 import { app } from 'electron'
+import ProviderContract from './provider-contract'
 
 /**
  * This class manages the writing targets of directories and files. It reads the
  * targets on each start of the app and writes them after they have been changed.
  */
-export default class TargetProvider extends EventEmitter {
+export default class TargetProvider extends ProviderContract {
   private readonly _file: string
+  private readonly _emitter: EventEmitter
+  private readonly _logger: LogProvider
   private _targets: WritingTarget[]
   /**
    * Create the instance on program start and initially load the targets.
    */
-  constructor () {
+  constructor (logger: LogProvider) {
     super()
-    global.log.verbose('Target provider booting up')
-    // Set the maximum amount of listeners to infinity, because in this specific
-    // case we don't want only 10 listeners, but as many as needed.
-    this.setMaxListeners(Infinity)
+    this._logger = logger
+    this._logger.verbose('Target provider booting up')
 
     this._file = path.join(app.getPath('userData'), 'targets.json')
     this._targets = []
 
     this._load()
+
+    this._emitter = new EventEmitter()
 
     // Register a global helper for the targets
     global.targets = {
@@ -76,7 +79,7 @@ export default class TargetProvider extends EventEmitter {
        * @return {void}              Nothing to return.
        */
       on: (event: string, callback: (...args: any[]) => void) => {
-        this.on(event, callback)
+        this._emitter.on(event, callback)
       },
       /**
        * Removes an event listener
@@ -85,7 +88,7 @@ export default class TargetProvider extends EventEmitter {
        * @return {void}              Nothing to return.
        */
       off: (event: string, callback: (...args: any[]) => void) => {
-        this.off(event, callback)
+        this._emitter.off(event, callback)
       },
       verify: () => {
         return this.verify()
@@ -93,8 +96,12 @@ export default class TargetProvider extends EventEmitter {
     }
   } // End constructor
 
+  async boot (): Promise<void> {
+    // Nothing to do
+  }
+
   async shutdown (): Promise<void> {
-    global.log.verbose('Target provider shutting down ...')
+    this._logger.verbose('Target provider shutting down ...')
     this._save() // Persist to disk
   }
 
@@ -197,7 +204,7 @@ export default class TargetProvider extends EventEmitter {
     this._save()
 
     // Inform the respective file that its target has been updated.
-    this.emit('update', target.path)
+    this._emitter.emit('update', target.path)
   }
 
   /**
@@ -216,7 +223,7 @@ export default class TargetProvider extends EventEmitter {
     this._save()
 
     // Inform the respective file that its target has been removed.
-    this.emit('remove', filePath)
+    this._emitter.emit('remove', filePath)
 
     return true
   }

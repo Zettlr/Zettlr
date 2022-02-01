@@ -29,18 +29,28 @@ import { ipcMain, app, shell } from 'electron'
 import { trans } from '@common/i18n-main'
 import isFile from '@common/util/is-file'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
+import ProviderContract from './provider-contract'
+import NotificationProvider from './notification-provider'
 
 const CUR_VER = app.getVersion()
 const REPO_URL = 'https://zettlr.com/api/releases/latest'
 
-export default class UpdateProvider {
+export default class UpdateProvider extends ProviderContract {
   private readonly _sha256Data: Map<string, string>
   private _updateState: UpdateState
   private _downloadReadStream: undefined|ReadStream
   private _downloadWriteStream: undefined|WriteStream
 
-  constructor () {
-    global.log.verbose('Update provider booting up ...')
+  private readonly _logger: LogProvider
+  private readonly _config: ConfigProvider
+  private readonly _notifications: NotificationProvider
+
+  constructor (logger: LogProvider, config: ConfigProvider, notifications: NotificationProvider) {
+    super()
+    this._logger = logger
+    this._config = config
+    this._notifications = notifications
+    this._logger.verbose('Update provider booting up ...')
 
     this._sha256Data = new Map()
 
@@ -59,8 +69,7 @@ export default class UpdateProvider {
        * @return  {void}
        */
       check: async () => {
-        global.log.info('[Update Provider] Checking for application updates ...')
-        await this._check()
+        await this.check()
       },
       /**
        * Checks if there is a new update available. Must be called after check()
@@ -68,7 +77,7 @@ export default class UpdateProvider {
        * @return  {boolean}  True, if the last update check retrieved a newer version
        */
       applicationUpdateAvailable: () => {
-        return this._updateState.updateAvailable
+        return this.applicationUpdateAvailable()
       },
       /**
        * Returns the current update state
@@ -76,7 +85,7 @@ export default class UpdateProvider {
        * @return  {UpdateState}  The current status of updates.
        */
       getUpdateState: () => {
-        return this._updateState
+        return this.getUpdateState()
       }
     }
 
@@ -85,23 +94,31 @@ export default class UpdateProvider {
       const { command, payload } = data
 
       if (command === 'check-for-update') {
-        await this._check()
+        await this.check()
       } else if (command === 'update-status') {
         // Just provide the caller with our response
         return this._updateState
       } else if (command === 'request-app-update') {
         // We shall download the URL which is in the content variable
-        global.log.info('[Update Provider] Requesting update ' + (payload as string))
+        this._logger.info('[Update Provider] Requesting update ' + (payload as string))
         this._downloadAppUpdate(payload)
       } else if (command === 'begin-update') {
         // Begin the actual update process NOTE We're not blocking the handler
         this._beginUpdate()
           .catch(e => {
-            global.log.error(`[Update Provider] Unexpected error during update process: ${e.message as string}`, e)
+            this._logger.error(`[Update Provider] Unexpected error during update process: ${e.message as string}`, e)
           })
         return true
       }
     })
+  }
+
+  applicationUpdateAvailable (): boolean {
+    return this._updateState.updateAvailable
+  }
+
+  getUpdateState (): UpdateState {
+    return this._updateState
   }
 
   /**
@@ -135,7 +152,7 @@ export default class UpdateProvider {
    * @param   {string}  message  The error message
    */
   private _reportError (code: string, message: string): void {
-    global.log.error(`[Update Provider] ${code}: ${message}`)
+    this._logger.error(`[Update Provider] ${code}: ${message}`)
     this._updateState.lastErrorCode = code
     this._updateState.lastErrorMessage = message
     broadcastIpcMessage('update-provider', 'state-changed', this._updateState)
@@ -146,16 +163,17 @@ export default class UpdateProvider {
    *
    * @return {Promise} Resolves only when there is an update available.
    */
-  private async _check (): Promise<void> {
+  async check (): Promise<void> {
     // First, reset the update state
+    this._logger.info('[Update Provider] Checking for application updates ...')
     this._resetState()
 
     try {
-      global.log.info(`[Updater] Checking ${REPO_URL} for updates ...`)
+      this._logger.info(`[Updater] Checking ${REPO_URL} for updates ...`)
       const response: Response<string> = await got(REPO_URL, {
         method: 'GET',
         searchParams: new URLSearchParams([
-          [ 'accept-beta', global.config.get('checkForBeta') ]
+          [ 'accept-beta', this._config.get('checkForBeta') ]
         ])
       })
 
@@ -238,7 +256,7 @@ export default class UpdateProvider {
     broadcastIpcMessage('update-provider', 'state-changed', this._updateState)
 
     if (this._updateState.updateAvailable) {
-      global.log.info(`[Update Provider] New update available! Please update to ${this._updateState.tagName} soon!`)
+      this._logger.info(`[Update Provider] New update available! Please update to ${this._updateState.tagName} soon!`)
       // Immediately retrieve the SHA checksum file
       const checksumFile = parsedResponse.assets.find((asset) => {
         return asset.name === 'SHA256SUMS.txt'
@@ -250,7 +268,7 @@ export default class UpdateProvider {
         this._reportError('SHA_CHECKSUM_ERR', 'Could not retrieve SHA256 checksums.')
       }
     } else {
-      global.log.info(`[Update Provider] No new update available. Current version is ${this._updateState.tagName}.`)
+      this._logger.info(`[Update Provider] No new update available. Current version is ${this._updateState.tagName}.`)
     }
   }
 
@@ -272,7 +290,7 @@ export default class UpdateProvider {
         if (release.length !== 2) {
           return
         }
-        global.log.info(`[Update Provider] Found SHA256 checksum for ${release[1]}`)
+        this._logger.info(`[Update Provider] Found SHA256 checksum for ${release[1]}`)
         this._sha256Data.set(release[1], release[0])
       })
 
@@ -335,11 +353,11 @@ export default class UpdateProvider {
     })
 
     this._downloadReadStream.on('end', () => {
-      global.log.info(`Successfully downloaded ${this._updateState.name}. Transferred ${this._updateState.size_downloaded} bytes overall.`)
-      global.notify.normal(`Download of ${this._updateState.name} successful!`, () => {
+      this._logger.info(`Successfully downloaded ${this._updateState.name}. Transferred ${this._updateState.size_downloaded} bytes overall.`)
+      this._notifications.show(`Download of ${this._updateState.name} successful!`, 'Update', () => {
         // The user has clicked the notification, so we can show the update window here
         global.application.runCommand('open-update-window')
-          .catch(e => global.log.error(String(e.message), e))
+          .catch(e => this._logger.error(String(e.message), e))
       })
     })
 
@@ -364,12 +382,12 @@ export default class UpdateProvider {
     // 2. Check that the file is correct
     // 3. Launch the file
     // 4. Quit the app
-    global.notify.normal('Verifying update ...')
+    this._notifications.show('Verifying update ...')
 
     const correctSHA = this._sha256Data.get(this._updateState.name)
 
     if (correctSHA === undefined) {
-      global.notify.normal('Could not verify update. Please retry or download manually.')
+      this._notifications.show('Could not verify update. Please retry or download manually.')
       this._cleanup(true)
       this._reportError('EVERIFY', 'Could not verify the download! Please retry or download manually.')
       return
@@ -381,12 +399,12 @@ export default class UpdateProvider {
     const downloadSHA = sha256sum.digest('hex')
 
     if (downloadSHA !== correctSHA) {
-      global.notify.normal('Could not verify update. Please retry or download manually.')
+      this._notifications.show('Could not verify update. Please retry or download manually.')
       this._cleanup(true)
       this._reportError('EVERIFY', 'Could not verify the download! Please retry or download manually.')
       return
     } else {
-      global.log.info(`[Update Provider] Successfully verified the checksum of ${this._updateState.name} (${downloadSHA})!`)
+      this._logger.info(`[Update Provider] Successfully verified the checksum of ${this._updateState.name} (${downloadSHA})!`)
     }
 
     // Then launch the file and immediately quit the app.
@@ -400,7 +418,7 @@ export default class UpdateProvider {
       }
       app.quit()
     } catch (err: any) {
-      global.notify.normal('Could not start update. Please install manually.')
+      this._notifications.show('Could not start update. Please install manually.')
       this._reportError('EOPEN', `Could not start update: ${err.message as string}.`)
     }
   }
@@ -417,7 +435,7 @@ export default class UpdateProvider {
       try {
         this._downloadWriteStream.close()
       } catch (err: any) {
-        global.log.warning(`[Update Provider] Could not close write stream: ${err.message as string}`, err)
+        this._logger.warning(`[Update Provider] Could not close write stream: ${err.message as string}`, err)
       }
       this._downloadWriteStream = undefined
     }
@@ -426,7 +444,7 @@ export default class UpdateProvider {
       try {
         this._downloadReadStream.close()
       } catch (err: any) {
-        global.log.warning(`[Update Provider] Could not close read stream: ${err.message as string}`, err)
+        this._logger.warning(`[Update Provider] Could not close read stream: ${err.message as string}`, err)
       }
       this._downloadWriteStream = undefined
     }
@@ -441,19 +459,22 @@ export default class UpdateProvider {
     // We shall also unlink the file
     fs.unlink(this._updateState.full_path)
       .catch(e => {
-        global.log.error(`[Update Provider] Could not remove partial download file ${this._updateState.full_path}.`, e)
+        this._logger.error(`[Update Provider] Could not remove partial download file ${this._updateState.full_path}.`, e)
       })
+  }
+
+  async boot (): Promise<void> {
+    // Nothing to do
   }
 
   /**
    * Shuts down the provider
    * @return {Boolean} Whether or not the shutdown was successful
    */
-  async shutdown (): Promise<boolean> {
-    global.log.verbose('Update provider shutting down ...')
+  async shutdown (): Promise<void> {
+    this._logger.verbose('Update provider shutting down ...')
     // We'll be removing the file IF and only IF the download was not finished.
     const downloadUnfinished = this._updateState.size_downloaded > 0 && this._updateState.size_downloaded !== this._updateState.size_total
     this._cleanup(downloadUnfinished)
-    return true
   }
 }

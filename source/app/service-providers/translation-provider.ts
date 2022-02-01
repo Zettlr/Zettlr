@@ -20,6 +20,8 @@ import { trans } from '@common/i18n-main'
 import moment from 'moment'
 import enumDictFiles from '@common/util/enum-dict-files'
 import enumLangFiles from '@common/util/enum-lang-files'
+import ProviderContract from './provider-contract'
+import getLanguageFile from '@common/util/get-language-file'
 
 const TRANSLATION_API_URL = 'https://translate.zettlr.com/api/languages'
 
@@ -30,12 +32,17 @@ interface APIResponse {
   download_url: string
 }
 
-export default class TranslationProvider {
+export default class TranslationProvider extends ProviderContract {
   private _availableLanguages: APIResponse[]
   private readonly _languageDirectory: string
+  private readonly _logger: LogProvider
+  private readonly _config: ConfigProvider
 
-  constructor () {
-    global.log.verbose('Translation provider booting up ...')
+  constructor (logger: LogProvider, config: ConfigProvider) {
+    super()
+    this._logger = logger
+    this._config = config
+    this._logger.verbose('Translation provider booting up ...')
     this._availableLanguages = [] // Holds all translations able to download
     this._languageDirectory = path.join(app.getPath('userData'), '/lang/')
     // Inject the global provider functions
@@ -48,10 +55,6 @@ export default class TranslationProvider {
         return JSON.parse(JSON.stringify(this._availableLanguages))
       }
     }
-
-    this.init().catch((err) => {
-      global.log.error(`[Translation Provider] Could not initialize provider: ${String(err.message)}`, err)
-    })
 
     // NOTE: This must be a synchronous event, because it is called from within
     // the trans() function if one of those two objects is not yet set in the
@@ -87,13 +90,34 @@ export default class TranslationProvider {
    * Get an initial load of all available translations
    * @return {Promise} Resolves if everything worked out, rejects otherwise.
    */
-  async init (): Promise<void> {
+  async boot (): Promise<void> {
+    // First and foremost, load the translation strings
+    const file = getLanguageFile(this._config.get('appLang'))
+
+    // It may be that only a fallback has been provided or else. In this case we
+    // must update the config to reflect this.
+    if (file.tag !== this._config.get('appLang')) {
+      this._config.set('appLang', file.tag)
+    }
+
+    // Cannot do this asynchronously, because it HAS to be loaded directly
+    // after the config and written into the global object
+    global.i18nRawData = await fs.readFile(file.path, 'utf8')
+    global.i18n = JSON.parse(global.i18nRawData)
+
+    // Also load the en-US fallback as we can be sure this WILL both stay
+    // up to date and will be understood by most people.
+    const fallback = getLanguageFile('en-US') // Will return either the shipped or updated file
+    global.i18nFallbackRawData = await fs.readFile(fallback.path, 'utf8')
+    global.i18nFallback = JSON.parse(global.i18nFallbackRawData)
+
+    // return file
     let response
     try {
       response = await got(TRANSLATION_API_URL, { method: 'GET' })
     } catch (err: any) {
       // Not critical.
-      global.log.warning(`[Translation Provider] Could not update translations: ${String(err.code)}`, err)
+      this._logger.warning(`[Translation Provider] Could not update translations: ${String(err.code)}`, err)
       return
     }
 
@@ -122,13 +146,13 @@ export default class TranslationProvider {
     }
 
     if (toUpdate.length === 0) {
-      global.log.info('[Translation Provider] No updates available.')
+      this._logger.info('[Translation Provider] No updates available.')
       return // Nothing to do here!
     }
 
     const langList = toUpdate.map(elem => trans(`dialog.preferences.app_lang.${elem.bcp47}`)).join(', ')
 
-    global.log.info(`[Translation Provider] Updating translations for ${langList} ...`)
+    this._logger.info(`[Translation Provider] Updating translations for ${langList} ...`)
 
     // At this moment, we should have all languages.
     for (const language of toUpdate) {
@@ -138,7 +162,7 @@ export default class TranslationProvider {
     }
 
     // Now we are done and can notify the user of all updated translations!
-    global.notify.normal(trans('dialog.preferences.translations.updated', langList))
+    this._logger.info(trans('dialog.preferences.translations.updated', langList))
   }
 
   /**
@@ -147,11 +171,11 @@ export default class TranslationProvider {
    * @param  {Language}  language A language option containing a bcp47 and a download url.
    */
   async downloadLanguage (language: APIResponse): Promise<void> {
-    global.log.info(`[Translation Provider] Downloading ${language.bcp47} ...`)
+    this._logger.info(`[Translation Provider] Downloading ${language.bcp47} ...`)
     let l = await got(language.download_url, { method: 'GET' })
     let file = path.join(this._languageDirectory, language.bcp47 + '.json')
     await fs.writeFile(file, l.body, { encoding: 'utf8' })
-    global.log.info(`[Translation Provider] Success: ${language.bcp47} updated.`)
+    this._logger.info(`[Translation Provider] Success: ${language.bcp47} updated.`)
   }
 
   /**
@@ -198,8 +222,7 @@ export default class TranslationProvider {
    * Shuts down the provider
    * @return {Boolean} Whether or not the shutdown was successful
    */
-  shutdown (): boolean {
-    global.log.verbose('Translation provider shutting down ...')
-    return true
+  async shutdown (): Promise<void> {
+    this._logger.verbose('Translation provider shutting down ...')
   }
 }

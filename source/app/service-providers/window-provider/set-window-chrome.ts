@@ -26,8 +26,8 @@ import path from 'path'
  * @param  {BrowserWindowConstructorOptions}  winConf        The configuration
  * @param  {boolean}                          [modal=false]  If set to true, will assign a modal chrome
  */
-export default function setWindowChrome (winConf: BrowserWindowConstructorOptions, modal: boolean = false): void {
-  const shouldUseNativeAppearance: boolean = global.config.get('window.nativeAppearance')
+export default function setWindowChrome (config: ConfigProvider, winConf: BrowserWindowConstructorOptions, modal: boolean = false): void {
+  const shouldUseNativeAppearance: boolean = config.get('window.nativeAppearance')
 
   if (process.platform !== 'darwin' || modal) {
     // It is recommended to set a background color for the windows, however, on

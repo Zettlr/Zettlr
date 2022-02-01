@@ -25,7 +25,6 @@ import {
 } from 'electron'
 
 // Internal classes
-import WindowManager from './modules/window-manager'
 import DocumentManager from './modules/document-manager'
 
 import FSAL from './modules/fsal'
@@ -38,6 +37,7 @@ import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import extractFilesFromArgv from '../app/util/extract-files-from-argv'
 import ZettlrCommand from './commands/zettlr-command'
+import AppServiceContainer from '../app/app-service-container'
 
 export default class Zettlr {
   isQuitting: boolean
@@ -46,22 +46,21 @@ export default class Zettlr {
   _fsal: FSAL
   _documentManager: DocumentManager
   _commands: ZettlrCommand[]
-  private readonly _windowManager: WindowManager
   private readonly isShownFor: string[]
+  private readonly _app: AppServiceContainer
 
   /**
     * Create a new application object
     * @param {electron.app} parentApp The app object.
     */
-  constructor () {
+  constructor (_app: AppServiceContainer) {
+    this._app = _app
     // Is the app quitting? True if quitting via menu, tray or keyboard shortcut.
     // False if titlebar `x` close, and all other times.
     this.isQuitting = false
     this.editFlag = false // Is the current opened file edited?
     this._openPaths = [] // Holds all currently opened paths.
     this.isShownFor = [] // Contains all files for which remote notifications are currently shown
-
-    this._windowManager = new WindowManager()
 
     // Inject some globals
     global.application = {
@@ -71,26 +70,8 @@ export default class Zettlr {
       isQuitting: () => {
         return this.isQuitting
       },
-      showLogViewer: () => {
-        this._windowManager.showLogWindow()
-      },
-      showDefaultsPreferences: () => {
-        this._windowManager.showDefaultsWindow()
-      },
-      showPreferences: () => {
-        this._windowManager.showPreferences()
-      },
-      showAboutWindow: () => {
-        this._windowManager.showAboutWindow()
-      },
       displayErrorMessage: (title: string, message: string, contents?: string) => {
-        this._windowManager.showErrorMessage(title, message, contents)
-      },
-      showTagManager: () => {
-        this._windowManager.showTagManager()
-      },
-      showAnyWindow: () => {
-        this._windowManager.showAnyWindow()
+        this._app.windows.showErrorMessage(title, message, contents)
       },
       findFile: (prop: any) => {
         return this._fsal.findFile(prop)
@@ -102,10 +83,10 @@ export default class Zettlr {
 
     // Now that the config provider is definitely set up, let's see if we
     // should copy the interactive tutorial to the documents directory.
-    if (global.config.isFirstStart()) {
-      global.log.info('[First Start] Copying over the interactive tutorial!')
+    if (this._app.config.isFirstStart()) {
+      this._app.log.info('[First Start] Copying over the interactive tutorial!')
       this.runCommand('tutorial-open', {})
-        .catch(err => global.log.error('[Application] Could not open tutorial', err))
+        .catch(err => this._app.log.error('[Application] Could not open tutorial', err))
     }
 
     // File System Abstraction Layer, pass the folder
@@ -113,12 +94,12 @@ export default class Zettlr {
     this._fsal = new FSAL(app.getPath('userData'))
 
     // Start up the document manager
-    this._documentManager = new DocumentManager()
+    this._documentManager = new DocumentManager(this._app.log, this._app.config, this._app.recentDocs, this._app.citeproc)
 
     // Immediately determine if the cache needs to be cleared
     let shouldClearCache = process.argv.includes('--clear-cache')
-    if (global.config.newVersionDetected() || shouldClearCache) {
-      global.log.info('Clearing the FSAL cache ...')
+    if (this._app.config.newVersionDetected() || shouldClearCache) {
+      this._app.log.info('Clearing the FSAL cache ...')
       this._fsal.clearCache()
     }
 
@@ -158,7 +139,7 @@ export default class Zettlr {
               broadcastIpcMessage('save-documents', []) // Empty path list so the Editor saves all
             } // Else: Do nothing (abort quitting)
           })
-          .catch(e => global.log.error('[Application] Could not ask the user to save their changes, because the message box threw an error. Not quitting!', e))
+          .catch(e => this._app.log.error('[Application] Could not ask the user to save their changes, because the message box threw an error. Not quitting!', e))
       }
     })
 
@@ -171,7 +152,7 @@ export default class Zettlr {
     // open, that will already prevent the quitting. As soon as the main window
     // is closed on any platform, the "windows-all-closed" will quit the app
     // successfully in any case.
-    this._windowManager.onBeforeMainWindowClose(() => {
+    this._app.windows.onBeforeMainWindowClose(() => {
       if (!this._documentManager.isClean()) {
         this.askSaveChanges()
           .then(result => {
@@ -181,26 +162,26 @@ export default class Zettlr {
             if (result.response === 0) {
               // Clear the modification flags and close again
               this._documentManager.updateModifiedFlags([]) // Empty array = no modified files
-              this._windowManager.closeMainWindow()
+              this._app.windows.closeMainWindow()
             } else if (result.response === 1) {
               // First, listen once to the event that all documents are clean
               // (i.e. it's safe to shut down) ...
               this._documentManager.once('documents-all-clean', () => {
                 // The document manager reports all documents are clean now
-                this._windowManager.closeMainWindow()
+                this._app.windows.closeMainWindow()
               })
 
               // ... and then have the renderer begin saving all changed docs.
               broadcastIpcMessage('save-documents', []) // Empty path list so the Editor saves all
             } // Else: Do nothing (abort quitting)
           })
-          .catch(e => global.log.error('[Application] Could not ask the user to save their changes, because the message box threw an error. Not quitting!', e))
+          .catch(e => this._app.log.error('[Application] Could not ask the user to save their changes, because the message box threw an error. Not quitting!', e))
       }
       // We must return false to prevent the window from closing
       return this._documentManager.isClean()
     })
 
-    this._windowManager.on('main-window-closed', () => {
+    this._app.windows.on('main-window-closed', () => {
       // Reset the FSAL state history so that any new window will have a clean start
       this._fsal.resetFiletreeHistory()
     })
@@ -210,7 +191,7 @@ export default class Zettlr {
       switch (scope) {
         case 'fileSaved':
         case 'openFiles':
-          this._windowManager.setModified(this.isModified())
+          this._app.windows.setModified(this.isModified())
           broadcastIpcMessage('fsal-state-changed', 'openFiles') // TODO: Do we need this?
           break
         case 'activeFile':
@@ -225,7 +206,7 @@ export default class Zettlr {
           }
           break
         default:
-          global.log.warning('Received an Update from the document manager, but the scope was unknown: ' + scope)
+          this._app.log.warning('Received an Update from the document manager, but the scope was unknown: ' + scope)
           break
       }
     })
@@ -239,7 +220,7 @@ export default class Zettlr {
           broadcastIpcMessage('fsal-state-changed', 'filetree')
           break
         case 'openDirectory':
-          global.config.set('openDirectory', (openDir !== null) ? openDir.path : null)
+          this._app.config.set('openDirectory', (openDir !== null) ? openDir.path : null)
           broadcastIpcMessage('fsal-state-changed', 'openDirectory')
           break
       }
@@ -260,10 +241,10 @@ export default class Zettlr {
   _onFileContentsChanged (changedFile: MDFileDescriptor|CodeFileDescriptor): void {
     // The contents of one of the open files have changed.
     // What follows looks a bit ugly, welcome to callback hell.
-    if (global.config.get('alwaysReloadFiles') === true) {
+    if (this._app.config.get('alwaysReloadFiles') === true) {
       this._documentManager.getFileContents(changedFile).then((file: MDFileMeta|CodeFileMeta) => {
         broadcastIpcMessage('open-file-changed', file)
-      }).catch(e => global.log.error(e.message, e))
+      }).catch(e => this._app.log.error(e.message, e))
     } else {
       // Prevent multiple instances of the dialog, just ask once. The logic
       // always retrieves the most recent version either way
@@ -274,7 +255,7 @@ export default class Zettlr {
       this.isShownFor.push(filePath)
 
       // Ask the user if we should replace the file
-      this._windowManager.shouldReplaceFile(changedFile.name)
+      this._app.windows.shouldReplaceFile(changedFile.name)
         .then((shouldReplace) => {
           // In any case remove the isShownFor for this file.
           this.isShownFor.splice(this.isShownFor.indexOf(filePath), 1)
@@ -283,14 +264,14 @@ export default class Zettlr {
           }
 
           if (changedFile === null) {
-            global.log.error('[Application] Cannot replace file.', changedFile)
+            this._app.log.error('[Application] Cannot replace file.', changedFile)
             return
           }
 
           this._documentManager.getFileContents(changedFile).then((file: any) => {
             broadcastIpcMessage('open-file-changed', file)
-          }).catch(e => global.log.error(e.message, e))
-        }).catch(e => global.log.error(e.message, e)) // END ask replace file
+          }).catch(e => this._app.log.error(e.message, e))
+        }).catch(e => this._app.log.error(e.message, e)) // END ask replace file
     }
   }
 
@@ -316,12 +297,12 @@ export default class Zettlr {
     const allPromises: Array<Promise<boolean>> = []
 
     // First: Initially load all paths
-    for (let p of global.config.get('openPaths') as string[]) {
+    for (let p of this._app.config.get('openPaths') as string[]) {
       const prom = this._fsal.loadPath(p)
       prom.catch(e => {
         console.error(e)
-        global.log.info(`[Application] Removing path ${p}, as it does no longer exist.`)
-        global.config.removePath(p)
+        this._app.log.info(`[Application] Removing path ${p}, as it does no longer exist.`)
+        this._app.config.removePath(p)
       })
 
       allPromises.push(prom)
@@ -332,25 +313,25 @@ export default class Zettlr {
       // we need to continue the set up process
 
       // Set the pointers either to null or last opened dir/file
-      const openDir = global.config.get('openDirectory')
+      const openDir = this._app.config.get('openDirectory')
       if (typeof openDir === 'string') {
         try {
           const descriptor = this._fsal.findDir(openDir)
           this._fsal.openDirectory = descriptor
-        } catch (err) {
-          global.log.error(`[Application] Could not set open directory ${openDir}.`, err)
+        } catch (err: any) {
+          this._app.log.error(`[Application] Could not set open directory ${openDir}.`, err)
         }
       } // else: openDir was null
 
       // Verify the integrity of the targets
-      global.targets.verify()
+      this._app.targets.verify()
 
       // Finally: Open any new files we have in the process arguments.
       this.runCommand('roots-add', extractFilesFromArgv())
         .finally(() => {
           // Now we are done.
           const duration = Date.now() - start
-          global.log.info(`Loaded all roots in ${duration / 1000} seconds`)
+          this._app.log.info(`Loaded all roots in ${duration / 1000} seconds`)
         })
     })
 
@@ -358,17 +339,17 @@ export default class Zettlr {
     await this._documentManager.init()
 
     // Finally, initiate a first check for updates
-    global.updates.check()
+    await this._app.updates.check()
 
-    if (global.updates.applicationUpdateAvailable()) {
-      const { tagName } = global.updates.getUpdateState()
-      global.log.info(`Update available: ${tagName}`)
-      global.notify.normal(trans('dialog.update.new_update_available', tagName), () => {
+    if (this._app.updates.applicationUpdateAvailable()) {
+      const { tagName } = this._app.updates.getUpdateState()
+      this._app.log.info(`Update available: ${tagName}`)
+      this._app.notifications.show(trans('dialog.update.new_update_available', tagName), 'Updates', () => {
         // The user has clicked the notification, so we can show the update window here
-        this._windowManager.showUpdateWindow()
+        this._app.windows.showUpdateWindow()
       })
     } else {
-      global.notify.normal(trans('dialog.update.no_new_update'))
+      this._app.notifications.show(trans('dialog.update.no_new_update'))
     }
   }
 
@@ -378,9 +359,9 @@ export default class Zettlr {
     */
   async shutdown (): Promise<void> {
     if (!this._documentManager.isClean()) {
-      global.log.error('[Application] Attention! The FSAL reported there were unsaved changes to certain files. This indicates a critical logical bug in the application!')
+      this._app.log.error('[Application] Attention! The FSAL reported there were unsaved changes to certain files. This indicates a critical logical bug in the application!')
     }
-    this._windowManager.shutdown()
+    this._app.windows.shutdown()
     // Finally shut down the file system
     await this._fsal.shutdown()
   }
@@ -433,7 +414,7 @@ export default class Zettlr {
       return true
     } else if (command === 'set-writing-target') {
       // Sets or updates a file's writing target
-      global.targets.set(payload)
+      this._app.targets.set(payload)
     } else if (command === 'open-file') {
       await this._documentManager.openFile(payload.path, payload.newTab)
       return true
@@ -476,18 +457,18 @@ export default class Zettlr {
       this._documentManager.updateModifiedFlags(payload)
       this.setModified(!this._documentManager.isClean())
     } else if (command === 'open-preferences') {
-      this._windowManager.showPreferences()
+      this._app.windows.showPreferences()
       return true
     } else if (command === 'open-quicklook') {
       this.openQL(payload)
       return true
     } else if (command === 'open-stats-window') {
-      this._windowManager.showStatsWindow()
+      this._app.windows.showStatsWindow()
       return true
     } else if (command === 'open-update-window') {
-      this._windowManager.showUpdateWindow()
+      this._app.windows.showUpdateWindow()
     } else if (command === 'open-project-preferences') {
-      this._windowManager.showProjectPropertiesWindow(payload)
+      this._app.windows.showProjectPropertiesWindow(payload)
     } else {
       // ELSE: If the command has not yet been found, try to run one of the
       // bigger commands
@@ -497,11 +478,11 @@ export default class Zettlr {
         try {
           return await cmd.run(command, payload)
         } catch (err: any) {
-          global.log.error('[Application] Error received while running command: ' + String(err.message), err)
+          this._app.log.error('[Application] Error received while running command: ' + String(err.message), err)
           return false
         }
       } else {
-        global.log.warning(`[Application] Received a request to run command ${command}, but it's not registered.`)
+        this._app.log.warning(`[Application] Received a request to run command ${command}, but it's not registered.`)
       }
     }
   }
@@ -519,8 +500,8 @@ export default class Zettlr {
     if (obj !== null && obj.type === 'directory') {
       this._fsal.openDirectory = obj
     } else {
-      global.log.error('Could not find directory', dirPath)
-      this._windowManager.prompt({
+      this._app.log.error('Could not find directory', dirPath)
+      this._app.windows.prompt({
         type: 'error',
         title: trans('system.error.dnf_title'),
         message: trans('system.error.dnf_message')
@@ -536,11 +517,11 @@ export default class Zettlr {
   openQL (filePath: string): void {
     let file: MDFileDescriptor|CodeFileDescriptor|null = this._fsal.findFile(filePath)
     if (file === null || file.type !== 'file') {
-      global.log.error(`[Application] A Quicklook window for ${filePath} was requested, but the file was not found.`)
+      this._app.log.error(`[Application] A Quicklook window for ${filePath} was requested, but the file was not found.`)
       return
     }
 
-    this._windowManager.showQuicklookWindow(file)
+    this._app.windows.showQuicklookWindow(file)
   }
 
   // /**
@@ -566,7 +547,7 @@ export default class Zettlr {
     * Indicate modifications.
     */
   setModified (isModified: boolean): void {
-    this._windowManager.setModified(isModified)
+    this._app.windows.setModified(isModified)
   }
 
   // Getters
@@ -581,8 +562,6 @@ export default class Zettlr {
    */
   getDocumentManager (): DocumentManager { return this._documentManager }
 
-  getWindowManager (): WindowManager { return this._windowManager }
-
   /**
     * Are there unsaved changes currently in the file system?
     * @return {Boolean} Return true, if there are unsaved changes, or false.
@@ -594,14 +573,14 @@ export default class Zettlr {
     * @return {void} This does not return.
     */
   openWindow (): void {
-    this._windowManager.showMainWindow()
+    this._app.windows.showMainWindow()
   }
 
   /**
    * Shows any open window, or the main window, if none are open.
    */
   openAnyWindow (): void {
-    this._windowManager.showAnyWindow()
+    this._app.windows.showAnyWindow()
   }
 
   /**
@@ -610,7 +589,7 @@ export default class Zettlr {
    * @return  {BrowserWindow}  The main application window
    */
   getMainWindow (): BrowserWindow|null {
-    return this._windowManager.getMainWindow()
+    return this._app.windows.getMainWindow()
   }
 
   /**
@@ -619,21 +598,21 @@ export default class Zettlr {
    * @param   {string}  target  The target file path
    */
   showPrintWindow (target: string): void {
-    this._windowManager.showPrintWindow(target)
+    this._app.windows.showPrintWindow(target)
   }
 
   // Convenience wrappers: Modules that have access to the application object
   // are able to prompt, ask for stuff, etc.
   async shouldOverwriteFile (filename: string): Promise<boolean> {
-    return await this._windowManager.shouldOverwriteFile(filename)
+    return await this._app.windows.shouldOverwriteFile(filename)
   }
 
   async askDir (): Promise<string[]> {
-    return await this._windowManager.askDir()
+    return await this._app.windows.askDir()
   }
 
   async askFile (filters: FileFilter[]|null = null, multiSel: boolean = false): Promise<string[]> {
-    return await this._windowManager.askFile(filters, multiSel)
+    return await this._app.windows.askFile(filters, multiSel)
   }
 
   /**
@@ -647,7 +626,7 @@ export default class Zettlr {
    * @return  {Promise<string|undefined>}            Resolves with a path or undefined
    */
   async saveFile (fileOrPathName: string): Promise<string|undefined> {
-    return await this._windowManager.saveFile(fileOrPathName)
+    return await this._app.windows.saveFile(fileOrPathName)
   }
 
   /**
@@ -656,7 +635,7 @@ export default class Zettlr {
    * @return  {Promise<MessageBoxReturnValue>}  The answer from the user
    */
   async askSaveChanges (): Promise<MessageBoxReturnValue> {
-    return await this._windowManager.askSaveChanges()
+    return await this._app.windows.askSaveChanges()
   }
 
   /**
@@ -665,7 +644,7 @@ export default class Zettlr {
    * @return  {Promise<any>} The data generated in the modal
    */
   async showPasteImageModal (startPath: string): Promise<any> {
-    return await this._windowManager.showPasteImageModal(startPath)
+    return await this._app.windows.showPasteImageModal(startPath)
   }
 
   /**
@@ -677,7 +656,7 @@ export default class Zettlr {
    * @return  {Promise<boolean>}                   Resolves to true if the user confirms
    */
   async confirmRemove (descriptor: MDFileDescriptor|CodeFileDescriptor|DirDescriptor): Promise<boolean> {
-    return await this._windowManager.confirmRemove(descriptor)
+    return await this._app.windows.confirmRemove(descriptor)
   }
 
   /**
@@ -686,6 +665,6 @@ export default class Zettlr {
    * @param   {any}   options  The options
    */
   prompt (options: any): void {
-    this._windowManager.prompt(options)
+    this._app.windows.prompt(options)
   }
 }

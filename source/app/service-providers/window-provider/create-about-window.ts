@@ -2,7 +2,7 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        createPasteImageModal function
+ * Contains:        createAboutWindow function
  * CVM-Role:        Utility function
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
@@ -20,6 +20,7 @@ import {
 import attachLogger from './attach-logger'
 import preventNavigation from './prevent-navigation'
 import setWindowChrome from './set-window-chrome'
+import { WindowPosition } from './types'
 
 /**
  * Creates a BrowserWindow with print window configuration and loads the
@@ -27,52 +28,42 @@ import setWindowChrome from './set-window-chrome'
  *
  * @return  {BrowserWindow}           The loaded print window
  */
-export default function createErrorModal (win: BrowserWindow, title: string, message: string, contents?: string): BrowserWindow {
-  if (contents === undefined) {
-    contents = '<no-contents>'
-  }
-
+export default function createAboutWindow (logger: LogProvider, config: ConfigProvider, conf: WindowPosition): BrowserWindow {
   const winConf: BrowserWindowConstructorOptions = {
     acceptFirstMouse: true,
     minWidth: 300,
     minHeight: 200,
-    width: 640,
-    height: 480,
-    modal: true,
-    parent: win,
+    width: conf.width,
+    height: conf.height,
+    x: conf.x,
+    y: conf.y,
+    minimizable: false, // Disable the minimise button for this utility window
     show: false,
     fullscreenable: false,
     webPreferences: {
       contextIsolation: true,
-      additionalArguments: [ title, message, contents ],
-      preload: ERROR_PRELOAD_WEBPACK_ENTRY
+      preload: ABOUT_PRELOAD_WEBPACK_ENTRY
     }
   }
 
   // Set the correct window chrome
-  setWindowChrome(winConf, true)
+  setWindowChrome(config, winConf)
 
   const window = new BrowserWindow(winConf)
 
-  const effectiveUrl = new URL(ERROR_WEBPACK_ENTRY)
-  // Add the error message contents to the searchParams
-  effectiveUrl.searchParams.append('title', title)
-  effectiveUrl.searchParams.append('message', message)
-  effectiveUrl.searchParams.append('contents', contents)
-
   // Load the index.html of the app.
-  window.loadURL(effectiveUrl.toString())
+  window.loadURL(ABOUT_WEBPACK_ENTRY)
     .catch(e => {
-      global.log.error(`Could not load URL ${ERROR_WEBPACK_ENTRY}: ${e.message as string}`, e)
+      logger.error(`Could not load URL ${ABOUT_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })
 
   // EVENT LISTENERS
 
   // Prevent arbitrary navigation away from our WEBPACK_ENTRY
-  preventNavigation(window)
+  preventNavigation(logger, window)
 
   // Implement main process logging
-  attachLogger(window, 'Error Modal')
+  attachLogger(logger, window, 'About Window')
 
   // Only show window once it is completely initialized + maximize it
   window.once('ready-to-show', function () {
@@ -92,7 +83,7 @@ export default function createErrorModal (win: BrowserWindow, title: string, mes
         'websql'
       ]
     }).catch(e => {
-      global.log.error(`Could not clear session data: ${e.message as string}`, e)
+      logger.error(`Could not clear session data: ${e.message as string}`, e)
     })
   })
 

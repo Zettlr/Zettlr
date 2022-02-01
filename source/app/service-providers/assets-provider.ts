@@ -18,8 +18,9 @@ import { app, ipcMain } from 'electron'
 import { promises as fs } from 'fs'
 import YAML from 'yaml'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
+import ProviderContract from './provider-contract'
 
-export default class AssetsProvider {
+export default class AssetsProvider extends ProviderContract {
   /**
    * Holds the path where defaults files can be found.
    *
@@ -28,9 +29,12 @@ export default class AssetsProvider {
   private readonly _defaultsPath: string
   private readonly _snippetsPath: string
   private readonly _filterPath: string
+  private readonly _logger: LogProvider
 
-  constructor () {
-    global.log.verbose('Assets provider starting up ...')
+  constructor (logger: LogProvider) {
+    super()
+    this._logger = logger
+    this._logger.verbose('Assets provider starting up ...')
 
     this._defaultsPath = path.join(app.getPath('userData'), '/defaults')
     this._snippetsPath = path.join(app.getPath('userData'), '/snippets')
@@ -81,7 +85,7 @@ export default class AssetsProvider {
     })
   }
 
-  async init (): Promise<void> {
+  async boot (): Promise<void> {
     // First, ensure all required default files are where they should be.
     // Required are those defaults files which are in the assets/defaults directory
     // and correspond to the format (import|export).(writer|reader).yaml
@@ -93,7 +97,7 @@ export default class AssetsProvider {
       try {
         await fs.lstat(absolutePath)
       } catch (err) {
-        global.log.warning(`[Assets Provider] Required defaults file ${file} not found. Copying ...`)
+        this._logger.warning(`[Assets Provider] Required defaults file ${file} not found. Copying ...`)
         await fs.copyFile(path.join(__dirname, './assets/defaults', file), absolutePath)
       }
     }
@@ -109,11 +113,11 @@ export default class AssetsProvider {
         const existingStat = await fs.lstat(absolutePath)
         const newStat = await fs.lstat(path.join(__dirname, './assets/lua-filter', file))
         if (newStat.mtimeMs > existingStat.mtimeMs) {
-          global.log.warning(`[Assets Provider] Found outdated filter ${file}; copying ...`)
+          this._logger.warning(`[Assets Provider] Found outdated filter ${file}; copying ...`)
           await fs.copyFile(path.join(__dirname, './assets/lua-filter', file), absolutePath)
         }
       } catch (err) {
-        global.log.warning(`[Assets Provider] Required filter ${file} not found. Copying ...`)
+        this._logger.warning(`[Assets Provider] Required filter ${file} not found. Copying ...`)
         await fs.copyFile(path.join(__dirname, './assets/lua-filter', file), absolutePath)
       }
     }
@@ -125,7 +129,7 @@ export default class AssetsProvider {
    * @return  {Promise<void>} Resolves after successful shutdown
    */
   async shutdown (): Promise<void> {
-    global.log.verbose('Assets provider shutting down ...')
+    this._logger.verbose('Assets provider shutting down ...')
   }
 
   /**
@@ -160,7 +164,7 @@ export default class AssetsProvider {
       await fs.writeFile(file, yaml)
       return true
     } catch (err: any) {
-      global.log.error(`[Assets Provider] Could not save defaults file: ${String(err.message)}`, err)
+      this._logger.error(`[Assets Provider] Could not save defaults file: ${String(err.message)}`, err)
       return false
     }
   }
@@ -181,8 +185,8 @@ export default class AssetsProvider {
 
     try {
       await fs.copyFile(source, target)
-    } catch (err) {
-      global.log.error(`[Assets Provider] Could not restore defaults file ${type} for ${format}!`, err)
+    } catch (err: any) {
+      this._logger.error(`[Assets Provider] Could not restore defaults file ${type} for ${format}!`, err)
       return false
     }
 
@@ -217,7 +221,7 @@ export default class AssetsProvider {
       broadcastIpcMessage('assets-provider', 'snippets-updated')
       return true
     } catch (err: any) {
-      global.log.error(`[Assets Provider] Could not save snippets file: ${String(err.message)}`, err)
+      this._logger.error(`[Assets Provider] Could not save snippets file: ${String(err.message)}`, err)
       return false
     }
   }
@@ -236,7 +240,7 @@ export default class AssetsProvider {
       broadcastIpcMessage('assets-provider', 'snippets-updated')
       return true
     } catch (err: any) {
-      global.log.error(`[Assets Provider] Could not remove snippets file: ${String(err.message)}`, err)
+      this._logger.error(`[Assets Provider] Could not remove snippets file: ${String(err.message)}`, err)
       return false
     }
   }
@@ -257,7 +261,7 @@ export default class AssetsProvider {
       broadcastIpcMessage('assets-provider', 'snippets-updated')
       return true
     } catch (err: any) {
-      global.log.error(`[Assets Provider] Could not rename snippets file: ${String(err.message)}`, err)
+      this._logger.error(`[Assets Provider] Could not rename snippets file: ${String(err.message)}`, err)
       return false
     }
   }

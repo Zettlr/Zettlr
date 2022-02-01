@@ -2,7 +2,7 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        createProjectPropertiesWindow function
+ * Contains:        createPreferencesWindow function
  * CVM-Role:        Utility function
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
@@ -23,14 +23,12 @@ import setWindowChrome from './set-window-chrome'
 import { WindowPosition } from './types'
 
 /**
- * Creates a BrowserWindow with project properties configuration
+ * Creates a BrowserWindow with print window configuration and loads the
+ * corresponding renderer.
  *
- * @param   {WindowPosition}  conf     The configuration to use
- * @param   {string}          dirPath  The directory whose project properties to load
- *
- * @return  {BrowserWindow}            The loaded print window
+ * @return  {BrowserWindow}           The loaded print window
  */
-export default function createProjectPropertiesWindow (conf: WindowPosition, dirPath: string): BrowserWindow {
+export default function createPreferencesWindow (logger: LogProvider, config: ConfigProvider, conf: WindowPosition): BrowserWindow {
   const winConf: BrowserWindowConstructorOptions = {
     acceptFirstMouse: true,
     minWidth: 300,
@@ -44,32 +42,28 @@ export default function createProjectPropertiesWindow (conf: WindowPosition, dir
     fullscreenable: false,
     webPreferences: {
       contextIsolation: true,
-      preload: PROJECT_PROPERTIES_PRELOAD_WEBPACK_ENTRY
+      preload: PREFERENCES_PRELOAD_WEBPACK_ENTRY
     }
   }
 
   // Set the correct window chrome
-  setWindowChrome(winConf)
+  setWindowChrome(config, winConf)
 
   const window = new BrowserWindow(winConf)
 
-  const effectiveUrl = new URL(PROJECT_PROPERTIES_WEBPACK_ENTRY)
-  // Add the directory path to the search params
-  effectiveUrl.searchParams.append('directory', dirPath)
-
   // Load the index.html of the app.
-  window.loadURL(effectiveUrl.toString())
+  window.loadURL(PREFERENCES_WEBPACK_ENTRY)
     .catch(e => {
-      global.log.error(`Could not load URL ${PROJECT_PROPERTIES_WEBPACK_ENTRY}: ${e.message as string}`, e)
+      logger.error(`Could not load URL ${PREFERENCES_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })
 
   // EVENT LISTENERS
 
   // Prevent arbitrary navigation away from our WEBPACK_ENTRY
-  preventNavigation(window)
+  preventNavigation(logger, window)
 
   // Implement main process logging
-  attachLogger(window, 'Project Properties')
+  attachLogger(logger, window, 'Preferences')
 
   // Only show window once it is completely initialized + maximize it
   window.once('ready-to-show', function () {
@@ -89,7 +83,7 @@ export default function createProjectPropertiesWindow (conf: WindowPosition, dir
         'websql'
       ]
     }).catch(e => {
-      global.log.error(`Could not clear session data: ${e.message as string}`, e)
+      logger.error(`Could not clear session data: ${e.message as string}`, e)
     })
   })
 

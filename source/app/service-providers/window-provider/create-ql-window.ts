@@ -2,13 +2,12 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        createAboutWindow function
+ * Contains:        createQuicklookWindow function
  * CVM-Role:        Utility function
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     Creates a BrowserWindow with an entry point according to
- *                  the function arguments.
+ * Description:     Creates a BrowserWindow using the Quicklook configuration
  *
  * END HEADER
  */
@@ -17,18 +16,20 @@ import {
   BrowserWindow,
   BrowserWindowConstructorOptions
 } from 'electron'
-import attachLogger from './attach-logger'
-import preventNavigation from './prevent-navigation'
-import setWindowChrome from './set-window-chrome'
+import { MDFileDescriptor } from '@dts/main/fsal'
 import { WindowPosition } from './types'
+import setWindowChrome from './set-window-chrome'
+import preventNavigation from './prevent-navigation'
+import attachLogger from './attach-logger'
 
 /**
- * Creates a BrowserWindow with print window configuration and loads the
+ * Creates a BrowserWindow with Quicklook Window configuration and loads the
  * corresponding renderer.
  *
- * @return  {BrowserWindow}           The loaded print window
+ * @param   {MDFileDescriptor}  file  The file to load in the Quicklook
+ * @return  {BrowserWindow}           The loaded main window
  */
-export default function createAboutWindow (conf: WindowPosition): BrowserWindow {
+export default function createQuicklookWindow (logger: LogProvider, config: ConfigProvider, file: MDFileDescriptor, conf: WindowPosition): BrowserWindow {
   const winConf: BrowserWindowConstructorOptions = {
     acceptFirstMouse: true,
     minWidth: 300,
@@ -37,37 +38,42 @@ export default function createAboutWindow (conf: WindowPosition): BrowserWindow 
     height: conf.height,
     x: conf.x,
     y: conf.y,
-    minimizable: false, // Disable the minimise button for this utility window
     show: false,
-    fullscreenable: false,
     webPreferences: {
       contextIsolation: true,
-      preload: ABOUT_PRELOAD_WEBPACK_ENTRY
+      preload: QUICKLOOK_PRELOAD_WEBPACK_ENTRY
     }
   }
 
   // Set the correct window chrome
-  setWindowChrome(winConf)
+  setWindowChrome(config, winConf)
 
   const window = new BrowserWindow(winConf)
 
+  const effectiveUrl = new URL(QUICKLOOK_WEBPACK_ENTRY)
+  effectiveUrl.searchParams.append('file', file.path)
+
   // Load the index.html of the app.
-  window.loadURL(ABOUT_WEBPACK_ENTRY)
+  // The variable QUICKLOOK_WEBPACK_ENTRY is automatically resolved by electron forge / webpack
+  window.loadURL(effectiveUrl.toString())
     .catch(e => {
-      global.log.error(`Could not load URL ${ABOUT_WEBPACK_ENTRY}: ${e.message as string}`, e)
+      logger.error(`Could not load URL ${QUICKLOOK_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })
 
   // EVENT LISTENERS
 
   // Prevent arbitrary navigation away from our WEBPACK_ENTRY
-  preventNavigation(window)
+  preventNavigation(logger, window)
 
   // Implement main process logging
-  attachLogger(window, 'About Window')
+  attachLogger(logger, window, 'Quicklook Window')
 
   // Only show window once it is completely initialized + maximize it
   window.once('ready-to-show', function () {
     window.show()
+    if (conf.isMaximised) {
+      window.maximize()
+    }
   })
 
   // Emitted when the user wants to close the window.
@@ -83,7 +89,7 @@ export default function createAboutWindow (conf: WindowPosition): BrowserWindow 
         'websql'
       ]
     }).catch(e => {
-      global.log.error(`Could not clear session data: ${e.message as string}`, e)
+      logger.error(`Could not clear session data: ${e.message as string}`, e)
     })
   })
 

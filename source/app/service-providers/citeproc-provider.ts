@@ -24,6 +24,9 @@ import extractBibTexAttachments from './assets/extract-bibtex-attachments'
 import { parse as parseBibTex } from 'astrocite-bibtex'
 import YAML from 'yaml'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
+import ProviderContract from './provider-contract'
+import NotificationProvider from './notification-provider'
+import WindowProvider from './window-provider'
 
 interface DatabaseRecord {
   path: string
@@ -39,7 +42,7 @@ interface DatabaseRecord {
 /**
  * This class enables to export citations from a CSL JSON file to HTML.
  */
-export default class CiteprocProvider {
+export default class CiteprocProvider extends ProviderContract {
   /**
    * The main library which is being used everywhere where we don't have
    * specific libraries. This variable holds the absolute path.
@@ -95,11 +98,22 @@ export default class CiteprocProvider {
    */
   private readonly _sys: CSLKernel
 
-  constructor () {
-    global.log.verbose('Citeproc provider booting up ...')
+  private readonly _logger: LogProvider
+  private readonly _config: ConfigProvider
+  private readonly _notifications: NotificationProvider
+  private readonly _windows: WindowProvider
+
+  constructor (logger: LogProvider, config: ConfigProvider, notifications: NotificationProvider, windows: WindowProvider) {
+    super()
+    this._logger = logger
+    this._config = config
+    this._notifications = notifications
+    this._windows = windows
+
+    this._logger.verbose('Citeproc provider booting up ...')
     const style = path.join(__dirname, './assets/csl-styles/chicago-author-date.csl')
     this._items = Object.create(null) // ID-accessible CSL data array.
-    this._mainLibrary = global.config.get('export.cslLibrary')
+    this._mainLibrary = this._config.get('export.cslLibrary')
 
     // Start the watcher
     this._watcher = new FSWatcher({
@@ -114,12 +128,12 @@ export default class CiteprocProvider {
       const db = this._databases.find(db => db.path === affectedPath)
 
       if (db === undefined) {
-        global.log.warning(`[Citeproc Provider] Chokidar reported the event ${eventName}:${affectedPath}, but no such database was loaded`)
+        this._logger.warning(`[Citeproc Provider] Chokidar reported the event ${eventName}:${affectedPath}, but no such database was loaded`)
         return
       }
 
       if (eventName === 'change') {
-        global.log.info(`[Citeproc Provider] Database ${affectedPath} has been changed remotely. Reloading ...`)
+        this._logger.info(`[Citeproc Provider] Database ${affectedPath} has been changed remotely. Reloading ...`)
         const isSelected = this._databases.indexOf(db) === this._databaseIdx
         this._unloadDatabase(affectedPath)
         this._loadDatabase(affectedPath)
@@ -136,7 +150,7 @@ export default class CiteprocProvider {
               // containing several thousand elements. So in this case we
               // schedule a reload for in 5 seconds from now, since then it
               // should be written successfully.
-              global.log.warning(`[Citeproc Provider] Reloading ${affectedPath} failed, but the error indicated it needs more time to finish writing. Attempting again in 5 seconds. If this happens often, try to reduce the size of the database file.`)
+              this._logger.warning(`[Citeproc Provider] Reloading ${affectedPath} failed, but the error indicated it needs more time to finish writing. Attempting again in 5 seconds. If this happens often, try to reduce the size of the database file.`)
               setTimeout(() => {
                 this._loadDatabase(affectedPath)
                   .then(db => {
@@ -146,15 +160,15 @@ export default class CiteprocProvider {
                     }
                   })
                   .catch(err => {
-                    global.log.error(`[Citeproc Provider] Could not reload database ${affectedPath} after second attempt: ${String(err.message)}`, err)
+                    this._logger.error(`[Citeproc Provider] Could not reload database ${affectedPath} after second attempt: ${String(err.message)}`, err)
                   })
               }, 5000)
             } else {
-              global.log.error(`[Citeproc Provider] Could not reload affected database ${affectedPath}: ${String(err.message)}`, err)
+              this._logger.error(`[Citeproc Provider] Could not reload affected database ${affectedPath}: ${String(err.message)}`, err)
             }
           })
       } else if (eventName === 'unlink') {
-        global.log.warning(`[Citeproc Provider] Database ${affectedPath} has been removed remotely. Unloading from processor ...`)
+        this._logger.warning(`[Citeproc Provider] Database ${affectedPath} has been removed remotely. Unloading from processor ...`)
         this._unloadDatabase(affectedPath)
       }
     })
@@ -221,7 +235,7 @@ export default class CiteprocProvider {
     }
 
     // Be notified of potential updates
-    global.config.on('update', (option: string) => {
+    this._config.on('update', (option: string) => {
       this._onConfigUpdate(option)
     })
 
@@ -263,18 +277,15 @@ export default class CiteprocProvider {
           this._selectDatabase(db.path)
         })
         .catch(err => {
-          global.log.error(`[Citeproc Provider] Could not load main library: ${String(err.message)}`, err)
-          if (!('application' in global)) {
-            return // If the main library wasn't found on start, do not attempt to display an error message.
-          }
-          global.application.displayErrorMessage(
-            trans('gui.citeproc.error_db'),
-            err.message,
-            err.message
-          )
+          this._logger.error(`[Citeproc Provider] Could not load main library: ${String(err.message)}`, err)
+          this._windows.showErrorMessage(trans('gui.citeproc.error_db'), err.message, err.message)
         })
     }
   } // END constructor
+
+  public async boot (): Promise<void> {
+    //
+  }
 
   /**
    * Loads a new engine. TODO: We can use this to create multiple engines with
@@ -286,7 +297,7 @@ export default class CiteprocProvider {
     const style = readFileSync(stylePath, { encoding: 'utf8' })
 
     if (lang === undefined) {
-      lang = global.config.get('appLang')
+      lang = this._config.get('appLang')
     }
 
     const engine = new CSL.Engine(
@@ -326,11 +337,11 @@ export default class CiteprocProvider {
 
     if (libraryType === '.json') {
       // Parse as JSON
-      global.log.info(`[Citeproc Provider] Parsing file ${databasePath} as CSL JSON ...`)
+      this._logger.info(`[Citeproc Provider] Parsing file ${databasePath} as CSL JSON ...`)
       record.cslData = JSON.parse(data)
     } else if ([ '.yaml', '.yml' ].includes(libraryType)) {
       // Parse as YAML
-      global.log.info(`[Citeproc Provider] Parsing file ${databasePath} as CSL YAML ...`)
+      this._logger.info(`[Citeproc Provider] Parsing file ${databasePath} as CSL YAML ...`)
       const yamlData = YAML.parse(data)
       if ('references' in yamlData) {
         record.cslData = yamlData.references // CSL YAML is stored in references
@@ -341,7 +352,7 @@ export default class CiteprocProvider {
       }
     } else if (libraryType === '.bib') {
       // Parse as BibTex
-      global.log.info(`[Citeproc Provider] Parsing file ${databasePath} as BibTex ...`)
+      this._logger.info(`[Citeproc Provider] Parsing file ${databasePath} as BibTex ...`)
       record.cslData = parseBibTex(data)
       record.type = 'bibtex'
 
@@ -352,7 +363,7 @@ export default class CiteprocProvider {
       throw new Error('Could not read database: Unknown file type')
     }
 
-    global.log.info(`[Citeproc Provider] Database ${record.path} loaded (${record.cslData.length} items).`)
+    this._logger.info(`[Citeproc Provider] Database ${record.path} loaded (${record.cslData.length} items).`)
 
     // Add the database to the list of available databases
     this._databases.push(record)
@@ -430,10 +441,9 @@ export default class CiteprocProvider {
   /**
    * Shuts down the service provider
    */
-  async shutdown (): Promise<boolean> {
-    global.log.verbose('Citeproc provider shutting down ...')
+  async shutdown (): Promise<void> {
+    this._logger.verbose('Citeproc provider shutting down ...')
     await this._watcher.close()
-    return true
   }
 
   /**
@@ -447,10 +457,10 @@ export default class CiteprocProvider {
 
     if (option === 'export.cslLibrary') {
       // Determine if we have to reload
-      const hasChanged = global.config.get('export.cslLibrary') !== this._mainLibrary
+      const hasChanged = this._config.get('export.cslLibrary') !== this._mainLibrary
 
       if (hasChanged) {
-        global.notify.normal(trans('gui.citeproc.reloading'))
+        this._notifications.show(trans('gui.citeproc.reloading'))
         try {
           this._unloadDatabase(this._mainLibrary)
         } catch (err) {
@@ -458,9 +468,9 @@ export default class CiteprocProvider {
           // TODO: Race condition: If the config update comes early in the
           // application boot process, we might end up with two times the same
           // database.
-          global.log.info('[Citeproc Provider] Not unloading main library.')
+          this._logger.info('[Citeproc Provider] Not unloading main library.')
         }
-        this._mainLibrary = global.config.get('export.cslLibrary')
+        this._mainLibrary = this._config.get('export.cslLibrary')
         if (this._mainLibrary.trim() === '') {
           return // The user removed the csl library
         }
@@ -470,11 +480,8 @@ export default class CiteprocProvider {
             this._selectDatabase(db.path)
           })
           .catch(err => {
-            global.log.error(`[Citeproc Provider] Could not reload main library: ${String(err.message)}`, err)
-            global.application.displayErrorMessage(
-              trans('gui.citeproc.error_db'),
-              err.message
-            )
+            this._logger.error(`[Citeproc Provider] Could not reload main library: ${String(err.message)}`, err)
+            this._windows.showErrorMessage(trans('gui.citeproc.error_db'), err.message)
           })
       }
     }
@@ -498,7 +505,7 @@ export default class CiteprocProvider {
 
     try {
       const localePath = path.join(__dirname, `./assets/csl-locales/locales-${lang}.xml`)
-      global.log.info(`[Citeproc Provider] Loading CSL locale file at ${localePath} ...`)
+      this._logger.info(`[Citeproc Provider] Loading CSL locale file at ${localePath} ...`)
       // NOTE that this System function must be synchronous, so we cannot use
       // the asynchronous promises API here.
       return readFileSync(localePath, { encoding: 'utf8' })
@@ -545,7 +552,7 @@ export default class CiteprocProvider {
       }
     } catch (err: any) {
       const msg = citations.map(elem => elem.id).join(', ')
-      global.log.error(`[citeproc] makeCitationCluster: Could not create citation cluster ${msg}: ${String(err)}`, err)
+      this._logger.error(`[citeproc] makeCitationCluster: Could not create citation cluster ${msg}: ${String(err)}`, err)
       return undefined
     }
   }
@@ -567,7 +574,7 @@ export default class CiteprocProvider {
       this._engine.updateItems(sanitizedCitations)
       return true
     } catch (err: any) {
-      global.log.error('[citeproc] Could not update engine registry: ' + String(err.message), citations)
+      this._logger.error('[citeproc] Could not update engine registry: ' + String(err.message), citations)
       return false
     }
   }
@@ -586,7 +593,7 @@ export default class CiteprocProvider {
     try {
       return this._engine.makeBibliography()
     } catch (err: any) {
-      global.log.warning(err.message, err)
+      this._logger.warning(err.message, err)
       return undefined // Something went wrong (e.g. falsy items in the registry)
     }
   }

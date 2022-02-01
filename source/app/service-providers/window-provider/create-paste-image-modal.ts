@@ -2,12 +2,13 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        createPrintWindow function
+ * Contains:        createPasteImageModal function
  * CVM-Role:        Utility function
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     Creates a BrowserWindow using the print configuration.
+ * Description:     Creates a BrowserWindow with an entry point according to
+ *                  the function arguments.
  *
  * END HEADER
  */
@@ -19,56 +20,50 @@ import {
 import attachLogger from './attach-logger'
 import preventNavigation from './prevent-navigation'
 import setWindowChrome from './set-window-chrome'
-import { WindowPosition } from './types'
 
 /**
  * Creates a BrowserWindow with print window configuration and loads the
  * corresponding renderer.
  *
- * @param   {string}  file  The file to load in the print preview
  * @return  {BrowserWindow}           The loaded print window
  */
-export default function createPrintWindow (file: string, conf: WindowPosition): BrowserWindow {
+export default function createPasteImageModal (logger: LogProvider, config: ConfigProvider, win: BrowserWindow, startPath: string): BrowserWindow {
   const winConf: BrowserWindowConstructorOptions = {
     acceptFirstMouse: true,
-    minWidth: 300,
-    minHeight: 200,
-    width: conf.width,
-    height: conf.height,
-    x: conf.x,
-    y: conf.y,
+    width: 700,
+    height: 600,
+    modal: true,
+    parent: win,
     show: false,
+    fullscreenable: false,
     webPreferences: {
       contextIsolation: true,
-      // We are loading an iFrame with a local resource, so we must disable webSecurity for this window
-      webSecurity: false,
-      preload: PRINT_PRELOAD_WEBPACK_ENTRY
+      preload: PASTE_IMAGE_PRELOAD_WEBPACK_ENTRY
     }
   }
 
   // Set the correct window chrome
-  setWindowChrome(winConf)
+  setWindowChrome(config, winConf, true)
 
   const window = new BrowserWindow(winConf)
 
-  const effectiveUrl = new URL(PRINT_WEBPACK_ENTRY)
-  // Add the print preview file to the search params
-  effectiveUrl.searchParams.append('file', file)
+  const effectiveUrl = new URL(PASTE_IMAGE_WEBPACK_ENTRY)
+  // Add the initial target path to the search params
+  effectiveUrl.searchParams.append('startPath', startPath)
 
   // Load the index.html of the app.
-  // The variable PRINT_WEBPACK_ENTRY is automatically resolved by electron forge / webpack
   window.loadURL(effectiveUrl.toString())
     .catch(e => {
-      global.log.error(`Could not load URL ${PRINT_WEBPACK_ENTRY}: ${e.message as string}`, e)
+      logger.error(`Could not load URL ${PASTE_IMAGE_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })
 
   // EVENT LISTENERS
 
   // Prevent arbitrary navigation away from our WEBPACK_ENTRY
-  preventNavigation(window)
+  preventNavigation(logger, window)
 
   // Implement main process logging
-  attachLogger(window, 'Print Window')
+  attachLogger(logger, window, 'Paste Image Modal')
 
   // Only show window once it is completely initialized + maximize it
   window.once('ready-to-show', function () {
@@ -88,7 +83,7 @@ export default function createPrintWindow (file: string, conf: WindowPosition): 
         'websql'
       ]
     }).catch(e => {
-      global.log.error(`Could not clear session data: ${e.message as string}`, e)
+      logger.error(`Could not clear session data: ${e.message as string}`, e)
     })
   })
 

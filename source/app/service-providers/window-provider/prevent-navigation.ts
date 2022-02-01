@@ -23,7 +23,7 @@ import { app, BrowserWindow, shell } from 'electron'
  *
  * @param   {BrowserWindow}  win  The BrowserWindow in question
  */
-export default function preventNavigation (win: BrowserWindow): void {
+export default function preventNavigation (logger: LogProvider, win: BrowserWindow): void {
   win.webContents.on('will-navigate', (event, url) => {
     // NOTE: app.isPackaged is false if the executable is called electron (instead of Zettlr)
     if (!app.isPackaged) {
@@ -46,17 +46,17 @@ export default function preventNavigation (win: BrowserWindow): void {
       // So we have to make sure to decode the url, i.e.,  %28 becomes ( again.
       const unencoded = decodeURIComponent(url)
       // We need to remove the protocol to ensure shell.openPath works.
-      global.log.verbose(`[Window Manager] Opening path ${unencoded.substring(12)}.`)
+      logger.verbose(`[Window Manager] Opening path ${unencoded.substring(12)}.`)
       shell.openPath(unencoded.substring(12))
-        .catch(error => global.log.error(
+        .catch(error => logger.error(
           `[Window Manager] Could not open path ${unencoded.substring(12)}.`,
           error
         ))
     } else {
-      global.log.verbose(
+      logger.verbose(
         `[Window Manager] Opening ${url} in default browser.`)
       shell.openExternal(url)
-        .catch(error => global.log.error(
+        .catch(error => logger.error(
           `[Window Manager] Could not open URL ${url}.`,
           error
         ))

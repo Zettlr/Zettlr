@@ -24,7 +24,7 @@ import path from 'path'
  * @param   {BrowserWindow}  win  The BrowserWindow to attach to
  * @param   {string}         id   A human-readable identifier for the window
  */
-export default function attachLogger (win: BrowserWindow, id: string): void {
+export default function attachLogger (logger: LogProvider, win: BrowserWindow, id: string): void {
   // See: https://www.electronjs.org/docs/api/web-contents#event-console-message
   win.webContents.on('console-message', (event, level, message, line, sourceId) => {
     // Prepare the generic log message and then log it using the appropriate
@@ -32,16 +32,16 @@ export default function attachLogger (win: BrowserWindow, id: string): void {
     const logMessage = `[R] [${id}] ${message} (${path.basename(sourceId)}:${line})`
     switch (level) {
       case 0: // Verbose
-        global.log.verbose(logMessage)
+        logger.verbose(logMessage)
         break
       case 1: // Info
-        global.log.info(logMessage)
+        logger.info(logMessage)
         break
       case 2: // Warning
-        global.log.warning(logMessage)
+        logger.warning(logMessage)
         break
       case 3: // Error
-        global.log.error(logMessage)
+        logger.error(logMessage)
         break
     }
   })

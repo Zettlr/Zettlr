@@ -15,8 +15,14 @@
 import { app, MenuItemConstructorOptions, shell } from 'electron'
 import { trans } from '@common/i18n-main'
 import path from 'path'
+import RecentDocumentsProvider from '@providers/recent-docs-provider'
+import WindowProvider from '@providers/window-provider'
 
 export default function getMenu (
+  logger: LogProvider,
+  config: ConfigProvider,
+  recentDocs: RecentDocumentsProvider,
+  windows: WindowProvider,
   getCheckboxState: (id: string, init: boolean) => boolean,
   setCheckboxState: (id: string, val: boolean) => void
 ): MenuItemConstructorOptions[] {
@@ -36,7 +42,7 @@ export default function getMenu (
           label: trans('menu.preferences'),
           accelerator: 'Cmd+,',
           click: function (menuitem, focusedWindow) {
-            global.application.showPreferences()
+            windows.showPreferences()
           }
         },
         {
@@ -44,14 +50,14 @@ export default function getMenu (
           label: trans('menu.assets_manager'),
           accelerator: 'Cmd+Alt+,',
           click: function (menuitem, focusedWindow) {
-            global.application.showDefaultsPreferences()
+            windows.showDefaultsWindow()
           }
         },
         {
           id: 'menu.tags',
           label: trans('menu.tags'),
           click: function (menuitem, focusedWindow) {
-            global.application.showTagManager()
+            windows.showTagManager()
           }
         },
         {
@@ -106,7 +112,7 @@ export default function getMenu (
               accelerator: 'Cmd+N',
               click: function (menuitem, focusedWindow) {
                 global.application.runCommand('new-unsaved-file', { type: 'md' })
-                  .catch(e => global.log.error(String(e.message), e))
+                  .catch(e => logger.error(String(e.message), e))
               }
             },
             {
@@ -114,7 +120,7 @@ export default function getMenu (
               label: 'TeX', // TODO: Translate
               click: function (menuitem, focusedWindow) {
                 global.application.runCommand('new-unsaved-file', { type: 'tex' })
-                  .catch(e => global.log.error(String(e.message), e))
+                  .catch(e => logger.error(String(e.message), e))
               }
             },
             {
@@ -122,7 +128,7 @@ export default function getMenu (
               label: 'YAML', // TODO: Translate
               click: function (menuitem, focusedWindow) {
                 global.application.runCommand('new-unsaved-file', { type: 'yaml' })
-                  .catch(e => global.log.error(String(e.message), e))
+                  .catch(e => logger.error(String(e.message), e))
               }
             },
             {
@@ -130,7 +136,7 @@ export default function getMenu (
               label: 'JSON', // TODO: Translate
               click: function (menuitem, focusedWindow) {
                 global.application.runCommand('new-unsaved-file', { type: 'json' })
-                  .catch(e => global.log.error(String(e.message), e))
+                  .catch(e => logger.error(String(e.message), e))
               }
             }
           ]
@@ -152,7 +158,7 @@ export default function getMenu (
           accelerator: 'Cmd+O',
           click: function (menuitem, focusedWindow) {
             global.application.runCommand('root-open-files')
-              .catch(e => global.log.error(String(e.message), e))
+              .catch(e => logger.error(String(e.message), e))
           }
         },
         {
@@ -161,7 +167,7 @@ export default function getMenu (
           accelerator: 'Cmd+Shift+O',
           click: function (menuitem, focusedWindow) {
             global.application.runCommand('root-open-workspaces')
-              .catch(e => global.log.error(String(e.message), e))
+              .catch(e => logger.error(String(e.message), e))
           }
         },
         {
@@ -195,7 +201,7 @@ export default function getMenu (
           click: function (menuitem, focusedWindow) {
             global.application.runCommand('previous-file')
               .catch(e => {
-                global.log.error(`[Menu] Error selecting previous file: ${e.message as string}`, e)
+                logger.error(`[Menu] Error selecting previous file: ${e.message as string}`, e)
               })
           }
         },
@@ -206,7 +212,7 @@ export default function getMenu (
           click: function (menuitem, focusedWindow) {
             global.application.runCommand('next-file')
               .catch(e => {
-                global.log.error(`[Menu] Error selecting next file: ${e.message as string}`, e)
+                logger.error(`[Menu] Error selecting next file: ${e.message as string}`, e)
               })
           }
         },
@@ -218,7 +224,7 @@ export default function getMenu (
           label: trans('menu.import_files'),
           click: function (menuItem, focusedWindow) {
             global.application.runCommand('import-files')
-              .catch(e => global.log.error('[Menu Provider] Cannot import files', e))
+              .catch(e => logger.error('[Menu Provider] Cannot import files', e))
           }
         },
         {
@@ -235,7 +241,7 @@ export default function getMenu (
           accelerator: 'Cmd+P',
           click: function (menuItem, focusedWindow) {
             global.application.runCommand('print')
-              .catch(e => global.log.error(String(e.message), e))
+              .catch(e => logger.error(String(e.message), e))
           }
         },
         {
@@ -246,7 +252,7 @@ export default function getMenu (
           label: trans('menu.import_lang_file'),
           click: function (menuItem, focusedWindow) {
             global.application.runCommand('import-lang-file')
-              .catch(e => global.log.error('[Menu Provider] Cannot import translation', e))
+              .catch(e => logger.error('[Menu Provider] Cannot import translation', e))
           }
         },
         {
@@ -257,11 +263,11 @@ export default function getMenu (
             shell.openPath(path.join(app.getPath('userData'), '/dict'))
               .then(potentialError => {
                 if (potentialError !== '') {
-                  global.log.error(msg + potentialError)
+                  logger.error(msg + potentialError)
                 }
               })
               .catch(err => {
-                global.log.error(msg + String(err.message), err)
+                logger.error(msg + String(err.message), err)
               })
           }
         },
@@ -434,9 +440,9 @@ export default function getMenu (
           label: trans('dialog.preferences.dark_mode'),
           accelerator: 'Cmd+Alt+L',
           type: 'checkbox',
-          checked: global.config.get('darkMode'),
+          checked: config.get('darkMode'),
           click: function (menuitem, focusedWindow) {
-            global.config.set('darkMode', global.config.get('darkMode') === false)
+            config.set('darkMode', config.get('darkMode') === false)
           }
         },
         {
@@ -444,9 +450,9 @@ export default function getMenu (
           label: trans('menu.toggle_file_meta'),
           accelerator: 'Cmd+Alt+S',
           type: 'checkbox',
-          checked: global.config.get('fileMeta'),
+          checked: config.get('fileMeta'),
           click: function (menuitem, focusedWindow) {
-            global.config.set('fileMeta', global.config.get('fileMeta') === false)
+            config.set('fileMeta', config.get('fileMeta') === false)
           }
         },
         {
@@ -549,7 +555,7 @@ export default function getMenu (
           label: trans('menu.open_logs'),
           accelerator: 'Cmd+Alt+Shift+L',
           click: function (menuitem, focusedWindow) {
-            global.application.showLogViewer()
+            windows.showLogWindow()
           }
         }
       ]
@@ -618,7 +624,7 @@ export default function getMenu (
           id: 'menu.about',
           label: trans('menu.about'),
           click: function (menuitem, focusedWindow) {
-            global.application.showAboutWindow()
+            windows.showAboutWindow()
           }
         },
         {
@@ -627,7 +633,7 @@ export default function getMenu (
           click: function (menuitem, focusedWindow) {
             const target = 'https://patreon.com/zettlr'
             shell.openExternal(target).catch(e => {
-              global.log.error(`[Menu Provider] Cannot open target: ${target}`, e.message)
+              logger.error(`[Menu Provider] Cannot open target: ${target}`, e.message)
             })
           }
         },
@@ -637,7 +643,7 @@ export default function getMenu (
           click: function (menuitem, focusedWindow) {
             const target = 'https://www.zettlr.com/'
             shell.openExternal(target).catch(e => {
-              global.log.error(`[Menu Provider] Cannot open target: ${target}`, e.message)
+              logger.error(`[Menu Provider] Cannot open target: ${target}`, e.message)
             })
           }
         },
@@ -647,7 +653,7 @@ export default function getMenu (
           click: function (menuitem, focusedWindow) {
             const target = 'https://www.latex-project.org/get/#tex-distributions'
             shell.openExternal(target).catch(e => {
-              global.log.error(`[Menu Provider] Cannot open target: ${target}`, e.message)
+              logger.error(`[Menu Provider] Cannot open target: ${target}`, e.message)
             })
           }
         },
@@ -658,7 +664,7 @@ export default function getMenu (
           click: function (menuitem, focusedWindow) {
             const target = 'https://docs.zettlr.com/'
             shell.openExternal(target).catch(e => {
-              global.log.error(`[Menu Provider] Cannot open target: ${target}`, e.message)
+              logger.error(`[Menu Provider] Cannot open target: ${target}`, e.message)
             })
           }
         },
@@ -667,7 +673,7 @@ export default function getMenu (
           label: trans('menu.open_tutorial'),
           click: function (menuitem, focusedWindow) {
             global.application.runCommand('tutorial-open')
-              .catch(e => global.log.error(String(e.message), e))
+              .catch(e => logger.error(String(e.message), e))
           }
         },
         {
@@ -676,7 +682,7 @@ export default function getMenu (
           click: function (menuitem, focusedWindow) {
             // Immediately open the window instead of first checking
             global.application.runCommand('open-update-window')
-              .catch(e => global.log.error(String(e.message), e))
+              .catch(e => logger.error(String(e.message), e))
           }
         }
       ]
@@ -684,7 +690,7 @@ export default function getMenu (
   ]
 
   // Finally, before returning, make sure to remove the debug menu if applicable
-  if (global.config.get('debug') === false) {
+  if (config.get('debug') === false) {
     menu.splice(4, 1)
   }
 

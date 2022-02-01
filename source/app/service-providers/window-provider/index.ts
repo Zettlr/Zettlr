@@ -45,14 +45,15 @@ import shouldReplaceFileDialog from './dialog/should-replace-file'
 import askDirectoryDialog from './dialog/ask-directory'
 import askSaveChanges from './dialog/ask-save-changes'
 import promptDialog from './dialog/prompt'
-import { WindowPosition } from './types.d'
+import { WindowPosition } from './types'
 import askFileDialog from './dialog/ask-file'
 import saveFileDialog from './dialog/save-dialog'
 import confirmRemove from './dialog/confirm-remove'
 import * as bcp47 from 'bcp-47'
 import mapFSError from './map-fs-error'
+import ProviderContract from '@providers/provider-contract'
 
-export default class WindowManager extends EventEmitter {
+export default class WindowProvider extends ProviderContract {
   private _mainWindow: BrowserWindow|null
   private readonly _qlWindows: Map<string, BrowserWindow>
   private _printWindow: BrowserWindow|null
@@ -73,9 +74,15 @@ export default class WindowManager extends EventEmitter {
   private _persistTimeout: ReturnType<typeof setTimeout>|undefined
   private _beforeMainWindowCloseCallback: Function|null
   private readonly _hasRTLLocale: boolean
+  private readonly _emitter: EventEmitter
+  private readonly _logger: LogProvider
+  private readonly _config: ConfigProvider
 
-  constructor () {
+  constructor (logger: LogProvider, config: ConfigProvider) {
     super()
+    this._logger = logger
+    this._config = config
+    this._emitter = new EventEmitter()
     this._mainWindow = null
     this._qlWindows = new Map()
     this._printWindow = null
@@ -115,16 +122,16 @@ export default class WindowManager extends EventEmitter {
     // Immediately begin loading the data
     this.loadData()
       .then(() => {
-        global.log.info('[Window Manager] Window Manager started.')
+        this._logger.info('[Window Manager] Window Manager started.')
         const shouldStartMinimized = process.argv.includes('--launch-minimized')
         const traySupported = process.env.ZETTLR_IS_TRAY_SUPPORTED === '1'
         if (!shouldStartMinimized || !traySupported) {
           this.showMainWindow()
         } else {
-          global.log.info('[Window Manager] Application should start in tray. Not showing main window.')
+          this._logger.info('[Window Manager] Application should start in tray. Not showing main window.')
         }
       })
-      .catch((err: Error) => global.log.error(`[Window Manager] Could not load data: ${err.message}`, err))
+      .catch((err: Error) => this._logger.error(`[Window Manager] Could not load data: ${err.message}`, err))
 
     // Listen to window control commands
     ipcMain.on('window-controls', (event, message) => {
@@ -186,7 +193,7 @@ export default class WindowManager extends EventEmitter {
             .then((icon) => {
               event.sender.startDrag({ file: payload.filePath, icon: icon })
             })
-            .catch(err => global.log.error(`[Window Manager] Could not fetch icon for path ${String(payload.filePath)}`, err))
+            .catch(err => this._logger.error(`[Window Manager] Could not fetch icon for path ${String(payload.filePath)}`, err))
           break
         case 'show-item-in-folder':
           if (itemPath.startsWith('safe-file://')) {
@@ -232,14 +239,14 @@ export default class WindowManager extends EventEmitter {
       const tmpObject = JSON.parse(data)
       if (Array.isArray(tmpObject)) {
         // Old configuration object --> do not map!
-        global.log.warning('[Window Manager] Detected an old windowState configuration file. Not retaining values!')
+        this._logger.warning('[Window Manager] Detected an old windowState configuration file. Not retaining values!')
         return
       }
-      global.log.info(`[Window Manager] Loading state information from ${this._configFile}`)
+      this._logger.info(`[Window Manager] Loading state information from ${this._configFile}`)
       this._windowState = new Map(Object.entries(tmpObject))
     } catch (err) {
       // Apparently no such file -> we'll leave the original (empty) array.
-      global.log.info('[Window Manager] No window state information found.')
+      this._logger.info('[Window Manager] No window state information found.')
     }
   }
 
@@ -262,10 +269,22 @@ export default class WindowManager extends EventEmitter {
     }
   }
 
+  async boot (): Promise<void> {
+    // Nothing to do
+  }
+
+  on (evt: string, callback: (...args: any[]) => void): void {
+    this._emitter.on(evt, callback)
+  }
+
+  off (evt: string, callback: (...args: any[]) => void): void {
+    this._emitter.off(evt, callback)
+  }
+
   /**
    * Shuts down the window manager and performs final operations
    */
-  shutdown (): void {
+  async shutdown (): Promise<void> {
     this._persistWindowPositions()
   }
 
@@ -276,10 +295,6 @@ export default class WindowManager extends EventEmitter {
     if (this._mainWindow === null) {
       return
     }
-
-    this._mainWindow.on('show', () => {
-      global.tray.add()
-    })
 
     // Listens to events from the window
     this._mainWindow.on('close', (event) => {
@@ -298,7 +313,7 @@ export default class WindowManager extends EventEmitter {
         win.close()
       }
 
-      if (process.platform !== 'darwin' && Boolean(global.config.get('system.leaveAppRunning')) && !global.application.isQuitting()) {
+      if (process.platform !== 'darwin' && Boolean(this._config.get('system.leaveAppRunning')) && !global.application.isQuitting()) {
         this._mainWindow?.hide()
         event.preventDefault()
       } else if (this._beforeMainWindowCloseCallback !== null) {
@@ -312,7 +327,7 @@ export default class WindowManager extends EventEmitter {
     this._mainWindow.on('closed', () => {
       // The window has been closed -> dereference
       this._mainWindow = null
-      this.emit('main-window-closed')
+      this._emitter.emit('main-window-closed')
     })
   }
 
@@ -348,7 +363,7 @@ export default class WindowManager extends EventEmitter {
         this._fileLock = false
       })
       .catch((err) => {
-        global.log.error(`[Window Manager] Could not persist data: ${err.message as string}`, err)
+        this._logger.error(`[Window Manager] Could not persist data: ${err.message as string}`, err)
       })
   }
 
@@ -480,7 +495,7 @@ export default class WindowManager extends EventEmitter {
         height: workArea.height
       })
 
-      this._mainWindow = createMainWindow(windowConfiguration)
+      this._mainWindow = createMainWindow(this._logger, this._config, windowConfiguration)
       this._hookMainWindow()
       this._hookWindowResize(this._mainWindow, 'main')
     } else {
@@ -512,7 +527,7 @@ export default class WindowManager extends EventEmitter {
     } else {
       // This particular file is not yet open
       const conf = this._retrieveWindowPosition(file.path, null)
-      const window = createQuicklookWindow(file, conf)
+      const window = createQuicklookWindow(this._logger, this._config, file, conf)
       this._hookWindowResize(window, file.path)
       this._qlWindows.set(file.path, window)
       window.on('closed', () => { this._qlWindows.delete(file.path) })
@@ -525,7 +540,7 @@ export default class WindowManager extends EventEmitter {
   showLogWindow (): void {
     if (this._logWindow === null) {
       const conf = this._retrieveWindowPosition('log', null)
-      this._logWindow = createLogWindow(conf)
+      this._logWindow = createLogWindow(this._logger, this._config, conf)
       this._hookWindowResize(this._logWindow, 'log')
 
       // Dereference the window as soon as it is closed
@@ -543,7 +558,7 @@ export default class WindowManager extends EventEmitter {
   showDefaultsWindow (): void {
     if (this._assetsWindow === null) {
       const conf = this._retrieveWindowPosition('assets', null)
-      this._assetsWindow = createAssetsWindow(conf)
+      this._assetsWindow = createAssetsWindow(this._logger, this._config, conf)
       this._hookWindowResize(this._assetsWindow, 'assets')
 
       // Dereference the window as soon as it is closed
@@ -561,7 +576,7 @@ export default class WindowManager extends EventEmitter {
   showStatsWindow (): void {
     if (this._statsWindow === null) {
       const conf = this._retrieveWindowPosition('stats', null)
-      this._statsWindow = createStatsWindow(conf)
+      this._statsWindow = createStatsWindow(this._logger, this._config, conf)
       this._hookWindowResize(this._statsWindow, 'stats')
 
       this._statsWindow.on('closed', () => {
@@ -584,7 +599,7 @@ export default class WindowManager extends EventEmitter {
         x: (workArea.width - 700) / 2,
         y: (workArea.height - 800) / 2
       })
-      this._preferences = createPreferencesWindow(conf)
+      this._preferences = createPreferencesWindow(this._logger, this._config, conf)
       this._hookWindowResize(this._preferences, 'preferences')
 
       // Dereference the window as soon as it is closed
@@ -608,7 +623,7 @@ export default class WindowManager extends EventEmitter {
         y: (workArea.height - 500) / 2,
         x: (workArea.width - 600) / 2
       })
-      this._aboutWindow = createAboutWindow(conf)
+      this._aboutWindow = createAboutWindow(this._logger, this._config, conf)
       this._hookWindowResize(this._aboutWindow, 'about')
 
       // Dereference the window as soon as it is closed
@@ -626,7 +641,7 @@ export default class WindowManager extends EventEmitter {
   showTagManager (): void {
     if (this._tagManager === null) {
       const conf = this._retrieveWindowPosition('tag-manager', null)
-      this._tagManager = createTagManagerWindow(conf)
+      this._tagManager = createTagManagerWindow(this._logger, this._config, conf)
       this._hookWindowResize(this._tagManager, 'tag-manager')
 
       // Dereference the window as soon as it is closed
@@ -646,7 +661,7 @@ export default class WindowManager extends EventEmitter {
       if (this._mainWindow === null) {
         return reject(new Error('[Window Manager] A paste image modal was requested, but there was no main window open.'))
       }
-      this._pasteImageModal = createPasteImageModal(this._mainWindow, startPath)
+      this._pasteImageModal = createPasteImageModal(this._logger, this._config, this._mainWindow, startPath)
 
       ipcMain.on('paste-image-ready', (event, data) => {
         // Resolve now
@@ -672,7 +687,7 @@ export default class WindowManager extends EventEmitter {
    */
   showErrorMessage (title: string, message: string, contents?: string): void {
     if (this._mainWindow === null) {
-      global.log.error('[Application] Could not display error message, because the main window was not open!', message)
+      this._logger.error('[Application] Could not display error message, because the main window was not open!', message)
       return
     }
 
@@ -682,7 +697,7 @@ export default class WindowManager extends EventEmitter {
       this._errorModal = null
     }
 
-    this._errorModal = createErrorModal(this._mainWindow, title, message, contents)
+    this._errorModal = createErrorModal(this._logger, this._config, this._mainWindow, title, message, contents)
 
     // Dereference the window as soon as it is closed
     this._errorModal.on('closed', () => {
@@ -709,7 +724,7 @@ export default class WindowManager extends EventEmitter {
   showPrintWindow (filePath: string): void {
     if (this._printWindow === null) {
       const conf = this._retrieveWindowPosition('print', null)
-      this._printWindow = createPrintWindow(filePath, conf)
+      this._printWindow = createPrintWindow(this._logger, this._config, filePath, conf)
       this._hookWindowResize(this._printWindow, 'print')
       this._printWindowFile = filePath
 
@@ -737,7 +752,7 @@ export default class WindowManager extends EventEmitter {
   showProjectPropertiesWindow (dirPath: string): void {
     if (this._projectProperties === null) {
       const conf = this._retrieveWindowPosition('print', null)
-      this._projectProperties = createProjectPropertiesWindow(conf, dirPath)
+      this._projectProperties = createProjectPropertiesWindow(this._logger, this._config, conf, dirPath)
       this._hookWindowResize(this._projectProperties, 'project-properties')
 
       // Dereference the window as soon as it is closed
@@ -764,7 +779,7 @@ export default class WindowManager extends EventEmitter {
         x: (workArea.height - 500) / 2,
         y: (workArea.width - 300) / 2
       })
-      this._updateWindow = createUpdateWindow(conf)
+      this._updateWindow = createUpdateWindow(this._logger, this._config, conf)
       this._hookWindowResize(this._updateWindow, 'updater')
 
       this._updateWindow.on('closed', () => { this._updateWindow = null })
@@ -811,7 +826,7 @@ export default class WindowManager extends EventEmitter {
       return true
     }
 
-    return await shouldReplaceFileDialog(this._mainWindow, filename)
+    return await shouldReplaceFileDialog(this._config, this._mainWindow, filename)
   }
 
   /**
@@ -840,9 +855,9 @@ export default class WindowManager extends EventEmitter {
     */
   async askDir (win?: BrowserWindow|null): Promise<string[]> {
     if (win != null) {
-      return await askDirectoryDialog(win)
+      return await askDirectoryDialog(this._config, win)
     } else {
-      return await askDirectoryDialog(this._mainWindow)
+      return await askDirectoryDialog(this._config, this._mainWindow)
     }
   }
 
@@ -858,9 +873,9 @@ export default class WindowManager extends EventEmitter {
    */
   async askFile (filters: FileFilter[]|null = null, multiSel: boolean = false, win?: BrowserWindow|null): Promise<string[]> {
     if (win != null) {
-      return await askFileDialog(win, filters, multiSel)
+      return await askFileDialog(this._config, win, filters, multiSel)
     } else {
-      return await askFileDialog(this._mainWindow, filters, multiSel)
+      return await askFileDialog(this._config, this._mainWindow, filters, multiSel)
     }
   }
 
@@ -880,9 +895,9 @@ export default class WindowManager extends EventEmitter {
    */
   async saveFile (fileOrPathName: string, win?: BrowserWindow|null): Promise<string|undefined> {
     if (win != null) {
-      return await saveFileDialog(win, fileOrPathName)
+      return await saveFileDialog(this._logger, this._config, win, fileOrPathName)
     } else {
-      return await saveFileDialog(this._mainWindow, fileOrPathName)
+      return await saveFileDialog(this._logger, this._config, this._mainWindow, fileOrPathName)
     }
   }
 
@@ -891,7 +906,7 @@ export default class WindowManager extends EventEmitter {
     * @param  {any} options Necessary informations for displaying the prompt
     */
   prompt (options: any): void {
-    promptDialog(this._mainWindow, options)
+    promptDialog(this._logger, this._mainWindow, options)
   }
 
   /**
