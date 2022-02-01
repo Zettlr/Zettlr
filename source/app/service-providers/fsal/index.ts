@@ -41,6 +41,8 @@ import { MDFileMeta, CodeFileMeta, AnyMetaDescriptor, MaybeRootMeta, FSALStats }
 import { codeFileExtensions, mdFileExtensions } from '@common/get-file-extensions'
 import { SearchTerm } from '@dts/common/search'
 import generateStats from './util/generate-stats'
+import ProviderContract from '@providers/provider-contract'
+import { app } from 'electron'
 
 // Re-export all interfaces necessary for other parts of the code (Document Manager)
 export {
@@ -67,7 +69,7 @@ interface FSALHistoryEvent {
   timestamp: number
 }
 
-export default class FSAL extends EventEmitter {
+export default class FSAL extends ProviderContract {
   private readonly _cache: FSALCache
   private readonly _watchdog: FSALWatchdog
   private _isCurrentlyHandlingRemoteChange: boolean
@@ -75,16 +77,19 @@ export default class FSAL extends EventEmitter {
   private readonly _remoteChangeBuffer: WatchdogEvent[]
   private _state: FSALState
   private _history: FSALHistoryEvent[]
+  private readonly _emitter: EventEmitter
 
-  constructor (cachedir: string) {
+  constructor () {
     super()
     global.log.verbose('FSAL booting up ...')
+    const cachedir = app.getPath('userData')
     this._cache = new FSALCache(path.join(cachedir, 'fsal/cache'))
     this._watchdog = new FSALWatchdog()
     this._isCurrentlyHandlingRemoteChange = false
     this._fsalIsBusy = false // Locks certain functionality during running of actions
     this._remoteChangeBuffer = [] // Holds events for later processing
     this._history = []
+    this._emitter = new EventEmitter()
 
     this._state = {
       // The app supports one open directory and (in theory) unlimited open files
@@ -116,6 +121,20 @@ export default class FSAL extends EventEmitter {
     })
   } // END constructor
 
+  async boot (): Promise<void> {
+    // Nothing to do
+  }
+
+  // Enable global event listening to updates of the config
+  on (evt: string, callback: (...args: any[]) => void): void {
+    this._emitter.on(evt, callback)
+  }
+
+  // Also do the same for the removal of listeners
+  off (evt: string, callback: (...args: any[]) => void): void {
+    this._emitter.off(evt, callback)
+  }
+
   /**
    * Adds an event to the filetree history and emits an event to notify consumers.
    *
@@ -142,7 +161,7 @@ export default class FSAL extends EventEmitter {
       timestamp: timestamp
     })
 
-    this.emit('fsal-state-changed', 'filetree', changedPath)
+    this._emitter.emit('fsal-state-changed', 'filetree', changedPath)
   }
 
   /**
@@ -344,11 +363,10 @@ export default class FSAL extends EventEmitter {
    *
    * @returns {boolean} Whether or not the shutdown was successful
    */
-  public async shutdown (): Promise<boolean> {
+  public async shutdown (): Promise<void> {
     global.log.verbose('FSAL shutting down ...')
     this._cache.persist()
     await this._watchdog.shutdown()
-    return true
   }
 
   /**
@@ -455,7 +473,7 @@ export default class FSAL extends EventEmitter {
     this._state.filetree = []
     this._state.openDirectory = null
 
-    this.emit('fsal-state-changed', 'openDirectory')
+    this._emitter.emit('fsal-state-changed', 'openDirectory')
   }
 
   /**
@@ -632,7 +650,7 @@ export default class FSAL extends EventEmitter {
 
   public set openDirectory (dirObject: DirDescriptor | null) {
     this._state.openDirectory = dirObject
-    this.emit('fsal-state-changed', 'openDirectory')
+    this._emitter.emit('fsal-state-changed', 'openDirectory')
   }
 
   public get openDirectory (): DirDescriptor|null {
@@ -705,7 +723,7 @@ export default class FSAL extends EventEmitter {
     }
 
     // Notify of a state change
-    this.emit('fsal-state-changed', 'filetree')
+    this._emitter.emit('fsal-state-changed', 'filetree')
     this._fsalIsBusy = false
     this._afterRemoteChange()
   }
@@ -875,7 +893,7 @@ export default class FSAL extends EventEmitter {
     // If it was the openDirectory, reinstate it
     if (this.openDirectory === src) {
       this.openDirectory = newDir
-      this.emit('fsal-state-changed', 'openDirectory')
+      this._emitter.emit('fsal-state-changed', 'openDirectory')
     }
 
     this._fsalIsBusy = false
@@ -964,7 +982,7 @@ export default class FSAL extends EventEmitter {
       this.openDirectory = this.findDir(newOpenDir)
     }
     if (activeFileUpdateNeeded) {
-      this.emit('fsal-state-changed', 'activeFile')
+      this._emitter.emit('fsal-state-changed', 'activeFile')
     }
     this._fsalIsBusy = false
     this._afterRemoteChange()

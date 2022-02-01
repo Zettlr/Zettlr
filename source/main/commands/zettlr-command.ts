@@ -15,10 +15,10 @@
  * END HEADER
  */
 
-import Zettlr from '../zettlr'
+import AppServiceContainer from '../../app/app-service-container'
 
 export default abstract class ZettlrCommand {
-  protected readonly _app: Zettlr
+  protected readonly _app: AppServiceContainer
   protected readonly _bind: string[]
 
   /**
@@ -31,7 +31,7 @@ export default abstract class ZettlrCommand {
    */
   abstract run (evt: string, arg: any): Promise<any>
 
-  constructor (app: Zettlr, bindEvent: string|string[]) {
+  constructor (app: AppServiceContainer, bindEvent: string|string[]) {
     // The app is the api entry point for all things we can do.
     this._app = app
 

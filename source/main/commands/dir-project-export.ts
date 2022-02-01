@@ -31,7 +31,7 @@ export default class DirProjectExport extends ZettlrCommand {
     */
   async run (evt: string, arg: any): Promise<boolean> {
     // First get the directory
-    const dir = this._app.findDir(arg)
+    const dir = this._app.fsal.findDir(arg)
 
     if (dir === null) {
       global.log.error('Could not export project: Directory not found.')
@@ -104,7 +104,7 @@ export default class DirProjectExport extends ZettlrCommand {
     }
 
     // TODO: Translate!
-    const notificationShown = global.notify.normal('Project successfully exported. Click to show.', async () => {
+    const notificationShown = this._app.notifications.show('Project successfully exported. Click to show.', 'Export', () => {
       openDirectory(dir.path)
     })
 

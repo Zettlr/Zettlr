@@ -53,9 +53,9 @@ export default class SaveFile extends ZettlrCommand {
         // But first of all, we need to ask for a file path. Prepend the
         // realFile.name with the currently selected directory, if possible, so
         // that the dialog starts in an expected place.
-        const selectedDir = this._app.getFileSystem().openDirectory?.path
+        const selectedDir = this._app.fsal.openDirectory?.path
         const startPath = (selectedDir !== undefined) ? path.join(selectedDir, realFile.name) : realFile.name
-        let newPath = await this._app.saveFile(startPath)
+        let newPath = await this._app.windows.saveFile(startPath)
 
         if (newPath === undefined) {
           global.log.warning('[App] No path for the file to save provided. Aborting save.')
@@ -89,7 +89,7 @@ export default class SaveFile extends ZettlrCommand {
       }
 
       // Update word count
-      global.stats.increaseWordCount(file.offsetWordCount)
+      this._app.stats.increaseWordCount(file.offsetWordCount)
 
       global.log.info(`File ${realFile.name} saved.`)
       return true

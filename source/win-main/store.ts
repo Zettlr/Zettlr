@@ -17,7 +17,7 @@
 import { StoreOptions, createStore, Store } from 'vuex'
 import sanitizeHtml from 'sanitize-html'
 import md2html from '@common/util/md-to-html'
-import sort from '../main/modules/fsal/util/sort'
+import sort from '@providers/fsal/util/sort'
 import { CodeFileMeta, DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
 import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
 import { PlatformPath } from '@dts/renderer/path'

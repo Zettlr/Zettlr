@@ -32,7 +32,7 @@ export default class ImportLangFile extends ZettlrCommand {
   async run (evt: string, arg: any): Promise<boolean> {
     let files
     try {
-      files = await this._app.askFile([
+      files = await this._app.windows.askFile([
         { name: 'JSON File', extensions: ['json'] }
       ], true)
     } catch (err) {
@@ -56,17 +56,15 @@ export default class ImportLangFile extends ZettlrCommand {
         // It's a language file!
         try {
           fs.copyFileSync(f, path.join(langDir, path.basename(f)))
-          global.notify.normal(trans('system.lang_import_success', path.basename(f)))
+          this._app.notifications.show(trans('system.lang_import_success', path.basename(f)))
         } catch (err) {
-          global.notify.normal(trans('system.lang_import_error', path.basename(f)))
+          this._app.notifications.show(trans('system.lang_import_error', path.basename(f)))
         }
       } else {
-        global.notify.normal(trans('system.lang_import_error', path.basename(f)))
+        this._app.notifications.show(trans('system.lang_import_error', path.basename(f)))
       }
     }
 
     return true
   }
 }
-
-module.exports = ImportLangFile

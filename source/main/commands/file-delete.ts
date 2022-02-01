@@ -26,18 +26,18 @@ export default class FileDelete extends ZettlrCommand {
     * @return {Boolean} Whether the file was successfully deleted.
     */
   async run (evt: string, arg: any): Promise<boolean> {
-    let file = this._app.getFileSystem().findFile(arg.path)
+    let file = this._app.fsal.findFile(arg.path)
     if (file === null) {
       global.log.error('Cannot delete file: Not found.')
       return false
     }
 
-    if (!await this._app.confirmRemove(file)) {
+    if (!await this._app.windows.confirmRemove(file)) {
       return false
     }
 
     // Now, remove the file
-    await this._app.getFileSystem().removeFile(file)
+    await this._app.fsal.removeFile(file)
 
     global.log.info(`Removed file ${file.name}.`)
     return true

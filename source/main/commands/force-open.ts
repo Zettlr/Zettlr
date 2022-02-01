@@ -48,18 +48,18 @@ export default class ForceOpen extends ZettlrCommand {
     // filename.
     if (idRE.test(linkContents)) {
       // It's an ID
-      file = this._app.getFileSystem().findExact(linkContents, 'id')
+      file = this._app.fsal.findExact(linkContents, 'id')
     } else {
       // It's a filename -- now check if an extension is given (likely not)
       if (FILETYPES.includes(path.extname(linkContents))) {
         // file ending given
-        file = this._app.getFileSystem().findExact(linkContents, 'name')
+        file = this._app.fsal.findExact(linkContents, 'name')
       } else {
         // No file ending given, so let's test all allowed. The filetypes are
         // sorted by probability (first .md, then .markdown), to reduce the
         // amount of time spent on the tree.
         for (const type of FILETYPES) {
-          file = this._app.getFileSystem().findExact((linkContents as string) + type, 'name')
+          file = this._app.fsal.findExact((linkContents as string) + type, 'name')
           if (file !== null) {
             break
           }

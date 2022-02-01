@@ -63,9 +63,9 @@ export default class TutorialOpen extends ZettlrCommand {
     }
     // Now the last thing to do is set it as open
     await this._app.runCommand('roots-add', [targetPath])
-    const tutorialDirectory = this._app.getFileSystem().findDir(targetPath)
+    const tutorialDirectory = this._app.fsal.findDir(targetPath)
     if (tutorialDirectory !== null) {
-      this._app.getFileSystem().openDirectory = tutorialDirectory
+      this._app.fsal.openDirectory = tutorialDirectory
       await this._app.getDocumentManager().openFile(path.join(targetPath, 'welcome.md'), true)
     }
   }

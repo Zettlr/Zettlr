@@ -30,9 +30,9 @@ export default class ImportFiles extends ZettlrCommand {
     * @return {void} Does not return.
     */
   async run (evt: string, arg: any): Promise<boolean> {
-    const openDirectory = this._app.getFileSystem().openDirectory
+    const openDirectory = this._app.fsal.openDirectory
     if (openDirectory === null) {
-      global.notify.normal(trans('system.import_no_directory'))
+      this._app.notifications.show(trans('system.import_no_directory'))
       return false
     }
 
@@ -47,7 +47,7 @@ export default class ImportFiles extends ZettlrCommand {
     }
 
     // First ask the user for a fileList
-    let fileList = await this._app.askFile(fltr, true)
+    let fileList = await this._app.windows.askFile(fltr, true)
     if (fileList.length === 0) {
       // The user seems to have decided not to import anything. Gracefully
       // fail. Not like the German SPD.
@@ -55,26 +55,26 @@ export default class ImportFiles extends ZettlrCommand {
     }
 
     // Now import.
-    global.notify.normal(trans('system.import_status'))
+    this._app.notifications.show(trans('system.import_status'))
     try {
       let ret = await makeImport(fileList, openDirectory, (file: string, error: string) => {
         global.log.error(`[Importer] Could not import file ${file}: ${error}`)
         // This callback gets called whenever there is an error while running pandoc.
-        global.notify.normal(trans('system.import_error', path.basename(file)))
+        this._app.notifications.show(trans('system.import_error', path.basename(file)))
       }, (file: string) => {
         // And this on each success!
-        global.notify.normal(trans('system.import_success', path.basename(file)))
+        this._app.notifications.show(trans('system.import_success', path.basename(file)))
       })
 
       if (ret.length > 0) {
         // Some files failed to import.
-        global.notify.normal(trans('system.import_fail', ret.length, ret.map((x) => { return path.basename(x) }).join(', ')))
+        this._app.notifications.show(trans('system.import_fail', ret.length, ret.map((x) => { return path.basename(x) }).join(', ')))
       }
     } catch (err: any) {
       // There has been an error on importing (e.g. Pandoc was not found)
       // This catches this and displays it.
       global.log.error(`[Importer] Could not import files: ${String(err.message)}`, err)
-      global.notify.normal(trans('system.import_fail', fileList.length, ''))
+      this._app.notifications.show(trans('system.import_fail', fileList.length, ''))
     }
 
     return true

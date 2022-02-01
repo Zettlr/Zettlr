@@ -20,6 +20,7 @@ import CiteprocProvider from '@providers/citeproc-provider'
 import ConfigProvider from '@providers/config-provider'
 import CssProvider from '@providers/css-provider'
 import DictionaryProvider from '@providers/dictionary-provider'
+import FSAL from '@providers/fsal'
 import LinkProvider from '@providers/link-provider'
 import LogProvider from '@providers/log-provider'
 import MenuProvider from '@providers/menu-provider'
@@ -53,6 +54,7 @@ export default class AppServiceContainer {
   private readonly _trayProvider: TrayProvider
   private readonly _updateProvider: UpdateProvider
   private readonly _windowProvider: WindowProvider
+  private readonly _fsal: FSAL
 
   constructor () {
     // NOTE: The order in which the providers are instantiated still matters!
@@ -75,6 +77,8 @@ export default class AppServiceContainer {
     this._menuProvider = new MenuProvider(this._logProvider, this._configProvider, this._recentDocsProvider, this._windowProvider)
     this._citeprocProvider = new CiteprocProvider(this._logProvider, this._configProvider, this._notificationProvider, this._windowProvider)
     this._updateProvider = new UpdateProvider(this._logProvider, this._configProvider, this._notificationProvider) // --> Command Provider
+
+    this._fsal = new FSAL()
   }
 
   async boot (): Promise<void> {
@@ -97,6 +101,8 @@ export default class AppServiceContainer {
     await this._citeprocProvider.boot() // --> WindowProvider
     await this._updateProvider.boot() // --> CommandProvider
 
+    await this._fsal.boot()
+
     this._menuProvider.set() // TODO
   }
 
@@ -118,8 +124,11 @@ export default class AppServiceContainer {
   public get tray (): TrayProvider { return this._trayProvider }
   public get updates (): UpdateProvider { return this._updateProvider }
   public get windows (): WindowProvider { return this._windowProvider }
+  public get fsal (): FSAL { return this._fsal }
 
   async shutdown (): Promise<void> {
+    await this._safeShutdown(this._fsal)
+
     await this._safeShutdown(this._windowProvider)
     await this._safeShutdown(this._trayProvider)
     await this._safeShutdown(this._statsProvider)

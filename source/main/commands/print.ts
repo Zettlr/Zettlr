@@ -39,7 +39,7 @@ export default class Print extends ZettlrCommand {
       return
     }
 
-    const fileDescriptor = this._app.getFileSystem().findFile(filePath)
+    const fileDescriptor = this._app.fsal.findFile(filePath)
 
     if (fileDescriptor === null) {
       global.log.error('[Print] Cannot print document: Not found.')
@@ -61,10 +61,10 @@ export default class Print extends ZettlrCommand {
         throw new Error(`Export failed with code ${output.code}`)
       }
       // Now we'll need to open the print window.
-      this._app.showPrintWindow(output.targetFile)
+      this._app.windows.showPrintWindow(output.targetFile)
     } catch (err: any) {
       global.log.error(`[Print] Could not export document: ${err.message as string}`, err)
-      global.notify.normal(`${err.name as string}: ${err.message as string}`)
+      this._app.notifications.show(`${err.name as string}: ${err.message as string}`)
     }
   }
 }

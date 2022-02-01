@@ -27,7 +27,7 @@ export default class DirRename extends ZettlrCommand {
    * @param  {Object} arg An object containing hash of containing and name of new dir.
    */
   async run (evt: string, arg: any): Promise<boolean> {
-    const sourceDir = this._app.findDir(arg.path)
+    const sourceDir = this._app.fsal.findDir(arg.path)
     if (sourceDir === null) {
       global.log.error('Could not rename directory: Not found.')
       return false
@@ -39,10 +39,10 @@ export default class DirRename extends ZettlrCommand {
     const newPath = path.join(sourceDir.dir, sanitizedName)
 
     try {
-      await this._app.getFileSystem().renameDir(sourceDir, sanitizedName)
+      await this._app.fsal.renameDir(sourceDir, sanitizedName)
     } catch (err: any) {
       console.error(err)
-      this._app.prompt({
+      this._app.windows.prompt({
         type: 'error',
         title: err.name,
         message: err.message

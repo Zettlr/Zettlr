@@ -27,7 +27,6 @@ import {
 // Internal classes
 import DocumentManager from './modules/document-manager'
 
-import FSAL from './modules/fsal'
 import { trans } from '@common/i18n-main'
 import { commands } from './commands'
 
@@ -43,7 +42,6 @@ export default class Zettlr {
   isQuitting: boolean
   editFlag: boolean
   _openPaths: any
-  _fsal: FSAL
   _documentManager: DocumentManager
   _commands: ZettlrCommand[]
   private readonly isShownFor: string[]
@@ -74,12 +72,12 @@ export default class Zettlr {
         this._app.windows.showErrorMessage(title, message, contents)
       },
       findFile: (prop: any) => {
-        return this._fsal.findFile(prop)
+        return this._app.fsal.findFile(prop)
       }
     }
 
     // Load available commands
-    this._commands = commands.map(Command => new Command(this))
+    this._commands = commands.map(Command => new Command(this._app))
 
     // Now that the config provider is definitely set up, let's see if we
     // should copy the interactive tutorial to the documents directory.
@@ -89,10 +87,6 @@ export default class Zettlr {
         .catch(err => this._app.log.error('[Application] Could not open tutorial', err))
     }
 
-    // File System Abstraction Layer, pass the folder
-    // where it can store its internal files.
-    this._fsal = new FSAL(app.getPath('userData'))
-
     // Start up the document manager
     this._documentManager = new DocumentManager(this._app.log, this._app.config, this._app.recentDocs, this._app.citeproc)
 
@@ -100,7 +94,7 @@ export default class Zettlr {
     let shouldClearCache = process.argv.includes('--clear-cache')
     if (this._app.config.newVersionDetected() || shouldClearCache) {
       this._app.log.info('Clearing the FSAL cache ...')
-      this._fsal.clearCache()
+      this._app.fsal.clearCache()
     }
 
     // Listen to the before-quit event by which we make sure to only quit the
@@ -183,7 +177,7 @@ export default class Zettlr {
 
     this._app.windows.on('main-window-closed', () => {
       // Reset the FSAL state history so that any new window will have a clean start
-      this._fsal.resetFiletreeHistory()
+      this._app.fsal.resetFiletreeHistory()
     })
 
     // Listen to document manager changes
@@ -212,9 +206,9 @@ export default class Zettlr {
     })
 
     // Listen to changes in the file system
-    this._fsal.on('fsal-state-changed', (scope: string, changedPath: string) => {
+    this._app.fsal.on('fsal-state-changed', (scope: string, changedPath: string) => {
       // Emitted when anything in the state changes
-      const openDir = this._fsal.openDirectory
+      const openDir = this._app.fsal.openDirectory
       switch (scope) {
         case 'filetree':
           broadcastIpcMessage('fsal-state-changed', 'filetree')
@@ -298,7 +292,7 @@ export default class Zettlr {
 
     // First: Initially load all paths
     for (let p of this._app.config.get('openPaths') as string[]) {
-      const prom = this._fsal.loadPath(p)
+      const prom = this._app.fsal.loadPath(p)
       prom.catch(e => {
         console.error(e)
         this._app.log.info(`[Application] Removing path ${p}, as it does no longer exist.`)
@@ -316,8 +310,8 @@ export default class Zettlr {
       const openDir = this._app.config.get('openDirectory')
       if (typeof openDir === 'string') {
         try {
-          const descriptor = this._fsal.findDir(openDir)
-          this._fsal.openDirectory = descriptor
+          const descriptor = this._app.fsal.findDir(openDir)
+          this._app.fsal.openDirectory = descriptor
         } catch (err: any) {
           this._app.log.error(`[Application] Could not set open directory ${openDir}.`, err)
         }
@@ -361,9 +355,6 @@ export default class Zettlr {
     if (!this._documentManager.isClean()) {
       this._app.log.error('[Application] Attention! The FSAL reported there were unsaved changes to certain files. This indicates a critical logical bug in the application!')
     }
-    this._app.windows.shutdown()
-    // Finally shut down the file system
-    await this._fsal.shutdown()
   }
 
   /**
@@ -378,22 +369,22 @@ export default class Zettlr {
     // FIRST: Try to run a minimal command for which its own custom function
     // wouldn't make sense.
     if (command === 'get-statistics-data') {
-      return this._fsal.statistics
+      return this._app.fsal.statistics
     } else if (command === 'get-filetree-events') {
-      return this._fsal.filetreeHistorySince(payload)
+      return this._app.fsal.filetreeHistorySince(payload)
     } else if (command === 'get-descriptor') {
-      const descriptor = this._fsal.find(payload)
+      const descriptor = this._app.fsal.find(payload)
       if (descriptor === null) {
         return null
       }
-      return this._fsal.getMetadataFor(descriptor)
+      return this._app.fsal.getMetadataFor(descriptor)
     } else if (command === 'get-open-directory') {
-      const openDir = this._fsal.openDirectory
+      const openDir = this._app.fsal.openDirectory
       if (openDir === null) {
         return null
       }
 
-      return this._fsal.getMetadataFor(openDir)
+      return this._app.fsal.getMetadataFor(openDir)
     } else if (command === 'set-open-directory') {
       this.selectDir(payload)
       return true
@@ -403,7 +394,7 @@ export default class Zettlr {
         return null
       }
 
-      return this._fsal.getMetadataFor(descriptor as MDFileDescriptor)
+      return this._app.fsal.getMetadataFor(descriptor as MDFileDescriptor)
     } else if (command === 'next-file') {
       // Trigger a "forward" command on the document manager
       await this._documentManager.forward()
@@ -420,7 +411,7 @@ export default class Zettlr {
       return true
     } else if (command === 'get-open-files') {
       // Return all open files as their metadata objects
-      return this._documentManager.openFiles.map(file => this._fsal.getMetadataFor(file))
+      return this._documentManager.openFiles.map(file => this._app.fsal.getMetadataFor(file))
     } else if (command === 'copy-img-to-clipboard') {
       // We should copy the contents of an image file to clipboard. Payload
       // contains the image path. We can rely on the Electron framework here.
@@ -445,12 +436,12 @@ export default class Zettlr {
       }
 
       // Otherwise, try to find the file via the FSAL
-      const descriptor = this._fsal.findFile(payload)
+      const descriptor = this._app.fsal.findFile(payload)
       if (descriptor === null) {
         return null
       }
 
-      return await this._fsal.getFileContents(descriptor)
+      return await this._app.fsal.getFileContents(descriptor)
     } else if (command === 'update-modified-files') {
       // Update the modification status according to the file path array given
       // in the payload.
@@ -494,11 +485,11 @@ export default class Zettlr {
    */
   selectDir (dirPath: string): void {
     // arg contains a hash for a directory.
-    let obj = this._fsal.findDir(dirPath)
+    let obj = this._app.fsal.findDir(dirPath)
 
     // Now send it back (the GUI should by itself filter out the files)
     if (obj !== null && obj.type === 'directory') {
-      this._fsal.openDirectory = obj
+      this._app.fsal.openDirectory = obj
     } else {
       this._app.log.error('Could not find directory', dirPath)
       this._app.windows.prompt({
@@ -515,7 +506,7 @@ export default class Zettlr {
    * @return {void}      No return.
    */
   openQL (filePath: string): void {
-    let file: MDFileDescriptor|CodeFileDescriptor|null = this._fsal.findFile(filePath)
+    let file: MDFileDescriptor|CodeFileDescriptor|null = this._app.fsal.findFile(filePath)
     if (file === null || file.type !== 'file') {
       this._app.log.error(`[Application] A Quicklook window for ${filePath} was requested, but the file was not found.`)
       return
@@ -536,11 +527,11 @@ export default class Zettlr {
   // }
 
   findFile (arg: string): MDFileDescriptor | CodeFileDescriptor | null {
-    return this._fsal.findFile(arg)
+    return this._app.fsal.findFile(arg)
   }
 
   findDir (arg: string): DirDescriptor | null {
-    return this._fsal.findDir(arg)
+    return this._app.fsal.findDir(arg)
   }
 
   /**
@@ -551,11 +542,6 @@ export default class Zettlr {
   }
 
   // Getters
-
-  /**
-   * Returns the File System Abstraction Layer
-   */
-  getFileSystem (): FSAL { return this._fsal }
 
   /**
    * Returns the document manager

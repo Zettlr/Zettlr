@@ -35,7 +35,7 @@ export default class SaveImage extends ZettlrCommand {
   async run (evt: string /*, target: any */): Promise<any> {
     const activeFile = this._app.getDocumentManager().activeFile
     if (activeFile === null) {
-      return global.notify.normal(trans('system.error.fnf_message'))
+      return this._app.notifications.show(trans('system.error.fnf_message'))
     }
 
     const startPath = path.resolve(
@@ -43,7 +43,7 @@ export default class SaveImage extends ZettlrCommand {
       global.config.get('editor.defaultSaveImagePath')
     )
 
-    const target = await this._app.showPasteImageModal(startPath)
+    const target = await this._app.windows.showPasteImageModal(startPath)
     if (target === undefined) {
       global.log.info('[Application] Aborted image pasting process.')
       return
@@ -54,7 +54,7 @@ export default class SaveImage extends ZettlrCommand {
 
     // A file must be opened and active, and the name valid
     if (targetFile === '') {
-      return global.notify.normal(trans('system.error.no_allowed_chars'))
+      return this._app.notifications.show(trans('system.error.no_allowed_chars'))
     }
 
     // Now check the extension of the name (some users may
@@ -75,7 +75,7 @@ export default class SaveImage extends ZettlrCommand {
 
     // If something went wrong or the user did not provide a directory, abort
     if (!isDir(target.targetDir)) {
-      return global.notify.normal(trans('system.error.dnf_message'))
+      return this._app.notifications.show(trans('system.error.dnf_message'))
     }
 
     // Build the correct path
@@ -86,7 +86,7 @@ export default class SaveImage extends ZettlrCommand {
 
     // Somebody may have remotely overwritten the clipboard in the meantime
     if (image.isEmpty()) {
-      return global.notify.normal(trans('system.error.could_not_save_image'))
+      return this._app.notifications.show(trans('system.error.could_not_save_image'))
     }
 
     let size = image.getSize()

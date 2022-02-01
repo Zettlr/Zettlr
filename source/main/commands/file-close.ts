@@ -43,7 +43,7 @@ export default class FileClose extends ZettlrCommand {
 
       // Now check if we can safely close the file
       if (file.modified) {
-        const result = await this._app.askSaveChanges()
+        const result = await this._app.windows.askSaveChanges()
         // 0 = 'Close without saving changes',
         // 1 = 'Save changes'
         if (result.response === 0) {

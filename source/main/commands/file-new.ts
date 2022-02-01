@@ -52,10 +52,10 @@ export default class FileNew extends ZettlrCommand {
       return // Return early
     }
 
-    let dir = this._app.getFileSystem().openDirectory
+    let dir = this._app.fsal.openDirectory
 
     if (arg?.path !== undefined) {
-      dir = this._app.getFileSystem().findDir(arg.path)
+      dir = this._app.fsal.findDir(arg.path)
     }
 
     if (dir === null) {
@@ -66,7 +66,7 @@ export default class FileNew extends ZettlrCommand {
     // Make sure we have a filename and have the user confirm this if applicable
     if (arg.name === undefined && shouldPromptUser) {
       // The user wishes to confirm the filename
-      const chosenPath = await this._app.saveFile(path.join(dir.path, generateFilename()))
+      const chosenPath = await this._app.windows.saveFile(path.join(dir.path, generateFilename()))
       if (chosenPath === undefined) {
         global.log.info('Did not create new file since the dialog was aborted.')
         return
@@ -76,7 +76,7 @@ export default class FileNew extends ZettlrCommand {
       // The user may also have selected a different directory altogether. If
       // that directory exists and is loaded by the FSAL, overwrite the dir.
       if (path.dirname(chosenPath) !== dir.path) {
-        dir = this._app.getFileSystem().findDir(path.dirname(chosenPath))
+        dir = this._app.fsal.findDir(path.dirname(chosenPath))
         if (dir === null) {
           // TODO: Better feedback to the user!
           global.log.error(`Could not create new file ${arg.name}: The selected directory is not loaded in Zettlr!`)
@@ -116,17 +116,17 @@ export default class FileNew extends ZettlrCommand {
       let found = dir.children.find(e => e.name.toLowerCase() === filename.toLowerCase())
       if (found !== undefined && found.type !== 'directory') {
         // Ask before overwriting
-        if (!await this._app.shouldOverwriteFile(filename)) {
+        if (!await this._app.windows.shouldOverwriteFile(filename)) {
           return
         } else {
           // Remove the file before creating it anew. We'll use the
           // corresponding command for that.
-          await this._app.getFileSystem().removeFile(found)
+          await this._app.fsal.removeFile(found)
         }
       }
 
       // First create the file
-      await this._app.getFileSystem().createFile(dir, {
+      await this._app.fsal.createFile(dir, {
         name: filename,
         content: '',
         type: (type === 'md') ? 'md' : 'code'
@@ -136,7 +136,7 @@ export default class FileNew extends ZettlrCommand {
       await this._app.getDocumentManager().openFile(path.join(dir.path, filename))
     } catch (err: any) {
       global.log.error(`Could not create file: ${err.message as string}`)
-      this._app.prompt({
+      this._app.windows.prompt({
         type: 'error',
         title: trans('system.error.could_not_create_file'),
         message: err.message

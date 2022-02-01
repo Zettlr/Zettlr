@@ -29,7 +29,7 @@ export default class RequestMove extends ZettlrCommand {
    */
   async run (evt: string, arg: { from: string, to: string }): Promise<boolean> {
     // arg contains from and to. Prepare the necessary variables
-    const fsal = this._app.getFileSystem() // We need this quite often here
+    const fsal = this._app.fsal // We need this quite often here
 
     let from: MDFileDescriptor|CodeFileDescriptor|DirDescriptor|null = fsal.findDir(arg.from)
     // Obviously a file!
@@ -37,7 +37,7 @@ export default class RequestMove extends ZettlrCommand {
       from = fsal.findFile(arg.from)
     }
 
-    let to = this._app.findDir(arg.to)
+    let to = fsal.findDir(arg.to)
 
     if (to === null || from === null) {
       // If findDir doesn't return anything then it's a file
@@ -55,7 +55,7 @@ export default class RequestMove extends ZettlrCommand {
 
     // Let's check if the destination is a child of the source:
     if (fsal.findFile(to.path, [from]) !== null || fsal.findDir(to.path, [from]) !== null) {
-      this._app.prompt({
+      this._app.windows.prompt({
         type: 'error',
         title: trans('system.error.move_into_child_title'),
         message: trans('system.error.move_into_child_message')
@@ -65,7 +65,7 @@ export default class RequestMove extends ZettlrCommand {
 
     // Now check if there already is a directory/file with the same name
     if (fsal.hasChild(to, from)) {
-      this._app.prompt({
+      this._app.windows.prompt({
         type: 'error',
         title: trans('system.error.already_exists_title'),
         message: trans('system.error.already_exists_message', from.name)

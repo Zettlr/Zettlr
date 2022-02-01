@@ -34,17 +34,17 @@ export default class FilePathFindMetaData extends ZettlrCommand {
     let file
     let metaData
     // It might be linked by ID
-    file = this._app.getFileSystem().findExact((arg as string), 'id')
+    file = this._app.fsal.findExact((arg as string), 'id')
     if (file !== undefined) {
-      metaData = await this._app.getFileSystem().getFileContents(file)
+      metaData = await this._app.fsal.getFileContents(file)
     }
     // It's not an ID, so search each type of file
     if (file === undefined) {
       for (let type of FILETYPES) {
-        file = this._app.getFileSystem().findExact((arg as string) + type, 'name')
+        file = this._app.fsal.findExact((arg as string) + type, 'name')
         if (file !== undefined) {
           // If we find it, then return it
-          metaData = await this._app.getFileSystem().getFileContents(file)
+          metaData = await this._app.fsal.getFileContents(file)
           break
         }
       }

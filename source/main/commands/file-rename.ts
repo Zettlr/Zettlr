@@ -42,7 +42,7 @@ export default class FileRename extends ZettlrCommand {
       newName += '.md'
     }
 
-    const file = this._app.findFile(arg.path)
+    const file = this._app.fsal.findFile(arg.path)
     if (file === null) {
       return global.log.error(`Could not find file ${String(arg.path)}`)
     }
@@ -53,7 +53,7 @@ export default class FileRename extends ZettlrCommand {
       // Make sure to not rename a file if it contains unsaved changes. People who
       // have autosave activated are pretty likely to never see this message box
       // either way.
-      this._app.prompt('Cannot rename file: Please save your changes first.')
+      this._app.windows.prompt('Cannot rename file: Please save your changes first.')
       return
     }
 
@@ -68,11 +68,11 @@ export default class FileRename extends ZettlrCommand {
     let found = dir?.children.find(e => e.name.toLowerCase() === newName.toLowerCase())
     if (found !== undefined && found.type !== 'directory' && file !== found) {
       // Ask for override
-      if (!await this._app.shouldOverwriteFile(newName)) {
+      if (!await this._app.windows.shouldOverwriteFile(newName)) {
         return // No override wanted
       } else {
         // Remove the file to be overwritten prior
-        await this._app.getFileSystem().removeFile(found)
+        await this._app.fsal.removeFile(found)
       }
     }
 
@@ -86,7 +86,7 @@ export default class FileRename extends ZettlrCommand {
     }
 
     try {
-      await this._app.getFileSystem().renameFile(file, newName)
+      await this._app.fsal.renameFile(file, newName)
       // NOTE: At this point, `file` will contain the _new_ information which
       // we can now use to re-set the documentManager's state if need be.
       if (wasOpen) {

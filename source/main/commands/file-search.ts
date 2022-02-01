@@ -28,14 +28,14 @@ export default class FileSearch extends ZettlrCommand {
   async run (evt: string, arg: any): Promise<boolean> {
     // arg.content contains a hash of the file to be searched
     // and the prepared terms.
-    let file = this._app.getFileSystem().findFile(arg.path)
+    let file = this._app.fsal.findFile(arg.path)
     if (file === null) {
       global.log.error('Could not search file: File not found.', arg)
       return false // File not found
     }
 
     try {
-      let result = await this._app.getFileSystem().searchFile(file, arg.terms)
+      let result = await this._app.fsal.searchFile(file, arg.terms)
       return result
     } catch (e: any) {
       global.log.error(`Could not search file ${file.name}: ${e.message as string}`, e)

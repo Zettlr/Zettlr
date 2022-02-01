@@ -25,7 +25,7 @@ export default class RootClose extends ZettlrCommand {
    * @param  {Object} arg The hash of a root directory or file.
    */
   async run (evt: string, arg: any): Promise<boolean> {
-    const root = this._app.getFileSystem().find(arg)
+    const root = this._app.fsal.find(arg)
     if (root === null) {
       global.log.error(`Cannot close root identified by ${arg as string}: Not found.`)
       return false
@@ -38,7 +38,7 @@ export default class RootClose extends ZettlrCommand {
 
     // We got a root, so now we need to unload it and remove it from config
     try {
-      this._app.getFileSystem().unloadPath(root)
+      this._app.fsal.unloadPath(root)
       global.config.removePath(root.path)
       // We do not need to update the renderer, will be done automatically.
     } catch (err: any) {

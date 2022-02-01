@@ -70,7 +70,7 @@ export default class Export extends ZettlrCommand {
       })
     } else {
       // We must have an absolute path given in file
-      const fileDescriptor = this._app.getFileSystem().findFile(file)
+      const fileDescriptor = this._app.fsal.findFile(file)
       if (fileDescriptor !== null) {
         exporterOptions.sourceFiles.push(fileDescriptor)
         exporterOptions.cwd = fileDescriptor.dir
@@ -88,8 +88,8 @@ export default class Export extends ZettlrCommand {
     try {
       const output = await makeExport(exporterOptions, options)
       if (output.code === 0) {
-        global.log.info(`Successfully exported file to ${output.targetFile}`)
-        global.notify.normal(trans('system.export_success', format.toUpperCase()))
+        this._app.log.info(`Successfully exported file to ${output.targetFile}`)
+        this._app.notifications.show(trans('system.export_success', format.toUpperCase()))
 
         // In case of a textbundle/pack it's a folder, else it's a file
         if ([ 'textbundle', 'textpack' ].includes(arg.format)) {

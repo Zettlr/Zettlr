@@ -37,10 +37,10 @@ export default class FileDuplicate extends ZettlrCommand {
     // ARG structure: { dir, file, name }
 
     // First, retrieve our source file
-    let file = this._app.findFile(arg.path)
+    let file = this._app.fsal.findFile(arg.path)
     if (file === null) {
       global.log.error('Could not duplicate source file, because the source file was not found')
-      this._app.prompt({
+      this._app.windows.prompt({
         type: 'error',
         title: trans('system.error.could_not_create_file'),
         message: 'Could not duplicate file, because the source file was not found'
@@ -51,12 +51,12 @@ export default class FileDuplicate extends ZettlrCommand {
     // Then, the target directory.
     let dir = file.parent // (1) A specified directory
     if (dir === null) {
-      dir = this._app.getFileSystem().openDirectory // (2) The current dir
+      dir = this._app.fsal.openDirectory // (2) The current dir
     }
 
     if (dir === null) { // (3) Fail
       global.log.error('Could not create file, because no directory was found')
-      this._app.prompt({
+      this._app.windows.prompt({
         type: 'error',
         title: trans('system.error.could_not_create_file'),
         message: 'No directory provided'
@@ -97,8 +97,8 @@ export default class FileDuplicate extends ZettlrCommand {
     }
 
     // Retrieve the file's content and create a new file with the same content
-    const fileMeta = await this._app.getFileSystem().getFileContents(file)
-    await this._app.getFileSystem().createFile(dir, {
+    const fileMeta = await this._app.fsal.getFileContents(file)
+    await this._app.fsal.createFile(dir, {
       name: filename,
       content: fileMeta.content
     })
@@ -107,5 +107,3 @@ export default class FileDuplicate extends ZettlrCommand {
     await this._app.getDocumentManager().openFile(path.join(dir.path, filename))
   }
 }
-
-module.exports = FileDuplicate

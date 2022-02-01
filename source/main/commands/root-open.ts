@@ -59,7 +59,7 @@ export default class RootOpen extends ZettlrCommand {
     const extensions = [ 'markdown', 'md', 'txt', 'rmd' ]
     const filter = [{ 'name': trans('system.files'), 'extensions': extensions }]
 
-    return await this._app.askFile(filter, true)
+    return await this._app.windows.askFile(filter, true)
   }
 
   /**
@@ -70,7 +70,7 @@ export default class RootOpen extends ZettlrCommand {
   private async openWorkspaces (): Promise<string[]> {
     // TODO: Move this to a command
     // The user wants to open another file or directory.
-    const ret = await this._app.askDir()
+    const ret = await this._app.windows.askDir()
 
     for (const workspace of ret) {
       const ignoredDir = isDir(workspace) && ignoreDir(workspace)
@@ -78,7 +78,7 @@ export default class RootOpen extends ZettlrCommand {
       if (ignoredDir || ignoredFile || workspace === app.getPath('home')) {
         // We cannot add this dir, because it is in the list of ignored directories.
         global.log.error(`The chosen workspace "${workspace}" is on the ignore list.`)
-        this._app.prompt({
+        this._app.windows.prompt({
           'type': 'error',
           'title': trans('system.error.ignored_dir_title'),
           'message': trans('system.error.ignored_dir_message', path.basename(workspace))
@@ -103,30 +103,30 @@ export default class RootOpen extends ZettlrCommand {
       // First check if this thing is already added. If so, simply write
       // the existing file/dir into the newFile/newDir vars. They will be
       // opened accordingly.
-      if ((newFile = this._app.getFileSystem().findFile(absPath)) != null) {
+      if ((newFile = this._app.fsal.findFile(absPath)) != null) {
         // Open the file immediately
         await this._app.getDocumentManager().openFile(newFile.path, true)
         // Also set the newDir variable so that Zettlr will automatically
         // navigate to the directory. The directory of the latest file will
         // remain open afterwards.
         newDir = newFile.parent
-      } else if ((newDir = this._app.getFileSystem().findDir(absPath)) != null) {
+      } else if ((newDir = this._app.fsal.findDir(absPath)) != null) {
         // Do nothing
       } else if (global.config.addPath(absPath)) {
         try {
           if (isDir(absPath)) {
-            global.notify.normal(trans('system.open_root_directory', path.basename(absPath)))
+            this._app.notifications.show(trans('system.open_root_directory', path.basename(absPath)))
           }
-          const loaded = await this._app.getFileSystem().loadPath(absPath)
+          const loaded = await this._app.fsal.loadPath(absPath)
           if (loaded) {
             // If it was a file and not a directory, immediately open it.
-            const file = this._app.getFileSystem().findFile(absPath)
+            const file = this._app.fsal.findFile(absPath)
             if (file !== null) {
               await this._app.getDocumentManager().openFile(file.path, true)
             }
 
             if (isDir(absPath)) {
-              global.notify.normal(trans('system.open_root_directory_success', path.basename(absPath)))
+              this._app.notifications.show(trans('system.open_root_directory_success', path.basename(absPath)))
             }
           } else {
             global.config.removePath(absPath)
@@ -134,17 +134,17 @@ export default class RootOpen extends ZettlrCommand {
         } catch (err: any) {
           // Something went wrong, so remove the path again.
           global.config.removePath(absPath)
-          this._app.getWindowManager().reportFSError('Could not open new root', err)
+          this._app.windows.reportFSError('Could not open new root', err)
         }
       } else {
-        global.notify.normal(trans('system.error.open_root_error', path.basename(absPath)))
+        this._app.notifications.show(trans('system.error.open_root_error', path.basename(absPath)))
         global.log.error(`Could not open new root ${absPath}!`)
       }
     }
 
     // Open the newly added path(s) directly.
     if (newDir !== null) {
-      this._app.getFileSystem().openDirectory = newDir
+      this._app.fsal.openDirectory = newDir
     }
   }
 }

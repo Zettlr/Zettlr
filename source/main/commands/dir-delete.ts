@@ -25,7 +25,7 @@ export default class DirDelete extends ZettlrCommand {
     * @param  {Object} arg An object containing hash of containing and name of new dir.
     */
   async run (evt: string, arg: any): Promise<boolean> {
-    let dirToDelete = this._app.findDir(arg.path)
+    let dirToDelete = this._app.fsal.findDir(arg.path)
     if (dirToDelete === null) {
       global.log.error('Could not remove directory: Not found.')
       return false
@@ -34,13 +34,13 @@ export default class DirDelete extends ZettlrCommand {
     // Now that all files are corresponding files are closed, we can
     // proceed to remove the directory.
 
-    if (!await this._app.confirmRemove(dirToDelete)) {
+    if (!await this._app.windows.confirmRemove(dirToDelete)) {
       return false
     }
 
     // First, remove the directory
     try {
-      await this._app.getFileSystem().removeDir(dirToDelete)
+      await this._app.fsal.removeDir(dirToDelete)
     } catch (err) {
       console.error(err)
       return false

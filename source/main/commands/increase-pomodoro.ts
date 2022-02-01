@@ -25,6 +25,6 @@ export default class IncreasePomodoro extends ZettlrCommand {
     * @param  {Object} arg Empty
     */
   async run (evt: string, arg: any): Promise<void> {
-    global.stats.increasePomodoros()
+    this._app.stats.increasePomodoros()
   }
 }

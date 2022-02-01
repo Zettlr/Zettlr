@@ -28,10 +28,10 @@ export default class DirNew extends ZettlrCommand {
     * @param  {Object} arg An object containing hash of containing and name of new dir.
     */
   async run (evt: string, arg: any): Promise<boolean> {
-    let sourceDir = this._app.findDir(arg.path)
+    let sourceDir = this._app.fsal.findDir(arg.path)
     if (sourceDir === null) {
       global.log.error('Could not create directory: No source given.', arg)
-      this._app.prompt({
+      this._app.windows.prompt({
         type: 'error',
         title: trans('system.error.could_not_create_dir'),
         message: trans('system.error.could_not_create_dir')
@@ -43,7 +43,7 @@ export default class DirNew extends ZettlrCommand {
 
     if (sanitizedName.length === 0) {
       global.log.error('New directory name was empty after sanitization.', arg)
-      this._app.prompt({
+      this._app.windows.prompt({
         type: 'error',
         title: trans('system.error.could_not_create_dir'),
         message: trans('system.error.could_not_create_dir')
@@ -52,9 +52,9 @@ export default class DirNew extends ZettlrCommand {
     }
 
     try {
-      await this._app.getFileSystem().createDir(sourceDir, sanitizedName)
+      await this._app.fsal.createDir(sourceDir, sanitizedName)
     } catch (err: any) {
-      this._app.prompt({
+      this._app.windows.prompt({
         type: 'error',
         title: trans('system.error.could_not_create_dir'),
         message: err.message
@@ -66,7 +66,7 @@ export default class DirNew extends ZettlrCommand {
     // application of the changes, so all we have to do is set the directory
     // as the new current directory.
     let newDirPath = path.join(sourceDir.path, sanitizedName)
-    this._app.getFileSystem().openDirectory = this._app.findDir(newDirPath)
+    this._app.fsal.openDirectory = this._app.fsal.findDir(newDirPath)
 
     return true
   }
