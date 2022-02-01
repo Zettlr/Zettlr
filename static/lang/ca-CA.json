@@ -5,7 +5,7 @@
             "vfc"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-01-09T14:51:53.000000Z"
+        "updated_at": "2022-01-23T20:46:33.000000Z"
     },
     "dialog": {
         "about": {
@@ -197,12 +197,16 @@
             "choose_file": "Tria el fitxer",
             "citation_database": "Base de dades de les refer\u00e8ncies (CSL, JSON o BibTex)",
             "citations": {
-                "title": "Referpencies"
+                "title": "Refer\u00e8ncies bibliogr\u00e0fiques"
             },
             "cite_style_label": "Com vols que s'autocompletin les teves cites?",
             "count_chars": "Compta car\u00e0cters en lloc de paraules (per exemple, per al xin\u00e8s)",
             "creationtime": "Hora de creaci\u00f3 del fitxer",
             "dark_mode": "Mode nocturn",
+            "dark_mode_schedule": {
+                "end": "Acaba el mode nocturn a les",
+                "start": "Engega el mode nocturn a les"
+            },
             "debug": "Habilita el mode de depuraci\u00f3",
             "default_image_save_path": "Cam\u00ed per defecte a les imatges (relatiu o absolut)",
             "delete_on_fail": "Elimina els elements de manera irreversible si el trasllat a la paperera provoca errors",
@@ -222,6 +226,7 @@
                 "title": "Visualitzaci\u00f3",
                 "use_first_headings": "Si est\u00e0 activat: utilitza el primer encap\u00e7alament de nivell 1 en comptes del nom del fitxer"
             },
+            "display_markdown_file_extensions": "Mostra l'extensi\u00f3 del fitxer Markdown",
             "display_time_explanation": "A les metadades del fitxer, mostra",
             "editor": "Editor",
             "editor_font_size": "Editor de la mida de la lletra",
@@ -368,6 +373,7 @@
             "zkn": {
                 "auto_create_file": "Crea autom\u00e0ticament fitxers no-existents quan segueixin links interns",
                 "auto_search": "Comen\u00e7a una cerca quan es segueixin els enlla\u00e7os Zettelkasten",
+                "custom_directory": "Posar els fitxers creats autom\u00e0ticament en aquesta carpeta (han d'estar carregats a Zettlr)",
                 "generated_id": "ID generada",
                 "id_generator_label": "Patr\u00f3 utilitzat per a generar noves IDs",
                 "id_label": "Expressi\u00f3 ID regular",
