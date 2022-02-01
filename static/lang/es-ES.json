@@ -14,7 +14,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-01-14T18:53:40.000000Z"
+        "updated_at": "2022-01-23T20:47:54.000000Z"
     },
     "dialog": {
         "about": {
@@ -212,6 +212,10 @@
             "count_chars": "Contar caracteres en lugar de palabras (p. ej. para el chino)",
             "creationtime": "Hora de creaci\u00f3n del archivo",
             "dark_mode": "Modo nocturno",
+            "dark_mode_schedule": {
+                "end": "Termina el modo oscuro a las",
+                "start": "Empieza el modo oscuro a las"
+            },
             "debug": "Activar el modo de depuraci\u00f3n (debugging)",
             "default_image_save_path": "Path(ruta) predeterminada para imagenes (relativa o absoluta)",
             "delete_on_fail": "Eliminar elementos de forma irreversible si falla enviar a la papelera",

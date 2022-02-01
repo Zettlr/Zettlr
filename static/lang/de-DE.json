@@ -1,15 +1,16 @@
 {
     "metadata": {
         "authors": [
-            "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
+            "Hendrik Erz \u003Chendrik@zettlr.com\u003E",
+            "Jonas Wunderlich \u003Cmail@jonas-wunderlich.de\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-01-14T14:17:04.000000Z"
+        "updated_at": "2022-01-31T19:08:54.000000Z"
     },
     "dialog": {
         "about": {
             "astrocite": "Erm\u00f6glicht Zettlr die Darstellung von Zitationen aus BibTex-Dateien",
-            "chartjs": "Bereitet deine Schreibstatistiken grafisch auf",
+            "chartjs": "Stellt deine Schreibstatistiken in einer Grafik dar",
             "chokidar": "Erkennt alle \u00c4nderung an den Dateien von au\u00dferhalb und stellt sie dar",
             "citationstyle": "Zettlr verwendet citeproc, um Zitationen direkt im Editor anzuzeigen. Hierzu verwendet Zettlr die CitationStyleLanguage (CSL) Sprachdateien sowie Stile. Die Dateien wurden unver\u00e4ndert mit Autorenangaben ausgeliefert. Weitere Informationen:",
             "citeproc": "Liefert die korrekten Zitationen f\u00fcr alle Werke",
@@ -187,8 +188,8 @@
                 "quotes_double_label": "Prim\u00e4re Anf\u00fchrungszeichen",
                 "quotes_single_label": "Sekund\u00e4re Anf\u00fchrungszeichen",
                 "replacement_info": "Hier kannst du Zeichenketten definieren, die ersetzt werden, sobald AutoCorrect eingeschaltet ist. Die Zeichen links werden mit den Zeichen rechts ersetzt.",
-                "style_libre_office_label": "LibreOffice-Stil (ersetzen mit Leerzeichen oder Enter)",
-                "style_word_label": "Word-Stil (sofort ersetzen, ohne Leerzeichen/Enter)",
+                "style_libre_office_label": "LibreOffice-Stil (dr\u00fccke Leerzeichen oder Enter zum ersetzen)",
+                "style_word_label": "Word-Stil (sofort ersetzen, ohne Leerzeichen oder Enter zu dr\u00fccken)",
                 "title": "AutoCorrect"
             },
             "avoid_new_tabs": "Vermeide neue Tabs f\u00fcr Dokumente, falls m\u00f6glich",
@@ -201,7 +202,11 @@
             "cite_style_label": "Wie soll Autocomplete Zitationen einf\u00fcgen?",
             "count_chars": "Zeichen statt W\u00f6rter z\u00e4hlen (z.B. f\u00fcr Chinesisch)",
             "creationtime": "Dateierstellungszeitpunkt",
-            "dark_mode": "Dunkler Modus",
+            "dark_mode": "Dunkles Thema",
+            "dark_mode_schedule": {
+                "end": "Wechsel ins helle Thema",
+                "start": "Wechsel ins dunkle Thema"
+            },
             "debug": "Entwicklermodus aktivieren",
             "default_image_save_path": "Standard-Bildspeicherort (relativ oder absolut)",
             "delete_on_fail": "L\u00f6sche Objekte unwiderruflich, wenn sie nicht in den Papierkorb verschoben werden k\u00f6nnen",
@@ -639,6 +644,7 @@
         "open_link": "Link \u00f6ffnen",
         "open_logs": "Logs \u00f6ffnen",
         "open_new_tab": "In neuem Tab \u00f6ffnen",
+        "open_tutorial": "Tutorial \u00f6ffnen",
         "open_workspace": "Arbeitsverzeichnis \u00f6ffnen \u2026",
         "pandoc": "Pandoc installieren",
         "paste": "Einf\u00fcgen",
@@ -744,7 +750,7 @@
             "open_attachment_error": "Konnte Anhang nicht \u00f6ffnen. L\u00e4uft Zotero?",
             "open_url_error": "Konnte %s nicht \u00f6ffnen",
             "pandoc_error_message": "Pandoc hat beim Export folgenden Fehler ausgegeben: %s",
-            "pandoc_error_title": "Fehler bei Dateiexport",
+            "pandoc_error_title": "Dateiexport fehlgeschlagen",
             "remove_message": "M\u00f6chtest du %s wirklich l\u00f6schen?",
             "remove_title": "Wirklich l\u00f6schen?",
             "tray_not_supported": "Tray-Icon in der Statusleiste nicht unterst\u00fctzt. &quot;KStatusNotifierItem/AppIndicator Support&quot; wird auf Gnome Desktop ben\u00f6tigt."

@@ -24,7 +24,7 @@
             "Taylan TATLI"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-12-10T19:10:43.000000Z"
+        "updated_at": "2022-01-17T06:41:23.000000Z"
     },
     "dialog": {
         "about": {
@@ -215,6 +215,9 @@
             "checkForBeta": "\u5f53\u6709\u65b0Beta\u7248\u672c\u53d1\u5e03\u65f6\u901a\u77e5\u6211",
             "choose_file": "\u9009\u62e9\u6587\u6863 \u2026",
             "citation_database": "\u5f15\u6587\u6570\u636e\u5e93\uff08CSL JSON \u6216 BibTex \u683c\u5f0f\uff09",
+            "citations": {
+                "title": "\u5f15\u7528"
+            },
             "cite_style_label": "\u81ea\u52a8\u5b8c\u6210\u529f\u80fd\u5982\u4f55\u63d2\u5165\u5f15\u6587\uff1f",
             "count_chars": "\u7edf\u8ba1\u5b57\u7684\u6570\u91cf\u800c\u4e0d\u662f\u8bcd\u8bed\u7684\u6570\u91cf\uff08\u4f8b\u5982\uff0c\u4e2d\u6587\uff09",
             "creationtime": "\u6587\u4ef6\u521b\u5efa\u65f6\u95f4",
