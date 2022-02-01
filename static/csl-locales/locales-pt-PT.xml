@@ -575,34 +575,34 @@
     <term name="illustrator" form="verb-short">ilus.</term>
     <term name="translator" form="verb-short">trad.</term>
     <term name="editortranslator" form="verb-short">ed. &amp; trad. por</term>
-
-    <!-- LONG MONTH FORMS -->
-    <term name="month-01">Janeiro</term>
-    <term name="month-02">Fevereiro</term>
-    <term name="month-03">Março</term>
-    <term name="month-04">Abril</term>
-    <term name="month-05">Maio</term>
-    <term name="month-06">Junho</term>
-    <term name="month-07">Julho</term>
-    <term name="month-08">Agosto</term>
-    <term name="month-09">Setembro</term>
-    <term name="month-10">Outubro</term>
-    <term name="month-11">Novembro</term>
-    <term name="month-12">Dezembro</term>
-
+      
+   <!-- LONG MONTH FORMS -->
+      <term name="month-01">janeiro</term>
+      <term name="month-02">fevereiro</term>
+      <term name="month-03">março</term>
+      <term name="month-04">abril</term>
+      <term name="month-05">maio</term>
+      <term name="month-06">junho</term>
+      <term name="month-07">julho</term>
+      <term name="month-08">agosto</term>
+      <term name="month-09">setembro</term>
+      <term name="month-10">outubro</term>
+      <term name="month-11">novembro</term>
+      <term name="month-12">dezembro</term>
+     
     <!-- SHORT MONTH FORMS -->
-    <term name="month-01" form="short">Jan.</term>
-    <term name="month-02" form="short">Fev.</term>
-    <term name="month-03" form="short">Mar.</term>
-    <term name="month-04" form="short">Abr.</term>
-    <term name="month-05" form="short">Mai.</term>
-    <term name="month-06" form="short">Jun.</term>
-    <term name="month-07" form="short">Jul.</term>
-    <term name="month-08" form="short">Ago.</term>
-    <term name="month-09" form="short">Set.</term>
-    <term name="month-10" form="short">Out.</term>
-    <term name="month-11" form="short">Nov.</term>
-    <term name="month-12" form="short">Dez.</term>
+      <term name="month-01" form="short">jan.</term>
+      <term name="month-02" form="short">fev.</term>
+      <term name="month-03" form="short">mar.</term>
+      <term name="month-04" form="short">abr.</term>
+      <term name="month-05" form="short">mai.</term>
+      <term name="month-06" form="short">jun.</term>
+      <term name="month-07" form="short">jul.</term>
+      <term name="month-08" form="short">ago.</term>
+      <term name="month-09" form="short">set.</term>
+      <term name="month-10" form="short">out.</term>
+      <term name="month-11" form="short">nov.</term>
+      <term name="month-12" form="short">dez.</term>
 
     <!-- SEASONS -->
     <term name="season-01">Primavera</term>
