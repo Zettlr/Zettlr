@@ -9,20 +9,22 @@
             "pluwen \u003Cpluwen@gmail.com\u003E",
             "marisa \u003Chermitpurple@foxmail.com\u003E",
             "Steve OU",
-            "HRC",
             "Retaw Jin \u003Cretaw106@hotmail.com\u003E",
+            "HRC",
             "ihipop \u003Cihipop+zettlr@gmail.com\u003E",
             "Z_Moz",
+            "Jovian \u003Clitanglian@hotmail.com\u003E",
             "0x7A",
             "Krysl",
             "Herb \u003Chwongbaul.app@outlook.com\u003E",
             "joegege",
+            "gigige",
             "Che Jiang \u003Cjiang@fastmail.net\u003E",
             "\u571f\u8c46 \u003Chewang@mail.bnu.edu.cn\u003E",
             "Taylan TATLI"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-08-04T17:22:22.000000Z"
+        "updated_at": "2022-01-17T06:41:23.000000Z"
     },
     "dialog": {
         "about": {
@@ -80,7 +82,7 @@
             "unknown_dialog": "\u8bf7\u6c42\u5bf9\u8bdd\u6846 '%s'\u4e0d\u5b58\u5728\u3002"
         },
         "export": {
-            "no_pandoc": "\u627e\u4e0d\u5230 pandoc\u3002\u8bf7\u786e\u4fdd\u5b89\u88c5pandoc!",
+            "no_pandoc": "\u65e0\u6cd5\u627e\u5230pandoc\u3002\u8bf7\u5b89\u88c5pandoc\u4ee5\u542f\u7528\u6587\u4ef6\u5bfc\u51fa\u9009\u9879\uff01",
             "no_xelatex": "\u65e0\u6cd5\u5728\u60a8\u7684\u7cfb\u7edf\u4e2d\u67e5\u627e\u5230 xelatex \u53ef\u6267\u884c\u6587\u4ef6\uff0c\u8bf7\u786e\u8ba4\u60a8\u5df2\u5b89\u88c5 LaTex \u6765\u4f7f\u7528\u5bfc\u51fa\u5230 PDF \u529f\u80fd\u3002"
         },
         "file_new": {
@@ -191,6 +193,12 @@
             "auto_dark_mode_schedule": "\u8ba1\u5212",
             "auto_dark_mode_schedule_format": "HH:MM\uff0824\u5c0f\u65f6\u5236\uff09",
             "auto_dark_mode_system": "\u8ddf\u968f\u7cfb\u7edf\u8bbe\u7f6e",
+            "auto_save": {
+                "delayed": "\u77ed\u6682\u5ef6\u8fdf\u540e",
+                "immediately": "\u9a6c\u4e0a",
+                "label": "\u81ea\u52a8\u4fdd\u5b58",
+                "off": "\u5173\u95ed"
+            },
             "autocomplete_accept_space": "\u5141\u8bb8\u81ea\u52a8\u5b8c\u6210\u751f\u6210\u7a7a\u683c",
             "autocorrect": {
                 "active_label": "\u5f00\u542f\u81ea\u52a8\u7ea0\u6b63",
@@ -207,8 +215,13 @@
             "checkForBeta": "\u5f53\u6709\u65b0Beta\u7248\u672c\u53d1\u5e03\u65f6\u901a\u77e5\u6211",
             "choose_file": "\u9009\u62e9\u6587\u6863 \u2026",
             "citation_database": "\u5f15\u6587\u6570\u636e\u5e93\uff08CSL JSON \u6216 BibTex \u683c\u5f0f\uff09",
+            "citations": {
+                "title": "\u5f15\u7528"
+            },
+            "cite_style_label": "\u81ea\u52a8\u5b8c\u6210\u529f\u80fd\u5982\u4f55\u63d2\u5165\u5f15\u6587\uff1f",
             "count_chars": "\u7edf\u8ba1\u5b57\u7684\u6570\u91cf\u800c\u4e0d\u662f\u8bcd\u8bed\u7684\u6570\u91cf\uff08\u4f8b\u5982\uff0c\u4e2d\u6587\uff09",
             "creationtime": "\u6587\u4ef6\u521b\u5efa\u65f6\u95f4",
+            "dark_mode": "\u591c\u95f4\u6a21\u5f0f",
             "debug": "\u542f\u7528\u8c03\u8bd5\u6a21\u5f0f",
             "default_image_save_path": "\u9ed8\u8ba4\u56fe\u7247\u8def\u5f84\uff08\u76f8\u5bf9\u6216\u7edd\u5bf9\uff09",
             "delete_on_fail": "\u5982\u679c\u79fb\u5230\u56de\u6536\u7ad9\u5931\u8d25\uff0c\u5219\u6c38\u4e45\u6027\u5730\u5220\u9664\u5b83\u4eec",
@@ -219,16 +232,16 @@
                 "preview_info": "\u4f60\u53ef\u4ee5\u52fe\u9009\u8fd9\u4e9b\u9009\u9879\u51b3\u5b9a\u5728\u6587\u6863\u4e2d\u5448\u73b0\u54ea\u4e9b\u5143\u7d20\u3002",
                 "render_citations": "\u6e32\u67d3\u5f15\u7528\u6bb5\u843d",
                 "render_htags": "\u9690\u85cf\u6807\u9898\u5b57\u7b26",
-                "render_iframes": "\u5e27\u6e32\u67d3",
-                "render_images": "\u56fe\u7247\u6e32\u67d3",
-                "render_links": "\u94fe\u63a5\u6e32\u67d3",
-                "render_math": "\u516c\u5f0f\u6e32\u67d3",
-                "render_tasks": "\u4efb\u52a1\u6e32\u67d3",
+                "render_iframes": "\u6e32\u67d3\u5185\u5d4c\u6846\u67b6",
+                "render_images": "\u6e32\u67d3\u56fe\u7247",
+                "render_links": "\u6e32\u67d3\u94fe\u63a5",
+                "render_math": "\u6e32\u67d3\u516c\u5f0f",
+                "render_tasks": "\u6e32\u67d3\u4efb\u52a1",
                 "title": "\u663e\u793a",
                 "use_first_headings": "\u4f7f\u7528\u4e00\u7ea7\u6807\u9898\uff08\u82e5\u5b58\u5728\uff09\u800c\u975e\u6587\u4ef6\u540d"
             },
             "display_time_explanation": "\u5728\u6587\u4ef6\u4e2d\u663e\u793a\u5143\u6570\u636e",
-            "editor": "\u7f16\u8f91",
+            "editor": "\u7f16\u8f91\u5668",
             "editor_font_size": "\u7f16\u8f91\u5668\u5b57\u4f53\u5927\u5c0f",
             "editor_setting": {
                 "direction_ltr": "\u4f7f\u7528\u4ece\u5de6\u81f3\u53f3\u7684\u4e66\u5199\u65b9\u5411",
@@ -259,7 +272,7 @@
             "filename_generator": "\u65b0\u6587\u4ef6\u540d\u7684\u6a21\u5f0f",
             "formatting_characters_explanation": "\u9009\u62e9\u8981\u88ab\u7c97\u4f53\u6216\u5f3a\u8c03\u547d\u4ee4\u4f7f\u7528\u7684\u683c\u5f0f\u5b57\u7b26",
             "general": "\u901a\u7528",
-            "hide_dirs": "\u5728\u5168\u5c40\u641c\u7d22\u671f\u95f4\u9690\u85cf\u76ee\u5f55",
+            "hide_dirs": "\u5728\u5168\u5c40\u641c\u7d22\u65f6\u9690\u85cf\u76ee\u5f55",
             "homeEndBehaviour": "\u6309 CodeMirror \u9ed8\u8ba4\u884c\u4e3a\u6765\u4f7f\u7528 \u003Ckbd\u003EHome\u003C/kbd\u003E \u548c \u003Ckbd\u003EEnd\u003C/kbd\u003E\u3002",
             "indent_unit": "\u4f7f\u7528\u4ee5\u4e0b\u6570\u91cf\u7684\u7a7a\u683c\u6765\u7f29\u8fdb",
             "input_mode": "\u7f16\u8f91\u5668\u8f93\u5165\u6a21\u5f0f",
@@ -277,12 +290,12 @@
                 "bmargin": "\u4f4e\u8fb9\u8ddd",
                 "bmargin_label": "\u5e95\u8fb9\u8ddd",
                 "font": "\u5b57\u4f53",
-                "font_intro": "\u4fee\u6539\u5b57\u4f53",
+                "font_intro": "\u8c03\u6574\u5b57\u4f53\u8bbe\u7f6e",
                 "fontsize": "\u5b57\u4f53\u5927\u5c0f",
                 "fontsize_label": "\u5b57\u4f53\u5927\u5c0f (pt)",
                 "keywords": "\u5173\u952e\u8bcd",
                 "keywords_label": "PDF\u5173\u952e\u8bcd",
-                "lineheight": "\u884c\u8ddd",
+                "lineheight": "\u884c\u9ad8",
                 "lineheight_label": "\u884c\u8ddd\uff08\u76f8\u5bf9\u4e8e\u5b57\u4f53\u5927\u5c0f\u7684\u767e\u5206\u6bd4\uff0c\u5373\uff1a150\uff05\u7b49\u4e8e1.5\u884c\u95f4\u8ddd\uff09",
                 "lmargin": "\u5de6\u8fb9\u8ddd",
                 "lmargin_label": "\u5de6\u8fb9\u8ddd",
@@ -325,6 +338,7 @@
             "readability_algorithm": "\u5728\u9605\u8bfb\u6a21\u5f0f\u4e2d\u4f7f\u7528\u7684\u7b97\u6cd5",
             "reset_pandoc_command": "\u91cd\u7f6epandoc\u547d\u4ee4",
             "show_app_in_the_notification_area": "\u5728\u6d88\u606f\u533a\u663e\u793a\u5e94\u7528",
+            "sort_folders_first": "\u5728\u6587\u6863\u4e0a\u65b9\u663e\u793a\u6587\u4ef6\u5939",
             "sorting_ascii": "ASCII\u987a\u5e8f\uff082\u572810\u4e4b\u540e\uff09",
             "sorting_explanation": "\u6587\u4ef6\u7684\u6392\u5e8f\u987a\u5e8f\uff08\u7528\u4e8e\u6309\u540d\u79f0\u6392\u5e8f\uff09",
             "sorting_natural": "\u81ea\u7136\u987a\u5e8f\uff0810\u57282\u4e4b\u540e\uff09",
@@ -336,7 +350,11 @@
                 "title": "\u62fc\u5199\u68c0\u67e5"
             },
             "theme": {
+                "accent_color_info": "\u8be5\u8bbe\u7f6e\u4ec5\u5728Windows\u548cMacOS\u53ef\u7528",
+                "accent_color_label": "\u4f7f\u7528\u7cfb\u7edf\u5b57\u4f53\u989c\u8272\u800c\u975e\u4e3b\u9898\u8272",
                 "info": "\u4f60\u53ef\u4ee5\u5728\u6b64\u9009\u62e9\u5e94\u7528\u7684\u4e3b\u9898\u3002",
+                "select_label": "\u70b9\u51fb\u9009\u62e9",
+                "selected_label": "\u5df2\u9009\u62e9",
                 "title": "\u4e3b\u9898"
             },
             "title": "\u504f\u597d\u8bbe\u7f6e",
@@ -360,6 +378,7 @@
             "xelatex_default": "\u9ed8\u8ba4\uff1aXeLatex",
             "zkn": {
                 "auto_create_file": "\u8ffd\u8e2a\u5185\u90e8\u94fe\u63a5\u65f6\u81ea\u52a8\u521b\u5efa\u4e0d\u5b58\u5728\u7684\u6587\u4ef6",
+                "auto_search": "\u8ddf\u8e2aZettelkasten-links\u65f6\u641c\u7d22",
                 "generated_id": "\u751f\u6210ID",
                 "id_generator_label": "\u7528\u4e8e\u751f\u6210\u65b0ID\u7684\u6a21\u5f0f",
                 "id_label": "ID\u6b63\u5219\u8868\u8fbe\u5f0f",
@@ -402,7 +421,8 @@
             "previous_frame": "\u5148\u524d\u65f6\u95f4\u8868",
             "tabs": {
                 "calendar_label": "\u65e5\u5386",
-                "chart_label": "\u56fe\u8868"
+                "chart_label": "\u56fe\u8868",
+                "fsal_label": "FSAL \u7edf\u8ba1"
             },
             "this_frame": "\u5f53\u524d\u65f6\u95f4\u8868",
             "title": "\u4e66\u5199\u7edf\u8ba1",
@@ -446,11 +466,15 @@
             "start_update_label": "\u70b9\u51fb\u66f4\u65b0",
             "start_update_message": "\u5f00\u59cb\u66f4\u65b0\u4e2d",
             "title": "\u53ef\u7528\u66f4\u65b0",
-            "transmission_error": "\u65e0\u6cd5\u68c0\u67e5\u66f4\u65b0\uff1a\u8fde\u63a5\u4e2d\u65ad"
+            "transmission_error": "\u65e0\u6cd5\u68c0\u67e5\u66f4\u65b0\uff1a\u8fde\u63a5\u4e2d\u65ad",
+            "window_title": "\u66f4\u65b0\u7ba1\u7406"
         }
     },
     "gui": {
         "assets_man": {
+            "defaults_restore_error": "\u65e0\u6cd5\u6062\u590d\u9ed8\u8ba4\u6587\u6863",
+            "defaults_restored": "\u9ed8\u8ba4\u6587\u6863\u5df2\u6062\u590d\uff01",
+            "defaults_restoring": "\u6b63\u5728\u6062\u590d\u9ed8\u8ba4\u6587\u6863...",
             "status": {
                 "save_error": "\u4fdd\u5b58\u5931\u8d25",
                 "saved": "\u5df2\u4fdd\u5b58\uff01",
@@ -466,6 +490,11 @@
         "avg_surpassed": "\ud83d\udd25 \u4f60\u4eca\u5929\u7684\u72b6\u6001\u771f\u4e0d\u9519\uff01",
         "avg_words": "\u65e5\u5e73\u5747",
         "chars": "%s \u5b57",
+        "chart": {
+            "high_legend": "\u6708\u5e73\u5747\u4e24\u500d\u4ee5\u4e0a",
+            "high_mid_legend": "\u8d85\u8fc7\u6708\u5e73\u5747",
+            "low_mid_legend": "\u4f4e\u4e8e\u6708\u5e73\u5747"
+        },
         "citeproc": {
             "error_db": "\u65e0\u6cd5\u52a0\u8f7d\u5f15\u6587\u6570\u636e\u5e93",
             "error_report_message": "\u60a8\u5e93\u4e2d\u6709 %s \u4e2a\u9879\u76ee\u56e0\u53d1\u751f\u9519\u8bef\u800c\u65e0\u6cd5\u52a0\u8f7d\u3002\u8bf7\u68c0\u67e5\u4e0b\u9762\u7684\u9519\u8bef\u4fe1\u606f\uff0c\u4ee5\u786e\u5b9a\u51fa\u73b0\u5f02\u5e38\u7684\u5f15\u7528\u952e\u503c\u548c\u9519\u8bef\u6027\u8d28\u3002",
@@ -492,7 +521,7 @@
         "files": "\u6587\u6863",
         "formatting": {
             "blockquote": "\u5f15\u7528",
-            "bold": "\u9ed1\u4f53",
+            "bold": "\u52a0\u7c97",
             "code": "\u4ee3\u7801",
             "comment": "\u6ce8\u91ca",
             "divider": "\u5206\u5272\u7ebf",
@@ -508,12 +537,14 @@
         },
         "global_search": {
             "clear_label": "\u6e05\u7a7a\u641c\u7d22",
+            "filter_label": "\u641c\u7d22\u7ed3\u679c\u8fc7\u6ee4",
             "query_label": "\u8bf7\u8f93\u5165\u60a8\u9700\u8981\u641c\u7d22\u7684\u5185\u5bb9",
             "query_placeholder": "\u641c\u7d22\u2026",
             "restrict_dir_label": "\u53ea\u4ee5\u4e0b\u641c\u7d22\u76ee\u5f55",
             "restrict_dir_placeholder": "\u9650\u5236\u641c\u7d22\u7684\u76ee\u5f55 ...",
             "search_label": "\u641c\u7d22",
-            "title": "\u5168\u6587\u641c\u7d22"
+            "title": "\u5168\u6587\u641c\u7d22",
+            "toggle_label": "\u5207\u6362\u641c\u7d22\u7ed3\u679c"
         },
         "modified": "\u5df2\u4fee\u6539",
         "months": {
@@ -553,7 +584,7 @@
         "workspaces": "\u5de5\u4f5c\u533a"
     },
     "localise": {
-        "decimal_delimiter": "\u3002",
+        "decimal_delimiter": ".",
         "thousand_delimiter": ","
     },
     "menu": {
@@ -595,6 +626,7 @@
         "insert_ol": "\u63d2\u5165\u6570\u5b57\u5217\u8868",
         "insert_tasklist": "\u63d2\u5165\u4efb\u52a1\u5217\u8868",
         "insert_ul": "\u63d2\u5165\u9879\u76ee\u5217\u8868",
+        "inspect_clipboard": "\u68c0\u6d4b\u526a\u5207\u677f",
         "italic": "\u659c\u4f53",
         "labels": {
             "debug": "\u6539\u8fdb",
@@ -609,7 +641,7 @@
         "new_dir": "\u65b0\u76ee\u5f55\u2026",
         "new_file": "\u65b0\u6587\u6863\u2026",
         "new_project": "\u521b\u5efa\u65b0\u7684\u9879\u76ee",
-        "no_suggestions": "\u65e0\u610f\u89c1",
+        "no_suggestions": "\u65e0\u5efa\u8bae",
         "open": "\u6253\u5f00\u2026",
         "open_attachment": "\u6253\u5f00\u9644\u4ef6",
         "open_in_browser": "\u5728\u6d4f\u89c8\u5668\u4e2d\u6253\u5f00",
@@ -681,7 +713,10 @@
         "all_files": "\u6240\u6709\u6587\u6863",
         "cancel": "\u53d6\u6d88",
         "common": {
+            "filter": "\u8fc7\u6ee4...",
+            "list_actions_label": "Actions",
             "list_add_button": "\u6dfb\u52a0",
+            "list_default_column_label": "\u6761\u76ee",
             "list_search_placeholder": "\u641c\u7d22\u5185\u5bb9 ..."
         },
         "directories": "\u76ee\u5f55",
@@ -706,34 +741,36 @@
             "ignored_dir_message": "\u76ee\u5f55&quot;%s&quot; \u65e0\u6cd5\u6253\u5f00",
             "ignored_dir_title": "\u65e0\u6cd5\u6253\u5f00\u76ee\u5f55",
             "image_not_found": "\u672a\u627e\u5230\u56fe\u7247\uff1a%s",
+            "malformed_citekey": "Citekey\u683c\u5f0f\u9519\u8bef\uff1a@%s",
             "malformed_textbundle": "\u683c\u5f0f\u9519\u8bef\u7684Textbundle\uff1a\uff05s",
             "move_into_child_message": "\u60a8\u65e0\u6cd5\u5c06\u76ee\u5f55\u79fb\u52a8\u5230\u5176\u5b50\u76ee\u5f55\u4e4b\u4e00\u3002",
             "move_into_child_title": "\u65e0\u6cd5\u79fb\u52a8\u76ee\u5f55",
             "no_allowed_chars": "\u63d0\u4ea4\u7684\u6587\u4ef6\u540d\u5305\u542b\u4e0d\u88ab\u5141\u8bb8\u7684\u5b57\u7b26",
             "no_pandoc_message": "\u5728\u8fd9\u4e2a\u7cfb\u7edf\u4e0a\u6ca1\u6709\u627e\u5230Pandoc\u3002 \u8bf7\u5728\u5bfc\u51fa\u6216\u5bfc\u5165\u6587\u4ef6\u4e4b\u524d\u5b89\u88c5Pandoc\u3002",
             "no_pandoc_title": "\u627e\u4e0d\u5230Pandoc",
-            "no_xelatex_message": "Zettlr\u65e0\u6cd5\u5728\u6b64\u7cfb\u7edf\u4e0a\u68c0\u6d4b\u5230LaTeX\u5206\u5e03\u3002 \u8bf7\u5728\u5bfc\u51fa\u4e3aPDF\u4e4b\u524d\u5b89\u88c5LaTeX\u3002",
+            "no_xelatex_message": "Zettlr \u65e0\u6cd5\u5728\u6b64\u7cfb\u7edf\u4e0a\u68c0\u6d4b\u5230 LaTeX \u7a0b\u5e8f\u3002 \u8bf7\u5728\u5bfc\u51fa\u4e3aPDF\u4e4b\u524d\u5b89\u88c5 LaTeX\u3002",
             "no_xelatex_title": "\u627e\u4e0d\u5230LaTeX",
             "open_attachment_error": "\u4e0d\u80fd\u6253\u5f00\u9644\u4ef6\uff0cZotero \u662f\u5426\u6b63\u5728\u8fd0\u884c\uff1f",
             "open_url_error": "\u65e0\u6cd5\u6253\u5f00 %s",
             "pandoc_error_message": "Pandoc\u62a5\u9519: %s",
             "pandoc_error_title": "\u65e0\u6cd5\u5bfc\u51fa\u6587\u6863",
             "remove_message": "\u4f60\u60f3\u8981\u79fb\u9664 %s?",
-            "remove_title": "\u662f\u5426\u5220\u9664\uff1f"
+            "remove_title": "\u662f\u5426\u5220\u9664\uff1f",
+            "tray_not_supported": "\u4e0d\u652f\u6301\u6258\u76d8\u663e\u793a\u3002Gnome\u684c\u9762\u73af\u5883\u8981\u6c42&quot;KStatusNotifierItem/AppIndicator Support&quot; \u63d2\u4ef6\u3002"
         },
         "export_success": "\u6210\u529f\u5bfc\u51fa\u5230\uff05s\uff01",
-        "file_changed": "\u6587\u6863\uff05s\u5df2\u8fdc\u7a0b\u66f4\u6539\u3002",
+        "file_changed": "\u6587\u6863 %s \u5df2\u88ab\u5176\u4ed6\u7a0b\u5e8f\u4fee\u6539\u3002",
         "file_removed": "\u6587\u6863\uff05s\u5df2\u88ab\u5220\u9664\u3002",
         "files": "\u6587\u4ef6",
         "import_error": "\u65e0\u6cd5\u52a0\u8f7d %s\u3002",
         "import_fail": "\u4ee5\u4e0b\u6587\u4ef6 %s \u65e0\u6cd5\u88ab\u5bfc\u5165\uff0c\u56e0\u4e3a\u5176\u672a\u77e5\u6587\u4ef6\u7c7b\u578b\uff1a%s",
         "import_lang_file": "\u5bfc\u5165\u65b0\u7684\u8bed\u8a00",
         "import_no_directory": "\u60a8\u5fc5\u987b\u9009\u62e9\u8981\u5bfc\u5165\u7684\u76ee\u5f55\u3002",
-        "import_status": "\u52a0\u8f7d\u4e2d\uff0c\u8bf7\u7b49\u5f85 \u2026",
-        "import_success": "%s \u52a0\u8f7d\u6210\u529f\uff01",
-        "lang_import_error": "\u65e0\u6cd5\u5bfc\u5165\u8bed\u8a00\u6587\u4ef6 %s\uff01",
+        "import_status": "\u5bfc\u5165\u4e2d\u3002\u8bf7\u7b49\u5f85\u2026",
+        "import_success": "%s \u6210\u529f\u5bfc\u5165\u3002",
+        "lang_import_error": "\u65e0\u6cd5\u5bfc\u5165\u8bed\u8a00\u5305\u6587\u4ef6 %s\uff01",
         "lang_import_success": "\u8bed\u8a00\u5305\u6587\u4ef6\u5df2\u5bfc\u5165\uff1a%s",
-        "no_command": "\u6536\u5230\u4e0d\u5305\u542b\u4efb\u4f55\u6307\u4ee4\u7684\u6d88\u606f\uff1a\uff05s",
+        "no_command": "\u6536\u5230\u4e00\u6761\u4e0d\u542b\u6307\u4ee4\u7684\u6d88\u606f\uff1a%s",
         "ok": "OK",
         "open_file": "\u6253\u5f00\u6587\u4ef6",
         "open_folder": "\u6253\u5f00\u9879\u76ee\u6587\u4ef6\u5939",
@@ -765,13 +802,13 @@
         "insert_bold": "\u63d2\u5165\u9ed1\u4f53",
         "insert_fn": "\u6dfb\u52a0\u811a\u6ce8",
         "insert_image": "\u63d2\u5165\u56fe\u50cf",
-        "insert_italic": "\u63d2\u5165\u659c\u4f53",
+        "insert_italic": "\u659c\u4f53",
         "insert_link": "\u63d2\u5165\u94fe\u63a5",
         "insert_ol": "\u63d2\u5165\u6709\u5e8f\u5217\u8868",
         "insert_ul": "\u63d2\u5165\u9879\u76ee\u5217\u8868",
         "pomodoro": "\u756a\u8304\u949f",
         "preferences": "\u6253\u5f00\u8bbe\u7f6e\u5bf9\u8bdd\u6846",
-        "readability": "\u9605\u8bfb\u6a21\u5f0f",
+        "readability": "\u68c0\u8bfb\u6a21\u5f0f",
         "remove_fn": "\u5220\u9664\u5149\u6807\u4e0b\u7684\u811a\u6ce8",
         "share": "\u4fdd\u5b58\u5f53\u524d\u6587\u6863\u4e3aHTML, DOCX, ODT \u6216PDF",
         "show_menu": "\u663e\u793a\u5e94\u7528\u83dc\u5355",
@@ -781,6 +818,10 @@
         "toggle_attachments": "\u67e5\u770b\u9644\u4ef6",
         "toggle_file_manager": "\u6587\u4ef6\u7ba1\u7406\u5668",
         "toggle_global_search": "\u5168\u5c40\u641c\u7d22"
+    },
+    "tray": {
+        "show_zettlr": "\u5728\u6258\u76d8\u4e2d\u663e\u793aZettlr",
+        "tooltip": "Zettlr"
     },
     "validation": {
         "error_empty": "\u9009\u9879\uff05s\u662f\u5fc5\u9700\u7684\u3002",

@@ -22,13 +22,13 @@
         ref="form"
         v-bind:model="model"
         v-bind:schema="schema"
-        v-on:input="handleInput"
+        v-on:update:model-value="handleInput"
       ></Form>
     </div>
   </WindowChrome>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -43,31 +43,24 @@
  * END HEADER
  */
 
-import Form from '../common/vue/form/Form.vue'
-import WindowChrome from '../common/vue/window/Chrome.vue'
-import { trans } from '../common/i18n-renderer'
+import Form from '@common/vue/form/Form.vue'
+import WindowChrome from '@common/vue/window/Chrome.vue'
+import { trans } from '@common/i18n-renderer'
 
 import generalSchema from './schema/general'
 import editorSchema from './schema/editor'
 import exportSchema from './schema/export'
+import citationSchema from './schema/citations'
 import zettelkastenSchema from './schema/zettelkasten'
 import displaySchema from './schema/display'
 import spellcheckingSchema from './schema/spellchecking'
 import autocorrectSchema from './schema/autocorrect'
 import advancedSchema from './schema/advanced'
+import { IpcRenderer } from 'electron'
+import { defineComponent } from 'vue'
+import { WindowTab } from '@dts/renderer/window'
 
-const ipcRenderer = window.ipc
-
-const SCHEMA = {
-  'tab-general': generalSchema,
-  'tab-editor': editorSchema,
-  'tab-export': exportSchema,
-  'tab-zettelkasten': zettelkastenSchema,
-  'tab-display': displaySchema,
-  'tab-spellchecking': spellcheckingSchema,
-  'tab-autocorrect': autocorrectSchema,
-  'tab-advanced': advancedSchema
-}
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
 /**
  * Searches the tree for a given model, traversing as necessary. Uses a depth-
@@ -78,7 +71,7 @@ const SCHEMA = {
  *
  * @return  {Field|undefined}          The corresponding field or undefined
  */
-function modelToField (model, tree) {
+function modelToField (model: string, tree: any): any {
   if (tree === undefined) {
     throw new Error('Could not map model: tree not defined!')
   }
@@ -117,28 +110,12 @@ function modelToField (model, tree) {
   return undefined
 }
 
-export default {
+export default defineComponent({
   components: {
     Form,
     WindowChrome
   },
   data () {
-    // Instantiate the Schemas. We have to do it in such a weird way because
-    // otherwise malformed translation strings will throw errors since the trans
-    // function has access to global.config only AFTER window registration has
-    // been executed. But, since it's a function, without this here we would
-    // automatically execute the trans() function during IMPORT, and as such
-    // BEFORE the window registration has had a chance to register the config
-    // global variable.
-    SCHEMA['tab-general'] = SCHEMA['tab-general']()
-    SCHEMA['tab-editor'] = SCHEMA['tab-editor']()
-    SCHEMA['tab-export'] = SCHEMA['tab-export']()
-    SCHEMA['tab-zettelkasten'] = SCHEMA['tab-zettelkasten']()
-    SCHEMA['tab-display'] = SCHEMA['tab-display']()
-    SCHEMA['tab-spellchecking'] = SCHEMA['tab-spellchecking']()
-    SCHEMA['tab-autocorrect'] = SCHEMA['tab-autocorrect']()
-    SCHEMA['tab-advanced'] = SCHEMA['tab-advanced']()
-
     return {
       currentTab: 0,
       tabs: [
@@ -159,6 +136,12 @@ export default {
           controls: 'tab-export',
           id: 'tab-export-control',
           icon: 'share'
+        },
+        {
+          label: trans('dialog.preferences.citations.title'),
+          controls: 'tab-citations',
+          id: 'tab-citations-control',
+          icon: 'block-quote'
         },
         {
           label: trans('dialog.preferences.zkn.title'),
@@ -182,7 +165,7 @@ export default {
           label: trans('dialog.preferences.autocorrect.title'),
           controls: 'tab-autocorrect',
           id: 'tab-autocorrect-control',
-          icon: 'block-quote'
+          icon: 'wand' // 'block-quote'
         },
         {
           label: trans('dialog.preferences.advanced'),
@@ -190,29 +173,31 @@ export default {
           id: 'tab-advanced-control',
           icon: 'tools'
         }
-      ],
-      // Will be prepopulated afterwards, contains the user dict
+      ] as WindowTab[],
+      // Will be populated afterwards, contains the user dict
       userDictionaryContents: [],
       // Will be populated afterwards, contains all dictionaries
       availableDictionaries: [],
+      // Will be populated afterwards, contains the available languages
+      appLangOptions: {} as any,
       // This will return the full object
-      config: global.config.get(),
-      schema: SCHEMA['tab-general']
+      config: (global as any).config.get(),
+      schema: {}
     }
   },
   computed: {
-    windowTitle: function () {
+    windowTitle: function (): string {
       if (process.platform === 'darwin') {
         return this.tabs[this.currentTab].label
       } else {
         return trans('dialog.preferences.title')
       }
     },
-    showTitlebar: function () {
+    showTitlebar: function (): boolean {
       const isDarwin = document.body.classList.contains('darwin')
-      return isDarwin || global.config.get('nativeAppearance') === false
+      return isDarwin || (global as any).config.get('nativeAppearance') === false
     },
-    model: function () {
+    model: function (): any {
       // The model to be passed on will simply be a merger of custom values
       // and the configuration object. This way we can safely change some of
       // these values without risking to overwrite the model (which we have
@@ -230,10 +215,7 @@ export default {
      */
     currentTab: function () {
       this.setTitle()
-
-      // Switch out the schema to re-build the form, which makes it appear
-      // as though we have switched tabs. Wicked!
-      this.schema = SCHEMA[this.tabs[this.currentTab].controls]
+      this.recreateSchema()
     }
   },
   /**
@@ -242,6 +224,7 @@ export default {
   mounted: function () {
     this.setTitle()
     this.populateDynamicValues()
+    this.recreateSchema()
   },
   /**
    * Listen to events in order to adapt display.
@@ -254,8 +237,9 @@ export default {
         // Don't waste boilerplate, just overwrite that whole thing
         // and let's hope the Vue algorithm of finding out what has
         // to be re-rendered is good!
-        this.config = global.config.get()
+        this.config = (global as any).config.get()
         this.populateDynamicValues()
+        this.recreateSchema()
       }
     })
 
@@ -265,16 +249,6 @@ export default {
         this.populateDynamicValues()
       }
     })
-
-    if (process.env.ZETTLR_IS_TRAY_SUPPORTED === '0') {
-      const leaveAppRunningField = modelToField('system.leaveAppRunning', SCHEMA['tab-advanced'])
-      if (leaveAppRunningField !== undefined) {
-        leaveAppRunningField.disabled = true
-        if (process.env.ZETTLR_TRAY_ERROR !== undefined) {
-          leaveAppRunningField.info = process.env.ZETTLR_TRAY_ERROR
-        }
-      }
-    }
   },
   methods: {
     /**
@@ -283,7 +257,7 @@ export default {
      * @param   {string}  prop  The property that has changed
      * @param   {any}     val   The value of that property.
      */
-    handleInput: function (prop, val) {
+    handleInput: function (prop: string, val: any) {
       // We do have an easy time here
       if (prop === 'userDictionaryContents') {
         // The user dictionary is not handled by the config
@@ -294,14 +268,20 @@ export default {
           .catch(err => console.error(err))
       } else if (prop === 'availableDictionaries') {
         // We have to extract the selected dictionaries and send their keys only
-        const enabled = val.filter(elem => elem.selected).map(elem => elem.key)
-        global.config.set('selectedDicts', enabled)
+        const enabled = val.filter((elem: any) => elem.selected).map((elem: any) => elem.key)
+        ;(global as any).config.set('selectedDicts', enabled)
         // Additionally, we have to backpropagate the new stuff down the pipe
         // so that the list view has them again
       } else {
         // By default, we should have the correct value already, we just need to
         // treat (complex) lists as special (not even token inputs).
-        global.config.set(prop, val)
+
+        // NOTE: Due to Vue 3 we MUST deproxy anything here. Since config values
+        // are always either dictionaries, lists, or primitives, we can safely
+        // do it the brute-force-way and stringify it. This will basically read
+        // out every value from the proxy and store it in vanilla objects/arrays
+        // again.
+        (global as any).config.set(prop, JSON.parse(JSON.stringify(val)))
       }
     },
     /**
@@ -324,18 +304,15 @@ export default {
         command: 'get-available-languages'
       })
         .then((languages) => {
-          const field = modelToField('appLang', SCHEMA['tab-general'])
-
-          if (field !== undefined) {
-            const options = {}
-            languages.map(lang => {
-              options[lang] = trans('dialog.preferences.app_lang.' + lang)
-              return null
-            })
-            field.options = options
-          } else {
-            console.error('Could not set available languages')
-          }
+          const options: any = {}
+          languages.map((lang: string) => {
+            options[lang] = trans('dialog.preferences.app_lang.' + lang)
+            return null
+          })
+          this.appLangOptions = options
+          // Since we're setting something on the schema-side of things, we must
+          // regenerate the form here.
+          this.recreateSchema()
         })
         .catch(err => console.error(err))
 
@@ -344,8 +321,8 @@ export default {
         command: 'get-available-dictionaries'
       })
         .then((dictionaries) => {
-          const values = []
-          dictionaries.map(dict => {
+          const values: any = []
+          dictionaries.map((dict: string) => {
             values.push({
               selected: this.model.selectedDicts.includes(dict),
               key: dict,
@@ -366,9 +343,48 @@ export default {
           this.userDictionaryContents = dictionary
         })
         .catch(err => console.error(err))
+    },
+    recreateSchema: function () {
+      const currentTab = this.tabs[this.currentTab].controls
+
+      switch (currentTab) {
+        case 'tab-general':
+          this.schema = generalSchema()
+          break
+        case 'tab-editor':
+          this.schema = editorSchema()
+          break
+        case 'tab-export':
+          this.schema = exportSchema()
+          break
+        case 'tab-citations':
+          this.schema = citationSchema()
+          break
+        case 'tab-zettelkasten':
+          this.schema = zettelkastenSchema()
+          break
+        case 'tab-display':
+          this.schema = displaySchema()
+          break
+        case 'tab-spellchecking':
+          this.schema = spellcheckingSchema()
+          break
+        case 'tab-autocorrect':
+          this.schema = autocorrectSchema()
+          break
+        case 'tab-advanced':
+          this.schema = advancedSchema()
+          break
+      }
+
+      // Populate the appLang field with available options
+      if (this.tabs[this.currentTab].controls === 'tab-general') {
+        const field = modelToField('appLang', this.schema)
+        field.options = this.appLangOptions
+      }
     }
   }
-}
+})
 </script>
 
 <style lang="less">

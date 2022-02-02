@@ -20,12 +20,10 @@ import environmentCheck from './util/environment-check'
 import addToPath from './util/add-to-PATH'
 import resolveTimespanMs from './util/resolve-timespan-ms'
 import { loadI18n } from '../common/i18n-main'
-import isFile from '../common/util/is-file'
-import isDir from '../common/util/is-dir'
 import path from 'path'
 
 // Developer tools
-import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
 
 // Providers
 import AppearanceProvider from './service-providers/appearance-provider'
@@ -36,6 +34,7 @@ import CssProvider from './service-providers/css-provider'
 import DictionaryProvider from './service-providers/dictionary-provider'
 import LogProvider from './service-providers/log-provider'
 import MenuProvider from './service-providers/menu-provider'
+import LinkProvider from './service-providers/link-provider'
 import TagProvider from './service-providers/tag-provider'
 import TargetProvider from './service-providers/target-provider'
 import TranslationProvider from './service-providers/translation-provider'
@@ -54,6 +53,7 @@ let configProvider: ConfigProvider
 let cssProvider: CssProvider
 let dictionaryProvider: DictionaryProvider
 let logProvider: LogProvider
+let linkProvider: LinkProvider
 let tagProvider: TagProvider
 let targetProvider: TargetProvider
 let translationProvider: TranslationProvider
@@ -93,7 +93,7 @@ export async function bootApplication (): Promise<void> {
   // Before we begin, let's load the Vue.js DevTools for debugging
   try {
     // Load Vue developer extension
-    installExtension(VUEJS_DEVTOOLS)
+    installExtension(VUEJS3_DEVTOOLS)
       .then((name: string) => global.log.info(`Added DevTools extension:  ${name}`))
       .catch((err: any) => global.log.error(`Could not install DevTools extensions: ${String(err.message)}`, err))
   } catch (err) {
@@ -112,6 +112,16 @@ export async function bootApplication (): Promise<void> {
   // the config provider, as many providers require those to be alive.
   logProvider = new LogProvider()
   configProvider = new ConfigProvider()
+
+  // Initiate i18n after the config provider has definitely spun up
+  let metadata = await loadI18n(global.config.get('appLang'))
+
+  // It may be that only a fallback has been provided or else. In this case we
+  // must update the config to reflect this.
+  if (metadata.tag !== global.config.get('appLang')) {
+    global.config.set('appLang', metadata.tag)
+  }
+
   appearanceProvider = new AppearanceProvider()
   assetsProvider = new AssetsProvider()
   await assetsProvider.init()
@@ -119,6 +129,7 @@ export async function bootApplication (): Promise<void> {
   dictionaryProvider = new DictionaryProvider()
   recentDocsProvider = new RecentDocumentsProvider()
   menuProvider = new MenuProvider() // Requires config & recent docs providers
+  linkProvider = new LinkProvider()
   tagProvider = new TagProvider()
   targetProvider = new TargetProvider()
   cssProvider = new CssProvider()
@@ -128,32 +139,6 @@ export async function bootApplication (): Promise<void> {
   statsProvider = new StatsProvider()
   trayProvider = new TrayProvider()
 
-  // If the user has provided a working path to XeLaTeX, make sure that its
-  // directory name is in path for Zettlr to find it.
-  const xelatexPath: string = global.config.get('xelatex').trim()
-  const xelatexPathIsFile = isFile(xelatexPath)
-  const xelatexPathIsDir = isDir(xelatexPath)
-  if (xelatexPath !== '' && (xelatexPathIsFile || xelatexPathIsDir)) {
-    if (xelatexPathIsFile) {
-      addToPath(path.dirname(xelatexPath), 'unshift')
-    } else {
-      addToPath(xelatexPath, 'unshift')
-    }
-  }
-
-  // If the user has provided a working path to Pandoc, make sure that its
-  // directory name is in path for Zettlr to find it.
-  const pandocPath: string = global.config.get('pandoc').trim()
-  const pandocPathIsFile = isFile(pandocPath)
-  const pandocPathIsDir = isDir(pandocPath)
-  if (pandocPath !== '' && (pandocPathIsFile || pandocPathIsDir)) {
-    if (pandocPathIsFile) {
-      addToPath(path.dirname(pandocPath), 'unshift')
-    } else {
-      addToPath(pandocPath, 'unshift')
-    }
-  }
-
   // If we have a bundled pandoc, unshift its path to env.PATH in order to have
   // the system search there first for the binary, and not use the internal
   // one.
@@ -161,15 +146,6 @@ export async function bootApplication (): Promise<void> {
   if (process.env.PANDOC_PATH !== undefined && useBundledPandoc) {
     addToPath(path.dirname(process.env.PANDOC_PATH), 'unshift')
     global.log.info('[Application] The bundled pandoc executable is now in PATH. If you do not want to use the bundled pandoc, uncheck the corresponding setting and reboot the app.')
-  }
-
-  // Initiate i18n after the config provider has definitely spun up
-  let metadata = await loadI18n(global.config.get('appLang'))
-
-  // It may be that only a fallback has been provided or else. In this case we
-  // must update the config to reflect this.
-  if (metadata.tag !== global.config.get('appLang')) {
-    global.config.set('appLang', metadata.tag)
   }
 
   // Initial setting of the application menu.
@@ -191,6 +167,7 @@ export async function shutdownApplication (): Promise<void> {
   await safeShutdown(translationProvider)
   await safeShutdown(cssProvider)
   await safeShutdown(targetProvider)
+  await safeShutdown(linkProvider)
   await safeShutdown(tagProvider)
   await safeShutdown(menuProvider)
   await safeShutdown(recentDocsProvider)

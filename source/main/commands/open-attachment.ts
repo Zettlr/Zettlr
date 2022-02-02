@@ -17,10 +17,10 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { trans } from '../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 import got from 'got'
 import { shell } from 'electron'
-import pdfSorter from '../../common/util/sort-by-pdf'
+import pdfSorter from '@common/util/sort-by-pdf'
 
 export default class OpenAttachment extends ZettlrCommand {
   constructor (app: any) {

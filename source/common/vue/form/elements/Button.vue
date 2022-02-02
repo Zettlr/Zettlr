@@ -10,7 +10,6 @@
       v-bind:name="name"
       v-bind:disabled="disabled"
       v-bind:class="{ 'primary': primary }"
-      v-on:click="$emit('click')"
     >
       <clr-icon v-if="icon !== ''" v-bind:shape="icon"></clr-icon>
       {{ label }}

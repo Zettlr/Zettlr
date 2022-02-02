@@ -6,7 +6,6 @@
     v-bind:style="{
       textAlign: control.align
     }"
-    v-on:click="$emit('click')"
   >
     <strong v-if="control.style === 'strong'" v-html="control.content"></strong>
     <em v-else-if="control.style === 'emphasis'" v-html="control.content"></em>

@@ -25,6 +25,12 @@
  */
 declare module '*.png'
 declare module '*.svg'
+declare module '*.mp3'
+declare module '*.wav'
+
+declare module 'vue-virtual-scroller'
+declare module '@joplin/turndown'
+declare module 'joplin-turndown-plugin-gfm'
 
 /**
  * DECLARE ELECTRON-FORGE INSERTION VARIABLES
@@ -73,9 +79,6 @@ interface Application {
   showTagManager: () => void
   showAnyWindow: () => void
   findFile: (prop: any) => MDFileDescriptor | CodeFileDescriptor | null
-  findDir: (prop: any) => DirDescriptor | null
-  // Same as findFile, only with content
-  getFile: (fileDescriptor: MDFileDescriptor | CodeFileDescriptor) => Promise<MDFileMeta | CodeFileMeta>
 }
 
 /**
@@ -86,6 +89,7 @@ interface Application {
  * types files in ./source/app/service-providers/assets
  */
 declare module global {
+  import { TagProvider } from '@dts/common/tag-provider'
   var assets: AssetsProvider
   var css: CssProvider
   var dict: DictionaryProvider
@@ -102,6 +106,7 @@ declare module global {
   var updates: UpdateProvider
   var translations: any
   var targets: TargetProvider
+  var links: LinkProvider
   var tags: TagProvider
   var stats: StatsProvider
   var recentDocs: RecentDocumentsProvider
@@ -111,9 +116,17 @@ declare module global {
   var i18nFallback: any
   var i18nFallbackRawData: any
   var tray: TrayProvider
-  // This type is only required in the renderer processes since the
-  // applicationMenuHelper is shared via the browser process's window object.
-  var menuProvider: {
-    show: (position: Point | Rect, items: AnyMenuItem[], callback: (clickedID: string) => void, cleanup?: boolean) => () => void
-  }
+}
+
+// This interface is being produced by the MarkdownEditor module in source/common
+interface DocumentInfo {
+  words: number
+  chars: number
+  chars_wo_spaces: number
+  cursor: { ch: number, line: number }
+  selections: Array<{
+    selectionLength: number
+    start: { ch: number, line: number }
+    end: { ch: number, line: number }
+  }>
 }

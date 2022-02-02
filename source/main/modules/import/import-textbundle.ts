@@ -17,9 +17,9 @@ import { promises as fs } from 'fs'
 import { app } from 'electron'
 import ZIP from 'adm-zip'
 
-import { trans } from '../../../common/i18n-main'
-import isFile from '../../../common/util/is-file'
-import { DirDescriptor } from '../fsal/types'
+import { trans } from '@common/i18n-main'
+import isFile from '@common/util/is-file'
+import { DirDescriptor } from '@dts/main/fsal'
 
 /**
  * Imports both textpacks and textbundles to the target directory.

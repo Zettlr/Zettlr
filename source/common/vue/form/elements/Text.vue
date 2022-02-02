@@ -6,11 +6,11 @@
         v-bind:id="fieldID"
         ref="input"
         type="text"
-        v-bind:value="value"
+        v-bind:value="modelValue"
         v-bind:class="{ 'inline': inline }"
         v-bind:placeholder="placeholder"
         v-bind:disabled="disabled"
-        v-on:input="$emit('input', $event.target.value)"
+        v-on:input="$emit('update:modelValue', $event.target.value)"
         v-on:keyup.enter="$emit('confirm', $event.target.value)"
         v-on:keyup.esc="$emit('escape', $event.target.value)"
         v-on:blur="$emit('blur', $event.target.value)"
@@ -29,15 +29,16 @@
       v-bind:id="fieldID"
       ref="input"
       type="text"
-      v-bind:value="value"
+      v-bind:value="modelValue"
       v-bind:class="{ 'inline': inline }"
       v-bind:placeholder="placeholder"
       v-bind:disabled="disabled"
-      v-on:input="$emit('input', $event.target.value)"
+      v-on:input="$emit('update:modelValue', $event.target.value)"
       v-on:keyup.enter="$emit('confirm', $event.target.value)"
       v-on:keyup.esc="$emit('escape', $event.target.value)"
       v-on:blur="$emit('blur', $event.target.value)"
     >
+    <p v-if="info !== ''" class="info" v-html="info"></p>
   </div>
 </template>
 
@@ -55,12 +56,12 @@
  *
  * END HEADER
  */
-import { trans } from '../../../i18n-renderer'
+import { trans } from '@common/i18n-renderer'
 
 export default {
   name: 'FieldText',
   props: {
-    value: {
+    modelValue: {
       type: String,
       default: ''
     },
@@ -87,8 +88,13 @@ export default {
     inline: {
       type: Boolean,
       default: false
+    },
+    info: {
+      type: String,
+      default: ''
     }
   },
+  emits: [ 'update:modelValue', 'confirm', 'escape', 'blur' ],
   computed: {
     fieldID: function () {
       return 'field-input-' + this.name
@@ -100,7 +106,7 @@ export default {
   methods: {
     resetValue: function () {
       this.$refs.input.value = this.reset
-      this.$emit('input', this.reset)
+      this.$emit('update:modelValue', this.reset)
     },
     focus: function () {
       this.$refs.input.focus()
@@ -113,4 +119,8 @@ export default {
 </script>
 
 <style lang="less">
+body div.form-control p.info {
+  font-size: 70%;
+  opacity: 0.8;
+}
 </style>

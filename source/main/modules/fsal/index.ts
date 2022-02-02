@@ -15,11 +15,11 @@
 
 import path from 'path'
 import EventEmitter from 'events'
-import isFile from '../../../common/util/is-file'
-import isDir from '../../../common/util/is-dir'
-import isAttachment from '../../../common/util/is-attachment'
-import objectToArray from '../../../common/util/object-to-array'
-import findObject from '../../../common/util/find-object'
+import isFile from '@common/util/is-file'
+import isDir from '@common/util/is-dir'
+import isAttachment from '@common/util/is-attachment'
+import objectToArray from '@common/util/object-to-array'
+import findObject from '@common/util/find-object'
 import locateByPath from './util/locate-by-path'
 import * as FSALFile from './fsal-file'
 import * as FSALCodeFile from './fsal-code-file'
@@ -29,19 +29,18 @@ import FSALWatchdog from './fsal-watchdog'
 import FSALCache from './fsal-cache'
 import sort from './util/sort'
 import {
+  WatchdogEvent,
+  AnyDescriptor,
   DirDescriptor,
   MDFileDescriptor,
-  MDFileMeta,
-  AnyDescriptor,
-  MaybeRootMeta,
-  WatchdogEvent,
-  AnyMetaDescriptor,
-  MaybeRootDescriptor,
   CodeFileDescriptor,
-  CodeFileMeta,
-  OtherFileDescriptor
-} from './types'
-import { codeFileExtensions, mdFileExtensions } from '../../../common/get-file-extensions'
+  OtherFileDescriptor,
+  MaybeRootDescriptor
+} from '@dts/main/fsal'
+import { MDFileMeta, CodeFileMeta, AnyMetaDescriptor, MaybeRootMeta, FSALStats } from '@dts/common/fsal'
+import { codeFileExtensions, mdFileExtensions } from '@common/get-file-extensions'
+import { SearchTerm } from '@dts/common/search'
+import generateStats from './util/generate-stats'
 
 // Re-export all interfaces necessary for other parts of the code (Document Manager)
 export {
@@ -511,13 +510,13 @@ export default class FSAL extends EventEmitter {
    * Returns a lean directory tree, ready to be stringyfied for IPC calls.
    */
   public getTreeMeta (): MaybeRootMeta[] {
-    let ret = []
+    let ret: MaybeRootMeta[] = []
     for (let root of this._state.filetree) {
-      ret.push(this.getMetadataFor(root))
+      ret.push(this.getMetadataFor(root) as MaybeRootMeta)
     }
 
     // We know there are no undefines in here, so give to correct type
-    return ret as MaybeRootMeta[]
+    return ret
   }
 
   /**
@@ -527,12 +526,16 @@ export default class FSAL extends EventEmitter {
    *
    * @return  {AnyMetaDescriptor}          The metadata for that descriptor
    */
-  public getMetadataFor (descriptor: AnyDescriptor): AnyMetaDescriptor|undefined {
-    if (descriptor.type === 'directory') return FSALDir.metadata(descriptor)
-    if (descriptor.type === 'file') return FSALFile.metadata(descriptor)
-    if (descriptor.type === 'code') return FSALCodeFile.metadata(descriptor)
-    if (descriptor.type === 'other') return FSALAttachment.metadata(descriptor)
-    return undefined
+  public getMetadataFor (descriptor: AnyDescriptor): AnyMetaDescriptor {
+    if (descriptor.type === 'directory') {
+      return FSALDir.metadata(descriptor)
+    } else if (descriptor.type === 'file') {
+      return FSALFile.metadata(descriptor)
+    } else if (descriptor.type === 'code') {
+      return FSALCodeFile.metadata(descriptor)
+    } else {
+      return FSALAttachment.metadata(descriptor)
+    }
   }
 
   /**
@@ -636,98 +639,8 @@ export default class FSAL extends EventEmitter {
     return this._state.openDirectory
   }
 
-  public get statistics (): any {
-    // First, we need ALL of our loaded paths as an array
-    let pathsArray: Array<DirDescriptor|MDFileDescriptor|CodeFileDescriptor> = []
-    for (const descriptor of this._state.filetree) {
-      pathsArray = pathsArray.concat(objectToArray(descriptor, 'children'))
-    }
-
-    // Now only the files
-    const mdArray = pathsArray.filter(descriptor => descriptor.type === 'file') as MDFileDescriptor[]
-
-    // So, let's first get our min, max, mean, and median word and charcount
-    let minChars = Infinity
-    let maxChars = -Infinity
-    let minWords = Infinity
-    let maxWords = -Infinity
-    let sumChars = 0
-    let sumWords = 0
-
-    for (const descriptor of mdArray) {
-      if (descriptor.charCount < minChars) {
-        minChars = descriptor.charCount
-      }
-
-      if (descriptor.charCount > maxChars) {
-        maxChars = descriptor.charCount
-      }
-
-      if (descriptor.wordCount < minWords) {
-        minWords = descriptor.wordCount
-      }
-
-      if (descriptor.wordCount > maxWords) {
-        maxWords = descriptor.wordCount
-      }
-
-      sumChars += descriptor.charCount
-      sumWords += descriptor.wordCount
-    }
-
-    // Now calculate the mean
-    const meanChars = Math.round(sumChars / mdArray.length)
-    const meanWords = Math.round(sumWords / mdArray.length)
-
-    // Now we are interested in the standard deviation to calculate the
-    // spread of words in 95 and 99 percent intervals around the mean.
-    let charsSS = 0
-    let wordsSS = 0
-
-    for (const descriptor of mdArray) {
-      charsSS += (descriptor.charCount - meanChars) ** 2
-      wordsSS += (descriptor.wordCount - meanWords) ** 2
-    }
-
-    // Now the standard deviation
-    //                        |<      Variance      >|
-    const sdChars = Math.sqrt(charsSS / mdArray.length)
-    const sdWords = Math.sqrt(wordsSS / mdArray.length)
-
-    // Calculate the standard deviation interval bounds
-    const chars68PercentLower = Math.round(meanChars - sdChars)
-    const chars68PercentUpper = Math.round(meanChars + sdChars)
-    const chars95PercentLower = Math.round(meanChars - 2 * sdChars)
-    const chars95PercentUpper = Math.round(meanChars + 2 * sdChars)
-
-    const words68PercentLower = Math.round(meanWords - sdWords)
-    const words68PercentUpper = Math.round(meanWords + sdWords)
-    const words95PercentLower = Math.round(meanWords - 2 * sdWords)
-    const words95PercentUpper = Math.round(meanWords + 2 * sdWords)
-
-    return {
-      minChars: minChars,
-      maxChars: maxChars,
-      minWords: minWords,
-      maxWords: maxWords,
-      sumChars: sumChars,
-      sumWords: sumWords,
-      meanChars: meanChars,
-      meanWords: meanWords,
-      sdChars: Math.round(sdChars),
-      sdWords: Math.round(sdWords),
-      chars68PercentLower: (chars68PercentLower < minChars) ? minChars : chars68PercentLower,
-      chars68PercentUpper: (chars68PercentUpper > maxChars) ? maxChars : chars68PercentUpper,
-      chars95PercentLower: (chars95PercentLower < minChars) ? minChars : chars95PercentLower,
-      chars95PercentUpper: (chars95PercentUpper > maxChars) ? maxChars : chars95PercentUpper,
-      words68PercentLower: (words68PercentLower < minWords) ? minWords : words68PercentLower,
-      words68PercentUpper: (words68PercentUpper > maxWords) ? maxWords : words68PercentUpper,
-      words95PercentLower: (words95PercentLower < minWords) ? minWords : words95PercentLower,
-      words95PercentUpper: (words95PercentUpper > maxWords) ? maxWords : words95PercentUpper,
-      mdFileCount: pathsArray.filter(d => d.type === 'file').length,
-      codeFileCount: pathsArray.filter(d => d.type === 'code').length,
-      dirCount: pathsArray.filter(d => d.type === 'directory').length
-    }
+  public get statistics (): FSALStats {
+    return generateStats(this._state.filetree)
   }
 
   /**
@@ -826,7 +739,7 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  public async searchFile (src: MDFileDescriptor|CodeFileDescriptor, searchTerms: any): Promise<any> { // TODO: Implement search results type
+  public async searchFile (src: MDFileDescriptor|CodeFileDescriptor, searchTerms: SearchTerm[]): Promise<any> { // TODO: Implement search results type
     // NOTE: Generates no events
     // Searches a file and returns the result
     if (src.type === 'file') {
@@ -910,8 +823,8 @@ export default class FSAL extends EventEmitter {
     this._fsalIsBusy = true
 
     // Compute the paths to be replaced
-    let oldPrefix = path.join(src.dir, src.name)
-    let newPrefix = path.join(src.dir, newName)
+    const oldPrefix = path.join(src.dir, src.name)
+    const newPrefix = path.join(src.dir, newName)
 
     // Now that we have prepared potential updates,
     // let us perform the rename.

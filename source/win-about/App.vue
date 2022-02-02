@@ -8,7 +8,6 @@
     v-bind:tabbar-label="windowTitle"
     v-bind:disable-vibrancy="true"
     v-on:tab="currentTab = $event"
-    v-on:statusbar-click="handleClick($event)"
   >
     <!--
       To comply with ARIA, we have to wrap the form in a tab container because
@@ -37,7 +36,7 @@
   </WindowChrome>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -52,8 +51,9 @@
  * END HEADER
  */
 
-import WindowChrome from '../common/vue/window/Chrome.vue'
-import { trans } from '../common/i18n-renderer'
+import WindowChrome from '@common/vue/window/Chrome.vue'
+import { trans } from '@common/i18n-renderer'
+import { defineComponent } from 'vue'
 
 // Import the tabs
 import GeneralTab from './General-Tab.vue'
@@ -63,8 +63,9 @@ import ContributorsTab from './Contributors-Tab.vue'
 import LicenseTab from './License-Tab.vue'
 import FontLicenseTab from './Font-License-Tab.vue'
 import DebugTab from './Debug-Tab.vue'
+import { WindowTab } from '@dts/renderer/window'
 
-export default {
+export default defineComponent({
   components: {
     WindowChrome,
     GeneralTab,
@@ -121,19 +122,19 @@ export default {
           id: 'tab-debug-control',
           icon: 'dashboard'
         }
-      ]
+      ] as WindowTab[]
     }
   },
   computed: {
-    windowTitle: function () {
+    windowTitle: function (): string {
       if (process.platform === 'darwin') {
         return this.tabs[this.currentTab].label
       } else {
-        return trans('dialog.about.title') + ' ' + global.config.get('version')
+        return trans('dialog.about.title') + ' ' + (global as any).config.get('version')
       }
     }
   }
-}
+})
 </script>
 
 <style lang="less">

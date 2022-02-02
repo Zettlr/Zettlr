@@ -13,7 +13,7 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import objectToArray from '../../common/util/object-to-array'
+import objectToArray from '@common/util/object-to-array'
 import { makeExport } from '../modules/export'
 import { filter as minimatch } from 'minimatch'
 import { shell } from 'electron'
@@ -67,17 +67,24 @@ export default class DirProjectExport extends ZettlrCommand {
     for (const format of config.formats) {
       // Spin up one exporter per format.
       global.log.info(`[Project] Exporting ${dir.name} as ${format}.`)
+      let template
+      if ([ 'html', 'chromium-pdf' ].includes(format) && config.templates.html !== '') {
+        template = config.templates.html
+      } else if (format === 'latex-pdf' && config.templates.tex !== '') {
+        template = config.templates.tex
+      }
+
       try {
         const opt: ExporterOptions = {
           format: format,
           sourceFiles: files,
           targetDirectory: dir.path,
-          title: config.title,
-          cwd: dir.path
-        }
-
-        if (typeof config.cslStyle === 'string' && config.cslStyle.length > 0) {
-          opt.cslStyle = config.cslStyle
+          cwd: dir.path,
+          defaultsOverride: {
+            title: config.title,
+            csl: (typeof config.cslStyle === 'string' && config.cslStyle.length > 0) ? config.cslStyle : undefined,
+            template: template
+          }
         }
 
         const result = await makeExport(opt)

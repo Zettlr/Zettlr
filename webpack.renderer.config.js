@@ -1,7 +1,27 @@
 const rules = require('./webpack.rules')
+const path = require('path')
 
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const { VueLoaderPlugin } = require('vue-loader')
+const { DefinePlugin } = require('webpack')
+
+const plugins = [
+  // Apply webpack rules to the corresponding language blocks in .vue files
+  new VueLoaderPlugin(),
+
+  // Set a few Vue 3 options; see: http://link.vuejs.org/feature-flags
+  new DefinePlugin({
+    __VUE_OPTIONS_API__: true,
+    __VUE_PROD_DEVTOOLS__: false
+  })
+]
+
+if (process.env.SKIP_TYPECHECKING !== 'true') {
+  // Enhanced typescript support (e.g. moves typescript type checking to separate process)
+  plugins.push(new ForkTsCheckerWebpackPlugin())
+} else {
+  console.log('Skipping typechecking for this build!')
+}
 
 rules.push({
   test: /\.less$/,
@@ -39,18 +59,17 @@ module.exports = {
   // in production (i.e. when we ship to users). NOTE, however, that these env-
   // variables must be set, which we're doing using cross-env in package.json.
   devtool: (process.env.NODE_ENV === 'production') ? false : 'source-map',
-  plugins: [
-    // Enhanced typescript support (e.g. moves typescript type checking to separate process)
-    new ForkTsCheckerWebpackPlugin(),
-
-    // Apply webpack rules to the corresponding language blocks in .vue files
-    new VueLoaderPlugin()
-  ],
+  plugins: plugins,
   resolve: {
     extensions: [
       '.js', '.ts', '.jsx', '.tsx',
       '.css', '.less', '.vue'
     ],
+    alias: {
+      '@common': [path.resolve(__dirname, 'source/common')],
+      '@providers': [path.resolve(__dirname, 'source/app/service-providers')],
+      '@dts': [path.resolve(__dirname, 'source/types')]
+    },
     fallback: {
       // Don't polyfill these modules
       path: false,

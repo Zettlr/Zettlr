@@ -14,15 +14,16 @@
  * END HEADER
  */
 
-import windowRegister from '../common/modules/window-register'
-import Vue from 'vue'
+import windowRegister from '@common/modules/window-register'
+import { createApp } from 'vue'
 import App from './App.vue'
 
 const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
 windowRegister()
 
-const app = new Vue(App)
+const app = createApp(App)
+app.mount('#app')
 
 // This window will be closed immediately on a window-close command
 ipcRenderer.on('shortcut', (event, shortcut) => {
@@ -30,6 +31,3 @@ ipcRenderer.on('shortcut', (event, shortcut) => {
     ipcRenderer.send('window-controls', { command: 'win-close' })
   }
 })
-
-// In the end: mount the app onto the DOM
-app.$mount('#app')

@@ -27,10 +27,10 @@
       </p>
       <ListControl
         v-bind:label="exportFormatLabel"
-        v-bind:value="exportFormatList"
+        v-bind:model-value="exportFormatList"
         v-bind:labels="[exportFormatUseLabel, exportFormatNameLabel]"
         v-bind:editable="[0]"
-        v-on:input="selectExportFormat($event)"
+        v-on:update:model-value="selectExportFormat($event)"
       ></ListControl>
     </div>
     <div
@@ -55,11 +55,24 @@
         v-bind:reset="true"
         v-bind:filter="{'csl': 'CSL Stylesheet'}"
       ></FileControl>
+      <!-- Also, the other possible files users can override -->
+      <FileControl
+        v-model="texTemplate"
+        v-bind:label="'LaTeX Template'"
+        v-bind:reset="true"
+        v-bind:filter="{'tex': 'LaTeX Source'}"
+      ></FileControl>
+      <FileControl
+        v-model="htmlTemplate"
+        v-bind:label="'HTML Template'"
+        v-bind:reset="true"
+        v-bind:filter="{'html,htm': 'HTML Template'}"
+      ></FileControl>
     </div>
   </WindowChrome>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -74,16 +87,21 @@
  * END HEADER
  */
 
-import { trans } from '../common/i18n-renderer'
-import WindowChrome from '../common/vue/window/Chrome.vue'
-import ListControl from '../common/vue/form/elements/List'
-import FileControl from '../common/vue/form/elements/File'
-import TextControl from '../common/vue/form/elements/Text'
-import Vue from 'vue'
+import { trans } from '@common/i18n-renderer'
+import WindowChrome from '@common/vue/window/Chrome.vue'
+import ListControl from '@common/vue/form/elements/List.vue'
+import FileControl from '@common/vue/form/elements/File.vue'
+import TextControl from '@common/vue/form/elements/Text.vue'
+import { IpcRenderer } from 'electron'
+import { defineComponent } from 'vue'
+import { ProjectSettings } from '@dts/common/fsal'
+import { WindowTab } from '@dts/renderer/window'
 
-const ipcRenderer = window.ipc
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
-export default {
+interface ExportFormat { selected: boolean, format: string }
+
+export default defineComponent({
   components: {
     WindowChrome,
     ListControl,
@@ -93,35 +111,35 @@ export default {
   data: function () {
     return {
       dirPath: '',
-      exportFormatMap: {},
+      exportFormatMap: {} as { [key: string]: string },
       selectedExportFormats: [ 'html', 'chromium-pdf' ], // NOTE: Must correspond to the defaults in fsal-directory.ts
       patterns: [],
       cslStyle: '',
+      texTemplate: '',
+      htmlTemplate: '',
       projectTitle: '',
       tabs: [
         {
           id: 'formats-control',
-          target: 'formats-panel',
           label: 'General',
           icon: 'cog',
           controls: 'formats-panel'
         },
         {
           id: 'files-control',
-          target: 'files-panel',
           label: 'Files',
           icon: 'file-settings',
           controls: 'formats-panel'
         }
-      ],
+      ] as WindowTab[],
       currentTab: 0
     }
   },
   computed: {
-    windowTitle: function () {
+    windowTitle: function (): string {
       return this.projectTitle
     },
-    exportFormatList: function () {
+    exportFormatList: function (): ExportFormat[] {
       // We need to return a list of { selected: boolean, format: 'string' }
       return Object.keys(this.exportFormatMap).map(e => {
         return {
@@ -130,19 +148,19 @@ export default {
         }
       })
     },
-    exportFormatLabel: function () {
+    exportFormatLabel: function (): string {
       return trans('dialog.preferences.project.format')
     },
-    exportFormatUseLabel: function () {
+    exportFormatUseLabel: function (): string {
       return trans('dialog.preferences.project.use_label')
     },
-    exportFormatNameLabel: function () {
+    exportFormatNameLabel: function (): string {
       return trans('dialog.preferences.project.name_label')
     },
-    exportPatternLabel: function () {
+    exportPatternLabel: function (): string {
       return trans('dialog.preferences.project.pattern')
     },
-    exportPatternNameLabel: function () {
+    exportPatternNameLabel: function (): string {
       return trans('dialog.preferences.project.pattern_name')
     }
   },
@@ -157,6 +175,12 @@ export default {
       this.updateProperties()
     },
     cslStyle: function (newValue, oldValue) {
+      this.updateProperties()
+    },
+    texTemplate: function (newValue, oldValue) {
+      this.updateProperties()
+    },
+    htmlTemplate: function (newValue, oldValue) {
       this.updateProperties()
     },
     dirPath: function (newValue, oldValue) {
@@ -177,7 +201,7 @@ export default {
           // NOTE: We are switching "id: readable" to "readable: id" here so
           // that it's much easier to retrieve the identifier later on.
           for (const key in info.formats) {
-            Vue.set(this.exportFormatMap, info.formats[key], key)
+            this.exportFormatMap[info.formats[key]] = key
           }
         }
       })
@@ -198,7 +222,7 @@ export default {
     })
   },
   methods: {
-    selectExportFormat: function (newListVal) {
+    selectExportFormat: function (newListVal: ExportFormat[]) {
       const newFormats = newListVal.filter(e => e.selected).map(e => {
         return this.exportFormatMap[e.format]
       })
@@ -210,11 +234,15 @@ export default {
         command: 'update-project-properties',
         payload: {
           properties: {
-            formats: this.selectedExportFormats,
-            filters: this.patterns,
+            formats: this.selectedExportFormats.map(e => e), // De-proxy
+            filters: this.patterns.map(e => e), // De-proxy
             cslStyle: this.cslStyle,
-            title: this.projectTitle
-          },
+            title: this.projectTitle,
+            templates: {
+              tex: this.texTemplate,
+              html: this.htmlTemplate
+            }
+          } as ProjectSettings,
           path: this.dirPath
         }
       }).catch(err => console.error(err))
@@ -230,6 +258,8 @@ export default {
             this.selectedExportFormats = descriptor.project.formats
             this.patterns = descriptor.project.filters
             this.cslStyle = descriptor.project.cslStyle
+            this.htmlTemplate = descriptor.project.templates.html
+            this.texTemplate = descriptor.project.templates.tex
             this.projectTitle = descriptor.project.title
           } else {
             // Apparently the user kept the window open and removed the project
@@ -240,7 +270,7 @@ export default {
         .catch(err => console.error(err))
     }
   }
-}
+})
 </script>
 
 <style lang="less">

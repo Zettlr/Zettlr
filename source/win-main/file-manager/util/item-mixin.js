@@ -20,8 +20,10 @@
 // logic, since both represent the same data structures.
 import fileContextMenu from './file-item-context'
 import dirContextMenu from './dir-item-context'
-import PopoverFileProps from './PopoverFileProps'
-import PopoverDirProps from './PopoverDirProps'
+import PopoverFileProps from './PopoverFileProps.vue'
+import PopoverDirProps from './PopoverDirProps.vue'
+
+import { nextTick } from 'vue'
 
 const ipcRenderer = window.ipc
 
@@ -54,7 +56,7 @@ export default {
         return // No need to select
       }
 
-      this.$nextTick(() => {
+      nextTick().then(() => {
         this.$refs['name-editing-input'].focus()
         // Select from the beginning until the last dot
         this.$refs['name-editing-input'].setSelectionRange(
@@ -62,18 +64,8 @@ export default {
           this.$refs['name-editing-input'].value.lastIndexOf('.')
         )
       })
+        .catch(err => console.error(err))
     }
-  },
-  mounted: function () {
-    // As soon as this element is mounted (irrespective of tree/list item),
-    // listen to events that trigger something on this object.
-    ipcRenderer.on('shortcut', (event, command) => {
-      if (command === 'rename-file' && this.obj.path === this.selectedFile.path) {
-        this.nameEditing = true
-      } else if (command === 'rename-dir' && this.obj.path === this.selectedDir.path) {
-        this.nameEditing = true
-      }
-    })
   },
   methods: {
     /**

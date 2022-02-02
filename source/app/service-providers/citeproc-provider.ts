@@ -19,11 +19,11 @@ import { FSWatcher } from 'chokidar'
 import { ipcMain } from 'electron'
 import { promises as fs, readFileSync } from 'fs'
 import path from 'path'
-import { trans } from '../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 import extractBibTexAttachments from './assets/extract-bibtex-attachments'
 import { parse as parseBibTex } from 'astrocite-bibtex'
 import YAML from 'yaml'
-import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
+import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 
 interface DatabaseRecord {
   path: string
@@ -105,7 +105,9 @@ export default class CiteprocProvider {
     this._watcher = new FSWatcher({
       ignored: /(^|[/\\])\../,
       persistent: true,
-      ignoreInitial: true
+      ignoreInitial: true,
+      // See for the following property the file source/main/modules/fsal/fsal-watchdog.ts
+      interval: 5000
     })
 
     this._watcher.on('all', (eventName, affectedPath) => {
@@ -128,7 +130,28 @@ export default class CiteprocProvider {
             }
           })
           .catch(err => {
-            global.log.error(`[Citeproc Provider] Could not reload affected database ${affectedPath}: ${String(err.message)}`, err)
+            if (err.message === 'Unexpected end of JSON input') {
+              // This error message indicates that the database hasn't yet been
+              // fully written. This happens often with large databases
+              // containing several thousand elements. So in this case we
+              // schedule a reload for in 5 seconds from now, since then it
+              // should be written successfully.
+              global.log.warning(`[Citeproc Provider] Reloading ${affectedPath} failed, but the error indicated it needs more time to finish writing. Attempting again in 5 seconds. If this happens often, try to reduce the size of the database file.`)
+              setTimeout(() => {
+                this._loadDatabase(affectedPath)
+                  .then(db => {
+                    if (isSelected) {
+                      // Reselect
+                      this._selectDatabase(affectedPath)
+                    }
+                  })
+                  .catch(err => {
+                    global.log.error(`[Citeproc Provider] Could not reload database ${affectedPath} after second attempt: ${String(err.message)}`, err)
+                  })
+              }, 5000)
+            } else {
+              global.log.error(`[Citeproc Provider] Could not reload affected database ${affectedPath}: ${String(err.message)}`, err)
+            }
           })
       } else if (eventName === 'unlink') {
         global.log.warning(`[Citeproc Provider] Database ${affectedPath} has been removed remotely. Unloading from processor ...`)

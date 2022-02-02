@@ -13,8 +13,8 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { trans } from '../../common/i18n-main'
-import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '../modules/fsal/types'
+import { trans } from '@common/i18n-main'
+import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/main/fsal'
 
 export default class RequestMove extends ZettlrCommand {
   constructor (app: any) {
@@ -42,6 +42,14 @@ export default class RequestMove extends ZettlrCommand {
     if (to === null || from === null) {
       // If findDir doesn't return anything then it's a file
       global.log.error('Could not find the target directory for moving.')
+      return false
+    }
+
+    // It can happen that the user begins to drag a file but then realizes they
+    // don't want to move the file, so they will just drop it in the origin
+    // directory. Without the following check they would be presented with an
+    // unwanted "file already exists in target directory"-message.
+    if (to.path === from.dir) {
       return false
     }
 

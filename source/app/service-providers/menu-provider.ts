@@ -20,7 +20,7 @@ import {
   app
 } from 'electron'
 
-import broadcastIPCMessage from '../../common/util/broadcast-ipc-message'
+import broadcastIPCMessage from '@common/util/broadcast-ipc-message'
 
 // Import the menu constructors
 import win32Menu from './assets/menu.win32'
@@ -124,6 +124,11 @@ export default class MenuProvider {
 
         // Send the serialized submenu to the renderer
         const menuItem = appMenu.getMenuItemById(itemID)
+        if (menuItem === null) {
+          global.log.error(`[Menu Provider] Could not send app menu ${itemID}: No item found.`)
+          return
+        }
+
         event.reply('menu-provider', {
           command: 'application-submenu',
           payload: {
@@ -143,7 +148,7 @@ export default class MenuProvider {
         const menuItem = appMenu.getMenuItemById(itemID)
 
         if (menuItem === null) {
-          global.log.error(`[Menu Provider] Could not rigger a click on item ${itemID}: No item found.`)
+          global.log.error(`[Menu Provider] Could not trigger a click on item ${itemID}: No item found.`)
           return
         }
 
@@ -287,7 +292,7 @@ export default class MenuProvider {
    *
    * @return  {any}            The serialized item
    */
-  _makeItemSerializable (menuItem: any): AnyMenuItem {
+  _makeItemSerializable (menuItem: Electron.MenuItem): AnyMenuItem {
     let serializableItem: any = {
       label: menuItem.label,
       id: menuItem.id,

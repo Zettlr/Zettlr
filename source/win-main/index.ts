@@ -12,9 +12,9 @@
  * END HEADER
  */
 
-import windowRegister from '../common/modules/window-register'
-import Vue from 'vue'
-import Vuex from 'vuex'
+import windowRegister from '@common/modules/window-register'
+import { createApp } from 'vue'
+// import { createStore } from 'vuex'
 import App from './App.vue'
 import createStore from './store'
 import PopupProvider from './popup-provider'
@@ -24,14 +24,11 @@ const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 // The first thing we have to do is run the window controller
 windowRegister()
 
-Vue.use(Vuex)
-Vue.use(PopupProvider) // Exposes $showPopover, $togglePopover, and $closePopover
+const appStore = createStore()
 
-// Create the Vue app
-const app = new Vue({
-  ...App,
-  store: createStore()
-})
+// Create the Vue app. We additionally use appStore, which exposes $store, and
+// PopupProvider, which exposes $showPopover, $togglePopover, and $closePopover
+const app = createApp(App).use(appStore).use(PopupProvider).mount('#app')
 
 document.addEventListener('dragover', function (event) {
   event.preventDefault()
@@ -55,13 +52,10 @@ document.addEventListener('drop', (event) => {
     }
   }
 
-  ipcRenderer.invoke('application', { command: 'handle-drop', payload: f })
+  ipcRenderer.invoke('application', { command: 'roots-add', payload: f })
     .catch(e => console.error(e))
   return false
 }, false)
-
-// In the end: mount the app onto the DOM
-app.$mount('#app')
 
 // -----------------------------------------------------------------------------
 

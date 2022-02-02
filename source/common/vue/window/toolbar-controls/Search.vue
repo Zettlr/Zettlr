@@ -11,8 +11,8 @@
       type="search"
       class="toolbar-search"
       v-bind:placeholder="control.placeholder"
-      v-on:input="$emit('input', $event.target.value)"
-      v-on:keypress.enter="$emit('input', $event.target.value)"
+      v-on:input="$emit('update:modelValue', $event.target.value)"
+      v-on:keypress.enter="$emit('update:modelValue', $event.target.value)"
     >
   </div>
 </template>
@@ -43,6 +43,7 @@ export default {
       default: function () { return {} }
     }
   },
+  emits: ['update:modelValue'],
   created: function () {
     /**
      * Listen to shortcuts from the menu provider
@@ -96,6 +97,7 @@ body.darwin {
 
     .toolbar-search {
       width: 0%;
+      opacity: 0;
       &::placeholder { color: rgb(190, 190, 190); }
     }
 
@@ -107,6 +109,7 @@ body.darwin {
 
     &:focus-within .toolbar-search {
       width: 100%;
+      opacity: 1;
     }
   }
 

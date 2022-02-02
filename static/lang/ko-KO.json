@@ -2,15 +2,16 @@
     "metadata": {
         "authors": [
             "Beomsu Chang \u003Cpauljang9@gmail.com\u003E",
+            "OctopusET \u003Csumoon@seoulsaram.org\u003E",
             "Chanshik Lim \u003Cchanshik@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-06-05T05:45:12.000000Z"
+        "updated_at": "2022-01-24T04:14:21.000000Z"
     },
     "dialog": {
         "about": {
             "astrocite": "Zettlr\uc774 BibTex \ub77c\uc774\ube0c\ub7ec\ub9ac\uc758 \uc778\uc6a9(citation)\uc744 \ud45c\uc2dc",
-            "chartjs": "\uc4f4 \uae00\uc758 \ud1b5\uacc4\ub97c \uba4b\uc9c4 \ucc28\ud2b8\ub85c \ud45c\uc2dc",
+            "chartjs": "\uc791\uc131\ud55c \uae00\uc758 \ud1b5\uacc4\ub97c \uba4b\uc9c4 \ucc28\ud2b8\ub85c \ud45c\uc2dc",
             "chokidar": "\uc571 \uc678\ubd80\uc5d0\uc11c \ud30c\uc77c\uc774 \ubcc0\uacbd\ub41c \uac83\uc744 \uac10\uc9c0",
             "citationstyle": "Zettlr\ub294 citeproc\uc744 \uc0ac\uc6a9\ud558\uc5ec \ud3b8\uc9d1\uae30\uc5d0\uc11c \uc9c1\uc811 \uc778\uc6a9\uc744 \ud45c\uc2dc\ud569\ub2c8\ub2e4. \uc774\ub97c \uc704\ud574 Zettlr\ub294 CitationStyleLanguage(CSL) \uc5b8\uc5b4\uc640 \uc2a4\ud0c0\uc77c \ud30c\uc77c\uc744 \uc0ac\uc6a9\ud569\ub2c8\ub2e4. \ud30c\uc77c\uc740 \ubcc0\uacbd\ub418\uc9c0 \uc54a\uace0 \uc791\uc131\uc790 \uba54\ud0c0\ub370\uc774\ud130\uc640 \ud568\uaed8 \ud3ec\ud568\ub429\ub2c8\ub2e4. \ucd94\uac00 \uc815\ubcf4:",
             "citeproc": "\ubaa8\ub4e0 \uc791\uc5c5\uc744 \uc704\ud55c \uc815\ud655\ud55c \uc778\uc6a9 \ub80c\ub354\ub9c1",

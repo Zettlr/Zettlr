@@ -15,7 +15,7 @@
 import ZettlrCommand from './zettlr-command'
 import { promises as fs } from 'fs'
 import path from 'path'
-import { codeFileExtensions, mdFileExtensions } from '../../common/get-file-extensions'
+import { codeFileExtensions, mdFileExtensions } from '@common/get-file-extensions'
 
 const ALLOWED_FILETYPES = mdFileExtensions(true)
 const CODE_FILETYPES = codeFileExtensions(true)

@@ -1,20 +1,267 @@
-# 2.0.4
+# 2.1.4
 
 ## GUI and Functionality
 
+- Tags and keywords within a YAML frontmatter are now clickable
+- AutoCorrect values are no longer detected as spelling mistakes
+- Fix an issue with false detection of footnote reference texts
+- Fix link resolving: Now files dropped onto the editor will be easier to detect
+  as files (rather than weblinks) so that more documents should easily be opened
+- Fixed some reloading issues with very large citation databases
+- Fixed a visual glitch when choosing to "Open in a new tab" in a note preview
+- Fix a regression that inserting pasted image paths into the editor didn't work
+- Fix wrong display of citations if there was an error rendering the citation
+- The tutorial is now also available after the first start; you can reopen it
+  any time from the Help menu
+- The autocompletion popup doesn't disappear anymore if you completely remove
+  anything already written to begin anew
+
+## Under the Hood
+
+- Update Pandoc to 2.17.0.1
+- Activate watchdog polling for the citeproc provider. This should reduce issues
+  with very large citation databases.
+- If the error message upon a failed database reload indicates that the file was
+  simply incomplete, the citeproc provider now attempts a second reload after a
+  delay of 5 seconds
+- Moved the workspace and root file opening logic into their own command
+- Make the ZettlrCommand base class abstract and require constraints on derived
+
+# 2.1.3
+
+## GUI and Functionality
+
+- Display inline math using monospaced font
+- Right-clicking citations doesn't select parts of it anymore
+- Inline-equations are now properly syntax highlighted
+- Fixed a bug that caused unintentional pastes when closing a tab using the
+  middle mouse button on Linux
+- Heavily improved the full text search: Previously, certain files that should
+  have been returned for specific search terms were not considered a match, and
+  multiple results per line were mostly not reported; additionally, search
+  results are now ordered by relevancy and the search results are marked more
+  visibly
+- Heavily improved the table editor user interface: Now the table editor will on
+  certain actions write all changes back to the document so that the possibility
+  of data loss involves a single table cell at most in case the user forgets to
+  un-focus the table. Furthermore, the table editor will now not be removed from
+  the document when it loses focus, and instead the table will be updated
+  silently
+- The log viewer now only displays errors and warnings initially
+- Fix a small visual glitch on macOS for toolbar searches
+- Added "Open in new Tab" button to link preview tooltip, when user has
+  preference "Avoid Opening Files in New Tabs" set to true
+- Fix `Use the CodeMirror default actions for Home and End` preference not
+  working on MacOS
+- Fix task item strikethrough appearing laggy
+- Fix task item strikethrough covering the preceding whitespace
+- On macOS, file tree icons are now displayed using the theme/system color. On
+  all platforms, you can customize the appearance using the selector
+  `body .tree-item clr-icon.special` (including platform/mode selectors)
+- Improve the readability mode: Now it will not render a YAML frontmatter and it
+  will additionally treat sentences smarter than before
+- Fixed an issue that would sometimes break images when you edited the caption
+  in the rendered image caption.
+- Enable resetting of the custom Zettelkasten directory
+- The default value for "Use system accent color" is now off for all platforms
+  except macOS
+- The app now remembers if you had the sidebar open, and which tab you selected
+- The app now remembers your recent global searches
+- The file tree now expands when you are filtering for files/directories
+- Translate the auto dark mode start/end setting strings
+- The ToC now displays the currently active section
+- Fix file manager always showing word count, even if user selected character
+  count in preferences
+- When clicking on a heading in the ToC, the cursor is now set to that heading
+  and the editor is focused immediately
+- Fix recent documents items not being clickable in Linux
+- Fix drag & drop of files onto the editor
+- Fix some bugs in the link opener
+
+## Under the Hood
+
+- Update Pandoc to 2.17
+- Removed the unused PDF settings from the config
+- Removed the unused `pandoc` and `xelatex` config options
+- Convert all MarkdownEditor hooks and plugins to TypeScript
+- Tests now simply transpile without type checking
+- Move service provider types to the new types directory
+- Provide `@dts` as an alias to retrieve typings
+- Move FSAL types to the new types directory
+- Convert the remaining utility functions to TypeScript
+- Polyfill the `path` module in renderer processes
+- Convert the MainSidebar component to TypeScript
+- Move out the statistics calculation from the FSAL
+- The `yarn package` and `yarn test-gui` commands now skip typechecking,
+  reducing build time by a large margin
+
+# 2.1.2
+
+## GUI and Functionality
+
+- **New Feature**: You now have more fine-grained control over how your files
+  are displayed: You can now select if the filename is always used or a title
+  or first heading level 1 is used (if applicable)
+- **New Feature**: You can now also fold nested lists
+- **New Feature**: You can now choose to display the file extensions of Markdown
+- **New Feature**: You can now choose to always only link using filenames
+- The Vim input mode of the editor started working again, so we are re-enabling
+  it with this update
+- Fixed an error that would cause the global search to malfunction if you
+  followed a link which then started a global search while the file manager was
+  hidden
+- Removed an unused preference
+- Rearranged some preferences
+- On Windows, tabbed windows will automatically hide their labels if the window
+  becomes too narrow
+- Reinstated the info on what variables you could use in the Zettelkasten
+  generator
+- Zettlr displays info text below some preferences again
+- Citations are now first-class citizens and got their own preferences tab
+- Fixed a small error that would close additional files when you renamed a file
+  that was also currently open
+- Fixed the context menu not showing during a full text search on macOS
+- When something goes wrong during opening of a new workspace or root file, the
+  error messages will now be more meaningful
+- Small improvement that will not detect Setext headings level 2 without a
+  following empty line. This prevents some instances of data loss where users
+  forget this empty line and thus accidentally create a valid simple table
+- Fixed an issue where the indentation of wrapped lines would look off after
+  changing the theme or modifying the editor font via custom CSS
+- Fixed the vim mode cursor being barely visible in dark mode
+- Done task list items will now be stroked out faster
+
+## Under the Hood
+
+- Convert the MarkdownEditor to ES modules and TypeScript
+- Make the `dot-notation` rule optional
+
+# 2.1.1
+
+## GUI and Functionality
+
+- **New Feature**: Zettlr now accounts for backlinks to the currently active
+  file, which means it now displays files which link to the current file in the
+  sidebar
+- New setting: You can now choose to hide the toolbar while in distraction-free
+  mode
+- Improved placement of the popup displayed by the Input Method Editor (IME) for
+  writing non-alphabetic characters (e.g. Chinese, Japanese, or Korean)
+- During drag&drop, you can now rest over a collapsed directory for longer than
+  two seconds to have it automatically uncollapse -- this way you can reach
+  deeper nested directories without having to stop the operation
+- Clicking a search result in the global search sidebar will now highlight it
+  in the sidebar
+- The search now also starts when you press Enter while the restriction input is
+  focused
+- If you abort moving a file by dropping it onto its source directory, Zettlr
+  will silently abort the move without nagging you about the fact that the
+  target directory obviously already contains a file of the same name
+- Renaming root-directories will now ensure the new path of the directory is
+  persisted to the configuration
+- Fix a rare error that would incapacitate the Math equation renderer
+- Fixed an error that would sometimes prevent the autocomplete popup to close
+  until the main window was closed and reopened (or the app is restarted)
+- Fixed an error that would prevent a global search if no directory is selected
+- Fixed a bug that disabled the table insertion toolbar button in the previous
+  version
+- Fixed an issue preventing updates of lists in the preferences
+- Fixed an issue not displaying the currently selected theme in the preferences
+
+## Under the Hood
+
+- Update to Electron 16
+- Make sure to de-proxy the tag database before sending it to the MdEditor
+- Remove the `openDocuments` array from the Vue component data
+- Convert the MainEditor component to TypeScript
+- Added a `@providers` alias for easy referencing of service providers
+
+# 2.1.0
+
+## GUI and Functionality
+
+- **New Feature**: Implemented "forward" and "back" actions, which are
+  especially useful for people managing a Zettelkasten and frequently follow
+  links: Now you can go back and forth between opened files (shortcuts:
+  `Cmd/Ctrl+[` and `Cmd/Ctrl+]`) so you can more quickly navigate your files
 - Fixed an error in the link filtering process that would throw an error when
   you attempted to remove internal links completely upon export
+- Fixed `Cmd/Ctrl-Click`-behavior on footnotes
+- Dragging and dropping files (both from the desktop and the sidebar) now always
+  inserts relative paths
+- More reactive updating of the related files section
+- Improvements during insertion of snippets
+- The footnote editor now has a consistent background color in dark mode
+- You can now open linked files from within the preview tooltips
+- Removed the shortcut to rename directories since that was rarely used and
+  could confuse users since it was not obvious where the directory is in the
+  file manager
+- Moved the file renaming process via shortcut to the document tabs since it's
+  much more visible there
+- Fix a very rare bug in which selections inside headings would look off
+- Fixed an error that would fail the print preview if you had images with
+  relative paths in your document
+- Internal links to files that contain a period should work now (except what
+  follows exactly matches an allowed Markdown file extension)
+- Scrollbars on Windows and Linux should now switch colors according to the
+  app's dark mode setting
+- Zettlr doesn't detect links to other headings in the form of `[link](#target)`
+  as tags anymore
+- Reinstated the ability to use pure number tags or hexadecimal numbers as tags
+- Using the shortcut `Ctrl-Shift-V` to paste something as plain text will no
+  longer paste it twice on Windows and Linux
+- Zettlr can now be started minimized (in the tray/notification area) by passing
+  the CLI flag `--launch-minimized`, which means the main window will not be
+  shown after launching the app
+- On single-file export, unsaved changes are now also exported
+- MagicQuotes can now surround selections
+- File duplication will now make sure to always create new files instead of
+  overwriting existing ones
+- Attempt to scroll back to the correct position after applying remote changes
+- Adapt styles on Windows
+- You can now specify a TeX template and an HTML template for projects
+- Fix double titlebars on Windows and Linux when displaying modals
+- Following internal links now also works for systems in which the ID is part of
+  the file name
+- Updated the display name in the Add/Remove Programs entry for Windows
+- Task list items in the editor are now correctly spaced again
+- Fixed a bug that would render it impossible to open images and files with non-
+  ASCII characters within their path
+- You can now copy the underlying equation code for LaTeX equations
 
 ## Under the Hood
 
 - Added a further check to the filter copying. Since the filters that ship with
   Zettlr are bound to the inner workings of the app, we should always overwrite
   them if applicable (to ensure they are updated with the app), unlike the
-  defaults which people should be able to modify with us messing with them
-- Sanitized and standardized all Vue component names and application entry points
+  defaults which people should be able to modify without us messing with them
+- Sanitized and standardized all Vue component names and app entry points
 - Fix a whole bunch of linter warnings
 - Remove the custom event system (`$on`, `$off`, and `$once`) in preparation for
   Vue 3
+- Switched to Vue 3 (incl. Vuex 4, vue-loader 16, vue-virtual-scroller 2)
+- The state is now being instantiated using a function which adds reactivity
+- The modified documents are now updated in such a way that attached watchers
+  are notified
+- The snippet insertion process is now much more precise and allows snippets to
+  be inserted at any point within non-empty lines without any quirks
+- Update Pandoc to 2.16.2
+- The VS Code debugger now uses the `test-gui` configuration and not the regular
+  (potentially critical) main configuration; NOTE that this means you must run
+  the `test-gui` command first to generate that data-dir in the first place
+  before starting the debugger
+- Cleaned up the handler for rendering task-list items
+- Switched the windows update, tag-manager, stats, quicklook, project-properties,
+  print, paste-image, log-viewer, error, assets, preferences, and about to
+  TypeScript
+- `extractYamlFrontmatter` does not require the linefeed anymore
+- Remove the `openFile` method from the main Zettlr object. Use
+  `getDocumentManager().openFile` instead to open a file
+- Add an automatic updater for `CITATION.cff`
+- Zettlr now extracts outlinks from a file and adds them to descriptors
+- Added `@common` as a shorthand alias for importing files within the `common`-
+  directory
+- The file autocompletion database now uses the full paths to index files
 
 # 2.0.3
 

@@ -37,7 +37,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -52,12 +52,14 @@
  * END HEADER
  */
 
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'DebugTab',
   data: function () {
     return {
-      version: global.config.get('version'),
-      uuid: global.config.get('uuid'),
+      version: (global as any).config.get('version'),
+      uuid: (global as any).config.get('uuid'),
       versions: process.versions,
       argv: process.argv,
       arch: process.arch,
@@ -68,7 +70,7 @@ export default {
   },
   methods: {
   }
-}
+})
 </script>
 
 <style lang="less">

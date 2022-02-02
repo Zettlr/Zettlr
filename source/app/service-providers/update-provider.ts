@@ -23,12 +23,12 @@ import path from 'path'
 import crypto from 'crypto'
 import got, { Response } from 'got'
 import semver from 'semver'
-import md2html from '../../common/util/md-to-html'
+import md2html from '@common/util/md-to-html'
 
 import { ipcMain, app, shell } from 'electron'
-import { trans } from '../../common/i18n-main'
-import isFile from '../../common/util/is-file'
-import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
+import { trans } from '@common/i18n-main'
+import isFile from '@common/util/is-file'
+import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 
 const CUR_VER = app.getVersion()
 const REPO_URL = 'https://zettlr.com/api/releases/latest'

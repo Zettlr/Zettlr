@@ -2,18 +2,20 @@
     "metadata": {
         "authors": [
             "Giulio A. Carta \u003Cgcarta2@gmail.com\u003E",
+            "albano \u003Calbano_battistella@hotmail.com\u003E",
             "cirlo \u003Ccarlo.castoldi@outlook.com\u003E",
             "Fastbyte01 \u003Crogepix@gmail.com\u003E",
-            "albano \u003Calbano_battistella@hotmail.com\u003E",
-            "Vezzoo"
+            "Giasone17",
+            "Vezzoo",
+            "Damiano Parravano \u003Cdamiafix@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-05-24T18:51:01.000000Z"
+        "updated_at": "2022-01-04T09:08:17.000000Z"
     },
     "dialog": {
         "about": {
             "astrocite": "Consente a Zettlr di mostrare le citazioni dalle librerie BibTex",
-            "chartjs": "Visualizza un grafico delle attivit\u00e0 di scrittura",
+            "chartjs": "Visualizza le tue statistiche di scrittura in un bel grafico",
             "chokidar": "Rileva le modifiche ai file effettuate esternamente al programma",
             "citationstyle": "Zettlr utilizza citeproc per mostrare le citazioni direttamente nell'editor. A questo scopo, Zettlr usa il linguaggio CitationStyleLanguage (CSL) e i relativi file di stile. I file sono stati inviati inalterati con i metadata dell'autore. Maggiori informazioni:",
             "citeproc": "Riporta le citazioni corrette per tutti i lavori",
@@ -37,11 +39,18 @@
             "cancel": "Annulla",
             "choose_path": "Apri cartella...",
             "close": "Chiudi",
+            "close_without_saving": "Chiudi senza salvare",
             "save": "Salva"
         },
         "custom_css": {
             "info": "Qui puoi sovrascrivere lo stile di Zettlr per personalizzarlo ulteriormente. \u003Cstrong\u003EAttenzione: Questo file sovrascrive tutte le direttive CSS! Non modificare la geometria degli elementi, o l'app potrebbe comportarsi in maniera indesiderata\u003C/strong\u003E",
             "title": "CSS Personalizzato"
+        },
+        "defaults": {
+            "explanation": "Modifica qui le impostazioni di default per importazione ed esportazione.",
+            "exporting_title": "Esportando",
+            "importing_title": "Importando",
+            "restore": "Ripristina i file di default"
         },
         "dir_new": {
             "placeholder": "Nome cartella",
@@ -70,9 +79,13 @@
         },
         "filter_tags": "Filtra i tag...",
         "find": {
+            "close_label": "Chiudi ricerca",
             "find_label": "Cerca",
             "find_placeholder": "Cerca...",
+            "regex_label": "Attiva ricerca con espressione regolare (RegEx)",
+            "replace_all_label": "Sostituisci tutte le occorrenze",
             "replace_label": "Sostituisci",
+            "replace_next_label": "Sostituisci la prossima occorrenza",
             "replace_placeholder": "Sostituisci con"
         },
         "paste_image": {
@@ -166,6 +179,12 @@
             "auto_dark_mode_schedule": "Orario",
             "auto_dark_mode_schedule_format": "HH:MM (formato 24h)",
             "auto_dark_mode_system": "Segui il Sistema Operativo",
+            "auto_save": {
+                "delayed": "Dopo un breve ritardo",
+                "immediately": "Immediatamente",
+                "label": "Autosalvataggio",
+                "off": "No"
+            },
             "autocomplete_accept_space": "Accetta gli spazi durante l'autocompletamento",
             "autocorrect": {
                 "active_label": "Attiva Correzione automatica",
@@ -182,13 +201,18 @@
             "checkForBeta": "Segnalami il rilascio di versioni beta",
             "choose_file": "Scegli file...",
             "citation_database": "Database di Citazioni (CSL JSON o BibTex)",
+            "cite_style_label": "Come vorresti l'autocompletamento per inserire le tue citazioni?",
             "count_chars": "Conta i caratteri invece che le parole (ad es., per Cinese)",
             "creationtime": "Data di creazione",
+            "dark_mode": "Modalit\u00e0 scura",
             "debug": "Attiva la modalit\u00e0 debug",
             "default_image_save_path": "Percorso predefinito delle immagini (relativo o assoluto)",
             "delete_on_fail": "Cancella gli oggetti irreversibilmente, se non \u00e8 possibile spostarli nel cestino",
             "display": {
+                "hide_toolbar_distraction_free": "Nascondi la barra degli strumenti in modalit\u00e0 senza-distrazioni",
+                "image_height": "Altezza massima delle immagini (percentuale)",
                 "image_size_info": "Con questi controlli puoi vincolare la dimensione delle anteprime delle immagini",
+                "image_width": "Larghezza massima delle immagini (percentuale)",
                 "preview_info": "Queste opzioni determinano come visualizzare alcuni elementi nei documenti.",
                 "render_citations": "Interpreta le citazioni",
                 "render_htags": "Nascondi i cancelletti dalle intestazioni",
@@ -209,6 +233,7 @@
                 "rtl_move_visually": "Usa l'ordine del testo per gli spostamenti con i tasti freccia quando in modalit\u00e0 RTL"
             },
             "enable_rmarkdown": "Attiva il supporto ai file RMarkdown",
+            "enable_scroll_zoom": "Zoom durante lo scorrimento tenendo premuto \u003Ckbd\u003ECmd\u003C/kbd\u003E o \u003Ckbd\u003ECtrl\u003C/kbd\u003E",
             "enable_table_helper": "Attiva l'Editor di Tabelle",
             "export": {
                 "dest": "Cartella di destinazione per i file esportati. \u003Cem\u003EAttenzione:\u003C/em\u003E Selezionando la directory corrente si sovrascriveranno i file senza avviso!",
@@ -235,6 +260,7 @@
             "homeEndBehaviour": "Usa l'azione predefinita di CodeMirror per i tasti \u003Ckbd\u003EInizio\u003C/kbd\u003E e \u003Ckbd\u003EFine\u003C/kdb\u003E",
             "indent_unit": "Indenta per il seguente numero di spazi",
             "input_mode": "Modalit\u00e0 di input dell'editor",
+            "leave_app_running_in_the_notification_area": "Lascia l'app in esecuzione nella barra delle notifiche",
             "modtime": "Data dell'ultima modifica",
             "mute_lines": "In modalit\u00e0 senza-distrazioni muta le righe non selezionate",
             "new_file_dont_prompt": "Non suggerire un nome quando si crea un nuovo file",
@@ -286,11 +312,17 @@
             "project": {
                 "csl_style": "Stile CSL (opzionale)",
                 "format": "Esporta il progetto in:",
+                "name_label": "Formato",
+                "pattern": "Aggiungi patterns Glob per includere solo files specifici",
+                "pattern_name": "Pattern Glob",
                 "title": "Impostazioni progetto",
-                "title_label": "Titolo progetto"
+                "title_label": "Titolo progetto",
+                "use_label": "Usa"
             },
             "readability_algorithm": "Algoritmo da utilizzare per i livelli di leggibilit\u00e0",
             "reset_pandoc_command": "Ripristina il comando di pandoc predefinito",
+            "show_app_in_the_notification_area": "Mostra l'app nella barra delle notifiche",
+            "sort_folders_first": "Mostra le cartelle sopra i file",
             "sorting_ascii": "Ordine ASCII (il 2 dopo il 10)",
             "sorting_explanation": "Criterio di ordinamento dei file (usato per ordinare per nome):",
             "sorting_natural": "Ordine naturale (il 10 dopo il 2)",
@@ -302,7 +334,11 @@
                 "title": "Controllo ortografico"
             },
             "theme": {
+                "accent_color_info": "Questa impostazione \u00e8 disponibile solo per Windows e macOS",
+                "accent_color_label": "Usa il colore di rifinitura del sistema invece del colore del tema",
                 "info": "Qui puoi scegliere il tempa dell'app.",
+                "select_label": "Clicca per selezionare",
+                "selected_label": "Selezionato",
                 "title": "Tema"
             },
             "title": "Preferenze",
@@ -316,13 +352,17 @@
             },
             "use_native_appearance": "Usa l'aspetto di default per le finestre",
             "user_dictionary": "Dizionario dell'utente. Rimuovi le parole cliccando su di esse.",
+            "user_dictionary_label": "Voce del dizionario",
             "watchdog_checkbox_label": "Attiva watchdog polling",
             "watchdog_explainer": "Su alcuni computer, Zettlr potrebbe segnalare troppe modifiche esterne ai file. Se succede, prova ad attivare questa impostazione.",
             "watchdog_threshold_label": "Tempo limite entro il quale si considera terminata la scrittura di un file (in ms)",
+            "whitelist": "Whitelist del rendering iFrame",
+            "whitelist_hostname": "Nome host",
             "xelatex": "Percorso dell'eseguibile di xelatex. Si prega di cambiarlo solo se Zettlr non riesce a localizzare xelatex.",
             "xelatex_default": "Valore predefinito: xelatex",
             "zkn": {
                 "auto_create_file": "Crea automaticamente nuovi file da un collegamento interno non esistente",
+                "auto_search": "Inizia una ricerca quando vengono seguiti i links Zettelkasten",
                 "generated_id": "ID generato",
                 "id_generator_label": "Struttura utilizzata per genereare nuovi ID",
                 "id_label": "Espressione regolare degli ID",
@@ -352,12 +392,22 @@
                 "var_year_two": "Anno (2 cifre)"
             }
         },
+        "snippets": {
+            "explanation": "Gli snippets permettono di definire parti di testo riutilizzabili con delle variabili",
+            "rename": "Rinomina snippet",
+            "title": "Snippets"
+        },
         "statistics": {
             "compare": "Confronta con l'arco temporale precedente",
             "day": "Data",
             "intro": "Qui trovi le statistiche estese sulle tue abitudini di scrittura, come un grafico dettagliato delle tue parole/giorno",
             "month": "Mese",
             "previous_frame": "Arco temporale precedente",
+            "tabs": {
+                "calendar_label": "Calendario",
+                "chart_label": "Grafici",
+                "fsal_label": "Statistiche FSAL"
+            },
             "this_frame": "Arco temporale corrente",
             "title": "Statistiche di scrittura",
             "week": "Settimana",
@@ -366,8 +416,10 @@
             "year": "Anno"
         },
         "tag_cloud": {
+            "add_to_file": "Aggiungi al file",
             "copy": "Copia negli appunti",
             "info": "Qui trovi tutti i tag che hai utilizzato da qualche parte nei tuoi file. Puoi copiare l'intera lista negli appunti. Posizionati sopra i tag per vedere il numero di volte che ne hai fatto uso.",
+            "suggestions_label": "Tags suggeriti per il file corrente",
             "title": "Pannello dei tag"
         },
         "tags": {
@@ -386,22 +438,47 @@
             "client_error": "Impossibile verificare la presenza di aggiornamenti: Client Error (Status code: %s)",
             "connection_error": "Impossibile verificare la presenza di aggiornamenti: impossibile connettersi",
             "current_version": "La tua versione",
+            "download_progress_label": "Scaricando il tuo aggiornamento",
+            "new_update_available": "Un aggiornamento alla versione %s \u00e8 disponibile!",
             "no_data": "Impossibile verificare la presenza di aggiornamenti: il server non ha inviato alcun dato",
+            "no_new_update": "Nessun aggiornamento disponibile. Hai la versione pi\u00f9 recente.",
             "notification": "Una nuova versione di Zettlr \u00e8 disponibile per il download. Si prega di leggere il changelog sottostante.",
+            "other_error": "Non \u00e8 stato possibile controllare gli aggiornamenti: %s: %s",
             "redirect_error": "Impossibile verificare la presenza di aggiornamenti: il server ha provato a reindirizzare (Status code: %s)",
             "release_url": "Apri la pagina dei download",
             "server_error": "Impossibile verificare la presenza di aggiornamenti: Server Error (Status code: %s)",
+            "start_update_label": "Clicca per iniziare l'aggiornamento",
+            "start_update_message": "Iniziando l'aggiornamento...",
             "title": "\u00c8 disponibile un nuovo aggiornamento",
-            "transmission_error": "Impossibile verificare la presenza di aggiornamenti: connessione interrotta"
+            "transmission_error": "Impossibile verificare la presenza di aggiornamenti: connessione interrotta",
+            "window_title": "Updater"
         }
     },
     "gui": {
+        "assets_man": {
+            "defaults_restore_error": "Non \u00e8 possibile ripristinare i files di default!",
+            "defaults_restored": "Files di default ripristinati!",
+            "defaults_restoring": "Ripristinando i files di default...",
+            "status": {
+                "save_error": "Salvataggio fallito",
+                "saved": "Salvato!",
+                "saving": "Salvando...",
+                "unsaved_changes": "Modifiche non salvate"
+            },
+            "win_title": "Gestore assets"
+        },
         "attachments": "Allegati",
         "attachments_open_dir": "Apri la cartella",
         "avg_close_to": "\ud83d\udcaa Hai quasi raggiunto la tua media giornaliera!",
         "avg_not_reached": "\u270d\ud83c\udffc Inizia a scrivere per superare la tua media giornaliera.",
         "avg_surpassed": "\ud83d\udd25 Non ti ferma pi\u00f9 nessuno!",
         "avg_words": "media giornaliera",
+        "chars": "Caratteri %s",
+        "chart": {
+            "high_legend": "Pi\u00f9 del doppio della media mensile",
+            "high_mid_legend": "Superiore alla media mensile",
+            "low_mid_legend": "Inferiore alla media mensile"
+        },
         "citeproc": {
             "error_db": "Impossibile caricare il database di citazioni",
             "error_report_message": "Non \u00e8 stato possibile caricare gli elementi %s nella tua libreria a causa di errori. Si prega di controllare il messaggio di errore qui sotto per capire quali CiteKeys sono errate e quale sia l'errore.",
@@ -413,6 +490,9 @@
             "references_none": "Non ci sono fonti in questo documento.",
             "reloading": "Sono stati rilevati dei cambiamenti nella libreria. Ricarica ..."
         },
+        "created": "Creato",
+        "ctrl_click_to_open": "Cmd/Ctrl+Click per aprire %s",
+        "date_just_now_label": "Ora",
         "dirs": "Cartelle",
         "display_search_results": "Mostra i risultati della ricerca",
         "empty_dir": "Directory vuota",
@@ -439,10 +519,46 @@
             "tasklist": "Lista di compiti",
             "ul": "Lista a punti"
         },
+        "global_search": {
+            "clear_label": "Cancella ricerca",
+            "filter_label": "Filtra i risultati della ricerca",
+            "query_label": "Inserisci sotto i termini di ricerca",
+            "query_placeholder": "Cercando...",
+            "restrict_dir_label": "Restringi la ricerca alle sole cartelle",
+            "restrict_dir_placeholder": "Restrizione alle sole cartelle...",
+            "search_label": "Cerca",
+            "title": "Ricerca testo integrale",
+            "toggle_label": "Attiva risultati"
+        },
+        "modified": "Modificato",
+        "months": {
+            "apr": "Aprile",
+            "aug": "Agosto",
+            "dec": "Dicembre",
+            "feb": "Febbraio",
+            "jan": "Gennaio",
+            "jul": "Luglio",
+            "jun": "Giugno",
+            "mar": "Marzo",
+            "may": "Maggio",
+            "nov": "Novembre",
+            "oct": "Ottobre",
+            "sep": "Settembre"
+        },
         "no_attachments": "Nessun allegato",
         "no_dir_selected": "Nessuna cartella selezionata",
+        "no_open_document": "Nessun documento aperto",
+        "no_other_files": "Nessun altro file",
+        "no_reference_message": "Nessun testo menzionato",
+        "no_related_files": "Nessun file correlato",
         "no_search_results": "Nessun risultato",
         "number_selections": "%s selezioni",
+        "other_files": "Altri file",
+        "preview_modification_date": "Modificato",
+        "preview_searching_label": "Ricerca del File...",
+        "preview_word_count": "Contatore parole",
+        "related_files_label": "Files correlati",
+        "reset": "Reset",
         "statistics_more": "Altre statistiche ...",
         "table_of_contents": "Sommario",
         "today_words": "parole oggi",
@@ -459,6 +575,7 @@
         "about": "Informazioni su Zettlr",
         "add_to_dictionary": "Aggiungi al dizionario",
         "all_front": "Porta tutto in primo piano",
+        "assets_manager": "Gestore assets",
         "bold": "Grassetto",
         "clear_recent_docs": "Pulisci elenco",
         "close_all_tabs": "Chiudi tutti i pannelli",
@@ -466,9 +583,11 @@
         "close_file": "Chiudi file",
         "close_workspace": "Chiudi spazio di lavoro",
         "copy": "Copia",
+        "copy_equation": "Copia il codice dell'equazione",
         "copy_filename": "Copia il nome del file",
         "copy_html": "Copia come HTML",
         "copy_id": "Copia ID",
+        "copy_img_to_clipboard": "Copia immagine negli appunti",
         "copy_link": "Copia link",
         "copy_mail": "Copia indirizzio email",
         "custom_css": "Personalizza CSS...",
@@ -479,6 +598,7 @@
         "donate": "Sostieni Zettlr",
         "duplicate_file": "Duplica file",
         "export": "Esporta...",
+        "filter_files": "Filtra files",
         "find_dir": "Cerca nella cartella",
         "find_file": "Cerca nel file",
         "generate_id": "Genera un nuovo ID",
@@ -509,6 +629,7 @@
         "no_suggestions": "Nessun suggerimento",
         "open": "Apri...",
         "open_attachment": "Apri allegato",
+        "open_in_browser": "Apri nel browser",
         "open_link": "Apri link",
         "open_logs": "Apri Logs",
         "open_new_tab": "Apri in una nuova scheda",
@@ -542,6 +663,8 @@
         "start_speaking": "Inizia a parlare",
         "stop_speaking": "Smetti di parlare",
         "tab_close": "Chiudi Pannello",
+        "tab_close_all": "Chiudi tutte le schede",
+        "tab_close_others": "Chiudi le altre schede",
         "tab_next": "Pannello Successivo",
         "tab_previous": "Pannello Precedente",
         "tags": "Gestisci i tag...",
@@ -574,6 +697,13 @@
     "system": {
         "all_files": "Tutti i file",
         "cancel": "Annulla",
+        "common": {
+            "filter": "Filtrando...",
+            "list_actions_label": "Azioni",
+            "list_add_button": "Aggiungi",
+            "list_default_column_label": "Oggetto",
+            "list_search_placeholder": "Ricerca voci..."
+        },
         "directories": "Cartelle",
         "directory_removed": "La cartella %s \u00e8 stata eliminata.",
         "error": {
@@ -595,6 +725,8 @@
             "fnf_title": "Il file specificato non esiste",
             "ignored_dir_message": "La cartella &quot;%s&quot; non pu\u00f2 essere aperta da Zettlr.",
             "ignored_dir_title": "Impossibile aprire la cartella",
+            "image_not_found": "Immagine non trovata: %s",
+            "malformed_citekey": "Citekey dalla forma errata: %s",
             "malformed_textbundle": "TextBundle difettoso: %s",
             "move_into_child_message": "Non puoi spostare una cartella all'interno di una delle sue sottocartelle",
             "move_into_child_title": "Impossibile spostare la cartella",
@@ -608,7 +740,8 @@
             "pandoc_error_message": "Pandoc ha restituito un errore: %s",
             "pandoc_error_title": "Impossibile esportare il file",
             "remove_message": "Vuoi davvero eliminare %s?",
-            "remove_title": "Eliminare per davvero?"
+            "remove_title": "Eliminare per davvero?",
+            "tray_not_supported": "Tray non supportato. E' richiesta l'Estensione Gnome &quot;KStatusNotifierItem/AppIndicator Support&quot; per il supporto su Gnome Desktop."
         },
         "export_success": "Esportazione in %s",
         "file_changed": "Il file %s \u00e8 stato modificato",
@@ -667,7 +800,13 @@
         "show_toc": "Mostra l'indice",
         "stats": "Visualizza statistiche",
         "tag_cloud": "Tag",
-        "toggle_attachments": "Visualizza allegati"
+        "toggle_attachments": "Visualizza allegati",
+        "toggle_file_manager": "Gestore file",
+        "toggle_global_search": "Ricerca globale"
+    },
+    "tray": {
+        "show_zettlr": "Mostra Zettlr",
+        "tooltip": "Zettlr"
     },
     "validation": {
         "error_empty": "Il campo %s \u00e8 richiesto.",

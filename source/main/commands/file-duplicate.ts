@@ -13,10 +13,11 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { trans } from '../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 import path from 'path'
 import sanitize from 'sanitize-filename'
-import { codeFileExtensions, mdFileExtensions } from '../../common/get-file-extensions'
+import { codeFileExtensions, mdFileExtensions } from '@common/get-file-extensions'
+import isFile from '@common/util/is-file'
 
 const CODEFILE_TYPES = codeFileExtensions(true)
 const ALLOWED_FILETYPES = mdFileExtensions(true)
@@ -63,8 +64,26 @@ export default class FileDuplicate extends ZettlrCommand {
       return
     }
 
+    let filename = ''
+    if (arg.name !== undefined) {
+      // We have a user-provided filename
+      filename = sanitize(arg.name.trim(), { 'replacement': '-' })
+    } else {
+      // We need to generate our own filename. First, attempt to just use 'copy of'
+      filename = 'Copy of ' + file.name // TODO: Translate
+      // See if it's a file
+      if (isFile(path.join(dir.path, filename))) {
+        // Filename is already given, so we need to add increasing numbers
+        let duplicateNumber = 1
+        while (isFile(path.join(dir.path, `Copy (${duplicateNumber}) of ${file.name}`))) {
+          duplicateNumber++
+        }
+        // Now we have a unique filename
+        filename = `Copy (${duplicateNumber}) of ${file.name}`
+      }
+    }
+
     // Afterwards, make sure the name is correct.
-    let filename = (arg.name !== undefined) ? sanitize(arg.name.trim(), { 'replacement': '-' }) : 'Copy of ' + file.name // TODO: Translate
     if (filename === '') {
       throw new Error('Could not create file: Filename was not valid')
     }
@@ -85,7 +104,7 @@ export default class FileDuplicate extends ZettlrCommand {
     })
 
     // And directly thereafter, open the file
-    await this._app.openFile(path.join(dir.path, filename))
+    await this._app.getDocumentManager().openFile(path.join(dir.path, filename))
   }
 }
 

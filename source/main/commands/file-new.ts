@@ -13,11 +13,11 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { trans } from '../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 import path from 'path'
 import sanitize from 'sanitize-filename'
-import { codeFileExtensions, mdFileExtensions } from '../../common/get-file-extensions'
-import generateFilename from '../../common/util/generate-filename'
+import { codeFileExtensions, mdFileExtensions } from '@common/get-file-extensions'
+import generateFilename from '@common/util/generate-filename'
 
 const CODEFILE_TYPES = codeFileExtensions(true)
 const ALLOWED_FILETYPES = mdFileExtensions(true)
@@ -55,7 +55,6 @@ export default class FileNew extends ZettlrCommand {
     let dir = this._app.getFileSystem().openDirectory
 
     if (arg?.path !== undefined) {
-      console.log('Path given: Selecting the directory:', arg.path)
       dir = this._app.getFileSystem().findDir(arg.path)
     }
 
@@ -134,7 +133,7 @@ export default class FileNew extends ZettlrCommand {
       })
 
       // And directly thereafter, open the file
-      await this._app.openFile(path.join(dir.path, filename))
+      await this._app.getDocumentManager().openFile(path.join(dir.path, filename))
     } catch (err: any) {
       global.log.error(`Could not create file: ${err.message as string}`)
       this._app.prompt({

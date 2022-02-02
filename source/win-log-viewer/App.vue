@@ -20,7 +20,7 @@
   </WindowChrome>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -36,11 +36,14 @@
  */
 
 import LogMessage from './LogMessage.vue'
-import WindowChrome from '../common/vue/window/Chrome.vue'
+import WindowChrome from '@common/vue/window/Chrome.vue'
+import { nextTick, defineComponent } from 'vue'
+import { IpcRenderer } from 'electron'
+import { ToolbarControl } from '@dts/renderer/window'
 
-const ipcRenderer = window.ipc
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
-export default {
+export default defineComponent({
   components: {
     LogMessage,
     WindowChrome
@@ -49,30 +52,29 @@ export default {
     return {
       filter: '', // Optionally filter the messages with a string
       nextIndex: 0, // Last log message array index; updated from the main process
-      messages: [], // Holds all the log files
-      // Filters TODO: Actually enable setting and getting these
-      includeVerbose: true,
-      includeInfo: true,
+      messages: [] as LogMessage[], // Holds all the log files
+      includeVerbose: false,
+      includeInfo: false,
       includeWarning: true,
       includeError: true
     }
   },
   computed: {
-    filteredMessages: function () {
+    filteredMessages: function (): LogMessage[] {
       const preFiltered = this.messages.filter(message => {
-        if (this.includeVerbose === true && message.level === 1) {
+        if (this.includeVerbose && message.level === 1) {
           return true
         }
 
-        if (this.includeInfo === true && message.level === 2) {
+        if (this.includeInfo && message.level === 2) {
           return true
         }
 
-        if (this.includeWarning === true && message.level === 3) {
+        if (this.includeWarning && message.level === 3) {
           return true
         }
 
-        if (this.includeError === true && message.level === 4) {
+        if (this.includeError && message.level === 4) {
           return true
         }
 
@@ -92,6 +94,7 @@ export default {
     toolbarControls: function () {
       return [
         {
+          id: 'filter-text',
           type: 'text',
           content: 'Filter messages:'
         },
@@ -100,14 +103,14 @@ export default {
           label: 'Verbose',
           id: 'verboseToggle',
           activeClass: 'verbose-control-active',
-          initialState: 'active'
+          initialState: ''
         },
         {
           type: 'toggle',
           label: 'Info',
           id: 'infoToggle',
           activeClass: 'info-control-active',
-          initialState: 'active'
+          initialState: ''
         },
         {
           type: 'toggle',
@@ -125,19 +128,21 @@ export default {
         },
         {
           type: 'spacer', // Make sure the content is flushed to the left
+          id: 'spacer-one',
           size: '3x'
         },
         {
           type: 'search',
+          id: 'log-filter',
           placeholder: 'Filter …'
         }
-      ]
+      ] as ToolbarControl[]
     }
   },
   mounted: function () {
     const self = this
     setInterval(function () {
-      self.fetchData()
+      self.fetchData().catch(e => console.error('Could not fetch new log data', e))
     }, 1000)
   },
   methods: {
@@ -146,7 +151,7 @@ export default {
      *
      * @return  {void}
      */
-    fetchData: async function () {
+    fetchData: async function (): Promise<void> {
       const newLogs = await ipcRenderer.invoke('log-provider', {
         command: 'retrieve-log-chunk',
         nextIndex: this.nextIndex
@@ -158,9 +163,8 @@ export default {
       this.messages = this.messages.concat(newLogs)
       // Vue will update itself only on the next tick, so let's await that
       if (shouldScroll === true) {
-        this.$nextTick(() => {
-          this.scrollToBottom()
-        })
+        await nextTick()
+        this.scrollToBottom()
       }
     },
     /**
@@ -169,7 +173,7 @@ export default {
      * @return  {boolean}  Whether the container is at the bottom
      */
     containerScrolledToBottom: function () {
-      const elem = this.$refs['log-viewer']
+      const elem = this.$refs['log-viewer'] as Element
       const lastVisiblePixel = elem.getBoundingClientRect().height + elem.scrollTop
       const leftToShow = elem.scrollHeight - lastVisiblePixel
 
@@ -181,10 +185,10 @@ export default {
      * @return  {void}
      */
     scrollToBottom: function () {
-      const elem = this.$refs['log-viewer']
+      const elem = this.$refs['log-viewer'] as Element
       elem.scrollTop = elem.scrollHeight - elem.getBoundingClientRect().height
     },
-    handleToggle: function (event) {
+    handleToggle: function (event: { id: string, state: any }) {
       const { id, state } = event
       if (id === 'verboseToggle') {
         this.includeVerbose = state
@@ -197,7 +201,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style lang="less">

@@ -34,7 +34,7 @@
   </WindowChrome>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -49,15 +49,26 @@
  * END HEADER
  */
 
-import WindowChrome from '../common/vue/window/Chrome.vue'
+import WindowChrome from '@common/vue/window/Chrome.vue'
 import CalendarView from './CalendarView.vue'
 import ChartView from './ChartView.vue'
 import FSALView from './FSALView.vue'
-import { trans } from '../common/i18n-renderer'
+import { trans } from '@common/i18n-renderer'
+import { IpcRenderer } from 'electron'
+import { defineComponent } from 'vue'
+import { WindowTab } from '@dts/renderer/window'
 
-const ipcRenderer = window.ipc
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
-export default {
+interface Stats {
+  wordCount: {[day: string]: number} // All words for the graph
+  pomodoros: {[day: string]: number} // All pomodoros ever completed
+  avgMonth: number // Monthly average
+  today: number // Today's word count
+  sumMonth: number // Overall sum for the past month
+}
+
+export default defineComponent({
   components: {
     WindowChrome,
     CalendarView,
@@ -86,7 +97,7 @@ export default {
           id: 'tab-fsal-control',
           icon: 'file-group'
         }
-      ],
+      ] as WindowTab[],
       // After the data has been loaded, it will contain the following
       // properties (as of writing this):
       //
@@ -95,25 +106,25 @@ export default {
       // sumMonth: number
       // today: number
       // wordCount: object [YYYY-MM-DD]: number
-      statisticsData: {}
+      statisticsData: {} as Stats
     }
   },
   computed: {
-    windowTitle: function () {
+    windowTitle: function (): string {
       if (process.platform === 'darwin') {
         return this.tabs[this.currentTab].label
       } else {
         return trans('dialog.statistics.title')
       }
     },
-    wordCounts: function () {
+    wordCounts: function (): any {
       if (this.statisticsData.wordCount === undefined) {
         return {}
       } else {
         return this.statisticsData.wordCount
       }
     },
-    avgMonth: function () {
+    avgMonth: function (): number {
       if (this.statisticsData.avgMonth === undefined) {
         return 0
       } else {
@@ -131,7 +142,7 @@ export default {
       })
       .catch(err => console.error(err))
   }
-}
+})
 </script>
 
 <style lang="less">

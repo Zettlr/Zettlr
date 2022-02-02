@@ -16,7 +16,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -31,13 +31,15 @@
  * END HEADER
  */
 
-import { trans } from '../common/i18n-renderer'
-import CodeEditor from '../common/vue/CodeEditor'
-import ButtonControl from '../common/vue/form/elements/Button'
+import { trans } from '@common/i18n-renderer'
+import CodeEditor from '@common/vue/CodeEditor.vue'
+import ButtonControl from '@common/vue/form/elements/Button.vue'
+import { IpcRenderer } from 'electron'
+import { defineComponent } from 'vue'
 
-const ipcRenderer = window.ipc
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
-export default {
+export default defineComponent({
   name: 'CustomCSS',
   components: {
     CodeEditor,
@@ -52,7 +54,7 @@ export default {
     }
   },
   computed: {
-    statusbarControls: function () {
+    statusbarControls: function (): any[] {
       return [
         {
           type: 'button',
@@ -69,13 +71,14 @@ export default {
         }
       ]
     },
-    saveButtonLabel: function () {
+    saveButtonLabel: function (): string {
       return trans('dialog.button.save')
     }
   },
   watch: {
     css: function () {
-      if (this.$refs['code-editor'].isClean() === true) {
+      const editor = this.$refs['code-editor'] as typeof CodeEditor
+      if (editor.isClean() === true) {
         this.savingStatus = ''
       } else {
         this.savingStatus = trans('gui.assets_man.status.unsaved_changes')
@@ -99,7 +102,7 @@ export default {
     })
   },
   methods: {
-    handleClick: function (controlID) {
+    handleClick: function (controlID: string) {
       if (controlID === 'save') {
         this.savingStatus = trans('gui.assets_man.status.saving')
         ipcRenderer.invoke('css-provider', {
@@ -116,7 +119,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style lang="less">

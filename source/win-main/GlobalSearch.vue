@@ -2,19 +2,21 @@
   <div id="global-search-pane">
     <h4>{{ searchTitle }}</h4>
     <!-- First: Two text controls for search terms and to restrict the search -->
-    <TextControl
+    <AutocompleteText
       ref="query-input"
       v-model="query"
-      v-bind:placeholder="queryInputPlaceholder"
       v-bind:label="queryInputLabel"
+      v-bind:autocomplete-values="recentGlobalSearches"
+      v-bind:placeholder="queryInputPlaceholder"
       v-on:confirm="startSearch()"
-    ></TextControl>
+    ></AutocompleteText>
     <AutocompleteText
       v-model="restrictToDir"
       v-bind:label="restrictDirLabel"
       v-bind:autocomplete-values="directorySuggestions"
       v-bind:placeholder="restrictDirPlaceholder"
       v-on:confirm="restrictToDir = $event"
+      v-on:keydown.enter="startSearch()"
     ></AutocompleteText>
     <!-- Then an always-visible search button ... -->
     <ButtonControl
@@ -87,8 +89,9 @@
             v-for="singleRes, idx2 in result.result"
             v-bind:key="idx2"
             class="result-line"
+            v-bind:class="{'active': idx==activeFileIdx && idx2==activeLineIdx}"
             v-on:contextmenu.stop.prevent="fileContextMenu($event, result.file.path, singleRes.line)"
-            v-on:mousedown.stop.prevent="onResultClick($event, result.file.path, singleRes.line)"
+            v-on:mousedown.stop.prevent="onResultClick($event, idx, idx2, result.file.path, singleRes.line)"
           >
             <strong>{{ singleRes.line }}</strong>:
             <span v-html="markText(singleRes)"></span>
@@ -99,7 +102,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -114,18 +117,60 @@
  * END HEADER
  */
 
-import objectToArray from '../common/util/object-to-array'
-import compileSearchTerms from '../common/util/compile-search-terms'
-import TextControl from '../common/vue/form/elements/Text'
-import ButtonControl from '../common/vue/form/elements/Button'
-import ProgressControl from '../common/vue/form/elements/Progress'
-import AutocompleteText from '../common/vue/form/elements/AutocompleteText'
-import { trans } from '../common/i18n-renderer'
+import objectToArray from '@common/util/object-to-array'
+import compileSearchTerms from '@common/util/compile-search-terms'
+import TextControl from '@common/vue/form/elements/Text.vue'
+import ButtonControl from '@common/vue/form/elements/Button.vue'
+import ProgressControl from '@common/vue/form/elements/Progress.vue'
+import AutocompleteText from '@common/vue/form/elements/AutocompleteText.vue'
+import { trans } from '@common/i18n-renderer'
+import { IpcRenderer } from 'electron'
+import { defineComponent } from 'vue'
+import { SearchResult, SearchTerm } from '@dts/common/search'
+import { CodeFileMeta, DirMeta, MDFileMeta } from '@dts/common/fsal'
+import showPopupMenu from '@common/modules/window-register/application-menu-helper'
+import { AnyMenuItem } from '@dts/renderer/context'
+import { PlatformPath } from '@dts/renderer/path'
 
-const ipcRenderer = window.ipc
-const path = window.path
+const path: PlatformPath = (window as any).path
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
-export default {
+interface LocalFile {
+  path: string
+  relativeDirectoryPath: string
+  filename: string
+  displayName: string
+}
+
+/**
+ * This interface describes a local search result that is composed of a
+ * LocalFile interface, its search results, and, as specialties, a cumulative
+ * weight of all the search results and a toggle to indicate whether we should
+ * hide the result set.
+ */
+interface LocalSearchResult {
+  file: LocalFile
+  result: SearchResult[]
+  hideResultSet: boolean
+  weight: number
+}
+
+const contextMenu: AnyMenuItem[] = [
+  {
+    label: trans('menu.open_new_tab'),
+    id: 'new-tab',
+    type: 'normal',
+    enabled: true
+  },
+  {
+    label: trans('menu.quicklook'),
+    id: 'open-quicklook',
+    type: 'normal',
+    enabled: true
+  }
+]
+
+export default defineComponent({
   name: 'GlobalSearch',
   components: {
     TextControl,
@@ -133,6 +178,7 @@ export default {
     ButtonControl,
     AutocompleteText
   },
+  emits: ['jtl'],
   data: function () {
     return {
       // The current search
@@ -142,13 +188,13 @@ export default {
       // Whether or not we should restrict search to a given directory
       restrictToDir: '',
       // All directories we've found in the file tree
-      directorySuggestions: [],
+      directorySuggestions: [] as string[],
       // The compiled search terms
-      compiledTerms: null,
+      compiledTerms: null as null|SearchTerm[],
       // All files that we need to search. Will be emptied during a search.
-      filesToSearch: [],
+      filesToSearch: [] as LocalFile[],
       // All results so far received
-      searchResults: [],
+      searchResults: [] as LocalSearchResult[],
       // The number of files the search started with (for progress bar)
       sumFilesToSearch: 0,
       // A global trigger for the result set trigger. This will determine what
@@ -158,37 +204,40 @@ export default {
       maxWeight: 0,
       // Is set to a line number if this component is waiting for a file to
       // become active.
-      jtlIntent: undefined,
-      contextMenu: [
-        {
-          label: trans('menu.open_new_tab'),
-          id: 'new-tab',
-          type: 'normal',
-          enabled: true
-        },
-        {
-          label: trans('menu.quicklook'),
-          id: 'open-quicklook',
-          enabled: true
-        }
-      ]
+      jtlIntent: undefined as undefined|number,
+      // The file list index of the most recently clicked search result.
+      activeFileIdx: undefined as undefined|number,
+      // The result line index of the most recently clicked search result.
+      activeLineIdx: undefined as undefined|number
     }
   },
   computed: {
-    selectedDir: function () {
+    recentGlobalSearches: function (): string[] {
+      return this.$store.state.config['window.recentGlobalSearches']
+    },
+    selectedDir: function (): DirMeta|null {
       return this.$store.state.selectedDirectory
     },
-    fileTree: function () {
+    fileTree: function (): Array<MDFileMeta|CodeFileMeta|DirMeta> {
       return this.$store.state.fileTree
     },
-    openFiles: function () {
+    openFiles: function (): MDFileMeta[] {
       return this.$store.state.openFiles
     },
-    activeFile: function () {
+    activeFile: function (): MDFileMeta|null {
       return this.$store.state.activeFile
     },
-    activeDocumentInfo: function () {
+    activeDocumentInfo: function (): any|null {
       return this.$store.state.activeDocumentInfo
+    },
+    useH1: function (): boolean {
+      return this.$store.state.config.fileNameDisplay.includes('heading')
+    },
+    useTitle: function (): boolean {
+      return this.$store.state.config.fileNameDisplay.includes('title')
+    },
+    queryInputElement: function (): HTMLInputElement|null {
+      return this.$refs['query-input'] as HTMLInputElement|null
     },
     searchTitle: function () {
       return trans('gui.global_search.title')
@@ -220,7 +269,7 @@ export default {
     toggleButtonLabel: function () {
       return trans('gui.global_search.toggle_label')
     },
-    sep: function () {
+    sep: function (): string {
       return path.sep
     },
     /**
@@ -231,20 +280,6 @@ export default {
         return this.searchResults
       }
 
-      // Search results have the following structure:
-      // {
-      //   file: {
-      //     path: Full path to the file
-      //     relativeDirectoryPath: Relative to the containing root
-      //     filename: The filename
-      //     displayName: If applicable the title/h1, else filename
-      //   }
-      //   result: [{
-      //     restext: The line's text content
-      //     line: The line number
-      //     ranges: The from-to ranges (array with from and to numbers)
-      //   }]
-      // }
       const lowercase = this.filter.toLowerCase()
 
       return this.searchResults.filter(result => {
@@ -290,12 +325,12 @@ export default {
     }
   },
   mounted: function () {
-    this.$refs['query-input'].focus()
+    (this.$refs['query-input'] as HTMLInputElement).focus()
     this.recomputeDirectorySuggestions()
   },
   methods: {
     recomputeDirectorySuggestions: function () {
-      let dirList = []
+      let dirList: string[] = []
 
       for (const treeItem of this.fileTree) {
         if (treeItem.type !== 'directory') {
@@ -322,10 +357,10 @@ export default {
         // We cut off the origin of the root (i.e. the path of the containing root dir)
         let rootItem = this.selectedDir
         while (rootItem.parent != null) {
-          rootItem = rootItem.parent
+          rootItem = rootItem.parent as unknown as DirMeta
         }
 
-        this.restrictToDir = this.selectedDir.path.replace(rootItem.dir, '').substr(1)
+        this.restrictToDir = this.selectedDir.path.replace(rootItem.dir, '').substring(1)
       }
     },
     startSearch: function () {
@@ -334,17 +369,17 @@ export default {
       // 2. The compiled search terms.
       // Let's do that first.
 
-      let fileList = []
-
-      const useH1 = Boolean(global.config.get('display.useFirstHeadings'))
+      let fileList: LocalFile[] = []
 
       for (const treeItem of this.fileTree) {
         if (treeItem.type !== 'directory') {
           let displayName = treeItem.name
-          if (treeItem.frontmatter != null && 'title' in treeItem.frontmatter) {
-            displayName = treeItem.frontmatter.title
-          } else if (useH1 && treeItem.firstHeading !== null) {
-            displayName = treeItem.firstHeading
+          if (treeItem.type === 'file') {
+            if (this.useTitle && typeof treeItem.frontmatter?.title === 'string') {
+              displayName = treeItem.frontmatter.title
+            } else if (this.useH1 && treeItem.firstHeading !== null) {
+              displayName = treeItem.firstHeading
+            }
           }
 
           fileList.push({
@@ -360,9 +395,9 @@ export default {
         dirContents = dirContents.filter(item => item.type !== 'directory')
         dirContents = dirContents.map(item => {
           let displayName = item.name
-          if (item.frontmatter != null && 'title' in item.frontmatter) {
+          if (this.useTitle && item.frontmatter != null && typeof item.frontmatter.title === 'string') {
             displayName = item.frontmatter.title
-          } else if (useH1 && item.firstHeading !== null) {
+          } else if (this.useH1 && item.firstHeading !== null) {
             displayName = item.firstHeading
           }
 
@@ -376,7 +411,7 @@ export default {
           }
         })
 
-        if (this.selectedDir.path.startsWith(treeItem.path) === true) {
+        if (this.selectedDir !== null && this.selectedDir.path.startsWith(treeItem.path) === true) {
           // Append the selected directory's contents BEFORE any other items
           // since that's probably something the user sees as more relevant.
           fileList = dirContents.concat(fileList)
@@ -396,6 +431,18 @@ export default {
 
       this.compiledTerms = compileSearchTerms(this.query)
 
+      // One last thing: Add the query to the recent searches
+      const recentSearches: string[] = this.$store.state.config['window.recentGlobalSearches']
+
+      const idx = recentSearches.indexOf(this.query)
+
+      if (idx > -1) {
+        recentSearches.splice(idx, 1)
+      }
+
+      recentSearches.unshift(this.query)
+      ;(global as any).config.set('window.recentGlobalSearches', recentSearches.slice(0, 10))
+
       // Now we're good to go!
       this.emptySearchResults()
       this.filter = '' // Reset the filter
@@ -406,14 +453,15 @@ export default {
     },
     singleSearchRun: async function () {
       // Take the file to be searched ...
+      const terms = compileSearchTerms(this.query)
       while (this.filesToSearch.length > 0) {
-        const fileToSearch = this.filesToSearch.shift()
+        const fileToSearch = this.filesToSearch.shift() as LocalFile
         // Now start the search
-        const result = await ipcRenderer.invoke('application', {
+        const result: SearchResult[] = await ipcRenderer.invoke('application', {
           command: 'file-search',
           payload: {
             path: fileToSearch.path,
-            terms: this.compiledTerms
+            terms: terms
           }
         })
         if (result.length > 0) {
@@ -421,7 +469,7 @@ export default {
             file: fileToSearch,
             result: result,
             hideResultSet: false, // If true, the individual results won't be displayed
-            weight: result.reduce((accumulator, currentValue) => {
+            weight: result.reduce((accumulator: number, currentValue: SearchResult) => {
               return accumulator + currentValue.weight
             }, 0) // This is the initialValue, b/c we're summing up props
           }
@@ -429,6 +477,10 @@ export default {
           if (newResult.weight > this.maxWeight) {
             this.maxWeight = newResult.weight
           }
+
+          // Also make sure to sort the search results by relevancy (note the
+          // b-a reversal, since we want a descending sort)
+          this.searchResults.sort((a, b) => b.weight - a.weight)
         }
       }
 
@@ -440,19 +492,24 @@ export default {
     },
     emptySearchResults: function () {
       this.searchResults = []
-      // Also, for convenience, re-focus and select the input
-      this.$refs['query-input'].focus()
-      this.$refs['query-input'].select()
+
+      // Clear indeces of active search result
+      this.activeFileIdx = -1
+      this.activeLineIdx = -1
+
+      // Also, for convenience, re-focus and select the input if available
+      this.queryInputElement?.focus()
+      this.queryInputElement?.select()
     },
     toggleIndividualResults: function () {
-      this.toggleState = this.toggleState === false
+      this.toggleState = !this.toggleState
       for (const result of this.searchResults) {
         result.hideResultSet = this.toggleState
       }
     },
-    fileContextMenu: function (event, filePath, lineNumber) {
+    fileContextMenu: function (event: MouseEvent, filePath: string, lineNumber: number) {
       const point = { x: event.clientX, y: event.clientY }
-      global.menuProvider.show(point, this.contextMenu, (clickedID) => {
+      showPopupMenu(point, contextMenu, (clickedID: string) => {
         switch (clickedID) {
           case 'new-tab':
             this.jumpToLine(filePath, lineNumber, true)
@@ -467,25 +524,28 @@ export default {
         }
       })
     },
-    onResultClick: function (event, filePath, lineNumber) {
+    onResultClick: function (event: MouseEvent, idx: number, idx2: number, filePath: string, lineNumber: number) {
       // This intermediary function is needed to make sure that jumpToLine can
       // also be called from within the context menu (see above).
       if (event.button === 2) {
         return // Do not handle right-clicks
       }
 
+      // Update indeces so we can keep track of the most recently clicked
+      // search result.
+      this.activeFileIdx = idx
+      this.activeLineIdx = idx2
+
       const isMiddleClick = (event.type === 'mousedown' && event.button === 1)
       this.jumpToLine(filePath, lineNumber, isMiddleClick)
     },
-    jumpToLine: function (filePath, lineNumber, openInNewTab = false) {
-      const isFileOpen = this.openFiles.find(file => file.path === filePath)
+    jumpToLine: function (filePath: string, lineNumber: number, openInNewTab: boolean = false) {
       const isActiveFile = (this.activeFile !== null) ? this.activeFile.path === filePath : false
 
       if (isActiveFile) {
         this.$emit('jtl', lineNumber)
-      } else if (isFileOpen === undefined) {
-        // The wanted file is not yet open --> open it and afterwards issue the
-        // jtl-command
+      } else {
+        // The wanted file is not yet active -> Do so and then jump to the correct line
         ipcRenderer.invoke('application', {
           command: 'open-file',
           payload: {
@@ -494,23 +554,19 @@ export default {
           }
         })
           .then(() => {
-            // As soon as the file becomes active, jump to that line
-            this.jtlIntent = lineNumber
-          })
-          .catch(e => console.error(e))
-      } else {
-        ipcRenderer.invoke('application', {
-          command: 'set-active-file',
-          payload: filePath
-        })
-          .then(() => {
-            // As soon as the file becomes active, jump to that line
-            this.jtlIntent = lineNumber
+            // As soon as the file becomes active, jump to that line. But only
+            // if it's >= 0. If lineNumber === -1 it means just the file should
+            // be open.
+            if (lineNumber >= 0) {
+              this.jtlIntent = lineNumber
+            }
           })
           .catch(e => console.error(e))
       }
     },
-    markText: function (resultObject) {
+    markText: function (resultObject: SearchResult) {
+      const startTag = '<span class="search-result-highlight">'
+      const endTag = '</span>'
       // We receive a result object and should return an HTML string containing
       // highlighting (we're using <strong>) where the result works. We have
       // access to restext, weight, line, and an array of from-to-ranges
@@ -534,20 +590,24 @@ export default {
           to: range.to
         }
       })
+      // Addendum Sun, 16 Jan 2022: If I had paid more attention to this little
+      // curious fact here, I could've saved myself a lot of trouble with the
+      // new Proxies of Vue3. For a short summary of my odyssee, see
+      // https://www.hendrik-erz.de/post/death-by-proxy
 
       // Because it shifts positions, we need to insert the closing tag first
       for (const range of unobserved.reverse()) {
-        marked = marked.substr(0, range.to) + '</strong>' + marked.substr(range.to)
-        marked = marked.substr(0, range.from) + '<strong>' + marked.substr(range.from)
+        marked = marked.substring(0, range.to) + endTag + marked.substring(range.to)
+        marked = marked.substring(0, range.from) + startTag + marked.substring(range.from)
       }
 
       return marked
     },
     focusQueryInput: function () {
-      this.$refs['query-input'].focus()
+      this.queryInputElement?.focus()
     }
   }
-}
+})
 </script>
 
 <style lang="less">
@@ -588,11 +648,24 @@ body div#global-search-pane {
       &:hover {
         background-color: rgb(180, 180, 180);
       }
+
+      .search-result-highlight {
+        font-weight: bold;
+        color: var(--system-accent-color);
+      }
+    }
+
+    div.active {
+      background-color: rgb(160, 160, 160);
     }
   }
 }
 
-body.dark div#global-search-pane div.search-result-container span.result-line:hover {
+body.dark div#global-search-pane div.search-result-container div.result-line:hover {
   background-color: rgb(60, 60, 60);
+}
+
+body.dark div#global-search-pane div.search-result-container div.active {
+  background-color: rgb(100, 100, 100);
 }
 </style>

@@ -13,7 +13,7 @@
  */
 
 import { BrowserWindow, dialog, MessageBoxReturnValue } from 'electron'
-import { trans } from '../../../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 
 /**
  * Asks the user if the file identified by filename should be overwritten

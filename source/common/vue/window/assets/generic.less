@@ -23,11 +23,17 @@ body {
     margin: 4px 0px;
     break-inside: avoid;
 
+    // Full width styles
     input:not(.inline),
     select:not(.inline),
     textarea:not(.inline) {
       width: 100%;
       display: block;
+    }
+
+    // Add some margin to inline elements
+    input.inline, select.inline {
+      margin: 0 5px;
     }
   }
 

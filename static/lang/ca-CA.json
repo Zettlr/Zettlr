@@ -5,7 +5,7 @@
             "vfc"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-11-07T15:46:04.000000Z"
+        "updated_at": "2022-01-23T20:46:33.000000Z"
     },
     "dialog": {
         "about": {
@@ -196,14 +196,22 @@
             "checkForBeta": "Notifica els llan\u00e7aments beta",
             "choose_file": "Tria el fitxer",
             "citation_database": "Base de dades de les refer\u00e8ncies (CSL, JSON o BibTex)",
+            "citations": {
+                "title": "Refer\u00e8ncies bibliogr\u00e0fiques"
+            },
             "cite_style_label": "Com vols que s'autocompletin les teves cites?",
             "count_chars": "Compta car\u00e0cters en lloc de paraules (per exemple, per al xin\u00e8s)",
             "creationtime": "Hora de creaci\u00f3 del fitxer",
             "dark_mode": "Mode nocturn",
+            "dark_mode_schedule": {
+                "end": "Acaba el mode nocturn a les",
+                "start": "Engega el mode nocturn a les"
+            },
             "debug": "Habilita el mode de depuraci\u00f3",
             "default_image_save_path": "Cam\u00ed per defecte a les imatges (relatiu o absolut)",
             "delete_on_fail": "Elimina els elements de manera irreversible si el trasllat a la paperera provoca errors",
             "display": {
+                "hide_toolbar_distraction_free": "Amaga la barra lateral en el mode lliure de distraccions",
                 "image_height": "M\u00e0xima al\u00e7ada de les imatges (en %)",
                 "image_size_info": "Amb aquests ajustaments podeu restringir les previsualitzacions de les imatges",
                 "image_width": "M\u00e0xima amplada de les imatges (%)",
@@ -218,6 +226,7 @@
                 "title": "Visualitzaci\u00f3",
                 "use_first_headings": "Si est\u00e0 activat: utilitza el primer encap\u00e7alament de nivell 1 en comptes del nom del fitxer"
             },
+            "display_markdown_file_extensions": "Mostra l'extensi\u00f3 del fitxer Markdown",
             "display_time_explanation": "A les metadades del fitxer, mostra",
             "editor": "Editor",
             "editor_font_size": "Editor de la mida de la lletra",
@@ -247,10 +256,17 @@
             "filemanager_expanded": "Expandit &mdash; mostra tant l'arbre de fitxers com la llista",
             "filemanager_explanation": "Mode gestor de fitxers",
             "filemanager_thin": "Prim &mdash; mostra l'arbre de fitxers o la llista",
+            "filename_display": {
+                "filename_only": "Nom\u00e9s nom del fitxer",
+                "heading": "Primer encap\u00e7alament de nivell 1 (si \u00e9s possible)",
+                "label": "Mostra el fitxer utilitzant",
+                "title": "T\u00edtol (si \u00e9s aplicable)",
+                "title_heading": "T\u00edtol o primer encap\u00e7alament de nivell 1 (si \u00e9s aplicable)"
+            },
             "filename_generator": "Patr\u00f3 pels noms dels nous fitxers",
             "formatting_characters_explanation": "Tria els car\u00e0cters de format per a negretes o cursives",
             "general": "General",
-            "hide_dirs": "Amaga les carpetes durant la cerca global",
+            "hide_dirs": "Amaga les carpetes durant l'escorcoll",
             "homeEndBehaviour": "Utilitza les accions per defecte del CodeMirror per \u003Ckbd\u003EHome\u003C/kbd\u003E i \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
             "indent_unit": "Sagna a partir del n\u00famero d'espais",
             "input_mode": "Mode d'input de l'editor",
@@ -316,6 +332,7 @@
             "readability_algorithm": "Algorisme a utilitzar per al mode de llegibilitat",
             "reset_pandoc_command": "Reinicialitza l'ordre pandoc",
             "show_app_in_the_notification_area": "Mostra l'aplicaci\u00f3 a l'\u00e0rea de notificaci\u00f3",
+            "sort_folders_first": "Mostra les carpetes sobre els fitxers",
             "sorting_ascii": "Ordre ASCII (2 va despr\u00e9s de 10)",
             "sorting_explanation": "Ordre en el que s'ordenen els fitxers (quan s'ordenen per nom)",
             "sorting_natural": "Ordre natural (10 va despr\u00e9s de 2)",
@@ -356,6 +373,7 @@
             "zkn": {
                 "auto_create_file": "Crea autom\u00e0ticament fitxers no-existents quan segueixin links interns",
                 "auto_search": "Comen\u00e7a una cerca quan es segueixin els enlla\u00e7os Zettelkasten",
+                "custom_directory": "Posar els fitxers creats autom\u00e0ticament en aquesta carpeta (han d'estar carregats a Zettlr)",
                 "generated_id": "ID generada",
                 "id_generator_label": "Patr\u00f3 utilitzat per a generar noves IDs",
                 "id_label": "Expressi\u00f3 ID regular",
@@ -521,7 +539,7 @@
             "restrict_dir_placeholder": "Restringeix la cerca a la carpeta...",
             "search_label": "Busca",
             "title": "Busca a tot el text",
-            "toggle_label": "Activa/Desactiva els resultats"
+            "toggle_label": "M\u00e9s / Menys detalls"
         },
         "modified": "Modificat",
         "months": {
@@ -576,6 +594,7 @@
         "close_file": "Tanca el fitxer",
         "close_workspace": "Tanca l'espai de treball",
         "copy": "Copia",
+        "copy_equation": "Copia el codi de l'ecuaci\u00f3",
         "copy_filename": "Copia el nom del fitxer",
         "copy_html": "Copia com a HTML",
         "copy_id": "Copia la ID",
@@ -794,7 +813,7 @@
         "tag_cloud": "Etiquetes",
         "toggle_attachments": "Mostra els adjunts",
         "toggle_file_manager": "Gestor der fitxers",
-        "toggle_global_search": "Cerca global"
+        "toggle_global_search": "Escorcoll"
     },
     "tray": {
         "show_zettlr": "Mostra el Zettlr",

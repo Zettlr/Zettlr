@@ -81,7 +81,7 @@ export default {
   created: function () {
     window.addEventListener('resize', this.recalculateSizes)
   },
-  destroyed: function () {
+  unmounted: function () {
     // Stop listening to any size changes
     window.removeEventListener('resize', this.recalculateSizes)
     this.observer.unobserve(this.$el)

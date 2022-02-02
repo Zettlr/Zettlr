@@ -49,7 +49,7 @@
       -->
       <FileItem
         v-for="item in getDirectoryContents"
-        v-bind:key="item.hash"
+        v-bind:key="item.id"
         v-bind:index="0"
         v-bind:obj="item.props"
         v-on:create-file="handleOperation('file-new', item.id)"
@@ -57,7 +57,7 @@
       >
       </FileItem>
       <div
-        v-if="getDirectoryContents[0].type === 'directory'"
+        v-if="getDirectoryContents[0].props.type === 'directory'"
         class="empty-directory"
       >
         {{ emptyDirectoryMessage }}
@@ -72,7 +72,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -88,16 +88,20 @@
  * END HEADER
  */
 
-import { trans } from '../../common/i18n-renderer'
+import { trans } from '@common/i18n-renderer'
 import tippy from 'tippy.js'
-import FileItem from './file-item'
+import FileItem from './file-item.vue'
 import { RecycleScroller } from 'vue-virtual-scroller'
-import objectToArray from '../../common/util/object-to-array'
+import objectToArray from '@common/util/object-to-array'
 import matchQuery from './util/match-query'
 
-const ipcRenderer = window.ipc
+import { nextTick, defineComponent } from 'vue'
+import { IpcRenderer } from 'electron'
+import { MDFileMeta, CodeFileMeta, DirMeta } from '@dts/common/fsal'
 
-export default {
+const ipcRenderer: IpcRenderer = (window as any).ipc
+
+export default defineComponent({
   name: 'FileList',
   components: {
     FileItem,
@@ -115,45 +119,45 @@ export default {
   },
   data: function () {
     return {
-      activeDescriptor: null // Can contain the active ("focused") item
+      activeDescriptor: null as any|null // Can contain the active ("focused") item
     }
   },
   computed: {
-    selectedDirectory: function () {
+    selectedDirectory: function (): any {
       return this.$store.state.selectedDirectory
     },
-    selectedDirectoryHash: function () {
+    selectedDirectoryHash: function (): string {
       if (this.selectedDirectory === null) {
         return ''
       } else {
         return this.selectedDirectory.hash
       }
     },
-    noResultsMessage: function () {
+    noResultsMessage: function (): string {
       return trans('gui.no_search_results')
     },
-    emptyFileListMessage: function () {
+    emptyFileListMessage: function (): string {
       return trans('gui.no_dir_selected')
     },
-    emptyDirectoryMessage: function () {
+    emptyDirectoryMessage: function (): string {
       return trans('gui.empty_dir')
     },
-    selectedFile: function () {
+    selectedFile: function (): string {
       return this.$store.state.activeFile
     },
-    itemHeight: function () {
+    itemHeight: function (): number {
       if (this.$store.state.config['fileMeta'] === true) {
         return 70
       } else {
         return 30
       }
     },
-    getDirectoryContents: function () {
+    getDirectoryContents: function (): Array<{ id: number, props: MDFileMeta|CodeFileMeta|DirMeta}> {
       if (this.$store.state.selectedDirectory === null) {
         return []
       }
 
-      let ret = []
+      const ret: Array<{ id: number, props: MDFileMeta|CodeFileMeta|DirMeta}> = []
       const items = objectToArray(this.$store.state.selectedDirectory, 'children')
       for (let i = 0; i < items.length; i++) {
         ret.push({
@@ -163,7 +167,13 @@ export default {
       }
       return ret
     },
-    getFilteredDirectoryContents: function () {
+    useH1: function (): boolean {
+      return this.$store.state.config.fileNameDisplay.includes('heading')
+    },
+    useTitle: function (): boolean {
+      return this.$store.state.config.fileNameDisplay.includes('title')
+    },
+    getFilteredDirectoryContents: function (): any[] {
       // Returns a list of directory contents, filtered
       const originalContents = this.getDirectoryContents
 
@@ -173,7 +183,7 @@ export default {
         return originalContents
       }
 
-      const filter = matchQuery(q, this.$store.state.config['display.useFirstHeadings'])
+      const filter = matchQuery(q, this.useTitle, this.useH1)
 
       // Filter based on the query (remember: there's an ID and a "props" property)
       return originalContents.filter(element => {
@@ -197,9 +207,9 @@ export default {
       this.scrollIntoView()
     },
     getDirectoryContents: function () {
-      this.$nextTick(function () {
-        this.scrollIntoView()
-      })
+      nextTick()
+        .then(() => { this.scrollIntoView() })
+        .catch(err => console.error(err))
     }
   },
   mounted: function () {
@@ -209,9 +219,9 @@ export default {
    * has finished (such as tippy).
    */
   updated: function () {
-    this.$nextTick(function () {
-      this.updateDynamics()
-    })
+    nextTick()
+      .then(() => { this.updateDynamics() })
+      .catch(err => console.error(err))
   },
   methods: {
     /**
@@ -219,7 +229,7 @@ export default {
      * Hold Shift for moving by 10 files, Command or Control to
      * jump to the very end.
      */
-    navigate: function (evt) {
+    navigate: function (evt: KeyboardEvent) {
       // Only capture arrow movements
       if (![ 'ArrowDown', 'ArrowUp', 'Enter' ].includes(evt.key)) {
         return
@@ -355,22 +365,26 @@ export default {
         }
       }
     },
-    onFocusHandler: function (event) {
+    onFocusHandler: function (event: any) {
       this.activeDescriptor = this.selectedFile
     },
     focusFilter: function () {
-      this.$refs.quickFilter.focus()
+      (this.$refs.quickFilter as HTMLInputElement).focus()
     },
-    handleOperation: async function (type, idx) {
+    handleOperation: async function (type: string, idx: number) {
       // Creates files and directories, or duplicates a file.
-      const source = this.getDirectoryContents.find(item => item.id === idx).props
+      const source = this.getDirectoryContents.find(item => item.id === idx)?.props
+      if (source === undefined) {
+        throw new Error('Could not handle file list operation: Source was undefined')
+      }
+
       await ipcRenderer.invoke('application', {
         command: type,
         payload: { path: source.path }
       })
     }
   }
-}
+})
 </script>
 
 <style lang="less">

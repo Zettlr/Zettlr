@@ -11,7 +11,7 @@
  * END HEADER
  */
 
-import { AnyDescriptor } from '../types'
+import { RequiredSortingProps } from './sort'
 
 /**
  * Helper function to sort files by modification or creation time
@@ -19,7 +19,7 @@ import { AnyDescriptor } from '../types'
  * @param  {AnyDescriptor} b The second descriptor
  * @return {number}          0, 1, or -1, depending upon what the comparision yields.
  */
-export default function (a: AnyDescriptor, b: AnyDescriptor): number {
+export default function sortDate<T extends RequiredSortingProps> (a: T, b: T): number {
   let aDate = a.modtime
   let bDate = b.modtime
 

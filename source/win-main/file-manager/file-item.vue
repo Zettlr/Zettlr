@@ -15,7 +15,7 @@
         'has-meta-info': fileMeta,
         directory: obj.type === 'directory'
       }"
-      v-bind:data-id="obj.id"
+      v-bind:data-id="obj.type === 'file' ? obj.id : ''"
       v-bind:data-filename="getFilename"
       v-bind:draggable="isDraggable"
       v-on:click.stop="requestSelection"
@@ -40,7 +40,7 @@
           ref="name-editing-input"
           type="text"
           v-bind:value="obj.name"
-          v-on:keyup.enter="finishNameEditing($event.target.value)"
+          v-on:keyup.enter="finishNameEditing(($event.target as HTMLInputElement).value)"
           v-on:keyup.esc="nameEditing = false"
           v-on:blur="nameEditing = false"
           v-on:click.stop=""
@@ -53,12 +53,12 @@
         <div v-if="isDirectory">
           <span class="badge">{{ countDirs }}</span>
           <span class="badge">{{ countFiles }}</span>
-          <span class="badge">{{ countWords }}</span>
+          <span class="badge">{{ countWordsOrCharsOfDirectory }}</span>
         </div>
         <template v-else>
           <div v-if="hasTags">
             <!-- First line -->
-            <div v-for="(tag, idx) in obj.tags" v-bind:key="idx" class="tag badge">
+            <div v-for="(tag, idx) in (obj as any).tags" v-bind:key="idx" class="tag badge">
               <span
                 v-if="retrieveTagColour(tag)"
                 class="color-circle"
@@ -77,10 +77,10 @@
               aria-label="Code-file"
               class="code-indicator badge"
             >
-              {{ obj.ext.substr(1) }}
+              {{ (obj as any).ext.substr(1) }}
             </span>
             <!-- Display the ID, if there is one -->
-            <span v-if="obj.id" class="id badge">{{ obj.id }}</span>
+            <span v-if="obj.type === 'file' && obj.id !== ''" class="id badge">{{ obj.id }}</span>
             <!-- Display the file size if we have a code file -->
             <span v-if="obj.type === 'code'" class="badge">{{ formattedSize }}</span>
             <!--
@@ -89,7 +89,7 @@
               relation to a set writing target, if there is one.
             -->
             <span v-else-if="!hasWritingTarget" class="badge">
-              {{ formattedWordCount }}
+              {{ formattedWordCharCountOfFile }}
             </span>
             <span v-else class="badge">
               <svg
@@ -121,7 +121,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -136,13 +136,16 @@
  * END HEADER
  */
 
-import { trans } from '../../common/i18n-renderer'
-import formatDate from '../../common/util/format-date'
-import localiseNumber from '../../common/util/localise-number'
-import formatSize from '../../common/util/format-size'
+import { trans } from '@common/i18n-renderer'
+import formatDate from '@common/util/format-date'
+import localiseNumber from '@common/util/localise-number'
+import formatSize from '@common/util/format-size'
 import itemMixin from './util/item-mixin'
 
-export default {
+import { defineComponent } from 'vue'
+import { CodeFileMeta, DirMeta, MDFileMeta } from '@dts/common/fsal'
+
+export default defineComponent({
   name: 'FileItem',
   mixins: [itemMixin],
   props: {
@@ -153,20 +156,38 @@ export default {
     index: {
       type: Number,
       required: true
+    },
+    obj: {
+      type: Object as () => MDFileMeta|CodeFileMeta|DirMeta,
+      required: true
     }
   },
   computed: {
+    shouldCountChars: function (): boolean {
+      return this.$store.state.config['editor.countChars']
+    },
+    useH1: function (): boolean {
+      return this.$store.state.config.fileNameDisplay.includes('heading')
+    },
+    useTitle: function (): boolean {
+      return this.$store.state.config.fileNameDisplay.includes('title')
+    },
+    displayMdExtensions: function (): boolean {
+      return this.$store.state.config['display.markdownFileExtensions']
+    },
     // We have to explicitly transform ALL properties to computed ones for
     // the reactivity in conjunction with the recycle-scroller.
     basename: function () {
-      if (this.obj.type === 'code') {
+      if (this.obj.type !== 'file') {
         return this.obj.name
       }
 
-      if (this.obj.frontmatter != null && 'title' in this.obj.frontmatter) {
+      if (this.useTitle && typeof this.obj.frontmatter?.title === 'string') {
         return this.obj.frontmatter.title
-      } else if (this.obj.firstHeading != null && this.$store.state.config['display.useFirstHeadings'] === true) {
+      } else if (this.useH1 && this.obj.firstHeading !== null) {
         return this.obj.firstHeading
+      } else if (this.displayMdExtensions) {
+        return this.obj.name
       } else {
         return this.obj.name.replace(this.obj.ext, '')
       }
@@ -174,35 +195,21 @@ export default {
     getFilename: function () {
       return this.obj.name
     },
-    getColoredTags: function () {
-      if (this.obj.tags === undefined) {
-        return []
-      } else {
-        const ret = []
-        const colouredTags = this.$store.state.colouredTags
-        for (const colouredTag in colouredTags) {
-          if (this.obj.tags.includes(colouredTag.name) === true) {
-            ret.push(colouredTag)
-          }
-        }
-
-        return ret
-      }
-    },
     hasTags: function () {
+      if (this.obj.type !== 'file') {
+        return false
+      }
+
       return this.obj.tags !== undefined && this.obj.tags.length > 0
     },
     isProject: function () {
-      return this.isDirectory === true && this.obj.project !== null
+      return this.obj.type === 'directory' && this.obj.project !== null
     },
     isDraggable: function () {
       return this.isDirectory === false
     },
     fileMeta: function () {
       return this.$store.state.config['fileMeta']
-    },
-    displayTime: function () {
-      return this.$store.state.displayTime
     },
     isCode: function () {
       return this.obj.type === 'code'
@@ -215,28 +222,27 @@ export default {
       }
     },
     countDirs: function () {
-      if (this.isDirectory === false) {
+      if (this.obj.type !== 'directory') {
         return 0
       }
-      return this.obj.children.filter(e => e.type === 'directory').length + ' ' + trans('system.directories') || 0
+      return this.obj.children.filter((e: any) => e.type === 'directory').length + ' ' + trans('system.directories') || 0
     },
     countFiles: function () {
-      if (this.isDirectory === false) {
+      if (this.obj.type !== 'directory') {
         return 0
       }
-      return this.obj.children.filter(e => [ 'file', 'code' ].includes(e.type)).length + ' ' + trans('system.files') || 0
+      return this.obj.children.filter((e: any) => [ 'file', 'code' ].includes(e.type)).length + ' ' + trans('system.files') || 0
     },
-    countWords: function () {
-      if (this.isDirectory === false) {
-        return 0
+    countWordsOrCharsOfDirectory: function () {
+      if (this.obj.type !== 'directory') {
+        return ''
       }
 
-      const wordCount = this.obj.children
-        .filter(file => file.type === 'file')
-        .map(file => file.wordCount)
-        .reduce((prev, cur) => prev + cur, 0)
-
-      return trans('gui.words', localiseNumber(wordCount))
+      const wordOrCharCount = this.obj.children
+        .filter((file: any) => file.type === 'file')
+        .map((file: any) => this.shouldCountChars ? file.charCount : file.wordCount)
+        .reduce((prev: number, cur: number) => prev + cur, 0)
+      return trans((this.shouldCountChars ? 'gui.chars' : 'gui.words'), localiseNumber(wordOrCharCount))
     },
     countTags: function () {
       if (this.obj.type !== 'file') {
@@ -253,6 +259,10 @@ export default {
       return true
     },
     writingTargetPath: function () {
+      if (this.obj.type !== 'file') {
+        throw new Error('Could not compute writingTargetPath: Was called on non-file object')
+      }
+
       let current = this.obj.charCount
       if (this.obj.target.mode === 'words') current = this.obj.wordCount
       let progress = current / this.obj.target.count
@@ -263,6 +273,10 @@ export default {
       return `M 1 0 A 1 1 0 ${large} 1 ${x} ${y} L 0 0`
     },
     writingTargetInfo: function () {
+      if (this.obj.type !== 'file') {
+        throw new Error('Could not compute writingTargetInfo: Was called on non-file object')
+      }
+
       let current = this.obj.charCount
       if (this.obj.target.mode === 'words') {
         current = this.obj.wordCount
@@ -280,40 +294,47 @@ export default {
 
       return `${localiseNumber(current)} / ${localiseNumber(this.obj.target.count)} ${label} (${progress} %)`
     },
-    formattedWordCount: function () {
-      if (this.obj.wordCount === undefined) {
+    formattedWordCharCountOfFile: function () {
+      if (this.obj.type !== 'file') {
         return '' // Failsafe because code files don't have a word count.
       }
-      // TODO: Enable char count as well!!
-      return trans('gui.words', localiseNumber(this.obj.wordCount))
+      if (this.shouldCountChars) {
+        return trans('gui.chars', localiseNumber(this.obj.charCount))
+      } else {
+        return trans('gui.words', localiseNumber(this.obj.wordCount))
+      }
     },
     formattedSize: function () {
       return formatSize(this.obj.size)
     }
   },
   methods: {
-    retrieveTagColour: function (tagName) {
-      const colouredTags = this.$store.state.colouredTags
-      const foundTag = colouredTags.find(tag => tag.name === tagName)
+    retrieveTagColour: function (tagName: string) {
+      const colouredTags: any[] = this.$store.state.colouredTags
+      const foundTag = colouredTags.find((tag) => tag.name === tagName)
       if (foundTag !== undefined) {
         return foundTag.color
       } else {
         return false
       }
     },
-    beginDragging: function (event) {
+    beginDragging: function (event: DragEvent) {
+      if (event.dataTransfer === null) {
+        return
+      }
+
       event.dataTransfer.dropEffect = 'move'
       // Tell the file manager component to lock the directory tree
       // (only necessary for thin mode)
       this.$emit('begin-dragging')
       event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
-        'type': this.obj.type, // Can be file, code, or directory
-        'path': this.obj.path,
-        'id': this.obj.id // Convenience
+        type: this.obj.type, // Can be file, code, or directory
+        path: this.obj.path,
+        id: this.obj.type === 'file' ? this.obj.id : '' // Convenience
       }))
     }
   }
-}
+})
 </script>
 
 <style lang="less">

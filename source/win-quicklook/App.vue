@@ -23,8 +23,6 @@
       v-bind:tags="tags"
       v-bind:word-count="wordCount"
       v-bind:char-count="charCount"
-      v-bind:target="target"
-      v-bind:first-heading="firstHeading"
       v-bind:frontmatter="frontmatter"
       v-bind:linefeed="linefeed"
       v-bind:modified="modified"
@@ -33,7 +31,7 @@
   </WindowChrome>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -49,12 +47,15 @@
  */
 
 import QuicklookEditor from './QuicklookEditor.vue'
-import WindowChrome from '../common/vue/window/Chrome.vue'
-import { trans } from '../common/i18n-renderer'
+import WindowChrome from '@common/vue/window/Chrome.vue'
+import { trans } from '@common/i18n-renderer'
+import { IpcRenderer } from 'electron'
+import { defineComponent } from 'vue'
+import { ToolbarControl } from '@dts/renderer/window'
 
-const ipcRenderer = window.ipc
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
-export default {
+export default defineComponent({
   components: {
     WindowChrome,
     QuicklookEditor
@@ -74,45 +75,53 @@ export default {
       tags: [],
       wordCount: 0,
       charCount: 0,
-      target: null,
       firstHeading: null,
-      frontmatter: null,
+      frontmatter: null as null|any,
       linefeed: '\n',
       modified: false,
       content: ''
     }
   },
   computed: {
-    shouldShowTitlebar: function () {
+    shouldShowTitlebar: function (): boolean {
       return process.platform !== 'darwin'
     },
-    windowTitle: function () {
-      let title = this.name
-      const firstHeadings = Boolean(global.config.get('display.useFirstHeadings'))
-      if (this.type === 'file') {
-        if (this.firstHeading !== null && firstHeadings) {
-          title = this.firstHeading
-        }
-        if (this.frontmatter != null && this.frontmatter.title !== undefined) {
-          title = this.frontmatter.title
-        }
-      }
-      return title
+    displayFilenameSettings: function (): string {
+      return (global as any).config.get('fileNameDisplay')
     },
-    toolbarControls: function () {
-      const ctrl = [
+    windowTitle: function (): string {
+      if (this.type !== 'file') {
+        return this.name
+      }
+
+      const useH1 = this.displayFilenameSettings.includes('heading')
+      const useTitle = this.displayFilenameSettings.includes('title')
+
+      if (useTitle && typeof this.frontmatter?.title === 'string') {
+        return this.frontmatter.title
+      }
+      if (useH1 && this.firstHeading !== null) {
+        return this.firstHeading
+      }
+
+      return this.name
+    },
+    toolbarControls: function (): ToolbarControl[] {
+      const ctrl: ToolbarControl[] = [
         {
           type: 'spacer', // Make sure the content is flushed to the left
-          size: 'size-5x'
+          size: '5x',
+          id: 'spacer-one'
         },
         {
           type: 'search',
+          id: 'filter-input',
           placeholder: trans('dialog.find.find_placeholder'),
-          onInputHandler: (value) => {
+          onInputHandler: (value: string) => {
             this.query = value
           },
-          onSubmitHandler: (value) => {
-            this.$refs.editor.searchNext()
+          onSubmitHandler: (value: string) => {
+            (this.$refs.editor as typeof QuicklookEditor).searchNext()
           }
         }
       ]
@@ -121,6 +130,7 @@ export default {
         // On macOS, we don't have a titlebar. There it is customary to add the window title to the toolbar.
         ctrl.push({
           type: 'text',
+          id: 'toolbar-title',
           content: (this.windowTitle === undefined) ? 'QuickLook' : this.windowTitle,
           style: 'strong'
         })
@@ -135,17 +145,17 @@ export default {
 
       if (command === 'update') {
         const { payload } = message
-        this.$refs.editor.updateConfig(payload)
+        ;(this.$refs.editor as typeof QuicklookEditor).updateConfig(payload)
       }
     })
   },
   methods: {
-    searchNext: function (query) {
+    searchNext: function (query: string) {
       this.query = query
-      this.$refs.editor.searchNext()
+      ;(this.$refs.editor as typeof QuicklookEditor).searchNext()
     }
   }
-}
+})
 </script>
 
 <style lang="less">

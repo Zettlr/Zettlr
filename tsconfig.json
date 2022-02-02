@@ -16,12 +16,21 @@
     "outDir": "dist",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "baseUrl": ".",
+    "paths": {
+      "@common/*": ["source/common/*"],
+      "@providers/*": ["source/app/service-providers/*"],
+      "@dts/*": ["source/types/*"]
+    }
   },
   "include": [
     "source/**/*",
     "test/**/*",
     "forge.config.js",
     "webpack.*.js"
-  ]
+  ],
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  }
 }

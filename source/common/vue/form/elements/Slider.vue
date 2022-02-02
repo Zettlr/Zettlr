@@ -5,9 +5,9 @@
       type="range"
       v-bind:min="min"
       v-bind:max="max"
-      v-bind:value="value"
+      v-bind:value="modelValue"
       v-bind:name="name"
-      v-on:input="$emit('input', parseInt($event.target.value, 10))"
+      v-on:input="$emit('update:modelValue', parseInt($event.target.value, 10))"
       v-on:change="$emit('change', parseInt($event.target.value, 10))"
     >
   </div>
@@ -31,7 +31,7 @@
 export default {
   name: 'SliderControl',
   props: {
-    value: {
+    modelValue: {
       type: Number,
       default: 0
     },
@@ -52,6 +52,7 @@ export default {
       default: ''
     }
   },
+  emits: [ 'update:modelValue', 'change' ],
   methods: {
     fieldID: function (key) {
       return 'form-input-' + this.name + '-' + key

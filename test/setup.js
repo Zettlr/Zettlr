@@ -12,6 +12,7 @@
  */
 
 import { JSDOM } from 'jsdom'
+import path from 'path'
 
 /**
  * Emulates a browser environment, which is required for some tests (especially if Vue is involved).
@@ -27,6 +28,10 @@ function mockBrowser () {
       ...Object.getOwnPropertyDescriptors(target)
     })
   }
+
+  // The renderer utilities look for the path module on the window object, so
+  // we copy it here in order for those tests not to fail.
+  window.path = path
 
   global.window = window
   global.document = window.document

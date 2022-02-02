@@ -14,12 +14,9 @@
 
 import path from 'path'
 import { promises as fs } from 'fs'
-import hash from '../../../common/util/hash'
-import {
-  OtherFileDescriptor,
-  OtherFileMeta,
-  DirDescriptor
-} from './types'
+import hash from '@common/util/hash'
+import { OtherFileDescriptor, DirDescriptor } from '@dts/main/fsal'
+import { OtherFileMeta } from '@dts/common/fsal'
 
 export async function parse (absPath: string, parent: DirDescriptor): Promise<OtherFileDescriptor> {
   let attachment: OtherFileDescriptor = {

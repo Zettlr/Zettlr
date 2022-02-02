@@ -26,11 +26,15 @@ interface ExtractYamlFrontmatterReturn {
  *
  * @return  {any|null}            The parsed frontmatter as an object, or null.
  */
-export default function extractYamlFrontmatter (markdown: string, linefeed: string = '\n'): ExtractYamlFrontmatterReturn {
+export default function extractYamlFrontmatter (markdown: string): ExtractYamlFrontmatterReturn {
   const ret = {
     frontmatter: null,
     content: markdown
   }
+
+  let linefeed = '\n'
+  if (markdown.includes('\r\n')) linefeed = '\r\n'
+  if (markdown.includes('\n\r')) linefeed = '\n\r'
 
   const lines = markdown.split(linefeed)
 

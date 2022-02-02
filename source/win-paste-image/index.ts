@@ -12,12 +12,12 @@
  * END HEADER
  */
 
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
-import windowRegister from '../common/modules/window-register'
+import windowRegister from '@common/modules/window-register'
 
 // The first thing we have to do is run the window controller
 windowRegister()
 
-const app = new Vue(App)
-app.$mount('#app')
+const app = createApp(App)
+app.mount('#app')

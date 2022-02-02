@@ -17,15 +17,15 @@
 import chokidar from 'chokidar'
 import EventEmitter from 'events'
 
-import ignoreDir from '../../../common/util/ignore-dir'
-import ignoreFile from '../../../common/util/ignore-file'
-import isFile from '../../../common/util/is-file'
-import isDir from '../../../common/util/is-dir'
-import isAttachment from '../../../common/util/is-attachment'
+import ignoreDir from '@common/util/ignore-dir'
+import ignoreFile from '@common/util/ignore-file'
+import isFile from '@common/util/is-file'
+import isDir from '@common/util/is-dir'
+import isAttachment from '@common/util/is-attachment'
 
-import { ignoreDirs as IGNORE_DIR_REGEXP } from '../../../common/data.json'
+import { ignoreDirs as IGNORE_DIR_REGEXP } from '@common/data.json'
 
-import { WatchdogEvent } from './types'
+import { WatchdogEvent } from '@dts/main/fsal'
 
 export default class FSALWatchdog extends EventEmitter {
   _booting: boolean

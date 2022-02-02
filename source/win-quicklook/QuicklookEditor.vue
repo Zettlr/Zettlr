@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -20,12 +20,17 @@
  * END HEADER
  */
 
-const MarkdownEditor = require('../common/modules/markdown-editor')
-const CodeMirror = require('codemirror')
+import MarkdownEditor from '../common/modules/markdown-editor'
+import CodeMirror from 'codemirror'
+import { IpcRenderer } from 'electron'
+import { defineComponent } from 'vue'
 
-const ipcRenderer = window.ipc
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
-export default {
+let mdEditor: MarkdownEditor|null = null
+let scrollbarAnnotations = null
+
+export default defineComponent({
   name: 'QuicklookEditor',
   props: {
     fontSize: {
@@ -80,14 +85,6 @@ export default {
       type: Number,
       default: 0
     },
-    target: {
-      type: Object,
-      default: null
-    },
-    firstHeading: {
-      type: String,
-      default: null
-    },
     frontmatter: {
       type: Object,
       default: null
@@ -106,12 +103,7 @@ export default {
     }
   },
   data: function () {
-    return {
-      editor: null,
-      searchCursor: null,
-      currentLocalSearch: '',
-      scrollbarAnnotations: null
-    }
+    return {}
   },
   computed: {
     editorStyles: function () {
@@ -122,19 +114,19 @@ export default {
     // We could basically watch any prop, as all are updated simultaneously,
     // but this makes most sense.
     content: function () {
-      if (this.editor === null) {
+      if (mdEditor === null) {
         console.error('Received a file update but the editor was not yet initiated!')
         return
       }
 
-      this.editor.setOptions({
+      mdEditor.setOptions({
         zettlr: {
           markdownImageBasePath: this.dir
         }
       })
 
       const mode = (this.ext === '.tex') ? 'stex' : 'multiplex'
-      this.editor.swapDoc(CodeMirror.Doc(this.content, mode), mode)
+      mdEditor.swapDoc(CodeMirror.Doc(this.content, mode), mode)
     },
     query: function () {
       // Begin a search
@@ -143,7 +135,7 @@ export default {
   },
   mounted: function () {
     // As soon as the component is mounted, initiate the editor
-    this.editor = new MarkdownEditor(this.$refs.editor, {
+    mdEditor = new MarkdownEditor(this.$refs.editor as HTMLTextAreaElement, {
       // If there are images in the Quicklook file, the image renderer needs
       // the directory path of the file to correctly render the images.
       zettlr: {
@@ -156,47 +148,55 @@ export default {
     // this.editor.isFullscreen = true
 
     // Initiate the scrollbar annotations
-    this.scrollbarAnnotations = this.editor.codeMirror.annotateScrollbar('sb-annotation')
-    this.scrollbarAnnotations.update([])
+    scrollbarAnnotations = mdEditor.codeMirror.annotateScrollbar('sb-annotation')
+    scrollbarAnnotations.update([])
 
     // Listen to shortcuts from the main process
     ipcRenderer.on('shortcut', (event, shortcut) => {
-      if (shortcut === 'copy-as-html') {
-        this.editor.copyAsHTML()
+      if (shortcut === 'copy-as-html' && mdEditor !== null) {
+        mdEditor.copyAsHTML()
       }
     })
   },
   methods: {
-    updateConfig: function (option) {
+    updateConfig: function (option: any) {
+      if (mdEditor === null) {
+        return
+      }
+
       // TODO: Make use of option, too lazy to copy over the boilerplate from
       // the main editor right now. Quicklooks are more static so they shouldn't
       // care too much about these things.
-      this.editor.setOptions({
+      mdEditor.setOptions({
         zettlr: {
-          imagePreviewWidth: global.config.get('display.imageWidth'),
-          imagePreviewHeight: global.config.get('display.imageHeight'),
-          markdownBoldFormatting: global.config.get('editor.boldFormatting'),
-          markdownItalicFormatting: global.config.get('editor.italicFormatting'),
-          zettelkasten: global.config.get('zkn'),
-          readabilityAlgorithm: global.config.get('editor.readabilityAlgorithm'),
+          imagePreviewWidth: (global as any).config.get('display.imageWidth'),
+          imagePreviewHeight: (global as any).config.get('display.imageHeight'),
+          markdownBoldFormatting: (global as any).config.get('editor.boldFormatting'),
+          markdownItalicFormatting: (global as any).config.get('editor.italicFormatting'),
+          zettelkasten: (global as any).config.get('zkn'),
+          readabilityAlgorithm: (global as any).config.get('editor.readabilityAlgorithm'),
           render: {
-            citations: global.config.get('display.renderCitations'),
-            iframes: global.config.get('display.renderIframes'),
-            images: global.config.get('display.renderImages'),
-            links: global.config.get('display.renderLinks'),
-            math: global.config.get('display.renderMath'),
-            tasks: global.config.get('display.renderTasks'),
-            headingTags: global.config.get('display.renderHTags'),
-            tables: global.config.get('editor.enableTableHelper')
+            citations: (global as any).config.get('display.renderCitations'),
+            iframes: (global as any).config.get('display.renderIframes'),
+            images: (global as any).config.get('display.renderImages'),
+            links: (global as any).config.get('display.renderLinks'),
+            math: (global as any).config.get('display.renderMath'),
+            tasks: (global as any).config.get('display.renderTasks'),
+            headingTags: (global as any).config.get('display.renderHTags'),
+            tables: (global as any).config.get('editor.enableTableHelper')
           }
         }
       })
     },
     searchNext () {
-      this.editor.searchNext(this.query)
+      if (mdEditor === null) {
+        return
+      }
+
+      mdEditor.searchNext(this.query)
     }
   }
-}
+})
 </script>
 
 <style lang="less">

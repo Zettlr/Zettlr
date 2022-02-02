@@ -16,10 +16,10 @@ import path from 'path'
 import { promises as fs } from 'fs'
 import { app, ipcMain } from 'electron'
 import got from 'got'
-import { trans } from '../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 import moment from 'moment'
-import enumDictFiles from '../../common/util/enum-dict-files'
-import enumLangFiles from '../../common/util/enum-lang-files'
+import enumDictFiles from '@common/util/enum-dict-files'
+import enumLangFiles from '@common/util/enum-lang-files'
 
 const TRANSLATION_API_URL = 'https://translate.zettlr.com/api/languages'
 

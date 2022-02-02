@@ -74,7 +74,7 @@
   </WindowChrome>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -89,16 +89,18 @@
  * END HEADER
  */
 
-import WindowChrome from '../common/vue/window/Chrome'
-import ButtonControl from '../common/vue/form/elements/Button'
-import ProgressControl from '../common/vue/form/elements/Progress'
-import { trans } from '../common/i18n-renderer'
-import formatSize from '../common/util/format-size'
+import WindowChrome from '@common/vue/window/Chrome.vue'
+import ButtonControl from '@common/vue/form/elements/Button.vue'
+import ProgressControl from '@common/vue/form/elements/Progress.vue'
+import { trans } from '@common/i18n-renderer'
+import formatSize from '@common/util/format-size'
 import PACKAGE_JSON from '../../package.json'
+import { IpcRenderer } from 'electron'
+import { defineComponent } from 'vue'
 
-const ipcRenderer = window.ipc
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
-export default {
+export default defineComponent({
   components: {
     WindowChrome,
     ButtonControl,
@@ -116,7 +118,9 @@ export default {
         prerelease: false,
         changelog: '',
         tagName: '',
-        compatibleAssets: [],
+        releasePage: 'https://github.com/Zettlr/Zettlr/releases',
+        // eslint-disable-next-line camelcase
+        compatibleAssets: [] as Array<{ name: string, browser_download_url: string }>,
         name: '',
         full_path: '',
         size_total: 0,
@@ -127,7 +131,7 @@ export default {
     }
   },
   computed: {
-    hasError: function () {
+    hasError: function (): boolean {
       // Sometimes, "undefined" properties do not get transferred from main so
       // we additionally need to check for existence here, cf. #2775
       return 'lastErrorMessage' in this.updateState &&
@@ -135,37 +139,37 @@ export default {
         this.updateState.lastErrorMessage !== undefined &&
         this.updateState.lastErrorCode !== undefined
     },
-    updateAvailable: function () {
+    updateAvailable: function (): boolean {
       return this.updateState.updateAvailable
     },
-    isDownloading: function () {
+    isDownloading: function (): boolean {
       return this.updateState.size_downloaded > 0 && this.updateState.size_downloaded < this.updateState.size_total
     },
-    isFinished: function () {
+    isFinished: function (): boolean {
       return this.updateState.size_downloaded > 0 && this.updateState.size_downloaded === this.updateState.size_total
     },
-    updateTitle: function () {
+    updateTitle: function (): string {
       return trans('dialog.update.title')
     },
-    updateCurrentVersion: function () {
+    updateCurrentVersion: function (): string {
       return trans('dialog.update.current_version')
     },
-    updateNotification: function () {
+    updateNotification: function (): string {
       return trans('dialog.update.notification')
     },
-    downloadProgressLabel: function () {
+    downloadProgressLabel: function (): string {
       return trans('dialog.update.download_progress_label')
     },
-    noUpdateMessage: function () {
+    noUpdateMessage: function (): string {
       return trans('dialog.update.no_new_update')
     },
-    currentVersion: function () {
+    currentVersion: function (): string {
       return PACKAGE_JSON.version
     },
-    checkForUpdateLabel: function () {
+    checkForUpdateLabel: function (): string {
       return trans('menu.update')
     },
-    getETA: function () {
+    getETA: function (): string {
       let seconds = this.updateState.eta_seconds
       if (seconds > 60) {
         return Math.floor(seconds / 60) + 'm ' + (seconds % 60) + 's'
@@ -193,7 +197,7 @@ export default {
     })
   },
   methods: {
-    requestDownload: function (url) {
+    requestDownload: function (url: string) {
       ipcRenderer.invoke('update-provider', {
         command: 'request-app-update',
         payload: url
@@ -209,7 +213,7 @@ export default {
           console.error(e)
         })
     },
-    formatSize: function (bytes) {
+    formatSize: function (bytes: number) {
       return formatSize(bytes, true)
     },
     checkForUpdate: function () {
@@ -220,7 +224,7 @@ export default {
       window.location.assign(this.updateState.releasePage)
     }
   }
-}
+})
 </script>
 
 <style lang="less">

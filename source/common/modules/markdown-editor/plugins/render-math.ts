@@ -12,8 +12,8 @@
   * END HEADER
   */
 
-import { getBlockMathRE, getInlineMathRenderRE } from '../../../../common/regular-expressions'
-import * as CodeMirror from 'codemirror'
+import { getBlockMathRE, getInlineMathRenderRE } from '@common/regular-expressions'
+import CodeMirror from 'codemirror'
 import katex from 'katex'
 
 import 'katex/contrib/mhchem' // modify katex module
@@ -61,6 +61,7 @@ commands.markdownRenderMath = function (cm: CodeMirror.Editor) {
 
     let mathSpan = document.createElement('span')
     mathSpan.classList.add('preview-math')
+    mathSpan.dataset.equation = myMarker.eq // Save the equation so it can be copied
 
     let textMarker = cm.getDoc().markText(
       myMarker.curFrom, myMarker.curTo,
@@ -79,7 +80,11 @@ commands.markdownRenderMath = function (cm: CodeMirror.Editor) {
     katex.render(myMarker.eq, mathSpan, { throwOnError: false, displayMode: myMarker.displayMode })
 
     // Now the marker has obviously changed
-    textMarker.changed()
+    if (textMarker.find() !== undefined) {
+      textMarker.changed()
+    } else {
+      console.warn('Warning: Attempted to update a text marker after KaTeX finished rendering, but it wasn\' in the document anymore.')
+    }
   }
 }
 

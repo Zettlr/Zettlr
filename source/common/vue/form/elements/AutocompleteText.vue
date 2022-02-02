@@ -6,10 +6,10 @@
       v-bind:id="fieldID"
       ref="input"
       type="search"
-      v-bind:value="value"
+      v-bind:value="modelValue"
       v-bind:class="{ 'inline': inline }"
       v-bind:placeholder="placeholder"
-      v-on:input="$emit('input', $event.target.value)"
+      v-on:input="$emit('update:modelValue', $event.target.value)"
       v-on:keydown.enter="confirmSelection()"
       v-on:keydown.tab.prevent="confirmSelection()"
       v-on:keydown.esc="$emit('escape', $event.target.value)"
@@ -20,7 +20,7 @@
     >
     <!-- Display the completion list -->
     <div
-      v-if="inputHasFocus && value !== ''"
+      v-if="inputHasFocus && modelValue !== '' && matches.length > 0"
       ref="autocomplete-dropdown"
       class="autocomplete-list"
       v-bind:style="{
@@ -62,10 +62,12 @@
  * END HEADER
  */
 
+import { nextTick } from 'vue'
+
 export default {
   name: 'AutocompleteText',
   props: {
-    value: {
+    modelValue: {
       type: String,
       default: ''
     },
@@ -90,6 +92,7 @@ export default {
       default: function () { return [] }
     }
   },
+  emits: [ 'update:modelValue', 'blur', 'escape', 'confirm' ],
   data: function () {
     return {
       inputHasFocus: false,
@@ -103,7 +106,7 @@ export default {
     }
   },
   watch: {
-    value: function (newVal, oldVal) {
+    modelValue: function (newVal, oldVal) {
       // Whenever the value changes, update the list of matches
       this.updateMatches()
     }
@@ -115,7 +118,7 @@ export default {
       if (this.selectedMatch > -1) {
         this.$emit('confirm', this.matches[this.selectedMatch])
       } else {
-        this.$emit('confirm', this.value)
+        this.$emit('confirm', this.modelValue)
       }
       this.$refs.input.blur() // We are done here and can blur the list
     },
@@ -126,11 +129,12 @@ export default {
         this.selectedMatch = 0
       }
 
+      this.$emit('update:modelValue', this.matches[this.selectedMatch])
+
       // After the changes have been applied to the DOM,
       // scroll the new match into view
-      this.$nextTick(() => {
-        this.scrollMatchIntoView()
-      })
+      nextTick().then(() => { this.scrollMatchIntoView() })
+        .catch(err => console.error(err))
     },
     selectPrevMatch: function () {
       if (this.selectedMatch - 1 >= 0) {
@@ -138,11 +142,13 @@ export default {
       } else {
         this.selectedMatch = this.matches.length - 1
       }
+
+      this.$emit('update:modelValue', this.matches[this.selectedMatch])
+
       // After the changes have been applied to the DOM,
       // scroll the new match into view
-      this.$nextTick(() => {
-        this.scrollMatchIntoView()
-      })
+      nextTick().then(() => { this.scrollMatchIntoView() })
+        .catch(err => console.error(err))
     },
     scrollMatchIntoView: function () {
       // Called whenever the match changes to scroll it into view.
@@ -164,7 +170,7 @@ export default {
     updateMatches: function () {
       // This function updates the matches with a list of strings that match
       this.matches = []
-      const lowerVal = this.value.toLocaleLowerCase()
+      const lowerVal = this.modelValue.toLocaleLowerCase()
       for (const suggestion of this.autocompleteValues) {
         if (suggestion.toLocaleLowerCase().indexOf(lowerVal) > -1) {
           this.matches.push(suggestion)
@@ -183,7 +189,13 @@ export default {
     },
     onBlurHandler: function (event) {
       this.inputHasFocus = false
-      this.$emit('blur', event.target.value)
+      this.$emit('blur', event.target.modelValue)
+    },
+    focus: function () {
+      this.$refs.input.focus()
+    },
+    select: function () {
+      this.$refs.input.select()
     }
   }
 }

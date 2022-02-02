@@ -14,26 +14,30 @@
  * END HEADER
  */
 
-import { app, BrowserWindow, clipboard, FileFilter, ipcMain, MessageBoxReturnValue, nativeImage } from 'electron'
-import path from 'path'
-import fs from 'fs'
+import {
+  app,
+  BrowserWindow,
+  clipboard,
+  FileFilter,
+  ipcMain,
+  MessageBoxReturnValue,
+  nativeImage
+} from 'electron'
 
 // Internal classes
 import WindowManager from './modules/window-manager'
 import DocumentManager from './modules/document-manager'
 
 import FSAL from './modules/fsal'
-import { trans } from '../common/i18n-main'
-import findLangCandidates from '../common/util/find-lang-candidates'
-import ignoreDir from '../common/util/ignore-dir'
-import ignoreFile from '../common/util/ignore-file'
-import isDir from '../common/util/is-dir'
-import isFile from '../common/util/is-file'
+import { trans } from '@common/i18n-main'
 import { commands } from './commands'
 
-import { CodeFileDescriptor, CodeFileMeta, DirDescriptor, MDFileDescriptor, MDFileMeta } from './modules/fsal/types'
-import broadcastIpcMessage from '../common/util/broadcast-ipc-message'
+import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/main/fsal'
+import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
+
+import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import extractFilesFromArgv from '../app/util/extract-files-from-argv'
+import ZettlrCommand from './commands/zettlr-command'
 
 export default class Zettlr {
   isQuitting: boolean
@@ -41,7 +45,7 @@ export default class Zettlr {
   _openPaths: any
   _fsal: FSAL
   _documentManager: DocumentManager
-  _commands: any[]
+  _commands: ZettlrCommand[]
   private readonly _windowManager: WindowManager
   private readonly isShownFor: string[]
 
@@ -90,13 +94,6 @@ export default class Zettlr {
       },
       findFile: (prop: any) => {
         return this._fsal.findFile(prop)
-      },
-      findDir: (prop: any) => {
-        return this._fsal.findDir(prop)
-      },
-      // Same as findFile, only with content
-      getFile: async (fileDescriptor: any) => {
-        return await this._fsal.getFileContents(fileDescriptor)
       }
     }
 
@@ -106,8 +103,9 @@ export default class Zettlr {
     // Now that the config provider is definitely set up, let's see if we
     // should copy the interactive tutorial to the documents directory.
     if (global.config.isFirstStart()) {
-      global.log.info(`[First Start] Copying over the interactive tutorial to ${app.getPath('documents')}!`)
-      this._prepareFirstStart()
+      global.log.info('[First Start] Copying over the interactive tutorial!')
+      this.runCommand('tutorial-open', {})
+        .catch(err => global.log.error('[Application] Could not open tutorial', err))
     }
 
     // File System Abstraction Layer, pass the folder
@@ -348,7 +346,7 @@ export default class Zettlr {
       global.targets.verify()
 
       // Finally: Open any new files we have in the process arguments.
-      this.handleAddRoots(extractFilesFromArgv())
+      this.runCommand('roots-add', extractFilesFromArgv())
         .finally(() => {
           // Now we are done.
           const duration = Date.now() - start
@@ -362,7 +360,7 @@ export default class Zettlr {
     // Finally, initiate a first check for updates
     const checkUpdates: boolean = global.config.get('system.checkForUpdates')
     if (checkUpdates) {
-      await global.updates.check()
+      global.updates.check()
 
       if (global.updates.applicationUpdateAvailable()) {
         const { tagName } = global.updates.getUpdateState()
@@ -371,6 +369,8 @@ export default class Zettlr {
           // The user has clicked the notification, so we can show the update window here
           this._windowManager.showUpdateWindow()
         })
+      } else {
+        global.notify.normal(trans('dialog.update.no_new_update'))
       }
     }
   }
@@ -399,14 +399,7 @@ export default class Zettlr {
   async runCommand (command: string, payload: any): Promise<any> {
     // FIRST: Try to run a minimal command for which its own custom function
     // wouldn't make sense.
-    if (command === 'open-workspace') {
-      return await this.openWorkspace()
-    } else if (command === 'open-root-file') {
-      return await this.openRootFile()
-    } else if (command === 'handle-drop') {
-      // Handle any files dropped onto the editor
-      return await this.handleAddRoots(payload)
-    } else if (command === 'get-statistics-data') {
+    if (command === 'get-statistics-data') {
       return this._fsal.statistics
     } else if (command === 'get-filetree-events') {
       return this._fsal.filetreeHistorySince(payload)
@@ -433,16 +426,19 @@ export default class Zettlr {
       }
 
       return this._fsal.getMetadataFor(descriptor as MDFileDescriptor)
-    } else if (command === 'set-active-file') {
-      const descriptor = this._documentManager.openFiles.find(elem => elem.path === payload) // this._fsal.findFile(payload)
-      if (descriptor !== undefined) {
-        this._documentManager.activeFile = descriptor
-      }
+    } else if (command === 'next-file') {
+      // Trigger a "forward" command on the document manager
+      await this._documentManager.forward()
+      return true
+    } else if (command === 'previous-file') {
+      // Trigger a "back" command on the document manager
+      await this._documentManager.back()
+      return true
     } else if (command === 'set-writing-target') {
       // Sets or updates a file's writing target
       global.targets.set(payload)
     } else if (command === 'open-file') {
-      await this.openFile(payload.path, payload.newTab)
+      await this._documentManager.openFile(payload.path, payload.newTab)
       return true
     } else if (command === 'get-open-files') {
       // Return all open files as their metadata objects
@@ -498,11 +494,11 @@ export default class Zettlr {
     } else {
       // ELSE: If the command has not yet been found, try to run one of the
       // bigger commands
-      let cmd = this._commands.find((elem: any) => elem.respondsTo(command))
+      const cmd: ZettlrCommand|undefined = this._commands.find((elem: ZettlrCommand) => elem.respondsTo(command))
       if (cmd !== undefined) {
         // Return the return value of the command, if there is any
         try {
-          return cmd.run(command, payload)
+          return await cmd.run(command, payload)
         } catch (err: any) {
           global.log.error('[Application] Error received while running command: ' + String(err.message), err)
           return false
@@ -532,102 +528,6 @@ export default class Zettlr {
         title: trans('system.error.dnf_title'),
         message: trans('system.error.dnf_message')
       })
-    }
-  }
-
-  /**
-    * Open a new workspace.
-    */
-  async openWorkspace (): Promise<void> {
-    // TODO: Move this to a command
-    // The user wants to open another file or directory.
-    let ret = await this._windowManager.askDir()
-    if (ret.length === 0) {
-      return
-    }
-
-    let retPath = ret[0] // We only need one path
-
-    if (
-      (isDir(retPath) && ignoreDir(retPath)) ||
-      (isFile(retPath) && ignoreFile(retPath)) ||
-      retPath === app.getPath('home')
-    ) {
-      // We cannot add this dir, because it is in the list of ignored directories.
-      global.log.error('The chosen workspace is on the ignore list.', ret)
-      return this._windowManager.prompt({
-        'type': 'error',
-        'title': trans('system.error.ignored_dir_title'),
-        'message': trans('system.error.ignored_dir_message', path.basename(retPath))
-      })
-    }
-
-    global.notify.normal(trans('system.open_root_directory', path.basename(retPath)))
-    await this.handleAddRoots([retPath])
-    global.notify.normal(trans('system.open_root_directory_success', path.basename(retPath)))
-  }
-
-  /**
-   * Open a new root file
-   */
-  async openRootFile (): Promise<void> {
-    // TODO: Move this to a command
-    // The user wants to open another file or directory.
-    const extensions = [ 'markdown', 'md', 'txt', 'rmd' ]
-    const filter = [{ 'name': trans('system.files'), 'extensions': extensions }]
-
-    let ret = await this._windowManager.askFile(filter, true)
-    await this.handleAddRoots(ret)
-  }
-
-  /**
-    * Handles a list of files and folders that the user in any way wants to add
-    * to the app.
-    * @param  {string[]} filelist An array of absolute paths
-    */
-  async handleAddRoots (filelist: string[]): Promise<void> {
-    // As long as it's not a forbidden file or ignored directory, add it.
-    let newFile = null
-    let newDir = null
-    for (const f of filelist) {
-      // First check if this thing is already added. If so, simply write
-      // the existing file/dir into the newFile/newDir vars. They will be
-      // opened accordingly.
-      if ((newFile = this._fsal.findFile(f)) != null) {
-        // Open the file immediately
-        await this.openFile(newFile.path, true)
-        // Also set the newDir variable so that Zettlr will automatically
-        // navigate to the directory. The directory of the latest file will
-        // remain open afterwards.
-        newDir = newFile.parent
-      } else if ((newDir = this._fsal.findDir(f)) != null) {
-        // Do nothing
-      } else if (global.config.addPath(f)) {
-        try {
-          const loaded = await this._fsal.loadPath(f)
-          if (loaded) {
-            // If it was a file and not a directory, immediately open it.
-            let file = this._fsal.findFile(f)
-            if (file !== null) {
-              await this.openFile(file.path, true)
-            }
-          } else {
-            global.config.removePath(f)
-          }
-        } catch (err: any) {
-          // Something went wrong, so remove the path again.
-          global.config.removePath(f)
-          throw err // The caller needs to handle this.
-        }
-      } else {
-        global.notify.normal(trans('system.error.open_root_error', path.basename(f)))
-        global.log.error(`Could not open new root file ${f}!`)
-      }
-    }
-
-    // Open the newly added path(s) directly.
-    if (newDir !== null) {
-      this._fsal.openDirectory = newDir
     }
   }
 
@@ -666,94 +566,10 @@ export default class Zettlr {
   }
 
   /**
-   * Opens the file passed to this function
-   *
-   * @param   {string}   filePath  The filepath
-   * @param   {boolean}  newTab    Optional. If true, will always prevent exchanging the currently active file.
-   */
-  async openFile (filePath: string, newTab?: boolean): Promise<void> {
-    global.log.info(`[Application] Opening file ${filePath}`)
-    // Add the file's metadata object to the recent docs
-    // We only need to call the underlying function, it'll trigger a state
-    // change event and will set in motion all other necessary processes.
-
-    // Remember if the file that should be opened was already opened. Because in
-    // this case we shouldn't close the active file (since we're not opening any
-    // new tabs in any case.)
-    const isFileAlreadyOpen = this._documentManager.openFiles.find(e => e.path === filePath) !== undefined
-    const file = await this._documentManager.openFile(filePath)
-
-    // The user determines if we should avoid new tabs. If we should do so,
-    // only open new tabs if the user has checked this setting.
-    const avoidNewTabs = Boolean(global.config.get('system.avoidNewTabs'))
-
-    if (this._documentManager.activeFile !== null && newTab !== true && avoidNewTabs) {
-      // We should avoid tabs, a new tab is not explicitly requested and we
-      // have an active file to close.
-      const activeFile = this._documentManager.activeFile
-
-      // However, one caveat: If the new file that we are about to set active
-      // was already open somewhere, we don't have to close this one, but rather
-      // switch to the next file.
-      if (activeFile !== null && !activeFile.modified && !isFileAlreadyOpen) {
-        this._documentManager.closeFile(activeFile)
-      }
-    }
-
-    this._documentManager.activeFile = file // Also make this thing active.
-  }
-
-  /**
     * Indicate modifications.
     */
   setModified (isModified: boolean): void {
     this._windowManager.setModified(isModified)
-  }
-
-  /**
-   * This function prepares the app on first start, which includes copying over the tutorial.
-   */
-  _prepareFirstStart (): void {
-    let tutorialPath = path.join(__dirname, 'tutorial')
-    let targetPath = path.join(app.getPath('documents'), 'Zettlr Tutorial')
-    let availableLanguages = fs.readdirSync(tutorialPath, { 'encoding': 'utf8' })
-
-    let candidates = availableLanguages
-      .map(e => { return { 'tag': e, 'path': path.join(tutorialPath, e) } })
-      .filter(e => isDir(e.path))
-
-    let { exact, close } = findLangCandidates(global.config.get('appLang'), candidates)
-
-    let tutorial = path.join(tutorialPath, 'en')
-    if (exact !== undefined) {
-      tutorial = exact.path
-    } else if (close !== undefined) {
-      tutorial = close.path
-    }
-
-    // Now we have both a target and a language candidate, let's copy over the files!
-    try {
-      fs.lstatSync(targetPath)
-      // Already exists! Abort!
-      global.log.error(`The directory ${targetPath} already exists - won't overwrite!`)
-      return
-    } catch (err) {
-      fs.mkdirSync(targetPath)
-
-      // Now copy over every file from the directory
-      let contents = fs.readdirSync(tutorial, { 'encoding': 'utf8' })
-      for (let file of contents) {
-        fs.copyFileSync(path.join(tutorial, file), path.join(targetPath, file))
-      }
-      global.log.info('Successfully copied the tutorial files', contents)
-
-      // Now the last thing to do is set it as open
-      global.config.addPath(targetPath)
-      // Also set the welcome.md as open
-      global.config.set('openFiles', [path.join(targetPath, 'welcome.md')])
-      // ALSO the directory needs to be opened
-      global.config.set('openDirectory', targetPath)
-    }
   }
 
   // Getters
@@ -767,6 +583,8 @@ export default class Zettlr {
    * Returns the document manager
    */
   getDocumentManager (): DocumentManager { return this._documentManager }
+
+  getWindowManager (): WindowManager { return this._windowManager }
 
   /**
     * Are there unsaved changes currently in the file system?

@@ -41,12 +41,15 @@ export default function preventNavigation (win: BrowserWindow): void {
     event.preventDefault()
 
     if (url.startsWith('safe-file://')) {
-      // We have a local file, so we need to remove the protocol, which will
-      // ensure shell.openExternal will work.
-      global.log.verbose(`[Window Manager] Opening path ${url.substr(12)}.`)
-      shell.openPath(url.substr(12))
+      // will-navigate assumes an URL and will pass an encoded URI, but if it
+      // is a safe-file, it's not an actual URL, but rather a path.
+      // So we have to make sure to decode the url, i.e.,  %28 becomes ( again.
+      const unencoded = decodeURIComponent(url)
+      // We need to remove the protocol to ensure shell.openPath works.
+      global.log.verbose(`[Window Manager] Opening path ${unencoded.substring(12)}.`)
+      shell.openPath(unencoded.substring(12))
         .catch(error => global.log.error(
-          `[Window Manager] Could not open path ${url.substr(12)}.`,
+          `[Window Manager] Could not open path ${unencoded.substring(12)}.`,
           error
         ))
     } else {

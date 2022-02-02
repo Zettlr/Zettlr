@@ -22,7 +22,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -37,7 +37,9 @@
  * END HEADER
  */
 
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'LogMessage',
   props: {
     message: {
@@ -83,7 +85,7 @@ export default {
     }
   },
   methods: {
-    messageClass: function (level) {
+    messageClass: function (level: number) {
       const classes = ['message']
       switch (level) {
         case 1:
@@ -106,10 +108,10 @@ export default {
         return
       }
 
-      this.$refs['details'].classList.toggle('hidden')
+      (this.$refs['details'] as Element).classList.toggle('hidden')
     }
   }
-}
+})
 </script>
 
 <style lang="less">

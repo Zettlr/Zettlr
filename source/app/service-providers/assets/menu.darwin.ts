@@ -13,7 +13,7 @@
  */
 
 import { app, MenuItemConstructorOptions, shell } from 'electron'
-import { trans } from '../../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 import path from 'path'
 
 export default function getMenu (
@@ -151,7 +151,7 @@ export default function getMenu (
           label: trans('menu.open'),
           accelerator: 'Cmd+O',
           click: function (menuitem, focusedWindow) {
-            global.application.runCommand('open-root-file')
+            global.application.runCommand('root-open-files')
               .catch(e => global.log.error(String(e.message), e))
           }
         },
@@ -160,7 +160,7 @@ export default function getMenu (
           label: trans('menu.open_workspace'),
           accelerator: 'Cmd+Shift+O',
           click: function (menuitem, focusedWindow) {
-            global.application.runCommand('open-workspace')
+            global.application.runCommand('root-open-workspaces')
               .catch(e => global.log.error(String(e.message), e))
           }
         },
@@ -183,6 +183,31 @@ export default function getMenu (
           accelerator: 'Cmd+S',
           click: function (menuItem, focusedWindow) {
             focusedWindow?.webContents.send('shortcut', 'save-file')
+          }
+        },
+        {
+          type: 'separator'
+        },
+        {
+          id: 'menu.previous_file',
+          label: 'Previous file',
+          accelerator: 'Cmd+[',
+          click: function (menuitem, focusedWindow) {
+            global.application.runCommand('previous-file')
+              .catch(e => {
+                global.log.error(`[Menu] Error selecting previous file: ${e.message as string}`, e)
+              })
+          }
+        },
+        {
+          id: 'menu.next_file',
+          label: 'Next file',
+          accelerator: 'Cmd+]',
+          click: function (menuitem, focusedWindow) {
+            global.application.runCommand('next-file')
+              .catch(e => {
+                global.log.error(`[Menu] Error selecting next file: ${e.message as string}`, e)
+              })
           }
         },
         {
@@ -249,14 +274,6 @@ export default function getMenu (
           accelerator: 'Cmd+R',
           click: function (menuitem, focusedWindow) {
             focusedWindow?.webContents.send('shortcut', 'rename-file')
-          }
-        },
-        {
-          id: 'menu.rename_dir',
-          label: trans('menu.rename_dir'),
-          accelerator: 'Cmd+Shift+R',
-          click: function (menuitem, focusedWindow) {
-            focusedWindow?.webContents.send('shortcut', 'rename-dir')
           }
         },
         {
@@ -643,6 +660,14 @@ export default function getMenu (
             shell.openExternal(target).catch(e => {
               global.log.error(`[Menu Provider] Cannot open target: ${target}`, e.message)
             })
+          }
+        },
+        {
+          id: 'menu.open_tutorial',
+          label: trans('menu.open_tutorial'),
+          click: function (menuitem, focusedWindow) {
+            global.application.runCommand('tutorial-open')
+              .catch(e => global.log.error(String(e.message), e))
           }
         },
         {

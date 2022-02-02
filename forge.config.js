@@ -127,8 +127,8 @@ module.exports = {
     // notarization.
     osxNotarize: ('APPLE_ID' in process.env && 'APPLE_ID_PASS' in process.env)
       ? {
-          appleId: process.env['APPLE_ID'],
-          appleIdPassword: process.env['APPLE_ID_PASS']
+          appleId: process.env.APPLE_ID,
+          appleIdPassword: process.env.APPLE_ID_PASS
         }
       : false,
     extraResource: [
@@ -151,7 +151,7 @@ module.exports = {
           config: './webpack.renderer.config.js',
           entryPoints: [
             {
-              html: './source/win-main/index.htm',
+              html: './static/index.htm',
               js: './source/win-main/index.ts',
               name: 'main_window',
               preload: {
@@ -159,7 +159,7 @@ module.exports = {
               }
             },
             {
-              html: './source/win-print/index.htm',
+              html: './static/index.htm',
               js: './source/win-print/index.ts',
               name: 'print',
               preload: {
@@ -167,7 +167,7 @@ module.exports = {
               }
             },
             {
-              html: './source/win-log-viewer/index.htm',
+              html: './static/index.htm',
               js: './source/win-log-viewer/index.ts',
               name: 'log_viewer',
               preload: {
@@ -175,7 +175,7 @@ module.exports = {
               }
             },
             {
-              html: './source/win-quicklook/index.htm',
+              html: './static/index.htm',
               js: './source/win-quicklook/index.ts',
               name: 'quicklook',
               preload: {
@@ -183,7 +183,7 @@ module.exports = {
               }
             },
             {
-              html: './source/win-preferences/index.htm',
+              html: './static/index.htm',
               js: './source/win-preferences/index.ts',
               name: 'preferences',
               preload: {
@@ -191,7 +191,7 @@ module.exports = {
               }
             },
             {
-              html: './source/win-tag-manager/index.htm',
+              html: './static/index.htm',
               js: './source/win-tag-manager/index.ts',
               name: 'tag_manager',
               preload: {
@@ -199,7 +199,7 @@ module.exports = {
               }
             },
             {
-              html: './source/win-paste-image/index.htm',
+              html: './static/index.htm',
               js: './source/win-paste-image/index.ts',
               name: 'paste_image',
               preload: {
@@ -207,7 +207,7 @@ module.exports = {
               }
             },
             {
-              html: './source/win-error/index.htm',
+              html: './static/index.htm',
               js: './source/win-error/index.ts',
               name: 'error',
               preload: {
@@ -215,7 +215,7 @@ module.exports = {
               }
             },
             {
-              html: './source/win-about/index.htm',
+              html: './static/index.htm',
               js: './source/win-about/index.ts',
               name: 'about',
               preload: {
@@ -223,7 +223,7 @@ module.exports = {
               }
             },
             {
-              html: './source/win-stats/index.htm',
+              html: './static/index.htm',
               js: './source/win-stats/index.ts',
               name: 'stats',
               preload: {
@@ -231,7 +231,7 @@ module.exports = {
               }
             },
             {
-              html: './source/win-assets/index.htm',
+              html: './static/index.htm',
               js: './source/win-assets/index.ts',
               name: 'assets',
               preload: {
@@ -239,7 +239,7 @@ module.exports = {
               }
             },
             {
-              html: './source/win-update/index.htm',
+              html: './static/index.htm',
               js: './source/win-update/index.ts',
               name: 'update',
               preload: {
@@ -247,7 +247,7 @@ module.exports = {
               }
             },
             {
-              html: './source/win-project-properties/index.htm',
+              html: './static/index.htm',
               js: './source/win-project-properties/index.ts',
               name: 'project_properties',
               preload: {

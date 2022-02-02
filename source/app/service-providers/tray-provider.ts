@@ -21,7 +21,7 @@ import {
 } from 'electron'
 import path from 'path'
 import EventEmitter from 'events'
-import { trans } from '../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 
 /**
  * This class generates the Tray in the system notification area
@@ -53,8 +53,25 @@ export default class TrayProvider extends EventEmitter {
       global.config.set('system.leaveAppRunning', false)
     }
 
+    let addToTray: boolean = global.config.get('system.leaveAppRunning')
+    const shouldStartMinimized = process.argv.includes('--launch-minimized')
+    const traySupported = process.env.ZETTLR_IS_TRAY_SUPPORTED === '1'
+
+    if (shouldStartMinimized && !addToTray && traySupported) {
+      global.log.info('[Tray Provider] Detected the --launch-minimized flag. Will override the tray setting.')
+      // The user has indicated via CLI flag that they want to start the app
+      // minimized, so we require the corresponding setting to be set
+      global.config.set('system.leaveAppRunning', true)
+      addToTray = true
+    }
+
+    if (addToTray) {
+      this._addTray()
+    }
+
     global.config.on('update', (option: string) => {
       if (option === 'system.leaveAppRunning') {
+        // even if the tray should not be shown, since we start in Tray we need to show it anyway
         if (global.config.get('system.leaveAppRunning') === true) {
           this._addTray()
         } else {
@@ -107,7 +124,7 @@ export default class TrayProvider extends EventEmitter {
    * @memberof TrayProvider
    */
   private _addTray (): void {
-    const leaveAppRunning = Boolean(global.config.get('system.leaveAppRunning'))
+    const leaveAppRunning: boolean = global.config.get('system.leaveAppRunning')
 
     if (!leaveAppRunning) {
       return // No need to add a tray.

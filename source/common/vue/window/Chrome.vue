@@ -129,7 +129,7 @@ export default {
     // Window title
     title: {
       type: String,
-      default: ''
+      default: 'Zettlr'
     },
     // Tabbar tabs
     tabbarTabs: {
@@ -187,6 +187,7 @@ export default {
       default: false
     }
   },
+  emits: [ 'toolbar-search', 'toolbar-click', 'toolbar-toggle', 'tab', 'statusbar-click' ],
   data: function () {
     return {
       // NOTE: This is solely for debug purposes so that we can adapt
@@ -352,6 +353,9 @@ export default {
       // adapt the body class
       document.body.classList.remove('darwin', 'win32', 'linux')
       document.body.classList.add(this.platform)
+    },
+    title: function () {
+      document.title = this.title
     }
   },
   created: function () {
@@ -362,8 +366,9 @@ export default {
       }
     })
 
-    // Apply the body class immediately
+    // Apply the body class immediately and also set the title
     document.body.classList.add(this.platform)
+    document.title = this.title
   },
   methods: {
     handleDoubleClick: function (origin) {

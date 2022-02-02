@@ -13,7 +13,7 @@
  */
 
 import { BrowserWindow, dialog, MessageBoxOptions } from 'electron'
-import { trans } from '../../../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 
 /**
  * Displays a prompt with information

@@ -27,7 +27,7 @@
   <a href="https://www.zettlr.com/" target="_blank">Homepage</a> |
   <a href="https://www.zettlr.com/download">Download</a> |
   <a href="https://docs.zettlr.com/" target="_blank">Documentation</a> |
-  <a href="https://forum.zettlr.com/" target="_blank">Discussion Forum</a> |
+  <a href="https://discord.gg/PcfS3DM9Xj" target="_blank">Discord</a> |
   <a href="#contributing">Contributing</a> |
   <a href="https://www.patreon.com/zettlr" target="_blank">Support Us</a>
 </p>
@@ -124,6 +124,8 @@ Packages the application, but not bundle it into an installer. Without any suffi
 
 The resulting application packages are stored in `./out`.
 
+> This command will skip typechecking to speed up builds, so be extra cautious.
+
 #### `release:{platform-arch}`
 
 Packages the application and then bundles it into an installer for the corresponding platform and architecture. To create such a bundle (may require running on the corresponding platform), one of the following values for `{platform-arch}` is required:
@@ -170,6 +172,8 @@ This runs the unit tests in the directory `./test`. Make sure to run this comman
 #### `test-gui`
 
 Use this command to carefree test any changes you make to the application. This command will start the application as if you ran `yarn start`, but will provide a custom configuration and a custom directory.
+
+> This command will skip typechecking to speed up builds, so be extra cautious.
 
 **The first time you start this command**, pass the `--clean`-flag to copy a bunch of test-files to your `./resources`-directory, create a `test-config.yml` in your project root, and start the application with this clean configuration. Then, you can adapt the `test-config.yml` to your liking (so that certain settings which you would otherwise _always_ set will be pre-set without you having to open the preferences).
 
@@ -271,6 +275,14 @@ Electron forge will put the packaged applications into the directory `./out` whi
 ## Command-Line Switches
 
 The Zettlr binary features a few command line switches that you can make use of for different purposes.
+
+#### `--launch-minimized`
+
+This CLI flag will instruct Zettlr not to show the main window on start. This is useful to create autostart entries. In that case, launching Zettlr with this flag at system boot will make sure that you will only see its icon in the tray.
+
+Since this implies the need to have the app running in the tray bar or notification area when starting the app like this, it will automatically set the corresponding setting `system.leaveAppRunning` to true.
+
+> Note: This flag will not have any effect on Linux systems which do not support displaying an icon in a tray bar or notification area.
 
 #### `--clear-cache`
 

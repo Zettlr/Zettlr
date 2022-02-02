@@ -13,10 +13,10 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { trans } from '../../common/i18n-main'
+import { trans } from '@common/i18n-main'
 import makeImport from '../modules/import'
 import path from 'path'
-import { import_files as FORMATS } from '../../common/data.json'
+import { import_files as FORMATS } from '@common/data.json'
 
 export default class ImportFiles extends ZettlrCommand {
   constructor (app: any) {

@@ -43,13 +43,12 @@
   // fonts such as Hiragana/Katakana are correctly
   // aligned. Should also help accessibility-plugins.
   &.CodeMirror-wrap > div:first-child {
+    margin-top: 0.4375em;
     textarea {
       font-family: inherit;
       font-size: inherit;
       line-height: inherit;
       height: 1.4375em !important;
-      bottom: -1.4375em !important;
-      transform: scaleY(1.1);
     }
   }
 
@@ -105,6 +104,7 @@
   input[type="checkbox"] {
     transform: scale(1.2);
     margin: 0.2em;
+    min-width: auto; // Reset the min-width property that applies to other checkboxes
     vertical-align: middle;
   }
 
@@ -182,8 +182,12 @@
   .size-header-5 { font-size: 1em; }
   .size-header-6 { font-size: 1em; }
 
+  // The underlying gfm mode is funny. For top level task items, it applies the
+  // class cm-variable-2 for the full text. For second-level task items, it
+  // applies cm-variable-3, and for the third level it applies cm-keyword. And
+  // then it toggles around. Why would you do that ...?
   .task-item-done {
-    text-decoration: line-through;
+    .cm-variable-2, .cm-variable-3, .cm-keyword { text-decoration: line-through; }
   }
 
   // Deliver a much more fancy UX for images inserted into the editor
@@ -213,6 +217,9 @@
         font-size: 12px;
         border-radius: 6px;
         padding: 10px;
+        // If we have images in a list, they will inherit the textIndent applied
+        // by CodeMirror, so we have to set it explicitly
+        text-indent: 0;
       }
 
       span.image-size-info {
@@ -341,7 +348,16 @@ body .tippy-content {
       color: rgb(200, 200, 200);
       font-size: 80%;
     }
+
+    .actions {
+      margin: 5px 0;
+    }
   }
+}
+
+body.dark .tippy-content .editor-fn-textarea {
+  background-color: transparent;
+  border: none;
 }
 
 // Text-folding related stuff
@@ -367,7 +383,6 @@ body .tippy-content {
 
 .CodeMirror-foldmarker {
   border-radius: 3px;
-  display: inline-block;
   font-size: 75%;
   margin-left: 10px;
   padding: 2px;

@@ -14,32 +14,27 @@
 
 import path from 'path'
 import { promises as fs } from 'fs'
-import hash from '../../../common/util/hash'
+import hash from '@common/util/hash'
 import sortDir from './util/sort'
-import isDir from '../../../common/util/is-dir'
-import isFile from '../../../common/util/is-file'
-import ignoreDir from '../../../common/util/ignore-dir'
-import ignoreFile from '../../../common/util/ignore-file'
-import safeAssign from '../../../common/util/safe-assign'
-import isAttachment from '../../../common/util/is-attachment'
+import isDir from '@common/util/is-dir'
+import isFile from '@common/util/is-file'
+import ignoreDir from '@common/util/ignore-dir'
+import ignoreFile from '@common/util/ignore-file'
+import safeAssign from '@common/util/safe-assign'
+import isAttachment from '@common/util/is-attachment'
 
 import { shell } from 'electron'
 
 import * as FSALFile from './fsal-file'
 import * as FSALCodeFile from './fsal-code-file'
 import * as FSALAttachment from './fsal-attachment'
-import {
-  DirDescriptor,
-  DirMeta,
-  MaybeRootMeta,
-  AnyDescriptor,
-  MaybeRootDescriptor
-} from './types'
+import { ProjectSettings, DirMeta } from '@dts/common/fsal'
+import { DirDescriptor, AnyDescriptor, MaybeRootDescriptor } from '@dts/main/fsal'
 import FSALCache from './fsal-cache'
 import {
   codeFileExtensions,
   mdFileExtensions
-} from '../../../common/get-file-extensions'
+} from '@common/get-file-extensions'
 
 /**
  * Determines what will be written to file (.ztr-directory)
@@ -56,12 +51,16 @@ const MARKDOWN_FILES = mdFileExtensions(true)
 /**
  * Used to insert a default project
  */
-const PROJECT_TEMPLATE = {
+const PROJECT_TEMPLATE: ProjectSettings = {
   // General values that not only pertain to the PDF generation
   title: 'Untitled', // Default project title is the directory's name
   formats: [ 'html', 'chromium-pdf' ], // NOTE: Must correspond to the defaults in ProjectProperties.vue
   filters: [], // A list of filters (glob patterns) to exclude certain files
-  cslStyle: '' // A path to an optional CSL style file.
+  cslStyle: '', // A path to an optional CSL style file.
+  templates: {
+    tex: '', // An optional tex template
+    html: '' // An optional HTML template
+  }
 }
 
 /**
@@ -93,12 +92,10 @@ export function metadata (dirObject: DirDescriptor): DirMeta {
       return metadata(elem)
     } else if (elem.type === 'file') {
       return FSALFile.metadata(elem)
-    } else if (elem.type === 'code') {
-      return FSALCodeFile.metadata(elem)
     } else {
-      return undefined
+      return FSALCodeFile.metadata(elem)
     }
-  }).filter(elem => elem !== undefined) as MaybeRootMeta[]
+  }).filter(elem => elem !== undefined)
 
   return {
     // By only passing the hash, the object becomes
@@ -208,7 +205,7 @@ export async function parse (currentPath: string, cache: FSALCache, parent: DirD
   } catch (err: any) {
     global.log.error(`Error reading metadata for directory ${dir.path}!`, err)
     // Re-throw so that the caller knows something's afoul
-    throw new Error(err)
+    throw err
   }
 
   // Now parse the directory contents recursively
@@ -341,8 +338,9 @@ export async function updateProjectProperties (dirObject: DirDescriptor, propert
   const cslUnchanged = dirObject._settings.project.cslStyle === properties.cslStyle
   const formatsUnchanged = JSON.stringify(dirObject._settings.project.formats) === JSON.stringify(properties.formats)
   const filtersUnchanged = JSON.stringify(dirObject._settings.project.filters) === JSON.stringify(properties.filters)
+  const templatesUnchanged = JSON.stringify(dirObject._settings.project.templates) === JSON.stringify(properties.templates)
 
-  if (titleUnchanged && cslUnchanged && formatsUnchanged && filtersUnchanged) {
+  if (titleUnchanged && cslUnchanged && formatsUnchanged && filtersUnchanged && templatesUnchanged) {
     return false
   }
 
@@ -483,7 +481,7 @@ export async function move (sourceObject: AnyDescriptor, targetDir: DirDescripto
   // Now remove the source from its parent (which in any case is a directory)
   let oldChildren = sourceObject.parent?.children
   if (oldChildren !== undefined) {
-    oldChildren.splice(oldChildren.indexOf(sourceObject as MaybeRootDescriptor), 1)
+    oldChildren.splice(oldChildren.indexOf(sourceObject as unknown as MaybeRootDescriptor), 1)
   }
 
   // Re-read the source

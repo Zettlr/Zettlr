@@ -63,7 +63,8 @@ export default {
       type: Boolean,
       default: false
     }
-  }
+  },
+  emits: [ 'select', 'add', 'remove' ]
 }
 </script>
 

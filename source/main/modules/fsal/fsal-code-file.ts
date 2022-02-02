@@ -14,12 +14,13 @@
 
 import { promises as fs } from 'fs'
 import path from 'path'
-import hash from '../../../common/util/hash'
+import hash from '@common/util/hash'
 import searchFile from './util/search-file'
 import { shell } from 'electron'
-import safeAssign from '../../../common/util/safe-assign'
+import safeAssign from '@common/util/safe-assign'
 // Import the interfaces that we need
-import { DirDescriptor, CodeFileDescriptor, CodeFileMeta } from './types'
+import { DirDescriptor, CodeFileDescriptor } from '@dts/main/fsal'
+import { CodeFileMeta } from '@dts/common/fsal'
 import FSALCache from './fsal-cache'
 import extractBOM from './util/extract-bom'
 
@@ -126,8 +127,7 @@ export async function parse (
     file.creationtime = stat.birthtime.getTime()
   } catch (err: any) {
     global.log.error('Error reading file ' + filePath, err)
-    // Re-throw a nicer and more meaningful message
-    throw new Error(`Could not read file ${filePath}: ${String(err.message)}`)
+    throw err // Re-throw
   }
 
   // Before reading in the full file and parsing it,

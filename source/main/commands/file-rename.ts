@@ -15,7 +15,7 @@
 import path from 'path'
 import ZettlrCommand from './zettlr-command'
 import sanitize from 'sanitize-filename'
-import { codeFileExtensions, mdFileExtensions } from '../../common/get-file-extensions'
+import { codeFileExtensions, mdFileExtensions } from '@common/get-file-extensions'
 
 const ALLOWED_FILETYPES = mdFileExtensions(true)
 const CODE_FILETYPES = codeFileExtensions(true)
@@ -82,7 +82,6 @@ export default class FileRename extends ZettlrCommand {
     const wasActive = this._app.getDocumentManager().activeFile?.path === file.path
     const wasOpen = documentDescriptor !== undefined
     if (documentDescriptor !== undefined) {
-      // Will also reset activeFile
       this._app.getDocumentManager().closeFile(documentDescriptor)
     }
 
@@ -91,7 +90,9 @@ export default class FileRename extends ZettlrCommand {
       // NOTE: At this point, `file` will contain the _new_ information which
       // we can now use to re-set the documentManager's state if need be.
       if (wasOpen) {
-        await this._app.getDocumentManager().openFile(file.path)
+        // NOTE: We must open in a new tab regardless of setting, since in this
+        // case we have programmatically closed the file
+        await this._app.getDocumentManager().openFile(file.path, true)
       }
       if (wasActive) {
         this._app.getDocumentManager().activeFile = file
