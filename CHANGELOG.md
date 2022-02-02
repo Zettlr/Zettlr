@@ -46,6 +46,7 @@
 - Following internal links now also works for systems in which the ID is part of
   the file name
 - Updated the display name in the Add/Remove Programs entry for Windows
+- Zettlr can ask you now where you want to store the exported PDF
 
 ## Under the Hood
 
