@@ -53,6 +53,7 @@ export default function getMenu (
         },
         ...docs.map(item => {
           const ret: MenuItemConstructorOptions = {
+            id: 'menu.recent_docs.' + item,
             label: path.basename(item),
             click: function (menuitem, focusedWindow) {
               global.application.runCommand('open-file', {
@@ -128,7 +129,7 @@ export default function getMenu (
           label: trans('menu.open'),
           accelerator: 'Ctrl+O',
           click: function (menuitem, focusedWindow) {
-            global.application.runCommand('open-root-file')
+            global.application.runCommand('root-open-files')
               .catch(e => global.log.error(String(e.message), e))
           }
         },
@@ -137,7 +138,7 @@ export default function getMenu (
           label: trans('menu.open_workspace'),
           accelerator: 'Ctrl+Shift+O',
           click: function (menuitem, focusedWindow) {
-            global.application.runCommand('open-workspace')
+            global.application.runCommand('root-open-workspaces')
               .catch(e => global.log.error(String(e.message), e))
           }
         },
@@ -641,6 +642,14 @@ export default function getMenu (
             shell.openExternal(target).catch(e => {
               global.log.error(`[Menu Provider] Cannot open target: ${target}`, e.message)
             })
+          }
+        },
+        {
+          id: 'menu.open_tutorial',
+          label: trans('menu.open_tutorial'),
+          click: function (menuitem, focusedWindow) {
+            global.application.runCommand('tutorial-open')
+              .catch(e => global.log.error(String(e.message), e))
           }
         },
         {

@@ -54,27 +54,6 @@ export default function (): any {
             'ask': trans('dialog.preferences.export.dest_ask_label')
           }
         }
-      ],
-      [
-        {
-          type: 'file',
-          label: trans('dialog.preferences.citation_database'),
-          model: 'export.cslLibrary',
-          reset: '',
-          filter: {
-            'json, yaml, yml': 'CSL JSON',
-            'bib': 'BibTeX'
-          }
-        },
-        {
-          type: 'file',
-          label: trans('dialog.preferences.project.csl_style'),
-          model: 'export.cslStyle',
-          reset: '',
-          filter: {
-            'csl': 'CSL Style'
-          }
-        }
       ]
     ]
   }

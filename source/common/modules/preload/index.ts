@@ -17,8 +17,7 @@
 import { contextBridge, ipcRenderer, clipboard } from 'electron'
 import path from 'path'
 
-// Path functions are harmless and can be exposed as-is
-contextBridge.exposeInMainWorld('path', { ...path })
+contextBridge.exposeInMainWorld('path', path)
 
 // We need a few ipc methods
 contextBridge.exposeInMainWorld('ipc', {

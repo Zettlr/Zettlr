@@ -20,8 +20,6 @@ import environmentCheck from './util/environment-check'
 import addToPath from './util/add-to-PATH'
 import resolveTimespanMs from './util/resolve-timespan-ms'
 import { loadI18n } from '../common/i18n-main'
-import isFile from '../common/util/is-file'
-import isDir from '../common/util/is-dir'
 import path from 'path'
 
 // Developer tools
@@ -36,6 +34,7 @@ import CssProvider from './service-providers/css-provider'
 import DictionaryProvider from './service-providers/dictionary-provider'
 import LogProvider from './service-providers/log-provider'
 import MenuProvider from './service-providers/menu-provider'
+import LinkProvider from './service-providers/link-provider'
 import TagProvider from './service-providers/tag-provider'
 import TargetProvider from './service-providers/target-provider'
 import TranslationProvider from './service-providers/translation-provider'
@@ -54,6 +53,7 @@ let configProvider: ConfigProvider
 let cssProvider: CssProvider
 let dictionaryProvider: DictionaryProvider
 let logProvider: LogProvider
+let linkProvider: LinkProvider
 let tagProvider: TagProvider
 let targetProvider: TargetProvider
 let translationProvider: TranslationProvider
@@ -129,6 +129,7 @@ export async function bootApplication (): Promise<void> {
   dictionaryProvider = new DictionaryProvider()
   recentDocsProvider = new RecentDocumentsProvider()
   menuProvider = new MenuProvider() // Requires config & recent docs providers
+  linkProvider = new LinkProvider()
   tagProvider = new TagProvider()
   targetProvider = new TargetProvider()
   cssProvider = new CssProvider()
@@ -137,32 +138,6 @@ export async function bootApplication (): Promise<void> {
   notificationProvider = new NotificationProvider()
   statsProvider = new StatsProvider()
   trayProvider = new TrayProvider()
-
-  // If the user has provided a working path to XeLaTeX, make sure that its
-  // directory name is in path for Zettlr to find it.
-  const xelatexPath: string = global.config.get('xelatex').trim()
-  const xelatexPathIsFile = isFile(xelatexPath)
-  const xelatexPathIsDir = isDir(xelatexPath)
-  if (xelatexPath !== '' && (xelatexPathIsFile || xelatexPathIsDir)) {
-    if (xelatexPathIsFile) {
-      addToPath(path.dirname(xelatexPath), 'unshift')
-    } else {
-      addToPath(xelatexPath, 'unshift')
-    }
-  }
-
-  // If the user has provided a working path to Pandoc, make sure that its
-  // directory name is in path for Zettlr to find it.
-  const pandocPath: string = global.config.get('pandoc').trim()
-  const pandocPathIsFile = isFile(pandocPath)
-  const pandocPathIsDir = isDir(pandocPath)
-  if (pandocPath !== '' && (pandocPathIsFile || pandocPathIsDir)) {
-    if (pandocPathIsFile) {
-      addToPath(path.dirname(pandocPath), 'unshift')
-    } else {
-      addToPath(pandocPath, 'unshift')
-    }
-  }
 
   // If we have a bundled pandoc, unshift its path to env.PATH in order to have
   // the system search there first for the binary, and not use the internal
@@ -192,6 +167,7 @@ export async function shutdownApplication (): Promise<void> {
   await safeShutdown(translationProvider)
   await safeShutdown(cssProvider)
   await safeShutdown(targetProvider)
+  await safeShutdown(linkProvider)
   await safeShutdown(tagProvider)
   await safeShutdown(menuProvider)
   await safeShutdown(recentDocsProvider)

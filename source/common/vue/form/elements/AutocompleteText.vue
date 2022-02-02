@@ -20,7 +20,7 @@
     >
     <!-- Display the completion list -->
     <div
-      v-if="inputHasFocus && modelValue !== ''"
+      v-if="inputHasFocus && modelValue !== '' && matches.length > 0"
       ref="autocomplete-dropdown"
       class="autocomplete-list"
       v-bind:style="{
@@ -129,6 +129,8 @@ export default {
         this.selectedMatch = 0
       }
 
+      this.$emit('update:modelValue', this.matches[this.selectedMatch])
+
       // After the changes have been applied to the DOM,
       // scroll the new match into view
       nextTick().then(() => { this.scrollMatchIntoView() })
@@ -140,6 +142,9 @@ export default {
       } else {
         this.selectedMatch = this.matches.length - 1
       }
+
+      this.$emit('update:modelValue', this.matches[this.selectedMatch])
+
       // After the changes have been applied to the DOM,
       // scroll the new match into view
       nextTick().then(() => { this.scrollMatchIntoView() })
@@ -185,6 +190,12 @@ export default {
     onBlurHandler: function (event) {
       this.inputHasFocus = false
       this.$emit('blur', event.target.modelValue)
+    },
+    focus: function () {
+      this.$refs.input.focus()
+    },
+    select: function () {
+      this.$refs.input.select()
     }
   }
 }

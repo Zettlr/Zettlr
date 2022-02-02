@@ -34,6 +34,7 @@
         "quote-props": "off",
         "no-prototype-builtins": "off",
         "dot-notation": "off",
+        "@typescript-eslint/dot-notation": ["warn"],
         "array-bracket-spacing": [
             2,
             "always",

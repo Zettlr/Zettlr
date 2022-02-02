@@ -61,7 +61,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -77,16 +77,19 @@
  */
 
 import ButtonControl from './toolbar-controls/Button.vue'
-import RingControl from './toolbar-controls/RingProgressButton'
+import RingControl from './toolbar-controls/RingProgressButton.vue'
 import ToggleControl from './toolbar-controls/Toggle.vue'
-import ThreeWayToggle from './toolbar-controls/ThreeWayToggle'
+import ThreeWayToggle from './toolbar-controls/ThreeWayToggle.vue'
 import SearchControl from './toolbar-controls/Search.vue'
 import SpacerControl from './toolbar-controls/Spacer.vue'
 import TextControl from './toolbar-controls/Text.vue'
+import { IpcRenderer } from 'electron'
+import { defineComponent, PropType } from 'vue'
+import { ToolbarControl } from '@dts/renderer/window'
 
-const ipcRenderer = window.ipc
+const ipcRenderer: IpcRenderer = (window as any).ipc
 
-export default {
+export default defineComponent({
   name: 'WindowToolbar',
   components: {
     ButtonControl,
@@ -103,8 +106,8 @@ export default {
       default: '0px'
     },
     controls: {
-      type: Array,
-      default: function () { return [] }
+      type: Array as PropType<ToolbarControl[]>,
+      default: () => []
     },
     showLabels: {
       type: Boolean,
@@ -138,16 +141,16 @@ export default {
      *
      * @param   {MouseEvent}  event  The triggering mouse event
      */
-    handleDoubleClick: function (event) {
+    handleDoubleClick: function (event: MouseEvent) {
       // Only emit a double click event if the user double clicked on the
       // _toolbar_ or on a spacer, and not just on any button.
-      const t = event.target
+      const t = event.target as HTMLElement|null
       if (t === this.$el || (t !== null && t.className.includes('spacer') === true)) {
         this.$emit('dblclick')
       }
     }
   }
-}
+})
 </script>
 
 <style lang="less">

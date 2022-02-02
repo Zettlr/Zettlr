@@ -16,7 +16,7 @@ import {
   BrowserWindow,
   BrowserWindowConstructorOptions
 } from 'electron'
-import { MDFileDescriptor } from '../fsal/types'
+import { MDFileDescriptor } from '@dts/main/fsal'
 import { WindowPosition } from './types'
 import setWindowChrome from './set-window-chrome'
 import preventNavigation from './prevent-navigation'

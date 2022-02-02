@@ -36,6 +36,7 @@
         v-for="item in getDirectories"
         v-bind:key="item.hash"
         v-bind:obj="item"
+        v-bind:is-currently-filtering="filterQuery.length > 0"
         v-bind:depth="0"
         v-bind:has-duplicate-name="getDirectories.filter(i => i.name === item.name).length > 1"
       >
@@ -51,7 +52,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -71,9 +72,13 @@ import TreeItem from './tree-item.vue'
 import matchQuery from './util/match-query'
 import matchTree from './util/match-tree'
 
-const ipcRenderer = window.ipc
+import { defineComponent } from 'vue'
+import { IpcRenderer } from 'electron'
+import { MDFileMeta, CodeFileMeta, DirMeta } from '@dts/common/fsal'
 
-export default {
+const ipcRenderer: IpcRenderer = (window as any).ipc
+
+export default defineComponent({
   name: 'FileTree',
   components: {
     TreeItem
@@ -92,17 +97,23 @@ export default {
     return {}
   },
   computed: {
-    fileTree: function () {
+    fileTree: function (): Array<MDFileMeta|CodeFileMeta|DirMeta> {
       return this.$store.state.fileTree
     },
-    getFilteredTree: function () {
+    useH1: function (): boolean {
+      return this.$store.state.config.fileNameDisplay.includes('heading')
+    },
+    useTitle: function (): boolean {
+      return this.$store.state.config.fileNameDisplay.includes('title')
+    },
+    getFilteredTree: function (): Array<MDFileMeta|CodeFileMeta|DirMeta> {
       const q = String(this.filterQuery).trim().toLowerCase() // Easy access
 
       if (q === '') {
         return this.fileTree
       }
 
-      const filter = matchQuery(q, this.$store.state.config['display.useFirstHeadings'])
+      const filter = matchQuery(q, this.useTitle, this.useH1)
       // Now we can actually filter out the file tree. We have to do this recursively.
       // We will perform a depth-first search and keep every directory which either
       // (a) matches directly or (b) has an amount of filtered children > 0
@@ -121,20 +132,23 @@ export default {
       }
       return filteredTree
     },
-    getFiles: function () {
-      return this.getFilteredTree.filter(item => item.type !== 'directory')
+    getFiles: function (): Array<MDFileMeta|CodeFileMeta> {
+      return this.getFilteredTree.filter(item => item.type !== 'directory') as Array<MDFileMeta|CodeFileMeta>
     },
-    getDirectories: function () {
-      return this.getFilteredTree.filter(item => item.type === 'directory')
+    getDirectories: function (): DirMeta[] {
+      return this.getFilteredTree.filter(item => item.type === 'directory') as DirMeta[]
     },
-    fileSectionHeading: function () {
+    fileSectionHeading: function (): string {
       return trans('gui.files')
     },
-    workspaceSectionHeading: function () {
+    workspaceSectionHeading: function (): string {
       return trans('gui.workspaces')
     },
-    noRootsMessage: function () {
+    noRootsMessage: function (): string {
       return trans('gui.empty_directories')
+    },
+    noResultsMessage: function () {
+      return trans('gui.no_search_results')
     }
   },
   methods: {
@@ -144,16 +158,16 @@ export default {
      * @param  {MouseEvent} evt The click event.
      * @return {void}     Does not return.
      */
-    requestOpenRoot: function (evt) {
-      ipcRenderer.invoke('application', { command: 'open-workspace' })
+    requestOpenRoot: function (evt: MouseEvent) {
+      ipcRenderer.invoke('application', { command: 'root-open-workspaces' })
         .catch(err => console.error(err))
     },
-    clickHandler: function (event) {
+    clickHandler: function (event: MouseEvent) {
       // We need to bubble this event upwards so that the file manager is informed of the selection
       this.$emit('selection', event)
     }
   }
-}
+})
 </script>
 
 <style lang="less">

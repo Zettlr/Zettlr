@@ -19,7 +19,9 @@
     "downlevelIteration": true,
     "baseUrl": ".",
     "paths": {
-      "@common/*": ["source/common/*"]
+      "@common/*": ["source/common/*"],
+      "@providers/*": ["source/app/service-providers/*"],
+      "@dts/*": ["source/types/*"]
     }
   },
   "include": [

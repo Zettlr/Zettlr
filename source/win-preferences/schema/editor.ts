@@ -39,18 +39,6 @@ export default function (): any {
       [
         {
           type: 'radio',
-          label: trans('dialog.preferences.cite_style_label'),
-          model: 'editor.citeStyle',
-          options: {
-            'regular': '[@Author2015, p. 123] → (Author 2015, 123)',
-            'in-text': '@Author2015 → Author (2015)',
-            'in-text-suffix': '@Author2015 [p. 123] → Author (2015, 123)'
-          }
-        }
-      ],
-      [
-        {
-          type: 'radio',
           label: trans('dialog.preferences.auto_save.label'),
           model: 'editor.autoSave',
           options: {
@@ -93,10 +81,8 @@ export default function (): any {
           model: 'editor.inputMode',
           options: {
             'default': 'Normal',
-            'emacs': 'Emacs' // ,
-            // NOTE: We had to deactivate vim. The editor will freeze if you
-            // enter the insert mode of VIM.
-            // 'vim': 'Vim'
+            'emacs': 'Emacs',
+            'vim': 'Vim'
           }
         }
       ],
@@ -130,11 +116,6 @@ export default function (): any {
           type: 'checkbox',
           label: trans('dialog.preferences.count_chars'),
           model: 'editor.countChars'
-        },
-        {
-          type: 'checkbox',
-          label: trans('dialog.preferences.editor_setting.rtl_move_visually'),
-          model: 'editor.rtlMoveVisually'
         }
       ],
       [
@@ -146,6 +127,11 @@ export default function (): any {
             'ltr': trans('dialog.preferences.editor_setting.direction_ltr'),
             'rtl': trans('dialog.preferences.editor_setting.direction_rtl')
           }
+        },
+        {
+          type: 'checkbox',
+          label: trans('dialog.preferences.editor_setting.rtl_move_visually'),
+          model: 'editor.rtlMoveVisually'
         }
       ]
     ]

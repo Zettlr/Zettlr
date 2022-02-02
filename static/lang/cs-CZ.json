@@ -4,7 +4,7 @@
             "Ales Nehyba \u003Cneal.cz@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-10-20T18:07:35.000000Z"
+        "updated_at": "2022-01-27T20:47:55.000000Z"
     },
     "dialog": {
         "about": {
@@ -191,9 +191,13 @@
             "checkForBeta": "Informovat o beta vyd\u00e1n\u00edch",
             "choose_file": "Vybrat soubor...",
             "citation_database": "Datab\u00e1ze citac\u00ed (CSL JSON nebo BibTex)",
+            "citations": {
+                "title": "Citace"
+            },
             "cite_style_label": "Jak m\u00e1 automatick\u00e9 dokon\u010dov\u00e1n\u00ed vkl\u00e1dat citace?",
             "count_chars": "Po\u010d\u00edtat znaky m\u00edsto slov (nap\u0159. pro \u010d\u00edn\u0161tinu)",
             "creationtime": "\u010cas vytvo\u0159en\u00ed souboru",
+            "dark_mode": "Tmav\u00fd re\u017eim",
             "debug": "Povolit v\u00fdvoj\u00e1\u0159sk\u00fd re\u017eim",
             "default_image_save_path": "V\u00fdchoz\u00ed cesta k obr\u00e1zk\u016fm (relativn\u00ed nebo absolutn\u00ed)",
             "delete_on_fail": "Polo\u017eku, kterou nelze p\u0159esunout do ko\u0161e, smazat trvale",

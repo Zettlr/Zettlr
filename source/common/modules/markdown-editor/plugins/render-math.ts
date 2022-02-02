@@ -80,7 +80,11 @@ commands.markdownRenderMath = function (cm: CodeMirror.Editor) {
     katex.render(myMarker.eq, mathSpan, { throwOnError: false, displayMode: myMarker.displayMode })
 
     // Now the marker has obviously changed
-    textMarker.changed()
+    if (textMarker.find() !== undefined) {
+      textMarker.changed()
+    } else {
+      console.warn('Warning: Attempted to update a text marker after KaTeX finished rendering, but it wasn\' in the document anymore.')
+    }
   }
 }
 

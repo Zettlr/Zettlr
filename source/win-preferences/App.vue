@@ -50,6 +50,7 @@ import { trans } from '@common/i18n-renderer'
 import generalSchema from './schema/general'
 import editorSchema from './schema/editor'
 import exportSchema from './schema/export'
+import citationSchema from './schema/citations'
 import zettelkastenSchema from './schema/zettelkasten'
 import displaySchema from './schema/display'
 import spellcheckingSchema from './schema/spellchecking'
@@ -57,6 +58,7 @@ import autocorrectSchema from './schema/autocorrect'
 import advancedSchema from './schema/advanced'
 import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
+import { WindowTab } from '@dts/renderer/window'
 
 const ipcRenderer: IpcRenderer = (window as any).ipc
 
@@ -136,6 +138,12 @@ export default defineComponent({
           icon: 'share'
         },
         {
+          label: trans('dialog.preferences.citations.title'),
+          controls: 'tab-citations',
+          id: 'tab-citations-control',
+          icon: 'block-quote'
+        },
+        {
           label: trans('dialog.preferences.zkn.title'),
           controls: 'tab-zettelkasten',
           id: 'tab-zettelkasten-control',
@@ -157,7 +165,7 @@ export default defineComponent({
           label: trans('dialog.preferences.autocorrect.title'),
           controls: 'tab-autocorrect',
           id: 'tab-autocorrect-control',
-          icon: 'block-quote'
+          icon: 'wand' // 'block-quote'
         },
         {
           label: trans('dialog.preferences.advanced'),
@@ -165,7 +173,7 @@ export default defineComponent({
           id: 'tab-advanced-control',
           icon: 'tools'
         }
-      ],
+      ] as WindowTab[],
       // Will be populated afterwards, contains the user dict
       userDictionaryContents: [],
       // Will be populated afterwards, contains all dictionaries
@@ -267,7 +275,13 @@ export default defineComponent({
       } else {
         // By default, we should have the correct value already, we just need to
         // treat (complex) lists as special (not even token inputs).
-        (global as any).config.set(prop, val)
+
+        // NOTE: Due to Vue 3 we MUST deproxy anything here. Since config values
+        // are always either dictionaries, lists, or primitives, we can safely
+        // do it the brute-force-way and stringify it. This will basically read
+        // out every value from the proxy and store it in vanilla objects/arrays
+        // again.
+        (global as any).config.set(prop, JSON.parse(JSON.stringify(val)))
       }
     },
     /**
@@ -342,6 +356,9 @@ export default defineComponent({
           break
         case 'tab-export':
           this.schema = exportSchema()
+          break
+        case 'tab-citations':
+          this.schema = citationSchema()
           break
         case 'tab-zettelkasten':
           this.schema = zettelkastenSchema()

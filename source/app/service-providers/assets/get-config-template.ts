@@ -60,7 +60,11 @@ export default function getConfigTemplate (): ConfigOptions {
       // Only use native window appearance by default on macOS. If this value
       // is false, this means that Zettlr will display the menu bar and window
       // controls as defined in the HTML.
-      nativeAppearance: process.platform === 'darwin'
+      nativeAppearance: process.platform === 'darwin',
+      // Store a few GUI related settings here as well
+      sidebarVisible: false,
+      currentSidebarTab: 'toc',
+      recentGlobalSearches: []
     },
     // Visible attachment filetypes
     attachmentExtensions: ATTACHMENT_EXTENSIONS,
@@ -72,17 +76,14 @@ export default function getConfigTemplate (): ConfigOptions {
     autoDarkModeEnd: '06:00', // Switch to light mode at this time
     fileMeta: true,
     fileMetaTime: 'modtime', // The time to be displayed in file meta
-    hideDirs: true, // Should the app hide directories during global search?
     sorting: 'natural', // Can be natural or based on ASCII values
     sortFoldersFirst: false, // should folders be shown first in combined fileview
     sortingTime: 'modtime', // can be modtime or creationtime
     muteLines: true, // Should the editor mute lines in distraction free mode?
     fileManagerMode: 'thin', // thin = Preview or directories visible --- expanded = both visible --- combined = tree view displays also files
+    fileNameDisplay: 'title', // Controls what info is displayed as filenames
     newFileNamePattern: '%id.md',
     newFileDontPrompt: false, // If true immediately creates files
-    // Export options
-    pandoc: '',
-    xelatex: '',
     export: {
       dir: 'temp', // Can either be "temp", "cwd" (current working directory) or "ask"
       stripTags: false, // Strip tags a.k.a. #tag
@@ -92,32 +93,18 @@ export default function getConfigTemplate (): ConfigOptions {
       useBundledPandoc: true, // Whether to use the bundled Pandoc
       singleFileLastExporter: 'html' // Remembers the last chosen exporter for easy re-exporting
     },
-    // PDF options (for all documents; projects will copy this object over)
-    pdf: {
-      keywords: '', // PDF keywords
-      papertype: 'a4paper', // Paper to use, e.g. A4 or Letter
-      pagenumbering: 'gobble', // By default omit page numbers
-      tmargin: 3, // Margins to paper (top, right, bottom, left)
-      rmargin: 3,
-      bmargin: 3,
-      lmargin: 3,
-      margin_unit: 'cm',
-      lineheight: '1.5', // Default: 150% line height
-      mainfont: 'Times New Roman', // Main font
-      sansfont: 'Arial', // Sans font, used, e.g. for headings
-      fontsize: 12, // Will be translated to pt
-      textpl: '' // Can be used to store a custom TeX template
-    },
     // Zettelkasten stuff (IDs, as well as link matchers)
     zkn: {
       idRE: '(\\d{14})',
       idGen: '%Y%M%D%h%m%s',
       linkStart: '[[',
       linkEnd: ']]',
+      linkFilenameOnly: false,
       linkWithFilename: 'always', // can be always|never|withID
       // If true, create files that are not found, if forceOpen is called
       autoCreateLinkedFiles: false,
-      autoSearch: true // Automatically start a search upon following a link?
+      autoSearch: true, // Automatically start a search upon following a link?
+      customDirectory: '' // If present, saves auto-created files here
     },
     // Editor related stuff
     editor: {
@@ -206,8 +193,10 @@ export default function getConfigTemplate (): ConfigOptions {
     },
     display: {
       theme: 'berlin', // The theme, can be berlin|frankfurt|bielefeld|karl-marx-stadt|bordeaux
-      // By default, Windows and macOS systems use the system accent color instead of the theme
-      useSystemAccentColor: [ 'darwin', 'win32' ].includes(process.platform),
+      // By default, macOS computers use the system accent color instead of the theme's one
+      useSystemAccentColor: process.platform === 'darwin',
+      hideToolbarInDistractionFree: false,
+      markdownFileExtensions: false,
       imageWidth: 100, // Maximum preview image width
       imageHeight: 50, // Maximum preview image height
       renderCitations: true,
@@ -216,8 +205,7 @@ export default function getConfigTemplate (): ConfigOptions {
       renderLinks: true,
       renderMath: true,
       renderTasks: true,
-      renderHTags: false,
-      useFirstHeadings: false // Should first headings be displayed instead of filenames?
+      renderHTags: false
     },
     // Language
     selectedDicts: [], // By default no spell checking is active to speed up first start.

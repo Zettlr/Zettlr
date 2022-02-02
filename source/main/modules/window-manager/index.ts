@@ -26,7 +26,7 @@ import {
 import { promises as fs } from 'fs'
 import EventEmitter from 'events'
 import path from 'path'
-import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '../fsal/types'
+import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/main/fsal'
 import createMainWindow from './create-main-window'
 import createPrintWindow from './create-print-window'
 import createUpdateWindow from './create-update-window'
@@ -50,6 +50,7 @@ import askFileDialog from './dialog/ask-file'
 import saveFileDialog from './dialog/save-dialog'
 import confirmRemove from './dialog/confirm-remove'
 import * as bcp47 from 'bcp-47'
+import mapFSError from './map-fs-error'
 
 export default class WindowManager extends EventEmitter {
   private _mainWindow: BrowserWindow|null
@@ -687,6 +688,17 @@ export default class WindowManager extends EventEmitter {
     this._errorModal.on('closed', () => {
       this._errorModal = null
     })
+  }
+
+  /**
+   * Reports an error specific to reading or writing files and directories.
+   *
+   * @param   {string}  title  A title for the error prompt (e.g. Error opening Workspace)
+   * @param   {any}     error  The error object that should be reported. Should be thrown by fs
+   */
+  reportFSError (title: string, error: any): void {
+    const { what, why } = mapFSError(error)
+    this.showErrorMessage(title, `There was an error accessing "${what}"`, why)
   }
 
   /**

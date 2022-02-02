@@ -148,7 +148,7 @@ app.whenReady().then(() => {
       .then(() => {
         // After the app has been booted, open any files that we amassed in the
         // meantime.
-        zettlr?.handleAddRoots(filesBeforeOpen)
+        zettlr?.runCommand('roots-add', filesBeforeOpen)
       })
       .catch(err => {
         console.error(err)
@@ -182,7 +182,7 @@ app.on('second-instance', (event, argv, cwd) => {
   zettlr.openWindow()
 
   // In case the user wants to open a file/folder with this running instance
-  zettlr.handleAddRoots(extractFilesFromArgv(argv)).catch(err => { console.error(err) })
+  zettlr.runCommand('roots-add', extractFilesFromArgv(argv)).catch(err => { console.error(err) })
 })
 
 /**
@@ -192,7 +192,7 @@ app.on('open-file', (e, p) => {
   e.preventDefault() // Need to explicitly set this b/c we're handling this
   // The user wants to open a file -> simply handle it.
   if (zettlr !== null) {
-    zettlr.handleAddRoots([p]).catch((err) => {
+    zettlr.runCommand('roots-add', [p]).catch((err) => {
       global.log.error('[Application] Error while adding new roots', err)
     })
   } else {

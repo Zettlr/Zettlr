@@ -16,6 +16,8 @@
  * END HEADER
  */
 
+import { Rect, Point, AnyMenuItem, NormalItem } from '@dts/renderer/context'
+
 const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
 // This function displays a custom styled popup menu at the given coordinates

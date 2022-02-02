@@ -15,30 +15,34 @@ import asciiSorting from './sort-ascii'
 import naturalSorting from './sort-natural'
 import dateSorting from './sort-date'
 
-import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '../types'
+export interface RequiredSortingProps {
+  type: string
+  name: string
+  frontmatter?: any
+  firstHeading?: string|null
+  modtime: number
+  creationtime: number
+}
 
 /**
 * This function can sort an array of ZettlrFile and ZettlrDir objects
-* @param  {Array<DirDescriptor | MDFileDescriptor>} arr An array containing file and directory descriptors
+* @param  {T[]} arr An array containing file and directory descriptors
 * @param {string} [type='name-up'] The type of sorting - can be time-up, time-down, name-up or name-down
-* @return {Array<DirDescriptor | MDFileDescriptor>}     The sorted array
+* @return {T[]}     The sorted array
 */
-export default function (
-  arr: Array<DirDescriptor | MDFileDescriptor | CodeFileDescriptor>,
-  type = 'name-up'
-): Array<DirDescriptor | MDFileDescriptor | CodeFileDescriptor> {
+export default function sort<T extends RequiredSortingProps> (arr: T[], type: string = 'name-up'): T[] {
   // First split the array based on type
-  let f: Array<MDFileDescriptor | CodeFileDescriptor> = []
-  let d: DirDescriptor[] = []
+  const f: T[] = []
+  const d: T[] = []
 
   // Should we use natural sorting or ascii?
-  let useNatural = global.config.get('sorting') === 'natural'
+  const useNatural = global.config.get('sorting') === 'natural'
 
   // Write in the sortingFunc whatever we should be using
-  let sortingFunc = (useNatural) ? naturalSorting : asciiSorting
+  const sortingFunc = (useNatural) ? naturalSorting : asciiSorting
 
   // Split up the children list
-  for (let c of arr) {
+  for (const c of arr) {
     switch (c.type) {
       case 'file':
       case 'code':
@@ -69,12 +73,10 @@ export default function (
       break
   }
 
-  const ret: Array<MDFileDescriptor | DirDescriptor | CodeFileDescriptor> = []
-
   // Return sorted array files -> directories
-  if (global.config.get('sortFoldersFirst')) {
-    return ret.concat(d).concat(f)
+  if (global.config.get('sortFoldersFirst') === true) {
+    return d.concat(f)
   } else {
-    return ret.concat(f).concat(d)
+    return f.concat(d)
   }
 }
