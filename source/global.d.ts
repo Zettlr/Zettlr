@@ -98,7 +98,6 @@ declare module global {
   var citeproc: CiteprocProvider
   var config: ConfigProvider
   var application: Application
-  var cliarguments: cliProvider
   var typo: any
   var preBootLog: BootLog[]
   var tippy: any
