@@ -71,12 +71,10 @@ import { trans } from '@common/i18n-renderer'
 import TreeItem from './tree-item.vue'
 import matchQuery from './util/match-query'
 import matchTree from './util/match-tree'
-
 import { defineComponent } from 'vue'
-import { IpcRenderer } from 'electron'
 import { MDFileMeta, CodeFileMeta, DirMeta } from '@dts/common/fsal'
 
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 export default defineComponent({
   name: 'FileTree',

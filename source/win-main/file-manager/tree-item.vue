@@ -137,12 +137,11 @@ import generateFilename from '@common/util/generate-filename'
 import { trans } from '@common/i18n-renderer'
 
 import { nextTick, defineComponent } from 'vue'
-import { IpcRenderer } from 'electron'
 import { MDFileMeta, DirMeta, CodeFileMeta } from '@dts/common/fsal'
 import { PlatformPath } from '@dts/renderer/path'
 
 const path: PlatformPath = (window as any).path
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 export default defineComponent({
   name: 'TreeItem',

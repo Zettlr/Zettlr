@@ -49,9 +49,8 @@
 import displayTabsContextMenu from './tabs-context'
 import tippy from 'tippy.js'
 import { nextTick, defineComponent } from 'vue'
-import { IpcRenderer } from 'electron'
 
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 export default defineComponent({
   name: 'DocumentTabs',

@@ -90,7 +90,6 @@ import { trans } from '@common/i18n-renderer'
 import localiseNumber from '@common/util/localise-number'
 import generateId from '@common/util/generate-id'
 import { nextTick, defineComponent } from 'vue'
-import { IpcRenderer } from 'electron'
 
 // Import the sound effects for the pomodoro timer
 import glassFile from './assets/glass.wav'
@@ -98,7 +97,7 @@ import alarmFile from './assets/digital_alarm.mp3'
 import chimeFile from './assets/chime.mp3'
 import { ToolbarControl } from '@dts/renderer/window'
 
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 const clipboard = (window as any).clipboard
 
 const SOUND_EFFECTS = [

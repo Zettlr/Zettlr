@@ -13,9 +13,8 @@
  * END HEADER
  */
 
-import { IpcRenderer } from 'electron'
 import sanitizeHtml from 'sanitize-html'
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 /**
  * This translates a given identifier string into the loaded language

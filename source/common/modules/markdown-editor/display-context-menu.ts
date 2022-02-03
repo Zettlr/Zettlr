@@ -14,10 +14,9 @@
 
 // Displays a context menu for the MarkdownEditor class
 import { trans } from '@common/i18n-renderer'
-import { IpcRenderer } from 'electron'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 const clipboard = (window as any).clipboard
 
 let currentMenu: any[] = []

@@ -124,7 +124,6 @@ import ButtonControl from '@common/vue/form/elements/Button.vue'
 import ProgressControl from '@common/vue/form/elements/Progress.vue'
 import AutocompleteText from '@common/vue/form/elements/AutocompleteText.vue'
 import { trans } from '@common/i18n-renderer'
-import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
 import { SearchResult, SearchTerm } from '@dts/common/search'
 import { CodeFileMeta, DirMeta, MDFileMeta } from '@dts/common/fsal'
@@ -133,7 +132,7 @@ import { AnyMenuItem } from '@dts/renderer/context'
 import { PlatformPath } from '@dts/renderer/path'
 
 const path: PlatformPath = (window as any).path
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 interface LocalFile {
   path: string

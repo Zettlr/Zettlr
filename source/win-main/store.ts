@@ -23,7 +23,7 @@ import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
 import { PlatformPath } from '@dts/renderer/path'
 
 const path: PlatformPath = (window as any).path
-const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
+const ipcRenderer = window.ipc
 
 interface FSALEvent {
   event: 'remove'|'add'|'change'

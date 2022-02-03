@@ -18,7 +18,7 @@
 // automatically
 import './assets/main.less'
 
-const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
+const ipcRenderer = window.ipc
 
 /**
  * Webpack provides the themes as JavaScript objects with two properties, use

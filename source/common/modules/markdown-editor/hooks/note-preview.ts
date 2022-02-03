@@ -1,9 +1,8 @@
 import tippy from 'tippy.js'
 import { trans } from '@common/i18n-renderer'
 import formatDate from '@common/util/format-date'
-import { IpcRenderer } from 'electron'
 import CodeMirror from 'codemirror'
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 /**
  * A hook for displaying link tooltips which display metadata

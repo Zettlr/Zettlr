@@ -54,11 +54,10 @@ import CalendarView from './CalendarView.vue'
 import ChartView from './ChartView.vue'
 import FSALView from './FSALView.vue'
 import { trans } from '@common/i18n-renderer'
-import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
 import { WindowTab } from '@dts/renderer/window'
 
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 interface Stats {
   wordCount: {[day: string]: number} // All words for the graph

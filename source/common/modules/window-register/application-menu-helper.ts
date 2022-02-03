@@ -18,7 +18,7 @@
 
 import { Rect, Point, AnyMenuItem, NormalItem } from '@dts/renderer/context'
 
-const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
+const ipcRenderer = window.ipc
 
 // This function displays a custom styled popup menu at the given coordinates
 export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[], callback: (clickedID: string) => void, cleanup = true): () => void {

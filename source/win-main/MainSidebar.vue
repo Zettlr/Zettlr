@@ -140,13 +140,12 @@ import { trans } from '@common/i18n-renderer'
 import { ClarityIcons } from '@clr/icons'
 import TabBar from '@common/vue/TabBar.vue'
 import { defineComponent } from 'vue'
-import { IpcRenderer } from 'electron'
 import { MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
 import { TabbarControl } from '@dts/renderer/window'
 import { PlatformPath } from '@dts/renderer/path'
 
 const path: PlatformPath = (window as any).path
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 interface RelatedFile {
   file: string

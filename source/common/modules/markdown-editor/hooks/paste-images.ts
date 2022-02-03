@@ -15,10 +15,9 @@
 
 import { PlatformPath } from '@dts/renderer/path'
 import CodeMirror from 'codemirror'
-import { IpcRenderer } from 'electron'
 
 const path: PlatformPath = (window as any).path
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 const clipboard = (window as any).clipboard
 
 export default function pasteImagesHook (cm: CodeMirror.Editor): void {

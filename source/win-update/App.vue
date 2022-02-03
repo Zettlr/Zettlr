@@ -95,10 +95,9 @@ import ProgressControl from '@common/vue/form/elements/Progress.vue'
 import { trans } from '@common/i18n-renderer'
 import formatSize from '@common/util/format-size'
 import PACKAGE_JSON from '../../package.json'
-import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
 
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 export default defineComponent({
   components: {

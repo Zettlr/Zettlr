@@ -67,9 +67,7 @@ import noteTooltipsHook from './hooks/note-preview'
 
 import displayContextMenu from './display-context-menu'
 
-import { IpcRenderer } from 'electron'
-
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 const clipboard = (window as any).clipboard
 
 export default class MarkdownEditor extends EventEmitter {

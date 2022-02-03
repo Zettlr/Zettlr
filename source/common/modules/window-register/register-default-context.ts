@@ -17,7 +17,7 @@
 import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { AnyMenuItem, Point } from '@dts/renderer/context'
-const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
+const ipcRenderer = window.ipc
 
 const TEMPLATE: AnyMenuItem[] = [
   {
