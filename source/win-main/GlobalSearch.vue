@@ -155,20 +155,27 @@ interface LocalSearchResult {
   weight: number
 }
 
-const contextMenu: AnyMenuItem[] = [
-  {
-    label: trans('menu.open_new_tab'),
-    id: 'new-tab',
-    type: 'normal',
-    enabled: true
-  },
-  {
-    label: trans('menu.quicklook'),
-    id: 'open-quicklook',
-    type: 'normal',
-    enabled: true
-  }
-]
+// Again: We have a side effect that trans() cannot be executed during import
+// stage. It needs to be executed after the window registration ran for now. It
+// will become better with the big refactoring that is currently underway since
+// API methods will then be infused by the preload scripts so that trans will
+// also work at the import stage.
+function getContextMenu (): AnyMenuItem[] {
+  return [
+    {
+      label: trans('menu.open_new_tab'),
+      id: 'new-tab',
+      type: 'normal',
+      enabled: true
+    },
+    {
+      label: trans('menu.quicklook'),
+      id: 'open-quicklook',
+      type: 'normal',
+      enabled: true
+    }
+  ]
+}
 
 export default defineComponent({
   name: 'GlobalSearch',
@@ -509,7 +516,7 @@ export default defineComponent({
     },
     fileContextMenu: function (event: MouseEvent, filePath: string, lineNumber: number) {
       const point = { x: event.clientX, y: event.clientY }
-      showPopupMenu(point, contextMenu, (clickedID: string) => {
+      showPopupMenu(point, getContextMenu(), (clickedID: string) => {
         switch (clickedID) {
           case 'new-tab':
             this.jumpToLine(filePath, lineNumber, true)
