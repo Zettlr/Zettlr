@@ -33,6 +33,13 @@ contextBridge.exposeInMainWorld('ipc', {
 // DEBUG
 contextBridge.exposeInMainWorld('__dirname', '')
 
+contextBridge.exposeInMainWorld('getCitation', function (items: CiteItem[], composite: boolean) {
+  ipcRenderer.sendSync('citation-renderer', {
+    command: 'get-citation-sync',
+    payload: { citations: items, composite: composite }
+  })
+})
+
 // Expose the subset of clipboard functions which we use
 contextBridge.exposeInMainWorld('clipboard', {
   readText: function () {

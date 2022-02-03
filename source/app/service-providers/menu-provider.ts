@@ -28,6 +28,7 @@ import macOSMenu from './assets/menu.darwin'
 import ProviderContract from './provider-contract'
 import RecentDocumentsProvider from './recent-docs-provider'
 import WindowProvider from './window-provider'
+import CommandProvider from './commands'
 
 // Types from the global.d.ts of the window-register module
 interface CheckboxRadioItem {
@@ -99,15 +100,17 @@ export default class MenuProvider extends ProviderContract {
   private readonly _config: ConfigProvider
   private readonly _recentDocs: RecentDocumentsProvider
   private readonly _windows: WindowProvider
+  private readonly _commands: CommandProvider
 
   /**
   * Creates the main application menu and sets it.
   */
-  constructor (logger: LogProvider, config: ConfigProvider, recentDocs: RecentDocumentsProvider, windows: WindowProvider) {
+  constructor (logger: LogProvider, config: ConfigProvider, recentDocs: RecentDocumentsProvider, commands: CommandProvider, windows: WindowProvider) {
     super()
     this._logger = logger
     this._config = config
     this._recentDocs = recentDocs
+    this._commands = commands
     this._windows = windows
     this._logger.verbose('Menu provider booting up ...')
     this._checkboxState = new Map()
@@ -357,7 +360,7 @@ export default class MenuProvider extends ProviderContract {
       this._checkboxState.set(id, val)
     }
 
-    const blueprint = BLUEPRINTS[process.platform](this._logger, this._config, this._recentDocs, this._windows, getState, setState)
+    const blueprint = BLUEPRINTS[process.platform](this._logger, this._config, this._recentDocs, this._commands, this._windows, getState, setState)
     // Last but not least build the template
     return Menu.buildFromTemplate(blueprint)
   }

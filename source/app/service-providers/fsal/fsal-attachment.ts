@@ -18,7 +18,7 @@ import hash from '@common/util/hash'
 import { OtherFileDescriptor, DirDescriptor } from '@dts/main/fsal'
 import { OtherFileMeta } from '@dts/common/fsal'
 
-export async function parse (absPath: string, parent: DirDescriptor): Promise<OtherFileDescriptor> {
+export async function parse (logger: LogProvider, absPath: string, parent: DirDescriptor): Promise<OtherFileDescriptor> {
   let attachment: OtherFileDescriptor = {
     parent: parent,
     path: absPath,
@@ -39,7 +39,7 @@ export async function parse (absPath: string, parent: DirDescriptor): Promise<Ot
     attachment.creationtime = stat.birthtime.getTime()
     attachment.size = stat.size
   } catch (err: any) {
-    global.log.error('Error reading file ' + absPath, err)
+    logger.error('Error reading file ' + absPath, err)
     throw err // Rethrow
   }
 

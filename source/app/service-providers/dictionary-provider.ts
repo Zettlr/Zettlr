@@ -69,24 +69,6 @@ export default class DictionaryProvider extends ProviderContract {
     this._fileLock = false
     this._unwrittenChanges = false
 
-    // Inject global methods
-    global.dict = {
-      on: (message: string, callback: Function) => {
-        this._emitter.on(message, callback as any)
-      },
-      off: (message: string, callback: Function) => {
-        this._emitter.off(message, callback as any)
-      },
-      /**
-       * Returns a copy of the full user dictionary.
-       * @return {Array} The user dictionary.
-       */
-      getUserDictionary: () => {
-        // Clone the array
-        return this._userDictionary.map(elem => elem)
-      }
-    }
-
     // Listen for synchronous messages from the renderer process for typos.
     ipcMain.on('dictionary-provider', (event, message) => {
       const { command, term } = message

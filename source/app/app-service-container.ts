@@ -77,13 +77,13 @@ export default class AppServiceContainer {
     this._windowProvider = new WindowProvider(this._logProvider, this._configProvider)
     this._trayProvider = new TrayProvider(this._logProvider, this._configProvider, this._windowProvider)
     this._dictionaryProvider = new DictionaryProvider(this._logProvider, this._configProvider)
-    this._menuProvider = new MenuProvider(this._logProvider, this._configProvider, this._recentDocsProvider, this._windowProvider)
     this._citeprocProvider = new CiteprocProvider(this._logProvider, this._configProvider, this._notificationProvider, this._windowProvider)
 
-    this._fsal = new FSAL()
+    this._fsal = new FSAL(this._logProvider, this._configProvider, this._targetProvider)
     this._targetProvider = new TargetProvider(this._logProvider, this._fsal)
     this._documentManager = new DocumentManager(this._logProvider, this._configProvider, this._recentDocsProvider, this._citeprocProvider)
     this._commandProvider = new CommandProvider(this)
+    this._menuProvider = new MenuProvider(this._logProvider, this._configProvider, this._recentDocsProvider, this._commandProvider, this._windowProvider)
     this._updateProvider = new UpdateProvider(this._logProvider, this._configProvider, this._notificationProvider, this._commandProvider)
   }
 

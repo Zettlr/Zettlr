@@ -148,7 +148,8 @@ app.whenReady().then(() => {
       .then(() => {
         // After the app has been booted, open any files that we amassed in the
         // meantime.
-        zettlr?.runCommand('roots-add', filesBeforeOpen)
+        getServiceContainer().commands.run('roots-add', filesBeforeOpen)
+          .catch(err => console.error(err))
       })
       .catch(err => {
         console.error(err)
@@ -181,18 +182,21 @@ app.on('second-instance', (event, argv, cwd) => {
   // with the nitty-gritty of actually making the main window visible.
   zettlr.openWindow()
 
+  const commands = getServiceContainer().commands
+
   // In case the user wants to open a file/folder with this running instance
-  zettlr.runCommand('roots-add', extractFilesFromArgv(argv)).catch(err => { console.error(err) })
+  commands.run('roots-add', extractFilesFromArgv(argv)).catch(err => { console.error(err) })
 })
 
 /**
  * This gets executed when the user wants to open a file on macOS.
  */
 app.on('open-file', (e, p) => {
+  const commands = getServiceContainer().commands
   e.preventDefault() // Need to explicitly set this b/c we're handling this
   // The user wants to open a file -> simply handle it.
   if (zettlr !== null) {
-    zettlr.runCommand('roots-add', [p]).catch((err) => {
+    commands.run('roots-add', [p]).catch((err) => {
       global.log.error('[Application] Error while adding new roots', err)
     })
   } else {

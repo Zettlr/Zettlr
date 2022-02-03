@@ -23,7 +23,7 @@ import path from 'path'
 import crypto from 'crypto'
 import got, { Response } from 'got'
 import semver from 'semver'
-import md2html from '@common/util/md-to-html'
+import { getConverter } from '@common/util/md-to-html'
 
 import { ipcMain, app, shell } from 'electron'
 import { trans } from '@common/i18n-main'
@@ -226,6 +226,8 @@ export default class UpdateProvider extends ProviderContract {
       this._reportError('ERR_BODY_PARSE_FAILURE', trans('dialog.update.no_data'))
       return
     }
+
+    const md2html = getConverter()
 
     // First we need to parse the JSON data.
     const parsedResponse: ServerAPIResponse = JSON.parse(response.body)

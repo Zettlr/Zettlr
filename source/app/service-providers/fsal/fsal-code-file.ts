@@ -42,7 +42,7 @@ function cacheFile (origFile: CodeFileDescriptor, cacheAdapter: FSALCache): void
   let copy = metadata(origFile)
   delete (copy as any).parent // Make sure not to store circular properties
   if (!cacheAdapter.set(origFile.hash.toString(), copy)) {
-    global.log.error(`Could not cache file ${origFile.name}!`)
+    throw new Error(`Could not cache file ${origFile.name}!`)
   }
 }
 
@@ -59,7 +59,8 @@ async function updateFileMetadata (fileObject: CodeFileDescriptor): Promise<void
     fileObject.size = stat.size
     global.log.info(`Updated modtime for fileDescriptor ${fileObject.name} to ${fileObject.modtime}`)
   } catch (err: any) {
-    global.log.error(`Could not update the metadata for file ${fileObject.name}: ${String(err.message).toString()}`, err)
+    err.message = `Could not update the metadata for file ${fileObject.name}: ${String(err.message)}`
+    throw err
   }
 }
 
@@ -126,7 +127,7 @@ export async function parse (
     file.size = stat.size
     file.creationtime = stat.birthtime.getTime()
   } catch (err: any) {
-    global.log.error('Error reading file ' + filePath, err)
+    err.message = 'Error reading file ' + filePath
     throw err // Re-throw
   }
 
@@ -166,7 +167,7 @@ export async function search (fileObject: CodeFileDescriptor, terms: any[]): Pro
 export async function load (fileObject: CodeFileDescriptor): Promise<string> {
   // Loads the content of a file from disk
   const content = await fs.readFile(fileObject.path, { encoding: 'utf8' })
-  return content.substr(fileObject.bom.length)
+  return content.substring(fileObject.bom.length)
 }
 
 export async function hasChangedOnDisk (fileObject: CodeFileDescriptor): Promise<boolean> {
@@ -201,11 +202,11 @@ export async function rename (fileObject: CodeFileDescriptor, cache: any, newNam
   }
 }
 
-export async function remove (fileObject: CodeFileDescriptor): Promise<void> {
+export async function remove (fileObject: CodeFileDescriptor, deleteOnFail: boolean): Promise<void> {
   try {
     await shell.trashItem(fileObject.path)
   } catch (err: any) {
-    if (global.config.get('system.deleteOnFail') === true) {
+    if (deleteOnFail) {
       // If this function throws, there's really something off and we shouldn't recover.
       await fs.unlink(fileObject.path)
     } else {

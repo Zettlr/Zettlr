@@ -28,7 +28,7 @@ import './editor.less'
 import getCodeMirrorDefaultOptions from './get-cm-options'
 import safeAssign from '@common/util/safe-assign'
 import countWords from '@common/util/count-words'
-import md2html from '@common/util/md-to-html'
+import { getConverter } from '@common/util/md-to-html'
 import generateKeymap from './generate-keymap'
 import generateTableOfContents from './util/generate-toc'
 
@@ -79,6 +79,7 @@ export default class MarkdownEditor extends EventEmitter {
   private _currentDocumentMode: string
   private _cmOptions: any
   private _countChars: boolean
+  private readonly _md2html: ReturnType<typeof getConverter>
 
   /**
    * Creates a new MarkdownEditor instance attached to the anchorElement
@@ -93,6 +94,8 @@ export default class MarkdownEditor extends EventEmitter {
     this._currentDocumentMode = 'multiplex'
     this._cmOptions = getCodeMirrorDefaultOptions(this)
     this._countChars = false
+
+    this._md2html = getConverter((window as any).getCitation)
 
     // Parse the anchorElement until we get something useful
     if (typeof anchorElement === 'string' && document.getElementById(anchorElement) !== null) {
@@ -320,7 +323,7 @@ export default class MarkdownEditor extends EventEmitter {
   copyAsHTML (): void {
     if (!this._instance.somethingSelected()) return
     let md = this._instance.getSelections().join(' ')
-    let html = md2html(md)
+    let html = this._md2html(md)
     // Write both the HTML and the Markdown
     // (as fallback plain text) to the clipboard
     clipboard.write({ 'text': md, 'html': html })

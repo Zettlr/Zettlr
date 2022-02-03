@@ -94,7 +94,6 @@ declare module global {
   var tippy: any
   var updates: UpdateProvider
   var translations: any
-  var targets: TargetProvider
   var links: LinkProvider
   var tags: TagProvider
   var stats: StatsProvider

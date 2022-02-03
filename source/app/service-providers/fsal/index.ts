@@ -43,6 +43,7 @@ import { SearchTerm } from '@dts/common/search'
 import generateStats from './util/generate-stats'
 import ProviderContract from '@providers/provider-contract'
 import { app } from 'electron'
+import TargetProvider from '@providers/target-provider'
 
 // Re-export all interfaces necessary for other parts of the code (Document Manager)
 export {
@@ -78,12 +79,18 @@ export default class FSAL extends ProviderContract {
   private _state: FSALState
   private _history: FSALHistoryEvent[]
   private readonly _emitter: EventEmitter
+  private readonly _logger: LogProvider
+  private readonly _config: ConfigProvider
 
-  constructor () {
+  constructor (logger: LogProvider, config: ConfigProvider, targets: TargetProvider) {
     super()
-    global.log.verbose('FSAL booting up ...')
+    this._logger = logger
+
+    this._logger.verbose('FSAL booting up ...')
+    this._config = config
+
     const cachedir = app.getPath('userData')
-    this._cache = new FSALCache(path.join(cachedir, 'fsal/cache'))
+    this._cache = new FSALCache(logger, path.join(cachedir, 'fsal/cache'))
     this._watchdog = new FSALWatchdog()
     this._isCurrentlyHandlingRemoteChange = false
     this._fsalIsBusy = false // Locks certain functionality during running of actions
@@ -98,14 +105,14 @@ export default class FSAL extends ProviderContract {
     }
 
     // Finally, set up listeners for global targets
-    global.targets.on('update', (filePath: string) => {
+    targets.on('update', (filePath: string) => {
       let file = this.findFile(filePath)
       if (file === null || file.type !== 'file') return // Not our business
       // Simply pull in the new target
-      FSALFile.setTarget(file, global.targets.get(filePath))
+      FSALFile.setTarget(file, targets.get(filePath))
       this._recordFiletreeChange('change', file.path)
     })
-    global.targets.on('remove', (filePath: string) => {
+    targets.on('remove', (filePath: string) => {
       let file = this.findFile(filePath)
       if (file === null || file.type !== 'file') return // Also not our business
       FSALFile.setTarget(file, undefined) // Reset
@@ -304,10 +311,10 @@ export default class FSAL extends ProviderContract {
       const isUnlink = [ 'unlink', 'unlinkDir' ].includes(event.event)
       const doesNotExist = !isFile(event.path) && !isDir(event.path)
       if (doesNotExist && !isUnlink) {
-        global.log.info(`Could not process event ${event.event} for ${event.path}: The corresponding node does not exist anymore.`)
+        this._logger.info(`Could not process event ${event.event} for ${event.path}: The corresponding node does not exist anymore.`)
         return this._afterRemoteChange() // Try the next event
       }
-      this._onRemoteChange(event.event, event.path).catch(e => global.log.error(e.message, e))
+      this._onRemoteChange(event.event, event.path).catch(e => this._logger.error(e.message, e))
     }
   }
 
@@ -348,11 +355,11 @@ export default class FSAL extends ProviderContract {
         this._recordFiletreeChange('add', root.path)
 
         // Also, make sure to update the config accordingly
-        const rootPaths: string[] = global.config.get('openPaths')
+        const rootPaths: string[] = this._config.get('openPaths')
 
         if (rootPaths.includes(root.path)) {
           rootPaths.splice(rootPaths.indexOf(root.path), 1)
-          global.config.set('openPaths', rootPaths)
+          this._config.set('openPaths', rootPaths)
         }
       }
     }
@@ -364,7 +371,7 @@ export default class FSAL extends ProviderContract {
    * @returns {boolean} Whether or not the shutdown was successful
    */
   public async shutdown (): Promise<void> {
-    global.log.verbose('FSAL shutting down ...')
+    this._logger.verbose('FSAL shutting down ...')
     this._cache.persist()
     await this._watchdog.shutdown()
   }
@@ -419,10 +426,10 @@ export default class FSAL extends ProviderContract {
       const idx = this._state.filetree.indexOf(descriptor)
       this._state.filetree.splice(idx, 1)
       this._recordFiletreeChange('remove', descriptor.path)
-      global.log.info(`Directory ${descriptor.name} found - Adding to file tree ...`)
+      this._logger.info(`Directory ${descriptor.name} found - Adding to file tree ...`)
       await this.loadPath(descriptor.path)
     } else {
-      global.log.info(`Rescanned directory ${descriptor.name}, but the directory still does not exist.`)
+      this._logger.info(`Rescanned directory ${descriptor.name}, but the directory still does not exist.`)
       // TODO: We need to provide user feedback --> make this function resolve to a Boolean or something.
     }
   }
@@ -450,7 +457,7 @@ export default class FSAL extends ProviderContract {
     }
 
     if (Date.now() - start > 500) {
-      global.log.warning(`[FSAL] Path ${p} took ${Date.now() - start}ms to load.`)
+      this._logger.warning(`[FSAL] Path ${p} took ${Date.now() - start}ms to load.`)
     }
 
     this._state.filetree = sort(this._state.filetree)
@@ -741,9 +748,9 @@ export default class FSAL extends ProviderContract {
 
     // Now we're safe to remove the file actually.
     if (src.type === 'file') {
-      await FSALFile.remove(src)
+      await FSALFile.remove(src, this._config.get('system.deleteOnFail'))
     } else {
-      await FSALCodeFile.remove(src)
+      await FSALCodeFile.remove(src, this._config.get('system.deleteOnFail'))
     }
 
     // In case it was a root file, we need to splice it

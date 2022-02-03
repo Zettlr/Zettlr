@@ -89,7 +89,7 @@ export default class SaveFile extends ZettlrCommand {
       }
 
       // Update word count
-      this._app.stats.increaseWordCount(file.offsetWordCount)
+      this._app.stats.updateWordCount(file.offsetWordCount)
 
       this._app.log.info(`File ${realFile.name} saved.`)
       return true

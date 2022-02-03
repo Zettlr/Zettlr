@@ -16,7 +16,7 @@
 // it's not in the plugins folder.
 
 import tippy from 'tippy.js'
-import md2html from '@common/util/md-to-html'
+import { getConverter } from '@common/util/md-to-html'
 import { trans } from '@common/i18n-renderer'
 import CodeMirror from 'codemirror'
 
@@ -98,6 +98,8 @@ function showFootnoteTooltip (cm: CodeMirror.Editor, element: HTMLElement): void
   // only contain ^<id> without the brackets
   const ref = element.textContent?.substring(1) ?? ''
   const fnref = getFootnoteTextForRef(cm, ref)
+
+  const md2html = getConverter((window as any).getCitation)
 
   tippy(element, {
     // Display the text as HTML

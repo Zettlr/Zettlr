@@ -19,6 +19,12 @@ import { app } from 'electron'
 import ProviderContract from './provider-contract'
 import FSAL from './fsal'
 
+export interface WritingTarget {
+  path: string
+  mode: 'words'|'chars'
+  count: number
+}
+
 /**
  * This class manages the writing targets of directories and files. It reads the
  * targets on each start of the app and writes them after they have been changed.
@@ -44,63 +50,30 @@ export default class TargetProvider extends ProviderContract {
     this._load()
 
     this._emitter = new EventEmitter()
-
-    // Register a global helper for the targets
-    global.targets = {
-      /**
-       * Adds (or updates) a writing target to the database
-       * @param  {Object} target An object describing the new target.
-       * @return {void}          Does not return.
-       */
-      set: (target: WritingTarget) => {
-        this.set(target)
-      },
-      /**
-       * Returns a writing target
-       * @param  {number}                   hash  The hash to be searched for.
-       * @return {WritingTarget|undefined}        The writing target.
-       */
-      get: (filePath: string) => {
-        let target = this.get(filePath)
-        if (target === undefined) {
-          return undefined
-        }
-
-        return Object.assign({}, target)
-      },
-      /**
-       * Removes a target from the database and returns the operation status.
-       * @return {Boolean} Whether or not the target was removed.
-       */
-      remove: (filePath: string) => {
-        return this.remove(filePath)
-      },
-      /**
-       * Adds callback to the event listeners
-       * @param  {String}   event    The event to be listened for.
-       * @param  {Function} callback The callback when the event is emitted.
-       * @return {void}              Nothing to return.
-       */
-      on: (event: string, callback: (...args: any[]) => void) => {
-        this._emitter.on(event, callback)
-      },
-      /**
-       * Removes an event listener
-       * @param  {String}   event    The event the listener was subscribed to
-       * @param  {Function} callback The callback
-       * @return {void}              Nothing to return.
-       */
-      off: (event: string, callback: (...args: any[]) => void) => {
-        this._emitter.off(event, callback)
-      },
-      verify: () => {
-        return this.verify()
-      }
-    }
   } // End constructor
 
   async boot (): Promise<void> {
     // Nothing to do
+  }
+
+  /**
+   * Adds callback to the event listeners
+   * @param  {String}   event    The event to be listened for.
+   * @param  {Function} callback The callback when the event is emitted.
+   * @return {void}              Nothing to return.
+   */
+  on (event: string, callback: (...args: any[]) => void): void {
+    this._emitter.on(event, callback)
+  }
+
+  /**
+   * Removes an event listener
+   * @param  {String}   event    The event the listener was subscribed to
+   * @param  {Function} callback The callback
+   * @return {void}              Nothing to return.
+   */
+  off (event: string, callback: (...args: any[]) => void): void {
+    this._emitter.off(event, callback)
   }
 
   async shutdown (): Promise<void> {

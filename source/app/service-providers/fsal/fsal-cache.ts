@@ -37,8 +37,12 @@ export default class FSALCache {
    */
   private readonly _accessed: Set<string>
 
-  constructor (datadir: string) {
+  private readonly _logger: LogProvider
+
+  constructor (logger: LogProvider, datadir: string) {
     this._datadir = datadir
+    this._logger = logger
+
     this._data = new Map()
     // Contains all keys that were requested before persist is called
     // Everything not in this Set will be cleaned out to keep the disk
@@ -48,7 +52,7 @@ export default class FSALCache {
     try {
       fs.lstatSync(this._datadir)
     } catch (err) {
-      global.log.warning(`[FSAL Cache] Cache data dir does not yet exist: ${this._datadir}.`)
+      this._logger.warning(`[FSAL Cache] Cache data dir does not yet exist: ${this._datadir}.`)
       // Make sure the path exists
       fs.mkdirSync(this._datadir, { 'recursive': true })
     }
@@ -83,7 +87,7 @@ export default class FSALCache {
     try {
       JSON.stringify(value)
     } catch (err) {
-      global.log.error(`[FSAL Cache] Could not cache value for key ${key}: Not JSONable!`)
+      this._logger.error(`[FSAL Cache] Could not cache value for key ${key}: Not JSONable!`)
       return false
     }
 
@@ -156,11 +160,11 @@ export default class FSALCache {
         // whenever we load this shard.
         fs.writeFileSync(path.join(this._datadir, shardKey), JSON.stringify(Array.from(shard.entries())))
       } catch (err) {
-        global.log.error(`[FSAL Cache] Could not persist shard ${shardKey}!`, err)
+        this._logger.error(`[FSAL Cache] Could not persist shard ${shardKey}!`, err)
       }
     }
 
-    global.log.info(`[FSAL Cache] Cleaned up cache: Removed ${deleted} remnants.`)
+    this._logger.info(`[FSAL Cache] Cleaned up cache: Removed ${deleted} remnants.`)
   }
 
   /**
@@ -191,9 +195,9 @@ export default class FSALCache {
 
     // Watch how the promises do
     Promise.all(promises).then(() => {
-      global.log.info('[FSAL Cache] Cache cleared!')
+      this._logger.info('[FSAL Cache] Cache cleared!')
     }).catch((e) => {
-      global.log.error('[FSAL Cache] Error while clearing the cache!', e)
+      this._logger.error('[FSAL Cache] Error while clearing the cache!', e)
     })
   }
 
@@ -246,6 +250,6 @@ export default class FSALCache {
     // One more note: This caching algorithm will ensure
     // there'll be at most 99 files (10 to 99 and -1 to -9).
 
-    return String(key).substr(0, 2)
+    return String(key).substring(0, 2)
   }
 }
