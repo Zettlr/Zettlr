@@ -57,7 +57,6 @@ async function updateFileMetadata (fileObject: CodeFileDescriptor): Promise<void
     let stat = await fs.lstat(fileObject.path)
     fileObject.modtime = stat.mtime.getTime()
     fileObject.size = stat.size
-    global.log.info(`Updated modtime for fileDescriptor ${fileObject.name} to ${fileObject.modtime}`)
   } catch (err: any) {
     err.message = `Could not update the metadata for file ${fileObject.name}: ${String(err.message)}`
     throw err
@@ -210,8 +209,8 @@ export async function remove (fileObject: CodeFileDescriptor, deleteOnFail: bool
       // If this function throws, there's really something off and we shouldn't recover.
       await fs.unlink(fileObject.path)
     } else {
-      global.log.info(`[FSAL File] Could not remove file ${fileObject.path}: ${String(err.message)}`)
-      return
+      err.message = `[FSAL File] Could not remove file ${fileObject.path}: ${String(err.message)}`
+      throw err
     }
   }
 

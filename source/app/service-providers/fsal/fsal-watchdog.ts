@@ -28,17 +28,20 @@ import { ignoreDirs as IGNORE_DIR_REGEXP } from '@common/data.json'
 import { WatchdogEvent } from '@dts/main/fsal'
 
 export default class FSALWatchdog extends EventEmitter {
-  _booting: boolean
-  _process: chokidar.FSWatcher|null
-  _paths: string[]
-  _ignoredEvents: WatchdogEvent[]
+  private _booting: boolean
+  private _process: chokidar.FSWatcher|null
+  private _ignoredEvents: WatchdogEvent[]
+  private readonly _logger: LogProvider
+  private readonly _config: ConfigProvider
+  private readonly _paths: string[]
 
   /**
    * Create a new watcher instance
-   * @param {String} path The path to projectDir
    */
-  constructor () {
+  constructor (logger: LogProvider, config: ConfigProvider) {
     super() // Setup the Event Emitter
+    this._logger = logger
+    this._config = config
     this._booting = false
     this._process = null
     this._paths = []
@@ -99,8 +102,8 @@ export default class FSALWatchdog extends EventEmitter {
       binaryInterval: 5000
     }
 
-    if (global.config.get('watchdog.activatePolling') as boolean) {
-      let threshold: number = global.config.get('watchdog.stabilityThreshold')
+    if (this._config.get('watchdog.activatePolling') as boolean) {
+      let threshold: number = this._config.get('watchdog.stabilityThreshold')
       if (typeof threshold !== 'number' || threshold < 0) {
         threshold = 1000
       }
@@ -112,7 +115,7 @@ export default class FSALWatchdog extends EventEmitter {
         'pollInterval': 100
       }
 
-      global.log.info(`[FSAL Watchdog] Activating file polling with a threshold of ${threshold}ms.`)
+      this._logger.info(`[FSAL Watchdog] Activating file polling with a threshold of ${threshold}ms.`)
     }
 
     // Begin watching the pushed paths
@@ -120,12 +123,12 @@ export default class FSALWatchdog extends EventEmitter {
 
     this._process.on('ready', () => {
       if (this._process === null) {
-        global.log.error('[FSAL Watchdog] The chokidar process fired a ready event but the process itself is gone!')
+        this._logger.error('[FSAL Watchdog] The chokidar process fired a ready event but the process itself is gone!')
         return
       }
 
       if (process.platform === 'darwin' && this._process.options.useFsEvents === false) {
-        global.log.warning('[FSAL Watchdog] The chokidar process falls back to polling. This may lead to a high CPU usage.')
+        this._logger.warning('[FSAL Watchdog] The chokidar process falls back to polling. This may lead to a high CPU usage.')
       }
 
       // Add all paths that may have been added to the array while the process
@@ -148,7 +151,7 @@ export default class FSALWatchdog extends EventEmitter {
       if (shouldIgnore > -1) {
         // Yup
         let i = this._ignoredEvents[shouldIgnore]
-        global.log.info(`[WATCHDOG] Ignore event: ${i.event}:${i.path}`)
+        this._logger.info(`[WATCHDOG] Ignore event: ${i.event}:${i.path}`)
         this._ignoredEvents.splice(shouldIgnore, 1)
         return
       }
@@ -160,7 +163,7 @@ export default class FSALWatchdog extends EventEmitter {
 
       // Only watch changes in directories and supported files
       if ((dir && !ignoreDir(p)) || (file && (!ignoreFile(p) || attachment))) {
-        global.log.info(`[WATCHDOG] Emitting event: ${event}:${p}`)
+        this._logger.info(`[WATCHDOG] Emitting event: ${event}:${p}`)
         // Emit the event for the respective path.
         this.emit('change', event, p)
       }
@@ -217,7 +220,7 @@ export default class FSALWatchdog extends EventEmitter {
     if (this._process !== null) {
       this._process.unwatch(p)
     } else {
-      global.log.error(`[FSAL Watchdog] Unwatching path ${p}, but the chokidar process is gone. This may indicate a bug.`)
+      this._logger.error(`[FSAL Watchdog] Unwatching path ${p}, but the chokidar process is gone. This may indicate a bug.`)
     }
 
     return this

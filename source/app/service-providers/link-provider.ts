@@ -38,54 +38,6 @@ export default class LinkProvider extends ProviderContract {
     // TODO: Add a set of duplicate IDs so we can inform the user so they can
     // fix this
 
-    // Register a global helper for the tag database
-    global.links = {
-      /**
-       * Adds an array of links from a specific file to the database. This
-       * function assumes sourceIDs to be unique, so in case of a duplicate, the
-       * later-loaded file overrides the earlier loaded one.
-       *
-       * @param   {string}            sourcePath     The full path to the source file
-       * @param   {string[]}          outboundLinks  A collection of links
-       * @param   {string|undefined}  sourceID       The ID of the source (if applicable)
-       */
-      report: (sourcePath: string, outboundLinks: string[], sourceID?: string) => {
-        // NOTE: The FSAL by now defaults to an empty string instead of undefined
-        if (sourceID === '') {
-          sourceID = undefined
-        }
-
-        this._fileLinkDatabase.set(sourcePath, outboundLinks)
-        if (sourceID !== undefined) {
-          this._idLinkDatabase.set(sourceID, outboundLinks)
-        }
-        broadcastIpcMessage('links')
-      },
-      /**
-       * Removes any outbound links emanating from the given file from the
-       * database. This function assumes sourceIDs to be unique, so in case of
-       * a duplicate, removing any of these files will delete the links for all.
-       *
-       * @param   {string}            sourcePath     The full path to the source file
-       * @param   {string|undefined}  sourceID       The ID of the source (if applicable)
-       */
-      remove: (sourcePath: string, sourceID?: string) => {
-        // NOTE: The FSAL by now defaults to an empty string instead of undefined
-        if (sourceID === '') {
-          sourceID = undefined
-        }
-
-        if (this._fileLinkDatabase.has(sourcePath)) {
-          this._fileLinkDatabase.delete(sourcePath)
-        }
-
-        if (sourceID !== undefined && this._idLinkDatabase.has(sourceID)) {
-          this._idLinkDatabase.delete(sourceID)
-        }
-        broadcastIpcMessage('links')
-      }
-    }
-
     ipcMain.handle('link-provider', (event, message) => {
       const { command } = message
 
@@ -122,5 +74,51 @@ export default class LinkProvider extends ProviderContract {
    */
   async shutdown (): Promise<void> {
     this._logger.verbose('Link provider shutting down ...')
+  }
+
+  /**
+   * Adds an array of links from a specific file to the database. This
+   * function assumes sourceIDs to be unique, so in case of a duplicate, the
+   * later-loaded file overrides the earlier loaded one.
+   *
+   * @param   {string}            sourcePath     The full path to the source file
+   * @param   {string[]}          outboundLinks  A collection of links
+   * @param   {string|undefined}  sourceID       The ID of the source (if applicable)
+   */
+  report (sourcePath: string, outboundLinks: string[], sourceID?: string): void {
+    // NOTE: The FSAL by now defaults to an empty string instead of undefined
+    if (sourceID === '') {
+      sourceID = undefined
+    }
+
+    this._fileLinkDatabase.set(sourcePath, outboundLinks)
+    if (sourceID !== undefined) {
+      this._idLinkDatabase.set(sourceID, outboundLinks)
+    }
+    broadcastIpcMessage('links')
+  }
+
+  /**
+   * Removes any outbound links emanating from the given file from the
+   * database. This function assumes sourceIDs to be unique, so in case of
+   * a duplicate, removing any of these files will delete the links for all.
+   *
+   * @param   {string}            sourcePath     The full path to the source file
+   * @param   {string|undefined}  sourceID       The ID of the source (if applicable)
+   */
+  remove (sourcePath: string, sourceID?: string): void {
+    // NOTE: The FSAL by now defaults to an empty string instead of undefined
+    if (sourceID === '') {
+      sourceID = undefined
+    }
+
+    if (this._fileLinkDatabase.has(sourcePath)) {
+      this._fileLinkDatabase.delete(sourcePath)
+    }
+
+    if (sourceID !== undefined && this._idLinkDatabase.has(sourceID)) {
+      this._idLinkDatabase.delete(sourceID)
+    }
+    broadcastIpcMessage('links')
   }
 }

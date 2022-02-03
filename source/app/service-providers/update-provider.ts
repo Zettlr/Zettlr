@@ -64,34 +64,6 @@ export default class UpdateProvider extends ProviderContract {
     this._downloadReadStream = undefined
     this._downloadWriteStream = undefined
 
-    // Inject the global provider functions
-    global.updates = {
-      /**
-       * Initiate a new update check
-       *
-       * @return  {void}
-       */
-      check: async () => {
-        await this.check()
-      },
-      /**
-       * Checks if there is a new update available. Must be called after check()
-       *
-       * @return  {boolean}  True, if the last update check retrieved a newer version
-       */
-      applicationUpdateAvailable: () => {
-        return this.applicationUpdateAvailable()
-      },
-      /**
-       * Returns the current update state
-       *
-       * @return  {UpdateState}  The current status of updates.
-       */
-      getUpdateState: () => {
-        return this.getUpdateState()
-      }
-    }
-
     // Handle events
     ipcMain.handle('update-provider', async (event, data) => {
       const { command, payload } = data

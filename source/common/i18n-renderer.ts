@@ -26,7 +26,7 @@ const ipcRenderer: IpcRenderer = (window as any).ipc
 export function trans (string: string, ...args: any[]): string {
   if (!string.includes('.')) {
     // Wtf? But alright, return the string and log an error
-    global.log.warning('The translation string was malformed: ' + string + '!')
+    console.log('The translation string was malformed: ' + string + '!')
     return string
   }
 
@@ -55,7 +55,7 @@ export function trans (string: string, ...args: any[]): string {
     } else {
       // Something went wrong and the requested translation string was
       // not found -> fall back and just return the original string
-      return (Boolean(global.config.get('debug')) || skipFallback) ? string : trans(string, ...[true].concat(args))
+      return (Boolean(window.config.get('debug')) || skipFallback) ? string : trans(string, ...[true].concat(args))
     }
   }
 

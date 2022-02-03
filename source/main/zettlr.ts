@@ -50,13 +50,6 @@ export default class Zettlr {
     this._openPaths = [] // Holds all currently opened paths.
     this.isShownFor = [] // Contains all files for which remote notifications are currently shown
 
-    // Inject some globals
-    global.application = {
-      isQuitting: () => {
-        return this.isQuitting
-      }
-    }
-
     // Now that the config provider is definitely set up, let's see if we
     // should copy the interactive tutorial to the documents directory.
     if (this._app.config.isFirstStart()) {

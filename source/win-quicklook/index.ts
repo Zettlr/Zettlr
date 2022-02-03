@@ -38,7 +38,7 @@ ipcRenderer.on('config-provider', (event, message) => {
   if (command === 'update') {
     const { payload } = message
     if (payload === 'editor.fontSize') {
-      app.$data.fontSize = global.config.get('editor.fontSize')
+      app.$data.fontSize = window.config.get('editor.fontSize')
     }
   }
 })
@@ -73,7 +73,7 @@ if (filePath === null) {
         app.$data.modified = file.modified
         app.$data.content = file.content
         // Set the correct font size
-        app.$data.fontSize = global.config.get('editor.fontSize')
+        app.$data.fontSize = window.config.get('editor.fontSize')
       }).catch((e) => {
         console.error(e)
       })

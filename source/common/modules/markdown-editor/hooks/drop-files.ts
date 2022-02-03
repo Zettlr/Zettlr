@@ -111,13 +111,13 @@ function getInternalLink (data: XFileObject, linkStart: string, linkEnd: string,
     return `[${path.basename(data.path)}](${path.relative(basePath, data.path)})`
   }
 
-  const fnameOnly: boolean = global.config.get('zkn.linkFilenameOnly')
+  const fnameOnly: boolean = window.config.get('zkn.linkFilenameOnly')
 
   if (fnameOnly) {
     return `${linkStart}${path.basename(data.path)}${linkEnd}`
   }
 
-  const linkPref: 'always'|'never'|'withID' = global.config.get('zkn.linkWithFilename')
+  const linkPref: 'always'|'never'|'withID' = window.config.get('zkn.linkWithFilename')
 
   if (data.id === '' && linkPref !== 'always') {
     return `${linkStart}${path.basename(data.path)}${linkEnd}`

@@ -80,29 +80,35 @@ interface Application {
  * types files in ./source/app/service-providers/assets
  */
 declare module global {
-  import { TagProvider } from '@dts/common/tag-provider'
-  var assets: AssetsProvider
-  var css: CssProvider
-  var dict: DictionaryProvider
-  var log: LogProvider
-  var store: any
-  var ipc: any
-  var config: ConfigProvider
-  var application: Application
-  var typo: any
-  var preBootLog: BootLog[]
-  var tippy: any
-  var updates: UpdateProvider
-  var translations: any
-  var links: LinkProvider
-  var tags: TagProvider
-  var stats: StatsProvider
   // Translation data necessary to facilitate internationalisation
   var i18n: any
   var i18nRawData: any
   var i18nFallback: any
   var i18nFallbackRawData: any
-  var tray: TrayProvider
+}
+
+declare interface Window {
+  /**
+   * The config API provides methods to read and set configuration values
+   */
+  config: {
+    /**
+     * Returns the config value associated with the provided key. If key is
+     * undefined, returns the full configuration.
+     *
+     * @param   {string}  key  The key to retrieve
+     *
+     * @return  {any}          The value associated with key
+     */
+    get: (key?: string) => any
+    /**
+     * Sets the configuration value associated with key to value.
+     *
+     * @param   {string}  key    The key to set
+     * @param   {any}     value  The value to set the key to
+     */
+    set: (key: string, value: any) => void
+  }
 }
 
 // This interface is being produced by the MarkdownEditor module in source/common

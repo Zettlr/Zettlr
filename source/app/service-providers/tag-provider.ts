@@ -49,90 +49,11 @@ export default class TagProvider extends ProviderContract {
 
     this._load()
 
-    // Register a global helper for the tag database
-    global.tags = {
-      /**
-       * Adds an array of tags to the database
-       * @param  {string[]} tagArray An array containing the tags to be added
-       * @return {void}          Does not return.
-       */
-      report: (tagArray: string[], filePath: string) => {
-        for (let tag of tagArray) {
-          // Either init or modify accordingly
-          const record = this._globalTagDatabase.get(tag)
-          if (record === undefined) {
-            const cInfo = this._colouredTags.find(e => e.name === tag)
-            const newRecord: InternalTagRecord = {
-              text: tag,
-              files: [filePath],
-              className: (cInfo !== undefined) ? 'cm-hint-colour' : ''
-            }
-
-            this._globalTagDatabase.set(tag, newRecord)
-            // Set a special class to all tags that have a highlight colour
-          } else {
-            if (!record.files.includes(filePath)) {
-              record.files.push(filePath)
-            }
-          }
-        }
-
-        broadcastIpcMessage('tags')
-      },
-      /**
-       * Removes the given tagArray from the database, i.e. decreases the
-       * counter until zero and then removes the tag.
-       * @param  {string[]} tagArray The tags to remove from the database
-       * @return {void}          Does not return.
-       */
-      remove: (tagArray: string[], filePath: string) => {
-        for (let tag of tagArray) {
-          const record = this._globalTagDatabase.get(tag)
-          if (record !== undefined) {
-            const idx = record.files.indexOf(filePath)
-            if (idx > -1) {
-              record.files.splice(idx, 1)
-            }
-
-            // Remove the tag altogether if its count is zero.
-            if (record.files.length === 0) {
-              this._globalTagDatabase.delete(tag)
-            }
-          }
-        }
-
-        broadcastIpcMessage('tags')
-      },
-      /**
-       * Returns the global tag database
-       * @return {TagDatabase} An object containing all tags.
-       */
-      getTagDatabase: () => {
-        return this._getSimplifiedTagDatabase()
-      },
-      /**
-       * Returns the special (= coloured) tags
-       * @param  {string} name An optional name to get one. Otherwise, will return all.
-       * @return {ColouredTag[]}      The special tag array.
-       */
-      getColouredTags: () => {
-        return this._colouredTags
-      },
-      /**
-       * Updates the special tags with an array of new ones.
-       * @param  {any[]} newTags An array containing the tags to be set.
-       * @return {boolean} True if all succeeded, false if at least one failed.
-       */
-      setColouredTags: (newTags: ColouredTag[]) => {
-        this.setColouredTags(newTags)
-      }
-    }
-
     ipcMain.handle('tag-provider', (event, message) => {
       const { command } = message
 
       if (command === 'get-tags-database') {
-        return this._getSimplifiedTagDatabase()
+        return this.getTagDatabase()
       } else if (command === 'set-coloured-tags') {
         const { payload } = message
         this.setColouredTags(payload)
@@ -177,6 +98,60 @@ export default class TagProvider extends ProviderContract {
   }
 
   /**
+   * Adds an array of tags to the database
+   * @param  {string[]} tagArray An array containing the tags to be added
+   * @return {void}          Does not return.
+   */
+  report (tagArray: string[], filePath: string): void {
+    for (let tag of tagArray) {
+      // Either init or modify accordingly
+      const record = this._globalTagDatabase.get(tag)
+      if (record === undefined) {
+        const cInfo = this._colouredTags.find(e => e.name === tag)
+        const newRecord: InternalTagRecord = {
+          text: tag,
+          files: [filePath],
+          className: (cInfo !== undefined) ? 'cm-hint-colour' : ''
+        }
+
+        this._globalTagDatabase.set(tag, newRecord)
+        // Set a special class to all tags that have a highlight colour
+      } else {
+        if (!record.files.includes(filePath)) {
+          record.files.push(filePath)
+        }
+      }
+    }
+
+    broadcastIpcMessage('tags')
+  }
+
+  /**
+   * Removes the given tagArray from the database, i.e. decreases the
+   * counter until zero and then removes the tag.
+   * @param  {string[]} tagArray The tags to remove from the database
+   * @return {void}          Does not return.
+   */
+  remove (tagArray: string[], filePath: string): void {
+    for (let tag of tagArray) {
+      const record = this._globalTagDatabase.get(tag)
+      if (record !== undefined) {
+        const idx = record.files.indexOf(filePath)
+        if (idx > -1) {
+          record.files.splice(idx, 1)
+        }
+
+        // Remove the tag altogether if its count is zero.
+        if (record.files.length === 0) {
+          this._globalTagDatabase.delete(tag)
+        }
+      }
+    }
+
+    broadcastIpcMessage('tags')
+  }
+
+  /**
    * This function only (re-)reads the tags on disk.
    * @return {ZettlrTags} This for chainability.
    */
@@ -218,11 +193,20 @@ export default class TagProvider extends ProviderContract {
   }
 
   /**
+   * Returns the special (= coloured) tags
+   * @param  {string} name An optional name to get one. Otherwise, will return all.
+   * @return {ColouredTag[]}      The special tag array.
+   */
+  getColouredTags (): ColouredTag[] {
+    return this._colouredTags
+  }
+
+  /**
    * Returns a simplified version of the internal tag database for external use.
    *
    * @return  {TagDatabase}  The database
    */
-  _getSimplifiedTagDatabase (): TagDatabase {
+  getTagDatabase (): TagDatabase {
     const ret: TagDatabase = {}
     for (const [ tag, record ] of this._globalTagDatabase.entries()) {
       ret[tag] = {

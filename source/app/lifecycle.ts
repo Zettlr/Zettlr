@@ -59,9 +59,9 @@ export async function bootApplication (): Promise<void> {
     log.verbose('Electron DevTools Installer not found - proceeding without loading developer tools.')
   }
 
-  await environmentCheck()
+  await environmentCheck(log)
 
-  registerCustomProtocols()
+  registerCustomProtocols(log)
 
   // Then we need to extract possible files that should be opened from the argv
   extractFilesFromArgv()
@@ -74,7 +74,7 @@ export async function bootApplication (): Promise<void> {
   // one.
   const useBundledPandoc = Boolean(config.get('export.useBundledPandoc'))
   if (process.env.PANDOC_PATH !== undefined && useBundledPandoc) {
-    addToPath(path.dirname(process.env.PANDOC_PATH), 'unshift')
+    addToPath(log, path.dirname(process.env.PANDOC_PATH), 'unshift')
     log.info('[Application] The bundled pandoc executable is now in PATH. If you do not want to use the bundled pandoc, uncheck the corresponding setting and reboot the app.')
   }
 }

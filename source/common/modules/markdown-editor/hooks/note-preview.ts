@@ -111,7 +111,7 @@ function getPreviewElement (metadata: [string, string, number, number], linkCont
   // Only if preference "Avoid New Tabs" is set,
   // offer an additional button on preview tooltip
   // to open the file in a new tab
-  if (global.config.get('system.avoidNewTabs') === true) {
+  if (window.config.get('system.avoidNewTabs') === true) {
     const openFuncNewTab = function (): void {
       ipcRenderer.invoke('application', {
         command: 'force-open',

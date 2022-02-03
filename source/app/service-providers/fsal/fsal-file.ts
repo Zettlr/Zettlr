@@ -78,7 +78,6 @@ async function updateFileMetadata (fileObject: MDFileDescriptor): Promise<void> 
     let stat = await fs.lstat(fileObject.path)
     fileObject.modtime = stat.mtime.getTime()
     fileObject.size = stat.size
-    global.log.info(`Updated modtime for fileDescriptor ${fileObject.name} to ${fileObject.modtime}`)
   } catch (err: any) {
     err.message = `Could not update the metadata for file ${fileObject.name}: ${String(err.message).toString()}`
     throw err
@@ -91,15 +90,12 @@ async function updateFileMetadata (fileObject: MDFileDescriptor): Promise<void> 
  * @param   {MDFileDescriptor}  file     The file descriptor to be updated
  * @param   {string}            content  The file contents
  */
-function parseFileContents (file: MDFileDescriptor, content: string): void {
+function parseFileContents (file: MDFileDescriptor, content: string, linkStart: string, linkEnd: string): void {
   // Prepare some necessary regular expressions and variables
   const idRE = getIDRE()
   const codeBlockRE = getCodeBlockRE(true)
   const inlineCodeRE = /`[^`]+`/g
   const h1HeadingRE = /^#{1}\s(.+)$/m
-
-  const linkStart = global.config.get('zkn.linkStart')
-  const linkEnd = global.config.get('zkn.linkEnd')
 
   let match
 
@@ -212,7 +208,7 @@ export function metadata (fileObject: MDFileDescriptor): MDFileMeta {
  *
  * @return  {Promise<MDFileDescriptor>}            Resolves with a file descriptor
  */
-export async function parse (filePath: string, cache: FSALCache|null, parent: DirDescriptor|null = null): Promise<MDFileDescriptor> {
+export async function parse (filePath: string, cache: FSALCache|null, linkStart: string, linkEnd: string, parent: DirDescriptor|null = null): Promise<MDFileDescriptor> {
   // First of all, prepare the file descriptor
   let file: MDFileDescriptor = {
     parent: null, // We have to set this AFTERWARDS, as safeAssign() will traverse down this parent property, thereby introducing a circular structure
@@ -268,7 +264,7 @@ export async function parse (filePath: string, cache: FSALCache|null, parent: Di
   if (!hasCache) {
     // Read in the file, parse the contents and make sure to cache the file
     let content = await fs.readFile(filePath, { encoding: 'utf8' })
-    parseFileContents(file, content)
+    parseFileContents(file, content, linkStart, linkEnd)
     if (cache !== null) {
       cacheFile(file, cache)
     }
@@ -343,7 +339,7 @@ export async function hasChangedOnDisk (fileObject: MDFileDescriptor): Promise<b
  *
  * @return  {Promise<void>}                 Resolves upon save.
  */
-export async function save (fileObject: MDFileDescriptor, content: string, cache: FSALCache|null): Promise<void> {
+export async function save (fileObject: MDFileDescriptor, content: string, linkStart: string, linkEnd: string, cache: FSALCache|null): Promise<void> {
   // Make sure to retain the BOM if applicable
   await fs.writeFile(fileObject.path, fileObject.bom + content)
   // Afterwards, retrieve the now current modtime
@@ -351,7 +347,7 @@ export async function save (fileObject: MDFileDescriptor, content: string, cache
   // Make sure to keep the file object itself as well as the tags updated
   global.links.remove(fileObject.path, fileObject.id)
   global.tags.remove(fileObject.tags, fileObject.path)
-  parseFileContents(fileObject, content)
+  parseFileContents(fileObject, content, linkStart, linkEnd)
   global.tags.report(fileObject.tags, fileObject.path)
   global.links.report(fileObject.path, fileObject.links, fileObject.id)
   fileObject.modified = false // Always reset the modification flag.
@@ -395,8 +391,8 @@ export async function remove (fileObject: MDFileDescriptor, deleteOnFail: boolea
       // If this function throws, there's really something off and we shouldn't recover.
       await fs.unlink(fileObject.path)
     } else {
-      global.log.error(`[FSAL File] Could not remove file ${fileObject.path}: ${String(err.message)}`)
-      return
+      err.message = `[FSAL File] Could not remove file ${fileObject.path}: ${String(err.message)}`
+      throw err
     }
   }
 
@@ -425,14 +421,14 @@ export function markClean (fileObject: MDFileDescriptor): void {
   fileObject.modified = false
 }
 
-export async function reparseChangedFile (fileObject: MDFileDescriptor, cache: FSALCache|null): Promise<void> {
+export async function reparseChangedFile (fileObject: MDFileDescriptor, linkStart: string, linkEnd: string, cache: FSALCache|null): Promise<void> {
   // Literally the same as the save() function only without prior writing of contents
   const contents = await load(fileObject)
   await updateFileMetadata(fileObject)
   // Make sure to keep the file object itself as well as the tags updated
   global.tags.remove(fileObject.tags, fileObject.path)
   global.links.remove(fileObject.path, fileObject.id)
-  parseFileContents(fileObject, contents)
+  parseFileContents(fileObject, contents, linkStart, linkEnd)
   global.tags.report(fileObject.tags, fileObject.path)
   global.links.report(fileObject.path, fileObject.links, fileObject.id)
   fileObject.modified = false // Always reset the modification flag.

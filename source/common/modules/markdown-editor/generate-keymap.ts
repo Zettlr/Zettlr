@@ -16,7 +16,7 @@ import { commands, KeyMap, normalizeKeyMap } from 'codemirror'
 const clipboard = (window as any).clipboard
 
 export default function (): KeyMap {
-  let homeEndBehaviour = Boolean(global.config.get('editor.homeEndBehaviour'))
+  let homeEndBehaviour = Boolean(window.config.get('editor.homeEndBehaviour'))
   const keymap: KeyMap = {}
 
   // Crossplatform shortcuts

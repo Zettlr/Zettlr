@@ -44,13 +44,6 @@ export default class CssProvider extends ProviderContract {
           })
       })
 
-    // Inject the global provider functions
-    global.css = {
-      on: (event, callback) => { this._emitter.on(event, callback) },
-      off: (event, callback) => { this._emitter.off(event, callback) },
-      getPath: () => { return this.getPath() }
-    }
-
     // Send the Custom CSS Path to whomever requires it
     ipcMain.handle('css-provider', async (event, payload) => {
       const { command } = payload

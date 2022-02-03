@@ -30,6 +30,21 @@ contextBridge.exposeInMainWorld('ipc', {
   })
 })
 
+contextBridge.exposeInMainWorld('config', {
+  get: function (property?: string) {
+    return ipcRenderer.sendSync('config-provider', {
+      command: 'get-config',
+      payload: { key: property }
+    })
+  },
+  set: function (property: string, value: any) {
+    ipcRenderer.sendSync('config-provider', {
+      command: 'set-config-single',
+      payload: { key: property, val: value }
+    })
+  }
+})
+
 // DEBUG
 contextBridge.exposeInMainWorld('__dirname', '')
 

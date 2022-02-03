@@ -137,8 +137,8 @@ async function persistSettings (dir: DirDescriptor): Promise<void> {
     try {
       await fs.unlink(settingsFile)
     } catch (err: any) {
-      const msg = err.message as string
-      global.log.error(`Error removing default .ztr-directory: ${msg}`, err)
+      err.message = `Error removing default .ztr-directory: ${err.message as string}`
+      throw err
     }
   }
   await fs.writeFile(path.join(dir.path, '.ztr-directory'), JSON.stringify(dir._settings))
@@ -165,9 +165,10 @@ async function parseSettings (dir: DirDescriptor): Promise<void> {
       // The settings are the default, so no need to write them to file
       await fs.unlink(configPath)
     }
-  } catch (err) {
+  } catch (err: any) {
     // Something went wrong
-    global.log.error(`Could not parse settings file for ${dir.name}`, err)
+    err.message = `Could not parse settings file for ${dir.name}`
+    throw err
   }
 }
 
@@ -203,7 +204,7 @@ export async function parse (currentPath: string, cache: FSALCache, parent: DirD
     dir.modtime = stats.ctimeMs
     dir.creationtime = stats.birthtimeMs
   } catch (err: any) {
-    global.log.error(`Error reading metadata for directory ${dir.path}!`, err)
+    err.message = `Error reading metadata for directory ${dir.path}!`
     // Re-throw so that the caller knows something's afoul
     throw err
   }
@@ -226,7 +227,6 @@ export async function parse (currentPath: string, cache: FSALCache, parent: DirD
     if (isInvalidDir || (isInvalidFile && !isAttachment(absolutePath))) continue
 
     // Parse accordingly
-    let start = Date.now()
     if (isAttachment(absolutePath)) {
       dir.attachments.push(await FSALAttachment.parse(absolutePath, dir))
     } else if (isFile(absolutePath)) {
@@ -239,11 +239,6 @@ export async function parse (currentPath: string, cache: FSALCache, parent: DirD
       }
     } else if (isDir(absolutePath)) {
       dir.children.push(await parse(absolutePath, cache, dir))
-    }
-
-    if (Date.now() - start > 100) {
-      // Only log if it took longer than 50ms
-      global.log.warning(`[FSAL Directory] Path ${absolutePath} took ${Date.now() - start}ms to load.`)
     }
   }
 
@@ -330,8 +325,7 @@ export async function makeProject (dirObject: DirDescriptor, properties: any): P
  */
 export async function updateProjectProperties (dirObject: DirDescriptor, properties: any): Promise<boolean> {
   if (dirObject._settings.project === null) {
-    global.log.error(`[FSAL Dir] Attempted to update project settings on dir ${dirObject.path}, but it is not a project!`)
-    return false
+    throw new Error(`[FSAL Dir] Attempted to update project settings on dir ${dirObject.path}, but it is not a project!`)
   }
 
   const titleUnchanged = dirObject._settings.project.title === properties.title
@@ -441,18 +435,18 @@ export async function rename (dirObject: DirDescriptor, newName: string, cache: 
  *
  * @param   {DirDescriptor}  dirObject  The directory to remove
  */
-export async function remove (dirObject: DirDescriptor): Promise<void> {
+export async function remove (dirObject: DirDescriptor, deleteOnFail: boolean): Promise<void> {
   // First, get the parent, if there is any
   let parentDir = dirObject.parent
   try {
     await shell.trashItem(dirObject.path)
   } catch (err: any) {
-    if (global.config.get('system.deleteOnFail') === true) {
+    if (deleteOnFail) {
       // If this function throws, there's really something off and we shouldn't recover.
       await fs.rmdir(dirObject.path, { recursive: true })
     } else {
-      global.log.info(`[FSAL Directory] Could not remove directory ${dirObject.path}: ${String(err.message)}`)
-      return
+      err.message = `[FSAL Directory] Could not remove directory ${dirObject.path}: ${String(err.message)}`
+      throw err
     }
   }
 

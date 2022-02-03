@@ -90,7 +90,7 @@ export default function (): any {
           type: 'number',
           label: trans('dialog.preferences.watchdog_threshold_label'),
           model: 'watchdog.stabilityThreshold',
-          disabled: global.config.get('watchdog.activatePolling') === false
+          disabled: window.config.get('watchdog.activatePolling') === false
         }
       ]
     ]

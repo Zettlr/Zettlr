@@ -49,18 +49,6 @@ export default class StatsProvider extends ProviderContract {
       sumMonth: 0
     }
 
-    global.stats = {
-      increaseWordCount: (words: number) => {
-        this.updateWordCount(words)
-      },
-      increasePomodoros: () => {
-        this.increasePomodoros()
-      },
-      getData: () => {
-        return this.getData()
-      }
-    }
-
     ipcMain.handle('stats-provider', (event, payload) => {
       const { command } = payload
       if (command === 'get-data') {

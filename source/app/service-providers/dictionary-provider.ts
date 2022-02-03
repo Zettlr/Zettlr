@@ -86,7 +86,7 @@ export default class DictionaryProvider extends ProviderContract {
       if (command === 'get-user-dictionary') {
         return this._userDictionary.map(elem => elem)
       } else if (command === 'set-user-dictionary') {
-        global.dict.setUserDictionary(message.payload)
+        this.setUserDictionary(message.payload)
       }
     })
 

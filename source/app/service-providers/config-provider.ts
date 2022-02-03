@@ -104,53 +104,6 @@ export default class ConfigProvider extends ProviderContract {
       this._rules.push(new ValidationRule(VALIDATE_RULES[i], VALIDATE_PROPERTIES[i]))
     }
 
-    // Put a global setter and getter for config keys into the globals.
-    global.config = {
-      get: (key?: string) => {
-        return this.get(key)
-      },
-      // The setter is a simply pass-through
-      set: (key: string, val: any) => {
-        return this.set(key, val)
-      },
-      // Enable global event listening to updates of the config
-      on: (evt: string, callback: (...args: any[]) => void) => {
-        this._emitter.on(evt, callback)
-      },
-      // Also do the same for the removal of listeners
-      off: (evt: string, callback: (...args: any[]) => void) => {
-        this._emitter.off(evt, callback)
-      },
-      /**
-       * Adds a path to the startup path array
-       * @param {String} p The path to add
-       * @return {Boolean} Whether or not the call succeeded
-       */
-      addPath: (p: string) => {
-        return this.addPath(p)
-      },
-      /**
-       * Removes a path from the startup path array
-       * @param  {String} p The path to remove
-       * @return {Boolean}   Whether or not the call succeeded
-       */
-      removePath: (p: string) => {
-        return this.removePath(p)
-      },
-      /**
-       * If true, Zettlr assumes this is the first start of the app
-       */
-      isFirstStart: () => {
-        return this.isFirstStart()
-      },
-      /**
-       * If true, Zettlr has detected a change in version in the config
-       */
-      newVersionDetected: () => {
-        return this.newVersionDetected()
-      }
-    } // END globals for the configuration
-
     // Listen for renderer events. These must be synchronous.
     ipcMain.on('config-provider', (event, message) => {
       const { command, payload } = message

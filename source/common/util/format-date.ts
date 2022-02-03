@@ -35,13 +35,13 @@ export default function formatDate (dateObj: Date|number, relative: boolean = fa
     } else {
       return dt.toRelative({
         style: 'short', // Can be short, narrow, or long
-        locale: global.config.get('appLang')
+        locale: window.config.get('appLang')
       }) ?? ''
     }
   } else {
     return dt.toLocaleString(
       { dateStyle: 'long', timeStyle: 'short' },
-      { locale: global.config.get('appLang') }
+      { locale: window.config.get('appLang') }
     )
   }
 }

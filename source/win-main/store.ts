@@ -32,7 +32,7 @@ interface FSALEvent {
 }
 
 function isAttachment (p: string): boolean {
-  let ext = global.config.get('attachmentExtensions')
+  let ext = window.config.get('attachmentExtensions')
   return ext.includes(path.extname(p).toLowerCase())
 }
 
@@ -243,7 +243,7 @@ function getConfig (): StoreOptions<ZettlrState> {
         colouredTags: [],
         tagDatabase: [],
         tagSuggestions: [],
-        config: configToArrayMapper(global.config.get()),
+        config: configToArrayMapper(window.config.get()),
         activeDocumentInfo: null,
         modifiedDocuments: [],
         tableOfContents: null,
@@ -300,7 +300,7 @@ function getConfig (): StoreOptions<ZettlrState> {
         state.activeDocumentInfo = info
       },
       updateConfig: function (state, option) {
-        state.config[option] = global.config.get(option)
+        state.config[option] = window.config.get(option)
       },
       addToFiletree: function (state, descriptor) {
         if (descriptor.parent == null && !state.fileTree.includes(descriptor)) {

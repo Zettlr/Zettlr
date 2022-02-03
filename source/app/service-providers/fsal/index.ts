@@ -91,7 +91,7 @@ export default class FSAL extends ProviderContract {
 
     const cachedir = app.getPath('userData')
     this._cache = new FSALCache(logger, path.join(cachedir, 'fsal/cache'))
-    this._watchdog = new FSALWatchdog()
+    this._watchdog = new FSALWatchdog(this._logger, this._config)
     this._isCurrentlyHandlingRemoteChange = false
     this._fsalIsBusy = false // Locks certain functionality during running of actions
     this._remoteChangeBuffer = [] // Holds events for later processing
@@ -287,7 +287,9 @@ export default class FSAL extends ProviderContract {
       if (affectedDescriptor.type === 'code') {
         await FSALCodeFile.reparseChangedFile(affectedDescriptor, this._cache)
       } else if (affectedDescriptor.type === 'file') {
-        await FSALFile.reparseChangedFile(affectedDescriptor, this._cache)
+        const linkStart = this._config.get('zkn.linkStart')
+        const linkEnd = this._config.get('zkn.linkEnd')
+        await FSALFile.reparseChangedFile(affectedDescriptor, linkStart, linkEnd, this._cache)
       } else if (affectedDescriptor.type === 'other') {
         await FSALAttachment.reparseChangedFile(affectedDescriptor)
       }
@@ -390,7 +392,9 @@ export default class FSAL extends ProviderContract {
       this._state.filetree.push(file)
       this._recordFiletreeChange('add', filePath)
     } else if (isMD) {
-      let file = await FSALFile.parse(filePath, this._cache)
+      const linkStart = this._config.get('zkn.linkStart')
+      const linkEnd = this._config.get('zkn.linkEnd')
+      let file = await FSALFile.parse(filePath, this._cache, linkStart, linkEnd)
       this._state.filetree.push(file)
       this._recordFiletreeChange('add', filePath)
     }
@@ -402,7 +406,12 @@ export default class FSAL extends ProviderContract {
    */
   private async _loadDir (dirPath: string): Promise<void> {
     // Loads a directory
-    let dir = await FSALDir.parse(dirPath, this._cache, null)
+    const start = Date.now()
+    const dir = await FSALDir.parse(dirPath, this._cache, null)
+    if (Date.now() - start > 100) {
+      // Only log if it took longer than 100ms
+      this._logger.warning(`[FSAL Directory] Path ${dirPath} took ${Date.now() - start}ms to load.`)
+    }
     this._state.filetree.push(dir)
     this._recordFiletreeChange('add', dirPath)
   }
@@ -922,7 +931,7 @@ export default class FSAL extends ProviderContract {
       'path': src.path
     }))
 
-    await FSALDir.remove(src)
+    await FSALDir.remove(src, this._config.get('system.deleteOnFail'))
 
     // Clean up after removing
     if (this._state.filetree.includes(src)) {

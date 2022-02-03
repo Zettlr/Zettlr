@@ -45,16 +45,6 @@ export default class TranslationProvider extends ProviderContract {
     this._logger.verbose('Translation provider booting up ...')
     this._availableLanguages = [] // Holds all translations able to download
     this._languageDirectory = path.join(app.getPath('userData'), '/lang/')
-    // Inject the global provider functions
-    global.translations = {
-      /**
-       * Return a copy of the available languages
-       * @return {Array} An array containing online languages available
-       */
-      getAvailableLanguages: () => {
-        return JSON.parse(JSON.stringify(this._availableLanguages))
-      }
-    }
 
     // NOTE: This must be a synchronous event, because it is called from within
     // the trans() function if one of those two objects is not yet set in the

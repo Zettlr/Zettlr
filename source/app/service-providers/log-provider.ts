@@ -66,22 +66,6 @@ export default class LogProvider extends ProviderContract {
 
     this.log(LogLevel.verbose, 'Log provider booting up ...', null)
 
-    // Inject the global provider functions
-    global.log = {
-      verbose: (msg, details = null) => {
-        this.verbose(msg, details)
-      },
-      info: (msg, details = null) => {
-        this.info(msg, details)
-      },
-      warning: (msg, details = null) => {
-        this.warning(msg, details)
-      },
-      error: (msg, details = null) => {
-        this.error(msg, details)
-      }
-    }
-
     // Ensure message handling
     ipcMain.handle('log-provider', (event, payload) => {
       const { command } = payload
