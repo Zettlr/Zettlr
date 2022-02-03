@@ -27,7 +27,7 @@ import * as FSALDir from './fsal-directory'
 import * as FSALAttachment from './fsal-attachment'
 import FSALWatchdog from './fsal-watchdog'
 import FSALCache from './fsal-cache'
-import sort from './util/sort'
+import getSorter from './util/sort'
 import {
   WatchdogEvent,
   AnyDescriptor,
@@ -287,6 +287,14 @@ export default class FSAL extends ProviderContract {
       if (isAttachment(changedPath)) {
         await FSALDir.addAttachment(parentDescriptor, changedPath)
       } else {
+        const sorter = getSorter(
+          this._config.get('sorting'),
+          this._config.get('sortFoldersFirst'),
+          this._config.get('fileNameDisplay'),
+          this._config.get('appLang'),
+          this._config.get('sortingTime')
+        )
+
         await FSALDir.addChild(
           parentDescriptor,
           changedPath,
@@ -295,11 +303,7 @@ export default class FSAL extends ProviderContract {
           this._tags,
           this._links,
           this._targets,
-          this._config.get('sorting'),
-          this._config.get('sortFoldersFirst'),
-          this._config.get('fileNameDisplay'),
-          this._config.get('appLang'),
-          this._config.get('sortingTime'),
+          sorter,
           this._cache
         )
       }
@@ -431,6 +435,14 @@ export default class FSAL extends ProviderContract {
     const linkEnd = this._config.get('zkn.linkEnd')
     // Loads a directory
     const start = Date.now()
+    const sorter = getSorter(
+      this._config.get('sorting'),
+      this._config.get('sortFoldersFirst'),
+      this._config.get('fileNameDisplay'),
+      this._config.get('appLang'),
+      this._config.get('sortingTime')
+    )
+
     const dir = await FSALDir.parse(
       dirPath,
       this._cache,
@@ -439,11 +451,7 @@ export default class FSAL extends ProviderContract {
       this._tags,
       this._links,
       this._targets,
-      this._config.get('sorting'),
-      this._config.get('sortFoldersFirst'),
-      this._config.get('fileNameDisplay'),
-      this._config.get('appLang'),
-      this._config.get('sortingTime'),
+      sorter,
       null
     )
     if (Date.now() - start > 100) {
@@ -507,14 +515,15 @@ export default class FSAL extends ProviderContract {
       this._logger.warning(`[FSAL] Path ${p} took ${Date.now() - start}ms to load.`)
     }
 
-    this._state.filetree = sort(
-      this._state.filetree,
+    const sorter = getSorter(
       this._config.get('sorting'),
       this._config.get('sortFoldersFirst'),
       this._config.get('fileNameDisplay'),
       this._config.get('appLang'),
       this._config.get('sortingTime')
     )
+
+    this._state.filetree = sorter(this._state.filetree)
 
     this._consolidateRootFiles()
 
@@ -731,15 +740,15 @@ export default class FSAL extends ProviderContract {
 
   public async sortDirectory (src: DirDescriptor, sorting?: 'time-up'|'time-down'|'name-up'|'name-down'): Promise<void> {
     this._fsalIsBusy = true
-    await FSALDir.sort(
-      src,
+    const sorter = getSorter(
       this._config.get('sorting'),
       this._config.get('sortFoldersFirst'),
       this._config.get('fileNameDisplay'),
       this._config.get('appLang'),
-      this._config.get('sortingTime'),
-      sorting
+      this._config.get('sortingTime')
     )
+
+    await FSALDir.sort(src, sorter, sorting)
     this._recordFiletreeChange('change', src.path)
     this._fsalIsBusy = false
     this._afterRemoteChange()
@@ -755,6 +764,15 @@ export default class FSAL extends ProviderContract {
       'event': 'add',
       'path': path.join(src.path, options.name)
     }])
+
+    const sorter = getSorter(
+      this._config.get('sorting'),
+      this._config.get('sortFoldersFirst'),
+      this._config.get('fileNameDisplay'),
+      this._config.get('appLang'),
+      this._config.get('sortingTime')
+    )
+
     await FSALDir.createFile(
       src,
       options,
@@ -764,11 +782,7 @@ export default class FSAL extends ProviderContract {
       this._targets,
       this._links,
       this._tags,
-      this._config.get('sorting'),
-      this._config.get('sortFoldersFirst'),
-      this._config.get('fileNameDisplay'),
-      this._config.get('appLang'),
-      this._config.get('sortingTime')
+      sorter
     )
     await this.sortDirectory(src)
     this._recordFiletreeChange('add', path.join(src.path, options.name))
@@ -803,16 +817,17 @@ export default class FSAL extends ProviderContract {
     this._recordFiletreeChange('remove', oldPath)
     this._recordFiletreeChange('add', src.path)
 
+    const sorter = getSorter(
+      this._config.get('sorting'),
+      this._config.get('sortFoldersFirst'),
+      this._config.get('fileNameDisplay'),
+      this._config.get('appLang'),
+      this._config.get('sortingTime')
+    )
+
     // Now we need to re-sort the parent directory
     if (src.parent !== null) {
-      await FSALDir.sort(
-        src.parent,
-        this._config.get('sorting'),
-        this._config.get('sortFoldersFirst'),
-        this._config.get('fileNameDisplay'),
-        this._config.get('appLang'),
-        this._config.get('sortingTime')
-      ) // Omit sorting
+      await FSALDir.sort(src.parent, sorter) // Omit sorting
       this._recordFiletreeChange('change', src.parent.path)
     }
 
@@ -926,6 +941,14 @@ export default class FSAL extends ProviderContract {
       'path': absolutePath
     }])
 
+    const sorter = getSorter(
+      this._config.get('sorting'),
+      this._config.get('sortFoldersFirst'),
+      this._config.get('fileNameDisplay'),
+      this._config.get('appLang'),
+      this._config.get('sortingTime')
+    )
+
     await FSALDir.create(
       src,
       newName,
@@ -935,11 +958,7 @@ export default class FSAL extends ProviderContract {
       this._tags,
       this._links,
       this._targets,
-      this._config.get('sorting'),
-      this._config.get('sortFoldersFirst'),
-      this._config.get('fileNameDisplay'),
-      this._config.get('appLang'),
-      this._config.get('sortingTime')
+      sorter
     )
     this._recordFiletreeChange('add', absolutePath)
 
@@ -985,6 +1004,14 @@ export default class FSAL extends ProviderContract {
       })
     }
 
+    const sorter = getSorter(
+      this._config.get('sorting'),
+      this._config.get('sortFoldersFirst'),
+      this._config.get('fileNameDisplay'),
+      this._config.get('appLang'),
+      this._config.get('sortingTime')
+    )
+
     // Now concat the removes in reverse direction and ignore them
     this._watchdog.ignoreEvents(adds.concat(removes))
     const newDir = await FSALDir.rename(
@@ -995,11 +1022,7 @@ export default class FSAL extends ProviderContract {
       this._tags,
       this._links,
       this._targets,
-      this._config.get('sorting'),
-      this._config.get('sortFoldersFirst'),
-      this._config.get('fileNameDisplay'),
-      this._config.get('appLang'),
-      this._config.get('sortingTime'),
+      sorter,
       this._cache
     )
 
@@ -1012,14 +1035,7 @@ export default class FSAL extends ProviderContract {
       // Exchange the directory in the filetree
       let index = this._state.filetree.indexOf(src)
       this._state.filetree.splice(index, 1, newDir)
-      this._state.filetree = sort(
-        this._state.filetree,
-        this._config.get('sorting'),
-        this._config.get('sortFoldersFirst'),
-        this._config.get('fileNameDisplay'),
-        this._config.get('appLang'),
-        this._config.get('sortingTime')
-      )
+      this._state.filetree = sorter(this._state.filetree)
     }
 
     // Cleanup: Re-set anything within the state that has changed due to this
@@ -1107,6 +1123,14 @@ export default class FSAL extends ProviderContract {
     }
     this._watchdog.ignoreEvents(adds.concat(removes))
 
+    const sorter = getSorter(
+      this._config.get('sorting'),
+      this._config.get('sortFoldersFirst'),
+      this._config.get('fileNameDisplay'),
+      this._config.get('appLang'),
+      this._config.get('sortingTime')
+    )
+
     // Now perform the actual move. What the action will do is re-read the
     // new source again, and insert it into the target, so the filetree is
     // good to go afterwards.
@@ -1118,11 +1142,7 @@ export default class FSAL extends ProviderContract {
       this._tags,
       this._links,
       this._targets,
-      this._config.get('sorting'),
-      this._config.get('sortFoldersFirst'),
-      this._config.get('fileNameDisplay'),
-      this._config.get('appLang'),
-      this._config.get('sortingTime'),
+      sorter,
       this._cache
     )
 

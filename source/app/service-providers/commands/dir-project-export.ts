@@ -18,6 +18,7 @@ import { makeExport } from '../../../main/modules/export'
 import { filter as minimatch } from 'minimatch'
 import { shell } from 'electron'
 import { ExporterOptions } from '../../../main/modules/export/types'
+import LogProvider from '@providers/log-provider'
 
 export default class DirProjectExport extends ZettlrCommand {
   constructor (app: any) {

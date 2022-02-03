@@ -26,6 +26,7 @@ import generateFilename from '@common/util/generate-filename'
 import RecentDocumentsProvider from '@providers/recent-docs-provider'
 import ProviderContract from '@providers/provider-contract'
 import CiteprocProvider from '@providers/citeproc-provider'
+import LogProvider from '@providers/log-provider'
 
 const ALLOWED_CODE_FILES = codeFileExtensions(true)
 const MARKDOWN_FILES = mdFileExtensions(true)

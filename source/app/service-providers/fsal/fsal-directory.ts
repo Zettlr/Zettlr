@@ -15,7 +15,6 @@
 import path from 'path'
 import { promises as fs } from 'fs'
 import hash from '@common/util/hash'
-import sortDir from './util/sort'
 import isDir from '@common/util/is-dir'
 import isFile from '@common/util/is-file'
 import ignoreDir from '@common/util/ignore-dir'
@@ -78,13 +77,9 @@ type SortMethod = 'name-up'|'name-down'|'time-up'|'time-down'
  */
 function sortChildren (
   dir: DirDescriptor,
-  sortingType: 'natural'|'ascii',
-  sortFoldersFirst: boolean,
-  fileNameDisplay: 'filename'|'title'|'heading'|'title+heading',
-  appLang: string,
-  whichTime: 'modtime'|'creationtime'
+  sorter: (arr: MaybeRootDescriptor[], sortingType?: string) => MaybeRootDescriptor[]
 ): void {
-  dir.children = sortDir(dir.children, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime, dir._settings.sorting)
+  dir.children = sorter(dir.children, dir._settings.sorting)
 }
 
 /**
@@ -198,11 +193,7 @@ export async function parse (
   tags: TagProvider,
   links: LinkProvider,
   targets: TargetProvider,
-  sortingType: 'natural'|'ascii',
-  sortFoldersFirst: boolean,
-  fileNameDisplay: 'filename'|'title'|'heading'|'title+heading',
-  appLang: string,
-  whichTime: 'modtime'|'creationtime',
+  sorter: (arr: MaybeRootDescriptor[], sortingType?: string) => MaybeRootDescriptor[],
   parent: DirDescriptor|null
 ): Promise<DirDescriptor> {
   // Prepopulate
@@ -261,12 +252,12 @@ export async function parse (
         dir.children.push(await FSALFile.parse(absolutePath, cache, linkStart, linkEnd, targets, links, tags, dir))
       }
     } else if (isDir(absolutePath)) {
-      dir.children.push(await parse(absolutePath, cache, linkStart, linkEnd, tags, links, targets, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime, dir))
+      dir.children.push(await parse(absolutePath, cache, linkStart, linkEnd, tags, links, targets, sorter, dir))
     }
   }
 
   // Finally sort and return the directory object
-  sortChildren(dir, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime)
+  sortChildren(dir, sorter)
   return dir
 }
 
@@ -316,11 +307,7 @@ export async function setSetting (dirObject: DirDescriptor, settings: any): Prom
  */
 export async function sort (
   dirObject: DirDescriptor,
-  sortingType: 'natural'|'ascii',
-  sortFoldersFirst: boolean,
-  fileNameDisplay: 'filename'|'title'|'heading'|'title+heading',
-  appLang: string,
-  whichTime: 'modtime'|'creationtime',
+  sorter: (arr: MaybeRootDescriptor[], sortingType?: string) => MaybeRootDescriptor[],
   method?: SortMethod
 ): Promise<void> {
   // If the caller omits the method, it should remain unchanged
@@ -331,7 +318,7 @@ export async function sort (
   dirObject._settings.sorting = method
   // Persist the settings to disk
   await persistSettings(dirObject)
-  sortChildren(dirObject, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime)
+  sortChildren(dirObject, sorter)
 }
 
 /**
@@ -402,21 +389,17 @@ export async function create (
   tags: TagProvider,
   links: LinkProvider,
   targets: TargetProvider,
-  sortingType: 'natural'|'ascii',
-  sortFoldersFirst: boolean,
-  fileNameDisplay: 'filename'|'title'|'heading'|'title+heading',
-  appLang: string,
-  whichTime: 'modtime'|'creationtime'
+  sorter: (arr: MaybeRootDescriptor[], sortingType?: string) => MaybeRootDescriptor[]
 ): Promise<void> {
   if (newName.trim() === '') throw new Error('Invalid directory name provided!')
   let existingDir = dirObject.children.find(elem => elem.name === newName)
   if (existingDir !== undefined) throw new Error(`A child with name ${newName} already exists!`)
   let newPath = path.join(dirObject.path, newName)
   await fs.mkdir(newPath)
-  let newDir = await parse(newPath, cache, linkStart, linkEnd, tags, links, targets, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime, dirObject)
+  let newDir = await parse(newPath, cache, linkStart, linkEnd, tags, links, targets, sorter, dirObject)
   // Add the new directory to the source dir
   dirObject.children.push(newDir)
-  sortChildren(dirObject, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime)
+  sortChildren(dirObject, sorter)
 }
 
 /**
@@ -435,11 +418,7 @@ export async function createFile (
   targets: TargetProvider,
   links: LinkProvider,
   tags: TagProvider,
-  sortingType: 'natural'|'ascii',
-  sortFoldersFirst: boolean,
-  fileNameDisplay: 'filename'|'title'|'heading'|'title+heading',
-  appLang: string,
-  whichTime: 'modtime'|'creationtime'
+  sorter: (arr: MaybeRootDescriptor[], sortingType?: string) => MaybeRootDescriptor[]
 ): Promise<void> {
   const filename = options.name
   const content = options.content
@@ -452,7 +431,7 @@ export async function createFile (
     const file = await FSALFile.parse(fullPath, cache, linkStart, linkEnd, targets, links, tags, dirObject)
     dirObject.children.push(file)
   }
-  sortChildren(dirObject, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime)
+  sortChildren(dirObject, sorter)
 }
 
 /**
@@ -474,11 +453,7 @@ export async function rename (
   tags: TagProvider,
   links: LinkProvider,
   targets: TargetProvider,
-  sortingType: 'natural'|'ascii',
-  sortFoldersFirst: boolean,
-  fileNameDisplay: 'filename'|'title'|'heading'|'title+heading',
-  appLang: string,
-  whichTime: 'modtime'|'creationtime',
+  sorter: (arr: MaybeRootDescriptor[], sortingType?: string) => MaybeRootDescriptor[],
   cache: FSALCache
 ): Promise<DirDescriptor> {
   // Check some things beforehand
@@ -493,13 +468,13 @@ export async function rename (
   let newPath = path.join(path.dirname(dirObject.path), newName)
   await fs.rename(dirObject.path, newPath)
   // Rescan the new dir to get all new file information
-  let newDir = await parse(newPath, cache, linkStart, linkEnd, tags, links, targets, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime, dirObject.parent)
+  let newDir = await parse(newPath, cache, linkStart, linkEnd, tags, links, targets, sorter, dirObject.parent)
   if (dirObject.parent !== null) {
     // Exchange the directory in the parent
     let index = dirObject.parent.children.indexOf(dirObject)
     dirObject.parent.children.splice(index, 1, newDir)
     // Now sort the parent
-    sortChildren(dirObject.parent, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime)
+    sortChildren(dirObject.parent, sorter)
   }
 
   // Return the new directory -- either to replace it in the filetree, or,
@@ -549,11 +524,7 @@ export async function move (
   tags: TagProvider,
   links: LinkProvider,
   targets: TargetProvider,
-  sortingType: 'natural'|'ascii',
-  sortFoldersFirst: boolean,
-  fileNameDisplay: 'filename'|'title'|'heading'|'title+heading',
-  appLang: string,
-  whichTime: 'modtime'|'creationtime',
+  sorter: (arr: MaybeRootDescriptor[], sortingType?: string) => MaybeRootDescriptor[],
   cache: FSALCache
 ): Promise<void> {
   // Moves anything into the target. We'll use fs.rename for that.
@@ -572,7 +543,7 @@ export async function move (
   // Re-read the source
   let newSource
   if (sourceObject.type === 'directory') {
-    newSource = await parse(targetPath, cache, linkStart, linkEnd, tags, links, targets, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime, targetDir)
+    newSource = await parse(targetPath, cache, linkStart, linkEnd, tags, links, targets, sorter, targetDir)
   } else {
     newSource = await FSALFile.parse(targetPath, cache, linkStart, linkEnd, targets, links, tags, targetDir)
   }
@@ -581,7 +552,7 @@ export async function move (
   targetDir.children.push(newSource)
 
   // Finally resort the target. Now the state should be good to go.
-  sortChildren(targetDir, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime)
+  sortChildren(targetDir, sorter)
 }
 
 export async function addAttachment (dirObject: DirDescriptor, attachmentPath: string): Promise<void> {
@@ -603,11 +574,7 @@ export async function addChild (
   tags: TagProvider,
   links: LinkProvider,
   targets: TargetProvider,
-  sortingType: 'natural'|'ascii',
-  sortFoldersFirst: boolean,
-  fileNameDisplay: 'filename'|'title'|'heading'|'title+heading',
-  appLang: string,
-  whichTime: 'modtime'|'creationtime',
+  sorter: (arr: MaybeRootDescriptor[], sortingType?: string) => MaybeRootDescriptor[],
   cache: FSALCache
 ): Promise<void> {
   const isDirectory = isDir(childPath)
@@ -615,13 +582,13 @@ export async function addChild (
   const isMD = MARKDOWN_FILES.includes(path.extname(childPath))
 
   if (isDirectory) {
-    dirObject.children.push(await parse(childPath, cache, linkStart, linkEnd, tags, links, targets, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime, dirObject))
+    dirObject.children.push(await parse(childPath, cache, linkStart, linkEnd, tags, links, targets, sorter, dirObject))
   } else if (isCode) {
     dirObject.children.push(await FSALCodeFile.parse(childPath, cache, dirObject))
   } else if (isMD) {
     dirObject.children.push(await FSALFile.parse(childPath, cache, linkStart, linkEnd, targets, links, tags, dirObject))
   }
-  sortChildren(dirObject, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime)
+  sortChildren(dirObject, sorter)
 }
 
 export function removeChild (dirObject: DirDescriptor, childPath: string): void {
