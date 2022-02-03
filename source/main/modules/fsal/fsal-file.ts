@@ -22,11 +22,13 @@ import { getIDRE, getCodeBlockRE } from '@common/regular-expressions'
 import { shell } from 'electron'
 import safeAssign from '@common/util/safe-assign'
 // Import the interfaces that we need
-import { DirDescriptor, MDFileDescriptor, MDFileMeta } from './types'
+import { DirDescriptor, MDFileDescriptor } from '@dts/main/fsal'
+import { MDFileMeta } from '@dts/common/fsal'
 import FSALCache from './fsal-cache'
 import extractBOM from './util/extract-bom'
 import extractTags from './util/extract-tags'
 import extractLinks from './util/extract-links'
+import { SearchTerm } from '@dts/common/search'
 
 // Here are all supported variables for Pandoc:
 // https://pandoc.org/MANUAL.html#variables
@@ -243,8 +245,7 @@ export async function parse (filePath: string, cache: FSALCache|null, parent: Di
     file.size = stat.size
   } catch (err: any) {
     global.log.error('Error reading file ' + filePath, err)
-    // Re-throw a nicer and more meaningful message
-    throw new Error(`Could not read file ${filePath}: ${String(err.message)}`)
+    throw err // Re-throw
   }
 
   // Before reading in the full file and parsing it,
@@ -275,6 +276,7 @@ export async function parse (filePath: string, cache: FSALCache|null, parent: Di
   file.target = global.targets.get(file.path)
 
   // Finally, report the tags
+  global.links.report(file.path, file.links, file.id)
   global.tags.report(file.tags, file.path)
 
   return file
@@ -288,7 +290,7 @@ export async function parse (filePath: string, cache: FSALCache|null, parent: Di
  *
  * @return  {Promise<any>}                  Resolves with search results
  */
-export async function search (fileObject: MDFileDescriptor, terms: any[]): Promise<any> {
+export async function search (fileObject: MDFileDescriptor, terms: SearchTerm[]): Promise<any> {
   // Initialise the content variables (needed to check for NOT operators)
   let cnt = await fs.readFile(fileObject.path, { encoding: 'utf8' })
   return searchFile(fileObject, terms, cnt)
@@ -345,9 +347,11 @@ export async function save (fileObject: MDFileDescriptor, content: string, cache
   // Afterwards, retrieve the now current modtime
   await updateFileMetadata(fileObject)
   // Make sure to keep the file object itself as well as the tags updated
+  global.links.remove(fileObject.path, fileObject.id)
   global.tags.remove(fileObject.tags, fileObject.path)
   parseFileContents(fileObject, content)
   global.tags.report(fileObject.tags, fileObject.path)
+  global.links.report(fileObject.path, fileObject.links, fileObject.id)
   fileObject.modified = false // Always reset the modification flag.
   if (cache !== null) {
     cacheFile(fileObject, cache)
@@ -425,8 +429,10 @@ export async function reparseChangedFile (fileObject: MDFileDescriptor, cache: F
   await updateFileMetadata(fileObject)
   // Make sure to keep the file object itself as well as the tags updated
   global.tags.remove(fileObject.tags, fileObject.path)
+  global.links.remove(fileObject.path, fileObject.id)
   parseFileContents(fileObject, contents)
   global.tags.report(fileObject.tags, fileObject.path)
+  global.links.report(fileObject.path, fileObject.links, fileObject.id)
   fileObject.modified = false // Always reset the modification flag.
   if (cache !== null) {
     cacheFile(fileObject, cache)

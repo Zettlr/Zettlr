@@ -16,6 +16,7 @@ import fs from 'fs'
 import path from 'path'
 import { app, ipcMain } from 'electron'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
+import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
 
 interface InternalTagRecord {
   text: string

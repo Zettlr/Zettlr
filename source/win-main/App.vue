@@ -1,9 +1,9 @@
 <template>
   <WindowChrome
     v-bind:title="title"
-    v-bind:titlebar="false"
+    v-bind:titlebar="shouldShowTitlebar"
     v-bind:menubar="true"
-    v-bind:show-toolbar="true"
+    v-bind:show-toolbar="shouldShowToolbar"
     v-bind:toolbar-labels="false"
     v-bind:toolbar-controls="toolbarControls"
     v-on:toolbar-toggle="handleToggle($event)"
@@ -25,7 +25,7 @@
         <GlobalSearch
           v-show="mainSplitViewVisibleComponent === 'globalSearch'"
           ref="global-search"
-          v-on:jtl="$refs['editor'].jtl($event)"
+          v-on:jtl="($refs.editor as any).jtl($event)"
         >
         </GlobalSearch>
       </template>
@@ -58,7 +58,7 @@
   </WindowChrome>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -73,31 +73,33 @@
  * END HEADER
  */
 
-import WindowChrome from '@common/vue/window/Chrome'
-import FileManager from './file-manager/file-manager'
-import MainSidebar from './MainSidebar'
-import DocumentTabs from './DocumentTabs'
-import SplitView from '../common/vue/window/SplitView'
-import GlobalSearch from './GlobalSearch'
-import MainEditor from './MainEditor'
-import PopoverExport from './PopoverExport'
-import PopoverStats from './PopoverStats'
-import PopoverTags from './PopoverTags'
-import PopoverPomodoro from './PopoverPomodoro'
-import PopoverTable from './PopoverTable'
-import PopoverDocInfo from './PopoverDocInfo'
+import WindowChrome from '@common/vue/window/Chrome.vue'
+import FileManager from './file-manager/file-manager.vue'
+import MainSidebar from './MainSidebar.vue'
+import DocumentTabs from './DocumentTabs.vue'
+import SplitView from '../common/vue/window/SplitView.vue'
+import GlobalSearch from './GlobalSearch.vue'
+import MainEditor from './MainEditor.vue'
+import PopoverExport from './PopoverExport.vue'
+import PopoverStats from './PopoverStats.vue'
+import PopoverTags from './PopoverTags.vue'
+import PopoverPomodoro from './PopoverPomodoro.vue'
+import PopoverTable from './PopoverTable.vue'
+import PopoverDocInfo from './PopoverDocInfo.vue'
 import { trans } from '@common/i18n-renderer'
 import localiseNumber from '@common/util/localise-number'
 import generateId from '@common/util/generate-id'
-import { nextTick } from 'vue'
+import { nextTick, defineComponent } from 'vue'
+import { IpcRenderer } from 'electron'
 
 // Import the sound effects for the pomodoro timer
 import glassFile from './assets/glass.wav'
 import alarmFile from './assets/digital_alarm.mp3'
 import chimeFile from './assets/chime.mp3'
+import { ToolbarControl } from '@dts/renderer/window'
 
-const ipcRenderer = window.ipc
-const clipboard = window.clipboard
+const ipcRenderer: IpcRenderer = (window as any).ipc
+const clipboard = (window as any).clipboard
 
 const SOUND_EFFECTS = [
   {
@@ -114,7 +116,7 @@ const SOUND_EFFECTS = [
   }
 ]
 
-export default {
+export default defineComponent({
   components: {
     WindowChrome,
     FileManager,
@@ -128,7 +130,6 @@ export default {
     return {
       title: 'Zettlr',
       readabilityActive: false,
-      sidebarVisible: false,
       fileManagerVisible: true,
       distractionFree: false,
       mainSplitViewVisibleComponent: 'fileManager',
@@ -136,15 +137,15 @@ export default {
       pomodoro: {
         currentEffectFile: glassFile,
         soundEffect: new Audio(glassFile),
-        intervalHandle: undefined,
-        popover: undefined,
+        intervalHandle: undefined as undefined|ReturnType<typeof setInterval>,
+        popover: undefined as any,
         durations: {
           task: 1500,
           short: 300,
           long: 1200
         },
         phase: {
-          type: 'task',
+          type: 'task' as 'task'|'short'|'long',
           elapsed: 0
         },
         counter: {
@@ -165,10 +166,22 @@ export default {
     }
   },
   computed: {
-    shouldCountChars: function () {
+    sidebarVisible: function (): boolean {
+      return this.$store.state.config['window.sidebarVisible']
+    },
+    shouldCountChars: function (): boolean {
       return this.$store.state.config['editor.countChars']
     },
-    parsedDocumentInfo: function () {
+    shouldShowToolbar: function (): boolean {
+      return this.distractionFree === false || this.$store.state.config['display.hideToolbarInDistractionFree'] === false
+    },
+    shouldShowTitlebar: function (): boolean {
+      // We need to display the titlebar in case the user decides to hide the
+      // toolbar. The titlebar is much less distracting, but this way the user
+      // can at least drag the window around.
+      return this.shouldShowToolbar === false
+    },
+    parsedDocumentInfo: function (): any {
       const info = this.$store.state.activeDocumentInfo
       if (info === null) {
         return ''
@@ -179,7 +192,7 @@ export default {
       if (info.selections.length > 0) {
         // We have selections to display.
         let length = 0
-        info.selections.forEach(sel => {
+        info.selections.forEach((sel: any) => {
           length += sel.selectionLength
         })
 
@@ -205,10 +218,10 @@ export default {
 
       return cnt
     },
-    hasTagSuggestions: function () {
+    hasTagSuggestions: function (): boolean {
       return this.$store.state.tagSuggestions.length > 0
     },
-    toolbarControls: function () {
+    toolbarControls: function (): ToolbarControl[] {
       return [
         {
           type: 'three-way-toggle',
@@ -227,7 +240,7 @@ export default {
         },
         {
           type: 'button',
-          id: 'open-workspace',
+          id: 'root-open-workspaces',
           title: trans('menu.open_workspace'),
           icon: 'folder-open'
         },
@@ -251,7 +264,8 @@ export default {
           icon: 'cog'
         },
         {
-          type: 'spacer'
+          type: 'spacer',
+          id: 'spacer-one'
         },
         {
           type: 'button',
@@ -268,6 +282,7 @@ export default {
         },
         {
           type: 'spacer',
+          id: 'spacer-two',
           size: '1x'
         },
         {
@@ -307,7 +322,8 @@ export default {
           icon: 'footnote'
         },
         {
-          type: 'spacer'
+          type: 'spacer',
+          id: 'spacer-three'
         },
         {
           type: 'text',
@@ -328,9 +344,18 @@ export default {
           id: 'toggle-sidebar',
           title: trans('menu.toggle_sidebar'),
           icon: 'view-columns',
-          initialState: this.sidebarVisible === true
+          initialState: this.sidebarVisible ? 'active' : ''
         }
       ]
+    },
+    editorSidebarSplitComponent: function (): any {
+      return this.$refs['editor-sidebar-split'] as any
+    },
+    fileManagerSplitComponent: function (): any {
+      return this.$refs['file-manager-split'] as any
+    },
+    globalSearchComponent: function (): any {
+      return this.$refs['global-search'] as any
     }
   },
   watch: {
@@ -340,9 +365,9 @@ export default {
           this.distractionFree = false
         }
 
-        this.$refs['editor-sidebar-split'].unhide()
+        this.editorSidebarSplitComponent.unhide()
       } else {
-        this.$refs['editor-sidebar-split'].hideView(2)
+        this.editorSidebarSplitComponent.hideView(2)
       }
     },
     fileManagerVisible: function (newValue, oldValue) {
@@ -351,23 +376,25 @@ export default {
           this.distractionFree = false
         }
 
-        this.$refs['file-manager-split'].unhide()
+        this.fileManagerSplitComponent.unhide()
       } else {
-        this.$refs['file-manager-split'].hideView(1)
+        this.fileManagerSplitComponent.hideView(1)
       }
     },
     mainSplitViewVisibleComponent: function (newValue, oldValue) {
       if (newValue === 'globalSearch') {
         // The global search just became visible, so make sure to change the
         // current directory.
-        this.$refs['global-search'].setCurrentDirectory()
+        nextTick().then(() => {
+          this.globalSearchComponent.setCurrentDirectory()
+        }).catch(e => console.error(e))
       }
     }
   },
   mounted: function () {
     ipcRenderer.on('shortcut', (event, shortcut, state) => {
       if (shortcut === 'toggle-sidebar') {
-        this.sidebarVisible = this.sidebarVisible === false
+        (global as any).config.set('window.sidebarVisible', !this.sidebarVisible)
       } else if (shortcut === 'insert-id') {
         // Generates an ID based upon the configured pattern, writes it into the
         // clipboard and then triggers the paste command on these webcontents.
@@ -379,7 +406,7 @@ export default {
         let rtf = clipboard.readRTF()
 
         // Write an ID to the clipboard
-        clipboard.writeText(generateId(global.config.get('zkn.idGen')))
+        clipboard.writeText(generateId((global as any).config.get('zkn.idGen')))
         // Paste the ID
         ipcRenderer.send('window-controls', { command: 'paste' })
 
@@ -403,7 +430,7 @@ export default {
         // Focus input
         if (this.$refs['global-search'] !== undefined) {
           nextTick()
-            .then(() => { this.$refs['global-search'].focusQueryInput() })
+            .then(() => { this.globalSearchComponent.focusQueryInput() })
             .catch(err => console.error(err))
         }
       } else if (shortcut === 'toggle-file-manager') {
@@ -431,12 +458,12 @@ export default {
           }
 
           this.distractionFree = true
-          this.sidebarVisible = false
+          ;(global as any).config.set('window.sidebarVisible', false)
           this.fileManagerVisible = false
         } else {
           // Leave distraction free mode
           this.distractionFree = false
-          this.sidebarVisible = this.sidebarsBeforeDistractionfree.sidebar
+          ;(global as any).config.set('window.sidebarVisible', this.sidebarsBeforeDistractionfree.sidebar)
           this.fileManagerVisible = this.sidebarsBeforeDistractionfree.fileManager
         }
       }
@@ -444,30 +471,32 @@ export default {
 
     // Initially, we need to hide the sidebar, since the view will be visible
     // by default.
-    this.$refs['editor-sidebar-split'].hideView(2)
+    if (!this.sidebarVisible) {
+      this.editorSidebarSplitComponent.hideView(2)
+    }
   },
   methods: {
-    jtl: function (lineNumber) {
-      this.$refs.editor.jtl(lineNumber)
+    jtl: function (lineNumber: number, setCursor: boolean = false) {
+      (this.$refs.editor as any).jtl(lineNumber, setCursor)
     },
-    startGlobalSearch: function (terms) {
+    startGlobalSearch: function (terms: string) {
       this.mainSplitViewVisibleComponent = 'globalSearch'
       this.fileManagerVisible = true
       nextTick()
         .then(() => {
-          this.$refs['global-search'].$data.query = terms
-          this.$refs['global-search'].startSearch()
+          this.globalSearchComponent.$data.query = terms
+          this.globalSearchComponent.startSearch()
         })
         .catch(err => console.error(err))
     },
     toggleFileList: function () {
       // This event can be used by various components to ask the file manager to
       // toggle its file list visibility
-      this.$refs['file-manager'].toggleFileList()
+      (this.$refs['file-manager'] as any).toggleFileList()
     },
-    handleClick: function (clickedID) {
-      if (clickedID === 'open-workspace') {
-        ipcRenderer.invoke('application', { command: 'open-workspace' })
+    handleClick: function (clickedID: string) {
+      if (clickedID === 'root-open-workspaces') {
+        ipcRenderer.invoke('application', { command: 'root-open-workspaces' })
           .catch(e => console.error(e))
       } else if (clickedID === 'open-preferences') {
         ipcRenderer.invoke('application', { command: 'open-preferences' })
@@ -476,20 +505,24 @@ export default {
         this.showExportPopover()
       } else if (clickedID === 'show-stats') {
         // The user wants to display the stats
-        this.$togglePopover(PopoverStats, document.getElementById('toolbar-show-stats'), {}, (data) => {
-          if (data.showMoreStats === true) {
-            ipcRenderer.invoke('application', {
-              command: 'open-stats-window'
-            })
-              .catch(err => console.error(err))
-          }
-          this.$closePopover()
-        })
+        this.$togglePopover(
+          PopoverStats,
+          document.getElementById('toolbar-show-stats') as HTMLElement,
+          {},
+          (data: any) => {
+            if (data.showMoreStats === true) {
+              ipcRenderer.invoke('application', {
+                command: 'open-stats-window'
+              })
+                .catch(err => console.error(err))
+            }
+            this.$closePopover()
+          })
       } else if (clickedID === 'show-tag-cloud') {
         const allTags = Object.keys(this.$store.state.tagDatabase)
         const tagMap = allTags.map(tag => {
           // Tags have the properties "className", "count", and "text"
-          const storeTag = this.$store.state.tagDatabase[tag]
+          const storeTag = (this.$store.state.tagDatabase as any)[tag]
 
           return {
             className: storeTag.className,
@@ -505,13 +538,13 @@ export default {
 
         const button = document.getElementById('toolbar-show-tag-cloud')
 
-        this.$togglePopover(PopoverTags, button, data, (data) => {
+        this.$togglePopover(PopoverTags, button as HTMLElement, data, (data: any) => {
           if (data.searchForTag !== '') {
             // The user has clicked a tag and wants to search for it
             this.startGlobalSearch('#' + data.searchForTag)
             this.$closePopover()
           } else if (data.addSuggestionsToFile === true) {
-            this.$refs.editor.addKeywordsToFile(data.suggestions)
+            (this.$refs.editor as any).addKeywordsToFile(data.suggestions)
             this.$closePopover()
           }
         })
@@ -529,64 +562,68 @@ export default {
           volume: this.pomodoro.soundEffect.volume * 100
         }
 
-        this.pomodoro.popover = this.$togglePopover(PopoverPomodoro, document.getElementById('toolbar-pomodoro'), data, (data) => {
-          // Update the durations as necessary
-          this.pomodoro.durations.task = data.taskDuration
-          this.pomodoro.durations.short = data.shortDuration
-          this.pomodoro.durations.long = data.longDuration
+        this.pomodoro.popover = this.$togglePopover(
+          PopoverPomodoro,
+          document.getElementById('toolbar-pomodoro') as HTMLElement,
+          data,
+          (data: any) => {
+            // Update the durations as necessary
+            this.pomodoro.durations.task = data.taskDuration
+            this.pomodoro.durations.short = data.shortDuration
+            this.pomodoro.durations.long = data.longDuration
 
-          // Make sure to add a final sanity check for the actual values of the pomodoro since the
-          // user can with some effort completely remove the time value
-          if (typeof this.pomodoro.durations.task !== 'number' || this.pomodoro.durations.task < 1) {
-            this.pomodoro.durations.task = 1
-          }
-          if (typeof this.pomodoro.durations.short !== 'number' || this.pomodoro.durations.short < 1) {
-            this.pomodoro.durations.short = 1
-          }
-          if (typeof this.pomodoro.durations.long !== 'number' || this.pomodoro.durations.long < 1) {
-            this.pomodoro.durations.long = 1
-          }
+            // Make sure to add a final sanity check for the actual values of the pomodoro since the
+            // user can with some effort completely remove the time value
+            if (typeof this.pomodoro.durations.task !== 'number' || this.pomodoro.durations.task < 1) {
+              this.pomodoro.durations.task = 1
+            }
+            if (typeof this.pomodoro.durations.short !== 'number' || this.pomodoro.durations.short < 1) {
+              this.pomodoro.durations.short = 1
+            }
+            if (typeof this.pomodoro.durations.long !== 'number' || this.pomodoro.durations.long < 1) {
+              this.pomodoro.durations.long = 1
+            }
 
-          const effectChanged = data.effect !== this.pomodoro.currentEffectFile
-          const volumeChanged = data.volume !== this.pomodoro.soundEffect.volume
-          if (effectChanged) {
-            this.pomodoro.currentEffectFile = data.effect
-            this.pomodoro.soundEffect = new Audio(data.effect)
-            this.pomodoro.soundEffect.volume = data.volume
-          }
+            const effectChanged = data.effect !== this.pomodoro.currentEffectFile
+            const volumeChanged = data.volume !== this.pomodoro.soundEffect.volume
+            if (effectChanged) {
+              this.pomodoro.currentEffectFile = data.effect
+              this.pomodoro.soundEffect = new Audio(data.effect)
+              this.pomodoro.soundEffect.volume = data.volume
+            }
 
-          if (volumeChanged) {
-            this.pomodoro.soundEffect.volume = data.volume
-          }
+            if (volumeChanged) {
+              this.pomodoro.soundEffect.volume = data.volume
+            }
 
-          if (effectChanged || volumeChanged) {
-            this.pomodoro.soundEffect.pause()
-            this.pomodoro.soundEffect.currentTime = 0
-            this.pomodoro.soundEffect.play().catch(e => {
-              /* We will be getting errors when pausing quickly */
-            })
-          }
+            if (effectChanged || volumeChanged) {
+              this.pomodoro.soundEffect.pause()
+              this.pomodoro.soundEffect.currentTime = 0
+              this.pomodoro.soundEffect.play().catch(e => {
+                /* We will be getting errors when pausing quickly */
+              })
+            }
 
-          const shouldStart = this.pomodoro.intervalHandle === undefined && data.isRunning === true
-          const shouldStop = this.pomodoro.intervalHandle !== undefined && data.isRunning === false
+            const shouldStart = this.pomodoro.intervalHandle === undefined && data.isRunning === true
+            const shouldStop = this.pomodoro.intervalHandle !== undefined && data.isRunning === false
 
-          if (shouldStart) {
-            this.pomodoro.soundEffect.pause()
-            this.pomodoro.soundEffect.currentTime = 0
-            this.startPomodoro()
-            this.$closePopover()
-          } else if (shouldStop) {
-            this.pomodoro.soundEffect.pause()
-            this.pomodoro.soundEffect.currentTime = 0
-            this.stopPomodoro()
-            this.$closePopover()
-          }
-        })
+            if (shouldStart) {
+              this.pomodoro.soundEffect.pause()
+              this.pomodoro.soundEffect.currentTime = 0
+              this.startPomodoro()
+              this.$closePopover()
+            } else if (shouldStop) {
+              this.pomodoro.soundEffect.pause()
+              this.pomodoro.soundEffect.currentTime = 0
+              this.stopPomodoro()
+              this.$closePopover()
+            }
+          })
       } else if (clickedID === 'insert-table') {
         // Display the insertion popover
         const data = {}
         const elem = document.getElementById('toolbar-insert-table')
-        this.$togglePopover(PopoverTable, elem, data, (data) => {
+        this.$togglePopover(PopoverTable, elem as HTMLElement, data, (data: any) => {
           // Generate a simple table based on the info, and insert it.
           let table = ''
           for (let i = 0; i < data.tableSize.rows; i++) {
@@ -597,8 +634,7 @@ export default {
             table += '\n'
           }
 
-          // This seems hacky, but it's not that bad, I think.
-          this.$refs['editor'].editor.codeMirror.replaceSelection(table)
+          (this.$refs.editor as any).replaceSelection(table)
           this.$closePopover()
         })
       } else if (clickedID === 'document-info') {
@@ -606,22 +642,22 @@ export default {
           docInfo: this.$store.state.activeDocumentInfo
         }
         const elem = document.getElementById('toolbar-document-info')
-        this.$togglePopover(PopoverDocInfo, elem, data, (data) => {
+        this.$togglePopover(PopoverDocInfo, elem as HTMLElement, data, (data: any) => {
           // Do nothing
         })
       } else if (clickedID.startsWith('markdown') === true && clickedID.length > 8) {
         // The user clicked a command button, so we just have to run that.
-        this.$refs['editor'].executeCommand(clickedID)
+        (this.$refs.editor as any).executeCommand(clickedID)
       } else if (clickedID === 'insertFootnote') {
-        this.$refs.editor.executeCommand(clickedID)
+        (this.$refs.editor as any).executeCommand(clickedID)
       }
     },
-    handleToggle: function (controlState) {
+    handleToggle: function (controlState: { id: string, state: any }) {
       const { id, state } = controlState
       if (id === 'toggle-readability') {
         this.readabilityActive = state // For simple toggles, the state is just a boolean
       } else if (id === 'toggle-sidebar') {
-        this.sidebarVisible = state
+        ;(global as any).config.set('window.sidebarVisible', state)
       } else if (id === 'toggle-file-manager') {
         // Since this is a three-way-toggle, we have to inspect the state.
         this.fileManagerVisible = state !== undefined
@@ -684,8 +720,10 @@ export default {
       this.pomodoro.counter.short = 0
       this.pomodoro.counter.long = 0
 
-      clearInterval(this.pomodoro.intervalHandle)
-      this.pomodoro.intervalHandle = undefined
+      if (this.pomodoro.intervalHandle !== undefined) {
+        clearInterval(this.pomodoro.intervalHandle)
+        this.pomodoro.intervalHandle = undefined
+      }
     },
     showExportPopover: function () {
       if (this.$store.state.activeFile === null) {
@@ -694,40 +732,44 @@ export default {
       const data = {
         format: this.$store.state.config['export.singleFileLastExporter']
       }
-      this.$togglePopover(PopoverExport, document.getElementById('toolbar-export'), data, (data) => {
-        if (data.shouldExport === true) {
-          // Remember to de-proxy any non-primitive data types so that they can
-          // be sent over the IPC pipe
-          const options = {}
-          for (const key in data.formatOptions) {
-            options[key] = data.formatOptions[key]
-          }
-          // Remember the last choice
-          global.config.set('export.singleFileLastExporter', data.format)
-          // If the file is modified, export the current contents of the editor
-          // rather than what is saved on disk
-          let content
-          if (this.$store.state.modifiedDocuments.includes(this.$store.state.activeFile.path) === true) {
-            content = this.$refs.editor.getValue()
-          }
-          // Run the exporter
-          ipcRenderer.invoke('application', {
-            command: 'export',
-            payload: {
-              format: data.format,
-              options: options,
-              exportTo: data.exportTo,
-              file: this.$store.state.activeFile.path,
-              content: content
+      this.$togglePopover(
+        PopoverExport,
+        document.getElementById('toolbar-export') as HTMLElement,
+        data,
+        (data: any) => {
+          if (data.shouldExport === true) {
+            // Remember to de-proxy any non-primitive data types so that they can
+            // be sent over the IPC pipe
+            const options: { [key: string]: string } = {}
+            for (const key in data.formatOptions) {
+              options[key] = data.formatOptions[key]
             }
-          })
-            .catch(e => console.error(e))
-          this.$closePopover()
-        }
-      })
+            // Remember the last choice
+            (global as any).config.set('export.singleFileLastExporter', data.format)
+            // If the file is modified, export the current contents of the editor
+            // rather than what is saved on disk
+            let content
+            if (this.$store.state.modifiedDocuments.includes(this.$store.state.activeFile.path) === true) {
+              content = (this.$refs.editor as any).getValue()
+            }
+            // Run the exporter
+            ipcRenderer.invoke('application', {
+              command: 'export',
+              payload: {
+                format: data.format,
+                options: options,
+                exportTo: data.exportTo,
+                file: this.$store.state.activeFile.path,
+                content: content
+              }
+            })
+              .catch(e => console.error(e))
+            this.$closePopover()
+          }
+        })
     }
   }
-}
+})
 </script>
 
 <style lang="less">

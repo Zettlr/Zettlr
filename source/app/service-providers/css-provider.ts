@@ -96,6 +96,7 @@ export default class CssProvider extends EventEmitter {
         command: 'get-custom-css-path',
         payload: this._filePath
       })
+      broadcastIpcMessage('css-provider', { command: 'custom-css-updated' })
       return true
     } catch (err: any) {
       global.log.error(`[CSS Provider] Could not set custom css: ${err.message as string}`, err)

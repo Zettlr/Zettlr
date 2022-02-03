@@ -18,7 +18,8 @@
 import EventEmitter from 'events'
 import path from 'path'
 import chokidar from 'chokidar'
-import { CodeFileDescriptor, CodeFileMeta, MDFileDescriptor, MDFileMeta } from '../fsal/types'
+import { CodeFileDescriptor, MDFileDescriptor } from '@dts/main/fsal'
+import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
 import { FSALCodeFile, FSALFile } from '../fsal'
 import { codeFileExtensions, mdFileExtensions } from '@common/get-file-extensions'
 import generateFilename from '@common/util/generate-filename'
@@ -353,7 +354,10 @@ export default class DocumentManager extends EventEmitter {
       const file = await FSALFile.parse(filePath, null)
       return file
     } else {
-      throw new Error(`Could not load file ${filePath}: Invalid path provided`)
+      const error: any = new Error(`Could not load file ${filePath}: Invalid path provided`)
+      error.path = filePath
+      error.code = 'EINVALIDPATH'
+      throw error
     }
   }
 

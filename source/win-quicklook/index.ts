@@ -17,7 +17,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import windowRegister from '@common/modules/window-register'
-import { CodeFileMeta, MDFileMeta } from '../main/modules/fsal/types'
+import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
 
 const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
@@ -67,7 +67,6 @@ if (filePath === null) {
         app.$data.tags = (file.type === 'file') ? file.tags : ''
         app.$data.wordCount = (file.type === 'file') ? file.wordCount : 0
         app.$data.charCount = (file.type === 'file') ? file.charCount : 0
-        app.$data.target = (file.type === 'file') ? file.target : null
         app.$data.firstHeading = (file.type === 'file') ? file.firstHeading : null
         app.$data.frontmatter = (file.type === 'file') ? file.frontmatter : null
         app.$data.linefeed = file.linefeed

@@ -15,7 +15,6 @@
  * END HEADER
  */
 
-import applicationMenuHelper from './application-menu-helper'
 const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
 export default function registerGlobals (): void {
@@ -76,10 +75,5 @@ export default function registerGlobals (): void {
       console.warn('[Window Registration] Called global.config.newVersionDetected in a renderer context.')
       return false
     }
-  }
-
-  // Export the menu provider
-  global.menuProvider = {
-    show: applicationMenuHelper
   }
 }

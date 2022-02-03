@@ -7,7 +7,7 @@
             "Huey"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-12-14T12:20:32.000000Z"
+        "updated_at": "2022-01-30T14:09:48.000000Z"
     },
     "dialog": {
         "about": {
@@ -198,14 +198,22 @@
             "checkForBeta": "Notify me about beta releases",
             "choose_file": "Choose file \u2026",
             "citation_database": "Citation Database (CSL JSON or BibTex)",
+            "citations": {
+                "title": "Citations"
+            },
             "cite_style_label": "How would you like autocomplete to insert your citations?",
             "count_chars": "Count characters instead of words (e.g., for Chinese)",
             "creationtime": "File creation time",
             "dark_mode": "Dark mode",
+            "dark_mode_schedule": {
+                "end": "End dark mode at",
+                "start": "Start dark mode at"
+            },
             "debug": "Enable debug mode",
             "default_image_save_path": "Default image path (relative or absolute)",
             "delete_on_fail": "Delete items irreversibly, if moving them to trash fails",
             "display": {
+                "hide_toolbar_distraction_free": "Hide toolbar in distraction free mode",
                 "image_height": "Maximum height of images (percent)",
                 "image_size_info": "With these controls you can control the dimensions of the image previews.",
                 "image_width": "Maximum width of images (percent)",
@@ -220,6 +228,7 @@
                 "title": "Display",
                 "use_first_headings": "If present, use the first heading level 1 instead of the filename"
             },
+            "display_markdown_file_extensions": "Display Markdown file extensions",
             "display_time_explanation": "In the file metadata display",
             "editor": "Editor",
             "editor_font_size": "Editor font size",
@@ -249,6 +258,13 @@
             "filemanager_expanded": "Expanded &mdash; Show both file tree and file list",
             "filemanager_explanation": "File manager mode",
             "filemanager_thin": "Thin &mdash; show either file tree or file list",
+            "filename_display": {
+                "filename_only": "Filename only",
+                "heading": "First heading level 1 if applicable",
+                "label": "Display files using",
+                "title": "Title if applicable",
+                "title_heading": "Title or first heading level 1 if applicable"
+            },
             "filename_generator": "Pattern for new filenames",
             "formatting_characters_explanation": "Choose the formatting characters that the bold/emphasis commands should use",
             "general": "General",
@@ -359,6 +375,7 @@
             "zkn": {
                 "auto_create_file": "Automatically create non-existing files when following internal links",
                 "auto_search": "Start a search when following Zettelkasten-links",
+                "custom_directory": "Put auto-created files into this directory (must be loaded in Zettlr)",
                 "generated_id": "Generated ID",
                 "id_generator_label": "Pattern used to generate new IDs",
                 "id_label": "ID regular expression",
@@ -629,6 +646,7 @@
         "open_link": "Open Link",
         "open_logs": "Open Logs",
         "open_new_tab": "Open in a new tab",
+        "open_tutorial": "Open Tutorial",
         "open_workspace": "Open Workspace \u2026",
         "pandoc": "Get Pandoc",
         "paste": "Paste",

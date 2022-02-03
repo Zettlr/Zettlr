@@ -17,9 +17,20 @@
 
 import Zettlr from '../zettlr'
 
-export default class ZettlrCommand {
+export default abstract class ZettlrCommand {
   protected readonly _app: Zettlr
   protected readonly _bind: string[]
+
+  /**
+   * Derived classes must implement this method which will be called upon request.
+   *
+   * @param   {string}        evt  Accepts any one of the events declared in _bind
+   * @param   {any<any>}      arg  Any arguments that are required for the command
+   *
+   * @return  {Promise<any>}       The run method must run asynchronously.
+   */
+  abstract run (evt: string, arg: any): Promise<any>
+
   constructor (app: Zettlr, bindEvent: string|string[]) {
     // The app is the api entry point for all things we can do.
     this._app = app

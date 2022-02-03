@@ -26,7 +26,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -41,7 +41,11 @@
  *
  * END HEADER
  */
-export default {
+
+import { TabbarControl } from '@dts/renderer/window'
+import { defineComponent, PropType } from 'vue'
+
+export default defineComponent({
   name: 'TabBar',
   props: {
     // Each tab must have the following properties:
@@ -50,7 +54,7 @@ export default {
     // * target (a CSS ID string)
     // * label (a title string)
     tabs: {
-      type: Array,
+      type: Array as PropType<TabbarControl[]>,
       required: true
     },
     // This must be equal to an ID from the tabs array
@@ -60,7 +64,7 @@ export default {
     }
   },
   emits: ['tab']
-}
+})
 </script>
 
 <style lang="less">

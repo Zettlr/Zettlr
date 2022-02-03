@@ -17,24 +17,23 @@
  * END HEADER
  */
 
-import { CodeFileMeta, DirMeta, MDFileMeta } from '../../../main/modules/fsal/types'
-
-type anyDescriptor = CodeFileMeta|DirMeta|MDFileMeta
+import { AnyMetaDescriptor } from '@dts/common/fsal'
 
 /**
  * Returns a function that can be used as a filter (i.e. in Array.filter) to match
  * descriptors (Codefiles, Directories, Markdown files) against the given query.
  *
  * @param   {string}    query                   The query string to match against.
+ * @param   {boolean}   includeTitle            Whether or not to include titles
  * @param   {boolean}   includeH1               Whether or not to include headings level 1
  *
- * @return  {(item: anyDescriptor) => boolean}  The filter function. Takes a descriptor as its only argument.
+ * @return  {(item: AnyMetaDescriptor) => boolean}  The filter function. Takes a descriptor as its only argument.
  */
-export default function matchQuery (query: string, includeH1: boolean): (item: anyDescriptor) => boolean {
+export default function matchQuery (query: string, includeTitle: boolean, includeH1: boolean): (item: AnyMetaDescriptor) => boolean {
   const queries = query.split(' ').map(q => q.trim()).filter(q => q !== '')
 
   // Returns a function that takes a Meta descriptor and returns whether it matches or not
-  return function (item: anyDescriptor): boolean {
+  return function (item: AnyMetaDescriptor): boolean {
     for (const q of queries) {
       // First, see if the name gives a match since that's what all descriptors have.
       if (item.name.toLowerCase().includes(q)) {
@@ -63,7 +62,7 @@ export default function matchQuery (query: string, includeH1: boolean): (item: a
       const hasTitle = hasFrontmatter && 'title' in item.frontmatter
 
       // Does the frontmatter work?
-      if (hasTitle && String(item.frontmatter.title).toLowerCase().includes(q)) {
+      if (includeTitle && hasTitle && String(item.frontmatter.title).toLowerCase().includes(q)) {
         return true
       }
 

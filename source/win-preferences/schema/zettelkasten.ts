@@ -40,13 +40,19 @@ export default function (): any {
           type: 'text',
           label: trans('dialog.preferences.zkn.id_generator_label'),
           model: 'zkn.idGen',
-          reset: '%Y%M%D%h%m%s'
+          reset: '%Y%M%D%h%m%s',
+          info: 'Variables: %Y, %y, %M, %D, %W, %h, %m, %s, %X, %uuid4'
         }
       ],
       [
         {
           type: 'fieldset-label', // TODO: Create this type
           text: trans('dialog.preferences.export.stripping')
+        },
+        {
+          type: 'checkbox',
+          label: 'Link with filename only',
+          model: 'zkn.linkFilenameOnly'
         },
         {
           type: 'radio',
@@ -56,19 +62,26 @@ export default function (): any {
             'always': trans('dialog.preferences.zkn.link_behaviour_always'),
             'withID': trans('dialog.preferences.zkn.link_behaviour_id'),
             'never': trans('dialog.preferences.zkn.link_behaviour_never')
-          }
+          },
+          disabled: global.config.get('zkn.linkFilenameOnly') === true
         }
       ],
       [
+        {
+          type: 'checkbox',
+          label: trans('dialog.preferences.zkn.auto_search'),
+          model: 'zkn.autoSearch'
+        },
         {
           type: 'checkbox',
           label: trans('dialog.preferences.zkn.auto_create_file'),
           model: 'zkn.autoCreateLinkedFiles'
         },
         {
-          type: 'checkbox',
-          label: trans('dialog.preferences.zkn.auto_search'),
-          model: 'zkn.autoSearch'
+          type: 'directory',
+          label: trans('dialog.preferences.zkn.custom_directory'),
+          model: 'zkn.customDirectory',
+          reset: ''
         }
       ]
     ]

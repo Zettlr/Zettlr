@@ -17,7 +17,7 @@
  * END HEADER
  */
 
-import { CodeFileMeta, DirMeta, MDFileMeta } from '../../../main/modules/fsal/types'
+import { CodeFileMeta, DirMeta, MDFileMeta } from '@dts/common/fsal'
 
 type FilterFunction = (item: DirMeta|MDFileMeta|CodeFileMeta) => boolean
 

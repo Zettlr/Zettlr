@@ -21,7 +21,7 @@ import YAML from 'yaml'
 // Module utilities
 import checkImportIntegrity from './check-import-integrity'
 import importTextbundle from './import-textbundle'
-import { DirDescriptor } from '../fsal/types'
+import { DirDescriptor } from '@dts/main/fsal'
 import { app } from 'electron'
 import { trans } from '@common/i18n-main'
 

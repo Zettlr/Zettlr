@@ -26,16 +26,19 @@ export default class ForceOpen extends ZettlrCommand {
   }
 
   /**
-    * Removes a file.
+    * Force-Opens a file, after click on internal link
     * @param {String} evt The event name
-    * @param  {Object} arg the parameters of the file to be deleted
-    * @return {Boolean} Whether the file was successfully deleted.
+    * @param  {Object} payload the parameters of the file to be opened
+    * @return {Boolean} Whether the file was successfully opened.
     */
-  async run (evt: string, arg: any): Promise<void> {
+  async run (evt: string, payload: any): Promise<void> {
+    const { linkContents, newTab } = payload
+
     // Determine if the file should be created, if it can't be found. For this
     // we need both the respective preferences setting and an auto-search
     // command.
-    const autoCreate = Boolean(global.config.get('zkn.autoCreateLinkedFiles'))
+    const autoCreate: boolean = global.config.get('zkn.autoCreateLinkedFiles')
+    const customDir: string = global.config.get('zkn.customDirectory')
 
     const idRE = getIDRE(true)
     let file = null
@@ -43,20 +46,20 @@ export default class ForceOpen extends ZettlrCommand {
     // First, let's see if what we got looks like an ID, or not. If it looks
     // like an ID, attempt to match it that way, else try to search for a
     // filename.
-    if (idRE.test(arg)) {
+    if (idRE.test(linkContents)) {
       // It's an ID
-      file = this._app.getFileSystem().findExact(arg, 'id')
+      file = this._app.getFileSystem().findExact(linkContents, 'id')
     } else {
       // It's a filename -- now check if an extension is given (likely not)
-      if (FILETYPES.includes(path.extname(arg))) {
+      if (FILETYPES.includes(path.extname(linkContents))) {
         // file ending given
-        file = this._app.getFileSystem().findExact(arg, 'name')
+        file = this._app.getFileSystem().findExact(linkContents, 'name')
       } else {
         // No file ending given, so let's test all allowed. The filetypes are
         // sorted by probability (first .md, then .markdown), to reduce the
         // amount of time spent on the tree.
         for (const type of FILETYPES) {
-          file = this._app.getFileSystem().findExact((arg as string) + type, 'name')
+          file = this._app.getFileSystem().findExact((linkContents as string) + type, 'name')
           if (file !== null) {
             break
           }
@@ -66,11 +69,13 @@ export default class ForceOpen extends ZettlrCommand {
 
     // Now we have a file (if not, create a new one if the user wishes so)
     if (file != null) {
-      await this._app.getDocumentManager().openFile(file.path)
-    } else if (autoCreate) {
+      await this._app.getDocumentManager().openFile(file.path, newTab)
+    } else if (autoCreate && customDir !== '') {
       // Call the file-new command on the application, which'll do all
       // necessary steps for us.
-      await this._app.runCommand('file-new', { name: arg })
+      await this._app.runCommand('file-new', { name: linkContents, path: customDir })
+    } else if (autoCreate && customDir === '') {
+      await this._app.runCommand('file-new', { name: linkContents })
     }
   }
 }

@@ -22,12 +22,19 @@
         >
         </clr-icon>
       </div>
-      {{ tab.label }}
+      <!--
+        Below's if-statement makes sure that on Windows, where the tabs are
+        rather wide, we only display the labels when the overall window width
+        is greater than at least 80px per tab
+      -->
+      <template v-if="currentWindowWidth > 80 * tabs.length || platform !== 'win32'">
+        {{ tab.label }}
+      </template>
     </button>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -44,7 +51,10 @@
  * END HEADER
  */
 
-export default {
+import { defineComponent, PropType } from 'vue'
+import { WindowTab } from '@dts/renderer/window'
+
+export default defineComponent({
   name: 'WindowTabbar',
   props: {
     marginTop: {
@@ -52,8 +62,8 @@ export default {
       default: '0px'
     },
     tabs: {
-      type: Array,
-      default: function () { return [] }
+      type: Array as PropType<WindowTab[]>,
+      required: true
     },
     label: {
       type: String,
@@ -63,15 +73,29 @@ export default {
   emits: ['tab'],
   data: function () {
     return {
-      currentTab: 0
+      currentTab: 0,
+      // The following are required to hide tab labels on win32 w/ narrow windows
+      currentWindowWidth: window.innerWidth,
+      platform: process.platform
     }
   },
   watch: {
     currentTab: function () {
       this.$emit('tab', this.currentTab)
     }
+  },
+  mounted () {
+    window.addEventListener('resize', this.onWindowResize)
+  },
+  destroyed () {
+    window.removeEventListener('resize', this.onWindowResize)
+  },
+  methods: {
+    onWindowResize (event: UIEvent) {
+      this.currentWindowWidth = window.innerWidth
+    }
   }
-}
+})
 </script>
 
 <style lang="less">

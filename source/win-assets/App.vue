@@ -48,6 +48,7 @@ import CustomCSS from './CustomCSS.vue'
 import SnippetsTab from './SnippetsTab.vue'
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
+import { WindowTab } from '@dts/renderer/window'
 
 export default defineComponent({
   components: {
@@ -83,7 +84,7 @@ export default defineComponent({
           id: 'tab-snippets-control',
           icon: 'pinboard'
         }
-      ],
+      ] as WindowTab[],
       currentTab: 0
     }
   },

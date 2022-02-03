@@ -80,8 +80,9 @@ import { trans } from '@common/i18n-renderer'
 import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
 import md5 from 'md5'
+import { PlatformPath } from '@dts/renderer/path'
 
-const path = (window as any).path
+const path: PlatformPath = (window as any).path
 const ipcRenderer: IpcRenderer = (window as any).ipc
 const clipboard = (window as any).clipboard
 

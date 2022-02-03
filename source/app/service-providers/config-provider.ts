@@ -16,13 +16,12 @@
 import fs from 'fs'
 import path from 'path'
 import EventEmitter from 'events'
-import ZettlrValidation from '@common/zettlr-validation'
+import { ValidationRule, VALIDATE_RULES, VALIDATE_PROPERTIES } from './assets/config-validation'
 import { app, ipcMain } from 'electron'
 import ignoreFile from '@common/util/ignore-file'
 import safeAssign from '@common/util/safe-assign'
 import isDir from '@common/util/is-dir'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
-import RULES from '@common/validation.json'
 import getConfigTemplate from './assets/get-config-template'
 import enumDictFiles from '@common/util/enum-dict-files'
 
@@ -93,9 +92,8 @@ export default class ConfigProvider extends EventEmitter {
     this.checkPaths()
 
     // Boot up the validation rules
-    for (const key in RULES) {
-      // @ts-expect-error TODO: Somehow TSLint doesn't like this
-      this._rules.push(new ZettlrValidation(key, RULES[key]))
+    for (let i = 0; i < VALIDATE_RULES.length; i++) {
+      this._rules.push(new ValidationRule(VALIDATE_RULES[i], VALIDATE_PROPERTIES[i]))
     }
 
     // Put a global setter and getter for config keys into the globals.

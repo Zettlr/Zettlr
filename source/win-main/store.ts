@@ -18,9 +18,11 @@ import { StoreOptions, createStore, Store } from 'vuex'
 import sanitizeHtml from 'sanitize-html'
 import md2html from '@common/util/md-to-html'
 import sort from '../main/modules/fsal/util/sort'
-import { DirMeta } from '../main/modules/fsal/types'
+import { CodeFileMeta, DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
+import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
+import { PlatformPath } from '@dts/renderer/path'
 
-const path = (window as any).path
+const path: PlatformPath = (window as any).path
 const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
 
 interface FSALEvent {
@@ -161,6 +163,70 @@ function configToArrayMapper (config: any): any {
   return arr
 }
 
+/**
+ * Declare the Vuex store used in the MainWindow
+ */
+export interface ZettlrState {
+  /**
+   * Contains the full file tree that is loaded into the app
+   */
+  fileTree: Array<MDFileMeta|CodeFileMeta|DirMeta>
+  /**
+   * Contains the last update timestamp from main
+   */
+  lastFiletreeUpdate: number
+  /**
+   * Contains the currently selected directory
+   */
+  selectedDirectory: DirMeta|null
+  /**
+   * Contains the currently active File in the editor
+   */
+  activeFile: MDFileMeta|null
+  /**
+   * Contains all open files in the editor
+   */
+  openFiles: MDFileMeta[]
+  /**
+   * Contains coloured tags that can be managed in the tag manager
+   */
+  colouredTags: ColouredTag[]
+  /**
+   * Contains all tags across all files loaded into Zettlr
+   */
+  tagDatabase: TagDatabase[]
+  /**
+   * Contains a list of suggested tags for the current active file.
+   */
+  tagSuggestions: string[]
+  /**
+   * Holds all configuration options. These need to be stored here separately
+   * to make use of the reactivity of Vue. We'll basically be binding the config
+   * listener to this store state. It's basically a dictionary for quick access.
+   */
+  config: any
+  /**
+   * Info about the currently active document
+   */
+  activeDocumentInfo: DocumentInfo|null
+  /**
+   * Modified files are stored here (only the paths, though)
+   */
+  modifiedDocuments: string[]
+  /**
+   * Contains the current table of contents of the active document
+   */
+  tableOfContents: any|null
+  /**
+   * Citation keys to be found within the current document
+   */
+  citationKeys: string[]
+  /**
+   * All CSL items available in the currently loaded database
+   */
+  cslItems: any[]
+}
+
 const config: StoreOptions<ZettlrState> = {
   state () {
     return {
@@ -181,7 +247,7 @@ const config: StoreOptions<ZettlrState> = {
     }
   },
   getters: {
-    file: state => (filePath: string, searchAttachments = false) => {
+    file: state => (filePath: string, searchAttachments = false): MDFileMeta|CodeFileMeta|OtherFileMeta|DirMeta|null => {
       return findPathDescriptor(filePath, state.fileTree, searchAttachments)
     }
   },

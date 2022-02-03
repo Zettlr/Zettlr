@@ -38,11 +38,6 @@ export default function (): any {
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.hide_dirs'),
-          model: 'hideDirs'
-        },
-        {
-          type: 'checkbox',
           label: trans('dialog.preferences.always_reload_files'),
           model: 'alwaysReloadFiles'
         },
@@ -65,13 +60,13 @@ export default function (): any {
         },
         {
           type: 'time',
-          label: 'Start dark mode at',
+          label: trans('dialog.preferences.dark_mode_schedule.start'),
           model: 'autoDarkModeStart',
           inline: true
         },
         {
           type: 'time',
-          label: 'End dark mode at',
+          label: trans('dialog.preferences.dark_mode_schedule.end'),
           model: 'autoDarkModeEnd',
           inline: true
         }
@@ -86,6 +81,22 @@ export default function (): any {
             'expanded': trans('dialog.preferences.filemanager_expanded'),
             'combined': trans('dialog.preferences.filemanager_combined')
           }
+        },
+        {
+          type: 'radio',
+          label: trans('dialog.preferences.filename_display.label'),
+          model: 'fileNameDisplay',
+          options: {
+            'filename': trans('dialog.preferences.filename_display.filename_only'),
+            'title': trans('dialog.preferences.filename_display.title'),
+            'heading': trans('dialog.preferences.filename_display.heading'),
+            'title+heading': trans('dialog.preferences.filename_display.title_heading')
+          }
+        },
+        {
+          type: 'checkbox',
+          label: trans('dialog.preferences.display_markdown_file_extensions'),
+          model: 'display.markdownFileExtensions'
         }
       ],
       [

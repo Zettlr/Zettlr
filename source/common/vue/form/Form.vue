@@ -12,6 +12,7 @@
           v-bind:label="field.label"
           v-bind:name="field.model"
           v-bind:reset="field.reset"
+          v-bind:info="field.info"
           v-bind:inline="field.inline"
           v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
         ></TextInput>
@@ -51,7 +52,18 @@
           v-bind:label="field.label"
           v-bind:reset="field.reset"
           v-bind:name="field.model"
+          v-bind:directory="false"
           v-bind:filter="field.filter"
+          v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
+        ></FileInput>
+        <FileInput
+          v-if="field.type === 'directory'"
+          v-bind:key="f_idx"
+          v-bind:model-value="getModelValue(field.model)"
+          v-bind:label="field.label"
+          v-bind:reset="field.reset"
+          v-bind:name="field.model"
+          v-bind:directory="true"
           v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
         ></FileInput>
         <CheckboxInput
@@ -78,6 +90,7 @@
           v-bind:model-value="getModelValue(field.model)"
           v-bind:label="field.label"
           v-bind:name="field.model"
+          v-bind:disabled="field.disabled"
           v-bind:options="field.options"
           v-on:update:model-value="$emit('update:modelValue', field.model, $event)"
         ></RadioInput>

@@ -1,4 +1,3 @@
-/* global CodeMirror define */
 /**
  * @ignore
  * BEGIN HEADER
@@ -14,6 +13,9 @@
  *
  * END HEADER
  */
+
+import { startState as _startState, copyState as _copyState, Pass, defineMode, getMode } from 'codemirror'
+import generateRegexForHighlightMode from '../util/generate-regex-for-highlight-mode'
 
 const highlightingModes = {
   'text/javascript': {
@@ -212,222 +214,208 @@ const highlightingModes = {
     'mode': 'octave',
     'selectors': ['octave']
   }
-};
+}
 
-(function (mod) {
-  if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
-    mod(require('codemirror/lib/codemirror'))
-  } else if (typeof define === 'function' && define.amd) { // AMD
-    define(['codemirror/lib/codemirror'], mod)
-  } else { // Plain browser env
-    mod(CodeMirror)
-  }
-})(function (CodeMirror) {
-  'use strict'
+/*  This function is a copy of CodeMirror.multiplexingMode with a small modification made to
+    the token function.  CodeMirror's multiplexing mode addon involves a brute force check of
+    every internal mode object, and when these checks are regular expressions on long lines
+    they can take a very long amount of time to complete.
 
-  const generateRegexForHighlightMode = require('../util/generate-regex-for-highlight-mode').default
+    However, Zettlr's use case is unique, because all but a few of the modes have an opening
+    regular expression that contains triple backticks (```).  This modified multiplexer takes
+    advantage of that commonality to eliminate the bulk of the checks.
+*/
+let zettlrMultiplexer = function (outer /*, others */) {
+  // Others should be {open, close, mode [, delimStyle] [, innerStyle]} objects
+  let others = Array.prototype.slice.call(arguments, 1)
 
-  /*  This function is a copy of CodeMirror.multiplexingMode with a small modification made to
-      the token function.  CodeMirror's multiplexing mode addon involves a brute force check of
-      every internal mode object, and when these checks are regular expressions on long lines
-      they can take a very long amount of time to complete.
-
-      However, Zettlr's use case is unique, because all but a few of the modes have an opening
-      regular expression that contains triple backticks (```).  This modified multiplexer takes
-      advantage of that commonality to eliminate the bulk of the checks.
-  */
-  let zettlrMultiplexer = function (outer /*, others */) {
-    // Others should be {open, close, mode [, delimStyle] [, innerStyle]} objects
-    let others = Array.prototype.slice.call(arguments, 1)
-
-    function indexOf (string, pattern, from, returnEnd) {
-      if (typeof pattern === 'string') {
-        const found = string.indexOf(pattern, from)
-        return returnEnd && found > -1 ? found + pattern.length : found
-      }
-      const m = pattern.exec(from ? string.slice(from) : string)
-      return m ? m.index + from + (returnEnd ? m[0].length : 0) : -1
+  function indexOf (string, pattern, from, returnEnd) {
+    if (typeof pattern === 'string') {
+      const found = string.indexOf(pattern, from)
+      return returnEnd && found > -1 ? found + pattern.length : found
     }
+    const m = pattern.exec(from ? string.slice(from) : string)
+    return m ? m.index + from + (returnEnd ? m[0].length : 0) : -1
+  }
 
-    return {
-      startState: function () {
-        return {
-          outer: CodeMirror.startState(outer),
-          innerActive: null,
-          inner: null
-        }
-      },
+  return {
+    startState: function () {
+      return {
+        outer: _startState(outer),
+        innerActive: null,
+        inner: null
+      }
+    },
 
-      copyState: function (state) {
-        return {
-          outer: CodeMirror.copyState(outer, state.outer),
-          innerActive: state.innerActive,
-          inner: state.innerActive && CodeMirror.copyState(state.innerActive.mode, state.inner)
-        }
-      },
+    copyState: function (state) {
+      return {
+        outer: _copyState(outer, state.outer),
+        innerActive: state.innerActive,
+        inner: state.innerActive && _copyState(state.innerActive.mode, state.inner)
+      }
+    },
 
-      /*  This token function has been modified from the version that can be found at
-          https://github.com/codemirror/CodeMirror/blob/master/addon/mode/multiplex.js
-          by performing a check to see if the stream content (the line being tokenized)
-          contains three backticks in a row.  If the line does not contain these backticks
-          we can guarantee that all of the syntax highlighting regular expressions which
-          require `{3} will fail, and so there is no need to perform the expensive check
-          on them.  We know that indexOf will return -1.
+    /*  This token function has been modified from the version that can be found at
+        https://github.com/codemirror/CodeMirror/blob/master/addon/mode/multiplex.js
+        by performing a check to see if the stream content (the line being tokenized)
+        contains three backticks in a row.  If the line does not contain these backticks
+        we can guarantee that all of the syntax highlighting regular expressions which
+        require `{3} will fail, and so there is no need to perform the expensive check
+        on them.  We know that indexOf will return -1.
 
-          The only other component is to know which modes can take advantage of the
-          backtick knowledge.  We mark these modes with a .backTicks property.
-      */
-      token: function (stream, state) {
-        if (!state.innerActive) {
-          let cutOff = Infinity
-          let oldContent = stream.string
+        The only other component is to know which modes can take advantage of the
+        backtick knowledge.  We mark these modes with a .backTicks property.
+    */
+    token: function (stream, state) {
+      if (!state.innerActive) {
+        let cutOff = Infinity
+        let oldContent = stream.string
 
-          // Check if the stream contains triple backticks ```
-          let hasBackticks = oldContent.includes('```')
+        // Check if the stream contains triple backticks ```
+        let hasBackticks = oldContent.includes('```')
 
-          for (let i = 0; i < others.length; ++i) {
-            let other = others[i]
+        for (let i = 0; i < others.length; ++i) {
+          let other = others[i]
 
-            // If we do not have the triple backticks in this line AND the mode requires the
-            // triple backticks in its open pattern, we know that indexOf will return -1.
-            // Because stream.pos does not appear to ever naturally take the value of -1, none
-            // of the case statements inside the rest of the for loop will be triggered. Thus
-            // we can safely abort this cycle of the loop.
-            if (!hasBackticks && other.backTicks) {
-              continue
+          // If we do not have the triple backticks in this line AND the mode requires the
+          // triple backticks in its open pattern, we know that indexOf will return -1.
+          // Because stream.pos does not appear to ever naturally take the value of -1, none
+          // of the case statements inside the rest of the for loop will be triggered. Thus
+          // we can safely abort this cycle of the loop.
+          if (!hasBackticks && other.backTicks) {
+            continue
+          }
+
+          const found = indexOf(oldContent, other.open, stream.pos)
+          if (found === stream.pos) {
+            if (!other.parseDelimiters) stream.match(other.open)
+            state.innerActive = other
+
+            // Get the outer indent, making sure to handle CodeMirror.Pass
+            let outerIndent = 0
+            if (outer.indent) {
+              const possibleOuterIndent = outer.indent(state.outer, '', '')
+              if (possibleOuterIndent !== Pass) outerIndent = possibleOuterIndent
             }
 
-            const found = indexOf(oldContent, other.open, stream.pos)
-            if (found === stream.pos) {
-              if (!other.parseDelimiters) stream.match(other.open)
-              state.innerActive = other
-
-              // Get the outer indent, making sure to handle CodeMirror.Pass
-              let outerIndent = 0
-              if (outer.indent) {
-                const possibleOuterIndent = outer.indent(state.outer, '', '')
-                if (possibleOuterIndent !== CodeMirror.Pass) outerIndent = possibleOuterIndent
-              }
-
-              state.inner = CodeMirror.startState(other.mode, outerIndent)
-              return other.delimStyle && (other.delimStyle + ' ' + other.delimStyle + '-open')
-            } else if (found !== -1 && found < cutOff) {
-              cutOff = found
-            }
+            state.inner = _startState(other.mode, outerIndent)
+            return other.delimStyle && (other.delimStyle + ' ' + other.delimStyle + '-open')
+          } else if (found !== -1 && found < cutOff) {
+            cutOff = found
           }
-
-          if (cutOff !== Infinity) stream.string = oldContent.slice(0, cutOff)
-          const outerToken = outer.token(stream, state.outer)
-          if (cutOff !== Infinity) stream.string = oldContent
-          return outerToken
-        } else {
-          const curInner = state.innerActive
-          const oldContent = stream.string
-          if (!curInner.close && stream.sol()) {
-            state.innerActive = state.inner = null
-            return this.token(stream, state)
-          }
-          const found = curInner.close ? indexOf(oldContent, curInner.close, stream.pos, curInner.parseDelimiters) : -1
-          if (found === stream.pos && !curInner.parseDelimiters) {
-            stream.match(curInner.close)
-            state.innerActive = state.inner = null
-            return curInner.delimStyle && (curInner.delimStyle + ' ' + curInner.delimStyle + '-close')
-          }
-          if (found > -1) stream.string = oldContent.slice(0, found)
-          let innerToken = curInner.mode.token(stream, state.inner)
-          if (found > -1) stream.string = oldContent
-
-          if (found === stream.pos && curInner.parseDelimiters) {
-            state.innerActive = state.inner = null
-          }
-
-          if (curInner.innerStyle) {
-            if (innerToken) innerToken = innerToken + ' ' + curInner.innerStyle
-            else innerToken = curInner.innerStyle
-          }
-
-          return innerToken
         }
-      },
 
-      indent: function (state, textAfter, line) {
-        const mode = state.innerActive ? state.innerActive.mode : outer
-        if (!mode.indent) return CodeMirror.Pass
-        return mode.indent(state.innerActive ? state.inner : state.outer, textAfter, line)
-      },
-
-      blankLine: function (state) {
-        const mode = state.innerActive ? state.innerActive.mode : outer
-        if (mode.blankLine) {
-          mode.blankLine(state.innerActive ? state.inner : state.outer)
+        if (cutOff !== Infinity) stream.string = oldContent.slice(0, cutOff)
+        const outerToken = outer.token(stream, state.outer)
+        if (cutOff !== Infinity) stream.string = oldContent
+        return outerToken
+      } else {
+        const curInner = state.innerActive
+        const oldContent = stream.string
+        if (!curInner.close && stream.sol()) {
+          state.innerActive = state.inner = null
+          return this.token(stream, state)
         }
-        if (!state.innerActive) {
-          for (let i = 0; i < others.length; ++i) {
-            const other = others[i]
-            if (other.open === '\n') {
-              state.innerActive = other
-              state.inner = CodeMirror.startState(other.mode, mode.indent ? mode.indent(state.outer, '', '') : 0)
-            }
-          }
-        } else if (state.innerActive.close === '\n') {
+        const found = curInner.close ? indexOf(oldContent, curInner.close, stream.pos, curInner.parseDelimiters) : -1
+        if (found === stream.pos && !curInner.parseDelimiters) {
+          stream.match(curInner.close)
+          state.innerActive = state.inner = null
+          return curInner.delimStyle && (curInner.delimStyle + ' ' + curInner.delimStyle + '-close')
+        }
+        if (found > -1) stream.string = oldContent.slice(0, found)
+        let innerToken = curInner.mode.token(stream, state.inner)
+        if (found > -1) stream.string = oldContent
+
+        if (found === stream.pos && curInner.parseDelimiters) {
           state.innerActive = state.inner = null
         }
-      },
 
-      electricChars: outer.electricChars,
+        if (curInner.innerStyle) {
+          if (innerToken) innerToken = innerToken + ' ' + curInner.innerStyle
+          else innerToken = curInner.innerStyle
+        }
 
-      innerMode: function (state) {
-        return state.inner ? { state: state.inner, mode: state.innerActive.mode } : { state: state.outer, mode: outer }
+        return innerToken
       }
+    },
+
+    indent: function (state, textAfter, line) {
+      const mode = state.innerActive ? state.innerActive.mode : outer
+      if (!mode.indent) return Pass
+      return mode.indent(state.innerActive ? state.inner : state.outer, textAfter, line)
+    },
+
+    blankLine: function (state) {
+      const mode = state.innerActive ? state.innerActive.mode : outer
+      if (mode.blankLine) {
+        mode.blankLine(state.innerActive ? state.inner : state.outer)
+      }
+      if (!state.innerActive) {
+        for (let i = 0; i < others.length; ++i) {
+          const other = others[i]
+          if (other.open === '\n') {
+            state.innerActive = other
+            state.inner = _startState(other.mode, mode.indent ? mode.indent(state.outer, '', '') : 0)
+          }
+        }
+      } else if (state.innerActive.close === '\n') {
+        state.innerActive = state.inner = null
+      }
+    },
+
+    electricChars: outer.electricChars,
+
+    innerMode: function (state) {
+      return state.inner ? { state: state.inner, mode: state.innerActive.mode } : { state: state.outer, mode: outer }
     }
   }
+}
 
-  /**
-  * MULTIPLEX MODE: This will by default load our internal mode cascade
-  * (consisting of the zkn-mode, the spellchecker and finally the gfm
-  * mode) OR in code blocks use the respective highlighting modes.
-  * @param  {Object} config The previous configuration object
-  * @return {CodeMirrorMode}        The multiplex mode
-  */
-  CodeMirror.defineMode('multiplex', function (config) {
-    // Generate a fenced code tag detector for each mode we want to support
-    let codeModes = []
+/**
+* MULTIPLEX MODE: This will by default load our internal mode cascade
+* (consisting of the zkn-mode, the spellchecker and finally the gfm
+* mode) OR in code blocks use the respective highlighting modes.
+* @param  {Object} config The previous configuration object
+* @return {CodeMirrorMode}        The multiplex mode
+*/
+defineMode('multiplex', function (config) {
+  // Generate a fenced code tag detector for each mode we want to support
+  let codeModes = []
 
-    for (let [ mimeType, highlightingMode ] of Object.entries(highlightingModes)) {
-      codeModes.push({
-        open: generateRegexForHighlightMode(highlightingMode.selectors),
-        close: /`{3}|~{3}/,
-        mode: CodeMirror.getMode(config, mimeType),
-        delimStyle: 'formatting-code-block',
-        innerStyle: 'fenced-code',
+  for (let [ mimeType, highlightingMode ] of Object.entries(highlightingModes)) {
+    codeModes.push({
+      open: generateRegexForHighlightMode(highlightingMode.selectors),
+      close: /`{3}|~{3}/,
+      mode: getMode(config, mimeType),
+      delimStyle: 'formatting-code-block',
+      innerStyle: 'fenced-code',
 
-        // To take advantage of the modified multiplexer, we add a property here to mark that this
-        // opening regex will not be necessary if there are no triple backticks in the line being checked
-        backTicks: true
-      })
+      // To take advantage of the modified multiplexer, we add a property here to mark that this
+      // opening regex will not be necessary if there are no triple backticks in the line being checked
+      backTicks: true
+    })
+  }
+
+  return zettlrMultiplexer(
+    getMode(config, 'spellchecker'), // Default mode
+    ...codeModes,
+    {
+      open: /`{3}|~{3}/,
+      close: /`{3}|~{3}/,
+      mode: getMode(config, 'text/plain'),
+      delimStyle: 'formatting-code-block',
+      innerStyle: 'fenced-code',
+
+      // To take advantage of the modified multiplexer, we add a property here to mark that this
+      // opening regex will not be necessary if there are no triple backticks in the line being checked
+      backTicks: true
+    },
+    {
+      open: /\$\$\s*$/,
+      close: /\$\$\s*$/,
+      mode: getMode(config, { name: 'stex', inMathMode: true }),
+      delimStyle: 'formatting-code-block',
+      innerStyle: 'fenced-code multiline-equation'
     }
-
-    return zettlrMultiplexer(
-      CodeMirror.getMode(config, 'spellchecker'), // Default mode
-      ...codeModes,
-      {
-        open: /`{3}|~{3}/,
-        close: /`{3}|~{3}/,
-        mode: CodeMirror.getMode(config, 'text/plain'),
-        delimStyle: 'formatting-code-block',
-        innerStyle: 'fenced-code',
-
-        // To take advantage of the modified multiplexer, we add a property here to mark that this
-        // opening regex will not be necessary if there are no triple backticks in the line being checked
-        backTicks: true
-      },
-      {
-        open: /\$\$\s*$/,
-        close: /\$\$\s*$/,
-        mode: CodeMirror.getMode(config, { name: 'stex', inMathMode: true }),
-        delimStyle: 'formatting-code-block',
-        innerStyle: 'fenced-code multiline-equation'
-      }
-    )
-  })
+  )
 })

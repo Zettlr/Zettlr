@@ -52,7 +52,7 @@ document.addEventListener('drop', (event) => {
     }
   }
 
-  ipcRenderer.invoke('application', { command: 'handle-drop', payload: f })
+  ipcRenderer.invoke('application', { command: 'roots-add', payload: f })
     .catch(e => console.error(e))
   return false
 }, false)
