@@ -628,8 +628,8 @@ export default class Zettlr {
     return await this._windowManager.shouldOverwriteFile(filename)
   }
 
-  async askDir (): Promise<string[]> {
-    return await this._windowManager.askDir()
+  async askDir (title: string, buttonLabel: string|null): Promise<string[]> {
+    return await this._windowManager.askDir(title, null, buttonLabel)
   }
 
   async askFile (filters: FileFilter[]|null = null, multiSel: boolean = false): Promise<string[]> {

@@ -20,18 +20,22 @@ import { trans } from '@common/i18n-main'
  * Asks the user for directory path(s)
  *
  * @param   {BrowserWindow|null}  win  The window to attach to
- *
+ * @param title {string}               Title of the Window
+ * @param buttonLabel {string|null}    Label of the Button
  * @return  {Promise<string>[]}        Resolves with an array of paths
  */
-export default async function askDirectory (win: BrowserWindow|null): Promise<string[]> {
+export default async function askDirectory (win: BrowserWindow|null, title: string, buttonLabel: string|null): Promise<string[]> {
   let startDir = app.getPath('home')
 
   if (isDir(global.config.get('dialogPaths.askDirDialog'))) {
     startDir = global.config.get('dialogPaths.askDirDialog')
   }
-
+  if (buttonLabel == null) {
+    buttonLabel = trans('system.open_folder')
+  }
   const options: OpenDialogOptions = {
-    title: trans('system.open_folder'),
+    title: title,
+    buttonLabel: buttonLabel,
     defaultPath: startDir,
     properties: [
       'openDirectory',

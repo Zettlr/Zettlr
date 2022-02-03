@@ -13,7 +13,7 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { app, dialog, shell } from 'electron'
+import { app, shell } from 'electron'
 import { makeExport, getAvailableFormats } from '../modules/export'
 import { trans } from '@common/i18n-main'
 import { ExporterOptions } from '../modules/export/types'
@@ -76,13 +76,8 @@ export default class Export extends ZettlrCommand {
         exporterOptions.cwd = fileDescriptor.dir
         switch (exportTo) {
           case 'ask': {
-            const folderSelection = dialog.showOpenDialogSync({
-              properties: [ 'openDirectory', 'createDirectory' ],
-              defaultPath: fileDescriptor.path,
-              buttonLabel: trans('system.export_dialog.save'),
-              title: trans('system.export_dialog.title') + fileDescriptor.name
-            })
-            if (folderSelection === undefined) {
+            const folderSelection = await this._app.askDir(trans('system.export_dialog.title'), trans('system.export_dialog.save'))
+            if (folderSelection === undefined || folderSelection.length === 0) {
               global.log.error('[Export] Could not run exporter: Folderselection did not have a result!')
               return
             }

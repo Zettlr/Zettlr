@@ -51,6 +51,7 @@ import saveFileDialog from './dialog/save-dialog'
 import confirmRemove from './dialog/confirm-remove'
 import * as bcp47 from 'bcp-47'
 import mapFSError from './map-fs-error'
+import { trans } from '@common/i18n-main'
 
 export default class WindowManager extends EventEmitter {
   private _mainWindow: BrowserWindow|null
@@ -218,7 +219,7 @@ export default class WindowManager extends EventEmitter {
 
     ipcMain.handle('request-dir', async (event, message) => {
       const focusedWindow = BrowserWindow.getFocusedWindow()
-      let dir = await this.askDir(focusedWindow)
+      let dir = await this.askDir(trans('system.open_folder'), focusedWindow)
       return dir
     })
   }
@@ -838,11 +839,14 @@ export default class WindowManager extends EventEmitter {
     * Show the dialog for choosing a directory
     * @return {string[]} An array containing all selected paths.
     */
-  async askDir (win?: BrowserWindow|null): Promise<string[]> {
+  async askDir (title: string, win?: BrowserWindow|null, buttonLabel?: string|null): Promise<string[]> {
+    if (buttonLabel === undefined) {
+      buttonLabel = null
+    }
     if (win != null) {
-      return await askDirectoryDialog(win)
+      return await askDirectoryDialog(win, title, buttonLabel)
     } else {
-      return await askDirectoryDialog(this._mainWindow)
+      return await askDirectoryDialog(this._mainWindow, title, buttonLabel)
     }
   }
 
