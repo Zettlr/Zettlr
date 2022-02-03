@@ -45,11 +45,6 @@ export default function (): any {
           type: 'checkbox',
           label: trans('dialog.preferences.avoid_new_tabs'),
           model: 'system.avoidNewTabs'
-        },
-        {
-          type: 'checkbox',
-          label: trans('dialog.preferences.check_updates'),
-          model: 'system.checkForUpdates'
         }
       ],
       [
