@@ -27,7 +27,7 @@ import {
   DISABLE_HARDWARE_ACCELERATION,
   getCLIArgument,
   handleGeneralArguments
-} from './app/service-providers/cli-provider'
+} from '@providers/cli-provider'
 
 handleGeneralArguments()
 // Immediately after launch, check if there is already another instance of
