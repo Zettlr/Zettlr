@@ -37,27 +37,6 @@ if (!app.requestSingleInstanceLock()) {
 
 // If we reach this point, we are now booting the first instance of Zettlr.
 
-// Set up the pre-boot log
-global.preBootLog = []
-
-/**
- * This will be overwritten by the log provider, once it has booted
- */
-global.log = {
-  verbose: (message: string) => {
-    global.preBootLog.push({ 'level': 1, 'message': message })
-  },
-  info: (message: string) => {
-    global.preBootLog.push({ 'level': 2, 'message': message })
-  },
-  warning: (message: string) => {
-    global.preBootLog.push({ 'level': 3, 'message': message })
-  },
-  error: (message: string) => {
-    global.preBootLog.push({ 'level': 4, 'message': message })
-  }
-}
-
 // To show notifications properly on Windows, we must manually set the appUserModelID
 // See https://www.electronjs.org/docs/tutorial/notifications#windows
 if (process.platform === 'win32') {
@@ -83,7 +62,7 @@ if (dataDirFlag !== undefined) {
         dataDir = path.join(__dirname, '../../', dataDir)
       }
     }
-    global.log.info('[Application] Using custom data dir: ' + dataDir)
+    getServiceContainer().log.info('[Application] Using custom data dir: ' + dataDir)
     app.setPath('userData', dataDir)
     app.setAppLogsPath(path.join(dataDir, 'logs'))
   }
@@ -176,7 +155,7 @@ app.on('second-instance', (event, argv, cwd) => {
     return
   }
 
-  global.log.info('[Application] A second instance has been opened.')
+  getServiceContainer().log.info('[Application] A second instance has been opened.')
 
   // openWindow calls the appropriate function of the windowManager, which deals
   // with the nitty-gritty of actually making the main window visible.
@@ -197,7 +176,7 @@ app.on('open-file', (e, p) => {
   // The user wants to open a file -> simply handle it.
   if (zettlr !== null) {
     commands.run('roots-add', [p]).catch((err) => {
-      global.log.error('[Application] Error while adding new roots', err)
+      getServiceContainer().log.error('[Application] Error while adding new roots', err)
     })
   } else {
     // The Zettlr object has yet to be created -> cache it
@@ -210,7 +189,8 @@ app.on('open-file', (e, p) => {
  * `system.leaveAppRunning` is true or on macOS.
  */
 app.on('window-all-closed', function () {
-  const leaveAppRunning = Boolean(global.config.get('system.leaveAppRunning'))
+  const config = getServiceContainer().config
+  const leaveAppRunning = Boolean(config.get('system.leaveAppRunning'))
   if (!leaveAppRunning && process.platform !== 'darwin') {
     // On OS X it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
@@ -259,5 +239,5 @@ app.on('activate', function () {
  */
 process.on('unhandledRejection', (err: any) => {
   // Just log to console.
-  global.log.error('[Application] Unhandled rejection received', err)
+  getServiceContainer().log.error('[Application] Unhandled rejection received', err)
 })

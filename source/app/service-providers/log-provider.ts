@@ -62,9 +62,6 @@ export default class LogProvider extends ProviderContract {
     this._entryPointer = 0 // Set the log entry file pointer to zero
     this._fileLock = false // True while data is being appended to the log
 
-    // Initialise log with pre-boot messages and an initialisation message
-    this._migratePreBootLog()
-
     this.log(LogLevel.verbose, 'Log provider booting up ...', null)
 
     // Ensure message handling
@@ -177,16 +174,6 @@ export default class LogProvider extends ProviderContract {
         let toRemove = path.join(this._logPath, nextLogFile)
         await fs.unlink(toRemove)
       }
-    }
-  }
-
-  /**
-   * Migrates potential pre-boot messages to the internal log
-   */
-  _migratePreBootLog (): void {
-    for (let entry of global.preBootLog) {
-      // "level" and "message are obligatory"
-      this.log(entry.level, entry.message, {})
     }
   }
 

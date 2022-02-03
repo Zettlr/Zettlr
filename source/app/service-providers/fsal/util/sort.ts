@@ -37,7 +37,7 @@ export default function getSorter (
   fileNameDisplay: 'filename'|'title'|'heading'|'title+heading',
   appLang: string,
   whichTime: 'modtime'|'creationtime'
-): (arr: MaybeRootDescriptor[]) => MaybeRootDescriptor[] {
+): (arr: MaybeRootDescriptor[], type?: string) => MaybeRootDescriptor[] {
   return function sort (arr: MaybeRootDescriptor[], type: string = 'name-up'): MaybeRootDescriptor[] {
     // First split the array based on type
     const f: MaybeRootDescriptor[] = []

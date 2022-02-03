@@ -17,7 +17,7 @@
 import { StoreOptions, createStore, Store } from 'vuex'
 import sanitizeHtml from 'sanitize-html'
 import { getConverter } from '@common/util/md-to-html'
-import sort from '@providers/fsal/util/sort'
+import getSorter from '@providers/fsal/util/sort'
 import { CodeFileMeta, DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
 import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
 import { PlatformPath } from '@dts/renderer/path'
@@ -303,13 +303,21 @@ function getConfig (): StoreOptions<ZettlrState> {
         state.config[option] = window.config.get(option)
       },
       addToFiletree: function (state, descriptor) {
+        const sorter = getSorter(
+          state.config.sorting,
+          state.config.sortFoldersFirst,
+          state.config.fileNameDisplay,
+          state.config.appLang,
+          state.config.sortingTime
+        )
+
         if (descriptor.parent == null && !state.fileTree.includes(descriptor)) {
           // It's a root, so insert at the root level
           if (descriptor.type === 'directory') {
             reconstructTree(descriptor)
           }
           state.fileTree.push(descriptor)
-          state.fileTree = sort(state.fileTree) // Omit sorting to sort name-up
+          ;(state as any).fileTree = sorter(state.fileTree as any) // Omit sorting to sort name-up
         } else if (descriptor.parent != null) {
           const parentPath = descriptor.dir
           const parentDescriptor = findPathDescriptor(parentPath, state.fileTree)
@@ -341,7 +349,7 @@ function getConfig (): StoreOptions<ZettlrState> {
             })
           } else {
             parentDescriptor.children.push(descriptor)
-            parentDescriptor.children = sort(parentDescriptor.children, parentDescriptor.sorting)
+            parentDescriptor.children = sorter(parentDescriptor.children, parentDescriptor.sorting)
           }
         } else {
           // NOTE: This is just in case we accidentally introduce a race condition.
@@ -379,6 +387,13 @@ function getConfig (): StoreOptions<ZettlrState> {
       patchInFiletree: function (state, descriptor) {
         const attachment = isAttachment(descriptor.path)
         const ownDescriptor = findPathDescriptor(descriptor.path, state.fileTree, attachment)
+        const sorter = getSorter(
+          state.config.sorting,
+          state.config.sortFoldersFirst,
+          state.config.fileNameDisplay,
+          state.config.appLang,
+          state.config.sortingTime
+        )
 
         if (ownDescriptor === null) {
           console.error(`[Vuex::patchInFiletree] Could not find descriptor for ${descriptor.path as string}! Not patching.`)
@@ -401,10 +416,10 @@ function getConfig (): StoreOptions<ZettlrState> {
         // sure to simply re-sort it in case the sorting has changed.
         // If we have a file, update the parent instead.
         if (ownDescriptor.type === 'directory') {
-          ownDescriptor.children = sort(ownDescriptor.children, ownDescriptor.sorting)
+          ownDescriptor.children = sorter(ownDescriptor.children, ownDescriptor.sorting)
         } else if (ownDescriptor.type === 'file' && ownDescriptor.parent != null) {
           const parentDescriptor = ownDescriptor.parent
-          parentDescriptor.children = sort(parentDescriptor.children, parentDescriptor.sorting)
+          parentDescriptor.children = sorter(parentDescriptor.children, parentDescriptor.sorting)
         }
       },
       lastFiletreeUpdate: function (state, payload) {

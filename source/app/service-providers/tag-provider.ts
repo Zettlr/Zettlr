@@ -18,6 +18,7 @@ import { app, ipcMain } from 'electron'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
 import ProviderContract from './provider-contract'
+import LogProvider from './log-provider'
 
 interface InternalTagRecord {
   text: string

@@ -17,6 +17,7 @@ import { promises as fs } from 'fs'
 import path from 'path'
 import { app, ipcMain } from 'electron'
 import ProviderContract from './provider-contract'
+import LogProvider from './log-provider'
 
 /**
  * ZettlrStats works like the ZettlrConfig object, only with a different file.

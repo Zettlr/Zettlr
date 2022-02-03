@@ -16,6 +16,7 @@ import { app, BrowserWindow, dialog, SaveDialogOptions, SaveDialogReturnValue } 
 import path from 'path'
 import isDir from '@common/util/is-dir'
 import { trans } from '@common/i18n-main'
+import LogProvider from '@providers/log-provider'
 
 /**
 * Displays a dialog to prompt the user for a file path

@@ -79,7 +79,7 @@ export default class AppServiceContainer {
     this._dictionaryProvider = new DictionaryProvider(this._logProvider, this._configProvider)
     this._citeprocProvider = new CiteprocProvider(this._logProvider, this._configProvider, this._notificationProvider, this._windowProvider)
 
-    this._fsal = new FSAL(this._logProvider, this._configProvider, this._targetProvider)
+    this._fsal = new FSAL(this._logProvider, this._configProvider, this._targetProvider, this._tagProvider, this._linkProvider)
     this._targetProvider = new TargetProvider(this._logProvider, this._fsal)
     this._documentManager = new DocumentManager(this._logProvider, this._configProvider, this._recentDocsProvider, this._citeprocProvider)
     this._commandProvider = new CommandProvider(this)

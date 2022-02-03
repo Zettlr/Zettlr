@@ -18,6 +18,7 @@ import path from 'path'
 import { app } from 'electron'
 import ProviderContract from './provider-contract'
 import FSAL from './fsal'
+import LogProvider from './log-provider'
 
 export interface WritingTarget {
   path: string

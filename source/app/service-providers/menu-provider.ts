@@ -29,6 +29,7 @@ import ProviderContract from './provider-contract'
 import RecentDocumentsProvider from './recent-docs-provider'
 import WindowProvider from './window-provider'
 import CommandProvider from './commands'
+import LogProvider from './log-provider'
 
 // Types from the global.d.ts of the window-register module
 interface CheckboxRadioItem {

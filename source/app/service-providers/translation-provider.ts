@@ -22,6 +22,7 @@ import enumDictFiles from '@common/util/enum-dict-files'
 import enumLangFiles from '@common/util/enum-lang-files'
 import ProviderContract from './provider-contract'
 import getLanguageFile from '@common/util/get-language-file'
+import LogProvider from './log-provider'
 
 const TRANSLATION_API_URL = 'https://translate.zettlr.com/api/languages'
 

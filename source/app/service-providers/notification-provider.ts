@@ -17,6 +17,7 @@ import {
   Notification
 } from 'electron'
 import path from 'path'
+import LogProvider from './log-provider'
 import ProviderContract from './provider-contract'
 
 export default class NotificationProvider extends ProviderContract {

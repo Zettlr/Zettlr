@@ -11,6 +11,7 @@
  * END HEADER
  */
 
+import LogProvider from '@providers/log-provider'
 import { protocol } from 'electron'
 
 export default function registerCustomProtocols (logger: LogProvider): void {

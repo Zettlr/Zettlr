@@ -16,6 +16,7 @@ import { ipcMain } from 'electron'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import path from 'path'
 import ProviderContract from './provider-contract'
+import LogProvider from './log-provider'
 
 /**
  * This class manages the coloured tags of the app. It reads the tags on each

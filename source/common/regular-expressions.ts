@@ -186,8 +186,8 @@ export function getHighlightRE (): RegExp {
  *
  * @return  {RegExp}              The compiled Regular Expression
  */
-export function getIDRE (exact: boolean = false): RegExp {
-  let idRegExpString: string = global.config.get('zkn.idRE')
+export function getIDRE (idGenPattern: string, exact: boolean = false): RegExp {
+  let idRegExpString: string = idGenPattern
   // Make sure the ID definitely has at least one
   // capturing group to not produce errors.
   if (!(/\(.+?\)/.test(idRegExpString))) {

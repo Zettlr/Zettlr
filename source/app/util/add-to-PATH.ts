@@ -12,6 +12,8 @@
  * END HEADER
  */
 
+import LogProvider from '@providers/log-provider'
+
 /**
  * Adds the given path to PATH.
  *

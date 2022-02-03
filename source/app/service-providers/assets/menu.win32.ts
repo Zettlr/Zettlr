@@ -20,6 +20,7 @@ import path from 'path'
 import RecentDocumentsProvider from '@providers/recent-docs-provider'
 import WindowProvider from '@providers/window-provider'
 import CommandProvider from '@providers/commands'
+import LogProvider from '@providers/log-provider'
 
 export default function getMenu (
   logger: LogProvider,

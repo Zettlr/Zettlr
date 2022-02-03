@@ -19,6 +19,7 @@ import { promises as fs } from 'fs'
 import YAML from 'yaml'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import ProviderContract from './provider-contract'
+import LogProvider from './log-provider'
 
 export default class AssetsProvider extends ProviderContract {
   /**

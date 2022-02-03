@@ -52,6 +52,7 @@ import confirmRemove from './dialog/confirm-remove'
 import * as bcp47 from 'bcp-47'
 import mapFSError from './map-fs-error'
 import ProviderContract from '@providers/provider-contract'
+import LogProvider from '@providers/log-provider'
 
 export default class WindowProvider extends ProviderContract {
   private _mainWindow: BrowserWindow|null

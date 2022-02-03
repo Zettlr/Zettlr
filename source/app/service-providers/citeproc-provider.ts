@@ -27,6 +27,7 @@ import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import ProviderContract from './provider-contract'
 import NotificationProvider from './notification-provider'
 import WindowProvider from './window-provider'
+import LogProvider from './log-provider'
 
 interface DatabaseRecord {
   path: string

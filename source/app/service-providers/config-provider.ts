@@ -25,6 +25,7 @@ import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import getConfigTemplate from './assets/get-config-template'
 import enumDictFiles from '@common/util/enum-dict-files'
 import ProviderContract from './provider-contract'
+import LogProvider from './log-provider'
 
 const ZETTLR_VERSION = app.getVersion()
 

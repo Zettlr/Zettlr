@@ -13,6 +13,7 @@
  * END HEADER
  */
 
+import LogProvider from '@providers/log-provider'
 import { BrowserWindow } from 'electron'
 import path from 'path'
 

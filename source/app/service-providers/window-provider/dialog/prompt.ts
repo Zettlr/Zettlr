@@ -14,6 +14,7 @@
 
 import { BrowserWindow, dialog, MessageBoxOptions } from 'electron'
 import { trans } from '@common/i18n-main'
+import LogProvider from '@providers/log-provider'
 
 /**
  * Displays a prompt with information

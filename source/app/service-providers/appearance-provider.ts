@@ -18,6 +18,7 @@ import {
   nativeTheme,
   systemPreferences
 } from 'electron'
+import LogProvider from './log-provider'
 import ProviderContract from './provider-contract'
 
 /**

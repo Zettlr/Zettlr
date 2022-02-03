@@ -12,6 +12,7 @@
  * END HEADER
  */
 
+import LogProvider from '@providers/log-provider'
 import {
   BrowserWindow,
   BrowserWindowConstructorOptions
