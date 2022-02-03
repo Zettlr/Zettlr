@@ -81,10 +81,12 @@ interface Application {
  */
 declare module global {
   // Translation data necessary to facilitate internationalisation
+  import { BootLog } from '@dts/main/log-provider'
   var i18n: any
   var i18nRawData: any
   var i18nFallback: any
   var i18nFallbackRawData: any
+  var preBootLog: BootLog
 }
 
 declare interface Window {

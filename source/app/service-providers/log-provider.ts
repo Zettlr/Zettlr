@@ -17,6 +17,7 @@ import { promises as fs } from 'fs'
 import { app, ipcMain } from 'electron'
 import chalk from 'chalk'
 import ProviderContract from './provider-contract'
+import { LogMessage } from '@dts/main/log-provider'
 const hasProp = Object.prototype.hasOwnProperty
 
 /**
