@@ -293,17 +293,18 @@ export default class Zettlr {
     })
 
     // Finally, initiate a first check for updates
-    await this._app.updates.check()
+    const checkUpdates: boolean = this._app.config.get('system.checkForUpdates')
+    if (checkUpdates) {
+      await this._app.updates.check()
 
-    if (this._app.updates.applicationUpdateAvailable()) {
-      const { tagName } = this._app.updates.getUpdateState()
-      this._app.log.info(`Update available: ${tagName}`)
-      this._app.notifications.show(trans('dialog.update.new_update_available', tagName), 'Updates', () => {
-        // The user has clicked the notification, so we can show the update window here
-        this._app.windows.showUpdateWindow()
-      })
-    } else {
-      this._app.notifications.show(trans('dialog.update.no_new_update'))
+      if (this._app.updates.applicationUpdateAvailable()) {
+        const { tagName } = this._app.updates.getUpdateState()
+        this._app.log.info(`Update available: ${tagName}`)
+        this._app.notifications.show(trans('dialog.update.new_update_available', tagName), undefined, () => {
+          // The user has clicked the notification, so we can show the update window here
+          this._app.windows.showUpdateWindow()
+        })
+      }
     }
   }
 

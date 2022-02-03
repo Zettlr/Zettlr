@@ -60,6 +60,11 @@ export default function (): any {
           model: 'system.leaveAppRunning',
           disabled: process.env.ZETTLR_IS_TRAY_SUPPORTED === '0',
           info: process.env.ZETTLR_TRAY_ERROR
+        },
+        {
+          type: 'checkbox',
+          label: trans('dialog.preferences.check_updates'),
+          model: 'system.checkForUpdates'
         }
       ],
       [
