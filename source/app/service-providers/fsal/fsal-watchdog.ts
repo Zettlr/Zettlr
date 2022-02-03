@@ -26,6 +26,7 @@ import isAttachment from '@common/util/is-attachment'
 import { ignoreDirs as IGNORE_DIR_REGEXP } from '@common/data.json'
 
 import { WatchdogEvent } from '@dts/main/fsal'
+import LogProvider from '@providers/log-provider'
 
 export default class FSALWatchdog extends EventEmitter {
   private _booting: boolean

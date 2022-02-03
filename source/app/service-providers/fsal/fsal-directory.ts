@@ -35,6 +35,8 @@ import {
   codeFileExtensions,
   mdFileExtensions
 } from '@common/get-file-extensions'
+import TagProvider from '@providers/tag-provider'
+import TargetProvider from '@providers/target-provider'
 
 /**
  * Determines what will be written to file (.ztr-directory)
@@ -74,8 +76,15 @@ type SortMethod = 'name-up'|'name-down'|'time-up'|'time-down'
  *
  * @param   {DirDescriptor}  dir  A directory descriptor
  */
-function sortChildren (dir: DirDescriptor): void {
-  dir.children = sortDir(dir.children, dir._settings.sorting)
+function sortChildren (
+  dir: DirDescriptor,
+  sortingType: 'natural'|'ascii',
+  sortFoldersFirst: boolean,
+  fileNameDisplay: 'filename'|'title'|'heading'|'title+heading',
+  appLang: string,
+  whichTime: 'modtime'|'creationtime'
+): void {
+  dir.children = sortDir(dir.children, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime, dir._settings.sorting)
 }
 
 /**
@@ -181,7 +190,21 @@ async function parseSettings (dir: DirDescriptor): Promise<void> {
  *
  * @return  {Promise<DirDescriptor>}           Resolves with the directory descriptor
  */
-export async function parse (currentPath: string, cache: FSALCache, parent: DirDescriptor|null): Promise<DirDescriptor> {
+export async function parse (
+  currentPath: string,
+  cache: FSALCache,
+  linkStart: string,
+  linkEnd: string,
+  tags: TagProvider,
+  links: LinkProvider,
+  targets: TargetProvider,
+  sortingType: 'natural'|'ascii',
+  sortFoldersFirst: boolean,
+  fileNameDisplay: 'filename'|'title'|'heading'|'title+heading',
+  appLang: string,
+  whichTime: 'modtime'|'creationtime',
+  parent: DirDescriptor|null
+): Promise<DirDescriptor> {
   // Prepopulate
   let dir: DirDescriptor = {
     parent: parent,
@@ -235,15 +258,15 @@ export async function parse (currentPath: string, cache: FSALCache, parent: DirD
       if (isCode) {
         dir.children.push(await FSALCodeFile.parse(absolutePath, cache, dir))
       } else if (isMD) {
-        dir.children.push(await FSALFile.parse(absolutePath, cache, dir))
+        dir.children.push(await FSALFile.parse(absolutePath, cache, linkStart, linkEnd, targets, links, tags, dir))
       }
     } else if (isDir(absolutePath)) {
-      dir.children.push(await parse(absolutePath, cache, dir))
+      dir.children.push(await parse(absolutePath, cache, linkStart, linkEnd, tags, links, targets, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime, dir))
     }
   }
 
   // Finally sort and return the directory object
-  sortChildren(dir)
+  sortChildren(dir, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime)
   return dir
 }
 
@@ -291,7 +314,15 @@ export async function setSetting (dirObject: DirDescriptor, settings: any): Prom
  * @param   {DirDescriptor}  dirObject  The directory object
  * @param   {string}         method     The sorting method
  */
-export async function sort (dirObject: DirDescriptor, method?: SortMethod): Promise<void> {
+export async function sort (
+  dirObject: DirDescriptor,
+  sortingType: 'natural'|'ascii',
+  sortFoldersFirst: boolean,
+  fileNameDisplay: 'filename'|'title'|'heading'|'title+heading',
+  appLang: string,
+  whichTime: 'modtime'|'creationtime',
+  method?: SortMethod
+): Promise<void> {
   // If the caller omits the method, it should remain unchanged
   if (method === undefined) {
     method = dirObject._settings.sorting
@@ -300,7 +331,7 @@ export async function sort (dirObject: DirDescriptor, method?: SortMethod): Prom
   dirObject._settings.sorting = method
   // Persist the settings to disk
   await persistSettings(dirObject)
-  sortChildren(dirObject)
+  sortChildren(dirObject, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime)
 }
 
 /**
@@ -362,16 +393,30 @@ export async function removeProject (dirObject: DirDescriptor): Promise<void> {
  * @param   {string}         newName    The name for the new directory
  * @param   {FSALCache}      cache      The cache object
  */
-export async function create (dirObject: DirDescriptor, newName: string, cache: FSALCache): Promise<void> {
+export async function create (
+  dirObject: DirDescriptor,
+  newName: string,
+  cache: FSALCache,
+  linkStart: string,
+  linkEnd: string,
+  tags: TagProvider,
+  links: LinkProvider,
+  targets: TargetProvider,
+  sortingType: 'natural'|'ascii',
+  sortFoldersFirst: boolean,
+  fileNameDisplay: 'filename'|'title'|'heading'|'title+heading',
+  appLang: string,
+  whichTime: 'modtime'|'creationtime'
+): Promise<void> {
   if (newName.trim() === '') throw new Error('Invalid directory name provided!')
   let existingDir = dirObject.children.find(elem => elem.name === newName)
   if (existingDir !== undefined) throw new Error(`A child with name ${newName} already exists!`)
   let newPath = path.join(dirObject.path, newName)
   await fs.mkdir(newPath)
-  let newDir = await parse(newPath, cache, dirObject)
+  let newDir = await parse(newPath, cache, linkStart, linkEnd, tags, links, targets, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime, dirObject)
   // Add the new directory to the source dir
   dirObject.children.push(newDir)
-  sortChildren(dirObject)
+  sortChildren(dirObject, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime)
 }
 
 /**
@@ -381,7 +426,21 @@ export async function create (dirObject: DirDescriptor, newName: string, cache: 
  * @param   {any}            options    Options, containing a name and content property
  * @param   {FSALCache}      cache      The FSAL cache to cache the resulting file
  */
-export async function createFile (dirObject: DirDescriptor, options: any, cache: FSALCache): Promise<void> {
+export async function createFile (
+  dirObject: DirDescriptor,
+  options: any,
+  cache: FSALCache,
+  linkStart: string,
+  linkEnd: string,
+  targets: TargetProvider,
+  links: LinkProvider,
+  tags: TagProvider,
+  sortingType: 'natural'|'ascii',
+  sortFoldersFirst: boolean,
+  fileNameDisplay: 'filename'|'title'|'heading'|'title+heading',
+  appLang: string,
+  whichTime: 'modtime'|'creationtime'
+): Promise<void> {
   const filename = options.name
   const content = options.content
   const fullPath = path.join(dirObject.path, filename)
@@ -390,10 +449,10 @@ export async function createFile (dirObject: DirDescriptor, options: any, cache:
     const file = await FSALCodeFile.parse(fullPath, cache, dirObject)
     dirObject.children.push(file)
   } else {
-    const file = await FSALFile.parse(fullPath, cache, dirObject)
+    const file = await FSALFile.parse(fullPath, cache, linkStart, linkEnd, targets, links, tags, dirObject)
     dirObject.children.push(file)
   }
-  sortChildren(dirObject)
+  sortChildren(dirObject, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime)
 }
 
 /**
@@ -407,22 +466,40 @@ export async function createFile (dirObject: DirDescriptor, options: any, cache:
  *
  * @return  {Promise<DirDescriptor>}    Resolves with the new directory descriptor.
  */
-export async function rename (dirObject: DirDescriptor, newName: string, cache: FSALCache): Promise<DirDescriptor> {
+export async function rename (
+  dirObject: DirDescriptor,
+  newName: string,
+  linkStart: string,
+  linkEnd: string,
+  tags: TagProvider,
+  links: LinkProvider,
+  targets: TargetProvider,
+  sortingType: 'natural'|'ascii',
+  sortFoldersFirst: boolean,
+  fileNameDisplay: 'filename'|'title'|'heading'|'title+heading',
+  appLang: string,
+  whichTime: 'modtime'|'creationtime',
+  cache: FSALCache
+): Promise<DirDescriptor> {
   // Check some things beforehand
-  if (newName.trim() === '') throw new Error('Invalid directory name provided!')
+  if (newName.trim() === '') {
+    throw new Error('Invalid directory name provided!')
+  }
   let parentNames = await fs.readdir(path.dirname(dirObject.path))
-  if (parentNames.includes(newName)) throw new Error(`Directory ${newName} already exists!`)
+  if (parentNames.includes(newName)) {
+    throw new Error(`Directory ${newName} already exists!`)
+  }
 
   let newPath = path.join(path.dirname(dirObject.path), newName)
   await fs.rename(dirObject.path, newPath)
   // Rescan the new dir to get all new file information
-  let newDir = await parse(newPath, cache, dirObject.parent)
+  let newDir = await parse(newPath, cache, linkStart, linkEnd, tags, links, targets, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime, dirObject.parent)
   if (dirObject.parent !== null) {
     // Exchange the directory in the parent
     let index = dirObject.parent.children.indexOf(dirObject)
     dirObject.parent.children.splice(index, 1, newDir)
     // Now sort the parent
-    sortChildren(dirObject.parent)
+    sortChildren(dirObject.parent, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime)
   }
 
   // Return the new directory -- either to replace it in the filetree, or,
@@ -464,7 +541,21 @@ export async function remove (dirObject: DirDescriptor, deleteOnFail: boolean): 
  * @param   {DirDescriptor}  targetDir     The target directory of this operation.
  * @param   {FSALCache}      cache         The cache object.
  */
-export async function move (sourceObject: AnyDescriptor, targetDir: DirDescriptor, cache: FSALCache): Promise<void> {
+export async function move (
+  sourceObject: AnyDescriptor,
+  targetDir: DirDescriptor,
+  linkStart: string,
+  linkEnd: string,
+  tags: TagProvider,
+  links: LinkProvider,
+  targets: TargetProvider,
+  sortingType: 'natural'|'ascii',
+  sortFoldersFirst: boolean,
+  fileNameDisplay: 'filename'|'title'|'heading'|'title+heading',
+  appLang: string,
+  whichTime: 'modtime'|'creationtime',
+  cache: FSALCache
+): Promise<void> {
   // Moves anything into the target. We'll use fs.rename for that.
   // Luckily, it doesn't care if it's a directory or a file, so just
   // stuff the path into that.
@@ -481,16 +572,16 @@ export async function move (sourceObject: AnyDescriptor, targetDir: DirDescripto
   // Re-read the source
   let newSource
   if (sourceObject.type === 'directory') {
-    newSource = await parse(targetPath, cache, targetDir)
+    newSource = await parse(targetPath, cache, linkStart, linkEnd, tags, links, targets, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime, targetDir)
   } else {
-    newSource = await FSALFile.parse(targetPath, cache, targetDir)
+    newSource = await FSALFile.parse(targetPath, cache, linkStart, linkEnd, targets, links, tags, targetDir)
   }
 
   // Add it to the new target
   targetDir.children.push(newSource)
 
   // Finally resort the target. Now the state should be good to go.
-  sortChildren(targetDir)
+  sortChildren(targetDir, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime)
 }
 
 export async function addAttachment (dirObject: DirDescriptor, attachmentPath: string): Promise<void> {
@@ -504,19 +595,33 @@ export function removeAttachment (dirObject: DirDescriptor, attachmentPath: stri
   dirObject.attachments.splice(idx, 1)
 }
 
-export async function addChild (dirObject: DirDescriptor, childPath: string, cache: FSALCache): Promise<void> {
+export async function addChild (
+  dirObject: DirDescriptor,
+  childPath: string,
+  linkStart: string,
+  linkEnd: string,
+  tags: TagProvider,
+  links: LinkProvider,
+  targets: TargetProvider,
+  sortingType: 'natural'|'ascii',
+  sortFoldersFirst: boolean,
+  fileNameDisplay: 'filename'|'title'|'heading'|'title+heading',
+  appLang: string,
+  whichTime: 'modtime'|'creationtime',
+  cache: FSALCache
+): Promise<void> {
   const isDirectory = isDir(childPath)
   const isCode = ALLOWED_CODE_FILES.includes(path.extname(childPath))
   const isMD = MARKDOWN_FILES.includes(path.extname(childPath))
 
   if (isDirectory) {
-    dirObject.children.push(await parse(childPath, cache, dirObject))
+    dirObject.children.push(await parse(childPath, cache, linkStart, linkEnd, tags, links, targets, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime, dirObject))
   } else if (isCode) {
     dirObject.children.push(await FSALCodeFile.parse(childPath, cache, dirObject))
   } else if (isMD) {
-    dirObject.children.push(await FSALFile.parse(childPath, cache, dirObject))
+    dirObject.children.push(await FSALFile.parse(childPath, cache, linkStart, linkEnd, targets, links, tags, dirObject))
   }
-  sortChildren(dirObject)
+  sortChildren(dirObject, sortingType, sortFoldersFirst, fileNameDisplay, appLang, whichTime)
 }
 
 export function removeChild (dirObject: DirDescriptor, childPath: string): void {

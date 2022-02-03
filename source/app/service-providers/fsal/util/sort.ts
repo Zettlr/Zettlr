@@ -11,9 +11,9 @@
  * END HEADER
  */
 
-import asciiSorting from './sort-ascii'
-import naturalSorting from './sort-natural'
-import dateSorting from './sort-date'
+import getAsciiSorter from './sort-ascii'
+import getNaturalSorter from './sort-natural'
+import getDateSorter from './sort-date'
 
 export interface RequiredSortingProps {
   type: string
@@ -30,16 +30,24 @@ export interface RequiredSortingProps {
 * @param {string} [type='name-up'] The type of sorting - can be time-up, time-down, name-up or name-down
 * @return {T[]}     The sorted array
 */
-export default function sort<T extends RequiredSortingProps> (arr: T[], type: string = 'name-up'): T[] {
+export default function sort<T extends RequiredSortingProps> (
+  arr: T[],
+  sortingType: 'natural'|'ascii',
+  sortFoldersFirst: boolean,
+  fileNameDisplay: 'filename'|'title'|'heading'|'title+heading',
+  appLang: string,
+  whichTime: 'modtime'|'creationtime',
+  type: string = 'name-up'
+): T[] {
   // First split the array based on type
   const f: T[] = []
   const d: T[] = []
 
   // Should we use natural sorting or ascii?
-  const useNatural = global.config.get('sorting') === 'natural'
+  const useNatural = sortingType === 'natural'
 
   // Write in the sortingFunc whatever we should be using
-  const sortingFunc = (useNatural) ? naturalSorting : asciiSorting
+  const sortingFunc = (useNatural) ? getNaturalSorter(fileNameDisplay, appLang) : getAsciiSorter(fileNameDisplay)
 
   // Split up the children list
   for (const c of arr) {
@@ -66,15 +74,15 @@ export default function sort<T extends RequiredSortingProps> (arr: T[], type: st
       f.sort(sortingFunc).reverse()
       break
     case 'time-up':
-      f.sort(dateSorting)
+      f.sort(getDateSorter(whichTime))
       break
     case 'time-down':
-      f.sort(dateSorting).reverse()
+      f.sort(getDateSorter(whichTime)).reverse()
       break
   }
 
   // Return sorted array files -> directories
-  if (global.config.get('sortFoldersFirst') === true) {
+  if (sortFoldersFirst) {
     return d.concat(f)
   } else {
     return f.concat(d)

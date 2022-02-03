@@ -29,7 +29,8 @@ import extractBOM from './util/extract-bom'
 import extractTags from './util/extract-tags'
 import extractLinks from './util/extract-links'
 import { SearchTerm } from '@dts/common/search'
-import { WritingTarget } from '@providers/target-provider'
+import TargetProvider, { WritingTarget } from '@providers/target-provider'
+import TagProvider from '@providers/tag-provider'
 
 // Here are all supported variables for Pandoc:
 // https://pandoc.org/MANUAL.html#variables
@@ -208,7 +209,16 @@ export function metadata (fileObject: MDFileDescriptor): MDFileMeta {
  *
  * @return  {Promise<MDFileDescriptor>}            Resolves with a file descriptor
  */
-export async function parse (filePath: string, cache: FSALCache|null, linkStart: string, linkEnd: string, parent: DirDescriptor|null = null): Promise<MDFileDescriptor> {
+export async function parse (
+  filePath: string,
+  cache: FSALCache|null,
+  linkStart: string,
+  linkEnd: string,
+  targets: TargetProvider,
+  links: LinkProvider,
+  tags: TagProvider,
+  parent: DirDescriptor|null = null
+): Promise<MDFileDescriptor> {
   // First of all, prepare the file descriptor
   let file: MDFileDescriptor = {
     parent: null, // We have to set this AFTERWARDS, as safeAssign() will traverse down this parent property, thereby introducing a circular structure
@@ -271,11 +281,11 @@ export async function parse (filePath: string, cache: FSALCache|null, linkStart:
   }
 
   // Get the target, if applicable
-  file.target = global.targets.get(file.path)
+  file.target = targets.get(file.path)
 
   // Finally, report the tags
-  global.links.report(file.path, file.links, file.id)
-  global.tags.report(file.tags, file.path)
+  links.report(file.path, file.links, file.id)
+  tags.report(file.tags, file.path)
 
   return file
 }
@@ -339,17 +349,25 @@ export async function hasChangedOnDisk (fileObject: MDFileDescriptor): Promise<b
  *
  * @return  {Promise<void>}                 Resolves upon save.
  */
-export async function save (fileObject: MDFileDescriptor, content: string, linkStart: string, linkEnd: string, cache: FSALCache|null): Promise<void> {
+export async function save (
+  fileObject: MDFileDescriptor,
+  content: string,
+  linkStart: string,
+  linkEnd: string,
+  links: LinkProvider,
+  tags: TagProvider,
+  cache: FSALCache|null
+): Promise<void> {
   // Make sure to retain the BOM if applicable
   await fs.writeFile(fileObject.path, fileObject.bom + content)
   // Afterwards, retrieve the now current modtime
   await updateFileMetadata(fileObject)
   // Make sure to keep the file object itself as well as the tags updated
-  global.links.remove(fileObject.path, fileObject.id)
-  global.tags.remove(fileObject.tags, fileObject.path)
+  links.remove(fileObject.path, fileObject.id)
+  tags.remove(fileObject.tags, fileObject.path)
   parseFileContents(fileObject, content, linkStart, linkEnd)
-  global.tags.report(fileObject.tags, fileObject.path)
-  global.links.report(fileObject.path, fileObject.links, fileObject.id)
+  tags.report(fileObject.tags, fileObject.path)
+  links.report(fileObject.path, fileObject.links, fileObject.id)
   fileObject.modified = false // Always reset the modification flag.
   if (cache !== null) {
     cacheFile(fileObject, cache)
@@ -365,7 +383,15 @@ export async function save (fileObject: MDFileDescriptor, content: string, linkS
  *
  * @return  {Promise<void>}                 Resolves upon success
  */
-export async function rename (fileObject: MDFileDescriptor, cache: FSALCache|null, newName: string): Promise<void> {
+export async function rename (
+  fileObject: MDFileDescriptor,
+  newName: string,
+  linkStart: string,
+  linkEnd: string,
+  tags: TagProvider,
+  links: LinkProvider,
+  cache: FSALCache|null
+): Promise<void> {
   let oldPath = fileObject.path
   let newPath = path.join(fileObject.dir, newName)
   await fs.rename(oldPath, newPath)
@@ -375,7 +401,7 @@ export async function rename (fileObject: MDFileDescriptor, cache: FSALCache|nul
   fileObject.name = newName
   // Afterwards, reparse the file (this is important if the user switches from
   // an ID in the filename to an ID in the file, or vice versa)
-  await reparseChangedFile(fileObject, cache)
+  await reparseChangedFile(fileObject, linkStart, linkEnd, tags, links, cache)
 }
 
 /**
@@ -421,16 +447,23 @@ export function markClean (fileObject: MDFileDescriptor): void {
   fileObject.modified = false
 }
 
-export async function reparseChangedFile (fileObject: MDFileDescriptor, linkStart: string, linkEnd: string, cache: FSALCache|null): Promise<void> {
+export async function reparseChangedFile (
+  fileObject: MDFileDescriptor,
+  linkStart: string,
+  linkEnd: string,
+  tags: TagProvider,
+  links: LinkProvider,
+  cache: FSALCache|null
+): Promise<void> {
   // Literally the same as the save() function only without prior writing of contents
   const contents = await load(fileObject)
   await updateFileMetadata(fileObject)
   // Make sure to keep the file object itself as well as the tags updated
-  global.tags.remove(fileObject.tags, fileObject.path)
-  global.links.remove(fileObject.path, fileObject.id)
+  tags.remove(fileObject.tags, fileObject.path)
+  links.remove(fileObject.path, fileObject.id)
   parseFileContents(fileObject, contents, linkStart, linkEnd)
-  global.tags.report(fileObject.tags, fileObject.path)
-  global.links.report(fileObject.path, fileObject.links, fileObject.id)
+  tags.report(fileObject.tags, fileObject.path)
+  links.report(fileObject.path, fileObject.links, fileObject.id)
   fileObject.modified = false // Always reset the modification flag.
   if (cache !== null) {
     cacheFile(fileObject, cache)

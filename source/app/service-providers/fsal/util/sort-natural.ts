@@ -14,50 +14,46 @@
 
 import { RequiredSortingProps } from './sort'
 
-type FileNameDisplay = 'filename'|'title'|'heading'|'title+heading'
-
 /**
  * Helper function to sort files using a collator
  * @param  {ZettlrFile} a A ZettlrFile exposing a name property
  * @param  {ZettlrFile} b A ZettlrFile exposing a name property
  * @return {number}   0, 1, or -1, depending upon what the comparision yields.
  */
-export default function sortNatural <T extends RequiredSortingProps> (a: T, b: T): number {
-  let aSort = a.name.toLowerCase()
-  let bSort = b.name.toLowerCase()
+export default function getNaturalSorter (fileNameDisplay: 'filename'|'title'|'heading'|'title+heading', appLang: string): (a: any, b: any) => number {
+  return function sortNatural <T extends RequiredSortingProps> (a: T, b: T): number {
+    let aSort = a.name.toLowerCase()
+    let bSort = b.name.toLowerCase()
 
-  const aTitle = (a.type === 'file') ? typeof a.frontmatter?.title === 'string' : false
-  const bTitle = (b.type === 'file') ? typeof b.frontmatter?.title === 'string' : false
-  const aHeading = (a.type === 'file') ? a.firstHeading != null : false
-  const bHeading = (b.type === 'file') ? b.firstHeading != null : false
+    const aTitle = (a.type === 'file') ? typeof a.frontmatter?.title === 'string' : false
+    const bTitle = (b.type === 'file') ? typeof b.frontmatter?.title === 'string' : false
+    const aHeading = (a.type === 'file') ? a.firstHeading != null : false
+    const bHeading = (b.type === 'file') ? b.firstHeading != null : false
 
-  const fileNameDisplay: FileNameDisplay = global.config.get('fileNameDisplay')
+    const useH1 = fileNameDisplay.includes('heading')
+    const useTitle = fileNameDisplay.includes('title')
 
-  const useH1 = fileNameDisplay.includes('heading')
-  const useTitle = fileNameDisplay.includes('title')
+    // Use a heading level 1 if applicable, and, optionally, overwrite this with
+    // the YAML frontmatter title variable
 
-  // Use a heading level 1 if applicable, and, optionally, overwrite this with
-  // the YAML frontmatter title variable
+    if (aHeading && useH1) {
+      aSort = a.firstHeading as string
+    }
 
-  if (aHeading && useH1) {
-    aSort = a.firstHeading as string
+    if (bHeading && useH1) {
+      bSort = b.firstHeading as string
+    }
+
+    if (aTitle && useTitle) {
+      aSort = a.frontmatter.title
+    }
+
+    if (bTitle && useTitle) {
+      bSort = b.frontmatter.title
+    }
+
+    const coll = new Intl.Collator([ appLang, 'en' ], { 'numeric': true })
+
+    return coll.compare(aSort, bSort)
   }
-
-  if (bHeading && useH1) {
-    bSort = b.firstHeading as string
-  }
-
-  if (aTitle && useTitle) {
-    aSort = a.frontmatter.title
-  }
-
-  if (bTitle && useTitle) {
-    bSort = b.frontmatter.title
-  }
-
-  const languagePreferences = [ global.config.get('appLang'), 'en' ]
-
-  let coll = new Intl.Collator(languagePreferences, { 'numeric': true })
-
-  return coll.compare(aSort, bSort)
 }

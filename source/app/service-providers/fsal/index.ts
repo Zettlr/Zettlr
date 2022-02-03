@@ -44,6 +44,8 @@ import generateStats from './util/generate-stats'
 import ProviderContract from '@providers/provider-contract'
 import { app } from 'electron'
 import TargetProvider from '@providers/target-provider'
+import LogProvider from '@providers/log-provider'
+import TagProvider from '@providers/tag-provider'
 
 // Re-export all interfaces necessary for other parts of the code (Document Manager)
 export {
@@ -81,13 +83,19 @@ export default class FSAL extends ProviderContract {
   private readonly _emitter: EventEmitter
   private readonly _logger: LogProvider
   private readonly _config: ConfigProvider
+  private readonly _tags: TagProvider
+  private readonly _links: LinkProvider
+  private readonly _targets: TargetProvider
 
-  constructor (logger: LogProvider, config: ConfigProvider, targets: TargetProvider) {
+  constructor (logger: LogProvider, config: ConfigProvider, targets: TargetProvider, tags: TagProvider, links: LinkProvider) {
     super()
     this._logger = logger
 
     this._logger.verbose('FSAL booting up ...')
     this._config = config
+    this._tags = tags
+    this._links = links
+    this._targets = targets
 
     const cachedir = app.getPath('userData')
     this._cache = new FSALCache(logger, path.join(cachedir, 'fsal/cache'))
@@ -225,6 +233,8 @@ export default class FSAL extends ProviderContract {
     //    forwards only applicable events.
     // 3. Whatever this change entails, we did not incur it ourselves and MUST
     //    therefore handle it.
+    const linkStart = this._config.get('zkn.linkStart')
+    const linkEnd = this._config.get('zkn.linkEnd')
 
     if ([ 'unlink', 'unlinkDir' ].includes(event)) {
       // A file or a directory has been removed.
@@ -277,7 +287,21 @@ export default class FSAL extends ProviderContract {
       if (isAttachment(changedPath)) {
         await FSALDir.addAttachment(parentDescriptor, changedPath)
       } else {
-        await FSALDir.addChild(parentDescriptor, changedPath, this._cache)
+        await FSALDir.addChild(
+          parentDescriptor,
+          changedPath,
+          linkStart,
+          linkEnd,
+          this._tags,
+          this._links,
+          this._targets,
+          this._config.get('sorting'),
+          this._config.get('sortFoldersFirst'),
+          this._config.get('fileNameDisplay'),
+          this._config.get('appLang'),
+          this._config.get('sortingTime'),
+          this._cache
+        )
       }
       // Finally, add a history event of what has happened
       this._recordFiletreeChange('add', changedPath)
@@ -287,9 +311,7 @@ export default class FSAL extends ProviderContract {
       if (affectedDescriptor.type === 'code') {
         await FSALCodeFile.reparseChangedFile(affectedDescriptor, this._cache)
       } else if (affectedDescriptor.type === 'file') {
-        const linkStart = this._config.get('zkn.linkStart')
-        const linkEnd = this._config.get('zkn.linkEnd')
-        await FSALFile.reparseChangedFile(affectedDescriptor, linkStart, linkEnd, this._cache)
+        await FSALFile.reparseChangedFile(affectedDescriptor, linkStart, linkEnd, this._tags, this._links, this._cache)
       } else if (affectedDescriptor.type === 'other') {
         await FSALAttachment.reparseChangedFile(affectedDescriptor)
       }
@@ -394,7 +416,7 @@ export default class FSAL extends ProviderContract {
     } else if (isMD) {
       const linkStart = this._config.get('zkn.linkStart')
       const linkEnd = this._config.get('zkn.linkEnd')
-      let file = await FSALFile.parse(filePath, this._cache, linkStart, linkEnd)
+      let file = await FSALFile.parse(filePath, this._cache, linkStart, linkEnd, this._targets, this._links, this._tags)
       this._state.filetree.push(file)
       this._recordFiletreeChange('add', filePath)
     }
@@ -405,9 +427,25 @@ export default class FSAL extends ProviderContract {
    * @param {String} dirPath The dir to be loaded
    */
   private async _loadDir (dirPath: string): Promise<void> {
+    const linkStart = this._config.get('zkn.linkStart')
+    const linkEnd = this._config.get('zkn.linkEnd')
     // Loads a directory
     const start = Date.now()
-    const dir = await FSALDir.parse(dirPath, this._cache, null)
+    const dir = await FSALDir.parse(
+      dirPath,
+      this._cache,
+      linkStart,
+      linkEnd,
+      this._tags,
+      this._links,
+      this._targets,
+      this._config.get('sorting'),
+      this._config.get('sortFoldersFirst'),
+      this._config.get('fileNameDisplay'),
+      this._config.get('appLang'),
+      this._config.get('sortingTime'),
+      null
+    )
     if (Date.now() - start > 100) {
       // Only log if it took longer than 100ms
       this._logger.warning(`[FSAL Directory] Path ${dirPath} took ${Date.now() - start}ms to load.`)
@@ -469,7 +507,14 @@ export default class FSAL extends ProviderContract {
       this._logger.warning(`[FSAL] Path ${p} took ${Date.now() - start}ms to load.`)
     }
 
-    this._state.filetree = sort(this._state.filetree)
+    this._state.filetree = sort(
+      this._state.filetree,
+      this._config.get('sorting'),
+      this._config.get('sortFoldersFirst'),
+      this._config.get('fileNameDisplay'),
+      this._config.get('appLang'),
+      this._config.get('sortingTime')
+    )
 
     this._consolidateRootFiles()
 
@@ -686,7 +731,15 @@ export default class FSAL extends ProviderContract {
 
   public async sortDirectory (src: DirDescriptor, sorting?: 'time-up'|'time-down'|'name-up'|'name-down'): Promise<void> {
     this._fsalIsBusy = true
-    await FSALDir.sort(src, sorting)
+    await FSALDir.sort(
+      src,
+      this._config.get('sorting'),
+      this._config.get('sortFoldersFirst'),
+      this._config.get('fileNameDisplay'),
+      this._config.get('appLang'),
+      this._config.get('sortingTime'),
+      sorting
+    )
     this._recordFiletreeChange('change', src.path)
     this._fsalIsBusy = false
     this._afterRemoteChange()
@@ -694,13 +747,29 @@ export default class FSAL extends ProviderContract {
 
   public async createFile (src: DirDescriptor, options: any): Promise<void> {
     this._fsalIsBusy = true
+    const linkStart = this._config.get('zkn.linkStart')
+    const linkEnd = this._config.get('zkn.linkEnd')
     // This action needs the cache because it'll parse a file
     // NOTE: Generates an add-event
     this._watchdog.ignoreEvents([{
       'event': 'add',
       'path': path.join(src.path, options.name)
     }])
-    await FSALDir.createFile(src, options, this._cache)
+    await FSALDir.createFile(
+      src,
+      options,
+      this._cache,
+      linkStart,
+      linkEnd,
+      this._targets,
+      this._links,
+      this._tags,
+      this._config.get('sorting'),
+      this._config.get('sortFoldersFirst'),
+      this._config.get('fileNameDisplay'),
+      this._config.get('appLang'),
+      this._config.get('sortingTime')
+    )
     await this.sortDirectory(src)
     this._recordFiletreeChange('add', path.join(src.path, options.name))
     this._fsalIsBusy = false
@@ -723,7 +792,9 @@ export default class FSAL extends ProviderContract {
     const oldPath = src.path // Cache the old path
 
     if (src.type === 'file') {
-      await FSALFile.rename(src, this._cache, newName)
+      const linkStart = this._config.get('zkn.linkStart')
+      const linkEnd = this._config.get('zkn.linkEnd')
+      await FSALFile.rename(src, newName, linkStart, linkEnd, this._tags, this._links, this._cache)
     } else if (src.type === 'code') {
       await FSALCodeFile.rename(src, this._cache, newName)
     }
@@ -734,7 +805,14 @@ export default class FSAL extends ProviderContract {
 
     // Now we need to re-sort the parent directory
     if (src.parent !== null) {
-      await FSALDir.sort(src.parent) // Omit sorting
+      await FSALDir.sort(
+        src.parent,
+        this._config.get('sorting'),
+        this._config.get('sortFoldersFirst'),
+        this._config.get('fileNameDisplay'),
+        this._config.get('appLang'),
+        this._config.get('sortingTime')
+      ) // Omit sorting
       this._recordFiletreeChange('change', src.parent.path)
     }
 
@@ -832,6 +910,8 @@ export default class FSAL extends ProviderContract {
 
   public async createDir (src: DirDescriptor, newName: string): Promise<void> {
     this._fsalIsBusy = true
+    const linkStart = this._config.get('zkn.linkStart')
+    const linkEnd = this._config.get('zkn.linkEnd')
     // Parses a directory and henceforth needs the cache
     // NOTE: Generates 1x add
     const absolutePath = path.join(src.path, newName)
@@ -846,7 +926,21 @@ export default class FSAL extends ProviderContract {
       'path': absolutePath
     }])
 
-    await FSALDir.create(src, newName, this._cache)
+    await FSALDir.create(
+      src,
+      newName,
+      this._cache,
+      linkStart,
+      linkEnd,
+      this._tags,
+      this._links,
+      this._targets,
+      this._config.get('sorting'),
+      this._config.get('sortFoldersFirst'),
+      this._config.get('fileNameDisplay'),
+      this._config.get('appLang'),
+      this._config.get('sortingTime')
+    )
     this._recordFiletreeChange('add', absolutePath)
 
     this._fsalIsBusy = false
@@ -855,6 +949,9 @@ export default class FSAL extends ProviderContract {
 
   public async renameDir (src: DirDescriptor, newName: string): Promise<void> {
     this._fsalIsBusy = true
+
+    const linkStart = this._config.get('zkn.linkStart')
+    const linkEnd = this._config.get('zkn.linkEnd')
 
     // Compute the paths to be replaced
     const oldPrefix = path.join(src.dir, src.name)
@@ -890,7 +987,21 @@ export default class FSAL extends ProviderContract {
 
     // Now concat the removes in reverse direction and ignore them
     this._watchdog.ignoreEvents(adds.concat(removes))
-    const newDir = await FSALDir.rename(src, newName, this._cache)
+    const newDir = await FSALDir.rename(
+      src,
+      newName,
+      linkStart,
+      linkEnd,
+      this._tags,
+      this._links,
+      this._targets,
+      this._config.get('sorting'),
+      this._config.get('sortFoldersFirst'),
+      this._config.get('fileNameDisplay'),
+      this._config.get('appLang'),
+      this._config.get('sortingTime'),
+      this._cache
+    )
 
     // NOTE: With regard to our filetree, it's just one unlink and one add because
     // consumers just need to remove the directory and then re-add it again.
@@ -901,7 +1012,14 @@ export default class FSAL extends ProviderContract {
       // Exchange the directory in the filetree
       let index = this._state.filetree.indexOf(src)
       this._state.filetree.splice(index, 1, newDir)
-      this._state.filetree = sort(this._state.filetree)
+      this._state.filetree = sort(
+        this._state.filetree,
+        this._config.get('sorting'),
+        this._config.get('sortFoldersFirst'),
+        this._config.get('fileNameDisplay'),
+        this._config.get('appLang'),
+        this._config.get('sortingTime')
+      )
     }
 
     // Cleanup: Re-set anything within the state that has changed due to this
@@ -953,6 +1071,9 @@ export default class FSAL extends ProviderContract {
 
   public async move (src: MaybeRootDescriptor, target: DirDescriptor): Promise<void> {
     this._fsalIsBusy = true
+    const linkStart = this._config.get('zkn.linkStart')
+    const linkEnd = this._config.get('zkn.linkEnd')
+
     // NOTE: Generates 1x unlink, 1x add for each child, src and on the target!
     let activeFileUpdateNeeded = false
     let newOpenDir
@@ -989,7 +1110,21 @@ export default class FSAL extends ProviderContract {
     // Now perform the actual move. What the action will do is re-read the
     // new source again, and insert it into the target, so the filetree is
     // good to go afterwards.
-    await FSALDir.move(src, target, this._cache)
+    await FSALDir.move(
+      src,
+      target,
+      linkStart,
+      linkEnd,
+      this._tags,
+      this._links,
+      this._targets,
+      this._config.get('sorting'),
+      this._config.get('sortFoldersFirst'),
+      this._config.get('fileNameDisplay'),
+      this._config.get('appLang'),
+      this._config.get('sortingTime'),
+      this._cache
+    )
 
     this._recordFiletreeChange('remove', src.path)
     this._recordFiletreeChange('add', path.join(target.path, src.name))
