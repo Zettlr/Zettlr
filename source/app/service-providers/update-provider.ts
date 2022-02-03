@@ -31,6 +31,7 @@ import isFile from '@common/util/is-file'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import ProviderContract from './provider-contract'
 import NotificationProvider from './notification-provider'
+import CommandProvider from './commands'
 
 const CUR_VER = app.getVersion()
 const REPO_URL = 'https://zettlr.com/api/releases/latest'
@@ -43,12 +44,14 @@ export default class UpdateProvider extends ProviderContract {
 
   private readonly _logger: LogProvider
   private readonly _config: ConfigProvider
+  private readonly _commands: CommandProvider
   private readonly _notifications: NotificationProvider
 
-  constructor (logger: LogProvider, config: ConfigProvider, notifications: NotificationProvider) {
+  constructor (logger: LogProvider, config: ConfigProvider, notifications: NotificationProvider, commands: CommandProvider) {
     super()
     this._logger = logger
     this._config = config
+    this._commands = commands
     this._notifications = notifications
     this._logger.verbose('Update provider booting up ...')
 
@@ -356,7 +359,7 @@ export default class UpdateProvider extends ProviderContract {
       this._logger.info(`Successfully downloaded ${this._updateState.name}. Transferred ${this._updateState.size_downloaded} bytes overall.`)
       this._notifications.show(`Download of ${this._updateState.name} successful!`, 'Update', () => {
         // The user has clicked the notification, so we can show the update window here
-        global.application.runCommand('open-update-window')
+        this._commands.run('open-update-window', undefined)
           .catch(e => this._logger.error(String(e.message), e))
       })
     })

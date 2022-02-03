@@ -17,11 +17,13 @@ import { trans } from '@common/i18n-main'
 import path from 'path'
 import RecentDocumentsProvider from '@providers/recent-docs-provider'
 import WindowProvider from '@providers/window-provider'
+import CommandProvider from '@providers/commands'
 
 export default function getMenu (
   logger: LogProvider,
   config: ConfigProvider,
   recentDocs: RecentDocumentsProvider,
+  commands: CommandProvider,
   windows: WindowProvider,
   getCheckboxState: (id: string, init: boolean) => boolean,
   setCheckboxState: (id: string, val: boolean) => void
@@ -111,7 +113,7 @@ export default function getMenu (
               label: 'Markdown', // TODO: Translate
               accelerator: 'Cmd+N',
               click: function (menuitem, focusedWindow) {
-                global.application.runCommand('new-unsaved-file', { type: 'md' })
+                commands.run('new-unsaved-file', { type: 'md' })
                   .catch(e => logger.error(String(e.message), e))
               }
             },
@@ -119,7 +121,7 @@ export default function getMenu (
               id: 'menu.new_tex_file',
               label: 'TeX', // TODO: Translate
               click: function (menuitem, focusedWindow) {
-                global.application.runCommand('new-unsaved-file', { type: 'tex' })
+                commands.run('new-unsaved-file', { type: 'tex' })
                   .catch(e => logger.error(String(e.message), e))
               }
             },
@@ -127,7 +129,7 @@ export default function getMenu (
               id: 'menu.new_yaml_file',
               label: 'YAML', // TODO: Translate
               click: function (menuitem, focusedWindow) {
-                global.application.runCommand('new-unsaved-file', { type: 'yaml' })
+                commands.run('new-unsaved-file', { type: 'yaml' })
                   .catch(e => logger.error(String(e.message), e))
               }
             },
@@ -135,7 +137,7 @@ export default function getMenu (
               id: 'menu.new_json_file',
               label: 'JSON', // TODO: Translate
               click: function (menuitem, focusedWindow) {
-                global.application.runCommand('new-unsaved-file', { type: 'json' })
+                commands.run('new-unsaved-file', { type: 'json' })
                   .catch(e => logger.error(String(e.message), e))
               }
             }
@@ -157,7 +159,7 @@ export default function getMenu (
           label: trans('menu.open'),
           accelerator: 'Cmd+O',
           click: function (menuitem, focusedWindow) {
-            global.application.runCommand('root-open-files')
+            commands.run('root-open-files', [])
               .catch(e => logger.error(String(e.message), e))
           }
         },
@@ -166,7 +168,7 @@ export default function getMenu (
           label: trans('menu.open_workspace'),
           accelerator: 'Cmd+Shift+O',
           click: function (menuitem, focusedWindow) {
-            global.application.runCommand('root-open-workspaces')
+            commands.run('root-open-workspaces', [])
               .catch(e => logger.error(String(e.message), e))
           }
         },
@@ -199,7 +201,7 @@ export default function getMenu (
           label: 'Previous file',
           accelerator: 'Cmd+[',
           click: function (menuitem, focusedWindow) {
-            global.application.runCommand('previous-file')
+            commands.run('previous-file', undefined)
               .catch(e => {
                 logger.error(`[Menu] Error selecting previous file: ${e.message as string}`, e)
               })
@@ -210,7 +212,7 @@ export default function getMenu (
           label: 'Next file',
           accelerator: 'Cmd+]',
           click: function (menuitem, focusedWindow) {
-            global.application.runCommand('next-file')
+            commands.run('next-file', undefined)
               .catch(e => {
                 logger.error(`[Menu] Error selecting next file: ${e.message as string}`, e)
               })
@@ -223,7 +225,7 @@ export default function getMenu (
           id: 'menu.import_files',
           label: trans('menu.import_files'),
           click: function (menuItem, focusedWindow) {
-            global.application.runCommand('import-files')
+            commands.run('import-files', undefined)
               .catch(e => logger.error('[Menu Provider] Cannot import files', e))
           }
         },
@@ -240,7 +242,7 @@ export default function getMenu (
           label: trans('menu.print'),
           accelerator: 'Cmd+P',
           click: function (menuItem, focusedWindow) {
-            global.application.runCommand('print')
+            commands.run('print', undefined)
               .catch(e => logger.error(String(e.message), e))
           }
         },
@@ -251,7 +253,7 @@ export default function getMenu (
           id: 'menu.import_lang_file',
           label: trans('menu.import_lang_file'),
           click: function (menuItem, focusedWindow) {
-            global.application.runCommand('import-lang-file')
+            commands.run('import-lang-file', undefined)
               .catch(e => logger.error('[Menu Provider] Cannot import translation', e))
           }
         },
@@ -672,7 +674,7 @@ export default function getMenu (
           id: 'menu.open_tutorial',
           label: trans('menu.open_tutorial'),
           click: function (menuitem, focusedWindow) {
-            global.application.runCommand('tutorial-open')
+            commands.run('tutorial-open', undefined)
               .catch(e => logger.error(String(e.message), e))
           }
         },
@@ -681,7 +683,7 @@ export default function getMenu (
           label: trans('menu.update'),
           click: function (menuitem, focusedWindow) {
             // Immediately open the window instead of first checking
-            global.application.runCommand('open-update-window')
+            commands.run('open-update-window', undefined)
               .catch(e => logger.error(String(e.message), e))
           }
         }

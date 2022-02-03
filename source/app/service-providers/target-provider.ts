@@ -17,6 +17,7 @@ import EventEmitter from 'events'
 import path from 'path'
 import { app } from 'electron'
 import ProviderContract from './provider-contract'
+import FSAL from './fsal'
 
 /**
  * This class manages the writing targets of directories and files. It reads the
@@ -26,13 +27,15 @@ export default class TargetProvider extends ProviderContract {
   private readonly _file: string
   private readonly _emitter: EventEmitter
   private readonly _logger: LogProvider
+  private readonly _fsal: FSAL
   private _targets: WritingTarget[]
   /**
    * Create the instance on program start and initially load the targets.
    */
-  constructor (logger: LogProvider) {
+  constructor (logger: LogProvider, fsal: FSAL) {
     super()
     this._logger = logger
+    this._fsal = fsal
     this._logger.verbose('Target provider booting up')
 
     this._file = path.join(app.getPath('userData'), 'targets.json')
@@ -152,7 +155,7 @@ export default class TargetProvider extends ProviderContract {
       // Now check if the file still exists. At this point, writing targets set
       // in a Zettlr 1.x branch will be lost because target.path will evaluate
       // to undefined.
-      if (global.application.findFile(target.path) === null) {
+      if (this._fsal.findFile(target.path) === null) {
         continue
       }
 

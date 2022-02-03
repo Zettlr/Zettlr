@@ -188,52 +188,6 @@ export default class CiteprocProvider extends ProviderContract {
 
     this._engine = this._makeEngine(style) // Holds the CSL engine
 
-    // Create a global object so that we can easily pass rendered citations
-    global.citeproc = {
-      getCitation: (citations: CiteItem[], composite: boolean) => {
-        return this.getCitation(citations, composite)
-      },
-      updateItems: (idList: string[]) => {
-        return this.updateItems(idList)
-      },
-      makeBibliography: () => {
-        return this.makeBibliography()
-      },
-      hasBibTexAttachments: () => {
-        if (this._databaseIdx < 0) {
-          return false
-        }
-
-        const db = this._databases[this._databaseIdx]
-        return Object.keys(db.bibtexAttachments).length > 0
-      },
-      getBibTexAttachments: (id: string) => {
-        return this._databases[this._databaseIdx].bibtexAttachments[id]
-      },
-      loadAndSelect: async (database: string) => {
-        let db = this._databases.find((db) => db.path === database)
-
-        if (db === undefined) {
-          db = await this._loadDatabase(database)
-        }
-
-        this._selectDatabase(db.path)
-      },
-      loadMainDatabase: () => {
-        // Make sure we deselect the current one, in case there is no main library
-        // defined so that the library will be effectively empty afterwards.
-        this._deselectDatabase()
-        if (this._databases.find((db) => db.path === this._mainLibrary) !== undefined) {
-          this._selectDatabase(this._mainLibrary)
-        }
-      },
-      getSelectedDatabase: () => {
-        if (this._databaseIdx > -1) {
-          return this._databases[this._databaseIdx].path
-        }
-      }
-    }
-
     // Be notified of potential updates
     this._config.on('update', (option: string) => {
       this._onConfigUpdate(option)
@@ -282,6 +236,44 @@ export default class CiteprocProvider extends ProviderContract {
         })
     }
   } // END constructor
+
+  hasBibTexAttachments (): boolean {
+    if (this._databaseIdx < 0) {
+      return false
+    }
+
+    const db = this._databases[this._databaseIdx]
+    return Object.keys(db.bibtexAttachments).length > 0
+  }
+
+  getBibTexAttachments (id: string): string|undefined {
+    return this._databases[this._databaseIdx].bibtexAttachments[id]
+  }
+
+  loadMainDatabase (): void {
+    // Make sure we deselect the current one, in case there is no main library
+    // defined so that the library will be effectively empty afterwards.
+    this._deselectDatabase()
+    if (this._databases.find((db) => db.path === this._mainLibrary) !== undefined) {
+      this._selectDatabase(this._mainLibrary)
+    }
+  }
+
+  async loadAndSelect (database: string): Promise<void> {
+    let db = this._databases.find((db) => db.path === database)
+
+    if (db === undefined) {
+      db = await this._loadDatabase(database)
+    }
+
+    this._selectDatabase(db.path)
+  }
+
+  getSelectedDatabase (): string|undefined {
+    if (this._databaseIdx > -1) {
+      return this._databases[this._databaseIdx].path
+    }
+  }
 
   public async boot (): Promise<void> {
     //

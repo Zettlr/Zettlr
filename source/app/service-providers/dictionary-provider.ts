@@ -84,25 +84,6 @@ export default class DictionaryProvider extends ProviderContract {
       getUserDictionary: () => {
         // Clone the array
         return this._userDictionary.map(elem => elem)
-      },
-      /**
-       * Replaces the current user dictionary with a new one
-       * @param {Array} dict The new dictionary.
-       * @return {Boolean} Whether or not the call succeeded.
-       */
-      setUserDictionary: (dict: string[]) => {
-        if (!Array.isArray(dict)) {
-          return false
-        }
-
-        this._userDictionary = dict
-        this._userDictionary = [...new Set(this._userDictionary)]
-        this._userDictionary = this._userDictionary.filter(word => word.trim() !== '')
-
-        // Send an invalidation message to the renderer
-        broadcastIpcMessage('dictionary-provider', { command: 'invalidate-dict' })
-
-        return true
       }
     }
 
@@ -154,6 +135,26 @@ export default class DictionaryProvider extends ProviderContract {
   async shutdown (): Promise<void> {
     this._logger.verbose('Dictionary provider shutting down ...')
     await this._persist()
+  }
+
+  /**
+     * Replaces the current user dictionary with a new one
+     * @param {Array} dict The new dictionary.
+     * @return {Boolean} Whether or not the call succeeded.
+     */
+  setUserDictionary (dict: string[]): boolean {
+    if (!Array.isArray(dict)) {
+      return false
+    }
+
+    this._userDictionary = dict
+    this._userDictionary = [...new Set(this._userDictionary)]
+    this._userDictionary = this._userDictionary.filter(word => word.trim() !== '')
+
+    // Send an invalidation message to the renderer
+    broadcastIpcMessage('dictionary-provider', { command: 'invalidate-dict' })
+
+    return true
   }
 
   /**

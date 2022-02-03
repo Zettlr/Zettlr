@@ -17,9 +17,11 @@
 import AppearanceProvider from '@providers/appearance-provider'
 import AssetsProvider from '@providers/assets-provider'
 import CiteprocProvider from '@providers/citeproc-provider'
+import CommandProvider from '@providers/commands'
 import ConfigProvider from '@providers/config-provider'
 import CssProvider from '@providers/css-provider'
 import DictionaryProvider from '@providers/dictionary-provider'
+import DocumentManager from '@providers/document-manager'
 import FSAL from '@providers/fsal'
 import LinkProvider from '@providers/link-provider'
 import LogProvider from '@providers/log-provider'
@@ -39,6 +41,7 @@ export default class AppServiceContainer {
   private readonly _appearanceProvider: AppearanceProvider
   private readonly _assetsProvider: AssetsProvider
   private readonly _citeprocProvider: CiteprocProvider
+  private readonly _commandProvider: CommandProvider
   private readonly _configProvider: ConfigProvider
   private readonly _cssProvider: CssProvider
   private readonly _dictionaryProvider: DictionaryProvider
@@ -55,6 +58,7 @@ export default class AppServiceContainer {
   private readonly _updateProvider: UpdateProvider
   private readonly _windowProvider: WindowProvider
   private readonly _fsal: FSAL
+  private readonly _documentManager: DocumentManager
 
   constructor () {
     // NOTE: The order in which the providers are instantiated still matters!
@@ -65,7 +69,6 @@ export default class AppServiceContainer {
     this._assetsProvider = new AssetsProvider(this._logProvider)
     this._linkProvider = new LinkProvider(this._logProvider)
     this._tagProvider = new TagProvider(this._logProvider)
-    this._targetProvider = new TargetProvider(this._logProvider)
     this._cssProvider = new CssProvider(this._logProvider)
     this._notificationProvider = new NotificationProvider(this._logProvider)
     this._statsProvider = new StatsProvider(this._logProvider)
@@ -76,9 +79,12 @@ export default class AppServiceContainer {
     this._dictionaryProvider = new DictionaryProvider(this._logProvider, this._configProvider)
     this._menuProvider = new MenuProvider(this._logProvider, this._configProvider, this._recentDocsProvider, this._windowProvider)
     this._citeprocProvider = new CiteprocProvider(this._logProvider, this._configProvider, this._notificationProvider, this._windowProvider)
-    this._updateProvider = new UpdateProvider(this._logProvider, this._configProvider, this._notificationProvider) // --> Command Provider
 
     this._fsal = new FSAL()
+    this._targetProvider = new TargetProvider(this._logProvider, this._fsal)
+    this._documentManager = new DocumentManager(this._logProvider, this._configProvider, this._recentDocsProvider, this._citeprocProvider)
+    this._commandProvider = new CommandProvider(this)
+    this._updateProvider = new UpdateProvider(this._logProvider, this._configProvider, this._notificationProvider, this._commandProvider)
   }
 
   async boot (): Promise<void> {
@@ -102,6 +108,8 @@ export default class AppServiceContainer {
     await this._updateProvider.boot() // --> CommandProvider
 
     await this._fsal.boot()
+    await this._documentManager.boot()
+    await this._commandProvider.boot()
 
     this._menuProvider.set() // TODO
   }
@@ -125,8 +133,12 @@ export default class AppServiceContainer {
   public get updates (): UpdateProvider { return this._updateProvider }
   public get windows (): WindowProvider { return this._windowProvider }
   public get fsal (): FSAL { return this._fsal }
+  public get documents (): DocumentManager { return this._documentManager }
+  public get commands (): CommandProvider { return this._commandProvider }
 
   async shutdown (): Promise<void> {
+    await this._safeShutdown(this._commandProvider)
+    await this._safeShutdown(this._documentManager)
     await this._safeShutdown(this._fsal)
 
     await this._safeShutdown(this._windowProvider)

@@ -17,33 +17,23 @@
 import {
   app,
   BrowserWindow,
-  clipboard,
   FileFilter,
-  ipcMain,
-  MessageBoxReturnValue,
-  nativeImage
+  MessageBoxReturnValue
 } from 'electron'
 
-// Internal classes
-import DocumentManager from './modules/document-manager'
-
 import { trans } from '@common/i18n-main'
-import { commands } from './commands'
 
 import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/main/fsal'
 import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
 
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import extractFilesFromArgv from '../app/util/extract-files-from-argv'
-import ZettlrCommand from './commands/zettlr-command'
 import AppServiceContainer from '../app/app-service-container'
 
 export default class Zettlr {
   isQuitting: boolean
   editFlag: boolean
   _openPaths: any
-  _documentManager: DocumentManager
-  _commands: ZettlrCommand[]
   private readonly isShownFor: string[]
   private readonly _app: AppServiceContainer
 
@@ -62,33 +52,18 @@ export default class Zettlr {
 
     // Inject some globals
     global.application = {
-      runCommand: async (command: string, payload?: any) => {
-        return await this.runCommand(command, payload)
-      },
       isQuitting: () => {
         return this.isQuitting
-      },
-      displayErrorMessage: (title: string, message: string, contents?: string) => {
-        this._app.windows.showErrorMessage(title, message, contents)
-      },
-      findFile: (prop: any) => {
-        return this._app.fsal.findFile(prop)
       }
     }
-
-    // Load available commands
-    this._commands = commands.map(Command => new Command(this._app))
 
     // Now that the config provider is definitely set up, let's see if we
     // should copy the interactive tutorial to the documents directory.
     if (this._app.config.isFirstStart()) {
       this._app.log.info('[First Start] Copying over the interactive tutorial!')
-      this.runCommand('tutorial-open', {})
+      this._app.commands.run('tutorial-open', {})
         .catch(err => this._app.log.error('[Application] Could not open tutorial', err))
     }
-
-    // Start up the document manager
-    this._documentManager = new DocumentManager(this._app.log, this._app.config, this._app.recentDocs, this._app.citeproc)
 
     // Immediately determine if the cache needs to be cleared
     let shouldClearCache = process.argv.includes('--clear-cache')
@@ -107,7 +82,7 @@ export default class Zettlr {
     // this, if we ever switched to the auto updater.
     app.on('before-quit', (event) => {
       this.isQuitting = true
-      if (!this._documentManager.isClean()) {
+      if (!this._app.documents.isClean()) {
         // Immediately prevent quitting ...
         event.preventDefault()
         this.isQuitting = false
@@ -119,12 +94,12 @@ export default class Zettlr {
             // 2 = 'Cancel
             if (result.response === 0) {
               // Clear the modification flags and close again
-              this._documentManager.updateModifiedFlags([]) // Empty array = no modified files
+              this._app.documents.updateModifiedFlags([]) // Empty array = no modified files
               app.quit()
             } else if (result.response === 1) {
               // First, listen once to the event that all documents are clean
               // (i.e. it's safe to shut down) ...
-              this._documentManager.once('documents-all-clean', () => {
+              this._app.documents.once('documents-all-clean', () => {
                 // The document manager reports all documents are clean now
                 app.quit()
               })
@@ -147,7 +122,7 @@ export default class Zettlr {
     // is closed on any platform, the "windows-all-closed" will quit the app
     // successfully in any case.
     this._app.windows.onBeforeMainWindowClose(() => {
-      if (!this._documentManager.isClean()) {
+      if (!this._app.documents.isClean()) {
         this.askSaveChanges()
           .then(result => {
             // 0 = 'Close without saving changes',
@@ -155,12 +130,12 @@ export default class Zettlr {
             // 2 = 'Cancel
             if (result.response === 0) {
               // Clear the modification flags and close again
-              this._documentManager.updateModifiedFlags([]) // Empty array = no modified files
+              this._app.documents.updateModifiedFlags([]) // Empty array = no modified files
               this._app.windows.closeMainWindow()
             } else if (result.response === 1) {
               // First, listen once to the event that all documents are clean
               // (i.e. it's safe to shut down) ...
-              this._documentManager.once('documents-all-clean', () => {
+              this._app.documents.once('documents-all-clean', () => {
                 // The document manager reports all documents are clean now
                 this._app.windows.closeMainWindow()
               })
@@ -172,7 +147,7 @@ export default class Zettlr {
           .catch(e => this._app.log.error('[Application] Could not ask the user to save their changes, because the message box threw an error. Not quitting!', e))
       }
       // We must return false to prevent the window from closing
-      return this._documentManager.isClean()
+      return this._app.documents.isClean()
     })
 
     this._app.windows.on('main-window-closed', () => {
@@ -181,7 +156,7 @@ export default class Zettlr {
     })
 
     // Listen to document manager changes
-    this._documentManager.on('update', (scope: string, changedDescriptor?: MDFileDescriptor|CodeFileDescriptor) => {
+    this._app.documents.on('update', (scope: string, changedDescriptor?: MDFileDescriptor|CodeFileDescriptor) => {
       switch (scope) {
         case 'fileSaved':
         case 'openFiles':
@@ -219,11 +194,6 @@ export default class Zettlr {
           break
       }
     })
-
-    // Runs a command through the application
-    ipcMain.handle('application', async (event, { command, payload }) => {
-      return await this.runCommand(command, payload)
-    })
   }
 
   /**
@@ -236,7 +206,7 @@ export default class Zettlr {
     // The contents of one of the open files have changed.
     // What follows looks a bit ugly, welcome to callback hell.
     if (this._app.config.get('alwaysReloadFiles') === true) {
-      this._documentManager.getFileContents(changedFile).then((file: MDFileMeta|CodeFileMeta) => {
+      this._app.documents.getFileContents(changedFile).then((file: MDFileMeta|CodeFileMeta) => {
         broadcastIpcMessage('open-file-changed', file)
       }).catch(e => this._app.log.error(e.message, e))
     } else {
@@ -262,7 +232,7 @@ export default class Zettlr {
             return
           }
 
-          this._documentManager.getFileContents(changedFile).then((file: any) => {
+          this._app.documents.getFileContents(changedFile).then((file: any) => {
             broadcastIpcMessage('open-file-changed', file)
           }).catch(e => this._app.log.error(e.message, e))
         }).catch(e => this._app.log.error(e.message, e)) // END ask replace file
@@ -321,16 +291,13 @@ export default class Zettlr {
       this._app.targets.verify()
 
       // Finally: Open any new files we have in the process arguments.
-      this.runCommand('roots-add', extractFilesFromArgv())
+      this._app.commands.run('roots-add', extractFilesFromArgv())
         .finally(() => {
           // Now we are done.
           const duration = Date.now() - start
           this._app.log.info(`Loaded all roots in ${duration / 1000} seconds`)
         })
     })
-
-    // Pre-set the state based on the configuration
-    await this._documentManager.init()
 
     // Finally, initiate a first check for updates
     await this._app.updates.check()
@@ -352,167 +319,9 @@ export default class Zettlr {
     * @return {Promise} Resolves after the providers have shut down
     */
   async shutdown (): Promise<void> {
-    if (!this._documentManager.isClean()) {
+    if (!this._app.documents.isClean()) {
       this._app.log.error('[Application] Attention! The FSAL reported there were unsaved changes to certain files. This indicates a critical logical bug in the application!')
     }
-  }
-
-  /**
-   * Runs a command through the application pipeline
-   *
-   * @param   {string}  command  The command to run
-   * @param   {any}     payload  The payload, if any
-   *
-   * @return  {Promise<any>}     The return from running the command
-   */
-  async runCommand (command: string, payload: any): Promise<any> {
-    // FIRST: Try to run a minimal command for which its own custom function
-    // wouldn't make sense.
-    if (command === 'get-statistics-data') {
-      return this._app.fsal.statistics
-    } else if (command === 'get-filetree-events') {
-      return this._app.fsal.filetreeHistorySince(payload)
-    } else if (command === 'get-descriptor') {
-      const descriptor = this._app.fsal.find(payload)
-      if (descriptor === null) {
-        return null
-      }
-      return this._app.fsal.getMetadataFor(descriptor)
-    } else if (command === 'get-open-directory') {
-      const openDir = this._app.fsal.openDirectory
-      if (openDir === null) {
-        return null
-      }
-
-      return this._app.fsal.getMetadataFor(openDir)
-    } else if (command === 'set-open-directory') {
-      this.selectDir(payload)
-      return true
-    } else if (command === 'get-active-file') {
-      const descriptor = this._documentManager.activeFile
-      if (descriptor === null) {
-        return null
-      }
-
-      return this._app.fsal.getMetadataFor(descriptor as MDFileDescriptor)
-    } else if (command === 'next-file') {
-      // Trigger a "forward" command on the document manager
-      await this._documentManager.forward()
-      return true
-    } else if (command === 'previous-file') {
-      // Trigger a "back" command on the document manager
-      await this._documentManager.back()
-      return true
-    } else if (command === 'set-writing-target') {
-      // Sets or updates a file's writing target
-      this._app.targets.set(payload)
-    } else if (command === 'open-file') {
-      await this._documentManager.openFile(payload.path, payload.newTab)
-      return true
-    } else if (command === 'get-open-files') {
-      // Return all open files as their metadata objects
-      return this._documentManager.openFiles.map(file => this._app.fsal.getMetadataFor(file))
-    } else if (command === 'copy-img-to-clipboard') {
-      // We should copy the contents of an image file to clipboard. Payload
-      // contains the image path. We can rely on the Electron framework here.
-      let imgPath: string = payload
-      if (imgPath.startsWith('safe-file://')) {
-        imgPath = imgPath.replace('safe-file://', '')
-      } else if (imgPath.startsWith('file://')) {
-        imgPath = imgPath.replace('file://', '')
-      }
-
-      const img = nativeImage.createFromPath(imgPath)
-
-      if (!img.isEmpty()) {
-        clipboard.writeImage(img)
-      }
-      return true
-    } else if (command === 'get-file-contents') {
-      // First, attempt to get the contents from the document manager
-      const file = this._documentManager.openFiles.find(file => file.path === payload)
-      if (file !== undefined) {
-        return await this._documentManager.getFileContents(file)
-      }
-
-      // Otherwise, try to find the file via the FSAL
-      const descriptor = this._app.fsal.findFile(payload)
-      if (descriptor === null) {
-        return null
-      }
-
-      return await this._app.fsal.getFileContents(descriptor)
-    } else if (command === 'update-modified-files') {
-      // Update the modification status according to the file path array given
-      // in the payload.
-      this._documentManager.updateModifiedFlags(payload)
-      this.setModified(!this._documentManager.isClean())
-    } else if (command === 'open-preferences') {
-      this._app.windows.showPreferences()
-      return true
-    } else if (command === 'open-quicklook') {
-      this.openQL(payload)
-      return true
-    } else if (command === 'open-stats-window') {
-      this._app.windows.showStatsWindow()
-      return true
-    } else if (command === 'open-update-window') {
-      this._app.windows.showUpdateWindow()
-    } else if (command === 'open-project-preferences') {
-      this._app.windows.showProjectPropertiesWindow(payload)
-    } else {
-      // ELSE: If the command has not yet been found, try to run one of the
-      // bigger commands
-      const cmd: ZettlrCommand|undefined = this._commands.find((elem: ZettlrCommand) => elem.respondsTo(command))
-      if (cmd !== undefined) {
-        // Return the return value of the command, if there is any
-        try {
-          return await cmd.run(command, payload)
-        } catch (err: any) {
-          this._app.log.error('[Application] Error received while running command: ' + String(err.message), err)
-          return false
-        }
-      } else {
-        this._app.log.warning(`[Application] Received a request to run command ${command}, but it's not registered.`)
-      }
-    }
-  }
-
-  /**
-   * Sets the active/open directory to the specified path.
-   *
-   * @param   {string}  dirPath  The directory's path
-   */
-  selectDir (dirPath: string): void {
-    // arg contains a hash for a directory.
-    let obj = this._app.fsal.findDir(dirPath)
-
-    // Now send it back (the GUI should by itself filter out the files)
-    if (obj !== null && obj.type === 'directory') {
-      this._app.fsal.openDirectory = obj
-    } else {
-      this._app.log.error('Could not find directory', dirPath)
-      this._app.windows.prompt({
-        type: 'error',
-        title: trans('system.error.dnf_title'),
-        message: trans('system.error.dnf_message')
-      })
-    }
-  }
-
-  /**
-   * Opens a standalone quicklook window when the renderer requests it
-   * @param  {number} hash The hash of the file to be displayed in the window
-   * @return {void}      No return.
-   */
-  openQL (filePath: string): void {
-    let file: MDFileDescriptor|CodeFileDescriptor|null = this._app.fsal.findFile(filePath)
-    if (file === null || file.type !== 'file') {
-      this._app.log.error(`[Application] A Quicklook window for ${filePath} was requested, but the file was not found.`)
-      return
-    }
-
-    this._app.windows.showQuicklookWindow(file)
   }
 
   // /**
@@ -544,15 +353,10 @@ export default class Zettlr {
   // Getters
 
   /**
-   * Returns the document manager
-   */
-  getDocumentManager (): DocumentManager { return this._documentManager }
-
-  /**
     * Are there unsaved changes currently in the file system?
     * @return {Boolean} Return true, if there are unsaved changes, or false.
     */
-  isModified (): boolean { return !this._documentManager.isClean() }
+  isModified (): boolean { return !this._app.documents.isClean() }
 
   /**
     * Shows the main window

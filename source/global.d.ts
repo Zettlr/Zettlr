@@ -69,10 +69,7 @@ declare const PROJECT_PROPERTIES_WEBPACK_ENTRY: string
  * DECLARE THE GLOBAL INTERFACES
  */
 interface Application {
-  runCommand: (command: string, payload?: any) => Promise<any>
   isQuitting: () => boolean
-  displayErrorMessage: (title: string, message: string, contents?: string) => void
-  findFile: (prop: any) => MDFileDescriptor | CodeFileDescriptor | null
 }
 
 /**
@@ -90,7 +87,6 @@ declare module global {
   var log: LogProvider
   var store: any
   var ipc: any
-  var citeproc: CiteprocProvider
   var config: ConfigProvider
   var application: Application
   var typo: any

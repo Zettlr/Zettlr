@@ -40,16 +40,23 @@ let upTimestamp: number
 export async function bootApplication (): Promise<void> {
   upTimestamp = Date.now()
 
-  global.log.info(`こんにちは！ Booting Zettlr at ${(new Date()).toString()}.`)
+  // We need to instantiate the service container right away to have access to
+  // the log and config providers. Then we just need to remember to boot it
+  // before we access anything important.
+  appServiceContainer = new AppServiceContainer()
+  const config = appServiceContainer.config
+  const log = appServiceContainer.log
+
+  log.info(`こんにちは！ Booting Zettlr at ${(new Date()).toString()}.`)
 
   // Before we begin, let's load the Vue.js DevTools for debugging
   try {
     // Load Vue developer extension
     installExtension(VUEJS3_DEVTOOLS)
-      .then((name: string) => global.log.info(`Added DevTools extension:  ${name}`))
-      .catch((err: any) => global.log.error(`Could not install DevTools extensions: ${String(err.message)}`, err))
+      .then((name: string) => log.info(`Added DevTools extension:  ${name}`))
+      .catch((err: any) => log.error(`Could not install DevTools extensions: ${String(err.message)}`, err))
   } catch (err) {
-    global.log.verbose('Electron DevTools Installer not found - proceeding without loading developer tools.')
+    log.verbose('Electron DevTools Installer not found - proceeding without loading developer tools.')
   }
 
   await environmentCheck()
@@ -60,16 +67,15 @@ export async function bootApplication (): Promise<void> {
   extractFilesFromArgv()
 
   // Now boot up the service container
-  appServiceContainer = new AppServiceContainer()
   await appServiceContainer.boot()
 
   // If we have a bundled pandoc, unshift its path to env.PATH in order to have
   // the system search there first for the binary, and not use the internal
   // one.
-  const useBundledPandoc = Boolean(global.config.get('export.useBundledPandoc'))
+  const useBundledPandoc = Boolean(config.get('export.useBundledPandoc'))
   if (process.env.PANDOC_PATH !== undefined && useBundledPandoc) {
     addToPath(path.dirname(process.env.PANDOC_PATH), 'unshift')
-    global.log.info('[Application] The bundled pandoc executable is now in PATH. If you do not want to use the bundled pandoc, uncheck the corresponding setting and reboot the app.')
+    log.info('[Application] The bundled pandoc executable is now in PATH. If you do not want to use the bundled pandoc, uncheck the corresponding setting and reboot the app.')
   }
 }
 
@@ -79,7 +85,8 @@ export async function bootApplication (): Promise<void> {
  * @return  {Promise<void>}  Resolves always
  */
 export async function shutdownApplication (): Promise<void> {
-  global.log.info(`さようなら！ Shutting down at ${(new Date()).toString()}`)
+  const log = appServiceContainer.log
+  log.info(`さようなら！ Shutting down at ${(new Date()).toString()}`)
 
   const downTimestamp = Date.now()
 
@@ -92,10 +99,10 @@ export async function shutdownApplication (): Promise<void> {
   if (span.days > 0) uptimeMessage = `${span.days} days, ${uptimeMessage}`
   if (span.weeks > 0) uptimeMessage = `${span.weeks} weeks, ${uptimeMessage}`
 
-  global.log.info(`Application uptime was: ${uptimeMessage}.`)
+  log.info(`Application uptime was: ${uptimeMessage}.`)
 
   if (span.days > 0 || span.weeks > 0) {
-    global.log.warning('Zettlr has run for more than one day. Please make sure to regularly reboot your computer.')
+    log.warning('Zettlr has run for more than one day. Please make sure to regularly reboot your computer.')
   }
 
   await appServiceContainer.shutdown()
