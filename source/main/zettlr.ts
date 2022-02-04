@@ -55,7 +55,7 @@ export default class Zettlr {
       switch (scope) {
         case 'fileSaved':
         case 'openFiles':
-          this._app.windows.setModified(this.isModified())
+          this._app.windows.setModified(!this._app.documents.isClean())
           broadcastIpcMessage('fsal-state-changed', 'openFiles') // TODO: Do we need this?
           break
         case 'activeFile':
@@ -151,21 +151,4 @@ export default class Zettlr {
       this._app.log.error('[Application] Attention! The FSAL reported there were unsaved changes to certain files. This indicates a critical logical bug in the application!')
     }
   }
-
-  // /**
-  //  * In case a root directory gets removed, indicate that fact by marking it
-  //  * dead.
-  //  * @param  {ZettlrDir} dir The dir to be removed
-  //  * @return {void}     No return.
-  //  */
-  // makeDead (dir: Object): void {
-  //   if (dir === this.getCurrentDir()) this.setCurrentDir(null) // Remove current directory
-  //   return console.log(`Marking directory ${dir.name} as dead!`)
-  // }
-
-  /**
-    * Are there unsaved changes currently in the file system?
-    * @return {Boolean} Return true, if there are unsaved changes, or false.
-    */
-  isModified (): boolean { return !this._app.documents.isClean() }
 }
