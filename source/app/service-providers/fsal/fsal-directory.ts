@@ -32,8 +32,8 @@ import {
   codeFileExtensions,
   mdFileExtensions
 } from '@providers/fsal/util/valid-file-extensions'
-import TagProvider from '@providers/tag-provider'
-import TargetProvider from '@providers/target-provider'
+import TagProvider from '@providers/tags'
+import TargetProvider from '@providers/targets'
 import { isMdOrCodeFile } from './util/is-md-or-code-file'
 
 /**

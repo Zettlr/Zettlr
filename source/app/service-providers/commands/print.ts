@@ -14,8 +14,8 @@
 
 import ZettlrCommand from './zettlr-command'
 import { app } from 'electron'
-import { makeExport } from '../../../main/modules/export'
-import { ExporterOptions } from '../../../main/modules/export/types'
+import { makeExport } from './exporter'
+import { ExporterOptions } from './exporter/types'
 
 export default class Print extends ZettlrCommand {
   constructor (app: any) {
@@ -56,7 +56,8 @@ export default class Print extends ZettlrCommand {
 
     // Call the exporter.
     try {
-      const output = await makeExport(opt)
+      this._app.log.verbose('[Printer] Exporting file to HTML ...')
+      const output = await makeExport(opt, this._app.config, this._app.assets)
       if (output.code !== 0) {
         throw new Error(`Export failed with code ${output.code}`)
       }

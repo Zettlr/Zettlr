@@ -23,8 +23,8 @@ import { DirDescriptor, MDFileDescriptor } from '@dts/main/fsal'
 import { MDFileMeta } from '@dts/common/fsal'
 import FSALCache from './fsal-cache'
 import { SearchTerm } from '@dts/common/search'
-import TargetProvider, { WritingTarget } from '@providers/target-provider'
-import TagProvider from '@providers/tag-provider'
+import TargetProvider, { WritingTarget } from '@providers/targets'
+import TagProvider from '@providers/tags'
 
 /**
  * Applies a cached file, saving time where the file is not being parsed.

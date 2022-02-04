@@ -14,11 +14,11 @@
 
 import ZettlrCommand from './zettlr-command'
 import objectToArray from '@common/util/object-to-array'
-import { makeExport } from '../../../main/modules/export'
+import { makeExport } from './exporter'
 import { filter as minimatch } from 'minimatch'
 import { shell } from 'electron'
-import { ExporterOptions } from '../../../main/modules/export/types'
-import LogProvider from '@providers/log-provider'
+import { ExporterOptions } from './exporter/types'
+import LogProvider from '@providers/log'
 
 export default class DirProjectExport extends ZettlrCommand {
   constructor (app: any) {
@@ -88,7 +88,9 @@ export default class DirProjectExport extends ZettlrCommand {
           }
         }
 
-        const result = await makeExport(opt)
+        this._app.log.verbose(`[Project Export] Exporting ${opt.sourceFiles.length} files to ${opt.targetDirectory}`)
+
+        const result = await makeExport(opt, this._app.config, this._app.assets)
         if (result.code !== 0) {
           // We got an error!
           throw new Error(`Export failed: ${result.stderr.join('\n')}`)

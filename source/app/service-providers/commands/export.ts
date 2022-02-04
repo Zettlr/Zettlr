@@ -14,9 +14,9 @@
 
 import ZettlrCommand from './zettlr-command'
 import { app, shell } from 'electron'
-import { makeExport, getAvailableFormats } from '../../../main/modules/export'
+import { makeExport, getAvailableFormats } from './exporter'
 import { trans } from '@common/i18n-main'
-import { ExporterOptions } from '../../../main/modules/export/types'
+import { ExporterOptions } from './exporter/types'
 import { promises as fs } from 'fs'
 import path from 'path'
 import isDir from '@common/util/is-dir'
@@ -86,7 +86,8 @@ export default class Export extends ZettlrCommand {
 
     // Call the exporter. Don't throw the "big" error as this is single-file export
     try {
-      const output = await makeExport(exporterOptions, options)
+      this._app.log.verbose(`[Exporter] Exporting ${exporterOptions.sourceFiles.length} files to ${exporterOptions.targetDirectory}`)
+      const output = await makeExport(exporterOptions, this._app.config, this._app.assets, options)
       if (output.code === 0) {
         this._app.log.info(`Successfully exported file to ${output.targetFile}`)
         this._app.notifications.show(trans('system.export_success', format.toUpperCase()))

@@ -18,7 +18,7 @@ import { promises as fs } from 'fs'
 import isFile from '../../common/util/is-file'
 import isTraySupported from './is-tray-supported'
 import commandExists from 'command-exists'
-import LogProvider from '@providers/log-provider'
+import LogProvider from '@providers/log'
 
 export default async function environmentCheck (logger: LogProvider): Promise<void> {
   logger.info('Performing environment check ...')

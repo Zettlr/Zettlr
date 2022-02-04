@@ -20,7 +20,7 @@
  * END HEADER
  */
 
-import LogProvider from '@providers/log-provider'
+import LogProvider from '@providers/log'
 import fs from 'fs'
 import path from 'path'
 

@@ -14,7 +14,7 @@
 
 import ZettlrCommand from './zettlr-command'
 import { trans } from '@common/i18n-main'
-import makeImport from '../../../main/modules/import'
+import makeImport from './importer'
 import path from 'path'
 import { import_files as FORMATS } from '@common/data.json'
 
@@ -57,7 +57,7 @@ export default class ImportFiles extends ZettlrCommand {
     // Now import.
     this._app.notifications.show(trans('system.import_status'))
     try {
-      let ret = await makeImport(fileList, openDirectory, (file: string, error: string) => {
+      let ret = await makeImport(fileList, openDirectory, this._app.assets, (file: string, error: string) => {
         this._app.log.error(`[Importer] Could not import file ${file}: ${error}`)
         // This callback gets called whenever there is an error while running pandoc.
         this._app.notifications.show(trans('system.import_error', path.basename(file)))
