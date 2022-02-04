@@ -317,7 +317,7 @@ function getConfig (): StoreOptions<ZettlrState> {
             reconstructTree(descriptor)
           }
           state.fileTree.push(descriptor)
-          ;(state as any).fileTree = sorter(state.fileTree as any) // Omit sorting to sort name-up
+          state.fileTree = sorter(state.fileTree) // Omit sorting to sort name-up
         } else if (descriptor.parent != null) {
           const parentPath = descriptor.dir
           const parentDescriptor = findPathDescriptor(parentPath, state.fileTree)

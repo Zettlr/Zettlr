@@ -14,7 +14,7 @@
 import getAsciiSorter from './sort-ascii'
 import getNaturalSorter from './sort-natural'
 import getDateSorter from './sort-date'
-import { MaybeRootDescriptor } from '@dts/main/fsal'
+// import { MaybeRootDescriptor } from '@dts/main/fsal'
 
 export interface RequiredSortingProps {
   type: string
@@ -24,6 +24,8 @@ export interface RequiredSortingProps {
   modtime: number
   creationtime: number
 }
+
+type GenericSorter = <T extends RequiredSortingProps>(arr: T[], type?: string) => T[]
 
 /**
 * This function can sort an array of ZettlrFile and ZettlrDir objects
@@ -37,11 +39,11 @@ export default function getSorter (
   fileNameDisplay: 'filename'|'title'|'heading'|'title+heading',
   appLang: string,
   whichTime: 'modtime'|'creationtime'
-): (arr: MaybeRootDescriptor[], type?: string) => MaybeRootDescriptor[] {
-  return function sort (arr: MaybeRootDescriptor[], type: string = 'name-up'): MaybeRootDescriptor[] {
+): GenericSorter {
+  return function sort <T extends RequiredSortingProps> (arr: T[], type: string = 'name-up'): T[] {
     // First split the array based on type
-    const f: MaybeRootDescriptor[] = []
-    const d: MaybeRootDescriptor[] = []
+    const f: T[] = []
+    const d: T[] = []
 
     // Should we use natural sorting or ascii?
     const useNatural = sortingType === 'natural'
