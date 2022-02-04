@@ -16,7 +16,7 @@ import ZettlrCommand from './zettlr-command'
 import { trans } from '@common/i18n-main'
 import path from 'path'
 import sanitize from 'sanitize-filename'
-import { codeFileExtensions, mdFileExtensions } from '@common/get-file-extensions'
+import { codeFileExtensions, mdFileExtensions } from '@providers/fsal/util/valid-file-extensions'
 import isFile from '@common/util/is-file'
 
 const CODEFILE_TYPES = codeFileExtensions(true)

@@ -16,7 +16,7 @@
 import isFile from '../../common/util/is-file'
 import path from 'path'
 // Supported filetypes
-import { mdFileExtensions, codeFileExtensions } from '../../common/get-file-extensions'
+import { mdFileExtensions, codeFileExtensions } from '../service-providers/fsal/util/valid-file-extensions'
 
 const FILETYPES = mdFileExtensions(true).concat(codeFileExtensions(true))
 

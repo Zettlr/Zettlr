@@ -16,7 +16,7 @@
 import path from 'path'
 import ZettlrCommand from './zettlr-command'
 import { getIDRE } from '@common/regular-expressions'
-import { mdFileExtensions } from '@common/get-file-extensions'
+import { mdFileExtensions } from '@providers/fsal/util/valid-file-extensions'
 
 const FILETYPES = mdFileExtensions(true)
 
@@ -39,8 +39,9 @@ export default class ForceOpen extends ZettlrCommand {
     // command.
     const autoCreate: boolean = this._app.config.get('zkn.autoCreateLinkedFiles')
     const customDir: string = this._app.config.get('zkn.customDirectory')
+    const idREPattern = this._app.config.get('zkn.idRE')
 
-    const idRE = getIDRE(true)
+    const idRE = getIDRE(idREPattern, true)
     let file = null
 
     // First, let's see if what we got looks like an ID, or not. If it looks

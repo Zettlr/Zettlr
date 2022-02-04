@@ -21,12 +21,12 @@ import ignoreDir from '@common/util/ignore-dir'
 import ignoreFile from '@common/util/ignore-file'
 import isFile from '@common/util/is-file'
 import isDir from '@common/util/is-dir'
-import isAttachment from '@common/util/is-attachment'
 
 import { ignoreDirs as IGNORE_DIR_REGEXP } from '@common/data.json'
 
 import { WatchdogEvent } from '@dts/main/fsal'
 import LogProvider from '@providers/log-provider'
+import { hasMdOrCodeExt } from './util/is-md-or-code-file'
 
 export default class FSALWatchdog extends EventEmitter {
   private _booting: boolean
@@ -158,9 +158,9 @@ export default class FSALWatchdog extends EventEmitter {
       }
 
       // Determine that these are real and valid files/dirs
-      let dir = (event === 'unlinkDir') ? true : isDir(p)
-      let file = (event === 'unlink') ? true : isFile(p)
-      let attachment = isAttachment(p, event === 'unlink')
+      const dir = (event === 'unlinkDir') ? true : isDir(p)
+      const file = (event === 'unlink') ? true : isFile(p)
+      const attachment = !hasMdOrCodeExt(p)
 
       // Only watch changes in directories and supported files
       if ((dir && !ignoreDir(p)) || (file && (!ignoreFile(p) || attachment))) {

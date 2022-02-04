@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-import { mdFileExtensions } from '@common/get-file-extensions'
+import { mdFileExtensions } from '@providers/fsal/util/valid-file-extensions'
 import makeValidUri from '@common/util/make-valid-uri'
 import CodeMirror from 'codemirror'
 import { PlatformPath } from '@dts/renderer/path'

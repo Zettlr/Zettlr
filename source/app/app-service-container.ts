@@ -81,7 +81,16 @@ export default class AppServiceContainer {
 
     this._fsal = new FSAL(this._logProvider, this._configProvider, this._targetProvider, this._tagProvider, this._linkProvider)
     this._targetProvider = new TargetProvider(this._logProvider, this._fsal)
-    this._documentManager = new DocumentManager(this._logProvider, this._configProvider, this._recentDocsProvider, this._citeprocProvider)
+    this._documentManager = new DocumentManager(
+      this._logProvider,
+      this._configProvider,
+      this._recentDocsProvider,
+      this._citeprocProvider,
+      this._fsal,
+      this._linkProvider,
+      this._targetProvider,
+      this._tagProvider
+    )
     this._commandProvider = new CommandProvider(this)
     this._menuProvider = new MenuProvider(this._logProvider, this._configProvider, this._recentDocsProvider, this._commandProvider, this._windowProvider)
     this._updateProvider = new UpdateProvider(this._logProvider, this._configProvider, this._notificationProvider, this._commandProvider)

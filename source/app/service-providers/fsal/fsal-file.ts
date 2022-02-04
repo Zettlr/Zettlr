@@ -16,35 +16,15 @@ import { promises as fs } from 'fs'
 import path from 'path'
 import hash from '@common/util/hash'
 import searchFile from './util/search-file'
-import countWords from '@common/util/count-words'
-import extractYamlFrontmatter from '@common/util/extract-yaml-frontmatter'
-import { getIDRE, getCodeBlockRE } from '@common/regular-expressions'
 import { shell } from 'electron'
 import safeAssign from '@common/util/safe-assign'
 // Import the interfaces that we need
 import { DirDescriptor, MDFileDescriptor } from '@dts/main/fsal'
 import { MDFileMeta } from '@dts/common/fsal'
 import FSALCache from './fsal-cache'
-import extractBOM from './util/extract-bom'
-import extractTags from './util/extract-tags'
-import extractLinks from './util/extract-links'
 import { SearchTerm } from '@dts/common/search'
 import TargetProvider, { WritingTarget } from '@providers/target-provider'
 import TagProvider from '@providers/tag-provider'
-
-// Here are all supported variables for Pandoc:
-// https://pandoc.org/MANUAL.html#variables
-// Below is a selection that Zettlr may use
-const FRONTMATTER_VARS = [
-  'title',
-  'subtitle',
-  'author',
-  'date',
-  'keywords',
-  'tags',
-  'lang',
-  'bibliography'
-]
 
 /**
  * Applies a cached file, saving time where the file is not being parsed.
@@ -76,91 +56,13 @@ function cacheFile (origFile: MDFileDescriptor, cacheAdapter: FSALCache): void {
  */
 async function updateFileMetadata (fileObject: MDFileDescriptor): Promise<void> {
   try {
-    let stat = await fs.lstat(fileObject.path)
+    const stat = await fs.lstat(fileObject.path)
     fileObject.modtime = stat.mtime.getTime()
     fileObject.size = stat.size
   } catch (err: any) {
-    err.message = `Could not update the metadata for file ${fileObject.name}: ${String(err.message).toString()}`
+    err.message = `Could not update the metadata for file ${fileObject.name}: ${err.message as string}`
     throw err
   }
-}
-
-/**
- * Parses the given file contents and updates the file descriptor with these.
- *
- * @param   {MDFileDescriptor}  file     The file descriptor to be updated
- * @param   {string}            content  The file contents
- */
-function parseFileContents (file: MDFileDescriptor, content: string, linkStart: string, linkEnd: string): void {
-  // Prepare some necessary regular expressions and variables
-  const idRE = getIDRE()
-  const codeBlockRE = getCodeBlockRE(true)
-  const inlineCodeRE = /`[^`]+`/g
-  const h1HeadingRE = /^#{1}\s(.+)$/m
-
-  let match
-
-  // First of all, determine all the things that have nothing to do with any
-  // Markdown contents.
-  file.bom = extractBOM(content)
-  file.linefeed = '\n'
-  if (content.includes('\r\n')) file.linefeed = '\r\n'
-  if (content.includes('\n\r')) file.linefeed = '\n\r'
-
-  // Then prepare the file contents as we need it for most of the function:
-  // Strip a potential YAML frontmatter, code, and any HTML comments.
-  const extracted = extractYamlFrontmatter(content)
-  const frontmatter = extracted.frontmatter
-
-  const contentWithoutYAML = extracted.content
-  const contentWithoutCode = contentWithoutYAML.replace(codeBlockRE, '').replace(inlineCodeRE, '')
-  const plainMarkdown = contentWithoutCode.replace(/<!--.+?-->/gs, '') // Note the dotall flag
-
-  // Finally, reset all those properties which we will extract from the file's
-  // content so that they remain in their default if we don't find those in the
-  // file.
-  file.id = ''
-  file.firstHeading = null
-  file.tags = extractTags(content)
-  file.links = extractLinks(content, linkStart, linkEnd)
-  file.frontmatter = null
-
-  // Search for the file's ID first in the file name, and then in the full contents.
-  if ((match = idRE.exec(file.name)) == null) {
-    while ((match = idRE.exec(content)) != null) {
-      if (content.substr(match.index - linkStart.length, linkStart.length) !== linkStart) {
-        // Found the first ID. Precedence should go to the first found.
-        // Minor BUG: Takes IDs that are inside links but not literally make up for a link.
-        break
-      }
-    }
-  }
-
-  if ((match != null) && (match[1].substr(-(linkEnd.length)) !== linkEnd)) {
-    file.id = match[1]
-  }
-
-  // At this point, we don't need the full content anymore. The next parsing
-  // steps rely on a Markdown string that is stripped of a potential YAML
-  // frontmatter, any code -- inline and blocks -- as well as any comments.
-
-  file.wordCount = countWords(plainMarkdown)
-  file.charCount = countWords(plainMarkdown, true)
-
-  const h1Match = h1HeadingRE.exec(contentWithoutYAML)
-  if (h1Match !== null) {
-    file.firstHeading = h1Match[1]
-  }
-
-  if (frontmatter !== null) {
-    file.frontmatter = {}
-    for (const [ key, value ] of Object.entries(frontmatter)) {
-      // Only keep those values which Zettlr can understand
-      if (FRONTMATTER_VARS.includes(key)) {
-        file.frontmatter[key] = value
-      }
-    }
-  } // END: We got a frontmatter
 }
 
 /**
@@ -212,8 +114,7 @@ export function metadata (fileObject: MDFileDescriptor): MDFileMeta {
 export async function parse (
   filePath: string,
   cache: FSALCache|null,
-  linkStart: string,
-  linkEnd: string,
+  parser: (file: MDFileDescriptor, content: string) => void,
   targets: TargetProvider,
   links: LinkProvider,
   tags: TagProvider,
@@ -274,7 +175,7 @@ export async function parse (
   if (!hasCache) {
     // Read in the file, parse the contents and make sure to cache the file
     let content = await fs.readFile(filePath, { encoding: 'utf8' })
-    parseFileContents(file, content, linkStart, linkEnd)
+    parser(file, content)
     if (cache !== null) {
       cacheFile(file, cache)
     }
@@ -352,8 +253,7 @@ export async function hasChangedOnDisk (fileObject: MDFileDescriptor): Promise<b
 export async function save (
   fileObject: MDFileDescriptor,
   content: string,
-  linkStart: string,
-  linkEnd: string,
+  parser: (file: MDFileDescriptor, content: string) => void,
   links: LinkProvider,
   tags: TagProvider,
   cache: FSALCache|null
@@ -365,7 +265,7 @@ export async function save (
   // Make sure to keep the file object itself as well as the tags updated
   links.remove(fileObject.path, fileObject.id)
   tags.remove(fileObject.tags, fileObject.path)
-  parseFileContents(fileObject, content, linkStart, linkEnd)
+  parser(fileObject, content)
   tags.report(fileObject.tags, fileObject.path)
   links.report(fileObject.path, fileObject.links, fileObject.id)
   fileObject.modified = false // Always reset the modification flag.
@@ -386,8 +286,7 @@ export async function save (
 export async function rename (
   fileObject: MDFileDescriptor,
   newName: string,
-  linkStart: string,
-  linkEnd: string,
+  parser: (file: MDFileDescriptor, content: string) => void,
   tags: TagProvider,
   links: LinkProvider,
   cache: FSALCache|null
@@ -401,7 +300,7 @@ export async function rename (
   fileObject.name = newName
   // Afterwards, reparse the file (this is important if the user switches from
   // an ID in the filename to an ID in the file, or vice versa)
-  await reparseChangedFile(fileObject, linkStart, linkEnd, tags, links, cache)
+  await reparseChangedFile(fileObject, parser, tags, links, cache)
 }
 
 /**
@@ -449,8 +348,7 @@ export function markClean (fileObject: MDFileDescriptor): void {
 
 export async function reparseChangedFile (
   fileObject: MDFileDescriptor,
-  linkStart: string,
-  linkEnd: string,
+  parser: (file: MDFileDescriptor, content: string) => void,
   tags: TagProvider,
   links: LinkProvider,
   cache: FSALCache|null
@@ -461,7 +359,7 @@ export async function reparseChangedFile (
   // Make sure to keep the file object itself as well as the tags updated
   tags.remove(fileObject.tags, fileObject.path)
   links.remove(fileObject.path, fileObject.id)
-  parseFileContents(fileObject, contents, linkStart, linkEnd)
+  parser(fileObject, contents)
   tags.report(fileObject.tags, fileObject.path)
   links.report(fileObject.path, fileObject.links, fileObject.id)
   fileObject.modified = false // Always reset the modification flag.

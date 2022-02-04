@@ -20,16 +20,15 @@ import path from 'path'
 import chokidar from 'chokidar'
 import { CodeFileDescriptor, MDFileDescriptor } from '@dts/main/fsal'
 import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
-import { FSALCodeFile, FSALFile } from '@providers/fsal'
-import { codeFileExtensions, mdFileExtensions } from '@common/get-file-extensions'
+import FSAL, { FSALCodeFile, FSALFile } from '@providers/fsal'
 import generateFilename from '@common/util/generate-filename'
 import RecentDocumentsProvider from '@providers/recent-docs-provider'
 import ProviderContract from '@providers/provider-contract'
 import CiteprocProvider from '@providers/citeproc-provider'
 import LogProvider from '@providers/log-provider'
-
-const ALLOWED_CODE_FILES = codeFileExtensions(true)
-const MARKDOWN_FILES = mdFileExtensions(true)
+import { hasCodeExt, hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
+import TargetProvider from '@providers/target-provider'
+import TagProvider from '@providers/tag-provider'
 
 export default class DocumentManager extends ProviderContract {
   private _loadedDocuments: Array<MDFileDescriptor|CodeFileDescriptor>
@@ -40,10 +39,23 @@ export default class DocumentManager extends ProviderContract {
   private readonly _config: ConfigProvider
   private readonly _recentDocs: RecentDocumentsProvider
   private readonly _citeproc: CiteprocProvider
+  private readonly _fsal: FSAL
+  private readonly _links: LinkProvider
+  private readonly _targets: TargetProvider
+  private readonly _tags: TagProvider
   private readonly _emitter: EventEmitter
   private _sessionPointer: number
 
-  constructor (logger: LogProvider, config: ConfigProvider, recentDocs: RecentDocumentsProvider, citeproc: CiteprocProvider) {
+  constructor (
+    logger: LogProvider,
+    config: ConfigProvider,
+    recentDocs: RecentDocumentsProvider,
+    citeproc: CiteprocProvider,
+    fsal: FSAL,
+    links: LinkProvider,
+    targets: TargetProvider,
+    tags: TagProvider
+  ) {
     super()
 
     this._loadedDocuments = []
@@ -55,6 +67,10 @@ export default class DocumentManager extends ProviderContract {
     this._config = config
     this._recentDocs = recentDocs
     this._citeproc = citeproc
+    this._fsal = fsal
+    this._links = links
+    this._targets = targets
+    this._tags = tags
     this._emitter = new EventEmitter()
 
     let options: chokidar.WatchOptions = {
@@ -376,15 +392,11 @@ export default class DocumentManager extends ProviderContract {
    * @return {Promise<MDFileDescriptor|CodeFileDescriptor>} The file's descriptor
    */
   private async _loadFile (filePath: string): Promise<MDFileDescriptor|CodeFileDescriptor> {
-    // Loads a standalone file
-    const isCode = ALLOWED_CODE_FILES.includes(path.extname(filePath).toLowerCase())
-    const isMD = MARKDOWN_FILES.includes(path.extname(filePath).toLowerCase())
-
-    if (isCode) {
+    if (hasCodeExt(filePath)) {
       const file = await FSALCodeFile.parse(filePath, null)
       return file
-    } else if (isMD) {
-      const file = await FSALFile.parse(filePath, null)
+    } else if (hasMarkdownExt(filePath)) {
+      const file = await FSALFile.parse(filePath, null, this._fsal.getMarkdownFileParser(), this._targets, this._links, this._tags)
       return file
     } else {
       const error: any = new Error(`Could not load file ${filePath}: Invalid path provided`)
@@ -563,9 +575,11 @@ export default class DocumentManager extends ProviderContract {
 
     // The appendix of the filename will be a number related to the amount of
     // duplicate files in the open files array
-    let fname = generateFilename()
+    const filenamePattern = this._config.get('newFileNamePattern')
+    const idREPattern = this._config.get('zkn.idRE')
+    let fname = generateFilename(filenamePattern, idREPattern)
     const ext = path.extname(fname).toLowerCase()
-    if (type !== 'md' && !ALLOWED_CODE_FILES.includes(ext)) {
+    if (type !== 'md' && !hasCodeExt(fname)) {
       // The user has explicitly requested a code file so we must respect
       // the decision.
       if (type === 'tex' && ext !== '.tex') {
@@ -575,7 +589,7 @@ export default class DocumentManager extends ProviderContract {
       } else if (type === 'yaml' && ![ '.yaml', '.yml' ].includes(ext)) {
         fname += '.yaml'
       }
-    } else if (!MARKDOWN_FILES.includes(ext)) {
+    } else if (!hasMarkdownExt(fname)) {
       fname += '.md'
     }
 
@@ -643,7 +657,14 @@ export default class DocumentManager extends ProviderContract {
 
   public async saveFile (src: MDFileDescriptor|CodeFileDescriptor, content: string): Promise<void> {
     if (src.type === 'file') {
-      await FSALFile.save(src, content, null)
+      await FSALFile.save(
+        src,
+        content,
+        this._fsal.getMarkdownFileParser(),
+        this._links,
+        this._tags,
+        null
+      )
     } else {
       await FSALCodeFile.save(src, content, null)
     }

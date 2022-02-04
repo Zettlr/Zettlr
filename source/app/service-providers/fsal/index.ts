@@ -17,7 +17,6 @@ import path from 'path'
 import EventEmitter from 'events'
 import isFile from '@common/util/is-file'
 import isDir from '@common/util/is-dir'
-import isAttachment from '@common/util/is-attachment'
 import objectToArray from '@common/util/object-to-array'
 import findObject from '@common/util/find-object'
 import locateByPath from './util/locate-by-path'
@@ -38,7 +37,6 @@ import {
   MaybeRootDescriptor
 } from '@dts/main/fsal'
 import { MDFileMeta, CodeFileMeta, AnyMetaDescriptor, MaybeRootMeta, FSALStats } from '@dts/common/fsal'
-import { codeFileExtensions, mdFileExtensions } from '@common/get-file-extensions'
 import { SearchTerm } from '@dts/common/search'
 import generateStats from './util/generate-stats'
 import ProviderContract from '@providers/provider-contract'
@@ -46,6 +44,8 @@ import { app } from 'electron'
 import TargetProvider from '@providers/target-provider'
 import LogProvider from '@providers/log-provider'
 import TagProvider from '@providers/tag-provider'
+import { hasCodeExt, hasMarkdownExt, isMdOrCodeFile } from './util/is-md-or-code-file'
+import getMarkdownFileParser from './util/file-parser'
 
 // Re-export all interfaces necessary for other parts of the code (Document Manager)
 export {
@@ -54,9 +54,6 @@ export {
   FSALDir,
   FSALAttachment
 }
-
-const ALLOWED_CODE_FILES = codeFileExtensions(true)
-const MARKDOWN_FILES = mdFileExtensions(true)
 
 interface FSALState {
   openDirectory: DirDescriptor|null
@@ -233,8 +230,6 @@ export default class FSAL extends ProviderContract {
     //    forwards only applicable events.
     // 3. Whatever this change entails, we did not incur it ourselves and MUST
     //    therefore handle it.
-    const linkStart = this._config.get('zkn.linkStart')
-    const linkEnd = this._config.get('zkn.linkEnd')
 
     if ([ 'unlink', 'unlinkDir' ].includes(event)) {
       // A file or a directory has been removed.
@@ -284,9 +279,7 @@ export default class FSAL extends ProviderContract {
     } else if ([ 'add', 'addDir' ].includes(event)) {
       // A file or a directory has been added. It can not be a root.
       const parentDescriptor = this.find(path.dirname(changedPath)) as DirDescriptor
-      if (isAttachment(changedPath)) {
-        await FSALDir.addAttachment(parentDescriptor, changedPath)
-      } else {
+      if (isMdOrCodeFile(changedPath) || isDir(changedPath)) {
         const sorter = getSorter(
           this._config.get('sorting'),
           this._config.get('sortFoldersFirst'),
@@ -298,14 +291,15 @@ export default class FSAL extends ProviderContract {
         await FSALDir.addChild(
           parentDescriptor,
           changedPath,
-          linkStart,
-          linkEnd,
           this._tags,
           this._links,
           this._targets,
+          this.getMarkdownFileParser(),
           sorter,
           this._cache
         )
+      } else {
+        await FSALDir.addAttachment(parentDescriptor, changedPath)
       }
       // Finally, add a history event of what has happened
       this._recordFiletreeChange('add', changedPath)
@@ -315,7 +309,13 @@ export default class FSAL extends ProviderContract {
       if (affectedDescriptor.type === 'code') {
         await FSALCodeFile.reparseChangedFile(affectedDescriptor, this._cache)
       } else if (affectedDescriptor.type === 'file') {
-        await FSALFile.reparseChangedFile(affectedDescriptor, linkStart, linkEnd, this._tags, this._links, this._cache)
+        await FSALFile.reparseChangedFile(
+          affectedDescriptor,
+          this.getMarkdownFileParser(),
+          this._tags,
+          this._links,
+          this._cache
+        )
       } else if (affectedDescriptor.type === 'other') {
         await FSALAttachment.reparseChangedFile(affectedDescriptor)
       }
@@ -409,18 +409,13 @@ export default class FSAL extends ProviderContract {
    * @param {String} filePath The file to be loaded
    */
   private async _loadFile (filePath: string): Promise<void> {
-    // Loads a standalone file
-    const isCode = ALLOWED_CODE_FILES.includes(path.extname(filePath).toLowerCase())
-    const isMD = MARKDOWN_FILES.includes(path.extname(filePath).toLowerCase())
-
-    if (isCode) {
+    const parser = this.getMarkdownFileParser()
+    if (hasCodeExt(filePath)) {
       let file = await FSALCodeFile.parse(filePath, this._cache)
       this._state.filetree.push(file)
       this._recordFiletreeChange('add', filePath)
-    } else if (isMD) {
-      const linkStart = this._config.get('zkn.linkStart')
-      const linkEnd = this._config.get('zkn.linkEnd')
-      let file = await FSALFile.parse(filePath, this._cache, linkStart, linkEnd, this._targets, this._links, this._tags)
+    } else if (hasMarkdownExt(filePath)) {
+      let file = await FSALFile.parse(filePath, this._cache, parser, this._targets, this._links, this._tags)
       this._state.filetree.push(file)
       this._recordFiletreeChange('add', filePath)
     }
@@ -431,8 +426,6 @@ export default class FSAL extends ProviderContract {
    * @param {String} dirPath The dir to be loaded
    */
   private async _loadDir (dirPath: string): Promise<void> {
-    const linkStart = this._config.get('zkn.linkStart')
-    const linkEnd = this._config.get('zkn.linkEnd')
     // Loads a directory
     const start = Date.now()
     const sorter = getSorter(
@@ -446,11 +439,10 @@ export default class FSAL extends ProviderContract {
     const dir = await FSALDir.parse(
       dirPath,
       this._cache,
-      linkStart,
-      linkEnd,
       this._tags,
       this._links,
       this._targets,
+      this.getMarkdownFileParser(),
       sorter,
       null
     )
@@ -471,6 +463,19 @@ export default class FSAL extends ProviderContract {
     let dir: DirDescriptor = FSALDir.getDirNotFoundDescriptor(dirPath)
     this._state.filetree.push(dir)
     this._recordFiletreeChange('add', dirPath)
+  }
+
+  /**
+   * Returns an instance with a new file parser. Should be used to retrieve updated
+   * versions of the parser whenever the configuration changes
+   *
+   * @return  {Function}  A parser that can be passed to FSAL functions involving files
+   */
+  public getMarkdownFileParser (): (file: MDFileDescriptor, content: string) => void {
+    const linkStart = this._config.get('zkn.linkStart')
+    const linkEnd = this._config.get('zkn.linkEnd')
+    const idPattern = this._config.get('zkn.idRE')
+    return getMarkdownFileParser(linkStart, linkEnd, idPattern)
   }
 
   public async rescanForDirectory (descriptor: DirDescriptor): Promise<void> {
@@ -756,8 +761,6 @@ export default class FSAL extends ProviderContract {
 
   public async createFile (src: DirDescriptor, options: any): Promise<void> {
     this._fsalIsBusy = true
-    const linkStart = this._config.get('zkn.linkStart')
-    const linkEnd = this._config.get('zkn.linkEnd')
     // This action needs the cache because it'll parse a file
     // NOTE: Generates an add-event
     this._watchdog.ignoreEvents([{
@@ -777,11 +780,10 @@ export default class FSAL extends ProviderContract {
       src,
       options,
       this._cache,
-      linkStart,
-      linkEnd,
       this._targets,
       this._links,
       this._tags,
+      this.getMarkdownFileParser(),
       sorter
     )
     await this.sortDirectory(src)
@@ -806,9 +808,14 @@ export default class FSAL extends ProviderContract {
     const oldPath = src.path // Cache the old path
 
     if (src.type === 'file') {
-      const linkStart = this._config.get('zkn.linkStart')
-      const linkEnd = this._config.get('zkn.linkEnd')
-      await FSALFile.rename(src, newName, linkStart, linkEnd, this._tags, this._links, this._cache)
+      await FSALFile.rename(
+        src,
+        newName,
+        this.getMarkdownFileParser(),
+        this._tags,
+        this._links,
+        this._cache
+      )
     } else if (src.type === 'code') {
       await FSALCodeFile.rename(src, this._cache, newName)
     }
@@ -925,8 +932,6 @@ export default class FSAL extends ProviderContract {
 
   public async createDir (src: DirDescriptor, newName: string): Promise<void> {
     this._fsalIsBusy = true
-    const linkStart = this._config.get('zkn.linkStart')
-    const linkEnd = this._config.get('zkn.linkEnd')
     // Parses a directory and henceforth needs the cache
     // NOTE: Generates 1x add
     const absolutePath = path.join(src.path, newName)
@@ -953,11 +958,10 @@ export default class FSAL extends ProviderContract {
       src,
       newName,
       this._cache,
-      linkStart,
-      linkEnd,
       this._tags,
       this._links,
       this._targets,
+      this.getMarkdownFileParser(),
       sorter
     )
     this._recordFiletreeChange('add', absolutePath)
@@ -968,10 +972,6 @@ export default class FSAL extends ProviderContract {
 
   public async renameDir (src: DirDescriptor, newName: string): Promise<void> {
     this._fsalIsBusy = true
-
-    const linkStart = this._config.get('zkn.linkStart')
-    const linkEnd = this._config.get('zkn.linkEnd')
-
     // Compute the paths to be replaced
     const oldPrefix = path.join(src.dir, src.name)
     const newPrefix = path.join(src.dir, newName)
@@ -1017,11 +1017,10 @@ export default class FSAL extends ProviderContract {
     const newDir = await FSALDir.rename(
       src,
       newName,
-      linkStart,
-      linkEnd,
       this._tags,
       this._links,
       this._targets,
+      this.getMarkdownFileParser(),
       sorter,
       this._cache
     )
@@ -1087,8 +1086,6 @@ export default class FSAL extends ProviderContract {
 
   public async move (src: MaybeRootDescriptor, target: DirDescriptor): Promise<void> {
     this._fsalIsBusy = true
-    const linkStart = this._config.get('zkn.linkStart')
-    const linkEnd = this._config.get('zkn.linkEnd')
 
     // NOTE: Generates 1x unlink, 1x add for each child, src and on the target!
     let activeFileUpdateNeeded = false
@@ -1137,11 +1134,10 @@ export default class FSAL extends ProviderContract {
     await FSALDir.move(
       src,
       target,
-      linkStart,
-      linkEnd,
       this._tags,
       this._links,
       this._targets,
+      this.getMarkdownFileParser(),
       sorter,
       this._cache
     )

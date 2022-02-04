@@ -16,7 +16,7 @@ import ZettlrCommand from './zettlr-command'
 import { trans } from '@common/i18n-main'
 import path from 'path'
 import sanitize from 'sanitize-filename'
-import { codeFileExtensions, mdFileExtensions } from '@common/get-file-extensions'
+import { codeFileExtensions, mdFileExtensions } from '@providers/fsal/util/valid-file-extensions'
 import generateFilename from '@common/util/generate-filename'
 
 const CODEFILE_TYPES = codeFileExtensions(true)
@@ -43,6 +43,9 @@ export default class FileNew extends ZettlrCommand {
     // generated and the user is asked to confirm the name.
     const shouldPromptUser = this._app.config.get('newFileDontPrompt') === false
     const type = (arg.type !== undefined) ? arg.type : 'md'
+    const filenamePattern = this._app.config.get('newFileNamePattern')
+    const idREPattern = this._app.config.get('zkn.idRE')
+    const generatedName = generateFilename(filenamePattern, idREPattern)
 
     if (evt === 'new-unsaved-file' && shouldPromptUser) {
       // We should simply create a new unsaved file that only resides in memory
@@ -66,7 +69,7 @@ export default class FileNew extends ZettlrCommand {
     // Make sure we have a filename and have the user confirm this if applicable
     if (arg.name === undefined && shouldPromptUser) {
       // The user wishes to confirm the filename
-      const chosenPath = await this._app.windows.saveFile(path.join(dir.path, generateFilename()))
+      const chosenPath = await this._app.windows.saveFile(path.join(dir.path, generatedName))
       if (chosenPath === undefined) {
         this._app.log.info('Did not create new file since the dialog was aborted.')
         return
@@ -85,7 +88,7 @@ export default class FileNew extends ZettlrCommand {
       }
     } else if (arg.name === undefined) {
       // Just generate a name.
-      arg.name = generateFilename()
+      arg.name = generatedName
     }
 
     try {

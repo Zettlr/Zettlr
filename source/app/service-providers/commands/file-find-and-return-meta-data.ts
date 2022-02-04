@@ -15,7 +15,7 @@
 
 import ZettlrCommand from './zettlr-command'
 import { MDFileMeta } from '@dts/common/fsal'
-import { mdFileExtensions } from '@common/get-file-extensions'
+import { mdFileExtensions } from '@providers/fsal/util/valid-file-extensions'
 
 const FILETYPES = mdFileExtensions(true)
 
