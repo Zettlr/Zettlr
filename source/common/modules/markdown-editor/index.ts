@@ -68,7 +68,7 @@ import noteTooltipsHook from './hooks/note-preview'
 import displayContextMenu from './display-context-menu'
 
 const ipcRenderer = window.ipc
-const clipboard = (window as any).clipboard
+const clipboard = window.clipboard
 
 export default class MarkdownEditor extends EventEmitter {
   private readonly _instance: CodeMirror.Editor

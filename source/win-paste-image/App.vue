@@ -82,7 +82,7 @@ import md5 from 'md5'
 
 const path = window.path
 const ipcRenderer = window.ipc
-const clipboard = (window as any).clipboard
+const clipboard = window.clipboard
 
 export default defineComponent({
   components: {

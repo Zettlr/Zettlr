@@ -17,7 +17,7 @@ import CodeMirror from 'codemirror'
 
 const path = window.path
 const ipcRenderer = window.ipc
-const clipboard = (window as any).clipboard
+const clipboard = window.clipboard
 
 export default function pasteImagesHook (cm: CodeMirror.Editor): void {
   /**
@@ -35,7 +35,7 @@ export default function pasteImagesHook (cm: CodeMirror.Editor): void {
       let plain = clipboard.readText()
       let explicitPaste = plain.replace(/\r/g, '') === changeObj.text.join('\n')
 
-      if (clipboard.hasImage() === true && explicitPaste) {
+      if (clipboard.hasImage() && explicitPaste) {
         // We've got an image. So we need to handle it.
         ipcRenderer.invoke('application', {
           command: 'save-image-from-clipboard'
@@ -69,7 +69,7 @@ export default function pasteImagesHook (cm: CodeMirror.Editor): void {
     // ALWAYS (even with text in the clipboard), you'd get the paste-image
     // dialog twice -- once when the beforeChange event triggers, and then here
     // as well.
-    if (clipboard.hasImage() === true && clipboard.readText().length === 0) {
+    if (clipboard.hasImage() && clipboard.readText().length === 0) {
       ipcRenderer.invoke('application', {
         command: 'save-image-from-clipboard'
       })

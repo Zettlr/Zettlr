@@ -17,7 +17,7 @@ import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 
 const ipcRenderer = window.ipc
-const clipboard = (window as any).clipboard
+const clipboard = window.clipboard
 
 let currentMenu: any[] = []
 let currentSuggestions: string[] = []
@@ -396,7 +396,7 @@ export default function displayContextMenu (
     if (clickedID === 'menu.copy_equation') {
       const wrapperElement = targetElement.closest('.preview-math')
       if (wrapperElement !== null) {
-        clipboard.writeText((wrapperElement as HTMLElement).dataset.equation)
+        clipboard.writeText((wrapperElement as HTMLElement).dataset.equation as string)
       }
       return
     }
@@ -450,7 +450,9 @@ export default function displayContextMenu (
     if (found !== undefined) {
       if (found.id === 'menu.copy_link') {
         // Write the extracted link to the clipboard
-        clipboard.writeText(linkToCopy)
+        if (linkToCopy !== null) {
+          clipboard.writeText(linkToCopy)
+        }
       } else {
         // Standard command
         commandCallback(found.command)

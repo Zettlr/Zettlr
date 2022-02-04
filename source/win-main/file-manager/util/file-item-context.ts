@@ -18,7 +18,7 @@ import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
 import { AnyMenuItem } from '@dts/renderer/context'
 
 const ipcRenderer = window.ipc
-const clipboard = (window as any).clipboard
+const clipboard = window.clipboard
 
 export default function displayFileContext (event: MouseEvent, fileObject: MDFileMeta|CodeFileMeta, el: HTMLElement, callback: any): void {
   const template: AnyMenuItem[] = [

@@ -719,7 +719,7 @@ function replaceSnippetVariables (text: string): string {
   const hour = now.hour
   const minute = now.minute
   const second = now.second
-  const clipboard = (window as any).clipboard.readText()
+  const clipboard = window.clipboard.readText()
 
   const REPLACEMENTS = {
     CURRENT_YEAR: now.year,

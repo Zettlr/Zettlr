@@ -98,7 +98,7 @@ import chimeFile from './assets/chime.mp3'
 import { ToolbarControl } from '@dts/renderer/window'
 
 const ipcRenderer = window.ipc
-const clipboard = (window as any).clipboard
+const clipboard = window.clipboard
 
 const SOUND_EFFECTS = [
   {
