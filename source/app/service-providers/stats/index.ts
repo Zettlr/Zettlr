@@ -39,7 +39,6 @@ export default class StatsProvider extends ProviderContract {
   constructor (logger: LogProvider) {
     super()
     this._logger = logger
-    this._logger.verbose('Stats provider booting up')
     this.statsPath = app.getPath('userData')
     this.statsFile = path.join(this.statsPath, 'stats.json')
     this.stats = {
@@ -56,15 +55,6 @@ export default class StatsProvider extends ProviderContract {
         return this.getData()
       }
     })
-
-    this.load()
-      .catch(e => {
-        this._logger.error(`[Stats Provider] Could not load stats data from disk: ${e.message as string}`, e)
-      })
-  }
-
-  async boot (): Promise<void> {
-    // Nothing to do
   }
 
   /**
@@ -127,9 +117,9 @@ export default class StatsProvider extends ProviderContract {
 
   /**
    * Load a potentially existing stats file.
-   * @return {ZettlrStats} This for chainability.
    */
-  async load (): Promise<void> {
+  async boot (): Promise<void> {
+    this._logger.verbose('Stats provider booting up')
     // Does the file already exist?
     try {
       await fs.lstat(this.statsFile)
