@@ -443,7 +443,17 @@ export default class UpdateProvider extends ProviderContract {
   }
 
   async boot (): Promise<void> {
-    // Nothing to do
+    // Initiate a first check for updates
+    const checkUpdates: boolean = this._config.get('system.checkForUpdates')
+    if (checkUpdates) {
+      await this.check()
+
+      if (this.applicationUpdateAvailable()) {
+        const { tagName } = this.getUpdateState()
+        this._logger.info(`Update available: ${tagName}`)
+        this._notifications.show(trans('dialog.update.new_update_available', tagName))
+      }
+    }
   }
 
   /**
