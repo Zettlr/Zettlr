@@ -35,7 +35,7 @@
     "reveal:build": "node scripts/update-reveal.js",
     "update:citation": "node scripts/update-citation.js",
     "test": "mocha",
-    "test-gui": "cross-env NODE_ENV=develop SKIP_TYPECHECKING=false node scripts/test-gui/index.js",
+    "test-gui": "cross-env NODE_ENV=develop SKIP_TYPECHECKING=true node scripts/test-gui/index.js",
     "lint": "eslint --ext js,vue,ts source"
   },
   "config": {
