@@ -138,61 +138,8 @@ export default class Zettlr {
    * Initiate the main process logic after boot.
    */
   async init (): Promise<void> {
-    // Start a timer to measure how long the roots take to load.
-    const start = Date.now()
-
-    // A note on allPromises and the Promise.all().finally()-chain below:
-    // In this function we have two main tasks: Load the file tree and the
-    // document manager. Since both processes are isolated from each other,
-    // loading the FSAL before the DocumentManager could lead to visual lag,
-    // just as vice versa (if the user is a maniac and has, like, 100 files
-    // open). Since asynchronous code is written as if it were procedural using
-    // async/await, we must forcefully detach both from each other. We do so by
-    // simply not awaiting the promises the FSAL generates, and collect them.
-    // Then, we stack all remaining set up code into the finally() below while
-    // the document manager is simply awaited. This way everything loads as fast
-    // as it can, and thus users with many files (as me) will have their
-    // documents load slightly before the file tree is fully visible.
-    const allPromises: Array<Promise<boolean>> = []
-
-    // First: Initially load all paths
-    for (let p of this._app.config.get('openPaths') as string[]) {
-      const prom = this._app.fsal.loadPath(p)
-      prom.catch(e => {
-        console.error(e)
-        this._app.log.info(`[Application] Removing path ${p}, as it does no longer exist.`)
-        this._app.config.removePath(p)
-      })
-
-      allPromises.push(prom)
-    }
-
-    Promise.all(allPromises).finally(() => {
-      // We allow some promises to fail, but after all have been dealt with,
-      // we need to continue the set up process
-
-      // Set the pointers either to null or last opened dir/file
-      const openDir = this._app.config.get('openDirectory')
-      if (typeof openDir === 'string') {
-        try {
-          const descriptor = this._app.fsal.findDir(openDir)
-          this._app.fsal.openDirectory = descriptor
-        } catch (err: any) {
-          this._app.log.error(`[Application] Could not set open directory ${openDir}.`, err)
-        }
-      } // else: openDir was null
-
-      // Verify the integrity of the targets
-      this._app.targets.verify(this._app.fsal)
-
-      // Finally: Open any new files we have in the process arguments.
-      this._app.commands.run('roots-add', extractFilesFromArgv())
-        .finally(() => {
-          // Now we are done.
-          const duration = Date.now() - start
-          this._app.log.info(`Loaded all roots in ${duration / 1000} seconds`)
-        })
-    })
+    // Open any new files we have in the process arguments.
+    await this._app.commands.run('roots-add', extractFilesFromArgv())
   }
 
   /**

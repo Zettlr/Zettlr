@@ -140,6 +140,40 @@ export default class FSAL extends ProviderContract {
       this._logger.info('Clearing the FSAL cache ...')
       this.clearCache()
     }
+
+    // Start a timer to measure how long the roots take to load.
+    const start = Date.now()
+
+    // Next, load every path we should be loading from the config
+    for (const rootOrWorkspace of this._config.get('openPaths') as string[]) {
+      try {
+        await this.loadPath(rootOrWorkspace)
+      } catch (err: any) {
+        this._logger.error(`[FSAL] Removing path ${rootOrWorkspace}, as it no longer exists.`)
+        this._config.removePath(rootOrWorkspace)
+      }
+    }
+
+    const duration = Date.now() - start
+    if (duration > 1000) {
+      this._logger.info(`[FSAL] Loaded all files and workspaces in ${duration / 1000} seconds`)
+    }
+
+    // Afterwards we can set our pointers accordingly
+    // Set the pointers either to null or last opened dir/file
+    const openDir: string|null = this._config.get('openDirectory')
+    if (openDir !== null) {
+      try {
+        const descriptor = this.findDir(openDir)
+        this.openDirectory = descriptor
+      } catch (err: any) {
+        this._logger.error(`[FSAL] Could not set open directory ${openDir}.`, err)
+      }
+    } // else: openDir was null
+
+    // Verify the integrity of the targets after we can be sure all files have
+    // been loaded
+    this._targets.verify(this)
   }
 
   // Enable global event listening to updates of the config
