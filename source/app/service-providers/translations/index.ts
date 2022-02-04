@@ -16,7 +16,7 @@ import path from 'path'
 import { promises as fs } from 'fs'
 import { app, ipcMain } from 'electron'
 import got from 'got'
-import { trans } from '@common/i18n-main'
+import { provideConfigToI18NMain, trans } from '@common/i18n-main'
 import moment from 'moment'
 import enumDictFiles from '@common/util/enum-dict-files'
 import enumLangFiles from '@common/util/enum-lang-files'
@@ -46,6 +46,10 @@ export default class TranslationProvider extends ProviderContract {
     this._logger.verbose('Translation provider booting up ...')
     this._availableLanguages = [] // Holds all translations able to download
     this._languageDirectory = path.join(app.getPath('userData'), '/lang/')
+
+    // Since we still have side effects in the main process, we have to inject
+    // the config provider into that module kind of hacky
+    provideConfigToI18NMain(config)
 
     // NOTE: This must be a synchronous event, because it is called from within
     // the trans() function if one of those two objects is not yet set in the

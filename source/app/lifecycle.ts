@@ -108,6 +108,6 @@ export async function shutdownApplication (): Promise<void> {
   await appServiceContainer.shutdown()
 }
 
-export function getServiceContainer (): AppServiceContainer {
+export function getServiceContainer (): AppServiceContainer|undefined {
   return appServiceContainer
 }

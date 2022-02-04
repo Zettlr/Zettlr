@@ -14,6 +14,12 @@
 
 import sanitizeHtml from 'sanitize-html'
 
+let config: ConfigProvider|undefined
+
+export function provideConfigToI18NMain (provider: ConfigProvider): void {
+  config = provider
+}
+
 /**
  * This translates a given identifier string into the loaded language
  * @param  {string} identifier A dot-delimited string containing the translatable
@@ -49,9 +55,10 @@ export function trans (identifier: string, ...args: any[]): string {
     if (obj in transString) {
       transString = transString[obj]
     } else {
+      const isDebug: boolean = config?.get('debug') ?? skipFallback
       // Something went wrong and the requested translation string was
       // not found -> fall back and just return the original string
-      return (Boolean(global.config.get('debug')) || skipFallback) ? identifier : trans(identifier, ...[true].concat(args))
+      return (isDebug) ? identifier : trans(identifier, ...[true].concat(args))
     }
   }
 

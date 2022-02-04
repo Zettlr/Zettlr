@@ -64,6 +64,7 @@ export default class AppServiceContainer {
     // NOTE: The order in which the providers are instantiated still matters!
     this._logProvider = new LogProvider()
     this._configProvider = new ConfigProvider(this._logProvider)
+    this._commandProvider = new CommandProvider(this)
     // NOTE: This provider still produces side effects
     this._translationProvider = new TranslationProvider(this._logProvider, this._configProvider)
     this._assetsProvider = new AssetsProvider(this._logProvider)
@@ -74,13 +75,12 @@ export default class AppServiceContainer {
     this._statsProvider = new StatsProvider(this._logProvider)
     this._recentDocsProvider = new RecentDocumentsProvider(this._logProvider)
     this._appearanceProvider = new AppearanceProvider(this._logProvider, this._configProvider)
-    this._windowProvider = new WindowProvider(this._logProvider, this._configProvider)
     this._trayProvider = new TrayProvider(this._logProvider, this._configProvider, this._windowProvider)
     this._dictionaryProvider = new DictionaryProvider(this._logProvider, this._configProvider)
     this._citeprocProvider = new CiteprocProvider(this._logProvider, this._configProvider, this._notificationProvider, this._windowProvider)
 
+    this._targetProvider = new TargetProvider(this._logProvider)
     this._fsal = new FSAL(this._logProvider, this._configProvider, this._targetProvider, this._tagProvider, this._linkProvider)
-    this._targetProvider = new TargetProvider(this._logProvider, this._fsal)
     this._documentManager = new DocumentManager(
       this._logProvider,
       this._configProvider,
@@ -91,7 +91,7 @@ export default class AppServiceContainer {
       this._targetProvider,
       this._tagProvider
     )
-    this._commandProvider = new CommandProvider(this)
+    this._windowProvider = new WindowProvider(this._logProvider, this._configProvider, this._documentManager)
     this._menuProvider = new MenuProvider(this._logProvider, this._configProvider, this._recentDocsProvider, this._commandProvider, this._windowProvider)
     this._updateProvider = new UpdateProvider(this._logProvider, this._configProvider, this._notificationProvider, this._commandProvider)
   }

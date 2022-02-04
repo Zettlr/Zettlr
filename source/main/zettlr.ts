@@ -14,16 +14,9 @@
  * END HEADER
  */
 
-import {
-  app,
-  BrowserWindow,
-  FileFilter,
-  MessageBoxReturnValue
-} from 'electron'
-
 import { trans } from '@common/i18n-main'
 
-import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/main/fsal'
+import { CodeFileDescriptor, MDFileDescriptor } from '@dts/main/fsal'
 import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
 
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
@@ -31,7 +24,6 @@ import extractFilesFromArgv from '../app/util/extract-files-from-argv'
 import AppServiceContainer from '../app/app-service-container'
 
 export default class Zettlr {
-  isQuitting: boolean
   editFlag: boolean
   _openPaths: any
   private readonly isShownFor: string[]
@@ -43,9 +35,6 @@ export default class Zettlr {
     */
   constructor (_app: AppServiceContainer) {
     this._app = _app
-    // Is the app quitting? True if quitting via menu, tray or keyboard shortcut.
-    // False if titlebar `x` close, and all other times.
-    this.isQuitting = false
     this.editFlag = false // Is the current opened file edited?
     this._openPaths = [] // Holds all currently opened paths.
     this.isShownFor = [] // Contains all files for which remote notifications are currently shown
@@ -64,84 +53,6 @@ export default class Zettlr {
       this._app.log.info('Clearing the FSAL cache ...')
       this._app.fsal.clearCache()
     }
-
-    // Listen to the before-quit event by which we make sure to only quit the
-    // application if the status of possibly modified files has been cleared.
-    // We listen to this event, because it will fire *before* the process
-    // attempts to close the open windows, including the main window, which
-    // would result in a loss of data. NOTE: The exception is the auto-updater
-    // which will close the windows before this event. But because we also
-    // listen to close-events on the main window, we should be able to handle
-    // this, if we ever switched to the auto updater.
-    app.on('before-quit', (event) => {
-      this.isQuitting = true
-      if (!this._app.documents.isClean()) {
-        // Immediately prevent quitting ...
-        event.preventDefault()
-        this.isQuitting = false
-        // ... and ask the user if we should *really* quit.
-        this.askSaveChanges()
-          .then(result => {
-            // 0 = 'Close without saving changes',
-            // 1 = 'Save changes'
-            // 2 = 'Cancel
-            if (result.response === 0) {
-              // Clear the modification flags and close again
-              this._app.documents.updateModifiedFlags([]) // Empty array = no modified files
-              app.quit()
-            } else if (result.response === 1) {
-              // First, listen once to the event that all documents are clean
-              // (i.e. it's safe to shut down) ...
-              this._app.documents.once('documents-all-clean', () => {
-                // The document manager reports all documents are clean now
-                app.quit()
-              })
-
-              // ... and then have the renderer begin saving all changed docs.
-              broadcastIpcMessage('save-documents', []) // Empty path list so the Editor saves all
-            } // Else: Do nothing (abort quitting)
-          })
-          .catch(e => this._app.log.error('[Application] Could not ask the user to save their changes, because the message box threw an error. Not quitting!', e))
-      }
-    })
-
-    // If the user wants to close the main window (either during quitting or
-    // by closing the window itself) we have to prevent this if not all files
-    // are clean. NOTE: The two events before-quit and onBeforeMainWindowClose
-    // make sure that this logic works on all platforms:
-    // If the main window is closed, quitting will work because no file can be
-    // modified without the main window being open. If the main window is still
-    // open, that will already prevent the quitting. As soon as the main window
-    // is closed on any platform, the "windows-all-closed" will quit the app
-    // successfully in any case.
-    this._app.windows.onBeforeMainWindowClose(() => {
-      if (!this._app.documents.isClean()) {
-        this.askSaveChanges()
-          .then(result => {
-            // 0 = 'Close without saving changes',
-            // 1 = 'Save changes'
-            // 2 = 'Cancel
-            if (result.response === 0) {
-              // Clear the modification flags and close again
-              this._app.documents.updateModifiedFlags([]) // Empty array = no modified files
-              this._app.windows.closeMainWindow()
-            } else if (result.response === 1) {
-              // First, listen once to the event that all documents are clean
-              // (i.e. it's safe to shut down) ...
-              this._app.documents.once('documents-all-clean', () => {
-                // The document manager reports all documents are clean now
-                this._app.windows.closeMainWindow()
-              })
-
-              // ... and then have the renderer begin saving all changed docs.
-              broadcastIpcMessage('save-documents', []) // Empty path list so the Editor saves all
-            } // Else: Do nothing (abort quitting)
-          })
-          .catch(e => this._app.log.error('[Application] Could not ask the user to save their changes, because the message box threw an error. Not quitting!', e))
-      }
-      // We must return false to prevent the window from closing
-      return this._app.documents.isClean()
-    })
 
     this._app.windows.on('main-window-closed', () => {
       // Reset the FSAL state history so that any new window will have a clean start
@@ -281,7 +192,7 @@ export default class Zettlr {
       } // else: openDir was null
 
       // Verify the integrity of the targets
-      this._app.targets.verify()
+      this._app.targets.verify(this._app.fsal)
 
       // Finally: Open any new files we have in the process arguments.
       this._app.commands.run('roots-add', extractFilesFromArgv())
@@ -329,126 +240,9 @@ export default class Zettlr {
   //   return console.log(`Marking directory ${dir.name} as dead!`)
   // }
 
-  findFile (arg: string): MDFileDescriptor | CodeFileDescriptor | null {
-    return this._app.fsal.findFile(arg)
-  }
-
-  findDir (arg: string): DirDescriptor | null {
-    return this._app.fsal.findDir(arg)
-  }
-
-  /**
-    * Indicate modifications.
-    */
-  setModified (isModified: boolean): void {
-    this._app.windows.setModified(isModified)
-  }
-
-  // Getters
-
   /**
     * Are there unsaved changes currently in the file system?
     * @return {Boolean} Return true, if there are unsaved changes, or false.
     */
   isModified (): boolean { return !this._app.documents.isClean() }
-
-  /**
-    * Shows the main window
-    * @return {void} This does not return.
-    */
-  openWindow (): void {
-    this._app.windows.showMainWindow()
-  }
-
-  /**
-   * Shows any open window, or the main window, if none are open.
-   */
-  openAnyWindow (): void {
-    this._app.windows.showAnyWindow()
-  }
-
-  /**
-   * Returns the main application window
-   *
-   * @return  {BrowserWindow}  The main application window
-   */
-  getMainWindow (): BrowserWindow|null {
-    return this._app.windows.getMainWindow()
-  }
-
-  /**
-   * Displays the given target file in the print window
-   *
-   * @param   {string}  target  The target file path
-   */
-  showPrintWindow (target: string): void {
-    this._app.windows.showPrintWindow(target)
-  }
-
-  // Convenience wrappers: Modules that have access to the application object
-  // are able to prompt, ask for stuff, etc.
-  async shouldOverwriteFile (filename: string): Promise<boolean> {
-    return await this._app.windows.shouldOverwriteFile(filename)
-  }
-
-  async askDir (): Promise<string[]> {
-    return await this._app.windows.askDir()
-  }
-
-  async askFile (filters: FileFilter[]|null = null, multiSel: boolean = false): Promise<string[]> {
-    return await this._app.windows.askFile(filters, multiSel)
-  }
-
-  /**
-   * Asks the user to provide a path to a new file. Takes a filename, in which
-   * case the dialog will start in the last known directory of this specific
-   * dialog, or a full absolute path, in which the dialog will start.
-   *
-   * @param   {string}              fileOrPathName   Either an absolute path or just a filename
-   * @param   {BrowserWindow|null}  win              The window to attach to
-   *
-   * @return  {Promise<string|undefined>}            Resolves with a path or undefined
-   */
-  async saveFile (fileOrPathName: string): Promise<string|undefined> {
-    return await this._app.windows.saveFile(fileOrPathName)
-  }
-
-  /**
-   * Asks the user to save changes to modified files
-   *
-   * @return  {Promise<MessageBoxReturnValue>}  The answer from the user
-   */
-  async askSaveChanges (): Promise<MessageBoxReturnValue> {
-    return await this._app.windows.askSaveChanges()
-  }
-
-  /**
-   * Shortcut for accessing the pasteImageModal in the Window manager.
-   *
-   * @return  {Promise<any>} The data generated in the modal
-   */
-  async showPasteImageModal (startPath: string): Promise<any> {
-    return await this._app.windows.showPasteImageModal(startPath)
-  }
-
-  /**
-   * Presents a confirmation to the user whether or not they want to actually
-   * remove a file or directory from the system.
-   *
-   * @param   {MDFileDescriptor}    descriptor     The descriptor in question
-   *
-   * @return  {Promise<boolean>}                   Resolves to true if the user confirms
-   */
-  async confirmRemove (descriptor: MDFileDescriptor|CodeFileDescriptor|DirDescriptor): Promise<boolean> {
-    return await this._app.windows.confirmRemove(descriptor)
-  }
-
-  /**
-   * Prompts the user with information
-   *
-   * @param   {any}   options  The options
-   */
-  prompt (options: any): void {
-    this._app.windows.prompt(options)
-  }
 }

@@ -34,15 +34,13 @@ export default class TargetProvider extends ProviderContract {
   private readonly _file: string
   private readonly _emitter: EventEmitter
   private readonly _logger: LogProvider
-  private readonly _fsal: FSAL
   private _targets: WritingTarget[]
   /**
    * Create the instance on program start and initially load the targets.
    */
-  constructor (logger: LogProvider, fsal: FSAL) {
+  constructor (logger: LogProvider) {
     super()
     this._logger = logger
-    this._fsal = fsal
     this._logger.verbose('Target provider booting up')
 
     this._file = path.join(app.getPath('userData'), 'targets.json')
@@ -110,7 +108,7 @@ export default class TargetProvider extends ProviderContract {
    * Verifies the validity of all targets.
    * @return {ZettlrTargets} Chainability.
    */
-  verify (): void {
+  verify (fsal: FSAL): void {
     // A target is defined to be "valid" if it contains a valid integer number
     // as the target word/char count, and the corresponding file/folder is still
     // loaded within the app.
@@ -129,7 +127,7 @@ export default class TargetProvider extends ProviderContract {
       // Now check if the file still exists. At this point, writing targets set
       // in a Zettlr 1.x branch will be lost because target.path will evaluate
       // to undefined.
-      if (this._fsal.findFile(target.path) === null) {
+      if (fsal.findFile(target.path) === null) {
         continue
       }
 
