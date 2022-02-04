@@ -25,6 +25,7 @@ import FSALCache from './fsal-cache'
 import { SearchTerm } from '@dts/common/search'
 import TargetProvider, { WritingTarget } from '@providers/targets'
 import TagProvider from '@providers/tags'
+import LinkProvider from '@providers/links'
 
 /**
  * Applies a cached file, saving time where the file is not being parsed.

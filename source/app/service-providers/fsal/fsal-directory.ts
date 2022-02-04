@@ -35,6 +35,7 @@ import {
 import TagProvider from '@providers/tags'
 import TargetProvider from '@providers/targets'
 import { isMdOrCodeFile } from './util/is-md-or-code-file'
+import LinkProvider from '@providers/links'
 
 /**
  * Determines what will be written to file (.ztr-directory)

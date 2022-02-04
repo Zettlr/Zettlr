@@ -18,6 +18,7 @@ import path from 'path'
 import { app, ipcMain } from 'electron'
 import ProviderContract from '../provider-contract'
 import LogProvider from '../log'
+import { Stats } from '@dts/main/stats-provider'
 
 /**
  * ZettlrStats works like the ZettlrConfig object, only with a different file.

@@ -46,6 +46,7 @@ import LogProvider from '@providers/log'
 import TagProvider from '@providers/tags'
 import { hasCodeExt, hasMarkdownExt, isMdOrCodeFile } from './util/is-md-or-code-file'
 import getMarkdownFileParser from './util/file-parser'
+import LinkProvider from '@providers/links'
 
 // Re-export all interfaces necessary for other parts of the code (Document Manager)
 export {

@@ -29,6 +29,7 @@ import LogProvider from '@providers/log'
 import { hasCodeExt, hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
 import TargetProvider from '@providers/targets'
 import TagProvider from '@providers/tags'
+import LinkProvider from '@providers/links'
 
 export default class DocumentManager extends ProviderContract {
   private _loadedDocuments: Array<MDFileDescriptor|CodeFileDescriptor>
