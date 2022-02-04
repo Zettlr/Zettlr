@@ -229,6 +229,7 @@ export default class CommandProvider extends ProviderContract {
   }
 
   async boot (): Promise<void> {
+    this._app.log.verbose('Command Provider booting up ...')
     // Set up the command listener here
     ipcMain.handle('application', async (event, { command, payload }) => {
       return await this.run(command, payload)
@@ -236,6 +237,6 @@ export default class CommandProvider extends ProviderContract {
   }
 
   async shutdown (): Promise<void> {
-    // Nothing to shutdown
+    this._app.log.verbose('Command Provider shutting down ...')
   }
 }

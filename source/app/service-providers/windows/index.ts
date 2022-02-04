@@ -126,20 +126,6 @@ export default class WindowProvider extends ProviderContract {
       this._hasRTLLocale = false
     }
 
-    // Immediately begin loading the data
-    this.loadData()
-      .then(() => {
-        this._logger.info('[Window Manager] Window Manager started.')
-        const shouldStartMinimized = process.argv.includes('--launch-minimized')
-        const traySupported = process.env.ZETTLR_IS_TRAY_SUPPORTED === '1'
-        if (!shouldStartMinimized || !traySupported) {
-          this.showMainWindow()
-        } else {
-          this._logger.info('[Window Manager] Application should start in tray. Not showing main window.')
-        }
-      })
-      .catch((err: Error) => this._logger.error(`[Window Manager] Could not load data: ${err.message}`, err))
-
     // Listen to the before-quit event by which we make sure to only quit the
     // application if the status of possibly modified files has been cleared.
     // We listen to this event, because it will fire *before* the process
@@ -307,7 +293,17 @@ export default class WindowProvider extends ProviderContract {
   }
 
   async boot (): Promise<void> {
-    // Nothing to do
+    this._logger.verbose('Window manager booting up ...')
+    // Immediately begin loading the data
+    await this.loadData()
+    this._logger.info('[Window Manager] Window Manager started.')
+    const shouldStartMinimized = process.argv.includes('--launch-minimized')
+    const traySupported = process.env.ZETTLR_IS_TRAY_SUPPORTED === '1'
+    if (!shouldStartMinimized || !traySupported) {
+      this.showMainWindow()
+    } else {
+      this._logger.info('[Window Manager] Application should start in tray. Not showing main window.')
+    }
   }
 
   on (evt: string, callback: (...args: any[]) => void): void {

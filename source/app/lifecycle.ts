@@ -40,6 +40,10 @@ let upTimestamp: number
 export async function bootApplication (): Promise<void> {
   upTimestamp = Date.now()
 
+  // First of all we MUST perform the environment check, since everything else
+  // depends on this.
+  await environmentCheck()
+
   // We need to instantiate the service container right away to have access to
   // the log and config providers. Then we just need to remember to boot it
   // before we access anything important.
@@ -58,8 +62,6 @@ export async function bootApplication (): Promise<void> {
   } catch (err) {
     log.verbose('Electron DevTools Installer not found - proceeding without loading developer tools.')
   }
-
-  await environmentCheck(log)
 
   registerCustomProtocols(log)
 
