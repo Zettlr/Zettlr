@@ -29,21 +29,9 @@ export default class CssProvider extends ProviderContract {
   constructor (logger: LogProvider) {
     super()
     this._logger = logger
-    this._logger.verbose('CSS provider booting up ...')
     this._filePath = path.join(app.getPath('userData'), 'custom.css')
 
     this._emitter = new EventEmitter()
-
-    // Check for the existence of the custom CSS file. If it is not existent,
-    // create an empty one.
-    fs.lstat(this._filePath)
-      .catch(e => {
-        // Create an empty file with a nice initial comment in it.
-        fs.writeFile(this._filePath, '/* Enter your custom CSS here */\n\n', { encoding: 'utf8' })
-          .catch(e => {
-            this._logger.error(`[CSS Provider] Could not create Custom CSS file: ${e.message as string}`, e)
-          })
-      })
 
     // Send the Custom CSS Path to whomever requires it
     ipcMain.handle('css-provider', async (event, payload) => {
@@ -60,7 +48,16 @@ export default class CssProvider extends ProviderContract {
   }
 
   async boot (): Promise<void> {
-    // Nothing to do
+    this._logger.verbose('CSS provider booting up ...')
+
+    // Check for the existence of the custom CSS file. If it is not existent,
+    // create an empty one.
+    try {
+      await fs.lstat(this._filePath)
+    } catch (err: any) {
+      // Create an empty file with a nice initial comment in it.
+      await fs.writeFile(this._filePath, '/* Enter your custom CSS here */\n\n', { encoding: 'utf8' })
+    }
   }
 
   /**
