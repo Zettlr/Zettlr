@@ -13,10 +13,9 @@
  * END HEADER
  */
 
-import { PlatformPath } from '@dts/renderer/path'
 import CodeMirror from 'codemirror'
 
-const path: PlatformPath = (window as any).path
+const path = window.path
 const ipcRenderer = window.ipc
 const clipboard = (window as any).clipboard
 

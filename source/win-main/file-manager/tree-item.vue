@@ -138,9 +138,8 @@ import { trans } from '@common/i18n-renderer'
 
 import { nextTick, defineComponent } from 'vue'
 import { MDFileMeta, DirMeta, CodeFileMeta } from '@dts/common/fsal'
-import { PlatformPath } from '@dts/renderer/path'
 
-const path: PlatformPath = (window as any).path
+const path = window.path
 const ipcRenderer = window.ipc
 
 export default defineComponent({

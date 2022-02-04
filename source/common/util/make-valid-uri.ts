@@ -17,9 +17,8 @@
 // it because of a naming conflict in the function.
 import fileExists from './is-file'
 import { getProtocolRE, getLinkRE, getMarkDownFileRE } from '../regular-expressions'
-import { PlatformPath } from '@dts/renderer/path'
 
-const path: PlatformPath = (window as any).path
+const path = window.path
 
 const protocolRE = getProtocolRE()
 const linkRE = getLinkRE()

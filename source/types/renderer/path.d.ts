@@ -51,7 +51,7 @@ interface FormatInputPathObject {
   name?: string | undefined
 }
 
-export interface PlatformPath {
+interface RendererPath {
   /**
    * Normalize a string path, reducing '..' and '.' parts.
    * When multiple slashes are found, they're replaced by a single one; when the path contains a trailing slash, it is preserved. On Windows backslashes are used.
@@ -142,10 +142,10 @@ export interface PlatformPath {
    * Posix specific pathing.
    * Same as parent object on posix.
    */
-  readonly posix: PlatformPath
+  readonly posix: RendererPath
   /**
    * Windows specific pathing.
    * Same as parent object on windows
    */
-  readonly win32: PlatformPath
+  readonly win32: RendererPath
 }

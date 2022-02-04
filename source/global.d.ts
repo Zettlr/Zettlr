@@ -146,6 +146,7 @@ declare interface Window {
      */
     on: (channel: string, listener: (event: undefined, ...args: any) => void) => void
   }
+  path: RendererPath
 }
 
 // This interface is being produced by the MarkdownEditor module in source/common

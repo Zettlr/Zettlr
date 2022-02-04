@@ -13,9 +13,8 @@
  */
 
 import { getProtocolRE } from '../regular-expressions'
-import { PlatformPath } from '@dts/renderer/path'
 
-const path: PlatformPath = (window as any).path
+const path = window.path
 
 const protocolRE = getProtocolRE()
 

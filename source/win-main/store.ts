@@ -20,9 +20,8 @@ import { getConverter } from '@common/util/md-to-html'
 import getSorter from '@providers/fsal/util/sort'
 import { CodeFileMeta, DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
 import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
-import { PlatformPath } from '@dts/renderer/path'
 
-const path: PlatformPath = (window as any).path
+const path = window.path
 const ipcRenderer = window.ipc
 
 interface FSALEvent {

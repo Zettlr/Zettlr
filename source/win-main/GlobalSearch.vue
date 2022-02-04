@@ -129,9 +129,8 @@ import { SearchResult, SearchTerm } from '@dts/common/search'
 import { CodeFileMeta, DirMeta, MDFileMeta } from '@dts/common/fsal'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { AnyMenuItem } from '@dts/renderer/context'
-import { PlatformPath } from '@dts/renderer/path'
 
-const path: PlatformPath = (window as any).path
+const path = window.path
 const ipcRenderer = window.ipc
 
 interface LocalFile {

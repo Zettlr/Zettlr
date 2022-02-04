@@ -16,9 +16,8 @@
 import { mdFileExtensions } from '@providers/fsal/util/valid-file-extensions'
 import makeValidUri from '@common/util/make-valid-uri'
 import CodeMirror from 'codemirror'
-import { PlatformPath } from '@dts/renderer/path'
 
-const path: PlatformPath = (window as any).path
+const path = window.path
 const ipcRenderer = window.ipc
 
 const VALID_FILETYPES = mdFileExtensions(true)
