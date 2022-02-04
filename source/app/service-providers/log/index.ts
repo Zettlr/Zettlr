@@ -54,15 +54,9 @@ export default class LogProvider extends ProviderContract {
   constructor () {
     super()
     this._logPath = path.join(app.getPath('userData'), 'logs')
-    this._cleanLogs() // Remove all older logs
-      .catch(err => {
-        this.error(`[Log Provider] Error while removing old logs: ${err.message as string}`, err)
-      })
     this._log = []
     this._entryPointer = 0 // Set the log entry file pointer to zero
     this._fileLock = false // True while data is being appended to the log
-
-    this.log(LogLevel.verbose, 'Log provider booting up ...', null)
 
     // Ensure message handling
     ipcMain.handle('log-provider', (event, payload) => {
@@ -96,7 +90,8 @@ export default class LogProvider extends ProviderContract {
   }
 
   async boot (): Promise<void> {
-    // Nothing to do
+    this.verbose('Log provider booting up ...')
+    await this._cleanLogs() // Remove all older logs
   }
 
   /**
@@ -104,7 +99,7 @@ export default class LogProvider extends ProviderContract {
    * @return {Boolean} Whether or not the shutdown was successful
    */
   async shutdown (): Promise<void> {
-    this.log(LogLevel.verbose, 'Log provider shutting down ...', null)
+    this.verbose('Log provider shutting down ...')
     await this._append() // One final append to flush the log
   }
 
