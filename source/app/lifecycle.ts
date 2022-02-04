@@ -14,7 +14,6 @@
  */
 
 // Helper/Utility functions
-import extractFilesFromArgv from './util/extract-files-from-argv'
 import registerCustomProtocols from './util/custom-protocols'
 import environmentCheck from './util/environment-check'
 import addToPath from './util/add-to-PATH'
@@ -64,9 +63,6 @@ export async function bootApplication (): Promise<void> {
   }
 
   registerCustomProtocols(log)
-
-  // Then we need to extract possible files that should be opened from the argv
-  extractFilesFromArgv()
 
   // Now boot up the service container
   await appServiceContainer.boot()
