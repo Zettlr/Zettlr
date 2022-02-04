@@ -87,8 +87,6 @@ export default class FSAL extends ProviderContract {
   constructor (logger: LogProvider, config: ConfigProvider, targets: TargetProvider, tags: TagProvider, links: LinkProvider) {
     super()
     this._logger = logger
-
-    this._logger.verbose('FSAL booting up ...')
     this._config = config
     this._tags = tags
     this._links = links
@@ -134,7 +132,14 @@ export default class FSAL extends ProviderContract {
   } // END constructor
 
   async boot (): Promise<void> {
-    // Nothing to do
+    this._logger.verbose('FSAL booting up ...')
+
+    // Immediately determine if the cache needs to be cleared
+    const shouldClearCache = process.argv.includes('--clear-cache')
+    if (this._config.newVersionDetected() || shouldClearCache) {
+      this._logger.info('Clearing the FSAL cache ...')
+      this.clearCache()
+    }
   }
 
   // Enable global event listening to updates of the config

@@ -47,13 +47,6 @@ export default class Zettlr {
         .catch(err => this._app.log.error('[Application] Could not open tutorial', err))
     }
 
-    // Immediately determine if the cache needs to be cleared
-    let shouldClearCache = process.argv.includes('--clear-cache')
-    if (this._app.config.newVersionDetected() || shouldClearCache) {
-      this._app.log.info('Clearing the FSAL cache ...')
-      this._app.fsal.clearCache()
-    }
-
     this._app.windows.on('main-window-closed', () => {
       // Reset the FSAL state history so that any new window will have a clean start
       this._app.fsal.resetFiletreeHistory()
