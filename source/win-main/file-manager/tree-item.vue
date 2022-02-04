@@ -251,7 +251,7 @@ export default defineComponent({
      * Returns true if the file manager mode is set to "combined"
      */
     combined: function (): boolean {
-      return this.$store.state.config['fileManagerMode'] === 'combined'
+      return this.$store.state.config.fileManagerMode === 'combined'
     },
     /**
      * Returns true if there are children that can be displayed
