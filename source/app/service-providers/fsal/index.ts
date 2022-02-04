@@ -157,19 +157,14 @@ export default class FSAL extends ProviderContract {
    *
    * @param   {add|remove|change}  event        The event type
    * @param   {string}             changedPath  The affected path
-   * @param   {number}             timestamp    The timestamp at which this event occurred
    */
-  private _recordFiletreeChange (event: 'add'|'remove'|'change', changedPath: string, timestamp: number = Date.now()): void {
-    // If there are events in the history, make sure the timestamps are *unique*
-    // Especially since we are sometimes emitting events within the same same
-    // function, this causes the timestamp parameter of this function to have
-    // the same value for some events. With this little check we make sure that
-    // each event has a unique timestamp.
+  private _recordFiletreeChange (event: 'add'|'remove'|'change', changedPath: string): void {
+    // The timestamp is just an ascending number (since we don't care about the
+    // precise timings, the only importance is the order in which they occur.)
+    let timestamp = 1
     if (this._history.length > 0) {
       const lastEvent = this._history[this._history.length - 1]
-      if (lastEvent.timestamp >= timestamp) {
-        timestamp = lastEvent.timestamp + 1
-      }
+      timestamp = lastEvent.timestamp + 1
     }
 
     this._history.push({
