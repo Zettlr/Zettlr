@@ -80,7 +80,6 @@ export default class ConfigProvider extends ProviderContract {
   constructor (logger: LogProvider) {
     super()
     this._logger = logger
-    this._logger.verbose('Config provider booting up ...')
     this.configFile = path.join(app.getPath('userData'), 'config.json')
 
     this._emitter = new EventEmitter() // Initiate the emitter
@@ -146,7 +145,7 @@ export default class ConfigProvider extends ProviderContract {
   }
 
   async boot (): Promise<void> {
-    // Nothing to do
+    this._logger.verbose('Config provider booting up ...')
   }
 
   /**

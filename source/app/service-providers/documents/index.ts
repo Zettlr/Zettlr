@@ -138,6 +138,7 @@ export default class DocumentManager extends ProviderContract {
 
   async boot (): Promise<void> {
     // Loads in all openFiles
+    this._logger.verbose('Document Manager starting up ...')
     const openFiles: string[] = this._config.get('openFiles')
     for (const filePath of openFiles) {
       try {

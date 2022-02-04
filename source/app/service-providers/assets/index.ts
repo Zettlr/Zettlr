@@ -35,7 +35,6 @@ export default class AssetsProvider extends ProviderContract {
   constructor (logger: LogProvider) {
     super()
     this._logger = logger
-    this._logger.verbose('Assets provider starting up ...')
 
     this._defaultsPath = path.join(app.getPath('userData'), '/defaults')
     this._snippetsPath = path.join(app.getPath('userData'), '/snippets')
@@ -70,6 +69,7 @@ export default class AssetsProvider extends ProviderContract {
   }
 
   async boot (): Promise<void> {
+    this._logger.verbose('Assets provider starting up ...')
     // First, ensure all required default files are where they should be.
     // Required are those defaults files which are in the assets/defaults directory
     // and correspond to the format (import|export).(writer|reader).yaml

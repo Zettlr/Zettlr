@@ -32,7 +32,6 @@ export default class LinkProvider extends ProviderContract {
   constructor (logger: LogProvider) {
     super()
     this._logger = logger
-    this._logger.verbose('Link provider booting up ...')
 
     this._fileLinkDatabase = new Map()
     this._idLinkDatabase = new Map()
@@ -66,7 +65,7 @@ export default class LinkProvider extends ProviderContract {
   }
 
   async boot (): Promise<void> {
-    // Nothing to do
+    this._logger.verbose('Link provider booting up ...')
   }
 
   /**

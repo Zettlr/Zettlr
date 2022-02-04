@@ -28,7 +28,6 @@ export default class NotificationProvider extends ProviderContract {
   constructor (logger: LogProvider) {
     super()
     this._logger = logger
-    this._logger.verbose('Notification provider booting up ...')
     this._osSupportsNotification = Notification.isSupported()
     this._icon = nativeImage.createFromPath(path.join(__dirname, '../../common/img/image-preview.png'))
     // Inject the global notification methods so that everyone has an easy time
@@ -36,7 +35,7 @@ export default class NotificationProvider extends ProviderContract {
   }
 
   async boot (): Promise<void> {
-    // Nothing to do
+    this._logger.verbose('Notification provider booting up ...')
   }
 
   show (msg: string, title?: string, callback?: Function): boolean {

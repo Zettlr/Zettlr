@@ -41,7 +41,6 @@ export default class TargetProvider extends ProviderContract {
   constructor (logger: LogProvider) {
     super()
     this._logger = logger
-    this._logger.verbose('Target provider booting up')
 
     this._file = path.join(app.getPath('userData'), 'targets.json')
     this._targets = []
@@ -52,7 +51,7 @@ export default class TargetProvider extends ProviderContract {
   } // End constructor
 
   async boot (): Promise<void> {
-    // Nothing to do
+    this._logger.verbose('Target provider booting up ...')
   }
 
   /**

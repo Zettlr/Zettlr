@@ -43,7 +43,6 @@ export default class TranslationProvider extends ProviderContract {
     super()
     this._logger = logger
     this._config = config
-    this._logger.verbose('Translation provider booting up ...')
     this._availableLanguages = [] // Holds all translations able to download
     this._languageDirectory = path.join(app.getPath('userData'), '/lang/')
 
@@ -86,6 +85,7 @@ export default class TranslationProvider extends ProviderContract {
    * @return {Promise} Resolves if everything worked out, rejects otherwise.
    */
   async boot (): Promise<void> {
+    this._logger.verbose('Translation provider booting up ...')
     // First and foremost, load the translation strings
     const file = getLanguageFile(this._config.get('appLang'))
 

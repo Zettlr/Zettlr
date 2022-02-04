@@ -48,7 +48,6 @@ export default class DictionaryProvider extends ProviderContract {
     super()
     this._logger = logger
     this._config = config
-    this._logger.verbose('Dictionary provider booting up ...')
     // Array containing all loaded NSpell dictionaries
     this._typos = []
     // Array containing the language codes for which checking currently works
@@ -98,18 +97,14 @@ export default class DictionaryProvider extends ProviderContract {
       // ... and add cache the autocorrect replacements so they are not seen as "wrong"
       this._cacheAutoCorrectValues()
     })
-
-    // Afterwards, load the first batch of dictionaries
-    this.reload()
-    this._cacheAutoCorrectValues()
-    this._loadUserDict() // On first start, load the user dictionary as well
-      .catch(err => {
-        this._logger.error(`[Dictionary Provider] Could not read user dictionary: ${err.message as string}`, err)
-      })
   }
 
   async boot (): Promise<void> {
-    // Nothing to do
+    this._logger.verbose('Dictionary provider booting up ...')
+    // Afterwards, load the first batch of dictionaries
+    this.reload()
+    this._cacheAutoCorrectValues()
+    await this._loadUserDict()
   }
 
   /**

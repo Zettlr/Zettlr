@@ -46,8 +46,6 @@ export default class TrayProvider extends ProviderContract {
     this._logger = logger
     this._config = config
     this._windows = windows
-
-    this._logger.verbose('Tray provider booting up ...')
     this._tray = null
 
     if (process.env.ZETTLR_IS_TRAY_SUPPORTED === '0') {
@@ -67,6 +65,7 @@ export default class TrayProvider extends ProviderContract {
   }
 
   async boot (): Promise<void> {
+    this._logger.verbose('Tray provider booting up ...')
     let addToTray: boolean = this._config.get('system.leaveAppRunning')
     const shouldStartMinimized = process.argv.includes('--launch-minimized')
     const traySupported = process.env.ZETTLR_IS_TRAY_SUPPORTED === '1'

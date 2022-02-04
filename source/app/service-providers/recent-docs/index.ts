@@ -31,7 +31,6 @@ export default class RecentDocumentsProvider extends ProviderContract {
   constructor (logger: LogProvider) {
     super()
     this._logger = logger
-    this._logger.verbose('Recent documents provider booting up ...')
 
     this._recentDocs = [] // This array holds all recent documents
 
@@ -39,7 +38,7 @@ export default class RecentDocumentsProvider extends ProviderContract {
   }
 
   async boot (): Promise<void> {
-    // Nothing to do
+    this._logger.verbose('Recent documents provider booting up ...')
   }
 
   on (evt: string, callback: (...args: any[]) => void): void {

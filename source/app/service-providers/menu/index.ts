@@ -113,7 +113,6 @@ export default class MenuProvider extends ProviderContract {
     this._recentDocs = recentDocs
     this._commands = commands
     this._windows = windows
-    this._logger.verbose('Menu provider booting up ...')
     this._checkboxState = new Map()
 
     // Begin listening to configuration update events that announce a change in
@@ -242,7 +241,7 @@ export default class MenuProvider extends ProviderContract {
   }
 
   async boot (): Promise<void> {
-    // Nothing to do
+    this._logger.verbose('Menu provider booting up ...')
   }
 
   /**
