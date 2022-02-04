@@ -336,7 +336,9 @@ export default defineComponent({
           const input = this.$refs['new-object-input'] as HTMLInputElement
           if (this.operationType === 'createFile') {
             // If we're generating a file, generate a filename
-            input.value = generateFilename()
+            const filenamePattern = this.$store.state.config.newFileNamePattern
+            const idREPattern = this.$store.state.config['zkn.idRE']
+            input.value = generateFilename(filenamePattern, idREPattern)
           } else if (this.operationType === 'createDir') {
             // Else standard val for new dirs.
             input.value = trans('dialog.dir_new.value')
