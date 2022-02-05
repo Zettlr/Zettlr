@@ -61,7 +61,8 @@ export default class AppServiceContainer {
   private readonly _documentManager: DocumentManager
 
   constructor () {
-    // NOTE: The order in which the providers are instantiated still matters!
+    // NOTE: The log and config providers need to be instantiated first. The
+    // rest can be instantiated afterwards.
     this._logProvider = new LogProvider()
     this._configProvider = new ConfigProvider(this._logProvider)
     this._commandProvider = new CommandProvider(this)
