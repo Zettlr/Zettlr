@@ -48,8 +48,8 @@ contextBridge.exposeInMainWorld('config', {
 // DEBUG
 contextBridge.exposeInMainWorld('__dirname', '')
 
-contextBridge.exposeInMainWorld('getCitation', function (items: CiteItem[], composite: boolean) {
-  ipcRenderer.sendSync('citation-renderer', {
+contextBridge.exposeInMainWorld('getCitation', function (items: CiteItem[], composite: boolean): string|undefined {
+  return ipcRenderer.sendSync('citation-renderer', {
     command: 'get-citation-sync',
     payload: { citations: items, composite: composite }
   })

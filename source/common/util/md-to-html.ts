@@ -15,7 +15,7 @@
 import { Converter, ShowdownExtension } from 'showdown'
 import extractCitations from './extract-citations'
 
-type CitationCallback = (items: CiteItem[], composite: boolean) => string
+type CitationCallback = (items: CiteItem[], composite: boolean) => string|undefined
 
 /**
  * md2html converts the given Markdown to HTML, optionally making any link
@@ -65,7 +65,7 @@ function makeCitationPlugin (citationCallback: CitationCallback): () => Showdown
         const allCitations = extractCitations(text)
         // ... and retrieve the rendered ones from the citeproc provider
         const finalCitations = allCitations.map((elem) => {
-          return citationCallback(elem.citations, elem.composite)
+          return citationCallback(elem.citations, elem.composite) ?? text
         })
 
         // Now get the citations to be replaced

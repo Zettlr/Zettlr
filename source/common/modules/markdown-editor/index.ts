@@ -93,7 +93,7 @@ export default class MarkdownEditor extends EventEmitter {
     this._cmOptions = getCodeMirrorDefaultOptions(this)
     this._countChars = false
 
-    this._md2html = getConverter((window as any).getCitation)
+    this._md2html = getConverter(window.getCitation)
 
     // Parse the anchorElement until we get something useful
     if (typeof anchorElement === 'string' && document.getElementById(anchorElement) !== null) {

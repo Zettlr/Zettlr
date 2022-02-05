@@ -229,7 +229,7 @@ export interface ZettlrState {
 function getConfig (): StoreOptions<ZettlrState> {
   // Enclose an md2html converter since the ToC updates need to go fast and
   // we can't instantiate a showdown converter every time
-  const md2html = getConverter((window as any).getCitation)
+  const md2html = getConverter(window.getCitation)
 
   const config: StoreOptions<ZettlrState> = {
     state () {

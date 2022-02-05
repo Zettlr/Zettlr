@@ -109,6 +109,15 @@ declare interface Window {
      */
     set: (key: string, value: any) => void
   }
+  /**
+   * Takes citation items and returns a rendered citation from main
+   *
+   * @param   {CiteItem[]}  items      The cite items (as CSL JSON)
+   * @param   {boolean}     composite  Whether the citation is composite
+   *
+   * @return  {string|undefined}       The rendered citation, or undefined
+   */
+  getCitation: (items: CiteItem[], composite: boolean) => string|undefined
   ipc: {
     /**
      * Sends a message to main (fire-and-forget)

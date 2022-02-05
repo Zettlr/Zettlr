@@ -139,7 +139,7 @@ export default class TableEditor {
     this._colAlignment = alignments
     this._edgeButtonSize = 30 // Size in pixels
 
-    this._md2html = getConverter((window as any).getCitation)
+    this._md2html = getConverter(window.getCitation)
 
     // Find the container element
     if ('container' in options && options.container instanceof HTMLElement) {

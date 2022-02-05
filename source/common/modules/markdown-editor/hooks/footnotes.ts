@@ -99,7 +99,7 @@ function showFootnoteTooltip (cm: CodeMirror.Editor, element: HTMLElement): void
   const ref = element.textContent?.substring(1) ?? ''
   const fnref = getFootnoteTextForRef(cm, ref)
 
-  const md2html = getConverter((window as any).getCitation)
+  const md2html = getConverter(window.getCitation)
 
   tippy(element, {
     // Display the text as HTML
