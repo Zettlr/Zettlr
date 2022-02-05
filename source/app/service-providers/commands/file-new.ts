@@ -44,8 +44,8 @@ export default class FileNew extends ZettlrCommand {
     const shouldPromptUser = this._app.config.get('newFileDontPrompt') === false
     const type = (arg.type !== undefined) ? arg.type : 'md'
     const filenamePattern = this._app.config.get('newFileNamePattern')
-    const idREPattern = this._app.config.get('zkn.idRE')
-    const generatedName = generateFilename(filenamePattern, idREPattern)
+    const idGenPattern = this._app.config.get('zkn.idGen')
+    const generatedName = generateFilename(filenamePattern, idGenPattern)
 
     if (evt === 'new-unsaved-file' && shouldPromptUser) {
       // We should simply create a new unsaved file that only resides in memory

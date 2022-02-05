@@ -561,8 +561,8 @@ export default class DocumentManager extends ProviderContract {
     // The appendix of the filename will be a number related to the amount of
     // duplicate files in the open files array
     const filenamePattern = this._config.get('newFileNamePattern')
-    const idREPattern = this._config.get('zkn.idRE')
-    let fname = generateFilename(filenamePattern, idREPattern)
+    const idGenPattern = this._config.get('zkn.idGen')
+    let fname = generateFilename(filenamePattern, idGenPattern)
     const ext = path.extname(fname).toLowerCase()
     if (type !== 'md' && !hasCodeExt(fname)) {
       // The user has explicitly requested a code file so we must respect
