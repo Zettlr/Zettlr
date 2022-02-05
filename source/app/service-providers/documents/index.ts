@@ -57,7 +57,7 @@ export default class DocumentManager extends ProviderContract {
     this._activeFile = null
     this._emitter = new EventEmitter()
 
-    let options: chokidar.WatchOptions = {
+    const options: chokidar.WatchOptions = {
       persistent: true,
       ignoreInitial: true, // Do not track the initial watch as changes
       followSymlinks: true, // Follow symlinks
@@ -76,8 +76,8 @@ export default class DocumentManager extends ProviderContract {
       // From chokidar docs: "[...] in some cases some change events will be
       // emitted while the file is being written." --> hence activate this.
       options.awaitWriteFinish = {
-        'stabilityThreshold': threshold,
-        'pollInterval': 100
+        stabilityThreshold: threshold,
+        pollInterval: 100
       }
 
       this._logger.info(`[DocumentManager] Activating file polling with a threshold of ${threshold}ms.`)
