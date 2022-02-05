@@ -25,13 +25,12 @@ import LogProvider from '../log'
 export default class LinkProvider extends ProviderContract {
   private readonly _fileLinkDatabase: Map<string, string[]>
   private readonly _idLinkDatabase: Map<string, string[]>
-  private readonly _logger: LogProvider
+
   /**
    * Create the instance on program start and initially load the tags.
    */
-  constructor (logger: LogProvider) {
+  constructor (private readonly _logger: LogProvider) {
     super()
-    this._logger = logger
 
     this._fileLinkDatabase = new Map()
     this._idLinkDatabase = new Map()

@@ -35,8 +35,6 @@ export default class DictionaryProvider extends ProviderContract {
   private readonly _loadedDicts: string[]
   private readonly _userDictionaryPath: string
   private readonly _emitter: EventEmitter
-  private readonly _logger: LogProvider
-  private readonly _config: ConfigProvider
   private _userDictionary: string[]
   private _fileLock: boolean
   private _unwrittenChanges: boolean
@@ -44,10 +42,8 @@ export default class DictionaryProvider extends ProviderContract {
   private _reloadWanted: boolean
   private _reloadLock: boolean
 
-  constructor (logger: LogProvider, config: ConfigProvider) {
+  constructor (private readonly _logger: LogProvider, private readonly _config: ConfigProvider) {
     super()
-    this._logger = logger
-    this._config = config
     // Array containing all loaded NSpell dictionaries
     this._typos = []
     // Array containing the language codes for which checking currently works

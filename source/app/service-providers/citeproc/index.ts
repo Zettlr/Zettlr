@@ -99,17 +99,13 @@ export default class CiteprocProvider extends ProviderContract {
    */
   private readonly _sys: CSLKernel
 
-  private readonly _logger: LogProvider
-  private readonly _config: ConfigProvider
-  private readonly _notifications: NotificationProvider
-  private readonly _windows: WindowProvider
-
-  constructor (logger: LogProvider, config: ConfigProvider, notifications: NotificationProvider, windows: WindowProvider) {
+  constructor (
+    private readonly _logger: LogProvider,
+    private readonly _config: ConfigProvider,
+    private readonly _notifications: NotificationProvider,
+    private readonly _windows: WindowProvider
+  ) {
     super()
-    this._logger = logger
-    this._config = config
-    this._notifications = notifications
-    this._windows = windows
 
     this._logger.verbose('Citeproc provider booting up ...')
     const style = path.join(__dirname, './assets/csl-styles/chicago-author-date.csl')

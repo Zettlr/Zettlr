@@ -30,16 +30,14 @@ import { Stats } from '@dts/main/stats-provider'
 export default class StatsProvider extends ProviderContract {
   private readonly statsPath: string
   private readonly statsFile: string
-  private readonly _logger: LogProvider
   private stats: Stats
 
   /**
    * Preset sane defaults and load an existing stats file if present
    * @param {Zettlr} parent The main zettlr object.
    */
-  constructor (logger: LogProvider) {
+  constructor (private readonly _logger: LogProvider) {
     super()
-    this._logger = logger
     this.statsPath = app.getPath('userData')
     this.statsFile = path.join(this.statsPath, 'stats.json')
     this.stats = {

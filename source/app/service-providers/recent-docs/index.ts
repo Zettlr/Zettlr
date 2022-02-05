@@ -24,13 +24,12 @@ import LogProvider from '../log'
 export default class RecentDocumentsProvider extends ProviderContract {
   private _recentDocs: string[]
   private readonly _emitter: EventEmitter
-  private readonly _logger: LogProvider
+
   /**
   * Create the instance on program start and initially load the tags.
   */
-  constructor (logger: LogProvider) {
+  constructor (private readonly _logger: LogProvider) {
     super()
-    this._logger = logger
 
     this._recentDocs = [] // This array holds all recent documents
 

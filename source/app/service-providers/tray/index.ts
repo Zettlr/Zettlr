@@ -34,18 +34,15 @@ export default class TrayProvider extends ProviderContract {
    */
   private _tray: Tray | null
 
-  private readonly _logger: LogProvider
-  private readonly _config: ConfigProvider
-  private readonly _windows: WindowProvider
-
   /**
    * Create the instance on program start and setup services.
    */
-  constructor (logger: LogProvider, config: ConfigProvider, windows: WindowProvider) {
+  constructor (
+    private readonly _logger: LogProvider,
+    private readonly _config: ConfigProvider,
+    private readonly _windows: WindowProvider
+  ) {
     super()
-    this._logger = logger
-    this._config = config
-    this._windows = windows
     this._tray = null
 
     if (process.env.ZETTLR_IS_TRAY_SUPPORTED === '0') {

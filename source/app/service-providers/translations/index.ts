@@ -36,19 +36,18 @@ interface APIResponse {
 export default class TranslationProvider extends ProviderContract {
   private _availableLanguages: APIResponse[]
   private readonly _languageDirectory: string
-  private readonly _logger: LogProvider
-  private readonly _config: ConfigProvider
 
-  constructor (logger: LogProvider, config: ConfigProvider) {
+  constructor (
+    private readonly _logger: LogProvider,
+    private readonly _config: ConfigProvider
+  ) {
     super()
-    this._logger = logger
-    this._config = config
     this._availableLanguages = [] // Holds all translations able to download
     this._languageDirectory = path.join(app.getPath('userData'), '/lang/')
 
     // Since we still have side effects in the main process, we have to inject
     // the config provider into that module kind of hacky
-    provideConfigToI18NMain(config)
+    provideConfigToI18NMain(this._config)
 
     // NOTE: This must be a synchronous event, because it is called from within
     // the trans() function if one of those two objects is not yet set in the

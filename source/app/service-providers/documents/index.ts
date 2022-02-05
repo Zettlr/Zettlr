@@ -36,26 +36,18 @@ export default class DocumentManager extends ProviderContract {
   private _activeFile: MDFileDescriptor|CodeFileDescriptor|null
   private readonly _watcher: chokidar.FSWatcher
   private readonly _sessionHistory: string[]
-  private readonly _logger: LogProvider
-  private readonly _config: ConfigProvider
-  private readonly _recentDocs: RecentDocumentsProvider
-  private readonly _citeproc: CiteprocProvider
-  private readonly _fsal: FSAL
-  private readonly _links: LinkProvider
-  private readonly _targets: TargetProvider
-  private readonly _tags: TagProvider
   private readonly _emitter: EventEmitter
   private _sessionPointer: number
 
   constructor (
-    logger: LogProvider,
-    config: ConfigProvider,
-    recentDocs: RecentDocumentsProvider,
-    citeproc: CiteprocProvider,
-    fsal: FSAL,
-    links: LinkProvider,
-    targets: TargetProvider,
-    tags: TagProvider
+    private readonly _logger: LogProvider,
+    private readonly _config: ConfigProvider,
+    private readonly _recentDocs: RecentDocumentsProvider,
+    private readonly _citeproc: CiteprocProvider,
+    private readonly _fsal: FSAL,
+    private readonly _links: LinkProvider,
+    private readonly _targets: TargetProvider,
+    private readonly _tags: TagProvider
   ) {
     super()
 
@@ -63,15 +55,6 @@ export default class DocumentManager extends ProviderContract {
     this._sessionHistory = []
     this._sessionPointer = -1
     this._activeFile = null
-
-    this._logger = logger
-    this._config = config
-    this._recentDocs = recentDocs
-    this._citeproc = citeproc
-    this._fsal = fsal
-    this._links = links
-    this._targets = targets
-    this._tags = tags
     this._emitter = new EventEmitter()
 
     let options: chokidar.WatchOptions = {

@@ -23,11 +23,9 @@ import ProviderContract from '../provider-contract'
 export default class NotificationProvider extends ProviderContract {
   private readonly _osSupportsNotification: boolean
   private readonly _icon: Electron.NativeImage
-  private readonly _logger: LogProvider
 
-  constructor (logger: LogProvider) {
+  constructor (private readonly _logger: LogProvider) {
     super()
-    this._logger = logger
     this._osSupportsNotification = Notification.isSupported()
     this._icon = nativeImage.createFromPath(path.join(__dirname, '../../common/img/image-preview.png'))
     // Inject the global notification methods so that everyone has an easy time

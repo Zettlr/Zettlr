@@ -90,18 +90,14 @@ export const commands = [
 
 export default class CommandProvider extends ProviderContract {
   private readonly _commands: ZettlrCommand[]
-  private readonly _app: AppServiceContainer
 
   // TODO: Right now this just injects the full service container into the
   // commands, but it mayt be better to only provide those which are actually
   // required.
-  constructor (app: AppServiceContainer) {
+  constructor (private readonly _app: AppServiceContainer) {
     super()
-
-    this._app = app
-
     // Load available commands
-    this._commands = commands.map(Command => new Command(app))
+    this._commands = commands.map(Command => new Command(this._app))
   }
 
   /**

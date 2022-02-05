@@ -71,15 +71,12 @@ export default class ConfigProvider extends ProviderContract {
 
   private readonly _emitter: EventEmitter
 
-  private readonly _logger: LogProvider
-
   /**
     * Preset sane defaults, then load the config and perform a system check.
     * @param {Zettlr} parent Parent Zettlr object.
     */
-  constructor (logger: LogProvider) {
+  constructor (private readonly _logger: LogProvider) {
     super()
-    this._logger = logger
     this.configFile = path.join(app.getPath('userData'), 'config.json')
 
     this._emitter = new EventEmitter() // Initiate the emitter

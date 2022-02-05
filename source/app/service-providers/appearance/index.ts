@@ -35,15 +35,11 @@ export default class AppearanceProvider extends ProviderContract {
   private _endHour: number
   private _endMin: number
 
-  private readonly _logger: LogProvider
-  private readonly _config: ConfigProvider
   /**
    * Create the instance on program start and initially load the settings.
    */
-  constructor (logger: LogProvider, config: ConfigProvider) {
+  constructor (private readonly _logger: LogProvider, private readonly _config: ConfigProvider) {
     super()
-    this._logger = logger
-    this._config = config
     this._logger.verbose('Appearance provider booting up ...')
     // Possible modes:
     // - off: Do nothing in here

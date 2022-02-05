@@ -30,11 +30,9 @@ export default class AssetsProvider extends ProviderContract {
   private readonly _defaultsPath: string
   private readonly _snippetsPath: string
   private readonly _filterPath: string
-  private readonly _logger: LogProvider
 
-  constructor (logger: LogProvider) {
+  constructor (private readonly _logger: LogProvider) {
     super()
-    this._logger = logger
 
     this._defaultsPath = path.join(app.getPath('userData'), '/defaults')
     this._snippetsPath = path.join(app.getPath('userData'), '/snippets')

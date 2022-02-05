@@ -79,22 +79,18 @@ export default class FSAL extends ProviderContract {
   private _state: FSALState
   private _history: FSALHistoryEvent[]
   private readonly _emitter: EventEmitter
-  private readonly _logger: LogProvider
-  private readonly _config: ConfigProvider
-  private readonly _tags: TagProvider
-  private readonly _links: LinkProvider
-  private readonly _targets: TargetProvider
 
-  constructor (logger: LogProvider, config: ConfigProvider, targets: TargetProvider, tags: TagProvider, links: LinkProvider) {
+  constructor (
+    private readonly _logger: LogProvider,
+    private readonly _config: ConfigProvider,
+    private readonly _targets: TargetProvider,
+    private readonly _tags: TagProvider,
+    private readonly _links: LinkProvider
+  ) {
     super()
-    this._logger = logger
-    this._config = config
-    this._tags = tags
-    this._links = links
-    this._targets = targets
 
     const cachedir = app.getPath('userData')
-    this._cache = new FSALCache(logger, path.join(cachedir, 'fsal/cache'))
+    this._cache = new FSALCache(this._logger, path.join(cachedir, 'fsal/cache'))
     this._watchdog = new FSALWatchdog(this._logger, this._config)
     this._isCurrentlyHandlingRemoteChange = false
     this._fsalIsBusy = false // Locks certain functionality during running of actions
@@ -109,14 +105,14 @@ export default class FSAL extends ProviderContract {
     }
 
     // Finally, set up listeners for global targets
-    targets.on('update', (filePath: string) => {
+    this._targets.on('update', (filePath: string) => {
       let file = this.findFile(filePath)
       if (file === null || file.type !== 'file') return // Not our business
       // Simply pull in the new target
-      FSALFile.setTarget(file, targets.get(filePath))
+      FSALFile.setTarget(file, this._targets.get(filePath))
       this._recordFiletreeChange('change', file.path)
     })
-    targets.on('remove', (filePath: string) => {
+    this._targets.on('remove', (filePath: string) => {
       let file = this.findFile(filePath)
       if (file === null || file.type !== 'file') return // Also not our business
       FSALFile.setTarget(file, undefined) // Reset

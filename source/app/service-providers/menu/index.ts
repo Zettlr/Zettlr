@@ -97,22 +97,17 @@ export default class MenuProvider extends ProviderContract {
    */
   _checkboxState: Map<string, boolean>
 
-  private readonly _logger: LogProvider
-  private readonly _config: ConfigProvider
-  private readonly _recentDocs: RecentDocumentsProvider
-  private readonly _windows: WindowProvider
-  private readonly _commands: CommandProvider
-
   /**
   * Creates the main application menu and sets it.
   */
-  constructor (logger: LogProvider, config: ConfigProvider, recentDocs: RecentDocumentsProvider, commands: CommandProvider, windows: WindowProvider) {
+  constructor (
+    private readonly _logger: LogProvider,
+    private readonly _config: ConfigProvider,
+    private readonly _recentDocs: RecentDocumentsProvider,
+    private readonly _commands: CommandProvider,
+    private readonly _windows: WindowProvider
+  ) {
     super()
-    this._logger = logger
-    this._config = config
-    this._recentDocs = recentDocs
-    this._commands = commands
-    this._windows = windows
     this._checkboxState = new Map()
 
     // Begin listening to configuration update events that announce a change in

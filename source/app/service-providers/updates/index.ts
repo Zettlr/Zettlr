@@ -44,17 +44,13 @@ export default class UpdateProvider extends ProviderContract {
   private _downloadReadStream: undefined|ReadStream
   private _downloadWriteStream: undefined|WriteStream
 
-  private readonly _logger: LogProvider
-  private readonly _config: ConfigProvider
-  private readonly _commands: CommandProvider
-  private readonly _notifications: NotificationProvider
-
-  constructor (logger: LogProvider, config: ConfigProvider, notifications: NotificationProvider, commands: CommandProvider) {
+  constructor (
+    private readonly _logger: LogProvider,
+    private readonly _config: ConfigProvider,
+    private readonly _notifications: NotificationProvider,
+    private readonly _commands: CommandProvider
+  ) {
     super()
-    this._logger = logger
-    this._config = config
-    this._commands = commands
-    this._notifications = notifications
     this._logger.verbose('Update provider booting up ...')
 
     this._sha256Data = new Map()

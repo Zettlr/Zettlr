@@ -78,15 +78,13 @@ export default class WindowProvider extends ProviderContract {
   private _persistTimeout: ReturnType<typeof setTimeout>|undefined
   private readonly _hasRTLLocale: boolean
   private readonly _emitter: EventEmitter
-  private readonly _logger: LogProvider
-  private readonly _config: ConfigProvider
-  private readonly _documents: DocumentManager
 
-  constructor (logger: LogProvider, config: ConfigProvider, documents: DocumentManager) {
+  constructor (
+    private readonly _logger: LogProvider,
+    private readonly _config: ConfigProvider,
+    private readonly _documents: DocumentManager
+  ) {
     super()
-    this._logger = logger
-    this._config = config
-    this._documents = documents
     this._emitter = new EventEmitter()
     this._mainWindow = null
     this._qlWindows = new Map()

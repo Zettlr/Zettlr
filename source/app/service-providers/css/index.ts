@@ -24,11 +24,9 @@ import LogProvider from '@providers/log'
 export default class CssProvider extends ProviderContract {
   private readonly _filePath: string
   private readonly _emitter: EventEmitter
-  private readonly _logger: LogProvider
 
-  constructor (logger: LogProvider) {
+  constructor (private readonly _logger: LogProvider) {
     super()
-    this._logger = logger
     this._filePath = path.join(app.getPath('userData'), 'custom.css')
 
     this._emitter = new EventEmitter()

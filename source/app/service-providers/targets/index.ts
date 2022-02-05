@@ -33,14 +33,12 @@ export interface WritingTarget {
 export default class TargetProvider extends ProviderContract {
   private readonly _file: string
   private readonly _emitter: EventEmitter
-  private readonly _logger: LogProvider
   private _targets: WritingTarget[]
   /**
    * Create the instance on program start and initially load the targets.
    */
-  constructor (logger: LogProvider) {
+  constructor (private readonly _logger: LogProvider) {
     super()
-    this._logger = logger
 
     this._file = path.join(app.getPath('userData'), 'targets.json')
     this._targets = []

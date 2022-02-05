@@ -34,13 +34,11 @@ export default class TagProvider extends ProviderContract {
   private readonly _file: string
   private _colouredTags: ColouredTag[]
   private readonly _globalTagDatabase: Map<string, InternalTagRecord>
-  private readonly _logger
   /**
    * Create the instance on program start and initially load the tags.
    */
-  constructor (logger: LogProvider) {
+  constructor (private readonly _logger: LogProvider) {
     super()
-    this._logger = logger
     this._logger.verbose('Tag provider booting up ...')
     this._file = path.join(app.getPath('userData'), 'tags.json')
     this._colouredTags = []
