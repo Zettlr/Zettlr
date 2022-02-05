@@ -30,10 +30,6 @@ export default class NotificationProvider extends ProviderContract {
     this._icon = nativeImage.createFromPath(path.join(__dirname, '../../common/img/image-preview.png'))
   }
 
-  async boot (): Promise<void> {
-    this._logger.verbose('Notification provider booting up ...')
-  }
-
   show (msg: string, title?: string, callback?: Function): boolean {
     if (!this._osSupportsNotification) {
       return false

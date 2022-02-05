@@ -98,6 +98,11 @@ export default class CommandProvider extends ProviderContract {
     super()
     // Load available commands
     this._commands = commands.map(Command => new Command(this._app))
+
+    // Set up the command listener
+    ipcMain.handle('application', async (event, { command, payload }) => {
+      return await this.run(command, payload)
+    })
   }
 
   /**
@@ -222,14 +227,6 @@ export default class CommandProvider extends ProviderContract {
         this._app.log.warning(`[Application] Received a request to run command ${command}, but it's not registered.`)
       }
     }
-  }
-
-  async boot (): Promise<void> {
-    this._app.log.verbose('Command Provider booting up ...')
-    // Set up the command listener here
-    ipcMain.handle('application', async (event, { command, payload }) => {
-      return await this.run(command, payload)
-    })
   }
 
   async shutdown (): Promise<void> {

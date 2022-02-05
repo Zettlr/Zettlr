@@ -63,10 +63,6 @@ export default class LinkProvider extends ProviderContract {
     })
   }
 
-  async boot (): Promise<void> {
-    this._logger.verbose('Link provider booting up ...')
-  }
-
   /**
    * Shuts down the service provider
    * @return {Boolean} Returns true after successful shutdown

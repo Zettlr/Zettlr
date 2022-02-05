@@ -141,10 +141,6 @@ export default class ConfigProvider extends ProviderContract {
     return this._newVersion
   }
 
-  async boot (): Promise<void> {
-    this._logger.verbose('Config provider booting up ...')
-  }
-
   /**
    * Shutdown the service provider -- here save the config to disk
    * @return {Boolean} Returns true after successful shutdown.

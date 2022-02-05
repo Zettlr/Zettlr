@@ -46,10 +46,6 @@ export default class TargetProvider extends ProviderContract {
     this._load()
 
     this._emitter = new EventEmitter()
-  } // End constructor
-
-  async boot (): Promise<void> {
-    this._logger.verbose('Target provider booting up ...')
   }
 
   /**

@@ -160,10 +160,6 @@ export default class AppearanceProvider extends ProviderContract {
     this.tick() // Begin the tick
   }
 
-  async boot (): Promise<void> {
-    // Nothing to do
-  }
-
   tick (): void {
     if (this._mode === 'schedule') {
       // By tracking the status of the time, we avoid annoying people by forcing

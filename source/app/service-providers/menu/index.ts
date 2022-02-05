@@ -235,10 +235,6 @@ export default class MenuProvider extends ProviderContract {
     })
   }
 
-  async boot (): Promise<void> {
-    this._logger.verbose('Menu provider booting up ...')
-  }
-
   /**
    * Shuts down the provider
    *

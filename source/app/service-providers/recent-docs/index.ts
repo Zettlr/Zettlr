@@ -36,10 +36,6 @@ export default class RecentDocumentsProvider extends ProviderContract {
     this._emitter = new EventEmitter()
   }
 
-  async boot (): Promise<void> {
-    this._logger.verbose('Recent documents provider booting up ...')
-  }
-
   on (evt: string, callback: (...args: any[]) => void): void {
     this._emitter.on(evt, callback)
   }

@@ -20,7 +20,10 @@ export default abstract class ProviderContract {
    *
    * @return  {Promise<void>}  boot must return a Promise.
    */
-  public abstract boot (): Promise<void>
+  public async boot (): Promise<void> {
+    // An empty default implementation for providers who don't require their own
+    // boot logic.
+  }
 
   /**
    * Service providers implement a shutdown method which must be called before
