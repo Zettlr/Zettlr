@@ -149,14 +149,23 @@ export default class TranslationProvider extends ProviderContract {
     this._logger.info(`[Translation Provider] Updating translations for ${langList} ...`)
 
     // At this moment, we should have all languages.
+    // NOTE: We're collecting the promises and do not await them here, so that
+    // the app starts faster, especially for slow connections.
+    const allPromises: Array<Promise<void>> = []
     for (const language of toUpdate) {
       // What we need to do is rather simple: Simply overwrite the corresponding
       // language files in the language subdirectory!
-      await this.downloadLanguage(language)
+      allPromises.push(this.downloadLanguage(language))
     }
 
-    // Now we are done and can notify the user of all updated translations!
-    this._logger.info(trans('dialog.preferences.translations.updated', langList))
+    Promise.all(allPromises)
+      .then(() => {
+        // Now we are done and can notify the user of all updated translations!
+        this._logger.info(trans('dialog.preferences.translations.updated', langList))
+      })
+      .catch((err) => {
+        this._logger.error(`Could not update language: ${err.message as string}`, err)
+      })
   }
 
   /**
