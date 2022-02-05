@@ -18,9 +18,10 @@ import { promises as fs } from 'fs'
 import isFile from '../../common/util/is-file'
 import isTraySupported from './is-tray-supported'
 import commandExists from 'command-exists'
+import LogProvider from '@providers/log'
 
-export default async function environmentCheck (): Promise<void> {
-  console.log('Performing environment check ...')
+export default async function environmentCheck (log: LogProvider): Promise<void> {
+  log.info('Performing environment check ...')
 
   /**
    * Contains custom paths that should be present on the process.env.PATH property
@@ -78,7 +79,7 @@ export default async function environmentCheck (): Promise<void> {
   if (!winARM && !macARM && !is64Bit && !isLinux && !linuxARM) {
     // We support: Windows ARM and macOS ARM
     // and anything 64bit. Warn for everything else.
-    console.warn(`[Application] Your platform/arch (${process.platform}/${process.arch}) combination is not officially supported. Zettlr might not function correctly.`)
+    log.warning(`[Application] Your platform/arch (${process.platform}/${process.arch}) combination is not officially supported. Zettlr might not function correctly.`)
   }
 
   // We need to check if Pandoc has been bundled with this package.
@@ -86,19 +87,19 @@ export default async function environmentCheck (): Promise<void> {
   const executable = (process.platform === 'win32') ? 'pandoc.exe' : 'pandoc'
   const pandocPath = path.join(process.resourcesPath, executable)
   if (isFile(pandocPath)) {
-    console.log(`[Application] Pandoc has been bundled with this release. Path: ${pandocPath}`)
+    log.info(`[Application] Pandoc has been bundled with this release. Path: ${pandocPath}`)
     process.env.PANDOC_PATH = pandocPath
   } else if (!app.isPackaged) {
     // We're in develop mode, so possibly, we have a Pandoc exe. Let's check
     const resPath = path.join(__dirname, '../../resources', executable)
     if (isFile(resPath)) {
-      console.log(`[Application] App is unpackaged, and Pandoc has been found in the resources directory: ${resPath}`)
+      log.info(`[Application] App is unpackaged, and Pandoc has been found in the resources directory: ${resPath}`)
       process.env.PANDOC_PATH = resPath
     } else {
-      console.warn(`[Application] App is unpackaged, but there was no Pandoc executable: ${resPath}`)
+      log.warning(`[Application] App is unpackaged, but there was no Pandoc executable: ${resPath}`)
     }
   } else {
-    console.warn('[Application] Pandoc has not been bundled with this release. Falling back to system version instead.')
+    log.warning('[Application] Pandoc has not been bundled with this release. Falling back to system version instead.')
   }
 
   // Make sure the PATH property exists
@@ -130,7 +131,7 @@ export default async function environmentCheck (): Promise<void> {
     try {
       await fs.lstat(p)
     } catch (err) {
-      console.log(`Creating required directory ${p} ...`)
+      log.info(`Creating required directory ${p} ...`)
       await fs.mkdir(p, { recursive: true })
     }
   }
@@ -141,7 +142,7 @@ export default async function environmentCheck (): Promise<void> {
   } catch (err: any) {
     process.env.ZETTLR_IS_TRAY_SUPPORTED = '0'
     process.env.ZETTLR_TRAY_ERROR = err.message
-    console.warn(err.message)
+    log.warning(err.message)
   }
 
   // Determine if git is installed on this machine
@@ -152,5 +153,5 @@ export default async function environmentCheck (): Promise<void> {
     process.env.GIT_SUPPORT = '0'
   }
 
-  console.log('Environment check complete.')
+  log.info('Environment check complete.')
 }

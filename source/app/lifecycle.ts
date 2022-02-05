@@ -39,10 +39,6 @@ let upTimestamp: number
 export async function bootApplication (): Promise<void> {
   upTimestamp = Date.now()
 
-  // First of all we MUST perform the environment check, since everything else
-  // depends on this.
-  await environmentCheck()
-
   // We need to instantiate the service container right away to have access to
   // the log and config providers. Then we just need to remember to boot it
   // before we access anything important.
@@ -51,6 +47,10 @@ export async function bootApplication (): Promise<void> {
   const log = appServiceContainer.log
 
   log.info(`こんにちは！ Booting Zettlr at ${(new Date()).toString()}.`)
+
+  // First of all we MUST perform the environment check, since everything else
+  // depends on this.
+  await environmentCheck(log)
 
   // Before we begin, let's load the Vue.js DevTools for debugging
   try {
