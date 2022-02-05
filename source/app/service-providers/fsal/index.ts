@@ -15,6 +15,7 @@
 
 import path from 'path'
 import EventEmitter from 'events'
+import { performance } from 'perf_hooks'
 import isFile from '@common/util/is-file'
 import isDir from '@common/util/is-dir'
 import objectToArray from '@common/util/object-to-array'
@@ -139,7 +140,7 @@ export default class FSAL extends ProviderContract {
     }
 
     // Start a timer to measure how long the roots take to load.
-    const start = Date.now()
+    const start = performance.now()
 
     // Next, load every path we should be loading from the config
     for (const rootOrWorkspace of this._config.get('openPaths') as string[]) {
@@ -151,9 +152,9 @@ export default class FSAL extends ProviderContract {
       }
     }
 
-    const duration = Date.now() - start
-    if (duration > 1000) {
-      this._logger.info(`[FSAL] Loaded all files and workspaces in ${duration / 1000} seconds`)
+    const duration = (performance.now() - start) / 1000
+    if (duration > 1) {
+      this._logger.info(`[FSAL] Loaded all files and workspaces in ${duration} seconds`)
     }
 
     // Afterwards we can set our pointers accordingly
