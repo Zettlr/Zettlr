@@ -28,8 +28,6 @@ export default class NotificationProvider extends ProviderContract {
     super()
     this._osSupportsNotification = Notification.isSupported()
     this._icon = nativeImage.createFromPath(path.join(__dirname, '../../common/img/image-preview.png'))
-    // Inject the global notification methods so that everyone has an easy time
-    // broadcasting those messages to all windows involved.
   }
 
   async boot (): Promise<void> {

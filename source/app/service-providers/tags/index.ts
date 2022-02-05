@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import fs from 'fs'
+import { promises as fs } from 'fs'
 import path from 'path'
 import { app, ipcMain } from 'electron'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
@@ -45,8 +45,6 @@ export default class TagProvider extends ProviderContract {
     // The global tag database; it contains all tags that are used in any of the
     // files.
     this._globalTagDatabase = new Map()
-
-    this._load()
 
     ipcMain.handle('tag-provider', (event, message) => {
       const { command } = message
@@ -84,7 +82,13 @@ export default class TagProvider extends ProviderContract {
   }
 
   async boot (): Promise<void> {
-    // Nothing to do
+    try {
+      await fs.lstat(this._file)
+      const content = await fs.readFile(this._file, { encoding: 'utf8' })
+      this.setColouredTags(JSON.parse(content))
+    } catch (err) {
+      await fs.writeFile(this._file, JSON.stringify([]), { encoding: 'utf8' })
+    }
   }
 
   /**
@@ -93,7 +97,7 @@ export default class TagProvider extends ProviderContract {
    */
   async shutdown (): Promise<void> {
     this._logger.verbose('Tag provider shutting down ...')
-    this._save()
+    await this._save()
   }
 
   /**
@@ -151,34 +155,12 @@ export default class TagProvider extends ProviderContract {
   }
 
   /**
-   * This function only (re-)reads the tags on disk.
-   * @return {ZettlrTags} This for chainability.
-   */
-  _load (): TagProvider {
-    // We are not checking if the user directory exists, b/c this file will
-    // be loaded after the ZettlrConfig, which makes sure the dir exists.
-
-    // Does the file already exist?
-    try {
-      fs.lstatSync(this._file)
-      this._colouredTags = JSON.parse(fs.readFileSync(this._file, { encoding: 'utf8' }))
-    } catch (err) {
-      fs.writeFileSync(this._file, JSON.stringify([]), { encoding: 'utf8' })
-      return this // No need to iterate over objects anymore
-    }
-
-    return this
-  }
-
-  /**
    * Simply writes the tag data to disk.
    * @return {ZettlrTags} This for chainability.
    */
-  _save (): TagProvider {
+  async _save (): Promise<void> {
     // (Over-)write the tags
-    fs.writeFileSync(this._file, JSON.stringify(this._colouredTags), { encoding: 'utf8' })
-
-    return this
+    await fs.writeFile(this._file, JSON.stringify(this._colouredTags), { encoding: 'utf8' })
   }
 
   /**
@@ -186,8 +168,19 @@ export default class TagProvider extends ProviderContract {
    * @param  {ColouredTag[]} tags The new tags as an array
    */
   setColouredTags (tags: ColouredTag[]): void {
-    this._colouredTags = tags
+    const uniqueTags: ColouredTag[] = []
+    for (const tag of tags) {
+      const hasTag = uniqueTags.find(elem => elem.name === tag.name)
+      if (hasTag === undefined) {
+        uniqueTags.push(tag)
+      }
+    }
+
+    this._colouredTags = uniqueTags
     this._save()
+      .catch((err: any) => {
+        this._logger.error(`[Tag Provider] Could not write tags to disk: ${err.message as string}`, err)
+      })
     broadcastIpcMessage('coloured-tags')
   }
 

@@ -113,6 +113,7 @@ export default class FSAL extends ProviderContract {
       FSALFile.setTarget(file, this._targets.get(filePath))
       this._recordFiletreeChange('change', file.path)
     })
+
     this._targets.on('remove', (filePath: string) => {
       let file = this.findFile(filePath)
       if (file === null || file.type !== 'file') return // Also not our business

@@ -220,18 +220,6 @@ export default class CiteprocProvider extends ProviderContract {
         return this.makeBibliography()
       }
     })
-
-    // Finally, begin loading the main library (if not empty)
-    if (this._mainLibrary.trim() !== '') {
-      this._loadDatabase(this._mainLibrary)
-        .then((db) => {
-          this._selectDatabase(db.path)
-        })
-        .catch(err => {
-          this._logger.error(`[Citeproc Provider] Could not load main library: ${String(err.message)}`, err)
-          this._windows.showErrorMessage(trans('gui.citeproc.error_db'), err.message, err.message)
-        })
-    }
   } // END constructor
 
   hasBibTexAttachments (): boolean {
@@ -273,7 +261,15 @@ export default class CiteprocProvider extends ProviderContract {
   }
 
   public async boot (): Promise<void> {
-    //
+    if (this._mainLibrary.trim() !== '') {
+      try {
+        const db = await this._loadDatabase(this._mainLibrary)
+        this._selectDatabase(db.path)
+      } catch (err: any) {
+        this._logger.error(`[Citeproc Provider] Could not load main library: ${String(err.message)}`, err)
+        this._windows.showErrorMessage(trans('gui.citeproc.error_db'), err.message, err.message)
+      }
+    }
   }
 
   /**
