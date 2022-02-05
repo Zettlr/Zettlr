@@ -2,6 +2,10 @@
   <div
     class="tree-item-container"
     v-bind:data-hash="obj.hash"
+    v-on:dragover="acceptDrags"
+    v-on:dragenter="enterDragging"
+    v-on:dragleave="leaveDragging"
+    v-on:drop="handleDrop"
   >
     <div
       v-bind:class="{
@@ -18,10 +22,6 @@
       }"
       v-on:click.stop="requestSelection"
       v-on:auxclick.stop="requestSelection"
-      v-on:dragover="acceptDrags"
-      v-on:dragenter="enterDragging"
-      v-on:dragleave="leaveDragging"
-      v-on:drop="handleDrop"
       v-on:contextmenu="handleContextMenu"
     >
       <!-- First: Secondary icon (only if primaryIcon displays the chevron) -->
