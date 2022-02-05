@@ -110,11 +110,10 @@ export default class TagProvider extends ProviderContract {
       // Either init or modify accordingly
       const record = this._globalTagDatabase.get(tag)
       if (record === undefined) {
-        const cInfo = this._colouredTags.find(e => e.name === tag)
         const newRecord: InternalTagRecord = {
           text: tag,
           files: [filePath],
-          className: (cInfo !== undefined) ? 'cm-hint-colour' : ''
+          className: ''
         }
 
         this._globalTagDatabase.set(tag, newRecord)
@@ -182,6 +181,10 @@ export default class TagProvider extends ProviderContract {
         this._logger.error(`[Tag Provider] Could not write tags to disk: ${err.message as string}`, err)
       })
     broadcastIpcMessage('coloured-tags')
+    // Necessary so that, e.g., the autocomplete list, receives a tag database
+    // with the correct class names applied, since the className property is
+    // injected in getTagDatabase()
+    broadcastIpcMessage('tags')
   }
 
   /**
@@ -201,10 +204,11 @@ export default class TagProvider extends ProviderContract {
   getTagDatabase (): TagDatabase {
     const ret: TagDatabase = {}
     for (const [ tag, record ] of this._globalTagDatabase.entries()) {
+      const cInfo = this._colouredTags.find(e => e.name === tag)
       ret[tag] = {
         text: record.text,
         count: record.files.length,
-        className: record.className
+        className: (cInfo !== undefined) ? 'cm-hint-colour' : ''
       }
     }
     return ret

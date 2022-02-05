@@ -236,7 +236,7 @@ export default defineComponent({
           imagePreviewHeight: this.$store.state.config['display.imageHeight'],
           markdownBoldFormatting: this.$store.state.config['editor.boldFormatting'],
           markdownItalicFormatting: this.$store.state.config['editor.italicFormatting'],
-          muteLines: this.$store.state.config['muteLines'],
+          muteLines: this.$store.state.config.muteLines,
           citeStyle: this.$store.state.config['editor.citeStyle'],
           readabilityAlgorithm: this.$store.state.config['editor.readabilityAlgorithm'],
           zettelkasten: {
