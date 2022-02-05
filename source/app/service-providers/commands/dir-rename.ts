@@ -38,6 +38,12 @@ export default class DirRename extends ZettlrCommand {
     const oldPath = sourceDir.path
     const newPath = path.join(sourceDir.dir, sanitizedName)
 
+    // Close any file that is inside the directory to be renamed and close them.
+    const ofs = this._app.documents.openFiles.filter(doc => doc.path.startsWith(sourceDir.path))
+    for (const doc of ofs) {
+      this._app.documents.closeFile(doc)
+    }
+
     try {
       await this._app.fsal.renameDir(sourceDir, sanitizedName)
     } catch (err: any) {
