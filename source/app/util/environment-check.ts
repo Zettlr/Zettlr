@@ -26,7 +26,7 @@ export default async function environmentCheck (): Promise<void> {
    * Contains custom paths that should be present on the process.env.PATH property
    * for the given operating system as reported by process.platform.
    */
-  const CUSTOM_PATHS = {
+  const CUSTOM_PATHS: { [key in NodeJS.Platform]: string[] } = {
     win32: [],
     linux: ['/usr/bin'],
     darwin: [
@@ -109,12 +109,12 @@ export default async function environmentCheck (): Promise<void> {
   // First integrate the additional paths that we need.
   let tempPATH = process.env.PATH.split(DELIM)
 
-  for (let customPath of CUSTOM_PATHS[process.platform]) {
+  for (const customPath of CUSTOM_PATHS[process.platform]) {
     // Check for both trailing and non-trailing slashes (to not add any
     // directory more than once)
     let customPathAlt = customPath + '/'
     if (customPath.endsWith('/')) {
-      customPathAlt = customPath.substr(0, customPath.length - 1)
+      customPathAlt = customPath.substring(0, customPath.length - 1)
     }
 
     if (!tempPATH.includes(customPath) && !tempPATH.includes(customPathAlt)) {
@@ -126,12 +126,12 @@ export default async function environmentCheck (): Promise<void> {
   process.env.PATH = tempPATH.filter(e => e.trim() !== '').join(DELIM)
 
   // Then ensure all required directories exist
-  for (let p of REQUIRED_DIRECTORIES) {
+  for (const directory of REQUIRED_DIRECTORIES) {
     try {
-      await fs.lstat(p)
+      await fs.lstat(directory)
     } catch (err) {
-      console.log(`Creating required directory ${p} ...`)
-      await fs.mkdir(p, { recursive: true })
+      console.log(`Creating required directory ${directory} ...`)
+      await fs.mkdir(directory, { recursive: true })
     }
   }
 
