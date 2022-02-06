@@ -190,6 +190,7 @@ export default class DocumentManager extends ProviderContract {
     this._watcher.add(files.map(file => file.path))
     this._config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
     this._emitter.emit('update', 'openFiles')
+    broadcastIpcMessage('fsal-state-changed', 'openFiles')
   }
 
   /**
@@ -216,6 +217,7 @@ export default class DocumentManager extends ProviderContract {
       })
 
       this._emitter.emit('update', 'openFiles')
+      broadcastIpcMessage('fsal-state-changed', 'openFiles')
       this._config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
     }
 
@@ -267,6 +269,7 @@ export default class DocumentManager extends ProviderContract {
     // Update all required states
     this._watcher.add(file.path)
     this._emitter.emit('update', 'openFiles')
+    broadcastIpcMessage('fsal-state-changed', 'openFiles')
     this._config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
 
     const avoidNewTabs = Boolean(this._config.get('system.avoidNewTabs'))
@@ -310,6 +313,7 @@ export default class DocumentManager extends ProviderContract {
     this._loadedDocuments.splice(this._loadedDocuments.indexOf(file), 1)
     this._watcher.unwatch(file.path)
     this._emitter.emit('update', 'openFiles')
+    broadcastIpcMessage('fsal-state-changed', 'openFiles')
     this._config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
 
     // Now, if we just closed the active file, we need to make another file
@@ -332,6 +336,7 @@ export default class DocumentManager extends ProviderContract {
     this._watcher.unwatch(this._loadedDocuments.map(file => file.path))
     this._loadedDocuments = []
     this._emitter.emit('update', 'openFiles')
+    broadcastIpcMessage('fsal-state-changed', 'openFiles')
     this._config.set('openFiles', [])
   }
 
