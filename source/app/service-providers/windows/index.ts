@@ -259,6 +259,12 @@ export default class WindowProvider extends ProviderContract {
       let dir = await this.askDir(focusedWindow)
       return dir
     })
+
+    this._documents.on('document-modified-changed', () => {
+      // Always update the main window's flag depending on whether the document
+      // manager is clean or not
+      this.setModified(!this._documents.isClean())
+    })
   }
 
   /**
@@ -901,11 +907,11 @@ export default class WindowProvider extends ProviderContract {
   /**
    * Asks the user whether or not to persist or drop changes to their files. It
    * returns the ID of the clicked button in the message box, which is 0 to
-   * simply drop changes, 1 to abort closing in order to save. TODO: Enable auto-save
+   * simply drop changes, 1 to abort closing in order to save.
    *
    * @return  {Promise<any>}  Returns the message box results
    */
-  async askSaveChanges (): Promise<any> {
+  async askSaveChanges (): Promise<Electron.MessageBoxReturnValue> {
     return await askSaveChanges(this._mainWindow)
   }
 
