@@ -55,7 +55,6 @@ export default class Zettlr {
       switch (scope) {
         case 'fileSaved':
         case 'openFiles':
-          this._app.windows.setModified(!this._app.documents.isClean())
           broadcastIpcMessage('fsal-state-changed', 'openFiles') // TODO: Do we need this?
           break
         case 'activeFile':
