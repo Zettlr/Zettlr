@@ -275,6 +275,9 @@ export default class WindowProvider extends ProviderContract {
     }
   }
 
+  /**
+   * Boots up the window manager and shows the main window, if applicable
+   */
   async boot (): Promise<void> {
     this._logger.verbose('Window manager booting up ...')
     // Immediately begin loading the data
@@ -289,10 +292,22 @@ export default class WindowProvider extends ProviderContract {
     }
   }
 
+  /**
+   * Listens to events emitted by the WindowManager
+   *
+   * @param   {string}    evt       The event to listen to
+   * @param   {Function}  callback  The callback to call
+   */
   on (evt: string, callback: (...args: any[]) => void): void {
     this._emitter.on(evt, callback)
   }
 
+  /**
+   * Removes the specified callback for the specified event
+   *
+   * @param   {string}    evt       The event to listen to
+   * @param   {Function}  callback  The callback to call
+   */
   off (evt: string, callback: (...args: any[]) => void): void {
     this._emitter.off(evt, callback)
   }
@@ -350,6 +365,15 @@ export default class WindowProvider extends ProviderContract {
     })
   }
 
+  /**
+   * If there are any unsaved changes to documents within the main window, this
+   * function handles everything regarding this. It asks the user to save
+   * changes if the user wants this. The caller just needs to look at the return
+   * value: If it's true, the user has confirmed the window can be closed, if
+   * false, there was some problem.
+   *
+   * @return  {Promise<boolean>}  True if the main window can safely be closed.
+   */
   private async _askUserToCloseWindow (): Promise<boolean> {
     if (this._documents.isClean()) {
       return true
