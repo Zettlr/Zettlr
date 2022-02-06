@@ -48,6 +48,7 @@ import TagProvider from '@providers/tags'
 import { hasCodeExt, hasMarkdownExt, isMdOrCodeFile } from './util/is-md-or-code-file'
 import getMarkdownFileParser from './util/file-parser'
 import LinkProvider from '@providers/links'
+import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 
 // Re-export all interfaces necessary for other parts of the code (Document Manager)
 export {
@@ -154,9 +155,7 @@ export default class FSAL extends ProviderContract {
     }
 
     const duration = (performance.now() - start) / 1000
-    if (duration > 1) {
-      this._logger.info(`[FSAL] Loaded all files and workspaces in ${duration} seconds`)
-    }
+    this._logger.info(`[FSAL] Loaded all files and workspaces in ${duration} seconds`)
 
     // Afterwards we can set our pointers accordingly
     // Set the pointers either to null or last opened dir/file
@@ -207,6 +206,7 @@ export default class FSAL extends ProviderContract {
     })
 
     this._emitter.emit('fsal-state-changed', 'filetree', changedPath)
+    broadcastIpcMessage('fsal-state-changed', 'filetree')
   }
 
   /**
@@ -460,7 +460,7 @@ export default class FSAL extends ProviderContract {
    */
   private async _loadDir (dirPath: string): Promise<void> {
     // Loads a directory
-    const start = Date.now()
+    const start = performance.now()
     const sorter = getSorter(
       this._config.get('sorting'),
       this._config.get('sortFoldersFirst'),
@@ -479,9 +479,10 @@ export default class FSAL extends ProviderContract {
       sorter,
       null
     )
-    if (Date.now() - start > 100) {
+    const duration = performance.now() - start
+    if (duration > 100) {
       // Only log if it took longer than 100ms
-      this._logger.warning(`[FSAL Directory] Path ${dirPath} took ${Date.now() - start}ms to load.`)
+      this._logger.warning(`[FSAL Directory] Path ${dirPath} took ${duration}ms to load.`)
     }
     this._state.filetree.push(dir)
     this._recordFiletreeChange('add', dirPath)
@@ -582,6 +583,12 @@ export default class FSAL extends ProviderContract {
     this._state.openDirectory = null
 
     this._emitter.emit('fsal-state-changed', 'openDirectory')
+    if (this.openDirectory === null) {
+      this._config.set('openDirectory', null)
+    } else {
+      this._config.set('openDirectory', this.openDirectory.path)
+    }
+    broadcastIpcMessage('fsal-state-changed', 'openDirectory')
   }
 
   /**
@@ -759,6 +766,12 @@ export default class FSAL extends ProviderContract {
   public set openDirectory (dirObject: DirDescriptor | null) {
     this._state.openDirectory = dirObject
     this._emitter.emit('fsal-state-changed', 'openDirectory')
+    if (this.openDirectory === null) {
+      this._config.set('openDirectory', null)
+    } else {
+      this._config.set('openDirectory', this.openDirectory.path)
+    }
+    broadcastIpcMessage('fsal-state-changed', 'openDirectory')
   }
 
   public get openDirectory (): DirDescriptor|null {
@@ -873,6 +886,7 @@ export default class FSAL extends ProviderContract {
 
     // Notify of a state change
     this._emitter.emit('fsal-state-changed', 'filetree')
+    broadcastIpcMessage('fsal-state-changed', 'filetree')
     this._fsalIsBusy = false
     this._afterRemoteChange()
   }
@@ -1076,6 +1090,12 @@ export default class FSAL extends ProviderContract {
     if (this.openDirectory === src) {
       this.openDirectory = newDir
       this._emitter.emit('fsal-state-changed', 'openDirectory')
+      if (this.openDirectory === null) {
+        this._config.set('openDirectory', null)
+      } else {
+        this._config.set('openDirectory', this.openDirectory.path)
+      }
+      broadcastIpcMessage('fsal-state-changed', 'openDirectory')
     }
 
     this._fsalIsBusy = false

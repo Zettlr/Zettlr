@@ -30,6 +30,7 @@ import { hasCodeExt, hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-f
 import TargetProvider from '@providers/targets'
 import TagProvider from '@providers/tags'
 import LinkProvider from '@providers/links'
+import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 
 export default class DocumentManager extends ProviderContract {
   private _loadedDocuments: Array<MDFileDescriptor|CodeFileDescriptor>
@@ -133,13 +134,16 @@ export default class DocumentManager extends ProviderContract {
       }
     }
 
+    this._logger.info(`[Document Manager] Restored ${this._loadedDocuments.length} open documents.`)
+
     const actuallyLoadedPaths = this._loadedDocuments.map(file => file.path)
 
     this._watcher.add(actuallyLoadedPaths)
 
-    this._emitter.emit('update', 'openFiles')
     // In case some of the files couldn't be loaded, make sure to re-set the config option accordingly.
     this._config.set('openFiles', actuallyLoadedPaths)
+    this._emitter.emit('update', 'openFiles')
+    broadcastIpcMessage('fsal-state-changed', 'openFiles')
 
     // And make the correct file active
     const activeFile: string = this._config.get('activeFile')
@@ -148,10 +152,12 @@ export default class DocumentManager extends ProviderContract {
     if (activeDescriptor !== undefined) {
       this._activeFile = activeDescriptor
       this._emitter.emit('update', 'activeFile')
+      broadcastIpcMessage('fsal-state-changed', 'activeFile')
     } else if (this._loadedDocuments.length > 0) {
       // Make another file active
       this._activeFile = this._loadedDocuments[0]
       this._emitter.emit('update', 'activeFile')
+      broadcastIpcMessage('fsal-state-changed', 'activeFile')
     }
   }
 
@@ -423,6 +429,7 @@ export default class DocumentManager extends ProviderContract {
       this._citeproc.loadMainDatabase()
       this._config.set('activeFile', null)
       this._emitter.emit('update', 'activeFile')
+      broadcastIpcMessage('fsal-state-changed', 'activeFile')
     } else if (descriptor !== null && descriptor.path !== this.activeFile?.path) {
       const file = this.openFiles.find(file => file.path === descriptor.path)
 
@@ -447,6 +454,7 @@ export default class DocumentManager extends ProviderContract {
               this._recentDocs.add(file.path)
               this._config.set('activeFile', this._activeFile.path)
               this._emitter.emit('update', 'activeFile')
+              broadcastIpcMessage('fsal-state-changed', 'activeFile')
             })
             .catch(err => this._logger.error(`[DocumentManager] Could not load file-specific database ${dbFile}`, err))
         } else {
@@ -454,6 +462,7 @@ export default class DocumentManager extends ProviderContract {
           this._recentDocs.add(file.path)
           this._config.set('activeFile', this._activeFile.path)
           this._emitter.emit('update', 'activeFile')
+          broadcastIpcMessage('fsal-state-changed', 'activeFile')
         }
       } else {
         console.error('Could not set active file. Either file was null or not in openFiles', descriptor, this.activeFile)
@@ -652,6 +661,7 @@ export default class DocumentManager extends ProviderContract {
     // Notify that a file has saved, which strictly speaking does not
     // modify the openFiles array, but does change the modification flag.
     this._emitter.emit('update', 'fileSaved', src)
+    broadcastIpcMessage('fsal-state-changed', 'openFiles')
 
     // Also, make sure to (re)load the file's bibliography file, if applicable.
     if (src.type === 'file' && src.frontmatter !== null && 'bibliography' in src.frontmatter) {

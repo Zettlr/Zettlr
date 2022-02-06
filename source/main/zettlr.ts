@@ -53,38 +53,11 @@ export default class Zettlr {
     // Listen to document manager changes
     this._app.documents.on('update', (scope: string, changedDescriptor?: MDFileDescriptor|CodeFileDescriptor) => {
       switch (scope) {
-        case 'fileSaved':
-        case 'openFiles':
-          broadcastIpcMessage('fsal-state-changed', 'openFiles') // TODO: Do we need this?
-          break
-        case 'activeFile':
-          // The active file has changed; set it in the config and notify the
-          // renderer process to switch to this file again.
-          broadcastIpcMessage('fsal-state-changed', 'activeFile')
-          break
         case 'openFileRemotelyChanged':
           if (changedDescriptor !== undefined) {
             // An open file has been changed --> handle this!
             this._onFileContentsChanged(changedDescriptor)
           }
-          break
-        default:
-          this._app.log.warning('Received an Update from the document manager, but the scope was unknown: ' + scope)
-          break
-      }
-    })
-
-    // Listen to changes in the file system
-    this._app.fsal.on('fsal-state-changed', (scope: string, changedPath: string) => {
-      // Emitted when anything in the state changes
-      const openDir = this._app.fsal.openDirectory
-      switch (scope) {
-        case 'filetree':
-          broadcastIpcMessage('fsal-state-changed', 'filetree')
-          break
-        case 'openDirectory':
-          this._app.config.set('openDirectory', (openDir !== null) ? openDir.path : null)
-          broadcastIpcMessage('fsal-state-changed', 'openDirectory')
           break
       }
     })
