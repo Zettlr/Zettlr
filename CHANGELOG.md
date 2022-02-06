@@ -20,6 +20,8 @@
 - Ensure documents are saved when renaming a directory
 - Do not show "Open Image Externally" if loading a data URL
 - Improve styling for the "No results" message on file tree filtering
+- The full-text search doesn't skip files whose title and/or tags match the
+  search terms anymore
 
 ## Under the Hood
 
