@@ -76,7 +76,6 @@ export default class AppServiceContainer {
     this._statsProvider = new StatsProvider(this._logProvider)
     this._recentDocsProvider = new RecentDocumentsProvider(this._logProvider)
     this._appearanceProvider = new AppearanceProvider(this._logProvider, this._configProvider)
-    this._trayProvider = new TrayProvider(this._logProvider, this._configProvider, this._windowProvider)
     this._dictionaryProvider = new DictionaryProvider(this._logProvider, this._configProvider)
     this._citeprocProvider = new CiteprocProvider(this._logProvider, this._configProvider, this._notificationProvider, this._windowProvider)
 
@@ -93,6 +92,7 @@ export default class AppServiceContainer {
       this._tagProvider
     )
     this._windowProvider = new WindowProvider(this._logProvider, this._configProvider, this._documentManager)
+    this._trayProvider = new TrayProvider(this._logProvider, this._configProvider, this._windowProvider)
     this._menuProvider = new MenuProvider(this._logProvider, this._configProvider, this._recentDocsProvider, this._commandProvider, this._windowProvider)
     this._updateProvider = new UpdateProvider(this._logProvider, this._configProvider, this._notificationProvider, this._commandProvider)
   }
