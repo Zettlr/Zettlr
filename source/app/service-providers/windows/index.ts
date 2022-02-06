@@ -58,7 +58,6 @@ import DocumentManager from '@providers/documents'
 
 export default class WindowProvider extends ProviderContract {
   private _mainWindow: BrowserWindow|null
-  private isQuitting: boolean
   private readonly _qlWindows: Map<string, BrowserWindow>
   private _printWindow: BrowserWindow|null
   private _updateWindow: BrowserWindow|null
@@ -100,9 +99,6 @@ export default class WindowProvider extends ProviderContract {
     this._statsWindow = null
     this._assetsWindow = null
     this._projectProperties = null
-    // Is the app quitting? True if quitting via menu, tray or keyboard shortcut.
-    // False if titlebar `x` close, and all other times.
-    this.isQuitting = false
     this._windowState = new Map()
     this._configFile = path.join(app.getPath('userData'), 'window_state.json')
     this._fileLock = false
@@ -133,34 +129,17 @@ export default class WindowProvider extends ProviderContract {
     // listen to close-events on the main window, we should be able to handle
     // this, if we ever switched to the auto updater.
     app.on('before-quit', (event) => {
-      this.isQuitting = true
       if (!this._documents.isClean()) {
-        // Immediately prevent quitting ...
         event.preventDefault()
-        this.isQuitting = false
-        // ... and ask the user if we should *really* quit.
-        this.askSaveChanges()
-          .then(result => {
-            // 0 = 'Close without saving changes',
-            // 1 = 'Save changes'
-            // 2 = 'Cancel
-            if (result.response === 0) {
-              // Clear the modification flags and close again
-              this._documents.updateModifiedFlags([]) // Empty array = no modified files
+        this._askUserToCloseWindow()
+          .then(canCloseWindow => {
+            if (canCloseWindow) {
               app.quit()
-            } else if (result.response === 1) {
-              // First, listen once to the event that all documents are clean
-              // (i.e. it's safe to shut down) ...
-              this._documents.once('documents-all-clean', () => {
-                // The document manager reports all documents are clean now
-                app.quit()
-              })
-
-              // ... and then have the renderer begin saving all changed docs.
-              broadcastIpcMessage('save-documents', []) // Empty path list so the Editor saves all
-            } // Else: Do nothing (abort quitting)
+            }
           })
-          .catch(e => this._logger.error('[Window Manager] Could not ask the user to save their changes, because the message box threw an error. Not quitting!', e))
+          .catch(err => {
+            this._logger.error('[WindowManager] Could not ask user to close window', err)
+          })
       }
     })
 
@@ -350,16 +329,19 @@ export default class WindowProvider extends ProviderContract {
         win.close()
       }
 
-      if (process.platform !== 'darwin' && Boolean(this._config.get('system.leaveAppRunning')) && !this.isQuitting) {
-        this._mainWindow?.hide()
+      if (!this._documents.isClean()) {
         event.preventDefault()
-      } else {
-        const shouldClose: boolean = this._beforeMainWindowCloseCallback()
-        if (!shouldClose) {
-          event.preventDefault()
-        }
+        this._askUserToCloseWindow()
+          .then(canCloseWindow => {
+            if (canCloseWindow) {
+              this._mainWindow?.close()
+            }
+          })
+          .catch(err => {
+            this._logger.error('[WindowManager] Could not ask user to close window', err)
+          })
       }
-    }) // END: mainWindow.on(close)
+    })
 
     this._mainWindow.on('closed', () => {
       // The window has been closed -> dereference
@@ -368,33 +350,26 @@ export default class WindowProvider extends ProviderContract {
     })
   }
 
-  private _beforeMainWindowCloseCallback (): boolean {
-    if (!this._documents.isClean()) {
-      this.askSaveChanges()
-        .then(result => {
-          // 0 = 'Close without saving changes',
-          // 1 = 'Save changes'
-          // 2 = 'Cancel
-          if (result.response === 0) {
-            // Clear the modification flags and close again
-            this._documents.updateModifiedFlags([]) // Empty array = no modified files
-            this.closeMainWindow()
-          } else if (result.response === 1) {
-            // First, listen once to the event that all documents are clean
-            // (i.e. it's safe to shut down) ...
-            this._documents.once('documents-all-clean', () => {
-              // The document manager reports all documents are clean now
-              this.closeMainWindow()
-            })
-
-            // ... and then have the renderer begin saving all changed docs.
-            broadcastIpcMessage('save-documents', []) // Empty path list so the Editor saves all
-          } // Else: Do nothing (abort quitting)
-        })
-        .catch(e => this._logger.error('[Application] Could not ask the user to save their changes, because the message box threw an error. Not quitting!', e))
+  private async _askUserToCloseWindow (): Promise<boolean> {
+    if (this._documents.isClean()) {
+      return true
     }
-    // We must return false to prevent the window from closing
-    return this._documents.isClean()
+
+    const result = await this.askSaveChanges()
+    if (result.response === 0) {
+      this._documents.updateModifiedFlags([])
+      return true
+    } else if (result.response === 1) {
+      return await new Promise<boolean>((resolve, reject) => {
+        this._documents.once('documents-all-clean', () => { resolve(true) })
+        broadcastIpcMessage('save-documents', [])
+        // Failsafe if the documents aren't saved after 5 seconds. This way the
+        // user can simply again close the window
+        setTimeout(() => { resolve(false) }, 5000)
+      })
+    } else {
+      return false
+    }
   }
 
   /**
