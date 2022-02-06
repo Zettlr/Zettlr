@@ -66,13 +66,6 @@ declare const PROJECT_PROPERTIES_PRELOAD_WEBPACK_ENTRY: string
 declare const PROJECT_PROPERTIES_WEBPACK_ENTRY: string
 
 /**
- * DECLARE THE GLOBAL INTERFACES
- */
-interface Application {
-  isQuitting: () => boolean
-}
-
-/**
  * Declare and extend the global NodeJS object to enable the globals
  * for the service providers.
  *
