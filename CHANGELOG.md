@@ -19,6 +19,7 @@
 - Fixed a bug that would sometimes not update the tag autocompletion
 - Ensure documents are saved when renaming a directory
 - Do not show "Open Image Externally" if loading a data URL
+- Improve styling for the "No results" message on file tree filtering
 
 ## Under the Hood
 

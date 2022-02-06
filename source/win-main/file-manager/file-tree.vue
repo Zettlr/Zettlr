@@ -8,8 +8,10 @@
     v-on:click="clickHandler"
   >
     <template v-if="fileTree.length > 0">
-      <div v-if="getFilteredTree.length === 0" class="empty-file-list">
-        {{ noResultsMessage }}
+      <div v-if="getFilteredTree.length === 0" class="empty-tree">
+        <div class="info">
+          {{ noResultsMessage }}
+        </div>
       </div>
 
       <div v-show="getFiles.length > 0" id="directories-files-header">
