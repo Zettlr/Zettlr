@@ -18,6 +18,7 @@
 - Fix a bug that would with some installations result in a blank main window.
 - Fixed a bug that would sometimes not update the tag autocompletion
 - Ensure documents are saved when renaming a directory
+- Do not show "Open Image Externally" if loading a data URL
 
 ## Under the Hood
 
