@@ -82,7 +82,11 @@ export default class FileRename extends ZettlrCommand {
     const wasActive = this._app.documents.activeFile?.path === file.path
     const wasOpen = documentDescriptor !== undefined
     if (documentDescriptor !== undefined) {
-      this._app.documents.closeFile(documentDescriptor)
+      const result = await this._app.commands.run('file-close', documentDescriptor.path)
+      if (result === false) {
+        this._app.log.warning(`[FileRename] Not renaming ${documentDescriptor.path}.`)
+        return
+      }
     }
 
     try {
