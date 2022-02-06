@@ -283,17 +283,17 @@ export default class DocumentManager extends ProviderContract {
   }
 
   /**
-   * Closes the given file if it's in fact open. This function also makes sure
-   * to re-set the current active file if the file to be closed was the active
-   * one.
+   * Closes the given file if it's in fact open. This function deals with every
+   * potential problem such as retrieving user consent to closing the file if it
+   * is modified.
    *
    * @param   {MDFileDescriptor|CodeFileDescriptor}  file  The file to be closed
    *
    * @return  {boolean}                                    Whether or not the file was closed
    */
-  public closeFile (file: MDFileDescriptor|CodeFileDescriptor): boolean {
+  public closeFile (file: MDFileDescriptor|CodeFileDescriptor): void {
     if (!this._loadedDocuments.includes(file)) {
-      return false
+      return // All good, we didn't even have to close the file.
     }
 
     // Retrieve the index of the active file and whether it's an active file
@@ -317,7 +317,6 @@ export default class DocumentManager extends ProviderContract {
         this.activeFile = null
       }
     }
-    return true
   }
 
   /**
@@ -484,6 +483,12 @@ export default class DocumentManager extends ProviderContract {
     } else if (file.type === 'code') {
       FSALCodeFile.markDirty(file)
     }
+
+    // Notify whomever it concerns that the modification status has changed
+    this._emitter.emit('document-modified-changed')
+    if (this.isClean()) {
+      this._emitter.emit('documents-all-clean')
+    }
   }
 
   /**
@@ -500,6 +505,12 @@ export default class DocumentManager extends ProviderContract {
     } else if (file.type === 'code') {
       FSALCodeFile.markClean(file)
     }
+
+    // Notify whomever it concerns that the modification status has changed
+    this._emitter.emit('document-modified-changed')
+    if (this.isClean()) {
+      this._emitter.emit('documents-all-clean')
+    }
   }
 
   /**
@@ -512,26 +523,10 @@ export default class DocumentManager extends ProviderContract {
   public updateModifiedFlags (dirtyPaths: string[]): void {
     for (const openFile of this._loadedDocuments) {
       if (dirtyPaths.includes(openFile.path)) {
-        if (openFile.type === 'file') {
-          FSALFile.markDirty(openFile)
-        } else if (openFile.type === 'code') {
-          FSALCodeFile.markDirty(openFile)
-        }
+        this.markDirty(openFile)
       } else {
-        if (openFile.type === 'file') {
-          FSALFile.markClean(openFile)
-        } else if (openFile.type === 'code') {
-          FSALCodeFile.markClean(openFile)
-        }
+        this.markClean(openFile)
       }
-    }
-
-    // Notify whomever it concerns that the modification status has changed
-    this._emitter.emit('document-modified-changed')
-
-    if (this.isClean()) {
-      // Indicate that now there are no modified documents anymore
-      this._emitter.emit('documents-all-clean')
     }
   }
 
