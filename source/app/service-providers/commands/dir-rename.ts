@@ -39,11 +39,17 @@ export default class DirRename extends ZettlrCommand {
     const newPath = path.join(sourceDir.dir, sanitizedName)
 
     // Close any file that is inside the directory to be renamed and close them.
-    const ofs = this._app.documents.openFiles.filter(doc => doc.path.startsWith(sourceDir.path))
-    for (const doc of ofs) {
-      this._app.documents.closeFile(doc)
+    const openFiles = this._app.documents.openFiles.filter(doc => doc.path.startsWith(sourceDir.path))
+    for (const doc of openFiles) {
+      const result = await this._app.commands.run('file-close', doc.path)
+      if (result === false) {
+        this._app.log.warning(`[DirRename Command] Attempt to close file ${doc.path} failed. Not renaming dir.`)
+        return false
+      }
     }
 
+    // At this point no file is open in that directory anymore, so we can easily
+    // rename the directory. The FSAL will reflect the changes.
     try {
       await this._app.fsal.renameDir(sourceDir, sanitizedName)
     } catch (err: any) {

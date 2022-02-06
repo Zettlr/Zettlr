@@ -17,6 +17,7 @@
   anything already written to begin anew
 - Fix a bug that would with some installations result in a blank main window.
 - Fixed a bug that would sometimes not update the tag autocompletion
+- Ensure documents are saved when renaming a directory
 
 ## Under the Hood
 
