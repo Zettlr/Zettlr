@@ -12,34 +12,12 @@
  * END HEADER
  */
 
-import { promises as fs } from 'fs'
 import sanitizeHtml from 'sanitize-html'
-import { LangFileMetadata } from './util/enum-lang-files'
-import { Candidate } from './util/find-lang-candidates'
-import getLanguageFile from './util/get-language-file'
 
-/**
- * This function loads a language JSON file specified by lang into the global
- * i18n-object.
- *
- * @param  {String} [lang='en-US'] The language to be loaded
- * @return {Object}                The language metadata object.
- */
-export async function loadI18n (lang = 'en-US'): Promise<Candidate & LangFileMetadata> {
-  let file = getLanguageFile(lang) // Will return a working path
+let config: ConfigProvider|undefined
 
-  // Cannot do this asynchronously, because it HAS to be loaded directly
-  // after the config and written into the global object
-  global.i18nRawData = await fs.readFile(file.path, 'utf8')
-  global.i18n = JSON.parse(global.i18nRawData)
-
-  // Also load the en-US fallback as we can be sure this WILL both stay
-  // up to date and will be understood by most people.
-  const fallback = getLanguageFile('en-US') // Will return either the shipped or updated file
-  global.i18nFallbackRawData = await fs.readFile(fallback.path, 'utf8')
-  global.i18nFallback = JSON.parse(global.i18nFallbackRawData)
-
-  return file
+export function provideConfigToI18NMain (provider: ConfigProvider): void {
+  config = provider
 }
 
 /**
@@ -52,16 +30,13 @@ export function trans (identifier: string, ...args: any[]): string {
   if (global.i18n === undefined) {
     // If you see this error while developing, you're doing something wrong
     // (e.g. call `trans` in one of the constructors of the service providers).
-    global.log.error(`Cannot translate ${identifier}, since the translations have not yet been loaded!`)
-    return identifier
+    throw new Error(`Cannot translate ${identifier}, since the translations have not yet been loaded!`)
   }
+
   if (!identifier.includes('.')) {
     // This happens especially if you, e.g., call the `trans` function with a
-    // yet-to-translate string that does not contain dots. In these cases we
-    // log a warning and return the identifier (which might even be a normal
-    // string).
-    global.log.warning(`The translation string was malformed: ${identifier}!`)
-    return identifier
+    // yet-to-translate string that does not contain dots.
+    throw new Error(`The translation string was malformed: ${identifier}!`)
   }
 
   // Split the string by dots
@@ -80,9 +55,10 @@ export function trans (identifier: string, ...args: any[]): string {
     if (obj in transString) {
       transString = transString[obj]
     } else {
+      const isDebug: boolean = config?.get('debug') ?? skipFallback
       // Something went wrong and the requested translation string was
       // not found -> fall back and just return the original string
-      return (Boolean(global.config.get('debug')) || skipFallback) ? identifier : trans(identifier, ...[true].concat(args))
+      return (isDebug) ? identifier : trans(identifier, ...[true].concat(args))
     }
   }
 

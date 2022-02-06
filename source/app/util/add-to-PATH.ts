@@ -12,13 +12,16 @@
  * END HEADER
  */
 
+import LogProvider from '@providers/log'
+
 /**
  * Adds the given path to PATH.
  *
- * @param   {string}  path    The path to add to PATH
- * @param   {string}  method  The method to use when adding the path.
+ * @param  {LogProvider} logger  The logger associated with the app
+ * @param  {string}      path    The path to add to PATH
+ * @param  {string}      method  The method to use when adding the path.
  */
-export default function addToPath (path: string, method: 'unshift'|'push'): void {
+export default function addToPath (logger: LogProvider, path: string, method: 'unshift'|'push'): void {
   if (process.env.PATH === undefined) {
     process.env.PATH = ''
   }
@@ -33,5 +36,5 @@ export default function addToPath (path: string, method: 'unshift'|'push'): void
   }
 
   process.env.PATH = tempPATH.join(DELIM)
-  global.log.info(`[Application] Added ${path} to PATH.`)
+  logger.info(`[Application] Added ${path} to PATH.`)
 }

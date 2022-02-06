@@ -12,7 +12,7 @@
  */
 
 import path from 'path'
-import { mdFileExtensions, codeFileExtensions } from '../get-file-extensions'
+import { mdFileExtensions, codeFileExtensions } from '../../app/service-providers/fsal/util/valid-file-extensions'
 
 const MD_FILES = mdFileExtensions(true)
 const CODE_FILES = codeFileExtensions(true)

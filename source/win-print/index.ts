@@ -17,7 +17,7 @@ import App from './App.vue'
 
 import windowRegister from '@common/modules/window-register'
 
-const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
+const ipcRenderer = window.ipc
 
 // Register all window stuff
 windowRegister()

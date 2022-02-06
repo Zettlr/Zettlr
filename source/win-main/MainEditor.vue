@@ -91,11 +91,10 @@ import objectToArray from '@common/util/object-to-array'
 import { trans } from '@common/i18n-renderer'
 import extractYamlFrontmatter from '@common/util/extract-yaml-frontmatter'
 import YAML from 'yaml'
-import { IpcRenderer } from 'electron'
 
 import { nextTick, defineComponent } from 'vue'
 
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 interface DocumentWrapper {
   path: string
@@ -237,7 +236,7 @@ export default defineComponent({
           imagePreviewHeight: this.$store.state.config['display.imageHeight'],
           markdownBoldFormatting: this.$store.state.config['editor.boldFormatting'],
           markdownItalicFormatting: this.$store.state.config['editor.italicFormatting'],
-          muteLines: this.$store.state.config['muteLines'],
+          muteLines: this.$store.state.config.muteLines,
           citeStyle: this.$store.state.config['editor.citeStyle'],
           readabilityAlgorithm: this.$store.state.config['editor.readabilityAlgorithm'],
           zettelkasten: {

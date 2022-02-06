@@ -110,7 +110,7 @@ export default {
     },
     exportDirectory: function () {
       // This watcher allows the user to set the export directory from here
-      global.config.set('export.dir', this.exportDirectory)
+      window.config.set('export.dir', this.exportDirectory)
     }
   },
   created: function () {
@@ -126,7 +126,7 @@ export default {
       .catch(err => console.error(err))
 
     // Preset the export directory
-    this.exportDirectory = global.config.get('export.dir')
+    this.exportDirectory = window.config.get('export.dir')
   },
   methods: {
     doExport: function () {

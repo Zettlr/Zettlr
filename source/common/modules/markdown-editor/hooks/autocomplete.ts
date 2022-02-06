@@ -285,7 +285,7 @@ export function setAutocompleteDatabase (type: string, database: any): void {
 
 function beginAutocomplete (cm: CodeMirror.Editor, autocompleteDatabase: keyof typeof availableDatabases): void {
   // Determine if we accept spaces within the autocomplete
-  const spaceCfg = Boolean(global.config.get('editor.autocompleteAcceptSpace'))
+  const spaceCfg = Boolean(window.config.get('editor.autocompleteAcceptSpace'))
 
   // We do not allow spaces for these databases:
   const DISALLOW_SPACES = [
@@ -496,8 +496,8 @@ function hintFunction (cm: CodeMirror.Editor, opt: CodeMirror.ShowHintOptions): 
         cm.setCursor({ line: cur.line, ch: cur.ch + end.length })
       }
 
-      const linkPref = global.config.get('zkn.linkWithFilename')
-      const fnameOnly: boolean = global.config.get('zkn.linkFilenameOnly')
+      const linkPref = window.config.get('zkn.linkWithFilename')
+      const fnameOnly: boolean = window.config.get('zkn.linkFilenameOnly')
 
       if (!fnameOnly && (linkPref === 'always' || (linkPref === 'withID' && completion.id !== ''))) {
         // We need to add the text after the link.
@@ -719,7 +719,7 @@ function replaceSnippetVariables (text: string): string {
   const hour = now.hour
   const minute = now.minute
   const second = now.second
-  const clipboard = (window as any).clipboard.readText()
+  const clipboard = window.clipboard.readText()
 
   const REPLACEMENTS = {
     CURRENT_YEAR: now.year,
@@ -734,7 +734,7 @@ function replaceSnippetVariables (text: string): string {
     CURRENT_SECONDS_UNIX: now.toSeconds(),
     UUID: uuid(),
     CLIPBOARD: (clipboard !== '') ? clipboard : undefined,
-    ZKN_ID: generateId(global.config.get('zkn.idGen'))
+    ZKN_ID: generateId(window.config.get('zkn.idGen'))
   }
 
   // Second: Replace those variables, and return the text. NOTE we're adding a

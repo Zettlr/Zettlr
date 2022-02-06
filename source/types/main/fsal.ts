@@ -1,5 +1,6 @@
 // FSAL types used solely in the main process
 import { ProjectSettings, FSMetaInfo } from '@dts/common/fsal'
+import { WritingTarget } from '@providers/targets'
 
 /**
  * Represents an event the watchdog can work with

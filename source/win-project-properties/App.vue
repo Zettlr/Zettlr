@@ -92,12 +92,11 @@ import WindowChrome from '@common/vue/window/Chrome.vue'
 import ListControl from '@common/vue/form/elements/List.vue'
 import FileControl from '@common/vue/form/elements/File.vue'
 import TextControl from '@common/vue/form/elements/Text.vue'
-import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
 import { ProjectSettings } from '@dts/common/fsal'
 import { WindowTab } from '@dts/renderer/window'
 
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 interface ExportFormat { selected: boolean, format: string }
 

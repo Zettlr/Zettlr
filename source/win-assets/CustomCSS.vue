@@ -34,10 +34,9 @@
 import { trans } from '@common/i18n-renderer'
 import CodeEditor from '@common/vue/CodeEditor.vue'
 import ButtonControl from '@common/vue/form/elements/Button.vue'
-import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
 
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 export default defineComponent({
   name: 'CustomCSS',

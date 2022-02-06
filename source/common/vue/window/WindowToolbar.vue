@@ -83,11 +83,10 @@ import ThreeWayToggle from './toolbar-controls/ThreeWayToggle.vue'
 import SearchControl from './toolbar-controls/Search.vue'
 import SpacerControl from './toolbar-controls/Spacer.vue'
 import TextControl from './toolbar-controls/Text.vue'
-import { IpcRenderer } from 'electron'
 import { defineComponent, PropType } from 'vue'
 import { ToolbarControl } from '@dts/renderer/window'
 
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 export default defineComponent({
   name: 'WindowToolbar',

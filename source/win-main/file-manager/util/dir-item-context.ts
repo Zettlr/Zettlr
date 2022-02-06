@@ -16,9 +16,8 @@ import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { DirMeta } from '@dts/common/fsal'
 import { AnyMenuItem } from '@dts/renderer/context'
-import { IpcRenderer } from 'electron'
 
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 export default function displayFileContext (event: MouseEvent, dirObject: DirMeta, el: HTMLElement, callback: any): void {
   const TEMPLATE: AnyMenuItem[] = [

@@ -96,10 +96,9 @@ import objectToArray from '@common/util/object-to-array'
 import matchQuery from './util/match-query'
 
 import { nextTick, defineComponent } from 'vue'
-import { IpcRenderer } from 'electron'
 import { MDFileMeta, CodeFileMeta, DirMeta } from '@dts/common/fsal'
 
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 export default defineComponent({
   name: 'FileList',

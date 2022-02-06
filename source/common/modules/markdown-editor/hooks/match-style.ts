@@ -15,7 +15,7 @@
 
 import html2md from '@common/util/html-to-md'
 import CodeMirror from 'codemirror'
-const clipboard = (window as any).clipboard
+const clipboard = window.clipboard
 
 /**
  * Parses possible HTML clipboard content to Markdown to enable

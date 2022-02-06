@@ -15,6 +15,8 @@
   any time from the Help menu
 - The autocompletion popup doesn't disappear anymore if you completely remove
   anything already written to begin anew
+- Fix a bug that would with some installations result in a blank main window.
+- Fixed a bug that would sometimes not update the tag autocompletion
 
 ## Under the Hood
 

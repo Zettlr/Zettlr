@@ -140,13 +140,11 @@ import { trans } from '@common/i18n-renderer'
 import { ClarityIcons } from '@clr/icons'
 import TabBar from '@common/vue/TabBar.vue'
 import { defineComponent } from 'vue'
-import { IpcRenderer } from 'electron'
-import { MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
+import { DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
 import { TabbarControl } from '@dts/renderer/window'
-import { PlatformPath } from '@dts/renderer/path'
 
-const path: PlatformPath = (window as any).path
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const path = window.path
+const ipcRenderer = window.ipc
 
 interface RelatedFile {
   file: string
@@ -220,11 +218,12 @@ export default defineComponent({
       return trans('gui.no_related_files')
     },
     attachments: function (): OtherFileMeta[] {
-      const currentDir = this.$store.state.selectedDirectory
+      const currentDir = this.$store.state.selectedDirectory as DirMeta|null
       if (currentDir === null) {
         return []
       } else {
-        return currentDir.attachments
+        const extensions: string[] = this.$store.state.config.attachmentExtensions
+        return currentDir.attachments.filter(attachment => extensions.includes(attachment.ext))
       }
     },
     activeFile: function (): MDFileMeta|null {

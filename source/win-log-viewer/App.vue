@@ -38,10 +38,10 @@
 import LogMessage from './LogMessage.vue'
 import WindowChrome from '@common/vue/window/Chrome.vue'
 import { nextTick, defineComponent } from 'vue'
-import { IpcRenderer } from 'electron'
 import { ToolbarControl } from '@dts/renderer/window'
+import { LogMessage as LM } from '@dts/main/log-provider'
 
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 export default defineComponent({
   components: {
@@ -52,7 +52,7 @@ export default defineComponent({
     return {
       filter: '', // Optionally filter the messages with a string
       nextIndex: 0, // Last log message array index; updated from the main process
-      messages: [] as LogMessage[], // Holds all the log files
+      messages: [] as LM[], // Holds all the log files
       includeVerbose: false,
       includeInfo: false,
       includeWarning: true,
@@ -60,7 +60,7 @@ export default defineComponent({
     }
   },
   computed: {
-    filteredMessages: function (): LogMessage[] {
+    filteredMessages: function (): LM[] {
       const preFiltered = this.messages.filter(message => {
         if (this.includeVerbose && message.level === 1) {
           return true

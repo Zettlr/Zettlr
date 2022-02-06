@@ -1,13 +1,6 @@
-interface LogProvider {
-  verbose: (message: string, details?: any) => void
-  info: (message: string, details?: any) => void
-  warning: (message: string, details?: any) => void
-  error: (message: string, details?: any) => void
-}
-
 // Before the log provider has booted, these messages will be added to the
 // preBootLog
-interface BootLog {
+export interface BootLog {
   level: LogLevel // Taken from the LogLevel enum in the Log Provider
   message: string
   details?: any
@@ -16,7 +9,7 @@ interface BootLog {
 /**
  * Available LogLevels
  */
-enum LogLevel {
+export enum LogLevel {
   verbose = 1,
   info = 2,
   warning = 3,
@@ -26,7 +19,7 @@ enum LogLevel {
 /**
  * A single log message
  */
-interface LogMessage {
+export interface LogMessage {
   time: string
   level: LogLevel
   message: string

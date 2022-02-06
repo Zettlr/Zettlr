@@ -14,8 +14,7 @@
 
 import CodeMirror, { commands } from 'codemirror'
 import extractCitations from '@common/util/extract-citations'
-import { IpcRenderer } from 'electron'
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 /**
  * Renders Markdown citations in place

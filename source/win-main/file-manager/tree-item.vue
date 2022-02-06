@@ -2,6 +2,10 @@
   <div
     class="tree-item-container"
     v-bind:data-hash="obj.hash"
+    v-on:dragover="acceptDrags"
+    v-on:dragenter="enterDragging"
+    v-on:dragleave="leaveDragging"
+    v-on:drop="handleDrop"
   >
     <div
       v-bind:class="{
@@ -18,10 +22,6 @@
       }"
       v-on:click.stop="requestSelection"
       v-on:auxclick.stop="requestSelection"
-      v-on:dragover="acceptDrags"
-      v-on:dragenter="enterDragging"
-      v-on:dragleave="leaveDragging"
-      v-on:drop="handleDrop"
       v-on:contextmenu="handleContextMenu"
     >
       <!-- First: Secondary icon (only if primaryIcon displays the chevron) -->
@@ -137,12 +137,10 @@ import generateFilename from '@common/util/generate-filename'
 import { trans } from '@common/i18n-renderer'
 
 import { nextTick, defineComponent } from 'vue'
-import { IpcRenderer } from 'electron'
 import { MDFileMeta, DirMeta, CodeFileMeta } from '@dts/common/fsal'
-import { PlatformPath } from '@dts/renderer/path'
 
-const path: PlatformPath = (window as any).path
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const path = window.path
+const ipcRenderer = window.ipc
 
 export default defineComponent({
   name: 'TreeItem',
@@ -253,7 +251,7 @@ export default defineComponent({
      * Returns true if the file manager mode is set to "combined"
      */
     combined: function (): boolean {
-      return this.$store.state.config['fileManagerMode'] === 'combined'
+      return this.$store.state.config.fileManagerMode === 'combined'
     },
     /**
      * Returns true if there are children that can be displayed
@@ -338,7 +336,9 @@ export default defineComponent({
           const input = this.$refs['new-object-input'] as HTMLInputElement
           if (this.operationType === 'createFile') {
             // If we're generating a file, generate a filename
-            input.value = generateFilename()
+            const filenamePattern = this.$store.state.config.newFileNamePattern
+            const idGenPattern = this.$store.state.config['zkn.idGen']
+            input.value = generateFilename(filenamePattern, idGenPattern)
           } else if (this.operationType === 'createDir') {
             // Else standard val for new dirs.
             input.value = trans('dialog.dir_new.value')

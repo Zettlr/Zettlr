@@ -1,9 +1,8 @@
 import tippy from 'tippy.js'
 import { trans } from '@common/i18n-renderer'
 import formatDate from '@common/util/format-date'
-import { IpcRenderer } from 'electron'
 import CodeMirror from 'codemirror'
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 /**
  * A hook for displaying link tooltips which display metadata
@@ -111,7 +110,7 @@ function getPreviewElement (metadata: [string, string, number, number], linkCont
   // Only if preference "Avoid New Tabs" is set,
   // offer an additional button on preview tooltip
   // to open the file in a new tab
-  if (global.config.get('system.avoidNewTabs') === true) {
+  if (window.config.get('system.avoidNewTabs') === true) {
     const openFuncNewTab = function (): void {
       ipcRenderer.invoke('application', {
         command: 'force-open',
