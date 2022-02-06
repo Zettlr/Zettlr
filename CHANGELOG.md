@@ -1,4 +1,4 @@
-# 2.1.4
+# 2.2.0
 
 ## GUI and Functionality
 
@@ -6,8 +6,8 @@
 - AutoCorrect values are no longer detected as spelling mistakes
 - Fix an issue with false detection of footnote reference texts
 - Fix link resolving: Now files dropped onto the editor will be easier to detect
-  as files (rather than weblinks) so that more documents should easily be opened
-- Fixed some reloading issues with very large citation databases
+  as files (rather than weblinks)
+- Fixed reloading issues with very large citation databases
 - Fixed a visual glitch when choosing to "Open in a new tab" in a note preview
 - Fix a regression that inserting pasted image paths into the editor didn't work
 - Fix wrong display of citations if there was an error rendering the citation
@@ -28,6 +28,18 @@
   delay of 5 seconds
 - Moved the workspace and root file opening logic into their own command
 - Make the ZettlrCommand base class abstract and require constraints on derived
+- Remove all calls to `global` in the renderer processes; instead properly type
+  the API provided via the window object
+- Refactor the main process:
+  - Move the FSAL, the WindowManager, and the DocumentManager into the service
+    provider realm
+  - Factor out all commands into a new CommandProvider
+  - Use singleton dependency injection to provide services to each other,
+    utilizing an AppServiceContainer
+  - Remove (almost) every dependency on the `global` object
+  - Move the littered code from the Zettlr main class into their corresponding
+    service providers
+  - Fixed the dependency hell within the FSAL
 
 # 2.1.3
 
