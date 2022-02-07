@@ -1,3 +1,62 @@
+<?php
+  // Define a few crude helper functions. First a basic file size formatter,
+  // and then a function that gives out relative dates for our purposes. It's
+  // easier to define these functions here rather than importing Carbon et al.
+  function format_size ($size) {
+    if (gettype($size) !== 'integer') {
+      // An error occurred
+      return 'unknown';
+    } else if ($size > 1000000000) {
+      // Size in Gigabyte
+      return round($size / 1000000000, 2) . ' GB';
+    } else if ($size > 1000000) {
+      // Size in Megabyte
+      return round($size / 1000000, 2) . ' MB';
+    } else if ($size > 1000) {
+      // Size in Kilobyte
+      return round($size / 1000, 2) . ' KB';
+    } else {
+      // Size in Byte
+      return $size . ' B';
+    }
+  }
+
+  function relative_time ($time) {
+    // This function formats the given time to relative
+    if (gettype($time) !== 'integer') {
+      // An error occurred
+      return 'unknown';
+    }
+
+    $now = time();
+    $duration_minutes = round(($now - $time) / 60);
+    if ($duration_minutes < 2) {
+      // Less than two minutes ago
+      return 'just now';
+    } else if ($duration_minutes < 60) {
+      // Less than 60 minutes ago
+      return round($duration_minutes) . " minutes ago";
+    } else if ($duration_minutes < 120) {
+      // Less than two hours ago
+      return '1 hour ago';
+    } else if ($duration_minutes < 60 * 24) {
+      // Less than a day ago
+      $hours = round($duration_minutes / 60);
+      return "$hours hours ago";
+    } else if ($duration_minutes < 60 * 24 * 2) {
+      // Less than two days ago
+      return 'yesterday';
+    } else if ($duration_minutes < 60 * 24 * 7) {
+      // Less than a week ago
+      $days = round($duration_minutes / (60 * 24));
+      return "$days days ago";
+    } else {
+      // Give out a proper format
+      return date('D M jS, Y H:i:s', $time);
+    }
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -164,12 +223,20 @@
         corrupted configuration files, or maybe even corrupted operating systems.
       </strong>
     </p>
+    <p>
+    <?php
+      $scriptfile_mod = filemtime(__FILE__);
+      $last_modified = date('D M jS, Y H:i:s', $scriptfile_mod);
+
+      echo "The nightlies have last been built on <strong>$last_modified</strong>";
+    ?>
+    </p>
     <table>
         <thead>
           <tr>
             <th>File</th>
-            <th>Size</th>
-            <th>Last modified</th>
+            <th style="text-align: right;">Size</th>
+            <th style="text-align: right;">Last modified</th>
           </tr>
         </thead>
         <tbody>
@@ -186,34 +253,8 @@
               }
 
               // At this point we have a correct file. So display it.
-
-              $time = filemtime('.' . DIRECTORY_SEPARATOR . $name);
-              if ($time === false) {
-                // An error occurred
-                $time = 'unknown';
-              } else {
-                // Format the time
-                $time = date('D M jS, Y H:i:s', $time);
-              }
-
-              $size = filesize('.' . DIRECTORY_SEPARATOR . $name);
-
-              if ($size === false) {
-                // An error occurred
-                $size = 'unknown';
-              } else if ($size > 1000000000) {
-                // Size in Gigabyte
-                $size = round($size / 1000000000, 2) . ' GB';
-              } else if ($size > 1000000) {
-                // Size in Megabyte
-                $size = round($size / 1000000, 2) . ' MB';
-              } else if ($size > 1000) {
-                // Size in Kilobyte
-                $size = round($size / 1000, 2) . ' KB';
-              } else {
-                // Size in Byte
-                $size = $size . ' B';
-              }
+              $time = relative_time(filemtime('.' . DIRECTORY_SEPARATOR . $name));
+              $size = format_size(filesize('.' . DIRECTORY_SEPARATOR . $name));
 
               echo "<tr>";
               echo "<td><a href=\"$name\">$name</a></td>";

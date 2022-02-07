@@ -22,6 +22,7 @@
 - Improve styling for the "No results" message on file tree filtering
 - The full-text search doesn't skip files whose title and/or tags match the
   search terms anymore
+- Newly created files now always open in a new tab
 
 ## Under the Hood
 
