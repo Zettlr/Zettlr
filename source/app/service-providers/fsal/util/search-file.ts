@@ -167,7 +167,9 @@ export default function searchFile (fileObject: MDFileDescriptor|CodeFileDescrip
   // Now immediately check if all required terms have matched. If not, we can
   // disregard this file now and save some computing time below.
   if (termsMatched !== termsToSearch.length) {
-    return []
+    // Make sure we return the finalResults array instead of an empty array, so
+    // we don't lose the file in case only its title has matched.
+    return finalResults
   }
 
   // Post-process the search result. Right now, a lot of stuff is unsorted since
