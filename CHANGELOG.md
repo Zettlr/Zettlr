@@ -24,7 +24,7 @@
 
 ## Under the Hood
 
-- Update Pandoc to 2.17.0.1
+- Update Pandoc to 2.17.1.1
 - Activate watchdog polling for the citeproc provider. This should reduce issues
   with very large citation databases.
 - If the error message upon a failed database reload indicates that the file was
