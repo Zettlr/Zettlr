@@ -23,6 +23,7 @@ import path from 'path'
 // Developer tools
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
 import AppServiceContainer from './app-service-container'
+import { app } from 'electron'
 
 // We need module-global variables so that garbage collect won't shut down the
 // providers before the app is shut down.
@@ -53,13 +54,15 @@ export async function bootApplication (): Promise<void> {
   log.info(`こんにちは！ Booting Zettlr at ${(new Date()).toString()}.`)
 
   // Before we begin, let's load the Vue.js DevTools for debugging
-  try {
-    // Load Vue developer extension
-    installExtension(VUEJS3_DEVTOOLS)
-      .then((name: string) => log.info(`Added DevTools extension:  ${name}`))
-      .catch((err: any) => log.error(`Could not install DevTools extensions: ${String(err.message)}`, err))
-  } catch (err) {
-    log.verbose('Electron DevTools Installer not found - proceeding without loading developer tools.')
+  if (!app.isPackaged) {
+    try {
+      // Load Vue developer extension
+      installExtension(VUEJS3_DEVTOOLS)
+        .then((name: string) => log.info(`Added DevTools extension:  ${name}`))
+        .catch((err: any) => log.error(`Could not install DevTools extensions: ${String(err.message)}`, err))
+    } catch (err) {
+      log.verbose('Electron DevTools Installer not found - proceeding without loading developer tools.')
+    }
   }
 
   registerCustomProtocols(log)

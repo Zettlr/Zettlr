@@ -44,6 +44,7 @@
   - Move the littered code from the Zettlr main class into their corresponding
     service providers
   - Fixed the dependency hell within the FSAL
+- The app doesn't attempt to download the Vue3 devtools in production anymore
 
 # 2.1.3
 
