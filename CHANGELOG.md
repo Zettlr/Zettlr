@@ -21,6 +21,8 @@
 - Do not show "Open Image Externally" if loading a data URL
 - Improve styling for the "No results" message on file tree filtering
 - Newly created files now always open in a new tab
+- Fixed a bug where you would receive two "paste image" dialogs if you had text
+  selected when pasting an image onto the editor
 
 ## Under the Hood
 

@@ -70,16 +70,20 @@ export default function pasteImagesHook (cm: CodeMirror.Editor): void {
     // dialog twice -- once when the beforeChange event triggers, and then here
     // as well.
     if (clipboard.hasImage() && clipboard.readText().length === 0) {
+      // Prevent CodeMirror from firing a beforeChange event if some text was
+      // selected (see #3141)
+      e.stopPropagation()
+      e.preventDefault()
       ipcRenderer.invoke('application', {
         command: 'save-image-from-clipboard'
       })
-        .then(relativePath => {
+        .then((relativePath: string|undefined) => {
           // If the user aborts the pasting process, the command will rturn
           // undefined, so we have to check for this.
           if (relativePath !== undefined) {
             // Replace backward slashes with forward slashes to make Windows paths
             // cross-platform compatible
-            const sanitizedPath = String(relativePath).replace(/\\/g, '/')
+            const sanitizedPath = relativePath.replace(/\\/g, '/')
             cm.replaceSelection(`![${path.basename(relativePath)}](${sanitizedPath})`)
           }
         })
