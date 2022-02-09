@@ -23,6 +23,7 @@
 - Newly created files now always open in a new tab
 - Fixed a bug where you would receive two "paste image" dialogs if you had text
   selected when pasting an image onto the editor
+- Fixed conflicting text decorations between strikethrough and spellchecking
 
 ## Under the Hood
 
