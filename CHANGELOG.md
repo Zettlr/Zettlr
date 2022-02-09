@@ -29,6 +29,9 @@ See for more info [this issue](https://github.com/Zettlr/Zettlr/issues/3103).
 - Fixed a bug where you would receive two "paste image" dialogs if you had text
   selected when pasting an image onto the editor
 - Fixed conflicting text decorations between strikethrough and spellchecking
+- Fixed a bug where a YAML frontmatter beginning and end would also be
+  recognized even if it was not valid. A valid YAML frontmatter must be
+  delimited by exactly three dashes/dots on their own line, and *not more*
 
 ## Under the Hood
 
