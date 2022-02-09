@@ -1,5 +1,10 @@
 # 2.2.0
 
+**Attention**: This update switches one preference in the exporters' defaults:
+`file-scope` is now removed. Remove this line from your defaults files, or reset
+them to the (new) default, if you'd like to use this in your exports as well.
+See for more info [this issue](https://github.com/Zettlr/Zettlr/issues/3103).
+
 ## GUI and Functionality
 
 - Tags and keywords within a YAML frontmatter are now clickable

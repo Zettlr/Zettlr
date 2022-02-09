@@ -16,7 +16,6 @@ include-in-header: []
 bibliography: []
 filters:
 - type: citeproc
-file-scope: false
 top-level-division: chapter
 number-sections: false
 number-offset:
