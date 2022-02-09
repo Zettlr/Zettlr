@@ -45,6 +45,7 @@
     service providers
   - Fixed the dependency hell within the FSAL
 - The app doesn't attempt to download the Vue3 devtools in production anymore
+- The date formatter now takes everything as parameters and has unit tests
 
 # 2.1.3
 

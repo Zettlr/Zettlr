@@ -193,10 +193,10 @@ export default {
       }
     },
     creationTime: function () {
-      return formatDate(new Date(this.creationtime), true)
+      return formatDate(new Date(this.creationtime), window.config.get('appLang'), true)
     },
     modificationTime: function () {
-      return formatDate(new Date(this.modtime), true)
+      return formatDate(new Date(this.modtime), window.config.get('appLang'), true)
     },
     formattedFiles: function () {
       return localiseNumber(this.files)

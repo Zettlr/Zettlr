@@ -216,9 +216,9 @@ export default defineComponent({
     },
     getDate: function () {
       if (this.$store.state.config['fileMetaTime'] === 'modtime') {
-        return formatDate(this.obj.modtime, true)
+        return formatDate(this.obj.modtime, window.config.get('appLang'), true)
       } else {
-        return formatDate(this.obj.creationtime, true)
+        return formatDate(this.obj.creationtime, window.config.get('appLang'), true)
       }
     },
     countDirs: function () {
