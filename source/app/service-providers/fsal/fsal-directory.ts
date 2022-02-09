@@ -77,7 +77,7 @@ type SortMethod = 'name-up'|'name-down'|'time-up'|'time-down'
  */
 function sortChildren (
   dir: DirDescriptor,
-  sorter: (arr: MaybeRootDescriptor[], sortingType?: string) => MaybeRootDescriptor[]
+  sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[]
 ): void {
   dir.children = sorter(dir.children, dir._settings.sorting)
 }
@@ -91,15 +91,18 @@ function sortChildren (
  */
 export function metadata (dirObject: DirDescriptor): DirMeta {
   // Handle the children
-  let children = dirObject.children.map((elem) => {
+  const children = dirObject.children.map((elem) => {
     if (elem.type === 'directory') {
       return metadata(elem)
     } else if (elem.type === 'file') {
       return FSALFile.metadata(elem)
-    } else {
+    } else if (elem.type === 'code') {
       return FSALCodeFile.metadata(elem)
+    } else {
+      console.log('RETURNING ATTACHMENT WITH METADATA', elem.path)
+      return FSALAttachment.metadata(elem)
     }
-  }).filter(elem => elem !== undefined)
+  })
 
   return {
     // By only passing the hash, the object becomes
@@ -116,7 +119,6 @@ export function metadata (dirObject: DirDescriptor): DirMeta {
     // null, or not (then it means there is a project)
     project: dirObject._settings.project,
     children: children,
-    attachments: dirObject.attachments.map(elem => FSALAttachment.metadata(elem)),
     type: dirObject.type,
     sorting: dirObject._settings.sorting,
     icon: dirObject._settings.icon,
@@ -192,11 +194,11 @@ export async function parse (
   links: LinkProvider,
   targets: TargetProvider,
   parser: (file: MDFileDescriptor, content: string) => void,
-  sorter: (arr: MaybeRootDescriptor[], sortingType?: string) => MaybeRootDescriptor[],
+  sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[],
   parent: DirDescriptor|null
 ): Promise<DirDescriptor> {
   // Prepopulate
-  let dir: DirDescriptor = {
+  const dir: DirDescriptor = {
     parent: parent,
     path: currentPath,
     name: path.basename(currentPath),
@@ -204,7 +206,6 @@ export async function parse (
     size: 0,
     hash: hash(currentPath),
     children: [],
-    attachments: [],
     type: 'directory',
     modtime: 0, // You know when something has gone wrong: 01.01.1970
     creationtime: 0,
@@ -247,7 +248,8 @@ export async function parse (
         dir.children.push(file)
       }
     } else if (isFile(absolutePath)) {
-      dir.attachments.push(await FSALAttachment.parse(absolutePath, dir))
+      console.log('READING ATTACHMENT', absolutePath)
+      dir.children.push(await FSALAttachment.parse(absolutePath, dir))
     } // Else: Probably a symlink TODO
   }
 
@@ -273,7 +275,6 @@ export function getDirNotFoundDescriptor (dirPath: string): DirDescriptor {
     hash: hash(dirPath),
     size: 0,
     children: [], // Always empty
-    attachments: [], // Always empty
     type: 'directory',
     modtime: 0, // ¯\_(ツ)_/¯
     creationtime: 0,
@@ -302,7 +303,7 @@ export async function setSetting (dirObject: DirDescriptor, settings: any): Prom
  */
 export async function sort (
   dirObject: DirDescriptor,
-  sorter: (arr: MaybeRootDescriptor[], sortingType?: string) => MaybeRootDescriptor[],
+  sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[],
   method?: SortMethod
 ): Promise<void> {
   // If the caller omits the method, it should remain unchanged
@@ -383,7 +384,7 @@ export async function create (
   links: LinkProvider,
   targets: TargetProvider,
   parser: (file: MDFileDescriptor, content: string) => void,
-  sorter: (arr: MaybeRootDescriptor[], sortingType?: string) => MaybeRootDescriptor[]
+  sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[]
 ): Promise<void> {
   if (newName.trim() === '') throw new Error('Invalid directory name provided!')
   let existingDir = dirObject.children.find(elem => elem.name === newName)
@@ -411,7 +412,7 @@ export async function createFile (
   links: LinkProvider,
   tags: TagProvider,
   parser: (file: MDFileDescriptor, content: string) => void,
-  sorter: (arr: MaybeRootDescriptor[], sortingType?: string) => MaybeRootDescriptor[]
+  sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[]
 ): Promise<void> {
   const filename = options.name
   const content = options.content
@@ -445,7 +446,7 @@ export async function rename (
   links: LinkProvider,
   targets: TargetProvider,
   parser: (file: MDFileDescriptor, content: string) => void,
-  sorter: (arr: MaybeRootDescriptor[], sortingType?: string) => MaybeRootDescriptor[],
+  sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[],
   cache: FSALCache
 ): Promise<DirDescriptor> {
   // Check some things beforehand
@@ -515,7 +516,7 @@ export async function move (
   links: LinkProvider,
   targets: TargetProvider,
   parser: (file: MDFileDescriptor, content: string) => void,
-  sorter: (arr: MaybeRootDescriptor[], sortingType?: string) => MaybeRootDescriptor[],
+  sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[],
   cache: FSALCache
 ): Promise<void> {
   // Moves anything into the target. We'll use fs.rename for that.
@@ -548,13 +549,13 @@ export async function move (
 
 export async function addAttachment (dirObject: DirDescriptor, attachmentPath: string): Promise<void> {
   const attachment = await FSALAttachment.parse(attachmentPath, dirObject)
-  dirObject.attachments.push(attachment)
+  dirObject.children.push(attachment)
   // TODO: Sort the attachments afterwards! Generally, I just realised we never sort any of these.
 }
 
 export function removeAttachment (dirObject: DirDescriptor, attachmentPath: string): void {
-  const idx = dirObject.attachments.findIndex(element => element.path === attachmentPath)
-  dirObject.attachments.splice(idx, 1)
+  const idx = dirObject.children.findIndex(element => element.path === attachmentPath)
+  dirObject.children.splice(idx, 1)
 }
 
 export async function addChild (
@@ -564,7 +565,7 @@ export async function addChild (
   links: LinkProvider,
   targets: TargetProvider,
   parser: (file: MDFileDescriptor, content: string) => void,
-  sorter: (arr: MaybeRootDescriptor[], sortingType?: string) => MaybeRootDescriptor[],
+  sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[],
   cache: FSALCache
 ): Promise<void> {
   if (isDir(childPath)) {

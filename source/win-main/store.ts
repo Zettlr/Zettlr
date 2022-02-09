@@ -18,7 +18,7 @@ import { StoreOptions, createStore, Store } from 'vuex'
 import sanitizeHtml from 'sanitize-html'
 import { getConverter } from '@common/util/md-to-html'
 import getSorter from '@providers/fsal/util/sort'
-import { CodeFileMeta, DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
+import { AnyMetaDescriptor, CodeFileMeta, DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
 import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
 
 const path = window.path
@@ -30,13 +30,15 @@ interface FSALEvent {
   timestamp: number
 }
 
-function isAttachment (p: string): boolean {
-  let ext = window.config.get('attachmentExtensions')
-  return ext.includes(path.extname(p).toLowerCase())
-}
-
-function findPathDescriptor (targetPath: string, tree: any, treatAsAttachment: boolean = false): any|null {
-  const prop = (treatAsAttachment) ? 'attachments' : 'children'
+/**
+ * This function quickly finds a given descriptor by path in the FSAL tree
+ *
+ * @param   {string}                       targetPath  The path to find a descriptor for
+ * @param   {DirMeta|AnyMetaDescriptor[]}  tree        The tree to search
+ *
+ * @return  {AnyMetaDescriptor|null}                   The descriptor, or null if not found
+ */
+function findPathDescriptor (targetPath: string, tree: DirMeta|AnyMetaDescriptor[]): AnyMetaDescriptor|null {
   // We need to find a target
   if (Array.isArray(tree)) {
     for (const descriptor of tree) {
@@ -45,7 +47,7 @@ function findPathDescriptor (targetPath: string, tree: any, treatAsAttachment: b
         return descriptor
       } else if (targetPath.startsWith(String(descriptor.path) + String(path.sep)) && descriptor.type === 'directory') {
         // We have the correct tree
-        return findPathDescriptor(targetPath, descriptor[prop], treatAsAttachment)
+        return findPathDescriptor(targetPath, descriptor.children)
       }
     }
   } else if (tree.type === 'directory') {
@@ -55,13 +57,13 @@ function findPathDescriptor (targetPath: string, tree: any, treatAsAttachment: b
       return tree
     }
 
-    for (const child of tree[prop]) {
+    for (const child of tree.children) {
       if (targetPath === child.path) {
         // We got the correct child
         return child
       } else if (targetPath.startsWith(String(child.path) + String(path.sep)) && child.type === 'directory') {
         // Traverse further down
-        return findPathDescriptor(targetPath, child[prop], treatAsAttachment)
+        return findPathDescriptor(targetPath, child.children)
       }
     }
   }
@@ -77,12 +79,6 @@ function findPathDescriptor (targetPath: string, tree: any, treatAsAttachment: b
  * @param   {DirMeta}  descriptor  The directory descriptor to reconstruct
  */
 function reconstructTree (descriptor: DirMeta): void {
-  for (const attachment of descriptor.attachments) {
-    // @ts-expect-error NOTE: The file metas have numbers to prevent circular
-    // structures over IPC. In the renderer we only need to override it here.
-    attachment.parent = descriptor
-  }
-
   for (const child of descriptor.children) {
     // @ts-expect-error
     child.parent = descriptor
@@ -251,8 +247,8 @@ function getConfig (): StoreOptions<ZettlrState> {
       }
     },
     getters: {
-      file: state => (filePath: string, searchAttachments = false): MDFileMeta|CodeFileMeta|OtherFileMeta|DirMeta|null => {
-        return findPathDescriptor(filePath, state.fileTree, searchAttachments)
+      file: state => (filePath: string): MDFileMeta|CodeFileMeta|OtherFileMeta|DirMeta|null => {
+        return findPathDescriptor(filePath, state.fileTree)
       }
     },
     mutations: {
@@ -319,55 +315,30 @@ function getConfig (): StoreOptions<ZettlrState> {
           state.fileTree = sorter(state.fileTree) // Omit sorting to sort name-up
         } else if (descriptor.parent != null) {
           const parentPath = descriptor.dir
-          const parentDescriptor = findPathDescriptor(parentPath, state.fileTree)
+          const parentDescriptor = findPathDescriptor(parentPath, state.fileTree) as DirMeta|null
           if (parentDescriptor === null) {
             console.warn(`Was about to add descriptor ${String(descriptor.path)} to the filetree, but the parent ${String(parentPath)} was null!`)
             return
           }
+
           if (parentDescriptor.children.find((elem: any) => elem.path === descriptor.path) !== undefined) {
             return // We already have this descriptor, nothing to do.
-          } else if (parentDescriptor.attachments.find((elem: any) => elem.path === descriptor.path) !== undefined) {
-            return // It was an attachment already there
           }
+
           descriptor.parent = parentDescriptor // Attach the child to its parent
           if (descriptor.type === 'directory') {
             // Make sure the parent pointers work correctly even inside this subtree
             reconstructTree(descriptor)
           }
 
-          if (isAttachment(descriptor.path)) {
-            parentDescriptor.attachments.push(descriptor)
-            parentDescriptor.attachments.sort((a: any, b: any) => {
-              if (a.name > b.name) {
-                return -1
-              } else if (a.name < b.name) {
-                return 1
-              } else {
-                return 0
-              }
-            })
-          } else {
-            parentDescriptor.children.push(descriptor)
-            parentDescriptor.children = sorter(parentDescriptor.children, parentDescriptor.sorting)
-          }
+          parentDescriptor.children.push(descriptor)
+          parentDescriptor.children = sorter(parentDescriptor.children, parentDescriptor.sorting)
         } else {
           // NOTE: This is just in case we accidentally introduce a race condition.
           console.warn('[Store] Received event to add a descriptor to the filetree, but it was a root and already present:', descriptor)
         }
       },
       removeFromFiletree: function (state, pathToRemove) {
-        if (isAttachment(pathToRemove)) {
-          const parent = findPathDescriptor(path.dirname(pathToRemove), state.fileTree)
-          if (parent === null) {
-            return // No descriptor found
-          }
-          const idx = parent.attachments.find((elem: any) => elem.path === pathToRemove)
-          if (idx > -1) {
-            parent.attachments.splice(idx, 1)
-          }
-          return // Done
-        }
-
         const descriptor = findPathDescriptor(pathToRemove, state.fileTree)
 
         if (descriptor === null) {
@@ -378,14 +349,15 @@ function getConfig (): StoreOptions<ZettlrState> {
           const idx = state.fileTree.findIndex(elem => elem === descriptor)
           state.fileTree.splice(idx, 1)
         } else {
-          const parentDescriptor = findPathDescriptor(descriptor.dir, state.fileTree)
-          const idx = parentDescriptor.children.findIndex((elem: any) => elem === descriptor)
-          parentDescriptor.children.splice(idx, 1)
+          const parentDescriptor = findPathDescriptor(descriptor.dir, state.fileTree) as DirMeta|null
+          if (parentDescriptor !== null) {
+            const idx = parentDescriptor.children.findIndex((elem: any) => elem === descriptor)
+            parentDescriptor.children.splice(idx, 1)
+          }
         }
       },
-      patchInFiletree: function (state, descriptor) {
-        const attachment = isAttachment(descriptor.path)
-        const ownDescriptor = findPathDescriptor(descriptor.path, state.fileTree, attachment)
+      patchInFiletree: function (state, descriptor: AnyMetaDescriptor) {
+        const ownDescriptor = findPathDescriptor(descriptor.path, state.fileTree)
         const sorter = getSorter(
           state.config.sorting,
           state.config.sortFoldersFirst,
@@ -395,17 +367,18 @@ function getConfig (): StoreOptions<ZettlrState> {
         )
 
         if (ownDescriptor === null) {
-          console.error(`[Vuex::patchInFiletree] Could not find descriptor for ${descriptor.path as string}! Not patching.`)
+          console.error(`[Vuex::patchInFiletree] Could not find descriptor for ${descriptor.path}! Not patching.`)
           return
         }
 
         const protectedKeys = [ 'parent', 'children', 'attachments' ]
 
-        for (const key of Object.keys(descriptor)) {
+        for (const key of Object.keys(descriptor) as Array<keyof AnyMetaDescriptor>) {
           if (protectedKeys.includes(key)) {
             continue // Don't overwrite protected keys which would result in dangling descriptors
           }
 
+          // @ts-expect-error Typescript doesn't like in place mutation :(
           ownDescriptor[key] = descriptor[key]
         }
 
@@ -417,7 +390,7 @@ function getConfig (): StoreOptions<ZettlrState> {
         if (ownDescriptor.type === 'directory') {
           ownDescriptor.children = sorter(ownDescriptor.children, ownDescriptor.sorting)
         } else if (ownDescriptor.type === 'file' && ownDescriptor.parent != null) {
-          const parentDescriptor = ownDescriptor.parent
+          const parentDescriptor = ownDescriptor.parent as unknown as DirMeta
           parentDescriptor.children = sorter(parentDescriptor.children, parentDescriptor.sorting)
         }
       },
@@ -430,7 +403,7 @@ function getConfig (): StoreOptions<ZettlrState> {
         } else {
           const ownDescriptor = findPathDescriptor(descriptor.path, state.fileTree)
 
-          if (ownDescriptor !== null) {
+          if (ownDescriptor !== null && ownDescriptor.type === 'directory') {
             state.selectedDirectory = ownDescriptor
           }
         }

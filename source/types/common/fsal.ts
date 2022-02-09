@@ -31,8 +31,7 @@ export interface FSMetaInfo {
  */
 export interface DirMeta extends FSMetaInfo {
   parent: number|null
-  attachments: OtherFileMeta[]
-  children: Array<DirMeta|MDFileMeta|CodeFileMeta>
+  children: Array<DirMeta|MDFileMeta|CodeFileMeta|OtherFileMeta>
   project: any
   type: 'directory'
   sorting: string

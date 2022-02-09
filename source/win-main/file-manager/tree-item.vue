@@ -280,9 +280,9 @@ export default defineComponent({
         return []
       }
       if (this.combined === true) {
-        return this.obj.children
+        return this.obj.children.filter(child => child.type !== 'other') as Array<MDFileMeta|DirMeta|CodeFileMeta>
       } else {
-        return this.obj.children.filter((e: any) => e.type === 'directory')
+        return this.obj.children.filter(child => child.type === 'directory') as DirMeta[]
       }
     },
     useH1: function (): boolean {

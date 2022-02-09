@@ -1,3 +1,14 @@
+# 2.2.1
+
+## GUI and Functionality
+
+(nothing here yet)
+
+## Under the Hood
+
+- Other files are now stored in the `children` array; the `attachments` array is
+  now gone for good
+
 # 2.2.0
 
 **Attention**: This update switches one preference in the exporters' defaults:

@@ -56,6 +56,7 @@ export default function getSorter (
       switch (c.type) {
         case 'file':
         case 'code':
+        case 'other':
           f.push(c)
           break
         case 'directory':
