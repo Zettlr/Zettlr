@@ -40,7 +40,7 @@ export function trans (identifier: string, ...args: any[]): string {
   }
 
   // Split the string by dots
-  let str = identifier.split('.')
+  const str = identifier.split('.')
   // The function will be called from line 74 as a fallback
   // if a given string couldn't be found.
   let transString = global.i18n
@@ -51,14 +51,14 @@ export function trans (identifier: string, ...args: any[]): string {
     args.splice(0, 1) // Remove the first argument as it's only the injected "true"
   }
 
-  for (let obj of str) {
+  for (const obj of str) {
     if (obj in transString) {
       transString = transString[obj]
     } else {
       const isDebug: boolean = config?.get('debug') ?? skipFallback
       // Something went wrong and the requested translation string was
       // not found -> fall back and just return the original string
-      return (isDebug) ? identifier : trans(identifier, ...[true].concat(args))
+      return (isDebug || skipFallback) ? identifier : trans(identifier, ...[true].concat(args))
     }
   }
 
@@ -68,7 +68,7 @@ export function trans (identifier: string, ...args: any[]): string {
     return identifier
   }
 
-  for (let a of args) {
+  for (const a of args) {
     transString = transString.replace('%s', a) // Always replace one %s with an arg
   }
 

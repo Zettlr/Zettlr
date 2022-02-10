@@ -9,6 +9,8 @@
 - Zettlr can now also preview emphasis such as italic or bold text
 - Using an absolute path as the default image location will ensure that pasted
   images will be inserted using absolute paths as well.
+- Fix an error that would make some actions unusable if a faulty translation was
+  provided
 
 ## Under the Hood
 
