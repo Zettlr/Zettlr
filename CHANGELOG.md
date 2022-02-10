@@ -2,7 +2,8 @@
 
 ## GUI and Functionality
 
-(nothing here yet)
+- Fixed an issue where sometimes moving the cursor to the beginning of a list
+  item would misbehave
 
 ## Under the Hood
 

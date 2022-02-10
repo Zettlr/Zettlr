@@ -353,7 +353,7 @@ export function getListTaskListRE (): RegExp {
  */
 export function getListTokenRE (): RegExp {
   return RegExp(
-    /^(\s*)(>[> ]*|[*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s*)/.source
+    /^(\s*)(>[> ]*|[*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s+)/.source
   )
 }
 
