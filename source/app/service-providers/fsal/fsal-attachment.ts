@@ -17,6 +17,7 @@ import { promises as fs } from 'fs'
 import hash from '@common/util/hash'
 import { OtherFileDescriptor, DirDescriptor } from '@dts/main/fsal'
 import { OtherFileMeta } from '@dts/common/fsal'
+import { shell } from 'electron'
 
 export async function parse (absPath: string, parent: DirDescriptor): Promise<OtherFileDescriptor> {
   let attachment: OtherFileDescriptor = {
@@ -71,4 +72,24 @@ export async function reparseChangedFile (attachment: OtherFileDescriptor): Prom
   attachment.modtime = stat.mtime.getTime() // stat.ctimeMs DEBUG: Switch to mtimeMs for the time being
   attachment.creationtime = stat.birthtime.getTime()
   attachment.size = stat.size
+}
+
+export async function remove (fileObject: OtherFileDescriptor, deleteOnFail: boolean): Promise<void> {
+  try {
+    await shell.trashItem(fileObject.path)
+  } catch (err: any) {
+    if (deleteOnFail) {
+      // If this function throws, there's really something off and we shouldn't recover.
+      await fs.unlink(fileObject.path)
+    } else {
+      err.message = `[FSAL File] Could not remove file ${fileObject.path}: ${String(err.message)}`
+      throw err
+    }
+  }
+
+  if (fileObject.parent !== null) {
+    // Splice it from the parent directory
+    const idx = fileObject.parent.children.indexOf(fileObject)
+    fileObject.parent.children.splice(idx, 1)
+  }
 }

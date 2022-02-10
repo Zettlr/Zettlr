@@ -99,7 +99,6 @@ export function metadata (dirObject: DirDescriptor): DirMeta {
     } else if (elem.type === 'code') {
       return FSALCodeFile.metadata(elem)
     } else {
-      console.log('RETURNING ATTACHMENT WITH METADATA', elem.path)
       return FSALAttachment.metadata(elem)
     }
   })
@@ -248,7 +247,6 @@ export async function parse (
         dir.children.push(file)
       }
     } else if (isFile(absolutePath)) {
-      console.log('READING ATTACHMENT', absolutePath)
       dir.children.push(await FSALAttachment.parse(absolutePath, dir))
     } // Else: Probably a symlink TODO
   }

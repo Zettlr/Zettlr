@@ -35,13 +35,6 @@ export default function locateByPath (tree: AnyDescriptor|AnyDescriptor[], searc
         return ret
       }
     }
-
-    // Now check the attachments
-    for (const otherFile of tree.attachments) {
-      if (otherFile.path === searchPath) {
-        return otherFile
-      }
-    }
   }
 
   return undefined

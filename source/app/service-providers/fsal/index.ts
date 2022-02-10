@@ -891,7 +891,7 @@ export default class FSAL extends ProviderContract {
     this._afterRemoteChange()
   }
 
-  public async removeFile (src: MDFileDescriptor|CodeFileDescriptor): Promise<void> {
+  public async removeFile (src: MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates 1x unlink
     // First remove the file
@@ -905,12 +905,14 @@ export default class FSAL extends ProviderContract {
     // Now we're safe to remove the file actually.
     if (src.type === 'file') {
       await FSALFile.remove(src, this._config.get('system.deleteOnFail'))
-    } else {
+    } else if (src.type === 'code') {
       await FSALCodeFile.remove(src, this._config.get('system.deleteOnFail'))
+    } else {
+      await FSALAttachment.remove(src, this._config.get('system.deleteOnFail'))
     }
 
     // In case it was a root file, we need to splice it
-    if (src.parent === null) {
+    if (src.parent === null && src.type !== 'other') {
       this.unloadPath(src)
     }
 
