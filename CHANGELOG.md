@@ -6,11 +6,14 @@
   item would misbehave
 - Zettlr now detects if a directory is a git repository and displays this
   information in the directory properties
+- Zettlr can now also preview emphasis such as italic or bold text
 
 ## Under the Hood
 
 - Other files are now stored in the `children` array; the `attachments` array is
   now gone for good
+- Removed old remnants of the experimental WYSIWYG mode, since Zettlr now offers
+  this via the ensemble of all rendering plugins in the main editor
 
 # 2.2.0
 

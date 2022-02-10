@@ -88,7 +88,7 @@ export default function getCodeMirrorDefaultOptions (mdEditorInstance: MarkdownE
         tasks: true,
         headingTags: true,
         tables: true,
-        wysiwyg: false
+        emphasis: true
       },
       // Maximum width of images
       imagePreviewWidth: 100,

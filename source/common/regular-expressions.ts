@@ -454,26 +454,6 @@ export function getUrlRE (global: boolean = false): RegExp {
 }
 
 /**
- * Returns a regular expression that matches:
- *
- * 1. Underscore strong
- * 2. Underscore emphasis
- * 3. Asterisk strong
- * 4. Asterisk emphasis
- * 5. Heading levels 1-6 (mark)
- * 6. Heading levels 1-6 (content)
- * 7. Blockquotes
- * 8. Inline code
- *
- * @return  {RegExp}              The compiled Regular Expression
- */
-export function getWysiwygRE (): RegExp {
-  return RegExp(
-    /__(.+?)__|_(.+?)_|\*\*(.+?)\*\*|\*(.+?)\*|^(#{1,6}) (.+?)$|^(?:\s*)> (.+)$|`(.+?)`/.source,
-    'gi')
-}
-
-/**
  * Returns a regular expression that matches Zettelkasten IDs.
  *
  * @param   {boolean}  [global=false]  Whether this RegExp should have the global flag.
