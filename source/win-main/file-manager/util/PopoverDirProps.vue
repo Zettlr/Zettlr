@@ -12,7 +12,15 @@
       <div><span>{{ foldersLabel }}: {{ formattedDirs }}</span></div>
     </div>
     <div class="properties-info-container">
-      <div><!-- Placeholder to have the word count flush right --></div>
+      <div>
+        <!--
+          We display the outer div always as a placeholder to have the word
+          count flush right, even if we don't have a git repository
+        -->
+        <span v-if="isGitRepository">
+          <clr-icon shape="git"></clr-icon> Git Repository
+        </span>
+      </div>
       <div><span>{{ formattedWordCount }}</span></div>
     </div>
     <hr>
@@ -179,6 +187,7 @@ export default {
       sortingType: 'name',
       sortingDirection: 'up',
       isProject: false,
+      isGitRepository: false,
       icon: null
     }
   },

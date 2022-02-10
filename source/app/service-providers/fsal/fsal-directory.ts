@@ -119,6 +119,7 @@ export function metadata (dirObject: DirDescriptor): DirMeta {
     project: dirObject._settings.project,
     children: children,
     type: dirObject.type,
+    isGitRepository: dirObject.isGitRepository,
     sorting: dirObject._settings.sorting,
     icon: dirObject._settings.icon,
     modtime: dirObject.modtime,
@@ -206,6 +207,7 @@ export async function parse (
     hash: hash(currentPath),
     children: [],
     type: 'directory',
+    isGitRepository: false,
     modtime: 0, // You know when something has gone wrong: 01.01.1970
     creationtime: 0,
     _settings: JSON.parse(JSON.stringify(SETTINGS_TEMPLATE))
@@ -225,14 +227,16 @@ export async function parse (
   // Now parse the directory contents recursively
   const children = await fs.readdir(dir.path)
   for (const child of children) {
+    const absolutePath = path.join(dir.path, child)
+
     if (child === '.ztr-directory') {
       // We got a settings file, so let's try to read it in
       await parseSettings(dir)
       continue // Done!
+    } else if (child === '.git' && isDir(absolutePath)) {
+      dir.isGitRepository = true
+      continue
     }
-
-    // Helper vars
-    const absolutePath = path.join(dir.path, child)
 
     if (isDir(absolutePath) && !ignoreDir(absolutePath)) {
       const cDir = await parse(absolutePath, cache, tags, links, targets, parser, sorter, dir)
@@ -274,6 +278,7 @@ export function getDirNotFoundDescriptor (dirPath: string): DirDescriptor {
     size: 0,
     children: [], // Always empty
     type: 'directory',
+    isGitRepository: false,
     modtime: 0, // ¯\_(ツ)_/¯
     creationtime: 0,
     // Settings are expected by some functions

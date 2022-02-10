@@ -21,6 +21,7 @@ export interface DirDescriptor extends FSMetaInfo {
     project: ProjectSettings|null
   }
   type: 'directory'
+  isGitRepository: boolean
   children: Array<MDFileDescriptor|DirDescriptor|CodeFileDescriptor|OtherFileDescriptor>
   dirNotFoundFlag?: boolean // If the flag is set & true this directory has not been found
 }

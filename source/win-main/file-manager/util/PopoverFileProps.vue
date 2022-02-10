@@ -173,6 +173,7 @@ body div.popover {
     & > div {
       width: 100%;
       padding: 0 10px;
+      overflow: hidden;
 
       & > span {
         white-space: nowrap;

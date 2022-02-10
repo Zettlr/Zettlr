@@ -20,6 +20,7 @@ import FootnoteIcon from './icons/clarity-custom/footnote.svg'
 import FileExtIcon from './icons/clarity-custom/file-ext.svg'
 import IndentedViewListIcon from './icons/clarity-custom/indented-view-list.svg'
 import RegExpIcon from './icons/clarity-custom/regexp.svg'
+import GitIcon from './icons/clarity-custom/git.svg'
 
 export default async function loadIcons (): Promise<void> {
   ClarityIcons.add({
@@ -27,6 +28,7 @@ export default async function loadIcons (): Promise<void> {
     'file-ext': FileExtIcon,
     'indented-view-list': IndentedViewListIcon,
     'regexp': RegExpIcon,
-    'footnote': FootnoteIcon
+    'footnote': FootnoteIcon,
+    'git': GitIcon
   })
 }

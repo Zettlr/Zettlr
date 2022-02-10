@@ -4,6 +4,8 @@
 
 - Fixed an issue where sometimes moving the cursor to the beginning of a list
   item would misbehave
+- Zettlr now detects if a directory is a git repository and displays this
+  information in the directory properties
 
 ## Under the Hood
 
