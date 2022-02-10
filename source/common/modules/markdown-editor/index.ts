@@ -447,9 +447,9 @@ export default class MarkdownEditor extends EventEmitter {
     this._currentDocumentMode = documentMode
 
     if (!this.readabilityMode) {
-      this.setOptions({ 'mode': this._currentDocumentMode })
+      this.setOptions({ mode: this._currentDocumentMode })
     } else {
-      this.setOptions({ 'mode': 'readability' })
+      this.setOptions({ mode: 'readability' })
     }
 
     return oldDoc
