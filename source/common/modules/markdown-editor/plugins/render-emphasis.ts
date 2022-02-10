@@ -14,7 +14,7 @@
 
 import CodeMirror, { commands } from 'codemirror'
 
-const emphasisRE = /(?<![\\])([*_]{1,3})((?!\s)[^*_]+?(?<![\s\\]))[*_]{1,3}/g
+const emphasisRE = /(?<![\\])([*_]{1,3}|~{2})((?!\s)[^*_]+?(?<![\s\\]))(?:[*_]{1,3}|~{2})/g
 
 /**
  * Declare the markdownRenderEmphasis command
@@ -54,8 +54,12 @@ const emphasisRE = /(?<![\\])([*_]{1,3})((?!\s)[^*_]+?(?<![\s\\]))[*_]{1,3}/g
         case 1: // Italic
           span.style.fontStyle = 'italic'
           break
-        case 2: // Bold
-          span.style.fontWeight = 'bold'
+        case 2: // Bold or strikethrough
+          if (match[1] === '~~') {
+            span.style.textDecoration = 'line-through'
+          } else {
+            span.style.fontWeight = 'bold'
+          }
           break
         case 3: // Both
           span.style.fontStyle = 'italic'
