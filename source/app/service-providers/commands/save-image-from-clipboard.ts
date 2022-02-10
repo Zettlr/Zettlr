@@ -38,10 +38,8 @@ export default class SaveImage extends ZettlrCommand {
       return this._app.notifications.show(trans('system.error.fnf_message'))
     }
 
-    const startPath = path.resolve(
-      activeFile.dir,
-      this._app.config.get('editor.defaultSaveImagePath')
-    )
+    const defaultPath = this._app.config.get('editor.defaultSaveImagePath')
+    const startPath = path.resolve(activeFile.dir, defaultPath)
 
     const target = await this._app.windows.showPasteImageModal(startPath)
     if (target === undefined) {
@@ -114,9 +112,15 @@ export default class SaveImage extends ZettlrCommand {
       await fs.writeFile(imagePath, image.toJPEG(100))
     }
 
-    // Insert a relative path instead of an absolute one
-    let pathToInsert = path.relative(path.dirname(activeFile.path), imagePath)
-
-    return pathToInsert
+    if (path.isAbsolute(defaultPath) && target.targetDir === defaultPath) {
+      // The user has provided an absolute path as the default image location
+      // and kept this in the save image modal. In this case, it makes sense to
+      // return an absolute path, instead of a path which likely has thousands
+      // of ../../../ in front of it
+      return imagePath
+    } else {
+      // Insert a relative path instead of an absolute one
+      return path.relative(activeFile.dir, imagePath)
+    }
   }
 }

@@ -7,6 +7,8 @@
 - Zettlr now detects if a directory is a git repository and displays this
   information in the directory properties
 - Zettlr can now also preview emphasis such as italic or bold text
+- Using an absolute path as the default image location will ensure that pasted
+  images will be inserted using absolute paths as well.
 
 ## Under the Hood
 

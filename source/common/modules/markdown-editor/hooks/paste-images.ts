@@ -40,14 +40,14 @@ export default function pasteImagesHook (cm: CodeMirror.Editor): void {
         ipcRenderer.invoke('application', {
           command: 'save-image-from-clipboard'
         })
-          .then(relativePath => {
+          .then((pathToInsert: string|undefined) => {
             // If the user aborts the pasting process, the command will return
             // undefined, so we have to check for this.
-            if (relativePath !== undefined) {
-              // Replace backward slashes with forward slashes to make Windows paths
-              // cross-platform compatible
-              const sanitizedPath = String(relativePath).replace(/\\/g, '/')
-              cm.replaceSelection(`![${path.basename(relativePath)}](${sanitizedPath})`)
+            if (pathToInsert !== undefined) {
+              // Replace backward slashes with forward slashes to make Windows
+              // paths cross-platform compatible
+              const sanitizedPath = pathToInsert.replace(/\\/g, '/')
+              cm.replaceSelection(`![${path.basename(sanitizedPath)}](${sanitizedPath})`)
             }
           })
           .catch(err => console.error(err))
@@ -77,14 +77,14 @@ export default function pasteImagesHook (cm: CodeMirror.Editor): void {
       ipcRenderer.invoke('application', {
         command: 'save-image-from-clipboard'
       })
-        .then((relativePath: string|undefined) => {
+        .then((pathToInsert: string|undefined) => {
           // If the user aborts the pasting process, the command will rturn
           // undefined, so we have to check for this.
-          if (relativePath !== undefined) {
+          if (pathToInsert !== undefined) {
             // Replace backward slashes with forward slashes to make Windows paths
             // cross-platform compatible
-            const sanitizedPath = relativePath.replace(/\\/g, '/')
-            cm.replaceSelection(`![${path.basename(relativePath)}](${sanitizedPath})`)
+            const sanitizedPath = pathToInsert.replace(/\\/g, '/')
+            cm.replaceSelection(`![${path.basename(sanitizedPath)}](${sanitizedPath})`)
           }
         })
         .catch(err => console.error(err))
