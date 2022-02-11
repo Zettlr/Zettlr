@@ -24,6 +24,7 @@
 - Incorporate the logic to disambiguate ID and filename links into
   FSAL::findExact
 - Improve findObject utility function
+- Resolve outbound links directly in the link provider
 
 # 2.2.0
 

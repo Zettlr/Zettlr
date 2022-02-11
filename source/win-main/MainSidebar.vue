@@ -324,10 +324,7 @@ export default defineComponent({
       // relation, so they should be on top of the list.
       const inboundLinks = await ipcRenderer.invoke('link-provider', {
         command: 'get-inbound-links',
-        payload: {
-          filePath: this.activeFile.path,
-          fileID: this.activeFile.id
-        }
+        payload: { filePath: this.activeFile.path }
       })
 
       for (const absPath of inboundLinks) {
