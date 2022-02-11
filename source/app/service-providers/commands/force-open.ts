@@ -13,12 +13,8 @@
  * END HEADER
  */
 
-import path from 'path'
 import ZettlrCommand from './zettlr-command'
-import { getIDRE } from '@common/regular-expressions'
-import { mdFileExtensions } from '@providers/fsal/util/valid-file-extensions'
-
-const FILETYPES = mdFileExtensions(true)
+import isDir from '@common/util/is-dir'
 
 export default class ForceOpen extends ZettlrCommand {
   constructor (app: any) {
@@ -39,43 +35,17 @@ export default class ForceOpen extends ZettlrCommand {
     // command.
     const autoCreate: boolean = this._app.config.get('zkn.autoCreateLinkedFiles')
     const customDir: string = this._app.config.get('zkn.customDirectory')
-    const idREPattern = this._app.config.get('zkn.idRE')
 
-    const idRE = getIDRE(idREPattern, true)
-    let file = null
-
-    // First, let's see if what we got looks like an ID, or not. If it looks
-    // like an ID, attempt to match it that way, else try to search for a
-    // filename.
-    if (idRE.test(linkContents)) {
-      // It's an ID
-      file = this._app.fsal.findExact(linkContents, 'id')
-    } else {
-      // It's a filename -- now check if an extension is given (likely not)
-      if (FILETYPES.includes(path.extname(linkContents))) {
-        // file ending given
-        file = this._app.fsal.findExact(linkContents, 'name')
-      } else {
-        // No file ending given, so let's test all allowed. The filetypes are
-        // sorted by probability (first .md, then .markdown), to reduce the
-        // amount of time spent on the tree.
-        for (const type of FILETYPES) {
-          file = this._app.fsal.findExact((linkContents as string) + type, 'name')
-          if (file !== null) {
-            break
-          }
-        }
-      }
-    }
+    const file = this._app.fsal.findExact(linkContents)
 
     // Now we have a file (if not, create a new one if the user wishes so)
-    if (file != null) {
+    if (file !== undefined) {
       await this._app.documents.openFile(file.path, newTab)
-    } else if (autoCreate && customDir !== '') {
+    } else if (autoCreate && isDir(customDir)) {
       // Call the file-new command on the application, which'll do all
       // necessary steps for us.
       await this._app.commands.run('file-new', { name: linkContents, path: customDir })
-    } else if (autoCreate && customDir === '') {
+    } else if (autoCreate && !isDir(customDir)) {
       await this._app.commands.run('file-new', { name: linkContents })
     }
   }
