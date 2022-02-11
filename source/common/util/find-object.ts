@@ -33,22 +33,24 @@ export default function findObject (tree: any, prop: string, val: any, traverse:
   }
 
   // Now search the tree
-  let ret
   if (Array.isArray(tree)) {
     // The tree itself is an array
-    for (let item of tree) {
-      ret = findObject(item, prop, val, traverse)
-      if (ret !== undefined) break // Found it!
+    for (const item of tree) {
+      const ret = findObject(item, prop, val, traverse)
+      if (ret !== undefined) {
+        return ret
+      }
     }
   } else if (traverse in tree && Array.isArray(tree[traverse])) {
     // The descendants are an array
-    for (let descendant of tree[traverse]) {
-      ret = findObject(descendant, prop, val, traverse)
-      if (ret !== undefined) break // Found it!
+    for (const descendant of tree[traverse]) {
+      const ret = findObject(descendant, prop, val, traverse)
+      if (ret !== undefined) {
+        return ret
+      }
     }
   } else if (traverse in tree) {
     // Neither tree nor descendants are an array -> simple traverse
-    ret = findObject(tree[traverse], prop, val, traverse)
+    return findObject(tree[traverse], prop, val, traverse)
   }
-  return ret
 }

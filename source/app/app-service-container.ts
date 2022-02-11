@@ -36,6 +36,7 @@ import TranslationProvider from '@providers/translations'
 import TrayProvider from '@providers/tray'
 import UpdateProvider from '@providers/updates'
 import WindowProvider from '@providers/windows'
+import { dialog } from 'electron'
 
 export default class AppServiceContainer {
   private readonly _appearanceProvider: AppearanceProvider
@@ -69,7 +70,7 @@ export default class AppServiceContainer {
     // NOTE: This provider still produces side effects
     this._translationProvider = new TranslationProvider(this._logProvider, this._configProvider)
     this._assetsProvider = new AssetsProvider(this._logProvider)
-    this._linkProvider = new LinkProvider(this._logProvider)
+    this._linkProvider = new LinkProvider(this)
     this._tagProvider = new TagProvider(this._logProvider)
     this._cssProvider = new CssProvider(this._logProvider)
     this._notificationProvider = new NotificationProvider(this._logProvider)
@@ -97,57 +98,147 @@ export default class AppServiceContainer {
     this._updateProvider = new UpdateProvider(this._logProvider, this._configProvider, this._notificationProvider, this._commandProvider)
   }
 
+  /**
+   * Boots up all service providers which need to be ready before the
+   * application can be used.
+   */
   async boot (): Promise<void> {
-    await this._logProvider.boot()
-    await this._configProvider.boot()
-    await this._translationProvider.boot()
-    await this._assetsProvider.boot()
-    await this._linkProvider.boot()
-    await this._tagProvider.boot()
-    await this._targetProvider.boot()
-    await this._cssProvider.boot()
-    await this._notificationProvider.boot()
-    await this._statsProvider.boot()
-    await this._recentDocsProvider.boot()
-    await this._appearanceProvider.boot()
+    await this._informativeBoot(this._logProvider)
+    await this._informativeBoot(this._configProvider)
+    await this._informativeBoot(this._translationProvider)
+    await this._informativeBoot(this._assetsProvider)
+    await this._informativeBoot(this._linkProvider)
+    await this._informativeBoot(this._tagProvider)
+    await this._informativeBoot(this._targetProvider)
+    await this._informativeBoot(this._cssProvider)
+    await this._informativeBoot(this._notificationProvider)
+    await this._informativeBoot(this._statsProvider)
+    await this._informativeBoot(this._recentDocsProvider)
+    await this._informativeBoot(this._appearanceProvider)
     // Boot the commands before the window provider to ensure the handler for
     // application requests from windows is registered before any window opens
-    await this._commandProvider.boot()
-    await this._windowProvider.boot()
-    await this._trayProvider.boot()
-    await this._dictionaryProvider.boot()
-    await this._menuProvider.boot()
-    await this._citeprocProvider.boot() // --> WindowProvider
-    await this._updateProvider.boot() // --> CommandProvider
+    await this._informativeBoot(this._commandProvider)
+    await this._informativeBoot(this._windowProvider)
+    await this._informativeBoot(this._trayProvider)
+    await this._informativeBoot(this._dictionaryProvider)
+    await this._informativeBoot(this._menuProvider)
+    await this._informativeBoot(this._citeprocProvider)
+    await this._informativeBoot(this._updateProvider)
 
-    await this._fsal.boot()
-    await this._documentManager.boot()
+    await this._informativeBoot(this._fsal)
+    await this._informativeBoot(this._documentManager)
 
     this._menuProvider.set() // TODO
   }
 
+  /**
+   * Returns the appearance provider
+   */
   public get appearance (): AppearanceProvider { return this._appearanceProvider }
+
+  /**
+   * Returns the assets provider
+   */
   public get assets (): AssetsProvider { return this._assetsProvider }
+
+  /**
+   * Returns the citeproc provider
+   */
   public get citeproc (): CiteprocProvider { return this._citeprocProvider }
+
+  /**
+   * Returns the config provider
+   */
   public get config (): ConfigProvider { return this._configProvider }
+
+  /**
+   * Returns the CSS provider
+   */
   public get css (): CssProvider { return this._cssProvider }
+
+  /**
+   * Returns the dictionary provider
+   */
   public get dictionary (): DictionaryProvider { return this._dictionaryProvider }
+
+  /**
+   * Returns the link provider
+   */
   public get links (): LinkProvider { return this._linkProvider }
+
+  /**
+   * Returns the log provider
+   */
   public get log (): LogProvider { return this._logProvider }
+
+  /**
+   * Returns the menu provider
+   */
   public get menu (): MenuProvider { return this._menuProvider }
+
+  /**
+   * Returns the notifications provider
+   */
   public get notifications (): NotificationProvider { return this._notificationProvider }
+
+  /**
+   * Returns the recent docs provider
+   */
   public get recentDocs (): RecentDocumentsProvider { return this._recentDocsProvider }
+
+  /**
+   * Returns the stats provider
+   */
   public get stats (): StatsProvider { return this._statsProvider }
+
+  /**
+   * Returns the tags provider
+   */
   public get tags (): TagProvider { return this._tagProvider }
+
+  /**
+   * Returns the target provider
+   */
   public get targets (): TargetProvider { return this._targetProvider }
+
+  /**
+   * Returns the translation provider
+   */
   public get translations (): TranslationProvider { return this._translationProvider }
+
+  /**
+   * Returns the tray provider
+   */
   public get tray (): TrayProvider { return this._trayProvider }
+
+  /**
+   * Returns the update provider
+   */
   public get updates (): UpdateProvider { return this._updateProvider }
+
+  /**
+   * Returns the window manager
+   */
   public get windows (): WindowProvider { return this._windowProvider }
+
+  /**
+   * Returns the FSAL
+   */
   public get fsal (): FSAL { return this._fsal }
+
+  /**
+   * Returns the DocumentManager
+   */
   public get documents (): DocumentManager { return this._documentManager }
+
+  /**
+   * Returns the command provider
+   */
   public get commands (): CommandProvider { return this._commandProvider }
 
+  /**
+   * Prepares quitting the app by shutting down the service providers
+   */
   async shutdown (): Promise<void> {
     await this._safeShutdown(this._commandProvider)
     await this._safeShutdown(this._documentManager)
@@ -173,11 +264,40 @@ export default class AppServiceContainer {
     await this._safeShutdown(this._logProvider)
   }
 
+  /**
+   * A utility function to safely shut down providers. (If one throws an error
+   * all others still should be able to shut down)
+   *
+   * @param  {ProviderContract}  provider  The provider to shut down
+   */
   private async _safeShutdown <T extends ProviderContract> (provider: T): Promise<void> {
     try {
       await provider.shutdown()
     } catch (err: any) {
-      this._logProvider.error(`[AppServiceContainer] Could not shut down provider ${provider.constructor.name}: ${err.message as string}`, err)
+      const title = `Error shutting down ${provider.constructor.name}`
+      const message = `Could not shut down ${provider.constructor.name}: ${err.message as string}`
+      dialog.showErrorBox(title, message)
+      this._logProvider.error(`[AppServiceContainer] ${message}`, err)
+    }
+  }
+
+  /**
+   * Similar to safeShutdown, this utility function provides a similar
+   * experience during boot. The only difference is that errors won't be caught
+   * here, since an error in any provider indicates that it is not safe to
+   * continue to boot the app.
+   *
+   * @param  {ProviderContract}  provider  The provider to boot
+   */
+  private async _informativeBoot <T extends ProviderContract> (provider: T): Promise<void> {
+    try {
+      await provider.boot()
+    } catch (err: any) {
+      const title = `Error starting ${provider.constructor.name}`
+      const message = `Could not start ${provider.constructor.name}: ${err.message as string}`
+      dialog.showErrorBox(title, message)
+      this._logProvider.error(`[AppServiceContainer] ${message}`, err)
+      throw err // Re-Throw since we need to quit the app now.
     }
   }
 }

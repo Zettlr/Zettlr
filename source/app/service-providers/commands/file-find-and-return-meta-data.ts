@@ -15,9 +15,6 @@
 
 import ZettlrCommand from './zettlr-command'
 import { MDFileMeta } from '@dts/common/fsal'
-import { mdFileExtensions } from '@providers/fsal/util/valid-file-extensions'
-
-const FILETYPES = mdFileExtensions(true)
 
 export default class FilePathFindMetaData extends ZettlrCommand {
   constructor (app: any) {
@@ -31,35 +28,16 @@ export default class FilePathFindMetaData extends ZettlrCommand {
       * @return {Boolean} Whether the file was successfully deleted.
       */
   async run (evt: string, arg: any): Promise<any> {
-    let file
-    let metaData
-    // It might be linked by ID
-    file = this._app.fsal.findExact((arg as string), 'id')
+    const file = this._app.fsal.findExact(arg)
     if (file !== undefined) {
-      metaData = await this._app.fsal.getFileContents(file)
-    }
-    // It's not an ID, so search each type of file
-    if (file === undefined) {
-      for (let type of FILETYPES) {
-        file = this._app.fsal.findExact((arg as string) + type, 'name')
-        if (file !== undefined) {
-          // If we find it, then return it
-          metaData = await this._app.fsal.getFileContents(file)
-          break
-        }
-      }
-    }
-    // Get the contents of the file such as:
-    if (metaData !== undefined) {
-      metaData = metaData as MDFileMeta // forces MDFileMeta rather than CodeFileMeta
+      const metaData = await this._app.fsal.getFileContents(file) as MDFileMeta
       let content = metaData.content.substring(0, 200) // The content
       if (metaData.content.length > 200) {
         content += '...'
       }
-      let wordCount = metaData.wordCount // The word count
-      let title = metaData.name // The file name
+      const wordCount = metaData.wordCount // The word count
+      const title = metaData.name // The file name
 
-      // use luxon to get a local time difference
       return ([ title, content, wordCount, metaData.modtime ])
     }
     // We can't find it, so return Not Found

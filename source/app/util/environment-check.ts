@@ -20,7 +20,7 @@ import isTraySupported from './is-tray-supported'
 import commandExists from 'command-exists'
 
 export default async function environmentCheck (): Promise<void> {
-  console.log('Performing environment check ...')
+  console.log('[Application] Performing environment check ...')
 
   /**
    * Contains custom paths that should be present on the process.env.PATH property
@@ -130,7 +130,7 @@ export default async function environmentCheck (): Promise<void> {
     try {
       await fs.lstat(directory)
     } catch (err) {
-      console.log(`Creating required directory ${directory} ...`)
+      console.log(`[Application] Creating required directory ${directory} ...`)
       await fs.mkdir(directory, { recursive: true })
     }
   }
@@ -152,5 +152,5 @@ export default async function environmentCheck (): Promise<void> {
     process.env.GIT_SUPPORT = '0'
   }
 
-  console.log('Environment check complete.')
+  console.log('[Application] Environment check complete.')
 }

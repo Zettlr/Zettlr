@@ -11,6 +11,11 @@
   images will be inserted using absolute paths as well.
 - The full-text search doesn't skip files whose title and/or tags match the
   search terms anymore
+- Fix an error that would make some actions unusable if a faulty translation was
+  provided
+- Sometimes, something goes wrong when you start the application; now you will
+  receive an informative message box if that happens, so that reporting problems
+  will be easier
 
 ## Under the Hood
 
@@ -18,6 +23,10 @@
   now gone for good
 - Removed old remnants of the experimental WYSIWYG mode, since Zettlr now offers
   this via the ensemble of all rendering plugins in the main editor
+- Incorporate the logic to disambiguate ID and filename links into
+  FSAL::findExact
+- Improve findObject utility function
+- Resolve outbound links directly in the link provider
 
 # 2.2.0
 

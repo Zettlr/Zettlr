@@ -14,9 +14,8 @@
 
 import { ipcMain } from 'electron'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
-import path from 'path'
 import ProviderContract from '../provider-contract'
-import LogProvider from '../log'
+import AppServiceContainer from 'source/app/app-service-container'
 
 /**
  * This class manages the coloured tags of the app. It reads the tags on each
@@ -29,7 +28,7 @@ export default class LinkProvider extends ProviderContract {
   /**
    * Create the instance on program start and initially load the tags.
    */
-  constructor (private readonly _logger: LogProvider) {
+  constructor (private readonly _app: AppServiceContainer) {
     super()
 
     this._fileLinkDatabase = new Map()
@@ -41,24 +40,12 @@ export default class LinkProvider extends ProviderContract {
       const { command } = message
 
       if (command === 'get-inbound-links') {
-        const sourceFiles: string[] = []
         // Return whatever links to the given file
-        const { filePath, fileID } = message.payload
-        const basenameExt = path.basename(filePath)
-        const basenameNoExt = path.basename(filePath, path.extname(filePath))
-
-        // Search all recorded links
-        for (const [ file, outbound ] of this._fileLinkDatabase.entries()) {
-          if (outbound.includes(basenameExt) || outbound.includes(basenameNoExt)) {
-            sourceFiles.push(file)
-          } else if (fileID !== undefined && outbound.includes(fileID)) {
-            sourceFiles.push(file)
-          }
+        const { filePath } = message.payload
+        return {
+          inbound: this.retrieveInbound(filePath),
+          outbound: this.retrieveOutbound(filePath)
         }
-
-        // NOTE: The resolution of these files will take place from within the
-        // renderer on-demand
-        return sourceFiles
       }
     })
   }
@@ -68,7 +55,7 @@ export default class LinkProvider extends ProviderContract {
    * @return {Boolean} Returns true after successful shutdown
    */
   async shutdown (): Promise<void> {
-    this._logger.verbose('Link provider shutting down ...')
+    this._app.log.verbose('Link provider shutting down ...')
   }
 
   /**
@@ -86,9 +73,19 @@ export default class LinkProvider extends ProviderContract {
       sourceID = undefined
     }
 
-    this._fileLinkDatabase.set(sourcePath, outboundLinks)
+    // Resolve the outboundLinks utilizing the FSAL
+    const resolved: string[] = []
+
+    for (const link of outboundLinks) {
+      const found = this._app.fsal.findExact(link)
+      if (found !== undefined) {
+        resolved.push(found.path)
+      }
+    }
+
+    this._fileLinkDatabase.set(sourcePath, resolved)
     if (sourceID !== undefined) {
-      this._idLinkDatabase.set(sourceID, outboundLinks)
+      this._idLinkDatabase.set(sourceID, resolved)
     }
     broadcastIpcMessage('links')
   }
@@ -115,5 +112,36 @@ export default class LinkProvider extends ProviderContract {
       this._idLinkDatabase.delete(sourceID)
     }
     broadcastIpcMessage('links')
+  }
+
+  /**
+   * Retrieves a set of links to the file given as argument
+   *
+   * @param   {string}    sourceFilePath  The source file's path
+   *
+   * @return  {string[]}                  A list of all files linking to sourceFile
+   */
+  retrieveInbound (sourceFilePath: string): string[] {
+    const sourceFiles: string[] = []
+
+    // Search all recorded links
+    for (const [ file, outbound ] of this._fileLinkDatabase.entries()) {
+      if (outbound.includes(sourceFilePath)) {
+        sourceFiles.push(file)
+      }
+    }
+
+    return sourceFiles
+  }
+
+  /**
+   * Retrieves a set of files the given source file links to
+   *
+   * @param   {string}    sourceFilePath  The source file's path
+   *
+   * @return  {string[]}                  A list of outbound links from source
+   */
+  retrieveOutbound (sourceFilePath: string): string[] {
+    return this._fileLinkDatabase.get(sourceFilePath) ?? []
   }
 }
