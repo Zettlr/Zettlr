@@ -23,6 +23,7 @@
   this via the ensemble of all rendering plugins in the main editor
 - Incorporate the logic to disambiguate ID and filename links into
   FSAL::findExact
+- Improve findObject utility function
 
 # 2.2.0
 
