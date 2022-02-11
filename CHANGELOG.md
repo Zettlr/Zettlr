@@ -21,6 +21,8 @@
   now gone for good
 - Removed old remnants of the experimental WYSIWYG mode, since Zettlr now offers
   this via the ensemble of all rendering plugins in the main editor
+- Incorporate the logic to disambiguate ID and filename links into
+  FSAL::findExact
 
 # 2.2.0
 
