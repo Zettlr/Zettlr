@@ -70,7 +70,7 @@ export default class AppServiceContainer {
     // NOTE: This provider still produces side effects
     this._translationProvider = new TranslationProvider(this._logProvider, this._configProvider)
     this._assetsProvider = new AssetsProvider(this._logProvider)
-    this._linkProvider = new LinkProvider(this._logProvider)
+    this._linkProvider = new LinkProvider(this)
     this._tagProvider = new TagProvider(this._logProvider)
     this._cssProvider = new CssProvider(this._logProvider)
     this._notificationProvider = new NotificationProvider(this._logProvider)
