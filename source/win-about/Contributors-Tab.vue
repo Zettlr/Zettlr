@@ -86,7 +86,7 @@ export default defineComponent({
       }
     },
     formattedDate: function (dateString: string) {
-      return formatDate(new Date(dateString))
+      return formatDate(new Date(dateString), window.config.get('appLang'))
     },
     linkifyEmail: function (email: string) {
       return `mailto:${email}`

@@ -1,4 +1,28 @@
+# 2.2.1
+
+## GUI and Functionality
+
+- Fixed an issue where sometimes moving the cursor to the beginning of a list
+  item would misbehave
+- Zettlr now detects if a directory is a git repository and displays this
+  information in the directory properties
+- Zettlr can now also preview emphasis such as italic or bold text
+- Using an absolute path as the default image location will ensure that pasted
+  images will be inserted using absolute paths as well.
+
+## Under the Hood
+
+- Other files are now stored in the `children` array; the `attachments` array is
+  now gone for good
+- Removed old remnants of the experimental WYSIWYG mode, since Zettlr now offers
+  this via the ensemble of all rendering plugins in the main editor
+
 # 2.2.0
+
+**Attention**: This update switches one preference in the exporters' defaults:
+`file-scope` is now removed. Remove this line from your defaults files, or reset
+them to the (new) default, if you'd like to use this in your exports as well.
+See for more info [this issue](https://github.com/Zettlr/Zettlr/issues/3103).
 
 ## GUI and Functionality
 
@@ -23,10 +47,16 @@
 - The full-text search doesn't skip files whose title and/or tags match the
   search terms anymore
 - Newly created files now always open in a new tab
+- Fixed a bug where you would receive two "paste image" dialogs if you had text
+  selected when pasting an image onto the editor
+- Fixed conflicting text decorations between strikethrough and spellchecking
+- Fixed a bug where a YAML frontmatter beginning and end would also be
+  recognized even if it was not valid. A valid YAML frontmatter must be
+  delimited by exactly three dashes/dots on their own line, and *not more*
 
 ## Under the Hood
 
-- Update Pandoc to 2.17.0.1
+- Update Pandoc to 2.17.1.1
 - Activate watchdog polling for the citeproc provider. This should reduce issues
   with very large citation databases.
 - If the error message upon a failed database reload indicates that the file was
@@ -46,6 +76,8 @@
   - Move the littered code from the Zettlr main class into their corresponding
     service providers
   - Fixed the dependency hell within the FSAL
+- The app doesn't attempt to download the Vue3 devtools in production anymore
+- The date formatter now takes everything as parameters and has unit tests
 
 # 2.1.3
 

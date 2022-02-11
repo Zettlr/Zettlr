@@ -52,5 +52,5 @@ function renderElements (cm: CodeMirror.Editor): void {
   if (render.citations === true) cm.execCommand('markdownRenderCitations')
   if (render.tasks === true) cm.execCommand('markdownRenderTasks')
   if (render.headingTags === true) cm.execCommand('markdownRenderHTags')
-  if (render.wysiwyg === true) cm.execCommand('markdownWYSIWYG')
+  if (render.emphasis === true) cm.execCommand('markdownRenderEmphasis')
 }

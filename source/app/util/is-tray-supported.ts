@@ -1,5 +1,5 @@
 import { spawn } from 'child_process'
-import { trans } from '../../common/i18n-main'
+// import { trans } from '../../common/i18n-main'
 
 /**
  * Check if system supports a Tray.
@@ -29,11 +29,17 @@ export default async function isTraySupported (): Promise<boolean> {
 
       shellProcess.on('close', (code, signal) => {
         if (code !== 0) {
-          reject(new Error(trans('system.error.tray_not_supported')))
+          // TODO: Currently, this is a race condition because the translations
+          // will only be loaded after this code has run, so on systems which
+          // don't support a tray, we can't display a localized message as of
+          // now. We have to revisit this later on.
+          // reject(new Error(trans('system.error.tray_not_supported')))
+          reject(new Error('Your operating system does not support a tray.'))
         } else if (out.includes("'appindicatorsupport@rgcjonas.gmail.com'")) {
           resolve(true)
         } else {
-          reject(new Error(trans('system.error.tray_not_supported')))
+          // reject(new Error(trans('system.error.tray_not_supported')))
+          reject(new Error('Your operating system does not support a tray.'))
         }
       })
 

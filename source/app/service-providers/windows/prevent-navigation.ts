@@ -42,15 +42,18 @@ export default function preventNavigation (logger: LogProvider, win: BrowserWind
     event.preventDefault()
 
     if (url.startsWith('safe-file://')) {
-      // will-navigate assumes an URL and will pass an encoded URI, but if it
-      // is a safe-file, it's not an actual URL, but rather a path.
-      // So we have to make sure to decode the url, i.e.,  %28 becomes ( again.
-      const unencoded = decodeURIComponent(url)
+      // will-navigate assumes an URL and will pass an encoded URI, so we have
+      // to make sure to decode the url so that %28 becomes ( again.
+      const unencoded = decodeURIComponent(url).substring(12)
+      // On Windows, it likes to add a third slash at the beginning (because
+      // unlike UNIX, absolute paths start with a letter, not a slash)
+      const leadingSlash = unencoded.startsWith('/') && process.platform === 'win32'
+      const realPath = leadingSlash ? unencoded.substring(1) : unencoded
       // We need to remove the protocol to ensure shell.openPath works.
-      logger.verbose(`[Window Manager] Opening path ${unencoded.substring(12)}.`)
-      shell.openPath(unencoded.substring(12))
+      logger.verbose(`[Window Manager] Opening path ${realPath}.`)
+      shell.openPath(realPath)
         .catch(error => logger.error(
-          `[Window Manager] Could not open path ${unencoded.substring(12)}.`,
+          `[Window Manager] Could not open path ${realPath}.`,
           error
         ))
     } else {

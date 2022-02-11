@@ -205,7 +205,8 @@ export default function getConfigTemplate (): ConfigOptions {
       renderLinks: true,
       renderMath: true,
       renderTasks: true,
-      renderHTags: false
+      renderHTags: false,
+      renderEmphasis: false
     },
     // Language
     selectedDicts: [], // By default no spell checking is active to speed up first start.

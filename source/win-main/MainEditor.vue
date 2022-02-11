@@ -254,7 +254,8 @@ export default defineComponent({
             math: this.$store.state.config['display.renderMath'],
             tasks: this.$store.state.config['display.renderTasks'],
             headingTags: this.$store.state.config['display.renderHTags'],
-            tables: this.$store.state.config['editor.enableTableHelper']
+            tables: this.$store.state.config['editor.enableTableHelper'],
+            emphasis: this.$store.state.config['display.renderEmphasis']
           }
         }
       }

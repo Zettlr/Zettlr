@@ -85,7 +85,7 @@ function getPreviewElement (metadata: [string, string, number, number], linkCont
   meta.classList.add('metadata')
   meta.innerHTML = `${trans('gui.preview_word_count')}: ${metadata[2]}`
   meta.innerHTML += '<br>'
-  meta.innerHTML += `${trans('gui.modified')}: ${formatDate(metadata[3])}`
+  meta.innerHTML += `${trans('gui.modified')}: ${formatDate(metadata[3], window.config.get('appLang'))}`
 
   const actions = document.createElement('div')
   actions.classList.add('actions')

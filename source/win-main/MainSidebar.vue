@@ -223,7 +223,8 @@ export default defineComponent({
         return []
       } else {
         const extensions: string[] = this.$store.state.config.attachmentExtensions
-        return currentDir.attachments.filter(attachment => extensions.includes(attachment.ext))
+        const attachments = currentDir.children.filter(child => child.type === 'other') as OtherFileMeta[]
+        return attachments.filter(attachment => extensions.includes(attachment.ext))
       }
     },
     activeFile: function (): MDFileMeta|null {
