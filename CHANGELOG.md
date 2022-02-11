@@ -9,6 +9,8 @@
 - Zettlr can now also preview emphasis such as italic or bold text
 - Using an absolute path as the default image location will ensure that pasted
   images will be inserted using absolute paths as well.
+- The full-text search doesn't skip files whose title and/or tags match the
+  search terms anymore
 
 ## Under the Hood
 
@@ -44,8 +46,6 @@ See for more info [this issue](https://github.com/Zettlr/Zettlr/issues/3103).
 - Ensure documents are saved when renaming a directory
 - Do not show "Open Image Externally" if loading a data URL
 - Improve styling for the "No results" message on file tree filtering
-- The full-text search doesn't skip files whose title and/or tags match the
-  search terms anymore
 - Newly created files now always open in a new tab
 - Fixed a bug where you would receive two "paste image" dialogs if you had text
   selected when pasting an image onto the editor
