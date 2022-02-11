@@ -11,6 +11,9 @@
   images will be inserted using absolute paths as well.
 - Fix an error that would make some actions unusable if a faulty translation was
   provided
+- Sometimes, something goes wrong when you start the application; now you will
+  receive an informative message box if that happens, so that reporting problems
+  will be easier
 
 ## Under the Hood
 
