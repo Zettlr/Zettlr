@@ -4,6 +4,7 @@
 
 - The full-text search doesn't skip files whose title and/or tags match the
   search terms anymore
+- Hovering the mouse over a document tab now shows the full path of the file
 
 ## Under the Hood
 
