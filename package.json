@@ -57,6 +57,7 @@
     "citeproc": "^2.4.62",
     "codemirror": "^5.65.1",
     "command-exists": "^1.2.9",
+    "d3": "^7.0.0",
     "got": "^11.8.3",
     "joplin-turndown-plugin-gfm": "^1.0.12",
     "katex": "^0.15.2",
