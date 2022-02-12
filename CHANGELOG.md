@@ -2,12 +2,16 @@
 
 ## GUI and Functionality
 
+- **New Feature**: Zettlr now finally offers a graph view of all notes in the
+  statistics window; clicking on a vertex opens the file in the main editor, and
+  you can choose to hide isolates
 - The full-text search doesn't skip files whose title and/or tags match the
   search terms anymore
 
 ## Under the Hood
 
-(nothing here)
+- Add d3 as a fixed dependency in `package.json`; lock to the version from
+  mermaid
 
 # 2.2.1
 

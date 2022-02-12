@@ -30,6 +30,9 @@
       <FSALView
         v-if="currentTab === 2"
       ></FSALView>
+      <GraphView
+        v-if="currentTab === 3"
+      ></GraphView>
     </div>
   </WindowChrome>
 </template>
@@ -56,6 +59,7 @@ import FSALView from './FSALView.vue'
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
 import { WindowTab } from '@dts/renderer/window'
+import GraphView from './GraphView.vue'
 
 const ipcRenderer = window.ipc
 
@@ -72,7 +76,8 @@ export default defineComponent({
     WindowChrome,
     CalendarView,
     ChartView,
-    FSALView
+    FSALView,
+    GraphView
   },
   data: function () {
     return {
@@ -95,16 +100,14 @@ export default defineComponent({
           controls: 'tab-fsal',
           id: 'tab-fsal-control',
           icon: 'file-group'
+        },
+        {
+          label: 'Graph',
+          controls: 'tab-graph',
+          id: 'tab-graph-control',
+          icon: 'network-globe'
         }
       ] as WindowTab[],
-      // After the data has been loaded, it will contain the following
-      // properties (as of writing this):
-      //
-      // avgMonth: number
-      // pomodoros: object [YYYY-MM-DD]: number
-      // sumMonth: number
-      // today: number
-      // wordCount: object [YYYY-MM-DD]: number
       statisticsData: {} as Stats
     }
   },
