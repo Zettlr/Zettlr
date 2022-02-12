@@ -16,6 +16,10 @@ import { ipcMain } from 'electron'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import ProviderContract from '../provider-contract'
 import AppServiceContainer from 'source/app/app-service-container'
+import { GraphVertex, LinkGraph } from '@dts/common/graph'
+import path from 'path'
+
+const NONE_COMPONENT = 'Files'
 
 /**
  * This class manages the coloured tags of the app. It reads the tags on each
@@ -46,6 +50,8 @@ export default class LinkProvider extends ProviderContract {
           inbound: this.retrieveInbound(filePath),
           outbound: this.retrieveOutbound(filePath)
         }
+      } else if (command === 'get-graph') {
+        return this.buildGraph()
       }
     })
   }
@@ -143,5 +149,116 @@ export default class LinkProvider extends ProviderContract {
    */
   retrieveOutbound (sourceFilePath: string): string[] {
     return this._fileLinkDatabase.get(sourceFilePath) ?? []
+  }
+
+  /**
+   * Constructs a graph from the link database
+   *
+   * @return  {LinkGraph}  The complete graph
+   */
+  buildGraph (): LinkGraph {
+    const graph: LinkGraph = {
+      nodes: [],
+      links: [],
+      components: []
+    }
+
+    const startTime = performance.now()
+    for (const [ file, outbound ] of this._fileLinkDatabase) {
+      const foundVertex = graph.nodes.find(vertex => vertex.id === file)
+
+      if (foundVertex === undefined) {
+        graph.nodes.push({
+          id: file,
+          label: path.basename(file),
+          component: NONE_COMPONENT,
+          isolate: true
+        })
+      }
+
+      for (const target of outbound) {
+        // For now, we're only using a weight of 1 (=unweighted)
+        graph.links.push({ source: file, target: target, weight: 1 })
+      }
+    }
+
+    // Now that we have all links, we can calculate the isolates
+    const sources = new Set(graph.links.map(link => link.source))
+    const targets = new Set(graph.links.map(link => link.target))
+    for (const source of sources) {
+      const node = graph.nodes.find(node => node.id === source)
+      if (node === undefined) {
+        throw new Error('Didnt find node')
+      }
+
+      node.isolate = false
+    }
+
+    for (const target of targets) {
+      const node = graph.nodes.find(node => node.id === target)
+      if (node === undefined) {
+        throw new Error('Didnt find node')
+      }
+
+      node.isolate = false
+    }
+
+    // Finally, let's identify the components
+    graph.components = this.identifyComponents(graph)
+
+    const duration = performance.now() - startTime
+    this._app.log.info(`[Link Provider] Graph constructed in ${Math.round(duration)}ms. Graph contains ${graph.nodes.length} nodes, ${graph.links.length} arcs and ${graph.components.length} components.`)
+
+    return graph
+  }
+
+  identifyComponents (graph: LinkGraph): string[] {
+    const visitedEdges = graph.nodes.map(vertex => false)
+    const components: string[] = []
+
+    const visit = (source: GraphVertex, component?: string): void => {
+      // Don't visit already visited edges twice
+      if (visitedEdges[graph.nodes.indexOf(source)]) {
+        return
+      }
+
+      // Now we know that this does not yet have a component, i.e. it is not
+      // part of an already existing component. So we need to create a new one
+      if (component === undefined) {
+        // We are in a top-level visit, so we need to create a new component.
+        // Thanks to above check, we know that at this point we are definitely
+        // creating a new component.
+        component = `Component ${components.length + 1}`
+        components.push(component)
+      }
+
+      visitedEdges[graph.nodes.indexOf(source)] = true
+      source.component = component
+
+      // NOTE: Here we must treat the network as undirected in order to create
+      // components. For this, we retrieve every arc that has the current vertex
+      // either as its head or tail, then map to the opposite end of the arc and
+      // resolve to the nodes.
+      const allTargets = graph.links
+        .filter(link => link.source === source.id || link.target === source.id)
+        .map(link => {
+          if (link.target === source.id) {
+            return link.source
+          } else {
+            return link.target
+          }
+        })
+        .map(link => graph.nodes.find(node => node.id === link) as GraphVertex)
+
+      for (const target of allTargets) {
+        visit(target, component)
+      }
+    }
+
+    graph.nodes.forEach((node, idx) => {
+      visit(node)
+    })
+
+    return components
   }
 }
