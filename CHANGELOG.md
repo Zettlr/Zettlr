@@ -1,3 +1,14 @@
+# 2.2.2
+
+## GUI and Functionality
+
+- The full-text search doesn't skip files whose title and/or tags match the
+  search terms anymore
+
+## Under the Hood
+
+(nothing here)
+
 # 2.2.1
 
 ## GUI and Functionality

@@ -93,7 +93,7 @@
             v-on:contextmenu.stop.prevent="fileContextMenu($event, result.file.path, singleRes.line)"
             v-on:mousedown.stop.prevent="onResultClick($event, idx, idx2, result.file.path, singleRes.line)"
           >
-            <strong>{{ singleRes.line }}</strong>:
+            <span v-if="singleRes.line !== -1"><strong>{{ singleRes.line }}</strong>: </span>
             <span v-html="markText(singleRes)"></span>
           </div>
         </div>

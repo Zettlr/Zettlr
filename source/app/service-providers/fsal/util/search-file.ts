@@ -30,6 +30,7 @@ import { MDFileDescriptor, CodeFileDescriptor } from '@dts/main/fsal'
 export default function searchFile (fileObject: MDFileDescriptor|CodeFileDescriptor, terms: SearchTerm[], cnt: string): SearchResult[] {
   let termsMatched = 0
   let cntLower = cnt.toLowerCase()
+  const finalResults: SearchResult[] = []
 
   // First, divide the terms in NOT operators and the rest
   const notOperators = terms.filter(elem => elem.operator === 'NOT')
@@ -91,14 +92,17 @@ export default function searchFile (fileObject: MDFileDescriptor|CodeFileDescrip
     }
   }
 
-  // Return immediately with an object of line -1 (indicating filename or tag matches) and a huge weight
+  // In case the title and/or tags matched, push an object of line -1 (indicating
+  // filename or tag matches) and a huge weight first
   if (termsMatched === termsToSearch.length) {
-    return [{
-      line: -1,
-      ranges: [{ from: 0, to: fileObject.name.length }],
-      restext: fileObject.name,
-      weight: 2
-    }]
+    finalResults.push(
+      {
+        line: -1,
+        ranges: [{ from: 0, to: fileObject.name.length }],
+        restext: fileObject.name,
+        weight: 2
+      }
+    )
   }
 
   // Now begin to search the full text
@@ -163,7 +167,9 @@ export default function searchFile (fileObject: MDFileDescriptor|CodeFileDescrip
   // Now immediately check if all required terms have matched. If not, we can
   // disregard this file now and save some computing time below.
   if (termsMatched !== termsToSearch.length) {
-    return []
+    // Make sure we return the finalResults array instead of an empty array, so
+    // we don't lose the file in case only its title has matched.
+    return finalResults
   }
 
   // Post-process the search result. Right now, a lot of stuff is unsorted since
@@ -176,7 +182,6 @@ export default function searchFile (fileObject: MDFileDescriptor|CodeFileDescrip
   fileMatches.sort((resultA, resultB) => resultA.line - resultB.line)
 
   // Second, we can also combine results from the same line!
-  const combinedResults: SearchResult[] = []
   for (const line of [...resultLines].sort((a, b) => a - b)) {
     // Here we're making use of some fancy MapReduce logic to create the search
     // result in two function calls. First we filter out only those results from
@@ -208,8 +213,8 @@ export default function searchFile (fileObject: MDFileDescriptor|CodeFileDescrip
     // to consume without any more processing necessary
     newResult.ranges.sort((rangeA, rangeB) => rangeA.to - rangeB.from)
 
-    combinedResults.push(newResult)
+    finalResults.push(newResult)
   }
 
-  return combinedResults
+  return finalResults
 }
