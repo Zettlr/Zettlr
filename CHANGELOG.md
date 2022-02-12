@@ -1,7 +1,22 @@
+# 2.2.2
+
+## GUI and Functionality
+
+- The full-text search doesn't skip files whose title and/or tags match the
+  search terms anymore
+
+## Under the Hood
+
+(nothing here)
+
 # 2.2.1
 
 ## GUI and Functionality
 
+- Fixed an error that would under certain circumstances crash the application on
+  start
+- Fix an error that would make some actions unusable if a faulty translation was
+  provided
 - Fixed an issue where sometimes moving the cursor to the beginning of a list
   item would misbehave
 - Zettlr now detects if a directory is a git repository and displays this
@@ -9,10 +24,6 @@
 - Zettlr can now also preview emphasis such as italic or bold text
 - Using an absolute path as the default image location will ensure that pasted
   images will be inserted using absolute paths as well.
-- The full-text search doesn't skip files whose title and/or tags match the
-  search terms anymore
-- Fix an error that would make some actions unusable if a faulty translation was
-  provided
 - Sometimes, something goes wrong when you start the application; now you will
   receive an informative message box if that happens, so that reporting problems
   will be easier
@@ -24,7 +35,7 @@
 - Removed old remnants of the experimental WYSIWYG mode, since Zettlr now offers
   this via the ensemble of all rendering plugins in the main editor
 - Incorporate the logic to disambiguate ID and filename links into
-  FSAL::findExact
+  `FSAL::findExact()`
 - Improve findObject utility function
 - Resolve outbound links directly in the link provider
 
