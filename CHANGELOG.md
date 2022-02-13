@@ -12,6 +12,8 @@
 
 - Add d3 as a fixed dependency in `package.json`; lock to the version from
   mermaid
+- Fix a dependency race condition in the service container
+- Make error messages more meaningful
 
 # 2.2.1
 

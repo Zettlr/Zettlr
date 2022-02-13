@@ -20,17 +20,12 @@ import path from 'path'
 import chokidar from 'chokidar'
 import { CodeFileDescriptor, MDFileDescriptor } from '@dts/main/fsal'
 import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
-import FSAL, { FSALCodeFile, FSALFile } from '@providers/fsal'
+import { FSALCodeFile, FSALFile } from '@providers/fsal'
 import generateFilename from '@common/util/generate-filename'
-import RecentDocumentsProvider from '@providers/recent-docs'
 import ProviderContract from '@providers/provider-contract'
-import CiteprocProvider from '@providers/citeproc'
-import LogProvider from '@providers/log'
 import { hasCodeExt, hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
-import TargetProvider from '@providers/targets'
-import TagProvider from '@providers/tags'
-import LinkProvider from '@providers/links'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
+import AppServiceContainer from 'source/app/app-service-container'
 
 export default class DocumentManager extends ProviderContract {
   private _loadedDocuments: Array<MDFileDescriptor|CodeFileDescriptor>
@@ -40,16 +35,7 @@ export default class DocumentManager extends ProviderContract {
   private readonly _emitter: EventEmitter
   private _sessionPointer: number
 
-  constructor (
-    private readonly _logger: LogProvider,
-    private readonly _config: ConfigProvider,
-    private readonly _recentDocs: RecentDocumentsProvider,
-    private readonly _citeproc: CiteprocProvider,
-    private readonly _fsal: FSAL,
-    private readonly _links: LinkProvider,
-    private readonly _targets: TargetProvider,
-    private readonly _tags: TagProvider
-  ) {
+  constructor (private readonly _app: AppServiceContainer) {
     super()
 
     this._loadedDocuments = []
@@ -68,8 +54,8 @@ export default class DocumentManager extends ProviderContract {
       binaryInterval: 5000
     }
 
-    if (this._config.get('watchdog.activatePolling') as boolean) {
-      let threshold: number = this._config.get('watchdog.stabilityThreshold')
+    if (this._app.config.get('watchdog.activatePolling') as boolean) {
+      let threshold: number = this._app.config.get('watchdog.stabilityThreshold')
       if (typeof threshold !== 'number' || threshold < 0) {
         threshold = 1000
       }
@@ -81,7 +67,7 @@ export default class DocumentManager extends ProviderContract {
         pollInterval: 100
       }
 
-      this._logger.info(`[DocumentManager] Activating file polling with a threshold of ${threshold}ms.`)
+      this._app.log.info(`[DocumentManager] Activating file polling with a threshold of ${threshold}ms.`)
     }
 
     // Start up the chokidar process
@@ -92,7 +78,7 @@ export default class DocumentManager extends ProviderContract {
 
       if (descriptor === undefined) {
         // Should not happen, but just in case
-        this._logger.warning(`[DocumentManager] Received a ${event}-event for ${p} but couldn't handle it.`)
+        this._app.log.warning(`[DocumentManager] Received a ${event}-event for ${p} but couldn't handle it.`)
         return
       }
 
@@ -107,46 +93,46 @@ export default class DocumentManager extends ProviderContract {
             // services (OneDrive and Box do that) from having text appear to "jump"
             // from time to time.
             if (newDescriptor.modtime > descriptor.modtime) {
-              this._logger.info(`[Document Manager] Emitting remote change event for file ${newDescriptor.path}`)
+              this._app.log.info(`[Document Manager] Emitting remote change event for file ${newDescriptor.path}`)
               // Replace the old descriptor with the newly loaded one
               this._loadedDocuments.splice(this._loadedDocuments.indexOf(descriptor), 1, newDescriptor)
               // Notify the caller, that the file has actually changed on disk.
               this._emitter.emit('update', 'openFileRemotelyChanged', newDescriptor)
             }
           })
-          .catch(err => this._logger.error(`[Document Manager] Could not reload remotely changed file ${p}!`, err))
+          .catch(err => this._app.log.error(`[Document Manager] Could not reload remotely changed file ${p}!`, err))
       } else {
-        this._logger.warning(`[DocumentManager] Received unexpected event ${event} for ${p}.`)
+        this._app.log.warning(`[DocumentManager] Received unexpected event ${event} for ${p}.`)
       }
     })
   } // END constructor
 
   async boot (): Promise<void> {
     // Loads in all openFiles
-    this._logger.verbose('Document Manager starting up ...')
-    const openFiles: string[] = this._config.get('openFiles')
+    this._app.log.verbose('Document Manager starting up ...')
+    const openFiles: string[] = this._app.config.get('openFiles')
     for (const filePath of openFiles) {
       try {
         const descriptor = await this._loadFile(filePath)
         this._loadedDocuments.push(descriptor)
       } catch (err: any) {
-        this._logger.error(`[Document Manager] Boot: Could not load file ${filePath}: ${String(err.message)}`, err)
+        this._app.log.error(`[Document Manager] Boot: Could not load file ${filePath}: ${String(err.message)}`, err)
       }
     }
 
-    this._logger.info(`[Document Manager] Restored ${this._loadedDocuments.length} open documents.`)
+    this._app.log.info(`[Document Manager] Restored ${this._loadedDocuments.length} open documents.`)
 
     const actuallyLoadedPaths = this._loadedDocuments.map(file => file.path)
 
     this._watcher.add(actuallyLoadedPaths)
 
     // In case some of the files couldn't be loaded, make sure to re-set the config option accordingly.
-    this._config.set('openFiles', actuallyLoadedPaths)
+    this._app.config.set('openFiles', actuallyLoadedPaths)
     this._emitter.emit('update', 'openFiles')
     broadcastIpcMessage('fsal-state-changed', 'openFiles')
 
     // And make the correct file active
-    const activeFile: string = this._config.get('activeFile')
+    const activeFile: string = this._app.config.get('activeFile')
     const activeDescriptor = this._loadedDocuments.find(elem => elem.path === activeFile)
 
     if (activeDescriptor !== undefined) {
@@ -188,7 +174,7 @@ export default class DocumentManager extends ProviderContract {
     this._watcher.unwatch(this._loadedDocuments.map(file => file.path))
     this._loadedDocuments = files
     this._watcher.add(files.map(file => file.path))
-    this._config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
+    this._app.config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
     this._emitter.emit('update', 'openFiles')
     broadcastIpcMessage('fsal-state-changed', 'openFiles')
   }
@@ -218,7 +204,7 @@ export default class DocumentManager extends ProviderContract {
 
       this._emitter.emit('update', 'openFiles')
       broadcastIpcMessage('fsal-state-changed', 'openFiles')
-      this._config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
+      this._app.config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
     }
 
     return this._loadedDocuments
@@ -270,9 +256,9 @@ export default class DocumentManager extends ProviderContract {
     this._watcher.add(file.path)
     this._emitter.emit('update', 'openFiles')
     broadcastIpcMessage('fsal-state-changed', 'openFiles')
-    this._config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
+    this._app.config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
 
-    const avoidNewTabs = Boolean(this._config.get('system.avoidNewTabs'))
+    const avoidNewTabs = Boolean(this._app.config.get('system.avoidNewTabs'))
 
     // Close the (formerly active) file if we should avoid new tabs and have not
     // gotten a specific request to open it in a *new* tab
@@ -314,7 +300,7 @@ export default class DocumentManager extends ProviderContract {
     this._watcher.unwatch(file.path)
     this._emitter.emit('update', 'openFiles')
     broadcastIpcMessage('fsal-state-changed', 'openFiles')
-    this._config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
+    this._app.config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
 
     // Now, if we just closed the active file, we need to make another file
     // active, or none, if there are no more open files active.
@@ -337,7 +323,7 @@ export default class DocumentManager extends ProviderContract {
     this._loadedDocuments = []
     this._emitter.emit('update', 'openFiles')
     broadcastIpcMessage('fsal-state-changed', 'openFiles')
-    this._config.set('openFiles', [])
+    this._app.config.set('openFiles', [])
   }
 
   /**
@@ -391,7 +377,7 @@ export default class DocumentManager extends ProviderContract {
       const file = await FSALCodeFile.parse(filePath, null)
       return file
     } else if (hasMarkdownExt(filePath)) {
-      const file = await FSALFile.parse(filePath, null, this._fsal.getMarkdownFileParser(), this._targets, this._links, this._tags)
+      const file = await FSALFile.parse(filePath, null, this._app.fsal.getMarkdownFileParser(), this._app.targets, this._app.links, this._app.tags)
       return file
     } else {
       const error: any = new Error(`Could not load file ${filePath}: Invalid path provided`)
@@ -431,8 +417,8 @@ export default class DocumentManager extends ProviderContract {
   public set activeFile (descriptor: MDFileDescriptor|CodeFileDescriptor|null) {
     if (descriptor === null && this._activeFile !== null) {
       this._activeFile = null
-      this._citeproc.loadMainDatabase()
-      this._config.set('activeFile', null)
+      this._app.citeproc.loadMainDatabase()
+      this._app.config.set('activeFile', null)
       this._emitter.emit('update', 'activeFile')
       broadcastIpcMessage('fsal-state-changed', 'activeFile')
     } else if (descriptor !== null && descriptor.path !== this.activeFile?.path) {
@@ -441,7 +427,7 @@ export default class DocumentManager extends ProviderContract {
       if (file !== undefined && this._loadedDocuments.includes(file)) {
         // Make sure the main database is set before, and only load an optional
         // bibliography file afterwards.
-        this._citeproc.loadMainDatabase()
+        this._app.citeproc.loadMainDatabase()
         // Make sure before selecting the file to load a potential file-specific
         // database. This can be defined (as for Pandoc) either directly in the
         // frontmatter OR in the metadata.
@@ -452,20 +438,20 @@ export default class DocumentManager extends ProviderContract {
             dbFile = path.resolve(file.dir, dbFile)
           }
           // We have a bibliography
-          this._citeproc.loadAndSelect(dbFile)
+          this._app.citeproc.loadAndSelect(dbFile)
             .finally(() => {
               // No matter what, we need to make the file active
               this._activeFile = file
-              this._recentDocs.add(file.path)
-              this._config.set('activeFile', this._activeFile.path)
+              this._app.recentDocs.add(file.path)
+              this._app.config.set('activeFile', this._activeFile.path)
               this._emitter.emit('update', 'activeFile')
               broadcastIpcMessage('fsal-state-changed', 'activeFile')
             })
-            .catch(err => this._logger.error(`[DocumentManager] Could not load file-specific database ${dbFile}`, err))
+            .catch(err => this._app.log.error(`[DocumentManager] Could not load file-specific database ${dbFile}`, err))
         } else {
           this._activeFile = file
-          this._recentDocs.add(file.path)
-          this._config.set('activeFile', this._activeFile.path)
+          this._app.recentDocs.add(file.path)
+          this._app.config.set('activeFile', this._activeFile.path)
           this._emitter.emit('update', 'activeFile')
           broadcastIpcMessage('fsal-state-changed', 'activeFile')
         }
@@ -488,7 +474,7 @@ export default class DocumentManager extends ProviderContract {
    */
   public markDirty (file: MDFileDescriptor|CodeFileDescriptor): void {
     if (!this._loadedDocuments.includes(file)) {
-      this._logger.error('[DocumentManager] Cannot mark dirty a non-open file!', file.path)
+      this._app.log.error('[DocumentManager] Cannot mark dirty a non-open file!', file.path)
       return
     }
 
@@ -510,7 +496,7 @@ export default class DocumentManager extends ProviderContract {
    */
   public markClean (file: MDFileDescriptor|CodeFileDescriptor): void {
     if (!this._loadedDocuments.includes(file)) {
-      this._logger.error('[DocumentManager] Cannot mark clean a non-open file!', file.path)
+      this._app.log.error('[DocumentManager] Cannot mark clean a non-open file!', file.path)
       return
     }
 
@@ -569,8 +555,8 @@ export default class DocumentManager extends ProviderContract {
 
     // The appendix of the filename will be a number related to the amount of
     // duplicate files in the open files array
-    const filenamePattern = this._config.get('newFileNamePattern')
-    const idGenPattern = this._config.get('zkn.idGen')
+    const filenamePattern = this._app.config.get('newFileNamePattern')
+    const idGenPattern = this._app.config.get('zkn.idGen')
     let fname = generateFilename(filenamePattern, idGenPattern)
     const ext = path.extname(fname).toLowerCase()
     if (type !== 'md' && !hasCodeExt(fname)) {
@@ -654,9 +640,9 @@ export default class DocumentManager extends ProviderContract {
       await FSALFile.save(
         src,
         content,
-        this._fsal.getMarkdownFileParser(),
-        this._links,
-        this._tags,
+        this._app.fsal.getMarkdownFileParser(),
+        this._app.links,
+        this._app.tags,
         null
       )
     } else {
@@ -676,8 +662,8 @@ export default class DocumentManager extends ProviderContract {
         dbFile = path.resolve(src.dir, dbFile)
       }
       // We have a bibliography
-      this._citeproc.loadAndSelect(dbFile)
-        .catch(err => this._logger.error(`[FSAL] Could not load file-specific database ${dbFile}`, err))
+      this._app.citeproc.loadAndSelect(dbFile)
+        .catch(err => this._app.log.error(`[FSAL] Could not load file-specific database ${dbFile}`, err))
     }
   }
 }

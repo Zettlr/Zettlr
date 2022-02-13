@@ -78,21 +78,12 @@ export default class AppServiceContainer {
     this._recentDocsProvider = new RecentDocumentsProvider(this._logProvider)
     this._appearanceProvider = new AppearanceProvider(this._logProvider, this._configProvider)
     this._dictionaryProvider = new DictionaryProvider(this._logProvider, this._configProvider)
-    this._citeprocProvider = new CiteprocProvider(this._logProvider, this._configProvider, this._notificationProvider, this._windowProvider)
 
     this._targetProvider = new TargetProvider(this._logProvider)
     this._fsal = new FSAL(this._logProvider, this._configProvider, this._targetProvider, this._tagProvider, this._linkProvider)
-    this._documentManager = new DocumentManager(
-      this._logProvider,
-      this._configProvider,
-      this._recentDocsProvider,
-      this._citeprocProvider,
-      this._fsal,
-      this._linkProvider,
-      this._targetProvider,
-      this._tagProvider
-    )
+    this._documentManager = new DocumentManager(this)
     this._windowProvider = new WindowProvider(this._logProvider, this._configProvider, this._documentManager)
+    this._citeprocProvider = new CiteprocProvider(this._logProvider, this._configProvider, this._notificationProvider, this._windowProvider)
     this._trayProvider = new TrayProvider(this._logProvider, this._configProvider, this._windowProvider)
     this._menuProvider = new MenuProvider(this._logProvider, this._configProvider, this._recentDocsProvider, this._commandProvider, this._windowProvider)
     this._updateProvider = new UpdateProvider(this._logProvider, this._configProvider, this._notificationProvider, this._commandProvider)
@@ -103,30 +94,30 @@ export default class AppServiceContainer {
    * application can be used.
    */
   async boot (): Promise<void> {
-    await this._informativeBoot(this._logProvider)
-    await this._informativeBoot(this._configProvider)
-    await this._informativeBoot(this._translationProvider)
-    await this._informativeBoot(this._assetsProvider)
-    await this._informativeBoot(this._linkProvider)
-    await this._informativeBoot(this._tagProvider)
-    await this._informativeBoot(this._targetProvider)
-    await this._informativeBoot(this._cssProvider)
-    await this._informativeBoot(this._notificationProvider)
-    await this._informativeBoot(this._statsProvider)
-    await this._informativeBoot(this._recentDocsProvider)
-    await this._informativeBoot(this._appearanceProvider)
+    await this._informativeBoot(this._logProvider, 'LogProvider')
+    await this._informativeBoot(this._configProvider, 'ConfigProvider')
+    await this._informativeBoot(this._translationProvider, 'TranslationProvider')
+    await this._informativeBoot(this._assetsProvider, 'AssetsProvider')
+    await this._informativeBoot(this._linkProvider, 'LinkProvider')
+    await this._informativeBoot(this._tagProvider, 'TagProvider')
+    await this._informativeBoot(this._targetProvider, 'TargetProvider')
+    await this._informativeBoot(this._cssProvider, 'CSSProvider')
+    await this._informativeBoot(this._notificationProvider, 'NotificationProvider')
+    await this._informativeBoot(this._statsProvider, 'StatsProvider')
+    await this._informativeBoot(this._recentDocsProvider, 'RecentDocsProvider')
+    await this._informativeBoot(this._appearanceProvider, 'AppearanceProvider')
     // Boot the commands before the window provider to ensure the handler for
     // application requests from windows is registered before any window opens
-    await this._informativeBoot(this._commandProvider)
-    await this._informativeBoot(this._windowProvider)
-    await this._informativeBoot(this._trayProvider)
-    await this._informativeBoot(this._dictionaryProvider)
-    await this._informativeBoot(this._menuProvider)
-    await this._informativeBoot(this._citeprocProvider)
-    await this._informativeBoot(this._updateProvider)
+    await this._informativeBoot(this._commandProvider, 'CommandProvider')
+    await this._informativeBoot(this._windowProvider, 'WindowManager')
+    await this._informativeBoot(this._trayProvider, 'TrayProvider')
+    await this._informativeBoot(this._dictionaryProvider, 'DictionaryProvider')
+    await this._informativeBoot(this._menuProvider, 'MenuProvider')
+    await this._informativeBoot(this._citeprocProvider, 'CiteprocProvider')
+    await this._informativeBoot(this._updateProvider, 'UpdateProvider')
 
-    await this._informativeBoot(this._fsal)
-    await this._informativeBoot(this._documentManager)
+    await this._informativeBoot(this._fsal, 'FSAL')
+    await this._informativeBoot(this._documentManager, 'DocumentManager')
 
     this._menuProvider.set() // TODO
   }
@@ -240,28 +231,28 @@ export default class AppServiceContainer {
    * Prepares quitting the app by shutting down the service providers
    */
   async shutdown (): Promise<void> {
-    await this._safeShutdown(this._commandProvider)
-    await this._safeShutdown(this._documentManager)
-    await this._safeShutdown(this._fsal)
+    await this._safeShutdown(this._commandProvider, 'CommandProvider')
+    await this._safeShutdown(this._documentManager, 'DocumentManager')
+    await this._safeShutdown(this._fsal, 'FSAL')
 
-    await this._safeShutdown(this._windowProvider)
-    await this._safeShutdown(this._trayProvider)
-    await this._safeShutdown(this._statsProvider)
-    await this._safeShutdown(this._notificationProvider)
-    await this._safeShutdown(this._updateProvider)
-    await this._safeShutdown(this._translationProvider)
-    await this._safeShutdown(this._cssProvider)
-    await this._safeShutdown(this._targetProvider)
-    await this._safeShutdown(this._linkProvider)
-    await this._safeShutdown(this._tagProvider)
-    await this._safeShutdown(this._menuProvider)
-    await this._safeShutdown(this._recentDocsProvider)
-    await this._safeShutdown(this._dictionaryProvider)
-    await this._safeShutdown(this._citeprocProvider)
-    await this._safeShutdown(this._assetsProvider)
-    await this._safeShutdown(this._appearanceProvider)
-    await this._safeShutdown(this._configProvider)
-    await this._safeShutdown(this._logProvider)
+    await this._safeShutdown(this._windowProvider, 'WindowManager')
+    await this._safeShutdown(this._trayProvider, 'TrayProvider')
+    await this._safeShutdown(this._statsProvider, 'StatsProvider')
+    await this._safeShutdown(this._notificationProvider, 'NotificationProvider')
+    await this._safeShutdown(this._updateProvider, 'UpdateProvider')
+    await this._safeShutdown(this._translationProvider, 'TranslationProvider')
+    await this._safeShutdown(this._cssProvider, 'CSSProvider')
+    await this._safeShutdown(this._targetProvider, 'TargetProvider')
+    await this._safeShutdown(this._linkProvider, 'LinkProvider')
+    await this._safeShutdown(this._tagProvider, 'TagProvider')
+    await this._safeShutdown(this._menuProvider, 'MenuProvider')
+    await this._safeShutdown(this._recentDocsProvider, 'RecentDocsProvider')
+    await this._safeShutdown(this._dictionaryProvider, 'DictionaryProvider')
+    await this._safeShutdown(this._citeprocProvider, 'CiteprocProvider')
+    await this._safeShutdown(this._assetsProvider, 'AssetsProvider')
+    await this._safeShutdown(this._appearanceProvider, 'AppearanceProvider')
+    await this._safeShutdown(this._configProvider, 'ConfigProvider')
+    await this._safeShutdown(this._logProvider, 'LogProvider')
   }
 
   /**
@@ -270,12 +261,12 @@ export default class AppServiceContainer {
    *
    * @param  {ProviderContract}  provider  The provider to shut down
    */
-  private async _safeShutdown <T extends ProviderContract> (provider: T): Promise<void> {
+  private async _safeShutdown <T extends ProviderContract> (provider: T, displayName: string): Promise<void> {
     try {
       await provider.shutdown()
     } catch (err: any) {
-      const title = `Error shutting down ${provider.constructor.name}`
-      const message = `Could not shut down ${provider.constructor.name}: ${err.message as string}`
+      const title = `Error shutting down ${displayName}`
+      const message = `Could not shut down ${displayName}: ${err.message as string}`
       dialog.showErrorBox(title, message)
       this._logProvider.error(`[AppServiceContainer] ${message}`, err)
     }
@@ -289,12 +280,12 @@ export default class AppServiceContainer {
    *
    * @param  {ProviderContract}  provider  The provider to boot
    */
-  private async _informativeBoot <T extends ProviderContract> (provider: T): Promise<void> {
+  private async _informativeBoot <T extends ProviderContract> (provider: T, displayName: string): Promise<void> {
     try {
       await provider.boot()
     } catch (err: any) {
-      const title = `Error starting ${provider.constructor.name}`
-      const message = `Could not start ${provider.constructor.name}: ${err.message as string}`
+      const title = `Error starting ${displayName}`
+      const message = `Could not start ${displayName}: ${err.message as string}`
       dialog.showErrorBox(title, message)
       this._logProvider.error(`[AppServiceContainer] ${message}`, err)
       throw err // Re-Throw since we need to quit the app now.
