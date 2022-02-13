@@ -7,7 +7,7 @@
         active: activeFile !== null && file.path === activeFile.path,
         modified: modifiedDocs.includes(file.path)
       }"
-      v-bind:title="file.name"
+      v-bind:title="file.path"
       v-bind:data-path="file.path"
       role="tab"
       draggable="true"
