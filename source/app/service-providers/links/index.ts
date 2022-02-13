@@ -213,12 +213,11 @@ export default class LinkProvider extends ProviderContract {
   }
 
   identifyComponents (graph: LinkGraph): string[] {
-    const visitedEdges = graph.nodes.map(vertex => false)
     const components: string[] = []
 
     const visit = (source: GraphVertex, component?: string): void => {
-      // Don't visit already visited edges twice
-      if (visitedEdges[graph.nodes.indexOf(source)]) {
+      // This node already is part of a component
+      if (source.component !== NONE_COMPONENT || source.component === component) {
         return
       }
 
@@ -232,7 +231,6 @@ export default class LinkProvider extends ProviderContract {
         components.push(component)
       }
 
-      visitedEdges[graph.nodes.indexOf(source)] = true
       source.component = component
 
       // NOTE: Here we must treat the network as undirected in order to create
