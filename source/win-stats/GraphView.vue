@@ -168,12 +168,10 @@ export default defineComponent({
       const color = d3.scaleOrdinal([...new Set(reduced)], d3.schemeTableau10)
       const includedNodes = this.graph.nodes.filter(node => (this.includeIsolates) ? true : !node.isolate)
 
-      // Construct the forces.
-      // const forceNode = d3.forceManyBody().strength((vertex, i, data) => -30)
       const svg = this.graphElement
 
       if (this.simulation === null) {
-        const forceLink = d3.forceLink<GraphVertex & SimulationNodeDatum, GraphArc>(this.graph.links).id((nodes, i, nodesData) => includedNodes[i].id)
+        const forceLink = d3.forceLink<GraphVertex & SimulationNodeDatum, GraphArc>(this.graph.links).id((node, i, nodesData) => node.id)
         this.simulation = d3.forceSimulation(includedNodes as any)
           .force('link', forceLink)
           .force('charge', d3.forceManyBody())
@@ -200,13 +198,17 @@ export default defineComponent({
         c.initialize(includedNodes as any[], () => 1)
       }
 
-      const linkSelection = svg.select('#arc-container').selectAll('line').data(graph.links)
+      const linkSelection = svg.select('#arc-container')
+        .selectAll('line')
+        .data(graph.links)
       linkSelection.exit().remove()
       linkSelection.enter().append('line')
         .attr('stroke-width', (name, index) => this.graph?.links[index].weight ?? 1)
         .attr('stroke', '#999') // Color
 
-      const vertexSelection = svg.select('#vertex-container').selectAll('circle').data(includedNodes)
+      const vertexSelection = svg.select('#vertex-container')
+        .selectAll('circle')
+        .data(includedNodes, (vertex: any) => vertex.id)
       vertexSelection.exit().remove()
       vertexSelection.enter().append('circle')
         .attr('r', 5)
@@ -217,7 +219,22 @@ export default defineComponent({
             payload: { path: vertex.id }
           }).catch(err => console.error(err))
         })
-        .attr('data-tippy-content', (vertex) => vertex.label)
+        .attr('data-tippy-content', (vertex) => {
+          let cnt = ''
+          if (vertex.label === undefined) {
+            console.log('Could not find correct vertex', vertex)
+            cnt += vertex.id
+          } else {
+            if (vertex.label.includes('reveal.js')) {
+              console.log(vertex)
+            }
+            cnt += vertex.label
+          }
+
+          cnt += ` (${vertex.component})`
+
+          return cnt
+        })
 
       tippy(svg.select('#vertex-container').selectAll('circle').nodes() as any[])
     }

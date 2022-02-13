@@ -1,6 +1,6 @@
 export interface GraphVertex {
   id: string
-  label: string
+  label?: string
   component: string // Can be used to differentiate groups of vertices (by color, etc)
   isolate: boolean
 }
