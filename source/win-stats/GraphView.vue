@@ -3,8 +3,21 @@
     <div id="controls">
       <Checkbox
         v-model="includeIsolates"
-        v-bind:label="'Include Isolates'"
+        v-bind:label="'Include isolates'"
+        v-bind:inline="true"
       ></Checkbox>
+      <Button
+        v-bind:icon="'zoom-in'"
+        v-bind:disabled="zoomFactor <= 0.5"
+        v-bind:inline="true"
+        v-on:click="zoomFactor -= 0.1"
+      ></Button>
+      <Button
+        v-bind:icon="'zoom-out'"
+        v-bind:disabled="zoomFactor >= 1.5"
+        v-bind:inline="true"
+        v-on:click="zoomFactor += 0.1"
+      ></Button>
     </div>
     <div id="graph" ref="container"></div>
   </div>
@@ -15,6 +28,7 @@ import { defineComponent } from 'vue'
 import { GraphArc, GraphVertex, LinkGraph } from '@dts/common/graph'
 import * as d3 from 'd3'
 import Checkbox from '@common/vue/form/elements/Checkbox.vue'
+import Button from '@common/vue/form/elements/Button.vue'
 import tippy from 'tippy.js'
 import { SimulationNodeDatum } from 'd3'
 
@@ -23,24 +37,38 @@ const ipcRenderer = window.ipc
 export default defineComponent({
   name: 'GraphView',
   components: {
-    Checkbox
+    Checkbox,
+    Button
   },
   data: function () {
     return {
       includeIsolates: true,
-      contentWidth: 0,
-      contentHeight: 0,
+      // These two variables are required to enable scrolling, they mark an
+      // offset to which the viewport will be relatively positioned
+      offsetX: 0,
+      offsetY: 0,
+      graphWidth: 0,
+      graphHeight: 0,
+      // This variable contains zoom information
+      zoomFactor: 1,
       graph: null as LinkGraph|null,
       // Store the D3 elements
       graphElement: null as d3.Selection<SVGSVGElement, undefined, null, undefined>|null,
       simulation: null as d3.Simulation<d3.SimulationNodeDatum, undefined>|null,
       // Add an observer to resize the SVG element as necessary
-      observer: new ResizeObserver(this.setSize as ResizeObserverCallback)
+      observer: new ResizeObserver(this.updateGraphSize as ResizeObserverCallback)
     }
   },
   computed: {
     containerElement: function (): HTMLDivElement {
       return this.$refs.container as HTMLDivElement
+    },
+    graphViewBox: function (): [number, number, number, number] {
+      const width = this.graphWidth * this.zoomFactor
+      const height = this.graphHeight * this.zoomFactor
+      const left = -width / 2 + this.offsetX
+      const top = -height / 2 + this.offsetY
+      return [ left, top, width, height ]
     }
   },
   watch: {
@@ -48,19 +76,22 @@ export default defineComponent({
       if (this.graph !== null) {
         this.startSimulation(this.graph)
       }
+    },
+    // We only need to watch the graphViewBox, since that depends on all
+    // required properties and gets recomputed (width, height, and offset)
+    graphViewBox: function () {
+      this.setSize()
     }
   },
   mounted: function () {
     this.observer.observe(this.containerElement, { box: 'border-box' })
-
-    const rect = this.containerElement.getBoundingClientRect()
-    const width = rect.width
-    const height = rect.height
+    // Retrieve the correct container element size for the first time
+    this.updateGraphSize()
 
     this.graphElement = d3.create('svg')
-      .attr('width', width)
-      .attr('height', height)
-      .attr('viewBox', [ -width / 2, -height / 2, width, height ])
+      .attr('width', this.graphWidth)
+      .attr('height', this.graphHeight)
+      .attr('viewBox', this.graphViewBox)
       .attr('style', 'max-width: 100%; height: auto;')
 
     // Let's create a link-container as an SVG group to add some default
@@ -79,40 +110,14 @@ export default defineComponent({
       .attr('stroke-width', 1.5)
       .attr('style', 'cursor: pointer; outline: none')
 
-    // TODO: Enable below's zoom/scroll functionality once it works properly
-    // const svg = this.graphElement
-    // const zoomContainer = svg.call(d3.zoom<SVGSVGElement, any>().on('zoom', function (event, d) {
-    //   zoomContainer.attr('transform', event.transform)
-    // }))
-    // .on('wheel.zoom', function (event: WheelEvent) {
-    //   svg.selectAll('#arc-container line')
-    //     .attr('x1', (d: any) => {
-    //       d.source.x += event.deltaX
-    //       return d.source.x
-    //     })
-    //     .attr('y1', (d: any) => {
-    //       d.source.y += event.deltaY
-    //       return d.source.y
-    //     })
-    //     .attr('x2', (d: any) => {
-    //       d.target.x += event.deltaX
-    //       return d.target.x
-    //     })
-    //     .attr('y2', (d: any) => {
-    //       d.target.y += event.deltaY
-    //       return d.target.y
-    //     })
-
-    //   svg.selectAll('#vertex-container circle')
-    //     .attr('cx', (d: any) => {
-    //       d.x += event.deltaX
-    //       return d.x
-    //     })
-    //     .attr('cy', (d: any) => {
-    //       d.y += event.deltaY
-    //       return d.y
-    //     })
-    // })
+    // Hook into the zoom behavior, and misuse the wheel-event emitted by it in
+    // order to reposition the center of the viewport
+    const graphComponent = this
+    this.graphElement.call(d3.zoom<SVGSVGElement, any>())
+      .on('wheel.zoom', function (event: WheelEvent) {
+        graphComponent.offsetX += event.deltaX
+        graphComponent.offsetY += event.deltaY
+      })
 
     const graphElement = this.graphElement.node()
     if (graphElement !== null) {
@@ -135,14 +140,17 @@ export default defineComponent({
     this.observer.unobserve(this.containerElement)
   },
   methods: {
-    setSize: function (entries: ResizeObserverEntry[], observer: ResizeObserver) {
+    updateGraphSize: function () {
       const { width, height } = this.containerElement.getBoundingClientRect()
-
+      this.graphWidth = width
+      this.graphHeight = height
+    },
+    setSize: function () {
       if (this.graphElement !== null) {
         this.graphElement
-          .attr('width', width)
-          .attr('height', height)
-          .attr('viewBox', [ -width / 2, -height / 2, width, height ])
+          .attr('width', this.graphWidth)
+          .attr('height', this.graphHeight)
+          .attr('viewBox', this.graphViewBox)
       }
     },
     startSimulation (graph: LinkGraph) {
@@ -238,7 +246,7 @@ div#graph-container {
     position: absolute;
     top: @controlHeight;
     bottom: 0;
-    width: 100%;
+    width: calc(100% - 20px);
   }
 }
 </style>
