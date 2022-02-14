@@ -375,9 +375,23 @@ export default class DocumentManager extends ProviderContract {
   private async _loadFile (filePath: string): Promise<MDFileDescriptor|CodeFileDescriptor> {
     if (hasCodeExt(filePath)) {
       const file = await FSALCodeFile.parse(filePath, null)
+      // Withthe next code, we ensure the FSAL's state is up to date if the user
+      // opened a standalone root file
+      const loadedInFSAL = this._app.fsal.find(filePath)
+      if (loadedInFSAL === undefined) {
+        await this._app.fsal.loadPath(filePath)
+        this._app.config.addPath(filePath)
+      }
       return file
     } else if (hasMarkdownExt(filePath)) {
       const file = await FSALFile.parse(filePath, null, this._app.fsal.getMarkdownFileParser(), this._app.targets, this._app.links, this._app.tags)
+      // Withthe next code, we ensure the FSAL's state is up to date if the user
+      // opened a standalone root file
+      const loadedInFSAL = this._app.fsal.find(filePath)
+      if (loadedInFSAL === undefined) {
+        await this._app.fsal.loadPath(filePath)
+        this._app.config.addPath(filePath)
+      }
       return file
     } else {
       const error: any = new Error(`Could not load file ${filePath}: Invalid path provided`)

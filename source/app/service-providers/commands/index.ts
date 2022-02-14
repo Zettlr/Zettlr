@@ -122,8 +122,8 @@ export default class CommandProvider extends ProviderContract {
       return this._app.fsal.filetreeHistorySince(payload)
     } else if (command === 'get-descriptor') {
       const descriptor = this._app.fsal.find(payload)
-      if (descriptor === null) {
-        return null
+      if (descriptor === undefined) {
+        return undefined
       }
       return this._app.fsal.getMetadataFor(descriptor)
     } else if (command === 'get-open-directory') {

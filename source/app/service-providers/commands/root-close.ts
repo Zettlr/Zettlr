@@ -26,7 +26,7 @@ export default class RootClose extends ZettlrCommand {
    */
   async run (evt: string, arg: any): Promise<boolean> {
     const root = this._app.fsal.find(arg)
-    if (root === null) {
+    if (root === undefined) {
       this._app.log.error(`Cannot close root identified by ${arg as string}: Not found.`)
       return false
     }

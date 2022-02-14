@@ -270,7 +270,7 @@ export default class FSAL extends ProviderContract {
       // A file or a directory has been removed.
       const descriptor = this.find(changedPath)
       let rootDirectoryIndex = -1 // Only necessary if the open dir has been removed
-      if (descriptor === null) {
+      if (descriptor === undefined) {
         // It must have been an attachment
         const parentPath = path.dirname(changedPath)
         const containingDirectory = this.find(parentPath) as DirDescriptor
@@ -535,8 +535,14 @@ export default class FSAL extends ProviderContract {
    * @param {String} p The path to be loaded
    */
   public async loadPath (p: string): Promise<boolean> {
+    const foundPath = this.find(p)
+    if (foundPath !== undefined) {
+      // Don't attempt to load the same path twice
+      return true
+    }
+
     // Load a path
-    let start = Date.now()
+    const start = Date.now()
     if (isFile(p)) {
       await this._loadFile(p)
       this._watchdog.watch(p)
@@ -729,13 +735,13 @@ export default class FSAL extends ProviderContract {
    *
    * @param   {number|string}       val  The value.
    *
-   * @return  {AnyDescriptor|null}       Returns either the descriptor, or null.
+   * @return  {AnyDescriptor|undefined}  Returns either the descriptor, or undefined.
    */
-  public find (val: string): AnyDescriptor|null {
+  public find (val: string): AnyDescriptor|undefined {
     const descriptor = locateByPath(this._state.filetree, val)
 
     if (descriptor === undefined) {
-      return null
+      return undefined
     } else {
       return descriptor
     }
