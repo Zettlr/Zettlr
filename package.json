@@ -52,7 +52,7 @@
     "astrocite": "^0.16.4",
     "bcp-47": "^2.1.0",
     "chalk": "^4.1.2",
-    "chart.js": "^3.7.0",
+    "chart.js": "^3.7.1",
     "chokidar": "^3.5.3",
     "citeproc": "^2.4.62",
     "codemirror": "^5.65.1",
