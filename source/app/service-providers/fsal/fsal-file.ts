@@ -149,7 +149,7 @@ export async function parse (
   // In any case, we need the most recent times.
   try {
     // Get lstat
-    let stat = await fs.lstat(filePath)
+    const stat = await fs.lstat(filePath)
     file.modtime = stat.mtime.getTime()
     file.creationtime = stat.birthtime.getTime()
     file.size = stat.size
@@ -227,7 +227,7 @@ export async function load (fileObject: MDFileDescriptor): Promise<string> {
   // Loads the content of a file from disk
   const content = await fs.readFile(fileObject.path, { encoding: 'utf8' })
   // Account for an optional BOM, if present
-  return content.substr(fileObject.bom.length)
+  return content.substring(fileObject.bom.length)
 }
 
 /**
