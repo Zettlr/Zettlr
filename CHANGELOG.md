@@ -10,6 +10,7 @@
 - Hovering the mouse over a document tab now shows the full path of the file
 - Ensure that in-memory files which are saved outside the workspaces are still
   added as root files
+- Use a more appropriate cursor for resizing the split views
 
 ## Under the Hood
 
