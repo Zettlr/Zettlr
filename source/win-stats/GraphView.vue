@@ -244,12 +244,19 @@ export default defineComponent({
         compMap.set(node.component, counter + 1)
       }
 
+      const unsorted: Array<[string, number]> = []
+
       this.components = []
 
       for (const [ component, size ] of compMap) {
         if (size > 1) {
-          this.components.push(component)
+          unsorted.push([ component, size ])
         }
+      }
+
+      unsorted.sort((a, b) => b[1] - a[1])
+      for (const [component] of unsorted) {
+        this.components.push(component)
       }
 
       // NOTE: We must under all circumstances map the values here to create a
@@ -292,7 +299,7 @@ export default defineComponent({
       const svg = this.graphElement
 
       if (this.simulation === null) {
-        const forceLink = d3.forceLink<GraphVertex & SimulationNodeDatum, GraphArc>(includedLinks).id((node, i, nodesData) => node.id)
+        const forceLink = d3.forceLink<GraphVertex & SimulationNodeDatum, GraphArc>(includedLinks).id((node, i, nodesData) => node.id).strength((link, i) => link.weight * 2)
         this.simulation = d3.forceSimulation(includedNodes as any)
           .force('link', forceLink)
           .force('charge', d3.forceManyBody())
