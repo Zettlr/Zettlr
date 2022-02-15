@@ -7,7 +7,7 @@
             "Huey"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-01-30T14:09:48.000000Z"
+        "updated_at": "2022-02-10T22:20:19.000000Z"
     },
     "dialog": {
         "about": {
@@ -196,6 +196,7 @@
             },
             "avoid_new_tabs": "Avoid opening files in new tabs if possible",
             "checkForBeta": "Notify me about beta releases",
+            "check_updates": "Automatically check for updates",
             "choose_file": "Choose file \u2026",
             "citation_database": "Citation Database (CSL JSON or BibTex)",
             "citations": {
@@ -219,6 +220,7 @@
                 "image_width": "Maximum width of images (percent)",
                 "preview_info": "These options determine which elements are rendered in documents.",
                 "render_citations": "Render Citations",
+                "render_emphasis": "Render emphasis",
                 "render_htags": "Hide heading characters",
                 "render_iframes": "Render Iframes",
                 "render_images": "Render Images",
@@ -786,6 +788,7 @@
         "save_changes_save": "Save",
         "save_changes_select_dir": "Please select a directory so that the new file can be saved.",
         "save_changes_title": "Omit unsaved changes?",
+        "save_file": "Save file",
         "unknown_command": "Unknown command received: %s"
     },
     "toolbar": {
