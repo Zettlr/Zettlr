@@ -4,19 +4,30 @@
       <Checkbox
         v-model="includeIsolates"
         v-bind:label="'Include isolates'"
-        v-bind:inline="true"
+        v-bind:inline="false"
       ></Checkbox>
       <Button
         v-bind:icon="'zoom-in'"
         v-bind:disabled="zoomFactor <= 0.5"
         v-bind:inline="true"
-        v-on:click="zoomFactor -= 0.1"
+        v-on:click="(zoomFactor > 0.5) ? zoomFactor -= 0.1 : ''"
       ></Button>
       <Button
         v-bind:icon="'zoom-out'"
         v-bind:disabled="zoomFactor >= 1.5"
         v-bind:inline="true"
-        v-on:click="zoomFactor += 0.1"
+        v-on:click="(zoomFactor < 1.5) ? zoomFactor += 0.1 : ''"
+      ></Button>
+      <Select
+        v-model="componentFilter"
+        v-bind:options="selectableComponents"
+        v-bind:inline="true"
+      ></Select>
+      <Button
+        v-bind:icon="'target'"
+        v-bind:disabled="offsetX === 0 && offsetY === 0"
+        v-bind:inline="true"
+        v-on:click="offsetX = 0; offsetY = 0"
       ></Button>
     </div>
     <div id="graph" ref="container"></div>
@@ -41,6 +52,7 @@ import * as d3 from 'd3'
 import Checkbox from '@common/vue/form/elements/Checkbox.vue'
 import Button from '@common/vue/form/elements/Button.vue'
 import Progress from '@common/vue/form/elements/Progress.vue'
+import Select from '@common/vue/form/elements/Select.vue'
 import tippy from 'tippy.js'
 import { SimulationNodeDatum } from 'd3'
 import DirectedGraph from '@providers/links/directed-graph'
@@ -53,7 +65,8 @@ export default defineComponent({
   components: {
     Checkbox,
     Button,
-    Progress
+    Progress,
+    Select
   },
   data: function () {
     return {
@@ -64,6 +77,9 @@ export default defineComponent({
         currentFile: 0,
         totalFiles: 0
       },
+      // The following array contains all components that are not isolates
+      components: [] as string[],
+      componentFilter: '', // Can hold the name of a specific component
       includeIsolates: true,
       // These two variables are required to enable scrolling, they mark an
       // offset to which the viewport will be relatively positioned
@@ -82,6 +98,17 @@ export default defineComponent({
     }
   },
   computed: {
+    selectableComponents: function (): any {
+      const ret: any = {
+        '': 'All components'
+      }
+
+      for (const component of this.components) {
+        ret[component] = component
+      }
+
+      return ret
+    },
     containerElement: function (): HTMLDivElement {
       return this.$refs.container as HTMLDivElement
     },
@@ -103,6 +130,11 @@ export default defineComponent({
     // required properties and gets recomputed (width, height, and offset)
     graphViewBox: function () {
       this.setSize()
+    },
+    componentFilter: function () {
+      if (this.graph !== null) {
+        this.startSimulation(this.graph)
+      }
     }
   },
   mounted: function () {
@@ -198,12 +230,69 @@ export default defineComponent({
       // have all isolates in a single color
       const reduced = this.graph.nodes.map(node => (node.isolate) ? ISOLATES_CLASS : node.component)
       const color = d3.scaleOrdinal([...new Set(reduced)], d3.schemeTableau10)
-      const includedNodes = this.graph.nodes.filter(node => (this.includeIsolates) ? true : !node.isolate)
+
+      // Now we have to do some magic. What we need to know is the size of each
+      // component. This is similar to a Python counter, but utilizing a JS map
+      const compMap = new Map<string, number>()
+
+      for (const node of this.graph.nodes) {
+        if (!compMap.has(node.component)) {
+          compMap.set(node.component, 0)
+        }
+
+        const counter = compMap.get(node.component) as number
+        compMap.set(node.component, counter + 1)
+      }
+
+      this.components = []
+
+      for (const [ component, size ] of compMap) {
+        if (size > 1) {
+          this.components.push(component)
+        }
+      }
+
+      // NOTE: We must under all circumstances map the values here to create a
+      // deep copy, since d3 messes with the objects and modifies them! Otherwise
+      // the logic here will break down. The same holds true for the links below.
+      const includedNodes = this.graph.nodes
+        .map(node => {
+          return {
+            component: node.component,
+            id: node.id,
+            isolate: node.isolate,
+            label: node.label
+          }
+        })
+        .filter(node => (this.includeIsolates) ? true : !node.isolate)
+        .filter(node => {
+          if (this.componentFilter !== '') {
+            return node.component === this.componentFilter
+          }
+
+          return true
+        })
+
+      // Since we kick a lot of nodes out above, we also must also remove links
+      // that point into the desert
+      const includedLinks = this.graph.links
+        .map(link => {
+          return {
+            source: link.source,
+            target: link.target,
+            weight: link.weight
+          }
+        })
+        .filter(link => {
+          const source = includedNodes.find(node => node.id === link.source)
+          const target = includedNodes.find(node => node.id === link.target)
+          return source !== undefined && target !== undefined
+        })
 
       const svg = this.graphElement
 
       if (this.simulation === null) {
-        const forceLink = d3.forceLink<GraphVertex & SimulationNodeDatum, GraphArc>(this.graph.links).id((node, i, nodesData) => node.id)
+        const forceLink = d3.forceLink<GraphVertex & SimulationNodeDatum, GraphArc>(includedLinks).id((node, i, nodesData) => node.id)
         this.simulation = d3.forceSimulation(includedNodes as any)
           .force('link', forceLink)
           .force('charge', d3.forceManyBody())
@@ -225,17 +314,17 @@ export default defineComponent({
         this.simulation.nodes(includedNodes as any).alpha(1).alphaTarget(0).restart()
         const l = this.simulation.force('link') as d3.ForceLink<GraphVertex & d3.SimulationNodeDatum, GraphArc>
         const c = this.simulation.force('charge') as d3.ForceManyBody<d3.SimulationNodeDatum>
-        l.links(this.graph.links)
+        l.links(includedLinks)
         l.initialize(includedNodes, () => Math.random() * 5)
         c.initialize(includedNodes as any[], () => 1)
       }
 
       const linkSelection = svg.select('#arc-container')
         .selectAll('line')
-        .data(graph.links)
+        .data(includedLinks)
       linkSelection.exit().remove()
       linkSelection.enter().append('line')
-        .attr('stroke-width', (name, index) => this.graph?.links[index].weight ?? 1)
+        .attr('stroke-width', (name, index) => includedLinks[index].weight)
         .attr('stroke', '#999') // Color
 
       const vertexSelection = svg.select('#vertex-container')
@@ -290,6 +379,7 @@ export default defineComponent({
       console.log(`Building graph from ${Object.entries(dbObject).length} files ...`)
       this.buildProgress.currentFile = 0
       this.buildProgress.totalFiles = Object.entries(dbObject).length
+      this.componentFilter = ''
 
       const DG = new DirectedGraph()
       const resolvedLinks = new Map<string, string>()
