@@ -438,7 +438,7 @@ div#graph-container {
   padding: 10px;
   // We need a fixed width so that the SVG is displayed full size
 
-  * {
+  p {
     // Reset the default removed margin on simple p-elements etc., which is
     // currently applied in the geometry CSS.
     margin: revert;
