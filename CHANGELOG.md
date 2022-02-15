@@ -18,6 +18,7 @@
   mermaid
 - Fix a dependency race condition in the service container
 - Make error messages more meaningful
+- Enable renderers to search for files using an internal link
 
 # 2.2.1
 
