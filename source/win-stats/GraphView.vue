@@ -20,6 +20,17 @@
       ></Button>
     </div>
     <div id="graph" ref="container"></div>
+
+    <!-- Show a loading indicator while the graph is building -->
+    <transition name="fade">
+      <div v-if="isBuildingGraph" id="loading-indicator">
+        <p>Building graph &hellip; ({{ buildProgress.currentFile }}/{{ buildProgress.totalFiles }} files processed)</p>
+        <Progress
+          v-bind:value="buildProgress.currentFile"
+          v-bind:max="buildProgress.totalFiles"
+        ></Progress>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -29,8 +40,11 @@ import { GraphArc, GraphVertex, LinkGraph } from '@dts/common/graph'
 import * as d3 from 'd3'
 import Checkbox from '@common/vue/form/elements/Checkbox.vue'
 import Button from '@common/vue/form/elements/Button.vue'
+import Progress from '@common/vue/form/elements/Progress.vue'
 import tippy from 'tippy.js'
 import { SimulationNodeDatum } from 'd3'
+import DirectedGraph from '@providers/links/directed-graph'
+import { MDFileMeta } from '@dts/common/fsal'
 
 const ipcRenderer = window.ipc
 
@@ -38,10 +52,18 @@ export default defineComponent({
   name: 'GraphView',
   components: {
     Checkbox,
-    Button
+    Button,
+    Progress
   },
   data: function () {
     return {
+      // This is a lock variable to prevent multiple identical graphs from
+      // building at the same time.
+      isBuildingGraph: false,
+      buildProgress: {
+        currentFile: 0,
+        totalFiles: 0
+      },
       includeIsolates: true,
       // These two variables are required to enable scrolling, they mark an
       // offset to which the viewport will be relatively positioned
@@ -124,27 +146,31 @@ export default defineComponent({
       this.containerElement.appendChild(graphElement)
     }
 
-    // Finally, retrieve the graph
-    ipcRenderer.invoke('link-provider', { command: 'get-graph' })
-      .then(graph => { this.startSimulation(graph) })
-      .catch(e => console.error(e))
+    // // Finally, retrieve the graph
+    this.buildGraph().catch(err => console.error(err))
 
     // Listen to any changes
     ipcRenderer.on('links', () => {
-      ipcRenderer.invoke('link-provider', { command: 'get-graph' })
-        .then(graph => { this.startSimulation(graph) })
-        .catch(e => console.error(e))
+      this.buildGraph().catch(err => console.error(err))
     })
   },
   unmounted: function () {
     this.observer.unobserve(this.containerElement)
   },
   methods: {
+    /**
+     * This callback is always called whenever the user resizes the window to
+     * update the graph
+     */
     updateGraphSize: function () {
       const { width, height } = this.containerElement.getBoundingClientRect()
       this.graphWidth = width
       this.graphHeight = height
     },
+
+    /**
+     * This callback is called whenever the cached graph size needs to update
+     */
     setSize: function () {
       if (this.graphElement !== null) {
         this.graphElement
@@ -153,6 +179,12 @@ export default defineComponent({
           .attr('viewBox', this.graphViewBox)
       }
     },
+    /**
+     * This starts or re-starts the force simulation of the graph. Always called
+     * when there is new graph data
+     *
+     * @param   {LinkGraph}  graph  The graph to simulate
+     */
     startSimulation (graph: LinkGraph) {
       if (this.graphElement === null) {
         throw new Error('startSimulation called before the SVG was instantiated!')
@@ -225,9 +257,6 @@ export default defineComponent({
             console.log('Could not find correct vertex', vertex)
             cnt += vertex.id
           } else {
-            if (vertex.label.includes('reveal.js')) {
-              console.log(vertex)
-            }
             cnt += vertex.label
           }
 
@@ -237,6 +266,71 @@ export default defineComponent({
         })
 
       tippy(svg.select('#vertex-container').selectAll('circle').nodes() as any[])
+    },
+    /**
+     * This function builds a graph from scratch. It is asynchronous since it
+     * has to resolve all file links to existing files if possible (to prevent
+     * spurious links). With about 2,000 files it takes approximately 10 seconds
+     * to finish (on a high-end MacBook Pro M1 2020, 13inch)
+     */
+    buildGraph: async function () {
+      if (this.isBuildingGraph) {
+        return console.warn('Cannot build graph: Another process is currently building a graph!')
+      }
+
+      this.isBuildingGraph = true
+      // We have to build the graph in the renderer because in main OH BOY IT'S
+      // A DISASTER. Even with my limited amount of files the whole app locks
+      // for 10-15 seconds (!)
+      // Here we do that shit asynchronously, therefore not blocking the main
+      // process.
+      const dbObject = await ipcRenderer.invoke('link-provider', { command: 'get-link-database' })
+      const database = new Map<string, string[]>(Object.entries(dbObject))
+
+      console.log(`Building graph from ${Object.entries(dbObject).length} files ...`)
+      this.buildProgress.currentFile = 0
+      this.buildProgress.totalFiles = Object.entries(dbObject).length
+
+      const DG = new DirectedGraph()
+      const resolvedLinks = new Map<string, string>()
+
+      const startTime = performance.now()
+      // Fortunately, the fileLinkDatabase is basically just one large edgelist
+      for (const [ sourcePath, targets ] of database) {
+        this.buildProgress.currentFile += 1
+        // We have to specifically add the source, since isolates will have 0
+        // targets, and hence we cannot rely on the Graph adding these vertices
+        DG.addVertex(sourcePath)
+        for (const target of targets) {
+          // Before adding a target, we MUST resolve the link to an actual file
+          // path if possible. This is necessary because there are at least two
+          // ways to link to notes: by filename or by ID. By resolving what we
+          // can, we prevent spurious duplicates. The resolve() helper will either
+          // return the full absolute path to the file identified by `target` or
+          // the unaltered `target`.
+          if (!resolvedLinks.has(target)) {
+            const found: MDFileMeta|undefined = await ipcRenderer.invoke('application', { command: 'find-exact', payload: target })
+            if (found === undefined) {
+              // This will create a vertex representing a latent (i.e. not yet
+              // existing) file.
+              resolvedLinks.set(target, target)
+            } else {
+              resolvedLinks.set(target, found.path)
+            }
+          }
+          DG.addArc(sourcePath, resolvedLinks.get(target) as string)
+        }
+      }
+
+      // Now set the labels (i.e. the filenames)
+      for (const V of DG.vertices) {
+        DG.setLabel(V.id, window.path.basename(V.id))
+      }
+
+      const duration = performance.now() - startTime
+      console.log(`[Link Provider] Graph constructed in ${Math.round(duration)}ms. Graph contains ${DG.countVertices} nodes, ${DG.countArcs} arcs and ${DG.countComponents} components.`)
+      this.isBuildingGraph = false
+      this.startSimulation(DG.graph)
     }
   }
 })
@@ -253,6 +347,12 @@ div#graph-container {
     margin: revert;
   }
 
+  .fade-enter-active,
+  .fade-leave-active { transition: opacity 0.5s ease; }
+
+  .fade-enter-from,
+  .fade-leave-to { opacity: 0; }
+
   @controlHeight: 75px;
 
   div#controls {
@@ -264,6 +364,18 @@ div#graph-container {
     top: @controlHeight;
     bottom: 0;
     width: calc(100% - 20px);
+  }
+
+  div#loading-indicator {
+    background-color: rgba(0, 0, 0, .5);
+    color: white;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 25% 20px;
   }
 }
 </style>

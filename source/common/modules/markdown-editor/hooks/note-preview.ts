@@ -40,7 +40,7 @@ export default function noteTooltipsHook (elem: CodeMirror.Editor): void {
     // Find the file
     ipcRenderer.invoke('application', { command: 'file-find-and-return-meta-data', payload: a.innerText })
       .then((metaData) => {
-        if (metaData !== null) {
+        if (metaData !== undefined) {
           // Set the tooltip's contents to the note contents
           const wrapper = getPreviewElement(metaData, a.innerText)
 

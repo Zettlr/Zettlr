@@ -16,9 +16,6 @@ import { ipcMain } from 'electron'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import ProviderContract from '../provider-contract'
 import AppServiceContainer from 'source/app/app-service-container'
-import { LinkGraph } from '@dts/common/graph'
-import path from 'path'
-import DirectedGraph from './directed-graph'
 
 /**
  * This class manages the coloured tags of the app. It reads the tags on each
@@ -49,8 +46,9 @@ export default class LinkProvider extends ProviderContract {
           inbound: this.retrieveInbound(filePath),
           outbound: this.retrieveOutbound(filePath)
         }
-      } else if (command === 'get-graph') {
-        return this.buildGraph()
+      } else if (command === 'get-link-database') {
+        // NOTE: We need to compact the Map into something JSONable
+        return Object.fromEntries(this._fileLinkDatabase)
       }
     })
   }
@@ -78,19 +76,14 @@ export default class LinkProvider extends ProviderContract {
       sourceID = undefined
     }
 
-    // Resolve the outboundLinks utilizing the FSAL
-    const resolved: string[] = []
+    // NOTE: To anyone who comes here thinking that one might be able to
+    // optimize the graph building below further by resolving links immediately
+    // when they arrive here: That won't work because most of the time the
+    // target files won't be loaded when the source file's links arrive here.
 
-    for (const link of outboundLinks) {
-      const found = this._app.fsal.findExact(link)
-      if (found !== undefined) {
-        resolved.push(found.path)
-      }
-    }
-
-    this._fileLinkDatabase.set(sourcePath, resolved)
+    this._fileLinkDatabase.set(sourcePath, outboundLinks)
     if (sourceID !== undefined) {
-      this._idLinkDatabase.set(sourceID, resolved)
+      this._idLinkDatabase.set(sourceID, outboundLinks)
     }
     broadcastIpcMessage('links')
   }
@@ -148,34 +141,5 @@ export default class LinkProvider extends ProviderContract {
    */
   retrieveOutbound (sourceFilePath: string): string[] {
     return this._fileLinkDatabase.get(sourceFilePath) ?? []
-  }
-
-  /**
-   * Constructs a graph from the link database
-   *
-   * @return  {LinkGraph}  The complete graph
-   */
-  buildGraph (): LinkGraph {
-    const DG = new DirectedGraph()
-
-    const startTime = performance.now()
-    // Fortunately, the fileLinkDatabase is basically just one large edgelist
-    for (const [ source, targets ] of this._fileLinkDatabase) {
-      // We have to specifically add the source, since isolates will have 0
-      // targets, and hence we cannot rely on the Graph adding these vertices
-      DG.addVertex(source)
-      for (const target of targets) {
-        DG.addArc(source, target)
-      }
-    }
-
-    // Now set the labels (i.e. the filenames)
-    for (const V of DG.vertices) {
-      DG.setLabel(V.id, path.basename(V.id))
-    }
-
-    const duration = performance.now() - startTime
-    this._app.log.info(`[Link Provider] Graph constructed in ${Math.round(duration)}ms. Graph contains ${DG.countVertices} nodes, ${DG.countArcs} arcs and ${DG.countComponents} components.`)
-    return DG.graph
   }
 }
