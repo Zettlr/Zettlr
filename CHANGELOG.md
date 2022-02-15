@@ -1,5 +1,43 @@
 # 2.2.2
 
+This update includes a long-awaited feature: Graph views. This brings Zettlr on
+par with other apps such as logseq or Obsidian. You will find the graph view in
+the stats window, which you can open as usual by clicking the statistics button
+on the toolbar. The graph will re-render as soon as something in the link
+structure of your notes changes. Rendering may take some time, however -- not
+because constructing or displaying the actual graph takes so much time, but
+rather, because resolving internal links (which can be either IDs or filenames)
+takes a long time.
+
+Within the graph view, you can interact with it in a few ways:
+
+* You can tick the checkbox to exclude isolates from rendering, that is: files
+  which are not linked to any other note
+* With the `+` and `-`-buttons, you can zoom in and out of the graph
+* Using the dropdown menu, you can restrict rendering to a single component.
+  These clusters of files are ordered by size, so the first components in the
+  list are the biggest in your network of files. Note that isolates are excluded
+  from this list
+* By utilizing the trackpad or scrollwheel of your mouse, you can scroll both
+  vertically and horizontally; dragging does not work yet
+* Clicking the target button resets the view on the graph to its origin if you
+  have scrolled someplace else
+* Clicking on a note will open it in the main window just as if you had clicked
+  on the note in the file manager
+
+Note that the graph view is still in its early stages. It works as advertised,
+but since networks can be very tricky, there is a lot of room for improvement.
+You will notice that we publish this new feature using a patch release (2.2.2
+instead of 2.3.0). The reason is that we cannot finalize this feature in any way
+without the feedback from the community. So for this feature, we would like to
+invite you to provide feedback -- not just about potential bugs, but about
+things we should improve in the visual feedback the graph view gives you.
+
+See this as an opportunity: Whereas the graph views of Roam, logseq or Obsidian
+are pretty much in a final stage, Zettlr's graph view is still a blank canvas
+upon which you can project your ideas that help us all make sense of the chaos
+that is the network of our files!
+
 ## GUI and Functionality
 
 - **New Feature**: Zettlr now finally offers a graph view of all notes in the
