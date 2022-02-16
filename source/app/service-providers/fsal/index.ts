@@ -219,7 +219,7 @@ export default class FSAL extends ProviderContract {
   resetFiletreeHistory (): void {
     this._history = []
 
-    let timestamp = Date.now()
+    let timestamp = 1
 
     for (const descriptor of this._state.filetree) {
       this._history.push({
