@@ -4,6 +4,9 @@
 
 - The graph view now only updates when the underlying link structure has in fact
   changed
+- Fixed an issue that would break project exports since we accidentally passed
+  not just Markdown and code files, but also everything else in that directory
+  to pandoc (including, but not limited to, PDFs, HTMLs, images, etc.)
 
 ## Under the Hood
 

@@ -46,8 +46,9 @@ export default class DirProjectExport extends ZettlrCommand {
       return false
     }
 
-    // Receive a two dimensional array of all directory contents and remove all dirs.x
-    let files = objectToArray(dir, 'children').filter(e => e.type !== 'directory')
+    // Receive a two dimensional array of all directory contents and remove all
+    // directories as well as any non-code/MD file
+    let files = objectToArray(dir, 'children').filter(e => e.type !== 'directory' && e.type !== 'other')
 
     // Use minimatch to filter against the project's filter patterns
     for (const pattern of config.filters) {
