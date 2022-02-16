@@ -48,7 +48,6 @@ import TagProvider from '@providers/tags'
 import { hasCodeExt, hasMarkdownExt, isMdOrCodeFile } from './util/is-md-or-code-file'
 import { mdFileExtensions } from './util/valid-file-extensions'
 import getMarkdownFileParser from './util/file-parser'
-import LinkProvider from '@providers/links'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import { getIDRE } from '@common/regular-expressions'
 
@@ -68,7 +67,7 @@ interface FSALState {
 /**
  * Declares an event that happens on the FSAL
  */
-interface FSALHistoryEvent {
+export interface FSALHistoryEvent {
   event: 'add'|'change'|'remove'
   path: string
   timestamp: number
@@ -88,8 +87,7 @@ export default class FSAL extends ProviderContract {
     private readonly _logger: LogProvider,
     private readonly _config: ConfigProvider,
     private readonly _targets: TargetProvider,
-    private readonly _tags: TagProvider,
-    private readonly _links: LinkProvider
+    private readonly _tags: TagProvider
   ) {
     super()
 
@@ -218,6 +216,9 @@ export default class FSAL extends ProviderContract {
    */
   resetFiletreeHistory (): void {
     this._history = []
+    // Notify callees to also reset their history timestamp pointers
+    this._emitter.emit('fsal-state-changed', 'reset-history')
+    broadcastIpcMessage('fsal-state-changed', 'reset-history')
 
     let timestamp = 1
 
@@ -327,7 +328,6 @@ export default class FSAL extends ProviderContract {
           parentDescriptor,
           changedPath,
           this._tags,
-          this._links,
           this._targets,
           this.getMarkdownFileParser(),
           sorter,
@@ -348,7 +348,6 @@ export default class FSAL extends ProviderContract {
           affectedDescriptor,
           this.getMarkdownFileParser(),
           this._tags,
-          this._links,
           this._cache
         )
       } else if (affectedDescriptor.type === 'other') {
@@ -450,7 +449,7 @@ export default class FSAL extends ProviderContract {
       this._state.filetree.push(file)
       this._recordFiletreeChange('add', filePath)
     } else if (hasMarkdownExt(filePath)) {
-      let file = await FSALFile.parse(filePath, this._cache, parser, this._targets, this._links, this._tags)
+      let file = await FSALFile.parse(filePath, this._cache, parser, this._targets, this._tags)
       this._state.filetree.push(file)
       this._recordFiletreeChange('add', filePath)
     }
@@ -475,7 +474,6 @@ export default class FSAL extends ProviderContract {
       dirPath,
       this._cache,
       this._tags,
-      this._links,
       this._targets,
       this.getMarkdownFileParser(),
       sorter,
@@ -861,7 +859,6 @@ export default class FSAL extends ProviderContract {
       options,
       this._cache,
       this._targets,
-      this._links,
       this._tags,
       this.getMarkdownFileParser(),
       sorter
@@ -893,7 +890,6 @@ export default class FSAL extends ProviderContract {
         newName,
         this.getMarkdownFileParser(),
         this._tags,
-        this._links,
         this._cache
       )
     } else if (src.type === 'code') {
@@ -1042,7 +1038,6 @@ export default class FSAL extends ProviderContract {
       newName,
       this._cache,
       this._tags,
-      this._links,
       this._targets,
       this.getMarkdownFileParser(),
       sorter
@@ -1101,7 +1096,6 @@ export default class FSAL extends ProviderContract {
       src,
       newName,
       this._tags,
-      this._links,
       this._targets,
       this.getMarkdownFileParser(),
       sorter,
@@ -1224,7 +1218,6 @@ export default class FSAL extends ProviderContract {
       src,
       target,
       this._tags,
-      this._links,
       this._targets,
       this.getMarkdownFileParser(),
       sorter,

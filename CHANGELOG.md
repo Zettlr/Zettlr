@@ -1,3 +1,15 @@
+# 2.2.3
+
+## GUI and Functionality
+
+- The graph view now only updates when the underlying link structure has in fact
+  changed
+
+## Under the Hood
+
+- Remove the dependency on the LinkProvider within the FSAL
+- The LinkProvider now only updates when necessary; easing the load on the graph
+
 # 2.2.2
 
 This update includes a long-awaited feature: Graph views. This brings Zettlr on

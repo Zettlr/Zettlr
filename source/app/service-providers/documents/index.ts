@@ -384,7 +384,7 @@ export default class DocumentManager extends ProviderContract {
       }
       return file
     } else if (hasMarkdownExt(filePath)) {
-      const file = await FSALFile.parse(filePath, null, this._app.fsal.getMarkdownFileParser(), this._app.targets, this._app.links, this._app.tags)
+      const file = await FSALFile.parse(filePath, null, this._app.fsal.getMarkdownFileParser(), this._app.targets, this._app.tags)
       // Withthe next code, we ensure the FSAL's state is up to date if the user
       // opened a standalone root file
       const loadedInFSAL = this._app.fsal.find(filePath)
@@ -655,7 +655,6 @@ export default class DocumentManager extends ProviderContract {
         src,
         content,
         this._app.fsal.getMarkdownFileParser(),
-        this._app.links,
         this._app.tags,
         null
       )

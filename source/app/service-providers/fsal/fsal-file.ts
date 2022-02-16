@@ -25,7 +25,6 @@ import FSALCache from './fsal-cache'
 import { SearchTerm } from '@dts/common/search'
 import TargetProvider, { WritingTarget } from '@providers/targets'
 import TagProvider from '@providers/tags'
-import LinkProvider from '@providers/links'
 
 /**
  * Applies a cached file, saving time where the file is not being parsed.
@@ -117,7 +116,6 @@ export async function parse (
   cache: FSALCache|null,
   parser: (file: MDFileDescriptor, content: string) => void,
   targets: TargetProvider,
-  links: LinkProvider,
   tags: TagProvider,
   parent: DirDescriptor|null = null
 ): Promise<MDFileDescriptor> {
@@ -186,7 +184,6 @@ export async function parse (
   file.target = targets.get(file.path)
 
   // Finally, report the tags
-  links.report(file.path, file.links, file.id)
   tags.report(file.tags, file.path)
 
   return file
@@ -255,7 +252,6 @@ export async function save (
   fileObject: MDFileDescriptor,
   content: string,
   parser: (file: MDFileDescriptor, content: string) => void,
-  links: LinkProvider,
   tags: TagProvider,
   cache: FSALCache|null
 ): Promise<void> {
@@ -264,11 +260,9 @@ export async function save (
   // Afterwards, retrieve the now current modtime
   await updateFileMetadata(fileObject)
   // Make sure to keep the file object itself as well as the tags updated
-  links.remove(fileObject.path, fileObject.id)
   tags.remove(fileObject.tags, fileObject.path)
   parser(fileObject, content)
   tags.report(fileObject.tags, fileObject.path)
-  links.report(fileObject.path, fileObject.links, fileObject.id)
   fileObject.modified = false // Always reset the modification flag.
   if (cache !== null) {
     cacheFile(fileObject, cache)
@@ -289,7 +283,6 @@ export async function rename (
   newName: string,
   parser: (file: MDFileDescriptor, content: string) => void,
   tags: TagProvider,
-  links: LinkProvider,
   cache: FSALCache|null
 ): Promise<void> {
   let oldPath = fileObject.path
@@ -301,7 +294,7 @@ export async function rename (
   fileObject.name = newName
   // Afterwards, reparse the file (this is important if the user switches from
   // an ID in the filename to an ID in the file, or vice versa)
-  await reparseChangedFile(fileObject, parser, tags, links, cache)
+  await reparseChangedFile(fileObject, parser, tags, cache)
 }
 
 /**
@@ -351,7 +344,6 @@ export async function reparseChangedFile (
   fileObject: MDFileDescriptor,
   parser: (file: MDFileDescriptor, content: string) => void,
   tags: TagProvider,
-  links: LinkProvider,
   cache: FSALCache|null
 ): Promise<void> {
   // Literally the same as the save() function only without prior writing of contents
@@ -359,10 +351,8 @@ export async function reparseChangedFile (
   await updateFileMetadata(fileObject)
   // Make sure to keep the file object itself as well as the tags updated
   tags.remove(fileObject.tags, fileObject.path)
-  links.remove(fileObject.path, fileObject.id)
   parser(fileObject, contents)
   tags.report(fileObject.tags, fileObject.path)
-  links.report(fileObject.path, fileObject.links, fileObject.id)
   fileObject.modified = false // Always reset the modification flag.
   if (cache !== null) {
     cacheFile(fileObject, cache)

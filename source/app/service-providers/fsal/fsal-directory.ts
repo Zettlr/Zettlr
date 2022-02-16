@@ -35,7 +35,6 @@ import {
 import TagProvider from '@providers/tags'
 import TargetProvider from '@providers/targets'
 import { isMdOrCodeFile } from './util/is-md-or-code-file'
-import LinkProvider from '@providers/links'
 
 /**
  * Determines what will be written to file (.ztr-directory)
@@ -191,7 +190,6 @@ export async function parse (
   currentPath: string,
   cache: FSALCache,
   tags: TagProvider,
-  links: LinkProvider,
   targets: TargetProvider,
   parser: (file: MDFileDescriptor, content: string) => void,
   sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[],
@@ -239,7 +237,7 @@ export async function parse (
     }
 
     if (isDir(absolutePath) && !ignoreDir(absolutePath)) {
-      const cDir = await parse(absolutePath, cache, tags, links, targets, parser, sorter, dir)
+      const cDir = await parse(absolutePath, cache, tags, targets, parser, sorter, dir)
       dir.children.push(cDir)
     } else if (isMdOrCodeFile(absolutePath)) {
       const isCode = ALLOWED_CODE_FILES.includes(path.extname(absolutePath).toLowerCase())
@@ -247,7 +245,7 @@ export async function parse (
         const file = await FSALCodeFile.parse(absolutePath, cache, dir)
         dir.children.push(file)
       } else {
-        const file = await FSALFile.parse(absolutePath, cache, parser, targets, links, tags, dir)
+        const file = await FSALFile.parse(absolutePath, cache, parser, targets, tags, dir)
         dir.children.push(file)
       }
     } else if (isFile(absolutePath)) {
@@ -384,7 +382,6 @@ export async function create (
   newName: string,
   cache: FSALCache,
   tags: TagProvider,
-  links: LinkProvider,
   targets: TargetProvider,
   parser: (file: MDFileDescriptor, content: string) => void,
   sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[]
@@ -394,7 +391,7 @@ export async function create (
   if (existingDir !== undefined) throw new Error(`A child with name ${newName} already exists!`)
   let newPath = path.join(dirObject.path, newName)
   await fs.mkdir(newPath)
-  let newDir = await parse(newPath, cache, tags, links, targets, parser, sorter, dirObject)
+  let newDir = await parse(newPath, cache, tags, targets, parser, sorter, dirObject)
   // Add the new directory to the source dir
   dirObject.children.push(newDir)
   sortChildren(dirObject, sorter)
@@ -412,7 +409,6 @@ export async function createFile (
   options: any,
   cache: FSALCache,
   targets: TargetProvider,
-  links: LinkProvider,
   tags: TagProvider,
   parser: (file: MDFileDescriptor, content: string) => void,
   sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[]
@@ -425,7 +421,7 @@ export async function createFile (
     const file = await FSALCodeFile.parse(fullPath, cache, dirObject)
     dirObject.children.push(file)
   } else {
-    const file = await FSALFile.parse(fullPath, cache, parser, targets, links, tags, dirObject)
+    const file = await FSALFile.parse(fullPath, cache, parser, targets, tags, dirObject)
     dirObject.children.push(file)
   }
   sortChildren(dirObject, sorter)
@@ -446,7 +442,6 @@ export async function rename (
   dirObject: DirDescriptor,
   newName: string,
   tags: TagProvider,
-  links: LinkProvider,
   targets: TargetProvider,
   parser: (file: MDFileDescriptor, content: string) => void,
   sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[],
@@ -464,7 +459,7 @@ export async function rename (
   let newPath = path.join(path.dirname(dirObject.path), newName)
   await fs.rename(dirObject.path, newPath)
   // Rescan the new dir to get all new file information
-  let newDir = await parse(newPath, cache, tags, links, targets, parser, sorter, dirObject.parent)
+  let newDir = await parse(newPath, cache, tags, targets, parser, sorter, dirObject.parent)
   if (dirObject.parent !== null) {
     // Exchange the directory in the parent
     let index = dirObject.parent.children.indexOf(dirObject)
@@ -516,7 +511,6 @@ export async function move (
   sourceObject: AnyDescriptor,
   targetDir: DirDescriptor,
   tags: TagProvider,
-  links: LinkProvider,
   targets: TargetProvider,
   parser: (file: MDFileDescriptor, content: string) => void,
   sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[],
@@ -538,9 +532,9 @@ export async function move (
   // Re-read the source
   let newSource
   if (sourceObject.type === 'directory') {
-    newSource = await parse(targetPath, cache, tags, links, targets, parser, sorter, targetDir)
+    newSource = await parse(targetPath, cache, tags, targets, parser, sorter, targetDir)
   } else {
-    newSource = await FSALFile.parse(targetPath, cache, parser, targets, links, tags, targetDir)
+    newSource = await FSALFile.parse(targetPath, cache, parser, targets, tags, targetDir)
   }
 
   // Add it to the new target
@@ -565,18 +559,17 @@ export async function addChild (
   dirObject: DirDescriptor,
   childPath: string,
   tags: TagProvider,
-  links: LinkProvider,
   targets: TargetProvider,
   parser: (file: MDFileDescriptor, content: string) => void,
   sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[],
   cache: FSALCache
 ): Promise<void> {
   if (isDir(childPath)) {
-    dirObject.children.push(await parse(childPath, cache, tags, links, targets, parser, sorter, dirObject))
+    dirObject.children.push(await parse(childPath, cache, tags, targets, parser, sorter, dirObject))
   } else if (ALLOWED_CODE_FILES.includes(path.extname(childPath))) {
     dirObject.children.push(await FSALCodeFile.parse(childPath, cache, dirObject))
   } else if (MARKDOWN_FILES.includes(path.extname(childPath))) {
-    dirObject.children.push(await FSALFile.parse(childPath, cache, parser, targets, links, tags, dirObject))
+    dirObject.children.push(await FSALFile.parse(childPath, cache, parser, targets, tags, dirObject))
   }
   sortChildren(dirObject, sorter)
 }
