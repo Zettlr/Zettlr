@@ -177,7 +177,7 @@ export default defineComponent({
         this.graphElement
           .selectAll('#vertex-container g')
           .select('circle')
-          .attr('stroke', null)
+          .attr('class', null)
           .attr('opacity', null)
 
         this.offsetX = 0
