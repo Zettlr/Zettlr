@@ -10,6 +10,7 @@
 - The graph view now supports displaying labels permanently; useful for smaller
   graphs
 - Better graph sizing
+- You can now highlight specific verticies based on text matching on its path
 
 ## Under the Hood
 

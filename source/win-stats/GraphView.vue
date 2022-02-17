@@ -36,6 +36,11 @@
         v-bind:inline="true"
         v-on:click="offsetX = 0; offsetY = 0"
       ></Button>
+      <Text
+        v-model="highlightFilter"
+        v-bind:placeholder="'Highlight vertices'"
+        v-bind:inline="true"
+      ></Text>
     </div>
     <div id="graph" ref="container"></div>
 
@@ -64,6 +69,7 @@ import tippy from 'tippy.js'
 import { SimulationNodeDatum } from 'd3'
 import DirectedGraph from '@providers/links/directed-graph'
 import { MDFileMeta } from '@dts/common/fsal'
+import Text from '@common/vue/form/elements/Text.vue'
 
 const ipcRenderer = window.ipc
 
@@ -73,7 +79,8 @@ export default defineComponent({
     Checkbox,
     Button,
     Progress,
-    Select
+    Select,
+    Text
   },
   data: function () {
     return {
@@ -87,6 +94,7 @@ export default defineComponent({
       // The following array contains all components that are not isolates
       components: [] as string[],
       componentFilter: '', // Can hold the name of a specific component
+      highlightFilter: '',
       includeIsolates: true,
       showLabels: false,
       // These two variables are required to enable scrolling, they mark an
@@ -151,6 +159,67 @@ export default defineComponent({
       if (this.graph !== null) {
         this.startSimulation(this.graph)
       }
+    },
+    /**
+     * Whenever the user types anything into the highlight filter, this function
+     * updates the matched elements, that is: it reduces the set of highlighted
+     * vertices to the ones matching the query
+     */
+    highlightFilter: function () {
+      if (this.graphElement === null) {
+        return
+      }
+
+      const query = this.highlightFilter.toLowerCase()
+
+      // Reset if the filter is empty
+      if (query.trim() === '') {
+        this.graphElement
+          .selectAll('#vertex-container g')
+          .select('circle')
+          .attr('stroke', null)
+          .attr('opacity', null)
+
+        this.offsetX = 0
+        this.offsetY = 0
+        return
+      }
+
+      // Create two selections, one containing the matching elements, one the
+      // not matched elements
+      const matches = this.graphElement.selectAll('#vertex-container g')
+        .filter((datum: any) => {
+          return (datum.id as string).toLowerCase().includes(query)
+        }).select('circle')
+
+      const nonmatches = this.graphElement.selectAll('#vertex-container g')
+        .filter((datum: any) => {
+          return !(datum.id as string).toLowerCase().includes(query)
+        }).select('circle')
+
+      // Style both groups accordingly
+      matches.attr('class', 'highlight').attr('opacity', null)
+      nonmatches.attr('class', null).attr('opacity', '0.2')
+
+      if (matches.size() === 0) {
+        this.offsetX = 0
+        this.offsetY = 0
+        return // Nothing more to do
+      }
+
+      // Finally, center the view evenly spaced in the middle between all
+      // selected elements
+      const X: number[] = []
+      const Y: number[] = []
+      matches.each((datum: any) => {
+        X.push(datum.x as number)
+        Y.push(datum.y as number)
+      })
+
+      const meanX = X.reduce((prev, curr) => prev + curr, 0) / X.length
+      const meanY = Y.reduce((prev, curr) => prev + curr, 0) / Y.length
+      this.offsetX = meanX
+      this.offsetY = meanY
     }
   },
   mounted: function () {
@@ -493,6 +562,27 @@ export default defineComponent({
 </script>
 
 <style lang="less">
+/* This animation pulsates a key if it has the class "pulse" */
+@keyframes pulsate-highlight {
+  0% {
+    stroke-opcaity: 1;
+    stroke-width: 1;
+  }
+  70% {
+    stroke-opacity: 0;
+    stroke-width: 20;
+  }
+  100% {
+    stroke-opacity: 0;
+    stroke-width: 0;
+  }
+}
+
+body {
+  div#graph-container div#graph .highlight { stroke: #ff0000; }
+  &.dark div#graph-container div#graph .highlight { stroke: #ffff00; }
+}
+
 div#graph-container {
   padding: 10px;
   // We need a fixed width so that the SVG is displayed full size
@@ -513,6 +603,9 @@ div#graph-container {
     position: absolute;
     bottom: 0;
     width: calc(100% - 20px);
+
+    // This pulsates nodes if this class is applied
+    .highlight { animation: pulsate-highlight 3s infinite; }
   }
 
   div#loading-indicator {
