@@ -531,6 +531,7 @@ export default defineComponent({
       const resolvedLinks = new Map<string, string>()
 
       const startTime = performance.now()
+      DG.startOperation()
       // Fortunately, the fileLinkDatabase is basically just one large edgelist
       for (const [ sourcePath, targets ] of database) {
         this.buildProgress.currentFile += 1
@@ -557,6 +558,7 @@ export default defineComponent({
           DG.addArc(sourcePath, resolvedLinks.get(target) as string)
         }
       }
+      DG.endOperation()
 
       // Now set the labels (i.e. the filenames)
       for (const V of DG.vertices) {

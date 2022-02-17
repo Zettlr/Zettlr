@@ -20,19 +20,34 @@ export default class DirectedGraph {
   private readonly _arcs: GraphArc[]
   private readonly _vertices: GraphVertex[]
   private _components: string[]
+  private _inOperation: boolean
 
   constructor () {
     this._arcs = []
     this._vertices = []
     this._components = []
+    this._inOperation = false
   }
 
   get graph (): LinkGraph {
+    if (this._inOperation) {
+      throw new Error('Graph is currently in an operation. Did you forget to call endOperation?')
+    }
     return {
       nodes: this._vertices,
       links: this._arcs,
       components: this._components
     }
+  }
+
+  startOperation (): void {
+    this._inOperation = true
+  }
+
+  endOperation (): void {
+    this._inOperation = false
+    // Now we can recalculate all the metrics and run the algorithms
+    this.identifyComponents()
   }
 
   get countVertices (): number {
@@ -68,7 +83,9 @@ export default class DirectedGraph {
     }
 
     this._vertices.push(newV)
-    this.identifyComponents()
+    if (!this._inOperation) {
+      this.identifyComponents()
+    }
     return newV
   }
 
@@ -87,7 +104,9 @@ export default class DirectedGraph {
     tV.isolate = false
     this._arcs.push({ source, target, weight })
 
-    this.identifyComponents()
+    if (!this._inOperation) {
+      this.identifyComponents()
+    }
   }
 
   setLabel (vertex: string, label: string): void {

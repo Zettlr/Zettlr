@@ -15,6 +15,7 @@
   your mouse cursor is when you zoom, the graph will zoom in ever so slightly
   onto that position
 - Tags/keywords in a YAML frontmatter are now properly lowercased
+- Massively improve the speed of graph building
 
 ## Under the Hood
 
