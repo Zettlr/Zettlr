@@ -14,28 +14,16 @@
         v-bind:inline="true"
       ></Checkbox>
       <Button
-        v-bind:icon="'zoom-in'"
-        v-bind:disabled="zoomFactor <= 0.5"
+        v-bind:icon="'target'"
+        v-bind:disabled="offsetX === 0 && offsetY === 0"
         v-bind:inline="true"
-        v-on:click="(zoomFactor > 0.5) ? zoomFactor -= 0.1 : ''"
-      ></Button>
-      <Button
-        v-bind:icon="'zoom-out'"
-        v-bind:disabled="zoomFactor >= 1.5"
-        v-bind:inline="true"
-        v-on:click="(zoomFactor < 1.5) ? zoomFactor += 0.1 : ''"
+        v-on:click="offsetX = 0; offsetY = 0"
       ></Button>
       <Select
         v-model="componentFilter"
         v-bind:options="selectableComponents"
         v-bind:inline="true"
       ></Select>
-      <Button
-        v-bind:icon="'target'"
-        v-bind:disabled="offsetX === 0 && offsetY === 0"
-        v-bind:inline="true"
-        v-on:click="offsetX = 0; offsetY = 0"
-      ></Button>
       <Text
         v-model="highlightFilter"
         v-bind:placeholder="'Highlight vertices'"
@@ -252,8 +240,31 @@ export default defineComponent({
     const graphComponent = this
     this.graphElement.call(d3.zoom<SVGSVGElement, any>())
       .on('wheel.zoom', function (event: WheelEvent) {
-        graphComponent.offsetX += event.deltaX
-        graphComponent.offsetY += event.deltaY
+        // What we do here is take the cursor offset from the container center
+        // as well as the SVG offset and also move the SVG based on where the
+        // cursor is. This mimicks somewhat the Google Maps approach to always
+        // also move the map ever so slightly towards wherever the cursor is
+        // pointing. But the behavior can certainly be imporved I guess.
+        const containerRect = graphComponent.containerElement.getBoundingClientRect()
+        const cursorY = event.clientY - containerRect.y
+        const cursorX = event.clientX - containerRect.x
+        const centerContainerX = containerRect.width / 2
+        const centerContainerY = containerRect.height / 2
+        const centerSVGX = graphComponent.offsetX
+        const centerSVGY = graphComponent.offsetY
+        const cursorOffsetX = cursorX - centerContainerX
+        const cursorOffsetY = cursorY - centerContainerY
+        const scalingFactor = 0.1 / graphComponent.zoomFactor
+
+        if (event.deltaY < 0) {
+          graphComponent.offsetX += (cursorOffsetX - centerSVGX) * scalingFactor
+          graphComponent.offsetY += (cursorOffsetY - centerSVGY) * scalingFactor
+        }
+
+        graphComponent.zoomFactor += (event.deltaY > 0) ? 0.1 : -0.1
+        if (graphComponent.zoomFactor < 0.1) {
+          graphComponent.zoomFactor = 0.1
+        }
       })
 
     const graphElement = this.graphElement.node()

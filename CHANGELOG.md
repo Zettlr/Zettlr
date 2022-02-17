@@ -11,6 +11,9 @@
   graphs
 - Better graph sizing
 - You can now highlight specific verticies based on text matching on its path
+- The graph view scrolling has now been replaced by moving zoom, i.e. wherever
+  your mouse cursor is when you zoom, the graph will zoom in ever so slightly
+  onto that position
 
 ## Under the Hood
 
