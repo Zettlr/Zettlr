@@ -41,6 +41,7 @@
               <Checkbox
                 v-if="typeof column === 'boolean'"
                 v-bind:model-value="column"
+                v-bind:name="`${name}-checkbox-${idx}-${colIdx}`"
                 v-on:update:model-value="handleInput(idx, colIdx, $event)"
               >
               </Checkbox>
@@ -67,6 +68,7 @@
                 v-if="typeof column === 'boolean'"
                 v-bind:model-value="column"
                 v-bind:disabled="isColumnEditable(colIdx) === false"
+                v-bind:name="`${name}-action-${idx}-${colIdx}`"
                 v-on:update:model-value="handleInput(idx, colIdx, $event)"
               >
               </Checkbox>
