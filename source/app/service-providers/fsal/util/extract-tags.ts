@@ -61,7 +61,7 @@ export default function extractTags (markdown: string): string[] {
       // the YAML parser will obviously cast those to numbers, but we don't want
       // this, so forcefully cast everything to string (see issue #1433).
       const sanitizedKeywords = frontmatter[prop].map((tag: any) => String(tag).toString())
-      tags = tags.concat(sanitizedKeywords)
+      tags = tags.concat(sanitizedKeywords).map(tag => tag.toLowerCase())
     }
   }
 

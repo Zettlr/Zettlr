@@ -14,6 +14,7 @@
 - The graph view scrolling has now been replaced by moving zoom, i.e. wherever
   your mouse cursor is when you zoom, the graph will zoom in ever so slightly
   onto that position
+- Tags/keywords in a YAML frontmatter are now properly lowercased
 
 ## Under the Hood
 
