@@ -7,6 +7,9 @@
 - Fixed an issue that would break project exports since we accidentally passed
   not just Markdown and code files, but also everything else in that directory
   to pandoc (including, but not limited to, PDFs, HTMLs, images, etc.)
+- The graph view now supports displaying labels permanently; useful for smaller
+  graphs
+- Better graph sizing
 
 ## Under the Hood
 

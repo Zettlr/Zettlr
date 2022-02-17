@@ -1,10 +1,17 @@
 <template>
   <div id="graph-container">
-    <div id="controls">
+    <div id="controls" ref="controls">
       <Checkbox
         v-model="includeIsolates"
         v-bind:label="'Include isolates'"
-        v-bind:inline="false"
+        v-bind:name="'isolates'"
+        v-bind:inline="true"
+      ></Checkbox>
+      <Checkbox
+        v-model="showLabels"
+        v-bind:label="'Show labels'"
+        v-bind:name="'labels'"
+        v-bind:inline="true"
       ></Checkbox>
       <Button
         v-bind:icon="'zoom-in'"
@@ -81,6 +88,7 @@ export default defineComponent({
       components: [] as string[],
       componentFilter: '', // Can hold the name of a specific component
       includeIsolates: true,
+      showLabels: false,
       // These two variables are required to enable scrolling, they mark an
       // offset to which the viewport will be relatively positioned
       offsetX: 0,
@@ -94,7 +102,7 @@ export default defineComponent({
       graphElement: null as d3.Selection<SVGSVGElement, undefined, null, undefined>|null,
       simulation: null as d3.Simulation<d3.SimulationNodeDatum, undefined>|null,
       // Add an observer to resize the SVG element as necessary
-      observer: new ResizeObserver(this.updateGraphSize as ResizeObserverCallback)
+      controlsObserver: new ResizeObserver(this.updateGraphSize as ResizeObserverCallback)
     }
   },
   computed: {
@@ -112,6 +120,9 @@ export default defineComponent({
     containerElement: function (): HTMLDivElement {
       return this.$refs.container as HTMLDivElement
     },
+    controlsElement: function (): HTMLDivElement {
+      return this.$refs.controls as HTMLDivElement
+    },
     graphViewBox: function (): [number, number, number, number] {
       const width = this.graphWidth * this.zoomFactor
       const height = this.graphHeight * this.zoomFactor
@@ -122,6 +133,11 @@ export default defineComponent({
   },
   watch: {
     includeIsolates: function () {
+      if (this.graph !== null) {
+        this.startSimulation(this.graph)
+      }
+    },
+    showLabels: function () {
       if (this.graph !== null) {
         this.startSimulation(this.graph)
       }
@@ -138,9 +154,7 @@ export default defineComponent({
     }
   },
   mounted: function () {
-    this.observer.observe(this.containerElement, { box: 'border-box' })
-    // Retrieve the correct container element size for the first time
-    this.updateGraphSize()
+    this.controlsObserver.observe(this.controlsElement, { box: 'border-box' })
 
     this.graphElement = d3.create('svg')
       .attr('width', this.graphWidth)
@@ -187,19 +201,21 @@ export default defineComponent({
     })
   },
   unmounted: function () {
-    this.observer.unobserve(this.containerElement)
+    this.controlsObserver.unobserve(this.controlsElement)
   },
   methods: {
     /**
-     * This callback is always called whenever the user resizes the window to
-     * update the graph
+     * This callback is called whenever the size of the controls element changes
      */
     updateGraphSize: function () {
+      const controlsHeight = this.controlsElement.getBoundingClientRect().height
+      const padValue = 20 // Twice the padding applied to the graph container
+      this.containerElement.style.top = `${controlsHeight + padValue}px`
+
       const { width, height } = this.containerElement.getBoundingClientRect()
       this.graphWidth = width
       this.graphHeight = height
     },
-
     /**
      * This callback is called whenever the cached graph size needs to update
      */
@@ -303,6 +319,7 @@ export default defineComponent({
         this.simulation = d3.forceSimulation(includedNodes as any)
           .force('link', forceLink)
           .force('charge', d3.forceManyBody())
+          .force('collide', d3.forceCollide(5))
           .force('x', d3.forceX())
           .force('y', d3.forceY())
           .on('tick', function () {
@@ -312,18 +329,26 @@ export default defineComponent({
               .attr('x2', (d: any) => d.target.x)
               .attr('y2', (d: any) => d.target.y)
 
-            svg.selectAll('#vertex-container circle')
+            svg.selectAll('#vertex-container g')
+              .select('circle')
               .attr('cx', (d: any) => d.x)
               .attr('cy', (d: any) => d.y)
+
+            svg.selectAll('#vertex-container g')
+              .select('text')
+              .attr('x', (d: any) => d.x + 5) // NOTE: 5 is here the radius!
+              .attr('y', (d: any) => d.y - 5)
           })
       } else {
         // If the simulation already exists, we can simply update it
         this.simulation.nodes(includedNodes as any).alpha(1).alphaTarget(0).restart()
-        const l = this.simulation.force('link') as d3.ForceLink<GraphVertex & d3.SimulationNodeDatum, GraphArc>
-        const c = this.simulation.force('charge') as d3.ForceManyBody<d3.SimulationNodeDatum>
-        l.links(includedLinks)
-        l.initialize(includedNodes, () => Math.random() * 5)
-        c.initialize(includedNodes as any[], () => 1)
+        const link = this.simulation.force('link') as d3.ForceLink<GraphVertex & d3.SimulationNodeDatum, GraphArc>
+        const charge = this.simulation.force('charge') as d3.ForceManyBody<d3.SimulationNodeDatum>
+        const coll = this.simulation.force('collide') as d3.ForceCollide<d3.SimulationNodeDatum>
+        link.links(includedLinks)
+        link.initialize(includedNodes, () => Math.random() * 5)
+        charge.initialize(includedNodes as any[], () => 1)
+        coll.initialize(includedNodes as any[], () => Math.random() * 5)
       }
 
       const linkSelection = svg.select('#arc-container')
@@ -334,32 +359,66 @@ export default defineComponent({
         .attr('stroke-width', (name, index) => includedLinks[index].weight)
         .attr('stroke', '#999') // Color
 
-      const vertexSelection = svg.select('#vertex-container')
-        .selectAll('circle')
+      svg.select('#vertex-container')
+        .selectAll('g')
         .data(includedNodes, (vertex: any) => vertex.id)
-      vertexSelection.exit().remove()
-      vertexSelection.enter().append('circle')
-        .attr('r', 5)
-        .attr('fill', (vertex, value) => (vertex.isolate) ? color(ISOLATES_CLASS) : color(vertex.component))
-        .on('click', (event, vertex) => {
-          ipcRenderer.invoke('application', {
-            command: 'open-file',
-            payload: { path: vertex.id }
-          }).catch(err => console.error(err))
-        })
-        .attr('data-tippy-content', (vertex) => {
-          let cnt = ''
-          if (vertex.label === undefined) {
-            console.log('Could not find correct vertex', vertex)
-            cnt += vertex.id
-          } else {
-            cnt += vertex.label
+        .join(
+          (enter) => {
+            const groupSelection = enter.append('g')
+
+            groupSelection
+              .append('circle')
+              .attr('r', 5)
+              .attr('fill', (vertex, value) => (vertex.isolate) ? color(ISOLATES_CLASS) : color(vertex.component))
+              .on('click', (event, vertex) => {
+                ipcRenderer.invoke('application', {
+                  command: 'open-file',
+                  payload: { path: vertex.id }
+                }).catch(err => console.error(err))
+              })
+              .attr('data-tippy-content', (vertex) => {
+                let cnt = ''
+                if (vertex.label === undefined) {
+                  console.log('Could not find correct vertex', vertex)
+                  cnt += vertex.id
+                } else {
+                  cnt += vertex.label
+                }
+
+                cnt += ` (${vertex.component})`
+
+                return cnt
+              })
+
+            if (this.showLabels) {
+              groupSelection
+                .append('text')
+                .attr('font-size', '8px')
+                .attr('font-weight', '100')
+                .attr('stroke', '#666')
+                .text((d: any) => { return d.label ?? d.id })
+            }
+
+            return groupSelection
+          },
+          (update) => {
+            // Remove the text and then conditionally re-apply it
+            update.select('text').remove()
+            if (this.showLabels) {
+              update
+                .append('text')
+                .attr('font-size', '8px')
+                .attr('font-weight', '100')
+                .attr('stroke', '#666')
+                .text((d: any) => { return d.label ?? d.id })
+            }
+
+            return update
+          },
+          (exit) => {
+            return exit.remove()
           }
-
-          cnt += ` (${vertex.component})`
-
-          return cnt
-        })
+        )
 
       tippy(svg.select('#vertex-container').selectAll('circle').nodes() as any[])
     },
@@ -450,15 +509,8 @@ div#graph-container {
   .fade-enter-from,
   .fade-leave-to { opacity: 0; }
 
-  @controlHeight: 75px;
-
-  div#controls {
-    height: @controlHeight;
-  }
-
   div#graph {
     position: absolute;
-    top: @controlHeight;
     bottom: 0;
     width: calc(100% - 20px);
   }
