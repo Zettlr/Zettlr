@@ -56,11 +56,10 @@ import displaySchema from './schema/display'
 import spellcheckingSchema from './schema/spellchecking'
 import autocorrectSchema from './schema/autocorrect'
 import advancedSchema from './schema/advanced'
-import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
 import { WindowTab } from '@dts/renderer/window'
 
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 /**
  * Searches the tree for a given model, traversing as necessary. Uses a depth-

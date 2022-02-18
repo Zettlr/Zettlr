@@ -32,10 +32,9 @@
 
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { AnyMenuItem, SubmenuItem } from '@dts/renderer/context'
-import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
 
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 export default defineComponent({
   name: 'WindowMenubar',

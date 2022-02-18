@@ -140,13 +140,11 @@ import { trans } from '@common/i18n-renderer'
 import { ClarityIcons } from '@clr/icons'
 import TabBar from '@common/vue/TabBar.vue'
 import { defineComponent } from 'vue'
-import { IpcRenderer } from 'electron'
-import { MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
+import { DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
 import { TabbarControl } from '@dts/renderer/window'
-import { PlatformPath } from '@dts/renderer/path'
 
-const path: PlatformPath = (window as any).path
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const path = window.path
+const ipcRenderer = window.ipc
 
 interface RelatedFile {
   file: string
@@ -220,11 +218,13 @@ export default defineComponent({
       return trans('gui.no_related_files')
     },
     attachments: function (): OtherFileMeta[] {
-      const currentDir = this.$store.state.selectedDirectory
+      const currentDir = this.$store.state.selectedDirectory as DirMeta|null
       if (currentDir === null) {
         return []
       } else {
-        return currentDir.attachments
+        const extensions: string[] = this.$store.state.config.attachmentExtensions
+        const attachments = currentDir.children.filter(child => child.type === 'other') as OtherFileMeta[]
+        return attachments.filter(attachment => extensions.includes(attachment.ext))
       }
     },
     activeFile: function (): MDFileMeta|null {
@@ -322,15 +322,12 @@ export default defineComponent({
 
       // Then retrieve the inbound links first, since that is the most important
       // relation, so they should be on top of the list.
-      const inboundLinks = await ipcRenderer.invoke('link-provider', {
+      const { inbound /* , outbound */ } = await ipcRenderer.invoke('link-provider', {
         command: 'get-inbound-links',
-        payload: {
-          filePath: this.activeFile.path,
-          fileID: this.activeFile.id
-        }
+        payload: { filePath: this.activeFile.path }
       })
 
-      for (const absPath of inboundLinks) {
+      for (const absPath of inbound) {
         unreactiveList.push({
           file: path.basename(absPath),
           path: absPath,

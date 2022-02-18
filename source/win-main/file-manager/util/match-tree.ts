@@ -17,9 +17,9 @@
  * END HEADER
  */
 
-import { CodeFileMeta, DirMeta, MDFileMeta } from '@dts/common/fsal'
+import { CodeFileMeta, DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
 
-type FilterFunction = (item: DirMeta|MDFileMeta|CodeFileMeta) => boolean
+type FilterFunction = (item: DirMeta|MDFileMeta|CodeFileMeta|OtherFileMeta) => boolean
 
 /**
  * Matches a given directory descriptor against a prepared filter function (see

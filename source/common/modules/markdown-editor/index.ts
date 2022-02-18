@@ -28,7 +28,7 @@ import './editor.less'
 import getCodeMirrorDefaultOptions from './get-cm-options'
 import safeAssign from '@common/util/safe-assign'
 import countWords from '@common/util/count-words'
-import md2html from '@common/util/md-to-html'
+import { getConverter } from '@common/util/md-to-html'
 import generateKeymap from './generate-keymap'
 import generateTableOfContents from './util/generate-toc'
 import { LatexCommand } from '@providers/latex-commands'
@@ -68,10 +68,8 @@ import noteTooltipsHook from './hooks/note-preview'
 
 import displayContextMenu from './display-context-menu'
 
-import { IpcRenderer } from 'electron'
-
-const ipcRenderer: IpcRenderer = (window as any).ipc
-const clipboard = (window as any).clipboard
+const ipcRenderer = window.ipc
+const clipboard = window.clipboard
 
 export default class MarkdownEditor extends EventEmitter {
   private readonly _instance: CodeMirror.Editor
@@ -80,6 +78,7 @@ export default class MarkdownEditor extends EventEmitter {
   private _currentDocumentMode: string
   private _cmOptions: any
   private _countChars: boolean
+  private readonly _md2html: ReturnType<typeof getConverter>
 
   /**
    * Creates a new MarkdownEditor instance attached to the anchorElement
@@ -94,6 +93,8 @@ export default class MarkdownEditor extends EventEmitter {
     this._currentDocumentMode = 'multiplex'
     this._cmOptions = getCodeMirrorDefaultOptions(this)
     this._countChars = false
+
+    this._md2html = getConverter(window.getCitation)
 
     // Parse the anchorElement until we get something useful
     if (typeof anchorElement === 'string' && document.getElementById(anchorElement) !== null) {
@@ -329,7 +330,7 @@ export default class MarkdownEditor extends EventEmitter {
   copyAsHTML (): void {
     if (!this._instance.somethingSelected()) return
     let md = this._instance.getSelections().join(' ')
-    let html = md2html(md)
+    let html = this._md2html(md)
     // Write both the HTML and the Markdown
     // (as fallback plain text) to the clipboard
     clipboard.write({ 'text': md, 'html': html })
@@ -455,9 +456,9 @@ export default class MarkdownEditor extends EventEmitter {
     this._currentDocumentMode = documentMode
 
     if (!this.readabilityMode) {
-      this.setOptions({ 'mode': this._currentDocumentMode })
+      this.setOptions({ mode: this._currentDocumentMode })
     } else {
-      this.setOptions({ 'mode': 'readability' })
+      this.setOptions({ mode: 'readability' })
     }
 
     return oldDoc

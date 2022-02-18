@@ -14,7 +14,7 @@
 
 import { getListOrderedRE, getListTaskListRE, getListUnorderedCMRE, getUrlRE, getBlockRE } from '@common/regular-expressions'
 import CodeMirror, { commands, Pass } from 'codemirror'
-const clipboard = (window as any).clipboard
+const clipboard = window.clipboard
 
 const unorderedListRE = getListUnorderedCMRE()
 const taskListRE = getListTaskListRE()

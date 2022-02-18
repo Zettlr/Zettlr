@@ -93,7 +93,7 @@
             v-on:contextmenu.stop.prevent="fileContextMenu($event, result.file.path, singleRes.line)"
             v-on:mousedown.stop.prevent="onResultClick($event, idx, idx2, result.file.path, singleRes.line)"
           >
-            <strong>{{ singleRes.line }}</strong>:
+            <span v-if="singleRes.line !== -1"><strong>{{ singleRes.line }}</strong>: </span>
             <span v-html="markText(singleRes)"></span>
           </div>
         </div>
@@ -124,16 +124,14 @@ import ButtonControl from '@common/vue/form/elements/Button.vue'
 import ProgressControl from '@common/vue/form/elements/Progress.vue'
 import AutocompleteText from '@common/vue/form/elements/AutocompleteText.vue'
 import { trans } from '@common/i18n-renderer'
-import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
 import { SearchResult, SearchTerm } from '@dts/common/search'
 import { CodeFileMeta, DirMeta, MDFileMeta } from '@dts/common/fsal'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { AnyMenuItem } from '@dts/renderer/context'
-import { PlatformPath } from '@dts/renderer/path'
 
-const path: PlatformPath = (window as any).path
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const path = window.path
+const ipcRenderer = window.ipc
 
 interface LocalFile {
   path: string
@@ -155,20 +153,27 @@ interface LocalSearchResult {
   weight: number
 }
 
-const contextMenu: AnyMenuItem[] = [
-  {
-    label: trans('menu.open_new_tab'),
-    id: 'new-tab',
-    type: 'normal',
-    enabled: true
-  },
-  {
-    label: trans('menu.quicklook'),
-    id: 'open-quicklook',
-    type: 'normal',
-    enabled: true
-  }
-]
+// Again: We have a side effect that trans() cannot be executed during import
+// stage. It needs to be executed after the window registration ran for now. It
+// will become better with the big refactoring that is currently underway since
+// API methods will then be infused by the preload scripts so that trans will
+// also work at the import stage.
+function getContextMenu (): AnyMenuItem[] {
+  return [
+    {
+      label: trans('menu.open_new_tab'),
+      id: 'new-tab',
+      type: 'normal',
+      enabled: true
+    },
+    {
+      label: trans('menu.quicklook'),
+      id: 'open-quicklook',
+      type: 'normal',
+      enabled: true
+    }
+  ]
+}
 
 export default defineComponent({
   name: 'GlobalSearch',
@@ -509,7 +514,7 @@ export default defineComponent({
     },
     fileContextMenu: function (event: MouseEvent, filePath: string, lineNumber: number) {
       const point = { x: event.clientX, y: event.clientY }
-      showPopupMenu(point, contextMenu, (clickedID: string) => {
+      showPopupMenu(point, getContextMenu(), (clickedID: string) => {
         switch (clickedID) {
           case 'new-tab':
             this.jumpToLine(filePath, lineNumber, true)

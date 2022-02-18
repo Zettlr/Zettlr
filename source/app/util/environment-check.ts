@@ -20,13 +20,13 @@ import isTraySupported from './is-tray-supported'
 import commandExists from 'command-exists'
 
 export default async function environmentCheck (): Promise<void> {
-  global.log.info('Performing environment check ...')
+  console.log('[Application] Performing environment check ...')
 
   /**
    * Contains custom paths that should be present on the process.env.PATH property
    * for the given operating system as reported by process.platform.
    */
-  const CUSTOM_PATHS = {
+  const CUSTOM_PATHS: { [key in NodeJS.Platform]: string[] } = {
     win32: [],
     linux: ['/usr/bin'],
     darwin: [
@@ -78,7 +78,7 @@ export default async function environmentCheck (): Promise<void> {
   if (!winARM && !macARM && !is64Bit && !isLinux && !linuxARM) {
     // We support: Windows ARM and macOS ARM
     // and anything 64bit. Warn for everything else.
-    global.log.warning(`[Application] Your platform/arch (${process.platform}/${process.arch}) combination is not officially supported. Zettlr might not function correctly.`)
+    console.warn(`[Application] Your platform/arch (${process.platform}/${process.arch}) combination is not officially supported. Zettlr might not function correctly.`)
   }
 
   // We need to check if Pandoc has been bundled with this package.
@@ -86,19 +86,19 @@ export default async function environmentCheck (): Promise<void> {
   const executable = (process.platform === 'win32') ? 'pandoc.exe' : 'pandoc'
   const pandocPath = path.join(process.resourcesPath, executable)
   if (isFile(pandocPath)) {
-    global.log.info(`[Application] Pandoc has been bundled with this release. Path: ${pandocPath}`)
+    console.log(`[Application] Pandoc has been bundled with this release. Path: ${pandocPath}`)
     process.env.PANDOC_PATH = pandocPath
   } else if (!app.isPackaged) {
     // We're in develop mode, so possibly, we have a Pandoc exe. Let's check
     const resPath = path.join(__dirname, '../../resources', executable)
     if (isFile(resPath)) {
-      global.log.info(`[Application] App is unpackaged, and Pandoc has been found in the resources directory: ${resPath}`)
+      console.log(`[Application] App is unpackaged, and Pandoc has been found in the resources directory: ${resPath}`)
       process.env.PANDOC_PATH = resPath
     } else {
-      global.log.warning(`[Application] App is unpackaged, but there was no Pandoc executable: ${resPath}`)
+      console.warn(`[Application] App is unpackaged, but there was no Pandoc executable: ${resPath}`)
     }
   } else {
-    global.log.warning('[Application] Pandoc has not been bundled with this release. Falling back to system version instead.')
+    console.warn('[Application] Pandoc has not been bundled with this release. Falling back to system version instead.')
   }
 
   // Make sure the PATH property exists
@@ -109,12 +109,12 @@ export default async function environmentCheck (): Promise<void> {
   // First integrate the additional paths that we need.
   let tempPATH = process.env.PATH.split(DELIM)
 
-  for (let customPath of CUSTOM_PATHS[process.platform]) {
+  for (const customPath of CUSTOM_PATHS[process.platform]) {
     // Check for both trailing and non-trailing slashes (to not add any
     // directory more than once)
     let customPathAlt = customPath + '/'
     if (customPath.endsWith('/')) {
-      customPathAlt = customPath.substr(0, customPath.length - 1)
+      customPathAlt = customPath.substring(0, customPath.length - 1)
     }
 
     if (!tempPATH.includes(customPath) && !tempPATH.includes(customPathAlt)) {
@@ -126,12 +126,12 @@ export default async function environmentCheck (): Promise<void> {
   process.env.PATH = tempPATH.filter(e => e.trim() !== '').join(DELIM)
 
   // Then ensure all required directories exist
-  for (let p of REQUIRED_DIRECTORIES) {
+  for (const directory of REQUIRED_DIRECTORIES) {
     try {
-      await fs.lstat(p)
+      await fs.lstat(directory)
     } catch (err) {
-      global.log.info(`Creating required directory ${p} ...`)
-      await fs.mkdir(p, { recursive: true })
+      console.log(`[Application] Creating required directory ${directory} ...`)
+      await fs.mkdir(directory, { recursive: true })
     }
   }
 
@@ -141,7 +141,7 @@ export default async function environmentCheck (): Promise<void> {
   } catch (err: any) {
     process.env.ZETTLR_IS_TRAY_SUPPORTED = '0'
     process.env.ZETTLR_TRAY_ERROR = err.message
-    global.log.warning(err.message)
+    console.warn(err.message)
   }
 
   // Determine if git is installed on this machine
@@ -152,5 +152,5 @@ export default async function environmentCheck (): Promise<void> {
     process.env.GIT_SUPPORT = '0'
   }
 
-  global.log.info('Environment check complete.')
+  console.log('[Application] Environment check complete.')
 }

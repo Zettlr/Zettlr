@@ -128,10 +128,10 @@ export default {
       return trans('dialog.target.chars')
     },
     creationTime: function () {
-      return formatDate(new Date(this.creationtime), true)
+      return formatDate(new Date(this.creationtime), window.config.get('appLang'), true)
     },
     modificationTime: function () {
-      return formatDate(new Date(this.modtime), true)
+      return formatDate(new Date(this.modtime), window.config.get('appLang'), true)
     },
     formattedSize: function () {
       return formatSize(this.fileSize)
@@ -173,6 +173,7 @@ body div.popover {
     & > div {
       width: 100%;
       padding: 0 10px;
+      overflow: hidden;
 
       & > span {
         white-space: nowrap;

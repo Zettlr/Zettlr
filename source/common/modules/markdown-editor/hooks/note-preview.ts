@@ -1,9 +1,8 @@
 import tippy from 'tippy.js'
 import { trans } from '@common/i18n-renderer'
 import formatDate from '@common/util/format-date'
-import { IpcRenderer } from 'electron'
 import CodeMirror from 'codemirror'
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 /**
  * A hook for displaying link tooltips which display metadata
@@ -41,16 +40,18 @@ export default function noteTooltipsHook (elem: CodeMirror.Editor): void {
     // Find the file
     ipcRenderer.invoke('application', { command: 'file-find-and-return-meta-data', payload: a.innerText })
       .then((metaData) => {
-        if (metaData !== null) {
+        if (metaData !== undefined) {
           // Set the tooltip's contents to the note contents
           const wrapper = getPreviewElement(metaData, a.innerText)
 
           tooltip.setContent(wrapper)
 
-          // Also, destroy the tooltip as soon as the button is clicked to
+          // Also, destroy the tooltip as soon as any button is clicked to
           // prevent visual artifacts
-          wrapper.querySelector('#open-note')?.addEventListener('click', (event) => {
-            tooltip.destroy()
+          wrapper.querySelectorAll('#open-note, #open-note-new-tab').forEach((element) => {
+            element.addEventListener('click', (event) => {
+              tooltip.destroy()
+            })
           })
         } else {
           tooltip.setContent(trans('system.error.fnf_message'))
@@ -84,7 +85,7 @@ function getPreviewElement (metadata: [string, string, number, number], linkCont
   meta.classList.add('metadata')
   meta.innerHTML = `${trans('gui.preview_word_count')}: ${metadata[2]}`
   meta.innerHTML += '<br>'
-  meta.innerHTML += `${trans('gui.modified')}: ${formatDate(metadata[3])}`
+  meta.innerHTML += `${trans('gui.modified')}: ${formatDate(metadata[3], window.config.get('appLang'))}`
 
   const actions = document.createElement('div')
   actions.classList.add('actions')
@@ -109,7 +110,7 @@ function getPreviewElement (metadata: [string, string, number, number], linkCont
   // Only if preference "Avoid New Tabs" is set,
   // offer an additional button on preview tooltip
   // to open the file in a new tab
-  if (global.config.get('system.avoidNewTabs')) {
+  if (window.config.get('system.avoidNewTabs') === true) {
     const openFuncNewTab = function (): void {
       ipcRenderer.invoke('application', {
         command: 'force-open',

@@ -95,7 +95,7 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
 
       const img = new Image()
 
-      const isDataUrl = /^data:[a-zA-Z0-9/;=]+(?:;base64){0,1},.+/.test(url)
+      let isDataUrl = /^data:[a-zA-Z0-9/;=]+(?:;base64){0,1},.+/.test(url)
       let actualURLToLoad = url
 
       if (!isDataUrl) {
@@ -122,9 +122,6 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
       figure.appendChild(img)
       figure.appendChild(caption)
       figure.appendChild(size)
-      if (!isDataUrl) {
-        figure.appendChild(openExternally)
-      }
 
       const container = document.createElement('div')
       container.classList.add('editor-image-container')
@@ -189,6 +186,7 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
       // Display a replacement image in case the correct one is not found
       img.onerror = () => {
         img.src = img404
+        isDataUrl = true
         caption.textContent = trans('system.error.image_not_found', url)
       }
       img.onclick = () => { textMarker.clear() }
@@ -197,6 +195,11 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
       img.onload = () => {
         img.title = `${title} (${img.naturalWidth}x${img.naturalHeight}px)`
         size.innerHTML = `${img.naturalWidth}&times;${img.naturalHeight}px`
+
+        if (!isDataUrl) {
+          figure.appendChild(openExternally)
+        }
+
         textMarker.changed()
       }
 

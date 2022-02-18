@@ -57,7 +57,7 @@ function renderIframe (src: string): HTMLIFrameElement {
     const hostname = (new URL(iframeSrc)).hostname
 
     // Check if the hostname is part of our whitelist
-    const whitelist = global.config.get('system.iframeWhitelist')
+    const whitelist = window.config.get('system.iframeWhitelist')
 
     if (whitelist.includes(hostname) === true) {
       // The hostname is part of the whitelist, so let's immediately render it.
@@ -109,9 +109,9 @@ function renderIframe (src: string): HTMLIFrameElement {
         wrapper.replaceWith(iframe)
         marker.changed()
 
-        const currentWhitelist = global.config.get('system.iframeWhitelist')
+        const currentWhitelist: string[] = window.config.get('system.iframeWhitelist')
         currentWhitelist.push(hostname)
-        global.config.set('system.iframeWhitelist', currentWhitelist)
+        window.config.set('system.iframeWhitelist', currentWhitelist)
       }
     }
   }

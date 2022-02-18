@@ -42,7 +42,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import windowRegister from '@common/modules/window-register'
 
-const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
+const ipcRenderer = window.ipc
 
 // The first thing we have to do is run the window controller
 windowRegister()
@@ -61,7 +61,7 @@ ipcRenderer.on('config-provider', (event, message) => {
   if (command === 'update') {
     const { payload } = message
     if (payload === 'editor.fontSize') {
-      app.$data.fontSize = global.config.get('editor.fontSize')
+      app.$data.fontSize = window.config.get('editor.fontSize')
     }
   }
 })

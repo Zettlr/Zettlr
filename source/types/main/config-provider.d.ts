@@ -123,6 +123,7 @@ interface ConfigOptions {
     renderMath: boolean
     renderTasks: boolean
     renderHTags: boolean
+    renderEmphasis: boolean
   }
   selectedDicts: string[]
   appLang: string
@@ -136,6 +137,7 @@ interface ConfigOptions {
     leaveAppRunning: boolean
     avoidNewTabs: boolean
     iframeWhitelist: string[]
+    checkForUpdates: boolean
   }
   checkForBeta: boolean
   uuid: string

@@ -8,7 +8,10 @@
             "concretx",
             "metal3d",
             "Adrien H \u003Cadrien.h@tuta.io\u003E",
+            "pabaillon",
             "ScaredCoward",
+            "eliovir",
+            "zacl",
             "Alexis M\u00e9taireau",
             "YannB",
             "Lexane",
@@ -17,7 +20,7 @@
             "Joris"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-11-17T01:40:40.000000Z"
+        "updated_at": "2022-01-30T13:20:55.000000Z"
     },
     "dialog": {
         "about": {
@@ -108,7 +111,7 @@
         },
         "preferences": {
             "advanced": "Param\u00e8tres avanc\u00e9s",
-            "always_reload_files": "Toujours charger dans le fichier actuel les modifications effectu\u00e9es par un programme ext\u00e9rieur",
+            "always_reload_files": "Toujours actualiser le fichier en cours lorsqu'il est modifi\u00e9 dans un autre programme",
             "app_lang": {
                 "af-ZA": "Afrikaans (Afrique du Sud)",
                 "ar-AR": "Arabe",
@@ -208,14 +211,22 @@
             "checkForBeta": "Me pr\u00e9venir \u00e0 propos des versions b\u00eata",
             "choose_file": "Choisir un fichier\u2026",
             "citation_database": "Fichier de r\u00e9f\u00e9rences bibliographiques (au format CSL JSON ou BibTex)",
+            "citations": {
+                "title": "Citations"
+            },
             "cite_style_label": "Choisissez la mani\u00e8re dont vos citations sont ins\u00e9r\u00e9es",
             "count_chars": "Compter caract\u00e8res au lieu des mots (p. ex., pour le chinois)",
             "creationtime": "Temps de cr\u00e9ation du fichier",
             "dark_mode": "Mode sombre",
+            "dark_mode_schedule": {
+                "end": "Arr\u00eater le mode sombre \u00e0",
+                "start": "D\u00e9marrer le mode sombre \u00e0"
+            },
             "debug": "Activer le mode debug",
             "default_image_save_path": "Chemin par d\u00e9faut des images (relatif ou absolu)",
             "delete_on_fail": "Supprimer les \u00e9l\u00e9ments de mani\u00e8re irr\u00e9versible, si leur d\u00e9placement vers la corbeille \u00e9choue",
             "display": {
+                "hide_toolbar_distraction_free": "Cacher la barre d'outils dans le mode sans distraction",
                 "image_height": "Hauteur maximale des images (pourcentage)",
                 "image_size_info": "Contr\u00f4ler la taille des aper\u00e7us d\u2019images.",
                 "image_width": "Largeur maximale des images (pourcentage)",
@@ -228,8 +239,9 @@
                 "render_math": "Afficher les formules",
                 "render_tasks": "Afficher les t\u00e2ches",
                 "title": "Afficher",
-                "use_first_headings": "S'il existe, utiliser le premier titre de niveau 1 comme nom de fichier"
+                "use_first_headings": "S'il existe, afficher le premier titre de niveau 1 \u00e0 la place du nom de fichier."
             },
+            "display_markdown_file_extensions": "Afficher les extensions de fichiers Markdown",
             "display_time_explanation": "Affichage chronologique des fichiers",
             "editor": "\u00c9diteur",
             "editor_font_size": "Taille de la police de l'\u00e9diteur",
@@ -259,6 +271,13 @@
             "filemanager_expanded": "D\u00e9velopp\u00e9 &mdash; affiche l'arborescence des fichiers et la liste des fichiers",
             "filemanager_explanation": "Mode gestionnaire de fichiers",
             "filemanager_thin": "Compact &mdash; affiche l'arborescence des fichiers ou la liste des fichiers",
+            "filename_display": {
+                "filename_only": "Nom de fichier seulement",
+                "heading": "Premier titre de niveau 1 si disponible",
+                "label": "Afficher les fichiers seulement",
+                "title": "Titre si disponible",
+                "title_heading": "Titre ou premier titre de niveau un si disponible"
+            },
             "filename_generator": "Mod\u00e8le pour les nouveaux noms de fichiers",
             "formatting_characters_explanation": "Choisissez les caract\u00e8res de formatage que les commandes en gras / d'emphase doivent utiliser",
             "general": "G\u00e9n\u00e9ral",
@@ -328,6 +347,7 @@
             "readability_algorithm": "Algorithme \u00e0 utiliser pour le mode de lisibilit\u00e9",
             "reset_pandoc_command": "R\u00e9initialiser la commande Pandoc",
             "show_app_in_the_notification_area": "Afficher l'application dans la zone de notification",
+            "sort_folders_first": "Afficher les dossiers au-dessus des fichiers",
             "sorting_ascii": "Ordre ASCII (2 apr\u00e8s 10)",
             "sorting_explanation": "Ordre de tri des fichiers (utilis\u00e9 pour le tri par nom)",
             "sorting_natural": "Ordre naturel (10 apr\u00e8s 2)",
@@ -368,6 +388,7 @@
             "zkn": {
                 "auto_create_file": "Cr\u00e9ation automatique des fichiers inexistants en suivant des liens internes",
                 "auto_search": "Lancer une recherche en suivant les liens Zettelkasten",
+                "custom_directory": "Placer les fichiers cr\u00e9\u00e9s automatiquement dans ce r\u00e9pertoire, qui doit \u00eatre charg\u00e9 dans Zettlr",
                 "generated_id": "Votre identifiant",
                 "id_generator_label": "Mod\u00e8le de cr\u00e9ation des identifiants",
                 "id_label": "Expression r\u00e9guli\u00e8re pour l\u2019identifiant",
@@ -588,6 +609,7 @@
         "close_file": "Fermer le fichier",
         "close_workspace": "Fermer l'espace de travail",
         "copy": "Copier",
+        "copy_equation": "Copier le code de l'\u00e9quation",
         "copy_filename": "Copier le nom de fichier",
         "copy_html": "Copier en HTML",
         "copy_id": "Copier l\u2019identifiant",
@@ -757,7 +779,7 @@
         "import_no_directory": "Vous devez s\u00e9lectionner un r\u00e9pertoire dans lequel importer.",
         "import_status": "Importation en cours. Merci de patienter\u2026",
         "import_success": "%s import\u00e9 avec succ\u00e8s.",
-        "lang_import_error": "Ne pas importer la traduction %s !",
+        "lang_import_error": "Impossible d'importer le fichier de langue %s !",
         "lang_import_success": "Le fichier de langue %s a \u00e9t\u00e9 import\u00e9 !",
         "no_command": "R\u00e9ception d'un message sans commande : %s",
         "ok": "Ok",

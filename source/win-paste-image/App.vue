@@ -77,14 +77,12 @@ import TextControl from '@common/vue/form/elements/Text.vue'
 import NumberControl from '@common/vue/form/elements/Number.vue'
 import File from '@common/vue/form/elements/File.vue'
 import { trans } from '@common/i18n-renderer'
-import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
 import md5 from 'md5'
-import { PlatformPath } from '@dts/renderer/path'
 
-const path: PlatformPath = (window as any).path
-const ipcRenderer: IpcRenderer = (window as any).ipc
-const clipboard = (window as any).clipboard
+const path = window.path
+const ipcRenderer = window.ipc
+const clipboard = window.clipboard
 
 export default defineComponent({
   components: {

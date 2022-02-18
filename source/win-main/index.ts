@@ -19,7 +19,7 @@ import App from './App.vue'
 import createStore from './store'
 import PopupProvider from './popup-provider'
 
-const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
+const ipcRenderer = window.ipc
 
 // The first thing we have to do is run the window controller
 windowRegister()
@@ -52,7 +52,7 @@ document.addEventListener('drop', (event) => {
     }
   }
 
-  ipcRenderer.invoke('application', { command: 'handle-drop', payload: f })
+  ipcRenderer.invoke('application', { command: 'roots-add', payload: f })
     .catch(e => console.error(e))
   return false
 }, false)

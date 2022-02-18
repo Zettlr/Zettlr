@@ -13,7 +13,7 @@
  */
 
 import assert from 'assert'
-import extractTags from '../source/main/modules/fsal/util/extract-tags'
+import extractTags from '../source/app/service-providers/fsal/util/extract-tags'
 
 const tests = [
   {

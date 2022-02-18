@@ -15,16 +15,15 @@ import { DateTime } from 'luxon'
 import { trans } from '../i18n-renderer'
 
 /**
- * Formats a date based on the user's locale.
+ * Formats a date based on the given locale.
  *
- * @param   {Date|number}      dateObj   A JavaScript Date object or a timestamp in milliseconds
- * @param   {boolean}  [relative=false]  Optional. If true, output a relative timestamp
+ * @param   {Date|number}  dateObj           A JavaScript Date object or a timestamp in milliseconds
+ * @param   {string}       locale            The locale to use for the formatter
+ * @param   {boolean}      [relative=false]  Optional. If true, output a relative timestamp
  *
- * @return  {string}                     The formatted date string
+ * @return  {string}                         The formatted date string
  */
-export default function formatDate (dateObj: Date|number, relative: boolean = false): string {
-  // NOTE: This function does not work during any tests, as Node.js needs Intl
-  // locales which it does not provide by default. For Electron, this works fine.
+export default function formatDate (dateObj: Date|number, locale: string, relative: boolean = false): string {
   const isDate = dateObj instanceof Date
   const dt = (isDate) ? DateTime.fromJSDate(dateObj) : DateTime.fromMillis(dateObj)
   if (relative) {
@@ -35,13 +34,13 @@ export default function formatDate (dateObj: Date|number, relative: boolean = fa
     } else {
       return dt.toRelative({
         style: 'short', // Can be short, narrow, or long
-        locale: global.config.get('appLang')
+        locale: locale // window.config.get('appLang')
       }) ?? ''
     }
   } else {
     return dt.toLocaleString(
       { dateStyle: 'long', timeStyle: 'short' },
-      { locale: global.config.get('appLang') }
+      { locale: locale /* window.config.get('appLang') */ }
     )
   }
 }

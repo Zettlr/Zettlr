@@ -7,7 +7,7 @@
         active: activeFile !== null && file.path === activeFile.path,
         modified: modifiedDocs.includes(file.path)
       }"
-      v-bind:title="file.name"
+      v-bind:title="file.path"
       v-bind:data-path="file.path"
       role="tab"
       draggable="true"
@@ -49,9 +49,8 @@
 import displayTabsContextMenu from './tabs-context'
 import tippy from 'tippy.js'
 import { nextTick, defineComponent } from 'vue'
-import { IpcRenderer } from 'electron'
 
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 export default defineComponent({
   name: 'DocumentTabs',

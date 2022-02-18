@@ -90,7 +90,6 @@ import { trans } from '@common/i18n-renderer'
 import localiseNumber from '@common/util/localise-number'
 import generateId from '@common/util/generate-id'
 import { nextTick, defineComponent } from 'vue'
-import { IpcRenderer } from 'electron'
 
 // Import the sound effects for the pomodoro timer
 import glassFile from './assets/glass.wav'
@@ -98,8 +97,8 @@ import alarmFile from './assets/digital_alarm.mp3'
 import chimeFile from './assets/chime.mp3'
 import { ToolbarControl } from '@dts/renderer/window'
 
-const ipcRenderer: IpcRenderer = (window as any).ipc
-const clipboard = (window as any).clipboard
+const ipcRenderer = window.ipc
+const clipboard = window.clipboard
 
 const SOUND_EFFECTS = [
   {
@@ -240,7 +239,7 @@ export default defineComponent({
         },
         {
           type: 'button',
-          id: 'open-workspace',
+          id: 'root-open-workspaces',
           title: trans('menu.open_workspace'),
           icon: 'folder-open'
         },
@@ -495,8 +494,8 @@ export default defineComponent({
       (this.$refs['file-manager'] as any).toggleFileList()
     },
     handleClick: function (clickedID: string) {
-      if (clickedID === 'open-workspace') {
-        ipcRenderer.invoke('application', { command: 'open-workspace' })
+      if (clickedID === 'root-open-workspaces') {
+        ipcRenderer.invoke('application', { command: 'root-open-workspaces' })
           .catch(e => console.error(e))
       } else if (clickedID === 'open-preferences') {
         ipcRenderer.invoke('application', { command: 'open-preferences' })

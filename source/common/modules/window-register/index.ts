@@ -15,7 +15,6 @@
  * END HEADER
  */
 
-import registerGlobals from './register-globals'
 import registerThemes from './register-themes'
 import registerDefaultContextMenu from './register-default-context'
 import loadIcons from './load-icons'
@@ -29,8 +28,6 @@ export default function windowRegister (): void {
   // Load the clarity icons
   loadIcons().catch(e => { console.error(e) })
 
-  // Register globals (such as global.config, etc.)
-  registerGlobals()
   // ... the theming functionality ...
   registerThemes()
   // ... the default context menus

@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-import extractBibTexAttachments from '../source/app/service-providers/assets/extract-bibtex-attachments'
+import extractBibTexAttachments from '../source/app/service-providers/citeproc/extract-bibtex-attachments'
 import assert from 'assert'
 import 'mocha'
 

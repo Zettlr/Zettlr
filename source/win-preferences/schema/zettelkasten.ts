@@ -63,7 +63,7 @@ export default function (): any {
             'withID': trans('dialog.preferences.zkn.link_behaviour_id'),
             'never': trans('dialog.preferences.zkn.link_behaviour_never')
           },
-          disabled: global.config.get('zkn.linkFilenameOnly') === true
+          disabled: window.config.get('zkn.linkFilenameOnly') === true
         }
       ],
       [

@@ -96,10 +96,9 @@ import objectToArray from '@common/util/object-to-array'
 import matchQuery from './util/match-query'
 
 import { nextTick, defineComponent } from 'vue'
-import { IpcRenderer } from 'electron'
-import { MDFileMeta, CodeFileMeta, DirMeta } from '@dts/common/fsal'
+import { MDFileMeta, CodeFileMeta, DirMeta, OtherFileMeta } from '@dts/common/fsal'
 
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 export default defineComponent({
   name: 'FileList',
@@ -158,12 +157,14 @@ export default defineComponent({
       }
 
       const ret: Array<{ id: number, props: MDFileMeta|CodeFileMeta|DirMeta}> = []
-      const items = objectToArray(this.$store.state.selectedDirectory, 'children')
+      const items = objectToArray(this.$store.state.selectedDirectory, 'children') as Array<MDFileMeta|CodeFileMeta|DirMeta|OtherFileMeta>
       for (let i = 0; i < items.length; i++) {
-        ret.push({
-          id: i, // This helps the virtual scroller to adequately position the items
-          props: items[i] // The actual item
-        })
+        if (items[i].type !== 'other') {
+          ret.push({
+            id: i, // This helps the virtual scroller to adequately position the items
+            props: items[i] as MDFileMeta|CodeFileMeta|DirMeta // The actual item
+          })
+        }
       }
       return ret
     },

@@ -13,12 +13,7 @@
  */
 
 // Helpers to determine what files from argv we can open
-import isFile from '../../common/util/is-file'
-import path from 'path'
-// Supported filetypes
-import { mdFileExtensions, codeFileExtensions } from '../../common/get-file-extensions'
-
-const FILETYPES = mdFileExtensions(true).concat(codeFileExtensions(true))
+import { isMdOrCodeFile } from '@providers/fsal/util/is-md-or-code-file'
 
 /**
  * Extracts files from argv.
@@ -34,7 +29,7 @@ export default function extractFilesFromArgv (argv = process.argv): string[] {
 
   const filesToOpen = argv.filter((arg) => {
     // Filter out CLI arguments, non-files, and non-supported files
-    return !arg.startsWith('--') && isFile(arg) && FILETYPES.includes(path.extname(arg))
+    return !arg.startsWith('--') && isMdOrCodeFile(arg)
   })
 
   return filesToOpen

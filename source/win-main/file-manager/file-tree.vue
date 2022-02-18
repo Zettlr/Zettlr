@@ -8,8 +8,10 @@
     v-on:click="clickHandler"
   >
     <template v-if="fileTree.length > 0">
-      <div v-if="getFilteredTree.length === 0" class="empty-file-list">
-        {{ noResultsMessage }}
+      <div v-if="getFilteredTree.length === 0" class="empty-tree">
+        <div class="info">
+          {{ noResultsMessage }}
+        </div>
       </div>
 
       <div v-show="getFiles.length > 0" id="directories-files-header">
@@ -71,12 +73,10 @@ import { trans } from '@common/i18n-renderer'
 import TreeItem from './tree-item.vue'
 import matchQuery from './util/match-query'
 import matchTree from './util/match-tree'
-
 import { defineComponent } from 'vue'
-import { IpcRenderer } from 'electron'
 import { MDFileMeta, CodeFileMeta, DirMeta } from '@dts/common/fsal'
 
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 export default defineComponent({
   name: 'FileTree',
@@ -159,7 +159,7 @@ export default defineComponent({
      * @return {void}     Does not return.
      */
     requestOpenRoot: function (evt: MouseEvent) {
-      ipcRenderer.invoke('application', { command: 'open-workspace' })
+      ipcRenderer.invoke('application', { command: 'root-open-workspaces' })
         .catch(err => console.error(err))
     },
     clickHandler: function (event: MouseEvent) {

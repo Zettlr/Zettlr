@@ -52,6 +52,15 @@ let autocompleteStart: CodeMirror.Position|null = null
 let currentDatabase: AutocompletionDatabaseType|null = null
 
 /**
+ * This property contains the last change object. This is necessary to restart
+ * the autocomplete if the user deleted everything written (since that will end
+ * the autocompletion)
+ *
+ * @var {string|null}
+ */
+let lastChangeText: string|null
+
+/**
  * This object holds all available databases for autocompletion
  */
 const availableDatabases = {
@@ -218,36 +227,28 @@ export function autocompleteHook (cm: CodeMirror.Editor): void {
       return
     }
 
-    const autocompleteDatabase = shouldBeginAutocomplete(cm, changeObj)
+    lastChangeText = changeObj.text[0]
+
+    const autocompleteDatabase = shouldBeginAutocomplete(cm)
 
     if (autocompleteDatabase === undefined) {
       return
     }
 
-    // Determine if we accept spaces within the autocomplete
-    const spaceCfg = Boolean(global.config.get('editor.autocompleteAcceptSpace'))
-
-    // We do not allow spaces for these databases:
-    const DISALLOW_SPACES = [
-      'tags',
-      'headings'
-    ]
-
-    const space = spaceCfg && !DISALLOW_SPACES.includes(autocompleteDatabase)
-
-    // If we're here, we can begin an autocompletion
-    autocompleteStart = Object.assign({}, cm.getCursor())
-    currentDatabase = autocompleteDatabase
-    cm.showHint({
-      hint: hintFunction,
-      completeSingle: false,
-      closeCharacters: (space) ? /[()[\]{};:>,]/ : undefined
-    }) // END showHint
+    beginAutocomplete(cm, autocompleteDatabase)
   })
 
   cm.on('endCompletion', () => {
     autocompleteStart = null
     currentDatabase = null
+
+    // Immediately check if we can begin a new autocomplete. This will be the
+    // case if the user has just deleted everything they typed without leaving
+    // the correct space to re-initiate an autocomplete
+    const autocompleteDatabase = shouldBeginAutocomplete(cm)
+    if (autocompleteDatabase !== undefined) {
+      beginAutocomplete(cm, autocompleteDatabase)
+    }
   })
 }
 
@@ -285,6 +286,28 @@ export function setAutocompleteDatabase (type: AutocompletionDatabaseType, datab
   }
 }
 
+function beginAutocomplete (cm: CodeMirror.Editor, autocompleteDatabase: keyof typeof availableDatabases): void {
+  // Determine if we accept spaces within the autocomplete
+  const spaceCfg = Boolean(window.config.get('editor.autocompleteAcceptSpace'))
+
+  // We do not allow spaces for these databases:
+  const DISALLOW_SPACES = [
+    'tags',
+    'headings'
+  ]
+
+  const space = spaceCfg && !DISALLOW_SPACES.includes(autocompleteDatabase)
+
+  // If we're here, we can begin an autocompletion
+  autocompleteStart = Object.assign({}, cm.getCursor())
+  currentDatabase = autocompleteDatabase
+  cm.showHint({
+    hint: hintFunction,
+    completeSingle: false,
+    closeCharacters: (space) ? /[()[\]{};:>,]/ : undefined
+  }) // END showHint
+}
+
 /**
  * Determins the correct database for an autocomplete operation, if applicable.
  *
@@ -293,7 +316,7 @@ export function setAutocompleteDatabase (type: AutocompletionDatabaseType, datab
  *
  * @return  {string|undefined}         Either the database name, or undefined
  */
-function shouldBeginAutocomplete (cm: CodeMirror.Editor, changeObj: any): AutocompletionDatabaseType|undefined {
+function shouldBeginAutocomplete (cm: CodeMirror.Editor): AutocompletionDatabaseType|undefined {
   // First, get cursor and line.
   const cursor = cm.getCursor()
   const line = cm.getLine(cursor.line)
@@ -312,23 +335,23 @@ function shouldBeginAutocomplete (cm: CodeMirror.Editor, changeObj: any): Autoco
   // or after a space (either a standalone citation or within square brackets
   // but with a prefix). Also, the citekey can be prefixed with a -.
   if (
-    changeObj.text[0] === '@' && (isSOL || [ ' ', '[', '-' ].includes(charBefore))
+    lastChangeText === '@' && (isSOL || [ ' ', '[', '-' ].includes(charBefore))
   ) {
     return 'citekeys'
   }
 
   // Can we begin tag autocompletion?
-  if (changeObj.text[0] === '#' && (isSOL || charBefore === ' ')) {
+  if (lastChangeText === '#' && (isSOL || charBefore === ' ')) {
     return 'tags'
   }
 
   // Can we begin autocompleting a snippet?
-  if (changeObj.text[0] === ':' && (isSOL || charBefore === ' ')) {
+  if (lastChangeText === ':' && (isSOL || charBefore === ' ')) {
     return 'snippets'
   }
 
   // Can we begin autocompleting a latex command?
-  if (changeObj.text[0] === '\\') {
+  if (lastChangeText === '\\') {
     // Check if we are in an equation
     const lines: LineInfo[] = []
     for (let i = 0; i < cm.lineCount(); i++) {
@@ -344,7 +367,7 @@ function shouldBeginAutocomplete (cm: CodeMirror.Editor, changeObj: any): Autoco
 
   // This will return true if the user began typing a hashtag within a link,
   // e.g. [some text](#), indicating they want to refer a heading within the doc.
-  if (changeObj.text[0] === '#' && charTwoBefore + charBefore === '](') {
+  if (lastChangeText === '#' && charTwoBefore + charBefore === '](') {
     return 'headings'
   }
 
@@ -446,6 +469,7 @@ function hintFunction (cm: CodeMirror.Editor, opt: CodeMirror.ShowHintOptions): 
 
   // Set the autocomplete to false as soon as the user has actively selected something.
   on(completionObject, 'pick', (completion: any) => {
+    lastChangeText = null // Always reset this!
     if (autocompleteStart === null) {
       throw new Error('Could not autocomplete: autocompleteStart was null')
     }
@@ -490,8 +514,8 @@ function hintFunction (cm: CodeMirror.Editor, opt: CodeMirror.ShowHintOptions): 
         cm.setCursor({ line: cur.line, ch: cur.ch + end.length })
       }
 
-      const linkPref = global.config.get('zkn.linkWithFilename')
-      const fnameOnly: boolean = global.config.get('zkn.linkFilenameOnly')
+      const linkPref = window.config.get('zkn.linkWithFilename')
+      const fnameOnly: boolean = window.config.get('zkn.linkFilenameOnly')
 
       if (!fnameOnly && (linkPref === 'always' || (linkPref === 'withID' && completion.id !== ''))) {
         // We need to add the text after the link.
@@ -553,6 +577,7 @@ function hintFunction (cm: CodeMirror.Editor, opt: CodeMirror.ShowHintOptions): 
   on(completionObject, 'close', () => {
     autocompleteStart = null
     currentDatabase = null
+    lastChangeText = null
   })
 
   return completionObject
@@ -638,7 +663,7 @@ function getTabMarkers (cm: CodeMirror.Editor, from: CodeMirror.Position, to: Co
 
     while ((match = varRE.exec(line)) !== null) {
       const ch = match.index
-      const index = parseInt(match[1] || match[2], 10)
+      const index = parseInt(match[1] ?? match[2], 10)
       const replaceWith = match[3]
 
       const localFrom = { line: i, ch: ch }
@@ -722,7 +747,7 @@ function replaceSnippetVariables (text: string): string {
   const hour = now.hour
   const minute = now.minute
   const second = now.second
-  const clipboard = (window as any).clipboard.readText()
+  const clipboard = window.clipboard.readText()
 
   const REPLACEMENTS = {
     CURRENT_YEAR: now.year,
@@ -737,7 +762,7 @@ function replaceSnippetVariables (text: string): string {
     CURRENT_SECONDS_UNIX: now.toSeconds(),
     UUID: uuid(),
     CLIPBOARD: (clipboard !== '') ? clipboard : undefined,
-    ZKN_ID: generateId(global.config.get('zkn.idGen'))
+    ZKN_ID: generateId(window.config.get('zkn.idGen'))
   }
 
   // Second: Replace those variables, and return the text. NOTE we're adding a
