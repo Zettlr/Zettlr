@@ -108,21 +108,21 @@ async function makeRevealJS (
   // so all we need to do is read the file Pandoc has produced (it's
   // decidedly NOT standalone so we only have the body parts) which we
   // need to wrap in our custom template now.
-  let file = await fs.readFile(sourceFile, { encoding: 'utf8' })
+  const file = await fs.readFile(sourceFile, { encoding: 'utf8' })
   // Unlink the file, because it has the ending '.revealjs', which
   // the operating system won't open either way.
   await fs.unlink(sourceFile)
   sourceFile = sourceFile + '.htm' // Make sure it's HTML
 
   // Load the template and the corresponding stylesheet.
-  let revealTpl = path.join(__dirname, './assets/template.revealjs.htm')
+  const revealTpl = path.join(__dirname, './assets/template.revealjs.htm')
   let tpl = await fs.readFile(revealTpl, { encoding: 'utf8' })
 
-  let revealStyle = path.join(__dirname, `./assets/revealjs-styles/${styleFile}.css`)
-  let style = await fs.readFile(revealStyle, { encoding: 'utf8' })
+  const revealStyle = path.join(__dirname, `./assets/revealjs-styles/${styleFile}.css`)
+  const style = await fs.readFile(revealStyle, { encoding: 'utf8' })
 
-  let skylightingStyle = path.join(__dirname, `./assets/revealjs-styles/${getSkylightingTheme(styleFile)}`)
-  let skylight = await fs.readFile(skylightingStyle, { encoding: 'utf8' })
+  const skylightingStyle = path.join(__dirname, `./assets/revealjs-styles/${getSkylightingTheme(styleFile)}`)
+  const skylight = await fs.readFile(skylightingStyle, { encoding: 'utf8' })
 
   let title = path.basename(sourceFile)
 

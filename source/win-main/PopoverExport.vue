@@ -12,7 +12,7 @@
       ref="form"
       v-bind:model="currentOptions"
       v-bind:schema="formSchema"
-      v-on:input="handleInput"
+      v-on:update:model-value="handleInput"
     ></Form>
     <!-- The choice of working directory vs. temporary applies to all exporters -->
     <hr>

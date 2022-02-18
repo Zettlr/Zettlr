@@ -17,6 +17,8 @@
 - Tags/keywords in a YAML frontmatter are now properly lowercased
 - Massively improve the speed of graph building
 - Fixed an error that would prevent the creation of new directories
+- Fixed a bug that would always export a revealJS presentation using the black
+  stylesheet
 
 ## Under the Hood
 
