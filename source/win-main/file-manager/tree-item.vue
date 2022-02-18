@@ -179,7 +179,7 @@ export default defineComponent({
         return false
       } else {
         // Else, just uncollapse if the user wishes so
-        return this.collapsed
+        return this.$store.state.uncollapsedDirectories.includes(this.obj.path) === false
       }
     },
     /**
@@ -208,7 +208,7 @@ export default defineComponent({
       // The primary icon is _always_ the chevron if we're dealing with a
       // directory and it has children. Otherwise, it will display the custom icon.
       if (this.hasChildren === true) {
-        return this.collapsed === true ? 'caret right' : 'caret down'
+        return this.shouldBeCollapsed ? 'caret right' : 'caret down'
       } else {
         return this.customIcon
       }
@@ -326,6 +326,13 @@ export default defineComponent({
   watch: {
     selectedFile: function (newVal, oldVal) {
       this.uncollapseIfApplicable()
+    },
+    collapsed: function () {
+      if (this.collapsed) {
+        this.$store.commit('removeUncollapsedDirectory', this.obj.path)
+      } else {
+        this.$store.commit('addUncollapsedDirectory', this.obj.path)
+      }
     },
     selectedDir: function (newVal, oldVal) {
       // this.uncollapseIfApplicable() TODO: As of now this would also uncollapse the containing file's directory
