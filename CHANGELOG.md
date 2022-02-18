@@ -20,6 +20,7 @@
 - Fixed a bug that would always export a revealJS presentation using the black
   stylesheet
 - Fixed commented entries in the YAML frontmatter being detected as headings
+- The file tree now remembers which directories are opened for longer
 
 ## Under the Hood
 

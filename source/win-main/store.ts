@@ -171,6 +171,11 @@ export interface ZettlrState {
    */
   lastFiletreeUpdate: number
   /**
+   * This array contains the paths of directories which are open (necessary to
+   * keep the state during filtering, etc.)
+   */
+  uncollapsedDirectories: string[]
+  /**
    * Contains the currently selected directory
    */
   selectedDirectory: DirMeta|null
@@ -232,6 +237,7 @@ function getConfig (): StoreOptions<ZettlrState> {
       return {
         fileTree: [],
         lastFiletreeUpdate: 0,
+        uncollapsedDirectories: [],
         selectedDirectory: null,
         activeFile: null,
         openFiles: [],
@@ -293,6 +299,17 @@ function getConfig (): StoreOptions<ZettlrState> {
       },
       activeDocumentInfo: function (state, info) {
         state.activeDocumentInfo = info
+      },
+      addUncollapsedDirectory: function (state, dirPath) {
+        if (!state.uncollapsedDirectories.includes(dirPath)) {
+          state.uncollapsedDirectories.push(dirPath)
+        }
+      },
+      removeUncollapsedDirectory: function (state, dirPath) {
+        const idx = state.uncollapsedDirectories.indexOf(dirPath)
+        if (idx > -1) {
+          state.uncollapsedDirectories.splice(idx, 1)
+        }
       },
       updateConfig: function (state, option) {
         state.config[option] = window.config.get(option)
