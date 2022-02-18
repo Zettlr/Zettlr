@@ -19,6 +19,7 @@
 - Fixed an error that would prevent the creation of new directories
 - Fixed a bug that would always export a revealJS presentation using the black
   stylesheet
+- Fixed commented entries in the YAML frontmatter being detected as headings
 
 ## Under the Hood
 
