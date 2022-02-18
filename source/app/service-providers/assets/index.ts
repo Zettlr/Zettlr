@@ -14,9 +14,13 @@
  */
 
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
-import { parse as parseLatexCommands, getDefault as getDefaultLatexCommands } from '../latex-commands'
-import ProviderContract from '../provider-contract'
+import { app, ipcMain } from 'electron'
+import { constants as fsConstants, promises as fs } from 'fs'
+import path from 'path'
+import YAML from 'yaml'
+import { getDefault as getDefaultLatexCommands, parse as parseLatexCommands } from '../latex-commands'
 import LogProvider from '../log'
+import ProviderContract from '../provider-contract'
 
 export default class AssetsProvider extends ProviderContract {
   /**

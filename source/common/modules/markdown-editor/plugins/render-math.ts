@@ -15,11 +15,10 @@
 import { getBlockMathRE, getInlineMathRenderRE } from '@common/regular-expressions'
 import CodeMirror from 'codemirror'
 import katex from 'katex'
-import { IpcRenderer } from 'electron'
 import 'katex/contrib/mhchem' // modify katex module
 import { LatexCommand } from '@providers/latex-commands'
 
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 const multilineMathRE = getBlockMathRE()
 const commands = (CodeMirror.commands as any)

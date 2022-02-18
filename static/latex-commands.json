@@ -739,5 +739,17 @@
     {
         "name": "mathtt{text}",
         "snippet": "\\mathtt{${0:text}}"
+    },
+    {
+        "name": "quad",
+        "snippet": "\\quad"
+    },
+    {
+        "name": "qquad",
+        "snippet": "\\qquad"
+    },
+    {
+        "name": "ldot",
+        "definition": "."
     }
 ]

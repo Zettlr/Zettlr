@@ -473,6 +473,10 @@ function hintFunction (cm: CodeMirror.Editor, opt: CodeMirror.ShowHintOptions): 
     if (autocompleteStart === null) {
       throw new Error('Could not autocomplete: autocompleteStart was null')
     }
+    if (currentDatabase == null) {
+      // We don't know where to get completion data from, so we can't do anything.
+      return
+    }
 
     // In case the user wants to link a file, intercept during
     // the process and add the file link according to the user's
@@ -563,9 +567,7 @@ function hintFunction (cm: CodeMirror.Editor, opt: CodeMirror.ShowHintOptions): 
           ch: autocompleteStart.ch + (completion.text as string).length + 2
         })
       } // Otherwise: citeStyle was in-text, i.e. we can leave everything as is
-    } else if (currentDatabase === 'snippets') {
-      insertSnippet(completion.text, cm)
-    } else if (currentDatabase === 'latexCommands') {
+    } else if ([ 'latexCommands', 'snippets' ].includes(currentDatabase)) {
       insertSnippet(completion.text, cm)
     }
   })
