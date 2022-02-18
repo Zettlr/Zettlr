@@ -1015,7 +1015,7 @@ export default class FSAL extends ProviderContract {
     // NOTE: Generates 1x add
     const absolutePath = path.join(src.path, newName)
 
-    if (this.find(absolutePath) !== null) {
+    if (this.find(absolutePath) !== undefined) {
       // We already have such a dir or file
       throw new Error(`An object already exists at path ${absolutePath}!`)
     }

@@ -54,6 +54,7 @@ export default class DirNew extends ZettlrCommand {
     try {
       await this._app.fsal.createDir(sourceDir, sanitizedName)
     } catch (err: any) {
+      console.log(err)
       this._app.windows.prompt({
         type: 'error',
         title: trans('system.error.could_not_create_dir'),

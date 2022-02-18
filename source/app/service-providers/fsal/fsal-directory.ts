@@ -386,12 +386,18 @@ export async function create (
   parser: (file: MDFileDescriptor, content: string) => void,
   sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[]
 ): Promise<void> {
-  if (newName.trim() === '') throw new Error('Invalid directory name provided!')
-  let existingDir = dirObject.children.find(elem => elem.name === newName)
-  if (existingDir !== undefined) throw new Error(`A child with name ${newName} already exists!`)
-  let newPath = path.join(dirObject.path, newName)
+  if (newName.trim() === '') {
+    throw new Error('Invalid directory name provided!')
+  }
+
+  const existingDir = dirObject.children.find(elem => elem.name === newName)
+  if (existingDir !== undefined) {
+    throw new Error(`A child with name ${newName} already exists!`)
+  }
+
+  const newPath = path.join(dirObject.path, newName)
   await fs.mkdir(newPath)
-  let newDir = await parse(newPath, cache, tags, targets, parser, sorter, dirObject)
+  const newDir = await parse(newPath, cache, tags, targets, parser, sorter, dirObject)
   // Add the new directory to the source dir
   dirObject.children.push(newDir)
   sortChildren(dirObject, sorter)
