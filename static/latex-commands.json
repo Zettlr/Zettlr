@@ -1,0 +1,755 @@
+[
+    {
+        "name": "begin",
+        "snippet": "\\begin{",
+        "description": "Begin a new environment"
+    },
+    {
+        "name": "beginend",
+        "displayText": "\\begin{} ... \\end{}",
+        "snippet": "\\begin{$1}\n\t$0\n\\end{$1}"
+    },
+    {
+        "name": "left(",
+        "displayText": "\\left( ... \\right)",
+        "snippet": "\\left($0\\right)"
+    },
+    {
+        "name": "left[",
+        "displayText": "\\left[ ... \\right]",
+        "snippet": "\\left[$0\\right]"
+    },
+    {
+        "name": "left{",
+        "displayText": "\\left\\{ ... \\right\\}",
+        "snippet": "\\left\\{$0\\right\\\\}"
+    },
+    {
+        "name": "bigl(",
+        "displayText": "\\bigl( ... \\bigr)",
+        "snippet": "\\bigl($0\\bigr)"
+    },
+    {
+        "name": "bigl[",
+        "displayText": "\\bigl[ ... \\bigr]",
+        "snippet": "\\bigl[$0\\bigr]"
+    },
+    {
+        "name": "bigl{",
+        "displayText": "\\bigl\\{ ... \\bigr\\}",
+        "snippet": "\\bigl\\{$0\\bigr\\\\}"
+    },
+    {
+        "name": "Bigl(",
+        "displayText": "\\Bigl( ... \\Bigr)",
+        "snippet": "\\Bigl($0\\Bigr)"
+    },
+    {
+        "name": "Bigl[",
+        "displayText": "\\Bigl[ ... \\Bigr]",
+        "snippet": "\\Bigl[$0\\Bigr]"
+    },
+    {
+        "name": "Bigl{",
+        "displayText": "\\Bigl\\{ ... \\Bigr\\}",
+        "snippet": "\\Bigl\\{$0\\Bigr\\\\}"
+    },
+    {
+        "name": "biggl(",
+        "displayText": "\\biggl( ... \\biggr)",
+        "snippet": "\\biggl($0\\biggr)"
+    },
+    {
+        "name": "biggl[",
+        "displayText": "\\biggl[ ... \\biggr]",
+        "snippet": "\\biggl[$0\\biggr]"
+    },
+    {
+        "name": "biggl{",
+        "displayText": "\\biggl\\{ ... \\biggr\\}",
+        "snippet": "\\biggl\\{$0\\biggr\\\\}"
+    },
+    {
+        "name": "Biggl(",
+        "displayText": "\\Biggl( ... \\Biggr)",
+        "snippet": "\\Biggl($0\\Biggr)"
+    },
+    {
+        "name": "Biggl[",
+        "snippet": "\\Biggl[$0\\Biggr]",
+        "displayText": "\\Biggl[ ... \\Biggr]"
+    },
+    {
+        "name": "Biggl{",
+        "snippet": "\\Biggl\\{$0\\Biggr\\\\}",
+        "displayText": "\\Biggl\\{ ... \\Biggr\\}"
+    },
+    {
+        "name": "{",
+        "snippet": "\\{$0\\\\}",
+        "description": "curly brackets \\{ ... \\}"
+    },
+    {
+        "name": "emph",
+        "snippet": "\\emph{$0}"
+    },
+    {
+        "name": "textbf",
+        "snippet": "\\textbf{$0}"
+    },
+    {
+        "name": "textit",
+        "snippet": "\\textit{$0}"
+    },
+    {
+        "name": "textmd",
+        "snippet": "\\textmd{$0}"
+    },
+    {
+        "name": "textnormal",
+        "snippet": "\\textnormal{$0}"
+    },
+    {
+        "name": "textrm",
+        "snippet": "\\textrm{$0}"
+    },
+    {
+        "name": "textsc",
+        "snippet": "\\textsc{$0}"
+    },
+    {
+        "name": "textsf",
+        "snippet": "\\textsf{$0}"
+    },
+    {
+        "name": "textsl",
+        "snippet": "\\textsl{$0}",
+        "description": "slanted text"
+    },
+    {
+        "name": "texttt",
+        "snippet": "\\texttt{$0}"
+    },
+    {
+        "name": "textup",
+        "snippet": "\\textup{$0}"
+    },
+    {
+        "name": "textwidth",
+        "snippet": "\\textwidth"
+    },
+    {
+        "name": "ttfamily",
+        "snippet": "\\ttfamily"
+    },
+    {
+        "name": "label",
+        "displayText": "\\label{...}",
+        "snippet": "\\label{$0}"
+    },
+    {
+        "name": "hspace",
+        "snippet": "\\hspace{$0}"
+    },
+    {
+        "name": "hspace*",
+        "snippet": "\\hspace*{$0}"
+    },
+    {
+        "name": "vspace",
+        "snippet": "\\vspace{$0}"
+    },
+    {
+        "name": "vspace*",
+        "snippet": "\\vspace*{$0}"
+    },
+    {
+        "name": "multicolumn{n}{cols}{text}",
+        "snippet": "\\multicolumn{${1:n}}{${2:cols}}{${0:text}}"
+    },
+    {
+        "name": "linespread",
+        "snippet": "\\linespread{${0:x}}"
+    },
+    {
+        "name": "underline",
+        "snippet": "\\underline{$0}"
+    },
+    {
+        "name": "rule{width}{height}",
+        "snippet": "\\rule{${1:width}}{${2:height}}$0"
+    },
+    {
+        "name": "pagebreak"
+    },
+    {
+        "name": "noindent"
+    },
+    {
+        "name": "nonumber"
+    },
+    {
+        "name": "tiny"
+    },
+    {
+        "name": "scriptsize"
+    },
+    {
+        "name": "footnotesize"
+    },
+    {
+        "name": "small"
+    },
+    {
+        "name": "normalsize"
+    },
+    {
+        "name": "large"
+    },
+    {
+        "name": "Large"
+    },
+    {
+        "name": "LARGE"
+    },
+    {
+        "name": "huge"
+    },
+    {
+        "name": "Huge"
+    },
+    {
+        "name": "raggedleft"
+    },
+    {
+        "name": "raggedright"
+    },
+    {
+        "name": "centering"
+    },
+    {
+        "name": "hline"
+    },
+    {
+        "name": "text",
+        "snippet": "\\text{$0}"
+    },
+    {
+        "name": "sqrt",
+        "snippet": "\\sqrt{$0}"
+    },
+    {
+        "name": "frac",
+        "snippet": "\\frac{$1}{$2}$0"
+    },
+    {
+        "name": "bar",
+        "snippet": "\\bar{$0}"
+    },
+    {
+        "name": "alpha",
+        "description": "α"
+    },
+    {
+        "name": "beta",
+        "description": "β"
+    },
+    {
+        "name": "chi",
+        "description": "χ"
+    },
+    {
+        "name": "delta",
+        "description": "δ"
+    },
+    {
+        "name": "epsilon",
+        "description": "ε"
+    },
+    {
+        "name": "varepsilon",
+        "description": "ε"
+    },
+    {
+        "name": "eta",
+        "description": "η"
+    },
+    {
+        "name": "gamma",
+        "description": "γ"
+    },
+    {
+        "name": "iota",
+        "description": "ι"
+    },
+    {
+        "name": "kappa",
+        "description": "κ"
+    },
+    {
+        "name": "lambda",
+        "description": "λ"
+    },
+    {
+        "name": "mu",
+        "description": "μ"
+    },
+    {
+        "name": "nu",
+        "description": "ν"
+    },
+    {
+        "name": "omega",
+        "description": "ω"
+    },
+    {
+        "name": "phi",
+        "description": "ϕ"
+    },
+    {
+        "name": "varphi",
+        "description": "ᵠ"
+    },
+    {
+        "name": "pi",
+        "description": "π"
+    },
+    {
+        "name": "psi",
+        "description": "ψ"
+    },
+    {
+        "name": "rho",
+        "description": "ρ"
+    },
+    {
+        "name": "sigma",
+        "description": "σ"
+    },
+    {
+        "name": "varsigma",
+        "description": "ς"
+    },
+    {
+        "name": "tau",
+        "description": "τ"
+    },
+    {
+        "name": "theta",
+        "description": "θ"
+    },
+    {
+        "name": "vartheta",
+        "description": "θ"
+    },
+    {
+        "name": "upsilon",
+        "description": "υ"
+    },
+    {
+        "name": "xi",
+        "description": "ξ"
+    },
+    {
+        "name": "zeta",
+        "description": "ζ"
+    },
+    {
+        "name": "Delta",
+        "description": "Δ"
+    },
+    {
+        "name": "Gamma",
+        "description": "Γ"
+    },
+    {
+        "name": "Lambda",
+        "description": "Λ"
+    },
+    {
+        "name": "Omega",
+        "description": "Ω"
+    },
+    {
+        "name": "Phi",
+        "description": "Φ"
+    },
+    {
+        "name": "Pi",
+        "description": "Π"
+    },
+    {
+        "name": "Psi",
+        "description": "Ψ"
+    },
+    {
+        "name": "Sigma",
+        "description": "Σ"
+    },
+    {
+        "name": "Theta",
+        "description": "Θ"
+    },
+    {
+        "name": "Upsilon",
+        "description": "Υ"
+    },
+    {
+        "name": "Xi",
+        "description": "Ξ"
+    },
+    {
+        "name": "exists",
+        "description": "∃"
+    },
+    {
+        "name": "in",
+        "description": "∈"
+    },
+    {
+        "name": "notin",
+        "description": "∉"
+    },
+    {
+        "name": "subset",
+        "description": "⊂"
+    },
+    {
+        "name": "supset",
+        "description": "⊃"
+    },
+    {
+        "name": "leftarrow",
+        "description": "←"
+    },
+    {
+        "name": "Leftarrow",
+        "description": "⇐"
+    },
+    {
+        "name": "Leftrightarrow",
+        "description": "⇔"
+    },
+    {
+        "name": "rightarrow",
+        "description": "→"
+    },
+    {
+        "name": "Rightarrow",
+        "description": "⇒"
+    },
+    {
+        "name": "infty",
+        "description": "∞"
+    },
+    {
+        "name": "div",
+        "description": "division"
+    },
+    {
+        "name": "approx",
+        "description": "≈"
+    },
+    {
+        "name": "mid",
+        "description": "∣"
+    },
+    {
+        "name": "neg",
+        "description": "¬"
+    },
+    {
+        "name": "setminus",
+        "description": "∖"
+    },
+    {
+        "name": "sum",
+        "description": "∑"
+    },
+    {
+        "name": "prime",
+        "description": "′"
+    },
+    {
+        "name": "geq",
+        "description": "≥"
+    },
+    {
+        "name": "partial",
+        "description": "∂"
+    },
+    {
+        "name": "pm",
+        "description": "±"
+    },
+    {
+        "name": "times",
+        "description": "×"
+    },
+    {
+        "name": "cdots",
+        "description": "···"
+    },
+    {
+        "name": "cap",
+        "description": "∩"
+    },
+    {
+        "name": "bigcap",
+        "description": "∩"
+    },
+    {
+        "name": "cup",
+        "description": "∪"
+    },
+    {
+        "name": "bigcup",
+        "description": "∪"
+    },
+    {
+        "name": "vee",
+        "description": "∨"
+    },
+    {
+        "name": "prod",
+        "description": "∏"
+    },
+    {
+        "name": "circ"
+    },
+    {
+        "name": "wedge",
+        "description": "∧"
+    },
+    {
+        "name": "neq",
+        "description": "≠"
+    },
+    {
+        "name": "forall",
+        "description": "∀"
+    },
+    {
+        "name": "leq",
+        "description": "≤"
+    },
+    {
+        "name": "equiv",
+        "description": "≡"
+    },
+    {
+        "name": "dot",
+        "snippet": "\\dot{$0}"
+    },
+    {
+        "name": "ddot",
+        "snippet": "\\ddot{$0}"
+    },
+    {
+        "name": "cdot",
+        "description": "·"
+    },
+    {
+        "name": "acute",
+        "snippet": "\\acute{$0}",
+        "description": "acute accent"
+    },
+    {
+        "name": "breve",
+        "snippet": "\\breve{$0}",
+        "description": "breve"
+    },
+    {
+        "name": "check",
+        "snippet": "\\check{$0}",
+        "description": "caron"
+    },
+    {
+        "name": "grave",
+        "snippet": "\\grave{$0}",
+        "description": "grave accent"
+    },
+    {
+        "name": "hat",
+        "snippet": "\\hat{$0}",
+        "description": "circumflex accent"
+    },
+    {
+        "name": "widehat",
+        "snippet": "\\widehat{$0}",
+        "description": "wide circumflex accent"
+    },
+    {
+        "name": "tilde",
+        "snippet": "\\tilde{$0}",
+        "description": "tilde"
+    },
+    {
+        "name": "widetilde",
+        "snippet": "\\widetilde{$0}",
+        "description": "wide tilde"
+    },
+    {
+        "name": "vec",
+        "snippet": "\\vec{$0}"
+    },
+    {
+        "name": "ddots",
+        "snippet": "\\ddots",
+        "description": "⋱"
+    },
+    {
+        "name": "fbox",
+        "snippet": "\\fbox{${0:text}}"
+    },
+    {
+        "name": "hlinefill",
+        "snippet": "\\hlinefill"
+    },
+    {
+        "name": "itshape",
+        "snippet": "\\itshape"
+    },
+    {
+        "name": "LaTeX",
+        "snippet": "\\LaTeX"
+    },
+    {
+        "name": "ldots",
+        "snippet": "\\ldots"
+    },
+    {
+        "name": "linebreak",
+        "snippet": "\\linebreak"
+    },
+    {
+        "name": "linebreak[number]",
+        "snippet": "\\linebreak[${1:number}]$0"
+    },
+    {
+        "name": "mbox",
+        "snippet": "\\mbox{${1:text}}"
+    },
+    {
+        "name": "newline",
+        "snippet": "\\newline"
+    },
+    {
+        "name": "nolinebreak",
+        "snippet": "\\nolinebreak"
+    },
+    {
+        "name": "nolinebreak[number]",
+        "snippet": "\\nolinebreak[${1:number}]"
+    },
+    {
+        "name": "nopagebreak",
+        "snippet": "\\nopagebreak"
+    },
+    {
+        "name": "nopagebreak[number]",
+        "snippet": "\\nopagebreak[${1:number}]"
+    },
+    {
+        "name": "underbrace{text}",
+        "snippet": "\\underbrace{${0:text}}"
+    },
+    {
+        "name": "overbrace",
+        "snippet": "\\overbrace{${0:text}}",
+        "description": "⏞"
+    },
+    {
+        "name": "overline",
+        "snippet": "\\overline{${1:text}}",
+        "description": " ̅"
+    },
+    {
+        "name": "parbox[position]{width}{text}",
+        "snippet": "\\parbox[${3:position}]{${1:width}}{${2:text}}"
+    },
+    {
+        "name": "parbox{width}{text}",
+        "snippet": "\\parbox{${1:width}}{${2:text}}"
+    },
+    {
+        "name": "rule[lift]{width}{thickness}",
+        "snippet": "\\rule[${3:lift}]{${1:width}}{${2:thickness}}"
+    },
+    {
+        "name": "stackrel{above}{under}",
+        "snippet": "\\stackrel{${1:above}}{${2:under}}"
+    },
+    {
+        "name": "thanks",
+        "snippet": "\\thanks{${1:text}}"
+    },
+    {
+        "name": "roman{counter}",
+        "snippet": "\\roman{${1:counter}}"
+    },
+    {
+        "name": "Roman{counter}",
+        "snippet": "\\Roman{${1:counter}}"
+    },
+    {
+        "name": "framebox[width][position]{text}",
+        "snippet": "\\framebox[${2:width}][${3:position}]{${1:text}}"
+    },
+    {
+        "name": "framebox[width]{text}",
+        "snippet": "\\framebox[${2:width}]{${1:text}}"
+    },
+    {
+        "name": "mathbb{text}",
+        "snippet": "\\mathbb{${0:text}}"
+    },
+    {
+        "name": "mathbf{text}",
+        "snippet": "\\mathbf{${0:text}}"
+    },
+    {
+        "name": "mathcal{text}",
+        "snippet": "\\mathcal{${0:text}}"
+    },
+    {
+        "name": "mathds{text}",
+        "snippet": "\\mathds{${0:text}}"
+    },
+    {
+        "name": "mathit{text}",
+        "snippet": "\\mathit{${0:text}}"
+    },
+    {
+        "name": "mathnormal{text}",
+        "snippet": "\\mathnormal{${0:text}}"
+    },
+    {
+        "name": "mathrm{text}",
+        "snippet": "\\mathrm{${0:text}}"
+    },
+    {
+        "name": "mathscr{text}",
+        "snippet": "\\mathscr{${0:text}}"
+    },
+    {
+        "name": "mathsf{text}",
+        "snippet": "\\mathsf{${0:text}}"
+    },
+    {
+        "name": "mathtt{text}",
+        "snippet": "\\mathtt{${0:text}}"
+    },
+    {
+        "name": "quad",
+        "snippet": "\\quad"
+    },
+    {
+        "name": "qquad",
+        "snippet": "\\qquad"
+    },
+    {
+        "name": "ldot",
+        "definition": "."
+    }
+]

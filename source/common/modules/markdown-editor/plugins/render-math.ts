@@ -15,32 +15,28 @@
 import { getBlockMathRE, getInlineMathRenderRE } from '@common/regular-expressions'
 import CodeMirror from 'codemirror'
 import katex from 'katex'
-
 import 'katex/contrib/mhchem' // modify katex module
+import { LatexCommand } from '@providers/latex-commands'
+
+const ipcRenderer = window.ipc
 
 const multilineMathRE = getBlockMathRE()
 const commands = (CodeMirror.commands as any)
-commands.markdownRenderMath = function (cm: CodeMirror.Editor) {
+commands.markdownRenderMath = async function (cm: CodeMirror.Editor) {
   // First, find all math elements
   // We'll only render the viewport
   const viewport = cm.getViewport()
   let lines: LineInfo[] = []
   for (let i = viewport.from; i < viewport.to; i++) {
-    let modeName = cm.getModeAt({ 'line': i, 'ch': 0 }).name ?? ''
-    let tokenType = cm.getTokenTypeAt({ 'line': i, 'ch': 0 })
-    lines.push(new LineInfo(i, cm.getLine(i), modeName, tokenType))
+    lines.push(LineInfo.from(i, cm))
   }
   let equations = findEquations(lines)
 
   // Now cycle through all new markers and insert them, if they weren't already
   for (let myMarker of equations) {
     let cur = cm.getCursor('from')
-    let isMulti = myMarker.curFrom.line !== myMarker.curTo.line
-    if (isMulti && cur.line >= myMarker.curFrom.line && cur.line <= myMarker.curTo.line) {
-      // We're directly in the multiline equation, so don't render.
-      continue
-    } else if (!isMulti && cur.line === myMarker.curFrom.line && cur.ch >= myMarker.curFrom.ch && cur.ch <= myMarker.curTo.ch) {
-      // Again, we're right in the middle of an inline-equation, so don't render.
+    if (myMarker.isInEquation(cur)) {
+      // We are in the middle of an equation, so don't render
       continue
     }
 
@@ -77,7 +73,21 @@ commands.markdownRenderMath = function (cm: CodeMirror.Editor) {
     // Enable on-click closing of rendered Math elements.
     mathSpan.onclick = (e) => { textMarker.clear() }
 
-    katex.render(myMarker.eq, mathSpan, { throwOnError: false, displayMode: myMarker.displayMode })
+    // Create list of custom commands
+    const commands = await ipcRenderer.invoke('assets-provider', { command: 'getLatexCommands' }) as LatexCommand[]
+    const macros = commands
+      .filter(command => command.definition !== undefined)
+      .reduce<Record<string, string>>((map, command) => {
+      map['\\' + command.name] = command.definition ?? ''
+      return map
+    }, {})
+
+    // Render the equation
+    katex.render(myMarker.eq, mathSpan, {
+      throwOnError: false,
+      displayMode: myMarker.displayMode,
+      macros: macros
+    })
 
     // Now the marker has obviously changed
     if (textMarker.find() !== undefined) {
@@ -95,6 +105,12 @@ export class LineInfo {
     readonly modeName: string,
     readonly tokenType?: string
   ) {}
+
+  static from (n: number, editor: CodeMirror.Editor): LineInfo {
+    let modeName = editor.getModeAt({ 'line': n, 'ch': 0 }).name ?? ''
+    let tokenType = editor.getTokenTypeAt({ 'line': n, 'ch': 0 })
+    return new LineInfo(n, editor.getLine(n), modeName, tokenType)
+  }
 }
 
 export class EquationMarker {
@@ -104,6 +120,19 @@ export class EquationMarker {
     readonly eq: string,
     readonly displayMode: boolean
   ) {}
+
+  isInEquation (position: CodeMirror.Position): boolean {
+    let isMulti = this.curFrom.line !== this.curTo.line
+    if (isMulti && position.line >= this.curFrom.line && position.line <= this.curTo.line) {
+      // We're directly in the multiline equation
+      return true
+    } else if (!isMulti && position.line === this.curFrom.line && position.ch >= this.curFrom.ch && position.ch <= this.curTo.ch) {
+      // We're right in the middle of an inline-equation
+      return true
+    } else {
+      return false
+    }
+  }
 }
 
 /**

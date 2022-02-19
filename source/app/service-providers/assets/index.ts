@@ -13,13 +13,14 @@
  * END HEADER
  */
 
-import path from 'path'
-import { app, ipcMain } from 'electron'
-import { promises as fs } from 'fs'
-import YAML from 'yaml'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
-import ProviderContract from '../provider-contract'
+import { app, ipcMain } from 'electron'
+import { constants as fsConstants, promises as fs } from 'fs'
+import path from 'path'
+import YAML from 'yaml'
+import { getDefault as getDefaultLatexCommands, parse as parseLatexCommands } from '../latex-commands'
 import LogProvider from '../log'
+import ProviderContract from '../provider-contract'
 
 export default class AssetsProvider extends ProviderContract {
   /**
@@ -30,6 +31,7 @@ export default class AssetsProvider extends ProviderContract {
   private readonly _defaultsPath: string
   private readonly _snippetsPath: string
   private readonly _filterPath: string
+  private readonly _latexCommandsFile: string
 
   constructor (private readonly _logger: LogProvider) {
     super()
@@ -37,6 +39,7 @@ export default class AssetsProvider extends ProviderContract {
     this._defaultsPath = path.join(app.getPath('userData'), '/defaults')
     this._snippetsPath = path.join(app.getPath('userData'), '/snippets')
     this._filterPath = path.join(app.getPath('userData'), '/lua-filter')
+    this._latexCommandsFile = path.join(app.getPath('userData'), '/latex-commands.json')
 
     ipcMain.handle('assets-provider', async (event, message) => {
       const { command, payload } = message
@@ -62,6 +65,13 @@ export default class AssetsProvider extends ProviderContract {
         return await this.listSnippets()
       } else if (command === 'rename-snippet') {
         return await this.renameSnippet(payload.name, payload.newName)
+      } else if (command === 'getLatexCommands') {
+        try {
+          await fs.access(this._latexCommandsFile, fsConstants.F_OK)
+          return await parseLatexCommands(this._latexCommandsFile)
+        } catch {
+          return getDefaultLatexCommands()
+        }
       }
     })
   }

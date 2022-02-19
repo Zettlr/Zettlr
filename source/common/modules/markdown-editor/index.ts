@@ -31,6 +31,7 @@ import countWords from '@common/util/count-words'
 import { getConverter } from '@common/util/md-to-html'
 import generateKeymap from './generate-keymap'
 import generateTableOfContents from './util/generate-toc'
+import { LatexCommand } from '@providers/latex-commands'
 
 // Search plugin (module-namespaced set of utility functions)
 import { searchNext, searchPrevious, replaceNext, replacePrevious, replaceAll, stopSearch } from './plugins/search'
@@ -61,7 +62,7 @@ import taskItemClassHook from './hooks/task-item-classes'
 import muteLinesHook from './hooks/mute-lines'
 import renderElementsHook from './hooks/render-elements'
 import typewriterHook from './hooks/typewriter'
-import { autocompleteHook, setAutocompleteDatabase } from './hooks/autocomplete'
+import { autocompleteHook, AutocompletionDatabaseType, setAutocompleteDatabase } from './hooks/autocomplete'
 import linkTooltipsHook from './hooks/link-tooltips'
 import noteTooltipsHook from './hooks/note-preview'
 
@@ -249,10 +250,17 @@ export default class MarkdownEditor extends EventEmitter {
     })
 
     // Listen to updates from the assets provider
-    ipcRenderer.on('assets-provider', (event, which) => {
-      if (which === 'snippets-updated') {
-        // The snippet list has been updated, so we must reflect this.
-        this.updateSnippetAutocomplete().catch(err => console.error(err))
+    ipcRenderer.on('assets-provider', async (event, which) => {
+      try {
+        if (which === 'snippets-updated') {
+          // The snippet list has been updated, so we must reflect this.
+          await this.updateSnippetAutocomplete()
+        } else if (which === 'latexcommands-updated') {
+          // The latex command list has been updated, so we must reflect this.
+          await this.updateLatexAutocomplete()
+        }
+      } catch (err) {
+        console.error(err)
       }
     })
 
@@ -273,8 +281,9 @@ export default class MarkdownEditor extends EventEmitter {
       }
     })
 
-    // Initial retrieval of snippets
+    // Initial retrieval of snippets and latex commands
     this.updateSnippetAutocomplete().catch(err => console.error(err))
+    this.updateLatexAutocomplete().catch(err => console.error(err))
   } // END CONSTRUCTOR
 
   // SEARCH FUNCTIONALITY
@@ -483,10 +492,10 @@ export default class MarkdownEditor extends EventEmitter {
   /**
    * Sets an autocomplete database of given type to a new value
    *
-   * @param   {String}  type      The type of the database
+   * @param   {AutocompletionDatabaseType}  type      The type of the database
    * @param   {Object}  database  The show-hint-addon compatible database
    */
-  setCompletionDatabase (type: string, database: any): void {
+  setCompletionDatabase (type: AutocompletionDatabaseType, database: any): void {
     setAutocompleteDatabase(type, database)
   }
 
@@ -511,6 +520,21 @@ export default class MarkdownEditor extends EventEmitter {
     }
 
     this.setCompletionDatabase('snippets', snippetsDB)
+  }
+
+  /**
+   * Updates the list of available latex commands.
+   */
+  async updateLatexAutocomplete (): Promise<void> {
+    const commands = await ipcRenderer.invoke('assets-provider', { command: 'getLatexCommands' }) as LatexCommand[]
+    const database = commands
+      .map(command => {
+        return {
+          'text': command.snippet,
+          'displayText': command.displayText
+        }
+      })
+    this.setCompletionDatabase('latexCommands', database)
   }
 
   /* * * * * * * * * * * *
