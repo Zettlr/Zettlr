@@ -72,9 +72,19 @@
                 title="This relation is based on tag similarity."
               ></clr-icon>
               <clr-icon
-                v-if="fileRecord.backlink"
-                shape="link"
-                title="This relation is based on a backlink"
+                v-if="fileRecord.link === 'inbound'"
+                shape="arrow left"
+                title="This relation is based on a backlink."
+              ></clr-icon>
+              <clr-icon
+                v-else-if="fileRecord.link === 'outbound'"
+                shape="arrow right"
+                title="This relation is based on an outbound link."
+              ></clr-icon>
+              <clr-icon
+                v-else-if="fileRecord.link === 'bidirectional'"
+                shape="two-way-arrows"
+                title="This relation is based on a bidirectional link."
               ></clr-icon>
             </span>
           </div>
@@ -150,7 +160,7 @@ interface RelatedFile {
   file: string
   path: string
   tags: string[]
-  backlink: boolean
+  link: 'inbound'|'outbound'|'bidirectional'|'none'
 }
 
 export default defineComponent({
@@ -322,18 +332,33 @@ export default defineComponent({
 
       // Then retrieve the inbound links first, since that is the most important
       // relation, so they should be on top of the list.
-      const { inbound /* , outbound */ } = await ipcRenderer.invoke('link-provider', {
+      const { inbound, outbound } = await ipcRenderer.invoke('link-provider', {
         command: 'get-inbound-links',
         payload: { filePath: this.activeFile.path }
-      })
+      }) as { inbound: string[], outbound: string[]}
 
-      for (const absPath of inbound) {
-        unreactiveList.push({
+      for (const absPath of [ ...inbound, ...outbound ]) {
+        const found = unreactiveList.find(elem => elem.path === absPath)
+        if (found !== undefined) {
+          continue
+        }
+
+        const related: RelatedFile = {
           file: path.basename(absPath),
           path: absPath,
           tags: [],
-          backlink: true
-        })
+          link: 'none'
+        }
+
+        if (inbound.includes(absPath) && outbound.includes(absPath)) {
+          related.link = 'bidirectional'
+        } else if (inbound.includes(absPath)) {
+          related.link = 'inbound'
+        } else {
+          related.link = 'outbound'
+        }
+
+        unreactiveList.push(related)
       }
 
       // The second way files can be related to each other is via shared tags.
@@ -356,7 +381,7 @@ export default defineComponent({
             file: path.basename(filePath),
             path: filePath,
             tags: recommendations[filePath],
-            backlink: false
+            link: 'none'
           })
         }
       }
@@ -366,13 +391,13 @@ export default defineComponent({
       // 1. Backlinks that also share common tags
       // 2. Backlinks that do not share common tags
       // 3. Files that only share common tags
-      const backlinksAndTags = unreactiveList.filter(e => e.backlink && e.tags.length > 0)
+      const backlinksAndTags = unreactiveList.filter(e => e.link !== 'none' && e.tags.length > 0)
       backlinksAndTags.sort((a, b) => { return b.tags.length - a.tags.length })
 
-      const backlinksOnly = unreactiveList.filter(e => e.backlink && e.tags.length === 0)
+      const backlinksOnly = unreactiveList.filter(e => e.link !== 'none' && e.tags.length === 0)
       // No sorting necessary
 
-      const tagsOnly = unreactiveList.filter(e => !e.backlink)
+      const tagsOnly = unreactiveList.filter(e => e.link === 'none')
       tagsOnly.sort((a, b) => { return b.tags.length - a.tags.length })
 
       this.relatedFiles = [ ...backlinksAndTags, ...backlinksOnly, ...tagsOnly ]

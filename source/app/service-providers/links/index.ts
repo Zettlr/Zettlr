@@ -52,20 +52,6 @@ export default class LinkProvider extends ProviderContract {
         return Object.fromEntries(this._fileLinkDatabase)
       }
     })
-
-    // // Listen to state changes within the FSAL
-    // this._app.fsal.on('fsal-state-changed', (which) => {
-    //   if (which === 'reset-history') { // 'fsal-state-changed', 'reset-history'
-    //     this._fsalHistoryTimestamp = 0
-    //   } else if (which === 'filetree') {
-    //     // Retrieve all new FSAL events and handle them
-    //     const events = this._app.fsal.filetreeHistorySince(this._fsalHistoryTimestamp)
-    //     for (const event of events) {
-    //       this._fsalHistoryTimestamp = event.timestamp
-    //       this._updateLinksFor(event.path)
-    //     }
-    //   }
-    // })
   }
 
   public async boot (): Promise<void> {
@@ -153,11 +139,20 @@ export default class LinkProvider extends ProviderContract {
    * @return  {string[]}                  A list of all files linking to sourceFile
    */
   retrieveInbound (sourceFilePath: string): string[] {
+    const descriptor = this._fsal.findFile(sourceFilePath)
+    if (descriptor === null || descriptor.type === 'code') {
+      return []
+    }
+
     const sourceFiles: string[] = []
+
+    const id = descriptor.id
+    const linkWithExt = descriptor.name
+    const linkWoExt = descriptor.name.replace(descriptor.ext, '')
 
     // Search all recorded links
     for (const [ file, outbound ] of this._fileLinkDatabase.entries()) {
-      if (outbound.includes(sourceFilePath)) {
+      if (outbound.includes(id) || outbound.includes(linkWithExt) || outbound.includes(linkWoExt)) {
         sourceFiles.push(file)
       }
     }
@@ -173,6 +168,20 @@ export default class LinkProvider extends ProviderContract {
    * @return  {string[]}                  A list of outbound links from source
    */
   retrieveOutbound (sourceFilePath: string): string[] {
-    return this._fileLinkDatabase.get(sourceFilePath) ?? []
+    const dbLinks = this._fileLinkDatabase.get(sourceFilePath)
+    if (dbLinks === undefined) {
+      return []
+    }
+
+    const outboundLinks: string[] = []
+
+    for (const link of dbLinks) {
+      const descriptor = this._fsal.findExact(link)
+      if (descriptor !== undefined) {
+        outboundLinks.push(descriptor.path)
+      }
+    }
+
+    return outboundLinks
   }
 }

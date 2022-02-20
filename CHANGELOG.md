@@ -1,3 +1,15 @@
+# 2.2.4
+
+## GUI and Functionality
+
+- Restores the display of links in the related files section of the sidebar
+- Differentiate between inbound, outbound, and bidirectional links in the
+  related files section
+
+## Under the Hood
+
+- Resolve links on-demand in the link provider
+
 # 2.2.3
 
 ## GUI and Functionality
