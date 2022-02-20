@@ -5,6 +5,11 @@
 - Restores the display of links in the related files section of the sidebar
 - Differentiate between inbound, outbound, and bidirectional links in the
   related files section
+- Fix related files display and link reporting
+- Added classes in order to conditionally style the related files section based
+  on the type of relation, the classes are `tags` if the relation is based on
+  keywords, `inbound` for incoming links, `outbound` for outgoing links, and
+  `bidirectional` for links from and to the said file
 
 ## Under the Hood
 

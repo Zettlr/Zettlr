@@ -57,7 +57,13 @@
           <div
             v-for="fileRecord, idx in relatedFiles"
             v-bind:key="idx"
-            class="related-file"
+            v-bind:class="{
+              'related-file': true,
+              'tags': fileRecord.tags.length > 0,
+              'inbound': fileRecord.link === 'inbound',
+              'outbound': fileRecord.link === 'outbound',
+              'bidirectional': fileRecord.link === 'bidirectional'
+            }"
           >
             <span
               class="filename"
