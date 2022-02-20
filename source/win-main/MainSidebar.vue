@@ -302,6 +302,10 @@ export default defineComponent({
       }
     })
 
+    ipcRenderer.on('links', () => {
+      this.updateRelatedFiles().catch(err => console.error(err))
+    })
+
     try {
       this.updateReferences().catch(e => console.error('Could not update references', e))
     } catch (err) {

@@ -113,7 +113,7 @@ export default class LinkProvider extends ProviderContract {
       this._fileLinkDatabase.set(path, newLinks)
       broadcastIpcMessage('links')
     } else {
-      const sameLinks = oldLinks.every((value, index) => value === newLinks[index])
+      const sameLinks = JSON.stringify(oldLinks) === JSON.stringify(newLinks)
 
       if (!sameLinks) {
         // Same file reporting different links
