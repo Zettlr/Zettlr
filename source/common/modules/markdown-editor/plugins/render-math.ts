@@ -17,7 +17,7 @@ import CodeMirror from 'codemirror'
 import katex from 'katex'
 
 import 'katex/contrib/mhchem' // modify katex module
-import clickAndClear from './click-and-clear'
+import clickAndClear from './util/click-and-clear'
 
 const multilineMathRE = getBlockMathRE()
 const commands = (CodeMirror.commands as any)

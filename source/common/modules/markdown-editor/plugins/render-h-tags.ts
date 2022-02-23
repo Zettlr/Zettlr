@@ -15,6 +15,7 @@
 import CodeMirror, { commands } from 'codemirror'
 import { getHeadRE } from '@common/regular-expressions'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
+import canRenderElement from './util/can-render-element'
 
 const headRE = getHeadRE()
 
@@ -37,18 +38,10 @@ const headRE = getHeadRE()
 
     const headingLevel = match[1].length
 
-    let curFrom = cm.getCursor('from')
-    const curTo = { 'line': i, 'ch': headingLevel }
+    const curFrom = { line: i, ch: 0 }
+    const curTo = { line: i, ch: headingLevel }
 
-    if (curFrom.line === i && curFrom.ch < headingLevel && curFrom.ch > 0) {
-      // We're directly in the formatting so don't render.
-      continue
-    }
-
-    curFrom = { 'line': i, 'ch': 0 }
-
-    // We can only have one marker at any given position at any given time
-    if (cm.findMarks(curFrom, curTo).length > 0) {
+    if (!canRenderElement(cm, curFrom, curTo)) {
       continue
     }
 

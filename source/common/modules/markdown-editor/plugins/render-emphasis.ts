@@ -13,6 +13,7 @@
   */
 
 import CodeMirror, { commands } from 'codemirror'
+import canRenderElement from './util/can-render-element'
 
 // const emphasisRE = /(?<![\\])(?<=\s|^)([*_]{1,3}|~{2})((?!\s)[^*_]+?(?<![\s\\]))(?:[*_]{1,3}|~{2})(?=\s|$)/g
 const emphasisRE = /(?<![\\\w])([*_]{1,3}|~{2})((?!\s)[^*_]+?(?![\s\\]))(?:[*_]{1,3}|~{2})(?![\\\w])/g
@@ -39,14 +40,7 @@ const emphasisRE = /(?<![\\\w])([*_]{1,3}|~{2})((?!\s)[^*_]+?(?![\s\\]))(?:[*_]{
       const from = { line: i, ch: match.index as number }
       const to = { line: i, ch: match.index as number + match[0].length }
 
-      const cur = cm.getCursor('from')
-      if (cur.line === from.line && cur.ch >= from.ch && cur.ch <= to.ch) {
-        // Cursor is in selection: Do not render.
-        continue
-      }
-
-      // We can only have one marker at any given position at any given time
-      if (cm.findMarks(from, to).length > 0) {
+      if (!canRenderElement(cm, from, to)) {
         continue
       }
 

@@ -18,6 +18,7 @@ import CodeMirror, { commands } from 'codemirror'
 import { getImageRE } from '@common/regular-expressions'
 import makeAbsoluteURL from '@common/util/make-absolute-url'
 import { trans } from '@common/i18n-renderer'
+import canRenderElement from './util/can-render-element'
 
 // Image detection regex
 const imageRE = getImageRE()
@@ -69,27 +70,10 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
       }
 
       // Now get the precise beginning of the match and its end
-      let curFrom = { 'line': i, 'ch': match.index }
-      let curTo = { 'line': i, 'ch': match.index + match[0].length }
+      const curFrom = { line: i, ch: match.index }
+      const curTo = { line: i, ch: match.index + match[0].length }
 
-      let cur = cm.getCursor('from')
-      if (cur.line === curFrom.line && cur.ch >= curFrom.ch && cur.ch <= curTo.ch + 1) {
-        // Cursor is in selection: Do not render.
-        continue
-      }
-
-      // We can only have one marker at any given position at any given time
-      if (cm.findMarks(curFrom, curTo).length > 0) {
-        continue
-      }
-
-      // Do not render if it's inside a comment (in this case the mode will be
-      // markdown, but comments shouldn't be included in rendering)
-      // Final check to avoid it for as long as possible, as getTokenAt takes
-      // considerable time.
-      const tokenTypeBegin = cm.getTokenTypeAt(curFrom)
-      const tokenTypeEnd = cm.getTokenTypeAt(curTo)
-      if (tokenTypeBegin?.includes('comment') || tokenTypeEnd?.includes('comment')) {
+      if (!canRenderElement(cm, curFrom, curTo)) {
         continue
       }
 

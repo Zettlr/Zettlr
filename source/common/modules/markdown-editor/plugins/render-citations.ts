@@ -14,6 +14,7 @@
 
 import CodeMirror, { commands } from 'codemirror'
 import extractCitations from '@common/util/extract-citations'
+import canRenderElement from './util/can-render-element'
 const ipcRenderer = window.ipc
 
 /**
@@ -39,24 +40,7 @@ const ipcRenderer = window.ipc
       const curFrom = { line: i, ch: citation.from }
       const curTo = { line: i, ch: citation.to }
 
-      const cursorPosition = cm.getCursor('from')
-      if (cursorPosition.line === curFrom.line && cursorPosition.ch >= curFrom.ch && cursorPosition.ch <= curTo.ch) {
-        // Cursor is in selection: Do not render.
-        continue
-      }
-
-      // We can only have one marker at any given position at any given time
-      if (cm.findMarks(curFrom, curTo).length > 0) {
-        continue
-      }
-
-      // Do not render if it's inside a comment (in this case the mode will be
-      // markdown, but comments shouldn't be included in rendering)
-      // Final check to avoid it for as long as possible, as getTokenAt takes
-      // considerable time.
-      const tokenTypeBegin = cm.getTokenTypeAt(curFrom)
-      const tokenTypeEnd = cm.getTokenTypeAt(curTo)
-      if (tokenTypeBegin?.includes('comment') || tokenTypeEnd?.includes('comment')) {
+      if (!canRenderElement(cm, curFrom, curTo)) {
         continue
       }
 

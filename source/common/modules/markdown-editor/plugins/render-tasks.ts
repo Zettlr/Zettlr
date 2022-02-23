@@ -14,6 +14,7 @@
 
 import CodeMirror, { commands } from 'codemirror'
 import { getTaskRE } from '@common/regular-expressions'
+import canRenderElement from './util/can-render-element'
 
 const taskRE = getTaskRE() // Matches `- [ ]` and `- [x]`
 
@@ -40,17 +41,10 @@ const taskRE = getTaskRE() // Matches `- [ ]` and `- [x]`
     }
 
     const leadingSpaces = match[1].length ?? 0
-
-    if (cm.getCursor('from').line === i && cm.getCursor('from').ch < 5 + leadingSpaces) {
-      // We're directly in the formatting so don't render.
-      continue
-    }
-
     const curFrom = { line: i, ch: 0 + leadingSpaces }
     const curTo = { line: i, ch: 5 + leadingSpaces }
 
-    // We can only have one marker at any given position at any given time
-    if (cm.findMarks(curFrom, curTo).length > 0) {
+    if (!canRenderElement(cm, curFrom, curTo)) {
       continue
     }
 

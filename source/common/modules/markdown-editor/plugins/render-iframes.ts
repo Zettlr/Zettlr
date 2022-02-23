@@ -14,6 +14,7 @@
 
 import CodeMirror, { commands } from 'codemirror'
 import { getIframeRE } from '@common/regular-expressions'
+import canRenderElement from './util/can-render-element'
 
 const iframeRE = getIframeRE() // Matches all iframes
 
@@ -36,16 +37,10 @@ function renderIframe (src: string): HTMLIFrameElement {
       continue
     }
 
-    if (cm.getCursor('from').line === i) {
-      // We're directly in the formatting so don't render.
-      continue
-    }
+    const curFrom = { 'line': i, 'ch': 0 }
+    const curTo = { 'line': i, 'ch': match[0].length }
 
-    let curFrom = { 'line': i, 'ch': 0 }
-    let curTo = { 'line': i, 'ch': match[0].length }
-
-    // We can only have one marker at any given position at any given time
-    if (cm.findMarks(curFrom, curTo).length > 0) {
+    if (!canRenderElement(cm, curFrom, curTo)) {
       continue
     }
 
@@ -57,9 +52,9 @@ function renderIframe (src: string): HTMLIFrameElement {
     const hostname = (new URL(iframeSrc)).hostname
 
     // Check if the hostname is part of our whitelist
-    const whitelist = window.config.get('system.iframeWhitelist')
+    const whitelist: string[] = window.config.get('system.iframeWhitelist')
 
-    if (whitelist.includes(hostname) === true) {
+    if (whitelist.includes(hostname)) {
       // The hostname is part of the whitelist, so let's immediately render it.
       cm.markText(
         curFrom, curTo,

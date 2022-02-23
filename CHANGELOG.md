@@ -22,6 +22,8 @@
 - Resolve links on-demand in the link provider
 - Factor out the `clickAndClear` functionality to its own helper
 - Improve editor image CSS
+- Factor out the checks to see if we can render some element to unify behavior
+  across rendering plugins
 
 # 2.2.3
 
