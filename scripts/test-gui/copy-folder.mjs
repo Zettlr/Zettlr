@@ -6,10 +6,11 @@
  * @return  {String[]}  The absolute paths of all roots
  */
 
-const fs = require('fs').promises
-const { lstatSync } = require('fs')
-const path = require('path')
-const log = require('../console-colour')
+import { promises as fs, lstatSync } from 'fs'
+import { join, dirname } from 'path'
+import { verbose } from '../console-colour.mjs'
+
+const __dirname = dirname(import.meta.url.substring(7))
 
 const isDir = function isDir (p) {
   try {
@@ -21,8 +22,8 @@ const isDir = function isDir (p) {
 }
 
 
-module.exports = async (destinationPath) => {
-  let sourcePath = path.join(__dirname, 'test-files')
+export default async (destinationPath) => {
+  let sourcePath = join(__dirname, 'test-files')
 
   await copyRecursive(sourcePath, destinationPath)
 
@@ -30,7 +31,7 @@ module.exports = async (destinationPath) => {
   let roots = await fs.readdir(destinationPath)
 
   // Return the absolute paths
-  return roots.map(root => { return path.join(destinationPath, root) })
+  return roots.map(root => { return join(destinationPath, root) })
 }
 
 /**
@@ -40,21 +41,21 @@ module.exports = async (destinationPath) => {
  * @param   {String}  targetPath   The absolute path to the target directory
  */
 async function copyRecursive (currentPath, targetPath) {
-  log.verbose(`Copying ${currentPath} ...`)
+  verbose(`Copying ${currentPath} ...`)
   if (!await isDir(currentPath)) {
     await fs.copyFile(currentPath, targetPath)
   } else {
     try {
       await fs.mkdir(targetPath) // Create the directory immediately
     } catch (e) {
-      log.verbose('Could not create directory, as it already exists.')
+      verbose('Could not create directory, as it already exists.')
     }
 
     let children = await fs.readdir(currentPath)
     for (let child of children) {
       await copyRecursive(
-        path.join(currentPath, child),
-        path.join(targetPath, child)
+        join(currentPath, child),
+        join(targetPath, child)
       )
     } // END for
   } // END else

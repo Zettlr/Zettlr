@@ -5,7 +5,7 @@
             "Jonas Wunderlich \u003Cmail@jonas-wunderlich.de\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-01-31T19:08:54.000000Z"
+        "updated_at": "2022-02-10T22:20:59.000000Z"
     },
     "dialog": {
         "about": {
@@ -194,6 +194,7 @@
             },
             "avoid_new_tabs": "Vermeide neue Tabs f\u00fcr Dokumente, falls m\u00f6glich",
             "checkForBeta": "Informiere mich \u00fcber Beta-Releases",
+            "check_updates": "Automatisch auf Aktualisierungen \u00fcberpr\u00fcfen",
             "choose_file": "Datei w\u00e4hlen \u2026",
             "citation_database": "Zitationsdatenbank (CSL JSON oder BibTex)",
             "citations": {
@@ -217,6 +218,7 @@
                 "image_width": "Maximale Bildbreite (Prozent)",
                 "preview_info": "Hiermit bestimmst du, welche Elemente Zettlr darstellt",
                 "render_citations": "Zitationen darstellen",
+                "render_emphasis": "Hervorhebungen darstellen",
                 "render_htags": "\u00dcberschrift-Zeichen verstecken",
                 "render_iframes": "iframe-Elemente darstellen",
                 "render_images": "Bilder darstellen",
@@ -784,6 +786,7 @@
         "save_changes_save": "Speichern",
         "save_changes_select_dir": "Bitte w\u00e4hle ein Verzeichnis aus, damit die neue Datei gespeichert werden kann.",
         "save_changes_title": "\u00c4nderungen verwerfen?",
+        "save_file": "Datei speichern",
         "unknown_command": "Unbekannten Befehl erhalten: %s"
     },
     "toolbar": {

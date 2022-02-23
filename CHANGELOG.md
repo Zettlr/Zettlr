@@ -35,6 +35,8 @@ body div#tab-container {
 - Improve editor image CSS
 - Factor out the checks to see if we can render some element to unify behavior
   across rendering plugins
+- Update most pure Node scripts from CommonJS to ESM in order to support the new
+  versions of csso, chalk, and got
 
 # 2.2.3
 

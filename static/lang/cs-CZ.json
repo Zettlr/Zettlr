@@ -4,7 +4,7 @@
             "Ales Nehyba \u003Cneal.cz@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-01-27T20:47:55.000000Z"
+        "updated_at": "2022-02-15T20:13:38.000000Z"
     },
     "dialog": {
         "about": {
@@ -41,8 +41,10 @@
             "title": "Vlastn\u00ed CSS"
         },
         "defaults": {
+            "explanation": "Zde uprav\u00edte v\u00fdchoz\u00ed nastaven\u00ed pro import a export.",
             "exporting_title": "Export",
-            "importing_title": "Import"
+            "importing_title": "Import",
+            "restore": "Obnovit v\u00fdchoz\u00ed nastaven\u00ed"
         },
         "dir_new": {
             "placeholder": "N\u00e1zev slo\u017eky",
@@ -189,6 +191,7 @@
             },
             "avoid_new_tabs": "Pokud mo\u017eno, neotev\u00edrat soubory v nov\u00fdch z\u00e1lo\u017ek\u00e1ch",
             "checkForBeta": "Informovat o beta vyd\u00e1n\u00edch",
+            "check_updates": "Automaticky zji\u0161\u0165ovat aktualizace",
             "choose_file": "Vybrat soubor...",
             "citation_database": "Datab\u00e1ze citac\u00ed (CSL JSON nebo BibTex)",
             "citations": {
@@ -198,10 +201,15 @@
             "count_chars": "Po\u010d\u00edtat znaky m\u00edsto slov (nap\u0159. pro \u010d\u00edn\u0161tinu)",
             "creationtime": "\u010cas vytvo\u0159en\u00ed souboru",
             "dark_mode": "Tmav\u00fd re\u017eim",
+            "dark_mode_schedule": {
+                "end": "Tmav\u00fd re\u017eim ukon\u010dit",
+                "start": "Tmav\u00fd re\u017eim zah\u00e1jit"
+            },
             "debug": "Povolit v\u00fdvoj\u00e1\u0159sk\u00fd re\u017eim",
             "default_image_save_path": "V\u00fdchoz\u00ed cesta k obr\u00e1zk\u016fm (relativn\u00ed nebo absolutn\u00ed)",
             "delete_on_fail": "Polo\u017eku, kterou nelze p\u0159esunout do ko\u0161e, smazat trvale",
             "display": {
+                "hide_toolbar_distraction_free": "Skr\u00fdt n\u00e1strojovou li\u0161tu v re\u017eimu soust\u0159ed\u011bn\u00ed",
                 "image_height": "Maxim\u00e1ln\u00ed v\u00fd\u0161ka obr\u00e1zk\u016f (procenta)",
                 "image_size_info": "Zde m\u016f\u017eete omezit n\u00e1hledy obr\u00e1zk\u016f.",
                 "image_width": "Maxim\u00e1ln\u00ed \u0161\u00ed\u0159ka obr\u00e1zk\u016f (procenta)",
@@ -216,6 +224,7 @@
                 "title": "Zobrazit",
                 "use_first_headings": "Pokud existuje, pou\u017e\u00edt prvn\u00ed z nadpis\u016f \u00farovn\u011b 1 jako n\u00e1zev souboru"
             },
+            "display_markdown_file_extensions": "Zobrazit p\u0159\u00edpony soubor\u016f markdown",
             "display_time_explanation": "Zobrazit metadata souboru",
             "editor": "Editor",
             "editor_font_size": "Velikost p\u00edsma v editoru",
@@ -245,6 +254,13 @@
             "filemanager_expanded": "Roz\u0161\u00ed\u0159en\u00fd &mdash; zobrazit adres\u00e1\u0159ovou strukturu a seznam soubor\u016f",
             "filemanager_explanation": "Re\u017eim spr\u00e1vce soubor\u016f",
             "filemanager_thin": "\u00datl\u00fd &mdash; zobrazit bu\u010f adres\u00e1\u0159ovou strukturu nebo seznam soubor\u016f",
+            "filename_display": {
+                "filename_only": "Pouze n\u00e1zvy soubor\u016f",
+                "heading": "Prvn\u00ed nadpis prvn\u00ed \u00farovn\u011b",
+                "label": "Zobrazen\u00ed soubor\u016f",
+                "title": "N\u00e1zev, pokud je to mo\u017en\u00e9",
+                "title_heading": "N\u00e1zev nebo prvn\u00ed nadpis prvn\u00ed \u00farovn\u011b"
+            },
             "filename_generator": "\u0160ablona pro nov\u00e9 n\u00e1zvy soubor\u016f",
             "formatting_characters_explanation": "Vyberte form\u00e1tovac\u00ed znaky,  kter\u00e9 se maj\u00ed pou\u017e\u00edt pro form\u00e1tov\u00e1n\u00ed tu\u010dn\u00e9ho/zv\u00fdrazn\u011bn\u00e9ho p\u00edsma",
             "general": "Obecn\u00e9",
@@ -304,6 +320,7 @@
             "project": {
                 "csl_style": "CSL style (voliteln\u00e9)",
                 "format": "Exportovat projekt do:",
+                "name_label": "Form\u00e1t",
                 "title": "Nastaven\u00ed projektu",
                 "title_label": "N\u00e1zev projektu",
                 "use_label": "Pou\u017e\u00edt"
@@ -311,6 +328,7 @@
             "readability_algorithm": "Algoritmus pro ov\u011b\u0159en\u00ed \u010ditelnosti",
             "reset_pandoc_command": "Resetovat pandoc p\u0159\u00edkaz",
             "show_app_in_the_notification_area": "Zobrazit aplikaci v oznamovac\u00ed oblasti",
+            "sort_folders_first": "Zobrazit slo\u017eky p\u0159ed soubory",
             "sorting_ascii": "ASCII po\u0159ad\u00ed (2 po 10)",
             "sorting_explanation": "Po\u0159ad\u00ed \u0159azen\u00ed soubor\u016f (pro \u0159azen\u00ed podle n\u00e1zvu)",
             "sorting_natural": "P\u0159irozen\u00e9 po\u0159ad\u00ed (10 po 2)",
@@ -323,7 +341,10 @@
             },
             "theme": {
                 "accent_color_info": "Tato volba je dostupn\u00e1 pouze na Windows a macOS",
+                "accent_color_label": "Pou\u017e\u00edt syst\u00e9movou barvu zv\u00fdrazn\u011bn\u00ed m\u00edsto barvy t\u00e9matu",
                 "info": "Vyberte grafick\u00e9 t\u00e9ma aplikace.",
+                "select_label": "klepn\u011bte pro v\u00fdb\u011br",
+                "selected_label": "vybr\u00e1no",
                 "title": "T\u00e9ma"
             },
             "title": "Mo\u017enosti",
@@ -341,11 +362,14 @@
             "watchdog_checkbox_label": "Aktivovat hl\u00edd\u00e1n\u00ed zm\u011bn",
             "watchdog_explainer": "N\u011bkdy m\u016f\u017ee Zettlr hl\u00e1sit p\u0159\u00edli\u0161 mnoho zm\u011bn ve vzd\u00e1len\u00fdch souborech. Pokud se to d\u011bje, zkuste aktivovat toto nastaven\u00ed.",
             "watchdog_threshold_label": "Jak dlouho \u010dekat ne\u017e je z\u00e1pis souboru pova\u017eov\u00e1n za ukon\u010den\u00fd (v ms)",
+            "whitelist": "Whitelist pro vykreslen\u00ed iFrame",
+            "whitelist_hostname": "Hostname",
             "xelatex": "Cesta k programu xelatex. M\u011b\u0148te pouze pokud Zettlr nedok\u00e1\u017ee program naj\u00edt.",
             "xelatex_default": "V\u00fdchoz\u00ed: xelatex",
             "zkn": {
                 "auto_create_file": "Automaticky vytv\u00e1\u0159et neexistuj\u00edc\u00ed soubory p\u0159i n\u00e1sledov\u00e1n\u00ed vnit\u0159n\u00edch odkaz\u016f",
                 "auto_search": "Spustit hled\u00e1n\u00ed p\u0159i n\u00e1sledov\u00e1n\u00ed odkaz\u016f kartot\u00e9ky",
+                "custom_directory": "Automaticky vytv\u00e1\u0159en\u00e9 soubory ukl\u00e1dat do slo\u017eky (mus\u00ed b\u00fdt nahran\u00e1 do Zettlr)",
                 "generated_id": "Vygenerovan\u00e9 ID",
                 "id_generator_label": "Vzor pro generov\u00e1n\u00ed nov\u00fdch ID.",
                 "id_label": "Regul\u00e1rn\u00ed v\u00fdraz ID",
@@ -387,7 +411,8 @@
             "month": "M\u011bs\u00edc",
             "previous_frame": "P\u0159edchoz\u00ed \u010dasov\u00fd r\u00e1mec",
             "tabs": {
-                "calendar_label": "Kalend\u00e1\u0159"
+                "calendar_label": "Kalend\u00e1\u0159",
+                "chart_label": "Grafy"
             },
             "this_frame": "Aktu\u00e1ln\u00ed \u010dasov\u00fd r\u00e1mec",
             "title": "Autorsk\u00e9 statistiky",
@@ -431,7 +456,8 @@
             "start_update_label": "Klepnut\u00edm spust\u00edte aktualizaci",
             "start_update_message": "Spou\u0161t\u00ed se aktualizace ...",
             "title": "Je dostupn\u00e1 aktualizace",
-            "transmission_error": "Nelze zkontrolovat aktualizace: Spojen\u00ed p\u0159eru\u0161eno."
+            "transmission_error": "Nelze zkontrolovat aktualizace: Spojen\u00ed p\u0159eru\u0161eno.",
+            "window_title": "Aktualizace"
         }
     },
     "gui": {
@@ -499,10 +525,14 @@
             "ul": "Odr\u00e1\u017ekov\u00fd seznam"
         },
         "global_search": {
+            "clear_label": "Vy\u010distit pole",
+            "filter_label": "Filtrovat v\u00fdsledky hled\u00e1n\u00ed",
             "query_placeholder": "Naj\u00edt ...",
             "restrict_dir_label": "Hledat pouze ve slo\u017ece",
             "restrict_dir_placeholder": "Hledat ve slo\u017ece ...",
-            "search_label": "Hledat"
+            "search_label": "Hledat",
+            "title": "Fulltextov\u00e9 hled\u00e1n\u00ed",
+            "toggle_label": "Rozbalit v\u00fdsledky"
         },
         "modified": "Zm\u011bn\u011bno",
         "months": {
@@ -602,6 +632,7 @@
         "open_link": "Otev\u0159\u00edt odkaz",
         "open_logs": "Otev\u0159\u00edt logy",
         "open_new_tab": "Otev\u0159\u00edt na nov\u00e9 z\u00e1lo\u017ece",
+        "open_tutorial": "Otev\u0159\u00edt Tutori\u00e1l",
         "open_workspace": "Otev\u0159\u00edt plochu...",
         "pandoc": "Z\u00edskat Pandoc",
         "paste": "Vlo\u017eit",
@@ -621,7 +652,7 @@
         "rename_dir": "P\u0159ejmenovat slo\u017eku",
         "rename_file": "P\u0159ejmenovat soubor",
         "rescan_dir": "Hledat slo\u017eku...",
-        "reset_zoom": "Resetovat p\u0159bl\u00ed\u017een\u00ed",
+        "reset_zoom": "Resetovat p\u0159ibl\u00ed\u017een\u00ed",
         "save": "Ulo\u017eit",
         "select_all": "Vybrat v\u0161e",
         "services": "Slu\u017eby",
@@ -692,6 +723,7 @@
             "fnf_title": "Soubor nebyl nalezen",
             "ignored_dir_message": "Aplikace nem\u016f\u017ee otev\u0159\u00edt slo\u017eku &quot;%s&quot;.",
             "ignored_dir_title": "Slo\u017eku nelze otev\u0159\u00edt",
+            "image_not_found": "Obr\u00e1zek nenalezen: %s",
             "malformed_textbundle": "Chybn\u00fd Textbundle: %s",
             "move_into_child_message": "Slo\u017eku nelze p\u0159esunout do jej\u00ed podslo\u017eky.",
             "move_into_child_title": "Slo\u017eku nelze p\u0159esunout",
@@ -737,6 +769,7 @@
         "save_changes_save": "Ulo\u017eit",
         "save_changes_select_dir": "Vyberte slo\u017eku, aby bylo mo\u017en\u00e9 ulo\u017eit nov\u00fd soubor.",
         "save_changes_title": "Zahodit neulo\u017een\u00e9 zm\u011bny?",
+        "save_file": "Ulo\u017eit soubor",
         "unknown_command": "Nezn\u00e1m\u00fd p\u0159\u00edkaz: %s"
     },
     "toolbar": {

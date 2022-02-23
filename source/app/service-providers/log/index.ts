@@ -41,7 +41,7 @@ enum LogLevel {
 const debugConsole = {
   error: function (message: string) { console.error(chalk.bold.red(message)) },
   warn: function (message: string) { console.warn(chalk.yellow(message)) },
-  info: function (message: string) { console.log(chalk.keyword('cornflowerblue')(message)) },
+  info: function (message: string) { console.log(chalk.blueBright(message)) },
   verbose: function (message: string) { console.log(chalk.grey(message)) }
 }
 

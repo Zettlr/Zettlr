@@ -9,37 +9,39 @@
  * might miss out some features/potential bugs.
  */
 
-const fs = require('fs').promises
-const path = require('path')
-const rimraf = require('rimraf')
-const { spawn } = require('child_process')
+import { promises as fs } from 'fs'
+import { join, basename, dirname } from 'path'
+import rimraf from 'rimraf'
+import { spawn } from 'child_process'
 
-const makeConfig = require('./make-config')
-const copyFolder = require('./copy-folder')
+import makeConfig from './make-config.mjs'
+import copyFolder from './copy-folder.mjs'
 
-const log = require('../console-colour')
+import { info, error, success, verbose, warn } from '../console-colour.mjs'
 
-const TEST_DIRECTORY = path.join(__dirname, '../../resources/test')
-const CONF_DIRECTORY = path.join(__dirname, '../../resources/test-cfg')
-const CONFIG_FILE = path.join(__dirname, '../../resources/test-cfg/config.json')
+const __dirname = dirname(import.meta.url.substring(7))
+
+const TEST_DIRECTORY = join(__dirname, '../../resources/test')
+const CONF_DIRECTORY = join(__dirname, '../../resources/test-cfg')
+const CONFIG_FILE = join(__dirname, '../../resources/test-cfg/config.json')
 
 // Test if we should nuke the old test environment, or simply start
 // with the old one (useful for testing persistence of settings)
 if (process.argv.includes('--clean')) {
-  log.info('☢️ Nuking test environment ...')
+  info('☢️ Nuking test environment ...')
   prepareEnvironment().then(() => {
     console.log('') // Empty line
     let argv = process.argv.slice(2)
     argv.splice(argv.indexOf('--clean'), 1)
     startApp(argv)
   }).catch(err => {
-    log.error(err.message)
+    error(err.message)
     // Add a console.error with the full error for stack trace, etc.
     console.error(err)
   })
 } else {
   // Start the app retaining the directory structure.
-  log.info('Starting app with old test environment ...')
+  info('Starting app with old test environment ...')
   startApp(process.argv.slice(2))
 }
 
@@ -53,10 +55,10 @@ async function prepareEnvironment () {
         resolve()
       })
     })
-    log.success('Removed the old testing directory.')
+    success('Removed the old testing directory.')
   } catch (e) {
     // Nothing to do
-    log.verbose('No old testing directory found.')
+    verbose('No old testing directory found.')
   }
 
   // Second, same but for the data directory
@@ -68,23 +70,23 @@ async function prepareEnvironment () {
         resolve()
       })
     })
-    log.success('Removed the old data directory.')
+    success('Removed the old data directory.')
   } catch (e) {
     // Nothing to do
-    log.verbose('No data directory found.')
+    verbose('No data directory found.')
   }
 
   // Fill in the file structure
-  log.info('Copying over testing directory into the resources folder ...')
+  info('Copying over testing directory into the resources folder ...')
   const roots = await copyFolder(TEST_DIRECTORY)
-  log.success('Done copying the testing files!')
+  success('Done copying the testing files!')
   await fs.mkdir(CONF_DIRECTORY, { recursive: true })
-  log.success('Created app data directory!')
+  success('Created app data directory!')
 
-  const readmeFile = roots.find(root => path.basename(root) === 'README.md')
+  const readmeFile = roots.find(root => basename(root) === 'README.md')
 
   // Now it's time to create the new config file
-  log.info('Creating new configuration file from test-config.yml ...')
+  info('Creating new configuration file from test-config.yml ...')
   let cfg = await makeConfig()
   cfg.openPaths = roots
   // Set the README.md file as open
@@ -100,14 +102,14 @@ async function prepareEnvironment () {
 
   // Finally, write the config file
   await fs.writeFile(CONFIG_FILE, JSON.stringify(cfg))
-  log.success(`Written file ${CONFIG_FILE}.`)
+  success(`Written file ${CONFIG_FILE}.`)
 }
 
 function startApp(argv = []) {
-  log.info('Starting Zettlr with custom configuration ...')
+  info('Starting Zettlr with custom configuration ...')
 
   if (argv.length > 0) {
-    log.warn('Supplying additional arguments to process: [' + argv.join(', ') + ']')
+    warn('Supplying additional arguments to process: [' + argv.join(', ') + ']')
   }
 
   // Make sure the correct command is run
@@ -116,7 +118,7 @@ function startApp(argv = []) {
   const forgeArgs = ['start', '--', `--data-dir="${CONF_DIRECTORY}"`, ...argv ]
   // Spawn's options: Use the root as CWD and pipe the process's stdio to the parent process.
   const spawnOptions = {
-    cwd: path.join(__dirname, '../../'),
+    cwd: join(__dirname, '../../'),
     stdio: [ process.stdin, process.stdout, process.stderr ]
   }
 
@@ -124,6 +126,6 @@ function startApp(argv = []) {
   const proc = spawn(command, forgeArgs, spawnOptions)
 
   proc.on('close', (code) => {
-    log.info(`Child process exited with code ${code}`)
+    info(`Child process exited with code ${code}`)
   })
 }
