@@ -14,6 +14,7 @@
 - Select the image markup when clearing a rendered image by clicking on it
 - Image captions do not disappear anymore while you are editing it, even if you
   move the mouse out of the image area
+- Improve icon alignment in the related files section
 
 ## Under the Hood
 
