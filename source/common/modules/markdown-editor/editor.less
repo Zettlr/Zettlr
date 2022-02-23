@@ -193,14 +193,15 @@
   // Deliver a much more fancy UX for images inserted into the editor
   .editor-image-container {
     display: inline-block;
+    position: relative;
     width: 100%;
     text-align: center;
     cursor: default;
 
     figure {
-      display: inline-block;
-      position: relative;
-      top: 0;
+      img {
+        display: inherit;
+      }
 
       &:hover {
         figcaption, span.image-size-info, span.open-externally-button {

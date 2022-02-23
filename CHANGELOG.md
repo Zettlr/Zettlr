@@ -17,6 +17,7 @@
 
 - Resolve links on-demand in the link provider
 - Factor out the `clickAndClear` functionality to its own helper
+- Improve editor image CSS
 
 # 2.2.3
 
