@@ -16,6 +16,14 @@
   move the mouse out of the image area
 - Improve icon alignment in the related files section
 - Relaxed conditions for emphasis rendering by just excluding word-characters
+- Added a smooth scrolling effect for the tab bar. If you don't like this effect
+  you can disable it with the following custom CSS:
+
+  ```
+  body div#tab-container {
+    scroll-behavior: auto;
+  }
+  ```
 
 ## Under the Hood
 

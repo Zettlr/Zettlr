@@ -410,6 +410,7 @@ body div#tab-container {
   // In case of an overflow, hide the scrollbar so that scrolling left/right
   // remains possible, but no thicc scrollbar in the way!
   &::-webkit-scrollbar { display: none; }
+  scroll-behavior: smooth;
 
   div[role="tab"] {
     display: inline-block;
