@@ -12,6 +12,8 @@
   `bidirectional` for links from and to the said file
 - Clicking on math now places the cursor correctly, reducing friction
 - Select the image markup when clearing a rendered image by clicking on it
+- Image captions do not disappear anymore while you are editing it, even if you
+  move the mouse out of the image area
 
 ## Under the Hood
 
