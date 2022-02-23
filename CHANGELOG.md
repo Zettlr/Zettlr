@@ -11,6 +11,7 @@
   keywords, `inbound` for incoming links, `outbound` for outgoing links, and
   `bidirectional` for links from and to the said file
 - Clicking on math now places the cursor correctly, reducing friction
+- Select the image markup when clearing a rendered image by clicking on it
 
 ## Under the Hood
 

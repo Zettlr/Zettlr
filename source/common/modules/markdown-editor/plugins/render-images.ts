@@ -189,7 +189,15 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
         isDataUrl = true
         caption.textContent = trans('system.error.image_not_found', url)
       }
-      img.onclick = () => { textMarker.clear() }
+      img.onclick = () => {
+        const range = textMarker.find()
+        if (range !== undefined) {
+          const { from, to } = range
+          cm.setSelection(from, to)
+          cm.focus()
+        }
+        textMarker.clear()
+      }
 
       // Update the image title on load to retrieve the real image size.
       img.onload = () => {
