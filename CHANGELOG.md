@@ -10,10 +10,12 @@
   on the type of relation, the classes are `tags` if the relation is based on
   keywords, `inbound` for incoming links, `outbound` for outgoing links, and
   `bidirectional` for links from and to the said file
+- Clicking on math now places the cursor correctly, reducing friction
 
 ## Under the Hood
 
 - Resolve links on-demand in the link provider
+- Factor out the `clickAndClear` functionality to its own helper
 
 # 2.2.3
 

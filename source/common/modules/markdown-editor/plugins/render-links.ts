@@ -15,6 +15,7 @@
 import CodeMirror, { commands } from 'codemirror'
 import makeAbsoluteURL from '@common/util/make-absolute-url'
 import openMarkdownLink from '../open-markdown-link'
+import clickAndClear from './click-and-clear'
 
 // This regular expression matches three different kinds of URLs:
 // 1. Linked images in the format [![Alt text](image/path.png)](www.link-target.tld)
@@ -227,9 +228,7 @@ const linkRE = /\[!\[([^[]*)\]\((.+)\)\]\((.+)\)|\[([^\]]+)\]\((.+?)\)|(((?:(?:a
         } else {
           // Clear the textmarker and set the cursor to where the
           // user has clicked the link.
-          textMarker.clear()
-          cm.setCursor(cm.coordsChar({ 'left': e.clientX, 'top': e.clientY }))
-          cm.focus()
+          clickAndClear(textMarker, cm)(e)
         }
       }
     } // END while-loop
