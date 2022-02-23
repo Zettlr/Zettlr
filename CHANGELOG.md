@@ -1,20 +1,22 @@
 # 2.2.4
 
+This update changes the scroll effect on the document tab bar to be smooth
+instead of snappy. To revert to the old behavior, you can use the following
+Custom CSS:
+
+```
+body div#tab-container {
+  scroll-behavior: auto;
+}
+```
+
 ## GUI and Functionality
 
 - Restores the display of links in the related files section of the sidebar
 - Differentiate between inbound, outbound, and bidirectional links in the
   related files section
 - Fix related files display and link reporting
-- Added a smooth scrolling effect for the tab bar. If you don't like this
-  effect you can disable it with the following custom CSS:
-
-  ```
-  body div#tab-container {
-    scroll-behavior: auto;
-  }
-  ```
-
+- Added a smooth scrolling effect for the tab bar
 - Added classes in order to conditionally style the related files section based
   on the type of relation, the classes are `tags` if the relation is based on
   keywords, `inbound` for incoming links, `outbound` for outgoing links, and
