@@ -14,7 +14,8 @@
 
 import CodeMirror, { commands } from 'codemirror'
 
-const emphasisRE = /(?<![\\])(?<=\s|^)([*_]{1,3}|~{2})((?!\s)[^*_]+?(?<![\s\\]))(?:[*_]{1,3}|~{2})(?=\s|$)/g
+// const emphasisRE = /(?<![\\])(?<=\s|^)([*_]{1,3}|~{2})((?!\s)[^*_]+?(?<![\s\\]))(?:[*_]{1,3}|~{2})(?=\s|$)/g
+const emphasisRE = /(?<![\\\w])([*_]{1,3}|~{2})((?!\s)[^*_]+?(?![\s\\]))(?:[*_]{1,3}|~{2})(?![\\\w])/g
 
 /**
  * Declare the markdownRenderEmphasis command

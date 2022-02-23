@@ -15,6 +15,7 @@
 - Image captions do not disappear anymore while you are editing it, even if you
   move the mouse out of the image area
 - Improve icon alignment in the related files section
+- Relaxed conditions for emphasis rendering by just excluding word-characters
 
 ## Under the Hood
 
