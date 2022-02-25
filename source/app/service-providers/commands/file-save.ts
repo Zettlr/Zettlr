@@ -76,6 +76,31 @@ export default class SaveFile extends ZettlrCommand {
         this._app.log.info(`Saving file to ${newPath}...`)
         await fs.writeFile(newPath, file.newContents)
 
+        const isPartOfAnyWorkspace = this._app.fsal.findDir(path.dirname(newPath)) !== null
+
+        await new Promise((resolve, reject) => {
+          // If the file we just created is part of any of the loaded
+          // directories we must wait for the FSAL to pick up these changes,
+          // because if we run the other functionality below BEFORE the FSAL has
+          // picked up the changes, somehow the watchdog will not emit the
+          // corresponding event. I currently suspect some race condition
+          // because openFile will attach a secondary chokidar watcher to the
+          // same file, and it might be that the document manager's watcher just
+          // swallows the add-event so that the FSAL will never receive it. For
+          // now: If the FSAL will eventually find the file, wait for it (with a
+          // bail out after 5 secs), and otherwise resolve now
+          if (!isPartOfAnyWorkspace) {
+            resolve(true)
+          }
+
+          this._app.fsal.once('fsal-state-changed', (which: string, potentialPath: string|undefined) => {
+            if (which === 'filetree' && potentialPath === newPath) {
+              resolve(true)
+            }
+          })
+          setTimeout(function () { resolve(true) }, 5000)
+        })
+
         // Now that the file exists we can close the "untitled" file and
         // immediately open the file just created. Also, don't forget to set it
         // as "active" so that the user doesn't notice that we actually replaced

@@ -30,6 +30,8 @@ body div#tab-container {
 - Tab characters are no longer detected as spelling errors
 - You can now choose to indent using tab characters instead of spaces
 - Do not close the file left to a new usaved file upon saving the file
+- Fixed a weird race condition in which the file manager would remain ignorant
+  of an in-memory file after it has been saved to disk
 
 ## Under the Hood
 
