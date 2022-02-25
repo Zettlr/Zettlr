@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs'
 import { join, dirname } from 'path'
-import * as YAML from 'yaml'
+import YAML from 'yaml'
 import { info } from '../console-colour.mjs'
 
 const __dirname = dirname(import.meta.url.substring(7))
