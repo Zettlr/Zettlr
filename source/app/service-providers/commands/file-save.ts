@@ -81,7 +81,7 @@ export default class SaveFile extends ZettlrCommand {
         // as "active" so that the user doesn't notice that we actually replaced
         // the file.
         this._app.documents.closeFile(realFile)
-        const descriptor = await this._app.documents.openFile(newPath)
+        const descriptor = await this._app.documents.openFile(newPath, true)
         this._app.documents.activeFile = descriptor
       } else {
         // Save a normal file
