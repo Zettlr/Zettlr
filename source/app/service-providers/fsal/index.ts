@@ -179,6 +179,10 @@ export default class FSAL extends ProviderContract {
     this._emitter.on(evt, callback)
   }
 
+  once (evt: string, callback: (...args: any[]) => void): void {
+    this._emitter.once(evt, callback)
+  }
+
   // Also do the same for the removal of listeners
   off (evt: string, callback: (...args: any[]) => void): void {
     this._emitter.off(evt, callback)
