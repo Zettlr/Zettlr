@@ -63,6 +63,8 @@ export default function getCodeMirrorDefaultOptions (mdEditorInstance: MarkdownE
     lineWrapping: true,
     // Pandoc requires 4 spaces indentation, which is the default
     indentUnit: 4,
+    // Whether or not to use tabs for indentation
+    indentWithTabs: false,
     autoCloseBrackets: true,
     // Use the default keyMap (needs to be specified for changes to be applied)
     keyMap: 'default',

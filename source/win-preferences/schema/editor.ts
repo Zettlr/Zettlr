@@ -60,6 +60,11 @@ export default function (): any {
           model: 'editor.indentUnit'
         },
         {
+          type: 'checkbox',
+          label: trans('dialog.preferences.indent_with_tabs'),
+          model: 'editor.indentWithTabs'
+        },
+        {
           type: 'number',
           label: trans('dialog.preferences.editor_font_size'),
           model: 'editor.fontSize'

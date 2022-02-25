@@ -23,7 +23,7 @@ const codeRE = getCodeRE()
 const zknTagRE = getZknTagRE()
 const footnoteRefRE = getFootnoteRefRE()
 // NOTE: The whitespace after ~ are first a normal space, then an NBSP
-const delim = '¡!#$%&()*+,-./:;<=>¿?@[\\]^_`{|}~  «„「『』"“”–—…÷'
+const delim = '¡!#$%&()*+,-./:;<=>¿?@[\\]^_`{|}~  \t«„「『』"“”–—…÷'
 // The following list should contain each and every quotation character
 const allQuotes = '‘’‚ ›‹«»„“”「」『』"\''
 

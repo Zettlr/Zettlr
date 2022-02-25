@@ -27,6 +27,8 @@ body div#tab-container {
   move the mouse out of the image area
 - Improve icon alignment in the related files section
 - Relaxed conditions for emphasis rendering by just excluding word-characters
+- Tab characters are no longer detected as spelling errors
+- You can now choose to indent using tab characters instead of spaces
 
 ## Under the Hood
 

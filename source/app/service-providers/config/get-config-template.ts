@@ -116,6 +116,7 @@ export default function getConfigTemplate (): ConfigOptions {
       homeEndBehaviour: false, // If true, Home/End goes to start/end of a paragraph, false means start/end of line.
       enableTableHelper: true, // Enable the table helper plugin
       indentUnit: 4, // The number of spaces to be added
+      indentWithTabs: false,
       fontSize: 16, // The editor's font size in pixels
       countChars: false, // Set to true to enable counting characters instead of words
       inputMode: 'default', // Can be default, vim, emacs
