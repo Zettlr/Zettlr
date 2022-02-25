@@ -3,8 +3,14 @@ const path = require('path')
 module.exports = [
   // Add support for native node modules
   {
-    test: /\.node$/,
-    use: 'node-loader'
+    // Apparently just checking for .node modules is not enough since we need
+    // the actual fsevents.node to trigger a rebuild of the module into the
+    // Electron binary and webpack will create a .node-file that just LINKS to
+    // the correct (actual) fsevents.node. Without the `native_modules`, a
+    // rebuild will never commence, and hence fsevents will remain unavailable
+    // on macOS
+    test: /native_modules\/.+\.node$/,
+    loader: 'node-loader'
   },
   {
     test: /\.(m?js|node)$/,

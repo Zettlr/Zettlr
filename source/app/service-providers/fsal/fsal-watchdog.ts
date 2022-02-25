@@ -133,6 +133,8 @@ export default class FSALWatchdog extends EventEmitter {
 
       if (process.platform === 'darwin' && this._process.options.useFsEvents === false) {
         this._logger.warning('[FSAL Watchdog] The chokidar process falls back to polling. This may lead to a high CPU usage.')
+      } else if (process.platform === 'darwin' && this._process.options.useFsEvents === true) {
+        this._logger.info('[FSAL Watchdog] The chokidar process utilizes fsevents. File changes are deteced without polling.')
       }
 
       // Add all paths that may have been added to the array while the process

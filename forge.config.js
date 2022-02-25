@@ -54,6 +54,12 @@ async function downloadPandoc (platform, arch) {
 module.exports = {
   hooks: {
     generateAssets: async (forgeConfig, targetPlatform, targetArch) => {
+      // Two steps need to be done here. First, we need to set an environment
+      // variable that is then accessible by the webpack process so that we can
+      // either include or not include fsevents for macOS platforms.
+      process.env.BUNDLE_FSEVENTS = (targetPlatform === 'darwin') ? '1' : '0'
+
+      // Second, we need to make sure we can bundle Pandoc.
       const isMacOS = targetPlatform === 'darwin'
       const isLinux = targetPlatform === 'linux'
       const isWin32 = targetPlatform === 'win32'

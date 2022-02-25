@@ -32,6 +32,7 @@ body div#tab-container {
 - Do not close the file left to a new usaved file upon saving the file
 - Fixed a weird race condition in which the file manager would remain ignorant
   of an in-memory file after it has been saved to disk
+- Changes to your files should now be detected immediately also on macOS
 
 ## Under the Hood
 
@@ -42,6 +43,7 @@ body div#tab-container {
   across rendering plugins
 - Update most pure Node scripts from CommonJS to ESM in order to support the new
   versions of csso, chalk, and got
+- FINALLY managed to get fsevents to run! After about three years or so.
 
 # 2.2.3
 
