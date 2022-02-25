@@ -64,7 +64,9 @@ export default class FSALWatchdog extends EventEmitter {
    */
   start (): this {
     // Don't boot up twice and only boot if there's at least one path
-    if (this._paths.length < 1 || this.isBooting()) return this
+    if (this._paths.length < 1 || this.isBooting()) {
+      return this
+    }
 
     this._booting = true // Lock the start function
 
@@ -73,12 +75,13 @@ export default class FSALWatchdog extends EventEmitter {
     // directories that should be ignored and a function that returns true
     // for all files that are _not_ in the filetypes list (whitelisting)
     // Further reading: https://github.com/micromatch/anymatch
-    let ignoreDirs = [/(^|[/\\])\../]
+    const ignoreDirs = [/(^|[/\\])\../]
 
     // Create new regexps from the strings
     for (let x of IGNORE_DIR_REGEXP) ignoreDirs.push(new RegExp(x, 'i'))
 
-    let options: chokidar.WatchOptions = {
+    const options: chokidar.WatchOptions = {
+      useFsEvents: process.platform === 'darwin',
       ignored: ignoreDirs,
       persistent: true,
       ignoreInitial: true, // Do not track the initial watch as changes
@@ -112,8 +115,8 @@ export default class FSALWatchdog extends EventEmitter {
       // From chokidar docs: "[...] in some cases some change events will be
       // emitted while the file is being written." --> hence activate this.
       options.awaitWriteFinish = {
-        'stabilityThreshold': threshold,
-        'pollInterval': 100
+        stabilityThreshold: threshold,
+        pollInterval: 100
       }
 
       this._logger.info(`[FSAL Watchdog] Activating file polling with a threshold of ${threshold}ms.`)
@@ -134,8 +137,8 @@ export default class FSALWatchdog extends EventEmitter {
 
       // Add all paths that may have been added to the array while the process
       // was starting up.
-      let alreadyWatched = Object.keys(this._process.getWatched())
-      for (let p of this._paths) {
+      const alreadyWatched = Object.keys(this._process.getWatched())
+      for (const p of this._paths) {
         if (!alreadyWatched.includes(p)) {
           this._process.add(p)
         }
@@ -145,13 +148,13 @@ export default class FSALWatchdog extends EventEmitter {
 
     this._process.on('all', (event: string, p: string) => {
       // Should we ignore that event?
-      let shouldIgnore = this._ignoredEvents.findIndex(e => {
+      const shouldIgnore = this._ignoredEvents.findIndex(e => {
         return e.event === event && e.path === p
       })
 
       if (shouldIgnore > -1) {
         // Yup
-        let i = this._ignoredEvents[shouldIgnore]
+        const i = this._ignoredEvents[shouldIgnore]
         this._logger.info(`[WATCHDOG] Ignore event: ${i.event}:${i.path}`)
         this._ignoredEvents.splice(shouldIgnore, 1)
         return
@@ -160,10 +163,10 @@ export default class FSALWatchdog extends EventEmitter {
       // Determine that these are real and valid files/dirs
       const dir = (event === 'unlinkDir') ? true : isDir(p)
       const file = (event === 'unlink') ? true : isFile(p)
-      const attachment = !hasMdOrCodeExt(p)
+      const otherFile = !hasMdOrCodeExt(p)
 
       // Only watch changes in directories and supported files
-      if ((dir && !ignoreDir(p)) || (file && (!ignoreFile(p) || attachment))) {
+      if ((dir && !ignoreDir(p)) || (file && (!ignoreFile(p) || otherFile))) {
         this._logger.info(`[WATCHDOG] Emitting event: ${event}:${p}`)
         // Emit the event for the respective path.
         this.emit('change', event, p)
@@ -232,7 +235,9 @@ export default class FSALWatchdog extends EventEmitter {
    * @param {Array} events An array of path/event-objects to ignore
    */
   ignoreEvents (events: WatchdogEvent[]): boolean {
-    if (events.length === 0) return false
+    if (events.length === 0) {
+      return false
+    }
 
     this._ignoredEvents = this._ignoredEvents.concat(events)
 
