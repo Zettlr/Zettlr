@@ -484,7 +484,7 @@ function getConfig (): StoreOptions<ZettlrState> {
             this.commit('removeFromFiletree', event.path)
           } else if (event.event === 'add') {
             const descriptor = await ipcRenderer.invoke('application', { command: 'get-descriptor', payload: event.path })
-            if (descriptor === null) {
+            if (descriptor === undefined) {
               console.error(`The descriptor for path ${event.path} was empty!`)
             } else {
               context.commit('addToFiletree', descriptor)
@@ -548,10 +548,16 @@ function getConfig (): StoreOptions<ZettlrState> {
           return // Can only generate suggestions for Markdown files
         }
 
+        console.log(context.state.activeFile.path)
         const descriptor = await ipcRenderer.invoke('application', {
           command: 'get-file-contents',
           payload: context.state.activeFile.path
         })
+
+        if (descriptor == null) {
+          console.error('Could not regenerate tag suggestions: Main returned', descriptor)
+          return
+        }
 
         const suggestions = []
         for (const tag of Object.keys(context.state.tagDatabase)) {
