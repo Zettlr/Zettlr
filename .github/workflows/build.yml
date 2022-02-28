@@ -117,7 +117,7 @@ jobs:
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
         if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
-        run: node ./scripts/set-nightly-version.mjs
+        run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
         run: |
@@ -191,7 +191,7 @@ jobs:
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
         if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
-        run: node ./scripts/set-nightly-version.mjs
+        run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
         run: |
@@ -261,7 +261,7 @@ jobs:
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
         if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
-        run: node ./scripts/set-nightly-version.mjs
+        run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
         run: |
@@ -317,7 +317,7 @@ jobs:
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
         if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
-        run: node ./scripts/set-nightly-version.mjs
+        run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
         run: |
