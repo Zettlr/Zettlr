@@ -16,11 +16,9 @@
  * END HEADER
  */
 
-import { writeFileSync } from 'fs'
-import { join, dirname } from 'path'
-import pkg from '../package.json' assert { type: 'json' }
-
-const __dirname = dirname(import.meta.url.substring(7))
+const fs = require('fs')
+const path = require('path')
+const pkg = require('../package.json')
 
 // Just don't run this script, would ya? :)
 console.error('WARNING: BUMPING VERSION TO NIGHTLY! IF YOU RAN THIS SCRIPT, REVERT THE CHANGES TO PACKAGE.JSON IMMEDIATELY!')
@@ -45,4 +43,4 @@ if (day < 10) {
 pkg.version = pkg.version + '+nightly-' + year + month + day
 
 // Write the package.json back.
-writeFileSync(join(__dirname, '../package.json'), JSON.stringify(pkg), { encoding: 'utf8' })
+fs.writeFileSync(path.join(__dirname, '../package.json'), JSON.stringify(pkg), { encoding: 'utf8' })
