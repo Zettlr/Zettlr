@@ -36,6 +36,18 @@ export default function extractBibtexAttachments (
   // Return value will be a fast-access dictionary
   let files = Object.create(null)
 
+  // First we search for the jabref comments containing the files' root directories
+  for (let entry of ast.children) {
+    if (entry.kind !== 'BracedComment') {
+      continue
+    }
+
+    // The format of the value field is 'jabref-meta: fileDirectory*:<path>;'
+    if (entry.value.split(':')[1].trim().startsWith('fileDirectory')) {
+      baseDir = entry.value.split(':')[2].trim().replace(/;/g, '')
+    }
+  }
+
   // Now let's see what entries have files attached.
   // Such attributes are stored in properties within the entry.
   for (let entry of ast.children) {
