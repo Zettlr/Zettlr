@@ -5,13 +5,14 @@
             "Celso Lira",
             "Jo\u00e3o Batista Farias Junior \u003Cjoaobfariasjunior@gmail.com\u003E",
             "dhax",
+            "KillerTofu",
             "Myreli \u003Cmyreli@pm.me\u003E",
             "oldbear",
             "Fabio Bianchi",
             "brunnogama \u003Cbrunnogama@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-01-10T23:33:57.000000Z"
+        "updated_at": "2022-03-01T00:29:04.000000Z"
     },
     "dialog": {
         "about": {
@@ -200,6 +201,7 @@
             },
             "avoid_new_tabs": "Evite abrir arquivos em novas guias, se poss\u00edvel",
             "checkForBeta": "Notificar sobre vers\u00f5es beta",
+            "check_updates": "Verificar atualiza\u00e7\u00f5es automaticamente",
             "choose_file": "Escolher arquivo ...",
             "citation_database": "Base de dados de cita\u00e7\u00f5es (CSL JSON ou BibTex)",
             "citations": {
@@ -437,7 +439,9 @@
             "connection_error": "N\u00e3o foi poss\u00edvel verificar se h\u00e1 atualiza\u00e7\u00f5es: N\u00e3o foi poss\u00edvel estabelecer conex\u00e3o",
             "current_version": "Sua vers\u00e3o",
             "download_progress_label": "Baixando a atualiza\u00e7\u00e3o",
+            "new_update_available": "Uma atualiza\u00e7\u00e3o para a vers\u00e3o %s est\u00e1 dispon\u00edvel!",
             "no_data": "N\u00e3o foi poss\u00edvel verificar se h\u00e1 atualiza\u00e7\u00f5es: o servidor n\u00e3o enviou nenhum dado",
+            "no_new_update": "N\u00e3o existem atualiza\u00e7\u00f5es. Voc\u00ea j\u00e1 possui a vers\u00e3o mais recente.",
             "notification": "Existe uma nova vers\u00e3o do Zettlr dispon\u00edvel para download. Por favor, leia o changelog abaixo.",
             "redirect_error": "N\u00e3o foi poss\u00edvel verificar se h\u00e1 atualiza\u00e7\u00f5es: o servidor tentou redirecionar (C\u00f3digo de status: %s)",
             "release_url": "Abrir p\u00e1gina de download",
@@ -463,6 +467,10 @@
         "avg_not_reached": "\u270d\ud83c\udffc Comece a escrever para superar sua m\u00e9dia di\u00e1ria.",
         "avg_surpassed": "\ud83d\udd25 Voc\u00ea est\u00e1 determinado!",
         "avg_words": "M\u00e9dia di\u00e1ria",
+        "chars": "%s caracteres",
+        "chart": {
+            "high_legend": "Mais que o dobro da m\u00e9dia mensal"
+        },
         "citeproc": {
             "error_db": "O banco de dados de cita\u00e7\u00f5es n\u00e3o p\u00f4de ser carregado",
             "error_report_message": "%s \u00edtems da sua biblioteca n\u00e3o puderam ser carregados pela ocorr\u00eancia de erros. Por favor verifique as mensagens de erro abaixo para ver quais CiteKeys foram mal-formadas e qual \u00e9 o erro.",
@@ -607,6 +615,7 @@
         "open_link": "Abrir Link",
         "open_logs": "Abrir Logs",
         "open_new_tab": "Abrir em Nova Aba",
+        "open_tutorial": "Abrir Tutorial",
         "open_workspace": "Abrir \u00c1rea de Trabalho",
         "pandoc": "Obter o Pandoc",
         "paste": "Colar",

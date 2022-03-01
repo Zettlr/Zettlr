@@ -5,7 +5,7 @@
             "Jonas Wunderlich \u003Cmail@jonas-wunderlich.de\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-02-10T22:20:59.000000Z"
+        "updated_at": "2022-02-25T09:13:31.000000Z"
     },
     "dialog": {
         "about": {
@@ -271,6 +271,7 @@
             "hide_dirs": "Verstecke Verzeichnisse w\u00e4hrend globaler Suchen",
             "homeEndBehaviour": "Nutze die CodeMirror-Standardaktionen f\u00fcr \u003Ckbd\u003EHome\u003C/kbd\u003E und \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
             "indent_unit": "R\u00fccke um folgende Anzahl Leerzeichen ein",
+            "indent_with_tabs": "Mit Tab-Zeichen einr\u00fccken",
             "input_mode": "Eingabemodus des Editors",
             "leave_app_running_in_the_notification_area": "App in der Statusleiste anzeigen",
             "modtime": "Letzter Bearbeitungszeitpunkt",

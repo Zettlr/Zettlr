@@ -20,7 +20,7 @@
             "Joris"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-02-10T08:09:18.000000Z"
+        "updated_at": "2022-02-16T14:20:18.000000Z"
     },
     "dialog": {
         "about": {
@@ -233,6 +233,7 @@
                 "image_width": "Largeur maximale des images (pourcentage)",
                 "preview_info": "Choisir les \u00e9l\u00e9ments qui sont visibles dans les documents.",
                 "render_citations": "Visualiser des citations",
+                "render_emphasis": "Accentuation du rendu",
                 "render_htags": "Cacher les \"#\" dans les titres",
                 "render_iframes": "Afficher les iframes",
                 "render_images": "Afficher les images",
@@ -800,6 +801,7 @@
         "save_changes_save": "Enregistrer",
         "save_changes_select_dir": "Veuillez s\u00e9lectionner un dossier pour enregistrer le nouveau fichier.",
         "save_changes_title": "Annuler les modifications ?",
+        "save_file": "Enregistrer le fichier",
         "unknown_command": "Commande inconnue re\u00e7ue : %s"
     },
     "toolbar": {
