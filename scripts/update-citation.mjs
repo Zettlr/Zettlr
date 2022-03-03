@@ -1,5 +1,5 @@
 import got from 'got'
-import { stringify } from 'yaml'
+import YAML from 'yaml'
 import { promises as fs } from 'fs'
 import { resolve } from 'path'
 
@@ -24,7 +24,7 @@ async function updateCitation () {
   console.log('Creating CITATION.cff file ...')
   const record = JSON.parse(response.body)
   // At this point we have all info that we need. Now build the citation file
-  const fileContents = stringify({
+  const fileContents = YAML.stringify({
     'cff-version': '1.2.0',
     message: record.metadata.notes,
     title: record.metadata.title,
