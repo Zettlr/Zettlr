@@ -44,6 +44,7 @@ body div#tab-container {
 - Update most pure Node scripts from CommonJS to ESM in order to support the new
   versions of csso, chalk, and got
 - FINALLY managed to get fsevents to run! After about three years or so.
+- Add support for JabRef `fileDirectory`-style comments
 
 # 2.2.3
 
