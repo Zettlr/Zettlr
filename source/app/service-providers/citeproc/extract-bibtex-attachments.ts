@@ -16,6 +16,7 @@ import path from 'path'
 import { bibtex } from 'astrocite'
 import { BracedComment } from 'astrocite-bibtex'
 import pdfSorter from '@common/util/sort-by-pdf'
+import LogProvider from '@providers/log'
 
 const AstrociteAST = bibtex.AST
 
@@ -31,31 +32,34 @@ interface BibTexAttachments {
  */
 export default function extractBibtexAttachments (
   fileContents: string,
-  baseDir: string = ''
+  baseDir: string,
+  logger?: LogProvider
 ): BibTexAttachments {
-  let ast = AstrociteAST.parse(fileContents)
+  const ast = AstrociteAST.parse(fileContents)
   // Return value will be a fast-access dictionary
-  let files = Object.create(null)
+  const files = Object.create(null)
 
   // First we search for the jabref comments containing the files' root directories
   const comments = ast.children.filter(item => item.kind === 'BracedComment') as BracedComment[]
   // The format of the value field is 'jabref-meta: fileDirectory*:<path>;'
   const jabrefComments = comments.filter(item => item.value.startsWith('jabref-meta:'))
-  for (let entry of jabrefComments) {
+  for (const entry of jabrefComments) {
     const value = entry.value.split(':').map(e => e.trim())
     if (value[1].startsWith('fileDirectory')) {
       baseDir = value[2].replace(/;/g, '')
+      logger?.info(`[extractBibtexAttachments] Found a fileDirectory, overwriting baseDir: ${baseDir}`)
+      break
     }
   }
 
   // Now let's see what entries have files attached.
   // Such attributes are stored in properties within the entry.
-  for (let entry of ast.children) {
+  for (const entry of ast.children) {
     if (entry.kind !== 'Entry') {
       continue
     }
 
-    for (let property of entry.properties) {
+    for (const property of entry.properties) {
       if (property.key === 'file') {
         const firstValue = property.value[0]
         if (firstValue.kind !== 'String' && firstValue.kind !== 'Text') {

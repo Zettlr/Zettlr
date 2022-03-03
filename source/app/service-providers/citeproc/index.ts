@@ -36,7 +36,7 @@ interface DatabaseRecord {
   type: 'csl'|'bibtex'
   cslData: CSLItem[]
   bibtexAttachments: {
-    [citeKey: string]: string
+    [citeKey: string]: string[]|false
   }
 }
 
@@ -227,12 +227,13 @@ export default class CiteprocProvider extends ProviderContract {
       return false
     }
 
-    const db = this._databases[this._databaseIdx]
-    return Object.keys(db.bibtexAttachments).length > 0
+    const attachments = this._databases[this._databaseIdx].bibtexAttachments
+    return Object.keys(attachments).length > 0
   }
 
-  getBibTexAttachments (id: string): string|undefined {
-    return this._databases[this._databaseIdx].bibtexAttachments[id]
+  getBibTexAttachments (id: string): string[]|false {
+    const attachments = this._databases[this._databaseIdx].bibtexAttachments[id]
+    return (attachments === undefined) ? false : attachments
   }
 
   loadMainDatabase (): void {
@@ -342,8 +343,8 @@ export default class CiteprocProvider extends ProviderContract {
       record.type = 'bibtex'
 
       // If we're here, we had a BibTex library --> extract the attachments
-      let attachments = extractBibTexAttachments(data, path.dirname(databasePath))
-      record.bibtexAttachments = attachments as any
+      const attachments = extractBibTexAttachments(data, path.dirname(databasePath), this._logger)
+      record.bibtexAttachments = attachments
     } else {
       throw new Error('Could not read database: Unknown file type')
     }

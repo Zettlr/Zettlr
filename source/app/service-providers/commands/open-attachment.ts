@@ -42,39 +42,42 @@ export default class OpenAttachment extends ZettlrCommand {
     // First let's see if we've got BibTex attachments, so we can
     // circumvent the Zotero thing directly
     if (this._app.citeproc.hasBibTexAttachments()) {
-      let attachments = this._app.citeproc.getBibTexAttachments(arg.citekey)
-      if (attachments !== undefined && attachments.length === 0) {
+      const attachments = this._app.citeproc.getBibTexAttachments(arg.citekey)
+      if (attachments === false || attachments.length === 0) {
         appearsToHaveNoAttachments = true
-      } else if (attachments !== undefined) {
-        let potentialError = await shell.openPath(attachments[0])
+      } else {
+        const potentialError = await shell.openPath(attachments[0])
         if (potentialError !== '') {
           this._app.log.warning('Error during opening of BibTex attachment', potentialError)
           return false
         }
         return true
-      } else {
-        // Try Zotero, but indicate that there might not be attachments
-        appearsToHaveNoAttachments = true
       }
     }
 
     // Thanks to @retorquere, we can query the better bibtex JSON RPC
     // api to retrieve a full list of all attachments.
     try {
-      let res: any = await got.post('http://localhost:23119/better-bibtex/json-rpc', {
+      const res: any = await got.post('http://localhost:23119/better-bibtex/json-rpc', {
         'json': {
           'jsonrpc': '2.0',
           'method': 'item.attachments',
           'params': [arg.citekey]
         }
       }).json()
-      if (res.result.length === 0) appearsToHaveNoAttachments = true
+
+      if (res.result.length === 0) {
+        appearsToHaveNoAttachments = true
+      }
+
       // Now map the result set. It will contain ALL attachments.
       let allAttachments = res.result.map((elem: any) => elem.path)
       // Sort them with PDFs on top
       allAttachments = allAttachments.sort(pdfSorter)
-      let potentialError = await shell.openPath(allAttachments[0])
-      if (potentialError !== '') throw new Error(potentialError)
+      const potentialError = await shell.openPath(allAttachments[0])
+      if (potentialError !== '') {
+        throw new Error(potentialError)
+      }
       return true
     } catch (err: any) {
       if (appearsToHaveNoAttachments) {
