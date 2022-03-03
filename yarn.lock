@@ -923,10 +923,10 @@
   resolved "https://registry.yarnpkg.com/@types/md5/-/md5-2.3.2.tgz#529bb3f8a7e9e9f621094eb76a443f585d882528"
   integrity sha512-v+JFDu96+UYJ3/UWzB0mEglIS//MZXgRaJ4ubUPwOM0gvLc/kcQ3TWNYwENEK7/EcXGQVrW8h/XqednSjBd/Og==
 
-"@types/mermaid@^8.2.7":
-  version "8.2.7"
-  resolved "https://registry.yarnpkg.com/@types/mermaid/-/mermaid-8.2.7.tgz#1f9610c241361f66ed0591d3186e0bf3ed2211c8"
-  integrity sha512-fHgKYloGociOIEftp1IXWEktRZOw4qhEWWZe4a8RKd0AIuhj70its8VV3+sM1DmaWRLPW9rbVD83JR0XJzEh8g==
+"@types/mermaid@^8.2.8":
+  version "8.2.8"
+  resolved "https://registry.yarnpkg.com/@types/mermaid/-/mermaid-8.2.8.tgz#06752a3abbddda59d6a3852147bba9d091665404"
+  integrity sha512-Xk6OxTQuK7Us6bom64mCr19ualLgk/kRPm/1hz8Bqu/tQnYURO9/DNYOhWaT6e94BypF8qgImC6bsgBTGBJIJA==
 
 "@types/mime@^1":
   version "1.3.2"
