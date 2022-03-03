@@ -33,6 +33,8 @@ body div#tab-container {
 - Fixed a weird race condition in which the file manager would remain ignorant
   of an in-memory file after it has been saved to disk
 - Changes to your files should now be detected immediately also on macOS
+- Fixed a bug that would disable both types of magic quotes (single + double)
+  if you disabled only one type
 
 ## Under the Hood
 
