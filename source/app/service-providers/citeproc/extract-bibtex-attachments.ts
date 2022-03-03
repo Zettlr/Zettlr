@@ -14,6 +14,7 @@
 
 import path from 'path'
 import { bibtex } from 'astrocite'
+import { BracedComment } from 'astrocite-bibtex'
 import pdfSorter from '@common/util/sort-by-pdf'
 
 const AstrociteAST = bibtex.AST
@@ -37,14 +38,13 @@ export default function extractBibtexAttachments (
   let files = Object.create(null)
 
   // First we search for the jabref comments containing the files' root directories
-  for (let entry of ast.children) {
-    if (entry.kind !== 'BracedComment') {
-      continue
-    }
-
-    // The format of the value field is 'jabref-meta: fileDirectory*:<path>;'
-    if (entry.value.split(':')[1].trim().startsWith('fileDirectory')) {
-      baseDir = entry.value.split(':')[2].trim().replace(/;/g, '')
+  const comments = ast.children.filter(item => item.kind === 'BracedComment') as BracedComment[]
+  // The format of the value field is 'jabref-meta: fileDirectory*:<path>;'
+  const jabrefComments = comments.filter(item => item.value.startsWith('jabref-meta:'))
+  for (let entry of jabrefComments) {
+    const value = entry.value.split(':').map(e => e.trim())
+    if (value[1].startsWith('fileDirectory')) {
+      baseDir = value[2].replace(/;/g, '')
     }
   }
 
