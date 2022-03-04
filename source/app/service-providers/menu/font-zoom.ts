@@ -14,6 +14,13 @@
  * END HEADER
  */
 
+/**
+ * Depending on the direction given, increases or decreases the font size of the
+ * editor component
+ *
+ * @param   {ConfigProvider}  config  The configuration provider
+ * @param   {'in'|'out'}      dir     The direction of zoom
+ */
 function fontZoom (config: ConfigProvider, dir: 'in'|'out'): void {
   const fontSize = config.get('editor.fontSize') as number
   if (dir === 'in') {
@@ -23,12 +30,26 @@ function fontZoom (config: ConfigProvider, dir: 'in'|'out'): void {
   }
 }
 
+/**
+ * Returns a function that, when called, increases the editor font size
+ *
+ * @param   {ConfigProvider}  config  The configuration provider
+ *
+ * @return  {Function}                A callback
+ */
 export function zoomIn (config: ConfigProvider): () => void {
   return function () {
     fontZoom(config, 'in')
   }
 }
 
+/**
+ * Returns a function that, when called, decreases the editor font size
+ *
+ * @param   {ConfigProvider}  config  The configuration provider
+ *
+ * @return  {Function}                A callback
+ */
 export function zoomOut (config: ConfigProvider): () => void {
   return function () {
     fontZoom(config, 'out')
