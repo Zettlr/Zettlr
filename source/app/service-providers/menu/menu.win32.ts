@@ -32,7 +32,7 @@ export default function getMenu (
   getCheckboxState: (id: string, init: boolean) => boolean,
   setCheckboxState: (id: string, val: boolean) => void
 ): MenuItemConstructorOptions[] {
-  const useGuiZoom = config.get('system.zoomType') === 'gui'
+  const useGuiZoom = config.get('system.zoomBehavior') === 'gui'
   // While on macOS we can just drop the following menuItem into the menu, the
   // win32-menu is also being used on Linux. Therefore, we use as fallback the
   // default, but ...

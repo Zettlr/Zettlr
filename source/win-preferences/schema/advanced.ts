@@ -77,11 +77,11 @@ export default function (): any {
       [
         {
           type: 'radio',
-          model: 'system.zoomType',
-          label: 'Zoom options',
+          model: 'system.zoomBehavior',
+          label: trans('dialog.preferences.zoom_behavior.label'),
           options: {
-            'gui': 'Zoom resizes the whole GUI',
-            'editor': 'Zoom changes the editor font size'
+            'gui': trans('dialog.preferences.zoom_behavior.gui'),
+            'editor': trans('dialog.preferences.zoom_behavior.editor')
           }
         }
       ],

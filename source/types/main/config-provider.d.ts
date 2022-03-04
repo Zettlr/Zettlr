@@ -139,7 +139,7 @@ interface ConfigOptions {
     avoidNewTabs: boolean
     iframeWhitelist: string[]
     checkForUpdates: boolean
-    zoomType: 'gui'|'editor'
+    zoomBehavior: 'gui'|'editor'
   }
   checkForBeta: boolean
   uuid: string

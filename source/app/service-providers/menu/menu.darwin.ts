@@ -30,7 +30,7 @@ export default function getMenu (
   getCheckboxState: (id: string, init: boolean) => boolean,
   setCheckboxState: (id: string, val: boolean) => void
 ): MenuItemConstructorOptions[] {
-  const useGuiZoom = config.get('system.zoomType') === 'gui'
+  const useGuiZoom = config.get('system.zoomBehavior') === 'gui'
 
   const menu: MenuItemConstructorOptions[] = [
     // APP MENU
