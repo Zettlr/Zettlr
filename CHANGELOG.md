@@ -12,6 +12,8 @@ body div#tab-container {
 
 ## GUI and Functionality
 
+- **New Feature**: You can now switch between zooming the whole GUI or just the
+  editor font size when using the zoom menu items/shortcuts
 - Restores the display of links in the related files section of the sidebar
 - Differentiate between inbound, outbound, and bidirectional links in the
   related files section

@@ -76,6 +76,17 @@ export default function (): any {
       ],
       [
         {
+          type: 'radio',
+          model: 'system.zoomType',
+          label: 'Zoom options',
+          options: {
+            'gui': 'Zoom resizes the whole GUI',
+            'editor': 'Zoom changes the editor font size'
+          }
+        }
+      ],
+      [
+        {
           type: 'list',
           label: trans('dialog.preferences.whitelist'),
           model: 'system.iframeWhitelist',

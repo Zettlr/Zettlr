@@ -19,6 +19,7 @@ import RecentDocumentsProvider from '@providers/recent-docs'
 import WindowProvider from '@providers/windows'
 import CommandProvider from '@providers/commands'
 import LogProvider from '@providers/log'
+import { zoomIn, zoomOut } from './font-zoom'
 
 export default function getMenu (
   logger: LogProvider,
@@ -29,6 +30,8 @@ export default function getMenu (
   getCheckboxState: (id: string, init: boolean) => boolean,
   setCheckboxState: (id: string, val: boolean) => void
 ): MenuItemConstructorOptions[] {
+  const useGuiZoom = config.get('system.zoomType') === 'gui'
+
   const menu: MenuItemConstructorOptions[] = [
     // APP MENU
     {
@@ -504,23 +507,31 @@ export default function getMenu (
         {
           type: 'separator'
         },
+        // The Zoom menu items can be changed in function between GUI zooming
+        // (using the zoom roles) and editor font size zooming (using a custom
+        // callback)
         {
           id: 'menu.reset_zoom',
           label: trans('menu.reset_zoom'),
           accelerator: 'Cmd+0',
-          role: 'resetZoom'
+          // NOTE: Since the base font-size can change, resetting the editor
+          // font size zoom level is not semantically meaningful
+          enabled: useGuiZoom,
+          role: (useGuiZoom) ? 'resetZoom' : undefined
         },
         {
           id: 'menu.zoom_in',
           label: trans('menu.zoom_in'),
           accelerator: 'Cmd+Plus',
-          role: 'zoomIn'
+          role: (useGuiZoom) ? 'zoomIn' : undefined,
+          click: (useGuiZoom) ? undefined : zoomIn(config)
         },
         {
           id: 'menu.zoom_out',
           label: trans('menu.zoom_out'),
           accelerator: 'Cmd+-',
-          role: 'zoomOut'
+          role: (useGuiZoom) ? 'zoomOut' : undefined,
+          click: (useGuiZoom) ? undefined : zoomOut(config)
         },
         {
           type: 'separator'
