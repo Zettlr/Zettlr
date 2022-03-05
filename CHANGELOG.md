@@ -37,6 +37,7 @@ body div#tab-container {
 - Changes to your files should now be detected immediately also on macOS
 - Fixed a bug that would disable both types of magic quotes (single + double)
   if you disabled only one type
+- Improve styling of progress bars on all platforms
 
 ## Under the Hood
 
