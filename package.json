@@ -73,7 +73,7 @@
     "sanitize-filename": "^1.6.3",
     "sanitize-html": "^2.7.0",
     "semver": "^7.3.5",
-    "showdown": "^2.0.2",
+    "showdown": "^2.0.3",
     "tippy.js": "^6.3.7",
     "uuid": "^8.3.2",
     "vue": "^3.2.31",
