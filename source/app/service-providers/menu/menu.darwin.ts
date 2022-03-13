@@ -202,7 +202,7 @@ export default function getMenu (
         },
         {
           id: 'menu.previous_file',
-          label: 'Previous file',
+          label: trans('menu.previous_file'),
           accelerator: 'Cmd+[',
           click: function (menuitem, focusedWindow) {
             commands.run('previous-file', undefined)
@@ -213,7 +213,7 @@ export default function getMenu (
         },
         {
           id: 'menu.next_file',
-          label: 'Next file',
+          label: trans('menu.next_file'),
           accelerator: 'Cmd+]',
           click: function (menuitem, focusedWindow) {
             commands.run('next-file', undefined)

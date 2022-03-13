@@ -1,3 +1,13 @@
+# 2.2.5
+
+## GUI and Functionality
+
+- Localized Previous/next file menu items
+
+## Under the Hood
+
+(nothing here)
+
 # 2.2.4
 
 This update changes the scroll effect on the document tab bar to be smooth
