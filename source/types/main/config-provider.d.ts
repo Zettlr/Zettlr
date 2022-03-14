@@ -139,6 +139,7 @@ interface ConfigOptions {
     avoidNewTabs: boolean
     iframeWhitelist: string[]
     checkForUpdates: boolean
+    checkForTranslationUpdates: boolean
     zoomBehavior: 'gui'|'editor'
   }
   checkForBeta: boolean
