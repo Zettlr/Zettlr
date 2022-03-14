@@ -116,7 +116,6 @@ export default class TranslationProvider extends ProviderContract {
         this._logger.warning(`[Translation Provider] Could not update translations: ${String(err.code)}`, err)
         return
       }
-
       // Alright, we only need the body
       response = JSON.parse(response.body)
       this._availableLanguages = response // Let's save the response
@@ -124,10 +123,6 @@ export default class TranslationProvider extends ProviderContract {
       this._logger.info('[Translation Provider] Translation update cancelled due to user setting.')
       this._availableLanguages = []
     }
-
-    // Alright, we only need the body
-    response = JSON.parse(response.body)
-    this._availableLanguages = response // Let's save the response
 
     // Now we have all the languages available. We also need the translation
     // metadata.
