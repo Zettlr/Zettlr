@@ -108,7 +108,8 @@ export default class TranslationProvider extends ProviderContract {
     // return file
     let response
     const checkForTranslationUpdates: boolean = this._config.get('system.checkForTranslationUpdates')
-    if (checkForTranslationUpdates) {
+    if (checkForTranslationUpdates) 
+    {
       try {
         response = await got(TRANSLATION_API_URL, { method: 'GET' })
       } catch (err: any) {
@@ -119,7 +120,8 @@ export default class TranslationProvider extends ProviderContract {
 
       // Alright, we only need the body
       response = JSON.parse(response.body)
-      this._availableLanguages = response} // Let's save the response
+      this._availableLanguages = response // Let's save the response
+    }
     else {
       this._logger.info('[Translation Provider] Translation update cancelled due to user setting.')
       this._availableLanguages = []
