@@ -1,3 +1,13 @@
+# 2.2.5
+
+## GUI and Functionality
+
+- Localized Previous/next file menu items
+
+## Under the Hood
+
+(nothing here)
+
 # 2.2.4
 
 This update changes the scroll effect on the document tab bar to be smooth
@@ -37,6 +47,7 @@ body div#tab-container {
 - Changes to your files should now be detected immediately also on macOS
 - Fixed a bug that would disable both types of magic quotes (single + double)
   if you disabled only one type
+- Improve styling of progress bars on all platforms
 
 ## Under the Hood
 
