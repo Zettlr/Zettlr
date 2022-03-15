@@ -5,7 +5,7 @@
             "vfc"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-02-13T16:57:45.000000Z"
+        "updated_at": "2022-03-07T08:05:23.000000Z"
     },
     "dialog": {
         "about": {
@@ -271,6 +271,7 @@
             "hide_dirs": "Amaga les carpetes durant l'escorcoll",
             "homeEndBehaviour": "Utilitza les accions per defecte del CodeMirror per \u003Ckbd\u003EHome\u003C/kbd\u003E i \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
             "indent_unit": "Sagna a partir del n\u00famero d'espais",
+            "indent_with_tabs": "Sagna amb tabulaci\u00f3",
             "input_mode": "Mode d'input de l'editor",
             "leave_app_running_in_the_notification_area": "Deixa l'aplicaci\u00f3 funcionant a l'\u00e0rea de notificaci\u00f3",
             "modtime": "Hora de la \u00faltima modificaci\u00f3",
@@ -403,6 +404,11 @@
                 "var_week_number": "Setmana de l'any (amb zero incial)",
                 "var_year": "Any (quatre d\u00edgits)",
                 "var_year_two": "Any (dos d\u00edgits)"
+            },
+            "zoom_behavior": {
+                "editor": "El zoom canvia la mida de la lletra de l'editor",
+                "gui": "El zoom canvia tota la GUI",
+                "label": "Comportament del zoom"
             }
         },
         "snippets": {

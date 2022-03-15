@@ -1,10 +1,11 @@
 {
     "metadata": {
         "authors": [
-            "Ryota Abe"
+            "Ryota Abe",
+            "juggernautjp \u003Ckatsutoshi.harada@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-02-27T11:57:42.000000Z"
+        "updated_at": "2022-03-14T10:05:59.000000Z"
     },
     "dialog": {
         "about": {
@@ -403,6 +404,11 @@
                 "var_week_number": "\u9031\u756a\u53f7(2\u6841)",
                 "var_year": "\u5e74(4\u6841)",
                 "var_year_two": "\u5e74(2\u6841)"
+            },
+            "zoom_behavior": {
+                "editor": "\u30ba\u30fc\u30e0\u3067\u30a8\u30c7\u30a3\u30bf\u306e\u30d5\u30a9\u30f3\u30c8\u30b5\u30a4\u30ba\u3092\u5909\u66f4\u3059\u308b",
+                "gui": "\u30ba\u30fc\u30e0\u3067GUI\u5168\u4f53\u306e\u62e1\u5927\u7387\u3092\u5909\u66f4\u3059\u308b",
+                "label": "\u30ba\u30fc\u30e0\u64cd\u4f5c"
             }
         },
         "snippets": {
@@ -639,6 +645,7 @@
         "new_dir": "\u65b0\u898f\u30c7\u30a3\u30ec\u30af\u30c8\u30ea...",
         "new_file": "\u65b0\u898f\u30d5\u30a1\u30a4\u30eb...",
         "new_project": "\u30d7\u30ed\u30b8\u30a7\u30af\u30c8\u3092\u4f5c\u6210",
+        "next_file": "\u6b21\u306e\u30d5\u30a1\u30a4\u30eb",
         "no_suggestions": "\u5019\u88dc\u306f\u3042\u308a\u307e\u305b\u3093",
         "open": "\u958b\u304f...",
         "open_attachment": "\u6dfb\u4ed8\u30d5\u30a1\u30a4\u30eb\u3092\u958b\u304f",
@@ -653,6 +660,7 @@
         "paste_plain": "\u30d7\u30ec\u30fc\u30f3\u30c6\u30ad\u30b9\u30c8\u3068\u3057\u3066\u8cbc\u308a\u4ed8\u3051",
         "pdf_preferences": "PDF\u8a2d\u5b9a...",
         "preferences": "\u8a2d\u5b9a",
+        "previous_file": "\u524d\u306e\u30d5\u30a1\u30a4\u30eb",
         "print": "\u5370\u5237...",
         "project_build": "\u30d7\u30ed\u30b8\u30a7\u30af\u30c8\u3092\u30a8\u30af\u30b9\u30dd\u30fc\u30c8",
         "project_properties": "\u30d7\u30ed\u30b8\u30a7\u30af\u30c8\u8a2d\u5b9a...",

@@ -4,7 +4,7 @@
             "Wiwi Kuan"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-02-11T14:39:05.000000Z"
+        "updated_at": "2022-03-08T11:47:56.000000Z"
     },
     "dialog": {
         "about": {
@@ -270,6 +270,7 @@
             "hide_dirs": "\u5728\u5168\u5c40\u641c\u7d22\u6642\u96b1\u85cf\u76ee\u9304",
             "homeEndBehaviour": "\u4f7f\u7528 CodeMirror \u9810\u8a2d\u7684 \u003Ckbd\u003EHome\u003C/kbd\u003E \u548c \u003Ckbd\u003EEnd\u003C/kbd\u003E \u7684\u529f\u80fd\u3002",
             "indent_unit": "\u7e2e\u6392\u6642\u4f7f\u7528\u5e7e\u500b\u7a7a\u683c",
+            "indent_with_tabs": "\u7528 Tab \u5b57\u5143\u4f86\u7e2e\u6392",
             "input_mode": "\u7de8\u8f2f\u5668\u8f38\u5165\u6a21\u5f0f",
             "leave_app_running_in_the_notification_area": "\u8b93 Zettlr \u5728\u901a\u77e5\u5340\u7e7c\u7e8c\u57f7\u884c",
             "modtime": "\u6700\u5f8c\u4fee\u6539\u6642\u9593",
@@ -402,6 +403,11 @@
                 "var_week_number": "\u7576\u5e74\u7684\u7b2c\u5e7e\u9031\uff08\u5169\u4f4d\u6578\uff09",
                 "var_year": "\u5e74\uff08\u56db\u4f4d\u6578\uff09",
                 "var_year_two": "\u5e74\uff08\u5169\u4f4d\u6578\uff09"
+            },
+            "zoom_behavior": {
+                "editor": "\u53ea\u7e2e\u653e\u7de8\u8f2f\u5668\u5b57\u578b\u5927\u5c0f",
+                "gui": "\u7e2e\u653e\u6574\u500b\u4f7f\u7528\u8005\u4ecb\u9762",
+                "label": "\u7e2e\u653e\u65b9\u5f0f"
             }
         },
         "snippets": {
