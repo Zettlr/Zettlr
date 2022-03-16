@@ -6,7 +6,7 @@
 
 ## Under the Hood
 
-(nothing here)
+- Switched to the new code signing certificate for the windows installers
 
 # 2.2.4
 
