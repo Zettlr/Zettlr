@@ -8,6 +8,7 @@
 
 - Switched to the new code signing certificate for the windows installers
 - Write errors which are logged properly to disk
+- Display errors in the log viewer
 
 # 2.2.4
 

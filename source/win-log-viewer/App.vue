@@ -162,7 +162,7 @@ export default defineComponent({
       this.nextIndex += newLogs.length
       this.messages = this.messages.concat(newLogs)
       // Vue will update itself only on the next tick, so let's await that
-      if (shouldScroll === true) {
+      if (shouldScroll) {
         await nextTick()
         this.scrollToBottom()
       }
