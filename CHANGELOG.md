@@ -5,6 +5,7 @@
 - Localized Previous/next file menu items
 - Fixed selection of words on right-click in the editor
 - Editor word selection on right-click now accepts both `'` and `’`
+- Add Fortran syntax highlighting (keyword `fortran`)
 
 ## Under the Hood
 

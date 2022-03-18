@@ -79,6 +79,7 @@ const availableDatabases = {
     { text: 'clojure', displayText: 'Clojure' },
     { text: 'elm', displayText: 'Elm' },
     { text: 'fsharp', displayText: 'F#' },
+    { text: 'fortran', displayText: 'Fortran' },
     { text: 'java', displayText: 'Java' },
     { text: 'kotlin', displayText: 'Kotlin' },
     { text: 'haskell', displayText: 'Haskell' },
