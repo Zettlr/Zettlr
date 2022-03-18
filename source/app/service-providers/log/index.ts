@@ -115,11 +115,11 @@ export default class LogProvider extends ProviderContract {
     }
 
     // Simply append to log
-    let msg = {
-      'level': logLevel,
-      'message': message,
-      'details': details,
-      'time': this._getTimestamp()
+    const msg = {
+      level: logLevel,
+      message: message,
+      details: details,
+      time: this._getTimestamp()
     }
 
     this._log.push(msg)
@@ -176,8 +176,13 @@ export default class LogProvider extends ProviderContract {
    * Appends all not-yet-written log messages to today's log file
    */
   async _append (): Promise<void> {
-    if (this._fileLock) return // Cannot write until the previous write has finished
-    if (this._entryPointer >= this._log.length - 1) return // Nothing to write
+    if (this._fileLock) {
+      return // Cannot write until the previous write has finished
+    }
+
+    if (this._entryPointer >= this._log.length - 1) {
+      return // Nothing to write
+    }
 
     // First slice the part of the log that is not yet written to file
     let logsToWrite = this._log.slice(this._entryPointer)
@@ -189,7 +194,10 @@ export default class LogProvider extends ProviderContract {
 
     // Now, filter out all verbose entries
     logsToWrite = logsToWrite.filter((entry) => entry.level > LogLevel.verbose)
-    if (logsToWrite.length === 0) return // Apparently, only verbose messages
+
+    if (logsToWrite.length === 0) {
+      return // Apparently, only verbose messages
+    }
 
     // Then map the entries to strings and join them with newlines
     let stringsToWrite = logsToWrite.map((elem) => this._toString(elem))
@@ -236,7 +244,15 @@ export default class LogProvider extends ProviderContract {
     if (message.level === LogLevel.error) level = 'Error'
 
     let details = ''
-    if (Array.isArray(message.details)) {
+    if (message.details instanceof Error) {
+      // There was an error object in the details, so stringify it
+      const name = message.details.name
+      const msg = message.details.message
+      const stack = (message.details.stack !== undefined)
+        ? message.details.stack.replace(/\n+/g, ' --> ')
+        : 'No stack trace provided'
+      details = ` | Native Error: ${name}; ${msg} Stack Trace: ${stack}`
+    } else if (Array.isArray(message.details)) {
       details = ` | Details: ${message.details.join(', ')}`
     } else if ([ 'number', 'string', 'boolean' ].includes(typeof message.details)) {
       details = ` | Details: ${message.details as string}`

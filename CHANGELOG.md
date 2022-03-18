@@ -7,6 +7,7 @@
 ## Under the Hood
 
 - Switched to the new code signing certificate for the windows installers
+- Write errors which are logged properly to disk
 
 # 2.2.4
 
