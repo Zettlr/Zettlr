@@ -134,6 +134,7 @@ export default class RootOpen extends ZettlrCommand {
         } catch (err: any) {
           // Something went wrong, so remove the path again.
           this._app.config.removePath(absPath)
+          this._app.log.error(`Could not open root ${absPath}: ${err.message as string}`, err)
           this._app.windows.reportFSError('Could not open new root', err)
         }
       } else {
