@@ -30,8 +30,12 @@ export default async function environmentCheck (): Promise<void> {
     win32: [],
     linux: ['/usr/bin'],
     darwin: [
+      // LaTeX binary directory
+      '/Library/TeX/texbin',
+      // Homebrew default for Intel Macs
       '/usr/local/bin',
-      '/Library/TeX/texbin'
+      // Homebrew default for M1 Macs
+      '/opt/homebrew/bin'
     ],
     aix: [],
     android: [],

@@ -12,6 +12,8 @@
 - Switched to the new code signing certificate for the windows installers
 - Write errors which are logged properly to disk
 - Display errors in the log viewer
+- Added the default Homebrew installation directory for Apple Silicon Macs in
+  order for Zettlr to find Pandoc installed via brew.
 
 # 2.2.4
 
