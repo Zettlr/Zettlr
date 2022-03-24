@@ -1,29 +1,29 @@
 [
   {
-    "id": "Marx1962",
+    "id": "noMoreTimeToArgue",
     "author": [
       {
-        "family": "Marx",
-        "given": "Karl"
+        "family": "Morgan",
+        "given": "Peck"
       }
     ],
-    "collection-title": "Marx Engels Werke",
-    "edition": "4",
-    "event-place": "Berlin",
+    "collection-title": "The Road Less Traveled",
+    "edition": "2",
+    "event-place": "Connecticut",
     "issued": {
       "date-parts": [
-        [ 1962 ]
+        [ 1998 ]
       ]
     },
-    "language": "de",
-    "number-of-pages": "956",
-    "number-of-volumes": "43",
-    "publisher": "Dietz",
-    "publisher-place": "Berlin",
-    "source": "Zotero",
-    "title": "Das Kapital. Kritik der politischen Ökonomie. Erster Band: Der Produktionsprozeß des Kapitals",
-    "title-short": "Das Kapital. Erster Band",
+    "language": "en",
+    "number-of-pages": "273",
+    "number-of-volumes": "3",
+    "publisher": "Touchstone",
+    "publisher-place": "New York",
+    "source": "Google",
+    "title": "People of the Lie: The Hope for Healing Human Evil",
+    "title-short": "People of the Lie",
     "type": "book",
-    "volume": "23"
+    "volume": "4"
   }
 ]
