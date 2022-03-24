@@ -6,7 +6,7 @@
             "ritvje"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-01-14T12:22:14.000000Z"
+        "updated_at": "2022-02-19T16:37:40.000000Z"
     },
     "dialog": {
         "about": {
@@ -195,6 +195,7 @@
             },
             "avoid_new_tabs": "V\u00e4lt\u00e4 tiedostojen avaamista uusissa v\u00e4lilehdiss\u00e4, jos mahdollista",
             "checkForBeta": "Ilmoita betaversioista",
+            "check_updates": "Tarkista p\u00e4ivitykset automaattisesti",
             "choose_file": "Valitse tiedosto\u2026",
             "citation_database": "Viittaustietokanta (CSL JSON tai BibTex)",
             "citations": {
@@ -204,6 +205,10 @@
             "count_chars": "Laske merkkej\u00e4 sanojen sijaan (esim. kiinalle)",
             "creationtime": "Tiedoston luontiaika",
             "dark_mode": "Tumma tila",
+            "dark_mode_schedule": {
+                "end": "P\u00e4\u00e4t\u00e4 tumma tila klo",
+                "start": "Aloita tumma tila klo"
+            },
             "debug": "Vianm\u00e4\u00e4ritystila (debug)",
             "default_image_save_path": "Kuvien oletustallennuspolku (suhteellinen tai absoluuttinen)",
             "delete_on_fail": "Poista nimikkeet peruuttamattomasti, jos niiden siirto roskakoriin ep\u00e4onnistuu",
@@ -214,6 +219,7 @@
                 "image_width": "Kuvien maksimileveys (prosenttia)",
                 "preview_info": "Seuraavassa m\u00e4\u00e4ritell\u00e4\u00e4n, mitk\u00e4 elementit n\u00e4ytet\u00e4\u00e4n dokumenteissa.",
                 "render_citations": "N\u00e4yt\u00e4 lainaukset",
+                "render_emphasis": "Hahmonna korostukset",
                 "render_htags": "Piilota otsakemerkit",
                 "render_iframes": "N\u00e4yt\u00e4 HTML-iframet",
                 "render_images": "N\u00e4yt\u00e4 kuvat",
@@ -370,6 +376,7 @@
             "zkn": {
                 "auto_create_file": "Luo puuttuvat tiedostot automaattisesti sis\u00e4isi\u00e4 linkkej\u00e4 luotaessa",
                 "auto_search": "Aloita haku Zettelkasten-linkkej\u00e4 seurattaessa",
+                "custom_directory": "Laita automaattisesti luodut tiedostot t\u00e4h\u00e4n hakemistoon (pit\u00e4\u00e4 olla ladattuna Zettlr:iss\u00e4)",
                 "generated_id": "Generoitu ID-numero",
                 "id_generator_label": "Generoitavien ID-numeroiden muoto",
                 "id_label": "ID-numeron s\u00e4\u00e4nn\u00f6llinen lauseke (regex)",
@@ -640,6 +647,7 @@
         "open_link": "Avaa linkki",
         "open_logs": "Avaa loki",
         "open_new_tab": "Avaa uudessa v\u00e4lilehdess\u00e4",
+        "open_tutorial": "Avaa tutoriaali",
         "open_workspace": "Avaa ty\u00f6tila",
         "pandoc": "Asenna Pandoc",
         "paste": "Liit\u00e4",
@@ -778,6 +786,7 @@
         "save_changes_save": "Tallenna",
         "save_changes_select_dir": "Valitse hakemisto tiedoston tallentamista varten.",
         "save_changes_title": "Hyl\u00e4t\u00e4\u00e4nk\u00f6 tallentamattomat muutokset?",
+        "save_file": "Tallenna tiedosto",
         "unknown_command": "Vastaanotettiin tuntematon komento: %s"
     },
     "toolbar": {

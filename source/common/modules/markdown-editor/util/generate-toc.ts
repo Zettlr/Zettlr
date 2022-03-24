@@ -13,26 +13,54 @@
   */
 
 /**
+ * A single entry within the table of contents
+ */
+export interface ToCEntry {
+  /**
+   * The zero-indexed line number of the heading
+   */
+  line: number
+  /**
+   * The text contents of the heading (without the heading formatting)
+   */
+  text: string
+  /**
+   * The level of the heading (1-6)
+   */
+  level: number
+  /**
+   * A human-readable title numbering (e.g. 1.2, 2.5.1)
+   */
+  renderedLevel: string
+}
+
+/**
  * Generates a table of contents from the given mdString and returns it
  *
- * @param   {string}  mdString  The Markdown to be used for generation
+ * @param   {string}      mdString  The Markdown to be used for generation
  *
- * @return  {any[]}             The ToC elements
+ * @return  {ToCEntry[]}            The ToC elements
  */
-export default function generateTableOfContents (mdString: string): any[] {
-  let toc = []
+export default function generateTableOfContents (mdString: string): ToCEntry[] {
+  const toc = []
 
-  let lines = mdString.split('\n')
+  const lines = mdString.split('\n')
 
   let inCodeBlock = false
-  let inYamlFrontMatter = lines[0] === '---'
+  let inYamlFrontMatter = false
+
   for (let i = 0; i < lines.length; i++) {
+    if (i === 0 && lines[0] === '---') {
+      inYamlFrontMatter = true
+      continue
+    }
+
     if (inYamlFrontMatter && [ '...', '---' ].includes(lines[i])) {
       inYamlFrontMatter = false
       continue
     }
 
-    if (inYamlFrontMatter && ![ '...', '---' ].includes(lines[i])) {
+    if (inYamlFrontMatter) {
       continue
     }
 
@@ -41,7 +69,7 @@ export default function generateTableOfContents (mdString: string): any[] {
       continue
     }
 
-    if (inCodeBlock && !/^\s*`{3,}$/.test(lines[i])) {
+    if (inCodeBlock) {
       continue
     }
 
@@ -64,7 +92,7 @@ export default function generateTableOfContents (mdString: string): any[] {
   let h4 = 0
   let h5 = 0
   let h6 = 0
-  for (let entry of toc) {
+  for (const entry of toc) {
     switch (entry.level) {
       case 1:
         h1++

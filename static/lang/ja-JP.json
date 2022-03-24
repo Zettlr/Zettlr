@@ -4,7 +4,7 @@
             "Ryota Abe"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-01-24T09:44:22.000000Z"
+        "updated_at": "2022-02-12T05:27:03.000000Z"
     },
     "dialog": {
         "about": {
@@ -193,6 +193,7 @@
             },
             "avoid_new_tabs": "\u30d5\u30a1\u30a4\u30eb\u3092\u65b0\u3057\u3044\u30bf\u30d6\u3067\u958b\u304f\u3053\u3068\u3092\u53ef\u80fd\u306a\u9650\u308a\u907f\u3051\u308b",
             "checkForBeta": "\u30d9\u30fc\u30bf\u7248\u306e\u30ea\u30ea\u30fc\u30b9\u3092\u901a\u77e5\u3059\u308b",
+            "check_updates": "\u66f4\u65b0\u3092\u81ea\u52d5\u7684\u306b\u30c1\u30a7\u30c3\u30af\u3059\u308b",
             "choose_file": "\u30d5\u30a1\u30a4\u30eb\u3092\u9078\u629e...",
             "citation_database": "\u53c2\u8003\u6587\u732e\u30c7\u30fc\u30bf\u30d9\u30fc\u30b9(CSL JSON \u307e\u305f\u306f BibTeX)",
             "citations": {
@@ -216,6 +217,7 @@
                 "image_width": "\u753b\u50cf\u306e\u6700\u5927\u5e45\uff08\u30d1\u30fc\u30bb\u30f3\u30c8\uff09",
                 "preview_info": "\u30c9\u30ad\u30e5\u30e1\u30f3\u30c8\u4e2d\u306b\u3069\u306e\u8981\u7d20\u3092\u8868\u793a\u3059\u308b\u304b\u3092\u6307\u5b9a\u3057\u307e\u3059\u3002",
                 "render_citations": "\u5f15\u7528\u3092\u8868\u793a",
+                "render_emphasis": "\u5f37\u8abf\u3092\u8868\u793a",
                 "render_htags": "\u898b\u51fa\u3057\u6587\u5b57\u3092\u96a0\u3059",
                 "render_iframes": "iframe\u3092\u8868\u793a",
                 "render_images": "\u753b\u50cf\u3092\u8868\u793a",
@@ -643,6 +645,7 @@
         "open_link": "\u30ea\u30f3\u30af\u3092\u958b\u304f",
         "open_logs": "\u30ed\u30b0\u3092\u958b\u304f",
         "open_new_tab": "\u65b0\u3057\u3044\u30bf\u30d6\u3067\u958b\u304f",
+        "open_tutorial": "\u30c1\u30e5\u30fc\u30c8\u30ea\u30a2\u30eb\u3092\u958b\u304f",
         "open_workspace": "\u30ef\u30fc\u30af\u30b9\u30da\u30fc\u30b9\u3092\u958b\u304f...",
         "pandoc": "pandoc\u3092\u5165\u624b",
         "paste": "\u8cbc\u308a\u4ed8\u3051",
@@ -782,6 +785,7 @@
         "save_changes_save": "\u4fdd\u5b58",
         "save_changes_select_dir": "\u65b0\u898f\u30d5\u30a1\u30a4\u30eb\u3092\u4fdd\u5b58\u3059\u308b\u305f\u3081\u306e\u30c7\u30a3\u30ec\u30af\u30c8\u30ea\u3092\u9078\u629e\u3057\u3066\u304f\u3060\u3055\u3044\u3002",
         "save_changes_title": "\u672a\u4fdd\u5b58\u306e\u5909\u66f4\u3092\u7834\u68c4\u3057\u307e\u3059\u304b\uff1f",
+        "save_file": "\u30d5\u30a1\u30a4\u30eb\u3092\u4fdd\u5b58",
         "unknown_command": "\u4e0d\u660e\u306a\u30b3\u30de\u30f3\u30c9\u3092\u53d7\u4fe1\u3057\u307e\u3057\u305f\uff1a%s"
     },
     "toolbar": {

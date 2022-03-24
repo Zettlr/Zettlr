@@ -129,23 +129,23 @@ jobs:
       - name: Package Windows (x64)
         run: yarn package:win-x64
         env:
-          CSC_LINK: ${{ secrets.WIN_CERT }}
-          CSC_KEY_PASSWORD: ${{ secrets.WIN_CERT_PASS }}
+          CSC_LINK: ${{ secrets.WIN_CERT_2025_03_15 }}
+          CSC_KEY_PASSWORD: ${{ secrets.WIN_CERT_PASS_2025_03_15 }}
       - name: Package Windows (arm64)
         run: yarn package:win-arm
         env:
-          CSC_LINK: ${{ secrets.WIN_CERT }}
-          CSC_KEY_PASSWORD: ${{ secrets.WIN_CERT_PASS }}
+          CSC_LINK: ${{ secrets.WIN_CERT_2025_03_15 }}
+          CSC_KEY_PASSWORD: ${{ secrets.WIN_CERT_PASS_2025_03_15 }}
       - name: Build NSIS installer (x64)
         run: yarn release:win-x64
         env:
-          CSC_LINK: ${{ secrets.WIN_CERT }}
-          CSC_KEY_PASSWORD: ${{ secrets.WIN_CERT_PASS }}
+          CSC_LINK: ${{ secrets.WIN_CERT_2025_03_15 }}
+          CSC_KEY_PASSWORD: ${{ secrets.WIN_CERT_PASS_2025_03_15 }}
       - name: Build NSIS installer (arm64)
         run: yarn release:win-arm
         env:
-          CSC_LINK: ${{ secrets.WIN_CERT }}
-          CSC_KEY_PASSWORD: ${{ secrets.WIN_CERT_PASS }}
+          CSC_LINK: ${{ secrets.WIN_CERT_2025_03_15 }}
+          CSC_KEY_PASSWORD: ${{ secrets.WIN_CERT_PASS_2025_03_15 }}
       # The ARM64 artifact is being output simply as .exe w/o arch, since we
       # have to include --ia32 in the build flags for ARM builds (thus,
       # strictly speaking it has two architectures).

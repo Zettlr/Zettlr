@@ -34,10 +34,9 @@
 
 import WindowChrome from '@common/vue/window/Chrome.vue'
 import { trans } from '@common/i18n-renderer'
-import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
 
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 export default defineComponent({
   components: {

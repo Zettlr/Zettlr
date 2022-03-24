@@ -183,6 +183,7 @@ export default {
             })
               .catch(err => console.error(err))
           } else if (clickedID === 'menu.properties') {
+            console.log('git dir', this.obj.isGitRepository)
             const data = {
               dirname: this.obj.name,
               creationtime: this.obj.creationtime,
@@ -195,6 +196,7 @@ export default {
                 .reduce((prev, cur) => prev + cur, 0),
               isProject: this.obj.type === 'directory' && this.obj.project !== null,
               fullPath: this.obj.path,
+              isGitRepository: this.obj.isGitRepository,
               icon: this.obj.icon
             }
 

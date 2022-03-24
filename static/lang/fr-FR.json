@@ -20,7 +20,7 @@
             "Joris"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-01-30T13:20:55.000000Z"
+        "updated_at": "2022-02-16T14:20:18.000000Z"
     },
     "dialog": {
         "about": {
@@ -209,6 +209,7 @@
             },
             "avoid_new_tabs": "\u00c9viter d'ouvrir des fichiers dans de nouveaux onglets si possible",
             "checkForBeta": "Me pr\u00e9venir \u00e0 propos des versions b\u00eata",
+            "check_updates": "V\u00e9rifier automatiquement la pr\u00e9sence de mises \u00e0 jour",
             "choose_file": "Choisir un fichier\u2026",
             "citation_database": "Fichier de r\u00e9f\u00e9rences bibliographiques (au format CSL JSON ou BibTex)",
             "citations": {
@@ -232,6 +233,7 @@
                 "image_width": "Largeur maximale des images (pourcentage)",
                 "preview_info": "Choisir les \u00e9l\u00e9ments qui sont visibles dans les documents.",
                 "render_citations": "Visualiser des citations",
+                "render_emphasis": "Accentuation du rendu",
                 "render_htags": "Cacher les \"#\" dans les titres",
                 "render_iframes": "Afficher les iframes",
                 "render_images": "Afficher les images",
@@ -659,6 +661,7 @@
         "open_link": "Ouvrir le lien",
         "open_logs": "Ouvrir les journaux",
         "open_new_tab": "Ouvrir dans un nouvel onglet",
+        "open_tutorial": "Ouvrir le tutoriel",
         "open_workspace": "Ouvrir un espace de travail...",
         "pandoc": "T\u00e9l\u00e9charger Pandoc",
         "paste": "Coller",
@@ -798,6 +801,7 @@
         "save_changes_save": "Enregistrer",
         "save_changes_select_dir": "Veuillez s\u00e9lectionner un dossier pour enregistrer le nouveau fichier.",
         "save_changes_title": "Annuler les modifications ?",
+        "save_file": "Enregistrer le fichier",
         "unknown_command": "Commande inconnue re\u00e7ue : %s"
     },
     "toolbar": {

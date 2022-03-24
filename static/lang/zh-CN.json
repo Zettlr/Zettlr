@@ -14,6 +14,7 @@
             "ihipop \u003Cihipop+zettlr@gmail.com\u003E",
             "Z_Moz",
             "Jovian \u003Clitanglian@hotmail.com\u003E",
+            "JIAYI LIU \u003Cjiayiliujiayiliu@gmail.com\u003E",
             "0x7A",
             "Krysl",
             "Herb \u003Chwongbaul.app@outlook.com\u003E",
@@ -24,7 +25,7 @@
             "Taylan TATLI"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-01-17T06:41:23.000000Z"
+        "updated_at": "2022-02-19T15:10:00.000000Z"
     },
     "dialog": {
         "about": {
@@ -213,6 +214,7 @@
             },
             "avoid_new_tabs": "\u5c3d\u91cf\u907f\u514d\u5728\u65b0\u6807\u7b7e\u9875\u6253\u5f00\u6587\u4ef6",
             "checkForBeta": "\u5f53\u6709\u65b0Beta\u7248\u672c\u53d1\u5e03\u65f6\u901a\u77e5\u6211",
+            "check_updates": "\u81ea\u52a8\u68c0\u67e5\u66f4\u65b0",
             "choose_file": "\u9009\u62e9\u6587\u6863 \u2026",
             "citation_database": "\u5f15\u6587\u6570\u636e\u5e93\uff08CSL JSON \u6216 BibTex \u683c\u5f0f\uff09",
             "citations": {
@@ -222,6 +224,10 @@
             "count_chars": "\u7edf\u8ba1\u5b57\u7684\u6570\u91cf\u800c\u4e0d\u662f\u8bcd\u8bed\u7684\u6570\u91cf\uff08\u4f8b\u5982\uff0c\u4e2d\u6587\uff09",
             "creationtime": "\u6587\u4ef6\u521b\u5efa\u65f6\u95f4",
             "dark_mode": "\u591c\u95f4\u6a21\u5f0f",
+            "dark_mode_schedule": {
+                "end": "\u6df1\u8272\u6a21\u5f0f\u7ed3\u675f\u65f6\u95f4",
+                "start": "\u6df1\u8272\u6a21\u5f0f\u5f00\u59cb\u65f6\u95f4"
+            },
             "debug": "\u542f\u7528\u8c03\u8bd5\u6a21\u5f0f",
             "default_image_save_path": "\u9ed8\u8ba4\u56fe\u7247\u8def\u5f84\uff08\u76f8\u5bf9\u6216\u7edd\u5bf9\uff09",
             "delete_on_fail": "\u5982\u679c\u79fb\u5230\u56de\u6536\u7ad9\u5931\u8d25\uff0c\u5219\u6c38\u4e45\u6027\u5730\u5220\u9664\u5b83\u4eec",
@@ -240,6 +246,7 @@
                 "title": "\u663e\u793a",
                 "use_first_headings": "\u4f7f\u7528\u4e00\u7ea7\u6807\u9898\uff08\u82e5\u5b58\u5728\uff09\u800c\u975e\u6587\u4ef6\u540d"
             },
+            "display_markdown_file_extensions": "\u663e\u793aMarkdown\u6587\u4ef6\u6269\u5c55\u540d",
             "display_time_explanation": "\u5728\u6587\u4ef6\u4e2d\u663e\u793a\u5143\u6570\u636e",
             "editor": "\u7f16\u8f91\u5668",
             "editor_font_size": "\u7f16\u8f91\u5668\u5b57\u4f53\u5927\u5c0f",
@@ -269,6 +276,9 @@
             "filemanager_expanded": "\u5206\u680f &mdash; \u5de6\u53f3\u680f\u5206\u522b\u663e\u793a\u76ee\u5f55\u6811\u548c\u6587\u4ef6\u5217\u8868",
             "filemanager_explanation": "\u6587\u4ef6\u7ba1\u7406\u5668\u6a21\u5f0f",
             "filemanager_thin": "\u5207\u6362 &mdash; \u663e\u793a\u76ee\u5f55\u6811\u6216\u8005\u6587\u4ef6\u5217\u8868",
+            "filename_display": {
+                "filename_only": "\u53ea\u663e\u793a\u6587\u4ef6\u540d"
+            },
             "filename_generator": "\u65b0\u6587\u4ef6\u540d\u7684\u6a21\u5f0f",
             "formatting_characters_explanation": "\u9009\u62e9\u8981\u88ab\u7c97\u4f53\u6216\u5f3a\u8c03\u547d\u4ee4\u4f7f\u7528\u7684\u683c\u5f0f\u5b57\u7b26",
             "general": "\u901a\u7528",
@@ -599,6 +609,7 @@
         "close_file": "\u5173\u95ed\u6587\u6863",
         "close_workspace": "\u5173\u95ed\u5de5\u4f5c\u533a",
         "copy": "\u590d\u5236",
+        "copy_equation": "\u590d\u5236\u65b9\u7a0b\u4ee3\u7801",
         "copy_filename": "\u590d\u5236\u6587\u4ef6\u540d",
         "copy_html": "\u590d\u5236\u4e3aHTML",
         "copy_id": "\u590d\u5236ID",
@@ -648,6 +659,7 @@
         "open_link": "\u6253\u5f00\u94fe\u63a5",
         "open_logs": "\u6253\u5f00\u65e5\u5fd7",
         "open_new_tab": "\u5728\u65b0\u6807\u7b7e\u9875\u4e2d\u6253\u5f00",
+        "open_tutorial": "\u6253\u5f00\u6559\u7a0b",
         "open_workspace": "\u6253\u5f00\u5de5\u4f5c\u533a...",
         "pandoc": "\u5b89\u88c5 Pandoc",
         "paste": "\u7c98\u8d34",
@@ -787,6 +799,7 @@
         "save_changes_save": "\u4fdd\u5b58",
         "save_changes_select_dir": "\u8bf7\u9009\u62e9\u76ee\u5f55\u4ee5\u4fdd\u5b58\u65b0\u7684\u6587\u6863\u3002",
         "save_changes_title": "\u5ffd\u7565\u672a\u4fdd\u5b58\u4fee\u6539?",
+        "save_file": "\u4fdd\u5b58\u6587\u4ef6",
         "unknown_command": "\u6536\u5230\u672a\u77e5\u6307\u4ee4: %s"
     },
     "toolbar": {

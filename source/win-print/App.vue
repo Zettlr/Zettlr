@@ -35,9 +35,8 @@ import { trans } from '@common/i18n-renderer'
 import WindowChrome from '@common/vue/window/Chrome.vue'
 import { defineComponent } from 'vue'
 import { ToolbarControl } from '@dts/renderer/window'
-import { PlatformPath } from '@dts/renderer/path'
 
-const path: PlatformPath = (window as any).path
+const path = window.path
 
 export default defineComponent({
   components: {

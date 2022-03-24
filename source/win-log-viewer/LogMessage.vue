@@ -53,6 +53,10 @@ export default defineComponent({
         return false
       }
 
+      if (this.message.details instanceof Error) {
+        return true
+      }
+
       if (typeof this.message.details === 'object') {
         return Object.keys(this.message.details).length > 0
       }
@@ -66,20 +70,25 @@ export default defineComponent({
     parsedDetails: function () {
       const detail = this.message.details
       let ret = ''
-      if (typeof detail === 'object') {
+      if (detail instanceof Error) {
+        const stack = detail.stack?.replace(/\n/g, '<br>')
+        return `Name: ${detail.name}
+Message: ${detail.message}
+${stack}`
+      } else if (typeof detail === 'object') {
         for (let param of Object.keys(detail)) {
           let val = (typeof detail[param] === 'object') ? JSON.stringify(detail[param]) : detail[param] + ''
-          if (val.length > 1000) val = val.substr(0, 1000) + '&hellip; <span class="more">(' + (val.length - 1000) + ' more characters)</span>'
-          ret += `${param}: ${val}<br>`
+          if (val.length > 1000) val = val.substring(0, 1000) + '… <span class="more">(' + (val.length - 1000) + ' more characters)</span>'
+          ret += `${param}: ${val}\n`
         }
       } else if (Array.isArray(detail)) {
         for (let i = 0; i < detail.length; i++) {
           let val = (typeof detail[i] === 'object') ? JSON.stringify(detail[i]) : detail[i] + ''
-          if (val.length > 1000) val = val.substr(0, 1000) + '&hellip; <span class="more">(' + (val.length - 1000) + ' more characters)</span>'
+          if (val.length > 1000) val = val.substring(0, 1000) + '… <span class="more">(' + (val.length - 1000) + ' more characters)</span>'
           ret += `[${i}]: ${val}`
         }
       } else {
-        ret += `${detail}<br>`
+        ret += `${detail}\n`
       }
       return ret
     }
@@ -133,6 +142,7 @@ export default defineComponent({
 
     .details {
       font-family: 'Menlo', 'Courier New', Courier, monospace;
+      white-space: pre;
     }
 
     .expand-details {

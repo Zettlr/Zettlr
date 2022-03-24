@@ -92,16 +92,20 @@ defineMode('markdown-zkn', function (config, parserConfig) {
      * @return  {string|null|undefined}            Returns a token class or null
      */
     token: function (stream, state) {
-      // First: YAML highlighting. This block will only execute
-      // at the beginning of a file.
-      if (state.startOfFile && stream.sol() && stream.match(/---/) !== null) {
+      // First: YAML highlighting. This block will only execute at the beginning
+      // of a file. NOTE the `stream.eol()` check at the end of the conditions.
+      // If the RE for a frontmatter did match, we have to additionally check
+      // that three dots or dashes are indeed the *only* contents on the line
+      // for it in order to be recognized as a valid frontmatter. More dashes or
+      // dots are not allowed as per the Pandoc documentation.
+      if (state.startOfFile && stream.sol() && stream.match(/---/) !== null && stream.eol()) {
         // Assume a frontmatter
         state.startOfFile = false
         state.inFrontmatter = true
         return 'hr yaml-frontmatter-start'
       } else if (!state.startOfFile && state.inFrontmatter) {
         // Still in frontMatter?
-        if (stream.sol() && stream.match(/---|\.\.\./) !== null) {
+        if (stream.sol() && stream.match(/---|\.\.\./) !== null && stream.eol()) {
           state.inFrontmatter = false
           return 'hr yaml-frontmatter-end'
         }

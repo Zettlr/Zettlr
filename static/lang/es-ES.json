@@ -14,7 +14,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-01-23T20:47:54.000000Z"
+        "updated_at": "2022-02-02T16:25:21.000000Z"
     },
     "dialog": {
         "about": {
@@ -653,6 +653,7 @@
         "open_link": "Abrir enlace",
         "open_logs": "Abrir Registros",
         "open_new_tab": "Abrir en una pesta\u00f1a nueva",
+        "open_tutorial": "Abrir Tutorial",
         "open_workspace": "Abrir \u00e1rea de trabajo...",
         "pandoc": "Instalar Pandoc",
         "paste": "Pegar",

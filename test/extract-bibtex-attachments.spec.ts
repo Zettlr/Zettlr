@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-import extractBibTexAttachments from '../source/app/service-providers/assets/extract-bibtex-attachments'
+import extractBibTexAttachments from '../source/app/service-providers/citeproc/extract-bibtex-attachments'
 import assert from 'assert'
 import 'mocha'
 
@@ -78,7 +78,7 @@ const invalidBibTexFile = `
 
 describe('Utility#extractBibTexAttachments()', function () {
   it('should successfully parse a valid BibTex file', function () {
-    const files = extractBibTexAttachments(validBibTexFile)
+    const files = extractBibTexAttachments(validBibTexFile, '')
     assert.deepStrictEqual(Object.keys(files), Object.keys(validResults), 'The parsed results do not contain the same keys!')
     for (const key in files) {
       assert.deepStrictEqual(files[key], validResults[key], `Key ${key} differs from the expected result!`)
@@ -87,7 +87,7 @@ describe('Utility#extractBibTexAttachments()', function () {
 
   it('should throw an error due to invalid BibTex entries', function () {
     assert.throws(() => {
-      extractBibTexAttachments(invalidBibTexFile)
+      extractBibTexAttachments(invalidBibTexFile, '')
     })
   })
 })

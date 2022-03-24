@@ -17,6 +17,7 @@ import CodeMirror from 'codemirror'
 import katex from 'katex'
 
 import 'katex/contrib/mhchem' // modify katex module
+import clickAndClear from './util/click-and-clear'
 
 const multilineMathRE = getBlockMathRE()
 const commands = (CodeMirror.commands as any)
@@ -75,7 +76,7 @@ commands.markdownRenderMath = function (cm: CodeMirror.Editor) {
     )
 
     // Enable on-click closing of rendered Math elements.
-    mathSpan.onclick = (e) => { textMarker.clear() }
+    mathSpan.onclick = clickAndClear(textMarker, cm)
 
     katex.render(myMarker.eq, mathSpan, { throwOnError: false, displayMode: myMarker.displayMode })
 

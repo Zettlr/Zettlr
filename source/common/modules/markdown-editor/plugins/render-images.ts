@@ -18,6 +18,7 @@ import CodeMirror, { commands } from 'codemirror'
 import { getImageRE } from '@common/regular-expressions'
 import makeAbsoluteURL from '@common/util/make-absolute-url'
 import { trans } from '@common/i18n-renderer'
+import canRenderElement from './util/can-render-element'
 
 // Image detection regex
 const imageRE = getImageRE()
@@ -69,33 +70,16 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
       }
 
       // Now get the precise beginning of the match and its end
-      let curFrom = { 'line': i, 'ch': match.index }
-      let curTo = { 'line': i, 'ch': match.index + match[0].length }
+      const curFrom = { line: i, ch: match.index }
+      const curTo = { line: i, ch: match.index + match[0].length }
 
-      let cur = cm.getCursor('from')
-      if (cur.line === curFrom.line && cur.ch >= curFrom.ch && cur.ch <= curTo.ch + 1) {
-        // Cursor is in selection: Do not render.
-        continue
-      }
-
-      // We can only have one marker at any given position at any given time
-      if (cm.findMarks(curFrom, curTo).length > 0) {
-        continue
-      }
-
-      // Do not render if it's inside a comment (in this case the mode will be
-      // markdown, but comments shouldn't be included in rendering)
-      // Final check to avoid it for as long as possible, as getTokenAt takes
-      // considerable time.
-      const tokenTypeBegin = cm.getTokenTypeAt(curFrom)
-      const tokenTypeEnd = cm.getTokenTypeAt(curTo)
-      if (tokenTypeBegin?.includes('comment') || tokenTypeEnd?.includes('comment')) {
+      if (!canRenderElement(cm, curFrom, curTo)) {
         continue
       }
 
       const img = new Image()
 
-      const isDataUrl = /^data:[a-zA-Z0-9/;=]+(?:;base64){0,1},.+/.test(url)
+      let isDataUrl = /^data:[a-zA-Z0-9/;=]+(?:;base64){0,1},.+/.test(url)
       let actualURLToLoad = url
 
       if (!isDataUrl) {
@@ -122,9 +106,6 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
       figure.appendChild(img)
       figure.appendChild(caption)
       figure.appendChild(size)
-      if (!isDataUrl) {
-        figure.appendChild(openExternally)
-      }
 
       const container = document.createElement('div')
       container.classList.add('editor-image-container')
@@ -189,14 +170,28 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
       // Display a replacement image in case the correct one is not found
       img.onerror = () => {
         img.src = img404
+        isDataUrl = true
         caption.textContent = trans('system.error.image_not_found', url)
       }
-      img.onclick = () => { textMarker.clear() }
+      img.onclick = () => {
+        const range = textMarker.find()
+        if (range !== undefined) {
+          const { from, to } = range
+          cm.setSelection(from, to)
+          cm.focus()
+        }
+        textMarker.clear()
+      }
 
       // Update the image title on load to retrieve the real image size.
       img.onload = () => {
         img.title = `${title} (${img.naturalWidth}x${img.naturalHeight}px)`
         size.innerHTML = `${img.naturalWidth}&times;${img.naturalHeight}px`
+
+        if (!isDataUrl) {
+          figure.appendChild(openExternally)
+        }
+
         textMarker.changed()
       }
 

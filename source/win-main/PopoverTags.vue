@@ -108,7 +108,7 @@ export default {
     sortedTags: function () {
       // Sorts the tags based on either name or count
       const sorted = this.tags.map(elem => elem)
-      const languagePreferences = [ global.config.get('appLang'), 'en' ]
+      const languagePreferences = [ window.config.get('appLang'), 'en' ]
       const coll = new Intl.Collator(languagePreferences, { 'numeric': true })
       sorted.sort((a, b) => {
         if (this.sorting === 'name') {

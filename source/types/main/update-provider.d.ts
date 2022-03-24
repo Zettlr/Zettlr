@@ -1,26 +1,7 @@
-interface UpdateProvider {
-  /**
-   * Checks for updates by querying the API
-   */
-  check: () => void // Initiates an update check programmatically
-  /**
-   * Is a new version available? (Should be called after check())
-   *
-   * @return  {Boolean}  Whether or not a new version is available
-   */
-  applicationUpdateAvailable: () => boolean
-  /**
-   * Gets the current update status (should be called after check())
-   *
-   * @return  {UpdateState}  The full Update information
-   */
-  getUpdateState: () => UpdateState
-}
-
 /**
  * Struct which represents a single asset provided for by the updater
  */
-interface UpdateAsset {
+export interface UpdateAsset {
   /**
    * The filename of the asset
    */
@@ -38,7 +19,7 @@ interface UpdateAsset {
 /**
  * This struct contains the information returned by the Update API
  */
-interface ServerAPIResponse {
+export interface ServerAPIResponse {
   /**
    * GitHub's internal ID
    */
@@ -77,7 +58,7 @@ interface ServerAPIResponse {
  * This struct holds all information necessary to guide a user through the
  * complete update process
  */
-interface UpdateState {
+export interface UpdateState {
   /**
    * If lastErrorMessage is not undefined, an error occurred. The error
    * corresponds to the got error classes

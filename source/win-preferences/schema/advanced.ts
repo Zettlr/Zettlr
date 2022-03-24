@@ -60,6 +60,11 @@ export default function (): any {
           model: 'system.leaveAppRunning',
           disabled: process.env.ZETTLR_IS_TRAY_SUPPORTED === '0',
           info: process.env.ZETTLR_TRAY_ERROR
+        },
+        {
+          type: 'checkbox',
+          label: trans('dialog.preferences.check_updates'),
+          model: 'system.checkForUpdates'
         }
       ],
       [
@@ -67,6 +72,17 @@ export default function (): any {
           type: 'token',
           label: trans('dialog.preferences.attachments_info'),
           model: 'attachmentExtensions'
+        }
+      ],
+      [
+        {
+          type: 'radio',
+          model: 'system.zoomBehavior',
+          label: trans('dialog.preferences.zoom_behavior.label'),
+          options: {
+            'gui': trans('dialog.preferences.zoom_behavior.gui'),
+            'editor': trans('dialog.preferences.zoom_behavior.editor')
+          }
         }
       ],
       [
@@ -90,7 +106,7 @@ export default function (): any {
           type: 'number',
           label: trans('dialog.preferences.watchdog_threshold_label'),
           model: 'watchdog.stabilityThreshold',
-          disabled: global.config.get('watchdog.activatePolling') === false
+          disabled: window.config.get('watchdog.activatePolling') === false
         }
       ]
     ]

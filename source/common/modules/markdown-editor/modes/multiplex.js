@@ -54,6 +54,10 @@ const highlightingModes = {
     'mode': 'mllike',
     'selectors': [ 'f\\#', 'fsharp' ]
   },
+  'text/x-fortran': {
+    'mode': 'fortran',
+    'selectors': ['fortran']
+  },
   'text/x-java': {
     'mode': 'clike',
     'selectors': ['java']

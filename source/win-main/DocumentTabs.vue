@@ -7,7 +7,7 @@
         active: activeFile !== null && file.path === activeFile.path,
         modified: modifiedDocs.includes(file.path)
       }"
-      v-bind:title="file.name"
+      v-bind:title="file.path"
       v-bind:data-path="file.path"
       role="tab"
       draggable="true"
@@ -49,9 +49,8 @@
 import displayTabsContextMenu from './tabs-context'
 import tippy from 'tippy.js'
 import { nextTick, defineComponent } from 'vue'
-import { IpcRenderer } from 'electron'
 
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 export default defineComponent({
   name: 'DocumentTabs',
@@ -411,6 +410,7 @@ body div#tab-container {
   // In case of an overflow, hide the scrollbar so that scrolling left/right
   // remains possible, but no thicc scrollbar in the way!
   &::-webkit-scrollbar { display: none; }
+  scroll-behavior: smooth;
 
   div[role="tab"] {
     display: inline-block;
