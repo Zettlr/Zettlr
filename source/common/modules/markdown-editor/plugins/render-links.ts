@@ -15,6 +15,8 @@
 import CodeMirror, { commands } from 'codemirror'
 import makeAbsoluteURL from '@common/util/make-absolute-url'
 import openMarkdownLink from '../open-markdown-link'
+import clickAndClear from './util/click-and-clear'
+import canRenderElement from './util/can-render-element'
 
 // This regular expression matches three different kinds of URLs:
 // 1. Linked images in the format [![Alt text](image/path.png)](www.link-target.tld)
@@ -113,26 +115,10 @@ const linkRE = /\[!\[([^[]*)\]\((.+)\)\]\((.+)\)|\[([^\]]+)\]\((.+?)\)|(((?:(?:a
         }
       }
 
-      let cur = cm.getCursor('from')
-      if (cur.line === curFrom.line && cur.ch >= curFrom.ch && cur.ch <= curTo.ch + 1) {
-        // Cursor is in selection: Do not render. Also include the adjacent
-        // character, because otherwise impartial links will also be detected
-        // and rendered before the user has finished typing them.
-        continue
-      }
-
-      // We can only have one marker at any given position at any given time
-      if (cm.findMarks(curFrom, curTo).length > 0) {
-        continue
-      }
-
-      // Do not render if it's inside a comment (in this case the mode will be
-      // markdown, but comments shouldn't be included in rendering)
-      // Final check to avoid it for as long as possible, as getTokenAt takes
-      // considerable time.
-      let tokenTypeBegin = cm.getTokenTypeAt(curFrom)
-      let tokenTypeEnd = cm.getTokenTypeAt(curTo)
-      if (tokenTypeBegin?.includes('comment') || tokenTypeEnd?.includes('comment')) {
+      // Check if we can render a link at this position. Include the adjacent
+      // character in the check, because otherwise impartial links will also be
+      // detected and rendered before the user has finished typing them.
+      if (!canRenderElement(cm, curFrom, { line: curTo.line, ch: curTo.ch + 1 })) {
         continue
       }
 
@@ -227,9 +213,7 @@ const linkRE = /\[!\[([^[]*)\]\((.+)\)\]\((.+)\)|\[([^\]]+)\]\((.+?)\)|(((?:(?:a
         } else {
           // Clear the textmarker and set the cursor to where the
           // user has clicked the link.
-          textMarker.clear()
-          cm.setCursor(cm.coordsChar({ 'left': e.clientX, 'top': e.clientY }))
-          cm.focus()
+          clickAndClear(textMarker, cm)(e)
         }
       }
     } // END while-loop

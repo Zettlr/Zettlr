@@ -1,5 +1,6 @@
 // FSAL types used solely in the main process
 import { ProjectSettings, FSMetaInfo } from '@dts/common/fsal'
+import { WritingTarget } from '@providers/targets'
 
 /**
  * Represents an event the watchdog can work with
@@ -20,8 +21,8 @@ export interface DirDescriptor extends FSMetaInfo {
     project: ProjectSettings|null
   }
   type: 'directory'
-  children: Array<MDFileDescriptor|DirDescriptor|CodeFileDescriptor>
-  attachments: OtherFileDescriptor[]
+  isGitRepository: boolean
+  children: Array<MDFileDescriptor|DirDescriptor|CodeFileDescriptor|OtherFileDescriptor>
   dirNotFoundFlag?: boolean // If the flag is set & true this directory has not been found
 }
 

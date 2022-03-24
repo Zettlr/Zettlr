@@ -7,7 +7,7 @@
             "Paula Simoes \u003Cppsimoes@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-12-21T14:48:05.000000Z"
+        "updated_at": "2022-02-07T11:10:17.000000Z"
     },
     "dialog": {
         "about": {
@@ -196,8 +196,12 @@
             },
             "avoid_new_tabs": "Se poss\u00edvel evitar abrir ficheiros em novas abas",
             "checkForBeta": "Notifique-me de actualiza\u00e7\u00f5es beta",
+            "check_updates": "Verificar atualiza\u00e7\u00f5es autom\u00e1ticamente",
             "choose_file": "Escolher ficheiro...",
             "citation_database": "Base de dados de cita\u00e7\u00f5es (CSL JSON ou BibTex)",
+            "citations": {
+                "title": "Cita\u00e7\u00f5es"
+            },
             "cite_style_label": "Qual o comportamento do preenchimento autom\u00e1tico de cita\u00e7\u00f5es?",
             "count_chars": "Contar caracteres em vez de palavras (em Chin\u00eas, p. ex.)",
             "creationtime": "Data de cria\u00e7\u00e3o do ficheiro",
@@ -339,6 +343,7 @@
                 "updated": "Tradu\u00e7\u00f5es actualizadas: %s"
             },
             "user_dictionary": "Dicion\u00e1rio do utilizador. Remova palavras clicando nelas.",
+            "user_dictionary_label": "Entrada do dicion\u00e1rio",
             "watchdog_checkbox_label": "Activar monitoriza\u00e7\u00e3o de mudan\u00e7as externas",
             "watchdog_explainer": "Nalguns computadores, o Zettlr pode reportar demasiadas mudan\u00e7as em ficheiros remotos. Se isto acontecer, tente activar esta configura\u00e7\u00e3o.",
             "watchdog_threshold_label": "Tempo de espera at\u00e9 a grava\u00e7\u00e3o do ficheiro estar conclu\u00edda (em ms)",
@@ -371,7 +376,8 @@
                 "var_month": "M\u00eas (zeros \u00e0 esquerda)",
                 "var_second": "Segundos (zeros \u00e0 esquerda)",
                 "var_week_number": "N\u00famero de semana (zeros \u00e0 esquerda)",
-                "var_year": "Ano (quatro d\u00edgitos)"
+                "var_year": "Ano (quatro d\u00edgitos)",
+                "var_year_two": "Ano (dois d\u00edgitos)"
             }
         },
         "statistics": {
@@ -380,6 +386,9 @@
             "intro": "Aqui pode encontrar estat\u00edsticas detalhadas sobre os seus h\u00e1bitos de escrita, incluindo um gr\u00e1fico detalhado das suas palavras por dia.",
             "month": "M\u00eas",
             "previous_frame": "Per\u00edodo anterior",
+            "tabs": {
+                "calendar_label": "Calend\u00e1rio"
+            },
             "this_frame": "Per\u00edodo actual",
             "title": "Estat\u00edsticas de escrita",
             "week": "Semana",
@@ -408,22 +417,39 @@
             "client_error": "N\u00e3o foi poss\u00edvel verificar se h\u00e1 actualiza\u00e7\u00f5es: Client Error (Status code: %s)",
             "connection_error": "N\u00e3o foi poss\u00edvel verificar se h\u00e1 actualiza\u00e7\u00f5es: N\u00e3o foi poss\u00edvel estabelecer liga\u00e7\u00e3o",
             "current_version": "A sua vers\u00e3o",
+            "download_progress_label": "Descarregando atualiza\u00e7\u00e3o",
+            "new_update_available": "Est\u00e1 dispon\u00edvel uma atualiza\u00e7\u00e3o para a vers\u00e3o %s",
             "no_data": "N\u00e3o foi poss\u00edvel verificar se h\u00e1 actualiza\u00e7\u00f5es: O servidor n\u00e3o enviou quaisquer dados",
+            "no_new_update": "Nenhuma atualiza\u00e7\u00e3o dispon\u00edvel. Tem a vers\u00e3o mais recente.",
             "notification": "H\u00e1 uma nova vers\u00e3o do Zettlr dispon\u00edvel. Por favor consulta a lista de modifica\u00e7\u00f5es abaixo.",
             "redirect_error": "N\u00e3o foi poss\u00edvel verificar se h\u00e1 actualiza\u00e7\u00f5es: O servidor tentou redireccionar o pedido (Status code: %s)",
             "release_url": "Abrir a p\u00e1gina da descarga",
             "server_error": "N\u00e3o foi poss\u00edvel verificar se h\u00e1 actualiza\u00e7\u00f5es: Server Error (Status code: %s)",
+            "start_update_message": "A Iniciar atualiza\u00e7\u00e3o ...",
             "title": "H\u00e1 uma actualiza\u00e7\u00e3o dispon\u00edvel",
-            "transmission_error": "N\u00e3o foi poss\u00edvel verificar se h\u00e1 actualiza\u00e7\u00f5es: Liga\u00e7\u00e3o interrompida"
+            "transmission_error": "N\u00e3o foi poss\u00edvel verificar se h\u00e1 actualiza\u00e7\u00f5es: Liga\u00e7\u00e3o interrompida",
+            "window_title": "Atualizador"
         }
     },
     "gui": {
+        "assets_man": {
+            "defaults_restore_error": "N\u00e3o foi poss\u00edvel recuperar ficheiro padr\u00e3o!",
+            "defaults_restored": "Ficheiro padr\u00e3o recuperado!",
+            "defaults_restoring": "A recuperar ficheiro padr\u00e3o ...",
+            "status": {
+                "save_error": "Falha ao gravar",
+                "saved": "Gravado!",
+                "saving": "Gravando ...",
+                "unsaved_changes": "Modifica\u00e7\u00f5es n\u00e3o gravadas"
+            }
+        },
         "attachments": "Anexos",
         "attachments_open_dir": "Abrir pasta",
         "avg_close_to": "\ud83d\udcaa Est\u00e1 perto de atingir a sua m\u00e9dia di\u00e1ria!",
         "avg_not_reached": "\u270d\ud83c\udffc Toca a escrever para atingir a sua m\u00e9dia di\u00e1ria.",
         "avg_surpassed": "\ud83d\udd25 At\u00e9 o teclado fumega!",
         "avg_words": "M\u00e9dia di\u00e1ria",
+        "chars": "%s caracteres",
         "citeproc": {
             "error_db": "N\u00e3o foi poss\u00edvel carregar a base de dados de cita\u00e7\u00f5es",
             "error_report_message": "%s items na sua biblioteca n\u00e3o foram carregados devido a erros. Por favor, verifique as mensagens de erro abaixo para ver que CiteKeys est\u00e3o mal formatadas e qual foi o erro.",
@@ -435,6 +461,8 @@
             "references_none": "N\u00e3o h\u00e1 cita\u00e7\u00f5es neste documento.",
             "reloading": "Foram detectadas altera\u00e7\u00f5es ao ficheiro de biblioteca. Recarregando..."
         },
+        "created": "Criado",
+        "date_just_now_label": "agora mesmo",
         "dirs": "Pastas",
         "display_search_results": "Mostrar resultados de pesquisa",
         "empty_dir": "Pasta vazia",
@@ -461,13 +489,39 @@
             "tasklist": "Lista de tarefas",
             "ul": "Lista de items"
         },
+        "global_search": {
+            "clear_label": "Limpar pesquisa",
+            "query_placeholder": "Encontrar ...",
+            "search_label": "Procurar"
+        },
+        "modified": "Modificado",
+        "months": {
+            "apr": "Abril",
+            "aug": "Agosto",
+            "dec": "Dezembro",
+            "feb": "Fevereiro",
+            "jan": "Janeiro",
+            "jul": "Julho",
+            "jun": "Junho",
+            "mar": "Mar\u00e7o",
+            "may": "Maio",
+            "nov": "Novembro",
+            "oct": "Outubro",
+            "sep": "Setembro"
+        },
         "no_attachments": "Sem anexos",
         "no_dir_selected": "Nenhuma pasta seleccionada",
         "no_search_results": "Sem resultados",
+        "preview_modification_date": "Modificado",
+        "preview_searching_label": "\u00c0 procura de ficheiro ...",
+        "preview_word_count": "Contagem de palavras",
+        "related_files_label": "Ficheiros relacionados",
         "statistics_more": "Mais estat\u00edsticas...",
+        "table_of_contents": "\u00cdndice",
         "today_words": "palavras hoje",
         "words": "%s palavras",
-        "words_last_month": "palavras o m\u00eas passado"
+        "words_last_month": "palavras o m\u00eas passado",
+        "workspaces": "\u00c1reas de Trabalho"
     },
     "localise": {
         "decimal_delimiter": ",",
@@ -481,6 +535,7 @@
         "clear_recent_docs": "Vazio",
         "close_dir": "Fechar pasta",
         "close_file": "Fechar ficheiro",
+        "close_workspace": "Fechar \u00e1rea de trabalho",
         "copy": "Copiar",
         "copy_filename": "Copiar nome do ficheiro",
         "copy_html": "Copiar como HTML",
@@ -495,6 +550,7 @@
         "donate": "Apoiar o Zettlr",
         "duplicate_file": "Duplicar ficheiro",
         "export": "Exportar...",
+        "filter_files": "Filtrar ficheiros",
         "find_dir": "Localizar na pasta",
         "find_file": "Localizar no ficheiro",
         "generate_id": "Gerar nova ID",
@@ -525,6 +581,7 @@
         "no_suggestions": "Sem sugest\u00f5es",
         "open": "Abrir...",
         "open_attachment": "Abrir Anexo",
+        "open_in_browser": "Abrir no navegador",
         "open_link": "Abrir Link",
         "open_logs": "Abrir Registos",
         "pandoc": "Obter Pandoc",
@@ -535,6 +592,7 @@
         "print": "Imprimir",
         "project_build": "Exportar Projecto",
         "project_properties": "Op\u00e7\u00f5es do Projecto",
+        "properties": "Propriedades",
         "quicklook": "Vista R\u00e1pida",
         "quit": "Sair",
         "recent_docs": "Documentos recentes",
@@ -585,6 +643,13 @@
     "system": {
         "all_files": "Todos os ficheiros",
         "cancel": "Cancelar",
+        "common": {
+            "filter": "Filtro ...",
+            "list_actions_label": "A\u00e7\u00f5es",
+            "list_add_button": "Adicionar",
+            "list_default_column_label": "Item",
+            "list_search_placeholder": "Procurar entradas ..."
+        },
         "directories": "Pastas",
         "directory_removed": "A pasta %s foi removida.",
         "error": {

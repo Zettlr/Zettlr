@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div v-bind:class="{ 'checkbox-outer-div-inline': inline }">
     <div class="form-control cb-group">
       <label
         v-bind:class="{
-          'checkbox': true,
-          'disabled': disabled
+          checkbox: true,
+          disabled: disabled
         }"
       >
         <input
@@ -59,9 +59,13 @@ export default {
     },
     name: {
       type: String,
-      default: ''
+      required: true
     },
     disabled: {
+      type: Boolean,
+      default: false
+    },
+    inline: {
       type: Boolean,
       default: false
     },
@@ -82,6 +86,11 @@ export default {
 @input-size: 14px;
 
 body {
+  div.checkbox-outer-div-inline {
+    display: inline-block;
+    padding-right: 10px;
+  }
+
   .cb-group {
     display: grid;
     grid-template-columns: @input-size * 2 auto;

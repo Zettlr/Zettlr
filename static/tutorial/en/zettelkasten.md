@@ -15,6 +15,8 @@ Whenever you click an internal link, Zettlr will do two things at once: Start a 
 
 To switch to the file manager or the full text search, you can use the three-way toggle in the upper-left corner of the toolbar.
 
+> You can customize what Zettlr will do if you follow such internal links in the Zettelkasten preferences.
+
 ## Linking Files 🗄
 
 When it comes to cross-linking files within your Zettelkasten, there are two general ways of doing so: Either by using an ID, or its filename (without extension). So if you have a file called “zettelkasten.md” you can link to it by writing `[[zettelkasten]]`. Zettlr will try to find a file with that filename and open it.

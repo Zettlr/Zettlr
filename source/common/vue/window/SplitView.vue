@@ -206,7 +206,7 @@ body div.split-view {
   }
 
   div.horizontal-resizer {
-    cursor: ew-resize;
+    cursor: col-resize;
     width: 11px; // 1px width plus 5px margin to either side
     z-index: 20000; // Make sure the resizers are always on top
     position: absolute;

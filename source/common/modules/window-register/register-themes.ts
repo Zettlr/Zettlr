@@ -18,7 +18,7 @@
 // automatically
 import './assets/main.less'
 
-const ipcRenderer = (window as any).ipc as Electron.IpcRenderer
+const ipcRenderer = window.ipc
 
 /**
  * Webpack provides the themes as JavaScript objects with two properties, use
@@ -68,10 +68,10 @@ export default function registerThemes (): void {
     if (command === 'update') {
       if (payload === 'display.theme') {
         // Switch the theme based on the current configuration value
-        switchTheme(global.config.get('display.theme'))
+        switchTheme(window.config.get('display.theme'))
       } else if (payload === 'darkMode') {
         // Switch to light/dark mode based on the configuration variable
-        document.body.classList.toggle('dark', global.config.get('darkMode'))
+        document.body.classList.toggle('dark', window.config.get('darkMode'))
       } else if (payload === 'display.useSystemAccentColor') {
         // The accent color setting has been changed, so re-set the customCSS
         setSystemCss()
@@ -87,8 +87,8 @@ export default function registerThemes (): void {
   })
 
   // Initial theme change
-  switchTheme(global.config.get('display.theme'))
-  document.body.classList.toggle('dark', global.config.get('darkMode'))
+  switchTheme(window.config.get('display.theme'))
+  document.body.classList.toggle('dark', window.config.get('darkMode'))
 
   // Initial rendering of the Custom CSS
   ipcRenderer.invoke('css-provider', { command: 'get-custom-css-path' })
@@ -154,7 +154,7 @@ function setSystemCss (): void {
       const style = document.createElement('style')
       style.setAttribute('id', 'system-css')
 
-      const useSystemAccent: boolean = global.config.get('display.useSystemAccentColor')
+      const useSystemAccent: boolean = window.config.get('display.useSystemAccentColor')
 
       // We can put all CSS variables we would like to output into this map. All
       // will be appended to the stylesheet below.

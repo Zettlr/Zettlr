@@ -72,6 +72,23 @@ tableResults.push({
   'colAlignments': [ 'left', 'left' ]
 })
 
+/** * * * * * * * * * * * * * * * * * *
+ * TABLE FOUR
+ */
+table.push(`| Var | Jp | UK |
+|:----|---:|---:|
+| *n* |  1 |  2 |
+| Av  |  1 |  8 |`)
+
+tableResults.push({
+  'ast': [
+    [ 'Var', 'Jp', 'UK' ],
+    [ '*n*', '1', '2' ],
+    [ 'Av', '1', '8' ]
+  ],
+  'colAlignments': [ 'left', 'right', 'right' ]
+})
+
 const TABLE_ERROR_1 = `| Unequal | cols | table | here |
 | - | - | - | - |
 | should | throw | an |

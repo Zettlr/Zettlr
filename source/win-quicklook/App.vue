@@ -49,11 +49,10 @@
 import QuicklookEditor from './QuicklookEditor.vue'
 import WindowChrome from '@common/vue/window/Chrome.vue'
 import { trans } from '@common/i18n-renderer'
-import { IpcRenderer } from 'electron'
 import { defineComponent } from 'vue'
 import { ToolbarControl } from '@dts/renderer/window'
 
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const ipcRenderer = window.ipc
 
 export default defineComponent({
   components: {

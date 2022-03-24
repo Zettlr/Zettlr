@@ -187,22 +187,23 @@
   // applies cm-variable-3, and for the third level it applies cm-keyword. And
   // then it toggles around. Why would you do that ...?
   .task-item-done {
-    .cm-variable-2, .cm-variable-3, .cm-keyword { text-decoration: line-through; }
+    .cm-variable-2, .cm-variable-3, .cm-keyword { text-decoration: line-through !important; }
   }
 
   // Deliver a much more fancy UX for images inserted into the editor
   .editor-image-container {
     display: inline-block;
+    position: relative;
     width: 100%;
     text-align: center;
     cursor: default;
 
     figure {
-      display: inline-block;
-      position: relative;
-      top: 0;
+      img {
+        display: inherit;
+      }
 
-      &:hover {
+      &:hover, &:focus-within {
         figcaption, span.image-size-info, span.open-externally-button {
           opacity: 1;
         }

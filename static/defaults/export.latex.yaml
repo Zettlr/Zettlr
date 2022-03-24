@@ -13,7 +13,6 @@ include-in-header: []
 bibliography: []
 filters:
 - type: citeproc
-file-scope: false
 top-level-division: chapter
 wrap: none
 columns: 78

@@ -5,7 +5,7 @@
             "vfc"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-01-23T20:46:33.000000Z"
+        "updated_at": "2022-02-13T16:57:45.000000Z"
     },
     "dialog": {
         "about": {
@@ -194,6 +194,7 @@
             },
             "avoid_new_tabs": "Evita, quan sigui possible, obrir fitxers a noves pestanyes",
             "checkForBeta": "Notifica els llan\u00e7aments beta",
+            "check_updates": "Cerca actualitzacions autom\u00e0ticament",
             "choose_file": "Tria el fitxer",
             "citation_database": "Base de dades de les refer\u00e8ncies (CSL, JSON o BibTex)",
             "citations": {
@@ -217,6 +218,7 @@
                 "image_width": "M\u00e0xima amplada de les imatges (%)",
                 "preview_info": "Aquestes opcions determinen quins elements es renderitzaran als documents",
                 "render_citations": "Renderitza les cites",
+                "render_emphasis": "Renderitza els \u00e8mfasi",
                 "render_htags": "Amaga els car\u00e0cters d'encap\u00e7alament",
                 "render_iframes": "Renderitza els iframes",
                 "render_images": "Renderitza les imatges",
@@ -644,6 +646,7 @@
         "open_link": "Obre l'enlla\u00e7",
         "open_logs": "Obre el registre",
         "open_new_tab": "Obre en una pestanya nova",
+        "open_tutorial": "Obre el tutorial",
         "open_workspace": "Obre l'espai de treball",
         "pandoc": "Aconsegueix el Pandoc",
         "paste": "Enganxa",
@@ -783,6 +786,7 @@
         "save_changes_save": "Desa",
         "save_changes_select_dir": "Si us plau, seleccioneu una carpeta on desar el nou fitxer",
         "save_changes_title": "Ignora els canvis no desats?",
+        "save_file": "Desa el fitxer",
         "unknown_command": "S'ha rebut una ordre desconeguda: %s"
     },
     "toolbar": {

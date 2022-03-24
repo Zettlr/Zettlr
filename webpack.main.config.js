@@ -2,6 +2,17 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const path = require('path')
 const rules = require('./webpack.rules')
 
+const externals = {}
+
+if (process.env.BUNDLE_FSEVENTS !== '1') {
+  // Do not embed fsevents (otherwise this leads to problems on Linux and
+  // Windows, see https://github.com/paulmillr/chokidar/issues/618#issuecomment-392618390)
+  // NOTE: The environment variable is set in the generateAssets hook of electron
+  // forge since that runs before this module is required and has access to the
+  // *target* platform (rather than process.platform)
+  externals.fsevents = "require('fsevents')"
+}
+
 module.exports = {
   // Main entry point: the file that runs in the main process
   entry: './source/main.ts',
@@ -47,8 +58,5 @@ module.exports = {
       '@dts': [path.resolve(__dirname, 'source/types')]
     }
   },
-  externals: {
-    // Do not embed fsevents (otherwise this leads to problems on Linux and Windows, see https://github.com/paulmillr/chokidar/issues/618#issuecomment-392618390)
-    'fsevents': "require('fsevents')"
-  }
+  externals: externals
 }

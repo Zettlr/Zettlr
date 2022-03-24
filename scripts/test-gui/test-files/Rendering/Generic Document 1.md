@@ -14,25 +14,18 @@ bibliography: <!-- A block comment. -->
 
 # Markdown: Syntax
 
-*   [Overview](#overview)
-    *   [Philosophy](#philosophy)
-    *   [Inline HTML](#html)
-    *   [Automatic Escaping for Special Characters](#autoescape)
-*   [Block Elements](#block)
-    *   [Paragraphs and Line Breaks](#p)
-    *   [Headers](#header)
-    *   [Blockquotes](#blockquote)
-    *   [Lists](#list)
-    *   [Code Blocks](#precode)
-    *   [Horizontal Rules](#hr)
-*   [Span Elements](#span)
-    *   [Links](#link)
-    *   [Emphasis](#em)
-    *   [Code](#code)
-    *   [Images](#img)
-*   [Miscellaneous](#misc)
-    *   [Backslash Escapes](#backslash)
-    *   [Automatic Links](#autolink)
+- [Overview](#overview)
+  - [Philosophy](#philosophy)
+- [Block Elements](#block-elements)
+  - [Paragraphs and Line Breaks](#paragraphs-and-line-breaks)
+  - [Headers](#headers)
+  - [Blockquotes](#blockquotes)
+  - [Lists](#lists)
+  - [Code Blocks](#code-blocks)
+- [Span Elements](#span-elements)
+  - [Links](#links)
+  - [Emphasis](#emphasis)
+  - [Code](#code)
 
 **Note:** This document is itself written using markdown; you
 can [see the source for it by adding '.text' to the URL](/projects/markdown/syntax.text).
@@ -314,6 +307,10 @@ _single underscores_
 **double asterisks**
 
 __double underscores__
+
+Zettlr itself should not render the following, however:
+
+`foo _bar` some text in between `bar_ foo` more text
 
 ### Code
 

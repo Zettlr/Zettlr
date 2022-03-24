@@ -26,7 +26,7 @@ Zettlr chargera immédiatement le fichier et vous pourrez utiliser les référen
 
 C'est la fameuse citation de Karl Marx « entre deux droits égaux, la force décide » tirée de son _Capital_, volume 1. Ajoutons maintenant cette référence. Pour ce faire, vous devez mettre votre référence entre crochets et inclure une clé de référencement. La forme minimale d'une référence est donc `[@CiteKey]`, et la forme maximale est `[Préfixe @CiteKey, Suffixe du repère]`. Pour indiquer des numéros de page, des sections, des chapitres, etc., placez-les directement après la clé de citation, par exemple `[@CiteKey, pp. 23-56]`. Au coeur de Zettlr, il y a un puissant moteur qui est capable de démêler ce que vous écrivez et d'extraire des sections communes telles que des pages (`p.` et `pp.`), des chapitres (`chapter`) et des sections (`sec.` ou `§`), et même en plusieurs langues !
 
-Pour en revenir à notre citation, qui a encore besoin de sa référence, pouvez-vous parvenir à ajouter une référence derrière la citation qui se traduit par `(Marx 1962, 23 : 249)` ?
+Pour en revenir à notre citation, qui a encore besoin de sa référence, pouvez-vous parvenir à ajouter une référence derrière la citation qui se traduit par `(Marx 1971, 23 : 249)` ?
 
 
 ## Les listes de références bibliographiques 💻

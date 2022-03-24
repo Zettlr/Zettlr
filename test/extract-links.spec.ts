@@ -13,7 +13,7 @@
  */
 
 import assert from 'assert'
-import extractLinks from '../source/main/modules/fsal/util/extract-links'
+import extractLinks from '../source/app/service-providers/fsal/util/extract-links'
 
 const tests = [
   {

@@ -33,38 +33,36 @@ const listRE = getListTokenRE()
     return Pass
   }
 
-  if (cm.somethingSelected()) {
-    // Call regular handler
-    cm.execCommand('goLineLeft')
+  // Get the cursor position before executing the command
+  const cursorBefore = Object.assign({}, cm.getCursor())
+  const line = cm.getLine(cursorBefore.line)
+
+  // Then call the underlying CodeMirror command
+  cm.execCommand('goLineLeft')
+
+  // Then, let's see if we're in a list. If the cursor beforehand was to the
+  // left of the list marker, and afterwards is at the beginning of the line, we
+  // back up the cursor just after the list marker
+  const match = listRE.exec(line)
+
+  // Now let's retrieve the cursor position after the command ran
+  const cursorAfter = Object.assign({}, cm.getCursor())
+
+  if (cm.somethingSelected() || match === null) {
     return
   }
 
-  const cur = cm.getCursor()
-  const line = cm.getLine(cur.line)
+  // The listRE matched, so now we can check for where the cursor actually
+  // is.
+  const leadingWhite = match[1].length ?? 0
+  const tokenLength = match[2].length ?? 0
+  const afterWhite = match[4].length ?? 0
 
-  // First, check for two conditions: We are in a list, and the cursor is
-  // farther to the right than the beginning of the list.
-  const match = listRE.exec(line)
+  const startOfItem = leadingWhite + tokenLength + afterWhite
 
-  if (match === null) {
-    cm.execCommand('goLineLeft')
-  } else {
-    // The listRE matched, so now we can check for where the cursor actually
-    // is.
-    const leadingWhite = match[1].length ?? 0
-    const tokenLength = match[2].length ?? 0
-    const afterWhite = match[4].length ?? 0
-
-    const startOfItem = leadingWhite + tokenLength + afterWhite
-
-    if (cur.ch <= startOfItem) {
-      // The cursor is either directly at the start of the list item's
-      // contents or before that, so simply execute the "goLineLeft" command.
-      cm.execCommand('goLineLeft')
-    } else {
-      // We are in a list and we also are more to the right than the start of
-      // the item, so move to that.
-      cm.extendSelection({ line: cur.line, ch: startOfItem })
-    }
+  if (cursorBefore.ch > startOfItem && cursorAfter.ch <= startOfItem) {
+    // We are in a list and we also are more to the right than the start of
+    // the item, so move to that.
+    cm.extendSelection({ line: cursorBefore.line, ch: startOfItem })
   }
 }

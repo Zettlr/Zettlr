@@ -198,7 +198,7 @@ export default {
       // Zettlr looks on other platforms. Please also note that this
       // does not affect the native window chrome.
       platform: process.platform,
-      useNativeAppearance: global.config.get('window.nativeAppearance')
+      useNativeAppearance: window.config.get('window.nativeAppearance')
     }
   },
   computed: {
@@ -362,7 +362,7 @@ export default {
     // Oh, we can destructure stuff directly in the method signature?! Uuuuh
     ipcRenderer.on('config-provider', (event, { command, payload }) => {
       if (command === 'update' && payload === 'window.nativeAppearance') {
-        this.useNativeAppearance = global.config.get('window.nativeAppearance')
+        this.useNativeAppearance = window.config.get('window.nativeAppearance')
       }
     })
 

@@ -2,12 +2,13 @@
     "metadata": {
         "authors": [
             "Noisecommander",
+            "Jonas Roose",
             "mkevenaar",
             "Marcel van den Brink \u003Cmarcel.vandenbrink@gmail.com\u003E",
             "Taylan TATLI"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-10-09T06:49:42.000000Z"
+        "updated_at": "2022-02-16T11:49:52.000000Z"
     },
     "dialog": {
         "about": {
@@ -36,11 +37,17 @@
             "cancel": "Annuleren",
             "choose_path": "Kies een map ...",
             "close": "Sluiten",
+            "close_without_saving": "Sluiten zonder opslaan",
             "save": "Opslaan"
         },
         "custom_css": {
             "info": "Hier kun je verschillende stijlen van Zettlr herschrijven om het nog verder aan te passen. \u003Cstrong\u003ELet op: Dit bestand overschrijft alle CSS-richtlijnen! Verander nooit de geometrie van de elementen anders kan Zettlr ongewenst gedrag vertonen!\u003C/strong\u003E",
             "title": "Aangepaste CSS"
+        },
+        "defaults": {
+            "explanation": "Bewerk de standaardinstellingen voor importeren en exporteren.",
+            "exporting_title": "Exporteren",
+            "importing_title": "Importeren"
         },
         "dir_new": {
             "placeholder": "Mapnaam",

@@ -15,13 +15,14 @@
 
 import { app } from 'electron'
 import path from 'path'
-import { bootApplication, shutdownApplication } from './app/lifecycle'
+import { bootApplication, shutdownApplication, getServiceContainer } from './app/lifecycle'
 
 // Include the global Zettlr class
 import Zettlr from './main/zettlr'
 
 // Helper function to extract files to open from process.argv
 import extractFilesFromArgv from './app/util/extract-files-from-argv'
+import AppServiceContainer from './app/app-service-container'
 import {
   DATA_DIR,
   DISABLE_HARDWARE_ACCELERATION,
@@ -44,27 +45,6 @@ if (!app.requestSingleInstanceLock()) {
 
 // If we reach this point, we are now booting the first instance of Zettlr.
 
-// Set up the pre-boot log
-global.preBootLog = []
-
-/**
- * This will be overwritten by the log provider, once it has booted
- */
-global.log = {
-  verbose: (message: string) => {
-    global.preBootLog.push({ 'level': 1, 'message': message })
-  },
-  info: (message: string) => {
-    global.preBootLog.push({ 'level': 2, 'message': message })
-  },
-  warning: (message: string) => {
-    global.preBootLog.push({ 'level': 3, 'message': message })
-  },
-  error: (message: string) => {
-    global.preBootLog.push({ 'level': 4, 'message': message })
-  }
-}
-
 // To show notifications properly on Windows, we must manually set the appUserModelID
 // See https://www.electronjs.org/docs/tutorial/notifications#windows
 if (process.platform === 'win32') {
@@ -77,6 +57,23 @@ let dataDir = getCLIArgument(DATA_DIR)
 
 if (dataDir !== undefined) {
   // a path to a custom config dir is provided
+  const match = /^--data-dir="?([^"]+)"?$/.exec(dataDirFlag)
+  if (match !== null) {
+    let dataDir = match[1]
+
+    if (!path.isAbsolute(dataDir)) {
+      if (app.isPackaged) {
+        // Attempt to use the executable file's path as the basis
+        dataDir = path.join(path.dirname(app.getPath('exe')), dataDir)
+      } else {
+        // Attempt to use the repository's root directory as the basis
+        dataDir = path.join(__dirname, '../../', dataDir)
+      }
+    }
+    getServiceContainer()?.log.info('[Application] Using custom data dir: ' + dataDir)
+    app.setPath('userData', dataDir)
+    app.setAppLogsPath(path.join(dataDir, 'logs'))
+  }
   if (!path.isAbsolute(dataDir)) {
     if (app.isPackaged) {
       // Attempt to use the executable file's path as the basis
@@ -145,12 +142,13 @@ app.whenReady().then(() => {
   // up the providers.
   bootApplication().then(() => {
     // Now instantiate the main class which will care about everything else
-    zettlr = new Zettlr()
+    zettlr = new Zettlr(getServiceContainer() as AppServiceContainer)
     zettlr.init()
       .then(() => {
         // After the app has been booted, open any files that we amassed in the
         // meantime.
-        zettlr?.runCommand('roots-add', filesBeforeOpen)
+        (getServiceContainer() as AppServiceContainer).commands.run('roots-add', filesBeforeOpen)
+          .catch(err => console.error(err))
       })
       .catch(err => {
         console.error(err)
@@ -177,25 +175,28 @@ app.on('second-instance', (event, argv, cwd) => {
     return
   }
 
-  global.log.info('[Application] A second instance has been opened.')
+  getServiceContainer()?.log.info('[Application] A second instance has been opened.')
 
   // openWindow calls the appropriate function of the windowManager, which deals
   // with the nitty-gritty of actually making the main window visible.
-  zettlr.openWindow()
+  getServiceContainer()?.windows.showMainWindow()
+
+  const commands = getServiceContainer()?.commands
 
   // In case the user wants to open a file/folder with this running instance
-  zettlr.runCommand('roots-add', extractFilesFromArgv(argv)).catch(err => { console.error(err) })
+  commands?.run('roots-add', extractFilesFromArgv(argv)).catch(err => { console.error(err) })
 })
 
 /**
  * This gets executed when the user wants to open a file on macOS.
  */
 app.on('open-file', (e, p) => {
+  const commands = getServiceContainer()?.commands
   e.preventDefault() // Need to explicitly set this b/c we're handling this
   // The user wants to open a file -> simply handle it.
   if (zettlr !== null) {
-    zettlr.runCommand('roots-add', [p]).catch((err) => {
-      global.log.error('[Application] Error while adding new roots', err)
+    commands?.run('roots-add', [p]).catch((err) => {
+      getServiceContainer()?.log.error('[Application] Error while adding new roots', err)
     })
   } else {
     // The Zettlr object has yet to be created -> cache it
@@ -208,7 +209,12 @@ app.on('open-file', (e, p) => {
  * `system.leaveAppRunning` is true or on macOS.
  */
 app.on('window-all-closed', function () {
-  const leaveAppRunning = Boolean(global.config.get('system.leaveAppRunning'))
+  const config = getServiceContainer()?.config
+  if (config === undefined) {
+    return
+  }
+
+  const leaveAppRunning = Boolean(config.get('system.leaveAppRunning'))
   if (!leaveAppRunning && process.platform !== 'darwin') {
     // On OS X it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
@@ -247,7 +253,7 @@ app.on('will-quit', function (event) {
  */
 app.on('activate', function () {
   if (zettlr !== null) {
-    zettlr.openAnyWindow()
+    getServiceContainer()?.windows.showAnyWindow()
   }
 })
 
@@ -257,5 +263,5 @@ app.on('activate', function () {
  */
 process.on('unhandledRejection', (err: any) => {
   // Just log to console.
-  global.log.error('[Application] Unhandled rejection received', err)
+  getServiceContainer()?.log.error('[Application] Unhandled rejection received', err)
 })

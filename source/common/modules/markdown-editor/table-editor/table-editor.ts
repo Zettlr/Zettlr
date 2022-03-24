@@ -19,7 +19,7 @@ import buildPipeTable from './build-pipe'
 import buildSimpleTable from './build-simple'
 import buildGridTable from './build-grid'
 
-import md2html from '@common/util/md-to-html'
+import { getConverter } from '@common/util/md-to-html'
 
 import computeCSS from './compute-css'
 import { ColAlignment, TableEditorOptions } from './types'
@@ -116,6 +116,8 @@ export default class TableEditor {
   private readonly _addLeftButton: HTMLDivElement
   private readonly _addRightButton: HTMLDivElement
 
+  private readonly _md2html: ReturnType<typeof getConverter>
+
   /**
    * Creates a new TableHelper.
    *
@@ -136,6 +138,8 @@ export default class TableEditor {
     this._ast = ast
     this._colAlignment = alignments
     this._edgeButtonSize = 30 // Size in pixels
+
+    this._md2html = getConverter(window.getCitation)
 
     // Find the container element
     if ('container' in options && options.container instanceof HTMLElement) {
@@ -309,7 +313,7 @@ export default class TableEditor {
 
       for (let j = 0; j < this._ast[i].length; j++) {
         const cell = row.insertCell(-1)
-        cell.innerHTML = md2html(this._ast[i][j])
+        cell.innerHTML = this._md2html(this._ast[i][j])
         cell.style.textAlign = this._colAlignment[j]
         cell.setAttribute('contenteditable', 'true')
         cell.addEventListener('focus', (event) => {
@@ -339,7 +343,7 @@ export default class TableEditor {
 
     // Re-render the table element and save the textContent as data-source
     this._ast[row][col] = cell.textContent ?? ''
-    cell.innerHTML = md2html(this._ast[row][col])
+    cell.innerHTML = this._md2html(this._ast[row][col])
 
     // For a short amount of time, the table won't have any focused
     // elements, so we'll set a small timeout, after which we test

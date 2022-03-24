@@ -138,13 +138,13 @@ function setup (option: any): void {
     // it will trigger an error, hence the
     // default mapping will be used.
     quotes = {
-      'single': {
-        'start': option.quotes.single.start,
-        'end': option.quotes.single.end
+      single: {
+        start: option.quotes.single.start,
+        end: option.quotes.single.end
       },
-      'double': {
-        'start': option.quotes.double.start,
-        'end': option.quotes.double.end
+      double: {
+        start: option.quotes.double.start,
+        end: option.quotes.double.end
       }
     }
   } catch (err) {
@@ -169,9 +169,12 @@ function makeKeyMap (): void {
   }
 
   // If the user has special quotes set, attach additional keys
-  if (quotes !== false && quotes.single.start !== "'" && quotes.double.start !== '"') {
-    builtKeyMap['\'"\''] = function (cm) { return handleQuote(cm, 'double') }
+  if (quotes !== false && quotes.single.start !== "'") {
     builtKeyMap["'''"] = function (cm) { return handleQuote(cm, 'single') }
+  }
+
+  if (quotes !== false && quotes.double.start !== '"') {
+    builtKeyMap['\'"\''] = function (cm) { return handleQuote(cm, 'double') }
   }
 
   // In case of LibreOffice style AutoCorrect only

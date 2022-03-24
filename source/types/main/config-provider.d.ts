@@ -91,6 +91,7 @@ interface ConfigOptions {
     homeEndBehaviour: boolean
     enableTableHelper: boolean
     indentUnit: number
+    indentWithTabs: boolean
     fontSize: number
     countChars: boolean
     inputMode: 'default'|'vim'|'emacs'
@@ -123,6 +124,7 @@ interface ConfigOptions {
     renderMath: boolean
     renderTasks: boolean
     renderHTags: boolean
+    renderEmphasis: boolean
   }
   selectedDicts: string[]
   appLang: string
@@ -136,6 +138,8 @@ interface ConfigOptions {
     leaveAppRunning: boolean
     avoidNewTabs: boolean
     iframeWhitelist: string[]
+    checkForUpdates: boolean
+    zoomBehavior: 'gui'|'editor'
   }
   checkForBeta: boolean
   uuid: string

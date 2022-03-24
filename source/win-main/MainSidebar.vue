@@ -57,7 +57,13 @@
           <div
             v-for="fileRecord, idx in relatedFiles"
             v-bind:key="idx"
-            class="related-file"
+            v-bind:class="{
+              'related-file': true,
+              'tags': fileRecord.tags.length > 0,
+              'inbound': fileRecord.link === 'inbound',
+              'outbound': fileRecord.link === 'outbound',
+              'bidirectional': fileRecord.link === 'bidirectional'
+            }"
           >
             <span
               class="filename"
@@ -72,9 +78,19 @@
                 title="This relation is based on tag similarity."
               ></clr-icon>
               <clr-icon
-                v-if="fileRecord.backlink"
-                shape="link"
-                title="This relation is based on a backlink"
+                v-if="fileRecord.link === 'inbound'"
+                shape="arrow left"
+                title="This relation is based on a backlink."
+              ></clr-icon>
+              <clr-icon
+                v-else-if="fileRecord.link === 'outbound'"
+                shape="arrow right"
+                title="This relation is based on an outbound link."
+              ></clr-icon>
+              <clr-icon
+                v-else-if="fileRecord.link === 'bidirectional'"
+                shape="two-way-arrows"
+                title="This relation is based on a bidirectional link."
               ></clr-icon>
             </span>
           </div>
@@ -140,19 +156,17 @@ import { trans } from '@common/i18n-renderer'
 import { ClarityIcons } from '@clr/icons'
 import TabBar from '@common/vue/TabBar.vue'
 import { defineComponent } from 'vue'
-import { IpcRenderer } from 'electron'
-import { MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
+import { DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
 import { TabbarControl } from '@dts/renderer/window'
-import { PlatformPath } from '@dts/renderer/path'
 
-const path: PlatformPath = (window as any).path
-const ipcRenderer: IpcRenderer = (window as any).ipc
+const path = window.path
+const ipcRenderer = window.ipc
 
 interface RelatedFile {
   file: string
   path: string
   tags: string[]
-  backlink: boolean
+  link: 'inbound'|'outbound'|'bidirectional'|'none'
 }
 
 export default defineComponent({
@@ -220,11 +234,13 @@ export default defineComponent({
       return trans('gui.no_related_files')
     },
     attachments: function (): OtherFileMeta[] {
-      const currentDir = this.$store.state.selectedDirectory
+      const currentDir = this.$store.state.selectedDirectory as DirMeta|null
       if (currentDir === null) {
         return []
       } else {
-        return currentDir.attachments
+        const extensions: string[] = this.$store.state.config.attachmentExtensions
+        const attachments = currentDir.children.filter(child => child.type === 'other') as OtherFileMeta[]
+        return attachments.filter(attachment => extensions.includes(attachment.ext))
       }
     },
     activeFile: function (): MDFileMeta|null {
@@ -292,6 +308,10 @@ export default defineComponent({
       }
     })
 
+    ipcRenderer.on('links', () => {
+      this.updateRelatedFiles().catch(err => console.error(err))
+    })
+
     try {
       this.updateReferences().catch(e => console.error('Could not update references', e))
     } catch (err) {
@@ -322,21 +342,33 @@ export default defineComponent({
 
       // Then retrieve the inbound links first, since that is the most important
       // relation, so they should be on top of the list.
-      const inboundLinks = await ipcRenderer.invoke('link-provider', {
+      const { inbound, outbound } = await ipcRenderer.invoke('link-provider', {
         command: 'get-inbound-links',
-        payload: {
-          filePath: this.activeFile.path,
-          fileID: this.activeFile.id
-        }
-      })
+        payload: { filePath: this.activeFile.path }
+      }) as { inbound: string[], outbound: string[]}
 
-      for (const absPath of inboundLinks) {
-        unreactiveList.push({
+      for (const absPath of [ ...inbound, ...outbound ]) {
+        const found = unreactiveList.find(elem => elem.path === absPath)
+        if (found !== undefined) {
+          continue
+        }
+
+        const related: RelatedFile = {
           file: path.basename(absPath),
           path: absPath,
           tags: [],
-          backlink: true
-        })
+          link: 'none'
+        }
+
+        if (inbound.includes(absPath) && outbound.includes(absPath)) {
+          related.link = 'bidirectional'
+        } else if (inbound.includes(absPath)) {
+          related.link = 'inbound'
+        } else {
+          related.link = 'outbound'
+        }
+
+        unreactiveList.push(related)
       }
 
       // The second way files can be related to each other is via shared tags.
@@ -359,7 +391,7 @@ export default defineComponent({
             file: path.basename(filePath),
             path: filePath,
             tags: recommendations[filePath],
-            backlink: false
+            link: 'none'
           })
         }
       }
@@ -369,13 +401,13 @@ export default defineComponent({
       // 1. Backlinks that also share common tags
       // 2. Backlinks that do not share common tags
       // 3. Files that only share common tags
-      const backlinksAndTags = unreactiveList.filter(e => e.backlink && e.tags.length > 0)
+      const backlinksAndTags = unreactiveList.filter(e => e.link !== 'none' && e.tags.length > 0)
       backlinksAndTags.sort((a, b) => { return b.tags.length - a.tags.length })
 
-      const backlinksOnly = unreactiveList.filter(e => e.backlink && e.tags.length === 0)
+      const backlinksOnly = unreactiveList.filter(e => e.link !== 'none' && e.tags.length === 0)
       // No sorting necessary
 
-      const tagsOnly = unreactiveList.filter(e => !e.backlink)
+      const tagsOnly = unreactiveList.filter(e => e.link === 'none')
       tagsOnly.sort((a, b) => { return b.tags.length - a.tags.length })
 
       this.relatedFiles = [ ...backlinksAndTags, ...backlinksOnly, ...tagsOnly ]
@@ -565,6 +597,7 @@ body {
       div.related-file {
         margin-bottom: 10px;
         display: flex;
+        align-items: center;
 
         span.filename {
           display: inline-block;
