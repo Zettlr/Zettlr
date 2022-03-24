@@ -20,7 +20,6 @@ import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import extractFilesFromArgv from '../app/util/extract-files-from-argv'
 import AppServiceContainer from '../app/app-service-container'
-import ZettlrCommand from './commands/zettlr-command'
 import { CLEAR_CACHE, getCLIArgument } from '@providers/cli-provider'
 
 export default class Zettlr {

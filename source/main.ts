@@ -57,7 +57,7 @@ let dataDir = getCLIArgument(DATA_DIR)
 
 if (dataDir !== undefined) {
   // a path to a custom config dir is provided
-  const match = /^--data-dir="?([^"]+)"?$/.exec(dataDirFlag)
+  const match = /^--data-dir="?([^"]+)"?$/.exec(dataDir)
   if (match !== null) {
     let dataDir = match[1]
 
@@ -83,7 +83,7 @@ if (dataDir !== undefined) {
       dataDir = path.join(__dirname, '../../', dataDir)
     }
   }
-  global.log.info('[Application] Using custom data dir: ' + String(dataDir))
+  getServiceContainer()?.log.info('[Application] Using custom data dir: ' + String(dataDir))
   app.setPath('userData', dataDir)
   app.setAppLogsPath(path.join(dataDir, 'logs'))
 }

@@ -124,19 +124,6 @@ export default class WindowProvider extends ProviderContract {
       this._hasRTLLocale = false
     }
 
-    // Immediately begin loading the data
-    this.loadData()
-      .then(() => {
-        global!.log.info('[Window Manager] Window Manager started.')
-        const shouldStartMinimized = getCLIArgument(LAUNCH_MINIMIZED)
-        const traySupported = process.env.ZETTLR_IS_TRAY_SUPPORTED === '1'
-        if (!shouldStartMinimized || !traySupported) {
-          this.showMainWindow()
-        } else {
-          global.log.info('[Window Manager] Application should start in tray. Not showing main window.')
-        }
-      })
-      .catch((err: Error) => global.log.error(`[Window Manager] Could not load data: ${err.message}`, err))
     // Listen to the before-quit event by which we make sure to only quit the
     // application if the status of possibly modified files has been cleared.
     // We listen to this event, because it will fire *before* the process
