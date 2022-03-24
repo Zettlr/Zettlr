@@ -13,13 +13,14 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { app, shell } from 'electron'
+import { app, BrowserWindow, shell } from 'electron'
 import { makeExport, getAvailableFormats } from './exporter'
 import { trans } from '@common/i18n-main'
 import { ExporterOptions } from './exporter/types'
 import { promises as fs } from 'fs'
 import path from 'path'
 import isDir from '@common/util/is-dir'
+import { getServiceContainer } from '../../lifecycle'
 
 export default class Export extends ZettlrCommand {
   constructor (app: any) {
@@ -76,9 +77,10 @@ export default class Export extends ZettlrCommand {
         exporterOptions.cwd = fileDescriptor.dir
         switch (exportTo) {
           case 'ask': {
-            const folderSelection = await this._app.askDir(trans('system.export_dialog.title'), trans('system.export_dialog.save'))
+            const focusedWindow = BrowserWindow.getFocusedWindow()
+            const folderSelection = await this._app.windows.askDir(trans('system.export_dialog.title'), focusedWindow, trans('system.export_dialog.save'))
             if (folderSelection === undefined || folderSelection.length === 0) {
-              global.log.error('[Export] Could not run exporter: Folderselection did not have a result!')
+              getServiceContainer()?.log.error('[Export] Could not run exporter: Folderselection did not have a result!')
               return
             }
             exporterOptions.targetDirectory = folderSelection[0]
