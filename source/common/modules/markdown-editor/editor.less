@@ -96,6 +96,21 @@
     border-radius: 3px;
   }
 
+  // This class is applied for the dialogs that the vim plugin produces, i.e.
+  // the command bar.
+  .CodeMirror-dialog.CodeMirror-dialog-bottom, .vim-error-message {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    input {
+      background-color: transparent;
+      border: none;
+      border-radius: none;
+    }
+  }
+
   // SYNTAX-HIGHLIGHTING CLASSES
   // ===========================================================================
 

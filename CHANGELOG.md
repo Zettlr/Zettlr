@@ -10,6 +10,7 @@
   has focus
 - Added an extra check so that unexpected values of `openDirectory` would not
   prevent Zettlr from starting
+- Make the vim command line visible and style it according to the Zettlr themes
 
 ## Under the Hood
 
