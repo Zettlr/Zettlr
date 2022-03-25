@@ -8,6 +8,8 @@
 - Add Fortran syntax highlighting (keyword `fortran`)
 - Fix a bug that could lead to data loss when changing documents while a table
   has focus
+- Added an extra check so that unexpected values of `openDirectory` would not
+  prevent Zettlr from starting
 
 ## Under the Hood
 

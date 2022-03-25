@@ -160,7 +160,10 @@ export default class FSAL extends ProviderContract {
     // Afterwards we can set our pointers accordingly
     // Set the pointers either to null or last opened dir/file
     const openDir: string|null = this._config.get('openDirectory')
-    if (openDir !== null) {
+    if (openDir !== null && typeof openDir !== 'string') {
+      this._logger.warning(`[FSAL] config::openDirectory had an unexpected value: ${String(openDir)}`)
+      this._config.set('openDirectory', null)
+    } else if (openDir !== null) {
       try {
         const descriptor = this.findDir(openDir)
         this.openDirectory = descriptor
