@@ -6,6 +6,8 @@
 - Fixed selection of words on right-click in the editor
 - Editor word selection on right-click now accepts both `'` and `’`
 - Add Fortran syntax highlighting (keyword `fortran`)
+- Fix a bug that could lead to data loss when changing documents while a table
+  has focus
 
 ## Under the Hood
 

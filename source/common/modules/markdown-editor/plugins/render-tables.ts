@@ -251,11 +251,13 @@ function writeTableToDocument (cm: CodeMirror.Editor, table: TableEditor): boole
         // scroll detection in the helper works as expected)
         container: '#editor .CodeMirror .CodeMirror-scroll',
         onBlur: (table) => {
-          console.log('On blur triggered, writing table ...')
-          writeTableToDocument(cm, table)
+          // DEBUG: Users can accidentally overwrite other documents when this
+          // triggers, as a click on another document ALSO blurs the table, but
+          // the writeTableToDocument handler is not fast enough to replace the
+          // table in this document and therefore overwrites the other document.
+          // writeTableToDocument(cm, table)
         },
         onCellChange: (table) => {
-          console.log('On change triggered, writing table ...')
           const tableChanged = writeTableToDocument(cm, table)
           if (tableChanged) {
             table.selectCell() // In this case, refocus the last selected cell
