@@ -81,7 +81,7 @@ export default class TranslationProvider extends ProviderContract {
 
   /**
    * Get an initial load of all available translations
-   * @return {Promise} Resolves if everything worked out, rejects otherwise.
+   *
    */
   async boot (): Promise<void> {
     this._logger.verbose('Translation provider booting up ...')
@@ -105,24 +105,33 @@ export default class TranslationProvider extends ProviderContract {
     global.i18nFallbackRawData = await fs.readFile(fallback.path, 'utf8')
     global.i18nFallback = JSON.parse(global.i18nFallbackRawData)
 
-    // return file
-    let response
+    // Get user's setting of translation updates
     const checkForTranslationUpdates: boolean = this._config.get('system.checkForTranslationUpdates')
     if (checkForTranslationUpdates) {
-      try {
-        response = await got(TRANSLATION_API_URL, { method: 'GET' })
-      } catch (err: any) {
-        // Not critical.
-        this._logger.warning(`[Translation Provider] Could not update translations: ${String(err.code)}`, err)
-        return
-      }
-      // Alright, we only need the body
-      response = JSON.parse(response.body)
-      this._availableLanguages = response // Let's save the response
+      await this.update()
     } else {
-      this._logger.info('[Translation Provider] Translation update cancelled due to user setting.')
-      this._availableLanguages = []
+      this._logger.info('[Translation Provider] User decide not to update translations.')
     }
+  }
+
+  /**
+   * Get translation updates via translation server
+   * @return {Promise} Resolves if everything worked out, rejects otherwise.
+   */
+  async update (): Promise<void> {
+    // return file
+    let response
+    try {
+      response = await got(TRANSLATION_API_URL, { method: 'GET' })
+    } catch (err: any) {
+      // Not critical.
+      this._logger.warning(`[Translation Provider] Could not update translations: ${String(err.code)}`, err)
+      return
+    }
+
+    // Alright, we only need the body
+    response = JSON.parse(response.body)
+    this._availableLanguages = response // Let's save the response
 
     // Now we have all the languages available. We also need the translation
     // metadata.
