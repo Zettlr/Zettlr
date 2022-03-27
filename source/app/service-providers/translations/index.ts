@@ -108,7 +108,7 @@ export default class TranslationProvider extends ProviderContract {
     // Get user's setting of translation updates
     const checkForTranslationUpdates: boolean = this._config.get('system.checkForTranslationUpdates')
     if (checkForTranslationUpdates) {
-      await this.updateTranslations()
+      this.updateTranslations().catch(err => this._logger.error('[Translation Provider] Failed to update translations.'))
     } else {
       this._logger.info('[Translation Provider] User decide not to update translations.')
     }
