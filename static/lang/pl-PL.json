@@ -3,10 +3,11 @@
         "authors": [
             "Tomasz",
             "akavel",
+            "Piotr Icikowski",
             "malpunek"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-08-29T14:06:47.000000Z"
+        "updated_at": "2022-03-18T01:10:12.000000Z"
     },
     "dialog": {
         "about": {
@@ -43,7 +44,9 @@
             "title": "W\u0142asny CSS"
         },
         "defaults": {
-            "explanation": "Domy\u015blne ustawiania importu i eksportu"
+            "explanation": "Domy\u015blne ustawiania importu i eksportu",
+            "exporting_title": "Eksportowanie",
+            "importing_title": "Importowanie"
         },
         "dir_new": {
             "placeholder": "Nazwa katalogu",
@@ -192,8 +195,12 @@
             },
             "avoid_new_tabs": "Unikaj otwierania plik\u00f3w w nowych kartach",
             "checkForBeta": "Powiadamiaj mnie o wydaniach beta",
+            "check_updates": "Automatycznie sprawdzaj aktualizacje",
             "choose_file": "Wybierz plik",
             "citation_database": "Baza cytowa\u0144 (CSL JSON albo BibTex)",
+            "citations": {
+                "title": "Cytacje"
+            },
             "count_chars": "Liczenie znak\u00f3w zamiast s\u0142\u00f3w",
             "creationtime": "Czas utworzenia pliku",
             "debug": "Tryb debugowania",

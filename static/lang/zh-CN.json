@@ -23,10 +23,11 @@
             "gigige",
             "Che Jiang \u003Cjiang@fastmail.net\u003E",
             "\u571f\u8c46 \u003Chewang@mail.bnu.edu.cn\u003E",
-            "Taylan TATLI"
+            "Taylan TATLI",
+            "Edgar Tang \u003Cedgar@veiam.net\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-03-13T13:38:48.000000Z"
+        "updated_at": "2022-03-23T06:22:48.000000Z"
     },
     "dialog": {
         "about": {
@@ -666,6 +667,7 @@
         "new_dir": "\u65b0\u76ee\u5f55\u2026",
         "new_file": "\u65b0\u6587\u6863\u2026",
         "new_project": "\u521b\u5efa\u65b0\u7684\u9879\u76ee",
+        "next_file": "\u4e0b\u4e00\u4e2a\u6587\u4ef6",
         "no_suggestions": "\u65e0\u5efa\u8bae",
         "open": "\u6253\u5f00\u2026",
         "open_attachment": "\u6253\u5f00\u9644\u4ef6",
@@ -680,6 +682,7 @@
         "paste_plain": "\u7c98\u8d34\u4e3a\u7eaf\u6587\u672c",
         "pdf_preferences": "PDF \u9009\u9879\u2026",
         "preferences": "\u504f\u597d",
+        "previous_file": "\u4e0a\u4e00\u4e2a\u6587\u4ef6",
         "print": "\u6253\u5370\u2026",
         "project_build": "\u5bfc\u51fa\u9879\u76ee",
         "project_properties": "\u9879\u76ee\u8bbe\u7f6e\u2026",

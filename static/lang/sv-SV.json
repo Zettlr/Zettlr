@@ -2,11 +2,10 @@
     "metadata": {
         "authors": [
             "Andreas Sandsk\u00e4r \u003Cekrarna@gmail.com\u003E",
-            "Mikael Hamre",
             "Chris Leonardsson"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-03-09T22:02:32.000000Z"
+        "updated_at": "2022-03-24T18:17:06.000000Z"
     },
     "dialog": {
         "about": {
@@ -485,7 +484,7 @@
                 "saving": "Sparar \u2026",
                 "unsaved_changes": "Osparade \u00e4ndringar"
             },
-            "win_title": "Tillg\u00e5ngar"
+            "win_title": "Till\u00e4gg hanterare"
         },
         "attachments": "Bilagor",
         "attachments_open_dir": "\u00d6ppna mapp",
@@ -646,6 +645,7 @@
         "new_dir": "Ny katalog\u2026",
         "new_file": "Ny fil\u2026",
         "new_project": "Skapa projekt",
+        "next_file": "N\u00e4sta fil",
         "no_suggestions": "Inga f\u00f6rslag",
         "open": "\u00d6ppna\u2026",
         "open_attachment": "\u00d6ppna bilaga",
@@ -660,6 +660,7 @@
         "paste_plain": "Infoga utan stil",
         "pdf_preferences": "PDF-inst\u00e4llningar...",
         "preferences": "Inst\u00e4llningar...",
+        "previous_file": "F\u00f6rg\u00e5ende fil",
         "print": "Skriva ut\u2026",
         "project_build": "Exportera projekt",
         "project_properties": "Projekt inst\u00e4llningar...",
@@ -699,11 +700,17 @@
         "toggle_typewriter_mode": "Skrivmaskinsl\u00e4ge",
         "undo": "\u00c5ngra",
         "unhide": "Visa",
+        "update": "S\u00f6k efter uppdateringar",
         "win_close": "St\u00e4ng",
-        "zoom_in": "Zoom in"
+        "win_minimize": "Minimera",
+        "zoom": "Zoom",
+        "zoom_in": "Zoom in",
+        "zoom_out": "Zooma ut"
     },
     "pomodoro": {
         "phase": {
+            "long": "Paus",
+            "short": "Kort paus",
             "task": "Arbete"
         },
         "start": "Start",
@@ -711,46 +718,90 @@
     },
     "system": {
         "all_files": "Alla filer",
+        "cancel": "Avbryt",
         "common": {
+            "filter": "Filtrera...",
             "list_actions_label": "Handling",
-            "list_add_button": "L\u00e4gg till"
+            "list_add_button": "L\u00e4gg till",
+            "list_default_column_label": "Objekt",
+            "list_search_placeholder": "S\u00f6ker efter inl\u00e4gg\u2026"
         },
+        "directories": "Kataloger",
+        "directory_removed": "Katalogen %s har tagits bort.",
         "error": {
+            "already_exists_message": "Filen/katalogen %s finns redan i m\u00e5let.",
+            "already_exists_title": "Kan inte flytta katalog eller fil",
             "cancel_remove": "Avbryt",
+            "citation_no_attachments": "Referensen med nyckel %s verkar inte ha bilagor.",
+            "could_not_create_dir": "Kunde inte skapa katalog",
             "could_not_create_file": "Det gick inte att skapa filen",
+            "could_not_save_image": "Det gick inte att spara bilden",
+            "delete_root_message": "Du kan inte ta bort rotkatalogen.",
+            "dnf_message": "Den beg\u00e4rda katalogen hittades inte.",
             "dnf_title": "Katalog hittades inte",
+            "export_error_message": "Ett fel uppstod vid export: %s",
+            "export_error_title": "Exporten misslyckades",
+            "export_temp_file": "Kunde inte ta bort den tempor\u00e4ra filen &quot;%s&quot;. Ta bort den manuellt.",
             "file_exists": "Filen finns redan.",
+            "fnf_message": "Den beg\u00e4rda filen hittades inte.",
             "fnf_title": "Filen finns inte",
             "ignored_dir_message": "Katalogen &quot;%s&quot; g\u00e5r inte att \u00f6ppnas av Zettlr.",
             "ignored_dir_title": "Det g\u00e5r inte att \u00f6ppna katalogen",
+            "image_not_found": "Bilden hittades inte: %s",
+            "malformed_citekey": "Felaktig Citekey: @%s",
+            "malformed_textbundle": "Felformat textpaket: %s",
             "move_into_child_message": "Du kan inte flytta en katalog till en underkatalog.",
             "move_into_child_title": "Det g\u00e5r inte att flytta katalogen",
             "no_allowed_chars": "Det angivna namnet inneh\u00f6ll inga till\u00e5tna bokst\u00e4ver.",
             "no_pandoc_message": "Pandoc har inte hittats p\u00e5 detta system. Installera Pandoc innan du exporterar eller importerar filer.",
+            "no_pandoc_title": "Pandoc hittades inte",
             "no_xelatex_message": "Zettlr kunde inte uppt\u00e4cka en LaTeX-distribution p\u00e5 detta system. Installera LaTeX innan du exporterar till PDF.",
             "no_xelatex_title": "LaTeX hittades inte",
+            "open_attachment_error": "Det gick inte att \u00f6ppna bilagan. K\u00f6rs Zotero?",
+            "open_url_error": "Kunde inte \u00f6ppna %s",
+            "pandoc_error_message": "Pandoc rapporterade ett fel: %s",
             "pandoc_error_title": "Kunde inte exportera filen",
+            "remove_message": "Vill du verkligen ta bort %s?",
+            "remove_title": "Vill du verkligen ta bort?",
             "tray_not_supported": "Brickor st\u00f6ds inte. Gnome Extension &quot;KStatusNotifierItem/AppIndicator Support&quot; kr\u00e4vs f\u00f6r st\u00f6d f\u00f6r brickor p\u00e5 Gnome-skrivbordet."
         },
+        "export_success": "Exporterar till %s",
+        "file_changed": "Filen %s har \u00e4ndrats fr\u00e5n fj\u00e4rranslutning",
+        "file_removed": "Filen %s har tagits bort.",
         "files": "Filer",
+        "import_error": "Kunde inte importera %s.",
         "import_fail": "F\u00f6ljande %s filer kunde inte importeras, eftersom deras filtyp \u00e4r ok\u00e4nd: %s",
         "import_lang_file": "Importera ny \u00f6vers\u00e4ttning",
+        "import_no_directory": "Du m\u00e5ste v\u00e4lja en katalog att importera till.",
+        "import_status": "Importerar. V\u00e4nta \u2026",
+        "import_success": "%s har importerats.",
+        "lang_import_error": "Kunde inte importera spr\u00e5k filen %s!",
+        "lang_import_success": "Spr\u00e5k fil importerad: %s",
+        "no_command": "Fick ett meddelande utan kommando: %s",
         "ok": "system.ok",
         "open_file": "\u00d6ppna fil",
+        "open_folder": "\u00d6ppna projektmappen",
+        "open_root_directory": "\u00d6ppnar ny root %s \u2026",
+        "open_root_directory_success": "%s har laddats.",
+        "overwrite_file_message": "Filen %s finns redan i den h\u00e4r katalogen. Skriva \u00f6ver?",
         "overwrite_file_title": "Skriv \u00f6ver befintlig fil",
+        "please_select_directory": "V\u00e4lj en katalog f\u00f6rst",
         "replace_file_message": "Filen %s har modifierats p\u00e5 distans. Ers\u00e4tta den laddade versionen med den nyare fr\u00e5n disken?",
+        "replace_file_title": "Byt ut fil",
         "save_changes_cancel": "Avbryt",
         "save_changes_message": "Det finns \u00e4ndringar som inte har sparats i den aktuella filen. Vill du utel\u00e4mna dem eller spara?",
         "save_changes_omit": "Forts\u00e4tt utan att spara",
         "save_changes_save": "Spara",
         "save_changes_select_dir": "V\u00e4lj en katalog s\u00e5 att den nya filen kan sparas.",
         "save_changes_title": "Utel\u00e4mna osparade \u00e4ndringar?",
-        "save_file": "Spara fil"
+        "save_file": "Spara fil",
+        "unknown_command": "Ok\u00e4nt kommando mottaget: %s"
     },
     "toolbar": {
         "dir_new": "Skapa en ny katalog",
         "dir_open": "\u00d6ppna existerande katalog",
         "file_delete": "Ta bort aktuell fil",
+        "file_info": "Visa fil information",
         "file_new": "Skapa en ny fil",
         "file_rename": "D\u00f6p om filen",
         "file_save": "Spara aktuell fil",
@@ -761,6 +812,7 @@
         "insert_image": "Infoga bild",
         "insert_italic": "Kursivera",
         "insert_link": "Infoga l\u00e4nk",
+        "insert_ol": "Skapa en numrerad lista",
         "insert_ul": "G\u00f6r en specificerad lista",
         "pomodoro": "Pomodoroklocka",
         "preferences": "\u00d6ppna dialogrutan inst\u00e4llningar",
@@ -780,6 +832,7 @@
         "tooltip": "Zettlr"
     },
     "validation": {
+        "error_empty": "Alternativ %s kr\u00e4vs.",
         "error_range_both": "Alternativet %s m\u00e5ste vara mellan %s och %s (tecken l\u00e5ngt).",
         "error_range_max": "Alternativet %s f\u00e5r inte \u00f6verstiga %s (tecken).",
         "error_range_min": "Alternativet %s m\u00e5ste vara minst %s (tecken l\u00e5ngt).",

@@ -5,7 +5,7 @@
             "vfc"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-03-07T08:05:23.000000Z"
+        "updated_at": "2022-03-18T08:48:48.000000Z"
     },
     "dialog": {
         "about": {
@@ -645,6 +645,7 @@
         "new_dir": "Nova carpeta...",
         "new_file": "Nou fitxer...",
         "new_project": "Crea un projecte",
+        "next_file": "Fitxer anterior",
         "no_suggestions": "Sense suggeriments",
         "open": "Obre...",
         "open_attachment": "Obre l'adjunt",
@@ -659,6 +660,7 @@
         "paste_plain": "Enganxa sense estil",
         "pdf_preferences": "Prefer\u00e8ncies del PDF...",
         "preferences": "Prefer\u00e8ncies...",
+        "previous_file": "Fitxer seg\u00fcent",
         "print": "Imprimeix...",
         "project_build": "Exporta el projecte",
         "project_properties": "Configuraci\u00f3 del projecte...",
