@@ -5,7 +5,7 @@
             "Jonas Wunderlich \u003Cmail@jonas-wunderlich.de\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-02-10T22:20:59.000000Z"
+        "updated_at": "2022-03-13T18:49:20.000000Z"
     },
     "dialog": {
         "about": {
@@ -271,6 +271,7 @@
             "hide_dirs": "Verstecke Verzeichnisse w\u00e4hrend globaler Suchen",
             "homeEndBehaviour": "Nutze die CodeMirror-Standardaktionen f\u00fcr \u003Ckbd\u003EHome\u003C/kbd\u003E und \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
             "indent_unit": "R\u00fccke um folgende Anzahl Leerzeichen ein",
+            "indent_with_tabs": "Mit Tab-Zeichen einr\u00fccken",
             "input_mode": "Eingabemodus des Editors",
             "leave_app_running_in_the_notification_area": "App in der Statusleiste anzeigen",
             "modtime": "Letzter Bearbeitungszeitpunkt",
@@ -403,6 +404,11 @@
                 "var_week_number": "Nummer der Woche (f\u00fchrende Null)",
                 "var_year": "Jahr (vierstellig)",
                 "var_year_two": "Jahr (zweistellig)"
+            },
+            "zoom_behavior": {
+                "editor": "Zoom \u00e4ndert nur die Editor-Schriftgr\u00f6\u00dfe",
+                "gui": "Zoom skaliert die gesamte GUI",
+                "label": "Zoom-Verhalten"
             }
         },
         "snippets": {
@@ -639,6 +645,7 @@
         "new_dir": "Neues Verzeichnis\u2026",
         "new_file": "Neue Datei\u2026",
         "new_project": "Projekt erstellen",
+        "next_file": "N\u00e4chste Datei",
         "no_suggestions": "Keine Vorschl\u00e4ge",
         "open": "\u00d6ffnen\u2026",
         "open_attachment": "Dateianhang \u00f6ffnen",
@@ -653,6 +660,7 @@
         "paste_plain": "Ohne Format einf\u00fcgen",
         "pdf_preferences": "PDF-Einstellungen\u2026",
         "preferences": "Einstellungen\u2026",
+        "previous_file": "Vorherige Datei",
         "print": "Drucken\u2026",
         "project_build": "Projekt exportieren",
         "project_properties": "Projekteinstellungen\u2026",

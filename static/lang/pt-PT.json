@@ -4,10 +4,12 @@
             "Carlos Bornes \u003Ccbornes3@gmail.com\u003E",
             "tmpod \u003Ctmpod@pm.me\u003E",
             "Nelson Faria",
+            "isosamep",
+            "guga14",
             "Paula Simoes \u003Cppsimoes@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-02-07T11:10:17.000000Z"
+        "updated_at": "2022-03-22T17:07:30.000000Z"
     },
     "dialog": {
         "about": {
@@ -18,14 +20,14 @@
             "citeproc": "Renderiza as cita\u00e7\u00f5es corretas para todos os trabalhos",
             "contributors": "Contribuidores",
             "jquery": "Torna f\u00e1cil a renderiza\u00e7\u00e3o de toda a interface de usu\u00e1rios",
-            "katex": "Renderiza f\u00f3rmulas Latex no editor",
+            "katex": "Renderiza f\u00f3rmulas LaTeX no editor",
             "lead": "Zettlr \u00e9 um projeto criado por Hendrik Erz, licenciado sobre a licen\u00e7a GNU GPL v3. \u00c9 Open Source, gratuito e baseado no framework Electron. O projeto Zettlr agradece aos desenvolvedores do Electron, do framework Node.js e do editor CodeMirror pelo seu trabalho. Sem eles, o Zettlr n\u00e3o seria poss\u00edvel. Abaixo pode conferir todos os projetos utilizados pelo Zettlr.",
             "lessjs": "Ajuda muito a escrever os estilos para o Zettlr",
             "license": "Licen\u00e7a",
-            "main": "Projectos Principais",
-            "nspell": "Fornece ao Zettlr capacidade de verifica\u00e7\u00e3o gramatical",
-            "other_projects": "O Zettlr tamb\u00e9m usa estes projectos:",
-            "projects": "Outros projectos:",
+            "main": "Projetos Principais",
+            "nspell": "Fornece ao Zettler capacidadades de verifica\u00e7\u00e3o ortogr\u00e1fica",
+            "other_projects": "Zettlr tamb\u00e9m utiliza estes projetos:",
+            "projects": "Outros projetos:",
             "showdownjs": "Rederiza o Changelog para que possa ver o que mudou a cada atualiza\u00e7\u00e3o",
             "sponsors": "Patrocinadores",
             "tippyjs": "De onde v\u00eam as dicas de utiliza\u00e7\u00e3o",
@@ -206,15 +208,21 @@
             "count_chars": "Contar caracteres em vez de palavras (em Chin\u00eas, p. ex.)",
             "creationtime": "Data de cria\u00e7\u00e3o do ficheiro",
             "dark_mode": "Modo escuro",
+            "dark_mode_schedule": {
+                "end": "Terminar o modo escuro \u00e0s",
+                "start": "Iniciar o modo escuro \u00e0s"
+            },
             "debug": "Ligar modo debug",
             "default_image_save_path": "Caminho para imagens por defeito (relativo ou absoluto)",
             "delete_on_fail": "Apagar itens irreversivelmente, se falhar mover para lixo",
             "display": {
+                "hide_toolbar_distraction_free": "Ocultar a barra de ferramentas no Modo Concentra\u00e7\u00e3o",
                 "image_height": "Altura m\u00e1xima das imagens (percentagem)",
                 "image_size_info": "Com estes controlos pode ajustar a pr\u00e9-visualiza\u00e7\u00e3o de imagens.",
                 "image_width": "Largura m\u00e1xima das imagens (percentagem)",
                 "preview_info": "Estas op\u00e7\u00f5es determinam os elementos que aparecer\u00e3o nos documentos.",
                 "render_citations": "Mostrar Cita\u00e7\u00f5es",
+                "render_emphasis": "Lembrar \u00eanfase",
                 "render_htags": "Ocultar caracteres de cabe\u00e7alho",
                 "render_iframes": "Mostrar Iframes",
                 "render_images": "Mostrar Imagens",
@@ -224,6 +232,7 @@
                 "title": "Mostrar",
                 "use_first_headings": "Usar o primeiro cabe\u00e7alho de n\u00edvel 1 em vez do nome de ficheiro, caso exista"
             },
+            "display_markdown_file_extensions": "Mostrar a extens\u00e3o de ficheiros Markdown",
             "display_time_explanation": "Nos metadados de ficheiro mostrar",
             "editor": "Editor",
             "editor_font_size": "Editor de tamanho de fonte",
@@ -252,13 +261,23 @@
             "filemanager_combined": "Combinado &mdash; Mostra ficheiros e diret\u00f3rios em arvore",
             "filemanager_expanded": "Expandido &mdash; mostra ambos arvore e lista de ficheiros",
             "filemanager_explanation": "Modo de gest\u00e3o de ficheiros",
+            "filemanager_thin": "Compacto &mdash; mostrar \u00e1rvore ou lista de ficheiros",
+            "filename_display": {
+                "filename_only": "Apenas o nome do ficheiro",
+                "heading": "Primeiro cabe\u00e7alho de n\u00edvel 1, se aplic\u00e1vel",
+                "label": "Mostrar os ficheiros usando",
+                "title": "T\u00edtulo, se aplic\u00e1vel",
+                "title_heading": "T\u00edtulo ou primeiro cabe\u00e7alho de n\u00edvel 1, se aplic\u00e1vel"
+            },
             "filename_generator": "Padr\u00e3o para novos nomes de ficheiro",
             "formatting_characters_explanation": "Escolha os caracteres de formata\u00e7\u00e3o que os comandos de negrito/realce devem usar",
             "general": "Geral",
             "hide_dirs": "Ocultar pastas numa pesquisa global",
             "homeEndBehaviour": "Usar as ac\u00e7\u00f5es por defeito do CodeMirror para \u003Ckbd\u003EHome\u003C/kdb\u003E e \u003Ckdb\u003EEnd\u003C/kdb\u003E.",
             "indent_unit": "Indentar com o seguinte n\u00famero de espa\u00e7os",
+            "indent_with_tabs": "Indentar usando tabs",
             "input_mode": "Modo de introdu\u00e7\u00e3o do editor",
+            "leave_app_running_in_the_notification_area": "Deixar a aplica\u00e7\u00e3o a correr na \u00e1rea de notifica\u00e7\u00f5es",
             "modtime": "Data da \u00faltima modifica\u00e7\u00e3o",
             "mute_lines": "Esbater linhas n\u00e3o seleccionadas no modo Concentra\u00e7\u00e3o",
             "new_file_dont_prompt": "N\u00e3o perguntar pelo nome do ficheiro ao criar um novo ficheiro",
@@ -311,12 +330,15 @@
                 "csl_style": "Estilo CSL (opcional)",
                 "format": "Exportar o projecto para:",
                 "name_label": "Formatar",
+                "pattern": "Adicionar padr\u00f5es Glob para incluir apenas ficheiros espec\u00edficos",
+                "pattern_name": "Padr\u00e3o Glob",
                 "title": "Op\u00e7\u00f5es do projecto",
                 "title_label": "T\u00edtulo do projecto",
                 "use_label": "Usar"
             },
             "readability_algorithm": "Algoritmo usado para o modo de facilidade de leitura",
             "reset_pandoc_command": "Voltar ao comando pandoc original",
+            "show_app_in_the_notification_area": "Mostrar a aplica\u00e7\u00e3o na \u00e1rea de notifica\u00e7\u00f5es",
             "sort_folders_first": "Mostrar direct\u00f3rios acima de ficheiros",
             "sorting_ascii": "Ordem ASCII (2 depois do 10)",
             "sorting_explanation": "Modo de ordena\u00e7\u00e3o dos ficheiros (usado para ordenar por nome)",
@@ -329,7 +351,10 @@
                 "title": "Ortografia"
             },
             "theme": {
+                "accent_color_info": "Esta op\u00e7\u00e3o est\u00e1 dispon\u00edvel apenas em Windows e MacOS",
+                "accent_color_label": "Usar a cor de realce do sistema operativo em vez da cor do tema",
                 "info": "Aqui pode escolher um Tema para a aplica\u00e7\u00e3o",
+                "select_label": "Clicar para seleccionar",
                 "selected_label": "Selecionado",
                 "title": "Tema"
             },
@@ -342,16 +367,20 @@
                 "success": "%s foi descarregado com sucesso!",
                 "updated": "Tradu\u00e7\u00f5es actualizadas: %s"
             },
+            "use_native_appearance": "Usar aspecto nativo para as janelas",
             "user_dictionary": "Dicion\u00e1rio do utilizador. Remova palavras clicando nelas.",
             "user_dictionary_label": "Entrada do dicion\u00e1rio",
             "watchdog_checkbox_label": "Activar monitoriza\u00e7\u00e3o de mudan\u00e7as externas",
             "watchdog_explainer": "Nalguns computadores, o Zettlr pode reportar demasiadas mudan\u00e7as em ficheiros remotos. Se isto acontecer, tente activar esta configura\u00e7\u00e3o.",
             "watchdog_threshold_label": "Tempo de espera at\u00e9 a grava\u00e7\u00e3o do ficheiro estar conclu\u00edda (em ms)",
+            "whitelist": "Permiss\u00f5es de renderiza\u00e7\u00e3o de iFrame",
             "whitelist_hostname": "Servidor",
             "xelatex": "Caminho para o execut\u00e1vel xelatex. Por favor, apenas altere se o Zettlr n\u00e3o conseguir localiz\u00e1-lo.",
             "xelatex_default": "Default: xelatex",
             "zkn": {
                 "auto_create_file": "Criar automaticamente ficheiros n\u00e3o existentes ao seguir links internos",
+                "auto_search": "Iniciar uma pesquisa ao seguir links Zettelkasten",
+                "custom_directory": "Colocar ficheiros criados automaticamente nestea pasta (tem de ser carregada no Zettlr)",
                 "generated_id": "ID gerada",
                 "id_generator_label": "Padr\u00e3o usado para gerar IDs novas",
                 "id_label": "Express\u00e3o regular ID",
@@ -375,10 +404,21 @@
                 "var_minute": "Minutos (zeros \u00e0 esquerda)",
                 "var_month": "M\u00eas (zeros \u00e0 esquerda)",
                 "var_second": "Segundos (zeros \u00e0 esquerda)",
+                "var_unix_epoch": "Tempo Unix",
                 "var_week_number": "N\u00famero de semana (zeros \u00e0 esquerda)",
                 "var_year": "Ano (quatro d\u00edgitos)",
                 "var_year_two": "Ano (dois d\u00edgitos)"
+            },
+            "zoom_behavior": {
+                "editor": "Fazer zoom altera o tamanho da letra do editor",
+                "gui": "Fazer zoom altera o tamanho de todo o interface",
+                "label": "Comportamento do zoom"
             }
+        },
+        "snippets": {
+            "explanation": "Snippets permitem-lhe definir pequenos trechos de texto com vari\u00e1veis",
+            "rename": "Renomear snippet",
+            "title": "Snippets"
         },
         "statistics": {
             "compare": "Comparar com o per\u00edodo de tempo anterior",
@@ -387,7 +427,9 @@
             "month": "M\u00eas",
             "previous_frame": "Per\u00edodo anterior",
             "tabs": {
-                "calendar_label": "Calend\u00e1rio"
+                "calendar_label": "Calend\u00e1rio",
+                "chart_label": "Gr\u00e1ficos",
+                "fsal_label": "Estat\u00edsticas FSAL"
             },
             "this_frame": "Per\u00edodo actual",
             "title": "Estat\u00edsticas de escrita",
@@ -397,8 +439,10 @@
             "year": "Ano"
         },
         "tag_cloud": {
+            "add_to_file": "Adicionar ao ficheiro",
             "copy": "Copiar para a \u00e1rea de transfer\u00eancia",
             "info": "Aqui encontra todas as etiquetas que usou nos seus ficheiros. Pode copiar toda a lista para a \u00e1rea de transfer\u00eancia. Pouse o cursor sobre as etiquetas para ver o n\u00famero de vezes que as usou.",
+            "suggestions_label": "Etiquetas sugeridas para o ficheiro actual",
             "title": "Nuvem de etiquetas"
         },
         "tags": {
@@ -422,9 +466,11 @@
             "no_data": "N\u00e3o foi poss\u00edvel verificar se h\u00e1 actualiza\u00e7\u00f5es: O servidor n\u00e3o enviou quaisquer dados",
             "no_new_update": "Nenhuma atualiza\u00e7\u00e3o dispon\u00edvel. Tem a vers\u00e3o mais recente.",
             "notification": "H\u00e1 uma nova vers\u00e3o do Zettlr dispon\u00edvel. Por favor consulta a lista de modifica\u00e7\u00f5es abaixo.",
+            "other_error": "N\u00e3o foi poss\u00edvel verificar actualiza\u00e7\u00f5es. %s: %s",
             "redirect_error": "N\u00e3o foi poss\u00edvel verificar se h\u00e1 actualiza\u00e7\u00f5es: O servidor tentou redireccionar o pedido (Status code: %s)",
             "release_url": "Abrir a p\u00e1gina da descarga",
             "server_error": "N\u00e3o foi poss\u00edvel verificar se h\u00e1 actualiza\u00e7\u00f5es: Server Error (Status code: %s)",
+            "start_update_label": "Clique para iniciar actualiza\u00e7\u00e3o",
             "start_update_message": "A Iniciar atualiza\u00e7\u00e3o ...",
             "title": "H\u00e1 uma actualiza\u00e7\u00e3o dispon\u00edvel",
             "transmission_error": "N\u00e3o foi poss\u00edvel verificar se h\u00e1 actualiza\u00e7\u00f5es: Liga\u00e7\u00e3o interrompida",
@@ -441,7 +487,8 @@
                 "saved": "Gravado!",
                 "saving": "Gravando ...",
                 "unsaved_changes": "Modifica\u00e7\u00f5es n\u00e3o gravadas"
-            }
+            },
+            "win_title": "Navegador de atributos"
         },
         "attachments": "Anexos",
         "attachments_open_dir": "Abrir pasta",
@@ -450,6 +497,11 @@
         "avg_surpassed": "\ud83d\udd25 At\u00e9 o teclado fumega!",
         "avg_words": "M\u00e9dia di\u00e1ria",
         "chars": "%s caracteres",
+        "chart": {
+            "high_legend": "Mais do dobro da m\u00e9dia mensal",
+            "high_mid_legend": "Acima da m\u00e9dia mensal",
+            "low_mid_legend": "Abaixo da m\u00e9dia mensal"
+        },
         "citeproc": {
             "error_db": "N\u00e3o foi poss\u00edvel carregar a base de dados de cita\u00e7\u00f5es",
             "error_report_message": "%s items na sua biblioteca n\u00e3o foram carregados devido a erros. Por favor, verifique as mensagens de erro abaixo para ver que CiteKeys est\u00e3o mal formatadas e qual foi o erro.",
@@ -462,6 +514,7 @@
             "reloading": "Foram detectadas altera\u00e7\u00f5es ao ficheiro de biblioteca. Recarregando..."
         },
         "created": "Criado",
+        "ctrl_click_to_open": "Cmd/Ctrl+Clique para abrir %s",
         "date_just_now_label": "agora mesmo",
         "dirs": "Pastas",
         "display_search_results": "Mostrar resultados de pesquisa",
@@ -491,8 +544,14 @@
         },
         "global_search": {
             "clear_label": "Limpar pesquisa",
+            "filter_label": "Filtrar resultados da pesquisa",
+            "query_label": "Inserir os termos para a pesquisa",
             "query_placeholder": "Encontrar ...",
-            "search_label": "Procurar"
+            "restrict_dir_label": "Restringir a pesquisa \u00e0 pasta",
+            "restrict_dir_placeholder": "Restringir \u00e0 pasta ...",
+            "search_label": "Procurar",
+            "title": "Pesquisa Global",
+            "toggle_label": "Alternar vista de resultados"
         },
         "modified": "Modificado",
         "months": {
@@ -511,16 +570,24 @@
         },
         "no_attachments": "Sem anexos",
         "no_dir_selected": "Nenhuma pasta seleccionada",
+        "no_open_document": "Nenhum documento aberto",
+        "no_other_files": "Nenhum outro ficheiro",
+        "no_reference_message": "Nenhum texto de refer\u00eancia",
+        "no_related_files": "Nenhum ficheiro relacionado",
         "no_search_results": "Sem resultados",
+        "number_selections": "%s selec\u00e7\u00f5es",
+        "other_files": "Outros ficheiros",
         "preview_modification_date": "Modificado",
         "preview_searching_label": "\u00c0 procura de ficheiro ...",
         "preview_word_count": "Contagem de palavras",
         "related_files_label": "Ficheiros relacionados",
+        "reset": "Reset",
         "statistics_more": "Mais estat\u00edsticas...",
         "table_of_contents": "\u00cdndice",
         "today_words": "palavras hoje",
         "words": "%s palavras",
         "words_last_month": "palavras o m\u00eas passado",
+        "words_selected": "%s seleccionadas",
         "workspaces": "\u00c1reas de Trabalho"
     },
     "localise": {
@@ -531,15 +598,19 @@
         "about": "Sobre o Zettlr",
         "add_to_dictionary": "Adicionar ao dicion\u00e1rio",
         "all_front": "Trazer todos para a frente",
+        "assets_manager": "Navegador de atributos",
         "bold": "Negrito",
         "clear_recent_docs": "Vazio",
+        "close_all_tabs": "Fechar todos os separadores",
         "close_dir": "Fechar pasta",
         "close_file": "Fechar ficheiro",
         "close_workspace": "Fechar \u00e1rea de trabalho",
         "copy": "Copiar",
+        "copy_equation": "Copiar c\u00f3digo da equa\u00e7\u00e3o",
         "copy_filename": "Copiar nome do ficheiro",
         "copy_html": "Copiar como HTML",
         "copy_id": "Copiar ID",
+        "copy_img_to_clipboard": "Copiar imagem para a \u00e1rea de transfer\u00eancia",
         "copy_link": "Copiar Link",
         "copy_mail": "Copiar endere\u00e7o de email",
         "custom_css": "CSS Personalizado...",
@@ -578,17 +649,22 @@
         "new_dir": "Nova pasta...",
         "new_file": "Novo ficheiro...",
         "new_project": "Criar projecto",
+        "next_file": "Pr\u00f3ximo ficheiro",
         "no_suggestions": "Sem sugest\u00f5es",
         "open": "Abrir...",
         "open_attachment": "Abrir Anexo",
         "open_in_browser": "Abrir no navegador",
         "open_link": "Abrir Link",
         "open_logs": "Abrir Registos",
+        "open_new_tab": "Abrir num novo separador",
+        "open_tutorial": "Abrir Tutorial",
+        "open_workspace": "Abrir \u00c1rea de Trabalho ...",
         "pandoc": "Obter Pandoc",
         "paste": "Colar",
         "paste_plain": "Colar sem formata\u00e7\u00e3o",
         "pdf_preferences": "Prefer\u00eancias do PDF",
         "preferences": "Prefer\u00eancias",
+        "previous_file": "Ficheiro anterior",
         "print": "Imprimir",
         "project_build": "Exportar Projecto",
         "project_properties": "Op\u00e7\u00f5es do Projecto",
@@ -613,15 +689,19 @@
         "start_speaking": "Come\u00e7ar a falar",
         "stop_speaking": "Parar de falar",
         "tab_close": "Fechar Separador",
+        "tab_close_all": "Fechar todos os separadores",
+        "tab_close_others": "Fechar outros separadores",
         "tab_next": "Separador Seguinte",
         "tab_previous": "Separador Anterior",
         "tags": "Organizar etiquetas",
         "toggle_devtools": "Ligar/desligar ferramentas de developer",
         "toggle_distraction_free": "Modo Concentra\u00e7\u00e3o",
         "toggle_file_meta": "Informa\u00e7\u00e3o Adicional",
+        "toggle_filemanager": "Alternar navegador de ficheiros",
         "toggle_fullscreen": "Ligar/desligar janela inteira",
         "toggle_sidebar": "Mostrar/esconder barra lateral",
         "toggle_theme": "Modo Escuro",
+        "toggle_typewriter_mode": "Modo M\u00e1quina de Escrever",
         "undo": "Desfazer",
         "unhide": "Mostrar",
         "update": "Verificar se existem actualiza\u00e7\u00f5es",
@@ -672,6 +752,7 @@
             "ignored_dir_message": "A pasta &quot;%s&quot; n\u00e3o pode ser aberta pelo Zettlr.",
             "ignored_dir_title": "N\u00e3o \u00e9 poss\u00edvel abrir pasta",
             "image_not_found": "Imagem n\u00e3o encontrada: %s",
+            "malformed_citekey": "Chave de cita\u00e7\u00e3o mal formatada: @%s",
             "malformed_textbundle": "Textbundle mal formatado: %s",
             "move_into_child_message": "N\u00e3o pode mover uma pasta para uma das suas sub-pastas.",
             "move_into_child_title": "N\u00e3o \u00e9 poss\u00edvel mover a pasta",
@@ -685,7 +766,8 @@
             "pandoc_error_message": "O pandoc gerou um erro: %s",
             "pandoc_error_title": "N\u00e3o foi poss\u00edvel exportar o ficheiro",
             "remove_message": "Tem a certeza que quer remover %s?",
-            "remove_title": "Apagar mesmo?"
+            "remove_title": "Apagar mesmo?",
+            "tray_not_supported": "\"Tray\" n\u00e3o \u00e9 suportado. A extens\u00e3o para Gnome &quot;KStatusNotifierItem/AppIndicator Support&quot; \u00e9 necess\u00e1ria para suportar \"Tray\" em ambientes de trabalho Gnome."
         },
         "export_success": "Exportando para %s",
         "file_changed": "O ficheiro %s foi modificado externamente.",
@@ -716,6 +798,7 @@
         "save_changes_save": "Guardar",
         "save_changes_select_dir": "Por favor, seleccione uma pasta para guardar o novo ficheiro.",
         "save_changes_title": "Descartar altera\u00e7\u00f5es n\u00e3o guardadas?",
+        "save_file": "Guardar ficheiro",
         "unknown_command": "Comando desconhecido recebido: %s"
     },
     "toolbar": {

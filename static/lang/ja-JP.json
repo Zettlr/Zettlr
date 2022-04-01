@@ -1,10 +1,11 @@
 {
     "metadata": {
         "authors": [
-            "Ryota Abe"
+            "Ryota Abe",
+            "juggernautjp \u003Ckatsutoshi.harada@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-02-12T05:27:03.000000Z"
+        "updated_at": "2022-03-14T10:05:59.000000Z"
     },
     "dialog": {
         "about": {
@@ -270,6 +271,7 @@
             "hide_dirs": "\u30b0\u30ed\u30fc\u30d0\u30eb\u691c\u7d22\u6642\u306b\u30c7\u30a3\u30ec\u30af\u30c8\u30ea\u3092\u975e\u8868\u793a",
             "homeEndBehaviour": "\u003Ckbd\u003EHome\u003C/kbd\u003E\u3068\u003Ckbd\u003EEnd\u003C/kbd\u003E\u306b\u3064\u3044\u3066CodeMirror\u306e\u30c7\u30d5\u30a9\u30eb\u30c8\u52d5\u4f5c\u3092\u4f7f\u7528\u3059\u308b",
             "indent_unit": "\u30a4\u30f3\u30c7\u30f3\u30c8\u306b\u4f7f\u7528\u3059\u308b\u7a7a\u767d\u306e\u6570",
+            "indent_with_tabs": "\u30a4\u30f3\u30c7\u30f3\u30c8\u306b\u30bf\u30d6\u6587\u5b57\u3092\u4f7f\u7528",
             "input_mode": "\u30a8\u30c7\u30a3\u30bf\u5165\u529b\u30e2\u30fc\u30c9",
             "leave_app_running_in_the_notification_area": "\u901a\u77e5\u9818\u57df\u306b\u30a2\u30d7\u30ea\u30b1\u30fc\u30b7\u30e7\u30f3\u3092\u6b8b\u3059",
             "modtime": "\u6700\u7d42\u66f4\u65b0\u65e5\u6642",
@@ -402,6 +404,11 @@
                 "var_week_number": "\u9031\u756a\u53f7(2\u6841)",
                 "var_year": "\u5e74(4\u6841)",
                 "var_year_two": "\u5e74(2\u6841)"
+            },
+            "zoom_behavior": {
+                "editor": "\u30ba\u30fc\u30e0\u3067\u30a8\u30c7\u30a3\u30bf\u306e\u30d5\u30a9\u30f3\u30c8\u30b5\u30a4\u30ba\u3092\u5909\u66f4\u3059\u308b",
+                "gui": "\u30ba\u30fc\u30e0\u3067GUI\u5168\u4f53\u306e\u62e1\u5927\u7387\u3092\u5909\u66f4\u3059\u308b",
+                "label": "\u30ba\u30fc\u30e0\u64cd\u4f5c"
             }
         },
         "snippets": {
@@ -638,6 +645,7 @@
         "new_dir": "\u65b0\u898f\u30c7\u30a3\u30ec\u30af\u30c8\u30ea...",
         "new_file": "\u65b0\u898f\u30d5\u30a1\u30a4\u30eb...",
         "new_project": "\u30d7\u30ed\u30b8\u30a7\u30af\u30c8\u3092\u4f5c\u6210",
+        "next_file": "\u6b21\u306e\u30d5\u30a1\u30a4\u30eb",
         "no_suggestions": "\u5019\u88dc\u306f\u3042\u308a\u307e\u305b\u3093",
         "open": "\u958b\u304f...",
         "open_attachment": "\u6dfb\u4ed8\u30d5\u30a1\u30a4\u30eb\u3092\u958b\u304f",
@@ -652,6 +660,7 @@
         "paste_plain": "\u30d7\u30ec\u30fc\u30f3\u30c6\u30ad\u30b9\u30c8\u3068\u3057\u3066\u8cbc\u308a\u4ed8\u3051",
         "pdf_preferences": "PDF\u8a2d\u5b9a...",
         "preferences": "\u8a2d\u5b9a",
+        "previous_file": "\u524d\u306e\u30d5\u30a1\u30a4\u30eb",
         "print": "\u5370\u5237...",
         "project_build": "\u30d7\u30ed\u30b8\u30a7\u30af\u30c8\u3092\u30a8\u30af\u30b9\u30dd\u30fc\u30c8",
         "project_properties": "\u30d7\u30ed\u30b8\u30a7\u30af\u30c8\u8a2d\u5b9a...",
