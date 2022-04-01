@@ -11,6 +11,8 @@
 - Added an extra check so that unexpected values of `openDirectory` would not
   prevent Zettlr from starting
 - Make the vim command line visible and style it according to the Zettlr themes
+- Clicking on the toolbar now doesn't steal the focus from other elements,
+  making it more comfortable to drag the window and immediately continue writing
 
 ## Under the Hood
 

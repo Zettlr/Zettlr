@@ -7,6 +7,7 @@
       'has-rtl-traffic-lights': hasRTLTrafficLights
     }"
     v-on:dblclick="handleDoubleClick"
+    v-on:mousedown="$event.preventDefault()"
   >
     <template v-for="(item, idx) in controls">
       <ButtonControl
