@@ -1,7 +1,7 @@
 import got from 'got'
 import YAML from 'yaml'
 import { promises as fs } from 'fs'
-import { resolve } from 'path'
+import { resolve, dirname } from 'path'
 
 const __dirname = dirname(import.meta.url.substring(7))
 
