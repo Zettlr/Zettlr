@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '.github/workflows/refresh.yml'
+  workflow_dispatch: {} # Used to manually trigger a nightly build.
   schedule:
     # Run on 1st and 15th of each month
     - cron: '1 2 1,15 * *'
