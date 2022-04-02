@@ -15,6 +15,9 @@
   making it more comfortable to drag the window and immediately continue writing
 - Added slight transparency to the inline code background color so that block
   cursors are visible inside that code
+- Resizing an image upon pasting from clipboard now works better, since the
+  aspect ratio will only be recalculated once you leave the input field (i.e. by
+  tabbing into another input); this way you can just type in a specific number
 
 ## Under the Hood
 
