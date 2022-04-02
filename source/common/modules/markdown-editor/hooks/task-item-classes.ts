@@ -14,6 +14,8 @@
 
 import CodeMirror from 'codemirror'
 
+const itemClass = 'task-item-done'
+
 /**
  * Hooks onto the cursorActivity event to apply the classes
  *
@@ -24,6 +26,11 @@ export default function taskItemClassHook (cm: CodeMirror.Editor): void {
   let taskHandle: number|undefined
 
   const callback = function (cm: CodeMirror.Editor): void {
+    const shouldRenderTasks: boolean = (cm as any).getOption('zettlr').render.tasks
+    if (!shouldRenderTasks) {
+      return
+    }
+
     if (taskHandle !== undefined) {
       return // There's already a task scheduled
     }
@@ -36,13 +43,26 @@ export default function taskItemClassHook (cm: CodeMirror.Editor): void {
 
   cm.on('cursorActivity', callback)
   cm.on('viewportChange', callback)
-  cm.on('optionChange', callback)
+  cm.on('optionChange', function (cm, option: any) {
+    if (option !== 'zettlr') {
+      return // No option we should care about
+    }
+
+    const shouldRenderTasks: boolean = (cm as any).getOption('zettlr').render.tasks
+
+    if (!shouldRenderTasks) {
+      // Remove all line classes since we should not render them anymore
+      for (let i = 0; i < cm.lineCount(); i++) {
+        cm.removeLineClass(i, 'wrap', itemClass)
+      }
+      cm.refresh()
+    }
+  })
   cm.on('change', callback)
 }
 
 function applyTaskItemClasses (cm: CodeMirror.Editor): void {
   let needsRefresh = false // Will be set to true if at least one line has been altered
-  const itemClass = 'task-item-done'
 
   // This matches a line that starts with at most three spaces, followed by at
   // least three backticks or tildes (fenced code block).

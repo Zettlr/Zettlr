@@ -18,6 +18,8 @@
 - Resizing an image upon pasting from clipboard now works better, since the
   aspect ratio will only be recalculated once you leave the input field (i.e. by
   tabbing into another input); this way you can just type in a specific number
+- Disabling "render task lists" will now also disable the application of task
+  lists; this helps speed up editing long documents with many tasks
 
 ## Under the Hood
 
