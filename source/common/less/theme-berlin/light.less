@@ -386,7 +386,9 @@ body {
 
     // Comments in the main editor should have a background-color
     .cm-comment:not(.cm-formatting):not(.cm-fenced-code) {
-      background-color: var(--grey-0);
+      // NOTE: The background color must have transparency applied, otherwise
+      // the block-cursor (e.g. in Insert mode or in vim mode) won't be visible
+      background-color: #f0f0f099;
 
       &:first-child {
         border-top-left-radius: @border-radius;
