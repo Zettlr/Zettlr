@@ -20,6 +20,7 @@
   tabbing into another input); this way you can just type in a specific number
 - Disabling "render task lists" will now also disable the application of task
   lists; this helps speed up editing long documents with many tasks
+- The main editor search now no longer automatically searches
 
 ## Under the Hood
 

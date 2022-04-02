@@ -497,23 +497,6 @@ export default defineComponent({
       } else if (!isRegexp && this.regexpSearch === true) {
         this.regexpSearch = false
       }
-
-      // Begin a search
-      if (this.findTimeout !== undefined) {
-        clearTimeout(this.findTimeout)
-        this.findTimeout = undefined
-      }
-
-      if (this.regexpSearch === true) {
-        // Don't automatically start a search b/c certain expressions will crash
-        // the process (such as searching for /.*/ in a large document)
-        return
-      }
-
-      this.findTimeout = setTimeout(() => {
-        this.searchNext()
-        this.findTimeout = undefined
-      }, 1000)
     },
     showSearch: function (newValue, oldValue) {
       if (newValue === true && oldValue === false) {
@@ -522,7 +505,7 @@ export default defineComponent({
         nextTick()
           .then(() => {
             (this.$refs['search-input'] as HTMLInputElement).focus()
-            this.searchNext()
+            // this.searchNext()
           })
           .catch(err => console.error(err))
       } else if (newValue === false) {
