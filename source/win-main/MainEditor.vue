@@ -505,7 +505,7 @@ export default defineComponent({
         nextTick()
           .then(() => {
             (this.$refs['search-input'] as HTMLInputElement).focus()
-            // this.searchNext()
+            ;(this.$refs['search-input'] as HTMLInputElement).select()
           })
           .catch(err => console.error(err))
       } else if (newValue === false) {

@@ -21,6 +21,8 @@
 - Disabling "render task lists" will now also disable the application of task
   lists; this helps speed up editing long documents with many tasks
 - The main editor search now no longer automatically searches
+- When opening the main editor search, anything in the search input will now be
+  selected
 
 ## Under the Hood
 
