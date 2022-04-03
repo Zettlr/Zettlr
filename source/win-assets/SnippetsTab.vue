@@ -16,7 +16,7 @@
       ></SelectableList>
     </template>
     <template #view2>
-      <div style="padding: 10px;">
+      <div id="snippets-container">
         <p>{{ snippetsExplanation }}</p>
 
         <p>
@@ -266,5 +266,14 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-//
+#snippets-container {
+  padding: 10px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .CodeMirror {
+    flex-grow: 1;
+  }
+}
 </style>

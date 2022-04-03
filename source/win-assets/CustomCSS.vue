@@ -126,6 +126,13 @@ div#custom-css {
   overflow: auto; // Enable scrolling, if necessary
   padding: 10px;
   width: 100vw;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .CodeMirror {
+    flex-grow: 1;
+  }
 }
 
 p#custom-css-info {
