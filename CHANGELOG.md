@@ -33,6 +33,7 @@
 - Display errors in the log viewer
 - Added the default Homebrew installation directory for Apple Silicon Macs in
   order for Zettlr to find Pandoc installed via brew.
+- Improve global search typings
 
 # 2.2.4
 

@@ -20,7 +20,7 @@ import { getConverter } from '@common/util/md-to-html'
 import getSorter from '@providers/fsal/util/sort'
 import { AnyMetaDescriptor, CodeFileMeta, DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
 import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
-import { SearchResult as MainSearchResult } from '@dts/common/search'
+import { SearchResultWrapper } from '@dts/common/search'
 
 const path = window.path
 const ipcRenderer = window.ipc
@@ -29,26 +29,6 @@ interface FSALEvent {
   event: 'remove'|'add'|'change'
   path: string
   timestamp: number
-}
-
-interface SearchResultFileDummy {
-  path: string
-  relativeDirectoryPath: string
-  filename: string
-  displayName: string
-}
-
-/**
- * This interface describes a local search result that is composed of a
- * LocalFile interface, its search results, and, as specialties, a cumulative
- * weight of all the search results and a toggle to indicate whether we should
- * hide the result set.
- */
-interface SearchResult {
-  file: SearchResultFileDummy
-  result: MainSearchResult[]
-  hideResultSet: boolean
-  weight: number
 }
 
 /**
@@ -249,7 +229,7 @@ export interface ZettlrState {
   /**
    * This variable stores search results from the global search
    */
-  searchResults: SearchResult[]
+  searchResults: SearchResultWrapper[]
 }
 
 function getConfig (): StoreOptions<ZettlrState> {
@@ -476,7 +456,7 @@ function getConfig (): StoreOptions<ZettlrState> {
       clearSearchResults: function (state) {
         state.searchResults = []
       },
-      addSearchResult: function (state, result: SearchResult) {
+      addSearchResult: function (state, result: SearchResultWrapper) {
         state.searchResults.push(result)
         // Also make sure to sort the search results by relevancy (note the
         // b-a reversal, since we want a descending sort)

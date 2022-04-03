@@ -125,33 +125,13 @@ import ProgressControl from '@common/vue/form/elements/Progress.vue'
 import AutocompleteText from '@common/vue/form/elements/AutocompleteText.vue'
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
-import { SearchResult, SearchTerm } from '@dts/common/search'
+import { SearchResult, SearchResultWrapper, SearchTerm } from '@dts/common/search'
 import { CodeFileMeta, DirMeta, MDFileMeta } from '@dts/common/fsal'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { AnyMenuItem } from '@dts/renderer/context'
 
 const path = window.path
 const ipcRenderer = window.ipc
-
-interface LocalFile {
-  path: string
-  relativeDirectoryPath: string
-  filename: string
-  displayName: string
-}
-
-/**
- * This interface describes a local search result that is composed of a
- * LocalFile interface, its search results, and, as specialties, a cumulative
- * weight of all the search results and a toggle to indicate whether we should
- * hide the result set.
- */
-interface LocalSearchResult {
-  file: LocalFile
-  result: SearchResult[]
-  hideResultSet: boolean
-  weight: number
-}
 
 // Again: We have a side effect that trans() cannot be executed during import
 // stage. It needs to be executed after the window registration ran for now. It
@@ -197,7 +177,7 @@ export default defineComponent({
       // The compiled search terms
       compiledTerms: null as null|SearchTerm[],
       // All files that we need to search. Will be emptied during a search.
-      filesToSearch: [] as LocalFile[],
+      filesToSearch: [] as any[],
       // The number of files the search started with (for progress bar)
       sumFilesToSearch: 0,
       // A global trigger for the result set trigger. This will determine what
@@ -275,7 +255,7 @@ export default defineComponent({
     sep: function (): string {
       return path.sep
     },
-    searchResults: function (): LocalSearchResult[] {
+    searchResults: function (): SearchResultWrapper[] {
       return this.$store.state.searchResults
     },
     /**
@@ -375,7 +355,7 @@ export default defineComponent({
       // 2. The compiled search terms.
       // Let's do that first.
 
-      let fileList: LocalFile[] = []
+      let fileList: any[] = []
 
       for (const treeItem of this.fileTree) {
         if (treeItem.type !== 'directory') {
@@ -461,7 +441,7 @@ export default defineComponent({
       // Take the file to be searched ...
       const terms = compileSearchTerms(this.query)
       while (this.filesToSearch.length > 0) {
-        const fileToSearch = this.filesToSearch.shift() as LocalFile
+        const fileToSearch = this.filesToSearch.shift() as any
         // Now start the search
         const result: SearchResult[] = await ipcRenderer.invoke('application', {
           command: 'file-search',
@@ -471,7 +451,7 @@ export default defineComponent({
           }
         })
         if (result.length > 0) {
-          const newResult = {
+          const newResult: SearchResultWrapper = {
             file: fileToSearch,
             result: result,
             hideResultSet: false, // If true, the individual results won't be displayed
