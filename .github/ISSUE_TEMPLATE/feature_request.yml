@@ -1,6 +1,5 @@
 name: Feature Request
 description: Something missing? Come along!
-title: "[Feature] "
 labels: [feature]
 body:
   - type: markdown
