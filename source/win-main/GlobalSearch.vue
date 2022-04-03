@@ -8,7 +8,7 @@
       v-bind:label="queryInputLabel"
       v-bind:autocomplete-values="recentGlobalSearches"
       v-bind:placeholder="queryInputPlaceholder"
-      v-on:confirm="startSearch()"
+      v-on:keydown.enter="startSearch()"
     ></AutocompleteText>
     <AutocompleteText
       v-model="restrictToDir"
@@ -198,8 +198,6 @@ export default defineComponent({
       compiledTerms: null as null|SearchTerm[],
       // All files that we need to search. Will be emptied during a search.
       filesToSearch: [] as LocalFile[],
-      // All results so far received
-      searchResults: [] as LocalSearchResult[],
       // The number of files the search started with (for progress bar)
       sumFilesToSearch: 0,
       // A global trigger for the result set trigger. This will determine what
@@ -276,6 +274,9 @@ export default defineComponent({
     },
     sep: function (): string {
       return path.sep
+    },
+    searchResults: function (): LocalSearchResult[] {
+      return this.$store.state.searchResults
     },
     /**
      * Allows search results to be further filtered
@@ -478,14 +479,10 @@ export default defineComponent({
               return accumulator + currentValue.weight
             }, 0) // This is the initialValue, b/c we're summing up props
           }
-          this.searchResults.push(newResult)
+          this.$store.commit('addSearchResult', newResult)
           if (newResult.weight > this.maxWeight) {
             this.maxWeight = newResult.weight
           }
-
-          // Also make sure to sort the search results by relevancy (note the
-          // b-a reversal, since we want a descending sort)
-          this.searchResults.sort((a, b) => b.weight - a.weight)
         }
       }
 
@@ -496,7 +493,7 @@ export default defineComponent({
       this.filesToSearch = [] // Reset, in case the search was aborted.
     },
     emptySearchResults: function () {
-      this.searchResults = []
+      this.$store.commit('clearSearchResults')
 
       // Clear indeces of active search result
       this.activeFileIdx = -1
@@ -581,27 +578,10 @@ export default defineComponent({
       // line.
       let marked = resultObject.restext
 
-      // "Why are you deep-cloning this array?" you may ask. Well, well. The
-      // reason is that Vue will observe the original array. And, whenever an
-      // observed thing -- be it an array or object -- is mutated, this will
-      // cause Vue to update the whole component state. Array.prototype.reverse
-      // actually mutates the array. So in order to prevent Vue from endlessly
-      // updating the component, we'll pull out the values into an unobserved
-      // cloned array that we can reverse without Vue getting stuck in an
-      // infinite loop.
-      const unobserved = resultObject.ranges.map(range => {
-        return {
-          from: range.from,
-          to: range.to
-        }
-      })
-      // Addendum Sun, 16 Jan 2022: If I had paid more attention to this little
-      // curious fact here, I could've saved myself a lot of trouble with the
-      // new Proxies of Vue3. For a short summary of my odyssee, see
-      // https://www.hendrik-erz.de/post/death-by-proxy
-
-      // Because it shifts positions, we need to insert the closing tag first
-      for (const range of unobserved.reverse()) {
+      // We go through the ranges in reverse order so that the range positions
+      // remain valid as we highlight parts of the string
+      for (let i = resultObject.ranges.length - 1; i > -1; i--) {
+        const range = resultObject.ranges[i]
         marked = marked.substring(0, range.to) + endTag + marked.substring(range.to)
         marked = marked.substring(0, range.from) + startTag + marked.substring(range.from)
       }

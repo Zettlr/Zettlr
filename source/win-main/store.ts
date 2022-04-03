@@ -20,6 +20,7 @@ import { getConverter } from '@common/util/md-to-html'
 import getSorter from '@providers/fsal/util/sort'
 import { AnyMetaDescriptor, CodeFileMeta, DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
 import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
+import { SearchResult as MainSearchResult } from '@dts/common/search'
 
 const path = window.path
 const ipcRenderer = window.ipc
@@ -28,6 +29,26 @@ interface FSALEvent {
   event: 'remove'|'add'|'change'
   path: string
   timestamp: number
+}
+
+interface SearchResultFileDummy {
+  path: string
+  relativeDirectoryPath: string
+  filename: string
+  displayName: string
+}
+
+/**
+ * This interface describes a local search result that is composed of a
+ * LocalFile interface, its search results, and, as specialties, a cumulative
+ * weight of all the search results and a toggle to indicate whether we should
+ * hide the result set.
+ */
+interface SearchResult {
+  file: SearchResultFileDummy
+  result: MainSearchResult[]
+  hideResultSet: boolean
+  weight: number
 }
 
 /**
@@ -225,6 +246,10 @@ export interface ZettlrState {
    * All CSL items available in the currently loaded database
    */
   cslItems: any[]
+  /**
+   * This variable stores search results from the global search
+   */
+  searchResults: SearchResult[]
 }
 
 function getConfig (): StoreOptions<ZettlrState> {
@@ -249,7 +274,8 @@ function getConfig (): StoreOptions<ZettlrState> {
         modifiedDocuments: [],
         tableOfContents: null,
         citationKeys: [],
-        cslItems: []
+        cslItems: [],
+        searchResults: []
       }
     },
     getters: {
@@ -446,6 +472,15 @@ function getConfig (): StoreOptions<ZettlrState> {
       },
       updateCSLItems: function (state, newItems: any[]) {
         state.cslItems = newItems
+      },
+      clearSearchResults: function (state) {
+        state.searchResults = []
+      },
+      addSearchResult: function (state, result: SearchResult) {
+        state.searchResults.push(result)
+        // Also make sure to sort the search results by relevancy (note the
+        // b-a reversal, since we want a descending sort)
+        state.searchResults.sort((a, b) => b.weight - a.weight)
       }
     },
     actions: {
@@ -548,7 +583,6 @@ function getConfig (): StoreOptions<ZettlrState> {
           return // Can only generate suggestions for Markdown files
         }
 
-        console.log(context.state.activeFile.path)
         const descriptor = await ipcRenderer.invoke('application', {
           command: 'get-file-contents',
           payload: context.state.activeFile.path

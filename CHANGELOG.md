@@ -23,6 +23,8 @@
 - The main editor search now no longer automatically searches
 - When opening the main editor search, anything in the search input will now be
   selected
+- Fix unintended global search start
+- Highlight results from global search in the main editor text
 
 ## Under the Hood
 

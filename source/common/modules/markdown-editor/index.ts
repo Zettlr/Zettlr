@@ -33,7 +33,7 @@ import generateKeymap from './generate-keymap'
 import generateTableOfContents from './util/generate-toc'
 
 // Search plugin (module-namespaced set of utility functions)
-import { searchNext, searchPrevious, replaceNext, replacePrevious, replaceAll, stopSearch } from './plugins/search'
+import { searchNext, searchPrevious, replaceNext, replacePrevious, replaceAll, stopSearch, highlightRanges } from './plugins/search'
 
 /**
  * APIs
@@ -300,6 +300,16 @@ export default class MarkdownEditor extends EventEmitter {
 
   stopSearch (): void {
     stopSearch()
+  }
+
+  /**
+   * Allows highlighting of arbitrary ranges independent of a search
+   *
+   * @param   {CodeMirror.Range[]}  ranges  The ranges to highlight
+   */
+  highlightRanges (ranges: CodeMirror.Range[]): void {
+    this.stopSearch() // Make sure we retain a sane search state
+    highlightRanges(this._instance, ranges)
   }
 
   /**

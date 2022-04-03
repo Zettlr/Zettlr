@@ -218,6 +218,20 @@ function highlightSearchResults (cm: CodeMirror.Editor, term: RegExp): void {
 }
 
 /**
+ * Highlights a predetermined set of ranges within the document
+ *
+ * @param   {CodeMirror.Editor}   cm      The editor instance
+ * @param   {CodeMirror.Range[]}  ranges  The ranges to highlight
+ */
+export function highlightRanges (cm: CodeMirror.Editor, ranges: CodeMirror.Range[]): void {
+  unhighlightSearchResults()
+  for (const range of ranges) {
+    const mark = cm.markText(range.anchor, range.head, { className: 'cm-highlight' })
+    matchesInDocument.push(mark)
+  }
+}
+
+/**
  * Removes all markers that highlight search results within the document.
  */
 function unhighlightSearchResults (): void {
