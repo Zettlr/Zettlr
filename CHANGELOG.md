@@ -26,6 +26,7 @@
 - Fix unintended global search start
 - Highlight results from global search in the main editor text
 - The code editor in the assets manager now scales with the size of the window
+- Added an option to prevent Zettlr from checking for updated translations
 
 ## Under the Hood
 

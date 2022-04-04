@@ -110,7 +110,7 @@ export default class TranslationProvider extends ProviderContract {
     if (checkForTranslationUpdates) {
       this.updateTranslations().catch(err => this._logger.error(`[Translation Provider] Failed to update translations: ${String(err.code)}`, err))
     } else {
-      this._logger.info('[Translation Provider] User decide not to update translations.')
+      this._logger.info('[Translation Provider] Not checking for translation updates based on preferences.')
     }
   }
 
