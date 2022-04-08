@@ -5,7 +5,7 @@
             "juggernautjp \u003Ckatsutoshi.harada@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-03-14T10:05:59.000000Z"
+        "updated_at": "2022-04-04T12:48:00.000000Z"
     },
     "dialog": {
         "about": {
@@ -194,6 +194,7 @@
             },
             "avoid_new_tabs": "\u30d5\u30a1\u30a4\u30eb\u3092\u65b0\u3057\u3044\u30bf\u30d6\u3067\u958b\u304f\u3053\u3068\u3092\u53ef\u80fd\u306a\u9650\u308a\u907f\u3051\u308b",
             "checkForBeta": "\u30d9\u30fc\u30bf\u7248\u306e\u30ea\u30ea\u30fc\u30b9\u3092\u901a\u77e5\u3059\u308b",
+            "check_translation_updates": "\u8d77\u52d5\u6642\u306b\u7ffb\u8a33\u60c5\u5831\u306e\u66f4\u65b0\u3092\u30c1\u30a7\u30c3\u30af\u3059\u308b",
             "check_updates": "\u66f4\u65b0\u3092\u81ea\u52d5\u7684\u306b\u30c1\u30a7\u30c3\u30af\u3059\u308b",
             "choose_file": "\u30d5\u30a1\u30a4\u30eb\u3092\u9078\u629e...",
             "citation_database": "\u53c2\u8003\u6587\u732e\u30c7\u30fc\u30bf\u30d9\u30fc\u30b9(CSL JSON \u307e\u305f\u306f BibTeX)",

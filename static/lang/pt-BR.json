@@ -7,12 +7,13 @@
             "dhax",
             "KillerTofu",
             "Myreli \u003Cmyreli@pm.me\u003E",
+            "PneuAro20",
             "oldbear",
             "Fabio Bianchi",
             "brunnogama \u003Cbrunnogama@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-03-01T00:29:04.000000Z"
+        "updated_at": "2022-04-03T23:47:27.000000Z"
     },
     "dialog": {
         "about": {
@@ -211,6 +212,10 @@
             "count_chars": "Contar caracteres em vez de palavras (por exemplo, para chin\u00eas)",
             "creationtime": "Hora de cria\u00e7\u00e3o do arquivo",
             "dark_mode": "Modo Escuro",
+            "dark_mode_schedule": {
+                "end": "Encerrar o modo escuro \u00e0s",
+                "start": "Iniciar o modo noturno \u00e0s"
+            },
             "debug": "Ativar modo de depura\u00e7\u00e3o",
             "default_image_save_path": "Caminho de imagem padr\u00e3o (relativo ou absoluto)",
             "delete_on_fail": "Apaga os itens de maneira irrevers\u00edvel, se ocorrer uma falha ao mover para lixeira",
@@ -230,6 +235,7 @@
                 "title": "Exibir",
                 "use_first_headings": "Use o primeiro t\u00edtulo de n\u00edvel 1 em vez do nome do arquivo, caso esteja presente"
             },
+            "display_markdown_file_extensions": "Mostrar as extens\u00f5es do arquivo Markdown",
             "display_time_explanation": "Nos metadados do arquivo mostre",
             "editor": "Editor",
             "editor_font_size": "Tamanho da fonte do editor",
@@ -260,7 +266,8 @@
             "filemanager_explanation": "Modo gerenciador de arquivos",
             "filemanager_thin": "Pequena &mdash; mostrar \u00e1rvore de arquivos ou lista de arquivos",
             "filename_display": {
-                "filename_only": "Apenas nome do arquivo"
+                "filename_only": "Apenas nome do arquivo",
+                "title": "T\u00edtulo de aplic\u00e1vel"
             },
             "filename_generator": "Padr\u00e3o para novos nomes de arquivos",
             "formatting_characters_explanation": "Escolha os caracteres de formata\u00e7\u00e3o que os comandos negrito/it\u00e1lico devem usar",
@@ -268,6 +275,7 @@
             "hide_dirs": "Ocultar diret\u00f3rios durante a pesquisa global",
             "homeEndBehaviour": "Usar as a\u00e7\u00f5es padr\u00e3o do CodeMirror para \u003Ckbd\u003E Home \u003C/kbd\u003E e \u003Ckbd\u003E End \u003C/kbd\u003E.",
             "indent_unit": "Indentar com o seguinte n\u00famero de espa\u00e7os",
+            "indent_with_tabs": "Usar \"tab\" para mudar o recuo",
             "input_mode": "Modo editor",
             "leave_app_running_in_the_notification_area": "Deixe o aplicativo em execu\u00e7\u00e3o na \u00e1rea de notifica\u00e7\u00e3o",
             "modtime": "Hor\u00e1rio da \u00faltima modifica\u00e7\u00e3o",
@@ -331,6 +339,7 @@
             "readability_algorithm": "Algoritmo a ser usado para o modo de legibilidade",
             "reset_pandoc_command": "Reset comando pandoc",
             "show_app_in_the_notification_area": "Mostrar o programa na \u00e1rea de notifica\u00e7\u00f5es",
+            "sort_folders_first": "Mostrar pastas no topo da lista antes dos arquivos",
             "sorting_ascii": "Ordem ASCII (2 ap\u00f3s 10)",
             "sorting_explanation": "Ordem de classifica\u00e7\u00e3o dos arquivos (usada para classifica\u00e7\u00e3o por nome)",
             "sorting_natural": "Ordem natural (10 ap\u00f3s 2)",
@@ -393,6 +402,9 @@
                 "var_week_number": "Semana do ano",
                 "var_year": "Ano (quatro digitos)",
                 "var_year_two": "Ano (dois digitos)"
+            },
+            "zoom_behavior": {
+                "editor": "Aplicar zoom altera o tamanho da fonte no editor de texto"
             }
         },
         "snippets": {
