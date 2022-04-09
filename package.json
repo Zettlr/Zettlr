@@ -67,7 +67,7 @@
     "md5": "^2.3.0",
     "mermaid": "^8.14.0",
     "minimatch": "^5.0.0",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "nspell": "^2.1.5",
     "rimraf": "^3.0.2",
     "sanitize-filename": "^1.6.3",
