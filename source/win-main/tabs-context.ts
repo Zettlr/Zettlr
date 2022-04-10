@@ -14,9 +14,11 @@
 
 import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
+import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
+import { AnyMenuItem } from '@dts/renderer/context'
 
-export default function displayTabsContext (event: MouseEvent, callback: (clickedID: string) => void): void {
-  const items: any = [
+export default function displayTabsContext (event: MouseEvent, fileObject: MDFileMeta|CodeFileMeta, callback: (clickedID: string) => void): void {
+  const items: AnyMenuItem[] = [
     {
       label: trans('menu.tab_close'),
       id: 'close-this',
@@ -34,6 +36,27 @@ export default function displayTabsContext (event: MouseEvent, callback: (clicke
       id: 'close-all',
       type: 'normal',
       enabled: true
+    },
+    {
+      type: 'separator'
+    },
+    {
+      label: trans('menu.copy_filename'),
+      id: 'copy-filename',
+      type: 'normal',
+      enabled: true
+    },
+    {
+      label: trans('menu.copy_abs_path'),
+      id: 'copy-path',
+      type: 'normal',
+      enabled: true
+    },
+    {
+      label: trans('menu.copy_id'),
+      id: 'copy-id',
+      type: 'normal',
+      enabled: fileObject.type === 'file' && fileObject.id !== ''
     }
   ]
 
