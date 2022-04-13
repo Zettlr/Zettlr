@@ -21,55 +21,14 @@ import getSorter from '@providers/fsal/util/sort'
 import { AnyMetaDescriptor, CodeFileMeta, DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
 import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
 import { SearchResultWrapper } from '@dts/common/search'
+import { locateByPath } from '@providers/fsal/util/locate-by-path'
 
-const path = window.path
 const ipcRenderer = window.ipc
 
 interface FSALEvent {
   event: 'remove'|'add'|'change'
   path: string
   timestamp: number
-}
-
-/**
- * This function quickly finds a given descriptor by path in the FSAL tree
- *
- * @param   {string}                       targetPath  The path to find a descriptor for
- * @param   {DirMeta|AnyMetaDescriptor[]}  tree        The tree to search
- *
- * @return  {AnyMetaDescriptor|null}                   The descriptor, or null if not found
- */
-function findPathDescriptor (targetPath: string, tree: DirMeta|AnyMetaDescriptor[]): AnyMetaDescriptor|null {
-  // We need to find a target
-  if (Array.isArray(tree)) {
-    for (const descriptor of tree) {
-      if (targetPath === descriptor.path) {
-        // We have the correct element
-        return descriptor
-      } else if (targetPath.startsWith(String(descriptor.path) + String(path.sep)) && descriptor.type === 'directory') {
-        // We have the correct tree
-        return findPathDescriptor(targetPath, descriptor.children)
-      }
-    }
-  } else if (tree.type === 'directory') {
-    // Single tree element
-    if (targetPath === tree.path) {
-      // Found the element
-      return tree
-    }
-
-    for (const child of tree.children) {
-      if (targetPath === child.path) {
-        // We got the correct child
-        return child
-      } else if (targetPath.startsWith(String(child.path) + String(path.sep)) && child.type === 'directory') {
-        // Traverse further down
-        return findPathDescriptor(targetPath, child.children)
-      }
-    }
-  }
-
-  return null
 }
 
 /**
@@ -259,8 +218,8 @@ function getConfig (): StoreOptions<ZettlrState> {
       }
     },
     getters: {
-      file: state => (filePath: string): MDFileMeta|CodeFileMeta|OtherFileMeta|DirMeta|null => {
-        return findPathDescriptor(filePath, state.fileTree)
+      file: state => (filePath: string): MDFileMeta|CodeFileMeta|OtherFileMeta|DirMeta|undefined => {
+        return locateByPath(state.fileTree, filePath)
       }
     },
     mutations: {
@@ -338,8 +297,8 @@ function getConfig (): StoreOptions<ZettlrState> {
           state.fileTree = sorter(state.fileTree) // Omit sorting to sort name-up
         } else if (descriptor.parent != null) {
           const parentPath = descriptor.dir
-          const parentDescriptor = findPathDescriptor(parentPath, state.fileTree) as DirMeta|null
-          if (parentDescriptor === null) {
+          const parentDescriptor = locateByPath(state.fileTree, parentPath) as DirMeta|undefined
+          if (parentDescriptor === undefined) {
             console.warn(`Was about to add descriptor ${String(descriptor.path)} to the filetree, but the parent ${String(parentPath)} was null!`)
             return
           }
@@ -362,9 +321,9 @@ function getConfig (): StoreOptions<ZettlrState> {
         }
       },
       removeFromFiletree: function (state, pathToRemove) {
-        const descriptor = findPathDescriptor(pathToRemove, state.fileTree)
+        const descriptor = locateByPath(state.fileTree, pathToRemove)
 
-        if (descriptor === null) {
+        if (descriptor === undefined) {
           return // No descriptor found -- nothing to do.
         }
 
@@ -372,15 +331,15 @@ function getConfig (): StoreOptions<ZettlrState> {
           const idx = state.fileTree.findIndex(elem => elem === descriptor)
           state.fileTree.splice(idx, 1)
         } else {
-          const parentDescriptor = findPathDescriptor(descriptor.dir, state.fileTree) as DirMeta|null
-          if (parentDescriptor !== null) {
+          const parentDescriptor = locateByPath(state.fileTree, descriptor.dir) as DirMeta|undefined
+          if (parentDescriptor !== undefined) {
             const idx = parentDescriptor.children.findIndex((elem: any) => elem === descriptor)
             parentDescriptor.children.splice(idx, 1)
           }
         }
       },
       patchInFiletree: function (state, descriptor: AnyMetaDescriptor) {
-        const ownDescriptor = findPathDescriptor(descriptor.path, state.fileTree)
+        const ownDescriptor = locateByPath(state.fileTree, descriptor.path)
         const sorter = getSorter(
           state.config.sorting,
           state.config.sortFoldersFirst,
@@ -389,7 +348,7 @@ function getConfig (): StoreOptions<ZettlrState> {
           state.config.sortingTime
         )
 
-        if (ownDescriptor === null) {
+        if (ownDescriptor === undefined) {
           console.error(`[Vuex::patchInFiletree] Could not find descriptor for ${descriptor.path}! Not patching.`)
           return
         }
@@ -424,9 +383,9 @@ function getConfig (): StoreOptions<ZettlrState> {
         if (descriptor === null) {
           state.selectedDirectory = null
         } else {
-          const ownDescriptor = findPathDescriptor(descriptor.path, state.fileTree)
+          const ownDescriptor = locateByPath(state.fileTree, descriptor.path)
 
-          if (ownDescriptor !== null && ownDescriptor.type === 'directory') {
+          if (ownDescriptor !== undefined && ownDescriptor.type === 'directory') {
             state.selectedDirectory = ownDescriptor
           }
         }
