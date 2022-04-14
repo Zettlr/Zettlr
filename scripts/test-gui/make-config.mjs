@@ -1,9 +1,11 @@
 import { promises as fs } from 'fs'
-import { join, dirname } from 'path'
+import path from 'path'
 import YAML from 'yaml'
 import { info } from '../console-colour.mjs'
 
-const __dirname = dirname(import.meta.url.substring(7))
+const __dirname = process.platform === 'win32'
+? path.dirname(decodeURI(import.meta.url.substring(8))) // file:///C:/...
+: path.dirname(decodeURI(import.meta.url.substring(7))) // file:///root/...
 
 /**
  * Parses the test config and returns it as a JSON object
@@ -11,8 +13,8 @@ const __dirname = dirname(import.meta.url.substring(7))
  * @return  {Object}  The config object
  */
 export default async () => {
-  const examplePath = join(__dirname, 'test-config.example.yml')
-  const realPath = join(__dirname, '../../', 'test-config.yml')
+  const examplePath = path.join(__dirname, 'test-config.example.yml')
+  const realPath = path.join(__dirname, '../../', 'test-config.yml')
 
   try {
     await fs.lstat(realPath)

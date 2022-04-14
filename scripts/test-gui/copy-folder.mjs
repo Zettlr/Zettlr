@@ -7,10 +7,12 @@
  */
 
 import { promises as fs, lstatSync } from 'fs'
-import { join, dirname } from 'path'
+import path from 'path'
 import { verbose } from '../console-colour.mjs'
 
-const __dirname = dirname(import.meta.url.substring(7))
+const __dirname = process.platform === 'win32'
+  ? path.dirname(decodeURI(import.meta.url.substring(8))) // file:///C:/...
+  : path.dirname(decodeURI(import.meta.url.substring(7))) // file:///root/...
 
 const isDir = function isDir (p) {
   try {
@@ -23,15 +25,15 @@ const isDir = function isDir (p) {
 
 
 export default async (destinationPath) => {
-  let sourcePath = join(__dirname, 'test-files')
+  const sourcePath = path.join(__dirname, 'test-files')
 
   await copyRecursive(sourcePath, destinationPath)
 
   // Finally, retrieve the roots so that they can be added to the config
-  let roots = await fs.readdir(destinationPath)
+  const roots = await fs.readdir(destinationPath)
 
   // Return the absolute paths
-  return roots.map(root => { return join(destinationPath, root) })
+  return roots.map(root => { return path.join(destinationPath, root) })
 }
 
 /**
@@ -41,8 +43,8 @@ export default async (destinationPath) => {
  * @param   {String}  targetPath   The absolute path to the target directory
  */
 async function copyRecursive (currentPath, targetPath) {
-  verbose(`Copying ${currentPath} ...`)
-  if (!await isDir(currentPath)) {
+  verbose(`Copying ${currentPath} -> ${targetPath}...`)
+  if (!isDir(currentPath)) {
     await fs.copyFile(currentPath, targetPath)
   } else {
     try {
@@ -51,11 +53,11 @@ async function copyRecursive (currentPath, targetPath) {
       verbose('Could not create directory, as it already exists.')
     }
 
-    let children = await fs.readdir(currentPath)
-    for (let child of children) {
+    const children = await fs.readdir(currentPath)
+    for (const child of children) {
       await copyRecursive(
-        join(currentPath, child),
-        join(targetPath, child)
+        path.join(currentPath, child),
+        path.join(targetPath, child)
       )
     } // END for
   } // END else

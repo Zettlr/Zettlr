@@ -13,29 +13,31 @@
 // This script requires a previous yarn/npm install.
 import got from 'got'
 import { promises as fs } from 'fs'
-import path, { join, dirname } from 'path'
+import path from 'path'
 import { info, success, error } from './console-colour.mjs' // Colourful output
 import ZIP from 'adm-zip'
 import rimraf from 'rimraf'
 
-const __dirname = dirname(import.meta.url.substring(7))
+const __dirname =  process.platform === 'win32'
+  ? path.dirname(decodeURI(import.meta.url.substring(8))) // file:///C:/...
+  : path.dirname(decodeURI(import.meta.url.substring(7))) // file:///root/...
 
 // The locales-URL returns an array with all files in that directory, incl. their download URL.
 // const REPO_LOCALES_URL = 'https://api.github.com/repos/citation-style-language/locales/contents'
 const REPO_LOCALES_URL = 'https://github.com/citation-style-language/locales/archive/master.zip'
 const STYLE_URL = 'https://raw.githubusercontent.com/citation-style-language/styles/master/chicago-author-date.csl'
 
-const LOCALES_TARGET_DIRECTORY = join(__dirname, '../static/csl-locales')
-const STYLES_TARGET_DIRECTORY = join(__dirname, '../static/csl-styles')
+const LOCALES_TARGET_DIRECTORY =path. join(__dirname, '../static/csl-locales')
+const STYLES_TARGET_DIRECTORY = path.join(__dirname, '../static/csl-styles')
 
 // First, let's download the list of contents from
 // the GitHub API.
 async function getCSLLocales () {
   // Prepare paths that we need
-  let resPath = join(__dirname, '../resources')
-  let localesZip = join(resPath, 'csl.zip')
+  let resPath = path.join(__dirname, '../resources')
+  let localesZip = path.join(resPath, 'csl.zip')
   // NOTE: localesUnzip is the path we will get when we unzip csl.zip
-  let localesUnzip = join(resPath, 'locales-master')
+  let localesUnzip = path.join(resPath, 'locales-master')
 
   // First, download the ZIP
   info(`Retrieving ZIP with locales from ${REPO_LOCALES_URL} ...`)
@@ -56,13 +58,13 @@ async function getCSLLocales () {
   // them over one by one
   let directoryContents = await fs.readdir(localesUnzip)
   directoryContents = directoryContents.filter(elem => /^locales/.test(elem))
-  directoryContents = directoryContents.map(elem => join(localesUnzip, elem))
+  directoryContents = directoryContents.map(elem => path.join(localesUnzip, elem))
   info('Done! Copying over locales-files ...')
 
   for (let filePath of directoryContents) {
     let basename = path.basename(filePath)
     info(`Copying ${basename} ...`)
-    let targetPath = join(LOCALES_TARGET_DIRECTORY, basename)
+    let targetPath = path.join(LOCALES_TARGET_DIRECTORY, basename)
     await fs.rename(filePath, targetPath)
     success(`Successfully written ${basename}!`)
   }
@@ -72,7 +74,7 @@ async function getCSLLocales () {
   let response = await got(STYLE_URL, { method: 'GET' })
   response = response.body
   let basename = path.basename(STYLE_URL)
-  let targetPath = join(STYLES_TARGET_DIRECTORY, basename)
+  let targetPath = path.join(STYLES_TARGET_DIRECTORY, basename)
   await fs.writeFile(targetPath, response, 'utf8')
   success('Updated CSL style!')
 

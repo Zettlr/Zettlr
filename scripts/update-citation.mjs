@@ -1,9 +1,11 @@
 import got from 'got'
 import YAML from 'yaml'
 import { promises as fs } from 'fs'
-import { resolve, dirname } from 'path'
+import path from 'path'
 
-const __dirname = dirname(import.meta.url.substring(7))
+const __dirname =  process.platform === 'win32'
+  ? path.dirname(decodeURI(import.meta.url.substring(8))) // file:///C:/...
+  : path.dirname(decodeURI(import.meta.url.substring(7))) // file:///root/...
 
 async function updateCitation () {
   // First, grab the "overall" DOI for the Zettlr repository. It will always
@@ -47,7 +49,7 @@ async function updateCitation () {
   })
 
   // Write to disk, and be done with it
-  await fs.writeFile(resolve(__dirname, '../CITATION.cff'), fileContents, { encoding: 'utf-8' })
+  await fs.writeFile(path.resolve(__dirname, '../CITATION.cff'), fileContents, { encoding: 'utf-8' })
   console.log('File CITATION.cff written.')
 }
 
