@@ -1,8 +1,8 @@
 /**
  * BEGIN HEADER
  *
- * Contains:        Vue component function
- * CVM-Role:        Model
+ * Contains:        Vuex store entry point
+ * CVM-Role:        Controller
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
@@ -17,71 +17,22 @@
 import { StoreOptions, createStore, Store } from 'vuex'
 import sanitizeHtml from 'sanitize-html'
 import { getConverter } from '@common/util/md-to-html'
-import getSorter from '@providers/fsal/util/sort'
-import {
-  AnyMetaDescriptor,
-  CodeFileMeta,
-  DirMeta,
-  FSALHistoryEvent,
-  MDFileMeta,
-  OtherFileMeta
-} from '@dts/common/fsal'
+import { CodeFileMeta, DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
 import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
 import { SearchResultWrapper } from '@dts/common/search'
 import { locateByPath } from '@providers/fsal/util/locate-by-path'
 
+// Import Mutations
+import addToFiletreeMutation from './mutations/add-to-filetree'
+import removeFromFiletreeMutation from './mutations/remove-from-filetree'
+import patchInFiletreeMutation from './mutations/patch-in-filetree'
+import announceModifiedFileMutation from './mutations/announce-modified-file'
+
+// Import Actions
+import filtreeUpdateAction from './actions/filtree-update'
+import regenerateTagSuggestionsAction from './actions/regenerate-tag-suggestions'
+
 const ipcRenderer = window.ipc
-
-/**
- * Reconstructs a descriptor tree by re-assigning the parent properties to the
- * correct object references, instead of just numbers. NOTE: You still have to
- * assign the parent of the descriptor itself.
- *
- * @param   {DirMeta}  descriptor  The directory descriptor to reconstruct
- */
-function reconstructTree (descriptor: DirMeta): void {
-  for (const child of descriptor.children) {
-    // @ts-expect-error
-    child.parent = descriptor
-    if (child.type === 'directory') {
-      reconstructTree(child)
-    }
-  }
-}
-
-function sanitizeFiletreeUpdates (events: FSALHistoryEvent[]): FSALHistoryEvent[] {
-  const ret: FSALHistoryEvent[] = []
-
-  for (const event of events) {
-    if (event.event === 'remove') {
-      // First: Check, if we have a corresponding add-event in history, and
-      // remove that one.
-      const addEvent = ret.findIndex(e => e.event === 'add' && e.path === event.path)
-      if (addEvent > -1) {
-        ret.splice(addEvent, 1)
-        // Find all other events in between and splice them as well
-        for (let i = 0; i < ret.length; i++) {
-          if (ret[i].path.startsWith(event.path)) {
-            ret.splice(i, 1)
-            i-- // Important to not jump over events
-          }
-        }
-
-        continue // Done here
-      }
-    }
-
-    // Second: Check if we have events for some files/dirs that reside within
-    // files/dirs that do not exist anymore -- we won't get any descriptor
-    // for these anyway, so we can save some computational power here.
-    // TODO: Is this even necessary ...?
-
-    // In the very end, add the event to our return array
-    ret.push(event)
-  }
-
-  return ret
-}
 
 function configToArrayMapper (config: any): any {
   // Heh, you're creating an object and call it array? Yes, sort of. What we get
@@ -234,35 +185,7 @@ function getConfig (): StoreOptions<ZettlrState> {
         }
         state.tableOfContents = toc
       },
-      announceModifiedFile: function (state, payload) {
-        const { filePath, isClean } = payload
-        // Since Proxies cannot intercept push and splice operations, we have to
-        // re-assign the modifiedDocuments if a change occurred, so that attached
-        // watchers are notified of this. An added benefit is that we can already
-        // de-proxy the array here to send it across the IPC bridge.
-        const newModifiedDocuments = state.modifiedDocuments.map(e => e)
-        const pathIndex = newModifiedDocuments.findIndex(e => e === filePath)
-
-        if (isClean === false && pathIndex === -1) {
-          // Add the path if not already done
-          newModifiedDocuments.push(filePath)
-          ipcRenderer.invoke('application', {
-            command: 'update-modified-files',
-            payload: newModifiedDocuments
-          })
-            .catch(e => console.error(e))
-          state.modifiedDocuments = newModifiedDocuments
-        } else if (isClean === true && pathIndex > -1) {
-          // Remove the path if in array
-          newModifiedDocuments.splice(pathIndex, 1)
-          ipcRenderer.invoke('application', {
-            command: 'update-modified-files',
-            payload: newModifiedDocuments
-          })
-            .catch(e => console.error(e))
-          state.modifiedDocuments = newModifiedDocuments
-        }
-      },
+      announceModifiedFile: announceModifiedFileMutation,
       activeDocumentInfo: function (state, info) {
         state.activeDocumentInfo = info
       },
@@ -280,103 +203,9 @@ function getConfig (): StoreOptions<ZettlrState> {
       updateConfig: function (state, option) {
         state.config[option] = window.config.get(option)
       },
-      addToFiletree: function (state, descriptor) {
-        const sorter = getSorter(
-          state.config.sorting,
-          state.config.sortFoldersFirst,
-          state.config.fileNameDisplay,
-          state.config.appLang,
-          state.config.sortingTime
-        )
-
-        if (descriptor.parent == null && !state.fileTree.includes(descriptor)) {
-          // It's a root, so insert at the root level
-          if (descriptor.type === 'directory') {
-            reconstructTree(descriptor)
-          }
-          state.fileTree.push(descriptor)
-          state.fileTree = sorter(state.fileTree) // Omit sorting to sort name-up
-        } else if (descriptor.parent != null) {
-          const parentPath = descriptor.dir
-          const parentDescriptor = locateByPath(state.fileTree, parentPath) as DirMeta|undefined
-          if (parentDescriptor === undefined) {
-            console.warn(`Was about to add descriptor ${String(descriptor.path)} to the filetree, but the parent ${String(parentPath)} was null!`)
-            return
-          }
-
-          if (parentDescriptor.children.find((elem: any) => elem.path === descriptor.path) !== undefined) {
-            return // We already have this descriptor, nothing to do.
-          }
-
-          descriptor.parent = parentDescriptor // Attach the child to its parent
-          if (descriptor.type === 'directory') {
-            // Make sure the parent pointers work correctly even inside this subtree
-            reconstructTree(descriptor)
-          }
-
-          parentDescriptor.children.push(descriptor)
-          parentDescriptor.children = sorter(parentDescriptor.children, parentDescriptor.sorting)
-        } else {
-          // NOTE: This is just in case we accidentally introduce a race condition.
-          console.warn('[Store] Received event to add a descriptor to the filetree, but it was a root and already present:', descriptor)
-        }
-      },
-      removeFromFiletree: function (state, pathToRemove) {
-        const descriptor = locateByPath(state.fileTree, pathToRemove)
-
-        if (descriptor === undefined) {
-          return // No descriptor found -- nothing to do.
-        }
-
-        if (descriptor.parent == null) {
-          const idx = state.fileTree.findIndex(elem => elem === descriptor)
-          state.fileTree.splice(idx, 1)
-        } else {
-          const parentDescriptor = locateByPath(state.fileTree, descriptor.dir) as DirMeta|undefined
-          if (parentDescriptor !== undefined) {
-            const idx = parentDescriptor.children.findIndex((elem: any) => elem === descriptor)
-            parentDescriptor.children.splice(idx, 1)
-          }
-        }
-      },
-      patchInFiletree: function (state, descriptor: AnyMetaDescriptor) {
-        const ownDescriptor = locateByPath(state.fileTree, descriptor.path)
-        const sorter = getSorter(
-          state.config.sorting,
-          state.config.sortFoldersFirst,
-          state.config.fileNameDisplay,
-          state.config.appLang,
-          state.config.sortingTime
-        )
-
-        if (ownDescriptor === undefined) {
-          console.error(`[Vuex::patchInFiletree] Could not find descriptor for ${descriptor.path}! Not patching.`)
-          return
-        }
-
-        const protectedKeys = [ 'parent', 'children', 'attachments' ]
-
-        for (const key of Object.keys(descriptor) as Array<keyof AnyMetaDescriptor>) {
-          if (protectedKeys.includes(key)) {
-            continue // Don't overwrite protected keys which would result in dangling descriptors
-          }
-
-          // @ts-expect-error Typescript doesn't like in place mutation :(
-          ownDescriptor[key] = descriptor[key]
-        }
-
-        // Now we have to check if we had a directory. If so, we can know for sure
-        // that the name did not change (because that would've resulted in a
-        // removal and one addition) but rather something else, so we need to make
-        // sure to simply re-sort it in case the sorting has changed.
-        // If we have a file, update the parent instead.
-        if (ownDescriptor.type === 'directory') {
-          ownDescriptor.children = sorter(ownDescriptor.children, ownDescriptor.sorting)
-        } else if (ownDescriptor.type === 'file' && ownDescriptor.parent != null) {
-          const parentDescriptor = ownDescriptor.parent as unknown as DirMeta
-          parentDescriptor.children = sorter(parentDescriptor.children, parentDescriptor.sorting)
-        }
-      },
+      addToFiletree: addToFiletreeMutation,
+      patchInFiletree: patchInFiletreeMutation,
+      removeFromFiletree: removeFromFiletreeMutation,
       lastFiletreeUpdate: function (state, payload) {
         state.lastFiletreeUpdate = payload
       },
@@ -424,61 +253,7 @@ function getConfig (): StoreOptions<ZettlrState> {
       }
     },
     actions: {
-      filetreeUpdate: async function (context) {
-        // When this function is called, an fsal-state-updated event has been
-        // emitted from the main process because something in the FSAL has
-        // changed. We need to reflect this here in the main application window
-        // so that the filemanager always shows the correct state.
-
-        // We need to perform three steps: First, retrieve all the history events
-        // since we last checked (we initialise the "lastChecked" property with
-        // 0 so that we will initially get all events), and then, for each event,
-        // first retrieve the necessary information, and finally apply this locally.
-        const events: FSALHistoryEvent[] = await ipcRenderer.invoke('application', { command: 'get-filetree-events', payload: context.state.lastFiletreeUpdate })
-
-        if (events.length === 0) {
-          return // Nothing to do
-        }
-
-        // A first problem we might encounter is that there has been an addition
-        // and subsequently a removal of the same file/directory. We need to
-        // account for this. We do so by first sanitizing the events that need
-        // to be processed.
-        const saneEvents = sanitizeFiletreeUpdates(events)
-
-        for (const event of saneEvents) {
-          if (event.timestamp <= context.state.lastFiletreeUpdate) {
-            console.warn('FSAL event had an outdated timestamp -- skipping', event.event, event.path, event.timestamp)
-            continue
-          }
-
-          // In the end, we also need to update our filetree update timestamp
-          context.commit('lastFiletreeUpdate', event.timestamp)
-
-          if (event.event === 'remove') {
-            this.commit('removeFromFiletree', event.path)
-          } else if (event.event === 'add') {
-            const descriptor = await ipcRenderer.invoke('application', { command: 'get-descriptor', payload: event.path })
-            if (descriptor === undefined) {
-              console.error(`The descriptor for path ${event.path} was empty!`)
-            } else {
-              context.commit('addToFiletree', descriptor)
-            }
-          } else if (event.event === 'change') {
-            const descriptor = await ipcRenderer.invoke('application', { command: 'get-descriptor', payload: event.path })
-            if (descriptor === null) {
-              console.error(`The descriptor for path ${event.path} was empty!`)
-            } else {
-              this.commit('patchInFiletree', descriptor)
-            }
-          }
-        }
-
-        // Now, dispatch another event. This will only run this function once, and
-        // will do nothing if there are no new events. This is meant as a convenience
-        // if there are more than one event in a succession
-        context.dispatch('filetreeUpdate').catch(e => console.error(e))
-      },
+      filetreeUpdate: filtreeUpdateAction,
       updateOpenDirectory: async function (context) {
         const directory = await ipcRenderer.invoke('application', { command: 'get-open-directory' })
         const curDir = context.state.selectedDirectory
@@ -514,34 +289,7 @@ function getConfig (): StoreOptions<ZettlrState> {
         const openFiles = await ipcRenderer.invoke('application', { command: 'get-open-files' })
         context.commit('updateOpenFiles', openFiles)
       },
-      regenerateTagSuggestions: async function (context) {
-        if (context.state.activeFile === null) {
-          return // Nothing to do
-        }
-
-        if (context.state.activeFile.type !== 'file') {
-          return // Can only generate suggestions for Markdown files
-        }
-
-        const descriptor = await ipcRenderer.invoke('application', {
-          command: 'get-file-contents',
-          payload: context.state.activeFile.path
-        })
-
-        if (descriptor == null) {
-          console.error('Could not regenerate tag suggestions: Main returned', descriptor)
-          return
-        }
-
-        const suggestions = []
-        for (const tag of Object.keys(context.state.tagDatabase)) {
-          if (String(descriptor.content).includes(tag) && descriptor.tags.includes(tag) === false) {
-            suggestions.push(tag)
-          }
-        }
-
-        context.commit('setTagSuggestions', suggestions)
-      }
+      regenerateTagSuggestions: regenerateTagSuggestionsAction
     }
   }
 
