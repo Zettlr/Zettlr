@@ -37,7 +37,14 @@ import {
   OtherFileDescriptor,
   MaybeRootDescriptor
 } from '@dts/main/fsal'
-import { MDFileMeta, CodeFileMeta, AnyMetaDescriptor, MaybeRootMeta, FSALStats } from '@dts/common/fsal'
+import {
+  MDFileMeta,
+  CodeFileMeta,
+  AnyMetaDescriptor,
+  MaybeRootMeta,
+  FSALStats,
+  FSALHistoryEvent
+} from '@dts/common/fsal'
 import { SearchTerm } from '@dts/common/search'
 import generateStats from './util/generate-stats'
 import ProviderContract from '@providers/provider-contract'
@@ -62,15 +69,6 @@ export {
 interface FSALState {
   openDirectory: DirDescriptor|null
   filetree: MaybeRootDescriptor[]
-}
-
-/**
- * Declares an event that happens on the FSAL
- */
-export interface FSALHistoryEvent {
-  event: 'add'|'change'|'remove'
-  path: string
-  timestamp: number
 }
 
 export default class FSAL extends ProviderContract {
@@ -697,7 +695,7 @@ export default class FSAL extends ProviderContract {
       return null
     }
 
-    return descriptor
+    return descriptor as DirDescriptor
   }
 
   /**
@@ -714,7 +712,7 @@ export default class FSAL extends ProviderContract {
       return null
     }
 
-    return descriptor
+    return descriptor as MDFileDescriptor|CodeFileDescriptor
   }
 
   /**
@@ -732,7 +730,7 @@ export default class FSAL extends ProviderContract {
       return null
     }
 
-    return descriptor
+    return descriptor as OtherFileDescriptor
   }
 
   /**
@@ -748,7 +746,7 @@ export default class FSAL extends ProviderContract {
     if (descriptor === undefined) {
       return undefined
     } else {
-      return descriptor
+      return descriptor as AnyDescriptor
     }
   }
 

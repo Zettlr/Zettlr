@@ -18,18 +18,19 @@ import { StoreOptions, createStore, Store } from 'vuex'
 import sanitizeHtml from 'sanitize-html'
 import { getConverter } from '@common/util/md-to-html'
 import getSorter from '@providers/fsal/util/sort'
-import { AnyMetaDescriptor, CodeFileMeta, DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
+import {
+  AnyMetaDescriptor,
+  CodeFileMeta,
+  DirMeta,
+  FSALHistoryEvent,
+  MDFileMeta,
+  OtherFileMeta
+} from '@dts/common/fsal'
 import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
 import { SearchResultWrapper } from '@dts/common/search'
 import { locateByPath } from '@providers/fsal/util/locate-by-path'
 
 const ipcRenderer = window.ipc
-
-interface FSALEvent {
-  event: 'remove'|'add'|'change'
-  path: string
-  timestamp: number
-}
 
 /**
  * Reconstructs a descriptor tree by re-assigning the parent properties to the
@@ -48,8 +49,8 @@ function reconstructTree (descriptor: DirMeta): void {
   }
 }
 
-function sanitizeFiletreeUpdates (events: FSALEvent[]): FSALEvent[] {
-  const ret: FSALEvent[] = []
+function sanitizeFiletreeUpdates (events: FSALHistoryEvent[]): FSALHistoryEvent[] {
+  const ret: FSALHistoryEvent[] = []
 
   for (const event of events) {
     if (event.event === 'remove') {
@@ -433,7 +434,7 @@ function getConfig (): StoreOptions<ZettlrState> {
         // since we last checked (we initialise the "lastChecked" property with
         // 0 so that we will initially get all events), and then, for each event,
         // first retrieve the necessary information, and finally apply this locally.
-        const events: FSALEvent[] = await ipcRenderer.invoke('application', { command: 'get-filetree-events', payload: context.state.lastFiletreeUpdate })
+        const events: FSALHistoryEvent[] = await ipcRenderer.invoke('application', { command: 'get-filetree-events', payload: context.state.lastFiletreeUpdate })
 
         if (events.length === 0) {
           return // Nothing to do

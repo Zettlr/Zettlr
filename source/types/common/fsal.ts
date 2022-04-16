@@ -12,6 +12,15 @@ export interface ProjectSettings {
 }
 
 /**
+ * Declares an event that happens on the FSAL
+ */
+export interface FSALHistoryEvent {
+  event: 'add'|'change'|'remove'
+  path: string
+  timestamp: number
+}
+
+/**
  * An interface containing meta information all
  * descriptors should provide.
  */
