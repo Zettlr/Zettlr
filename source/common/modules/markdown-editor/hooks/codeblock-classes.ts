@@ -12,13 +12,9 @@
  * END HEADER
  */
 import CodeMirror from 'codemirror'
-// import { debounce, range } from 'lodash'
 const codeblockClass = 'code-block-line'
 const codeblockClassOpen = 'code-block-first-line'
 const codeblockClassClose = 'code-block-last-line'
-// The debounce timeout needs to be exactly the same as but no less than the
-// debounce timeout used in CodeMirror Markdown Mode.
-// const findCodeDebounced = debounce(findCode, 400, { leading: true })
 
 /**
  * Hooks onto the cursorActivity, optionChange and keyHandled event to apply
@@ -29,9 +25,7 @@ const codeblockClassClose = 'code-block-last-line'
  */
 export default function codeblockClassHook (cm: CodeMirror.Editor): void {
   cm.on('keyHandled', handleNewline)
-  // cm.on('cursorActivity', findCodeDebounced)
   cm.on('cursorActivity', findCode)
-  // cm.on('optionChange', findCodeDebounced)
   cm.on('optionChange', findCode)
 }
 
