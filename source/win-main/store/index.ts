@@ -18,7 +18,8 @@ import { StoreOptions, createStore, Store } from 'vuex'
 import { CodeFileMeta, DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
 import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
 import { SearchResultWrapper } from '@dts/common/search'
-import { locateByPath } from '@providers/fsal/util/locate-by-path'
+import { RelatedFile } from '@dts/renderer/misc'
+import locateByPath from '@providers/fsal/util/locate-by-path'
 import configToArrayMapper from './config-to-array'
 
 // Import Mutations
@@ -34,6 +35,7 @@ import regenerateTagSuggestionsAction from './actions/regenerate-tag-suggestions
 import updateOpenDirectoryAction from './actions/update-open-directory'
 import updateActiveFileAction from './actions/update-active-file'
 import updateOpenFilesAction from './actions/update-open-files'
+import updateRelatedFilesAction from './actions/update-related-files'
 
 /**
  * This is the main window's store state, including all properties we have
@@ -64,6 +66,10 @@ export interface ZettlrState {
    * Contains all open files in the editor
    */
   openFiles: MDFileMeta[]
+  /**
+   * Files which are in some way related to the currently active file
+   */
+  relatedFiles: RelatedFile[]
   /**
    * Contains coloured tags that can be managed in the tag manager
    */
@@ -123,6 +129,7 @@ function getConfig (): StoreOptions<ZettlrState> {
         selectedDirectory: null,
         activeFile: null,
         openFiles: [],
+        relatedFiles: [],
         colouredTags: [],
         tagDatabase: [],
         tagSuggestions: [],
@@ -137,7 +144,7 @@ function getConfig (): StoreOptions<ZettlrState> {
     },
     getters: {
       file: state => (filePath: string): MDFileMeta|CodeFileMeta|OtherFileMeta|DirMeta|undefined => {
-        return locateByPath(state.fileTree, filePath)
+        return locateByPath(state.fileTree, filePath) as any
       }
     },
     mutations: {
@@ -169,6 +176,9 @@ function getConfig (): StoreOptions<ZettlrState> {
       },
       updateOpenFiles: function (state, openFiles) {
         state.openFiles = openFiles
+      },
+      updateRelatedFiles: function (state, relatedFiles: RelatedFile[]) {
+        state.relatedFiles = relatedFiles
       },
       colouredTags: function (state, tags) {
         state.colouredTags = tags
@@ -207,7 +217,8 @@ function getConfig (): StoreOptions<ZettlrState> {
       updateOpenDirectory: updateOpenDirectoryAction,
       updateActiveFile: updateActiveFileAction,
       updateOpenFiles: updateOpenFilesAction,
-      regenerateTagSuggestions: regenerateTagSuggestionsAction
+      regenerateTagSuggestions: regenerateTagSuggestionsAction,
+      updateRelatedFiles: updateRelatedFilesAction
     }
   }
 

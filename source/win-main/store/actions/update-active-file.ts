@@ -32,4 +32,6 @@ export default async function (context: ActionContext<ZettlrState, ZettlrState>)
   context.dispatch('updateActiveFile').catch(e => console.error(e))
   // Update the tag suggestions
   context.dispatch('regenerateTagSuggestions').catch(e => console.error(e))
+  // Update the related files
+  context.dispatch('updateRelatedFiles').catch(e => console.error(e))
 }
