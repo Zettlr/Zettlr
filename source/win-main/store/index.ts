@@ -21,6 +21,7 @@ import { CodeFileMeta, DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fs
 import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
 import { SearchResultWrapper } from '@dts/common/search'
 import { locateByPath } from '@providers/fsal/util/locate-by-path'
+import configToArrayMapper from './config-to-array'
 
 // Import Mutations
 import addToFiletreeMutation from './mutations/add-to-filetree'
@@ -34,44 +35,8 @@ import regenerateTagSuggestionsAction from './actions/regenerate-tag-suggestions
 
 const ipcRenderer = window.ipc
 
-function configToArrayMapper (config: any): any {
-  // Heh, you're creating an object and call it array? Yes, sort of. What we get
-  // from the config provider is a nested object, because that saves some typing
-  // work (we can just define an object "display" which serves as a prefix for
-  // all keys within it). What this function does is take any nested object and
-  // basically transform it into a flat object with string keys (so, actually,
-  // an associative array, but as we don't have that in JavaScript ... you know
-  // the drill.) where the string keys are the dot-joined key-prefixes.
-  const arr: any = {}
-
-  for (const key of Object.keys(config)) {
-    const value = config[key]
-    const isArray = Array.isArray(value)
-    const isUndefined = value === undefined
-    const isNull = value === null
-    const isNum = typeof value === 'number'
-    const isString = typeof value === 'string'
-    const isBool = typeof value === 'boolean'
-    if (isArray || isUndefined || isNull || isNum || isString || isBool) {
-      // Yep, above are all (possibly) checks we have to perform in order to be
-      // certain that value is not a "normal" object with key-value pairs. This
-      // means we have reached one leaf and can begin traversing up
-      arr[key] = value
-    } else {
-      // Traverse one level deeper.
-      const mapped = configToArrayMapper(value)
-      for (const mappedKey in mapped) {
-        // Add the namespace here
-        arr[key + '.' + mappedKey] = mapped[mappedKey]
-      }
-    }
-  }
-
-  return arr
-}
-
 /**
- * Declare the Vuex store used in the MainWindow
+ * This is the main window's store state, including all properties we have
  */
 export interface ZettlrState {
   /**
@@ -143,6 +108,11 @@ export interface ZettlrState {
   searchResults: SearchResultWrapper[]
 }
 
+/**
+ * Instantiates a new Store configuration
+ *
+ * @return  {StoreOptions<ZettlrState>}  The instantiated store
+ */
 function getConfig (): StoreOptions<ZettlrState> {
   // Enclose an md2html converter since the ToC updates need to go fast and
   // we can't instantiate a showdown converter every time
@@ -296,7 +266,11 @@ function getConfig (): StoreOptions<ZettlrState> {
   return config
 }
 
-// Make the Vuex-Store the default export
+/**
+ * Returns a new Vuex Store
+ *
+ * @return  {Store<ZettlrState>}  The instantiated store
+ */
 export default function (): Store<ZettlrState> {
   return createStore(getConfig())
 }
