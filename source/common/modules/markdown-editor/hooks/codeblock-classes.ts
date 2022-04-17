@@ -24,22 +24,8 @@ const codeblockClassClose = 'code-block-last-line'
  * @param   {CodeMirror.Editor}  cm  The instance
  */
 export default function codeblockClassHook (cm: CodeMirror.Editor): void {
-  cm.on('keyHandled', handleNewline)
-  cm.on('cursorActivity', findCode)
-  cm.on('optionChange', findCode)
-}
-
-/**
- * When pressing Enter inside a code block, do not debounce but make sure the
- * new line is styled properly immediately
- *
- * @param   {CodeMirror.Editor}  cm  The instance
- * @param   {string}  name  The key pressed
- */
-function handleNewline (cm: CodeMirror.Editor, name: string): void {
-  if (name === 'Enter') {
-    findCode(cm)
-  }
+  cm.on('change', findCode)
+  cm.on('swapDoc', findCode)
 }
 
 /**
