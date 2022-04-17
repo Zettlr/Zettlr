@@ -29,7 +29,7 @@
         <div
           v-bind:class="{ 'toc-entry': true, 'toc-entry-active': tocEntryIsActive(entry.line, idx) }"
           v-bind:data-line="entry.line"
-          v-html="entry.text"
+          v-html="toc2html(entry.text)"
         ></div>
       </div>
     </div>
@@ -158,9 +158,14 @@ import TabBar from '@common/vue/TabBar.vue'
 import { defineComponent } from 'vue'
 import { DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
 import { TabbarControl } from '@dts/renderer/window'
+import sanitizeHtml from 'sanitize-html'
+import { getConverter } from '@common/util/md-to-html'
 
 const path = window.path
 const ipcRenderer = window.ipc
+
+// Must be instantiated after loading, i.e. when the Sidebar is initialized
+let md2html: Function
 
 interface RelatedFile {
   file: string
@@ -318,6 +323,11 @@ export default defineComponent({
       console.error(err)
     }
     this.updateRelatedFiles().catch(e => console.error('Could not update related files', e))
+  },
+  created: function () {
+    // Instantiate a converter so that we can convert the md of our ToC entries
+    // to html with citation support
+    md2html = getConverter(window.getCitation)
   },
   methods: {
     setCurrentTab: function (which: string) {
@@ -485,6 +495,20 @@ export default defineComponent({
 
       // True, when cursor lies between current and next heading
       return (cursorLine >= tocEntryLine && cursorLine < nextTocEntryLine)
+    },
+    /**
+     * Converts a Table of Contents-entry to (safe) HTML
+     *
+     * @param   {string}  entryText  The Markdown ToC entry
+     *
+     * @return  {string}             The safe HTML string
+     */
+    toc2html: function (entryText: string): string {
+      const html = md2html(entryText)
+      return sanitizeHtml(html, {
+        // Headings may be emphasised and contain code
+        allowedTags: [ 'em', 'kbd', 'code' ]
+      })
     }
   }
 })

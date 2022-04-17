@@ -15,8 +15,6 @@
  */
 
 import { StoreOptions, createStore, Store } from 'vuex'
-import sanitizeHtml from 'sanitize-html'
-import { getConverter } from '@common/util/md-to-html'
 import { CodeFileMeta, DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
 import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
 import { SearchResultWrapper } from '@dts/common/search'
@@ -28,6 +26,7 @@ import addToFiletreeMutation from './mutations/add-to-filetree'
 import removeFromFiletreeMutation from './mutations/remove-from-filetree'
 import patchInFiletreeMutation from './mutations/patch-in-filetree'
 import announceModifiedFileMutation from './mutations/announce-modified-file'
+import updateOpenDirectoryMutation from './mutations/update-open-directory'
 
 // Import Actions
 import filtreeUpdateAction from './actions/filtree-update'
@@ -115,10 +114,6 @@ export interface ZettlrState {
  * @return  {StoreOptions<ZettlrState>}  The instantiated store
  */
 function getConfig (): StoreOptions<ZettlrState> {
-  // Enclose an md2html converter since the ToC updates need to go fast and
-  // we can't instantiate a showdown converter every time
-  const md2html = getConverter(window.getCitation)
-
   const config: StoreOptions<ZettlrState> = {
     state () {
       return {
@@ -147,16 +142,8 @@ function getConfig (): StoreOptions<ZettlrState> {
     },
     mutations: {
       updateTableOfContents: function (state, toc) {
-        for (const entry of toc) {
-          entry.text = md2html(entry.text)
-          entry.text = sanitizeHtml(entry.text, {
-            // Headings may be emphasised and contain code
-            allowedTags: [ 'em', 'kbd', 'code' ]
-          })
-        }
         state.tableOfContents = toc
       },
-      announceModifiedFile: announceModifiedFileMutation,
       activeDocumentInfo: function (state, info) {
         state.activeDocumentInfo = info
       },
@@ -174,22 +161,8 @@ function getConfig (): StoreOptions<ZettlrState> {
       updateConfig: function (state, option) {
         state.config[option] = window.config.get(option)
       },
-      addToFiletree: addToFiletreeMutation,
-      patchInFiletree: patchInFiletreeMutation,
-      removeFromFiletree: removeFromFiletreeMutation,
       lastFiletreeUpdate: function (state, payload) {
         state.lastFiletreeUpdate = payload
-      },
-      updateOpenDirectory: function (state, descriptor) {
-        if (descriptor === null) {
-          state.selectedDirectory = null
-        } else {
-          const ownDescriptor = locateByPath(state.fileTree, descriptor.path)
-
-          if (ownDescriptor !== undefined && ownDescriptor.type === 'directory') {
-            state.selectedDirectory = ownDescriptor
-          }
-        }
       },
       updateActiveFile: function (state, descriptor) {
         state.activeFile = descriptor
@@ -221,7 +194,13 @@ function getConfig (): StoreOptions<ZettlrState> {
         // Also make sure to sort the search results by relevancy (note the
         // b-a reversal, since we want a descending sort)
         state.searchResults.sort((a, b) => b.weight - a.weight)
-      }
+      },
+      // Longer mutations that require more code are defined externally
+      announceModifiedFile: announceModifiedFileMutation,
+      updateOpenDirectory: updateOpenDirectoryMutation,
+      addToFiletree: addToFiletreeMutation,
+      patchInFiletree: patchInFiletreeMutation,
+      removeFromFiletree: removeFromFiletreeMutation
     },
     actions: {
       filetreeUpdate: filtreeUpdateAction,
