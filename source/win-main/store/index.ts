@@ -32,8 +32,9 @@ import announceModifiedFileMutation from './mutations/announce-modified-file'
 // Import Actions
 import filtreeUpdateAction from './actions/filtree-update'
 import regenerateTagSuggestionsAction from './actions/regenerate-tag-suggestions'
-
-const ipcRenderer = window.ipc
+import updateOpenDirectoryAction from './actions/update-open-directory'
+import updateActiveFileAction from './actions/update-active-file'
+import updateOpenFilesAction from './actions/update-open-files'
 
 /**
  * This is the main window's store state, including all properties we have
@@ -224,41 +225,9 @@ function getConfig (): StoreOptions<ZettlrState> {
     },
     actions: {
       filetreeUpdate: filtreeUpdateAction,
-      updateOpenDirectory: async function (context) {
-        const directory = await ipcRenderer.invoke('application', { command: 'get-open-directory' })
-        const curDir = context.state.selectedDirectory
-
-        if (curDir === null && directory === null) {
-          return // The above is only true if both are null
-        } else if (curDir !== null && curDir.path === directory.path) {
-          return // Same directory, nothing to update
-        }
-
-        context.commit('updateOpenDirectory', directory)
-
-        // In case the user quickly switched, we need to re-run this
-        context.dispatch('updateOpenDirectory').catch(e => console.error(e))
-      },
-      updateActiveFile: async function (context) {
-        const openFile = await ipcRenderer.invoke('application', { command: 'get-active-file' })
-        const thisActiveFile = context.state.activeFile
-        if (openFile === null && thisActiveFile === null) {
-          return
-        } else if (openFile?.path === thisActiveFile?.path) {
-          return
-        }
-
-        context.commit('updateActiveFile', openFile)
-
-        // In case the user quickly switched, re-run this dispatcher
-        context.dispatch('updateActiveFile').catch(e => console.error(e))
-        // Update the tag suggestions
-        context.dispatch('regenerateTagSuggestions').catch(e => console.error(e))
-      },
-      updateOpenFiles: async function (context) {
-        const openFiles = await ipcRenderer.invoke('application', { command: 'get-open-files' })
-        context.commit('updateOpenFiles', openFiles)
-      },
+      updateOpenDirectory: updateOpenDirectoryAction,
+      updateActiveFile: updateActiveFileAction,
+      updateOpenFiles: updateOpenFilesAction,
       regenerateTagSuggestions: regenerateTagSuggestionsAction
     }
   }

@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        PatchInFiletreeMutation
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Patches an existing descriptor in the filetree
+ *
+ * END HEADER
+ */
+
 import { AnyMetaDescriptor, DirMeta } from '@dts/common/fsal'
 import locateByPath from '@providers/fsal/util/locate-by-path'
 import getSorter from '@providers/fsal/util/sort'

@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        FiletreeUpdateAction
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Performs an update of the file tree
+ *
+ * END HEADER
+ */
+
 import { FSALHistoryEvent } from '@dts/common/fsal'
 import { ActionContext } from 'vuex'
 import { ZettlrState } from '..'

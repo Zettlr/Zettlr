@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        RegenerateTagSuggestionsAction
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Regenerates the array of suggested tags for the current file
+ *
+ * END HEADER
+ */
+
 import { ActionContext } from 'vuex'
 import { ZettlrState } from '..'
 

@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        AnnounceModifiedFileMutation
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Updates the list of currently modified files
+ *
+ * END HEADER
+ */
+
 import { ZettlrState } from '..'
 
 const ipcRenderer = window.ipc

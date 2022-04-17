@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        RemoveFromFiletreeMutation
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Removes an existing descriptor from the filetree
+ *
+ * END HEADER
+ */
+
 import { DirMeta } from '@dts/common/fsal'
 import locateByPath from '@providers/fsal/util/locate-by-path'
 import { ZettlrState } from '..'
