@@ -11,11 +11,10 @@
  * END HEADER
  */
 
-import { getBlockMathRE, getCodeBlockRE } from '../regular-expressions'
+import { getBlockMathRE } from '../regular-expressions'
 import extractYamlFrontmatter from './extract-yaml-frontmatter'
 
 const mathRE = getBlockMathRE()
-const codeRE = getCodeBlockRE(true)
 const inlineRE = /(?:[_*`]{1,3})(.+?)(?:[_*`]{1,3})/gi
 const interpunctionRE = /^[-–—.…:;,'%/\\_¡!¿?()[\]{}]+$/
 
@@ -32,7 +31,6 @@ export default function (markdown: string, countChars = false): number {
   // Now we need to remove a few things which shouldn't count towards the total
   content = content.replace(/<!--.*?-->/gms, '') // Comments
   content = content.replace(mathRE, '') // Display Math equations
-  content = content.replace(codeRE, '') // Code blocks
   content = content.replace(/^#+\s+/gm, '') // Headings
   content = content.replace(/^\s*(?:[*+-]|\d+\.|\[(?: |x)\])\s+/igm, '') // List items (the bullets)
   content = content.replace(inlineRE, '$1') // A bunch of inline stuff
