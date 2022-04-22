@@ -139,7 +139,7 @@
     "ts-loader": "^9.2.6",
     "ts-node": "^10.6.0",
     "tsconfig-paths": "^3.13.0",
-    "typescript": "^4.5.5",
+    "typescript": "^4.6.3",
     "typings-for-css-modules-loader": "^1.7.0",
     "vue-loader": "^17.0.0",
     "webpack": "^5.70.0"
