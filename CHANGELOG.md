@@ -2,7 +2,8 @@
 
 ## GUI and Functionality
 
-(nothing here yet)
+- A malformed directory settings file now does not prevent loading the
+  directory; instead the malformed file is now removed
 
 ## Under the Hood
 
