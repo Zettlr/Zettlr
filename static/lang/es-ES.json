@@ -14,7 +14,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-02-02T16:25:21.000000Z"
+        "updated_at": "2022-04-09T07:40:48.000000Z"
     },
     "dialog": {
         "about": {
@@ -203,6 +203,8 @@
             },
             "avoid_new_tabs": "Evita, cuando sea posible, abrir archivos en nuevas pesta\u00f1as",
             "checkForBeta": "Notifiquame sobre las versiones beta",
+            "check_translation_updates": "Comprueba autom\u00e1ticamente si se han actualizado las traducciones",
+            "check_updates": "Comprueba autom\u00e1ticamente si hay actualizaciones",
             "choose_file": "Elegir archivo ....",
             "citation_database": "Base de datos de citas (CSL JSON o BibTex)",
             "citations": {
@@ -226,6 +228,7 @@
                 "image_width": "Anchura m\u00e1xima de las im\u00e1genes (en %)",
                 "preview_info": "Estas opciones determinan qu\u00e9 elementos se renderizan en los documentos.",
                 "render_citations": "Renderizar citas",
+                "render_emphasis": "Redneriza los \u00e9nfasis",
                 "render_htags": "Ocultar caracteres de cabecera",
                 "render_iframes": "Renderizar Iframes",
                 "render_images": "Renderizar imagenes",
@@ -278,6 +281,7 @@
             "hide_dirs": "Ocultar carpetas durante la b\u00fasqueda global",
             "homeEndBehaviour": "Usa las acciones por defecto de CodeMirror de \u003Ckbd\u003EHome\u003C/kbd\u003E y \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
             "indent_unit": "Sangrado por el siguiente n\u00famero de espacios",
+            "indent_with_tabs": "Sangrar utilizando la tecla de tabulaci\u00f3n",
             "input_mode": "Modo de entrada del editor",
             "leave_app_running_in_the_notification_area": "Deja la aplicaci\u00f3n funcionando en el \u00e1rea de notificaci\u00f3n",
             "modtime": "Hora de la \u00faltima modificaci\u00f3n",
@@ -410,6 +414,11 @@
                 "var_week_number": "Semana del a\u00f1o (completando con ceros delante)",
                 "var_year": "A\u00f1o (cuatro cifras)",
                 "var_year_two": "A\u00f1o (dos d\u00edgitos)"
+            },
+            "zoom_behavior": {
+                "editor": "El zoom se aplica s\u00f3lo al tama\u00f1o de la letra",
+                "gui": "El zoom se aplica a toda la ventana",
+                "label": "Comportamiento del zoom"
             }
         },
         "snippets": {
@@ -646,6 +655,7 @@
         "new_dir": "Carpeta nueva...",
         "new_file": "Archivo nuevo...",
         "new_project": "Crear proyecto",
+        "next_file": "Siguiente archivo",
         "no_suggestions": "Sin surgerencias",
         "open": "Abrir...",
         "open_attachment": "Abrir adjunto",
@@ -660,6 +670,7 @@
         "paste_plain": "Pegar sin formatos",
         "pdf_preferences": "Preferencias PDF...",
         "preferences": "Preferencias",
+        "previous_file": "Archivo anterior",
         "print": "Imprimir....",
         "project_build": "Exportar proyecto",
         "project_properties": "Configuraci\u00f3n del proyecto....",
@@ -793,6 +804,7 @@
         "save_changes_save": "Guardar",
         "save_changes_select_dir": "Por favor, seleccione una carpeta para poder guardar el nuevo archivo.",
         "save_changes_title": "\u00bfOmitir los cambios no guardados?",
+        "save_file": "Guarda el archivo",
         "unknown_command": "Se ha recibido una instrucci\u00f3n desconocida: %s"
     },
     "toolbar": {

@@ -10,6 +10,7 @@
             "Adrien H \u003Cadrien.h@tuta.io\u003E",
             "pabaillon",
             "ScaredCoward",
+            "Goofy",
             "eliovir",
             "zacl",
             "Alexis M\u00e9taireau",
@@ -20,7 +21,7 @@
             "Joris"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-02-16T14:20:18.000000Z"
+        "updated_at": "2022-04-09T16:48:53.000000Z"
     },
     "dialog": {
         "about": {
@@ -134,7 +135,7 @@
                 "eo-EO": "Esp\u00e9ranto",
                 "es-ES": "Espagnol (Espagne)",
                 "et-ET": "Estonien",
-                "eu-EU": "Basquaise",
+                "eu-EU": "Basque",
                 "fa-IR": "Persan (Farsi)",
                 "fi-FI": "Finnois",
                 "fo-FO": "F\u00e9ro\u00efen",
@@ -202,13 +203,14 @@
                 "quick_select_none_label": "Aucun",
                 "quotes_double_label": "Guillemets fran\u00e7ais",
                 "quotes_single_label": "Guillemets anglais",
-                "replacement_info": "Ici, vous pouvez d\u00e9finir les cha\u00eenes de caract\u00e8res qui seront remplac\u00e9es lorsque la correction automatique est activ\u00e9e. Les caract\u00e8res du c\u00f4t\u00e9 gauche seront remplac\u00e9s par ceux de droite droite.",
+                "replacement_info": "Ici, vous pouvez d\u00e9finir les cha\u00eenes de caract\u00e8res qui seront remplac\u00e9es lorsque la correction automatique est activ\u00e9e. Les caract\u00e8res du c\u00f4t\u00e9 gauche seront remplac\u00e9s par ceux de droite. (1)",
                 "style_libre_office_label": "\u00c0 la mani\u00e8re de LibreOffice",
                 "style_word_label": "\u00c0 la mani\u00e8re de Word",
                 "title": "AutoCorrect"
             },
             "avoid_new_tabs": "\u00c9viter d'ouvrir des fichiers dans de nouveaux onglets si possible",
             "checkForBeta": "Me pr\u00e9venir \u00e0 propos des versions b\u00eata",
+            "check_translation_updates": "V\u00e9rifier les traductions mises \u00e0 jour au d\u00e9marrage",
             "check_updates": "V\u00e9rifier automatiquement la pr\u00e9sence de mises \u00e0 jour",
             "choose_file": "Choisir un fichier\u2026",
             "citation_database": "Fichier de r\u00e9f\u00e9rences bibliographiques (au format CSL JSON ou BibTex)",
@@ -286,6 +288,7 @@
             "hide_dirs": "Cacher les dossiers durant la recherche globale",
             "homeEndBehaviour": "Utilise les actions par d\u00e9faut de CodeMirror pour \u003Ckbd\u003EHome\u003C/kbd\u003E et \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
             "indent_unit": "Largeur d\u2019indentation en nombre d\u2019espaces",
+            "indent_with_tabs": "Indenter \u00e0 l'aide de tabulations",
             "input_mode": "Mode de saisie de l'\u00e9diteur",
             "leave_app_running_in_the_notification_area": "Laisser l'application en cours d'ex\u00e9cution dans la zone de notification",
             "modtime": "Heure de la derni\u00e8re modification",
@@ -418,6 +421,11 @@
                 "var_week_number": "Semaine (sur 2 chiffres)",
                 "var_year": "Ann\u00e9e (sur 4 chiffres)",
                 "var_year_two": "Ann\u00e9e (deux chiffres)"
+            },
+            "zoom_behavior": {
+                "editor": "Le zoom modifie la taille de la police de l'\u00e9diteur",
+                "gui": "Le zoom redimensionne l'ensemble de l'interface graphique",
+                "label": "Comportement du zoom"
             }
         },
         "snippets": {
@@ -654,6 +662,7 @@
         "new_dir": "Nouveau dossier\u2026",
         "new_file": "Nouveau fichier\u2026",
         "new_project": "Nouveau Projet",
+        "next_file": "Fichier suivant",
         "no_suggestions": "Pas de suggestions",
         "open": "Ouvrir...",
         "open_attachment": "Ouvrir annexe",
@@ -668,6 +677,7 @@
         "paste_plain": "Coller sans format",
         "pdf_preferences": "Param\u00e8tres de PDF\u2026",
         "preferences": "Pr\u00e9f\u00e9rences...",
+        "previous_file": "Fichier pr\u00e9c\u00e9dent",
         "print": "Imprimer\u2026",
         "project_build": "Exporter le Projet",
         "project_properties": "Param\u00e8tres de Projet\u2026",

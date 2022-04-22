@@ -10,7 +10,7 @@
  */
 
 import { promises as fs } from 'fs'
-import { join, basename, dirname } from 'path'
+import path from 'path'
 import rimraf from 'rimraf'
 import { spawn } from 'child_process'
 
@@ -19,11 +19,13 @@ import copyFolder from './copy-folder.mjs'
 
 import { info, error, success, verbose, warn } from '../console-colour.mjs'
 
-const __dirname = dirname(import.meta.url.substring(7))
+const __dirname = process.platform === 'win32'
+? path.dirname(decodeURI(import.meta.url.substring(8))) // file:///C:/...
+: path.dirname(decodeURI(import.meta.url.substring(7))) // file:///root/...
 
-const TEST_DIRECTORY = join(__dirname, '../../resources/test')
-const CONF_DIRECTORY = join(__dirname, '../../resources/test-cfg')
-const CONFIG_FILE = join(__dirname, '../../resources/test-cfg/config.json')
+const TEST_DIRECTORY = path.join(__dirname, '../../resources/test')
+const CONF_DIRECTORY = path.join(__dirname, '../../resources/test-cfg')
+const CONFIG_FILE = path.join(__dirname, '../../resources/test-cfg/config.json')
 
 // Test if we should nuke the old test environment, or simply start
 // with the old one (useful for testing persistence of settings)
@@ -83,7 +85,7 @@ async function prepareEnvironment () {
   await fs.mkdir(CONF_DIRECTORY, { recursive: true })
   success('Created app data directory!')
 
-  const readmeFile = roots.find(root => basename(root) === 'README.md')
+  const readmeFile = roots.find(root => path.basename(root) === 'README.md')
 
   // Now it's time to create the new config file
   info('Creating new configuration file from test-config.yml ...')
@@ -118,7 +120,7 @@ function startApp(argv = []) {
   const forgeArgs = ['start', '--', `--data-dir="${CONF_DIRECTORY}"`, ...argv ]
   // Spawn's options: Use the root as CWD and pipe the process's stdio to the parent process.
   const spawnOptions = {
-    cwd: join(__dirname, '../../'),
+    cwd: path.join(__dirname, '../../'),
     stdio: [ process.stdin, process.stdout, process.stderr ]
   }
 
