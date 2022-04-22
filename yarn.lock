@@ -1035,10 +1035,10 @@
     "@types/mime" "^1"
     "@types/node" "*"
 
-"@types/showdown@^1.9.4":
-  version "1.9.4"
-  resolved "https://registry.yarnpkg.com/@types/showdown/-/showdown-1.9.4.tgz#5385adf34143abad9309561661fa6c781d2ab962"
-  integrity sha512-50ehC3IAijfkvoNqmQ+VL73S7orOxmAK8ljQAFBv8o7G66lAZyxQj1L3BAv2dD86myLXI+sgKP1kcxAaxW356w==
+"@types/showdown@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@types/showdown/-/showdown-2.0.0.tgz#3e800eca8573848cac4e5555f4377ba3a0e7b1f2"
+  integrity sha512-70xBJoLv+oXjB5PhtA8vo7erjLDp9/qqI63SRHm4REKrwuPOLs8HhXwlZJBJaB4kC18cCZ1UUZ6Fb/PLFW4TCA==
 
 "@types/sockjs@^0.3.33":
   version "0.3.33"
