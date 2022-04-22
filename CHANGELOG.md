@@ -1,3 +1,13 @@
+# 2.2.6
+
+## GUI and Functionality
+
+(nothing here yet)
+
+## Under the Hood
+
+- Simplify the codeblock class hook again to significantly improve typing speed
+
 # 2.2.5
 
 ## GUI and Functionality
