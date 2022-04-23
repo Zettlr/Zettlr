@@ -8,6 +8,7 @@
 ## Under the Hood
 
 - Simplify the codeblock class hook again to significantly improve typing speed
+- Updated all dependency packages to the respective latest versions
 
 # 2.2.5
 
