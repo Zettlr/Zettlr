@@ -16,11 +16,13 @@
 import { mdFileExtensions } from '@providers/fsal/util/valid-file-extensions'
 import makeValidUri from '@common/util/make-valid-uri'
 import CodeMirror from 'codemirror'
+import headingToID from './util/heading-to-id'
 
 const path = window.path
 const ipcRenderer = window.ipc
 
 const VALID_FILETYPES = mdFileExtensions(true)
+const atxRE = /^#{1,6}\s(.+)$/
 
 /**
  * Resolves and opens a link safely (= not inside Zettlr, except it's a local MD file)
@@ -32,14 +34,15 @@ export default function (url: string, cm: CodeMirror.Editor): void {
   const base: string = (cm as any).getOption('zettlr').markdownImageBasePath
 
   if (url[0] === '#') {
-    // We should open an internal link
-    let re = new RegExp('#\\s[^\\r\\n]*?' +
-    url.replace(/-/g, '[^\\r\\n]+?').replace(/^#/, ''), 'i')
-    // The new regex should now match the corresponding heading in the document
+    // We should open an internal link.
     for (let i = 0; i < cm.lineCount(); i++) {
-      let line = cm.getLine(i)
-      if (re.test(line)) {
-        cm.setCursor({ 'line': i, 'ch': 0 })
+      const line = cm.getLine(i)
+      // Check if we have an ATX heading on this line.
+      const match = atxRE.exec(line)
+      // If so, and if the corresponding Pandoc ID equals the URL, we got the
+      // target.
+      if (match !== null && headingToID(match[1]) === url.substring(1)) {
+        cm.setCursor({ line: i, ch: 0 })
         cm.refresh()
         break
       }

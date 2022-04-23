@@ -17,9 +17,7 @@ const codeblockClassOpen = 'code-block-first-line'
 const codeblockClassClose = 'code-block-last-line'
 
 /**
- * Hooks onto the cursorActivity, optionChange and keyHandled event to apply
- * codeblock classes. Everything is debounced, except the Enter key because
- * you'll want styling to be applied instantly when adding a line to a block.
+ * Hooks onto the change and swapDoc events to apply codeblock classes.
  *
  * @param   {CodeMirror.Editor}  cm  The instance
  */
@@ -29,12 +27,9 @@ export default function codeblockClassHook (cm: CodeMirror.Editor): void {
 }
 
 /**
- * Find fenced and indented code blocks. This is a hack.
- *
- * We really ought to extent the codeMirror GFM Mode to regex on the token
- * stream, because now we're mimicking Markdown Mode.
- *
- * Overriding means maintaining though, and Markdown Mode is quite complex.
+ * Finds fenced code blocks and applies classes to the wrapper elements of the
+ * lines in order to style the block as a whole (as opposed to inline styles
+ * which we are limited to in the parser).
  *
  * @param   {CodeMirror.Editor}  cm  The instance
  */

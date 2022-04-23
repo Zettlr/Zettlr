@@ -18,7 +18,7 @@ import { info, success, error } from './console-colour.mjs' // Colourful output
 import ZIP from 'adm-zip'
 import rimraf from 'rimraf'
 
-const __dirname =  process.platform === 'win32'
+const __dirname = process.platform === 'win32'
   ? path.dirname(decodeURI(import.meta.url.substring(8))) // file:///C:/...
   : path.dirname(decodeURI(import.meta.url.substring(7))) // file:///root/...
 
@@ -27,7 +27,7 @@ const __dirname =  process.platform === 'win32'
 const REPO_LOCALES_URL = 'https://github.com/citation-style-language/locales/archive/master.zip'
 const STYLE_URL = 'https://raw.githubusercontent.com/citation-style-language/styles/master/chicago-author-date.csl'
 
-const LOCALES_TARGET_DIRECTORY =path. join(__dirname, '../static/csl-locales')
+const LOCALES_TARGET_DIRECTORY = path.join(__dirname, '../static/csl-locales')
 const STYLES_TARGET_DIRECTORY = path.join(__dirname, '../static/csl-styles')
 
 // First, let's download the list of contents from
