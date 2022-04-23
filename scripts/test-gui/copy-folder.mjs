@@ -23,7 +23,6 @@ const isDir = function isDir (p) {
   }
 }
 
-
 export default async (destinationPath) => {
   const sourcePath = path.join(__dirname, 'test-files')
 

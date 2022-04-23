@@ -20,8 +20,8 @@ import copyFolder from './copy-folder.mjs'
 import { info, error, success, verbose, warn } from '../console-colour.mjs'
 
 const __dirname = process.platform === 'win32'
-? path.dirname(decodeURI(import.meta.url.substring(8))) // file:///C:/...
-: path.dirname(decodeURI(import.meta.url.substring(7))) // file:///root/...
+  ? path.dirname(decodeURI(import.meta.url.substring(8))) // file:///C:/...
+  : path.dirname(decodeURI(import.meta.url.substring(7))) // file:///root/...
 
 const TEST_DIRECTORY = path.join(__dirname, '../../resources/test')
 const CONF_DIRECTORY = path.join(__dirname, '../../resources/test-cfg')
@@ -92,7 +92,7 @@ async function prepareEnvironment () {
   let cfg = await makeConfig()
   cfg.openPaths = roots
   // Set the README.md file as open
-  cfg.openFiles = [ readmeFile ]
+  cfg.openFiles = [readmeFile]
   cfg.activeFile = readmeFile
 
   // We also want the dialogs to start at the test directory for easier navigation
@@ -107,7 +107,7 @@ async function prepareEnvironment () {
   success(`Written file ${CONFIG_FILE}.`)
 }
 
-function startApp(argv = []) {
+function startApp (argv = []) {
   info('Starting Zettlr with custom configuration ...')
 
   if (argv.length > 0) {
@@ -117,7 +117,7 @@ function startApp(argv = []) {
   // Make sure the correct command is run
   const command = (process.platform === 'win32') ? '.\\node_modules\\.bin\\electron-forge.cmd' : 'electron-forge'
   // Arguments for electron-forge
-  const forgeArgs = ['start', '--', `--data-dir="${CONF_DIRECTORY}"`, ...argv ]
+  const forgeArgs = [ 'start', '--', `--data-dir="${CONF_DIRECTORY}"`, ...argv ]
   // Spawn's options: Use the root as CWD and pipe the process's stdio to the parent process.
   const spawnOptions = {
     cwd: path.join(__dirname, '../../'),

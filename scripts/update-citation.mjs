@@ -3,7 +3,7 @@ import YAML from 'yaml'
 import { promises as fs } from 'fs'
 import path from 'path'
 
-const __dirname =  process.platform === 'win32'
+const __dirname = process.platform === 'win32'
   ? path.dirname(decodeURI(import.meta.url.substring(8))) // file:///C:/...
   : path.dirname(decodeURI(import.meta.url.substring(7))) // file:///root/...
 
