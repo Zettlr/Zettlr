@@ -17,6 +17,7 @@ import CodeMirror, { on } from 'codemirror'
 import { DateTime } from 'luxon'
 import { v4 as uuid } from 'uuid'
 import generateId from '@common/util/generate-id'
+import headingToID from '../util/heading-to-id'
 
 // We need two code block REs: First the line-wise, and then the full one.
 const codeBlockRE = getCodeBlockRE(false)
@@ -173,30 +174,7 @@ function collectHeadingIDs (cm: CodeMirror.Editor): void {
       continue
     }
 
-    // We got an ATX heading. Now we need to transform it into a Pandoc ID.
-    // The algorithm is described here: https://pandoc.org/MANUAL.html#extension-auto_identifiers
-    let text = match[1]
-
-    // Remove all formatting, links, etc.
-    text = text.replace(/[*_]{1,3}(.+)[*_]{1,3}/g, '$1')
-    text = text.replace(/`[^`]+`/g, '$1')
-    text = text.replace(/\[.+\]\(.+\)/g, '')
-    // Remove all footnotes.
-    text = text.replace(/\[\^.+\]/g, '')
-    // Replace all spaces and newlines with hyphens.
-    text = text.replace(/[\s\n]/g, '-')
-    // Remove all non-alphanumeric characters, except underscores, hyphens, and periods.
-    text = text.replace(/[^a-zA-Z0-9_.-]/g, '')
-    // Convert all alphabetic characters to lowercase.
-    text = text.toLowerCase()
-    // Remove everything up to the first letter (identifiers may not begin with a number or punctuation mark).
-    const letterMatch = /[a-z]/.exec(text)
-    const firstLetter = (letterMatch !== null) ? letterMatch.index : 0
-    text = text.substring(firstLetter)
-    // If nothing is left after this, use the identifier section.
-    if (text.length === 0) {
-      text = 'section'
-    }
+    const text = headingToID(match[1])
 
     availableDatabases.headings.push({
       text: text,
