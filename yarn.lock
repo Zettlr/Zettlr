@@ -454,12 +454,7 @@
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"
   integrity sha512-9NET910DNaIPngYnLLPeg+Ogzqsi9uM4mSboU5y6p8S5DzMTVEsJZrawi+BoDNUVBa2DhJqQYUFvMDfgU062LQ==
 
-"@sindresorhus/is@^4.0.0":
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-4.5.0.tgz#7c8293e2268de42d7037249a9e4f905dc890539b"
-  integrity sha512-ZzlL5VTnHZJl8wMWEaYk/13hwMNKLylTSPZRz8+0HIwfRTQMnFgUahDNRRV+rTmPADxQZYxna/nQcStNSCccKg==
-
-"@sindresorhus/is@^4.6.0":
+"@sindresorhus/is@^4.0.0", "@sindresorhus/is@^4.6.0":
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-4.6.0.tgz#3c7c9c46e678feefe7a2e5bb609d3dbd665ffb3f"
   integrity sha512-t09vSN3MdfsyCHoFcTRCH/iUtG7OJ0CsjzB8cjAmKc/va/kIgeDI/TxsigdncE/4be734m0cvIYwNaV4i2XqAw==
@@ -5077,10 +5072,10 @@ got@^11.7.0:
     p-cancelable "^2.0.0"
     responselike "^2.0.0"
 
-got@^12.0.0:
-  version "12.0.3"
-  resolved "https://registry.yarnpkg.com/got/-/got-12.0.3.tgz#c7314daab26d42039e624adbf98f6d442e5de749"
-  integrity sha512-hmdcXi/S0gcAtDg4P8j/rM7+j3o1Aq6bXhjxkDhRY2ipe7PHpvx/14DgTY2czHOLaGeU8VRvRecidwfu9qdFug==
+got@^12.0.4:
+  version "12.0.4"
+  resolved "https://registry.yarnpkg.com/got/-/got-12.0.4.tgz#e3b6bf6992425f904076fd71aac7030da5122de8"
+  integrity sha512-2Eyz4iU/ktq7wtMFXxzK7g5p35uNYLLdiZarZ5/Yn3IJlNEpBd5+dCgcAyxN8/8guZLszffwe3wVyw+DEVrpBg==
   dependencies:
     "@sindresorhus/is" "^4.6.0"
     "@szmarczak/http-timer" "^5.0.1"

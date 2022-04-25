@@ -58,7 +58,7 @@
     "codemirror": "^5.65.3",
     "command-exists": "^1.2.9",
     "d3": "^7.4.4",
-    "got": "^12.0.0",
+    "got": "^12.0.4",
     "joplin-turndown-plugin-gfm": "^1.0.12",
     "katex": "^0.15.3",
     "ky": "^0.30.0",
