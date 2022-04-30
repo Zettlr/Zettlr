@@ -190,6 +190,15 @@ export default defineComponent({
     }
   },
   computed: {
+    /**
+     * The Vue Virtual Scroller component expects an array of objects which
+     * expose two properties: id and "props". The latter contains the actual
+     * object (i.e. the RelatedFile). We may want to merge this functionality
+     * into the RelatedFiles generation later on, but this is the safest way
+     * for now.
+     *
+     * @return  {{ id: number, props: RelatedFile }}  The data for the scroller
+     */
     scrollerRelatedFiles: function (): any {
       return this.relatedFiles.map((elem, idx) => {
         return { id: idx, props: elem }
