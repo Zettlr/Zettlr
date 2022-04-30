@@ -609,19 +609,22 @@ body {
       padding: 10px;
 
       div.related-file {
+        // NOTE: The margin + height equal 42, which was the automatic height
+        // before we fixed it here. We have to fix it because the Recycle
+        // scroller requires completely fixed heights.
         margin-bottom: 10px;
         display: flex;
         align-items: center;
+        padding: 10px 5px;
+        height: 32px;
 
-        &:hover {
-          background-color: rgb(200, 200, 200);
-        }
+        &:hover { background-color: rgb(200, 200, 200); }
 
         span.filename {
           display: inline-block;
           font-size: 11px;
-          padding: 10px 5px;
           flex-grow: 8;
+          overflow: hidden;
         }
 
         span.icons {
