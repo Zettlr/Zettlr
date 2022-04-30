@@ -54,46 +54,53 @@
           {{ noRelatedFilesMessage }}
         </div>
         <div v-else>
-          <div
-            v-for="fileRecord, idx in relatedFiles"
-            v-bind:key="idx"
-            v-bind:class="{
-              'related-file': true,
-              'tags': fileRecord.tags.length > 0,
-              'inbound': fileRecord.link === 'inbound',
-              'outbound': fileRecord.link === 'outbound',
-              'bidirectional': fileRecord.link === 'bidirectional'
-            }"
+          <RecycleScroller
+            v-slot="{ item, index }"
+            v-bind:items="scrollerRelatedFiles"
+            v-bind:item-size="43"
+            v-bind:emit-update="true"
+            v-bind:page-mode="true"
           >
-            <span
-              class="filename"
-              draggable="true"
-              v-on:mousedown.stop="requestFile($event, fileRecord.path)"
-              v-on:dragstart="beginDragRelatedFile($event, fileRecord.path)"
-            >{{ getRelatedFileName(fileRecord.path) }}</span>
-            <span class="icons">
-              <clr-icon
-                v-if="fileRecord.tags.length > 0"
-                shape="tag"
-                title="This relation is based on tag similarity."
-              ></clr-icon>
-              <clr-icon
-                v-if="fileRecord.link === 'inbound'"
-                shape="arrow left"
-                title="This relation is based on a backlink."
-              ></clr-icon>
-              <clr-icon
-                v-else-if="fileRecord.link === 'outbound'"
-                shape="arrow right"
-                title="This relation is based on an outbound link."
-              ></clr-icon>
-              <clr-icon
-                v-else-if="fileRecord.link === 'bidirectional'"
-                shape="two-way-arrows"
-                title="This relation is based on a bidirectional link."
-              ></clr-icon>
-            </span>
-          </div>
+            <div
+              v-bind:key="index"
+              v-bind:class="{
+                'related-file': true,
+                'tags': item.props.tags.length > 0,
+                'inbound': item.props.link === 'inbound',
+                'outbound': item.props.link === 'outbound',
+                'bidirectional': item.props.link === 'bidirectional'
+              }"
+              v-on:mousedown.stop="requestFile($event, item.props.path)"
+              v-on:dragstart="beginDragRelatedFile($event, item.props.path)"
+            >
+              <span
+                class="filename"
+                draggable="true"
+              >{{ getRelatedFileName(item.props.path) }}</span>
+              <span class="icons">
+                <clr-icon
+                  v-if="item.props.tags.length > 0"
+                  shape="tag"
+                  title="This relation is based on tag similarity."
+                ></clr-icon>
+                <clr-icon
+                  v-if="item.props.link === 'inbound'"
+                  shape="arrow left"
+                  title="This relation is based on a backlink."
+                ></clr-icon>
+                <clr-icon
+                  v-else-if="item.props.link === 'outbound'"
+                  shape="arrow right"
+                  title="This relation is based on an outbound link."
+                ></clr-icon>
+                <clr-icon
+                  v-else-if="item.props.link === 'bidirectional'"
+                  shape="two-way-arrows"
+                  title="This relation is based on a bidirectional link."
+                ></clr-icon>
+              </span>
+            </div>
+          </RecycleScroller>
         </div>
       </div>
     </div>
@@ -156,6 +163,7 @@ import { trans } from '@common/i18n-renderer'
 import { ClarityIcons } from '@clr/icons'
 import TabBar from '@common/vue/TabBar.vue'
 import { defineComponent } from 'vue'
+import { RecycleScroller } from 'vue-virtual-scroller'
 import { DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
 import { TabbarControl } from '@dts/renderer/window'
 
@@ -172,7 +180,8 @@ interface RelatedFile {
 export default defineComponent({
   name: 'MainSidebar',
   components: {
-    TabBar
+    TabBar,
+    RecycleScroller
   },
   data: function () {
     return {
@@ -181,6 +190,11 @@ export default defineComponent({
     }
   },
   computed: {
+    scrollerRelatedFiles: function (): any {
+      return this.relatedFiles.map((elem, idx) => {
+        return { id: idx, props: elem }
+      })
+    },
     currentTab: function (): string {
       return this.$store.state.config['window.currentSidebarTab']
     },
@@ -599,15 +613,15 @@ body {
         display: flex;
         align-items: center;
 
+        &:hover {
+          background-color: rgb(200, 200, 200);
+        }
+
         span.filename {
           display: inline-block;
           font-size: 11px;
           padding: 10px 5px;
           flex-grow: 8;
-
-          &:hover {
-            background-color: rgb(200, 200, 200);
-          }
         }
 
         span.icons {
@@ -627,10 +641,8 @@ body {
       background-color: rgba(30, 30, 30, 1);
       color: rgb(230, 230, 230);
 
-      div.related-files-container {
-        div.related-file {
-          span.filename:hover { background-color: rgb(80, 80, 80); }
-        }
+      div.related-files-container div.related-file:hover {
+        background-color: rgb(80, 80, 80);
       }
     }
   }
@@ -644,7 +656,7 @@ body.darwin {
     background-color: transparent;
 
     div.related-files-container {
-      div.related-file span.filename { border-radius: 4px; }
+      div.related-file { border-radius: 4px; }
     }
   }
 
