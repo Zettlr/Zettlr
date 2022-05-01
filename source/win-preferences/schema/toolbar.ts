@@ -65,6 +65,13 @@ export default function (): any {
           label: trans('dialog.preferences.toolbar.showInsertFootnoteButton'),
           model: 'customizeToolbar.showInsertFootnoteButton'
         }
+      ],
+      [
+        {
+          type: 'checkbox',
+          label: trans('dialog.preferences.toolbar.showDocumentInfoText'),
+          model: 'customizeToolbar.showDocumentInfoText'
+        }
       ]
     ]
   }

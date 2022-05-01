@@ -153,6 +153,7 @@ interface ConfigOptions {
     showMarkdownMakeTaskListButton: boolean
     showInsertTableButton: boolean
     showInsertFootnoteButton: boolean
+    showDocumentInfoText: boolean
   }
   uuid: string
 }

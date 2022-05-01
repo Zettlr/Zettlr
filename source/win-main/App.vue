@@ -355,7 +355,8 @@ export default defineComponent({
           type: 'text',
           align: 'center',
           id: 'document-info',
-          content: this.parsedDocumentInfo
+          content: this.parsedDocumentInfo,
+          visible: this.customizeToolbarVisible('showDocumentInfoText')
         },
         {
           type: 'ring',
