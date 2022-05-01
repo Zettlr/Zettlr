@@ -298,7 +298,8 @@ export default defineComponent({
           type: 'toggle',
           id: 'toggle-readability',
           title: trans('toolbar.readability'),
-          icon: 'eye'
+          icon: 'eye',
+          visible: this.customizeToolbarVisible('showToggleReadabilityButton')
         },
         {
           type: 'spacer',
@@ -529,7 +530,7 @@ export default defineComponent({
         ipcRenderer.invoke('application', { command: 'open-preferences' })
           .catch(e => console.error(e))
       } else if (clickedID === 'new-file') {
-        ipcRenderer.invoke('application', { command: 'new-unsaved-file', payload: {type: 'md' } })
+        ipcRenderer.invoke('application', { command: 'new-unsaved-file', payload: { type: 'md' } })
           .catch(e => console.error(e))
       } else if (clickedID === 'previous-file') {
         ipcRenderer.invoke('application', { command: 'previous-file' })

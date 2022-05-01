@@ -147,6 +147,7 @@ interface ConfigOptions {
     showNewFileButton: boolean
     showPreviousFileButton: boolean
     showNextFileButton: boolean
+    showToggleReadabilityButton: boolean
     showMarkdownCommentButton: boolean
     showMarkdownLinkButton: boolean
     showMarkdownImageButton: boolean

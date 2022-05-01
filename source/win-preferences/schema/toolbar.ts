@@ -37,6 +37,11 @@ export default function (): any {
       [
         {
           type: 'checkbox',
+          label: trans('dialog.preferences.toolbar.showToggleReadabilityButton'),
+          model: 'customizeToolbar.showToggleReadabilityButton'
+        },
+        {
+          type: 'checkbox',
           label: trans('dialog.preferences.toolbar.showMarkdownCommentButton'),
           model: 'customizeToolbar.showMarkdownCommentButton'
         },

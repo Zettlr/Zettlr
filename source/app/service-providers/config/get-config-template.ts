@@ -231,6 +231,7 @@ export default function getConfigTemplate (): ConfigOptions {
       showNewFileButton: true,
       showPreviousFileButton: true,
       showNextFileButton: true,
+      showToggleReadabilityButton: true,
       showMarkdownCommentButton: true,
       showMarkdownLinkButton: true,
       showMarkdownImageButton: true,
