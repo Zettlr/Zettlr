@@ -6,6 +6,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "strict": true,
+    "jsx": "preserve", // Necessary for volar to lint Vue template sections
     // Do not enforce strict property initialization. This allows us to init
     // states in classes by calling an init-function rather than doing it
     // manually, which is helpful for classes in which we need to reset the
