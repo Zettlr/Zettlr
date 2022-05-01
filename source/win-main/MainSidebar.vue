@@ -624,14 +624,16 @@ body {
         margin-bottom: 10px;
         display: flex;
         align-items: center;
-        padding: 10px 5px;
-        height: 32px;
+        padding: 5px 5px;
+        height: 35px;
+        overflow: hidden;
 
         &:hover { background-color: rgb(200, 200, 200); }
 
         span.filename {
           display: inline-block;
           font-size: 11px;
+          height: 28px;
           flex-grow: 8;
           overflow: hidden;
         }
