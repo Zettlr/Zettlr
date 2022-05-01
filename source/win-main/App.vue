@@ -265,21 +265,21 @@ export default defineComponent({
         {
           type: 'button',
           id: 'new-file',
-          title: trans('menu.new_file'), // Can I use menu trans here?
+          title: trans('menu.new_file'),
           icon: 'plus',
           visible: this.customizeToolbarVisible('showNewFileButton')
         },
         {
           type: 'button',
           id: 'previous-file',
-          title: trans('menu.previous_file'), // Can I use menu trans here?
+          title: trans('menu.previous_file'),
           icon: 'arrow left',
           visible: this.customizeToolbarVisible('showPreviousFileButton')
         },
         {
           type: 'button',
           id: 'next-file',
-          title: trans('menu.next_file'), // Can I use menu trans here?
+          title: trans('menu.next_file'),
           icon: 'arrow right',
           visible: this.customizeToolbarVisible('showNextFileButton')
         },
