@@ -273,14 +273,14 @@ export default defineComponent({
           type: 'button',
           id: 'previous-file',
           title: trans('menu.previous_file'), // Can I use menu trans here?
-          icon: 'undo',
+          icon: 'arrow left',
           visible: this.customizeToolbarVisible('showPreviousFileButton')
         },
         {
           type: 'button',
           id: 'next-file',
           title: trans('menu.next_file'), // Can I use menu trans here?
-          icon: 'redo',
+          icon: 'arrow right',
           visible: this.customizeToolbarVisible('showNextFileButton')
         },
         {
@@ -806,7 +806,7 @@ export default defineComponent({
     },
     customizeToolbarVisible: function (configName: string): boolean {
       return this.$store.state.config['customizeToolbar.' + configName] === true
-    },
+    }
   }
 })
 </script>
