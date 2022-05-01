@@ -103,6 +103,10 @@ export interface ToolbarControl {
    * A text control can be either strong of emphasised
    */
   style?: 'strong'|'emphasis'
+  /**
+   * If set to true, display the button
+   */
+  visible?: boolean
 }
 
 /**

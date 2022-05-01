@@ -56,6 +56,7 @@ import displaySchema from './schema/display'
 import spellcheckingSchema from './schema/spellchecking'
 import autocorrectSchema from './schema/autocorrect'
 import advancedSchema from './schema/advanced'
+import toolbarSchema from './schema/toolbar'
 import { defineComponent } from 'vue'
 import { WindowTab } from '@dts/renderer/window'
 
@@ -170,6 +171,12 @@ export default defineComponent({
           label: trans('dialog.preferences.advanced'),
           controls: 'tab-advanced',
           id: 'tab-advanced-control',
+          icon: 'tools'
+        },
+        {
+          label: trans('dialog.preferences.toolbar'),
+          controls: 'tab-toolbar',
+          id: 'tab-toolbar-control',
           icon: 'tools'
         }
       ] as WindowTab[],
@@ -373,6 +380,9 @@ export default defineComponent({
           break
         case 'tab-advanced':
           this.schema = advancedSchema()
+          break
+        case 'tab-toolbar':
+          this.schema = toolbarSchema()
           break
       }
 

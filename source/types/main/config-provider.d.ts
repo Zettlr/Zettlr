@@ -143,5 +143,13 @@ interface ConfigOptions {
     zoomBehavior: 'gui'|'editor'
   }
   checkForBeta: boolean
+  customizeToolbar: {
+    showMarkdownCommentButton: boolean
+    showMarkdownLinkButton: boolean
+    showMarkdownImageButton: boolean
+    showMarkdownMakeTaskListButton: boolean
+    showInsertTableButton: boolean
+    showInsertFootnoteButton: boolean
+  }
   uuid: string
 }

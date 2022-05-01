@@ -288,37 +288,43 @@ export default defineComponent({
           type: 'button',
           id: 'markdownComment',
           title: trans('gui.formatting.comment'),
-          icon: 'code'
+          icon: 'code',
+          visible: (global as any).config.get('customizeToolbar.showMarkdownCommentButton')
         },
         {
           type: 'button',
           id: 'markdownLink',
           title: trans('gui.formatting.link'),
-          icon: 'link'
+          icon: 'link',
+          visible: (global as any).config.get('customizeToolbar.showMarkdownLinkButton')
         },
         {
           type: 'button',
           id: 'markdownImage',
           title: trans('gui.formatting.image'),
-          icon: 'image'
+          icon: 'image',
+          visible: (global as any).config.get('customizeToolbar.showMarkdownImageButton')
         },
         {
           type: 'button',
           id: 'markdownMakeTaskList',
           title: trans('gui.formatting.tasklist'),
-          icon: 'checkbox-list'
+          icon: 'checkbox-list',
+          visible: (global as any).config.get('customizeToolbar.showMarkdownMakeTaskListButton')
         },
         {
           type: 'button',
           id: 'insert-table',
           title: trans('gui.formatting.insert_table'),
-          icon: 'table'
+          icon: 'table',
+          visible: (global as any).config.get('customizeToolbar.showInsertTableButton')
         },
         {
           type: 'button',
           id: 'insertFootnote',
           title: trans('gui.formatting.footnote'),
-          icon: 'footnote'
+          icon: 'footnote',
+          visible: (global as any).config.get('customizeToolbar.showInsertFootnoteButton')
         },
         {
           type: 'spacer',

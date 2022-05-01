@@ -83,3 +83,10 @@ watchdog:
   activatePolling: false
   stabilityThreshold: 1000
 checkForBeta: true
+customizeToolbar:
+  showMarkdownCommentButton: true
+  showMarkdownLinkButton: true
+  showMarkdownImageButton: true
+  showMarkdownMakeTaskListButton: true
+  showInsertTableButton: true
+  showInsertFootnoteButton: true

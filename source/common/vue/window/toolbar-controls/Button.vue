@@ -1,5 +1,5 @@
 <template>
-  <div class="toolbar-group">
+  <div v-if="control.visible !== false" class="toolbar-group">
     <button
       v-bind:id="`toolbar-${control.id}`"
       role="button"
