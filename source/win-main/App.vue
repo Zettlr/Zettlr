@@ -267,21 +267,21 @@ export default defineComponent({
           id: 'new-file',
           title: trans('menu.new_file'), // Can I use menu trans here?
           icon: 'plus',
-          visible: (global as any).config.get('customizeToolbar.showNewFileButton')
+          visible: this.customizeToolbarVisible('showNewFileButton')
         },
         {
           type: 'button',
           id: 'previous-file',
           title: trans('menu.previous_file'), // Can I use menu trans here?
           icon: 'undo',
-          visible: (global as any).config.get('customizeToolbar.showPreviousFileButton')
+          visible: this.customizeToolbarVisible('showPreviousFileButton')
         },
         {
           type: 'button',
           id: 'next-file',
           title: trans('menu.next_file'), // Can I use menu trans here?
           icon: 'redo',
-          visible: (global as any).config.get('customizeToolbar.showNextFileButton')
+          visible: this.customizeToolbarVisible('showNextFileButton')
         },
         {
           type: 'spacer',
@@ -310,42 +310,42 @@ export default defineComponent({
           id: 'markdownComment',
           title: trans('gui.formatting.comment'),
           icon: 'code',
-          visible: (global as any).config.get('customizeToolbar.showMarkdownCommentButton')
+          visible: this.customizeToolbarVisible('showMarkdownCommentButton')
         },
         {
           type: 'button',
           id: 'markdownLink',
           title: trans('gui.formatting.link'),
           icon: 'link',
-          visible: (global as any).config.get('customizeToolbar.showMarkdownLinkButton')
+          visible: this.customizeToolbarVisible('showMarkdownLinkButton')
         },
         {
           type: 'button',
           id: 'markdownImage',
           title: trans('gui.formatting.image'),
           icon: 'image',
-          visible: (global as any).config.get('customizeToolbar.showMarkdownImageButton')
+          visible: this.customizeToolbarVisible('showMarkdownImageButton')
         },
         {
           type: 'button',
           id: 'markdownMakeTaskList',
           title: trans('gui.formatting.tasklist'),
           icon: 'checkbox-list',
-          visible: (global as any).config.get('customizeToolbar.showMarkdownMakeTaskListButton')
+          visible: this.customizeToolbarVisible('showMarkdownMakeTaskListButton')
         },
         {
           type: 'button',
           id: 'insert-table',
           title: trans('gui.formatting.insert_table'),
           icon: 'table',
-          visible: (global as any).config.get('customizeToolbar.showInsertTableButton')
+          visible: this.customizeToolbarVisible('showInsertTableButton')
         },
         {
           type: 'button',
           id: 'insertFootnote',
           title: trans('gui.formatting.footnote'),
           icon: 'footnote',
-          visible: (global as any).config.get('customizeToolbar.showInsertFootnoteButton')
+          visible: this.customizeToolbarVisible('showInsertFootnoteButton')
         },
         {
           type: 'spacer',
@@ -802,7 +802,10 @@ export default defineComponent({
             this.$closePopover()
           }
         })
-    }
+    },
+    customizeToolbarVisible: function (configName: string): boolean {
+      return this.$store.state.config['customizeToolbar.' + configName] === true
+    },
   }
 })
 </script>
