@@ -15,8 +15,9 @@
 import CodeMirror, { commands } from 'codemirror'
 import mermaid from 'mermaid'
 
-// Initialise the mermaid API
-mermaid.initialize({ startOnLoad: false, theme: mermaid.mermaidAPI.Theme.Dark })
+// Initialise the mermaid API. Note the "as any" cast, since the mermaid types
+// are wrong.
+mermaid.initialize({ startOnLoad: false, theme: 'dark' as any })
 
 /**
  * Defines the CodeMirror command to render all found markdown images.
