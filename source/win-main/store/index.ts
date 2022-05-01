@@ -36,6 +36,7 @@ import updateOpenDirectoryAction from './actions/update-open-directory'
 import updateActiveFileAction from './actions/update-active-file'
 import updateOpenFilesAction from './actions/update-open-files'
 import updateRelatedFilesAction from './actions/update-related-files'
+import updateBibliographyAction from './actions/update-bibliography'
 
 /**
  * This is the main window's store state, including all properties we have
@@ -105,6 +106,10 @@ export interface ZettlrState {
    */
   citationKeys: string[]
   /**
+   * The currently rendered bibliography (if applicable)
+   */
+  bibliography: [BibliographyOptions, string[]]|undefined
+  /**
    * All CSL items available in the currently loaded database
    */
   cslItems: any[]
@@ -138,6 +143,7 @@ function getConfig (): StoreOptions<ZettlrState> {
         modifiedDocuments: [],
         tableOfContents: null,
         citationKeys: [],
+        bibliography: undefined,
         cslItems: [],
         searchResults: []
       }
@@ -193,6 +199,9 @@ function getConfig (): StoreOptions<ZettlrState> {
         // Update the citations, removing possible duplicates
         state.citationKeys = [...new Set(newKeys)]
       },
+      updateBibliography: function (state, bibliography) {
+        state.bibliography = bibliography
+      },
       updateCSLItems: function (state, newItems: any[]) {
         state.cslItems = newItems
       },
@@ -218,7 +227,8 @@ function getConfig (): StoreOptions<ZettlrState> {
       updateActiveFile: updateActiveFileAction,
       updateOpenFiles: updateOpenFilesAction,
       regenerateTagSuggestions: regenerateTagSuggestionsAction,
-      updateRelatedFiles: updateRelatedFilesAction
+      updateRelatedFiles: updateRelatedFilesAction,
+      updateBibliography: updateBibliographyAction
     }
   }
 

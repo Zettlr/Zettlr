@@ -279,17 +279,20 @@ export default defineComponent({
     citationKeys: function (): string[] {
       return this.$store.state.citationKeys
     },
+    bibliography: function (): any {
+      return this.$store.state.bibliography
+    },
     referenceHTML: function (): string {
-      if (this.bibContents === undefined || this.bibContents[1].length === 0) {
+      if (this.bibliography === undefined || this.bibliography[1].length === 0) {
         return `<p>${trans('gui.citeproc.references_none')}</p>`
       } else {
-        const html = [this.bibContents[0].bibstart]
+        const html = [this.bibliography[0].bibstart]
 
-        for (const entry of this.bibContents[1]) {
+        for (const entry of this.bibliography[1]) {
           html.push(entry)
         }
 
-        html.push(this.bibContents[0].bibend)
+        html.push(this.bibliography[0].bibend)
 
         return html.join('\n')
       }
@@ -305,10 +308,6 @@ export default defineComponent({
     }
   },
   watch: {
-    citationKeys: function () {
-      // Reload the bibliography
-      this.updateReferences().catch(e => console.error('Could not update references', e))
-    },
     modifiedFiles: function () {
       if (this.activeFile == null) {
         return
@@ -324,22 +323,10 @@ export default defineComponent({
     }
   },
   mounted: function () {
-    ipcRenderer.on('citeproc-renderer', (event, { command, payload }) => {
-      if (command === 'citeproc-bibliography') {
-        this.bibContents = payload
-      }
-    })
-
     ipcRenderer.on('links', () => {
       this.$store.dispatch('updateRelatedFiles')
         .catch(e => console.error('Could not update related files', e))
     })
-
-    try {
-      this.updateReferences().catch(e => console.error('Could not update references', e))
-    } catch (err) {
-      console.error(err)
-    }
   },
   created: function () {
     // Instantiate a converter so that we can convert the md of our ToC entries
@@ -349,14 +336,6 @@ export default defineComponent({
   methods: {
     setCurrentTab: function (which: string) {
       (global as any).config.set('window.currentSidebarTab', which)
-    },
-    updateReferences: async function () {
-      // NOTE We're manually cloning the citationKeys array, since Proxies
-      // cannot be cloned to be sent across the IPC bridge
-      this.bibContents = await ipcRenderer.invoke('citeproc-provider', {
-        command: 'get-bibliography',
-        payload: this.citationKeys.map(e => e)
-      })
     },
     getIcon: function (attachmentPath: string) {
       const fileExtIcon = ClarityIcons.get('file-ext')

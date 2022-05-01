@@ -742,6 +742,9 @@ export default defineComponent({
         keys.push(...citation.citations.map(elem => elem.id))
       }
       this.$store.commit('updateCitationKeys', keys)
+      // After we have updated the current file's citation keys, it is time
+      // to generate a new list of references.
+      this.$store.dispatch('updateBibliography').catch(e => console.error(e))
     },
     updateFileDatabase () {
       if (mdEditor === null) {
