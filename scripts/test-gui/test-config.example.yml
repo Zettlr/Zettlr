@@ -84,6 +84,9 @@ watchdog:
   stabilityThreshold: 1000
 checkForBeta: true
 customizeToolbar:
+  showNewFileButton: true
+  showPreviousFileButton: true
+  showNextFileButton: true
   showMarkdownCommentButton: true
   showMarkdownLinkButton: true
   showMarkdownImageButton: true

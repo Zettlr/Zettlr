@@ -104,7 +104,7 @@ export interface ToolbarControl {
    */
   style?: 'strong'|'emphasis'
   /**
-   * If set to true, display the button
+   * If set to false, hide the button
    */
   visible?: boolean
 }

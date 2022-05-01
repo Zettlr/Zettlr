@@ -144,6 +144,9 @@ interface ConfigOptions {
   }
   checkForBeta: boolean
   customizeToolbar: {
+    showNewFileButton: boolean
+    showPreviousFileButton: boolean
+    showNextFileButton: boolean
     showMarkdownCommentButton: boolean
     showMarkdownLinkButton: boolean
     showMarkdownImageButton: boolean

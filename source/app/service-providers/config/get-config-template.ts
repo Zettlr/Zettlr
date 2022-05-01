@@ -228,6 +228,9 @@ export default function getConfigTemplate (): ConfigOptions {
     },
     checkForBeta: false, // Should the user be notified of beta releases?
     customizeToolbar: {
+      showNewFileButton: true,
+      showPreviousFileButton: true,
+      showNextFileButton: true,
       showMarkdownCommentButton: true,
       showMarkdownLinkButton: true,
       showMarkdownImageButton: true,

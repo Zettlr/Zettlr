@@ -263,6 +263,27 @@ export default defineComponent({
           icon: 'cog'
         },
         {
+          type: 'button',
+          id: 'new-file',
+          title: trans('menu.new_file'), // Can I use menu trans here?
+          icon: 'plus',
+          visible: (global as any).config.get('customizeToolbar.showNewFileButton')
+        },
+        {
+          type: 'button',
+          id: 'previous-file',
+          title: trans('menu.previous_file'), // Can I use menu trans here?
+          icon: 'undo',
+          visible: (global as any).config.get('customizeToolbar.showPreviousFileButton')
+        },
+        {
+          type: 'button',
+          id: 'next-file',
+          title: trans('menu.next_file'), // Can I use menu trans here?
+          icon: 'redo',
+          visible: (global as any).config.get('customizeToolbar.showNextFileButton')
+        },
+        {
           type: 'spacer',
           id: 'spacer-one'
         },
@@ -505,6 +526,15 @@ export default defineComponent({
           .catch(e => console.error(e))
       } else if (clickedID === 'open-preferences') {
         ipcRenderer.invoke('application', { command: 'open-preferences' })
+          .catch(e => console.error(e))
+      } else if (clickedID === 'new-file') {
+        ipcRenderer.invoke('application', { command: 'new-unsaved-file', payload: {type: 'md' } })
+          .catch(e => console.error(e))
+      } else if (clickedID === 'previous-file') {
+        ipcRenderer.invoke('application', { command: 'previous-file' })
+          .catch(e => console.error(e))
+      } else if (clickedID === 'next-file') {
+        ipcRenderer.invoke('application', { command: 'next-file' })
           .catch(e => console.error(e))
       } else if (clickedID === 'export') {
         this.showExportPopover()

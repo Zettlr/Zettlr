@@ -20,42 +20,49 @@ export default function (): any {
       [
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.toolbar.markdownCommentButton'),
+          label: trans('dialog.preferences.toolbar.showNewFileButton'),
+          model: 'customizeToolbar.showNewFileButton'
+        },
+        {
+          type: 'checkbox',
+          label: trans('dialog.preferences.toolbar.showPreviousFileButton'),
+          model: 'customizeToolbar.showPreviousFileButton'
+        },
+        {
+          type: 'checkbox',
+          label: trans('dialog.preferences.toolbar.showNextFileButton'),
+          model: 'customizeToolbar.showNextFileButton'
+        }
+      ],
+      [
+        {
+          type: 'checkbox',
+          label: trans('dialog.preferences.toolbar.showMarkdownCommentButton'),
           model: 'customizeToolbar.showMarkdownCommentButton'
-        }
-      ],
-      [
+        },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.toolbar.markdownLinkButton'),
+          label: trans('dialog.preferences.toolbar.showMarkdownLinkButton'),
           model: 'customizeToolbar.showMarkdownLinkButton'
-        }
-      ],
-      [
+        },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.toolbar.markdownImageButton'),
+          label: trans('dialog.preferences.toolbar.showMarkdownImageButton'),
           model: 'customizeToolbar.showMarkdownImageButton'
-        }
-      ],
-      [
+        },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.toolbar.markdownMakeTaskListButton'),
+          label: trans('dialog.preferences.toolbar.showMarkdownMakeTaskListButton'),
           model: 'customizeToolbar.showMarkdownMakeTaskListButton'
-        }
-      ],
-      [
+        },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.toolbar.insertTableButton'),
+          label: trans('dialog.preferences.toolbar.showInsertTableButton'),
           model: 'customizeToolbar.showInsertTableButton'
-        }
-      ],
-      [
+        },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.toolbar.insertFootnoteButton'),
+          label: trans('dialog.preferences.toolbar.showInsertFootnoteButton'),
           model: 'customizeToolbar.showInsertFootnoteButton'
         }
       ]

@@ -177,7 +177,7 @@ export default defineComponent({
           label: trans('dialog.preferences.toolbar'),
           controls: 'tab-toolbar',
           id: 'tab-toolbar-control',
-          icon: 'tools'
+          icon: 'container'
         }
       ] as WindowTab[],
       // Will be populated afterwards, contains the user dict
