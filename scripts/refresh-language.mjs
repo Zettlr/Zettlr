@@ -4,7 +4,7 @@ import { writeFile } from 'fs'
 import path from 'path'
 import { info, success, error } from './console-colour.mjs'
 
-const __dirname =  process.platform === 'win32'
+const __dirname = process.platform === 'win32'
   ? path.dirname(decodeURI(import.meta.url.substring(8))) // file:///C:/...
   : path.dirname(decodeURI(import.meta.url.substring(7))) // file:///root/...
 const targetDir = path.join(__dirname, '../static/lang')

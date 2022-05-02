@@ -697,6 +697,16 @@ body.linux {
         }
       }
 
+      &.selected {
+        background-color: var(--system-accent-color, --c-primary);
+        color: var(--system-accent-color-contrast, white);
+
+        div.filename div.date {
+          background-color: var(--system-accent-color, --c-primary);
+          color: var(--system-accent-color-contrast, white);
+        }
+      }
+
         div.filename div.date { background-color: rgb(40, 40, 50); }
         &.active { background-color: rgb(80, 80, 80); }
 
