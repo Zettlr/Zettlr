@@ -33,7 +33,7 @@
           shape="tree-view"
           role="presentation"
         ></clr-icon>{{ workspaceSectionHeading }}
-        <select v-model="selected">
+        <select v-model="selected" v-on:change ="sortBy()">
           <option value="null" disabled selected hidden>Sort by</option>
           <option value ="Alpha">Alphabetical Order</option>
           <option value ="B">B</option>
@@ -171,6 +171,10 @@ export default defineComponent({
     clickHandler: function (event: MouseEvent) {
       // We need to bubble this event upwards so that the file manager is informed of the selection
       this.$emit('selection', event)
+    }
+    , 
+    sortBy: function (event: MouseEvent) {
+      console.log(this.selected)
     }
   }
 })
