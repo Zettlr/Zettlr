@@ -94,7 +94,7 @@ export default defineComponent({
     }
   },
   data: function () {
-    return {}
+    return {sortBy: "asc"}
   },
   computed: {
     fileTree: function (): Array<MDFileMeta|CodeFileMeta|DirMeta> {
@@ -135,8 +135,28 @@ export default defineComponent({
     getFiles: function (): Array<MDFileMeta|CodeFileMeta> {
       return this.getFilteredTree.filter(item => item.type !== 'directory') as Array<MDFileMeta|CodeFileMeta>
     },
+    alphabeticSort: function(): DirMeta[] {
+      function compare(a, b) {
+
+        let nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
+
+        // if workspaces have the same name, compare their parent's name
+        if (nameA == nameB) {
+          let dirA = a.dir.toLowerCase(), dirB = b.dir.toLowerCase();
+          if (dirA < dirB)
+            return -1;
+          if (dirA > dirB)
+            return 1;
+        } 
+        return 0;
+      }
+      let temp = this.getFilteredTree.filter(item => item.type === 'directory');
+      if (this.sortBy == "desc") return temp.sort(compare).reverse() as DirMeta[];
+      return temp.sort(compare) as DirMeta[];
+    },
     getDirectories: function (): DirMeta[] {
-      return this.getFilteredTree.filter(item => item.type === 'directory') as DirMeta[]
+      //return this.getFilteredTree.filter(item => item.type === 'directory') as DirMeta[]
+      return this.alphabeticSort as DirMeta[];
     },
     fileSectionHeading: function (): string {
       return trans('gui.files')
