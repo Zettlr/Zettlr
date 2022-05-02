@@ -33,6 +33,12 @@
           shape="tree-view"
           role="presentation"
         ></clr-icon>{{ workspaceSectionHeading }}
+        <select v-model="selected">
+          <option value="null" disabled selected hidden>Sort by</option>
+          <option value ="Alpha">Alphabetical Order</option>
+          <option value ="B">B</option>
+          <option value ="C">C</option>
+        </select>
       </div>
       <TreeItem
         v-for="item in getDirectories"
@@ -94,7 +100,7 @@ export default defineComponent({
     }
   },
   data: function () {
-    return {}
+    return {selected:null}
   },
   computed: {
     fileTree: function (): Array<MDFileMeta|CodeFileMeta|DirMeta> {
