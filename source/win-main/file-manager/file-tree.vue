@@ -136,7 +136,7 @@ export default defineComponent({
       return this.getFilteredTree.filter(item => item.type !== 'directory') as Array<MDFileMeta|CodeFileMeta>
     },
     alphabeticSort: function(): DirMeta[] {
-      function compare(a, b) {
+      function compare(a:any, b:any) {
 
         let nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
 
