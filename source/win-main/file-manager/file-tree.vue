@@ -33,6 +33,12 @@
           shape="tree-view"
           role="presentation"
         ></clr-icon>{{ workspaceSectionHeading }}
+        <select v-model="selected">
+          <option value="null" disabled selected hidden>Sort by</option>
+          <option value ="Alpha">Alphabetical Order</option>
+          <option value ="B">B</option>
+          <option value ="C">C</option>
+        </select>
       </div>
       <TreeItem
         v-for="item in getDirectories"
@@ -94,7 +100,10 @@ export default defineComponent({
     }
   },
   data: function () {
-    return {sortBy: "asc"}
+    return {
+      selected:null,
+      sortBy: "asc"
+    }
   },
   computed: {
     fileTree: function (): Array<MDFileMeta|CodeFileMeta|DirMeta> {
@@ -136,7 +145,7 @@ export default defineComponent({
       return this.getFilteredTree.filter(item => item.type !== 'directory') as Array<MDFileMeta|CodeFileMeta>
     },
     alphabeticSort: function(): DirMeta[] {
-      function compare(a, b) {
+      function compare(a:any, b:any) {
 
         let nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
 
