@@ -75,6 +75,7 @@ import matchQuery from './util/match-query'
 import matchTree from './util/match-tree'
 import { defineComponent } from 'vue'
 import { MDFileMeta, CodeFileMeta, DirMeta } from '@dts/common/fsal'
+import alphabeticSort from './util/alphabeticSort'
 
 const ipcRenderer = window.ipc
 
@@ -135,28 +136,10 @@ export default defineComponent({
     getFiles: function (): Array<MDFileMeta|CodeFileMeta> {
       return this.getFilteredTree.filter(item => item.type !== 'directory') as Array<MDFileMeta|CodeFileMeta>
     },
-    alphabeticSort: function(): DirMeta[] {
-      function compare(a:any, b:any) {
-
-        let nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
-
-        // if workspaces have the same name, compare their parent's name
-        if (nameA == nameB) {
-          let dirA = a.dir.toLowerCase(), dirB = b.dir.toLowerCase();
-          if (dirA < dirB)
-            return -1;
-          if (dirA > dirB)
-            return 1;
-        } 
-        return 0;
-      }
-      let temp = this.getFilteredTree.filter(item => item.type === 'directory');
-      if (this.sortBy == "desc") return temp.sort(compare).reverse() as DirMeta[];
-      return temp.sort(compare) as DirMeta[];
-    },
     getDirectories: function (): DirMeta[] {
       //return this.getFilteredTree.filter(item => item.type === 'directory') as DirMeta[]
-      return this.alphabeticSort as DirMeta[];
+      let temp = this.getFilteredTree.filter(item => item.type === 'directory');
+      return alphabeticSort(temp, this.sortBy) as DirMeta[];
     },
     fileSectionHeading: function (): string {
       return trans('gui.files')
