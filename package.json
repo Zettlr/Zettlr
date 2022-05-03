@@ -97,7 +97,7 @@
     "@types/d3": "^7.1.0",
     "@types/katex": "^0.14.0",
     "@types/lodash": "^4.14.181",
-    "@types/luxon": "^2.3.0",
+    "@types/luxon": "^2.3.2",
     "@types/md5": "^2.3.2",
     "@types/mermaid": "^8.2.8",
     "@types/mocha": "^9.1.0",
