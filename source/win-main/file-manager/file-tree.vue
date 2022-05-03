@@ -81,6 +81,7 @@ import matchQuery from './util/match-query'
 import matchTree from './util/match-tree'
 import { defineComponent } from 'vue'
 import { MDFileMeta, CodeFileMeta, DirMeta } from '@dts/common/fsal'
+import alphabeticSort from './util/alphabeticSort'
 
 const ipcRenderer = window.ipc
 
@@ -100,10 +101,14 @@ export default defineComponent({
     }
   },
   data: function () {
+<<<<<<< HEAD
     return {
       selected:null,
       sortBy: "asc"
     }
+=======
+    return {sortBy: "asc"}
+>>>>>>> 343d65efacb19fa67ca5fdbaefe5d439a0e04d4e
   },
   computed: {
     fileTree: function (): Array<MDFileMeta|CodeFileMeta|DirMeta> {
@@ -165,7 +170,12 @@ export default defineComponent({
     },
     getDirectories: function (): DirMeta[] {
       //return this.getFilteredTree.filter(item => item.type === 'directory') as DirMeta[]
+<<<<<<< HEAD
       return this.alphabeticSort as DirMeta[];
+=======
+      let temp = this.getFilteredTree.filter(item => item.type === 'directory');
+      return alphabeticSort(temp, this.sortBy) as DirMeta[];
+>>>>>>> 343d65efacb19fa67ca5fdbaefe5d439a0e04d4e
     },
     fileSectionHeading: function (): string {
       return trans('gui.files')
