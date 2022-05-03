@@ -33,11 +33,11 @@
           shape="tree-view"
           role="presentation"
         ></clr-icon>{{ workspaceSectionHeading }}
-        <select v-model="selected" v-on:change ="sortBy()">
+        <select id="sort-header" v-model="selected" v-on:change ="sortBy()">
           <option value="null" disabled selected hidden>Sort by</option>
-          <option value ="Alpha">Alphabetical Order</option>
-          <option value ="B">B</option>
-          <option value ="C">C</option>
+          <option value ="Default">Sort by</option>
+          <option value ="AlphaA">Alphabetical (Ascending)</option>
+          <option value ="AlphaD">Alphabetical (Descending)</option>
         </select>
       </div>
       <TreeItem
@@ -257,6 +257,13 @@ body.win32 {
       padding: 5px 0px 5px 10px;
       margin: 0px 0px 5px 0px;
     }
+  }
+
+  #sort-header {
+    font-size: 10px;
+    width: 110px;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px calc(max(0px,100% - 130px - 110px));
   }
 
   &.dark {
