@@ -263,7 +263,10 @@ body.win32 {
     font-size: 10px;
     width: 110px;
     padding: 0px 0px 0px 0px;
-    margin: 0px 0px 0px calc(max(0px,100% - 130px - 110px));
+    //margin: 0px 0px 0px calc(max(0px,100% - 130px - 110px));
+    margin-bottom:10px;
+    margin-right:5px;
+    float:right;
   }
 
   &.dark {
