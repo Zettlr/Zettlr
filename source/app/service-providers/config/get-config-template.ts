@@ -227,7 +227,7 @@ export default function getConfigTemplate (): ConfigOptions {
       zoomBehavior: 'gui' // Used to determine what gets zoomed: The GUI or the editor
     },
     checkForBeta: false, // Should the user be notified of beta releases?
-    customizeToolbar: {
+    displayToolbarButtons: {
       showNewFileButton: true,
       showPreviousFileButton: true,
       showNextFileButton: true,

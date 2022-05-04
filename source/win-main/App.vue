@@ -267,21 +267,21 @@ export default defineComponent({
           id: 'new-file',
           title: trans('menu.new_file'),
           icon: 'plus',
-          visible: this.customizeToolbarVisible('showNewFileButton')
+          visible: this.getToolbarButtonDisplay('showNewFileButton')
         },
         {
           type: 'button',
           id: 'previous-file',
           title: trans('menu.previous_file'),
           icon: 'arrow left',
-          visible: this.customizeToolbarVisible('showPreviousFileButton')
+          visible: this.getToolbarButtonDisplay('showPreviousFileButton')
         },
         {
           type: 'button',
           id: 'next-file',
           title: trans('menu.next_file'),
           icon: 'arrow right',
-          visible: this.customizeToolbarVisible('showNextFileButton')
+          visible: this.getToolbarButtonDisplay('showNextFileButton')
         },
         {
           type: 'spacer',
@@ -299,7 +299,7 @@ export default defineComponent({
           id: 'toggle-readability',
           title: trans('toolbar.readability'),
           icon: 'eye',
-          visible: this.customizeToolbarVisible('showToggleReadabilityButton')
+          visible: this.getToolbarButtonDisplay('showToggleReadabilityButton')
         },
         {
           type: 'spacer',
@@ -311,42 +311,42 @@ export default defineComponent({
           id: 'markdownComment',
           title: trans('gui.formatting.comment'),
           icon: 'code',
-          visible: this.customizeToolbarVisible('showMarkdownCommentButton')
+          visible: this.getToolbarButtonDisplay('showMarkdownCommentButton')
         },
         {
           type: 'button',
           id: 'markdownLink',
           title: trans('gui.formatting.link'),
           icon: 'link',
-          visible: this.customizeToolbarVisible('showMarkdownLinkButton')
+          visible: this.getToolbarButtonDisplay('showMarkdownLinkButton')
         },
         {
           type: 'button',
           id: 'markdownImage',
           title: trans('gui.formatting.image'),
           icon: 'image',
-          visible: this.customizeToolbarVisible('showMarkdownImageButton')
+          visible: this.getToolbarButtonDisplay('showMarkdownImageButton')
         },
         {
           type: 'button',
           id: 'markdownMakeTaskList',
           title: trans('gui.formatting.tasklist'),
           icon: 'checkbox-list',
-          visible: this.customizeToolbarVisible('showMarkdownMakeTaskListButton')
+          visible: this.getToolbarButtonDisplay('showMarkdownMakeTaskListButton')
         },
         {
           type: 'button',
           id: 'insert-table',
           title: trans('gui.formatting.insert_table'),
           icon: 'table',
-          visible: this.customizeToolbarVisible('showInsertTableButton')
+          visible: this.getToolbarButtonDisplay('showInsertTableButton')
         },
         {
           type: 'button',
           id: 'insertFootnote',
           title: trans('gui.formatting.footnote'),
           icon: 'footnote',
-          visible: this.customizeToolbarVisible('showInsertFootnoteButton')
+          visible: this.getToolbarButtonDisplay('showInsertFootnoteButton')
         },
         {
           type: 'spacer',
@@ -357,7 +357,7 @@ export default defineComponent({
           align: 'center',
           id: 'document-info',
           content: this.parsedDocumentInfo,
-          visible: this.customizeToolbarVisible('showDocumentInfoText')
+          visible: this.getToolbarButtonDisplay('showDocumentInfoText')
         },
         {
           type: 'ring',
@@ -805,8 +805,8 @@ export default defineComponent({
           }
         })
     },
-    customizeToolbarVisible: function (configName: string): boolean {
-      return this.$store.state.config['customizeToolbar.' + configName] === true
+    getToolbarButtonDisplay: function (configName: string): boolean {
+      return this.$store.state.config['displayToolbarButtons.' + configName] === true
     }
   }
 })

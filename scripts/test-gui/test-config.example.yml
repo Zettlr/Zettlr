@@ -83,13 +83,3 @@ watchdog:
   activatePolling: false
   stabilityThreshold: 1000
 checkForBeta: true
-customizeToolbar:
-  showNewFileButton: true
-  showPreviousFileButton: true
-  showNextFileButton: true
-  showMarkdownCommentButton: true
-  showMarkdownLinkButton: true
-  showMarkdownImageButton: true
-  showMarkdownMakeTaskListButton: true
-  showInsertTableButton: true
-  showInsertFootnoteButton: true

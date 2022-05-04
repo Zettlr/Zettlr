@@ -2,12 +2,12 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        Advanced Preferences Schema
+ * Contains:        Toolbar Preferences Schema
  * CVM-Role:        Model
- * Maintainer:      Hendrik Erz
+ * Maintainer:      Edgar Tang
  * License:         GNU GPL v3
  *
- * Description:     Exports the advanced tab schema.
+ * Description:     Exports the toolbar tab schema.
  *
  * END HEADER
  */
@@ -21,61 +21,61 @@ export default function (): any {
         {
           type: 'checkbox',
           label: trans('dialog.preferences.toolbar.showNewFileButton'),
-          model: 'customizeToolbar.showNewFileButton'
+          model: 'displayToolbarButtons.showNewFileButton'
         },
         {
           type: 'checkbox',
           label: trans('dialog.preferences.toolbar.showPreviousFileButton'),
-          model: 'customizeToolbar.showPreviousFileButton'
+          model: 'displayToolbarButtons.showPreviousFileButton'
         },
         {
           type: 'checkbox',
           label: trans('dialog.preferences.toolbar.showNextFileButton'),
-          model: 'customizeToolbar.showNextFileButton'
+          model: 'displayToolbarButtons.showNextFileButton'
         }
       ],
       [
         {
           type: 'checkbox',
           label: trans('dialog.preferences.toolbar.showToggleReadabilityButton'),
-          model: 'customizeToolbar.showToggleReadabilityButton'
+          model: 'displayToolbarButtons.showToggleReadabilityButton'
         },
         {
           type: 'checkbox',
           label: trans('dialog.preferences.toolbar.showMarkdownCommentButton'),
-          model: 'customizeToolbar.showMarkdownCommentButton'
+          model: 'displayToolbarButtons.showMarkdownCommentButton'
         },
         {
           type: 'checkbox',
           label: trans('dialog.preferences.toolbar.showMarkdownLinkButton'),
-          model: 'customizeToolbar.showMarkdownLinkButton'
+          model: 'displayToolbarButtons.showMarkdownLinkButton'
         },
         {
           type: 'checkbox',
           label: trans('dialog.preferences.toolbar.showMarkdownImageButton'),
-          model: 'customizeToolbar.showMarkdownImageButton'
+          model: 'displayToolbarButtons.showMarkdownImageButton'
         },
         {
           type: 'checkbox',
           label: trans('dialog.preferences.toolbar.showMarkdownMakeTaskListButton'),
-          model: 'customizeToolbar.showMarkdownMakeTaskListButton'
+          model: 'displayToolbarButtons.showMarkdownMakeTaskListButton'
         },
         {
           type: 'checkbox',
           label: trans('dialog.preferences.toolbar.showInsertTableButton'),
-          model: 'customizeToolbar.showInsertTableButton'
+          model: 'displayToolbarButtons.showInsertTableButton'
         },
         {
           type: 'checkbox',
           label: trans('dialog.preferences.toolbar.showInsertFootnoteButton'),
-          model: 'customizeToolbar.showInsertFootnoteButton'
+          model: 'displayToolbarButtons.showInsertFootnoteButton'
         }
       ],
       [
         {
           type: 'checkbox',
           label: trans('dialog.preferences.toolbar.showDocumentInfoText'),
-          model: 'customizeToolbar.showDocumentInfoText'
+          model: 'displayToolbarButtons.showDocumentInfoText'
         }
       ]
     ]

@@ -143,7 +143,7 @@ interface ConfigOptions {
     zoomBehavior: 'gui'|'editor'
   }
   checkForBeta: boolean
-  customizeToolbar: {
+  displayToolbarButtons: {
     showNewFileButton: boolean
     showPreviousFileButton: boolean
     showNextFileButton: boolean

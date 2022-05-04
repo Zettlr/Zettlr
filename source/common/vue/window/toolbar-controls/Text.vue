@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="control.visible !== false"
     v-bind:id="`toolbar-${control.id}`"
     role="presentation"
     class="toolbar-text"

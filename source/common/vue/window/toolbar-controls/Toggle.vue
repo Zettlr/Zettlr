@@ -1,6 +1,5 @@
 <template>
   <button
-    v-if="control.visible !== false"
     v-bind:id="`toolbar-${control.id}`"
     role="button"
     v-bind:aria-pressed="isActive"
