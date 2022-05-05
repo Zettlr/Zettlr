@@ -14,21 +14,22 @@
  */
 
  import alphabeticSort from '../source/win-main/file-manager/util/alphabeticSort'
- import { strictEqual } from 'assert'
+ import assert from 'assert'
  
- const sort = 'asc'
+ const sort = 'desc'
 
  const alphabeticSortTesters = [
   
-   { 'input': ["first", "second", "last", "zuisn", "example"], 'expected': ['example', 'first', 'last', 'second', 'zuisn'] },
-   {},
-   {},
+   { input: ['first', 'second', 'last', 'zuisn', 'example'], expected: ['example', 'first', 'last', 'second', 'zuisn'] },
+   { input: ['new', 'aight', 'test', 'plant', 'which'], expected: ['aight', 'new', 'plant', 'test', 'which'] },
+   { input: ['untitled', 'titled'], expected: ['titled', 'untitled'] },
+   { input: ['one', 'two', 'three'], expected: ['one', 'three', 'two'] }
  ]
  
  describe('Utility#alphabeticSort()', function () {
-   for (let test of alphabeticSortTesters) {
+   for (const test of alphabeticSortTesters) {
      it(`Input "${test.input}" should return "${test.expected}"`, function () {
-       strictEqual(alphabeticSort(test.input, sort), test.expected)
+       assert.strictEqual(alphabeticSort(test.input, sort), test.expected)
      })
    }
  })
