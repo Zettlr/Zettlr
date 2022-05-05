@@ -14,38 +14,21 @@
  */
 
  import alphabeticSort from '../source/win-main/file-manager/util/alphabeticSort'
- import assert from 'assert'
+ import { strictEqual } from 'assert'
  
- 
+ const sort = 'asc'
+
  const alphabeticSortTesters = [
-   // Full URIs should be returned as they are
-   { 'input': 'file:///home/foo/documents/test.md', 'expected': 'safe-file:///home/foo/documents/test.md' },
-   { 'input': 'http://www.example.com/', 'expected': 'http://www.example.com/' },
-   { 'input': 'ftp://api.somelink.fm/api/test.php', 'expected': 'ftp://api.somelink.fm/api/test.php' },
-   { 'input': '//shared-host/docs/file.md', 'expected': 'safe-file:////shared-host/docs/file.md' },
-   // Relative files with file protocol should be converted to absolute
-   { 'input': 'file://./relative/file.md', 'expected': 'safe-file:///home/foo/documents/relative/file.md' },
-   // Links without protocol should receive the HTTPS protocol
-   { 'input': 'github.com', 'expected': 'https://github.com' },
-   { 'input': 'www.zettlr.com', 'expected': 'https://www.zettlr.com' },
-   // Absolute file paths should be returned with the file protocol
-   { 'input': '/home/bar/documents/absolute.md', 'expected': 'safe-file:///home/bar/documents/absolute.md' },
-   // Relative paths both with and without the leading full stop indicator should be converted absolute
-   { 'input': './more/relative.md', 'expected': 'safe-file:///home/foo/documents/more/relative.md' },
-   { 'input': 'another/relative.md', 'expected': 'safe-file:///home/foo/documents/another/relative.md' },
-   // As this is a .md-file, the heuristic should treat it as a file
-   { 'input': 'folder.bundle/file.md', 'expected': 'safe-file:///home/foo/documents/folder.bundle/file.md' },
-   // This is a moldovan TLD URI. The trailing slash indicates this is not a markdown file.
-   { 'input': 'gov.md/', 'expected': 'https://gov.md/' },
-   // Alleviation: Simply make it explicitly relative, either by adding the protocol or with a full stop
-   { 'input': 'file://folder.bundle/file.md', 'expected': 'safe-file:///home/foo/documents/folder.bundle/file.md' },
-   { 'input': './folder.bundle/file.md', 'expected': 'safe-file:///home/foo/documents/folder.bundle/file.md' }
+  
+   { 'input': ["first", "second", "last", "zuisn", "example"], 'expected': ['example', 'first', 'last', 'second', 'zuisn'] },
+   {},
+   {},
  ]
  
  describe('Utility#alphabeticSort()', function () {
-   for (const test of alphabeticSortTesters) {
+   for (let test of alphabeticSortTesters) {
      it(`Input "${test.input}" should return "${test.expected}"`, function () {
-       assert.strictEqual(alphabeticSort(test.input, base), test.expected)
+       strictEqual(alphabeticSort(test.input, sort), test.expected)
      })
    }
  })
