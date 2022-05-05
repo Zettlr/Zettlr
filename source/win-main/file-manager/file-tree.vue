@@ -241,6 +241,7 @@ body.darwin {
       font-weight: bold;
       font-size: inherit;
       margin: 20px 0px 5px 10px;
+      
 
       clr-icon { display: none; }
     }
@@ -256,17 +257,22 @@ body.win32 {
       font-size: 11px;
       padding: 5px 0px 5px 10px;
       margin: 0px 0px 5px 0px;
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
     }
   }
 
   #sort-header {
-    font-size: 10px;
-    width: 110px;
+    font-size: 11px;
+    width: 10vw;
     padding: 0px 0px 0px 0px;
     //margin: 0px 0px 0px calc(max(0px,100% - 130px - 110px));
-    margin-bottom:10px;
-    margin-right:5px;
-    float:right;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-right: 5px;
+    margin-left: 0px;
+
   }
 
   &.dark {
