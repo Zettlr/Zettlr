@@ -241,8 +241,6 @@ body.darwin {
       font-weight: bold;
       font-size: inherit;
       margin: 20px 0px 5px 10px;
-      
-
       clr-icon { display: none; }
     }
   }
@@ -271,7 +269,7 @@ body.win32 {
     margin-top: 0px;
     margin-bottom: 0px;
     margin-right: 5px;
-    margin-left: 0px;
+    margin-left: auto;
 
   }
 
