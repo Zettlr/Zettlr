@@ -9,6 +9,7 @@
 - Fixed heading ID links not working with, e.g., accents
 - Added "Copy filename", "Copy path" and "Copy ID" to document tabs context
   menus
+- Fixed heavy latency when working on a file with many related files
 
 ## Under the Hood
 
