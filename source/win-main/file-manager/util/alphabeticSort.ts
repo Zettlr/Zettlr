@@ -5,22 +5,27 @@ export default function alphabeticSort (dirArray: any, sortBy: string): DirMeta[
     let nameA = a.name.toLowerCase()
     let nameB = b.name.toLowerCase()
 
-    // if workspaces have the same name, compare their parent's name
-    if (nameA === nameB) {
-      let dirA = a.dir.toLowerCase()
-      let dirB = b.dir.toLowerCase()
-      if (dirA < dirB) {
-        return -1
+      // if workspaces have the same name, compare their parent's name
+      if (nameA == nameB) {
+        let dirA = a.dir.toLowerCase(), dirB = b.dir.toLowerCase();
+        if (dirA < dirB)
+          return -1;
+        if (dirA > dirB)
+          return 1;
       }
-      if (dirA > dirB) {
-        return 1
+             
+      // sort by workspace's name
+      else {
+        if (nameA < nameB) {
+          return -1
+        }
+        if (nameA > nameB) {
+          return 1
+        }
       }
+      return 0;
     }
-    return 0
+    
+    if (sortBy == "desc") return dirArray.sort(compare).reverse() as DirMeta[];
+    return dirArray.sort(compare) as DirMeta[];
   }
-  // let temp = this.getFilteredTree.filter(item => item.type === 'directory');
-  if (sortBy === 'desc') {
-    return dirArray.sort(compare).reverse() as DirMeta[]
-  }
-  return dirArray.sort(compare) as DirMeta[]
-}
