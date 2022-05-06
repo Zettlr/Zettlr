@@ -12,10 +12,20 @@ export default function alphabeticSort(dirArray: any, sortBy: string): DirMeta[]
           return -1;
         if (dirA > dirB)
           return 1;
-      } 
+      }
+             
+      // sort by workspace's name
+      else {
+        if (nameA < nameB) {
+          return -1
+        }
+        if (nameA > nameB) {
+          return 1
+        }
+      }
       return 0;
     }
-    //let temp = this.getFilteredTree.filter(item => item.type === 'directory');
+    
     if (sortBy == "desc") return dirArray.sort(compare).reverse() as DirMeta[];
     return dirArray.sort(compare) as DirMeta[];
   }
