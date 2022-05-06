@@ -25,26 +25,22 @@ const alphabeticSortTesters = [
   },
   {
     input: [{ name: 'untitled', dir: 'Downloads' },{ name: 'titled', dir: 'Documents' }],
-    // { name: 'untitled', dir: 'Downloads' },{ name: 'titled', dir: 'Documents' }
-    expected: [{ name: 'titled', dir: 'Documents' }, { name: 'untitled', dir: 'Downloads' }],
+    expected: [{ name: 'untitled', dir: 'Downloads' }, { name: 'titled', dir: 'Documents' }],
   },
   {
     input: [{ name: 'first', dir: 'Applications' }, { name: 'first', dir: 'Music' }],
     expected: [{ name: 'first', dir: 'Music' }, { name: 'first', dir: 'Applications' }],
   },
-  // {
-  //   input: [{ name: 'first', dir: 'desktop' },{ name: 'first', dir: 'document' }],
-  //   expected: [{ name: 'first', dir: 'document' }, { name: 'first', dir: 'desktop' }],
-  // },
+  {
+    input: [{ name: 'file', dir: 'Test' },{ name: 'file', dir: 'Beats' }],
+    expected: [{ name: 'file', dir: 'Beats' }, { name: 'file', dir: 'Test' }],
+  },
 ];
 
 describe('Utility#alphabeticSort()', function () {
   for (const test of alphabeticSortTesters) {
     it(`Input "${test.input}" should return "${test.expected}"`, function () {
-      const result = alphabeticSort(test.input, sort);
-      console.log('resultresultresult', result);
-      console.log('test.expectedtest.expected', test.expected);
-      deepStrictEqual(result, test.expected);
+      deepStrictEqual(alphabeticSort(test.input, sort), test.expected);
     });
   }
 });
