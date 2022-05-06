@@ -23,7 +23,11 @@
    { input: ['first', 'second', 'last', 'zuisn', 'example'], expected: ['example', 'first', 'last', 'second', 'zuisn'] },
    { input: ['new', 'aight', 'test', 'plant', 'which'], expected: ['aight', 'new', 'plant', 'test', 'which'] },
    { input: ['untitled', 'titled'], expected: ['titled', 'untitled'] },
-   { input: ['one', 'two', 'three'], expected: ['one', 'three', 'two'] }
+   { input: ['one', 'two', 'three'], expected: ['one', 'three', 'two'] },
+   { input: ['B', 'A'], expected: ['A', 'B'] }
+
+
+      
  ]
  
  describe('Utility#alphabeticSort()', function () {
