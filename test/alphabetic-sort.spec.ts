@@ -25,6 +25,7 @@ const alphabeticSortTesters = [
   },
   {
     input: [{ name: 'untitled', dir: 'Downloads' },{ name: 'titled', dir: 'Documents' }],
+    // { name: 'untitled', dir: 'Downloads' },{ name: 'titled', dir: 'Documents' }
     expected: [{ name: 'titled', dir: 'Documents' }, { name: 'untitled', dir: 'Downloads' }],
   },
   {
@@ -41,8 +42,8 @@ describe('Utility#alphabeticSort()', function () {
   for (const test of alphabeticSortTesters) {
     it(`Input "${test.input}" should return "${test.expected}"`, function () {
       const result = alphabeticSort(test.input, sort);
-      // console.log('resultresultresult', result);
-      // console.log('test.expectedtest.expected', test.expected);
+      console.log('resultresultresult', result);
+      console.log('test.expectedtest.expected', test.expected);
       deepStrictEqual(result, test.expected);
     });
   }
