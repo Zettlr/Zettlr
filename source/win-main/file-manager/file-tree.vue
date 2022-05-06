@@ -263,7 +263,7 @@ body.win32 {
 
   #sort-header {
     font-size: 11px;
-    width: 10vw;
+    width: 12vw;
     padding: 0px 0px 0px 0px;
     //margin: 0px 0px 0px calc(max(0px,100% - 130px - 110px));
     margin-top: 0px;
