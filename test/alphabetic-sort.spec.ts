@@ -33,7 +33,7 @@ const alphabeticSortTesters = [
   },
   {
     input: [{ name: 'file', dir: 'Test' },{ name: 'file', dir: 'Beats' }],
-    expected: [{ name: 'file', dir: 'Beats' }, { name: 'file', dir: 'Test' }],
+    expected: [{ name: 'file', dir: 'Test' }, { name: 'file', dir: 'Beats' }],
   },
 ];
 
