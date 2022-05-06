@@ -4,8 +4,8 @@ import YAML from 'yaml'
 import { info } from '../console-colour.mjs'
 
 const __dirname = process.platform === 'win32'
-? path.dirname(decodeURI(import.meta.url.substring(8))) // file:///C:/...
-: path.dirname(decodeURI(import.meta.url.substring(7))) // file:///root/...
+  ? path.dirname(decodeURI(import.meta.url.substring(8))) // file:///C:/...
+  : path.dirname(decodeURI(import.meta.url.substring(7))) // file:///root/...
 
 /**
  * Parses the test config and returns it as a JSON object
@@ -20,7 +20,7 @@ export default async () => {
     await fs.lstat(realPath)
   } catch (e) {
     // Real config did not exist -> copy over example
-    info(`Copied test-config.yml to the root directory.`)
+    info('Copied test-config.yml to the root directory.')
     await fs.copyFile(examplePath, realPath)
   }
 

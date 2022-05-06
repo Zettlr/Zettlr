@@ -12,7 +12,7 @@ import { minify } from 'csso'
 // 5. For each of the themes, retrieve them from the node_modules
 // 6. Minify the themes and overwrite the respective files.
 
-const __dirname =  process.platform === 'win32'
+const __dirname = process.platform === 'win32'
   ? path.dirname(decodeURI(import.meta.url.substring(8))) // file:///C:/...
   : path.dirname(decodeURI(import.meta.url.substring(7))) // file:///root/...
 
