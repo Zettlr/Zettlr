@@ -180,7 +180,11 @@ export default defineComponent({
       this.$emit('selection', event)
     },
     sortHandler: function (event: MouseEvent) {
-      console.log(this.selected)
+      if (this.sortSelection === 'AlphaD') {
+        // set sort order to 'desc'
+      } else {
+        // set sort order to 'asc'
+      }
     }
   }
 })
@@ -210,6 +214,9 @@ body {
         margin-right: 3px;
         vertical-align: bottom;
       }
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
     }
 
     .list-item {
@@ -233,6 +240,16 @@ body {
             font-size: 200%;
         }
     }
+  }
+
+  #sort-header {
+    font-size: 11px;
+    width: 12vw;
+    padding: 0px 0px 0px 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-right: 5px;
+    margin-left: auto;
   }
 }
 
@@ -261,23 +278,21 @@ body.win32 {
       font-size: 11px;
       padding: 5px 0px 5px 10px;
       margin: 0px 0px 5px 0px;
-      display: flex;
-      flex-flow: row wrap;
-      align-items: center;
+      //display: flex;
+      //flex-flow: row wrap;
+      //align-items: center;
     }
   }
 
-  #sort-header {
-    font-size: 11px;
-    width: 12vw;
-    padding: 0px 0px 0px 0px;
-    //margin: 0px 0px 0px calc(max(0px,100% - 130px - 110px));
-    margin-top: 0px;
-    margin-bottom: 0px;
-    margin-right: 5px;
-    margin-left: auto;
-
-  }
+  // #sort-header {
+  //  font-size: 11px;
+  //  width: 12vw;
+  //  padding: 0px 0px 0px 0px;
+  //  margin-top: 0px;
+  //  margin-bottom: 0px;
+  //  margin-right: 5px;
+  //  margin-left: auto;
+  // }
 
   &.dark {
     #file-tree {
