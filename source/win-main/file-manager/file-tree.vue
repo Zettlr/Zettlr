@@ -33,7 +33,7 @@
           shape="tree-view"
           role="presentation"
         ></clr-icon>{{ workspaceSectionHeading }}
-        <select id="sort-header" v-model="selected" v-on:change ="sortBy()">
+        <select id="sort-header" v-model="sortSelection" v-on:change ="sortHandler()">
           <option value="null" disabled selected hidden>Sort by</option>
           <option value ="Default">Sort by</option>
           <option value ="AlphaA">Alphabetical (Ascending)</option>
@@ -100,7 +100,9 @@ export default defineComponent({
     }
   },
   data: function () {
-    return {selected:null}
+    return {
+      sortSelection: null
+    }
   },
   computed: {
     fileTree: function (): Array<MDFileMeta|CodeFileMeta|DirMeta> {
@@ -142,7 +144,12 @@ export default defineComponent({
       return this.getFilteredTree.filter(item => item.type !== 'directory') as Array<MDFileMeta|CodeFileMeta>
     },
     getDirectories: function (): DirMeta[] {
-      return this.getFilteredTree.filter(item => item.type === 'directory') as DirMeta[]
+      if (this.sortSelection === 'AlphaA' || this.sortSelection === 'AlphaD') {
+        // run alphabeticSort function
+        return this.getFilteredTree.filter(item => item.type === 'directory') as DirMeta[]
+      } else {
+        return this.getFilteredTree.filter(item => item.type === 'directory') as DirMeta[]
+      }
     },
     fileSectionHeading: function (): string {
       return trans('gui.files')
@@ -171,9 +178,8 @@ export default defineComponent({
     clickHandler: function (event: MouseEvent) {
       // We need to bubble this event upwards so that the file manager is informed of the selection
       this.$emit('selection', event)
-    }
-    , 
-    sortBy: function (event: MouseEvent) {
+    },
+    sortHandler: function (event: MouseEvent) {
       console.log(this.selected)
     }
   }
