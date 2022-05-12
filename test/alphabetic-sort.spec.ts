@@ -20,27 +20,31 @@ const sort = 'desc';
 
 const alphabeticSortTesters = [
   {
-    input: [{ name: 'titled', dir: 'Documents' },{ name: 'titled', dir: 'Desktop' },],
-    expected: [{ name: 'titled', dir: 'Documents' }, { name: 'titled', dir: 'Desktop' },],
+    input: [{ name: 'titled', dir: 'Documents' },{ name: 'titled', dir: 'Desktop' }],
+    expected: [{ name: 'titled', dir: 'Documents' }, { name: 'titled', dir: 'Desktop' }],
+    message : `Should return {name: 'titled', dir: 'Documents' } , { name: 'titled', dir: 'Desktop' }` 
   },
   {
     input: [{ name: 'untitled', dir: 'Downloads' },{ name: 'titled', dir: 'Documents' }],
     expected: [{ name: 'untitled', dir: 'Downloads' }, { name: 'titled', dir: 'Documents' }],
+    message : `Should return { name: 'untitled', dir: 'Downloads' } , { name: 'titled', dir: 'Documents' }`
   },
   {
     input: [{ name: 'first', dir: 'Applications' }, { name: 'first', dir: 'Music' }],
     expected: [{ name: 'first', dir: 'Music' }, { name: 'first', dir: 'Applications' }],
+    message : `Should return { name: 'first', dir: 'Music' } , { name: 'first', dir: 'Applications' }`
   },
   {
     input: [{ name: 'file', dir: 'Test' },{ name: 'file', dir: 'Beats' }],
     expected: [{ name: 'file', dir: 'Test' }, { name: 'file', dir: 'Beats' }],
+    message : `Should return { name: 'file', dir: 'Test' } , { name: 'file', dir: 'Beats' }`
   },
 ];
 
 describe('Utility#alphabeticSort()', function () {
   for (const test of alphabeticSortTesters) {
-    it(`Input "${test.input}" should return "${test.expected}"`, function () {
-      deepStrictEqual(alphabeticSort(test.input, sort), test.expected);
+    it(`${test.message}`, function () {
+      deepStrictEqual(alphabeticSort(test.input, sort), test.expected, `Test case 1 passed successfully! `);
     });
   }
 });
