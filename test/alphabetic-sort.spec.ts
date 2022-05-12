@@ -44,7 +44,7 @@ const alphabeticSortTesters = [
 describe('Utility#alphabeticSort()', function () {
   for (const test of alphabeticSortTesters) {
     it(`${test.message}`, function () {
-      deepStrictEqual(alphabeticSort(test.input, sort), test.expected, `Test case 1 passed successfully! `);
+      deepStrictEqual(alphabeticSort(test.input, sort), test.expected);
     });
   }
 });
