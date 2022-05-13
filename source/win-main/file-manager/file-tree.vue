@@ -32,6 +32,12 @@
           shape="tree-view"
           role="presentation"
         ></clr-icon>{{ workspaceSectionHeading }}
+        <select id="sort-header" v-model="sortSelection" v-on:change ="sortHandler()">
+          <option value="null" disabled selected hidden>Sort by</option>
+          <option value ="Default">Sort by</option>
+          <option value ="AlphaA">Alphabetical (Ascending)</option>
+          <option value ="AlphaD">Alphabetical (Descending)</option>
+        </select>
       </div>
       <TreeItem
         v-for="item in getDirectories"
@@ -74,6 +80,7 @@ import matchQuery from './util/match-query'
 import matchTree from './util/match-tree'
 import { defineComponent } from 'vue'
 import { MDFileMeta, CodeFileMeta, DirMeta } from '@dts/common/fsal'
+import alphabeticSort from './util/alphabeticSort'
 
 const ipcRenderer = window.ipc
 
@@ -93,7 +100,10 @@ export default defineComponent({
     }
   },
   data: function () {
-    return {}
+    return {
+      sortSelection: null,
+      sortBy: "asc"
+    }
   },
   computed: {
     fileTree: function (): Array<MDFileMeta|CodeFileMeta|DirMeta> {
@@ -135,7 +145,13 @@ export default defineComponent({
       return this.getFilteredTree.filter(item => item.type !== 'directory') as Array<MDFileMeta|CodeFileMeta>
     },
     getDirectories: function (): DirMeta[] {
-      return this.getFilteredTree.filter(item => item.type === 'directory') as DirMeta[]
+      if (this.sortSelection === 'AlphaA' || this.sortSelection === 'AlphaD') {
+        // run alphabeticSort function
+        let temp = this.getFilteredTree.filter(item => item.type === 'directory');
+        return alphabeticSort(temp, this.sortBy) as DirMeta[];
+      } else {
+        return this.getFilteredTree.filter(item => item.type === 'directory') as DirMeta[]
+      }
     },
     fileSectionHeading: function (): string {
       return trans('gui.files')
@@ -164,6 +180,13 @@ export default defineComponent({
     clickHandler: function (event: MouseEvent) {
       // We need to bubble this event upwards so that the file manager is informed of the selection
       this.$emit('selection', event)
+    },
+    sortHandler: function (event: MouseEvent) {
+      if (this.sortSelection === 'AlphaD') {
+        this.sortBy = "desc"
+      } else {
+        this.sortBy = "asc"
+      }
     }
   }
 })
@@ -193,6 +216,9 @@ body {
         margin-right: 3px;
         vertical-align: bottom;
       }
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
     }
 
     .list-item {
@@ -217,6 +243,16 @@ body {
         }
     }
   }
+
+  #sort-header {
+    font-size: 11px;
+    width: 12vw;
+    padding: 0px 0px 0px 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-right: 5px;
+    margin-left: auto;
+  }
 }
 
 body.darwin {
@@ -230,7 +266,6 @@ body.darwin {
       font-weight: bold;
       font-size: inherit;
       margin: 20px 0px 5px 10px;
-
       clr-icon { display: none; }
     }
   }
@@ -245,8 +280,21 @@ body.win32 {
       font-size: 11px;
       padding: 5px 0px 5px 10px;
       margin: 0px 0px 5px 0px;
+      //display: flex;
+      //flex-flow: row wrap;
+      //align-items: center;
     }
   }
+
+  // #sort-header {
+  //  font-size: 11px;
+  //  width: 12vw;
+  //  padding: 0px 0px 0px 0px;
+  //  margin-top: 0px;
+  //  margin-bottom: 0px;
+  //  margin-right: 5px;
+  //  margin-left: auto;
+  // }
 
   &.dark {
     #file-tree {
