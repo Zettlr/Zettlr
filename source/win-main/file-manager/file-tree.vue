@@ -81,6 +81,7 @@ import matchQuery from './util/match-query'
 import matchTree from './util/match-tree'
 import { defineComponent } from 'vue'
 import { MDFileMeta, CodeFileMeta, DirMeta } from '@dts/common/fsal'
+import alphabeticSort from './util/alphabeticSort'
 
 const ipcRenderer = window.ipc
 
@@ -101,7 +102,8 @@ export default defineComponent({
   },
   data: function () {
     return {
-      sortSelection: null
+      sortSelection: null,
+      sortBy: "asc"
     }
   },
   computed: {
@@ -146,7 +148,8 @@ export default defineComponent({
     getDirectories: function (): DirMeta[] {
       if (this.sortSelection === 'AlphaA' || this.sortSelection === 'AlphaD') {
         // run alphabeticSort function
-        return this.getFilteredTree.filter(item => item.type === 'directory') as DirMeta[]
+        let temp = this.getFilteredTree.filter(item => item.type === 'directory');
+        return alphabeticSort(temp, this.sortBy) as DirMeta[];
       } else {
         return this.getFilteredTree.filter(item => item.type === 'directory') as DirMeta[]
       }
