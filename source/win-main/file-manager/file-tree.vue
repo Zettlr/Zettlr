@@ -13,7 +13,6 @@
           {{ noResultsMessage }}
         </div>
       </div>
-
       <div v-show="getFiles.length > 0" id="directories-files-header">
         <clr-icon
           shape="file"
