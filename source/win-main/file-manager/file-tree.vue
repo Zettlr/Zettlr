@@ -184,9 +184,9 @@ export default defineComponent({
     },
     sortHandler: function (event: MouseEvent) {
       if (this.sortSelection === 'AlphaD') {
-        // set sort order to 'desc'
+        this.sortBy = "desc"
       } else {
-        // set sort order to 'asc'
+        this.sortBy = "asc"
       }
     }
   }
