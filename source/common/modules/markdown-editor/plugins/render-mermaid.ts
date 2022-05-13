@@ -13,11 +13,11 @@
   */
 
 import CodeMirror, { commands } from 'codemirror'
-import mermaidAPI from 'mermaid'
+import mermaid from 'mermaid'
 
-// Initialise the mermaid API
-// TODO: Theming!
-mermaidAPI.initialize({ startOnLoad: false, theme: 'dark'/*, theme: null */ })
+// Initialise the mermaid API. Note the "as any" cast, since the mermaid types
+// are wrong.
+mermaid.initialize({ startOnLoad: false, theme: 'dark' as any })
 
 /**
  * Defines the CodeMirror command to render all found markdown images.
@@ -80,7 +80,7 @@ mermaidAPI.initialize({ startOnLoad: false, theme: 'dark'/*, theme: null */ })
       let svg = document.createElement('span')
       svg.classList.add('mermaid-chart')
       try {
-        let graph = mermaidAPI.render(`graphDivL${startLine}-L${endLine}${Date.now()}`, code)
+        let graph = mermaid.render(`graphDivL${startLine}-L${endLine}${Date.now()}`, code)
         svg.innerHTML = graph
       } catch (err: any) {
         svg.classList.add('error')

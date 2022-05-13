@@ -147,8 +147,8 @@ const linkRE = /\[!\[([^[]*)\]\((.+)\)\]\((.+)\)|\[([^\]]+)\]\((.+?)\)|(((?:(?:a
 
         // Make sure the link is not preceeded by ]( and not followed by )
         if (curFrom.ch > 3) {
-          let prefix = line.substr(curFrom.ch - 2, 2)
-          let suffix = line.substr(curTo.ch, 1)
+          let prefix = line.substring(curFrom.ch - 2, curFrom.ch)
+          let suffix = line.substring(curTo.ch, curTo.ch + 1)
           if (prefix === '](' && suffix === ')') continue // Part of a full markdown link
         }
       } else if (isEmail) {

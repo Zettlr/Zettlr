@@ -1,3 +1,19 @@
+# 2.2.6
+
+## GUI and Functionality
+
+- A malformed directory settings file now does not prevent loading the
+  directory; instead the malformed file is now removed
+- Fixed a small visual glitch on Linux where the selected file was not
+  highlighted in the file list in the thin or expanded file manager modes
+- Fixed heading ID links not working with, e.g., accents
+- Fixed heavy latency when working on a file with many related files
+
+## Under the Hood
+
+- Simplify the codeblock class hook again to significantly improve typing speed
+- Updated all dependency packages to the respective latest versions
+
 # 2.2.5
 
 ## GUI and Functionality

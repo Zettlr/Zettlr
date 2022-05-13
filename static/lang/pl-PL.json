@@ -7,7 +7,7 @@
             "malpunek"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-03-18T01:10:12.000000Z"
+        "updated_at": "2022-04-30T15:26:50.000000Z"
     },
     "dialog": {
         "about": {
@@ -46,7 +46,8 @@
         "defaults": {
             "explanation": "Domy\u015blne ustawiania importu i eksportu",
             "exporting_title": "Eksportowanie",
-            "importing_title": "Importowanie"
+            "importing_title": "Importowanie",
+            "restore": "Przywr\u00f3\u0107 domy\u015blne"
         },
         "dir_new": {
             "placeholder": "Nazwa katalogu",
@@ -195,23 +196,32 @@
             },
             "avoid_new_tabs": "Unikaj otwierania plik\u00f3w w nowych kartach",
             "checkForBeta": "Powiadamiaj mnie o wydaniach beta",
+            "check_translation_updates": "Sprawd\u017a aktualizacje t\u0142umacze\u0144 przy uruchomieniu",
             "check_updates": "Automatycznie sprawdzaj aktualizacje",
             "choose_file": "Wybierz plik",
             "citation_database": "Baza cytowa\u0144 (CSL JSON albo BibTex)",
             "citations": {
                 "title": "Cytacje"
             },
+            "cite_style_label": "Wybierz tryb autouzupe\u0142niania przypis\u00f3w",
             "count_chars": "Liczenie znak\u00f3w zamiast s\u0142\u00f3w",
             "creationtime": "Czas utworzenia pliku",
+            "dark_mode": "Tryb nocny",
+            "dark_mode_schedule": {
+                "end": "Wy\u0142\u0105cz tryb nocny o",
+                "start": "W\u0142\u0105cz tryb nocny o"
+            },
             "debug": "Tryb debugowania",
             "default_image_save_path": "Domy\u015blna \u015bcie\u017cka obrazu (wzgl\u0119dna lub bezwzgl\u0119dna)",
             "delete_on_fail": "Usuwaj pliki, je\u015bli nie uda si\u0119\u00a0przenie\u015b\u0107\u00a0ich do kosza",
             "display": {
+                "hide_toolbar_distraction_free": "Ukrywaj pasek narz\u0119dzi w trybie skupienia",
                 "image_height": "Maksymalna wysoko\u015b\u0107 obrazu (%)",
                 "image_size_info": "Regulacja podgl\u0105du obrazu",
                 "image_width": "Maksymalna szeroko\u015b\u0107 obrazu (%)",
                 "preview_info": "Ustawienia wy\u015bwietlanych element\u00f3w",
                 "render_citations": "Wy\u015bwietlaj cytowania",
+                "render_emphasis": "Wy\u015bwietlaj emfaz\u0119",
                 "render_htags": "Wy\u015bwietlaj nag\u0142\u00f3wki",
                 "render_iframes": "Wy\u015bwietlaj Iframes",
                 "render_images": "Wy\u015bwietlaj obrazy",
@@ -221,6 +231,7 @@
                 "title": "Wy\u015bwietlanie",
                 "use_first_headings": "U\u017cywaj pierwszego nag\u0142\u00f3wka poziomu pierwszego zamiast nazwy pliku"
             },
+            "display_markdown_file_extensions": "Wy\u015bwietlaj rozszerzenia plik\u00f3w Markdown",
             "display_time_explanation": "Wy\u015bwietlane metadane pliku",
             "editor": "Edytor",
             "editor_font_size": "Wielko\u015b\u0107\u00a0liter w edytorze",
@@ -250,12 +261,20 @@
             "filemanager_expanded": "Rozrzeszony &mdash; osobne listy plik\u00f3w i katalog\u00f3w",
             "filemanager_explanation": "Tryb mened\u017cera plik\u00f3w",
             "filemanager_thin": "W\u0105ski &mdash; lista folder\u00f3w albo lista plik\u00f3w",
+            "filename_display": {
+                "filename_only": "Tylko nazwa pliku",
+                "heading": "Nag\u0142\u00f3wek 1. poziomu, gdy dost\u0119pny",
+                "label": "Wy\u015bwietlaj pliki przy u\u017cyciu",
+                "title": "Tytu\u0142, je\u015bli dost\u0119pny",
+                "title_heading": "Tytu\u0142 albo nag\u0142\u00f3wek 1. poziomu, je\u015bli dost\u0119pne"
+            },
             "filename_generator": "Wzorzec dla nazw nowych plik\u00f3w",
             "formatting_characters_explanation": "Wybierz znaki formatowania dla wyt\u0142uszczenia i emfazy",
             "general": "Og\u00f3lne",
             "hide_dirs": "Ukrywaj katalogi w globalnym wyszukiwaniu",
             "homeEndBehaviour": "U\u017cywaj domy\u015blnych akcji CodeMirror dla \u003Ckbd\u003EHome\u003C/kbd\u003E i \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
             "indent_unit": "Liczba spacji wci\u0119cia",
+            "indent_with_tabs": "Wci\u0119cia z u\u017cyciem tabulatora",
             "input_mode": "Tryb wprowadzania",
             "leave_app_running_in_the_notification_area": "Pozostaw w obszarze powiadomie\u0144",
             "modtime": "Czas ostatniej modyfikacji",
@@ -310,11 +329,16 @@
                 "csl_style": "Styl CSL (opcjonalnie)",
                 "format": "Eksportuj projekt do:",
                 "name_label": "Format",
+                "pattern": "Dodaj wzorce Glob do wyboru plik\u00f3w",
+                "pattern_name": "Wzorzec Glob",
                 "title": "Ustawienia projektu",
-                "title_label": "Tytu\u0142 projektu"
+                "title_label": "Tytu\u0142 projektu",
+                "use_label": "U\u017cyj"
             },
             "readability_algorithm": "Algorytm trybu \u0142atwo\u015bci czytania",
             "reset_pandoc_command": "Zresetuj komend\u0119 pandoc",
+            "show_app_in_the_notification_area": "Poka\u017c aplikacj\u0119 w panelu powiadomie\u0144",
+            "sort_folders_first": "Poka\u017c foldery ponad plikami",
             "sorting_ascii": "Porz\u0105dek ASCII (2 po 10)",
             "sorting_explanation": "Sortowanie nazw plik\u00f3w",
             "sorting_natural": "Porz\u0105dek naturalny (10 po 2)",
@@ -329,6 +353,8 @@
                 "accent_color_info": "Ustawienie dost\u0119pne tylko w Windows i MacOS",
                 "accent_color_label": "U\u017cyj systemowego akcentu kolorystecznego",
                 "info": "Wybierz wygl\u0105d aplikacji",
+                "select_label": "kliknij, aby wybra\u0107",
+                "selected_label": "wybrane",
                 "title": "Wygl\u0105d"
             },
             "title": "Ustawienia",
@@ -346,11 +372,14 @@
             "watchdog_checkbox_label": "Monitoruj aktywno\u015b\u0107 systemu plik\u00f3w",
             "watchdog_explainer": "Je\u015bli Zettlr raportuje zbyt wiele zmian zdalnych plik\u00f3w, zaznacz t\u0119 opcj\u0119",
             "watchdog_threshold_label": "Czas oczekiwania, zanim zapis pliku zostanie uznany za dokonany (w ms)",
+            "whitelist": "Bia\u0142a lista wy\u015bwietlanych iFrames",
+            "whitelist_hostname": "Nazwa hosta",
             "xelatex": "\u015acie\u017cka do pliku wykonywalnego xelatex. Zmieniaj tylko, je\u015bli Zettlr sam tego nie zrobi.",
             "xelatex_default": "Domy\u015blnie: xelatex",
             "zkn": {
                 "auto_create_file": "Automatycznie tw\u00f3rz nowe pliki pod\u0105\u017caj\u0105c za \u0142\u0105czami wewn\u0119trznymi",
                 "auto_search": "Rozpocznij wyszukiwanie przy wybraniu \u0142\u0105cza Zettelkasten",
+                "custom_directory": "Zapisuj automatycznie stworzone pliki w tym folderze",
                 "generated_id": "Wygenerowany identyfikator",
                 "id_generator_label": "Wz\u00f3r do generowania nowych identyfikator\u00f3w",
                 "id_label": "Wyra\u017cenie regularne identyfikatora",
@@ -378,7 +407,17 @@
                 "var_week_number": "Tydzie\u0144 roku (wiod\u0105ce zero)",
                 "var_year": "Rok (cztery cyfry)",
                 "var_year_two": "Rok (dwie cyfry)"
+            },
+            "zoom_behavior": {
+                "editor": "Przybli\u017cenie zmienia wielko\u015b\u0107\u00a0fonta w edytorze",
+                "gui": "Przybli\u017cenie zmienia wielko\u015b\u0107 ca\u0142ego interfejsu",
+                "label": "Zachowanie przybli\u017cenia"
             }
+        },
+        "snippets": {
+            "explanation": "Wycinki to zapisane fragmenty tekstu ze zmiennymi",
+            "rename": "Zmie\u0144 nazw\u0119 wycinka",
+            "title": "Wycinki"
         },
         "statistics": {
             "compare": "Por\u00f3wnaj z poprzednim okresem",
@@ -387,7 +426,9 @@
             "month": "Miesi\u0105c",
             "previous_frame": "Poprzedni okres",
             "tabs": {
-                "calendar_label": "Kalendarz"
+                "calendar_label": "Kalendarz",
+                "chart_label": "Wykresy",
+                "fsal_label": "Statystyki"
             },
             "this_frame": "Obecny okres",
             "title": "Statystyki pisania",
@@ -437,6 +478,9 @@
     },
     "gui": {
         "assets_man": {
+            "defaults_restore_error": "Nie mog\u0119 przywr\u00f3ci\u0107 domy\u015blnych!",
+            "defaults_restored": "Domy\u015blne przywr\u00f3cone!",
+            "defaults_restoring": "Przywracam domy\u015blne...",
             "status": {
                 "save_error": "Zapis nie powi\u00f3d\u0142 si\u0119",
                 "saved": "Zapisano!",
@@ -452,6 +496,11 @@
         "avg_surpassed": "\ud83d\udd25 Wymiatasz!",
         "avg_words": "dzienna \u015brednia",
         "chars": "Znaki: %s",
+        "chart": {
+            "high_legend": "Dwukrotnie ponad \u015bredni\u0105 miesi\u0119czn\u0105",
+            "high_mid_legend": "Powy\u017cej \u015bredniej miesi\u0119cznej",
+            "low_mid_legend": "Poni\u017cej \u015bredniej miesi\u0119cznej"
+        },
         "citeproc": {
             "error_db": "Nie uda\u0142o si\u0119 za\u0142adowa\u0107 bazy cytowa\u0144",
             "error_report_message": "%s element\u00f3w biblioteki nie mog\u0142o zosta\u0107 za\u0142adowane. Poni\u017csze komunikaty zawieraj\u0105 b\u0142\u0119dy i kt\u00f3re CiteKeys zosta\u0142y uszkodzone.",
@@ -463,6 +512,8 @@
             "references_none": "Nie ma cytowa\u0144 w tym dokumencie",
             "reloading": "Wykryto zmiany w pliku biblioteki. Trwa \u0142adowanie..."
         },
+        "created": "Stworzony",
+        "ctrl_click_to_open": "Cmd/Ctrl+klikni\u0119cie, aby otworzy\u0107 %s",
         "date_just_now_label": "teraz",
         "dirs": "Katalogi",
         "display_search_results": "Wy\u015bwietl wyniki wyszukiwania",
@@ -492,12 +543,16 @@
         },
         "global_search": {
             "clear_label": "Wyczy\u015b\u0107\u00a0wyszukiwanie",
+            "filter_label": "Filtruj wyniki wyszukiwania",
             "query_label": "Wprowad\u017a has\u0142a do wyszukania",
             "query_placeholder": "Znajd\u017a...",
+            "restrict_dir_label": "Ogranicz wyszukiwanie do folderu",
+            "restrict_dir_placeholder": "Ogranicz do folderu...",
             "search_label": "Szukaj",
             "title": "Wyszukiwanie pe\u0142notekstowe",
             "toggle_label": "Prze\u0142\u0105cz rezultaty"
         },
+        "modified": "Zmodyfikowany",
         "months": {
             "apr": "Kwiecie\u0144",
             "aug": "Sierpie\u0144",
@@ -514,8 +569,17 @@
         },
         "no_attachments": "Brak za\u0142\u0105cznik\u00f3w",
         "no_dir_selected": "Nie wybrano katalogu",
+        "no_open_document": "Brak otwartych plik\u00f3w",
+        "no_other_files": "\u017badnych innych plik\u00f3w",
+        "no_reference_message": "Brak tekstu odniesienia",
+        "no_related_files": "Brak plik\u00f3w pokrewnych",
         "no_search_results": "Brak wynik\u00f3w",
         "number_selections": "%s zaznaczonych",
+        "other_files": "Inne pliki",
+        "preview_modification_date": "Zmodyfikowany",
+        "preview_searching_label": "Szukam pliku...",
+        "preview_word_count": "Liczba s\u0142\u00f3w",
+        "related_files_label": "Pliki pokrewne",
         "reset": "Reset",
         "statistics_more": "Wi\u0119cej statystyk...",
         "table_of_contents": "Spis tre\u015bci",
@@ -541,6 +605,7 @@
         "close_file": "Zamknij plik",
         "close_workspace": "Zamknij obszar roboczy",
         "copy": "Kopiuj",
+        "copy_equation": "Skopiuj kod r\u00f3wnania",
         "copy_filename": "Kopiuj nazw\u0119 pliku",
         "copy_html": "Kopiuj jako HTML",
         "copy_id": "Kopiuj ID",
@@ -583,6 +648,7 @@
         "new_dir": "Nowy katalog...",
         "new_file": "Nowy plik...",
         "new_project": "Stw\u00f3rz projekt",
+        "next_file": "Nast\u0119pny plik",
         "no_suggestions": "Brak sugestii",
         "open": "Otw\u00f3rz...",
         "open_attachment": "Otw\u00f3rz za\u0142\u0105cznik",
@@ -590,12 +656,14 @@
         "open_link": "Otw\u00f3rz link",
         "open_logs": "Otw\u00f3rz logi",
         "open_new_tab": "Otw\u00f3rz w nowej karcie",
+        "open_tutorial": "Otw\u00f3rz wprowadzenie",
         "open_workspace": "Otw\u00f3rz obszar roboczy",
         "pandoc": "Pobierz pandoc",
         "paste": "Wklej",
         "paste_plain": "Wklej bez formatowania",
         "pdf_preferences": "Ustawienia PDF",
         "preferences": "Ustawienia",
+        "previous_file": "Poprzedni plik",
         "print": "Drukuj...",
         "project_build": "Eksportuj projekt",
         "project_properties": "Ustawienia projektu...",
@@ -655,8 +723,11 @@
         "all_files": "Wszystkie pliki",
         "cancel": "Anuluj",
         "common": {
+            "filter": "Filtr...",
             "list_actions_label": "Dzia\u0142ania",
-            "list_add_button": "Dodaj"
+            "list_add_button": "Dodaj",
+            "list_default_column_label": "Pozycja",
+            "list_search_placeholder": "Szukaj wpis\u00f3w..."
         },
         "directories": "Foldery",
         "directory_removed": "Katalog %s zosta\u0142 usuni\u0119ty.",
@@ -679,6 +750,8 @@
             "fnf_title": "Nie znaleziono pliku",
             "ignored_dir_message": "Katalog %s nie mo\u017ce zosta\u0107 otwarty przez Zettlr.",
             "ignored_dir_title": "Nie mo\u017cna otworzy\u0107 katalogu",
+            "image_not_found": "Nie znaleziono obrazu: %s",
+            "malformed_citekey": "B\u0142\u0119dny klucz przypisu: @%s",
             "malformed_textbundle": "B\u0142\u0119dna wi\u0105zka: %s",
             "move_into_child_message": "Nie mo\u017cesz przenie\u015b\u0107 katalogu do katalogu podrz\u0119dnego",
             "move_into_child_title": "Nie mog\u0119 przenie\u015b\u0107\u00a0katalogu",
@@ -692,7 +765,8 @@
             "pandoc_error_message": "B\u0142\u0105d biblioteki pandoc: %s",
             "pandoc_error_title": "Nie mo\u017cna eksportowa\u0107 pliku.",
             "remove_message": "Czy chcesz usun\u0105\u0107\u00a0%s?",
-            "remove_title": "Usun\u0105\u0107?"
+            "remove_title": "Usun\u0105\u0107?",
+            "tray_not_supported": "Panel powiadomie\u0144 nie jest wspierany. Potrzebujesz wtyczki quot;KStatusNotifierItem/AppIndicator Support&quot; do Gnome Shell."
         },
         "export_success": "Eksportuj\u0119 do %s",
         "file_changed": "Plik %s zosta\u0142 zmieniony przez inny program.",
@@ -723,6 +797,7 @@
         "save_changes_save": "Zapisz",
         "save_changes_select_dir": "Wybierz katalog dla nowego pliku.",
         "save_changes_title": "Pomin\u0105\u0107\u00a0niezapisane zmiany?",
+        "save_file": "Zapisz plik",
         "unknown_command": "Nieznana komenda: %s"
     },
     "toolbar": {
@@ -752,9 +827,11 @@
         "stats": "Statystyki",
         "tag_cloud": "Tagi",
         "toggle_attachments": "Wy\u015bwietl/Schowaj za\u0142\u0105czniki",
-        "toggle_file_manager": "Mened\u017cer plik\u00f3w"
+        "toggle_file_manager": "Mened\u017cer plik\u00f3w",
+        "toggle_global_search": "Globalne wyszukiwanie"
     },
     "tray": {
+        "show_zettlr": "Poka\u017c Zettlr",
         "tooltip": "Zettlr"
     },
     "validation": {
