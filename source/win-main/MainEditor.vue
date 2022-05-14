@@ -96,6 +96,8 @@ import { nextTick, defineComponent } from 'vue'
 
 const ipcRenderer = window.ipc
 
+const UPDATETOC_TIMEOUT = 400 // Update TOC in sidebar 400 ms after last input.
+
 interface DocumentWrapper {
   path: string
   dir: string
@@ -154,7 +156,8 @@ export default defineComponent({
       replaceString: '', // Models the replace string
       findTimeout: undefined as any, // Holds a timeout so that not every single keypress results in a searchNext
       docInfoTimeout: undefined as any, // Holds a timeout to not update the docInfo every millisecond
-      anchor: undefined as undefined|CodeMirror.Position
+      anchor: undefined as undefined|CodeMirror.Position,
+	  updateTOCTimeout: undefined as any // Stores a timeout ID for updateTOC
     }
   },
   computed: {
@@ -553,7 +556,18 @@ export default defineComponent({
         isClean: activeDocument.cmDoc.isClean()
       })
 
-      this.$store.commit('updateTableOfContents', mdEditor.tableOfContents)
+      // too often to do it on every change
+      //this.$store.commit('updateTableOfContents', mdEditor.tableOfContents)
+      // The sidebar needs the correct table of contents, so signal the
+	  // corresponding event to the renderer
+	  // Do it after a pause after the last input.
+	  //if (this._updateTOCTimeout !== undefined) {
+      clearTimeout(this._updateTOCTimeout)
+      //}
+      this._updateTOCTimeout = setTimeout((e) => {
+	    this.$store.commit('updateTableOfContents', mdEditor.tableOfContents)
+		this.$store.commit('activeDocumentInfo', mdEditor.documentInfo)
+      }, UPDATETOC_TIMEOUT)
     })
 
     mdEditor.on('cursorActivity', () => {
@@ -561,7 +575,7 @@ export default defineComponent({
       // very long documents, since calculating the word count needs considerable
       // time, and without the delay, typing seems "laggy".
       if (mdEditor !== null) {
-        this.$store.commit('activeDocumentInfo', mdEditor.documentInfo)
+        //this.$store.commit('activeDocumentInfo', mdEditor.documentInfo)
       }
     })
 
