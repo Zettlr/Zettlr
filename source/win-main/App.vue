@@ -365,7 +365,8 @@ export default defineComponent({
           title: trans('toolbar.pomodoro'),
           // Good morning, we are verbose here
           progressPercent: this.pomodoro.phase.elapsed / this.pomodoro.durations[this.pomodoro.phase.type] * 100,
-          colour: this.pomodoro.colour[this.pomodoro.phase.type]
+          colour: this.pomodoro.colour[this.pomodoro.phase.type],
+          visible: this.getToolbarButtonDisplay('showPomodoroButton')
         },
         {
           type: 'toggle',

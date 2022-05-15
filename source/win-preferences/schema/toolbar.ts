@@ -76,6 +76,11 @@ export default function (): any {
           type: 'checkbox',
           label: trans('dialog.preferences.toolbar.showDocumentInfoText'),
           model: 'displayToolbarButtons.showDocumentInfoText'
+        },
+        {
+          type: 'checkbox',
+          label: trans('dialog.preferences.toolbar.showPomodoroButton'),
+          model: 'displayToolbarButtons.showPomodoroButton'
         }
       ]
     ]

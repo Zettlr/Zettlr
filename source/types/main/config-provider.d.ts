@@ -155,6 +155,7 @@ interface ConfigOptions {
     showInsertTableButton: boolean
     showInsertFootnoteButton: boolean
     showDocumentInfoText: boolean
+    showPomodoroButton: boolean
   }
   uuid: string
 }

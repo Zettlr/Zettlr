@@ -238,7 +238,8 @@ export default function getConfigTemplate (): ConfigOptions {
       showMarkdownMakeTaskListButton: true,
       showInsertTableButton: true,
       showInsertFootnoteButton: true,
-      showDocumentInfoText: true
+      showDocumentInfoText: true,
+      showPomodoroButton: true
     },
     uuid: uuid4() // The app's unique anonymous identifier
   }
