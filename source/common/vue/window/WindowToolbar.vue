@@ -33,7 +33,7 @@
       >
       </ThreeWayToggle>
       <RingControl
-        v-if="item.type === 'ring'"
+        v-if="item.type === 'ring' && item.visible !== false"
         v-bind:key="idx"
         v-bind:control="item"
         v-bind:show-label="showLabels"

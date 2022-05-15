@@ -144,6 +144,7 @@ interface ConfigOptions {
   }
   checkForBeta: boolean
   displayToolbarButtons: {
+    showOpenPreferencesButton: boolean
     showNewFileButton: boolean
     showPreviousFileButton: boolean
     showNextFileButton: boolean
@@ -155,6 +156,7 @@ interface ConfigOptions {
     showInsertTableButton: boolean
     showInsertFootnoteButton: boolean
     showDocumentInfoText: boolean
+    showPomodoroButton: boolean
   }
   uuid: string
 }

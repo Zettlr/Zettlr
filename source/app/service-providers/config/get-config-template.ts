@@ -228,6 +228,7 @@ export default function getConfigTemplate (): ConfigOptions {
     },
     checkForBeta: false, // Should the user be notified of beta releases?
     displayToolbarButtons: {
+      showOpenPreferencesButton: true,
       showNewFileButton: true,
       showPreviousFileButton: true,
       showNextFileButton: true,
@@ -238,7 +239,8 @@ export default function getConfigTemplate (): ConfigOptions {
       showMarkdownMakeTaskListButton: true,
       showInsertTableButton: true,
       showInsertFootnoteButton: true,
-      showDocumentInfoText: true
+      showDocumentInfoText: true,
+      showPomodoroButton: true
     },
     uuid: uuid4() // The app's unique anonymous identifier
   }

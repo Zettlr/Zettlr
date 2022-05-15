@@ -260,7 +260,8 @@ export default defineComponent({
           type: 'button',
           id: 'open-preferences',
           title: trans('toolbar.preferences'),
-          icon: 'cog'
+          icon: 'cog',
+          visible: this.getToolbarButtonDisplay('showOpenPreferencesButton')
         },
         {
           type: 'button',
@@ -365,7 +366,8 @@ export default defineComponent({
           title: trans('toolbar.pomodoro'),
           // Good morning, we are verbose here
           progressPercent: this.pomodoro.phase.elapsed / this.pomodoro.durations[this.pomodoro.phase.type] * 100,
-          colour: this.pomodoro.colour[this.pomodoro.phase.type]
+          colour: this.pomodoro.colour[this.pomodoro.phase.type],
+          visible: this.getToolbarButtonDisplay('showPomodoroButton')
         },
         {
           type: 'toggle',
