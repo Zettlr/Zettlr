@@ -228,6 +228,7 @@ export default function getConfigTemplate (): ConfigOptions {
     },
     checkForBeta: false, // Should the user be notified of beta releases?
     displayToolbarButtons: {
+      showOpenPreferencesButton: true,
       showNewFileButton: true,
       showPreviousFileButton: true,
       showNextFileButton: true,

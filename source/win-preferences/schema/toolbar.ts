@@ -20,6 +20,11 @@ export default function (): any {
       [
         {
           type: 'checkbox',
+          label: trans('dialog.preferences.toolbar.showOpenPreferencesButton'),
+          model: 'displayToolbarButtons.showOpenPreferencesButton'
+        },
+        {
+          type: 'checkbox',
           label: trans('dialog.preferences.toolbar.showNewFileButton'),
           model: 'displayToolbarButtons.showNewFileButton'
         },

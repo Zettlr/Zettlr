@@ -144,6 +144,7 @@ interface ConfigOptions {
   }
   checkForBeta: boolean
   displayToolbarButtons: {
+    showOpenPreferencesButton: boolean
     showNewFileButton: boolean
     showPreviousFileButton: boolean
     showNextFileButton: boolean

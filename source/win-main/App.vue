@@ -260,7 +260,8 @@ export default defineComponent({
           type: 'button',
           id: 'open-preferences',
           title: trans('toolbar.preferences'),
-          icon: 'cog'
+          icon: 'cog',
+          visible: this.getToolbarButtonDisplay('showOpenPreferencesButton')
         },
         {
           type: 'button',
