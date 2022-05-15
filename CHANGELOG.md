@@ -1,3 +1,14 @@
+# 2.2.7
+
+## GUI and Functionality
+
+- Added "Copy filename", "Copy path" and "Copy ID" to document tabs context
+  menus (thanks to @kyaso)
+
+## Under the Hood
+
+(nothing here)
+
 # 2.2.6
 
 ## GUI and Functionality

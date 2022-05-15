@@ -7,7 +7,7 @@
             "Huey"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-04-04T08:42:20.000000Z"
+        "updated_at": "2022-05-14T15:49:14.000000Z"
     },
     "dialog": {
         "about": {
@@ -605,6 +605,7 @@
         "close_file": "Close file",
         "close_workspace": "Close Workspace",
         "copy": "Copy",
+        "copy_abs_path": "Copy full path",
         "copy_equation": "Copy equation code",
         "copy_filename": "Copy filename",
         "copy_html": "Copy as HTML",

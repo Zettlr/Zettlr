@@ -631,11 +631,15 @@ body {
         &:hover { background-color: rgb(200, 200, 200); }
 
         span.filename {
-          display: inline-block;
           font-size: 11px;
           height: 28px;
           flex-grow: 8;
+          // The next four properties together ensure that we show at most two
+          // lines with a nice ellipsis (…) to indicate cut-off lines.
           overflow: hidden;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
         }
 
         span.icons {
