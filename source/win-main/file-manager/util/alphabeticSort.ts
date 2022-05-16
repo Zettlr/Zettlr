@@ -4,7 +4,7 @@
  *
  * Contains:        alphabeticSort
  * CVM-Role:        Utility Function
- * Maintainer:      
+ * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
  * Description:     A utility function that sorts a given array of directories.
@@ -19,10 +19,10 @@ import { DirMeta } from '@dts/common/fsal'
 /**
  * Returns a sorted array of directories
  *
- * @param   {any}      dirArray         The directories to be sorted
- * @param   {string}   sortBy           How to sort the directories
+ * @param   {DirMeta}   dirArray         The directories to be sorted
+ * @param   {string}    sortBy           How to sort the directories
  *
- * @return  {DirMeta[]}                 The sorted array
+ * @return  {DirMeta[]}                  The sorted array
  */
 export default function alphabeticSort (dirArray: DirMeta[], sortBy: string): DirMeta[] {
   function compare (a: DirMeta, b: DirMeta): number {
@@ -45,9 +45,9 @@ export default function alphabeticSort (dirArray: DirMeta[], sortBy: string): Di
     }
     return 0
   }
-  
+
   // return array in reverse alphabetical order
-  if (sortBy === 'desc') {
+  if (sortBy === 'AlphaD') {
     return dirArray.sort(compare).reverse()
   }
 

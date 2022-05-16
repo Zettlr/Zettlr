@@ -15,8 +15,9 @@
 
 import alphabeticSort from '../source/win-main/file-manager/util/alphabeticSort';
 import { deepStrictEqual } from 'assert';
+import { DirMeta } from '@dts/common/fsal'
 
-const sort = 'desc';
+const sort = 'AlphaD';
 
 const alphabeticSortTesters = [
   {
@@ -44,7 +45,7 @@ const alphabeticSortTesters = [
 describe('Utility#alphabeticSort()', function () {
   for (const test of alphabeticSortTesters) {
     it(`${test.message}`, function () {
-      deepStrictEqual(alphabeticSort(test.input, sort), test.expected);
+      deepStrictEqual(alphabeticSort(test.input as DirMeta[], sort), test.expected);
     });
   }
 });

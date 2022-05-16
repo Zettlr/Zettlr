@@ -101,8 +101,7 @@ export default defineComponent({
   },
   data: function () {
     return {
-      sortSelection: null,
-      sortBy: "asc"
+      sortSelection: null
     }
   },
   computed: {
@@ -147,8 +146,8 @@ export default defineComponent({
     getDirectories: function (): DirMeta[] {
       if (this.sortSelection === 'AlphaA' || this.sortSelection === 'AlphaD') {
         // run alphabeticSort function
-        let temp = this.getFilteredTree.filter(item => item.type === 'directory');
-        return alphabeticSort(temp, this.sortBy) as DirMeta[];
+        let temp = this.getFilteredTree.filter(item => item.type === 'directory') as DirMeta[];
+        return alphabeticSort(temp, this.sortSelection) as DirMeta[];
       } else {
         return this.getFilteredTree.filter(item => item.type === 'directory') as DirMeta[]
       }
@@ -180,13 +179,6 @@ export default defineComponent({
     clickHandler: function (event: MouseEvent) {
       // We need to bubble this event upwards so that the file manager is informed of the selection
       this.$emit('selection', event)
-    },
-    sortHandler: function (event: MouseEvent) {
-      if (this.sortSelection === 'AlphaD') {
-        this.sortBy = "desc"
-      } else {
-        this.sortBy = "asc"
-      }
     }
   }
 })
