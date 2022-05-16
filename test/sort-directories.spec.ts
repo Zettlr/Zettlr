@@ -3,7 +3,7 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        alphabeticSort tester
+ * Contains:        sortDirectories tester
  * CVM-Role:        TESTING
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
@@ -13,13 +13,13 @@
  * END HEADER
  */
 
-import alphabeticSort from '../source/win-main/file-manager/util/alphabeticSort';
+import sortDirectories from '../source/win-main/file-manager/util/sort-directories';
 import { deepStrictEqual } from 'assert';
 import { DirMeta } from '@dts/common/fsal'
 
 const sort = 'AlphaD';
 
-const alphabeticSortTesters = [
+const sortDirectoriesTesters = [
   {
     input: [{ name: 'titled', dir: 'Documents' },{ name: 'titled', dir: 'Desktop' }],
     expected: [{ name: 'titled', dir: 'Documents' }, { name: 'titled', dir: 'Desktop' }],
@@ -42,10 +42,10 @@ const alphabeticSortTesters = [
   },
 ];
 
-describe('Utility#alphabeticSort()', function () {
-  for (const test of alphabeticSortTesters) {
+describe('Utility#sortDirectories()', function () {
+  for (const test of sortDirectoriesTesters) {
     it(`${test.message}`, function () {
-      deepStrictEqual(alphabeticSort(test.input as DirMeta[], sort), test.expected);
+      deepStrictEqual(sortDirectories(test.input as DirMeta[], sort), test.expected);
     });
   }
 });

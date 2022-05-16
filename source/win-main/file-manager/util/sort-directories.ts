@@ -2,7 +2,7 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        alphabeticSort
+ * Contains:        sortDirectories
  * CVM-Role:        Utility Function
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
@@ -24,9 +24,8 @@ import { DirMeta } from '@dts/common/fsal'
  *
  * @return  {DirMeta[]}                  The sorted array
  */
-export default function alphabeticSort (dirArray: DirMeta[], sortBy: string): DirMeta[] {
+export default function sortDirectories (dirArray: DirMeta[], sortBy: string): DirMeta[] {
   function compare (a: DirMeta, b: DirMeta): number {
-
     // get names of directory in lowercase due to ASCII values
     let nameA = a.name.toLowerCase()
     let nameB = b.name.toLowerCase()
