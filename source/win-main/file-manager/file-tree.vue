@@ -32,11 +32,22 @@
           shape="tree-view"
           role="presentation"
         ></clr-icon>{{ workspaceSectionHeading }}
-        <select id="sort-header" v-model="sortSelection" v-on:change ="sortHandler()">
-          <option value="null" disabled selected hidden>Sort by</option>
-          <option value ="Default">Sort by</option>
-          <option value ="AlphaA">Alphabetical (Ascending)</option>
-          <option value ="AlphaD">Alphabetical (Descending)</option>
+        <select id="sort-header" v-model="sortSelection" v-on:change="sortHandler()">
+          <option
+            value="null" disabled
+            selected hidden
+          >
+            Sort by
+          </option>
+          <option value="Default">
+            Sort by
+          </option>
+          <option value="AlphaA">
+            Alphabetical (Ascending)
+          </option>
+          <option value="AlphaD">
+            Alphabetical (Descending)
+          </option>
         </select>
       </div>
       <TreeItem
@@ -145,8 +156,8 @@ export default defineComponent({
     },
     getDirectories: function (): DirMeta[] {
       if (this.sortSelection === 'AlphaA' || this.sortSelection === 'AlphaD') {
-        let temp = this.getFilteredTree.filter(item => item.type === 'directory') as DirMeta[];
-        return sortDirectories(temp, this.sortSelection) as DirMeta[];
+        let temp = this.getFilteredTree.filter(item => item.type === 'directory') as DirMeta[]
+        return sortDirectories(temp, this.sortSelection) as DirMeta[]
       } else {
         return this.getFilteredTree.filter(item => item.type === 'directory') as DirMeta[]
       }
