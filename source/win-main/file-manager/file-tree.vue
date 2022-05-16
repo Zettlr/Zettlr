@@ -34,19 +34,16 @@
         ></clr-icon>{{ workspaceSectionHeading }}
         <select id="sort-header" v-model="sortSelection" v-on:change="sortHandler()">
           <option
-            value="null" disabled
-            selected hidden
+            value="null"
+            selected
           >
-            Sort by
-          </option>
-          <option value="Default">
-            Sort by
+            Sort By{{ sortByOption }}
           </option>
           <option value="AlphaA">
-            Alphabetical (Ascending)
+            Alphabetical (Ascending){{ alphabeticalAscOption }}
           </option>
           <option value="AlphaD">
-            Alphabetical (Descending)
+            Alphabetical (Descending){{ alphabeticalDescOption }}
           </option>
         </select>
       </div>
@@ -173,6 +170,15 @@ export default defineComponent({
     },
     noResultsMessage: function () {
       return trans('gui.no_search_results')
+    },
+    sortByOption: function () {
+      return trans('gui.sort_by_option')
+    },
+    alphabeticalAscOption: function () {
+      return trans('gui.alphabetical_asc_option')
+    },
+    alphabeticalDescOption: function () {
+      return trans('gui.alphabetical_desc_option')
     }
   },
   methods: {
