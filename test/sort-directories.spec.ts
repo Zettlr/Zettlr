@@ -39,6 +39,11 @@ const sortDirectoriesTesters = [
     input: [{ name: 'file', dir: 'Test' }, { name: 'file', dir: 'Beats' }],
     expected: [{ name: 'file', dir: 'Test' }, { name: 'file', dir: 'Beats' }],
     message: `Should return { name: 'file', dir: 'Test' } , { name: 'file', dir: 'Beats' }`
+  },
+  {
+    input: [{ name: 'Root', dir: '/home/B' }, { name: 'Root', dir: '/home/D' }, { name: 'Root', dir: '/home/C' }, { name: 'Root', dir: '/home/A' }],
+    expected: [{ name: 'Root', dir: '/home/D' }, { name: 'Root', dir: '/home/C' }, { name: 'Root', dir: '/home/B' }, { name: 'Root', dir: '/home/A' }],
+    message: `Should return { name: 'Root', dir: '/home/D' }, { name: 'Root', dir: '/home/C' }, { name: 'Root', dir: '/home/B' }, { name: 'Root', dir: '/home/A' }`
   }
 ]
 
