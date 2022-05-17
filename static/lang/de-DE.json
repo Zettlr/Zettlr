@@ -5,7 +5,7 @@
             "Jonas Wunderlich \u003Cmail@jonas-wunderlich.de\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-04-04T08:42:59.000000Z"
+        "updated_at": "2022-05-14T15:49:43.000000Z"
     },
     "dialog": {
         "about": {
@@ -603,6 +603,7 @@
         "close_file": "Datei schlie\u00dfen",
         "close_workspace": "Arbeitsverzeichnis schlie\u00dfen",
         "copy": "Kopieren",
+        "copy_abs_path": "Dateipfad kopieren",
         "copy_equation": "Formel-Code kopieren",
         "copy_filename": "Dateinamen kopieren",
         "copy_html": "Als HTML kopieren",
