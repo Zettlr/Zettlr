@@ -53,4 +53,5 @@ function renderElements (cm: CodeMirror.Editor): void {
   if (render.tasks === true) cm.execCommand('markdownRenderTasks')
   if (render.headingTags === true) cm.execCommand('markdownRenderHTags')
   if (render.emphasis === true) cm.execCommand('markdownRenderEmphasis')
+  if (render.codeBlockButton === true) cm.execCommand('markdownRenderCodeBlockButton')
 }

@@ -182,7 +182,8 @@ export default defineComponent({
             math: (global as any).config.get('display.renderMath'),
             tasks: (global as any).config.get('display.renderTasks'),
             headingTags: (global as any).config.get('display.renderHTags'),
-            tables: (global as any).config.get('editor.enableTableHelper')
+            tables: (global as any).config.get('editor.enableTableHelper'),
+            codeBlockButton: (global as any).config.get('display.renderCodeBlockButton')
           }
         }
       })

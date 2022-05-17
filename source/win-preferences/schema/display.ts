@@ -62,7 +62,13 @@ export default function (): any {
           type: 'checkbox',
           label: trans('dialog.preferences.display.render_emphasis'),
           model: 'display.renderEmphasis'
+        },
+        {
+          type: 'checkbox',
+          label: trans('dialog.preferences.display.render_codeblock_button'),
+          model: 'display.renderCodeBlockButton'
         }
+
       ],
       [
         {
