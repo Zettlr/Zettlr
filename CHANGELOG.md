@@ -2,14 +2,15 @@
 
 ## GUI and Functionality
 
+- **New Feature**: You can hide the toolbar button and words count block in the
+  preference
 - Added "Copy filename", "Copy path" and "Copy ID" to document tabs context
   menus (thanks to @kyaso)
-- **New Feature**:You can hide the toolbar button and words count block in the preference
-- Add `new file`, `next file` and `previous file` button to the toolbar
+- Add "New File", "Next File" and "Previous File" buttons to the toolbar
 
 ## Under the Hood
 
-(nothing here)
+- Ignore `IDEA`-related files
 
 # 2.2.6
 
