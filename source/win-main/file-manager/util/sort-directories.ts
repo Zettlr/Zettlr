@@ -32,8 +32,8 @@ export default function sortDirectories (dirArray: DirMeta[], sortBy: string): D
 
     // if directories have the same name, compare the names of the directory they are in
     if (nameA === nameB) {
-      let dirA = a.dir.match(/([^/]*)\/*$/)[1].toLowerCase()
-      let dirB = b.dir.match(/([^/]*)\/*$/)[1].toLowerCase()
+      let dirA = a.dir
+      let dirB = b.dir
       if (dirA < dirB) { return -1 }
       if (dirA > dirB) { return 1 }
 
