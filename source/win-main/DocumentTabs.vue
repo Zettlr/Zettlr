@@ -51,6 +51,7 @@ import tippy from 'tippy.js'
 import { nextTick, defineComponent } from 'vue'
 
 const ipcRenderer = window.ipc
+const clipboard = window.clipboard
 
 export default defineComponent({
   name: 'DocumentTabs',
@@ -275,7 +276,7 @@ export default defineComponent({
         .catch(e => console.error(e))
     },
     handleContextMenu: function (event: MouseEvent, file: any) {
-      displayTabsContextMenu(event, (clickedID: string) => {
+      displayTabsContextMenu(event, file, (clickedID: string) => {
         if (clickedID === 'close-this') {
           // Close only this
           ipcRenderer.invoke('application', {
@@ -302,6 +303,15 @@ export default defineComponent({
               payload: openFile.path
             }).catch(e => console.error(e))
           }
+        } else if (clickedID === 'copy-filename') {
+          // Copy the filename to the clipboard
+          clipboard.writeText(file.name)
+        } else if (clickedID === 'copy-path') {
+          // Copy path to the clipboard
+          clipboard.writeText(file.path)
+        } else if (clickedID === 'copy-id') {
+          // Copy the ID to the clipboard
+          clipboard.writeText(file.id)
         }
       })
     },

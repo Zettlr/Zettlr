@@ -143,5 +143,20 @@ interface ConfigOptions {
     zoomBehavior: 'gui'|'editor'
   }
   checkForBeta: boolean
+  displayToolbarButtons: {
+    showOpenPreferencesButton: boolean
+    showNewFileButton: boolean
+    showPreviousFileButton: boolean
+    showNextFileButton: boolean
+    showToggleReadabilityButton: boolean
+    showMarkdownCommentButton: boolean
+    showMarkdownLinkButton: boolean
+    showMarkdownImageButton: boolean
+    showMarkdownMakeTaskListButton: boolean
+    showInsertTableButton: boolean
+    showInsertFootnoteButton: boolean
+    showDocumentInfoText: boolean
+    showPomodoroButton: boolean
+  }
   uuid: string
 }
