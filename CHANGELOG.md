@@ -1,3 +1,6 @@
+#2.2.8
+## GUI and Functionality
+- **New Feature**: Users can use a drop down to order root directories (currently only alphabetically ascending/descending )
 # 2.2.7
 
 ## GUI and Functionality
