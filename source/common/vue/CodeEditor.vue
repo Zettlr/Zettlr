@@ -224,7 +224,6 @@ export default defineComponent({
   },
   mounted: function () {
     cmInstance = CodeMirror.fromTextArea(this.$refs['editor'] as HTMLTextAreaElement, {
-      lineNumbers: true,
       theme: 'code-editor',
       mode: this.mode,
       cursorScrollMargin: 20,

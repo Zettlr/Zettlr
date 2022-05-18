@@ -108,6 +108,7 @@ export default function getConfigTemplate (): ConfigOptions {
     },
     // Editor related stuff
     editor: {
+      lineNumbers: true,
       autoSave: 'delayed',
       autocompleteAcceptSpace: false, // Whether you can type spaces in autocorrect
       autoCloseBrackets: true,

@@ -121,6 +121,11 @@ export default function (): any {
           type: 'checkbox',
           label: trans('dialog.preferences.count_chars'),
           model: 'editor.countChars'
+        },        
+        {
+          type: 'checkbox',
+          label: trans('dialog.preferences.line_numbers'),
+          model: 'editor.lineNumbers'
         }
       ],
       [

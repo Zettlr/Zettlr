@@ -121,7 +121,7 @@ export default function (): any {
           type: 'checkbox',
           label: trans('dialog.preferences.display.hide_toolbar_distraction_free'),
           model: 'display.hideToolbarInDistractionFree'
-        }
+        },
       ],
       [
         {
