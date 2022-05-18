@@ -1136,14 +1136,14 @@
     "@typescript-eslint/typescript-estree" "4.33.0"
     debug "^4.3.1"
 
-"@typescript-eslint/parser@^5.20.0":
-  version "5.24.0"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/parser/-/parser-5.24.0.tgz#fe6563483f264aa9fe48b7fd9b329aa5f985841a"
-  integrity sha512-4q29C6xFYZ5B2CXqSBBdcS0lPyfM9M09DoQLtHS5kf+WbpV8pBBhHDLNhXfgyVwFnhrhYzOu7xmg02DzxeF2Uw==
+"@typescript-eslint/parser@^5.25.0":
+  version "5.25.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/parser/-/parser-5.25.0.tgz#fb533487147b4b9efd999a4d2da0b6c263b64f7f"
+  integrity sha512-r3hwrOWYbNKP1nTcIw/aZoH+8bBnh/Lh1iDHoFpyG4DnCpvEdctrSl6LOo19fZbzypjQMHdajolxs6VpYoChgA==
   dependencies:
-    "@typescript-eslint/scope-manager" "5.24.0"
-    "@typescript-eslint/types" "5.24.0"
-    "@typescript-eslint/typescript-estree" "5.24.0"
+    "@typescript-eslint/scope-manager" "5.25.0"
+    "@typescript-eslint/types" "5.25.0"
+    "@typescript-eslint/typescript-estree" "5.25.0"
     debug "^4.3.4"
 
 "@typescript-eslint/scope-manager@4.33.0":
@@ -1161,6 +1161,14 @@
   dependencies:
     "@typescript-eslint/types" "5.24.0"
     "@typescript-eslint/visitor-keys" "5.24.0"
+
+"@typescript-eslint/scope-manager@5.25.0":
+  version "5.25.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/scope-manager/-/scope-manager-5.25.0.tgz#e78f1484bca7e484c48782075219c82c6b77a09f"
+  integrity sha512-p4SKTFWj+2VpreUZ5xMQsBMDdQ9XdRvODKXN4EksyBjFp2YvQdLkyHqOffakYZPuWJUDNu3jVXtHALDyTv3cww==
+  dependencies:
+    "@typescript-eslint/types" "5.25.0"
+    "@typescript-eslint/visitor-keys" "5.25.0"
 
 "@typescript-eslint/type-utils@5.24.0":
   version "5.24.0"
@@ -1180,6 +1188,11 @@
   version "5.24.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-5.24.0.tgz#565ff94a4b89073265e27514dc65225d18aabe6c"
   integrity sha512-Tpg1c3shTDgTmZd3qdUyd+16r/pGmVaVEbLs+ufuWP0EruVbUiEOmpBBQxBb9a8iPRxi8Rb2oiwOxuZJzSq11A==
+
+"@typescript-eslint/types@5.25.0":
+  version "5.25.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-5.25.0.tgz#dee51b1855788b24a2eceeae54e4adb89b088dd8"
+  integrity sha512-7fWqfxr0KNHj75PFqlGX24gWjdV/FDBABXL5dyvBOWHpACGyveok8Uj4ipPX/1fGU63fBkzSIycEje4XsOxUFA==
 
 "@typescript-eslint/typescript-estree@4.33.0":
   version "4.33.0"
@@ -1201,6 +1214,19 @@
   dependencies:
     "@typescript-eslint/types" "5.24.0"
     "@typescript-eslint/visitor-keys" "5.24.0"
+    debug "^4.3.4"
+    globby "^11.1.0"
+    is-glob "^4.0.3"
+    semver "^7.3.7"
+    tsutils "^3.21.0"
+
+"@typescript-eslint/typescript-estree@5.25.0":
+  version "5.25.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/typescript-estree/-/typescript-estree-5.25.0.tgz#a7ab40d32eb944e3fb5b4e3646e81b1bcdd63e00"
+  integrity sha512-MrPODKDych/oWs/71LCnuO7NyR681HuBly2uLnX3r5i4ME7q/yBqC4hW33kmxtuauLTM0OuBOhhkFaxCCOjEEw==
+  dependencies:
+    "@typescript-eslint/types" "5.25.0"
+    "@typescript-eslint/visitor-keys" "5.25.0"
     debug "^4.3.4"
     globby "^11.1.0"
     is-glob "^4.0.3"
@@ -1233,6 +1259,14 @@
   integrity sha512-qzGwSXMyMnogcAo+/2fU+jhlPPVMXlIH2PeAonIKjJSoDKl1+lJVvG5Z5Oud36yU0TWK2cs1p/FaSN5J2OUFYA==
   dependencies:
     "@typescript-eslint/types" "5.24.0"
+    eslint-visitor-keys "^3.3.0"
+
+"@typescript-eslint/visitor-keys@5.25.0":
+  version "5.25.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/visitor-keys/-/visitor-keys-5.25.0.tgz#33aa5fdcc5cedb9f4c8828c6a019d58548d4474b"
+  integrity sha512-yd26vFgMsC4h2dgX4+LR+GeicSKIfUvZREFLf3DDjZPtqgLx5AJZr6TetMNwFP9hcKreTTeztQYBTNbNoOycwA==
+  dependencies:
+    "@typescript-eslint/types" "5.25.0"
     eslint-visitor-keys "^3.3.0"
 
 "@ungap/promise-all-settled@1.1.2":
@@ -3408,14 +3442,7 @@ debug@2.6.9, debug@^2.1.3, debug@^2.2.0, debug@^2.6.8, debug@^2.6.9:
   dependencies:
     ms "2.0.0"
 
-debug@4, debug@^4.0.1, debug@^4.3.1:
-  version "4.3.3"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.3.tgz#04266e0b70a98d4462e6e288e38259213332b664"
-  integrity sha512-/zxw5+vh1Tfv+4Qn7a5nsbcJKPaSvCDhojn6FEl9vupwK2VCSDtEiEtqr8DFtzYFOdz63LBkxec7DYuc2jon6Q==
-  dependencies:
-    ms "2.1.2"
-
-debug@4.3.4, debug@^4.1.0, debug@^4.1.1, debug@^4.3.2, debug@^4.3.4:
+debug@4, debug@4.3.4, debug@^4.0.1, debug@^4.1.0, debug@^4.1.1, debug@^4.3.1, debug@^4.3.2, debug@^4.3.4:
   version "4.3.4"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.4.tgz#1319f6579357f2338d3337d2cdd4914bb5dcc865"
   integrity sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==
