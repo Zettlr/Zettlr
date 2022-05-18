@@ -20,19 +20,19 @@ export default function (): KeyMap {
   const keymap: KeyMap = {}
 
   // Crossplatform shortcuts
-  keymap['Enter'] = 'newlineAndIndentContinueMarkdownList'
-  keymap['Tab'] = 'autoIndentMarkdownList'
+  keymap.Enter = 'newlineAndIndentContinueMarkdownList'
+  keymap.Tab = 'autoIndentMarkdownList'
   keymap['Shift-Tab'] = 'autoUnindentMarkdownList'
   keymap['Ctrl-Enter'] = (cm) => {
     // Implement middle-of-line insert line below behaviour (see #101)
-    commands['goLineEnd'](cm)
-    commands['newlineAndIndent'](cm)
+    commands.goLineEnd(cm)
+    commands.newlineAndIndent(cm)
   }
   keymap['Shift-Ctrl-Enter'] = (cm) => {
     // Implement middle-of-line insert line above behaviour (see #101)
-    commands['goLineUp'](cm)
-    commands['goLineEnd'](cm)
-    commands['newlineAndIndent'](cm)
+    commands.goLineUp(cm)
+    commands.goLineEnd(cm)
+    commands.newlineAndIndent(cm)
   }
 
   // Swap lines in the editor (mostly useful for lists)
@@ -41,8 +41,8 @@ export default function (): KeyMap {
 
   // If homeEndBehaviour is true, use defaults (paragraph start/end), if it's
   // false, use visible lines.
-  keymap['Home'] = (homeEndBehaviour) ? 'goLineStart' : 'goLineLeftMarkdown'
-  keymap['End'] = (homeEndBehaviour) ? 'golineEnd' : 'goLineRight'
+  keymap.Home = (homeEndBehaviour) ? 'goLineStart' : 'goLineLeftMarkdown'
+  keymap.End = (homeEndBehaviour) ? 'golineEnd' : 'goLineRight'
 
   // macOS only shortcuts
   if (process.platform === 'darwin') {

@@ -127,7 +127,7 @@ export default defineComponent({
     },
     // We need the fileManagerMode separately to watch the property
     fileManagerMode: function () {
-      return this.$store.state.config['fileManagerMode']
+      return this.$store.state.config.fileManagerMode
     },
     /**
      * Determines whether the file list is currently visible
@@ -190,7 +190,7 @@ export default defineComponent({
         // the file manager is hidden, or the global search is visible. In both
         // cases we need to wait for the app to display the file manager.
         nextTick()
-          .then(() => { (this.$refs['quickFilter'] as any).focus() })
+          .then(() => { (this.$refs.quickFilter as any).focus() })
           .catch(err => console.error(err))
       }
     })

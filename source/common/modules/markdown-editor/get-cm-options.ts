@@ -42,7 +42,7 @@ export default function getCodeMirrorDefaultOptions (mdEditorInstance: MarkdownE
     // Disable cursor blinking, as we apply a @keyframes animation
     cursorBlinkRate: 0,
     // Specify the gutters
-    gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+    gutters: [ 'CodeMirror-linenumbers', 'CodeMirror-foldgutter' ],
     // add line numbers
     lineNumbers: true,
 
@@ -53,7 +53,7 @@ export default function getCodeMirrorDefaultOptions (mdEditorInstance: MarkdownE
         return ''
       }
     },
-    
+
     // Default fold options
     foldOptions: {
       'widget': '\u00A0\u2026\u00A0', // nbsp ellipse nbsp
