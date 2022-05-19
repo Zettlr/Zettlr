@@ -7,6 +7,8 @@
 - Added "Copy filename", "Copy path" and "Copy ID" to document tabs context
   menus (thanks to @kyaso)
 - Add "New File", "Next File" and "Previous File" buttons to the toolbar
+- The query input now gets blurred when starting a global search in order to
+  prevent the dropdown from showing up, especially during auto-searches
 
 ## Under the Hood
 
