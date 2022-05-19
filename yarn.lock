@@ -390,10 +390,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
-"@joplin/turndown@^4.0.61":
-  version "4.0.61"
-  resolved "https://registry.yarnpkg.com/@joplin/turndown/-/turndown-4.0.61.tgz#528b8fc7fdcf241f14850be2381cc8b7b20eb5b9"
-  integrity sha512-sxAwwlKISZYyPwyaw1feLcuTGBFmulLtMEY8fvLk8Q6tgJbRqyIaV55dDHX3zYnn55hrC1RLFSJui0y6C2fhzQ==
+"@joplin/turndown@^4.0.62":
+  version "4.0.62"
+  resolved "https://registry.yarnpkg.com/@joplin/turndown/-/turndown-4.0.62.tgz#b8837dcd3ea7e253c3a114554faa69f76469f651"
+  integrity sha512-oQBW4rz0NcXswmmhfISbgpD15PvDEnAw3Gzb9/638KTfdQTNXJUAixCjGYxWTKF7M82GXUkk3Gf6r74rWxJ4Kw==
   dependencies:
     css "^2.2.4"
     html-entities "^1.2.1"

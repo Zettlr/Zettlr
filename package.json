@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "@clr/icons": "^13.0.2",
-    "@joplin/turndown": "^4.0.61",
+    "@joplin/turndown": "^4.0.62",
     "@types/node": "^17.0.21",
     "@types/sanitize-html": "^2.6.2",
     "@types/semver": "^7.3.9",
