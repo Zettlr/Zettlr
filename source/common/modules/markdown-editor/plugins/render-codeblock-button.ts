@@ -152,7 +152,7 @@
            span.style.fontStyle = 'italic'
            span.style.fontWeight = 'bold'
            break
-       }
+       }	
        span.style.background = 'green'
  
        // Replace the few things that can be part of an emphasis
@@ -178,6 +178,25 @@
          cm.setCursor(cm.coordsChar({ left: e.clientX, top: e.clientY }))
          cm.focus()
        }
+     }
+     
+     // -------------- CODE TO CREATE BUTTON -------------------------------
+     // At the moment this only gets the first code block (the array[0] part)
+     // This can be fixed later by adding a for loop over all the elements with
+     // the class name
+     let codeBlock = document.getElementsByClassName("code-block-first-line")[0]
+     
+     // Create a button
+     let copyButton = document.createElement("button")
+     copyButton.className = "code-block-copy-button"
+     copyButton.innerText = "Copy Code Block"
+     
+     // If the code block does not already have a button
+     // I added this because it seemed to be constantly adding buttons while
+     // the render plugin was running
+     // This way, only one button will be added to a code block
+     if (codeBlock.querySelector(".code-block-copy-button") == null) {
+     	codeBlock.appendChild(copyButton)
      }
    } // END for-loop
  }
