@@ -11,6 +11,7 @@
 ## Under the Hood
 
 - Ignore `IDEA`-related files
+- Update Pandoc to `2.18`
 
 # 2.2.6
 
