@@ -32,7 +32,7 @@
           shape="tree-view"
           role="presentation"
         ></clr-icon>{{ workspaceSectionHeading }}
-        <select id="sort-header" v-model="sortSelection" v-on:change="sortHandler()">
+        <select id="sort-header" v-model="sortSelection">
           <option
             value="null"
             selected
