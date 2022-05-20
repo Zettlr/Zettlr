@@ -9,6 +9,7 @@
 - Add "New File", "Next File" and "Previous File" buttons to the toolbar
 - The query input now gets blurred when starting a global search in order to
   prevent the dropdown from showing up, especially during auto-searches
+- Fixed wrong character count if counting without spaces
 
 ## Under the Hood
 

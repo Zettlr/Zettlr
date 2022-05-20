@@ -738,7 +738,7 @@ export default class MarkdownEditor extends EventEmitter {
    * @return  {Number}  The number of chars without spaces
    */
   get charCountWithoutSpaces (): number {
-    return countWords(this.value.replace(/ +/g, ''), true)
+    return countWords(this.value, 'nospace')
   }
 
   /**
