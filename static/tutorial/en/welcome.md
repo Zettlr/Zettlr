@@ -59,7 +59,7 @@ The first tab displays a dynamically-generated table of contents. You can click 
 
 > Note that the references are only formatted using the built-in citation style. When you export your document, Zettlr will take care to use the citation style you chose, if you set one in the “Export”-preferences.
 
-The third tab contains related files, that is: files for which Zettlr thinks they are related to your current file. It does so by looking at the tags as well as the internal links (more on that later) whgich you use within all files. On top of this list will be files that link to the file you're currently viewing. Afterwards follow files that have tags in common with the current file. The more tags a file has in common with your current file, the higher up it will be in this list.
+The third tab contains related files, that is: files for which Zettlr thinks they are related to your current file. It does so by looking at the tags as well as the internal links (more on that later) which you use within all files. On top of this list will be files that link to the file you're currently viewing. Afterwards follow files that have tags in common with the current file. The more tags a file has in common with your current file, the higher up it will be in this list.
 
 The last tab contains all non-markdown files that reside in your currently selected directory. You will see a file "LaTeX Guide.pdf". Wondering what it is? Let’s have a look: Click on it to open the file with your default PDF viewer now!
 
