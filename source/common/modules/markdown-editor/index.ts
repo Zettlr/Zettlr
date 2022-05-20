@@ -555,6 +555,7 @@ export default class MarkdownEditor extends EventEmitter {
       let selectionText = this._instance.getSelections()
       let selectionBounds = this._instance.listSelections()
       for (let i = 0; i < selectionText.length; i++) {
+        // const start = selectionBounds[i].anchor > selectionBounds[i].head
         ret.selections.push({
           selectionLength: countWords(selectionText[i], this._countChars),
           start: Object.assign({}, selectionBounds[i].anchor),
