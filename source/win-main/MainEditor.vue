@@ -157,8 +157,8 @@ export default defineComponent({
       findTimeout: undefined as any, // Holds a timeout so that not every single keypress results in a searchNext
       docInfoTimeout: undefined as any, // Holds a timeout to not update the docInfo every millisecond
       anchor: undefined as undefined|CodeMirror.Position,
-	  updateTableOfContentsWhenIdleID: undefined as any, // Stores a idle callback ID for updating TOC
-	  updateDocumentInfoWhenIdleID: undefined as any // Stores a idle callback ID for updating DocumentInfo
+      updateTableOfContentsWhenIdleID: undefined as any, // Stores a idle callback ID for updating TOC
+      updateDocumentInfoWhenIdleID: undefined as any // Stores a idle callback ID for updating DocumentInfo
     }
   },
   computed: {
@@ -557,56 +557,27 @@ export default defineComponent({
         isClean: activeDocument.cmDoc.isClean()
       })
 
-      // too often to do it on every change
-      //this.$store.commit('updateTableOfContents', mdEditor.tableOfContents)
       // The sidebar needs the correct table of contents, so signal the
       // corresponding event to the renderer
-      // Do it after a pause after the last input.
-      //if (this.updateTOCTimeout !== undefined) {
-      //clearTimeout(this.updateTOCTimeout)
-      //}
-      /*
-      this.updateTOCTimeout = setTimeout(() => {
-        if (mdEditor !== null) {
-          this.$store.commit('updateTableOfContents', mdEditor.tableOfContents)
-          //this.$store.commit('activeDocumentInfo', mdEditor.documentInfo)
-        }
-      }, IDLE_UPDATE_TIMEOUT)
-      */
-      window.cancelIdleCallback(this.updateTableOfContentsWhenIdleID);
+      // Do it when idle.
+      window.cancelIdleCallback(this.updateTableOfContentsWhenIdleID)
       this.updateTableOfContentsWhenIdleID = window.requestIdleCallback(() => {
-        //console.log('requestIdleCallback');
         if (mdEditor !== null) {
           this.$store.commit('updateTableOfContents', mdEditor.tableOfContents)
-          //this.$store.commit('activeDocumentInfo', mdEditor.documentInfo)
         }
-      }, {timeout: IDLE_UPDATE_TIMEOUT});
-      
+      }, { timeout: IDLE_UPDATE_TIMEOUT })
     })
 
     mdEditor.on('cursorActivity', () => {
       // Don't update every keystroke to not run into performance problems with
       // very long documents, since calculating the word count needs considerable
       // time, and without the delay, typing seems "laggy".
-      //if (mdEditor !== null) {
-      //  this.$store.commit('activeDocumentInfo', mdEditor.documentInfo)
-      //}
-      /*
-      clearTimeout(this.updateDocumentInfo)
-      this.updateDocumentInfo = setTimeout(() => {
-        if (mdEditor !== null) {
-          this.$store.commit('activeDocumentInfo', mdEditor.documentInfo)
-        }
-      }, IDLE_UPDATE_TIMEOUT)
-      */
-      window.cancelIdleCallback(this.updateDocumentInfoWhenIdleID);
+      window.cancelIdleCallback(this.updateDocumentInfoWhenIdleID)
       this.updateDocumentInfoWhenIdleID = window.requestIdleCallback(() => {
-        //console.log('requestIdleCallback');
         if (mdEditor !== null) {
-          //this.$store.commit('updateTableOfContents', mdEditor.tableOfContents)
           this.$store.commit('activeDocumentInfo', mdEditor.documentInfo)
         }
-      }, {timeout: IDLE_UPDATE_TIMEOUT});
+      }, { timeout: IDLE_UPDATE_TIMEOUT })
     })
 
     mdEditor.on('zettelkasten-link', (linkContents) => {
