@@ -271,7 +271,7 @@ function getConfig (): StoreOptions<ZettlrState> {
     mutations: {
       updateTableOfContents: function (state, toc) {
         // This function is called every time a document is changed
-        // (e.g., a leter is typed). Most of the time the headings
+        // (e.g., a letter is typed). Most of the time the headings
         // stay the same. To avoid unnecessary computation, their
         // parsed texts are cached:
         // state.headingCache[unparsedHeadingText] = parsedHeadingText
@@ -283,19 +283,10 @@ function getConfig (): StoreOptions<ZettlrState> {
               allowedTags: [ 'em', 'kbd', 'code' ]
             })
             state.headingCache[headingText] = parsedHeadingText
-            // console.log('not from cache', headingText)
           }
           return state.headingCache[headingText]
         }
         for (const entry of toc) {
-          /*
-          org:
-          entry.text = md2html(entry.text)
-          entry.text = sanitizeHtml(entry.text, {
-            // Headings may be emphasised and contain code
-            allowedTags: [ 'em', 'kbd', 'code' ]
-          })
-          */
           entry.text = headingTextToHtml(entry.text)
         }
         state.tableOfContents = toc
