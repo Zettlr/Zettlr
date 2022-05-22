@@ -105,7 +105,7 @@ export default function getMarkdownFileParser (
     // steps rely on a Markdown string that is stripped of a potential YAML
     // frontmatter, any code -- inline and blocks -- as well as any comments.
 
-    file.wordCount = countWords(plainMarkdown)
+    file.wordCount = countWords(plainMarkdown, false)
     file.charCount = countWords(plainMarkdown, true)
 
     const h1Match = h1HeadingRE.exec(contentWithoutYAML)
