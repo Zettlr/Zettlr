@@ -63,10 +63,10 @@ export function getCodeBlockRE (multiline: boolean = false): RegExp {
     )
   } else {
     // `multiline` indicates the user has a complete Markdown document.
-    // This RegExp matches backtick and tilde code blocks, and indented code
-    // blocks.
+    // This RegExp matches backtick and tilde code blocks. NOTE: It does not
+    // match indented code blocks!
     return RegExp(
-      /^`{3,}.+?^`{3,}|^[ \t]{4,}.+?$|^~{3,}.+?^~{3,}/gms.source,
+      /^`{3,}.+?^`{3,}|^~{3,}.+?^~{3,}/gms.source,
       'gms'
     )
   }

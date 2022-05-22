@@ -25,7 +25,7 @@ const interpunctionRE = /^[-–—.…:;,'%/\\_¡!¿?()[\]{}]+$/
  * @param {Boolean} countChars Whether to count chars instead
  * @return {Number}       The number of words in the file.
  */
-export default function (markdown: string, countChars = false): number {
+export default function (markdown: string, countChars: boolean|'nospace' = false): number {
   // First, get rid of a potential frontmatter
   let content: string|string[] = extractYamlFrontmatter(markdown).content
 
@@ -36,16 +36,17 @@ export default function (markdown: string, countChars = false): number {
   content = content.replace(/^#+\s+/gm, '') // Headings
   content = content.replace(/^\s*(?:[*+-]|\d+\.|\[(?: |x)\])\s+/igm, '') // List items (the bullets)
   content = content.replace(inlineRE, '$1') // A bunch of inline stuff
-  content = content.replace(/\n+/g, '\n') // Make sure we have single linefeeds
 
   // At this point we should have a string that is more or less plain text, so
   // we can either count the words or characters.
 
-  if (!countChars) {
+  if (countChars === false) {
     // Will return the length of the resultant array instead of the string
     content = content.split(/[\s ]+/).filter(word => word.trim() !== '')
     // Additionally, remove interpunction-only words
     content = content.filter(word => !interpunctionRE.test(word))
+  } else if (countChars === 'nospace') {
+    content = content.replace(/ +/g, '')
   }
 
   return content.length

@@ -1,3 +1,22 @@
+# 2.2.7
+
+## GUI and Functionality
+
+- **New Feature**: You can hide the toolbar button and words count block in the
+  preference
+- Added "Copy filename", "Copy path" and "Copy ID" to document tabs context
+  menus (thanks to @kyaso)
+- Add "New File", "Next File" and "Previous File" buttons to the toolbar
+- The query input now gets blurred when starting a global search in order to
+  prevent the dropdown from showing up, especially during auto-searches
+- Fixed wrong character count if counting without spaces
+- Fixed wrong word count for indented lists
+
+## Under the Hood
+
+- Ignore `IDEA`-related files
+- Update Pandoc to `2.18`
+
 # 2.2.6
 
 ## GUI and Functionality

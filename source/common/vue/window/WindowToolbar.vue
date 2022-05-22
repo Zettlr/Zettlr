@@ -11,14 +11,14 @@
   >
     <template v-for="(item, idx) in controls">
       <ButtonControl
-        v-if="item.type === 'button'"
+        v-if="item.type === 'button' && item.visible !== false"
         v-bind:key="idx"
         v-bind:control="item"
         v-bind:show-label="showLabels"
         v-on:click="$emit('click', item.id)"
       ></ButtonControl>
       <ToggleControl
-        v-if="item.type === 'toggle'"
+        v-if="item.type === 'toggle' && item.visible !== false"
         v-bind:key="idx"
         v-bind:control="item"
         v-bind:show-label="showLabels"
@@ -33,7 +33,7 @@
       >
       </ThreeWayToggle>
       <RingControl
-        v-if="item.type === 'ring'"
+        v-if="item.type === 'ring' && item.visible !== false"
         v-bind:key="idx"
         v-bind:control="item"
         v-bind:show-label="showLabels"
@@ -53,7 +53,7 @@
         v-bind:control="item"
       ></SpacerControl>
       <TextControl
-        v-if="item.type === 'text'"
+        v-if="item.type === 'text' && item.visible !== false"
         v-bind:key="idx"
         v-bind:control="item"
         v-on:click="$emit('click', item.id)"
