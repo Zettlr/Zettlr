@@ -11,11 +11,14 @@
   prevent the dropdown from showing up, especially during auto-searches
 - Fixed wrong character count if counting without spaces
 - Fixed wrong word count for indented lists
+- Table of contents and document info are now updated when program is idle
+  (snappier typing in large documents with many headings on slow computers)
 
 ## Under the Hood
 
 - Ignore `IDEA`-related files
 - Update Pandoc to `2.18`
+- Headings are cached to speed up the update of table of contents
 
 # 2.2.6
 
