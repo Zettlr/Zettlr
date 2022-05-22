@@ -230,6 +230,10 @@ export interface ZettlrState {
    * This variable stores search results from the global search
    */
   searchResults: SearchResultWrapper[]
+  /**
+   * Cached texts of the headings
+   */
+  headingCache: { [key: string]: string }
 }
 
 function getConfig (): StoreOptions<ZettlrState> {
@@ -256,7 +260,7 @@ function getConfig (): StoreOptions<ZettlrState> {
         citationKeys: [],
         cslItems: [],
         searchResults: [],
-        headingCache: []
+        headingCache: {}
       }
     },
     getters: {
@@ -271,9 +275,9 @@ function getConfig (): StoreOptions<ZettlrState> {
         // stay the same. To avoid unnecessary computation, their
         // parsed texts are cached:
         // state.headingCache[unparsedHeadingText] = parsedHeadingText
-        const headingTextToHtml: string = function (headingText) {
+        const headingTextToHtml = function (headingText: string): string {
           if (!state.headingCache[headingText]) {
-            let parsedHeadingText = md2html(headingText)
+            let parsedHeadingText: string = md2html(headingText)
             parsedHeadingText = sanitizeHtml(parsedHeadingText, {
               // Headings may be emphasised and contain code
               allowedTags: [ 'em', 'kbd', 'code' ]
