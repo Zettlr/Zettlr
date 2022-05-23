@@ -55,7 +55,7 @@ function findCode (cm: CodeMirror.Editor): void {
         // Increment the lineCount and apply the code start line to that line
         cm.addLineClass(++i, 'wrap', codeblockClass)
         cm.addLineClass(i, 'wrap', codeblockClassOpen)
-        console.log(cm.lineInfo(i).textClass)
+        //console.log(cm.lineInfo(i).textClass)
         // Remove a potential close class, in case we have just one line of
         // code block; found by @kyaso
         cm.removeLineClass(i, 'wrap', codeblockClassClose)

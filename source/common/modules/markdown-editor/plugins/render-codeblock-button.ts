@@ -21,7 +21,7 @@
 
  // const emphasisRE = /(?<![\\])(?<=\s|^)([*_]{1,3}|~{2})((?!\s)[^*_]+?(?<![\s\\]))(?:[*_]{1,3}|~{2})(?=\s|$)/g
  const emphasisRE = /(?<![\\\w])([*_]{1,3}|~{2})((?!\s)[^*_]+?(?![\s\\]))(?:[*_]{1,3}|~{2})(?![\\\w])/g
-
+const clipboard = window.clipboard
  /**
   * Declare the markdownRenderEmphasis command
   *
@@ -47,28 +47,45 @@
      var count_codeblock = 0
      const codeBlockRE = /^(?:\s{0,3}`{3}|~{3}).*/
      const lineCount = cm.lineCount()
+     var incodeblock = false
+       var codesblocks = new Array()
+       var codeblock = ''
      for (let j = 0; j<lineCount; j++){
+         //console.log("in")
        const line = cm.getLine(j)
-       if (codeBlockRE.test(line)){
-         //console.log(cm.getLine(++i))
+       if (codeBlockRE.test(line) && !incodeblock){
          count_codeblock = count_codeblock + 1
+           codeblock = ''
+           codeblock = codeblock + cm.getLine(++j) + '\n'
+           incodeblock = true
+       }
+       else if (codeBlockRE.test(line) && incodeblock){
+           codesblocks.push(codeblock)
+           
+           incodeblock = false
+       }
+       else if(!codeBlockRE.test(line) && incodeblock){
+           codeblock = codeblock + cm.getLine(j) + '\n'
        }
      }
+     //console.log(1)
+     //console.log(blocks)
+       console.log('codesblocks' + codesblocks[1])
+       console.log('type' + typeof Number(count_codeblock))
+       for (let i = 0; i < Number(count_codeblock); i++) {
+           let codeBlock = document.getElementsByClassName("code-block-first-line")[i]
 
-     //console.log("count block",count_codeblock)
-     for (let i = 0; i < Number(count_codeblock/2); i++) {
-         let codeBlock = document.getElementsByClassName("code-block-first-line")[i]
-
-         // Create a button
-         let copyButton = document.createElement("button")
-         copyButton.className = "code-block-copy-button"
-         copyButton.innerText = "Copy Code Block"
-         if (codeBlock.querySelector(".code-block-copy-button") == null) {
-             codeBlock.appendChild(copyButton)
-         }
-     }
-
-
+           // Create a button
+           let copyButton = document.createElement("button")
+           copyButton.className = "code-block-copy-button"
+           copyButton.innerText = "Copy"
+           if (codeBlock.querySelector(".code-block-copy-button") == null) {
+               codeBlock.appendChild(copyButton)
+           }
+           copyButton.onclick = function() {
+               clipboard.writeText(codesblocks[i])
+           }
+       }
    } // END for-loop
  }
 
