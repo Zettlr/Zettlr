@@ -187,9 +187,9 @@
      let codeBlock = document.getElementsByClassName("code-block-first-line")[0]
      
      // Create a button
-     let copyButton = document.createElement("button")
+     let copyButton = document.createElement("clr-icon")
      copyButton.className = "code-block-copy-button"
-     copyButton.innerText = "Copy Code Block"
+     copyButton.setAttribute("shape", "copy")
      
      // If the code block does not already have a button
      // I added this because it seemed to be constantly adding buttons while
