@@ -15,7 +15,7 @@ import CodeMirror from 'codemirror'
 const codeblockClass = 'code-block-line'
 const codeblockClassOpen = 'code-block-first-line'
 const codeblockClassClose = 'code-block-last-line'
-export var count_codeblock: number = 0
+
 /**
  * Hooks onto the change and swapDoc events to apply codeblock classes.
  *
@@ -40,7 +40,7 @@ function findCode (cm: CodeMirror.Editor): void {
   let inCodeBlock = false
 
   cm.startOperation()
-  count_codeblock = 0
+
   // Check lines for code blocks
   for (let i = 0; i < lineCount; i++) {
     const line = cm.getLine(i)
@@ -55,7 +55,6 @@ function findCode (cm: CodeMirror.Editor): void {
         // Increment the lineCount and apply the code start line to that line
         cm.addLineClass(++i, 'wrap', codeblockClass)
         cm.addLineClass(i, 'wrap', codeblockClassOpen)
-        //console.log(cm.lineInfo(i).textClass)
         // Remove a potential close class, in case we have just one line of
         // code block; found by @kyaso
         cm.removeLineClass(i, 'wrap', codeblockClassClose)
