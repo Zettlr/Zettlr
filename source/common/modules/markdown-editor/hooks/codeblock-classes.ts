@@ -64,6 +64,7 @@ function findCode (cm: CodeMirror.Editor): void {
       cm.removeLineClass(i, 'wrap', codeblockClass)
       cm.removeLineClass(i, 'wrap', codeblockClassOpen)
       cm.removeLineClass(i, 'wrap', codeblockClassClose)
+
       // Apply the closer to the previous line
       cm.addLineClass(i - 1, 'wrap', codeblockClassClose)
       inCodeBlock = false
