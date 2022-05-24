@@ -431,6 +431,7 @@ export default defineComponent({
 
       // Now we're good to go!
       this.emptySearchResults()
+      this.blurQueryInput()
       this.filter = '' // Reset the filter
       this.sumFilesToSearch = fileList.length
       this.filesToSearch = fileList
@@ -570,6 +571,9 @@ export default defineComponent({
     },
     focusQueryInput: function () {
       this.queryInputElement?.focus()
+    },
+    blurQueryInput: function () {
+      this.queryInputElement?.blur()
     }
   }
 })
