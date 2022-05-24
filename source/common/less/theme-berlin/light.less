@@ -211,14 +211,20 @@ body {
         border-bottom-right-radius: 4px;
     }
     
-    // Style the code block copy buttons
-    .code-block-copy-button:active {
-	background: #e5e5e5;
-	-webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
-	-moz-box-shadow: inset 0px 0px 5px #c1c1c1;
-	box-shadow: inset 0px 0px 5px #c1c1c1;
-	outline: none;
-
+    .code-block-copy-button{
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      height: 25px;
+      width: 25px;
+      z-index: 9;
+    }
+    .code-block-copy-button:active{
+      background: #b6b6b6;
+      -webkit-box-shadow: inset 0px 0px 5px #c1c1c1;
+      -moz-box-shadow: inset 0px 0px 5px #c1c1c1;
+      box-shadow: inset 0px 0px 5px #c1c1c1;
+      outline: none;
     }
 
     /* LISTS */
