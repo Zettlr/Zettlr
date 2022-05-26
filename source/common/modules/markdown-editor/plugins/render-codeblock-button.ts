@@ -26,7 +26,7 @@ const clipboard = window.clipboard
   const codeBlockRE = /^(?:\s{0,3}`{3}|~{3}).*/
   const lineCount = cm.lineCount()
   let incodeblock = false
-  let codesblocks = new Array()
+  let codesblocks = new Array<string>()
   let codeblock = ''
   for (let j = 0; j < lineCount; j++) {
     const line = cm.getLine(j)
@@ -45,7 +45,6 @@ const clipboard = window.clipboard
 
   for (let i = 0; i < Number(countCodeblock); i++) {
     const codeBlock1 = document.getElementsByClassName('cm-formatting-code-block-open')[i]
-    console.log(i)
     if (codeBlock1.hasChildNodes()) {
       if (codeBlock1.childNodes.length > 1) {
         codeBlock1.removeChild(codeBlock1.childNodes[1])
@@ -60,7 +59,6 @@ const clipboard = window.clipboard
     copyButton.innerText = 'Copy'
     codeBlock.appendChild(copyButton)
     copyButton.onclick = function () {
-      console.log('in')
       clipboard.writeText(codesblocks[i])
     }
   }
