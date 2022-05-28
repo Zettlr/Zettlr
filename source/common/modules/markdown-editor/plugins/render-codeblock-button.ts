@@ -28,6 +28,8 @@ const clipboard = window.clipboard
   let incodeblock = false
   let codesblocks = new Array<string>()
   let codeblock = ''
+  const CodeblockOpenCount = document.getElementsByClassName('code-block-first-line').length
+  const CodeblockCloseCount = document.getElementsByClassName('code-block-last-line').length
   for (let j = 0; j < lineCount; j++) {
     const line = cm.getLine(j)
     if (codeBlockRE.test(line) && !incodeblock) {
@@ -53,16 +55,19 @@ const clipboard = window.clipboard
       }
     }
   }
+
   for (let i = 0; i < Number(countCodeblock); i++) {
     const codeBlock = document.getElementsByClassName('cm-formatting-code-block-open')[i]
     // Create a button
     if (typeof codeBlock !== 'undefined') {
-      const copyButton = document.createElement('button')
-      copyButton.className = 'code-block-copy-button'
-      copyButton.innerText = 'Copy'
-      codeBlock.appendChild(copyButton)
-      copyButton.onclick = function () {
-        clipboard.writeText(codesblocks[i])
+      if (CodeblockOpenCount === CodeblockCloseCount) {
+        const copyButton = document.createElement('button')
+        copyButton.className = 'code-block-copy-button'
+        copyButton.innerText = 'Copy'
+        codeBlock.appendChild(copyButton)
+        copyButton.onclick = function () {
+          clipboard.writeText(codesblocks[i])
+        }
       }
     }
   }
