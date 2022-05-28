@@ -2,7 +2,7 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        copy-to-clipboard button rendering plugin
+ * Contains:        Emphasis rendering plugin
  * CVM-Role:        CodeMirror Plugin
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
@@ -45,21 +45,25 @@ const clipboard = window.clipboard
 
   for (let i = 0; i < Number(countCodeblock); i++) {
     const codeBlock1 = document.getElementsByClassName('cm-formatting-code-block-open')[i]
-    if (codeBlock1.hasChildNodes()) {
-      if (codeBlock1.childNodes.length > 1) {
-        codeBlock1.removeChild(codeBlock1.childNodes[1])
+    if (typeof codeBlock1 !== 'undefined') {
+      if (codeBlock1.hasChildNodes()) {
+        if (codeBlock1.childNodes.length > 1) {
+          codeBlock1.removeChild(codeBlock1.childNodes[1])
+        }
       }
     }
   }
   for (let i = 0; i < Number(countCodeblock); i++) {
     const codeBlock = document.getElementsByClassName('cm-formatting-code-block-open')[i]
     // Create a button
-    const copyButton = document.createElement('button')
-    copyButton.className = 'code-block-copy-button'
-    copyButton.innerText = 'Copy'
-    codeBlock.appendChild(copyButton)
-    copyButton.onclick = function () {
-      clipboard.writeText(codesblocks[i])
+    if (typeof codeBlock !== 'undefined') {
+      const copyButton = document.createElement('button')
+      copyButton.className = 'code-block-copy-button'
+      copyButton.innerText = 'Copy'
+      codeBlock.appendChild(copyButton)
+      copyButton.onclick = function () {
+        clipboard.writeText(codesblocks[i])
+      }
     }
   }
   cm.endOperation()
