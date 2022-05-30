@@ -11,6 +11,8 @@
   prevent the dropdown from showing up, especially during auto-searches
 - Fixed wrong character count if counting without spaces
 - Fixed wrong word count for indented lists
+- Fixed wrong keyword/tag CSS class names
+- Added keyword/tag CSS class names to YAML frontmatter tags
 
 ## Under the Hood
 
