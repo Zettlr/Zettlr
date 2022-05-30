@@ -16,6 +16,8 @@
 - Display the last modification date in the file list, even if the additional
   info setting is turned off
 - The "restrict to directory" field will now be empty by default
+- Pressing `Tab` while the query input is focused will now directly focus the
+  restrict-to-dir input
 
 ## Under the Hood
 

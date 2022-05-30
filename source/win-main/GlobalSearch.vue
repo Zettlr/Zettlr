@@ -9,8 +9,10 @@
       v-bind:autocomplete-values="recentGlobalSearches"
       v-bind:placeholder="queryInputPlaceholder"
       v-on:keydown.enter="startSearch()"
+      v-on:keydown.tab="($refs['restrict-to-dir-input'] as any).focus()"
     ></AutocompleteText>
     <AutocompleteText
+      ref="restrict-to-dir-input"
       v-model="restrictToDir"
       v-bind:label="restrictDirLabel"
       v-bind:autocomplete-values="directorySuggestions"
