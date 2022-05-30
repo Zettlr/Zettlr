@@ -15,6 +15,7 @@
 - Added keyword/tag CSS class names to YAML frontmatter tags
 - Display the last modification date in the file list, even if the additional
   info setting is turned off
+- The "restrict to directory" field will now be empty by default
 
 ## Under the Hood
 

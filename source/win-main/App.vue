@@ -413,10 +413,9 @@ export default defineComponent({
     },
     mainSplitViewVisibleComponent: function (newValue, oldValue) {
       if (newValue === 'globalSearch') {
-        // The global search just became visible, so make sure to change the
-        // current directory.
+        // The global search just became visible, so focus the query input
         nextTick().then(() => {
-          this.globalSearchComponent.setCurrentDirectory()
+          this.globalSearchComponent.focusQueryInput()
         }).catch(e => console.error(e))
       }
     }
