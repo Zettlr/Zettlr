@@ -174,7 +174,7 @@ export default defineComponent({
           icon: 'tools'
         },
         {
-          label: trans('dialog.preferences.toolbar'),
+          label: trans('dialog.preferences.toolbar.title'),
           controls: 'tab-toolbar',
           id: 'tab-toolbar-control',
           icon: 'container'
