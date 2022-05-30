@@ -13,6 +13,8 @@
 - Fixed wrong word count for indented lists
 - Fixed wrong keyword/tag CSS class names
 - Added keyword/tag CSS class names to YAML frontmatter tags
+- Display the last modification date in the file list, even if the additional
+  info setting is turned off
 
 ## Under the Hood
 
