@@ -47,37 +47,34 @@ export default function getMenu (
     }]
   }
 
-  // ... if we're somewhere else, display our custom implementation of recent docs.
-  if (process.platform !== 'win32') {
-    const docs = recentDocs.get()
-    recentDocsItem = {
-      id: 'menu.recent_docs',
-      label: trans('menu.recent_docs'),
-      submenu: [
-        {
-          id: 'menu.clear_recent_docs',
-          label: trans('menu.clear_recent_docs'),
-          click: function (menuitem, focusedWindow) {
-            recentDocs.clear()
-          },
-          enabled: docs.length > 0
+  const docs = recentDocs.get()
+  recentDocsItem = {
+    id: 'menu.recent_docs',
+    label: trans('menu.recent_docs'),
+    submenu: [
+      {
+        id: 'menu.clear_recent_docs',
+        label: trans('menu.clear_recent_docs'),
+        click: function (menuitem, focusedWindow) {
+          recentDocs.clear()
         },
-        ...docs.map(item => {
-          const ret: MenuItemConstructorOptions = {
-            id: 'menu.recent_docs.' + item,
-            label: path.basename(item),
-            click: function (menuitem, focusedWindow) {
-              commands.run('open-file', {
-                path: item,
-                newTab: true
-              }).catch((e: any) => logger.error(`[Menu] Could not open recent document ${item}`, e))
-            }
+        enabled: docs.length > 0
+      },
+      ...docs.map(item => {
+        const ret: MenuItemConstructorOptions = {
+          id: 'menu.recent_docs.' + item,
+          label: path.basename(item),
+          click: function (menuitem, focusedWindow) {
+            commands.run('open-file', {
+              path: item,
+              newTab: true
+            }).catch((e: any) => logger.error(`[Menu] Could not open recent document ${item}`, e))
           }
+        }
 
-          return ret
-        })
-      ]
-    }
+        return ret
+      })
+    ]
   }
 
   const menu: MenuItemConstructorOptions[] = [

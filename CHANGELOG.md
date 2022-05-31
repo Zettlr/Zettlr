@@ -18,6 +18,7 @@
 - The "restrict to directory" field will now be empty by default
 - Pressing `Tab` while the query input is focused will now directly focus the
   restrict-to-dir input
+- The recent documents menu on Windows works again
 
 ## Under the Hood
 
