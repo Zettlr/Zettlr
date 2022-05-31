@@ -19,6 +19,7 @@
 - Pressing `Tab` while the query input is focused will now directly focus the
   restrict-to-dir input
 - The recent documents menu on Windows works again
+- Fixed jumping of the code editor in the assets manager
 
 ## Under the Hood
 
