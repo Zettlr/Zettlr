@@ -194,6 +194,9 @@ export default {
     focus: function () {
       this.$refs.input.focus()
     },
+    blur: function () {
+      this.$refs.input.blur()
+    },
     select: function () {
       this.$refs.input.select()
     }

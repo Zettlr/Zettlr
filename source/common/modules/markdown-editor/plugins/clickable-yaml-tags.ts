@@ -13,6 +13,7 @@
  * END HEADER
  */
 
+import cssSafeString from '@common/util/css-safe-string'
 import CodeMirror, { commands } from 'codemirror'
 import yaml from 'yaml'
 import { Scalar, YAMLMap, YAMLSeq } from 'yaml/types'
@@ -143,8 +144,10 @@ import { Scalar, YAMLMap, YAMLSeq } from 'yaml/types'
       continue
     }
 
+    const tagText = cssSafeString(cm.getRange(from, to))
+
     cm.markText(from, to, {
-      className: 'zkn-tag cma',
+      className: `zkn-tag zkn-tag-${tagText} cma`,
       inclusiveLeft: false,
       inclusiveRight: false,
       clearOnEnter: true

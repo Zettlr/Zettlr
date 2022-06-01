@@ -555,6 +555,7 @@ export default class MarkdownEditor extends EventEmitter {
       let selectionText = this._instance.getSelections()
       let selectionBounds = this._instance.listSelections()
       for (let i = 0; i < selectionText.length; i++) {
+        // const start = selectionBounds[i].anchor > selectionBounds[i].head
         ret.selections.push({
           selectionLength: countWords(selectionText[i], this._countChars),
           start: Object.assign({}, selectionBounds[i].anchor),
@@ -738,7 +739,7 @@ export default class MarkdownEditor extends EventEmitter {
    * @return  {Number}  The number of chars without spaces
    */
   get charCountWithoutSpaces (): number {
-    return countWords(this.value.replace(/ +/g, ''), true)
+    return countWords(this.value, 'nospace')
   }
 
   /**

@@ -27,7 +27,7 @@
             "Edgar Tang \u003Cedgar@veiam.net\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-03-23T06:22:48.000000Z"
+        "updated_at": "2022-05-23T23:53:42.000000Z"
     },
     "dialog": {
         "about": {
@@ -216,6 +216,7 @@
             },
             "avoid_new_tabs": "\u5c3d\u91cf\u907f\u514d\u5728\u65b0\u6807\u7b7e\u9875\u6253\u5f00\u6587\u4ef6",
             "checkForBeta": "\u5f53\u6709\u65b0Beta\u7248\u672c\u53d1\u5e03\u65f6\u901a\u77e5\u6211",
+            "check_translation_updates": "\u68c0\u67e5\u6700\u65b0\u7ffb\u8bd1",
             "check_updates": "\u81ea\u52a8\u68c0\u67e5\u66f4\u65b0",
             "choose_file": "\u9009\u62e9\u6587\u6863 \u2026",
             "citation_database": "\u5f15\u6587\u6570\u636e\u5e93\uff08CSL JSON \u6216 BibTex \u683c\u5f0f\uff09",
@@ -377,6 +378,21 @@
                 "title": "\u4e3b\u9898"
             },
             "title": "\u504f\u597d\u8bbe\u7f6e",
+            "toolbar": {
+                "showDocumentInfoText": "\u663e\u793a\u6587\u4ef6\u4fe1\u606f",
+                "showInsertFootnoteButton": "\u663e\u793a\u6ce8\u811a\u6309\u94ae",
+                "showInsertTableButton": "\u663e\u793a\u63d2\u5165\u8868\u683c\u6309\u94ae",
+                "showMarkdownCommentButton": "\u663e\u793a\u63d2\u5165\u5907\u6ce8\u6309\u94ae",
+                "showMarkdownImageButton": "\u663e\u793a\u56fe\u50cf\u6309\u94ae",
+                "showMarkdownLinkButton": "\u663e\u793a\u94fe\u63a5\u6309\u94ae",
+                "showMarkdownMakeTaskListButton": "\u663e\u793a\u4efb\u52a1\u6e05\u5355\u6309\u94ae",
+                "showNewFileButton": "\u663e\u793a\u65b0\u6587\u4ef6\u6309\u94ae",
+                "showNextFileButton": "\u663e\u793a\u4e0b\u4e00\u4e2a\u6587\u4ef6\u6309\u94ae",
+                "showOpenPreferencesButton": "\u663e\u793a\u6253\u5f00\u504f\u597d\u8bbe\u7f6e\u6309\u94ae",
+                "showPomodoroButton": "\u663e\u793a\u756a\u8304\u949f\u6309\u94ae",
+                "showPreviousFileButton": "\u663e\u793a\u6253\u5f00\u524d\u4e00\u4e2a\u6587\u4ef6\u6309\u94ae",
+                "showToggleReadabilityButton": "\u663e\u793a\u53ef\u8bfb\u6027\u6309\u94ae"
+            },
             "translations": {
                 "download": "\u70b9\u51fb\u4e0b\u8f7d",
                 "downloading": "\u6b63\u5728\u4e0b\u8f7d %s",
@@ -624,6 +640,7 @@
         "close_file": "\u5173\u95ed\u6587\u6863",
         "close_workspace": "\u5173\u95ed\u5de5\u4f5c\u533a",
         "copy": "\u590d\u5236",
+        "copy_abs_path": "\u590d\u5236\u5168\u8def\u5f84\u6309\u94ae",
         "copy_equation": "\u590d\u5236\u65b9\u7a0b\u4ee3\u7801",
         "copy_filename": "\u590d\u5236\u6587\u4ef6\u540d",
         "copy_html": "\u590d\u5236\u4e3aHTML",

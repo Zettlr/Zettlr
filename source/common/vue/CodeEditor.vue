@@ -204,7 +204,13 @@ export default defineComponent({
   },
   watch: {
     modelValue: function () {
-      if (cmInstance !== null) {
+      if (cmInstance === null) {
+        return
+      }
+
+      const currentValue = cmInstance.getValue()
+
+      if (currentValue !== this.modelValue) {
         const cur = Object.assign({}, cmInstance.getCursor())
         cmInstance.setValue(this.modelValue)
         cmInstance.setCursor(cur)
