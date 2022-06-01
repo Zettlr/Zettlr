@@ -13,7 +13,6 @@
           {{ noResultsMessage }}
         </div>
       </div>
-
       <div v-show="getFiles.length > 0" id="directories-files-header">
         <clr-icon
           shape="file"
@@ -33,6 +32,20 @@
           shape="tree-view"
           role="presentation"
         ></clr-icon>{{ workspaceSectionHeading }}
+        <select id="sort-header" v-model="sortSelection">
+          <option
+            value="null"
+            selected
+          >
+            Sort By{{ sortByOption }}
+          </option>
+          <option value="AlphaA">
+            Alphabetical (Ascending){{ alphabeticalAscOption }}
+          </option>
+          <option value="AlphaD">
+            Alphabetical (Descending){{ alphabeticalDescOption }}
+          </option>
+        </select>
       </div>
       <TreeItem
         v-for="item in getDirectories"
@@ -75,6 +88,7 @@ import matchQuery from './util/match-query'
 import matchTree from './util/match-tree'
 import { defineComponent } from 'vue'
 import { MDFileMeta, CodeFileMeta, DirMeta } from '@dts/common/fsal'
+import sortDirectories from './util/sort-directories'
 
 const ipcRenderer = window.ipc
 
@@ -94,7 +108,9 @@ export default defineComponent({
     }
   },
   data: function () {
-    return {}
+    return {
+      sortSelection: null
+    }
   },
   computed: {
     fileTree: function (): Array<MDFileMeta|CodeFileMeta|DirMeta> {
@@ -136,7 +152,12 @@ export default defineComponent({
       return this.getFilteredTree.filter(item => item.type !== 'directory') as Array<MDFileMeta|CodeFileMeta>
     },
     getDirectories: function (): DirMeta[] {
-      return this.getFilteredTree.filter(item => item.type === 'directory') as DirMeta[]
+      if (this.sortSelection === 'AlphaA' || this.sortSelection === 'AlphaD') {
+        let temp = this.getFilteredTree.filter(item => item.type === 'directory') as DirMeta[]
+        return sortDirectories(temp, this.sortSelection) as DirMeta[]
+      } else {
+        return this.getFilteredTree.filter(item => item.type === 'directory') as DirMeta[]
+      }
     },
     fileSectionHeading: function (): string {
       return trans('gui.files')
@@ -149,6 +170,15 @@ export default defineComponent({
     },
     noResultsMessage: function () {
       return trans('gui.no_search_results')
+    },
+    sortByOption: function () {
+      return trans('gui.sort_by_option')
+    },
+    alphabeticalAscOption: function () {
+      return trans('gui.alphabetical_asc_option')
+    },
+    alphabeticalDescOption: function () {
+      return trans('gui.alphabetical_desc_option')
     }
   },
   methods: {
@@ -194,6 +224,9 @@ body {
         margin-right: 3px;
         vertical-align: bottom;
       }
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
     }
 
     .list-item {
@@ -218,6 +251,16 @@ body {
         }
     }
   }
+
+  #sort-header {
+    font-size: 11px;
+    width: 12vw;
+    padding: 0px 0px 0px 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-right: 5px;
+    margin-left: auto;
+  }
 }
 
 body.darwin {
@@ -231,7 +274,6 @@ body.darwin {
       font-weight: bold;
       font-size: inherit;
       margin: 20px 0px 5px 10px;
-
       clr-icon { display: none; }
     }
   }
@@ -246,8 +288,21 @@ body.win32 {
       font-size: 11px;
       padding: 5px 0px 5px 10px;
       margin: 0px 0px 5px 0px;
+      //display: flex;
+      //flex-flow: row wrap;
+      //align-items: center;
     }
   }
+
+  // #sort-header {
+  //  font-size: 11px;
+  //  width: 12vw;
+  //  padding: 0px 0px 0px 0px;
+  //  margin-top: 0px;
+  //  margin-bottom: 0px;
+  //  margin-right: 5px;
+  //  margin-left: auto;
+  // }
 
   &.dark {
     #file-tree {
