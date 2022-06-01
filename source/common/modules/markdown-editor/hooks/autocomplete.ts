@@ -541,6 +541,8 @@ function hintFunction (cm: CodeMirror.Editor, opt: CodeMirror.ShowHintOptions): 
         to.ch += autocompleteStart.ch
       }
 
+      console.log(autocompleteStart, from, to, insertedLines)
+
       // Then, insert the text, but with all variables replaced and only the
       // tabstops remaining.
       const actualTextToInsert = replaceSnippetVariables(completion.text)
@@ -563,6 +565,11 @@ function hintFunction (cm: CodeMirror.Editor, opt: CodeMirror.ShowHintOptions): 
       // store those text markers so that we can find them again by tabbing
       // through them.
       currentTabStops = getTabMarkers(cm, from, to)
+      currentTabStops.map(tab => {
+        console.log('Tab', tab.index)
+        tab.markers.map(mark => console.log(mark.find()))
+        return null
+      })
 
       // Now activate our special snippets keymap which will ensure the user can
       // cycle through all placeholders which we have identified.
@@ -598,19 +605,32 @@ function hintFunction (cm: CodeMirror.Editor, opt: CodeMirror.ShowHintOptions): 
  */
 function getTabMarkers (cm: CodeMirror.Editor, from: CodeMirror.Position, to: CodeMirror.Position): TextSnippetTextMarker[] {
   let tabStops: TextSnippetTextMarker[] = []
+
+  // We have to remember the end of the snippet in case there is text following.
+  // Since CodeMirror updates the position of bookmarks, we can cheat a little.
+  // If there is no $0 in the snippet, we use this one, otherwise we clear it
+  // after having placed all tabstops.
+  const endMarkerElement = document.createElement('span')
+  endMarkerElement.classList.add('tabstop')
+  endMarkerElement.textContent = '0'
+  const endMarker = cm.setBookmark(to, { widget: endMarkerElement })
+
   for (let i = from.line; i <= to.line; i++) {
     let line = cm.getLine(i)
     let match = null
 
-    // Account for when some snippet has been inserted in between some text
-    if (i === from.line && from.ch > 0) {
-      line = line.substring(from.ch)
-    } else if (i === to.line && to.ch < line.length) {
-      line = line.substring(0, to.ch)
-    }
-
     // NOTE: The negative lookbehind
     const varRE = /(?<!\\)\$(\d+)|(?<!\\)\$\{(\d+):(.+?)\}/g
+
+    // Account for when some snippet has been inserted in between some text
+    if (i === from.line && from.ch > 0) {
+      // Make sure that the RegExp starts searching only from the beginning of
+      // the actual snippet to preserve $-signs before it
+      varRE.lastIndex = from.ch
+    } else if (i === to.line && to.ch < line.length) {
+      // Likewise, make sure that the regexp doesn't match $-signs AFTER the snippet
+      line = line.substring(0, to.ch)
+    }
 
     while ((match = varRE.exec(line)) !== null) {
       const ch = match.index
@@ -625,6 +645,13 @@ function getTabMarkers (cm: CodeMirror.Editor, from: CodeMirror.Position, to: Co
       // changed now and otherwise the regexp will get confused.
       varRE.lastIndex = ch
       line = cm.getLine(i)
+
+      // While we don't need to adapt the lastIndex anymore, we still need to
+      // make sure to cut off irrelevant text from the line so the regexp
+      // doesn't match things it should not match
+      if (i === to.line && to.ch < line.length) {
+        line = line.substring(0, to.ch)
+      }
 
       if (replaceWith !== undefined) {
         // In this case, we must replace the marker with the default text
@@ -663,20 +690,19 @@ function getTabMarkers (cm: CodeMirror.Editor, from: CodeMirror.Position, to: Co
     return acc // We just have to return the reference to the array again
   }, []) // initialValue: An empty array
 
-  // Now we just need to sort the currentTabStops and map it so only the
-  // marker remains.
+  // Now we just need to sort the currentTabStops
   tabStops.sort((a, b) => { return a.index - b.index })
-  // Now put the 0 to the top (if there is a zero)
+
+  // Lastly, put the 0 to the top (if there is a zero)
   if (tabStops.length > 0 && tabStops[0].index === 0) {
     tabStops.push(tabStops.shift() as TextSnippetTextMarker)
+    // Don't forget to clear the (wrong) endmarker
+    endMarker.clear()
   } else {
     // If there is no zero, we must make sure to add one "pseudo-$0" after the
-    // selection so that the cursor ends up there afterwards.
-    const elem = document.createElement('span')
-    elem.classList.add('tabstop')
-    elem.textContent = '0'
-    const marker = cm.setBookmark(to, { widget: elem })
-    tabStops.push({ index: 0, markers: [marker] })
+    // selection so that the cursor ends up there afterwards. This is why we
+    // have saved the endMarker above.
+    tabStops.push({ index: 0, markers: [endMarker] })
   }
 
   return tabStops

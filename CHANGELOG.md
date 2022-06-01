@@ -27,6 +27,7 @@
 - The table of contents in the sidebar now shows the title of the currently
   active file, if applicable
 - Removed the less-than-helpful file and folder removal shortcuts
+- Fixed wrongly positioned tabstops during snippets autocomplete
 
 ## Under the Hood
 
