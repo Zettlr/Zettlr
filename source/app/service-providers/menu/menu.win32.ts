@@ -288,7 +288,6 @@ export default function getMenu (
         {
           id: 'menu.delete_file',
           label: trans('menu.delete_file'),
-          accelerator: 'Delete',
           click: function (menuitem, focusedWindow) {
             focusedWindow?.webContents.send('shortcut', 'delete-file')
           }
@@ -296,7 +295,6 @@ export default function getMenu (
         {
           id: 'menu.delete_dir',
           label: trans('menu.delete_dir'),
-          accelerator: 'Ctrl+Delete',
           click: function (menuitem, focusedWindow) {
             focusedWindow?.webContents.send('shortcut', 'delete-dir')
           }
