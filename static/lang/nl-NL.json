@@ -8,7 +8,7 @@
             "Taylan TATLI"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-02-16T11:49:52.000000Z"
+        "updated_at": "2022-05-27T13:10:01.000000Z"
     },
     "dialog": {
         "about": {
@@ -47,7 +47,8 @@
         "defaults": {
             "explanation": "Bewerk de standaardinstellingen voor importeren en exporteren.",
             "exporting_title": "Exporteren",
-            "importing_title": "Importeren"
+            "importing_title": "Importeren",
+            "restore": "Herstel het bestand met de standaardinstellingen"
         },
         "dir_new": {
             "placeholder": "Mapnaam",
@@ -76,9 +77,13 @@
         },
         "filter_tags": "Filter labels\u2026",
         "find": {
+            "close_label": "Sluit zoeken",
             "find_label": "Zoeken",
             "find_placeholder": "Zoeken...",
+            "regex_label": "Reguliere expressie zoeken",
+            "replace_all_label": "Vervang alle",
             "replace_label": "Vervangen",
+            "replace_next_label": "Vervang volgende",
             "replace_placeholder": "Vervang met"
         },
         "paste_image": {
@@ -172,6 +177,13 @@
             "auto_dark_mode_schedule": "Schema",
             "auto_dark_mode_schedule_format": "uu:mm (24-uursnotatie)",
             "auto_dark_mode_system": "Volg het besturingssysteem",
+            "auto_save": {
+                "delayed": "Na een korte wachttijd",
+                "immediately": "Onmiddellijk",
+                "label": "Automatisch opslaan",
+                "off": "Uit"
+            },
+            "autocomplete_accept_space": "Aanvaard spaties bij automatisch aanvullen",
             "autocorrect": {
                 "active_label": "Zet autocorrectie aan",
                 "quick_select_label": "Snelle selectie",
@@ -183,14 +195,28 @@
                 "style_word_label": "Word stijl",
                 "title": "Autocorrectie"
             },
+            "avoid_new_tabs": "Vermijd indien mogelijk bestanden in nieuwe tabbladen te openen",
             "checkForBeta": "Notificeer mij bij beta releases",
+            "check_translation_updates": "Controleer op bijgewerkte vertalingen bij opstarten",
+            "check_updates": "Controleer automatisch op updates",
             "choose_file": "Kies bestand ...",
             "citation_database": "Citaten database (CSL JSON of BibTex)",
+            "citations": {
+                "title": "Verwijzingen"
+            },
+            "cite_style_label": "Hoe moeten uw verwijzingen automatisch ingevoegd worden?",
             "count_chars": "Tel karakters in plaats van woorden (bijv. voor Chinees)",
             "creationtime": "Tijdstip waarop het bestand is aangemaakt.",
+            "dark_mode": "Donkere modus",
+            "dark_mode_schedule": {
+                "end": "Stop donkere modus om",
+                "start": "Start donkere modus om"
+            },
             "debug": "Zet debug mode aan",
             "default_image_save_path": "Standaard pad naar afbeeldingen (relatief of absoluut)",
+            "delete_on_fail": "Verwijder items definitief als ze niet in de prullenbak geworpen kunnen worden",
             "display": {
+                "hide_toolbar_distraction_free": "Verberg de gereedschapsbalk in afleidingsvrije modus",
                 "image_size_info": "Met deze bedieningselementen kunt u de voorvertoningen van afbeeldingen beperken.",
                 "preview_info": "Deze opties bepalen welke elementen in documenten worden weergegeven.",
                 "render_citations": "Geef citaten weer",
@@ -203,6 +229,7 @@
                 "title": "Weergave",
                 "use_first_headings": "Gebruik indien aanwezig de eerste kop niveau 1 in plaats van de bestandsnaam"
             },
+            "display_markdown_file_extensions": "Toon Markdown bestandsextensies",
             "display_time_explanation": "In de metadata van het bestand toon",
             "editor": "Editor",
             "editor_setting": {
@@ -307,6 +334,21 @@
                 "title": "Thema"
             },
             "title": "Voorkeuren",
+            "toolbar": {
+                "showDocumentInfoText": "Toon bestandsinfo",
+                "showInsertFootnoteButton": "Toon knop om voetnoot in te voegen",
+                "showInsertTableButton": "Toon knop om tabel in te voegen",
+                "showMarkdownCommentButton": "Toon knop om commentaar in te voegen",
+                "showMarkdownImageButton": "Toon knop om afbeelding in te voegen",
+                "showMarkdownLinkButton": "Toon knop om link in te voegen",
+                "showMarkdownMakeTaskListButton": "Toon knop 'takenlijst'",
+                "showNewFileButton": "Toon knop om nieuw bestand te cre\u00ebren",
+                "showNextFileButton": "Toon knop om naar volgend bestand te gaan",
+                "showOpenPreferencesButton": "Toon knop om voorkeuren te openen",
+                "showPomodoroButton": "Toon Pomodorotimer",
+                "showPreviousFileButton": "Toon knop om naar vorig bestand te gaan",
+                "showToggleReadabilityButton": "Toon knop voor leesbaarheidsmodus"
+            },
             "translations": {
                 "download": "Klik om te downloaden",
                 "downloading": "%s aan het downloaden",
@@ -394,6 +436,11 @@
         }
     },
     "gui": {
+        "assets_man": {
+            "defaults_restore_error": "Kon het bestand met de standaardinstellingen niet herstellen!",
+            "defaults_restored": "Het bestand met de standaardinstellingen werd hersteld!",
+            "defaults_restoring": "Het bestand met de standaardinstelingen aan het herstellen ..."
+        },
         "attachments": "Bijlagen",
         "attachments_open_dir": "Open map",
         "avg_close_to": "\ud83d\udcaa Je staat op het punt je dagelijkse gemiddelde te halen!",
@@ -436,6 +483,14 @@
             "remove_footnote": "Verwijder voetnoot",
             "tasklist": "Takenlijst",
             "ul": "Gespecificeerde lijst"
+        },
+        "global_search": {
+            "filter_label": "Filter zoekresultaten",
+            "query_label": "Voer hieronder uw zoektermen in",
+            "query_placeholder": "Vind ...",
+            "search_label": "Zoeken",
+            "title": "Doorzoek de volledige tekst",
+            "toggle_label": "Toon resultaten"
         },
         "no_attachments": "Geen bijlagen",
         "no_dir_selected": "Geen map geselecteerd",
@@ -659,7 +714,12 @@
         "show_toc": "Toon de inhoudsopgave",
         "stats": "Bekijk statistieken",
         "tag_cloud": "Labels",
-        "toggle_attachments": "Bekijk bijlagen"
+        "toggle_attachments": "Bekijk bijlagen",
+        "toggle_file_manager": "Bestandsmanager"
+    },
+    "tray": {
+        "show_zettlr": "Toon Zettlr",
+        "tooltip": "Zettlr"
     },
     "validation": {
         "error_empty": "Optie %s is verplicht.",
