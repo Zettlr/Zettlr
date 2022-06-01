@@ -162,13 +162,20 @@ function getConfig (): StoreOptions<ZettlrState> {
       },
       addUncollapsedDirectory: function (state, dirPath) {
         if (!state.uncollapsedDirectories.includes(dirPath)) {
-          state.uncollapsedDirectories.push(dirPath)
+          // In order for the reactivity to pick up on a changed state, we have
+          // to literally deproxy and then re-assign. Proxies still have some
+          // way to go.
+          const oldUncollapsed = state.uncollapsedDirectories.map(e => e)
+          oldUncollapsed.push(dirPath)
+          state.uncollapsedDirectories = oldUncollapsed
         }
       },
       removeUncollapsedDirectory: function (state, dirPath) {
         const idx = state.uncollapsedDirectories.indexOf(dirPath)
         if (idx > -1) {
-          state.uncollapsedDirectories.splice(idx, 1)
+          const oldUncollapsed = state.uncollapsedDirectories.map(e => e)
+          oldUncollapsed.splice(idx, 1)
+          state.uncollapsedDirectories = oldUncollapsed
         }
       },
       updateConfig: function (state, option) {

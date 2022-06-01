@@ -12,7 +12,7 @@
       role="tabpanel"
     >
       <!-- Table of Contents -->
-      <h1>{{ tocLabel }}</h1>
+      <h1>{{ titleOrTocLabel }}</h1>
       <!-- Show the ToC entries -->
       <div
         v-for="(entry, idx) of tableOfContents"
@@ -269,6 +269,25 @@ export default defineComponent({
     },
     relatedFiles: function (): RelatedFile[] {
       return this.$store.state.relatedFiles
+    },
+    /**
+     * Returns either the title property for the active file or the generic ToC
+     * label -- to be used within the ToC of the sidebar
+     *
+     * @return  {string}  The title for the ToC sidebar
+     */
+    titleOrTocLabel: function (): string {
+      if (this.activeFile === null || this.activeFile.frontmatter === null) {
+        return this.tocLabel
+      }
+
+      const frontmatter = this.activeFile.frontmatter
+
+      if ('title' in frontmatter && frontmatter.title.length > 0) {
+        return this.activeFile.frontmatter.title
+      } else {
+        return this.tocLabel
+      }
     },
     modifiedFiles: function (): string[] {
       return this.$store.state.modifiedDocuments

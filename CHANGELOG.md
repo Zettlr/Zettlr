@@ -4,6 +4,10 @@
 
 - **New Feature**: You can hide the toolbar button and words count block in the
   preference
+- **New Feature**: You can now navigate the file tree with the arrow buttons
+  after activating the quick filter; use up and down to visually move through
+  the visible items and left/right to collapse/uncollapse a directory; use Enter
+  to "click" that item
 - Added "Copy filename", "Copy path" and "Copy ID" to document tabs context
   menus (thanks to @kyaso)
 - Add "New File", "Next File" and "Previous File" buttons to the toolbar
@@ -20,6 +24,9 @@
   restrict-to-dir input
 - The recent documents menu on Windows works again
 - Fixed jumping of the code editor in the assets manager
+- The table of contents in the sidebar now shows the title of the currently
+  active file, if applicable
+- Removed the less-than-helpful file and folder removal shortcuts
 
 ## Under the Hood
 
