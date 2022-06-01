@@ -20,6 +20,8 @@
   restrict-to-dir input
 - The recent documents menu on Windows works again
 - Fixed jumping of the code editor in the assets manager
+- The table of contents in the sidebar now shows the title of the currently
+  active file, if applicable
 
 ## Under the Hood
 
