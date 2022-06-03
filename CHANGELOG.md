@@ -1,4 +1,4 @@
-# 2.2.7
+# 2.3.0
 
 ## GUI and Functionality
 
@@ -8,6 +8,8 @@
   after activating the quick filter; use up and down to visually move through
   the visible items and left/right to collapse/uncollapse a directory; use Enter
   to "click" that item
+- **New Feature**: The document tabbar now features buttons so you can easily
+  scroll horizontally through many tabs
 - Added "Copy filename", "Copy path" and "Copy ID" to document tabs context
   menus (thanks to @kyaso)
 - Add "New File", "Next File" and "Previous File" buttons to the toolbar
