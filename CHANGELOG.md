@@ -28,6 +28,8 @@
   active file, if applicable
 - Removed the less-than-helpful file and folder removal shortcuts
 - Fixed wrongly positioned tabstops during snippets autocomplete
+- Fixed an error that would erroneously render citations in footnote previews or
+  copied text with styling
 
 ## Under the Hood
 
