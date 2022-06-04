@@ -68,7 +68,6 @@ export default function (): any {
           label: trans('dialog.preferences.display.render_codeblock_button'),
           model: 'display.renderCodeBlockButton'
         }
-
       ],
       [
         {

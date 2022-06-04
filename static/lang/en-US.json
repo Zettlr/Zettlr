@@ -221,7 +221,6 @@
                 "image_width": "Maximum width of images (percent)",
                 "preview_info": "These options determine which elements are rendered in documents.",
                 "render_citations": "Render Citations",
-                "render_codeblock_button": "Render codeblock copy button",
                 "render_emphasis": "Render emphasis",
                 "render_htags": "Hide heading characters",
                 "render_iframes": "Render Iframes",

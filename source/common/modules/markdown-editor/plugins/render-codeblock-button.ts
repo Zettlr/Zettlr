@@ -2,7 +2,7 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        Emphasis rendering plugin
+ * Contains:        Codeblock copy button rendering plugin
  * CVM-Role:        CodeMirror Plugin
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
@@ -16,20 +16,24 @@ import CodeMirror, { commands } from 'codemirror'
 
 const clipboard = window.clipboard
 /**
-   * Declare the markdownRenderEmphasis command
+   * Declare the  markdownRenderCodeBlockButton command
    *
    * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
 */
 ;(commands as any).markdownRenderCodeBlockButton = function (cm: CodeMirror.Editor) {
   cm.startOperation()
+
   let countCodeblock = 0
   const codeBlockRE = /^(?:\s{0,3}`{3}|~{3}).*/
   const lineCount = cm.lineCount()
   let incodeblock = false
   let codesblocks = new Array<string>()
   let codeblock = ''
-  const CodeblockOpenCount = document.getElementsByClassName('code-block-first-line').length
-  const CodeblockCloseCount = document.getElementsByClassName('code-block-last-line').length
+  const codeblockClassOpen = 'code-block-first-line'
+  const codeblockClassClose = 'code-block-last-line'
+  const codeblocks = document.getElementsByClassName(codeblockClassOpen)
+
+  // This loop is grab the code block's code and store as a list
   for (let j = 0; j < lineCount; j++) {
     const line = cm.getLine(j)
     if (codeBlockRE.test(line) && !incodeblock) {
@@ -37,6 +41,7 @@ const clipboard = window.clipboard
       codeblock = codeblock + cm.getLine(++j) + '\n'
       incodeblock = true
     } else if (codeBlockRE.test(line) && incodeblock) {
+      codeblock = codeblock.slice(0, -1)
       codesblocks.push(codeblock)
       codeblock = ''
       incodeblock = false
@@ -44,30 +49,27 @@ const clipboard = window.clipboard
       codeblock = codeblock + cm.getLine(j) + '\n'
     }
   }
-
-  for (let i = 0; i < Number(countCodeblock); i++) {
-    const codeBlock1 = document.getElementsByClassName('cm-formatting-code-block-open')[i]
-    if (typeof codeBlock1 !== 'undefined') {
-      if (codeBlock1.hasChildNodes()) {
-        if (codeBlock1.childNodes.length > 1) {
-          codeBlock1.removeChild(codeBlock1.childNodes[1])
-        }
+  // This loop is update the copy buttons for each code block
+  if (document.getElementsByClassName(codeblockClassClose).length === codeblocks.length) {
+    for (let i = 0; i < codeblocks.length; i++) {
+      const codeBlock = codeblocks[i]
+      if (codeBlock === undefined) {
+        continue
       }
-    }
-  }
-
-  for (let i = 0; i < Number(countCodeblock); i++) {
-    const codeBlock = document.getElementsByClassName('cm-formatting-code-block-open')[i]
-    // Create a button
-    if (typeof codeBlock !== 'undefined') {
-      if (CodeblockOpenCount === CodeblockCloseCount) {
-        const copyButton = document.createElement('button')
+      const codeBlockText = codesblocks[i]
+      // Create a button
+      if (codeBlock.hasChildNodes() && codeBlock.childNodes.length > 1) {
+        codeBlock.childNodes[1].addEventListener('click', function (e) {
+          clipboard.writeText(codeBlockText)
+        })
+      } else {
+        let copyButton = document.createElement('button')
         copyButton.className = 'code-block-copy-button'
         copyButton.innerText = 'Copy'
         codeBlock.appendChild(copyButton)
-        copyButton.onclick = function () {
-          clipboard.writeText(codesblocks[i])
-        }
+        copyButton.addEventListener('click', function (e) {
+          clipboard.writeText(codeBlockText)
+        })
       }
     }
   }
