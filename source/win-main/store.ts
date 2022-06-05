@@ -233,7 +233,7 @@ export interface ZettlrState {
   /**
    * Cached texts of the headings
    */
-  headingCache: { [key: string]: string }
+  headingCache: Map<string, string>
 }
 
 function getConfig (): StoreOptions<ZettlrState> {
@@ -260,7 +260,7 @@ function getConfig (): StoreOptions<ZettlrState> {
         citationKeys: [],
         cslItems: [],
         searchResults: [],
-        headingCache: {}
+        headingCache: new Map()
       }
     },
     getters: {
@@ -273,21 +273,17 @@ function getConfig (): StoreOptions<ZettlrState> {
         // This function is called every time a document is changed
         // (e.g., a letter is typed). Most of the time the headings
         // stay the same. To avoid unnecessary computation, their
-        // parsed texts are cached:
-        // state.headingCache[unparsedHeadingText] = parsedHeadingText
-        const headingTextToHtml = function (headingText: string): string {
-          if (!state.headingCache[headingText]) {
-            let parsedHeadingText: string = md2html(headingText)
+        // parsed texts are cached in state.headingCache map.
+        for (const entry of toc) {
+          if (!state.headingCache.has(entry.text)) {
+            let parsedHeadingText: string = md2html(entry.text)
             parsedHeadingText = sanitizeHtml(parsedHeadingText, {
               // Headings may be emphasised and contain code
               allowedTags: [ 'em', 'kbd', 'code' ]
             })
-            state.headingCache[headingText] = parsedHeadingText
+            state.headingCache.set(entry.text, parsedHeadingText)
           }
-          return state.headingCache[headingText]
-        }
-        for (const entry of toc) {
-          entry.text = headingTextToHtml(entry.text)
+          entry.text = state.headingCache.get(entry.text)
         }
         state.tableOfContents = toc
       },

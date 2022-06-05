@@ -96,7 +96,7 @@ import { nextTick, defineComponent } from 'vue'
 
 const ipcRenderer = window.ipc
 
-const IDLE_UPDATE_TIMEOUT = 400 // Update TOC in sidebar at least 400 ms after the last input or cursor movement.
+const IDLE_UPDATE_TIMEOUT = 500 // Update TOC in sidebar at least 400 ms after the last input or cursor movement.
 
 interface DocumentWrapper {
   path: string
