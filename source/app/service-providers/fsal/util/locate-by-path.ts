@@ -1,38 +1,47 @@
+import { AnyMetaDescriptor } from '@dts/common/fsal'
 import { AnyDescriptor } from '@dts/main/fsal'
 
-// This function performs a simple lookup. We know the tree is a file tree, which
-// means that the descriptor we're dealing with MUST be a starting portion of
-// searchPath. So we only have three options:
-// 1. tree.path === searchPath --> Return, because we found the descriptor
-// 2. searchPath.startsWith(tree.path) --> Traverse down the tree
-// 3. !searchPath.startsWith(tree.path) --> Return undefined, because the tree cannot contain the searchPath
-export default function locateByPath (tree: AnyDescriptor|AnyDescriptor[], searchPath: string): AnyDescriptor|undefined {
-  // First let's see if we can shortcut
-  if (!Array.isArray(tree) && tree.path === searchPath) {
-    // The tree was a single descriptor and had the correct path. Return it.
-    return tree
-  } else if (Array.isArray(tree)) {
-    // The tree itself is an array, so we probably got the full fileTree
-    for (const item of tree) {
-      if (!searchPath.startsWith(item.path)) {
-        continue // This item cannot contain the wanted descriptor
-      }
+type MetaOrNotToMeta = AnyDescriptor | AnyMetaDescriptor
 
-      const ret = locateByPath(item, searchPath)
-      if (ret !== undefined) {
-        return ret
+const PATH_SEP = process.platform === 'win32' ? '\\' : '/'
+
+/**
+ * Takes a tree of descriptors and returns the descriptor that exactly matches
+ * targetPath, or undefined.
+ *
+ * @param   {AnyMetaDescriptor|AnyDescriptor}  tree        One or more descriptors
+ * @param   {string}                           targetPath  The (absolute) path to search for
+ *
+ * @return  {AnyMetaDescriptor|AnyDescriptor|undefined}    Either the descriptor or undefined
+ */
+export function locateByPath (tree: AnyMetaDescriptor|AnyMetaDescriptor[], targetPath: string): AnyMetaDescriptor|undefined
+export function locateByPath (tree: AnyDescriptor|AnyDescriptor[], targetPath: string): AnyDescriptor|undefined
+export default function locateByPath (tree: MetaOrNotToMeta|MetaOrNotToMeta[], targetPath: string): MetaOrNotToMeta|undefined {
+  // We need to find a target
+  if (Array.isArray(tree)) {
+    for (const descriptor of tree) {
+      if (targetPath === descriptor.path) {
+        // We have the correct element
+        return descriptor
+      } else if (targetPath.startsWith(descriptor.path + PATH_SEP) && descriptor.type === 'directory') {
+        // We have the correct tree
+        return locateByPath(descriptor.children, targetPath)
       }
     }
   } else if (tree.type === 'directory') {
-    // The descendants are an array
-    for (const child of tree.children) {
-      if (!searchPath.startsWith(child.path)) {
-        continue // This child cannot contain the wanted descriptor
-      }
+    // Single tree element
+    if (targetPath === tree.path) {
+      // Found the element
+      return tree
+    }
 
-      const ret = locateByPath(child, searchPath)
-      if (ret !== undefined) {
-        return ret
+    for (const child of tree.children) {
+      if (targetPath === child.path) {
+        // We got the correct child
+        return child
+      } else if (targetPath.startsWith(child.path + PATH_SEP) && child.type === 'directory') {
+        // Traverse further down
+        return locateByPath(child.children, targetPath)
       }
     }
   }

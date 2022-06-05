@@ -29,7 +29,7 @@
         <div
           v-bind:class="{ 'toc-entry': true, 'toc-entry-active': tocEntryIsActive(entry.line, idx) }"
           v-bind:data-line="entry.line"
-          v-html="entry.text"
+          v-html="toc2html(entry.text)"
         ></div>
       </div>
     </div>
@@ -166,16 +166,15 @@ import { defineComponent } from 'vue'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import { DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
 import { TabbarControl } from '@dts/renderer/window'
+import sanitizeHtml from 'sanitize-html'
+import { getConverter } from '@common/util/md-to-html'
+import { RelatedFile } from '@dts/renderer/misc'
 
 const path = window.path
 const ipcRenderer = window.ipc
 
-interface RelatedFile {
-  file: string
-  path: string
-  tags: string[]
-  link: 'inbound'|'outbound'|'bidirectional'|'none'
-}
+// Must be instantiated after loading, i.e. when the Sidebar is initialized
+let md2html: Function
 
 export default defineComponent({
   name: 'MainSidebar',
@@ -184,10 +183,7 @@ export default defineComponent({
     RecycleScroller
   },
   data: function () {
-    return {
-      bibContents: undefined as undefined|any[],
-      relatedFiles: [] as RelatedFile[]
-    }
+    return {}
   },
   computed: {
     /**
@@ -269,6 +265,9 @@ export default defineComponent({
     activeFile: function (): MDFileMeta|null {
       return this.$store.state.activeFile
     },
+    relatedFiles: function (): RelatedFile[] {
+      return this.$store.state.relatedFiles
+    },
     /**
      * Returns either the title property for the active file or the generic ToC
      * label -- to be used within the ToC of the sidebar
@@ -297,17 +296,20 @@ export default defineComponent({
     citationKeys: function (): string[] {
       return this.$store.state.citationKeys
     },
+    bibliography: function (): any {
+      return this.$store.state.bibliography
+    },
     referenceHTML: function (): string {
-      if (this.bibContents === undefined || this.bibContents[1].length === 0) {
+      if (this.bibliography === undefined || this.bibliography[1].length === 0) {
         return `<p>${trans('gui.citeproc.references_none')}</p>`
       } else {
-        const html = [this.bibContents[0].bibstart]
+        const html = [this.bibliography[0].bibstart]
 
-        for (const entry of this.bibContents[1]) {
+        for (const entry of this.bibliography[1]) {
           html.push(entry)
         }
 
-        html.push(this.bibContents[0].bibend)
+        html.push(this.bibliography[0].bibend)
 
         return html.join('\n')
       }
@@ -323,13 +325,6 @@ export default defineComponent({
     }
   },
   watch: {
-    citationKeys: function () {
-      // Reload the bibliography
-      this.updateReferences().catch(e => console.error('Could not update references', e))
-    },
-    activeFile: function () {
-      this.updateRelatedFiles().catch(e => console.error('Could not update related files', e))
-    },
     modifiedFiles: function () {
       if (this.activeFile == null) {
         return
@@ -339,120 +334,25 @@ export default defineComponent({
       // immediately account for any changes in the related files.
       const activePath = this.activeFile.path
       if (!(activePath in this.modifiedFiles)) {
-        this.updateRelatedFiles().catch(e => console.error('Could not update related files', e))
+        this.$store.dispatch('updateRelatedFiles')
+          .catch(e => console.error('Could not update related files', e))
       }
     }
   },
   mounted: function () {
-    ipcRenderer.on('citeproc-renderer', (event, { command, payload }) => {
-      if (command === 'citeproc-bibliography') {
-        this.bibContents = payload
-      }
-    })
-
     ipcRenderer.on('links', () => {
-      this.updateRelatedFiles().catch(err => console.error(err))
+      this.$store.dispatch('updateRelatedFiles')
+        .catch(e => console.error('Could not update related files', e))
     })
-
-    try {
-      this.updateReferences().catch(e => console.error('Could not update references', e))
-    } catch (err) {
-      console.error(err)
-    }
-    this.updateRelatedFiles().catch(e => console.error('Could not update related files', e))
+  },
+  created: function () {
+    // Instantiate a converter so that we can convert the md of our ToC entries
+    // to html with citation support
+    md2html = getConverter(window.getCitation)
   },
   methods: {
     setCurrentTab: function (which: string) {
       (global as any).config.set('window.currentSidebarTab', which)
-    },
-    updateReferences: async function () {
-      // NOTE We're manually cloning the citationKeys array, since Proxies
-      // cannot be cloned to be sent across the IPC bridge
-      this.bibContents = await ipcRenderer.invoke('citeproc-provider', {
-        command: 'get-bibliography',
-        payload: this.citationKeys.map(e => e)
-      })
-    },
-    updateRelatedFiles: async function () {
-      // First reset, default is no related files
-      this.relatedFiles = []
-      if (this.activeFile === null || this.activeFile.type !== 'file') {
-        return
-      }
-
-      const unreactiveList: RelatedFile[] = []
-
-      // Then retrieve the inbound links first, since that is the most important
-      // relation, so they should be on top of the list.
-      const { inbound, outbound } = await ipcRenderer.invoke('link-provider', {
-        command: 'get-inbound-links',
-        payload: { filePath: this.activeFile.path }
-      }) as { inbound: string[], outbound: string[]}
-
-      for (const absPath of [ ...inbound, ...outbound ]) {
-        const found = unreactiveList.find(elem => elem.path === absPath)
-        if (found !== undefined) {
-          continue
-        }
-
-        const related: RelatedFile = {
-          file: path.basename(absPath),
-          path: absPath,
-          tags: [],
-          link: 'none'
-        }
-
-        if (inbound.includes(absPath) && outbound.includes(absPath)) {
-          related.link = 'bidirectional'
-        } else if (inbound.includes(absPath)) {
-          related.link = 'inbound'
-        } else {
-          related.link = 'outbound'
-        }
-
-        unreactiveList.push(related)
-      }
-
-      // The second way files can be related to each other is via shared tags.
-      // This relation is not as important as explicit links, so they should
-      // be below the inbound linked files.
-      const recommendations = await ipcRenderer.invoke('tag-provider', {
-        command: 'recommend-matching-files',
-        payload: this.activeFile.tags.map(tag => tag) // De-proxy
-      })
-
-      // Recommendations come in the form of [file: string]: string[]
-      for (const filePath of Object.keys(recommendations)) {
-        const existingFile = unreactiveList.find(elem => elem.path === filePath)
-        if (existingFile !== undefined) {
-          // This file already links here
-          existingFile.tags = recommendations[filePath]
-        } else {
-          // This file doesn't explicitly link here but it shares tags
-          unreactiveList.push({
-            file: path.basename(filePath),
-            path: filePath,
-            tags: recommendations[filePath],
-            link: 'none'
-          })
-        }
-      }
-
-      // Now we have all relations based on either tags or backlinks. We must
-      // now order them in such a way that the hierarchy is like that:
-      // 1. Backlinks that also share common tags
-      // 2. Backlinks that do not share common tags
-      // 3. Files that only share common tags
-      const backlinksAndTags = unreactiveList.filter(e => e.link !== 'none' && e.tags.length > 0)
-      backlinksAndTags.sort((a, b) => { return b.tags.length - a.tags.length })
-
-      const backlinksOnly = unreactiveList.filter(e => e.link !== 'none' && e.tags.length === 0)
-      // No sorting necessary
-
-      const tagsOnly = unreactiveList.filter(e => e.link === 'none')
-      tagsOnly.sort((a, b) => { return b.tags.length - a.tags.length })
-
-      this.relatedFiles = [ ...backlinksAndTags, ...backlinksOnly, ...tagsOnly ]
     },
     getIcon: function (attachmentPath: string) {
       const fileExtIcon = ClarityIcons.get('file-ext')
@@ -484,7 +384,7 @@ export default defineComponent({
     },
     getRelatedFileName: function (filePath: string) {
       const descriptor = this.$store.getters.file(filePath)
-      if (descriptor === null) {
+      if (descriptor === undefined) {
         return filePath
       }
 
@@ -527,6 +427,20 @@ export default defineComponent({
 
       // True, when cursor lies between current and next heading
       return (cursorLine >= tocEntryLine && cursorLine < nextTocEntryLine)
+    },
+    /**
+     * Converts a Table of Contents-entry to (safe) HTML
+     *
+     * @param   {string}  entryText  The Markdown ToC entry
+     *
+     * @return  {string}             The safe HTML string
+     */
+    toc2html: function (entryText: string): string {
+      const html = md2html(entryText)
+      return sanitizeHtml(html, {
+        // Headings may be emphasised and contain code
+        allowedTags: [ 'em', 'kbd', 'code' ]
+      })
     }
   }
 })
