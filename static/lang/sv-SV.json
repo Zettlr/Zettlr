@@ -5,7 +5,7 @@
             "Chris Leonardsson"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-04-09T05:44:35.000000Z"
+        "updated_at": "2022-05-19T04:22:20.000000Z"
     },
     "dialog": {
         "about": {
@@ -356,6 +356,13 @@
                 "title": "Tema"
             },
             "title": "Inst\u00e4llningar",
+            "toolbar": {
+                "showMarkdownImageButton": "Visa bild",
+                "showMarkdownLinkButton": "Visa l\u00e4nk",
+                "showNewFileButton": "Ny fil",
+                "showNextFileButton": "N\u00e4sta fil",
+                "showOpenPreferencesButton": "\u00d6ppna inst\u00e4llningar"
+            },
             "translations": {
                 "download": "Klicka f\u00f6r nerladdning",
                 "downloading": "H\u00e4mtar %s",
@@ -603,6 +610,7 @@
         "close_file": "St\u00e4ng fil",
         "close_workspace": "St\u00e4ng arbetsyta",
         "copy": "Kopiera",
+        "copy_abs_path": "Kopiera hela s\u00f6k v\u00e4gen",
         "copy_equation": "Kopiera ekvations koden",
         "copy_filename": "Kopiera filnamn",
         "copy_html": "Kopiera som HTML",

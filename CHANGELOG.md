@@ -1,9 +1,15 @@
-# 2.2.7
+# 2.3.0
 
 ## GUI and Functionality
 
 - **New Feature**: You can hide the toolbar button and words count block in the
   preference
+- **New Feature**: You can now navigate the file tree with the arrow buttons
+  after activating the quick filter; use up and down to visually move through
+  the visible items and left/right to collapse/uncollapse a directory; use Enter
+  to "click" that item
+- **New Feature**: The document tabbar now features buttons so you can easily
+  scroll horizontally through many tabs
 - Added "Copy filename", "Copy path" and "Copy ID" to document tabs context
   menus (thanks to @kyaso)
 - Add "New File", "Next File" and "Previous File" buttons to the toolbar
@@ -11,6 +17,21 @@
   prevent the dropdown from showing up, especially during auto-searches
 - Fixed wrong character count if counting without spaces
 - Fixed wrong word count for indented lists
+- Fixed wrong keyword/tag CSS class names
+- Added keyword/tag CSS class names to YAML frontmatter tags
+- Display the last modification date in the file list, even if the additional
+  info setting is turned off
+- The "restrict to directory" field will now be empty by default
+- Pressing `Tab` while the query input is focused will now directly focus the
+  restrict-to-dir input
+- The recent documents menu on Windows works again
+- Fixed jumping of the code editor in the assets manager
+- The table of contents in the sidebar now shows the title of the currently
+  active file, if applicable
+- Removed the less-than-helpful file and folder removal shortcuts
+- Fixed wrongly positioned tabstops during snippets autocomplete
+- Fixed an error that would erroneously render citations in footnote previews or
+  copied text with styling
 - Table of contents and document info are now updated when program is idle
   (snappier typing in large documents with many headings on slow computers)
 

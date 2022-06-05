@@ -26,7 +26,7 @@
     >
       <div class="filename">
         <!-- Display the date in the top-right corner -->
-        <div v-if="fileMeta" class="date">
+        <div class="date">
           {{ getDate }}
         </div>
         <clr-icon
