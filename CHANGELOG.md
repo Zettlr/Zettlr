@@ -32,6 +32,8 @@
 
 - Ignore `IDEA`-related files
 - Update Pandoc to `2.18`
+- Refactored the main window's store to be more modular for the upcoming
+  additional changes
 
 # 2.2.6
 
