@@ -30,7 +30,7 @@ import announceModifiedFileMutation from './mutations/announce-modified-file'
 import updateOpenDirectoryMutation from './mutations/update-open-directory'
 
 // Import Actions
-import filtreeUpdateAction from './actions/filtree-update'
+import filetreeUpdateAction from './actions/filetree-update'
 import regenerateTagSuggestionsAction from './actions/regenerate-tag-suggestions'
 import updateOpenDirectoryAction from './actions/update-open-directory'
 import updateActiveFileAction from './actions/update-active-file'
@@ -229,7 +229,7 @@ function getConfig (): StoreOptions<ZettlrState> {
       removeFromFiletree: removeFromFiletreeMutation
     },
     actions: {
-      filetreeUpdate: filtreeUpdateAction,
+      filetreeUpdate: filetreeUpdateAction,
       updateOpenDirectory: updateOpenDirectoryAction,
       updateActiveFile: updateActiveFileAction,
       updateOpenFiles: updateOpenFilesAction,
