@@ -183,9 +183,7 @@ export default defineComponent({
     RecycleScroller
   },
   data: function () {
-    return {
-      bibContents: undefined as undefined|any[]
-    }
+    return {}
   },
   computed: {
     /**
