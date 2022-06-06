@@ -376,16 +376,28 @@ body.dark .tippy-content .editor-fn-textarea {
   border: none;
 }
 
-// Text-folding related stuff
 .CodeMirror-gutters {
   background-color: transparent;
-  border: none;
-  width: 2em;
+  border: transparent;
+}
+// Text-folding related stuff
+.CodeMirror-foldgutter {
+  background-color: transparent;
   padding-right: 10px;
 }
-.CodeMirror-foldgutter {
-  width: 2em;
+.CodeMirror-linenumbers {
+  background-color: transparent;
+  font-weight: 300;
+  width: 7em;
 }
+
+.CodeMirror-linenumber {
+  background-color: transparent;
+  font-weight: 300;
+  text-align: right;
+  color: var(--text-faint);
+}
+
 .CodeMirror-foldgutter-open, .CodeMirror-foldgutter-folded {
   text-align: right;
   cursor: pointer;

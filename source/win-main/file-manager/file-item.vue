@@ -209,13 +209,13 @@ export default defineComponent({
       return this.isDirectory === false
     },
     fileMeta: function () {
-      return this.$store.state.config['fileMeta']
+      return this.$store.state.config.fileMeta
     },
     isCode: function () {
       return this.obj.type === 'code'
     },
     getDate: function () {
-      if (this.$store.state.config['fileMetaTime'] === 'modtime') {
+      if (this.$store.state.config.fileMetaTime === 'modtime') {
         return formatDate(this.obj.modtime, window.config.get('appLang'), true)
       } else {
         return formatDate(this.obj.creationtime, window.config.get('appLang'), true)

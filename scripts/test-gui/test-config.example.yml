@@ -5,7 +5,7 @@
 # likings. The test-config.yml will not be committed to git, so it
 # will stay persistent between pulls.
 
-# Please view the comments in source/app/service-providers/types/config-provider.d.ts
+# Please view the comments in /source/types/main/config-provider.d.ts
 # for full explanations on all possible values
 darkTheme: false
 alwaysReloadFiles: false
@@ -50,6 +50,7 @@ zkn:
   linkWithFilename: always # always|never|withID
   autoCreateLinkedFiles: false
 editor:
+  lineNumbers: true
   autoCloseBrackets: true
   defaultSaveImagePath: assets
   homeEndBehaviour: true

@@ -83,6 +83,7 @@ interface ConfigOptions {
     customDirectory: string
   }
   editor: {
+    lineNumbers: boolean
     autocompleteAcceptSpace: boolean
     autoSave: 'off'|'immediately'|'delayed'
     citeStyle: 'in-text'|'in-text-suffix'|'regular'

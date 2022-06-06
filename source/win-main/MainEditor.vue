@@ -218,6 +218,7 @@ export default defineComponent({
         indentUnit: this.$store.state.config['editor.indentUnit'],
         indentWithTabs: this.$store.state.config['editor.indentWithTabs'],
         autoCloseBrackets: this.$store.state.config['editor.autoCloseBrackets'],
+        lineNumbers: this.$store.state.config['editor.lineNumbers'],
         autoCorrect: {
           style: this.$store.state.config['editor.autoCorrect.style'],
           quotes: {

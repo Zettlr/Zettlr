@@ -205,6 +205,7 @@
             },
             "cite_style_label": "How would you like autocomplete to insert your citations?",
             "count_chars": "Count characters instead of words (e.g., for Chinese)",
+            "line_numbers": "Display line numbers in the gutter",
             "creationtime": "File creation time",
             "dark_mode": "Dark mode",
             "dark_mode_schedule": {

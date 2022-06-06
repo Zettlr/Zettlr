@@ -117,7 +117,7 @@ ${stack}`
         return
       }
 
-      (this.$refs['details'] as Element).classList.toggle('hidden')
+      (this.$refs.details as Element).classList.toggle('hidden')
     }
   }
 })
