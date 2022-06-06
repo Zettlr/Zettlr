@@ -93,18 +93,10 @@ import extractYamlFrontmatter from '@common/util/extract-yaml-frontmatter'
 import YAML from 'yaml'
 
 import { nextTick, defineComponent } from 'vue'
+import { MainEditorDocumentWrapper } from '@dts/renderer/editor'
+import retrieveDocumentFromMain from './util/retrieve-document-from-main'
 
 const ipcRenderer = window.ipc
-
-interface DocumentWrapper {
-  path: string
-  dir: string
-  mode: string
-  cmDoc: CodeMirror.Doc
-  modified: boolean
-  lastWordCount: number
-  saveTimeout: any
-}
 
 /**
  * We must define the Markdown instance outside of Vue, since the proxy-fication
@@ -120,15 +112,15 @@ let mdEditor: MarkdownEditor|null = null
  *
  * @var {any[]}
  */
-const openDocuments: DocumentWrapper[] = []
+const openDocuments: MainEditorDocumentWrapper[] = []
 
 /**
  * Contains the currently displayed activeDocument; needs to be defined outside
  * due to the same reasons as mdEditor and openDocuments.
  *
- * @var {null|DocumentWrapper}
+ * @var {null|MainEditorDocumentWrapper}
  */
-let activeDocument: DocumentWrapper|null = null
+let activeDocument: MainEditorDocumentWrapper|null = null
 
 export default defineComponent({
   name: 'MainEditor',
@@ -193,7 +185,7 @@ export default defineComponent({
         return true // By default, assume Markdown
       }
 
-      return this.resolveMode(this.activeFile.ext) === 'multiplex'
+      return activeDocument?.mode === 'multiplex'
     },
     openFiles: function (): any[] {
       return this.$store.state.openFiles
@@ -379,7 +371,7 @@ export default defineComponent({
     globalSearchResults: function () {
       this.maybeHighlightSearchResults()
     },
-    activeFile: function () {
+    activeFile: async function () {
       if (mdEditor === null) {
         console.error('Received a file update but the editor was not yet initiated!')
         return
@@ -398,92 +390,26 @@ export default defineComponent({
 
       if (doc !== undefined) {
         // Simply swap it
-        mdEditor.setOptions({
-          zettlr: { markdownImageBasePath: this.activeFile.dir }
-        })
-        mdEditor.swapDoc(doc.cmDoc, doc.mode)
-        activeDocument = doc
-        mdEditor.readOnly = false
-        this.$store.commit('updateTableOfContents', mdEditor.tableOfContents)
-        this.$store.commit('activeDocumentInfo', mdEditor.documentInfo)
-        // Check if there are search results available for this file that we can
-        // pull in and highlight
-        this.maybeHighlightSearchResults()
-        // Update the citation keys
-        this.updateCitationKeys()
-      } else if (this.currentlyFetchingFiles.includes(this.activeFile.path) === false) {
+        this.swapDocument(doc)
+      } else if (!this.currentlyFetchingFiles.includes(this.activeFile.path)) {
         // We have to request the document beforehand
         this.currentlyFetchingFiles.push(this.activeFile.path)
-        ipcRenderer.invoke('application', { command: 'get-file-contents', payload: this.activeFile.path })
-          .then((descriptorWithContent) => {
-            const mode = this.resolveMode(this.activeFile.ext)
-            const newDoc: DocumentWrapper = {
-              path: descriptorWithContent.path,
-              dir: descriptorWithContent.dir, // Save the dir to distinguish memory-files from others
-              mode: mode, // Save the mode for later swaps
-              cmDoc: CodeMirror.Doc(descriptorWithContent.content, mode),
-              modified: false,
-              lastWordCount: countWords(descriptorWithContent.content, this.shouldCountChars),
-              saveTimeout: undefined // Only used below to save the saveTimeout
-            }
+        const newDoc = await retrieveDocumentFromMain(
+          this.activeFile.path,
+          this.activeFile.ext,
+          this.shouldCountChars,
+          this.autoSave,
+          (doc) => { this.save(doc).catch(e => console.error(e)) }
+        )
 
-            // Listen to change events on the doc, because if the user pastes
-            // more than ten words at once, we need to substract it to not
-            // mess with the word count.
-            newDoc.cmDoc.on('change', (doc, changeObj) => {
-              if (changeObj.origin !== 'paste') {
-                return
-              }
-
-              const newTextWords = countWords(changeObj.text.join(' '), this.shouldCountChars)
-              if (newTextWords > 10) {
-                newDoc.lastWordCount = countWords(newDoc.cmDoc.getValue(), this.shouldCountChars)
-              }
-            })
-
-            // Implement autosaving
-            newDoc.cmDoc.on('change', (doc, changeObj) => {
-              // Do not attempt to autosave if it's off or we're dealing with an in-memory file.
-              if (this.autoSave === 'off' || newDoc.dir === ':memory:') {
-                return
-              }
-
-              if (newDoc.saveTimeout !== undefined) {
-                clearTimeout(newDoc.saveTimeout)
-                newDoc.saveTimeout = undefined
-              }
-
-              // Even "immediately" doesn't save RIGHT after you have typed a
-              // character. Rather, we take a 250ms window so that the filesystem
-              // won't be too stressed. This should still feel very immediate to
-              // the user, since the file will more or less be saved once they
-              // stop typing.
-              const delay = (this.autoSave === 'immediately') ? 250 : 5000
-
-              newDoc.saveTimeout = setTimeout(() => {
-                this.save(newDoc).catch(e => console.error(e))
-                newDoc.saveTimeout = undefined
-              }, delay)
-            })
-
-            openDocuments.push(newDoc)
-            const idx = this.currentlyFetchingFiles.findIndex(e => e === descriptorWithContent.path)
-            this.currentlyFetchingFiles.splice(idx, 1)
-            // Let's check whether the active file has in the meantime changed
-            // If it has, don't overwrite the current one
-            if (this.activeFile.path === descriptorWithContent.path && mdEditor !== null) {
-              mdEditor.setOptions({
-                zettlr: { markdownImageBasePath: this.activeFile.dir }
-              })
-              mdEditor.swapDoc(newDoc.cmDoc, newDoc.mode)
-              activeDocument = newDoc
-              mdEditor.readOnly = false
-              this.$store.commit('updateTableOfContents', mdEditor.tableOfContents)
-              this.$store.commit('activeDocumentInfo', mdEditor.documentInfo)
-              this.updateCitationKeys()
-            }
-          })
-          .catch(e => console.error(e))
+        openDocuments.push(newDoc)
+        const idx = this.currentlyFetchingFiles.findIndex(e => e === newDoc.path)
+        this.currentlyFetchingFiles.splice(idx, 1)
+        // Let's check whether the active file has in the meantime changed
+        // If it has, don't overwrite the current one
+        if (this.activeFile.path === newDoc.path && mdEditor !== null) {
+          this.swapDocument(newDoc)
+        }
       } // Else: The file might currently being fetched, so let's wait ...
     },
     openFiles: function () {
@@ -653,6 +579,26 @@ export default defineComponent({
     obs.observe(this.$refs.editor as any)
   },
   methods: {
+    swapDocument (doc: MainEditorDocumentWrapper) {
+      if (mdEditor === null) {
+        console.error(`Could not swap to document ${doc.path}: Editor was not initialized`)
+        return
+      }
+
+      mdEditor.setOptions({
+        zettlr: { markdownImageBasePath: this.activeFile.dir }
+      })
+      mdEditor.swapDoc(doc.cmDoc, doc.mode)
+      activeDocument = doc
+      mdEditor.readOnly = false
+      this.$store.commit('updateTableOfContents', mdEditor.tableOfContents)
+      this.$store.commit('activeDocumentInfo', mdEditor.documentInfo)
+      // Check if there are search results available for this file that we can
+      // pull in and highlight
+      this.maybeHighlightSearchResults()
+      // Update the citation keys
+      this.updateCitationKeys()
+    },
     maybeUpdateActiveDocumentInfo () {
       if (this.docInfoTimeout !== undefined) {
         return // There will be an update soon enough.
@@ -670,27 +616,7 @@ export default defineComponent({
         mdEditor.jtl(lineNumber, setCursor)
       }
     },
-    /**
-     * Resolves a file extension to a valid CodeMirror mode
-     *
-     * @param   {string}  ext  The file extension (with leading dot!)
-     *
-     * @return  {string}       The corresponding CodeMirror mode. Defaults to multiplex
-     */
-    resolveMode (ext: string) {
-      switch (ext) {
-        case '.tex':
-          return 'stex'
-        case '.yaml':
-        case '.yml':
-          return 'yaml'
-        case '.json':
-          return 'javascript'
-        default:
-          return 'multiplex'
-      }
-    },
-    async save (doc: DocumentWrapper) {
+    async save (doc: MainEditorDocumentWrapper) {
       if (doc.cmDoc.isClean() === true) {
         return // Nothing to save
       }
@@ -963,11 +889,7 @@ export default defineComponent({
       activeDocument.cmDoc.setValue('---\n' + YAML.stringify(frontmatter) + '---' + postFrontmatter + content)
     },
     getValue () {
-      if (mdEditor !== null) {
-        return mdEditor.value
-      } else {
-        return ''
-      }
+      return mdEditor?.value ?? ''
     }
   }
 })
