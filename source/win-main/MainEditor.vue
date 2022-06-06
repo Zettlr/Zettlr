@@ -4,7 +4,7 @@
     ref="editor"
     v-bind:style="{ 'font-size': `${fontSize}px` }"
     v-bind:class="{
-      'monospace': !isMarkdown,
+      'code-file': !isMarkdown,
       'fullscreen': distractionFree
     }"
     v-on:wheel="onEditorScroll($event)"
@@ -19,7 +19,7 @@
           v-model="query"
           type="text"
           v-bind:placeholder="findPlaceholder"
-          v-bind:class="{'monospace': regexpSearch }"
+          v-bind:class="{'has-regex': regexpSearch }"
           v-on:keypress.enter.exact="searchNext()"
           v-on:keypress.shift.enter.exact="searchPrevious()"
           v-on:keydown.esc.exact="showSearch = false"
@@ -185,7 +185,7 @@ export default defineComponent({
         return true // By default, assume Markdown
       }
 
-      return activeDocument?.mode === 'multiplex'
+      return this.activeFile.type === 'file'
     },
     openFiles: function (): any[] {
       return this.$store.state.openFiles
@@ -929,7 +929,7 @@ export default defineComponent({
 
     input {
       flex: 3;
-      &.monospace { font-family: monospace; }
+      &.has-regex { font-family: monospace; }
     }
 
     button {
@@ -952,8 +952,13 @@ export default defineComponent({
   }
 
   // If a code file is loaded, we need to display the editor contents in monospace.
-  &.monospace .CodeMirror {
+  &.code-file .CodeMirror {
     font-family: monospace;
+
+    margin-left: 0px;
+    .CodeMirror-scroll {
+      padding-right: 0px;
+    }
 
     // We're using this solarized theme here: https://ethanschoonover.com/solarized/
     // See also the CodeEditor.vue component, which uses the same colours
@@ -989,6 +994,10 @@ export default defineComponent({
     .cm-property   { color: @magenta; }
     .cm-type       { color: @red; }
     .cm-number     { color: @violet; }
+
+    // Reset the margins for code files (top/bottom, see the other
+    // CodeMirror-code definition)
+    .CodeMirror-code { margin: 0; }
   }
 
   .CodeMirror-code {
@@ -1034,6 +1043,7 @@ export default defineComponent({
 
 body.dark #editor {
   background-color: rgba(20, 20, 30, 1);
+  .CodeMirror .CodeMirror-gutters { background-color: rgba(20, 20, 30, 1); }
 }
 
 body.darwin #editor {

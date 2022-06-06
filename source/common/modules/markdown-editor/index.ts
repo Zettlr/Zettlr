@@ -462,6 +462,18 @@ export default class MarkdownEditor extends EventEmitter {
       this.setOptions({ mode: 'readability' })
     }
 
+    if (this._currentDocumentMode !== 'multiplex') {
+      this.setOptions({
+        lineNumbers: true,
+        lineWrapping: false
+      })
+    } else {
+      this.setOptions({
+        lineNumbers: false,
+        lineWrapping: true
+      })
+    }
+
     return oldDoc
   }
 

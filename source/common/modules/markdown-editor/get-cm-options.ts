@@ -41,6 +41,8 @@ export default function getCodeMirrorDefaultOptions (mdEditorInstance: MarkdownE
     cursorScrollMargin: 60,
     // Disable cursor blinking, as we apply a @keyframes animation
     cursorBlinkRate: 0,
+    // Don't show lineNumbers by default. This option will be switched for code.
+    lineNumbers: false,
     // Specify the fold gutter
     gutters: ['CodeMirror-foldgutter'],
     // Default fold options
