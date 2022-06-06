@@ -275,7 +275,7 @@ export default defineComponent({
      * @return  {string}  The title for the ToC sidebar
      */
     titleOrTocLabel: function (): string {
-      if (this.activeFile === null || this.activeFile.frontmatter === null) {
+      if (this.activeFile === null || this.activeFile.frontmatter == null) {
         return this.tocLabel
       }
 

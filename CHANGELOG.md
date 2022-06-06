@@ -39,6 +39,7 @@
 - Update Pandoc to `2.18`
 - Refactored the main window's store to be more modular for the upcoming
   additional changes
+- Added an additional check for frontmatter values in code files
 
 # 2.2.6
 
