@@ -1,3 +1,14 @@
+# Upcoming
+
+## GUI and Functionality
+
+- Code files (e.g. `*.tex` or `*.json`) now have line numbers enabled and the
+  margins of the main editor removed by default
+
+## Under the Hood
+
+- Refactored the main editor component further
+
 # 2.3.0
 
 ## GUI and Functionality
