@@ -8,6 +8,7 @@
 ## Under the Hood
 
 - Refactored the main editor component further
+- Upgrade Electron to `v18.0.0`
 
 # 2.3.0
 
