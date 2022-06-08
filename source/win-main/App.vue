@@ -75,7 +75,7 @@
 
 import WindowChrome from '@common/vue/window/Chrome.vue'
 import FileManager from './file-manager/file-manager.vue'
-import MainSidebar from './MainSidebar.vue'
+import MainSidebar from './sidebar/MainSidebar.vue'
 import DocumentTabs from './DocumentTabs.vue'
 import SplitView from '../common/vue/window/SplitView.vue'
 import GlobalSearch from './GlobalSearch.vue'
