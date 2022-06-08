@@ -123,6 +123,16 @@ jobs:
         run: |
           pkgver=$(node ./scripts/get-pkg-version.js)
           echo ::set-output name=version::$pkgver
+      # If we're building a full release, we have to make sure that nobody (that
+      # is: Hendrik) forgot to increment the tag version. If we already have a
+      # tag with this version, we should not proceed, because that will then
+      # lead to an overwriting of the files in the previous release. That
+      # doesn't cause any havoc because we don't push unstable code to master,
+      # BUT it looks bad.
+      - name: Verify the corresponding tag does not yet exist
+        if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
+        # Note the ! - it will return 0 if the command fails, and 1 otherwise
+        run: ! git rev-parse "v${{steps.ref.outputs.version}}" 
       # Create the windows binaries. First package both for x64 and arm64, then
       # make an NSIS installer. Make sure to sign the windows installer using
       # the corresponding SSL EV.
