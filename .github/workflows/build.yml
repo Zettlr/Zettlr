@@ -100,12 +100,13 @@ jobs:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Clone repository (master branch)
         if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: 'master'
+          fetch-depth: 0 # Required for the tag verification step.
       - name: Clone repository (develop branch)
         if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: 'develop'
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
@@ -184,12 +185,13 @@ jobs:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Clone repository (master branch)
         if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: 'master'
+          fetch-depth: 0 # Required for the tag verification step.
       - name: Clone repository (develop branch)
         if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: 'develop'
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
@@ -257,12 +259,13 @@ jobs:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Clone repository (master branch)
         if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: 'master'
+          fetch-depth: 0 # Required for the tag verification step.
       - name: Clone repository (develop branch)
         if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: 'develop'
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
@@ -323,7 +326,7 @@ jobs:
       # NOTE: Here we do not care about which branch is checked out since we
       # just need the two scripts which are present in both.
       - name: Clone repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v2
         with:
