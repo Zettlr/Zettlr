@@ -378,13 +378,16 @@ body.dark .tippy-content .editor-fn-textarea {
 
 // Text-folding related stuff
 .CodeMirror-gutters {
-  background-color: transparent;
+  //background-color: transparent;
+  background-color: white;
   border: none;
-  width: 2em;
-  padding-right: 10px;
 }
 .CodeMirror-foldgutter {
-  width: 2em;
+  width: 20px;
+}
+.CodeMirror-linenumbers {
+  width: 40px;
+  border-right: 1px solid rgba(0, 0, 0, 0.25);
 }
 .CodeMirror-foldgutter-open, .CodeMirror-foldgutter-folded {
   text-align: right;
