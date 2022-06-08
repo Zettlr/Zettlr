@@ -15,8 +15,7 @@
 
 import cssSafeString from '@common/util/css-safe-string'
 import CodeMirror, { commands } from 'codemirror'
-import yaml from 'yaml'
-import { Scalar, YAMLMap, YAMLSeq } from 'yaml/types'
+import yaml, { Scalar, YAMLMap, YAMLSeq } from 'yaml'
 
 /**
  * Defines the CodeMirror command to render all found markdown images.
@@ -73,12 +72,12 @@ import { Scalar, YAMLMap, YAMLSeq } from 'yaml/types'
     // a valid tag
     if (item instanceof Scalar && item.range != null) {
       // A scalar has just one range
-      rangesToProcess.push(item.range)
+      rangesToProcess.push(item.range.slice(0, 2) as [number, number])
     } else if (item instanceof YAMLSeq && item.items.length > 0) {
       // Sequences have items with ranges
       for (const subItem of item.items) {
         if (subItem instanceof Scalar && subItem.range != null) {
-          rangesToProcess.push(subItem.range)
+          rangesToProcess.push(subItem.range.slice(0, 2) as [number, number])
         }
       }
     }

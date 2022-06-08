@@ -18,12 +18,12 @@
       role="tabpanel"
       v-bind:aria-labelledby="tabs[currentTab].id"
     >
-      <Form
+      <FormBuilder
         ref="form"
         v-bind:model="model"
         v-bind:schema="schema"
         v-on:update:model-value="handleInput"
-      ></Form>
+      ></FormBuilder>
     </div>
   </WindowChrome>
 </template>
@@ -43,7 +43,7 @@
  * END HEADER
  */
 
-import Form from '@common/vue/form/Form.vue'
+import FormBuilder from '@common/vue/form/Form.vue'
 import WindowChrome from '@common/vue/window/Chrome.vue'
 import { trans } from '@common/i18n-renderer'
 
@@ -112,7 +112,7 @@ function modelToField (model: string, tree: any): any {
 
 export default defineComponent({
   components: {
-    Form,
+    FormBuilder,
     WindowChrome
   },
   data () {

@@ -213,7 +213,7 @@ async function writeDefaults (
     defaults[key] = properties[key]
   }
 
-  const YAMLOptions: YAML.Options = {
+  const YAMLOptions = {
     indent: 4,
     simpleKeys: false
   }
