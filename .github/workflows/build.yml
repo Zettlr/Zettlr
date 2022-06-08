@@ -207,6 +207,9 @@ jobs:
         run: |
           pkgver=$(node ./scripts/get-pkg-version.js)
           echo ::set-output name=version::$pkgver
+      - name: Verify the corresponding tag does not yet exist # See windows build for detailed comments on this command
+        if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
+        run: ! git rev-parse "v${{steps.ref.outputs.version}}" 
       # Save the macOS certificate on this runner for forge to access it in the
       # next step below.
       - name: Retrieve code signing certificate
@@ -277,6 +280,9 @@ jobs:
         run: |
           pkgver=$(node ./scripts/get-pkg-version.js)
           echo ::set-output name=version::$pkgver
+      - name: Verify the corresponding tag does not yet exist # See windows build for detailed comments on this command
+        if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
+        run: ! git rev-parse "v${{steps.ref.outputs.version}}" 
       - name: Package Linux targets (x64)
         run: yarn package:linux-x64
       - name: Create Linux installers (x64)
