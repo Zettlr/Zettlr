@@ -2,6 +2,8 @@
 
 ## GUI and Functionality
 
+- **New Feature**: After a long time, you can now again drag and drop entries in
+  the table of contents in the sidebar to rearrange sections of your file
 - Code files (e.g. `*.tex` or `*.json`) now have line numbers enabled and the
   margins of the main editor removed by default
 

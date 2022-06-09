@@ -50,7 +50,7 @@
           </template>
           <template #view2>
             <!-- Second side: Sidebar -->
-            <MainSidebar></MainSidebar>
+            <MainSidebar v-on:move-section="moveSection($event)"></MainSidebar>
           </template>
         </SplitView>
       </template>
@@ -507,6 +507,9 @@ export default defineComponent({
   methods: {
     jtl: function (lineNumber: number, setCursor: boolean = false) {
       (this.$refs.editor as any).jtl(lineNumber, setCursor)
+    },
+    moveSection: function (data: { from: number, to: number }) {
+      (this.$refs.editor as any).moveSection(data.from, data.to)
     },
     startGlobalSearch: function (terms: string) {
       this.mainSplitViewVisibleComponent = 'globalSearch'

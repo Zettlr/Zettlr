@@ -890,6 +890,9 @@ export default defineComponent({
     },
     getValue () {
       return mdEditor?.value ?? ''
+    },
+    moveSection (from: number, to: number) {
+      mdEditor?.moveSection(from, to)
     }
   }
 })

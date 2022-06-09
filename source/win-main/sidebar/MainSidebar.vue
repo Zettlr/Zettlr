@@ -7,7 +7,10 @@
     ></TabBar>
 
     <!-- Now the tab containers -->
-    <ToCTab v-if="currentTab === 'toc'"></ToCTab>
+    <ToCTab
+      v-if="currentTab === 'toc'"
+      v-on:move-section="$emit('move-section', $event)"
+    ></ToCTab>
     <ReferencesTab v-if="currentTab === 'references'"></ReferencesTab>
     <RelatedFilesTab v-if="currentTab === 'relatedFiles'"></RelatedFilesTab>
     <OtherFilesTab v-if="currentTab === 'attachments'"></OtherFilesTab>
@@ -50,6 +53,7 @@ export default defineComponent({
     RelatedFilesTab,
     OtherFilesTab
   },
+  emits: ['move-section'],
   data: function () {
     return {}
   },

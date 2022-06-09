@@ -66,6 +66,7 @@ import linkTooltipsHook from './hooks/link-tooltips'
 import noteTooltipsHook from './hooks/note-preview'
 
 import displayContextMenu from './display-context-menu'
+import moveSection from '@common/util/move-section'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
@@ -367,6 +368,17 @@ export default class MarkdownEditor extends EventEmitter {
       this._instance.setCursor({ line: line, ch: 0 })
       this._instance.focus()
     }
+  }
+
+  /**
+   * Moves the section that starts with an ATX heading on the from-line to the
+   * line identified by to
+   *
+   * @param   {number}  from  The starting line (including the section heading)
+   * @param   {number}  to    The target line for the section
+   */
+  moveSection (from: number, to: number): void {
+    this.codeMirror.setValue(moveSection(this.value, from, to))
   }
 
   /**
