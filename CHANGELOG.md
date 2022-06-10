@@ -6,6 +6,8 @@
   the table of contents in the sidebar to rearrange sections of your file
 - Code files (e.g. `*.tex` or `*.json`) now have line numbers enabled and the
   margins of the main editor removed by default
+- The sidebar tabs are now static at the top, meaning you don't have to scroll
+  up within a long list just to see the tabbar
 
 ## Under the Hood
 

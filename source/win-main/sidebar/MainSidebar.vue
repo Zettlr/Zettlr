@@ -7,13 +7,15 @@
     ></TabBar>
 
     <!-- Now the tab containers -->
-    <ToCTab
-      v-if="currentTab === 'toc'"
-      v-on:move-section="$emit('move-section', $event)"
-    ></ToCTab>
-    <ReferencesTab v-if="currentTab === 'references'"></ReferencesTab>
-    <RelatedFilesTab v-if="currentTab === 'relatedFiles'"></RelatedFilesTab>
-    <OtherFilesTab v-if="currentTab === 'attachments'"></OtherFilesTab>
+    <div id="sidebar-tab-container">
+      <ToCTab
+        v-if="currentTab === 'toc'"
+        v-on:move-section="$emit('move-section', $event)"
+      ></ToCTab>
+      <ReferencesTab v-if="currentTab === 'references'"></ReferencesTab>
+      <RelatedFilesTab v-if="currentTab === 'relatedFiles'"></RelatedFilesTab>
+      <OtherFilesTab v-if="currentTab === 'attachments'"></OtherFilesTab>
+    </div>
   </div>
 </template>
 
@@ -153,8 +155,16 @@ body {
     background-color: rgb(230, 230, 230);
     height: 100%;
     width: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
+
+    #sidebar-tab-container {
+      position: absolute;
+      top: 40px;
+      bottom: 0;
+      left: 0px;
+      right: 0px;
+      padding: 0px 5px 5px 0px;
+      overflow-y: auto;
+    }
 
     #open-dir-external {
       padding: @button-margin;
