@@ -15,6 +15,7 @@
 - Refactored the Sidebar panels into their own respective components
 - Upgrade Electron to `v18.0.0`
 - Pandoc logs are now logged in every case
+- Improve the display and functionality of log messagesß
 
 # 2.3.0
 
