@@ -91,7 +91,7 @@ export default class DirProjectExport extends ZettlrCommand {
 
         this._app.log.verbose(`[Project Export] Exporting ${opt.sourceFiles.length} files to ${opt.targetDirectory}`)
 
-        const result = await makeExport(opt, this._app.config, this._app.assets)
+        const result = await makeExport(opt, this._app.log, this._app.config, this._app.assets)
         if (result.code !== 0) {
           // We got an error!
           throw new Error(`Export failed: ${result.stderr.join('\n')}`)

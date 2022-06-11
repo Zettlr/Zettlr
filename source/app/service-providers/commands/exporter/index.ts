@@ -29,6 +29,7 @@ import { plugin as PDFExporter } from './pdf-exporter'
 import { plugin as RevealJSExporter } from './revealjs-exporter'
 import { plugin as TextbundleExporter } from './textbundle-exporter'
 import AssetsProvider from '@providers/assets'
+import LogProvider from '@providers/log'
 
 const PLUGINS = [
   DefaultExporter,
@@ -58,6 +59,7 @@ export function getAvailableFormats (): any {
  */
 export async function makeExport (
   options: ExporterOptions,
+  logger: LogProvider,
   config: ConfigProvider,
   assets: AssetsProvider,
   formatOptions: any = {}
@@ -77,7 +79,7 @@ export async function makeExport (
   // This is basically the "plugin API"
   const ctx: ExporterAPI = {
     runPandoc: async (defaults: string) => {
-      return await runPandoc(defaults, options.cwd)
+      return await runPandoc(logger, defaults, options.cwd)
     },
     getDefaultsFor: async (writer: string, properties: any) => {
       return await writeDefaults(writer, properties, config, assets, options.defaultsOverride)
@@ -96,7 +98,7 @@ export async function makeExport (
   return exporterReturn
 }
 
-async function runPandoc (defaultsFile: string, cwd?: string): Promise<PandocRunnerOutput> {
+async function runPandoc (logger: LogProvider, defaultsFile: string, cwd?: string): Promise<PandocRunnerOutput> {
   const output: PandocRunnerOutput = {
     code: 0,
     stdout: [],
@@ -135,6 +137,10 @@ async function runPandoc (defaultsFile: string, cwd?: string): Promise<PandocRun
   // for example), clean up the output.
   output.stderr = output.stderr.join('').split('\n').filter(line => line.trim() !== '')
   output.stdout = output.stdout.join('').split('\n').filter(line => line.trim() !== '')
+
+  if (output.stdout.length > 0) {
+    logger.info('This Pandoc run produced additional output.', output.stdout)
+  }
 
   return output
 }

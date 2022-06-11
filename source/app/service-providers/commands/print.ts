@@ -57,7 +57,7 @@ export default class Print extends ZettlrCommand {
     // Call the exporter.
     try {
       this._app.log.verbose('[Printer] Exporting file to HTML ...')
-      const output = await makeExport(opt, this._app.config, this._app.assets)
+      const output = await makeExport(opt, this._app.log, this._app.config, this._app.assets)
       if (output.code !== 0) {
         throw new Error(`Export failed with code ${output.code}`)
       }

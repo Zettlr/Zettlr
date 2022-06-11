@@ -87,7 +87,7 @@ export default class Export extends ZettlrCommand {
     // Call the exporter. Don't throw the "big" error as this is single-file export
     try {
       this._app.log.verbose(`[Exporter] Exporting ${exporterOptions.sourceFiles.length} files to ${exporterOptions.targetDirectory}`)
-      const output = await makeExport(exporterOptions, this._app.config, this._app.assets, options)
+      const output = await makeExport(exporterOptions, this._app.log, this._app.config, this._app.assets, options)
       if (output.code === 0) {
         this._app.log.info(`Successfully exported file to ${output.targetFile}`)
         this._app.notifications.show(trans('system.export_success', format.toUpperCase()))
