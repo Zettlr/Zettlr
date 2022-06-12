@@ -541,8 +541,6 @@ function hintFunction (cm: CodeMirror.Editor, opt: CodeMirror.ShowHintOptions): 
         to.ch += autocompleteStart.ch
       }
 
-      console.log(autocompleteStart, from, to, insertedLines)
-
       // Then, insert the text, but with all variables replaced and only the
       // tabstops remaining.
       const actualTextToInsert = replaceSnippetVariables(completion.text)
