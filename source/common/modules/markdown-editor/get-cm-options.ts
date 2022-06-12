@@ -104,6 +104,10 @@ export default function getCodeMirrorDefaultOptions (mdEditorInstance: MarkdownE
         linkStart: '[[', // Zettelkasten link start
         linkEnd: ']]' // Zettelkasten link end
       },
+      metadata: {
+        path: '', // Absolute path to the current file
+        id: '' // ID of the current file
+      },
       // The base path used to render the image in case of relative URLs
       markdownImageBasePath: '',
       // The characters used for bold formatting

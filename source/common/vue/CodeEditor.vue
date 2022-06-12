@@ -74,7 +74,11 @@ CodeMirror.defineMode('markdown-snippets', function (config, parsercfg) {
     'CURRENT_SECONDS_UNIX',
     'UUID',
     'CLIPBOARD',
-    'ZKN_ID'
+    'ZKN_ID',
+    'CURRENT_ID',
+    'FILENAME',
+    'DIRECTORY',
+    'EXTENSION'
   ]
 
   const markdownSnippets = {

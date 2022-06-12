@@ -22,6 +22,7 @@ import headingToID from '../util/heading-to-id'
 // We need two code block REs: First the line-wise, and then the full one.
 const codeBlockRE = getCodeBlockRE(false)
 const codeBlockMultiline = getCodeBlockRE(true)
+const path = window.path
 
 interface AutocompleteDatabaseEntry {
   text: string
@@ -543,7 +544,7 @@ function hintFunction (cm: CodeMirror.Editor, opt: CodeMirror.ShowHintOptions): 
 
       // Then, insert the text, but with all variables replaced and only the
       // tabstops remaining.
-      const actualTextToInsert = replaceSnippetVariables(completion.text)
+      const actualTextToInsert = replaceSnippetVariables(completion.text, cm)
       const actualInsertedLines = actualTextToInsert.split('\n').length
       cm.replaceRange(actualTextToInsert, from, to)
 
@@ -710,11 +711,12 @@ function getTabMarkers (cm: CodeMirror.Editor, from: CodeMirror.Position, to: Co
  * A utility function that replaces snippet variables with their correct values
  * dynamically.
  *
- * @param   {string}  text  The text to modify
+ * @param   {string}             text  The text to modify
+ * @param   {CodeMirror.Editor}  cm    The editor instance
  *
- * @return  {string}        The text with all variables replaced accordingly.
+ * @return  {string}                   The text with all variables replaced accordingly.
  */
-function replaceSnippetVariables (text: string): string {
+function replaceSnippetVariables (text: string, cm: CodeMirror.Editor): string {
   // First, prepare our replacement table
   const now = DateTime.now()
   const month = now.month
@@ -723,6 +725,8 @@ function replaceSnippetVariables (text: string): string {
   const minute = now.minute
   const second = now.second
   const clipboard = window.clipboard.readText()
+
+  const absPath = (cm as any).getOption('zettlr').metadata.path as string
 
   const REPLACEMENTS = {
     CURRENT_YEAR: now.year,
@@ -737,7 +741,11 @@ function replaceSnippetVariables (text: string): string {
     CURRENT_SECONDS_UNIX: now.toSeconds(),
     UUID: uuid(),
     CLIPBOARD: (clipboard !== '') ? clipboard : undefined,
-    ZKN_ID: generateId(window.config.get('zkn.idGen'))
+    ZKN_ID: generateId(window.config.get('zkn.idGen')),
+    CURRENT_ID: (cm as any).getOption('zettlr').metadata.id as string,
+    FILENAME: path.basename(absPath),
+    DIRECTORY: path.dirname(absPath),
+    EXTENSION: path.extname(absPath)
   }
 
   // Second: Replace those variables, and return the text. NOTE we're adding a

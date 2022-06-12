@@ -8,6 +8,11 @@
   margins of the main editor removed by default
 - The sidebar tabs are now static at the top, meaning you don't have to scroll
   up within a long list just to see the tabbar
+- Added new variables for snippets:
+  - `CURRENT_ID`: Holds the currently assigned Zettelkasten ID to the file
+  - `FILENAME`: Holds the filename of the current file
+  - `DIRECTORY`: Holds the directory path for the current file
+  - `EXTENSION`: Holds the file extension for the current file
 
 ## Under the Hood
 

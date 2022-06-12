@@ -585,8 +585,12 @@ export default defineComponent({
         return
       }
 
+      // Provide the editor instance with metadata for the new file
       mdEditor.setOptions({
-        zettlr: { markdownImageBasePath: this.activeFile.dir }
+        zettlr: {
+          markdownImageBasePath: this.activeFile.dir,
+          metadata: { path: this.activeFile.path, id: this.activeFile.id }
+        }
       })
       mdEditor.swapDoc(doc.cmDoc, doc.mode)
       activeDocument = doc
