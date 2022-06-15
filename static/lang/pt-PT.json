@@ -2,14 +2,14 @@
     "metadata": {
         "authors": [
             "Carlos Bornes \u003Ccbornes3@gmail.com\u003E",
+            "Paula Simoes \u003Cppsimoes@gmail.com\u003E",
             "tmpod \u003Ctmpod@pm.me\u003E",
             "Nelson Faria",
             "isosamep",
-            "guga14",
-            "Paula Simoes \u003Cppsimoes@gmail.com\u003E"
+            "guga14"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-03-22T17:07:30.000000Z"
+        "updated_at": "2022-06-06T14:30:38.000000Z"
     },
     "dialog": {
         "about": {
@@ -19,9 +19,9 @@
             "citationstyle": "O Zettler usa o citeproc para mostrar cita\u00e7\u00f5es directamente no editor. Para tal, o Zettlr usa a linguagem CitationStyleLanguage (CLS) e ficheiros de estilo. Estes ficheiros s\u00e3o disponibilizados inalterados e com metadados do autor. Para mais informa\u00e7\u00f5es:",
             "citeproc": "Renderiza as cita\u00e7\u00f5es corretas para todos os trabalhos",
             "contributors": "Contribuidores",
-            "jquery": "Torna f\u00e1cil a renderiza\u00e7\u00e3o de toda a interface de usu\u00e1rios",
+            "jquery": "Facilita o processamento de toda a interface do utilizador",
             "katex": "Renderiza f\u00f3rmulas LaTeX no editor",
-            "lead": "Zettlr \u00e9 um projeto criado por Hendrik Erz, licenciado sobre a licen\u00e7a GNU GPL v3. \u00c9 Open Source, gratuito e baseado no framework Electron. O projeto Zettlr agradece aos desenvolvedores do Electron, do framework Node.js e do editor CodeMirror pelo seu trabalho. Sem eles, o Zettlr n\u00e3o seria poss\u00edvel. Abaixo pode conferir todos os projetos utilizados pelo Zettlr.",
+            "lead": "O Zettlr \u00e9 um projecto de Hendrik Erz, licenciado sob a licen\u00e7a GNU GPL v3. \u00c9 de C\u00f3digo Aberto (Open Source), gratuito e baseado na framework Electron. O Zettlr gostaria de agradecer aos developers do Electron, da framework Node.js e do editor CodeMirror pelo seu trabalho. Sem eles, o Zettlr n\u00e3o seria poss\u00edvel. Abaixo pode encontrar todos os projectos que o Zettlr usa.",
             "lessjs": "Ajuda muito a escrever os estilos para o Zettlr",
             "license": "Licen\u00e7a",
             "main": "Projetos Principais",
