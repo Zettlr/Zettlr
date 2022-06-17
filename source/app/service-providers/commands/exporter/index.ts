@@ -26,27 +26,49 @@ import isFile from '@common/util/is-file'
 import { DefaultsOverride, ExporterAPI, ExporterOptions, ExporterOutput, PandocRunnerOutput } from './types'
 import { plugin as DefaultExporter } from './default-exporter'
 import { plugin as PDFExporter } from './pdf-exporter'
-import { plugin as RevealJSExporter } from './revealjs-exporter'
 import { plugin as TextbundleExporter } from './textbundle-exporter'
 import AssetsProvider from '@providers/assets'
 import LogProvider from '@providers/log'
+import { PandocProfileMetadata } from '@dts/common/assets'
 
-const PLUGINS = [
-  DefaultExporter,
-  PDFExporter,
-  RevealJSExporter,
-  TextbundleExporter
-]
+/**
+ * This function returns faux metadata for the custom export formats the
+ * exporter supports which circumvent (or build upon) the Pandoc exporter. These
+ * are not defined as regular defaults files, therefore we need to output them
+ * here.
+ *
+ * @return  {PandocProfileMetadata[]}The additional profiles
+ */
+export function getCustomProfiles (): PandocProfileMetadata[] {
+  return [
+    {
+      name: 'Textbundle.yaml', // Fake name
+      path: 'textbundle', // Fake path
+      reader: 'markdown', // Not completely the truth
+      writer: 'textbundle', // Not even supported by Pandoc
+      isInvalid: false // IT'S ALL FAKE!
+    },
+    {
+      name: 'Textpack.yaml',
+      path: 'textpack',
+      reader: 'markdown',
+      writer: 'textpack',
+      isInvalid: false
+    },
+    {
+      name: 'Simple PDF.yaml',
+      path: 'simple-pdf',
+      reader: 'markdown',
+      writer: 'simple-pdf',
+      isInvalid: false
+    }
+  ]
+}
 
-export function getAvailableFormats (): any {
-  // Returns simply a list of all available formats
-  const list = []
-
-  for (const plugin of PLUGINS) {
-    list.push(plugin.pluginInformation())
-  }
-
-  return list
+const PLUGINS = {
+  'pandoc': DefaultExporter,
+  'simple-pdf': PDFExporter,
+  'textbundle': TextbundleExporter
 }
 
 /**
@@ -61,19 +83,9 @@ export async function makeExport (
   options: ExporterOptions,
   logger: LogProvider,
   config: ConfigProvider,
-  assets: AssetsProvider,
-  formatOptions: any = {}
+  assets: AssetsProvider
 ): Promise<ExporterOutput> {
   // We already know where the exported file will end up, so set the property
-
-  // Now we can prepare our return
-  let exporterReturn: ExporterOutput = {
-    code: 6, // See https://pandoc.org/MANUAL.html#exit-codes
-    stdout: [],
-    stderr: [],
-    targetFile: '' // This will be returned if no exporter has been found
-  }
-
   const inputFiles = options.sourceFiles.map(file => file.path)
 
   // This is basically the "plugin API"
@@ -81,21 +93,20 @@ export async function makeExport (
     runPandoc: async (defaults: string) => {
       return await runPandoc(logger, defaults, options.cwd)
     },
-    getDefaultsFor: async (writer: string, properties: any) => {
-      return await writeDefaults(writer, properties, config, assets, options.defaultsOverride)
+    getDefaultsFor: async (profile: string, properties: any = {}) => {
+      return await writeDefaults(profile, properties, config, assets, options.defaultsOverride)
     }
   }
 
-  // Search for the correct plugin to run, and run it
-  for (const plugin of PLUGINS) {
-    const formats = plugin.pluginInformation().formats
-    if (options.format in formats) {
-      exporterReturn = await plugin.run(options, inputFiles, formatOptions, ctx)
-      break
-    }
+  // Search for the correct plugin to run, and run it. First the custom ones ...
+  if ([ 'textbundle', 'textpack' ].includes(options.profile.path)) {
+    return await PLUGINS.textbundle.run(options, inputFiles, ctx)
+  } else if (options.profile.path === 'simple-pdf') {
+    return await PLUGINS['simple-pdf'].run(options, inputFiles, ctx)
+  } else {
+    // ... otherwise run the regular Pandoc exporter.
+    return await PLUGINS.pandoc.run(options, inputFiles, ctx)
   }
-
-  return exporterReturn
 }
 
 async function runPandoc (logger: LogProvider, defaultsFile: string, cwd?: string): Promise<PandocRunnerOutput> {
@@ -148,7 +159,7 @@ async function runPandoc (logger: LogProvider, defaultsFile: string, cwd?: strin
 // REFERENCE: Full defaults file here: https://pandoc.org/MANUAL.html#default-files
 
 async function writeDefaults (
-  writer: string, // The writer to use (e.g. html or pdf)
+  profile: string, // The profile to use
   properties: any, // Contains properties that will be written to the defaults
   config: ConfigProvider,
   assets: AssetsProvider,
@@ -157,7 +168,7 @@ async function writeDefaults (
   const dataDir = app.getPath('temp')
   const defaultsFile = path.join(dataDir, 'defaults.yml')
 
-  const defaults: any = await assets.getDefaultsFor(writer, 'export')
+  const defaults: any = await assets.getDefaultsFile(profile)
 
   // In order to facilitate file-only databases, we need to get the currently
   // selected database. This could break in a lot of places, but until Pandoc
