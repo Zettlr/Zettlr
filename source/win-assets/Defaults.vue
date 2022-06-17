@@ -8,13 +8,40 @@
     <template #view1>
       <SelectableList
         v-bind:items="listItems"
+        v-bind:editable="true"
         v-bind:selected-item="currentItem"
         v-on:select="currentItem = $event"
+        v-on:add="newDefaultsFile()"
+        v-on:remove="removeCurrentFile()"
       ></SelectableList>
     </template>
     <template #view2>
       <div id="defaults-container">
         <p>{{ defaultsExplanation }}</p>
+
+        <p>
+          <TextControl
+            v-model="currentFilename"
+            v-bind:inline="true"
+            v-bind:disabled="currentItem < 0"
+          ></TextControl>
+          <ButtonControl
+            v-bind:label="renameFileLabel"
+            v-bind:inline="true"
+            v-bind:disabled="visibleItems.length === 0 || currentFilename === visibleItems[currentItem].name"
+            v-on:click="renameFile()"
+          ></ButtonControl>
+        </p>
+
+        <p v-if="visibleItems[currentItem]?.isInvalid" class="warning">
+          <clr-icon shape="warning"></clr-icon>
+          <!-- TODO: Translate! -->
+          <span> <!-- NOTE: Wrapping in a span due to the flex -->
+            This profile appears to be either missing a <code>writer</code> or a
+            <code>reader</code> property. Make sure to set both so that Zettlr
+            can use this profile.
+          </span>
+        </p>
 
         <CodeEditor
           ref="code-editor"
@@ -29,12 +56,6 @@
             v-bind:label="saveButtonLabel"
             v-bind:inline="true"
             v-on:click="saveDefaultsFile()"
-          ></ButtonControl>
-          <ButtonControl
-            v-bind:primary="false"
-            v-bind:label="restoreButtonLabel"
-            v-bind:inline="true"
-            v-on:click="restoreDefaultsFile()"
           ></ButtonControl>
           <span v-if="savingStatus !== ''" class="saving-status">{{ savingStatus }}</span>
         </div>
@@ -61,43 +82,28 @@
 
 import SplitView from '@common/vue/window/SplitView.vue'
 import SelectableList from '@common/vue/form/elements/SelectableList.vue'
+import TextControl from '@common/vue/form/elements/Text.vue'
 import ButtonControl from '@common/vue/form/elements/Button.vue'
 import CodeEditor from '@common/vue/CodeEditor.vue'
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
+import { PandocProfileMetadata } from '@dts/common/assets'
+import { PANDOC_READERS, PANDOC_WRITERS, SUPPORTED_READERS } from '@common/util/pandoc-maps'
+import sanitizeFilename from 'sanitize-filename'
 
 const ipcRenderer = window.ipc
+const path = window.path
 
-const WRITERS = {
-  'html': 'HTML',
-  'pdf': 'PDF',
-  'docx': 'Word',
-  'odt': 'OpenDocument Text',
-  'rtf': 'RTF',
-  'latex': 'LaTeX',
-  'org': 'Orgmode',
-  'revealjs': 'Reveal.js',
-  'plain': 'Plain Text',
-  'rst': 'reStructured Text',
-  'markdown': 'Markdown'
-}
-
-const READERS = {
-  'docbook': 'DocBook',
-  'docx': 'Word',
-  'epub': 'ePub',
-  'haddock': 'Haddock',
-  'html': 'HTML',
-  'latex': 'LaTeX',
-  'muse': 'Muse',
-  'odt': 'OpenDocument Text',
-  'opml': 'OPML',
-  'org': 'Orgmode',
-  'rst': 'reStructured Text',
-  't2t': 'text2tags',
-  'textile': 'Textile',
-  'vimwiki': 'VimWiki'
-}
+const NEW_DEFAULTS_FILE_CONTENTS = `# This is a new defaults file that you can use to define rules for exporting or
+# importing files to and from Zettlr. The only two required properties are the
+# writer and reader ones. Without them, Zettlr will not be able to export or
+# import your files. You can choose any reader or writer that is supported by
+# Pandoc. Zettlr will automatically show the profile at appropriate locations
+# based on the values of the writer and reader properties.
+# More info: https://pandoc.org/MANUAL.html.
+reader: markdown
+writer: markdown
+`
 
 export default defineComponent({
   name: 'DefaultsApp',
@@ -105,7 +111,8 @@ export default defineComponent({
     SplitView,
     SelectableList,
     CodeEditor,
-    ButtonControl
+    ButtonControl,
+    TextControl
   },
   props: {
     // "which" describes which kind of defaults files this instance controls
@@ -118,33 +125,55 @@ export default defineComponent({
   data: function () {
     return {
       currentItem: 0,
+      currentFilename: '',
       editorContents: '',
-      savingStatus: ''
+      savingStatus: '',
+      availableDefaultsFiles: [] as PandocProfileMetadata[]
     }
   },
   computed: {
-    listItems: function (): string[] {
-      const formatList = (this.which === 'export') ? WRITERS : READERS
-      return Object.values(formatList)
+    renameFileLabel: function (): string {
+      return 'Rename file'
+    },
+    codeEditor: function (): typeof CodeEditor {
+      return this.$refs['code-editor'] as typeof CodeEditor
+    },
+    visibleItems: function (): PandocProfileMetadata[] {
+      // Display either the exporting or importing formats depending on the tab
+      return this.availableDefaultsFiles
+        .filter((e) => SUPPORTED_READERS.includes(this.which === 'import' ? e.writer : e.reader))
+    },
+    listItems: function (): any[] {
+      return this.visibleItems
+        .map(file => {
+          // Try to resolve known and fully supported extensions
+          const reader = file.reader in PANDOC_READERS ? PANDOC_READERS[file.reader] : file.reader
+          const writer = file.writer in PANDOC_WRITERS ? PANDOC_WRITERS[file.writer] : file.writer
+          const infoString = (file.isInvalid) ? 'Invalid' : [ reader, writer ].join(' → ')
+
+          return {
+            displayText: this.getDisplayText(file.name), // The file name is always the displayText
+            infoString: infoString,
+            infoStringClass: file.isInvalid ? 'error' : undefined
+          }
+        })
     },
     defaultsExplanation: function (): string {
       return trans('dialog.defaults.explanation') // Edit the corresponding defaults file here.
     },
     saveButtonLabel: function (): string {
       return trans('dialog.button.save')
-    },
-    restoreButtonLabel: function (): string {
-      return trans('dialog.defaults.restore')
     }
   },
   watch: {
     which: function (newValue, oldValue) {
       // Reset to the beginning of the list. The watcher right below will pick
       // that change up and re-load the defaults.
-      this.currentItem = 0
+      this.currentItem = -1
+      this.loadDefaultsForState().catch(e => console.error(e))
     },
     currentItem: function (newValue, oldValue) {
-      this.loadDefaultsForState()
+      this.loadDefaultsForState().catch(e => console.error(e))
     },
     editorContents: function () {
       const editor = this.$refs['code-editor'] as typeof CodeEditor
@@ -156,7 +185,9 @@ export default defineComponent({
     }
   },
   mounted: function () {
-    this.loadDefaultsForState()
+    this.retrieveDefaultsFiles()
+      .then(() => this.loadDefaultsForState().catch(e => console.error(e)))
+      .catch(e => console.error(e))
 
     ipcRenderer.on('shortcut', (event, shortcut) => {
       if (shortcut === 'save-file') {
@@ -165,70 +196,135 @@ export default defineComponent({
     })
   },
   methods: {
-    loadDefaultsForState: function () {
-      const formatList = (this.which === 'export') ? WRITERS : READERS
-
+    loadDefaultsForState: async function () {
       // Loads a defaults file from main for the given state (tab + list item)
-      const format = Object.keys(formatList)[this.currentItem]
+      if (this.availableDefaultsFiles.length === 0) {
+        this.currentFilename = ''
+        return
+      }
+
+      if (this.currentItem < 0) {
+        this.currentItem = 0
+      }
+
+      if (this.currentItem >= this.visibleItems.length) {
+        this.currentItem = this.visibleItems.length - 1
+      }
+
+      const absPath = this.visibleItems[this.currentItem].path
 
       ipcRenderer.invoke('assets-provider', {
         command: 'get-defaults-file',
-        payload: {
-          format: format,
-          type: this.which
-        }
+        payload: { absPath: absPath }
       })
         .then(data => {
           this.editorContents = data
-          ;(this.$refs['code-editor'] as typeof CodeEditor).markClean()
+          this.codeEditor.markClean()
+          this.currentFilename = this.visibleItems[this.currentItem].name
           this.savingStatus = ''
+        })
+        .catch(err => console.error(err))
+    },
+    retrieveDefaultsFiles: async function () {
+      // NOTE: Here we are explicitly requesting only the defaults files, not
+      // all export profiles, because here it's only about modifying them (which
+      // does not work with the custom profiles the exporter provides).
+      ipcRenderer.invoke('assets-provider', {
+        command: 'list-defaults'
+      })
+        .then((files: PandocProfileMetadata[]) => {
+          this.availableDefaultsFiles = files
+          if (this.currentItem < 0) {
+            this.currentItem = 0
+          }
+          this.loadDefaultsForState().catch(e => console.error(e))
         })
         .catch(err => console.error(err))
     },
     saveDefaultsFile: function () {
       this.savingStatus = trans('gui.assets_man.status.saving')
 
-      const formatList = (this.which === 'export') ? WRITERS : READERS
-      const format = Object.keys(formatList)[this.currentItem]
+      const absPath = this.visibleItems[this.currentItem].path
 
       ipcRenderer.invoke('assets-provider', {
         command: 'set-defaults-file',
-        payload: {
-          format: format,
-          type: this.which,
-          contents: this.editorContents
-        }
+        payload: { absPath: absPath, contents: this.editorContents }
       })
-        .then(() => {
+        .then(async () => {
           this.savingStatus = trans('gui.assets_man.status.saved')
+          await this.retrieveDefaultsFiles() // Always make sure to pull in any changes
           setTimeout(() => { this.savingStatus = '' }, 1000)
         })
         .catch(err => console.error(err))
     },
-    restoreDefaultsFile: function () {
-      this.savingStatus = trans('gui.assets_man.defaults_restoring')
+    newDefaultsFile: function () {
+      // Create a new defaults file
+      const d = new Date()
+      const yyyy = d.getFullYear()
+      const mm = d.getMonth() + 1
+      const dd = d.getDate()
+      const h = d.getHours()
+      const m = d.getMinutes()
+      const s = d.getSeconds()
 
-      const formatList = (this.which === 'export') ? WRITERS : READERS
-      const format = Object.keys(formatList)[this.currentItem]
+      const dir = path.dirname(this.availableDefaultsFiles[0].path)
+      const newName = `New Profile ${yyyy}-${mm}-${dd} ${h}-${m}-${s}.yaml`
+      ipcRenderer.invoke('assets-provider', {
+        command: 'set-defaults-file',
+        payload: { absPath: path.join(dir, newName), contents: NEW_DEFAULTS_FILE_CONTENTS }
+      })
+        .then(async () => {
+          await this.retrieveDefaultsFiles() // Always make sure to pull in any changes
+        })
+        .catch(err => console.error(err))
+    },
+    renameFile: function () {
+      let newName = this.currentFilename
+      if (!newName.endsWith('.yaml') || !newName.endsWith('.yml')) {
+        newName += '.yaml'
+      }
+
+      newName = sanitizeFilename(newName, { replacement: '-' })
+
+      const oldAbsPath = this.visibleItems[this.currentItem].path
+      const oldDir = path.dirname(oldAbsPath)
+      const newAbsPath = path.join(oldDir, this.currentFilename)
 
       ipcRenderer.invoke('assets-provider', {
-        command: 'restore-defaults-file',
-        payload: {
-          format: format,
-          type: this.which
-        }
+        command: 'rename-defaults-file',
+        payload: { oldPath: oldAbsPath, newPath: newAbsPath }
       })
-        .then((result) => {
-          if (result === true) {
-            this.savingStatus = trans('Defaults file restored.')
-            // Immediately re-fetch the now restored defaults file
-            this.loadDefaultsForState()
-            setTimeout(() => { this.savingStatus = '' }, 1000)
-          } else {
-            this.savingStatus = trans('gui.assets_man.defaults_restore_error')
-          }
+        .then(async () => {
+          await this.retrieveDefaultsFiles() // Always make sure to pull in any changes
         })
-        .catch(err => { console.error(err) })
+        .catch(err => console.error(err))
+    },
+    removeCurrentFile: function () {
+      // Only remove if we have MORE than one profile. One profile is required
+      // (among other things so that newDefaultsFile() can pull in the defaultspath
+      // and because Zettlr is intended to be used for importing/exporting. If
+      // you don't use it like that, don't look at the profiles!)
+      if (this.visibleItems.length === 1) {
+        this.savingStatus = 'You need to have at least one import and export profile at a time.'
+        setTimeout(() => { this.savingStatus = '' }, 1000)
+        return
+      }
+
+      const absPath = this.visibleItems[this.currentItem].path
+
+      ipcRenderer.invoke('assets-provider', {
+        command: 'remove-defaults-file',
+        payload: { absPath: absPath }
+      })
+        .then(async () => {
+          await this.retrieveDefaultsFiles() // Always make sure to pull in any changes
+        })
+        .catch(err => console.error(err))
+    },
+    getDisplayText: function (name: string): string {
+      // First, strip off the extension
+      name = name.substring(0, name.lastIndexOf('.'))
+      return name
     }
   }
 })
@@ -244,5 +340,18 @@ export default defineComponent({
   .CodeMirror {
     flex-grow: 1;
   }
+
+  p.warning {
+  display: flex;
+  color: rgb(97, 97, 0);
+  background-color: rgb(209, 209, 23);
+  border: 1px solid rgb(170, 170, 0);
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+
+  // More spacing between the icon and the text
+  span { padding-left: 5px; }
+}
 }
 </style>

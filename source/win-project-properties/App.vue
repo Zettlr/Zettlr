@@ -23,12 +23,12 @@
       <p v-if="selectedExportFormats.length === 0" class="warning">
         <clr-icon shape="warning"></clr-icon>
         <!-- TODO: Translate! -->
-        <span>Please select at least one export format to build this project.</span>
+        <span>Please select at least one profile to build this project.</span>
       </p>
       <ListControl
         v-bind:label="exportFormatLabel"
         v-bind:model-value="exportFormatList"
-        v-bind:labels="[exportFormatUseLabel, exportFormatNameLabel]"
+        v-bind:labels="[exportFormatUseLabel, exportFormatNameLabel, 'Conversion']"
         v-bind:editable="[0]"
         v-on:update:model-value="selectExportFormat($event)"
       ></ListControl>
@@ -95,10 +95,12 @@ import TextControl from '@common/vue/form/elements/Text.vue'
 import { defineComponent } from 'vue'
 import { ProjectSettings } from '@dts/common/fsal'
 import { WindowTab } from '@dts/renderer/window'
+import { PandocProfileMetadata } from '@dts/common/assets'
+import { PANDOC_READERS, PANDOC_WRITERS, SUPPORTED_READERS } from '@common/util/pandoc-maps'
 
 const ipcRenderer = window.ipc
 
-interface ExportFormat { selected: boolean, format: string }
+interface ExportFormat { selected: boolean, name: string, conversion: string }
 
 export default defineComponent({
   components: {
@@ -110,8 +112,8 @@ export default defineComponent({
   data: function () {
     return {
       dirPath: '',
-      exportFormatMap: {} as { [key: string]: string },
-      selectedExportFormats: [ 'html', 'chromium-pdf' ], // NOTE: Must correspond to the defaults in fsal-directory.ts
+      profiles: [] as PandocProfileMetadata[],
+      selectedExportFormats: [] as string[], // NOTE: Must correspond to the defaults in fsal-directory.ts
       patterns: [],
       cslStyle: '',
       texTemplate: '',
@@ -139,11 +141,16 @@ export default defineComponent({
       return this.projectTitle
     },
     exportFormatList: function (): ExportFormat[] {
-      // We need to return a list of { selected: boolean, format: 'string' }
-      return Object.keys(this.exportFormatMap).map(e => {
+      // We need to return a list of { selected: boolean, name: string, conversion: string }
+      return this.profiles.filter(e => SUPPORTED_READERS.includes(e.reader)).map(e => {
+        const reader = e.reader in PANDOC_READERS ? PANDOC_READERS[e.reader] : e.reader
+        const writer = e.writer in PANDOC_WRITERS ? PANDOC_WRITERS[e.writer] : e.writer
+        const conversionString = (e.isInvalid) ? 'Invalid' : [ reader, writer ].join(' → ')
+
         return {
-          selected: this.selectedExportFormats.includes(this.exportFormatMap[e]),
-          format: e
+          selected: this.selectedExportFormats.includes(e.path),
+          name: this.getDisplayText(e.name),
+          conversion: conversionString
         }
       })
     },
@@ -188,21 +195,11 @@ export default defineComponent({
   },
   mounted: function () {
     // First, we need to get the available export formats
-    ipcRenderer.invoke('application', {
-      command: 'get-available-export-formats'
+    ipcRenderer.invoke('assets-provider', {
+      command: 'list-export-profiles'
     })
-      .then(exporterInformation => {
-        // We only need to know the readable string for an exportable format
-        // and the identifier. The list will be populated using the keys
-        // (human-readable string), and the actual value will consist of the
-        // values (the identifiers).
-        for (const info of exporterInformation) {
-          // NOTE: We are switching "id: readable" to "readable: id" here so
-          // that it's much easier to retrieve the identifier later on.
-          for (const key in info.formats) {
-            this.exportFormatMap[info.formats[key]] = key
-          }
-        }
+      .then((defaults: PandocProfileMetadata[]) => {
+        this.profiles = defaults
       })
       .catch(err => console.error(err))
 
@@ -223,10 +220,13 @@ export default defineComponent({
   methods: {
     selectExportFormat: function (newListVal: ExportFormat[]) {
       const newFormats = newListVal.filter(e => e.selected).map(e => {
-        return this.exportFormatMap[e.format]
-      })
-      this.selectedExportFormats = newFormats
+        return this.profiles.find(x => this.getDisplayText(x.name) === e.name)
+      }).filter(x => x !== undefined) as PandocProfileMetadata[]
+      this.selectedExportFormats = newFormats.map(x => x.path)
       this.updateProperties()
+    },
+    getDisplayText: function (name: string): string {
+      return name.substring(0, name.lastIndexOf('.'))
     },
     updateProperties: function () {
       ipcRenderer.invoke('application', {

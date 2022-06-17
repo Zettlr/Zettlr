@@ -778,35 +778,27 @@ export default defineComponent({
         document.getElementById('toolbar-export') as HTMLElement,
         data,
         (data: any) => {
-          if (data.shouldExport === true) {
-            // Remember to de-proxy any non-primitive data types so that they can
-            // be sent over the IPC pipe
-            const options: { [key: string]: string } = {}
-            for (const key in data.formatOptions) {
-              options[key] = data.formatOptions[key]
-            }
-            // Remember the last choice
-            (global as any).config.set('export.singleFileLastExporter', data.format)
-            // If the file is modified, export the current contents of the editor
-            // rather than what is saved on disk
-            let content
-            if (this.$store.state.modifiedDocuments.includes(this.$store.state.activeFile.path) === true) {
-              content = (this.$refs.editor as any).getValue()
-            }
-            // Run the exporter
-            ipcRenderer.invoke('application', {
-              command: 'export',
-              payload: {
-                format: data.format,
-                options: options,
-                exportTo: data.exportTo,
-                file: this.$store.state.activeFile.path,
-                content: content
-              }
-            })
-              .catch(e => console.error(e))
-            this.$closePopover()
+          if (data.shouldExport !== true) {
+            return
           }
+          // If the file is modified, export the current contents of the editor
+          // rather than what is saved on disk
+          let content
+          if (this.$store.state.modifiedDocuments.includes(this.$store.state.activeFile.path) === true) {
+            content = (this.$refs.editor as any).getValue()
+          }
+          // Run the exporter
+          ipcRenderer.invoke('application', {
+            command: 'export',
+            payload: {
+              profile: JSON.parse(JSON.stringify(data.profile)),
+              exportTo: data.exportTo,
+              file: this.$store.state.activeFile.path,
+              content: content
+            }
+          })
+            .catch(e => console.error(e))
+          this.$closePopover()
         })
     },
     getToolbarButtonDisplay: function (configName: string): boolean {
