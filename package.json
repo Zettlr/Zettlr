@@ -112,7 +112,7 @@
     "cross-env": "^7.0.3",
     "css-loader": "^6.7.1",
     "csso": "^5.0.0",
-    "electron": "^18.0.0",
+    "electron": "^19.0.4",
     "electron-builder": "^23.0.3",
     "electron-devtools-installer": "^3.2.0",
     "electron-notarize": "^1.2.1",
