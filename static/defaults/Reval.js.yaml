@@ -1,11 +1,14 @@
 # ZETTLR DEFAULTS FILE
 # ====================
-# Conversion: Markdown --> reStructuredText
+# Conversion: Markdown --> revealJS file
 # More info: https://pandoc.org/MANUAL.html
 reader: markdown
-writer: rst
-self-contained: false
-variables: {}
+writer: revealjs
+self-contained: true # Must be true (unless you use a custom template)
+# If standalone is true, this will prompt Pandoc to download all required assets
+# so that your file can run while you're offline. Setting this to true is the
+# same behavior as in previous versions of Zettlr.
+standalone: true
 metadata-files: []
 include-before-body: []
 include-after-body: []
@@ -14,11 +17,6 @@ bibliography: []
 filters:
 - type: citeproc
 top-level-division: chapter
-wrap: none
-columns: 78
-dpi: 72
-toc: false
-toc-depth: 2
 number-sections: false
 number-offset:
 - 0
@@ -30,13 +28,17 @@ number-offset:
 shift-heading-level-by: 1
 section-divs: true
 identifier-prefix: ''
-title-prefix: ''
 eol: lf
 strip-comments: false
 indented-code-classes: []
 ascii: false
 default-image-extension: .jpg
 highlight-style: pygments
+html-math-method:
+  method: mathjax
+  url: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 tab-stop: 4
 preserve-tabs: false
+html-q-tags: false
+css: []
 fail-if-warnings: false
