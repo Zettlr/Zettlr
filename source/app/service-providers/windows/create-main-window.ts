@@ -76,6 +76,15 @@ export default function createMainWindow (logger: LogProvider, config: ConfigPro
     }
   })
 
+  // This does exactly the same as the app-command listener above, but for macOS
+  window.on('swipe', (event, direction) => {
+    if (direction === 'left') {
+      docs.back().catch(e => logger.error(e.message, e))
+    } else if (direction === 'right') {
+      docs.forward().catch(e => logger.error(e.message, e))
+    }
+  })
+
   // Only show window once it is completely initialized + maximize it
   window.once('ready-to-show', function () {
     window.show()
