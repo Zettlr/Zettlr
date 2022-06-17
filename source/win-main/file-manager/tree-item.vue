@@ -78,6 +78,7 @@
             v-bind:value="obj.name"
             v-on:keyup.enter="finishNameEditing(($event.target as HTMLInputElement).value)"
             v-on:keyup.esc="nameEditing = false"
+            v-on:keydown.stop=""
             v-on:blur="nameEditing = false"
             v-on:click.stop=""
           >

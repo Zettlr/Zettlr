@@ -13,6 +13,7 @@
   - `FILENAME`: Holds the filename of the current file
   - `DIRECTORY`: Holds the directory path for the current file
   - `EXTENSION`: Holds the file extension for the current file
+- Fixed inability to move the text cursor while renaming files in the file tree
 
 ## Under the Hood
 
