@@ -14,6 +14,8 @@
   - `DIRECTORY`: Holds the directory path for the current file
   - `EXTENSION`: Holds the file extension for the current file
 - Fixed inability to move the text cursor while renaming files in the file tree
+- Added the ability to use mouse buttons 4 and 5 for forward/backward navigation
+  (Windows/Linux only, no support on macOS)
 
 ## Under the Hood
 
