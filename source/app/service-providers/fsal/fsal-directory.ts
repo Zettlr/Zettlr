@@ -54,7 +54,7 @@ const MARKDOWN_FILES = mdFileExtensions(true)
 const PROJECT_TEMPLATE: ProjectSettings = {
   // General values that not only pertain to the PDF generation
   title: 'Untitled', // Default project title is the directory's name
-  formats: [ 'html', 'chromium-pdf' ], // NOTE: Must correspond to the defaults in ProjectProperties.vue
+  formats: [], // NOTE: Must correspond to the defaults in ProjectProperties.vue
   filters: [], // A list of filters (glob patterns) to exclude certain files
   cslStyle: '', // A path to an optional CSL style file.
   templates: {
