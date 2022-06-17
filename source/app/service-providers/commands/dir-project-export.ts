@@ -66,19 +66,29 @@ export default class DirProjectExport extends ZettlrCommand {
       return false
     }
 
+    const allDefaults = await this._app.assets.listDefaults()
+
     for (const format of config.formats) {
       // Spin up one exporter per format.
-      this._app.log.info(`[Project] Exporting ${dir.name} as ${format}.`)
+      const profile = allDefaults.find(e => e.path === format)
+
+      if (profile === undefined) {
+        this._app.log.warning(`Could not export project ${dir.name} using profile ${format}: Not found`)
+        continue
+      }
+
+      this._app.log.info(`[Project] Exporting ${dir.name} as ${profile.writer} (Profile: ${profile.name}).`)
+
       let template
-      if ([ 'html', 'chromium-pdf' ].includes(format) && config.templates.html !== '') {
+      if (profile.writer === 'html' && config.templates.html !== '') {
         template = config.templates.html
-      } else if (format === 'latex-pdf' && config.templates.tex !== '') {
+      } else if (profile.writer === 'pdf' && config.templates.tex !== '') {
         template = config.templates.tex
       }
 
       try {
         const opt: ExporterOptions = {
-          format: format,
+          profile: profile,
           sourceFiles: files,
           targetDirectory: dir.path,
           cwd: dir.path,

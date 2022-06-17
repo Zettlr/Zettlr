@@ -14,7 +14,7 @@
 
 import ZettlrCommand from './zettlr-command'
 import { app, shell } from 'electron'
-import { makeExport, getAvailableFormats } from './exporter'
+import { makeExport } from './exporter'
 import { trans } from '@common/i18n-main'
 import { ExporterOptions } from './exporter/types'
 import { promises as fs } from 'fs'
@@ -23,7 +23,7 @@ import isDir from '@common/util/is-dir'
 
 export default class Export extends ZettlrCommand {
   constructor (app: any) {
-    super(app, [ 'export', 'get-available-export-formats' ])
+    super(app, ['export'])
   }
 
   /**
@@ -33,15 +33,10 @@ export default class Export extends ZettlrCommand {
     * @return {Boolean}     Whether or not the call succeeded.
     */
   async run (evt: string, arg: any): Promise<void> {
-    if (evt === 'get-available-export-formats') {
-      // In this case only enumerate the available export formats
-      return getAvailableFormats()
-    }
-
-    const { file, content, format, options, exportTo } = arg
+    const { file, content, profile, exportTo } = arg
 
     const exporterOptions: ExporterOptions = {
-      format: format,
+      profile: profile,
       targetDirectory: '',
       sourceFiles: [],
       cwd: undefined
@@ -87,13 +82,13 @@ export default class Export extends ZettlrCommand {
     // Call the exporter. Don't throw the "big" error as this is single-file export
     try {
       this._app.log.verbose(`[Exporter] Exporting ${exporterOptions.sourceFiles.length} files to ${exporterOptions.targetDirectory}`)
-      const output = await makeExport(exporterOptions, this._app.log, this._app.config, this._app.assets, options)
+      const output = await makeExport(exporterOptions, this._app.log, this._app.config, this._app.assets)
       if (output.code === 0) {
         this._app.log.info(`Successfully exported file to ${output.targetFile}`)
-        this._app.notifications.show(trans('system.export_success', format.toUpperCase()))
+        this._app.notifications.show(trans('system.export_success', 'TODO: Replace with actual format')) // TODO!
 
         // In case of a textbundle/pack it's a folder, else it's a file
-        if ([ 'textbundle', 'textpack' ].includes(arg.format)) {
+        if ([ 'textbundle', 'textpack' ].includes(arg.profile.writer)) {
           shell.showItemInFolder(output.targetFile)
         } else {
           const potentialError = await shell.openPath(output.targetFile)
