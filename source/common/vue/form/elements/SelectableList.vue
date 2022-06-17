@@ -1,9 +1,13 @@
 <template>
-  <div class="selectable-list-wrapper">
+  <div
+    v-bind:class="{
+      'selectable-list-wrapper': true,
+      'has-footer': editable
+    }"
+  >
     <div
       v-bind:class="{
-        'selectable-list-container': true,
-        'has-footer': editable
+        'selectable-list-container': true
       }"
     >
       <div
@@ -14,23 +18,29 @@
         }"
         v-on:click="$emit('select', idx)"
       >
-        <span class="display-text">{{ item }}</span>
+        <span class="display-text">{{ getDisplayText(item) }}</span>
+        <span
+          v-if="hasInfoString(item)"
+          v-bind:class="{
+            'info-string': true,
+            'error': item.infoStringClass === 'error'
+          }"
+        >{{ item.infoString }}</span>
       </div>
-
-      <!-- Add an optional footer -->
-      <div v-if="editable" class="selectable-list-footer">
-        <div class="add" v-on:click="$emit('add')">
-          <clr-icon shape="plus" size="16"></clr-icon>
-        </div>
-        <div class="remove" v-on:click="$emit('remove')">
-          <clr-icon shape="minus" size="16"></clr-icon>
-        </div>
+    </div>
+    <!-- Add an optional footer -->
+    <div v-if="editable" class="selectable-list-footer">
+      <div class="add" v-on:click="$emit('add')">
+        <clr-icon shape="plus" size="16"></clr-icon>
+      </div>
+      <div class="remove" v-on:click="$emit('remove')">
+        <clr-icon shape="minus" size="16"></clr-icon>
       </div>
     </div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -46,6 +56,11 @@
  *
  * END HEADER
  */
+
+interface SelectableListItem {
+  displayText: string
+  infoString: string
+}
 
 export default {
   name: 'SelectableList',
@@ -64,22 +79,58 @@ export default {
       default: false
     }
   },
-  emits: [ 'select', 'add', 'remove' ]
+  emits: [ 'select', 'add', 'remove' ],
+  methods: {
+    getDisplayText: function (listItem: string|SelectableListItem): string {
+      if (typeof listItem === 'string') {
+        return listItem
+      } else {
+        return listItem.displayText
+      }
+    },
+    hasInfoString: function (listItem: string|SelectableListItem): boolean {
+      return typeof listItem !== 'string'
+    }
+  }
 }
 </script>
 
 <style lang="less">
 body .selectable-list-wrapper {
   padding: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  &.has-footer { padding-bottom: 40px; }
+
+  .selectable-list-footer {
+    position: absolute;
+    bottom: 18px;
+    left: 20px;
+    right: 20px;
+    height: 22px;
+    display: flex;
+    justify-content: flex-start;
+    background-color: rgb(255, 255, 255);
+    border-left: 1px solid rgb(180, 180, 180);
+    border-right: 1px solid rgb(180, 180, 180);
+    border-bottom: 1px solid rgb(180, 180, 180);
+
+    .add, .remove {
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+      text-align: center;
+    }
+  }
 
   .selectable-list-container {
     border: 1px solid rgb(180, 180, 180);
-    min-height: 30px;
-
-    &.has-footer {
-      padding-bottom: 20px;
-      position: relative;
-    }
+    height: 100%;
+    overflow: auto;
 
     div.item {
       background-color: white;
@@ -87,26 +138,18 @@ body .selectable-list-wrapper {
       border-bottom: 1px solid rgb(180, 180, 180);
       white-space: nowrap;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
 
       &.selected { background-color: rgb(230, 230, 230); }
 
       &:last-child { border-bottom: none; }
-    }
 
-    .selectable-list-footer {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 20px;
-      display: flex;
-      justify-content: flex-start;
-      background-color: rgb(255, 255, 255);
+      .info-string {
+        font-size: 10px;
+        color: gray;
 
-      .add, .remove {
-        width: 20px;
-        height: 20px;
-        line-height: 20px;
-        text-align: center;
+        &.error { color: rgb(200, 80, 100); }
       }
     }
   }
@@ -118,7 +161,6 @@ body.darwin {
     font-size: 12px;
 
     .item {
-      height: 30px;
       line-height: 20px;
       padding: 5px;
     }
@@ -131,6 +173,16 @@ body.darwin {
   }
 
   &.dark {
+    .selectable-list-footer {
+      background-color: rgb(68, 68, 68);
+      border-color: #505050;
+
+      .add, .remove {
+        color: rgb(230, 230, 230);
+        border-right-color: rgb(90, 90, 90);
+      }
+    }
+
     .selectable-list-container {
       border-color: #505050;
 
@@ -143,15 +195,6 @@ body.darwin {
           background-color: rgb(80, 80, 80);
         }
       }
-
-      .selectable-list-footer {
-        background-color: rgb(68, 68, 68);
-
-        .add, .remove {
-          color: rgb(230, 230, 230);
-          border-right-color: rgb(90, 90, 90);
-        }
-      }
     }
   }
 }
@@ -162,14 +205,20 @@ body.win32, body.linux {
     .selectable-list-container {
       div.item {
         border: none;
-        height: 30px;
-        line-height: 30px;
+        // height: 30px;
+        line-height: 20px;
         padding: 0 5px;
       }
     }
   }
   &.dark {
     .selectable-list-wrapper {
+      .selectable-list-footer {
+        background-color: rgb(70, 70, 70);
+
+        .add, .remove { color: rgb(230, 230, 230); }
+      }
+
       .selectable-list-container {
         div.item {
           background-color: rgb(70, 70, 70);
@@ -179,11 +228,6 @@ body.win32, body.linux {
             background-color: rgb(90, 90, 90);
           }
 
-        }
-        .selectable-list-footer {
-          background-color: rgb(70, 70, 70);
-
-          .add, .remove { color: rgb(230, 230, 230); }
         }
       }
     }
