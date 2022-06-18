@@ -84,12 +84,12 @@ function showHelp (): void {
 }
 
 export function getArgumentValue (key: string): string | undefined {
-  const dataDirFlag = process.argv.find(elem => elem.indexOf(key + '=') === 0)
-  if (dataDirFlag === undefined) {
+  const argument = process.argv.find(elem => elem.indexOf(key + '=') === 0)
+  if (argument === undefined) {
     return undefined
   }
   const regex = new RegExp('^' + key + '="?([^"]+)"?$')
-  const match = regex.exec(dataDirFlag)
+  const match = regex.exec(argument)
   if (match !== null) {
     return match[1]
   }
