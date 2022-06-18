@@ -22,7 +22,7 @@ export const DISABLE_HARDWARE_ACCELERATION: string = 'disable-hardware-accelerat
 export const CLEAR_CACHE: string = 'clear-cache'
 export const LAUNCH_MINIMIZED: string = 'launch-minimized'
 
-export function getCLIArgument (key: string): any {
+export function getCLIArgument (key: string): string | boolean | undefined {
   switch (key) {
     case DATA_DIR: {
       let dataDir = getArgumentValue('--data-dir')
