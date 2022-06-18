@@ -51,6 +51,14 @@ export function getCLIArgument (key: string): string | boolean | undefined {
   return undefined
 }
 
+/**
+ * This function scans all available arguments passed to the zettlr-executable.
+ * If fitting arguments are found, this function handles them and should exit zettlr after
+ * doing the appropriate work.
+ *
+ * This function should run as soon as possible so that we do not hog resources.
+ * It also should NOT be called when zettlr is running in windowed mode.
+ */
 export function handleGeneralArguments (): void {
   if (process.argv.includes('--help') || process.argv.includes('-h')) {
     showHelp()
