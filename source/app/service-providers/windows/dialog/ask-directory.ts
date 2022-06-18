@@ -24,15 +24,13 @@ import { trans } from '@common/i18n-main'
  * @param buttonLabel {string|null}    Label of the Button
  * @return  {Promise<string>[]}        Resolves with an array of paths
  */
-export default async function askDirectory (config: ConfigProvider, win: BrowserWindow|null, title: string, buttonLabel: string|null): Promise<string[]> {
+export default async function askDirectory (config: ConfigProvider, win: BrowserWindow|null, title: string, buttonLabel: string|undefined): Promise<string[]> {
   let startDir = app.getPath('home')
 
   if (isDir(config.get('dialogPaths.askDirDialog'))) {
     startDir = config.get('dialogPaths.askDirDialog')
   }
-  if (buttonLabel == null) {
-    buttonLabel = trans('system.open_folder')
-  }
+
   const options: OpenDialogOptions = {
     title: title,
     buttonLabel: buttonLabel,

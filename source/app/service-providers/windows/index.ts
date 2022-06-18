@@ -919,10 +919,7 @@ export default class WindowProvider extends ProviderContract {
     * Show the dialog for choosing a directory
     * @return {string[]} An array containing all selected paths.
     */
-  async askDir (title: string, win?: BrowserWindow|null, buttonLabel?: string|null): Promise<string[]> {
-    if (buttonLabel === undefined) {
-      buttonLabel = null
-    }
+  async askDir (title: string, win?: BrowserWindow|null, buttonLabel?: string|undefined): Promise<string[]> {
     if (win != null) {
       return await askDirectoryDialog(this._config, win, title, buttonLabel)
     } else {
