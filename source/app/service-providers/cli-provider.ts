@@ -17,10 +17,10 @@
 import { app } from 'electron'
 import path from 'path'
 
-export const DATA_DIR: string = 'data-dir'
-export const DISABLE_HARDWARE_ACCELERATION: string = 'disable-hardware-acceleration'
-export const CLEAR_CACHE: string = 'clear-cache'
-export const LAUNCH_MINIMIZED: string = 'launch-minimized'
+export const DATA_DIR = 'data-dir'
+export const DISABLE_HARDWARE_ACCELERATION = 'disable-hardware-acceleration'
+export const CLEAR_CACHE = 'clear-cache'
+export const LAUNCH_MINIMIZED = 'launch-minimized'
 
 export function getCLIArgument (key: string): string | boolean | undefined {
   switch (key) {
