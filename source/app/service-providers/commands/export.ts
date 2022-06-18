@@ -80,7 +80,7 @@ export default class Export extends ZettlrCommand {
             const focusedWindow = BrowserWindow.getFocusedWindow()
             const folderSelection = await this._app.windows.askDir(trans('system.export_dialog.title'), focusedWindow, trans('system.export_dialog.save'))
             if (folderSelection === undefined || folderSelection.length === 0) {
-              getServiceContainer()?.log.error('[Export] Could not run exporter: Folderselection did not have a result!')
+              this._app.log.error('[Export] Could not run exporter: Folderselection did not have a result!')
               return
             }
             exporterOptions.targetDirectory = folderSelection[0]
