@@ -127,12 +127,13 @@ export interface ExporterAPI {
    * Retrieves a user-customised defaults file, adds the given properties and
    * writes the file to disk. Returns the absolute path to the file.
    *
-   * @param   {string}           writer      The writer for which the defaults apply
+   * @param   {string}           filename    The filename for which the defaults apply
    * @param   {any}              properties  Any additional properties to add to the defaults.
    *
    * @return  {Promise<string>}              Resolves with an absolute path to the written file.
    */
   getDefaultsFor: (writer: string, properties: any = {}) => Promise<string>
+  listDefaults: () => Promise<PandocProfileMetadata[]>
 }
 
 export interface ExporterPlugin {

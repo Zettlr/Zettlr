@@ -92,6 +92,9 @@ export async function makeExport (
     },
     getDefaultsFor: async (filename: string, properties: any = {}) => {
       return await writeDefaults(filename, properties, config, assets, options.defaultsOverride)
+    },
+    listDefaults: async () => {
+      return await assets.listDefaults()
     }
   }
 
