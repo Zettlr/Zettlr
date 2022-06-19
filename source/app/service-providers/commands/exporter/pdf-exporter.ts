@@ -50,10 +50,16 @@ export const plugin: ExporterPlugin = {
       'output-file': htmlFilePath
     }
 
-    // TODO: getDefaultsFor is wrongly called
+    // Now we'll have to get the correct exporting template
+    const allDefaults = (await ctx.listDefaults())
+      .filter(e => e.writer === 'html')
+
+    if (allDefaults.length > 1) {
+      console.warn('More than one suitable format for exporting to HTML found - using first one!')
+    }
 
     // Write to an intermediary HTML file which we will convert to PDF below.
-    const defaultsFile = await ctx.getDefaultsFor('html', defaultKeys)
+    const defaultsFile = await ctx.getDefaultsFor(allDefaults[0].name, defaultKeys)
 
     // Run Pandoc
     const pandocOutput = await ctx.runPandoc(defaultsFile)
