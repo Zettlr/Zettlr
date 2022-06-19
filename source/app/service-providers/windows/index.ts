@@ -55,10 +55,6 @@ import ProviderContract from '@providers/provider-contract'
 import LogProvider from '@providers/log'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import DocumentManager from '@providers/documents'
-import {
-  getCLIArgument,
-  LAUNCH_MINIMIZED
-} from '@providers/cli-provider'
 
 export default class WindowProvider extends ProviderContract {
   private _mainWindow: BrowserWindow|null

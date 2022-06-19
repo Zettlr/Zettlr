@@ -55,7 +55,7 @@ if (process.platform === 'win32') {
 // Full path or relative path is OK. '~' does not work as expected.
 let dataDir = getCLIArgument(DATA_DIR)
 
-if (dataDir !== undefined) {
+if (dataDir !== undefined && typeof dataDir === 'string') {
   // a path to a custom config dir is provided
   const match = /^--data-dir="?([^"]+)"?$/.exec(dataDir)
   if (match !== null) {
@@ -91,7 +91,7 @@ if (dataDir !== undefined) {
 // On systems with virtual GPUs (i.e. VMs), it might be necessary to disable
 // hardware acceleration. If the corresponding flag is set, we do so.
 // See for more info https://github.com/Zettlr/Zettlr/issues/2127
-if (getCLIArgument(DISABLE_HARDWARE_ACCELERATION)) {
+if (getCLIArgument(DISABLE_HARDWARE_ACCELERATION) === true) {
   app.disableHardwareAcceleration()
 }
 
