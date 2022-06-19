@@ -5,11 +5,7 @@
       'has-footer': editable
     }"
   >
-    <div
-      v-bind:class="{
-        'selectable-list-container': true
-      }"
-    >
+    <div class="selectable-list-container">
       <div
         v-for="item, idx in items" v-bind:key="idx"
         v-bind:class="{
@@ -17,15 +13,16 @@
           'selected': idx === selectedItem
         }"
         v-on:click="$emit('select', idx)"
+        v-on:contextmenu="handleContextMenu($event, idx)"
       >
         <span class="display-text">{{ getDisplayText(item) }}</span>
         <span
           v-if="hasInfoString(item)"
           v-bind:class="{
             'info-string': true,
-            'error': item.infoStringClass === 'error'
+            'error': (item as any).infoStringClass === 'error'
           }"
-        >{{ item.infoString }}</span>
+        >{{ (item as any).infoString }}</span>
       </div>
     </div>
     <!-- Add an optional footer -->
@@ -33,7 +30,7 @@
       <div class="add" v-on:click="$emit('add')">
         <clr-icon shape="plus" size="16"></clr-icon>
       </div>
-      <div class="remove" v-on:click="$emit('remove')">
+      <div class="remove" v-on:click="$emit('remove', selectedItem)">
         <clr-icon shape="minus" size="16"></clr-icon>
       </div>
     </div>
@@ -57,16 +54,20 @@
  * END HEADER
  */
 
+import showPopupMenu from '@common/modules/window-register/application-menu-helper'
+import { AnyMenuItem } from '@dts/renderer/context'
+import { defineComponent } from 'vue'
+
 interface SelectableListItem {
   displayText: string
   infoString: string
 }
 
-export default {
+export default defineComponent({
   name: 'SelectableList',
   props: {
     items: {
-      type: Array,
+      type: Object as () => Array<string|SelectableListItem>,
       required: true
     },
     selectedItem: {
@@ -90,9 +91,29 @@ export default {
     },
     hasInfoString: function (listItem: string|SelectableListItem): boolean {
       return typeof listItem !== 'string'
+    },
+    handleContextMenu: function (event: MouseEvent, idx: number) {
+      if (!this.editable) {
+        return // No action possible
+      }
+
+      const menu: AnyMenuItem[] = [
+        {
+          label: 'Remove',
+          id: 'remove-item',
+          type: 'normal',
+          enabled: true
+        }
+      ]
+
+      showPopupMenu({ x: event.clientX, y: event.clientY }, menu, (clickedID) => {
+        if (clickedID === 'remove-item') {
+          this.$emit('remove', idx)
+        }
+      })
     }
   }
-}
+})
 </script>
 
 <style lang="less">

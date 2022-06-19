@@ -12,7 +12,7 @@
         v-bind:selected-item="currentItem"
         v-on:select="currentItem = $event"
         v-on:add="newDefaultsFile()"
-        v-on:remove="removeCurrentFile()"
+        v-on:remove="removeFile($event)"
       ></SelectableList>
     </template>
     <template #view2>
@@ -23,6 +23,7 @@
           v-model="currentFilename"
           v-bind:inline="false"
           v-bind:disabled="currentItem < 0"
+          v-on:confirm="renameFile()"
         ></TextControl>
         <ButtonControl
           v-bind:label="renameFileLabel"
@@ -316,18 +317,12 @@ export default defineComponent({
         })
         .catch(err => console.error(err))
     },
-    removeCurrentFile: function () {
-      // Only remove if we have MORE than one profile. One profile is required
-      // (among other things so that newDefaultsFile() can pull in the defaultspath
-      // and because Zettlr is intended to be used for importing/exporting. If
-      // you don't use it like that, don't look at the profiles!)
-      if (this.visibleItems.length === 1) {
-        this.savingStatus = 'You need to have at least one import and export profile at a time.'
-        setTimeout(() => { this.savingStatus = '' }, 1000)
+    removeFile: function (idx: number) {
+      if (idx > this.visibleItems.length - 1 || idx < 0) {
         return
       }
 
-      const filename = this.visibleItems[this.currentItem].name
+      const filename = this.visibleItems[idx].name
 
       ipcRenderer.invoke('assets-provider', {
         command: 'remove-defaults-file',

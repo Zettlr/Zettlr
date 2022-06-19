@@ -75,6 +75,8 @@ Supported theme values are:
   margins of the main editor removed by default
 - The sidebar tabs are now static at the top, meaning you don't have to scroll
   up within a long list just to see the tabbar
+- Lists (especially in the assets manager) now also allow you to remove entries
+  with a right click
 - Added new variables for snippets:
   - `CURRENT_ID`: Holds the currently assigned Zettelkasten ID to the file
   - `FILENAME`: Holds the filename of the current file
