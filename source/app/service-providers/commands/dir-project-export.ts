@@ -70,7 +70,7 @@ export default class DirProjectExport extends ZettlrCommand {
 
     for (const format of config.formats) {
       // Spin up one exporter per format.
-      const profile = allDefaults.find(e => e.path === format)
+      const profile = allDefaults.find(e => e.name === format)
 
       if (profile === undefined) {
         this._app.log.warning(`Could not export project ${dir.name} using profile ${format}: Not found`)

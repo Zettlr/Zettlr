@@ -4,10 +4,6 @@ export interface PandocProfileMetadata {
    */
   name: string
   /**
-   * The absolute path of the file
-   */
-  path: string
-  /**
    * The writer, can be undefined
    */
   writer: string
@@ -21,4 +17,12 @@ export interface PandocProfileMetadata {
    * at least have to have a value. If any hasn't, isInvalid will be true.
    */
   isInvalid: boolean
+  /**
+   * Zettlr ships with a few profiles by default. In order to ensure that there
+   * is always a set of minimal profiles to export and import to, Zettlr will
+   * ensure that these standard defaults files will always be present. With this
+   * flag, renderer elements can additionally indicate that. This helps prevent
+   * some misconceptions, i.e. why certain files cannot be deleted.
+   */
+  isProtected?: boolean
 }

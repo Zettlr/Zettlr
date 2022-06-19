@@ -148,7 +148,7 @@ export default defineComponent({
         const conversionString = (e.isInvalid) ? 'Invalid' : [ reader, writer ].join(' → ')
 
         return {
-          selected: this.selectedExportFormats.includes(e.path),
+          selected: this.selectedExportFormats.includes(e.name),
           name: this.getDisplayText(e.name),
           conversion: conversionString
         }
@@ -222,7 +222,7 @@ export default defineComponent({
       const newFormats = newListVal.filter(e => e.selected).map(e => {
         return this.profiles.find(x => this.getDisplayText(x.name) === e.name)
       }).filter(x => x !== undefined) as PandocProfileMetadata[]
-      this.selectedExportFormats = newFormats.map(x => x.path)
+      this.selectedExportFormats = newFormats.map(x => x.name)
       this.updateProperties()
     },
     getDisplayText: function (name: string): string {

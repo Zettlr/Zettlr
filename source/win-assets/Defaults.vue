@@ -19,19 +19,23 @@
       <div id="defaults-container">
         <p>{{ defaultsExplanation }}</p>
 
-        <p>
-          <TextControl
-            v-model="currentFilename"
-            v-bind:inline="true"
-            v-bind:disabled="currentItem < 0"
-          ></TextControl>
-          <ButtonControl
-            v-bind:label="renameFileLabel"
-            v-bind:inline="true"
-            v-bind:disabled="visibleItems.length === 0 || currentFilename === visibleItems[currentItem].name"
-            v-on:click="renameFile()"
-          ></ButtonControl>
-        </p>
+        <TextControl
+          v-model="currentFilename"
+          v-bind:inline="false"
+          v-bind:disabled="currentItem < 0"
+        ></TextControl>
+        <ButtonControl
+          v-bind:label="renameFileLabel"
+          v-bind:inline="true"
+          v-bind:disabled="visibleItems.length === 0 || currentFilename === visibleItems[currentItem].name"
+          v-on:click="renameFile()"
+        ></ButtonControl>
+
+        <span v-if="visibleItems.length > 0 && visibleItems[currentItem].isProtected === true" class="protected-info">
+          <!-- TODO: Translate -->
+          &#128274; This file is protected. This means that it will be restored when you
+          remove or rename it.
+        </span>
 
         <p v-if="visibleItems[currentItem]?.isInvalid" class="warning">
           <clr-icon shape="warning"></clr-icon>
@@ -92,7 +96,6 @@ import { PANDOC_READERS, PANDOC_WRITERS, SUPPORTED_READERS } from '@common/util/
 import sanitizeFilename from 'sanitize-filename'
 
 const ipcRenderer = window.ipc
-const path = window.path
 
 const NEW_DEFAULTS_FILE_CONTENTS = `# This is a new defaults file that you can use to define rules for exporting or
 # importing files to and from Zettlr. The only two required properties are the
@@ -141,7 +144,24 @@ export default defineComponent({
     visibleItems: function (): PandocProfileMetadata[] {
       // Display either the exporting or importing formats depending on the tab
       return this.availableDefaultsFiles
-        .filter((e) => SUPPORTED_READERS.includes(this.which === 'import' ? e.writer : e.reader))
+        .filter((e) => {
+          // Retrieve which one we need to check
+          let readerWriter = (this.which === 'import') ? e.writer : e.reader
+
+          // Pandoc allows, especially for Markdown, to enable or disable
+          // extensions, denoted via plus and minus signs. We have to account
+          // for that. NOTE that on the upside, + and - are otherwise disallowed
+          // for reader/writer names.
+          if (readerWriter.indexOf('+') > 0) {
+            readerWriter = readerWriter.substring(0, readerWriter.indexOf('+'))
+          }
+
+          if (readerWriter.indexOf('-') > 0) {
+            readerWriter = readerWriter.substring(0, readerWriter.indexOf('-'))
+          }
+
+          return SUPPORTED_READERS.includes(readerWriter)
+        })
     },
     listItems: function (): any[] {
       return this.visibleItems
@@ -152,7 +172,7 @@ export default defineComponent({
           const infoString = (file.isInvalid) ? 'Invalid' : [ reader, writer ].join(' → ')
 
           return {
-            displayText: this.getDisplayText(file.name), // The file name is always the displayText
+            displayText: this.getDisplayText(file),
             infoString: infoString,
             infoStringClass: file.isInvalid ? 'error' : undefined
           }
@@ -211,11 +231,11 @@ export default defineComponent({
         this.currentItem = this.visibleItems.length - 1
       }
 
-      const absPath = this.visibleItems[this.currentItem].path
+      const name = this.visibleItems[this.currentItem].name
 
       ipcRenderer.invoke('assets-provider', {
         command: 'get-defaults-file',
-        payload: { absPath: absPath }
+        payload: { filename: name }
       })
         .then(data => {
           this.editorContents = data
@@ -244,11 +264,11 @@ export default defineComponent({
     saveDefaultsFile: function () {
       this.savingStatus = trans('gui.assets_man.status.saving')
 
-      const absPath = this.visibleItems[this.currentItem].path
+      const name = this.visibleItems[this.currentItem].name
 
       ipcRenderer.invoke('assets-provider', {
         command: 'set-defaults-file',
-        payload: { absPath: absPath, contents: this.editorContents }
+        payload: { filename: name, contents: this.editorContents }
       })
         .then(async () => {
           this.savingStatus = trans('gui.assets_man.status.saved')
@@ -267,11 +287,10 @@ export default defineComponent({
       const m = d.getMinutes()
       const s = d.getSeconds()
 
-      const dir = path.dirname(this.availableDefaultsFiles[0].path)
       const newName = `New Profile ${yyyy}-${mm}-${dd} ${h}-${m}-${s}.yaml`
       ipcRenderer.invoke('assets-provider', {
         command: 'set-defaults-file',
-        payload: { absPath: path.join(dir, newName), contents: NEW_DEFAULTS_FILE_CONTENTS }
+        payload: { filename: newName, contents: NEW_DEFAULTS_FILE_CONTENTS }
       })
         .then(async () => {
           await this.retrieveDefaultsFiles() // Always make sure to pull in any changes
@@ -280,19 +299,17 @@ export default defineComponent({
     },
     renameFile: function () {
       let newName = this.currentFilename
-      if (!newName.endsWith('.yaml') || !newName.endsWith('.yml')) {
+      if (!newName.endsWith('.yaml') && !newName.endsWith('.yml')) {
         newName += '.yaml'
       }
 
       newName = sanitizeFilename(newName, { replacement: '-' })
 
-      const oldAbsPath = this.visibleItems[this.currentItem].path
-      const oldDir = path.dirname(oldAbsPath)
-      const newAbsPath = path.join(oldDir, this.currentFilename)
+      const oldName = this.visibleItems[this.currentItem].name
 
       ipcRenderer.invoke('assets-provider', {
         command: 'rename-defaults-file',
-        payload: { oldPath: oldAbsPath, newPath: newAbsPath }
+        payload: { oldName, newName }
       })
         .then(async () => {
           await this.retrieveDefaultsFiles() // Always make sure to pull in any changes
@@ -310,20 +327,28 @@ export default defineComponent({
         return
       }
 
-      const absPath = this.visibleItems[this.currentItem].path
+      const filename = this.visibleItems[this.currentItem].name
 
       ipcRenderer.invoke('assets-provider', {
         command: 'remove-defaults-file',
-        payload: { absPath: absPath }
+        payload: { filename }
       })
         .then(async () => {
           await this.retrieveDefaultsFiles() // Always make sure to pull in any changes
         })
         .catch(err => console.error(err))
     },
-    getDisplayText: function (name: string): string {
+    getDisplayText: function (profile: PandocProfileMetadata): string {
+      let name = profile.name
       // First, strip off the extension
       name = name.substring(0, name.lastIndexOf('.'))
+      // If the file is protected, indicate this in the list, using a lock emoji
+      // To get the lock symbol's JS representation you have to do weird tricks:
+      // Get the char code (! not codePoint) at the first (0) and second (1)
+      // position and prepend that with \u
+      if (profile.isProtected === true) {
+        name = '\ud83d\udd12 ' + name
+      }
       return name
     }
   }
@@ -342,16 +367,20 @@ export default defineComponent({
   }
 
   p.warning {
-  display: flex;
-  color: rgb(97, 97, 0);
-  background-color: rgb(209, 209, 23);
-  border: 1px solid rgb(170, 170, 0);
-  border-radius: 5px;
-  padding: 5px;
-  margin: 5px;
+    display: flex;
+    color: rgb(97, 97, 0);
+    background-color: rgb(209, 209, 23);
+    border: 1px solid rgb(170, 170, 0);
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
 
-  // More spacing between the icon and the text
-  span { padding-left: 5px; }
-}
+    // More spacing between the icon and the text
+    span { padding-left: 5px; }
+  }
+
+  span.protected-info {
+    color: gray;
+  }
 }
 </style>

@@ -50,6 +50,8 @@ export const plugin: ExporterPlugin = {
       'output-file': htmlFilePath
     }
 
+    // TODO: getDefaultsFor is wrongly called
+
     // Write to an intermediary HTML file which we will convert to PDF below.
     const defaultsFile = await ctx.getDefaultsFor('html', defaultKeys)
 

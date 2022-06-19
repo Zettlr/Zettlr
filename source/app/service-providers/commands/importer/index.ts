@@ -98,7 +98,7 @@ export default async function makeImport (
         console.warn(`More than one applicable profile found! Using first one: ${potentialProfiles[0].name}`)
       }
 
-      const defaults = await assetsProvider.getDefaultsFile(potentialProfiles[0].path)
+      const defaults = await assetsProvider.getDefaultsFile(potentialProfiles[0].name)
 
       // ... supply our file paths ...
       defaults['input-files'] = [file.path]

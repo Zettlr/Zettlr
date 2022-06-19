@@ -43,21 +43,18 @@ export function getCustomProfiles (): PandocProfileMetadata[] {
   return [
     {
       name: 'Textbundle.yaml', // Fake name
-      path: 'textbundle', // Fake path
       reader: 'markdown', // Not completely the truth
       writer: 'textbundle', // Not even supported by Pandoc
       isInvalid: false // IT'S ALL FAKE!
     },
     {
       name: 'Textpack.yaml',
-      path: 'textpack',
       reader: 'markdown',
       writer: 'textpack',
       isInvalid: false
     },
     {
       name: 'Simple PDF.yaml',
-      path: 'simple-pdf',
       reader: 'markdown',
       writer: 'simple-pdf',
       isInvalid: false
@@ -93,15 +90,15 @@ export async function makeExport (
     runPandoc: async (defaults: string) => {
       return await runPandoc(logger, defaults, options.cwd)
     },
-    getDefaultsFor: async (profile: string, properties: any = {}) => {
-      return await writeDefaults(profile, properties, config, assets, options.defaultsOverride)
+    getDefaultsFor: async (filename: string, properties: any = {}) => {
+      return await writeDefaults(filename, properties, config, assets, options.defaultsOverride)
     }
   }
 
   // Search for the correct plugin to run, and run it. First the custom ones ...
-  if ([ 'textbundle', 'textpack' ].includes(options.profile.path)) {
+  if ([ 'textbundle', 'textpack' ].includes(options.profile.writer)) {
     return await PLUGINS.textbundle.run(options, inputFiles, ctx)
-  } else if (options.profile.path === 'simple-pdf') {
+  } else if (options.profile.writer === 'simple-pdf') {
     return await PLUGINS['simple-pdf'].run(options, inputFiles, ctx)
   } else {
     // ... otherwise run the regular Pandoc exporter.
@@ -159,16 +156,15 @@ async function runPandoc (logger: LogProvider, defaultsFile: string, cwd?: strin
 // REFERENCE: Full defaults file here: https://pandoc.org/MANUAL.html#default-files
 
 async function writeDefaults (
-  profile: string, // The profile to use
+  filename: string, // The profile to use
   properties: any, // Contains properties that will be written to the defaults
   config: ConfigProvider,
   assets: AssetsProvider,
   defaultsOverride?: DefaultsOverride
 ): Promise<string> {
-  const dataDir = app.getPath('temp')
-  const defaultsFile = path.join(dataDir, 'defaults.yml')
+  const defaultsFile = path.join(app.getPath('temp'), 'defaults.yml')
 
-  const defaults: any = await assets.getDefaultsFile(profile)
+  const defaults: any = await assets.getDefaultsFile(filename)
 
   // In order to facilitate file-only databases, we need to get the currently
   // selected database. This could break in a lot of places, but until Pandoc

@@ -30,8 +30,27 @@ export default class AssetsProvider extends ProviderContract {
    * @var {string}
    */
   private readonly _defaultsPath: string
+  /**
+   * Holds the path where snippets can be found.
+   *
+   * @var {string}
+   */
   private readonly _snippetsPath: string
+  /**
+   * Holds the path where Lua filters can be found.
+   *
+   * @var {string}
+   */
   private readonly _filterPath: string
+  /**
+   * Holds a list of all protected defaults files. Protected defaults files are
+   * those that come by default with the app. Protected simply means here that
+   * if the user removes such a file, it will be restored immediately. This also
+   * applies when the user renames such a file.‚
+   *
+   * @var {string[]}
+   */
+  private readonly _protectedDefaults: string[]
 
   constructor (private readonly _logger: LogProvider) {
     super()
@@ -39,6 +58,7 @@ export default class AssetsProvider extends ProviderContract {
     this._defaultsPath = path.join(app.getPath('userData'), '/defaults')
     this._snippetsPath = path.join(app.getPath('userData'), '/snippets')
     this._filterPath = path.join(app.getPath('userData'), '/lua-filter')
+    this._protectedDefaults = []
 
     ipcMain.handle('assets-provider', async (event, message) => {
       const { command, payload } = message
@@ -49,15 +69,13 @@ export default class AssetsProvider extends ProviderContract {
       // file contents programmatically should thus make use of the bundled YAML
       // module to parse and stringify the files accordingly.
       if (command === 'get-defaults-file') {
-        return await this.getDefaultsFile(payload.absPath, true)
+        return await this.getDefaultsFile(payload.filename, true)
       } else if (command === 'set-defaults-file') {
-        return await this.setDefaultsFile(payload.absPath, payload.contents, true)
+        return await this.setDefaultsFile(payload.filename, payload.contents, true)
       } else if (command === 'rename-defaults-file') {
-        return await this.renameDefaultsFile(payload.oldPath, payload.newPath)
+        return await this.renameDefaultsFile(payload.oldName, payload.newName)
       } else if (command === 'remove-defaults-file') {
-        return await this.removeDefaultsFile(payload.absPath)
-      } else if (command === 'restore-defaults-file') {
-        return await this.restoreDefaultsFor(payload.format, payload.type)
+        return await this.removeDefaultsFile(payload.filename)
       } else if (command === 'list-defaults') {
         return await this.listDefaults()
       } else if (command === 'list-export-profiles') {
@@ -86,6 +104,7 @@ export default class AssetsProvider extends ProviderContract {
     const defaultsFiles = await fs.readdir(path.join(__dirname, './assets/defaults'))
     const defaults = defaultsFiles.filter(file => /\.ya?ml$/.test(file))
     for (const file of defaults) {
+      this._protectedDefaults.push(file)
       const absolutePath = path.join(this._defaultsPath, file)
       try {
         await fs.lstat(absolutePath)
@@ -140,19 +159,13 @@ export default class AssetsProvider extends ProviderContract {
   /**
    * Gets the defaults file for a given writer
    *
-   * @param   {string}             absPath  The path to the profile to use
+   * @param   {string}             filename  The profile's filename
    *
    * @return  {Promise<any>}    The defaults (parsed from YAML)
    */
-  async getDefaultsFile (absPath: string, verbatim: boolean = false): Promise<any|string> {
-    // Make code execution attacks harder
-    if (!absPath.startsWith(this._defaultsPath) || ![ '.yaml', '.yml' ].includes(path.extname(absPath))) {
-      console.log(absPath, this._defaultsPath, path.extname(absPath))
-      throw new Error(`Invalid path for a defaults file provided: ${absPath}`)
-    }
-
-    const file = path.join(absPath)
-    const yaml = await fs.readFile(file, { encoding: 'utf-8' })
+  async getDefaultsFile (filename: string, verbatim: boolean = false): Promise<any|string> {
+    const absPath = path.join(this._defaultsPath, filename)
+    const yaml = await fs.readFile(absPath, { encoding: 'utf-8' })
     // Either return the string contents or a JavaScript object
     return (verbatim) ? yaml : YAML.parse(yaml)
   }
@@ -165,11 +178,11 @@ export default class AssetsProvider extends ProviderContract {
    *
    * @return  {Promise<boolean>}      Whether or not the operation was successful.
    */
-  async setDefaultsFile (absPath: string, newDefaults: any, verbatim: boolean = false): Promise<boolean> {
-    // Make code execution attacks harder
-    if (!absPath.startsWith(this._defaultsPath) || ![ '.yaml', '.yml' ].includes(path.extname(absPath))) {
-      throw new Error(`Invalid path for a defaults file provided: ${absPath}`)
-    }
+  async setDefaultsFile (filename: string, newDefaults: any, verbatim: boolean = false): Promise<boolean> {
+    console.log('file', filename)
+    console.log('new contents', newDefaults)
+    const absPath = path.join(this._defaultsPath, filename)
+    console.log('saving to:', absPath)
 
     try {
       // Stringify the new defaults according to the verbatim flag
@@ -185,22 +198,22 @@ export default class AssetsProvider extends ProviderContract {
   /**
    * Allows one to rename a defaults file
    *
-   * @param   {string}            oldPath  The former path to the file
-   * @param   {string}            newPath  The new path to the file
+   * @param   {string}            oldName  The former path to the file
+   * @param   {string}            newName  The new path to the file
    *
    * @return  {Promise<boolean>}           True upon success
    */
-  async renameDefaultsFile (oldPath: string, newPath: string): Promise<boolean> {
-    // Make code execution attacks harder
-    if (!oldPath.startsWith(this._defaultsPath) || ![ '.yaml', '.yml' ].includes(path.extname(oldPath))) {
-      throw new Error(`Invalid path for a defaults file provided: ${oldPath}`)
-    }
-    if (!newPath.startsWith(this._defaultsPath) || ![ '.yaml', '.yml' ].includes(path.extname(newPath))) {
-      throw new Error(`Invalid path for a defaults file provided: ${newPath}`)
-    }
+  async renameDefaultsFile (oldName: string, newName: string): Promise<boolean> {
+    const oldPath = path.join(this._defaultsPath, oldName)
+    const newPath = path.join(this._defaultsPath, newName)
 
     try {
       await fs.rename(oldPath, newPath)
+      // If renaming that file removed a protected one, restore it immediately.
+      // This is effectively the same as duplicating the file.
+      if (this._protectedDefaults.includes(oldName)) {
+        await this.restoreDefaultsFor(oldName)
+      }
       return true
     } catch (err: any) {
       this._logger.error(`[Assets Provider] Could not rename file ${oldPath} to ${newPath}.`, err)
@@ -213,17 +226,19 @@ export default class AssetsProvider extends ProviderContract {
    * restored on the next start of the app, so removing them will only be
    * temporary (e.g. for restoring purposes).
    *
-   * @param   {string}            absPath  The full path to the file to be deleted
+   * @param   {string}            filename  The defaults file's name
    *
    * @return  {Promise<boolean>}           Returns true upon success
    */
-  async removeDefaultsFile (absPath: string): Promise<boolean> {
-    // Make attacks harder
-    if (!absPath.startsWith(this._defaultsPath) || ![ '.yaml', '.yml' ].includes(path.extname(absPath))) {
-      throw new Error(`Invalid path for a defaults file provided: ${absPath}`)
-    }
+  async removeDefaultsFile (filename: string): Promise<boolean> {
+    const absPath = path.join(this._defaultsPath, filename)
     try {
       await fs.unlink(absPath)
+      // If removing that file removed a protected one, restore it immediately.
+      // This is effectively the same as restoring the file.
+      if (this._protectedDefaults.includes(filename)) {
+        await this.restoreDefaultsFor(filename)
+      }
       return true
     } catch (err: any) {
       this._logger.error(`[Assets Provider] Could not remove defaults file: ${absPath}`, err)
@@ -235,20 +250,18 @@ export default class AssetsProvider extends ProviderContract {
    * Restores the requested defaults file by copying it from the directory
    * within Zettlr into the defaults path (user data).
    *
-   * @param   {string}             format  The format to copy over
-   * @param   {'export'|'import'}  type    The type of defaults file
+   * @param   {string}             filename  The defaults file to copy over
    *
    * @return  {Promise<boolean>}           Returns true on success
    */
-  async restoreDefaultsFor (format: string, type: 'export'|'import'): Promise<boolean> {
-    const file = `${type}.${format}.yaml`
-    const source = path.join(__dirname, './assets/defaults', file)
-    const target = path.join(this._defaultsPath, file)
+  async restoreDefaultsFor (filename: string): Promise<boolean> {
+    const source = path.join(__dirname, './assets/defaults', filename)
+    const target = path.join(this._defaultsPath, filename)
 
     try {
       await fs.copyFile(source, target)
     } catch (err: any) {
-      this._logger.error(`[Assets Provider] Could not restore defaults file ${type} for ${format}!`, err)
+      this._logger.error(`[Assets Provider] Could not restore defaults file ${filename}!`, err)
       return false
     }
 
@@ -273,12 +286,11 @@ export default class AssetsProvider extends ProviderContract {
 
         profiles.push({
           name: file,
-          path: absolutePath,
           writer: yaml.writer,
           reader: yaml.reader,
-          isInvalid: yaml.writer === undefined || yaml.reader === undefined
+          isInvalid: yaml.writer === undefined || yaml.reader === undefined,
+          isProtected: this._protectedDefaults.includes(file)
         })
-        await fs.lstat(absolutePath)
       } catch (err) {
         this._logger.warning(`[Assets Provider] Installed profile ${file} had an error and could not be parsed`)
       }

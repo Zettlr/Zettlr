@@ -66,7 +66,7 @@ export default defineComponent({
     popoverData: function () {
       const data: any = {
         shouldExport: this.shouldExport,
-        profile: this.profileMetadata.find(e => e.path === this.format),
+        profile: this.profileMetadata.find(e => e.name === this.format),
         exportTo: this.exportDirectory
       }
 
@@ -79,7 +79,7 @@ export default defineComponent({
         // Remove files that cannot read any of Zettlr's internal formats ...
         .filter(e => SUPPORTED_READERS.includes(e.reader))
         // ... and add them to the available options
-        .forEach(elem => { selectOptions[elem.path] = this.getDisplayText(elem) })
+        .forEach(elem => { selectOptions[elem.name] = this.getDisplayText(elem) })
 
       return selectOptions
     }
@@ -91,8 +91,8 @@ export default defineComponent({
     },
     format: function () {
       // Remember the last choice
-      const prof = this.profileMetadata.find(e => e.path === this.format)
-      config.set('export.singleFileLastExporter', (prof === undefined) ? '' : prof.path)
+      const prof = this.profileMetadata.find(e => e.name === this.format)
+      config.set('export.singleFileLastExporter', (prof === undefined) ? '' : prof.name)
     }
   },
   created: function () {
@@ -104,11 +104,11 @@ export default defineComponent({
         this.profileMetadata = defaults
         // Get either the last used exporter OR the first element available
         const lastProfile: string = config.get('export.singleFileLastExporter')
-        const lastIdx = this.profileMetadata.findIndex(e => e.path === lastProfile)
+        const lastIdx = this.profileMetadata.findIndex(e => e.name === lastProfile)
         if (lastIdx < 0) {
-          this.format = this.profileMetadata[0].path
+          this.format = this.profileMetadata[0].name
         } else {
-          this.format = this.profileMetadata[lastIdx].path
+          this.format = this.profileMetadata[lastIdx].name
         }
         console.log(this.format)
       })

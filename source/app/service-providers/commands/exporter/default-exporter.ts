@@ -49,7 +49,7 @@ export const plugin: ExporterPlugin = {
       'input-files': sourceFiles,
       'output-file': target
     }
-    const defaultsFile = await ctx.getDefaultsFor(options.profile.path, defaultKeys)
+    const defaultsFile = await ctx.getDefaultsFor(options.profile.name, defaultKeys)
 
     // Run Pandoc
     const pandocOutput = await ctx.runPandoc(defaultsFile)
