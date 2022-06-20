@@ -719,7 +719,10 @@ body.linux {
         background-color: #5a5a5a;
 
         &:hover { background-color: rgb(53, 53, 53); }
-        &.active { background-color: rgb(50, 50, 50); }
+        &.active {
+          background-color: rgb(50, 50, 50);
+          border-bottom-color: var(--system-accent-color, --c-primary);
+        }
       }
     }
   }

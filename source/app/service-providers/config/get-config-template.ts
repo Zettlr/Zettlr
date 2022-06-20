@@ -85,7 +85,7 @@ export default function getConfigTemplate (): ConfigOptions {
     newFileNamePattern: '%id.md',
     newFileDontPrompt: false, // If true immediately creates files
     export: {
-      dir: 'temp', // Can either be "temp" or "cwd" (current working directory)
+      dir: 'temp', // Can either be "temp", "cwd" (current working directory) or "ask"
       stripTags: false, // Strip tags a.k.a. #tag
       stripLinks: 'full', // Strip internal links: "full" - remove completely, "unlink" - only remove brackets, "no" - don't alter
       cslLibrary: '', // Path to a CSL JSON library file

@@ -86,7 +86,12 @@ Supported theme values are:
   - `EXTENSION`: Holds the file extension for the current file
 - Fixed inability to move the text cursor while renaming files in the file tree
 - Added the ability to use mouse buttons 4 and 5 for forward/backward navigation
-  (Windows/Linux only, no support on macOS)
+- Fixed a visual glitch on Linux where in dark mode the active tab would have no
+  colored bottom border
+- Added a third exporter option: You can now have Zettlr ask you everytime where
+  it should store an exported file
+- In case of an error, the error dialog will now also present the Pandoc error
+  code
 
 ## Under the Hood
 
@@ -94,7 +99,7 @@ Supported theme values are:
 - Refactored the Sidebar panels into their own respective components
 - Upgrade Electron to `v18.0.0`
 - Pandoc logs are now logged in every case
-- Improve the display and functionality of log messagesß
+- Improve the display and functionality of log messages
 
 # 2.3.0
 

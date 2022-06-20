@@ -50,7 +50,8 @@ export default function (): any {
           model: 'export.dir',
           options: {
             'temp': trans('dialog.preferences.export.dest_temp_label'),
-            'cwd': trans('dialog.preferences.export.dest_cwd_label')
+            'cwd': trans('dialog.preferences.export.dest_cwd_label'),
+            'ask': trans('dialog.preferences.export.dest_ask_label')
           }
         }
       ]

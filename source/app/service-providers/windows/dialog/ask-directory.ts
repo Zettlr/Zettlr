@@ -14,16 +14,16 @@
 
 import { app, BrowserWindow, dialog, OpenDialogOptions, OpenDialogReturnValue } from 'electron'
 import isDir from '@common/util/is-dir'
-import { trans } from '@common/i18n-main'
 
 /**
  * Asks the user for directory path(s)
  *
  * @param   {BrowserWindow|null}  win  The window to attach to
- *
+ * @param title {string}               Title of the Window
+ * @param buttonLabel {string|null}    Label of the Button
  * @return  {Promise<string>[]}        Resolves with an array of paths
  */
-export default async function askDirectory (config: ConfigProvider, win: BrowserWindow|null): Promise<string[]> {
+export default async function askDirectory (config: ConfigProvider, win: BrowserWindow|null, title: string, buttonLabel: string|undefined): Promise<string[]> {
   let startDir = app.getPath('home')
 
   if (isDir(config.get('dialogPaths.askDirDialog'))) {
@@ -31,7 +31,8 @@ export default async function askDirectory (config: ConfigProvider, win: Browser
   }
 
   const options: OpenDialogOptions = {
-    title: trans('system.open_folder'),
+    title: title,
+    buttonLabel: buttonLabel,
     defaultPath: startDir,
     properties: [
       'openDirectory',
