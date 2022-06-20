@@ -17,6 +17,7 @@
 - Added the ability to use mouse buttons 4 and 5 for forward/backward navigation
 - Fixed a visual glitch on Linux where in dark mode the active tab would have no
   colored bottom border
+- Zettlr can ask you now where you want to store the exported PDF
 
 ## Under the Hood
 
