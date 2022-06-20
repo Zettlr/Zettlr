@@ -17,7 +17,10 @@
 - Added the ability to use mouse buttons 4 and 5 for forward/backward navigation
 - Fixed a visual glitch on Linux where in dark mode the active tab would have no
   colored bottom border
-- Zettlr can ask you now where you want to store the exported PDF
+- Added a third exporter option: You can now have Zettlr ask you everytime where
+  it should store an exported file
+- In case of an error, the error dialog will now also present the Pandoc error
+  code
 
 ## Under the Hood
 
@@ -25,7 +28,7 @@
 - Refactored the Sidebar panels into their own respective components
 - Upgrade Electron to `v18.0.0`
 - Pandoc logs are now logged in every case
-- Improve the display and functionality of log messagesß
+- Improve the display and functionality of log messages
 
 # 2.3.0
 

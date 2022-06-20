@@ -118,7 +118,7 @@ export default class Export extends ZettlrCommand {
         }
       } else {
         const title = trans('system.error.export_error_title')
-        const message = trans('system.error.export_error_message', output.stderr[0])
+        const message = trans('system.error.export_error_message', `Pandoc exited with code ${output.code}`)
         const contents = output.stderr.join('\n')
         this._app.windows.showErrorMessage(title, message, contents)
       }
