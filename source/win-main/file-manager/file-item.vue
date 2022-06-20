@@ -26,7 +26,7 @@
     >
       <div class="filename">
         <!-- Display the date in the top-right corner -->
-        <div v-if="fileMeta" class="date">
+        <div class="date">
           {{ getDate }}
         </div>
         <clr-icon
@@ -694,6 +694,16 @@ body.linux {
         background-color: rgb(80, 80, 80);
         div.filename div.date {
           background-color: rgb(80, 80, 80);
+        }
+      }
+
+      &.selected {
+        background-color: var(--system-accent-color, --c-primary);
+        color: var(--system-accent-color-contrast, white);
+
+        div.filename div.date {
+          background-color: var(--system-accent-color, --c-primary);
+          color: var(--system-accent-color-contrast, white);
         }
       }
 

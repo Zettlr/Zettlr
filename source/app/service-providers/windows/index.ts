@@ -561,7 +561,7 @@ export default class WindowProvider extends ProviderContract {
         height: workArea.height
       })
 
-      this._mainWindow = createMainWindow(this._logger, this._config, windowConfiguration)
+      this._mainWindow = createMainWindow(this._logger, this._config, this._documents, windowConfiguration)
       this._hookMainWindow()
       this._hookWindowResize(this._mainWindow, 'main')
     } else {

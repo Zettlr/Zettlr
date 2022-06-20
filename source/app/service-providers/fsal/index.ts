@@ -37,7 +37,14 @@ import {
   OtherFileDescriptor,
   MaybeRootDescriptor
 } from '@dts/main/fsal'
-import { MDFileMeta, CodeFileMeta, AnyMetaDescriptor, MaybeRootMeta, FSALStats } from '@dts/common/fsal'
+import {
+  MDFileMeta,
+  CodeFileMeta,
+  AnyMetaDescriptor,
+  MaybeRootMeta,
+  FSALStats,
+  FSALHistoryEvent
+} from '@dts/common/fsal'
 import { SearchTerm } from '@dts/common/search'
 import generateStats from './util/generate-stats'
 import ProviderContract from '@providers/provider-contract'
@@ -62,15 +69,6 @@ export {
 interface FSALState {
   openDirectory: DirDescriptor|null
   filetree: MaybeRootDescriptor[]
-}
-
-/**
- * Declares an event that happens on the FSAL
- */
-export interface FSALHistoryEvent {
-  event: 'add'|'change'|'remove'
-  path: string
-  timestamp: number
 }
 
 export default class FSAL extends ProviderContract {
@@ -160,7 +158,10 @@ export default class FSAL extends ProviderContract {
     // Afterwards we can set our pointers accordingly
     // Set the pointers either to null or last opened dir/file
     const openDir: string|null = this._config.get('openDirectory')
-    if (openDir !== null) {
+    if (openDir !== null && typeof openDir !== 'string') {
+      this._logger.warning(`[FSAL] config::openDirectory had an unexpected value: ${String(openDir)}`)
+      this._config.set('openDirectory', null)
+    } else if (openDir !== null) {
       try {
         const descriptor = this.findDir(openDir)
         this.openDirectory = descriptor
@@ -694,7 +695,7 @@ export default class FSAL extends ProviderContract {
       return null
     }
 
-    return descriptor
+    return descriptor as DirDescriptor
   }
 
   /**
@@ -711,7 +712,7 @@ export default class FSAL extends ProviderContract {
       return null
     }
 
-    return descriptor
+    return descriptor as MDFileDescriptor|CodeFileDescriptor
   }
 
   /**
@@ -729,7 +730,7 @@ export default class FSAL extends ProviderContract {
       return null
     }
 
-    return descriptor
+    return descriptor as OtherFileDescriptor
   }
 
   /**
@@ -745,7 +746,7 @@ export default class FSAL extends ProviderContract {
     if (descriptor === undefined) {
       return undefined
     } else {
-      return descriptor
+      return descriptor as AnyDescriptor
     }
   }
 

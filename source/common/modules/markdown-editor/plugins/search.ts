@@ -209,10 +209,25 @@ export function stopSearch (): void {
  * @param   {RegExp}             term  The term, as a regular expression
  */
 function highlightSearchResults (cm: CodeMirror.Editor, term: RegExp): void {
-  unhighlightSearchResults()
   const cursor = cm.getSearchCursor(term)
+  const ranges: CodeMirror.Range[] = []
   while (cursor.findNext() !== false) {
-    const mark = cm.markText(cursor.from(), cursor.to(), { className: 'cm-highlight' })
+    // @ts-expect-error The CodeMirror types weirdly require more than necessary
+    ranges.push({ anchor: cursor.from(), head: cursor.to() })
+  }
+  highlightRanges(cm, ranges)
+}
+
+/**
+ * Highlights a predetermined set of ranges within the document
+ *
+ * @param   {CodeMirror.Editor}   cm      The editor instance
+ * @param   {CodeMirror.Range[]}  ranges  The ranges to highlight
+ */
+export function highlightRanges (cm: CodeMirror.Editor, ranges: CodeMirror.Range[]): void {
+  unhighlightSearchResults()
+  for (const range of ranges) {
+    const mark = cm.markText(range.anchor, range.head, { className: 'cm-highlight' })
     matchesInDocument.push(mark)
   }
 }

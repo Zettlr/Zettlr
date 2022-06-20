@@ -14,6 +14,7 @@
  */
 
 import { getZknTagRE, getHeadingRE, getHighlightRE, getTableRE, getInlineMathRE, getFnReferenceRE } from '@common/regular-expressions'
+import cssSafeString from '@common/util/css-safe-string'
 // @ts-expect-error
 import { defineMode, getMode, startState as _startState, copyState as _copyState, defineMIME, Mode } from 'codemirror'
 
@@ -210,7 +211,9 @@ defineMode('markdown-zkn', function (config, parserConfig) {
         return mdMode.token(stream, state.mdState)
       } else if (stream.match(zknTagRE, false) !== null) {
         const match = stream.match(zknTagRE)
-        return `zkn-tag zkn-tag-${match[1].substring(1).toLowerCase()}`
+        // Retrieve a CSS class name-safe version of the tag text
+        const tagText = cssSafeString(match[1])
+        return `zkn-tag zkn-tag-${tagText}`
       }
 
       // Now check for a zknLink

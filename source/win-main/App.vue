@@ -50,7 +50,7 @@
           </template>
           <template #view2>
             <!-- Second side: Sidebar -->
-            <MainSidebar></MainSidebar>
+            <MainSidebar v-on:move-section="moveSection($event)"></MainSidebar>
           </template>
         </SplitView>
       </template>
@@ -75,7 +75,7 @@
 
 import WindowChrome from '@common/vue/window/Chrome.vue'
 import FileManager from './file-manager/file-manager.vue'
-import MainSidebar from './MainSidebar.vue'
+import MainSidebar from './sidebar/MainSidebar.vue'
 import DocumentTabs from './DocumentTabs.vue'
 import SplitView from '../common/vue/window/SplitView.vue'
 import GlobalSearch from './GlobalSearch.vue'
@@ -260,7 +260,29 @@ export default defineComponent({
           type: 'button',
           id: 'open-preferences',
           title: trans('toolbar.preferences'),
-          icon: 'cog'
+          icon: 'cog',
+          visible: this.getToolbarButtonDisplay('showOpenPreferencesButton')
+        },
+        {
+          type: 'button',
+          id: 'new-file',
+          title: trans('menu.new_file'),
+          icon: 'plus',
+          visible: this.getToolbarButtonDisplay('showNewFileButton')
+        },
+        {
+          type: 'button',
+          id: 'previous-file',
+          title: trans('menu.previous_file'),
+          icon: 'arrow left',
+          visible: this.getToolbarButtonDisplay('showPreviousFileButton')
+        },
+        {
+          type: 'button',
+          id: 'next-file',
+          title: trans('menu.next_file'),
+          icon: 'arrow right',
+          visible: this.getToolbarButtonDisplay('showNextFileButton')
         },
         {
           type: 'spacer',
@@ -277,7 +299,8 @@ export default defineComponent({
           type: 'toggle',
           id: 'toggle-readability',
           title: trans('toolbar.readability'),
-          icon: 'eye'
+          icon: 'eye',
+          visible: this.getToolbarButtonDisplay('showToggleReadabilityButton')
         },
         {
           type: 'spacer',
@@ -288,37 +311,43 @@ export default defineComponent({
           type: 'button',
           id: 'markdownComment',
           title: trans('gui.formatting.comment'),
-          icon: 'code'
+          icon: 'code',
+          visible: this.getToolbarButtonDisplay('showMarkdownCommentButton')
         },
         {
           type: 'button',
           id: 'markdownLink',
           title: trans('gui.formatting.link'),
-          icon: 'link'
+          icon: 'link',
+          visible: this.getToolbarButtonDisplay('showMarkdownLinkButton')
         },
         {
           type: 'button',
           id: 'markdownImage',
           title: trans('gui.formatting.image'),
-          icon: 'image'
+          icon: 'image',
+          visible: this.getToolbarButtonDisplay('showMarkdownImageButton')
         },
         {
           type: 'button',
           id: 'markdownMakeTaskList',
           title: trans('gui.formatting.tasklist'),
-          icon: 'checkbox-list'
+          icon: 'checkbox-list',
+          visible: this.getToolbarButtonDisplay('showMarkdownMakeTaskListButton')
         },
         {
           type: 'button',
           id: 'insert-table',
           title: trans('gui.formatting.insert_table'),
-          icon: 'table'
+          icon: 'table',
+          visible: this.getToolbarButtonDisplay('showInsertTableButton')
         },
         {
           type: 'button',
           id: 'insertFootnote',
           title: trans('gui.formatting.footnote'),
-          icon: 'footnote'
+          icon: 'footnote',
+          visible: this.getToolbarButtonDisplay('showInsertFootnoteButton')
         },
         {
           type: 'spacer',
@@ -328,7 +357,8 @@ export default defineComponent({
           type: 'text',
           align: 'center',
           id: 'document-info',
-          content: this.parsedDocumentInfo
+          content: this.parsedDocumentInfo,
+          visible: this.getToolbarButtonDisplay('showDocumentInfoText')
         },
         {
           type: 'ring',
@@ -336,7 +366,8 @@ export default defineComponent({
           title: trans('toolbar.pomodoro'),
           // Good morning, we are verbose here
           progressPercent: this.pomodoro.phase.elapsed / this.pomodoro.durations[this.pomodoro.phase.type] * 100,
-          colour: this.pomodoro.colour[this.pomodoro.phase.type]
+          colour: this.pomodoro.colour[this.pomodoro.phase.type],
+          visible: this.getToolbarButtonDisplay('showPomodoroButton')
         },
         {
           type: 'toggle',
@@ -382,10 +413,9 @@ export default defineComponent({
     },
     mainSplitViewVisibleComponent: function (newValue, oldValue) {
       if (newValue === 'globalSearch') {
-        // The global search just became visible, so make sure to change the
-        // current directory.
+        // The global search just became visible, so focus the query input
         nextTick().then(() => {
-          this.globalSearchComponent.setCurrentDirectory()
+          this.globalSearchComponent.focusQueryInput()
         }).catch(e => console.error(e))
       }
     }
@@ -478,6 +508,9 @@ export default defineComponent({
     jtl: function (lineNumber: number, setCursor: boolean = false) {
       (this.$refs.editor as any).jtl(lineNumber, setCursor)
     },
+    moveSection: function (data: { from: number, to: number }) {
+      (this.$refs.editor as any).moveSection(data.from, data.to)
+    },
     startGlobalSearch: function (terms: string) {
       this.mainSplitViewVisibleComponent = 'globalSearch'
       this.fileManagerVisible = true
@@ -499,6 +532,15 @@ export default defineComponent({
           .catch(e => console.error(e))
       } else if (clickedID === 'open-preferences') {
         ipcRenderer.invoke('application', { command: 'open-preferences' })
+          .catch(e => console.error(e))
+      } else if (clickedID === 'new-file') {
+        ipcRenderer.invoke('application', { command: 'new-unsaved-file', payload: { type: 'md' } })
+          .catch(e => console.error(e))
+      } else if (clickedID === 'previous-file') {
+        ipcRenderer.invoke('application', { command: 'previous-file' })
+          .catch(e => console.error(e))
+      } else if (clickedID === 'next-file') {
+        ipcRenderer.invoke('application', { command: 'next-file' })
           .catch(e => console.error(e))
       } else if (clickedID === 'export') {
         this.showExportPopover()
@@ -766,6 +808,9 @@ export default defineComponent({
             this.$closePopover()
           }
         })
+    },
+    getToolbarButtonDisplay: function (configName: string): boolean {
+      return this.$store.state.config['displayToolbarButtons.' + configName] === true
     }
   }
 })

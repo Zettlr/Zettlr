@@ -8,9 +8,11 @@
       v-bind:label="queryInputLabel"
       v-bind:autocomplete-values="recentGlobalSearches"
       v-bind:placeholder="queryInputPlaceholder"
-      v-on:confirm="startSearch()"
+      v-on:keydown.enter="startSearch()"
+      v-on:keydown.tab="($refs['restrict-to-dir-input'] as any).focus()"
     ></AutocompleteText>
     <AutocompleteText
+      ref="restrict-to-dir-input"
       v-model="restrictToDir"
       v-bind:label="restrictDirLabel"
       v-bind:autocomplete-values="directorySuggestions"
@@ -125,33 +127,13 @@ import ProgressControl from '@common/vue/form/elements/Progress.vue'
 import AutocompleteText from '@common/vue/form/elements/AutocompleteText.vue'
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
-import { SearchResult, SearchTerm } from '@dts/common/search'
+import { SearchResult, SearchResultWrapper, SearchTerm } from '@dts/common/search'
 import { CodeFileMeta, DirMeta, MDFileMeta } from '@dts/common/fsal'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { AnyMenuItem } from '@dts/renderer/context'
 
 const path = window.path
 const ipcRenderer = window.ipc
-
-interface LocalFile {
-  path: string
-  relativeDirectoryPath: string
-  filename: string
-  displayName: string
-}
-
-/**
- * This interface describes a local search result that is composed of a
- * LocalFile interface, its search results, and, as specialties, a cumulative
- * weight of all the search results and a toggle to indicate whether we should
- * hide the result set.
- */
-interface LocalSearchResult {
-  file: LocalFile
-  result: SearchResult[]
-  hideResultSet: boolean
-  weight: number
-}
 
 // Again: We have a side effect that trans() cannot be executed during import
 // stage. It needs to be executed after the window registration ran for now. It
@@ -197,9 +179,7 @@ export default defineComponent({
       // The compiled search terms
       compiledTerms: null as null|SearchTerm[],
       // All files that we need to search. Will be emptied during a search.
-      filesToSearch: [] as LocalFile[],
-      // All results so far received
-      searchResults: [] as LocalSearchResult[],
+      filesToSearch: [] as any[],
       // The number of files the search started with (for progress bar)
       sumFilesToSearch: 0,
       // A global trigger for the result set trigger. This will determine what
@@ -277,6 +257,9 @@ export default defineComponent({
     sep: function (): string {
       return path.sep
     },
+    searchResults: function (): SearchResultWrapper[] {
+      return this.$store.state.searchResults
+    },
     /**
      * Allows search results to be further filtered
      */
@@ -352,29 +335,13 @@ export default defineComponent({
       // Remove duplicates
       this.directorySuggestions = [...new Set(dirList)]
     },
-    setCurrentDirectory: function () {
-      if (this.restrictToDir.trim() !== '') {
-        return // Do not overwrite anything
-      }
-
-      // Immediately preset the restrictToDir with the currently selected directory
-      if (this.selectedDir !== null) {
-        // We cut off the origin of the root (i.e. the path of the containing root dir)
-        let rootItem = this.selectedDir
-        while (rootItem.parent != null) {
-          rootItem = rootItem.parent as unknown as DirMeta
-        }
-
-        this.restrictToDir = this.selectedDir.path.replace(rootItem.dir, '').substring(1)
-      }
-    },
     startSearch: function () {
       // We should start a search. We need two types of information for that:
       // 1. A list of files to be searched
       // 2. The compiled search terms.
       // Let's do that first.
 
-      let fileList: LocalFile[] = []
+      let fileList: any[] = []
 
       for (const treeItem of this.fileTree) {
         if (treeItem.type !== 'directory') {
@@ -450,6 +417,7 @@ export default defineComponent({
 
       // Now we're good to go!
       this.emptySearchResults()
+      this.blurQueryInput()
       this.filter = '' // Reset the filter
       this.sumFilesToSearch = fileList.length
       this.filesToSearch = fileList
@@ -460,7 +428,7 @@ export default defineComponent({
       // Take the file to be searched ...
       const terms = compileSearchTerms(this.query)
       while (this.filesToSearch.length > 0) {
-        const fileToSearch = this.filesToSearch.shift() as LocalFile
+        const fileToSearch = this.filesToSearch.shift() as any
         // Now start the search
         const result: SearchResult[] = await ipcRenderer.invoke('application', {
           command: 'file-search',
@@ -470,7 +438,7 @@ export default defineComponent({
           }
         })
         if (result.length > 0) {
-          const newResult = {
+          const newResult: SearchResultWrapper = {
             file: fileToSearch,
             result: result,
             hideResultSet: false, // If true, the individual results won't be displayed
@@ -478,14 +446,10 @@ export default defineComponent({
               return accumulator + currentValue.weight
             }, 0) // This is the initialValue, b/c we're summing up props
           }
-          this.searchResults.push(newResult)
+          this.$store.commit('addSearchResult', newResult)
           if (newResult.weight > this.maxWeight) {
             this.maxWeight = newResult.weight
           }
-
-          // Also make sure to sort the search results by relevancy (note the
-          // b-a reversal, since we want a descending sort)
-          this.searchResults.sort((a, b) => b.weight - a.weight)
         }
       }
 
@@ -496,7 +460,7 @@ export default defineComponent({
       this.filesToSearch = [] // Reset, in case the search was aborted.
     },
     emptySearchResults: function () {
-      this.searchResults = []
+      this.$store.commit('clearSearchResults')
 
       // Clear indeces of active search result
       this.activeFileIdx = -1
@@ -581,27 +545,10 @@ export default defineComponent({
       // line.
       let marked = resultObject.restext
 
-      // "Why are you deep-cloning this array?" you may ask. Well, well. The
-      // reason is that Vue will observe the original array. And, whenever an
-      // observed thing -- be it an array or object -- is mutated, this will
-      // cause Vue to update the whole component state. Array.prototype.reverse
-      // actually mutates the array. So in order to prevent Vue from endlessly
-      // updating the component, we'll pull out the values into an unobserved
-      // cloned array that we can reverse without Vue getting stuck in an
-      // infinite loop.
-      const unobserved = resultObject.ranges.map(range => {
-        return {
-          from: range.from,
-          to: range.to
-        }
-      })
-      // Addendum Sun, 16 Jan 2022: If I had paid more attention to this little
-      // curious fact here, I could've saved myself a lot of trouble with the
-      // new Proxies of Vue3. For a short summary of my odyssee, see
-      // https://www.hendrik-erz.de/post/death-by-proxy
-
-      // Because it shifts positions, we need to insert the closing tag first
-      for (const range of unobserved.reverse()) {
+      // We go through the ranges in reverse order so that the range positions
+      // remain valid as we highlight parts of the string
+      for (let i = resultObject.ranges.length - 1; i > -1; i--) {
+        const range = resultObject.ranges[i]
         marked = marked.substring(0, range.to) + endTag + marked.substring(range.to)
         marked = marked.substring(0, range.from) + startTag + marked.substring(range.from)
       }
@@ -610,6 +557,9 @@ export default defineComponent({
     },
     focusQueryInput: function () {
       this.queryInputElement?.focus()
+    },
+    blurQueryInput: function () {
+      this.queryInputElement?.blur()
     }
   }
 })

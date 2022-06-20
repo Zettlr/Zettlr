@@ -8,6 +8,11 @@ body.dark {
   #editor .CodeMirror {
     color: var(--grey-0);
 
+    // Add a background color to the vim command bar
+    .CodeMirror-dialog.CodeMirror-dialog-bottom, .vim-error-message {
+      background-color: rgb(80, 80, 80);
+    }
+
     // First the code blocks
     .cm-comment,
     .cm-fenced-code,
@@ -246,7 +251,7 @@ body.dark {
 
     // Code background
     .cm-comment:not(.cm-formatting):not(.cm-fenced-code) {
-      background-color: var(--grey-5);
+      background-color: #50505a99;
     }
 
     // cm-comment should be ignored inside code blocks

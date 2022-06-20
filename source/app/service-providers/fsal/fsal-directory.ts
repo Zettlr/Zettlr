@@ -171,9 +171,9 @@ async function parseSettings (dir: DirDescriptor): Promise<void> {
       await fs.unlink(configPath)
     }
   } catch (err: any) {
-    // Something went wrong
-    err.message = `Could not parse settings file for ${dir.name}`
-    throw err
+    // Something went wrong. Unlink the malformed file. Do not throw an error
+    // since a malformed settings file should never stop loading a directory.
+    await fs.unlink(configPath)
   }
 }
 

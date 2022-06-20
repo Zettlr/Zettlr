@@ -1,6 +1,5 @@
 name: Bug Report
 description: Use this user-friendly form to report bugs to us
-title: "[Bug] "
 labels: [bug]
 body:
   - type: markdown
@@ -46,6 +45,25 @@ body:
       label: Specify version
       description: Optional, but it is encouraged to add this information (especially if we release many versions in a short span of time).
       placeholder: e.g. 1.8.9 or 1.8.9+nightly-20210628
+    validations:
+      required: false
+  # Since Zettlr is being distributed via many different channels, sometimes
+  # bugs are not necessarily the cause of the codebase, but rather how it's
+  # packaged. For example, we have received many bug reports in Q2 of 2022 that
+  # were caused by the Flathub package
+  - type: dropdown
+    id: package-manager
+    attributes:
+      label: Installation Method
+      description: "Please indicate how you installed the app"
+      options:
+        - From the Website or GitHub
+        - Chocolatey
+        - Homebrew
+        - Mac Ports
+        - AUR (Arch Repository)
+        - Flathub
+        - Other (please specify below)
     validations:
       required: false
   # Also, we need to know the operating system(s) where this happens

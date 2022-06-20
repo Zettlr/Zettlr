@@ -65,17 +65,21 @@ function makeCitationPlugin (citationCallback: CitationCallback): () => Showdown
         const allCitations = extractCitations(text)
         // ... and retrieve the rendered ones from the citeproc provider
         const finalCitations = allCitations.map((elem) => {
-          return citationCallback(elem.citations, elem.composite) ?? text
-        })
-
-        // Now get the citations to be replaced
-        const toBeReplaced = allCitations.map(citation => {
-          return text.substring(citation.from, citation.to - citation.from)
-        })
+          // Provide the original string as a fallback in case no citation can
+          // be retrieved (e.g. if the item is missing in the library)
+          const fallback = text.substring(elem.from, elem.to)
+          return {
+            text: citationCallback(elem.citations, elem.composite) ?? fallback,
+            from: elem.from,
+            to: elem.to
+          }
+        }).reverse() // NOTE: We're reversing to not mess with the positions
 
         // Finally, replace every citation with its designated replacement
         for (let i = 0; i < allCitations.length; i++) {
-          text = text.replace(toBeReplaced[i], finalCitations[i])
+          const before = text.substring(0, finalCitations[i].from)
+          const after = text.substring(finalCitations[i].to)
+          text = before + finalCitations[i].text + after
         }
 
         // Now return the text

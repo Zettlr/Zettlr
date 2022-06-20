@@ -223,9 +223,25 @@ export default function getConfigTemplate (): ConfigOptions {
       avoidNewTabs: true, // Whether to avoid opening new tabs for documents if possible
       iframeWhitelist: [ 'www.youtube.com', 'player.vimeo.com' ], // Contains a list of whitelisted iFrame prerendering domains
       checkForUpdates: true,
+      checkForTranslationUpdates: true,
       zoomBehavior: 'gui' // Used to determine what gets zoomed: The GUI or the editor
     },
     checkForBeta: false, // Should the user be notified of beta releases?
+    displayToolbarButtons: {
+      showOpenPreferencesButton: true,
+      showNewFileButton: true,
+      showPreviousFileButton: true,
+      showNextFileButton: true,
+      showToggleReadabilityButton: true,
+      showMarkdownCommentButton: true,
+      showMarkdownLinkButton: true,
+      showMarkdownImageButton: true,
+      showMarkdownMakeTaskListButton: true,
+      showInsertTableButton: true,
+      showInsertFootnoteButton: true,
+      showDocumentInfoText: true,
+      showPomodoroButton: true
+    },
     uuid: uuid4() // The app's unique anonymous identifier
   }
 }

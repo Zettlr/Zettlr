@@ -65,6 +65,11 @@ export default function (): any {
           type: 'checkbox',
           label: trans('dialog.preferences.check_updates'),
           model: 'system.checkForUpdates'
+        },
+        {
+          type: 'checkbox',
+          label: trans('dialog.preferences.check_translation_updates'),
+          model: 'system.checkForTranslationUpdates'
         }
       ],
       [

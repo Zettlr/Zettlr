@@ -81,7 +81,7 @@ export default class TranslationProvider extends ProviderContract {
 
   /**
    * Get an initial load of all available translations
-   * @return {Promise} Resolves if everything worked out, rejects otherwise.
+   *
    */
   async boot (): Promise<void> {
     this._logger.verbose('Translation provider booting up ...')
@@ -105,6 +105,20 @@ export default class TranslationProvider extends ProviderContract {
     global.i18nFallbackRawData = await fs.readFile(fallback.path, 'utf8')
     global.i18nFallback = JSON.parse(global.i18nFallbackRawData)
 
+    // Get user's setting of translation updates
+    const checkForTranslationUpdates: boolean = this._config.get('system.checkForTranslationUpdates')
+    if (checkForTranslationUpdates) {
+      this.updateTranslations().catch(err => this._logger.error(`[Translation Provider] Failed to update translations: ${String(err.code)}`, err))
+    } else {
+      this._logger.info('[Translation Provider] Not checking for translation updates based on preferences.')
+    }
+  }
+
+  /**
+   * Get translation updates via translation server
+   * @return {Promise} Resolves if everything worked out, rejects otherwise.
+   */
+  async updateTranslations (): Promise<void> {
     // return file
     let response
     try {

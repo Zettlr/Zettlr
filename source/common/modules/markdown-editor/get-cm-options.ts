@@ -41,6 +41,8 @@ export default function getCodeMirrorDefaultOptions (mdEditorInstance: MarkdownE
     cursorScrollMargin: 60,
     // Disable cursor blinking, as we apply a @keyframes animation
     cursorBlinkRate: 0,
+    // Don't show lineNumbers by default. This option will be switched for code.
+    lineNumbers: false,
     // Specify the fold gutter
     gutters: ['CodeMirror-foldgutter'],
     // Default fold options
@@ -101,6 +103,10 @@ export default function getCodeMirrorDefaultOptions (mdEditorInstance: MarkdownE
         idRE: '(\\d{14})', // How to determine IDs
         linkStart: '[[', // Zettelkasten link start
         linkEnd: ']]' // Zettelkasten link end
+      },
+      metadata: {
+        path: '', // Absolute path to the current file
+        id: '' // ID of the current file
       },
       // The base path used to render the image in case of relative URLs
       markdownImageBasePath: '',

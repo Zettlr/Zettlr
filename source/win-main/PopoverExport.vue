@@ -7,13 +7,13 @@
       v-bind:options="availableFormats"
     ></SelectControl>
     <!-- Here we can enumerate options for the currently selected format. -->
-    <Form
+    <FormBuilder
       v-if="formSchema.fieldsets.length > 0"
       ref="form"
       v-bind:model="currentOptions"
       v-bind:schema="formSchema"
       v-on:update:model-value="handleInput"
-    ></Form>
+    ></FormBuilder>
     <!-- The choice of working directory vs. temporary applies to all exporters -->
     <hr>
     <RadioControl
@@ -48,7 +48,7 @@
 
 import RadioControl from '@common/vue/form/elements/Radio'
 import SelectControl from '@common/vue/form/elements/Select'
-import Form from '@common/vue/form/Form'
+import FormBuilder from '@common/vue/form/Form'
 
 const ipcRenderer = window.ipc
 
@@ -57,7 +57,7 @@ export default {
   components: {
     SelectControl,
     RadioControl,
-    Form
+    FormBuilder
   },
   data: function () {
     return {

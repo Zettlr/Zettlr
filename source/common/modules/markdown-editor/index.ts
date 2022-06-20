@@ -33,7 +33,7 @@ import generateKeymap from './generate-keymap'
 import generateTableOfContents from './util/generate-toc'
 
 // Search plugin (module-namespaced set of utility functions)
-import { searchNext, searchPrevious, replaceNext, replacePrevious, replaceAll, stopSearch } from './plugins/search'
+import { searchNext, searchPrevious, replaceNext, replacePrevious, replaceAll, stopSearch, highlightRanges } from './plugins/search'
 
 /**
  * APIs
@@ -66,6 +66,7 @@ import linkTooltipsHook from './hooks/link-tooltips'
 import noteTooltipsHook from './hooks/note-preview'
 
 import displayContextMenu from './display-context-menu'
+import moveSection from '@common/util/move-section'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
@@ -303,6 +304,16 @@ export default class MarkdownEditor extends EventEmitter {
   }
 
   /**
+   * Allows highlighting of arbitrary ranges independent of a search
+   *
+   * @param   {CodeMirror.Range[]}  ranges  The ranges to highlight
+   */
+  highlightRanges (ranges: CodeMirror.Range[]): void {
+    this.stopSearch() // Make sure we retain a sane search state
+    highlightRanges(this._instance, ranges)
+  }
+
+  /**
    * Pastes the clipboard contents as plain text, regardless of any formatted
    * text present.
    */
@@ -357,6 +368,17 @@ export default class MarkdownEditor extends EventEmitter {
       this._instance.setCursor({ line: line, ch: 0 })
       this._instance.focus()
     }
+  }
+
+  /**
+   * Moves the section that starts with an ATX heading on the from-line to the
+   * line identified by to
+   *
+   * @param   {number}  from  The starting line (including the section heading)
+   * @param   {number}  to    The target line for the section
+   */
+  moveSection (from: number, to: number): void {
+    this.codeMirror.setValue(moveSection(this.value, from, to))
   }
 
   /**
@@ -452,6 +474,18 @@ export default class MarkdownEditor extends EventEmitter {
       this.setOptions({ mode: 'readability' })
     }
 
+    if (this._currentDocumentMode !== 'multiplex') {
+      this.setOptions({
+        lineNumbers: true,
+        lineWrapping: false
+      })
+    } else {
+      this.setOptions({
+        lineNumbers: false,
+        lineWrapping: true
+      })
+    }
+
     return oldDoc
   }
 
@@ -545,6 +579,7 @@ export default class MarkdownEditor extends EventEmitter {
       let selectionText = this._instance.getSelections()
       let selectionBounds = this._instance.listSelections()
       for (let i = 0; i < selectionText.length; i++) {
+        // const start = selectionBounds[i].anchor > selectionBounds[i].head
         ret.selections.push({
           selectionLength: countWords(selectionText[i], this._countChars),
           start: Object.assign({}, selectionBounds[i].anchor),
@@ -728,7 +763,7 @@ export default class MarkdownEditor extends EventEmitter {
    * @return  {Number}  The number of chars without spaces
    */
   get charCountWithoutSpaces (): number {
-    return countWords(this.value.replace(/ +/g, ''), true)
+    return countWords(this.value, 'nospace')
   }
 
   /**

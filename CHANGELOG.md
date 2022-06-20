@@ -1,3 +1,90 @@
+# Upcoming
+
+## GUI and Functionality
+
+- **New Feature**: After a long time, you can now again drag and drop entries in
+  the table of contents in the sidebar to rearrange sections of your file
+- Code files (e.g. `*.tex` or `*.json`) now have line numbers enabled and the
+  margins of the main editor removed by default
+- The sidebar tabs are now static at the top, meaning you don't have to scroll
+  up within a long list just to see the tabbar
+- Added new variables for snippets:
+  - `CURRENT_ID`: Holds the currently assigned Zettelkasten ID to the file
+  - `FILENAME`: Holds the filename of the current file
+  - `DIRECTORY`: Holds the directory path for the current file
+  - `EXTENSION`: Holds the file extension for the current file
+- Fixed inability to move the text cursor while renaming files in the file tree
+- Added the ability to use mouse buttons 4 and 5 for forward/backward navigation
+- Fixed a visual glitch on Linux where in dark mode the active tab would have no
+  colored bottom border
+
+## Under the Hood
+
+- Refactored the main editor component further
+- Refactored the Sidebar panels into their own respective components
+- Upgrade Electron to `v18.0.0`
+- Pandoc logs are now logged in every case
+- Improve the display and functionality of log messagesß
+
+# 2.3.0
+
+## GUI and Functionality
+
+- **New Feature**: You can now customize the toolbar and add or remove buttons
+  as you see fit
+- **New Feature**: You can now navigate the file tree with the arrow buttons
+  after activating the quick filter; use up and down to visually move through
+  the visible items and left/right to collapse/uncollapse a directory; use Enter
+  to "click" that item
+- **New Feature**: The document tabbar now features buttons so you can easily
+  scroll horizontally through many tabs
+- Added "Copy filename", "Copy path", and "Copy ID" items to document tabs
+  context menus (thanks to @kyaso)
+- Added "New File", "Next File", and "Previous File" buttons to the toolbar
+- The query input now gets blurred when starting a global search in order to
+  prevent the dropdown from showing up, especially during auto-searches
+- Added keyword/tag CSS class names to YAML frontmatter tags
+- Added the last modification date to the file list, even if the additional info
+  setting is turned off
+- The "restrict to directory" field will now be empty by default
+- Pressing `Tab` while the query input is focused will now directly focus the
+  restrict-to-dir input
+- The table of contents in the sidebar now shows the title of the currently
+  active file, if applicable
+- Removed the less-than-helpful file and folder removal shortcuts
+- Fixed the recent documents menu on Windows
+- Fixed wrong character count if counting without spaces
+- Fixed wrong word count for indented lists
+- Fixed wrong keyword/tag CSS class names
+- Fixed jumping of the code editor in the assets manager
+- Fixed wrongly positioned tabstops during snippets autocomplete
+- Fixed an error that would erroneously render citations in footnote previews or
+  copied text with styling
+
+## Under the Hood
+
+- Ignore `IDEA`-related files
+- Update Pandoc to `2.18`
+- Refactored the main window's store to be more modular for the upcoming
+  additional changes
+- Added an additional check for frontmatter values in code files
+
+# 2.2.6
+
+## GUI and Functionality
+
+- A malformed directory settings file now does not prevent loading the
+  directory; instead the malformed file is now removed
+- Fixed a small visual glitch on Linux where the selected file was not
+  highlighted in the file list in the thin or expanded file manager modes
+- Fixed heading ID links not working with, e.g., accents
+- Fixed heavy latency when working on a file with many related files
+
+## Under the Hood
+
+- Simplify the codeblock class hook again to significantly improve typing speed
+- Updated all dependency packages to the respective latest versions
+
 # 2.2.5
 
 ## GUI and Functionality
@@ -6,7 +93,27 @@
 - Fixed selection of words on right-click in the editor
 - Editor word selection on right-click now accepts both `'` and `’`
 - Add Fortran syntax highlighting (keyword `fortran`)
-- Zettlr can ask you now where you want to store the exported PDF
+- Fix a bug that could lead to data loss when changing documents while a table
+  has focus
+- Added an extra check so that unexpected values of `openDirectory` would not
+  prevent Zettlr from starting
+- Make the vim command line visible and style it according to the Zettlr themes
+- Clicking on the toolbar now doesn't steal the focus from other elements,
+  making it more comfortable to drag the window and immediately continue writing
+- Added slight transparency to the inline code background color so that block
+  cursors are visible inside that code
+- Resizing an image upon pasting from clipboard now works better, since the
+  aspect ratio will only be recalculated once you leave the input field (i.e. by
+  tabbing into another input); this way you can just type in a specific number
+- Disabling "render task lists" will now also disable the application of task
+  lists; this helps speed up editing long documents with many tasks
+- The main editor search now no longer automatically searches
+- When opening the main editor search, anything in the search input will now be
+  selected
+- Fix unintended global search start
+- Highlight results from global search in the main editor text
+- The code editor in the assets manager now scales with the size of the window
+- Added an option to prevent Zettlr from checking for updated translations
 
 ## Under the Hood
 
@@ -15,6 +122,7 @@
 - Display errors in the log viewer
 - Added the default Homebrew installation directory for Apple Silicon Macs in
   order for Zettlr to find Pandoc installed via brew.
+- Improve global search typings
 
 # 2.2.4
 

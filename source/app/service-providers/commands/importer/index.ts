@@ -84,7 +84,7 @@ export default async function makeImport (
       const defaultsFile = path.join(app.getPath('temp'), 'defaults.yml')
 
       // ... cast the defaults to string ...
-      const YAMLOptions: YAML.Options = {
+      const YAMLOptions = {
         indent: 4,
         simpleKeys: false
       }

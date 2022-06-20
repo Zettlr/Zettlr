@@ -18,12 +18,12 @@
       role="tabpanel"
       v-bind:aria-labelledby="tabs[currentTab].id"
     >
-      <Form
+      <FormBuilder
         ref="form"
         v-bind:model="model"
         v-bind:schema="schema"
         v-on:update:model-value="handleInput"
-      ></Form>
+      ></FormBuilder>
     </div>
   </WindowChrome>
 </template>
@@ -43,7 +43,7 @@
  * END HEADER
  */
 
-import Form from '@common/vue/form/Form.vue'
+import FormBuilder from '@common/vue/form/Form.vue'
 import WindowChrome from '@common/vue/window/Chrome.vue'
 import { trans } from '@common/i18n-renderer'
 
@@ -56,6 +56,7 @@ import displaySchema from './schema/display'
 import spellcheckingSchema from './schema/spellchecking'
 import autocorrectSchema from './schema/autocorrect'
 import advancedSchema from './schema/advanced'
+import toolbarSchema from './schema/toolbar'
 import { defineComponent } from 'vue'
 import { WindowTab } from '@dts/renderer/window'
 
@@ -111,7 +112,7 @@ function modelToField (model: string, tree: any): any {
 
 export default defineComponent({
   components: {
-    Form,
+    FormBuilder,
     WindowChrome
   },
   data () {
@@ -171,6 +172,12 @@ export default defineComponent({
           controls: 'tab-advanced',
           id: 'tab-advanced-control',
           icon: 'tools'
+        },
+        {
+          label: trans('dialog.preferences.toolbar.title'),
+          controls: 'tab-toolbar',
+          id: 'tab-toolbar-control',
+          icon: 'container'
         }
       ] as WindowTab[],
       // Will be populated afterwards, contains the user dict
@@ -373,6 +380,9 @@ export default defineComponent({
           break
         case 'tab-advanced':
           this.schema = advancedSchema()
+          break
+        case 'tab-toolbar':
+          this.schema = toolbarSchema()
           break
       }
 

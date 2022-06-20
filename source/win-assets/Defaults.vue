@@ -13,7 +13,7 @@
       ></SelectableList>
     </template>
     <template #view2>
-      <div style="padding: 10px;">
+      <div id="defaults-container">
         <p>{{ defaultsExplanation }}</p>
 
         <CodeEditor
@@ -21,19 +21,23 @@
           v-model="editorContents"
           v-bind:mode="'yaml'"
         ></CodeEditor>
-        <ButtonControl
-          v-bind:primary="true"
-          v-bind:label="saveButtonLabel"
-          v-bind:inline="true"
-          v-on:click="saveDefaultsFile()"
-        ></ButtonControl>
-        <ButtonControl
-          v-bind:primary="false"
-          v-bind:label="restoreButtonLabel"
-          v-bind:inline="true"
-          v-on:click="restoreDefaultsFile()"
-        ></ButtonControl>
-        <span v-if="savingStatus !== ''" class="saving-status">{{ savingStatus }}</span>
+
+        <!-- This div is used to keep the buttons in a line despite the flex -->
+        <div>
+          <ButtonControl
+            v-bind:primary="true"
+            v-bind:label="saveButtonLabel"
+            v-bind:inline="true"
+            v-on:click="saveDefaultsFile()"
+          ></ButtonControl>
+          <ButtonControl
+            v-bind:primary="false"
+            v-bind:label="restoreButtonLabel"
+            v-bind:inline="true"
+            v-on:click="restoreDefaultsFile()"
+          ></ButtonControl>
+          <span v-if="savingStatus !== ''" class="saving-status">{{ savingStatus }}</span>
+        </div>
       </div>
     </template>
   </SplitView>
@@ -231,5 +235,14 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-//
+#defaults-container {
+  padding: 10px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .CodeMirror {
+    flex-grow: 1;
+  }
+}
 </style>

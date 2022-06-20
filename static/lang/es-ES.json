@@ -2,19 +2,20 @@
     "metadata": {
         "authors": [
             "ScaredCoward",
-            "Renzo Sparta \u003Cexequiel0210@gmail.com\u003E",
+            "Humberto P\u00e9rez Romero \u003Chupero@disroot.org\u003E",
             "vfc",
             "das_kultural",
             "Diego Tra\u00edd",
+            "Renzo Sparta \u003Cexequiel0210@gmail.com\u003E",
             "Z_Moz",
-            "Humberto P\u00e9rez Romero \u003Chupero@disroot.org\u003E",
             "Miren",
             "Hiperterminal \u003Cdavid@hiperterminal.com\u003E",
+            "Javier Garc\u00eda Mar\u00edn",
             "Tim",
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-02-02T16:25:21.000000Z"
+        "updated_at": "2022-05-31T18:21:54.000000Z"
     },
     "dialog": {
         "about": {
@@ -34,7 +35,7 @@
             "other_projects": "Zettlr tambi\u00e9n hace uso de los siguientes proyectos:",
             "projects": "Otros proyectos",
             "showdownjs": "Renderiza el changelog (registro de cambios) para que puedas ver lo que ha cambiado en una actualizaci\u00f3n",
-            "sponsors": "Esp\u00f3nsors",
+            "sponsors": "Patrocinadores",
             "tippyjs": "De ah\u00ed vienen las buenas tooltips (descripciones emergentes)",
             "title": "Acerca de Zettlr",
             "trademark": "Todos los logotipos y marcas est\u00e1n sujetos a sus leg\u00edtimos propietarios. Adem\u00e1s de usar su c\u00f3digo, Zettlr no est\u00e1 de ninguna manera afiliado a ninguno de estos proyectos. Node.js es una marca registrada de Joyent, Inc."
@@ -203,6 +204,8 @@
             },
             "avoid_new_tabs": "Evita, cuando sea posible, abrir archivos en nuevas pesta\u00f1as",
             "checkForBeta": "Notifiquame sobre las versiones beta",
+            "check_translation_updates": "Comprueba autom\u00e1ticamente si se han actualizado las traducciones",
+            "check_updates": "Comprueba autom\u00e1ticamente si hay actualizaciones",
             "choose_file": "Elegir archivo ....",
             "citation_database": "Base de datos de citas (CSL JSON o BibTex)",
             "citations": {
@@ -226,6 +229,7 @@
                 "image_width": "Anchura m\u00e1xima de las im\u00e1genes (en %)",
                 "preview_info": "Estas opciones determinan qu\u00e9 elementos se renderizan en los documentos.",
                 "render_citations": "Renderizar citas",
+                "render_emphasis": "Redneriza los \u00e9nfasis",
                 "render_htags": "Ocultar caracteres de cabecera",
                 "render_iframes": "Renderizar Iframes",
                 "render_images": "Renderizar imagenes",
@@ -278,6 +282,7 @@
             "hide_dirs": "Ocultar carpetas durante la b\u00fasqueda global",
             "homeEndBehaviour": "Usa las acciones por defecto de CodeMirror de \u003Ckbd\u003EHome\u003C/kbd\u003E y \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
             "indent_unit": "Sangrado por el siguiente n\u00famero de espacios",
+            "indent_with_tabs": "Sangrar utilizando la tecla de tabulaci\u00f3n",
             "input_mode": "Modo de entrada del editor",
             "leave_app_running_in_the_notification_area": "Deja la aplicaci\u00f3n funcionando en el \u00e1rea de notificaci\u00f3n",
             "modtime": "Hora de la \u00faltima modificaci\u00f3n",
@@ -361,6 +366,22 @@
                 "title": "Tema"
             },
             "title": "Preferencias",
+            "toolbar": {
+                "showDocumentInfoText": "Muestra informaci\u00f3n del documento",
+                "showInsertFootnoteButton": "Muestra el bot\u00f3n \"Insertar nota a pie de p\u00e1gina\"",
+                "showInsertTableButton": "Muestra el bot\u00f3n \"Insertar tabla\"",
+                "showMarkdownCommentButton": "Muestra el bot\u00f3n \"Insertar comentario\"",
+                "showMarkdownImageButton": "Muestra el bot\u00f3n \"Imagen\"",
+                "showMarkdownLinkButton": "Muestra el bot\u00f3n \"Enlace\"",
+                "showMarkdownMakeTaskListButton": "Muestra el bot\u00f3n \"Lista de tareas\"",
+                "showNewFileButton": "Muestra el bot\u00f3n \"Archivo nuevo\"",
+                "showNextFileButton": "Muestra el bot\u00f3n \"Pr\u00f3ximo archivo\"",
+                "showOpenPreferencesButton": "Muestra el bot\u00f3n \"Abrir preferencias\"",
+                "showPomodoroButton": "Muestra el temporizador Pomodoro",
+                "showPreviousFileButton": "Muestra el bot\u00f3n \"Archivo anterior\"",
+                "showToggleReadabilityButton": "Muestra el bot\u00f3n \"Habilitar modo de legibilidad\"",
+                "title": "Barra de herramientas"
+            },
             "translations": {
                 "download": "Haz clic para descargar",
                 "downloading": "Descargando %s",
@@ -410,6 +431,11 @@
                 "var_week_number": "Semana del a\u00f1o (completando con ceros delante)",
                 "var_year": "A\u00f1o (cuatro cifras)",
                 "var_year_two": "A\u00f1o (dos d\u00edgitos)"
+            },
+            "zoom_behavior": {
+                "editor": "El zoom se aplica s\u00f3lo al tama\u00f1o de la letra",
+                "gui": "El zoom se aplica a toda la ventana",
+                "label": "Comportamiento del zoom"
             }
         },
         "snippets": {
@@ -481,7 +507,7 @@
             "defaults_restoring": "Restuarando el archivo de los par\u00e1metros por defecto",
             "status": {
                 "save_error": "Ha fallado el guardado",
-                "saved": "Guardado!",
+                "saved": "\u00a1Guardado!",
                 "saving": "Guardando...",
                 "unsaved_changes": "Cambios no guardados"
             },
@@ -603,6 +629,7 @@
         "close_file": "Cerrar archivo",
         "close_workspace": "Cerrar \u00e1rea de trabajo",
         "copy": "Copiar",
+        "copy_abs_path": "Copiar ruta completa",
         "copy_equation": "Copia el c\u00f3digo de la ecuaci\u00f3n",
         "copy_filename": "Copiar nombre de archivo",
         "copy_html": "Copiar como HTML",
@@ -646,6 +673,7 @@
         "new_dir": "Carpeta nueva...",
         "new_file": "Archivo nuevo...",
         "new_project": "Crear proyecto",
+        "next_file": "Siguiente archivo",
         "no_suggestions": "Sin surgerencias",
         "open": "Abrir...",
         "open_attachment": "Abrir adjunto",
@@ -660,6 +688,7 @@
         "paste_plain": "Pegar sin formatos",
         "pdf_preferences": "Preferencias PDF...",
         "preferences": "Preferencias",
+        "previous_file": "Archivo anterior",
         "print": "Imprimir....",
         "project_build": "Exportar proyecto",
         "project_properties": "Configuraci\u00f3n del proyecto....",
@@ -793,6 +822,7 @@
         "save_changes_save": "Guardar",
         "save_changes_select_dir": "Por favor, seleccione una carpeta para poder guardar el nuevo archivo.",
         "save_changes_title": "\u00bfOmitir los cambios no guardados?",
+        "save_file": "Guarda el archivo",
         "unknown_command": "Se ha recibido una instrucci\u00f3n desconocida: %s"
     },
     "toolbar": {
@@ -820,7 +850,7 @@
         "show_menu": "Mostrar men\u00fa de aplicaci\u00f3n",
         "show_toc": "Mostrar el sumario",
         "stats": "Ver estad\u00edsticas",
-        "tag_cloud": "tags",
+        "tag_cloud": "Etiquetas",
         "toggle_attachments": "Ver archivos adjuntos",
         "toggle_file_manager": "Gestor de archivos",
         "toggle_global_search": "B\u00fasqueda global"

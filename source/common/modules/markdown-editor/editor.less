@@ -96,6 +96,21 @@
     border-radius: 3px;
   }
 
+  // This class is applied for the dialogs that the vim plugin produces, i.e.
+  // the command bar.
+  .CodeMirror-dialog.CodeMirror-dialog-bottom, .vim-error-message {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    input {
+      background-color: transparent;
+      border: none;
+      border-radius: none;
+    }
+  }
+
   // SYNTAX-HIGHLIGHTING CLASSES
   // ===========================================================================
 
@@ -363,13 +378,16 @@ body.dark .tippy-content .editor-fn-textarea {
 
 // Text-folding related stuff
 .CodeMirror-gutters {
-  background-color: transparent;
+  //background-color: transparent;
+  background-color: white;
   border: none;
-  width: 2em;
-  padding-right: 10px;
 }
 .CodeMirror-foldgutter {
-  width: 2em;
+  width: 20px;
+}
+.CodeMirror-linenumbers {
+  width: 40px;
+  border-right: 1px solid rgba(0, 0, 0, 0.25);
 }
 .CodeMirror-foldgutter-open, .CodeMirror-foldgutter-folded {
   text-align: right;

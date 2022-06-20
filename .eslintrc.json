@@ -20,13 +20,10 @@
         "parser": "@typescript-eslint/parser",
         "ecmaVersion": 2018,
         "project": "./tsconfig.json",
-        "extraFileExtensions": [".vue"]
+        "extraFileExtensions": [ ".vue", ".mjs" ]
     },
     "rules": {
-        "space-before-function-paren": [
-            2,
-            "always"
-        ],
+        "space-before-function-paren": [ 2, "always" ],
         // The following rule-changes to JSStandard Coding Style are tradition,
         // as they were included with the default configuration of Atom's ESLint
         // plugin, so we'll keep them here for the time being.

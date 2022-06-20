@@ -36,6 +36,7 @@
         v-bind:max="originalWidth"
         v-bind:placeholder="imgWidth"
         v-bind:inline="true"
+        v-on:blur="recalculateDimensions('width')"
         v-on:confirm="handleClick('save')"
         v-on:escape="handleClick('cancel')"
       ></NumberControl>
@@ -45,6 +46,7 @@
         v-bind:max="imgHeight"
         v-bind:placeholder="originalHeight"
         v-bind:inline="true"
+        v-on:blur="recalculateDimensions('height')"
         v-on:confirm="handleClick('save')"
         v-on:escape="handleClick('cancel')"
       ></NumberControl>
@@ -165,12 +167,6 @@ export default defineComponent({
     }
   },
   watch: {
-    imgWidth: function () {
-      this.recalculateDimensions('width')
-    },
-    imgHeight: function () {
-      this.recalculateDimensions('height')
-    },
     retainAspect: function () {
       this.recalculateDimensions('width')
     }

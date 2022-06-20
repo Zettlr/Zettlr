@@ -41,3 +41,19 @@ export interface SearchResult {
    */
   ranges: SearchResultRange[]
 }
+
+/**
+ * This interface describes a wrapper that combines search results with metadata
+ * on the file the results describe
+ */
+export interface SearchResultWrapper {
+  file: {
+    path: string
+    relativeDirectoryPath: string
+    filename: string
+    displayName: string
+  }
+  result: SearchResult[]
+  hideResultSet: boolean
+  weight: number
+}

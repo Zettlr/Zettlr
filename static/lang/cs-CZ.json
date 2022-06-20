@@ -4,7 +4,7 @@
             "Ales Nehyba \u003Cneal.cz@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-02-15T20:13:38.000000Z"
+        "updated_at": "2022-04-20T17:38:23.000000Z"
     },
     "dialog": {
         "about": {
@@ -191,6 +191,7 @@
             },
             "avoid_new_tabs": "Pokud mo\u017eno, neotev\u00edrat soubory v nov\u00fdch z\u00e1lo\u017ek\u00e1ch",
             "checkForBeta": "Informovat o beta vyd\u00e1n\u00edch",
+            "check_translation_updates": "Zkontrolovat aktualizace p\u0159eklad\u016f p\u0159i spu\u0161t\u011bn\u00ed",
             "check_updates": "Automaticky zji\u0161\u0165ovat aktualizace",
             "choose_file": "Vybrat soubor...",
             "citation_database": "Datab\u00e1ze citac\u00ed (CSL JSON nebo BibTex)",
@@ -267,6 +268,7 @@
             "hide_dirs": "Skr\u00fdt slo\u017eky b\u011bhem glob\u00e1ln\u00edho hled\u00e1n\u00ed",
             "homeEndBehaviour": "Pou\u017e\u00edt v\u00fdchoz\u00ed akce CodeMirror pro kl\u00e1vesy \u003Ckbd\u003EHome\u003C/kbd\u003E a \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
             "indent_unit": "Odsadit o ur\u010den\u00fd po\u010det mezer",
+            "indent_with_tabs": "Odsadit pomoc\u00ed tabul\u00e1tor\u016f",
             "input_mode": "Re\u017eim editoru",
             "leave_app_running_in_the_notification_area": "Nechat aplikaci b\u011b\u017eet v oznamovac\u00ed oblasti",
             "modtime": "\u010cas posledn\u00ed zm\u011bny",
@@ -397,6 +399,11 @@
                 "var_week_number": "Kalend\u00e1\u0159n\u00ed t\u00fdden (v\u010detn\u011b \u00favodn\u00edch nul)",
                 "var_year": "Rok (\u010dty\u0159i \u010d\u00edslice)",
                 "var_year_two": "Rok (2 \u010d\u00edslice)"
+            },
+            "zoom_behavior": {
+                "editor": "Zv\u011bt\u0161ov\u00e1n\u00ed m\u011bn\u00ed velikost p\u00edsma editoru",
+                "gui": "Zv\u011bt\u0161ov\u00e1n\u00ed m\u011bn\u00ed velikost cel\u00e9ho GUI",
+                "label": "Chov\u00e1n\u00ed zv\u011bt\u0161ov\u00e1n\u00ed"
             }
         },
         "snippets": {
@@ -470,7 +477,8 @@
                 "saved": "Ulo\u017eeno!",
                 "saving": "Ukl\u00e1d\u00e1 se ...",
                 "unsaved_changes": "Neulo\u017een\u00e9 zm\u011bny"
-            }
+            },
+            "win_title": "Spr\u00e1vce prost\u0159edk\u016f"
         },
         "attachments": "P\u0159\u00edlohy",
         "attachments_open_dir": "Otev\u0159\u00edt slo\u017eku",
@@ -527,6 +535,7 @@
         "global_search": {
             "clear_label": "Vy\u010distit pole",
             "filter_label": "Filtrovat v\u00fdsledky hled\u00e1n\u00ed",
+            "query_label": "N\u00ed\u017ee zadejte hledan\u00e9 v\u00fdrazy",
             "query_placeholder": "Naj\u00edt ...",
             "restrict_dir_label": "Hledat pouze ve slo\u017ece",
             "restrict_dir_placeholder": "Hledat ve slo\u017ece ...",
@@ -577,6 +586,7 @@
         "about": "O aplikaci",
         "add_to_dictionary": "P\u0159idat do slo\u017eky",
         "all_front": "V\u0161e do pop\u0159ed\u00ed",
+        "assets_manager": "Spr\u00e1vce prost\u0159edk\u016f",
         "bold": "Tu\u010dn\u00e9",
         "clear_recent_docs": "Vymazat seznam",
         "close_all_tabs": "Zav\u0159\u00edt v\u0161echny z\u00e1lo\u017eky",
@@ -584,6 +594,7 @@
         "close_file": "Zav\u0159\u00edt soubor",
         "close_workspace": "Zav\u0159\u00edt plochu",
         "copy": "Kop\u00edrovat",
+        "copy_equation": "Zkop\u00edrovat k\u00f3d rovnice",
         "copy_filename": "Kop\u00edrovat n\u00e1zev souboru",
         "copy_html": "Zkop\u00edrovat jako HTML",
         "copy_id": "Kop\u00edrovat ID",
@@ -598,6 +609,7 @@
         "donate": "Podpo\u0159te Zettlr",
         "duplicate_file": "Duplikovat soubor",
         "export": "Exportovat",
+        "filter_files": "Filtrovat soubory",
         "find_dir": "Naj\u00edt ve slo\u017ece",
         "find_file": "Naj\u00edt v souboru",
         "generate_id": "Generovat nov\u00e9 ID",
@@ -625,6 +637,7 @@
         "new_dir": "Nov\u00e1 slo\u017eka...",
         "new_file": "Nov\u00fd soubor ...",
         "new_project": "Vytvo\u0159it projekt",
+        "next_file": "Dal\u0161\u00ed soubor",
         "no_suggestions": "Bez n\u00e1vrh\u016f",
         "open": "Otev\u0159\u00edt ...",
         "open_attachment": "Otev\u0159\u00edt p\u0159\u00edlohu",
@@ -639,6 +652,7 @@
         "paste_plain": "Vlo\u017eit bez form\u00e1tov\u00e1n\u00ed",
         "pdf_preferences": "Mo\u017enosti PDF...",
         "preferences": "Mo\u017enosti",
+        "previous_file": "P\u0159edchoz\u00ed soubor",
         "print": "Tisk...",
         "project_build": "Exportovat projekt",
         "project_properties": "Nastaven\u00ed projektu...",
@@ -698,9 +712,11 @@
         "all_files": "V\u0161echny soubory",
         "cancel": "Zru\u0161it",
         "common": {
+            "filter": "Filtrovat ...",
             "list_actions_label": "Akce",
             "list_add_button": "P\u0159idat",
-            "list_default_column_label": "Polo\u017eka"
+            "list_default_column_label": "Polo\u017eka",
+            "list_search_placeholder": "Hledat polo\u017eky ..."
         },
         "directories": "Slo\u017eky",
         "directory_removed": "Slo\u017eka %s byla odstran\u011bna.",
@@ -799,7 +815,8 @@
         "stats": "Zobrazit statistiky",
         "tag_cloud": "\u0160t\u00edtky",
         "toggle_attachments": "Zobrazit p\u0159\u00edlohy",
-        "toggle_file_manager": "Spr\u00e1vce soubor\u016f"
+        "toggle_file_manager": "Spr\u00e1vce soubor\u016f",
+        "toggle_global_search": "Glob\u00e1ln\u00ed vyhled\u00e1v\u00e1n\u00ed"
     },
     "tray": {
         "show_zettlr": "Zobrazit Zettlr",
