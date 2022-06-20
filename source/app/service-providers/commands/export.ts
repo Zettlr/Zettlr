@@ -20,6 +20,8 @@ import { ExporterOptions } from './exporter/types'
 import { promises as fs } from 'fs'
 import path from 'path'
 import isDir from '@common/util/is-dir'
+import { PANDOC_WRITERS } from '@common/util/pandoc-maps'
+import { PandocProfileMetadata } from '@dts/common/assets'
 
 export default class Export extends ZettlrCommand {
   constructor (app: any) {
@@ -33,7 +35,7 @@ export default class Export extends ZettlrCommand {
     * @return {Boolean}     Whether or not the call succeeded.
     */
   async run (evt: string, arg: any): Promise<void> {
-    const { file, content, profile, exportTo } = arg
+    const { file, content, profile, exportTo } = arg as { file: string, content: string, profile: PandocProfileMetadata, exportTo: string }
 
     const exporterOptions: ExporterOptions = {
       profile: profile,
@@ -85,7 +87,8 @@ export default class Export extends ZettlrCommand {
       const output = await makeExport(exporterOptions, this._app.log, this._app.config, this._app.assets)
       if (output.code === 0) {
         this._app.log.info(`Successfully exported file to ${output.targetFile}`)
-        this._app.notifications.show(trans('system.export_success', 'TODO: Replace with actual format')) // TODO!
+        const readableFormat = (profile.writer in PANDOC_WRITERS) ? PANDOC_WRITERS[profile.writer] : profile.writer
+        this._app.notifications.show(trans('system.export_success', readableFormat))
 
         // In case of a textbundle/pack it's a folder, else it's a file
         if ([ 'textbundle', 'textpack' ].includes(arg.profile.writer)) {
