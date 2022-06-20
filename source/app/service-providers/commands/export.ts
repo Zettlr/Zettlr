@@ -74,7 +74,22 @@ export default class Export extends ZettlrCommand {
       if (fileDescriptor !== null) {
         exporterOptions.sourceFiles.push(fileDescriptor)
         exporterOptions.cwd = fileDescriptor.dir
-        exporterOptions.targetDirectory = (exportTo === 'temp') ? app.getPath('temp') : fileDescriptor.dir
+        switch (exportTo) {
+          case 'ask': {
+            const folderSelection = await this._app.windows.askDir(trans('system.export_dialog.title'), null, trans('system.export_dialog.save'))
+            if (folderSelection === undefined || folderSelection.length === 0) {
+              this._app.log.error('[Export] Could not run exporter: Folderselection did not have a result!')
+              return
+            }
+            exporterOptions.targetDirectory = folderSelection[0]
+            break
+          }
+          case 'temp':
+          case 'cwd':
+          default:
+            exporterOptions.targetDirectory = (exportTo === 'temp') ? app.getPath('temp') : fileDescriptor.dir
+            break
+        }
       }
     }
 
@@ -90,7 +105,7 @@ export default class Export extends ZettlrCommand {
       const output = await makeExport(exporterOptions, this._app.log, this._app.config, this._app.assets, options)
       if (output.code === 0) {
         this._app.log.info(`Successfully exported file to ${output.targetFile}`)
-        this._app.notifications.show(trans('system.export_success', format.toUpperCase()))
+        this._app.notifications.show(trans('system.export_success', output.targetFile))
 
         // In case of a textbundle/pack it's a folder, else it's a file
         if ([ 'textbundle', 'textpack' ].includes(arg.format)) {

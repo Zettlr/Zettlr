@@ -63,7 +63,7 @@ interface ConfigOptions {
   newFileNamePattern: string
   newFileDontPrompt: boolean
   export: {
-    dir: 'temp'|'cwd'
+    dir: 'temp'|'cwd'|'ask'
     stripTags: boolean
     stripLinks: 'full'|'unlink'|'no'
     cslLibrary: string

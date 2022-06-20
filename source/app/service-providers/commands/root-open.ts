@@ -70,7 +70,7 @@ export default class RootOpen extends ZettlrCommand {
   private async openWorkspaces (): Promise<string[]> {
     // TODO: Move this to a command
     // The user wants to open another file or directory.
-    const ret = await this._app.windows.askDir()
+    const ret = await this._app.windows.askDir(trans('system.open_folder'), null)
 
     for (const workspace of ret) {
       const ignoredDir = isDir(workspace) && ignoreDir(workspace)

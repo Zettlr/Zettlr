@@ -55,6 +55,7 @@ import ProviderContract from '@providers/provider-contract'
 import LogProvider from '@providers/log'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import DocumentManager from '@providers/documents'
+import { trans } from '@common/i18n-main'
 
 export default class WindowProvider extends ProviderContract {
   private _mainWindow: BrowserWindow|null
@@ -235,7 +236,7 @@ export default class WindowProvider extends ProviderContract {
 
     ipcMain.handle('request-dir', async (event, message) => {
       const focusedWindow = BrowserWindow.getFocusedWindow()
-      let dir = await this.askDir(focusedWindow)
+      let dir = await this.askDir(trans('system.open_folder'), focusedWindow)
       return dir
     })
 
@@ -918,11 +919,11 @@ export default class WindowProvider extends ProviderContract {
     * Show the dialog for choosing a directory
     * @return {string[]} An array containing all selected paths.
     */
-  async askDir (win?: BrowserWindow|null): Promise<string[]> {
+  async askDir (title: string, win?: BrowserWindow|null, buttonLabel?: string|undefined): Promise<string[]> {
     if (win != null) {
-      return await askDirectoryDialog(this._config, win)
+      return await askDirectoryDialog(this._config, win, title, buttonLabel)
     } else {
-      return await askDirectoryDialog(this._config, this._mainWindow)
+      return await askDirectoryDialog(this._config, this._mainWindow, title, buttonLabel)
     }
   }
 
