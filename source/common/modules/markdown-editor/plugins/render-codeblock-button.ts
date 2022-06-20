@@ -41,6 +41,7 @@ const clipboard = window.clipboard
       codeblock = codeblock + cm.getLine(++j) + '\n'
       incodeblock = true
     } else if (codeBlockRE.test(line) && incodeblock) {
+      // Update the codes in code-block
       codeblock = codeblock.slice(0, -1)
       codesblocks.push(codeblock)
       codeblock = ''
@@ -59,17 +60,14 @@ const clipboard = window.clipboard
       const codeBlockText = codesblocks[i]
       // Create a button
       if (codeBlock.hasChildNodes() && codeBlock.childNodes.length > 1) {
-        codeBlock.childNodes[1].addEventListener('click', function (e) {
-          clipboard.writeText(codeBlockText)
-        })
+        codeBlock.childNodes[1].addEventListener('click', () => clipboard.writeText(codeBlockText))
       } else {
+        // Add property for copy button
         let copyButton = document.createElement('button')
         copyButton.className = 'code-block-copy-button'
         copyButton.innerText = 'Copy'
         codeBlock.appendChild(copyButton)
-        copyButton.addEventListener('click', function (e) {
-          clipboard.writeText(codeBlockText)
-        })
+        copyButton.addEventListener('click', () => clipboard.writeText(codeBlockText))
       }
     }
   }
