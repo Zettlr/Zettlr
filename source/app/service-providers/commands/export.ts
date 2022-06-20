@@ -13,14 +13,13 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { app, BrowserWindow, shell } from 'electron'
+import { app, shell } from 'electron'
 import { makeExport, getAvailableFormats } from './exporter'
 import { trans } from '@common/i18n-main'
 import { ExporterOptions } from './exporter/types'
 import { promises as fs } from 'fs'
 import path from 'path'
 import isDir from '@common/util/is-dir'
-import { getServiceContainer } from '../../lifecycle'
 
 export default class Export extends ZettlrCommand {
   constructor (app: any) {
