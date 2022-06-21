@@ -375,7 +375,7 @@ function handleQuote (cm: CodeMirror.Editor, type: string): typeof CodeMirror.Pa
     const noMdStart = cm.getModeAt(anchor).name !== 'markdown-zkn'
     const noMdEnd = cm.getModeAt(head).name !== 'markdown-zkn'
     const selectionContent = cm.getRange(anchor, head)
-    console.log(anchor, head)
+
     if (noMdStart || noMdEnd) {
       toBeReplacedWith.push(selectionContent)
     } else {

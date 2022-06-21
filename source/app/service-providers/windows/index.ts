@@ -196,7 +196,6 @@ export default class WindowProvider extends ProviderContract {
           event.sender.selectAll()
           break
         case 'inspect-element':
-          console.log(payload)
           event.sender.inspectElement(Math.round(payload.x), Math.round(payload.y))
           break
         case 'drag-start':

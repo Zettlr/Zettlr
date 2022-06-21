@@ -179,10 +179,7 @@ export default class AssetsProvider extends ProviderContract {
    * @return  {Promise<boolean>}      Whether or not the operation was successful.
    */
   async setDefaultsFile (filename: string, newDefaults: any, verbatim: boolean = false): Promise<boolean> {
-    console.log('file', filename)
-    console.log('new contents', newDefaults)
     const absPath = path.join(this._defaultsPath, filename)
-    console.log('saving to:', absPath)
 
     try {
       // Stringify the new defaults according to the verbatim flag

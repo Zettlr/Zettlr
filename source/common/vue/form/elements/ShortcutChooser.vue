@@ -194,8 +194,6 @@ export default defineComponent({
 
       // On macOS and Linux, if you use Alt as a modifier
       const isRegularKey = /^(?:Key[A-Z])|(?:Digit[0-9])$/.test(event.code)
-      console.log(`event.code: ${event.code}; event.key: ${event.key}`)
-      ;(navigator as any).keyboard.getLayoutMap().then((map: any) => console.log(map.get(event.code)))
 
       if (isRegularKey && !win32 && alt) {
         // The user has pressed a regular key on macOS or Linux, and has

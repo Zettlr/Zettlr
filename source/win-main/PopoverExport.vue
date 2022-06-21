@@ -111,7 +111,6 @@ export default defineComponent({
         } else {
           this.format = this.profileMetadata[lastIdx].name
         }
-        console.log(this.format)
       })
       .catch(err => console.error(err))
 

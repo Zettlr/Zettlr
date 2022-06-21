@@ -221,7 +221,6 @@ export default class MenuProvider extends ProviderContract {
               this._logger.error(`[Menu Provider] Could not click menu item with role ${menuItem.role}, since no handler is implemented!`)
           }
         } else {
-          console.log(`Clicking menu item with ID ${itemID}`)
           menuItem.click(menuItem, focusedWindow)
         }
       }

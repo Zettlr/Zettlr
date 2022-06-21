@@ -459,7 +459,6 @@ export default defineComponent({
               .attr('data-tippy-content', (vertex) => {
                 let cnt = ''
                 if (vertex.label === undefined) {
-                  console.log('Could not find correct vertex', vertex)
                   cnt += vertex.id
                 } else {
                   cnt += vertex.label
@@ -522,7 +521,6 @@ export default defineComponent({
       const dbObject = await ipcRenderer.invoke('link-provider', { command: 'get-link-database' })
       const database = new Map<string, string[]>(Object.entries(dbObject))
 
-      console.log(`Building graph from ${Object.entries(dbObject).length} files ...`)
       this.buildProgress.currentFile = 0
       this.buildProgress.totalFiles = Object.entries(dbObject).length
       this.componentFilter = ''

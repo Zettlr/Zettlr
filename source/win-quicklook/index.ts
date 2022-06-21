@@ -50,12 +50,9 @@ const filePath = searchParams.get('file')
 if (filePath === null) {
   console.error('Could not load file to quicklook, since the passed file was null!')
 } else {
-  console.log(`Quicklook file: ${filePath}`)
-
   setTimeout(() => {
     ipcRenderer.invoke('application', { command: 'get-file-contents', payload: filePath })
       .then((file: MDFileMeta|CodeFileMeta) => {
-        console.log(file, filePath)
         app.$data.name = file.name
         app.$data.dir = file.dir
         app.$data.hash = file.hash

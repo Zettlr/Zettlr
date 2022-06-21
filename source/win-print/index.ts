@@ -38,6 +38,5 @@ const filePath = searchParams.get('file')
 if (filePath === null) {
   console.error('Could not load file to preview, since the passed file was null!')
 } else {
-  console.log(`Showing file: ${filePath}`)
   app.$data.filePath = filePath
 }

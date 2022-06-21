@@ -364,7 +364,6 @@ export default class MarkdownEditor extends EventEmitter {
     })
 
     if (setCursor) {
-      console.log('Setting cursor!')
       this._instance.setCursor({ line: line, ch: 0 })
       this._instance.focus()
     }
