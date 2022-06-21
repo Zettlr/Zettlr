@@ -2,7 +2,7 @@
 
 export interface ProjectSettings {
   title: string
-  formats: string[]
+  profiles: string[]
   filters: string[]
   cslStyle: string
   templates: {

@@ -68,12 +68,12 @@ export default class DirProjectExport extends ZettlrCommand {
 
     const allDefaults = await this._app.assets.listDefaults()
 
-    for (const format of config.formats) {
+    for (const profilePath of config.profiles) {
       // Spin up one exporter per format.
-      const profile = allDefaults.find(e => e.name === format)
+      const profile = allDefaults.find(e => e.name === profilePath)
 
       if (profile === undefined) {
-        this._app.log.warning(`Could not export project ${dir.name} using profile ${format}: Not found`)
+        this._app.log.warning(`Could not export project ${dir.name} using profile ${profilePath}: Not found`)
         continue
       }
 

@@ -20,7 +20,7 @@
         v-bind:label="'Project Title'"
       ></TextControl>
 
-      <p v-if="selectedExportFormats.length === 0" class="warning">
+      <p v-if="selectedExportProfiles.length === 0" class="warning">
         <clr-icon shape="warning"></clr-icon>
         <!-- TODO: Translate! -->
         <span>Please select at least one profile to build this project.</span>
@@ -30,7 +30,7 @@
         v-bind:model-value="exportFormatList"
         v-bind:labels="[exportFormatUseLabel, exportFormatNameLabel, 'Conversion']"
         v-bind:editable="[0]"
-        v-on:update:model-value="selectExportFormat($event)"
+        v-on:update:model-value="selectExportProfile($event)"
       ></ListControl>
     </div>
     <div
@@ -100,7 +100,7 @@ import { PANDOC_READERS, PANDOC_WRITERS, SUPPORTED_READERS } from '@common/util/
 
 const ipcRenderer = window.ipc
 
-interface ExportFormat { selected: boolean, name: string, conversion: string }
+interface ExportProfile { selected: boolean, name: string, conversion: string }
 
 export default defineComponent({
   components: {
@@ -113,7 +113,7 @@ export default defineComponent({
     return {
       dirPath: '',
       profiles: [] as PandocProfileMetadata[],
-      selectedExportFormats: [] as string[], // NOTE: Must correspond to the defaults in fsal-directory.ts
+      selectedExportProfiles: [] as string[], // NOTE: Must correspond to the defaults in fsal-directory.ts
       patterns: [],
       cslStyle: '',
       texTemplate: '',
@@ -140,7 +140,7 @@ export default defineComponent({
     windowTitle: function (): string {
       return this.projectTitle
     },
-    exportFormatList: function (): ExportFormat[] {
+    exportFormatList: function (): ExportProfile[] {
       // We need to return a list of { selected: boolean, name: string, conversion: string }
       return this.profiles.filter(e => SUPPORTED_READERS.includes(e.reader)).map(e => {
         const reader = e.reader in PANDOC_READERS ? PANDOC_READERS[e.reader] : e.reader
@@ -148,7 +148,7 @@ export default defineComponent({
         const conversionString = (e.isInvalid) ? 'Invalid' : [ reader, writer ].join(' → ')
 
         return {
-          selected: this.selectedExportFormats.includes(e.name),
+          selected: this.selectedExportProfiles.includes(e.name),
           name: this.getDisplayText(e.name),
           conversion: conversionString
         }
@@ -171,7 +171,7 @@ export default defineComponent({
     }
   },
   watch: {
-    selectedExportFormats: function () {
+    selectedExportProfiles: function () {
       this.updateProperties()
     },
     projectTitle: function () {
@@ -218,11 +218,11 @@ export default defineComponent({
     })
   },
   methods: {
-    selectExportFormat: function (newListVal: ExportFormat[]) {
-      const newFormats = newListVal.filter(e => e.selected).map(e => {
+    selectExportProfile: function (newListVal: ExportProfile[]) {
+      const newProfiles = newListVal.filter(e => e.selected).map(e => {
         return this.profiles.find(x => this.getDisplayText(x.name) === e.name)
       }).filter(x => x !== undefined) as PandocProfileMetadata[]
-      this.selectedExportFormats = newFormats.map(x => x.name)
+      this.selectedExportProfiles = newProfiles.map(x => x.name)
       this.updateProperties()
     },
     getDisplayText: function (name: string): string {
@@ -233,7 +233,7 @@ export default defineComponent({
         command: 'update-project-properties',
         payload: {
           properties: {
-            formats: this.selectedExportFormats.map(e => e), // De-proxy
+            profiles: this.selectedExportProfiles.map(e => e), // De-proxy
             filters: this.patterns.map(e => e), // De-proxy
             cslStyle: this.cslStyle,
             title: this.projectTitle,
@@ -254,7 +254,7 @@ export default defineComponent({
         .then(descriptor => {
           // Save the actually used formats.
           if (descriptor.project !== null) {
-            this.selectedExportFormats = descriptor.project.formats
+            this.selectedExportProfiles = descriptor.project.profiles
             this.patterns = descriptor.project.filters
             this.cslStyle = descriptor.project.cslStyle
             this.htmlTemplate = descriptor.project.templates.html
