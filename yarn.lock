@@ -327,13 +327,13 @@
     fs-extra "^10.0.0"
     which "^2.0.2"
 
-"@electron-forge/maker-zip@^6.0.0-beta.63":
-  version "6.0.0-beta.63"
-  resolved "https://registry.yarnpkg.com/@electron-forge/maker-zip/-/maker-zip-6.0.0-beta.63.tgz#f4b918e1933104a2dccf3ef4cd93beb8c1f4ce6c"
-  integrity sha512-tXNX58ly2TYj0Z7G9bKP3FbEHLfeNv+lJgmlDBwP5Uh4yG0d/dxIBUzP5Dv+pIjsH/l3K3dVfCCM3fc4q+u3Mg==
+"@electron-forge/maker-zip@^6.0.0-beta.64":
+  version "6.0.0-beta.64"
+  resolved "https://registry.yarnpkg.com/@electron-forge/maker-zip/-/maker-zip-6.0.0-beta.64.tgz#52c86603df8b9c3934da98a5616b52887b1d4875"
+  integrity sha512-vT76tEsQqiWXQKes1u1BHqzvh3irXQl2JKbwh5HJSAOFpdvL8Q2LGf5ioCzPHEC7amRnHuCzL0+qT4y3exfdBA==
   dependencies:
-    "@electron-forge/maker-base" "6.0.0-beta.63"
-    "@electron-forge/shared-types" "6.0.0-beta.63"
+    "@electron-forge/maker-base" "6.0.0-beta.64"
+    "@electron-forge/shared-types" "6.0.0-beta.64"
     cross-zip "^4.0.0"
     fs-extra "^10.0.0"
 
