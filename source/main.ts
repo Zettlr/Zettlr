@@ -55,25 +55,8 @@ if (process.platform === 'win32') {
 // Full path or relative path is OK. '~' does not work as expected.
 let dataDir = getCLIArgument(DATA_DIR)
 
-if (dataDir !== undefined && typeof dataDir === 'string') {
+if (typeof dataDir === 'string') {
   // a path to a custom config dir is provided
-  const match = /^--data-dir="?([^"]+)"?$/.exec(dataDir)
-  if (match !== null) {
-    let dataDir = match[1]
-
-    if (!path.isAbsolute(dataDir)) {
-      if (app.isPackaged) {
-        // Attempt to use the executable file's path as the basis
-        dataDir = path.join(path.dirname(app.getPath('exe')), dataDir)
-      } else {
-        // Attempt to use the repository's root directory as the basis
-        dataDir = path.join(__dirname, '../../', dataDir)
-      }
-    }
-    getServiceContainer()?.log.info('[Application] Using custom data dir: ' + dataDir)
-    app.setPath('userData', dataDir)
-    app.setAppLogsPath(path.join(dataDir, 'logs'))
-  }
   if (!path.isAbsolute(dataDir)) {
     if (app.isPackaged) {
       // Attempt to use the executable file's path as the basis
@@ -83,7 +66,8 @@ if (dataDir !== undefined && typeof dataDir === 'string') {
       dataDir = path.join(__dirname, '../../', dataDir)
     }
   }
-  getServiceContainer()?.log.info('[Application] Using custom data dir: ' + String(dataDir))
+
+  getServiceContainer()?.log.info('[Application] Using custom data dir: ' + dataDir)
   app.setPath('userData', dataDir)
   app.setAppLogsPath(path.join(dataDir, 'logs'))
 }
