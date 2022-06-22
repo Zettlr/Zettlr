@@ -564,11 +564,6 @@ function hintFunction (cm: CodeMirror.Editor, opt: CodeMirror.ShowHintOptions): 
       // store those text markers so that we can find them again by tabbing
       // through them.
       currentTabStops = getTabMarkers(cm, from, to)
-      currentTabStops.map(tab => {
-        console.log('Tab', tab.index)
-        tab.markers.map(mark => console.log(mark.find()))
-        return null
-      })
 
       // Now activate our special snippets keymap which will ensure the user can
       // cycle through all placeholders which we have identified.

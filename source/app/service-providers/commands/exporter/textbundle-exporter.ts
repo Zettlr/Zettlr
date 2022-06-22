@@ -24,17 +24,7 @@ import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './
 import sanitize from 'sanitize-filename'
 
 export const plugin: ExporterPlugin = {
-  pluginInformation: function () {
-    return {
-      id: 'textbundleExporter',
-      formats: {
-        'textbundle': 'Textbundle',
-        'textpack': 'Textpack'
-      },
-      options: []
-    }
-  },
-  run: async function (options: ExporterOptions, sourceFiles, formatOptions: any, ctx: ExporterAPI): Promise<ExporterOutput> {
+  run: async function (options: ExporterOptions, sourceFiles, ctx: ExporterAPI): Promise<ExporterOutput> {
     const output: ExporterOutput = {
       code: 0,
       stdout: [],
@@ -46,15 +36,19 @@ export const plugin: ExporterPlugin = {
       throw new Error('Cannot export to Textbundle: Please only pass one single file.')
     }
 
+    if (typeof options.profile !== 'string' || ![ 'textbundle', 'textpack' ].includes(options.profile)) {
+      throw new Error('Cannot run Textbundle exporter: Wrong profile given!')
+    }
+
     const baseName = path.basename(options.sourceFiles[0].name, options.sourceFiles[0].ext)
     const title = (options.defaultsOverride?.title !== undefined) ? sanitize(options.defaultsOverride.title, { replacement: '-' }) : baseName
-    const ext = options.format === 'textpack' ? '.textpack' : '.textbundle'
+    const ext = options.profile === 'textpack' ? '.textpack' : '.textbundle'
     const targetPath = path.join(options.targetDirectory, title + ext)
     try {
       output.targetFile = await makeTextbundle(
         sourceFiles[0],
         targetPath,
-        options.format === 'textpack',
+        options.profile === 'textpack',
         path.basename(sourceFiles[0])
       )
     } catch (err: any) {

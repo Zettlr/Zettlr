@@ -17,34 +17,10 @@ import path from 'path'
 import sanitize from 'sanitize-filename'
 import { trans } from '@common/i18n-main'
 import { ExporterOptions, ExporterPlugin, ExporterOutput, ExporterAPI } from './types'
-
-// TODO: Enable these additional writers
-// // Pandoc formats that can be passed directly to the engine
-// 'asciidoc'|'beamer'|'context'|'docbook5'|'docuwiki'|'epub'|'fb2'|
-// 'haddock'|'ipynb'|'jats'|'jira'|'json'|'man'|'mediawiki'|'ms'|
-// 'muse'|'native'|'opml'|'opendocument'|'pptx'
-// 'texinfo'|'textile'|'slideous'|'slidy'|'dzslides'|'s5'|'tei'|'xwiki'|'zimwiki'|
+import { WRITER2EXT } from '@common/util/pandoc-maps'
 
 export const plugin: ExporterPlugin = {
-  pluginInformation: function () {
-    return {
-      id: 'default',
-      formats: {
-        'html': 'HTML',
-        'odt': 'OpenDocument Text',
-        'docx': 'Microsoft Word',
-        'latex': 'LaTeX Source',
-        'org': 'Orgmode',
-        'plain': 'Plain Text',
-        'rst': 'reStructured Text',
-        'markdown': 'Markdown',
-        'rtf': 'RichText Format',
-        'icml': 'InDesign Markup Language (ICML)'
-      },
-      options: []
-    }
-  },
-  run: async function (options: ExporterOptions, sourceFiles: string[], formatOptions: any, ctx: ExporterAPI): Promise<ExporterOutput> {
+  run: async function (options: ExporterOptions, sourceFiles: string[], ctx: ExporterAPI): Promise<ExporterOutput> {
     // Determine the availability of Pandoc. As the Pandoc path is added to
     // process.env.PATH during the environment check, this should always work
     // if a supported Zettlr variant is being used. In other cases (e.g. custom
@@ -56,13 +32,12 @@ export const plugin: ExporterPlugin = {
       throw new Error(trans('system.error.no_pandoc_message'))
     }
 
-    // Get the correct file extension
-    let extension = options.format
-    if (options.format === 'plain') {
-      extension = 'txt'
-    } else if (options.format === 'latex') {
-      extension = 'tex'
+    if (typeof options.profile === 'string') {
+      throw new Error('Cannot run default exporter plugin: Wrong profile provided!')
     }
+
+    // Get the correct file extension
+    const extension = WRITER2EXT[options.profile.writer]
 
     // First file determines the name of the exported file.
     const firstName = path.basename(options.sourceFiles[0].name, options.sourceFiles[0].ext)
@@ -74,7 +49,7 @@ export const plugin: ExporterPlugin = {
       'input-files': sourceFiles,
       'output-file': target
     }
-    const defaultsFile = await ctx.getDefaultsFor(options.format, defaultKeys)
+    const defaultsFile = await ctx.getDefaultsFor(options.profile.name, defaultKeys)
 
     // Run Pandoc
     const pandocOutput = await ctx.runPandoc(defaultsFile)

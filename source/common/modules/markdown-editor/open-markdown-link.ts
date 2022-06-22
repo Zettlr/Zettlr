@@ -61,8 +61,7 @@ export default function (url: string, cm: CodeMirror.Editor): void {
     // we cannot rely on the errors thrown by new URL(), as,
     // e.g., file://./relative.md will not throw an error albeit
     // we need to convert it to absolute.
-    let validURI = makeValidUri(url, base)
-    console.log(validURI)
+    const validURI = makeValidUri(url, base)
 
     // Now we have a valid link. Finally, let's check if we can open the file
     // internally, without having to switch to an external program.

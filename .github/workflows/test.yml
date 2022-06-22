@@ -22,7 +22,5 @@ jobs:
       run: yarn install --frozen-lockfile
     - name: Run the unit tests
       run: yarn test
-    - name: Test reveal.JS template pre-building
-      run: yarn reveal:build
     - name: Test CSL refreshing
       run: yarn csl:refresh

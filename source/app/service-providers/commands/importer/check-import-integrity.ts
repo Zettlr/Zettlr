@@ -16,6 +16,7 @@ import path from 'path'
 import isFile from '@common/util/is-file'
 
 import { import_files as FILES } from '@common/data.json'
+import { EXT2READER } from '@common/util/pandoc-maps'
 
 /**
 * This function checks a given file list and checks how good it is at guessing
@@ -24,39 +25,29 @@ import { import_files as FILES } from '@common/data.json'
 * @param  {Array} fileList An array containing a file list. If it's a string, a directory is assumed which is then read.
 * @return {Object} A sanitised object containing all files with some detected attributes.
 */
-export default async function checkImportIntegrity (fileList: string[]): Promise<any[]> {
+export default async function checkImportIntegrity (fileList: string[]): Promise<Array<{ path: string, availableReaders: string[] }>> {
   // Now do the integrity check.
   const resList = []
 
-  for (let file of fileList) {
+  for (const file of fileList) {
     // Is this a standard file? Textbundle is a directory, so make sure we check for that.
     if (!isFile(file) && path.extname(file) !== '.textbundle') {
       continue
     }
 
     // Guess the file format from the extension.
-    let ext = path.extname(file).substr(1).toLowerCase()
-    let detectedFile = {
-      'path': file,
-      'knownFormat': ''
+    let ext = path.extname(file).substring(1).toLowerCase()
+    const detectedFile = {
+      path: file,
+      availableReaders: [] as string[]
     }
 
-    for (let format of FILES) {
-      if (format.slice(2).includes(ext)) {
+    for (const format of FILES) {
+      if (format.slice(1).includes(ext)) {
         // Known extension, we can go further
-        detectedFile.knownFormat = format[0]
+        detectedFile.availableReaders = EXT2READER[ext]
         break
       }
-    }
-
-    // Pandoc requires the "latex" reader, not the "tex" reader
-    if (detectedFile.knownFormat === 'tex') {
-      detectedFile.knownFormat = 'latex'
-    }
-
-    // Same for "wiki" files: We use VimWiki
-    if (detectedFile.knownFormat === 'wiki') {
-      detectedFile.knownFormat = 'vimwiki'
     }
 
     resList.push(detectedFile)

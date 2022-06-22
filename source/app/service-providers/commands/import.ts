@@ -40,10 +40,10 @@ export default class ImportFiles extends ZettlrCommand {
     // The "All Files" filter should be at the top
     let fltr = [{ 'name': trans('system.all_files'), 'extensions': ['*'] }]
     for (let f of FORMATS) {
-      // The import_files array has the structure "pandoc format" "readable format" "extensions"...
+      // The import_files array has the structure "readable format" "extensions"...
       // Here we set index 1 as readable name and all following elements (without leading dots)
       // as extensions
-      fltr.push({ 'name': f[1], 'extensions': f.slice(2) })
+      fltr.push({ 'name': f[0], 'extensions': f.slice(1) })
     }
 
     // First ask the user for a fileList

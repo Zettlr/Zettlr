@@ -20,6 +20,8 @@ import YAML from 'yaml'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import ProviderContract from '../provider-contract'
 import LogProvider from '../log'
+import { PandocProfileMetadata } from '@dts/common/assets'
+import { getCustomProfiles } from '@providers/commands/exporter'
 
 export default class AssetsProvider extends ProviderContract {
   /**
@@ -28,8 +30,27 @@ export default class AssetsProvider extends ProviderContract {
    * @var {string}
    */
   private readonly _defaultsPath: string
+  /**
+   * Holds the path where snippets can be found.
+   *
+   * @var {string}
+   */
   private readonly _snippetsPath: string
+  /**
+   * Holds the path where Lua filters can be found.
+   *
+   * @var {string}
+   */
   private readonly _filterPath: string
+  /**
+   * Holds a list of all protected defaults files. Protected defaults files are
+   * those that come by default with the app. Protected simply means here that
+   * if the user removes such a file, it will be restored immediately. This also
+   * applies when the user renames such a file.‚
+   *
+   * @var {string[]}
+   */
+  private readonly _protectedDefaults: string[]
 
   constructor (private readonly _logger: LogProvider) {
     super()
@@ -37,6 +58,7 @@ export default class AssetsProvider extends ProviderContract {
     this._defaultsPath = path.join(app.getPath('userData'), '/defaults')
     this._snippetsPath = path.join(app.getPath('userData'), '/snippets')
     this._filterPath = path.join(app.getPath('userData'), '/lua-filter')
+    this._protectedDefaults = []
 
     ipcMain.handle('assets-provider', async (event, message) => {
       const { command, payload } = message
@@ -47,11 +69,18 @@ export default class AssetsProvider extends ProviderContract {
       // file contents programmatically should thus make use of the bundled YAML
       // module to parse and stringify the files accordingly.
       if (command === 'get-defaults-file') {
-        return await this.getDefaultsFor(payload.format, payload.type, true)
+        return await this.getDefaultsFile(payload.filename, true)
       } else if (command === 'set-defaults-file') {
-        return await this.setDefaultsFor(payload.format, payload.type, payload.contents, true)
-      } else if (command === 'restore-defaults-file') {
-        return await this.restoreDefaultsFor(payload.format, payload.type)
+        return await this.setDefaultsFile(payload.filename, payload.contents, true)
+      } else if (command === 'rename-defaults-file') {
+        return await this.renameDefaultsFile(payload.oldName, payload.newName)
+      } else if (command === 'remove-defaults-file') {
+        return await this.removeDefaultsFile(payload.filename)
+      } else if (command === 'list-defaults') {
+        return await this.listDefaults()
+      } else if (command === 'list-export-profiles') {
+        const profiles = await this.listDefaults()
+        return profiles.concat(getCustomProfiles())
       } else if (command === 'get-snippet') {
         return await this.getSnippet(payload.name)
       } else if (command === 'set-snippet') {
@@ -69,12 +98,13 @@ export default class AssetsProvider extends ProviderContract {
   async boot (): Promise<void> {
     this._logger.verbose('Assets provider starting up ...')
     // First, ensure all required default files are where they should be.
-    // Required are those defaults files which are in the assets/defaults directory
-    // and correspond to the format (import|export).(writer|reader).yaml
+    // Required are those defaults files which are in the assets/defaults
+    // directory
 
     const defaultsFiles = await fs.readdir(path.join(__dirname, './assets/defaults'))
-    const defaults = defaultsFiles.filter(file => /^(?:import|export)\..+?\.yaml$/.test(file))
+    const defaults = defaultsFiles.filter(file => /\.ya?ml$/.test(file))
     for (const file of defaults) {
+      this._protectedDefaults.push(file)
       const absolutePath = path.join(this._defaultsPath, file)
       try {
         await fs.lstat(absolutePath)
@@ -129,14 +159,13 @@ export default class AssetsProvider extends ProviderContract {
   /**
    * Gets the defaults file for a given writer
    *
-   * @param   {string}             format  The writer, e.g., html or pdf.
-   * @param   {'export'|'import'}  type    The type of the defaults file
+   * @param   {string}             filename  The profile's filename
    *
    * @return  {Promise<any>}    The defaults (parsed from YAML)
    */
-  async getDefaultsFor (format: string, type: 'export'|'import', verbatim: boolean = false): Promise<any|string> {
-    const file = path.join(this._defaultsPath, `${type}.${format}.yaml`)
-    const yaml = await fs.readFile(file, { encoding: 'utf-8' })
+  async getDefaultsFile (filename: string, verbatim: boolean = false): Promise<any|string> {
+    const absPath = path.join(this._defaultsPath, filename)
+    const yaml = await fs.readFile(absPath, { encoding: 'utf-8' })
     // Either return the string contents or a JavaScript object
     return (verbatim) ? yaml : YAML.parse(yaml)
   }
@@ -144,18 +173,18 @@ export default class AssetsProvider extends ProviderContract {
   /**
    * Overwrites the defaults for a given writer.
    *
-   * @param   {string}            format       The writer or reader, e.g., html or pdf.
-   * @param   {'export'|'import'} type         The defaults' file type
+   * @param   {string}            absPath      The file to write
    * @param   {any}               newDefaults  The new defaults (object to be cast to YAML string)
    *
    * @return  {Promise<boolean>}      Whether or not the operation was successful.
    */
-  async setDefaultsFor (format: string, type: 'export'|'import', newDefaults: any, verbatim: boolean = false): Promise<boolean> {
+  async setDefaultsFile (filename: string, newDefaults: any, verbatim: boolean = false): Promise<boolean> {
+    const absPath = path.join(this._defaultsPath, filename)
+
     try {
-      const file = path.join(this._defaultsPath, `${type}.${format}.yaml`)
       // Stringify the new defaults according to the verbatim flag
       const yaml = (verbatim) ? newDefaults : YAML.stringify(newDefaults)
-      await fs.writeFile(file, yaml)
+      await fs.writeFile(absPath, yaml)
       return true
     } catch (err: any) {
       this._logger.error(`[Assets Provider] Could not save defaults file: ${String(err.message)}`, err)
@@ -164,27 +193,107 @@ export default class AssetsProvider extends ProviderContract {
   }
 
   /**
+   * Allows one to rename a defaults file
+   *
+   * @param   {string}            oldName  The former path to the file
+   * @param   {string}            newName  The new path to the file
+   *
+   * @return  {Promise<boolean>}           True upon success
+   */
+  async renameDefaultsFile (oldName: string, newName: string): Promise<boolean> {
+    const oldPath = path.join(this._defaultsPath, oldName)
+    const newPath = path.join(this._defaultsPath, newName)
+
+    try {
+      await fs.rename(oldPath, newPath)
+      // If renaming that file removed a protected one, restore it immediately.
+      // This is effectively the same as duplicating the file.
+      if (this._protectedDefaults.includes(oldName)) {
+        await this.restoreDefaultsFor(oldName)
+      }
+      return true
+    } catch (err: any) {
+      this._logger.error(`[Assets Provider] Could not rename file ${oldPath} to ${newPath}.`, err)
+      return false
+    }
+  }
+
+  /**
+   * Removes the given defaults file. NOTE that any default profiles will be
+   * restored on the next start of the app, so removing them will only be
+   * temporary (e.g. for restoring purposes).
+   *
+   * @param   {string}            filename  The defaults file's name
+   *
+   * @return  {Promise<boolean>}           Returns true upon success
+   */
+  async removeDefaultsFile (filename: string): Promise<boolean> {
+    const absPath = path.join(this._defaultsPath, filename)
+    try {
+      await fs.unlink(absPath)
+      // If removing that file removed a protected one, restore it immediately.
+      // This is effectively the same as restoring the file.
+      if (this._protectedDefaults.includes(filename)) {
+        await this.restoreDefaultsFor(filename)
+      }
+      return true
+    } catch (err: any) {
+      this._logger.error(`[Assets Provider] Could not remove defaults file: ${absPath}`, err)
+      return false
+    }
+  }
+
+  /**
    * Restores the requested defaults file by copying it from the directory
    * within Zettlr into the defaults path (user data).
    *
-   * @param   {string}             format  The format to copy over
-   * @param   {'export'|'import'}  type    The type of defaults file
+   * @param   {string}             filename  The defaults file to copy over
    *
    * @return  {Promise<boolean>}           Returns true on success
    */
-  async restoreDefaultsFor (format: string, type: 'export'|'import'): Promise<boolean> {
-    const file = `${type}.${format}.yaml`
-    const source = path.join(__dirname, './assets/defaults', file)
-    const target = path.join(this._defaultsPath, file)
+  async restoreDefaultsFor (filename: string): Promise<boolean> {
+    const source = path.join(__dirname, './assets/defaults', filename)
+    const target = path.join(this._defaultsPath, filename)
 
     try {
       await fs.copyFile(source, target)
     } catch (err: any) {
-      this._logger.error(`[Assets Provider] Could not restore defaults file ${type} for ${format}!`, err)
+      this._logger.error(`[Assets Provider] Could not restore defaults file ${filename}!`, err)
       return false
     }
 
     return true
+  }
+
+  /**
+   * Lists every Pandoc defaults file/profile installed
+   *
+   * @return  {Promise<PandocProfileMetadata[]>}The parsed metadata for all profiles
+   */
+  async listDefaults (): Promise<PandocProfileMetadata[]> {
+    const profiles: PandocProfileMetadata[] = []
+
+    const defaultsFiles = await fs.readdir(this._defaultsPath)
+    const defaults = defaultsFiles.filter(file => /\.ya?ml$/.test(file))
+    for (const file of defaults) {
+      const absolutePath = path.join(this._defaultsPath, file)
+      try {
+        const contents = await fs.readFile(absolutePath, { encoding: 'utf-8' })
+        const yaml = YAML.parse(contents)
+
+        profiles.push({
+          name: file,
+          writer: yaml.writer,
+          reader: yaml.reader,
+          isInvalid: yaml.writer === undefined || yaml.reader === undefined,
+          isProtected: this._protectedDefaults.includes(file)
+        })
+      } catch (err) {
+        this._logger.warning(`[Assets Provider] Installed profile ${file} had an error and could not be parsed`)
+      }
+    }
+
+    return profiles
   }
 
   /**

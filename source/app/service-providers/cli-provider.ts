@@ -15,7 +15,6 @@
  */
 
 import { app } from 'electron'
-import path from 'path'
 
 export const DATA_DIR = 'data-dir'
 export const DISABLE_HARDWARE_ACCELERATION = 'disable-hardware-acceleration'
@@ -41,18 +40,7 @@ export const LAUNCH_MINIMIZED = 'launch-minimized'
 export function getCLIArgument (key: string): string | boolean | undefined {
   switch (key) {
     case DATA_DIR: {
-      let dataDir = getArgumentValue('--data-dir')
-      if (dataDir !== undefined && !path.isAbsolute(dataDir)) {
-        if (app.isPackaged) {
-          // Attempt to use the executable file's path as the basis
-          dataDir = path.join(path.dirname(app.getPath('exe')), dataDir)
-        } else {
-          // Attempt to use the repository's root directory as the basis
-          dataDir = path.join(__dirname, '../../', dataDir)
-        }
-        return dataDir
-      }
-      return undefined
+      return getArgumentValue('--data-dir')
     }
     case CLEAR_CACHE: {
       return process.argv.includes('--clear-cache')
@@ -108,7 +96,6 @@ function showHelp (): void {
  *
  * @param key  {string}   This is the key to be checked. OMIT the equals sign, eg. -x or --xlong; NOT -x=y.
  *
- *
  * @return  {string}      If the key is of the format -x=y, --xlong=y, a string with y is returned
  * @return  {undefined}   If the key was not passed or is not of the format specified in the description.
  */
@@ -117,8 +104,8 @@ export function getArgumentValue (key: string): string | undefined {
   if (argument === undefined) {
     return undefined
   }
-  const regex = new RegExp('^' + key + '="?([^"]+)"?$')
-  const match = regex.exec(argument)
+
+  const match = /="?([^"]+)"?$/.exec(argument)
   if (match !== null) {
     return match[1]
   }

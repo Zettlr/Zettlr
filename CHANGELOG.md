@@ -1,13 +1,84 @@
 # Upcoming
 
+## New Defaults/Profile File System
+
+This update introduces a new way to work with defaults files. At a glance,
+here's what has changed:
+
+* Zettlr now understands the `reader` and `writer` properties of defaults files
+* It uses those properties to determine if a file can be used for importing or
+  exporting, and displays the appropriate files in the relevant places for you
+  to choose
+* You can now create new defaults files, rename existing ones, or remove them
+* When changing the `writer` or `reader` for such a file, this change will be
+  recognized by Zettlr and be treated accordingly
+* This also means that Zettlr will from now on only ship with a minimum set of
+  profiles; but any additional import/export formats can be created by you with
+  just one click
+* Additionally, because of this, you are now able to export LaTeX files directly
+  without running them through a Markdown interpreter first, allowing you to,
+  e.g., create beamer slides or write plain TeX files within Zettlr
+* Furthermore, we have dropped our internal reveal.js exporter, since Pandoc
+  supports everything we did out of the box (and better) than our exporter
+
+### Migration Guide
+
+There are two instances where you will want to migrate something.
+
+#### Old defaults files
+
+Since Zettlr will never remove any data without asking, it will keep the
+previous files in your defaults directory. Now that their filename is also
+meaningful, you can see them by their naming structure: `import.format.yaml` and
+`export.format.yaml`. You are free to remove them or rename and keep them.
+Zettlr ships with a set of new files that are now additionally appropriately
+named.
+
+> Please note that it is not possible to remove this minimal set of profiles;
+> Zettlr will always recreate these files upon start. If you do not use Zettlr
+> for importing or exporting files, you can simply ignore them.
+
+#### Reveal.js Presentations
+
+Since we have now dropped our internal reveal.js exporter, there are a few
+changes you have to make to your existing reveal.js presentations. First, the
+theme must now be defined in a YAML frontmatter instead of via the dropdown. A
+minimal working YAML frontmatter will look like this:
+
+```markdown
+---
+theme: league
+---
+
+... the rest of the file
+```
+
+Supported theme values are:
+
+* `beige`
+* `black` (the default, in this case you can omit the `theme` variable)
+* `blood`
+* `league`
+* `moon`
+* `night`
+* `serif`
+* `simple`
+* `sky`
+* `solarized`
+* `white`
+
 ## GUI and Functionality
 
 - **New Feature**: After a long time, you can now again drag and drop entries in
   the table of contents in the sidebar to rearrange sections of your file
+- **New Feature**: Overhauled, improved, and streamlined the defaults file
+  system used by the importer and exporter
 - Code files (e.g. `*.tex` or `*.json`) now have line numbers enabled and the
   margins of the main editor removed by default
 - The sidebar tabs are now static at the top, meaning you don't have to scroll
   up within a long list just to see the tabbar
+- Lists (especially in the assets manager) now also allow you to remove entries
+  with a right click
 - Added new variables for snippets:
   - `CURRENT_ID`: Holds the currently assigned Zettelkasten ID to the file
   - `FILENAME`: Holds the filename of the current file
