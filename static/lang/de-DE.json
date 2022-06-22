@@ -5,7 +5,7 @@
             "Jonas Wunderlich \u003Cmail@jonas-wunderlich.de\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-05-30T07:24:12.000000Z"
+        "updated_at": "2022-06-22T14:43:22.000000Z"
     },
     "dialog": {
         "about": {
@@ -243,6 +243,7 @@
             "enable_table_helper": "Tabelleneditor aktivieren",
             "export": {
                 "dest": "Zielverzeichnis f\u00fcr Exporte. \u003Cem\u003EVorsicht:\u003C/em\u003E Die Auswahl &quot;Aktuelles Verzeichnis&quot; \u00fcberschreibt ohne Warnung eventuell vorhandene Dateien!",
+                "dest_ask_label": "Verzeichnis ausw\u00e4hlen",
                 "dest_cwd_label": "Aktuelles Verzeichnis: die Exporte werden im aktuell ausgew\u00e4hlten Verzeichnis gespeichert.",
                 "dest_temp_label": "Tempor\u00e4res Verzeichnis: wird regelm\u00e4\u00dfig geleert",
                 "strip_id_label": "Entferne ZKN-IDs aus den Dateien",
@@ -782,6 +783,10 @@
             "remove_message": "M\u00f6chtest du %s wirklich l\u00f6schen?",
             "remove_title": "Wirklich l\u00f6schen?",
             "tray_not_supported": "Tray-Icon in der Statusleiste nicht unterst\u00fctzt. &quot;KStatusNotifierItem/AppIndicator Support&quot; wird auf Gnome Desktop ben\u00f6tigt."
+        },
+        "export_dialog": {
+            "save": "Exportieren",
+            "title": "Exportieren nach"
         },
         "export_success": "Exportiere nach %s",
         "file_changed": "Datei %s wurde au\u00dferhalb bearbeitet.",

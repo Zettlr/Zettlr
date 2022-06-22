@@ -7,7 +7,7 @@
             "Huey"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-05-30T07:25:46.000000Z"
+        "updated_at": "2022-06-22T14:46:09.000000Z"
     },
     "dialog": {
         "about": {
@@ -245,6 +245,7 @@
             "enable_table_helper": "Enable Table Editor",
             "export": {
                 "dest": "Target directory for exported files. \u003Cem\u003EAttention:\u003C/em\u003E Selecting the current working directory will overwrite files without warning!",
+                "dest_ask_label": "Ask for directory",
                 "dest_cwd_label": "Current working directory: exported files will be saved into the currently selected directory.",
                 "dest_temp_label": "Temporary directory: is regularly expunged",
                 "strip_id_label": "Remove ZKN IDs from files",
@@ -784,6 +785,10 @@
             "remove_message": "Do you really want to remove %s?",
             "remove_title": "Really delete?",
             "tray_not_supported": "Tray is not supported. Gnome Extension &quot;KStatusNotifierItem/AppIndicator Support&quot; is required for Tray support on the Gnome Desktop."
+        },
+        "export_dialog": {
+            "save": "Save",
+            "title": "Choose export destination"
         },
         "export_success": "Exporting to %s",
         "file_changed": "File %s has changed remotely.",
