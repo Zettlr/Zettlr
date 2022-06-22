@@ -95,6 +95,7 @@ import { defineComponent } from 'vue'
 import { PandocProfileMetadata } from '@dts/common/assets'
 import { PANDOC_READERS, PANDOC_WRITERS, SUPPORTED_READERS } from '@common/util/pandoc-maps'
 import sanitizeFilename from 'sanitize-filename'
+import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
 
 const ipcRenderer = window.ipc
 
@@ -147,21 +148,8 @@ export default defineComponent({
       return this.availableDefaultsFiles
         .filter((e) => {
           // Retrieve which one we need to check
-          let readerWriter = (this.which === 'import') ? e.writer : e.reader
-
-          // Pandoc allows, especially for Markdown, to enable or disable
-          // extensions, denoted via plus and minus signs. We have to account
-          // for that. NOTE that on the upside, + and - are otherwise disallowed
-          // for reader/writer names.
-          if (readerWriter.indexOf('+') > 0) {
-            readerWriter = readerWriter.substring(0, readerWriter.indexOf('+'))
-          }
-
-          if (readerWriter.indexOf('-') > 0) {
-            readerWriter = readerWriter.substring(0, readerWriter.indexOf('-'))
-          }
-
-          return SUPPORTED_READERS.includes(readerWriter)
+          const readerWriter = (this.which === 'import') ? e.writer : e.reader
+          return SUPPORTED_READERS.includes(getPlainPandocReaderWriter(readerWriter))
         })
     },
     listItems: function (): any[] {

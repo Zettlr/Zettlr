@@ -44,6 +44,7 @@ import FormBuilder from '@common/vue/form/Form.vue'
 import { defineComponent } from 'vue'
 import { PandocProfileMetadata } from '@dts/common/assets'
 import { SUPPORTED_READERS } from '@common/util/pandoc-maps'
+import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
 
 const ipcRenderer = window.ipc
 const config = window.config
@@ -78,7 +79,9 @@ export default defineComponent({
 
       this.profileMetadata
         // Remove files that cannot read any of Zettlr's internal formats ...
-        .filter(e => SUPPORTED_READERS.includes(e.reader))
+        .filter(e => {
+          return SUPPORTED_READERS.includes(getPlainPandocReaderWriter(e.reader))
+        })
         // ... and add them to the available options
         .forEach(elem => { selectOptions[elem.name] = this.getDisplayText(elem) })
 
