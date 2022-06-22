@@ -34,17 +34,14 @@
 
         <span v-if="visibleItems.length > 0 && visibleItems[currentItem].isProtected === true" class="protected-info">
           <!-- TODO: Translate -->
-          &#128274; This file is protected. This means that it will be restored when you
-          remove or rename it.
+          &#128274; {{ protectedProfileWarning }}
         </span>
 
         <p v-if="visibleItems[currentItem]?.isInvalid" class="warning">
           <clr-icon shape="warning"></clr-icon>
           <!-- TODO: Translate! -->
           <span> <!-- NOTE: Wrapping in a span due to the flex -->
-            This profile appears to be either missing a <code>writer</code> or a
-            <code>reader</code> property. Make sure to set both so that Zettlr
-            can use this profile.
+            {{ invalidProfileWarning }}
           </span>
         </p>
 
@@ -137,6 +134,12 @@ export default defineComponent({
     }
   },
   computed: {
+    protectedProfileWarning: function (): string {
+      return trans('dialog.defaults.protected_warning')
+    },
+    invalidProfileWarning: function (): string {
+      return trans('dialog.defaults.invalid_warning')
+    },
     renameFileLabel: function (): string {
       return 'Rename file'
     },
