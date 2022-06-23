@@ -42,6 +42,7 @@ const clipboard = window.clipboard
       incodeblock = true
     } else if (codeBlockRE.test(line) && incodeblock) {
       // Update the codes in code-block
+      // Remove newline character after the last code line
       codeblock = codeblock.slice(0, -1)
       codesblocks.push(codeblock)
       codeblock = ''
