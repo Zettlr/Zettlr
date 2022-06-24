@@ -65,6 +65,8 @@ const clipboard = window.clipboard
         let copyButton = document.createElement('button')
         copyButton.className = 'code-block-copy-button'
         copyButton.innerHTML = '<clr-icon shape="copy"></clr-icon>'
+        copyButton.setAttribute('title', 'Copy this code block to clipboard')
+        copyButton.setAttribute('aria-label', 'Copy this code block to clipboard')
         codeBlock.appendChild(copyButton)
         copyButton.addEventListener('click', () => clipboard.writeText(codeBlockText))
       }
