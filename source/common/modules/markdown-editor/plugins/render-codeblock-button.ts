@@ -23,7 +23,6 @@ const clipboard = window.clipboard
 ;(commands as any).markdownRenderCodeBlockButton = function (cm: CodeMirror.Editor) {
   cm.startOperation()
 
-  let countCodeblock = 0
   const codeBlockRE = /^(?:\s{0,3}`{3}|~{3}).*/
   const lineCount = cm.lineCount()
   let incodeblock = false
@@ -37,7 +36,6 @@ const clipboard = window.clipboard
   for (let j = 0; j < lineCount; j++) {
     const line = cm.getLine(j)
     if (codeBlockRE.test(line) && !incodeblock) {
-      countCodeblock = countCodeblock + 1
       codeblock = codeblock + cm.getLine(++j) + '\n'
       incodeblock = true
     } else if (codeBlockRE.test(line) && incodeblock) {
@@ -66,7 +64,7 @@ const clipboard = window.clipboard
         // Add property for copy button
         let copyButton = document.createElement('button')
         copyButton.className = 'code-block-copy-button'
-        copyButton.innerText = 'Copy'
+        copyButton.innerHTML = '<clr-icon shape="copy"></clr-icon>'
         codeBlock.appendChild(copyButton)
         copyButton.addEventListener('click', () => clipboard.writeText(codeBlockText))
       }
