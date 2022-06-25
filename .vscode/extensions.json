@@ -30,7 +30,7 @@
 		// Vue.js tooling -- previously, we recommended Vetur, but since that had
 		// issues with TypeScript we switched to Volar (which is recommended by the
 		// Vue team)
-		"johnsoncodehk.volar",
+		"Vue.volar",
 		// Makes documenting code much easier
 		"jeremyljackson.vs-docblock",
 		// Useful snippets for the Vue components in this codebase.
