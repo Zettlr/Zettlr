@@ -60,9 +60,7 @@ export default class AssetsProvider extends ProviderContract {
     this._filterPath = path.join(app.getPath('userData'), '/lua-filter')
     this._protectedDefaults = []
 
-    ipcMain.handle('assets-provider', async (event, message) => {
-      const { command, payload } = message
-
+    ipcMain.handle('assets-provider', async (event, { command, payload }) => {
       // These function calls, however, treat the defaults files verbatim to
       // retain comments. NOTE: This means that any *renderer* will always
       // receive the text, not an Object. Renderers who need to work with the
