@@ -95,6 +95,7 @@ import YAML from 'yaml'
 import { nextTick, defineComponent } from 'vue'
 import { MainEditorDocumentWrapper } from '@dts/renderer/editor'
 import retrieveDocumentFromMain from './util/retrieve-document-from-main'
+import { OpenDocument } from '@dts/common/documents'
 
 const ipcRenderer = window.ipc
 
@@ -187,8 +188,8 @@ export default defineComponent({
 
       return this.activeFile.type === 'file'
     },
-    openFiles: function (): any[] {
-      return this.$store.state.openFiles
+    openFiles: function (): OpenDocument[] {
+      return this.$store.state.config.openFiles
     },
     fontSize: function (): number {
       return this.$store.state.config['editor.fontSize']
