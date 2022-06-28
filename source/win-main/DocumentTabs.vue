@@ -5,12 +5,13 @@
       v-bind:key="idx"
       v-bind:class="{
         active: activeFile !== null && file.path === activeFile.path,
-        modified: modifiedDocs.includes(file.path)
+        modified: modifiedDocs.includes(file.path),
+        pinned: file.pinned
       }"
       v-bind:title="file.path"
       v-bind:data-path="file.path"
+      v-bind:draggable="true"
       role="tab"
-      draggable="true"
       v-on:dragstart="handleDragStart"
       v-on:drag="handleDrag"
       v-on:dragend="handleDragEnd"
@@ -21,8 +22,12 @@
       <span
         class="filename"
         role="button"
-      >{{ getTabText(file) }}</span>
+      >
+        <clr-icon v-if="file.pinned" shape="pin"></clr-icon>
+        {{ getTabText(file) }}
+      </span>
       <span
+        v-if="!file.pinned"
         class="close"
         aria-hidden="true"
         v-on:mousedown="handleClickClose($event, file)"
@@ -56,15 +61,18 @@
 import displayTabsContextMenu from './tabs-context'
 import tippy from 'tippy.js'
 import { nextTick, defineComponent } from 'vue'
+import { OpenDocument } from '@dts/common/documents'
+import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
+const path = window.path
 
 export default defineComponent({
   name: 'DocumentTabs',
   computed: {
-    openFiles: function (): any[] {
-      return this.$store.state.openFiles
+    openFiles: function (): OpenDocument[] {
+      return this.$store.state.config.openFiles as OpenDocument[]
     },
     activeFile: function (): any {
       return this.$store.state.activeFile
@@ -140,7 +148,7 @@ export default defineComponent({
         input.style.backgroundColor = 'transparent'
         input.style.border = 'none'
         input.style.color = 'white'
-        input.value = this.openFiles[currentIdx].name
+        input.value = path.basename(this.openFiles[currentIdx].path)
 
         wrapper.appendChild(input)
 
@@ -242,8 +250,13 @@ export default defineComponent({
         }
       }
     },
-    getTabText: function (file: any) {
+    getTabText: function (doc: OpenDocument) {
       // Returns a more appropriate tab text based on the user settings
+      const file = this.$store.getters.file(doc.path) as MDFileMeta|CodeFileMeta|undefined
+      if (file === undefined) {
+        return path.basename(doc.path)
+      }
+
       if (file.type !== 'file') {
         return file.name
       } else if (this.useTitle && typeof file.frontmatter?.title === 'string') {
@@ -322,8 +335,13 @@ export default defineComponent({
       })
         .catch(e => console.error(e))
     },
-    handleContextMenu: function (event: MouseEvent, file: any) {
-      displayTabsContextMenu(event, file, (clickedID: string) => {
+    handleContextMenu: function (event: MouseEvent, doc: OpenDocument) {
+      const file = this.$store.getters.file(doc.path) as MDFileMeta|CodeFileMeta|undefined
+      if (file === undefined) {
+        return // TODO
+      }
+
+      displayTabsContextMenu(event, file, doc, (clickedID: string) => {
         if (clickedID === 'close-this') {
           // Close only this
           ipcRenderer.invoke('application', {
@@ -333,7 +351,7 @@ export default defineComponent({
         } else if (clickedID === 'close-others') {
           // Close all files ...
           for (const openFile of this.openFiles) {
-            if (openFile === file) {
+            if (openFile.path === file.path) {
               continue // ... except this
             }
 
@@ -356,9 +374,18 @@ export default defineComponent({
         } else if (clickedID === 'copy-path') {
           // Copy path to the clipboard
           clipboard.writeText(file.path)
-        } else if (clickedID === 'copy-id') {
+        } else if (clickedID === 'copy-id' && file.type === 'file') {
           // Copy the ID to the clipboard
           clipboard.writeText(file.id)
+        } else if (clickedID === 'pin-tab') {
+          // Toggle the pin status
+          ipcRenderer.invoke('documents-provider', {
+            command: 'set-pinned',
+            payload: {
+              path: doc.path,
+              pinned: !doc.pinned
+            }
+          }).catch(e => console.error(e))
         }
       })
     },
@@ -431,7 +458,13 @@ export default defineComponent({
         return
       }
 
-      const originalIndex = originalOrdering.indexOf(targetElement.getAttribute('data-path'))
+      const dataPath = targetElement.getAttribute('data-path')
+
+      if (dataPath === null) {
+        return
+      }
+
+      const originalIndex = originalOrdering.indexOf(dataPath)
       if (originalIndex === 0) {
         this.$el.insertBefore(targetElement, this.$el.children[0])
       } else if (originalIndex === this.$el.children.length - 1) {
@@ -460,10 +493,6 @@ body div#tab-container {
   background-color: rgb(215, 215, 215);
   border-bottom: 1px solid grey;
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  flex-shrink: 0;
   overflow-x: auto;
   // In case of an overflow, hide the scrollbar so that scrolling left/right
   // remains possible, but no thicc scrollbar in the way!
@@ -484,27 +513,18 @@ body div#tab-container {
   }
 
   div[role="tab"] {
-    display: inline-block;
-    padding: 5px 10px;
-    flex-grow: 1;
+    display: flex;
     position: relative;
-    min-width: 200px;
+    min-width: fit-content;
+    max-width: 250px;
     line-height: @tabbar-height;
-    overflow: hidden;
-    padding-right: @tabbar-height; // Push the filename back
+    padding: 0 10px; // Give the filenames a little more spacing
 
     &:hover { background-color: rgb(200, 200, 210); }
 
     .filename {
       line-height: 30px;
       white-space: nowrap;
-      overflow-x: hidden;
-      display: inline-block;
-      position: absolute;
-      left: 0px;
-      top: 0px;
-      right: @tabbar-height; // Don't overlay the close button
-      padding-left: 8px;
     }
 
     // Mark modification status classically
@@ -513,11 +533,9 @@ body div#tab-container {
     }
 
     .close {
-      position: absolute;
-      display: inline-block;
-      right: 0px;
-      top: 0px;
-      width: @tabbar-height;
+      font-size: 14px;
+      margin-left: 5px;
+      width: 10px;
       height: @tabbar-height;
       line-height: @tabbar-height;
       text-align: center;
@@ -554,9 +572,11 @@ body.darwin {
 
       .filename {
         padding: 0 5px;
-        margin-left: (@tabbar-height / 3 * 1.9);
+        margin: 0 (@tabbar-height / 3 * 1.9);
         overflow: hidden;
       }
+
+      &.pinned .filename { margin: 0; }
 
       &:not(.active) {
         // As a reminder, from Mozilla docs:
@@ -582,6 +602,8 @@ body.darwin {
         opacity: 0;
         transition: opacity 0.2s ease;
         border-radius: 2px;
+        position: absolute;
+        right: 0px;
         width: (@tabbar-height / 3 * 1.9);
         height: (@tabbar-height / 3 * 1.9);
         margin: (@tabbar-height / 3 * 0.55);
@@ -647,11 +669,6 @@ body.win32 {
       &.active {
         background-color: rgb(172, 172, 172);
         color: white;
-      }
-
-      .close {
-        // The "x" needs to be bigger
-        font-size: 18px;
       }
     }
   }
