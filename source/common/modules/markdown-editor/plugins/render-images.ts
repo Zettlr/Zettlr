@@ -155,7 +155,6 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
       caption.addEventListener('focusout', updateCaptionFunction)
 
       // Retrieve the size constraints
-      
       // Seems to Change Codes here to control image size
       const maxPreviewWidth = Number((cm as any).getOption('zettlr').imagePreviewWidth)
       const maxPreviewHeight = Number((cm as any).getOption('zettlr').imagePreviewHeight)
