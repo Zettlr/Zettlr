@@ -322,6 +322,7 @@ export default class TableEditor {
         cell.addEventListener('blur', (event) => {
           this._onCellBlur(cell)
         })
+        this._updateUrl(cell)
       }
     }
 
@@ -344,6 +345,9 @@ export default class TableEditor {
     // Re-render the table element and save the textContent as data-source
     this._ast[row][col] = cell.textContent ?? ''
     cell.innerHTML = this._md2html(this._ast[row][col])
+
+    // update url with cma class
+    this._updateUrl(cell)
 
     // For a short amount of time, the table won't have any focused
     // elements, so we'll set a small timeout, after which we test
@@ -982,5 +986,22 @@ export default class TableEditor {
     }
 
     return caretPos
+  }
+
+  /**
+   * update A tags which does not contain cma class
+   * @param cell
+   */
+  _updateUrl (cell: HTMLTableCellElement): void {
+    for (const a of cell.getElementsByTagName('A')) {
+      if (!a.classList.contains('cma')) {
+        const url = a.getAttribute('href')
+        if (url !== null && url.trim() !== '') {
+          a.removeAttribute('href')
+          a.setAttribute('title', url)
+          a.classList.add('cma')
+        }
+      }
+    }
   }
 }
