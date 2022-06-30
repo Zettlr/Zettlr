@@ -63,6 +63,21 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
       let title = match[3] ?? altText // An optional title in quotes after the image
       let p4 = match[4] ?? ''
 
+      let widthAttribute = ''
+      let heightAttribute = ''
+      if (match[4] !== '') {
+        let widthRE = /(width=)"([^"]+)"/g
+        let heightRE = /(height=)"([^"]+)"/g
+        let mat = widthRE.exec(p4)
+        if (mat != null) {
+          widthAttribute = mat[2] ?? ''
+        }
+        mat = heightRE.exec(p4)
+        if (mat != null) {
+          heightAttribute = mat[2] ?? ''
+        }
+      }
+
       // If a third group has been captured, we need to extract this from the
       // "bigger" second group again.
       if (match[3] !== undefined) {
@@ -161,6 +176,12 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
       let width = (!Number.isNaN(maxPreviewWidth)) ? `${maxPreviewWidth}%` : '100%'
       let height = (!Number.isNaN(maxPreviewHeight) && maxPreviewHeight < 100) ? `${maxPreviewHeight}vh` : ''
 
+      if (widthAttribute !== '') {
+        width = widthAttribute
+      }
+      if (heightAttribute !== '') {
+        height = heightAttribute
+      }
       // Apply the constraints to the figure and image
       figure.style.maxWidth = width
       figure.style.maxHeight = height
