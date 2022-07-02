@@ -25,7 +25,6 @@ import attachLogger from './attach-logger'
 import LogProvider from '@providers/log'
 import ConfigProvider from '@providers/config'
 import DocumentManager from '@providers/documents'
-import ConfigProvider from '@providers/config'
 
 /**
  * Creates a BrowserWindow with main window configuration and loads the main
