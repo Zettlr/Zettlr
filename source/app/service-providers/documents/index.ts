@@ -26,6 +26,8 @@ import ProviderContract from '@providers/provider-contract'
 import { hasCodeExt, hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import AppServiceContainer from 'source/app/app-service-container'
+import { OpenDocument } from '@dts/common/documents'
+import { ipcMain } from 'electron'
 
 export default class DocumentManager extends ProviderContract {
   private _loadedDocuments: Array<MDFileDescriptor|CodeFileDescriptor>
@@ -105,31 +107,33 @@ export default class DocumentManager extends ProviderContract {
         this._app.log.warning(`[DocumentManager] Received unexpected event ${event} for ${p}.`)
       }
     })
+
+    // Finally, listen to events from the renderer
+    ipcMain.handle('documents-provider', (event, { command, payload }) => {
+      if (command === 'set-pinned') {
+        const filePath = payload.path as string
+        const shouldBePinned = payload.pinned as boolean
+        this.setPinnedStatus(filePath, shouldBePinned)
+      }
+    })
   } // END constructor
 
   async boot (): Promise<void> {
     // Loads in all openFiles
     this._app.log.verbose('Document Manager starting up ...')
-    const openFiles: string[] = this._app.config.get('openFiles')
-    for (const filePath of openFiles) {
+    const openFiles: OpenDocument[] = this._app.config.get('openFiles')
+    for (const doc of openFiles) {
       try {
-        const descriptor = await this._loadFile(filePath)
+        const descriptor = await this._loadFile(doc.path)
         this._loadedDocuments.push(descriptor)
       } catch (err: any) {
-        this._app.log.error(`[Document Manager] Boot: Could not load file ${filePath}: ${String(err.message)}`, err)
+        this._app.log.error(`[Document Manager] Boot: Could not load file ${doc.path}: ${String(err.message)}`, err)
       }
     }
 
     this._app.log.info(`[Document Manager] Restored ${this._loadedDocuments.length} open documents.`)
-
-    const actuallyLoadedPaths = this._loadedDocuments.map(file => file.path)
-
-    this._watcher.add(actuallyLoadedPaths)
-
-    // In case some of the files couldn't be loaded, make sure to re-set the config option accordingly.
-    this._app.config.set('openFiles', actuallyLoadedPaths)
-    this._emitter.emit('update', 'openFiles')
-    broadcastIpcMessage('fsal-state-changed', 'openFiles')
+    this._watcher.add(this._loadedDocuments.map(file => file.path))
+    this.syncToConfig()
 
     // And make the correct file active
     const activeFile: string = this._app.config.get('activeFile')
@@ -174,9 +178,7 @@ export default class DocumentManager extends ProviderContract {
     this._watcher.unwatch(this._loadedDocuments.map(file => file.path))
     this._loadedDocuments = files
     this._watcher.add(files.map(file => file.path))
-    this._app.config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
-    this._emitter.emit('update', 'openFiles')
-    broadcastIpcMessage('fsal-state-changed', 'openFiles')
+    this.syncToConfig()
   }
 
   /**
@@ -202,9 +204,18 @@ export default class DocumentManager extends ProviderContract {
         return pathArray.indexOf(a.path) - pathArray.indexOf(b.path)
       })
 
-      this._emitter.emit('update', 'openFiles')
-      broadcastIpcMessage('fsal-state-changed', 'openFiles')
-      this._app.config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
+      // Also make sure that pinned tabs are all grouped to the left before sync
+      const openFiles: OpenDocument[] = this._app.config.get('openFiles')
+      this._loadedDocuments.sort((a, b) => {
+        const _a = openFiles.find(elem => elem.path === a.path)?.pinned ?? false
+        const _b = openFiles.find(elem => elem.path === b.path)?.pinned ?? false
+
+        if (_a && !_b) return -1
+        if (!_a && _b) return 1
+        return 0
+      })
+
+      this.syncToConfig()
     }
 
     return this._loadedDocuments
@@ -252,11 +263,11 @@ export default class DocumentManager extends ProviderContract {
       this._loadedDocuments.push(file)
     }
 
-    // Update all required states
+    // Update all required states. Especially make sure to re-sort this to
+    // ensure the new file (unpinned) doesn't end up in between several pinned
+    // files.
     this._watcher.add(file.path)
-    this._emitter.emit('update', 'openFiles')
-    broadcastIpcMessage('fsal-state-changed', 'openFiles')
-    this._app.config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
+    this.sortOpenFiles(this._loadedDocuments.map(d => d.path))
 
     const avoidNewTabs = Boolean(this._app.config.get('system.avoidNewTabs'))
 
@@ -291,6 +302,11 @@ export default class DocumentManager extends ProviderContract {
       return // All good, we didn't even have to close the file.
     }
 
+    if (this.isPinned(file.path)) {
+      this._app.log.warning(`[Document Provider] Refusing to close pinned file ${file.path}`)
+      return
+    }
+
     // Retrieve the index of the active file and whether it's an active file
     const activeFileIdx = this._loadedDocuments.findIndex(elem => elem === this._activeFile)
     const isActive = this._activeFile === file
@@ -298,9 +314,7 @@ export default class DocumentManager extends ProviderContract {
     // Then remove the file from the list of open files
     this._loadedDocuments.splice(this._loadedDocuments.indexOf(file), 1)
     this._watcher.unwatch(file.path)
-    this._emitter.emit('update', 'openFiles')
-    broadcastIpcMessage('fsal-state-changed', 'openFiles')
-    this._app.config.set('openFiles', this._loadedDocuments.filter(file => file.dir !== ':memory:').map(file => file.path))
+    this.syncToConfig()
 
     // Now, if we just closed the active file, we need to make another file
     // active, or none, if there are no more open files active.
@@ -319,11 +333,15 @@ export default class DocumentManager extends ProviderContract {
    * Closes all open files.
    */
   public closeAllFiles (): void {
-    this._watcher.unwatch(this._loadedDocuments.map(file => file.path))
-    this._loadedDocuments = []
-    this._emitter.emit('update', 'openFiles')
-    broadcastIpcMessage('fsal-state-changed', 'openFiles')
-    this._app.config.set('openFiles', [])
+    for (const file of this._loadedDocuments) {
+      if (this.isPinned(file.path)) {
+        continue // Cannot close this file
+      }
+
+      this._watcher.unwatch(file.path)
+      this._loadedDocuments.splice(this._loadedDocuments.indexOf(file), 1)
+    }
+    this.syncToConfig()
   }
 
   /**
@@ -398,6 +416,77 @@ export default class DocumentManager extends ProviderContract {
       error.path = filePath
       error.code = 'EINVALIDPATH'
       throw error
+    }
+  }
+
+  /**
+   * This method synchronizes the state of the loadedDocuments array into the
+   * configuration.
+   */
+  private syncToConfig (): void {
+    // Retrieve the files from config so that we can retain the non-default
+    // properties for the files (i.e. if the document is pinned). NOTE we have
+    // to clone the objects because otherwise the config provider's built-in
+    // shortcut in case of unchanged objects will kick in.
+    const openFiles: OpenDocument[] = JSON.parse(JSON.stringify(this._app.config.get('openFiles')))
+
+    const openDocs: OpenDocument[] = this._loadedDocuments
+      .filter(file => file.dir !== ':memory:') // Exclude in memory files
+      .map(file => {
+        const doc = openFiles.find(e => e.path === file.path)
+        return {
+          path: file.path,
+          pinned: doc?.pinned ?? false // Retain the pinned status (default false)
+        }
+      })
+
+    // Now set
+    this._app.config.set('openFiles', openDocs)
+
+    // Emit appropriate events
+    this._emitter.emit('update', 'openFiles')
+    broadcastIpcMessage('fsal-state-changed', 'openFiles')
+  }
+
+  /**
+   * Sets the pinned status for the given file.
+   *
+   * @param   {string}   filePath        The absolute path to the file
+   * @param   {boolean}  shouldBePinned  Whether the file should be pinned.
+   */
+  private setPinnedStatus (filePath: string, shouldBePinned: boolean): void {
+    const openFiles: OpenDocument[] = JSON.parse(JSON.stringify(this._app.config.get('openFiles')))
+
+    const idx = openFiles.findIndex(doc => doc.path === filePath)
+
+    if (idx > -1) {
+      openFiles[idx].pinned = shouldBePinned
+      // In this case, also trigger a sorting command, providing the same set
+      // of paths because the sorter will make sure that, in case the tab is
+      // now pinned, it will move to the left of the tab list.
+      this._app.config.set('openFiles', openFiles)
+      this.sortOpenFiles(this._loadedDocuments.map(f => f.path))
+    }
+  }
+
+  /**
+   * Returns true if the document identified by filePath is pinned. Returns false
+   * both if the document is not pinned or if it is not in the openFiles array.
+   *
+   * @param   {string}   filePath  The file path
+   *
+   * @return  {boolean}            Whether the file is pinned
+   */
+  private isPinned (filePath: string): boolean {
+    const openFiles: OpenDocument[] = this._app.config.get('openFiles')
+
+    const doc = openFiles.find(d => d.path === filePath)
+
+    if (doc === undefined) {
+      this._app.log.error(`[Document Provider] Requested pin status for file ${filePath}, but the file was not in the openFiles array!`, openFiles)
+      return false
+    } else {
+      return doc.pinned
     }
   }
 
@@ -548,7 +637,7 @@ export default class DocumentManager extends ProviderContract {
    * Returns true if none of the open files have their modified flag set.
    */
   public isClean (): boolean {
-    for (let openFile of this._loadedDocuments) {
+    for (const openFile of this._loadedDocuments) {
       if (openFile.modified) {
         return false
       }

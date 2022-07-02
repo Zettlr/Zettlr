@@ -56,6 +56,7 @@ import LogProvider from '@providers/log'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import DocumentManager from '@providers/documents'
 import { trans } from '@common/i18n-main'
+import ConfigProvider from '@providers/config'
 
 export default class WindowProvider extends ProviderContract {
   private _mainWindow: BrowserWindow|null
@@ -560,7 +561,7 @@ export default class WindowProvider extends ProviderContract {
         height: workArea.height
       })
 
-      this._mainWindow = createMainWindow(this._logger, this._config, this._documents, windowConfiguration)
+      this._mainWindow = createMainWindow(0, this._logger, this._config, this._documents, windowConfiguration)
       this._hookMainWindow()
       this._hookWindowResize(this._mainWindow, 'main')
     } else {

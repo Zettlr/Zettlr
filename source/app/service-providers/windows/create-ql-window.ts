@@ -22,6 +22,7 @@ import setWindowChrome from './set-window-chrome'
 import preventNavigation from './prevent-navigation'
 import attachLogger from './attach-logger'
 import LogProvider from '@providers/log'
+import ConfigProvider from '@providers/config'
 
 /**
  * Creates a BrowserWindow with Quicklook Window configuration and loads the

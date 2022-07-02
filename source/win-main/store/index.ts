@@ -34,7 +34,6 @@ import filetreeUpdateAction from './actions/filetree-update'
 import regenerateTagSuggestionsAction from './actions/regenerate-tag-suggestions'
 import updateOpenDirectoryAction from './actions/update-open-directory'
 import updateActiveFileAction from './actions/update-active-file'
-import updateOpenFilesAction from './actions/update-open-files'
 import updateRelatedFilesAction from './actions/update-related-files'
 import updateBibliographyAction from './actions/update-bibliography'
 
@@ -63,10 +62,6 @@ export interface ZettlrState {
    * Contains the currently active File in the editor
    */
   activeFile: MDFileMeta|null
-  /**
-   * Contains all open files in the editor
-   */
-  openFiles: MDFileMeta[]
   /**
    * Files which are in some way related to the currently active file
    */
@@ -133,7 +128,6 @@ function getConfig (): StoreOptions<ZettlrState> {
         uncollapsedDirectories: [],
         selectedDirectory: null,
         activeFile: null,
-        openFiles: [],
         relatedFiles: [],
         colouredTags: [],
         tagDatabase: [],
@@ -187,9 +181,6 @@ function getConfig (): StoreOptions<ZettlrState> {
       updateActiveFile: function (state, descriptor) {
         state.activeFile = descriptor
       },
-      updateOpenFiles: function (state, openFiles) {
-        state.openFiles = openFiles
-      },
       updateRelatedFiles: function (state, relatedFiles: RelatedFile[]) {
         state.relatedFiles = relatedFiles
       },
@@ -232,7 +223,6 @@ function getConfig (): StoreOptions<ZettlrState> {
       filetreeUpdate: filetreeUpdateAction,
       updateOpenDirectory: updateOpenDirectoryAction,
       updateActiveFile: updateActiveFileAction,
-      updateOpenFiles: updateOpenFilesAction,
       regenerateTagSuggestions: regenerateTagSuggestionsAction,
       updateRelatedFiles: updateRelatedFilesAction,
       updateBibliography: updateBibliographyAction

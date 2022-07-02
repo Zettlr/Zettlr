@@ -206,9 +206,6 @@ export default defineComponent({
     fileTree: function (): Array<MDFileMeta|CodeFileMeta|DirMeta> {
       return this.$store.state.fileTree
     },
-    openFiles: function (): MDFileMeta[] {
-      return this.$store.state.openFiles
-    },
     activeFile: function (): MDFileMeta|null {
       return this.$store.state.activeFile
     },
