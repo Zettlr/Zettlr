@@ -126,8 +126,12 @@ export default defineComponent({
     MainSidebar
   },
   data: function () {
+    const searchParams = new URLSearchParams(window.location.search)
     return {
       title: 'Zettlr',
+      // The window number indicates which main window this one here is. This is
+      // only necessary for the documents and split views to show up.
+      windowNumber: parseInt(searchParams.get('window_number') ?? '0', 10),
       readabilityActive: false,
       fileManagerVisible: true,
       distractionFree: false,
