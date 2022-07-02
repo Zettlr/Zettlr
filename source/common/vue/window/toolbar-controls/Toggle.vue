@@ -6,7 +6,7 @@
     v-bind:class="{
       'toggle': true,
       'active': isActive,
-      [control.activeClass]: control.activeClass !== undefined && isActive
+      [control.activeClass as string]: control.activeClass !== undefined && isActive
     }"
     v-bind:title="titleWithFallback"
     v-on:click="toggle"
@@ -16,7 +16,7 @@
   </button>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -31,11 +31,14 @@
  * END HEADER
  */
 
-export default {
+import { ToolbarControl } from '@dts/renderer/window'
+import { defineComponent, PropType } from 'vue'
+
+export default defineComponent({
   name: 'ToggleControl',
   props: {
     control: {
-      type: Object,
+      type: Object as PropType<ToolbarControl>,
       default: function () { return {} }
     },
     showLabel: {
@@ -46,13 +49,10 @@ export default {
   emits: ['toggle'],
   data: function () {
     return {
-      isActive: this.control.initialState === 'active'
+      isActive: this.control.initialState === true
     }
   },
   computed: {
-    controlActiveChanged: function () {
-      return this.control.initialState
-    },
     titleWithFallback: function () {
       if (typeof this.control.title === 'string' && this.control.title.length > 0) {
         return this.control.title
@@ -72,18 +72,13 @@ export default {
       }
     }
   },
-  watch: {
-    controlActiveChanged: function () {
-      this.isActive = this.control.initialState
-    }
-  },
   methods: {
     toggle: function () {
-      this.isActive = this.isActive === false
+      this.isActive = !this.isActive
       this.$emit('toggle', this.isActive)
     }
   }
-}
+})
 </script>
 
 <style lang="less">

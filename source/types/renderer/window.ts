@@ -80,7 +80,12 @@ export interface ToolbarControl {
    * Must be boolean for a regular toggle control, and either stateOne.id or
    * stateTwo.id or undefined for a three way toggle.
    */
-  initialState?: string|boolean|undefined
+  initialState?: string|boolean
+  /**
+   * If given, this denotes a class for a toggle control that will be applied
+   * while the toggle is in its "on" state.
+   */
+  activeClass?: string
   /**
    * A search control can have this optional placeholder string
    */

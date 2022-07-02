@@ -96,6 +96,9 @@ Supported theme values are:
   it should store an exported file
 - In case of an error, the error dialog will now also present the Pandoc error
   code
+- Fixed a minor bug in toolbar toggle controls that necessitated clicking them
+  twice to bring them into the "active" state (holds especially true for the
+  sidebar toggle)
 
 ## Under the Hood
 
