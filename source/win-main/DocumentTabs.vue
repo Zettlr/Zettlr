@@ -1,8 +1,8 @@
 <template>
   <div id="tab-container" ref="container" role="tablist">
     <div
-      v-for="(file, idx) in openFiles"
-      v-bind:key="idx"
+      v-for="file in openFiles"
+      v-bind:key="file.path"
       v-bind:class="{
         active: activeFile !== null && file.path === activeFile.path,
         modified: modifiedDocs.includes(file.path),

@@ -204,6 +204,17 @@ export default class DocumentManager extends ProviderContract {
         return pathArray.indexOf(a.path) - pathArray.indexOf(b.path)
       })
 
+      // Also make sure that pinned tabs are all grouped to the left before sync
+      const openFiles: OpenDocument[] = this._app.config.get('openFiles')
+      this._loadedDocuments.sort((a, b) => {
+        const _a = openFiles.find(elem => elem.path === a.path)?.pinned ?? false
+        const _b = openFiles.find(elem => elem.path === b.path)?.pinned ?? false
+
+        if (_a && !_b) return -1
+        if (!_a && _b) return 1
+        return 0
+      })
+
       this.syncToConfig()
     }
 
@@ -252,9 +263,11 @@ export default class DocumentManager extends ProviderContract {
       this._loadedDocuments.push(file)
     }
 
-    // Update all required states
+    // Update all required states. Especially make sure to re-sort this to
+    // ensure the new file (unpinned) doesn't end up in between several pinned
+    // files.
     this._watcher.add(file.path)
-    this.syncToConfig()
+    this.sortOpenFiles(this._loadedDocuments.map(d => d.path))
 
     const avoidNewTabs = Boolean(this._app.config.get('system.avoidNewTabs'))
 
@@ -448,12 +461,12 @@ export default class DocumentManager extends ProviderContract {
 
     if (idx > -1) {
       openFiles[idx].pinned = shouldBePinned
+      // In this case, also trigger a sorting command, providing the same set
+      // of paths because the sorter will make sure that, in case the tab is
+      // now pinned, it will move to the left of the tab list.
+      this._app.config.set('openFiles', openFiles)
+      this.sortOpenFiles(this._loadedDocuments.map(f => f.path))
     }
-
-    this._app.config.set('openFiles', openFiles)
-    // Emit appropriate events
-    this._emitter.emit('update', 'openFiles')
-    broadcastIpcMessage('fsal-state-changed', 'openFiles')
   }
 
   /**
