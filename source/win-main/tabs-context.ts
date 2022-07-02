@@ -42,7 +42,7 @@ export default function displayTabsContext (event: MouseEvent, fileObject: MDFil
       type: 'separator'
     },
     {
-      label: doc.pinned ? 'Unpin tab' : 'Pin tab',
+      label: doc.pinned ? trans('menu.unpin_tab') : trans('menu.pin_tab'),
       id: 'pin-tab',
       type: 'normal',
       enabled: true
