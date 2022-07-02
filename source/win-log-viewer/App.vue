@@ -91,7 +91,7 @@ export default defineComponent({
         return preFiltered
       }
     },
-    toolbarControls: function () {
+    toolbarControls: function (): ToolbarControl[] {
       return [
         {
           id: 'filter-text',
@@ -103,28 +103,28 @@ export default defineComponent({
           label: 'Verbose',
           id: 'verboseToggle',
           activeClass: 'verbose-control-active',
-          initialState: ''
+          initialState: false
         },
         {
           type: 'toggle',
           label: 'Info',
           id: 'infoToggle',
           activeClass: 'info-control-active',
-          initialState: ''
+          initialState: false
         },
         {
           type: 'toggle',
           label: 'Warning',
           id: 'warningToggle',
           activeClass: 'warning-control-active',
-          initialState: 'active'
+          initialState: true
         },
         {
           type: 'toggle',
           label: 'Error',
           id: 'errorToggle',
           activeClass: 'error-control-active',
-          initialState: 'active'
+          initialState: true
         },
         {
           type: 'spacer', // Make sure the content is flushed to the left
