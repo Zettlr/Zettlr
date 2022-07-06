@@ -73,6 +73,10 @@
         // function. NOTE to keep this on my mind!
         "vue/no-v-html": "off",
 
+        // This is a rule for Vue2, as per the documentation we should turn it
+        // off. See: https://eslint.vuejs.org/rules/no-v-for-template-key.html
+        "vue/no-v-for-template-key": "off",
+
         // Disable a few typescript rules as we are not yet there to easily implement them
         "@typescript-eslint/no-floating-promises": [ "warn" ],
         "@typescript-eslint/no-misused-promises": [ "warn" ],
