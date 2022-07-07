@@ -12,7 +12,10 @@
  * END HEADER
  */
 
+import { OpenDocument } from '@dts/common/documents'
+import { MDFileMeta } from '@dts/common/fsal'
 import { RelatedFile } from '@dts/renderer/misc'
+import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
 import { ActionContext } from 'vuex'
 import { ZettlrState } from '..'
 
@@ -23,8 +26,8 @@ export default async function (context: ActionContext<ZettlrState, ZettlrState>)
   // First reset, default is no related files
   context.commit('updateRelatedFiles', [])
 
-  const activeFile = context.state.activeFile
-  if (activeFile === null || activeFile.type !== 'file') {
+  const activeFile: OpenDocument|null = context.getters.lastLeafActiveFile()
+  if (activeFile === null || !hasMarkdownExt(activeFile.path)) {
     return
   }
 
@@ -61,12 +64,21 @@ export default async function (context: ActionContext<ZettlrState, ZettlrState>)
     unreactiveList.push(related)
   }
 
+  const descriptor: MDFileMeta|undefined = await ipcRenderer.invoke('application', {
+    command: 'get-file-contents',
+    payload: activeFile.path
+  })
+
+  if (descriptor === undefined) {
+    return
+  }
+
   // The second way files can be related to each other is via shared tags.
   // This relation is not as important as explicit links, so they should
   // be below the inbound linked files.
   const recommendations = await ipcRenderer.invoke('tag-provider', {
     command: 'recommend-matching-files',
-    payload: activeFile.tags.map(tag => tag) // De-proxy
+    payload: descriptor.tags.map(tag => tag) // De-proxy
   })
 
   // Recommendations come in the form of [file: string]: string[]

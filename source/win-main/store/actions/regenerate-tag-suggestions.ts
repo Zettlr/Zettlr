@@ -12,23 +12,25 @@
  * END HEADER
  */
 
+import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
 import { ActionContext } from 'vuex'
 import { ZettlrState } from '..'
 
 const ipcRenderer = window.ipc
 
 export default async function (context: ActionContext<ZettlrState, ZettlrState>): Promise<void> {
-  if (context.state.activeFile === null) {
+  const activeFile = context.getters.lastLeafActiveFile()
+  if (activeFile === null) {
     return // Nothing to do
   }
 
-  if (context.state.activeFile.type !== 'file') {
+  if (!hasMarkdownExt(activeFile.path)) {
     return // Can only generate suggestions for Markdown files
   }
 
   const descriptor = await ipcRenderer.invoke('application', {
     command: 'get-file-contents',
-    payload: context.state.activeFile.path
+    payload: activeFile.path
   })
 
   if (descriptor == null) {
