@@ -57,6 +57,7 @@ import { mdFileExtensions } from './util/valid-file-extensions'
 import getMarkdownFileParser from './util/file-parser'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import { getIDRE } from '@common/regular-expressions'
+import ConfigProvider from '@providers/config'
 
 // Re-export all interfaces necessary for other parts of the code (Document Manager)
 export {

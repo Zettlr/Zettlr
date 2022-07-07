@@ -14,6 +14,7 @@
 
 import { app, BrowserWindow, dialog, OpenDialogOptions, OpenDialogReturnValue } from 'electron'
 import isDir from '@common/util/is-dir'
+import ConfigProvider from '@providers/config'
 
 /**
  * Asks the user for directory path(s)

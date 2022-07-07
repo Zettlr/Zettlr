@@ -12,6 +12,7 @@
  * END HEADER
  */
 
+import ConfigProvider from '@providers/config'
 import sanitizeHtml from 'sanitize-html'
 
 let config: ConfigProvider|undefined
