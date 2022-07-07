@@ -109,7 +109,6 @@ export default class AppServiceContainer {
     // Boot the commands before the window provider to ensure the handler for
     // application requests from windows is registered before any window opens
     await this._informativeBoot(this._commandProvider, 'CommandProvider')
-    await this._informativeBoot(this._windowProvider, 'WindowManager')
     await this._informativeBoot(this._trayProvider, 'TrayProvider')
     await this._informativeBoot(this._dictionaryProvider, 'DictionaryProvider')
     await this._informativeBoot(this._menuProvider, 'MenuProvider')
@@ -117,6 +116,7 @@ export default class AppServiceContainer {
     await this._informativeBoot(this._updateProvider, 'UpdateProvider')
 
     await this._informativeBoot(this._fsal, 'FSAL')
+    await this._informativeBoot(this._windowProvider, 'WindowManager')
     await this._informativeBoot(this._documentManager, 'DocumentManager')
 
     this._menuProvider.set() // TODO
