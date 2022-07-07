@@ -16,6 +16,7 @@ import { app, BrowserWindow, dialog, FileFilter, OpenDialogOptions, OpenDialogRe
 import path from 'path'
 import isDir from '@common/util/is-dir'
 import { trans } from '@common/i18n-main'
+import ConfigProvider from '@providers/config'
 
 /**
  * Displays a dialog to prompt the user for file paths

@@ -27,6 +27,7 @@ import { ignoreDirs as IGNORE_DIR_REGEXP } from '@common/data.json'
 import { WatchdogEvent } from '@dts/main/fsal'
 import LogProvider from '@providers/log'
 import { hasMdOrCodeExt } from './util/is-md-or-code-file'
+import ConfigProvider from '@providers/config'
 
 export default class FSALWatchdog extends EventEmitter {
   private _booting: boolean

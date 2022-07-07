@@ -24,6 +24,7 @@ import { trans } from '@common/i18n-main'
 import ProviderContract from '../provider-contract'
 import WindowProvider from '../windows'
 import LogProvider from '../log'
+import ConfigProvider from '@providers/config'
 
 /**
  * This class generates the Tray in the system notification area

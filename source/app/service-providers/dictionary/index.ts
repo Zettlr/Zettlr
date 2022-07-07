@@ -24,6 +24,7 @@ import findLangCandidates, { Candidate } from '@common/util/find-lang-candidates
 import enumDictFiles, { DictFileMetadata } from '@common/util/enum-dict-files'
 import ProviderContract from '../provider-contract'
 import LogProvider from '../log'
+import ConfigProvider from '@providers/config'
 
 /**
  * This class loads and unloads dictionaries according to the configuration set
