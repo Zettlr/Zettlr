@@ -76,8 +76,7 @@ export default class RequestMove extends ZettlrCommand {
 
     // A final check: If from is a file, and the file is modified, we cannot
     // move, lest we want to induce data loss, see issue #2347
-    const openFile = this._app.documents.openFiles.find(elem => elem.path === arg.from)
-    if (openFile?.modified === true) {
+    if (this._app.documents.isModified(arg.from)) {
       this._app.log.error(`[Application] Cannot move file ${arg.from} to ${arg.to}, since it is modified.`)
       return false
     }

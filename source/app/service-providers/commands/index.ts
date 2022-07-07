@@ -23,12 +23,10 @@ import DirRescan from './dir-rescan'
 import DirSetIcon from './dir-set-icon'
 import DirSort from './dir-sort'
 import Export from './export'
-import FileClose from './file-close'
 import FileDelete from './file-delete'
 import FileDuplicate from './file-duplicate'
 import FileNew from './file-new'
 import FileRename from './file-rename'
-import FileSave from './file-save'
 import FileSearch from './file-search'
 import ForceOpen from './force-open'
 import FileFindAndReturnMetaData from './file-find-and-return-meta-data'
@@ -41,7 +39,6 @@ import RequestMove from './request-move'
 import RootClose from './root-close'
 import RootOpen from './root-open'
 import SaveImageFromClipboard from './save-image-from-clipboard'
-import SortOpenFiles from './sort-open-files'
 import TutorialOpen from './tutorial-open'
 import UpdateProjectProperties from './update-project-properties'
 import UpdateUserDictionary from './update-user-dictionary'
@@ -49,7 +46,6 @@ import ProviderContract from '@providers/provider-contract'
 import AppServiceContainer from 'source/app/app-service-container'
 import ZettlrCommand from './zettlr-command'
 import SetOpenDirectory from './set-open-directory'
-import { MDFileDescriptor } from '@dts/main/fsal'
 import { clipboard, ipcMain, nativeImage } from 'electron'
 
 export const commands = [
@@ -63,12 +59,10 @@ export const commands = [
   DirSetIcon,
   DirSort,
   Export,
-  FileClose,
   FileDelete,
   FileDuplicate,
   FileNew,
   FileRename,
-  FileSave,
   FileSearch,
   FileFindAndReturnMetaData,
   ForceOpen,
@@ -82,7 +76,6 @@ export const commands = [
   RootOpen,
   SaveImageFromClipboard,
   SetOpenDirectory,
-  SortOpenFiles,
   TutorialOpen,
   UpdateProjectProperties,
   UpdateUserDictionary
@@ -133,30 +126,19 @@ export default class CommandProvider extends ProviderContract {
       }
 
       return this._app.fsal.getMetadataFor(openDir)
-    } else if (command === 'get-active-file') {
-      const descriptor = this._app.documents.activeFile
-      if (descriptor === null) {
-        return null
-      }
-
-      return this._app.fsal.getMetadataFor(descriptor as MDFileDescriptor)
     } else if (command === 'next-file') {
       // Trigger a "forward" command on the document manager
-      await this._app.documents.forward()
+      // await this._app.documents.forward()
+      // TODO!!!
       return true
     } else if (command === 'previous-file') {
       // Trigger a "back" command on the document manager
-      await this._app.documents.back()
+      // await this._app.documents.back()
+      // TODO!!!
       return true
     } else if (command === 'set-writing-target') {
       // Sets or updates a file's writing target
       this._app.targets.set(payload)
-    } else if (command === 'open-file') {
-      await this._app.documents.openFile(payload.path, payload.newTab)
-      return true
-    } else if (command === 'get-open-files') {
-      // Return all open files as their metadata objects
-      return this._app.documents.openFiles.map(file => this._app.fsal.getMetadataFor(file))
     } else if (command === 'copy-img-to-clipboard') {
       // We should copy the contents of an image file to clipboard. Payload
       // contains the image path. We can rely on the Electron framework here.
@@ -174,24 +156,8 @@ export default class CommandProvider extends ProviderContract {
       }
       return true
     } else if (command === 'get-file-contents') {
-      // First, attempt to get the contents from the document manager
-      const file = this._app.documents.openFiles.find(file => file.path === payload)
-      if (file !== undefined) {
-        return await this._app.documents.getFileContents(file)
-      }
-
-      // Otherwise, try to find the file via the FSAL
-      const descriptor = this._app.fsal.findFile(payload)
-      if (descriptor === null) {
-        return null
-      }
-
-      return await this._app.fsal.getFileContents(descriptor)
-    } else if (command === 'update-modified-files') {
-      // Update the modification status according to the file path array given
-      // in the payload.
-      this._app.documents.updateModifiedFlags(payload)
-      this._app.windows.setModified(!this._app.documents.isClean())
+      // Some renderer's editor has requested a file
+      return await this._app.fsal.loadAnySupportedFile(payload)
     } else if (command === 'open-preferences') {
       this._app.windows.showPreferences()
       return true

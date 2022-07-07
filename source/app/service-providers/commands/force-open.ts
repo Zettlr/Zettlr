@@ -28,7 +28,7 @@ export default class ForceOpen extends ZettlrCommand {
     * @return {Boolean} Whether the file was successfully opened.
     */
   async run (evt: string, payload: any): Promise<void> {
-    const { linkContents, newTab } = payload
+    const { linkContents, newTab, leafId } = payload
 
     // Determine if the file should be created, if it can't be found. For this
     // we need both the respective preferences setting and an auto-search
@@ -40,13 +40,13 @@ export default class ForceOpen extends ZettlrCommand {
 
     // Now we have a file (if not, create a new one if the user wishes so)
     if (file !== undefined) {
-      await this._app.documents.openFile(file.path, newTab)
+      await this._app.documents.openFile(leafId, file.path, newTab)
     } else if (autoCreate && isDir(customDir)) {
       // Call the file-new command on the application, which'll do all
       // necessary steps for us.
-      await this._app.commands.run('file-new', { name: linkContents, path: customDir })
+      await this._app.commands.run('file-new', { leafId, name: linkContents, path: customDir })
     } else if (autoCreate && !isDir(customDir)) {
-      await this._app.commands.run('file-new', { name: linkContents })
+      await this._app.commands.run('file-new', { leafId, name: linkContents })
     }
   }
 }

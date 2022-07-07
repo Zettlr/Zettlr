@@ -66,7 +66,9 @@ export default class TutorialOpen extends ZettlrCommand {
     const tutorialDirectory = this._app.fsal.findDir(targetPath)
     if (tutorialDirectory !== null) {
       this._app.fsal.openDirectory = tutorialDirectory
-      await this._app.documents.openFile(path.join(targetPath, 'welcome.md'), true)
+      // Always open the tutorial in the first window
+      const windowId = this._app.documents.windowKeys()[0]
+      await this._app.documents.openFile(windowId, undefined, path.join(targetPath, 'welcome.md'), true)
     }
   }
 }

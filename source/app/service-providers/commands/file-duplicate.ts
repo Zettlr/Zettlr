@@ -34,8 +34,6 @@ export default class FileDuplicate extends ZettlrCommand {
    * @return {void}     This function does not return anything.
    */
   async run (evt: string, arg: any): Promise<void> {
-    // ARG structure: { dir, file, name }
-
     // First, retrieve our source file
     let file = this._app.fsal.findFile(arg.path)
     if (file === null) {
@@ -104,6 +102,6 @@ export default class FileDuplicate extends ZettlrCommand {
     })
 
     // And directly thereafter, open the file
-    await this._app.documents.openFile(path.join(dir.path, filename))
+    await this._app.documents.openFile(arg.windowNumber, arg.leafId, path.join(dir.path, filename))
   }
 }
