@@ -179,6 +179,10 @@ export default class MarkdownEditor extends EventEmitter {
       this.emit('cursorActivity')
     })
 
+    this._instance.on('focus', (cm, event) => {
+      this.emit('focus', event)
+    })
+
     this._instance.on('mousedown', (cm, event) => {
       // Open links on both Cmd and Ctrl clicks - otherwise stop handling event
       if (process.platform === 'darwin' && !event.metaKey) return true
