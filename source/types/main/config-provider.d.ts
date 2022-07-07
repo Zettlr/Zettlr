@@ -1,10 +1,6 @@
-import { OpenDocument } from '@dts/common/documents'
-
 export interface ConfigOptions {
   version: string
   openPaths: string[]
-  openFiles: OpenDocument[]
-  activeFile: string|null
   openDirectory: string|null
   dialogPaths: {
     askFileDialog: string

@@ -49,8 +49,6 @@ export default function getConfigTemplate (): ConfigOptions {
   return {
     version: ZETTLR_VERSION, // Useful for migrating
     openPaths: [], // Array to include all opened root paths
-    openFiles: [], // Array to include all currently opened files
-    activeFile: null, // Save last opened file hash here
     openDirectory: null, // Save last opened dir path here
     dialogPaths: {
       askFileDialog: '',
@@ -71,7 +69,7 @@ export default function getConfigTemplate (): ConfigOptions {
     attachmentExtensions: ATTACHMENT_EXTENSIONS,
     // UI related options
     darkMode: false,
-    alwaysReloadFiles: false, // Should Zettlr automatically load remote changes?
+    alwaysReloadFiles: true, // Should Zettlr automatically load remote changes?
     autoDarkMode: 'off', // Possible values: 'off', 'system', 'schedule', 'auto'
     autoDarkModeStart: '22:00', // Switch into dark mode at this time
     autoDarkModeEnd: '06:00', // Switch to light mode at this time
@@ -221,7 +219,7 @@ export default function getConfigTemplate (): ConfigOptions {
     system: {
       deleteOnFail: false, // Whether to delete files if trashing them fails
       leaveAppRunning: false, // Whether to leave app running in the notification area (tray)
-      avoidNewTabs: true, // Whether to avoid opening new tabs for documents if possible
+      avoidNewTabs: false, // Whether to avoid opening new tabs for documents if possible
       iframeWhitelist: [ 'www.youtube.com', 'player.vimeo.com' ], // Contains a list of whitelisted iFrame prerendering domains
       checkForUpdates: true,
       checkForTranslationUpdates: true,
