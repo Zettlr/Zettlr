@@ -19,15 +19,24 @@ import path from 'path'
 
 contextBridge.exposeInMainWorld('path', path)
 
+// PREPARATION: Since we have multiple editor panes and all of them need to
+// listen to a few events, we need to ramp up some of the channels' max
+// listeners. We assume approx. 10 base listeners and will support up to 90 more
+// The reason we run into this problem is that the preloader actually shares
+// listeners across all windows
+ipcRenderer.setMaxListeners(100)
+
 // We need a few ipc methods
 contextBridge.exposeInMainWorld('ipc', {
   send: (channel: string, ...args: any[]) => ipcRenderer.send(channel, ...args),
   sendSync: (event: string, ...args: any[]) => ipcRenderer.sendSync(event, ...args),
   invoke: async (channel: string, ...args: any[]) => await ipcRenderer.invoke(channel, ...args),
-  on: (channel: string, listener: Function) => ipcRenderer.on(channel, (event, ...args) => {
-    // Omit the event when calling the listener
-    listener(undefined, ...args)
-  })
+  on: (channel: string, listener: Function) => {
+    ipcRenderer.on(channel, (event, ...args) => {
+      // Omit the event when calling the listener
+      listener(undefined, ...args)
+    })
+  }
 })
 
 contextBridge.exposeInMainWorld('config', {
