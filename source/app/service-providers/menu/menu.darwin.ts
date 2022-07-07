@@ -118,7 +118,7 @@ export default function getMenu (
               label: 'Markdown', // TODO: Translate
               accelerator: 'Cmd+N',
               click: function (menuitem, focusedWindow) {
-                commands.run('new-unsaved-file', { type: 'md' })
+                commands.run('file-new', { type: 'md' })
                   .catch(e => logger.error(String(e.message), e))
               }
             },
@@ -126,7 +126,7 @@ export default function getMenu (
               id: 'menu.new_tex_file',
               label: 'TeX', // TODO: Translate
               click: function (menuitem, focusedWindow) {
-                commands.run('new-unsaved-file', { type: 'tex' })
+                commands.run('file-new', { type: 'tex' })
                   .catch(e => logger.error(String(e.message), e))
               }
             },
@@ -134,7 +134,7 @@ export default function getMenu (
               id: 'menu.new_yaml_file',
               label: 'YAML', // TODO: Translate
               click: function (menuitem, focusedWindow) {
-                commands.run('new-unsaved-file', { type: 'yaml' })
+                commands.run('file-new', { type: 'yaml' })
                   .catch(e => logger.error(String(e.message), e))
               }
             },
@@ -142,7 +142,7 @@ export default function getMenu (
               id: 'menu.new_json_file',
               label: 'JSON', // TODO: Translate
               click: function (menuitem, focusedWindow) {
-                commands.run('new-unsaved-file', { type: 'json' })
+                commands.run('file-new', { type: 'json' })
                   .catch(e => logger.error(String(e.message), e))
               }
             }
@@ -625,6 +625,14 @@ export default function getMenu (
           accelerator: 'Ctrl+Tab',
           click: function (menuitem, focusedWindow) {
             focusedWindow?.webContents.send('shortcut', 'next-tab')
+          }
+        },
+        {
+          id: 'menu.new_window',
+          label: 'New window',
+          accelerator: 'CmdOrCtrl+Shift+N',
+          click: function (menuItem, focusedWindow) {
+            windows.newMainWindow()
           }
         }
       ]
