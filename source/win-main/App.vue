@@ -20,6 +20,7 @@
         <FileManager
           v-show="mainSplitViewVisibleComponent === 'fileManager'"
           ref="file-manager"
+          v-bind:window-id="windowId"
         ></FileManager>
         <!-- ... or the global search, if selected -->
         <GlobalSearch
@@ -39,14 +40,17 @@
         >
           <template #view1>
             <!-- First side: Editor -->
-            <DocumentTabs
-              v-show="!distractionFree"
-            ></DocumentTabs>
-            <MainEditor
-              ref="editor"
-              v-bind:readability-mode="readabilityActive"
-              v-bind:distraction-free="distractionFree"
-            ></MainEditor>
+            <EditorPane
+              v-if="paneConfiguration.type === 'leaf'"
+              v-bind:node="paneConfiguration"
+              v-bind:leaf-id="paneConfiguration.id"
+              v-bind:window-id="windowId"
+            ></EditorPane>
+            <EditorBranch
+              v-else
+              v-bind:node="paneConfiguration"
+              v-bind:window-id="windowId"
+            ></EditorBranch>
           </template>
           <template #view2>
             <!-- Second side: Sidebar -->
@@ -76,10 +80,10 @@
 import WindowChrome from '@common/vue/window/Chrome.vue'
 import FileManager from './file-manager/file-manager.vue'
 import MainSidebar from './sidebar/MainSidebar.vue'
-import DocumentTabs from './DocumentTabs.vue'
+import EditorPane from './EditorPane.vue'
+import EditorBranch from './EditorBranch.vue'
 import SplitView from '../common/vue/window/SplitView.vue'
 import GlobalSearch from './GlobalSearch.vue'
-import MainEditor from './MainEditor.vue'
 import PopoverExport from './PopoverExport.vue'
 import PopoverStats from './PopoverStats.vue'
 import PopoverTags from './PopoverTags.vue'
@@ -96,6 +100,7 @@ import glassFile from './assets/glass.wav'
 import alarmFile from './assets/digital_alarm.mp3'
 import chimeFile from './assets/chime.mp3'
 import { ToolbarControl } from '@dts/renderer/window'
+import { OpenDocument, BranchNodeJSON, LeafNodeJSON } from '@dts/common/documents'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
@@ -119,9 +124,9 @@ export default defineComponent({
   components: {
     WindowChrome,
     FileManager,
-    DocumentTabs,
+    EditorPane,
+    EditorBranch,
     SplitView,
-    MainEditor,
     GlobalSearch,
     MainSidebar
   },
@@ -131,7 +136,7 @@ export default defineComponent({
       title: 'Zettlr',
       // The window number indicates which main window this one here is. This is
       // only necessary for the documents and split views to show up.
-      windowNumber: parseInt(searchParams.get('window_number') ?? '0', 10),
+      windowId: searchParams.get('window_id') as string,
       readabilityActive: false,
       fileManagerVisible: true,
       distractionFree: false,
@@ -170,7 +175,13 @@ export default defineComponent({
   },
   computed: {
     sidebarVisible: function (): boolean {
-      return this.$store.state.config['window.sidebarVisible']
+      return this.$store.state.config['window.sidebarVisible'] as boolean
+    },
+    activeFile: function (): OpenDocument|null {
+      return this.$store.getters.lastLeafActiveFile()
+    },
+    modifiedFiles: function (): string[] {
+      return Array.from(this.$store.state.modifiedFiles.keys())
     },
     shouldCountChars: function (): boolean {
       return this.$store.state.config['editor.countChars']
@@ -390,6 +401,9 @@ export default defineComponent({
     },
     globalSearchComponent: function (): any {
       return this.$refs['global-search'] as any
+    },
+    paneConfiguration () {
+      return this.$store.state.paneStructure as BranchNodeJSON|LeafNodeJSON
     }
   },
   watch: {
@@ -427,7 +441,7 @@ export default defineComponent({
   mounted: function () {
     ipcRenderer.on('shortcut', (event, shortcut, state) => {
       if (shortcut === 'toggle-sidebar') {
-        window.config.set('window.sidebarVisible', !this.sidebarVisible)
+        window.config.set('window.sidebarVisible', this.sidebarVisible === false)
       } else if (shortcut === 'insert-id') {
         // Generates an ID based upon the configured pattern, writes it into the
         // clipboard and then triggers the paste command on these webcontents.
@@ -491,20 +505,36 @@ export default defineComponent({
           }
 
           this.distractionFree = true
-          ;(global as any).config.set('window.sidebarVisible', false)
+          window.config.set('window.sidebarVisible', false)
           this.fileManagerVisible = false
         } else {
           // Leave distraction free mode
           this.distractionFree = false
-          ;(global as any).config.set('window.sidebarVisible', this.sidebarsBeforeDistractionfree.sidebar)
+          window.config.set('window.sidebarVisible', this.sidebarsBeforeDistractionfree.sidebar)
           this.fileManagerVisible = this.sidebarsBeforeDistractionfree.fileManager
         }
+      } else if (shortcut === 'navigate-back') {
+        ipcRenderer.invoke('documents-provider', {
+          command: 'navigate-back',
+          payload: {
+            windowId: this.windowId,
+            leafId: this.$store.state.lastLeafId
+          }
+        }).catch(err => console.error(err))
+      } else if (shortcut === 'navigate-forward') {
+        ipcRenderer.invoke('documents-provider', {
+          command: 'navigate-forward',
+          payload: {
+            windowId: this.windowId,
+            leafId: this.$store.state.lastLeafId
+          }
+        }).catch(err => console.error(err))
       }
     })
 
     // Initially, we need to hide the sidebar, since the view will be visible
     // by default.
-    if (!this.sidebarVisible) {
+    if (this.sidebarVisible === false) {
       this.editorSidebarSplitComponent.hideView(2)
     }
   },
@@ -538,14 +568,24 @@ export default defineComponent({
         ipcRenderer.invoke('application', { command: 'open-preferences' })
           .catch(e => console.error(e))
       } else if (clickedID === 'new-file') {
-        ipcRenderer.invoke('application', { command: 'new-unsaved-file', payload: { type: 'md' } })
+        ipcRenderer.invoke('application', { command: 'file-new', payload: { type: 'md' } })
           .catch(e => console.error(e))
       } else if (clickedID === 'previous-file') {
-        ipcRenderer.invoke('application', { command: 'previous-file' })
-          .catch(e => console.error(e))
+        ipcRenderer.invoke('documents-provider', {
+          command: 'navigate-back',
+          payload: {
+            windowId: this.windowId,
+            leafId: this.$store.state.lastLeafId
+          }
+        }).catch(err => console.error(err))
       } else if (clickedID === 'next-file') {
-        ipcRenderer.invoke('application', { command: 'next-file' })
-          .catch(e => console.error(e))
+        ipcRenderer.invoke('documents-provider', {
+          command: 'navigate-forward',
+          payload: {
+            windowId: this.windowId,
+            leafId: this.$store.state.lastLeafId
+          }
+        }).catch(err => console.error(err))
       } else if (clickedID === 'export') {
         this.showExportPopover()
       } else if (clickedID === 'show-stats') {
@@ -771,34 +811,31 @@ export default defineComponent({
       }
     },
     showExportPopover: function () {
-      if (this.$store.state.activeFile === null) {
+      if (this.activeFile === null) {
         return // Can't export a non-open file
       }
+
       const data = {
         format: this.$store.state.config['export.singleFileLastExporter']
       }
+
       this.$togglePopover(
         PopoverExport,
         document.getElementById('toolbar-export') as HTMLElement,
         data,
         (data: any) => {
-          if (data.shouldExport !== true) {
+          if (data.shouldExport !== true || this.activeFile === null) {
             return
           }
           // If the file is modified, export the current contents of the editor
           // rather than what is saved on disk
-          let content
-          if (this.$store.state.modifiedDocuments.includes(this.$store.state.activeFile.path) === true) {
-            content = (this.$refs.editor as any).getValue()
-          }
           // Run the exporter
           ipcRenderer.invoke('application', {
             command: 'export',
             payload: {
               profile: JSON.parse(JSON.stringify(data.profile)),
               exportTo: data.exportTo,
-              file: this.$store.state.activeFile.path,
-              content: content
+              file: this.activeFile.path
             }
           })
             .catch(e => console.error(e))

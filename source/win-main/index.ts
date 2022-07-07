@@ -16,10 +16,13 @@ import windowRegister from '@common/modules/window-register'
 import { createApp } from 'vue'
 // import { createStore } from 'vuex'
 import App from './App.vue'
-import createStore from './store'
+import createStore, { key as storeKey } from './store'
 import PopupProvider from './popup-provider'
 
 const ipcRenderer = window.ipc
+
+const searchParams = new URLSearchParams(window.location.search)
+const windowId = searchParams.get('window_id')
 
 // The first thing we have to do is run the window controller
 windowRegister()
@@ -28,7 +31,7 @@ const appStore = createStore()
 
 // Create the Vue app. We additionally use appStore, which exposes $store, and
 // PopupProvider, which exposes $showPopover, $togglePopover, and $closePopover
-const app = createApp(App).use(appStore).use(PopupProvider).mount('#app')
+const app = createApp(App).use(appStore, storeKey).use(PopupProvider).mount('#app')
 
 document.addEventListener('dragover', function (event) {
   event.preventDefault()
@@ -107,6 +110,11 @@ ipcRenderer.on('config-provider', (event, { command, payload }) => {
   }
 })
 
+// Listen for document state updates
+ipcRenderer.on('documents-update', (evt, payload) => {
+  app.$store.dispatch('documentTree', payload).catch(err => console.error(err))
+})
+
 // -----------------------------------------------------------------------------
 
 // Listen for updates to the tag database
@@ -128,7 +136,6 @@ ipcRenderer.invoke('tag-provider', { command: 'get-tags-database' })
 // -----------------------------------------------------------------------------
 let filetreeUpdateLock = false
 let openDirectoryLock = false
-let activeFileUpdateLock = false
 // Listen for broadcasts from main in order to update the filetree
 ipcRenderer.on('fsal-state-changed', (event, kind: string) => {
   if (kind === 'filetree') {
@@ -149,31 +156,20 @@ ipcRenderer.on('fsal-state-changed', (event, kind: string) => {
     app.$store.dispatch('updateOpenDirectory')
       .catch(e => console.error(e))
       .finally(() => { openDirectoryLock = false })
-  } else if (kind === 'activeFile') {
-    if (activeFileUpdateLock) {
-      return
-    }
-
-    activeFileUpdateLock = true
-    app.$store.dispatch('updateActiveFile')
-      .catch(e => console.error(e))
-      .finally(() => { activeFileUpdateLock = false })
   }
 })
 
 // Initial update
 filetreeUpdateLock = true
 openDirectoryLock = true
-activeFileUpdateLock = true
 app.$store.dispatch('filetreeUpdate')
   .catch(e => console.error(e))
   .finally(() => { filetreeUpdateLock = false })
 app.$store.dispatch('updateOpenDirectory')
   .catch(e => console.error(e))
   .finally(() => { openDirectoryLock = false })
-app.$store.dispatch('updateActiveFile')
-  .catch(e => console.error(e))
-  .finally(() => { activeFileUpdateLock = false })
+app.$store.dispatch('documentTree', { event: 'init', context: { windowId } })
+  .catch(err => console.error(err))
 
 // -----------------------------------------------
 

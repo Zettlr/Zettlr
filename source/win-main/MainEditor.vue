@@ -1,7 +1,7 @@
 <template>
   <div
-    id="editor"
     ref="editor"
+    class="main-editor-wrapper"
     v-bind:style="{ 'font-size': `${fontSize}px` }"
     v-bind:class="{
       'code-file': !isMarkdown,
@@ -11,11 +11,14 @@
     v-on:mousedown="editorMousedown($event)"
     v-on:mouseup="editorMouseup($event)"
     v-on:mousemove="editorMousemove($event)"
+    v-on:dragenter="handleDragEnter($event, 'editor')"
+    v-on:dragleave="handleDragLeave($event)"
+    v-on:drop="handleDrop($event, 'editor')"
   >
-    <div v-show="showSearch" id="editor-search">
+    <div v-show="showSearch" class="main-editor-search">
       <div class="row">
         <input
-          ref="search-input"
+          ref="searchinput"
           v-model="query"
           type="text"
           v-bind:placeholder="findPlaceholder"
@@ -63,11 +66,56 @@
         </button>
       </div>
     </div>
-    <textarea id="cm-text" ref="textarea" style="display:none;"></textarea>
+    <textarea v-bind:id="editorId" ref="textarea" style="display:none;"></textarea>
+
+    <div
+      v-if="documentTabDrag"
+      v-bind:class="{
+        dropzone: true,
+        top: true,
+        dragover: documentTabDragWhere === 'top'
+      }"
+      v-on:drop="handleDrop($event, 'top')"
+      v-on:dragenter="handleDragEnter($event, 'top')"
+      v-on:dragleave="handleDragLeave($event)"
+    ></div>
+    <div
+      v-if="documentTabDrag"
+      v-bind:class="{
+        dropzone: true,
+        left: true,
+        dragover: documentTabDragWhere === 'left'
+      }"
+      v-on:drop="handleDrop($event, 'left')"
+      v-on:dragenter="handleDragEnter($event, 'left')"
+      v-on:dragleave="handleDragLeave($event)"
+    ></div>
+    <div
+      v-if="documentTabDrag"
+      v-bind:class="{
+        dropzone: true,
+        bottom: true,
+        dragover: documentTabDragWhere === 'bottom'
+      }"
+      v-on:drop="handleDrop($event, 'bottom')"
+      v-on:dragenter="handleDragEnter($event, 'bottom')"
+      v-on:dragleave="handleDragLeave($event)"
+    ></div>
+    <div
+      v-if="documentTabDrag"
+      v-bind:class="{
+        dropzone: true,
+        right: true,
+        dragover: documentTabDragWhere === 'right'
+      }"
+      v-on:drop="handleDrop($event, 'right')"
+      v-on:dragenter="handleDragEnter($event, 'right')"
+      v-on:dragleave="handleDragLeave($event)"
+    ></div>
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -92,815 +140,881 @@ import { trans } from '@common/i18n-renderer'
 import extractYamlFrontmatter from '@common/util/extract-yaml-frontmatter'
 import YAML from 'yaml'
 
-import { nextTick, defineComponent } from 'vue'
+import { nextTick, ref, computed, onMounted, watch, toRef } from 'vue'
+import { useStore } from 'vuex'
+import { key as storeKey } from './store'
 import { MainEditorDocumentWrapper } from '@dts/renderer/editor'
 import retrieveDocumentFromMain from './util/retrieve-document-from-main'
-import { OpenDocument } from '@dts/common/documents'
+import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
+import { DP_EVENTS } from '@dts/common/documents'
+import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
 
 const ipcRenderer = window.ipc
+const path = window.path
 
-/**
- * We must define the Markdown instance outside of Vue, since the proxy-fication
- * will cause errors with CodeMirror.
- *
- * @var {MarkdownEditor|null}
- */
+const props = defineProps({
+  readabilityMode: {
+    type: Boolean,
+    default: false
+  },
+  distractionFree: {
+    type: Boolean,
+    default: false
+  },
+  leafId: {
+    type: String,
+    required: true
+  },
+  windowId: {
+    type: String,
+    required: true
+  }
+})
+
+const store = useStore(storeKey)
+
+// TEMPLATE REFS
+const editor = ref<HTMLDivElement|null>(null)
+const textarea = ref<HTMLTextAreaElement|null>(null)
+const searchinput = ref<HTMLInputElement|null>(null)
+
+// UNREFFED STUFF
 let mdEditor: MarkdownEditor|null = null
-
-/**
- * Contains all loaded and currently open documents. Needs to be defined outside
- * because of the Proxies.
- *
- * @var {any[]}
- */
 const openDocuments: MainEditorDocumentWrapper[] = []
 
-/**
- * Contains the currently displayed activeDocument; needs to be defined outside
- * due to the same reasons as mdEditor and openDocuments.
- *
- * @var {null|MainEditorDocumentWrapper}
- */
-let activeDocument: MainEditorDocumentWrapper|null = null
+// EVENT LISTENERS
+ipcRenderer.on('shortcut', (event, command) => {
+  if (mdEditor?.codeMirror.hasFocus() !== true) {
+    return // None of our business
+  }
 
-export default defineComponent({
-  name: 'MainEditor',
-  components: {
-  },
-  props: {
-    readabilityMode: {
-      type: Boolean,
-      default: false
-    },
-    distractionFree: {
-      type: Boolean,
-      default: false
+  if (command === 'save-file') {
+    const activeDoc = openDocuments.find(doc => doc.path === activeFile.value?.path)
+    if (activeDoc !== undefined) {
+      save(activeDoc).catch(err => console.error(err))
     }
-  },
-  data: function () {
-    return {
-      currentlyFetchingFiles: [] as string[], // Contains the paths of files that are right now being fetched
-      // Should we perform a regexp search?
-      regexpSearch: false,
-      showSearch: false, // Set to true to show the search box
-      query: '', // Models the search value
-      replaceString: '', // Models the replace string
-      findTimeout: undefined as any, // Holds a timeout so that not every single keypress results in a searchNext
-      docInfoTimeout: undefined as any, // Holds a timeout to not update the docInfo every millisecond
-      anchor: undefined as undefined|CodeMirror.Position
+  } else if (command === 'close-window') {
+    // TODO: Implement tab closing
+  } else if (command === 'search') {
+    showSearch.value = !showSearch.value
+  }
+})
+
+function announceDocumentModified (doc: MainEditorDocumentWrapper): void {
+  ipcRenderer.invoke('documents-provider', {
+    command: 'update-file-modification-status',
+    payload: {
+      path: doc.path,
+      isClean: doc.cmDoc.isClean(),
+      timestamp: Date.now(),
+      contents: (!doc.cmDoc.isClean()) ? doc.cmDoc.getValue() : ''
     }
-  },
-  computed: {
-    useH1: function (): boolean {
-      return this.$store.state.config.fileNameDisplay.includes('heading')
-    },
-    useTitle: function (): boolean {
-      return this.$store.state.config.fileNameDisplay.includes('title')
-    },
-    filenameOnly: function (): boolean {
-      return this.$store.state.config['zkn.linkFilenameOnly']
-    },
-    findPlaceholder: function (): string {
-      return trans('dialog.find.find_placeholder')
-    },
-    replacePlaceholder: function (): string {
-      return trans('dialog.find.replace_placeholder')
-    },
-    replaceNextLabel: function (): string {
-      return trans('dialog.find.replace_next_label')
-    },
-    replaceAllLabel: function (): string {
-      return trans('dialog.find.replace_all_label')
-    },
-    closeLabel: function (): string {
-      return trans('dialog.find.close_label')
-    },
-    regexLabel: function (): string {
-      return trans('dialog.find.regex_label')
-    },
-    activeFile: function (): any {
-      return this.$store.state.activeFile
-    },
-    isMarkdown: function (): boolean {
-      if (this.activeFile === null) {
-        return true // By default, assume Markdown
-      }
+  })
+    .catch(err => console.error(err))
+}
 
-      return this.activeFile.type === 'file'
-    },
-    openFiles: function (): OpenDocument[] {
-      return this.$store.state.config.openFiles
-    },
-    fontSize: function (): number {
-      return this.$store.state.config['editor.fontSize']
-    },
-    shouldCountChars: function (): boolean {
-      return this.$store.state.config['editor.countChars']
-    },
-    editorConfiguration: function (): any {
-      // We update everything, because not so many values are actually updated
-      // right after setting the new configurations. Plus, the user won't update
-      // everything all the time, but rather do one initial configuration, so
-      // even if we incur a performance penalty, it won't be noticed that much.
-      const doubleQuotes = this.$store.state.config['editor.autoCorrect.magicQuotes.primary'].split('…')
-      const singleQuotes = this.$store.state.config['editor.autoCorrect.magicQuotes.secondary'].split('…')
-      return {
-        keyMap: this.$store.state.config['editor.inputMode'],
-        direction: this.$store.state.config['editor.direction'],
-        rtlMoveVisually: this.$store.state.config['editor.rtlMoveVisually'],
-        indentUnit: this.$store.state.config['editor.indentUnit'],
-        indentWithTabs: this.$store.state.config['editor.indentWithTabs'],
-        autoCloseBrackets: this.$store.state.config['editor.autoCloseBrackets'],
-        autoCorrect: {
-          style: this.$store.state.config['editor.autoCorrect.style'],
-          quotes: {
-            single: {
-              start: singleQuotes[0],
-              end: singleQuotes[1]
-            },
-            double: {
-              start: doubleQuotes[0],
-              end: doubleQuotes[1]
-            }
-          },
-          replacements: this.$store.state.config['editor.autoCorrect.replacements']
-        },
-        zettlr: {
-          imagePreviewWidth: this.$store.state.config['display.imageWidth'],
-          imagePreviewHeight: this.$store.state.config['display.imageHeight'],
-          markdownBoldFormatting: this.$store.state.config['editor.boldFormatting'],
-          markdownItalicFormatting: this.$store.state.config['editor.italicFormatting'],
-          muteLines: this.$store.state.config.muteLines,
-          citeStyle: this.$store.state.config['editor.citeStyle'],
-          readabilityAlgorithm: this.$store.state.config['editor.readabilityAlgorithm'],
-          zettelkasten: {
-            idRE: this.$store.state.config['zkn.idRE'],
-            idGen: this.$store.state.config['zkn.idGen'],
-            linkStart: this.$store.state.config['zkn.linkStart'],
-            linkEnd: this.$store.state.config['zkn.linkEnd'],
-            linkWithFilename: this.$store.state.config['zkn.linkWithFilename']
-          },
-          render: {
-            citations: this.$store.state.config['display.renderCitations'],
-            iframes: this.$store.state.config['display.renderIframes'],
-            images: this.$store.state.config['display.renderImages'],
-            links: this.$store.state.config['display.renderLinks'],
-            math: this.$store.state.config['display.renderMath'],
-            tasks: this.$store.state.config['display.renderTasks'],
-            headingTags: this.$store.state.config['display.renderHTags'],
-            tables: this.$store.state.config['editor.enableTableHelper'],
-            emphasis: this.$store.state.config['display.renderEmphasis']
-          }
-        }
-      }
-    },
-    autoSave: function (): any {
-      return this.$store.state.config['editor.autoSave']
-    },
-    tagDatabase: function () {
-      return this.$store.state.tagDatabase
-    },
-    cslItems: function () {
-      return this.$store.state.cslItems
-    },
-    fsalFiles: function () {
-      const tree = this.$store.state.fileTree
-      const files = []
-
-      for (const item of tree) {
-        if (item.type === 'directory') {
-          const contents = objectToArray(item, 'children').filter(descriptor => descriptor.type === 'file')
-          files.push(...contents)
-        } else if (item.type === 'file') {
-          files.push(item)
-        }
-      }
-
-      return files
-    },
-    globalSearchResults: function () {
-      return this.$store.state.searchResults
-    }
-  },
-  watch: {
-    useH1: function () {
-      this.updateFileDatabase()
-    },
-    useTitle: function () {
-      this.updateFileDatabase()
-    },
-    filenameOnly: function () {
-      this.updateFileDatabase()
-    },
-    fsalFiles: function () {
-      this.updateFileDatabase()
-    },
-    cslItems: function () {
-      if (mdEditor === null) {
-        return
-      }
-
-      // We have received new items, so we should update them in the editor.
-      const items = this.cslItems.map((item: any) => {
-        // Get a rudimentary author list
-        let authors = ''
-        if (item.author !== undefined) {
-          authors = item.author.map((author: any) => {
-            if (author.family !== undefined) {
-              return author.family
-            } else if (author.literal !== undefined) {
-              return author.literal
-            } else {
-              return undefined
-            }
-          }).filter((elem: any) => elem !== undefined).join(', ')
+ipcRenderer.on('documents-update', (evt, { event, context }) => {
+  const openPaths = openDocuments.map(x => x.path)
+  const { filePath } = context
+  if (event === DP_EVENTS.FILE_SAVED && openPaths.includes(filePath)) {
+    // We have to re-load the document from main. Basically, what we do here is
+    // to load it using our utility function, and then just copying over the
+    // content, omitting the loaded document.
+    const thisDoc = openDocuments.find(x => x.path === filePath) as MainEditorDocumentWrapper
+    retrieveDocumentFromMain(filePath, path.extname(filePath), shouldCountChars.value, autoSave, () => {})
+      .then(newDoc => {
+        const newValue = newDoc.cmDoc.getValue()
+        if (thisDoc.cmDoc.getValue() === newValue) {
+          return
         }
 
-        let title = ''
-        if (item.title !== undefined) {
-          title = item.title
-        } else if (item['container-title'] !== undefined) {
-          title = item['container-title']
-        }
-
-        // This is just a very crude representation of the citations.
-        return {
-          text: item.id,
-          displayText: `${item.id}: ${authors} - ${title}`
-        }
+        thisDoc.cmDoc.setValue(newValue)
+        thisDoc.cmDoc.markClean()
+        // Immediately notify main that this is not, in fact, modified
+        announceDocumentModified(thisDoc)
       })
-      mdEditor.setCompletionDatabase('citekeys', items)
-    },
-    readabilityMode: function () {
-      if (mdEditor === null) {
-        return
-      }
-
-      mdEditor.readabilityMode = this.readabilityMode
-    },
-    distractionFree: function () {
-      if (mdEditor === null) {
-        return
-      }
-
-      mdEditor.distractionFree = this.distractionFree
-    },
-    editorConfiguration: function () {
-      if (mdEditor === null) {
-        return
-      }
-
-      // Update the editor configuration, if anything changes.
-      mdEditor.setOptions(this.editorConfiguration)
-    },
-    tagDatabase: function () {
-      if (mdEditor === null) {
-        return
-      }
-
-      // We must deproxy the tag database
-      const unproxy: any = {}
-      for (const tag in this.tagDatabase) {
-        unproxy[tag] = {
-          text: this.tagDatabase[tag].text,
-          count: this.tagDatabase[tag].count,
-          className: this.tagDatabase[tag].className
-        }
-      }
-      mdEditor.setCompletionDatabase('tags', unproxy)
-    },
-    globalSearchResults: function () {
-      this.maybeHighlightSearchResults()
-    },
-    activeFile: async function () {
-      if (mdEditor === null) {
-        console.error('Received a file update but the editor was not yet initiated!')
-        return
-      }
-
-      if (this.activeFile === null) {
-        mdEditor.swapDoc(CodeMirror.Doc('', 'multiplex'), 'multiplex')
-        mdEditor.readOnly = true
-        this.$store.commit('updateTableOfContents', mdEditor.tableOfContents)
-        // Update the citation keys with an empty array
-        this.updateCitationKeys()
-        return
-      }
-
-      const doc = openDocuments.find(doc => doc.path === this.activeFile.path)
-
-      if (doc !== undefined) {
-        // Simply swap it
-        this.swapDocument(doc)
-      } else if (!this.currentlyFetchingFiles.includes(this.activeFile.path)) {
-        // We have to request the document beforehand
-        this.currentlyFetchingFiles.push(this.activeFile.path)
-        const newDoc = await retrieveDocumentFromMain(
-          this.activeFile.path,
-          this.activeFile.ext,
-          this.shouldCountChars,
-          this.autoSave,
-          (doc) => { this.save(doc).catch(e => console.error(e)) }
-        )
-
-        openDocuments.push(newDoc)
-        const idx = this.currentlyFetchingFiles.findIndex(e => e === newDoc.path)
-        this.currentlyFetchingFiles.splice(idx, 1)
-        // Let's check whether the active file has in the meantime changed
-        // If it has, don't overwrite the current one
-        if (this.activeFile.path === newDoc.path && mdEditor !== null) {
-          this.swapDocument(newDoc)
-        }
-      } // Else: The file might currently being fetched, so let's wait ...
-    },
-    openFiles: function () {
-      // The openFiles array in the store has changed --> remove all documents
-      // that are not present anymore
-      for (const doc of openDocuments) {
-        const found = this.openFiles.find(descriptor => descriptor.path === doc.path)
-        if (found === undefined) {
-          // Remove the document from our array
-          const idx = openDocuments.indexOf(doc)
-          openDocuments.splice(idx, 1)
-        }
-      }
-    },
-    query: function () {
-      // Make sure to switch the regexp search depending on the search input
-      const isRegexp = /^\/.+\/[gimy]{0,4}$/.test(this.query)
-      if (isRegexp && this.regexpSearch === false) {
-        this.regexpSearch = true
-      } else if (!isRegexp && this.regexpSearch === true) {
-        this.regexpSearch = false
-      }
-    },
-    showSearch: function (newValue, oldValue) {
-      if (newValue === true && oldValue === false) {
-        // The user activated search, so focus the input and run a search (if
-        // the query wasnt' empty)
-        nextTick()
-          .then(() => {
-            (this.$refs['search-input'] as HTMLInputElement).focus()
-            ;(this.$refs['search-input'] as HTMLInputElement).select()
-          })
-          .catch(err => console.error(err))
-      } else if (newValue === false) {
-        // Always "stopSearch" if the input is not shown, since this will clear
-        // out, e.g., the matches on the scrollbar
-        if (mdEditor !== null) {
-          mdEditor.stopSearch()
-        }
-      }
-    },
-    shouldCountChars: function (newVal, oldVal) {
-      if (mdEditor === null) {
-        return
-      }
-
-      mdEditor.countChars = newVal
-    }
-  },
-  mounted: function () {
-    // As soon as the component is mounted, initiate the editor
-    mdEditor = new MarkdownEditor(this.$refs.textarea as HTMLTextAreaElement, this.editorConfiguration)
-
-    // We have to set this to the appropriate value after mount, afterwards it
-    // will be updated as appropriate.
-    mdEditor.countChars = this.shouldCountChars
-
-    // Update the document info on corresponding events
-    mdEditor.on('change', (changeObj) => {
-      if (activeDocument === null || mdEditor === null) {
-        return
-      }
-
-      // Announce that the file is modified (if applicable) to the whole application
-      this.$store.commit('announceModifiedFile', {
-        filePath: activeDocument.path,
-        isClean: activeDocument.cmDoc.isClean()
-      })
-
-      this.$store.commit('updateTableOfContents', mdEditor.tableOfContents)
-    })
-
-    mdEditor.on('cursorActivity', () => {
-      // Don't update every keystroke to not run into performance problems with
-      // very long documents, since calculating the word count needs considerable
-      // time, and without the delay, typing seems "laggy".
-      if (mdEditor !== null) {
-        this.$store.commit('activeDocumentInfo', mdEditor.documentInfo)
-      }
-    })
-
-    mdEditor.on('zettelkasten-link', (linkContents) => {
-      ipcRenderer.invoke('application', {
-        command: 'force-open',
-        payload: {
-          linkContents: linkContents,
-          newTab: undefined // let open-file command decide based on preferences
-        }
-      })
-        .catch(err => console.error(err))
-
-      if (this.$store.state.config['zkn.autoSearch'] === true) {
-        (this.$root as any).startGlobalSearch(linkContents)
-      }
-    })
-
-    mdEditor.on('zettelkasten-tag', (tag) => {
-      (this.$root as any).startGlobalSearch(tag)
-    })
-
-    // Listen to shortcuts from the main process
-    ipcRenderer.on('shortcut', (event, shortcut) => {
-      if (shortcut === 'save-file' && activeDocument !== null) {
-        this.save(activeDocument).catch(e => console.error(e))
-      } else if (shortcut === 'copy-as-html' && mdEditor !== null) {
-        mdEditor.copyAsHTML()
-      } else if (shortcut === 'paste-as-plain' && mdEditor !== null) {
-        mdEditor.pasteAsPlainText()
-      } else if (shortcut === 'toggle-typewriter-mode' && mdEditor !== null) {
-        mdEditor.hasTypewriterMode = mdEditor.hasTypewriterMode === false
-      } else if (shortcut === 'search') {
-        this.showSearch = this.showSearch === false
-      }
-    })
-
-    ipcRenderer.on('open-file-changed', (event, fileDescriptor) => {
-      // This event is emitted by the main process if the user wants to exchange
-      // a file with remote changes. It already ships with the file descriptor
-      // so all we have to do is find the right file and just swap the contents.
-      // We don't need to update anything else, since that has been updated in
-      // the application's store already by the time this event arrives.
-      const doc = openDocuments.find(item => item.path === fileDescriptor.path)
-
-      if (doc !== undefined) {
-        const { top } = (mdEditor as MarkdownEditor).codeMirror.getScrollInfo()
-        const cur = Object.assign({}, doc.cmDoc.getCursor())
-        doc.cmDoc.setValue(fileDescriptor.content)
-        nextTick()
-          .then(() => {
-            // Wait a little bit for the unwanted modification-events to emit and
-            // then immediately revert that status again.
-            doc.cmDoc.markClean()
-            doc.cmDoc.setCursor(cur)
-            ;(mdEditor as MarkdownEditor).codeMirror.getWrapperElement().scrollTop = top
-            this.$store.commit('announceModifiedFile', {
-              filePath: doc.path,
-              isClean: doc.cmDoc.isClean()
-            })
-          })
-          .catch(err => console.error(err))
-      }
-    })
-
-    ipcRenderer.on('save-documents', (event, pathList = []) => {
-      // If this event gets emitted, the main process wants
-      // some open and modified documents to be saved.
-      if (pathList.length === 0) {
-        pathList = openDocuments.map(doc => doc.path)
-      }
-
-      const docsToSave = openDocuments.filter(doc => pathList.includes(doc.path))
-
-      for (const doc of docsToSave) {
-        this.save(doc).catch((e: any) => console.error(e))
-      }
-    })
-
-    // Finally, let's observe if the editor element changes. If so, refresh the
-    // editor. This will keep the cursor correct when the SplitViews are either
-    // opened/closed or resized.
-    const obs = new ResizeObserver(entries => {
-      if (mdEditor !== null) {
-        mdEditor.codeMirror.refresh()
-      }
-    })
-
-    obs.observe(this.$refs.editor as any)
-  },
-  methods: {
-    swapDocument (doc: MainEditorDocumentWrapper) {
-      if (mdEditor === null) {
-        console.error(`Could not swap to document ${doc.path}: Editor was not initialized`)
-        return
-      }
-
-      // Provide the editor instance with metadata for the new file
-      mdEditor.setOptions({
-        zettlr: {
-          markdownImageBasePath: this.activeFile.dir,
-          metadata: { path: this.activeFile.path, id: this.activeFile.id }
-        }
-      })
-      mdEditor.swapDoc(doc.cmDoc, doc.mode)
-      activeDocument = doc
-      mdEditor.readOnly = false
-      this.$store.commit('updateTableOfContents', mdEditor.tableOfContents)
-      this.$store.commit('activeDocumentInfo', mdEditor.documentInfo)
-      // Check if there are search results available for this file that we can
-      // pull in and highlight
-      this.maybeHighlightSearchResults()
-      // Update the citation keys
-      this.updateCitationKeys()
-    },
-    maybeUpdateActiveDocumentInfo () {
-      if (this.docInfoTimeout !== undefined) {
-        return // There will be an update soon enough.
-      }
-
-      this.docInfoTimeout = setTimeout(() => {
-        this.docInfoTimeout = undefined
-        if (mdEditor !== null) {
-          this.$store.commit('activeDocumentInfo', mdEditor.documentInfo)
-        }
-      }, 1000)
-    },
-    jtl (lineNumber: number, setCursor: boolean = false) {
-      if (mdEditor !== null) {
-        mdEditor.jtl(lineNumber, setCursor)
-      }
-    },
-    async save (doc: MainEditorDocumentWrapper) {
-      if (doc.cmDoc.isClean() === true) {
-        return // Nothing to save
-      }
-
-      const newContents = doc.cmDoc.getValue()
-      const currentWordCount = countWords(newContents, this.shouldCountChars)
-      const descriptor = {
-        path: doc.path,
-        newContents: doc.cmDoc.getValue(),
-        offsetWordCount: currentWordCount - doc.lastWordCount
-      }
-
-      doc.lastWordCount = currentWordCount
-
-      const result = await ipcRenderer.invoke('application', {
-        command: 'file-save',
-        payload: descriptor
-      })
-
-      if (result !== true) {
-        console.error('Retrieved a falsy result from main, indicating an error with saving the file.')
-        return
-      }
-
-      // Everything worked out, so clean up
-      doc.cmDoc.markClean()
-      this.$store.dispatch('regenerateTagSuggestions').catch(e => console.error(e))
-      this.$store.commit('announceModifiedFile', {
-        filePath: doc.path,
-        isClean: doc.cmDoc.isClean()
-      })
-
-      // Also, extract all cited keys
-      this.updateCitationKeys()
-      // Saving can additionally do some changes to the files which are relevant
-      // to the autocomplete, so make sure to update that as well. See #2330
-      this.updateFileDatabase()
-    },
-    updateCitationKeys: function () {
-      if (mdEditor === null) {
-        return
-      }
-
-      const value = mdEditor.value
-
-      const citations = extractCitations(value)
-      const keys = []
-      for (const citation of citations) {
-        keys.push(...citation.citations.map(elem => elem.id))
-      }
-      this.$store.commit('updateCitationKeys', keys)
-      // After we have updated the current file's citation keys, it is time
-      // to generate a new list of references.
-      this.$store.dispatch('updateBibliography').catch(e => console.error(e))
-    },
-    updateFileDatabase () {
-      if (mdEditor === null) {
-        return
-      }
-
-      const fileDatabase: any = {}
-
-      for (const file of this.fsalFiles) {
-        const fname = file.name.substr(0, file.name.lastIndexOf('.'))
-        let displayText = fname // Fallback: Only filename
-        if (this.useTitle && typeof file.frontmatter?.title === 'string') {
-          // (Else) if there is a frontmatter, use that title
-          displayText = file.frontmatter.title
-        } else if (this.useH1 && file.firstHeading !== null) {
-          // The user wants to use first headings as fallbacks
-          displayText = file.firstHeading
-        }
-
-        if (file.id !== '' && !this.filenameOnly) {
-          displayText = `${file.id}: ${displayText}`
-        }
-
-        fileDatabase[file.path] = {
-          // Use the ID, if given, or the filename
-          text: (file.id !== '' && !this.filenameOnly) ? file.id : fname,
-          displayText: displayText,
-          id: (file.id !== '' && !this.filenameOnly) ? file.id : ''
-        }
-      }
-
-      mdEditor.setCompletionDatabase('files', fileDatabase)
-    },
-    toggleQueryRegexp () {
-      const isRegexp = /^\/.+\/[gimy]{0,4}$/.test(this.query.trim())
-
-      if (isRegexp) {
-        const match = /^\/(.+)\/[gimy]{0,4}$/.exec(this.query.trim())
-        if (match !== null) {
-          this.query = match[1]
-        }
-      } else {
-        this.query = `/${this.query}/`
-      }
-    },
-    executeCommand (cmd: string) {
-      if (mdEditor === null) {
-        return
-      }
-
-      // Executes a markdown command on the editor instance
-      mdEditor.runCommand(cmd)
-      mdEditor.focus()
-    },
-    replaceSelection (value: string) {
-      if (mdEditor === null) {
-        return
-      }
-
-      mdEditor.codeMirror.replaceSelection(value)
-    },
-    // SEARCH FUNCTIONALITY BLOCK
-    searchNext () {
-      // Make sure to clear out a timeout to prevent Zettlr from auto-searching
-      // again after the user deliberately searched by pressing Enter.
-      if (this.findTimeout !== undefined) {
-        clearTimeout(this.findTimeout)
-        this.findTimeout = undefined
-      }
-
-      if (mdEditor === null) {
-        return
-      }
-
-      mdEditor.searchNext(this.query)
-    },
-    searchPrevious () {
-      if (mdEditor === null) {
-        return
-      }
-
-      mdEditor.searchPrevious(this.query)
-    },
-    replaceNext () {
-      if (mdEditor === null) {
-        return
-      }
-
-      mdEditor.replaceNext(this.query, this.replaceString)
-    },
-    replacePrevious () {
-      if (mdEditor === null) {
-        return
-      }
-
-      mdEditor.replacePrevious(this.query, this.replaceString)
-    },
-    replaceAll () {
-      if (mdEditor === null) {
-        return
-      }
-
-      mdEditor.replaceAll(this.query, this.replaceString)
-    },
-    maybeHighlightSearchResults () {
-      const doc = this.activeFile
-      if (doc === null || mdEditor === null) {
-        return // No open file/no editor
-      }
-
-      const result = this.globalSearchResults.find((r: any) => r.file.path === doc.path)
-      if (result !== undefined) {
-        // Construct CodeMirror.Ranges from the results
-        const rangesToHighlight = []
-        for (const res of result.result) {
-          const line: number = res.line
-          for (const range of res.ranges) {
-            const { from, to } = range
-            rangesToHighlight.push({
-              anchor: { line: line, ch: from },
-              head: { line: line, ch: to }
-            })
-          }
-        }
-        mdEditor.highlightRanges(rangesToHighlight as any)
-      }
-    },
-    /**
-     * Scrolls the editor according to the value if the user scrolls left of the
-     * .CodeMirror-scroll element
-     *
-     * @param   {WheelEvent}  event  The mousewheel event
-     */
-    onEditorScroll (event: WheelEvent) {
-      if (event.target !== this.$refs.editor) {
-        return // Only handle if the event's target is the editor itself
-      }
-
-      const scroller = (this.$refs.editor as HTMLElement).querySelector('.CodeMirror-scroll')
-
-      if (scroller !== null) {
-        scroller.scrollTop += event.deltaY
-      }
-    },
-    /**
-     * Triggers when the user presses any mouse button
-     *
-     * @param   {MouseEvent}  event  The mouse event
-     */
-    editorMousedown (event: MouseEvent) {
-      // start selecting lines only if we are on the left margin and the left mouse button is pressed
-      if (event.target !== this.$refs.editor || event.button !== 0 || mdEditor === null) {
-        return
-      }
-
-      // set the start point of the selection to be where the mouse was clicked
-      this.anchor = mdEditor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY })
-      mdEditor.codeMirror.setSelection(this.anchor)
-    },
-
-    editorMousemove (event: MouseEvent) {
-      if (this.anchor === undefined || mdEditor === null) {
-        return
-      }
-      // get the point where the mouse has moved
-      const addPoint = mdEditor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY })
-      // use the original start point where the mouse first was clicked
-      // and change the end point to where the mouse has moved so far
-      mdEditor.codeMirror.setSelection(this.anchor, addPoint)
-    },
-    /**
-     * Triggers when the user releases any mouse button
-     *
-     * @param   {MouseEvent}  event  The mouse event
-     */
-    editorMouseup (event: MouseEvent) {
-      if (this.anchor === undefined || mdEditor === null) {
-        // This event gets also fired when someone, e.g., wants to edit an image
-        // caption, so we must explicitly check if we are currently in a left-
-        // side selection event, and if we aren't, don't do anything.
-        return
-      }
-
-      // when the mouse is released, set anchor to undefined to stop adding lines
-      this.anchor = undefined
-      // Also, make sure the editor is focused.
-      mdEditor.codeMirror.focus()
-    },
-    addKeywordsToFile (keywords: string[]) {
-      if (mdEditor === null || activeDocument === null) {
-        return
-      }
-
-      // Split the contents of the editor into frontmatter and contents, then
-      // add the keywords to the frontmatter, slice everything back together
-      // and then overwrite the editor's contents.
-      let { frontmatter, content } = extractYamlFrontmatter(mdEditor.value)
-
-      let postFrontmatter = '\n'
-      if (frontmatter !== null) {
-        if ('keywords' in frontmatter) {
-          frontmatter.keywords = frontmatter.keywords.concat(keywords)
-        } else if ('tags' in frontmatter) {
-          frontmatter.tags = frontmatter.tags.concat(keywords)
-        } else {
-          frontmatter.keywords = keywords
-        }
-      } else {
-        // Frontmatter was null, so create one
-        frontmatter = {}
-        frontmatter.keywords = keywords
-        postFrontmatter += '\n' // Make sure if we're now ADDING a frontmatter to space it from the content
-      }
-
-      // Glue it back together and set it as content
-      activeDocument.cmDoc.setValue('---\n' + YAML.stringify(frontmatter) + '---' + postFrontmatter + content)
-    },
-    getValue () {
-      return mdEditor?.value ?? ''
-    },
-    moveSection (from: number, to: number) {
-      mdEditor?.moveSection(from, to)
+      .catch(err => console.error(err))
+  } else if (event === DP_EVENTS.FILE_REMOTELY_CHANGED && openPaths.includes(filePath)) {
+    const descriptor = context.descriptor as MDFileMeta|CodeFileMeta
+    const thisDoc = openDocuments.find(x => x.path === filePath) as MainEditorDocumentWrapper
+    // Replace its content, if applicable
+    if (thisDoc.cmDoc.getValue() !== descriptor.content) {
+      thisDoc.cmDoc.setValue(descriptor.content)
+      thisDoc.cmDoc.markClean()
+      announceDocumentModified(thisDoc)
     }
   }
 })
+
+// MOUNTED HOOK
+onMounted(() => {
+  // As soon as the component is mounted, initiate the editor
+  mdEditor = new MarkdownEditor(editorId.value, editorConfiguration)
+
+  // We have to set this to the appropriate value after mount, afterwards it
+  // will be updated as appropriate.
+  mdEditor.countChars = shouldCountChars.value
+
+  // Update the document info on corresponding events
+  mdEditor.on('change', (changeObj: CodeMirror.EditorChange) => {
+    if (mdEditor === null || activeFile.value === null) {
+      return
+    }
+
+    const activeDocument = openDocuments.find(doc => activeFile.value?.path === doc.path)
+    if (activeDocument === undefined) {
+      return
+    }
+
+    // Announce that the file is modified (if applicable) to the whole application
+    if (changeObj.origin !== 'setValue') {
+      announceDocumentModified(activeDocument)
+    }
+
+    store.commit('updateTableOfContents', mdEditor.tableOfContents)
+  })
+
+  mdEditor.on('cursorActivity', () => {
+    // Don't update every keystroke to not run into performance problems with
+    // very long documents, since calculating the word count needs considerable
+    // time, and without the delay, typing seems "laggy".
+    if (mdEditor !== null) {
+      store.commit('activeDocumentInfo', mdEditor.documentInfo)
+    }
+  })
+
+  mdEditor.on('focus', () => {
+    store.dispatch('lastLeafId', props.leafId).catch(err => console.error(err))
+    if (mdEditor !== null) {
+      store.commit('updateTableOfContents', mdEditor.tableOfContents)
+    }
+  })
+
+  mdEditor.on('zettelkasten-link', (linkContents) => {
+    ipcRenderer.invoke('application', {
+      command: 'force-open',
+      payload: {
+        linkContents: linkContents,
+        newTab: undefined, // let open-file command decide based on preferences
+        leafId: props.leafId
+      }
+    })
+      .catch(err => console.error(err))
+
+    if (store.state.config['zkn.autoSearch'] === true) {
+      // TODO (bindInstance.$root as any).startGlobalSearch(linkContents)
+    }
+  })
+
+  mdEditor.on('zettelkasten-tag', (tag) => {
+    // TODO (bindInstance.$root as any).startGlobalSearch(tag)
+  })
+
+  // Lastly, run the initial load cycle
+  loadActiveFile().catch(err => console.error(err))
+})
+
+// DATA SETUP
+const currentlyFetchingFiles = ref<string[]>([])
+const regexpSearch = ref(false)
+const showSearch = ref(false)
+const query = ref('')
+const replaceString = ref('')
+const findTimeout = ref<any>(undefined)
+const docInfoTimeout = ref<any>(undefined)
+const anchor = ref<undefined|CodeMirror.Position>(undefined)
+const documentTabDrag = ref(false)
+const documentTabDragWhere = ref<undefined|string>(undefined)
+
+// COMPUTED PROPERTIES
+const editorId = computed(() => `cm-text-${props.leafId}`)
+const useH1 = computed<boolean>(() => store.state.config.fileNameDisplay.includes('heading'))
+const useTitle = computed<boolean>(() => store.state.config.fileNameDisplay.includes('title'))
+const filenameOnly = computed<boolean>(() => store.state.config['zkn.linkFilenameOnly'])
+const fontSize = computed<number>(() => store.state.config['editor.fontSize'])
+const shouldCountChars = computed<boolean>(() => store.state.config['editor.countChars'])
+const autoSave = computed(() => store.state.config['editor.autoSave'])
+const tagDatabase = computed(() => store.state.tagDatabase)
+const cslItems = computed(() => store.state.cslItems)
+const globalSearchResults = computed(() => store.state.searchResults)
+const node = computed(() => store.state.paneData.find(leaf => leaf.id === props.leafId))
+const activeFile = computed(() => node.value?.activeFile)
+const openFiles = computed(() => node.value?.openFiles ?? [])
+
+const editorConfiguration = computed<any>(() => {
+  // We update everything, because not so many values are actually updated
+  // right after setting the new configurations. Plus, the user won't update
+  // everything all the time, but rather do one initial configuration, so
+  // even if we incur a performance penalty, it won't be noticed that much.
+  const doubleQuotes = store.state.config['editor.autoCorrect.magicQuotes.primary'].split('…')
+  const singleQuotes = store.state.config['editor.autoCorrect.magicQuotes.secondary'].split('…')
+  return {
+    keyMap: store.state.config['editor.inputMode'],
+    direction: store.state.config['editor.direction'],
+    rtlMoveVisually: store.state.config['editor.rtlMoveVisually'],
+    indentUnit: store.state.config['editor.indentUnit'],
+    indentWithTabs: store.state.config['editor.indentWithTabs'],
+    autoCloseBrackets: store.state.config['editor.autoCloseBrackets'],
+    autoCorrect: {
+      style: store.state.config['editor.autoCorrect.style'],
+      quotes: {
+        single: {
+          start: singleQuotes[0],
+          end: singleQuotes[1]
+        },
+        double: {
+          start: doubleQuotes[0],
+          end: doubleQuotes[1]
+        }
+      },
+      replacements: store.state.config['editor.autoCorrect.replacements']
+    },
+    zettlr: {
+      imagePreviewWidth: store.state.config['display.imageWidth'],
+      imagePreviewHeight: store.state.config['display.imageHeight'],
+      markdownBoldFormatting: store.state.config['editor.boldFormatting'],
+      markdownItalicFormatting: store.state.config['editor.italicFormatting'],
+      muteLines: store.state.config.muteLines,
+      citeStyle: store.state.config['editor.citeStyle'],
+      readabilityAlgorithm: store.state.config['editor.readabilityAlgorithm'],
+      zettelkasten: {
+        idRE: store.state.config['zkn.idRE'],
+        idGen: store.state.config['zkn.idGen'],
+        linkStart: store.state.config['zkn.linkStart'],
+        linkEnd: store.state.config['zkn.linkEnd'],
+        linkWithFilename: store.state.config['zkn.linkWithFilename']
+      },
+      render: {
+        citations: store.state.config['display.renderCitations'],
+        iframes: store.state.config['display.renderIframes'],
+        images: store.state.config['display.renderImages'],
+        links: store.state.config['display.renderLinks'],
+        math: store.state.config['display.renderMath'],
+        tasks: store.state.config['display.renderTasks'],
+        headingTags: store.state.config['display.renderHTags'],
+        tables: store.state.config['editor.enableTableHelper'],
+        emphasis: store.state.config['display.renderEmphasis']
+      }
+    }
+  }
+})
+
+const findPlaceholder = trans('dialog.find.find_placeholder')
+const replacePlaceholder = trans('dialog.find.replace_placeholder')
+const replaceNextLabel = trans('dialog.find.replace_next_label')
+const replaceAllLabel = trans('dialog.find.replace_all_label')
+const closeLabel = trans('dialog.find.close_label')
+const regexLabel = trans('dialog.find.regex_label')
+
+const isMarkdown = computed(() => {
+  if (activeFile.value == null) {
+    return true // By default, assume Markdown
+  }
+
+  return hasMarkdownExt(activeFile.value.path)
+})
+
+const fsalFiles = computed(() => {
+  const tree = store.state.fileTree
+  const files = []
+
+  for (const item of tree) {
+    if (item.type === 'directory') {
+      const contents = objectToArray(item, 'children').filter(descriptor => descriptor.type === 'file')
+      files.push(...contents)
+    } else if (item.type === 'file') {
+      files.push(item)
+    }
+  }
+
+  return files
+})
+
+// WATCHERS
+watch(useH1, () => { updateFileDatabase() })
+watch(useTitle, () => { updateFileDatabase() })
+watch(filenameOnly, () => { updateFileDatabase() })
+watch(fsalFiles, () => { updateFileDatabase() })
+watch(cslItems, (newValue) => {
+  if (mdEditor === null) {
+    return
+  }
+
+  // We have received new items, so we should update them in the editor.
+  const items = newValue.map((item: any) => {
+    // Get a rudimentary author list
+    let authors = ''
+    if (item.author !== undefined) {
+      authors = item.author.map((author: any) => {
+        if (author.family !== undefined) {
+          return author.family
+        } else if (author.literal !== undefined) {
+          return author.literal
+        } else {
+          return undefined
+        }
+      }).filter((elem: any) => elem !== undefined).join(', ')
+    }
+
+    let title = ''
+    if (item.title !== undefined) {
+      title = item.title
+    } else if (item['container-title'] !== undefined) {
+      title = item['container-title']
+    }
+
+    // This is just a very crude representation of the citations.
+    return {
+      text: item.id,
+      displayText: `${item.id}: ${authors} - ${title}`
+    }
+  })
+  mdEditor.setCompletionDatabase('citekeys', items)
+})
+
+watch(toRef(props, 'readabilityMode'), (newValue) => {
+  if (mdEditor !== null) {
+    mdEditor.readabilityMode = newValue
+  }
+})
+
+watch(toRef(props, 'distractionFree'), (newValue) => {
+  if (mdEditor !== null) {
+    mdEditor.distractionFree = newValue
+  }
+})
+
+watch(editorConfiguration, (newValue) => {
+  if (mdEditor !== null) {
+    mdEditor.setOptions(newValue)
+  }
+})
+
+watch(tagDatabase, (newValue) => {
+  if (mdEditor === null) {
+    return
+  }
+
+  // We must deproxy the tag database
+  const unproxy: any = {}
+  for (const tag in newValue) {
+    unproxy[tag] = {
+      text: newValue[tag].text,
+      count: newValue[tag].count,
+      className: newValue[tag].className
+    }
+  }
+
+  mdEditor.setCompletionDatabase('tags', unproxy)
+})
+
+watch(globalSearchResults, () => { maybeHighlightSearchResults() })
+
+watch(activeFile, async () => {
+  await loadActiveFile()
+})
+
+watch(openFiles, (newValue) => {
+// watch(() => props.openFiles, (newValue) => {
+  // The openFiles array in the store has changed --> remove all documents
+  // that are not present anymore
+  for (const doc of openDocuments) {
+    const found = newValue.find(descriptor => descriptor.path === doc.path)
+    if (found === undefined) {
+      // Remove the document from our array
+      const idx = openDocuments.indexOf(doc)
+      openDocuments.splice(idx, 1)
+    }
+  }
+})
+
+watch(query, (newValue) => {
+  // Make sure to switch the regexp search depending on the search input
+  const isRegexp = /^\/.+\/[gimy]{0,4}$/.test(newValue)
+  if (isRegexp && regexpSearch.value === false) {
+    regexpSearch.value = true
+  } else if (!isRegexp && regexpSearch.value === true) {
+    regexpSearch.value = false
+  }
+})
+
+watch(showSearch, (newValue, oldValue) => {
+  if (newValue === true && oldValue === false) {
+    // The user activated search, so focus the input and run a search (if
+    // the query wasnt' empty)
+    nextTick()
+      .then(() => {
+        searchinput.value?.focus()
+        searchinput.value?.select()
+      })
+      .catch(err => console.error(err))
+  } else if (newValue === false) {
+    // Always "stopSearch" if the input is not shown, since this will clear
+    // out, e.g., the matches on the scrollbar
+    mdEditor?.stopSearch()
+  }
+})
+
+watch(shouldCountChars, (newValue) => {
+  if (mdEditor !== null) {
+    mdEditor.countChars = newValue
+  }
+})
+
+// METHODS
+async function loadActiveFile () {
+  if (mdEditor === null) {
+    console.error('Received a file update but the editor was not yet initiated!')
+    return
+  }
+
+  if (activeFile.value == null) {
+    mdEditor.swapDoc(CodeMirror.Doc('', 'multiplex'), 'multiplex')
+    mdEditor.readOnly = true
+    store.commit('updateTableOfContents', mdEditor.tableOfContents)
+    // Update the citation keys with an empty array
+    updateCitationKeys()
+    return
+  }
+
+  const doc = openDocuments.find(doc => doc.path === activeFile.value?.path)
+
+  if (doc !== undefined) {
+    // Simply swap it
+    swapDocument(doc)
+  } else if (!currentlyFetchingFiles.value.includes(activeFile.value.path)) {
+    // We have to request the document beforehand
+    currentlyFetchingFiles.value.push(activeFile.value.path)
+    const newDoc = await retrieveDocumentFromMain(
+      activeFile.value.path,
+      path.extname(activeFile.value.path),
+      shouldCountChars.value,
+      autoSave,
+      (doc) => { save(doc).catch(e => console.error(e)) }
+    )
+
+    openDocuments.push(newDoc)
+    const idx = currentlyFetchingFiles.value.findIndex(e => e === newDoc.path)
+    currentlyFetchingFiles.value.splice(idx, 1)
+    // Let's check whether the active file has in the meantime changed
+    // If it has, don't overwrite the current one
+    if (activeFile.value.path === newDoc.path && mdEditor !== null) {
+      swapDocument(newDoc)
+    }
+  } // Else: The file might currently being fetched, so let's wait ...
+}
+
+function swapDocument (doc: MainEditorDocumentWrapper) {
+  if (mdEditor === null) {
+    console.error(`Could not swap to document ${doc.path}: Editor was not initialized`)
+    return
+  }
+
+  if (activeFile.value == null) {
+    console.error(`Could not swap to document ${doc.path}: Was not yet set as active file!`)
+    return
+  }
+
+  if (mdEditor.codeMirror.getDoc() === doc.cmDoc) {
+    // swapDocument gets called whenever the state changes, so add a check
+    // here whether the document is already the loaded one.
+    return
+  }
+
+  // Provide the editor instance with metadata for the new file
+  mdEditor.setOptions({
+    zettlr: {
+      markdownImageBasePath: path.dirname(activeFile.value.path),
+      metadata: { path: activeFile.value.path, id: '' /* TODO activeFile.id */ }
+    }
+  })
+  mdEditor.swapDoc(doc.cmDoc, doc.mode)
+  mdEditor.readOnly = false
+  store.commit('updateTableOfContents', mdEditor.tableOfContents)
+  store.commit('activeDocumentInfo', mdEditor.documentInfo)
+  // Check if there are search results available for this file that we can
+  // pull in and highlight
+  maybeHighlightSearchResults()
+  // Update the citation keys
+  updateCitationKeys()
+}
+
+// TODO
+// eslint-disable-next-line no-unused-vars
+function maybeUpdateActiveDocumentInfo () {
+  if (docInfoTimeout.value !== undefined) {
+    return // There will be an update soon enough.
+  }
+
+  docInfoTimeout.value = setTimeout(() => {
+    docInfoTimeout.value = undefined
+    if (mdEditor !== null) {
+      store.commit('activeDocumentInfo', mdEditor.documentInfo)
+    }
+  }, 1000)
+}
+
+// TODO
+// eslint-disable-next-line no-unused-vars
+function jtl (lineNumber: number, setCursor: boolean = false) {
+  if (mdEditor !== null) {
+    mdEditor.jtl(lineNumber, setCursor)
+  }
+}
+
+async function save (doc: MainEditorDocumentWrapper) {
+  if (doc.cmDoc.isClean() === true) {
+    return // Nothing to save
+  }
+
+  const newContents = doc.cmDoc.getValue()
+  const currentWordCount = countWords(newContents, shouldCountChars.value)
+
+  const result = await ipcRenderer.invoke('documents-provider', {
+    command: 'save-file',
+    payload: {
+      windowId: props.windowId,
+      leafId: props.leafId,
+      path: doc.path,
+      contents: doc.cmDoc.getValue(),
+      offsetWordCount: currentWordCount - doc.lastWordCount
+    }
+  })
+
+  if (result !== true) {
+    console.error('Retrieved a falsy result from main, indicating an error with saving the file.')
+    return
+  }
+
+  doc.lastWordCount = currentWordCount
+
+  // Everything worked out, so clean up
+  doc.cmDoc.markClean()
+  store.dispatch('regenerateTagSuggestions').catch(e => console.error(e))
+  announceDocumentModified(doc)
+
+  // Also, extract all cited keys
+  updateCitationKeys()
+  // Saving can additionally do some changes to the files which are relevant
+  // to the autocomplete, so make sure to update that as well. See #2330
+  updateFileDatabase()
+}
+
+function updateCitationKeys () {
+  if (mdEditor === null) {
+    return
+  }
+
+  const value = mdEditor.value
+
+  const citations = extractCitations(value)
+  const keys = []
+  for (const citation of citations) {
+    keys.push(...citation.citations.map(elem => elem.id))
+  }
+  store.commit('updateCitationKeys', keys)
+  // After we have updated the current file's citation keys, it is time
+  // to generate a new list of references.
+  store.dispatch('updateBibliography').catch(e => console.error(e))
+}
+
+function updateFileDatabase () {
+  if (mdEditor === null) {
+    return
+  }
+
+  const fileDatabase: any = {}
+
+  for (const file of fsalFiles.value) {
+    const fname = file.name.substr(0, file.name.lastIndexOf('.'))
+    let displayText = fname // Fallback: Only filename
+    if (useTitle.value && typeof file.frontmatter?.title === 'string') {
+      // (Else) if there is a frontmatter, use that title
+      displayText = file.frontmatter.title
+    } else if (useH1.value && file.firstHeading !== null) {
+      // The user wants to use first headings as fallbacks
+      displayText = file.firstHeading
+    }
+
+    if (file.id !== '' && !filenameOnly.value) {
+      displayText = `${file.id}: ${displayText}`
+    }
+
+    fileDatabase[file.path] = {
+      // Use the ID, if given, or the filename
+      text: (file.id !== '' && !filenameOnly.value) ? file.id : fname,
+      displayText: displayText,
+      id: (file.id !== '' && !filenameOnly.value) ? file.id : ''
+    }
+  }
+
+  mdEditor.setCompletionDatabase('files', fileDatabase)
+}
+
+function toggleQueryRegexp () {
+  const isRegexp = /^\/.+\/[gimy]{0,4}$/.test(query.value.trim())
+
+  if (isRegexp) {
+    const match = /^\/(.+)\/[gimy]{0,4}$/.exec(query.value.trim())
+    if (match !== null) {
+      query.value = match[1]
+    }
+  } else {
+    query.value = `/${query.value}/`
+  }
+}
+
+// TODO
+// eslint-disable-next-line no-unused-vars
+function executeCommand (cmd: string) {
+  // Executes a markdown command on the editor instance
+  mdEditor?.runCommand(cmd)
+  mdEditor?.focus()
+}
+
+// TODO
+// eslint-disable-next-line no-unused-vars
+function replaceSelection (value: string) {
+  mdEditor?.codeMirror?.replaceSelection(value)
+}
+
+// SEARCH FUNCTIONALITY BLOCK
+function searchNext () {
+  // Make sure to clear out a timeout to prevent Zettlr from auto-searching
+  // again after the user deliberately searched by pressing Enter.
+  if (findTimeout.value !== undefined) {
+    clearTimeout(findTimeout.value)
+    findTimeout.value = undefined
+  }
+  mdEditor?.searchNext(query.value)
+}
+
+function searchPrevious () {
+  mdEditor?.searchPrevious(query.value)
+}
+
+function replaceNext () {
+  mdEditor?.replaceNext(query.value, replaceString.value)
+}
+
+function replacePrevious () {
+  mdEditor?.replacePrevious(query.value, replaceString.value)
+}
+
+function replaceAll () {
+  mdEditor?.replaceAll(query.value, replaceString.value)
+}
+
+function maybeHighlightSearchResults () {
+  const doc = activeFile.value
+  if (doc == null || mdEditor === null) {
+    return // No open file/no editor
+  }
+
+  const result = globalSearchResults.value.find((r: any) => r.file.path === doc.path)
+  if (result !== undefined) {
+    // Construct CodeMirror.Ranges from the results
+    const rangesToHighlight = []
+    for (const res of result.result) {
+      const line: number = res.line
+      for (const range of res.ranges) {
+        const { from, to } = range
+        rangesToHighlight.push({
+          anchor: { line: line, ch: from },
+          head: { line: line, ch: to }
+        })
+      }
+    }
+    mdEditor.highlightRanges(rangesToHighlight as any)
+  }
+}
+
+/**
+ * Scrolls the editor according to the value if the user scrolls left of the
+ * .CodeMirror-scroll element
+ *
+ * @param   {WheelEvent}  event  The mousewheel event
+ */
+function onEditorScroll (event: WheelEvent) {
+  if (event.target !== editor.value) {
+    return // Only handle if the event's target is the editor itself
+  }
+
+  const scroller = editor.value?.querySelector('.CodeMirror-scroll')
+
+  if (scroller != null) {
+    scroller.scrollTop += event.deltaY
+  }
+}
+
+/**
+ * Triggers when the user presses any mouse button
+ *
+ * @param   {MouseEvent}  event  The mouse event
+ */
+function editorMousedown (event: MouseEvent) {
+  // start selecting lines only if we are on the left margin and the left mouse button is pressed
+  if (event.target !== editor.value || event.button !== 0 || mdEditor === null) {
+    return
+  }
+
+  // set the start point of the selection to be where the mouse was clicked
+  anchor.value = mdEditor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY })
+  mdEditor.codeMirror.setSelection(anchor.value)
+}
+
+function editorMousemove (event: MouseEvent) {
+  if (anchor.value === undefined || mdEditor === null) {
+    return
+  }
+  // get the point where the mouse has moved
+  const addPoint = mdEditor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY })
+  // use the original start point where the mouse first was clicked
+  // and change the end point to where the mouse has moved so far
+  mdEditor.codeMirror.setSelection(anchor.value, addPoint)
+}
+
+/**
+ * Triggers when the user releases any mouse button
+ *
+ * @param   {MouseEvent}  event  The mouse event
+ */
+function editorMouseup (event: MouseEvent) {
+  if (anchor.value === undefined || mdEditor === null) {
+    // This event gets also fired when someone, e.g., wants to edit an image
+    // caption, so we must explicitly check if we are currently in a left-
+    // side selection event, and if we aren't, don't do anything.
+    return
+  }
+
+  // when the mouse is released, set anchor to undefined to stop adding lines
+  anchor.value = undefined
+  // Also, make sure the editor is focused.
+  mdEditor.codeMirror.focus()
+}
+
+// TODO
+// eslint-disable-next-line no-unused-vars
+function addKeywordsToFile (keywords: string[]) {
+  if (mdEditor === null || activeFile.value == null) {
+    return
+  }
+
+  // Split the contents of the editor into frontmatter and contents, then
+  // add the keywords to the frontmatter, slice everything back together
+  // and then overwrite the editor's contents.
+  let { frontmatter, content } = extractYamlFrontmatter(mdEditor.value)
+
+  let postFrontmatter = '\n'
+  if (frontmatter !== null) {
+    if ('keywords' in frontmatter) {
+      frontmatter.keywords = frontmatter.keywords.concat(keywords)
+    } else if ('tags' in frontmatter) {
+      frontmatter.tags = frontmatter.tags.concat(keywords)
+    } else {
+      frontmatter.keywords = keywords
+    }
+  } else {
+    // Frontmatter was null, so create one
+    frontmatter = {}
+    frontmatter.keywords = keywords
+    postFrontmatter += '\n' // Make sure if we're now ADDING a frontmatter to space it from the content
+  }
+
+  // Glue it back together and set it as content
+  const activeDocument = openDocuments.find(doc => activeFile.value?.path === doc.path)
+  if (activeDocument === undefined) {
+    return
+  }
+  activeDocument.cmDoc.setValue('---\n' + YAML.stringify(frontmatter) + '---' + postFrontmatter + content)
+}
+
+// TODO
+// eslint-disable-next-line no-unused-vars
+function getValue () {
+  return mdEditor?.value ?? ''
+}
+
+// TODO
+// eslint-disable-next-line no-unused-vars
+function moveSection (from: number, to: number) {
+  mdEditor?.moveSection(from, to)
+}
+
+function handleDrop (event: DragEvent, where: 'editor'|'top'|'left'|'right'|'bottom') {
+  const documentTab = event.dataTransfer?.getData('zettlr/document-tab')
+  if (documentTab !== undefined && documentTab.includes(':')) {
+    documentTabDrag.value = false
+    event.stopPropagation()
+    event.preventDefault()
+    // At this point, we have received a drop we need to handle it. There
+    // are two possibilities: Either the user has dropped the file onto the
+    // editor, which means the file should be moved from its origin here.
+    // Or, the user has dropped the file onto one of the four edges. In that
+    // case, we need to first split this specific leaf, and then move the
+    // dropped file there. The drag data contains both the origin and the
+    // path, separated by colons -> window:leaf:absPath
+    const [ originWindow, originLeaf, filePath ] = documentTab.split(':')
+    if (where === 'editor' && props.leafId === originLeaf) {
+      // Nothing to do, the user dropped the file on the origin
+      return false
+    }
+
+    // Now actually perform the act
+    if (where === 'editor') {
+      ipcRenderer.invoke('documents-provider', {
+        command: 'move-file',
+        payload: {
+          originWindow: originWindow,
+          targetWindow: props.windowId,
+          originLeaf: originLeaf,
+          targetLeaf: props.leafId,
+          path: filePath
+        }
+      })
+        .catch(err => console.error(err))
+    } else {
+      const dir = ([ 'left', 'right' ].includes(where)) ? 'horizontal' : 'vertical'
+      const ins = ([ 'top', 'left' ].includes(where)) ? 'before' : 'after'
+      ipcRenderer.invoke('documents-provider', {
+        command: 'split-leaf',
+        payload: {
+          originWindow: props.windowId,
+          originLeaf: props.leafId,
+          direction: dir,
+          insertion: ins,
+          path: filePath,
+          fromWindow: originWindow,
+          fromLeaf: originLeaf
+        }
+      })
+        .catch(err => console.error(err))
+    }
+  }
+}
+
+function handleDragEnter (event: DragEvent, where: 'editor'|'top'|'left'|'right'|'bottom') {
+  const hasDocumentTab = event.dataTransfer?.types.includes('zettlr/document-tab') ?? false
+  if (hasDocumentTab) {
+    event.stopPropagation()
+    documentTabDrag.value = true
+    documentTabDragWhere.value = where
+  }
+}
+
+function handleDragLeave (event: DragEvent) {
+  const hasDocumentTab = event.dataTransfer?.types.includes('zettlr/document-tab') ?? false
+  if (hasDocumentTab && editor.value !== null) {
+    const bounds = editor.value.getBoundingClientRect()
+    const outX = event.clientX < bounds.left || event.clientX > bounds.right
+    const outY = event.clientY < bounds.top || event.clientY > bounds.bottom
+    if (outX || outY) {
+      documentTabDrag.value = false
+      documentTabDragWhere.value = undefined
+    }
+  }
+}
+
 </script>
 
 <style lang="less">
@@ -918,15 +1032,16 @@ export default defineComponent({
 @editor-margin-normal-md:  50px;
 @editor-margin-normal-lg: 100px;
 
-#editor {
+.main-editor-wrapper {
   width: 100%;
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
   background-color: #ffffff;
   transition: 0.2s background-color ease;
+  position: relative;
 
-  div#editor-search {
+  div.main-editor-search {
     position: absolute;
     width: 300px;
     right: 0;
@@ -946,6 +1061,47 @@ export default defineComponent({
     }
   }
 
+  div.dropzone {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0);
+    transition: all 0.3s ease;
+
+    &.dragover {
+      background-color: rgba(21, 61, 107, 0.5);
+      box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .5);
+    }
+
+    &.top {
+      top: 0;
+      width: 100%;
+      height: 10%;
+      min-height: 60px;
+    }
+
+    &.left {
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 10%;
+      min-width: 60px;
+    }
+
+    &.right {
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: 10%;
+      min-width: 60px;
+    }
+
+    &.bottom {
+      bottom: 0;
+      width: 100%;
+      height: 10%;
+      min-height: 60px;
+    }
+  }
+
   .CodeMirror {
     // The CodeMirror editor needs to respect the new tabbar; it cannot take
     // up 100 % all for itself anymore.
@@ -954,9 +1110,10 @@ export default defineComponent({
     font-family: inherit;
     // background: none;
 
-    @media(min-width: 1025px) { margin-left: @editor-margin-normal-lg; }
-    @media(max-width: 1024px) { margin-left: @editor-margin-normal-md; }
-    @media(max-width:  900px) { margin-left: @editor-margin-normal-sm; }
+    // @media(min-width: 1025px) { margin-left: @editor-margin-normal-lg; }
+    // @media(max-width: 1024px) { margin-left: @editor-margin-normal-md; }
+    // @media(max-width:  900px) { margin-left: @editor-margin-normal-sm; }
+    margin-left: 5%;
   }
 
   // If a code file is loaded, we need to display the editor contents in monospace.
@@ -1016,10 +1173,11 @@ export default defineComponent({
   }
 
   .CodeMirror-scroll {
-    padding-right: 5em;
-    @media(min-width: 1025px) { padding-right: @editor-margin-normal-lg; }
-    @media(max-width: 1024px) { padding-right: @editor-margin-normal-md; }
-    @media(max-width:  900px) { padding-right: @editor-margin-normal-sm; }
+    // padding-right: 5em;
+    padding-right: 5%;
+    // @media(min-width: 1025px) { padding-right: @editor-margin-normal-lg; }
+    // @media(max-width: 1024px) { padding-right: @editor-margin-normal-md; }
+    // @media(max-width:  900px) { padding-right: @editor-margin-normal-sm; }
     overflow-x: hidden !important; // Necessary to hide the horizontal scrollbar
 
     // We need to override a negative margin
@@ -1049,18 +1207,18 @@ export default defineComponent({
   }
 }
 
-body.dark #editor {
+body.dark .main-editor-wrapper {
   background-color: rgba(20, 20, 30, 1);
   .CodeMirror .CodeMirror-gutters { background-color: rgba(20, 20, 30, 1); }
 }
 
-body.darwin #editor {
+body.darwin .main-editor-wrapper {
   // On macOS the tabbar is 30px high.
   &:not(.fullscreen) {
     height: calc(100% - 30px);
   }
 
-  div#editor-search {
+  div.main-editor-search {
     background-color: rgba(230, 230, 230, 1);
     border-bottom-left-radius: 6px;
     padding: 6px;
@@ -1076,19 +1234,19 @@ body.darwin #editor {
   }
 }
 
-body.darwin.dark #editor {
-  div#editor-search {
+body.darwin.dark .main-editor-wrapper {
+  div.main-editor-search {
     background-color: rgba(60, 60, 60, 1);
   }
 }
 
-body.win32 #editor, body.linux #editor {
+body.win32 .main-editor-wrapper, body.linux .main-editor-wrapper {
   // On Windows, the tab bar is 30px high
   &:not(.fullscreen) {
     height: calc(100% - 30px);
   }
 
-  div#editor-search {
+  div.main-editor-search {
     background-color: rgba(230, 230, 230, 1);
     box-shadow: -2px 2px 4px 1px rgba(0, 0, 0, .3);
 
@@ -1101,7 +1259,7 @@ body.win32 #editor, body.linux #editor {
 }
 
 // CodeMirror fullscreen
-#editor.fullscreen {
+.main-editor-wrapper.fullscreen {
     .CodeMirror {
     @media(min-width: 1301px) { margin-left: @editor-margin-fullscreen-xxl !important; }
     @media(max-width: 1300px) { margin-left: @editor-margin-fullscreen-xl  !important; }
@@ -1120,12 +1278,12 @@ body.win32 #editor, body.linux #editor {
 }
 
 body.darwin {
-    #editor.fullscreen {
+    .main-editor-wrapper.fullscreen {
      border-top: 1px solid #d5d5d5;
   }
 
   &.dark {
-    #editor.fullscreen {
+    .main-editor-wrapper.fullscreen {
       border-top-color: #505050;
     }
   }
