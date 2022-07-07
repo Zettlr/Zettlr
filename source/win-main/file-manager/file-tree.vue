@@ -27,6 +27,7 @@
         v-bind:depth="0"
         v-bind:active-item="activeTreeItem?.[0]"
         v-bind:has-duplicate-name="getFiles.filter(i => i.name === item.name).length > 1"
+        v-bind:window-id="windowId"
       >
       </TreeItem>
       <div v-show="getDirectories.length > 0" id="directories-dirs-header">
@@ -43,6 +44,7 @@
         v-bind:depth="0"
         v-bind:active-item="activeTreeItem?.[0]"
         v-bind:has-duplicate-name="getDirectories.filter(i => i.name === item.name).length > 1"
+        v-bind:window-id="windowId"
       >
       </TreeItem>
     </template>
@@ -122,6 +124,10 @@ export default defineComponent({
       required: true
     },
     filterQuery: {
+      type: String,
+      required: true
+    },
+    windowId: {
       type: String,
       required: true
     }

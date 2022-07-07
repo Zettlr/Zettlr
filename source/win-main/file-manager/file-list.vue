@@ -35,6 +35,7 @@
             v-bind:obj="item.props"
             v-bind:active-file="activeDescriptor"
             v-bind:index="index"
+            v-bind:window-id="windowId"
             v-on:create-file="handleOperation('file-new', item.id)"
             v-on:create-dir="handleOperation('dir-new', item.id)"
             v-on:begin-dragging="$emit('lock-file-tree')"
@@ -52,6 +53,7 @@
         v-bind:key="item.id"
         v-bind:index="0"
         v-bind:obj="item.props"
+        v-bind:window-id="windowId"
         v-on:create-file="handleOperation('file-new', item.id)"
         v-on:create-dir="handleOperation('dir-new', item.id)"
       >
@@ -112,6 +114,10 @@ export default defineComponent({
       required: true
     },
     filterQuery: {
+      type: String,
+      required: true
+    },
+    windowId: {
       type: String,
       required: true
     }

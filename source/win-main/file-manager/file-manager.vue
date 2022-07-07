@@ -47,6 +47,7 @@
         ref="directories"
         v-bind:is-visible="fileTreeVisible"
         v-bind:filter-query="filterQuery"
+        v-bind:window-id="windowId"
         v-on:selection="selectionListener"
       ></FileTree>
       <!-- Now render the file list -->
@@ -62,6 +63,7 @@
         ref="fileList"
         v-bind:is-visible="isFileListVisible"
         v-bind:filter-query="filterQuery"
+        v-bind:window-id="windowId"
         v-on:lock-file-tree="lockDirectoryTree()"
       ></FileList>
     </div>
@@ -94,6 +96,12 @@ export default defineComponent({
   components: {
     FileTree,
     FileList
+  },
+  props: {
+    windowId: {
+      type: String,
+      required: true
+    }
   },
   data: () => {
     return {
