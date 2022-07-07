@@ -33,7 +33,7 @@ import DocumentManager from '@providers/documents'
  * @return  {BrowserWindow}  The loaded main window
  */
 export default function createMainWindow (
-  windowNumber: number,
+  windowId: string,
   logger: LogProvider,
   config: ConfigProvider,
   docs: DocumentManager,
@@ -58,7 +58,7 @@ export default function createMainWindow (
 
   const effectiveUrl = new URL(MAIN_WINDOW_WEBPACK_ENTRY)
   // Add the print preview file to the search params
-  effectiveUrl.searchParams.append('window_number', windowNumber.toString())
+  effectiveUrl.searchParams.append('window_id', windowId)
 
   const window = new BrowserWindow(winConf)
 
@@ -74,25 +74,29 @@ export default function createMainWindow (
   // Prevent arbitrary navigation away from our WEBPACK_ENTRY
   preventNavigation(logger, window)
   // Implement main process logging
-  attachLogger(logger, window, 'Main Window')
+  attachLogger(logger, window, `Main Window (${windowId})`)
 
   // (Windows/Linux only) Listen to browser navigation events, and go back/
   // forward in the document manager's history accordingly. This is not
   // supported on macOS.
   window.on('app-command', (event, command) => {
     if (command === 'browser-backward') {
-      docs.back().catch(e => logger.error(e.message, e))
+      // docs.back().catch(e => logger.error(e.message, e))
+      window.webContents.send('shortcut', 'navigate-back')
     } else if (command === 'browser-forward') {
-      docs.forward().catch(e => logger.error(e.message, e))
+      // docs.forward().catch(e => logger.error(e.message, e))
+      window.webContents.send('shortcut', 'navigate-forward')
     }
   })
 
   // This does exactly the same as the app-command listener above, but for macOS
   window.on('swipe', (event, direction) => {
     if (direction === 'left') {
-      docs.back().catch(e => logger.error(e.message, e))
+      // docs.back().catch(e => logger.error(e.message, e))
+      window.webContents.send('shortcut', 'navigate-back')
     } else if (direction === 'right') {
-      docs.forward().catch(e => logger.error(e.message, e))
+      // docs.forward().catch(e => logger.error(e.message, e))
+      window.webContents.send('shortcut', 'navigate-forward')
     }
   })
 
