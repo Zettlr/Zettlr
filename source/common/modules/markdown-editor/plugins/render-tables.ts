@@ -249,7 +249,7 @@ function writeTableToDocument (cm: CodeMirror.Editor, table: TableEditor): boole
       const table = fromMarkdown(markdownTable.join('\n'), potentialTableType, {
         // Detect mouse movement on the scroll element (so that
         // scroll detection in the helper works as expected)
-        container: '#editor .CodeMirror .CodeMirror-scroll',
+        container: '.main-editor-wrapper .CodeMirror .CodeMirror-scroll',
         onBlur: (table) => {
           // DEBUG: Users can accidentally overwrite other documents when this
           // triggers, as a click on another document ALSO blurs the table, but
