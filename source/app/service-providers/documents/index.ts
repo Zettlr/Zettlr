@@ -17,34 +17,86 @@
 
 import EventEmitter from 'events'
 import path from 'path'
-import chokidar from 'chokidar'
-import { CodeFileDescriptor, MDFileDescriptor } from '@dts/main/fsal'
-import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
+import { promises as fs } from 'fs'
 import { FSALCodeFile, FSALFile } from '@providers/fsal'
-import generateFilename from '@common/util/generate-filename'
 import ProviderContract from '@providers/provider-contract'
-import { hasCodeExt, hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import AppServiceContainer from 'source/app/app-service-container'
-import { OpenDocument } from '@dts/common/documents'
-import { ipcMain } from 'electron'
+import { ipcMain, app } from 'electron'
+import { DocumentTree, DTLeaf } from '@common/modules/document-tree'
+import ConfigFileContainer from '@common/modules/config-file-container'
+import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
+import { TabManager } from '@common/modules/document-tree/tab-manager'
+import { DP_EVENTS, OpenDocument } from '@dts/common/documents'
+import { v4 as uuid4 } from 'uuid'
+import chokidar from 'chokidar'
+import { CodeFileDescriptor, MDFileDescriptor } from '@dts/main/fsal'
+
+interface DocumentWindows { [windowId: string]: DocumentTree }
 
 export default class DocumentManager extends ProviderContract {
-  private _loadedDocuments: Array<MDFileDescriptor|CodeFileDescriptor>
-  private _activeFile: MDFileDescriptor|CodeFileDescriptor|null
-  private readonly _watcher: chokidar.FSWatcher
-  private readonly _sessionHistory: string[]
+  /**
+   * This array holds all open windows, here represented as document trees
+   *
+   * @var {DocumentTree[]}
+   */
+  private readonly _windows: DocumentWindows
+  /**
+   * The event emitter helps broadcast events across the main process
+   *
+   * @var {EventEmitter}
+   */
   private readonly _emitter: EventEmitter
-  private _sessionPointer: number
+  /**
+   * The config file container persists the document tree data to disk so that
+   * open editor panes & windows can be restored
+   *
+   * @var {ConfigFileContainer}
+   */
+  private readonly _config: ConfigFileContainer
+  /**
+   * Modified files are application-global: Whenever a file is modified anywhere
+   * in the application, this array is being updated so that changes can be
+   * propagated across windows. They are being held in a Map. The keys are the
+   * filepaths as well as the last modification time, the values the most recent
+   * file contents.
+   *
+   * @var {Map<[string, number], string>}
+   */
+  private readonly _modifiedFiles: Map<[string, number], string>
+  /**
+   * The process that watches currently opened files for remote changes
+   *
+   * @var {chokidar.FSWatcher}
+   */
+  private readonly _watcher: chokidar.FSWatcher
+
+  /**
+   * Holds a list of strings for files that have recently been saved by the
+   * user. For those files, we need to ignore remote changes since they
+   * originate here.
+   *
+   * @var {string[]}
+   */
+  private readonly _ignoreChanges: string[]
+
+  /**
+   * This array allows us to prevent showing multiple "Reload changes?" dialogs
+   * for a single file open in the app.
+   *
+   * @var {string[]}
+   */
+  private readonly _remoteChangeDialogShownFor: string[]
 
   constructor (private readonly _app: AppServiceContainer) {
     super()
 
-    this._loadedDocuments = []
-    this._sessionHistory = []
-    this._sessionPointer = -1
-    this._activeFile = null
+    this._windows = {}
     this._emitter = new EventEmitter()
+    this._config = new ConfigFileContainer(path.join(app.getPath('userData'), 'documents.yaml'), 'yaml')
+    this._modifiedFiles = new Map()
+    this._ignoreChanges = []
+    this._remoteChangeDialogShownFor = []
 
     const options: chokidar.WatchOptions = {
       persistent: true,
@@ -75,45 +127,122 @@ export default class DocumentManager extends ProviderContract {
     // Start up the chokidar process
     this._watcher = new chokidar.FSWatcher(options)
 
-    this._watcher.on('all', (event: string, p: string) => {
-      const descriptor = this._loadedDocuments.find(file => file.path === p)
-
-      if (descriptor === undefined) {
-        // Should not happen, but just in case
-        this._app.log.warning(`[DocumentManager] Received a ${event}-event for ${p} but couldn't handle it.`)
+    this._watcher.on('all', (event: string, filePath: string) => {
+      if (this._ignoreChanges.includes(filePath)) {
+        this._ignoreChanges.splice(this._ignoreChanges.indexOf(filePath), 1)
         return
       }
 
       if (event === 'unlink') {
-        // Just close the file (also handles activeFile and config changes)
-        this.closeFile(descriptor)
+        // Close the file everywhere
+        this.closeFileEverywhere(filePath)
       } else if (event === 'change') {
-        this._loadFile(p)
-          .then(newDescriptor => {
-            // In response to issue #1621: We will not check for equal modtime
-            // but only for newer modtime to prevent sluggish cloud synchronization
-            // services (OneDrive and Box do that) from having text appear to "jump"
-            // from time to time.
-            if (newDescriptor.modtime > descriptor.modtime) {
-              this._app.log.info(`[Document Manager] Emitting remote change event for file ${newDescriptor.path}`)
-              // Replace the old descriptor with the newly loaded one
-              this._loadedDocuments.splice(this._loadedDocuments.indexOf(descriptor), 1, newDescriptor)
-              // Notify the caller, that the file has actually changed on disk.
-              this._emitter.emit('update', 'openFileRemotelyChanged', newDescriptor)
-            }
-          })
-          .catch(err => this._app.log.error(`[Document Manager] Could not reload remotely changed file ${p}!`, err))
+        this.handleRemoteChange(filePath).catch(err => console.error(err))
       } else {
-        this._app.log.warning(`[DocumentManager] Received unexpected event ${event} for ${p}.`)
+        this._app.log.warning(`[DocumentManager] Received unexpected event ${event} for ${filePath}.`)
       }
     })
 
     // Finally, listen to events from the renderer
-    ipcMain.handle('documents-provider', (event, { command, payload }) => {
-      if (command === 'set-pinned') {
-        const filePath = payload.path as string
-        const shouldBePinned = payload.pinned as boolean
-        this.setPinnedStatus(filePath, shouldBePinned)
+    ipcMain.handle('documents-provider', async (event, { command, payload }) => {
+      switch (command) {
+        // A given tab should be set as pinned
+        case 'set-pinned': {
+          const windowId = payload.windowId as string
+          const leafID = payload.leafId as string
+          const filePath = payload.path as string
+          const shouldBePinned = payload.pinned as boolean
+          this.setPinnedStatus(windowId, leafID, filePath, shouldBePinned)
+          return
+        }
+        // Some main window has requested its tab/split view state
+        case 'retrieve-tab-config': {
+          return this._windows[payload.windowId].toJSON()
+        }
+        case 'save-file': {
+          const windowId = payload.windowId as string
+          const leafId = payload.leafId as string
+          const filePath = payload.path as string
+          const contents = payload.contents as string
+          const result = await this.saveFile(windowId, leafId, filePath, contents)
+          if (result) {
+            this._app.stats.updateWordCount(payload.offsetWordCount as number)
+          }
+          return result
+        }
+        case 'open-file': {
+          return await this.openFile(payload.windowId, payload.leafId, payload.path, payload.newTab)
+        }
+        case 'close-file': {
+          const leafId = payload.leafId as string
+          const windowId = payload.windowId as string
+          const filePath = payload.path as string
+          return await this.closeFile(windowId, leafId, filePath)
+        }
+        case 'sort-open-files': {
+          const leafId = payload.leafId as string
+          const windowId = payload.windowId as string
+          const newOrder = payload.newOrder as string[]
+          this.sortOpenFiles(windowId, leafId, newOrder)
+          return
+        }
+        case 'update-file-modification-status': {
+          const filePath = payload.path as string
+          const timestamp = payload.timestamp as number
+          const contents = payload.contents as string
+          const isClean = payload.isClean as boolean
+
+          if (isClean) {
+            this.markClean(filePath)
+          } else {
+            this.markDirty(filePath, timestamp, contents)
+          }
+          return
+        }
+        case 'get-file-modification-status': {
+          return this._modifiedFiles
+        }
+        case 'move-file': {
+          const oWin = payload.originWindow
+          const tWin = payload.targetWindow
+          const oLeaf = payload.originLeaf
+          const tLeaf = payload.targetLeaf
+          const filePath = payload.path
+          return await this.moveFile(oWin, tWin, oLeaf, tLeaf, filePath)
+        }
+        case 'split-leaf': {
+          const oWin = payload.originWindow
+          const oLeaf = payload.originLeaf
+          const direction = payload.direction
+          const insertion = payload.insertion
+          const filePath = payload.path // Optional, may be undefined
+          const fromWindow = payload.fromWindow // Optional, may be undefined
+          const fromLeaf = payload.fromLeaf // Otional, may be undefined
+          return await this.splitLeaf(oWin, oLeaf, direction, insertion, filePath, fromWindow, fromLeaf)
+        }
+        case 'close-leaf': {
+          return this.closeLeaf(payload.windowId, payload.leafId)
+        }
+        case 'set-branch-sizes': {
+          // NOTE that in this particular instance we do not emit an event. The
+          // reason is that we need to prevent frequent reloads during resizing.
+          // For as long as the window is open, the window will have the correct
+          // sizes, and will only update those sizes here in the main process.
+          // As soon as the window is closed, however, it will automatically
+          // grab the correct sizes again.
+          const branch = this._windows[payload.windowId].findBranch(payload.branchId)
+          if (branch !== undefined) {
+            branch.sizes = payload.sizes
+            this.syncToConfig()
+          }
+          return
+        }
+        case 'navigate-forward': {
+          return await this.navigateForward(payload.windowId, payload.leafId)
+        }
+        case 'navigate-back': {
+          return await this.navigateBack(payload.windowId, payload.leafId)
+        }
       }
     })
   } // END constructor
@@ -121,33 +250,64 @@ export default class DocumentManager extends ProviderContract {
   async boot (): Promise<void> {
     // Loads in all openFiles
     this._app.log.verbose('Document Manager starting up ...')
-    const openFiles: OpenDocument[] = this._app.config.get('openFiles')
-    for (const doc of openFiles) {
+
+    // Check if the data store is initialized
+    if (!await this._config.isInitialized()) {
+      this._app.log.info('[Document Manager] Initializing document storage ...')
+      const tree = new DocumentTree()
+      const key = uuid4()
+      await this._config.init({ [key]: tree.toJSON() })
+    }
+
+    const treedata: DocumentWindows = await this._config.get()
+    for (const key in treedata) {
       try {
-        const descriptor = await this._loadFile(doc.path)
-        this._loadedDocuments.push(descriptor)
+        this._windows[key] = await DocumentTree.fromJSON(treedata[key])
+        this.broadcastEvent(DP_EVENTS.NEW_WINDOW, { key })
       } catch (err: any) {
-        this._app.log.error(`[Document Manager] Boot: Could not load file ${doc.path}: ${String(err.message)}`, err)
+        this._app.log.error(`[Document Provider] Could not instantiate window ${key}: ${err.message as string}`, err)
       }
     }
 
-    this._app.log.info(`[Document Manager] Restored ${this._loadedDocuments.length} open documents.`)
-    this._watcher.add(this._loadedDocuments.map(file => file.path))
+    if (Object.keys(treedata).length === 0) {
+      this._app.log.warning('[Document Manager] Creating new window since all are closed.')
+      const key = uuid4()
+      this._windows[key] = new DocumentTree()
+      this.broadcastEvent(DP_EVENTS.NEW_WINDOW, { key })
+    }
+
+    this.syncWatchedFilePaths()
+
+    this._app.log.info(`[Document Manager] Restored ${this.windowCount()} open windows.`)
     this.syncToConfig()
+  }
 
-    // And make the correct file active
-    const activeFile: string = this._app.config.get('activeFile')
-    const activeDescriptor = this._loadedDocuments.find(elem => elem.path === activeFile)
+  public windowCount (): number {
+    return Object.keys(this._windows).length
+  }
 
-    if (activeDescriptor !== undefined) {
-      this._activeFile = activeDescriptor
-      this._emitter.emit('update', 'activeFile')
-      broadcastIpcMessage('fsal-state-changed', 'activeFile')
-    } else if (this._loadedDocuments.length > 0) {
-      // Make another file active
-      this._activeFile = this._loadedDocuments[0]
-      this._emitter.emit('update', 'activeFile')
-      broadcastIpcMessage('fsal-state-changed', 'activeFile')
+  public windowKeys (): string[] {
+    return Object.keys(this._windows)
+  }
+
+  public newWindow (): void {
+    const newTree = new DocumentTree()
+    const existingKeys = Object.keys(this._windows)
+    let key = uuid4()
+    while (existingKeys.includes(key)) {
+      key = uuid4()
+    }
+
+    this._windows[key] = newTree
+    this.broadcastEvent(DP_EVENTS.NEW_WINDOW, { key })
+    this.syncToConfig()
+  }
+
+  public closeWindow (windowId: string): void {
+    if (windowId in this._windows) {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete this._windows[windowId]
+      this.syncToConfig()
     }
   }
 
@@ -166,59 +326,13 @@ export default class DocumentManager extends ProviderContract {
   }
 
   async shutdown (): Promise<void> {
-    // Nothing to do
+    this._config.shutdown()
   }
 
-  /**
-   * Allows to set the open files.
-   *
-   * @param {Array<MDFileDescriptor|CodeFileDescriptor>} fileArray  An array with paths to open
-   */
-  public set openFiles (files: Array<MDFileDescriptor|CodeFileDescriptor>) {
-    this._watcher.unwatch(this._loadedDocuments.map(file => file.path))
-    this._loadedDocuments = files
-    this._watcher.add(files.map(file => file.path))
-    this.syncToConfig()
-  }
-
-  /**
-   * Returns all open files
-   *
-   * @returns {Array<MDFileDescriptor|CodeFileDescriptor>} A list of open file descriptors
-   */
-  public get openFiles (): Array<MDFileDescriptor|CodeFileDescriptor> {
-    return this._loadedDocuments
-  }
-
-  /**
-   * Sorts the openFiles according to hashArray, and returns the new sorting.
-   *
-   * @param {Array} pathArray An array with absolute paths to sort with
-   *
-   * @return {Array} The new sorting
-   */
-  public sortOpenFiles (pathArray: string[]): Array<MDFileDescriptor|CodeFileDescriptor> {
-    if (Array.isArray(pathArray)) {
-      // Simply re-sort based on the new paths
-      this._loadedDocuments.sort((a, b) => {
-        return pathArray.indexOf(a.path) - pathArray.indexOf(b.path)
-      })
-
-      // Also make sure that pinned tabs are all grouped to the left before sync
-      const openFiles: OpenDocument[] = this._app.config.get('openFiles')
-      this._loadedDocuments.sort((a, b) => {
-        const _a = openFiles.find(elem => elem.path === a.path)?.pinned ?? false
-        const _b = openFiles.find(elem => elem.path === b.path)?.pinned ?? false
-
-        if (_a && !_b) return -1
-        if (!_a && _b) return 1
-        return 0
-      })
-
-      this.syncToConfig()
-    }
-
-    return this._loadedDocuments
+  private broadcastEvent (event: DP_EVENTS, context?: any): void {
+    // Here we blast an event notification across every line of code of the app
+    broadcastIpcMessage('documents-update', { event, context: context })
+    this._emitter.emit(event, context)
   }
 
   /**
@@ -229,63 +343,52 @@ export default class DocumentManager extends ProviderContract {
    *
    * @return {Promise<MDFileDescriptor|CodeFileDescriptor>} The file's descriptor
    */
-  public async openFile (filePath: string, newTab?: boolean, modifyHistory?: boolean): Promise<MDFileDescriptor|CodeFileDescriptor> {
-    const openFile = this._loadedDocuments.find(file => file.path === filePath)
-
-    // Remove the file from the session history if applicable
-    if (modifyHistory !== false) {
-      const sessionIndex = this._sessionHistory.indexOf(filePath)
-      if (sessionIndex > -1) {
-        this._sessionHistory.splice(sessionIndex, 1)
-      }
-    }
-
-    // If the file is already open, we just set it as the active one and be done
-    // with it, no further action needed
-    if (openFile !== undefined) {
-      if (modifyHistory !== false) {
-        this._sessionHistory.push(filePath)
-        this._sessionPointer = this._sessionHistory.length - 1
-      }
-      this.activeFile = openFile
-      return openFile
-    }
-
-    // The file is not open, so let's first load it into our state ...
-    const file = await this._loadFile(filePath)
-
-    if (this._activeFile !== null) {
-      // ... behind our active file
-      const idx = this._loadedDocuments.indexOf(this._activeFile)
-      this._loadedDocuments.splice(idx + 1, 0, file)
-    } else {
-      // ... or at the end
-      this._loadedDocuments.push(file)
-    }
-
-    // Update all required states. Especially make sure to re-sort this to
-    // ensure the new file (unpinned) doesn't end up in between several pinned
-    // files.
-    this._watcher.add(file.path)
-    this.sortOpenFiles(this._loadedDocuments.map(d => d.path))
-
+  public async openFile (windowId: string, leafId: string|undefined, filePath: string, newTab?: boolean, modifyHistory?: boolean): Promise<boolean> {
     const avoidNewTabs = Boolean(this._app.config.get('system.avoidNewTabs'))
+    let leaf: DTLeaf|undefined
+    if (leafId === undefined) {
+      // Take the first leaf of the given window
+      leaf = this._windows[windowId].getAllLeafs()[0]
+    } else {
+      leaf = this._windows[windowId].findLeaf(leafId)
+    }
 
+    if (leaf === undefined) {
+      return false
+    }
+
+    // Now we definitely know the leaf ID if it was undefined
+    if (leafId === undefined) {
+      leafId = leaf.id
+    }
+
+    if (leaf.tabMan.openFiles.map(x => x.path).includes(filePath)) {
+      // File is already open -> simply set it as active
+      // leaf.tabMan.activeFile = filePath
+      await leaf.tabMan.openFile(filePath)
+      this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId, filePath })
+      return true
+    }
+
+    // TODO: Make sure the active file is not modified!
     // Close the (formerly active) file if we should avoid new tabs and have not
     // gotten a specific request to open it in a *new* tab
-    if (this.activeFile !== null && avoidNewTabs && newTab !== true && !this.activeFile.modified) {
-      this.closeFile(this.activeFile)
+    const activeFile = leaf.tabMan.activeFile
+    const ret = await leaf.tabMan.openFile(filePath)
+
+    if (activeFile !== null && avoidNewTabs && newTab !== true && !this.isModified(activeFile.path)) {
+      leaf.tabMan.closeFile(activeFile)
+      this.syncWatchedFilePaths()
+      this.broadcastEvent(DP_EVENTS.CLOSE_FILE, { windowId, leafId, filePath })
+      this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId, filePath: leaf.tabMan.activeFile?.path })
+    }
+    if (ret) {
+      this.broadcastEvent(DP_EVENTS.OPEN_FILE, { windowId, leafId, filePath })
     }
 
-    // Set the file as active, which will trigger a second wave of state updates
-    this.activeFile = file
-
-    if (modifyHistory !== false) {
-      this._sessionHistory.push(filePath)
-      this._sessionPointer = this._sessionHistory.length - 1
-    }
-
-    return file
+    this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId, filePath: leaf.tabMan.activeFile?.path })
+    this.syncToConfig()
+    return ret
   }
 
   /**
@@ -297,155 +400,240 @@ export default class DocumentManager extends ProviderContract {
    *
    * @return  {boolean}                                    Whether or not the file was closed
    */
-  public closeFile (file: MDFileDescriptor|CodeFileDescriptor): void {
-    if (!this._loadedDocuments.includes(file)) {
-      return // All good, we didn't even have to close the file.
+  public async closeFile (windowId: string, leafId: string, filePath: string): Promise<boolean> {
+    const leaf = this._windows[windowId].findLeaf(leafId)
+    if (leaf === undefined) {
+      this._app.log.error(`[Document Manager] Could not close file ${filePath}: Editor pane not found.`)
+      return false
     }
 
-    if (this.isPinned(file.path)) {
-      this._app.log.warning(`[Document Provider] Refusing to close pinned file ${file.path}`)
-      return
+    const openFile = leaf.tabMan.openFiles.find(f => f.path === filePath)
+
+    if (openFile === undefined) {
+      return false
     }
 
-    // Retrieve the index of the active file and whether it's an active file
-    const activeFileIdx = this._loadedDocuments.findIndex(elem => elem === this._activeFile)
-    const isActive = this._activeFile === file
+    if (this.isModified(filePath)) {
+      const result = await this._app.windows.askSaveChanges()
+      // 0 = 'Close without saving changes',
+      // 1 = 'Save changes'
+      if (result.response === 0) {
+        // Clear the modification flag
+        this.markClean(filePath)
+        // Mark the whole application as clean if applicable
+        // TODO: Implement event based in the window provider
+        // this._app.windows.setModified(!this._app.documents.isClean())
+      } else if (result.response === 1) {
+        // The following code looks horrible, but it solves the problem quite
+        // elegantly: Since we are in an asynchronous function, we can actually
+        // pause execution of this function until the file has been saved. To
+        // do this, we create a new promise and, inside that, listen to the
+        // document-modified-changed event of the document manager, which is
+        // being emitted everytime something in the modification status has
+        // changed. This happens if a file is being saved. To prevent *other*
+        // files from resolving the promise, we will explicitly check if the
+        // event has been emitted specifically in response to a successful
+        // save of our file here.
+        await new Promise<void>((resolve, reject) => {
+          const callback = (): void => {
+            // The document manager has access to the same object, so just wait
+            // until the document manager sets the file.modified flag to false.
+            if (!this.isModified(filePath)) {
+              // Always remember to clean up 🧹
+              this.off(DP_EVENTS.CHANGE_FILE_STATUS, callback)
+              resolve()
+            }
+          }
+          this.on(DP_EVENTS.CHANGE_FILE_STATUS, callback)
 
-    // Then remove the file from the list of open files
-    this._loadedDocuments.splice(this._loadedDocuments.indexOf(file), 1)
-    this._watcher.unwatch(file.path)
-    this.syncToConfig()
+          // Tell the renderer to actually save our file.
+          broadcastIpcMessage('save-documents', [filePath])
 
-    // Now, if we just closed the active file, we need to make another file
-    // active, or none, if there are no more open files active.
-    if (isActive) {
-      if (this._loadedDocuments.length > 0 && activeFileIdx > 0) {
-        this.activeFile = this._loadedDocuments[activeFileIdx - 1]
-      } else if (this._loadedDocuments.length > 0 && activeFileIdx === 0) {
-        this.activeFile = this._loadedDocuments[0]
+          // Failsafe: Reject if the file in question hasn't been saved after
+          // 5 seconds. Even the slowest of computers should be able to save a
+          // plain text file in that amount of time.
+          setTimeout(() => { reject(new Error(`[Document Manager] Could not automatically save file ${filePath}`)) }, 5000)
+        })
       } else {
-        this.activeFile = null
+        // Don't close the file
+        this._app.log.info('[Document Manager] Not closing file, as the user did not want that.')
+        return false
       }
     }
-  }
 
-  /**
-   * Closes all open files.
-   */
-  public closeAllFiles (): void {
-    for (const file of this._loadedDocuments) {
-      if (this.isPinned(file.path)) {
-        continue // Cannot close this file
+    if (leaf !== undefined) {
+      const ret = leaf.tabMan.closeFile(filePath)
+      if (ret) {
+        this.syncToConfig()
+        this.syncWatchedFilePaths()
+        this.broadcastEvent(DP_EVENTS.CLOSE_FILE, { windowId, leafId, filePath })
+        this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId, filePath: leaf.tabMan.activeFile?.path })
+        if (leaf.tabMan.openFiles.length === 0) {
+          // Remove this leaf
+          leaf.parent.removeNode(leaf)
+          this.broadcastEvent(DP_EVENTS.LEAF_CLOSED, { windowId, leafId })
+        }
       }
-
-      this._watcher.unwatch(file.path)
-      this._loadedDocuments.splice(this._loadedDocuments.indexOf(file), 1)
+      return ret
     }
-    this.syncToConfig()
+
+    return false
   }
 
   /**
-   * Goes back in the session history and opens the previous file
-   */
-  public async back (): Promise<void> {
-    await this._moveThroughHistory(-1)
-  }
-
-  /**
-   * Goes forward in the session history and opens the next file
-   */
-  public async forward (): Promise<void> {
-    await this._moveThroughHistory(1)
-  }
-
-  /**
-   * Moves through history using the specified direction
+   * Directs every open leaf to close a given file. This function even
+   * overwrites potential stati such as modification or pinned to ensure files
+   * are definitely closed. This will be called from within the watcher callback
+   * on an `unlink` event.
    *
-   * @param   {number}  direction  The direction to take. Negative = back, positive = forward
+   * @param   {string}  filePath  The file path in question
    */
-  private async _moveThroughHistory (direction: number): Promise<void> {
-    // Always make sure the session pointer is valid
-    if (this._sessionPointer < 0 || this._sessionPointer > this._sessionHistory.length - 1) {
-      this._sessionPointer = this._sessionHistory.length - 1
+  private closeFileEverywhere (filePath: string): void {
+    for (const key in this._windows) {
+      const allLeafs = this._windows[key].getAllLeafs()
+      for (const leaf of allLeafs) {
+        if (leaf.tabMan.openFiles.map(x => x.path).includes(filePath)) {
+          leaf.tabMan.setPinnedStatus(filePath, false)
+          const success = leaf.tabMan.closeFile(filePath)
+          if (success) {
+            // TODO: EMIT EVENTS
+          }
+        }
+      }
     }
 
-    const targetIndex = this._sessionPointer + direction
-
-    if (targetIndex > this._sessionHistory.length - 1 || targetIndex < 0) {
-      return // Cannot move: Out of bounds
-    }
-
-    // Move the pointer
-    this._sessionPointer = targetIndex
-    const pathToOpen = this._sessionHistory[this._sessionPointer]
-
-    // Open that file, but tell the opener explicitly not to modify the state
-    await this.openFile(pathToOpen, undefined, false)
+    this.syncWatchedFilePaths()
   }
 
   /**
-   * Opens, reads, and parses a file to be loaded.
+   * This function handles a remote change, i.e. where the watcher has reported
+   * that the file has been changed remotely.
    *
-   * @param {String} filePath The file to be loaded
-   *
-   * @return {Promise<MDFileDescriptor|CodeFileDescriptor>} The file's descriptor
+   * @param   {string}  filePath  The file in question
    */
-  private async _loadFile (filePath: string): Promise<MDFileDescriptor|CodeFileDescriptor> {
-    if (hasCodeExt(filePath)) {
-      const file = await FSALCodeFile.parse(filePath, null)
-      // Withthe next code, we ensure the FSAL's state is up to date if the user
-      // opened a standalone root file
-      const loadedInFSAL = this._app.fsal.find(filePath)
-      if (loadedInFSAL === undefined) {
-        await this._app.fsal.loadPath(filePath)
-        this._app.config.addPath(filePath)
+  private async handleRemoteChange (filePath: string): Promise<void> {
+    // First thing we have to look up is: Did the file really change? Then, we
+    // have to update the file descriptors across all leafs and broadcast an event.
+    const openFiles: OpenDocument[] = []
+    for (const key in this._windows) {
+      const allLeafs = this._windows[key].getAllLeafs()
+      for (const leaf of allLeafs) {
+        openFiles.push(...leaf.tabMan.openFiles.filter(x => x.path === filePath))
       }
-      return file
-    } else if (hasMarkdownExt(filePath)) {
-      const file = await FSALFile.parse(filePath, null, this._app.fsal.getMarkdownFileParser(), this._app.targets, this._app.tags)
-      // Withthe next code, we ensure the FSAL's state is up to date if the user
-      // opened a standalone root file
-      const loadedInFSAL = this._app.fsal.find(filePath)
-      if (loadedInFSAL === undefined) {
-        await this._app.fsal.loadPath(filePath)
-        this._app.config.addPath(filePath)
+    }
+
+    // Sanity check: Check all modtimes
+    const allModtimes: number[] = openFiles.map(x => x.modtime)
+    if (!allModtimes.every(val => val === allModtimes[0])) {
+      this._app.log.error('[Document Manager] The same file has different modtimes across all leafs. This is a logical bug.')
+    }
+
+    const ourModtime = Math.max(...allModtimes) // Get the most recent modtime
+
+    const stat = await fs.lstat(filePath)
+    const modtime = stat.mtime.getTime()
+    // In response to issue #1621: We will not check for equal modtime but only
+    // for newer modtime to prevent sluggish cloud synchronization services
+    // (e.g. OneDrive and Box) from having text appear to "jump" from time to time.
+    if (modtime > ourModtime) {
+      // Now what we have to do is (a) update the modtimes of every OpenDocument.
+      // Since these are all pointers we can literally do a forEach. (b) react
+      // to that change.
+      openFiles.forEach(doc => { doc.modtime = modtime })
+      // Notify the caller, that the file has actually changed on disk.
+      // The contents of one of the open files have changed.
+      // What follows looks a bit ugly, welcome to callback hell.
+      if (this._app.config.get('alwaysReloadFiles') === true) {
+        await this.notifyRemoteChange(filePath)
+      } else {
+        // Prevent multiple instances of the dialog, just ask once. The logic
+        // always retrieves the most recent version either way
+        if (this._remoteChangeDialogShownFor.includes(filePath)) {
+          return
+        }
+        this._remoteChangeDialogShownFor.push(filePath)
+
+        // Ask the user if we should replace the file
+        const shouldReplace = await this._app.windows.shouldReplaceFile(filePath)
+        // In any case remove the isShownFor for this file.
+        this._remoteChangeDialogShownFor.splice(this._remoteChangeDialogShownFor.indexOf(filePath), 1)
+        if (!shouldReplace) {
+          return
+        }
+
+        await this.notifyRemoteChange(filePath)
       }
-      return file
-    } else {
-      const error: any = new Error(`Could not load file ${filePath}: Invalid path provided`)
-      error.path = filePath
-      error.code = 'EINVALIDPATH'
-      throw error
+    }
+  }
+
+  /**
+   * This function ensures that our watcher keeps watching the correct files
+   */
+  private syncWatchedFilePaths (): void {
+    // First, get the files currently watched
+    const watchedFiles = Object.values(this._watcher.getWatched()).flat()
+
+    // Second, get all open files
+    const openFiles: string[] = []
+    for (const key in this._windows) {
+      const allLeafs = this._windows[key].getAllLeafs()
+      for (const leaf of allLeafs) {
+        openFiles.push(...leaf.tabMan.openFiles.map(x => x.path))
+      }
+    }
+
+    // Third, remove those watched files which are no longer open
+    for (const watchedFile of watchedFiles) {
+      if (!openFiles.includes(watchedFile)) {
+        this._watcher.unwatch(watchedFile)
+      }
+    }
+
+    // Fourth, add those open files not yet watched
+    for (const openFile of openFiles) {
+      if (!watchedFiles.includes(openFile)) {
+        this._watcher.add(openFile)
+      }
+    }
+  }
+
+  /**
+   * This is a convenience function meant for operations that affect every
+   * editor pane across the whole application, such as renaming files, removing
+   * directories, and other things. It will iterate over every open editor pane
+   * and call the provided callback function, providing the tab manager for the
+   * pane in question. Since some operations require async, the whole function
+   * works asynchronously.
+   *
+   * The callback function MUST return a boolean indicating whether the state of
+   * any pane has changed. If it has, the function will make sure to emit
+   * appropriate events. If you do not honor this, any changes to the internal
+   * state will not be picked up by the appropriate places.
+   *
+   * @param   {(tabMan: TabManager) => Promise<boolean>}  callback  The callback
+   */
+  public async forEachLeaf (callback: (tabMan: TabManager) => Promise<boolean>): Promise<void> {
+    for (const windowId in this._windows) {
+      for (const leaf of this._windows[windowId].getAllLeafs()) {
+        const stateHasChanged = await callback(leaf.tabMan)
+        if (stateHasChanged) {
+          this.syncToConfig()
+        }
+      }
     }
   }
 
   /**
    * This method synchronizes the state of the loadedDocuments array into the
-   * configuration.
+   * configuration. It also makes sure to announce changes to whomever it may
+   * concern.
    */
   private syncToConfig (): void {
-    // Retrieve the files from config so that we can retain the non-default
-    // properties for the files (i.e. if the document is pinned). NOTE we have
-    // to clone the objects because otherwise the config provider's built-in
-    // shortcut in case of unchanged objects will kick in.
-    const openFiles: OpenDocument[] = JSON.parse(JSON.stringify(this._app.config.get('openFiles')))
-
-    const openDocs: OpenDocument[] = this._loadedDocuments
-      .filter(file => file.dir !== ':memory:') // Exclude in memory files
-      .map(file => {
-        const doc = openFiles.find(e => e.path === file.path)
-        return {
-          path: file.path,
-          pinned: doc?.pinned ?? false // Retain the pinned status (default false)
-        }
-      })
-
-    // Now set
-    this._app.config.set('openFiles', openDocs)
-
-    // Emit appropriate events
-    this._emitter.emit('update', 'openFiles')
-    broadcastIpcMessage('fsal-state-changed', 'openFiles')
+    const toSave: any = {}
+    for (const key in this._windows) {
+      toSave[key] = this._windows[key].toJSON()
+    }
+    this._config.set(toSave)
   }
 
   /**
@@ -454,62 +642,41 @@ export default class DocumentManager extends ProviderContract {
    * @param   {string}   filePath        The absolute path to the file
    * @param   {boolean}  shouldBePinned  Whether the file should be pinned.
    */
-  private setPinnedStatus (filePath: string, shouldBePinned: boolean): void {
-    const openFiles: OpenDocument[] = JSON.parse(JSON.stringify(this._app.config.get('openFiles')))
-
-    const idx = openFiles.findIndex(doc => doc.path === filePath)
-
-    if (idx > -1) {
-      openFiles[idx].pinned = shouldBePinned
-      // In this case, also trigger a sorting command, providing the same set
-      // of paths because the sorter will make sure that, in case the tab is
-      // now pinned, it will move to the left of the tab list.
-      this._app.config.set('openFiles', openFiles)
-      this.sortOpenFiles(this._loadedDocuments.map(f => f.path))
+  private setPinnedStatus (windowId: string, leafId: string, filePath: string, shouldBePinned: boolean): void {
+    const leaf = this._windows[windowId].findLeaf(leafId)
+    if (leaf === undefined) {
+      return
     }
+
+    leaf.tabMan.setPinnedStatus(filePath, shouldBePinned)
+    this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { windowId, leafId, filePath, status: 'pinned' })
+    this.syncToConfig()
   }
 
   /**
-   * Returns true if the document identified by filePath is pinned. Returns false
-   * both if the document is not pinned or if it is not in the openFiles array.
+   * Broadcasts a remote changed event across the app to notify everyone that a
+   * file has been remotely changed.
    *
-   * @param   {string}   filePath  The file path
-   *
-   * @return  {boolean}            Whether the file is pinned
+   * @param {string} filePath The file in question
    */
-  private isPinned (filePath: string): boolean {
-    const openFiles: OpenDocument[] = this._app.config.get('openFiles')
-
-    const doc = openFiles.find(d => d.path === filePath)
-
-    if (doc === undefined) {
-      this._app.log.error(`[Document Provider] Requested pin status for file ${filePath}, but the file was not in the openFiles array!`, openFiles)
-      return false
+  public async notifyRemoteChange (filePath: string): Promise<void> {
+    if (hasMarkdownExt(filePath)) {
+      const descriptor = await FSALFile.parse(
+        filePath,
+        null,
+        this._app.fsal.getMarkdownFileParser(),
+        this._app.targets,
+        this._app.tags
+      )
+      const returnFile = FSALFile.metadata(descriptor)
+      returnFile.content = await FSALFile.load(descriptor)
+      this.broadcastEvent(DP_EVENTS.FILE_REMOTELY_CHANGED, { filePath, descriptor: returnFile })
     } else {
-      return doc.pinned
+      const descriptor = await FSALCodeFile.parse(filePath, null)
+      const returnFile = FSALCodeFile.metadata(descriptor)
+      returnFile.content = await FSALCodeFile.load(descriptor)
+      this.broadcastEvent(DP_EVENTS.FILE_REMOTELY_CHANGED, { filePath, descriptor: returnFile })
     }
-  }
-
-  /**
-   * Returns a file metadata object including the file contents.
-   * @param {Object} file The file descriptor
-   */
-  public async getFileContents (file: MDFileDescriptor|CodeFileDescriptor): Promise<MDFileMeta|CodeFileMeta> {
-    if (file.type === 'file') {
-      const returnFile = FSALFile.metadata(file)
-      if (file.dir !== ':memory:') {
-        returnFile.content = await FSALFile.load(file)
-      }
-      return returnFile
-    } else if (file.type === 'code') {
-      const returnFile = FSALCodeFile.metadata(file)
-      if (file.dir !== ':memory:') {
-        returnFile.content = await FSALCodeFile.load(file)
-      }
-      return returnFile
-    }
-
-    throw new Error('[FSAL] Could not retrieve file contents: Invalid type or invalid descriptor.')
   }
 
   /**
@@ -517,255 +684,376 @@ export default class DocumentManager extends ProviderContract {
    *
    * @param {MDFileDescriptor|CodeFileDescriptor|null} descriptorPath The descriptor to make active file
    */
-  public set activeFile (descriptor: MDFileDescriptor|CodeFileDescriptor|null) {
-    if (descriptor === null && this._activeFile !== null) {
-      this._activeFile = null
-      this._app.citeproc.loadMainDatabase()
-      this._app.config.set('activeFile', null)
-      this._emitter.emit('update', 'activeFile')
-      broadcastIpcMessage('fsal-state-changed', 'activeFile')
-    } else if (descriptor !== null && descriptor.path !== this.activeFile?.path) {
-      const file = this.openFiles.find(file => file.path === descriptor.path)
+  public setActiveFile (windowId: string, leafId: string, filePath: string|null): void {
+    const leaf = this._windows[windowId].findLeaf(leafId)
+    if (leaf === undefined) {
+      return
+    }
 
-      if (file !== undefined && this._loadedDocuments.includes(file)) {
-        // Make sure the main database is set before, and only load an optional
-        // bibliography file afterwards.
-        this._app.citeproc.loadMainDatabase()
-        // Make sure before selecting the file to load a potential file-specific
-        // database. This can be defined (as for Pandoc) either directly in the
-        // frontmatter OR in the metadata.
-        if (file.type === 'file' && file.frontmatter !== null && 'bibliography' in file.frontmatter) {
-          let dbFile: string = file.frontmatter.bibliography
-          if (!path.isAbsolute(dbFile)) {
-            // Convert to absolute path if necessary
-            dbFile = path.resolve(file.dir, dbFile)
-          }
-          // We have a bibliography
-          this._app.citeproc.loadAndSelect(dbFile)
-            .finally(() => {
-              // No matter what, we need to make the file active
-              this._activeFile = file
-              this._app.recentDocs.add(file.path)
-              this._app.config.set('activeFile', this._activeFile.path)
-              this._emitter.emit('update', 'activeFile')
-              broadcastIpcMessage('fsal-state-changed', 'activeFile')
-            })
-            .catch(err => this._app.log.error(`[DocumentManager] Could not load file-specific database ${dbFile}`, err))
-        } else {
-          this._activeFile = file
-          this._app.recentDocs.add(file.path)
-          this._app.config.set('activeFile', this._activeFile.path)
-          this._emitter.emit('update', 'activeFile')
-          broadcastIpcMessage('fsal-state-changed', 'activeFile')
-        }
-      } else {
-        console.error('Could not set active file. Either file was null or not in openFiles', descriptor, this.activeFile)
+    leaf.tabMan.activeFile = filePath
+    this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId, filePath })
+    this.syncToConfig()
+
+    if (filePath === null) {
+      return // We're done here
+    }
+
+    this._app.citeproc.loadMainDatabase()
+    this.loadFileDatabase(filePath)
+      .catch(err => this._app.log.error(`[Document Manager] Could not load file database for ${filePath}`, err))
+  }
+
+  public sortOpenFiles (windowId: string, leafId: string, newOrder: string[]): void {
+    const leaf = this._windows[windowId].findLeaf(leafId)
+    if (leaf === undefined) {
+      return
+    }
+
+    const res = leaf.tabMan.sortOpenFiles(newOrder)
+    if (res) {
+      this.broadcastEvent(DP_EVENTS.FILES_SORTED, { windowId, leafId })
+      this.syncToConfig()
+    }
+  }
+
+  /**
+   * Using this function, one can move a given file from one editor pane to
+   * another -- even across windows.
+   *
+   * @param {number} originWindow The originating window
+   * @param {number} targetWindow The target window
+   * @param {string} originLeaf   The origin pane in the origin window
+   * @param {string} targetLeaf   The target pane in the target window
+   * @param {string} filePath     The file to be moved
+   */
+  public async moveFile (
+    originWindow: string,
+    targetWindow: string,
+    originLeaf: string,
+    targetLeaf: string,
+    filePath: string
+  ): Promise<void> {
+    // The user has requested to move a file. This basically just means closing
+    // the file in the origin, and opening it in the target
+    const origin = this._windows[originWindow].findLeaf(originLeaf)
+    const target = this._windows[targetWindow].findLeaf(targetLeaf)
+
+    if (origin === undefined || target === undefined) {
+      this._app.log.error(`[Document Manager] Received a move request from ${originLeaf} to ${targetLeaf} but one of those was undefined.`)
+      return
+    }
+
+    // First open the file in the target
+    let success = await target.tabMan.openFile(filePath)
+    if (success) {
+      this.broadcastEvent(DP_EVENTS.OPEN_FILE, { windowId: targetWindow, leafId: targetLeaf, filePath })
+      this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId: targetWindow, leafId: targetLeaf })
+      this.syncToConfig()
+    }
+
+    // Then decide if we should close the leaf ...
+    if (origin.tabMan.openFiles.length === 1) {
+      // Close the leaf instead
+      this.closeLeaf(originWindow, originLeaf)
+      this.syncToConfig()
+    } else {
+      // ... or rather just close the file
+      success = origin.tabMan.closeFile(filePath)
+      if (!success) {
+        this._app.log.error(`[Document Manager] Could not fulfill move request for file ${filePath}: Could not close it.`)
+        return
       }
-    } // Else: No update necessary
+
+      this.broadcastEvent(DP_EVENTS.CLOSE_FILE, { windowId: originWindow, leafId: originLeaf, filePath })
+      this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId: originWindow, leafId: originLeaf })
+      this.syncToConfig()
+    }
+  }
+
+  /**
+   * Splits the given origin leaf along the direction. Optionally, you can also
+   * direct the document manager to immediately move a file from the origin to
+   * the to-be-created leaf to fill it with content.
+   *
+   * @param {number} originWindow   The originating window
+   * @param {string} originLeaf     The origin pane in the origin window
+   * @param {string} splitDirection The direction of the split (horizontal or vertical)
+   * @param {string} insertion      Where to insert the new leaf (defaults to after)
+   * @param {string} filePath       Optional: the file to be moved
+   * @param {number} fromWindow     Optional: If the file doesn't come from origin
+   * @param {string} fromLeaf       Optional: If the file doesn't come from origin
+   */
+  public async splitLeaf (
+    originWindow: string,
+    originLeaf: string,
+    splitDirection: 'horizontal'|'vertical',
+    insertion: 'before'|'after' = 'after',
+    filePath?: string,
+    fromWindow?: string,
+    fromLeaf?: string
+  ): Promise<void> {
+    // The user has requested a split and following move of a file
+    const origin = this._windows[originWindow].findLeaf(originLeaf)
+
+    if (origin === undefined) {
+      this._app.log.error(`[Document Manager] Received a split request from ${originLeaf} but could not find it.`)
+      return
+    }
+
+    const target = origin.split(splitDirection, insertion)
+    this.broadcastEvent(DP_EVENTS.NEW_LEAF, {
+      windowId: originWindow,
+      originLeaf: originLeaf,
+      newLeaf: target.id,
+      direction: splitDirection,
+      insertion
+    })
+
+    this.syncToConfig()
+
+    if (filePath !== undefined) {
+      const win = (fromWindow !== undefined) ? fromWindow : originWindow
+      const leaf = (fromLeaf !== undefined) ? fromLeaf : originLeaf
+      await this.moveFile(win, originWindow, leaf, target.id, filePath)
+    }
+  }
+
+  public closeLeaf (windowId: string, leafId: string): void {
+    const leaf = this._windows[windowId].findLeaf(leafId)
+
+    if (leaf !== undefined) {
+      leaf.parent.removeNode(leaf)
+      this.broadcastEvent(DP_EVENTS.LEAF_CLOSED, { windowId, leafId })
+    }
   }
 
   /**
    * Returns the hash of the currently active file.
    * @returns {number|null} The hash of the active file.
    */
-  public get activeFile (): MDFileDescriptor|CodeFileDescriptor|null {
-    return this._activeFile
+  public getActiveFile (leafId: string): string|null {
+    for (const windowId in this._windows) {
+      const leaf = this._windows[windowId].findLeaf(leafId)
+      if (leaf !== undefined) {
+        return leaf.tabMan.activeFile?.path ?? null
+      }
+    }
+    return null
   }
 
   /**
    * Sets the modification flag on an open file
    */
-  public markDirty (file: MDFileDescriptor|CodeFileDescriptor): void {
-    if (!this._loadedDocuments.includes(file)) {
-      this._app.log.error('[DocumentManager] Cannot mark dirty a non-open file!', file.path)
-      return
+  public markDirty (filePath: string, timestamp: number, contents: string): void {
+    for (const key of this._modifiedFiles.keys()) {
+      if (key[0] === filePath && timestamp > key[1]) {
+        // The file is already marked dirty, but this one is a newer state
+        this._modifiedFiles.delete(key)
+        this._modifiedFiles.set([ filePath, timestamp ], contents)
+        this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { filePath, status: 'modification' })
+        return
+      }
     }
 
-    if (file.type === 'file') {
-      FSALFile.markDirty(file)
-    } else if (file.type === 'code') {
-      FSALCodeFile.markDirty(file)
-    }
-
-    // Notify whomever it concerns that the modification status has changed
-    this._emitter.emit('document-modified-changed')
-    if (this.isClean()) {
-      this._emitter.emit('documents-all-clean')
-    }
+    // If we're here, the file has not yet been marked dirty
+    this._modifiedFiles.set([ filePath, timestamp ], contents)
+    this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { filePath, status: 'modification' })
   }
 
   /**
    * Removes the modification flag on an open file
    */
-  public markClean (file: MDFileDescriptor|CodeFileDescriptor): void {
-    if (!this._loadedDocuments.includes(file)) {
-      this._app.log.error('[DocumentManager] Cannot mark clean a non-open file!', file.path)
-      return
-    }
-
-    if (file.type === 'file') {
-      FSALFile.markClean(file)
-    } else if (file.type === 'code') {
-      FSALCodeFile.markClean(file)
-    }
-
-    // Notify whomever it concerns that the modification status has changed
-    this._emitter.emit('document-modified-changed')
-    if (this.isClean()) {
-      this._emitter.emit('documents-all-clean')
+  public markClean (filePath: string): void {
+    for (const key of this._modifiedFiles.keys()) {
+      if (key[0] === filePath) {
+        this._modifiedFiles.delete(key)
+        this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { filePath, status: 'modification' })
+      }
     }
   }
 
-  /**
-   * Updates the modification flag of all open files based on their paths's
-   * presence in the path list.
-   *
-   * @param   {string[]}  dirtyPaths  The paths to mark dirty. All other open
-   *                                  files will be marked clean.
-   */
-  public updateModifiedFlags (dirtyPaths: string[]): void {
-    for (const openFile of this._loadedDocuments) {
-      if (dirtyPaths.includes(openFile.path)) {
-        this.markDirty(openFile)
-      } else {
-        this.markClean(openFile)
+  public markEverythingClean (): void {
+    this._modifiedFiles.clear()
+    this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { status: 'modification' })
+  }
+
+  public isModified (filePath: string): boolean {
+    for (const [fPath] of this._modifiedFiles.keys()) {
+      if (fPath === filePath) {
+        return true
       }
     }
+
+    return false
   }
 
   /**
    * Returns true if none of the open files have their modified flag set.
+   *
+   * @param  {string|number}  leafId  Can either contain a leafId or a window
+   *                                  index, and returns the clean state only
+   *                                  for that. If undefined, returns the total
+   *                                  clean state.
    */
-  public isClean (): boolean {
-    for (const openFile of this._loadedDocuments) {
-      if (openFile.modified) {
-        return false
+  public isClean (id?: string, which?: 'window'|'leaf'): boolean {
+    const modPaths = Array.from(this._modifiedFiles.keys()).map(x => x[0])
+    if (id === undefined) {
+      // Total clean state
+      for (const key in this._windows) {
+        const allLeafs = this._windows[key].getAllLeafs()
+        for (const leaf of allLeafs) {
+          for (const file of leaf.tabMan.openFiles) {
+            if (modPaths.includes(file.path)) {
+              return false
+            }
+          }
+        }
+      }
+    } else if (which === 'window') {
+      // window-specific clean state
+      const allLeafs = this._windows[id].getAllLeafs()
+      for (const leaf of allLeafs) {
+        for (const file of leaf.tabMan.openFiles) {
+          if (modPaths.includes(file.path)) {
+            return false
+          }
+        }
+      }
+    } else {
+      // leaf-specific clean state
+      for (const key in this._windows) {
+        const leaf = this._windows[key].findLeaf(id)
+        if (leaf !== undefined) {
+          for (const file of leaf.tabMan.openFiles) {
+            if (modPaths.includes(file.path)) {
+              return false
+            }
+          }
+        }
       }
     }
+
     return true
   }
 
   /**
-   * Create a new file in memory (= unsaved and with no path assigned).
+   * This function will return a more recent, cached version of the given file
+   * if the given file has been recently modified but not yet saved. In that
+   * case, the document provider will have the most recently edited content in
+   * its cache.
+   *
+   * @param   {string}  filePath  The file in question
+   *
+   * @return  {string}            A string with the file contents, or undefined
+   *                              if the file has not been modified inside the
+   *                              program.
    */
-  public async newUnsavedFile (type?: 'md'|'yaml'|'json'|'tex'): Promise<MDFileDescriptor|CodeFileDescriptor> {
-    // First, find out where we should create the file -- either behind the
-    // activeFile, or at the end of the list of open files.
-    let activeIdx = this.openFiles.findIndex(file => file === this.activeFile)
-    if (activeIdx < 0) {
-      activeIdx = this.openFiles.length - 2
-    }
+  public getCachedVersion (filePath: string): string|undefined {
+    let candidate: string|undefined
+    let timestamp: number = -Infinity
 
-    // The appendix of the filename will be a number related to the amount of
-    // duplicate files in the open files array
-    const filenamePattern = this._app.config.get('newFileNamePattern')
-    const idGenPattern = this._app.config.get('zkn.idGen')
-    let fname = generateFilename(filenamePattern, idGenPattern)
-    const ext = path.extname(fname).toLowerCase()
-    if (type !== 'md' && !hasCodeExt(fname)) {
-      // The user has explicitly requested a code file so we must respect
-      // the decision.
-      if (type === 'tex' && ext !== '.tex') {
-        fname += '.tex'
-      } else if (type === 'json' && ext !== '.json') {
-        fname += '.json'
-      } else if (type === 'yaml' && ![ '.yaml', '.yml' ].includes(ext)) {
-        fname += '.yaml'
-      }
-    } else if (!hasMarkdownExt(fname)) {
-      fname += '.md'
-    }
-
-    const post = (this.openFiles.filter(f => f.name === fname).length > 0) ? '-1' : ''
-    // Splice the "post" into the filename
-    const finalFname = path.basename(fname, path.extname(fname)) + post + path.extname(fname)
-
-    // Now create the file object. It's basically treated like a root file, but
-    // with no real location on the file system associated.
-    let file: MDFileDescriptor|CodeFileDescriptor
-
-    if (type === 'md') {
-      file = {
-        parent: null,
-        name: finalFname,
-        dir: ':memory:', // Special location
-        path: ':memory:/' + finalFname,
-        // NOTE: Many properties are strictly speaking invalid
-        hash: 0,
-        size: 0,
-        modtime: 0, // I'm waiting for that 01.01.1970 bug to appear ( ͡° ͜ʖ ͡°)
-        creationtime: 0,
-        ext: '.md',
-        id: '',
-        type: 'file',
-        tags: [],
-        links: [],
-        bom: '',
-        wordCount: 0,
-        charCount: 0,
-        target: undefined,
-        firstHeading: null,
-        frontmatter: null,
-        linefeed: '\n',
-        modified: false
-      }
-    } else {
-      file = {
-        parent: null,
-        name: finalFname,
-        dir: ':memory:', // Special location
-        path: ':memory:/' + finalFname,
-        // NOTE: Many properties are strictly speaking invalid
-        hash: 0,
-        size: 0,
-        modtime: 0, // I'm waiting for that 01.01.1970 bug to appear ( ͡° ͜ʖ ͡°)
-        creationtime: 0,
-        ext: path.extname(finalFname),
-        id: '',
-        type: 'code',
-        tags: [],
-        bom: '',
-        linefeed: '\n',
-        modified: false
+    for (const key of this._modifiedFiles.keys()) {
+      if (key[0] === filePath && key[1] > timestamp) {
+        candidate = this._modifiedFiles.get(key)
+        timestamp = key[1]
       }
     }
 
-    // Now splice it at the correct position
-    const openFiles = this.openFiles
-    openFiles.splice(activeIdx + 1, 0, file)
-    this.openFiles = openFiles // Will take care of all other things
-
-    return file
+    return candidate
   }
 
-  public async saveFile (src: MDFileDescriptor|CodeFileDescriptor, content: string): Promise<void> {
-    if (src.type === 'file') {
+  public async navigateForward (windowId: string, leafId: string): Promise<void> {
+    const leaf = this._windows[windowId].findLeaf(leafId)
+    if (leaf === undefined) {
+      return
+    }
+
+    await leaf.tabMan.forward()
+    this.broadcastEvent(DP_EVENTS.OPEN_FILE, { windowId, leafId })
+    this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId })
+  }
+
+  public async navigateBack (windowId: string, leafId: string): Promise<void> {
+    const leaf = this._windows[windowId].findLeaf(leafId)
+    if (leaf === undefined) {
+      return
+    }
+
+    await leaf.tabMan.back()
+    this.broadcastEvent(DP_EVENTS.OPEN_FILE, { windowId, leafId })
+    this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId })
+  }
+
+  public async saveFile (windowId: string, leafId: string, filePath: string, contents: string): Promise<boolean> {
+    const basename = path.basename(filePath)
+    const leaf = this._windows[windowId].findLeaf(leafId)
+
+    if (leaf === undefined) {
+      this._app.log.error(`[Document Manager] Could not save file ${basename} since no editor pane was found.`)
+      return false
+    }
+
+    this._ignoreChanges.push(filePath)
+
+    let descriptor = await this.loadFile(filePath)
+    if (descriptor.type === 'file') {
       await FSALFile.save(
-        src,
-        content,
+        descriptor,
+        contents,
         this._app.fsal.getMarkdownFileParser(),
         this._app.tags,
         null
       )
     } else {
-      await FSALCodeFile.save(src, content, null)
+      await FSALCodeFile.save(descriptor, contents, null)
     }
 
-    // Notify that a file has saved, which strictly speaking does not
-    // modify the openFiles array, but does change the modification flag.
-    this._emitter.emit('update', 'fileSaved', src)
-    broadcastIpcMessage('fsal-state-changed', 'openFiles')
+    // At this point, notify the leaf that the file's no longer modified
+    this.markClean(filePath)
+    this.broadcastEvent(DP_EVENTS.FILE_SAVED, { filePath })
 
     // Also, make sure to (re)load the file's bibliography file, if applicable.
-    if (src.type === 'file' && src.frontmatter !== null && 'bibliography' in src.frontmatter) {
-      let dbFile: string = src.frontmatter.bibliography
+    await this.loadFileDatabase(filePath)
+
+    return true
+  }
+
+  /**
+   * Loads a file-specific database
+   *
+   * @param   {string}   filePath  The file in question
+   */
+  private async loadFileDatabase (filePath: string): Promise<void> {
+    const descriptor = await this.loadFile(filePath)
+    if (descriptor.type === 'file' && descriptor.frontmatter !== null && 'bibliography' in descriptor.frontmatter) {
+      let dbFile: string = descriptor.frontmatter.bibliography
       if (!path.isAbsolute(dbFile)) {
         // Convert to absolute path if necessary
-        dbFile = path.resolve(src.dir, dbFile)
+        dbFile = path.resolve(descriptor.dir, dbFile)
       }
       // We have a bibliography
-      this._app.citeproc.loadAndSelect(dbFile)
-        .catch(err => this._app.log.error(`[FSAL] Could not load file-specific database ${dbFile}`, err))
+      await this._app.citeproc.loadAndSelect(dbFile)
+    }
+  }
+
+  /**
+   * Loads a file into a FSAL descriptor
+   *
+   * @param   {string}                    filePath  The file to load
+   *
+   * @return  {Promise<MDFileDescriptor>}           The descriptor
+   */
+  private async loadFile (filePath: string): Promise<MDFileDescriptor|CodeFileDescriptor> {
+    if (hasMarkdownExt(filePath)) {
+      return await FSALFile.parse(
+        filePath,
+        null,
+        this._app.fsal.getMarkdownFileParser(),
+        this._app.targets,
+        this._app.tags
+      )
+    } else {
+      return await FSALCodeFile.parse(filePath, null)
     }
   }
 }

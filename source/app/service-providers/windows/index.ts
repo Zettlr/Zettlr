@@ -23,7 +23,6 @@ import {
   FileFilter,
   shell
 } from 'electron'
-import { promises as fs } from 'fs'
 import EventEmitter from 'events'
 import path from 'path'
 import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/main/fsal'
@@ -55,11 +54,13 @@ import ProviderContract from '@providers/provider-contract'
 import LogProvider from '@providers/log'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import DocumentManager from '@providers/documents'
+import { DP_EVENTS } from '@dts/common/documents'
 import { trans } from '@common/i18n-main'
 import ConfigProvider from '@providers/config'
+import ConfigFileContainer from '@common/modules/config-file-container'
 
 export default class WindowProvider extends ProviderContract {
-  private _mainWindow: BrowserWindow|null
+  private readonly _mainWindows: { [key: string]: BrowserWindow }
   private readonly _qlWindows: Map<string, BrowserWindow>
   private _printWindow: BrowserWindow|null
   private _updateWindow: BrowserWindow|null
@@ -75,10 +76,10 @@ export default class WindowProvider extends ProviderContract {
   private _printWindowFile: string|undefined
   private _windowState: Map<string, WindowPosition>
   private readonly _configFile: string
-  private _fileLock: boolean
-  private _persistTimeout: ReturnType<typeof setTimeout>|undefined
+  private readonly _stateContainer: ConfigFileContainer
   private readonly _hasRTLLocale: boolean
   private readonly _emitter: EventEmitter
+  private _shuttingDown: boolean
 
   constructor (
     private readonly _logger: LogProvider,
@@ -87,7 +88,7 @@ export default class WindowProvider extends ProviderContract {
   ) {
     super()
     this._emitter = new EventEmitter()
-    this._mainWindow = null
+    this._mainWindows = {}
     this._qlWindows = new Map()
     this._printWindow = null
     this._updateWindow = null
@@ -102,8 +103,9 @@ export default class WindowProvider extends ProviderContract {
     this._assetsWindow = null
     this._projectProperties = null
     this._windowState = new Map()
-    this._configFile = path.join(app.getPath('userData'), 'window_state.json')
-    this._fileLock = false
+    this._configFile = path.join(app.getPath('userData'), 'window_state.yml')
+    this._stateContainer = new ConfigFileContainer(this._configFile, 'yaml', 1000)
+    this._shuttingDown = false
 
     // Detect whether we have an RTL locale for correct traffic light positions.
     const schema = bcp47.parse(app.getLocale())
@@ -136,12 +138,15 @@ export default class WindowProvider extends ProviderContract {
         this._askUserToCloseWindow()
           .then(canCloseWindow => {
             if (canCloseWindow) {
+              this._shuttingDown = true
               app.quit()
             }
           })
           .catch(err => {
             this._logger.error('[WindowManager] Could not ask user to close window', err)
           })
+      } else {
+        this._shuttingDown = true
       }
     })
 
@@ -240,40 +245,35 @@ export default class WindowProvider extends ProviderContract {
       return dir
     })
 
-    this._documents.on('document-modified-changed', () => {
+    this._documents.on(DP_EVENTS.CHANGE_FILE_STATUS, (ctx: any) => {
       // Always update the main window's flag depending on whether the document
       // manager is clean or not
-      this.setModified(!this._documents.isClean())
+      for (const key in this._mainWindows) {
+        this.setModified(key, !this._documents.isClean(key, 'window'))
+      }
+    })
+
+    this._documents.on(DP_EVENTS.NEW_WINDOW, () => {
+      this.showMainWindows()
+    })
+
+    this._documents.on(DP_EVENTS.WINDOW_CLOSED, ({ windowId }) => {
+      const win = this._mainWindows[windowId]
+      win.close()
     })
   }
 
   /**
-   * Loads persisted window position data from disk
+   * Programmatically closes all main windows that are open.
    */
-  async loadData (): Promise<void> {
-    try {
-      const data = await fs.readFile(this._configFile, 'utf8')
-      const tmpObject = JSON.parse(data)
-      if (Array.isArray(tmpObject)) {
-        // Old configuration object --> do not map!
-        this._logger.warning('[Window Manager] Detected an old windowState configuration file. Not retaining values!')
-        return
-      }
-      this._logger.info(`[Window Manager] Loading state information from ${this._configFile}`)
-      this._windowState = new Map(Object.entries(tmpObject))
-    } catch (err) {
-      // Apparently no such file -> we'll leave the original (empty) array.
-      this._logger.info('[Window Manager] No window state information found.')
+  closeMainWindows (): void {
+    for (const key in this._mainWindows) {
+      this._mainWindows[key].close()
     }
   }
 
-  /**
-   * Programmatically closes the main window if it is open.
-   */
-  closeMainWindow (): void {
-    if (this._mainWindow !== null) {
-      this._mainWindow.close()
-    }
+  newMainWindow (): void {
+    this._documents.newWindow()
   }
 
   /**
@@ -281,13 +281,21 @@ export default class WindowProvider extends ProviderContract {
    */
   async boot (): Promise<void> {
     this._logger.verbose('Window manager booting up ...')
+
     // Immediately begin loading the data
-    await this.loadData()
+    if (!await this._stateContainer.isInitialized()) {
+      await this._stateContainer.init(Object.fromEntries(this._windowState))
+    }
+    const tmpObject = await this._stateContainer.get()
+    this._windowState = new Map(Object.entries(tmpObject))
     this._logger.info('[Window Manager] Window Manager started.')
+  }
+
+  public maybeShowWindows (): void {
     const shouldStartMinimized = process.argv.includes('--launch-minimized')
     const traySupported = process.env.ZETTLR_IS_TRAY_SUPPORTED === '1'
     if (!shouldStartMinimized || !traySupported) {
-      this.showMainWindow()
+      this.showMainWindows()
     } else {
       this._logger.info('[Window Manager] Application should start in tray. Not showing main window.')
     }
@@ -317,19 +325,15 @@ export default class WindowProvider extends ProviderContract {
    * Shuts down the window manager and performs final operations
    */
   async shutdown (): Promise<void> {
-    this._persistWindowPositions()
+    this._stateContainer.shutdown()
   }
 
   /**
    * Listens to events on the main window
    */
-  private _hookMainWindow (): void {
-    if (this._mainWindow === null) {
-      return
-    }
-
+  private _hookMainWindow (window: BrowserWindow): void {
     // Listens to events from the window
-    this._mainWindow.on('close', (event) => {
+    window.on('close', (event) => {
       // The user has requested the window to be closed -> first close
       // all other windows. NOTE: This also closes windows not instantiated
       // from within this class. This is a failsafe -- don't open windows outside
@@ -338,32 +342,64 @@ export default class WindowProvider extends ProviderContract {
       for (const win of allWindows) {
         // Don't close the main window just yet. We are just preparing for the
         // shutdown by closing all other windows.
-        if (win === this._mainWindow) {
-          continue
+        if (this.getMainWindowKey(win) === undefined) {
+          win.close()
         }
-
-        win.close()
       }
 
-      if (!this._documents.isClean()) {
+      const key = this.getMainWindowKey(window)
+
+      if (key === undefined) {
+        this._logger.error('[Window Manager] Could not close window since its key was not found!')
+        return
+      }
+
+      if (!this._documents.isClean(key)) {
         event.preventDefault()
-        this._askUserToCloseWindow()
+        this._askUserToCloseWindow(key)
           .then(canCloseWindow => {
             if (canCloseWindow) {
-              this._mainWindow?.close()
+              window.close()
             }
           })
           .catch(err => {
             this._logger.error('[WindowManager] Could not ask user to close window', err)
           })
       }
+
+      // If we're not shutting down, ask the document provider to close the window
+      if (!this._shuttingDown) {
+        this._documents.closeWindow(key)
+      }
     })
 
-    this._mainWindow.on('closed', () => {
+    window.on('closed', () => {
       // The window has been closed -> dereference
-      this._mainWindow = null
-      this._emitter.emit('main-window-closed')
+      const key = this.getMainWindowKey(window)
+      if (key === undefined) {
+        this._logger.error('[Window Manager] Could not close a main window since its key was not found!')
+        return
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete this._mainWindows[key]
     })
+  }
+
+  /**
+   * Returns the associated key for the provided window. Returns undefined if it
+   * is not a main window
+   *
+   * @param   {BrowserWindow}  win  The window
+   *
+   * @return  {string}              The key
+   */
+  public getMainWindowKey (win: BrowserWindow): string|undefined {
+    for (const key in this._mainWindows) {
+      if (win === this._mainWindows[key]) {
+        return key
+      }
+    }
   }
 
   /**
@@ -375,14 +411,14 @@ export default class WindowProvider extends ProviderContract {
    *
    * @return  {Promise<boolean>}  True if the main window can safely be closed.
    */
-  private async _askUserToCloseWindow (): Promise<boolean> {
-    if (this._documents.isClean()) {
+  private async _askUserToCloseWindow (windowId?: string): Promise<boolean> {
+    if (this._documents.isClean(windowId)) {
       return true
     }
 
     const result = await this.askSaveChanges()
     if (result.response === 0) {
-      this._documents.updateModifiedFlags([])
+      this._documents.markEverythingClean()
       return true
     } else if (result.response === 1) {
       return await new Promise<boolean>((resolve, reject) => {
@@ -410,27 +446,7 @@ export default class WindowProvider extends ProviderContract {
    * Persists the window positions to disk
    */
   private _persistWindowPositions (): void {
-    if (this._fileLock) {
-      if (this._persistTimeout !== undefined) {
-        clearTimeout(this._persistTimeout)
-        this._persistTimeout = undefined
-      }
-      // Try again after one second, because there is currently data being written
-      this._persistTimeout = setTimeout(() => {
-        this._persistWindowPositions()
-      }, 1000)
-      return
-    }
-
-    const data = JSON.stringify(Object.fromEntries(this._windowState))
-    this._fileLock = true
-    fs.writeFile(this._configFile, data)
-      .then(() => {
-        this._fileLock = false
-      })
-      .catch((err) => {
-        this._logger.error(`[Window Manager] Could not persist data: ${err.message as string}`, err)
-      })
+    this._stateContainer.set(Object.fromEntries(this._windowState))
   }
 
   /**
@@ -484,17 +500,23 @@ export default class WindowProvider extends ProviderContract {
    * @param   {WindowPosition}  position  The window position to be set.
    */
   private _updateWindowPosition (stateId: string, position: WindowPosition): void {
-    // First, get the current display of the position. NOTE: We have to construct
-    // a new object since getDisplayMatching requires integers
-    const { id, workArea } = screen.getDisplayMatching({
-      x: Math.round(position.x),
-      y: Math.round(position.y),
-      width: Math.round(position.width),
-      height: Math.round(position.height)
-    })
+    // First a fallback display
+    let { id, workArea } = screen.getPrimaryDisplay()
+
+    // Then try to find the correct display
+    const allDisplays = screen.getAllDisplays()
+    for (const display of allDisplays) {
+      if (display.id === position.lastDisplayId) {
+        // Wonderful
+        id = display.id
+        workArea = display.workArea
+        break
+      }
+    }
+
     position.lastDisplayId = id
 
-    // Then, make sure that all bounds are still good to go
+    // Make sure that all bounds are still good to go
     if (position.width > workArea.width) {
       position.width = workArea.width
     }
@@ -503,12 +525,25 @@ export default class WindowProvider extends ProviderContract {
       position.height = workArea.height
     }
 
-    if (position.x + position.width > workArea.x + workArea.width) {
+    const positionRight = position.x + position.width
+    const positionBottom = position.y + position.height
+    const workAreaRight = workArea.x + workArea.width
+    const workAreaBottom = workArea.y + workArea.height
+
+    if (position.x < workArea.x) {
       position.x = workArea.x
     }
 
-    if (position.y + position.height > workArea.y + workArea.height) {
+    if (position.y < workArea.y) {
       position.y = workArea.y
+    }
+
+    if (positionRight > workAreaRight) {
+      position.x -= positionRight - workAreaRight
+    }
+
+    if (positionBottom > workAreaBottom) {
+      position.y -= positionBottom - workAreaBottom
     }
 
     position.isMaximised = position.width === workArea.width && position.height === workArea.height
@@ -549,23 +584,43 @@ export default class WindowProvider extends ProviderContract {
   }
 
   /**
-   * Shows the main window
+   * Shows the main windows
    */
-  showMainWindow (): void {
-    if (this._mainWindow === null) {
+  showMainWindows (): void {
+    // Remove main windows that are no longer in the document manager
+    const documentKeys = this._documents.windowKeys()
+    for (const key in this._mainWindows) {
+      if (!documentKeys.includes(key)) {
+        this._mainWindows[key].close()
+      }
+    }
+
+    for (const key of documentKeys) {
+      if (key in this._mainWindows) {
+        this._makeVisible(this._mainWindows[key])
+        continue
+      }
+
+      const stateId = `main-${key}`
+
+      // Then deal with all windows that are not yet visible
       const { workArea } = screen.getPrimaryDisplay()
-      const windowConfiguration = this._retrieveWindowPosition('main', {
+      const windowConfiguration = this._retrieveWindowPosition(stateId, {
         y: workArea.y,
         x: workArea.x,
         width: workArea.width,
         height: workArea.height
       })
 
-      this._mainWindow = createMainWindow(0, this._logger, this._config, this._documents, windowConfiguration)
-      this._hookMainWindow()
-      this._hookWindowResize(this._mainWindow, 'main')
-    } else {
-      this._makeVisible(this._mainWindow)
+      const win = createMainWindow(key, this._logger, this._config, this._documents, windowConfiguration)
+      this._hookMainWindow(win)
+      this._hookWindowResize(win, stateId)
+      this._mainWindows[key] = win
+    }
+
+    if (this._documents.windowCount() === 0) {
+      // There must be always at least one window
+      this._documents.newWindow()
     }
   }
 
@@ -575,9 +630,30 @@ export default class WindowProvider extends ProviderContract {
   showAnyWindow (): void {
     const windows = BrowserWindow.getAllWindows()
     if (windows.length === 0) {
-      this.showMainWindow()
+      this.showMainWindows()
     } else {
       this._makeVisible(windows[0])
+    }
+  }
+
+  /**
+   * Returns the first existing main window. This function will return the
+   * focused window, if that happens to be a main window, otherwise the first
+   * main window that is open.
+   *
+   * @return  {BrowserWindow|undefined}  The window, or undefined
+   */
+  getFirstMainWindow (): BrowserWindow|undefined {
+    const focusedWindow = BrowserWindow.getFocusedWindow()
+    if (focusedWindow !== null && this.getMainWindowKey(focusedWindow) !== undefined) {
+      return focusedWindow
+    }
+
+    const allWindows = BrowserWindow.getAllWindows()
+    for (const win of allWindows) {
+      if (this.getMainWindowKey(win) !== undefined) {
+        return win
+      }
     }
   }
 
@@ -724,10 +800,11 @@ export default class WindowProvider extends ProviderContract {
    */
   async showPasteImageModal (startPath: string): Promise<any> {
     return await new Promise((resolve, reject) => {
-      if (this._mainWindow === null) {
+      const firstMainWin = this.getFirstMainWindow()
+      if (firstMainWin === undefined) {
         return reject(new Error('[Window Manager] A paste image modal was requested, but there was no main window open.'))
       }
-      this._pasteImageModal = createPasteImageModal(this._logger, this._config, this._mainWindow, startPath)
+      this._pasteImageModal = createPasteImageModal(this._logger, this._config, firstMainWin, startPath)
 
       ipcMain.on('paste-image-ready', (event, data) => {
         // Resolve now
@@ -752,7 +829,8 @@ export default class WindowProvider extends ProviderContract {
    * @param   {string}  contents  Optional further contents
    */
   showErrorMessage (title: string, message: string, contents?: string): void {
-    if (this._mainWindow === null) {
+    const firstMainWin = this.getFirstMainWindow()
+    if (firstMainWin === undefined) {
       this._logger.error('[Application] Could not display error message, because the main window was not open!', message)
       return
     }
@@ -763,7 +841,7 @@ export default class WindowProvider extends ProviderContract {
       this._errorModal = null
     }
 
-    this._errorModal = createErrorModal(this._logger, this._config, this._mainWindow, title, message, contents)
+    this._errorModal = createErrorModal(this._logger, this._config, firstMainWin, title, message, contents)
 
     // Dereference the window as soon as it is closed
     this._errorModal.on('closed', () => {
@@ -859,19 +937,10 @@ export default class WindowProvider extends ProviderContract {
    *
    * @param   {boolean}  modificationState  Whether to indicate a modification
    */
-  setModified (modificationState: boolean): void {
-    if (this._mainWindow !== null && process.platform === 'darwin') {
-      this._mainWindow.setDocumentEdited(modificationState)
+  setModified (windowId: string, modificationState: boolean): void {
+    if (windowId in this._mainWindows && process.platform === 'darwin') {
+      this._mainWindows[windowId].setDocumentEdited(modificationState)
     }
-  }
-
-  /**
-   * Returns the main window
-   *
-   * @return  {BrowserWindow|null}  The main window
-   */
-  getMainWindow (): BrowserWindow|null {
-    return this._mainWindow
   }
 
   // ######################### DIALOG BOXES ####################################
@@ -883,8 +952,9 @@ export default class WindowProvider extends ProviderContract {
    * @param {string}   filename The filename to be displayed.
    * @return {boolean} True if the file should be replaced
    */
-  async shouldReplaceFile (filename: string): Promise<boolean> {
-    if (this._mainWindow === null) {
+  async shouldReplaceFile (filePath: string): Promise<boolean> {
+    const firstMainWin = this.getFirstMainWindow()
+    if (firstMainWin === undefined) {
       // If the main window is not open, there is no sense in showing this
       // box, as the file is not really "open". It will be shown once a new
       // main window is opened, but then the file contents will be loaded from
@@ -892,7 +962,9 @@ export default class WindowProvider extends ProviderContract {
       return true
     }
 
-    return await shouldReplaceFileDialog(this._config, this._mainWindow, filename)
+    const filename = path.basename(filePath)
+
+    return await shouldReplaceFileDialog(this._config, firstMainWin, filename)
   }
 
   /**
@@ -901,7 +973,12 @@ export default class WindowProvider extends ProviderContract {
     * @return  {boolean}         Resolves with true if the file should be overwritten
     */
   async shouldOverwriteFile (filename: string): Promise<boolean> {
-    return await shouldOverwriteFileDialog(this._mainWindow, filename)
+    const firstMainWin = this.getFirstMainWindow()
+    if (firstMainWin === undefined) {
+      return false
+    }
+
+    return await shouldOverwriteFileDialog(firstMainWin, filename)
   }
 
   /**
@@ -912,7 +989,11 @@ export default class WindowProvider extends ProviderContract {
    * @return  {Promise<any>}  Returns the message box results
    */
   async askSaveChanges (): Promise<Electron.MessageBoxReturnValue> {
-    return await askSaveChanges(this._mainWindow)
+    const firstMainWin = this.getFirstMainWindow()
+    if (firstMainWin === undefined) {
+      throw new Error('Could not ask to save changes: No main window was open!')
+    }
+    return await askSaveChanges(firstMainWin)
   }
 
   /**
@@ -923,7 +1004,11 @@ export default class WindowProvider extends ProviderContract {
     if (win != null) {
       return await askDirectoryDialog(this._config, win, title, buttonLabel)
     } else {
-      return await askDirectoryDialog(this._config, this._mainWindow, title, buttonLabel)
+      const firstMainWin = this.getFirstMainWindow()
+      if (firstMainWin === undefined) {
+        throw new Error('Could not ask user for directory: No main window open!')
+      }
+      return await askDirectoryDialog(this._config, firstMainWin, title, buttonLabel)
     }
   }
 
@@ -941,7 +1026,11 @@ export default class WindowProvider extends ProviderContract {
     if (win != null) {
       return await askFileDialog(this._config, win, filters, multiSel)
     } else {
-      return await askFileDialog(this._config, this._mainWindow, filters, multiSel)
+      const firstMainWin = this.getFirstMainWindow()
+      if (firstMainWin === undefined) {
+        throw new Error('Could not ask user for file: No main window open!')
+      }
+      return await askFileDialog(this._config, firstMainWin, filters, multiSel)
     }
   }
 
@@ -963,7 +1052,11 @@ export default class WindowProvider extends ProviderContract {
     if (win != null) {
       return await saveFileDialog(this._logger, this._config, win, fileOrPathName)
     } else {
-      return await saveFileDialog(this._logger, this._config, this._mainWindow, fileOrPathName)
+      const firstMainWin = this.getFirstMainWindow()
+      if (firstMainWin === undefined) {
+        throw new Error('Could not ask user to save: No main window open!')
+      }
+      return await saveFileDialog(this._logger, this._config, firstMainWin, fileOrPathName)
     }
   }
 
@@ -972,7 +1065,11 @@ export default class WindowProvider extends ProviderContract {
     * @param  {any} options Necessary informations for displaying the prompt
     */
   prompt (options: any): void {
-    promptDialog(this._logger, this._mainWindow, options)
+    const firstMainWin = this.getFirstMainWindow()
+    if (firstMainWin === undefined) {
+      return
+    }
+    promptDialog(this._logger, firstMainWin, options)
   }
 
   /**
@@ -981,6 +1078,10 @@ export default class WindowProvider extends ProviderContract {
     * @return {boolean}                                   True if user wishes to remove it.
     */
   async confirmRemove (descriptor: MDFileDescriptor|CodeFileDescriptor|DirDescriptor): Promise<boolean> {
-    return await confirmRemove(this._mainWindow, descriptor)
+    const firstMainWin = this.getFirstMainWindow()
+    if (firstMainWin === undefined) {
+      return true
+    }
+    return await confirmRemove(firstMainWin, descriptor)
   }
 }
