@@ -296,7 +296,8 @@ onMounted(() => {
       payload: {
         linkContents: linkContents,
         newTab: undefined, // let open-file command decide based on preferences
-        leafId: props.leafId
+        leafId: props.leafId,
+        windowId: props.windowId
       }
     })
       .catch(err => console.error(err))
