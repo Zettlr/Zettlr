@@ -199,7 +199,7 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-body #editor {
+body .main-editor-wrapper {
   background-color: #ffffff;
   height: 100%;
 
@@ -210,7 +210,7 @@ body #editor {
   }
 }
 
-body.dark #editor {
+body.dark .main-editor-wrapper {
   background-color: rgba(20, 20, 30, 1);
 }
 </style>
