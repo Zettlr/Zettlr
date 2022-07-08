@@ -143,7 +143,7 @@ import YAML from 'yaml'
 import { nextTick, ref, computed, onMounted, watch, toRef } from 'vue'
 import { useStore } from 'vuex'
 import { key as storeKey } from './store'
-import { MainEditorDocumentWrapper } from '@dts/renderer/editor'
+import { EditorCommands, MainEditorDocumentWrapper } from '@dts/renderer/editor'
 import retrieveDocumentFromMain from './util/retrieve-document-from-main'
 import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
 import { DP_EVENTS } from '@dts/common/documents'
@@ -167,6 +167,10 @@ const props = defineProps({
   },
   windowId: {
     type: String,
+    required: true
+  },
+  editorCommands: {
+    type: Object as () => EditorCommands,
     required: true
   }
 })
@@ -341,6 +345,7 @@ const globalSearchResults = computed(() => store.state.searchResults)
 const node = computed(() => store.state.paneData.find(leaf => leaf.id === props.leafId))
 const activeFile = computed(() => node.value?.activeFile)
 const openFiles = computed(() => node.value?.openFiles ?? [])
+const lastLeafId = computed(() => store.state.lastLeafId)
 
 const editorConfiguration = computed<any>(() => {
   // We update everything, because not so many values are actually updated
@@ -398,6 +403,43 @@ const editorConfiguration = computed<any>(() => {
       }
     }
   }
+})
+
+// External commands/"event" system
+watch(toRef(props.editorCommands, 'jumpToLine'), () => {
+  if (lastLeafId.value !== props.leafId) {
+    return
+  }
+  const { lineNumber, setCursor } = props.editorCommands.data
+  jtl(lineNumber, setCursor)
+})
+watch(toRef(props.editorCommands, 'moveSection'), () => {
+  if (lastLeafId.value !== props.leafId) {
+    return
+  }
+  const { from, to } = props.editorCommands.data
+  moveSection(from, to)
+})
+watch(toRef(props.editorCommands, 'addKeywords'), () => {
+  if (lastLeafId.value !== props.leafId) {
+    return
+  }
+  const keywords: string[] = props.editorCommands.data
+  addKeywordsToFile(keywords)
+})
+watch(toRef(props.editorCommands, 'executeCommand'), () => {
+  if (lastLeafId.value !== props.leafId) {
+    return
+  }
+  const command: string = props.editorCommands.data
+  executeCommand(command)
+})
+watch(toRef(props.editorCommands, 'replaceSelection'), () => {
+  if (lastLeafId.value !== props.leafId) {
+    return
+  }
+  const textToInsert: string = props.editorCommands.data
+  replaceSelection(textToInsert)
 })
 
 const findPlaceholder = trans('dialog.find.find_placeholder')

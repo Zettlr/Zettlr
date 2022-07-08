@@ -26,7 +26,7 @@
         <GlobalSearch
           v-show="mainSplitViewVisibleComponent === 'globalSearch'"
           ref="global-search"
-          v-on:jtl="($refs.editor as any).jtl($event)"
+          v-on:jtl="jtl($event)"
         >
         </GlobalSearch>
       </template>
@@ -44,12 +44,14 @@
               v-if="paneConfiguration.type === 'leaf'"
               v-bind:node="paneConfiguration"
               v-bind:leaf-id="paneConfiguration.id"
+              v-bind:editor-commands="editorCommands"
               v-bind:window-id="windowId"
             ></EditorPane>
             <EditorBranch
               v-else
               v-bind:node="paneConfiguration"
               v-bind:window-id="windowId"
+              v-bind:editor-commands="editorCommands"
             ></EditorBranch>
           </template>
           <template #view2>
@@ -101,6 +103,7 @@ import alarmFile from './assets/digital_alarm.mp3'
 import chimeFile from './assets/chime.mp3'
 import { ToolbarControl } from '@dts/renderer/window'
 import { OpenDocument, BranchNodeJSON, LeafNodeJSON } from '@dts/common/documents'
+import { EditorCommands } from '@dts/renderer/editor'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
@@ -167,6 +170,15 @@ export default defineComponent({
           long: '#33ffcc'
         }
       },
+      // Editor commands state
+      editorCommands: {
+        jumpToLine: false,
+        moveSection: false,
+        addKeywords: false,
+        replaceSelection: false,
+        executeCommand: false,
+        data: undefined
+      } as EditorCommands,
       sidebarsBeforeDistractionfree: {
         fileManager: true,
         sidebar: false
@@ -540,10 +552,12 @@ export default defineComponent({
   },
   methods: {
     jtl: function (lineNumber: number, setCursor: boolean = false) {
-      (this.$refs.editor as any).jtl(lineNumber, setCursor)
+      this.editorCommands.data = { lineNumber, setCursor }
+      this.editorCommands.jumpToLine = !this.editorCommands.jumpToLine
     },
     moveSection: function (data: { from: number, to: number }) {
-      (this.$refs.editor as any).moveSection(data.from, data.to)
+      this.editorCommands.data = { from: data.from, to: data.to }
+      this.editorCommands.moveSection = !this.editorCommands.moveSection
     },
     startGlobalSearch: function (terms: string) {
       this.mainSplitViewVisibleComponent = 'globalSearch'
@@ -629,7 +643,8 @@ export default defineComponent({
             this.startGlobalSearch('#' + data.searchForTag)
             this.$closePopover()
           } else if (data.addSuggestionsToFile === true) {
-            (this.$refs.editor as any).addKeywordsToFile(data.suggestions)
+            this.editorCommands.data = data.suggestions
+            this.editorCommands.addKeywords = !this.editorCommands.addKeywords
             this.$closePopover()
           }
         })
@@ -719,7 +734,8 @@ export default defineComponent({
             table += '\n'
           }
 
-          (this.$refs.editor as any).replaceSelection(table)
+          this.editorCommands.data = table
+          this.editorCommands.replaceSelection = !this.editorCommands.replaceSelection
           this.$closePopover()
         })
       } else if (clickedID === 'document-info') {
@@ -732,9 +748,11 @@ export default defineComponent({
         })
       } else if (clickedID.startsWith('markdown') === true && clickedID.length > 8) {
         // The user clicked a command button, so we just have to run that.
-        (this.$refs.editor as any).executeCommand(clickedID)
+        this.editorCommands.data = clickedID
+        this.editorCommands.executeCommand = !this.editorCommands.executeCommand
       } else if (clickedID === 'insertFootnote') {
-        (this.$refs.editor as any).executeCommand(clickedID)
+        this.editorCommands.data = clickedID
+        this.editorCommands.executeCommand = !this.editorCommands.executeCommand
       }
     },
     handleToggle: function (controlState: { id: string, state: any }) {

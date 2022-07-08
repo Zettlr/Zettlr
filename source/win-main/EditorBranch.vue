@@ -13,6 +13,7 @@
         v-bind:key="`branch-${index}`"
         v-bind:node="subNode"
         v-bind:window-id="windowId"
+        v-bind:editor-commands="editorCommands"
         v-bind:available-width="(node.direction === 'horizontal') ? sizes[index] : 100"
         v-bind:available-height="(node.direction === 'vertical') ? sizes[index] : 100"
       ></EditorBranch>
@@ -21,6 +22,7 @@
         v-bind:key="subNode.id"
         v-bind:leaf-id="subNode.id"
         v-bind:window-id="windowId"
+        v-bind:editor-commands="editorCommands"
         v-bind:class="{
           'border-right': index < node.nodes.length - 1 && node.direction === 'horizontal',
           'border-bottom': index < node.nodes.length - 1 && node.direction === 'vertical'
@@ -43,6 +45,7 @@
 import EditorPane from './EditorPane.vue'
 import { BranchNodeJSON } from '@dts/common/documents'
 import { defineComponent } from 'vue'
+import { EditorCommands } from '@dts/renderer/editor'
 
 const ipcRenderer = window.ipc
 
@@ -67,6 +70,10 @@ export default defineComponent({
     availableHeight: {
       type: Number,
       default: 100
+    },
+    editorCommands: {
+      type: Object as () => EditorCommands,
+      required: true
     }
   },
   data () {

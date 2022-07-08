@@ -14,12 +14,14 @@
       v-bind:distraction-free="false"
       v-bind:leaf-id="leafId"
       v-bind:window-id="windowId"
+      v-bind:editor-commands="editorCommands"
     ></MainEditor>
   </div>
   <!-- A single editor pane can either be a pane itself OR a MultiSplitView -->
 </template>
 
 <script lang="ts">
+import { EditorCommands } from '@dts/renderer/editor'
 import { defineComponent } from 'vue'
 import DocumentTabs from './DocumentTabs.vue'
 import MainEditor from './MainEditor.vue'
@@ -46,6 +48,10 @@ export default defineComponent({
     availableHeight: {
       type: Number,
       default: 100
+    },
+    editorCommands: {
+      type: Object as () => EditorCommands,
+      required: true
     }
   },
   computed: {
