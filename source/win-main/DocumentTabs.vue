@@ -1,49 +1,58 @@
 <template>
   <div
-    ref="container"
-    class="tab-container"
-    role="tablist"
-    v-on:contextmenu="handleTabbarContext($event)"
+    v-bind:class="{
+      'document-tablist-wrapper': true,
+      'scrollers-active': showScrollers
+    }"
   >
-    <div
-      v-for="file in openFiles"
-      v-bind:key="file.path"
-      v-bind:class="{
-        active: activeFile !== null && file.path === activeFile.path,
-        modified: modifiedPaths.includes(file.path),
-        pinned: file.pinned
-      }"
-      v-bind:title="file.path"
-      v-bind:data-path="file.path"
-      v-bind:draggable="true"
-      role="tab"
-      v-on:dragstart="handleDragStart($event, file.path)"
-      v-on:drag="handleDrag"
-      v-on:dragend="handleDragEnd"
-      v-on:contextmenu="handleContextMenu($event, file)"
-      v-on:mouseup="handleMiddleMouseClick($event, file)"
-      v-on:click="handleClickFilename($event, file)"
-    >
-      <span
-        class="filename"
-        role="button"
-      >
-        <clr-icon v-if="file.pinned" shape="pin"></clr-icon>
-        {{ getTabText(file) }}
-      </span>
-      <span
-        v-if="!file.pinned"
-        class="close"
-        aria-hidden="true"
-        v-on:mousedown="handleClickClose($event, file)"
-      >&times;</span>
-    </div>
-    <!-- Add scroller arrows so that users can click to scroll -->
-    <div class="scroller left" v-on:click="scrollLeft()">
+    <!-- Left scroller arrow -->
+    <div v-if="showScrollers" class="scroller left" v-on:click="scrollLeft()">
       <clr-icon shape="caret left"></clr-icon>
     </div>
-    <div class="scroller right">
+    <!-- Right scroller arrow -->
+    <div v-if="showScrollers" class="scroller right">
       <clr-icon shape="caret right" v-on:click="scrollRight()"></clr-icon>
+    </div>
+
+    <div
+      ref="container"
+      role="tablist"
+      v-bind:class="{ 'tab-container': true }"
+      v-on:contextmenu="handleTabbarContext($event)"
+    >
+      <div
+        v-for="file in openFiles"
+        v-bind:key="file.path"
+        v-bind:class="{
+          active: activeFile !== null && file.path === activeFile.path,
+          modified: modifiedPaths.includes(file.path),
+          pinned: file.pinned
+        }"
+        v-bind:title="file.path"
+        v-bind:data-path="file.path"
+        v-bind:draggable="true"
+        role="tab"
+        v-on:dragstart="handleDragStart($event, file.path)"
+        v-on:drag="handleDrag"
+        v-on:dragend="handleDragEnd"
+        v-on:contextmenu="handleContextMenu($event, file)"
+        v-on:mouseup="handleMiddleMouseClick($event, file)"
+        v-on:click="handleClickFilename($event, file)"
+      >
+        <span
+          class="filename"
+          role="button"
+        >
+          <clr-icon v-if="file.pinned" shape="pin"></clr-icon>
+          {{ getTabText(file) }}
+        </span>
+        <span
+          v-if="!file.pinned"
+          class="close"
+          aria-hidden="true"
+          v-on:mousedown="handleClickClose($event, file)"
+        >&times;</span>
+      </div>
     </div>
   </div>
 </template>
@@ -83,6 +92,14 @@ export default defineComponent({
     windowId: {
       type: String,
       required: true
+    }
+  },
+  data () {
+    return {
+      showScrollers: false,
+      resizeObserver: new ResizeObserver(() => {
+        this.maybeActivateScrollers()
+      })
     }
   },
   computed: {
@@ -213,8 +230,27 @@ export default defineComponent({
         })
       }
     })
+
+    this.resizeObserver.observe(this.container)
+  },
+  unmounted () {
+    this.resizeObserver.unobserve(this.container)
   },
   methods: {
+    maybeActivateScrollers () {
+      // First, get the total available width for the container
+      const containerWidth = this.container.getBoundingClientRect().width
+      // Second, get the total width of all tabs
+      const tabWidth = Array.from(
+        this.container.querySelectorAll('[role="tab"]') as NodeListOf<HTMLDivElement>
+      )
+        .map(elem => elem.getBoundingClientRect().width)
+        .reduce((width, acc) => width + acc, 0)
+
+      // If the total width of all tabs is larger, activate the scrollers, else
+      // disable them
+      this.showScrollers = tabWidth > containerWidth
+    },
     scrollActiveFileIntoView: function () {
       // First, we need to find the tab displaying the active file
       const elem = this.container.querySelector('.active') as HTMLDivElement|null
@@ -574,20 +610,10 @@ export default defineComponent({
 <style lang="less">
 @tabbar-height: 30px;
 
-body div.tab-container {
-  width: 100%;
-  height: 30px;
-  padding: 0 20px; // Necessary for the scroll buttons
-  background-color: rgb(215, 215, 215);
-  border-bottom: 1px solid grey;
-  display: flex;
-  overflow-x: auto;
+body div.document-tablist-wrapper {
   position: relative;
 
-  // In case of an overflow, hide the scrollbar so that scrolling left/right
-  // remains possible, but no thicc scrollbar in the way!
-  &::-webkit-scrollbar { display: none; }
-  scroll-behavior: smooth;
+  &.scrollers-active { padding: 0 20px; }
 
   div.scroller {
     position: absolute;
@@ -601,6 +627,20 @@ body div.tab-container {
     &.left { left: 0px; }
     &.right { right: 0px; }
   }
+}
+
+body div.tab-container {
+  width: 100%;
+  height: 30px;
+  background-color: rgb(215, 215, 215);
+  border-bottom: 1px solid grey;
+  display: flex;
+  overflow-x: auto;
+
+  // In case of an overflow, hide the scrollbar so that scrolling left/right
+  // remains possible, but no thicc scrollbar in the way!
+  &::-webkit-scrollbar { display: none; }
+  scroll-behavior: smooth;
 
   div[role="tab"] {
     display: flex;
@@ -638,9 +678,7 @@ body div.tab-container {
 }
 
 body.darwin {
-  div.tab-container {
-    border-bottom: 1px solid rgb(220, 220, 220);
-
+  div.document-tablist-wrapper {
     div.scroller {
       background-color: rgb(230, 230, 230);
       color: rgb(83, 83, 83);
@@ -651,6 +689,10 @@ body.darwin {
       &.left { border-right: 1px solid rgb(200, 200, 200); }
       &.right { border-left: 1px solid rgb(200, 200, 200); }
     }
+  }
+
+  div.tab-container {
+    border-bottom: 1px solid rgb(220, 220, 220);
 
     div[role="tab"] {
       text-align: center;
@@ -709,10 +751,7 @@ body.darwin {
   }
 
   &.dark {
-    div.tab-container {
-      border-bottom-color: rgb(11, 11, 11);
-      background-color: rgb(22, 22, 22);
-
+    div.document-tablist-wrapper {
       div.scroller {
         background-color: rgb(22, 22, 22);
         color: rgb(233, 233, 233);
@@ -722,6 +761,11 @@ body.darwin {
         &.left { border-color: rgb(32, 34, 36); }
         &.right { border-color: rgb(32, 34, 36); }
       }
+    }
+
+    div.tab-container {
+      border-bottom-color: rgb(11, 11, 11);
+      background-color: rgb(22, 22, 22);
 
       div[role="tab"] {
         color: rgb(233, 233, 233);
@@ -742,13 +786,15 @@ body.darwin {
 }
 
 body.win32 {
-  div.tab-container {
-    border-bottom: none;
-
+  div.document-tablist-wrapper {
     div.scroller {
       &.left { border-right: 1px solid rgb(180, 180, 180); }
       &.right { border-left: 1px solid rgb(180, 180, 180); }
     }
+  }
+
+  div.tab-container {
+    border-bottom: none;
 
     div[role="tab"] {
       font-size: 12px;
@@ -765,15 +811,17 @@ body.win32 {
   }
 
   &.dark {
-    div.tab-container {
-      background-color: rgb(11, 11, 11);
-
+    div.document-tablist-wrapper {
       div.scroller {
         &:hover { background-color: rgb(53, 53, 53); }
 
         &.left { border-color: rgb(120, 120, 120); }
         &.right { border-color: rgb(120, 120, 120) }
       }
+    }
+
+    div.tab-container {
+      background-color: rgb(11, 11, 11);
 
       div[role="tab"] {
         border-color: rgb(120, 120, 120);
@@ -789,7 +837,7 @@ body.win32 {
 }
 
 body.linux {
-  div.tab-container {
+  div.document-tablist-wrapper {
     div.scroller {
       line-height: 29px;
       background-color: rgb(235, 235, 235);
@@ -798,6 +846,8 @@ body.linux {
       &.left { border-right: 1px solid rgb(200, 200, 200); }
       &.right { border-left: 1px solid rgb(200, 200, 200); }
     }
+  }
+  div.tab-container {
 
     div[role="tab"] {
       font-size: 12px;
@@ -811,9 +861,7 @@ body.linux {
   }
 
   &.dark {
-    div.tab-container {
-      background-color: rgb(11, 11, 11);
-
+    div.document-tablist-wrapper {
       div.scroller {
         background-color: #5a5a5a;
         &:hover { background-color: rgb(53, 53, 53); }
@@ -821,6 +869,10 @@ body.linux {
         &.left { border-color: 1px solid rgb(120, 120, 120); }
         &.right { border-color: 1px solid rgb(120, 120, 120); }
       }
+    }
+
+    div.tab-container {
+      background-color: rgb(11, 11, 11);
 
       div[role="tab"] {
         border-color: rgb(120, 120, 120);
