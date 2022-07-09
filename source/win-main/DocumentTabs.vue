@@ -242,7 +242,7 @@ export default defineComponent({
       const containerWidth = this.container.getBoundingClientRect().width
       // Second, get the total width of all tabs
       const tabWidth = Array.from(
-        this.container.querySelectorAll('[role="tab"]') as NodeListOf<HTMLDivElement>
+        this.container.querySelectorAll<HTMLDivElement>('[role="tab"]')
       )
         .map(elem => elem.getBoundingClientRect().width)
         .reduce((width, acc) => width + acc, 0)
