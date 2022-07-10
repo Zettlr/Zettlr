@@ -508,6 +508,11 @@ export default defineComponent({
         this.mainSplitViewVisibleComponent = 'fileManager'
       } else if (shortcut === 'export') {
         this.showExportPopover()
+      } else if (shortcut === 'print') {
+        if (this.activeFile !== null) {
+          ipcRenderer.invoke('application', { command: 'print', payload: this.activeFile.path })
+            .catch(err => console.error(err))
+        }
       } else if (shortcut === 'toggle-distraction-free') {
         if (this.distractionFree === false) {
           // Enter distraction free mode

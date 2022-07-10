@@ -212,8 +212,7 @@ export default function getMenu (
           label: trans('menu.print'),
           accelerator: 'Ctrl+P',
           click: function (menuItem, focusedWindow) {
-            commands.run('print', undefined)
-              .catch(e => logger.error(String(e.message), e))
+            focusedWindow?.webContents.send('shortcut', 'print')
           }
         },
         {
