@@ -485,7 +485,8 @@ export default defineComponent({
       })
     },
     handleDragStart: function (event: DragEvent, filePath: string) {
-      const data = `${this.windowId}:${this.leafId}:${filePath}`
+      const DELIM = (process.platform === 'win32') ? ';' : ':'
+      const data = `${this.windowId}${DELIM}${this.leafId}${DELIM}${filePath}`
       event.dataTransfer?.setData('zettlr/document-tab', data)
     },
     handleDrag: function (event: DragEvent) {

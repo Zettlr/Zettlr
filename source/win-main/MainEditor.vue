@@ -985,8 +985,9 @@ function moveSection (from: number, to: number) {
 }
 
 function handleDrop (event: DragEvent, where: 'editor'|'top'|'left'|'right'|'bottom') {
+  const DELIM = (process.platform === 'win32') ? ';' : ':'
   const documentTab = event.dataTransfer?.getData('zettlr/document-tab')
-  if (documentTab !== undefined && documentTab.includes(':')) {
+  if (documentTab !== undefined && documentTab.includes(DELIM)) {
     documentTabDrag.value = false
     event.stopPropagation()
     event.preventDefault()
@@ -996,8 +997,8 @@ function handleDrop (event: DragEvent, where: 'editor'|'top'|'left'|'right'|'bot
     // Or, the user has dropped the file onto one of the four edges. In that
     // case, we need to first split this specific leaf, and then move the
     // dropped file there. The drag data contains both the origin and the
-    // path, separated by colons -> window:leaf:absPath
-    const [ originWindow, originLeaf, filePath ] = documentTab.split(':')
+    // path, separated by the $PATH delimiter -> window:leaf:absPath
+    const [ originWindow, originLeaf, filePath ] = documentTab.split(DELIM)
     if (where === 'editor' && props.leafId === originLeaf) {
       // Nothing to do, the user dropped the file on the origin
       return false
