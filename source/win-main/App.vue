@@ -833,14 +833,10 @@ export default defineComponent({
         return // Can't export a non-open file
       }
 
-      const data = {
-        format: this.$store.state.config['export.singleFileLastExporter']
-      }
-
       this.$togglePopover(
         PopoverExport,
         document.getElementById('toolbar-export') as HTMLElement,
-        data,
+        { filePath: this.activeFile.path },
         (data: any) => {
           if (data.shouldExport !== true || this.activeFile === null) {
             return
