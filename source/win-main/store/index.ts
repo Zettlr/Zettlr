@@ -80,6 +80,11 @@ export interface ZettlrState {
   selectedDirectory: DirMeta|null
   activeFile: null
   /**
+   * This property contains all leaf IDs on which the readability mode is
+   * currently active
+   */
+  readabilityModeActive: string[]
+  /**
    * Files which are in some way related to the currently active file
    */
   relatedFiles: RelatedFile[]
@@ -150,6 +155,7 @@ function getConfig (): StoreOptions<ZettlrState> {
         fileTree: [],
         modifiedFiles: new Map(),
         lastFiletreeUpdate: 0,
+        readabilityModeActive: [],
         activeFile: null,
         uncollapsedDirectories: [],
         selectedDirectory: null,
@@ -207,6 +213,17 @@ function getConfig (): StoreOptions<ZettlrState> {
           const oldUncollapsed = state.uncollapsedDirectories.map(e => e)
           oldUncollapsed.splice(idx, 1)
           state.uncollapsedDirectories = oldUncollapsed
+        }
+      },
+      addReadabilityActiveLeaf (state, leaf) {
+        if (!state.readabilityModeActive.includes(leaf)) {
+          state.readabilityModeActive.push(leaf)
+        }
+      },
+      removeReadabilityActiveLeaf (state, leaf) {
+        const idx = state.readabilityModeActive.indexOf(leaf)
+        if (idx > -1) {
+          state.readabilityModeActive.splice(idx, 1)
         }
       },
       updateConfig: function (state, option) {

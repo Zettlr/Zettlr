@@ -140,7 +140,6 @@ export default defineComponent({
       // The window number indicates which main window this one here is. This is
       // only necessary for the documents and split views to show up.
       windowId: searchParams.get('window_id') as string,
-      readabilityActive: false,
       fileManagerVisible: true,
       distractionFree: false,
       mainSplitViewVisibleComponent: 'fileManager',
@@ -193,6 +192,14 @@ export default defineComponent({
     },
     activeFile: function (): OpenDocument|null {
       return this.$store.getters.lastLeafActiveFile()
+    },
+    readabilityActive: function (): boolean {
+      const lastLeaf = this.$store.state.lastLeafId
+      if (typeof lastLeaf !== 'string') {
+        return false
+      }
+
+      return this.$store.state.readabilityModeActive.includes(lastLeaf)
     },
     modifiedFiles: function (): string[] {
       return Array.from(this.$store.state.modifiedFiles.keys())
@@ -329,7 +336,8 @@ export default defineComponent({
           id: 'toggle-readability',
           title: trans('toolbar.readability'),
           icon: 'eye',
-          visible: this.getToolbarButtonDisplay('showToggleReadabilityButton')
+          visible: this.getToolbarButtonDisplay('showToggleReadabilityButton'),
+          initialState: this.readabilityActive
         },
         {
           type: 'spacer',
@@ -771,7 +779,6 @@ export default defineComponent({
     handleToggle: function (controlState: { id: string, state: any }) {
       const { id, state } = controlState
       if (id === 'toggle-readability') {
-        this.readabilityActive = state // For simple toggles, the state is just a boolean
         this.editorCommands.readabilityMode = !this.editorCommands.readabilityMode
       } else if (id === 'toggle-sidebar') {
         window.config.set('window.sidebarVisible', state)

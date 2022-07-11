@@ -420,6 +420,11 @@ watch(toRef(props.editorCommands, 'readabilityMode'), (newValue) => {
 
   if (mdEditor !== null) {
     mdEditor.readabilityMode = !mdEditor.readabilityMode
+    if (mdEditor.readabilityMode) {
+      store.commit('addReadabilityActiveLeaf', props.leafId)
+    } else {
+      store.commit('removeReadabilityActiveLeaf', props.leafId)
+    }
   }
 })
 
