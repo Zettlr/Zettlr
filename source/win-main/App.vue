@@ -174,6 +174,8 @@ export default defineComponent({
       editorCommands: {
         jumpToLine: false,
         moveSection: false,
+        distractionFreeMode: false,
+        readabilityMode: false,
         addKeywords: false,
         replaceSelection: false,
         executeCommand: false,
@@ -522,11 +524,17 @@ export default defineComponent({
           }
 
           this.distractionFree = true
+          this.editorCommands.data = true
+          this.editorCommands.distractionFreeMode = !this.editorCommands.distractionFreeMode
+
           window.config.set('window.sidebarVisible', false)
           this.fileManagerVisible = false
         } else {
           // Leave distraction free mode
           this.distractionFree = false
+          this.editorCommands.data = false
+          this.editorCommands.distractionFreeMode = !this.editorCommands.distractionFreeMode
+
           window.config.set('window.sidebarVisible', this.sidebarsBeforeDistractionfree.sidebar)
           this.fileManagerVisible = this.sidebarsBeforeDistractionfree.fileManager
         }
@@ -764,6 +772,7 @@ export default defineComponent({
       const { id, state } = controlState
       if (id === 'toggle-readability') {
         this.readabilityActive = state // For simple toggles, the state is just a boolean
+        this.editorCommands.readabilityMode = !this.editorCommands.readabilityMode
       } else if (id === 'toggle-sidebar') {
         window.config.set('window.sidebarVisible', state)
       } else if (id === 'toggle-file-manager') {

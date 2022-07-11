@@ -64,6 +64,8 @@ export interface MainEditorDocumentWrapper {
 export interface EditorCommands {
   jumpToLine: boolean
   moveSection: boolean
+  distractionFreeMode: boolean
+  readabilityMode: boolean
   addKeywords: boolean
   replaceSelection: boolean
   executeCommand: boolean

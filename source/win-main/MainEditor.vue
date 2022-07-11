@@ -153,14 +153,6 @@ const ipcRenderer = window.ipc
 const path = window.path
 
 const props = defineProps({
-  readabilityMode: {
-    type: Boolean,
-    default: false
-  },
-  distractionFree: {
-    type: Boolean,
-    default: false
-  },
   leafId: {
     type: String,
     required: true
@@ -330,6 +322,7 @@ const docInfoTimeout = ref<any>(undefined)
 const anchor = ref<undefined|CodeMirror.Position>(undefined)
 const documentTabDrag = ref(false)
 const documentTabDragWhere = ref<undefined|string>(undefined)
+const distractionFree = ref<boolean>(false)
 
 // COMPUTED PROPERTIES
 const editorId = computed(() => `cm-text-${props.leafId}`)
@@ -419,6 +412,36 @@ watch(toRef(props.editorCommands, 'moveSection'), () => {
   }
   const { from, to } = props.editorCommands.data
   moveSection(from, to)
+})
+watch(toRef(props.editorCommands, 'readabilityMode'), (newValue) => {
+  if (lastLeafId.value !== props.leafId) {
+    return
+  }
+
+  if (mdEditor !== null) {
+    mdEditor.readabilityMode = !mdEditor.readabilityMode
+  }
+})
+
+watch(toRef(props.editorCommands, 'distractionFreeMode'), (newValue) => {
+  console.log(`distractionFree on ${props.leafId}`)
+  if (lastLeafId.value !== props.leafId) {
+    console.warn('Leaving')
+    if (mdEditor !== null) {
+      // Always exit distraction free mode in this case (safeguard)
+      mdEditor.distractionFree = false
+      distractionFree.value = false
+    }
+
+    return
+  }
+
+  console.log('Toggling!')
+
+  if (mdEditor !== null) {
+    mdEditor.distractionFree = !mdEditor.distractionFree
+    distractionFree.value = mdEditor.distractionFree
+  }
 })
 watch(toRef(props.editorCommands, 'addKeywords'), () => {
   if (lastLeafId.value !== props.leafId) {
@@ -513,18 +536,6 @@ watch(cslItems, (newValue) => {
     }
   })
   mdEditor.setCompletionDatabase('citekeys', items)
-})
-
-watch(toRef(props, 'readabilityMode'), (newValue) => {
-  if (mdEditor !== null) {
-    mdEditor.readabilityMode = newValue
-  }
-})
-
-watch(toRef(props, 'distractionFree'), (newValue) => {
-  if (mdEditor !== null) {
-    mdEditor.distractionFree = newValue
-  }
 })
 
 watch(editorConfiguration, (newValue) => {
