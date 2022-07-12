@@ -685,8 +685,12 @@ export default defineComponent({
       const fileDatabase: any = {}
 
       for (const file of this.fsalFiles) {
-        const fname = file.name.substr(0, file.name.lastIndexOf('.'))
+        // const fname = file.name.substr(0, file.name.lastIndexOf('.'))
+
+        const fname = file.name
+
         let displayText = fname // Fallback: Only filename
+        
         if (this.useTitle && typeof file.frontmatter?.title === 'string') {
           // (Else) if there is a frontmatter, use that title
           displayText = file.frontmatter.title
