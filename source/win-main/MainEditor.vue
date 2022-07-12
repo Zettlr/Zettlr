@@ -309,6 +309,9 @@ onMounted(() => {
 
   // Lastly, run the initial load cycle
   loadActiveFile().catch(err => console.error(err))
+
+  // Supply the configuration object once initially
+  mdEditor.setOptions(editorConfiguration.value)
 })
 
 // DATA SETUP
@@ -411,7 +414,7 @@ watch(toRef(props.editorCommands, 'moveSection'), () => {
     return
   }
   const { from, to } = props.editorCommands.data
-  moveSection(from, to)
+  mdEditor?.moveSection(from, to)
 })
 watch(toRef(props.editorCommands, 'readabilityMode'), (newValue) => {
   if (lastLeafId.value !== props.leafId) {
@@ -429,9 +432,7 @@ watch(toRef(props.editorCommands, 'readabilityMode'), (newValue) => {
 })
 
 watch(toRef(props.editorCommands, 'distractionFreeMode'), (newValue) => {
-  console.log(`distractionFree on ${props.leafId}`)
   if (lastLeafId.value !== props.leafId) {
-    console.warn('Leaving')
     if (mdEditor !== null) {
       // Always exit distraction free mode in this case (safeguard)
       mdEditor.distractionFree = false
@@ -440,8 +441,6 @@ watch(toRef(props.editorCommands, 'distractionFreeMode'), (newValue) => {
 
     return
   }
-
-  console.log('Toggling!')
 
   if (mdEditor !== null) {
     mdEditor.distractionFree = !mdEditor.distractionFree
@@ -460,14 +459,15 @@ watch(toRef(props.editorCommands, 'executeCommand'), () => {
     return
   }
   const command: string = props.editorCommands.data
-  executeCommand(command)
+  mdEditor?.runCommand(command)
+  mdEditor?.focus()
 })
 watch(toRef(props.editorCommands, 'replaceSelection'), () => {
   if (lastLeafId.value !== props.leafId) {
     return
   }
   const textToInsert: string = props.editorCommands.data
-  replaceSelection(textToInsert)
+  mdEditor?.codeMirror?.replaceSelection(textToInsert)
 })
 
 const findPlaceholder = trans('dialog.find.find_placeholder')
@@ -544,9 +544,7 @@ watch(cslItems, (newValue) => {
 })
 
 watch(editorConfiguration, (newValue) => {
-  if (mdEditor !== null) {
-    mdEditor.setOptions(newValue)
-  }
+  mdEditor?.setOptions(newValue)
 })
 
 watch(tagDatabase, (newValue) => {
@@ -823,20 +821,6 @@ function toggleQueryRegexp () {
   }
 }
 
-// TODO
-// eslint-disable-next-line no-unused-vars
-function executeCommand (cmd: string) {
-  // Executes a markdown command on the editor instance
-  mdEditor?.runCommand(cmd)
-  mdEditor?.focus()
-}
-
-// TODO
-// eslint-disable-next-line no-unused-vars
-function replaceSelection (value: string) {
-  mdEditor?.codeMirror?.replaceSelection(value)
-}
-
 // SEARCH FUNCTIONALITY BLOCK
 function searchNext () {
   // Make sure to clear out a timeout to prevent Zettlr from auto-searching
@@ -848,21 +832,13 @@ function searchNext () {
   mdEditor?.searchNext(query.value)
 }
 
-function searchPrevious () {
-  mdEditor?.searchPrevious(query.value)
-}
-
-function replaceNext () {
-  mdEditor?.replaceNext(query.value, replaceString.value)
-}
-
-function replacePrevious () {
-  mdEditor?.replacePrevious(query.value, replaceString.value)
-}
-
-function replaceAll () {
-  mdEditor?.replaceAll(query.value, replaceString.value)
-}
+// NOTE: These functions have to be "piped" through the setup since expressions
+// inside the template will only be evaluated once, ergo for them mdEditor will
+// always be null and they will never call the corresponding function.
+function searchPrevious () { mdEditor?.searchPrevious(query.value) }
+function replaceNext () { mdEditor?.replaceNext(query.value, replaceString.value) }
+function replacePrevious () { mdEditor?.replacePrevious(query.value, replaceString.value) }
+function replaceAll () { mdEditor?.replaceAll(query.value, replaceString.value) }
 
 function maybeHighlightSearchResults () {
   const doc = activeFile.value
@@ -986,18 +962,6 @@ function addKeywordsToFile (keywords: string[]) {
     return
   }
   activeDocument.cmDoc.setValue('---\n' + YAML.stringify(frontmatter) + '---' + postFrontmatter + content)
-}
-
-// TODO
-// eslint-disable-next-line no-unused-vars
-function getValue () {
-  return mdEditor?.value ?? ''
-}
-
-// TODO
-// eslint-disable-next-line no-unused-vars
-function moveSection (from: number, to: number) {
-  mdEditor?.moveSection(from, to)
 }
 
 function handleDrop (event: DragEvent, where: 'editor'|'top'|'left'|'right'|'bottom') {
