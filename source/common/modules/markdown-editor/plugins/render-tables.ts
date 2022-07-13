@@ -243,13 +243,19 @@ function writeTableToDocument (cm: CodeMirror.Editor, table: TableEditor): boole
       continue
     }
 
+    // Since we now can have multiple editor instances, we cannot provide a
+    // simple string here. Rather, we need to explicitly pass the correct
+    // scroller element.
+    const wrapper = cm.getWrapperElement()
+      .querySelector('.CodeMirror-scroll') as HTMLDivElement
+
     // Now attempt to create a table from it.
     try {
       // Will raise an error if the table is malformed
       const table = fromMarkdown(markdownTable.join('\n'), potentialTableType, {
         // Detect mouse movement on the scroll element (so that
         // scroll detection in the helper works as expected)
-        container: '.main-editor-wrapper .CodeMirror .CodeMirror-scroll',
+        container: wrapper,
         onBlur: (table) => {
           // DEBUG: Users can accidentally overwrite other documents when this
           // triggers, as a click on another document ALSO blurs the table, but
