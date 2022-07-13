@@ -147,12 +147,6 @@ function getContextMenu (): AnyMenuItem[] {
       id: 'new-tab',
       type: 'normal',
       enabled: true
-    },
-    {
-      label: trans('menu.quicklook'),
-      id: 'open-quicklook',
-      type: 'normal',
-      enabled: true
     }
   ]
 }
@@ -479,13 +473,6 @@ export default defineComponent({
         switch (clickedID) {
           case 'new-tab':
             this.jumpToLine(filePath, lineNumber, true)
-            break
-          case 'open-quicklook':
-            ipcRenderer.invoke('application', {
-              command: 'open-quicklook',
-              payload: filePath
-            })
-              .catch(e => console.error(e))
             break
         }
       })

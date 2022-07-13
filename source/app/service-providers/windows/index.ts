@@ -31,7 +31,6 @@ import createPrintWindow from './create-print-window'
 import createUpdateWindow from './create-update-window'
 import createLogWindow from './create-log-window'
 import createStatsWindow from './create-stats-window'
-import createQuicklookWindow from './create-ql-window'
 import createPreferencesWindow from './create-preferences-window'
 import createAboutWindow from './create-about-window'
 import createTagManagerWindow from './create-tag-manager-window'
@@ -654,25 +653,6 @@ export default class WindowProvider extends ProviderContract {
       if (this.getMainWindowKey(win) !== undefined) {
         return win
       }
-    }
-  }
-
-  /**
-   * Opens a new Quicklook window for the given file.
-   *
-   * @param   {MDFileDescriptor}  file  The file to display in the Quicklook
-   */
-  showQuicklookWindow (file: MDFileDescriptor): void {
-    if (this._qlWindows.has(file.path)) {
-      // The window is already open -> make it visible
-      this._makeVisible(this._qlWindows.get(file.path) as BrowserWindow)
-    } else {
-      // This particular file is not yet open
-      const conf = this._retrieveWindowPosition(file.path, null)
-      const window = createQuicklookWindow(this._logger, this._config, file, conf)
-      this._hookWindowResize(window, file.path)
-      this._qlWindows.set(file.path, window)
-      window.on('closed', () => { this._qlWindows.delete(file.path) })
     }
   }
 

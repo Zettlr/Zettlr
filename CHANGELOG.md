@@ -27,6 +27,7 @@ quick list:
    background will be green as long as the table has not been modified. Once it
    it modified, the background will turn red. Click the button to apply all
    changes to the document.
+6. Quicklook windows are completely gone now.
 
 ## Split-Panes and Multiple Windows
 
@@ -146,6 +147,8 @@ Supported theme values are:
 - The TableEditor now has a clear data saving strategy: Whenever you change a
   table, you need to manually click the disk icon at the top of the table to
   apply all your changes to the document so that it can then be saved
+- Quicklook windows are gone completely now, since they can be more than
+  replaced by the new split views and multiple windows
 - Code files (e.g. `*.tex` or `*.json`) now have line numbers enabled and the
   margins of the main editor removed by default
 - The sidebar tabs are now static at the top, meaning you don't have to scroll

@@ -73,12 +73,6 @@ export default function displayFileContext (event: MouseEvent, fileObject: MDFil
       enabled: fileObject.type === 'file' && fileObject.id !== ''
     },
     {
-      label: trans('menu.quicklook'),
-      id: 'menu.quicklook',
-      type: 'normal',
-      enabled: true
-    },
-    {
       type: 'separator'
     },
     {

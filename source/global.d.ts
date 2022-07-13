@@ -54,8 +54,6 @@ declare const PREFERENCES_PRELOAD_WEBPACK_ENTRY: string
 declare const PREFERENCES_WEBPACK_ENTRY: string
 declare const PRINT_PRELOAD_WEBPACK_ENTRY: string
 declare const PRINT_WEBPACK_ENTRY: string
-declare const QUICKLOOK_PRELOAD_WEBPACK_ENTRY: string
-declare const QUICKLOOK_WEBPACK_ENTRY: string
 declare const STATS_PRELOAD_WEBPACK_ENTRY: string
 declare const STATS_WEBPACK_ENTRY: string
 declare const TAG_MANAGER_PRELOAD_WEBPACK_ENTRY: string

@@ -101,14 +101,7 @@ export default {
         event.preventDefault() // Otherwise, on Windows we'd have a middle-click-scroll
       }
 
-      if (type === 'file' && alt) {
-        // QuickLook the file
-        ipcRenderer.invoke('application', {
-          command: 'open-quicklook',
-          payload: this.obj.path
-        })
-          .catch(e => console.error(e))
-      } else if ([ 'file', 'code' ].includes(type)) {
+      if ([ 'file', 'code' ].includes(type)) {
         // Request the clicked file
         ipcRenderer.invoke('documents-provider', {
           command: 'open-file',
@@ -116,7 +109,7 @@ export default {
             path: this.obj.path,
             windowId: this.windowId,
             leafId: this.$store.state.lastLeafId,
-            newTab: middleClick // Force a new tab in this case.
+            newTab: middleClick || (alt && type === 'file') // Force a new tab in this case.
           }
         })
           .catch(e => console.error(e))
@@ -329,12 +322,6 @@ export default {
             // The close_file item is only shown in the tree view on root files
             ipcRenderer.invoke('application', {
               command: 'root-close',
-              payload: this.obj.path
-            })
-              .catch(err => console.error(err))
-          } else if (clickedID === 'menu.quicklook') {
-            ipcRenderer.invoke('application', {
-              command: 'open-quicklook',
               payload: this.obj.path
             })
               .catch(err => console.error(err))

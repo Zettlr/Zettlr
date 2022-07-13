@@ -161,15 +161,6 @@ export default class CommandProvider extends ProviderContract {
     } else if (command === 'open-preferences') {
       this._app.windows.showPreferences()
       return true
-    } else if (command === 'open-quicklook') {
-      const file = this._app.fsal.findFile(payload)
-      if (file === null || file.type !== 'file') {
-        this._app.log.error(`[Application] A Quicklook window for ${payload as string} was requested, but the file was not found.`)
-        return false
-      }
-
-      this._app.windows.showQuicklookWindow(file)
-      return true
     } else if (command === 'open-stats-window') {
       this._app.windows.showStatsWindow()
       return true
