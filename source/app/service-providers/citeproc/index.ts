@@ -28,6 +28,7 @@ import ProviderContract from '../provider-contract'
 import NotificationProvider from '../notifications'
 import WindowProvider from '../windows'
 import LogProvider from '../log'
+import ConfigProvider from '@providers/config'
 
 interface DatabaseRecord {
   path: string

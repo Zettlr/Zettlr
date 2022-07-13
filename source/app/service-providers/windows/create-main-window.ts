@@ -23,6 +23,7 @@ import setWindowChrome from './set-window-chrome'
 import preventNavigation from './prevent-navigation'
 import attachLogger from './attach-logger'
 import LogProvider from '@providers/log'
+import ConfigProvider from '@providers/config'
 import DocumentManager from '@providers/documents'
 
 /**
@@ -31,7 +32,13 @@ import DocumentManager from '@providers/documents'
  *
  * @return  {BrowserWindow}  The loaded main window
  */
-export default function createMainWindow (logger: LogProvider, config: ConfigProvider, docs: DocumentManager, conf: WindowPosition): BrowserWindow {
+export default function createMainWindow (
+  windowNumber: number,
+  logger: LogProvider,
+  config: ConfigProvider,
+  docs: DocumentManager,
+  conf: WindowPosition
+): BrowserWindow {
   const winConf: BrowserWindowConstructorOptions = {
     width: conf.width,
     height: conf.height,
@@ -49,11 +56,15 @@ export default function createMainWindow (logger: LogProvider, config: ConfigPro
 
   setWindowChrome(config, winConf)
 
+  const effectiveUrl = new URL(MAIN_WINDOW_WEBPACK_ENTRY)
+  // Add the print preview file to the search params
+  effectiveUrl.searchParams.append('window_number', windowNumber.toString())
+
   const window = new BrowserWindow(winConf)
 
   // Load the index.html of the app.
   // The variable MAIN_WINDOW_WEBPACK_ENTRY is automatically resolved by electron forge / webpack
-  window.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
+  window.loadURL(effectiveUrl.toString())
     .catch(e => {
       logger.error(`Could not load URL ${MAIN_WINDOW_WEBPACK_ENTRY}: ${e.message as string}`, e)
     })

@@ -73,6 +73,7 @@ Supported theme values are:
   the table of contents in the sidebar to rearrange sections of your file
 - **New Feature**: Overhauled, improved, and streamlined the defaults file
   system used by the importer and exporter
+- **New Feature**: You can now pin tabs, which prevents them from being closed
 - Code files (e.g. `*.tex` or `*.json`) now have line numbers enabled and the
   margins of the main editor removed by default
 - The sidebar tabs are now static at the top, meaning you don't have to scroll
@@ -96,6 +97,9 @@ Supported theme values are:
   it should store an exported file
 - In case of an error, the error dialog will now also present the Pandoc error
   code
+- Fixed a minor bug in toolbar toggle controls that necessitated clicking them
+  twice to bring them into the "active" state (holds especially true for the
+  sidebar toggle)
 
 ## Under the Hood
 

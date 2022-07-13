@@ -30,6 +30,7 @@ import { plugin as TextbundleExporter } from './textbundle-exporter'
 import AssetsProvider from '@providers/assets'
 import LogProvider from '@providers/log'
 import { PandocProfileMetadata } from '@dts/common/assets'
+import ConfigProvider from '@providers/config'
 
 /**
  * This function returns faux metadata for the custom export formats the

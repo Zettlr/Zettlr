@@ -17,6 +17,7 @@ import path from 'path'
 import isDir from '@common/util/is-dir'
 import { trans } from '@common/i18n-main'
 import LogProvider from '@providers/log'
+import ConfigProvider from '@providers/config'
 
 /**
 * Displays a dialog to prompt the user for a file path

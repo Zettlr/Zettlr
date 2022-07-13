@@ -20,6 +20,7 @@ import WindowProvider from '@providers/windows'
 import CommandProvider from '@providers/commands'
 import LogProvider from '@providers/log'
 import { zoomIn, zoomOut } from './font-zoom'
+import ConfigProvider from '@providers/config'
 
 export default function getMenu (
   logger: LogProvider,

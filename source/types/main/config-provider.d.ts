@@ -1,4 +1,6 @@
-interface ConfigProvider {
+import { OpenDocument } from '@dts/common/documents'
+
+export interface ConfigProvider {
   // Clone the properties to prevent intrusion
   get: (key?: string) => any
   // The setter is a simply pass-through
@@ -29,10 +31,10 @@ interface ConfigProvider {
   newVersionDetected: () => boolean
 }
 
-interface ConfigOptions {
+export interface ConfigOptions {
   version: string
   openPaths: string[]
-  openFiles: string[]
+  openFiles: OpenDocument[]
   activeFile: string|null
   openDirectory: string|null
   dialogPaths: {

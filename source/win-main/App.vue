@@ -126,8 +126,12 @@ export default defineComponent({
     MainSidebar
   },
   data: function () {
+    const searchParams = new URLSearchParams(window.location.search)
     return {
       title: 'Zettlr',
+      // The window number indicates which main window this one here is. This is
+      // only necessary for the documents and split views to show up.
+      windowNumber: parseInt(searchParams.get('window_number') ?? '0', 10),
       readabilityActive: false,
       fileManagerVisible: true,
       distractionFree: false,
@@ -374,7 +378,7 @@ export default defineComponent({
           id: 'toggle-sidebar',
           title: trans('menu.toggle_sidebar'),
           icon: 'view-columns',
-          initialState: this.sidebarVisible ? 'active' : ''
+          initialState: this.sidebarVisible
         }
       ]
     },
@@ -423,7 +427,7 @@ export default defineComponent({
   mounted: function () {
     ipcRenderer.on('shortcut', (event, shortcut, state) => {
       if (shortcut === 'toggle-sidebar') {
-        (global as any).config.set('window.sidebarVisible', !this.sidebarVisible)
+        window.config.set('window.sidebarVisible', !this.sidebarVisible)
       } else if (shortcut === 'insert-id') {
         // Generates an ID based upon the configured pattern, writes it into the
         // clipboard and then triggers the paste command on these webcontents.
@@ -435,7 +439,7 @@ export default defineComponent({
         let rtf = clipboard.readRTF()
 
         // Write an ID to the clipboard
-        clipboard.writeText(generateId((global as any).config.get('zkn.idGen')))
+        clipboard.writeText(generateId(window.config.get('zkn.idGen')))
         // Paste the ID
         ipcRenderer.send('window-controls', { command: 'paste' })
 
@@ -698,7 +702,7 @@ export default defineComponent({
       if (id === 'toggle-readability') {
         this.readabilityActive = state // For simple toggles, the state is just a boolean
       } else if (id === 'toggle-sidebar') {
-        ;(global as any).config.set('window.sidebarVisible', state)
+        window.config.set('window.sidebarVisible', state)
       } else if (id === 'toggle-file-manager') {
         // Since this is a three-way-toggle, we have to inspect the state.
         this.fileManagerVisible = state !== undefined
