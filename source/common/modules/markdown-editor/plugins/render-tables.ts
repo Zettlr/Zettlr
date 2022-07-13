@@ -21,6 +21,14 @@ const tableHeadingRE = getTableHeadingRE()
 
 const tableList: Array<{ table: TableEditor, marker: TextMarker }> = []
 
+/**
+ * Applies a changed table to the underlying document
+ *
+ * @param {CodeMirror.Editor}  cm     The CodeMirror instance
+ * @param {TableEditor}        table  The TableEditor instance
+ *
+ * @return {boolean}                  True if the changes have been applied
+ */
 function writeTableToDocument (cm: CodeMirror.Editor, table: TableEditor): boolean {
   // First, retrieve our marker-table tuple
   const elem = tableList.find(item => item.table === table)
@@ -256,18 +264,12 @@ function writeTableToDocument (cm: CodeMirror.Editor, table: TableEditor): boole
         // Detect mouse movement on the scroll element (so that
         // scroll detection in the helper works as expected)
         container: wrapper,
-        onBlur: (table) => {
-          // DEBUG: Users can accidentally overwrite other documents when this
-          // triggers, as a click on another document ALSO blurs the table, but
-          // the writeTableToDocument handler is not fast enough to replace the
-          // table in this document and therefore overwrites the other document.
-          // writeTableToDocument(cm, table)
-        },
-        onCellChange: (table) => {
+        saveIntent: (table) => {
           const tableChanged = writeTableToDocument(cm, table)
           if (tableChanged) {
             table.selectCell() // In this case, refocus the last selected cell
           }
+          table.markClean()
         }
       })
 

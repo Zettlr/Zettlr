@@ -24,6 +24,8 @@ import { getConverter } from '@common/util/md-to-html'
 import computeCSS from './compute-css'
 import { ColAlignment, TableEditorOptions } from './types'
 
+import { diskIcon } from './save-icon'
+
 // Look what I found: https://www.w3schools.com/jsref/dom_obj_table.asp
 
 export default class TableEditor {
@@ -33,72 +35,99 @@ export default class TableEditor {
    * @var {number}
    */
   private _rows: number
+
   /**
    * Holds the current number of columns within the table
    *
    * @var {number}
    */
   private _cols: number
+
   /**
    * Holds the current column-index
    *
    * @var {number}
    */
   private _cellIndex: number
+
   /**
    * Holds the current row-index
    *
    * @var {number}
    */
   private _rowIndex: number
+
   /**
    * The options passed to the instance
    *
    * @var {TableEditorOptions}
    */
   private readonly _options: TableEditorOptions
+
   /**
    * Holds the type of the table returned by the editor
    *
    * @var {'pipe'|'simple'|'grid'}
    */
   private readonly _mdTableType: 'pipe'|'simple'|'grid'
+
   /**
    * If true, any events on the table editor are not handled
    *
    * @var {boolean}
    */
   private _eventLock: boolean
+
   /**
    * The container element for the editor
    *
    * @var {HTMLElement}
    */
   private readonly _containerElement: HTMLElement
+
   /**
    * The DOM element representing the editor
    *
    * @var {HTMLTableElement}
    */
   private readonly _elem: HTMLTableElement
+
   /**
    * The actual table contents
    *
    * @var {string[][]}
    */
   private readonly _ast: string[][]
+
   /**
    * Holds the current alignment per each column
    *
    * @var {ColAlignment[]}
    */
   private _colAlignment: ColAlignment[]
+
   /**
    * Holds the size of the edge buttons
    *
    * @var {number}
    */
   private readonly _edgeButtonSize: number
+
+  /**
+   * Remembers the clean/modified status of the table
+   *
+   * @var {boolean}
+   */
+  private _isClean: boolean
+
+  /**
+   * This variable is used internally to detect whether the table has
+   * effectively changed since the last time to track the clean status
+   *
+   * @var {string}
+   */
+  private _lastSeenTable: string
+
   /**
    * The following variables are the various buttons
    */
@@ -115,6 +144,8 @@ export default class TableEditor {
   private readonly _addBottomButton: HTMLDivElement
   private readonly _addLeftButton: HTMLDivElement
   private readonly _addRightButton: HTMLDivElement
+
+  private readonly _saveStatusButton: HTMLDivElement
 
   private readonly _md2html: ReturnType<typeof getConverter>
 
@@ -138,6 +169,7 @@ export default class TableEditor {
     this._ast = ast
     this._colAlignment = alignments
     this._edgeButtonSize = 30 // Size in pixels
+    this._isClean = true
 
     this._md2html = getConverter(window.getCitation)
 
@@ -203,6 +235,11 @@ export default class TableEditor {
     this._addBottomButton = template.cloneNode(true) as HTMLDivElement
     this._addLeftButton = template.cloneNode(true) as HTMLDivElement
     this._addRightButton = template.cloneNode(true) as HTMLDivElement
+
+    this._saveStatusButton = document.createElement('div')
+    this._saveStatusButton.classList.add('table-helper-save-status-button')
+    this._saveStatusButton.classList.add('is-clean')
+    this._saveStatusButton.innerHTML = diskIcon
     // END Create buttons
 
     // Create the Table element
@@ -261,6 +298,12 @@ export default class TableEditor {
       e.preventDefault()
       this.pluckCol()
     })
+    this._saveStatusButton.addEventListener('mousedown', (e) => {
+      e.preventDefault()
+      if (this._options.saveIntent !== undefined) {
+        this._options.saveIntent(this)
+      }
+    })
 
     // Inject the CSS necessary to style the table and buttons.
     this._injectCSS()
@@ -273,10 +316,10 @@ export default class TableEditor {
    */
   _moveHelper (evt: MouseEvent): void {
     const rect = this._elem.getBoundingClientRect()
-    const minX = rect.left - this._edgeButtonSize / 2
-    const minY = rect.top - this._edgeButtonSize / 2
-    const maxX = minX + rect.width + this._edgeButtonSize // Not half to account for the lower minY
-    const maxY = minY + rect.height + this._edgeButtonSize // Not half to account for the lower minY
+    const minX = rect.left - this._edgeButtonSize
+    const minY = rect.top - this._edgeButtonSize
+    const maxX = minX + rect.width + this._edgeButtonSize * 2
+    const maxY = minY + rect.height + this._edgeButtonSize * 2
 
     if (
       evt.clientX >= minX &&
@@ -495,14 +538,18 @@ export default class TableEditor {
     // Then calculate the button positions. First for the align- and remove-buttons
     // as these will always be visible and then for the add-buttons depending on
     // cell visibility.
-    this._alignButtons.style.top = `${tableRect.top - this._edgeButtonSize / 2}px`
+    this._alignButtons.style.top = `${tableRect.top - this._edgeButtonSize}px`
     this._alignButtons.style.left = `${tableRect.left + this._edgeButtonSize / 2}px`
-    this._removeButtons.style.top = `${tableRect.top - this._edgeButtonSize / 2}px`
+    this._removeButtons.style.top = `${tableRect.top - this._edgeButtonSize}px`
     this._removeButtons.style.left = `${tableRect.left + tableRect.width - this._edgeButtonSize * 2.5}px`
+    this._saveStatusButton.style.top = `${tableRect.top - this._edgeButtonSize}px`
+    // The save button is in the top center of the table
+    this._saveStatusButton.style.left = `${tableRect.left + tableRect.width / 2 - this._edgeButtonSize * 2}px`
 
     // After changing the bounding rects, we can get them now
     const alignButtonsRect = this._alignButtons.getBoundingClientRect()
     const removeButtonsRect = this._removeButtons.getBoundingClientRect()
+    const saveButtonRect = this._saveStatusButton.getBoundingClientRect()
 
     // Also make sure the button groups stay visible
     // if the user scrolls to one of the edges of the
@@ -519,17 +566,23 @@ export default class TableEditor {
     if (removeButtonsRect.top + this._edgeButtonSize > containerBottom) {
       this._removeButtons.style.top = `${containerBottom - this._edgeButtonSize}px`
     }
+    if (saveButtonRect.top < containerTop) {
+      this._saveStatusButton.style.top = `${containerTop}px`
+    }
+    if (saveButtonRect.top + this._edgeButtonSize > containerBottom) {
+      this._saveStatusButton.style.top = `${containerBottom - this._edgeButtonSize}px`
+    }
 
     // Move the buttons if the cell is visible.
     if (cellIsOnScreen) {
-      this._addTopButton.style.top = `${cellTop - this._edgeButtonSize / 2}px`
+      this._addTopButton.style.top = `${cellTop - this._edgeButtonSize}px`
       this._addTopButton.style.left = `${cellLeft + cellWidth / 2 - this._edgeButtonSize / 2}px`
-      this._addBottomButton.style.top = `${cellBottom - this._edgeButtonSize / 2}px`
+      this._addBottomButton.style.top = `${cellBottom}px`
       this._addBottomButton.style.left = `${cellLeft + cellWidth / 2 - this._edgeButtonSize / 2}px`
       this._addLeftButton.style.top = `${cellTop + cellHeight / 2 - this._edgeButtonSize / 2}px`
-      this._addLeftButton.style.left = `${cellLeft - this._edgeButtonSize / 2}px`
+      this._addLeftButton.style.left = `${cellLeft - this._edgeButtonSize}px`
       this._addRightButton.style.top = `${cellTop + cellHeight / 2 - this._edgeButtonSize / 2}px`
-      this._addRightButton.style.left = `${cellRight - this._edgeButtonSize / 2}px`
+      this._addRightButton.style.left = `${cellRight}px`
 
       // Now we can get the bounding boxes of the four buttons
       const topButtonRect = this._addTopButton.getBoundingClientRect()
@@ -588,6 +641,7 @@ export default class TableEditor {
     document.body.appendChild(this._addRightButton)
     document.body.appendChild(this._alignButtons)
     document.body.appendChild(this._removeButtons)
+    document.body.appendChild(this._saveStatusButton)
 
     this._recalculateEdgeButtonPositions()
   }
@@ -607,6 +661,7 @@ export default class TableEditor {
     this._addRightButton.parentElement?.removeChild(this._addRightButton)
     this._alignButtons.parentElement?.removeChild(this._alignButtons)
     this._removeButtons.parentElement?.removeChild(this._removeButtons)
+    this._saveStatusButton.parentElement?.removeChild(this._saveStatusButton)
   }
 
   /**
@@ -620,7 +675,8 @@ export default class TableEditor {
       this._addLeftButton.parentElement !== null &&
       this._addRightButton.parentElement !== null &&
       this._alignButtons.parentElement !== null &&
-      this._removeButtons.parentElement !== null
+      this._removeButtons.parentElement !== null &&
+      this._saveStatusButton.parentElement !== null
   }
 
   /**
@@ -636,6 +692,17 @@ export default class TableEditor {
    * @return {void} Does not return.
    */
   _signalContentChange (): void {
+    const currentTable = JSON.stringify(this._ast)
+    if (currentTable === this._lastSeenTable) {
+      // The table has not changed
+      this._saveStatusButton.classList.add('is-clean')
+      return
+    }
+
+    this._lastSeenTable = currentTable
+    this._isClean = false
+    this._saveStatusButton.classList.remove('is-clean')
+
     // Now inform the caller that the table has changed with this object.
     if (this._options.onChange !== undefined) {
       this._options.onChange(this)
@@ -643,7 +710,8 @@ export default class TableEditor {
   }
 
   /**
-  * Returns the Markdown table representation of this table
+  * Returns the Markdown table representation of this table.
+  *
   * @returns {string} The markdown table
   */
   getMarkdownTable (): string {
@@ -659,8 +727,24 @@ export default class TableEditor {
   }
 
   /**
+   * Signals the table editor that the caller has now saved the table contents
+   */
+  markClean (): void {
+    this._isClean = true
+    this._saveStatusButton.classList.add('is-clean')
+  }
+
+  /**
+   * Returns the clean status of the table editor.
+   *
+   * @return  {boolean} True if the table has not changed
+   */
+  isClean (): boolean {
+    return this._isClean
+  }
+
+  /**
    * Moves the curser to the previous column, switching rows if necessary.
-   * @return {void} Does not return.
    */
   previousCell (): void {
     // We're already in the first cell
@@ -682,10 +766,10 @@ export default class TableEditor {
   /**
    * Moves the cursor to the next cell, passing over rows, if necessary.
    * Can add new rows as you go.
-   * @param  {Boolean} [automaticallyAddRows=true] Whether to add new rows.
-   * @return {void}                              Does not return.
+   *
+   * @param  {boolean}  automaticallyAddRows  Whether to add new rows.
    */
-  nextCell (automaticallyAddRows = true): void {
+  nextCell (automaticallyAddRows: boolean = true): void {
     // Focuses the next cell of the table
     let newCellIndex = this._cellIndex + 1
     let newRowIndex = this._rowIndex
@@ -730,10 +814,10 @@ export default class TableEditor {
   /**
    * Moves the cursor to the same column, next row. Can also add new
    * rows, if you wish so.
-   * @param  {Boolean} [automaticallyAddRows=true] Whether or not to add new rows.
-   * @return {void}                              Does not return.
+   *
+   * @param  {boolean}  automaticallyAddRows  Whether or not to add new rows.
    */
-  nextRow (automaticallyAddRows = true): void {
+  nextRow (automaticallyAddRows: boolean = true): void {
     // Focuses the same cell in the next row
     let newRowIndex = this._rowIndex + 1
 
@@ -901,11 +985,12 @@ export default class TableEditor {
   }
 
   /**
-  *
-  * @param {string} alignment The new alignment - left, center, or right
-  * @param {number} col The column index to change
-  */
-  changeColAlignment (alignment: ColAlignment, col = this._cellIndex): void {
+   * Changes the column alignment for the provided column
+   *
+   * @param {ColAlignment}  alignment  The new alignment: left, center, or right
+   * @param {number}        col        The column index to change
+   */
+  changeColAlignment (alignment: ColAlignment, col: number = this._cellIndex): void {
     if (![ 'left', 'center', 'right' ].includes(alignment)) {
       throw new Error('Wrong column alignment provided! ' + alignment)
     }

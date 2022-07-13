@@ -8,18 +8,25 @@ the extensive changes, we had to adapt how your data is persisted. Here's the
 quick list:
 
 1. Your open documents will have to be re-opened once. Regardless of which files
-   were open previously, they will all be closed after the update
-2. There are no more unsaved in-memory files
+   were open previously, they will all be closed after the update.
+2. There are no more unsaved in-memory files.
 3. Two default settings have changed in order to maximize benefits from the new
    features: Avoid new tabs is now set to false (since split-panes also allows
    you to spread out your open documents across several panes and windows), and
-   Always reload remote changes is now set to true by default
+   Always reload remote changes is now set to true by default.
 4. The defaults system has changed. You will see new export options that weren't
    there before, and you will see some weird `export.format.yaml` and
    `import.format.yaml` export options. These are the "old" profiles we have
    kept in case you made modifications. We suggest you copy over all changes to
    the new profiles and then delete them, or rename those old ones to more
-   memorable names. Read more below
+   memorable names. Read more below.
+5. The TableEditor has received a better save strategy to prevent data loss. As
+   it is impossible to fully control the data flow from the visual table element
+   into the underlying Markdown document, this data flow is now explicit: Tables
+   now feature a save button (with a disk icon) at the top of the table. Its
+   background will be green as long as the table has not been modified. Once it
+   it modified, the background will turn red. Click the button to apply all
+   changes to the document.
 
 ## Split-Panes and Multiple Windows
 
@@ -136,6 +143,9 @@ Supported theme values are:
 - **New Feature**: Overhauled, improved, and streamlined the defaults file
   system used by the importer and exporter
 - **New Feature**: You can now pin tabs, which prevents them from being closed
+- The TableEditor now has a clear data saving strategy: Whenever you change a
+  table, you need to manually click the disk icon at the top of the table to
+  apply all your changes to the document so that it can then be saved
 - Code files (e.g. `*.tex` or `*.json`) now have line numbers enabled and the
   margins of the main editor removed by default
 - The sidebar tabs are now static at the top, meaning you don't have to scroll
