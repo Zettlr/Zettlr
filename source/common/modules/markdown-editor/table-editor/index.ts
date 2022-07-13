@@ -20,21 +20,18 @@ import parseGridTable from './parse-grid'
 import { TableEditorOptions } from './types'
 
 export default function fromMarkdown (markdownTable: string, potentialType: 'pipe'|'simple'|'grid' = 'pipe', hooks: TableEditorOptions = {}): TableEditor {
-  let parsed
   switch (potentialType) {
-    case 'simple':
-      parsed = parseSimpleTable(markdownTable)
-      break
-    case 'grid':
-      parsed = parseGridTable(markdownTable)
-      break
-    default:
-      parsed = parsePipeTable(markdownTable)
-      break
+    case 'simple': {
+      const parsed = parseSimpleTable(markdownTable)
+      return new TableEditor(parsed.ast, parsed.colAlignments, potentialType, hooks)
+    }
+    case 'grid': {
+      const parsed = parseGridTable(markdownTable)
+      return new TableEditor(parsed.ast, parsed.colAlignments, potentialType, hooks)
+    }
+    default: {
+      const parsed = parsePipeTable(markdownTable)
+      return new TableEditor(parsed.ast, parsed.colAlignments, potentialType, hooks)
+    }
   }
-
-  // Now parse the whole thing into the table editor.
-  const editor = new TableEditor(parsed.ast, parsed.colAlignments, potentialType, hooks)
-
-  return editor
 }
