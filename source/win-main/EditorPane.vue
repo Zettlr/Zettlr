@@ -1,6 +1,9 @@
 <template>
   <div
-    class="editor-pane"
+    v-bind:class="{
+      'editor-pane': true,
+      'distraction-free': distractionFree
+    }"
     v-bind:style="elementStyles"
   >
     <!-- We have a leaf: Default DocumentTabs/Editor combo -->
@@ -10,8 +13,7 @@
     ></DocumentTabs>
     <MainEditor
       ref="editor"
-      v-bind:readability-mode="false"
-      v-bind:distraction-free="false"
+      v-bind:distraction-free="distractionFree"
       v-bind:leaf-id="leafId"
       v-bind:window-id="windowId"
       v-bind:editor-commands="editorCommands"
@@ -56,7 +58,17 @@ export default defineComponent({
   },
   computed: {
     elementStyles () {
-      return `width: ${this.availableWidth}%; height: ${this.availableHeight}%`
+      if (this.distractionFree) {
+        return ''
+      } else {
+        return `width: ${this.availableWidth}%; height: ${this.availableHeight}%`
+      }
+    },
+    lastLeafId () {
+      return this.$store.state.lastLeafId
+    },
+    distractionFree () {
+      return this.$store.state.distractionFreeMode === this.leafId
     }
   }
 })

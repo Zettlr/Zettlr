@@ -164,6 +164,10 @@ const props = defineProps({
   editorCommands: {
     type: Object as () => EditorCommands,
     required: true
+  },
+  distractionFree: {
+    type: Boolean,
+    required: true
   }
 })
 
@@ -327,7 +331,6 @@ const docInfoTimeout = ref<any>(undefined)
 const anchor = ref<undefined|CodeMirror.Position>(undefined)
 const documentTabDrag = ref(false)
 const documentTabDragWhere = ref<undefined|string>(undefined)
-const distractionFree = ref<boolean>(false)
 
 // COMPUTED PROPERTIES
 const editorId = computed(() => `cm-text-${props.leafId}`)
@@ -433,20 +436,9 @@ watch(toRef(props.editorCommands, 'readabilityMode'), (newValue) => {
   }
 })
 
-watch(toRef(props.editorCommands, 'distractionFreeMode'), (newValue) => {
-  if (lastLeafId.value !== props.leafId) {
-    if (mdEditor !== null) {
-      // Always exit distraction free mode in this case (safeguard)
-      mdEditor.distractionFree = false
-      distractionFree.value = false
-    }
-
-    return
-  }
-
+watch(toRef(props, 'distractionFree'), (newValue) => {
   if (mdEditor !== null) {
-    mdEditor.distractionFree = !mdEditor.distractionFree
-    distractionFree.value = mdEditor.distractionFree
+    mdEditor.distractionFree = props.distractionFree
   }
 })
 watch(toRef(props.editorCommands, 'addKeywords'), () => {
@@ -1066,6 +1058,15 @@ function handleDragLeave (event: DragEvent) {
   background-color: #ffffff;
   transition: 0.2s background-color ease;
   position: relative;
+
+  &.fullscreen {
+    position: fixed;
+    z-index: 1000; // Ensure this editor instance is on top of any other pane
+    top: 40px; // Titlebar height
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
 
   div.main-editor-search {
     position: absolute;

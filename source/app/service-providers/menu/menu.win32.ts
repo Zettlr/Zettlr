@@ -447,12 +447,8 @@ export default function getMenu (
           id: 'menu.toggle_distraction_free',
           label: trans('menu.toggle_distraction_free'),
           accelerator: 'Ctrl+J',
-          type: 'checkbox',
-          checked: getCheckboxState('menu.toggle_distraction_free', false),
           click: function (menuitem, focusedWindow) {
-            const currentState = getCheckboxState('menu.toggle_distraction_free', false)
-            setCheckboxState('menu.toggle_distraction_free', !currentState)
-            focusedWindow?.webContents.send('shortcut', 'toggle-distraction-free' /*, menuitem.checked */)
+            focusedWindow?.webContents.send('shortcut', 'toggle-distraction-free')
           }
         },
         {

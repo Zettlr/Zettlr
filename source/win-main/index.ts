@@ -209,5 +209,7 @@ ipcRenderer.on('shortcut', (event, command) => {
       payload: { path: dirDescriptor.path }
     })
       .catch(err => console.error(err))
+  } else if (command === 'toggle-distraction-free') {
+    app.$store.commit('toggleDistractionFree')
   }
 })

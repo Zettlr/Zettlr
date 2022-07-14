@@ -142,7 +142,6 @@ export default defineComponent({
       // only necessary for the documents and split views to show up.
       windowId: searchParams.get('window_id') as string,
       fileManagerVisible: true,
-      distractionFree: false,
       mainSplitViewVisibleComponent: 'fileManager',
       // Pomodoro state
       pomodoro: {
@@ -174,7 +173,6 @@ export default defineComponent({
       editorCommands: {
         jumpToLine: false,
         moveSection: false,
-        distractionFreeMode: false,
         readabilityMode: false,
         addKeywords: false,
         replaceSelection: false,
@@ -427,13 +425,19 @@ export default defineComponent({
     },
     paneConfiguration () {
       return this.$store.state.paneStructure as BranchNodeJSON|LeafNodeJSON
+    },
+    lastLeafId (): string|undefined {
+      return this.$store.state.lastLeafId
+    },
+    distractionFree (): boolean {
+      return this.$store.state.distractionFreeMode !== undefined
     }
   },
   watch: {
     sidebarVisible: function (newValue, oldValue) {
       if (newValue === true) {
         if (this.distractionFree === true) {
-          this.distractionFree = false
+          this.$store.commit('leaveDistractionFree')
         }
 
         this.editorSidebarSplitComponent.unhide()
@@ -444,7 +448,7 @@ export default defineComponent({
     fileManagerVisible: function (newValue, oldValue) {
       if (newValue === true) {
         if (this.distractionFree === true) {
-          this.distractionFree = false
+          this.$store.commit('leaveDistractionFree')
         }
 
         this.fileManagerSplitComponent.unhide()
@@ -458,6 +462,22 @@ export default defineComponent({
         nextTick().then(() => {
           this.globalSearchComponent.focusQueryInput()
         }).catch(e => console.error(e))
+      }
+    },
+    distractionFree: function (newValue, oldValue) {
+      if (newValue === true) {
+        // Enter distraction free mode
+        this.sidebarsBeforeDistractionfree = {
+          fileManager: this.fileManagerVisible,
+          sidebar: this.sidebarVisible
+        }
+
+        window.config.set('window.sidebarVisible', false)
+        this.fileManagerVisible = false
+      } else {
+        // Leave distraction free mode
+        window.config.set('window.sidebarVisible', this.sidebarsBeforeDistractionfree.sidebar)
+        this.fileManagerVisible = this.sidebarsBeforeDistractionfree.fileManager
       }
     }
   },
@@ -523,29 +543,6 @@ export default defineComponent({
         if (this.activeFile !== null) {
           ipcRenderer.invoke('application', { command: 'print', payload: this.activeFile.path })
             .catch(err => console.error(err))
-        }
-      } else if (shortcut === 'toggle-distraction-free') {
-        if (this.distractionFree === false) {
-          // Enter distraction free mode
-          this.sidebarsBeforeDistractionfree = {
-            fileManager: this.fileManagerVisible,
-            sidebar: this.sidebarVisible
-          }
-
-          this.distractionFree = true
-          this.editorCommands.data = true
-          this.editorCommands.distractionFreeMode = !this.editorCommands.distractionFreeMode
-
-          window.config.set('window.sidebarVisible', false)
-          this.fileManagerVisible = false
-        } else {
-          // Leave distraction free mode
-          this.distractionFree = false
-          this.editorCommands.data = false
-          this.editorCommands.distractionFreeMode = !this.editorCommands.distractionFreeMode
-
-          window.config.set('window.sidebarVisible', this.sidebarsBeforeDistractionfree.sidebar)
-          this.fileManagerVisible = this.sidebarsBeforeDistractionfree.fileManager
         }
       } else if (shortcut === 'navigate-back') {
         ipcRenderer.invoke('documents-provider', {

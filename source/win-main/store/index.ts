@@ -139,6 +139,11 @@ export interface ZettlrState {
    * e.g., retrieve that state's activeFile.
    */
   lastLeafId: string|undefined
+  /**
+   * If any leaf is currently in distractionFree, this variable will hold its
+   * leafId. Otherwise, it's undefined.
+   */
+  distractionFreeMode: string|undefined
 }
 
 /**
@@ -170,6 +175,7 @@ function getConfig (): StoreOptions<ZettlrState> {
         citationKeys: [],
         bibliography: undefined,
         lastLeafId: undefined,
+        distractionFreeMode: undefined,
         cslItems: [],
         searchResults: []
       }
@@ -196,6 +202,20 @@ function getConfig (): StoreOptions<ZettlrState> {
       },
       lastLeafId: function (state, leafId: string|undefined) {
         state.lastLeafId = leafId
+      },
+      toggleDistractionFree: function (state) {
+        if (state.distractionFreeMode === undefined && state.lastLeafId !== undefined) {
+          state.distractionFreeMode = state.lastLeafId
+        } else if (state.distractionFreeMode !== undefined && state.lastLeafId === state.distractionFreeMode) {
+          state.distractionFreeMode = undefined
+        } else if (state.distractionFreeMode !== undefined && state.lastLeafId !== state.distractionFreeMode) {
+          state.distractionFreeMode = state.lastLeafId
+        }
+      },
+      leaveDistractionFree: function (state) {
+        if (state.distractionFreeMode !== undefined) {
+          state.distractionFreeMode = undefined
+        }
       },
       addUncollapsedDirectory: function (state, dirPath) {
         if (!state.uncollapsedDirectories.includes(dirPath)) {
