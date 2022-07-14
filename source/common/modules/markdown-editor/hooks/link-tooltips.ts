@@ -18,8 +18,6 @@ import tippy, { followCursor } from 'tippy.js'
 // const tippy = require('tippy.js').default
 import openMarkdownLink from '../open-markdown-link'
 
-let timeout: ReturnType<typeof setTimeout>|undefined
-
 /**
  * A hook for displaying link tooltips which can be used to visually
  * enable users to click a link (without having to press down Ctrl/Cmd)
@@ -28,11 +26,6 @@ let timeout: ReturnType<typeof setTimeout>|undefined
  */
 export default function linkTooltipsHook (cm: CodeMirror.Editor): void {
   cm.getWrapperElement().addEventListener('mousemove', (event) => {
-    if (timeout !== undefined) {
-      clearTimeout(timeout)
-      timeout = undefined
-    }
-
     const a = event.target as HTMLAnchorElement
 
     // Only for links with cma-class
@@ -53,10 +46,7 @@ export default function linkTooltipsHook (cm: CodeMirror.Editor): void {
     }
 
     // Immediately show a tooltip with the link contents
-    timeout = setTimeout(() => {
-      showTippy(a, linkTarget, cm)
-      timeout = undefined
-    }, 1000) // 1s delay
+    showTippy(a, linkTarget, cm)
   })
 }
 
@@ -71,6 +61,8 @@ function showTippy (element: HTMLAnchorElement, target: string, cm: CodeMirror.E
   tippy(element as any, {
     content: `<clr-icon shape="pop-out"></clr-icon> <a href="#" id="editor-cm-tooltip-anchor">${target}</a>`,
     allowHTML: true, // Obviously
+    delay: 100, // A small delay
+    offset: [ 0, 0 ], // This ensures the tooltip opens adjacent to the link
     interactive: true, // Allow clicking the link
     placement: 'top', // Display at the beginning of the anchor
     followCursor: 'horizontal', // Necessary for links that begin at the end of a line and end at the beginning of the next one

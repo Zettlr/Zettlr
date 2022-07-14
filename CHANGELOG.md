@@ -149,6 +149,8 @@ Supported theme values are:
   apply all your changes to the document so that it can then be saved
 - Quicklook windows are gone completely now, since they can be more than
   replaced by the new split views and multiple windows
+- Improved the link tooltip inside the editor; it will show faster now and is
+  easier to access
 - Code files (e.g. `*.tex` or `*.json`) now have line numbers enabled and the
   margins of the main editor removed by default
 - The sidebar tabs are now static at the top, meaning you don't have to scroll
