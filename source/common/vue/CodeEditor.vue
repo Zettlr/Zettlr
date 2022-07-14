@@ -74,7 +74,11 @@ CodeMirror.defineMode('markdown-snippets', function (config, parsercfg) {
     'CURRENT_SECONDS_UNIX',
     'UUID',
     'CLIPBOARD',
-    'ZKN_ID'
+    'ZKN_ID',
+    'CURRENT_ID',
+    'FILENAME',
+    'DIRECTORY',
+    'EXTENSION'
   ]
 
   const markdownSnippets = {
@@ -204,7 +208,13 @@ export default defineComponent({
   },
   watch: {
     modelValue: function () {
-      if (cmInstance !== null) {
+      if (cmInstance === null) {
+        return
+      }
+
+      const currentValue = cmInstance.getValue()
+
+      if (currentValue !== this.modelValue) {
         const cur = Object.assign({}, cmInstance.getCursor())
         cmInstance.setValue(this.modelValue)
         cmInstance.setCursor(cur)

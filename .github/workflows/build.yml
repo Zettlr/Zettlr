@@ -100,12 +100,13 @@ jobs:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Clone repository (master branch)
         if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: 'master'
+          fetch-depth: 0 # Required for the tag verification step.
       - name: Clone repository (develop branch)
         if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: 'develop'
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
@@ -123,6 +124,16 @@ jobs:
         run: |
           pkgver=$(node ./scripts/get-pkg-version.js)
           echo ::set-output name=version::$pkgver
+      # If we're building a full release, we have to make sure that nobody (that
+      # is: Hendrik) forgot to increment the tag version. If we already have a
+      # tag with this version, we should not proceed, because that will then
+      # lead to an overwriting of the files in the previous release. That
+      # doesn't cause any havoc because we don't push unstable code to master,
+      # BUT it looks bad.
+      - name: Verify the corresponding tag does not yet exist
+        if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
+        # Note the ! - it will return 0 if the command fails, and 1 otherwise
+        run: '! git rev-parse "v${{steps.ref.outputs.version}}"'
       # Create the windows binaries. First package both for x64 and arm64, then
       # make an NSIS installer. Make sure to sign the windows installer using
       # the corresponding SSL EV.
@@ -174,12 +185,13 @@ jobs:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Clone repository (master branch)
         if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: 'master'
+          fetch-depth: 0 # Required for the tag verification step.
       - name: Clone repository (develop branch)
         if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: 'develop'
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
@@ -197,6 +209,9 @@ jobs:
         run: |
           pkgver=$(node ./scripts/get-pkg-version.js)
           echo ::set-output name=version::$pkgver
+      - name: Verify the corresponding tag does not yet exist # See windows build for detailed comments on this command
+        if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
+        run: '! git rev-parse "v${{steps.ref.outputs.version}}"'
       # Save the macOS certificate on this runner for forge to access it in the
       # next step below.
       - name: Retrieve code signing certificate
@@ -244,12 +259,13 @@ jobs:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Clone repository (master branch)
         if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: 'master'
+          fetch-depth: 0 # Required for the tag verification step.
       - name: Clone repository (develop branch)
         if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: 'develop'
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
@@ -267,6 +283,9 @@ jobs:
         run: |
           pkgver=$(node ./scripts/get-pkg-version.js)
           echo ::set-output name=version::$pkgver
+      - name: Verify the corresponding tag does not yet exist # See windows build for detailed comments on this command
+        if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
+        run: '! git rev-parse "v${{steps.ref.outputs.version}}"'
       - name: Package Linux targets (x64)
         run: yarn package:linux-x64
       - name: Create Linux installers (x64)
@@ -307,7 +326,7 @@ jobs:
       # NOTE: Here we do not care about which branch is checked out since we
       # just need the two scripts which are present in both.
       - name: Clone repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v2
         with:

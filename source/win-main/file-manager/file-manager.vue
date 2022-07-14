@@ -37,6 +37,7 @@
         type="search"
         v-bind:placeholder="filterPlaceholder"
         v-on:focus="($event.target as HTMLInputElement).select()"
+        v-on:blur="handleQuickFilterBlur"
       />
     </div>
 
@@ -252,6 +253,17 @@ export default defineComponent({
       // If the file list is visible we can navigate
       if (this.isFileListVisible === true) {
         (this.$refs.fileList as any).navigate(evt)
+      } else {
+        // Try to navigate the file tree
+        (this.$refs.directories as any).navigate(evt)
+      }
+    },
+    handleQuickFilterBlur: function (evt: Event) {
+      // Stop navigating on blur
+      if (this.isFileListVisible === true) {
+        (this.$refs.fileList as any).stopNavigate()
+      } else {
+        (this.$refs.directories as any).stopNavigate()
       }
     },
     /**

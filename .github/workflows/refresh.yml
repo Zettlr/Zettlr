@@ -41,12 +41,6 @@ jobs:
           yarn lang:refresh
           git add -A
           git diff-index --quiet HEAD || git commit -m "Update translations"
-      # Update the reveal.js build
-      - name: Update reveal.js
-        run: |
-          yarn reveal:build
-          git add -A
-          git diff-index --quiet HEAD || git commit -m "Update reveal.js build"
       # Update the CITATION.cff file if applicable
       - name: Update CITATION.cff
         run: |

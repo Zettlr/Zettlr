@@ -21,7 +21,7 @@
             "Joris"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-04-09T16:48:53.000000Z"
+        "updated_at": "2022-06-08T14:32:36.000000Z"
     },
     "dialog": {
         "about": {
@@ -372,6 +372,22 @@
                 "title": "Th\u00e8me"
             },
             "title": "Param\u00e8tres",
+            "toolbar": {
+                "showDocumentInfoText": "Afficher les informations du document",
+                "showInsertFootnoteButton": "Afficher le bouton \u00ab\u202fIns\u00e9rer une note de bas de page\u202f\u00bb",
+                "showInsertTableButton": "Afficher le bouton \u00ab\u202fIns\u00e9rer un tableau\u202f\u00bb",
+                "showMarkdownCommentButton": "Afficher le bouton \u00ab\u202fIns\u00e9rer un commentaire\u202f\u00bb",
+                "showMarkdownImageButton": "Afficher le bouton image",
+                "showMarkdownLinkButton": "Afficher le bouton lien",
+                "showMarkdownMakeTaskListButton": "Afficher le bouton liste de t\u00e2ches",
+                "showNewFileButton": "Afficher le bouton \u00ab\u202fNouveau fichier\u202f\u00bb",
+                "showNextFileButton": "Afficher le bouton \u00ab\u202fFichier suivant\u202f\u00bb",
+                "showOpenPreferencesButton": "Afficher le bouton \u00ab\u202fOuvrir les pr\u00e9f\u00e9rences\u202f\u00bb",
+                "showPomodoroButton": "Afficher la minuterie Pomodoro",
+                "showPreviousFileButton": "Afficher le bouton \u00ab\u202fFichier pr\u00e9c\u00e9dent\u202f\u00bb",
+                "showToggleReadabilityButton": "Afficher le bouton de lisibilit\u00e9",
+                "title": "Barre d\u2019outil"
+            },
             "translations": {
                 "download": "Cliquez pour t\u00e9l\u00e9charger",
                 "downloading": "T\u00e9l\u00e9chargement de la traduction %s",
@@ -619,6 +635,7 @@
         "close_file": "Fermer le fichier",
         "close_workspace": "Fermer l'espace de travail",
         "copy": "Copier",
+        "copy_abs_path": "Copier le chemin complet",
         "copy_equation": "Copier le code de l'\u00e9quation",
         "copy_filename": "Copier le nom de fichier",
         "copy_html": "Copier en HTML",

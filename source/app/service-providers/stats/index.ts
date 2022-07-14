@@ -31,6 +31,7 @@ export default class StatsProvider extends ProviderContract {
   private readonly statsPath: string
   private readonly statsFile: string
   private stats: Stats
+  private hasBooted: boolean
 
   /**
    * Preset sane defaults and load an existing stats file if present
@@ -47,6 +48,8 @@ export default class StatsProvider extends ProviderContract {
       today: 0,
       sumMonth: 0
     }
+
+    this.hasBooted = false
 
     ipcMain.handle('stats-provider', (event, payload) => {
       const { command } = payload
@@ -119,9 +122,7 @@ export default class StatsProvider extends ProviderContract {
    */
   async boot (): Promise<void> {
     this._logger.verbose('Stats provider booting up')
-    // Does the file already exist?
     try {
-      await fs.lstat(this.statsFile)
       const data = await fs.readFile(this.statsFile, { encoding: 'utf8' })
       const parsedData = JSON.parse(data)
       // We cannot safe assign because the wordCount and pomodoros are
@@ -134,9 +135,11 @@ export default class StatsProvider extends ProviderContract {
         today: parsedData.today,
         sumMonth: parsedData.sumMonth
       }
-      this._recompute().catch(e => this._logger.error(`[Stats Provider] Error during recomputing: ${e.message as string}`, e))
+      this.hasBooted = true
+      await this._recompute()
     } catch (err) {
       // Write initial file
+      this.hasBooted = true
       await this.save()
     }
   }
@@ -180,6 +183,19 @@ export default class StatsProvider extends ProviderContract {
    * Write the statistics (e.g. on app exit)
    */
   async save (): Promise<void> {
+    // We have to explicitly check whether this provider has been booted,
+    // because I've had the pleasure multiple times now that, if the boot()
+    // method has not yet finished and the app is being shut down already (or
+    // anything else triggers the save() method), that this will basically write
+    // empty data into the file, thereby overwriting everything that has been
+    // collected, which is especially bad regarding years of stats. I've lost
+    // multiple months already because I couldn't explain this bug (today's the
+    // first time after two years or so that I looked at this provider again).
+    if (!this.hasBooted) {
+      this._logger.warning('[Stats Provider] Cannot save stats to file: Booting not yet completed')
+      return
+    }
+
     // (Over-)write the configuration
     this._logger.info('[Stats Provider] Writing statistics to file')
     await fs.writeFile(this.statsFile, JSON.stringify(this.stats), { encoding: 'utf8' })

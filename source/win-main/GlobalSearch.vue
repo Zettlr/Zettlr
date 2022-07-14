@@ -9,8 +9,10 @@
       v-bind:autocomplete-values="recentGlobalSearches"
       v-bind:placeholder="queryInputPlaceholder"
       v-on:keydown.enter="startSearch()"
+      v-on:keydown.tab="($refs['restrict-to-dir-input'] as any).focus()"
     ></AutocompleteText>
     <AutocompleteText
+      ref="restrict-to-dir-input"
       v-model="restrictToDir"
       v-bind:label="restrictDirLabel"
       v-bind:autocomplete-values="directorySuggestions"
@@ -204,9 +206,6 @@ export default defineComponent({
     fileTree: function (): Array<MDFileMeta|CodeFileMeta|DirMeta> {
       return this.$store.state.fileTree
     },
-    openFiles: function (): MDFileMeta[] {
-      return this.$store.state.openFiles
-    },
     activeFile: function (): MDFileMeta|null {
       return this.$store.state.activeFile
     },
@@ -332,22 +331,6 @@ export default defineComponent({
 
       // Remove duplicates
       this.directorySuggestions = [...new Set(dirList)]
-    },
-    setCurrentDirectory: function () {
-      if (this.restrictToDir.trim() !== '') {
-        return // Do not overwrite anything
-      }
-
-      // Immediately preset the restrictToDir with the currently selected directory
-      if (this.selectedDir !== null) {
-        // We cut off the origin of the root (i.e. the path of the containing root dir)
-        let rootItem = this.selectedDir
-        while (rootItem.parent != null) {
-          rootItem = rootItem.parent as unknown as DirMeta
-        }
-
-        this.restrictToDir = this.selectedDir.path.replace(rootItem.dir, '').substring(1)
-      }
     },
     startSearch: function () {
       // We should start a search. We need two types of information for that:

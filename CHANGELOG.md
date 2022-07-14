@@ -1,21 +1,156 @@
-# 2.2.7
+# Upcoming
+
+## New Defaults/Profile File System
+
+This update introduces a new way to work with defaults files. At a glance,
+here's what has changed:
+
+* Zettlr now understands the `reader` and `writer` properties of defaults files
+* It uses those properties to determine if a file can be used for importing or
+  exporting, and displays the appropriate files in the relevant places for you
+  to choose
+* You can now create new defaults files, rename existing ones, or remove them
+* When changing the `writer` or `reader` for such a file, this change will be
+  recognized by Zettlr and be treated accordingly
+* This also means that Zettlr will from now on only ship with a minimum set of
+  profiles; but any additional import/export formats can be created by you with
+  just one click
+* Additionally, because of this, you are now able to export LaTeX files directly
+  without running them through a Markdown interpreter first, allowing you to,
+  e.g., create beamer slides or write plain TeX files within Zettlr
+* Furthermore, we have dropped our internal reveal.js exporter, since Pandoc
+  supports everything we did out of the box (and better) than our exporter
+
+### Migration Guide
+
+There are two instances where you will want to migrate something.
+
+#### Old defaults files
+
+Since Zettlr will never remove any data without asking, it will keep the
+previous files in your defaults directory. Now that their filename is also
+meaningful, you can see them by their naming structure: `import.format.yaml` and
+`export.format.yaml`. You are free to remove them or rename and keep them.
+Zettlr ships with a set of new files that are now additionally appropriately
+named.
+
+> Please note that it is not possible to remove this minimal set of profiles;
+> Zettlr will always recreate these files upon start. If you do not use Zettlr
+> for importing or exporting files, you can simply ignore them.
+
+#### Reveal.js Presentations
+
+Since we have now dropped our internal reveal.js exporter, there are a few
+changes you have to make to your existing reveal.js presentations. First, the
+theme must now be defined in a YAML frontmatter instead of via the dropdown. A
+minimal working YAML frontmatter will look like this:
+
+```markdown
+---
+theme: league
+---
+
+... the rest of the file
+```
+
+Supported theme values are:
+
+* `beige`
+* `black` (the default, in this case you can omit the `theme` variable)
+* `blood`
+* `league`
+* `moon`
+* `night`
+* `serif`
+* `simple`
+* `sky`
+* `solarized`
+* `white`
 
 ## GUI and Functionality
 
-- **New Feature**: You can hide the toolbar button and words count block in the
-  preference
-- Added "Copy filename", "Copy path" and "Copy ID" to document tabs context
-  menus (thanks to @kyaso)
-- Add "New File", "Next File" and "Previous File" buttons to the toolbar
+- **New Feature**: After a long time, you can now again drag and drop entries in
+  the table of contents in the sidebar to rearrange sections of your file
+- **New Feature**: Overhauled, improved, and streamlined the defaults file
+  system used by the importer and exporter
+- **New Feature**: You can now pin tabs, which prevents them from being closed
+- Code files (e.g. `*.tex` or `*.json`) now have line numbers enabled and the
+  margins of the main editor removed by default
+- The sidebar tabs are now static at the top, meaning you don't have to scroll
+  up within a long list just to see the tabbar
+- Lists (especially in the assets manager) now also allow you to remove entries
+  with a right click
+- Added new variables for snippets:
+  - `CURRENT_ID`: Holds the currently assigned Zettelkasten ID to the file
+  - `FILENAME`: Holds the filename of the current file
+  - `DIRECTORY`: Holds the directory path for the current file
+  - `EXTENSION`: Holds the file extension for the current file
+- Fixed inability to move the text cursor while renaming files in the file tree
+- Fixed an incredibly dangerous bug that would lead to data loss if the app was
+  being shut down before the statistics provider has been booted up; in which
+  case the provider would overwrite sometimes several years worth of statistics
+  with empty data
+- Added the ability to use mouse buttons 4 and 5 for forward/backward navigation
+- Fixed a visual glitch on Linux where in dark mode the active tab would have no
+  colored bottom border
+- Added a third exporter option: You can now have Zettlr ask you everytime where
+  it should store an exported file
+- In case of an error, the error dialog will now also present the Pandoc error
+  code
+- Fixed a minor bug in toolbar toggle controls that necessitated clicking them
+  twice to bring them into the "active" state (holds especially true for the
+  sidebar toggle)
+
+## Under the Hood
+
+- Refactored the main editor component further
+- Refactored the Sidebar panels into their own respective components
+- Upgrade Electron to `v18.0.0`
+- Pandoc logs are now logged in every case
+- Improve the display and functionality of log messages
+
+# 2.3.0
+
+## GUI and Functionality
+
+- **New Feature**: You can now customize the toolbar and add or remove buttons
+  as you see fit
+- **New Feature**: You can now navigate the file tree with the arrow buttons
+  after activating the quick filter; use up and down to visually move through
+  the visible items and left/right to collapse/uncollapse a directory; use Enter
+  to "click" that item
+- **New Feature**: The document tabbar now features buttons so you can easily
+  scroll horizontally through many tabs
+- Added "Copy filename", "Copy path", and "Copy ID" items to document tabs
+  context menus (thanks to @kyaso)
+- Added "New File", "Next File", and "Previous File" buttons to the toolbar
 - The query input now gets blurred when starting a global search in order to
   prevent the dropdown from showing up, especially during auto-searches
+- Added keyword/tag CSS class names to YAML frontmatter tags
+- Added the last modification date to the file list, even if the additional info
+  setting is turned off
+- The "restrict to directory" field will now be empty by default
+- Pressing `Tab` while the query input is focused will now directly focus the
+  restrict-to-dir input
+- The table of contents in the sidebar now shows the title of the currently
+  active file, if applicable
+- Removed the less-than-helpful file and folder removal shortcuts
+- Fixed the recent documents menu on Windows
 - Fixed wrong character count if counting without spaces
 - Fixed wrong word count for indented lists
+- Fixed wrong keyword/tag CSS class names
+- Fixed jumping of the code editor in the assets manager
+- Fixed wrongly positioned tabstops during snippets autocomplete
+- Fixed an error that would erroneously render citations in footnote previews or
+  copied text with styling
 
 ## Under the Hood
 
 - Ignore `IDEA`-related files
 - Update Pandoc to `2.18`
+- Refactored the main window's store to be more modular for the upcoming
+  additional changes
+- Added an additional check for frontmatter values in code files
 
 # 2.2.6
 

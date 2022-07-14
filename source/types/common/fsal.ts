@@ -2,13 +2,22 @@
 
 export interface ProjectSettings {
   title: string
-  formats: string[]
+  profiles: string[]
   filters: string[]
   cslStyle: string
   templates: {
     tex: string
     html: string
   }
+}
+
+/**
+ * Declares an event that happens on the FSAL
+ */
+export interface FSALHistoryEvent {
+  event: 'add'|'change'|'remove'
+  path: string
+  timestamp: number
 }
 
 /**

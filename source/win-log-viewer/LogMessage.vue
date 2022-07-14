@@ -9,15 +9,17 @@
     <div class="msg">
       {{ message.message }}
       <div
-        v-show="hasDetails"
-        class="expand-details"
-      ></div>
-      <div
         ref="details"
-        class="details hidden"
+        v-bind:class="{
+          details: true,
+          hidden: !showDetails
+        }"
       >
         {{ parsedDetails }}
       </div>
+    </div>
+    <div class="expand-details">
+      <clr-icon v-show="hasDetails" v-bind:shape="iconShape"></clr-icon>
     </div>
   </div>
 </template>
@@ -47,7 +49,25 @@ export default defineComponent({
       required: true
     }
   },
+  data: function () {
+    return {
+      showDetails: false
+    }
+  },
   computed: {
+    /**
+     * Returns the shape for the CLR icon: either an arrow down or up
+     *
+     * @return  {string}  The clr icon's shape
+     */
+    iconShape: function () {
+      return (this.showDetails) ? 'caret up' : 'caret down'
+    },
+    /**
+     * Determines if this log message has additional details
+     *
+     * @return  {boolean}  True or false depending on the existence of details
+     */
     hasDetails: function () {
       if (this.message.details === undefined) {
         return false
@@ -67,6 +87,12 @@ export default defineComponent({
 
       return true
     },
+    /**
+     * Parses the details attached to this log message depending on its type
+     * into a plain text string
+     *
+     * @return  {string}  The parsed message
+     */
     parsedDetails: function () {
       const detail = this.message.details
       let ret = ''
@@ -94,6 +120,13 @@ ${stack}`
     }
   },
   methods: {
+    /**
+     * Determines the message class and maps the message levels into CSS classes
+     *
+     * @param   {number}  level  The level attached to the message
+     *
+     * @return  {string}         The CSS classes
+     */
     messageClass: function (level: number) {
       const classes = ['message']
       switch (level) {
@@ -112,12 +145,15 @@ ${stack}`
       }
       return classes.join(' ')
     },
+    /**
+     * Toggles display of this message's details on or off
+     */
     toggleDetails: function () {
       if (this.hasDetails === false) {
         return
       }
 
-      (this.$refs['details'] as Element).classList.toggle('hidden')
+      this.showDetails = !this.showDetails
     }
   }
 })
@@ -125,35 +161,31 @@ ${stack}`
 
 <style lang="less">
   .message {
-    // display: table-row;
     width: 100%;
     transition: 0.5s all ease;
     border-bottom: 1px solid rgb(128, 128, 128);
+    display: flex;
 
-    .timestamp, .msg {
-      padding: 4px 10px;
-      display: table-cell;
-      vertical-align: middle;
-    }
-
-    .timestamp, .details {
+    .timestamp {
+      flex-grow: 0;
       font-weight: bold;
     }
+
+    .msg { flex-grow: 10; }
+
+    .expand-details {
+      flex-grow: 0;
+      color: black;
+    }
+
+    .timestamp, .msg, .expand-details { padding: 4px 10px; }
+
+    .timestamp, .details { font-weight: bold; }
 
     .details {
       font-family: 'Menlo', 'Courier New', Courier, monospace;
       white-space: pre;
-    }
-
-    .expand-details {
-      width: 0px;
-      height: 0px;
-      border-top: 10px solid #666;
-      border-left: 5px solid transparent;
-      border-right: 5px solid transparent;
-      border-bottom: none;
-      margin-left: 5px;
-      float: right;
+      margin-top: 15px;
     }
 
     .message .details .more { color: #000; }
@@ -181,7 +213,7 @@ ${stack}`
 
     &.error {
       background-color: rgb(255, 130, 130);
-    color: rgb(139, 27, 27);
+      color: rgb(139, 27, 27);
 
       &:hover { background-color: rgb(247, 188, 188); }
     }

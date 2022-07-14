@@ -34,6 +34,7 @@ import NotificationProvider from '../notifications'
 import LogProvider from '../log'
 import CommandProvider from '../commands'
 import { ServerAPIResponse, UpdateState } from '@dts/main/update-provider'
+import ConfigProvider from '@providers/config'
 
 const CUR_VER = app.getVersion()
 const REPO_URL = 'https://zettlr.com/api/releases/latest'

@@ -23,7 +23,14 @@ import Zettlr from './main/zettlr'
 // Helper function to extract files to open from process.argv
 import extractFilesFromArgv from './app/util/extract-files-from-argv'
 import AppServiceContainer from './app/app-service-container'
+import {
+  DATA_DIR,
+  DISABLE_HARDWARE_ACCELERATION,
+  getCLIArgument,
+  handleGeneralArguments
+} from '@providers/cli-provider'
 
+handleGeneralArguments()
 // Immediately after launch, check if there is already another instance of
 // Zettlr running, and, if so, exit immediately. The arguments (including files)
 // from this instance will already be passed to the first instance.
@@ -46,33 +53,29 @@ if (process.platform === 'win32') {
 
 // Setting custom data dir for user configuration files.
 // Full path or relative path is OK. '~' does not work as expected.
-const dataDirFlag = process.argv.find(elem => elem.indexOf('--data-dir=') === 0)
+let dataDir = getCLIArgument(DATA_DIR)
 
-if (dataDirFlag !== undefined) {
+if (typeof dataDir === 'string') {
   // a path to a custom config dir is provided
-  const match = /^--data-dir="?([^"]+)"?$/.exec(dataDirFlag)
-  if (match !== null) {
-    let dataDir = match[1]
-
-    if (!path.isAbsolute(dataDir)) {
-      if (app.isPackaged) {
-        // Attempt to use the executable file's path as the basis
-        dataDir = path.join(path.dirname(app.getPath('exe')), dataDir)
-      } else {
-        // Attempt to use the repository's root directory as the basis
-        dataDir = path.join(__dirname, '../../', dataDir)
-      }
+  if (!path.isAbsolute(dataDir)) {
+    if (app.isPackaged) {
+      // Attempt to use the executable file's path as the basis
+      dataDir = path.join(path.dirname(app.getPath('exe')), dataDir)
+    } else {
+      // Attempt to use the repository's root directory as the basis
+      dataDir = path.join(__dirname, '../../', dataDir)
     }
-    getServiceContainer()?.log.info('[Application] Using custom data dir: ' + dataDir)
-    app.setPath('userData', dataDir)
-    app.setAppLogsPath(path.join(dataDir, 'logs'))
   }
+
+  getServiceContainer()?.log.info('[Application] Using custom data dir: ' + dataDir)
+  app.setPath('userData', dataDir)
+  app.setAppLogsPath(path.join(dataDir, 'logs'))
 }
 
 // On systems with virtual GPUs (i.e. VMs), it might be necessary to disable
 // hardware acceleration. If the corresponding flag is set, we do so.
 // See for more info https://github.com/Zettlr/Zettlr/issues/2127
-if (process.argv.includes('--disable-hardware-acceleration')) {
+if (getCLIArgument(DISABLE_HARDWARE_ACCELERATION) === true) {
   app.disableHardwareAcceleration()
 }
 

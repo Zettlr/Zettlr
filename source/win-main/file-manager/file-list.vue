@@ -313,6 +313,9 @@ export default defineComponent({
       }
       this.scrollIntoView()
     },
+    stopNavigate: function () {
+      this.activeDescriptor = null
+    },
     scrollIntoView: function () {
       // In case the file changed, make sure it's in view.
       let scrollTop = this.$el.scrollTop

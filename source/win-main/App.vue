@@ -50,7 +50,7 @@
           </template>
           <template #view2>
             <!-- Second side: Sidebar -->
-            <MainSidebar></MainSidebar>
+            <MainSidebar v-on:move-section="moveSection($event)"></MainSidebar>
           </template>
         </SplitView>
       </template>
@@ -75,7 +75,7 @@
 
 import WindowChrome from '@common/vue/window/Chrome.vue'
 import FileManager from './file-manager/file-manager.vue'
-import MainSidebar from './MainSidebar.vue'
+import MainSidebar from './sidebar/MainSidebar.vue'
 import DocumentTabs from './DocumentTabs.vue'
 import SplitView from '../common/vue/window/SplitView.vue'
 import GlobalSearch from './GlobalSearch.vue'
@@ -126,8 +126,12 @@ export default defineComponent({
     MainSidebar
   },
   data: function () {
+    const searchParams = new URLSearchParams(window.location.search)
     return {
       title: 'Zettlr',
+      // The window number indicates which main window this one here is. This is
+      // only necessary for the documents and split views to show up.
+      windowNumber: parseInt(searchParams.get('window_number') ?? '0', 10),
       readabilityActive: false,
       fileManagerVisible: true,
       distractionFree: false,
@@ -374,7 +378,7 @@ export default defineComponent({
           id: 'toggle-sidebar',
           title: trans('menu.toggle_sidebar'),
           icon: 'view-columns',
-          initialState: this.sidebarVisible ? 'active' : ''
+          initialState: this.sidebarVisible
         }
       ]
     },
@@ -413,10 +417,9 @@ export default defineComponent({
     },
     mainSplitViewVisibleComponent: function (newValue, oldValue) {
       if (newValue === 'globalSearch') {
-        // The global search just became visible, so make sure to change the
-        // current directory.
+        // The global search just became visible, so focus the query input
         nextTick().then(() => {
-          this.globalSearchComponent.setCurrentDirectory()
+          this.globalSearchComponent.focusQueryInput()
         }).catch(e => console.error(e))
       }
     }
@@ -424,7 +427,7 @@ export default defineComponent({
   mounted: function () {
     ipcRenderer.on('shortcut', (event, shortcut, state) => {
       if (shortcut === 'toggle-sidebar') {
-        (global as any).config.set('window.sidebarVisible', !this.sidebarVisible)
+        window.config.set('window.sidebarVisible', !this.sidebarVisible)
       } else if (shortcut === 'insert-id') {
         // Generates an ID based upon the configured pattern, writes it into the
         // clipboard and then triggers the paste command on these webcontents.
@@ -436,7 +439,7 @@ export default defineComponent({
         let rtf = clipboard.readRTF()
 
         // Write an ID to the clipboard
-        clipboard.writeText(generateId((global as any).config.get('zkn.idGen')))
+        clipboard.writeText(generateId(window.config.get('zkn.idGen')))
         // Paste the ID
         ipcRenderer.send('window-controls', { command: 'paste' })
 
@@ -508,6 +511,9 @@ export default defineComponent({
   methods: {
     jtl: function (lineNumber: number, setCursor: boolean = false) {
       (this.$refs.editor as any).jtl(lineNumber, setCursor)
+    },
+    moveSection: function (data: { from: number, to: number }) {
+      (this.$refs.editor as any).moveSection(data.from, data.to)
     },
     startGlobalSearch: function (terms: string) {
       this.mainSplitViewVisibleComponent = 'globalSearch'
@@ -696,7 +702,7 @@ export default defineComponent({
       if (id === 'toggle-readability') {
         this.readabilityActive = state // For simple toggles, the state is just a boolean
       } else if (id === 'toggle-sidebar') {
-        ;(global as any).config.set('window.sidebarVisible', state)
+        window.config.set('window.sidebarVisible', state)
       } else if (id === 'toggle-file-manager') {
         // Since this is a three-way-toggle, we have to inspect the state.
         this.fileManagerVisible = state !== undefined
@@ -776,35 +782,27 @@ export default defineComponent({
         document.getElementById('toolbar-export') as HTMLElement,
         data,
         (data: any) => {
-          if (data.shouldExport === true) {
-            // Remember to de-proxy any non-primitive data types so that they can
-            // be sent over the IPC pipe
-            const options: { [key: string]: string } = {}
-            for (const key in data.formatOptions) {
-              options[key] = data.formatOptions[key]
-            }
-            // Remember the last choice
-            (global as any).config.set('export.singleFileLastExporter', data.format)
-            // If the file is modified, export the current contents of the editor
-            // rather than what is saved on disk
-            let content
-            if (this.$store.state.modifiedDocuments.includes(this.$store.state.activeFile.path) === true) {
-              content = (this.$refs.editor as any).getValue()
-            }
-            // Run the exporter
-            ipcRenderer.invoke('application', {
-              command: 'export',
-              payload: {
-                format: data.format,
-                options: options,
-                exportTo: data.exportTo,
-                file: this.$store.state.activeFile.path,
-                content: content
-              }
-            })
-              .catch(e => console.error(e))
-            this.$closePopover()
+          if (data.shouldExport !== true) {
+            return
           }
+          // If the file is modified, export the current contents of the editor
+          // rather than what is saved on disk
+          let content
+          if (this.$store.state.modifiedDocuments.includes(this.$store.state.activeFile.path) === true) {
+            content = (this.$refs.editor as any).getValue()
+          }
+          // Run the exporter
+          ipcRenderer.invoke('application', {
+            command: 'export',
+            payload: {
+              profile: JSON.parse(JSON.stringify(data.profile)),
+              exportTo: data.exportTo,
+              file: this.$store.state.activeFile.path,
+              content: content
+            }
+          })
+            .catch(e => console.error(e))
+          this.$closePopover()
         })
     },
     getToolbarButtonDisplay: function (configName: string): boolean {

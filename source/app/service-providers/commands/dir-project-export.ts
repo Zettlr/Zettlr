@@ -66,19 +66,29 @@ export default class DirProjectExport extends ZettlrCommand {
       return false
     }
 
-    for (const format of config.formats) {
+    const allDefaults = await this._app.assets.listDefaults()
+
+    for (const profilePath of config.profiles) {
       // Spin up one exporter per format.
-      this._app.log.info(`[Project] Exporting ${dir.name} as ${format}.`)
+      const profile = allDefaults.find(e => e.name === profilePath)
+
+      if (profile === undefined) {
+        this._app.log.warning(`Could not export project ${dir.name} using profile ${profilePath}: Not found`)
+        continue
+      }
+
+      this._app.log.info(`[Project] Exporting ${dir.name} as ${profile.writer} (Profile: ${profile.name}).`)
+
       let template
-      if ([ 'html', 'chromium-pdf' ].includes(format) && config.templates.html !== '') {
+      if (profile.writer === 'html' && config.templates.html !== '') {
         template = config.templates.html
-      } else if (format === 'latex-pdf' && config.templates.tex !== '') {
+      } else if (profile.writer === 'pdf' && config.templates.tex !== '') {
         template = config.templates.tex
       }
 
       try {
         const opt: ExporterOptions = {
-          format: format,
+          profile: profile,
           sourceFiles: files,
           targetDirectory: dir.path,
           cwd: dir.path,
@@ -91,7 +101,7 @@ export default class DirProjectExport extends ZettlrCommand {
 
         this._app.log.verbose(`[Project Export] Exporting ${opt.sourceFiles.length} files to ${opt.targetDirectory}`)
 
-        const result = await makeExport(opt, this._app.config, this._app.assets)
+        const result = await makeExport(opt, this._app.log, this._app.config, this._app.assets)
         if (result.code !== 0) {
           // We got an error!
           throw new Error(`Export failed: ${result.stderr.join('\n')}`)

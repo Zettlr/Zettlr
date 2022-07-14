@@ -5,7 +5,7 @@
             "vfc"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-04-09T06:13:51.000000Z"
+        "updated_at": "2022-06-04T07:18:04.000000Z"
     },
     "dialog": {
         "about": {
@@ -356,6 +356,22 @@
                 "title": "Tema"
             },
             "title": "Prefer\u00e8ncies",
+            "toolbar": {
+                "showDocumentInfoText": "Mostra la informaci\u00f3 del document",
+                "showInsertFootnoteButton": "Mostra el bot\u00f3 d'inserir notes al peu",
+                "showInsertTableButton": "Mostra el bot\u00f3 de taules",
+                "showMarkdownCommentButton": "Mostra el bot\u00f3 de comentaris",
+                "showMarkdownImageButton": "Mostra el bot\u00f3 d'inserir imatges",
+                "showMarkdownLinkButton": "Mostra el bot\u00f3 d'enlla\u00e7os",
+                "showMarkdownMakeTaskListButton": "Mostra el bot\u00f3 de llista de tasques",
+                "showNewFileButton": "Mostra el bot\u00f3 de Nou Fitxer",
+                "showNextFileButton": "Mostra el bot\u00f3 Proper Fitxer",
+                "showOpenPreferencesButton": "Mostra el bot\u00f3 de les opcions del temporitzador",
+                "showPomodoroButton": "Mostra el temporitzador",
+                "showPreviousFileButton": "Mostra el bot\u00f3 Fitxer Anterior",
+                "showToggleReadabilityButton": "Mostra el bot\u00f3 de llegibilitat",
+                "title": "Barra d'eines"
+            },
             "translations": {
                 "download": "Clica per descarregar",
                 "downloading": "Descarregant %s",
@@ -603,6 +619,7 @@
         "close_file": "Tanca el fitxer",
         "close_workspace": "Tanca l'espai de treball",
         "copy": "Copia",
+        "copy_abs_path": "Copia tot el cam\u00ed",
         "copy_equation": "Copia el codi de l'ecuaci\u00f3",
         "copy_filename": "Copia el nom del fitxer",
         "copy_html": "Copia com a HTML",

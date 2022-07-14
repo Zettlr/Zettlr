@@ -158,9 +158,6 @@ ipcRenderer.on('fsal-state-changed', (event, kind: string) => {
     app.$store.dispatch('updateActiveFile')
       .catch(e => console.error(e))
       .finally(() => { activeFileUpdateLock = false })
-  } else if (kind === 'openFiles') {
-    app.$store.dispatch('updateOpenFiles')
-      .catch(e => console.error(e))
   }
 })
 
@@ -177,8 +174,6 @@ app.$store.dispatch('updateOpenDirectory')
 app.$store.dispatch('updateActiveFile')
   .catch(e => console.error(e))
   .finally(() => { activeFileUpdateLock = false })
-app.$store.dispatch('updateOpenFiles')
-  .catch(e => console.error(e))
 
 // -----------------------------------------------
 

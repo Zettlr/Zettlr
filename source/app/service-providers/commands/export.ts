@@ -14,16 +14,18 @@
 
 import ZettlrCommand from './zettlr-command'
 import { app, shell } from 'electron'
-import { makeExport, getAvailableFormats } from './exporter'
+import { makeExport } from './exporter'
 import { trans } from '@common/i18n-main'
 import { ExporterOptions } from './exporter/types'
 import { promises as fs } from 'fs'
 import path from 'path'
 import isDir from '@common/util/is-dir'
+import { PANDOC_WRITERS } from '@common/util/pandoc-maps'
+import { PandocProfileMetadata } from '@dts/common/assets'
 
 export default class Export extends ZettlrCommand {
   constructor (app: any) {
-    super(app, [ 'export', 'get-available-export-formats' ])
+    super(app, ['export'])
   }
 
   /**
@@ -33,15 +35,10 @@ export default class Export extends ZettlrCommand {
     * @return {Boolean}     Whether or not the call succeeded.
     */
   async run (evt: string, arg: any): Promise<void> {
-    if (evt === 'get-available-export-formats') {
-      // In this case only enumerate the available export formats
-      return getAvailableFormats()
-    }
-
-    const { file, content, format, options, exportTo } = arg
+    const { file, content, profile, exportTo } = arg as { file: string, content: string, profile: PandocProfileMetadata, exportTo: string }
 
     const exporterOptions: ExporterOptions = {
-      format: format,
+      profile: profile,
       targetDirectory: '',
       sourceFiles: [],
       cwd: undefined
@@ -74,7 +71,22 @@ export default class Export extends ZettlrCommand {
       if (fileDescriptor !== null) {
         exporterOptions.sourceFiles.push(fileDescriptor)
         exporterOptions.cwd = fileDescriptor.dir
-        exporterOptions.targetDirectory = (exportTo === 'temp') ? app.getPath('temp') : fileDescriptor.dir
+        switch (exportTo) {
+          case 'ask': {
+            const folderSelection = await this._app.windows.askDir(trans('system.export_dialog.title'), null, trans('system.export_dialog.save'))
+            if (folderSelection === undefined || folderSelection.length === 0) {
+              this._app.log.error('[Export] Could not run exporter: Folderselection did not have a result!')
+              return
+            }
+            exporterOptions.targetDirectory = folderSelection[0]
+            break
+          }
+          case 'temp':
+          case 'cwd':
+          default:
+            exporterOptions.targetDirectory = (exportTo === 'temp') ? app.getPath('temp') : fileDescriptor.dir
+            break
+        }
       }
     }
 
@@ -87,13 +99,14 @@ export default class Export extends ZettlrCommand {
     // Call the exporter. Don't throw the "big" error as this is single-file export
     try {
       this._app.log.verbose(`[Exporter] Exporting ${exporterOptions.sourceFiles.length} files to ${exporterOptions.targetDirectory}`)
-      const output = await makeExport(exporterOptions, this._app.config, this._app.assets, options)
+      const output = await makeExport(exporterOptions, this._app.log, this._app.config, this._app.assets)
       if (output.code === 0) {
         this._app.log.info(`Successfully exported file to ${output.targetFile}`)
-        this._app.notifications.show(trans('system.export_success', format.toUpperCase()))
+        const readableFormat = (profile.writer in PANDOC_WRITERS) ? PANDOC_WRITERS[profile.writer] : profile.writer
+        this._app.notifications.show(trans('system.export_success', readableFormat))
 
         // In case of a textbundle/pack it's a folder, else it's a file
-        if ([ 'textbundle', 'textpack' ].includes(arg.format)) {
+        if ([ 'textbundle', 'textpack' ].includes(arg.profile.writer)) {
           shell.showItemInFolder(output.targetFile)
         } else {
           const potentialError = await shell.openPath(output.targetFile)
@@ -103,7 +116,7 @@ export default class Export extends ZettlrCommand {
         }
       } else {
         const title = trans('system.error.export_error_title')
-        const message = trans('system.error.export_error_message', output.stderr[0])
+        const message = trans('system.error.export_error_message', `Pandoc exited with code ${output.code}`)
         const contents = output.stderr.join('\n')
         this._app.windows.showErrorMessage(title, message, contents)
       }

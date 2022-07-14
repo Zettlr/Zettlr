@@ -25,6 +25,8 @@ import { DirDescriptor } from '@dts/main/fsal'
 import { app } from 'electron'
 import { trans } from '@common/i18n-main'
 import AssetsProvider from '@providers/assets'
+import { PandocProfileMetadata } from '@dts/common/assets'
+import { SUPPORTED_READERS } from '@common/util/pandoc-maps'
 
 export default async function makeImport (
   fileList: string[],
@@ -50,31 +52,53 @@ export default async function makeImport (
   // This for loop will initiate all pandoc instances at once. The return of
   // these processes will come in asynchronously, so we can let chokidar handle
   // the detection.
-  for (let file of files) {
-    // There are two files that we cannot import using pandoc: textbundle and textpack.
-    if (file.knownFormat === 'textbundle' || file.knownFormat === 'textpack') {
+  for (const file of files) {
+    if ([ '.textbundle', '.textpack' ].includes(path.extname(file.path))) {
       // We need to import using a special importer.
-      await importTextbundle(file, dirToImport)
-    } else if ([ 'markdown', 'txt' ].includes(file.knownFormat)) {
+      try {
+        await importTextbundle(file, dirToImport)
+        if (successCallback !== null) {
+          successCallback(file.path)
+        }
+      } catch (err: any) {
+        failedFiles.push(file.path)
+        if (errorCallback !== null) {
+          errorCallback(file.path, err.message)
+        }
+      }
+    } else if ([ '.markdown', '.txt' ].includes(path.extname(file.path))) {
       // In this case we should just copy it over
       try {
-        let newName = path.join(dirToImport.path, path.basename(file.path, path.extname(file.path))) + '.md'
+        const newName = path.join(dirToImport.path, path.basename(file.path, path.extname(file.path))) + '.md'
         await fs.copyFile(file.path, newName)
         if (successCallback !== null) {
           successCallback(file.path)
         }
       } catch (err: any) {
+        failedFiles.push(file.path)
         if (errorCallback !== null) {
           errorCallback(file.path, err.message)
         }
       }
-    } else if (file.knownFormat !== '') {
+    } else if (file.availableReaders.length > 0) {
       // The file is known -> let's import it!
-
-      let newName = path.join(dirToImport.path, path.basename(file.path, path.extname(file.path))) + '.md'
+      const newName = path.join(dirToImport.path, path.basename(file.path, path.extname(file.path))) + '.md'
 
       // Retrieve the corresponding defaults file ...
-      const defaults = await assetsProvider.getDefaultsFor(file.knownFormat, 'import')
+      const allDefaults = (await assetsProvider.listDefaults()).filter(e => SUPPORTED_READERS.includes(e.writer))
+      const potentialProfiles: PandocProfileMetadata[] = []
+      for (const profile of allDefaults) {
+        if (file.availableReaders.includes(profile.reader)) {
+          potentialProfiles.push(profile)
+        }
+      }
+
+      // TODO If more than one profile are found, ask the user!
+      if (potentialProfiles.length > 1) {
+        console.warn(`More than one applicable profile found! Using first one: ${potentialProfiles[0].name}`)
+      }
+
+      const defaults = await assetsProvider.getDefaultsFile(potentialProfiles[0].name)
 
       // ... supply our file paths ...
       defaults['input-files'] = [file.path]
@@ -84,7 +108,7 @@ export default async function makeImport (
       const defaultsFile = path.join(app.getPath('temp'), 'defaults.yml')
 
       // ... cast the defaults to string ...
-      const YAMLOptions: YAML.Options = {
+      const YAMLOptions = {
         indent: 4,
         simpleKeys: false
       }
@@ -95,28 +119,30 @@ export default async function makeImport (
       // ... and finally run pandoc, providing the file.
       const pandocProcess = spawn('pandoc', [ '--defaults', `"${defaultsFile}"` ], { shell: true })
 
-      await new Promise<void>((resolve, reject) => {
-        pandocProcess.on('message', (message, handle) => {
-          console.log(String(message))
-        })
-        pandocProcess.on('close', (code, signal) => {
-          // Code should be 0
-          if (code === 0 && successCallback !== null) {
-            successCallback(file.path)
-            resolve()
-          } else if (errorCallback !== null) {
-            errorCallback(file.path)
-            reject(new Error(`Could not import file: Pandoc exited with code ${String(code)}`))
-          }
-        })
+      try {
+        await new Promise<void>((resolve, reject) => {
+          pandocProcess.on('message', (message, handle) => {
+            console.log(String(message))
+          })
+          pandocProcess.on('close', (code, signal) => {
+            if (code === 0) {
+              resolve()
+            } else {
+              reject(new Error(`Could not import file: Pandoc exited with code ${String(code)}`))
+            }
+          })
 
-        pandocProcess.on('error', (err) => {
-          if (errorCallback !== null) {
-            errorCallback(file.path, err)
-          }
-          reject(err)
+          pandocProcess.on('error', (err) => { reject(err) })
         })
-      })
+        if (successCallback !== null) {
+          successCallback(file.path)
+        }
+      } catch (err: any) {
+        failedFiles.push(file.path)
+        if (errorCallback !== null) {
+          errorCallback(file.path, err.message)
+        }
+      }
     } else {
       failedFiles.push(file.path)
     }

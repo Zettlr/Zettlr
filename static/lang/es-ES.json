@@ -2,19 +2,20 @@
     "metadata": {
         "authors": [
             "ScaredCoward",
-            "Renzo Sparta \u003Cexequiel0210@gmail.com\u003E",
+            "Humberto P\u00e9rez Romero \u003Chupero@disroot.org\u003E",
             "vfc",
             "das_kultural",
             "Diego Tra\u00edd",
+            "Renzo Sparta \u003Cexequiel0210@gmail.com\u003E",
             "Z_Moz",
-            "Humberto P\u00e9rez Romero \u003Chupero@disroot.org\u003E",
             "Miren",
             "Hiperterminal \u003Cdavid@hiperterminal.com\u003E",
+            "Javier Garc\u00eda Mar\u00edn",
             "Tim",
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-04-09T07:40:48.000000Z"
+        "updated_at": "2022-05-31T18:21:54.000000Z"
     },
     "dialog": {
         "about": {
@@ -34,7 +35,7 @@
             "other_projects": "Zettlr tambi\u00e9n hace uso de los siguientes proyectos:",
             "projects": "Otros proyectos",
             "showdownjs": "Renderiza el changelog (registro de cambios) para que puedas ver lo que ha cambiado en una actualizaci\u00f3n",
-            "sponsors": "Esp\u00f3nsors",
+            "sponsors": "Patrocinadores",
             "tippyjs": "De ah\u00ed vienen las buenas tooltips (descripciones emergentes)",
             "title": "Acerca de Zettlr",
             "trademark": "Todos los logotipos y marcas est\u00e1n sujetos a sus leg\u00edtimos propietarios. Adem\u00e1s de usar su c\u00f3digo, Zettlr no est\u00e1 de ninguna manera afiliado a ninguno de estos proyectos. Node.js es una marca registrada de Joyent, Inc."
@@ -365,6 +366,22 @@
                 "title": "Tema"
             },
             "title": "Preferencias",
+            "toolbar": {
+                "showDocumentInfoText": "Muestra informaci\u00f3n del documento",
+                "showInsertFootnoteButton": "Muestra el bot\u00f3n \"Insertar nota a pie de p\u00e1gina\"",
+                "showInsertTableButton": "Muestra el bot\u00f3n \"Insertar tabla\"",
+                "showMarkdownCommentButton": "Muestra el bot\u00f3n \"Insertar comentario\"",
+                "showMarkdownImageButton": "Muestra el bot\u00f3n \"Imagen\"",
+                "showMarkdownLinkButton": "Muestra el bot\u00f3n \"Enlace\"",
+                "showMarkdownMakeTaskListButton": "Muestra el bot\u00f3n \"Lista de tareas\"",
+                "showNewFileButton": "Muestra el bot\u00f3n \"Archivo nuevo\"",
+                "showNextFileButton": "Muestra el bot\u00f3n \"Pr\u00f3ximo archivo\"",
+                "showOpenPreferencesButton": "Muestra el bot\u00f3n \"Abrir preferencias\"",
+                "showPomodoroButton": "Muestra el temporizador Pomodoro",
+                "showPreviousFileButton": "Muestra el bot\u00f3n \"Archivo anterior\"",
+                "showToggleReadabilityButton": "Muestra el bot\u00f3n \"Habilitar modo de legibilidad\"",
+                "title": "Barra de herramientas"
+            },
             "translations": {
                 "download": "Haz clic para descargar",
                 "downloading": "Descargando %s",
@@ -490,7 +507,7 @@
             "defaults_restoring": "Restuarando el archivo de los par\u00e1metros por defecto",
             "status": {
                 "save_error": "Ha fallado el guardado",
-                "saved": "Guardado!",
+                "saved": "\u00a1Guardado!",
                 "saving": "Guardando...",
                 "unsaved_changes": "Cambios no guardados"
             },
@@ -612,6 +629,7 @@
         "close_file": "Cerrar archivo",
         "close_workspace": "Cerrar \u00e1rea de trabajo",
         "copy": "Copiar",
+        "copy_abs_path": "Copiar ruta completa",
         "copy_equation": "Copia el c\u00f3digo de la ecuaci\u00f3n",
         "copy_filename": "Copiar nombre de archivo",
         "copy_html": "Copiar como HTML",
@@ -832,7 +850,7 @@
         "show_menu": "Mostrar men\u00fa de aplicaci\u00f3n",
         "show_toc": "Mostrar el sumario",
         "stats": "Ver estad\u00edsticas",
-        "tag_cloud": "tags",
+        "tag_cloud": "Etiquetas",
         "toggle_attachments": "Ver archivos adjuntos",
         "toggle_file_manager": "Gestor de archivos",
         "toggle_global_search": "B\u00fasqueda global"

@@ -13,6 +13,7 @@
  * END HEADER
  */
 
+import ConfigProvider from '@providers/config'
 import {
   ipcMain,
   nativeTheme,

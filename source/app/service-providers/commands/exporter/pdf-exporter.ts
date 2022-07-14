@@ -25,17 +25,7 @@ import { trans } from '@common/i18n-main'
 import sanitize from 'sanitize-filename'
 
 export const plugin: ExporterPlugin = {
-  pluginInformation: function () {
-    return {
-      id: 'pdfExporter',
-      formats: {
-        'chromium-pdf': 'PDF Document',
-        'latex-pdf': 'PDF (LaTeX)'
-      },
-      options: []
-    }
-  },
-  run: async function (options: ExporterOptions, sourceFiles: string[], formatOptions: any, ctx: ExporterAPI): Promise<ExporterOutput> {
+  run: async function (options: ExporterOptions, sourceFiles: string[], ctx: ExporterAPI): Promise<ExporterOutput> {
     // Determine the availability of Pandoc. As the Pandoc path is added to
     // process.env.PATH during the environment check, this should always work
     // if a supported Zettlr variant is being used. In other cases (e.g. custom
@@ -57,43 +47,44 @@ export const plugin: ExporterPlugin = {
     // Get the corresponding defaults file
     const defaultKeys = {
       'input-files': sourceFiles,
-      'output-file': (options.format === 'latex-pdf') ? pdfFilePath : htmlFilePath
+      'output-file': htmlFilePath
     }
-    let defaultsFile = ''
-    if (options.format === 'latex-pdf') {
-      // Immediately write to PDF
-      defaultsFile = await ctx.getDefaultsFor('pdf', defaultKeys)
-    } else {
-      // Write to an intermediary HTML file which we will convert to PDF below.
-      defaultsFile = await ctx.getDefaultsFor('html', defaultKeys)
+
+    // Now we'll have to get the correct exporting template
+    const allDefaults = (await ctx.listDefaults())
+      .filter(e => e.writer === 'html')
+
+    if (allDefaults.length > 1) {
+      console.warn('More than one suitable format for exporting to HTML found - using first one!')
     }
+
+    // Write to an intermediary HTML file which we will convert to PDF below.
+    const defaultsFile = await ctx.getDefaultsFor(allDefaults[0].name, defaultKeys)
 
     // Run Pandoc
     const pandocOutput = await ctx.runPandoc(defaultsFile)
 
     // Without XeLaTeX, people can still export to PDF using Chromium's print
     // API. Chromium's PDF abilities are actually quite good.
-    if (options.format === 'chromium-pdf') {
-      const printer = new BrowserWindow({
-        width: 600,
-        height: 800,
-        show: false
-      })
+    const printer = new BrowserWindow({
+      width: 600,
+      height: 800,
+      show: false
+    })
 
-      await printer.loadFile(htmlFilePath)
-      const pdfData = await printer.webContents.printToPDF({
-        marginsType: 0,
-        printBackground: false,
-        printSelectionOnly: false,
-        landscape: false,
-        pageSize: 'A4',
-        scaleFactor: 100
-      })
-      printer.close()
+    await printer.loadFile(htmlFilePath)
+    const pdfData = await printer.webContents.printToPDF({
+      marginsType: 0,
+      printBackground: false,
+      printSelectionOnly: false,
+      landscape: false,
+      pageSize: 'A4',
+      scaleFactor: 100
+    })
+    printer.close()
 
-      await fs.writeFile(pdfFilePath, pdfData)
-      await fs.unlink(htmlFilePath) // Remove the intermediary HTML file
-    }
+    await fs.writeFile(pdfFilePath, pdfData)
+    await fs.unlink(htmlFilePath) // Remove the intermediary HTML file
 
     // Make sure to propagate the results
     return {

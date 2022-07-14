@@ -13,22 +13,22 @@
         v-bind:name="'labels'"
         v-bind:inline="true"
       ></Checkbox>
-      <Button
+      <ButtonElement
         v-bind:icon="'target'"
         v-bind:disabled="offsetX === 0 && offsetY === 0"
         v-bind:inline="true"
         v-on:click="offsetX = 0; offsetY = 0"
-      ></Button>
-      <Select
+      ></ButtonElement>
+      <SelectElement
         v-model="componentFilter"
         v-bind:options="selectableComponents"
         v-bind:inline="true"
-      ></Select>
-      <Text
+      ></SelectElement>
+      <TextElement
         v-model="highlightFilter"
         v-bind:placeholder="'Highlight vertices'"
         v-bind:inline="true"
-      ></Text>
+      ></TextElement>
     </div>
     <div id="graph" ref="container"></div>
 
@@ -36,10 +36,10 @@
     <transition name="fade">
       <div v-if="isBuildingGraph" id="loading-indicator">
         <p>Building graph &hellip; ({{ buildProgress.currentFile }}/{{ buildProgress.totalFiles }} files processed)</p>
-        <Progress
+        <ProgressElement
           v-bind:value="buildProgress.currentFile"
           v-bind:max="buildProgress.totalFiles"
-        ></Progress>
+        ></ProgressElement>
       </div>
     </transition>
   </div>
@@ -50,14 +50,14 @@ import { defineComponent } from 'vue'
 import { GraphArc, GraphVertex, LinkGraph } from '@dts/common/graph'
 import * as d3 from 'd3'
 import Checkbox from '@common/vue/form/elements/Checkbox.vue'
-import Button from '@common/vue/form/elements/Button.vue'
-import Progress from '@common/vue/form/elements/Progress.vue'
-import Select from '@common/vue/form/elements/Select.vue'
+import ButtonElement from '@common/vue/form/elements/Button.vue'
+import ProgressElement from '@common/vue/form/elements/Progress.vue'
+import SelectElement from '@common/vue/form/elements/Select.vue'
+import TextElement from '@common/vue/form/elements/Text.vue'
 import tippy from 'tippy.js'
 import { SimulationNodeDatum } from 'd3'
 import DirectedGraph from '@providers/links/directed-graph'
 import { MDFileMeta } from '@dts/common/fsal'
-import Text from '@common/vue/form/elements/Text.vue'
 
 const ipcRenderer = window.ipc
 
@@ -65,10 +65,10 @@ export default defineComponent({
   name: 'GraphView',
   components: {
     Checkbox,
-    Button,
-    Progress,
-    Select,
-    Text
+    ButtonElement,
+    ProgressElement,
+    SelectElement,
+    TextElement
   },
   data: function () {
     return {
@@ -459,7 +459,6 @@ export default defineComponent({
               .attr('data-tippy-content', (vertex) => {
                 let cnt = ''
                 if (vertex.label === undefined) {
-                  console.log('Could not find correct vertex', vertex)
                   cnt += vertex.id
                 } else {
                   cnt += vertex.label
@@ -522,7 +521,6 @@ export default defineComponent({
       const dbObject = await ipcRenderer.invoke('link-provider', { command: 'get-link-database' })
       const database = new Map<string, string[]>(Object.entries(dbObject))
 
-      console.log(`Building graph from ${Object.entries(dbObject).length} files ...`)
       this.buildProgress.currentFile = 0
       this.buildProgress.totalFiles = Object.entries(dbObject).length
       this.componentFilter = ''

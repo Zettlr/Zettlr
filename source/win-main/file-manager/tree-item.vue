@@ -12,6 +12,7 @@
         'tree-item': true,
         [obj.type]: true,
         'selected': isSelected,
+        'active': activeItem === obj.path,
         'project': obj.type === 'directory' && obj.project != null,
         'root': isRoot
       }"
@@ -77,6 +78,7 @@
             v-bind:value="obj.name"
             v-on:keyup.enter="finishNameEditing(($event.target as HTMLInputElement).value)"
             v-on:keyup.esc="nameEditing = false"
+            v-on:keydown.stop=""
             v-on:blur="nameEditing = false"
             v-on:click.stop=""
           >
@@ -111,6 +113,7 @@
         v-bind:obj="child"
         v-bind:is-currently-filtering="isCurrentlyFiltering"
         v-bind:depth="depth + 1"
+        v-bind:active-item="activeItem"
       >
       </TreeItem>
     </div>
@@ -162,6 +165,10 @@ export default defineComponent({
     isCurrentlyFiltering: {
       type: Boolean,
       default: false
+    },
+    activeItem: {
+      type: String,
+      default: undefined
     }
   },
   data: () => {
@@ -544,12 +551,24 @@ body {
         background-color: var(--system-accent-color, --c-primary);
         color: var(--system-accent-color-contrast, --c-primary-contrast);
       }
+
+      &.active .display-text {
+        background-color: rgb(68, 68, 68);
+        color: rgb(255, 255, 255);
+      }
     }
   }
 
   &.dark div.tree-item-container {
-    .tree-item.project {
-      color: rgb(240, 98, 98);
+    .tree-item {
+      &.project {
+        color: rgb(240, 98, 98);
+      }
+
+      &.active .display-text {
+        background-color: rgb(68, 68, 68);
+        color: rgb(255, 255, 255);
+      }
     }
   }
 }

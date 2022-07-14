@@ -148,7 +148,6 @@ function getTargetType (target: HTMLElement): 'text'|'citation'|'link'|'spell-er
   }
 
   if (target.closest('.preview-math') !== null) {
-    console.log('Math!')
     return 'math'
   }
 

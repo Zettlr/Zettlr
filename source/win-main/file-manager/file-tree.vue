@@ -25,6 +25,7 @@
         v-bind:key="item.hash"
         v-bind:obj="item"
         v-bind:depth="0"
+        v-bind:active-item="activeTreeItem?.[0]"
         v-bind:has-duplicate-name="getFiles.filter(i => i.name === item.name).length > 1"
       >
       </TreeItem>
@@ -40,6 +41,7 @@
         v-bind:obj="item"
         v-bind:is-currently-filtering="filterQuery.length > 0"
         v-bind:depth="0"
+        v-bind:active-item="activeTreeItem?.[0]"
         v-bind:has-duplicate-name="getDirectories.filter(i => i.name === item.name).length > 1"
       >
       </TreeItem>
@@ -74,9 +76,40 @@ import TreeItem from './tree-item.vue'
 import matchQuery from './util/match-query'
 import matchTree from './util/match-tree'
 import { defineComponent } from 'vue'
-import { MDFileMeta, CodeFileMeta, DirMeta } from '@dts/common/fsal'
+import { MDFileMeta, CodeFileMeta, DirMeta, OtherFileMeta } from '@dts/common/fsal'
 
 const ipcRenderer = window.ipc
+
+type AnyDescriptor = DirMeta|CodeFileMeta|MDFileMeta|OtherFileMeta
+
+/**
+ * Flattens one element of the filtered directory tree into a one-dimensional
+ * array, taking into account only uncollapsed (=visible) directories.
+ *
+ * @param   {AnyDescriptor}       elem         The element to flatten
+ * @param   {string[]|undefined}  uncollapsed  A list of opened directories. Pass undefined to return all directories
+ * @param   {AnyDescriptor[]}     arr          A list to append to (for recursion)
+ *
+ * @return  {AnyDescriptor[]}                  The flattened list
+ */
+function getFlattenedVisibleFileTree (elem: AnyDescriptor, uncollapsed: string[]|undefined, arr: AnyDescriptor[] = []): AnyDescriptor[] {
+  // Add the current element
+  if (elem.type !== 'other') {
+    // TODO: Once we enable displaying of otherfiles in the file tree, we MUST
+    // replace this with a check of whether that setting is on!
+    arr.push(elem)
+  }
+
+  // Include children only when we either are filtering (uncollapsed = undefined)
+  // or if the directory is actually visible
+  if (elem.type === 'directory' && (uncollapsed === undefined || uncollapsed.includes(elem.path))) {
+    for (const child of elem.children) {
+      arr = getFlattenedVisibleFileTree(child, uncollapsed, arr)
+    }
+  }
+
+  return arr
+}
 
 export default defineComponent({
   name: 'FileTree',
@@ -94,7 +127,10 @@ export default defineComponent({
     }
   },
   data: function () {
-    return {}
+    return {
+      // Can contain the path to a tree item that is focused
+      activeTreeItem: undefined as undefined|[string, string]
+    }
   },
   computed: {
     fileTree: function (): Array<MDFileMeta|CodeFileMeta|DirMeta> {
@@ -138,6 +174,25 @@ export default defineComponent({
     getDirectories: function (): DirMeta[] {
       return this.getFilteredTree.filter(item => item.type === 'directory') as DirMeta[]
     },
+    uncollapsedDirectories: function (): string[] {
+      return this.$store.state.uncollapsedDirectories
+    },
+    flattenedSimpleFileTree: function (): Array<[string, string]> {
+      // First, take the filtered tree and flatten it
+      let list: AnyDescriptor[] = []
+      const uncollapsedDirs: string[]|undefined = (this.filterQuery.length === 0) ? this.uncollapsedDirectories : undefined
+
+      this.getFilteredTree.forEach(elem => {
+        list = list.concat(getFlattenedVisibleFileTree(elem, uncollapsedDirs))
+      })
+
+      const flatArray: Array<[string, string]> = []
+      for (const elem of list) {
+        // We need the type to check if we can uncollapse/collapse a directory
+        flatArray.push([ elem.path, elem.type ])
+      }
+      return flatArray
+    },
     fileSectionHeading: function (): string {
       return trans('gui.files')
     },
@@ -165,6 +220,83 @@ export default defineComponent({
     clickHandler: function (event: MouseEvent) {
       // We need to bubble this event upwards so that the file manager is informed of the selection
       this.$emit('selection', event)
+    },
+    navigate: function (event: KeyboardEvent) {
+      // The user requested to navigate into the file tree with the keyboard
+      // Only capture arrow movements
+      if (![ 'ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Enter', 'Escape' ].includes(event.key)) {
+        return
+      }
+
+      event.stopPropagation()
+      event.preventDefault()
+
+      if (event.key === 'Escape') {
+        this.activeTreeItem = undefined
+        return
+      }
+
+      if (this.flattenedSimpleFileTree.length === 0) {
+        return // Nothing to navigate
+      }
+
+      if (event.key === 'Enter' && this.activeTreeItem !== undefined) {
+        // Open the currently active item
+        if (this.activeTreeItem[1] === 'directory') {
+          ipcRenderer.invoke('application', {
+            command: 'set-open-directory',
+            payload: this.activeTreeItem[0]
+          })
+            .catch(e => console.error(e))
+        } else {
+          // Select the active file (if there is one)
+          ipcRenderer.invoke('application', {
+            command: 'open-file',
+            payload: {
+              path: this.activeTreeItem[0],
+              newTab: false
+            }
+          })
+            .catch(e => console.error(e))
+        }
+      }
+
+      // Get the current index of the current active file
+      let currentIndex = this.flattenedSimpleFileTree.findIndex(val => val[0] === this.activeTreeItem?.[0])
+
+      switch (event.key) {
+        case 'ArrowDown':
+          currentIndex++
+          break
+        case 'ArrowUp':
+          currentIndex--
+          break
+        case 'ArrowLeft':
+          // Close a directory if applicable
+          if (currentIndex > -1 && this.flattenedSimpleFileTree[currentIndex][1] === 'directory') {
+            this.$store.commit('removeUncollapsedDirectory', this.flattenedSimpleFileTree[currentIndex][0])
+          }
+          return
+        case 'ArrowRight':
+          // Open a directory if applicable
+          if (currentIndex > -1 && this.flattenedSimpleFileTree[currentIndex][1] === 'directory') {
+            this.$store.commit('addUncollapsedDirectory', this.flattenedSimpleFileTree[currentIndex][0])
+          }
+          return
+      }
+
+      // Sanitize the index
+      if (currentIndex > this.flattenedSimpleFileTree.length - 1) {
+        currentIndex = this.flattenedSimpleFileTree.length - 1
+      } else if (currentIndex < 0) {
+        currentIndex = 0
+      }
+
+      // Set the active tree item
+      this.activeTreeItem = this.flattenedSimpleFileTree[currentIndex]
+    },
+    stopNavigate: function () {
+      this.activeTreeItem = undefined
     }
   }
 })
