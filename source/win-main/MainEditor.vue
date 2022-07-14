@@ -193,6 +193,8 @@ ipcRenderer.on('shortcut', (event, command) => {
     // TODO: Implement tab closing
   } else if (command === 'search') {
     showSearch.value = !showSearch.value
+  } else if (command === 'toggle-typewriter-mode') {
+    mdEditor.hasTypewriterMode = !mdEditor.hasTypewriterMode
   }
 })
 

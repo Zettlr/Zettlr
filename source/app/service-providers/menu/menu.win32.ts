@@ -459,11 +459,7 @@ export default function getMenu (
           id: 'menu.toggle_typewriter_mode',
           label: trans('menu.toggle_typewriter_mode'),
           accelerator: 'Ctrl+Alt+T',
-          type: 'checkbox',
-          checked: getCheckboxState('menu.toggle_typewriter_mode', false),
           click: function (menuitem, focusedWindow) {
-            const currentState = getCheckboxState('menu.toggle_typewriter_mode', false)
-            setCheckboxState('menu.toggle_typewriter_mode', !currentState)
             focusedWindow?.webContents.send('shortcut', 'toggle-typewriter-mode')
           }
         },
