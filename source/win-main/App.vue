@@ -26,7 +26,8 @@
         <GlobalSearch
           v-show="mainSplitViewVisibleComponent === 'globalSearch'"
           ref="global-search"
-          v-on:jtl="jtl($event)"
+          v-bind:window-id="windowId"
+          v-on:jtl="(filePath, lineNumber, newTab) => jtl(filePath, lineNumber, newTab)"
         >
         </GlobalSearch>
       </template>
@@ -572,9 +573,59 @@ export default defineComponent({
     }
   },
   methods: {
-    jtl: function (lineNumber: number, setCursor: boolean = false) {
-      this.editorCommands.data = { lineNumber, setCursor }
-      this.editorCommands.jumpToLine = !this.editorCommands.jumpToLine
+    jtl: function (filePath: string, lineNumber: number, newTab: boolean, setCursor: boolean = false) {
+      // We need to make sure the given file is (a) open somewhere and (b) the
+      // active file.
+
+      // Simplest case: The file is already active somewhere
+      const activeFileLeaf: LeafNodeJSON|undefined = this.$store.state.paneData
+        .find((pane: LeafNodeJSON) => pane.activeFile?.path === filePath)
+      if (activeFileLeaf !== undefined) {
+        // There is at least one leaf with the given file being active, so we
+        // can simply emit the event
+        this.editorCommands.data = { filePath, lineNumber, setCursor }
+        this.editorCommands.jumpToLine = !this.editorCommands.jumpToLine
+        return
+      }
+
+      const WAIT_TIME = 100 // How long to wait before re-executing the jtl()
+
+      // Next, let's see if the file is at least open somewhere
+      const containingLeaf: LeafNodeJSON|undefined = this.$store.state.paneData
+        .find((pane: LeafNodeJSON) => {
+          return pane.openFiles.find(doc => doc.path === filePath) !== undefined
+        })
+      if (containingLeaf !== undefined) {
+        // Let's first make it the active file and then execute the command
+        ipcRenderer.invoke('documents-provider', {
+          command: 'open-file',
+          payload: { path: filePath, windowId: this.windowId, leafId: containingLeaf.id }
+        })
+          .then(() => {
+            // Re-execute the jtl command
+            setTimeout(() => this.jtl(filePath, lineNumber, newTab, setCursor), WAIT_TIME)
+          })
+          .catch(e => console.error(e))
+        return
+      }
+
+      // If we're here, the file was not open, so we have to do that first. At
+      // least this both makes it an open file AND an active file somewhere in
+      // the window.
+      ipcRenderer.invoke('documents-provider', {
+        command: 'open-file',
+        payload: {
+          path: filePath,
+          windowId: this.windowId,
+          leafId: this.$store.state.lastLeafId,
+          newTab: newTab
+        }
+      })
+        .then(() => {
+          // Re-execute the jtl command
+          setTimeout(() => this.jtl(filePath, lineNumber, newTab, setCursor), WAIT_TIME)
+        })
+        .catch(e => console.error(e))
     },
     moveSection: function (data: { from: number, to: number }) {
       this.editorCommands.data = { from: data.from, to: data.to }

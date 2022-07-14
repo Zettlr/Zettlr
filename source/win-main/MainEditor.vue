@@ -403,11 +403,11 @@ const editorConfiguration = computed<any>(() => {
 
 // External commands/"event" system
 watch(toRef(props.editorCommands, 'jumpToLine'), () => {
-  if (lastLeafId.value !== props.leafId) {
-    return
+  const { filePath, lineNumber, setCursor } = props.editorCommands.data
+  // Execute a jtl-command if the current displayed file is the correct one
+  if (filePath === activeFile.value?.path) {
+    jtl(lineNumber, setCursor)
   }
-  const { lineNumber, setCursor } = props.editorCommands.data
-  jtl(lineNumber, setCursor)
 })
 watch(toRef(props.editorCommands, 'moveSection'), () => {
   if (lastLeafId.value !== props.leafId) {
