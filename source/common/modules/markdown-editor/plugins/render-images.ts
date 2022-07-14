@@ -66,6 +66,8 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
       let widthAttribute = ''
       let heightAttribute = ''
       if (match[4] !== '') {
+        // Use regex to parse pandoc attributes
+        // like width="3.69in" height="1.93884in"
         let widthRE = /(width=)"([^"]+)"/g
         let heightRE = /(height=)"([^"]+)"/g
         let mat = widthRE.exec(p4)
@@ -170,18 +172,19 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
       caption.addEventListener('focusout', updateCaptionFunction)
 
       // Retrieve the size constraints
-      // Seems to Change Codes here to control image size
       const maxPreviewWidth = Number((cm as any).getOption('zettlr').imagePreviewWidth)
       const maxPreviewHeight = Number((cm as any).getOption('zettlr').imagePreviewHeight)
       let width = (!Number.isNaN(maxPreviewWidth)) ? `${maxPreviewWidth}%` : '100%'
       let height = (!Number.isNaN(maxPreviewHeight) && maxPreviewHeight < 100) ? `${maxPreviewHeight}vh` : ''
 
+      // Use the pandoc attributes to control image size
       if (widthAttribute !== '') {
         width = widthAttribute
       }
       if (heightAttribute !== '') {
         height = heightAttribute
       }
+
       // Apply the constraints to the figure and image
       figure.style.maxWidth = width
       figure.style.maxHeight = height
