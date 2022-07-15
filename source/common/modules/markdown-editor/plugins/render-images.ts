@@ -68,15 +68,15 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
       if (match[4] !== '') {
         // Use regex to parse pandoc attributes
         // like width="3.69in" height="1.93884in"
-        let widthRE = /(width=)"([^"]+)"/g
-        let heightRE = /(height=)"([^"]+)"/g
+        const widthRE = /(?:width=)"([^"]+)"/g
+        const heightRE = /(?:height=)"([^"]+)"/g
         let mat = widthRE.exec(p4)
         if (mat != null) {
-          widthAttribute = mat[2] ?? ''
+          widthAttribute = mat[1] ?? ''
         }
         mat = heightRE.exec(p4)
         if (mat != null) {
-          heightAttribute = mat[2] ?? ''
+          heightAttribute = mat[1] ?? ''
         }
       }
 
