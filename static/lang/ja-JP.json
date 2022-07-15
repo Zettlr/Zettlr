@@ -5,7 +5,7 @@
             "juggernautjp \u003Ckatsutoshi.harada@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-06-28T12:48:25.000000Z"
+        "updated_at": "2022-07-05T14:03:30.000000Z"
     },
     "dialog": {
         "about": {
@@ -680,6 +680,7 @@
         "paste": "\u8cbc\u308a\u4ed8\u3051",
         "paste_plain": "\u30d7\u30ec\u30fc\u30f3\u30c6\u30ad\u30b9\u30c8\u3068\u3057\u3066\u8cbc\u308a\u4ed8\u3051",
         "pdf_preferences": "PDF\u8a2d\u5b9a...",
+        "pin_tab": "\u30bf\u30d6\u3092\u56fa\u5b9a",
         "preferences": "\u8a2d\u5b9a",
         "previous_file": "\u524d\u306e\u30d5\u30a1\u30a4\u30eb",
         "print": "\u5370\u5237...",
@@ -721,6 +722,7 @@
         "toggle_typewriter_mode": "\u30bf\u30a4\u30d7\u30e9\u30a4\u30bf\u30fc\u30e2\u30fc\u30c9",
         "undo": "\u5143\u306b\u623b\u3059",
         "unhide": "\u8868\u793a",
+        "unpin_tab": "\u30bf\u30d6\u56fa\u5b9a\u3092\u89e3\u9664",
         "update": "\u30a2\u30c3\u30d7\u30c7\u30fc\u30c8\u306e\u78ba\u8a8d",
         "win_close": "\u9589\u3058\u308b",
         "win_minimize": "\u6700\u5c0f\u5316",

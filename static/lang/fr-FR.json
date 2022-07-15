@@ -21,7 +21,7 @@
             "Joris"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-06-08T14:32:36.000000Z"
+        "updated_at": "2022-07-08T16:15:58.000000Z"
     },
     "dialog": {
         "about": {
@@ -61,6 +61,8 @@
             "explanation": "Modifier les param\u00e8tres par d\u00e9faut pour les importations ou les exportations.",
             "exporting_title": "Exportation",
             "importing_title": "Importation",
+            "invalid_warning": "Ce profil ne semble pas avoir la propri\u00e9t\u00e9 \u00e9criture ou lecture. Assurez-vous de d\u00e9finir les deux pour que Zettlr puisse utiliser ce profil.",
+            "protected_warning": "Ce profil est prot\u00e9g\u00e9. Cela signifie qu\u2019il sera restaur\u00e9 lorsque vous le supprimerez ou le renommerez.",
             "restore": "Restaurer le fichier par d\u00e9faut"
         },
         "dir_new": {
@@ -259,6 +261,7 @@
             "enable_table_helper": "Activer l'\u00e9diteur de tableau",
             "export": {
                 "dest": "Dossier de destination pour les fichiers export\u00e9s. \u003Cem\u003EAttention\u003C/em\u003E les fichiers sont remplac\u00e9s si vous choisissez \u00ab dossier en cours \u00bb !",
+                "dest_ask_label": "Demander le dossier",
                 "dest_cwd_label": "Dossier en cours, les fichiers sont export\u00e9s dans le dossier courant",
                 "dest_temp_label": "Dossier temporaire: vid\u00e9 r\u00e9guli\u00e8rement",
                 "strip_id_label": "Supprimer les IDs ZKN des fichiers",
@@ -693,6 +696,7 @@
         "paste": "Coller",
         "paste_plain": "Coller sans format",
         "pdf_preferences": "Param\u00e8tres de PDF\u2026",
+        "pin_tab": "\u00c9pingler l\u2019onglet",
         "preferences": "Pr\u00e9f\u00e9rences...",
         "previous_file": "Fichier pr\u00e9c\u00e9dent",
         "print": "Imprimer\u2026",
@@ -734,6 +738,7 @@
         "toggle_typewriter_mode": "Typewriter Mode",
         "undo": "Annuler",
         "unhide": "Remontrer",
+        "unpin_tab": "D\u00e9tacher l'onglet",
         "update": "V\u00e9rifier les mises \u00e0 jour",
         "win_close": "Fermer",
         "win_minimize": "Minimiser",
@@ -798,6 +803,10 @@
             "remove_message": "Voulez-vous vraiment supprimer %s ?",
             "remove_title": "Vraiment supprimer ?",
             "tray_not_supported": "Tray n'est pas support\u00e9. L'extension Gnome \"KStatusNotifierItem/AppIndicator Support\" est n\u00e9cessaire pour le fonctionnement de Tray sur Gnome Desktop."
+        },
+        "export_dialog": {
+            "save": "Sauvegarder",
+            "title": "Choisissez la destination d'export"
         },
         "export_success": "Exportation vers %s",
         "file_changed": "Le fichier %s a \u00e9t\u00e9 modifi\u00e9 par un programme ext\u00e9rieur.",

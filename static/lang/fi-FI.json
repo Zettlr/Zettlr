@@ -6,7 +6,7 @@
             "ritvje"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-02-19T16:37:40.000000Z"
+        "updated_at": "2022-07-12T14:18:28.000000Z"
     },
     "dialog": {
         "about": {
@@ -46,6 +46,8 @@
             "explanation": "Muokkaa tuonnin ja viennin oletusasetuksia t\u00e4\u00e4ll\u00e4.",
             "exporting_title": "Vied\u00e4\u00e4n",
             "importing_title": "Tuodaan",
+            "invalid_warning": "T\u00e4st\u00e4 profiilista puuttuu joko writer tai reader-ominaisuus. Aseta kumpikin, jotta Zettlr voi k\u00e4ytt\u00e4\u00e4 t\u00e4t\u00e4 profiilia.",
+            "protected_warning": "T\u00e4m\u00e4 profiili on suojattu, eli se palautetaan, kun poistat tai uudelleennime\u00e4t sen.",
             "restore": "Palauta oletustiedosto"
         },
         "dir_new": {
@@ -195,6 +197,7 @@
             },
             "avoid_new_tabs": "V\u00e4lt\u00e4 tiedostojen avaamista uusissa v\u00e4lilehdiss\u00e4, jos mahdollista",
             "checkForBeta": "Ilmoita betaversioista",
+            "check_translation_updates": "Tarkista k\u00e4\u00e4nn\u00f6sten p\u00e4ivitykset k\u00e4ynnistett\u00e4ess\u00e4",
             "check_updates": "Tarkista p\u00e4ivitykset automaattisesti",
             "choose_file": "Valitse tiedosto\u2026",
             "citation_database": "Viittaustietokanta (CSL JSON tai BibTex)",
@@ -243,6 +246,7 @@
             "enable_table_helper": "K\u00e4yt\u00e4 taulukkomuokkainta",
             "export": {
                 "dest": "Viennin kohdehakemisto. \u003Cem\u003EHuomio:\u003C/em\u003ENykyisen hakemiston valitseminen korvaa tiedostoja kysym\u00e4tt\u00e4 vahvistusta!",
+                "dest_ask_label": "Kysy hakemistoa",
                 "dest_cwd_label": "Nykyinen ty\u00f6skentelyhakemisto; viedyt tiedostot tallennetaan nyt valittuun hakemistoon",
                 "dest_temp_label": "Tilap\u00e4inen hakemisto; tyhjennet\u00e4\u00e4n m\u00e4\u00e4r\u00e4ajoin",
                 "strip_id_label": "Poista ZKN ID-numerot tiedostoista",
@@ -272,6 +276,7 @@
             "hide_dirs": "Piilota hakemistot haettaessa kaikkialta",
             "homeEndBehaviour": "(Use the CodeMirror default actions for \u003Ckbd\u003EHome\u003C/kbd\u003E and \u003Ckbd\u003EEnd\u003C/kbd\u003E.)",
             "indent_unit": "Sisennyksess\u00e4 k\u00e4ytett\u00e4vien v\u00e4lily\u00f6ntien m\u00e4\u00e4r\u00e4",
+            "indent_with_tabs": "Sisenn\u00e4 k\u00e4ytt\u00e4m\u00e4ll\u00e4 sarkainta",
             "input_mode": "Tekstieditorin sy\u00f6tt\u00f6tila",
             "leave_app_running_in_the_notification_area": "J\u00e4t\u00e4 sovellus p\u00e4\u00e4lle ilmoitusalueelle",
             "modtime": "Viimeksi muokattu",
@@ -355,6 +360,22 @@
                 "title": "Teema"
             },
             "title": "Asetukset",
+            "toolbar": {
+                "showDocumentInfoText": "N\u00e4yt\u00e4 tiedoston tiedot",
+                "showInsertFootnoteButton": "N\u00e4yt\u00e4 \"Lis\u00e4\u00e4 alaviite\" -painike",
+                "showInsertTableButton": "N\u00e4yt\u00e4 \"Lis\u00e4\u00e4 taulukko\" -painike",
+                "showMarkdownCommentButton": "N\u00e4yt\u00e4 \"Lis\u00e4\u00e4 kommentti\" -painike",
+                "showMarkdownImageButton": "N\u00e4yt\u00e4 kuvapainike",
+                "showMarkdownLinkButton": "N\u00e4yt\u00e4 linkkipainike",
+                "showMarkdownMakeTaskListButton": "N\u00e4yt\u00e4 teht\u00e4v\u00e4listapainike",
+                "showNewFileButton": "N\u00e4yt\u00e4 \"Uusi tiedosto\" -painike",
+                "showNextFileButton": "N\u00e4yt\u00e4 \"Seuraava tiedosto\" -painike",
+                "showOpenPreferencesButton": "N\u00e4yt\u00e4 \"Avaa asetukset\" -painike",
+                "showPomodoroButton": "N\u00e4yt\u00e4 Pomodoro-ajastin",
+                "showPreviousFileButton": "N\u00e4yt\u00e4 \"Edellinen tiedosto\" -painike",
+                "showToggleReadabilityButton": "N\u00e4yt\u00e4 luettavuus-painike",
+                "title": "Ty\u00f6kalupalkki"
+            },
             "translations": {
                 "download": "Lataa",
                 "downloading": "Ladataan: %s",
@@ -404,6 +425,11 @@
                 "var_week_number": "Viikkonumero (edelt\u00e4v\u00e4ll\u00e4 nollalla)",
                 "var_year": "vuosi",
                 "var_year_two": "Vuosi (kaksi numeroa)"
+            },
+            "zoom_behavior": {
+                "editor": "Zoom muuttaa editorin fonttikokoa",
+                "gui": "Zoom muuttaa koko k\u00e4ytt\u00f6liittym\u00e4n kokoa",
+                "label": "Zoomaus-k\u00e4ytt\u00e4ytyminen"
             }
         },
         "snippets": {
@@ -597,6 +623,7 @@
         "close_file": "Sulje tiedosto",
         "close_workspace": "Sulje ty\u00f6tila",
         "copy": "Kopioi",
+        "copy_abs_path": "Kopioi koko polku",
         "copy_equation": "Kopioi yht\u00e4l\u00f6n koodi",
         "copy_filename": "Kopioi tiedostonnimi",
         "copy_html": "Kopioi HTML",
@@ -640,6 +667,7 @@
         "new_dir": "Uusi hakemisto\u2026",
         "new_file": "Uusi tiedosto\u2026",
         "new_project": "Uusi projekti",
+        "next_file": "Seuraava tiedosto",
         "no_suggestions": "Ei ehdotuksia",
         "open": "Avaa\u2026",
         "open_attachment": "Avaa liite",
@@ -653,7 +681,9 @@
         "paste": "Liit\u00e4",
         "paste_plain": "Liit\u00e4 ilman muotoiluja",
         "pdf_preferences": "PDF-asetukset\u2026",
+        "pin_tab": "Kiinnit\u00e4 v\u00e4lilehti",
         "preferences": "Asetukset",
+        "previous_file": "Edellinen tiedosto",
         "print": "Tulosta\u2026",
         "project_build": "Vie projekti",
         "project_properties": "Projektin asetukset\u2026",
@@ -693,6 +723,7 @@
         "toggle_typewriter_mode": "Typewriter-tila",
         "undo": "Kumoa",
         "unhide": "N\u00e4yt\u00e4",
+        "unpin_tab": "Poista kiinnitys",
         "update": "Tarkista p\u00e4ivitykset",
         "win_close": "Sulje",
         "win_minimize": "Pienenn\u00e4",
@@ -756,6 +787,10 @@
             "pandoc_error_title": "Vienti ep\u00e4onnistui",
             "remove_message": "Haluatko varmasti poistaa: %s?",
             "remove_title": "Vahvista poisto"
+        },
+        "export_dialog": {
+            "save": "Tallenna",
+            "title": "Valitse vientikohde"
         },
         "export_success": "Vied\u00e4\u00e4n: %s",
         "file_changed": "Tiedostoa %s on muutettu avaamisen j\u00e4lkeen.",

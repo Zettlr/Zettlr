@@ -14,7 +14,7 @@
             "brunnogama \u003Cbrunnogama@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-05-26T08:08:18.000000Z"
+        "updated_at": "2022-07-11T14:58:16.000000Z"
     },
     "dialog": {
         "about": {
@@ -252,6 +252,7 @@
             "enable_table_helper": "Habilitar editor de tabela",
             "export": {
                 "dest": "Pasta de destino para arquivos exportados. \u003Cem\u003E Aten\u00e7\u00e3o: \u003C/em\u003E Selecionar a pasta de trabalho atual sobrecrever\u00e1 os arquivos sem aviso!",
+                "dest_ask_label": "Pergunte qual a pasta de destino",
                 "dest_cwd_label": "Pasta de trabalho atual: os arquivos exportados ser\u00e3o salvos na pasta atualmente selecionada.",
                 "dest_temp_label": "Pasta tempor\u00e1ria: \u00e9 regularmente apagada.",
                 "strip_id_label": "Remova os ZKN IDs dos arquivos",
@@ -378,7 +379,8 @@
                 "showOpenPreferencesButton": "Exibir bot\u00e3o \"Abrir Prefer\u00eancias\"",
                 "showPomodoroButton": "Exibir Pomodoro-timer",
                 "showPreviousFileButton": "Exibir bot\u00e3o \"Arquivo anterior\"",
-                "showToggleReadabilityButton": "Exibir bot\u00e3o de legibilidade"
+                "showToggleReadabilityButton": "Exibir bot\u00e3o de legibilidade",
+                "title": "Barra de Tarefas"
             },
             "translations": {
                 "download": "Clique para baixar",
@@ -685,6 +687,7 @@
         "paste": "Colar",
         "paste_plain": "Colar sem formata\u00e7\u00e3o",
         "pdf_preferences": "Prefer\u00eancias PDF...",
+        "pin_tab": "Fixar Aba",
         "preferences": "Prefer\u00eancias",
         "previous_file": "Arquivo anterior",
         "print": "Imprimir...",
@@ -726,6 +729,7 @@
         "toggle_typewriter_mode": "Modo m\u00e1quina de escrever",
         "undo": "Desfazer",
         "unhide": "Exibir",
+        "unpin_tab": "Desafixar Aba",
         "update": "Verifique se h\u00e1 atualiza\u00e7\u00f5es",
         "win_close": "Fechar",
         "win_minimize": "Minimizar",
@@ -790,6 +794,10 @@
             "remove_message": "Deseja mesmo remover %s?",
             "remove_title": "Realmente excluir?",
             "tray_not_supported": "A tray n\u00e3o \u00e9 suportada. A extens\u00e3o Gnome &quot;KStatusNotifierItem/AppIndicator Support&quot; \u00e9 necess\u00e1ria para suporte da tray na \u00e1rea de trabalho Gnome"
+        },
+        "export_dialog": {
+            "save": "Salvar",
+            "title": "Selecione a pasta para exporta\u00e7\u00e3o"
         },
         "export_success": "Exportando para %s",
         "file_changed": "O arquivo %s foi alterado remotamente.",
