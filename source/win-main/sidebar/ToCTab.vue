@@ -32,11 +32,15 @@
 
 <script lang="ts">
 import { trans } from '@common/i18n-renderer'
-import { MDFileMeta } from '@dts/common/fsal'
+import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
 import { defineComponent } from 'vue'
 import sanitizeHtml from 'sanitize-html'
 import { getConverter } from '@common/util/md-to-html'
 import { ToCEntry } from '@common/modules/markdown-editor/util/generate-toc'
+import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
+import { OpenDocument } from '@dts/common/documents'
+
+const ipcRenderer = window.ipc
 
 // Must be instantiated after loading, i.e. when the Sidebar is initialized
 let md2html: Function
@@ -44,6 +48,11 @@ let md2html: Function
 export default defineComponent({
   name: 'ToCTab',
   emits: ['move-section'],
+  data () {
+    return {
+      activeFileDescriptor: null as MDFileMeta|CodeFileMeta|null
+    }
+  },
   computed: {
     tableOfContents: function (): ToCEntry[]|null {
       return this.$store.state.tableOfContents
@@ -55,29 +64,61 @@ export default defineComponent({
      * @return  {string}  The title for the ToC sidebar
      */
     titleOrTocLabel: function (): string {
-      if (this.activeFile === null || this.activeFile.frontmatter == null) {
+      if (
+        this.activeFileDescriptor === null ||
+        this.activeFileDescriptor.type === 'code' ||
+        this.activeFileDescriptor.frontmatter == null
+      ) {
         return this.tocLabel
       }
 
-      const frontmatter = this.activeFile.frontmatter
+      const frontmatter = this.activeFileDescriptor.frontmatter
 
       if ('title' in frontmatter && frontmatter.title.length > 0) {
-        return this.activeFile.frontmatter.title
+        return frontmatter.title
       } else {
         return this.tocLabel
       }
     },
-    activeFile: function (): MDFileMeta|null {
-      return this.$store.state.activeFile
+    activeFile: function (): OpenDocument|null {
+      return this.$store.getters.lastLeafActiveFile()
     },
     tocLabel: function (): string {
       return trans('gui.table_of_contents')
     }
   },
+  watch: {
+    async activeFile (newValue: OpenDocument|null) {
+      if (newValue === null) {
+        this.activeFileDescriptor = null
+      } else {
+        const descriptor: MDFileMeta|CodeFileMeta|undefined = await ipcRenderer.invoke('application', {
+          command: 'get-file-contents',
+          payload: newValue.path
+        })
+
+        if (descriptor === undefined) {
+          this.activeFileDescriptor = null
+        } else {
+          this.activeFileDescriptor = descriptor
+        }
+      }
+    },
+    activeFileDescriptor (newValue: MDFileMeta|CodeFileMeta|null) {
+      if (newValue === null || newValue.type === 'code') {
+        md2html = getConverter(window.getCitationCallback(CITEPROC_MAIN_DB))
+      } else {
+        const fm = newValue.frontmatter
+        if (fm != null && 'bibliography' in fm && typeof fm.bibliography === 'string' && fm.bibliography.length > 0) {
+          md2html = getConverter(window.getCitationCallback(fm.bibliography))
+        }
+      }
+    }
+  },
   created: function () {
     // Instantiate a converter so that we can convert the md of our ToC entries
-    // to html with citation support
-    md2html = getConverter(window.getCitation)
+    // to html with citation support TODO
+    md2html = getConverter(window.getCitationCallback(CITEPROC_MAIN_DB))
   },
   methods: {
     /**

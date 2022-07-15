@@ -19,6 +19,7 @@ import tippy from 'tippy.js'
 import { getConverter } from '@common/util/md-to-html'
 import { trans } from '@common/i18n-renderer'
 import CodeMirror from 'codemirror'
+import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 
 /**
  * No footnote tooltips while we're editing a footnote
@@ -99,7 +100,11 @@ function showFootnoteTooltip (cm: CodeMirror.Editor, element: HTMLElement): void
   const ref = element.textContent?.substring(1) ?? ''
   const fnref = getFootnoteTextForRef(cm, ref)
 
-  const md2html = getConverter(window.getCitation)
+  let md2html = getConverter(window.getCitationCallback(CITEPROC_MAIN_DB))
+  const lib: string|undefined = (cm as any).getOption('zettlr').metadata.library
+  if (lib !== undefined) {
+    md2html = getConverter(window.getCitationCallback(lib))
+  }
 
   tippy(element, {
     // Display the text as HTML

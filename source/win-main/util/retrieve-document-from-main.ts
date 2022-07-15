@@ -1,4 +1,6 @@
 import countWords from '@common/util/count-words'
+import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
+import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
 import { MainEditorDocumentWrapper } from '@dts/renderer/editor'
 import CodeMirror from 'codemirror'
 import { ComputedRef } from 'vue'
@@ -46,17 +48,32 @@ export default async function retrieveDocumentFromMain (
     mode: mode, // Save the mode for later swaps
     cmDoc: CodeMirror.Doc('', mode),
     modified: false,
+    library: undefined,
     lastWordCount: 0,
     saveTimeout: undefined // Only used below to save the saveTimeout
   }
 
-  const descriptorWithContent = await ipcRenderer.invoke('application', {
+  const descriptorWithContent: MDFileMeta|CodeFileMeta|undefined = await ipcRenderer.invoke('application', {
     command: 'get-file-contents',
     payload: filePath
   })
 
+  if (descriptorWithContent === undefined) {
+    throw new Error(`Descriptor for file ${filePath} was unavailable! Could not load document`)
+  }
+
   newDoc.cmDoc = CodeMirror.Doc(descriptorWithContent.content, mode)
   newDoc.lastWordCount = countWords(descriptorWithContent.content, shouldCountChars)
+
+  if (descriptorWithContent.type === 'file') {
+    const bib = descriptorWithContent.frontmatter?.bibliography
+    if (bib != null && typeof bib === 'string' && bib.trim() !== '') {
+      newDoc.library = bib
+    } else {
+      // It's an MD file, so we still need a library -> main library
+      newDoc.library = CITEPROC_MAIN_DB
+    }
+  }
 
   // Listen to change events on the doc, because if the user pastes
   // more than ten words at once, we need to substract it to not

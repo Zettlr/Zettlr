@@ -277,6 +277,7 @@ export default class DocumentManager extends ProviderContract {
     }
 
     this.syncWatchedFilePaths()
+    await this.synchronizeDatabases()
 
     this._app.log.info(`[Document Manager] Restored ${this.windowCount()} open windows.`)
     this.syncToConfig()
@@ -336,6 +337,50 @@ export default class DocumentManager extends ProviderContract {
   }
 
   /**
+   * This function searches all currently opened documents for files that have
+   * databases attached to them, and announces to the citeproc provider that it
+   * should keep those available. Resolves once the citeproc provider finished
+   * synchronizing.
+   */
+  private async synchronizeDatabases (): Promise<void> {
+    // First get a list of all open files
+    const allLeafs: DTLeaf[] = []
+    for (const window of Object.values(this._windows)) {
+      allLeafs.push(...window.getAllLeafs())
+    }
+
+    const openFiles: string[] = allLeafs.map(leaf => {
+      return leaf.tabMan.openFiles.map(doc => doc.path)
+    }).flat() // Flatten the 2d-array
+
+    const libraries: string[] = []
+
+    for (const filePath of openFiles) {
+      let descriptor = this._app.fsal.find(filePath)
+      if (descriptor === undefined) {
+        // This is why we require every open document to be also loaded in the
+        // FSAL: There, we can simply grab it from the tree, instead of having
+        // to parse the file again (which is more computationally expensive).
+        this._app.log.error(`[Documents Provider] Error during database sync: Did not find ${filePath} in FSAL, even though it's loaded here. This indicates a logical bug. Please report this.`)
+        descriptor = await this.loadFile(filePath)
+      }
+
+      if (descriptor.type !== 'file') {
+        continue
+      }
+
+      if (descriptor.frontmatter !== null && 'bibliography' in descriptor.frontmatter) {
+        const bib = descriptor.frontmatter.bibliography
+        if (typeof bib === 'string' && path.isAbsolute(bib)) {
+          libraries.push(bib)
+        }
+      }
+    }
+
+    await this._app.citeproc.synchronizeDatabases(libraries)
+  }
+
+  /**
    * Returns a file's metadata including the contents.
    *
    * @param  {string}  file   The absolute file path
@@ -387,6 +432,7 @@ export default class DocumentManager extends ProviderContract {
     }
 
     this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId, filePath: leaf.tabMan.activeFile?.path })
+    await this.synchronizeDatabases()
     this.syncToConfig()
     return ret
   }
@@ -472,7 +518,10 @@ export default class DocumentManager extends ProviderContract {
           // Remove this leaf
           leaf.parent.removeNode(leaf)
           this.broadcastEvent(DP_EVENTS.LEAF_CLOSED, { windowId, leafId })
+          this.syncToConfig()
         }
+
+        await this.synchronizeDatabases()
       }
       return ret
     }
@@ -693,14 +742,6 @@ export default class DocumentManager extends ProviderContract {
     leaf.tabMan.activeFile = filePath
     this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId, filePath })
     this.syncToConfig()
-
-    if (filePath === null) {
-      return // We're done here
-    }
-
-    this._app.citeproc.loadMainDatabase()
-    this.loadFileDatabase(filePath)
-      .catch(err => this._app.log.error(`[Document Manager] Could not load file database for ${filePath}`, err))
   }
 
   public sortOpenFiles (windowId: string, leafId: string, newOrder: string[]): void {
@@ -1004,6 +1045,7 @@ export default class DocumentManager extends ProviderContract {
         this._app.tags,
         null
       )
+      await this.synchronizeDatabases() // The file may have gotten a library
     } else {
       await FSALCodeFile.save(descriptor, contents, null)
     }
@@ -1012,28 +1054,7 @@ export default class DocumentManager extends ProviderContract {
     this.markClean(filePath)
     this.broadcastEvent(DP_EVENTS.FILE_SAVED, { filePath })
 
-    // Also, make sure to (re)load the file's bibliography file, if applicable.
-    await this.loadFileDatabase(filePath)
-
     return true
-  }
-
-  /**
-   * Loads a file-specific database
-   *
-   * @param   {string}   filePath  The file in question
-   */
-  private async loadFileDatabase (filePath: string): Promise<void> {
-    const descriptor = await this.loadFile(filePath)
-    if (descriptor.type === 'file' && descriptor.frontmatter !== null && 'bibliography' in descriptor.frontmatter) {
-      let dbFile: string = descriptor.frontmatter.bibliography
-      if (!path.isAbsolute(dbFile)) {
-        // Convert to absolute path if necessary
-        dbFile = path.resolve(descriptor.dir, dbFile)
-      }
-      // We have a bibliography
-      await this._app.citeproc.loadAndSelect(dbFile)
-    }
   }
 
   /**

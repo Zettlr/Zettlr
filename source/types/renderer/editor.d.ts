@@ -8,6 +8,10 @@ export interface MainEditorDocumentWrapper {
    */
   path: string
   /**
+   * Easy access of the reference library file for the given file
+   */
+  library: string|undefined
+  /**
    * The directory of the file
    */
   dir: string

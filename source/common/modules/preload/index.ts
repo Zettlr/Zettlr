@@ -57,12 +57,17 @@ contextBridge.exposeInMainWorld('config', {
 // DEBUG
 contextBridge.exposeInMainWorld('__dirname', '')
 
-contextBridge.exposeInMainWorld('getCitation', function (items: CiteItem[], composite: boolean): string|undefined {
-  return ipcRenderer.sendSync('citation-renderer', {
-    command: 'get-citation-sync',
-    payload: { citations: items, composite: composite }
-  })
-})
+contextBridge.exposeInMainWorld(
+  'getCitationCallback',
+  function (database: string): (citations: CiteItem[], composite: boolean) => string|undefined {
+    return function (citations: CiteItem[], composite: boolean): string|undefined {
+      return ipcRenderer.sendSync('citeproc-provider', {
+        command: 'get-citation-sync',
+        payload: { database, citations, composite }
+      })
+    }
+  }
+)
 
 // Expose the subset of clipboard functions which we use
 contextBridge.exposeInMainWorld('clipboard', {

@@ -85,24 +85,6 @@ updateColouredTags()
 
 // -----------------------------------------------------------------------------
 
-function updateCitationDatabase (): void {
-  ipcRenderer.invoke('citeproc-provider', { command: 'get-items' })
-    .then(cslData => {
-      app.$store.commit('updateCSLItems', cslData)
-    })
-    .catch(err => console.error(err))
-}
-
-ipcRenderer.on('citeproc-provider', (event, message) => {
-  if (message === 'database-changed') {
-    updateCitationDatabase()
-  }
-})
-
-updateCitationDatabase()
-
-// -----------------------------------------------------------------------------
-
 // Update the configuration if some value changes
 ipcRenderer.on('config-provider', (event, { command, payload }) => {
   if (command === 'update') {

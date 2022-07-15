@@ -25,6 +25,7 @@ import computeCSS from './compute-css'
 import { ColAlignment, TableEditorOptions } from './types'
 
 import { diskIcon } from './save-icon'
+import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 
 // Look what I found: https://www.w3schools.com/jsref/dom_obj_table.asp
 
@@ -171,7 +172,8 @@ export default class TableEditor {
     this._edgeButtonSize = 30 // Size in pixels
     this._isClean = true
 
-    this._md2html = getConverter(window.getCitation)
+    // TODO
+    this._md2html = getConverter(window.getCitationCallback(CITEPROC_MAIN_DB))
 
     // Find the container element
     if ('container' in options && options.container instanceof HTMLElement) {

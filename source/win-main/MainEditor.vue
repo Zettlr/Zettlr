@@ -134,7 +134,6 @@
 import countWords from '@common/util/count-words'
 import MarkdownEditor from '@common/modules/markdown-editor'
 import CodeMirror from 'codemirror'
-import extractCitations from '@common/util/extract-citations'
 import objectToArray from '@common/util/object-to-array'
 import { trans } from '@common/i18n-renderer'
 import extractYamlFrontmatter from '@common/util/extract-yaml-frontmatter'
@@ -148,6 +147,7 @@ import retrieveDocumentFromMain from './util/retrieve-document-from-main'
 import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
 import { DP_EVENTS } from '@dts/common/documents'
 import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
+import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 
 const ipcRenderer = window.ipc
 const path = window.path
@@ -199,6 +199,20 @@ ipcRenderer.on('shortcut', (event, command) => {
     showSearch.value = !showSearch.value
   } else if (command === 'toggle-typewriter-mode') {
     mdEditor.hasTypewriterMode = !mdEditor.hasTypewriterMode
+  }
+})
+
+ipcRenderer.on('citeproc-database-updated', (event, dbPath: string) => {
+  const activeDoc = openDocuments.find(doc => doc.path === activeFile.value?.path)
+
+  if (activeDoc === undefined) {
+    return // Nothing to do
+  }
+
+  const usesMainLib = activeDoc.library === CITEPROC_MAIN_DB
+
+  if (dbPath === activeDoc.library || (usesMainLib && dbPath === CITEPROC_MAIN_DB)) {
+    updateCitationKeys(activeDoc).catch(e => console.error('Could not update citation keys', e))
   }
 })
 
@@ -341,7 +355,6 @@ const fontSize = computed<number>(() => store.state.config['editor.fontSize'])
 const shouldCountChars = computed<boolean>(() => store.state.config['editor.countChars'])
 const autoSave = computed(() => store.state.config['editor.autoSave'])
 const tagDatabase = computed(() => store.state.tagDatabase)
-const cslItems = computed(() => store.state.cslItems)
 const globalSearchResults = computed(() => store.state.searchResults)
 const node = computed(() => store.state.paneData.find(leaf => leaf.id === props.leafId))
 const activeFile = computed(() => node.value?.activeFile)
@@ -500,42 +513,6 @@ watch(useH1, () => { updateFileDatabase() })
 watch(useTitle, () => { updateFileDatabase() })
 watch(filenameOnly, () => { updateFileDatabase() })
 watch(fsalFiles, () => { updateFileDatabase() })
-watch(cslItems, (newValue) => {
-  if (mdEditor === null) {
-    return
-  }
-
-  // We have received new items, so we should update them in the editor.
-  const items = newValue.map((item: any) => {
-    // Get a rudimentary author list
-    let authors = ''
-    if (item.author !== undefined) {
-      authors = item.author.map((author: any) => {
-        if (author.family !== undefined) {
-          return author.family
-        } else if (author.literal !== undefined) {
-          return author.literal
-        } else {
-          return undefined
-        }
-      }).filter((elem: any) => elem !== undefined).join(', ')
-    }
-
-    let title = ''
-    if (item.title !== undefined) {
-      title = item.title
-    } else if (item['container-title'] !== undefined) {
-      title = item['container-title']
-    }
-
-    // This is just a very crude representation of the citations.
-    return {
-      text: item.id,
-      displayText: `${item.id}: ${authors} - ${title}`
-    }
-  })
-  mdEditor.setCompletionDatabase('citekeys', items)
-})
 
 watch(editorConfiguration, (newValue) => {
   mdEditor?.setOptions(newValue)
@@ -624,7 +601,7 @@ async function loadActiveFile () {
     mdEditor.readOnly = true
     store.commit('updateTableOfContents', mdEditor.tableOfContents)
     // Update the citation keys with an empty array
-    updateCitationKeys()
+    mdEditor.setCompletionDatabase('citekeys', [])
     return
   }
 
@@ -675,8 +652,12 @@ function swapDocument (doc: MainEditorDocumentWrapper) {
   // Provide the editor instance with metadata for the new file
   mdEditor.setOptions({
     zettlr: {
-      markdownImageBasePath: path.dirname(activeFile.value.path),
-      metadata: { path: activeFile.value.path, id: '' /* TODO activeFile.id */ }
+      markdownImageBasePath: path.dirname(doc.path),
+      metadata: {
+        path: doc.path,
+        id: '', /* TODO activeFile.id */
+        library: doc.library
+      }
     }
   })
   mdEditor.swapDoc(doc.cmDoc, doc.mode)
@@ -687,7 +668,9 @@ function swapDocument (doc: MainEditorDocumentWrapper) {
   // pull in and highlight
   maybeHighlightSearchResults()
   // Update the citation keys
-  updateCitationKeys()
+  if (doc.library !== undefined) {
+    updateCitationKeys(doc).catch(e => console.error('Could not update citation keys', e))
+  }
 }
 
 // TODO
@@ -705,8 +688,6 @@ function maybeUpdateActiveDocumentInfo () {
   }, 1000)
 }
 
-// TODO
-// eslint-disable-next-line no-unused-vars
 function jtl (lineNumber: number, setCursor: boolean = false) {
   if (mdEditor !== null) {
     mdEditor.jtl(lineNumber, setCursor)
@@ -745,28 +726,53 @@ async function save (doc: MainEditorDocumentWrapper) {
   announceDocumentModified(doc)
 
   // Also, extract all cited keys
-  updateCitationKeys()
+  if (doc.library !== undefined) {
+    updateCitationKeys(doc).catch(e => console.error('Could not update citation keys', e))
+  }
   // Saving can additionally do some changes to the files which are relevant
   // to the autocomplete, so make sure to update that as well. See #2330
   updateFileDatabase()
 }
 
-function updateCitationKeys () {
+async function updateCitationKeys (doc: MainEditorDocumentWrapper): Promise<void> {
   if (mdEditor === null) {
     return
   }
 
-  const value = mdEditor.value
+  const items: any[] = (await ipcRenderer.invoke('citeproc-provider', {
+    command: 'get-items',
+    payload: { database: doc.library }
+  }))
+    .map((item: any) => {
+      // Get a rudimentary author list
+      let authors = ''
+      if (item.author !== undefined) {
+        authors = item.author.map((author: any) => {
+          if (author.family !== undefined) {
+            return author.family
+          } else if (author.literal !== undefined) {
+            return author.literal
+          } else {
+            return undefined
+          }
+        }).filter((elem: any) => elem !== undefined).join(', ')
+      }
 
-  const citations = extractCitations(value)
-  const keys = []
-  for (const citation of citations) {
-    keys.push(...citation.citations.map(elem => elem.id))
-  }
-  store.commit('updateCitationKeys', keys)
-  // After we have updated the current file's citation keys, it is time
-  // to generate a new list of references.
-  store.dispatch('updateBibliography').catch(e => console.error(e))
+      let title = ''
+      if (item.title !== undefined) {
+        title = item.title
+      } else if (item['container-title'] !== undefined) {
+        title = item['container-title']
+      }
+
+      // This is just a very crude representation of the citations.
+      return {
+        text: item.id,
+        displayText: `${item.id}: ${authors} - ${title}`
+      }
+    })
+
+  mdEditor.setCompletionDatabase('citekeys', items)
 }
 
 function updateFileDatabase () {

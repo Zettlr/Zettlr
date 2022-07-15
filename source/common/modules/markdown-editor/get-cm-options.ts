@@ -15,6 +15,7 @@
  * END HEADER
  */
 
+import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import generateKeymap from './generate-keymap'
 import MarkdownEditor from './index'
 
@@ -106,7 +107,10 @@ export default function getCodeMirrorDefaultOptions (mdEditorInstance: MarkdownE
       },
       metadata: {
         path: '', // Absolute path to the current file
-        id: '' // ID of the current file
+        id: '', // ID of the current file
+        // Can be undefined (do not offer citation autocomplete), CITEPROC_DB_MAIN
+        // (use the main library), or an absolute path (use a file-specific db)
+        library: CITEPROC_MAIN_DB
       },
       // The base path used to render the image in case of relative URLs
       markdownImageBasePath: '',

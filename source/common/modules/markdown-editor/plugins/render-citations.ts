@@ -23,6 +23,12 @@ const ipcRenderer = window.ipc
  * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
  */
 ;(commands as any).markdownRenderCitations = function (cm: CodeMirror.Editor) {
+  const library: string|undefined = (cm as any).getOption('zettlr').metadata.library
+
+  if (library === undefined) {
+    return // No citation rendering
+  }
+
   // We'll only render the viewport
   const viewport = cm.getViewport()
   for (let i = viewport.from; i < viewport.to; i++) {
@@ -84,10 +90,13 @@ const ipcRenderer = window.ipc
 
       // Now that everything is done, request the citation and replace the
       // text contents accordingly
-
       ipcRenderer.invoke('citeproc-provider', {
         command: 'get-citation',
-        payload: { citations: citation.citations, composite: citation.composite }
+        payload: {
+          database: library,
+          citations: citation.citations,
+          composite: citation.composite
+        }
       })
         .then((payload) => {
           if (payload !== undefined) {
