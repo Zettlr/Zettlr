@@ -65,6 +65,10 @@ it works:
   one set of open files and one active file. Each window also remembers which
   pane was last active so that global features (such as the sidebar) can show
   you information based on the most recently focused editor pane's active file.
+* Most contextual information (table of contents, list of references, etc.) will
+  now update based on the most recently focused editor. In order to make those
+  places show information relating to one of the open editors, simply click with
+  your mouse inside to focus them.
 
 ## New Defaults/Profile File System
 
@@ -97,12 +101,14 @@ Since Zettlr will never remove any data without asking, it will keep the
 previous files in your defaults directory. Now that their filename is also
 meaningful, you can see them by their naming structure: `import.format.yaml` and
 `export.format.yaml`. You are free to remove them or rename and keep them.
-Zettlr ships with a set of new files that are now additionally appropriately
-named.
 
-> Please note that it is not possible to remove this minimal set of profiles;
-> Zettlr will always recreate these files upon start. If you do not use Zettlr
-> for importing or exporting files, you can simply ignore them.
+Zettlr ships with a set of new files that are now additionally appropriately
+named. Those files are "protected". Protected files have a small lock icon next
+to their name. Protected means that if you delete or rename them, they will
+automatically be recreated. You can use this to your advantage: By deleting such
+a file, you are effectively resetting it to factory default (good if you forgot
+what you changed). By renaming such a file, you can effectively make a copy to
+have several versions of the same settings depending on your needs.
 
 #### Reveal.js Presentations
 
@@ -133,6 +139,14 @@ Supported theme values are:
 * `solarized`
 * `white`
 
+Then, in order to get a working reveal.js presentation, you have to make sure
+that the property `standalone: true` is inside the profile (this is the
+default). In order to additionally copy everything into the HTML file to create
+a truly self-contained presentation, set the property `self-contained: true`.
+
+All other things should work as before, but may require a small tweak here or
+there.
+
 ## GUI and Functionality
 
 - **New Feature**: You can now open multiple main windows, each with their own
@@ -149,6 +163,7 @@ Supported theme values are:
   apply all your changes to the document so that it can then be saved
 - Quicklook windows are gone completely now, since they can be more than
   replaced by the new split views and multiple windows
+- The windows now finally correctly remember their positions, fixing an old bug
 - Improved the link tooltip inside the editor; it will show faster now and is
   easier to access
 - Code files (e.g. `*.tex` or `*.json`) now have line numbers enabled and the
