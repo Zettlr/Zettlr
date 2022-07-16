@@ -63,8 +63,8 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
       let title = match[3] ?? altText // An optional title in quotes after the image
       let p4 = match[4] ?? ''
 
-      let widthAttribute = ''
-      let heightAttribute = ''
+      let widthAttribute
+      let heightAttribute
       if (match[4] !== '') {
         // Use regex to parse pandoc attributes
         // like width="3.69in" height="1.93884in"
@@ -72,11 +72,11 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
         const heightRE = /(?:height=)"([^"]+)"/g
         let mat = widthRE.exec(p4)
         if (mat != null) {
-          widthAttribute = mat[1] ?? ''
+          widthAttribute = mat[1]
         }
         mat = heightRE.exec(p4)
         if (mat != null) {
-          heightAttribute = mat[1] ?? ''
+          heightAttribute = mat[1]
         }
       }
 
@@ -178,10 +178,10 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
       let height = (!Number.isNaN(maxPreviewHeight) && maxPreviewHeight < 100) ? `${maxPreviewHeight}vh` : ''
 
       // Use the pandoc attributes to control image size
-      if (widthAttribute !== '') {
+      if (widthAttribute !== undefined) {
         width = widthAttribute
       }
-      if (heightAttribute !== '') {
+      if (heightAttribute !== undefined) {
         height = heightAttribute
       }
 
