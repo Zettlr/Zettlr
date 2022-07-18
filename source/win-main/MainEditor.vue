@@ -78,7 +78,9 @@
       v-on:drop="handleDrop($event, 'top')"
       v-on:dragenter="handleDragEnter($event, 'top')"
       v-on:dragleave="handleDragLeave($event)"
-    ></div>
+    >
+      <clr-icon v-if="documentTabDragWhere === 'top'" shape="caret up"></clr-icon>
+    </div>
     <div
       v-if="documentTabDrag"
       v-bind:class="{
@@ -89,7 +91,9 @@
       v-on:drop="handleDrop($event, 'left')"
       v-on:dragenter="handleDragEnter($event, 'left')"
       v-on:dragleave="handleDragLeave($event)"
-    ></div>
+    >
+      <clr-icon v-if="documentTabDragWhere === 'left'" shape="caret left"></clr-icon>
+    </div>
     <div
       v-if="documentTabDrag"
       v-bind:class="{
@@ -100,7 +104,9 @@
       v-on:drop="handleDrop($event, 'bottom')"
       v-on:dragenter="handleDragEnter($event, 'bottom')"
       v-on:dragleave="handleDragLeave($event)"
-    ></div>
+    >
+      <clr-icon v-if="documentTabDragWhere === 'bottom'" shape="caret down"></clr-icon>
+    </div>
     <div
       v-if="documentTabDrag"
       v-bind:class="{
@@ -111,11 +117,14 @@
       v-on:drop="handleDrop($event, 'right')"
       v-on:dragenter="handleDragEnter($event, 'right')"
       v-on:dragleave="handleDragLeave($event)"
-    ></div>
+    >
+      <clr-icon v-if="documentTabDragWhere === 'right'" shape="caret right"></clr-icon>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+
 /**
  * @ignore
  * BEGIN HEADER
@@ -1056,6 +1065,8 @@ function handleDragLeave (event: DragEvent) {
 @editor-margin-normal-md:  50px;
 @editor-margin-normal-lg: 100px;
 
+@dropzone-size: 60px;
+
 .main-editor-wrapper {
   width: 100%;
   height: 100%;
@@ -1094,44 +1105,79 @@ function handleDragLeave (event: DragEvent) {
     }
   }
 
+  @keyframes caretup {
+    from { margin-bottom: 0; }
+    50% { margin-bottom: @dropzone-size; }
+    to { margin-bottom: @dropzone-size; }
+  }
+  @keyframes caretdown {
+    from { margin-top: 0; }
+    50% { margin-top: @dropzone-size; }
+    to { margin-top: @dropzone-size; }
+  }
+  @keyframes caretleft {
+    from { margin-right: 0; }
+    50% { margin-right: @dropzone-size; }
+    to { margin-right: @dropzone-size; }
+  }
+  @keyframes caretright {
+    from { margin-left: 0; }
+    50% { margin-left: @dropzone-size; }
+    to { margin-left: @dropzone-size; }
+  }
+
   div.dropzone {
     position: absolute;
     background-color: rgba(0, 0, 0, 0);
     transition: all 0.3s ease;
+    // Display the direction caret centered ...
+    display: flex;
+    align-items: center;
+    // ... and in white (against the dragover background color)
+    color: white;
+
+    clr-icon { margin: 0; }
 
     &.dragover {
       background-color: rgba(21, 61, 107, 0.5);
-      box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .5);
+      box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .2);
+      backdrop-filter: blur(2px);
     }
 
     &.top {
       top: 0;
       width: 100%;
-      height: 10%;
-      min-height: 60px;
+      height: @dropzone-size;
+      flex-direction: column-reverse;
+      clr-icon { animation: 2s ease-out infinite running caretup; }
     }
 
     &.left {
       top: 0;
       left: 0;
       height: 100%;
-      width: 10%;
-      min-width: 60px;
+      width: @dropzone-size;
+      flex-direction: row-reverse;
+      clr-icon { animation: 2s ease-out infinite running caretleft; }
     }
 
     &.right {
       top: 0;
       right: 0;
       height: 100%;
-      width: 10%;
-      min-width: 60px;
+      width: @dropzone-size;
+      flex-direction: row;
+      clr-icon { animation: 2s ease-out infinite running caretright; }
     }
 
     &.bottom {
       bottom: 0;
       width: 100%;
-      height: 10%;
-      min-height: 60px;
+      height: @dropzone-size;
+      justify-content: center;
+      flex-direction: column;
+      align-items: flex-start;
+      clr-icon { animation: 2s ease-out infinite running caretdown; }
     }
   }
 
