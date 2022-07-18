@@ -1106,24 +1106,28 @@ function handleDragLeave (event: DragEvent) {
   }
 
   @keyframes caretup {
-    from { margin-bottom: 0; }
-    50% { margin-bottom: @dropzone-size; }
-    to { margin-bottom: @dropzone-size; }
+    from { margin-bottom: 0; opacity: 1; }
+    50% { opacity: 0; }
+    75% { margin-bottom: @dropzone-size; opacity: 0; }
+    to { margin-bottom: @dropzone-size; opacity: 0; }
   }
   @keyframes caretdown {
-    from { margin-top: 0; }
-    50% { margin-top: @dropzone-size; }
-    to { margin-top: @dropzone-size; }
+    from { margin-top: 0; opacity: 1; }
+    50% { opacity: 0; }
+    75% { margin-top: @dropzone-size; opacity: 0; }
+    to { margin-top: @dropzone-size; opacity: 0; }
   }
   @keyframes caretleft {
-    from { margin-right: 0; }
-    50% { margin-right: @dropzone-size; }
-    to { margin-right: @dropzone-size; }
+    from { margin-right: 0; opacity: 1; }
+    50% { opacity: 0; }
+    75% { margin-right: @dropzone-size; opacity: 0; }
+    to { margin-right: @dropzone-size; opacity: 0; }
   }
   @keyframes caretright {
-    from { margin-left: 0; }
-    50% { margin-left: @dropzone-size; }
-    to { margin-left: @dropzone-size; }
+    from { margin-left: 0; opacity: 1; }
+    50% { opacity: 0; }
+    75% { margin-left: @dropzone-size; opacity: 0; }
+    to { margin-left: @dropzone-size; opacity: 0; }
   }
 
   div.dropzone {
@@ -1149,7 +1153,7 @@ function handleDragLeave (event: DragEvent) {
       width: 100%;
       height: @dropzone-size;
       flex-direction: column-reverse;
-      clr-icon { animation: 2s ease-out infinite running caretup; }
+      clr-icon { animation: 1s ease-out infinite running caretup; }
     }
 
     &.left {
@@ -1158,7 +1162,7 @@ function handleDragLeave (event: DragEvent) {
       height: 100%;
       width: @dropzone-size;
       flex-direction: row-reverse;
-      clr-icon { animation: 2s ease-out infinite running caretleft; }
+      clr-icon { animation: 1s ease-out infinite running caretleft; }
     }
 
     &.right {
@@ -1167,7 +1171,7 @@ function handleDragLeave (event: DragEvent) {
       height: 100%;
       width: @dropzone-size;
       flex-direction: row;
-      clr-icon { animation: 2s ease-out infinite running caretright; }
+      clr-icon { animation: 1s ease-out infinite running caretright; }
     }
 
     &.bottom {
@@ -1175,9 +1179,8 @@ function handleDragLeave (event: DragEvent) {
       width: 100%;
       height: @dropzone-size;
       justify-content: center;
-      flex-direction: column;
       align-items: flex-start;
-      clr-icon { animation: 2s ease-out infinite running caretdown; }
+      clr-icon { animation: 1s ease-out infinite running caretdown; }
     }
   }
 
