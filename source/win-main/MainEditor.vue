@@ -249,7 +249,8 @@ export default defineComponent({
             tasks: this.$store.state.config['display.renderTasks'],
             headingTags: this.$store.state.config['display.renderHTags'],
             tables: this.$store.state.config['editor.enableTableHelper'],
-            emphasis: this.$store.state.config['display.renderEmphasis']
+            emphasis: this.$store.state.config['display.renderEmphasis'],
+            codeBlockButton: this.$store.state.config['display.renderCodeBlockButton']
           }
         }
       }

@@ -127,6 +127,7 @@ export interface ConfigOptions {
     renderTasks: boolean
     renderHTags: boolean
     renderEmphasis: boolean
+    renderCodeBlockButton: boolean
   }
   selectedDicts: string[]
   appLang: string
