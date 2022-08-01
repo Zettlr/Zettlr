@@ -15,7 +15,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-05-31T18:21:54.000000Z"
+        "updated_at": "2022-07-28T09:50:41.000000Z"
     },
     "dialog": {
         "about": {
@@ -55,6 +55,8 @@
             "explanation": "Editar aqu\u00ed la configuraci\u00f3n por defecto para importaciones o exportaciones.",
             "exporting_title": "Exportar",
             "importing_title": "Importar",
+            "invalid_warning": "Parece que a este perfil le falta la propiedad escritor o lector. Aseg\u00farate de configurar ambos para que Zettlr pueda usar este perfil.",
+            "protected_warning": "Este perfil est\u00e1 protegido. Esto significa que se restaurar\u00e1 cuando lo elimines o le cambies nombre.",
             "restore": "Restaurar archivo por defecto"
         },
         "dir_new": {
@@ -253,6 +255,7 @@
             "enable_table_helper": "Habilitar editir de tablas",
             "export": {
                 "dest": "Carpeta de destino de los archivos exportados. \u003Cem\u003EAtenci\u00f3n:\u003C/em\u003E \u00a1Seleccionar la carpeta de trabajo actual sobreescribir\u00e1 los archivos sin previo aviso!",
+                "dest_ask_label": "Pedir directorio",
                 "dest_cwd_label": "Carpeta de trabajo actual: los archivos exportados se guardar\u00e1n en la carpeta que est\u00e1 seleccionada actualmente.",
                 "dest_temp_label": "Carpeta temporal: se borra regularmente",
                 "strip_id_label": "Eliminar las IDs de ZKN de los archivos",
@@ -687,6 +690,7 @@
         "paste": "Pegar",
         "paste_plain": "Pegar sin formatos",
         "pdf_preferences": "Preferencias PDF...",
+        "pin_tab": "Anclar pesta\u00f1a",
         "preferences": "Preferencias",
         "previous_file": "Archivo anterior",
         "print": "Imprimir....",
@@ -728,6 +732,7 @@
         "toggle_typewriter_mode": "Modo m\u00e1quina de escribir",
         "undo": "Deshacer",
         "unhide": "Mostrar",
+        "unpin_tab": "Desanclar pesta\u00f1a",
         "update": "Buscar actualizaciones",
         "win_close": "Cerrar",
         "win_minimize": "Minimizar",
@@ -793,6 +798,10 @@
             "remove_title": "\u00bfSeguro que quieres eliminar?",
             "tray_not_supported": "La bandeja a\u00fan no est\u00e0 preparada. Se necesita la extensi\u00f3n de Gnome &quot;KStatusNotifierItem/AppIndicator Support&quot; para poder implementar la bandeja en Gnome"
         },
+        "export_dialog": {
+            "save": "Guardar",
+            "title": "Elegir destino de exportaci\u00f3n"
+        },
         "export_success": "Exportando a %s",
         "file_changed": "Archivo %s ha cambiado de manera remota.",
         "file_removed": "Archivo %s se ha eliminado.",
@@ -844,7 +853,7 @@
         "insert_ul": "Haga una lista con vi\u00f1etas",
         "pomodoro": "Temporizador Pomodoro",
         "preferences": "Abrir el di\u00e1logo de configuraci\u00f3n",
-        "readability": "Habilitar modo de legebilidad",
+        "readability": "Habilitar modo de legibilidad",
         "remove_fn": "Eliminar la nota a pie de p\u00e1gina bajo el cursor",
         "share": "Compartir el archivo actual como HTML, DOCX, ODT o PDF",
         "show_menu": "Mostrar men\u00fa de aplicaci\u00f3n",
