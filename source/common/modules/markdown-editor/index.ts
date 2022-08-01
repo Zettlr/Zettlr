@@ -250,7 +250,7 @@ export default class MarkdownEditor extends EventEmitter {
       }, (wordToReplace: string) => {
         // Simply replace the selection with the given word
         this._instance.replaceSelection(wordToReplace)
-      })
+      }, { filePath: this._cmOptions.zettlr.markdownImageBasePath })
 
       // If applicable, select the word under cursor
       if (shouldSelectWordUnderCursor) {

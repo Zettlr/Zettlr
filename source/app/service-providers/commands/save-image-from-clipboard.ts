@@ -32,14 +32,13 @@ export default class SaveImage extends ZettlrCommand {
    * @param  {Object} target Options on the image
    * @return {void}        Does not return.
    */
-  async run (evt: string /*, target: any */): Promise<any> {
-    const activeFile = this._app.documents.activeFile
-    if (activeFile === null) {
+  async run (evt: string, arg: any): Promise<any> {
+    if (!('startPath' in arg)) {
       return this._app.notifications.show(trans('system.error.fnf_message'))
     }
 
     const defaultPath = this._app.config.get('editor.defaultSaveImagePath')
-    const startPath = path.resolve(activeFile.dir, defaultPath)
+    const startPath = path.resolve(arg.startPath, defaultPath)
 
     const target = await this._app.windows.showPasteImageModal(startPath)
     if (target === undefined) {
@@ -120,7 +119,7 @@ export default class SaveImage extends ZettlrCommand {
       return imagePath
     } else {
       // Insert a relative path instead of an absolute one
-      return path.relative(activeFile.dir, imagePath)
+      return path.relative(startPath, imagePath)
     }
   }
 }

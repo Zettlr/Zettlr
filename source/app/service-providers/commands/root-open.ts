@@ -97,15 +97,33 @@ export default class RootOpen extends ZettlrCommand {
    */
   private async handleAddRoots (pathlist: string[]): Promise<void> {
     // As long as it's not a forbidden file or ignored directory, add it.
+    if (pathlist.length === 0) {
+      return // No need to add anything
+    }
+
     let newFile = null
     let newDir = null
+
+    // Make sure there's at least one window
+    if (this._app.documents.windowCount() === 0) {
+      this._app.documents.newWindow()
+    }
+
+    // Always open these files in the focused main window OR the first one
+    const firstWin = this._app.windows.getFirstMainWindow()
+    const winKey = firstWin !== undefined
+      ? this._app.windows.getMainWindowKey(firstWin) ?? this._app.documents.windowKeys()[0]
+      : this._app.documents.windowKeys()[0]
+
+    const leafId = this._app.documents.leafIds(winKey)[0]
+
     for (const absPath of pathlist) {
       // First check if this thing is already added. If so, simply write
       // the existing file/dir into the newFile/newDir vars. They will be
       // opened accordingly.
       if ((newFile = this._app.fsal.findFile(absPath)) != null) {
         // Open the file immediately
-        await this._app.documents.openFile(newFile.path, true)
+        await this._app.documents.openFile(winKey, leafId, newFile.path, true)
         // Also set the newDir variable so that Zettlr will automatically
         // navigate to the directory. The directory of the latest file will
         // remain open afterwards.
@@ -122,7 +140,7 @@ export default class RootOpen extends ZettlrCommand {
             // If it was a file and not a directory, immediately open it.
             const file = this._app.fsal.findFile(absPath)
             if (file !== null) {
-              await this._app.documents.openFile(file.path, true)
+              await this._app.documents.openFile(winKey, leafId, file.path, true)
             }
 
             if (isDir(absPath)) {

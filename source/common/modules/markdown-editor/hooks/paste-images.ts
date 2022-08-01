@@ -38,7 +38,8 @@ export default function pasteImagesHook (cm: CodeMirror.Editor): void {
       if (clipboard.hasImage() && explicitPaste) {
         // We've got an image. So we need to handle it.
         ipcRenderer.invoke('application', {
-          command: 'save-image-from-clipboard'
+          command: 'save-image-from-clipboard',
+          payload: { startPath: (cm as any).getOption('zettlr').markdownImageBasePath }
         })
           .then((pathToInsert: string|undefined) => {
             // If the user aborts the pasting process, the command will return
@@ -75,7 +76,8 @@ export default function pasteImagesHook (cm: CodeMirror.Editor): void {
       e.stopPropagation()
       e.preventDefault()
       ipcRenderer.invoke('application', {
-        command: 'save-image-from-clipboard'
+        command: 'save-image-from-clipboard',
+        payload: { startPath: (cm as any).getOption('zettlr').markdownImageBasePath }
       })
         .then((pathToInsert: string|undefined) => {
           // If the user aborts the pasting process, the command will rturn

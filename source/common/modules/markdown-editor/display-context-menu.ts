@@ -169,7 +169,8 @@ export default function displayContextMenu (
   event: MouseEvent,
   isReadOnly: boolean,
   commandCallback: (command: string) => void,
-  replaceCallback: (repl: string) => void
+  replaceCallback: (repl: string) => void,
+  context: { filePath?: string }
 ): boolean {
   if (event.target === null) {
     return false
@@ -404,7 +405,10 @@ export default function displayContextMenu (
     if (clickedID.startsWith('citekey-')) {
       ipcRenderer.invoke('application', {
         command: 'open-attachment',
-        payload: { 'citekey': clickedID.substr(8) }
+        payload: {
+          citekey: clickedID.substring(8),
+          filePath: context.filePath ?? ''
+        }
       })
         .catch((err: any) => console.error(err))
         .finally(() => { closeCallback() })
@@ -415,7 +419,7 @@ export default function displayContextMenu (
     if (clickedID.startsWith('typo-add-')) {
       ipcRenderer.sendSync('dictionary-provider', {
         command: 'add',
-        term: clickedID.substr(9) // Extract the word from the ID
+        term: clickedID.substring(9) // Extract the word from the ID
       })
       return
     }

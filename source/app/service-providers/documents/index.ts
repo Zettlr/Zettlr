@@ -291,6 +291,14 @@ export default class DocumentManager extends ProviderContract {
     return Object.keys(this._windows)
   }
 
+  public leafIds (windowId: string): string[] {
+    if (!(windowId in this._windows)) {
+      return []
+    }
+
+    return this._windows[windowId].getAllLeafs().map(leaf => leaf.id)
+  }
+
   public newWindow (): void {
     const newTree = new DocumentTree()
     const existingKeys = Object.keys(this._windows)

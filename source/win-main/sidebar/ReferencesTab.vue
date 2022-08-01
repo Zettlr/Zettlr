@@ -10,7 +10,7 @@
 <script lang="ts">
 import { trans } from '@common/i18n-renderer'
 import extractCitations from '@common/util/extract-citations'
-import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
+import getBibliographyForDescriptor from '@common/util/get-bibliography-for-descriptor'
 import { DP_EVENTS, OpenDocument } from '@dts/common/documents'
 import { MDFileMeta, CodeFileMeta } from '@dts/common/fsal'
 import { defineComponent } from 'vue'
@@ -93,15 +93,7 @@ export default defineComponent({
         return
       }
 
-      let library = CITEPROC_MAIN_DB
-
-      if (descriptor.frontmatter != null && 'bibliography' in descriptor.frontmatter) {
-        library = descriptor.frontmatter.bibliography.trim()
-      }
-
-      if (library === '' || library === undefined) {
-        library = CITEPROC_MAIN_DB
-      }
+      const library = getBibliographyForDescriptor(descriptor)
 
       const citations = extractCitations(descriptor.content)
       const keys = []
