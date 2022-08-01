@@ -133,6 +133,9 @@ app.whenReady().then(() => {
         // meantime.
         (getServiceContainer() as AppServiceContainer).commands.run('roots-add', filesBeforeOpen)
           .catch(err => console.error(err))
+
+        // After everything has been booted up, show the windows
+        getServiceContainer()?.windows.maybeShowWindows()
       })
       .catch(err => {
         console.error(err)
@@ -163,7 +166,7 @@ app.on('second-instance', (event, argv, cwd) => {
 
   // openWindow calls the appropriate function of the windowManager, which deals
   // with the nitty-gritty of actually making the main window visible.
-  getServiceContainer()?.windows.showMainWindow()
+  getServiceContainer()?.windows.showMainWindows()
 
   const commands = getServiceContainer()?.commands
 

@@ -1,8 +1,12 @@
 import countWords from '@common/util/count-words'
+import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
+import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
 import { MainEditorDocumentWrapper } from '@dts/renderer/editor'
 import CodeMirror from 'codemirror'
+import { ComputedRef } from 'vue'
 
 const ipcRenderer = window.ipc
+const path = window.path
 
 /**
  * Resolves a file extension to a valid CodeMirror mode
@@ -34,24 +38,41 @@ export default async function retrieveDocumentFromMain (
   filePath: string,
   fileExt: string,
   shouldCountChars: boolean,
-  autoSave: string,
+  autoSave: ComputedRef<any>,
   saveCallback: (doc: MainEditorDocumentWrapper) => void
 ): Promise<MainEditorDocumentWrapper> {
-  const descriptorWithContent = await ipcRenderer.invoke('application', {
+  const mode = resolveMode(fileExt)
+  const newDoc: MainEditorDocumentWrapper = {
+    path: filePath,
+    dir: path.dirname(filePath), // Save the dir to distinguish memory-files from others
+    mode: mode, // Save the mode for later swaps
+    cmDoc: CodeMirror.Doc('', mode),
+    modified: false,
+    library: undefined,
+    lastWordCount: 0,
+    saveTimeout: undefined // Only used below to save the saveTimeout
+  }
+
+  const descriptorWithContent: MDFileMeta|CodeFileMeta|undefined = await ipcRenderer.invoke('application', {
     command: 'get-file-contents',
     payload: filePath
   })
 
-  const mode = resolveMode(fileExt)
+  if (descriptorWithContent === undefined) {
+    throw new Error(`Descriptor for file ${filePath} was unavailable! Could not load document`)
+  }
 
-  const newDoc: MainEditorDocumentWrapper = {
-    path: descriptorWithContent.path,
-    dir: descriptorWithContent.dir, // Save the dir to distinguish memory-files from others
-    mode: mode, // Save the mode for later swaps
-    cmDoc: CodeMirror.Doc(descriptorWithContent.content, mode),
-    modified: false,
-    lastWordCount: countWords(descriptorWithContent.content, shouldCountChars),
-    saveTimeout: undefined // Only used below to save the saveTimeout
+  newDoc.cmDoc = CodeMirror.Doc(descriptorWithContent.content, mode)
+  newDoc.lastWordCount = countWords(descriptorWithContent.content, shouldCountChars)
+
+  if (descriptorWithContent.type === 'file') {
+    const bib = descriptorWithContent.frontmatter?.bibliography
+    if (bib != null && typeof bib === 'string' && bib.trim() !== '') {
+      newDoc.library = bib
+    } else {
+      // It's an MD file, so we still need a library -> main library
+      newDoc.library = CITEPROC_MAIN_DB
+    }
   }
 
   // Listen to change events on the doc, because if the user pastes
@@ -71,7 +92,7 @@ export default async function retrieveDocumentFromMain (
   // Implement autosaving
   newDoc.cmDoc.on('change', (doc, changeObj) => {
     // Do not attempt to autosave if it's off or we're dealing with an in-memory file.
-    if (autoSave === 'off' || newDoc.dir === ':memory:') {
+    if (autoSave.value === 'off') {
       return
     }
 
@@ -85,11 +106,10 @@ export default async function retrieveDocumentFromMain (
     // won't be too stressed. This should still feel very immediate to
     // the user, since the file will more or less be saved once they
     // stop typing.
-    const delay = (autoSave === 'immediately') ? 250 : 5000
+    const delay = (autoSave.value === 'immediately') ? 250 : 5000
 
     newDoc.saveTimeout = setTimeout(() => {
       saveCallback(newDoc)
-      // this.save(newDoc).catch(e => console.error(e))
       newDoc.saveTimeout = undefined
     }, delay)
   })

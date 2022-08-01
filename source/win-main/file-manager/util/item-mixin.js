@@ -32,6 +32,10 @@ export default {
     obj: {
       type: Object,
       default: function () { return {} }
+    },
+    windowId: {
+      type: String,
+      required: true
     }
   },
   data: function () {
@@ -44,7 +48,7 @@ export default {
       return this.obj.type === 'directory'
     },
     selectedFile: function () {
-      return this.$store.state.activeFile
+      return this.$store.getters.lastLeafActiveFile()
     },
     selectedDir: function () {
       return this.$store.state.selectedDirectory
@@ -97,20 +101,15 @@ export default {
         event.preventDefault() // Otherwise, on Windows we'd have a middle-click-scroll
       }
 
-      if (type === 'file' && alt) {
-        // QuickLook the file
-        ipcRenderer.invoke('application', {
-          command: 'open-quicklook',
-          payload: this.obj.path
-        })
-          .catch(e => console.error(e))
-      } else if ([ 'file', 'code' ].includes(type)) {
+      if ([ 'file', 'code' ].includes(type)) {
         // Request the clicked file
-        ipcRenderer.invoke('application', {
+        ipcRenderer.invoke('documents-provider', {
           command: 'open-file',
           payload: {
             path: this.obj.path,
-            newTab: middleClick // Force a new tab in this case.
+            windowId: this.windowId,
+            leafId: this.$store.state.lastLeafId,
+            newTab: middleClick || (alt && type === 'file') // Force a new tab in this case.
           }
         })
           .catch(e => console.error(e))
@@ -249,10 +248,11 @@ export default {
         fileContextMenu(event, this.obj, this.$el, (clickedID) => {
           if (clickedID === 'new-tab') {
             // Request the clicked file, explicitly in a new tab
-            ipcRenderer.invoke('application', {
+            ipcRenderer.invoke('documents-provider', {
               command: 'open-file',
               payload: {
                 path: this.obj.path,
+                windowId: this.windowId,
                 newTab: true
               }
             })
@@ -262,7 +262,11 @@ export default {
           } else if (clickedID === 'menu.duplicate_file') {
             ipcRenderer.invoke('application', {
               command: 'file-duplicate',
-              payload: { path: this.obj.path }
+              payload: {
+                path: this.obj.path,
+                windowId: this.windowId,
+                leafId: this.$store.state.lastLeafId
+              }
             })
               .catch(err => console.error(err))
           } else if (clickedID === 'menu.delete_file') {
@@ -318,12 +322,6 @@ export default {
             // The close_file item is only shown in the tree view on root files
             ipcRenderer.invoke('application', {
               command: 'root-close',
-              payload: this.obj.path
-            })
-              .catch(err => console.error(err))
-          } else if (clickedID === 'menu.quicklook') {
-            ipcRenderer.invoke('application', {
-              command: 'open-quicklook',
               payload: this.obj.path
             })
               .catch(err => console.error(err))

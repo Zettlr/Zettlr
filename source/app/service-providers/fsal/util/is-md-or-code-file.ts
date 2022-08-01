@@ -53,7 +53,11 @@ export function hasMdOrCodeExt (p: string): boolean {
  * @return  {boolean}     True or false
  */
 export function hasMarkdownExt (p: string): boolean {
-  const ext = path.extname(p).toLowerCase()
+  // This function can run both in main as well as in the renderers
+  const ext = (typeof window !== 'undefined')
+    ? window.path.extname(p).toLowerCase()
+    : path.extname(p).toLowerCase()
+
   return MD_FILES.includes(ext)
 }
 
@@ -65,6 +69,9 @@ export function hasMarkdownExt (p: string): boolean {
  * @return  {boolean}     True or false
  */
 export function hasCodeExt (p: string): boolean {
-  const ext = path.extname(p).toLowerCase()
+  // This function can run both in main as well as in the renderers
+  const ext = (typeof window !== 'undefined')
+    ? window.path.extname(p).toLowerCase()
+    : path.extname(p).toLowerCase()
   return CODE_FILES.includes(ext)
 }

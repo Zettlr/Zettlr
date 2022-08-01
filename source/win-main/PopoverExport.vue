@@ -1,6 +1,7 @@
 <template>
   <div>
     <h4>Export</h4>
+    <p><strong>{{ filename }}</strong></p>
     <SelectControl
       v-model="format"
       v-bind:label="'Format'"
@@ -48,6 +49,7 @@ import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
 
 const ipcRenderer = window.ipc
 const config = window.config
+const path = window.path
 
 export default defineComponent({
   name: 'PopoverExport',
@@ -60,11 +62,15 @@ export default defineComponent({
     return {
       shouldExport: false, // As soon as this becomes true, we can export
       format: '',
+      filePath: '',
       exportDirectory: 'temp',
       profileMetadata: [] as PandocProfileMetadata[]
     }
   },
   computed: {
+    filename () {
+      return path.basename(this.filePath)
+    },
     popoverData: function () {
       const data: any = {
         shouldExport: this.shouldExport,

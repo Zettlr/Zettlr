@@ -19,7 +19,6 @@ import { trans } from '@common/i18n-main'
 import { ExporterOptions } from './exporter/types'
 import { promises as fs } from 'fs'
 import path from 'path'
-import isDir from '@common/util/is-dir'
 import { PANDOC_WRITERS } from '@common/util/pandoc-maps'
 import { PandocProfileMetadata } from '@dts/common/assets'
 
@@ -29,13 +28,14 @@ export default class Export extends ZettlrCommand {
   }
 
   /**
-    * Export a file to another format.
-    * @param {String} evt The event name
+    * Exports a single file to another format.
+    *
+    * @param  {string} evt The event name
     * @param  {Object} arg An object containing hash and wanted extension.
     * @return {Boolean}     Whether or not the call succeeded.
     */
   async run (evt: string, arg: any): Promise<void> {
-    const { file, content, profile, exportTo } = arg as { file: string, content: string, profile: PandocProfileMetadata, exportTo: string }
+    const { file, profile, exportTo } = arg as { file: string, profile: PandocProfileMetadata, exportTo: string }
 
     const exporterOptions: ExporterOptions = {
       profile: profile,
@@ -44,49 +44,50 @@ export default class Export extends ZettlrCommand {
       cwd: undefined
     }
 
-    if (content !== undefined && typeof content === 'string') {
-      // We should export some raw content. So targetDirectory must be temp. We
-      // use a default filename so the caller can get away with only specifying
-      // content and format. However, they can also specify an absolute filepath
-      // which we can use to fill in more info about the export
-      exporterOptions.targetDirectory = app.getPath('temp')
-      let filename = `zettlr_export_${Date.now()}.md`
-      if (file !== undefined && typeof file === 'string') {
-        filename = path.basename(file)
-        if (isDir(path.dirname(file))) {
-          exporterOptions.cwd = path.dirname(file)
-        }
-      }
-      // Write the content to file
+    // If the file is modified, then the document manager will have a more
+    // recent version of the file in its cache. In that case, we'll silently
+    // overwrite the source file with a temporary one that we create with the
+    // contents of said modified file.
+    const cachedVersion = this._app.documents.getCachedVersion(file)
+    if (cachedVersion !== undefined) {
+      const filename = path.basename(file)
       const tempPath = path.join(app.getPath('temp'), filename)
-      await fs.writeFile(tempPath, content, { encoding: 'utf8' })
-      exporterOptions.sourceFiles.push({
+      await fs.writeFile(tempPath, cachedVersion, { encoding: 'utf8' })
+      exporterOptions.sourceFiles = [{
         path: tempPath,
         name: filename,
-        ext: path.extname(filename)
-      })
-    } else {
-      // We must have an absolute path given in file
-      const fileDescriptor = this._app.fsal.findFile(file)
-      if (fileDescriptor !== null) {
+        ext: path.extname(file)
+      }]
+    }
+
+    // We must have an absolute path given in file
+    const fileDescriptor = this._app.fsal.findFile(file)
+    if (fileDescriptor !== null) {
+      // If we have a cached version, we already have a file to export.
+      // Otherwise, use the regular one from disk.
+      if (cachedVersion === undefined) {
         exporterOptions.sourceFiles.push(fileDescriptor)
-        exporterOptions.cwd = fileDescriptor.dir
-        switch (exportTo) {
-          case 'ask': {
-            const folderSelection = await this._app.windows.askDir(trans('system.export_dialog.title'), null, trans('system.export_dialog.save'))
-            if (folderSelection === undefined || folderSelection.length === 0) {
-              this._app.log.error('[Export] Could not run exporter: Folderselection did not have a result!')
-              return
-            }
-            exporterOptions.targetDirectory = folderSelection[0]
-            break
+      }
+
+      // The cwd, however, is the source file one's
+      exporterOptions.cwd = fileDescriptor.dir
+      switch (exportTo) {
+        case 'ask': {
+          const folderSelection = await this._app.windows.askDir(trans('system.export_dialog.title'), null, trans('system.export_dialog.save'))
+          if (folderSelection === undefined || folderSelection.length === 0) {
+            this._app.log.error('[Export] Could not run exporter: Folderselection did not have a result!')
+            return
           }
-          case 'temp':
-          case 'cwd':
-          default:
-            exporterOptions.targetDirectory = (exportTo === 'temp') ? app.getPath('temp') : fileDescriptor.dir
-            break
+          exporterOptions.targetDirectory = folderSelection[0]
+          break
         }
+        case 'temp':
+          exporterOptions.targetDirectory = app.getPath('temp')
+          break
+        case 'cwd':
+        default:
+          exporterOptions.targetDirectory = fileDescriptor.dir
+          break
       }
     }
 

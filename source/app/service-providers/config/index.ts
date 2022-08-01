@@ -27,7 +27,6 @@ import enumDictFiles from '@common/util/enum-dict-files'
 import ProviderContract from '../provider-contract'
 import LogProvider from '../log'
 import { ConfigOptions } from '@dts/main/config-provider'
-import { OpenDocument } from '@dts/common/documents'
 
 const ZETTLR_VERSION = app.getVersion()
 
@@ -260,25 +259,6 @@ export default class ConfigProvider extends ProviderContract {
       }
       this.config.editor.autoCorrect.replacements = newReplacements
     }
-
-    // After version 2.3.0 we've switched to a more sophisticated document
-    // management, so we need to convert the simple paths to descriptors.
-    this.config.openFiles = this.config.openFiles
-      // First map from strings to descriptors
-      .map((file: OpenDocument|string) => {
-        if (typeof file === 'string') {
-          return {
-            path: file,
-            pinned: false
-          }
-        } else if (typeof file.path === 'string' && typeof file.pinned === 'boolean') {
-          return file // Already migrated
-        } else {
-          return undefined // Invalid
-        }
-      })
-      // Then filter out invalids
-      .filter(e => e !== undefined) as OpenDocument[]
 
     return this
   }

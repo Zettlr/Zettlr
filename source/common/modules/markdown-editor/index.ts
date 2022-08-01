@@ -61,12 +61,13 @@ import taskItemClassHook from './hooks/task-item-classes'
 import muteLinesHook from './hooks/mute-lines'
 import renderElementsHook from './hooks/render-elements'
 import typewriterHook from './hooks/typewriter'
-import { autocompleteHook, setAutocompleteDatabase } from './hooks/autocomplete'
+import autocomplete from './hooks/autocomplete'
 import linkTooltipsHook from './hooks/link-tooltips'
 import noteTooltipsHook from './hooks/note-preview'
 
 import displayContextMenu from './display-context-menu'
 import moveSection from '@common/util/move-section'
+import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
@@ -74,11 +75,12 @@ const clipboard = window.clipboard
 export default class MarkdownEditor extends EventEmitter {
   private readonly _instance: CodeMirror.Editor
   private readonly _anchorElement: null|HTMLTextAreaElement
+  private readonly _autocompleteDBCallback: (type: string, database: any) => void
   private _readabilityMode: boolean
   private _currentDocumentMode: string
   private _cmOptions: any
   private _countChars: boolean
-  private readonly _md2html: ReturnType<typeof getConverter>
+  private _md2html: ReturnType<typeof getConverter>
 
   /**
    * Creates a new MarkdownEditor instance attached to the anchorElement
@@ -94,7 +96,7 @@ export default class MarkdownEditor extends EventEmitter {
     this._cmOptions = getCodeMirrorDefaultOptions(this)
     this._countChars = false
 
-    this._md2html = getConverter(window.getCitation)
+    this._md2html = getConverter(window.getCitationCallback(CITEPROC_MAIN_DB))
 
     // Parse the anchorElement until we get something useful
     if (typeof anchorElement === 'string' && document.getElementById(anchorElement) !== null) {
@@ -120,6 +122,9 @@ export default class MarkdownEditor extends EventEmitter {
     // editor instance is readonly initially, and needs to be enabled
     // programmatically by setting MarkdownEditor::readonly = false.
     this._instance.getWrapperElement().classList.add('CodeMirror-readonly')
+
+    const { autocompleteHook, setAutocompleteDatabase } = autocomplete()
+    this._autocompleteDBCallback = setAutocompleteDatabase
 
     // Attach plugins using event listeners ("hooks" in lieu of a better name)
     dropFilesHook(this._instance)
@@ -177,6 +182,10 @@ export default class MarkdownEditor extends EventEmitter {
 
     this._instance.on('cursorActivity', (cm) => {
       this.emit('cursorActivity')
+    })
+
+    this._instance.on('focus', (cm, event) => {
+      this.emit('focus', event)
     })
 
     this._instance.on('mousedown', (cm, event) => {
@@ -434,6 +443,20 @@ export default class MarkdownEditor extends EventEmitter {
 
     // Clear the line indentation cache for the corresponding hook
     clearLineIndentationCache()
+
+    // Lastly, in case the caller has changed the zettlr.metadata.library prop,
+    // we have to re-set the MD2HTML renderer
+    if ('zettlr' in newOptions && 'metadata' in newOptions.zettlr && 'library' in newOptions.zettlr.metadata) {
+      const lib = newOptions.zettlr.metadata.library
+      // Two possibilities: Either it's a non-empty string (file-based database)
+      // or it's "main". The third option is that it's invalid, in which case
+      // it's also main.
+      if (lib !== undefined && typeof lib === 'string' && lib.trim() !== '') {
+        this._md2html = getConverter(window.getCitationCallback(lib))
+      } else {
+        this._md2html = getConverter(window.getCitationCallback(CITEPROC_MAIN_DB))
+      }
+    }
   }
 
   /**
@@ -520,7 +543,7 @@ export default class MarkdownEditor extends EventEmitter {
    * @param   {Object}  database  The show-hint-addon compatible database
    */
   setCompletionDatabase (type: string, database: any): void {
-    setAutocompleteDatabase(type, database)
+    this._autocompleteDBCallback(type, database)
   }
 
   /**

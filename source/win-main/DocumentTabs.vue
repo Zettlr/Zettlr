@@ -1,44 +1,58 @@
 <template>
-  <div id="tab-container" ref="container" role="tablist">
-    <div
-      v-for="file in openFiles"
-      v-bind:key="file.path"
-      v-bind:class="{
-        active: activeFile !== null && file.path === activeFile.path,
-        modified: modifiedDocs.includes(file.path),
-        pinned: file.pinned
-      }"
-      v-bind:title="file.path"
-      v-bind:data-path="file.path"
-      v-bind:draggable="true"
-      role="tab"
-      v-on:dragstart="handleDragStart"
-      v-on:drag="handleDrag"
-      v-on:dragend="handleDragEnd"
-      v-on:contextmenu="handleContextMenu($event, file)"
-      v-on:mouseup="handleMiddleMouseClick($event, file)"
-      v-on:mousedown="handleClickFilename($event, file)"
-    >
-      <span
-        class="filename"
-        role="button"
-      >
-        <clr-icon v-if="file.pinned" shape="pin"></clr-icon>
-        {{ getTabText(file) }}
-      </span>
-      <span
-        v-if="!file.pinned"
-        class="close"
-        aria-hidden="true"
-        v-on:mousedown="handleClickClose($event, file)"
-      >&times;</span>
-    </div>
-    <!-- Add scroller arrows so that users can click to scroll -->
-    <div class="scroller left" v-on:click="scrollLeft()">
+  <div
+    v-bind:class="{
+      'document-tablist-wrapper': true,
+      'scrollers-active': showScrollers
+    }"
+  >
+    <!-- Left scroller arrow -->
+    <div v-if="showScrollers" class="scroller left" v-on:click="scrollLeft()">
       <clr-icon shape="caret left"></clr-icon>
     </div>
-    <div class="scroller right">
+    <!-- Right scroller arrow -->
+    <div v-if="showScrollers" class="scroller right">
       <clr-icon shape="caret right" v-on:click="scrollRight()"></clr-icon>
+    </div>
+
+    <div
+      ref="container"
+      role="tablist"
+      v-bind:class="{ 'tab-container': true }"
+      v-on:contextmenu="handleTabbarContext($event)"
+    >
+      <div
+        v-for="file in openFiles"
+        v-bind:key="file.path"
+        v-bind:class="{
+          active: activeFile !== null && file.path === activeFile.path,
+          modified: modifiedPaths.includes(file.path),
+          pinned: file.pinned
+        }"
+        v-bind:title="file.path"
+        v-bind:data-path="file.path"
+        v-bind:draggable="true"
+        role="tab"
+        v-on:dragstart="handleDragStart($event, file.path)"
+        v-on:drag="handleDrag"
+        v-on:dragend="handleDragEnd"
+        v-on:contextmenu="handleContextMenu($event, file)"
+        v-on:mouseup="handleMiddleMouseClick($event, file)"
+        v-on:click="handleClickFilename($event, file)"
+      >
+        <span
+          class="filename"
+          role="button"
+        >
+          <clr-icon v-if="file.pinned" shape="pin"></clr-icon>
+          {{ getTabText(file) }}
+        </span>
+        <span
+          v-if="!file.pinned"
+          class="close"
+          aria-hidden="true"
+          v-on:mousedown="handleClickClose($event, file)"
+        >&times;</span>
+      </div>
     </div>
   </div>
 </template>
@@ -58,10 +72,10 @@
  * END HEADER
  */
 
-import displayTabsContextMenu from './tabs-context'
+import displayTabsContextMenu, { displayTabbarContext } from './tabs-context'
 import tippy from 'tippy.js'
 import { nextTick, defineComponent } from 'vue'
-import { OpenDocument } from '@dts/common/documents'
+import { OpenDocument, LeafNodeJSON } from '@dts/common/documents'
 import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
 
 const ipcRenderer = window.ipc
@@ -70,16 +84,25 @@ const path = window.path
 
 export default defineComponent({
   name: 'DocumentTabs',
+  props: {
+    leafId: {
+      type: String,
+      required: true
+    },
+    windowId: {
+      type: String,
+      required: true
+    }
+  },
+  data () {
+    return {
+      showScrollers: false,
+      resizeObserver: new ResizeObserver(() => {
+        this.maybeActivateScrollers()
+      })
+    }
+  },
   computed: {
-    openFiles: function (): OpenDocument[] {
-      return this.$store.state.config.openFiles as OpenDocument[]
-    },
-    activeFile: function (): any {
-      return this.$store.state.activeFile
-    },
-    modifiedDocs: function (): string[] {
-      return this.$store.state.modifiedDocuments
-    },
     useH1: function (): boolean {
       return this.$store.state.config.fileNameDisplay.includes('heading')
     },
@@ -91,6 +114,18 @@ export default defineComponent({
     },
     container: function (): HTMLDivElement {
       return this.$refs.container as HTMLDivElement
+    },
+    node (): LeafNodeJSON|undefined {
+      return this.$store.state.paneData.find((leaf: LeafNodeJSON) => leaf.id === this.leafId)
+    },
+    openFiles (): OpenDocument[] {
+      return this.node?.openFiles ?? []
+    },
+    activeFile (): OpenDocument|null {
+      return this.node?.activeFile ?? null
+    },
+    modifiedPaths (): string[] {
+      return Array.from((this.$store.state.modifiedFiles as Map<string, number>).keys()).map(x => x[0])
     }
   },
   watch: {
@@ -120,19 +155,28 @@ export default defineComponent({
           this.selectFile(this.openFiles[0])
         }
       } else if (shortcut === 'close-window') {
+        if (this.$store.state.lastLeafId !== this.leafId) {
+          return // Otherwise all document tabs would close one file at the same
+          // time
+        }
         // The tab bar has the responsibility to first close the activeFile if
         // there is one. If there is none, it should send a request to close
         // this window as if the user had clicked on the close-button.
         if (currentIdx > -1) {
           // There's an active file, so request the closure
-          ipcRenderer.invoke('application', {
-            command: 'file-close',
-            payload: this.openFiles[currentIdx].path
+          ipcRenderer.invoke('documents-provider', {
+            command: 'close-file',
+            payload: {
+              path: this.openFiles[currentIdx].path,
+              leafId: this.leafId,
+              windowId: this.windowId
+            }
           })
             .catch(e => console.error(e))
         } else {
           // No more open files, so request closing of the window
-          ipcRenderer.send('window-controls', { command: 'win-close' })
+          // TODO: This must be managed centrally
+          // ipcRenderer.send('window-controls', { command: 'win-close' })
         }
       } else if (shortcut === 'rename-file') {
         // Renaming via shortcut (= Cmd/Ctrl+R) works via a tooltip underneath
@@ -186,8 +230,27 @@ export default defineComponent({
         })
       }
     })
+
+    this.resizeObserver.observe(this.container)
+  },
+  unmounted () {
+    this.resizeObserver.unobserve(this.container)
   },
   methods: {
+    maybeActivateScrollers () {
+      // First, get the total available width for the container
+      const containerWidth = this.container.getBoundingClientRect().width
+      // Second, get the total width of all tabs
+      const tabWidth = Array.from(
+        this.container.querySelectorAll<HTMLDivElement>('[role="tab"]')
+      )
+        .map(elem => elem.getBoundingClientRect().width)
+        .reduce((width, acc) => width + acc, 0)
+
+      // If the total width of all tabs is larger, activate the scrollers, else
+      // disable them
+      this.showScrollers = tabWidth > containerWidth
+    },
     scrollActiveFileIntoView: function () {
       // First, we need to find the tab displaying the active file
       const elem = this.container.querySelector('.active') as HTMLDivElement|null
@@ -288,9 +351,13 @@ export default defineComponent({
         return // We don't handle this event here.
       }
 
-      ipcRenderer.invoke('application', {
-        command: 'file-close',
-        payload: file.path
+      ipcRenderer.invoke('documents-provider', {
+        command: 'close-file',
+        payload: {
+          path: file.path,
+          windowId: this.windowId,
+          leafId: this.leafId
+        }
       })
         .catch(e => console.error(e))
     },
@@ -325,28 +392,46 @@ export default defineComponent({
         this.handleClickClose(event, file)
       }
     },
-    selectFile: function (file: any) {
+    selectFile: function (file: OpenDocument) {
       // NOTE: We're handling active file setting via the open-file command. As
       // long as a given file is already open, the document manager will simply
       // set it as active. That is why we don't provide the newTab property.
-      ipcRenderer.invoke('application', {
+      ipcRenderer.invoke('documents-provider', {
         command: 'open-file',
-        payload: { path: file.path }
+        payload: { path: file.path, windowId: this.windowId, leafId: this.leafId }
       })
         .catch(e => console.error(e))
+    },
+    handleTabbarContext: function (event: MouseEvent) {
+      // If the person didn't click on a file, let them to close the whole leaf
+      displayTabbarContext(event, (clickedID: string) => {
+        if (clickedID === 'close-leaf') {
+          ipcRenderer.invoke('documents-provider', {
+            command: 'close-leaf',
+            payload: {
+              leafId: this.leafId,
+              windowId: this.windowId
+            }
+          }).catch(e => console.error(e))
+        }
+      })
     },
     handleContextMenu: function (event: MouseEvent, doc: OpenDocument) {
       const file = this.$store.getters.file(doc.path) as MDFileMeta|CodeFileMeta|undefined
       if (file === undefined) {
-        return // TODO
+        return
       }
 
       displayTabsContextMenu(event, file, doc, (clickedID: string) => {
         if (clickedID === 'close-this') {
           // Close only this
-          ipcRenderer.invoke('application', {
-            command: 'file-close',
-            payload: file.path
+          ipcRenderer.invoke('documents-provider', {
+            command: 'close-file',
+            payload: {
+              path: file.path,
+              leafId: this.leafId,
+              windowId: this.windowId
+            }
           }).catch(e => console.error(e))
         } else if (clickedID === 'close-others') {
           // Close all files ...
@@ -355,17 +440,25 @@ export default defineComponent({
               continue // ... except this
             }
 
-            ipcRenderer.invoke('application', {
-              command: 'file-close',
-              payload: openFile.path
+            ipcRenderer.invoke('documents-provider', {
+              command: 'close-file',
+              payload: {
+                path: openFile.path,
+                leafId: this.leafId,
+                windowId: this.windowId
+              }
             }).catch(e => console.error(e))
           }
         } else if (clickedID === 'close-all') {
           // Close all files
           for (const openFile of this.openFiles) {
-            ipcRenderer.invoke('application', {
-              command: 'file-close',
-              payload: openFile.path
+            ipcRenderer.invoke('documents-provider', {
+              command: 'close-file',
+              payload: {
+                path: openFile.path,
+                leafId: this.leafId,
+                windowId: this.windowId
+              }
             }).catch(e => console.error(e))
           }
         } else if (clickedID === 'copy-filename') {
@@ -383,14 +476,18 @@ export default defineComponent({
             command: 'set-pinned',
             payload: {
               path: doc.path,
+              leafId: this.leafId,
+              windowId: this.windowId,
               pinned: !doc.pinned
             }
           }).catch(e => console.error(e))
         }
       })
     },
-    handleDragStart: function (event: DragEvent) {
-      // console.log(event)
+    handleDragStart: function (event: DragEvent, filePath: string) {
+      const DELIM = (process.platform === 'win32') ? ';' : ':'
+      const data = `${this.windowId}${DELIM}${this.leafId}${DELIM}${filePath}`
+      event.dataTransfer?.setData('zettlr/document-tab', data)
     },
     handleDrag: function (event: DragEvent) {
       const tab = event.target as Element
@@ -403,6 +500,12 @@ export default defineComponent({
       // point. NOTE that the value of five is arbitrary and relies on the fact
       // that the tablist only contains tabs.
       const { left, top, right, bottom, height } = this.$el.getBoundingClientRect()
+      // Stop handling if the user drags the tab out of the document tab bar
+      // This is so that editor instances can enable splitting via drag&drop
+      if (coordsX < left - 10 || coordsX > right + 10 || coordsY < top - 10 || coordsY > bottom + 10) {
+        return
+      }
+
       const middle = height / 2
       if (coordsX < left) {
         coordsX = left + 5
@@ -444,15 +547,33 @@ export default defineComponent({
       // process of that order.
       const newOrder = []
       for (let i = 0; i < this.$el.children.length; i++) {
+        if (this.$el.children[i].getAttribute('role') !== 'tab') {
+          // There may be other children in the element, such as the scrollers
+          continue
+        }
         const fpath = this.$el.children[i].getAttribute('data-path')
         newOrder.push(fpath)
+      }
+
+      const originalOrdering = this.openFiles.map(file => file.path)
+
+      // Did the order change at all?
+      let somethingChanged = false
+      for (let i = 0; i < newOrder.length; i++) {
+        if (newOrder[i] !== originalOrdering[i]) {
+          somethingChanged = true
+          break
+        }
+      }
+
+      if (!somethingChanged) {
+        return
       }
 
       // Now that we have the correct NEW ordering, we need to temporarily
       // restore the old ordering, because otherwise Vue will be confused since
       // it needs to keep track of the element ordering, and we just messed with
       // that big time.
-      const originalOrdering = this.openFiles.map(file => file.path)
       const targetElement = event.target as Element|null
       if (targetElement === null) {
         return
@@ -473,9 +594,13 @@ export default defineComponent({
         this.$el.insertBefore(targetElement, this.$el.children[originalIndex + 1])
       }
 
-      ipcRenderer.invoke('application', {
+      ipcRenderer.invoke('documents-provider', {
         command: 'sort-open-files',
-        payload: newOrder
+        payload: {
+          newOrder: newOrder,
+          windowId: this.windowId,
+          leafId: this.leafId
+        }
       })
         .catch(err => console.error(err))
     }
@@ -486,18 +611,10 @@ export default defineComponent({
 <style lang="less">
 @tabbar-height: 30px;
 
-body div#tab-container {
-  width: 100%;
-  height: 30px;
-  padding: 0 20px; // Necessary for the scroll buttons
-  background-color: rgb(215, 215, 215);
-  border-bottom: 1px solid grey;
-  display: flex;
-  overflow-x: auto;
-  // In case of an overflow, hide the scrollbar so that scrolling left/right
-  // remains possible, but no thicc scrollbar in the way!
-  &::-webkit-scrollbar { display: none; }
-  scroll-behavior: smooth;
+body div.document-tablist-wrapper {
+  position: relative;
+
+  &.scrollers-active { padding: 0 20px; }
 
   div.scroller {
     position: absolute;
@@ -511,6 +628,20 @@ body div#tab-container {
     &.left { left: 0px; }
     &.right { right: 0px; }
   }
+}
+
+body div.tab-container {
+  width: 100%;
+  height: 30px;
+  background-color: rgb(215, 215, 215);
+  border-bottom: 1px solid grey;
+  display: flex;
+  overflow-x: auto;
+
+  // In case of an overflow, hide the scrollbar so that scrolling left/right
+  // remains possible, but no thicc scrollbar in the way!
+  &::-webkit-scrollbar { display: none; }
+  scroll-behavior: smooth;
 
   div[role="tab"] {
     display: flex;
@@ -548,9 +679,7 @@ body div#tab-container {
 }
 
 body.darwin {
-  div#tab-container {
-    border-bottom: 1px solid rgb(220, 220, 220);
-
+  div.document-tablist-wrapper {
     div.scroller {
       background-color: rgb(230, 230, 230);
       color: rgb(83, 83, 83);
@@ -561,6 +690,10 @@ body.darwin {
       &.left { border-right: 1px solid rgb(200, 200, 200); }
       &.right { border-left: 1px solid rgb(200, 200, 200); }
     }
+  }
+
+  div.tab-container {
+    border-bottom: 1px solid rgb(220, 220, 220);
 
     div[role="tab"] {
       text-align: center;
@@ -619,9 +752,7 @@ body.darwin {
   }
 
   &.dark {
-    div#tab-container {
-      border-bottom-color: rgb(11, 11, 11);
-
+    div.document-tablist-wrapper {
       div.scroller {
         background-color: rgb(22, 22, 22);
         color: rgb(233, 233, 233);
@@ -631,6 +762,11 @@ body.darwin {
         &.left { border-color: rgb(32, 34, 36); }
         &.right { border-color: rgb(32, 34, 36); }
       }
+    }
+
+    div.tab-container {
+      border-bottom-color: rgb(11, 11, 11);
+      background-color: rgb(22, 22, 22);
 
       div[role="tab"] {
         color: rgb(233, 233, 233);
@@ -651,13 +787,15 @@ body.darwin {
 }
 
 body.win32 {
-  div#tab-container {
-    border-bottom: none;
-
+  div.document-tablist-wrapper {
     div.scroller {
       &.left { border-right: 1px solid rgb(180, 180, 180); }
       &.right { border-left: 1px solid rgb(180, 180, 180); }
     }
+  }
+
+  div.tab-container {
+    border-bottom: none;
 
     div[role="tab"] {
       font-size: 12px;
@@ -674,15 +812,17 @@ body.win32 {
   }
 
   &.dark {
-    div#tab-container {
-      background-color: rgb(11, 11, 11);
-
+    div.document-tablist-wrapper {
       div.scroller {
         &:hover { background-color: rgb(53, 53, 53); }
 
         &.left { border-color: rgb(120, 120, 120); }
         &.right { border-color: rgb(120, 120, 120) }
       }
+    }
+
+    div.tab-container {
+      background-color: rgb(11, 11, 11);
 
       div[role="tab"] {
         border-color: rgb(120, 120, 120);
@@ -698,7 +838,7 @@ body.win32 {
 }
 
 body.linux {
-  div#tab-container {
+  div.document-tablist-wrapper {
     div.scroller {
       line-height: 29px;
       background-color: rgb(235, 235, 235);
@@ -707,6 +847,8 @@ body.linux {
       &.left { border-right: 1px solid rgb(200, 200, 200); }
       &.right { border-left: 1px solid rgb(200, 200, 200); }
     }
+  }
+  div.tab-container {
 
     div[role="tab"] {
       font-size: 12px;
@@ -720,9 +862,7 @@ body.linux {
   }
 
   &.dark {
-    div#tab-container {
-      background-color: rgb(11, 11, 11);
-
+    div.document-tablist-wrapper {
       div.scroller {
         background-color: #5a5a5a;
         &:hover { background-color: rgb(53, 53, 53); }
@@ -730,6 +870,10 @@ body.linux {
         &.left { border-color: 1px solid rgb(120, 120, 120); }
         &.right { border-color: 1px solid rgb(120, 120, 120); }
       }
+    }
+
+    div.tab-container {
+      background-color: rgb(11, 11, 11);
 
       div[role="tab"] {
         border-color: rgb(120, 120, 120);

@@ -147,12 +147,6 @@ function getContextMenu (): AnyMenuItem[] {
       id: 'new-tab',
       type: 'normal',
       enabled: true
-    },
-    {
-      label: trans('menu.quicklook'),
-      id: 'open-quicklook',
-      type: 'normal',
-      enabled: true
     }
   ]
 }
@@ -164,6 +158,12 @@ export default defineComponent({
     ProgressControl,
     ButtonControl,
     AutocompleteText
+  },
+  props: {
+    windowId: {
+      type: String,
+      required: true
+    }
   },
   emits: ['jtl'],
   data: function () {
@@ -187,9 +187,6 @@ export default defineComponent({
       toggleState: false,
       // Contains the current search's maximum (combined) weight across the results
       maxWeight: 0,
-      // Is set to a line number if this component is waiting for a file to
-      // become active.
-      jtlIntent: undefined as undefined|number,
       // The file list index of the most recently clicked search result.
       activeFileIdx: undefined as undefined|number,
       // The result line index of the most recently clicked search result.
@@ -292,19 +289,6 @@ export default defineComponent({
     }
   },
   watch: {
-    // We are sneaky here: The activeDocumentInfo is being updated *after* the
-    // editor has completed switching to a new document. If we have a jtl
-    // intent then, it is guaranteed that this means that our document has
-    // finished loading and the editor is able to handle our request as it is
-    // supposed to.
-    activeDocumentInfo: function (newValue, oldValue) {
-      // If we have an intention of jumping to a line,
-      // do so and unset the intent again.
-      if (this.jtlIntent !== undefined) {
-        this.$emit('jtl', this.jtlIntent)
-        this.jtlIntent = undefined
-      }
-    },
     fileTree: function () {
       this.recomputeDirectorySuggestions()
     }
@@ -480,13 +464,6 @@ export default defineComponent({
           case 'new-tab':
             this.jumpToLine(filePath, lineNumber, true)
             break
-          case 'open-quicklook':
-            ipcRenderer.invoke('application', {
-              command: 'open-quicklook',
-              payload: filePath
-            })
-              .catch(e => console.error(e))
-            break
         }
       })
     },
@@ -506,29 +483,7 @@ export default defineComponent({
       this.jumpToLine(filePath, lineNumber, isMiddleClick)
     },
     jumpToLine: function (filePath: string, lineNumber: number, openInNewTab: boolean = false) {
-      const isActiveFile = (this.activeFile !== null) ? this.activeFile.path === filePath : false
-
-      if (isActiveFile) {
-        this.$emit('jtl', lineNumber)
-      } else {
-        // The wanted file is not yet active -> Do so and then jump to the correct line
-        ipcRenderer.invoke('application', {
-          command: 'open-file',
-          payload: {
-            path: filePath,
-            newTab: openInNewTab // Open in a new tab if wanted
-          }
-        })
-          .then(() => {
-            // As soon as the file becomes active, jump to that line. But only
-            // if it's >= 0. If lineNumber === -1 it means just the file should
-            // be open.
-            if (lineNumber >= 0) {
-              this.jtlIntent = lineNumber
-            }
-          })
-          .catch(e => console.error(e))
-      }
+      this.$emit('jtl', filePath, lineNumber, openInNewTab)
     },
     markText: function (resultObject: SearchResult) {
       const startTag = '<span class="search-result-highlight">'

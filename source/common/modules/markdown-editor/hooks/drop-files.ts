@@ -24,7 +24,24 @@ interface XFileObject {
   id: string
 }
 
+function ignoreDocumentTabs (cm: CodeMirror.Editor, event: DragEvent): void {
+  if (event.dataTransfer === null) {
+    return
+  }
+
+  const documentTab = event.dataTransfer.getData('zettlr/document-tab')
+  if (documentTab !== undefined) {
+    // CodeMirror must ignore document tab actions
+    (event as any).codemirrorIgnore = true
+  }
+}
+
 export default function dropFilesHook (cm: CodeMirror.Editor): void {
+  // Hook into drag events to make sure Codemirror doesn't handle them
+  cm.on('dragenter', ignoreDocumentTabs)
+  cm.on('dragleave', ignoreDocumentTabs)
+  cm.on('dragover', ignoreDocumentTabs)
+
   cm.on('drop', (cm, event) => {
     if (event.dataTransfer === null) {
       return
@@ -32,7 +49,14 @@ export default function dropFilesHook (cm: CodeMirror.Editor): void {
 
     const zettlrFile = event.dataTransfer.getData('text/x-zettlr-file')
     const otherFile = event.dataTransfer.getData('text/x-zettlr-other-file')
+    const documentTab = event.dataTransfer.getData('zettlr/document-tab')
     const hasFiles = event.dataTransfer.files.length > 0
+
+    if (documentTab !== undefined) {
+      // CodeMirror must ignore document tab actions
+      (event as any).codemirrorIgnore = true
+      return
+    }
 
     if (zettlrFile === '' && otherFile === '' && !hasFiles) {
       return // Nothing we could do here

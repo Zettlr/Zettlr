@@ -160,6 +160,10 @@ export default defineComponent({
     obj: {
       type: Object as () => MDFileMeta|CodeFileMeta|DirMeta,
       required: true
+    },
+    windowId: {
+      type: String,
+      required: true
     }
   },
   computed: {

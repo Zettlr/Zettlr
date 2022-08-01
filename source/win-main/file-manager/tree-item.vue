@@ -114,6 +114,7 @@
         v-bind:is-currently-filtering="isCurrentlyFiltering"
         v-bind:depth="depth + 1"
         v-bind:active-item="activeItem"
+        v-bind:window-id="windowId"
       >
       </TreeItem>
     </div>
@@ -169,6 +170,10 @@ export default defineComponent({
     activeItem: {
       type: String,
       default: undefined
+    },
+    windowId: {
+      type: String,
+      required: true
     }
   },
   data: () => {

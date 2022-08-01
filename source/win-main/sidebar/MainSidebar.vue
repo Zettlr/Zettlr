@@ -37,12 +37,12 @@
 import { trans } from '@common/i18n-renderer'
 import TabBar from '@common/vue/TabBar.vue'
 import { defineComponent } from 'vue'
-import { MDFileMeta } from '@dts/common/fsal'
 import { TabbarControl } from '@dts/renderer/window'
 import ToCTab from './ToCTab.vue'
 import ReferencesTab from './ReferencesTab.vue'
 import RelatedFilesTab from './RelatedFilesTab.vue'
 import OtherFilesTab from './OtherFilesTab.vue'
+import { OpenDocument } from '@dts/common/documents'
 
 const ipcRenderer = window.ipc
 
@@ -103,14 +103,11 @@ export default defineComponent({
     relatedFilesLabel: function (): string {
       return trans('gui.related_files_label')
     },
-    activeFile: function (): MDFileMeta|null {
-      return this.$store.state.activeFile
+    activeFile: function (): OpenDocument|null {
+      return this.$store.getters.lastLeafActiveFile()
     },
     modifiedFiles: function (): string[] {
       return this.$store.state.modifiedDocuments
-    },
-    citationKeys: function (): string[] {
-      return this.$store.state.citationKeys
     }
   },
   watch: {

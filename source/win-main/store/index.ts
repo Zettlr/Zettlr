@@ -14,28 +14,36 @@
  * END HEADER
  */
 
-import { StoreOptions, createStore, Store } from 'vuex'
+import { StoreOptions, createStore as baseCreateStore, Store } from 'vuex'
+import { InjectionKey } from 'vue'
 import { CodeFileMeta, DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
 import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
 import { SearchResultWrapper } from '@dts/common/search'
 import { RelatedFile } from '@dts/renderer/misc'
 import locateByPath from '@providers/fsal/util/locate-by-path'
 import configToArrayMapper from './config-to-array'
+import { BranchNodeJSON, LeafNodeJSON, OpenDocument } from '@dts/common/documents'
 
 // Import Mutations
 import addToFiletreeMutation from './mutations/add-to-filetree'
 import removeFromFiletreeMutation from './mutations/remove-from-filetree'
 import patchInFiletreeMutation from './mutations/patch-in-filetree'
-import announceModifiedFileMutation from './mutations/announce-modified-file'
 import updateOpenDirectoryMutation from './mutations/update-open-directory'
+import documentTreeMutation from './mutations/document-tree'
 
 // Import Actions
 import filetreeUpdateAction from './actions/filetree-update'
 import regenerateTagSuggestionsAction from './actions/regenerate-tag-suggestions'
 import updateOpenDirectoryAction from './actions/update-open-directory'
-import updateActiveFileAction from './actions/update-active-file'
 import updateRelatedFilesAction from './actions/update-related-files'
 import updateBibliographyAction from './actions/update-bibliography'
+import documentTreeUpdateAction from './actions/document-tree-update'
+
+/**
+ * The injection key is required for store access from within composition API
+ * components
+ */
+export const key: InjectionKey<Store<ZettlrState>> = Symbol('store key')
 
 /**
  * This is the main window's store state, including all properties we have
@@ -50,6 +58,18 @@ export interface ZettlrState {
    */
   lastFiletreeUpdate: number
   /**
+   * Contains a full document tree managed by this window
+   */
+  paneStructure: BranchNodeJSON|LeafNodeJSON
+  /**
+   * Contains just the data points of the document tree
+   */
+  paneData: LeafNodeJSON[]
+  /**
+   * Holds the currently modified files alongside their last modification timestamp
+   */
+  modifiedFiles: Map<string, number>
+  /**
    * This array contains the paths of directories which are open (necessary to
    * keep the state during filtering, etc.)
    */
@@ -58,10 +78,12 @@ export interface ZettlrState {
    * Contains the currently selected directory
    */
   selectedDirectory: DirMeta|null
+  activeFile: null
   /**
-   * Contains the currently active File in the editor
+   * This property contains all leaf IDs on which the readability mode is
+   * currently active
    */
-  activeFile: MDFileMeta|null
+  readabilityModeActive: string[]
   /**
    * Files which are in some way related to the currently active file
    */
@@ -112,6 +134,16 @@ export interface ZettlrState {
    * This variable stores search results from the global search
    */
   searchResults: SearchResultWrapper[]
+  /**
+   * This describes the editor that was most recently focused. Can be used to,
+   * e.g., retrieve that state's activeFile.
+   */
+  lastLeafId: string|undefined
+  /**
+   * If any leaf is currently in distractionFree, this variable will hold its
+   * leafId. Otherwise, it's undefined.
+   */
+  distractionFreeMode: string|undefined
 }
 
 /**
@@ -123,11 +155,15 @@ function getConfig (): StoreOptions<ZettlrState> {
   const config: StoreOptions<ZettlrState> = {
     state () {
       return {
+        paneStructure: { type: 'leaf', id: '', openFiles: [], activeFile: null },
+        paneData: [],
         fileTree: [],
+        modifiedFiles: new Map(),
         lastFiletreeUpdate: 0,
+        readabilityModeActive: [],
+        activeFile: null,
         uncollapsedDirectories: [],
         selectedDirectory: null,
-        activeFile: null,
         relatedFiles: [],
         colouredTags: [],
         tagDatabase: [],
@@ -138,6 +174,8 @@ function getConfig (): StoreOptions<ZettlrState> {
         tableOfContents: null,
         citationKeys: [],
         bibliography: undefined,
+        lastLeafId: undefined,
+        distractionFreeMode: undefined,
         cslItems: [],
         searchResults: []
       }
@@ -145,6 +183,14 @@ function getConfig (): StoreOptions<ZettlrState> {
     getters: {
       file: state => (filePath: string): MDFileMeta|CodeFileMeta|OtherFileMeta|DirMeta|undefined => {
         return locateByPath(state.fileTree, filePath) as any
+      },
+      lastLeafActiveFile: state => (): OpenDocument|null => {
+        const leaf = state.paneData.find(leaf => leaf.id === state.lastLeafId)
+        if (leaf !== undefined) {
+          return leaf.activeFile
+        } else {
+          return null
+        }
       }
     },
     mutations: {
@@ -153,6 +199,23 @@ function getConfig (): StoreOptions<ZettlrState> {
       },
       activeDocumentInfo: function (state, info) {
         state.activeDocumentInfo = info
+      },
+      lastLeafId: function (state, leafId: string|undefined) {
+        state.lastLeafId = leafId
+      },
+      toggleDistractionFree: function (state) {
+        if (state.distractionFreeMode === undefined && state.lastLeafId !== undefined) {
+          state.distractionFreeMode = state.lastLeafId
+        } else if (state.distractionFreeMode !== undefined && state.lastLeafId === state.distractionFreeMode) {
+          state.distractionFreeMode = undefined
+        } else if (state.distractionFreeMode !== undefined && state.lastLeafId !== state.distractionFreeMode) {
+          state.distractionFreeMode = state.lastLeafId
+        }
+      },
+      leaveDistractionFree: function (state) {
+        if (state.distractionFreeMode !== undefined) {
+          state.distractionFreeMode = undefined
+        }
       },
       addUncollapsedDirectory: function (state, dirPath) {
         if (!state.uncollapsedDirectories.includes(dirPath)) {
@@ -172,17 +235,28 @@ function getConfig (): StoreOptions<ZettlrState> {
           state.uncollapsedDirectories = oldUncollapsed
         }
       },
+      addReadabilityActiveLeaf (state, leaf) {
+        if (!state.readabilityModeActive.includes(leaf)) {
+          state.readabilityModeActive.push(leaf)
+        }
+      },
+      removeReadabilityActiveLeaf (state, leaf) {
+        const idx = state.readabilityModeActive.indexOf(leaf)
+        if (idx > -1) {
+          state.readabilityModeActive.splice(idx, 1)
+        }
+      },
       updateConfig: function (state, option) {
         state.config[option] = window.config.get(option)
       },
       lastFiletreeUpdate: function (state, payload) {
         state.lastFiletreeUpdate = payload
       },
-      updateActiveFile: function (state, descriptor) {
-        state.activeFile = descriptor
-      },
       updateRelatedFiles: function (state, relatedFiles: RelatedFile[]) {
         state.relatedFiles = relatedFiles
+      },
+      updateModifiedFiles: function (state, modifiedFiles: Map<string, number>) {
+        state.modifiedFiles = modifiedFiles
       },
       colouredTags: function (state, tags) {
         state.colouredTags = tags
@@ -212,8 +286,8 @@ function getConfig (): StoreOptions<ZettlrState> {
         // b-a reversal, since we want a descending sort)
         state.searchResults.sort((a, b) => b.weight - a.weight)
       },
+      documentTree: documentTreeMutation,
       // Longer mutations that require more code are defined externally
-      announceModifiedFile: announceModifiedFileMutation,
       updateOpenDirectory: updateOpenDirectoryMutation,
       addToFiletree: addToFiletreeMutation,
       patchInFiletree: patchInFiletreeMutation,
@@ -222,10 +296,17 @@ function getConfig (): StoreOptions<ZettlrState> {
     actions: {
       filetreeUpdate: filetreeUpdateAction,
       updateOpenDirectory: updateOpenDirectoryAction,
-      updateActiveFile: updateActiveFileAction,
+      lastLeafId: async function (ctx, lastLeafId: string) {
+        ctx.commit('lastLeafId', lastLeafId)
+        // Update the tag suggestions
+        await ctx.dispatch('regenerateTagSuggestions')
+        // Update the related files
+        await ctx.dispatch('updateRelatedFiles')
+      },
       regenerateTagSuggestions: regenerateTagSuggestionsAction,
       updateRelatedFiles: updateRelatedFilesAction,
-      updateBibliography: updateBibliographyAction
+      updateBibliography: updateBibliographyAction,
+      documentTree: documentTreeUpdateAction
     }
   }
 
@@ -237,6 +318,6 @@ function getConfig (): StoreOptions<ZettlrState> {
  *
  * @return  {Store<ZettlrState>}  The instantiated store
  */
-export default function (): Store<ZettlrState> {
-  return createStore(getConfig())
+export default function createStore (): Store<ZettlrState> {
+  return baseCreateStore<ZettlrState>(getConfig())
 }

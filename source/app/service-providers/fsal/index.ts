@@ -462,6 +462,29 @@ export default class FSAL extends ProviderContract {
   }
 
   /**
+   * This is the public counterpart of the private file loader. It allows to
+   * conveniently load any file that is supported by the editor component.
+   *
+   * @param   {string}   filePath                          The absolute file path to load
+   *
+   * @return  {Promise<MDFileMeta|CodeFileMeta|undefined>} Resolves with a meta descriptor (including content) upon success
+   */
+  public async loadAnySupportedFile (filePath: string): Promise<MDFileMeta|CodeFileMeta|undefined> {
+    if (hasCodeExt(filePath)) {
+      const file = await FSALCodeFile.parse(filePath, this._cache)
+      const metadata = FSALCodeFile.metadata(file)
+      metadata.content = await FSALCodeFile.load(file)
+      return metadata
+    } else if (hasMarkdownExt(filePath)) {
+      const parser = this.getMarkdownFileParser()
+      const file = await FSALFile.parse(filePath, this._cache, parser, this._targets, this._tags)
+      const metadata = FSALFile.metadata(file)
+      metadata.content = await FSALFile.load(file)
+      return metadata
+    }
+  }
+
+  /**
    * Loads a directory tree into the FSAL recursively.
    * @param {String} dirPath The dir to be loaded
    */

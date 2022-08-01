@@ -92,7 +92,7 @@ export default function getMenu (
               label: 'Markdown', // TODO: Translate
               accelerator: 'Ctrl+N',
               click: function (menuitem, focusedWindow) {
-                commands.run('new-unsaved-file', { type: 'md' })
+                commands.run('file-new', { type: 'md' })
                   .catch(e => logger.error(String(e.message), e))
               }
             },
@@ -100,7 +100,7 @@ export default function getMenu (
               id: 'menu.new_tex_file',
               label: 'TeX', // TODO: Translate
               click: function (menuitem, focusedWindow) {
-                commands.run('new-unsaved-file', { type: 'tex' })
+                commands.run('file-new', { type: 'tex' })
                   .catch(e => logger.error(String(e.message), e))
               }
             },
@@ -108,7 +108,7 @@ export default function getMenu (
               id: 'menu.new_yaml_file',
               label: 'YAML', // TODO: Translate
               click: function (menuitem, focusedWindow) {
-                commands.run('new-unsaved-file', { type: 'yaml' })
+                commands.run('file-new', { type: 'yaml' })
                   .catch(e => logger.error(String(e.message), e))
               }
             },
@@ -116,7 +116,7 @@ export default function getMenu (
               id: 'menu.new_json_file',
               label: 'JSON', // TODO: Translate
               click: function (menuitem, focusedWindow) {
-                commands.run('new-unsaved-file', { type: 'json' })
+                commands.run('file-new', { type: 'json' })
                   .catch(e => logger.error(String(e.message), e))
               }
             }
@@ -212,8 +212,7 @@ export default function getMenu (
           label: trans('menu.print'),
           accelerator: 'Ctrl+P',
           click: function (menuItem, focusedWindow) {
-            commands.run('print', undefined)
-              .catch(e => logger.error(String(e.message), e))
+            focusedWindow?.webContents.send('shortcut', 'print')
           }
         },
         {
@@ -448,23 +447,15 @@ export default function getMenu (
           id: 'menu.toggle_distraction_free',
           label: trans('menu.toggle_distraction_free'),
           accelerator: 'Ctrl+J',
-          type: 'checkbox',
-          checked: getCheckboxState('menu.toggle_distraction_free', false),
           click: function (menuitem, focusedWindow) {
-            const currentState = getCheckboxState('menu.toggle_distraction_free', false)
-            setCheckboxState('menu.toggle_distraction_free', !currentState)
-            focusedWindow?.webContents.send('shortcut', 'toggle-distraction-free' /*, menuitem.checked */)
+            focusedWindow?.webContents.send('shortcut', 'toggle-distraction-free')
           }
         },
         {
           id: 'menu.toggle_typewriter_mode',
           label: trans('menu.toggle_typewriter_mode'),
           accelerator: 'Ctrl+Alt+T',
-          type: 'checkbox',
-          checked: getCheckboxState('menu.toggle_typewriter_mode', false),
           click: function (menuitem, focusedWindow) {
-            const currentState = getCheckboxState('menu.toggle_typewriter_mode', false)
-            setCheckboxState('menu.toggle_typewriter_mode', !currentState)
             focusedWindow?.webContents.send('shortcut', 'toggle-typewriter-mode')
           }
         },
@@ -598,6 +589,14 @@ export default function getMenu (
           accelerator: 'Ctrl+Tab',
           click: function (menuitem, focusedWindow) {
             focusedWindow?.webContents.send('shortcut', 'next-tab')
+          }
+        },
+        {
+          id: 'menu.new_window',
+          label: 'New window',
+          accelerator: 'CmdOrCtrl+Shift+N',
+          click: function (menuItem, focusedWindow) {
+            windows.newMainWindow()
           }
         }
       ]

@@ -182,14 +182,6 @@ module.exports = {
             },
             {
               html: './static/index.htm',
-              js: './source/win-quicklook/index.ts',
-              name: 'quicklook',
-              preload: {
-                js: './source/common/modules/preload/index.ts'
-              }
-            },
-            {
-              html: './static/index.htm',
               js: './source/win-preferences/index.ts',
               name: 'preferences',
               preload: {

@@ -24,7 +24,7 @@ const ALLOWED_FILETYPES = mdFileExtensions(true)
 
 export default class FileNew extends ZettlrCommand {
   constructor (app: any) {
-    super(app, [ 'file-new', 'new-unsaved-file' ])
+    super(app, ['file-new'])
   }
 
   /**
@@ -33,7 +33,7 @@ export default class FileNew extends ZettlrCommand {
    * @param  {Object} arg An object containing a hash of containing directory and a file name.
    * @return {void}     This function does not return anything.
    */
-  async run (evt: string, arg: { name?: string, path?: string, type?: 'md'|'yaml'|'json'|'tex' }): Promise<void> {
+  async run (evt: string, arg: { leafId?: string, windowId?: string, name?: string, path?: string, type: 'md'|'yaml'|'json'|'tex' }): Promise<void> {
     // A few notes on how this command works with respect to its input. As you
     // can see, all parameters are optional and all which are missing will be
     // inferred from context (otherwise the command will fail). The type
@@ -46,13 +46,23 @@ export default class FileNew extends ZettlrCommand {
     const filenamePattern = this._app.config.get('newFileNamePattern')
     const idGenPattern = this._app.config.get('zkn.idGen')
     const generatedName = generateFilename(filenamePattern, idGenPattern)
+    const leafId = arg.leafId
 
-    if (evt === 'new-unsaved-file' && shouldPromptUser) {
-      // We should simply create a new unsaved file that only resides in memory
-      const file = await this._app.documents.newUnsavedFile(type)
-      // Set it as active
-      this._app.documents.activeFile = file
-      return // Return early
+    if (arg.windowId === undefined) {
+      // The caller didn't provide a window number. This can happen with, e.g.
+      // menu items. But since we want to fulfill the user's wish, we first try
+      // to fallback onto any main window and only fail otherwise.
+      const firstMainWindow = this._app.windows.getFirstMainWindow()
+      if (firstMainWindow !== undefined) {
+        arg.windowId = this._app.windows.getMainWindowKey(firstMainWindow)
+      }
+    }
+
+    const windowId = arg.windowId
+
+    if (windowId === undefined) {
+      this._app.log.error('Cannot create new file: No window id provided')
+      return
     }
 
     let dir = this._app.fsal.openDirectory
@@ -62,7 +72,13 @@ export default class FileNew extends ZettlrCommand {
     }
 
     if (dir === null) {
-      this._app.log.error(`Could not create new file ${arg.name as string}: No directory selected!`)
+      const msg = 'Could not create new file: No directory selected!'
+      this._app.windows.prompt({
+        title: 'Could not create new file',
+        message: msg,
+        type: 'error'
+      })
+      this._app.log.error(msg)
       return
     }
 
@@ -136,7 +152,7 @@ export default class FileNew extends ZettlrCommand {
       })
 
       // And directly thereafter, open the file
-      await this._app.documents.openFile(path.join(dir.path, filename), true)
+      await this._app.documents.openFile(windowId, leafId, path.join(dir.path, filename), true)
     } catch (err: any) {
       this._app.log.error(`Could not create file: ${err.message as string}`)
       this._app.windows.prompt({

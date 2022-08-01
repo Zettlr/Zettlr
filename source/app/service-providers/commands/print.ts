@@ -31,10 +31,7 @@ export default class Print extends ZettlrCommand {
    * @return {Boolean} Whether the command ran successful
    */
   async run (evt: string, arg?: string): Promise<void> {
-    let filePath = this._app.documents.activeFile?.path
-    if (arg !== undefined) {
-      filePath = arg
-    }
+    const filePath = arg
 
     if (filePath == null) {
       this._app.log.error('[Print] Cannot print document: Not found.')

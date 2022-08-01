@@ -48,8 +48,12 @@ export default function computeCSS (edgeButtonSize: number): Element {
      elements of CodeMirror */
   .table-helper-align-button-container,
   .table-helper-remove-button-container,
-  .table-helper-add-button {
+  .table-helper-save-status-button {
     z-index: 2;
+  }
+
+  .table-helper-add-button {
+    z-index: 3;
   }
 
   .table-helper-align-button-container {
@@ -126,10 +130,6 @@ export default function computeCSS (edgeButtonSize: number): Element {
     height: ${edgeButtonSize * 0.1}px;
   }
 
-  .table-helper-remove-button {
-    /*transform-origin: center center;*/
-  }
-
   .table-helper-remove-button.row .table-helper-remove-button-line {
     position: absolute;
     top: ${edgeButtonSize / 2}px;
@@ -153,16 +153,16 @@ export default function computeCSS (edgeButtonSize: number): Element {
 
   /* row */
   .table-helper-remove-button.row .table-helper-remove-button-line:nth-child(3) {
-    transform: rotate(0deg)
-    width:
+    transform: rotate(0deg);
   }
 
   /* col */
   .table-helper-remove-button.col .table-helper-remove-button-line:nth-child(3) {
-    transform: rotate(90deg)
+    transform: rotate(90deg);
   }
 
-  .table-helper-add-button {
+  .table-helper-add-button,
+  .table-helper-save-status-button {
     opacity: 0.25;
     transition: 0.2s opacity ease;
     width: ${edgeButtonSize}px;
@@ -177,7 +177,24 @@ export default function computeCSS (edgeButtonSize: number): Element {
     position: absolute;
     font-weight: bold;
   }
-  .table-helper-add-button:hover { opacity: 1; }
+
+  .table-helper-save-status-button {
+    border-radius: ${edgeButtonSize * 0.25}px;
+    background-color: rgb(255, 176, 176);
+  }
+
+  .table-helper-save-status-button.is-clean {
+    background-color: rgb(180, 240, 170);
+  }
+
+  .table-helper-save-status-button svg {
+    height: 50%;
+  }
+
+  .table-helper-add-button:hover,
+  .table-helper-save-status-button:hover {
+    opacity: 1;
+  }
 `
 
   return styleNode

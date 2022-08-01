@@ -18,6 +18,20 @@ import { OpenDocument } from '@dts/common/documents'
 import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
 import { AnyMenuItem } from '@dts/renderer/context'
 
+export function displayTabbarContext (event: MouseEvent, callback: (clickedID: string) => void): void {
+  const items: AnyMenuItem[] = [
+    {
+      label: 'Close leaf',
+      id: 'close-leaf',
+      type: 'normal',
+      enabled: true
+    }
+  ]
+
+  const point = { x: event.clientX, y: event.clientY }
+  showPopupMenu(point, items, callback)
+}
+
 export default function displayTabsContext (event: MouseEvent, fileObject: MDFileMeta|CodeFileMeta, doc: OpenDocument, callback: (clickedID: string) => void): void {
   const items: AnyMenuItem[] = [
     {

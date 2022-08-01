@@ -1,5 +1,75 @@
 # Upcoming
 
+## READ THIS FIRST!
+
+This update brings a host of changes and new features. If you're upgrading from
+an older version of Zettlr, you will have to re-do a few things because due to
+the extensive changes, we had to adapt how your data is persisted. Here's the
+quick list:
+
+1. Your open documents will have to be re-opened once. Regardless of which files
+   were open previously, they will all be closed after the update.
+2. There are no more unsaved in-memory files.
+3. Two default settings have changed in order to maximize benefits from the new
+   features: Avoid new tabs is now set to false (since split-panes also allows
+   you to spread out your open documents across several panes and windows), and
+   Always reload remote changes is now set to true by default.
+4. The defaults system has changed. You will see new export options that weren't
+   there before, and you will see some weird `export.format.yaml` and
+   `import.format.yaml` export options. These are the "old" profiles we have
+   kept in case you made modifications. We suggest you copy over all changes to
+   the new profiles and then delete them, or rename those old ones to more
+   memorable names. Read more below.
+5. The TableEditor has received a better save strategy to prevent data loss. As
+   it is impossible to fully control the data flow from the visual table element
+   into the underlying Markdown document, this data flow is now explicit: Tables
+   now feature a save button (with a disk icon) at the top of the table. Its
+   background will be green as long as the table has not been modified. Once it
+   it modified, the background will turn red. Click the button to apply all
+   changes to the document.
+6. Quicklook windows are completely gone now.
+
+## Split-Panes and Multiple Windows
+
+A long awaited feature has made it into this version: Now you can open multiple
+windows and you can split the editor area in every window into multiple parts,
+so-called editor _panes_ (sometimes we may call them "leafs" since internally
+they are represented as a tree structure. Feel free to remind us in that case
+that we're talking to humans, not our code). This means you can now open as many
+files as you wish at the same time, and you can spread them out across multiple
+windows. This will especially benefit workflows that rely on having open
+multiple files side by side to copy information or to read them. However, if you
+are happy with the old ways, you can of course opt not to use them. Here's how
+it works:
+
+* You can open a new window by choosing the corresponding menu item in the
+  Windows submenu, or by pressing `Cmd/Ctrl+Shift+N`.
+* You can now drag document tabs not just within the tab bar, but also onto the
+  editor area. If you move a document tab to the borders of the editor, a
+  shimmer will appear that indicates that you can split the editor to that side.
+  If you drop the file on one of the four borders of the editor, this will split
+  the corresponding editor in two along the specified direction (left, right,
+  top, bottom) and also move the file into that new pane.
+* You can also move document tabs between multiple panes by simply dropping them
+  in the center of an editor pane. As long as there's no shimmer, the file will
+  be moved instead.
+* After you have closed the last file inside such a pane, it will automatically
+  close itself. If the pane was part of a split, the other pane will then occupy
+  the place of the now closed editor pane. To create the pane again, simply drag
+  another file to the correct border of an existing editor pane.
+* You can resize the panes at will. Unlike the sidebar and file manager, we have
+  not implemented any size limits, so with a little bit of care, you can create
+  your unique mosaique of files.
+* Since we are now not limited to one active file and one set of open files per
+  window, these notions have changed their meaning. Now, every editor pane has
+  one set of open files and one active file. Each window also remembers which
+  pane was last active so that global features (such as the sidebar) can show
+  you information based on the most recently focused editor pane's active file.
+* Most contextual information (table of contents, list of references, etc.) will
+  now update based on the most recently focused editor. In order to make those
+  places show information relating to one of the open editors, simply click with
+  your mouse inside to focus them.
+
 ## New Defaults/Profile File System
 
 This update introduces a new way to work with defaults files. At a glance,
@@ -31,12 +101,14 @@ Since Zettlr will never remove any data without asking, it will keep the
 previous files in your defaults directory. Now that their filename is also
 meaningful, you can see them by their naming structure: `import.format.yaml` and
 `export.format.yaml`. You are free to remove them or rename and keep them.
-Zettlr ships with a set of new files that are now additionally appropriately
-named.
 
-> Please note that it is not possible to remove this minimal set of profiles;
-> Zettlr will always recreate these files upon start. If you do not use Zettlr
-> for importing or exporting files, you can simply ignore them.
+Zettlr ships with a set of new files that are now additionally appropriately
+named. Those files are "protected". Protected files have a small lock icon next
+to their name. Protected means that if you delete or rename them, they will
+automatically be recreated. You can use this to your advantage: By deleting such
+a file, you are effectively resetting it to factory default (good if you forgot
+what you changed). By renaming such a file, you can effectively make a copy to
+have several versions of the same settings depending on your needs.
 
 #### Reveal.js Presentations
 
@@ -67,13 +139,33 @@ Supported theme values are:
 * `solarized`
 * `white`
 
+Then, in order to get a working reveal.js presentation, you have to make sure
+that the property `standalone: true` is inside the profile (this is the
+default). In order to additionally copy everything into the HTML file to create
+a truly self-contained presentation, set the property `self-contained: true`.
+
+All other things should work as before, but may require a small tweak here or
+there.
+
 ## GUI and Functionality
 
+- **New Feature**: You can now open multiple main windows, each with their own
+  files loaded
+- **New Feature**: You can now arbitrarily split the editor area into multiple
+  editor panes to keep open as many files at the same time as you wish
 - **New Feature**: After a long time, you can now again drag and drop entries in
   the table of contents in the sidebar to rearrange sections of your file
 - **New Feature**: Overhauled, improved, and streamlined the defaults file
   system used by the importer and exporter
 - **New Feature**: You can now pin tabs, which prevents them from being closed
+- The TableEditor now has a clear data saving strategy: Whenever you change a
+  table, you need to manually click the disk icon at the top of the table to
+  apply all your changes to the document so that it can then be saved
+- Quicklook windows are gone completely now, since they can be more than
+  replaced by the new split views and multiple windows
+- The windows now finally correctly remember their positions, fixing an old bug
+- Improved the link tooltip inside the editor; it will show faster now and is
+  easier to access
 - Code files (e.g. `*.tex` or `*.json`) now have line numbers enabled and the
   margins of the main editor removed by default
 - The sidebar tabs are now static at the top, meaning you don't have to scroll

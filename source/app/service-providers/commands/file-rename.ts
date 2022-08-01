@@ -47,9 +47,7 @@ export default class FileRename extends ZettlrCommand {
       return this._app.log.error(`Could not find file ${String(arg.path)}`)
     }
 
-    // Find the file within the open documents
-    const documentDescriptor = this._app.documents.openFiles.find(e => e.path === file.path)
-    if (documentDescriptor?.modified === true) {
+    if (this._app.documents.isModified(file.path)) {
       // Make sure to not rename a file if it contains unsaved changes. People who
       // have autosave activated are pretty likely to never see this message box
       // either way.
@@ -79,28 +77,28 @@ export default class FileRename extends ZettlrCommand {
     // Check if the file was currently open. Since only the FSAL will get the
     // info, we should close immediately, in order to prevent a "zombie" file
     // to remain open in the document manager.
-    const wasActive = this._app.documents.activeFile?.path === file.path
-    const wasOpen = documentDescriptor !== undefined
-    if (documentDescriptor !== undefined) {
-      const result = await this._app.commands.run('file-close', documentDescriptor.path)
-      if (result === false) {
-        this._app.log.warning(`[FileRename] Not renaming ${documentDescriptor.path}.`)
-        return
-      }
-    }
+    // const wasActive = this._app.documents.activeFile?.path === file.path
+    // const wasOpen = documentDescriptor !== undefined
+    // if (documentDescriptor !== undefined) {
+    //   const result = await this._app.commands.run('file-close', documentDescriptor.path)
+    //   if (result === false) {
+    //     this._app.log.warning(`[FileRename] Not renaming ${documentDescriptor.path}.`)
+    //     return
+    //   }
+    // } TODO TODO
 
     try {
       await this._app.fsal.renameFile(file, newName)
       // NOTE: At this point, `file` will contain the _new_ information which
       // we can now use to re-set the documentManager's state if need be.
-      if (wasOpen) {
-        // NOTE: We must open in a new tab regardless of setting, since in this
-        // case we have programmatically closed the file
-        await this._app.documents.openFile(file.path, true)
-      }
-      if (wasActive) {
-        this._app.documents.activeFile = file
-      }
+      // if (wasOpen) {
+      //   // NOTE: We must open in a new tab regardless of setting, since in this
+      //   // case we have programmatically closed the file
+      //   await this._app.documents.openFile(file.path, true)
+      // }
+      // if (wasActive) {
+      //   this._app.documents.activeFile = file
+      // } TODO TODO
     } catch (e: any) {
       this._app.log.error(`Error during renaming file: ${e.message as string}`, e)
     }

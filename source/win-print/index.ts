@@ -7,7 +7,7 @@
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     Controls a single Quicklook window
+ * Description:     Controls the print preview window
  *
  * END HEADER
  */

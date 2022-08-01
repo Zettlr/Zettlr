@@ -72,6 +72,13 @@ export default defineComponent({
       }
     }
   },
+  watch: {
+    control () {
+      // Enable the caller to re-set the initialState property whenever needed
+      // to programmatically enable/disable the toggle
+      this.isActive = this.control.initialState === true
+    }
+  },
   methods: {
     toggle: function () {
       this.isActive = !this.isActive
