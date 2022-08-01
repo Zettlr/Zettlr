@@ -14,7 +14,7 @@ In dieser letzten Einführung wollen wir dir zeigen, wie du deine Literatur mit 
 
 Um mit Zettlr zu zitieren, sind einige wenige Vorarbeiten nötig, wie das aufsetzen einer Literaturdatenbank. Das haben wir aber [im Zettlr-Handbuch ausführlich beschrieben](https://docs.zettlr.com/de/academic/citations/). Für dieses Tutorial haben wir dir bereits eine kleine Literaturdatenbank erstellt, sodass du das jetzt noch nicht machen musst. Lass uns diese nun erst laden!
 
-Öffne die Einstellungen und wechsle zum „Exportieren“-Reiter. Dort kannst du eine „CSL-Datenbank“ auswählen. Die Datenbank ist im Tutorial-Ordner. Wenn du sie gefunden hast, speichere die Einstellungen. Zettlr wird die Datenbank nun automatisch laden.
+Öffne die Einstellungen und wechsle zum „Zietieren“-Reiter. Dort kannst du eine „CSL-Datenbank“ auswählen. Die Datenbank ist im Tutorial-Ordner. Wenn du sie gefunden hast, speichere die Einstellungen. Zettlr wird die Datenbank nun automatisch laden.
 
 ## Deine erste Zitation 🎓
 
