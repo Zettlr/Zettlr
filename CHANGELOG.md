@@ -166,6 +166,7 @@ there.
 - The windows now finally correctly remember their positions, fixing an old bug
 - Improved the link tooltip inside the editor; it will show faster now and is
   easier to access
+- Zettlr now recognizes Quarto Markdown files (`*.qmd`)
 - Code files (e.g. `*.tex` or `*.json`) now have line numbers enabled and the
   margins of the main editor removed by default
 - The sidebar tabs are now static at the top, meaning you don't have to scroll

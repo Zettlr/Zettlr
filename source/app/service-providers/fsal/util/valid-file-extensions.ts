@@ -21,7 +21,7 @@
  * @return  {string[]}               The list of valid file extensions
  */
 export function mdFileExtensions (withDot = false): string[] {
-  const ext = [ 'md', 'rmd', 'markdown', 'txt', 'mdx', 'mkd' ]
+  const ext = [ 'md', 'rmd', 'qmd', 'markdown', 'txt', 'mdx', 'mkd' ]
 
   return (withDot) ? ext.map(e => '.' + e) : ext
 }
