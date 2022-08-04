@@ -49,7 +49,10 @@ export default function createMainWindow (
     minHeight: 200,
     show: false,
     webPreferences: {
+      // contextIsolation and sandbox mean: Preload scripts have access to
+      // Node modules, the renderers not
       contextIsolation: true,
+      sandbox: false,
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY
     }
   }

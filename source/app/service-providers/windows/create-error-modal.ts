@@ -45,7 +45,10 @@ export default function createErrorModal (logger: LogProvider, config: ConfigPro
     show: false,
     fullscreenable: false,
     webPreferences: {
+      // contextIsolation and sandbox mean: Preload scripts have access to
+      // Node modules, the renderers not
       contextIsolation: true,
+      sandbox: false,
       additionalArguments: [ title, message, contents ],
       preload: ERROR_PRELOAD_WEBPACK_ENTRY
     }

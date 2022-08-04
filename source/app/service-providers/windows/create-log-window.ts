@@ -41,7 +41,10 @@ export default function createLogWindow (logger: LogProvider, config: ConfigProv
     y: conf.y,
     show: false,
     webPreferences: {
+      // contextIsolation and sandbox mean: Preload scripts have access to
+      // Node modules, the renderers not
       contextIsolation: true,
+      sandbox: false,
       preload: LOG_VIEWER_PRELOAD_WEBPACK_ENTRY
     }
   }
