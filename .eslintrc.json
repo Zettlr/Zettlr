@@ -82,6 +82,10 @@
         "@typescript-eslint/no-misused-promises": [ "warn" ],
         "@typescript-eslint/strict-boolean-expressions": [ "warn" ],
         // Only warn if there's no array comparison given
-        "@typescript-eslint/require-array-sort-compare": [ "warn" ]
+        "@typescript-eslint/require-array-sort-compare": [ "warn" ],
+        // If we activate this rule, we have about 500 errors that there are no
+        // spaces around | operators. Hasn't been a problem until now, won't be
+        // one in the future.
+        "@typescript-eslint/space-infix-ops": "off"
     }
 }
