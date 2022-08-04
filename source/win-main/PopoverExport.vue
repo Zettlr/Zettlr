@@ -41,7 +41,6 @@
 
 import RadioControl from '@common/vue/form/elements/Radio.vue'
 import SelectControl from '@common/vue/form/elements/Select.vue'
-import FormBuilder from '@common/vue/form/Form.vue'
 import { defineComponent } from 'vue'
 import { PandocProfileMetadata } from '@dts/common/assets'
 import { SUPPORTED_READERS } from '@common/util/pandoc-maps'
@@ -55,8 +54,7 @@ export default defineComponent({
   name: 'PopoverExport',
   components: {
     SelectControl,
-    RadioControl,
-    FormBuilder
+    RadioControl
   },
   data: function () {
     return {
@@ -68,10 +66,10 @@ export default defineComponent({
     }
   },
   computed: {
-    filename () {
+    filename (): string {
       return path.basename(this.filePath)
     },
-    popoverData: function () {
+    popoverData: function (): any {
       const data: any = {
         shouldExport: this.shouldExport,
         profile: this.profileMetadata.find(e => e.name === this.format),
