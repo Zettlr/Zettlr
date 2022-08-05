@@ -201,6 +201,9 @@ there.
 - Upgrade Electron to `v18.0.0`
 - Pandoc logs are now logged in every case
 - Improve the display and functionality of log messages
+- Switched the configuration file management for the different service providers
+  from the previously very bodged methods to the unified and new
+  PersistentDataContainer
 
 # 2.3.0
 

@@ -13,12 +13,12 @@
  * END HEADER
  */
 
-import { promises as fs } from 'fs'
 import path from 'path'
 import { app, ipcMain } from 'electron'
 import ProviderContract from '../provider-contract'
 import LogProvider from '../log'
 import { Stats } from '@dts/main/stats-provider'
+import PersistentDataContainer from '@common/modules/persistent-data-container'
 
 /**
  * ZettlrStats works like the ZettlrConfig object, only with a different file.
@@ -28,10 +28,9 @@ import { Stats } from '@dts/main/stats-provider'
  * anyone.)
  */
 export default class StatsProvider extends ProviderContract {
-  private readonly statsPath: string
   private readonly statsFile: string
+  private readonly container: PersistentDataContainer
   private stats: Stats
-  private hasBooted: boolean
 
   /**
    * Preset sane defaults and load an existing stats file if present
@@ -39,8 +38,8 @@ export default class StatsProvider extends ProviderContract {
    */
   constructor (private readonly _logger: LogProvider) {
     super()
-    this.statsPath = app.getPath('userData')
-    this.statsFile = path.join(this.statsPath, 'stats.json')
+    this.statsFile = path.join(app.getPath('userData'), 'stats.json')
+    this.container = new PersistentDataContainer(this.statsFile, 'json')
     this.stats = {
       wordCount: {},
       pomodoros: {},
@@ -48,8 +47,6 @@ export default class StatsProvider extends ProviderContract {
       today: 0,
       sumMonth: 0
     }
-
-    this.hasBooted = false
 
     ipcMain.handle('stats-provider', (event, payload) => {
       const { command } = payload
@@ -64,7 +61,7 @@ export default class StatsProvider extends ProviderContract {
    */
   async shutdown (): Promise<void> {
     this._logger.verbose('Stats provider shutting down ...')
-    await this.save()
+    this.container.shutdown()
   }
 
   /**
@@ -90,10 +87,6 @@ export default class StatsProvider extends ProviderContract {
       this.stats.wordCount[this.today] = 0
     }
 
-    // Trigger a save. _recompute is being called from all the different setters
-    // after anything changes. NOTE: Remember this for future stuff!
-    await this.save()
-
     // Compute average
     let allwords = []
     for (let day in this.stats.wordCount) {
@@ -115,6 +108,10 @@ export default class StatsProvider extends ProviderContract {
     // Average last month
     this.stats.avgMonth = Math.round(this.stats.sumMonth / allwords.length)
     this.stats.today = this.stats.wordCount[this.today]
+
+    // Trigger a save. _recompute is being called from all the different setters
+    // after anything changes. NOTE: Remember this for future stuff!
+    this.container.set(this.stats)
   }
 
   /**
@@ -122,12 +119,12 @@ export default class StatsProvider extends ProviderContract {
    */
   async boot (): Promise<void> {
     this._logger.verbose('Stats provider booting up')
-    try {
-      const data = await fs.readFile(this.statsFile, { encoding: 'utf8' })
-      const parsedData = JSON.parse(data)
-      // We cannot safe assign because the wordCount and pomodoros are
-      // dictionaries, and it doesn't work for those (as the stats object
-      // does not contain the properties of the saved state).
+
+    if (!await this.container.isInitialized()) {
+      // Stats container is not yet initialized
+      await this.container.init(this.stats)
+    } else {
+      const parsedData = await this.container.get()
       this.stats = {
         wordCount: parsedData.wordCount,
         pomodoros: parsedData.pomodoros,
@@ -135,12 +132,6 @@ export default class StatsProvider extends ProviderContract {
         today: parsedData.today,
         sumMonth: parsedData.sumMonth
       }
-      this.hasBooted = true
-      await this._recompute()
-    } catch (err) {
-      // Write initial file
-      this.hasBooted = true
-      await this.save()
     }
   }
 
@@ -162,7 +153,8 @@ export default class StatsProvider extends ProviderContract {
       this.stats.wordCount[this.today] = this.stats.wordCount[this.today] + val
     }
 
-    this._recompute().catch(e => this._logger.error(`[Stats Provider] Error during recomputing: ${e.message as string}`, e))
+    this._recompute()
+      .catch(e => this._logger.error(`[Stats Provider] Error during recomputing: ${e.message as string}`, e))
   }
 
   /**
@@ -176,29 +168,8 @@ export default class StatsProvider extends ProviderContract {
       this.stats.pomodoros[this.today] = this.stats.pomodoros[this.today] + 1
     }
 
-    this._recompute().catch(e => this._logger.error(`[Stats Provider] Error during recomputing: ${e.message as string}`, e))
-  }
-
-  /**
-   * Write the statistics (e.g. on app exit)
-   */
-  async save (): Promise<void> {
-    // We have to explicitly check whether this provider has been booted,
-    // because I've had the pleasure multiple times now that, if the boot()
-    // method has not yet finished and the app is being shut down already (or
-    // anything else triggers the save() method), that this will basically write
-    // empty data into the file, thereby overwriting everything that has been
-    // collected, which is especially bad regarding years of stats. I've lost
-    // multiple months already because I couldn't explain this bug (today's the
-    // first time after two years or so that I looked at this provider again).
-    if (!this.hasBooted) {
-      this._logger.warning('[Stats Provider] Cannot save stats to file: Booting not yet completed')
-      return
-    }
-
-    // (Over-)write the configuration
-    this._logger.info('[Stats Provider] Writing statistics to file')
-    await fs.writeFile(this.statsFile, JSON.stringify(this.stats), { encoding: 'utf8' })
+    this._recompute()
+      .catch(e => this._logger.error(`[Stats Provider] Error during recomputing: ${e.message as string}`, e))
   }
 
   /**
