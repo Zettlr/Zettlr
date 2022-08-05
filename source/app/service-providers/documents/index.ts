@@ -24,7 +24,7 @@ import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import AppServiceContainer from 'source/app/app-service-container'
 import { ipcMain, app } from 'electron'
 import { DocumentTree, DTLeaf } from '@common/modules/document-tree'
-import ConfigFileContainer from '@common/modules/config-file-container'
+import PersistentDataContainer from '@common/modules/persistent-data-container'
 import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
 import { TabManager } from '@common/modules/document-tree/tab-manager'
 import { DP_EVENTS, OpenDocument } from '@dts/common/documents'
@@ -51,9 +51,9 @@ export default class DocumentManager extends ProviderContract {
    * The config file container persists the document tree data to disk so that
    * open editor panes & windows can be restored
    *
-   * @var {ConfigFileContainer}
+   * @var {PersistentDataContainer}
    */
-  private readonly _config: ConfigFileContainer
+  private readonly _config: PersistentDataContainer
   /**
    * Modified files are application-global: Whenever a file is modified anywhere
    * in the application, this array is being updated so that changes can be
@@ -93,7 +93,7 @@ export default class DocumentManager extends ProviderContract {
 
     this._windows = {}
     this._emitter = new EventEmitter()
-    this._config = new ConfigFileContainer(path.join(app.getPath('userData'), 'documents.yaml'), 'yaml')
+    this._config = new PersistentDataContainer(path.join(app.getPath('userData'), 'documents.yaml'), 'yaml')
     this._modifiedFiles = new Map()
     this._ignoreChanges = []
     this._remoteChangeDialogShownFor = []

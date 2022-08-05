@@ -56,7 +56,7 @@ import DocumentManager from '@providers/documents'
 import { DP_EVENTS } from '@dts/common/documents'
 import { trans } from '@common/i18n-main'
 import ConfigProvider from '@providers/config'
-import ConfigFileContainer from '@common/modules/config-file-container'
+import PersistentDataContainer from '@common/modules/persistent-data-container'
 
 export default class WindowProvider extends ProviderContract {
   private readonly _mainWindows: { [key: string]: BrowserWindow }
@@ -75,7 +75,7 @@ export default class WindowProvider extends ProviderContract {
   private _printWindowFile: string|undefined
   private _windowState: Map<string, WindowPosition>
   private readonly _configFile: string
-  private readonly _stateContainer: ConfigFileContainer
+  private readonly _stateContainer: PersistentDataContainer
   private readonly _hasRTLLocale: boolean
   private readonly _emitter: EventEmitter
   private _shuttingDown: boolean
@@ -103,7 +103,7 @@ export default class WindowProvider extends ProviderContract {
     this._projectProperties = null
     this._windowState = new Map()
     this._configFile = path.join(app.getPath('userData'), 'window_state.yml')
-    this._stateContainer = new ConfigFileContainer(this._configFile, 'yaml', 1000)
+    this._stateContainer = new PersistentDataContainer(this._configFile, 'yaml', 1000)
     this._shuttingDown = false
 
     // Detect whether we have an RTL locale for correct traffic light positions.
