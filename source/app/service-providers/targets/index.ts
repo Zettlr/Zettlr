@@ -12,13 +12,13 @@
  * END HEADER
  */
 
-import fs from 'fs'
 import EventEmitter from 'events'
 import path from 'path'
 import { app } from 'electron'
 import ProviderContract from '../provider-contract'
 import FSAL from '../fsal'
 import LogProvider from '../log'
+import PersistentDataContainer from '@common/modules/persistent-data-container'
 
 export interface WritingTarget {
   path: string
@@ -32,6 +32,7 @@ export interface WritingTarget {
  */
 export default class TargetProvider extends ProviderContract {
   private readonly _file: string
+  private readonly container: PersistentDataContainer
   private readonly _emitter: EventEmitter
   private _targets: WritingTarget[]
   /**
@@ -41,11 +42,18 @@ export default class TargetProvider extends ProviderContract {
     super()
 
     this._file = path.join(app.getPath('userData'), 'targets.json')
+    this.container = new PersistentDataContainer(this._file, 'json')
     this._targets = []
 
-    this._load()
-
     this._emitter = new EventEmitter()
+  }
+
+  public async boot (): Promise<void> {
+    if (!await this.container.isInitialized()) {
+      await this.container.init([])
+    } else {
+      this._targets = await this.container.get()
+    }
   }
 
   /**
@@ -70,31 +78,7 @@ export default class TargetProvider extends ProviderContract {
 
   async shutdown (): Promise<void> {
     this._logger.verbose('Target provider shutting down ...')
-    this._save() // Persist to disk
-  }
-
-  /**
-   * This function loads the targets from disk.
-   */
-  _load (): void {
-    // We are not checking if the user directory exists, b/c this file will
-    // be loaded after the ZettlrConfig, which makes sure the dir exists.
-
-    // Does the file already exist?
-    try {
-      fs.lstatSync(this._file)
-      this._targets = JSON.parse(fs.readFileSync(this._file, { encoding: 'utf8' }))
-    } catch (err) {
-      fs.writeFileSync(this._file, JSON.stringify([]), { encoding: 'utf8' })
-    }
-  }
-
-  /**
-   * Simply writes the tag data to disk.
-   */
-  _save (): void {
-    // (Over-)write the targets
-    fs.writeFileSync(this._file, JSON.stringify(this._targets), { encoding: 'utf8' })
+    this.container.shutdown()
   }
 
   /**
@@ -169,7 +153,7 @@ export default class TargetProvider extends ProviderContract {
       this._targets.push(target)
     }
 
-    this._save()
+    this.container.set(this._targets)
 
     // Inform the respective file that its target has been updated.
     this._emitter.emit('update', target.path)
@@ -188,7 +172,7 @@ export default class TargetProvider extends ProviderContract {
     }
 
     this._targets.splice(this._targets.indexOf(target), 1)
-    this._save()
+    this.container.set(this._targets)
 
     // Inform the respective file that its target has been removed.
     this._emitter.emit('remove', filePath)
