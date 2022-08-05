@@ -13,10 +13,10 @@
  * END HEADER
  */
 
-import fs from 'fs'
 import path from 'path'
 import EventEmitter from 'events'
 import { ValidationRule, VALIDATE_RULES, VALIDATE_PROPERTIES } from './config-validation'
+import PersistentDataContainer from '@common/modules/persistent-data-container'
 import { app, ipcMain } from 'electron'
 import ignoreFile from '@common/util/ignore-file'
 import safeAssign from '@common/util/safe-assign'
@@ -68,7 +68,12 @@ export default class ConfigProvider extends ProviderContract {
    */
   private _newVersion: boolean
 
-  private _saveTimeout: any|undefined
+  /**
+   * Holds the data container responsible for writing the data to disk
+   *
+   * @var {PersistentDataContainer}
+   */
+  private readonly _container: PersistentDataContainer
 
   private readonly _emitter: EventEmitter
 
@@ -86,21 +91,8 @@ export default class ConfigProvider extends ProviderContract {
     this._rules = [] // This array holds all validation rules
     this._firstStart = false // Only true if a config file has been created
     this._newVersion = false // True if the last read config had a different version
-    this._saveTimeout = undefined
 
-    // Load the configuration
-    this.load()
-
-    // Run potential migrations if applicable.
-    this.runMigrations()
-
-    // Remove potential dead links to non-existent files and dirs
-    this.checkPaths()
-
-    // Boot up the validation rules
-    for (let i = 0; i < VALIDATE_RULES.length; i++) {
-      this._rules.push(new ValidationRule(VALIDATE_RULES[i], VALIDATE_PROPERTIES[i]))
-    }
+    this._container = new PersistentDataContainer(this.configFile, 'json')
 
     // Listen for renderer events. These must be synchronous.
     ipcMain.on('config-provider', (event, message) => {
@@ -110,7 +102,6 @@ export default class ConfigProvider extends ProviderContract {
         event.returnValue = this.get(payload.key)
       } else if (command === 'set-config-single') {
         event.returnValue = this.set(payload.key, payload.val)
-        this._maybeSave()
       }
     })
 
@@ -127,8 +118,6 @@ export default class ConfigProvider extends ProviderContract {
             ret = false
           }
         }
-
-        this._maybeSave()
         return ret
       }
     })
@@ -148,7 +137,50 @@ export default class ConfigProvider extends ProviderContract {
    */
   async shutdown (): Promise<void> {
     this._logger.verbose('Config provider shutting down ...')
-    this.save()
+    this._container.shutdown()
+  }
+
+  /**
+   * Boots the provider
+   */
+  async boot (): Promise<void> {
+    this._logger.verbose('Config provider booting up ...')
+
+    if (!await this._container.isInitialized()) {
+      this._logger.info('No configuration detected: Assuming first start and new version!')
+      // The config is not yet initialized, so we know this is a firstStart.
+      this._firstStart = true
+      this._newVersion = true
+      await this._container.init(this.config)
+    } else {
+      this._logger.verbose('Loading configuration ...')
+      // The container has already been initialized, so it's not a first start.
+      // Pull in the config and do our thing.
+      const readConfig = await this._container.get()
+
+      // Determine if this is a different version
+      this._newVersion = readConfig.version !== this.config.version
+      // NOTE: We cannot use "update" here because we cannot yet broadcast any
+      // events, so we have to use safeAssign directly.
+      this.config = safeAssign(readConfig, this.config)
+
+      // Don't forget to update the version
+      if (this._newVersion) {
+        this._logger.info(`Migrating from ${String(readConfig.version)} to ${String(this.config.version)}!`)
+        this.set('version', ZETTLR_VERSION)
+      }
+    }
+
+    // Run potential migrations if applicable.
+    this.runMigrations()
+
+    // Remove potential dead links to non-existent files and dirs
+    this.checkPaths()
+
+    // Boot up the validation rules
+    for (let i = 0; i < VALIDATE_RULES.length; i++) {
+      this._rules.push(new ValidationRule(VALIDATE_RULES[i], VALIDATE_PROPERTIES[i]))
+    }
   }
 
   // Enable global event listening to updates of the config
@@ -159,76 +191,6 @@ export default class ConfigProvider extends ProviderContract {
   // Also do the same for the removal of listeners
   off (evt: string, callback: (...args: any[]) => void): void {
     this._emitter.off(evt, callback)
-  }
-
-  /**
-    * This function only (re-)reads the configuration file if present
-    * @return {ZettlrConfig} This for chainability.
-    */
-  load (): this {
-    let readConfig = null
-    this._logger.verbose(`[Config Provider] Loading configuration file from ${this.configFile} ...`)
-
-    // Does the file already exist?
-    try {
-      fs.lstatSync(this.configFile)
-      readConfig = JSON.parse(fs.readFileSync(this.configFile, { encoding: 'utf8' }))
-      this._logger.verbose('[Config Provider] Successfully loaded configuration')
-    } catch (err) {
-      this._logger.info('[Config Provider] No configuration file found - using defaults.')
-      fs.writeFileSync(this.configFile, JSON.stringify(this.config), { encoding: 'utf8' })
-      this._firstStart = true // Assume first start
-      this._newVersion = true // Obviously
-      return this // No need to iterate over objects anymore
-    }
-
-    // Determine if this is a different version
-    this._newVersion = readConfig.version !== this.config.version
-    if (this._newVersion) {
-      this._logger.info(`Migrating from ${String(readConfig.version)} to ${String(this.config.version)}!`)
-    }
-
-    this.update(readConfig)
-
-    // Don't forget to update the version
-    if (this._newVersion) {
-      this.set('version', ZETTLR_VERSION)
-      this._maybeSave()
-    }
-
-    return this
-  }
-
-  /**
-    * Write the config file (e.g. on app exit)
-    * @return {ZettlrConfig} This for chainability.
-    */
-  save (): this {
-    if (this.configFile == null || this.config == null) {
-      this.load()
-    }
-    // (Over-)write the configuration
-    this._logger.info(`[Config Provider] Writing configuration file to ${this.configFile}...`)
-
-    try {
-      fs.writeFileSync(this.configFile, JSON.stringify(this.config), { encoding: 'utf8' })
-    } catch (err: any) {
-      this._logger.error(`[Config Provider] Error during file write: ${String(err.message)}`, err)
-    }
-
-    return this
-  }
-
-  /**
-   * (Re)start a countdown to save the configuration intermittently.
-   */
-  _maybeSave (): void {
-    if (this._saveTimeout !== undefined) {
-      clearTimeout(this._saveTimeout)
-      this._saveTimeout = undefined
-    }
-
-    this._saveTimeout = setTimeout(() => { this.save() }, 5000)
   }
 
   /**
@@ -248,6 +210,7 @@ export default class ConfigProvider extends ProviderContract {
           delete entry.val
         }
       }
+      this._container.set(this.config)
     } else if (replacements != null) {
       // Previous versions stored the replacements as objects of the form
       // { "-->": "→", ... }
@@ -258,6 +221,7 @@ export default class ConfigProvider extends ProviderContract {
         }
       }
       this.config.editor.autoCorrect.replacements = newReplacements
+      this._container.set(this.config)
     }
 
     return this
@@ -297,6 +261,7 @@ export default class ConfigProvider extends ProviderContract {
     if ((!ignoreFile(p) || isDir(p)) && !this.config.openPaths.includes(p)) {
       this.config.openPaths.push(p)
       this._sortPaths()
+      this._container.set(this.config)
       return true
     }
 
@@ -311,6 +276,7 @@ export default class ConfigProvider extends ProviderContract {
   removePath (p: string): boolean {
     if (this.config.openPaths.includes(p)) {
       this.config.openPaths.splice(this.config.openPaths.indexOf(p), 1)
+      this._container.set(this.config)
       return true
     }
     return false
@@ -385,7 +351,7 @@ export default class ConfigProvider extends ProviderContract {
         command: 'update',
         payload: option
       })
-      this._maybeSave()
+      this._container.set(this.config)
       return true
     }
 
@@ -419,7 +385,7 @@ export default class ConfigProvider extends ProviderContract {
           command: 'update',
           payload: option
         })
-        this._maybeSave()
+        this._container.set(this.config)
         return true
       }
     }
@@ -440,6 +406,7 @@ export default class ConfigProvider extends ProviderContract {
     this._emitter.emit('update') // Emit an event to all listeners
     // Broadcast to all open windows
     broadcastIpcMessage('config-provider', { command: 'update', payload: undefined })
+    this._container.set(this.config)
   }
 
   /**
@@ -467,6 +434,7 @@ export default class ConfigProvider extends ProviderContract {
     })
 
     this.config.openPaths = f.concat(d)
+    this._container.set(this.config)
 
     return this
   }
