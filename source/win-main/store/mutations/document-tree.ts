@@ -348,16 +348,18 @@ export default function (state: ZettlrState, payload: any): void {
     // This event is not emitted by the document provider. Rather, it happens
     // once after the window has been created to apply the initial "update" that
     // fills the state.
-    case 'init':
+    case 'init': {
       recoverState(state, treedata)
       // Here we also need to set the last leaf ID so that the user can
       // immediately begin opening files. If this is not set, the user must first
       // focus any of the leafs before clicking on a file does something, which
       // is unwanted behavior.
-      if (extractLeafs(treedata).length > 0) {
-        state.lastLeafId = extractLeafs(treedata)[0].id
+      const leafs = extractLeafs(treedata)
+      if (leafs.length > 0) {
+        state.lastLeafId = leafs[0].id
       }
       break
+    }
     // Events that pertain only to one leaf: no structural change
     case DP_EVENTS.ACTIVE_FILE:
     case DP_EVENTS.CHANGE_FILE_STATUS:
