@@ -12,13 +12,13 @@
  * END HEADER
  */
 
-import { promises as fs } from 'fs'
 import path from 'path'
 import { app, ipcMain } from 'electron'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
 import ProviderContract from '../provider-contract'
 import LogProvider from '../log'
+import PersistentDataContainer from '@common/modules/persistent-data-container'
 
 interface InternalTagRecord {
   text: string
@@ -32,6 +32,7 @@ interface InternalTagRecord {
  */
 export default class TagProvider extends ProviderContract {
   private readonly _file: string
+  private readonly container: PersistentDataContainer
   private _colouredTags: ColouredTag[]
   private readonly _globalTagDatabase: Map<string, InternalTagRecord>
   /**
@@ -42,6 +43,7 @@ export default class TagProvider extends ProviderContract {
     this._logger.verbose('Tag provider booting up ...')
     this._file = path.join(app.getPath('userData'), 'tags.json')
     this._colouredTags = []
+    this.container = new PersistentDataContainer(this._file, 'json')
     // The global tag database; it contains all tags that are used in any of the
     // files.
     this._globalTagDatabase = new Map()
@@ -82,12 +84,10 @@ export default class TagProvider extends ProviderContract {
   }
 
   async boot (): Promise<void> {
-    try {
-      await fs.lstat(this._file)
-      const content = await fs.readFile(this._file, { encoding: 'utf8' })
-      this.setColouredTags(JSON.parse(content))
-    } catch (err) {
-      await fs.writeFile(this._file, JSON.stringify([]), { encoding: 'utf8' })
+    if (!await this.container.isInitialized()) {
+      await this.container.init([])
+    } else {
+      this.setColouredTags(await this.container.get())
     }
   }
 
@@ -97,7 +97,7 @@ export default class TagProvider extends ProviderContract {
    */
   async shutdown (): Promise<void> {
     this._logger.verbose('Tag provider shutting down ...')
-    await this._save()
+    this.container.shutdown()
   }
 
   /**
@@ -154,15 +154,6 @@ export default class TagProvider extends ProviderContract {
   }
 
   /**
-   * Simply writes the tag data to disk.
-   * @return {ZettlrTags} This for chainability.
-   */
-  async _save (): Promise<void> {
-    // (Over-)write the tags
-    await fs.writeFile(this._file, JSON.stringify(this._colouredTags), { encoding: 'utf8' })
-  }
-
-  /**
    * Updates all tags (i.e. replaces them)
    * @param  {ColouredTag[]} tags The new tags as an array
    */
@@ -176,10 +167,7 @@ export default class TagProvider extends ProviderContract {
     }
 
     this._colouredTags = uniqueTags
-    this._save()
-      .catch((err: any) => {
-        this._logger.error(`[Tag Provider] Could not write tags to disk: ${err.message as string}`, err)
-      })
+    this.container.set(this._colouredTags)
     broadcastIpcMessage('coloured-tags')
     // Necessary so that, e.g., the autocomplete list, receives a tag database
     // with the correct class names applied, since the className property is
