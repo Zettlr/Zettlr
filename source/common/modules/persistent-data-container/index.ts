@@ -65,11 +65,7 @@ export default class PersistentDataContainer {
    *
    * @return  {PersistentDataContainer}  The file container
    */
-  constructor (
-    filePath: string,
-    type: 'yaml'|'json' = 'json',
-    delay: number = 1000
-  ) {
+  constructor (filePath: string, type: 'yaml'|'json' = 'json', delay: number = 1000) {
     this._filePath = filePath
     this._dataType = type
     this._delay = delay
@@ -86,11 +82,7 @@ export default class PersistentDataContainer {
     }
 
     this._data = initialData
-    if (this._dataType === 'json') {
-      await fs.writeFile(this._filePath, JSON.stringify(this._data), { encoding: 'utf-8' })
-    } else {
-      await fs.writeFile(this._filePath, stringifyYAML(this._data), { encoding: 'utf-8' })
-    }
+    await fs.writeFile(this._filePath, this.stringify(), { encoding: 'utf-8' })
   }
 
   /**
@@ -181,14 +173,22 @@ export default class PersistentDataContainer {
       this._timeout = undefined
     }
 
+    // TODO: Proper logging
+    fs.writeFile(this._filePath, this.stringify(), { encoding: 'utf-8' })
+      .catch(err => { console.error(err) })
+  }
+
+  /**
+   * Stringifies the data to be written to disk according to the data type
+   *
+   * @return  {string}  The contained data as a serialized string
+   */
+  private stringify (): string {
     if (this._dataType === 'json') {
-      fs.writeFile(this._filePath, JSON.stringify(this._data), { encoding: 'utf-8' })
-      // TODO: Proper logging
-        .catch(err => { console.error(err) })
+      // By passing a space as the third character, we make the JSON readable
+      return JSON.stringify(this._data, undefined, ' ')
     } else {
-      fs.writeFile(this._filePath, stringifyYAML(this._data), { encoding: 'utf-8' })
-      // TODO: Proper logging
-        .catch(err => { console.error(err) })
+      return stringifyYAML(this._data)
     }
   }
 
