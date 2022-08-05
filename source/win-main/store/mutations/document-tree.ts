@@ -350,6 +350,13 @@ export default function (state: ZettlrState, payload: any): void {
     // fills the state.
     case 'init':
       recoverState(state, treedata)
+      // Here we also need to set the last leaf ID so that the user can
+      // immediately begin opening files. If this is not set, the user must first
+      // focus any of the leafs before clicking on a file does something, which
+      // is unwanted behavior.
+      if (extractLeafs(treedata).length > 0) {
+        state.lastLeafId = extractLeafs(treedata)[0].id
+      }
       break
     // Events that pertain only to one leaf: no structural change
     case DP_EVENTS.ACTIVE_FILE:
