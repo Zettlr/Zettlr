@@ -116,8 +116,5 @@ export default function parsePipeTable (markdownTable: string|string[]): ParsedT
   }
 
   // Return the AST
-  return {
-    'ast': ast,
-    'colAlignments': colAlignments
-  }
+  return { ast, colAlignments }
 }

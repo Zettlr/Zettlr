@@ -206,7 +206,7 @@ export default class WindowProvider extends ProviderContract {
         case 'drag-start':
           app.getFileIcon(payload.filePath)
             .then((icon) => {
-              event.sender.startDrag({ file: payload.filePath, icon: icon })
+              event.sender.startDrag({ file: payload.filePath, icon })
             })
             .catch(err => this._logger.error(`[Window Manager] Could not fetch icon for path ${String(payload.filePath)}`, err))
           break

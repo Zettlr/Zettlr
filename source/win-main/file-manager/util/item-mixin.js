@@ -370,7 +370,7 @@ export default {
       const command = (this.obj.type === 'directory') ? 'dir-rename' : 'file-rename'
 
       ipcRenderer.invoke('application', {
-        command: command,
+        command,
         payload: {
           path: this.obj.path,
           name: newName

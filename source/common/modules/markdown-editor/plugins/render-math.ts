@@ -126,8 +126,8 @@ export function findInlineEquations (text: string, line: number): EquationMarker
     }
 
     newMarkers.push(new EquationMarker(
-      { 'ch': match.index, 'line': line },
-      { 'ch': match.index + match[0].length, 'line': line },
+      { ch: match.index, line },
+      { ch: match.index + match[0].length, line },
       match.groups.eq ?? '',
       // Equations surrounded by two dollars should be displayed as centred equation
       (match.groups.dollar ?? '').length === 2

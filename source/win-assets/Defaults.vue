@@ -165,7 +165,7 @@ export default defineComponent({
 
           return {
             displayText: this.getDisplayText(file),
-            infoString: infoString,
+            infoString,
             infoStringClass: file.isInvalid ? 'error' : undefined
           }
         })

@@ -63,7 +63,7 @@ export default {
   data: function () {
     const availableSize = window.innerWidth
     return {
-      availableSize: availableSize,
+      availableSize,
       viewResizing: false,
       viewResizeX: 0,
       // Initial widths

@@ -597,7 +597,7 @@ export default defineComponent({
       ipcRenderer.invoke('documents-provider', {
         command: 'sort-open-files',
         payload: {
-          newOrder: newOrder,
+          newOrder,
           windowId: this.windowId,
           leafId: this.leafId
         }

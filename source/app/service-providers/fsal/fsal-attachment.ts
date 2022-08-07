@@ -21,7 +21,7 @@ import { shell } from 'electron'
 
 export async function parse (absPath: string, parent: DirDescriptor): Promise<OtherFileDescriptor> {
   let attachment: OtherFileDescriptor = {
-    parent: parent,
+    parent,
     path: absPath,
     name: path.basename(absPath),
     hash: hash(absPath),

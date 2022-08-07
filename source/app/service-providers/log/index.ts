@@ -117,8 +117,8 @@ export default class LogProvider extends ProviderContract {
     // Simply append to log
     const msg = {
       level: logLevel,
-      message: message,
-      details: details,
+      message,
+      details,
       time: this._getTimestamp()
     }
 

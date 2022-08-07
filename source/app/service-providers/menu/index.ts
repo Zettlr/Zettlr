@@ -291,7 +291,7 @@ export default class MenuProvider extends ProviderContract {
           resolve(resolvedID)
         }, 100)
       })
-      popupMenu.popup({ x: x, y: y })
+      popupMenu.popup({ x, y })
     })
   }
 

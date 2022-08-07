@@ -487,5 +487,5 @@ function cursors (cursor: CodeMirror.Position, candidates: any): { cursorBegin: 
     cursorBegin.ch = 0
   }
 
-  return { cursorBegin: cursorBegin, cursorEnd: cursor }
+  return { cursorBegin, cursorEnd: cursor }
 }

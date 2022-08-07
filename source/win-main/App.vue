@@ -423,7 +423,7 @@ export default defineComponent({
     globalSearchComponent: function (): any {
       return this.$refs['global-search'] as any
     },
-    paneConfiguration () {
+    paneConfiguration (): BranchNodeJSON|LeafNodeJSON {
       return this.$store.state.paneStructure as BranchNodeJSON|LeafNodeJSON
     },
     lastLeafId (): string|undefined {
@@ -502,11 +502,7 @@ export default defineComponent({
 
         // Now restore the clipboard's original contents
         setTimeout((e) => {
-          clipboard.write({
-            'text': text,
-            'html': html,
-            'rtf': rtf
-          })
+          clipboard.write({ text, html, rtf })
         }, 10) // Why do a timeout? Because the paste event is asynchronous.
       } else if (shortcut === 'copy-current-id') {
         const activeFile = this.$store.state.activeFile
@@ -615,7 +611,7 @@ export default defineComponent({
           path: filePath,
           windowId: this.windowId,
           leafId: this.$store.state.lastLeafId,
-          newTab: newTab
+          newTab
         }
       })
         .then(() => {

@@ -232,7 +232,7 @@ export default class MarkdownEditor extends EventEmitter {
             // because in the specific case of CodeMirror this results in unwanted
             // behaviour.
             // Needs to be issued from main on the holding webContents
-            ipcRenderer.send('window-controls', { command: command })
+            ipcRenderer.send('window-controls', { command })
             break
           case 'pasteAsPlain':
             this.pasteAsPlainText()
@@ -344,7 +344,7 @@ export default class MarkdownEditor extends EventEmitter {
     let html = this._md2html(md)
     // Write both the HTML and the Markdown
     // (as fallback plain text) to the clipboard
-    clipboard.write({ 'text': md, 'html': html })
+    clipboard.write({ 'text': md, html })
   }
 
   /**
@@ -368,12 +368,12 @@ export default class MarkdownEditor extends EventEmitter {
     }
 
     this._instance.scrollIntoView({
-      from: { line: line, ch: 0 },
+      from: { line, ch: 0 },
       to: { line: lastLine, ch: 0 }
     })
 
     if (setCursor) {
-      this._instance.setCursor({ line: line, ch: 0 })
+      this._instance.setCursor({ line, ch: 0 })
       this._instance.focus()
     }
   }

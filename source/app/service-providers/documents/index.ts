@@ -340,7 +340,7 @@ export default class DocumentManager extends ProviderContract {
 
   private broadcastEvent (event: DP_EVENTS, context?: any): void {
     // Here we blast an event notification across every line of code of the app
-    broadcastIpcMessage('documents-update', { event, context: context })
+    broadcastIpcMessage('documents-update', { event, context })
     this._emitter.emit(event, context)
   }
 
@@ -852,7 +852,7 @@ export default class DocumentManager extends ProviderContract {
     const target = origin.split(splitDirection, insertion)
     this.broadcastEvent(DP_EVENTS.NEW_LEAF, {
       windowId: originWindow,
-      originLeaf: originLeaf,
+      originLeaf,
       newLeaf: target.id,
       direction: splitDirection,
       insertion

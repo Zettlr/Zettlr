@@ -54,7 +54,7 @@ export default defineComponent({
       // variables might be the same for a few error messages. In this
       // case, fall back to "error".
       title: (title === message) ? 'Error' : title,
-      message: message,
+      message,
       additionalInfo: (contents === '<no-contents>') ? '' : contents
     }
   },

@@ -32,8 +32,8 @@ export default async function askDirectory (config: ConfigProvider, win: Browser
   }
 
   const options: OpenDialogOptions = {
-    title: title,
-    buttonLabel: buttonLabel,
+    title,
+    buttonLabel,
     defaultPath: startDir,
     properties: [
       'openDirectory',

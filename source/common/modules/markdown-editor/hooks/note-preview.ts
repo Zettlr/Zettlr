@@ -94,7 +94,7 @@ function getPreviewElement (metadata: [string, string, number, number], linkCont
     ipcRenderer.invoke('application', {
       command: 'force-open',
       payload: {
-        linkContents: linkContents,
+        linkContents,
         newTab: undefined // let open-file command decide based on preferences
       }
     })
@@ -115,7 +115,7 @@ function getPreviewElement (metadata: [string, string, number, number], linkCont
       ipcRenderer.invoke('application', {
         command: 'force-open',
         payload: {
-          linkContents: linkContents,
+          linkContents,
           newTab: true
         }
       })

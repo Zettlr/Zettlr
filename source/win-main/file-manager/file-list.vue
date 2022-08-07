@@ -151,7 +151,7 @@ export default defineComponent({
       return this.$store.state.activeFile
     },
     itemHeight: function (): number {
-      if (this.$store.state.config['fileMeta'] === true) {
+      if (this.$store.state.config.fileMeta === true) {
         return 70
       } else {
         return 30

@@ -45,7 +45,7 @@ export default async function retrieveDocumentFromMain (
   const newDoc: MainEditorDocumentWrapper = {
     path: filePath,
     dir: path.dirname(filePath), // Save the dir to distinguish memory-files from others
-    mode: mode, // Save the mode for later swaps
+    mode, // Save the mode for later swaps
     cmDoc: CodeMirror.Doc('', mode),
     modified: false,
     library: undefined,

@@ -57,7 +57,7 @@ export default class RootOpen extends ZettlrCommand {
   private async openFiles (): Promise<string[]> {
     // The user wants to open another file or directory.
     const extensions = [ 'markdown', 'md', 'txt', 'rmd' ]
-    const filter = [{ 'name': trans('system.files'), 'extensions': extensions }]
+    const filter = [{ name: trans('system.files'), extensions }]
 
     return await this._app.windows.askFile(filter, true)
   }

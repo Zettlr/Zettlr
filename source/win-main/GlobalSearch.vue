@@ -339,7 +339,7 @@ export default defineComponent({
             path: treeItem.path,
             relativeDirectoryPath: '',
             filename: treeItem.name,
-            displayName: displayName
+            displayName
           })
           continue
         }
@@ -360,7 +360,7 @@ export default defineComponent({
             // app-internal relative path remains. Also, we're removing the leading (back)slash
             relativeDirectoryPath: item.dir.replace(treeItem.dir, '').substr(1),
             filename: item.name,
-            displayName: displayName
+            displayName
           }
         })
 
@@ -415,13 +415,13 @@ export default defineComponent({
           command: 'file-search',
           payload: {
             path: fileToSearch.path,
-            terms: terms
+            terms
           }
         })
         if (result.length > 0) {
           const newResult: SearchResultWrapper = {
             file: fileToSearch,
-            result: result,
+            result,
             hideResultSet: false, // If true, the individual results won't be displayed
             weight: result.reduce((accumulator: number, currentValue: SearchResult) => {
               return accumulator + currentValue.weight

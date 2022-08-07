@@ -40,13 +40,10 @@ export default function enumLangFiles (paths = [ path.join(app.getPath('userData
       if (!isFile(path.join(p, file))) continue
       if (path.extname(file) !== '.json') continue
 
-      const schema = bcp47.parse(file.substr(0, file.lastIndexOf('.')))
+      const schema = bcp47.parse(file.substring(0, file.lastIndexOf('.')))
       const tag = bcp47.stringify(schema)
       if (schema.language !== undefined && tag !== undefined) {
-        candidates.push({
-          tag: tag,
-          path: path.join(p, file)
-        })
+        candidates.push({ tag, path: path.join(p, file) })
       }
     }
   }

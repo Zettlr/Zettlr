@@ -30,7 +30,7 @@ export default function compileSearchTerms (term: string): SearchTerm[] {
     if (c === ' ' && !hasExact) {
       // Spaces mark the end of one search term (except we're in an exact match)
       if (curWord.trim() !== '') {
-        myTerms.push({ words: [curWord.trim()], operator: operator })
+        myTerms.push({ words: [curWord.trim()], operator })
         curWord = ''
         operator = 'AND' // Reset the operator
       }
@@ -59,7 +59,7 @@ export default function compileSearchTerms (term: string): SearchTerm[] {
         hasExact = false
         // Do not trim the word to account for trailing and
         // ending whitespace within an exact capturing group
-        myTerms.push({ words: [curWord], operator: operator })
+        myTerms.push({ words: [curWord], operator })
         curWord = ''
         operator = 'AND'
       }
@@ -79,7 +79,7 @@ export default function compileSearchTerms (term: string): SearchTerm[] {
 
   // If there is a last word (in most cases it should be), add it to the list
   if (curWord.trim() !== '') {
-    myTerms.push({ words: [curWord.trim()], operator: operator })
+    myTerms.push({ words: [curWord.trim()], operator })
   }
 
   // Now pack together all consecutive ORs

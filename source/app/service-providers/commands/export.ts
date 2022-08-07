@@ -38,7 +38,7 @@ export default class Export extends ZettlrCommand {
     const { file, profile, exportTo } = arg as { file: string, profile: PandocProfileMetadata, exportTo: string }
 
     const exporterOptions: ExporterOptions = {
-      profile: profile,
+      profile,
       targetDirectory: '',
       sourceFiles: [],
       cwd: undefined

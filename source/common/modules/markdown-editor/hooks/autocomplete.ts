@@ -197,10 +197,7 @@ export default function autocomplete (): {
 
       const text = headingToID(match[1])
 
-      availableDatabases.headings.push({
-        text: text,
-        displayText: '#' + text
-      })
+      availableDatabases.headings.push({ text, displayText: '#' + text })
     }
   }
 
@@ -572,7 +569,7 @@ export default function autocomplete (): {
         const index = parseInt(match[1] ?? match[2], 10)
         const replaceWith = match[3]
 
-        const localFrom = { line: i, ch: ch }
+        const localFrom = { line: i, ch }
         const localTo = { line: i, ch: ch + match[0].length }
         cm.replaceRange((replaceWith !== undefined) ? replaceWith : '', localFrom, localTo)
 
@@ -599,10 +596,7 @@ export default function autocomplete (): {
               className: 'tabstop'
             }
           )
-          tabStops.push({
-            index: index,
-            markers: [marker]
-          })
+          tabStops.push({ index, markers: [marker] })
         } else {
           // Here we don't need a TextMarker, but rather a Bookmark,
           // since it's basically a single-char range.
@@ -612,10 +606,7 @@ export default function autocomplete (): {
           const marker = cm.setBookmark(localFrom, {
             widget: elem
           })
-          tabStops.push({
-            index: index,
-            markers: [marker]
-          })
+          tabStops.push({ index, markers: [marker] })
         }
       }
     }
@@ -637,9 +628,7 @@ export default function autocomplete (): {
     }, []) // initialValue: An empty array
 
     // Now we just need to sort the currentTabStops
-    tabStops.sort((a, b) => {
-      return a.index - b.index
-    })
+    tabStops.sort((a, b) => a.index - b.index)
 
     // Lastly, put the 0 to the top (if there is a zero)
     if (tabStops.length > 0 && tabStops[0].index === 0) {

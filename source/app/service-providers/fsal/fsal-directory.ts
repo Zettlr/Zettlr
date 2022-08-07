@@ -116,7 +116,7 @@ export function metadata (dirObject: DirDescriptor): DirMeta {
     // The project itself is not needed, renderer only checks if it equals
     // null, or not (then it means there is a project)
     project: dirObject._settings.project,
-    children: children,
+    children,
     type: dirObject.type,
     isGitRepository: dirObject.isGitRepository,
     sorting: dirObject._settings.sorting,
@@ -197,7 +197,7 @@ export async function parse (
 ): Promise<DirDescriptor> {
   // Prepopulate
   const dir: DirDescriptor = {
-    parent: parent,
+    parent,
     path: currentPath,
     name: path.basename(currentPath),
     dir: path.dirname(currentPath),

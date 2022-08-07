@@ -88,14 +88,14 @@ export default class DirProjectExport extends ZettlrCommand {
 
       try {
         const opt: ExporterOptions = {
-          profile: profile,
+          profile,
           sourceFiles: files,
           targetDirectory: dir.path,
           cwd: dir.path,
           defaultsOverride: {
             title: config.title,
             csl: (typeof config.cslStyle === 'string' && config.cslStyle.length > 0) ? config.cslStyle : undefined,
-            template: template
+            template
           }
         }
 

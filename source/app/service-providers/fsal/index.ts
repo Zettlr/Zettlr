@@ -123,7 +123,7 @@ export default class FSAL extends ProviderContract {
 
     this._watchdog.on('change', (event, changedPath) => {
       // Buffer the event for later
-      this._remoteChangeBuffer.push({ 'event': event, 'path': changedPath })
+      this._remoteChangeBuffer.push({ event, path: changedPath })
 
       // Handle the buffer if we're not currently handling a change.
       if (!this._isCurrentlyHandlingRemoteChange && !this._fsalIsBusy) this._afterRemoteChange()
@@ -205,11 +205,7 @@ export default class FSAL extends ProviderContract {
       timestamp = lastEvent.timestamp + 1
     }
 
-    this._history.push({
-      event: event,
-      path: changedPath,
-      timestamp: timestamp
-    })
+    this._history.push({ event, path: changedPath, timestamp })
 
     this._emitter.emit('fsal-state-changed', 'filetree', changedPath)
     broadcastIpcMessage('fsal-state-changed', 'filetree')
@@ -229,11 +225,7 @@ export default class FSAL extends ProviderContract {
     let timestamp = 1
 
     for (const descriptor of this._state.filetree) {
-      this._history.push({
-        event: 'add',
-        path: descriptor.path,
-        timestamp: timestamp
-      })
+      this._history.push({ event: 'add', path: descriptor.path, timestamp })
 
       timestamp++
     }

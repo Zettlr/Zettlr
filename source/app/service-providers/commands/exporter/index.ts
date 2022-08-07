@@ -122,7 +122,7 @@ async function runPandoc (logger: LogProvider, defaultsFile: string, cwd?: strin
       // NOTE: This has to be true, because of reasons unbeknownst to me, Pandoc
       // is unable to open the defaultsFile if it is not run from within a shell
       shell: true,
-      cwd: cwd
+      cwd
     })
 
     pandocProcess.stdout.on('data', (data) => {

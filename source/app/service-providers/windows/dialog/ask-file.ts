@@ -47,7 +47,7 @@ export default async function askFileDialog (config: ConfigProvider, win: Browse
     title: trans('system.open_file'),
     defaultPath: startDir,
     properties: ['openFile'],
-    filters: filters
+    filters
   }
 
   // Should multiple selections be allowed?

@@ -65,7 +65,7 @@ export function validate (data: any): ValidationError[] {
       const rule = VALIDATE_RULES[VALIDATE_PROPERTIES.indexOf(key)]
       const val = new ValidationRule(key, rule)
       if (!val.validate(data[key])) {
-        unvalidated.push({ key: key, reason: val.why() })
+        unvalidated.push({ key, reason: val.why() })
       }
     }
   }

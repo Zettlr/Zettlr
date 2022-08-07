@@ -319,7 +319,7 @@ onMounted(() => {
     ipcRenderer.invoke('application', {
       command: 'force-open',
       payload: {
-        linkContents: linkContents,
+        linkContents,
         newTab: undefined, // let open-file command decide based on preferences
         leafId: props.leafId,
         windowId: props.windowId
@@ -809,7 +809,7 @@ function updateFileDatabase () {
     fileDatabase[file.path] = {
       // Use the ID, if given, or the filename
       text: (file.id !== '' && !filenameOnly.value) ? file.id : fname,
-      displayText: displayText,
+      displayText,
       id: (file.id !== '' && !filenameOnly.value) ? file.id : ''
     }
   }
@@ -864,8 +864,8 @@ function maybeHighlightSearchResults () {
       for (const range of res.ranges) {
         const { from, to } = range
         rangesToHighlight.push({
-          anchor: { line: line, ch: from },
-          head: { line: line, ch: to }
+          anchor: { line, ch: from },
+          head: { line, ch: to }
         })
       }
     }
@@ -998,9 +998,9 @@ function handleDrop (event: DragEvent, where: 'editor'|'top'|'left'|'right'|'bot
       ipcRenderer.invoke('documents-provider', {
         command: 'move-file',
         payload: {
-          originWindow: originWindow,
+          originWindow,
           targetWindow: props.windowId,
-          originLeaf: originLeaf,
+          originLeaf,
           targetLeaf: props.leafId,
           path: filePath
         }
