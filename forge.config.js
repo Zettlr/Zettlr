@@ -153,6 +153,12 @@ module.exports = {
         // basically copying the CSP from the HTML-files, but with 'unsafe-eval'
         // added (which webpack needs for the sourcemaps).
         devContentSecurityPolicy: "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+        // The default port for php-fpm is 9000, and since forge and PHP will
+        // collide on every system on which PHP is installed, we change the
+        // default ports for both the logger and the dev servers. We have to set
+        // both ports, because changing only one doesn't solve the issue.
+        port: 9001,
+        loggerPort: 9002,
         renderer: {
           config: './webpack.renderer.config.js',
           entryPoints: [

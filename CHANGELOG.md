@@ -204,6 +204,9 @@ there.
 - Switched the configuration file management for the different service providers
   from the previously very bodged methods to the unified and new
   PersistentDataContainer
+- Changed the default ports for the development servers to 9001 (devServer) and
+  9002 (logger) respectively to avoid collisions with PHP fpm installations on
+  development systems.
 
 # 2.3.0
 
