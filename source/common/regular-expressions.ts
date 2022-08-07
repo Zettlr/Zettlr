@@ -58,17 +58,12 @@ export function getCodeRE (): RegExp {
 export function getCodeBlockRE (multiline: boolean = false): RegExp {
   if (!multiline) {
     // The user only wants to match a single line
-    return RegExp(
-      /^\s{0,3}(`{3,}|~{3,})/.source
-    )
+    return /^\s{0,3}(`{3,}|~{3,})/
   } else {
     // `multiline` indicates the user has a complete Markdown document.
     // This RegExp matches backtick and tilde code blocks. NOTE: It does not
     // match indented code blocks!
-    return RegExp(
-      /^`{3,}.+?^`{3,}|^~{3,}.+?^~{3,}/gms.source,
-      'gms'
-    )
+    return /^`{3,}.+?^`{3,}|^~{3,}.+?^~{3,}/gms
   }
 }
 

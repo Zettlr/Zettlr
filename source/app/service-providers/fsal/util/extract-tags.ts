@@ -13,20 +13,27 @@
  */
 
 import { getZknTagRE } from '@common/regular-expressions'
-import extractYamlFrontmatter from '@common/util/extract-yaml-frontmatter'
 
-export default function extractTags (markdown: string): string[] {
+/**
+ * Extracts tags from a Markdown file. NOTE: This function expects a split
+ * Markdown file into frontmatter and without any code (so that Python comments
+ * don't get detected as tags)
+ *
+ * @param   {any}       frontmatter         The file's frontmatter
+ * @param   {string}    contentWithoutCode  The content without any code
+ *
+ * @return  {string[]}                      A list of tags detected
+ */
+export default function extractTags (frontmatter: any, contentWithoutCode: string): string[] {
   let tags: string[] = []
 
-  // Extract a potential YAML frontmatter
-  const { content, frontmatter } = extractYamlFrontmatter(markdown)
-  const tagRE = getZknTagRE(true)
-  // Remove links, since these can also point to headings and thus would be
-  // detected as tags accidentally
   const linkRE = /\[([^\]]+)\]\((.+?)\)/g
+  const tagRE = getZknTagRE(true)
+
+  const markdown = contentWithoutCode.replace(linkRE, '')
 
   // First, go through the keywords within the text
-  for (const match of content.replace(linkRE, '').matchAll(tagRE)) {
+  for (const match of markdown.matchAll(tagRE)) {
     const tag = match[1].replace(/#/g, '')
 
     if (tag.length > 0) {

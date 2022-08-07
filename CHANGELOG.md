@@ -211,6 +211,8 @@ there.
 - The yaml frontmatter title property is now its own property on file
   descriptors to centralize the extraction logic and save some code on the
   renderer's side
+- Extracted the ID extraction functionality to its own utility function
+- Fixed a bug that would incorrectly detect Python comments or C++ pragmas as tags
 
 # 2.3.0
 

@@ -13,11 +13,12 @@
  * END HEADER
  */
 
-import { getCodeBlockRE, getIDRE } from '@common/regular-expressions'
+import { getCodeBlockRE } from '@common/regular-expressions'
 import countWords from '@common/util/count-words'
 import extractYamlFrontmatter from '@common/util/extract-yaml-frontmatter'
 import { MDFileDescriptor } from '@dts/main/fsal'
 import extractBOM from './extract-bom'
+import extractFileId from './extract-file-id'
 import extractLinks from './extract-links'
 import extractTags from './extract-tags'
 
@@ -54,12 +55,17 @@ export default function getMarkdownFileParser (
     content: string
   ): void {
     // Prepare some necessary regular expressions and variables
-    const idRE = getIDRE(idREPattern)
     const codeBlockRE = getCodeBlockRE(true)
     const inlineCodeRE = /`[^`]+`/g
     const h1HeadingRE = /^#{1}\s(.+)$/m
 
-    let match
+    // Next, we have to prepare various forms of the Markdown document for the
+    // various extractors that, e.g., Python comments won't be detected as tags
+    const extracted = extractYamlFrontmatter(content)
+    const frontmatter = extracted.frontmatter
+    const contentWithoutYAML = extracted.content
+    const contentWithoutCode = contentWithoutYAML.replace(codeBlockRE, '').replace(inlineCodeRE, '')
+    const plainMarkdown = contentWithoutCode.replace(/<!--.+?-->/gs, '') // Note the dotall flag
 
     // First of all, determine all the things that have nothing to do with any
     // Markdown contents.
@@ -68,39 +74,15 @@ export default function getMarkdownFileParser (
     if (content.includes('\r\n')) file.linefeed = '\r\n'
     if (content.includes('\n\r')) file.linefeed = '\n\r'
 
-    // Then prepare the file contents as we need it for most of the function:
-    // Strip a potential YAML frontmatter, code, and any HTML comments.
-    const extracted = extractYamlFrontmatter(content)
-    const frontmatter = extracted.frontmatter
-
-    const contentWithoutYAML = extracted.content
-    const contentWithoutCode = contentWithoutYAML.replace(codeBlockRE, '').replace(inlineCodeRE, '')
-    const plainMarkdown = contentWithoutCode.replace(/<!--.+?-->/gs, '') // Note the dotall flag
-
     // Finally, reset all those properties which we will extract from the file's
     // content so that they remain in their default if we don't find those in the
     // file.
-    file.id = ''
+    file.id = extractFileId(file.name, content, idREPattern, linkStart, linkEnd)
+    file.tags = extractTags(frontmatter, contentWithoutCode)
+    file.links = extractLinks(content, linkStart, linkEnd)
     file.firstHeading = null
     file.yamlTitle = undefined
-    file.tags = extractTags(content)
-    file.links = extractLinks(content, linkStart, linkEnd)
     file.frontmatter = null
-
-    // Search for the file's ID first in the file name, and then in the full contents.
-    if ((match = idRE.exec(file.name)) == null) {
-      while ((match = idRE.exec(content)) != null) {
-        if (content.substr(match.index - linkStart.length, linkStart.length) !== linkStart) {
-          // Found the first ID. Precedence should go to the first found.
-          // Minor BUG: Takes IDs that are inside links but not literally make up for a link.
-          break
-        }
-      }
-    }
-
-    if ((match != null) && (match[1].substr(-(linkEnd.length)) !== linkEnd)) {
-      file.id = match[1]
-    }
 
     // At this point, we don't need the full content anymore. The next parsing
     // steps rely on a Markdown string that is stripped of a potential YAML
@@ -109,7 +91,7 @@ export default function getMarkdownFileParser (
     file.wordCount = countWords(plainMarkdown, false)
     file.charCount = countWords(plainMarkdown, true)
 
-    const h1Match = h1HeadingRE.exec(contentWithoutYAML)
+    const h1Match = h1HeadingRE.exec(contentWithoutCode)
     if (h1Match !== null) {
       file.firstHeading = h1Match[1]
     }
