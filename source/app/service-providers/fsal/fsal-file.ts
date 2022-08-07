@@ -95,6 +95,7 @@ export function metadata (fileObject: MDFileDescriptor): MDFileMeta {
     modtime: fileObject.modtime,
     creationtime: fileObject.creationtime,
     firstHeading: fileObject.firstHeading,
+    yamlTitle: fileObject.yamlTitle,
     frontmatter: fileObject.frontmatter,
     linefeed: fileObject.linefeed,
     modified: fileObject.modified,
@@ -140,6 +141,7 @@ export async function parse (
     creationtime: 0, // Creation time
     linefeed: '\n',
     firstHeading: null, // May contain the first heading level 1
+    yamlTitle: undefined,
     frontmatter: null, // May contain frontmatter variables
     modified: false // If true, it has been modified in the renderer
   }

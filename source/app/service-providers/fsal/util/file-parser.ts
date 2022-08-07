@@ -82,6 +82,7 @@ export default function getMarkdownFileParser (
     // file.
     file.id = ''
     file.firstHeading = null
+    file.yamlTitle = undefined
     file.tags = extractTags(content)
     file.links = extractLinks(content, linkStart, linkEnd)
     file.frontmatter = null
@@ -119,6 +120,14 @@ export default function getMarkdownFileParser (
         // Only keep those values which Zettlr can understand
         if (FRONTMATTER_VARS.includes(key)) {
           file.frontmatter[key] = value
+        }
+      }
+
+      // Extract the frontmatter title if applicable
+      if ('title' in frontmatter && typeof frontmatter.title === 'string') {
+        const title = frontmatter.title.trim()
+        if (title !== '') {
+          file.yamlTitle = title
         }
       }
     } // END: We got a frontmatter

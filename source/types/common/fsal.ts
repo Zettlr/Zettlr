@@ -63,6 +63,7 @@ export interface MDFileMeta extends FSMetaInfo {
   charCount: number
   target: any // TODO
   firstHeading: string|null
+  yamlTitle: string|undefined
   frontmatter: any|null
   linefeed: string
   modified: boolean

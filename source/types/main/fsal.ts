@@ -41,6 +41,7 @@ export interface MDFileDescriptor extends FSMetaInfo {
   charCount: number
   target: WritingTarget|undefined
   firstHeading: string|null
+  yamlTitle: string|undefined
   frontmatter: any|null
   linefeed: string
   modified: boolean

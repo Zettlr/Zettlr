@@ -311,8 +311,8 @@ export default defineComponent({
         return this.obj.name
       }
 
-      if (this.useTitle && typeof this.obj.frontmatter?.title === 'string') {
-        return this.obj.frontmatter.title
+      if (this.useTitle && this.obj.yamlTitle !== undefined) {
+        return this.obj.yamlTitle
       } else if (this.useH1 && this.obj.firstHeading !== null) {
         return this.obj.firstHeading
       } else if (this.displayMdExtensions) {

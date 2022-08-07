@@ -206,7 +206,10 @@ there.
   PersistentDataContainer
 - Changed the default ports for the development servers to 9001 (devServer) and
   9002 (logger) respectively to avoid collisions with PHP fpm installations on
-  development systems.
+  development systems
+- The yaml frontmatter title property is now its own property on file
+  descriptors to centralize the extraction logic and save some code on the
+  renderer's side
 
 # 2.3.0
 

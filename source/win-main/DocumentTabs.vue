@@ -322,8 +322,8 @@ export default defineComponent({
 
       if (file.type !== 'file') {
         return file.name
-      } else if (this.useTitle && typeof file.frontmatter?.title === 'string') {
-        return file.frontmatter.title
+      } else if (this.useTitle && file.yamlTitle !== undefined) {
+        return file.yamlTitle
       } else if (this.useH1 && file.firstHeading != null) {
         return file.firstHeading
       } else if (this.displayMdExtensions) {
