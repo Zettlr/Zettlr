@@ -198,7 +198,8 @@ there.
 
 - Refactored the main editor component further
 - Refactored the Sidebar panels into their own respective components
-- Upgrade Electron to `v18.0.0`
+- Upgrade Electron to `19.x.x`
+- Upgrade Pandoc to `2.19`
 - Pandoc logs are now logged in every case
 - Improve the display and functionality of log messages
 - Switched the configuration file management for the different service providers
