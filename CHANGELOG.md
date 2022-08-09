@@ -197,6 +197,7 @@ there.
   without any errors
 - Middle-mouse clicks on the collapse/uncollapse indicators in the file tree
   should no longer trigger scrolling behavior on Windows
+- File tree items now show their absolute path on mouse hover
 
 ## Under the Hood
 

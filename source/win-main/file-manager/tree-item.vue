@@ -21,6 +21,7 @@
       v-bind:style="{
         'padding-left': `${depth * 15 + 10}px`
       }"
+      v-bind:title="obj.path"
       v-on:click.stop="requestSelection"
       v-on:auxclick.stop="requestSelection"
       v-on:contextmenu="handleContextMenu"
