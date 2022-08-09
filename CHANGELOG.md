@@ -210,9 +210,8 @@ there.
 - Switched the configuration file management for the different service providers
   from the previously very bodged methods to the unified and new
   PersistentDataContainer
-- Changed the default ports for the development servers to 9001 (devServer) and
-  9002 (logger) respectively to avoid collisions with PHP fpm installations on
-  development systems
+- Changed the default ports for the logging server to 9001 to avoid collisions
+  with PHP fpm installations on development systems
 - The yaml frontmatter title property is now its own property on file
   descriptors to centralize the extraction logic and save some code on the
   renderer's side
