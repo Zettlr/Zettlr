@@ -167,7 +167,7 @@ export default class ConfigProvider extends ProviderContract {
       // Don't forget to update the version
       if (this._newVersion) {
         this._logger.info(`Migrating from ${String(readConfig.version)} to ${String(this.config.version)}!`)
-        this.set('version', ZETTLR_VERSION)
+        this.config.version = ZETTLR_VERSION // We should not emit events here, so manually set the value
       }
     }
 
