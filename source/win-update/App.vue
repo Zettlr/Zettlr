@@ -227,7 +227,7 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-body.darwin {
+body.darwin, body.win32, body.linux {
   #update {
     padding: 10px;
 
@@ -241,4 +241,5 @@ body.darwin {
     }
   }
 }
+
 </style>
