@@ -136,6 +136,9 @@ export default defineComponent({
       nextTick()
         .then(() => { this.scrollActiveFileIntoView() })
         .catch(err => console.error(err))
+    },
+    openFiles: function () {
+      this.maybeActivateScrollers()
     }
   },
   mounted: function () {
