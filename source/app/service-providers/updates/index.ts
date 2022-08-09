@@ -329,6 +329,11 @@ export default class UpdateProvider extends ProviderContract {
     })
 
     this._downloadReadStream.on('end', () => {
+      // Close the write stream. This will free the file handle, which is
+      // important on Windows for the next step, because if this is not done,
+      // Windows will refuse to open the file and emit an error that the file is
+      // still in use.
+      this._downloadWriteStream?.end()
       this._logger.info(`Successfully downloaded ${this._updateState.name}. Transferred ${this._updateState.size_downloaded} bytes overall.`)
       this._notifications.show(`Download of ${this._updateState.name} successful!`, 'Update', () => {
         // The user has clicked the notification, so we can show the update window here

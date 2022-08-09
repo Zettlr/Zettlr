@@ -193,6 +193,8 @@ there.
 - Fixed a minor bug in toolbar toggle controls that necessitated clicking them
   twice to bring them into the "active" state (holds especially true for the
   sidebar toggle)
+- Fixed faulty updates on Windows: Now the downloaded file should be opened
+  without any errors
 
 ## Under the Hood
 
