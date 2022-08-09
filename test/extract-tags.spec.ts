@@ -14,6 +14,7 @@
 
 import assert from 'assert'
 import extractTags from '../source/app/service-providers/fsal/util/extract-tags'
+import extractYamlFrontmatter from '@common/util/extract-yaml-frontmatter'
 
 const tests = [
   {
@@ -76,8 +77,9 @@ This Markdown file doesn't contain tags, but it contains a
 
 describe('extractTags()', function () {
   for (const test of tests) {
+    const { content, frontmatter } = extractYamlFrontmatter(test.input)
     it(`extracts the tags [ ${test.expected.join(', ')} ]`, function () {
-      assert.deepStrictEqual(extractTags(test.input), test.expected)
+      assert.deepStrictEqual(extractTags(frontmatter, content), test.expected)
     })
   }
 })
