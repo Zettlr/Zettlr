@@ -195,6 +195,8 @@ there.
   sidebar toggle)
 - Fixed faulty updates on Windows: Now the downloaded file should be opened
   without any errors
+- Middle-mouse clicks on the collapse/uncollapse indicators in the file tree
+  should no longer trigger scrolling behavior on Windows
 
 ## Under the Hood
 

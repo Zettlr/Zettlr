@@ -53,6 +53,7 @@
             'special': typeof primaryIcon !== 'boolean' && ![ 'caret right', 'caret down' ].includes(primaryIcon)
           }"
           v-on:click.stop="handlePrimaryIconClick"
+          v-on:auxclick.stop.prevent="handlePrimaryIconClick"
         ></clr-icon>
       </span>
       <span
