@@ -21,13 +21,13 @@
             "Herb \u003Chwongbaul.app@outlook.com\u003E",
             "joegege",
             "gigige",
-            "Che Jiang \u003Cjiang@fastmail.net\u003E",
+            "Che Jiang \u848b\u6f88 \u003Cjiang@fastmail.net\u003E",
             "\u571f\u8c46 \u003Chewang@mail.bnu.edu.cn\u003E",
             "Taylan TATLI",
             "Edgar Tang \u003Cedgar@veiam.net\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-07-18T11:18:45.000000Z"
+        "updated_at": "2022-08-14T11:04:19.000000Z"
     },
     "dialog": {
         "about": {
@@ -391,7 +391,8 @@
                 "showOpenPreferencesButton": "\u663e\u793a\u6253\u5f00\u504f\u597d\u8bbe\u7f6e\u6309\u94ae",
                 "showPomodoroButton": "\u663e\u793a\u756a\u8304\u949f\u6309\u94ae",
                 "showPreviousFileButton": "\u663e\u793a\u6253\u5f00\u524d\u4e00\u4e2a\u6587\u4ef6\u6309\u94ae",
-                "showToggleReadabilityButton": "\u663e\u793a\u53ef\u8bfb\u6027\u6309\u94ae"
+                "showToggleReadabilityButton": "\u663e\u793a\u53ef\u8bfb\u6027\u6309\u94ae",
+                "title": "\u5de5\u5177\u680f"
             },
             "translations": {
                 "download": "\u70b9\u51fb\u4e0b\u8f7d",
@@ -698,6 +699,7 @@
         "paste": "\u7c98\u8d34",
         "paste_plain": "\u7c98\u8d34\u4e3a\u7eaf\u6587\u672c",
         "pdf_preferences": "PDF \u9009\u9879\u2026",
+        "pin_tab": "\u56fa\u5b9a\u6807\u7b7e",
         "preferences": "\u504f\u597d",
         "previous_file": "\u4e0a\u4e00\u4e2a\u6587\u4ef6",
         "print": "\u6253\u5370\u2026",
@@ -739,6 +741,7 @@
         "toggle_typewriter_mode": "\u6253\u5b57\u673a\u6a21\u5f0f",
         "undo": "\u64a4\u9500",
         "unhide": "\u663e\u793a",
+        "unpin_tab": "\u53d6\u6d88\u56fa\u5b9a\u6807\u7b7e",
         "update": "\u68c0\u67e5\u66f4\u65b0",
         "win_close": "\u5173\u95ed",
         "win_minimize": "\u6700\u5c0f\u5316",
@@ -803,6 +806,9 @@
             "remove_message": "\u4f60\u60f3\u8981\u79fb\u9664 %s?",
             "remove_title": "\u662f\u5426\u5220\u9664\uff1f",
             "tray_not_supported": "\u4e0d\u652f\u6301\u6258\u76d8\u663e\u793a\u3002Gnome\u684c\u9762\u73af\u5883\u8981\u6c42&quot;KStatusNotifierItem/AppIndicator Support&quot; \u63d2\u4ef6\u3002"
+        },
+        "export_dialog": {
+            "save": "\u4fdd\u5b58"
         },
         "export_success": "\u6210\u529f\u5bfc\u51fa\u5230\uff05s\uff01",
         "file_changed": "\u6587\u6863 %s \u5df2\u88ab\u5176\u4ed6\u7a0b\u5e8f\u4fee\u6539\u3002",
