@@ -7,13 +7,13 @@
             "boltomli",
             "Aixue Wang \u003Cgz_wax@hotmail.com\u003E",
             "pluwen \u003Cpluwen@gmail.com\u003E",
+            "Jovian \u003Clitanglian@hotmail.com\u003E",
             "marisa \u003Chermitpurple@foxmail.com\u003E",
             "Steve OU",
             "Retaw Jin \u003Cretaw106@hotmail.com\u003E",
             "HRC",
             "ihipop \u003Cihipop+zettlr@gmail.com\u003E",
             "Z_Moz",
-            "Jovian \u003Clitanglian@hotmail.com\u003E",
             "JIAYI LIU \u003Cjiayiliujiayiliu@gmail.com\u003E",
             "0x7A",
             "Krysl",
@@ -27,7 +27,7 @@
             "Edgar Tang \u003Cedgar@veiam.net\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-08-14T11:04:19.000000Z"
+        "updated_at": "2022-08-31T13:06:35.000000Z"
     },
     "dialog": {
         "about": {
@@ -54,7 +54,7 @@
         },
         "button": {
             "cancel": "\u53d6\u6d88",
-            "choose_path": "\u9009\u62e9\u4e00\u4e2a\u76ee\u5f55\u2026",
+            "choose_path": "\u9009\u62e9\u76ee\u5f55...",
             "close": "\u5173\u95ed",
             "close_without_saving": "\u4e0d\u4fdd\u5b58\u4fee\u6539\u5e76\u5173\u95ed",
             "save": "\u4fdd\u5b58"
@@ -67,6 +67,8 @@
             "explanation": "\u7f16\u8f91\u5bfc\u5165\u6216\u5bfc\u51fa\u7684\u9ed8\u8ba4\u8bbe\u7f6e",
             "exporting_title": "\u5bfc\u51fa",
             "importing_title": "\u5bfc\u5165",
+            "invalid_warning": "\u8fd9\u4e2a\u914d\u7f6e\u6863\u4f3c\u4e4e\u7f3a\u5c11\u7f16\u8005\u6216\u8bfb\u8005\u7684\u5c5e\u6027\u3002\u786e\u4fdd\u4e24\u8005\u90fd\u8bbe\u5b9a\u4ee5\u4fbf Zettlr \u53ef\u4ee5\u4f7f\u7528\u8fd9\u4e2a\u914d\u7f6e\u6863\u3002",
+            "protected_warning": "\u8fd9\u4e2a\u914d\u7f6e\u6863\u662f\u53d7\u4fdd\u62a4\u7684\u3002\u8fd9\u610f\u5473\u7740\u5b83\u5c06\u4f1a\u5728\u4f60\u79fb\u9664\u6216\u91cd\u547d\u540d\u5b83\u65f6\u6062\u590d\u3002",
             "restore": "\u6062\u590d\u4e3a\u9ed8\u8ba4\u6587\u4ef6"
         },
         "dir_new": {
@@ -265,6 +267,7 @@
             "enable_table_helper": "\u542f\u7528\u8868\u683c\u7f16\u8f91\u5668",
             "export": {
                 "dest": "\u5bfc\u51fa\u6587\u4ef6\u7684\u76ee\u6807\u76ee\u5f55\u3002 \u003Cem\u003E\u6ce8\u610f\uff1a\u003C/ em\u003E\u9009\u62e9\u5f53\u524d\u5de5\u4f5c\u76ee\u5f55\u5c06\u8986\u76d6\u6587\u6863\u800c\u4e0d\u53d1\u51fa\u8b66\u544a\uff01",
+                "dest_ask_label": "\u8be2\u95ee\u76ee\u5f55",
                 "dest_cwd_label": "\u5f53\u524d\u5de5\u4f5c\u76ee\u5f55\uff1a\u5bfc\u51fa\u7684\u6587\u6863\u5c06\u4fdd\u5b58\u5230\u5f53\u524d\u9009\u5b9a\u7684\u76ee\u5f55\u4e2d\u3002",
                 "dest_temp_label": "\u4e34\u65f6\u76ee\u5f55\uff1a\u5b9a\u671f\u6e05\u9664",
                 "strip_id_label": "\u5220\u9664\u6587\u6863\u4e2d\u7684ZKN ID",
@@ -808,7 +811,8 @@
             "tray_not_supported": "\u4e0d\u652f\u6301\u6258\u76d8\u663e\u793a\u3002Gnome\u684c\u9762\u73af\u5883\u8981\u6c42&quot;KStatusNotifierItem/AppIndicator Support&quot; \u63d2\u4ef6\u3002"
         },
         "export_dialog": {
-            "save": "\u4fdd\u5b58"
+            "save": "\u4fdd\u5b58",
+            "title": "\u9009\u62e9\u5bfc\u51fa\u76ee\u7684\u4f4d\u7f6e"
         },
         "export_success": "\u6210\u529f\u5bfc\u51fa\u5230\uff05s\uff01",
         "file_changed": "\u6587\u6863 %s \u5df2\u88ab\u5176\u4ed6\u7a0b\u5e8f\u4fee\u6539\u3002",

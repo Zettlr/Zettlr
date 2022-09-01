@@ -5,7 +5,7 @@
             "vfc"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-06-04T07:18:04.000000Z"
+        "updated_at": "2022-08-18T06:37:44.000000Z"
     },
     "dialog": {
         "about": {
@@ -45,6 +45,8 @@
             "explanation": "Edita els par\u00e0metres per importar i exportar aqu\u00ed",
             "exporting_title": "Exportar",
             "importing_title": "Importar",
+            "invalid_warning": "Sembla que aquest perfil no t\u00e9 permisos d'escriptura o de lectura. Assegureu-vos que els t\u00e9 perqu\u00e8 Zettlr pugui fer-lo servir.",
+            "protected_warning": "Aquest perfil est\u00e0 protegit: es restaurar\u00e0 si l'esborreu o li canvieu el nom",
             "restore": "Restaura els fitxers per defecte"
         },
         "dir_new": {
@@ -243,6 +245,7 @@
             "enable_table_helper": "Activa l'editor de taules",
             "export": {
                 "dest": "Directori de dest\u00ed pels fitxers exportats. \u003Cem\u003EAtenci\u00f3:\u003C/em\u003E Si seleccioneu el directori on esteu treballant ara mateix els fitxers es sobreescriuran sense cap av\u00eds!",
+                "dest_ask_label": "Pregunta per la carpeta",
                 "dest_cwd_label": "Carpeta actual de treball: els fitxers exportats es desaran en aquesta carpeta",
                 "dest_temp_label": "Carpeta temporal: es buida regularment",
                 "strip_id_label": "Elimina les ID del ZKN dels fitxers",
@@ -558,12 +561,12 @@
         "global_search": {
             "clear_label": "Neteja la cerca",
             "filter_label": "Filtra els resultats de la cerca",
-            "query_label": "Escriu les paraules a cercar aqu\u00ed sota",
+            "query_label": "Paraules a cercar:",
             "query_placeholder": "Troba ...",
             "restrict_dir_label": "Restringeix  la cerca a la carpeta",
             "restrict_dir_placeholder": "Restringeix la cerca a la carpeta...",
             "search_label": "Busca",
-            "title": "Busca a tot el text",
+            "title": "Escorcoll general",
             "toggle_label": "M\u00e9s / Menys detalls"
         },
         "modified": "Modificat",
@@ -677,6 +680,7 @@
         "paste": "Enganxa",
         "paste_plain": "Enganxa sense estil",
         "pdf_preferences": "Prefer\u00e8ncies del PDF...",
+        "pin_tab": "Fixa la pestanya",
         "preferences": "Prefer\u00e8ncies...",
         "previous_file": "Fitxer seg\u00fcent",
         "print": "Imprimeix...",
@@ -718,6 +722,7 @@
         "toggle_typewriter_mode": "Mode m\u00e0qiuna d'escriure",
         "undo": "Desf\u00e9s",
         "unhide": "Mostra",
+        "unpin_tab": "No fixis la pestanya",
         "update": "Comprova si hi ha actualitzacions",
         "win_close": "Tanca",
         "win_minimize": "Minimitza",
@@ -782,6 +787,10 @@
             "remove_message": "Realment voleu esborrar %s?",
             "remove_title": "Realment esborrar?",
             "tray_not_supported": "La safata no \u00e9s compatible. L'extensi\u00f3 del Gnome &quot;KStatusNotifierItem/AppIndicator Support&quot; \u00e9s necess\u00e0ria per a la integraci\u00f3 de la safata a l'entorn Gnome"
+        },
+        "export_dialog": {
+            "save": "Desa",
+            "title": "Exporta a"
         },
         "export_success": "Exporta a %s",
         "file_changed": "El fitxer %s ha estat canviat remotament",

@@ -2,10 +2,11 @@
     "metadata": {
         "authors": [
             "GA\u00c1L P\u00e9ter \u003Cagglutive@freemail.hu\u003E",
-            "David Bolla"
+            "David Bolla",
+            "Csega"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-11-15T15:07:39.000000Z"
+        "updated_at": "2022-08-31T10:48:08.000000Z"
     },
     "dialog": {
         "about": {
@@ -34,11 +35,16 @@
             "cancel": "M\u00e9gse",
             "choose_path": "V\u00e1lassza ki a k\u00f6nyvt\u00e1rat \u2026",
             "close": "Bez\u00e1rni",
+            "close_without_saving": "Bez\u00e1r\u00e1s ment\u00e9s n\u00e9lk\u00fcl",
             "save": "Menteni"
         },
         "custom_css": {
             "info": "A pontosabb testreszab\u00e1s \u00e9rdek\u00e9ben itt fel\u00fclb\u00edr\u00e1lhatja a Zettlr st\u00edlus\u00e1t. \u003Cstrong\u003E Figyelem: Ez a f\u00e1jl fel\u00fcl\u00edrja az \u00f6sszes CSS-ir\u00e1nyelvet! Soha ne v\u00e1ltoztassa meg az elemek geometri\u00e1j\u00e1t, k\u00fcl\u00f6nben az alkalmaz\u00e1s viselked\u00e9se el\u0151rel\u00e1thatatlann\u00e1 v\u00e1lik! \u003C/strong\u003E",
             "title": "Egy\u00e9ni CSS"
+        },
+        "defaults": {
+            "exporting_title": "Export\u00e1l\u00e1s",
+            "importing_title": "Import\u00e1l\u00e1s"
         },
         "dir_new": {
             "placeholder": "A k\u00f6nyvt\u00e1r neve",
@@ -65,13 +71,18 @@
         "file_rename": {
             "placeholder": "\u00c1llom\u00e1ny"
         },
+        "filter_tags": "Sz\u0171r\u00e9si c\u00edmk\u00e9k...",
         "find": {
+            "close_label": "Keres\u00e9s bez\u00e1r\u00e1sa",
             "find_label": "Keresni",
             "find_placeholder": "Ezt keresni \u2026",
+            "replace_all_label": "\u00d6sszes cser\u00e9je",
             "replace_label": "\u003Cem\u003E1\u003C/em\u003E\u00d7 cser\u00e9lni",
+            "replace_next_label": "K\u00f6vetkez\u0151 cser\u00e9je",
             "replace_placeholder": "Erre \u2026"
         },
         "paste_image": {
+            "current_directory": "Aktu\u00e1lis k\u00f6nyvt\u00e1r",
             "dimensions": "A k\u00e9p m\u00e9rete",
             "info": "A v\u00e1g\u00f3lapon tal\u00e1lhat\u00f3 k\u00e9p el\u0151n\u00e9zete. A sorv\u00e9ge billenty\u0171vel egyb\u0151l visszat\u00e9rhet a jelenlegi k\u00f6nyvt\u00e1rba, vagy pedig v\u00e1laszthat egy m\u00e1sikat.",
             "name_label": "A f\u00e1jl neve",
@@ -106,6 +117,7 @@
                 "es-ES": "spanyol",
                 "et-ET": "\u00e9szt",
                 "eu-EU": "baszk",
+                "fi-FI": "Finn",
                 "fo-FO": "fer\u00f6eri",
                 "fr-FR": "francia",
                 "ga-GA": "\u00edr",
@@ -160,6 +172,14 @@
             "checkForBeta": "\u00c9rtes\u00edtsen a b\u00e9ta kiad\u00e1sokr\u00f3l",
             "choose_file": "F\u00e1jlt kiv\u00e1lasztani \u2026",
             "citation_database": "Id\u00e9zetek adatb\u00e1zisa (CSL-JSON vagy BibTex)",
+            "citations": {
+                "title": "Hivatkoz\u00e1sok"
+            },
+            "dark_mode": "S\u00f6t\u00e9t m\u00f3d",
+            "dark_mode_schedule": {
+                "end": "S\u00f6t\u00e9t m\u00f3d befejez\u00e9se ekkor:",
+                "start": "S\u00f6t\u00e9t m\u00f3d ind\u00edt\u00e1sa ekkor:"
+            },
             "debug": "A hibakeres\u00e9si m\u00f3d enged\u00e9lyez\u00e9se",
             "default_image_save_path": "A k\u00e9pek alap\u00e9rtelmezett el\u00e9r\u00e9si \u00fatja",
             "display": {
@@ -519,12 +539,14 @@
         "no_command": "Az \u00fczenetben nincs semmilyen utas\u00edt\u00e1s: %s",
         "ok": "Ok\u00e9",
         "open_folder": "Projekt-k\u00f6nyvt\u00e1rat kinyitni",
+        "replace_file_title": "F\u00e1jl cser\u00e9je",
         "save_changes_cancel": "M\u00e9gsem",
         "save_changes_message": "A f\u00e1jl megv\u00e1ltozott. Menteni vagy eldobni?",
         "save_changes_omit": "Eldobni",
         "save_changes_save": "Menteni",
         "save_changes_select_dir": "A f\u00e1jl ment\u00e9s\u00e9hez ki kell v\u00e1lasztani egy k\u00f6nyvt\u00e1rat.",
         "save_changes_title": "Eldobni a v\u00e1ltoz\u00e1sokat?",
+        "save_file": "F\u00e1jl ment\u00e9se",
         "unknown_command": "Ismeretlen utas\u00edt\u00e1s: %s"
     },
     "toolbar": {
@@ -552,6 +574,10 @@
         "stats": "Statisztika",
         "tag_cloud": "C\u00e9dul\u00e1k",
         "toggle_attachments": "Mell\u00e9kletek"
+    },
+    "tray": {
+        "show_zettlr": "A Zettlr megjelen\u00edt\u00e9se",
+        "tooltip": "Zettlr"
     },
     "validation": {
         "error_empty": "Kell hozz\u00e1 a(z) %s opci\u00f3.",

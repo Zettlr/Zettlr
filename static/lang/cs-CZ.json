@@ -4,7 +4,7 @@
             "Ales Nehyba \u003Cneal.cz@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-04-20T17:38:23.000000Z"
+        "updated_at": "2022-08-26T19:28:49.000000Z"
     },
     "dialog": {
         "about": {
@@ -594,6 +594,7 @@
         "close_file": "Zav\u0159\u00edt soubor",
         "close_workspace": "Zav\u0159\u00edt plochu",
         "copy": "Kop\u00edrovat",
+        "copy_abs_path": "Zkop\u00edrovat plnou cestu",
         "copy_equation": "Zkop\u00edrovat k\u00f3d rovnice",
         "copy_filename": "Kop\u00edrovat n\u00e1zev souboru",
         "copy_html": "Zkop\u00edrovat jako HTML",
@@ -651,6 +652,7 @@
         "paste": "Vlo\u017eit",
         "paste_plain": "Vlo\u017eit bez form\u00e1tov\u00e1n\u00ed",
         "pdf_preferences": "Mo\u017enosti PDF...",
+        "pin_tab": "P\u0159ipnout",
         "preferences": "Mo\u017enosti",
         "previous_file": "P\u0159edchoz\u00ed soubor",
         "print": "Tisk...",
@@ -692,6 +694,7 @@
         "toggle_typewriter_mode": "Re\u017eim psac\u00edho stroje",
         "undo": "Zp\u011bt",
         "unhide": "Zobrazit",
+        "unpin_tab": "Odepnout",
         "update": "Zkontrolovat aktualizace",
         "win_close": "Zav\u0159\u00edt",
         "win_minimize": "Minimalizovat",
@@ -755,6 +758,10 @@
             "remove_message": "Opravdu chcete odstranit %s?",
             "remove_title": "Opravdu smazat?",
             "tray_not_supported": "Syst\u00e9mov\u00e1 oblast nen\u00ed podporovan\u00e1. Pro podporu syst\u00e9mov\u00e9 oblasti Gnome desktopu je vy\u017eadov\u00e1n\u00ed roz\u0161\u00ed\u0159en\u00ed &quot;KStatusNotifierItem/AppIndicator Support&quot;."
+        },
+        "export_dialog": {
+            "save": "Ulo\u017eit",
+            "title": "Vyberte m\u00edsto exportu"
         },
         "export_success": "Prob\u00edh\u00e1 export do %s",
         "file_changed": "Soubor %s byl zm\u011bn\u011bn vzd\u00e1len\u011b.",
