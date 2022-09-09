@@ -98,7 +98,7 @@ const locatorRE = /^(?:[\d, -]*\d|[ivxlcdm, -]*[ivxlcdm])/i
  * and an array citations which contains the parsed CSL Items that can be passed
  * to citeproc-js.
  */
-interface CitePosition {
+export interface CitePosition {
   from: number
   to: number
   composite: boolean
