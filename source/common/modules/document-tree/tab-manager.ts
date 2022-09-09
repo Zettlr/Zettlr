@@ -260,8 +260,6 @@ export class TabManager {
 
     const targetIndex = this._sessionPointer + direction
 
-    console.log(this._sessionHistory)
-
     if (targetIndex > this._sessionHistory.length - 1 || targetIndex < 0) {
       return console.log('Out of bounds') // Cannot move: Out of bounds
     }
