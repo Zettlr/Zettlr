@@ -1,0 +1,303 @@
+// It is very nice that Codemirror offers snippets out of the box, but
+// unfortunately the syntax is incompatible with Textmate, so for backwards
+// compatibility we'll have to reimplement it here. This is largely the code
+// responsible for snippets in the old implementation, but now disentangled from
+// the other autocompletes thanks to the new plugin structure of Codemirror 6.
+
+import { Completion } from '@codemirror/autocomplete'
+import { StateEffect, StateField, SelectionRange, EditorSelection } from '@codemirror/state'
+import { Decoration, EditorView, WidgetType } from '@codemirror/view'
+import { AutocompletePlugin } from '.'
+
+// Define a class to highlight active tabstops
+const tabstopDeco = Decoration.mark({ class: 'tabstop' })
+
+// This widget is used to mark simple tabstops with no default text (so that
+// they're visible and users can see where the cursor will end up next).
+class SnippetWidget extends WidgetType {
+  constructor (readonly content: string, readonly range: SelectionRange) {
+    super()
+  }
+
+  eq (other: SnippetWidget): boolean {
+    return other.content === this.content && other.range.eq(this.range)
+  }
+
+  toDOM (view: EditorView): HTMLElement {
+    const elem = document.createElement('span')
+    elem.classList.add('tabstop')
+    elem.innerText = this.content
+    return elem
+  }
+
+  ignoreEvent (event: Event): boolean {
+    return true // By default ignore all events
+  }
+}
+
+/**
+ * This utility function inserts a snippet
+ */
+ function apply (view: EditorView, completion: Completion, from: number, to: number) {
+  const [ textToInsert, ranges ] = template2snippet(completion.info as string, from - 1)
+  // We can immediately take the first rangeset and set it as a selection, whilst
+  // committing the rest into our StateField as an effect
+  const firstRange = ranges.shift()
+  view.dispatch({
+    changes: [{ from: from - 1, to, insert: textToInsert }],
+    selection: EditorSelection.create(firstRange ?? [EditorSelection.cursor(to)]),
+    effects: snippetTabsEffect.of(ranges)
+  })
+}
+
+/**
+ * Used internally to add ranges for the snippets to the state
+ */
+const snippetTabsEffect = StateEffect.define<SelectionRange[][]>()
+/**
+ * Use this effect to provide the editor state with a set of new tags to autocomplete
+ */
+export const snippetsUpdate = StateEffect.define<{ name: string, content: string }[]>()
+
+interface SnippetStateField {
+  availableSnippets: Completion[]
+  activeRanges: SelectionRange[][]
+}
+
+export const snippetsUpdateField = StateField.define<SnippetStateField>({
+  create (state) {
+    return {
+      availableSnippets: [],
+      activeRanges: []
+    }
+  },
+  update (val, transaction) {
+    for (const effect of transaction.effects) {
+      if (effect.is(snippetsUpdate)) {
+        val.availableSnippets = effect.value.map(entry => {
+          return { label: entry.name, info: entry.content, apply }
+        })
+        return { ...val }
+      } else if (effect.is(snippetTabsEffect)) {
+        val.activeRanges = effect.value
+        return { ...val }
+      }
+    }
+
+    if (!transaction.docChanged) {
+      return val
+    }
+
+    // This monstrosity ensures that our ranges stay in sync while the user types
+    val.activeRanges = val.activeRanges.map(ranges => {
+      return ranges.map(({ from, to }) => {
+        return EditorSelection.range(
+          transaction.changes.mapPos(from),
+          transaction.changes.mapPos(to)
+        )
+      })
+    })
+
+    return { ...val }
+  },
+  // Turns any active ranges into decorations to highlight them
+  provide: field => {
+    return EditorView.decorations.from(field, (fieldValue) => {
+      if (fieldValue.activeRanges.length === 0) {
+        return Decoration.none
+      }
+
+      const decorations: any[] = []
+      let position = 0
+      for (const ranges of fieldValue.activeRanges) {
+        position++
+        for (const range of ranges) {
+          if (range.to === range.from) {
+            const widget = new SnippetWidget(`$${position}`, range)
+            decorations.push(Decoration.widget({ widget }).range(range.from))
+          } else {
+            decorations.push(tabstopDeco.range(range.from, range.to))
+          }
+        }
+      }
+
+      return Decoration.set(decorations)
+    })
+  }
+})
+
+/**
+ * Takes a template string and returns a two-element array containing (a) the
+ * template text with all variables and tabstops replaced so that it can be
+ * inserted into a document, and (b) a two-dimensional list of ranges in the
+ * correct order for tabbing through them.
+ *
+ * @param   {string}  template              The template string
+ * @param   {number}  rangeOffset           The global offset at which the
+ *                                          template will be inserted
+ *
+ * @return  {[string, SelectionRange[][]]}  The final text as well as tabstop
+ *                                          ranges (if any)
+ */
+function template2snippet (template: string, rangeOffset: number): [string, SelectionRange[][]] {
+  const rawRanges: Array<{ position: number, ranges: SelectionRange[] }> = []
+  let finalText = replaceSnippetVariables(template)
+
+  // Matches $[0-9] as well as ${[0-9]:default string}
+  const tabStopRE = /(?<!\\)\$(\d+)|(?<!\\)\$\{(\d+):(.+?)\}/ // NOTE: No g flag
+
+  let match: null|RegExpExecArray = null
+  while ((match = tabStopRE.exec(finalText)) !== null) {
+    const position = parseInt(match[1] ?? match[2], 10)
+    const replacementString: string|undefined = match[3]
+    const from = rangeOffset + match.index
+    const to = (replacementString !== undefined) ? from + replacementString.length : from
+
+    finalText = finalText.replace(match[0], replacementString ?? '')
+    rawRanges.push({ position, ranges: [EditorSelection.range(from, to)] })
+  }
+
+  if (rawRanges.length === 0) {
+    return [ finalText, [] ] // Already done!
+  }
+
+  // Combine multiple ranges with the same position together
+  const combinedRanges = rawRanges.reduce((acc, value) => {
+    const { position, ranges } = value
+    const existingRange = acc.find(v => v.position === position)
+    if (existingRange !== undefined) {
+      existingRange.ranges = existingRange.ranges.concat(ranges)
+    } else {
+      acc.push(value)
+    }
+
+    return acc
+  }, [] as Array<{ position: number, ranges: SelectionRange[] }>)
+
+  // Sort the ranges ascending, except the zero, which needs at the bottom
+  combinedRanges.sort((a, b) => {
+    if (a.position === 0) {
+      return 1 // Bring to back
+    } else if (b.position === 0) {
+      return -1
+    } else {
+      return a.position - b.position
+    }
+  })
+
+  // Check that there's a zero in there. If not, add one to the back.
+  if (combinedRanges[combinedRanges.length - 1].position !== 0) {
+    combinedRanges.push({ position: 0, ranges: [EditorSelection.cursor(rangeOffset + finalText.length)] })
+  }
+
+  // For the rest of the script, it's irrelevant which position the tabs had,
+  // since it expects the array to be sorted anyways, so we can omit that info now.
+  const onlyRanges = combinedRanges.map(v => v.ranges)
+
+  return [ finalText, onlyRanges ]
+}
+
+/**
+   * A utility function that replaces snippet variables with their correct values
+   * dynamically.
+   *
+   * @param   {string}             text  The text to modify
+   *
+   * @return  {string}                   The text with all variables replaced accordingly.
+   */
+function replaceSnippetVariables (text: string): string {
+  const clipboard = 'Clipboard contents!'
+
+  const REPLACEMENTS = {
+    CURRENT_YEAR: 2022,
+    CURRENT_YEAR_SHORT: '22',
+    CURRENT_MONTH: '09',
+    CURRENT_MONTH_NAME: 'September',
+    CURRENT_MONTH_NAME_SHORT: "Sep",
+    CURRENT_DATE: '02',
+    CURRENT_HOUR: '16',
+    CURRENT_MINUTE: '56',
+    CURRENT_SECOND: '23',
+    CURRENT_SECONDS_UNIX: Date.now(),
+    UUID: 'random-uuid-4-deadbeef',
+    CLIPBOARD: clipboard,
+    ZKN_ID: '1234567890',
+    CURRENT_ID: '',
+    FILENAME: 'filename.md',
+    DIRECTORY: '/some/directory',
+    EXTENSION: '.md'
+  }
+
+  // Second: Replace those variables, and return the text. NOTE we're adding a
+  // negative lookbehind -- (?<!\\) -- to make sure we're not including escaped ones.
+  return text.replace(/(?<!\\)\$([A-Z_]+)|(?<!\\)\$\{([A-Z_]+):(.+?)\}/g, (match, p1, p2, p3) => {
+    if (p1 !== undefined) {
+      // We have a single variable, so only replace if it's a supported one
+      if (REPLACEMENTS[p1 as keyof typeof REPLACEMENTS] !== undefined) {
+        return REPLACEMENTS[p1 as keyof typeof REPLACEMENTS]
+      } else {
+        return match
+      }
+    } else {
+      // We have a variable with placeholder, so replace it potentially with the default
+      if (REPLACEMENTS[p2 as keyof typeof REPLACEMENTS] !== undefined) {
+        return REPLACEMENTS[p2 as keyof typeof REPLACEMENTS]
+      } else {
+        return p3
+      }
+    }
+  })
+}
+
+export const snippets: AutocompletePlugin = {
+  applies (ctx) {
+    // A valid snippet applies whenever the user typed a colon
+    if (ctx.state.doc.sliceString(ctx.pos - 1, ctx.pos) !== ':') {
+      return false // Only applies after the user typed an #
+    }
+
+    const lineObject = ctx.state.doc.lineAt(ctx.pos)
+
+    if (ctx.pos - lineObject.from === 1) {
+      return true // Start of Line, so perfectly fine
+    }
+
+    const charBefore = ctx.state.doc.sliceString(ctx.pos - 2, ctx.pos - 1)
+    if (charBefore === ' ') {
+      return true // Valid char in front of the colon (so that `something:`
+      // won't trigger)
+    }
+
+    return false
+  },
+  entries (ctx, query) {
+    query = query.toLowerCase()
+    const entries = ctx.state.field(snippetsUpdateField).availableSnippets
+    return entries.filter(entry => {
+      return entry.label.toLowerCase().includes(query)
+    })
+  },
+  fields: [snippetsUpdateField]
+}
+
+export function nextSnippet (target: EditorView): boolean {
+  // Progresses to the next tabstop if there's one available
+  const nextRange = target.state.field(snippetsUpdateField).activeRanges.shift()
+  if (nextRange !== undefined) {
+    target.dispatch({ selection: EditorSelection.create(nextRange) })
+    return true
+  } else {
+    return false
+  }
+}
+
+export function abortSnippet (target: EditorView): boolean {
+  // Removes all tabstops, if there are any
+  const ranges = target.state.field(snippetsUpdateField).activeRanges.length
+  if (ranges > 0) {
+    target.dispatch({ effects: snippetTabsEffect.of([]) })
+    return true
+  }
+
+  return false
+}

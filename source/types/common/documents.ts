@@ -23,6 +23,16 @@ export interface OpenDocument {
 }
 
 /**
+ * This enum describes supported file types that can be opened in an editor.
+ */
+export enum DocumentType {
+  Markdown = 1,
+  YAML,
+  JSON,
+  LaTeX
+}
+
+/**
  * A JSON serializable representation of a document tree leaf
  */
 export interface LeafNodeJSON {
