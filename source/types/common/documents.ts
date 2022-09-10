@@ -8,10 +8,6 @@ export interface OpenDocument {
    */
   path: string
   /**
-   * The modtime is required so that we can check for remote changes
-   */
-  modtime: number
-  /**
    * Indicates whether this document should be handled as pinned
    */
   pinned: boolean

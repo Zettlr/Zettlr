@@ -1,6 +1,7 @@
 import { tags } from '@lezer/highlight'
 import { HighlightStyle, syntaxHighlighting } from '@codemirror/language'
 import { customTags } from '../util/custom-tags'
+import { Extension } from '@codemirror/state'
 
 // Instead of utilizing JS styling, we simply apply class names, in order to
 // retain our users' ability to apply custom CSS.
@@ -121,10 +122,10 @@ const codeTheme = HighlightStyle.define([
   { tag: tags.meta, class: 'meta' }
 ])
 
-export function markdownSyntaxHighlighter () {
-  return [syntaxHighlighting(markdownTheme), syntaxHighlighting(codeTheme)]
+export function markdownSyntaxHighlighter (): Extension {
+  return [ syntaxHighlighting(markdownTheme), syntaxHighlighting(codeTheme) ]
 }
 
-export function codeSyntaxHighlighter () {
+export function codeSyntaxHighlighter (): Extension {
   return syntaxHighlighting(codeTheme)
 }

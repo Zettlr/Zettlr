@@ -264,7 +264,7 @@ export class DTBranch {
    *
    * @return  {Promise<DTBranch>}                 The new branch
    */
-  static async fromJSON (parent: DocumentTree|DTBranch, nodeData: any): Promise<DTBranch> {
+  static fromJSON (parent: DocumentTree|DTBranch, nodeData: any): DTBranch {
     if (nodeData.direction === undefined) {
       throw new Error('Could not instantiate branch: Data direction was undefined')
     }
@@ -277,9 +277,9 @@ export class DTBranch {
 
     for (const subNode of nodeData.nodes) {
       if (subNode.type === 'leaf') {
-        newBranch.addNode(await DTLeaf.fromJSON(newBranch, subNode))
+        newBranch.addNode(DTLeaf.fromJSON(newBranch, subNode))
       } else if (subNode.type === 'branch') {
-        newBranch.addNode(await DTBranch.fromJSON(newBranch, subNode))
+        newBranch.addNode(DTBranch.fromJSON(newBranch, subNode))
       }
     }
 

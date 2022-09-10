@@ -14,13 +14,11 @@
 
 import { promises as fs } from 'fs'
 import path from 'path'
-import hash from '@common/util/hash'
 import searchFile from './util/search-file'
 import { shell } from 'electron'
 import safeAssign from '@common/util/safe-assign'
 // Import the interfaces that we need
 import { DirDescriptor, CodeFileDescriptor } from '@dts/main/fsal'
-import { CodeFileMeta } from '@dts/common/fsal'
 import FSALCache from './fsal-cache'
 import extractBOM from './util/extract-bom'
 
@@ -30,7 +28,7 @@ import extractBOM from './util/extract-bom'
  * @param {any} cachedFile The cache object to apply
  */
 function applyCache (cachedFile: any, origFile: CodeFileDescriptor): CodeFileDescriptor {
-  return safeAssign(cachedFile, origFile) as CodeFileDescriptor
+  return safeAssign(cachedFile, origFile)
 }
 
 /**
@@ -38,10 +36,7 @@ function applyCache (cachedFile: any, origFile: CodeFileDescriptor): CodeFileDes
  * @param {CodeFileDescriptor} origFile The file to cache
  */
 function cacheFile (origFile: CodeFileDescriptor, cacheAdapter: FSALCache): void {
-  // We'll use a metadata version of the original file sans the parent property
-  let copy = metadata(origFile)
-  delete (copy as any).parent // Make sure not to store circular properties
-  if (!cacheAdapter.set(origFile.hash.toString(), copy)) {
+  if (!cacheAdapter.set(origFile.path, JSON.stringify(origFile))) {
     throw new Error(`Could not cache file ${origFile.name}!`)
   }
 }
@@ -72,28 +67,6 @@ function parseFileContents (file: CodeFileDescriptor, content: string): void {
   if (content.includes('\n\r')) file.linefeed = '\n\r'
 }
 
-export function metadata (fileObject: CodeFileDescriptor): CodeFileMeta {
-  return {
-    // By only passing the hash, the object becomes
-    // both lean AND it can be reconstructed into a
-    // circular structure with NO overheads in the
-    // renderer.
-    parent: (fileObject.parent !== null) ? fileObject.parent.hash : null,
-    dir: fileObject.dir,
-    path: fileObject.path,
-    name: fileObject.name,
-    hash: fileObject.hash,
-    ext: fileObject.ext,
-    size: fileObject.size,
-    type: fileObject.type,
-    modtime: fileObject.modtime,
-    creationtime: fileObject.creationtime,
-    linefeed: fileObject.linefeed,
-    modified: fileObject.modified,
-    content: ''
-  }
-}
-
 export async function parse (
   filePath: string,
   cache: FSALCache|null,
@@ -101,15 +74,12 @@ export async function parse (
 ): Promise<CodeFileDescriptor> {
   // First of all, prepare the file descriptor
   let file: CodeFileDescriptor = {
-    parent: null, // We have to set this AFTERWARDS, as safeAssign() will traverse down this parent property, thereby introducing a circular structure
+    root: parent === null,
     dir: path.dirname(filePath), // Containing dir
     path: filePath,
     name: path.basename(filePath),
-    hash: hash(filePath),
     ext: path.extname(filePath),
     size: 0,
-    id: '', // The ID, if there is one inside the file.
-    tags: [], // All tags that are to be found inside the file's contents.
     bom: '', // Default: No BOM
     type: 'code',
     modtime: 0, // Modification time
@@ -133,17 +103,14 @@ export async function parse (
   // Before reading in the full file and parsing it,
   // let's check if the file has been changed
   let hasCache = false
-  if (cache?.has(file.hash.toString()) === true) {
-    let cachedFile = cache.get(file.hash.toString())
+  if (cache?.has(file.path) === true) {
+    let cachedFile = cache.get(file.path)
     // If the modtime is still the same, we can apply the cache
     if (cachedFile.modtime === file.modtime) {
       file = applyCache(cachedFile, file)
       hasCache = true
     }
   }
-
-  // Now it is safe to assign the parent
-  file.parent = parent
 
   if (!hasCache) {
     // Read in the file, parse the contents and make sure to cache the file
@@ -192,7 +159,6 @@ export async function rename (fileObject: CodeFileDescriptor, cache: any, newNam
   await fs.rename(oldPath, newPath)
   // Now update the object
   fileObject.path = newPath
-  fileObject.hash = hash(newPath)
   fileObject.name = newName
   // Afterwards, retrieve the now current modtime
   await updateFileMetadata(fileObject)
@@ -212,12 +178,6 @@ export async function remove (fileObject: CodeFileDescriptor, deleteOnFail: bool
       err.message = `[FSAL File] Could not remove file ${fileObject.path}: ${String(err.message)}`
       throw err
     }
-  }
-
-  if (fileObject.parent !== null) {
-    // Splice it from the parent directory
-    const idx = fileObject.parent.children.indexOf(fileObject)
-    fileObject.parent.children.splice(idx, 1)
   }
 }
 

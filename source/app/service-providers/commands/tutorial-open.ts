@@ -64,7 +64,7 @@ export default class TutorialOpen extends ZettlrCommand {
     // Now the last thing to do is set it as open
     await this._app.commands.run('roots-add', [targetPath])
     const tutorialDirectory = this._app.fsal.findDir(targetPath)
-    if (tutorialDirectory !== null) {
+    if (tutorialDirectory !== undefined) {
       this._app.fsal.openDirectory = tutorialDirectory
       // Always open the tutorial in the first window
       const windowId = this._app.documents.windowKeys()[0]

@@ -16,7 +16,7 @@ class MathWidget extends WidgetType {
     super()
   }
 
-  eq (other: MathWidget) {
+  eq (other: MathWidget): boolean {
     return other.equation === this.equation &&
       other.node.from === this.node.from &&
       other.node.to === this.node.to
@@ -36,7 +36,7 @@ class MathWidget extends WidgetType {
   }
 }
 
-function shouldHandleNode (node: SyntaxNodeRef) {
+function shouldHandleNode (node: SyntaxNodeRef): boolean {
   // This parser should look for InlineCode and FencedCode and then immediately
   // check its first CodeMark child to ensure its contents only include $ or $$.
   if (![ 'InlineCode', 'FencedCode' ].includes(node.type.name)) {

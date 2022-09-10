@@ -114,18 +114,14 @@ export default class CommandProvider extends ProviderContract {
     } else if (command === 'get-filetree-events') {
       return this._app.fsal.filetreeHistorySince(payload)
     } else if (command === 'get-descriptor') {
-      const descriptor = this._app.fsal.find(payload)
-      if (descriptor === undefined) {
-        return undefined
-      }
-      return this._app.fsal.getMetadataFor(descriptor)
+      return this._app.fsal.find(payload)
     } else if (command === 'get-open-directory') {
       const openDir = this._app.fsal.openDirectory
       if (openDir === null) {
         return null
       }
 
-      return this._app.fsal.getMetadataFor(openDir)
+      return openDir
     } else if (command === 'next-file') {
       // Trigger a "forward" command on the document manager
       // await this._app.documents.forward()

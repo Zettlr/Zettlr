@@ -24,5 +24,5 @@ export const customKeymap: KeyBinding[] = [
   { key: '"', run: handleQuote('"') },
   { key: "'", run: handleQuote("'") },
   { key: 'Alt-Up', run: moveLineUp, shift: copyLineUp },
-  { key: 'Alt-Down', run: moveLineDown, shift: copyLineDown },
+  { key: 'Alt-Down', run: moveLineDown, shift: copyLineDown }
 ]

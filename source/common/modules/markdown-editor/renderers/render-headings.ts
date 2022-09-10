@@ -12,7 +12,7 @@ class HeadingTagWidget extends WidgetType {
     super()
   }
 
-  eq (other: HeadingTagWidget) {
+  eq (other: HeadingTagWidget): boolean {
     return other.level === this.level &&
       other.node.from === this.node.from &&
       other.node.to === this.node.to
@@ -32,7 +32,7 @@ class HeadingTagWidget extends WidgetType {
   }
 }
 
-function shouldHandleNode (node: SyntaxNodeRef) {
+function shouldHandleNode (node: SyntaxNodeRef): boolean {
   return node.type.name.startsWith('HeaderMark')
 }
 

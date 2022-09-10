@@ -12,7 +12,7 @@ class TaskWidget extends WidgetType {
     super()
   }
 
-  eq (other: TaskWidget) {
+  eq (other: TaskWidget): boolean {
     return other.isChecked === this.isChecked &&
       other.node.from === this.node.from &&
       other.node.to === this.node.to
@@ -36,7 +36,7 @@ class TaskWidget extends WidgetType {
   }
 }
 
-function shouldHandleNode (node: SyntaxNodeRef) {
+function shouldHandleNode (node: SyntaxNodeRef): boolean {
   return node.type.name === 'TaskMarker'
 }
 

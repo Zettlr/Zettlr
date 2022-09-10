@@ -1,6 +1,4 @@
 import { OpenDocument } from '@dts/common/documents'
-import { isMdOrCodeFile } from '@providers/fsal/util/is-md-or-code-file'
-import { promises as fs, constants as FSConstants } from 'fs'
 
 export class TabManager {
   private readonly _openFiles: OpenDocument[]
@@ -103,15 +101,15 @@ export class TabManager {
   /**
    * Returns a file's metadata including the contents.
    *
-   * @param  {string}  file   The absolute file path
-   * @param  {boolean} newTab Optional. If true, will always prevent exchanging the currently active file.
+   * @param   {string}   filePath       The absolute file path
+   * @param   {boolean}  modifyHistory  Optional. Only used internally.
    *
-   * @return {Promise<MDFileDescriptor|CodeFileDescriptor>} The file's descriptor
+   * @return  {Promise<boolean>}        True upon successful opening
    */
-  public async openFile (
+  public openFile (
     filePath: string,
     modifyHistory?: boolean
-  ): Promise<boolean> {
+  ): boolean {
     if (this.activeFile?.path === filePath) {
       return false
     }
@@ -133,31 +131,12 @@ export class TabManager {
         this._sessionPointer = this._sessionHistory.length - 1
       }
       this.activeFile = openFile
-      return false
+      return true
     }
-
-    // The file is not open, so first test if we can actually open it, and then
-    // load it into our state.
-    try {
-      await fs.access(filePath,
-        FSConstants.F_OK | // File must be visible to the process
-        FSConstants.R_OK | // We need to read it
-        FSConstants.W_OK // And write it
-      )
-    } catch (err: any) {
-      return false
-    }
-
-    if (!isMdOrCodeFile(filePath)) {
-      return false
-    }
-
-    const stat = await fs.lstat(filePath)
 
     const file: OpenDocument = {
       path: filePath,
-      pinned: false,
-      modtime: stat.mtime.getTime()
+      pinned: false
     }
 
     if (this._activeFile !== null) {

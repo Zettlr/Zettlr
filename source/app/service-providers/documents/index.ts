@@ -23,16 +23,36 @@ import ProviderContract from '@providers/provider-contract'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import AppServiceContainer from 'source/app/app-service-container'
 import { ipcMain, app } from 'electron'
-import { DocumentTree, DTLeaf } from '@common/modules/document-tree'
+import { DocumentTree, DTLeaf } from './document-tree'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
-import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
-import { TabManager } from '@common/modules/document-tree/tab-manager'
-import { DP_EVENTS, OpenDocument } from '@dts/common/documents'
+import { TabManager } from '@providers/documents/document-tree/tab-manager'
+import { DP_EVENTS, OpenDocument, DocumentType } from '@dts/common/documents'
 import { v4 as uuid4 } from 'uuid'
 import chokidar from 'chokidar'
+import { Update } from '@codemirror/collab'
+import { ChangeSet, Text } from '@codemirror/state'
 import { CodeFileDescriptor, MDFileDescriptor } from '@dts/main/fsal'
 
 interface DocumentWindows { [windowId: string]: DocumentTree }
+
+const MAX_VERSION_HISTORY = 100 // Keep no more than this many updates.
+
+interface Document {
+  // The absolute file path
+  filePath: string
+  // The descriptor for the file
+  descriptor: MDFileDescriptor|CodeFileDescriptor
+  // The type
+  type: DocumentType
+  // Versioning
+  currentVersion: number
+  minimumVersion: number
+  lastSavedVersion: number // Allows to quickly check if the doc has been modified: currentVersion > lastSavedVersion
+  // The updates since the file was opened
+  updates: Update[]
+  // The actual document content
+  document: Text
+}
 
 export default class DocumentManager extends ProviderContract {
   /**
@@ -88,15 +108,25 @@ export default class DocumentManager extends ProviderContract {
    */
   private readonly _remoteChangeDialogShownFor: string[]
 
+  /**
+   * This holds all currently opened documents somewhere across the app.
+   *
+   * @var {Document[]}
+   */
+  private readonly documents: Document[]
+
   constructor (private readonly _app: AppServiceContainer) {
     super()
 
+    const containerPath = path.join(app.getPath('userData'), 'documents.yaml')
+
     this._windows = {}
     this._emitter = new EventEmitter()
-    this._config = new PersistentDataContainer(path.join(app.getPath('userData'), 'documents.yaml'), 'yaml')
+    this._config = new PersistentDataContainer(containerPath, 'yaml')
     this._modifiedFiles = new Map()
     this._ignoreChanges = []
     this._remoteChangeDialogShownFor = []
+    this.documents = []
 
     const options: chokidar.WatchOptions = {
       persistent: true,
@@ -143,6 +173,20 @@ export default class DocumentManager extends ProviderContract {
       }
     })
 
+    /**
+     * Hook the event listener that directly communicates with the editors
+     */
+    ipcMain.handle('documents-authority', async (event, { command, payload }) => {
+      switch (command) {
+        case 'pull-updates':
+          return await this.pullUpdates(payload.filePath, payload.version)
+        case 'push-updates':
+          return await this.pushUpdates(payload.filePath, payload.version, payload.updates)
+        case 'get-document':
+          return await this.getDocument(payload.filePath)
+      }
+    })
+
     // Finally, listen to events from the renderer
     ipcMain.handle('documents-provider', async (event, { command, payload }) => {
       switch (command) {
@@ -160,11 +204,8 @@ export default class DocumentManager extends ProviderContract {
           return this._windows[payload.windowId].toJSON()
         }
         case 'save-file': {
-          const windowId = payload.windowId as string
-          const leafId = payload.leafId as string
           const filePath = payload.path as string
-          const contents = payload.contents as string
-          const result = await this.saveFile(windowId, leafId, filePath, contents)
+          const result = await this.saveFile(filePath)
           if (result) {
             this._app.stats.updateWordCount(payload.offsetWordCount as number)
           }
@@ -184,19 +225,6 @@ export default class DocumentManager extends ProviderContract {
           const windowId = payload.windowId as string
           const newOrder = payload.newOrder as string[]
           this.sortOpenFiles(windowId, leafId, newOrder)
-          return
-        }
-        case 'update-file-modification-status': {
-          const filePath = payload.path as string
-          const timestamp = payload.timestamp as number
-          const contents = payload.contents as string
-          const isClean = payload.isClean as boolean
-
-          if (isClean) {
-            this.markClean(filePath)
-          } else {
-            this.markDirty(filePath, timestamp, contents)
-          }
           return
         }
         case 'get-file-modification-status': {
@@ -262,7 +290,7 @@ export default class DocumentManager extends ProviderContract {
     const treedata: DocumentWindows = await this._config.get()
     for (const key in treedata) {
       try {
-        this._windows[key] = await DocumentTree.fromJSON(treedata[key])
+        this._windows[key] = DocumentTree.fromJSON(treedata[key])
         this.broadcastEvent(DP_EVENTS.NEW_WINDOW, { key })
       } catch (err: any) {
         this._app.log.error(`[Document Provider] Could not instantiate window ${key}: ${err.message as string}`, err)
@@ -344,41 +372,143 @@ export default class DocumentManager extends ProviderContract {
     this._emitter.emit(event, context)
   }
 
+  // DOCUMENT AUTHORITY FUNCTIONS
+  public async getDocument (filePath: string): Promise<{ content: string, type: DocumentType, startVersion: number }> {
+    const existingDocument = this.documents.find(doc => doc.filePath === filePath)
+    if (existingDocument !== undefined) {
+      return {
+        content: existingDocument.document.toString(),
+        type: existingDocument.type,
+        startVersion: existingDocument.currentVersion
+      }
+    }
+
+    // TODO: Replace the following with a proper file loader
+    let content = ''
+    let type = DocumentType.Markdown
+
+    // TODO: We also need to be able to load files not present in the file tree!
+    const descriptor = this._app.fsal.findFile(filePath)
+    if (descriptor === undefined) {
+      throw new Error(`Cannot load file ${filePath}`) // TODO: Proper error handling & state recovery!
+    }
+
+    const contents = await this._app.fsal.loadAnySupportedFile(filePath)
+
+    if (descriptor.type === 'code') {
+      switch (descriptor.ext) {
+        case '.yaml':
+        case '.yml':
+          type = DocumentType.YAML
+          break
+        case '.json':
+          type = DocumentType.JSON
+          break
+        case '.tex':
+        case '.latex':
+          type = DocumentType.LaTeX
+      }
+    }
+
+    const doc: Document = {
+      filePath,
+      type,
+      descriptor,
+      currentVersion: 0,
+      minimumVersion: 0,
+      lastSavedVersion: 0,
+      updates: [],
+      document: Text.of(contents.split(descriptor.linefeed))
+    }
+
+    this.documents.push(doc)
+
+    // TODO: Sync the watchdog!
+
+    return { content, type, startVersion: 0 }
+  }
+
+  private async pullUpdates (filePath: string, clientVersion: number): Promise<Update[]|false> {
+    const doc = this.documents.find(doc => doc.filePath === filePath)
+    if (doc === undefined) {
+      // Indicate to the editor that they should get the document (again). This
+      // handles the case where the document has been remotely modified and thus
+      // removed from the document array.
+      return false
+    }
+
+    if (clientVersion < doc.minimumVersion) {
+      // TODO: This means that the client is completely out of sync and needs to
+      // re-fetch the whole document.
+      return false
+    } else if (clientVersion < doc.currentVersion) {
+      return doc.updates.slice(clientVersion)
+    } else {
+      return [] // No updates available
+    }
+  }
+
+  private async pushUpdates (filePath: string, clientVersion: number, clientUpdates: any[]): Promise<boolean> { // clientUpdates must be produced via "toJSON"
+    const doc = this.documents.find(doc => doc.filePath === filePath)
+    if (doc === undefined) {
+      throw new Error(`Could not receive updates for file ${filePath}: Not found.`)
+    }
+
+    if (clientVersion !== doc.currentVersion) {
+      console.log('Client wanted to push updates, but it has a wrong version!')
+      return false
+    }
+
+    for (const update of clientUpdates) {
+      const changes = ChangeSet.fromJSON(update.changes)
+      doc.updates.push({ changes, clientID: update.clientID })
+      doc.document = changes.apply(doc.document)
+      doc.currentVersion = doc.minimumVersion + doc.updates.length
+      // People are lazy, and hence there is a non-zero chance that in a few
+      // instances the currentVersion will get dangerously close to
+      // Number.MAX_SAFE_INTEGER. In that case, we need to perform a rollback to
+      // version 0 and notify all editors that have the document in question
+      // open to simply re-load it. That will cause a screen-flicker, but
+      // honestly better like this than otherwise.
+      if (doc.currentVersion === Number.MAX_SAFE_INTEGER - 1) {
+        console.warn(`Document ${filePath} has reached MAX_SAFE_INTEGER. Performing rollback ...`)
+        doc.minimumVersion = 0
+        doc.currentVersion = doc.updates.length
+        // TODO: Broadcast a message so that all editor instances can reload the
+        // document.
+      }
+    }
+
+    // Notify all clients, they will then request the update
+    broadcastIpcMessage('file-changed', doc.filePath)
+
+    // Drop all updates that exceed the amount of updates we allow.
+    while (doc.updates.length > MAX_VERSION_HISTORY) {
+      doc.updates.shift()
+      doc.minimumVersion++
+    }
+
+    return true
+  }
+
+  // END DOCUMENT AUTHORITY FUNCTIONS
+
   /**
    * This function searches all currently opened documents for files that have
    * databases attached to them, and announces to the citeproc provider that it
-   * should keep those available. Resolves once the citeproc provider finished
+   * should keep those available. Resolves once the citeproc provider finishes
    * synchronizing.
    */
   private async synchronizeDatabases (): Promise<void> {
-    // First get a list of all open files
-    const allLeafs: DTLeaf[] = []
-    for (const window of Object.values(this._windows)) {
-      allLeafs.push(...window.getAllLeafs())
-    }
-
-    const openFiles: string[] = allLeafs.map(leaf => {
-      return leaf.tabMan.openFiles.map(doc => doc.path)
-    }).flat() // Flatten the 2d-array
-
     const libraries: string[] = []
 
-    for (const filePath of openFiles) {
-      let descriptor = this._app.fsal.find(filePath)
-      if (descriptor === undefined) {
-        // This is why we require every open document to be also loaded in the
-        // FSAL: There, we can simply grab it from the tree, instead of having
-        // to parse the file again (which is more computationally expensive).
-        this._app.log.error(`[Documents Provider] Error during database sync: Did not find ${filePath} in FSAL, even though it's loaded here. This indicates a logical bug. Please report this.`)
-        descriptor = await this.loadFile(filePath)
-      }
-
-      if (descriptor.type !== 'file') {
+    for (const doc of this.documents) {
+      if (doc.descriptor.type !== 'file') {
         continue
       }
 
-      if (descriptor.frontmatter !== null && 'bibliography' in descriptor.frontmatter) {
-        const bib = descriptor.frontmatter.bibliography
+      if (doc.descriptor.frontmatter !== null && 'bibliography' in doc.descriptor.frontmatter) {
+        const bib = doc.descriptor.frontmatter.bibliography
         if (typeof bib === 'string' && path.isAbsolute(bib)) {
           libraries.push(bib)
         }
@@ -418,7 +548,7 @@ export default class DocumentManager extends ProviderContract {
     if (leaf.tabMan.openFiles.map(x => x.path).includes(filePath)) {
       // File is already open -> simply set it as active
       // leaf.tabMan.activeFile = filePath
-      await leaf.tabMan.openFile(filePath)
+      leaf.tabMan.openFile(filePath)
       this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId, filePath })
       return true
     }
@@ -427,7 +557,7 @@ export default class DocumentManager extends ProviderContract {
     // Close the (formerly active) file if we should avoid new tabs and have not
     // gotten a specific request to open it in a *new* tab
     const activeFile = leaf.tabMan.activeFile
-    const ret = await leaf.tabMan.openFile(filePath)
+    const ret = leaf.tabMan.openFile(filePath)
 
     if (activeFile !== null && avoidNewTabs && newTab !== true && !this.isModified(activeFile.path)) {
       leaf.tabMan.closeFile(activeFile)
@@ -461,80 +591,59 @@ export default class DocumentManager extends ProviderContract {
       return false
     }
 
-    const openFile = leaf.tabMan.openFiles.find(f => f.path === filePath)
+    const openFile = this.documents.find(doc => doc.filePath === filePath)
+
+    let numOpenInstances = 0
+    await this.forEachLeaf(async tabMan => {
+      const file = tabMan.openFiles.find(f => f.path === filePath)
+      if (file !== undefined) {
+        numOpenInstances++
+      }
+      return false
+    })
 
     if (openFile === undefined) {
       return false
     }
 
-    if (this.isModified(filePath)) {
+    // If we were to completely remove the file from our buffer, we have to ask
+    // first. If there's at least another instance open that means that we won't
+    // lose the file.
+    if (this.isModified(filePath) && numOpenInstances === 1) {
       const result = await this._app.windows.askSaveChanges()
       // 0 = 'Close without saving changes',
       // 1 = 'Save changes'
       if (result.response === 0) {
         // Clear the modification flag
-        this.markClean(filePath)
-        // Mark the whole application as clean if applicable
-        // TODO: Implement event based in the window provider
-        // this._app.windows.setModified(!this._app.documents.isClean())
+        openFile.lastSavedVersion = openFile.currentVersion
       } else if (result.response === 1) {
-        // The following code looks horrible, but it solves the problem quite
-        // elegantly: Since we are in an asynchronous function, we can actually
-        // pause execution of this function until the file has been saved. To
-        // do this, we create a new promise and, inside that, listen to the
-        // document-modified-changed event of the document manager, which is
-        // being emitted everytime something in the modification status has
-        // changed. This happens if a file is being saved. To prevent *other*
-        // files from resolving the promise, we will explicitly check if the
-        // event has been emitted specifically in response to a successful
-        // save of our file here.
-        await new Promise<void>((resolve, reject) => {
-          const callback = (): void => {
-            // The document manager has access to the same object, so just wait
-            // until the document manager sets the file.modified flag to false.
-            if (!this.isModified(filePath)) {
-              // Always remember to clean up 🧹
-              this.off(DP_EVENTS.CHANGE_FILE_STATUS, callback)
-              resolve()
-            }
-          }
-          this.on(DP_EVENTS.CHANGE_FILE_STATUS, callback)
-
-          // Tell the renderer to actually save our file.
-          broadcastIpcMessage('save-documents', [filePath])
-
-          // Failsafe: Reject if the file in question hasn't been saved after
-          // 5 seconds. Even the slowest of computers should be able to save a
-          // plain text file in that amount of time.
-          setTimeout(() => { reject(new Error(`[Document Manager] Could not automatically save file ${filePath}`)) }, 5000)
-        })
+        await this.saveFile(filePath) // TODO: Check return status
       } else {
         // Don't close the file
         this._app.log.info('[Document Manager] Not closing file, as the user did not want that.')
         return false
       }
+
+      // Remove the file
+      this.documents.splice(this.documents.indexOf(openFile), 1)
     }
 
-    if (leaf !== undefined) {
-      const ret = leaf.tabMan.closeFile(filePath)
-      if (ret) {
+    const ret = leaf.tabMan.closeFile(filePath)
+    if (ret) {
+      this.syncToConfig()
+      this.syncWatchedFilePaths()
+      this.broadcastEvent(DP_EVENTS.CLOSE_FILE, { windowId, leafId, filePath })
+      this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId, filePath: leaf.tabMan.activeFile?.path })
+      if (leaf.tabMan.openFiles.length === 0) {
+        // Remove this leaf
+        leaf.parent.removeNode(leaf)
+        this.broadcastEvent(DP_EVENTS.LEAF_CLOSED, { windowId, leafId })
         this.syncToConfig()
-        this.syncWatchedFilePaths()
-        this.broadcastEvent(DP_EVENTS.CLOSE_FILE, { windowId, leafId, filePath })
-        this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId, filePath: leaf.tabMan.activeFile?.path })
-        if (leaf.tabMan.openFiles.length === 0) {
-          // Remove this leaf
-          leaf.parent.removeNode(leaf)
-          this.broadcastEvent(DP_EVENTS.LEAF_CLOSED, { windowId, leafId })
-          this.syncToConfig()
-        }
-
-        await this.synchronizeDatabases()
       }
-      return ret
-    }
 
-    return false
+      await this.synchronizeDatabases()
+    }
+    return ret
   }
 
   /**
@@ -579,24 +688,19 @@ export default class DocumentManager extends ProviderContract {
       }
     }
 
-    // Sanity check: Check all modtimes
-    const allModtimes: number[] = openFiles.map(x => x.modtime)
-    if (!allModtimes.every(val => val === allModtimes[0])) {
-      this._app.log.error('[Document Manager] The same file has different modtimes across all leafs. This is a logical bug.')
-    }
+    const doc = this.documents.find(doc => doc.filePath === filePath)
 
-    const ourModtime = Math.max(...allModtimes) // Get the most recent modtime
+    if (doc === undefined) {
+      throw new Error(`Could not handle remote change for file ${filePath}: Could not find corresponding file!`)
+    }
 
     const stat = await fs.lstat(filePath)
     const modtime = stat.mtime.getTime()
+    const ourModtime = doc.descriptor.modtime
     // In response to issue #1621: We will not check for equal modtime but only
     // for newer modtime to prevent sluggish cloud synchronization services
     // (e.g. OneDrive and Box) from having text appear to "jump" from time to time.
     if (modtime > ourModtime) {
-      // Now what we have to do is (a) update the modtimes of every OpenDocument.
-      // Since these are all pointers we can literally do a forEach. (b) react
-      // to that change.
-      openFiles.forEach(doc => { doc.modtime = modtime })
       // Notify the caller, that the file has actually changed on disk.
       // The contents of one of the open files have changed.
       // What follows looks a bit ugly, welcome to callback hell.
@@ -631,13 +735,7 @@ export default class DocumentManager extends ProviderContract {
     const watchedFiles = Object.values(this._watcher.getWatched()).flat()
 
     // Second, get all open files
-    const openFiles: string[] = []
-    for (const key in this._windows) {
-      const allLeafs = this._windows[key].getAllLeafs()
-      for (const leaf of allLeafs) {
-        openFiles.push(...leaf.tabMan.openFiles.map(x => x.path))
-      }
-    }
+    const openFiles: string[] = this.documents.map(doc => doc.filePath)
 
     // Third, remove those watched files which are no longer open
     for (const watchedFile of watchedFiles) {
@@ -717,23 +815,12 @@ export default class DocumentManager extends ProviderContract {
    * @param {string} filePath The file in question
    */
   public async notifyRemoteChange (filePath: string): Promise<void> {
-    if (hasMarkdownExt(filePath)) {
-      const descriptor = await FSALFile.parse(
-        filePath,
-        null,
-        this._app.fsal.getMarkdownFileParser(),
-        this._app.targets,
-        this._app.tags
-      )
-      const returnFile = FSALFile.metadata(descriptor)
-      returnFile.content = await FSALFile.load(descriptor)
-      this.broadcastEvent(DP_EVENTS.FILE_REMOTELY_CHANGED, { filePath, descriptor: returnFile })
-    } else {
-      const descriptor = await FSALCodeFile.parse(filePath, null)
-      const returnFile = FSALCodeFile.metadata(descriptor)
-      returnFile.content = await FSALCodeFile.load(descriptor)
-      this.broadcastEvent(DP_EVENTS.FILE_REMOTELY_CHANGED, { filePath, descriptor: returnFile })
-    }
+    // TODO: Here we basically only need to close the document and wait for the
+    // renderers to reload themselves with getDocument, which will automatically
+    // open the new document.
+    const idx = this.documents.findIndex(file => file.filePath === filePath)
+    this.documents.splice(idx, 1)
+    // TODO: Emit an update that basically means "please pull this file in again"
   }
 
   /**
@@ -889,51 +976,19 @@ export default class DocumentManager extends ProviderContract {
     }
     return null
   }
+  // TODO: I NEED THIS SOMEWHERE! this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { filePath, status: 'modification' })
 
-  /**
-   * Sets the modification flag on an open file
-   */
-  public markDirty (filePath: string, timestamp: number, contents: string): void {
-    for (const key of this._modifiedFiles.keys()) {
-      if (key[0] === filePath && timestamp > key[1]) {
-        // The file is already marked dirty, but this one is a newer state
-        this._modifiedFiles.delete(key)
-        this._modifiedFiles.set([ filePath, timestamp ], contents)
-        this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { filePath, status: 'modification' })
-        return
-      }
-    }
+  // TODO: I NEED THIS SOMEWHERE! this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { filePath, status: 'modification' })
 
-    // If we're here, the file has not yet been marked dirty
-    this._modifiedFiles.set([ filePath, timestamp ], contents)
-    this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { filePath, status: 'modification' })
-  }
-
-  /**
-   * Removes the modification flag on an open file
-   */
-  public markClean (filePath: string): void {
-    for (const key of this._modifiedFiles.keys()) {
-      if (key[0] === filePath) {
-        this._modifiedFiles.delete(key)
-        this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { filePath, status: 'modification' })
-      }
-    }
-  }
-
-  public markEverythingClean (): void {
-    this._modifiedFiles.clear()
-    this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { status: 'modification' })
-  }
+  // TODO: I NEED THIS SOMEWHERE! this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { status: 'modification' })
 
   public isModified (filePath: string): boolean {
-    for (const [fPath] of this._modifiedFiles.keys()) {
-      if (fPath === filePath) {
-        return true
-      }
+    const doc = this.documents.find(doc => doc.filePath === filePath)
+    if (doc !== undefined) {
+      return doc.currentVersion !== doc.lastSavedVersion
+    } else {
+      return false // None existing files aren't modified
     }
-
-    return false
   }
 
   /**
@@ -944,6 +999,7 @@ export default class DocumentManager extends ProviderContract {
    *                                  for that. If undefined, returns the total
    *                                  clean state.
    */
+  public isClean (): boolean
   public isClean (id?: string, which?: 'window'|'leaf'): boolean {
     const modPaths = Array.from(this._modifiedFiles.keys()).map(x => x[0])
     if (id === undefined) {
@@ -985,32 +1041,6 @@ export default class DocumentManager extends ProviderContract {
     return true
   }
 
-  /**
-   * This function will return a more recent, cached version of the given file
-   * if the given file has been recently modified but not yet saved. In that
-   * case, the document provider will have the most recently edited content in
-   * its cache.
-   *
-   * @param   {string}  filePath  The file in question
-   *
-   * @return  {string}            A string with the file contents, or undefined
-   *                              if the file has not been modified inside the
-   *                              program.
-   */
-  public getCachedVersion (filePath: string): string|undefined {
-    let candidate: string|undefined
-    let timestamp: number = -Infinity
-
-    for (const key of this._modifiedFiles.keys()) {
-      if (key[0] === filePath && key[1] > timestamp) {
-        candidate = this._modifiedFiles.get(key)
-        timestamp = key[1]
-      }
-    }
-
-    return candidate
-  }
-
   public async navigateForward (windowId: string, leafId: string): Promise<void> {
     const leaf = this._windows[windowId].findLeaf(leafId)
     if (leaf === undefined) {
@@ -1033,56 +1063,31 @@ export default class DocumentManager extends ProviderContract {
     this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId, leafId })
   }
 
-  public async saveFile (windowId: string, leafId: string, filePath: string, contents: string): Promise<boolean> {
-    const basename = path.basename(filePath)
-    const leaf = this._windows[windowId].findLeaf(leafId)
+  public async saveFile (filePath: string): Promise<boolean> {
+    const doc = this.documents.find(doc => doc.filePath === filePath)
 
-    if (leaf === undefined) {
-      this._app.log.error(`[Document Manager] Could not save file ${basename} since no editor pane was found.`)
-      return false
+    if (doc === undefined) {
+      return false // TODO: Error logging
     }
 
     this._ignoreChanges.push(filePath)
 
-    let descriptor = await this.loadFile(filePath)
-    if (descriptor.type === 'file') {
+    if (doc.descriptor.type === 'file') {
       await FSALFile.save(
-        descriptor,
-        contents,
+        doc.descriptor,
+        doc.document.toString(),
         this._app.fsal.getMarkdownFileParser(),
         this._app.tags,
         null
       )
       await this.synchronizeDatabases() // The file may have gotten a library
     } else {
-      await FSALCodeFile.save(descriptor, contents, null)
+      await FSALCodeFile.save(doc.descriptor, doc.document.toString(), null)
     }
 
-    // At this point, notify the leaf that the file's no longer modified
-    this.markClean(filePath)
+    doc.lastSavedVersion = doc.currentVersion
     this.broadcastEvent(DP_EVENTS.FILE_SAVED, { filePath })
 
     return true
-  }
-
-  /**
-   * Loads a file into a FSAL descriptor
-   *
-   * @param   {string}                    filePath  The file to load
-   *
-   * @return  {Promise<MDFileDescriptor>}           The descriptor
-   */
-  private async loadFile (filePath: string): Promise<MDFileDescriptor|CodeFileDescriptor> {
-    if (hasMarkdownExt(filePath)) {
-      return await FSALFile.parse(
-        filePath,
-        null,
-        this._app.fsal.getMarkdownFileParser(),
-        this._app.targets,
-        this._app.tags
-      )
-    } else {
-      return await FSALCodeFile.parse(filePath, null)
-    }
   }
 }

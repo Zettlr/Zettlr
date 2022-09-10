@@ -1,6 +1,5 @@
 // FSAL types used solely in the main process
 import { ProjectSettings, FSMetaInfo } from '@dts/common/fsal'
-import { WritingTarget } from '@providers/targets'
 
 /**
  * Represents an event the watchdog can work with
@@ -10,14 +9,17 @@ export interface WatchdogEvent {
   path: string
 }
 
+export type SortMethod = 'name-up'|'name-down'|'time-up'|'time-down'
+
 /**
  * The FSAL directory descriptor
  */
 export interface DirDescriptor extends FSMetaInfo {
-  parent: DirDescriptor|null
-  _settings: {
-    sorting: 'name-up'|'name-down'|'time-up'|'time-down'
-    icon: string
+  // Settings are properties that must be persisted separately in a
+  // .ztr-directory file, since they are not bound to the directory.
+  settings: {
+    sorting: SortMethod
+    icon: string|null
     project: ProjectSettings|null
   }
   type: 'directory'
@@ -30,7 +32,6 @@ export interface DirDescriptor extends FSMetaInfo {
  * The FSAL Markdown file descriptor
  */
 export interface MDFileDescriptor extends FSMetaInfo {
-  parent: DirDescriptor|null
   ext: string
   id: string
   type: 'file'
@@ -39,7 +40,6 @@ export interface MDFileDescriptor extends FSMetaInfo {
   bom: string // An optional BOM
   wordCount: number
   charCount: number
-  target: WritingTarget|undefined
   firstHeading: string|null
   yamlTitle: string|undefined
   frontmatter: any|null
@@ -51,11 +51,8 @@ export interface MDFileDescriptor extends FSMetaInfo {
  * The FSAL code file descriptor (.tex, .yml)
  */
 export interface CodeFileDescriptor extends FSMetaInfo {
-  parent: DirDescriptor|null
   ext: string
   type: 'code'
-  id: string
-  tags: string[]
   bom: string // An optional BOM
   linefeed: string
   modified: boolean
@@ -65,7 +62,7 @@ export interface CodeFileDescriptor extends FSMetaInfo {
  * The FSAL other (non-MD and non-Tex) file descriptor
  */
 export interface OtherFileDescriptor extends FSMetaInfo {
-  parent: DirDescriptor
+  root: false // Attachments can never be roots
   type: 'other'
   ext: string
 }

@@ -8,7 +8,7 @@ import { renderTasks } from './render-tasks'
 import { renderCitations } from './render-citations'
 import { renderMermaid } from './render-mermaid'
 
-const renderCompartment = new Compartment
+const renderCompartment = new Compartment()
 
 interface RendererConfig {
   renderImages?: boolean
@@ -51,8 +51,7 @@ export function initRenderers (config: RendererConfig): Extension {
   return renderCompartment.of(getRenderersConf(config))
 }
 
-export function reconfigureRenderers(view: EditorView, config: RendererConfig = {}): void {
-
+export function reconfigureRenderers (view: EditorView, config: RendererConfig = {}): void {
   view.dispatch({
     effects: renderCompartment.reconfigure(getRenderersConf(config))
   })

@@ -36,9 +36,10 @@ import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
 import { defineComponent } from 'vue'
 import sanitizeHtml from 'sanitize-html'
 import { getConverter } from '@common/util/md-to-html'
-import { ToCEntry } from '@common/modules/markdown-editor/util/generate-toc'
+import { ToCEntry } from '@common/modules/markdown-editor/plugins/toc-field'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { OpenDocument } from '@dts/common/documents'
+import { AnyDescriptor } from '@dts/main/fsal'
 
 const ipcRenderer = window.ipc
 
@@ -50,7 +51,7 @@ export default defineComponent({
   emits: ['move-section'],
   data () {
     return {
-      activeFileDescriptor: null as MDFileMeta|CodeFileMeta|null
+      activeFileDescriptor: null as AnyDescriptor|null
     }
   },
   computed: {
@@ -66,7 +67,7 @@ export default defineComponent({
     titleOrTocLabel: function (): string {
       if (
         this.activeFileDescriptor === null ||
-        this.activeFileDescriptor.type === 'code' ||
+        this.activeFileDescriptor.type !== 'file' ||
         this.activeFileDescriptor.frontmatter == null
       ) {
         return this.tocLabel
@@ -92,16 +93,12 @@ export default defineComponent({
       if (newValue === null) {
         this.activeFileDescriptor = null
       } else {
-        const descriptor: MDFileMeta|CodeFileMeta|undefined = await ipcRenderer.invoke('application', {
-          command: 'get-file-contents',
+        const descriptor: AnyDescriptor|undefined = await ipcRenderer.invoke('application', {
+          command: 'get-descriptor',
           payload: newValue.path
         })
 
-        if (descriptor === undefined) {
-          this.activeFileDescriptor = null
-        } else {
-          this.activeFileDescriptor = descriptor
-        }
+        this.activeFileDescriptor = descriptor ?? null
       }
     },
     activeFileDescriptor (newValue: MDFileMeta|CodeFileMeta|null) {

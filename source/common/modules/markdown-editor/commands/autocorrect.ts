@@ -129,7 +129,7 @@ export function handleQuote (quote: string) {
         const text = view.state.sliceDoc(range.from, range.to)
         return {
           range: EditorSelection.range(range.from + quotes[0].length, range.to + quotes[1].length),
-          changes: { from: range.from, to: range.to, insert: `${quotes[0]}${text}${quotes[1]}`}
+          changes: { from: range.from, to: range.to, insert: `${quotes[0]}${text}${quotes[1]}` }
         }
       }
     })

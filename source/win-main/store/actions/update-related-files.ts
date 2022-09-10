@@ -65,7 +65,7 @@ export default async function (context: ActionContext<ZettlrState, ZettlrState>)
   }
 
   const descriptor: MDFileMeta|undefined = await ipcRenderer.invoke('application', {
-    command: 'get-file-contents',
+    command: 'get-descriptor',
     payload: activeFile.path
   })
 

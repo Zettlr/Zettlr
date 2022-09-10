@@ -13,7 +13,7 @@ class LinkWidget extends WidgetType {
     super()
   }
 
-  eq (other: LinkWidget) {
+  eq (other: LinkWidget): boolean {
     return other.linkTitle === this.linkTitle && other.linkUrl === this.linkUrl
   }
 
@@ -31,7 +31,7 @@ class LinkWidget extends WidgetType {
   }
 }
 
-function shouldHandleNode (node: SyntaxNodeRef) {
+function shouldHandleNode (node: SyntaxNodeRef): boolean {
   return node.type.name === 'Link'
 }
 

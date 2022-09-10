@@ -164,10 +164,10 @@ export class DTLeaf {
    *
    * @return  {Promise<DTLeaf>}                  Resolves with the new leaf
    */
-  static async fromJSON (parent: DocumentTree|DTBranch, nodeData: any): Promise<DTLeaf> {
+  static fromJSON (parent: DocumentTree|DTBranch, nodeData: any): DTLeaf {
     const leaf = new DTLeaf(parent, nodeData.id)
     for (const file of nodeData.openFiles as OpenDocument[]) {
-      const success = await leaf.tabMan.openFile(file.path, false)
+      const success = leaf.tabMan.openFile(file.path, false)
       if (success) {
         leaf.tabMan.setPinnedStatus(file.path, file.pinned)
       } else {

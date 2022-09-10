@@ -58,6 +58,7 @@ import { readabilityMode } from './plugins/readability'
 import { customKeymap } from './commands/keymap'
 import { typewriter } from './plugins/typewriter'
 import { footnoteHover, formattingToolbar } from './tooltips'
+import { DocumentType } from '@dts/common/documents'
 
 export interface DocumentWrapper {
   path: string
@@ -125,7 +126,6 @@ export default class MarkdownEditor extends EventEmitter {
       state: undefined,
       parent: anchorElement
     })
-
   } // END CONSTRUCTOR
 
   private _getExtensions (filePath: string, type: DocumentType, startVersion: number): Extension[] {
@@ -225,7 +225,7 @@ export default class MarkdownEditor extends EventEmitter {
    *
    * @param   {string}           documentPath         The document to switch to
    */
-   async swapDoc (documentPath: string): Promise<void> {
+  async swapDoc (documentPath: string): Promise<void> {
     const { content, type, startVersion } = await this.fetchDoc(documentPath)
 
     const state = EditorState.create({
@@ -340,15 +340,24 @@ export default class MarkdownEditor extends EventEmitter {
   }
 
   /**
+   * Whether the underlying Codemirror instance is currently focused
+   *
+   * @return  {boolean} The focus status
+   */
+  hasFocus (): boolean {
+    return this._instance.hasFocus
+  }
+
+  /**
    * Sets an autocomplete database of given type to a new value
    *
    * @param   {String}  type      The type of the database
    * @param   {Object}  database  The show-hint-addon compatible database
    */
   setCompletionDatabase (type: 'tags', database: string[]): void
-  setCompletionDatabase (type: 'citations', database: { citekey: string, displayText: string }[]): void
-  setCompletionDatabase (type: 'snippets', database: { name: string, content: string }[]): void
-  setCompletionDatabase (type: 'files', database: { filename: string, id: string }[]): void
+  setCompletionDatabase (type: 'citations', database: Array<{ citekey: string, displayText: string }>): void
+  setCompletionDatabase (type: 'snippets', database: Array<{ name: string, content: string }>): void
+  setCompletionDatabase (type: 'files', database: Array<{ filename: string, id: string }>): void
   setCompletionDatabase (type: string, database: any): void {
     switch (type) {
       case 'tags':

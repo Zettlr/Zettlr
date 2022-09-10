@@ -5,9 +5,15 @@
 // the other autocompletes thanks to the new plugin structure of Codemirror 6.
 
 import { Completion } from '@codemirror/autocomplete'
-import { StateEffect, StateField, SelectionRange, EditorSelection } from '@codemirror/state'
+import { StateEffect, StateField, SelectionRange, EditorSelection, EditorState } from '@codemirror/state'
 import { Decoration, EditorView, WidgetType } from '@codemirror/view'
 import { AutocompletePlugin } from '.'
+import { DateTime } from 'luxon'
+import { v4 as uuid } from 'uuid'
+import generateId from '@common/util/generate-id'
+import { configField } from '../util/configuration'
+
+const path = window.path
 
 // Define a class to highlight active tabstops
 const tabstopDeco = Decoration.mark({ class: 'tabstop' })
@@ -38,8 +44,8 @@ class SnippetWidget extends WidgetType {
 /**
  * This utility function inserts a snippet
  */
- function apply (view: EditorView, completion: Completion, from: number, to: number) {
-  const [ textToInsert, ranges ] = template2snippet(completion.info as string, from - 1)
+function apply (view: EditorView, completion: Completion, from: number, to: number): void {
+  const [ textToInsert, ranges ] = template2snippet(view.state, completion.info as string, from - 1)
   // We can immediately take the first rangeset and set it as a selection, whilst
   // committing the rest into our StateField as an effect
   const firstRange = ranges.shift()
@@ -57,7 +63,7 @@ const snippetTabsEffect = StateEffect.define<SelectionRange[][]>()
 /**
  * Use this effect to provide the editor state with a set of new tags to autocomplete
  */
-export const snippetsUpdate = StateEffect.define<{ name: string, content: string }[]>()
+export const snippetsUpdate = StateEffect.define<Array<{ name: string, content: string }>>()
 
 interface SnippetStateField {
   availableSnippets: Completion[]
@@ -139,9 +145,9 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
  * @return  {[string, SelectionRange[][]]}  The final text as well as tabstop
  *                                          ranges (if any)
  */
-function template2snippet (template: string, rangeOffset: number): [string, SelectionRange[][]] {
+function template2snippet (state: EditorState, template: string, rangeOffset: number): [string, SelectionRange[][]] {
   const rawRanges: Array<{ position: number, ranges: SelectionRange[] }> = []
-  let finalText = replaceSnippetVariables(template)
+  let finalText = replaceSnippetVariables(state, template)
 
   // Matches $[0-9] as well as ${[0-9]:default string}
   const tabStopRE = /(?<!\\)\$(\d+)|(?<!\\)\$\{(\d+):(.+?)\}/ // NOTE: No g flag
@@ -162,7 +168,7 @@ function template2snippet (template: string, rangeOffset: number): [string, Sele
   }
 
   // Combine multiple ranges with the same position together
-  const combinedRanges = rawRanges.reduce((acc, value) => {
+  const combinedRanges = rawRanges.reduce<Array<{ position: number, ranges: SelectionRange[] }>>((acc, value) => {
     const { position, ranges } = value
     const existingRange = acc.find(v => v.position === position)
     if (existingRange !== undefined) {
@@ -172,7 +178,7 @@ function template2snippet (template: string, rangeOffset: number): [string, Sele
     }
 
     return acc
-  }, [] as Array<{ position: number, ranges: SelectionRange[] }>)
+  }, [])
 
   // Sort the ranges ascending, except the zero, which needs at the bottom
   combinedRanges.sort((a, b) => {
@@ -205,27 +211,37 @@ function template2snippet (template: string, rangeOffset: number): [string, Sele
    *
    * @return  {string}                   The text with all variables replaced accordingly.
    */
-function replaceSnippetVariables (text: string): string {
-  const clipboard = 'Clipboard contents!'
+function replaceSnippetVariables (state: EditorState, text: string): string {
+  // First, prepare our replacement table
+  const now = DateTime.now()
+  const month = now.month
+  const day = now.day
+  const hour = now.hour
+  const minute = now.minute
+  const second = now.second
+  const clipboard = window.clipboard.readText()
+
+  const config = state.field(configField)
+  const absPath = config.metadata.path
 
   const REPLACEMENTS = {
-    CURRENT_YEAR: 2022,
-    CURRENT_YEAR_SHORT: '22',
-    CURRENT_MONTH: '09',
-    CURRENT_MONTH_NAME: 'September',
-    CURRENT_MONTH_NAME_SHORT: "Sep",
-    CURRENT_DATE: '02',
-    CURRENT_HOUR: '16',
-    CURRENT_MINUTE: '56',
-    CURRENT_SECOND: '23',
-    CURRENT_SECONDS_UNIX: Date.now(),
-    UUID: 'random-uuid-4-deadbeef',
-    CLIPBOARD: clipboard,
-    ZKN_ID: '1234567890',
-    CURRENT_ID: '',
-    FILENAME: 'filename.md',
-    DIRECTORY: '/some/directory',
-    EXTENSION: '.md'
+    CURRENT_YEAR: now.year,
+    CURRENT_YEAR_SHORT: now.year.toString().substring(2),
+    CURRENT_MONTH: (month < 10) ? '0' + month.toString() : month,
+    CURRENT_MONTH_NAME: now.monthLong,
+    CURRENT_MONTH_NAME_SHORT: now.monthShort,
+    CURRENT_DATE: (day < 10) ? '0' + day.toString() : day,
+    CURRENT_HOUR: (hour < 10) ? '0' + hour.toString() : hour,
+    CURRENT_MINUTE: (minute < 10) ? '0' + minute.toString() : minute,
+    CURRENT_SECOND: (second < 10) ? '0' + second.toString() : second,
+    CURRENT_SECONDS_UNIX: now.toSeconds(),
+    UUID: uuid(),
+    CLIPBOARD: (clipboard !== '') ? clipboard : undefined,
+    ZKN_ID: generateId(window.config.get('zkn.idGen')),
+    CURRENT_ID: config.metadata.id,
+    FILENAME: path.basename(absPath),
+    DIRECTORY: path.dirname(absPath),
+    EXTENSION: path.extname(absPath)
   }
 
   // Second: Replace those variables, and return the text. NOTE we're adding a

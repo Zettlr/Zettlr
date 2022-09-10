@@ -118,7 +118,7 @@ export class DocumentTree {
    *
    * @return  {DocumentTree}        The tree
    */
-  static async fromJSON (data: any): Promise<DocumentTree> {
+  static fromJSON (data: any): DocumentTree {
     if (Array.isArray(data)) {
       throw new Error('Could not instantiate tree: Data was an array')
     }
@@ -134,9 +134,9 @@ export class DocumentTree {
     const newTree = new DocumentTree()
 
     if (data.type === 'leaf') {
-      newTree.node = await DTLeaf.fromJSON(newTree, data)
+      newTree.node = DTLeaf.fromJSON(newTree, data)
     } else if (data.type === 'branch') {
-      newTree.node = await DTBranch.fromJSON(newTree, data)
+      newTree.node = DTBranch.fromJSON(newTree, data)
     }
 
     return newTree

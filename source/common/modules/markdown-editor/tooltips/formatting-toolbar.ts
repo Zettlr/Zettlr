@@ -16,8 +16,8 @@ function getToolbar (state: EditorState): Tooltip[] {
     strictSide: false,
     arrow: true,
     create: () => {
-      const dom = document.createElement("div")
-      dom.className = "cm-tooltip-cursor"
+      const dom = document.createElement('div')
+      dom.className = 'cm-tooltip-cursor'
 
       const bold = document.createElement('button')
       bold.classList.add('formatting-toolbar-button')
@@ -54,8 +54,8 @@ export const formattingToolbar = StateField.define<readonly Tooltip[]>({
     return getToolbar(state)
   },
 
-  update(tooltips, transaction) {
-    if (!transaction.selection) {
+  update (tooltips, transaction) {
+    if (transaction.selection === undefined) {
       return tooltips
     }
 

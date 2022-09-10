@@ -28,6 +28,9 @@ export interface EditorConfiguration {
   linkStart: string
   linkEnd: string
   idRE: string
+  idGen: string
+  indentUnit: number
+  indentWithTabs: boolean
   linkPreference: 'always'|'never'|'withID'
   linkFilenameOnly: boolean
   metadata: {
@@ -68,6 +71,9 @@ export function getDefaultConfig (): EditorConfiguration {
     linkStart: '[[',
     linkEnd: ']]',
     idRE: '(\\d{14})',
+    idGen: '',
+    indentUnit: 4,
+    indentWithTabs: false,
     linkPreference: 'always',
     linkFilenameOnly: false,
     metadata: {

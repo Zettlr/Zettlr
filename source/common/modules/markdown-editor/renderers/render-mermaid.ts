@@ -17,7 +17,7 @@ class MermaidWidget extends WidgetType {
     super()
   }
 
-  eq (other: MermaidWidget) {
+  eq (other: MermaidWidget): boolean {
     return other.graph === this.graph &&
       other.node.from === this.node.from &&
       other.node.to === this.node.to
@@ -45,7 +45,7 @@ class MermaidWidget extends WidgetType {
   }
 }
 
-function shouldHandleNode (node: SyntaxNodeRef) {
+function shouldHandleNode (node: SyntaxNodeRef): boolean {
   // console.log(node.type.name)
   // This parser should look for InlineCode and FencedCode and then immediately
   // check its first CodeMark child to ensure its contents only include $ or $$.

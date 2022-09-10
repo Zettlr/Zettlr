@@ -7,13 +7,15 @@
 import { ChangeSet, Text } from '@codemirror/state'
 import { Update } from '@codemirror/collab'
 import { DocumentType } from '@dts/common/documents'
+import broadcastIPCMessage from '@common/util/broadcast-ipc-message'
+// import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
+// import { FSALCodeFile, FSALFile } from '@providers/fsal'
 
 const MAX_VERSION_HISTORY = 100 // Keep no more than this many updates.
 
 interface Document {
   filePath: string
   type: DocumentType
-  pendingPulls: Array<(updates: Update[]) => void>
   currentVersion: number
   minimumVersion: number
   updates: Update[]
@@ -42,14 +44,7 @@ export class DocumentAuthority {
       console.warn(`Pulling updates for ${filePath}. ClientVersion is ${clientVersion}; current: ${doc.currentVersion}`)
       return doc.updates.slice(clientVersion)
     } else {
-      // What this weird little construction will do is return a Promise that
-      // will eventually resolve with updates, after some client has pushed
-      // updates to the corresponding document.
-      return await new Promise<Update[]>((resolve, reject) => {
-        doc.pendingPulls.push((updates: Update[]) => {
-          resolve(updates)
-        })
-      })
+      return [] // No updates available
     }
   }
 
@@ -84,11 +79,8 @@ export class DocumentAuthority {
       }
     }
 
-    // Notify all clients that have in the meantime requested new updates
-    for (const cb of doc.pendingPulls) {
-      cb(clientUpdates)
-    }
-    doc.pendingPulls = []
+    // Notify all clients, they will then request the update
+    broadcastIPCMessage('file-changed', doc.filePath)
 
     // Drop all updates that exceed the amount of updates we allow.
     while (doc.updates.length > MAX_VERSION_HISTORY) {
@@ -99,7 +91,7 @@ export class DocumentAuthority {
     return true
   }
 
-  public async getDocument (filePath: string): Promise<{ content: string; type: DocumentType; startVersion: number; }> {
+  public async getDocument (filePath: string): Promise<{ content: string, type: DocumentType, startVersion: number }> {
     const existingDocument = this.documents.find(doc => doc.filePath === filePath)
     if (existingDocument !== undefined) {
       return {
@@ -113,16 +105,17 @@ export class DocumentAuthority {
     let content = ''
     let type = DocumentType.Markdown
 
-    if (filePath.includes('doc1')) {
-      content = doc4 // doc1
-      type = DocumentType.Markdown
-    } else if (filePath.includes('doc2')) {
-      content = doc2
-      type = DocumentType.YAML
-    } else {
-      content = doc3
-      type = DocumentType.Markdown
-    }
+    // if (hasMarkdownExt(filePath)) {
+    //   await FSALFile.parse(
+    //     filePath,
+    //     null,
+    //     this._app.fsal.getMarkdownFileParser(),
+    //     this._app.targets,
+    //     this._app.tags
+    //   )
+    // } else {
+    //   await FSALCodeFile.parse(filePath, null)
+    // }
 
     const doc: Document = {
       filePath,
@@ -130,7 +123,6 @@ export class DocumentAuthority {
       currentVersion: 0,
       minimumVersion: 0,
       updates: [],
-      pendingPulls: [],
       document: Text.of(content.split('\n')),
       lastSavedVersion: 0
     }

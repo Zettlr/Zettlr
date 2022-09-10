@@ -7,7 +7,7 @@ import { configField } from '../util/configuration'
 /**
  * Use this effect to provide the editor state with a set of new citekeys
  */
-export const filesUpdate = StateEffect.define<{ filename: string, id: string }[]>()
+export const filesUpdate = StateEffect.define<Array<{ filename: string, id: string }>>()
 export const filesUpdateField = StateField.define<Completion[]>({
   create (state) {
     return []

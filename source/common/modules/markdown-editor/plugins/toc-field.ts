@@ -72,87 +72,87 @@ export interface ToCEntry {
  */
 function generateToc (state: EditorState): ToCEntry[] {
   const toc: ToCEntry[] = []
-    let h1 = 0
-    let h2 = 0
-    let h3 = 0
-    let h4 = 0
-    let h5 = 0
-    let h6 = 0
-    syntaxTree(state).iterate({
-      enter (node) {
-        switch (node.type.name) {
-          case 'ATXHeading1':
-          case 'SetextHeading1':
-            h1++
-            h2 = h3 = h4 = h5 = h6 = 0
-            toc.push({
-              line: state.doc.lineAt(node.from).number,
-              text: state.doc.sliceString(node.from + 2, node.to),
-              level: 1,
-              renderedLevel: [ h1 ].join('.'),
-              id: headingToID(state.doc.sliceString(node.from + 2, node.to))
-            })
-            break
-          case 'ATXHeading2':
-          case 'SetextHeading2':
-            h2 ++
-            h3 = h4 = h5 = h6 = 0
-            toc.push({
-              line: state.doc.lineAt(node.from).number,
-              text: state.doc.sliceString(node.from + 2, node.to),
-              level: 2,
-              renderedLevel: [ h1, h2 ].join('.'),
-              id: headingToID(state.doc.sliceString(node.from + 2, node.to))
-            })
-            break
-          case 'ATXHeading3':
-            h3 ++
-            h4 = h5 = h6 = 0
-            toc.push({
-              line: state.doc.lineAt(node.from).number,
-              text: state.doc.sliceString(node.from + 4, node.to),
-              level: 3,
-              renderedLevel: [ h1, h2, h3 ].join('.'),
-              id: headingToID(state.doc.sliceString(node.from + 4, node.to))
-            })
-            break
-          case 'ATXHeading4':
-            h4 ++
-            h5 = h6 = 0
-            toc.push({
-              line: state.doc.lineAt(node.from).number,
-              text: state.doc.sliceString(node.from + 5, node.to),
-              level: 4,
-              renderedLevel: [ h1, h2, h3, h4 ].join('.'),
-              id: headingToID(state.doc.sliceString(node.from + 5, node.to))
-            })
-            break
-          case 'ATXHeading5':
-            h5 ++
-            h6 = 0
-            toc.push({
-              line: state.doc.lineAt(node.from).number,
-              text: state.doc.sliceString(node.from + 6, node.to),
-              level: 5,
-              renderedLevel: [ h1, h2, h3, h4, h5 ].join('.'),
-              id: headingToID(state.doc.sliceString(node.from + 6, node.to))
-            })
-            break
-          case 'ATXHeading6':
-            h6++
-            toc.push({
-              line: state.doc.lineAt(node.from).number,
-              text: state.doc.sliceString(node.from + 7, node.to),
-              level: 6,
-              renderedLevel: [ h1, h2, h3, h4, h5, h6 ].join('.'),
-              id: headingToID(state.doc.sliceString(node.from + 7, node.to))
-            })
-            break
-        }
+  let h1 = 0
+  let h2 = 0
+  let h3 = 0
+  let h4 = 0
+  let h5 = 0
+  let h6 = 0
+  syntaxTree(state).iterate({
+    enter (node) {
+      switch (node.type.name) {
+        case 'ATXHeading1':
+        case 'SetextHeading1':
+          h1++
+          h2 = h3 = h4 = h5 = h6 = 0
+          toc.push({
+            line: state.doc.lineAt(node.from).number,
+            text: state.doc.sliceString(node.from + 2, node.to),
+            level: 1,
+            renderedLevel: [h1].join('.'),
+            id: headingToID(state.doc.sliceString(node.from + 2, node.to))
+          })
+          break
+        case 'ATXHeading2':
+        case 'SetextHeading2':
+          h2++
+          h3 = h4 = h5 = h6 = 0
+          toc.push({
+            line: state.doc.lineAt(node.from).number,
+            text: state.doc.sliceString(node.from + 2, node.to),
+            level: 2,
+            renderedLevel: [ h1, h2 ].join('.'),
+            id: headingToID(state.doc.sliceString(node.from + 2, node.to))
+          })
+          break
+        case 'ATXHeading3':
+          h3++
+          h4 = h5 = h6 = 0
+          toc.push({
+            line: state.doc.lineAt(node.from).number,
+            text: state.doc.sliceString(node.from + 4, node.to),
+            level: 3,
+            renderedLevel: [ h1, h2, h3 ].join('.'),
+            id: headingToID(state.doc.sliceString(node.from + 4, node.to))
+          })
+          break
+        case 'ATXHeading4':
+          h4++
+          h5 = h6 = 0
+          toc.push({
+            line: state.doc.lineAt(node.from).number,
+            text: state.doc.sliceString(node.from + 5, node.to),
+            level: 4,
+            renderedLevel: [ h1, h2, h3, h4 ].join('.'),
+            id: headingToID(state.doc.sliceString(node.from + 5, node.to))
+          })
+          break
+        case 'ATXHeading5':
+          h5++
+          h6 = 0
+          toc.push({
+            line: state.doc.lineAt(node.from).number,
+            text: state.doc.sliceString(node.from + 6, node.to),
+            level: 5,
+            renderedLevel: [ h1, h2, h3, h4, h5 ].join('.'),
+            id: headingToID(state.doc.sliceString(node.from + 6, node.to))
+          })
+          break
+        case 'ATXHeading6':
+          h6++
+          toc.push({
+            line: state.doc.lineAt(node.from).number,
+            text: state.doc.sliceString(node.from + 7, node.to),
+            level: 6,
+            renderedLevel: [ h1, h2, h3, h4, h5, h6 ].join('.'),
+            id: headingToID(state.doc.sliceString(node.from + 7, node.to))
+          })
+          break
       }
-    })
+    }
+  })
 
-    return toc
+  return toc
 }
 
 export const tocField = StateField.define<ToCEntry[]>({

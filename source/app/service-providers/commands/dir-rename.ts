@@ -14,7 +14,6 @@
 
 import ZettlrCommand from './zettlr-command'
 import sanitize from 'sanitize-filename'
-import path from 'path'
 
 export default class DirRename extends ZettlrCommand {
   constructor (app: any) {
@@ -28,15 +27,12 @@ export default class DirRename extends ZettlrCommand {
    */
   async run (evt: string, arg: any): Promise<boolean> {
     const sourceDir = this._app.fsal.findDir(arg.path)
-    if (sourceDir === null) {
+    if (sourceDir === undefined) {
       this._app.log.error('Could not rename directory: Not found.')
       return false
     }
 
     const sanitizedName = sanitize(arg.name, { replacement: '-' })
-    const isRootDir = sourceDir.parent === null
-    const oldPath = sourceDir.path
-    const newPath = path.join(sourceDir.dir, sanitizedName)
 
     // Close any file that is inside the directory to be renamed and close them.
     let allFilesClosedSuccessfully = true
@@ -70,15 +66,6 @@ export default class DirRename extends ZettlrCommand {
         message: err.message
       })
       return false
-    }
-
-    // At this point the directory has been correctly renamed. However, if we
-    // just renamed a root directory, we have to exchange the old path for the
-    // new one in the config as well.
-    if (isRootDir) {
-      this._app.config.removePath(oldPath)
-      this._app.config.addPath(newPath)
-      this._app.log.info(`[DirRename Command] Exchanged ${oldPath} with ${newPath} in config`)
     }
 
     return true

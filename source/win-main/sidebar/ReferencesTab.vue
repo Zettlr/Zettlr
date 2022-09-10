@@ -12,7 +12,7 @@ import { trans } from '@common/i18n-renderer'
 import extractCitations from '@common/util/extract-citations'
 import getBibliographyForDescriptor from '@common/util/get-bibliography-for-descriptor'
 import { DP_EVENTS, OpenDocument } from '@dts/common/documents'
-import { MDFileMeta, CodeFileMeta } from '@dts/common/fsal'
+import { CodeFileDescriptor, MDFileDescriptor, OtherFileDescriptor } from '@dts/main/fsal'
 import { defineComponent } from 'vue'
 
 const ipcRenderer = window.ipc
@@ -83,19 +83,23 @@ export default defineComponent({
         return
       }
 
-      const descriptor: MDFileMeta|CodeFileMeta|undefined = await ipcRenderer.invoke('application', {
-        command: 'get-file-contents',
+      const descriptor: MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor = await ipcRenderer.invoke('application', {
+        command: 'get-descriptor',
         payload: this.activeFile.path
       })
 
-      if (descriptor === undefined || descriptor.type !== 'file') {
+      if (descriptor.type !== 'file') {
         this.bibliography = undefined
         return
       }
 
-      const library = getBibliographyForDescriptor(descriptor)
+      const fileContents: string = await ipcRenderer.invoke('application', {
+        command: 'get-file-contents',
+        payload: this.activeFile.path
+      })
 
-      const citations = extractCitations(descriptor.content)
+      const library = getBibliographyForDescriptor(descriptor)
+      const citations = extractCitations(fileContents)
       const keys = []
       for (const citation of citations) {
         keys.push(...citation.citations.map(elem => elem.id))

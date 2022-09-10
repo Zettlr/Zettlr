@@ -1,9 +1,9 @@
 // According to Marijn [here](https://discuss.codemirror.net/t/extend-overlay-mode/2818/4),
 // we can define additional syntax as a plugin (as opposed to an overlay mode)
 
-import { StateField, EditorState } from '@codemirror/state'
+import { StateField, EditorState, Extension } from '@codemirror/state'
 import { syntaxTree } from '@codemirror/language'
-import { MatchDecorator, ViewPlugin, Decoration, DecorationSet, EditorView } from '@codemirror/view'
+import { MatchDecorator, ViewPlugin, Decoration, DecorationSet, EditorView, ViewUpdate } from '@codemirror/view'
 
 /**
  * The inline decorator is a ViewPlugin that adds a few inline highlight styles
@@ -12,7 +12,7 @@ import { MatchDecorator, ViewPlugin, Decoration, DecorationSet, EditorView } fro
  *
  * @return  {ViewPlugin}  The instantiated plugin
  */
-function getInlineDecorator () {
+function getInlineDecorator (): Extension {
   // First, we need to define the decorations we would like to add
   const citationDeco = Decoration.mark({ class: 'cm-citation' })
   const tagDeco = Decoration.mark({ class: 'cm-zkn-tag' })
@@ -24,11 +24,11 @@ function getInlineDecorator () {
   const decorator = new MatchDecorator({
     regexp: /(@\w+)|(::.*?::)|(^#{1,6}\s+)|(?<=[([{\s]|^)(#\w+)/g,
     decoration: m => {
-      if (m[1]) {
+      if (m[1] !== undefined) {
         return citationDeco
-      } else if (m[2]) {
+      } else if (m[2] !== undefined) {
         return highlightDeco
-      } else if (m[3]) {
+      } else if (m[3] !== undefined) {
         return headingDeco
       } else {
         return tagDeco
@@ -41,7 +41,9 @@ function getInlineDecorator () {
   // runs the decorator on every update.
   return ViewPlugin.define(view => ({
     decorations: decorator.createDeco(view),
-    update(u) { this.decorations = decorator.updateDeco(u, this.decorations) }
+    update (u: ViewUpdate) {
+      this.decorations = decorator.updateDeco(u, this.decorations)
+    }
   }), {
     decorations: v => v.decorations
   })
@@ -52,13 +54,14 @@ function getInlineDecorator () {
  *
  * @return  {StateField}  The StateField
  */
-function getCodeBlockLineHighlighter () {
+function getCodeBlockLineHighlighter (): Extension {
   const codeLineDecorator = Decoration.line({ class: 'code' })
   const render = function (state: EditorState): DecorationSet {
     const widgets: any[] = []
 
     syntaxTree(state).iterate({
-      from: 0, to: state.doc.length,
+      from: 0,
+      to: state.doc.length,
       enter: (node) => {
         // CodeText contains a single node that has all the code's contents
         if (node.type.name !== 'CodeText') {
@@ -94,7 +97,7 @@ function getCodeBlockLineHighlighter () {
  *
  * @return  {StateField}  The StateField
  */
- function getHeadingLineHighlighter () {
+function getHeadingLineHighlighter (): Extension {
   const h1 = Decoration.line({ class: 'size-header-1' })
   const h2 = Decoration.line({ class: 'size-header-2' })
   const h3 = Decoration.line({ class: 'size-header-3' })
@@ -106,7 +109,8 @@ function getCodeBlockLineHighlighter () {
     const widgets: any[] = []
 
     syntaxTree(state).iterate({
-      from: 0, to: state.doc.length,
+      from: 0,
+      to: state.doc.length,
       enter: (node) => {
         // We can return "false" to prevent the iterator from descending further
         // into the tree

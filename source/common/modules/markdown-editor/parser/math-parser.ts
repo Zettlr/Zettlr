@@ -24,8 +24,8 @@ export const inlineMathParser: InlineParser = {
     }
 
     // ... and work through the match.
-    const { eq, dollar } = match.groups as any
-    
+    const { eq, dollar } = match.groups as { [key: string]: string }
+
     let curPos = pos
     const childNodes = [ctx.elt('CodeMark', curPos, curPos + dollar.length)]
 

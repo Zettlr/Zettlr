@@ -14,7 +14,7 @@ class CitationWidget extends WidgetType {
     super()
   }
 
-  eq (other: CitationWidget) {
+  eq (other: CitationWidget): boolean {
     return JSON.stringify(other.citations) === JSON.stringify(this.citations)
   }
 
@@ -30,7 +30,7 @@ class CitationWidget extends WidgetType {
   }
 }
 
-function shouldHandleNode (node: SyntaxNodeRef) {
+function shouldHandleNode (node: SyntaxNodeRef): boolean {
   // console.log(node.type.name, 'Parent: ', node.node.parent?.type.name)
   return node.type.name === 'Citation'
 }

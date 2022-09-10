@@ -50,13 +50,13 @@ import { EditorState, StateField } from '@codemirror/state'
  */
 function renderWidgets (
   state: EditorState,
-  visibleRanges: readonly {from: number, to: number}[],
+  visibleRanges: ReadonlyArray<{from: number, to: number}>,
   shouldHandleNode: (node: SyntaxNodeRef) => boolean,
   createWidget: (state: EditorState, node: SyntaxNodeRef) => WidgetType|undefined
 ): DecorationSet {
   const widgets: any[] = [] // TODO: Correct type
 
-  const selections = state.selection.ranges.map(range => [range.from, range.to])
+  const selections = state.selection.ranges.map(range => [ range.from, range.to ])
 
   if (visibleRanges.length === 0) {
     // visibleRanges is empty, hence we should (re)process the whole document
@@ -65,12 +65,13 @@ function renderWidgets (
 
   for (const { from, to } of visibleRanges) {
     syntaxTree(state).iterate({
-      from, to,
+      from,
+      to,
       enter: (node) => {
         // Determine the number of overlapping selections. If these are non-
         // null, we must not render this widget
         const overlaps = selections
-          .filter(([from, to]) => !(to <= node.from || from >= node.to))
+          .filter(([ from, to ]) => !(to <= node.from || from >= node.to))
           .length
 
         if (overlaps > 0) {
@@ -115,7 +116,7 @@ function renderWidgets (
  * plan to consume nodes that span linebreaks since this will throw an error.
  * Also, if you want to simply define additional syntax, please use the syntax
  * plugin.
- * 
+ *
  * @param   {Function}    shouldHandleNode  A function that receives a syntax
  *                                          node and should return true if your
  *                                          plugin would like to handle it.
@@ -129,7 +130,7 @@ function renderWidgets (
 export function renderInlineWidgets (
   shouldHandleNode: (node: SyntaxNodeRef) => boolean,
   createWidget: (state: EditorState, node: SyntaxNodeRef) => WidgetType|undefined
-) {
+): ViewPlugin<any> {
   const plugin = ViewPlugin.fromClass(class {
     decorations: DecorationSet
 
@@ -137,7 +138,7 @@ export function renderInlineWidgets (
       this.decorations = renderWidgets(view.state, view.visibleRanges, shouldHandleNode, createWidget)
     }
 
-    update (update: ViewUpdate) {
+    update (update: ViewUpdate): void {
       if (update.docChanged || update.viewportChanged || update.selectionSet) {
         this.decorations = renderWidgets(update.view.state, update.view.visibleRanges, shouldHandleNode, createWidget)
       }
@@ -156,7 +157,7 @@ export function renderInlineWidgets (
  * are guaranteed to be inline-only, please use `renderInlineWidgets` instead.
  * Also, if you want to simply define additional syntax, please use the syntax
  * plugin.
- * 
+ *
  * @param   {Function}    shouldHandleNode  A function that receives a syntax
  *                                          node and should return true if your
  *                                          plugin would like to handle it.

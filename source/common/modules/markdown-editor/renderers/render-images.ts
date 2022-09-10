@@ -15,7 +15,7 @@ class ImageWidget extends WidgetType {
     super()
   }
 
-  eq (other: ImageWidget) {
+  eq (other: ImageWidget): boolean {
     return other.imageTitle === this.imageTitle && other.imageUrl === this.imageUrl
   }
 
@@ -93,7 +93,7 @@ class ImageWidget extends WidgetType {
   }
 }
 
-function shouldHandleNode (node: SyntaxNodeRef) {
+function shouldHandleNode (node: SyntaxNodeRef): boolean {
   return node.type.name === 'Image'
 }
 

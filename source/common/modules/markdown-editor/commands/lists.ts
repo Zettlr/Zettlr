@@ -15,14 +15,15 @@ import { SyntaxNode } from '@lezer/common'
  *                                the current editor selection
  */
 function isListTouchedBySelection (state: EditorState): boolean {
-   // Then make sure there's anything listy in there.
-   let containsList = false
-   for (const range of state.selection.ranges) {
+  // Then make sure there's anything listy in there.
+  let containsList = false
+  for (const range of state.selection.ranges) {
     // NOTE: The Markdown mode nests lists under the parent nodes OrderedList
     // and BulletList, so basically I just have to move up the syntaxtree until
     // I either find such a node, or Document (meaning there is no parent)
     syntaxTree(state).iterate({
-      from: range.from, to: range.to,
+      from: range.from,
+      to: range.to,
       enter (node) {
         if (containsList) {
           return false // Ensure we leave the tree asap
@@ -34,7 +35,7 @@ function isListTouchedBySelection (state: EditorState): boolean {
           case 'OrderedList':
           case 'BulletList':
             containsList = true
-            // fall-through
+            // falls through
           default:
             return false
         }
@@ -170,7 +171,8 @@ function fetchLists (state: EditorState): SyntaxNode[] {
     // and BulletList, so basically I just have to move up the syntaxtree until
     // I either find such a node, or Document (meaning there is no parent)
     syntaxTree(state).iterate({
-      from: range.from, to: range.to,
+      from: range.from,
+      to: range.to,
       enter (node) {
         switch (node.type.name) {
           case 'Document':
@@ -178,7 +180,7 @@ function fetchLists (state: EditorState): SyntaxNode[] {
           case 'OrderedList':
           case 'BulletList':
             lists.push(node.node)
-            // fall-through
+            // falls through
           default:
             return false
         }

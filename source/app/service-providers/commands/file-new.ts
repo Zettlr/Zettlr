@@ -65,13 +65,13 @@ export default class FileNew extends ZettlrCommand {
       return
     }
 
-    let dir = this._app.fsal.openDirectory
+    let dir = this._app.fsal.openDirectory ?? undefined
 
     if (arg?.path !== undefined) {
       dir = this._app.fsal.findDir(arg.path)
     }
 
-    if (dir === null) {
+    if (dir === undefined) {
       const msg = 'Could not create new file: No directory selected!'
       this._app.windows.prompt({
         title: 'Could not create new file',
@@ -96,7 +96,7 @@ export default class FileNew extends ZettlrCommand {
       // that directory exists and is loaded by the FSAL, overwrite the dir.
       if (path.dirname(chosenPath) !== dir.path) {
         dir = this._app.fsal.findDir(path.dirname(chosenPath))
-        if (dir === null) {
+        if (dir === undefined) {
           // TODO: Better feedback to the user!
           this._app.log.error(`Could not create new file ${arg.name}: The selected directory is not loaded in Zettlr!`)
           return

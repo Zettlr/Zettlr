@@ -35,8 +35,8 @@ export interface AutocompletePlugin {
    *
    * @return  {Completion[]}              The list of available completions
    */
-  entries: (ctx: CompletionContext, query: string) => Completion[],
-  fields?: StateField<any>[]
+  entries: (ctx: CompletionContext, query: string) => Completion[]
+  fields?: Array<StateField<any>>
 }
 
 const forbiddenTokens = [
@@ -120,4 +120,4 @@ export const autocomplete = [
 export { citekeyUpdate } from './citations'
 export { filesUpdate } from './files'
 export { tagsUpdate } from './tags'
-export { snippetsUpdate } from './snippets' 
+export { snippetsUpdate } from './snippets'

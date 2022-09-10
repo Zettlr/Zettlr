@@ -51,7 +51,7 @@ const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors:
     // up. By defining an empty StreamParser, we can ensure that there will be
     // such a structure, even if it's basically just plain text.
     mode: StreamLanguage.define({ token (stream, state) { stream.skipToEnd(); return null } }),
-    selectors: [ 'mermaid' ]
+    selectors: ['mermaid']
   },
   {
     mode: StreamLanguage.define(javascript),
@@ -151,7 +151,7 @@ const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors:
   },
   {
     mode: StreamLanguage.define(r),
-    selectors: [ 'r' ]
+    selectors: ['r']
   },
   {
     mode: StreamLanguage.define(ruby),
@@ -286,7 +286,7 @@ export default function markdownParser (): LanguageSupport {
         inlineMathParser,
         // And this one parses citations
         footnoteParser,
-        citationParser,
+        citationParser
       ],
       // We have to notify the markdown parser about the additional Node Types
       // that the YAML block parser utilizes

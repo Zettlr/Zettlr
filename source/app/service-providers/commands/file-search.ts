@@ -29,7 +29,7 @@ export default class FileSearch extends ZettlrCommand {
     // arg.content contains a hash of the file to be searched
     // and the prepared terms.
     let file = this._app.fsal.findFile(arg.path)
-    if (file === null) {
+    if (file === undefined) {
       this._app.log.error('Could not search file: File not found.', arg)
       return false // File not found
     }

@@ -48,11 +48,12 @@ export default class Export extends ZettlrCommand {
     // recent version of the file in its cache. In that case, we'll silently
     // overwrite the source file with a temporary one that we create with the
     // contents of said modified file.
-    const cachedVersion = this._app.documents.getCachedVersion(file)
-    if (cachedVersion !== undefined) {
-      const filename = path.basename(file)
-      const tempPath = path.join(app.getPath('temp'), filename)
-      await fs.writeFile(tempPath, cachedVersion, { encoding: 'utf8' })
+    const isModified = this._app.documents.isModified(file)
+    const filename = path.basename(file)
+    const tempPath = path.join(app.getPath('temp'), filename)
+    if (isModified) {
+      const cachedVersion = await this._app.documents.getDocument(file)
+      await fs.writeFile(tempPath, cachedVersion.content, { encoding: 'utf8' })
       exporterOptions.sourceFiles = [{
         path: tempPath,
         name: filename,
@@ -62,10 +63,12 @@ export default class Export extends ZettlrCommand {
 
     // We must have an absolute path given in file
     const fileDescriptor = this._app.fsal.findFile(file)
-    if (fileDescriptor !== null) {
+    if (fileDescriptor !== undefined) {
       // If we have a cached version, we already have a file to export.
       // Otherwise, use the regular one from disk.
-      if (cachedVersion === undefined) {
+      if (isModified) {
+        exporterOptions.sourceFiles.push({ path: tempPath, name: filename, ext: path.extname(filename) })
+      } else {
         exporterOptions.sourceFiles.push(fileDescriptor)
       }
 

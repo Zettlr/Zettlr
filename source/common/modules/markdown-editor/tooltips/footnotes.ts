@@ -12,7 +12,7 @@ import { EditorState } from '@codemirror/state'
  * @return  {string|undefined}         Either the body, or undefined
  */
 function findRefForFootnote (state: EditorState, fn: string): string|undefined {
-  let text: string|undefined = undefined
+  let text: string|undefined
   // Find the corresponding ref
   syntaxTree(state).iterate({
     enter (node) {
@@ -30,14 +30,14 @@ function findRefForFootnote (state: EditorState, fn: string): string|undefined {
       if (ref !== fn + ':') {
         return false
       }
-      
+
       // We got the actual ref. The next sibling is the footnote's body (if any).
       const body = node.node.nextSibling
       if (body === null) {
         return false
       }
 
-      text = state.sliceDoc(body.from, body.to)      
+      text = state.sliceDoc(body.from, body.to)
     }
   })
 
@@ -77,10 +77,10 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
   return {
     pos,
     above: true,
-    create(view) {
-      let dom = document.createElement("div")
+    create (view) {
+      let dom = document.createElement('div')
       dom.textContent = tooltipContent
-      return {dom}
+      return { dom }
     }
   }
 }

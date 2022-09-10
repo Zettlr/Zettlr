@@ -140,26 +140,23 @@
  * END HEADER
  */
 
-import countWords from '@common/util/count-words'
 import MarkdownEditor from '@common/modules/markdown-editor'
-import CodeMirror from 'codemirror'
+import { Update } from '@codemirror/collab'
 import objectToArray from '@common/util/object-to-array'
 import { trans } from '@common/i18n-renderer'
-import extractYamlFrontmatter from '@common/util/extract-yaml-frontmatter'
-import YAML from 'yaml'
+// import extractYamlFrontmatter from '@common/util/extract-yaml-frontmatter'
+// import YAML from 'yaml'
 
 import { nextTick, ref, computed, onMounted, watch, toRef } from 'vue'
 import { useStore } from 'vuex'
 import { key as storeKey } from './store'
 import { EditorCommands, MainEditorDocumentWrapper } from '@dts/renderer/editor'
-import retrieveDocumentFromMain from './util/retrieve-document-from-main'
 import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
-import { DP_EVENTS } from '@dts/common/documents'
-import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
+import { DocumentType } from '@dts/common/documents'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
+import { EditorConfiguration } from '@common/modules/markdown-editor/util/configuration'
 
 const ipcRenderer = window.ipc
-const path = window.path
 
 const props = defineProps({
   leafId: {
@@ -189,20 +186,50 @@ const searchinput = ref<HTMLInputElement|null>(null)
 
 // UNREFFED STUFF
 let mdEditor: MarkdownEditor|null = null
-const openDocuments: MainEditorDocumentWrapper[] = []
+
+// AUTHORITY CALLBACKS
+async function pullUpdates (filePath: string, version: number): Promise<false|Update[]> {
+  // Requests new updates from the authority. It may be that the returned
+  // promise pends for minutes or even hours -- until new changes are available
+  return await new Promise((resolve, reject) => {
+    ipcRenderer.on('file-changed', (evt, filePath: string) => {
+      ipcRenderer.invoke('documents-authority', {
+        command: 'pull-updates',
+        payload: { filePath, version }
+      })
+        .then((result: false|Update[]) => {
+          resolve(result)
+        })
+        .catch(err => reject(err))
+    })
+  })
+}
+
+async function pushUpdates (filePath: string, version: number, updates: any): Promise<boolean> {
+  // Submits new updates to the authority, returns true if successful
+  return await ipcRenderer.invoke('documents-authority', {
+    command: 'push-updates',
+    payload: { filePath, version, updates }
+  })
+}
+
+async function getDoc (filePath: string): Promise<{ content: string, type: DocumentType, startVersion: number }> {
+  // Fetches a fresh document
+  return await ipcRenderer.invoke('documents-authority', {
+    command: 'get-document',
+    payload: {
+      filePath
+    }
+  })
+}
 
 // EVENT LISTENERS
 ipcRenderer.on('shortcut', (event, command) => {
-  if (mdEditor?.codeMirror.hasFocus() !== true) {
+  if (mdEditor?.hasFocus() !== true) {
     return // None of our business
   }
 
-  if (command === 'save-file') {
-    const activeDoc = openDocuments.find(doc => doc.path === activeFile.value?.path)
-    if (activeDoc !== undefined) {
-      save(activeDoc).catch(err => console.error(err))
-    }
-  } else if (command === 'close-window') {
+  if (command === 'close-window') {
     // TODO: Implement tab closing
   } else if (command === 'search') {
     showSearch.value = !showSearch.value
@@ -212,91 +239,33 @@ ipcRenderer.on('shortcut', (event, command) => {
 })
 
 ipcRenderer.on('citeproc-database-updated', (event, dbPath: string) => {
-  const activeDoc = openDocuments.find(doc => doc.path === activeFile.value?.path)
+  // TODO
+  // const activeDoc = openDocuments.find(doc => doc.path === activeFile.value?.path)
 
-  if (activeDoc === undefined) {
-    return // Nothing to do
-  }
+  // if (activeDoc === undefined) {
+  //   return // Nothing to do
+  // }
 
-  const usesMainLib = activeDoc.library === CITEPROC_MAIN_DB
+  // const usesMainLib = activeDoc.library === CITEPROC_MAIN_DB
 
-  if (dbPath === activeDoc.library || (usesMainLib && dbPath === CITEPROC_MAIN_DB)) {
-    updateCitationKeys(activeDoc).catch(e => console.error('Could not update citation keys', e))
-  }
-})
-
-function announceDocumentModified (doc: MainEditorDocumentWrapper): void {
-  ipcRenderer.invoke('documents-provider', {
-    command: 'update-file-modification-status',
-    payload: {
-      path: doc.path,
-      isClean: doc.cmDoc.isClean(),
-      timestamp: Date.now(),
-      contents: (!doc.cmDoc.isClean()) ? doc.cmDoc.getValue() : ''
-    }
-  })
-    .catch(err => console.error(err))
-}
-
-ipcRenderer.on('documents-update', (evt, { event, context }) => {
-  const openPaths = openDocuments.map(x => x.path)
-  const { filePath } = context
-  if (event === DP_EVENTS.FILE_SAVED && openPaths.includes(filePath)) {
-    // We have to re-load the document from main. Basically, what we do here is
-    // to load it using our utility function, and then just copying over the
-    // content, omitting the loaded document.
-    const thisDoc = openDocuments.find(x => x.path === filePath) as MainEditorDocumentWrapper
-    retrieveDocumentFromMain(filePath, path.extname(filePath), shouldCountChars.value, autoSave, () => {})
-      .then(newDoc => {
-        const newValue = newDoc.cmDoc.getValue()
-        if (thisDoc.cmDoc.getValue() === newValue) {
-          return
-        }
-
-        thisDoc.cmDoc.setValue(newValue)
-        thisDoc.cmDoc.markClean()
-        // Immediately notify main that this is not, in fact, modified
-        announceDocumentModified(thisDoc)
-      })
-      .catch(err => console.error(err))
-  } else if (event === DP_EVENTS.FILE_REMOTELY_CHANGED && openPaths.includes(filePath)) {
-    const descriptor = context.descriptor as MDFileMeta|CodeFileMeta
-    const thisDoc = openDocuments.find(x => x.path === filePath) as MainEditorDocumentWrapper
-    // Replace its content, if applicable
-    if (thisDoc.cmDoc.getValue() !== descriptor.content) {
-      thisDoc.cmDoc.setValue(descriptor.content)
-      thisDoc.cmDoc.markClean()
-      announceDocumentModified(thisDoc)
-    }
-  }
+  // if (dbPath === activeDoc.library || (usesMainLib && dbPath === CITEPROC_MAIN_DB)) {
+  //   updateCitationKeys(activeDoc).catch(e => console.error('Could not update citation keys', e))
+  // }
 })
 
 // MOUNTED HOOK
 onMounted(() => {
+  const element = document.getElementById(editorId.value) as HTMLElement
   // As soon as the component is mounted, initiate the editor
-  mdEditor = new MarkdownEditor(editorId.value, editorConfiguration)
+  mdEditor = new MarkdownEditor(element, getDoc, pullUpdates, pushUpdates)
 
   // We have to set this to the appropriate value after mount, afterwards it
   // will be updated as appropriate.
   mdEditor.countChars = shouldCountChars.value
 
   // Update the document info on corresponding events
-  mdEditor.on('change', (changeObj: CodeMirror.EditorChange) => {
-    if (mdEditor === null || activeFile.value === null) {
-      return
-    }
-
-    const activeDocument = openDocuments.find(doc => activeFile.value?.path === doc.path)
-    if (activeDocument === undefined) {
-      return
-    }
-
-    // Announce that the file is modified (if applicable) to the whole application
-    if (changeObj.origin !== 'setValue') {
-      announceDocumentModified(activeDocument)
-    }
-
-    store.commit('updateTableOfContents', mdEditor.tableOfContents)
+  mdEditor.on('change', () => {
+    store.commit('updateTableOfContents', mdEditor?.tableOfContents)
   })
 
   mdEditor.on('cursorActivity', () => {
@@ -344,14 +313,12 @@ onMounted(() => {
 })
 
 // DATA SETUP
-const currentlyFetchingFiles = ref<string[]>([])
 const regexpSearch = ref(false)
 const showSearch = ref(false)
 const query = ref('')
 const replaceString = ref('')
 const findTimeout = ref<any>(undefined)
-const docInfoTimeout = ref<any>(undefined)
-const anchor = ref<undefined|CodeMirror.Position>(undefined)
+const anchor = ref<undefined|any>(undefined) // TODO: Correct position
 const documentTabDrag = ref(false)
 const documentTabDragWhere = ref<undefined|string>(undefined)
 
@@ -362,70 +329,63 @@ const useTitle = computed<boolean>(() => store.state.config.fileNameDisplay.incl
 const filenameOnly = computed<boolean>(() => store.state.config['zkn.linkFilenameOnly'])
 const fontSize = computed<number>(() => store.state.config['editor.fontSize'])
 const shouldCountChars = computed<boolean>(() => store.state.config['editor.countChars'])
-const autoSave = computed(() => store.state.config['editor.autoSave'])
 const tagDatabase = computed(() => store.state.tagDatabase)
 const globalSearchResults = computed(() => store.state.searchResults)
 const node = computed(() => store.state.paneData.find(leaf => leaf.id === props.leafId))
-const activeFile = computed(() => node.value?.activeFile)
-const openFiles = computed(() => node.value?.openFiles ?? [])
+const activeFile = computed(() => node.value?.activeFile) // TODO: MAYBE REMOVE
 const lastLeafId = computed(() => store.state.lastLeafId)
 
-const editorConfiguration = computed<any>(() => {
+const editorConfiguration = computed<EditorConfiguration>(() => {
   // We update everything, because not so many values are actually updated
   // right after setting the new configurations. Plus, the user won't update
   // everything all the time, but rather do one initial configuration, so
   // even if we incur a performance penalty, it won't be noticed that much.
-  const doubleQuotes = store.state.config['editor.autoCorrect.magicQuotes.primary'].split('…')
-  const singleQuotes = store.state.config['editor.autoCorrect.magicQuotes.secondary'].split('…')
   return {
-    keyMap: store.state.config['editor.inputMode'],
-    direction: store.state.config['editor.direction'],
-    rtlMoveVisually: store.state.config['editor.rtlMoveVisually'],
+    // keyMap: store.state.config['editor.inputMode'],
+    // direction: store.state.config['editor.direction'],
+    // rtlMoveVisually: store.state.config['editor.rtlMoveVisually'],
     indentUnit: store.state.config['editor.indentUnit'],
     indentWithTabs: store.state.config['editor.indentWithTabs'],
     autoCloseBrackets: store.state.config['editor.autoCloseBrackets'],
-    autoCorrect: {
+    autocorrect: {
+      active: store.state.config['editor.autoCorrect.active'],
       style: store.state.config['editor.autoCorrect.style'],
-      quotes: {
-        single: {
-          start: singleQuotes[0],
-          end: singleQuotes[1]
-        },
-        double: {
-          start: doubleQuotes[0],
-          end: doubleQuotes[1]
-        }
+      magicQuotes: {
+        primary: store.state.config['editor.autoCorrect.magicQuotes.secondary'],
+        secondary: store.state.config['editor.autoCorrect.magicQuotes.secondary']
       },
       replacements: store.state.config['editor.autoCorrect.replacements']
     },
-    zettlr: {
-      imagePreviewWidth: store.state.config['display.imageWidth'],
-      imagePreviewHeight: store.state.config['display.imageHeight'],
-      markdownBoldFormatting: store.state.config['editor.boldFormatting'],
-      markdownItalicFormatting: store.state.config['editor.italicFormatting'],
-      muteLines: store.state.config.muteLines,
-      citeStyle: store.state.config['editor.citeStyle'],
-      readabilityAlgorithm: store.state.config['editor.readabilityAlgorithm'],
-      zettelkasten: {
-        idRE: store.state.config['zkn.idRE'],
-        idGen: store.state.config['zkn.idGen'],
-        linkStart: store.state.config['zkn.linkStart'],
-        linkEnd: store.state.config['zkn.linkEnd'],
-        linkWithFilename: store.state.config['zkn.linkWithFilename']
-      },
-      render: {
-        citations: store.state.config['display.renderCitations'],
-        iframes: store.state.config['display.renderIframes'],
-        images: store.state.config['display.renderImages'],
-        links: store.state.config['display.renderLinks'],
-        math: store.state.config['display.renderMath'],
-        tasks: store.state.config['display.renderTasks'],
-        headingTags: store.state.config['display.renderHTags'],
-        tables: store.state.config['editor.enableTableHelper'],
-        emphasis: store.state.config['display.renderEmphasis']
-      }
+    imagePreviewWidth: store.state.config['display.imageWidth'],
+    imagePreviewHeight: store.state.config['display.imageHeight'],
+    boldFormatting: store.state.config['editor.boldFormatting'],
+    italicFormatting: store.state.config['editor.italicFormatting'],
+    muteLines: store.state.config.muteLines,
+    citeStyle: store.state.config['editor.citeStyle'],
+    readabilityAlgorithm: store.state.config['editor.readabilityAlgorithm'],
+    idRE: store.state.config['zkn.idRE'],
+    idGen: store.state.config['zkn.idGen'],
+    renderCitations: store.state.config['display.renderCitations'],
+    renderIframes: store.state.config['display.renderIframes'],
+    renderImages: store.state.config['display.renderImages'],
+    renderLinks: store.state.config['display.renderLinks'],
+    renderMath: store.state.config['display.renderMath'],
+    renderTasks: store.state.config['display.renderTasks'],
+    renderHeadings: store.state.config['display.renderHTags'],
+    renderTables: store.state.config['editor.enableTableHelper'],
+    renderEmphasis: store.state.config['display.renderEmphasis'],
+    linkStart: store.state.config['zkn.linkStart'],
+    linkEnd: store.state.config['zkn.linkEnd'],
+    linkPreference: store.state.config['zkn.linkWithFilename'],
+    linkFilenameOnly: store.state.config['zkn.linkFilenameOnly'],
+    readabilityMode: false, // TODO
+    typewriterMode: false, // TODO
+    metadata: {
+      path: '',
+      id: '',
+      library: '' // TODO
     }
-  }
+  } as EditorConfiguration
 })
 
 // External commands/"event" system
@@ -480,10 +440,10 @@ watch(toRef(props.editorCommands, 'executeCommand'), () => {
 })
 watch(toRef(props.editorCommands, 'replaceSelection'), () => {
   if (lastLeafId.value !== props.leafId) {
-    return
+    // return TODO
   }
-  const textToInsert: string = props.editorCommands.data
-  mdEditor?.codeMirror?.replaceSelection(textToInsert)
+  // const textToInsert: string = props.editorCommands.data
+  // mdEditor?.replaceSelection(textToInsert)
 })
 
 const findPlaceholder = trans('dialog.find.find_placeholder')
@@ -533,36 +493,18 @@ watch(tagDatabase, (newValue) => {
   }
 
   // We must deproxy the tag database
-  const unproxy: any = {}
+  const tags: string[] = []
   for (const tag in newValue) {
-    unproxy[tag] = {
-      text: newValue[tag].text,
-      count: newValue[tag].count,
-      className: newValue[tag].className
-    }
+    tags.push(tag)
   }
 
-  mdEditor.setCompletionDatabase('tags', unproxy)
+  mdEditor.setCompletionDatabase('tags', tags)
 })
 
 watch(globalSearchResults, () => { maybeHighlightSearchResults() })
 
 watch(activeFile, async () => {
   await loadActiveFile()
-})
-
-watch(openFiles, (newValue) => {
-// watch(() => props.openFiles, (newValue) => {
-  // The openFiles array in the store has changed --> remove all documents
-  // that are not present anymore
-  for (const doc of openDocuments) {
-    const found = newValue.find(descriptor => descriptor.path === doc.path)
-    if (found === undefined) {
-      // Remove the document from our array
-      const idx = openDocuments.indexOf(doc)
-      openDocuments.splice(idx, 1)
-    }
-  }
 })
 
 watch(query, (newValue) => {
@@ -606,143 +548,59 @@ async function loadActiveFile () {
   }
 
   if (activeFile.value == null) {
-    mdEditor.swapDoc(CodeMirror.Doc('', 'multiplex'), 'multiplex')
-    mdEditor.readOnly = true
+    // TODO: REMOVE DOCUMENT!
     store.commit('updateTableOfContents', mdEditor.tableOfContents)
     // Update the citation keys with an empty array
-    mdEditor.setCompletionDatabase('citekeys', [])
+    mdEditor.setCompletionDatabase('citations', [])
     return
   }
 
-  const doc = openDocuments.find(doc => doc.path === activeFile.value?.path)
-
-  if (doc !== undefined) {
-    // Simply swap it
-    swapDocument(doc)
-  } else if (!currentlyFetchingFiles.value.includes(activeFile.value.path)) {
-    // We have to request the document beforehand
-    currentlyFetchingFiles.value.push(activeFile.value.path)
-    const newDoc = await retrieveDocumentFromMain(
-      activeFile.value.path,
-      path.extname(activeFile.value.path),
-      shouldCountChars.value,
-      autoSave,
-      (doc) => { save(doc).catch(e => console.error(e)) }
-    )
-
-    openDocuments.push(newDoc)
-    const idx = currentlyFetchingFiles.value.findIndex(e => e === newDoc.path)
-    currentlyFetchingFiles.value.splice(idx, 1)
-    // Let's check whether the active file has in the meantime changed
-    // If it has, don't overwrite the current one
-    if (activeFile.value.path === newDoc.path && mdEditor !== null) {
-      swapDocument(newDoc)
-    }
-  } // Else: The file might currently being fetched, so let's wait ...
+  swapDocument(activeFile.value.path)
 }
 
-function swapDocument (doc: MainEditorDocumentWrapper) {
+function swapDocument (doc: string) {
   if (mdEditor === null) {
-    console.error(`Could not swap to document ${doc.path}: Editor was not initialized`)
+    console.error(`Could not swap to document ${doc}: Editor was not initialized`)
     return
   }
 
   if (activeFile.value == null) {
-    console.error(`Could not swap to document ${doc.path}: Was not yet set as active file!`)
-    return
-  }
-
-  if (mdEditor.codeMirror.getDoc() === doc.cmDoc) {
-    // swapDocument gets called whenever the state changes, so add a check
-    // here whether the document is already the loaded one.
+    console.error(`Could not swap to document ${doc}: Was not yet set as active file!`)
     return
   }
 
   // Provide the editor instance with metadata for the new file
   mdEditor.setOptions({
-    zettlr: {
-      markdownImageBasePath: path.dirname(doc.path),
-      metadata: {
-        path: doc.path,
-        id: '', /* TODO activeFile.id */
-        library: doc.library
-      }
+    metadata: {
+      path: doc,
+      id: '', /* TODO activeFile.id */
+      library: CITEPROC_MAIN_DB
     }
   })
-  mdEditor.swapDoc(doc.cmDoc, doc.mode)
-  mdEditor.readOnly = false
-  store.commit('updateTableOfContents', mdEditor.tableOfContents)
-  store.commit('activeDocumentInfo', mdEditor.documentInfo)
-  // Check if there are search results available for this file that we can
-  // pull in and highlight
-  maybeHighlightSearchResults()
-  // Update the citation keys
-  if (doc.library !== undefined) {
-    updateCitationKeys(doc).catch(e => console.error('Could not update citation keys', e))
-  }
-}
 
-// TODO
-// eslint-disable-next-line no-unused-vars
-function maybeUpdateActiveDocumentInfo () {
-  if (docInfoTimeout.value !== undefined) {
-    return // There will be an update soon enough.
-  }
-
-  docInfoTimeout.value = setTimeout(() => {
-    docInfoTimeout.value = undefined
-    if (mdEditor !== null) {
-      store.commit('activeDocumentInfo', mdEditor.documentInfo)
-    }
-  }, 1000)
+  mdEditor.swapDoc(doc)
+    .then(() => {
+      store.commit('updateTableOfContents', mdEditor?.tableOfContents)
+      store.commit('activeDocumentInfo', mdEditor?.documentInfo)
+      // Check if there are search results available for this file that we can
+      // pull in and highlight
+      maybeHighlightSearchResults()
+      // TODO
+      // Update the citation keys
+      // if (doc.library !== undefined) {
+      //   updateCitationKeys(doc).catch(e => console.error('Could not update citation keys', e))
+      // }
+    })
+    .catch(err => console.error(err))
 }
 
 function jtl (lineNumber: number, setCursor: boolean = false) {
   if (mdEditor !== null) {
-    mdEditor.jtl(lineNumber, setCursor)
+    mdEditor.jtl(lineNumber) // TODO: Cursor?
   }
 }
 
-async function save (doc: MainEditorDocumentWrapper) {
-  if (doc.cmDoc.isClean() === true) {
-    return // Nothing to save
-  }
-
-  const newContents = doc.cmDoc.getValue()
-  const currentWordCount = countWords(newContents, shouldCountChars.value)
-
-  const result = await ipcRenderer.invoke('documents-provider', {
-    command: 'save-file',
-    payload: {
-      windowId: props.windowId,
-      leafId: props.leafId,
-      path: doc.path,
-      contents: doc.cmDoc.getValue(),
-      offsetWordCount: currentWordCount - doc.lastWordCount
-    }
-  })
-
-  if (result !== true) {
-    console.error('Retrieved a falsy result from main, indicating an error with saving the file.')
-    return
-  }
-
-  doc.lastWordCount = currentWordCount
-
-  // Everything worked out, so clean up
-  doc.cmDoc.markClean()
-  store.dispatch('regenerateTagSuggestions').catch(e => console.error(e))
-  announceDocumentModified(doc)
-
-  // Also, extract all cited keys
-  if (doc.library !== undefined) {
-    updateCitationKeys(doc).catch(e => console.error('Could not update citation keys', e))
-  }
-  // Saving can additionally do some changes to the files which are relevant
-  // to the autocomplete, so make sure to update that as well. See #2330
-  updateFileDatabase()
-}
-
+// eslint-disable-next-line no-unused-vars
 async function updateCitationKeys (doc: MainEditorDocumentWrapper): Promise<void> {
   if (mdEditor === null) {
     return
@@ -776,12 +634,12 @@ async function updateCitationKeys (doc: MainEditorDocumentWrapper): Promise<void
 
       // This is just a very crude representation of the citations.
       return {
-        text: item.id,
+        citekey: item.id,
         displayText: `${item.id}: ${authors} - ${title}`
       }
     })
 
-  mdEditor.setCompletionDatabase('citekeys', items)
+  mdEditor.setCompletionDatabase('citations', items)
 }
 
 function updateFileDatabase () {
@@ -899,23 +757,23 @@ function onEditorScroll (event: WheelEvent) {
 function editorMousedown (event: MouseEvent) {
   // start selecting lines only if we are on the left margin and the left mouse button is pressed
   if (event.target !== editor.value || event.button !== 0 || mdEditor === null) {
-    return
+    // return TODO
   }
 
   // set the start point of the selection to be where the mouse was clicked
-  anchor.value = mdEditor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY })
-  mdEditor.codeMirror.setSelection(anchor.value)
+  // anchor.value = mdEditor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY })
+  // mdEditor.codeMirror.setSelection(anchor.value)
 }
 
 function editorMousemove (event: MouseEvent) {
   if (anchor.value === undefined || mdEditor === null) {
-    return
+    // return TODO
   }
   // get the point where the mouse has moved
-  const addPoint = mdEditor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY })
+  // const addPoint = mdEditor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY })
   // use the original start point where the mouse first was clicked
   // and change the end point to where the mouse has moved so far
-  mdEditor.codeMirror.setSelection(anchor.value, addPoint)
+  // mdEditor.codeMirror.setSelection(anchor.value, addPoint)
 }
 
 /**
@@ -934,43 +792,43 @@ function editorMouseup (event: MouseEvent) {
   // when the mouse is released, set anchor to undefined to stop adding lines
   anchor.value = undefined
   // Also, make sure the editor is focused.
-  mdEditor.codeMirror.focus()
+  mdEditor.focus()
 }
 
 // TODO
 // eslint-disable-next-line no-unused-vars
 function addKeywordsToFile (keywords: string[]) {
-  if (mdEditor === null || activeFile.value == null) {
-    return
-  }
+  // if (mdEditor === null || activeFile.value == null) {
+  //   return
+  // }
 
-  // Split the contents of the editor into frontmatter and contents, then
-  // add the keywords to the frontmatter, slice everything back together
-  // and then overwrite the editor's contents.
-  let { frontmatter, content } = extractYamlFrontmatter(mdEditor.value)
+  // // Split the contents of the editor into frontmatter and contents, then
+  // // add the keywords to the frontmatter, slice everything back together
+  // // and then overwrite the editor's contents.
+  // let { frontmatter, content } = extractYamlFrontmatter(mdEditor.value)
 
-  let postFrontmatter = '\n'
-  if (frontmatter !== null) {
-    if ('keywords' in frontmatter) {
-      frontmatter.keywords = frontmatter.keywords.concat(keywords)
-    } else if ('tags' in frontmatter) {
-      frontmatter.tags = frontmatter.tags.concat(keywords)
-    } else {
-      frontmatter.keywords = keywords
-    }
-  } else {
-    // Frontmatter was null, so create one
-    frontmatter = {}
-    frontmatter.keywords = keywords
-    postFrontmatter += '\n' // Make sure if we're now ADDING a frontmatter to space it from the content
-  }
+  // let postFrontmatter = '\n'
+  // if (frontmatter !== null) {
+  //   if ('keywords' in frontmatter) {
+  //     frontmatter.keywords = frontmatter.keywords.concat(keywords)
+  //   } else if ('tags' in frontmatter) {
+  //     frontmatter.tags = frontmatter.tags.concat(keywords)
+  //   } else {
+  //     frontmatter.keywords = keywords
+  //   }
+  // } else {
+  //   // Frontmatter was null, so create one
+  //   frontmatter = {}
+  //   frontmatter.keywords = keywords
+  //   postFrontmatter += '\n' // Make sure if we're now ADDING a frontmatter to space it from the content
+  // }
 
-  // Glue it back together and set it as content
-  const activeDocument = openDocuments.find(doc => activeFile.value?.path === doc.path)
-  if (activeDocument === undefined) {
-    return
-  }
-  activeDocument.cmDoc.setValue('---\n' + YAML.stringify(frontmatter) + '---' + postFrontmatter + content)
+  // // Glue it back together and set it as content
+  // const activeDocument = openDocuments.find(doc => activeFile.value?.path === doc.path)
+  // if (activeDocument === undefined) {
+  //   return
+  // }
+  // activeDocument.cmDoc.setValue('---\n' + YAML.stringify(frontmatter) + '---' + postFrontmatter + content)
 }
 
 function handleDrop (event: DragEvent, where: 'editor'|'top'|'left'|'right'|'bottom') {

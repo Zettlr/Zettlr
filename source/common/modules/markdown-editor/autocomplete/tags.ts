@@ -30,7 +30,7 @@ export const tagsUpdateField = StateField.define<Completion[]>({
 /**
  * This utility function inserts a tag
  */
-const apply = function (view: EditorView, completion: Completion, from: number, to: number) {
+const apply = function (view: EditorView, completion: Completion, from: number, to: number): void {
   view.dispatch({
     changes: [{ from, to, insert: completion.label }],
     selection: { anchor: to }

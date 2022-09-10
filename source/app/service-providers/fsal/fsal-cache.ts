@@ -251,6 +251,6 @@ export default class FSALCache {
     // One more note: This caching algorithm will ensure
     // there'll be at most 99 files (10 to 99 and -1 to -9).
 
-    return String(key).substring(0, 2)
+    return key.substring(0, 2)
   }
 }

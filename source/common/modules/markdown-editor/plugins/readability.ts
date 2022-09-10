@@ -60,7 +60,7 @@ const scoreDecorations = [
  * @param {number} targetMin The lower limit of the target scale, default 0.
  * @param {number} targetMax The upper limit of the target scale, default 10.
  */
- function zTransform (val: number, sourceMin: number, sourceMax: number, targetMin: number = 0, targetMax: number = 10): number {
+function zTransform (val: number, sourceMin: number, sourceMax: number, targetMin: number = 0, targetMax: number = 10): number {
   // This algorithm "shrinks" val to the scale 0:1 before extrapolating
   // to the target scale.
 
@@ -175,12 +175,12 @@ function extractScores (text: string, offset: number, algorithm: string): any[] 
   let lastSeenIndex = 0
   return text
     // Remove block-level markup that shouldn't get readability'd
-    .replace(/^\`{1,3}.+?^\`{1,3}$/gsm, '')
+    .replace(/^`{1,3}.+?^`{1,3}$/gsm, '')
     .replace(/^-{3}.+?^(?:-{3}|\.{3})$/gsm, '')
     .replace(/^#{1,6}\s+/gm, '')
     .replace(/^\s*[-+*]\s\[[x\s]\]\s/gmi, '')
     // Now split into sentences at LF and delimiters
-    .split(/[\.:!?]\s+|\n/ig)
+    .split(/[.:!?]\s+|\n/ig)
     // Immediately retrieve the ranges in `text` for them
     .map(sentence => {
       // lastSeenIndex is important because sentences can appear multiple times
@@ -236,11 +236,11 @@ function readabilityScores (view: EditorView): DecorationSet {
 export const readabilityMode = ViewPlugin.fromClass(class {
   decorations: DecorationSet
 
-  constructor(view: EditorView) {
+  constructor (view: EditorView) {
     this.decorations = Decoration.none
   }
 
-  update(update: ViewUpdate) {
+  update (update: ViewUpdate): void {
     this.decorations = readabilityScores(update.view)
   }
 }, {

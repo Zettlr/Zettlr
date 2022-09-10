@@ -25,10 +25,10 @@ export interface FSALHistoryEvent {
  * descriptors should provide.
  */
 export interface FSMetaInfo {
-  name: string // path.basename(absolutePath)
-  dir: string // path.dirname(absolutePath)
   path: string // absolutePath
-  hash: number // Hashed absolute path
+  dir: string // path.dirname(absolutePath)
+  name: string // path.basename(absolutePath)
+  root: boolean // Whether the file/dir is a root (relative to Zettlr)
   type: 'file' | 'directory' | 'code' | 'other'
   size: number
   modtime: number
@@ -39,9 +39,9 @@ export interface FSMetaInfo {
  * Represents a non-circular directory
  */
 export interface DirMeta extends FSMetaInfo {
-  parent: number|null
+  parent: DirMeta|number|null
   children: Array<DirMeta|MDFileMeta|CodeFileMeta|OtherFileMeta>
-  project: any
+  project: ProjectSettings|null
   type: 'directory'
   isGitRepository: boolean
   sorting: string
@@ -53,10 +53,11 @@ export interface DirMeta extends FSMetaInfo {
  * Represents a non-circular file
  */
 export interface MDFileMeta extends FSMetaInfo {
-  parent: number|null
+  parent: DirMeta|number|null
   ext: string
   id: string
   type: 'file'
+  bom: string
   tags: string[]
   links: string[]
   wordCount: number
@@ -67,26 +68,25 @@ export interface MDFileMeta extends FSMetaInfo {
   frontmatter: any|null
   linefeed: string
   modified: boolean
-  content: string
 }
 
 /**
  * Represents a non-circular code file (.tex or .yml)
  */
 export interface CodeFileMeta extends FSMetaInfo {
-  parent: number|null
+  parent: DirMeta|number|null
   type: 'code'
   linefeed: string
+  bom: string
   modified: boolean
   ext: string
-  content: string
 }
 
 /**
  * Represents a non-circular attachment
  */
 export interface OtherFileMeta extends FSMetaInfo {
-  parent: number
+  root: false
   type: 'other'
   ext: string
 }

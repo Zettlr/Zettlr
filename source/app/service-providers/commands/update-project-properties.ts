@@ -30,7 +30,7 @@ export default class UpdateProjectProperties extends ZettlrCommand {
     // let expanded = expandOptionObject(arg.properties)
     // Find the directory, and apply the properties to it!
     let dir = this._app.fsal.findDir(arg.path)
-    if (dir !== null) {
+    if (dir !== undefined) {
       await this._app.fsal.updateProject(dir, arg.properties)
     } else {
       this._app.log.warning(`Could not update project properties for ${String(arg.path)}: No directory found!`)
