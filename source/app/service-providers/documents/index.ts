@@ -75,16 +75,6 @@ export default class DocumentManager extends ProviderContract {
    */
   private readonly _config: PersistentDataContainer
   /**
-   * Modified files are application-global: Whenever a file is modified anywhere
-   * in the application, this array is being updated so that changes can be
-   * propagated across windows. They are being held in a Map. The keys are the
-   * filepaths as well as the last modification time, the values the most recent
-   * file contents.
-   *
-   * @var {Map<[string, number], string>}
-   */
-  private readonly _modifiedFiles: Map<[string, number], string>
-  /**
    * The process that watches currently opened files for remote changes
    *
    * @var {chokidar.FSWatcher}
@@ -123,7 +113,6 @@ export default class DocumentManager extends ProviderContract {
     this._windows = {}
     this._emitter = new EventEmitter()
     this._config = new PersistentDataContainer(containerPath, 'yaml')
-    this._modifiedFiles = new Map()
     this._ignoreChanges = []
     this._remoteChangeDialogShownFor = []
     this.documents = []
@@ -228,7 +217,7 @@ export default class DocumentManager extends ProviderContract {
           return
         }
         case 'get-file-modification-status': {
-          return this._modifiedFiles
+          return this.documents.filter(x => this.isModified(x.filePath)).map(x => x.filePath)
         }
         case 'move-file': {
           const oWin = payload.originWindow
@@ -383,17 +372,15 @@ export default class DocumentManager extends ProviderContract {
       }
     }
 
-    // TODO: Replace the following with a proper file loader
-    let content = ''
     let type = DocumentType.Markdown
 
     // TODO: We also need to be able to load files not present in the file tree!
-    const descriptor = this._app.fsal.findFile(filePath)
-    if (descriptor === undefined) {
+    const descriptor = await this._app.fsal.getDescriptorForAnySupportedFile(filePath)
+    if (descriptor === undefined || descriptor.type === 'other') {
       throw new Error(`Cannot load file ${filePath}`) // TODO: Proper error handling & state recovery!
     }
 
-    const contents = await this._app.fsal.loadAnySupportedFile(filePath)
+    const content = await this._app.fsal.loadAnySupportedFile(filePath)
 
     if (descriptor.type === 'code') {
       switch (descriptor.ext) {
@@ -418,7 +405,7 @@ export default class DocumentManager extends ProviderContract {
       minimumVersion: 0,
       lastSavedVersion: 0,
       updates: [],
-      document: Text.of(contents.split(descriptor.linefeed))
+      document: Text.of(content.split(descriptor.linefeed))
     }
 
     this.documents.push(doc)
@@ -436,6 +423,8 @@ export default class DocumentManager extends ProviderContract {
       // removed from the document array.
       return false
     }
+
+    console.log('CLIENT REQUESTED UPDATES!', clientVersion, doc.currentVersion)
 
     if (clientVersion < doc.minimumVersion) {
       // TODO: This means that the client is completely out of sync and needs to
@@ -455,6 +444,7 @@ export default class DocumentManager extends ProviderContract {
     }
 
     if (clientVersion !== doc.currentVersion) {
+      console.log('CLIENT VERSION OUT OF SYNC', clientVersion, doc.currentVersion)
       return false
     }
 
@@ -479,7 +469,7 @@ export default class DocumentManager extends ProviderContract {
     }
 
     // Notify all clients, they will then request the update
-    broadcastIpcMessage('file-changed', doc.filePath)
+    this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { filePath, status: 'modification' })
 
     // Drop all updates that exceed the amount of updates we allow.
     while (doc.updates.length > MAX_VERSION_HISTORY) {
@@ -977,8 +967,6 @@ export default class DocumentManager extends ProviderContract {
   }
   // TODO: I NEED THIS SOMEWHERE! this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { filePath, status: 'modification' })
 
-  // TODO: I NEED THIS SOMEWHERE! this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { filePath, status: 'modification' })
-
   // TODO: I NEED THIS SOMEWHERE! this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { status: 'modification' })
 
   public isModified (filePath: string): boolean {
@@ -998,9 +986,9 @@ export default class DocumentManager extends ProviderContract {
    *                                  for that. If undefined, returns the total
    *                                  clean state.
    */
-  public isClean (): boolean
   public isClean (id?: string, which?: 'window'|'leaf'): boolean {
-    const modPaths = Array.from(this._modifiedFiles.keys()).map(x => x[0])
+    const modPaths = this.documents.filter(x => this.isModified(x.filePath)).map(x => x.filePath)
+
     if (id === undefined) {
       // Total clean state
       for (const key in this._windows) {

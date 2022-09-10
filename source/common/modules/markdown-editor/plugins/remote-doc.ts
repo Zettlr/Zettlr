@@ -61,6 +61,7 @@ export function hookDocumentAuthority (
           .then(success => {
             if (!success) {
               console.warn('Pushing updates failed!')
+              return // TODO: REMOVE AGAIN AFTER DEBUGGING
             }
 
             // Allow another push
@@ -104,6 +105,8 @@ export function hookDocumentAuthority (
                 resolve()
                 return
               }
+
+              console.log('Applying updates ...')
 
               // Revitalize the updates
               updates = updates.map(u => {

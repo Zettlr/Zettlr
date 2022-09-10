@@ -417,7 +417,7 @@ export default class WindowProvider extends ProviderContract {
 
     const result = await this.askSaveChanges()
     if (result.response === 0) {
-      this._documents.markEverythingClean()
+      // TODO this._documents.markEverythingClean()
       return true
     } else if (result.response === 1) {
       return await new Promise<boolean>((resolve, reject) => {

@@ -152,7 +152,7 @@ import { useStore } from 'vuex'
 import { key as storeKey } from './store'
 import { EditorCommands, MainEditorDocumentWrapper } from '@dts/renderer/editor'
 import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
-import { DocumentType } from '@dts/common/documents'
+import { DocumentType, DP_EVENTS } from '@dts/common/documents'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { EditorConfiguration } from '@common/modules/markdown-editor/util/configuration'
 
@@ -192,15 +192,17 @@ async function pullUpdates (filePath: string, version: number): Promise<false|Up
   // Requests new updates from the authority. It may be that the returned
   // promise pends for minutes or even hours -- until new changes are available
   return await new Promise((resolve, reject) => {
-    ipcRenderer.on('file-changed', (evt, filePath: string) => {
+    ipcRenderer.on('documents-update', (evt, { event, context }) => {
+      if (event !== DP_EVENTS.CHANGE_FILE_STATUS || context.filePath !== filePath) {
+        return
+      }
+
       ipcRenderer.invoke('documents-authority', {
         command: 'pull-updates',
         payload: { filePath, version }
       })
         .then((result: false|Update[]) => {
-          console.log('UPDATING', JSON.stringify(result))
           resolve(result)
-          console.log('UPDATE COMPLETE!')
         })
         .catch(err => reject(err))
     })
