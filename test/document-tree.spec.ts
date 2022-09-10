@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-import { DocumentTree, DTBranch, DTLeaf } from '@common/modules/document-tree'
+import { DocumentTree, DTBranch, DTLeaf } from '../source/app/service-providers/documents/document-tree'
 import { v4 as uuid4 } from 'uuid'
 import assert from 'assert'
 import 'mocha'
