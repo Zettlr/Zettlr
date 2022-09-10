@@ -79,7 +79,7 @@ export default class AppServiceContainer {
     this._dictionaryProvider = new DictionaryProvider(this._logProvider, this._configProvider)
 
     this._targetProvider = new TargetProvider(this._logProvider)
-    this._fsal = new FSAL(this._logProvider, this._configProvider, this._targetProvider, this._tagProvider)
+    this._fsal = new FSAL(this._logProvider, this._configProvider, this._tagProvider)
     this._linkProvider = new LinkProvider(this._logProvider, this._fsal)
     this._documentManager = new DocumentManager(this)
     this._windowProvider = new WindowProvider(this._logProvider, this._configProvider, this._documentManager)

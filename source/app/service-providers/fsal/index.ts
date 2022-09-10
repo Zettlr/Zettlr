@@ -379,7 +379,7 @@ export default class FSAL extends ProviderContract {
     for (const root of roots) {
       const dir = this.findDir(root.dir)
 
-      if (dir !== null) {
+      if (dir !== undefined) {
         // The directory is, in fact loaded! So first we can pluck that file
         // from our filetree.
         this._state.filetree.splice(this._state.filetree.indexOf(root), 1)

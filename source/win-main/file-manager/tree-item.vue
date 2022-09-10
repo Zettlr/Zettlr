@@ -1,7 +1,6 @@
 <template>
   <div
     class="tree-item-container"
-    v-bind:data-hash="obj.hash"
     v-on:dragover="acceptDrags"
     v-on:dragenter="enterDragging"
     v-on:dragleave="leaveDragging"
@@ -13,10 +12,9 @@
         [obj.type]: true,
         'selected': isSelected,
         'active': activeItem === obj.path,
-        'project': obj.type === 'directory' && obj.project != null,
+        'project': obj.type === 'directory' && obj.settings.project != null,
         'root': isRoot
       }"
-      v-bind:data-hash="obj.hash"
       v-bind:data-id="obj.type === 'file' ? obj.id : ''"
       v-bind:style="{
         'padding-left': `${depth * 15 + 10}px`
@@ -65,7 +63,6 @@
         }"
         role="button"
         v-bind:aria-label="`Select ${obj.name}`"
-        v-bind:data-hash="obj.hash"
         v-bind:draggable="!isRoot"
         v-on:dragstart="beginDragging"
         v-on:drag="onDragHandler"
@@ -111,7 +108,7 @@
     <div v-if="isDirectory && !shouldBeCollapsed">
       <TreeItem
         v-for="child in filteredChildren"
-        v-bind:key="child.hash"
+        v-bind:key="child.path"
         v-bind:obj="child"
         v-bind:is-currently-filtering="isCurrentlyFiltering"
         v-bind:depth="depth + 1"
@@ -143,7 +140,7 @@ import generateFilename from '@common/util/generate-filename'
 import { trans } from '@common/i18n-renderer'
 
 import { nextTick, defineComponent } from 'vue'
-import { MDFileMeta, DirMeta, CodeFileMeta } from '@dts/common/fsal'
+import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/main/fsal'
 
 const path = window.path
 const ipcRenderer = window.ipc
@@ -162,7 +159,7 @@ export default defineComponent({
       default: false // Can only be true if root and actually has a duplicate name
     },
     obj: {
-      type: Object as () => MDFileMeta|DirMeta|CodeFileMeta,
+      type: Object as () => MDFileDescriptor|DirDescriptor|CodeFileDescriptor,
       required: true
     },
     isCurrentlyFiltering: {
@@ -243,12 +240,12 @@ export default defineComponent({
         }
       } else if (this.obj.dirNotFoundFlag === true) {
         return 'disconnect'
-      } else if (this.obj.project !== null) {
+      } else if (this.obj.settings.project !== null) {
         // Indicate that this directory has a project.
         return 'blocks-group'
-      } else if (this.obj.icon !== null) {
+      } else if (this.obj.settings.icon !== null) {
         // Display the custom icon
-        return this.obj.icon
+        return this.obj.settings.icon
       }
 
       // No icon available
@@ -258,8 +255,7 @@ export default defineComponent({
      * Returns true if this item is a root item
      */
     isRoot: function (): boolean {
-      // Parent apparently can also be undefined BUG
-      return this.obj.parent == null
+      return this.obj.root
     },
     /**
      * Returns true if the file manager mode is set to "combined"
@@ -289,14 +285,14 @@ export default defineComponent({
     /**
      * Returns a list of children that can be displayed inside the tree view
      */
-    filteredChildren: function (): Array<MDFileMeta|DirMeta|CodeFileMeta> {
+    filteredChildren: function (): Array<MDFileDescriptor|DirDescriptor|CodeFileDescriptor> {
       if (this.obj.type !== 'directory') {
         return []
       }
       if (this.combined === true) {
-        return this.obj.children.filter(child => child.type !== 'other') as Array<MDFileMeta|DirMeta|CodeFileMeta>
+        return this.obj.children.filter(child => child.type !== 'other') as Array<MDFileDescriptor|DirDescriptor|CodeFileDescriptor>
       } else {
-        return this.obj.children.filter(child => child.type === 'directory') as DirMeta[]
+        return this.obj.children.filter(child => child.type === 'directory') as DirDescriptor[]
       }
     },
     useH1: function (): boolean {
