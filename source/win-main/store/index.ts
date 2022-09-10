@@ -16,7 +16,6 @@
 
 import { StoreOptions, createStore as baseCreateStore, Store } from 'vuex'
 import { InjectionKey } from 'vue'
-import { CodeFileMeta, DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
 import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
 import { SearchResultWrapper } from '@dts/common/search'
 import { RelatedFile } from '@dts/renderer/misc'
@@ -38,6 +37,7 @@ import updateOpenDirectoryAction from './actions/update-open-directory'
 import updateRelatedFilesAction from './actions/update-related-files'
 import updateBibliographyAction from './actions/update-bibliography'
 import documentTreeUpdateAction from './actions/document-tree-update'
+import { AnyDescriptor, DirDescriptor, MaybeRootDescriptor } from '@dts/main/fsal'
 
 /**
  * The injection key is required for store access from within composition API
@@ -52,7 +52,7 @@ export interface ZettlrState {
   /**
    * Contains the full file tree that is loaded into the app
    */
-  fileTree: Array<MDFileMeta|CodeFileMeta|DirMeta>
+  fileTree: MaybeRootDescriptor[]
   /**
    * Contains the last update timestamp from main
    */
@@ -77,7 +77,7 @@ export interface ZettlrState {
   /**
    * Contains the currently selected directory
    */
-  selectedDirectory: DirMeta|null
+  selectedDirectory: DirDescriptor|null
   activeFile: null
   /**
    * This property contains all leaf IDs on which the readability mode is
@@ -181,7 +181,7 @@ function getConfig (): StoreOptions<ZettlrState> {
       }
     },
     getters: {
-      file: state => (filePath: string): MDFileMeta|CodeFileMeta|OtherFileMeta|DirMeta|undefined => {
+      file: state => (filePath: string): AnyDescriptor|undefined => {
         return locateByPath(state.fileTree, filePath) as any
       },
       lastLeafActiveFile: state => (): OpenDocument|null => {

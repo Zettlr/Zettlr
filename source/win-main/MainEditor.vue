@@ -198,7 +198,9 @@ async function pullUpdates (filePath: string, version: number): Promise<false|Up
         payload: { filePath, version }
       })
         .then((result: false|Update[]) => {
+          console.log('UPDATING', JSON.stringify(result))
           resolve(result)
+          console.log('UPDATE COMPLETE!')
         })
         .catch(err => reject(err))
     })
@@ -217,9 +219,7 @@ async function getDoc (filePath: string): Promise<{ content: string, type: Docum
   // Fetches a fresh document
   return await ipcRenderer.invoke('documents-authority', {
     command: 'get-document',
-    payload: {
-      filePath
-    }
+    payload: { filePath }
   })
 }
 
@@ -255,9 +255,8 @@ ipcRenderer.on('citeproc-database-updated', (event, dbPath: string) => {
 
 // MOUNTED HOOK
 onMounted(() => {
-  const element = document.getElementById(editorId.value) as HTMLElement
   // As soon as the component is mounted, initiate the editor
-  mdEditor = new MarkdownEditor(element, getDoc, pullUpdates, pushUpdates)
+  mdEditor = new MarkdownEditor(editor.value as HTMLElement, getDoc, pullUpdates, pushUpdates)
 
   // We have to set this to the appropriate value after mount, afterwards it
   // will be updated as appropriate.
@@ -647,7 +646,7 @@ function updateFileDatabase () {
     return
   }
 
-  const fileDatabase: any = {}
+  const fileDatabase: Array<{ filename: string, id: string }> = []
 
   for (const file of fsalFiles.value) {
     const fname = file.name.substr(0, file.name.lastIndexOf('.'))
@@ -664,12 +663,11 @@ function updateFileDatabase () {
       displayText = `${file.id}: ${displayText}`
     }
 
-    fileDatabase[file.path] = {
+    fileDatabase.push({
       // Use the ID, if given, or the filename
-      text: (file.id !== '' && !filenameOnly.value) ? file.id : fname,
-      displayText,
+      filename: (file.id !== '' && !filenameOnly.value) ? file.id : fname,
       id: (file.id !== '' && !filenameOnly.value) ? file.id : ''
-    }
+    })
   }
 
   mdEditor.setCompletionDatabase('files', fileDatabase)
@@ -1042,7 +1040,7 @@ function handleDragLeave (event: DragEvent) {
     }
   }
 
-  .CodeMirror {
+  .cm-editor {
     // The CodeMirror editor needs to respect the new tabbar; it cannot take
     // up 100 % all for itself anymore.
     margin-left: 0.5em;
@@ -1057,11 +1055,11 @@ function handleDragLeave (event: DragEvent) {
   }
 
   // If a code file is loaded, we need to display the editor contents in monospace.
-  &.code-file .CodeMirror {
+  &.code-file .cm-editor {
     font-family: monospace;
 
     margin-left: 0px;
-    .CodeMirror-scroll {
+    .cm-content {
       padding-right: 0px;
     }
 
@@ -1105,14 +1103,14 @@ function handleDragLeave (event: DragEvent) {
     .CodeMirror-code { margin: 0; }
   }
 
-  .CodeMirror-code {
+  .cm-content {
     margin: 5em 0em;
     @media(max-width: 1024px) { margin: @editor-margin-fullscreen-md 0em; }
 
     .mute { opacity:0.2; }
   }
 
-  .CodeMirror-scroll {
+  .cm-content {
     // padding-right: 5em;
     padding-right: 5%;
     // @media(min-width: 1025px) { padding-right: @editor-margin-normal-lg; }
@@ -1200,14 +1198,14 @@ body.win32 .main-editor-wrapper, body.linux .main-editor-wrapper {
 
 // CodeMirror fullscreen
 .main-editor-wrapper.fullscreen {
-    .CodeMirror {
+    .cm-editor {
     @media(min-width: 1301px) { margin-left: @editor-margin-fullscreen-xxl !important; }
     @media(max-width: 1300px) { margin-left: @editor-margin-fullscreen-xl  !important; }
     @media(max-width: 1100px) { margin-left: @editor-margin-fullscreen-lg  !important; }
     @media(max-width: 1000px) { margin-left: @editor-margin-fullscreen-md  !important; }
     @media(max-width:  800px) { margin-left: @editor-margin-fullscreen-sm  !important; }
 
-    .CodeMirror-scroll {
+    .cm-content {
       @media(min-width: 1301px) { padding-right: @editor-margin-fullscreen-xxl !important; }
       @media(max-width: 1300px) { padding-right: @editor-margin-fullscreen-xl  !important; }
       @media(max-width: 1100px) { padding-right: @editor-margin-fullscreen-lg  !important; }

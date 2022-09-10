@@ -1148,6 +1148,12 @@ export default class FSAL extends ProviderContract {
   }
 
   public async getDescriptorForAnySupportedFile (absPath: string): Promise<MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor> {
+    // If we have the given file already loaded we don't have to load it again
+    const descriptor = this.find(absPath)
+    if (descriptor !== undefined && descriptor.type !== 'directory') {
+      return descriptor
+    }
+
     if (isDir(absPath)) {
       throw new Error(`[FSAL] Cannot load file ${absPath} as it is a directory`)
     }

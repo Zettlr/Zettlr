@@ -227,16 +227,16 @@ export default defineComponent({
         // We have selections to display.
         let length = 0
         info.selections.forEach((sel: any) => {
-          length += sel.selectionLength
+          // length += sel.selectionLength TODO
         })
 
         cnt = trans('gui.words_selected', localiseNumber(length))
         cnt += '<br>'
         if (info.selections.length === 1) {
-          cnt += (info.selections[0].start.line + 1) + ':'
-          cnt += (info.selections[0].start.ch + 1) + ' &ndash; '
-          cnt += (info.selections[0].end.line + 1) + ':'
-          cnt += (info.selections[0].end.ch + 1)
+          cnt += (info.selections[0].anchor.line + 1) + ':'
+          cnt += (info.selections[0].anchor.ch + 1) + ' &ndash; '
+          cnt += (info.selections[0].head.line + 1) + ':'
+          cnt += (info.selections[0].head.ch + 1)
         } else {
           // Multiple selections --> indicate
           cnt += trans('gui.number_selections', info.selections.length)
@@ -501,7 +501,7 @@ export default defineComponent({
         ipcRenderer.send('window-controls', { command: 'paste' })
 
         // Now restore the clipboard's original contents
-        setTimeout((e) => {
+        setTimeout(() => {
           clipboard.write({ text, html, rtf })
         }, 10) // Why do a timeout? Because the paste event is asynchronous.
       } else if (shortcut === 'copy-current-id') {

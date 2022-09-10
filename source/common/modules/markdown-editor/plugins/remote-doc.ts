@@ -114,7 +114,6 @@ export function hookDocumentAuthority (
               })
               this.view.dispatch(receiveUpdates(this.view.state, updates))
             } catch (e: any) {
-              console.warn(this.view)
               reject(e)
             }
 

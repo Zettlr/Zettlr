@@ -442,7 +442,7 @@ export default class DocumentManager extends ProviderContract {
       // re-fetch the whole document.
       return false
     } else if (clientVersion < doc.currentVersion) {
-      return doc.updates.slice(clientVersion)
+      return doc.updates.slice(clientVersion - doc.minimumVersion)
     } else {
       return [] // No updates available
     }
@@ -455,13 +455,12 @@ export default class DocumentManager extends ProviderContract {
     }
 
     if (clientVersion !== doc.currentVersion) {
-      console.log('Client wanted to push updates, but it has a wrong version!')
       return false
     }
 
     for (const update of clientUpdates) {
       const changes = ChangeSet.fromJSON(update.changes)
-      doc.updates.push({ changes, clientID: update.clientID })
+      doc.updates.push(update)
       doc.document = changes.apply(doc.document)
       doc.currentVersion = doc.minimumVersion + doc.updates.length
       // People are lazy, and hence there is a non-zero chance that in a few
