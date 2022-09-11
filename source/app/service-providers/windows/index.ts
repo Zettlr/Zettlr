@@ -51,7 +51,7 @@ import * as bcp47 from 'bcp-47'
 import mapFSError from './map-fs-error'
 import ProviderContract from '@providers/provider-contract'
 import LogProvider from '@providers/log'
-import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
+// import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import DocumentManager from '@providers/documents'
 import { DP_EVENTS } from '@dts/common/documents'
 import { trans } from '@common/i18n-main'
@@ -78,7 +78,6 @@ export default class WindowProvider extends ProviderContract {
   private readonly _stateContainer: PersistentDataContainer
   private readonly _hasRTLLocale: boolean
   private readonly _emitter: EventEmitter
-  private _shuttingDown: boolean
 
   constructor (
     private readonly _logger: LogProvider,
@@ -104,7 +103,6 @@ export default class WindowProvider extends ProviderContract {
     this._windowState = new Map()
     this._configFile = path.join(app.getPath('userData'), 'window_state.yml')
     this._stateContainer = new PersistentDataContainer(this._configFile, 'yaml', 1000)
-    this._shuttingDown = false
 
     // Detect whether we have an RTL locale for correct traffic light positions.
     const schema = bcp47.parse(app.getLocale())
@@ -122,32 +120,6 @@ export default class WindowProvider extends ProviderContract {
     } else {
       this._hasRTLLocale = false
     }
-
-    // Listen to the before-quit event by which we make sure to only quit the
-    // application if the status of possibly modified files has been cleared.
-    // We listen to this event, because it will fire *before* the process
-    // attempts to close the open windows, including the main window, which
-    // would result in a loss of data. NOTE: The exception is the auto-updater
-    // which will close the windows before this event. But because we also
-    // listen to close-events on the main window, we should be able to handle
-    // this, if we ever switched to the auto updater.
-    app.on('before-quit', (event) => {
-      if (!this._documents.isClean()) {
-        event.preventDefault()
-        this._askUserToCloseWindow()
-          .then(canCloseWindow => {
-            if (canCloseWindow) {
-              this._shuttingDown = true
-              app.quit()
-            }
-          })
-          .catch(err => {
-            this._logger.error('[WindowManager] Could not ask user to close window', err)
-          })
-      } else {
-        this._shuttingDown = true
-      }
-    })
 
     // Listen to window control commands
     ipcMain.on('window-controls', (event, message) => {
@@ -252,6 +224,13 @@ export default class WindowProvider extends ProviderContract {
       }
     })
 
+    this._documents.on(DP_EVENTS.FILE_SAVED, (ctx: any) => {
+      // TODO: DUPLICATE CODE!
+      for (const key in this._mainWindows) {
+        this.setModified(key, !this._documents.isClean(key, 'window'))
+      }
+    })
+
     this._documents.on(DP_EVENTS.NEW_WINDOW, () => {
       this.showMainWindows()
     })
@@ -350,26 +329,34 @@ export default class WindowProvider extends ProviderContract {
 
       if (key === undefined) {
         this._logger.error('[Window Manager] Could not close window since its key was not found!')
-        return
+        // return
       }
 
+      // TODO: SIMILAR TO BELOW!
+      // Basically what we need to do here is to check if the window is clean,
+      // and if the documents provider responds that all is good, we can close
+      // the window. Basically we need to ask the documents provider 'Senpai can
+      // I close window UwU?' and if senpai is d'accord we can close the window
+      // OR even better: Have the document provider handle EVERYTHING in this
+      // regard. The document provider can basically tell us to close the window
       if (!this._documents.isClean(key)) {
-        event.preventDefault()
-        this._askUserToCloseWindow(key)
-          .then(canCloseWindow => {
-            if (canCloseWindow) {
-              window.close()
-            }
-          })
-          .catch(err => {
-            this._logger.error('[WindowManager] Could not ask user to close window', err)
-          })
+      //   event.preventDefault()
+      //   this._askUserToCloseWindow(key)
+      //     .then(canCloseWindow => {
+      //       if (canCloseWindow) {
+      //         window.close()
+      //       }
+      //     })
+      //     .catch(err => {
+      //       this._logger.error('[WindowManager] Could not ask user to close window', err)
+      //     })
       }
 
       // If we're not shutting down, ask the document provider to close the window
-      if (!this._shuttingDown) {
-        this._documents.closeWindow(key)
-      }
+      // TODO: REDO THIS OTHERWISE PEOPLE CANT CLOSE WINDOWS!
+      // if (!this._shuttingDown) {
+      //   this._documents.closeWindow(key)
+      // }
     })
 
     window.on('closed', () => {
@@ -398,37 +385,6 @@ export default class WindowProvider extends ProviderContract {
       if (win === this._mainWindows[key]) {
         return key
       }
-    }
-  }
-
-  /**
-   * If there are any unsaved changes to documents within the main window, this
-   * function handles everything regarding this. It asks the user to save
-   * changes if the user wants this. The caller just needs to look at the return
-   * value: If it's true, the user has confirmed the window can be closed, if
-   * false, there was some problem.
-   *
-   * @return  {Promise<boolean>}  True if the main window can safely be closed.
-   */
-  private async _askUserToCloseWindow (windowId?: string): Promise<boolean> {
-    if (this._documents.isClean(windowId)) {
-      return true
-    }
-
-    const result = await this.askSaveChanges()
-    if (result.response === 0) {
-      // TODO this._documents.markEverythingClean()
-      return true
-    } else if (result.response === 1) {
-      return await new Promise<boolean>((resolve, reject) => {
-        this._documents.once('documents-all-clean', () => { resolve(true) })
-        broadcastIpcMessage('save-documents', [])
-        // Failsafe if the documents aren't saved after 5 seconds. This way the
-        // user can simply again close the window
-        setTimeout(() => { resolve(false) }, 5000)
-      })
-    } else {
-      return false
     }
   }
 

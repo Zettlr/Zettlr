@@ -265,6 +265,40 @@ ipcRenderer.on('citeproc-database-updated', (event, dbPath: string) => {
   // }
 })
 
+ipcRenderer.on('shortcut', (event, command) => {
+  if (mdEditor?.hasFocus() !== true) {
+    return // None of our business
+  }
+
+  const file = activeFile.value
+
+  if (command === 'save-file' && file != null) {
+    // Main is telling us to save, so tell main to save the current file.
+    ipcRenderer.invoke('documents-provider', {
+      command: 'save-file',
+      payload: {
+        windowId: props.windowId,
+        leafId: props.leafId,
+        path: file.path,
+        // TODO: Correct word count
+        offsetWordCount: 0
+      }
+    })
+      .then(result => {
+        if (result !== true) {
+          console.error('Retrieved a falsy result from main, indicating an error with saving the file.')
+        }
+      })
+      .catch(e => console.error(e))
+  } else if (command === 'close-window') {
+    // TODO: Implement tab closing
+  } else if (command === 'search') {
+    showSearch.value = !showSearch.value
+  } else if (command === 'toggle-typewriter-mode') {
+    mdEditor.hasTypewriterMode = !mdEditor.hasTypewriterMode
+  }
+})
+
 // MOUNTED HOOK
 onMounted(() => {
   // As soon as the component is mounted, initiate the editor

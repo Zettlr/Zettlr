@@ -105,6 +105,8 @@ export default class DocumentManager extends ProviderContract {
    */
   private readonly documents: Document[]
 
+  private _shuttingDown: boolean
+
   constructor (private readonly _app: AppServiceContainer) {
     super()
 
@@ -116,6 +118,7 @@ export default class DocumentManager extends ProviderContract {
     this._ignoreChanges = []
     this._remoteChangeDialogShownFor = []
     this.documents = []
+    this._shuttingDown = false
 
     const options: chokidar.WatchOptions = {
       persistent: true,
@@ -262,7 +265,65 @@ export default class DocumentManager extends ProviderContract {
         }
       }
     })
+
+    // Listen to the before-quit event by which we make sure to only quit the
+    // application if the status of possibly modified files has been cleared.
+    // We listen to this event, because it will fire *before* the process
+    // attempts to close the open windows, including the main window, which
+    // would result in a loss of data. NOTE: The exception is the auto-updater
+    // which will close the windows before this event. But because we also
+    // listen to close-events on the main window, we should be able to handle
+    // this, if we ever switched to the auto updater.
+    app.on('before-quit', (event) => {
+      if (!this.isClean()) {
+        event.preventDefault()
+        this._askUserToCloseWindow()
+          .then(canCloseWindow => {
+            if (canCloseWindow) {
+              this._shuttingDown = true
+              app.quit()
+            }
+          })
+          .catch(err => {
+            this._app.log.error('[WindowManager] Could not ask user to close window', err)
+          })
+      } else {
+        this._shuttingDown = true
+      }
+    })
   } // END constructor
+
+  /**
+   * If there are any unsaved changes to documents, this function handles
+   * everything regarding this. It asks the user to save changes if the user
+   * wants this. The caller just needs to look at the return value: If it's
+   * true, the user has confirmed the window can be closed, if false, there was
+   * some problem.
+   *
+   * @return  {Promise<boolean>}  True if the main window can safely be closed.
+   */
+  private async _askUserToCloseWindow (windowId?: string): Promise<boolean> {
+    if (this.isClean(windowId)) {
+      return true
+    }
+
+    const result = await this._app.windows.askSaveChanges()
+    if (result.response === 0) {
+      // TODO this._documents.markEverythingClean()
+      for (const document of this.documents) {
+        document.lastSavedVersion = document.currentVersion
+      }
+      return true
+    } else if (result.response === 1) {
+      // Save all docs
+      for (const document of this.documents) {
+        await this.saveFile(document.filePath)
+      }
+      return true
+    } else {
+      return false
+    }
+  }
 
   async boot (): Promise<void> {
     // Loads in all openFiles
@@ -1071,6 +1132,8 @@ export default class DocumentManager extends ProviderContract {
     } else {
       await FSALCodeFile.save(doc.descriptor, doc.document.toString(), null)
     }
+
+    console.log('File ' + filePath + ' saved successfully.')
 
     doc.lastSavedVersion = doc.currentVersion
     this.broadcastEvent(DP_EVENTS.FILE_SAVED, { filePath })
