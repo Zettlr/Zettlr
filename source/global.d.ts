@@ -144,8 +144,10 @@ declare interface Window {
      * @param   {string}     channel   The channel on which to listen
      * @param   {undefined}  listener  An event. This will always be omitted and undefined.
      * @param   {any}        args      Any payload that was sent from main
+     *
+     * @return {Function}  A function to stop listening (remove the listener)
      */
-    on: (channel: string, listener: (event: undefined, ...args: any) => void) => void
+    on: (channel: string, listener: (event: undefined, ...args: any) => void) => () => void
   }
   path: RendererPath
   clipboard: {

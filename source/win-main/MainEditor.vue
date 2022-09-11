@@ -190,9 +190,15 @@ let mdEditor: MarkdownEditor|null = null
 // AUTHORITY CALLBACKS
 async function pullUpdates (filePath: string, version: number): Promise<false|Update[]> {
   // Requests new updates from the authority. It may be that the returned
-  // promise pends for minutes or even hours -- until new changes are available
+  // promise pends for minutes or even hours -- until new changes are available.
+  // Notice how we're not returning the promise from the IPC channel. The reason
+  // is mainly to prevent pollution -- I don't want to try out what happens if
+  // a dozen IPC calls are hanging in the air with no resolution in sight.
+  console.log('Client waiting for updates, version:', version)
   return await new Promise((resolve, reject) => {
-    ipcRenderer.on('documents-update', (evt, { event, context }) => {
+    // Begin listening for the correct event
+    const stopListening = ipcRenderer.on('documents-update', (evt, payload) => {
+      const { event, context } = payload
       if (event !== DP_EVENTS.CHANGE_FILE_STATUS || context.filePath !== filePath) {
         return
       }
@@ -202,6 +208,9 @@ async function pullUpdates (filePath: string, version: number): Promise<false|Up
         payload: { filePath, version }
       })
         .then((result: false|Update[]) => {
+          // Clean up to not pollute the event listener with millions of callbacks
+          stopListening()
+          console.log('Resolving promise with answer from main, removing listener ...')
           resolve(result)
         })
         .catch(err => reject(err))
@@ -211,6 +220,7 @@ async function pullUpdates (filePath: string, version: number): Promise<false|Up
 
 async function pushUpdates (filePath: string, version: number, updates: any): Promise<boolean> {
   // Submits new updates to the authority, returns true if successful
+  console.log(`Client pushing ${updates.length} updates from version ${version}...`)
   return await ipcRenderer.invoke('documents-authority', {
     command: 'push-updates',
     payload: { filePath, version, updates }

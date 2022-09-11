@@ -60,8 +60,16 @@ export function hookDocumentAuthority (
         pushUpdates(filePath, version, payload)
           .then(success => {
             if (!success) {
-              console.warn('Pushing updates failed!')
-              return // TODO: REMOVE AGAIN AFTER DEBUGGING
+              // NOTE: When main returns false it's not THAT ideal, but the
+              // algorithm is capable of recovering. The reason pushing fails
+              // regularly is because of a race condition that the push and pull
+              // listeners are not tied to the same state, hence there will
+              // always be that instance where the editor instance is faster in
+              // pushing a second set of updates, but with a wrong version number.
+              // It will then just try to push updates AGAIN (hence we don't
+              // return).
+              // TODO: There must be a better solution. Like, don't push while
+              // pulling, or vice versa, idk.
             }
 
             // Allow another push
