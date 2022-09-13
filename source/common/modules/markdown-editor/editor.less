@@ -31,6 +31,7 @@
 .cm-scroller {
   padding-right: 10vw;
   overflow: auto; /* Necessary in conjunction with .cm-editor:height */
+  font-family: inherit !important;
 }
 
 .cm-editor {
@@ -43,26 +44,6 @@
 
   // STYLING FOR THE COMMON WRAPPER ELEMENTS
   // ===========================================================================
-
-  // The textarea element needs to have the same
-  // font-size as the editor, even though it is
-  // hidden. This way, pop-ups for non-western
-  // fonts such as Hiragana/Katakana are correctly
-  // aligned. Should also help accessibility-plugins.
-  &.CodeMirror-wrap > div:first-child {
-    margin-top: 0.4375em;
-    textarea {
-      font-family: inherit;
-      font-size: inherit;
-      line-height: inherit;
-      height: 1.4375em !important;
-    }
-  }
-
-  // This directive prevents strange colour artifacts when a document is open
-  // that has less lines of code than fit into the window (especially notable
-  // in dark mode, as the sizer is visible with a small green halo).
-  .CodeMirror-sizer { height: 100%; }
 
   &.CodeMirror-empty {
     background-position: center center;
@@ -101,21 +82,6 @@
     padding: 2px;
     background-color: rgba(0, 217, 225, 0.7);
     border-radius: 3px;
-  }
-
-  // This class is applied for the dialogs that the vim plugin produces, i.e.
-  // the command bar.
-  .CodeMirror-dialog.CodeMirror-dialog-bottom, .vim-error-message {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-
-    input {
-      background-color: transparent;
-      border: none;
-      border-radius: none;
-    }
   }
 
   // SYNTAX-HIGHLIGHTING CLASSES

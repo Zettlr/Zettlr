@@ -1149,7 +1149,8 @@ function handleDragLeave (event: DragEvent) {
     .CodeMirror-code { margin: 0; }
   }
 
-  .cm-content {
+  .cm-scroller {
+    // TODO: Remove the margins for code files!
     margin: 5em 0em;
     @media(max-width: 1024px) { margin: @editor-margin-fullscreen-md 0em; }
 

@@ -144,6 +144,7 @@ export default class MarkdownEditor extends EventEmitter {
       search({ top: true }), // Add a search
       EditorState.allowMultipleSelections.of(true),
       EditorState.tabSize.of(4),
+      EditorView.lineWrapping, // Enable line wrapping
       indentUnit.of('    '), // TODO: That can also be set by the user
       // EditorState.indentUnit.of(4),
 
