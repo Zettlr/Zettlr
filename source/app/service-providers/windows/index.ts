@@ -60,7 +60,6 @@ import PersistentDataContainer from '@common/modules/persistent-data-container'
 
 export default class WindowProvider extends ProviderContract {
   private readonly _mainWindows: { [key: string]: BrowserWindow }
-  private readonly _qlWindows: Map<string, BrowserWindow>
   private _printWindow: BrowserWindow|null
   private _updateWindow: BrowserWindow|null
   private _logWindow: BrowserWindow|null
@@ -87,7 +86,6 @@ export default class WindowProvider extends ProviderContract {
     super()
     this._emitter = new EventEmitter()
     this._mainWindows = {}
-    this._qlWindows = new Map()
     this._printWindow = null
     this._updateWindow = null
     this._preferences = null
@@ -312,58 +310,34 @@ export default class WindowProvider extends ProviderContract {
   private _hookMainWindow (window: BrowserWindow): void {
     // Listens to events from the window
     window.on('close', (event) => {
-      // The user has requested the window to be closed -> first close
-      // all other windows. NOTE: This also closes windows not instantiated
-      // from within this class. This is a failsafe -- don't open windows outside
-      // of the window manager.
-      const allWindows = BrowserWindow.getAllWindows()
-      for (const win of allWindows) {
-        // Don't close the main window just yet. We are just preparing for the
-        // shutdown by closing all other windows.
-        if (this.getMainWindowKey(win) === undefined) {
-          win.close()
-        }
-      }
-
       const key = this.getMainWindowKey(window)
 
       if (key === undefined) {
-        this._logger.error('[Window Manager] Could not close window since its key was not found!')
-        // return
+        this._logger.error('[Window Manager] A main window is being closed, but I could not find its key!')
+        return
       }
 
-      // TODO: SIMILAR TO BELOW!
-      // Basically what we need to do here is to check if the window is clean,
-      // and if the documents provider responds that all is good, we can close
-      // the window. Basically we need to ask the documents provider 'Senpai can
-      // I close window UwU?' and if senpai is d'accord we can close the window
-      // OR even better: Have the document provider handle EVERYTHING in this
-      // regard. The document provider can basically tell us to close the window
+      // Only close this window if it is safe to do so. The isClean() method will
+      // return true during shutdowns.
       if (!this._documents.isClean(key)) {
-      //   event.preventDefault()
-      //   this._askUserToCloseWindow(key)
-      //     .then(canCloseWindow => {
-      //       if (canCloseWindow) {
-      //         window.close()
-      //       }
-      //     })
-      //     .catch(err => {
-      //       this._logger.error('[WindowManager] Could not ask user to close window', err)
-      //     })
+        event.preventDefault()
+        this._documents.askUserToCloseWindow(key)
+          .then(canCloseWindow => {
+            if (canCloseWindow) {
+              window.close()
+            }
+          })
+          .catch(err => {
+            this._logger.error('[WindowManager] Could not ask user to close window', err)
+          })
       }
-
-      // If we're not shutting down, ask the document provider to close the window
-      // TODO: REDO THIS OTHERWISE PEOPLE CANT CLOSE WINDOWS!
-      // if (!this._shuttingDown) {
-      //   this._documents.closeWindow(key)
-      // }
     })
 
     window.on('closed', () => {
       // The window has been closed -> dereference
       const key = this.getMainWindowKey(window)
       if (key === undefined) {
-        this._logger.error('[Window Manager] Could not close a main window since its key was not found!')
+        this._logger.error('[Window Manager] Could not dereference a main window since its key was not found!')
         return
       }
 

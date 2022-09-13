@@ -1130,6 +1130,19 @@ export default class FSAL extends ProviderContract {
     this._afterRemoteChange()
   } // END: move-action
 
+  /**
+   * This is a convenience function to retrieve the file contents (as a string)
+   * of any file that is supported by Zettlr, meaning you can use this function
+   * to load the contents of any Markdown file, any JSON or YAML file, or any
+   * TeX file (+ maybe others in the future).
+   *
+   * @throws When the path was a directory or an unsupported file (unsupported
+   *         includes attachments)
+   *
+   * @param   {string<string>}   absPath  The path to the file
+   *
+   * @return  {Promise<string>}           Resolves with a string
+   */
   public async loadAnySupportedFile (absPath: string): Promise<string> {
     if (isDir(absPath)) {
       throw new Error(`[FSAL] Cannot load file ${absPath} as it is a directory`)
@@ -1147,6 +1160,17 @@ export default class FSAL extends ProviderContract {
     throw new Error(`[FSAL] Cannot load file ${absPath}: Unsupported`)
   }
 
+  /**
+   * Convenience function to retrieve a supported file (including attachments
+   * in the form of a FSAL descriptor containing metadata on the file in
+   * question.)
+   *
+   * @throws If the path points to a directory or an otherwise unsupported file.
+   *
+   * @param   {string}   absPath  The path to the file
+   *
+   * @return  {Promise<MDFileDescriptor>}           Resolves with the descriptor
+   */
   public async getDescriptorForAnySupportedFile (absPath: string): Promise<MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor> {
     // If we have the given file already loaded we don't have to load it again
     const descriptor = this.find(absPath)

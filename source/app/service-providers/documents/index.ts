@@ -33,7 +33,9 @@ import { Update } from '@codemirror/collab'
 import { ChangeSet, Text } from '@codemirror/state'
 import { CodeFileDescriptor, MDFileDescriptor } from '@dts/main/fsal'
 
-interface DocumentWindows { [windowId: string]: DocumentTree }
+interface DocumentWindows {
+  [windowId: string]: DocumentTree
+}
 
 const MAX_VERSION_HISTORY = 100 // Keep no more than this many updates.
 
@@ -277,15 +279,25 @@ export default class DocumentManager extends ProviderContract {
     app.on('before-quit', (event) => {
       if (!this.isClean()) {
         event.preventDefault()
-        this._askUserToCloseWindow()
-          .then(canCloseWindow => {
-            if (canCloseWindow) {
-              this._shuttingDown = true
+
+        this._app.windows.askSaveChanges()
+          .then(async result => {
+            if (result.response < 2) {
+              for (const document of this.documents) {
+                if (result.response === 0) {
+                  document.lastSavedVersion = document.currentVersion
+                } else {
+                  await this.saveFile(document.filePath)
+                }
+              }
+
+              // TODO: Emit events that the documents are now clean, same below
+
               app.quit()
-            }
+            } // Else: Don't quit
           })
           .catch(err => {
-            this._app.log.error('[WindowManager] Could not ask user to close window', err)
+            this._app.log.error('[DocumentManager] Cannot ask user to save or omit changes!', err)
           })
       } else {
         this._shuttingDown = true
@@ -294,31 +306,51 @@ export default class DocumentManager extends ProviderContract {
   } // END constructor
 
   /**
-   * If there are any unsaved changes to documents, this function handles
-   * everything regarding this. It asks the user to save changes if the user
-   * wants this. The caller just needs to look at the return value: If it's
-   * true, the user has confirmed the window can be closed, if false, there was
-   * some problem.
+   * Use this method to ask the user whether or not the window identified with
+   * the windowId may be closed. If this function returns true, the user agreed
+   * to drop all changes, or there were no changes contained in the window.
    *
-   * @return  {Promise<boolean>}  True if the main window can safely be closed.
+   * @param   {string}            windowId  The window in question
+   *
+   * @return  {Promise<boolean>}            Returns false if the window may not be closed
    */
-  private async _askUserToCloseWindow (windowId?: string): Promise<boolean> {
+  public async askUserToCloseWindow (windowId: string): Promise<boolean> {
     if (this.isClean(windowId)) {
       return true
     }
 
+    // TODO: Check if the same (modified) files are also open in other windows.
+    // If so, we can treat this window as if it contains no changes, since the
+    // document is still open somewhere else.
+
     const result = await this._app.windows.askSaveChanges()
     if (result.response === 0) {
-      // TODO this._documents.markEverythingClean()
+      // Mark everything as clean TODO: As of now this would mean that if the
+      // documents are open in other windows, they would still reflect the
+      // "wrong" (b/c omitted, unsaved) state!
       for (const document of this.documents) {
         document.lastSavedVersion = document.currentVersion
       }
+
+      // If we're not shutting down, this function will only be called for when
+      // the user wants to actively close a window for good
+      if (!this._shuttingDown) {
+        this.closeWindow(windowId)
+      }
+
       return true
     } else if (result.response === 1) {
       // Save all docs
       for (const document of this.documents) {
         await this.saveFile(document.filePath)
       }
+
+      // If we're not shutting down, this function will only be called for when
+      // the user wants to actively close a window for good
+      if (!this._shuttingDown) {
+        this.closeWindow(windowId)
+      }
+
       return true
     } else {
       return false
@@ -1026,9 +1058,6 @@ export default class DocumentManager extends ProviderContract {
     }
     return null
   }
-  // TODO: I NEED THIS SOMEWHERE! this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { filePath, status: 'modification' })
-
-  // TODO: I NEED THIS SOMEWHERE! this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { status: 'modification' })
 
   public isModified (filePath: string): boolean {
     const doc = this.documents.find(doc => doc.filePath === filePath)
@@ -1052,16 +1081,7 @@ export default class DocumentManager extends ProviderContract {
 
     if (id === undefined) {
       // Total clean state
-      for (const key in this._windows) {
-        const allLeafs = this._windows[key].getAllLeafs()
-        for (const leaf of allLeafs) {
-          for (const file of leaf.tabMan.openFiles) {
-            if (modPaths.includes(file.path)) {
-              return false
-            }
-          }
-        }
-      }
+      return modPaths.length === 0
     } else if (which === 'window') {
       // window-specific clean state
       const allLeafs = this._windows[id].getAllLeafs()
@@ -1132,8 +1152,6 @@ export default class DocumentManager extends ProviderContract {
     } else {
       await FSALCodeFile.save(doc.descriptor, doc.document.toString(), null)
     }
-
-    console.log('File ' + filePath + ' saved successfully.')
 
     doc.lastSavedVersion = doc.currentVersion
     this.broadcastEvent(DP_EVENTS.FILE_SAVED, { filePath })
