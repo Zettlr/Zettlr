@@ -543,6 +543,15 @@ export default class MarkdownEditor extends EventEmitter {
   }
 
   /**
+   * Returns the outer DOM element for the editor instance
+   *
+   * @return  {HTMLElement}The editor wrapper
+   */
+  get dom (): HTMLElement {
+    return this._instance.dom
+  }
+
+  /**
    * Returns the word count of the editor contents
    *
    * @return  {Number}  The word count

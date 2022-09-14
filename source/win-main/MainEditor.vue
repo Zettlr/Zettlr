@@ -66,7 +66,10 @@
         </button>
       </div>
     </div>
-    <textarea v-bind:id="editorId" ref="textarea" style="display:none;"></textarea>
+
+    <div v-bind:id="editorId">
+      <!-- This element will be replaced with Codemirror's wrapper element on mount -->
+    </div>
 
     <div
       v-if="documentTabDrag"
@@ -181,7 +184,6 @@ const store = useStore(storeKey)
 
 // TEMPLATE REFS
 const editor = ref<HTMLDivElement|null>(null)
-const textarea = ref<HTMLTextAreaElement|null>(null)
 const searchinput = ref<HTMLInputElement|null>(null)
 
 // UNREFFED STUFF
@@ -302,7 +304,13 @@ ipcRenderer.on('shortcut', (event, command) => {
 // MOUNTED HOOK
 onMounted(() => {
   // As soon as the component is mounted, initiate the editor
-  mdEditor = new MarkdownEditor(editor.value as HTMLElement, getDoc, pullUpdates, pushUpdates)
+  mdEditor = new MarkdownEditor(undefined, getDoc, pullUpdates, pushUpdates)
+
+  const wrapper = document.getElementById(editorId.value)
+
+  if (wrapper !== null) {
+    wrapper.replaceWith(mdEditor.dom)
+  }
 
   // We have to set this to the appropriate value after mount, afterwards it
   // will be updated as appropriate.
@@ -1092,7 +1100,7 @@ function handleDragLeave (event: DragEvent) {
     margin-left: 0.5em;
     height: 100%;
     font-family: inherit;
-    // background: none;
+    background-color: transparent;
 
     // @media(min-width: 1025px) { margin-left: @editor-margin-normal-lg; }
     // @media(max-width: 1024px) { margin-left: @editor-margin-normal-md; }
@@ -1105,8 +1113,11 @@ function handleDragLeave (event: DragEvent) {
     font-family: monospace;
 
     margin-left: 0px;
-    .cm-content {
+
+    // Reset the margins for code files
+    .cm-scroller {
       padding-right: 0px;
+      margin: 0;
     }
 
     // We're using this solarized theme here: https://ethanschoonover.com/solarized/
@@ -1143,14 +1154,9 @@ function handleDragLeave (event: DragEvent) {
     .cm-property   { color: @magenta; }
     .cm-type       { color: @red; }
     .cm-number     { color: @violet; }
-
-    // Reset the margins for code files (top/bottom, see the other
-    // CodeMirror-code definition)
-    .CodeMirror-code { margin: 0; }
   }
 
-  .cm-scroller {
-    // TODO: Remove the margins for code files!
+  .cm-editor .cm-scroller {
     margin: 5em 0em;
     @media(max-width: 1024px) { margin: @editor-margin-fullscreen-md 0em; }
 
