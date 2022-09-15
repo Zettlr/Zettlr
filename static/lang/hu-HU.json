@@ -6,7 +6,7 @@
             "Csega"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-08-31T10:48:08.000000Z"
+        "updated_at": "2022-09-05T08:28:28.000000Z"
     },
     "dialog": {
         "about": {
@@ -34,7 +34,7 @@
         "button": {
             "cancel": "M\u00e9gse",
             "choose_path": "V\u00e1lassza ki a k\u00f6nyvt\u00e1rat \u2026",
-            "close": "Bez\u00e1rni",
+            "close": "Bez\u00e1r\u00e1s",
             "close_without_saving": "Bez\u00e1r\u00e1s ment\u00e9s n\u00e9lk\u00fcl",
             "save": "Menteni"
         },
