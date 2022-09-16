@@ -222,13 +222,6 @@ export default class WindowProvider extends ProviderContract {
       }
     })
 
-    this._documents.on(DP_EVENTS.FILE_SAVED, (ctx: any) => {
-      // TODO: DUPLICATE CODE!
-      for (const key in this._mainWindows) {
-        this.setModified(key, !this._documents.isClean(key, 'window'))
-      }
-    })
-
     this._documents.on(DP_EVENTS.NEW_WINDOW, () => {
       this.showMainWindows()
     })

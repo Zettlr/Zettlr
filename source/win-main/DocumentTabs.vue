@@ -125,7 +125,7 @@ export default defineComponent({
       return this.node?.activeFile ?? null
     },
     modifiedPaths (): string[] {
-      return Array.from((this.$store.state.modifiedFiles as Map<string, number>).keys()).map(x => x[0])
+      return this.$store.state.modifiedDocuments
     }
   },
   watch: {

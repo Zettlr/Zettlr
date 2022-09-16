@@ -18,6 +18,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import createStore, { key as storeKey } from './store'
 import PopupProvider from './popup-provider'
+import { DP_EVENTS } from '@dts/common/documents'
 
 const ipcRenderer = window.ipc
 
@@ -118,6 +119,7 @@ ipcRenderer.invoke('tag-provider', { command: 'get-tags-database' })
 // -----------------------------------------------------------------------------
 let filetreeUpdateLock = false
 let openDirectoryLock = false
+
 // Listen for broadcasts from main in order to update the filetree
 ipcRenderer.on('fsal-state-changed', (event, kind: string) => {
   if (kind === 'filetree') {
@@ -138,6 +140,14 @@ ipcRenderer.on('fsal-state-changed', (event, kind: string) => {
     app.$store.dispatch('updateOpenDirectory')
       .catch(e => console.error(e))
       .finally(() => { openDirectoryLock = false })
+  }
+})
+
+ipcRenderer.on('documents-update', (event, payload) => {
+  // A file has been saved or modified
+  if (payload.event === DP_EVENTS.CHANGE_FILE_STATUS && payload.status === 'modification') {
+    app.$store.dispatch('updateModifiedFiles')
+      .catch(e => console.error(e))
   }
 })
 

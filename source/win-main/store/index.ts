@@ -39,6 +39,8 @@ import updateBibliographyAction from './actions/update-bibliography'
 import documentTreeUpdateAction from './actions/document-tree-update'
 import { AnyDescriptor, DirDescriptor, MaybeRootDescriptor } from '@dts/main/fsal'
 
+const ipcRenderer = window.ipc
+
 /**
  * The injection key is required for store access from within composition API
  * components
@@ -65,10 +67,6 @@ export interface ZettlrState {
    * Contains just the data points of the document tree
    */
   paneData: LeafNodeJSON[]
-  /**
-   * Holds the currently modified files alongside their last modification timestamp
-   */
-  modifiedFiles: Map<string, number>
   /**
    * This array contains the paths of directories which are open (necessary to
    * keep the state during filtering, etc.)
@@ -158,7 +156,6 @@ function getConfig (): StoreOptions<ZettlrState> {
         paneStructure: { type: 'leaf', id: '', openFiles: [], activeFile: null },
         paneData: [],
         fileTree: [],
-        modifiedFiles: new Map(),
         lastFiletreeUpdate: 0,
         readabilityModeActive: [],
         activeFile: null,
@@ -255,8 +252,8 @@ function getConfig (): StoreOptions<ZettlrState> {
       updateRelatedFiles: function (state, relatedFiles: RelatedFile[]) {
         state.relatedFiles = relatedFiles
       },
-      updateModifiedFiles: function (state, modifiedFiles: Map<string, number>) {
-        state.modifiedFiles = modifiedFiles
+      updateModifiedFiles: function (state, modifiedDocuments: string[]) {
+        state.modifiedDocuments = modifiedDocuments
       },
       colouredTags: function (state, tags) {
         state.colouredTags = tags
@@ -306,7 +303,14 @@ function getConfig (): StoreOptions<ZettlrState> {
       regenerateTagSuggestions: regenerateTagSuggestionsAction,
       updateRelatedFiles: updateRelatedFilesAction,
       updateBibliography: updateBibliographyAction,
-      documentTree: documentTreeUpdateAction
+      documentTree: documentTreeUpdateAction,
+      updateModifiedFiles: async (ctx) => {
+        const modifiedFiles: string[] = await ipcRenderer.invoke('documents-provider', {
+          command: 'get-file-modification-status'
+        })
+
+        ctx.commit('updateModifiedFiles', modifiedFiles)
+      }
     }
   }
 

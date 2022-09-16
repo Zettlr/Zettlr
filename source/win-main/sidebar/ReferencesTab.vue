@@ -60,7 +60,7 @@ export default defineComponent({
   mounted () {
     ipcRenderer.on('documents-update', (e, { event, context }) => {
       // Update the bibliography if the active file has been saved
-      if (event === DP_EVENTS.FILE_SAVED) {
+      if (event === DP_EVENTS.CHANGE_FILE_STATUS && context.status === 'modification') {
         const { filePath } = context
 
         if (filePath === this.activeFile?.path) {
