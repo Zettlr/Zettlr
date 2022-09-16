@@ -293,8 +293,11 @@ export default {
             }
 
             if (this.hasWritingTarget === true) {
-              data.targetValue = this.obj.target.count
-              data.targetMode = this.obj.target.mode
+              const target = this.getWritingTarget(this.obj.path)
+              if (target !== undefined) {
+                data.targetValue = target.count
+                data.targetMode = target.mode
+              }
             }
 
             if (this.obj.type === 'file') {
@@ -308,7 +311,7 @@ export default {
 
               // 1.: Writing Target
               if (this.obj.type === 'file') {
-                ipcRenderer.invoke('application', {
+                ipcRenderer.invoke('targets-provider', {
                   command: 'set-writing-target',
                   payload: {
                     mode: data.target.mode,
@@ -378,6 +381,15 @@ export default {
       })
         .catch(e => console.error(e))
         .finally(() => { this.nameEditing = false })
+    },
+    getWritingTarget: function (filePath) {
+      const targets = this.$store.state.writingTargets
+
+      if (targets.length === 0) {
+        return undefined
+      }
+
+      return targets.find(x => x.path === filePath)
     }
   }
 }

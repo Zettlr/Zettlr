@@ -38,6 +38,7 @@ import updateRelatedFilesAction from './actions/update-related-files'
 import updateBibliographyAction from './actions/update-bibliography'
 import documentTreeUpdateAction from './actions/document-tree-update'
 import { AnyDescriptor, DirDescriptor, MaybeRootDescriptor } from '@dts/common/fsal'
+import { WritingTarget } from '@providers/targets'
 
 const ipcRenderer = window.ipc
 
@@ -94,6 +95,10 @@ export interface ZettlrState {
    * Contains all tags across all files loaded into Zettlr
    */
   tagDatabase: TagDatabase[]
+  /**
+   * Holds all current writing targets
+   */
+  writingTargets: WritingTarget[]
   /**
    * Contains a list of suggested tags for the current active file.
    */
@@ -163,6 +168,7 @@ function getConfig (): StoreOptions<ZettlrState> {
         selectedDirectory: null,
         relatedFiles: [],
         colouredTags: [],
+        writingTargets: [],
         tagDatabase: [],
         tagSuggestions: [],
         config: configToArrayMapper(window.config.get()),
@@ -258,6 +264,9 @@ function getConfig (): StoreOptions<ZettlrState> {
       colouredTags: function (state, tags) {
         state.colouredTags = tags
       },
+      updateWritingTargets: function (state, targets: WritingTarget[]) {
+        state.writingTargets = targets
+      },
       updateTagDatabase: function (state, tags) {
         state.tagDatabase = tags
       },
@@ -310,6 +319,13 @@ function getConfig (): StoreOptions<ZettlrState> {
         })
 
         ctx.commit('updateModifiedFiles', modifiedFiles)
+      },
+      updateWritingTargets: async (ctx) => {
+        const targets: WritingTarget[] = await ipcRenderer.invoke('targets-provider', {
+          command: 'get-targets'
+        })
+
+        ctx.commit('updateWritingTargets', targets)
       }
     }
   }

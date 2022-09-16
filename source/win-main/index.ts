@@ -151,6 +151,13 @@ ipcRenderer.on('documents-update', (event, payload) => {
   }
 })
 
+ipcRenderer.on('targets-provider', (event, what: string) => {
+  if (what === 'writing-targets-updated') {
+    app.$store.dispatch('updateWritingTargets')
+      .catch(e => console.error(e))
+  }
+})
+
 // Initial update
 filetreeUpdateLock = true
 openDirectoryLock = true

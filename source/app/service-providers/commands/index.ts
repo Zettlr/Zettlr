@@ -132,9 +132,6 @@ export default class CommandProvider extends ProviderContract {
       // await this._app.documents.back()
       // TODO!!!
       return true
-    } else if (command === 'set-writing-target') {
-      // Sets or updates a file's writing target
-      this._app.targets.set(payload)
     } else if (command === 'copy-img-to-clipboard') {
       // We should copy the contents of an image file to clipboard. Payload
       // contains the image path. We can rely on the Electron framework here.
