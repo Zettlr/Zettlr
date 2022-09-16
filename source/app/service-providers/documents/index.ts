@@ -32,6 +32,7 @@ import chokidar from 'chokidar'
 import { Update } from '@codemirror/collab'
 import { ChangeSet, Text } from '@codemirror/state'
 import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import countWords from '@common/util/count-words'
 
 interface DocumentWindows {
   [windowId: string]: DocumentTree
@@ -54,6 +55,8 @@ interface Document {
   updates: Update[]
   // The actual document content
   document: Text
+  lastSavedWordCount: number // Holds the word count since the last save (for writing stats)
+  lastSavedCharCount: number
 }
 
 export default class DocumentManager extends ProviderContract {
@@ -498,7 +501,9 @@ export default class DocumentManager extends ProviderContract {
       minimumVersion: 0,
       lastSavedVersion: 0,
       updates: [],
-      document: Text.of(content.split(descriptor.linefeed))
+      document: Text.of(content.split(descriptor.linefeed)),
+      lastSavedWordCount: countWords(content, false),
+      lastSavedCharCount: countWords(content, true)
     }
 
     this.documents.push(doc)
@@ -1149,6 +1154,21 @@ export default class DocumentManager extends ProviderContract {
         null
       )
       await this.synchronizeDatabases() // The file may have gotten a library
+
+      // In case of an MD File increase the word or char count
+      const content = doc.document.toString()
+      const newWordCount = countWords(content, false)
+      const newCharCount = countWords(content, true)
+
+      const countChars = this._app.config.get().editor.countChars
+      if (countChars) {
+        this._app.stats.updateWordCount(newCharCount - doc.lastSavedCharCount)
+      } else {
+        this._app.stats.updateWordCount(newWordCount - doc.lastSavedWordCount)
+      }
+
+      doc.lastSavedWordCount = newWordCount
+      doc.lastSavedCharCount = newCharCount
     } else {
       await FSALCodeFile.save(doc.descriptor, doc.document.toString(), null)
     }

@@ -284,9 +284,12 @@ export default class ConfigProvider extends ProviderContract {
 
   /**
     * Returns a config property
-    * @param  {String} attr The property to return
-    * @return {Mixed}      Either the config property or null
+    *
+    * @param  {string}             attr  The property to return
+    * @return {any|ConfigOptions}        Either the config property or null
     */
+  get (): ConfigOptions
+  get (attr: string): any
   get (attr?: string): any {
     if (attr === undefined) {
       // If no attribute is given, simply return the complete config object.
@@ -321,9 +324,10 @@ export default class ConfigProvider extends ProviderContract {
 
   /**
     * Simply returns the complete config object.
-    * @return {Object} The configuration object.
+    *
+    * @return {ConfigOptions} The configuration object.
     */
-  getConfig (): any {
+  getConfig (): ConfigOptions {
     return this.config
   }
 
