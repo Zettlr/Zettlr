@@ -58,14 +58,14 @@ body {
       font-family: 'Inconsolata', Consolas, Menlo, monospace !important;
     }
 
-    .CodeMirror-focused .CodeMirror-selected,
-    .CodeMirror .CodeMirror-selected {
+    .cm-editor.cm-focused .cm-selectionBackground,
+    .cm-editor .cm-selectionBackground {
       background-color: fade(@c-primary, 20%);
     }
 
-    .CodeMirror {
+    .cm-editor {
 
-      .CodeMirror-gutters { background-color: #fffff8; }
+      .cm-gutters { background-color: #fffff8; }
 
       // EDITOR SPECIFIC
       // Formattings
@@ -121,12 +121,12 @@ body {
       background-color: #002b36;
 
       // Style the code block line wrapper classes
-      .CodeMirror .code-block-line {
+      .cm-editor .code-block-line {
         background-color: #111111;
       }
     }
 
-    .main-editor-wrapper .CodeMirror {
+    .main-editor-wrapper .cm-editor {
       color: #839496;
 
       .CodeMirror-gutters { background-color: #002b36; }

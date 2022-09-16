@@ -131,22 +131,26 @@ export default class MarkdownEditor extends EventEmitter {
   private _getExtensions (filePath: string, type: DocumentType, startVersion: number): Extension[] {
     // First, instantiate with common extensions that all documents share
     const extensions: Extension[] = [
+      // KEYMAPS
       keymap.of([
         ...defaultKeymap, // Minimal default keymap
         ...historyKeymap, // History commands (redo/undo)
         ...searchKeymap // Search commands (Ctrl+F, etc.)
       ]),
+      // CODE FOLDING
       codeFolding(),
       foldGutter(),
-      history(), // Maintains an undo-history
+      // HISTORY
+      history(),
+      // SELECTIONS
       // Overrides the default browser selection drawing, allows styling
       drawSelection({ drawRangeCursor: false, cursorBlinkRate: 0 }),
-      search({ top: true }), // Add a search
       EditorState.allowMultipleSelections.of(true),
+      search({ top: true }), // Add a search
+      // TAB SIZES/INDENTATION
       EditorState.tabSize.of(4),
-      EditorView.lineWrapping, // Enable line wrapping
       indentUnit.of('    '), // TODO: That can also be set by the user
-      // EditorState.indentUnit.of(4),
+      EditorView.lineWrapping, // Enable line wrapping
 
       // The updateListener is a custom extension we're using in order to be
       // able to emit events from this main class based on change events.
@@ -162,6 +166,8 @@ export default class MarkdownEditor extends EventEmitter {
           this.emit('cursorActivity')
         }
       }),
+
+      // Enables the editor to fetch updates to the document from main
       hookDocumentAuthority(filePath, startVersion, this.pullUpdates, this.pushUpdates)
     ]
 

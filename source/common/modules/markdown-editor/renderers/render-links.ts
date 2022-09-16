@@ -22,6 +22,19 @@ class LinkWidget extends WidgetType {
     elem.innerText = this.linkTitle
     elem.setAttribute('title', this.linkUrl)
     elem.setAttribute('href', this.linkUrl)
+
+    elem.classList.add('markdown-link')
+
+    // New service function: Enable users to style links depending on where
+    // their targets are located (same file, online, or file on computer)
+    if (this.linkUrl.startsWith('#')) {
+      elem.classList.add('internal')
+    } else if (/^[a-z]+:\/\//.test(this.linkUrl)) {
+      elem.classList.add('web')
+    } else {
+      elem.classList.add('local')
+    }
+
     elem.addEventListener('click', clickAndSelect(view, this.node))
     return elem
   }
@@ -39,7 +52,7 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): LinkWidget|unde
   // Get the actual link contents, extract title and URL and create a
   // replacement widget
   const literalLink = state.sliceDoc(node.from, node.to)
-  const match = /\[(?<title>.+)\]\((?<url>.+)\)/.exec(literalLink)
+  const match = /(?!!)\[(?<title>.+)\]\((?<url>.+)\)/.exec(literalLink)
   if (match === null) {
     return undefined // Should not happen, but we never know.
   }

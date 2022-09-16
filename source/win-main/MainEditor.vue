@@ -1102,15 +1102,59 @@ function handleDragLeave (event: DragEvent) {
     font-family: inherit;
     background-color: transparent;
 
-    // @media(min-width: 1025px) { margin-left: @editor-margin-normal-lg; }
-    // @media(max-width: 1024px) { margin-left: @editor-margin-normal-md; }
-    // @media(max-width:  900px) { margin-left: @editor-margin-normal-sm; }
+    @media(min-width: 1025px) { margin-left: @editor-margin-normal-lg; }
+    @media(max-width: 1024px) { margin-left: @editor-margin-normal-md; }
+    @media(max-width:  900px) { margin-left: @editor-margin-normal-sm; }
     margin-left: 5%;
+
+    .code { // BEGIN: CODE BLOCK/FILE THEME
+      // We're using this solarized theme here: https://ethanschoonover.com/solarized/
+      // See also the CodeEditor.vue component, which uses the same colours
+      @base03:    #002b36;
+      @base02:    #073642;
+      @base01:    #586e75;
+      @base00:    #657b83;
+      @base0:     #839496;
+      @base1:     #93a1a1;
+      @base2:     #eee8d5;
+      @base3:     #fdf6e3;
+      @yellow:    #b58900;
+      @orange:    #cb4b16;
+      @red:       #dc322f;
+      @magenta:   #d33682;
+      @violet:    #6c71c4;
+      @blue:      #268bd2;
+      @cyan:      #2aa198;
+      @green:     #859900;
+
+      color: @base01;
+      font-family: 'Inconsolata', Consolas, Menlo, monospace;
+
+      .cm-string     { color: @green; }
+      .cm-keyword    { color: @green; }
+      .cm-atom       { color: @violet; }
+      .cm-tag-name, .cm-modifier { color: @cyan; }
+      .cm-qualifier  { color: @blue; }
+      .cm-builtin    { color: @blue; }
+      .cm-variable-name { color: @cyan; }
+      .cm-variable   { color: @cyan; }
+      .cm-comment    { color: @base1; }
+      .cm-attribute-name  { color: @orange; }
+      .cm-property   { color: @magenta; }
+      .cm-keyword,
+      .cm-name,
+      .cm-type-name       { color: @yellow; }
+      .cm-number     { color: @violet; }
+      .cm-property-name { color: @blue; }
+
+      .cm-positive { color: @green; }
+      .cm-negative { color: @red; }
+    } // END: Solarized code theme
   }
 
   // If a code file is loaded, we need to display the editor contents in monospace.
   &.code-file .cm-editor {
-    font-family: monospace;
+    font-family: 'Inconsolata', Consolas, Menlo, monospace;
 
     margin-left: 0px;
 
@@ -1119,45 +1163,10 @@ function handleDragLeave (event: DragEvent) {
       padding-right: 0px;
       margin: 0;
     }
-
-    // We're using this solarized theme here: https://ethanschoonover.com/solarized/
-    // See also the CodeEditor.vue component, which uses the same colours
-    @base03:    #002b36;
-    @base02:    #073642;
-    @base01:    #586e75;
-    @base00:    #657b83;
-    @base0:     #839496;
-    @base1:     #93a1a1;
-    @base2:     #eee8d5;
-    @base3:     #fdf6e3;
-    @yellow:    #b58900;
-    @orange:    #cb4b16;
-    @red:       #dc322f;
-    @magenta:   #d33682;
-    @violet:    #6c71c4;
-    @blue:      #268bd2;
-    @cyan:      #2aa198;
-    @green:     #859900;
-
-    color: @base01;
-    .cm-string     { color: @green; }
-    .cm-string-2   { color: @green; }
-    .cm-keyword    { color: @green; }
-    .cm-atom       { color: @green; }
-    .cm-tag        { color: @blue; }
-    .cm-qualifier  { color: @blue; }
-    .cm-builtin    { color: @blue; }
-    .cm-variable-2 { color: @yellow; }
-    .cm-variable   { color: @yellow; }
-    .cm-comment    { color: @base1; }
-    .cm-attribute  { color: @orange; }
-    .cm-property   { color: @magenta; }
-    .cm-type       { color: @red; }
-    .cm-number     { color: @violet; }
   }
 
   .cm-editor .cm-scroller {
-    margin: 5em 0em;
+    // margin: 5em 0em;
     @media(max-width: 1024px) { margin: @editor-margin-fullscreen-md 0em; }
 
     .mute { opacity:0.2; }
@@ -1166,9 +1175,9 @@ function handleDragLeave (event: DragEvent) {
   .cm-content {
     // padding-right: 5em;
     padding-right: 5%;
-    // @media(min-width: 1025px) { padding-right: @editor-margin-normal-lg; }
-    // @media(max-width: 1024px) { padding-right: @editor-margin-normal-md; }
-    // @media(max-width:  900px) { padding-right: @editor-margin-normal-sm; }
+    @media(min-width: 1025px) { padding-right: @editor-margin-normal-lg; }
+    @media(max-width: 1024px) { padding-right: @editor-margin-normal-md; }
+    @media(max-width:  900px) { padding-right: @editor-margin-normal-sm; }
     overflow-x: hidden !important; // Necessary to hide the horizontal scrollbar
 
     // We need to override a negative margin

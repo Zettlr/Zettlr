@@ -28,10 +28,12 @@
 // Use the default mouse cursor on the vertical scrollbar
 .CodeMirror-vscrollbar { cursor: default; }
 
-.cm-scroller {
-  padding-right: 10vw;
-  overflow: auto; /* Necessary in conjunction with .cm-editor:height */
-  font-family: inherit !important;
+.main-editor-wrapper:not(.code-file) {
+  // Reset the gutter styling
+  .cm-editor .cm-gutters {
+    border-right-color: transparent;
+    background-color: inherit !important;
+  }
 }
 
 .cm-editor {
@@ -41,6 +43,7 @@
   line-height: 1.4375;
   user-select: text;
   background-color: inherit;
+  cursor: text;
 
   // STYLING FOR THE COMMON WRAPPER ELEMENTS
   // ===========================================================================

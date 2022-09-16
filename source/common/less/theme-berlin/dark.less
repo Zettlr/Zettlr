@@ -4,14 +4,15 @@
 
 // DARK STYLES
 body.dark {
+  // Gutters (for code files)
+  .main-editor-wrapper.code-file .cm-gutters {
+    border-right-color: var(--grey-5);
+    background-color: var(--grey-7);
+    color: var(--grey-4);
+  }
 
-  .main-editor-wrapper .CodeMirror {
+  .main-editor-wrapper .cm-editor {
     color: var(--grey-0);
-
-    // Add a background color to the vim command bar
-    .CodeMirror-dialog.CodeMirror-dialog-bottom, .vim-error-message {
-      background-color: rgb(80, 80, 80);
-    }
 
     // First the code blocks
     .cm-comment,
@@ -202,11 +203,8 @@ body.dark {
     }
   }
 
-  .CodeMirror-focused .CodeMirror-selected {
-    background-color: var(--selection-dark);
-  }
-
-  .CodeMirror .CodeMirror-selected {
+  .cm-editor.cm-focused .cm-selectionBackground,
+  .cm-editor .cm-selectionBackground {
     background-color: var(--selection-dark);
   }
 
