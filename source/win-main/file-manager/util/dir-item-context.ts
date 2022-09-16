@@ -14,12 +14,12 @@
 
 import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import { DirMeta } from '@dts/common/fsal'
+import { DirDescriptor } from '@dts/common/fsal'
 import { AnyMenuItem } from '@dts/renderer/context'
 
 const ipcRenderer = window.ipc
 
-export default function displayFileContext (event: MouseEvent, dirObject: DirMeta, el: HTMLElement, callback: any): void {
+export default function displayFileContext (event: MouseEvent, dirObject: DirDescriptor, el: HTMLElement, callback: any): void {
   const TEMPLATE: AnyMenuItem[] = [
     {
       label: trans('menu.properties'),
@@ -78,19 +78,19 @@ export default function displayFileContext (event: MouseEvent, dirObject: DirMet
   }
 
   // Now check for a project
-  if (dirObject.project !== null && dirObject.dirNotFoundFlag !== true) {
+  if (dirObject.settings.project !== null && dirObject.dirNotFoundFlag !== true) {
     template.push({ type: 'separator' })
     template.push({
       id: 'menu.project_build',
       type: 'normal',
       label: trans('menu.project_build'),
       // Only enable if there are formats to export to
-      enabled: dirObject.project.formats.length > 0
+      enabled: dirObject.settings.project.profiles.length > 0
     })
   }
 
   // Finally, check for it being root
-  if (dirObject.parent == null) {
+  if (dirObject.root) {
     template.push({ type: 'separator' })
     template.push({
       id: 'menu.close_workspace',

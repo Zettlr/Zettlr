@@ -140,7 +140,7 @@ import generateFilename from '@common/util/generate-filename'
 import { trans } from '@common/i18n-renderer'
 
 import { nextTick, defineComponent } from 'vue'
-import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/main/fsal'
+import { DirDescriptor, MaybeRootDescriptor } from '@dts/common/fsal'
 
 const path = window.path
 const ipcRenderer = window.ipc
@@ -159,7 +159,7 @@ export default defineComponent({
       default: false // Can only be true if root and actually has a duplicate name
     },
     obj: {
-      type: Object as () => MDFileDescriptor|DirDescriptor|CodeFileDescriptor,
+      type: Object as () => MaybeRootDescriptor,
       required: true
     },
     isCurrentlyFiltering: {
@@ -285,12 +285,12 @@ export default defineComponent({
     /**
      * Returns a list of children that can be displayed inside the tree view
      */
-    filteredChildren: function (): Array<MDFileDescriptor|DirDescriptor|CodeFileDescriptor> {
+    filteredChildren: function (): MaybeRootDescriptor[] {
       if (this.obj.type !== 'directory') {
         return []
       }
       if (this.combined === true) {
-        return this.obj.children.filter(child => child.type !== 'other') as Array<MDFileDescriptor|DirDescriptor|CodeFileDescriptor>
+        return this.obj.children.filter(child => child.type !== 'other') as MaybeRootDescriptor[]
       } else {
         return this.obj.children.filter(child => child.type === 'directory') as DirDescriptor[]
       }

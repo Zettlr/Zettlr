@@ -98,7 +98,7 @@ import objectToArray from '@common/util/object-to-array'
 import matchQuery from './util/match-query'
 
 import { nextTick, defineComponent } from 'vue'
-import { MDFileMeta, CodeFileMeta, DirMeta, OtherFileMeta } from '@dts/common/fsal'
+import { MaybeRootDescriptor, AnyDescriptor } from '@dts/common/fsal'
 
 const ipcRenderer = window.ipc
 
@@ -157,18 +157,18 @@ export default defineComponent({
         return 30
       }
     },
-    getDirectoryContents: function (): Array<{ id: number, props: MDFileMeta|CodeFileMeta|DirMeta}> {
+    getDirectoryContents: function (): Array<{ id: number, props: MaybeRootDescriptor}> {
       if (this.$store.state.selectedDirectory === null) {
         return []
       }
 
-      const ret: Array<{ id: number, props: MDFileMeta|CodeFileMeta|DirMeta}> = []
-      const items = objectToArray(this.$store.state.selectedDirectory, 'children') as Array<MDFileMeta|CodeFileMeta|DirMeta|OtherFileMeta>
+      const ret: Array<{ id: number, props: MaybeRootDescriptor}> = []
+      const items = objectToArray(this.$store.state.selectedDirectory, 'children') as AnyDescriptor[]
       for (let i = 0; i < items.length; i++) {
         if (items[i].type !== 'other') {
           ret.push({
             id: i, // This helps the virtual scroller to adequately position the items
-            props: items[i] as MDFileMeta|CodeFileMeta|DirMeta // The actual item
+            props: items[i] as MaybeRootDescriptor // The actual item
           })
         }
       }

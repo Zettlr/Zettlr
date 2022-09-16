@@ -22,7 +22,6 @@
         class="attachment"
         draggable="true"
         v-bind:data-link="attachment.path"
-        v-bind:data-hash="attachment.hash"
         v-bind:title="attachment.path"
         v-bind:href="`safe-file://${attachment.path}`"
         v-on:dragstart="handleDragStart($event, attachment.path)"
@@ -36,7 +35,7 @@
 
 <script lang="ts">
 import { trans } from '@common/i18n-renderer'
-import { DirMeta, OtherFileMeta } from '@dts/common/fsal'
+import { DirDescriptor, OtherFileDescriptor } from '@dts/common/fsal'
 import { ClarityIcons } from '@clr/icons'
 import { defineComponent } from 'vue'
 
@@ -54,13 +53,13 @@ export default defineComponent({
     noAttachmentsMessage: function (): string {
       return trans('gui.no_other_files')
     },
-    attachments: function (): OtherFileMeta[] {
-      const currentDir = this.$store.state.selectedDirectory as DirMeta|null
+    attachments: function (): OtherFileDescriptor[] {
+      const currentDir = this.$store.state.selectedDirectory as DirDescriptor|null
       if (currentDir === null) {
         return []
       } else {
         const extensions: string[] = this.$store.state.config.attachmentExtensions
-        const attachments = currentDir.children.filter(child => child.type === 'other') as OtherFileMeta[]
+        const attachments = currentDir.children.filter(child => child.type === 'other') as OtherFileDescriptor[]
         return attachments.filter(attachment => extensions.includes(attachment.ext))
       }
     }

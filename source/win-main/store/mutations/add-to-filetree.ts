@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { DirDescriptor, MaybeRootDescriptor } from '@dts/main/fsal'
+import { DirDescriptor, MaybeRootDescriptor } from '@dts/common/fsal'
 import locateByPath from '@providers/fsal/util/locate-by-path'
 import getSorter from '@providers/fsal/util/sort'
 import { ZettlrState } from '../'

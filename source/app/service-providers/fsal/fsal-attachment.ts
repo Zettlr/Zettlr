@@ -14,7 +14,7 @@
 
 import path from 'path'
 import { promises as fs } from 'fs'
-import { OtherFileDescriptor } from '@dts/main/fsal'
+import { OtherFileDescriptor } from '@dts/common/fsal'
 import { shell } from 'electron'
 
 export async function parse (absPath: string): Promise<OtherFileDescriptor> {

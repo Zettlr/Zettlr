@@ -22,8 +22,7 @@ import safeAssign from '@common/util/safe-assign'
 import * as FSALFile from './fsal-file'
 import * as FSALCodeFile from './fsal-code-file'
 import * as FSALAttachment from './fsal-attachment'
-import { ProjectSettings } from '@dts/common/fsal'
-import { DirDescriptor, AnyDescriptor, MDFileDescriptor, SortMethod } from '@dts/main/fsal'
+import { DirDescriptor, AnyDescriptor, MDFileDescriptor, SortMethod, ProjectSettings } from '@dts/common/fsal'
 import FSALCache from './fsal-cache'
 import {
   codeFileExtensions,

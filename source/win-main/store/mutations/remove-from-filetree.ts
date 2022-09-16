@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { DirDescriptor } from '@dts/main/fsal'
+import { DirDescriptor } from '@dts/common/fsal'
 import locateByPath from '@providers/fsal/util/locate-by-path'
 import { ZettlrState } from '..'
 

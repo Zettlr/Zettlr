@@ -12,7 +12,7 @@ import { trans } from '@common/i18n-renderer'
 import extractCitations from '@common/util/extract-citations'
 import getBibliographyForDescriptor from '@common/util/get-bibliography-for-descriptor'
 import { DP_EVENTS, OpenDocument } from '@dts/common/documents'
-import { CodeFileDescriptor, MDFileDescriptor, OtherFileDescriptor } from '@dts/main/fsal'
+import { AnyDescriptor } from '@dts/common/fsal'
 import { defineComponent } from 'vue'
 
 const ipcRenderer = window.ipc
@@ -83,12 +83,12 @@ export default defineComponent({
         return
       }
 
-      const descriptor: MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor = await ipcRenderer.invoke('application', {
+      const descriptor: AnyDescriptor|undefined = await ipcRenderer.invoke('application', {
         command: 'get-descriptor',
         payload: this.activeFile.path
       })
 
-      if (descriptor.type !== 'file') {
+      if (descriptor === undefined || descriptor.type !== 'file') {
         this.bibliography = undefined
         return
       }

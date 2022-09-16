@@ -32,14 +32,13 @@
 
 <script lang="ts">
 import { trans } from '@common/i18n-renderer'
-import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
 import { defineComponent } from 'vue'
 import sanitizeHtml from 'sanitize-html'
 import { getConverter } from '@common/util/md-to-html'
 import { ToCEntry } from '@common/modules/markdown-editor/plugins/toc-field'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { OpenDocument } from '@dts/common/documents'
-import { AnyDescriptor } from '@dts/main/fsal'
+import { AnyDescriptor, MDFileDescriptor, CodeFileDescriptor } from '@dts/common/fsal'
 
 const ipcRenderer = window.ipc
 
@@ -101,7 +100,7 @@ export default defineComponent({
         this.activeFileDescriptor = descriptor ?? null
       }
     },
-    activeFileDescriptor (newValue: MDFileMeta|CodeFileMeta|null) {
+    activeFileDescriptor (newValue: MDFileDescriptor|CodeFileDescriptor|null) {
       if (newValue === null || newValue.type === 'code') {
         md2html = getConverter(window.getCitationCallback(CITEPROC_MAIN_DB))
       } else {

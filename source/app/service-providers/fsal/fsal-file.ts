@@ -17,7 +17,7 @@ import path from 'path'
 import searchFile from './util/search-file'
 import safeAssign from '@common/util/safe-assign'
 // Import the interfaces that we need
-import { MDFileDescriptor } from '@dts/main/fsal'
+import { MDFileDescriptor } from '@dts/common/fsal'
 import FSALCache from './fsal-cache'
 import { SearchTerm } from '@dts/common/search'
 import TagProvider from '@providers/tags'

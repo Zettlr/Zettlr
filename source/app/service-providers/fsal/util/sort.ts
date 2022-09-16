@@ -14,7 +14,6 @@
 import getAsciiSorter from './sort-ascii'
 import getNaturalSorter from './sort-natural'
 import getDateSorter from './sort-date'
-// import { MaybeRootDescriptor } from '@dts/main/fsal'
 
 export interface RequiredSortingProps {
   type: string

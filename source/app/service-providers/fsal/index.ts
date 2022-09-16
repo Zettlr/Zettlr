@@ -25,20 +25,19 @@ import * as FSALFile from './fsal-file'
 import * as FSALCodeFile from './fsal-code-file'
 import * as FSALDir from './fsal-directory'
 import * as FSALAttachment from './fsal-attachment'
-import FSALWatchdog from './fsal-watchdog'
+import FSALWatchdog, { WatchdogEvent } from './fsal-watchdog'
 import FSALCache from './fsal-cache'
 import getSorter from './util/sort'
 import {
-  WatchdogEvent,
   AnyDescriptor,
   DirDescriptor,
   MDFileDescriptor,
   CodeFileDescriptor,
   OtherFileDescriptor,
   MaybeRootDescriptor,
-  SortMethod
-} from '@dts/main/fsal'
-import { FSALStats, FSALHistoryEvent } from '@dts/common/fsal'
+  SortMethod,
+  FSALStats, FSALHistoryEvent
+} from '@dts/common/fsal'
 import { SearchTerm } from '@dts/common/search'
 import generateStats from './util/generate-stats'
 import ProviderContract from '@providers/provider-contract'
@@ -619,7 +618,7 @@ export default class FSAL extends ProviderContract {
       return undefined
     }
 
-    return descriptor as DirDescriptor
+    return descriptor
   }
 
   /**
@@ -636,7 +635,7 @@ export default class FSAL extends ProviderContract {
       return undefined
     }
 
-    return descriptor as MDFileDescriptor|CodeFileDescriptor
+    return descriptor
   }
 
   /**
@@ -654,7 +653,7 @@ export default class FSAL extends ProviderContract {
       return undefined
     }
 
-    return descriptor as OtherFileDescriptor
+    return descriptor
   }
 
   /**
@@ -670,7 +669,7 @@ export default class FSAL extends ProviderContract {
     if (descriptor === undefined) {
       return undefined
     } else {
-      return descriptor as AnyDescriptor
+      return descriptor
     }
   }
 

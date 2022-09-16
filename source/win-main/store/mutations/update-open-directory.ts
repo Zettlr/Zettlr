@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { DirDescriptor } from '@dts/main/fsal'
+import { DirDescriptor } from '@dts/common/fsal'
 import locateByPath from '@providers/fsal/util/locate-by-path'
 import { ZettlrState } from '..'
 
@@ -23,7 +23,7 @@ export default function (state: ZettlrState, descriptor: DirDescriptor|null): vo
     const ownDescriptor = locateByPath(state.fileTree, descriptor.path)
 
     if (ownDescriptor !== undefined && ownDescriptor.type === 'directory') {
-      state.selectedDirectory = ownDescriptor as DirDescriptor
+      state.selectedDirectory = ownDescriptor
     }
   }
 }

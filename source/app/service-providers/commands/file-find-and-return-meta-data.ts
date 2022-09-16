@@ -14,7 +14,7 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { MDFileDescriptor } from '@dts/main/fsal'
+import { MDFileDescriptor } from '@dts/common/fsal'
 
 export default class FilePathFindMetaData extends ZettlrCommand {
   constructor (app: any) {
@@ -29,7 +29,7 @@ export default class FilePathFindMetaData extends ZettlrCommand {
    * @param   {string}                         evt  The event
    * @param   {arg}                            arg  The argument, should be a query string
    *
-   * @return  {MDFileMeta|undefined|string[]}       Returns a MetaDescriptor, undefined, or an array
+   * @return  {MDFileDescriptor|undefined|string[]} Returns a MetaDescriptor, undefined, or an array
    */
   async run (evt: string, arg: any): Promise<MDFileDescriptor|undefined|any[]> {
     // Quick'n'dirty command to return the Meta descriptor for the given query

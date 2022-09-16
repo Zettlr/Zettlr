@@ -13,7 +13,7 @@
  */
 
 import { OpenDocument } from '@dts/common/documents'
-import { MDFileMeta } from '@dts/common/fsal'
+import { MDFileDescriptor } from '@dts/common/fsal'
 import { RelatedFile } from '@dts/renderer/misc'
 import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
 import { ActionContext } from 'vuex'
@@ -64,7 +64,7 @@ export default async function (context: ActionContext<ZettlrState, ZettlrState>)
     unreactiveList.push(related)
   }
 
-  const descriptor: MDFileMeta|undefined = await ipcRenderer.invoke('application', {
+  const descriptor: MDFileDescriptor|undefined = await ipcRenderer.invoke('application', {
     command: 'get-descriptor',
     payload: activeFile.path
   })

@@ -18,7 +18,7 @@
  */
 
 import { SearchResult, SearchTerm } from '@dts/common/search'
-import { MDFileDescriptor, CodeFileDescriptor } from '@dts/main/fsal'
+import { MDFileDescriptor, CodeFileDescriptor } from '@dts/common/fsal'
 
 /**
  * Performs a full text search on the given fileObject, using terms. Returns a

@@ -35,34 +35,37 @@ export interface FSMetaInfo {
   creationtime: number
 }
 
+export type SortMethod = 'name-up'|'name-down'|'time-up'|'time-down'
+
 /**
- * Represents a non-circular directory
+ * The FSAL directory descriptor
  */
-export interface DirMeta extends FSMetaInfo {
-  parent: DirMeta|number|null
-  children: Array<DirMeta|MDFileMeta|CodeFileMeta|OtherFileMeta>
-  project: ProjectSettings|null
+export interface DirDescriptor extends FSMetaInfo {
+  // Settings are properties that must be persisted separately in a
+  // .ztr-directory file, since they are not bound to the directory.
+  settings: {
+    sorting: SortMethod
+    icon: string|null
+    project: ProjectSettings|null
+  }
   type: 'directory'
   isGitRepository: boolean
-  sorting: string
-  icon: string
+  children: Array<MDFileDescriptor|DirDescriptor|CodeFileDescriptor|OtherFileDescriptor>
   dirNotFoundFlag?: boolean // If the flag is set & true this directory has not been found
 }
 
 /**
- * Represents a non-circular file
+ * The FSAL Markdown file descriptor
  */
-export interface MDFileMeta extends FSMetaInfo {
-  parent: DirMeta|number|null
+export interface MDFileDescriptor extends FSMetaInfo {
   ext: string
   id: string
   type: 'file'
-  bom: string
   tags: string[]
-  links: string[]
+  links: string[] // Any outlinks declared in the file
+  bom: string // An optional BOM
   wordCount: number
   charCount: number
-  target: any // TODO
   firstHeading: string|null
   yamlTitle: string|undefined
   frontmatter: any|null
@@ -71,28 +74,27 @@ export interface MDFileMeta extends FSMetaInfo {
 }
 
 /**
- * Represents a non-circular code file (.tex or .yml)
+ * The FSAL code file descriptor (.tex, .yml)
  */
-export interface CodeFileMeta extends FSMetaInfo {
-  parent: DirMeta|number|null
-  type: 'code'
-  linefeed: string
-  bom: string
-  modified: boolean
+export interface CodeFileDescriptor extends FSMetaInfo {
   ext: string
+  type: 'code'
+  bom: string // An optional BOM
+  linefeed: string
+  modified: boolean
 }
 
 /**
- * Represents a non-circular attachment
+ * The FSAL other (non-MD and non-Tex) file descriptor
  */
-export interface OtherFileMeta extends FSMetaInfo {
-  root: false
+export interface OtherFileDescriptor extends FSMetaInfo {
+  root: false // Attachments can never be roots
   type: 'other'
   ext: string
 }
 
-export type AnyMetaDescriptor = DirMeta | MDFileMeta | CodeFileMeta | OtherFileMeta
-export type MaybeRootMeta = DirMeta | MDFileMeta
+export type AnyDescriptor = DirDescriptor | MDFileDescriptor | CodeFileDescriptor | OtherFileDescriptor
+export type MaybeRootDescriptor = DirDescriptor | MDFileDescriptor | CodeFileDescriptor
 
 export interface FSALStats {
   minChars: number

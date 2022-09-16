@@ -37,7 +37,7 @@ import updateOpenDirectoryAction from './actions/update-open-directory'
 import updateRelatedFilesAction from './actions/update-related-files'
 import updateBibliographyAction from './actions/update-bibliography'
 import documentTreeUpdateAction from './actions/document-tree-update'
-import { AnyDescriptor, DirDescriptor, MaybeRootDescriptor } from '@dts/main/fsal'
+import { AnyDescriptor, DirDescriptor, MaybeRootDescriptor } from '@dts/common/fsal'
 
 const ipcRenderer = window.ipc
 

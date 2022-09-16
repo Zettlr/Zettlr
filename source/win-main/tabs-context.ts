@@ -15,7 +15,7 @@
 import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { OpenDocument } from '@dts/common/documents'
-import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
+import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import { AnyMenuItem } from '@dts/renderer/context'
 
 export function displayTabbarContext (event: MouseEvent, callback: (clickedID: string) => void): void {
@@ -32,7 +32,7 @@ export function displayTabbarContext (event: MouseEvent, callback: (clickedID: s
   showPopupMenu(point, items, callback)
 }
 
-export default function displayTabsContext (event: MouseEvent, fileObject: MDFileMeta|CodeFileMeta, doc: OpenDocument, callback: (clickedID: string) => void): void {
+export default function displayTabsContext (event: MouseEvent, fileObject: MDFileDescriptor|CodeFileDescriptor, doc: OpenDocument, callback: (clickedID: string) => void): void {
   const items: AnyMenuItem[] = [
     {
       label: trans('menu.tab_close'),

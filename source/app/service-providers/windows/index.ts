@@ -25,7 +25,7 @@ import {
 } from 'electron'
 import EventEmitter from 'events'
 import path from 'path'
-import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/main/fsal'
+import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import createMainWindow from './create-main-window'
 import createPrintWindow from './create-print-window'
 import createUpdateWindow from './create-update-window'

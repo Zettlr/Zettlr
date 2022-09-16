@@ -14,7 +14,7 @@
 
 import ZettlrCommand from './zettlr-command'
 import { trans } from '@common/i18n-main'
-import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/main/fsal'
+import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 
 export default class RequestMove extends ZettlrCommand {
   constructor (app: any) {

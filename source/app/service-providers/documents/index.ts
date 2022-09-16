@@ -31,7 +31,7 @@ import { v4 as uuid4 } from 'uuid'
 import chokidar from 'chokidar'
 import { Update } from '@codemirror/collab'
 import { ChangeSet, Text } from '@codemirror/state'
-import { CodeFileDescriptor, MDFileDescriptor } from '@dts/main/fsal'
+import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 
 interface DocumentWindows {
   [windowId: string]: DocumentTree
