@@ -249,7 +249,7 @@ export default class MarkdownEditor extends EventEmitter {
     const { content, type, startVersion } = await this.fetchDoc(documentPath)
 
     // Update the metadata
-    this.setOptions({ metadata: { path: documentPath, id: '', library: 'main' } })
+    // this.setOptions({ metadata: { path: documentPath, id: '', library: 'main' } })
 
     const state = EditorState.create({
       doc: content,

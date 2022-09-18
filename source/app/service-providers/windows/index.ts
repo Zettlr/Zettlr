@@ -323,6 +323,8 @@ export default class WindowProvider extends ProviderContract {
           .catch(err => {
             this._logger.error('[WindowManager] Could not ask user to close window', err)
           })
+      } else {
+        this._documents.closeWindow(key)
       }
     })
 

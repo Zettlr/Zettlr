@@ -426,7 +426,12 @@ export default class DocumentManager extends ProviderContract {
   }
 
   public closeWindow (windowId: string): void {
+    if (this._shuttingDown) {
+      return // During shutdown only the WindowManager should close windows
+    }
+
     if (windowId in this._windows) {
+      this._app.log.info(`[Documents Manager] Closing window ${windowId}!`)
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete this._windows[windowId]
       this.syncToConfig()
