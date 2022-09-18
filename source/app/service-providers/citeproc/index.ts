@@ -106,10 +106,9 @@ export default class CiteprocProvider extends ProviderContract {
   ) {
     super()
 
-    this._logger.verbose('Citeproc provider booting up ...')
     this._items = {}
     this.lastSelectedDatabase = ''
-    this.mainLibrary = this._config.get()
+    this.mainLibrary = this._config.get().export.cslLibrary
 
     // Start the watcher
     this._watcher = new FSWatcher({
@@ -155,8 +154,6 @@ export default class CiteprocProvider extends ProviderContract {
         return this._items[id]
       }
     }
-
-    this.loadEngine()
 
     // Be notified of potential updates
     this._config.on('update', (option: string) => {
@@ -218,7 +215,10 @@ export default class CiteprocProvider extends ProviderContract {
   }
 
   public async boot (): Promise<void> {
-    this.mainLibrary = this._config.get('export.cslLibrary')
+    this._logger.verbose('Citeproc provider booting up ...')
+
+    this.loadEngine()
+
     if (this.mainLibrary === '') {
       return
     }

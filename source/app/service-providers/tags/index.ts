@@ -40,7 +40,6 @@ export default class TagProvider extends ProviderContract {
    */
   constructor (private readonly _logger: LogProvider) {
     super()
-    this._logger.verbose('Tag provider booting up ...')
     this._file = path.join(app.getPath('userData'), 'tags.json')
     this._colouredTags = []
     this.container = new PersistentDataContainer(this._file, 'json')
@@ -84,6 +83,7 @@ export default class TagProvider extends ProviderContract {
   }
 
   async boot (): Promise<void> {
+    this._logger.verbose('Tag provider booting up ...')
     if (!await this.container.isInitialized()) {
       await this.container.init([])
     } else {
