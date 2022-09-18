@@ -55,7 +55,6 @@ export default function (url: string, view: EditorView): void {
 
   if (url[0] === '#') {
     // We should open an internal link, i.e. "jump to line".
-    console.log('Opening internal link!', url.substring(1))
     const targetLine = findMatchingHeading(url.substring(1), view.state)
     if (targetLine !== undefined) {
       console.log('jtl:', targetLine)
@@ -65,7 +64,6 @@ export default function (url: string, view: EditorView): void {
       })
     }
   } else if (url.startsWith('.')) {
-    console.log('Opening relative path')
     // We are definitely dealing with a relative URL. So let's resolve it
     const absPath = path.resolve(base, url)
     window.location.assign(`safe-file://${absPath}`)
