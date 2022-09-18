@@ -70,6 +70,7 @@ import { typewriter } from './plugins/typewriter'
 import { footnoteHover, formattingToolbar } from './tooltips'
 import { DocumentType } from '@dts/common/documents'
 import { pasteHandler } from './plugins/paste-handlers'
+import { spellchecker } from './plugins/spell-check'
 
 export interface DocumentWrapper {
   path: string
@@ -223,7 +224,8 @@ export default class MarkdownEditor extends EventEmitter {
           readabilityMode,
           formattingToolbar,
           footnoteHover,
-          pasteHandler // Manages image saving
+          pasteHandler, // Manages image saving
+          spellchecker
         )
         break
       case DocumentType.JSON:
@@ -247,9 +249,6 @@ export default class MarkdownEditor extends EventEmitter {
    */
   async swapDoc (documentPath: string): Promise<void> {
     const { content, type, startVersion } = await this.fetchDoc(documentPath)
-
-    // Update the metadata
-    // this.setOptions({ metadata: { path: documentPath, id: '', library: 'main' } })
 
     const state = EditorState.create({
       doc: content,
