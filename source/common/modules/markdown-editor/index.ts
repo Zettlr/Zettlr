@@ -69,6 +69,7 @@ import { customKeymap } from './commands/keymap'
 import { typewriter } from './plugins/typewriter'
 import { footnoteHover, formattingToolbar } from './tooltips'
 import { DocumentType } from '@dts/common/documents'
+import { pasteHandler } from './plugins/paste-handlers'
 
 export interface DocumentWrapper {
   path: string
@@ -221,7 +222,8 @@ export default class MarkdownEditor extends EventEmitter {
           autocomplete,
           readabilityMode,
           formattingToolbar,
-          footnoteHover
+          footnoteHover,
+          pasteHandler // Manages image saving
         )
         break
       case DocumentType.JSON:
@@ -245,6 +247,9 @@ export default class MarkdownEditor extends EventEmitter {
    */
   async swapDoc (documentPath: string): Promise<void> {
     const { content, type, startVersion } = await this.fetchDoc(documentPath)
+
+    // Update the metadata
+    this.setOptions({ metadata: { path: documentPath, id: '', library: 'main' } })
 
     const state = EditorState.create({
       doc: content,
