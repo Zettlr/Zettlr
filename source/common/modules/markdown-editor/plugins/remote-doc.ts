@@ -114,8 +114,6 @@ export function hookDocumentAuthority (
                 return
               }
 
-              console.log('Applying updates ...')
-
               // Revitalize the updates
               updates = updates.map(u => {
                 return {

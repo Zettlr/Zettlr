@@ -185,8 +185,6 @@ function generateToc (state: EditorState): ToCEntry[] {
     }
   })
 
-  console.log(toc)
-
   return toc
 }
 

@@ -3,7 +3,7 @@
 // The renderers are adapted from the example here:
 // https://codemirror.net/examples/decoration/#boolean-toggle-widgets
 import { renderInlineWidgets } from './base-renderer'
-import { SyntaxNodeRef } from '@lezer/common'
+import { SyntaxNode, SyntaxNodeRef } from '@lezer/common'
 import { EditorView, WidgetType } from '@codemirror/view'
 import { EditorState } from '@codemirror/state'
 import { configField } from '../util/configuration'
@@ -15,7 +15,7 @@ const path = window.path
 const img404 = 'data:image/png;base64,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'
 
 class ImageWidget extends WidgetType {
-  constructor (readonly imageTitle: string, readonly imageUrl: string, readonly altText: string, readonly data: string) {
+  constructor (readonly node: SyntaxNode, readonly imageTitle: string, readonly imageUrl: string, readonly altText: string, readonly data: string) {
     super()
   }
 
@@ -26,7 +26,7 @@ class ImageWidget extends WidgetType {
   toDOM (view: EditorView): HTMLElement {
     const img = document.createElement('img')
 
-    const decodedUrl = decodeURIComponent(this.imageUrl)
+    const decodedUrl = this.imageUrl
 
     let isDataUrl = /^data:[a-zA-Z0-9/;=]+(?:;base64){0,1},.+/.test(decodedUrl)
     let actualURLToLoad = decodedUrl
@@ -80,7 +80,8 @@ class ImageWidget extends WidgetType {
     img.onerror = () => {
       img.src = img404
       isDataUrl = true
-      caption.textContent = 'Image not found' // TODO: Translate
+      caption.textContent = 'Image not found: ' + decodedUrl // TODO: Translate
+      caption.contentEditable = 'false'
     }
 
     // Update the image title on load to retrieve the real image size.
@@ -93,11 +94,40 @@ class ImageWidget extends WidgetType {
       }
     }
 
+    const { from, to } = this.node
+    const data = this.data
+
+    // Define a quick inline function that takes care of applying a new caption
+    const updateCaptionFunction = function (event: KeyboardEvent|FocusEvent): void {
+      if (event instanceof KeyboardEvent && event.key !== 'Enter') {
+        // If this is a KeyboardEvent, only perform the action on Enter
+        return
+      }
+
+      event.preventDefault()
+      event.stopPropagation()
+      // Make sure there are no quotes since these will break the image
+      const newCaption = caption.textContent?.replace(/"/g, '') ?? ''
+      // "Why are you setting the caption both as the image description and title?"
+      // Well, since all exports sometimes us this, sometimes the other value.
+      const newImageTag = `![${newCaption}](${decodedUrl} "${newCaption}")${data}`
+      // Then replace the range, which will trigger a "change" event which in
+      // turn will rerender this image.
+      // TODO: Right now this throws an error since apparently there is a second
+      // update in progress as soon as this function gets called
+      view.dispatch({ changes: { from, to, insert: newImageTag } })
+    }
+
+    // Should work on these events
+    caption.addEventListener('keydown', updateCaptionFunction)
+    caption.addEventListener('focusout', updateCaptionFunction)
+
     return container
   }
 
   ignoreEvent (event: Event): boolean {
-    return false // By default ignore all events
+    // We're handling mouse events and keyboard events ourselves.
+    return event instanceof MouseEvent || event instanceof KeyboardEvent || event instanceof FocusEvent
   }
 }
 
@@ -124,7 +154,12 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): ImageWidget|und
   let title = match[3] ?? altText // An optional title in quotes after the image
   let p4 = match[4] ?? ''
 
-  return new ImageWidget(title, url, altText, p4)
+  // Remove the "title" from the surrounding URL group, if applicable.
+  if (match[3] !== undefined) {
+    url = url.replace(`"${match[3]}"`, '').trim()
+  }
+
+  return new ImageWidget(node.node, title, url, altText, p4)
 }
 
 export const renderImages = renderInlineWidgets(shouldHandleNode, createWidget)

@@ -27,7 +27,8 @@ export const pasteHandler = Prec.highest(EditorView.domEventHandlers({
           // paths cross-platform compatible
           const relative = path.relative(basePath, pathToInsert)
           const sanitizedPath = relative.replace(/\\/g, '/')
-          const tag = `![${path.basename(sanitizedPath)}](${encodeURIComponent(sanitizedPath)})`
+          // We need to replace spaces, since the Markdown parser is strict here
+          const tag = `![${path.basename(sanitizedPath)}](${sanitizedPath.replace(/ /g, '%20')})`
           const { from, to } = view.state.selection.main
           view.dispatch({ changes: { from, to, insert: tag } })
         }
