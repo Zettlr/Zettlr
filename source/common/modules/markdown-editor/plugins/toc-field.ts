@@ -1,21 +1,42 @@
 // Creates a StateField that keeps a ToC updated
 
 import { EditorState, StateField } from '@codemirror/state'
-import { syntaxTree } from '@codemirror/language'
+import { syntaxTree, ensureSyntaxTree } from '@codemirror/language'
 
+/**
+ * Takes a heading (the full line) and transforms it into an ID. This function
+ * will first look for a Pandoc-style ID ({#heading-id}), then for a named
+ * anchor (<a name="heading-id"></a>), and if both fail, transform the text into
+ * an ID utilizing the Pandoc algorithm.
+ *
+ * @param   {string}  headingString  The heading string to generate an ID for
+ *
+ * @return  {string}                 The generated ID
+ */
 function headingToID (headingString: string): string {
-  const match = /\{(.+)\}$/.exec(headingString)
-  if (match !== null) {
-    // There's Pandoc attribute markup in the heading string, so we don't have
-    // to calculate an ID (maybe)
-    const attrs = match[1].split(' ').map(x => x.trim()).filter(x => x !== '')
+  // If there are Pandoc attributs inside this header, and they include an ID,
+  // then we should use that one.
+  const pandocAttrs = /\{(.+)\}$/.exec(headingString)
+  if (pandocAttrs !== null) {
+    const attrs = pandocAttrs[1].split(' ').map(x => x.trim()).filter(x => x !== '')
     const id = attrs.find(x => x.startsWith('#'))
     if (id !== undefined) {
       return id.substring(1)
     }
   }
 
+  // A named anchor is also a valid heading ID, so if there is one, return that.
+  const namedAnchor = /<a(?:.+)name=['"]?([^'"]+)['"]?(?:.*)>(?:.*)<\/a>/i.exec(headingString)
+  if (namedAnchor !== null) {
+    return namedAnchor[1]
+  }
+
+  // If both of these "explicit" overriding methods work, transform what's left
+  // of the content into an ID utilizing Pandoc's algorithm.
+
   let text = headingString
+  // Remove HTML elements
+  text = text.replace(/<.+>/i, '')
   // Remove all formatting, links, etc.
   text = text.replace(/[*_]{1,3}(.+)[*_]{1,3}/g, '$1')
   text = text.replace(/`[^`]+`/g, '$1')
@@ -78,8 +99,18 @@ function generateToc (state: EditorState): ToCEntry[] {
   let h4 = 0
   let h5 = 0
   let h6 = 0
-  syntaxTree(state).iterate({
+
+  // We try to retrieve the full syntax tree, and if that fails, fall back to
+  // the (possibly incomplete) syntax tree. For the ToC we definitely want to
+  // utilize the full tree.
+  const tree = ensureSyntaxTree(state, state.doc.length) ?? syntaxTree(state)
+
+  tree.iterate({
     enter (node) {
+      if (node.type.name === 'Document') {
+        return
+      }
+
       switch (node.type.name) {
         case 'ATXHeading1':
         case 'SetextHeading1':
@@ -92,7 +123,7 @@ function generateToc (state: EditorState): ToCEntry[] {
             renderedLevel: [h1].join('.'),
             id: headingToID(state.doc.sliceString(node.from + 2, node.to))
           })
-          break
+          return false
         case 'ATXHeading2':
         case 'SetextHeading2':
           h2++
@@ -104,7 +135,7 @@ function generateToc (state: EditorState): ToCEntry[] {
             renderedLevel: [ h1, h2 ].join('.'),
             id: headingToID(state.doc.sliceString(node.from + 2, node.to))
           })
-          break
+          return false
         case 'ATXHeading3':
           h3++
           h4 = h5 = h6 = 0
@@ -115,7 +146,7 @@ function generateToc (state: EditorState): ToCEntry[] {
             renderedLevel: [ h1, h2, h3 ].join('.'),
             id: headingToID(state.doc.sliceString(node.from + 4, node.to))
           })
-          break
+          return false
         case 'ATXHeading4':
           h4++
           h5 = h6 = 0
@@ -126,7 +157,7 @@ function generateToc (state: EditorState): ToCEntry[] {
             renderedLevel: [ h1, h2, h3, h4 ].join('.'),
             id: headingToID(state.doc.sliceString(node.from + 5, node.to))
           })
-          break
+          return false
         case 'ATXHeading5':
           h5++
           h6 = 0
@@ -137,7 +168,7 @@ function generateToc (state: EditorState): ToCEntry[] {
             renderedLevel: [ h1, h2, h3, h4, h5 ].join('.'),
             id: headingToID(state.doc.sliceString(node.from + 6, node.to))
           })
-          break
+          return false
         case 'ATXHeading6':
           h6++
           toc.push({
@@ -147,10 +178,14 @@ function generateToc (state: EditorState): ToCEntry[] {
             renderedLevel: [ h1, h2, h3, h4, h5, h6 ].join('.'),
             id: headingToID(state.doc.sliceString(node.from + 7, node.to))
           })
-          break
+          return false
+        default:
+          return false
       }
     }
   })
+
+  console.log(toc)
 
   return toc
 }

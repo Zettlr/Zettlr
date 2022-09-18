@@ -7,6 +7,7 @@ import { SyntaxNodeRef, SyntaxNode } from '@lezer/common'
 import { EditorView, WidgetType } from '@codemirror/view'
 import { EditorState } from '@codemirror/state'
 import clickAndSelect from './click-and-select'
+import openMarkdownLink from '../util/open-markdown-link'
 
 class LinkWidget extends WidgetType {
   constructor (readonly linkTitle: string, readonly linkUrl: string, readonly node: SyntaxNode) {
@@ -35,12 +36,26 @@ class LinkWidget extends WidgetType {
       elem.classList.add('local')
     }
 
-    elem.addEventListener('click', clickAndSelect(view, this.node))
+    elem.addEventListener('click', (event) => {
+      event.preventDefault()
+      event.stopPropagation()
+      const cmd = event.metaKey && process.platform === 'darwin'
+      const ctrl = event.ctrlKey && process.platform !== 'darwin'
+      if (cmd || ctrl) {
+        openMarkdownLink(this.linkUrl, view)
+      } else {
+        clickAndSelect(view, this.node)(event)
+      }
+    })
     return elem
   }
 
   ignoreEvent (event: Event): boolean {
-    return false // By default ignore all events
+    if (event instanceof MouseEvent) {
+      return true
+    }
+
+    return false
   }
 }
 

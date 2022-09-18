@@ -15,14 +15,34 @@
 
 import { mdFileExtensions } from '@providers/fsal/util/valid-file-extensions'
 import makeValidUri from '@common/util/make-valid-uri'
-import CodeMirror from 'codemirror'
-import headingToID from './util/heading-to-id'
+import { EditorState, Line } from '@codemirror/state'
+import { configField } from './configuration'
+import { EditorView } from '@codemirror/view'
+import { tocField } from '../plugins/toc-field'
 
 const path = window.path
 const ipcRenderer = window.ipc
 
 const VALID_FILETYPES = mdFileExtensions(true)
-const atxRE = /^#{1,6}\s(.+)$/
+
+/**
+ * Uses the ToC field within the editor state to determine the line descriptor
+ * for the given heading ID (if applicable)
+ *
+ * @param   {string}       headingId  The heading ID to search for
+ * @param   {EditorState}  state      The state
+ *
+ * @return  {Line|undefined}          The line, or undefined
+ */
+function findMatchingHeading (headingId: string, state: EditorState): Line|undefined {
+  headingId = headingId.toLowerCase()
+
+  for (const entry of state.field(tocField)) {
+    if (entry.id.toLowerCase() === headingId) {
+      return state.doc.line(entry.line)
+    }
+  }
+}
 
 /**
  * Resolves and opens a link safely (= not inside Zettlr, except it's a local MD file)
@@ -30,24 +50,22 @@ const atxRE = /^#{1,6}\s(.+)$/
  * @param   {string}      url  The URL to open
  * @param   {CodeMirror.Editor}  cm   The instance to use if it's a heading link
  */
-export default function (url: string, cm: CodeMirror.Editor): void {
-  const base: string = (cm as any).getOption('zettlr').markdownImageBasePath
+export default function (url: string, view: EditorView): void {
+  const base = path.dirname(view.state.field(configField).metadata.path)
 
   if (url[0] === '#') {
-    // We should open an internal link.
-    for (let i = 0; i < cm.lineCount(); i++) {
-      const line = cm.getLine(i)
-      // Check if we have an ATX heading on this line.
-      const match = atxRE.exec(line)
-      // If so, and if the corresponding Pandoc ID equals the URL, we got the
-      // target.
-      if (match !== null && headingToID(match[1]) === url.substring(1)) {
-        cm.setCursor({ line: i, ch: 0 })
-        cm.refresh()
-        break
-      }
+    // We should open an internal link, i.e. "jump to line".
+    console.log('Opening internal link!', url.substring(1))
+    const targetLine = findMatchingHeading(url.substring(1), view.state)
+    if (targetLine !== undefined) {
+      console.log('jtl:', targetLine)
+      view.dispatch({
+        selection: { anchor: targetLine.from, head: targetLine.to },
+        effects: EditorView.scrollIntoView(targetLine.from, { y: 'center' })
+      })
     }
   } else if (url.startsWith('.')) {
+    console.log('Opening relative path')
     // We are definitely dealing with a relative URL. So let's resolve it
     const absPath = path.resolve(base, url)
     window.location.assign(`safe-file://${absPath}`)
@@ -73,10 +91,7 @@ export default function (url: string, cm: CodeMirror.Editor): void {
       // Attempt to open internally
       ipcRenderer.invoke('application', {
         command: 'open-file',
-        payload: {
-          path: localPath,
-          newTab: false
-        }
+        payload: { path: localPath, newTab: false }
       })
         .catch(e => console.error(e))
     } else {
