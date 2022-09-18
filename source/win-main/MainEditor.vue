@@ -15,61 +15,19 @@
     v-on:dragleave="handleDragLeave($event)"
     v-on:drop="handleDrop($event, 'editor')"
   >
-    <div v-show="showSearch" class="main-editor-search">
-      <div class="row">
-        <input
-          ref="searchinput"
-          v-model="query"
-          type="text"
-          v-bind:placeholder="findPlaceholder"
-          v-bind:class="{'has-regex': regexpSearch }"
-          v-on:keypress.enter.exact="searchNext()"
-          v-on:keypress.shift.enter.exact="searchPrevious()"
-          v-on:keydown.esc.exact="showSearch = false"
-        >
-        <button
-          v-bind:title="regexLabel"
-          v-bind:class="{ 'active': regexpSearch }"
-          v-on:click="toggleQueryRegexp()"
-        >
-          <clr-icon shape="regexp"></clr-icon>
-        </button>
-        <button
-          v-bind:title="closeLabel"
-          v-on:click="showSearch = false"
-        >
-          <clr-icon shape="times"></clr-icon>
-        </button>
-      </div>
-      <div class="row">
-        <input
-          v-model="replaceString"
-          type="text"
-          v-bind:placeholder="replacePlaceholder"
-          v-bind:class="{'monospace': regexpSearch }"
-          v-on:keypress.enter.exact="replaceNext()"
-          v-on:keypress.shift.enter.exact="replacePrevious()"
-          v-on:keypress.alt.enter.exact="replaceAll()"
-          v-on:keydown.esc.exact="showSearch = false"
-        >
-        <button
-          v-bind:title="replaceNextLabel"
-          v-on:click="replaceNext()"
-        >
-          <clr-icon shape="two-way-arrows"></clr-icon>
-        </button>
-        <button
-          v-bind:title="replaceAllLabel"
-          v-on:click="replaceAll()"
-        >
-          <clr-icon shape="step-forward-2"></clr-icon>
-        </button>
-      </div>
-    </div>
-
     <div v-bind:id="editorId">
       <!-- This element will be replaced with Codemirror's wrapper element on mount -->
     </div>
+
+    <EditorSearchPanel
+      v-show="showSearch"
+      v-bind:show-search="showSearch"
+      v-on:search-next="searchNext($event)"
+      v-on:search-previous="searchPrevious($event)"
+      v-on:replace-next="replaceNext($event)"
+      v-on:replace-all="replaceAll($event)"
+      v-on:end-search="showSearch = false"
+    ></EditorSearchPanel>
 
     <div
       v-if="documentTabDrag"
@@ -146,18 +104,21 @@
 import MarkdownEditor from '@common/modules/markdown-editor'
 import { Update } from '@codemirror/collab'
 import objectToArray from '@common/util/object-to-array'
-import { trans } from '@common/i18n-renderer'
 // import extractYamlFrontmatter from '@common/util/extract-yaml-frontmatter'
 // import YAML from 'yaml'
 
-import { nextTick, ref, computed, onMounted, watch, toRef } from 'vue'
+import { ref, computed, onMounted, watch, toRef } from 'vue'
 import { useStore } from 'vuex'
 import { key as storeKey } from './store'
-import { EditorCommands, MainEditorDocumentWrapper } from '@dts/renderer/editor'
+import { EditorCommands } from '@dts/renderer/editor'
 import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
 import { DocumentType, DP_EVENTS } from '@dts/common/documents'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { EditorConfiguration } from '@common/modules/markdown-editor/util/configuration'
+import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import getBibliographyForDescriptor from '@common/util/get-bibliography-for-descriptor'
+import EditorSearchPanel from './EditorSearchPanel.vue'
+import { SearchQuery } from '@codemirror/search'
 
 const ipcRenderer = window.ipc
 
@@ -184,7 +145,6 @@ const store = useStore(storeKey)
 
 // TEMPLATE REFS
 const editor = ref<HTMLDivElement|null>(null)
-const searchinput = ref<HTMLInputElement|null>(null)
 
 // UNREFFED STUFF
 let mdEditor: MarkdownEditor|null = null
@@ -196,7 +156,6 @@ async function pullUpdates (filePath: string, version: number): Promise<false|Up
   // Notice how we're not returning the promise from the IPC channel. The reason
   // is mainly to prevent pollution -- I don't want to try out what happens if
   // a dozen IPC calls are hanging in the air with no resolution in sight.
-  console.log('Client waiting for updates, version:', version)
   return await new Promise((resolve, reject) => {
     // Begin listening for the correct event
     const stopListening = ipcRenderer.on('documents-update', (evt, payload) => {
@@ -212,7 +171,6 @@ async function pullUpdates (filePath: string, version: number): Promise<false|Up
         .then((result: false|Update[]) => {
           // Clean up to not pollute the event listener with millions of callbacks
           stopListening()
-          console.log('Resolving promise with answer from main, removing listener ...')
           resolve(result)
         })
         .catch(err => reject(err))
@@ -222,7 +180,6 @@ async function pullUpdates (filePath: string, version: number): Promise<false|Up
 
 async function pushUpdates (filePath: string, version: number, updates: any): Promise<boolean> {
   // Submits new updates to the authority, returns true if successful
-  console.log(`Client pushing ${updates.length} updates from version ${version}...`)
   return await ipcRenderer.invoke('documents-authority', {
     command: 'push-updates',
     payload: { filePath, version, updates }
@@ -238,33 +195,23 @@ async function getDoc (filePath: string): Promise<{ content: string, type: Docum
 }
 
 // EVENT LISTENERS
-ipcRenderer.on('shortcut', (event, command) => {
-  if (mdEditor?.hasFocus() !== true) {
-    return // None of our business
-  }
-
-  if (command === 'close-window') {
-    // TODO: Implement tab closing
-  } else if (command === 'search') {
-    showSearch.value = !showSearch.value
-  } else if (command === 'toggle-typewriter-mode') {
-    mdEditor.hasTypewriterMode = !mdEditor.hasTypewriterMode
-  }
-})
-
 ipcRenderer.on('citeproc-database-updated', (event, dbPath: string) => {
-  // TODO
-  // const activeDoc = openDocuments.find(doc => doc.path === activeFile.value?.path)
+  const descriptor = activeFileDescriptor.value
+  const activeDoc = activeFile.value
 
-  // if (activeDoc === undefined) {
-  //   return // Nothing to do
-  // }
+  if (descriptor === undefined || descriptor.type !== 'file' || activeDoc == null) {
+    return // Nothing to do
+  }
 
-  // const usesMainLib = activeDoc.library === CITEPROC_MAIN_DB
+  const library = getBibliographyForDescriptor(descriptor)
 
-  // if (dbPath === activeDoc.library || (usesMainLib && dbPath === CITEPROC_MAIN_DB)) {
-  //   updateCitationKeys(activeDoc).catch(e => console.error('Could not update citation keys', e))
-  // }
+  const usesMainLib = library === CITEPROC_MAIN_DB
+
+  if (dbPath === library || (usesMainLib && dbPath === CITEPROC_MAIN_DB)) {
+    updateCitationKeys(library).catch(e => {
+      console.error('Could not update citation keys', e)
+    })
+  }
 })
 
 ipcRenderer.on('shortcut', (event, command) => {
@@ -366,11 +313,7 @@ onMounted(() => {
 })
 
 // DATA SETUP
-const regexpSearch = ref(false)
 const showSearch = ref(false)
-const query = ref('')
-const replaceString = ref('')
-const findTimeout = ref<any>(undefined)
 const anchor = ref<undefined|any>(undefined) // TODO: Correct position
 const documentTabDrag = ref(false)
 const documentTabDragWhere = ref<undefined|string>(undefined)
@@ -387,6 +330,8 @@ const globalSearchResults = computed(() => store.state.searchResults)
 const node = computed(() => store.state.paneData.find(leaf => leaf.id === props.leafId))
 const activeFile = computed(() => node.value?.activeFile) // TODO: MAYBE REMOVE
 const lastLeafId = computed(() => store.state.lastLeafId)
+
+const activeFileDescriptor = ref<undefined|MDFileDescriptor|CodeFileDescriptor>(undefined)
 
 const editorConfiguration = computed<EditorConfiguration>(() => {
   // We update everything, because not so many values are actually updated
@@ -499,13 +444,6 @@ watch(toRef(props.editorCommands, 'replaceSelection'), () => {
   // mdEditor?.replaceSelection(textToInsert)
 })
 
-const findPlaceholder = trans('dialog.find.find_placeholder')
-const replacePlaceholder = trans('dialog.find.replace_placeholder')
-const replaceNextLabel = trans('dialog.find.replace_next_label')
-const replaceAllLabel = trans('dialog.find.replace_all_label')
-const closeLabel = trans('dialog.find.close_label')
-const regexLabel = trans('dialog.find.regex_label')
-
 const isMarkdown = computed(() => {
   if (activeFile.value == null) {
     return true // By default, assume Markdown
@@ -514,7 +452,7 @@ const isMarkdown = computed(() => {
   return hasMarkdownExt(activeFile.value.path)
 })
 
-const fsalFiles = computed(() => {
+const fsalFiles = computed<MDFileDescriptor[]>(() => {
   const tree = store.state.fileTree
   const files = []
 
@@ -535,6 +473,19 @@ watch(useH1, () => { updateFileDatabase() })
 watch(useTitle, () => { updateFileDatabase() })
 watch(filenameOnly, () => { updateFileDatabase() })
 watch(fsalFiles, () => { updateFileDatabase() })
+
+watch(activeFile, async () => {
+  // Request the descriptor and put it into our ref
+  if (activeFile.value == null) {
+    activeFileDescriptor.value = undefined
+  } else {
+    const descriptor = await ipcRenderer.invoke('application', {
+      command: 'get-descriptor',
+      payload: activeFile.value.path
+    })
+    activeFileDescriptor.value = descriptor
+  }
+})
 
 watch(editorConfiguration, (newValue) => {
   mdEditor?.setOptions(newValue)
@@ -560,27 +511,8 @@ watch(activeFile, async () => {
   await loadActiveFile()
 })
 
-watch(query, (newValue) => {
-  // Make sure to switch the regexp search depending on the search input
-  const isRegexp = /^\/.+\/[gimy]{0,4}$/.test(newValue)
-  if (isRegexp && regexpSearch.value === false) {
-    regexpSearch.value = true
-  } else if (!isRegexp && regexpSearch.value === true) {
-    regexpSearch.value = false
-  }
-})
-
 watch(showSearch, (newValue, oldValue) => {
-  if (newValue === true && oldValue === false) {
-    // The user activated search, so focus the input and run a search (if
-    // the query wasnt' empty)
-    nextTick()
-      .then(() => {
-        searchinput.value?.focus()
-        searchinput.value?.select()
-      })
-      .catch(err => console.error(err))
-  } else if (newValue === false) {
+  if (newValue === false) {
     // Always "stopSearch" if the input is not shown, since this will clear
     // out, e.g., the matches on the scrollbar
     mdEditor?.stopSearch()
@@ -654,14 +586,14 @@ function jtl (lineNumber: number, setCursor: boolean = false) {
 }
 
 // eslint-disable-next-line no-unused-vars
-async function updateCitationKeys (doc: MainEditorDocumentWrapper): Promise<void> {
+async function updateCitationKeys (library: string): Promise<void> {
   if (mdEditor === null) {
     return
   }
 
   const items: any[] = (await ipcRenderer.invoke('citeproc-provider', {
     command: 'get-items',
-    payload: { database: doc.library }
+    payload: { database: library }
   }))
     .map((item: any) => {
       // Get a rudimentary author list
@@ -703,7 +635,7 @@ function updateFileDatabase () {
   const fileDatabase: Array<{ filename: string, id: string }> = []
 
   for (const file of fsalFiles.value) {
-    const fname = file.name.substr(0, file.name.lastIndexOf('.'))
+    const fname = file.name.substring(0, file.name.lastIndexOf('.'))
     let displayText = fname // Fallback: Only filename
     if (useTitle.value && typeof file.frontmatter?.title === 'string') {
       // (Else) if there is a frontmatter, use that title
@@ -727,37 +659,11 @@ function updateFileDatabase () {
   mdEditor.setCompletionDatabase('files', fileDatabase)
 }
 
-function toggleQueryRegexp () {
-  const isRegexp = /^\/.+\/[gimy]{0,4}$/.test(query.value.trim())
-
-  if (isRegexp) {
-    const match = /^\/(.+)\/[gimy]{0,4}$/.exec(query.value.trim())
-    if (match !== null) {
-      query.value = match[1]
-    }
-  } else {
-    query.value = `/${query.value}/`
-  }
-}
-
 // SEARCH FUNCTIONALITY BLOCK
-function searchNext () {
-  // Make sure to clear out a timeout to prevent Zettlr from auto-searching
-  // again after the user deliberately searched by pressing Enter.
-  if (findTimeout.value !== undefined) {
-    clearTimeout(findTimeout.value)
-    findTimeout.value = undefined
-  }
-  mdEditor?.searchNext(query.value)
-}
-
-// NOTE: These functions have to be "piped" through the setup since expressions
-// inside the template will only be evaluated once, ergo for them mdEditor will
-// always be null and they will never call the corresponding function.
-function searchPrevious () { mdEditor?.searchPrevious(query.value) }
-function replaceNext () { mdEditor?.replaceNext(query.value, replaceString.value) }
-function replacePrevious () { mdEditor?.replacePrevious(query.value, replaceString.value) }
-function replaceAll () { mdEditor?.replaceAll(query.value, replaceString.value) }
+function searchNext (query: SearchQuery) { mdEditor?.searchNext(query) }
+function searchPrevious (query: SearchQuery) { mdEditor?.searchPrevious(query) }
+function replaceNext (query: SearchQuery) { mdEditor?.replaceNext(query) }
+function replaceAll (query: SearchQuery) { mdEditor?.replaceAll(query) }
 
 function maybeHighlightSearchResults () {
   const doc = activeFile.value
@@ -995,26 +901,6 @@ function handleDragLeave (event: DragEvent) {
     right: 0;
   }
 
-  div.main-editor-search {
-    position: absolute;
-    width: 300px;
-    right: 0;
-    z-index: 7; // One less and the scrollbar will on top of the input field
-    padding: 5px 10px;
-
-    div.row { display: flex; }
-
-    input {
-      flex: 3;
-      &.has-regex { font-family: monospace; }
-    }
-
-    button {
-      flex: 1;
-      max-width: 24px;
-    }
-  }
-
   @keyframes caretup {
     from { margin-bottom: 0; opacity: 1; }
     50% { opacity: 0; }
@@ -1217,44 +1103,12 @@ body.darwin .main-editor-wrapper {
   &:not(.fullscreen) {
     height: calc(100% - 30px);
   }
-
-  div.main-editor-search {
-    background-color: rgba(230, 230, 230, 1);
-    border-bottom-left-radius: 6px;
-    padding: 6px;
-    box-shadow: -2px 2px 4px 1px rgba(0, 0, 0, .3);
-
-    input[type="text"], button {
-      border-radius: 0;
-      margin: 0;
-    }
-
-    button:hover { background-color: rgb(240, 240, 240); }
-    button.active { background-color: rgb(200, 200, 200) }
-  }
-}
-
-body.darwin.dark .main-editor-wrapper {
-  div.main-editor-search {
-    background-color: rgba(60, 60, 60, 1);
-  }
 }
 
 body.win32 .main-editor-wrapper, body.linux .main-editor-wrapper {
   // On Windows, the tab bar is 30px high
   &:not(.fullscreen) {
     height: calc(100% - 30px);
-  }
-
-  div.main-editor-search {
-    background-color: rgba(230, 230, 230, 1);
-    box-shadow: -2px 2px 4px 1px rgba(0, 0, 0, .3);
-
-    button { max-width: fit-content; }
-    button, input { border-width: 1px; }
-
-    button:hover { background-color: rgb(240, 240, 240); }
-    button.active { background-color: rgb(200, 200, 200) }
   }
 }
 

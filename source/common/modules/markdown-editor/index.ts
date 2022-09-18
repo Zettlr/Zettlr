@@ -33,7 +33,17 @@ import { StreamLanguage, indentOnInput, bracketMatching, indentUnit, codeFolding
 import { stex } from '@codemirror/legacy-modes/mode/stex'
 import { yaml } from '@codemirror/legacy-modes/mode/yaml'
 import { json } from '@codemirror/legacy-modes/mode/javascript'
-import { search, searchKeymap } from '@codemirror/search'
+import {
+  getSearchQuery,
+  search,
+  // searchKeymap,
+  SearchQuery,
+  setSearchQuery,
+  findNext,
+  findPrevious,
+  replaceNext as _replaceNext,
+  replaceAll as _replaceAll
+} from '@codemirror/search'
 import { closeBrackets, completionKeymap } from '@codemirror/autocomplete'
 
 import safeAssign from '@common/util/safe-assign'
@@ -43,7 +53,7 @@ import markdownParser from './parser/markdown-parser'
 import { charCountField, charCountNoSpacesField, mdStatistics, wordCountField } from './plugins/statistics-fields'
 
 // Renderer plugins
-import { initRenderers } from './renderers'
+import { initRenderers, reconfigureRenderers } from './renderers'
 import { syntaxExtensions } from './parser/syntax-extensions'
 import { ToCEntry, tocField } from './plugins/toc-field'
 import { autocomplete, citekeyUpdate, filesUpdate, tagsUpdate, snippetsUpdate } from './autocomplete'
@@ -134,8 +144,8 @@ export default class MarkdownEditor extends EventEmitter {
       // KEYMAPS
       keymap.of([
         ...defaultKeymap, // Minimal default keymap
-        ...historyKeymap, // History commands (redo/undo)
-        ...searchKeymap // Search commands (Ctrl+F, etc.)
+        ...historyKeymap // , // History commands (redo/undo)
+        // ...searchKeymap // Search commands (Ctrl+F, etc.)
       ]),
       // CODE FOLDING
       codeFolding(),
@@ -147,10 +157,14 @@ export default class MarkdownEditor extends EventEmitter {
       drawSelection({ drawRangeCursor: false, cursorBlinkRate: 0 }),
       EditorState.allowMultipleSelections.of(true),
       search({ top: true }), // Add a search
-      // TAB SIZES/INDENTATION
-      EditorState.tabSize.of(4),
-      indentUnit.of('    '), // TODO: That can also be set by the user
+      // TAB SIZES/INDENTATION -> Depend on the configuration field
+      EditorState.tabSize.from(configField, (val) => val.indentUnit),
+      indentUnit.from(configField, (val) => val.indentWithTabs ? '\t' : ' '.repeat(val.indentUnit)),
       EditorView.lineWrapping, // Enable line wrapping
+
+      // Add the configuration and preset it with whatever is in the cached
+      // config.
+      configField.init(state => JSON.parse(JSON.stringify(this.config))),
 
       // The updateListener is a custom extension we're using in order to be
       // able to emit events from this main class based on change events.
@@ -191,23 +205,20 @@ export default class MarkdownEditor extends EventEmitter {
           markdownSyntaxHighlighter(), // ... which can then be styled with a highlighter
           syntaxExtensions, // Add our own specific syntax plugin
           initRenderers({
-            // TODO: Add configs to turn them on or off
-            renderImages: true,
-            renderLinks: true,
-            renderMath: true,
-            renderTasks: true,
-            renderHeadings: true,
-            renderCitations: true,
+            renderImages: this.config.renderImages,
+            renderLinks: this.config.renderLinks,
+            renderMath: this.config.renderMath,
+            renderTasks: this.config.renderTasks,
+            renderHeadings: this.config.renderHeadings,
+            renderCitations: this.config.renderCitations,
             renderMermaid: true
+            // STILL TODO: Tables, Emphasis
           }),
           // Some statistics we need for Markdown documents
           mdStatistics,
           typewriter, // Typewriter mode
           tocField,
           autocomplete,
-          // Add the configuration and preset it with whatever is in the cached
-          // config.
-          configField.init(state => JSON.parse(JSON.stringify(this.config))),
           readabilityMode,
           formattingToolbar,
           footnoteHover
@@ -254,11 +265,35 @@ export default class MarkdownEditor extends EventEmitter {
   }
 
   // SEARCH FUNCTIONALITY
-  searchNext (term: string): void {}
-  searchPrevious (term: string): void {}
-  replaceNext (term: string, replacement: string): void {}
-  replacePrevious (term: string, replacement: string): void {}
-  replaceAll (term: string, replacement: string): void {}
+  private maybeExchangeQuery (query: SearchQuery): void {
+    const currentQuery = getSearchQuery(this._instance.state)
+    if (!currentQuery.eq(query)) {
+      console.log('Exchanging old search query!')
+      this._instance.dispatch({ effects: setSearchQuery.of(query) })
+    }
+  }
+
+  searchNext (query: SearchQuery): void {
+    console.log('Searching next!', query)
+    this.maybeExchangeQuery(query)
+    console.log(findNext(this._instance))
+  }
+
+  searchPrevious (query: SearchQuery): void {
+    this.maybeExchangeQuery(query)
+    findPrevious(this._instance)
+  }
+
+  replaceNext (query: SearchQuery): void {
+    this.maybeExchangeQuery(query)
+    _replaceNext(this._instance)
+  }
+
+  replaceAll (query: SearchQuery): void {
+    this.maybeExchangeQuery(query)
+    _replaceAll(this._instance)
+  }
+
   stopSearch (): void {}
 
   /**
@@ -313,7 +348,22 @@ export default class MarkdownEditor extends EventEmitter {
     // Cache the current config here
     this.config = safeAssign(newOptions, this.config)
     // Apply the new options to the state
+
+    // First: The configuration updates themselves. This will already update a
+    // bunch of other facets and values (such as tab size and unit)
     this._instance.state.update({ effects: configUpdateEffect.of(newOptions) })
+
+    // Second: The renderers
+    reconfigureRenderers(this._instance, {
+      renderImages: this.config.renderImages,
+      renderLinks: this.config.renderLinks,
+      renderMath: this.config.renderMath,
+      renderTasks: this.config.renderTasks,
+      renderHeadings: this.config.renderHeadings,
+      renderCitations: this.config.renderCitations,
+      renderMermaid: true
+      // STILL TODO: Tables, Emphasis
+    })
   }
 
   /**
