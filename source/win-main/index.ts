@@ -169,6 +169,8 @@ app.$store.dispatch('updateOpenDirectory')
   .finally(() => { openDirectoryLock = false })
 app.$store.dispatch('documentTree', { event: 'init', context: { windowId } })
   .catch(err => console.error(err))
+app.$store.dispatch('updateModifiedFiles')
+  .catch(e => console.error(e))
 
 // -----------------------------------------------
 
