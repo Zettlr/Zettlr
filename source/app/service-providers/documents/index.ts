@@ -17,7 +17,7 @@
 
 import EventEmitter from 'events'
 import path from 'path'
-import { promises as fs } from 'fs'
+import { promises as fs, constants as FSConstants } from 'fs'
 import { FSALCodeFile, FSALFile } from '@providers/fsal'
 import ProviderContract from '@providers/provider-contract'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
@@ -375,12 +375,28 @@ export default class DocumentManager extends ProviderContract {
     const treedata: DocumentWindows = await this._config.get()
     for (const key in treedata) {
       try {
-        this._windows[key] = DocumentTree.fromJSON(treedata[key])
+        // Make sure to fish out invalid paths before mounting the tree
+        const tree = DocumentTree.fromJSON(treedata[key])
+        for (const leaf of tree.getAllLeafs()) {
+          for (const file of leaf.tabMan.openFiles.map(x => x.path)) {
+            try {
+              await fs.access(file, FSConstants.F_OK|FSConstants.W_OK|FSConstants.R_OK)
+            } catch (err: any) {
+              leaf.tabMan.closeFile(file)
+            }
+          }
+          if (leaf.tabMan.openFiles.length === 0) {
+            leaf.parent.removeNode(leaf)
+          }
+        }
+        this._windows[key] = tree
         this.broadcastEvent(DP_EVENTS.NEW_WINDOW, { key })
       } catch (err: any) {
         this._app.log.error(`[Document Provider] Could not instantiate window ${key}: ${err.message as string}`, err)
       }
     }
+
+    this.syncToConfig() // In case anything has changed in the loop above
 
     if (Object.keys(treedata).length === 0) {
       this._app.log.warning('[Document Manager] Creating new window since all are closed.')
@@ -512,8 +528,7 @@ export default class DocumentManager extends ProviderContract {
     }
 
     this.documents.push(doc)
-
-    // TODO: Sync the watchdog!
+    this.syncWatchedFilePaths()
 
     return { content, type, startVersion: 0 }
   }
@@ -526,8 +541,6 @@ export default class DocumentManager extends ProviderContract {
       // removed from the document array.
       return false
     }
-
-    console.log('CLIENT REQUESTED UPDATES!', clientVersion, doc.currentVersion)
 
     if (clientVersion < doc.minimumVersion) {
       // TODO: This means that the client is completely out of sync and needs to
