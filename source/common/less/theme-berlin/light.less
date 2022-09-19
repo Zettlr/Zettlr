@@ -158,21 +158,24 @@ body {
       font-weight: bold;
     }
 
-    // Add a cool indicator to the front matter -- overwrites the .cm-hr style above
-    .cm-yaml-frontmatter-start {
-      color: inherit;
+    // Styling for the frontmatter
+    .cm-yaml-frontmatter-start,
+    .cm-yaml-frontmatter-end {
+      color: var(--c-primary);
+      font-weight: bold;
+      font-family: 'Inconsolata', Consolas, Menlo, monospace;
+    }
 
-      &::after {
-        content: "YAML Frontmatter";
-        display: inline-block;
-        margin-left: 10px;
-        padding: 0px 5px;
-        font-size: 60%;
-        font-weight: normal;
-        vertical-align: middle;
-        color: rgb(180, 180, 180);
-        background-color: rgb(240, 240, 240);
-      }
+    .cm-yaml-frontmatter-start::after {
+      content: "YAML Frontmatter";
+      display: inline-block;
+      margin-left: 10px;
+      padding: 0px 5px;
+      font-size: 60%;
+      font-weight: normal;
+      vertical-align: middle;
+      color: rgb(180, 180, 180);
+      background-color: rgb(240, 240, 240);
     }
 
     .CodeMirror-foldmarker {
