@@ -54,7 +54,9 @@ export default class RequestMove extends ZettlrCommand {
     }
 
     // Let's check if the destination is a child of the source:
-    if (fsal.findFile(to.path, [from]) !== null || fsal.findDir(to.path, [from]) !== null) {
+    if (from.type === 'directory' && (
+      fsal.findFile(to.path, [from]) !== null || fsal.findDir(to.path, [from]) !== null
+    )) {
       this._app.windows.prompt({
         type: 'error',
         title: trans('system.error.move_into_child_title'),

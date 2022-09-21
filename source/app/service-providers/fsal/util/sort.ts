@@ -24,7 +24,7 @@ export interface RequiredSortingProps {
   creationtime: number
 }
 
-type GenericSorter = <T extends RequiredSortingProps>(arr: T[], type?: string) => T[]
+export type GenericSorter = <T extends RequiredSortingProps>(arr: T[], type?: string) => T[]
 
 /**
 * This function can sort an array of ZettlrFile and ZettlrDir objects

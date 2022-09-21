@@ -479,6 +479,7 @@ export default class DocumentManager extends ProviderContract {
   }
 
   // DOCUMENT AUTHORITY FUNCTIONS
+
   public async getDocument (filePath: string): Promise<{ content: string, type: DocumentType, startVersion: number }> {
     const existingDocument = this.documents.find(doc => doc.filePath === filePath)
     if (existingDocument !== undefined) {
@@ -833,6 +834,63 @@ export default class DocumentManager extends ProviderContract {
   }
 
   /**
+   * This function can be called from within the FSAL or programmatically, if a
+   * file has been programmatically been moved (either by renaming or moving).
+   * This makes it easier for the user to not even notice this inside the open
+   * documents.
+   *
+   * @param  {string}  oldPath  The old path
+   * @param  {string}  newPath  The path it'll be afterwards
+   */
+  public async hasMovedFile (oldPath: string, newPath: string): Promise<void> {
+    // Basically we just have to close the oldPath, and "open" the new path.
+    const openDoc = this.documents.find(doc => doc.filePath === oldPath)
+    if (openDoc === undefined) {
+      return // Nothing to do
+    }
+
+    openDoc.filePath = newPath
+    openDoc.descriptor.path = newPath
+    openDoc.descriptor.dir = path.dirname(newPath)
+    openDoc.descriptor.name = path.basename(newPath)
+    openDoc.descriptor.ext = path.extname(newPath)
+
+    const leafsToNotify: Array<[string, string]> = []
+    await this.forEachLeaf(async (tabMan, windowId, leafId) => {
+      const res = tabMan.replaceFilePath(oldPath, newPath)
+      if (res) {
+        leafsToNotify.push([ windowId, leafId ])
+      }
+      return res
+    })
+
+    this.syncWatchedFilePaths()
+
+    // Emit the necessary events to each window
+    for (const [ windowId, leafId ] of leafsToNotify) {
+      this.broadcastEvent(DP_EVENTS.CLOSE_FILE, { filePath: oldPath, windowId, leafId })
+      this.broadcastEvent(DP_EVENTS.OPEN_FILE, { filePath: newPath, windowId, leafId })
+    }
+  }
+
+  /**
+   * Convenience function, can be called in case of moving a directory around.
+   * Will internally call hasMovedFile for every affected file to ensure a
+   * smooth user experience.
+   *
+   * @param  {string}  oldPath  The old path
+   * @param  {string}  newPath  The new path
+   */
+  public async hasMovedDir (oldPath: string, newPath: string): Promise<void> {
+    // Similar as hasMovedFile, but triggers the command for every affected file
+    const docs = this.documents.filter(doc => doc.filePath.startsWith(oldPath))
+
+    for (const doc of docs) {
+      await this.hasMovedFile(doc.filePath, doc.filePath.replace(oldPath, newPath))
+    }
+  }
+
+  /**
    * This function ensures that our watcher keeps watching the correct files
    */
   private syncWatchedFilePaths (): void {
@@ -872,10 +930,10 @@ export default class DocumentManager extends ProviderContract {
    *
    * @param   {(tabMan: TabManager) => Promise<boolean>}  callback  The callback
    */
-  public async forEachLeaf (callback: (tabMan: TabManager) => Promise<boolean>): Promise<void> {
+  public async forEachLeaf (callback: (tabMan: TabManager, windowId: string, leafId: string) => Promise<boolean>): Promise<void> {
     for (const windowId in this._windows) {
       for (const leaf of this._windows[windowId].getAllLeafs()) {
-        const stateHasChanged = await callback(leaf.tabMan)
+        const stateHasChanged = await callback(leaf.tabMan, windowId, leaf.id)
         if (stateHasChanged) {
           this.syncToConfig()
         }
@@ -985,7 +1043,7 @@ export default class DocumentManager extends ProviderContract {
     }
 
     // First open the file in the target
-    let success = await target.tabMan.openFile(filePath)
+    let success = target.tabMan.openFile(filePath)
     if (success) {
       this.broadcastEvent(DP_EVENTS.OPEN_FILE, { windowId: targetWindow, leafId: targetLeaf, filePath })
       this.broadcastEvent(DP_EVENTS.ACTIVE_FILE, { windowId: targetWindow, leafId: targetLeaf })
@@ -1192,6 +1250,7 @@ export default class DocumentManager extends ProviderContract {
     }
 
     doc.lastSavedVersion = doc.currentVersion
+    this._app.log.info(`[DocumentManager] File ${filePath} saved.`)
     this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { filePath, status: 'modification' })
 
     return true

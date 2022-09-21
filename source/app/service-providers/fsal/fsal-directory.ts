@@ -363,7 +363,7 @@ export async function createDirectory (
  */
 export async function createFile (
   dirObject: DirDescriptor,
-  options: any,
+  options: { name: string, content: string, type: 'code'|'file' },
   cache: FSALCache,
   tags: TagProvider,
   parser: (file: MDFileDescriptor, content: string) => void,
@@ -418,7 +418,7 @@ export async function renameChild (
     throw new Error(`Directory ${newName} already exists!`)
   }
 
-  const newPath = path.join(path.dirname(dirObject.path), newName)
+  const newPath = path.join(dirObject.path, newName)
   await fs.rename(oldDescriptor.path, newPath)
 
   // Remove the old descriptor

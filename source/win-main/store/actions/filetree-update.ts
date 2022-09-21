@@ -75,8 +75,9 @@ export default async function (context: ActionContext<ZettlrState, ZettlrState>)
   const saneEvents = sanitizeFiletreeUpdates(events)
 
   for (const event of saneEvents) {
+    console.log(`Processing event ${event.event}:${event.path}`)
     if (event.timestamp <= context.state.lastFiletreeUpdate) {
-      console.warn('FSAL event had an outdated timestamp -- skipping', event.event, event.path, event.timestamp)
+      console.warn(`FSAL event had an outdated timestamp (${event.timestamp}, current: ${context.state.lastFiletreeUpdate}) -- skipping (${event.event}:${event.path})`)
       continue
     }
 

@@ -213,17 +213,37 @@ export class TabManager {
   }
 
   /**
+   * This function is a convenience when the path of a file has changed without
+   * the file being deleted or otherwise removed from the app. NOTE that you
+   * still have to emit any events to notify the editors of this change.
+   *
+   * @param   {string}  oldPath  The old path
+   * @param   {string}  newPath  The new path
+   *
+   * @return  {boolean}          False if the file was not open here
+   */
+  public replaceFilePath (oldPath: string, newPath: string): boolean {
+    const file = this.openFiles.find(doc => doc.path === oldPath)
+    if (file === undefined) {
+      return false
+    }
+
+    file.path = newPath
+    return true
+  }
+
+  /**
    * Goes back in the session history and opens the previous file
    */
-  public async back (): Promise<void> {
-    await this._moveThroughHistory(-1)
+  public back (): void {
+    this._moveThroughHistory(-1)
   }
 
   /**
    * Goes forward in the session history and opens the next file
    */
-  public async forward (): Promise<void> {
-    await this._moveThroughHistory(1)
+  public forward (): void {
+    this._moveThroughHistory(1)
   }
 
   /**
@@ -231,7 +251,7 @@ export class TabManager {
    *
    * @param   {number}  direction  The direction to take. Negative = back, positive = forward
    */
-  private async _moveThroughHistory (direction: number): Promise<void> {
+  private _moveThroughHistory (direction: number): void {
     // Always make sure the session pointer is valid
     if (this._sessionPointer < 0 || this._sessionPointer > this._sessionHistory.length - 1) {
       this._sessionPointer = this._sessionHistory.length - 1
@@ -248,7 +268,7 @@ export class TabManager {
     const pathToOpen = this._sessionHistory[this._sessionPointer]
 
     // Open that file, but tell the opener explicitly not to modify the state
-    await this.openFile(pathToOpen, false)
+    this.openFile(pathToOpen, false)
   }
 
   /**

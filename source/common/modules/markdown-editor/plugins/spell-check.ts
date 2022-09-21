@@ -71,6 +71,7 @@ function check (term: string, autocorrectValues: string[]): boolean {
 }
 
 function suggest (term: string): string[] {
+  // TODO: MOVE THIS TO THE MAIN PROCESS!
   const cachedSuggestions = suggestionCache.get(term)
   if (cachedSuggestions !== undefined) {
     return cachedSuggestions
