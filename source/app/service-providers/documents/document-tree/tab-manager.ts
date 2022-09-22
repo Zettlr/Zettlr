@@ -190,6 +190,8 @@ export class TabManager {
       return false
     }
 
+    console.log(`Closing file in leaf: ${file.path}`)
+
     // Retrieve the index of the active file and whether it's an active file
     const activeFileIdx = (this._activeFile === null) ? -1 : this._openFiles.indexOf(this._activeFile)
     const isActive = this._activeFile === file
@@ -225,10 +227,15 @@ export class TabManager {
   public replaceFilePath (oldPath: string, newPath: string): boolean {
     const file = this.openFiles.find(doc => doc.path === oldPath)
     if (file === undefined) {
+      console.log(`Didnt find file for path ${oldPath} -- nothing has changed.`, this.openFiles.map(doc => doc.path))
       return false
     }
 
     file.path = newPath
+    if (this.activeFile?.path === oldPath) {
+      this.activeFile = file
+    }
+
     return true
   }
 

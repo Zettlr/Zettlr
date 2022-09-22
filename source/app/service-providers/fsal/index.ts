@@ -182,8 +182,6 @@ export default class FSAL extends ProviderContract {
       timestamp = lastEvent.timestamp + 1
     }
 
-    console.log('Recording filetree change', event, changedPath)
-
     this._history.push({ event, path: changedPath, timestamp })
 
     this._emitter.emit('fsal-state-changed', 'filetree', changedPath)
@@ -993,8 +991,8 @@ export default class FSAL extends ProviderContract {
   public async renameDir (src: DirDescriptor, newName: string): Promise<void> {
     this._fsalIsBusy = true
     // Compute the paths to be replaced
-    const oldPrefix = path.join(src.dir, src.name)
-    const newPrefix = path.join(src.dir, newName)
+    const newPath = path.join(src.dir, newName)
+    const oldPath = src.path
 
     // Now that we have prepared potential updates,
     // let us perform the rename.
@@ -1005,7 +1003,7 @@ export default class FSAL extends ProviderContract {
       adds.push({
         event: child.type === 'file' ? 'add' : 'addDir',
         // Converts /old/path/oldname/file.md --> /old/path/newname/file.md
-        path: child.path.replace(oldPrefix, newPrefix)
+        path: child.path.replace(src.path, newPath)
       })
       removes.push({
         event: child.type === 'file' ? 'unlink' : 'unlinkDir',
@@ -1016,18 +1014,18 @@ export default class FSAL extends ProviderContract {
     for (const attachment of objectToArray(src, 'attachments')) {
       adds.push({
         event: 'add',
-        path: attachment.path.replace(oldPrefix, newPrefix)
+        path: attachment.path.replace(src.path, newPath)
       })
       removes.push({ event: 'unlink', path: attachment.path })
     }
 
     const parent = this.findDir(src.dir)
-    const oldPath = src.path
-    const newPath = path.join(src.dir, newName)
 
     if (parent === undefined) {
       this.unloadPath(src.path)
       this._config.removePath(src.path)
+      // chokidar always watches the parent directory, even if it's a root
+      this._watchdog.ignoreEvents([{ event: 'addDir', path: newPath }])
       await fs.rename(src.path, newPath)
       await this.loadPath(newPath)
       this._config.addPath(newPath)

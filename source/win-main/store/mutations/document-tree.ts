@@ -312,6 +312,7 @@ function copyDelta (state: ZettlrState, treedata: DocumentTree, leafId: string):
     console.warn('Could not apply delta, either local or remote not available', localLeaf, remoteLeaf, leafId)
     return
   }
+  console.log('Replacing activefile', localLeaf.activeFile?.path, remoteLeaf.activeFile?.path)
   localLeaf.activeFile = remoteLeaf.activeFile
   localLeaf.openFiles = remoteLeaf.openFiles
 }
@@ -366,6 +367,7 @@ export default function (state: ZettlrState, payload: any): void {
     case DP_EVENTS.OPEN_FILE:
     case DP_EVENTS.CLOSE_FILE:
     case DP_EVENTS.FILES_SORTED:
+      console.log('Applying delta for leaf', context.leafId)
       copyDelta(state, treedata, context.leafId)
       break
     case DP_EVENTS.LEAF_CLOSED: // One leaf removed

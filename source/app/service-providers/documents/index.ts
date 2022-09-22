@@ -155,6 +155,7 @@ export default class DocumentManager extends ProviderContract {
     this._watcher = new chokidar.FSWatcher(options)
 
     this._watcher.on('all', (event: string, filePath: string) => {
+      console.log(`Processing ${event} for ${filePath}`)
       if (this._ignoreChanges.includes(filePath)) {
         this._ignoreChanges.splice(this._ignoreChanges.indexOf(filePath), 1)
         return
@@ -396,8 +397,6 @@ export default class DocumentManager extends ProviderContract {
       }
     }
 
-    this.syncToConfig() // In case anything has changed in the loop above
-
     if (Object.keys(treedata).length === 0) {
       this._app.log.warning('[Document Manager] Creating new window since all are closed.')
       const key = uuid4()
@@ -405,11 +404,12 @@ export default class DocumentManager extends ProviderContract {
       this.broadcastEvent(DP_EVENTS.NEW_WINDOW, { key })
     }
 
+    // Sync everything after boot
     this.syncWatchedFilePaths()
     await this.synchronizeDatabases()
+    this.syncToConfig()
 
     this._app.log.info(`[Document Manager] Restored ${this.windowCount()} open windows.`)
-    this.syncToConfig()
   }
 
   public windowCount (): number {
@@ -859,7 +859,10 @@ export default class DocumentManager extends ProviderContract {
     await this.forEachLeaf(async (tabMan, windowId, leafId) => {
       const res = tabMan.replaceFilePath(oldPath, newPath)
       if (res) {
+        console.log('ADDING LEAF TO BE NOTIFIED')
         leafsToNotify.push([ windowId, leafId ])
+      } else {
+        console.log('Not adding leaf, nothing changed.')
       }
       return res
     })
@@ -868,6 +871,7 @@ export default class DocumentManager extends ProviderContract {
 
     // Emit the necessary events to each window
     for (const [ windowId, leafId ] of leafsToNotify) {
+      console.log('Emitting event for', windowId, leafId)
       this.broadcastEvent(DP_EVENTS.CLOSE_FILE, { filePath: oldPath, windowId, leafId })
       this.broadcastEvent(DP_EVENTS.OPEN_FILE, { filePath: newPath, windowId, leafId })
     }
@@ -886,6 +890,7 @@ export default class DocumentManager extends ProviderContract {
     const docs = this.documents.filter(doc => doc.filePath.startsWith(oldPath))
 
     for (const doc of docs) {
+      console.log('Replacing file path for doc', doc.filePath, 'with', doc.filePath.replace(oldPath, newPath))
       await this.hasMovedFile(doc.filePath, doc.filePath.replace(oldPath, newPath))
     }
   }
@@ -895,10 +900,24 @@ export default class DocumentManager extends ProviderContract {
    */
   private syncWatchedFilePaths (): void {
     // First, get the files currently watched
-    const watchedFiles = Object.values(this._watcher.getWatched()).flat()
+    const watchedFiles: string[] = []
+    const watched = this._watcher.getWatched()
+    for (const dir in watched) {
+      for (const filename of watched[dir]) {
+        watchedFiles.push(path.join(dir, filename))
+      }
+    }
 
-    // Second, get all open files
-    const openFiles: string[] = this.documents.map(doc => doc.filePath)
+    // Second, get all open files. NOTE: This does not mean "open open", but
+    // rather paths that are "open" somewhere in a leaf. Not actively viewed.
+    let openFiles: string[] = []
+    for (const windowId in this._windows) {
+      for (const leaf of this._windows[windowId].getAllLeafs()) {
+        openFiles.push(...leaf.tabMan.openFiles.map(f => f.path))
+      }
+    }
+
+    openFiles = [...new Set(openFiles)] // Remove duplicates
 
     // Third, remove those watched files which are no longer open
     for (const watchedFile of watchedFiles) {
