@@ -71,6 +71,10 @@ import { footnoteHover, formattingToolbar } from './tooltips'
 import { DocumentType } from '@dts/common/documents'
 import { pasteHandler } from './plugins/paste-handlers'
 import { spellchecker } from './plugins/spell-check'
+import { getConverter } from '@common/util/md-to-html'
+import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
+
+const clipboard = window.clipboard
 
 export interface DocumentWrapper {
   path: string
@@ -202,7 +206,18 @@ export default class MarkdownEditor extends EventEmitter {
         extensions.push(
           // We need our custom keymaps first
           keymap.of(completionKeymap),
-          Prec.highest(keymap.of(customKeymap)),
+          Prec.highest(keymap.of(
+            [
+              ...customKeymap,
+              {
+                key: 'Mod-Alt-c',
+                run: (target) => {
+                  this.copyAsHTML()
+                  return true
+                }
+              }
+            ]
+          )),
           markdownParser(), // The parser generates the AST for the document ...
           markdownSyntaxHighlighter(), // ... which can then be styled with a highlighter
           syntaxExtensions, // Add our own specific syntax plugin
@@ -316,7 +331,19 @@ export default class MarkdownEditor extends EventEmitter {
   /**
    * Copies the current editor contents into the clipboard as HTML
    */
-  copyAsHTML (): void {}
+  copyAsHTML (): void {
+    const selections: string[] = []
+    const md2html = getConverter(window.getCitationCallback(CITEPROC_MAIN_DB)) // TODO: Correct database
+
+    for (const { from, to } of this._instance.state.selection.ranges) {
+      selections.push(this._instance.state.sliceDoc(from, to))
+    }
+
+    clipboard.write({
+      text: selections.join('\n'),
+      html: md2html(selections.join('\n'))
+    })
+  }
 
   /**
    * Small function that jumps to a specific line in the editor.

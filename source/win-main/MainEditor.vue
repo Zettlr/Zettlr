@@ -171,6 +171,12 @@ async function pullUpdates (filePath: string, version: number): Promise<false|Up
         .then((result: false|Update[]) => {
           // Clean up to not pollute the event listener with millions of callbacks
           stopListening()
+          if (result === false) {
+            // The leaf is completely out of sync, so we need to reload the file.
+            // The easiest way is to simply "swapDoc" again as this will pull in
+            // everything anew.
+            mdEditor?.swapDoc(filePath).catch(e => console.error(e))
+          }
           resolve(result)
         })
         .catch(err => reject(err))
@@ -219,6 +225,8 @@ ipcRenderer.on('shortcut', (event, command) => {
     return // None of our business
   }
 
+  console.log(command)
+
   const file = activeFile.value
 
   if (command === 'save-file' && file != null) {
@@ -245,6 +253,8 @@ ipcRenderer.on('shortcut', (event, command) => {
     showSearch.value = !showSearch.value
   } else if (command === 'toggle-typewriter-mode') {
     mdEditor.hasTypewriterMode = !mdEditor.hasTypewriterMode
+  } else if (command === 'copy-as-html') {
+    mdEditor.copyAsHTML()
   }
 })
 
