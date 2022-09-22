@@ -17,33 +17,37 @@ function getToolbar (state: EditorState): Tooltip[] {
     arrow: true,
     create: () => {
       const dom = document.createElement('div')
-      dom.className = 'cm-tooltip-cursor'
+      dom.className = 'cm-formatting-bar'
+
+      const buttonWrapper = document.createElement('div')
+      buttonWrapper.className = 'button-wrapper'
 
       const bold = document.createElement('button')
       bold.classList.add('formatting-toolbar-button')
-      bold.textContent = 'B'
+      bold.innerHTML = '<clr-icon shape="bold"></clr-icon>'
 
       const italic = document.createElement('button')
       italic.classList.add('formatting-toolbar-button')
-      italic.textContent = 'i'
+      italic.innerHTML = '<clr-icon shape="italic"></clr-icon>'
 
       const link = document.createElement('button')
       link.classList.add('formatting-toolbar-button')
-      link.textContent = 'l'
+      link.innerHTML = '<clr-icon shape="link"></clr-icon>'
 
       const image = document.createElement('button')
       image.classList.add('formatting-toolbar-button')
-      image.textContent = 'img'
+      image.innerHTML = '<clr-icon shape="image"></clr-icon>'
 
       const comment = document.createElement('button')
       comment.classList.add('formatting-toolbar-button')
-      comment.textContent = '<>'
+      comment.innerHTML = '<clr-icon shape="code-alt"></clr-icon>'
 
       const code = document.createElement('button')
       code.classList.add('formatting-toolbar-button')
-      code.textContent = '</>'
+      code.innerHTML = '<clr-icon shape="code"></clr-icon>'
 
-      dom.append(bold, italic, link, image, comment, code)
+      buttonWrapper.append(bold, italic, link, image, comment, code)
+      dom.append(buttonWrapper)
       return { dom }
     }
   }]

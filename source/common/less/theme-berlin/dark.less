@@ -201,7 +201,31 @@ body.dark {
       border-bottom: 2px solid @grey-3;
       background-color: @grey-6;
     }
-  }
+
+    .cm-tooltip.cm-formatting-bar {
+      button.formatting-toolbar-button {
+        background-color: var(--grey-5);
+        color: var(--grey-2);
+  
+        &:hover {
+          background-color: var(--grey-3);
+          color: var(--grey-1);
+        }
+      }
+
+      &.cm-tooltip-below {
+        .cm-tooltip-arrow::before, .cm-tooltip-arrow::after {
+          border-bottom-color: var(--grey-5);
+        }
+      }
+
+      &.cm-tooltip-above {
+        .cm-tooltip-arrow::before, .cm-tooltip-arrow::after {
+          border-top-color: var(--grey-5);
+        }
+      }
+    }
+  } // END: All the editor-wrapper shenanigans
 
   .cm-editor.cm-focused .cm-selectionBackground,
   .cm-editor .cm-selectionBackground {
