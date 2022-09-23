@@ -1,7 +1,7 @@
 // Shows a formatting toolbar if there's a main non-empty selection
 import { Tooltip, showTooltip } from '@codemirror/view'
 import { EditorState, StateField } from '@codemirror/state'
-import { applyBold, applyCode, applyComment, applyItalic } from '../commands/markdown'
+import { applyBold, applyCode, applyComment, applyItalic, insertImage, insertLink } from '../commands/markdown'
 
 function getToolbar (state: EditorState): Tooltip[] {
   const mainSel = state.selection.main
@@ -54,8 +54,8 @@ function getToolbar (state: EditorState): Tooltip[] {
         mount (view) {
           bold.onclick = function (event) { applyBold(view) }
           italic.onclick = function (event) { applyItalic(view) }
-          link.onclick = function (event) { /* TODO: Insert link */ }
-          image.onclick = function (event) { /* TODO: Insert image */ }
+          link.onclick = function (event) { insertLink(view) }
+          image.onclick = function (event) { insertImage(view) }
           comment.onclick = function (event) { applyComment(view) }
           code.onclick = function (event) { applyCode(view) }
         }
