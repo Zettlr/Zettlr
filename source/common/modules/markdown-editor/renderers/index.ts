@@ -7,6 +7,7 @@ import { renderMath } from './render-math'
 import { renderTasks } from './render-tasks'
 import { renderCitations } from './render-citations'
 import { renderMermaid } from './render-mermaid'
+import { renderTables } from './render-tables'
 
 const renderCompartment = new Compartment()
 
@@ -18,6 +19,7 @@ interface RendererConfig {
   renderHeadings?: boolean
   renderCitations?: boolean
   renderMermaid?: boolean
+  renderTables?: boolean
 }
 
 function getRenderersConf (config: RendererConfig): Extension {
@@ -42,6 +44,9 @@ function getRenderersConf (config: RendererConfig): Extension {
   }
   if (config.renderMermaid === true) {
     ext.push(renderMermaid)
+  }
+  if (config.renderTables === true) {
+    ext.push(renderTables)
   }
 
   return ext

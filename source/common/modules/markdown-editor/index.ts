@@ -228,7 +228,8 @@ export default class MarkdownEditor extends EventEmitter {
             renderTasks: this.config.renderTasks,
             renderHeadings: this.config.renderHeadings,
             renderCitations: this.config.renderCitations,
-            renderMermaid: true
+            renderMermaid: true,
+            renderTables: this.config.renderTables
             // STILL TODO: Tables, Emphasis
           }),
           // Some statistics we need for Markdown documents
