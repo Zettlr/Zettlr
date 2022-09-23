@@ -236,9 +236,7 @@ ipcRenderer.on('shortcut', (event, command) => {
       payload: {
         windowId: props.windowId,
         leafId: props.leafId,
-        path: file.path,
-        // TODO: Correct word count
-        offsetWordCount: 0
+        path: file.path
       }
     })
       .then(result => {
