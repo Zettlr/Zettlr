@@ -36,7 +36,6 @@ class TableWidget extends WidgetType {
         table.markClean()
       }
     })
-    // TODO: Listen to callbacks!
     return table.domElement
   }
 
