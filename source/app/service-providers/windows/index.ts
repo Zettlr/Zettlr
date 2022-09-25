@@ -310,6 +310,24 @@ export default class WindowProvider extends ProviderContract {
         return
       }
 
+      const nWindows = BrowserWindow.getAllWindows().length
+      const leaveAppRunning = this._config.get().system.leaveAppRunning
+
+      // If this is the last window open on Windows or Linux, the user intention
+      // is to quit the app. To prevent the document manager from removing the
+      // window from the config, we need to programmatically issue a quit event.
+      // If the user has explicitly mentioned that they want to keep the app
+      // running, we will only close the window here, but don't tell the
+      // documents manager about it so that it keeps the document in the config.
+      if (nWindows === 1 && process.platform !== 'darwin') {
+        if (!leaveAppRunning) {
+          app.quit()
+        } else {
+          window.close()
+        }
+        return
+      }
+
       // Only close this window if it is safe to do so. The isClean() method will
       // return true during shutdowns.
       if (!this._documents.isClean(key)) {
