@@ -77,7 +77,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch, defineEmits, defineProps, toRef, nextTick } from 'vue'
+import { ref, watch, toRef, nextTick } from 'vue'
 import { trans } from '@common/i18n-renderer'
 import { SearchQuery } from '@codemirror/search'
 
