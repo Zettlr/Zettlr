@@ -155,7 +155,7 @@ export default class DocumentManager extends ProviderContract {
     this._watcher = new chokidar.FSWatcher(options)
 
     this._watcher.on('all', (event: string, filePath: string) => {
-      console.log(`Processing ${event} for ${filePath}`)
+      this._app.log.info(`[DocumentManager] Processing ${event} for ${filePath}`)
       if (this._ignoreChanges.includes(filePath)) {
         this._ignoreChanges.splice(this._ignoreChanges.indexOf(filePath), 1)
         return
