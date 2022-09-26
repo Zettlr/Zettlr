@@ -23,6 +23,7 @@ class CitationWidget extends WidgetType {
 
   toDOM (view: EditorView): HTMLElement {
     const config = view.state.field(configField).metadata.library
+    console.log(view.state.field(configField))
     const library = config === '' ? CITEPROC_MAIN_DB : config
     const callback = window.getCitationCallback(library)
     const renderedCitation = callback(this.citation.citations, false)

@@ -114,7 +114,7 @@ import { EditorCommands } from '@dts/renderer/editor'
 import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
 import { DocumentType, DP_EVENTS } from '@dts/common/documents'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
-import { EditorConfigOptions, EditorConfiguration } from '@common/modules/markdown-editor/util/configuration'
+import { EditorConfigOptions } from '@common/modules/markdown-editor/util/configuration'
 import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import getBibliographyForDescriptor from '@common/util/get-bibliography-for-descriptor'
 import EditorSearchPanel from './EditorSearchPanel.vue'
@@ -345,7 +345,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
   // everything all the time, but rather do one initial configuration, so
   // even if we incur a performance penalty, it won't be noticed that much.
   return {
-    // keyMap: store.state.config['editor.inputMode'],
+    // keyMap: store.state.config['editor.inputMode'], TODO
     // direction: store.state.config['editor.direction'],
     // rtlMoveVisually: store.state.config['editor.rtlMoveVisually'],
     indentUnit: store.state.config['editor.indentUnit'],
@@ -383,12 +383,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     linkPreference: store.state.config['zkn.linkWithFilename'],
     linkFilenameOnly: store.state.config['zkn.linkFilenameOnly'],
     readabilityMode: false, // TODO
-    typewriterMode: false // , // TODO
-    // metadata: {
-    //   path: '',
-    //   id: '',
-    //   library: '' // TODO
-    // }
+    typewriterMode: false // TODO
   } as EditorConfigOptions
 })
 
