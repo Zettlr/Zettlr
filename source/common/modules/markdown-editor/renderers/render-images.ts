@@ -8,6 +8,7 @@ import { EditorView, WidgetType } from '@codemirror/view'
 import { EditorState } from '@codemirror/state'
 import { configField } from '../util/configuration'
 import makeAbsoluteURL from '@common/util/make-absolute-url'
+import { linkImageMenu } from '../context-menu/link-image-menu'
 
 const path = window.path
 
@@ -121,6 +122,12 @@ class ImageWidget extends WidgetType {
     // Should work on these events
     caption.addEventListener('keydown', updateCaptionFunction)
     caption.addEventListener('focusout', updateCaptionFunction)
+
+    container.addEventListener('contextmenu', (event) => {
+      event.preventDefault()
+      event.stopPropagation()
+      linkImageMenu(view, this.node, { x: event.clientX, y: event.clientY })
+    })
 
     return container
   }

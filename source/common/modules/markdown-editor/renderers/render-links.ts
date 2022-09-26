@@ -8,6 +8,7 @@ import { EditorView, WidgetType } from '@codemirror/view'
 import { EditorState } from '@codemirror/state'
 import clickAndSelect from './click-and-select'
 import openMarkdownLink from '../util/open-markdown-link'
+import { linkImageMenu } from '../context-menu/link-image-menu'
 
 class LinkWidget extends WidgetType {
   constructor (readonly linkTitle: string, readonly linkUrl: string, readonly node: SyntaxNode) {
@@ -46,6 +47,11 @@ class LinkWidget extends WidgetType {
       } else {
         clickAndSelect(view, this.node)(event)
       }
+    })
+    elem.addEventListener('contextmenu', (event) => {
+      event.preventDefault()
+      event.stopPropagation()
+      linkImageMenu(view, this.node, { x: event.clientX, y: event.clientY })
     })
     return elem
   }

@@ -9,6 +9,7 @@ import { EditorState } from '@codemirror/state'
 import clickAndSelect from './click-and-select'
 import extractCitations, { CitePosition } from '@common/util/extract-citations'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
+import { citationMenu } from '../context-menu/citation-menu'
 
 class CitationWidget extends WidgetType {
   private readonly getCitation: Function
@@ -33,6 +34,13 @@ class CitationWidget extends WidgetType {
       elem.classList.add('error')
     }
     elem.addEventListener('click', clickAndSelect(view, this.node))
+
+    elem.addEventListener('contextmenu', (event) => {
+      const keys = this.citation.citations.map(x => x.id)
+      const coords = { x: event.clientX, y: event.clientY }
+      citationMenu(view, coords, keys, elem.innerText)
+    })
+
     return elem
   }
 
@@ -42,7 +50,7 @@ class CitationWidget extends WidgetType {
 }
 
 function shouldHandleNode (node: SyntaxNodeRef): boolean {
-  // console.log(node.type.name, 'Parent: ', node.node.parent?.type.name)
+  console.log(node.type.name, 'Parent: ', node.node.parent?.type.name)
   return node.type.name === 'Citation'
 }
 

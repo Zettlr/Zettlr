@@ -71,10 +71,8 @@ import { footnoteHover, formattingToolbar } from './tooltips'
 import { DocumentType } from '@dts/common/documents'
 import { pasteHandler } from './plugins/paste-handlers'
 import { spellchecker } from './plugins/spell-check'
-import { getConverter } from '@common/util/md-to-html'
-import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
-
-const clipboard = window.clipboard
+import { defaultContextMenu } from './plugins/default-context-menu'
+import { copyAsHTML } from './util/copy-paste-cut'
 
 export interface DocumentWrapper {
   path: string
@@ -230,7 +228,7 @@ export default class MarkdownEditor extends EventEmitter {
             renderCitations: this.config.renderCitations,
             renderMermaid: true,
             renderTables: this.config.renderTables
-            // STILL TODO: Tables, Emphasis
+            // STILL TODO: Emphasis
           }),
           // Some statistics we need for Markdown documents
           mdStatistics,
@@ -241,6 +239,7 @@ export default class MarkdownEditor extends EventEmitter {
           formattingToolbar,
           footnoteHover,
           pasteHandler, // Manages image saving
+          defaultContextMenu, // A default context menu
           spellchecker
         )
         break
@@ -333,17 +332,7 @@ export default class MarkdownEditor extends EventEmitter {
    * Copies the current editor contents into the clipboard as HTML
    */
   copyAsHTML (): void {
-    const selections: string[] = []
-    const md2html = getConverter(window.getCitationCallback(CITEPROC_MAIN_DB)) // TODO: Correct database
-
-    for (const { from, to } of this._instance.state.selection.ranges) {
-      selections.push(this._instance.state.sliceDoc(from, to))
-    }
-
-    clipboard.write({
-      text: selections.join('\n'),
-      html: md2html(selections.join('\n'))
-    })
+    copyAsHTML(this._instance)
   }
 
   /**
