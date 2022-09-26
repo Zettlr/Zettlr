@@ -114,7 +114,7 @@ import { EditorCommands } from '@dts/renderer/editor'
 import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
 import { DocumentType, DP_EVENTS } from '@dts/common/documents'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
-import { EditorConfiguration } from '@common/modules/markdown-editor/util/configuration'
+import { EditorConfigOptions, EditorConfiguration } from '@common/modules/markdown-editor/util/configuration'
 import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import getBibliographyForDescriptor from '@common/util/get-bibliography-for-descriptor'
 import EditorSearchPanel from './EditorSearchPanel.vue'
@@ -339,7 +339,7 @@ const lastLeafId = computed(() => store.state.lastLeafId)
 
 const activeFileDescriptor = ref<undefined|MDFileDescriptor|CodeFileDescriptor>(undefined)
 
-const editorConfiguration = computed<EditorConfiguration>(() => {
+const editorConfiguration = computed<EditorConfigOptions>(() => {
   // We update everything, because not so many values are actually updated
   // right after setting the new configurations. Plus, the user won't update
   // everything all the time, but rather do one initial configuration, so
@@ -383,13 +383,13 @@ const editorConfiguration = computed<EditorConfiguration>(() => {
     linkPreference: store.state.config['zkn.linkWithFilename'],
     linkFilenameOnly: store.state.config['zkn.linkFilenameOnly'],
     readabilityMode: false, // TODO
-    typewriterMode: false, // TODO
-    metadata: {
-      path: '',
-      id: '',
-      library: '' // TODO
-    }
-  } as EditorConfiguration
+    typewriterMode: false // , // TODO
+    // metadata: {
+    //   path: '',
+    //   id: '',
+    //   library: '' // TODO
+    // }
+  } as EditorConfigOptions
 })
 
 // External commands/"event" system
@@ -546,10 +546,10 @@ async function loadActiveFile () {
     return
   }
 
-  swapDocument(activeFile.value.path)
+  swapDocument(activeFile.value.path).catch(err => console.error(err))
 }
 
-function swapDocument (doc: string) {
+async function swapDocument (doc: string) {
   if (mdEditor === null) {
     console.error(`Could not swap to document ${doc}: Editor was not initialized`)
     return
@@ -560,29 +560,31 @@ function swapDocument (doc: string) {
     return
   }
 
+  const descriptor: MDFileDescriptor|CodeFileDescriptor = await ipcRenderer.invoke('application', { command: 'get-descriptor', payload: doc })
+
+  if (descriptor === undefined) {
+    throw new Error(`Could not swap document: Could not retrieve descriptor for path ${doc}!`)
+  }
+
+  const library = descriptor.type === 'file' ? getBibliographyForDescriptor(descriptor) : undefined
+
+  await mdEditor.swapDoc(doc)
+  store.commit('updateTableOfContents', mdEditor?.tableOfContents)
+  store.commit('activeDocumentInfo', mdEditor?.documentInfo)
+  // Check if there are search results available for this file that we can
+  // pull in and highlight
+  maybeHighlightSearchResults()
+  // Update the citation keys
+  updateCitationKeys(doc).catch(e => console.error('Could not update citation keys', e))
+
   // Provide the editor instance with metadata for the new file
   mdEditor.setOptions({
     metadata: {
       path: doc,
-      id: '', /* TODO activeFile.id */
-      library: CITEPROC_MAIN_DB
+      id: descriptor.type === 'file' ? descriptor.id : '',
+      library: library ?? CITEPROC_MAIN_DB
     }
   })
-
-  mdEditor.swapDoc(doc)
-    .then(() => {
-      store.commit('updateTableOfContents', mdEditor?.tableOfContents)
-      store.commit('activeDocumentInfo', mdEditor?.documentInfo)
-      // Check if there are search results available for this file that we can
-      // pull in and highlight
-      maybeHighlightSearchResults()
-      // TODO
-      // Update the citation keys
-      // if (doc.library !== undefined) {
-      //   updateCitationKeys(doc).catch(e => console.error('Could not update citation keys', e))
-      // }
-    })
-    .catch(err => console.error(err))
 }
 
 function jtl (lineNumber: number, setCursor: boolean = false) {

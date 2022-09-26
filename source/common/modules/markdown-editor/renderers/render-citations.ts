@@ -10,14 +10,11 @@ import clickAndSelect from './click-and-select'
 import extractCitations, { CitePosition } from '@common/util/extract-citations'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { citationMenu } from '../context-menu/citation-menu'
+import { configField } from '../util/configuration'
 
 class CitationWidget extends WidgetType {
-  private readonly getCitation: Function
-
   constructor (readonly citation: CitePosition, readonly node: SyntaxNode) {
     super()
-    // TODO: Get correct library
-    this.getCitation = window.getCitationCallback(CITEPROC_MAIN_DB)
   }
 
   eq (other: CitationWidget): boolean {
@@ -25,7 +22,11 @@ class CitationWidget extends WidgetType {
   }
 
   toDOM (view: EditorView): HTMLElement {
-    const renderedCitation = this.getCitation(this.citation)
+    const config = view.state.field(configField).metadata.library
+    const library = config === '' ? CITEPROC_MAIN_DB : config
+    const callback = window.getCitationCallback(library)
+    const renderedCitation = callback(this.citation.citations, false)
+
     const elem = document.createElement('a')
     if (renderedCitation !== undefined) {
       elem.innerText = renderedCitation
@@ -50,7 +51,7 @@ class CitationWidget extends WidgetType {
 }
 
 function shouldHandleNode (node: SyntaxNodeRef): boolean {
-  console.log(node.type.name, 'Parent: ', node.node.parent?.type.name)
+  // console.log(node.type.name, 'Parent: ', node.node.parent?.type.name)
   return node.type.name === 'Citation'
 }
 

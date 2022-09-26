@@ -5,6 +5,7 @@
 
 import { StateEffect, StateField } from '@codemirror/state'
 import safeAssign from '@common/util/safe-assign'
+import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 
 export interface AutocorrectOptions {
   active: boolean
@@ -52,8 +53,8 @@ export function getDefaultConfig (): EditorConfiguration {
     autocorrect: {
       active: true,
       magicQuotes: {
-        primary: '“…”', // TODO: Replace with default after testing
-        secondary: '‘…’' // TODO: Replace with default after testing
+        primary: '"…"',
+        secondary: "'…'"
       },
       replacements: []
     },
@@ -79,7 +80,7 @@ export function getDefaultConfig (): EditorConfiguration {
     metadata: {
       path: '',
       id: '',
-      library: '' // TODO
+      library: CITEPROC_MAIN_DB
     },
     boldFormatting: '**',
     italicFormatting: '_',
