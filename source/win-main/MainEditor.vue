@@ -225,8 +225,6 @@ ipcRenderer.on('shortcut', (event, command) => {
     return // None of our business
   }
 
-  console.log(command)
-
   const file = activeFile.value
 
   if (command === 'save-file' && file != null) {
