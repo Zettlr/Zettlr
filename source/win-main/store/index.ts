@@ -39,6 +39,7 @@ import updateBibliographyAction from './actions/update-bibliography'
 import documentTreeUpdateAction from './actions/document-tree-update'
 import { AnyDescriptor, DirDescriptor, MaybeRootDescriptor } from '@dts/common/fsal'
 import { WritingTarget } from '@providers/targets'
+import updateSnippetsAction from './actions/update-snippets'
 
 const ipcRenderer = window.ipc
 
@@ -134,6 +135,10 @@ export interface ZettlrState {
    */
   cslItems: any[]
   /**
+   * Snippets (including file contents)
+   */
+  snippets: Array<{ name: string, content: string }>
+  /**
    * This variable stores search results from the global search
    */
   searchResults: SearchResultWrapper[]
@@ -179,6 +184,7 @@ function getConfig (): StoreOptions<ZettlrState> {
         bibliography: undefined,
         lastLeafId: undefined,
         distractionFreeMode: undefined,
+        snippets: [],
         cslItems: [],
         searchResults: []
       }
@@ -292,6 +298,9 @@ function getConfig (): StoreOptions<ZettlrState> {
         // b-a reversal, since we want a descending sort)
         state.searchResults.sort((a, b) => b.weight - a.weight)
       },
+      snippets: function (state, snippets) {
+        state.snippets = snippets
+      },
       documentTree: documentTreeMutation,
       // Longer mutations that require more code are defined externally
       updateOpenDirectory: updateOpenDirectoryMutation,
@@ -313,6 +322,7 @@ function getConfig (): StoreOptions<ZettlrState> {
       updateRelatedFiles: updateRelatedFilesAction,
       updateBibliography: updateBibliographyAction,
       documentTree: documentTreeUpdateAction,
+      updateSnippets: updateSnippetsAction,
       updateModifiedFiles: async (ctx) => {
         const modifiedFiles: string[] = await ipcRenderer.invoke('documents-provider', {
           command: 'get-file-modification-status'

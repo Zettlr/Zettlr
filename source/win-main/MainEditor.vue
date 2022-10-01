@@ -336,6 +336,7 @@ const globalSearchResults = computed(() => store.state.searchResults)
 const node = computed(() => store.state.paneData.find(leaf => leaf.id === props.leafId))
 const activeFile = computed(() => node.value?.activeFile) // TODO: MAYBE REMOVE
 const lastLeafId = computed(() => store.state.lastLeafId)
+const snippets = computed(() => store.state.snippets)
 
 const activeFileDescriptor = ref<undefined|MDFileDescriptor|CodeFileDescriptor>(undefined)
 
@@ -526,6 +527,10 @@ watch(shouldCountChars, (newValue) => {
   }
 })
 
+watch(snippets, (newValue) => {
+  mdEditor?.setCompletionDatabase('snippets', newValue)
+})
+
 // METHODS
 async function loadActiveFile () {
   if (mdEditor === null) {
@@ -573,6 +578,8 @@ async function swapDocument (doc: string) {
   if (library !== undefined) {
     updateCitationKeys(library).catch(e => console.error('Could not update citation keys', e))
   }
+
+  mdEditor.setCompletionDatabase('snippets', snippets.value)
 
   // Provide the editor instance with metadata for the new file
   mdEditor.setOptions({

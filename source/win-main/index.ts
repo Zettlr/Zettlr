@@ -158,6 +158,13 @@ ipcRenderer.on('targets-provider', (event, what: string) => {
   }
 })
 
+ipcRenderer.on('snippets-provider', (event, what: string) => {
+  if (what === 'snippets-updated') {
+    app.$store.dispatch('updateSnippets')
+      .catch(e => console.error(e))
+  }
+})
+
 // Initial update
 filetreeUpdateLock = true
 openDirectoryLock = true
@@ -170,6 +177,8 @@ app.$store.dispatch('updateOpenDirectory')
 app.$store.dispatch('documentTree', { event: 'init', context: { windowId } })
   .catch(err => console.error(err))
 app.$store.dispatch('updateModifiedFiles')
+  .catch(e => console.error(e))
+app.$store.dispatch('updateSnippets')
   .catch(e => console.error(e))
 
 // -----------------------------------------------
