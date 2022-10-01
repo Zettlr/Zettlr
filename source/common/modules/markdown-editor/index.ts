@@ -26,17 +26,10 @@ import './editor.less'
  */
 import EventEmitter from 'events'
 
-import { EditorView, keymap, lineNumbers, drawSelection } from '@codemirror/view'
-import { EditorState, Extension, Prec } from '@codemirror/state'
-import { defaultKeymap, historyKeymap, history } from '@codemirror/commands'
-import { StreamLanguage, indentOnInput, bracketMatching, indentUnit, codeFolding, foldGutter } from '@codemirror/language'
-import { stex } from '@codemirror/legacy-modes/mode/stex'
-import { yaml } from '@codemirror/legacy-modes/mode/yaml'
-import { json } from '@codemirror/legacy-modes/mode/javascript'
+import { EditorView } from '@codemirror/view'
+import { EditorState, Extension } from '@codemirror/state'
 import {
   getSearchQuery,
-  search,
-  // searchKeymap,
   SearchQuery,
   setSearchQuery,
   findNext,
@@ -44,35 +37,22 @@ import {
   replaceNext as _replaceNext,
   replaceAll as _replaceAll
 } from '@codemirror/search'
-import { closeBrackets, completionKeymap } from '@codemirror/autocomplete'
 
 import safeAssign from '@common/util/safe-assign'
 
-import { codeSyntaxHighlighter, markdownSyntaxHighlighter } from './highlight/get-syntax-highlighter'
-import markdownParser from './parser/markdown-parser'
-import { charCountField, charCountNoSpacesField, mdStatistics, wordCountField } from './plugins/statistics-fields'
+import { charCountField, charCountNoSpacesField, wordCountField } from './plugins/statistics-fields'
 
 // Renderer plugins
-import { initRenderers, reconfigureRenderers } from './renderers'
-import { syntaxExtensions } from './parser/syntax-extensions'
+import { reconfigureRenderers } from './renderers'
 import { ToCEntry, tocField } from './plugins/toc-field'
-import { autocomplete, citekeyUpdate, filesUpdate, tagsUpdate, snippetsUpdate } from './autocomplete'
-
-// Import the hook that keeps the local documents in sync with the central truth
-import { hookDocumentAuthority } from './plugins/remote-doc'
+import { citekeyUpdate, filesUpdate, tagsUpdate, snippetsUpdate } from './autocomplete'
 
 // Main configuration
 import { configField, configUpdateEffect, EditorConfigOptions, EditorConfiguration, getDefaultConfig } from './util/configuration'
 import { Update } from '@codemirror/collab'
-import { readabilityMode } from './plugins/readability'
-import { customKeymap } from './commands/keymap'
-import { typewriter } from './plugins/typewriter'
-import { footnoteHover, formattingToolbar } from './tooltips'
 import { DocumentType } from '@dts/common/documents'
-import { pasteHandler } from './plugins/paste-handlers'
-import { spellchecker } from './plugins/spell-check'
-import { defaultContextMenu } from './plugins/default-context-menu'
 import { copyAsHTML } from './util/copy-paste-cut'
+import { CoreExtensionOptions, getJSONExtensions, getMarkdownExtensions, getTexExtensions, getYAMLExtensions } from './editor-extension-sets'
 
 export interface DocumentWrapper {
   path: string
@@ -143,36 +123,15 @@ export default class MarkdownEditor extends EventEmitter {
   } // END CONSTRUCTOR
 
   private _getExtensions (filePath: string, type: DocumentType, startVersion: number): Extension[] {
-    // First, instantiate with common extensions that all documents share
-    const extensions: Extension[] = [
-      // KEYMAPS
-      keymap.of([
-        ...defaultKeymap, // Minimal default keymap
-        ...historyKeymap // , // History commands (redo/undo)
-        // ...searchKeymap // Search commands (Ctrl+F, etc.)
-      ]),
-      // CODE FOLDING
-      codeFolding(),
-      foldGutter(),
-      // HISTORY
-      history(),
-      // SELECTIONS
-      // Overrides the default browser selection drawing, allows styling
-      drawSelection({ drawRangeCursor: false, cursorBlinkRate: 0 }),
-      EditorState.allowMultipleSelections.of(true),
-      search({ top: true }), // Add a search
-      // TAB SIZES/INDENTATION -> Depend on the configuration field
-      EditorState.tabSize.from(configField, (val) => val.indentUnit),
-      indentUnit.from(configField, (val) => val.indentWithTabs ? '\t' : ' '.repeat(val.indentUnit)),
-      EditorView.lineWrapping, // Enable line wrapping
-
-      // Add the configuration and preset it with whatever is in the cached
-      // config.
-      configField.init(state => JSON.parse(JSON.stringify(this.config))),
-
-      // The updateListener is a custom extension we're using in order to be
-      // able to emit events from this main class based on change events.
-      EditorView.updateListener.of((update) => {
+    const options: CoreExtensionOptions = {
+      initialConfig: JSON.parse(JSON.stringify(this.config)),
+      remoteConfig: {
+        filePath,
+        startVersion,
+        pullUpdates: this.pullUpdates,
+        pushUpdates: this.pushUpdates
+      },
+      updateListener: (update) => {
         // Listen for changes and emit events appropriately
         if (update.docChanged) {
           this.emit('change')
@@ -183,82 +142,23 @@ export default class MarkdownEditor extends EventEmitter {
         if (update.selectionSet) {
           this.emit('cursorActivity')
         }
-      }),
-
-      // Enables the editor to fetch updates to the document from main
-      hookDocumentAuthority(filePath, startVersion, this.pullUpdates, this.pushUpdates)
-    ]
-
-    // Extensions only required for code files, but not for Markdown files
-    const codeExtensions: Extension[] = [
-      lineNumbers(),
-      closeBrackets(),
-      bracketMatching(),
-      indentOnInput(),
-      codeSyntaxHighlighter()
-    ]
+      }
+    }
 
     switch (type) {
       case DocumentType.Markdown:
-        // Add Markdown-file specific extensions
-        extensions.push(
-          // We need our custom keymaps first
-          keymap.of(completionKeymap),
-          Prec.highest(keymap.of(
-            [
-              ...customKeymap,
-              {
-                key: 'Mod-Alt-c',
-                run: (target) => {
-                  this.copyAsHTML()
-                  return true
-                }
-              }
-            ]
-          )),
-          markdownParser(), // The parser generates the AST for the document ...
-          markdownSyntaxHighlighter(), // ... which can then be styled with a highlighter
-          syntaxExtensions, // Add our own specific syntax plugin
-          initRenderers({
-            renderImages: this.config.renderImages,
-            renderLinks: this.config.renderLinks,
-            renderMath: this.config.renderMath,
-            renderTasks: this.config.renderTasks,
-            renderHeadings: this.config.renderHeadings,
-            renderCitations: this.config.renderCitations,
-            renderMermaid: true,
-            renderTables: this.config.renderTables
-            // STILL TODO: Emphasis
-          }),
-          // Some statistics we need for Markdown documents
-          mdStatistics,
-          typewriter, // Typewriter mode
-          tocField,
-          autocomplete,
-          readabilityMode,
-          formattingToolbar,
-          footnoteHover,
-          pasteHandler, // Manages image saving
-          defaultContextMenu, // A default context menu
-          spellchecker
-        )
-        break
+        return getMarkdownExtensions(options)
       case DocumentType.JSON:
-        extensions.push(StreamLanguage.define(json), ...codeExtensions)
-        break
+        return getJSONExtensions(options)
       case DocumentType.YAML:
-        extensions.push(StreamLanguage.define(yaml), ...codeExtensions)
-        break
+        return getYAMLExtensions(options)
       case DocumentType.LaTeX:
-        extensions.push(StreamLanguage.define(stex), ...codeExtensions)
+        return getTexExtensions(options)
     }
-
-    return extensions
   }
 
   /**
-   * Swaps the current CodeMirror Document with a new one. NOTE: You have to load
-   * the document first with sync().
+   * Swaps the current CodeMirror Document with a new one.
    *
    * @param   {string}           documentPath         The document to switch to
    */
@@ -384,7 +284,7 @@ export default class MarkdownEditor extends EventEmitter {
       renderCitations: this.config.renderCitations,
       renderTables: this.config.renderTables,
       renderMermaid: true
-      // STILL TODO: Tables, Emphasis
+      // STILL TODO: Emphasis
     })
   }
 
