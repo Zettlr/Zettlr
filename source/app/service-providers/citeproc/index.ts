@@ -108,7 +108,7 @@ export default class CiteprocProvider extends ProviderContract {
 
     this._items = {}
     this.lastSelectedDatabase = ''
-    this.mainLibrary = this._config.get().export.cslLibrary
+    this.mainLibrary = ''
 
     // Start the watcher
     this._watcher = new FSWatcher({
@@ -216,6 +216,7 @@ export default class CiteprocProvider extends ProviderContract {
 
   public async boot (): Promise<void> {
     this._logger.verbose('Citeproc provider booting up ...')
+    this.mainLibrary = this._config.get().export.cslLibrary
 
     this.loadEngine()
 

@@ -570,7 +570,9 @@ async function swapDocument (doc: string) {
   // pull in and highlight
   maybeHighlightSearchResults()
   // Update the citation keys
-  updateCitationKeys(doc).catch(e => console.error('Could not update citation keys', e))
+  if (library !== undefined) {
+    updateCitationKeys(library).catch(e => console.error('Could not update citation keys', e))
+  }
 
   // Provide the editor instance with metadata for the new file
   mdEditor.setOptions({
@@ -593,6 +595,8 @@ async function updateCitationKeys (library: string): Promise<void> {
   if (mdEditor === null) {
     return
   }
+
+  console.warn('Updating citation keys for library', library)
 
   const items: any[] = (await ipcRenderer.invoke('citeproc-provider', {
     command: 'get-items',
