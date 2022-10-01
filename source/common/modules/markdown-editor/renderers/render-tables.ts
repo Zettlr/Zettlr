@@ -34,7 +34,8 @@ class TableWidget extends WidgetType {
         })
 
         table.markClean()
-      }
+      },
+      container: view.scrollDOM
     })
     return table.domElement
   }

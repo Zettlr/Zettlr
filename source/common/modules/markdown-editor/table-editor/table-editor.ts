@@ -150,6 +150,8 @@ export default class TableEditor {
 
   private readonly _md2html: ReturnType<typeof getConverter>
 
+  private _lastMousemoveEvent: MouseEvent|undefined
+
   /**
    * Creates a new TableHelper.
    *
@@ -254,7 +256,22 @@ export default class TableEditor {
     // Populate the inner contents initially
     this._rebuildDOMElement()
 
-    this._containerElement.addEventListener('mousemove', this._moveHelper.bind(this))
+    // Whenever the user moves the mouse over the container, maybe show the edge
+    // buttons ...
+    this._containerElement.addEventListener('mousemove', (e) => {
+      this._moveHelper(e)
+      this._lastMousemoveEvent = e
+    })
+
+    // ... but whenever a mousemove event triggers on the DOCUMENT that did not
+    // earlier pass through our container, this means we must hide the edge
+    // buttons.
+    document.addEventListener('mousemove', (e) => {
+      if (this._lastMousemoveEvent !== e) {
+        this._hideEdgeButtons()
+      }
+    })
+
     this._containerElement.addEventListener('scroll', (event) => {
       if (this._edgeButtonsVisible) {
         this._recalculateEdgeButtonPositions()
