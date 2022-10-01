@@ -152,10 +152,10 @@
     <term name="song" form="short">audio rec.</term>
 
     <!-- HISTORICAL ERA TERMS -->
-    <term name="ad">fvt.</term>
-    <term name="bc">evt.</term>
-    <term name="bce">BCE</term>
-    <term name="ce">CE</term>
+    <term name="ad">e.Kr.</term>
+    <term name="bc">f.Kr.</term>
+    <term name="bce">fvt.</term>
+    <term name="ce">evt.</term>
 
     <!-- PUNCTUATION -->
     <term name="open-quote">«</term>
