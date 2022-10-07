@@ -63,6 +63,23 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
       let title = match[3] ?? altText // An optional title in quotes after the image
       let p4 = match[4] ?? ''
 
+      let widthAttribute
+      let heightAttribute
+      if (match[4] !== '') {
+        // Use regex to parse pandoc attributes
+        // like width="3.69in" height="1.93884in"
+        const widthRE = /(?:width=)"([^"]+)"/g
+        const heightRE = /(?:height=)"([^"]+)"/g
+        let mat = widthRE.exec(p4)
+        if (mat != null) {
+          widthAttribute = mat[1]
+        }
+        mat = heightRE.exec(p4)
+        if (mat != null) {
+          heightAttribute = mat[1]
+        }
+      }
+
       // If a third group has been captured, we need to extract this from the
       // "bigger" second group again.
       if (match[3] !== undefined) {
@@ -159,6 +176,14 @@ const img404 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAAC0CAYAAADl5P
       const maxPreviewHeight = Number((cm as any).getOption('zettlr').imagePreviewHeight)
       let width = (!Number.isNaN(maxPreviewWidth)) ? `${maxPreviewWidth}%` : '100%'
       let height = (!Number.isNaN(maxPreviewHeight) && maxPreviewHeight < 100) ? `${maxPreviewHeight}vh` : ''
+
+      // Use the pandoc attributes to control image size
+      if (widthAttribute !== undefined) {
+        width = widthAttribute
+      }
+      if (heightAttribute !== undefined) {
+        height = heightAttribute
+      }
 
       // Apply the constraints to the figure and image
       figure.style.maxWidth = width
