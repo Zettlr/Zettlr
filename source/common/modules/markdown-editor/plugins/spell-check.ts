@@ -1,5 +1,5 @@
 import { syntaxTree } from '@codemirror/language'
-import { linter, Diagnostic } from '@codemirror/lint'
+import { linter, Diagnostic, Action } from '@codemirror/lint'
 import { getZknTagRE } from '@common/regular-expressions'
 import { configField } from '../util/configuration'
 
@@ -13,6 +13,32 @@ const zknTagRE = getZknTagRE()
 // The cache is a simple hashmap
 const spellcheckCache = new Map<string, boolean>()
 const suggestionCache = new Map<string, string[]>()
+
+// Nodes that are not being checked
+const ignoreNodes = [
+  'FencedCode', // Code blocks
+  'HTMLTag', // HTML tags
+  'URL', // Only URLs (not titles etc.)
+  'InlineCode',
+  // Various formatting characters
+  'TableDelimiter',
+  'CodeMark',
+  'HeaderMark',
+  'EmphasisMark',
+  'LinkMark',
+  'QuoteMark',
+  'ListMark'
+]
+
+// Container nodes where we only check its contents
+const passOverNodes = [
+  'Document',
+  'Link',
+  'Image',
+  'BulletList',
+  'OrderedList',
+  'Table'
+]
 
 // Listen for dictionary-provider messages
 ipcRenderer.on('dictionary-provider', (event, message) => {
@@ -32,7 +58,7 @@ ipcRenderer.on('dictionary-provider', (event, message) => {
  *
  * @return  {boolean}       True, if the word is considered correct.
  */
-function check (term: string, autocorrectValues: string[]): boolean {
+async function check (term: string, autocorrectValues: string[]): Promise<boolean> {
   // Don't check empty strings, which can arise when a 'word' consists of just
   // opening/closing quotes, which is then removed
   if (term === '') {
@@ -55,10 +81,10 @@ function check (term: string, autocorrectValues: string[]): boolean {
 
   // Save into the corresponding cache and return the query result
   // Return the query result
-  const correct: boolean|undefined = ipcRenderer.sendSync('dictionary-provider', {
-    command: 'check',
-    term: saneTerm
-  })
+  const correct: boolean|undefined = await ipcRenderer.invoke(
+    'dictionary-provider',
+    { command: 'check', term: saneTerm }
+  )
 
   if (correct === undefined) {
     // Don't check unless its ready
@@ -70,53 +96,91 @@ function check (term: string, autocorrectValues: string[]): boolean {
   return correct
 }
 
-function suggest (term: string): string[] {
-  // TODO: MOVE THIS TO THE MAIN PROCESS!
+/**
+ * Fetches a list of suggestions from the server
+ *
+ * @param   {string}             term  The term to get suggestions for
+ *
+ * @return  {Promise<string>[]}        A list of possible suggestions
+ */
+async function suggest (term: string): Promise<string[]> {
   const cachedSuggestions = suggestionCache.get(term)
   if (cachedSuggestions !== undefined) {
     return cachedSuggestions
   }
 
-  const suggestions = ipcRenderer.sendSync('dictionary-provider', {
-    command: 'suggest', term
-  })
+  const suggestions: string[] = await ipcRenderer.invoke(
+    'dictionary-provider',
+    { command: 'suggest', term }
+  )
 
   suggestionCache.set(term, suggestions)
-
   return suggestions
 }
 
-export const spellchecker = linter(view => {
-  const diagnostics: Diagnostic[] = []
+/**
+ * (Asynchronously) checks one word
+ *
+ * @param   {string}    word                 The word to check
+ * @param   {number}    index                Its relative index to nodeStart
+ * @param   {number}    nodeStart            The node's start index
+ * @param   {string[]}  autocorrectValues    Possible autocorrect values
+ *
+ * @return  {Promise<Diagnostic|undefined>}  Returns undefined if the word was fine, otherwise a Diagnostic object
+ */
+async function checkWord (word: string, index: number, nodeStart: number, autocorrectValues: string[]): Promise<Diagnostic|undefined> {
+  const timeID = `Checking word ${word}`
+  console.time(timeID)
+  if (await check(word, autocorrectValues)) {
+    console.timeEnd(timeID)
+    return undefined
+  }
+
+  const from = nodeStart + index
+  const to = from + word.length
+
+  const suggestions = await suggest(word)
+
+  const dia: Diagnostic = { from, to, severity: 'error', message: 'Suggestions:' } // TODO: Translate
+
+  const addAction: Action = {
+    name: 'Add to dictionary', // TODO: Translate!
+    apply (view, from, to) {
+      ipcRenderer.invoke('dictionary-provider', {
+        command: 'add',
+        payload: word
+      })
+        .catch(e => console.error(e))
+    }
+  }
+
+  if (suggestions.length > 0) {
+    dia.actions = [
+      addAction,
+      {
+        name: suggestions[0],
+        apply (view, from, to) {
+          view.dispatch({
+            changes: { from, to, insert: suggestions[0] }
+          })
+        }
+      }
+    ]
+  } else {
+    dia.message = 'No suggestions' // TODO: Translate
+  }
+
+  console.timeEnd(timeID)
+
+  return dia
+}
+
+export const spellchecker = linter(async view => {
+  const diagnostics: Array<Promise<Diagnostic|undefined>> = []
 
   const autocorrectValues = view.state.field(configField).autocorrect.replacements.map(x => x.value)
 
   syntaxTree(view.state).cursor().iterate(node => {
-    const ignoreNodes = [
-      'FencedCode', // Code blocks
-      'HTMLTag', // HTML tags
-      'URL', // Only URLs (not titles etc.)
-      'InlineCode',
-      // Various formatting characters
-      'TableDelimiter',
-      'CodeMark',
-      'HeaderMark',
-      'EmphasisMark',
-      'LinkMark',
-      'QuoteMark',
-      'ListMark'
-    ]
-
-    // Container nodes
-    const passOverNodes = [
-      'Document',
-      'Link',
-      'Image',
-      'BulletList',
-      'OrderedList',
-      'Table'
-    ]
-
     if (node.type.name.startsWith('YAML')) {
       return false // Do not check a frontmatter
     }
@@ -162,33 +226,12 @@ export const spellchecker = linter(view => {
     let index = 0
     for (const word of words) {
       index = nodeContents.indexOf(word, index)
-      if (!check(word, autocorrectValues)) {
-        const from = node.from + index
-        const to = from + word.length
-
-        const suggestions = suggest(word)
-
-        const dia: Diagnostic = { from, to, severity: 'error', message: 'Suggestions:' }
-
-        if (suggestions.length > 0) {
-          dia.actions = [{
-            name: suggestions[0],
-            apply (view, from, to) {
-              view.dispatch({
-                changes: { from, to, insert: suggestions[0] }
-              })
-            }
-          }]
-        } else {
-          dia.message = 'No suggestions'
-        }
-
-        diagnostics.push(dia)
-      }
-
+      diagnostics.push(checkWord(word, index, node.from, autocorrectValues))
       index += word.length
     }
     return false // Do not descend further
   })
-  return diagnostics
+
+  // (1) Await all promises, (2) filter out undefined (= no spelling error)
+  return (await Promise.all(diagnostics)).filter(diag => diag !== undefined) as Diagnostic[]
 })

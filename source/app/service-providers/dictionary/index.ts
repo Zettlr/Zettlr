@@ -66,24 +66,18 @@ export default class DictionaryProvider extends ProviderContract {
     this._fileLock = false
     this._unwrittenChanges = false
 
-    // Listen for synchronous messages from the renderer process for typos.
-    ipcMain.on('dictionary-provider', (event, message) => {
-      const { command, term } = message
-      if (command === 'check') {
-        event.returnValue = this.check(term)
-      } else if (command === 'suggest') {
-        event.returnValue = this.suggest(term)
-      } else if (command === 'add') {
-        event.returnValue = this.add(term)
-      }
-    })
-
     ipcMain.handle('dictionary-provider', (event, message) => {
-      const { command } = message
+      const { command, term } = message
       if (command === 'get-user-dictionary') {
         return this._userDictionary.map(elem => elem)
       } else if (command === 'set-user-dictionary') {
         this.setUserDictionary(message.payload)
+      } else if (command === 'check') {
+        return this.check(term)
+      } else if (command === 'suggest') {
+        return this.suggest(term)
+      } else if (command === 'add') {
+        return this.add(term)
       }
     })
 
