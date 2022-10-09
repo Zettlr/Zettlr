@@ -603,8 +603,6 @@ async function updateCitationKeys (library: string): Promise<void> {
     return
   }
 
-  console.warn('Updating citation keys for library', library)
-
   const items: any[] = (await ipcRenderer.invoke('citeproc-provider', {
     command: 'get-items',
     payload: { database: library }
