@@ -88,15 +88,7 @@ export default class StatsProvider extends ProviderContract {
     }
 
     // Compute average
-    let allwords = []
-    for (let day in this.stats.wordCount) {
-      // hasOwnProperty only returns "true" if the prop is not a default
-      // prop that every object has.
-      if (this.stats.wordCount.hasOwnProperty(day)) {
-        allwords.push(this.stats.wordCount[day])
-      }
-    }
-
+    let allwords = Object.values(this.stats.wordCount)
     allwords = allwords.reverse().slice(0, 30) // We only want the last 30 days.
 
     // Now summarize the last 30 days. Should never exceed 100k.
@@ -106,7 +98,7 @@ export default class StatsProvider extends ProviderContract {
     }
 
     // Average last month
-    this.stats.avgMonth = Math.round(this.stats.sumMonth / allwords.length)
+    this.stats.avgMonth = Math.round(this.stats.sumMonth / (allwords.length ?? 0))
     this.stats.today = this.stats.wordCount[this.today]
 
     // Trigger a save. _recompute is being called from all the different setters
@@ -125,12 +117,25 @@ export default class StatsProvider extends ProviderContract {
       await this.container.init(this.stats)
     } else {
       const parsedData = await this.container.get()
+      // Sanity check: We need all numbers everywhere
+      let errorsEncountered = false
+      for (const key in parsedData.wordCount) {
+        if (typeof parsedData.wordCount[key] !== 'number' || Number.isNaN(parsedData.wordCount[key])) {
+          parsedData.wordCount[key] = 0
+          errorsEncountered = true
+        }
+      }
+
       this.stats = {
         wordCount: parsedData.wordCount,
         pomodoros: parsedData.pomodoros,
         avgMonth: parsedData.avgMonth,
         today: parsedData.today,
         sumMonth: parsedData.sumMonth
+      }
+
+      if (errorsEncountered) {
+        await this._recompute()
       }
     }
   }
@@ -174,12 +179,12 @@ export default class StatsProvider extends ProviderContract {
 
   /**
    * Return the given date as a string in the form YYYY-MM-DD
-   * @param {Date} [d = new Date()] The date which should be converted. Defaults to now.
-   * @return {string} Today's date in international standard form.
+   *
+   * @return  {string}  Today's date in international standard form.
    */
   get today (): string {
     const d = new Date()
-    let yyyy = d.getFullYear()
+    const yyyy = d.getFullYear()
 
     let mm: number|string = d.getMonth() + 1
     if (mm <= 9) {
