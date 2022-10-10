@@ -203,11 +203,7 @@ export default class DocumentManager extends ProviderContract {
         }
         case 'save-file': {
           const filePath = payload.path as string
-          const result = await this.saveFile(filePath)
-          if (result) {
-            this._app.stats.updateWordCount(payload.offsetWordCount as number)
-          }
-          return result
+          return await this.saveFile(filePath)
         }
         case 'open-file': {
           return await this.openFile(payload.windowId, payload.leafId, payload.path, payload.newTab)
