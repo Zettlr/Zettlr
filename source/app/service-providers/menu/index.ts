@@ -291,7 +291,9 @@ export default class MenuProvider extends ProviderContract {
           resolve(resolvedID)
         }, 100)
       })
-      popupMenu.popup({ x, y })
+      // Enforce integers for the coordinates, otherwise we will get this weird
+      // "conversion failure" error.
+      popupMenu.popup({ x: Math.round(x), y: Math.round(y) })
     })
   }
 

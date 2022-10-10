@@ -1,6 +1,9 @@
 import { syntaxTree } from '@codemirror/language'
 import { linter, Diagnostic, Action } from '@codemirror/lint'
+import { trans } from '@common/i18n-renderer'
+import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { getZknTagRE } from '@common/regular-expressions'
+import { AnyMenuItem } from '@dts/renderer/context'
 import { configField } from '../util/configuration'
 
 const ipcRenderer = window.ipc
@@ -52,6 +55,53 @@ ipcRenderer.on('dictionary-provider', (event, message) => {
 })
 
 /**
+ * Sanitizes a term so that the dictionary can find it (remove funky characters
+ * and quotes, for example)
+ *
+ * @param   {string}  term  The unsanitized term
+ *
+ * @return  {string}        The sanitized term
+ */
+function sanitizeTerm (term: string): string {
+  // Convert smart quotes into the default before checking the term, see #1948
+  return term.replace(/’‘‚‹›»“”」/g, "'")
+}
+
+/**
+ * Use this function to check & cache a whole batch of words which reduces the
+ * overall overhead from having to check hundreds of words with a single IPC
+ * call each. We use a dedicated function for this as most of the time we only
+ * need to check a single word. This here is only really necessary after booting
+ * the window to (re)fill the spellcheck cache.
+ *
+ * @param  {string[]}  terms  The words to check
+ */
+async function batchCheck (terms: string[]): Promise<void> {
+  terms = terms.map(term => sanitizeTerm(term))
+
+  // Don't double check terms that are already cached
+  terms = terms.filter(t => !spellcheckCache.has(t))
+
+  if (terms.length === 0) {
+    return
+  }
+
+  const correct: boolean[]|undefined = await ipcRenderer.invoke(
+    'dictionary-provider',
+    { command: 'check', terms }
+  )
+
+  if (correct === undefined) {
+    console.warn(`Could not spellcheck terms ${terms.join(', ')}: Main returned undefined`)
+    return
+  }
+
+  for (let i = 0; i < terms.length; i++) {
+    spellcheckCache.set(terms[i], correct[i])
+  }
+}
+
+/**
  * Checks whether a term is spelled correctly, or not
  *
  * @param   {string}  term  The word to check
@@ -59,63 +109,31 @@ ipcRenderer.on('dictionary-provider', (event, message) => {
  * @return  {boolean}       True, if the word is considered correct.
  */
 async function check (term: string, autocorrectValues: string[]): Promise<boolean> {
-  // Don't check empty strings, which can arise when a 'word' consists of just
-  // opening/closing quotes, which is then removed
-  if (term === '') {
+  const saneTerm = sanitizeTerm(term)
+
+  // Autocorrect values are always correct
+  if (autocorrectValues.includes(saneTerm)) {
     return true
   }
 
-  // Convert smart quotes into the default before checking the term, see #1948
-  const saneTerm = term.replace(/’‘‚‹›»“”」/g, "'")
-
-  // Return cache if possible
+  // Next chance: Return the cache
   const cacheResult = spellcheckCache.get(saneTerm)
   if (cacheResult !== undefined) {
     return cacheResult
   }
 
-  // Autocorrect values are also always correct
-  if (autocorrectValues.includes(saneTerm)) {
-    return true
-  }
-
-  // Save into the corresponding cache and return the query result
-  // Return the query result
-  const correct: boolean|undefined = await ipcRenderer.invoke(
+  // The following code is equal to batchCheck().
+  const correct: boolean[]|undefined = await ipcRenderer.invoke(
     'dictionary-provider',
-    { command: 'check', term: saneTerm }
+    { command: 'check', terms: [saneTerm] }
   )
 
   if (correct === undefined) {
-    // Don't check unless its ready
     return true
   }
 
-  // Cache the result
-  spellcheckCache.set(saneTerm, correct)
-  return correct
-}
-
-/**
- * Fetches a list of suggestions from the server
- *
- * @param   {string}             term  The term to get suggestions for
- *
- * @return  {Promise<string>[]}        A list of possible suggestions
- */
-async function suggest (term: string): Promise<string[]> {
-  const cachedSuggestions = suggestionCache.get(term)
-  if (cachedSuggestions !== undefined) {
-    return cachedSuggestions
-  }
-
-  const suggestions: string[] = await ipcRenderer.invoke(
-    'dictionary-provider',
-    { command: 'suggest', term }
-  )
-
-  suggestionCache.set(term, suggestions)
-  return suggestions
+  spellcheckCache.set(saneTerm, correct[0])
+  return correct[0]
 }
 
 /**
@@ -129,57 +147,117 @@ async function suggest (term: string): Promise<string[]> {
  * @return  {Promise<Diagnostic|undefined>}  Returns undefined if the word was fine, otherwise a Diagnostic object
  */
 async function checkWord (word: string, index: number, nodeStart: number, autocorrectValues: string[]): Promise<Diagnostic|undefined> {
-  const timeID = `Checking word ${word}`
-  console.time(timeID)
   if (await check(word, autocorrectValues)) {
-    console.timeEnd(timeID)
     return undefined
   }
 
   const from = nodeStart + index
   const to = from + word.length
 
-  const suggestions = await suggest(word)
+  const dia: Diagnostic = { from, to, severity: 'error', message: 'Spelling mistake' } // TODO: Translate
 
-  const dia: Diagnostic = { from, to, severity: 'error', message: 'Suggestions:' } // TODO: Translate
+  const actions: Action[] = [
+    {
+      name: 'Options', // TODO: Translate!
+      apply (view, from, to) {
+        fetchSuggestions(word)
+          .then(suggestions => {
+            const coords = { x: 0, y: 0 }
+            const rect = view.coordsAtPos(from)
+            if (rect !== null) {
+              coords.x = rect.left
+              coords.y = rect.top
+            }
 
-  const addAction: Action = {
-    name: 'Add to dictionary', // TODO: Translate!
-    apply (view, from, to) {
-      ipcRenderer.invoke('dictionary-provider', {
-        command: 'add',
-        payload: word
-      })
-        .catch(e => console.error(e))
-    }
-  }
+            const items: AnyMenuItem[] = suggestions.map(suggestion => {
+              return {
+                type: 'normal',
+                enabled: true,
+                label: suggestion,
+                id: suggestion
+              }
+            })
 
-  if (suggestions.length > 0) {
-    dia.actions = [
-      addAction,
-      {
-        name: suggestions[0],
-        apply (view, from, to) {
-          view.dispatch({
-            changes: { from, to, insert: suggestions[0] }
+            if (items.length === 0) {
+              items.push({
+                type: 'normal',
+                enabled: false,
+                label: trans('menu.no_suggestions'),
+                id: 'no-suggestion'
+              })
+            }
+
+            // Add the add method
+            items.unshift(
+              {
+                label: trans('menu.add_to_dictionary'),
+                id: 'add-to-dictionary',
+                type: 'normal',
+                enabled: true
+              },
+              { type: 'separator' }
+            )
+
+            showPopupMenu(coords, items, clickedID => {
+              if (clickedID === 'no-suggestion') {
+                // Do nothing
+              } else if (clickedID === 'add-to-dictionary') {
+                ipcRenderer.invoke(
+                  'dictionary-provider',
+                  { command: 'add', terms: [word] }
+                )
+                  .catch(e => console.error(e))
+              } else {
+                view.dispatch({ changes: { from, to, insert: clickedID } })
+              }
+            })
           })
-        }
+          .catch(e => console.error(e))
       }
-    ]
-  } else {
-    dia.message = 'No suggestions' // TODO: Translate
-  }
+    }
+  ]
 
-  console.timeEnd(timeID)
+  dia.actions = actions
 
   return dia
 }
 
+/**
+ * Returns a list of suggestions. If none are cached locally, this will return
+ * an empty list and start a fetch in the background.
+ *
+ * @param   {string}             term  The term to get suggestions for
+ *
+ * @return  {Promise<string[]>}        A list of possible suggestions
+ */
+async function fetchSuggestions (term: string): Promise<string[]> {
+  const saneTerm = sanitizeTerm(term)
+  const cachedSuggestions = suggestionCache.get(saneTerm)
+  if (cachedSuggestions !== undefined) {
+    return cachedSuggestions
+  }
+
+  // If we're here, the suggestion has not yet been cached. Code is equal to
+  // above's batchSuggest
+  const suggestions: string[][] = await ipcRenderer.invoke(
+    'dictionary-provider',
+    { command: 'suggest', terms: [saneTerm] }
+  )
+
+  suggestionCache.set(saneTerm, suggestions[0])
+  return suggestions[0]
+}
+
 export const spellchecker = linter(async view => {
-  const diagnostics: Array<Promise<Diagnostic|undefined>> = []
+  const diagnostics: Diagnostic[] = []
 
   const autocorrectValues = view.state.field(configField).autocorrect.replacements.map(x => x.value)
 
+  const wordsToCheck: Array<{ word: string, index: number, nodeStart: number }> = []
+
+  // Iterate over the syntax tree to collect all words that need checking,
+  // including any additional information we may need. We do this synchronously
+  // and then perform the "real" check below.
   syntaxTree(view.state).cursor().iterate(node => {
     if (node.type.name.startsWith('YAML')) {
       return false // Do not check a frontmatter
@@ -226,12 +304,21 @@ export const spellchecker = linter(async view => {
     let index = 0
     for (const word of words) {
       index = nodeContents.indexOf(word, index)
-      diagnostics.push(checkWord(word, index, node.from, autocorrectValues))
+      wordsToCheck.push({ word, index, nodeStart: node.from })
       index += word.length
     }
     return false // Do not descend further
   })
 
-  // (1) Await all promises, (2) filter out undefined (= no spelling error)
-  return (await Promise.all(diagnostics)).filter(diag => diag !== undefined) as Diagnostic[]
+  // Now make sure everything is cached beforehand with two IPC calls
+  await batchCheck(wordsToCheck.map(x => x.word))
+
+  for (const { word, index, nodeStart } of wordsToCheck) {
+    const diagnostic = await checkWord(word, index, nodeStart, autocorrectValues)
+    if (diagnostic !== undefined) {
+      diagnostics.push(diagnostic)
+    }
+  }
+
+  return diagnostics
 })

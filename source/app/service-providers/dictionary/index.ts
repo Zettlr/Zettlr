@@ -67,17 +67,18 @@ export default class DictionaryProvider extends ProviderContract {
     this._unwrittenChanges = false
 
     ipcMain.handle('dictionary-provider', (event, message) => {
-      const { command, term } = message
+      const terms: string[] = message.terms
+      const { command } = message
       if (command === 'get-user-dictionary') {
         return this._userDictionary.map(elem => elem)
       } else if (command === 'set-user-dictionary') {
         this.setUserDictionary(message.payload)
       } else if (command === 'check') {
-        return this.check(term)
+        return terms.map(t => this.check(t))
       } else if (command === 'suggest') {
-        return this.suggest(term)
+        return terms.map(t => this.suggest(t))
       } else if (command === 'add') {
-        return this.add(term)
+        return terms.map(t => this.add(t))
       }
     })
 
