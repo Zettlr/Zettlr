@@ -98,7 +98,8 @@ export default class FileDuplicate extends ZettlrCommand {
     const contents = await this._app.fsal.loadAnySupportedFile(file.path)
     await this._app.fsal.createFile(dir, {
       name: filename,
-      content: contents
+      content: contents,
+      type: file.type
     })
 
     // And directly thereafter, open the file

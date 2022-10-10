@@ -148,7 +148,7 @@ export default class FileNew extends ZettlrCommand {
       await this._app.fsal.createFile(dir, {
         name: filename,
         content: '',
-        type: (type === 'md') ? 'md' : 'code'
+        type: (type === 'md') ? 'file' : 'code'
       })
 
       // And directly thereafter, open the file
