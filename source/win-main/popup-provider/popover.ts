@@ -87,9 +87,6 @@ export default class ZettlrPopover {
     this._watcher = this._popover.$watch('popoverData', (newValue: any, oldValue: any) => {
       this._callback(newValue)
     }, { deep: true })
-
-    // Place
-    this._place()
   }
 
   /**
@@ -268,7 +265,7 @@ export default class ZettlrPopover {
 
     // Also, the data update might have changed the data dimensions, so let's
     // make sure the dimensions are re-calculated.
-    setTimeout(() => { this._place() }, 100)
+    requestAnimationFrame(() => this._place())
   }
 
   /**
