@@ -87,27 +87,6 @@ import './assets/generic.less'
 
 const ipcRenderer = window.ipc
 
-// First we need some general variables
-const TITLEBAR_MACOS_HEIGHT = 40
-const TITLEBAR_WIN32_HEIGHT = 30
-const TITLEBAR_LINUX_HEIGHT = 30
-
-const MENUBAR_MACOS_HEIGHT = 31 // No menubar on macOS
-const MENUBAR_WIN32_HEIGHT = 31
-const MENUBAR_LINUX_HEIGHT = 31
-
-const TOOLBAR_MACOS_HEIGHT = 40
-const TOOLBAR_WIN32_HEIGHT = 40
-const TOOLBAR_LINUX_HEIGHT = 40
-
-const TABBAR_MACOS_HEIGHT = 60
-const TABBAR_WIN32_HEIGHT = 40
-const TABBAR_LINUX_HEIGHT = 40
-
-const STATUSBAR_MACOS_HEIGHT = 60
-const STATUSBAR_WIN32_HEIGHT = 60
-const STATUSBAR_LINUX_HEIGHT = 60
-
 export default {
   name: 'WindowChrome',
   components: {
@@ -227,51 +206,6 @@ export default {
         return false
       } else {
         return true
-      }
-    },
-    platformTitlebarHeight: function () {
-      if (this.platform === 'darwin') {
-        return TITLEBAR_MACOS_HEIGHT
-      } else if (this.platform === 'win32') {
-        return TITLEBAR_WIN32_HEIGHT
-      } else {
-        return TITLEBAR_LINUX_HEIGHT // Default
-      }
-    },
-    platformMenubarHeight: function () {
-      if (this.platform === 'darwin') {
-        return MENUBAR_MACOS_HEIGHT
-      } else if (this.platform === 'win32') {
-        return MENUBAR_WIN32_HEIGHT
-      } else {
-        return MENUBAR_LINUX_HEIGHT // Default
-      }
-    },
-    platformToolbarHeight: function () {
-      if (this.platform === 'darwin') {
-        return TOOLBAR_MACOS_HEIGHT
-      } else if (this.platform === 'win32') {
-        return TOOLBAR_WIN32_HEIGHT
-      } else {
-        return TOOLBAR_LINUX_HEIGHT // Default
-      }
-    },
-    platformTabbarHeight: function () {
-      if (this.platform === 'darwin') {
-        return TABBAR_MACOS_HEIGHT
-      } else if (this.platform === 'win32') {
-        return TABBAR_WIN32_HEIGHT
-      } else {
-        return TABBAR_LINUX_HEIGHT // Default
-      }
-    },
-    platformStatusbarHeight: function () {
-      if (this.platform === 'darwin') {
-        return STATUSBAR_MACOS_HEIGHT
-      } else if (this.platform === 'win32') {
-        return STATUSBAR_WIN32_HEIGHT
-      } else {
-        return STATUSBAR_LINUX_HEIGHT // Default
       }
     },
   },
