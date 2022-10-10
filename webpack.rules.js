@@ -27,8 +27,8 @@ module.exports = [
     loader: 'vue-loader',
     options: {
       compilerOptions: {
-        // We have a custom element, clr-icon, which Vue shouldn't touch
-        isCustomElement: tag => tag === 'clr-icon'
+        // Vue must not touch custom elements with a dash in the name
+        isCustomElement: tag => tag.includes('-')
       }
     }
   },

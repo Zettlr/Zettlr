@@ -1,11 +1,6 @@
 <template>
-  <SplitView
-    v-bind:initial-size-percent="[ 20, 80 ]"
-    v-bind:minimum-size-percent="[ 20, 20 ]"
-    v-bind:split="'horizontal'"
-    v-bind:initial-total-width="100"
-  >
-    <template #view1>
+  <zettlr-splitter style="width: 100%; height: 100%;">
+    <zettlr-pane data-basis="20%" style="min-width: 20%;">
       <SelectableList
         v-bind:items="availableSnippets"
         v-bind:selected-item="currentItem"
@@ -14,8 +9,9 @@
         v-on:add="addSnippet()"
         v-on:remove="removeSnippet($event)"
       ></SelectableList>
-    </template>
-    <template #view2>
+    </zettlr-pane>
+    <zettlr-separator></zettlr-separator>
+    <zettlr-pane data-basis="80%" style="min-width: 20%;">
       <div id="snippets-container">
         <p>{{ snippetsExplanation }}</p>
 
@@ -50,8 +46,8 @@
         ></ButtonControl>
         <span v-if="savingStatus !== ''" class="saving-status">{{ savingStatus }}</span>
       </div>
-    </template>
-  </SplitView>
+    </zettlr-pane>
+  </zettlr-splitter>
 </template>
 
 <script lang="ts">
@@ -70,7 +66,6 @@
  * END HEADER
  */
 
-import SplitView from '@common/vue/window/SplitView.vue'
 import SelectableList from '@common/vue/form/elements/SelectableList.vue'
 import ButtonControl from '@common/vue/form/elements/Button.vue'
 import TextControl from '@common/vue/form/elements/Text.vue'
@@ -83,7 +78,6 @@ const ipcRenderer = window.ipc
 export default defineComponent({
   name: 'SnippetsTab',
   components: {
-    SplitView,
     SelectableList,
     CodeEditor,
     ButtonControl,

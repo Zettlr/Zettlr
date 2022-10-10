@@ -1,11 +1,6 @@
 <template>
-  <SplitView
-    v-bind:initial-size-percent="[ 20, 80 ]"
-    v-bind:minimum-size-percent="[ 20, 20 ]"
-    v-bind:split="'horizontal'"
-    v-bind:initial-total-width="100"
-  >
-    <template #view1>
+  <zettlr-splitter style="width: 100%; height: 100%;">
+    <zettlr-pane data-basis="20%" style="min-width: 20%;">
       <SelectableList
         v-bind:items="listItems"
         v-bind:editable="true"
@@ -14,8 +9,9 @@
         v-on:add="newDefaultsFile()"
         v-on:remove="removeFile($event)"
       ></SelectableList>
-    </template>
-    <template #view2>
+    </zettlr-pane>
+    <zettlr-separator></zettlr-separator>
+    <zettlr-pane data-basis="80%" style="min-width: 20%;">
       <div id="defaults-container">
         <p>{{ defaultsExplanation }}</p>
 
@@ -62,8 +58,8 @@
           <span v-if="savingStatus !== ''" class="saving-status">{{ savingStatus }}</span>
         </div>
       </div>
-    </template>
-  </SplitView>
+    </zettlr-pane>
+  </zettlr-splitter>
 </template>
 
 <script lang="ts">
@@ -82,7 +78,6 @@
  * END HEADER
  */
 
-import SplitView from '@common/vue/window/SplitView.vue'
 import SelectableList from '@common/vue/form/elements/SelectableList.vue'
 import TextControl from '@common/vue/form/elements/Text.vue'
 import ButtonControl from '@common/vue/form/elements/Button.vue'
@@ -110,7 +105,6 @@ writer: markdown
 export default defineComponent({
   name: 'DefaultsApp',
   components: {
-    SplitView,
     SelectableList,
     CodeEditor,
     ButtonControl,

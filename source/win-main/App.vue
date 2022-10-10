@@ -1,21 +1,41 @@
 <template>
   <WindowChrome
     v-bind:title="title"
+    v-bind:class="{ 'distraction-free': distractionFree }"
     v-bind:titlebar="shouldShowTitlebar"
-    v-bind:menubar="true"
+    v-bind:menubar="houldShowMenuBar"
     v-bind:show-toolbar="shouldShowToolbar"
     v-bind:toolbar-labels="false"
     v-bind:toolbar-controls="toolbarControls"
     v-on:toolbar-toggle="handleToggle($event)"
     v-on:toolbar-click="handleClick($event)"
   >
-    <SplitView
+    <zettlr-splitter
       ref="file-manager-split"
-      v-bind:initial-size-percent="[ 20, 80 ]"
-      v-bind:minimum-size-percent="[ 10, 50 ]"
-      v-bind:split="'horizontal'"
+      data-direction="row"
+      style="width: 100%;"
     >
-      <template #view1>
+      <zettlr-pane data-basis="60%" data-grow="1" style="min-width: 50%;">
+        <EditorPane
+          v-if="paneConfiguration.type === 'leaf'"
+          v-bind:node="paneConfiguration"
+          v-bind:leaf-id="paneConfiguration.id"
+          v-bind:editor-commands="editorCommands"
+          v-bind:window-id="windowId"
+	  v-on:global-search="startGlobalSearch($event)"
+        ></EditorPane>
+        <EditorBranch
+          v-else
+          v-bind:node="paneConfiguration"
+          v-bind:window-id="windowId"
+          v-bind:editor-commands="editorCommands"
+	  v-on:global-search="startGlobalSearch($event)"
+        ></EditorBranch>
+      </zettlr-pane>
+      <zettlr-pane
+        v-show="fileManagerVisible"
+        data-order="-1" data-basis="20%" style="min-width: 10%;"
+      >
         <!-- File manager in the left side of the split view -->
         <FileManager
           v-show="mainSplitViewVisibleComponent === 'fileManager'"
@@ -30,43 +50,17 @@
           v-on:jtl="(filePath, lineNumber, newTab) => jtl(filePath, lineNumber, newTab)"
         >
         </GlobalSearch>
-      </template>
-      <template #view2>
-        <!-- Another split view in the right side -->
-        <SplitView
-          ref="editor-sidebar-split"
-          v-bind:initial-size-percent="[ 80, 20 ]"
-          v-bind:minimum-size-percent="[ 50, 10 ]"
-          v-bind:split="'horizontal'"
-        >
-          <template #view1>
-            <!-- First side: Editor -->
-            <EditorPane
-              v-if="paneConfiguration.type === 'leaf'"
-              v-bind:node="paneConfiguration"
-              v-bind:leaf-id="paneConfiguration.id"
-              v-bind:editor-commands="editorCommands"
-              v-bind:window-id="windowId"
-              v-on:global-search="startGlobalSearch($event)"
-            ></EditorPane>
-            <EditorBranch
-              v-else
-              v-bind:node="paneConfiguration"
-              v-bind:window-id="windowId"
-              v-bind:editor-commands="editorCommands"
-              v-on:global-search="startGlobalSearch($event)"
-            ></EditorBranch>
-          </template>
-          <template #view2>
-            <!-- Second side: Sidebar -->
-            <MainSidebar
-              v-on:move-section="moveSection($event)"
-              v-on:jump-to-line="genericJtl($event)"
-            ></MainSidebar>
-          </template>
-        </SplitView>
-      </template>
-    </SplitView>
+      </zettlr-pane>
+      <zettlr-separator v-show="fileManagerVisible" data-order="-1"></zettlr-separator>
+      <zettlr-separator v-show="sidebarVisible"></zettlr-separator>
+      <zettlr-pane v-show="sidebarVisible" data-basis="20%" style="min-width: 10%;">
+        <!-- Second side: Sidebar -->
+        <MainSidebar
+          v-on:move-section="moveSection($event)"
+          v-on:jump-to-line="genericJtl($event)"
+        ></MainSidebar>
+      </zettlr-pane>
+    </zettlr-splitter>
   </WindowChrome>
 </template>
 
@@ -90,7 +84,6 @@ import FileManager from './file-manager/file-manager.vue'
 import MainSidebar from './sidebar/MainSidebar.vue'
 import EditorPane from './EditorPane.vue'
 import EditorBranch from './EditorBranch.vue'
-import SplitView from '../common/vue/window/SplitView.vue'
 import GlobalSearch from './GlobalSearch.vue'
 import PopoverExport from './PopoverExport.vue'
 import PopoverStats from './PopoverStats.vue'
@@ -136,7 +129,6 @@ export default defineComponent({
     FileManager,
     EditorPane,
     EditorBranch,
-    SplitView,
     GlobalSearch,
     MainSidebar
   },
@@ -211,6 +203,10 @@ export default defineComponent({
     },
     shouldCountChars: function (): boolean {
       return this.$store.state.config['editor.countChars']
+    },
+    shouldShowMenuBar: function (): boolean {
+      // On linux, do not show the menu bar in distraction-free mode
+      return process.platform !== 'linux' || !this.distractionFree
     },
     shouldShowToolbar: function (): boolean {
       return this.distractionFree === false || this.$store.state.config['display.hideToolbarInDistractionFree'] === false
@@ -417,12 +413,6 @@ export default defineComponent({
         }
       ]
     },
-    editorSidebarSplitComponent: function (): any {
-      return this.$refs['editor-sidebar-split'] as any
-    },
-    fileManagerSplitComponent: function (): any {
-      return this.$refs['file-manager-split'] as any
-    },
     globalSearchComponent: function (): any {
       return this.$refs['global-search'] as any
     },
@@ -442,10 +432,6 @@ export default defineComponent({
         if (this.distractionFree === true) {
           this.$store.commit('leaveDistractionFree')
         }
-
-        this.editorSidebarSplitComponent.unhide()
-      } else {
-        this.editorSidebarSplitComponent.hideView(2)
       }
     },
     fileManagerVisible: function (newValue, oldValue) {
@@ -453,10 +439,6 @@ export default defineComponent({
         if (this.distractionFree === true) {
           this.$store.commit('leaveDistractionFree')
         }
-
-        this.fileManagerSplitComponent.unhide()
-      } else {
-        this.fileManagerSplitComponent.hideView(1)
       }
     },
     mainSplitViewVisibleComponent: function (newValue, oldValue) {
@@ -561,12 +543,6 @@ export default defineComponent({
         }).catch(err => console.error(err))
       }
     })
-
-    // Initially, we need to hide the sidebar, since the view will be visible
-    // by default.
-    if (this.sidebarVisible === false) {
-      this.editorSidebarSplitComponent.hideView(2)
-    }
   },
   methods: {
     genericJtl: function (lineNumber: number) {

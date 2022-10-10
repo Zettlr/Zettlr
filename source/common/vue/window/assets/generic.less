@@ -139,3 +139,22 @@ body.linux {
     }
   }
 }
+
+body zettlr-separator {
+  box-sizing: content-box;
+  flex-basis: 1px;
+  padding: 0 5px;
+  margin: 0 -5px;
+  background-clip: content-box;
+  position: relative;
+  cursor: col-resize;
+  background-color: rgb(213, 213, 213);
+}
+
+body.dark zettlr-separator {
+  background-color: rgb(80, 80, 80);
+}
+
+body.linux {
+  zettlr-separator { background-color: var(--border-color); }
+}

@@ -18,6 +18,7 @@
 import registerThemes from './register-themes'
 import registerDefaultContextMenu from './register-default-context'
 import loadIcons from './load-icons'
+import '../../splitter.js'
 
 /**
  * This function is the renderer's counterpart to the main process's window
