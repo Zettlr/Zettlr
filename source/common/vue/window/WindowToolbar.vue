@@ -145,7 +145,7 @@ export default defineComponent({
       // Only emit a double click event if the user double clicked on the
       // _toolbar_ or on a spacer, and not just on any button.
       const t = event.target as HTMLElement|null
-      if (t === this.$el || (t !== null && t.className.includes('spacer') === true)) {
+      if (t === this.$el || (t !== null && t.classList.contains('spacer') === true)) {
         this.$emit('dblclick')
       }
     }

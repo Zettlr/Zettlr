@@ -179,7 +179,7 @@ function maybeOpenLink (event: MouseEvent, view: EditorView) {
     return
   }
 
-  if (t.className.includes('cm-link') === true && t.textContent !== null) {
+  if (t.classList.contains('cm-link') === true && t.textContent !== null) {
     window.location.assign(t.textContent)
   }
 }
