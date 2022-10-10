@@ -37,8 +37,6 @@ export default {
 <style lang="less">
 // General styles
 div#titlebar {
-  width: 100vw;
-  -webkit-app-region: drag;
   grid-area: titlebar;
 }
 
@@ -59,10 +57,11 @@ body.darwin {
   }
 }
 
+// Windows styles
 body.win32 {
   div#titlebar {
-    height: 30px;
-    line-height: 30px;
+    height: 31px;
+    line-height: 31px;
     padding-left: 20px;
     background-color: var(--system-accent-color, --c-primary);
     color: var(--system-accent-color-contrast, white);
@@ -72,8 +71,6 @@ body.win32 {
 // Linux styles
 body.linux {
   div#titlebar {
-    width: auto;
-    font-size: 11pt;
     display: flex;
     justify-content: center;
     align-items: center;

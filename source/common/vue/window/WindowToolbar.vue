@@ -149,47 +149,45 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-body div#toolbar {
-  grid-area: toolbar;
-  width: 100%;
-  height: 40px;
-  padding: 0px 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
+body {
+  div#toolbar {
+    grid-area: toolbar;
+    & > * { -webkit-app-region: no-drag; }
 
-  button {
-    // Reset the min-width from generic.less
-    min-width: auto;
-  }
+    height: 40px;
+    font-size: 14px;
+    padding: 0px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
 
-  div.spacer {
-    .size-1x { flex-grow: 1; }
-    .size-3x { flex-grow: 3; }
-    .size-5x { flex-grow: 5; }
-  }
+    button {
+      // Reset the min-width from generic.less
+      min-width: auto;
+    }
 
-  div.toolbar-group {
-    text-align: center;
+    div.spacer {
+      .size-1x { flex-grow: 1; }
+      .size-3x { flex-grow: 3; }
+      .size-5x { flex-grow: 5; }
+    }
 
-    span.toolbar-label {
-      display: block;
-      font-size: 10px;
+    div.toolbar-group {
       text-align: center;
+
+      span.toolbar-label {
+        display: block;
+        font-size: 10px;
+        text-align: center;
+      }
     }
   }
 }
 
 body.darwin {
-  @toolbar-height: 40px;
   @font-size: 14px;
 
   div#toolbar {
-    // On macOS, there is no titlebar, and as such we need to make the toolbar draggable
-    -webkit-app-region: drag;
-    & > * { -webkit-app-region: no-drag; }
-
-    height: @toolbar-height;
     font-size: @font-size;
     background-color: rgb(245, 245, 245);
 
@@ -234,11 +232,11 @@ body.darwin {
 }
 
 body.win32 {
-  @toolbar-height: 40px;
   @font-size: 14px;
 
   div#toolbar {
-    height: @toolbar-height;
+    // On Windows, drag from the titlebar or menubar, not the toolbar.
+    -webkit-app-region: no-drag;
     font-size: @font-size;
     background-color: rgb(245, 245, 245);
     color: rgb(100, 100, 100);
@@ -277,20 +275,13 @@ body.win32 {
 }
 
 body.linux {
-  @toolbar-height: 46px;
-  @font-size: 14px;
-
   div#toolbar {
-    min-height: @toolbar-height;
-    font-size: @font-size;
+    min-height: 46px;
+    font-size: 12pt;
 
     justify-content: initial;
     overflow: auto;
     &::-webkit-scrollbar { display: none; }
-
-    // Don't drag from the toolbar elements
-    -webkit-app-region: drag;
-    & > * { -webkit-app-region: no-drag; }
 
     & > *:not(.spacer) {
       flex: 0 0 auto;

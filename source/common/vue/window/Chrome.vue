@@ -253,6 +253,45 @@ export default {
 <style lang="less">
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, Ubuntu, Roboto, Noto, 'Segoe UI', Arial, sans-serif;
+
+  #window-frame {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  // The window chrome and statusbar have fixed heights, the content takes up
+  // the remainder of the space.
+  #window-content { flex: 1 1 auto; }
+  #window-frame > :not(#window-content) { flex: 0 0 auto; }
+
+  #window-chrome {
+    // The window chrome gets the system font
+    font-family: inherit;
+
+    // The window chrome can get dragged by default.  Elements that can't be
+    // dragged (e.g. window controls) must explicitely indicate so by setting
+    // -webkit-app-region: no-drag.
+    -webkit-app-region: drag;
+
+    display: grid;
+    grid:
+      "titlebar controls" minmax(0, auto)
+      "menubar controls" minmax(0, auto)
+      "toolbar toolbar" auto
+      "tabbar tabbar" auto
+      / minmax(0, 1fr) auto;
+  }
+
+  #window-content {
+    display: flex;
+    overflow: auto;
+
+    // The window content has position: relative set so that it acts as a root
+    // for the distraction free mode.
+    position: relative;
+  }
+
   // macOS OPERATING SYSTEM STYLES
   // NOTE: On macOS, Zettlr uses vibrancy which means we must make the
   // background-color of all elements transparent which should have this
@@ -271,37 +310,7 @@ body {
     }
   }
 
-  #window-frame {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-
-  #window-frame > * {
-    flex: 0 0 auto;
-  }
-
-  #window-chrome {
-    // The window chrome gets the system font
-    font-family: inherit;
-    position: sticky;
-    top: 0;
-    display: grid;
-    grid:
-      "titlebar controls" minmax(0, auto)
-      "menubar controls" minmax(0, auto)
-      "toolbar toolbar" auto
-      "tabbar tabbar" auto
-      / minmax(0, 1fr) auto;
-  }
-
-  #window-content {
-    flex: 1 1 auto;
-    overflow: auto;
-    display: flex;
-    position: relative; // Root for the distraction-free mode
-  }
-
+  // Windows OPERATING SYSTEM STYLES
   &.win32 {
     div#window-content {
       background-color: rgb(235, 235, 235);
@@ -314,6 +323,7 @@ body {
     }
   }
 
+  // Linux OPERATING SYSTEM STYLES
   &.linux {
     --current-color: 0 0 0;
     --window-bg-color: #fafafa;
@@ -332,7 +342,6 @@ body {
     --headerbar-border-color: rgb(var(--current-color) / var(--border-opacity));
     --headerbar-shade-color: rgb(var(--current-color) / 0.07);
     --border-color: rgb(var(--current-color) / var(--border-opacity));
-    --system-font-family: Cantarell, system-ui, 'Open Sans', 'Helvetica Neue', sans-serif;
     --accelerator-color: rgb(var(--current-color) / 55%);
 
     --accent-bg-color: #3584e4;
@@ -340,7 +349,10 @@ body {
     --accent-color-rgb: 28 113 216;
     --accent-color: rgb(var(--accent-color-rgb));
 
+    // Use a different font-family for Linux that targets Gnome system fonts
+    --system-font-family: Cantarell, system-ui, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-family: var(--system-font-family);
+    font-size: 11pt;
 
     #window-chrome {
       overflow: hidden;
@@ -351,11 +363,20 @@ body {
       border-bottom: none;
       -webkit-app-region: drag;
 
-      // Toolbar, tabbar and titlebar share the space: only one is visible.
+      // On the first line, we have the toolbar or tabbar (only one is
+      // available at once), followed by the window controls.
+      // On the second line, the menubar takes all the available space.
       grid:
-        [toolbar-start tabbar-start controls-start] "titlebar titlebar" auto [toolbar-end tabbar-end controls-end]
-        "menubar menubar" auto
-        / [toolbar-start tabbar-start] minmax(0, 1fr) [toolbar-end tabbar-end controls-start] auto [controls-end];
+        [toolbar-start tabbar-start controls-start]
+          "titlebar titlebar" auto
+        [toolbar-end tabbar-end controls-end]
+          "menubar menubar" auto
+        /
+        [toolbar-start tabbar-start]
+          minmax(0, 1fr)
+        [toolbar-end tabbar-end controls-start] 
+          auto
+        [controls-end];
     }
 
     #window-content {

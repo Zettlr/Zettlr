@@ -99,7 +99,8 @@ export default defineComponent({
 // General styles
 body div.tab-list {
   grid-area: tabbar;
-  width: 100%;
+  & > * { -webkit-app-region: no-drag; }
+
   font-family: inherit;
   display: flex;
   padding: 5px;
@@ -221,8 +222,6 @@ body.win32 {
 // Linux styling
 body.linux {
   div.tab-list {
-    & > * { -webkit-app-region: no-drag; }
-
     background-color: var(--headerbar-bg-color);
     background-clip: content-box;
 
@@ -233,8 +232,8 @@ body.linux {
     min-width: 50px;
 
     -webkit-mask-image:
-      linear-gradient(to left, 
-        transparent, 15px, black 20px, 
+      linear-gradient(to left,
+        transparent, 15px, black 20px,
         black calc(100% - 20px), calc(100% - 15px), transparent);
 
     &::before, &::after {

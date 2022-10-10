@@ -3,7 +3,7 @@
     v-bind:title="title"
     v-bind:class="{ 'distraction-free': distractionFree }"
     v-bind:titlebar="shouldShowTitlebar"
-    v-bind:menubar="houldShowMenuBar"
+    v-bind:menubar="shouldShowMenuBar"
     v-bind:show-toolbar="shouldShowToolbar"
     v-bind:toolbar-labels="false"
     v-bind:toolbar-controls="toolbarControls"

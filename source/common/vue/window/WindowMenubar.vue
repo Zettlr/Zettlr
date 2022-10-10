@@ -144,21 +144,7 @@ export default defineComponent({
 // Styles for the menubar (for Windows and Linux)
 #menubar {
   grid-area: menubar;
-  height: 31px;
-  width: 100%;
-  // Use the system font with a somewhat smaller font-size
-  font-family: inherit;
-  font-size: 12px;
-  padding-left: 30px;
-  // Use the Zettlr logo as fixed background to enable branding in the menubar
-  background-image: url("../../img/image-preview.png");
-  background-position: left center;
-  background-repeat: no-repeat;
-  background-size: contain;
-
-  // If the menubar is shown, this indicates there's no title bar, hence we
-  // need the menubar to be draggable.
-  -webkit-app-region: drag;
+  & > * { -webkit-app-region: no-drag; }
 
   span.top-level-item {
     display: inline-block;
@@ -166,15 +152,24 @@ export default defineComponent({
     height: 31px;
     line-height: 31px;
     padding: 0 10px;
-    // Don't drag the top-level menubar items
-    -webkit-app-region: no-drag;
   }
 }
 
 body.win32 {
   #menubar {
+    // Use the system font with a somewhat smaller font-size
+    font-family: inherit;
+    font-size: 12px;
+    padding-left: 30px;
+    height: 31px;
     background-color: var(--system-accent-color, --c-primary);
     color: var(--system-accent-color-contrast);
+
+    // Use the Zettlr logo as fixed background to enable branding in the menubar
+    background-image: url("../../img/image-preview.png");
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: contain;
 
     span.top-level-item:hover {
       // Since we can't be sure which colour the menu bar will have, simply add a transparent overlay
@@ -185,12 +180,6 @@ body.win32 {
 
 body.linux {
   #menubar {
-    // No logo in the menubar on Linux
-    background-image: none;
-    padding-left: 0;
-
-    font-family: var(--system-font-family);
-    font-size: 11pt;
     span.top-level-item:hover {
       color: var(--accent-color);
       border-bottom: 3px solid var(--accent-color);

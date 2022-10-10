@@ -144,25 +144,50 @@ export default {
  */
 body {
   div#window-controls {
-    cursor: default;
     grid-area: controls;
-    -webkit-app-region: drag;
     & > * { -webkit-app-region: no-drag; }
 
+    display: flex;
+    flex-direction: row;
+  }
+}
+
+body.win32 {
+  div#window-controls {
+    background-color: var(--system-accent-color, --c-primary);
+    color: var(--system-accent-color-contrast, white);
+
     .minimise, .resize, .close {
-      float: left;
+      // Wherever the controls are shown, they will be shown on top of the system accent colour,
+      // so we must always use the accompanying contrast colour for the window controls.
+      fill: var(--system-accent-color-contrast, white);
+      stroke: none;
+      transition: background-color .2s;
+
       width: 45px;
       height: 31px;
       margin: 0 0 0 1px;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.5);
+      }
+
       text-align: center;
       line-height: 29px;
-      fill: #666666;
-      stroke: #666666;
 
       svg {
         width: 10px;
         height: 10px;
         shape-rendering: crispEdges;
+      }
+    }
+
+    .close {
+      svg polygon { transition: fill .2s; }
+
+      &:hover {
+        background-color: rgba(232, 17, 35, 0.9);
+        svg polygon { fill: #ffffff; }
       }
     }
   }
@@ -177,48 +202,16 @@ body {
   }
 }
 
-body.win32 div#window-controls {
-  background-color: var(--system-accent-color, --c-primary);
-  color: var(--system-accent-color-contrast, white);
-
-  .minimise, .resize, .close {
-    // Wherever the controls are shown, they will be shown on top of the system accent colour,
-    // so we must always use the accompanying contrast colour for the window controls.
-    fill: var(--system-accent-color-contrast, white);
-    stroke: none;
-    transition: background-color .2s;
-
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.5);
-    }
-  }
-
-  .close {
-    svg polygon { transition: fill .2s; }
-
-    &:hover {
-      background-color: rgba(232, 17, 35, 0.9);
-      svg polygon { fill: #ffffff; }
-    }
-  }
-}
-
 body.linux {
   div#window-controls {
     padding: 9px;
-    display: flex;
-    flex-direction: row;
     align-items: center;
 
-    .minimise, .resize, .close {
+    & > * {
       width: auto;
       height: auto;
-      margin-left: 6px;
+      margin: 0 0 0 6px;
       transition: background-color .2s;
-
-      &:hover {
-        background-color: var(--view-hover-color);
-      }
 
       fill: var(--headerbar-fg-color);
       stroke: none;
@@ -237,6 +230,9 @@ body.linux {
         background-color: var(--view-selected-hover-color);
       }
     }
+
+    // Minimize and resize are typically not shown on linux
+    & > .resize, & > .minimise { display: none; }
   }
 }
 </style>
