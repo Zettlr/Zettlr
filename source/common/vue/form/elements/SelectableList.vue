@@ -2,7 +2,6 @@
   <div
     v-bind:class="{
       'selectable-list-wrapper': true,
-      'has-footer': editable
     }"
   >
     <div class="selectable-list-container">
@@ -119,20 +118,18 @@ export default defineComponent({
 <style lang="less">
 body .selectable-list-wrapper {
   padding: 20px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-
-  &.has-footer { padding-bottom: 40px; }
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 
   .selectable-list-footer {
-    position: absolute;
+    /*position: absolute;
     bottom: 18px;
     left: 20px;
-    right: 20px;
-    height: 22px;
+    right: 20px; */
+    margin-top: auto;
+    margin-bottom: 18px;
+    padding: 2px 0;
     display: flex;
     justify-content: flex-start;
     background-color: rgb(255, 255, 255);
@@ -151,6 +148,7 @@ body .selectable-list-wrapper {
   .selectable-list-container {
     border: 1px solid rgb(180, 180, 180);
     height: 100%;
+    flex: 1 1 auto;
     overflow: auto;
 
     div.item {
@@ -251,6 +249,14 @@ body.win32, body.linux {
 
         }
       }
+    }
+  }
+}
+
+body.linux, body.linux.dark {
+  .selectable-list-wrapper {
+    .selectable-list-container, .selectable-list-footer {
+      border-color: var(--border-color);
     }
   }
 }

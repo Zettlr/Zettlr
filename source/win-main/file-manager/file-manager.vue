@@ -9,9 +9,10 @@
     v-on:mousemove="maybeShowArrowButton"
     v-on:mouseleave="maybeShowArrowButton"
     v-on:dragover="handleDragOver"
-    v-on:wheel="handleWheel"
+    v-on:wheel.passive="handleWheel"
     v-on:dragstart="lockDirectoryTree"
     v-on:dragend="unlockDirectoryTree"
+    v-on:scroll.passive="handleScroll"
   >
     <!-- Display the arrow button in case we have a non-combined view -->
     <div
@@ -299,9 +300,12 @@ export default defineComponent({
         elem.scrollTop -= 10 - distanceTop / 10
       }
     },
+    handleScroll: function (event) {
+      console.log(event)
+    },
     handleWheel: function (event: WheelEvent) {
       // Determine if we can scroll back & forth
-      if (process.platform !== 'darwin') {
+      if (process.platform !== 'linux') {
         return // macOS only
       }
 
@@ -314,13 +318,11 @@ export default defineComponent({
       if (event.deltaX > 0) {
         // Switch to the file list
         if (this.isFileListVisible === false) {
-          event.preventDefault()
           event.stopPropagation()
           this.toggleFileList()
         }
       } else if (event.deltaX < 0 && this.isFileListVisible === true) {
         // Switch to the tree view
-        event.preventDefault()
         event.stopPropagation()
         this.toggleFileList()
       }
@@ -434,6 +436,8 @@ export default defineComponent({
 body #file-manager {
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 
   #component-container {
     overflow-x: hidden;
@@ -441,7 +445,6 @@ body #file-manager {
     overflow-y: hidden;
     position: relative;
     width: 100%;
-    height: calc(100% - 37px); // 100% minus the filter
   }
 
   &.expanded {
@@ -477,7 +480,6 @@ body #file-manager {
     z-index: 2;
     left: 0;
     right: 0;
-    height: 37px;
 
     .file-manager-filter-input {
       border: 1px solid transparent;
@@ -491,6 +493,26 @@ body.dark #file-manager {
   #arrow-button {
     background-color: rgb(80, 80, 80);
     color: rgb(230, 230, 230);
+  }
+}
+
+body.darwin {
+  @window_bg_color: #fafafa;
+  @window_fg_color: rgba(0, 0, 0, 0.8);
+
+  #file-manager {
+    background-color: @window_bg_color;
+    color: @window_fg_color;
+  }
+
+  &.dark {
+    @window_bg_color: #242424;
+    @window_fg_color: #ffffff;
+
+    #file-manager {
+      background-color: @window_bg_color;
+      color: @window_fg_color;
+    }
   }
 }
 

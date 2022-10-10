@@ -33,6 +33,7 @@
         >
           <FileItem
             v-bind:obj="item.props"
+            v-bind:item-height="itemHeight"
             v-bind:active-file="activeDescriptor"
             v-bind:index="index"
             v-bind:window-id="windowId"
@@ -51,6 +52,7 @@
       <FileItem
         v-for="item in getDirectoryContents"
         v-bind:key="item.id"
+        v-bind:item-height="itemHeight"
         v-bind:index="0"
         v-bind:obj="item.props"
         v-bind:window-id="windowId"
@@ -445,6 +447,12 @@ body.win32 {
     #file-list {
       background-color: rgb(40, 40, 50);
     }
+  }
+}
+
+body.linux {
+  #file-list {
+    scrollbar-gutter: stable both-edges;
   }
 }
 </style>

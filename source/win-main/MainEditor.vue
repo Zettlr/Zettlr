@@ -902,9 +902,9 @@ function handleDragLeave (event: DragEvent) {
   position: relative;
 
   &.fullscreen {
-    position: fixed;
+    position: absolute;
     z-index: 1000; // Ensure this editor instance is on top of any other pane
-    top: 40px; // Titlebar height
+    top: 0;
     bottom: 0;
     left: 0;
     right: 0;

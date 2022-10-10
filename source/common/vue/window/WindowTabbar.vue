@@ -17,7 +17,6 @@
         <clr-icon
           v-if="tab.icon"
           v-bind:shape="tab.icon"
-          size="24"
         >
         </clr-icon>
       </div>
@@ -111,6 +110,10 @@ body div.tab-list {
       padding: 5px;
       outline: none;
       white-space: nowrap;
+
+      & > .toolbar-icon {
+        height: 24px;
+      }
 
       &.active {
         // --system variables are set dynamically based on the operating system.
@@ -218,43 +221,93 @@ body.win32 {
 // Linux styling
 body.linux {
   div.tab-list {
-    top: 0px;
-    height: 40px;
-    justify-content: center;
+    & > * { -webkit-app-region: no-drag; }
+
+    background-color: var(--headerbar-bg-color);
+    background-clip: content-box;
+
+    padding: 0 20px;
+    padding-bottom: 1px;
+    overflow: auto;
     list-style-type: none;
-    background-color: rgb(240, 240, 240); // Same colour as titlebar
-    color: var(--grey-4);
-    padding-bottom: 0px;
+    min-width: 50px;
+
+    -webkit-mask-image:
+      linear-gradient(to left, 
+        transparent, 15px, black 20px, 
+        black calc(100% - 20px), calc(100% - 15px), transparent);
+
+    &::before, &::after {
+      content: '';
+      margin: auto;
+    }
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    &.wide {
+      padding: 6px 0;
+
+      &::before, &::after {
+        width: 60px;
+      }
+
+      & > *:not(:first-child) {
+        margin-left: 3px;
+      }
+
+      & > *:not(:last-child) {
+        margin-right: 3px;
+      }
+
+      button[role="tab"] {
+        border-radius: 6px;
+        flex-direction: row;
+        font-size: 10pt;
+        line-height: 10pt;
+
+        & > .toolbar-icon {
+          margin-right: 8px;
+        }
+      }
+    }
 
     button[role="tab"] {
+      font-family: var(--system-font-family);
+      font-weight: bold;
       border: none;
-      padding: 2px 6px;
-      border-radius: 0px;
+      display: flex;
+      align-items: center;
+      flex: 0 0 auto;
+      padding: 9px 12px;
       background-color: transparent;
-      border-right: 1px solid rgb(210, 210, 210);
+      border-radius: 0;
+      flex-direction: column;
+      font-size: 8pt;
+
+      & > .toolbar-icon {
+        width: 16px;
+        height: 16px;
+
+        vertical-align: middle;
+        display: inline-block;
+      }
 
       &:last-child {
         border-right: none;
       }
 
-      div.toolbar-icon {
-        display: none;
-      }
-
       &:hover {
-        background-color: rgb(230, 230, 230);
+        background-color: var(--view-hover-color);
       }
-    }
-  }
 
-  &.dark {
-    div.tab-list {
-      background-color: rgb(52, 52, 52);
-      color: rgb(172, 172, 172);
+      &.active {
+        color: inherit;
+        background-color: var(--view-selected-color);
 
-      button[role="tab"] {
-        &:hover, &.active {
-          background-color: rgb(64, 64, 64);
+        &:hover {
+          background-color: var(--view-selected-hover-color);
         }
       }
     }

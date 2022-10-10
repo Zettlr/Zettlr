@@ -5,6 +5,9 @@
       'odd': index % 2 === 1,
       'even': index % 2 === 0
     }"
+    v-bind:style="{
+      'height': `${itemHeight}px`,
+    }"
   >
     <div
       v-bind:class="{
@@ -42,7 +45,6 @@
           v-bind:value="obj.name"
           v-on:keyup.enter="finishNameEditing(($event.target as HTMLInputElement).value)"
           v-on:keyup.esc="nameEditing = false"
-          v-on:blur="nameEditing = false"
           v-on:click.stop=""
         >
         <span v-else>
@@ -153,6 +155,10 @@ export default defineComponent({
     activeFile: {
       type: Object,
       default: function () { return {} }
+    },
+    itemHeight: {
+      type: Number,
+      required: true
     },
     index: {
       type: Number,
@@ -659,9 +665,55 @@ body.win32 {
 
 body.linux {
   div.list-item-wrapper {
+    display: flex;
+    flex-direction: column;
+
     div.list-item {
-      border-bottom: 1px solid rgb(213, 213, 213);
-      background-color: rgb(230, 230, 230);
+      flex: 1 1 auto;
+      padding: 0;
+      /* no side margins: we got the scrollbar gutter already */
+      margin: 2px 0;
+      padding: 4px 6px;
+      border-radius: 6px;
+      color: var(--window-fg-color);
+
+      &.directory {
+        color: var(--system-accent-color, --c-primary);
+      }
+
+      div.filename {
+        font-size: 11pt;
+        line-height: 11pt;
+        margin: 1px 0 0 0;
+        overflow: visible;
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: start;
+        align-items: center;
+
+        & > :last-child {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          flex: 1 1 auto;
+        }
+
+        div.date {
+          position: static;
+          top: inherit;
+          right: inherit;
+          flex: 0 0 auto;
+          opacity: 0.55; /* dim label */
+        }
+
+        /* Make it invisible */
+        input[type="text"] {
+          outline: none;
+          padding: 0;
+          margin: 0;
+          min-height: inherit;
+          border-radius: 0;
+        }
+      }
 
       &.active {
         background-color: rgb(200, 200, 200);
@@ -669,27 +721,29 @@ body.linux {
       }
 
       &.selected {
-        background-color: var(--system-accent-color, --c-primary);
-        color: var(--system-accent-color-contrast, white);
-
-        div.filename div.date {
-          background-color: var(--system-accent-color, --c-primary);
-          color: var(--system-accent-color-contrast, white);
-        }
+        background-color: var(--view-selected-color);
       }
 
-      div.filename div.date { background-color: rgb(230, 230, 230); }
-
       div.meta-info {
+        > * {
+          overflow: auto;
+        }
+
+        > *::-webkit-scrollbar {
+          display: none;
+        }
+
         .badge {
+          border-radius: 4px;
+
           &.code-indicator {
             background-color: var(--system-accent-color, --c-primary);
             color: white;
           }
 
           &.tag {
-            background-color: rgba(90, 90, 90, 0.5); // Make those tags a little bit translucent
-            color: rgb(240, 240, 240);
+            background-color: var(--button-color);
+            color: var(--view-fg-color);
 
             .color-circle {
               // If there's a coloured tag in there, display that as well
@@ -699,6 +753,10 @@ body.linux {
               border: 1px solid white;
               border-radius: 50%;
             }
+          }
+
+          &:not(.code-indicator):not(.tag) {
+            opacity: 0.55;
           }
 
           svg {
@@ -715,37 +773,11 @@ body.linux {
     }
   }
 
-  &.dark {
-    div.list-item-wrapper {
-      div.list-item {
-        border-bottom-color: #505050;
-        background-color: rgb(40, 40, 50);
+  .hover div.list-item-wrapper div.list-item {
+    background-color: var(--view-hover-color);
 
-        &.active {
-        background-color: rgb(80, 80, 80);
-        div.filename div.date {
-          background-color: rgb(80, 80, 80);
-        }
-      }
-
-      &.selected {
-        background-color: var(--system-accent-color, --c-primary);
-        color: var(--system-accent-color-contrast, white);
-
-        div.filename div.date {
-          background-color: var(--system-accent-color, --c-primary);
-          color: var(--system-accent-color-contrast, white);
-        }
-      }
-
-        div.filename div.date { background-color: rgb(40, 40, 50); }
-        &.active { background-color: rgb(80, 80, 80); }
-
-        div.meta-info .badge {
-          background-color: rgb(80, 80, 80);
-          color: rgb(220, 220, 220);
-        }
-      }
+    &.selected {
+      background-color: var(--view-selected-hover-color);
     }
   }
 }

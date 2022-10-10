@@ -155,11 +155,6 @@ body {
     width: 100%;
 
     #sidebar-tab-container {
-      position: absolute;
-      top: 40px;
-      bottom: 0;
-      left: 0px;
-      right: 0px;
       padding: 0px 5px 5px 0px;
       overflow-y: auto;
     }
@@ -319,6 +314,13 @@ body.darwin {
     div#sidebar {
       background-color: transparent;
     }
+  }
+}
+
+body.linux {
+  #sidebar {
+    background-color: inherit;
+    overflow: hidden;
   }
 }
 </style>

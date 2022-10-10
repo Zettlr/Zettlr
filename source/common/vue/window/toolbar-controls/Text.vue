@@ -46,4 +46,14 @@ body .toolbar-text {
   padding: 0 10px;
   width: 150px; // constrain the text width to accomodate content changes.
 }
+
+body.linux {
+  div#toolbar .toolbar-text {
+    -webkit-app-region: drag;
+
+    & > * {
+      -webkit-app-region: no-drag;
+    }
+  }
+}
 </style>

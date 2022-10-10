@@ -101,5 +101,5 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-//
+#window-content > [role="tabpanel"] { width: 100%; }
 </style>

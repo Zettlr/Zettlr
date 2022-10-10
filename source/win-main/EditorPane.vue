@@ -109,4 +109,9 @@ body {
     padding-top: 5em;
   }
 }
+
+body .editor-pane {
+  display: flex;
+  flex-direction: column;
+}
 </style>
