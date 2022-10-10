@@ -79,3 +79,54 @@ body {
     }    
   }
 }
+
+body.linux {
+  div.application-menu {
+    background-color: var(--popover-bg-color);
+    color: var(--popover-fg-color);
+    font-family: var(--system-font-family);
+    font-size: 11pt;
+
+    padding: 3px 0;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    max-height: 80vh;
+    overflow: auto;
+
+    div.menu-item {
+      height: auto;
+      line-height: initial;
+      margin: 6px;
+      padding: 0;
+      min-width: 40px;
+
+      align-items: center;
+      grid-template-columns: 30px auto 100px;
+
+      div.status {
+        text-align: left;
+        margin-left: 3px;
+      }
+
+      &.separator {
+        border-bottom: 1px solid var(--border-color);
+        opacity: 0.55;
+      }
+
+      &:not(.separator):not(.disabled):hover {
+        background-color: var(--view-hover-color);
+      }
+
+      &:not(.separator) {
+        min-height: 32px;
+        padding: 3px 6px;
+        border-radius: 6px;
+      }
+
+      &:not(.submenu) > .after-element {
+        color: var(--accelerator-color);
+        margin-right: 12px;
+      }
+    }
+  }
+}
