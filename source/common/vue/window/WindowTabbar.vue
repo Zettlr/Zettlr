@@ -68,6 +68,10 @@ export default defineComponent({
     label: {
       type: String,
       default: 'tabs'
+    },
+    platform: {
+      type: String,
+      required: true
     }
   },
   emits: ['tab'],
@@ -75,8 +79,7 @@ export default defineComponent({
     return {
       currentTab: 0,
       // The following are required to hide tab labels on win32 w/ narrow windows
-      currentWindowWidth: window.innerWidth,
-      platform: process.platform
+      currentWindowWidth: window.innerWidth
     }
   },
   watch: {

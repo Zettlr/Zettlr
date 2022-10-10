@@ -36,6 +36,7 @@
         v-bind:margin-top="tabbarMargin"
         v-bind:tabs="tabbarTabs"
         v-bind:label="tabbarLabel"
+        v-bind:platform="platform"
         v-on:tab="$emit('tab', $event)"
       ></WindowTabbar>
       <!-- Last but not least, the window controls -->
