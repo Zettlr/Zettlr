@@ -31,6 +31,29 @@ import {
 } from '@providers/cli-provider'
 
 handleGeneralArguments()
+
+// Set the custom data dir for user configuration files.
+// This must be set *before* getting the instance lock, because different data
+// dirs will result in electron using different locks.
+let dataDir = getCLIArgument(DATA_DIR)
+
+if (typeof dataDir === 'string') {
+  // a path to a custom config dir is provided
+  if (!path.isAbsolute(dataDir)) {
+    if (app.isPackaged) {
+      // Attempt to use the executable file's path as the basis
+      dataDir = path.join(path.dirname(app.getPath('exe')), dataDir)
+    } else {
+      // Attempt to use the repository's root directory as the basis
+      dataDir = path.join(__dirname, '../../', dataDir)
+    }
+  }
+
+  getServiceContainer()?.log.info('[Application] Using custom data dir: ' + dataDir)
+  app.setPath('userData', dataDir)
+  app.setAppLogsPath(path.join(dataDir, 'logs'))
+}
+
 // Immediately after launch, check if there is already another instance of
 // Zettlr running, and, if so, exit immediately. The arguments (including files)
 // from this instance will already be passed to the first instance.
@@ -49,27 +72,6 @@ if (!app.requestSingleInstanceLock()) {
 // See https://www.electronjs.org/docs/tutorial/notifications#windows
 if (process.platform === 'win32') {
   app.setAppUserModelId('com.zettlr.app')
-}
-
-// Setting custom data dir for user configuration files.
-// Full path or relative path is OK. '~' does not work as expected.
-let dataDir = getCLIArgument(DATA_DIR)
-
-if (typeof dataDir === 'string') {
-  // a path to a custom config dir is provided
-  if (!path.isAbsolute(dataDir)) {
-    if (app.isPackaged) {
-      // Attempt to use the executable file's path as the basis
-      dataDir = path.join(path.dirname(app.getPath('exe')), dataDir)
-    } else {
-      // Attempt to use the repository's root directory as the basis
-      dataDir = path.join(__dirname, '../../', dataDir)
-    }
-  }
-
-  getServiceContainer()?.log.info('[Application] Using custom data dir: ' + dataDir)
-  app.setPath('userData', dataDir)
-  app.setAppLogsPath(path.join(dataDir, 'logs'))
 }
 
 // On systems with virtual GPUs (i.e. VMs), it might be necessary to disable
