@@ -49,4 +49,12 @@ body #toolbar .spacer {
   &.spacer-3x { flex-grow: 0.3; }
   &.spacer-1x { flex-grow: 0.1; }
 }
+
+body.linux #toolbar .spacer {
+  min-width: 12px;
+
+  &.spacer-5x { flex-grow: 5; }
+  &.spacer-3x { flex-grow: 3; }
+  &.spacer-1x { flex-grow: 1; }
+}
 </style>

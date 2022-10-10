@@ -175,12 +175,6 @@ body.linux {
       border-top-right-radius: 4px;
       border-bottom-right-radius: 4px;
     }
-
-    button.active { background-color: rgb(228, 228, 228); }
-  }
-
-  &.dark div#toolbar div.three-way-toggle {
-    button.active { background-color: rgb(50, 50, 50); }
   }
 }
 </style>
