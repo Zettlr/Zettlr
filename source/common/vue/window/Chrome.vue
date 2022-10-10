@@ -3,7 +3,6 @@
     <!-- This div contains all the bars we have -->
     <div
       id="window-chrome"
-      v-bind:style="{ height: windowChromeHeight }"
     >
       <!--
         These different window chrome parts can be displayed conditionally, in
@@ -19,11 +18,9 @@
       ></WindowTitlebar>
       <WindowMenubar
         v-if="showMenubar"
-        v-bind:margin-top="menubarMargin"
       ></WindowMenubar>
       <WindowToolbar
         v-if="showToolbar"
-        v-bind:margin-top="toolbarMargin"
         v-bind:controls="toolbarControls"
         v-bind:show-labels="toolbarLabels"
         v-on:search="$emit('toolbar-search', $event)"
@@ -33,7 +30,6 @@
       ></WindowToolbar>
       <WindowTabbar
         v-if="showTabbar"
-        v-bind:margin-top="tabbarMargin"
         v-bind:tabs="tabbarTabs"
         v-bind:label="tabbarLabel"
         v-bind:platform="platform"
@@ -47,10 +43,6 @@
     </div>
     <div
       id="window-content"
-      v-bind:style="{
-        top: windowChromeHeight,
-        bottom: contentMarginBottom
-      }"
       v-bind:class="{
         'disable-vibrancy': disableVibrancy
       }"
@@ -282,72 +274,6 @@ export default {
         return STATUSBAR_LINUX_HEIGHT // Default
       }
     },
-    windowChromeHeight: function () {
-      let margin = 0
-
-      if (this.showTitlebar === true) {
-        margin += this.platformTitlebarHeight
-      }
-
-      if (this.showMenubar === true) {
-        margin += this.platformMenubarHeight
-      }
-
-      if (this.showToolbar === true) {
-        margin += this.platformToolbarHeight
-      }
-
-      if (this.showTabbar === true) {
-        margin += this.platformTabbarHeight
-      }
-
-      return `${margin}px`
-    },
-    contentMarginBottom: function () {
-      if (this.showStatusbar === true) {
-        return `${this.platformStatusbarHeight}px`
-      } else {
-        return '0px'
-      }
-    },
-    menubarMargin: function () {
-      // Only a titlebar may be on top of the menubar
-      if (this.showTitlebar === true) {
-        return `${this.platformTitlebarHeight}px`
-      } else {
-        return '0px'
-      }
-    },
-    toolbarMargin: function () {
-      let margin = 0
-
-      if (this.showTitlebar === true) {
-        margin += this.platformTitlebarHeight
-      }
-
-      if (this.showMenubar === true) {
-        margin += this.platformMenubarHeight
-      }
-
-      return `${margin}px`
-    },
-    tabbarMargin: function () {
-      let margin = 0
-
-      if (this.showTitlebar === true) {
-        margin += this.platformTitlebarHeight
-      }
-
-      if (this.showMenubar === true) {
-        margin += this.platformMenubarHeight
-      }
-
-      if (this.showToolbar === true) {
-        margin += this.platformToolbarHeight
-      }
-
-      return `${margin}px`
-    }
   },
   watch: {
     platform: function () {
@@ -411,20 +337,35 @@ body {
     }
   }
 
-  div#window-chrome {
-    // The window chrome gets the system font
-    font-family: inherit;
+  #window-frame {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
 
-  div#window-content {
-    // The top position will be computed dynamically based on the different
-    // bars that are shown in the window chrome content.
-    position: absolute;
+  #window-frame > * {
+    flex: 0 0 auto;
+  }
+
+  #window-chrome {
+    // The window chrome gets the system font
+    font-family: inherit;
+    position: sticky;
     top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    display: grid;
+    grid:
+      "titlebar controls" minmax(0, auto)
+      "menubar controls" minmax(0, auto)
+      "toolbar toolbar" auto
+      "tabbar tabbar" auto
+      / minmax(0, 1fr) auto;
+  }
+
+  #window-content {
+    flex: 1 1 auto;
     overflow: auto;
+    display: flex;
+    position: relative; // Root for the distraction-free mode
   }
 
   &.win32 {

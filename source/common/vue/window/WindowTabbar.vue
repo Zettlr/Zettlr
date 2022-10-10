@@ -3,7 +3,6 @@
     class="tab-list"
     role="tablist"
     v-bind:aria-label="label"
-    v-bind:style="{ top: marginTop }"
   >
     <button
       v-for="(tab, idx) in tabs"
@@ -57,10 +56,6 @@ import { WindowTab } from '@dts/renderer/window'
 export default defineComponent({
   name: 'WindowTabbar',
   props: {
-    marginTop: {
-      type: String,
-      default: '0px'
-    },
     tabs: {
       type: Array as PropType<WindowTab[]>,
       required: true
@@ -104,7 +99,7 @@ export default defineComponent({
 <style lang="less">
 // General styles
 body div.tab-list {
-  position: absolute;
+  grid-area: tabbar;
   width: 100%;
   font-family: inherit;
   display: flex;
@@ -129,7 +124,6 @@ body div.tab-list {
 body.darwin {
   // System tabs, e.g. the "big ones" on the Windows
   div.tab-list {
-    top: 40px;
     height: 60px;
     justify-content: center;
     list-style-type: none;
@@ -182,7 +176,6 @@ body.darwin {
 // Windows styling
 body.win32 {
   div.tab-list {
-    top: 25px;
     height: 40px;
     justify-content: center;
     list-style-type: none;

@@ -1,7 +1,6 @@
 <template>
   <div
     id="menubar"
-    v-bind:style="{ top: marginTop }"
   >
     <span
       v-for="(item, idx) in menu"
@@ -38,12 +37,6 @@ const ipcRenderer = window.ipc
 
 export default defineComponent({
   name: 'WindowMenubar',
-  props: {
-    marginTop: {
-      type: String,
-      default: '0px'
-    }
-  },
   data: function () {
     return {
       menu: [] as SubmenuItem[],
@@ -150,8 +143,7 @@ export default defineComponent({
 <style lang="less">
 // Styles for the menubar (for Windows and Linux)
 #menubar {
-  position: absolute;
-  top: 0;
+  grid-area: menubar;
   height: 31px;
   width: 100%;
   // Use the system font with a somewhat smaller font-size

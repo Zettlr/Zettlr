@@ -149,15 +149,14 @@ export default {
 body {
   div#window-controls {
     cursor: default;
-    -webkit-app-region: no-drag;
-    position: absolute;
-    top: 0;
-    right: 0;
+    grid-area: controls;
+    -webkit-app-region: drag;
+    & > * { -webkit-app-region: no-drag; }
 
     .minimise, .resize, .close {
       float: left;
       width: 45px;
-      height: 30px;
+      height: 31px;
       margin: 0 0 0 1px;
       text-align: center;
       line-height: 29px;
@@ -183,6 +182,9 @@ body {
 }
 
 body.win32 div#window-controls {
+  background-color: var(--system-accent-color, --c-primary);
+  color: var(--system-accent-color-contrast, white);
+
   .minimise, .resize, .close {
     // Wherever the controls are shown, they will be shown on top of the system accent colour,
     // so we must always use the accompanying contrast colour for the window controls.
