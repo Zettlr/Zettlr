@@ -67,12 +67,13 @@ export default class ZettlrPopover {
     this._popup = document.createElement('div')
     this._popup.classList.add('popover')
     const popoverMountPoint = document.createElement('div')
+    popoverMountPoint.classList.add('contents')
     popoverMountPoint.setAttribute('id', 'popoverMount')
     this._popup.appendChild(popoverMountPoint)
     this._arrow = document.createElement('div')
     this._arrow.classList.add('popover-arrow')
+    this._popup.appendChild(this._arrow)
     document.body.appendChild(this._popup)
-    document.body.appendChild(this._arrow)
 
     // Create the Vue instance and mount it into the popover container
     this._popover = createApp(component).mount('#popoverMount')

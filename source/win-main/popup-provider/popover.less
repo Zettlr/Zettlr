@@ -321,3 +321,47 @@ body.win32 {
     padding: 8px;
   }
 }
+
+body.linux {
+  .popover {
+    font-family: var(--system-font-family);
+
+    padding: 0;
+    border-radius: 12px;
+  }
+
+  .popover, .popover-arrow {
+    background-color: var(--popover-bg-color);
+    color: var(--popover-fg-color);
+    box-shadow:
+      0 1px 5px 1px rgb(0 0 0 / 9%),
+      0 2px 14px 3px rgb(0 0 0 / 5%);
+  }
+
+  .popover {
+    .contents {
+      background-color: var(--popover-bg-color);
+      position: relative;
+      z-index: 11; /* above the arrow */
+
+      padding: 8px;
+    }
+
+    border: 1px solid rgb(0 0 0 / 14%);
+  }
+
+  .popover-arrow {
+    border: none;
+    height: @arrow-size;
+    width: @arrow-size;
+
+    &.up {
+      border-left: 1px solid rgb(0 0 0 / 14%);
+      border-top: 1px solid rgb(0 0 0 / 14%);
+      transform: translate(0, 50%) rotate(45deg);
+    }
+    &.down { border-top-color: var(--popover-bg-color); }
+    &.left { border-right-color: var(--popover-bg-color); }
+    &.right { border-left-color: var(--popover-bg-color); }
+  }
+}
