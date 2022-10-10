@@ -842,50 +842,64 @@ body.win32 {
 
 body.linux {
   div.document-tablist-wrapper {
+    background-color: var(--headerbar-bg-color);
+    box-shadow: inset 0 -1px var(--headerbar-shade-color);
+    padding-bottom: 1px;
+
     div.scroller {
-      line-height: 29px;
-      background-color: rgb(235, 235, 235);
-      &:hover { background-color: rgb(200, 200, 200); }
+      line-height: 43px;
+      background-color: var(--headerbar-bg-color);
+      &:hover { background-color: var(--view-hover-color); }
 
-      &.left { border-right: 1px solid rgb(200, 200, 200); }
-      &.right { border-left: 1px solid rgb(200, 200, 200); }
-    }
-  }
-  div.tab-container {
+      &.left { 
+        box-shadow: inset -1px 0 var(--headerbar-shade-color);
+      }
 
-    div[role="tab"] {
-      font-size: 12px;
-      background-color: rgb(235, 235, 235); // Almost same colour as toolbar
-      &:hover { background-color: rgb(200, 200, 200); }
-
-      &:not(:last-child) { border-right: 1px solid rgb(200, 200, 200); }
-      &.active { border-bottom: 3px solid var(--system-accent-color, --c-primary); } // TODO: Which colour?
-      .close { font-size: 18px; }
-    }
-  }
-
-  &.dark {
-    div.document-tablist-wrapper {
-      div.scroller {
-        background-color: #5a5a5a;
-        &:hover { background-color: rgb(53, 53, 53); }
-
-        &.left { border-color: 1px solid rgb(120, 120, 120); }
-        &.right { border-color: 1px solid rgb(120, 120, 120); }
+      &.right { 
+        box-shadow: inset 1px 0 var(--headerbar-shade-color);
       }
     }
 
-    div.tab-container {
-      background-color: rgb(11, 11, 11);
+    &.scrollers-active div.tab-container {
+      div[role="tab"]:last-child {
+        border-right: none;
+      }
+    }
+  }
 
-      div[role="tab"] {
-        border-color: rgb(120, 120, 120);
-        background-color: #5a5a5a;
+  div.tab-container {
+    background-color: inherit;
+    color: var(--headerbar-fg-color);
+    border-bottom: none;
+    height: 43px;
 
-        &:hover { background-color: rgb(53, 53, 53); }
-        &.active {
-          background-color: rgb(50, 50, 50);
-          border-bottom-color: var(--system-accent-color, --c-primary);
+    div[role="tab"] {
+      font-size: 12px;
+      margin: 4px;
+      border-radius: 6px;
+      align-items: center;
+
+      &:hover { background-color: var(--view-hover-color); }
+      &.active {
+        background-color: var(--view-selected-color);
+        &:hover {
+          background-color: var(--view-selected-hover-color);
+        }
+      }
+
+      .close {
+        font-size: 18px;
+        height: 18px;
+        width: 18px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0.4;
+
+        &:hover {
+          opacity: 1;
+          border-radius: 9999px;
+          background-color: var(--view-hover-color);
         }
       }
     }

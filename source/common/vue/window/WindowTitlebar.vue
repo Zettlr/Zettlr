@@ -72,18 +72,12 @@ body.win32 {
 // Linux styles
 body.linux {
   div#titlebar {
-    height: 30px;
-    line-height: 30px;
-    text-align: center;
+    width: auto;
+    font-size: 11pt;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-weight: bold;
-    background-color: rgb(238, 238, 238);
-    color: var(--grey-4);
-    padding: 0 80px; // On Linux, the window controls are also on the left side
-  }
-
-  &.dark div#titlebar {
-    background-color: rgb(52, 52, 52);
-    color: rgb(172, 172, 172);
   }
 }
 </style>

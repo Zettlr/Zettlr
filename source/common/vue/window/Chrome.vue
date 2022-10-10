@@ -407,6 +407,36 @@ body {
     --accent-color: rgb(var(--accent-color-rgb));
 
     font-family: var(--system-font-family);
+
+    #window-chrome {
+      overflow: hidden;
+      background-color: var(--headerbar-bg-color);
+      box-shadow: inset 0 -1px var(--headerbar-shade-color);
+      color: var(--headerbar-fg-color);
+      border: 1px solid var(--headerbar-border-color);
+      border-bottom: none;
+      -webkit-app-region: drag;
+
+      // Toolbar, tabbar and titlebar share the space: only one is visible.
+      grid:
+        [toolbar-start tabbar-start controls-start] "titlebar titlebar" auto [toolbar-end tabbar-end controls-end]
+        "menubar menubar" auto
+        / [toolbar-start tabbar-start] minmax(0, 1fr) [toolbar-end tabbar-end controls-start] auto [controls-end];
+    }
+
+    #window-content {
+      background-color: var(--window-bg-color);
+
+      border: 1px solid var(--border-color);
+      border-top: none;
+    }
+
+    .distraction-free {
+      #window-chrome {
+        background-color: transparent;
+        box-shadow: none;
+      }
+    }
   }
 
   &.linux.dark {
