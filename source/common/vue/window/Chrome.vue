@@ -426,16 +426,59 @@ body {
     overflow: auto;
   }
 
-  &:not(.darwin) {
+  &.win32 {
     div#window-content {
       background-color: rgb(235, 235, 235);
     }
   }
 
-  &.dark:not(.darwin) {
+  &.win32.dark {
     div#window-content {
       background-color: rgb(30, 30, 30);
     }
+  }
+
+  &.linux {
+    --current-color: 0 0 0;
+    --window-bg-color: #fafafa;
+    --window-fg-color: rgb(var(--current-color) / 0.8);
+    --view-bg-color: #ffffff;
+    --view-fg-color: rgb(var(--current-color) / 0.8);
+    --view-hover-color: rgb(var(--current-color) / 0.07);
+    --view-selected-color: rgb(var(--current-color) / 0.1);
+    --view-selected-hover-color: rgb(var(--current-color) / 0.13);
+    --button-color: rgb(var(--current-color) / 0.1);
+    --popover-bg-color: #ffffff;
+    --popover-fg-color: rgba(0, 0, 0, 0.8);
+    --headerbar-bg-color: #ebebeb;
+    --headerbar-fg-color: rgba(0, 0, 0, 0.8);
+    --border-opacity: 0.15;
+    --headerbar-border-color: rgb(var(--current-color) / var(--border-opacity));
+    --headerbar-shade-color: rgb(var(--current-color) / 0.07);
+    --border-color: rgb(var(--current-color) / var(--border-opacity));
+    --system-font-family: Cantarell, system-ui, 'Open Sans', 'Helvetica Neue', sans-serif;
+    --accelerator-color: rgb(var(--current-color) / 55%);
+
+    --accent-bg-color: #3584e4;
+    --accent-fg-color: #ffffff;
+    --accent-color-rgb: 28 113 216;
+    --accent-color: rgb(var(--accent-color-rgb));
+
+    font-family: var(--system-font-family);
+  }
+
+  &.linux.dark {
+    --current-color: 255 255 255;
+    --window-bg-color: #242424;
+    --window-fg-color: #ffffff;
+    --view-bg-color: #1e1e1e;
+    --view-fg-color: #ffffff;
+    --popover-bg-color: #383838;
+    --popover-fg-color: #ffffff;
+    --headerbar-bg-color: #303030;
+    --headerbar-fg-color: #ffffff;
+    --headerbar-shade-color: rgb(0 0 0 / 0.36);
+    --accent-color-rgb: 120 174 237;
   }
 }
 </style>
