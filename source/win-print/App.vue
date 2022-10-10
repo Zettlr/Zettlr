@@ -10,7 +10,7 @@
   >
     <iframe
       v-bind:src="fileUrl"
-      style="position: relative; width: 0; height: 0; width: 100%; height: 100%; border: none"
+      style="position: relative; left: 0; top: 0; width: 100%; height: 100%; border: none; margin: 0;"
     >
     </iframe>
   </WindowChrome>
