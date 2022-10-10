@@ -4,6 +4,7 @@
       v-for="tab, idx in tabs"
       v-bind:key="idx"
       role="tab"
+      v-bind:aria-current="currentTab === tab.id"
       v-bind:aria-label="tab.label"
       v-bind:data-target="tab.target"
       v-bind:class="{
@@ -118,6 +119,71 @@ body.win32 {
 
   &.dark .system-tablist .system-tab.active {
     background-color: rgb(120, 120, 120);
+  }
+}
+
+body.linux {
+ .system-tablist {
+    display: flex;
+    justify-content: inherit;
+
+    .system-tab {
+      flex-grow: inherit;
+      text-align: inherit;
+    }
+  }
+
+  .system-tablist[role="tablist"] {
+    padding: 6px 0;
+    background-color: var(--headerbar-bg-color);
+    overflow: auto;
+    &::-webkit-scrollbar { display: none; }
+
+    &::before, &::after {
+      content: '';
+      width: 20px;
+      flex: 1 0 auto;
+      position: sticky;
+      pointer-events: none;
+    }
+
+    &::before {
+      left: 0;
+      background: linear-gradient(to right, var(--headerbar-bg-color), 15px, transparent 20px);
+    }
+
+    &::after {
+      right: 0;
+      background: linear-gradient(to left, var(--headerbar-bg-color), 15px, transparent 20px);
+    }
+
+    & > * {
+      margin-right: 3px;
+    }
+
+    & > :first-child {
+      margin-left: auto;
+    }
+
+    & > :last-child {
+      margin-right: auto;
+    }
+  }
+
+  .system-tab[role="tab"] {
+    background-color: transparent;
+
+    &:hover {
+      background-color: var(--view-hover-color);
+    }
+
+    &[aria-current="true"] {
+      background-color: var(--view-selected-color);
+
+      &:hover {
+        background-color: var(--view-selected-hover-color);
+      }
+    }
   }
 }
 </style>
