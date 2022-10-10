@@ -9,7 +9,7 @@
     ],
     "extends": [
         "standard-with-typescript",
-        "plugin:vue/recommended"
+        "plugin:vue/vue3-recommended"
     ],
     "globals": {
         "Atomics": "readonly",
