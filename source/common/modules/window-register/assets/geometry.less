@@ -94,7 +94,7 @@ body {
 // Make sure that scrollbars look dark or light depending on the app's theme on
 // non-macOS systems. The colors and general styles have been taken very
 // professionally from a screenshot of a Windows 10 interface
-body:not(.darwin) {
+body:win32 {
   ::-webkit-scrollbar { background-color: rgb(228, 228, 228); }
   ::-webkit-scrollbar-thumb { background-color: rgb(172, 172, 172); }
 
@@ -127,6 +127,74 @@ body:not(.darwin) {
     ::-webkit-scrollbar-button { background-color: rgb(40, 40, 40); }
     ::-webkit-scrollbar-thumb { background-color: rgb(78, 78, 88); }
     ::-webkit-scrollbar-button:single-button:hover { background-color: rgb(66, 66, 66); }
+  }
+}
+
+body.linux {
+  /* Rounded scrollbar components */
+  ::-webkit-scrollbar, ::-webkit-scrollbar-thumb, ::-webkit-scrollbar-track {
+    border-radius: 10px;
+    border: 4px solid transparent;
+    background-clip: padding-box;
+    box-sizing: content-box;
+  }
+
+  /* Linux does not use scrollbar buttons */
+  ::-webkit-scrollbar-button {
+    height: 0;
+    width: 0;
+  }
+
+  /* Default style: only display the thumb */
+  ::-webkit-scrollbar, ::-webkit-scrollbar-track, ::-webkit-scrollbar-thumb, ::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
+
+  /* Only display the thumb on hover */
+  :hover::-webkit-scrollbar-thumb {
+    background-color: rgb(var(--current-color) / 20%);
+  }
+
+  /* CodeMirror hover */
+  .CodeMirror:hover {
+    .CodeMirror-vscrollbar, .CodeMirror-hscrollbar {
+      &::-webkit-scrollbar-thumb {
+        background-color: rgb(var(--current-color) / 20%);
+      }
+    }
+  }
+
+  /* Hover style: display the track and darken the thumb */
+  ::-webkit-scrollbar:hover {
+    background-color: var(--view-bg-color);
+  }
+
+  ::-webkit-scrollbar-track:hover {
+    background-color: rgb(var(--current-color) / 10%);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(var(--current-color) / 40%);
+  }
+
+  ::-webkit-scrollbar-thumb:active {
+    background-color: rgb(var(--current-color) / 60%);
+  }
+
+  ::-webkit-scrollbar-thumb:vertical {
+    min-height: 48px;
+  }
+
+  ::-webkit-scrollbar:vertical {
+    width: 11px;
+  }
+
+  ::-webkit-scrollbar-thumb:horizontal {
+    width: 48px;
+  }
+
+  ::-webkit-scrollbar:horizontal {
+    height: 11px;
   }
 }
 
