@@ -95,7 +95,7 @@ const filesBeforeOpen: string[] = []
 let zettlr: Zettlr|null = null
 
 /**
- * This variable is being used to determine if all servive providers have
+ * This variable is being used to determine if all survive providers have
  * successfully shut down and we can actually quit the app.
  *
  * @var {boolean}

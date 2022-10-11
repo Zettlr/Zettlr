@@ -75,7 +75,7 @@ export default class CiteprocProvider extends ProviderContract {
   private readonly databases: Map<string, DatabaseRecord>
 
   /**
-   * This hashmap contains a mapping of citekeys --> CSLItems for quick acces
+   * This hashmap contains a mapping of citekeys --> CSLItems for quick access
    * by the CSL engine.
    *
    * @var {Object}
@@ -468,7 +468,7 @@ export default class CiteprocProvider extends ProviderContract {
    *
    * @param  {string}            database   The database in which to search
    * @param  {CiteItem[]}        citations  Array containing the IDs to be returned
-   * @param  {boolean}           composite  If true, getCitation will mimick the "mode: composite" feature of processCitationCluster
+   * @param  {boolean}           composite  If true, getCitation will mimic the "mode: composite" feature of processCitationCluster
    *
    * @return {string|undefined}             The rendered string
    */
@@ -493,7 +493,7 @@ export default class CiteprocProvider extends ProviderContract {
       if (!composite || citations.length > 1) {
         return this.engine.makeCitationCluster(citations)
       } else if (composite && citations.length === 1) {
-        // Mimick the composite mode
+        // Mimic the composite mode
         const citation = citations[0]
         citation['author-only'] = true
         citation['suppress-author'] = false

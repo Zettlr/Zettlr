@@ -278,7 +278,7 @@ export default class DocumentManager extends ProviderContract {
           const insertion = payload.insertion
           const filePath = payload.path // Optional, may be undefined
           const fromWindow = payload.fromWindow // Optional, may be undefined
-          const fromLeaf = payload.fromLeaf // Otional, may be undefined
+          const fromLeaf = payload.fromLeaf // Optional, may be undefined
           return await this.splitLeaf(oWin, oLeaf, direction, insertion, filePath, fromWindow, fromLeaf)
         }
         case 'close-leaf': {

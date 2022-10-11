@@ -772,7 +772,7 @@ export default class TableEditor {
   }
 
   /**
-   * Moves the curser to the previous column, switching rows if necessary.
+   * Moves the cursor to the previous column, switching rows if necessary.
    */
   previousCell (): void {
     // We're already in the first cell

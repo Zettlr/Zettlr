@@ -8,7 +8,7 @@ But in case you did not expect this, there may be something off!
 
 ## Adding more Test Cases
 
-In case you realize there's broken behaviour, feel free to open a Pull Request which adds more files/modifies files to accomodate for these edge cases so that we have an easy time testing it out using the local development environments.
+In case you realize there's broken behaviour, feel free to open a Pull Request which adds more files/modifies files to accommodate for these edge cases so that we have an easy time testing it out using the local development environments.
 
 ## Getting Started
 

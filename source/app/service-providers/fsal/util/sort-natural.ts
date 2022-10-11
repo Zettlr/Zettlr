@@ -18,7 +18,7 @@ import { RequiredSortingProps } from './sort'
  * Helper function to sort files using a collator
  * @param  {ZettlrFile} a A ZettlrFile exposing a name property
  * @param  {ZettlrFile} b A ZettlrFile exposing a name property
- * @return {number}   0, 1, or -1, depending upon what the comparision yields.
+ * @return {number}   0, 1, or -1, depending upon what the comparison yields.
  */
 export default function getNaturalSorter (fileNameDisplay: 'filename'|'title'|'heading'|'title+heading', appLang: string): (a: any, b: any) => number {
   return function sortNatural <T extends RequiredSortingProps> (a: T, b: T): number {

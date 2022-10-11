@@ -17,7 +17,7 @@ import { RequiredSortingProps } from './sort'
  * Helper function to sort files by modification or creation time
  * @param  {AnyDescriptor} a The first descriptor
  * @param  {AnyDescriptor} b The second descriptor
- * @return {number}          0, 1, or -1, depending upon what the comparision yields.
+ * @return {number}          0, 1, or -1, depending upon what the comparison yields.
  */
 export default function getDateSorter (whichTime: 'modtime'|'creationtime'): (a: any, b: any) => number {
   return function sortDate<T extends RequiredSortingProps> (a: T, b: T): number {

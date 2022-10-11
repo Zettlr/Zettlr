@@ -254,7 +254,7 @@ export default class ConfigProvider extends ProviderContract {
   /**
     * Adds a path to be opened on startup
     * @param {String} p The path to be added
-    * @return {Boolean} True, if the path was succesfully added, else false.
+    * @return {Boolean} True, if the path was successfully added, else false.
     */
   addPath (p: string): boolean {
     // Only add valid and unique paths

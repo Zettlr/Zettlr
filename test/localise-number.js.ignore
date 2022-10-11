@@ -14,7 +14,7 @@
  */
 
 // DEBUG: This test is currently failing since mocha is unable to load ES6 modules.
-// It all began with bcp-47 being converted to an ES6 module, and it's preferrable
+// It all began with bcp-47 being converted to an ES6 module, and it's preferable
 // to use import instead of require either way, so we're gonna disable this test
 // for the time being. Plus, the test never failed, and I don't see any reason
 // why we would need to change that function, so ... just don't change it, and

@@ -126,11 +126,11 @@ function switchTheme (newTheme: Theme): void {
 function setCustomCss (cssPath: string): void {
   const formerCustomCSS = document.getElementById('custom-css-link')
   if (formerCustomCSS !== null) {
-    // If appicable, remove a given previous custom CSS
+    // If applicable, remove a given previous custom CSS
     formerCustomCSS.parentElement?.removeChild(formerCustomCSS)
   }
 
-  // (Re)laod the custom CSS
+  // (Re)load the custom CSS
   let link = document.createElement('link')
   link.rel = 'stylesheet'
   link.setAttribute('href', 'safe-file://' + cssPath)
@@ -143,7 +143,7 @@ function setCustomCss (cssPath: string): void {
  * (Re)loads the system CSS
  */
 function setSystemCss (): void {
-  // Remove any former system CSS stylesheet, if appicable
+  // Remove any former system CSS stylesheet, if applicable
   const formerSystemCSS = document.getElementById('system-css')
   if (formerSystemCSS !== null) {
     formerSystemCSS.parentElement?.removeChild(formerSystemCSS)
