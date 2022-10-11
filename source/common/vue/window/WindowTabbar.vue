@@ -84,7 +84,7 @@ export default defineComponent({
   mounted () {
     window.addEventListener('resize', this.onWindowResize)
   },
-  destroyed () {
+  unmounted () {
     window.removeEventListener('resize', this.onWindowResize)
   },
   methods: {

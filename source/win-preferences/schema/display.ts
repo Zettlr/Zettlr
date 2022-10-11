@@ -109,7 +109,7 @@ export default function (): any {
         {
           type: 'checkbox',
           label: trans('dialog.preferences.theme.accent_color_label'),
-          model: 'display.useSystemAccentColor',
+          model: 'display.useSystemAccentColor'
         }
       ],
       [

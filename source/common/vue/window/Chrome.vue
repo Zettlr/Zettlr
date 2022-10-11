@@ -207,7 +207,7 @@ export default {
       } else {
         return true
       }
-    },
+    }
   },
   watch: {
     platform: function () {
@@ -377,7 +377,7 @@ body {
         /
         [toolbar-start tabbar-start]
           minmax(0, 1fr)
-        [toolbar-end tabbar-end controls-start] 
+        [toolbar-end tabbar-end controls-start]
           auto
         [controls-end];
     }

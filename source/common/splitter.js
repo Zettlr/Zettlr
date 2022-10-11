@@ -1,3 +1,16 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Splitter
+ * CVM-Role:        View
+ * Maintainer:      Basile Clément
+ * License:         GNU GPL v3
+ *
+ * Description:     Allow manual resizing of elements in a flexbox layout.
+ *
+ * END HEADER
+ */
 /* eslint-env es6 */
 
 class Splitter extends HTMLElement {
@@ -8,7 +21,7 @@ class Splitter extends HTMLElement {
 
     // Use flexbox by default for the splitter.  Note that non-flex display
     // values will render the splitter useless, since we use flex-basis to set
-    // the size. 
+    // the size.
     const style = document.createElement('style')
     style.textContent = ':host { display: flex; } :host([hidden]) { display: none; }'
 
@@ -54,7 +67,7 @@ class Splitter extends HTMLElement {
     event.stopPropagation()
     event.preventDefault()
 
-    const [previousSibling, nextSibling] = target.getEnclosingVisualElements()
+    const [ previousSibling, nextSibling ] = target.getEnclosingVisualElements()
     const previousPane = previousSibling instanceof Pane ? previousSibling : null
     const nextPane = nextSibling instanceof Pane ? nextSibling : null
 
@@ -108,9 +121,11 @@ class Splitter extends HTMLElement {
             newBasis = childSize
           }
 
-          if (newBasis !== oldBasis) delayed.push(() => {
-            child.dataset.basis = newBasis
-          })
+          if (newBasis !== oldBasis) {
+            delayed.push(() => {
+              child.dataset.basis = newBasis
+            })
+          }
         }
       }
       for (const fn of delayed) fn()
@@ -126,8 +141,8 @@ class Splitter extends HTMLElement {
       panes.push([ pane, paneStyle, parseFloat(paneStyle.getPropertyValue(propertyName)), factor, unit ])
     }
 
-    if (previousPane) addPane(previousPane)
-    if (nextPane) addPane(nextPane, -1)
+    if (previousPane !== null) addPane(previousPane)
+    if (nextPane !== null) addPane(nextPane, -1)
 
     const onMouseMove = ({ pageX, pageY }) => {
       const direction = style.getPropertyValue('flex-direction')
@@ -138,14 +153,14 @@ class Splitter extends HTMLElement {
 
       // For relative sizes using percentages, we need to compute the container
       // basis.  It is computed on first use below.
-      let containerBasis = undefined;
+      let containerBasis
 
       // Set the new value using flex-basis, because if flex-basis is not
       // `auto`, width and height will not be taken into account.
       // This also has a better behavior when the direction changes while
       // resizing.
       const offset = (isReverse ? -1 : 1) * (isHorizontal ? pageX - initialPageX : pageY - initialPageY)
-      for (const [pane, paneStyle, initialBasis, factor, unit] of panes) {
+      for (const [ pane, paneStyle, initialBasis, factor, unit ] of panes) {
         if (paneStyle.getPropertyValue('flex-grow') !== '0') continue
 
         let paneBasis = Math.max(0, initialBasis + factor * offset)
@@ -176,7 +191,7 @@ class Splitter extends HTMLElement {
       clampBases()
     }
     const observer = new MutationObserver((_mutationList, observer) => stopResizing(observer))
-    observer.observe(this, {childList: true})
+    observer.observe(this, { childList: true })
 
     window.addEventListener('mouseup', () => stopResizing(observer), { once: true })
   }
@@ -198,7 +213,7 @@ class Pane extends HTMLElement {
     shadowRoot.appendChild(slot)
   }
 
-  static get observedAttributes () { return ['data-basis', 'data-shrink', 'data-grow', 'data-order'] }
+  static get observedAttributes () { return [ 'data-basis', 'data-shrink', 'data-grow', 'data-order' ] }
 
   attributeChangedCallback (name, oldValue, newValue) {
     const setStyle = (name, value) => {
@@ -207,7 +222,7 @@ class Pane extends HTMLElement {
     }
 
     if (name === 'data-basis') {
-      setStyle('flex-basis', newValue);
+      setStyle('flex-basis', newValue)
     } else if (name === 'data-shrink') {
       setStyle('flex-shrink', newValue)
     } else if (name === 'data-grow') {
@@ -305,7 +320,7 @@ class Separator extends HTMLElement {
     // the center to the edges) is necessarily the previous (resp. next) visual
     // sibling.  In the most common case where no CSS order is set, this means
     // we only have to look at the previous and next siblings, to give a
-    // definite answer. 
+    // definite answer.
     //
     // For performance's sake, we bail out early when we encounter such as
     // "definite" visual sibling; hence, instead of ending up with a central
@@ -363,8 +378,8 @@ class Separator extends HTMLElement {
     let rangeEnd = this
 
     // These are [order, element] pairs
-    let currentPredecessor = [null, null]
-    let currentSuccessor = [null, null]
+    let currentPredecessor = [ null, null ]
+    let currentSuccessor = [ null, null ]
 
     // Look for the previous visual sibling in the initial segment.
     while ((rangeStart = rangeStart.previousElementSibling) !== null) {
@@ -374,14 +389,14 @@ class Separator extends HTMLElement {
 
       // currentPredecessorOrder < cursorOrder <= targetOrder
       if (isLt(currentPredecessor[0], cursorOrder) && isLe(cursorOrder, targetOrder)) {
-        currentPredecessor = [cursorOrder, rangeStart]
+        currentPredecessor = [ cursorOrder, rangeStart ]
 
         if (cursorOrder === targetOrder) break
       }
 
       // targetOrder < cursorOrder <= currentSuccessorOrder
       if (isLt(targetOrder, cursorOrder) && isLe(cursorOrder, currentSuccessor[0])) {
-        currentSuccessor = [cursorOrder, rangeStart]
+        currentSuccessor = [ cursorOrder, rangeStart ]
       }
     }
 
@@ -393,14 +408,14 @@ class Separator extends HTMLElement {
 
       // targetOrder <= cursorOrder < currentSuccessorOrder
       if (isLe(targetOrder, cursorOrder) && isLt(cursorOrder, currentSuccessor[0])) {
-        currentSuccessor = [cursorOrder, rangeEnd]
+        currentSuccessor = [ cursorOrder, rangeEnd ]
 
         if (cursorOrder === targetOrder) break
       }
 
       // currentPredecessorOrder <= cursorOrder < targetOrder
       if (isLe(currentPredecessor[0], cursorOrder) && isLt(cursorOrder, targetOrder)) {
-        currentPredecessor = [cursorOrder, rangeEnd]
+        currentPredecessor = [ cursorOrder, rangeEnd ]
       }
     }
 
@@ -421,9 +436,9 @@ class Separator extends HTMLElement {
         if (!isHidden(cursor)) {
           const cursorOrder = getOrder(cursor)
 
-          // targetOrder < cursorOrder < currentSuccessorOrder 
+          // targetOrder < cursorOrder < currentSuccessorOrder
           if (isLt(targetOrder, cursorOrder) && isLt(cursorOrder, currentSuccessor[0])) {
-            currentSuccessor = [cursorOrder, cursor]
+            currentSuccessor = [ cursorOrder, cursor ]
 
             if (cursorOrder === targetOrder + 1) break
           }
@@ -446,15 +461,17 @@ class Separator extends HTMLElement {
 
           // currentPredecessorOrder < cursorOrder < targetOrder
           if (isLt(currentPredecessor[0], cursorOrder) && isLt(cursorOrder, targetOrder)) {
-            currentPredecessor = [cursorOrder, cursor]
+            currentPredecessor = [ cursorOrder, cursor ]
 
             if (cursorOrder === targetOrder - 1) break
           }
         }
+
+        cursor = cursor.previousElementSibling
       }
     }
 
-    return [currentPredecessor[1], currentSuccessor[1]]
+    return [ currentPredecessor[1], currentSuccessor[1] ]
   }
 }
 

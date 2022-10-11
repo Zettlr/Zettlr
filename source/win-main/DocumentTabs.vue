@@ -851,11 +851,11 @@ body.linux {
       background-color: var(--headerbar-bg-color);
       &:hover { background-color: var(--view-hover-color); }
 
-      &.left { 
+      &.left {
         box-shadow: inset -1px 0 var(--headerbar-shade-color);
       }
 
-      &.right { 
+      &.right {
         box-shadow: inset 1px 0 var(--headerbar-shade-color);
       }
     }
