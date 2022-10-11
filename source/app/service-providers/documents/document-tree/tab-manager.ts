@@ -190,8 +190,6 @@ export class TabManager {
       return false
     }
 
-    console.log(`Closing file in leaf: ${file.path}`)
-
     // Retrieve the index of the active file and whether it's an active file
     const activeFileIdx = (this._activeFile === null) ? -1 : this._openFiles.indexOf(this._activeFile)
     const isActive = this._activeFile === file
