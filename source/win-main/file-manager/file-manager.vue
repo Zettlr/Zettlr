@@ -42,7 +42,7 @@
       />
     </div>
 
-    <div id="component-container">
+    <div ref="component-container" class="component-container">
       <!-- Render a the file-tree -->
       <FileTree
         ref="directories"
@@ -247,11 +247,11 @@ export default defineComponent({
       // Only show the button if the mouse is in the top of the file manager.
       // We're adding 10px padding to make sure we have some leeway in case of
       // sudden mouse movements.
-      const { top, left, right } = this.$el.getBoundingClientRect()
+      const { top, left, right } = this.$refs['component-container'].getBoundingClientRect()
       if (
         canShowFileTree &&
         evt.clientX >= left && evt.clientX <= right - 10 &&
-        evt.clientY >= top + 10 && evt.clientY <= top + 200
+        evt.clientY >= top + 10 && evt.clientY <= top + 60
       ) {
         (this.$refs.arrowButton as HTMLElement).classList.remove('hidden')
       } else {
@@ -439,7 +439,7 @@ body #file-manager {
   display: flex;
   flex-direction: column;
 
-  #component-container {
+  .component-container {
     overflow-x: hidden;
     // NOTE: Due to everything being relative, the component container is file-tree + file-list high
     overflow-y: hidden;
@@ -520,7 +520,7 @@ body.darwin {
   #file-manager {
     border-top: 1px solid #d5d5d5;
 
-    #component-container { height: calc(100% - 30px); }
+    .component-container { height: calc(100% - 30px); }
 
     .file-manager-filter {
       background-color: transparent;
@@ -551,7 +551,7 @@ body.darwin {
 
 body.win32 {
   #file-manager {
-    #component-container {
+    .component-container {
       height: calc(100% - 34px);
     }
 

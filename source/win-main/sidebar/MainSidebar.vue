@@ -231,7 +231,7 @@ body {
         flex-shrink: 1;
         padding: 0px 5px;
         font-weight: bold;
-        color: var(--system-accent-color, --c-primary);
+        color: var(--system-accent-color, var(--c-primary));
       }
 
       div.toc-entry {
@@ -242,7 +242,7 @@ body {
 
       div.toc-entry-active {
         font-weight: bold;
-        color: var(--system-accent-color);
+        color: var(--system-accent-color, var(--c-primary));
       }
     }
 

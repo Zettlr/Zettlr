@@ -136,6 +136,7 @@ body.linux {
   .system-tablist[role="tablist"] {
     padding: 6px 0;
     background-color: var(--headerbar-bg-color);
+    box-shadow: inset 0 -1px var(--headerbar-shade-color);
     overflow: auto;
     &::-webkit-scrollbar { display: none; }
 

@@ -77,8 +77,8 @@ div#statusbar {
   button {
     margin-right: 5px; // Increase spacing a little bit here
     &.primary {
-      background-color: var(--system-accent-color, --c-primary);
-      border-color: var(--system-accent-color, --c-primary);
+      background-color: var(--system-accent-color, var(--c-primary));
+      border-color: var(--system-accent-color, var(--c-primary));
       background-image: linear-gradient(transparent, #00000020);
       color: var(--system-accent-color-contrast, white);
     }

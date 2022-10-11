@@ -176,8 +176,8 @@ body.darwin {
     }
 
     input:checked + .toggle {
-      background-color: var(--system-accent-color, --c-primary);
-      border-color: var(--system-accent-color, --c-primary);
+      background-color: var(--system-accent-color, var(--c-primary));
+      border-color: var(--system-accent-color, var(--c-primary));
       background-image: linear-gradient(transparent, #00000020);
     }
 
@@ -205,7 +205,7 @@ body.darwin {
 
       input:checked + .toggle {
         background: none;
-        background-color: var(--system-accent-color, --c-primary);
+        background-color: var(--system-accent-color, var(--c-primary));
         border-color: transparent;
 
         &:before {
@@ -225,11 +225,11 @@ body.win32 {
     margin-right: 5px;
 
     input:checked + .toggle {
-      border-color: var(--system-accent-color, --c-primary);
+      border-color: var(--system-accent-color, var(--c-primary));
     }
 
     input:checked + .toggle:before {
-      background-color: var(--system-accent-color, --c-primary);
+      background-color: var(--system-accent-color, var(--c-primary));
     }
 
     .toggle {
@@ -313,7 +313,7 @@ body.linux {
 
       input:checked + .toggle {
         background: none;
-        background-color: var(--system-accent-color, --c-primary);
+        background-color: var(--system-accent-color, var(--c-primary));
         border-color: transparent;
 
         &:before {

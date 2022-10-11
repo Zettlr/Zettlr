@@ -154,7 +154,7 @@ body {
 
 body.win32 {
   div#window-controls {
-    background-color: var(--system-accent-color, --c-primary);
+    background-color: var(--system-accent-color, var(--c-primary));
     color: var(--system-accent-color-contrast, white);
 
     .minimise, .resize, .close {

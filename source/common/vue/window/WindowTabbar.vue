@@ -118,7 +118,7 @@ body div.tab-list {
 
       &.active {
         // --system variables are set dynamically based on the operating system.
-        color: var(--system-accent-color, --c-primary);
+        color: var(--system-accent-color, var(--c-primary));
         background-color: var(--system-accent-color-contrast, white);
       }
     }
@@ -147,7 +147,7 @@ body.darwin {
       }
 
       &.active {
-        color: var(--system-accent-color, --c-primary);
+        color: var(--system-accent-color, var(--c-primary));
       }
 
       div.toolbar-icon {
@@ -170,7 +170,7 @@ body.darwin {
         }
 
         &.active {
-          color: var(--system-accent-color, --c-primary);
+          color: var(--system-accent-color, var(--c-primary));
         }
       }
     }
@@ -208,7 +208,7 @@ body.win32 {
         color: rgb(238, 238, 238);
 
         &.active {
-          color: var(--system-accent-color, --c-primary);
+          color: var(--system-accent-color, var(--c-primary));
         }
 
         &:hover, &.active {

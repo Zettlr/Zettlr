@@ -194,7 +194,7 @@ export default function getConfigTemplate (): ConfigOptions {
     display: {
       theme: 'berlin', // The theme, can be berlin|frankfurt|bielefeld|karl-marx-stadt|bordeaux
       // By default, macOS computers use the system accent color instead of the theme's one
-      useSystemAccentColor: process.platform === 'darwin',
+      useSystemAccentColor: process.platform === 'darwin' || process.platform === 'linux',
       hideToolbarInDistractionFree: false,
       markdownFileExtensions: false,
       imageWidth: 100, // Maximum preview image width

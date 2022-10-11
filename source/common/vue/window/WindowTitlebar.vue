@@ -63,7 +63,7 @@ body.win32 {
     height: 31px;
     line-height: 31px;
     padding-left: 20px;
-    background-color: var(--system-accent-color, --c-primary);
+    background-color: var(--system-accent-color, var(--c-primary));
     color: var(--system-accent-color-contrast, white);
   }
 }

@@ -135,6 +135,11 @@ export default class AppearanceProvider extends ProviderContract {
           } catch (err) {
             return colorFallback // Probably macOS < 10.14
           }
+        } else if (process.platform === 'linux') {
+          return {
+            accent: this._isItDark() ? '78aeed' : '1c71d8',
+            contrast: 'ffffff'
+          }
         } else {
           return colorFallback // Unsupported platform
         }

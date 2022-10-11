@@ -343,11 +343,14 @@ body {
     --headerbar-shade-color: rgb(var(--current-color) / 0.07);
     --border-color: rgb(var(--current-color) / var(--border-opacity));
     --accelerator-color: rgb(var(--current-color) / 55%);
+    --dim-label-opacity: 0.55;
 
     --accent-bg-color: #3584e4;
     --accent-fg-color: #ffffff;
     --accent-color-rgb: 28 113 216;
     --accent-color: rgb(var(--accent-color-rgb));
+
+    background-color: var(--window-bg-color);
 
     // Use a different font-family for Linux that targets Gnome system fonts
     --system-font-family: Cantarell, system-ui, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -388,7 +391,7 @@ body {
 
     .distraction-free {
       #window-chrome {
-        background-color: transparent;
+        background-color: var(--view-bg-color);
         box-shadow: none;
       }
     }
@@ -406,6 +409,7 @@ body {
     --headerbar-fg-color: #ffffff;
     --headerbar-shade-color: rgb(0 0 0 / 0.36);
     --accent-color-rgb: 120 174 237;
+    --dim-label-opacity: 0.9;
   }
 }
 </style>

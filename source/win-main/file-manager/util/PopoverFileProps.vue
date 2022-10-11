@@ -201,7 +201,7 @@ body div.popover {
     }
 
     &.primary {
-      background-color: var(--system-accent-color, --c-primary);
+      background-color: var(--system-accent-color, var(--c-primary));
       color: rgb(230, 230, 230);
     }
   }

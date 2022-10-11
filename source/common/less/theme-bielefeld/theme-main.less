@@ -82,4 +82,24 @@ body {
       .CodeMirror-gutters { background-color: var(--beige-0); }
     }
   }
+
+  &.linux {
+    // The default bielefeld color is too light, darken it up a bit.
+    --c-primary: darken(@c-primary, 60%, relative);
+    --c-primary-contrast: var(--view-bg-color);
+    .linux-light(darken(@grey-3, 30%, relative), rgb(243 243 232 / 100%));
+
+    &.dark {
+      @bg_color: darken(rgb(100 100 65 / 100%), 60%, relative);
+      --c-primary: @c-primary;
+      --c-primary-contrast: var(--view-bg-color);
+      .linux-dark(@grey-0, @bg_color);
+
+      .main-editor-wrapper {
+        background-color: @bg_color;
+
+        .CodeMirror .CodeMirror-gutters { background-color: @bg_color; }
+      }
+    }
+  }
 }

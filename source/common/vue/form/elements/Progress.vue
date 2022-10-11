@@ -79,7 +79,7 @@ body {
     }
 
     progress::-webkit-progress-value {
-      background-color: var(--system-accent-color, --c-primary);
+      background-color: var(--system-accent-color, var(--c-primary));
       border-radius: 3px;
       transition: 0.4s width ease;
     }

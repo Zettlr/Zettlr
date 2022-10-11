@@ -275,7 +275,7 @@ body.darwin {
   .icon-selector div {
     border-radius: 2px;
     &:hover { background-color: rgb(180, 180, 180); }
-    &.active { background-color: var(--system-accent-color, --c-primary) }
+    &.active { background-color: var(--system-accent-color, var(--c-primary)) }
   }
 
   &.dark .icon-selector div:hover {

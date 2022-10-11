@@ -111,7 +111,7 @@ body {
       }
 
       input:checked + .toggle {
-        background-color: var(--system-accent-color, --c-primary);
+        background-color: var(--system-accent-color, var(--c-primary));
       }
     }
   }

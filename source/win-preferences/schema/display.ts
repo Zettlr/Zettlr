@@ -15,7 +15,6 @@
 import { trans } from '@common/i18n-renderer'
 
 export default function (): any {
-  const isWinOrMac = [ 'darwin', 'win32' ].includes(process.platform)
   return {
     fieldsets: [
       [
@@ -111,9 +110,6 @@ export default function (): any {
           type: 'checkbox',
           label: trans('dialog.preferences.theme.accent_color_label'),
           model: 'display.useSystemAccentColor',
-          // Disable on anything except macOS and Windows
-          disabled: !isWinOrMac,
-          info: (!isWinOrMac) ? trans('dialog.preferences.theme.accent_color_info') : undefined
         }
       ],
       [

@@ -72,6 +72,9 @@ export default function registerThemes (): void {
       } else if (payload === 'darkMode') {
         // Switch to light/dark mode based on the configuration variable
         document.body.classList.toggle('dark', window.config.get('darkMode'))
+
+        // On linux, the accent color is different in dark mode
+        if (process.platform === 'linux') setSystemCss()
       } else if (payload === 'display.useSystemAccentColor') {
         // The accent color setting has been changed, so re-set the customCSS
         setSystemCss()
@@ -155,6 +158,7 @@ function setSystemCss (): void {
       style.setAttribute('id', 'system-css')
 
       const useSystemAccent: boolean = window.config.get('display.useSystemAccentColor')
+      document.documentElement.classList.toggle('system', useSystemAccent)
 
       // We can put all CSS variables we would like to output into this map. All
       // will be appended to the stylesheet below.
@@ -162,9 +166,6 @@ function setSystemCss (): void {
       if (useSystemAccent) {
         variables.set('--system-accent-color', '#' + accentColor.accent)
         variables.set('--system-accent-color-contrast', '#' + accentColor.contrast)
-      } else {
-        variables.set('--system-accent-color', 'var(--c-primary)')
-        variables.set('--system-accent-color-contrast', 'var(--c-primary-contrast)')
       }
 
       // Why do we format it nicely? I don't know, but I like to keep things tidy.

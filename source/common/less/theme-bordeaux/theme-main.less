@@ -143,4 +143,16 @@ body {
       color: #dc322f;
     }
   }
+
+  &.linux {
+    --c-primary: darken(@c-primary, 90%, relative);
+    --c-primary-contrast: var(--view-bg-color);
+    .linux-light(@grey-3, #fffff8);
+
+    &.dark {
+      --c-primary: @c-primary;
+      @fg_color: lighten(#839496, 60%, relative);
+      .linux-dark(@fg_color, #002b36);
+    }
+  }
 }

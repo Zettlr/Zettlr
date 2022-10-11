@@ -374,8 +374,8 @@ body {
       height: 30px;
 
       &.directory {
-        color: var(--system-accent-color, --c-primary);
-        border-left-color: var(--system-accent-color, --c-primary);
+        color: var(--system-accent-color, var(--c-primary));
+        border-left-color: var(--system-accent-color, var(--c-primary));
       }
 
       &.has-meta-info { height: 70px; }
@@ -476,12 +476,12 @@ body.darwin {
       }
 
       &.selected {
-        border-left: 5px solid var(--system-accent-color, --c-primary);
-        background-color: var(--system-accent-color, --c-primary);
+        border-left: 5px solid var(--system-accent-color, var(--c-primary));
+        background-color: var(--system-accent-color, var(--c-primary));
         color: var(--system-accent-color-contrast, white);
 
         div.filename div.date {
-          background-color: var(--system-accent-color, --c-primary);
+          background-color: var(--system-accent-color, var(--c-primary));
           color: var(--system-accent-color-contrast, rgb(235, 235, 235));
         }
       }
@@ -500,7 +500,7 @@ body.darwin {
           border-radius: 4px;
 
           &.code-indicator {
-            background-color: var(--system-accent-color, --c-primary);
+            background-color: var(--system-accent-color, var(--c-primary));
             color: white;
           }
 
@@ -545,10 +545,10 @@ body.darwin {
         }
 
         &.selected {
-          background-color: var(--system-accent-color, --c-primary);
+          background-color: var(--system-accent-color, var(--c-primary));
 
           div.filename div.date {
-            background-color: var(--system-accent-color, --c-primary);
+            background-color: var(--system-accent-color, var(--c-primary));
             color: var(--system-accent-color-contrast, rgb(40, 40, 50));
           }
         }
@@ -582,11 +582,11 @@ body.win32 {
       }
 
       &.selected {
-        background-color: var(--system-accent-color, --c-primary);
+        background-color: var(--system-accent-color, var(--c-primary));
         color: var(--system-accent-color-contrast, white);
 
         div.filename div.date {
-          background-color: var(--system-accent-color, --c-primary);
+          background-color: var(--system-accent-color, var(--c-primary));
           color: var(--system-accent-color-contrast, white);
         }
       }
@@ -596,7 +596,7 @@ body.win32 {
       div.meta-info {
         .badge {
           &.code-indicator {
-            background-color: var(--system-accent-color, --c-primary);
+            background-color: var(--system-accent-color, var(--c-primary));
             color: white;
           }
 
@@ -678,7 +678,7 @@ body.linux {
       color: var(--window-fg-color);
 
       &.directory {
-        color: var(--system-accent-color, --c-primary);
+        color: var(--system-accent-color, var(--c-primary));
       }
 
       div.filename {
@@ -702,7 +702,8 @@ body.linux {
           top: inherit;
           right: inherit;
           flex: 0 0 auto;
-          opacity: 0.55; /* dim label */
+          color: var(--window-fg-color);
+          opacity: var(--dim-label-opacity);
         }
 
         /* Make it invisible */
@@ -737,8 +738,8 @@ body.linux {
           border-radius: 4px;
 
           &.code-indicator {
-            background-color: var(--system-accent-color, --c-primary);
-            color: white;
+            background-color: var(--system-accent-color, var(--c-primary));
+            color: var(--c-primary-contrast, var(--view-bg-color));
           }
 
           &.tag {
@@ -756,7 +757,7 @@ body.linux {
           }
 
           &:not(.code-indicator):not(.tag) {
-            opacity: 0.55;
+            opacity: var(--dim-label-opacity);
           }
 
           svg {

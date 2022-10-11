@@ -71,7 +71,14 @@ body {
   /**
    * Change editor font only.
    */
-   .main-editor-wrapper .cm-scroller {
+  .main-editor-wrapper .cm-scroller {
     font-family: 'Crimson', serif !important;
+  }
+
+  &.linux {
+    &.dark {
+      // The default frankfurt color is too dark, lighten it up a bit.
+      --c-primary: lighten(@c-primary, 20%, relative);
+    }
   }
 }

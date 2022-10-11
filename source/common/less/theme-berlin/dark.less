@@ -318,4 +318,39 @@ body.dark {
       background-color: rgba(255, 255, 255, 0.8) !important;
     }
   }
+
+  &.linux {
+    .linux-dark(@grey-0, rgb(20 20 30));
+  }
+}
+
+.linux-dark(@view_fg_color, @view_bg_color) {
+  @window_fg_color: @view_fg_color;
+  @card_fg_color: @window_fg_color;
+  @headerbar_fg_color: @window_fg_color;
+  @popover_fg_color: @window_fg_color;
+  @dialog_fg_color: @window_fg_color;
+
+  @window_bg_color: lighten(@view_bg_color, 10%, relative);
+  @card_bg_color: rgb(255 255 255 / 80%);
+  @headerbar_bg_color: @view_bg_color;
+  @popover_bg_color: mix(@window_bg_color, white, 93%);
+  @dialog_bg_color: mix(@window_bg_color, white, 93%);
+
+  :not(.system) & {
+    --view-fg-color: @view_fg_color;
+    --window-fg-color: @window_fg_color;
+    --card-fg-color: @card_fg_color;
+    --headerbar-fg-color: @headerbar_fg_color;
+    --popover-fg-color: @popover_fg_color;
+    --dialog-fg-color: @dialog_fg_color;
+
+    --view-bg-color: @view_bg_color;
+    --window-bg-color: @window_bg_color;
+    --card-bg-color: @card_bg_color;
+    --headerbar-bg-color: @headerbar_bg_color;
+    --popover-bg-color: @popover_bg_color;
+    --dialog-bg-color: @dialog_bg_color;
+>>>>>>> 29c0c6df (feat(linux): Window theming)
+  }
 }

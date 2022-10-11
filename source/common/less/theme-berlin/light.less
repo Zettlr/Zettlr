@@ -385,4 +385,40 @@ body {
       padding: 20px;
     }
   }
+
+  &.linux {
+    --accent-color: var(--c-primary);
+
+    .linux-light(@grey-3, white);
+  }
+}
+
+.linux-light(@view_fg_color, @view_bg_color) {
+  @window_fg_color: darken(@view_fg_color, 60%, relative);
+  @card_fg_color: @window_fg_color;
+  @headerbar_fg_color: @window_fg_color;
+  @popover_fg_color: @window_fg_color;
+  @dialog_fg_color: @window_fg_color;
+
+  @window_bg_color: @view_bg_color;
+  @card_bg_color: rgb(255 255 255 / 60%);
+  @headerbar_bg_color: mix(@window_bg_color, @window_fg_color, 90%);
+  @popover_bg_color: mix(@window_bg_color, white, 90%);
+  @dialog_bg_color: @window_bg_color;
+
+  :not(.system) & {
+    --view-fg-color: @view_fg_color;
+    --window-fg-color: @window_fg_color;
+    --card-fg-color: @card_fg_color;
+    --headerbar-fg-color: @headerbar_fg_color;
+    --popover-fg-color: @popover_fg_color;
+    --dialog-fg-color: @dialog_fg_color;
+
+    --view-bg-color: @view_bg_color;
+    --window-bg-color: @window_bg_color;
+    --card-bg-color: @card_bg_color;
+    --headerbar-bg-color: @headerbar_bg_color;
+    --popover-bg-color: @popover_bg_color;
+    --dialog-bg-color: @dialog_bg_color;
+  }
 }

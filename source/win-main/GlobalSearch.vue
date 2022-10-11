@@ -558,7 +558,7 @@ body div#global-search-pane {
 
       .search-result-highlight {
         font-weight: bold;
-        color: var(--system-accent-color);
+        color: var(--system-accent-color, var(--c-primary));
       }
     }
 

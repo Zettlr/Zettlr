@@ -553,8 +553,8 @@ body {
       }
 
       &.selected .display-text {
-        background-color: var(--system-accent-color, --c-primary);
-        color: var(--system-accent-color-contrast, --c-primary-contrast);
+        background-color: var(--system-accent-color, var(--c-primary));
+        color: var(--system-accent-color-contrast, var(--c-primary-contrast));
       }
 
       &.active .display-text {
@@ -584,7 +584,7 @@ body.darwin {
     color: rgb(53, 53, 53);
 
     // On macOS, non-standard icons are normally displayed in color
-    clr-icon.special { color: var(--system-accent-color, --c-primary); }
+    clr-icon.special { color: var(--system-accent-color, var(--c-primary)); }
 
     .item-icon, .toggle-icon {
       display: inline-block;
@@ -599,7 +599,7 @@ body.darwin {
 
       &.highlight {
         outline-width: 2px;
-        outline-color: var(--system-accent-color, --c-primary);
+        outline-color: var(--system-accent-color, var(--c-primary));
         outline-style: solid;
       }
     }
@@ -632,8 +632,8 @@ body.win32 {
 
       &.highlight {
         // This class is applied on drag & drop
-        background-color: var(--system-accent-color, --c-primary);
-        color: var(--system-accent-color-contrast, --c-primary-contrast);
+        background-color: var(--system-accent-color, var(--c-primary));
+        color: var(--system-accent-color-contrast, var(--c-primary-contrast));
       }
     }
   }
@@ -655,8 +655,8 @@ body.linux {
 
       &.highlight {
         // This class is applied on drag & drop
-        background-color: var(--system-accent-color, --c-primary);
-        color: var(--system-accent-color-contrast, --c-primary-contrast);
+        background-color: var(--system-accent-color, var(--c-primary));
+        color: var(--system-accent-color-contrast, var(--c-primary-contrast));
       }
     }
   }

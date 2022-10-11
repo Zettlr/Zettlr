@@ -162,7 +162,7 @@ body.win32 {
     font-size: 12px;
     padding-left: 30px;
     height: 31px;
-    background-color: var(--system-accent-color, --c-primary);
+    background-color: var(--system-accent-color, var(--c-primary));
     color: var(--system-accent-color-contrast);
 
     // Use the Zettlr logo as fixed background to enable branding in the menubar
@@ -181,8 +181,8 @@ body.win32 {
 body.linux {
   #menubar {
     span.top-level-item:hover {
-      color: var(--accent-color);
-      border-bottom: 3px solid var(--accent-color);
+      color: var(--system-accent-color, var(--accent-color));
+      border-bottom: 3px solid var(--system-accent-color, var(--accent-color));
     }
   }
 }
