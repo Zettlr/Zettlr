@@ -390,10 +390,10 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
 
 // External commands/"event" system
 watch(toRef(props.editorCommands, 'jumpToLine'), () => {
-  const { filePath, lineNumber, setCursor } = props.editorCommands.data
+  const { filePath, lineNumber } = props.editorCommands.data
   // Execute a jtl-command if the current displayed file is the correct one
   if (filePath === activeFile.value?.path) {
-    jtl(lineNumber, setCursor)
+    jtl(lineNumber)
   }
 })
 watch(toRef(props.editorCommands, 'moveSection'), () => {
@@ -591,7 +591,7 @@ async function swapDocument (doc: string) {
   })
 }
 
-function jtl (lineNumber: number, setCursor: boolean = false) {
+function jtl (lineNumber: number) {
   if (mdEditor !== null) {
     mdEditor.jtl(lineNumber) // TODO: Cursor?
   }

@@ -57,7 +57,10 @@
           </template>
           <template #view2>
             <!-- Second side: Sidebar -->
-            <MainSidebar v-on:move-section="moveSection($event)"></MainSidebar>
+            <MainSidebar
+              v-on:move-section="moveSection($event)"
+              v-on:jump-to-line="genericJtl($event)"
+            ></MainSidebar>
           </template>
         </SplitView>
       </template>
@@ -566,7 +569,17 @@ export default defineComponent({
     }
   },
   methods: {
-    jtl: function (filePath: string, lineNumber: number, newTab: boolean, setCursor: boolean = false) {
+    genericJtl: function (lineNumber: number) {
+      // This function is called from the sidebar where we already know the file
+      // is open (because its editor component has provided the table of
+      // contents in the first place).
+      const doc = this.$store.getters.lastLeafActiveFile() as OpenDocument|null
+      if (doc !== null) {
+        this.editorCommands.data = { filePath: doc.path, lineNumber }
+        this.editorCommands.jumpToLine = !this.editorCommands.jumpToLine
+      }
+    },
+    jtl: function (filePath: string, lineNumber: number, newTab: boolean) {
       // We need to make sure the given file is (a) open somewhere and (b) the
       // active file.
 
@@ -576,7 +589,7 @@ export default defineComponent({
       if (activeFileLeaf !== undefined) {
         // There is at least one leaf with the given file being active, so we
         // can simply emit the event
-        this.editorCommands.data = { filePath, lineNumber, setCursor }
+        this.editorCommands.data = { filePath, lineNumber }
         this.editorCommands.jumpToLine = !this.editorCommands.jumpToLine
         return
       }
@@ -596,7 +609,7 @@ export default defineComponent({
         })
           .then(() => {
             // Re-execute the jtl command
-            setTimeout(() => this.jtl(filePath, lineNumber, newTab, setCursor), WAIT_TIME)
+            setTimeout(() => this.jtl(filePath, lineNumber, newTab), WAIT_TIME)
           })
           .catch(e => console.error(e))
         return
@@ -616,7 +629,7 @@ export default defineComponent({
       })
         .then(() => {
           // Re-execute the jtl command
-          setTimeout(() => this.jtl(filePath, lineNumber, newTab, setCursor), WAIT_TIME)
+          setTimeout(() => this.jtl(filePath, lineNumber, newTab), WAIT_TIME)
         })
         .catch(e => console.error(e))
     },

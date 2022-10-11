@@ -12,7 +12,7 @@
       v-bind:style="{
         'margin-left': `${entry.level * 10}px`
       }"
-      v-on:click="($root as any).jtl(entry.line, true)"
+      v-on:click="$emit('jump-to-line', entry.line)"
       v-on:dragstart="startDragging"
       v-on:dragenter="dragEnter"
       v-on:dragleave="dragLeave"
@@ -47,7 +47,7 @@ let md2html: Function
 
 export default defineComponent({
   name: 'ToCTab',
-  emits: ['move-section'],
+  emits: [ 'move-section', 'jump-to-line' ],
   data () {
     return {
       activeFileDescriptor: null as AnyDescriptor|null
