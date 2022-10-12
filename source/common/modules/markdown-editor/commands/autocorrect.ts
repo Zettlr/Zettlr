@@ -79,6 +79,10 @@ export function handleBackspace (view: EditorView): boolean {
   let hasHandled = false
 
   for (const range of view.state.selection.ranges) {
+    if (range.from === 0) {
+      continue
+    }
+
     const slice = view.state.sliceDoc(range.from - 1, range.from)
     if (primaryMagicQuotes.includes(slice)) {
       hasHandled = true
