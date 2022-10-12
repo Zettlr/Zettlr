@@ -60,8 +60,16 @@ function apply (view: EditorView, completion: Completion, from: number, to: numb
  * Used internally to add ranges for the snippets to the state
  */
 const snippetTabsEffect = StateEffect.define<SelectionRange[][]>()
+
 /**
- * Use this effect to provide the editor state with a set of new tags to autocomplete
+ * This effect is used to indicate to the library that it should remove the
+ * first active range (so that the widget decorator can immediately remove the
+ * widget for the next selection range).
+ */
+const shiftNextTabEffect = StateEffect.define()
+
+/**
+ * Use this effect to provide the editor state with a set of new snippets to autocomplete
  */
 export const snippetsUpdate = StateEffect.define<Array<{ name: string, content: string }>>()
 
@@ -86,6 +94,15 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
         return { ...val }
       } else if (effect.is(snippetTabsEffect)) {
         val.activeRanges = effect.value
+        return { ...val }
+      } else if (effect.is(shiftNextTabEffect)) {
+        // NOTE: We cannot shift the range in the nextTab() command, as this
+        // change is not transparent to the library (hence it would render a
+        // widget also for the currently selected range, as it would only pick
+        // up the fact that this range doesn't exist anymore after the user
+        // starts typing, which re-evaluates the length of the activeRanges
+        // array.)
+        val.activeRanges.shift()
         return { ...val }
       }
     }
@@ -127,7 +144,12 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
         }
       }
 
-      return Decoration.set(decorations)
+      // NOTE: Our activeRanges are not guaranteed to be sorted from beginning
+      // to end of the document (since the user may also jump back and forth) in
+      // their snippet. Since the library expects them to be sorted, we pass in
+      // `true` as a second parameter so that the library sorts these ranges for
+      // us.
+      return Decoration.set(decorations, true)
     })
   }
 })
@@ -298,13 +320,19 @@ export const snippets: AutocompletePlugin = {
 
 export function nextSnippet (target: EditorView): boolean {
   // Progresses to the next tabstop if there's one available
-  const nextRange = target.state.field(snippetsUpdateField).activeRanges.shift()
-  if (nextRange !== undefined) {
-    target.dispatch({ selection: EditorSelection.create(nextRange) })
-    return true
-  } else {
+  const activeRanges = target.state.field(snippetsUpdateField).activeRanges
+  if (activeRanges.length === 0) {
     return false
   }
+
+  target.dispatch({
+    selection: EditorSelection.create(activeRanges[0]),
+    effects: [
+      shiftNextTabEffect.of(null),
+      EditorView.scrollIntoView(activeRanges[0][0].from, { y: 'center' })
+    ]
+  })
+  return true
 }
 
 export function abortSnippet (target: EditorView): boolean {
