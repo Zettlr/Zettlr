@@ -356,7 +356,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
       active: store.state.config['editor.autoCorrect.active'],
       style: store.state.config['editor.autoCorrect.style'],
       magicQuotes: {
-        primary: store.state.config['editor.autoCorrect.magicQuotes.secondary'],
+        primary: store.state.config['editor.autoCorrect.magicQuotes.primary'],
         secondary: store.state.config['editor.autoCorrect.magicQuotes.secondary']
       },
       replacements: store.state.config['editor.autoCorrect.replacements']
