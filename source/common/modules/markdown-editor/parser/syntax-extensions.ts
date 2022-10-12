@@ -22,7 +22,7 @@ function getInlineDecorator (): Extension {
   // Next, we need a so-called MatchDecorator that parses the code and returns a
   // decoration that should apply to those matches
   const decorator = new MatchDecorator({
-    regexp: /(@\w+)|(::.*?::)|(^#{1,6}\s+)|(?<=[([{\s]|^)(#\w+)/g,
+    regexp: /(@\w+)|(::.*?::)|(^#{1,6}\s+)|(?<=^|\s|[({[])#(#?[^\s,.:;…!?"'`»«“”‘’—–@$%&*#^+~÷\\/|<=>[\](){}]+#?)/ug,
     decoration: m => {
       if (m[1] !== undefined) {
         return citationDeco
