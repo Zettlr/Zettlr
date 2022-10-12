@@ -48,7 +48,7 @@ function findRefForFootnote (state: EditorState, fn: string): string|undefined {
  * If the user currently hovers over a footnote, this function returns the specs
  * to create a tooltip with the footnote ref's contents, else null.
  */
-function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip|Promise<Tooltip|null>|null {
+function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip|null {
   let { from, text } = view.state.doc.lineAt(pos)
   const fnRE = /\[\^.+?\](?!:)/g
   const relativePos = pos - from

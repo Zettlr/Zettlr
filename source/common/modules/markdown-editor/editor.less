@@ -258,23 +258,30 @@
     margin: 0 auto;
   }
 
-  // These two IDs are being used by the renderLines hook to make sure lists and
-  // blockquotes are always inset the right amount
-  #measureWidth {
-    position: absolute;
-    visibility: hidden;
-    height: auto;
-    width: auto;
-    white-space: nowrap;
-  }
+  .editor-note-preview {
+    max-width: 300px;
+    padding: 5px;
 
-  #measureMonoWidth {
-    font-family: Consolas, 'Inconsolata', Menlo, monospace;;
-    position: absolute;
-    visibility: hidden;
-    height: auto;
-    width: auto;
-    white-space: nowrap;
+    // Style the little preview note tooltips better
+    h4.filename {
+      font-size: 120%; // Not that much larger than the rest of the text
+    }
+
+    .note-content {
+      font-family: monospace; // TODO: Better font list for all operating systems
+      line-height: 100%;
+      margin: 10px 0;
+      white-space: pre-wrap;
+    }
+
+    .metadata {
+      color: rgb(200, 200, 200);
+      font-size: 80%;
+    }
+
+    .actions {
+      margin: 5px 0;
+    }
   }
 }
 
@@ -321,29 +328,6 @@ body .tippy-content {
     border: none;
     min-width: 200px;
     min-height: 150px;
-  }
-
-  .editor-note-preview {
-    // Style the little preview note tooltips better
-    h4.filename {
-      font-size: 120%; // Not that much larger than the rest of the text
-    }
-
-    .note-content {
-      font-family: monospace; // TODO: Better font list for all operating systems
-      line-height: 100%;
-      margin: 10px 0;
-      white-space: pre-wrap;
-    }
-
-    .metadata {
-      color: rgb(200, 200, 200);
-      font-size: 80%;
-    }
-
-    .actions {
-      margin: 5px 0;
-    }
   }
 }
 

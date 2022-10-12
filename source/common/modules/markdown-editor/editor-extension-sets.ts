@@ -40,7 +40,7 @@ import { mdStatistics } from './plugins/statistics-fields'
 import { tocField } from './plugins/toc-field'
 import { typewriter } from './plugins/typewriter'
 import { initRenderers } from './renderers'
-import { formattingToolbar, footnoteHover } from './tooltips'
+import { formattingToolbar, footnoteHover, filePreview } from './tooltips'
 import { EditorConfiguration, configField } from './util/configuration'
 import { copyAsHTML } from './util/copy-paste-cut'
 
@@ -213,6 +213,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     readabilityMode,
     formattingToolbar,
     footnoteHover,
+    filePreview,
     pasteHandler, // Manages image saving
     defaultContextMenu, // A default context menu
     spellchecker
