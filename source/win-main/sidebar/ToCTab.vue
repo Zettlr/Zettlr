@@ -14,8 +14,7 @@
       }"
       v-on:click="$emit('jump-to-line', entry.line)"
       v-on:dragstart="startDragging"
-      v-on:dragenter="dragEnter"
-      v-on:dragleave="dragLeave"
+      v-on:dragover="dragOver"
       v-on:drop="drop"
     >
       <div class="toc-level">
@@ -163,19 +162,11 @@ export default defineComponent({
       const fromLine = (event.currentTarget as HTMLElement).dataset.line
       event.dataTransfer?.setData('x-zettlr/toc-drag', fromLine as string)
     },
-    dragEnter: function (event: DragEvent) {
-      if (event.currentTarget === null) {
-        return
-      }
+    dragOver: function (event: DragEvent) {
+      const elem = document.querySelectorAll('.toc-entry-container')
+      elem.forEach(e => e.classList.remove('toc-drop-effect'))
       const container = event.currentTarget as HTMLElement
       container.classList.add('toc-drop-effect')
-    },
-    dragLeave: function (event: DragEvent) {
-      if (event.currentTarget === null) {
-        return
-      }
-      const container = event.currentTarget as HTMLElement
-      container.classList.remove('toc-drop-effect')
     },
     drop: function (event: DragEvent) {
       if (event.currentTarget === null) {
@@ -187,6 +178,10 @@ export default defineComponent({
 
       const fromLine = parseInt(event.dataTransfer?.getData('x-zettlr/toc-drag') as string, 10)
       const toLine = parseInt(container.dataset.line as string, 10)
+      if (fromLine === toLine) {
+        return
+      }
+
       const actualToLine = this.findEndOfEntry(toLine)
       if (actualToLine === undefined) {
         console.warn('Could not move section: Could not find correct target line')

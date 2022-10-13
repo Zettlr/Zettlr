@@ -312,10 +312,40 @@ export default class MarkdownEditor extends EventEmitter {
    * line identified by to
    *
    * @param   {number}  from  The starting line (including the section heading)
-   * @param   {number}  to    The target line for the section
+   * @param   {number}  to    The target line for the section (is -1 if it should be moved to the end)
    */
   moveSection (from: number, to: number): void {
-    // TODO
+    const toc = this._instance.state.field(tocField)
+    const entry = toc.find(e => e.line === from)
+
+    if (entry === undefined) {
+      return // Something went wrong
+    }
+
+    // The section ends at either the next higher or same-level heading
+    const nextSections = toc.slice(toc.indexOf(entry) + 1)
+    let endOfStartPos = this._instance.state.doc.length
+
+    for (const section of nextSections) {
+      if (section.level <= entry.level) {
+        endOfStartPos = section.pos - 1
+        break
+      }
+    }
+
+    const toLine = to !== -1 ? to : this._instance.state.doc.lines
+    const targetPos = this._instance.state.doc.line(toLine).to
+    const entryContents = this._instance.state.sliceDoc(entry.pos, endOfStartPos)
+
+    // Now, dispatch the updates.
+    this._instance.dispatch({
+      changes: [
+        // First, "cut"
+        { from: entry.pos, to: endOfStartPos, insert: '' },
+        // Then, "paste"
+        { from: targetPos, insert: entryContents }
+      ]
+    })
   }
 
   /**

@@ -63,9 +63,13 @@ function headingToID (headingString: string): string {
 
 export interface ToCEntry {
   /**
-   * The zero-indexed line number of the heading
+   * The one-indexed line number of the heading
    */
   line: number
+  /**
+   * The character where the entry begins
+   */
+  pos: number
   /**
    * The text contents of the heading (without the heading formatting)
    */
@@ -118,6 +122,7 @@ function generateToc (state: EditorState): ToCEntry[] {
           h2 = h3 = h4 = h5 = h6 = 0
           toc.push({
             line: state.doc.lineAt(node.from).number,
+            pos: node.from,
             text: state.doc.sliceString(node.from + 2, node.to),
             level: 1,
             renderedLevel: [h1].join('.'),
@@ -130,6 +135,7 @@ function generateToc (state: EditorState): ToCEntry[] {
           h3 = h4 = h5 = h6 = 0
           toc.push({
             line: state.doc.lineAt(node.from).number,
+            pos: node.from,
             text: state.doc.sliceString(node.from + 2, node.to),
             level: 2,
             renderedLevel: [ h1, h2 ].join('.'),
@@ -141,6 +147,7 @@ function generateToc (state: EditorState): ToCEntry[] {
           h4 = h5 = h6 = 0
           toc.push({
             line: state.doc.lineAt(node.from).number,
+            pos: node.from,
             text: state.doc.sliceString(node.from + 4, node.to),
             level: 3,
             renderedLevel: [ h1, h2, h3 ].join('.'),
@@ -152,6 +159,7 @@ function generateToc (state: EditorState): ToCEntry[] {
           h5 = h6 = 0
           toc.push({
             line: state.doc.lineAt(node.from).number,
+            pos: node.from,
             text: state.doc.sliceString(node.from + 5, node.to),
             level: 4,
             renderedLevel: [ h1, h2, h3, h4 ].join('.'),
@@ -163,6 +171,7 @@ function generateToc (state: EditorState): ToCEntry[] {
           h6 = 0
           toc.push({
             line: state.doc.lineAt(node.from).number,
+            pos: node.from,
             text: state.doc.sliceString(node.from + 6, node.to),
             level: 5,
             renderedLevel: [ h1, h2, h3, h4, h5 ].join('.'),
@@ -173,6 +182,7 @@ function generateToc (state: EditorState): ToCEntry[] {
           h6++
           toc.push({
             line: state.doc.lineAt(node.from).number,
+            pos: node.from,
             text: state.doc.sliceString(node.from + 7, node.to),
             level: 6,
             renderedLevel: [ h1, h2, h3, h4, h5, h6 ].join('.'),
