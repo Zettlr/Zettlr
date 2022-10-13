@@ -27,7 +27,7 @@ import './editor.less'
 import EventEmitter from 'events'
 
 import { EditorView } from '@codemirror/view'
-import { EditorState, Extension } from '@codemirror/state'
+import { EditorState, Extension, SelectionRange } from '@codemirror/state'
 import {
   getSearchQuery,
   SearchQuery,
@@ -51,8 +51,9 @@ import { citekeyUpdate, filesUpdate, tagsUpdate, snippetsUpdate } from './autoco
 import { configField, configUpdateEffect, EditorConfigOptions, EditorConfiguration, getDefaultConfig } from './util/configuration'
 import { Update } from '@codemirror/collab'
 import { DocumentType } from '@dts/common/documents'
-import { copyAsHTML } from './util/copy-paste-cut'
+import { copyAsHTML, pasteAsPlain } from './util/copy-paste-cut'
 import { CoreExtensionOptions, getJSONExtensions, getMarkdownExtensions, getTexExtensions, getYAMLExtensions } from './editor-extension-sets'
+import { highlightRangesEffect } from './plugins/highlight-ranges'
 
 export interface DocumentWrapper {
   path: string
@@ -269,15 +270,19 @@ export default class MarkdownEditor extends EventEmitter {
   /**
    * Allows highlighting of arbitrary ranges independent of a search
    *
-   * @param   {CodeMirror.Range[]}  ranges  The ranges to highlight
+   * @param  {SelectionRange[]}  ranges  The ranges to highlight
    */
-  highlightRanges (ranges: any[]): void {} // TODO
+  highlightRanges (ranges: SelectionRange[]): void {
+    this._instance.dispatch({ effects: highlightRangesEffect.of(ranges) })
+  }
 
   /**
    * Pastes the clipboard contents as plain text, regardless of any formatted
    * text present.
    */
-  pasteAsPlainText (): void {}
+  pasteAsPlainText (): void {
+    pasteAsPlain(this._instance)
+  }
 
   /**
    * Copies the current editor contents into the clipboard as HTML
@@ -460,23 +465,6 @@ export default class MarkdownEditor extends EventEmitter {
   }
 
   /**
-   * Should the editor return char counts instead of word counts where appropriate?
-   *
-   * @param   {boolean}  shouldCountChars  The value
-   */
-  set countChars (shouldCountChars: boolean) {
-  }
-
-  /**
-   * Returns whether the editor returns char counts in appropriate places.
-   *
-   * @return  {boolean}  Whether the editor counts chars or words.
-   */
-  get countChars (): boolean {
-    return false // TODO
-  }
-
-  /**
    * Whether the editor is in fullscreen mode
    *
    * @return  {Boolean}  True if the editor option for fullScreen is set
@@ -607,5 +595,14 @@ export default class MarkdownEditor extends EventEmitter {
    */
   get charCountWithoutSpaces (): number|undefined {
     return this._instance.state.field(charCountNoSpacesField, false)
+  }
+
+  /**
+   * Returns the underlying Codemirror instance
+   *
+   * @return  {EditorView}  The instance
+   */
+  get instance (): EditorView {
+    return this._instance
   }
 }

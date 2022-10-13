@@ -43,6 +43,7 @@ import { initRenderers } from './renderers'
 import { formattingToolbar, footnoteHover, filePreview } from './tooltips'
 import { EditorConfiguration, configField } from './util/configuration'
 import { copyAsHTML } from './util/copy-paste-cut'
+import { highlightRanges } from './plugins/highlight-ranges'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -120,7 +121,8 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
       options.remoteConfig.startVersion,
       options.remoteConfig.pullUpdates,
       options.remoteConfig.pushUpdates
-    )
+    ),
+    highlightRanges
   ]
 }
 

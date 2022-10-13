@@ -119,6 +119,7 @@ import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import getBibliographyForDescriptor from '@common/util/get-bibliography-for-descriptor'
 import EditorSearchPanel from './EditorSearchPanel.vue'
 import { SearchQuery } from '@codemirror/search'
+import { EditorSelection } from '@codemirror/state'
 
 const ipcRenderer = window.ipc
 
@@ -245,8 +246,6 @@ ipcRenderer.on('shortcut', (event, command) => {
         }
       })
       .catch(e => console.error(e))
-  } else if (command === 'close-window') {
-    // TODO: Implement tab closing
   } else if (command === 'search') {
     showSearch.value = !showSearch.value
   } else if (command === 'toggle-typewriter-mode') {
@@ -266,10 +265,6 @@ onMounted(() => {
   if (wrapper !== null) {
     wrapper.replaceWith(mdEditor.dom)
   }
-
-  // We have to set this to the appropriate value after mount, afterwards it
-  // will be updated as appropriate.
-  mdEditor.countChars = shouldCountChars.value
 
   // Update the document info on corresponding events
   mdEditor.on('change', () => {
@@ -332,7 +327,6 @@ const useH1 = computed<boolean>(() => store.state.config.fileNameDisplay.include
 const useTitle = computed<boolean>(() => store.state.config.fileNameDisplay.includes('title'))
 const filenameOnly = computed<boolean>(() => store.state.config['zkn.linkFilenameOnly'])
 const fontSize = computed<number>(() => store.state.config['editor.fontSize'])
-const shouldCountChars = computed<boolean>(() => store.state.config['editor.countChars'])
 const tagDatabase = computed(() => store.state.tagDatabase)
 const globalSearchResults = computed(() => store.state.searchResults)
 const node = computed(() => store.state.paneData.find(leaf => leaf.id === props.leafId))
@@ -509,7 +503,10 @@ watch(tagDatabase, (newValue) => {
   mdEditor.setCompletionDatabase('tags', tags)
 })
 
-watch(globalSearchResults, () => { maybeHighlightSearchResults() })
+watch(globalSearchResults, () => {
+  // TODO: I don't like that we need a timeout here.
+  setTimeout(maybeHighlightSearchResults, 200)
+})
 
 watch(activeFile, async () => {
   await loadActiveFile()
@@ -520,12 +517,6 @@ watch(showSearch, (newValue, oldValue) => {
     // Always "stopSearch" if the input is not shown, since this will clear
     // out, e.g., the matches on the scrollbar
     mdEditor?.stopSearch()
-  }
-})
-
-watch(shouldCountChars, (newValue) => {
-  if (mdEditor !== null) {
-    mdEditor.countChars = newValue
   }
 })
 
@@ -685,22 +676,23 @@ function maybeHighlightSearchResults () {
     return // No open file/no editor
   }
 
-  const result = globalSearchResults.value.find((r: any) => r.file.path === doc.path)
-  if (result !== undefined) {
-    // Construct CodeMirror.Ranges from the results
-    const rangesToHighlight = []
-    for (const res of result.result) {
-      const line: number = res.line
-      for (const range of res.ranges) {
-        const { from, to } = range
-        rangesToHighlight.push({
-          anchor: { line, ch: from },
-          head: { line, ch: to }
-        })
-      }
-    }
-    mdEditor.highlightRanges(rangesToHighlight as any)
+  const result = globalSearchResults.value.find(r => r.file.path === doc.path)
+  if (result === undefined) {
+    mdEditor.highlightRanges([])
+    return
   }
+
+  // Construct CodeMirror.Ranges from the results
+  const rangesToHighlight = []
+  // NOTE: We have to filter out "whole-file" results
+  for (const res of result.result.filter(res => res.line > -1)) {
+    const startIdx = mdEditor.instance.state.doc.line(res.line + 1).from
+    for (const range of res.ranges) {
+      const { from, to } = range
+      rangesToHighlight.push(EditorSelection.range(startIdx + from, startIdx + to))
+    }
+  }
+  mdEditor.highlightRanges(rangesToHighlight)
 }
 
 /**
