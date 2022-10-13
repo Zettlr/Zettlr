@@ -15,7 +15,6 @@ export const highlightRanges = StateField.define<DecorationSet>({
   update (oldVal, transaction) {
     for (const effect of transaction.effects) {
       if (effect.is(highlightRangesEffect)) {
-        console.warn('Updating range result decorations!')
         const newDecos = []
         for (const range of effect.value) {
           newDecos.push(highlightDeco.range(range.from, range.to))
