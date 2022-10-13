@@ -103,7 +103,7 @@ function generateToc (state: EditorState): ToCEntry[] {
   // We try to retrieve the full syntax tree, and if that fails, fall back to
   // the (possibly incomplete) syntax tree. For the ToC we definitely want to
   // utilize the full tree.
-  const tree = ensureSyntaxTree(state, state.doc.length) ?? syntaxTree(state)
+  const tree = ensureSyntaxTree(state, state.doc.length, 500) ?? syntaxTree(state)
 
   tree.iterate({
     enter (node) {
