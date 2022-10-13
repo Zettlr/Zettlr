@@ -65,7 +65,7 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): MathWidget|unde
   // reference (SyntaxNodeRef will be dropped, but the SyntaxNode itself will
   // stay, and keep its position updated depending on what happens in the doc)
   const nodeText = state.sliceDoc(node.from, node.to)
-  if (nodeText.charAt(0) !== '$' || nodeText.charAt(nodeText.length - 1) !== '$') {
+  if (!nodeText.startsWith('$') && (!nodeText.endsWith('$\n') || nodeText.endsWith('$'))) {
     return undefined // It's regular FencedCode/InlineCode
   }
 

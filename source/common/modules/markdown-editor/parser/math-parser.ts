@@ -88,6 +88,10 @@ export const blockMathParser: BlockParser = {
     ])
 
     ctx.addElement(wrapperNode)
+
+    // Ensure the closing code mark is also contained within this block. NOTE:
+    // Needs to be done AFTER we have used the line info to create the widget!
+    ctx.nextLine()
     return true // Signal that we've parsed this block
   }
 }
