@@ -47,6 +47,7 @@ import AppServiceContainer from 'source/app/app-service-container'
 import ZettlrCommand from './zettlr-command'
 import SetOpenDirectory from './set-open-directory'
 import { clipboard, ipcMain, nativeImage } from 'electron'
+import isFile from '@common/util/is-file'
 
 export const commands = [
   DirDelete,
@@ -114,7 +115,11 @@ export default class CommandProvider extends ProviderContract {
     } else if (command === 'get-filetree-events') {
       return this._app.fsal.filetreeHistorySince(payload)
     } else if (command === 'get-descriptor') {
-      return this._app.fsal.find(payload)
+      if (isFile(payload)) {
+        return await this._app.fsal.getDescriptorForAnySupportedFile(payload)
+      } else {
+        return await this._app.fsal.getAnyDirectoryDescriptor(payload)
+      }
     } else if (command === 'get-open-directory') {
       const openDir = this._app.fsal.openDirectory
       if (openDir === null) {

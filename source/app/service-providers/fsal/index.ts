@@ -1244,4 +1244,24 @@ export default class FSAL extends ProviderContract {
       return descriptor
     }
   }
+
+  /**
+   * Returns any directory descriptor
+   *
+   * @param   {string}                  absPath  The path to the directory
+   *
+   * @return  {Promise<DirDescriptor>}           The dir descriptor
+   */
+  public async getAnyDirectoryDescriptor (absPath: string): Promise<DirDescriptor> {
+    const descriptor = this.findDir(absPath)
+    if (descriptor !== undefined) {
+      return descriptor
+    }
+
+    if (!isDir(absPath)) {
+      throw new Error(`[FSAL] Cannot load directory ${absPath}: Not a directory`)
+    }
+
+    return await FSALDir.parse(absPath, this._cache, this._tags, this.getMarkdownFileParser(), this.getDirectorySorter(), false)
+  }
 }
