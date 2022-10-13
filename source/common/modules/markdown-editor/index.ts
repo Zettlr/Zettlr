@@ -123,6 +123,9 @@ export default class MarkdownEditor extends EventEmitter {
   } // END CONSTRUCTOR
 
   private _getExtensions (filePath: string, type: DocumentType, startVersion: number): Extension[] {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const editorInstance = this
+
     const options: CoreExtensionOptions = {
       initialConfig: JSON.parse(JSON.stringify(this.config)),
       remoteConfig: {
@@ -141,6 +144,55 @@ export default class MarkdownEditor extends EventEmitter {
         }
         if (update.selectionSet) {
           this.emit('cursorActivity')
+        }
+      },
+      domEventsListeners: {
+        mousedown (event, view) {
+          const cmd = event.metaKey && process.platform === 'darwin'
+          const ctrl = event.ctrlKey && process.platform !== 'darwin'
+          if (!cmd && !ctrl) {
+            return false
+          }
+
+          const pos = view.posAtCoords({ x: event.clientX, y: event.clientY })
+          if (pos === null) {
+            return false
+          }
+
+          // Now let's see if the user clicked on something useful. First check
+          // for tags, second for links
+
+          const lineInfo = view.lineBlockAt(pos)
+          const relativePos = pos - lineInfo.from
+          const lineText = view.state.sliceDoc(lineInfo.from, lineInfo.to)
+          for (const match of lineText.matchAll(/(?<=^|\s|[({[])#(#?[^\s,.:;…!?"'`»«“”‘’—–@$%&*#^+~÷\\/|<=>[\](){}]+#?)/g)) {
+            const idx = match.index as number
+            if (idx > pos) {
+              break // We're too far
+            } else if (idx <= relativePos && idx + match[0].length >= relativePos) {
+              // Got a tag
+              editorInstance.emit('zettelkasten-tag', match[0])
+              event.preventDefault()
+              return true
+            }
+          }
+
+          // Now let's check for links
+          const { linkStart, linkEnd } = view.state.field(configField)
+          const start = lineText.substring(0, relativePos).lastIndexOf(linkStart)
+          if (start < 0) {
+            return false
+          }
+          const end = lineText.indexOf(linkEnd, relativePos)
+          if (end < 0) {
+            return false
+          }
+
+          // Clicked on a link.
+          const linkContents = lineText.substring(start + linkStart.length, end)
+          editorInstance.emit('zettelkasten-link', linkContents)
+          event.preventDefault()
+          return true
         }
       }
     }
@@ -187,7 +239,6 @@ export default class MarkdownEditor extends EventEmitter {
   private maybeExchangeQuery (query: SearchQuery): void {
     const currentQuery = getSearchQuery(this._instance.state)
     if (!currentQuery.eq(query)) {
-      console.log('Exchanging old search query!')
       this._instance.dispatch({ effects: setSearchQuery.of(query) })
     }
   }
@@ -241,11 +292,13 @@ export default class MarkdownEditor extends EventEmitter {
    * @param  {number} line The line to pull into view
    */
   jtl (line: number): void {
-    const lineDesc = this._instance.state.doc.line(line)
-    this._instance.dispatch({
-      selection: { anchor: lineDesc.from, head: lineDesc.to },
-      effects: EditorView.scrollIntoView(lineDesc.from, { y: 'center' })
-    })
+    if (line > 0 && line <= this._instance.state.doc.lines) {
+      const lineDesc = this._instance.state.doc.line(line)
+      this._instance.dispatch({
+        selection: { anchor: lineDesc.from, head: lineDesc.to },
+        effects: EditorView.scrollIntoView(lineDesc.from, { y: 'center' })
+      })
+    }
     this._instance.focus()
   }
 

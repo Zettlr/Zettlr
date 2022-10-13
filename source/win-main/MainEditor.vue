@@ -141,6 +141,8 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits<{(e: 'globalSearch', query: string): void}>()
+
 const store = useStore(storeKey)
 
 // TEMPLATE REFS
@@ -303,12 +305,12 @@ onMounted(() => {
       .catch(err => console.error(err))
 
     if (store.state.config['zkn.autoSearch'] === true) {
-      // TODO (bindInstance.$root as any).startGlobalSearch(linkContents)
+      emit('globalSearch', linkContents)
     }
   })
 
   mdEditor.on('zettelkasten-tag', (tag) => {
-    // TODO (bindInstance.$root as any).startGlobalSearch(tag)
+    emit('globalSearch', tag)
   })
 
   // Lastly, run the initial load cycle

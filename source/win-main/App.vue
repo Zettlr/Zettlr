@@ -47,12 +47,14 @@
               v-bind:leaf-id="paneConfiguration.id"
               v-bind:editor-commands="editorCommands"
               v-bind:window-id="windowId"
+              v-on:global-search="startGlobalSearch($event)"
             ></EditorPane>
             <EditorBranch
               v-else
               v-bind:node="paneConfiguration"
               v-bind:window-id="windowId"
               v-bind:editor-commands="editorCommands"
+              v-on:global-search="startGlobalSearch($event)"
             ></EditorBranch>
           </template>
           <template #view2>

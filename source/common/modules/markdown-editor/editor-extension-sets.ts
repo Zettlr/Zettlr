@@ -25,7 +25,7 @@ import { yaml } from '@codemirror/legacy-modes/mode/yaml'
 import { json } from '@codemirror/legacy-modes/mode/javascript'
 import { search } from '@codemirror/search'
 import { EditorState, Extension, Prec } from '@codemirror/state'
-import { keymap, drawSelection, EditorView, lineNumbers, ViewUpdate } from '@codemirror/view'
+import { keymap, drawSelection, EditorView, lineNumbers, ViewUpdate, DOMEventHandlers } from '@codemirror/view'
 import { autocomplete } from './autocomplete'
 import { customKeymap } from './commands/keymap'
 import { codeSyntaxHighlighter, markdownSyntaxHighlighter } from './highlight/get-syntax-highlighter'
@@ -58,6 +58,7 @@ export interface CoreExtensionOptions {
     pushUpdates: (filePath: string, version: number, updates: Update[]) => Promise<boolean>
   }
   updateListener: (update: ViewUpdate) => void
+  domEventsListeners: DOMEventHandlers<any>
 }
 
 /**
@@ -216,7 +217,8 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     filePreview,
     pasteHandler, // Manages image saving
     defaultContextMenu, // A default context menu
-    spellchecker
+    spellchecker,
+    EditorView.domEventHandlers(options.domEventsListeners)
   ]
 }
 

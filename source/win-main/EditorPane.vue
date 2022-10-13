@@ -17,6 +17,7 @@
       v-bind:leaf-id="leafId"
       v-bind:window-id="windowId"
       v-bind:editor-commands="editorCommands"
+      v-on:global-search="$emit('globalSearch', $event)"
     ></MainEditor>
   </div>
   <!-- A single editor pane can either be a pane itself OR a MultiSplitView -->
@@ -56,6 +57,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['globalSearch'],
   computed: {
     elementStyles () {
       if (this.distractionFree) {
