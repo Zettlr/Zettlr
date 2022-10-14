@@ -15,8 +15,8 @@ async function filePreviewTooltip (view: EditorView, pos: number, side: 1 | -1):
   const { linkStart, linkEnd } = view.state.field(configField)
   const { from, text } = view.state.doc.lineAt(pos)
 
-  const start = text.indexOf(linkStart) + linkStart.length
-  const end = text.indexOf(linkEnd, start)
+  const start = text.substring(0, pos - from).lastIndexOf(linkStart) + linkStart.length
+  const end = text.indexOf(linkEnd, pos - from)
 
   if (pos > from + end || pos < from + start) {
     return null
@@ -29,15 +29,24 @@ async function filePreviewTooltip (view: EditorView, pos: number, side: 1 | -1):
     { command: 'file-find-and-return-meta-data', payload: fileToDisplay }
   )
 
-  if (res === undefined) {
-    return null
-  }
-
-  return {
-    pos,
-    above: true,
-    create (view) {
-      return { dom: getPreviewElement(res, fileToDisplay) }
+  if (res !== undefined) {
+    console.log(res)
+    return {
+      pos,
+      above: true,
+      create (view) {
+        return { dom: getPreviewElement(res, fileToDisplay) }
+      }
+    }
+  } else {
+    return {
+      pos,
+      above: true,
+      create (view) {
+        const dom = document.createElement('div')
+        dom.textContent = `File ${fileToDisplay} does not exist.` // TODO: Translate!
+        return { dom }
+      }
     }
   }
 }
