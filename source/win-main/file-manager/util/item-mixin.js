@@ -133,6 +133,11 @@ export default {
           })
             .catch(e => console.error(e))
         }
+
+        // Also uncollapse (only applies in file trees)
+        if (this.hasChildren === true) {
+          this.collapsed = this.collapsed === false
+        }
       }
     },
     /**
