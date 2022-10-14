@@ -198,16 +198,13 @@ export default {
               icon: this.obj.icon
             }
 
-            if (this.obj.sorting !== null) {
-              data.sortingType = this.obj.sorting.split('-')[0]
-              data.sortingDirection = this.obj.sorting.split('-')[1]
-            } // Else: Default sorting of name-up
+            ;[ data.sortingType, data.sortingDirection ] = this.obj.settings.sorting.split('-')
 
             const elem = (treeItem) ? this.$refs['display-text'] : this.$el
 
             this.$showPopover(PopoverDirProps, elem, data, (data) => {
               // Apply new sorting if applicable
-              if (data.sorting !== this.obj.sorting) {
+              if (data.sorting !== this.obj.settings.sorting) {
                 ipcRenderer.invoke('application', {
                   command: 'dir-sort',
                   payload: {
@@ -232,7 +229,7 @@ export default {
               }
 
               // Set the icon if it has changed
-              if (data.icon !== this.obj.icon) {
+              if (data.icon !== this.obj.settings.icon) {
                 ipcRenderer.invoke('application', {
                   command: 'dir-set-icon',
                   payload: {
