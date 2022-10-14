@@ -243,7 +243,7 @@ export default defineComponent({
       } else if (this.obj.settings.project !== null) {
         // Indicate that this directory has a project.
         return 'blocks-group'
-      } else if (this.obj.settings.icon !== null) {
+      } else if (this.obj.settings.icon != null) {
         // Display the custom icon
         return this.obj.settings.icon
       }

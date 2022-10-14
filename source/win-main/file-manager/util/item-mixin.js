@@ -192,7 +192,7 @@ export default {
                 .filter(file => file.type === 'file')
                 .map(file => file.wordCount)
                 .reduce((prev, cur) => prev + cur, 0),
-              isProject: this.obj.type === 'directory' && this.obj.project !== null,
+              isProject: this.obj.type === 'directory' && this.obj.settings.project !== null,
               fullPath: this.obj.path,
               isGitRepository: this.obj.isGitRepository,
               icon: this.obj.icon
