@@ -57,6 +57,25 @@ With Zettlr, writing professional texts is easy and motivating: Whether you are 
 
 To install Zettlr, just [download the latest release](https://www.zettlr.com/download/) for your operating system! Currently supported are macOS, Windows, and most Linux distributions (via Debian- and Fedora-packages as well as AppImages).
 
+Debian and Ubuntu based distros:
+For users of Debian and Ubuntu based distributions, you can also install and
+update the `.deb` packages we publish in our GitHub releases page using [deb-get](https://github.com/wimpysworld/deb-get).
+
+First install `deb-get` using these commands in a terminal:
+```bash
+$  sudo apt install curl
+$  curl -sL https://raw.githubusercontent.com/wimpysworld/deb-get/main/deb-get | sudo -E bash -s install deb-get
+```
+Then install Zettlr using the following command in terminal:
+```bash
+$  deb-get install zettlr
+```
+Once Zettlr is installed it can be kept upto date using:
+```bash
+    deb-get update
+    deb-get upgrade
+```
+
 All other [platforms that Electron supports](https://www.electronjs.org/docs/tutorial/support#supported-platforms) are supported as well, but you will need to build the app yourself for this to work.
 
 **Please also consider [becoming a patron](https://www.patreon.com/zettlr) or making a [one-time donation](https://paypal.me/hendrikerz)!**
