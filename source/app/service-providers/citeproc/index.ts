@@ -479,6 +479,11 @@ export default class CiteprocProvider extends ProviderContract {
 
     // Make sure we have the correct database loaded
     this.selectDatabase(database)
+    const citekeys = citations.map(c => c.id)
+    if (!this.ensureCitekeysExist(citekeys)) {
+      this._logger.verbose(`[CiteprocProvider] Cannot render citation with citekeys ${citekeys.join(', ')}: At least one key does not exist in database ${database}`)
+      return undefined
+    }
 
     try {
       if (!composite || citations.length > 1) {
@@ -505,10 +510,13 @@ export default class CiteprocProvider extends ProviderContract {
    * Directs the engine to create a bibliography from the items currently in the
    * registry (this can be updated by calling updateItems with an array of IDs.)
    *
+   * @param  {string}    database  The database to use for creating the bibliography
+   * @param  {string[]}  citekeys  The citekeys to use for creating the bibliography
+   *
    * @return {[BibliographyOptions, string[]]|undefined} A CSL object containing the bibliography.
    */
-  makeBibliography (database: string, citations: string[]): [BibliographyOptions, string[]]|undefined {
-    if (citations.length === 0) {
+  makeBibliography (database: string, citekeys: string[]): [BibliographyOptions, string[]]|undefined {
+    if (citekeys.length === 0) {
       return undefined
     }
 
@@ -517,12 +525,13 @@ export default class CiteprocProvider extends ProviderContract {
     }
 
     this.selectDatabase(database)
+    if (!this.ensureCitekeysExist(citekeys)) {
+      this._logger.verbose(`[CiteprocProvider] Cannot render bibliography with citekeys ${citekeys.join(', ')}: At least one key does not exist in database ${database}`)
+      return undefined
+    }
 
     try {
-      // Don't try to pass non-existent items in there, since that will make
-      // the citeproc engine to throw an error.
-      const sanitizedCitations = citations.filter(id => id in this._items)
-      this.engine.updateItems(sanitizedCitations)
+      this.engine.updateItems(citekeys)
       return this.engine.makeBibliography()
     } catch (err: any) {
       this._logger.warning(err.message, err)
@@ -537,5 +546,26 @@ export default class CiteprocProvider extends ProviderContract {
    */
   private hasMainLibrary (): boolean {
     return this.mainLibrary !== '' && this.databases.has(this.mainLibrary)
+  }
+
+  /**
+   * This function returns false if at least one provided citekey does not exist
+   * in the currently selected database. Can be called after selecting a
+   * database to ensure the CSLEngine does not throw errors if a key does not
+   * exist.
+   *
+   * @param   {string[]}  citekeys  The citekeys to check
+   *
+   * @return  {boolean}             Returns false if one or more citekeys don't
+   *                                exist in the selected database.
+   */
+  private ensureCitekeysExist (citekeys: string[]): boolean {
+    for (const key of citekeys) {
+      if (!(key in this._items)) {
+        return false
+      }
+    }
+
+    return true
   }
 }
