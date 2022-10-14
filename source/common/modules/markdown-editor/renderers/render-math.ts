@@ -10,6 +10,7 @@ import katex from 'katex'
 import 'katex/contrib/mhchem'
 import { EditorState } from '@codemirror/state'
 import clickAndSelect from './click-and-select'
+import { equationMenu } from '../context-menu/equation-menu'
 
 class MathWidget extends WidgetType {
   constructor (readonly equation: string, readonly displayMode: boolean, readonly node: SyntaxNode) {
@@ -28,11 +29,14 @@ class MathWidget extends WidgetType {
     elem.dataset.equation = this.equation
     katex.render(this.equation, elem, { throwOnError: false, displayMode: this.displayMode })
     elem.addEventListener('click', clickAndSelect(view, this.node))
+    elem.addEventListener('contextmenu', (event) => {
+      equationMenu(view, this.equation, { x: event.clientX, y: event.clientY })
+    })
     return elem
   }
 
   ignoreEvent (event: Event): boolean {
-    return false // By default ignore all events
+    return true // By default ignore all events
   }
 }
 
