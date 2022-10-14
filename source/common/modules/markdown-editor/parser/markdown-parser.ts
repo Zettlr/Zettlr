@@ -43,6 +43,7 @@ import { diff } from '@codemirror/legacy-modes/mode/diff'
 import { octave } from '@codemirror/legacy-modes/mode/octave'
 import { citationParser } from './citation-parser'
 import { footnoteParser, footnoteRefParser } from './footnote-parser'
+import { plainLinkParser } from './plain-link-parser'
 
 const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors: string[]}> = [
   {
@@ -282,11 +283,11 @@ export default function markdownParser (): LanguageSupport {
         footnoteRefParser
       ],
       parseInline: [
-        // This InlineParser parses inline math
+        // Add inline parsers that add AST elements for various additional types
         inlineMathParser,
-        // And this one parses citations
         footnoteParser,
-        citationParser
+        citationParser,
+        plainLinkParser
       ],
       // We have to notify the markdown parser about the additional Node Types
       // that the YAML block parser utilizes
