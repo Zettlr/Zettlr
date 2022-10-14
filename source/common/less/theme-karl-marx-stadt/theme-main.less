@@ -18,7 +18,6 @@
 @import "../theme-berlin/theme-main.less";
 
 :root {
-
   // Now adapt
   --c-primary: var(--red-1);
   --c-primary-contrast: white;
@@ -67,10 +66,16 @@
 @c-primary: @red-1;
 @c-primary-shade: @red-3;
 
-body.dark {
-  .main-editor-wrapper // Style the code block line wrapper classes
+body {
+  .main-editor-wrapper .cm-cursor-secondary {
+    // As the main theme defines secondary cursors just like this theme's
+    // primary cursors, we have to adapt the color here.
+    background: #1cb27e;
+  }
+}
 
-  .CodeMirror .code-block-line {
+body.dark {
+  .main-editor-wrapper cm-editor .code-block-line {
     background-color: #111111;
   }
 }

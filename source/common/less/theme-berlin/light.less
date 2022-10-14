@@ -124,6 +124,9 @@ body {
       font-weight: inherit;
     }
 
+    // I can't believe that THAT's not part of the default theme
+    .cm-emphasis { font-style: italic; }
+
     // citations
     .citeproc-citation {
       background-color: var(--grey-0);
@@ -266,8 +269,12 @@ body {
     background-color: var(--selection-light);
   }
 
-  .cm-cursor {
+  .cm-cursor-primary {
     background: var(--c-primary);
+  }
+
+  .cm-cursor-secondary {
+    background: var(--red-2);
   }
 
   // Hint related stuff. Hints mustn't be scoped by .CodeMirror as they are
