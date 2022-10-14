@@ -586,7 +586,7 @@ async function swapDocument (doc: string) {
 
 function jtl (lineNumber: number) {
   if (mdEditor !== null) {
-    mdEditor.jtl(lineNumber) // TODO: Cursor?
+    mdEditor.jtl(lineNumber)
   }
 }
 
