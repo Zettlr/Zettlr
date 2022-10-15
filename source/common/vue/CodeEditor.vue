@@ -25,7 +25,7 @@
 
 import { Decoration, EditorView, lineNumbers, MatchDecorator, ViewPlugin, ViewUpdate } from '@codemirror/view'
 import { onMounted, ref, toRef, watch } from 'vue'
-import { closeBrackets } from '@codemirror/autocomplete'
+import { autocompletion, closeBrackets, CompletionContext } from '@codemirror/autocomplete'
 import { bracketMatching, indentOnInput, StreamLanguage } from '@codemirror/language'
 import { codeSyntaxHighlighter, markdownSyntaxHighlighter } from '@common/modules/markdown-editor/highlight/get-syntax-highlighter'
 import { yaml } from '@codemirror/legacy-modes/mode/yaml'
@@ -107,6 +107,21 @@ const snippetsHighlight = ViewPlugin.define(view => ({
     this.decorations = snippetsDecorator.updateDeco(u, this.decorations)
   }
 }), { decorations: v => v.decorations })
+
+function snippetsAutocomplete (context: CompletionContext) {
+  const match = context.matchBefore(/\$[\da-z_]*$/i)
+  if (match === null) {
+    return null
+  } else {
+    const existingVarContents = match.text.toLowerCase().substring(1) // Ignore the $
+    return {
+      from: match.from,
+      options: SUPPORTED_VARIABLES
+        .filter(variable => variable.toLowerCase().startsWith(existingVarContents))
+        .map(variable => { return { label: '$' + variable, type: 'keyword' } })
+    }
+  }
+}
 
 /**
  * Small drop-in plugin that assigns 'cm-link'-classes to everything that looks
@@ -198,7 +213,15 @@ const cssExtensions = [
 ]
 
 const mdExtensions = [
-  ...extensions, // TODO
+  ...extensions,
+  // Enable the user to autocomplete the snippets
+  autocompletion({
+    activateOnTyping: true, // Always show immediately
+    selectOnOpen: false, // But never pre-select anything
+    closeOnBlur: true,
+    maxRenderedOptions: 20,
+    override: [snippetsAutocomplete]
+  }),
   markdownParser(), // Comes from the main editor
   markdownSyntaxHighlighter(), // Comes from the main editor
   snippetsHighlight
@@ -318,6 +341,16 @@ body {
     .cm-tm-variable { color: @yellow; }
     .cm-tm-variable-placeholder { color: @violet; }
     .cm-tm-false-variable { color: @red; }
+
+    // Applies to all tooltips
+    .cm-tooltip-hover,
+    .cm-tooltip-autocomplete,
+    .cm-tooltip {
+      border: none;
+      padding: 5px;
+      border-radius: 4px;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .25);
+    }
   }
 
   &.dark {
@@ -342,6 +375,13 @@ body {
       .cm-gutters {
         background-color: @base01;
         color: @base1;
+      }
+
+      .cm-tooltip-hover,
+      .cm-tooltip-autocomplete,
+      .cm-tooltip {
+        background-color: rgb(40, 40, 40);
+        border: 1px solid rgb(80, 80, 80);
       }
     }
   }
