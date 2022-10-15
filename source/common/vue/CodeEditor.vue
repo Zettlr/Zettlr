@@ -1,8 +1,10 @@
 <template>
-  <textarea ref="editor"></textarea>
+  <div class="code-editor-wrapper">
+    <div v-bind:id="wrapperId"></div>
+  </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 /**
  * @ignore
  * BEGIN HEADER
@@ -19,18 +21,17 @@
  * END HEADER
  */
 
-import CodeMirror from 'codemirror'
-import 'codemirror/addon/edit/closebrackets'
+// import { trans } from '@common/i18n-renderer'
 
-import 'codemirror/lib/codemirror.css'
-import 'codemirror/mode/css/css'
-import 'codemirror/mode/yaml/yaml'
-import 'codemirror/mode/gfm/gfm'
-import 'codemirror/addon/mode/overlay'
-
-import { trans } from '@common/i18n-renderer'
-
-import { defineComponent } from 'vue'
+import { Decoration, EditorView, lineNumbers, MatchDecorator, ViewPlugin, ViewUpdate } from '@codemirror/view'
+import { onMounted, ref, toRef, watch } from 'vue'
+import { closeBrackets } from '@codemirror/autocomplete'
+import { bracketMatching, indentOnInput, StreamLanguage } from '@codemirror/language'
+import { codeSyntaxHighlighter, markdownSyntaxHighlighter } from '@common/modules/markdown-editor/highlight/get-syntax-highlighter'
+import { yaml } from '@codemirror/legacy-modes/mode/yaml'
+import { EditorState } from '@codemirror/state'
+import { css } from '@codemirror/legacy-modes/mode/css'
+import markdownParser from '@common/modules/markdown-editor/parser/markdown-parser'
 
 /**
  * We have to define the CodeMirror instance outside of Vue, since the Proxy-
@@ -39,89 +40,73 @@ import { defineComponent } from 'vue'
  *
  * @var {CodeMirror.Editor}
  */
-let cmInstance: CodeMirror.Editor|null = null
+const cmInstance = new EditorView()
 
-/**
- * Define a snippets mode that extends the GFM mode with TextMate syntax.
- *
- * @param  {Object}       config     The original mode config
- * @param  {Object}       parsercfg  The parser config
- *
- * @return {OverlayMode}             The generated overlay mode
- */
-CodeMirror.defineMode('markdown-snippets', function (config, parsercfg) {
-  // Create the overlay and such
-  // Only matches simple $0 or $14 tabstops
-  const tabstopRE = /\$\d+/
-  // Matches tabstops with defaults
-  const placeholderRE = /\$\{\d+:.+?\}/
-  // Matches only valid variables
-  const onlyVarRE = /\$([A-Z_]+)/
-  // Matches only valid variables plus their placeholder
-  const variableRE = /\$\{([A-Z_]+):.+?\}/
+// TODO: This could break if we ever have more than one code editor on the same page
+const wrapperId = ref<string>('code-editor')
 
-  // NOTE: This array corresponds to whatever is defined in autocomplete.js
-  const SUPPORTED_VARIABLES = [
-    'CURRENT_YEAR',
-    'CURRENT_YEAR_SHORT',
-    'CURRENT_MONTH',
-    'CURRENT_MONTH_NAME',
-    'CURRENT_MONTH_NAME_SHORT',
-    'CURRENT_DATE',
-    'CURRENT_HOUR',
-    'CURRENT_MINUTE',
-    'CURRENT_SECOND',
-    'CURRENT_SECONDS_UNIX',
-    'UUID',
-    'CLIPBOARD',
-    'ZKN_ID',
-    'CURRENT_ID',
-    'FILENAME',
-    'DIRECTORY',
-    'EXTENSION'
-  ]
+const cleanFlag = ref<boolean>(true)
 
-  const markdownSnippets = {
-    token: function (stream: CodeMirror.StringStream) {
-      if (stream.match(tabstopRE) !== null) {
-        return 'tm-tabstop'
+const tabstopDeco = Decoration.mark({ class: 'cm-tm-tabstop' })
+const placeholderDeco = Decoration.mark({ class: 'cm-tm-placeholder' })
+const varDeco = Decoration.mark({ class: 'cm-tm-variable' })
+const invalidVarDeco = Decoration.mark({ class: 'cm-tm-false-variable' })
+const varPlaceholderDeco = Decoration.mark({ class: 'cm-tm-variable-placeholder' })
+
+const SUPPORTED_VARIABLES = [
+  'CURRENT_YEAR',
+  'CURRENT_YEAR_SHORT',
+  'CURRENT_MONTH',
+  'CURRENT_MONTH_NAME',
+  'CURRENT_MONTH_NAME_SHORT',
+  'CURRENT_DATE',
+  'CURRENT_HOUR',
+  'CURRENT_MINUTE',
+  'CURRENT_SECOND',
+  'CURRENT_SECONDS_UNIX',
+  'UUID',
+  'CLIPBOARD',
+  'ZKN_ID',
+  'CURRENT_ID',
+  'FILENAME',
+  'DIRECTORY',
+  'EXTENSION'
+]
+
+const snippetsDecorator = new MatchDecorator({
+  // tabstops|tabstops with default|variables|variable with default
+  regexp: /(?<tabstop>\$\d+)|(?<tabstopDefault>\$\{\d+:.+?\})|\$(?<var>[A-Z_]+)|\$\{(?<varDefault>[A-Z_]+):.+?\}/g,
+  // tabstop and tabstopDefault -> valid tabstop
+  // var and varDefault --> check the corresponding group if variable is correct
+  decoration: m => {
+    if (m.groups?.tabstop !== undefined) {
+      return tabstopDeco
+    } else if (m.groups?.tabstopDefault !== undefined) {
+      return placeholderDeco
+    } else if (m.groups?.var !== undefined) {
+      if (SUPPORTED_VARIABLES.includes(m.groups.var)) {
+        return varDeco
+      } else {
+        return invalidVarDeco
       }
-
-      if (stream.match(placeholderRE) !== null) {
-        return 'tm-placeholder'
+    } else if (m.groups?.varDefault !== undefined) {
+      if (SUPPORTED_VARIABLES.includes(m.groups.varDefault)) {
+        return varPlaceholderDeco
+      } else {
+        return invalidVarDeco
       }
-
-      if (stream.match(onlyVarRE, false) !== null) {
-        const variable = stream.match(onlyVarRE)[1]
-        if (SUPPORTED_VARIABLES.includes(variable)) {
-          return 'tm-variable'
-        } else {
-          return 'tm-false-variable'
-        }
-      }
-
-      if (stream.match(variableRE, false) !== null) {
-        const variable = stream.match(variableRE)[1]
-        if (SUPPORTED_VARIABLES.includes(variable)) {
-          return 'tm-variable-placeholder'
-        } else {
-          return 'tm-false-variable'
-        }
-      }
-
-      // We didn't match anything, so try again next time.
-      stream.next()
-      return null
+    } else {
+      return invalidVarDeco // Default: invalid
     }
   }
-
-  const mode = CodeMirror.getMode(config, {
-    name: 'gfm',
-    highlightFormatting: true,
-    gitHubSpice: false
-  })
-  return CodeMirror.overlayMode(mode, markdownSnippets, true)
 })
+
+const snippetsHighlight = ViewPlugin.define(view => ({
+  decorations: snippetsDecorator.createDeco(view),
+  update (u: ViewUpdate) {
+    this.decorations = snippetsDecorator.updateDeco(u, this.decorations)
+  }
+}), { decorations: v => v.decorations })
 
 /**
  * Small drop-in plugin that assigns 'cm-link'-classes to everything that looks
@@ -130,43 +115,43 @@ CodeMirror.defineMode('markdown-snippets', function (config, parsercfg) {
  *
  * @param   {CodeMirror.Editor}  cm  The CodeMirror instance
  */
-function markLinks (cm: CodeMirror.Editor) {
-  // Very small drop in that marks URLs inside the code editor
-  for (let i = 0; i < cm.lineCount(); i++) {
-    const line = String(cm.getLine(i))
-    // Can contain a-z0-9, ., -, /, %, and #, but must end
-    // with an alphanumeric, a slash or a hashtag.
-    const match = /[a-z0-9-]+:\/\/[a-z0-9.-/#%]+[a-z0-9/#]/i.exec(line)
-    if (match === null) {
-      continue
-    }
+// function markLinks (cm: CodeMirror.Editor) {
+//   // Very small drop in that marks URLs inside the code editor
+//   for (let i = 0; i < cm.lineCount(); i++) {
+//     const line = String(cm.getLine(i))
+//     // Can contain a-z0-9, ., -, /, %, and #, but must end
+//     // with an alphanumeric, a slash or a hashtag.
+//     const match = /[a-z0-9-]+:\/\/[a-z0-9.-/#%]+[a-z0-9/#]/i.exec(line)
+//     if (match === null) {
+//       continue
+//     }
 
-    const from = { line: i, ch: match.index }
-    const to = { line: i, ch: match.index + match[0].length }
+//     const from = { line: i, ch: match.index }
+//     const to = { line: i, ch: match.index + match[0].length }
 
-    // We can only have one marker at any given position at any given time
-    if (cm.findMarks(from, to).length > 0) {
-      continue
-    }
+//     // We can only have one marker at any given position at any given time
+//     if (cm.findMarks(from, to).length > 0) {
+//       continue
+//     }
 
-    cm.markText(
-      from, to,
-      {
-        className: 'cm-link',
-        inclusiveLeft: false,
-        inclusiveRight: true,
-        attributes: { title: trans('gui.ctrl_click_to_open', match[0]) }
-      }
-    )
-  }
-}
+//     cm.markText(
+//       from, to,
+//       {
+//         className: 'cm-link',
+//         inclusiveLeft: false,
+//         inclusiveRight: true,
+//         attributes: { title: trans('gui.ctrl_click_to_open', match[0]) }
+//       }
+//     )
+//   }
+// }
 
 /**
  * If applicable, follows a link from the editor.
  *
  * @param   {MouseEvent}  event  The triggering MouseEvent
  */
-function maybeOpenLink (event: MouseEvent) {
+function maybeOpenLink (event: MouseEvent, view: EditorView) {
   const t = event.target
   const cmd = process.platform === 'darwin' && event.metaKey
   const ctrl = process.platform !== 'darwin' && event.ctrlKey
@@ -184,122 +169,87 @@ function maybeOpenLink (event: MouseEvent) {
   }
 }
 
-export default defineComponent({
-  name: 'CodeEditor',
-  props: {
-    modelValue: {
-      type: String,
-      default: ''
-    },
-    mode: {
-      type: String,
-      default: 'css'
-    },
-    readonly: {
-      type: Boolean,
-      default: false
+const extensions = [
+  lineNumbers(),
+  closeBrackets(),
+  bracketMatching(),
+  indentOnInput(),
+  codeSyntaxHighlighter(), // This comes from the main editor component
+  EditorView.updateListener.of((update) => {
+    if (update.docChanged) {
+      // Tell the main component that the contents have changed
+      cleanFlag.value = false
+      emit('update:modelValue', cmInstance.state.doc.toString())
     }
-  },
-  emits: ['update:modelValue'],
-  data: function () {
-    return {
-      cmInstance: null
-    }
-  },
-  watch: {
-    modelValue: function () {
-      if (cmInstance === null) {
-        return
-      }
+  }),
+  EditorView.domEventHandlers({
+    mousedown: maybeOpenLink
+  })
+]
 
-      const currentValue = cmInstance.getValue()
+const yamlExtensions = [
+  ...extensions,
+  StreamLanguage.define(yaml)
+]
 
-      if (currentValue !== this.modelValue) {
-        const cur = Object.assign({}, cmInstance.getCursor())
-        cmInstance.setValue(this.modelValue)
-        cmInstance.setCursor(cur)
-      }
-    },
-    readonly: function () {
-      if (cmInstance === null) {
-        return
-      }
+const cssExtensions = [
+  ...extensions,
+  StreamLanguage.define(css)
+]
 
-      if (this.readonly === true) {
-        cmInstance.setOption('readOnly', 'nocursor')
-      } else {
-        cmInstance.setOption('readOnly', false)
-      }
-    }
-  },
-  mounted: function () {
-    cmInstance = CodeMirror.fromTextArea(this.$refs.editor as HTMLTextAreaElement, {
-      lineNumbers: true,
-      theme: 'code-editor',
-      mode: this.mode,
-      cursorScrollMargin: 20,
-      lineWrapping: true,
-      autoCloseBrackets: true,
-      readOnly: (this.readonly === true) ? 'nocursor' : false,
-      extraKeys: {
-        // Even though indentWithTabs is false, without remapping Tab to
-        // indentation, it would insert a Tab rather than spaces. So we have
-        // to rebind it here.
-        Tab: (cm) => cm.execCommand('indentMore')
-      }
-    })
+const mdExtensions = [
+  ...extensions, // TODO
+  markdownParser(), // Comes from the main editor
+  markdownSyntaxHighlighter(), // Comes from the main editor
+  snippetsHighlight
+]
 
-    cmInstance.setValue(this.modelValue)
+function setContents (contents: string, mode: 'css'|'yaml'|'markdown-snippets'): void {
+  const state = EditorState.create({
+    doc: contents,
+    extensions: (mode === 'css') ? cssExtensions : (mode === 'yaml') ? yamlExtensions : mdExtensions
+  })
 
-    cmInstance.on('change', (event, changeObj) => {
-      if (cmInstance === null) {
-        return
-      }
+  cmInstance.setState(state)
+}
 
-      this.$emit('update:modelValue', cmInstance.getValue())
-    })
+interface Props {
+  modelValue: string
+  mode: 'css'|'markdown-snippets'|'yaml'
+  readonly?: boolean
+}
 
-    // Detect links inside the source code and listen for clicks on these.
-    cmInstance.on('cursorActivity', markLinks)
-    cmInstance.getWrapperElement().addEventListener('mousedown', maybeOpenLink)
-  },
-  beforeUnmount: function () {
-    if (cmInstance === null) {
-      return
-    }
+const props = defineProps<Props>()
 
-    const cmWrapper = cmInstance.getWrapperElement()
-    if (cmWrapper.parentNode === null) {
-      return
-    }
+const emit = defineEmits<{(e: 'update:modelValue', newContents: string): void}>()
 
-    // "Remove this from your tree to delete an editor instance."
-    cmWrapper.parentNode.removeChild(cmWrapper)
-  },
-  methods: {
-    setValue: function (newContents: string) {
-      if (cmInstance === null) {
-        return
-      }
-
-      cmInstance.setValue(newContents)
-    },
-    isClean: function () {
-      if (cmInstance === null) {
-        return true
-      }
-
-      return cmInstance.isClean()
-    },
-    markClean: function () {
-      if (cmInstance === null) {
-        return
-      }
-
-      cmInstance.markClean()
-    }
+watch(toRef(props, 'modelValue'), () => {
+  // Assign new contents, but only if not the same as the current contents
+  if (cmInstance.state.doc.toString() !== props.modelValue) {
+    setContents(props.modelValue, props.mode)
   }
 })
+
+onMounted(() => {
+  const wrapper = document.getElementById(wrapperId.value)
+
+  if (wrapper !== null) {
+    wrapper.replaceWith(cmInstance.dom)
+  }
+
+  setContents(props.modelValue, props.mode)
+})
+
+// Utility functions for those accessing this module
+function isClean (): boolean {
+  return cleanFlag.value
+}
+
+function markClean (): void {
+  cleanFlag.value = true
+}
+
+defineExpose({ markClean, isClean })
 </script>
 
 <style lang="less">
@@ -322,10 +272,26 @@ export default defineComponent({
 @green:     #859900;
 
 body {
-  .CodeMirror.cm-s-code-editor {
+  .code-editor-wrapper {
+    height: 100%;
+    position: relative;
+    overflow: auto;
     margin: 20px 0px;
     background-color: white;
     border: 1px solid rgb(173, 173, 173);
+  }
+
+  .cm-editor.cm-focused {
+    outline: none !important;
+  }
+
+  .cm-editor {
+    .cm-scroller { overflow: auto; }
+    height: 100%;
+
+    // margin: 20px 0px;
+    // background-color: white;
+    // border: 1px solid rgb(173, 173, 173);
     color: @base01;
     .cm-string     { color: @green; }
     .cm-string-2   { color: @green; }
