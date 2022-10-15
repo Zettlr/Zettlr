@@ -307,8 +307,10 @@ body {
     .cm-property   { color: @magenta; }
     .cm-type       { color: @red; }
     .cm-number     { color: @violet; }
-    .CodeMirror-gutters { background-color: @base1; }
-    .CodeMirror-linenumber { color: @base00; }
+    .cm-gutters {
+      background-color: @base1;
+      color: @base00;
+    }
 
     // Additional styles only for the GFM snippets editor
     .cm-tm-tabstop { color: @cyan; }
@@ -319,7 +321,7 @@ body {
   }
 
   &.dark {
-    .CodeMirror.cm-s-code-editor {
+    .cm-editor {
       background-color: rgb(65, 65, 65);
       border-color: rgb(100, 100, 100);
       color: @base01;
@@ -337,8 +339,10 @@ body {
       .cm-property   { color: @magenta; }
       .cm-type       { color: @green; }
       .cm-number     { color: @violet; }
-      .CodeMirror-gutters { background-color: @base01; }
-      .CodeMirror-linenumber { color: @base1; }
+      .cm-gutters {
+        background-color: @base01;
+        color: @base1;
+      }
     }
   }
 }
