@@ -236,6 +236,13 @@ export default class MarkdownEditor extends EventEmitter {
     this._instance.focus()
   }
 
+  /**
+   * Empties out the editor and replaces it with an empty state.
+   */
+  public emptyEditor (): void {
+    this._instance.setState(EditorState.create())
+  }
+
   // SEARCH FUNCTIONALITY
   private maybeExchangeQuery (query: SearchQuery): void {
     const currentQuery = getSearchQuery(this._instance.state)

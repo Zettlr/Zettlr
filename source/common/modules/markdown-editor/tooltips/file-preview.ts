@@ -30,7 +30,6 @@ async function filePreviewTooltip (view: EditorView, pos: number, side: 1 | -1):
   )
 
   if (res !== undefined) {
-    console.log(res)
     return {
       pos,
       above: true,

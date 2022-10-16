@@ -533,6 +533,7 @@ async function loadActiveFile () {
 
   if (activeFile.value == null) {
     // TODO: REMOVE DOCUMENT!
+    mdEditor.emptyEditor()
     store.commit('updateTableOfContents', mdEditor.tableOfContents)
     // Update the citation keys with an empty array
     mdEditor.setCompletionDatabase('citations', [])
