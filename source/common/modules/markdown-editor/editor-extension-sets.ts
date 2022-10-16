@@ -44,6 +44,7 @@ import { formattingToolbar, footnoteHover, filePreview, urlHover } from './toolt
 import { EditorConfiguration, configField } from './util/configuration'
 import { copyAsHTML } from './util/copy-paste-cut'
 import { highlightRanges } from './plugins/highlight-ranges'
+import { jsonFolding } from './code-folding/json'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -237,6 +238,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
 export function getJSONExtensions (options: CoreExtensionOptions): Extension[] {
   return [
     ...getGenericCodeExtensions(options),
+    jsonFolding,
     StreamLanguage.define(json)
   ]
 }
