@@ -320,8 +320,7 @@ body {
 
   // Custom styling for the various editors across the app
   // -----------------------------------------------------------------------------
-  .main-editor-wrapper .CodeMirror {
-
+  .main-editor-wrapper .cm-editor {
     // Comments in the main editor should have a background-color
     .cm-comment:not(.cm-formatting):not(.cm-fenced-code) {
       // NOTE: The background color must have transparency applied, otherwise
@@ -364,6 +363,12 @@ body {
         background-color: transparent !important;
         padding: 0 !important;
       }
+    }
+
+    .iframe-wrapper {
+      background-color: var(--grey-0);
+      border-radius: 4px;
+      padding: 20px;
     }
   }
 }

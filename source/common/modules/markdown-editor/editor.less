@@ -239,16 +239,18 @@
     }
   }
 
-  // The warning if a given hostname is not yet on the whitelist
-  .iframe-warning-wrapper {
+  // The wrapper node for the iFrames (both rendered + the warning)
+  .iframe-wrapper {
     text-align: center;
-    min-height: 300px;
-    padding: 40px 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
-    // More spacing for the buttons
+    // More spacing for the buttons on the warning
     button {
       display: block;
-      margin: 20px auto;
+      margin: 10px auto;
     }
   }
 

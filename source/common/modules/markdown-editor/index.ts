@@ -371,6 +371,7 @@ export default class MarkdownEditor extends EventEmitter {
       renderHeadings: this.config.renderHeadings,
       renderCitations: this.config.renderCitations,
       renderTables: this.config.renderTables,
+      renderIframes: this.config.renderIframes,
       renderMermaid: true
       // STILL TODO: Emphasis
     })

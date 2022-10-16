@@ -8,6 +8,7 @@ import { renderTasks } from './render-tasks'
 import { renderCitations } from './render-citations'
 import { renderMermaid } from './render-mermaid'
 import { renderTables } from './render-tables'
+import { renderIframes } from './render-iframes'
 
 const renderCompartment = new Compartment()
 
@@ -20,6 +21,7 @@ interface RendererConfig {
   renderCitations?: boolean
   renderMermaid?: boolean
   renderTables?: boolean
+  renderIframes?: boolean
 }
 
 function getRenderersConf (config: RendererConfig): Extension {
@@ -47,6 +49,9 @@ function getRenderersConf (config: RendererConfig): Extension {
   }
   if (config.renderTables === true) {
     ext.push(renderTables)
+  }
+  if (config.renderIframes === true) {
+    ext.push(renderIframes)
   }
 
   return ext
