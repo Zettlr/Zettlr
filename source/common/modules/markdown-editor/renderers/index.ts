@@ -9,6 +9,7 @@ import { renderCitations } from './render-citations'
 import { renderMermaid } from './render-mermaid'
 import { renderTables } from './render-tables'
 import { renderIframes } from './render-iframes'
+import { renderEmphasis } from './render-emphasis'
 
 const renderCompartment = new Compartment()
 
@@ -22,6 +23,7 @@ interface RendererConfig {
   renderMermaid?: boolean
   renderTables?: boolean
   renderIframes?: boolean
+  renderEmphasis?: boolean
 }
 
 function getRenderersConf (config: RendererConfig): Extension {
@@ -52,6 +54,10 @@ function getRenderersConf (config: RendererConfig): Extension {
   }
   if (config.renderIframes === true) {
     ext.push(renderIframes)
+  }
+
+  if (config.renderEmphasis === true) {
+    ext.push(renderEmphasis)
   }
 
   return ext
