@@ -756,7 +756,7 @@ export default class DocumentManager extends ProviderContract {
    *
    * @param   {string}  filePath  The file path in question
    */
-  private closeFileEverywhere (filePath: string): void {
+  public closeFileEverywhere (filePath: string): void {
     for (const key in this._windows) {
       const allLeafs = this._windows[key].getAllLeafs()
       for (const leaf of allLeafs) {
@@ -764,7 +764,7 @@ export default class DocumentManager extends ProviderContract {
           leaf.tabMan.setPinnedStatus(filePath, false)
           const success = leaf.tabMan.closeFile(filePath)
           if (success) {
-            // TODO: EMIT EVENTS
+            this.broadcastEvent(DP_EVENTS.CLOSE_FILE, { windowId: key, leafId: leaf.id, filePath })
           }
         }
       }

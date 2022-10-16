@@ -36,6 +36,9 @@ export default class FileDelete extends ZettlrCommand {
       return false
     }
 
+    // Ensure the file is closed before removing
+    this._app.documents.closeFileEverywhere(arg.path)
+
     // Now, remove the file
     await this._app.fsal.removeFile(file)
 

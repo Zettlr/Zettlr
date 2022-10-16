@@ -373,7 +373,7 @@ export async function createFile (
   const content = options.content
   const fullPath = path.join(dirObject.path, filename)
   await fs.writeFile(fullPath, content)
-  if ('type' in options && options.type === 'code') {
+  if (hasCodeExt(fullPath)) {
     const file = await FSALCodeFile.parse(fullPath, cache, dirObject)
     dirObject.children.push(file)
   } else {
