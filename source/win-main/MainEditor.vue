@@ -317,7 +317,7 @@ onMounted(() => {
 
 // DATA SETUP
 const showSearch = ref(false)
-const anchor = ref<undefined|any>(undefined) // TODO: Correct position
+const anchor = ref<number|null>(null)
 const documentTabDrag = ref(false)
 const documentTabDragWhere = ref<undefined|string>(undefined)
 
@@ -707,7 +707,7 @@ function onEditorScroll (event: WheelEvent) {
     return // Only handle if the event's target is the editor itself
   }
 
-  const scroller = editor.value?.querySelector('.CodeMirror-scroll')
+  const scroller = mdEditor?.instance.dom.querySelector('.cm-scroller')
 
   if (scroller != null) {
     scroller.scrollTop += event.deltaY
@@ -722,23 +722,32 @@ function onEditorScroll (event: WheelEvent) {
 function editorMousedown (event: MouseEvent) {
   // start selecting lines only if we are on the left margin and the left mouse button is pressed
   if (event.target !== editor.value || event.button !== 0 || mdEditor === null) {
-    // return TODO
+    return
   }
 
   // set the start point of the selection to be where the mouse was clicked
-  // anchor.value = mdEditor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY })
-  // mdEditor.codeMirror.setSelection(anchor.value)
+  anchor.value = mdEditor.instance.posAtCoords({ x: event.pageX, y: event.pageY })
+  if (anchor.value === null) {
+    return
+  }
+
+  mdEditor.instance.dispatch({ selection: EditorSelection.cursor(anchor.value) })
 }
 
 function editorMousemove (event: MouseEvent) {
-  if (anchor.value === undefined || mdEditor === null) {
-    // return TODO
+  if (anchor.value === null || mdEditor === null) {
+    return
   }
+
   // get the point where the mouse has moved
-  // const addPoint = mdEditor.codeMirror.coordsChar({ left: event.pageX, top: event.pageY })
+  const addPoint = mdEditor.instance.posAtCoords({ x: event.pageX, y: event.pageY })
+  if (addPoint === null) {
+    return
+  }
+
   // use the original start point where the mouse first was clicked
   // and change the end point to where the mouse has moved so far
-  // mdEditor.codeMirror.setSelection(anchor.value, addPoint)
+  mdEditor.instance.dispatch({ selection: EditorSelection.range(anchor.value, addPoint) })
 }
 
 /**
@@ -755,7 +764,7 @@ function editorMouseup (event: MouseEvent) {
   }
 
   // when the mouse is released, set anchor to undefined to stop adding lines
-  anchor.value = undefined
+  anchor.value = null
   // Also, make sure the editor is focused.
   mdEditor.focus()
 }
