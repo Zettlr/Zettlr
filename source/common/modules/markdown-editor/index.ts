@@ -54,6 +54,7 @@ import { DocumentType } from '@dts/common/documents'
 import { copyAsHTML, pasteAsPlain } from './util/copy-paste-cut'
 import { CoreExtensionOptions, getJSONExtensions, getMarkdownExtensions, getTexExtensions, getYAMLExtensions } from './editor-extension-sets'
 import { highlightRangesEffect } from './plugins/highlight-ranges'
+import { applyComment, insertImage, insertLink } from './commands/markdown'
 
 export interface DocumentWrapper {
   path: string
@@ -407,7 +408,21 @@ export default class MarkdownEditor extends EventEmitter {
    * @param   {String}  cmd  The command to run
    */
   runCommand (cmd: string): void {
-    // TODO
+    switch (cmd) {
+      case 'markdownComment':
+        applyComment(this._instance)
+        break
+      case 'markdownLink':
+        insertLink(this._instance)
+        break
+      case 'markdownImage':
+        insertImage(this._instance)
+        break
+      default:
+        console.warn('Unimplemented command:', cmd)
+      // TODO case 'markdownMakeTaskList':
+      // TODO: case 'insertFootnote':
+    }
   }
 
   /**
@@ -451,12 +466,6 @@ export default class MarkdownEditor extends EventEmitter {
         this._instance.dispatch({ effects: filesUpdate.of(database) })
         break
     }
-  }
-
-  /**
-   * Updates the list of available snippets.
-   */
-  async updateSnippetAutocomplete (): Promise<void> {
   }
 
   /* * * * * * * * * * * *
@@ -562,7 +571,7 @@ export default class MarkdownEditor extends EventEmitter {
    * @return  {boolean}  True if the readability mode is active
    */
   get readabilityMode (): boolean {
-    return false // TODO
+    return this._instance.state.field(configField).readabilityMode
   }
 
   /**
@@ -571,6 +580,8 @@ export default class MarkdownEditor extends EventEmitter {
    * @param   {boolean}  shouldBeReadability  Whether or not the mode should be active
    */
   set readabilityMode (shouldBeReadability: boolean) {
+    this.config.readabilityMode = shouldBeReadability
+    this._instance.dispatch({ effects: configUpdateEffect.of(this.config) })
   }
 
   /**
