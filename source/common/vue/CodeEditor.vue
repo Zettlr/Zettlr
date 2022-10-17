@@ -30,7 +30,7 @@ import { bracketMatching, indentOnInput, StreamLanguage } from '@codemirror/lang
 import { codeSyntaxHighlighter, markdownSyntaxHighlighter } from '@common/modules/markdown-editor/highlight/get-syntax-highlighter'
 import { yaml } from '@codemirror/legacy-modes/mode/yaml'
 import { EditorState } from '@codemirror/state'
-import { css } from '@codemirror/legacy-modes/mode/css'
+import { cssLanguage } from '@codemirror/lang-css'
 import markdownParser from '@common/modules/markdown-editor/parser/markdown-parser'
 
 /**
@@ -209,7 +209,7 @@ const yamlExtensions = [
 
 const cssExtensions = [
   ...extensions,
-  StreamLanguage.define(css)
+  cssLanguage
 ]
 
 const mdExtensions = [

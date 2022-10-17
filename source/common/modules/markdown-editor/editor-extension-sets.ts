@@ -22,7 +22,6 @@ import { defaultKeymap, historyKeymap, history } from '@codemirror/commands'
 import { bracketMatching, codeFolding, foldGutter, indentOnInput, indentUnit, StreamLanguage } from '@codemirror/language'
 import { stex } from '@codemirror/legacy-modes/mode/stex'
 import { yaml } from '@codemirror/legacy-modes/mode/yaml'
-import { json } from '@codemirror/legacy-modes/mode/javascript'
 import { search } from '@codemirror/search'
 import { EditorState, Extension, Prec } from '@codemirror/state'
 import { keymap, drawSelection, EditorView, lineNumbers, ViewUpdate, DOMEventHandlers } from '@codemirror/view'
@@ -45,6 +44,7 @@ import { EditorConfiguration, configField } from './util/configuration'
 import { copyAsHTML } from './util/copy-paste-cut'
 import { highlightRanges } from './plugins/highlight-ranges'
 import { jsonFolding } from './code-folding/json'
+import { jsonLanguage } from '@codemirror/lang-json'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -239,7 +239,7 @@ export function getJSONExtensions (options: CoreExtensionOptions): Extension[] {
   return [
     ...getGenericCodeExtensions(options),
     jsonFolding,
-    StreamLanguage.define(json)
+    jsonLanguage
   ]
 }
 

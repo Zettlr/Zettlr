@@ -1,20 +1,21 @@
 import { customTags } from '../util/custom-tags'
+import { LanguageSupport, StreamLanguage, Language, LanguageDescription } from '@codemirror/language'
+
+// Import all the languages, first the "new" ones
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown'
 import { php } from '@codemirror/lang-php'
 import { python } from '@codemirror/lang-python'
-import { LanguageSupport, StreamLanguage, Language, LanguageDescription } from '@codemirror/language'
-import { frontmatterParser } from './frontmatter-parser'
-import { inlineMathParser, blockMathParser } from './math-parser'
-
-// Import all the languages
-import { javascript, json, typescript } from '@codemirror/legacy-modes/mode/javascript'
+import { cssLanguage } from '@codemirror/lang-css'
+import { javascriptLanguage, typescriptLanguage } from '@codemirror/lang-javascript'
+import { jsonLanguage } from '@codemirror/lang-json'
+// Now from the legacy modes package
 import { c, cpp, csharp, java, kotlin, objectiveC, dart, scala } from '@codemirror/legacy-modes/mode/clike'
 import { clojure } from '@codemirror/legacy-modes/mode/clojure'
 import { elm } from '@codemirror/legacy-modes/mode/elm'
 import { fSharp } from '@codemirror/legacy-modes/mode/mllike'
 import { fortran } from '@codemirror/legacy-modes/mode/fortran'
 import { haskell } from '@codemirror/legacy-modes/mode/haskell'
-import { css, sCSS, less } from '@codemirror/legacy-modes/mode/css'
+import { sCSS, less } from '@codemirror/legacy-modes/mode/css'
 import { xml, html } from '@codemirror/legacy-modes/mode/xml'
 import { stex } from '@codemirror/legacy-modes/mode/stex'
 import { r } from '@codemirror/legacy-modes/mode/r'
@@ -41,9 +42,13 @@ import { toml } from '@codemirror/legacy-modes/mode/toml'
 import { dockerFile } from '@codemirror/legacy-modes/mode/dockerfile'
 import { diff } from '@codemirror/legacy-modes/mode/diff'
 import { octave } from '@codemirror/legacy-modes/mode/octave'
+
+// Additional parser
 import { citationParser } from './citation-parser'
 import { footnoteParser, footnoteRefParser } from './footnote-parser'
 import { plainLinkParser } from './plain-link-parser'
+import { frontmatterParser } from './frontmatter-parser'
+import { inlineMathParser, blockMathParser } from './math-parser'
 
 const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors: string[]}> = [
   {
@@ -55,15 +60,15 @@ const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors:
     selectors: ['mermaid']
   },
   {
-    mode: StreamLanguage.define(javascript),
+    mode: javascriptLanguage,
     selectors: [ 'javascript', 'js', 'node' ]
   },
   {
-    mode: StreamLanguage.define(json),
+    mode: jsonLanguage,
     selectors: ['json']
   },
   {
-    mode: StreamLanguage.define(typescript),
+    mode: typescriptLanguage,
     selectors: [ 'typescript', 'ts' ]
   },
   {
@@ -115,7 +120,7 @@ const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors:
     selectors: ['scala']
   },
   {
-    mode: StreamLanguage.define(css),
+    mode: cssLanguage,
     selectors: ['css']
   },
   {
