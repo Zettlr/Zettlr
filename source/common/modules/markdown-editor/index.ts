@@ -216,6 +216,9 @@ export default class MarkdownEditor extends EventEmitter {
    * @param   {string}           documentPath         The document to switch to
    */
   async swapDoc (documentPath: string): Promise<void> {
+    // We need to set the file's path already here so that it's available on
+    // the initial rendering round for any extensions that need it
+    this.config.metadata.path = documentPath
     const { content, type, startVersion } = await this.fetchDoc(documentPath)
 
     const state = EditorState.create({
