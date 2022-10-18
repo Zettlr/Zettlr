@@ -436,10 +436,10 @@ watch(toRef(props.editorCommands, 'executeCommand'), () => {
 })
 watch(toRef(props.editorCommands, 'replaceSelection'), () => {
   if (lastLeafId.value !== props.leafId) {
-    // return TODO
+    return
   }
-  // const textToInsert: string = props.editorCommands.data
-  // mdEditor?.replaceSelection(textToInsert)
+  const textToInsert: string = props.editorCommands.data
+  mdEditor?.replaceSelection(textToInsert)
 })
 
 const isMarkdown = computed(() => {
