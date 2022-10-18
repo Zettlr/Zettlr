@@ -55,6 +55,7 @@ import { copyAsHTML, pasteAsPlain } from './util/copy-paste-cut'
 import { CoreExtensionOptions, getJSONExtensions, getMarkdownExtensions, getTexExtensions, getYAMLExtensions } from './editor-extension-sets'
 import { highlightRangesEffect } from './plugins/highlight-ranges'
 import { applyComment, insertImage, insertLink } from './commands/markdown'
+import { addNewFootnote } from './commands/footnotes'
 
 export interface DocumentWrapper {
   path: string
@@ -418,10 +419,12 @@ export default class MarkdownEditor extends EventEmitter {
       case 'markdownImage':
         insertImage(this._instance)
         break
+      case 'insertFootnote':
+        addNewFootnote(this._instance)
+        break
       default:
         console.warn('Unimplemented command:', cmd)
       // TODO case 'markdownMakeTaskList':
-      // TODO: case 'insertFootnote':
     }
   }
 

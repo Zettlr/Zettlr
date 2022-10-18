@@ -6,41 +6,24 @@
 import { ChangeSpec } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
 
+interface Footnote {
+  id: number
+  from: number
+  to: number
+  ref?: {
+    from: number
+    to: number
+  }
+}
+
 export function addNewFootnote (target: EditorView): boolean {
-  if (!target.state.selection.main.empty) {
-    return true // Footnotes can't be added if something is selected
-  }
+  const text = target.state.sliceDoc()
 
-  const where = target.state.selection.main.from
-
-  const fnRE = /\[\^(\d+?)\](?!:)/g
-  let identifiers = []
-  for (const match of target.state.sliceDoc().matchAll(fnRE)) {
-    identifiers.push({
-      id: parseInt(match[1], 10),
-      from: match.index as number,
-      to: match.index as number + match[0].length
-    })
-  }
-
-  // Now remove all those footnote identifiers that occur before the `where`
-  // position since they won't need to change. We can also filter out non-
-  // numeric identifiers since those can't be counted upwards
-  identifiers = identifiers.filter(i => i.to > where)
-
-  // Now find the new identifier
-  let newIdentifier = identifiers.length === 0 ? 1 : Infinity
-  for (const i of identifiers) {
-    if (i.id < newIdentifier) {
-      newIdentifier = i.id
-    }
-  }
-
-  // Now also collect all the footnote refs in the document, thereby identifying
-  // where we have to insert the new ref and for renumbering them later
+  // First, collect all fn refs of the document, which we'll need in the next
+  // step.
   const fnRefRE = /^\[\^(\d+?)\]:(?=\s)/gm
-  let refs = []
-  for (const match of target.state.sliceDoc().matchAll(fnRefRE)) {
+  const refs = []
+  for (const match of text.matchAll(fnRefRE)) {
     refs.push({
       id: parseInt(match[1], 10),
       from: match.index as number,
@@ -48,16 +31,53 @@ export function addNewFootnote (target: EditorView): boolean {
     })
   }
 
-  // Since we don't yet know where the ref will be at, we have to rely on the
-  // identifier. Everything equal or greater than the new identifier works.
-  refs = refs.filter(r => r.id >= newIdentifier)
+  // Second, collect all footnotes, adding the corresponding ref if applicable.
+  const fnRE = /\[\^(\d+?)\](?!:)/g
+  const identifiers: Footnote[] = []
+  for (const match of text.matchAll(fnRE)) {
+    const id = parseInt(match[1], 10)
+    const newElem: Footnote = {
+      id,
+      from: match.index as number,
+      to: match.index as number + match[0].length
+    }
 
-  // Where to insert the refnote is the position of the equal numbered ref OR
-  // the end of the document
+    const ref = refs.find(ref => ref.id === id)
+    if (ref !== undefined) {
+      newElem.ref = { from: ref.from, to: ref.to }
+    }
+
+    identifiers.push(newElem)
+  }
+
+  // This is where our new footnote should be inserted
+  const where = target.state.selection.main.from
+
+  // Split up all identifiers into before and after. Before will be used to find
+  // the new identifier, after will need to be adapted during the insertion.
+  const fnBefore = identifiers.filter(i => i.to <= where)
+  const fnAfter = identifiers.filter(i => i.to > where)
+
+  // Now find the new identifier. It'll be the highest number+1 of the befores.
+  let newIdentifier = fnBefore.length + 1
+  for (const i of fnBefore) {
+    if (i.id >= newIdentifier) {
+      newIdentifier = i.id + 1
+    }
+  }
+
+  // Now that we have the new identifier, we can renumber the following fns
+  for (let i = 0, id = newIdentifier + 1; i < fnAfter.length; i++, id++) {
+    fnAfter[i].id = id
+  }
+
+  // A final thing we have to do is find where we should put the new identifier.
   let whereRef = target.state.doc.length
-  const eqRef = refs.find(r => r.id === newIdentifier)
-  if (eqRef !== undefined) {
-    whereRef = eqRef.from
+  for (const i of fnAfter) {
+    if (i.ref !== undefined) {
+      whereRef = i.ref.from
+      break // First non-empty ref wins
+    }
   }
 
   // Now we have to collect all changes that are about to happen:
@@ -66,12 +86,12 @@ export function addNewFootnote (target: EditorView): boolean {
     { from: where, insert: `[^${newIdentifier}]` },
     { from: whereRef, insert: `\n[^${newIdentifier}]: \n` }
   ]
-  // 2. Renumbering of all following footnotes (that are numerical)
-  for (const i of identifiers) {
-    changes.push({ from: i.from, to: i.to, insert: `[^${i.id + 1}]` })
-  }
-  for (const ref of refs) {
-    changes.push({ from: ref.from, to: ref.to, insert: `[^${ref.id + 1}]:` })
+  // 2. Renumbering of all following footnotes
+  for (const i of fnAfter) {
+    changes.push({ from: i.from, to: i.to, insert: `[^${i.id}]` })
+    if (i.ref !== undefined) {
+      changes.push({ from: i.ref.from, to: i.ref.to, insert: `[^${i.id}]:` })
+    }
   }
 
   // And go.
