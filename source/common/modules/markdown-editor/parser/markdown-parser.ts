@@ -49,6 +49,7 @@ import { footnoteParser, footnoteRefParser } from './footnote-parser'
 import { plainLinkParser } from './plain-link-parser'
 import { frontmatterParser } from './frontmatter-parser'
 import { inlineMathParser, blockMathParser } from './math-parser'
+import { imageParser } from './image-parser'
 
 const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors: string[]}> = [
   {
@@ -292,7 +293,8 @@ export default function markdownParser (): LanguageSupport {
         inlineMathParser,
         footnoteParser,
         citationParser,
-        plainLinkParser
+        plainLinkParser,
+        imageParser
       ],
       // We have to notify the markdown parser about the additional Node Types
       // that the YAML block parser utilizes
