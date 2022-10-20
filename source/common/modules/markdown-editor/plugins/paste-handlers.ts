@@ -1,6 +1,7 @@
 import { Prec } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
 import { configField } from '../util/configuration'
+import { paste } from '../util/copy-paste-cut'
 
 const clipboard = window.clipboard
 const ipcRenderer = window.ipc
@@ -9,7 +10,9 @@ const path = window.path
 export const pasteHandler = Prec.highest(EditorView.domEventHandlers({
   paste (event, view) {
     if (!clipboard.hasImage()) {
-      return false // Don't need to do anything
+      // Regular paste
+      paste(view)
+      return true
     }
 
     const basePath = path.dirname(view.state.field(configField).metadata.path)

@@ -91,7 +91,7 @@ export function paste (view: EditorView): void {
 
   const changes: ChangeSpec[] = []
 
-  if (html === '') {
+  if (html === '' || html === plain) {
     // Insert the plain text
     for (const { from, to } of view.state.selection.ranges) {
       changes.push({ from, to, insert: plain })
@@ -119,7 +119,7 @@ export function pasteAsPlain (view: EditorView): void {
 
   const changes: ChangeSpec[] = []
 
-  if (html === '') {
+  if (html === '' || html === plain) {
     // Insert the plain text
     for (const { from, to } of view.state.selection.ranges) {
       changes.push({ from, to, insert: plain })
