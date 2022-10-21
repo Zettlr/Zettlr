@@ -50,6 +50,7 @@ import { plainLinkParser } from './plain-link-parser'
 import { frontmatterParser } from './frontmatter-parser'
 import { inlineMathParser, blockMathParser } from './math-parser'
 import { imageParser } from './image-parser'
+import { gridTableParser, pipeTableParser, simpleTableParser } from './pandoc-table-parser'
 
 const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors: string[]}> = [
   {
@@ -286,7 +287,10 @@ export default function markdownParser (): LanguageSupport {
         frontmatterParser,
         // This BlockParser parses math blocks
         blockMathParser,
-        footnoteRefParser
+        footnoteRefParser,
+        gridTableParser,
+        pipeTableParser // ,
+        // simpleTableParser
       ],
       parseInline: [
         // Add inline parsers that add AST elements for various additional types
