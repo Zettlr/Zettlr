@@ -33,7 +33,6 @@ function parseGridTable (ctx: BlockContext, pos: number, end: number, lines: str
     to = from + line.length
     const isSeparator = gridLineRE.test(line)
     if (isSeparator) {
-      console.log('Line is sep:', line)
       const sep = ctx.elt('TableDelimiter', from, to)
       rows.push(ctx.elt('TableRow', from, to, [sep]))
     } else {
@@ -124,7 +123,6 @@ function parsePipeTable (ctx: BlockContext, pos: number, end: number, lines: str
 export const gridTableParser: BlockParser = {
   name: 'grid-table',
   parse: (ctx, line) => {
-    console.warn(`GRID TABLE "${line.text}"`)
     // Let's begin with the easiest thing to detect: grid tables
     if (!gridLineRE.test(line.text)) {
       return false
@@ -144,7 +142,6 @@ export const gridTableParser: BlockParser = {
 
     const end = ctx.lineStart + line.text.length
 
-    console.log(`Grid table found between pos ${start} and ${end}`, '\n' + lines.join('\n'))
     const elt = parseGridTable(ctx, start, end, lines)
     ctx.addElement(elt)
     return true

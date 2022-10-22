@@ -62,6 +62,7 @@ export default function parsePipeTable (markdownTable: string|string[]): ParsedT
     }
 
     if (numColumns !== row.length) { // ... subsequent rows check that length.
+      console.warn('PIPE TABLE PARSER', markdownTable)
       throw new Error(`Malformed Markdown Table! Found ${row.length} columns on line ${i} (should be ${numColumns}).`)
     }
 

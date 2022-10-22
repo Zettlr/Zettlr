@@ -25,11 +25,16 @@ import { ParsedTable, ColAlignment } from './types'
 export default function parseGridTable (markdownTable: string|string[]): ParsedTable {
   // First remove whitespace from both sides of the table, e.g. in case
   // a trailing newline is present
-  if (typeof markdownTable === 'string') markdownTable = markdownTable.trim()
-  if (!Array.isArray(markdownTable)) markdownTable = markdownTable.split('\n')
+  if (typeof markdownTable === 'string') {
+    markdownTable = markdownTable.trim()
+  }
+
+  if (!Array.isArray(markdownTable)) {
+    markdownTable = markdownTable.split('\n')
+  }
 
   if (markdownTable.length === 0 || (markdownTable.length === 1 && markdownTable[0].trim() === '')) {
-    throw new Error('MarkdownTable was empty!')
+    throw new SyntaxError('Could not parse grid table: empty!')
   }
 
   const ast: string[][] = []
@@ -62,39 +67,65 @@ export default function parseGridTable (markdownTable: string|string[]): ParsedT
   }
 
   // Now iterate over all table rows
+  let hasSeenSeparatorLine = false
   for (let i = 0; i < markdownTable.length; i++) {
+    const row = markdownTable[i]
+
     // There should not be empty lines in the table.
     // If so, this indicates an error in the render tables plugin!
-    if (markdownTable[i].trim() === '') {
-      throw new Error(`Line ${i} in the table was empty!`)
+    if (row.trim() === '') {
+      throw new SyntaxError(`Could not parse grid table: Line ${i + 1} was empty!`)
     }
 
-    const row: string|string[] = markdownTable[i].trim() // Clean up whitespace
+    if (row.startsWith('+') && hasSeenSeparatorLine) {
+      throw new SyntaxError('Could not parse grid table: Found multiple separator rows!')
+    }
+
     if (row.startsWith('+')) {
+      hasSeenSeparatorLine = true
       continue // Skip separation lines
     }
 
-    if (!row[0].startsWith('|')) {
-      throw new Error(`Malformed Markdown Table! Row ${i} did not start with + or |!`)
+    if (!row.startsWith('|')) {
+      throw new Error(`Could not parse grid table: Row ${i + 1} did not start with + or |!`)
     }
 
     // Split to columns
     const cols = row.split('|').map(elem => elem.trim()).slice(1, -1)
 
-    // First row determines the amount of columns expected
     if (numColumns === 0) {
-      numColumns = cols.length // Basically: First row determines column count ...
+      numColumns = cols.length // First row determines column count ...
     } else if (numColumns !== cols.length) { // ... subsequent rows check against this.
-      throw new Error(`Malformed Markdown Table! Found ${row.length} columns on line ${i} (should be ${numColumns}).`)
+      throw new SyntaxError(`Could not parse grid table: Found ${row.length} columns on line ${i + 1} (should be ${numColumns}).`)
     }
 
-    // Add the whole row to the AST
-    ast.push(cols)
+    if (hasSeenSeparatorLine) {
+      // Add the whole row to the AST
+      ast.push(cols)
+    } else {
+      // There was no separator line in between --> multi-line table --> add the
+      // current columns to the previous ones (including newlines).
+      for (let j = 0; j < numColumns; j++) {
+        ast[ast.length - 1][j] += '\n' + cols[j]
+      }
+    }
+
+    hasSeenSeparatorLine = false
   }
 
   if (ast.length === 0 || ast[0].length === 0) {
     // This AST does not look as it's supposed to -> abort
-    throw new Error('Malformed Markdown Table! The parsed AST was empty.')
+    throw new SyntaxError('Could not parse grid table: The parsed AST was empty.')
+  }
+
+  // Cleanup: Remove trailing newlines (that can occur if we have a row where
+  // more than zero but not all columns were multi-line)
+  for (let row = 0; row < ast.length; row++) {
+    for (let col = 0; col < ast[0].length; col++) {
+      if (ast[row][col].endsWith('\n')) {
+        ast[row][col] = ast[row][col].slice(0, -1)
+      }
+    }
   }
 
   // Return the AST

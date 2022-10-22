@@ -22,7 +22,7 @@ class TableWidget extends WidgetType {
 
   toDOM (view: EditorView): HTMLElement {
     const node = this.node
-    const table = fromMarkdown(this.table, undefined, {
+    const table = fromMarkdown(this.table, {
       saveIntent (instance) {
         const newTable = table.getMarkdownTable()
         view.dispatch({
