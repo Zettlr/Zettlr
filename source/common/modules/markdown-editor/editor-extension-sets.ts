@@ -41,7 +41,6 @@ import { typewriter } from './plugins/typewriter'
 import { initRenderers } from './renderers'
 import { formattingToolbar, footnoteHover, filePreview, urlHover } from './tooltips'
 import { EditorConfiguration, configField } from './util/configuration'
-import { copyAsHTML } from './util/copy-paste-cut'
 import { highlightRanges } from './plugins/highlight-ranges'
 import { jsonFolding } from './code-folding/json'
 import { jsonLanguage } from '@codemirror/lang-json'
@@ -183,18 +182,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     ...getCoreExtensions(options),
     // We need our custom keymaps first
     keymap.of(completionKeymap),
-    Prec.highest(keymap.of(
-      [
-        ...customKeymap,
-        {
-          key: 'Mod-Alt-c',
-          run: (target) => {
-            copyAsHTML(target)
-            return true
-          }
-        }
-      ]
-    )),
+    Prec.highest(keymap.of(customKeymap)),
     // The parser generates the AST for the document ...
     markdownParser(options.initialConfig.linkStart, options.initialConfig.linkEnd),
     // ... which can then be styled with a highlighter
