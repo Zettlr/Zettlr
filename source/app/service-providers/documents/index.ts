@@ -39,24 +39,63 @@ interface DocumentWindows {
 }
 
 const MAX_VERSION_HISTORY = 100 // Keep no more than this many updates.
+const DELAYED_SAVE_TIMEOUT = 5000 // Delayed timeout means: Save after 5 seconds
+const IMMEDIATE_SAVE_TIMEOUT = 250 // Even "immediate" should not save immediate to save disk space
 
+/**
+ * Holds all information associated with a document that is currently loaded
+ */
 interface Document {
-  // The absolute file path
+  /**
+   * The absolute path to the file
+   */
   filePath: string
-  // The descriptor for the file
+  /**
+   * The descriptor for the file
+   */
   descriptor: MDFileDescriptor|CodeFileDescriptor
-  // The type
+  /**
+   * The file type (e.g. Markdown, JSON, YAML)
+   */
   type: DocumentType
-  // Versioning
+  /**
+   * The current version of the document in memory
+   */
   currentVersion: number
+  /**
+   * The last version for which full updates are available. Editors with a
+   * version less than minimumVersion will need to reload the document.
+   */
   minimumVersion: number
-  lastSavedVersion: number // Allows to quickly check if the doc has been modified: currentVersion > lastSavedVersion
-  // The updates since the file was opened
+  /**
+   * The last version number that has been saved to disk. If lastSavedVersion
+   * === currentVersion, the file is not modified.
+   */
+  lastSavedVersion: number
+  /**
+   * Holds all updates between minimumVersion and currentVersion in a granular
+   * form.
+   */
   updates: Update[]
-  // The actual document content
+  /**
+   * The actual document text in a CodeMirror format.
+   */
   document: Text
-  lastSavedWordCount: number // Holds the word count since the last save (for writing stats)
+  /**
+   * Necessary for the word count statistics: The amount of words when the file
+   * was last saved to disk.
+   */
+  lastSavedWordCount: number
+  /**
+   * Necessary for the word count statistics: The amount of characters when the
+   * file was last saved to disk.
+   */
   lastSavedCharCount: number
+  /**
+   * Holds an optional save timeout. This is for when users have indicated they
+   * want autosaving.
+   */
+  saveTimeout: undefined|NodeJS.Timeout
 }
 
 export default class DocumentManager extends ProviderContract {
@@ -521,7 +560,8 @@ export default class DocumentManager extends ProviderContract {
       updates: [],
       document: Text.of(content.split(descriptor.linefeed)),
       lastSavedWordCount: countWords(content, false),
-      lastSavedCharCount: countWords(content, true)
+      lastSavedCharCount: countWords(content, true),
+      saveTimeout: undefined
     }
 
     this.documents.push(doc)
@@ -589,6 +629,21 @@ export default class DocumentManager extends ProviderContract {
       doc.updates.shift()
       doc.minimumVersion++
     }
+
+    // TODO: Set timeouts for the documents to save them automatically, if the user so wishes
+    const autoSave = this._app.config.get().editor.autoSave
+
+    // Either no autosave or there is currently a timeout in progress
+    if (autoSave === 'off' || doc.saveTimeout !== undefined) {
+      return true
+    }
+
+    const timeout = autoSave === 'delayed' ? DELAYED_SAVE_TIMEOUT : IMMEDIATE_SAVE_TIMEOUT
+
+    doc.saveTimeout = setTimeout(() => {
+      this.saveFile(doc.filePath)
+        .catch(err => this._app.log.error(`[Document Provider] Could not save file ${doc.filePath}: ${err.message as string}`, err))
+    }, timeout)
 
     return true
   }
@@ -1231,7 +1286,8 @@ export default class DocumentManager extends ProviderContract {
     const doc = this.documents.find(doc => doc.filePath === filePath)
 
     if (doc === undefined) {
-      return false // TODO: Error logging
+      this._app.log.error(`[Document Provider] Could not save file ${filePath}: Not found in loaded documents!`)
+      return false
     }
 
     this._ignoreChanges.push(filePath)
@@ -1262,6 +1318,15 @@ export default class DocumentManager extends ProviderContract {
       doc.lastSavedCharCount = newCharCount
     } else {
       await FSALCodeFile.save(doc.descriptor, doc.document.toString(), null)
+    }
+
+    // If saveFile was called from a timeout, clearTimeout does nothing but the
+    // timeout is reset to undefined. However, implementing this check here
+    // ensures that we can programmatically call saveFile anywhere else and
+    // still have everything work as intended.
+    if (doc.saveTimeout !== undefined) {
+      clearTimeout(doc.saveTimeout)
+      doc.saveTimeout = undefined
     }
 
     doc.lastSavedVersion = doc.currentVersion
