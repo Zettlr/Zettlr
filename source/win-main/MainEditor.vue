@@ -1062,12 +1062,15 @@ function handleDragLeave (event: DragEvent) {
 
     // Reset the margins for code files
     .cm-scroller {
-      padding-right: 0px;
+      padding: 0px;
       margin: 0;
     }
   }
 
   .cm-editor .cm-scroller {
+    // Apply some padding so that Markdown documents aren't glued to the edges
+    padding-top: 50px;
+    padding-bottom: 50px;
     // margin: 5em 0em;
     @media(max-width: 1024px) { margin: @editor-margin-fullscreen-md 0em; }
 
