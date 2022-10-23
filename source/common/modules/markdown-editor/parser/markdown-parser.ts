@@ -51,6 +51,7 @@ import { frontmatterParser } from './frontmatter-parser'
 import { inlineMathParser, blockMathParser } from './math-parser'
 import { imageParser } from './image-parser'
 import { gridTableParser, pipeTableParser } from './pandoc-table-parser'
+import { getZknLinkParser } from './zkn-link-parser'
 
 const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors: string[]}> = [
   {
@@ -265,7 +266,7 @@ const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors:
 
 // This file returns a syntax extension that provides parsing and syntax
 // capabilities
-export default function markdownParser (): LanguageSupport {
+export default function markdownParser (linkStart: string, linkEnd: string): LanguageSupport {
   return markdown({
     base: markdownLanguage,
     codeLanguages: (infoString) => {
@@ -298,7 +299,8 @@ export default function markdownParser (): LanguageSupport {
         footnoteParser,
         citationParser,
         plainLinkParser,
-        imageParser
+        imageParser,
+        getZknLinkParser(linkStart, linkEnd)
       ],
       // We have to notify the markdown parser about the additional Node Types
       // that the YAML block parser utilizes
@@ -316,7 +318,9 @@ export default function markdownParser (): LanguageSupport {
         { name: 'Citation', style: customTags.Citation },
         { name: 'Footnote', style: customTags.Footnote },
         { name: 'FootnoteRef', style: customTags.FootnoteRef },
-        { name: 'FootnoteBody', style: customTags.FootnoteBody }
+        { name: 'FootnoteBody', style: customTags.FootnoteBody },
+        { name: 'ZknLink', style: customTags.ZknLink },
+        { name: 'ZknLinkContent', style: customTags.ZknLinkContent }
       ]
     }
   })

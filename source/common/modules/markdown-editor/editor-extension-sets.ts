@@ -195,8 +195,10 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
         }
       ]
     )),
-    markdownParser(), // The parser generates the AST for the document ...
-    markdownSyntaxHighlighter(), // ... which can then be styled with a highlighter
+    // The parser generates the AST for the document ...
+    markdownParser(options.initialConfig.linkStart, options.initialConfig.linkEnd),
+    // ... which can then be styled with a highlighter
+    markdownSyntaxHighlighter(),
     syntaxExtensions, // Add our own specific syntax plugin
     initRenderers({
       renderImages: options.initialConfig.renderImages,
@@ -206,8 +208,8 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
       renderHeadings: options.initialConfig.renderHeadings,
       renderCitations: options.initialConfig.renderCitations,
       renderMermaid: true,
-      renderTables: options.initialConfig.renderTables
-      // STILL TODO: Emphasis
+      renderTables: options.initialConfig.renderTables,
+      renderEmphasis: options.initialConfig.renderEmphasis
     }),
     // Some statistics we need for Markdown documents
     mdStatistics,

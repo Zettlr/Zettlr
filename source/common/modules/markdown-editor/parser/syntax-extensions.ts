@@ -4,7 +4,6 @@
 import { StateField, EditorState, Extension } from '@codemirror/state'
 import { syntaxTree } from '@codemirror/language'
 import { MatchDecorator, ViewPlugin, Decoration, DecorationSet, EditorView, ViewUpdate } from '@codemirror/view'
-import { configField } from '../util/configuration'
 
 /**
  * The inline decorator is a ViewPlugin that adds a few inline highlight styles
@@ -172,66 +171,6 @@ function getHeadingLineHighlighter (): Extension {
 }
 
 /**
- * Creates a StateField that highlights Zkn-links
- *
- * @return  {StateField}  The StateField
- */
-function getZknLinkHighlighter (): Extension {
-  const deco = Decoration.mark({ class: 'cm-zkn-link' })
-
-  const render = function (state: EditorState): DecorationSet {
-    const widgets: any[] = []
-
-    const { linkStart, linkEnd } = state.field(configField)
-
-    syntaxTree(state).iterate({
-      from: 0,
-      to: state.doc.length,
-      enter: (node) => {
-        // We can return "false" to prevent the iterator from descending further
-        // into the tree
-        if (node.type.name === 'Document') {
-          return // Don't return false because headings are children of Document
-        }
-
-        if (node.type.name === 'FencedCode') {
-          return false
-        }
-
-        const nodeContents = state.sliceDoc(node.from, node.to)
-
-        let idx = 0
-        while (nodeContents.includes(linkStart, idx)) {
-          const start = nodeContents.indexOf(linkStart, idx)
-          const end = nodeContents.indexOf(linkEnd, start + linkStart.length)
-          if (end < 0) {
-            break // This link is not closing on this line
-          }
-
-          idx = end + linkStart.length
-          widgets.push(deco.range(node.from + start, node.from + idx))
-        }
-
-        return false // Do not descend further
-      }
-    })
-
-    return Decoration.set(widgets)
-  }
-
-  const pluginField = StateField.define<DecorationSet>({
-    create (state: EditorState) {
-      return render(state)
-    },
-    update (oldDecoSet, transactions) {
-      return render(transactions.state)
-    },
-    provide: f => EditorView.decorations.from(f)
-  })
-  return pluginField
-}
-
-/**
  * An array of syntax extensions for Markdown documents (i.e. please do not use
  * for code files).
  *
@@ -240,6 +179,5 @@ function getZknLinkHighlighter (): Extension {
 export const syntaxExtensions = [
   getInlineDecorator(),
   getCodeBlockLineHighlighter(),
-  getHeadingLineHighlighter(),
-  getZknLinkHighlighter()
+  getHeadingLineHighlighter()
 ]
