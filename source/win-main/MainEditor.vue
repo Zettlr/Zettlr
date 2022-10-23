@@ -1071,8 +1071,6 @@ function handleDragLeave (event: DragEvent) {
     // Apply some padding so that Markdown documents aren't glued to the edges
     padding-top: 50px;
     padding-bottom: 50px;
-    // margin: 5em 0em;
-    @media(max-width: 1024px) { margin: @editor-margin-fullscreen-md 0em; }
 
     .mute { opacity:0.2; }
   }
