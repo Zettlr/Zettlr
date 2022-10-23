@@ -1,6 +1,6 @@
 // The autocorrect plugin is basically just a keymap that listens to spaces and enters
 import { ChangeSpec, EditorSelection } from '@codemirror/state'
-import { EditorView } from '@codemirror/view'
+import { Command, EditorView } from '@codemirror/view'
 import { configField } from '../util/configuration'
 
 // These characters can be directly followed by a starting magic quote
@@ -42,9 +42,19 @@ export function handleReplacement (view: EditorView): boolean {
   const changes: ChangeSpec[] = []
 
   for (const range of view.state.selection.ranges) {
-    const slice = view.state.sliceDoc(range.from - maxLength, range.from)
+    const from = Math.max(range.from - maxLength, 0)
+    const slice = view.state.sliceDoc(from, range.from)
     for (const { key, value } of autocorrect.replacements) {
       if (slice.endsWith(key)) {
+        if (key === '---' && from === 0) {
+          // Three hyphens at the beginning of the document should not be
+          // replaced (YAML frontmatter start)
+          break
+        } else if ([ '---', '...' ].includes(key) && view.state.doc.lineAt(range.from).length === 3) {
+          // Three hyphens or three dots alone on their own line should also not
+          // be replaced (YAML frontmatter end)
+          break
+        }
         changes.push({ from: range.from - key.length, to: range.from, insert: value })
       }
     }
@@ -69,8 +79,8 @@ export function handleBackspace (view: EditorView): boolean {
     return false
   }
 
-  const primaryMagicQuotes = autocorrect.magicQuotes.primary
-  const secondaryMagicQuotes = autocorrect.magicQuotes.secondary
+  const primaryMagicQuotes = autocorrect.magicQuotes.primary.split('…')
+  const secondaryMagicQuotes = autocorrect.magicQuotes.secondary.split('…')
 
   // This checks if we have a magic quote right before the cursor. If so,
   // pressing Backspace will not remove the quote, but rather replace it with a
@@ -84,10 +94,10 @@ export function handleBackspace (view: EditorView): boolean {
     }
 
     const slice = view.state.sliceDoc(range.from - 1, range.from)
-    if (primaryMagicQuotes.includes(slice)) {
+    if (primaryMagicQuotes.includes(slice) && slice !== '"') {
       hasHandled = true
       changes.push({ from: range.from - 1, to: range.from, insert: '"' })
-    } else if (secondaryMagicQuotes.includes(slice)) {
+    } else if (secondaryMagicQuotes.includes(slice) && slice !== "'") {
       hasHandled = true
       changes.push({ from: range.from - 1, to: range.from, insert: "'" })
     }
@@ -104,7 +114,7 @@ export function handleBackspace (view: EditorView): boolean {
  *
  * @return  {Command}        Returns a Command function
  */
-export function handleQuote (quote: string) {
+export function handleQuote (quote: string): Command {
   return function (view: EditorView): boolean {
     const autocorrect = view.state.field(configField).autocorrect
     if (!autocorrect.active) {
