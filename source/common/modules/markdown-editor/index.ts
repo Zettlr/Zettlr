@@ -242,6 +242,14 @@ export default class MarkdownEditor extends EventEmitter {
   }
 
   /**
+   * This function allows to reload the full editor contents. This is useful if
+   * a setting has changed that requires extensions to be fully reloaded.
+   */
+  async reload (): Promise<void> {
+    await this.swapDoc(this.config.metadata.path)
+  }
+
+  /**
    * Empties out the editor and replaces it with an empty state.
    */
   public emptyEditor (): void {
