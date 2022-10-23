@@ -7,29 +7,25 @@ import { MatchDecorator, ViewPlugin, Decoration, DecorationSet, EditorView, View
 
 /**
  * The inline decorator is a ViewPlugin that adds a few inline highlight styles
- * such as for citations, tags, and highlights. It does so utilizing a
+ * such as for tags, and highlights. It does so utilizing a
  * MatchDecorator.
  *
  * @return  {ViewPlugin}  The instantiated plugin
  */
 function getInlineDecorator (): Extension {
   // First, we need to define the decorations we would like to add
-  const citationDeco = Decoration.mark({ class: 'cm-citation' })
   const tagDeco = Decoration.mark({ class: 'cm-zkn-tag' })
   const highlightDeco = Decoration.mark({ class: 'cm-highlight' })
 
-  const citationRe = /(@\w+)/.source
   const highlightRe = /(::.+?::)/.source
   const tagRe = /(?<=^|\s|[({[])#(#?[^\s,.:;…!?"'`»«“”‘’—–@$%&*#^+~÷\\/|<=>[\](){}]+#?)/.source
 
   // Next, we need a so-called MatchDecorator that parses the code and returns a
   // decoration that should apply to those matches
   const decorator = new MatchDecorator({
-    regexp: new RegExp(`${citationRe}|${highlightRe}|${tagRe}`, 'gu'),
+    regexp: new RegExp(`${highlightRe}|${tagRe}`, 'gu'),
     decoration: m => {
       if (m[1] !== undefined) {
-        return citationDeco
-      } else if (m[2] !== undefined) {
         return highlightDeco
       } else {
         return tagDeco
