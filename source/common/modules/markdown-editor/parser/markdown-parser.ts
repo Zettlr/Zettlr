@@ -50,7 +50,7 @@ import { plainLinkParser } from './plain-link-parser'
 import { frontmatterParser } from './frontmatter-parser'
 import { inlineMathParser, blockMathParser } from './math-parser'
 import { imageParser } from './image-parser'
-import { gridTableParser, pipeTableParser, simpleTableParser } from './pandoc-table-parser'
+import { gridTableParser, pipeTableParser } from './pandoc-table-parser'
 
 const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors: string[]}> = [
   {
