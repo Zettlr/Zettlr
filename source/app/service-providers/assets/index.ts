@@ -22,6 +22,8 @@ import ProviderContract from '../provider-contract'
 import LogProvider from '../log'
 import { PandocProfileMetadata } from '@dts/common/assets'
 import { getCustomProfiles } from '@providers/commands/exporter'
+import getPlainPandocReaderWriter from '@common/util/plain-pandoc-reader-writer'
+import { SUPPORTED_READERS } from '@common/util/pandoc-maps'
 
 export default class AssetsProvider extends ProviderContract {
   /**
@@ -279,11 +281,19 @@ export default class AssetsProvider extends ProviderContract {
         const contents = await fs.readFile(absolutePath, { encoding: 'utf-8' })
         const yaml = YAML.parse(contents)
 
+        // A defaults file needs to fulfill three conditions in order to be
+        // considered valid: (1) has a writer, (2) has a reader, (3) either
+        // reader or writer must be a supported Markdown format.
+        const hasWriter = yaml.writer !== undefined
+        const hasReader = yaml.reader !== undefined
+        const validWriter = hasWriter && SUPPORTED_READERS.includes(getPlainPandocReaderWriter(yaml.writer))
+        const validReader = hasReader && SUPPORTED_READERS.includes(getPlainPandocReaderWriter(yaml.reader))
+
         profiles.push({
           name: file,
           writer: yaml.writer,
           reader: yaml.reader,
-          isInvalid: yaml.writer === undefined || yaml.reader === undefined,
+          isInvalid: !(hasWriter && hasReader && (validWriter || validReader)),
           isProtected: this._protectedDefaults.includes(file)
         })
       } catch (err) {
