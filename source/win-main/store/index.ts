@@ -16,7 +16,7 @@
 
 import { StoreOptions, createStore as baseCreateStore, Store } from 'vuex'
 import { InjectionKey } from 'vue'
-import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
+import { ColouredTag } from '@dts/common/tag-provider'
 import { SearchResultWrapper } from '@dts/common/search'
 import { RelatedFile } from '@dts/renderer/misc'
 import locateByPath from '@providers/fsal/util/locate-by-path'
@@ -32,7 +32,6 @@ import documentTreeMutation from './mutations/document-tree'
 
 // Import Actions
 import filetreeUpdateAction from './actions/filetree-update'
-import regenerateTagSuggestionsAction from './actions/regenerate-tag-suggestions'
 import updateOpenDirectoryAction from './actions/update-open-directory'
 import updateRelatedFilesAction from './actions/update-related-files'
 import updateBibliographyAction from './actions/update-bibliography'
@@ -93,17 +92,9 @@ export interface ZettlrState {
    */
   colouredTags: ColouredTag[]
   /**
-   * Contains all tags across all files loaded into Zettlr
-   */
-  tagDatabase: TagDatabase[]
-  /**
    * Holds all current writing targets
    */
   writingTargets: WritingTarget[]
-  /**
-   * Contains a list of suggested tags for the current active file.
-   */
-  tagSuggestions: string[]
   /**
    * Holds all configuration options. These need to be stored here separately
    * to make use of the reactivity of Vue. We'll basically be binding the config
@@ -174,8 +165,6 @@ function getConfig (): StoreOptions<ZettlrState> {
         relatedFiles: [],
         colouredTags: [],
         writingTargets: [],
-        tagDatabase: [],
-        tagSuggestions: [],
         config: configToArrayMapper(window.config.get()),
         activeDocumentInfo: null,
         modifiedDocuments: [],
@@ -273,12 +262,6 @@ function getConfig (): StoreOptions<ZettlrState> {
       updateWritingTargets: function (state, targets: WritingTarget[]) {
         state.writingTargets = targets
       },
-      updateTagDatabase: function (state, tags) {
-        state.tagDatabase = tags
-      },
-      setTagSuggestions: function (state, suggestions) {
-        state.tagSuggestions = suggestions
-      },
       updateCitationKeys: function (state, newKeys: string[]) {
         // Update the citations, removing possible duplicates
         state.citationKeys = [...new Set(newKeys)]
@@ -313,12 +296,9 @@ function getConfig (): StoreOptions<ZettlrState> {
       updateOpenDirectory: updateOpenDirectoryAction,
       lastLeafId: async function (ctx, lastLeafId: string) {
         ctx.commit('lastLeafId', lastLeafId)
-        // Update the tag suggestions
-        await ctx.dispatch('regenerateTagSuggestions')
         // Update the related files
         await ctx.dispatch('updateRelatedFiles')
       },
-      regenerateTagSuggestions: regenerateTagSuggestionsAction,
       updateRelatedFiles: updateRelatedFilesAction,
       updateBibliography: updateBibliographyAction,
       documentTree: documentTreeUpdateAction,

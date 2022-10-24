@@ -89,6 +89,13 @@ export default class MarkdownEditor extends EventEmitter {
   private readonly pushUpdates: (filePath: string, version: number, updates: Update[]) => Promise<boolean>
   private config: EditorConfiguration
 
+  private readonly databaseCache: {
+    tags: string[]
+    citations: Array<{ citekey: string, displayText: string }>
+    snippets: Array<{ name: string, content: string }>
+    files: Array<{ filename: string, id: string }>
+  }
+
   /**
    * Creates a new MarkdownEditor instance attached to the anchorElement
    *
@@ -108,6 +115,10 @@ export default class MarkdownEditor extends EventEmitter {
     this.fetchDoc = getDocument
     this.pullUpdates = pullUpdates
     this.pushUpdates = pushUpdates
+    // Since the editor state needs to be rebuilt whenever the document changes,
+    // we have to persist the databases (and feed them to the state) everytime
+    // we have to rebuild it (during swapDoc).
+    this.databaseCache = { tags: [], citations: [], snippets: [], files: [] }
 
     // The following fields are used to cache certain values, especially since
     // they aren't retained during document swaps
@@ -229,6 +240,13 @@ export default class MarkdownEditor extends EventEmitter {
     })
 
     this._instance.setState(state)
+
+    // Provide the cached databases to the state (can be overridden by the
+    // caller afterwards by calling setCompletionDatabase)
+    this._instance.dispatch({ effects: tagsUpdate.of(this.databaseCache.tags) })
+    this._instance.dispatch({ effects: citekeyUpdate.of(this.databaseCache.citations) })
+    this._instance.dispatch({ effects: snippetsUpdate.of(this.databaseCache.snippets) })
+    this._instance.dispatch({ effects: filesUpdate.of(this.databaseCache.files) })
 
     // Determine if this is a code doc and add the corresponding class to the
     // outer content DOM so that we can style it.
@@ -477,15 +495,19 @@ export default class MarkdownEditor extends EventEmitter {
   setCompletionDatabase (type: string, database: any): void {
     switch (type) {
       case 'tags':
+        this.databaseCache.tags = database
         this._instance.dispatch({ effects: tagsUpdate.of(database) })
         break
       case 'citations':
+        this.databaseCache.citations = database
         this._instance.dispatch({ effects: citekeyUpdate.of(database) })
         break
       case 'snippets':
+        this.databaseCache.snippets = database
         this._instance.dispatch({ effects: snippetsUpdate.of(database) })
         break
       case 'files':
+        this.databaseCache.files = database
         this._instance.dispatch({ effects: filesUpdate.of(database) })
         break
     }

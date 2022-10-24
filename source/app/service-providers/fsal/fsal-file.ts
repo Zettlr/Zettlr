@@ -20,7 +20,6 @@ import safeAssign from '@common/util/safe-assign'
 import { MDFileDescriptor } from '@dts/common/fsal'
 import FSALCache from './fsal-cache'
 import { SearchTerm } from '@dts/common/search'
-import TagProvider from '@providers/tags'
 
 /**
  * Applies a cached file, saving time where the file is not being parsed.
@@ -71,7 +70,6 @@ export async function parse (
   filePath: string,
   cache: FSALCache|null,
   parser: (file: MDFileDescriptor, content: string) => void,
-  tags: TagProvider,
   isRoot: boolean
 ): Promise<MDFileDescriptor> {
   // First of all, prepare the file descriptor
@@ -131,9 +129,6 @@ export async function parse (
     }
   }
 
-  // Finally, report the tags
-  tags.report(file.tags, file.path)
-
   return file
 }
 
@@ -190,17 +185,13 @@ export async function save (
   fileObject: MDFileDescriptor,
   content: string,
   parser: (file: MDFileDescriptor, content: string) => void,
-  tags: TagProvider,
   cache: FSALCache|null
 ): Promise<void> {
   // Make sure to retain the BOM if applicable
   await fs.writeFile(fileObject.path, fileObject.bom + content)
   // Afterwards, retrieve the now current modtime
   await updateFileMetadata(fileObject)
-  // Make sure to keep the file object itself as well as the tags updated
-  tags.remove(fileObject.tags, fileObject.path)
   parser(fileObject, content)
-  tags.report(fileObject.tags, fileObject.path)
   fileObject.modified = false // Always reset the modification flag.
   if (cache !== null) {
     cacheFile(fileObject, cache)
@@ -220,7 +211,6 @@ export async function rename (
   fileObject: MDFileDescriptor,
   newName: string,
   parser: (file: MDFileDescriptor, content: string) => void,
-  tags: TagProvider,
   cache: FSALCache|null
 ): Promise<void> {
   let oldPath = fileObject.path
@@ -231,22 +221,19 @@ export async function rename (
   fileObject.name = newName
   // Afterwards, reparse the file (this is important if the user switches from
   // an ID in the filename to an ID in the file, or vice versa)
-  await reparseChangedFile(fileObject, parser, tags, cache)
+  await reparseChangedFile(fileObject, parser, cache)
 }
 
 export async function reparseChangedFile (
   fileObject: MDFileDescriptor,
   parser: (file: MDFileDescriptor, content: string) => void,
-  tags: TagProvider,
   cache: FSALCache|null
 ): Promise<void> {
   // Literally the same as the save() function only without prior writing of contents
   const contents = await load(fileObject)
   await updateFileMetadata(fileObject)
   // Make sure to keep the file object itself as well as the tags updated
-  tags.remove(fileObject.tags, fileObject.path)
   parser(fileObject, contents)
-  tags.report(fileObject.tags, fileObject.path)
   fileObject.modified = false // Always reset the modification flag.
   if (cache !== null) {
     cacheFile(fileObject, cache)

@@ -28,7 +28,6 @@ import {
   codeFileExtensions,
   mdFileExtensions
 } from '@providers/fsal/util/valid-file-extensions'
-import TagProvider from '@providers/tags'
 import { hasCodeExt, hasMarkdownExt, isMdOrCodeFile } from './util/is-md-or-code-file'
 import { safeDelete } from './util/safe-delete'
 
@@ -133,7 +132,6 @@ async function parseSettings (dir: DirDescriptor): Promise<void> {
 export async function parse (
   currentPath: string,
   cache: FSALCache,
-  tags: TagProvider,
   parser: (file: MDFileDescriptor, content: string) => void,
   sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[],
   isRoot: boolean
@@ -179,7 +177,7 @@ export async function parse (
     }
 
     if (isDir(absolutePath) && !ignoreDir(absolutePath)) {
-      const cDir = await parse(absolutePath, cache, tags, parser, sorter, false)
+      const cDir = await parse(absolutePath, cache, parser, sorter, false)
       dir.children.push(cDir)
     } else if (isMdOrCodeFile(absolutePath)) {
       const isCode = ALLOWED_CODE_FILES.includes(path.extname(absolutePath).toLowerCase())
@@ -187,7 +185,7 @@ export async function parse (
         const file = await FSALCodeFile.parse(absolutePath, cache, dir)
         dir.children.push(file)
       } else {
-        const file = await FSALFile.parse(absolutePath, cache, parser, tags, false)
+        const file = await FSALFile.parse(absolutePath, cache, parser, false)
         dir.children.push(file)
       }
     } else if (isFile(absolutePath)) {
@@ -365,7 +363,6 @@ export async function createFile (
   dirObject: DirDescriptor,
   options: { name: string, content: string, type: 'code'|'file' },
   cache: FSALCache,
-  tags: TagProvider,
   parser: (file: MDFileDescriptor, content: string) => void,
   sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[]
 ): Promise<void> {
@@ -377,7 +374,7 @@ export async function createFile (
     const file = await FSALCodeFile.parse(fullPath, cache, dirObject)
     dirObject.children.push(file)
   } else {
-    const file = await FSALFile.parse(fullPath, cache, parser, tags, false)
+    const file = await FSALFile.parse(fullPath, cache, parser, false)
     dirObject.children.push(file)
   }
   sortChildren(dirObject, sorter)
@@ -398,7 +395,6 @@ export async function renameChild (
   dirObject: DirDescriptor,
   oldName: string,
   newName: string,
-  tags: TagProvider,
   parser: (file: MDFileDescriptor, content: string) => void,
   sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[],
   cache: FSALCache
@@ -427,10 +423,10 @@ export async function renameChild (
   // Add the new descriptor
   if (isDir(newPath)) {
     // Rescan the new dir to get all new file information
-    const descriptor = await parse(newPath, cache, tags, parser, sorter, false)
+    const descriptor = await parse(newPath, cache, parser, sorter, false)
     dirObject.children.push(descriptor)
   } else if (hasMarkdownExt(newPath)) {
-    const descriptor = await FSALFile.parse(newPath, cache, parser, tags, false)
+    const descriptor = await FSALFile.parse(newPath, cache, parser, false)
     dirObject.children.push(descriptor)
   } else if (hasCodeExt(newPath)) {
     const descriptor = await FSALCodeFile.parse(newPath, cache)
@@ -455,7 +451,6 @@ export async function move (
   sourceDir: DirDescriptor,
   sourceObject: AnyDescriptor,
   targetDir: DirDescriptor,
-  tags: TagProvider,
   parser: (file: MDFileDescriptor, content: string) => void,
   sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[],
   cache: FSALCache
@@ -473,9 +468,9 @@ export async function move (
   // Re-read the source
   let newSource
   if (sourceObject.type === 'directory') {
-    newSource = await parse(targetPath, cache, tags, parser, sorter, false)
+    newSource = await parse(targetPath, cache, parser, sorter, false)
   } else {
-    newSource = await FSALFile.parse(targetPath, cache, parser, tags, false)
+    newSource = await FSALFile.parse(targetPath, cache, parser, false)
   }
 
   // Add it to the new target
@@ -499,17 +494,16 @@ export function removeAttachment (dirObject: DirDescriptor, attachmentPath: stri
 export async function addChild (
   dirObject: DirDescriptor,
   childPath: string,
-  tags: TagProvider,
   parser: (file: MDFileDescriptor, content: string) => void,
   sorter: (arr: AnyDescriptor[], sortingType?: string) => AnyDescriptor[],
   cache: FSALCache
 ): Promise<void> {
   if (isDir(childPath)) {
-    dirObject.children.push(await parse(childPath, cache, tags, parser, sorter, false))
+    dirObject.children.push(await parse(childPath, cache, parser, sorter, false))
   } else if (ALLOWED_CODE_FILES.includes(path.extname(childPath))) {
     dirObject.children.push(await FSALCodeFile.parse(childPath, cache, dirObject))
   } else if (MARKDOWN_FILES.includes(path.extname(childPath))) {
-    dirObject.children.push(await FSALFile.parse(childPath, cache, parser, tags, false))
+    dirObject.children.push(await FSALFile.parse(childPath, cache, parser, false))
   }
   sortChildren(dirObject, sorter)
 }

@@ -257,9 +257,6 @@ export default defineComponent({
 
       return cnt
     },
-    hasTagSuggestions: function (): boolean {
-      return this.$store.state.tagSuggestions.length > 0
-    },
     toolbarControls: function (): ToolbarControl[] {
       return [
         {
@@ -294,7 +291,7 @@ export default defineComponent({
           id: 'show-tag-cloud',
           title: trans('toolbar.tag_cloud'),
           icon: 'tags',
-          badge: this.hasTagSuggestions
+          badge: undefined // this.hasTagSuggestions
         },
         {
           type: 'button',
@@ -698,26 +695,11 @@ export default defineComponent({
             this.$closePopover()
           })
       } else if (clickedID === 'show-tag-cloud') {
-        const allTags = Object.keys(this.$store.state.tagDatabase)
-        const tagMap = allTags.map(tag => {
-          // Tags have the properties "className", "count", and "text"
-          const storeTag = (this.$store.state.tagDatabase as any)[tag]
-
-          return {
-            className: storeTag.className,
-            count: storeTag.count,
-            text: storeTag.text
-          }
-        })
-
-        const data = {
-          tags: tagMap,
-          suggestions: this.$store.state.tagSuggestions
-        }
-
         const button = document.getElementById('toolbar-show-tag-cloud')
 
-        this.$togglePopover(PopoverTags, button as HTMLElement, data, (data: any) => {
+        this.$togglePopover(PopoverTags, button as HTMLElement, {
+          activeFile: this.$store.getters.lastLeafActiveFile()
+        }, (data: any) => {
           if (data.searchForTag !== '') {
             // The user has clicked a tag and wants to search for it
             this.startGlobalSearch('#' + data.searchForTag)

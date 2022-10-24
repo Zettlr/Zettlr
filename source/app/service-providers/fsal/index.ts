@@ -43,7 +43,6 @@ import generateStats from './util/generate-stats'
 import ProviderContract from '@providers/provider-contract'
 import { app } from 'electron'
 import LogProvider from '@providers/log'
-import TagProvider from '@providers/tags'
 import { hasCodeExt, hasMarkdownExt, hasMdOrCodeExt, isMdOrCodeFile } from './util/is-md-or-code-file'
 import { mdFileExtensions } from './util/valid-file-extensions'
 import getMarkdownFileParser from './util/file-parser'
@@ -80,7 +79,6 @@ export default class FSAL extends ProviderContract {
   constructor (
     private readonly _logger: LogProvider,
     private readonly _config: ConfigProvider,
-    private readonly _tags: TagProvider,
     private readonly _docs: DocumentManager
   ) {
     super()
@@ -298,7 +296,6 @@ export default class FSAL extends ProviderContract {
         await FSALDir.addChild(
           parentDescriptor,
           changedPath,
-          this._tags,
           this.getMarkdownFileParser(),
           this.getDirectorySorter(),
           this._cache
@@ -317,7 +314,6 @@ export default class FSAL extends ProviderContract {
         await FSALFile.reparseChangedFile(
           affectedDescriptor,
           this.getMarkdownFileParser(),
-          this._tags,
           this._cache
         )
       } else if (affectedDescriptor.type === 'other') {
@@ -413,7 +409,7 @@ export default class FSAL extends ProviderContract {
       this._recordFiletreeChange('add', filePath)
     } else if (hasMarkdownExt(filePath)) {
       const parser = this.getMarkdownFileParser()
-      const file = await FSALFile.parse(filePath, this._cache, parser, this._tags, true)
+      const file = await FSALFile.parse(filePath, this._cache, parser, true)
       this._state.filetree.push(file)
       this._recordFiletreeChange('add', filePath)
     }
@@ -431,7 +427,6 @@ export default class FSAL extends ProviderContract {
     const dir = await FSALDir.parse(
       dirPath,
       this._cache,
-      this._tags,
       this.getMarkdownFileParser(),
       sorter,
       true
@@ -605,6 +600,34 @@ export default class FSAL extends ProviderContract {
    */
   public getTreeMeta (): MaybeRootDescriptor[] {
     return this._state.filetree
+  }
+
+  /**
+   * Collects all tags loaded with any of the files in the filetree. Returns a
+   * list of [ tag, files[] ].
+   *
+   * @return  {Array<[ string, string[] ]>}  The list of tags with the files
+   */
+  public collectTags (): Array<[ string, string[] ]> {
+    // NOTE: Did a small performance check, on my full directory with >1,000
+    // tags and several hundred files this takes 23ms. Memory is indeed fast.
+    const tags: Array<[ string, string[] ]> = []
+
+    const allFiles = objectToArray(this._state.filetree, 'children')
+      .filter(descriptor => descriptor.type === 'file') as MDFileDescriptor[]
+
+    for (const descriptor of allFiles) {
+      for (const tag of descriptor.tags) {
+        const found = tags.find(elem => elem[0] === tag)
+        if (found !== undefined) {
+          found[1].push(descriptor.path)
+        } else {
+          tags.push([ tag, [descriptor.path] ])
+        }
+      }
+    }
+
+    return tags
   }
 
   /**
@@ -786,7 +809,6 @@ export default class FSAL extends ProviderContract {
       src,
       options,
       this._cache,
-      this._tags,
       this.getMarkdownFileParser(),
       sorter
     )
@@ -826,7 +848,7 @@ export default class FSAL extends ProviderContract {
       await this.loadPath(newPath)
       this._config.addPath(newPath)
     } else {
-      await FSALDir.renameChild(parent, src.name, newName, this._tags, parser, sorter, this._cache)
+      await FSALDir.renameChild(parent, src.name, newName, parser, sorter, this._cache)
       this._recordFiletreeChange('remove', oldPath)
       this._recordFiletreeChange('add', newPath)
       this._recordFiletreeChange('change', parent.path)
@@ -1036,7 +1058,6 @@ export default class FSAL extends ProviderContract {
         parent,
         src.name,
         newName,
-        this._tags,
         this.getMarkdownFileParser(),
         this.getDirectorySorter(),
         this._cache
@@ -1152,7 +1173,6 @@ export default class FSAL extends ProviderContract {
       parent,
       src,
       target,
-      this._tags,
       this.getMarkdownFileParser(),
       this.getDirectorySorter(),
       this._cache
@@ -1234,7 +1254,7 @@ export default class FSAL extends ProviderContract {
 
     if (hasMarkdownExt(absPath)) {
       const parser = this.getMarkdownFileParser()
-      const descriptor = await FSALFile.parse(absPath, this._cache, parser, this._tags, false)
+      const descriptor = await FSALFile.parse(absPath, this._cache, parser, false)
       return descriptor
     } else if (hasCodeExt(absPath)) {
       const descriptor = await FSALCodeFile.parse(absPath, this._cache)
@@ -1262,6 +1282,6 @@ export default class FSAL extends ProviderContract {
       throw new Error(`[FSAL] Cannot load directory ${absPath}: Not a directory`)
     }
 
-    return await FSALDir.parse(absPath, this._cache, this._tags, this.getMarkdownFileParser(), this.getDirectorySorter(), false)
+    return await FSALDir.parse(absPath, this._cache, this.getMarkdownFileParser(), this.getDirectorySorter(), false)
   }
 }

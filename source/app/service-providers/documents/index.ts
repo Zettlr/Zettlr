@@ -1297,7 +1297,6 @@ export default class DocumentManager extends ProviderContract {
         doc.descriptor,
         doc.document.toString(),
         this._app.fsal.getMarkdownFileParser(),
-        this._app.tags,
         null
       )
       await this.synchronizeDatabases() // The file may have gotten a library

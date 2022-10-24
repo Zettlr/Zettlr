@@ -99,24 +99,6 @@ ipcRenderer.on('documents-update', (evt, payload) => {
 })
 
 // -----------------------------------------------------------------------------
-
-// Listen for updates to the tag database
-ipcRenderer.on('tags', (event) => {
-  ipcRenderer.invoke('tag-provider', { command: 'get-tags-database' })
-    .then(tags => {
-      app.$store.commit('updateTagDatabase', tags)
-    })
-    .catch(e => console.error(e))
-})
-
-// Also send an initial update
-ipcRenderer.invoke('tag-provider', { command: 'get-tags-database' })
-  .then(tags => {
-    app.$store.commit('updateTagDatabase', tags)
-  })
-  .catch(e => console.error(e))
-
-// -----------------------------------------------------------------------------
 let filetreeUpdateLock = false
 let openDirectoryLock = false
 

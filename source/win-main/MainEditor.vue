@@ -120,6 +120,7 @@ import getBibliographyForDescriptor from '@common/util/get-bibliography-for-desc
 import EditorSearchPanel from './EditorSearchPanel.vue'
 import { SearchQuery } from '@codemirror/search'
 import { EditorSelection } from '@codemirror/state'
+import { TagDatabase } from '@dts/common/tag-provider'
 
 const ipcRenderer = window.ipc
 
@@ -327,7 +328,6 @@ const useH1 = computed<boolean>(() => store.state.config.fileNameDisplay.include
 const useTitle = computed<boolean>(() => store.state.config.fileNameDisplay.includes('title'))
 const filenameOnly = computed<boolean>(() => store.state.config['zkn.linkFilenameOnly'])
 const fontSize = computed<number>(() => store.state.config['editor.fontSize'])
-const tagDatabase = computed(() => store.state.tagDatabase)
 const globalSearchResults = computed(() => store.state.searchResults)
 const node = computed(() => store.state.paneData.find(leaf => leaf.id === props.leafId))
 const activeFile = computed(() => node.value?.activeFile) // TODO: MAYBE REMOVE
@@ -489,20 +489,6 @@ watch(editorConfiguration, (newValue) => {
   mdEditor?.setOptions(newValue)
 })
 
-watch(tagDatabase, (newValue) => {
-  if (mdEditor === null) {
-    return
-  }
-
-  // We must deproxy the tag database
-  const tags: string[] = []
-  for (const tag in newValue) {
-    tags.push(tag)
-  }
-
-  mdEditor.setCompletionDatabase('tags', tags)
-})
-
 watch(globalSearchResults, () => {
   // TODO: I don't like that we need a timeout here.
   setTimeout(maybeHighlightSearchResults, 200)
@@ -574,6 +560,9 @@ async function swapDocument (doc: string) {
   }
 
   mdEditor.setCompletionDatabase('snippets', snippets.value)
+
+  const tags = await ipcRenderer.invoke('tag-provider', { command: 'get-tags-database' }) as TagDatabase
+  mdEditor.setCompletionDatabase('tags', Object.keys(tags))
 
   // Provide the editor instance with metadata for the new file
   mdEditor.setOptions({
