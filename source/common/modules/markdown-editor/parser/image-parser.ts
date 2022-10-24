@@ -58,7 +58,6 @@ export const imageParser: InlineParser = {
     // URL
     from = to
     to = from + url.length
-    console.warn(url)
     children.push(ctx.elt('URL', from, to))
     if (title !== undefined && title.length > 0) {
       // Code Mark: quote

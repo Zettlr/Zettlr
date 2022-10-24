@@ -745,7 +745,7 @@ function editorMousemove (event: MouseEvent) {
  * @param   {MouseEvent}  event  The mouse event
  */
 function editorMouseup (event: MouseEvent) {
-  if (anchor.value === undefined || mdEditor === null) {
+  if (anchor.value === null || mdEditor === null) {
     // This event gets also fired when someone, e.g., wants to edit an image
     // caption, so we must explicitly check if we are currently in a left-
     // side selection event, and if we aren't, don't do anything.
