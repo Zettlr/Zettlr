@@ -98,10 +98,18 @@ class ImageWidget extends WidgetType {
     const { from, to } = this.node
     const data = this.data
 
+    let hasAlreadyDispatchedAnUpdate = false
+
     // Define a quick inline function that takes care of applying a new caption
     const updateCaptionFunction = function (event: KeyboardEvent|FocusEvent): void {
       if (event instanceof KeyboardEvent && event.key !== 'Enter') {
         // If this is a KeyboardEvent, only perform the action on Enter
+        return
+      }
+
+      if (hasAlreadyDispatchedAnUpdate) {
+        // Happens if the user presses Enter (the focusout will then also try to
+        // dispatch an update, making CodeMirror complain)
         return
       }
 
@@ -116,6 +124,7 @@ class ImageWidget extends WidgetType {
       // turn will rerender this image.
       // TODO: Right now this throws an error since apparently there is a second
       // update in progress as soon as this function gets called
+      hasAlreadyDispatchedAnUpdate = true
       view.dispatch({ changes: { from, to, insert: newImageTag } })
     }
 
@@ -132,10 +141,7 @@ class ImageWidget extends WidgetType {
     return container
   }
 
-  ignoreEvent (event: Event): boolean {
-    // We're handling mouse events and keyboard events ourselves.
-    return event instanceof MouseEvent || event instanceof KeyboardEvent || event instanceof FocusEvent
-  }
+  ignoreEvent (event: Event): boolean { return true }
 }
 
 function shouldHandleNode (node: SyntaxNodeRef): boolean {
