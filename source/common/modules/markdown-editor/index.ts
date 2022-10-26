@@ -56,6 +56,7 @@ import { CoreExtensionOptions, getJSONExtensions, getMarkdownExtensions, getTexE
 import { highlightRangesEffect } from './plugins/highlight-ranges'
 import { applyComment, insertImage, insertLink } from './commands/markdown'
 import { addNewFootnote } from './commands/footnotes'
+import countWords from '@common/util/count-words'
 
 export interface DocumentWrapper {
   path: string
@@ -79,7 +80,7 @@ export interface DocumentInfo {
   chars: number
   chars_wo_spaces: number
   cursor: UserReadablePosition
-  selections: Array<{ anchor: UserReadablePosition, head: UserReadablePosition }>
+  selections: Array<{ anchor: UserReadablePosition, head: UserReadablePosition, words: number, chars: number }>
 }
 
 export default class MarkdownEditor extends EventEmitter {
@@ -543,17 +544,20 @@ export default class MarkdownEditor extends EventEmitter {
       chars_wo_spaces: this.charCountWithoutSpaces ?? 0,
       cursor: { line: line.number, ch: mainOffset - line.from + 1 }, // Chars are still zero-based
       selections: this._instance.state.selection.ranges
-      // Remove cursor-only positions (range must have a length)
-        .filter(sel => sel.anchor !== sel.head)
+      // Remove cursor-only positions
+        .filter(sel => !sel.empty)
         // Then map to user readable ranges
         .map(sel => {
           // Analogous to how we determine the cursor position we do it here for
           // each selection present.
-          const anchorLine = this._instance.state.doc.lineAt(sel.anchor)
-          const headLine = this._instance.state.doc.lineAt(sel.head)
+          const anchorLine = this._instance.state.doc.lineAt(sel.from)
+          const headLine = this._instance.state.doc.lineAt(sel.to)
+          const selContent = this._instance.state.sliceDoc(sel.from, sel.to)
           return {
-            anchor: { line: anchorLine.number, ch: sel.anchor - anchorLine.from },
-            head: { line: headLine.number, ch: sel.head - headLine.from }
+            anchor: { line: anchorLine.number, ch: sel.from - anchorLine.from },
+            head: { line: headLine.number, ch: sel.to - headLine.from },
+            words: countWords(selContent, false),
+            chars: countWords(selContent, true)
           }
         })
     }

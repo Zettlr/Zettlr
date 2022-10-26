@@ -232,7 +232,7 @@ export default defineComponent({
         // We have selections to display.
         let length = 0
         info.selections.forEach((sel: any) => {
-          // length += sel.selectionLength TODO
+          length += this.shouldCountChars ? sel.chars : sel.words
         })
 
         cnt = trans('gui.words_selected', localiseNumber(length))
@@ -248,8 +248,8 @@ export default defineComponent({
         }
       } else {
         // No selection.
-        const locID = (this.shouldCountChars === true) ? 'gui.chars' : 'gui.words'
-        const num = (this.shouldCountChars === true) ? info.chars : info.words
+        const locID = (this.shouldCountChars) ? 'gui.chars' : 'gui.words'
+        const num = (this.shouldCountChars) ? info.chars : info.words
         cnt = trans(locID, localiseNumber(num))
         cnt += '<br>'
         cnt += (info.cursor.line + 1) + ':' + (info.cursor.ch + 1)
