@@ -80,7 +80,12 @@ export interface DocumentInfo {
   chars: number
   chars_wo_spaces: number
   cursor: UserReadablePosition
-  selections: Array<{ anchor: UserReadablePosition, head: UserReadablePosition, words: number, chars: number }>
+  selections: Array<{
+    anchor: UserReadablePosition
+    head: UserReadablePosition
+    words: number
+    chars: number
+  }>
 }
 
 export default class MarkdownEditor extends EventEmitter {

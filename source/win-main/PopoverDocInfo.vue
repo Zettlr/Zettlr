@@ -28,13 +28,13 @@
 
       <tr v-for="sel, idx in docInfo.selections" v-bind:key="idx">
         <td style="text-align:right">
-          <strong>{{ sel.start.line }}:{{ sel.start.ch }}</strong>
+          <strong>{{ sel.anchor.line }}:{{ sel.anchor.ch }}</strong>
         </td>
         <td><strong>&ndash;</strong></td>
         <td>
-          <strong>{{ sel.end.line }}:{{ sel.end.ch }}</strong>
+          <strong>{{ sel.head.line }}:{{ sel.head.ch }}</strong>
         </td>
-        <td>{{ getWdSelectedLabel(sel.selectionLength) }}</td>
+        <td>{{ getWdSelectedLabel(shouldCountChars ? sel.chars : sel.words) }}</td>
       </tr>
     </table>
     <p v-else>
@@ -43,7 +43,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -59,14 +59,17 @@
  */
 import { trans } from '@common/i18n-renderer'
 import localiseNumber from '@common/util/localise-number'
+import { defineComponent } from 'vue'
+import { DocumentInfo } from '@common/modules/markdown-editor'
 
-export default {
+export default defineComponent({
   name: 'PopoverDocInfo',
   components: {
   },
   data: function () {
     return {
-      docInfo: null
+      docInfo: null as null|DocumentInfo,
+      shouldCountChars: false
     }
   },
   computed: {
@@ -85,7 +88,7 @@ export default {
     withoutSpacesLabel: function () {
       return trans('gui.file_chars_wo_spaces')
     },
-    selectedWords: function () {
+    selectedWords: function (): string {
       if (this.docInfo === null) {
         return '0'
       } else {
@@ -108,11 +111,15 @@ export default {
     }
   },
   methods: {
-    getWdSelectedLabel: function (words) {
-      return trans('gui.words_selected', localiseNumber(words))
+    getWdSelectedLabel: function (wordsOrChars: number) {
+      if (this.shouldCountChars) {
+        return trans('gui.chars', localiseNumber(wordsOrChars))
+      } else {
+        return trans('gui.words', localiseNumber(wordsOrChars))
+      }
     }
   }
-}
+})
 </script>
 
 <style lang="less">

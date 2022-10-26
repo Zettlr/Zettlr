@@ -248,8 +248,8 @@ export default defineComponent({
         }
       } else {
         // No selection.
-        const locID = (this.shouldCountChars) ? 'gui.chars' : 'gui.words'
-        const num = (this.shouldCountChars) ? info.chars : info.words
+        const locID = this.shouldCountChars ? 'gui.chars' : 'gui.words'
+        const num = this.shouldCountChars ? info.chars : info.words
         cnt = trans(locID, localiseNumber(num))
         cnt += '<br>'
         cnt += (info.cursor.line + 1) + ':' + (info.cursor.ch + 1)
@@ -802,7 +802,8 @@ export default defineComponent({
         })
       } else if (clickedID === 'document-info') {
         const data = {
-          docInfo: this.$store.state.activeDocumentInfo
+          docInfo: this.$store.state.activeDocumentInfo,
+          shouldCountChars: this.shouldCountChars
         }
         const elem = document.getElementById('toolbar-document-info')
         this.$togglePopover(PopoverDocInfo, elem as HTMLElement, data, (data: any) => {
