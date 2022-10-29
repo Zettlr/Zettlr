@@ -50,7 +50,7 @@
           v-if="!file.pinned"
           class="close"
           aria-hidden="true"
-          v-on:mousedown="handleClickClose($event, file)"
+          v-on:mousedown.stop="handleClickClose($event, file)"
         >&times;</span>
       </div>
     </div>
