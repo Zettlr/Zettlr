@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-import { ChangeSpec } from '@codemirror/state'
+import { ChangeSpec, EditorSelection, SelectionRange } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
 import html2md from '@common/util/html-to-md'
 import { getConverter } from '@common/util/md-to-html'
@@ -90,21 +90,30 @@ export function paste (view: EditorView): void {
   const html = clipboard.readHTML()
 
   const changes: ChangeSpec[] = []
+  const ranges: SelectionRange[] = []
+
+  let offset = 0
 
   if (html === '' || html === plain) {
     // Insert the plain text
     for (const { from, to } of view.state.selection.ranges) {
       changes.push({ from, to, insert: plain })
+      offset += plain.length
+      const pos = from + offset
+      ranges.push(EditorSelection.range(pos, pos))
     }
   } else {
     // Convert HTML to plain and insert that
     const converted = html2md(html)
     for (const { from, to } of view.state.selection.ranges) {
       changes.push({ from, to, insert: converted })
+      offset += converted.length
+      const pos = from + offset
+      ranges.push(EditorSelection.range(pos, pos))
     }
   }
 
-  view.dispatch({ changes })
+  view.dispatch({ changes, selection: EditorSelection.create(ranges) })
 }
 
 /**
@@ -118,18 +127,27 @@ export function pasteAsPlain (view: EditorView): void {
   const html = clipboard.readHTML()
 
   const changes: ChangeSpec[] = []
+  const ranges: SelectionRange[] = []
+
+  let offset = 0
 
   if (html === '' || html === plain) {
     // Insert the plain text
     for (const { from, to } of view.state.selection.ranges) {
       changes.push({ from, to, insert: plain })
+      offset += plain.length
+      const pos = from + offset
+      ranges.push(EditorSelection.range(pos, pos))
     }
   } else {
     // Insert the HTML without conversion
     for (const { from, to } of view.state.selection.ranges) {
       changes.push({ from, to, insert: html })
+      offset += html.length
+      const pos = from + offset
+      ranges.push(EditorSelection.range(pos, pos))
     }
   }
 
-  view.dispatch({ changes })
+  view.dispatch({ changes, selection: EditorSelection.create(ranges) })
 }

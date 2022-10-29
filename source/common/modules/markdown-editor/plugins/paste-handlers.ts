@@ -10,8 +10,6 @@ const path = window.path
 export const pasteHandler = Prec.highest(EditorView.domEventHandlers({
   paste (event, view) {
     if (!clipboard.hasImage()) {
-      // Regular paste
-      paste(view)
       return true
     }
 
