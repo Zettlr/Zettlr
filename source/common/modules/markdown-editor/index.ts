@@ -591,7 +591,7 @@ export default class MarkdownEditor extends EventEmitter {
    * @return  {Boolean}  True if typewriter mode is active
    */
   get hasTypewriterMode (): boolean {
-    return false // TODO
+    return this.config.typewriterMode
   }
 
   /**
@@ -600,6 +600,10 @@ export default class MarkdownEditor extends EventEmitter {
    * @param   {Boolean}  shouldBeTypewriter  True or False
    */
   set hasTypewriterMode (shouldBeTypewriter: boolean) {
+    this.config.typewriterMode = shouldBeTypewriter
+    this._instance.dispatch({
+      effects: configUpdateEffect.of({ typewriterMode: shouldBeTypewriter })
+    })
   }
 
   /**

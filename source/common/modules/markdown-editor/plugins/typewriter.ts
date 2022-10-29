@@ -59,6 +59,8 @@ const typewriterMuteLines = StateField.define<DecorationSet>({
       return Decoration.none
     }
 
+    console.log('Updating typewriter mode!')
+
     return renderMutedLines(transaction.state)
   },
   provide: f => EditorView.decorations.from(f)

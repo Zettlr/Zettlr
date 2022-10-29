@@ -201,7 +201,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     }),
     // Some statistics we need for Markdown documents
     mdStatistics,
-    typewriter, // Typewriter mode
+    typewriter,
     tocField,
     autocomplete,
     readabilityMode,
