@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Snippets Autocomplete
+ * CVM-Role:        Autocomplete Plugin
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This plugin manages snippets.
+ *
+ * END HEADER
+ */
+
 // It is very nice that Codemirror offers snippets out of the box, but
 // unfortunately the syntax is incompatible with Textmate, so for backwards
 // compatibility we'll have to reimplement it here. This is largely the code

@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Hyperlinks Tooltips
+ * CVM-Role:        Extension
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file displays tooltips for URLs and Links.
+ *
+ * END HEADER
+ */
+
 import { EditorView, hoverTooltip, Tooltip } from '@codemirror/view'
 import { syntaxTree } from '@codemirror/language'
 

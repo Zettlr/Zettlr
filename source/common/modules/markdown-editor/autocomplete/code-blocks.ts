@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Code Block Autocomplete
+ * CVM-Role:        Autocomplete Plugin
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This plugin manages code blocks.
+ *
+ * END HEADER
+ */
+
 import { Completion } from '@codemirror/autocomplete'
 import { EditorView } from '@codemirror/view'
 import { AutocompletePlugin } from '.'

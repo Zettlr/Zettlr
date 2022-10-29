@@ -1,5 +1,16 @@
-// This is a simple, small transaction extender that makes the editor function
-// like a typewriter.
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Typewriter Mode
+ * CVM-Role:        Extension
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This extension implements a typewriter like writing experience.
+ *
+ * END HEADER
+ */
 
 import { EditorState, StateField } from '@codemirror/state'
 import { Decoration, DecorationSet, EditorView } from '@codemirror/view'

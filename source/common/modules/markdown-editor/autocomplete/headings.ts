@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Headings Autocomplete
+ * CVM-Role:        Autocomplete Plugin
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This plugin manages insertion of internal (heading) links.
+ *
+ * END HEADER
+ */
+
 import { AutocompletePlugin } from '.'
 import { tocField } from '../plugins/toc-field'
 

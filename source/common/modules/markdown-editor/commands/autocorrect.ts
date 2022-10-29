@@ -1,3 +1,18 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Autocorrect
+ * CVM-Role:        Utility Function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This is the autocorrect plugin, but since it basically just
+ *                  consists of commands, we added it to the commands folder.
+ *
+ * END HEADER
+ */
+
 // The autocorrect plugin is basically just a keymap that listens to spaces and enters
 import { ChangeSpec, EditorSelection } from '@codemirror/state'
 import { Command, EditorView } from '@codemirror/view'

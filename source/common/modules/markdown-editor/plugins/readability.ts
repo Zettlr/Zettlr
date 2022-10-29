@@ -1,3 +1,18 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Readability Mode
+ * CVM-Role:        Extension
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This extension applies one of the available readability
+ *                  metrics to Markdown documents.
+ *
+ * END HEADER
+ */
+
 import { ViewUpdate, ViewPlugin, DecorationSet, EditorView, Decoration } from '@codemirror/view'
 import { configField } from '../util/configuration'
 

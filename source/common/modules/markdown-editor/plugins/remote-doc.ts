@@ -1,3 +1,19 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Remote Document
+ * CVM-Role:        Utility
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This module defines a set of functions required by the
+ *                  editor to retrieve, update, and sync with the document
+ *                  provider.
+ *
+ * END HEADER
+ */
+
 // This plugin implements remote callbacks that keep the editor's document in
 // sync with a central authority
 import { Update, sendableUpdates, receiveUpdates, collab, getSyncedVersion } from '@codemirror/collab'

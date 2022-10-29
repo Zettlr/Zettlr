@@ -1,7 +1,17 @@
-// Utilizing a ReplaceDecorator, we're here rendering stuff.
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        MermaidRenderer
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This renderer displays mermaid graphs.
+ *
+ * END HEADER
+ */
 
-// The renderers are adapted from the example here:
-// https://codemirror.net/examples/decoration/#boolean-toggle-widgets
 import { renderBlockWidgets } from './base-renderer'
 import { SyntaxNode, SyntaxNodeRef } from '@lezer/common'
 import { EditorView, WidgetType } from '@codemirror/view'

@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Keymap
+ * CVM-Role:        Extension
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This is our base keymap.
+ *
+ * END HEADER
+ */
+
 import { copyLineDown, copyLineUp, indentLess, indentMore, moveLineDown, moveLineUp } from '@codemirror/commands'
 import { KeyBinding } from '@codemirror/view'
 import { abortSnippet, nextSnippet } from '../autocomplete/snippets'

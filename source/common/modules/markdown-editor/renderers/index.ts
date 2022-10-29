@@ -1,3 +1,18 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Renderer Entry Point
+ * CVM-Role:        Extension
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This module defines an extension that provides configurable
+ *                  renderers for Markdown files.
+ *
+ * END HEADER
+ */
+
 import { Compartment, Extension } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
 import { renderHeadings } from './render-headings'

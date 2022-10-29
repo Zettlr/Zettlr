@@ -1,4 +1,16 @@
-// A small plugin enabling search-like highlighting of arbitrary ranges
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Highlight Ranges
+ * CVM-Role:        Extension
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     A small plugin enabling search-like highlighting of arbitrary ranges
+ *
+ * END HEADER
+ */
 
 import { EditorState, SelectionRange, StateEffect, StateField } from '@codemirror/state'
 import { Decoration, DecorationSet, EditorView } from '@codemirror/view'

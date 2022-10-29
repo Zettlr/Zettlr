@@ -1,3 +1,18 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Syntax Highlighting
+ * CVM-Role:        Extension
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This module defines the syntax highlighting "themes" for
+ *                  code and Markdown files.
+ *
+ * END HEADER
+ */
+
 import { tags } from '@lezer/highlight'
 import { HighlightStyle, syntaxHighlighting } from '@codemirror/language'
 import { customTags } from '../util/custom-tags'

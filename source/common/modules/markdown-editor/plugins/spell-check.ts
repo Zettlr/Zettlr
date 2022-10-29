@@ -1,3 +1,18 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Spellchecker
+ * CVM-Role:        Linter
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This linter function checks Markdown documents for spelling
+ *                  mistakes.
+ *
+ * END HEADER
+ */
+
 import { syntaxTree } from '@codemirror/language'
 import { linter, Diagnostic, Action } from '@codemirror/lint'
 import { trans } from '@common/i18n-renderer'

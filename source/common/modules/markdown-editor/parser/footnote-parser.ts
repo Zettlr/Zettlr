@@ -1,4 +1,17 @@
-// We need the corresponding footnote syntax tags in our tree
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Footnote Parser
+ * CVM-Role:        InlineParser
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This inline parser adds footnote elements to the Lezer tree.
+ *
+ * END HEADER
+ */
+
 import { InlineParser, BlockParser, parser } from '@lezer/markdown'
 import { partialParse } from './partial-parse'
 

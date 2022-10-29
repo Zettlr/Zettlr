@@ -1,7 +1,20 @@
-// Since configuration for CodeMirror mainly works via a pair of StateField and
-// StateEffect, in order to reduce the amount of boiler plate, we define all
-// configuration options relatively similar to Codemirror 5 as an object that
-// we can query -- only now with full type support!
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Editor Configuration
+ * CVM-Role:        Utility
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Since configuration for CodeMirror mainly works via
+ *                  StateFields and StateEffects, in order to reduce the amount
+ *                  of boiler plate, we define all configuration options as an
+ *                  easily query-able object similarly to CM5 -- only now with
+ *                  full type support.
+ *
+ * END HEADER
+ */
 
 import { StateEffect, StateField } from '@codemirror/state'
 import safeAssign from '@common/util/safe-assign'

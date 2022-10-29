@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Equation menu
+ * CVM-Role:        Utility function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays a context menu for a given equation
+ *
+ * END HEADER
+ */
+
 import { EditorView } from '@codemirror/view'
 import { trans } from '@common/i18n-main'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'

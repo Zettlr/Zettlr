@@ -1,5 +1,17 @@
-// According to Marijn [here](https://discuss.codemirror.net/t/extend-overlay-mode/2818/4),
-// we can define additional syntax as a plugin (as opposed to an overlay mode)
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Syntax Extensions
+ * CVM-Role:        Extension
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     A collection of smaller extensions that style documents
+ *                  without modifying the Lezer tree. (Basically overlay modes)
+ *
+ * END HEADER
+ */
 
 import { StateField, EditorState, Extension } from '@codemirror/state'
 import { syntaxTree } from '@codemirror/language'

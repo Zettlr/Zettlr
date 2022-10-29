@@ -1,5 +1,18 @@
-// This file defines a set of StateFields that are used to keep a few statistics
-// such as word counts available to the overlying MarkdownEditor instance.
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Statistics Field
+ * CVM-Role:        Extension
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file defines a set of StateFields that are used to keep
+ *                  a few statistics such as word counts available to the
+ *                  overlying MarkdownEditor instance.
+ *
+ * END HEADER
+ */
 
 import { EditorState, StateField, Transaction } from '@codemirror/state'
 import countWords from '@common/util/count-words'

@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Heading menu
+ * CVM-Role:        Utility function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Displays a context menu for a given heading
+ *
+ * END HEADER
+ */
+
 import { EditorView } from '@codemirror/view'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { AnyMenuItem } from '@dts/renderer/context'

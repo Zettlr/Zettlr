@@ -1,3 +1,19 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Autocomplete
+ * CVM-Role:        Extension
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This is the autocomplete entry file. It defines a helper
+ *                  class to manage different types of autocompletes and bundles
+ *                  everything together.
+ *
+ * END HEADER
+ */
+
 import {
   Completion,
   CompletionSource,

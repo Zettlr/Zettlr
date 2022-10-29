@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Footnote Tooltips
+ * CVM-Role:        Extension
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This extension displays previews of footnotes on hover.
+ *
+ * END HEADER
+ */
+
 import { EditorView, hoverTooltip, Tooltip } from '@codemirror/view'
 import { syntaxTree } from '@codemirror/language'
 import { EditorState } from '@codemirror/state'

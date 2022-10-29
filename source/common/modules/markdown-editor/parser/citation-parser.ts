@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Citation Parser
+ * CVM-Role:        InlineParser
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This inline parser adds citation elements to the Lezer tree.
+ *
+ * END HEADER
+ */
+
 import { InlineParser } from '@lezer/markdown'
 import extractCitations from '@common/util/extract-citations'
 

@@ -1,3 +1,18 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Partial Parse
+ * CVM-Role:        Utility Function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Given a parser function, this utility function renders a
+ *                  document part and returns the partial tree for that part.
+ *
+ * END HEADER
+ */
+
 import { Parser, Tree } from '@lezer/common'
 import { BlockContext, InlineContext, Element } from '@lezer/markdown'
 

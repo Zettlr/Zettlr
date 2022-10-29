@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Lists
+ * CVM-Role:        Extension
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     A collection of commands and utility functions for dealing with lists
+ *
+ * END HEADER
+ */
+
 // This plugin handles everything with lists
 
 import { ChangeSpec, EditorState, Transaction } from '@codemirror/state'

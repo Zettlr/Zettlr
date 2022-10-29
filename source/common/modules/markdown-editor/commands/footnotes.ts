@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Footnotes Commands
+ * CVM-Role:        Extension
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     A collection of commands for adding, modifying, and removing footnotes.
+ *
+ * END HEADER
+ */
+
 // There are a few things people need to do with footnotes, all defined here:
 // 1. Hover over them for a preview
 // 2. Cmd-Click them to edit them in place

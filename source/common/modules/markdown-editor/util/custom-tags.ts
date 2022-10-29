@@ -1,9 +1,22 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Custom Tags
+ * CVM-Role:        Utility Function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This module defines custom tags that our custom parsers add
+ *                  to the Lezer Trees emitted by the Markdown mode. These tags
+ *                  are provided both to the Markdown parser as well as the
+ *                  highlighter mode so they know about them.
+ *
+ * END HEADER
+ */
+
 import { Tag, tags } from '@lezer/highlight'
 
-// This file defines custom tags to be used by our custom implementation. They
-// must be defined here because they need to be accessed both by the language
-// parser (to declare the tags that the frontmatter parser will spit out) as
-// well as the highlighter so that that one can attach styling to them.
 export const customTags = {
   YAMLFrontmatterStart: Tag.define(tags.contentSeparator),
   YAMLFrontmatterEnd: Tag.define(tags.contentSeparator),

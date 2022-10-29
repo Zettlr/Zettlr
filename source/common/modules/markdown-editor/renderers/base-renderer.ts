@@ -1,5 +1,18 @@
-// This is a base-class from which all renderer plugins must be derived. It
-// handles all the nitty gritty that is the same either way.
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Base Renderer
+ * CVM-Role:        Utility Class
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This module defines two base-renderers that are used by all
+ *                  rendering plugins. Rendering plugins can either define a
+ *                  block renderer or an inline renderer depending on the need.
+ *
+ * END HEADER
+ */
 
 import {
   WidgetType,

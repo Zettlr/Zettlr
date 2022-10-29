@@ -1,4 +1,16 @@
-// Contains Markdown syntax commands that can be bound to a keyboard shortcut
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Markdown Commands
+ * CVM-Role:        Extension
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This is our common collection of bold/italic/link/etc. commands
+ *
+ * END HEADER
+ */
 
 import { ChangeSpec, EditorSelection } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'

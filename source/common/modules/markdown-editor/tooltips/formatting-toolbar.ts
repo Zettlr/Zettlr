@@ -1,4 +1,17 @@
-// Shows a formatting toolbar if there's a main non-empty selection
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Formatting Toolbar
+ * CVM-Role:        Extension
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This extension can display a formatting bar for selections.
+ *
+ * END HEADER
+ */
+
 import { Tooltip, showTooltip } from '@codemirror/view'
 import { EditorState, StateField } from '@codemirror/state'
 import { applyBold, applyCode, applyComment, applyItalic, insertImage, insertLink } from '../commands/markdown'

@@ -1,9 +1,22 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        File Preview tooltip
+ * CVM-Role:        Extension
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This extension displays a file preview on Zettelkasten-link
+ *                  hover.
+ *
+ * END HEADER
+ */
+
 import { EditorView, hoverTooltip, Tooltip } from '@codemirror/view'
 import { trans } from '@common/i18n-renderer'
 import formatDate from '@common/util/format-date'
 import { configField } from '../util/configuration'
-// import { syntaxTree } from '@codemirror/language'
-// import { EditorState } from '@codemirror/state'
 
 const ipcRenderer = window.ipc
 

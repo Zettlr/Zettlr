@@ -1,3 +1,18 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Plain Link Parser
+ * CVM-Role:        InlineParser
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Since the default Markdown mode doesn't apply URL elements
+ *                  to plain links, we do that here.
+ *
+ * END HEADER
+ */
+
 import { InlineParser } from '@lezer/markdown'
 
 // A small parser that can parse plain text links

@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Files Autocomplete
+ * CVM-Role:        Autocomplete Plugin
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This plugin manages Zettelkasten links.
+ *
+ * END HEADER
+ */
+
 import { Completion } from '@codemirror/autocomplete'
 import { StateEffect, StateField } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'

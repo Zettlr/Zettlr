@@ -1,3 +1,18 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Math Parser
+ * CVM-Role:        InlineParser, BlockParser
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This module provides an inline and a block parser for both
+ *                  inline and block math.
+ *
+ * END HEADER
+ */
+
 import { InlineParser, BlockParser } from '@lezer/markdown'
 import { StreamLanguage } from '@codemirror/language'
 import { Tree } from '@lezer/common'
@@ -6,7 +21,6 @@ import { partialParse } from './partial-parse'
 
 const stexLang = StreamLanguage.define(stexMath)
 
-// TODO: Docs for this: https://github.com/lezer-parser/markdown#user-content-blockparser
 export const inlineMathParser: InlineParser = {
   // This parser should only match inline-math (we have to divide that here)
   name: 'inlineMath',

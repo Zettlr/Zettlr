@@ -1,4 +1,17 @@
-// Creates a StateField that keeps a ToC updated
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Table of Contents field
+ * CVM-Role:        Extension
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This state field keeps an updated table of contents for
+ *                  Markdown documents.
+ *
+ * END HEADER
+ */
 
 import { EditorState, StateField } from '@codemirror/state'
 import { syntaxTree, ensureSyntaxTree } from '@codemirror/language'

@@ -1,3 +1,18 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Click and Select Utility
+ * CVM-Role:        Utility Function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This function can be used by renderers to enable an easy way
+ *                  to select the source code behind rendered widgets.
+ *
+ * END HEADER
+ */
+
 import { EditorView } from '@codemirror/view'
 import { SyntaxNode } from '@lezer/common'
 

@@ -1,3 +1,19 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Pandoc table Parser
+ * CVM-Role:        Block Parser
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Since the default Markdown mode only offers limited support
+ *                  for tables, this parser ensures we detect any kind of table
+ *                  supported by Pandoc in a given document.
+ *
+ * END HEADER
+ */
+
 import { BlockParser, Element, BlockContext /* , LeafBlockParser */ } from '@lezer/markdown'
 
 // Group 1: ^| table contents |$; Group 2: some text | with pipes in between

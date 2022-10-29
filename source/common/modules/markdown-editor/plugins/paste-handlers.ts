@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Paste Handlers
+ * CVM-Role:        Utility Functions
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This paste handler manages pasting of images.
+ *
+ * END HEADER
+ */
+
 import { Prec } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
 import { configField } from '../util/configuration'

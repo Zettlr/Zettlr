@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Zettelkasten Link Parser
+ * CVM-Role:        InlineParser
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     A small parser that adds Zettelkasten link elements to the tree.
+ *
+ * END HEADER
+ */
+
 import { InlineParser } from '@lezer/markdown'
 
 // This parser adds Zettelkasten links to the syntax tree.
