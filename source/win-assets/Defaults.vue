@@ -148,7 +148,6 @@ export default defineComponent({
     },
     visibleItems: function (): PandocProfileMetadata[] {
       // Display either the exporting or importing formats depending on the tab
-      console.log(this.availableDefaultsFiles)
       return this.availableDefaultsFiles
         .filter((e) => {
           if (e.isInvalid) {

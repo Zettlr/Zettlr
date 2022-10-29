@@ -222,7 +222,7 @@ const mdExtensions = [
     maxRenderedOptions: 20,
     override: [snippetsAutocomplete]
   }),
-  markdownParser(), // Comes from the main editor
+  markdownParser('[[', ']]'), // Comes from the main editor
   markdownSyntaxHighlighter(), // Comes from the main editor
   snippetsHighlight
 ]
