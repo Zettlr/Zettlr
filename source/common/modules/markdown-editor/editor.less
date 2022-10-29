@@ -195,14 +195,13 @@
   .editor-image-container {
     display: inline-block;
     position: relative;
-    width: 100%;
     text-align: center;
     cursor: default;
 
     figure {
-      img {
-        display: inherit;
-      }
+      display: inline-block;
+
+      img { display: inherit; }
 
       &:hover, &:focus-within {
         figcaption, span.image-size-info, span.open-externally-button {

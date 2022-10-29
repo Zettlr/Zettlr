@@ -26,6 +26,7 @@ class ImageWidget extends WidgetType {
 
   toDOM (view: EditorView): HTMLElement {
     const img = document.createElement('img')
+    img.alt = this.altText
 
     const decodedUrl = this.imageUrl
 
@@ -65,17 +66,13 @@ class ImageWidget extends WidgetType {
     container.appendChild(figure)
 
     // Retrieve the size constraints
-    const maxPreviewWidth = 100 // TODO: Make configurable!
-    const maxPreviewHeight = 50 // TODO: Make configurable!
-    let width = (!Number.isNaN(maxPreviewWidth)) ? `${maxPreviewWidth}%` : '100%'
-    let height = (!Number.isNaN(maxPreviewHeight) && maxPreviewHeight < 100) ? `${maxPreviewHeight}vh` : ''
+    const { imagePreviewHeight, imagePreviewWidth } = view.state.field(configField)
+    const width = (!Number.isNaN(imagePreviewWidth)) ? `${imagePreviewWidth}%` : '100%'
+    const height = (!Number.isNaN(imagePreviewHeight) && imagePreviewHeight < 100) ? `${imagePreviewHeight}vh` : ''
 
-    // Apply the constraints to the figure and image
-    figure.style.maxWidth = width
-    figure.style.maxHeight = height
+    // Apply the constraints
     img.style.maxWidth = width
     img.style.maxHeight = height
-    img.alt = this.altText
 
     // Display a replacement image in case the correct one is not found
     img.onerror = () => {
