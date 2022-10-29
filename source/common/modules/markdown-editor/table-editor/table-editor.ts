@@ -262,6 +262,15 @@ export default class TableEditor {
       this._moveHelper(e)
       this._lastMousemoveEvent = e
     })
+    // These buttons are not children of containerElement but also should not
+    // hide the edge buttons, naturally.
+    this._addBottomButton.addEventListener('mousemove', e => { this._lastMousemoveEvent = e })
+    this._addLeftButton.addEventListener('mousemove', e => { this._lastMousemoveEvent = e })
+    this._addRightButton.addEventListener('mousemove', e => { this._lastMousemoveEvent = e })
+    this._addTopButton.addEventListener('mousemove', e => { this._lastMousemoveEvent = e })
+    this._alignButtons.addEventListener('mousemove', e => { this._lastMousemoveEvent = e })
+    this._removeButtons.addEventListener('mousemove', e => { this._lastMousemoveEvent = e })
+    this._saveStatusButton.addEventListener('mousemove', e => { this._lastMousemoveEvent = e })
 
     // ... but whenever a mousemove event triggers on the DOCUMENT that did not
     // earlier pass through our container, this means we must hide the edge
