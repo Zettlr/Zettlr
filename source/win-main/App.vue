@@ -110,6 +110,7 @@ import chimeFile from './assets/chime.mp3'
 import { ToolbarControl } from '@dts/renderer/window'
 import { OpenDocument, BranchNodeJSON, LeafNodeJSON } from '@dts/common/documents'
 import { EditorCommands } from '@dts/renderer/editor'
+import buildPipeTable from '@common/modules/markdown-editor/table-editor/build-pipe'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
@@ -787,16 +788,18 @@ export default defineComponent({
         const elem = document.getElementById('toolbar-insert-table')
         this.$togglePopover(PopoverTable, elem as HTMLElement, data, (data: any) => {
           // Generate a simple table based on the info, and insert it.
-          let table = ''
+          const ast: string[][] = []
+          const align: any[] = []
           for (let i = 0; i < data.tableSize.rows; i++) {
-            table += '|'
+            const row: string[] = []
+            align.push('left')
             for (let k = 0; k < data.tableSize.cols; k++) {
-              table += '   |'
+              row.push('')
             }
-            table += '\n'
+            ast.push(row)
           }
 
-          this.editorCommands.data = table
+          this.editorCommands.data = buildPipeTable(ast, align)
           this.editorCommands.replaceSelection = !this.editorCommands.replaceSelection
           this.$closePopover()
         })
