@@ -98,18 +98,10 @@ class ImageWidget extends WidgetType {
     const { from, to } = this.node
     const data = this.data
 
-    let hasAlreadyDispatchedAnUpdate = false
-
     // Define a quick inline function that takes care of applying a new caption
     const updateCaptionFunction = function (event: KeyboardEvent|FocusEvent): void {
       if (event instanceof KeyboardEvent && event.key !== 'Enter') {
         // If this is a KeyboardEvent, only perform the action on Enter
-        return
-      }
-
-      if (hasAlreadyDispatchedAnUpdate) {
-        // Happens if the user presses Enter (the focusout will then also try to
-        // dispatch an update, making CodeMirror complain)
         return
       }
 
@@ -120,11 +112,9 @@ class ImageWidget extends WidgetType {
       // "Why are you setting the caption both as the image description and title?"
       // Well, since all exports sometimes us this, sometimes the other value.
       const newImageTag = `![${newCaption}](${decodedUrl} "${newCaption}")${data}`
-      // Then replace the range, which will trigger a "change" event which in
-      // turn will rerender this image.
-      // TODO: Right now this throws an error since apparently there is a second
-      // update in progress as soon as this function gets called
-      hasAlreadyDispatchedAnUpdate = true
+      // Remove the event listeners beforehand to prevent multiple dispatches
+      caption.removeEventListener('keydown', updateCaptionFunction)
+      caption.removeEventListener('focusout', updateCaptionFunction)
       view.dispatch({ changes: { from, to, insert: newImageTag } })
     }
 
