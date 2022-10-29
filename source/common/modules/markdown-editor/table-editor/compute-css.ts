@@ -42,6 +42,9 @@ export default function computeCSS (edgeButtonSize: number): Element {
     border: 1px solid #666;
     border-collapse: collapse;
     min-width: 10px;
+    /* Codemirror 6's drawCursor plugin makes the actual cursor transparent, so
+    we have to reset it here for the contenteditables. Similar with selections */
+    caret-color: rgb(0, 0, 0);
   }
 
   /* We must pull to the front these buttons, lest they be overlaid by some

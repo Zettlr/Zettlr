@@ -307,4 +307,15 @@ body.dark {
   .table-helper-add-button {
     background-color: white;
   }
+
+  .table-helper td {
+    /* Codemirror 6's drawCursor plugin makes the actual cursor transparent, so
+    we have to reset it here for the contenteditables. Similar with selections */
+    caret-color: rgb(255, 255, 255);
+
+    &::selection {
+      color: black;
+      background-color: rgba(255, 255, 255, 0.8) !important;
+    }
+  }
 }

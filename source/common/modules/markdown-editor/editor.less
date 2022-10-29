@@ -239,6 +239,16 @@
         left: 10px;
         right: 10px;
         cursor: text; // Captions can be edited
+
+        // Codemirror 6's drawCursor plugin makes the actual cursor transparent,
+        // so we have to reset it here for the contenteditables. Same for
+        // selection backgrounds.
+        caret-color: rgb(255, 255, 255);
+        &::selection {
+          color: black;
+          // Overwrite the important by the plugin
+          background-color: rgba(255, 255, 255, 0.8) !important;
+        }
       }
     }
   }

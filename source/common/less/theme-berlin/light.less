@@ -4,6 +4,17 @@
 
 // Now all "bigger" styles
 body {
+  .table-helper td {
+    /* Codemirror 6's drawCursor plugin makes the actual cursor transparent, so
+    we have to reset it here for the contenteditables. Similar with selections */
+    caret-color: black;
+
+    &::selection {
+      color: black;
+      background-color: rgba(0, 0, 0, 0.2) !important;
+    }
+  }
+
   // Gutters (for code files)
   .main-editor-wrapper.code-file .cm-gutters {
     border-right-color: var(--grey-2);
