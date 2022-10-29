@@ -1,7 +1,6 @@
 import { Prec } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
 import { configField } from '../util/configuration'
-import { paste } from '../util/copy-paste-cut'
 
 const clipboard = window.clipboard
 const ipcRenderer = window.ipc
