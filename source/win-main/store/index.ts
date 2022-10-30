@@ -251,7 +251,10 @@ function getConfig (): StoreOptions<ZettlrState> {
         state.lastFiletreeUpdate = payload
       },
       updateRelatedFiles: function (state, relatedFiles: RelatedFile[]) {
-        state.relatedFiles = relatedFiles
+        // Make sure we're only updating if something has changed.
+        if (JSON.stringify(relatedFiles) !== JSON.stringify(state.relatedFiles)) {
+          state.relatedFiles = relatedFiles
+        }
       },
       updateModifiedFiles: function (state, modifiedDocuments: string[]) {
         state.modifiedDocuments = modifiedDocuments

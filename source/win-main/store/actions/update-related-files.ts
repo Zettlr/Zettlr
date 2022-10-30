@@ -23,11 +23,9 @@ const path = window.path
 const ipcRenderer = window.ipc
 
 export default async function (context: ActionContext<ZettlrState, ZettlrState>): Promise<void> {
-  // First reset, default is no related files
-  context.commit('updateRelatedFiles', [])
-
   const activeFile: OpenDocument|null = context.getters.lastLeafActiveFile()
   if (activeFile === null || !hasMarkdownExt(activeFile.path)) {
+    context.commit('updateRelatedFiles', [])
     return
   }
 
@@ -70,6 +68,7 @@ export default async function (context: ActionContext<ZettlrState, ZettlrState>)
   })
 
   if (descriptor === undefined) {
+    context.commit('updateRelatedFiles', [])
     return
   }
 
