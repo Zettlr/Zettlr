@@ -74,6 +74,8 @@ Zettlr is an [Electron](https://www.electronjs.org/)-based app, so to start deve
 1. A [NodeJS](https://nodejs.org/)-stack installed on your computer. Make sure it's at least Node 14 (`lts/fermium`). To test what version you have, run `node -v`.
 2. [Yarn](https://yarnpkg.com/en/) installed. Yarn is the required package manager for the project, as we do not commit `package-lock.json`-files and many commands require yarn. You can install this globally using `npm install -g yarn` or Homebrew, if you are on macOS.
 
+Note that [cURL](https://curl.se/download.html) library needs to be installed on your computer.
+
 Then, simply clone the repository and install the dependencies on your local computer:
 
 ```bash
