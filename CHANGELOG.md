@@ -198,6 +198,8 @@ there.
 - Middle-mouse clicks on the collapse/uncollapse indicators in the file tree
   should no longer trigger scrolling behavior on Windows
 - File tree items now show their absolute path on mouse hover
+- Clicking a directory will now also uncollapse it without having to click on
+  the arrow
 
 ## Under the Hood
 
@@ -205,6 +207,7 @@ there.
 - Refactored the Sidebar panels into their own respective components
 - Upgrade Electron to `19.x.x`
 - Upgrade Pandoc to `2.19`
+- Upgrade CodeMirror to version 6
 - Pandoc logs are now logged in every case
 - Improve the display and functionality of log messages
 - Switched the configuration file management for the different service providers
@@ -216,7 +219,14 @@ there.
   descriptors to centralize the extraction logic and save some code on the
   renderer's side
 - Extracted the ID extraction functionality to its own utility function
-- Fixed a bug that would incorrectly detect Python comments or C++ pragmas as tags
+- Fixed a bug that would incorrectly detect Python comments or C++ pragmas as
+  tags
+- Removed all `Meta` descriptors; now all descriptors are unified across main
+  and renderer processes
+- Documents are now no longer managed by the editor leafs. Instead, they are
+  managed by the document provider
+- Completely removed all instances of `hash`; the FSAL cache now is being called
+  with absolute file paths. Hashed paths are only used to determine the shard.
 
 # 2.3.0
 
