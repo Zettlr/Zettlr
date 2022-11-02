@@ -25,8 +25,15 @@ export default function calculateColSizes (ast: string[][]): number[] {
   for (let col = 0; col < ast[0].length; col++) {
     let colSize = 0
     for (let row = 0; row < ast.length; row++) {
-      if (ast[row][col].length > colSize) {
-        colSize = ast[row][col].length
+      const cell = ast[row][col]
+      let cellLength = cell.length
+      if (cell.includes('\n')) {
+        // Multi-line cell -> take the longest of the containing rows
+        cellLength = Math.max(...cell.split('\n').map(x => x.length))
+      }
+
+      if (cellLength > colSize) {
+        colSize = cellLength
       }
     }
     sizes.push(colSize)

@@ -18,7 +18,7 @@
  */
 
 import { SearchResult, SearchTerm } from '@dts/common/search'
-import { MDFileDescriptor, CodeFileDescriptor } from '@dts/main/fsal'
+import { MDFileDescriptor, CodeFileDescriptor } from '@dts/common/fsal'
 
 /**
  * Performs a full text search on the given fileObject, using terms. Returns a
@@ -66,13 +66,13 @@ export default function searchFile (fileObject: MDFileDescriptor|CodeFileDescrip
   for (const t of termsToSearch) {
     const matchedWords: Set<string> = new Set()
     for (const wd of t.words) {
-      if (fileObject.name.toLowerCase().includes(wd.toLowerCase()) || fileObject.tags.includes(wd.toLowerCase())) {
+      if (fileObject.name.toLowerCase().includes(wd.toLowerCase()) || (fileObject.type === 'file' && fileObject.tags.includes(wd.toLowerCase()))) {
         matchedWords.add(wd)
         if (t.operator === 'OR') {
           // Break because only one match necessary
           break
         }
-      } else if (wd[0] === '#' && fileObject.tags.includes(wd.toLowerCase().substring(1))) {
+      } else if (wd[0] === '#' && fileObject.type === 'file' && fileObject.tags.includes(wd.toLowerCase().substring(1))) {
         // Account for a potential # in front of the tag
         matchedWords.add(wd)
         if (t.operator === 'OR') {

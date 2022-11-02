@@ -35,10 +35,8 @@ table.push(`+---------------+---------------+--------------------+
 tableResults.push({
   ast: [
     [ 'Fruit', 'Price', 'Advantages' ],
-    [ 'Bananas', '$1.34', '- built-in wrapper' ],
-    [ '', '', '- bright color' ],
-    [ 'Oranges', '$2.10', '- cures scurvy' ],
-    [ '', '', '- tasty' ]
+    [ 'Bananas', '$1.34', '- built-in wrapper\n- bright color' ],
+    [ 'Oranges', '$2.10', '- cures scurvy\n- tasty' ]
   ],
   colAlignments: [ 'left', 'left', 'left' ]
 })

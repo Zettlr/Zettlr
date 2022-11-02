@@ -26,7 +26,7 @@ export default class DirRemoveProject extends ZettlrCommand {
     */
   async run (evt: string, arg: any): Promise<void> {
     let dir = this._app.fsal.findDir(arg.path)
-    if (dir !== null) {
+    if (dir !== undefined) {
       await this._app.fsal.removeProject(dir)
     } else {
       this._app.log.error('Could not remove project: Could not find directory!')

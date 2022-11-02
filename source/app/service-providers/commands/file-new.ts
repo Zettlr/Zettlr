@@ -16,11 +16,8 @@ import ZettlrCommand from './zettlr-command'
 import { trans } from '@common/i18n-main'
 import path from 'path'
 import sanitize from 'sanitize-filename'
-import { codeFileExtensions, mdFileExtensions } from '@providers/fsal/util/valid-file-extensions'
 import generateFilename from '@common/util/generate-filename'
-
-const CODEFILE_TYPES = codeFileExtensions(true)
-const ALLOWED_FILETYPES = mdFileExtensions(true)
+import { hasMdOrCodeExt } from '@providers/fsal/util/is-md-or-code-file'
 
 export default class FileNew extends ZettlrCommand {
   constructor (app: any) {
@@ -65,13 +62,13 @@ export default class FileNew extends ZettlrCommand {
       return
     }
 
-    let dir = this._app.fsal.openDirectory
+    let dir = this._app.fsal.openDirectory ?? undefined
 
     if (arg?.path !== undefined) {
       dir = this._app.fsal.findDir(arg.path)
     }
 
-    if (dir === null) {
+    if (dir === undefined) {
       const msg = 'Could not create new file: No directory selected!'
       this._app.windows.prompt({
         title: 'Could not create new file',
@@ -96,7 +93,7 @@ export default class FileNew extends ZettlrCommand {
       // that directory exists and is loaded by the FSAL, overwrite the dir.
       if (path.dirname(chosenPath) !== dir.path) {
         dir = this._app.fsal.findDir(path.dirname(chosenPath))
-        if (dir === null) {
+        if (dir === undefined) {
           // TODO: Better feedback to the user!
           this._app.log.error(`Could not create new file ${arg.name}: The selected directory is not loaded in Zettlr!`)
           return
@@ -114,20 +111,22 @@ export default class FileNew extends ZettlrCommand {
         throw new Error('Could not create file: Filename was not valid')
       }
 
-      // If no valid filename is provided, assume .md
-      const ext = path.extname(filename).toLowerCase()
-      if (type !== 'md') {
-        // The user has explicitly requested a code file so we must respect
-        // the decision.
-        if (type === 'tex' && ext !== '.tex') {
-          filename += '.tex'
-        } else if (type === 'json' && ext !== '.json') {
-          filename += '.json'
-        } else if (type === 'yaml' && ![ '.yaml', '.yml' ].includes(ext)) {
-          filename += '.yaml'
+      if (!hasMdOrCodeExt(filename)) {
+        // There's no valid file extension given. We have to add one. By default
+        // we assume Markdown, but let ourselves be guided by the given type.
+        switch (type) {
+          case 'json':
+            filename += '.json'
+            break
+          case 'tex':
+            filename += '.tex'
+            break
+          case 'yaml':
+            filename += '.yml'
+            break
+          default:
+            filename += '.md'
         }
-      } else if (!ALLOWED_FILETYPES.includes(ext) && !CODEFILE_TYPES.includes(ext)) {
-        filename += '.md'
       }
 
       // Check if there's already a file with this name in the directory
@@ -145,10 +144,11 @@ export default class FileNew extends ZettlrCommand {
       }
 
       // First create the file
+      console.log('CREATING FILE!', filename)
       await this._app.fsal.createFile(dir, {
         name: filename,
         content: '',
-        type: (type === 'md') ? 'md' : 'code'
+        type: (type === 'md') ? 'file' : 'code'
       })
 
       // And directly thereafter, open the file

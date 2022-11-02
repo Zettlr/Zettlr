@@ -89,7 +89,7 @@ export default class LinkProvider extends ProviderContract {
     // do a lot of comparison and only update if absolutely certain we can add
     // a little bit overhead here
     const dirDescriptor = this._fsal.findDir(path)
-    if (dirDescriptor !== null && event === 'add') {
+    if (dirDescriptor !== undefined && event === 'add') {
       for (const child of dirDescriptor.children) {
         this._updateLinksFor(child.path, event)
       }
@@ -97,7 +97,7 @@ export default class LinkProvider extends ProviderContract {
     }
 
     const descriptor = this._fsal.findFile(path)
-    if (descriptor === null || descriptor.type !== 'file') {
+    if (descriptor === undefined || descriptor.type !== 'file') {
       // File has likely been removed, or some other error
       if (this._fileLinkDatabase.has(path)) {
         this._fileLinkDatabase.delete(path)
@@ -140,7 +140,7 @@ export default class LinkProvider extends ProviderContract {
    */
   retrieveInbound (sourceFilePath: string): string[] {
     const descriptor = this._fsal.findFile(sourceFilePath)
-    if (descriptor === null || descriptor.type === 'code') {
+    if (descriptor === undefined || descriptor.type === 'code') {
       return []
     }
 

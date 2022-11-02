@@ -43,7 +43,7 @@ export default class FileRename extends ZettlrCommand {
     }
 
     const file = this._app.fsal.findFile(arg.path)
-    if (file === null) {
+    if (file === undefined) {
       return this._app.log.error(`Could not find file ${String(arg.path)}`)
     }
 
@@ -62,7 +62,7 @@ export default class FileRename extends ZettlrCommand {
     }
 
     // Test if we are about to override a file
-    const dir = file.parent
+    const dir = this._app.fsal.findDir(file.dir)
     let found = dir?.children.find(e => e.name.toLowerCase() === newName.toLowerCase())
     if (found !== undefined && found.type !== 'directory' && file !== found) {
       // Ask for override

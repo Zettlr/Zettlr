@@ -26,7 +26,7 @@ export default class DirRescan extends ZettlrCommand {
     */
   async run (evt: string, arg: any): Promise<void> {
     const deadDir = this._app.fsal.findDir(arg.path)
-    if (deadDir === null) {
+    if (deadDir === undefined) {
       this._app.log.error('Could not find directory descriptor to rescan.')
       return
     }

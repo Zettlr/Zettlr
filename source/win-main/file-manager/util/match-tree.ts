@@ -17,22 +17,22 @@
  * END HEADER
  */
 
-import { CodeFileMeta, DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
+import { AnyDescriptor, DirDescriptor } from '@dts/common/fsal'
 
-type FilterFunction = (item: DirMeta|MDFileMeta|CodeFileMeta|OtherFileMeta) => boolean
+type FilterFunction = (item: AnyDescriptor) => boolean
 
 /**
  * Matches a given directory descriptor against a prepared filter function (see
- * match-query.ts in this directory). Returns either a DirMeta containing only
- * the matches, or undefined, if nothing within the directory matches. This does
- * not modify the original directory.
+ * match-query.ts in this directory). Returns either a DirDescriptor containing
+ * only the matches, or undefined, if nothing within the directory matches. This
+ * does not modify the original directory.
  *
- * @param   {DirMeta}         directory  The directory to match
- * @param   {FilterFunction}  filter     The filter function to match against
+ * @param   {DirDescriptor}            directory  The directory to match
+ * @param   {FilterFunction}           filter     The filter function to match against
  *
- * @return  {DirMeta|undefined}          Either a novel descriptor, or undefined
+ * @return  {DirDescriptor|undefined}             Either a novel descriptor, or undefined
  */
-export default function matchTree (directory: DirMeta, filter: FilterFunction): DirMeta|undefined {
+export default function matchTree (directory: DirDescriptor, filter: FilterFunction): DirDescriptor|undefined {
   // From SO: "The properties are added in order, so if you want to override
   // existing properties, you need to put them at the end instead of at the
   // beginning" (source: https://stackoverflow.com/a/49491435)

@@ -70,7 +70,6 @@ export default class AppServiceContainer {
     // NOTE: This provider still produces side effects
     this._translationProvider = new TranslationProvider(this._logProvider, this._configProvider)
     this._assetsProvider = new AssetsProvider(this._logProvider)
-    this._tagProvider = new TagProvider(this._logProvider)
     this._cssProvider = new CssProvider(this._logProvider)
     this._notificationProvider = new NotificationProvider(this._logProvider)
     this._statsProvider = new StatsProvider(this._logProvider)
@@ -79,9 +78,10 @@ export default class AppServiceContainer {
     this._dictionaryProvider = new DictionaryProvider(this._logProvider, this._configProvider)
 
     this._targetProvider = new TargetProvider(this._logProvider)
-    this._fsal = new FSAL(this._logProvider, this._configProvider, this._targetProvider, this._tagProvider)
-    this._linkProvider = new LinkProvider(this._logProvider, this._fsal)
     this._documentManager = new DocumentManager(this)
+    this._fsal = new FSAL(this._logProvider, this._configProvider, this._documentManager)
+    this._tagProvider = new TagProvider(this._logProvider, this._fsal)
+    this._linkProvider = new LinkProvider(this._logProvider, this._fsal)
     this._windowProvider = new WindowProvider(this._logProvider, this._configProvider, this._documentManager)
     this._citeprocProvider = new CiteprocProvider(this._logProvider, this._configProvider, this._notificationProvider, this._windowProvider)
     this._trayProvider = new TrayProvider(this._logProvider, this._configProvider, this._windowProvider)

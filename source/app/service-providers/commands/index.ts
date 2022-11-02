@@ -47,6 +47,7 @@ import AppServiceContainer from 'source/app/app-service-container'
 import ZettlrCommand from './zettlr-command'
 import SetOpenDirectory from './set-open-directory'
 import { clipboard, ipcMain, nativeImage } from 'electron'
+import isFile from '@common/util/is-file'
 
 export const commands = [
   DirDelete,
@@ -114,18 +115,18 @@ export default class CommandProvider extends ProviderContract {
     } else if (command === 'get-filetree-events') {
       return this._app.fsal.filetreeHistorySince(payload)
     } else if (command === 'get-descriptor') {
-      const descriptor = this._app.fsal.find(payload)
-      if (descriptor === undefined) {
-        return undefined
+      if (isFile(payload)) {
+        return await this._app.fsal.getDescriptorForAnySupportedFile(payload)
+      } else {
+        return await this._app.fsal.getAnyDirectoryDescriptor(payload)
       }
-      return this._app.fsal.getMetadataFor(descriptor)
     } else if (command === 'get-open-directory') {
       const openDir = this._app.fsal.openDirectory
       if (openDir === null) {
         return null
       }
 
-      return this._app.fsal.getMetadataFor(openDir)
+      return openDir
     } else if (command === 'next-file') {
       // Trigger a "forward" command on the document manager
       // await this._app.documents.forward()
@@ -136,9 +137,6 @@ export default class CommandProvider extends ProviderContract {
       // await this._app.documents.back()
       // TODO!!!
       return true
-    } else if (command === 'set-writing-target') {
-      // Sets or updates a file's writing target
-      this._app.targets.set(payload)
     } else if (command === 'copy-img-to-clipboard') {
       // We should copy the contents of an image file to clipboard. Payload
       // contains the image path. We can rely on the Electron framework here.

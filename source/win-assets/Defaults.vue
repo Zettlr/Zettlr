@@ -141,7 +141,7 @@ export default defineComponent({
       return trans('dialog.defaults.invalid_warning')
     },
     renameFileLabel: function (): string {
-      return 'Rename file'
+      return 'Rename file' // TODO: Translate!
     },
     codeEditor: function (): typeof CodeEditor {
       return this.$refs['code-editor'] as typeof CodeEditor
@@ -150,6 +150,9 @@ export default defineComponent({
       // Display either the exporting or importing formats depending on the tab
       return this.availableDefaultsFiles
         .filter((e) => {
+          if (e.isInvalid) {
+            return true // We always need to show invalid files so users can fix them
+          }
           // Retrieve which one we need to check
           const readerWriter = (this.which === 'import') ? e.writer : e.reader
           return SUPPORTED_READERS.includes(getPlainPandocReaderWriter(readerWriter))

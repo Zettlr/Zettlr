@@ -121,13 +121,13 @@ export default class RootOpen extends ZettlrCommand {
       // First check if this thing is already added. If so, simply write
       // the existing file/dir into the newFile/newDir vars. They will be
       // opened accordingly.
-      if ((newFile = this._app.fsal.findFile(absPath)) != null) {
+      if ((newFile = this._app.fsal.findFile(absPath)) !== undefined) {
         // Open the file immediately
         await this._app.documents.openFile(winKey, leafId, newFile.path, true)
         // Also set the newDir variable so that Zettlr will automatically
         // navigate to the directory. The directory of the latest file will
         // remain open afterwards.
-        newDir = newFile.parent
+        newDir = this._app.fsal.findDir(newFile.dir)
       } else if ((newDir = this._app.fsal.findDir(absPath)) != null) {
         // Do nothing
       } else if (this._app.config.addPath(absPath)) {
@@ -139,7 +139,7 @@ export default class RootOpen extends ZettlrCommand {
           if (loaded) {
             // If it was a file and not a directory, immediately open it.
             const file = this._app.fsal.findFile(absPath)
-            if (file !== null) {
+            if (file !== undefined) {
               await this._app.documents.openFile(winKey, leafId, file.path, true)
             }
 
@@ -162,7 +162,7 @@ export default class RootOpen extends ZettlrCommand {
     }
 
     // Open the newly added path(s) directly.
-    if (newDir !== null) {
+    if (newDir !== undefined) {
       this._app.fsal.openDirectory = newDir
     }
   }

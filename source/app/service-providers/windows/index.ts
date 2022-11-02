@@ -25,7 +25,7 @@ import {
 } from 'electron'
 import EventEmitter from 'events'
 import path from 'path'
-import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/main/fsal'
+import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import createMainWindow from './create-main-window'
 import createPrintWindow from './create-print-window'
 import createUpdateWindow from './create-update-window'
@@ -51,7 +51,7 @@ import * as bcp47 from 'bcp-47'
 import mapFSError from './map-fs-error'
 import ProviderContract from '@providers/provider-contract'
 import LogProvider from '@providers/log'
-import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
+// import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import DocumentManager from '@providers/documents'
 import { DP_EVENTS } from '@dts/common/documents'
 import { trans } from '@common/i18n-main'
@@ -60,7 +60,6 @@ import PersistentDataContainer from '@common/modules/persistent-data-container'
 
 export default class WindowProvider extends ProviderContract {
   private readonly _mainWindows: { [key: string]: BrowserWindow }
-  private readonly _qlWindows: Map<string, BrowserWindow>
   private _printWindow: BrowserWindow|null
   private _updateWindow: BrowserWindow|null
   private _logWindow: BrowserWindow|null
@@ -78,7 +77,6 @@ export default class WindowProvider extends ProviderContract {
   private readonly _stateContainer: PersistentDataContainer
   private readonly _hasRTLLocale: boolean
   private readonly _emitter: EventEmitter
-  private _shuttingDown: boolean
 
   constructor (
     private readonly _logger: LogProvider,
@@ -88,7 +86,6 @@ export default class WindowProvider extends ProviderContract {
     super()
     this._emitter = new EventEmitter()
     this._mainWindows = {}
-    this._qlWindows = new Map()
     this._printWindow = null
     this._updateWindow = null
     this._preferences = null
@@ -104,7 +101,6 @@ export default class WindowProvider extends ProviderContract {
     this._windowState = new Map()
     this._configFile = path.join(app.getPath('userData'), 'window_state.yml')
     this._stateContainer = new PersistentDataContainer(this._configFile, 'yaml', 1000)
-    this._shuttingDown = false
 
     // Detect whether we have an RTL locale for correct traffic light positions.
     const schema = bcp47.parse(app.getLocale())
@@ -122,32 +118,6 @@ export default class WindowProvider extends ProviderContract {
     } else {
       this._hasRTLLocale = false
     }
-
-    // Listen to the before-quit event by which we make sure to only quit the
-    // application if the status of possibly modified files has been cleared.
-    // We listen to this event, because it will fire *before* the process
-    // attempts to close the open windows, including the main window, which
-    // would result in a loss of data. NOTE: The exception is the auto-updater
-    // which will close the windows before this event. But because we also
-    // listen to close-events on the main window, we should be able to handle
-    // this, if we ever switched to the auto updater.
-    app.on('before-quit', (event) => {
-      if (!this._documents.isClean()) {
-        event.preventDefault()
-        this._askUserToCloseWindow()
-          .then(canCloseWindow => {
-            if (canCloseWindow) {
-              this._shuttingDown = true
-              app.quit()
-            }
-          })
-          .catch(err => {
-            this._logger.error('[WindowManager] Could not ask user to close window', err)
-          })
-      } else {
-        this._shuttingDown = true
-      }
-    })
 
     // Listen to window control commands
     ipcMain.on('window-controls', (event, message) => {
@@ -333,29 +303,36 @@ export default class WindowProvider extends ProviderContract {
   private _hookMainWindow (window: BrowserWindow): void {
     // Listens to events from the window
     window.on('close', (event) => {
-      // The user has requested the window to be closed -> first close
-      // all other windows. NOTE: This also closes windows not instantiated
-      // from within this class. This is a failsafe -- don't open windows outside
-      // of the window manager.
-      const allWindows = BrowserWindow.getAllWindows()
-      for (const win of allWindows) {
-        // Don't close the main window just yet. We are just preparing for the
-        // shutdown by closing all other windows.
-        if (this.getMainWindowKey(win) === undefined) {
-          win.close()
-        }
-      }
-
       const key = this.getMainWindowKey(window)
 
       if (key === undefined) {
-        this._logger.error('[Window Manager] Could not close window since its key was not found!')
+        this._logger.error('[Window Manager] A main window is being closed, but I could not find its key!')
         return
       }
 
+      const nWindows = BrowserWindow.getAllWindows().length
+      const leaveAppRunning = this._config.get().system.leaveAppRunning
+
+      // If this is the last window open on Windows or Linux, the user intention
+      // is to quit the app. To prevent the document manager from removing the
+      // window from the config, we need to programmatically issue a quit event.
+      // If the user has explicitly mentioned that they want to keep the app
+      // running, we will only close the window here, but don't tell the
+      // documents manager about it so that it keeps the document in the config.
+      if (nWindows === 1 && process.platform !== 'darwin') {
+        if (!leaveAppRunning) {
+          app.quit()
+        } else {
+          window.close()
+        }
+        return
+      }
+
+      // Only close this window if it is safe to do so. The isClean() method will
+      // return true during shutdowns.
       if (!this._documents.isClean(key)) {
         event.preventDefault()
-        this._askUserToCloseWindow(key)
+        this._documents.askUserToCloseWindow(key)
           .then(canCloseWindow => {
             if (canCloseWindow) {
               window.close()
@@ -364,10 +341,7 @@ export default class WindowProvider extends ProviderContract {
           .catch(err => {
             this._logger.error('[WindowManager] Could not ask user to close window', err)
           })
-      }
-
-      // If we're not shutting down, ask the document provider to close the window
-      if (!this._shuttingDown) {
+      } else {
         this._documents.closeWindow(key)
       }
     })
@@ -376,7 +350,7 @@ export default class WindowProvider extends ProviderContract {
       // The window has been closed -> dereference
       const key = this.getMainWindowKey(window)
       if (key === undefined) {
-        this._logger.error('[Window Manager] Could not close a main window since its key was not found!')
+        this._logger.error('[Window Manager] Could not dereference a main window since its key was not found!')
         return
       }
 
@@ -398,37 +372,6 @@ export default class WindowProvider extends ProviderContract {
       if (win === this._mainWindows[key]) {
         return key
       }
-    }
-  }
-
-  /**
-   * If there are any unsaved changes to documents within the main window, this
-   * function handles everything regarding this. It asks the user to save
-   * changes if the user wants this. The caller just needs to look at the return
-   * value: If it's true, the user has confirmed the window can be closed, if
-   * false, there was some problem.
-   *
-   * @return  {Promise<boolean>}  True if the main window can safely be closed.
-   */
-  private async _askUserToCloseWindow (windowId?: string): Promise<boolean> {
-    if (this._documents.isClean(windowId)) {
-      return true
-    }
-
-    const result = await this.askSaveChanges()
-    if (result.response === 0) {
-      this._documents.markEverythingClean()
-      return true
-    } else if (result.response === 1) {
-      return await new Promise<boolean>((resolve, reject) => {
-        this._documents.once('documents-all-clean', () => { resolve(true) })
-        broadcastIpcMessage('save-documents', [])
-        // Failsafe if the documents aren't saved after 5 seconds. This way the
-        // user can simply again close the window
-        setTimeout(() => { resolve(false) }, 5000)
-      })
-    } else {
-      return false
     }
   }
 

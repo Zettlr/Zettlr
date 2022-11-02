@@ -44,7 +44,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -61,6 +61,7 @@
 
 import { trans } from '@common/i18n-renderer'
 import localiseNumber from '@common/util/localise-number'
+import { Stats } from '@dts/main/stats-provider'
 import { DateTime } from 'luxon'
 
 const ipcRenderer = window.ipc
@@ -75,7 +76,7 @@ export default {
       averageMonth: 0,
       sumToday: 0,
       showMoreStats: false,
-      wordCounts: {}
+      wordCounts: {} as { [key: string]: number }
     }
   },
   computed: {
@@ -99,13 +100,13 @@ export default {
       const allKeys = Object.keys(this.wordCounts)
       const dailyCounts = []
       for (let i = 1; i <= numDays; i++) {
-        let day = i
-        if (day < 10) {
+        let day = i.toString()
+        if (i < 10) {
           day = `0${i}`
         }
 
-        let m = month
-        if (m < 10) {
+        let m = month.toString()
+        if (month < 10) {
           m = `0${m}`
         }
 
@@ -176,7 +177,7 @@ export default {
   },
   created: function () {
     // Asynchronously pull in the data
-    ipcRenderer.invoke('stats-provider', { command: 'get-data' }).then(stats => {
+    ipcRenderer.invoke('stats-provider', { command: 'get-data' }).then((stats: Stats) => {
       this.sumMonth = stats.sumMonth
       this.averageMonth = stats.avgMonth
       this.sumToday = stats.today

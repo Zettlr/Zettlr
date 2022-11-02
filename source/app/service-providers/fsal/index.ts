@@ -25,39 +25,33 @@ import * as FSALFile from './fsal-file'
 import * as FSALCodeFile from './fsal-code-file'
 import * as FSALDir from './fsal-directory'
 import * as FSALAttachment from './fsal-attachment'
-import FSALWatchdog from './fsal-watchdog'
+import FSALWatchdog, { WatchdogEvent } from './fsal-watchdog'
 import FSALCache from './fsal-cache'
-import getSorter from './util/sort'
+import getSorter, { GenericSorter } from './util/sort'
 import {
-  WatchdogEvent,
   AnyDescriptor,
   DirDescriptor,
   MDFileDescriptor,
   CodeFileDescriptor,
   OtherFileDescriptor,
-  MaybeRootDescriptor
-} from '@dts/main/fsal'
-import {
-  MDFileMeta,
-  CodeFileMeta,
-  AnyMetaDescriptor,
-  MaybeRootMeta,
-  FSALStats,
-  FSALHistoryEvent
+  MaybeRootDescriptor,
+  SortMethod,
+  FSALStats, FSALHistoryEvent
 } from '@dts/common/fsal'
 import { SearchTerm } from '@dts/common/search'
 import generateStats from './util/generate-stats'
 import ProviderContract from '@providers/provider-contract'
 import { app } from 'electron'
-import TargetProvider from '@providers/targets'
 import LogProvider from '@providers/log'
-import TagProvider from '@providers/tags'
-import { hasCodeExt, hasMarkdownExt, isMdOrCodeFile } from './util/is-md-or-code-file'
+import { hasCodeExt, hasMarkdownExt, hasMdOrCodeExt, isMdOrCodeFile } from './util/is-md-or-code-file'
 import { mdFileExtensions } from './util/valid-file-extensions'
 import getMarkdownFileParser from './util/file-parser'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
 import { getIDRE } from '@common/regular-expressions'
 import ConfigProvider from '@providers/config'
+import { promises as fs } from 'fs'
+import { safeDelete } from './util/safe-delete'
+import DocumentManager from '@providers/documents'
 
 // Re-export all interfaces necessary for other parts of the code (Document Manager)
 export {
@@ -85,8 +79,7 @@ export default class FSAL extends ProviderContract {
   constructor (
     private readonly _logger: LogProvider,
     private readonly _config: ConfigProvider,
-    private readonly _targets: TargetProvider,
-    private readonly _tags: TagProvider
+    private readonly _docs: DocumentManager
   ) {
     super()
 
@@ -105,28 +98,14 @@ export default class FSAL extends ProviderContract {
       filetree: [] // Contains the full filetree
     }
 
-    // Finally, set up listeners for global targets
-    this._targets.on('update', (filePath: string) => {
-      let file = this.findFile(filePath)
-      if (file === null || file.type !== 'file') return // Not our business
-      // Simply pull in the new target
-      FSALFile.setTarget(file, this._targets.get(filePath))
-      this._recordFiletreeChange('change', file.path)
-    })
-
-    this._targets.on('remove', (filePath: string) => {
-      let file = this.findFile(filePath)
-      if (file === null || file.type !== 'file') return // Also not our business
-      FSALFile.setTarget(file, undefined) // Reset
-      this._recordFiletreeChange('change', file.path)
-    })
-
     this._watchdog.on('change', (event, changedPath) => {
       // Buffer the event for later
       this._remoteChangeBuffer.push({ event, path: changedPath })
 
       // Handle the buffer if we're not currently handling a change.
-      if (!this._isCurrentlyHandlingRemoteChange && !this._fsalIsBusy) this._afterRemoteChange()
+      if (!this._isCurrentlyHandlingRemoteChange && !this._fsalIsBusy) {
+        this._afterRemoteChange()
+      }
     })
   } // END constructor
 
@@ -144,12 +123,12 @@ export default class FSAL extends ProviderContract {
     const start = performance.now()
 
     // Next, load every path we should be loading from the config
-    for (const rootOrWorkspace of this._config.get('openPaths') as string[]) {
+    for (const root of this._config.get('openPaths') as string[]) {
       try {
-        await this.loadPath(rootOrWorkspace)
+        await this.loadPath(root)
       } catch (err: any) {
-        this._logger.error(`[FSAL] Removing path ${rootOrWorkspace}, as it no longer exists.`)
-        this._config.removePath(rootOrWorkspace)
+        this._logger.error(`[FSAL] Removing path ${root}, as it no longer exists.`)
+        this._config.removePath(root)
       }
     }
 
@@ -165,15 +144,11 @@ export default class FSAL extends ProviderContract {
     } else if (openDir !== null) {
       try {
         const descriptor = this.findDir(openDir)
-        this.openDirectory = descriptor
+        this.openDirectory = descriptor ?? null
       } catch (err: any) {
         this._logger.error(`[FSAL] Could not set open directory ${openDir}.`, err)
       }
     } // else: openDir was null
-
-    // Verify the integrity of the targets after we can be sure all files have
-    // been loaded
-    this._targets.verify(this)
   }
 
   // Enable global event listening to updates of the config
@@ -226,7 +201,6 @@ export default class FSAL extends ProviderContract {
 
     for (const descriptor of this._state.filetree) {
       this._history.push({ event: 'add', path: descriptor.path, timestamp })
-
       timestamp++
     }
   }
@@ -234,11 +208,11 @@ export default class FSAL extends ProviderContract {
   /**
    * Retrieves all history events after the given time.
    *
-   * @param   {number}              time  The timestamp marker
+   * @param   {number}              time  The timestamp marker (an ascending number)
    *
    * @return  {FSALHistoryEvent[]}        The events after the given time
    */
-  filetreeHistorySince (time: number = Date.now()): FSALHistoryEvent[] {
+  filetreeHistorySince (time: number = 1): FSALHistoryEvent[] {
     const idx = this._history.findIndex(event => event.timestamp > time)
     if (idx === -1) {
       return [] // The caller is already up to date
@@ -270,20 +244,19 @@ export default class FSAL extends ProviderContract {
       const descriptor = this.find(changedPath)
       let rootDirectoryIndex = -1 // Only necessary if the open dir has been removed
       if (descriptor === undefined) {
-        // It must have been an attachment
-        const parentPath = path.dirname(changedPath)
-        const containingDirectory = this.find(parentPath) as DirDescriptor
-        FSALDir.removeAttachment(containingDirectory, changedPath)
+        // Nothing to do.
+        this._logger.info(`[FSAL] Received removal event for path ${changedPath}, but it was not loaded.`)
+        return
+      } else if (descriptor.root) {
+        const idx = this._state.filetree.indexOf(descriptor)
+        this._state.filetree.splice(idx, 1)
+        rootDirectoryIndex = idx // Remember the index
       } else {
-        // It is a normal file or directory
-        if (descriptor.parent === null) {
-          // It was a root
-          const idx = this._state.filetree.findIndex(element => element.path === changedPath)
-          this._state.filetree.splice(idx, 1)
-          rootDirectoryIndex = idx // Remember the index
+        const parent = this.findDir(descriptor.dir)
+        if (parent === undefined) {
+          this._logger.error(`[FSAL] Could not remove path ${descriptor.path}: Could not find its parent!`)
         } else {
-          // It was not a root
-          FSALDir.removeChild(descriptor.parent, changedPath)
+          await FSALDir.removeChild(parent, changedPath, true)
         }
       }
 
@@ -292,11 +265,12 @@ export default class FSAL extends ProviderContract {
       const openDir = this._state.openDirectory
       if (openDir !== null && openDir.path === changedPath) {
         this._state.openDirectory = null
-        if (openDir.parent !== null) {
-          this._state.openDirectory = openDir.parent
+        const parent = this.findDir(openDir.dir)
+        if (parent !== undefined) {
+          this._state.openDirectory = parent
         } else if (rootDirectoryIndex === this._state.filetree.length) {
           // Last directory has been removed, check if there are any before it
-          let dirs = this._state.filetree.filter(dir => dir.type === 'directory') as DirDescriptor[]
+          const dirs = this._state.filetree.filter(dir => dir.type === 'directory') as DirDescriptor[]
           if (dirs.length > 0) {
             this._state.openDirectory = dirs[dirs.length - 1]
           }
@@ -312,23 +286,18 @@ export default class FSAL extends ProviderContract {
       this._recordFiletreeChange('remove', changedPath)
     } else if ([ 'add', 'addDir' ].includes(event)) {
       // A file or a directory has been added. It can not be a root.
-      const parentDescriptor = this.find(path.dirname(changedPath)) as DirDescriptor
-      if (isMdOrCodeFile(changedPath) || isDir(changedPath)) {
-        const sorter = getSorter(
-          this._config.get('sorting'),
-          this._config.get('sortFoldersFirst'),
-          this._config.get('fileNameDisplay'),
-          this._config.get('appLang'),
-          this._config.get('sortingTime')
-        )
+      const parentDescriptor = this.findDir(path.dirname(changedPath))
+      if (parentDescriptor === undefined) {
+        this._logger.error(`[FSAL] Could not process add event for ${changedPath}: Parent directory not found.`)
+        return
+      }
 
+      if (isMdOrCodeFile(changedPath) || isDir(changedPath)) {
         await FSALDir.addChild(
           parentDescriptor,
           changedPath,
-          this._tags,
-          this._targets,
           this.getMarkdownFileParser(),
-          sorter,
+          this.getDirectorySorter(),
           this._cache
         )
       } else {
@@ -345,7 +314,6 @@ export default class FSAL extends ProviderContract {
         await FSALFile.reparseChangedFile(
           affectedDescriptor,
           this.getMarkdownFileParser(),
-          this._tags,
           this._cache
         )
       } else if (affectedDescriptor.type === 'other') {
@@ -392,18 +360,17 @@ export default class FSAL extends ProviderContract {
    */
   private _consolidateRootFiles (): void {
     // First, retrieve all root files
-    const roots = this._state.filetree.filter(elem => elem.type !== 'directory')
+    const roots = this._state.filetree.filter(elem => elem.type !== 'directory') as Array<MDFileDescriptor|CodeFileDescriptor>
 
     // Secondly, see if we can find the containing directories somewhere in our
     // filetree.
     for (const root of roots) {
       const dir = this.findDir(root.dir)
 
-      if (dir !== null) {
+      if (dir !== undefined) {
         // The directory is, in fact loaded! So first we can pluck that file
         // from our filetree.
-        const idx = this._state.filetree.indexOf(root)
-        this._state.filetree.splice(idx, 1)
+        this._state.filetree.splice(this._state.filetree.indexOf(root), 1)
         // In order to reflect this change in consumers of the filetree, we
         // first need to remove the file so that consumers remove it from their
         // filetree, before "adding" it again. The time they execute the second
@@ -415,12 +382,7 @@ export default class FSAL extends ProviderContract {
         this._recordFiletreeChange('add', root.path)
 
         // Also, make sure to update the config accordingly
-        const rootPaths: string[] = this._config.get('openPaths')
-
-        if (rootPaths.includes(root.path)) {
-          rootPaths.splice(rootPaths.indexOf(root.path), 1)
-          this._config.set('openPaths', rootPaths)
-        }
+        this._config.removePath(root.path)
       }
     }
   }
@@ -441,38 +403,15 @@ export default class FSAL extends ProviderContract {
    * @param {String} filePath The file to be loaded
    */
   private async _loadFile (filePath: string): Promise<void> {
-    const parser = this.getMarkdownFileParser()
-    if (hasCodeExt(filePath)) {
-      let file = await FSALCodeFile.parse(filePath, this._cache)
-      this._state.filetree.push(file)
-      this._recordFiletreeChange('add', filePath)
-    } else if (hasMarkdownExt(filePath)) {
-      let file = await FSALFile.parse(filePath, this._cache, parser, this._targets, this._tags)
-      this._state.filetree.push(file)
-      this._recordFiletreeChange('add', filePath)
-    }
-  }
-
-  /**
-   * This is the public counterpart of the private file loader. It allows to
-   * conveniently load any file that is supported by the editor component.
-   *
-   * @param   {string}   filePath                          The absolute file path to load
-   *
-   * @return  {Promise<MDFileMeta|CodeFileMeta|undefined>} Resolves with a meta descriptor (including content) upon success
-   */
-  public async loadAnySupportedFile (filePath: string): Promise<MDFileMeta|CodeFileMeta|undefined> {
     if (hasCodeExt(filePath)) {
       const file = await FSALCodeFile.parse(filePath, this._cache)
-      const metadata = FSALCodeFile.metadata(file)
-      metadata.content = await FSALCodeFile.load(file)
-      return metadata
+      this._state.filetree.push(file)
+      this._recordFiletreeChange('add', filePath)
     } else if (hasMarkdownExt(filePath)) {
       const parser = this.getMarkdownFileParser()
-      const file = await FSALFile.parse(filePath, this._cache, parser, this._targets, this._tags)
-      const metadata = FSALFile.metadata(file)
-      metadata.content = await FSALFile.load(file)
-      return metadata
+      const file = await FSALFile.parse(filePath, this._cache, parser, true)
+      this._state.filetree.push(file)
+      this._recordFiletreeChange('add', filePath)
     }
   }
 
@@ -482,24 +421,17 @@ export default class FSAL extends ProviderContract {
    */
   private async _loadDir (dirPath: string): Promise<void> {
     // Loads a directory
+    const sorter = this.getDirectorySorter()
     const start = performance.now()
-    const sorter = getSorter(
-      this._config.get('sorting'),
-      this._config.get('sortFoldersFirst'),
-      this._config.get('fileNameDisplay'),
-      this._config.get('appLang'),
-      this._config.get('sortingTime')
-    )
 
     const dir = await FSALDir.parse(
       dirPath,
       this._cache,
-      this._tags,
-      this._targets,
       this.getMarkdownFileParser(),
       sorter,
-      null
+      true
     )
+
     const duration = performance.now() - start
     if (duration > 100) {
       // Only log if it took longer than 100ms
@@ -515,14 +447,14 @@ export default class FSAL extends ProviderContract {
    */
   private async _loadPlaceholder (dirPath: string): Promise<void> {
     // Load a "dead" directory
-    let dir: DirDescriptor = FSALDir.getDirNotFoundDescriptor(dirPath)
+    const dir: DirDescriptor = FSALDir.getDirNotFoundDescriptor(dirPath)
     this._state.filetree.push(dir)
     this._recordFiletreeChange('add', dirPath)
   }
 
   /**
-   * Returns an instance with a new file parser. Should be used to retrieve updated
-   * versions of the parser whenever the configuration changes
+   * Returns an instance with a new file parser. Should be used to retrieve
+   * updated versions of the parser whenever the configuration changes
    *
    * @return  {Function}  A parser that can be passed to FSAL functions involving files
    */
@@ -533,13 +465,33 @@ export default class FSAL extends ProviderContract {
     return getMarkdownFileParser(linkStart, linkEnd, idPattern)
   }
 
+  /**
+   * Returns a directory sorter based on the config.
+   *
+   * @return  {GenericSorter}The sorter
+   */
+  public getDirectorySorter (): GenericSorter {
+    return getSorter(
+      this._config.get('sorting'),
+      this._config.get('sortFoldersFirst'),
+      this._config.get('fileNameDisplay'),
+      this._config.get('appLang'),
+      this._config.get('sortingTime')
+    )
+  }
+
+  /**
+   * For "dead" directories, this function attampts to reload it. This way you
+   * can also keep directories open in the file tree that are not always present
+   *
+   * @param   {DirDescriptor}  descriptor  The directory descriptor
+   */
   public async rescanForDirectory (descriptor: DirDescriptor): Promise<void> {
     // Rescans a not found directory and, if found, replaces the directory
     // descriptor.
     if (isDir(descriptor.path)) {
       // Remove this descriptor, and have the FSAL load the real one
-      const idx = this._state.filetree.indexOf(descriptor)
-      this._state.filetree.splice(idx, 1)
+      this._state.filetree.splice(this._state.filetree.indexOf(descriptor), 1)
       this._recordFiletreeChange('remove', descriptor.path)
       this._logger.info(`Directory ${descriptor.name} found - Adding to file tree ...`)
       await this.loadPath(descriptor.path)
@@ -551,10 +503,11 @@ export default class FSAL extends ProviderContract {
 
   /**
    * Loads a given path into the FSAL.
-   * @param {String} p The path to be loaded
+   *
+   * @param {String} absPath The path to be loaded
    */
-  public async loadPath (p: string): Promise<boolean> {
-    const foundPath = this.find(p)
+  public async loadPath (absPath: string): Promise<boolean> {
+    const foundPath = this.find(absPath)
     if (foundPath !== undefined) {
       // Don't attempt to load the same path twice
       return true
@@ -562,32 +515,26 @@ export default class FSAL extends ProviderContract {
 
     // Load a path
     const start = Date.now()
-    if (isFile(p)) {
-      await this._loadFile(p)
-      this._watchdog.watch(p)
-    } else if (isDir(p)) {
-      await this._loadDir(p)
-      this._watchdog.watch(p)
-    } else if (path.extname(p) === '') {
+    if (isFile(absPath)) {
+      await this._loadFile(absPath)
+      this._watchdog.watch(absPath)
+    } else if (isDir(absPath)) {
+      await this._loadDir(absPath)
+      this._watchdog.watch(absPath)
+    } else if (path.extname(absPath) === '') {
       // It's not a file (-> no extension) but it
       // could not be found -> mark it as "dead"
-      await this._loadPlaceholder(p)
+      await this._loadPlaceholder(absPath)
     } else {
       // If we've reached here the path poses a problem -> notify caller
       return false
     }
 
     if (Date.now() - start > 500) {
-      this._logger.warning(`[FSAL] Path ${p} took ${Date.now() - start}ms to load.`)
+      this._logger.warning(`[FSAL] Path ${absPath} took ${Date.now() - start}ms to load.`)
     }
 
-    const sorter = getSorter(
-      this._config.get('sorting'),
-      this._config.get('sortFoldersFirst'),
-      this._config.get('fileNameDisplay'),
-      this._config.get('appLang'),
-      this._config.get('sortingTime')
-    )
+    const sorter = this.getDirectorySorter()
 
     this._state.filetree = sorter(this._state.filetree)
 
@@ -597,32 +544,32 @@ export default class FSAL extends ProviderContract {
   }
 
   /**
-   * Unloads the complete FSAL, can be used
-   * for preparation of a full reload.
+   * Unloads the complete FSAL, can be used for preparation of a full reload.
    */
   public unloadAll (): void {
-    for (let p of Object.keys(this._state.filetree)) {
-      this._watchdog.unwatch(p)
-      this._recordFiletreeChange('remove', p)
+    for (const absPath of Object.keys(this._state.filetree)) {
+      this._watchdog.unwatch(absPath)
+      this._recordFiletreeChange('remove', absPath)
     }
 
     this._state.filetree = []
     this._state.openDirectory = null
 
-    this._emitter.emit('fsal-state-changed', 'openDirectory')
-    if (this.openDirectory === null) {
-      this._config.set('openDirectory', null)
-    } else {
-      this._config.set('openDirectory', this.openDirectory.path)
-    }
+    this._config.set('openDirectory', null)
     broadcastIpcMessage('fsal-state-changed', 'openDirectory')
   }
 
   /**
    * Unloads a Root from the FSAL.
-   * @param {Object} root The root to be removed.
+   *
+   * @param  {string}  absPath The root to be removed.
    */
-  public unloadPath (root: MaybeRootDescriptor): boolean {
+  public unloadPath (absPath: string): boolean {
+    const root = this.find(absPath)
+    if (root === undefined || root.type === 'other') {
+      return false
+    }
+
     if (!this._state.filetree.includes(root)) {
       return false
     }
@@ -649,53 +596,38 @@ export default class FSAL extends ProviderContract {
   }
 
   /**
-   * Returns a file metadata object including the file contents.
-   * @param {Object} file The file descriptor
+   * Returns the directory tree, ready to be stringyfied for IPC calls.
    */
-  public async getFileContents (file: MDFileDescriptor|CodeFileDescriptor): Promise<MDFileMeta|CodeFileMeta> {
-    if (file.type === 'file') {
-      let returnFile = FSALFile.metadata(file)
-      returnFile.content = await FSALFile.load(file)
-      return returnFile
-    } else if (file.type === 'code') {
-      let returnFile = FSALCodeFile.metadata(file)
-      returnFile.content = await FSALCodeFile.load(file)
-      return returnFile
-    }
-
-    throw new Error('[FSAL] Could not retrieve file contents: Invalid type or invalid descriptor.')
+  public getTreeMeta (): MaybeRootDescriptor[] {
+    return this._state.filetree
   }
 
   /**
-   * Returns a lean directory tree, ready to be stringyfied for IPC calls.
+   * Collects all tags loaded with any of the files in the filetree. Returns a
+   * list of [ tag, files[] ].
+   *
+   * @return  {Array<[ string, string[] ]>}  The list of tags with the files
    */
-  public getTreeMeta (): MaybeRootMeta[] {
-    let ret: MaybeRootMeta[] = []
-    for (let root of this._state.filetree) {
-      ret.push(this.getMetadataFor(root) as MaybeRootMeta)
+  public collectTags (): Array<[ string, string[] ]> {
+    // NOTE: Did a small performance check, on my full directory with >1,000
+    // tags and several hundred files this takes 23ms. Memory is indeed fast.
+    const tags: Array<[ string, string[] ]> = []
+
+    const allFiles = objectToArray(this._state.filetree, 'children')
+      .filter(descriptor => descriptor.type === 'file') as MDFileDescriptor[]
+
+    for (const descriptor of allFiles) {
+      for (const tag of descriptor.tags) {
+        const found = tags.find(elem => elem[0] === tag)
+        if (found !== undefined) {
+          found[1].push(descriptor.path)
+        } else {
+          tags.push([ tag, [descriptor.path] ])
+        }
+      }
     }
 
-    // We know there are no undefines in here, so give to correct type
-    return ret
-  }
-
-  /**
-   * Returns a metadata object for the given descriptor
-   *
-   * @param   {AnyDescriptor}  descriptor  The descriptor to return metadata for
-   *
-   * @return  {AnyMetaDescriptor}          The metadata for that descriptor
-   */
-  public getMetadataFor (descriptor: AnyDescriptor): AnyMetaDescriptor {
-    if (descriptor.type === 'directory') {
-      return FSALDir.metadata(descriptor)
-    } else if (descriptor.type === 'file') {
-      return FSALFile.metadata(descriptor)
-    } else if (descriptor.type === 'code') {
-      return FSALCodeFile.metadata(descriptor)
-    } else {
-      return FSALAttachment.metadata(descriptor)
-    }
+    return tags
   }
 
   /**
@@ -703,66 +635,64 @@ export default class FSAL extends ProviderContract {
    *
    * @param  {string}       val  An absolute path to search for.
    *
-   * @return {DirDescriptor|null}       Either null or the wanted directory
+   * @return {DirDescriptor|undefined}       Either undefined or the wanted directory
    */
-  public findDir (val: string, baseTree = this._state.filetree): DirDescriptor|null {
+  public findDir (val: string, baseTree = this._state.filetree): DirDescriptor|undefined {
     const descriptor = locateByPath(baseTree, val)
     if (descriptor === undefined || descriptor.type !== 'directory') {
-      return null
+      return undefined
     }
 
-    return descriptor as DirDescriptor
+    return descriptor
   }
 
   /**
    * Attempts to find a file in the FSAL. Returns null if not found.
    *
    * @param {string}                             val       An absolute path to search for.
-   * @param {MaybeRootDescriptor[]|MaybeRootDescriptor} baseTree  The tree to search within
    *
-   * @return  {MDFileDescriptor|CodeFileDescriptor|null}          Either the corresponding descriptor, or null
+   * @return  {MDFileDescriptor|CodeFileDescriptor|undefined}  Either the corresponding descriptor, or undefined
    */
-  public findFile (val: string, baseTree = this._state.filetree): MDFileDescriptor|CodeFileDescriptor|null {
+  public findFile (val: string, baseTree = this._state.filetree): MDFileDescriptor|CodeFileDescriptor|undefined {
     const descriptor = locateByPath(baseTree, val)
     if (descriptor === undefined || (descriptor.type !== 'file' && descriptor.type !== 'code')) {
-      return null
+      return undefined
     }
 
-    return descriptor as MDFileDescriptor|CodeFileDescriptor
+    return descriptor
   }
 
   /**
    * Finds a non-markdown file within the filetree
    *
    * @param {string} val An absolute path to search for.
-   * @param {MaybeRootDescriptor[]|MaybeRootDescriptor} baseTree The tree to search within
    *
-   * @return  {OtherFileDescriptor|null}  Either the corresponding file, or null
+   * @return  {OtherFileDescriptor|undefined}  Either the corresponding file, or undefined
    */
-  public findOther (val: string, baseTree: MaybeRootDescriptor[]|MaybeRootDescriptor = this._state.filetree): OtherFileDescriptor|null {
+  public findOther (val: string, baseTree: MaybeRootDescriptor[]|MaybeRootDescriptor = this._state.filetree): OtherFileDescriptor|undefined {
     const descriptor = locateByPath(baseTree, val)
 
     if (descriptor === undefined || descriptor.type !== 'other') {
-      return null
+      return undefined
     }
 
-    return descriptor as OtherFileDescriptor
+    return descriptor
   }
 
   /**
    * Finds a descriptor that is loaded.
    *
-   * @param   {number|string}       val  The value.
+   * @param   {string}       absPath  The absolute path to the file or directory
    *
    * @return  {AnyDescriptor|undefined}  Returns either the descriptor, or undefined.
    */
-  public find (val: string): AnyDescriptor|undefined {
-    const descriptor = locateByPath(this._state.filetree, val)
+  public find (absPath: string): AnyDescriptor|undefined {
+    const descriptor = locateByPath(this._state.filetree, absPath)
 
     if (descriptor === undefined) {
       return undefined
     } else {
-      return descriptor as AnyDescriptor
+      return descriptor
     }
   }
 
@@ -803,14 +733,19 @@ export default class FSAL extends ProviderContract {
 
   /**
    * Returns true, if the haystack contains a descriptor with the same name as needle.
-   * @param {DirDescriptor} haystack A dir descriptor
-   * @param {MDFileDescriptor|DirDescriptor} needle A file or directory descriptor
-   */ // TODO: Only Directories!
+   *
+   * @param   {DirDescriptor}                   haystack A dir descriptor
+   * @param   {MDFileDescriptor|DirDescriptor}  needle   A file or directory descriptor
+   *
+   * @return  {boolean}                                  Whether needle is in haystack
+   */
   public hasChild (haystack: DirDescriptor, needle: MDFileDescriptor|CodeFileDescriptor|DirDescriptor): boolean {
     // Hello, PHP
     // If a name checks out, return true
-    for (let child of (haystack).children) {
-      if (child.name.toLowerCase() === needle.name.toLowerCase()) return true
+    for (const child of haystack.children) {
+      if (child.name.toLowerCase() === needle.name.toLowerCase()) {
+        return true
+      }
     }
 
     return false
@@ -842,45 +777,38 @@ export default class FSAL extends ProviderContract {
     return this._cache.clearCache()
   }
 
-  public async sortDirectory (src: DirDescriptor, sorting?: 'time-up'|'time-down'|'name-up'|'name-down'): Promise<void> {
+  public async sortDirectory (src: DirDescriptor, sorting?: SortMethod): Promise<void> {
     this._fsalIsBusy = true
-    const sorter = getSorter(
-      this._config.get('sorting'),
-      this._config.get('sortFoldersFirst'),
-      this._config.get('fileNameDisplay'),
-      this._config.get('appLang'),
-      this._config.get('sortingTime')
-    )
 
+    const sorter = this.getDirectorySorter()
     await FSALDir.sort(src, sorter, sorting)
     this._recordFiletreeChange('change', src.path)
+
     this._fsalIsBusy = false
     this._afterRemoteChange()
   }
 
-  public async createFile (src: DirDescriptor, options: any): Promise<void> {
+  /**
+   * Creates a new file in the given directory
+   *
+   * @param  {DirDescriptor}                                           src      The source directory
+   * @param  {{ name: string, content: string, type: 'code'|'file' }}  options  Options
+   */
+  public async createFile (src: DirDescriptor, options: { name: string, content: string, type: 'code'|'file' }): Promise<void> {
     this._fsalIsBusy = true
     // This action needs the cache because it'll parse a file
     // NOTE: Generates an add-event
     this._watchdog.ignoreEvents([{
-      'event': 'add',
-      'path': path.join(src.path, options.name)
+      event: 'add',
+      path: path.join(src.path, options.name)
     }])
 
-    const sorter = getSorter(
-      this._config.get('sorting'),
-      this._config.get('sortFoldersFirst'),
-      this._config.get('fileNameDisplay'),
-      this._config.get('appLang'),
-      this._config.get('sortingTime')
-    )
+    const sorter = this.getDirectorySorter()
 
     await FSALDir.createFile(
       src,
       options,
       this._cache,
-      this._targets,
-      this._tags,
       this.getMarkdownFileParser(),
       sorter
     )
@@ -890,81 +818,69 @@ export default class FSAL extends ProviderContract {
     this._afterRemoteChange()
   }
 
+  /**
+   * Renames the given file
+   *
+   * @param  {MDFileDescriptor}  src      The file to be renamed
+   * @param  {string}            newName  The new name for the file
+   */
   public async renameFile (src: MDFileDescriptor|CodeFileDescriptor, newName: string): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates 1x unlink, 1x add
 
-    this._watchdog.ignoreEvents([{
-      'event': 'unlink',
-      'path': src.path
-    }])
-    this._watchdog.ignoreEvents([{
-      'event': 'add',
-      'path': path.join(src.dir, newName)
-    }])
+    this._watchdog.ignoreEvents([
+      { event: 'unlink', path: src.path },
+      { event: 'add', path: path.join(src.dir, newName) }
+    ])
 
+    const parent = this.findDir(src.dir)
+    const sorter = this.getDirectorySorter()
+    const parser = this.getMarkdownFileParser()
+
+    const newPath = path.join(src.dir, newName)
     const oldPath = src.path // Cache the old path
 
-    if (src.type === 'file') {
-      await FSALFile.rename(
-        src,
-        newName,
-        this.getMarkdownFileParser(),
-        this._tags,
-        this._cache
-      )
-    } else if (src.type === 'code') {
-      await FSALCodeFile.rename(src, this._cache, newName)
+    if (parent === undefined) {
+      // It's a root file
+      this._config.removePath(src.path)
+      this.unloadPath(src.path)
+      await fs.rename(src.path, newPath)
+      await this.loadPath(newPath)
+      this._config.addPath(newPath)
+    } else {
+      await FSALDir.renameChild(parent, src.name, newName, parser, sorter, this._cache)
+      this._recordFiletreeChange('remove', oldPath)
+      this._recordFiletreeChange('add', newPath)
+      this._recordFiletreeChange('change', parent.path)
     }
 
-    // src.path already points to the new path
-    this._recordFiletreeChange('remove', oldPath)
-    this._recordFiletreeChange('add', src.path)
+    // Notify the documents provider so it can exchange any files if necessary
+    await this._docs.hasMovedFile(oldPath, newPath)
 
-    const sorter = getSorter(
-      this._config.get('sorting'),
-      this._config.get('sortFoldersFirst'),
-      this._config.get('fileNameDisplay'),
-      this._config.get('appLang'),
-      this._config.get('sortingTime')
-    )
-
-    // Now we need to re-sort the parent directory
-    if (src.parent !== null) {
-      await FSALDir.sort(src.parent, sorter) // Omit sorting
-      this._recordFiletreeChange('change', src.parent.path)
-    }
-
-    // Notify of a state change
-    this._emitter.emit('fsal-state-changed', 'filetree')
-    broadcastIpcMessage('fsal-state-changed', 'filetree')
     this._fsalIsBusy = false
     this._afterRemoteChange()
   }
 
+  /**
+   * Removes the given file from the system
+   *
+   * @param   {MDFileDescriptor}  src   The source file
+   */
   public async removeFile (src: MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates 1x unlink
     // First remove the file
-    this._watchdog.ignoreEvents([{
-      'event': 'unlink',
-      'path': src.path
-    }])
+    this._watchdog.ignoreEvents([{ event: 'unlink', path: src.path }])
 
-    // Will trigger a change that syncs the files
+    const parent = this.findDir(src.dir)
+    const deleteOnFail = this._config.get('system.deleteOnFail') as boolean
 
-    // Now we're safe to remove the file actually.
-    if (src.type === 'file') {
-      await FSALFile.remove(src, this._config.get('system.deleteOnFail'))
-    } else if (src.type === 'code') {
-      await FSALCodeFile.remove(src, this._config.get('system.deleteOnFail'))
-    } else {
-      await FSALAttachment.remove(src, this._config.get('system.deleteOnFail'))
-    }
-
-    // In case it was a root file, we need to splice it
-    if (src.parent === null && src.type !== 'other') {
-      this.unloadPath(src)
+    if (src.root) {
+      this.unloadPath(src.path)
+      await fs.unlink(src.path)
+    } else if (parent !== undefined) {
+      await FSALDir.removeChild(parent, src.path, deleteOnFail)
+      this._config.removePath(src.path)
     }
 
     this._recordFiletreeChange('remove', src.path)
@@ -973,6 +889,14 @@ export default class FSAL extends ProviderContract {
     this._afterRemoteChange()
   }
 
+  /**
+   * Search the given file
+   *
+   * @param   {MDFileDescriptor}  src          The file to search
+   * @param   {SearchTerm[]}      searchTerms  The search terms
+   *
+   * @return {Promise<any>}                    Returns the results
+   */
   public async searchFile (src: MDFileDescriptor|CodeFileDescriptor, searchTerms: SearchTerm[]): Promise<any> { // TODO: Implement search results type
     // NOTE: Generates no events
     // Searches a file and returns the result
@@ -983,6 +907,11 @@ export default class FSAL extends ProviderContract {
     }
   }
 
+  /**
+   * Sets the given directory settings
+   *
+   * @param   {DirDescriptor}  src       The target directory
+   */
   public async setDirectorySetting (src: DirDescriptor, settings: any): Promise<void> {
     this._fsalIsBusy = true
     // Sets a setting on the directory
@@ -994,6 +923,12 @@ export default class FSAL extends ProviderContract {
     this._afterRemoteChange()
   }
 
+  /**
+   * Creates a new project in this dir
+   *
+   * @param   {DirDescriptor}  src           The directory
+   * @param   {any}            initialProps  Any initial settings
+   */
   public async createProject (src: DirDescriptor, initialProps: any): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates no events as dotfiles are not watched
@@ -1005,6 +940,12 @@ export default class FSAL extends ProviderContract {
     this._afterRemoteChange()
   }
 
+  /**
+   * Updates the given properties for this project
+   *
+   * @param   {DirDescriptor}  src      The project dir
+   * @param   {any}            options  New options
+   */
   public async updateProject (src: DirDescriptor, options: any): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates no events as dotfiles are not watched
@@ -1019,6 +960,11 @@ export default class FSAL extends ProviderContract {
     this._afterRemoteChange()
   }
 
+  /**
+   * Deletes the project in this dir
+   *
+   * @param   {DirDescriptor}  src  The target directory
+   */
   public async removeProject (src: DirDescriptor): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates no events as dotfiles are not watched
@@ -1030,6 +976,12 @@ export default class FSAL extends ProviderContract {
     this._afterRemoteChange()
   }
 
+  /**
+   * Creates a new directory
+   *
+   * @param   {DirDescriptor}  src      Where to create the dir
+   * @param   {string}         newName  How to name it
+   */
   public async createDir (src: DirDescriptor, newName: string): Promise<void> {
     this._fsalIsBusy = true
     // Parses a directory and henceforth needs the cache
@@ -1041,39 +993,28 @@ export default class FSAL extends ProviderContract {
       throw new Error(`An object already exists at path ${absolutePath}!`)
     }
 
-    this._watchdog.ignoreEvents([{
-      'event': 'addDir',
-      'path': absolutePath
-    }])
+    this._watchdog.ignoreEvents([{ event: 'addDir', path: absolutePath }])
 
-    const sorter = getSorter(
-      this._config.get('sorting'),
-      this._config.get('sortFoldersFirst'),
-      this._config.get('fileNameDisplay'),
-      this._config.get('appLang'),
-      this._config.get('sortingTime')
-    )
+    const sorter = this.getDirectorySorter()
 
-    await FSALDir.create(
-      src,
-      newName,
-      this._cache,
-      this._tags,
-      this._targets,
-      this.getMarkdownFileParser(),
-      sorter
-    )
+    await FSALDir.createDirectory(src, newName, sorter)
     this._recordFiletreeChange('add', absolutePath)
 
     this._fsalIsBusy = false
     this._afterRemoteChange()
   }
 
+  /**
+   * Renames the given directory
+   *
+   * @param   {DirDescriptor}  src      The directory to rename
+   * @param   {string}         newName  The new name for the dir
+   */
   public async renameDir (src: DirDescriptor, newName: string): Promise<void> {
     this._fsalIsBusy = true
     // Compute the paths to be replaced
-    const oldPrefix = path.join(src.dir, src.name)
-    const newPrefix = path.join(src.dir, newName)
+    const newPath = path.join(src.dir, newName)
+    const oldPath = src.path
 
     // Now that we have prepared potential updates,
     // let us perform the rename.
@@ -1082,64 +1023,60 @@ export default class FSAL extends ProviderContract {
     let removes = []
     for (const child of objectToArray(src, 'children')) {
       adds.push({
-        'event': child.type === 'file' ? 'add' : 'addDir',
+        event: child.type === 'file' ? 'add' : 'addDir',
         // Converts /old/path/oldname/file.md --> /old/path/newname/file.md
-        'path': child.path.replace(oldPrefix, newPrefix)
+        path: child.path.replace(src.path, newPath)
       })
       removes.push({
-        'event': child.type === 'file' ? 'unlink' : 'unlinkDir',
-        'path': child.path
+        event: child.type === 'file' ? 'unlink' : 'unlinkDir',
+        path: child.path
       })
     }
 
     for (const attachment of objectToArray(src, 'attachments')) {
       adds.push({
         event: 'add',
-        path: attachment.path.replace(oldPrefix, newPrefix)
+        path: attachment.path.replace(src.path, newPath)
       })
-      removes.push({
-        event: 'unlink',
-        path: attachment.path
-      })
+      removes.push({ event: 'unlink', path: attachment.path })
     }
 
-    const sorter = getSorter(
-      this._config.get('sorting'),
-      this._config.get('sortFoldersFirst'),
-      this._config.get('fileNameDisplay'),
-      this._config.get('appLang'),
-      this._config.get('sortingTime')
-    )
+    const parent = this.findDir(src.dir)
 
-    // Now concat the removes in reverse direction and ignore them
-    this._watchdog.ignoreEvents(adds.concat(removes))
-    const newDir = await FSALDir.rename(
-      src,
-      newName,
-      this._tags,
-      this._targets,
-      this.getMarkdownFileParser(),
-      sorter,
-      this._cache
-    )
-
-    // NOTE: With regard to our filetree, it's just one unlink and one add because
-    // consumers just need to remove the directory and then re-add it again.
-    this._recordFiletreeChange('remove', src.path)
-    this._recordFiletreeChange('add', newDir.path)
-
-    if (src.parent === null) {
-      // Exchange the directory in the filetree
-      let index = this._state.filetree.indexOf(src)
-      this._state.filetree.splice(index, 1, newDir)
-      this._state.filetree = sorter(this._state.filetree)
+    if (parent === undefined) {
+      this.unloadPath(src.path)
+      this._config.removePath(src.path)
+      // chokidar always watches the parent directory, even if it's a root
+      this._watchdog.ignoreEvents([{ event: 'addDir', path: newPath }])
+      await fs.rename(src.path, newPath)
+      await this.loadPath(newPath)
+      this._config.addPath(newPath)
+    } else {
+      // Now concat the removes in reverse direction and ignore them
+      this._watchdog.ignoreEvents(adds.concat(removes))
+      await FSALDir.renameChild(
+        parent,
+        src.name,
+        newName,
+        this.getMarkdownFileParser(),
+        this.getDirectorySorter(),
+        this._cache
+      )
+      // NOTE: With regard to our filetree, it's just one unlink and one add because
+      // consumers just need to remove the directory and then re-add it again.
+      this._recordFiletreeChange('remove', src.path)
+      this._recordFiletreeChange('add', newPath)
     }
+
+    // Notify the documents provider so it can exchange any files if necessary
+    await this._docs.hasMovedDir(oldPath, newPath)
 
     // Cleanup: Re-set anything within the state that has changed due to this
 
     // If it was the openDirectory, reinstate it
     if (this.openDirectory === src) {
-      this.openDirectory = newDir
+      const newDir = this.findDir(newPath)
+      this.openDirectory = newDir ?? null
       this._emitter.emit('fsal-state-changed', 'openDirectory')
       if (this.openDirectory === null) {
         this._config.set('openDirectory', null)
@@ -1153,108 +1090,198 @@ export default class FSAL extends ProviderContract {
     this._afterRemoteChange()
   }
 
+  /**
+   * Deletes the given directory
+   *
+   * @param   {DirDescriptor}  src  The dir to remove
+   */
   public async removeDir (src: DirDescriptor): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates 1x unlink for each child + src!
     let arr = objectToArray(src, 'children').map(e => {
       return {
-        'event': e.type === 'file' ? 'unlink' : 'unlinkDir',
-        'path': e.path
+        event: e.type === 'file' ? 'unlink' : 'unlinkDir',
+        path: e.path
       }
     })
 
-    this._watchdog.ignoreEvents(arr.concat({
-      'event': 'unlinkDir',
-      'path': src.path
-    }))
+    this._watchdog.ignoreEvents(arr.concat({ event: 'unlinkDir', path: src.path }))
 
-    await FSALDir.remove(src, this._config.get('system.deleteOnFail'))
+    const parent = this.findDir(src.dir)
+    const deleteOnFail: boolean = this._config.get('system.deleteOnFail')
 
-    // Clean up after removing
-    if (this._state.filetree.includes(src)) {
-      // If it's a root, unload it, which emits an event
-      // and also consolidates the open files
-      this.unloadPath(src) // NOTE: Will automatically emit a remove history event
+    if (parent === undefined) {
+      this.unloadPath(src.path)
+      await safeDelete(src.path, deleteOnFail)
+      this._config.removePath(src.path)
     } else {
-      // Not a root directory. It can still be the open directory.
-      if (this.openDirectory === src) {
-        // Sets the parent as the openDir
-        this.openDirectory = src.parent
-      }
-
-      this._recordFiletreeChange('remove', src.path)
+      await FSALDir.removeChild(parent, src.path, deleteOnFail)
     }
+
+    if (this.openDirectory === src) {
+      this.openDirectory = parent ?? null
+    }
+
+    this._recordFiletreeChange('remove', src.path)
     this._fsalIsBusy = false
     this._afterRemoteChange()
   }
 
+  /**
+   * Moves a file or directory to its new destination
+   *
+   * @param   {MaybeRootDescriptor}  src     What to move
+   * @param   {DirDescriptor}        target  Where to move it
+   */
   public async move (src: MaybeRootDescriptor, target: DirDescriptor): Promise<void> {
     this._fsalIsBusy = true
 
     // NOTE: Generates 1x unlink, 1x add for each child, src and on the target!
-    let activeFileUpdateNeeded = false
-    let newOpenDir
-    const hasOpenDir = this.openDirectory !== null
-    const srcIsDir = src.type === 'directory'
-    const srcIsOpenDir = src === this.openDirectory
-    const srcContainsOpenDir = srcIsDir && hasOpenDir && this.findDir((this.openDirectory as DirDescriptor).path, [src]) !== null
-
-    // Next, check if the open directory is affected
-    if (srcIsOpenDir || srcContainsOpenDir) {
-      // Compute the new hash and indicate an update is necessary
-      newOpenDir = (this.openDirectory as DirDescriptor).path.replace(src.dir, target.path)
-    }
+    const newPath = path.join(target.path, src.name)
+    const oldPath = src.path
+    const wasOpenDir = this.openDirectory?.path === src.path
 
     // Now we need to generate the ignore events that are to be expected.
-    let sourcePath = src.path
-    let targetPath = path.join(target.path, src.name)
-    let arr = objectToArray(src, 'children')
-    let adds = []
-    let removes = []
-    for (let obj of arr) {
+    const sourcePath = src.path
+    const targetPath = path.join(target.path, src.name)
+    const arr = objectToArray(src, 'children')
+    const adds = []
+    const removes = []
+    for (const obj of arr) {
       adds.push({
-        'event': obj.type === 'file' ? 'add' : 'addDir',
+        event: obj.type === 'file' ? 'add' : 'addDir',
         // Converts /path/source/file.md --> /path/target/file.md
-        'path': obj.path.replace(sourcePath, targetPath)
+        path: obj.path.replace(sourcePath, targetPath)
       })
       removes.push({
-        'event': obj.type === 'file' ? 'unlink' : 'unlinkDir',
-        'path': obj.path
+        event: obj.type === 'file' ? 'unlink' : 'unlinkDir',
+        path: obj.path
       })
     }
-    this._watchdog.ignoreEvents(adds.concat(removes))
 
-    const sorter = getSorter(
-      this._config.get('sorting'),
-      this._config.get('sortFoldersFirst'),
-      this._config.get('fileNameDisplay'),
-      this._config.get('appLang'),
-      this._config.get('sortingTime')
-    )
+    this._watchdog.ignoreEvents(adds.concat(removes))
 
     // Now perform the actual move. What the action will do is re-read the
     // new source again, and insert it into the target, so the filetree is
     // good to go afterwards.
+    const parent = this.findDir(src.dir)
+    if (parent === undefined) {
+      throw new Error('[FSAL] Cannot move roots!')
+    }
+
     await FSALDir.move(
+      parent,
       src,
       target,
-      this._tags,
-      this._targets,
       this.getMarkdownFileParser(),
-      sorter,
+      this.getDirectorySorter(),
       this._cache
     )
 
     this._recordFiletreeChange('remove', src.path)
     this._recordFiletreeChange('add', path.join(target.path, src.name))
 
-    if (newOpenDir !== undefined) {
-      this.openDirectory = this.findDir(newOpenDir)
+    // Notify the documents provider so it can exchange any files if necessary
+    if (src.type === 'directory') {
+      await this._docs.hasMovedDir(oldPath, newPath)
+    } else {
+      await this._docs.hasMovedFile(oldPath, newPath)
     }
-    if (activeFileUpdateNeeded) {
-      this._emitter.emit('fsal-state-changed', 'activeFile')
+
+    const newDescriptor = this.findDir(newPath)
+    if (wasOpenDir) {
+      this.openDirectory = newDescriptor ?? null
     }
     this._fsalIsBusy = false
     this._afterRemoteChange()
   } // END: move-action
+
+  /**
+   * This is a convenience function to retrieve the file contents (as a string)
+   * of any file that is supported by Zettlr, meaning you can use this function
+   * to load the contents of any Markdown file, any JSON or YAML file, or any
+   * TeX file (+ maybe others in the future).
+   *
+   * @throws When the path was a directory or an unsupported file (unsupported
+   *         includes attachments)
+   *
+   * @param   {string<string>}   absPath  The path to the file
+   *
+   * @return  {Promise<string>}           Resolves with a string
+   */
+  public async loadAnySupportedFile (absPath: string): Promise<string> {
+    if (isDir(absPath)) {
+      throw new Error(`[FSAL] Cannot load file ${absPath} as it is a directory`)
+    }
+
+    if (!isFile(absPath)) {
+      throw new Error(`[FSAL] Cannot load file ${absPath}: Not found`)
+    }
+
+    if (hasMdOrCodeExt(absPath)) {
+      const content = await fs.readFile(absPath, { encoding: 'utf-8' })
+      return content
+    }
+
+    throw new Error(`[FSAL] Cannot load file ${absPath}: Unsupported`)
+  }
+
+  /**
+   * Convenience function to retrieve a supported file (including attachments
+   * in the form of a FSAL descriptor containing metadata on the file in
+   * question.)
+   *
+   * @throws If the path points to a directory or an otherwise unsupported file.
+   *
+   * @param   {string}   absPath  The path to the file
+   *
+   * @return  {Promise<MDFileDescriptor>}           Resolves with the descriptor
+   */
+  public async getDescriptorForAnySupportedFile (absPath: string): Promise<MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor> {
+    // If we have the given file already loaded we don't have to load it again
+    const descriptor = this.find(absPath)
+    if (descriptor !== undefined && descriptor.type !== 'directory') {
+      return descriptor
+    }
+
+    if (isDir(absPath)) {
+      throw new Error(`[FSAL] Cannot load file ${absPath} as it is a directory`)
+    }
+
+    if (!isFile(absPath)) {
+      throw new Error(`[FSAL] Cannot load file ${absPath}: Not found`)
+    }
+
+    if (hasMarkdownExt(absPath)) {
+      const parser = this.getMarkdownFileParser()
+      const descriptor = await FSALFile.parse(absPath, this._cache, parser, false)
+      return descriptor
+    } else if (hasCodeExt(absPath)) {
+      const descriptor = await FSALCodeFile.parse(absPath, this._cache)
+      return descriptor
+    } else {
+      const descriptor = await FSALAttachment.parse(absPath)
+      return descriptor
+    }
+  }
+
+  /**
+   * Returns any directory descriptor
+   *
+   * @param   {string}                  absPath  The path to the directory
+   *
+   * @return  {Promise<DirDescriptor>}           The dir descriptor
+   */
+  public async getAnyDirectoryDescriptor (absPath: string): Promise<DirDescriptor> {
+    const descriptor = this.findDir(absPath)
+    if (descriptor !== undefined) {
+      return descriptor
+    }
+
+    if (!isDir(absPath)) {
+      throw new Error(`[FSAL] Cannot load directory ${absPath}: Not a directory`)
+    }
+
+    return await FSALDir.parse(absPath, this._cache, this.getMarkdownFileParser(), this.getDirectorySorter(), false)
+  }
 }

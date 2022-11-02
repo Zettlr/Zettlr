@@ -133,6 +133,11 @@ export default {
           })
             .catch(e => console.error(e))
         }
+
+        // Also uncollapse (only applies in file trees)
+        if (this.hasChildren === true) {
+          this.collapsed = this.collapsed === false
+        }
       }
     },
     /**
@@ -192,22 +197,19 @@ export default {
                 .filter(file => file.type === 'file')
                 .map(file => file.wordCount)
                 .reduce((prev, cur) => prev + cur, 0),
-              isProject: this.obj.type === 'directory' && this.obj.project !== null,
+              isProject: this.obj.type === 'directory' && this.obj.settings.project !== null,
               fullPath: this.obj.path,
               isGitRepository: this.obj.isGitRepository,
               icon: this.obj.icon
             }
 
-            if (this.obj.sorting !== null) {
-              data.sortingType = this.obj.sorting.split('-')[0]
-              data.sortingDirection = this.obj.sorting.split('-')[1]
-            } // Else: Default sorting of name-up
+            ;[ data.sortingType, data.sortingDirection ] = this.obj.settings.sorting.split('-')
 
             const elem = (treeItem) ? this.$refs['display-text'] : this.$el
 
             this.$showPopover(PopoverDirProps, elem, data, (data) => {
               // Apply new sorting if applicable
-              if (data.sorting !== this.obj.sorting) {
+              if (data.sorting !== this.obj.settings.sorting) {
                 ipcRenderer.invoke('application', {
                   command: 'dir-sort',
                   payload: {
@@ -232,7 +234,7 @@ export default {
               }
 
               // Set the icon if it has changed
-              if (data.icon !== this.obj.icon) {
+              if (data.icon !== this.obj.settings.icon) {
                 ipcRenderer.invoke('application', {
                   command: 'dir-set-icon',
                   payload: {
@@ -293,8 +295,11 @@ export default {
             }
 
             if (this.hasWritingTarget === true) {
-              data.targetValue = this.obj.target.count
-              data.targetMode = this.obj.target.mode
+              const target = this.getWritingTarget(this.obj.path)
+              if (target !== undefined) {
+                data.targetValue = target.count
+                data.targetMode = target.mode
+              }
             }
 
             if (this.obj.type === 'file') {
@@ -308,7 +313,7 @@ export default {
 
               // 1.: Writing Target
               if (this.obj.type === 'file') {
-                ipcRenderer.invoke('application', {
+                ipcRenderer.invoke('targets-provider', {
                   command: 'set-writing-target',
                   payload: {
                     mode: data.target.mode,
@@ -378,6 +383,15 @@ export default {
       })
         .catch(e => console.error(e))
         .finally(() => { this.nameEditing = false })
+    },
+    getWritingTarget: function (filePath) {
+      const targets = this.$store.state.writingTargets
+
+      if (targets.length === 0) {
+        return undefined
+      }
+
+      return targets.find(x => x.path === filePath)
     }
   }
 }

@@ -1,3 +1,6 @@
+/**
+ * All configuration options managed by the Config provider
+ */
 export interface ConfigOptions {
   version: string
   openPaths: string[]

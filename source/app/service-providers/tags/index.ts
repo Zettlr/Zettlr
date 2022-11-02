@@ -19,6 +19,7 @@ import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
 import ProviderContract from '../provider-contract'
 import LogProvider from '../log'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
+import FSAL from '@providers/fsal'
 
 interface InternalTagRecord {
   text: string
@@ -38,9 +39,8 @@ export default class TagProvider extends ProviderContract {
   /**
    * Create the instance on program start and initially load the tags.
    */
-  constructor (private readonly _logger: LogProvider) {
+  constructor (private readonly _logger: LogProvider, private readonly _fsal: FSAL) {
     super()
-    this._logger.verbose('Tag provider booting up ...')
     this._file = path.join(app.getPath('userData'), 'tags.json')
     this._colouredTags = []
     this.container = new PersistentDataContainer(this._file, 'json')
@@ -59,17 +59,13 @@ export default class TagProvider extends ProviderContract {
       } else if (command === 'get-coloured-tags') {
         return this._colouredTags
       } else if (command === 'recommend-matching-files') {
-        const { payload } = message
+        const wantedTags: string[] = message.payload
+        const allTags = this._fsal.collectTags().filter(record => wantedTags.includes(record[0]))
         // We cannot use a Map for the return value since Maps are not JSONable.
         const ret: { [key: string]: string[] } = {}
 
-        for (const tag of payload) {
-          const record = this._globalTagDatabase.get(tag)
-          if (record === undefined) {
-            continue
-          }
-
-          for (const file of record.files) {
+        for (const [ tag, files ] of allTags) {
+          for (const file of files) {
             if (ret[file] === undefined) {
               ret[file] = [tag]
             } else if (!ret[file].includes(tag)) {
@@ -84,6 +80,7 @@ export default class TagProvider extends ProviderContract {
   }
 
   async boot (): Promise<void> {
+    this._logger.verbose('Tag provider booting up ...')
     if (!await this.container.isInitialized()) {
       await this.container.init([])
     } else {
@@ -98,59 +95,6 @@ export default class TagProvider extends ProviderContract {
   async shutdown (): Promise<void> {
     this._logger.verbose('Tag provider shutting down ...')
     this.container.shutdown()
-  }
-
-  /**
-   * Adds an array of tags to the database
-   * @param  {string[]} tagArray An array containing the tags to be added
-   * @return {void}          Does not return.
-   */
-  report (tagArray: string[], filePath: string): void {
-    for (let tag of tagArray) {
-      // Either init or modify accordingly
-      const record = this._globalTagDatabase.get(tag)
-      if (record === undefined) {
-        const newRecord: InternalTagRecord = {
-          text: tag,
-          files: [filePath],
-          className: ''
-        }
-
-        this._globalTagDatabase.set(tag, newRecord)
-        // Set a special class to all tags that have a highlight colour
-      } else {
-        if (!record.files.includes(filePath)) {
-          record.files.push(filePath)
-        }
-      }
-    }
-
-    broadcastIpcMessage('tags')
-  }
-
-  /**
-   * Removes the given tagArray from the database, i.e. decreases the
-   * counter until zero and then removes the tag.
-   * @param  {string[]} tagArray The tags to remove from the database
-   * @return {void}          Does not return.
-   */
-  remove (tagArray: string[], filePath: string): void {
-    for (let tag of tagArray) {
-      const record = this._globalTagDatabase.get(tag)
-      if (record !== undefined) {
-        const idx = record.files.indexOf(filePath)
-        if (idx > -1) {
-          record.files.splice(idx, 1)
-        }
-
-        // Remove the tag altogether if its count is zero.
-        if (record.files.length === 0) {
-          this._globalTagDatabase.delete(tag)
-        }
-      }
-    }
-
-    broadcastIpcMessage('tags')
   }
 
   /**
@@ -191,11 +135,11 @@ export default class TagProvider extends ProviderContract {
    */
   getTagDatabase (): TagDatabase {
     const ret: TagDatabase = {}
-    for (const [ tag, record ] of this._globalTagDatabase.entries()) {
+    for (const [ tag, files ] of this._fsal.collectTags()) {
       const cInfo = this._colouredTags.find(e => e.name === tag)
       ret[tag] = {
-        text: record.text,
-        count: record.files.length,
+        text: tag,
+        count: files.length,
         className: (cInfo !== undefined) ? 'cm-hint-colour' : ''
       }
     }

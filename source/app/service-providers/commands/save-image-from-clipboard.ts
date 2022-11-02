@@ -97,10 +97,7 @@ export default class SaveImage extends ZettlrCommand {
     // properties provided in target.
     if (shouldResizeWidth || shouldResizeHeight) {
       // The resize function requires real integers
-      image = image.resize({
-        'width': resizeWidth,
-        'height': resizeHeight
-      })
+      image = image.resize({ width: resizeWidth, height: resizeHeight })
     }
 
     this._app.log.info(`Saving image ${targetFile} to ${imagePath} ...`)
@@ -111,15 +108,16 @@ export default class SaveImage extends ZettlrCommand {
       await fs.writeFile(imagePath, image.toJPEG(100))
     }
 
-    if (path.isAbsolute(defaultPath) && target.targetDir === defaultPath) {
-      // The user has provided an absolute path as the default image location
-      // and kept this in the save image modal. In this case, it makes sense to
-      // return an absolute path, instead of a path which likely has thousands
-      // of ../../../ in front of it
-      return imagePath
-    } else {
-      // Insert a relative path instead of an absolute one
-      return path.relative(startPath, imagePath)
-    }
+    return imagePath
+    // if (path.isAbsolute(defaultPath) && target.targetDir === defaultPath) {
+    //   // The user has provided an absolute path as the default image location
+    //   // and kept this in the save image modal. In this case, it makes sense to
+    //   // return an absolute path, instead of a path which likely has thousands
+    //   // of ../../../ in front of it
+    //   return imagePath
+    // } else {
+    //   // Insert a relative path instead of an absolute one
+    //   return path.relative(startPath, imagePath)
+    // }
   }
 }

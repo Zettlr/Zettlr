@@ -38,7 +38,7 @@ export default class RootClose extends ZettlrCommand {
 
     // We got a root, so now we need to unload it and remove it from config
     try {
-      this._app.fsal.unloadPath(root)
+      this._app.fsal.unloadPath(root.path)
       this._app.config.removePath(root.path)
       // We do not need to update the renderer, will be done automatically.
     } catch (err: any) {

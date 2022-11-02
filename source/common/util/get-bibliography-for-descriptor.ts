@@ -14,19 +14,18 @@
  */
 
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
-import { MDFileMeta } from '@dts/common/fsal'
-import { MDFileDescriptor } from '@dts/main/fsal'
+import { MDFileDescriptor } from '@dts/common/fsal'
 
 /**
  * Takes a descriptor and returns the appropriate citation library for it. NOTE:
  * You still have to check whether there is a library loaded, this simply returns
  * a path (or the CITEPROC_MAIN_DB constant).
  *
- * @param   {MDFileDescriptor|MDFileMeta}  descriptor  The descriptor
+ * @param   {MDFileDescriptor}  descriptor  The descriptor
  *
- * @return  {string}                                   The appropriate library
+ * @return  {string}                        The appropriate library
  */
-export default function getBibliographyForDescriptor (descriptor: MDFileDescriptor|MDFileMeta): string {
+export default function getBibliographyForDescriptor (descriptor: MDFileDescriptor): string {
   let library = CITEPROC_MAIN_DB
 
   if (descriptor.frontmatter != null && 'bibliography' in descriptor.frontmatter) {

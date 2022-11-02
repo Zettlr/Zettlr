@@ -2,82 +2,32 @@
  * MAIN CSS FOR LIGHT THEMING
  */
 
-// CodeMirror scrollbar annotations
-.sb-annotation {
-  background-color: var(--bg-annotation);
-}
-
 // Now all "bigger" styles
 body {
+  .table-helper td {
+    /* Codemirror 6's drawCursor plugin makes the actual cursor transparent, so
+    we have to reset it here for the contenteditables. Similar with selections */
+    caret-color: black;
 
-  .main-editor-wrapper .CodeMirror {
+    &::selection {
+      color: black;
+      background-color: rgba(0, 0, 0, 0.2) !important;
+    }
+  }
+
+  // Gutters (for code files)
+  .main-editor-wrapper.code-file .cm-gutters {
+    border-right-color: var(--grey-2);
+    background-color: var(--grey-0);
+    color: var(--grey-3);
+  }
+
+  .main-editor-wrapper .cm-editor {
     color: var(--grey-5);
 
-    &.cm-s-zettlr-code {
-      // Code files have this theme applied (others have cm-s-zettlr-markdown)
-      font-family: 'Inconsolata', Consolas, Menlo, monospace;
+    .cm-scroller {
+      font-family: inherit; // Reset the base theme's "monospace"
     }
-
-    // Add a background color to the vim command bar
-    .CodeMirror-dialog.CodeMirror-dialog-bottom, .vim-error-message {
-      background-color: rgb(225, 225, 225);
-    }
-
-    &.cm-stex-mode,
-    &.cm-css-mode {
-      font-family: 'Inconsolata', Consolas, Menlo, monospace;
-
-      .cm-comment {
-        color: var(--grey-2);
-      }
-
-      .cm-attribute {
-        color: var(--blue-0);
-      }
-
-      .cm-builtin {
-        color: var(--blue-0);
-      }
-
-      // Some modes use this for keywords
-      .cm-string {
-        color: var(--green-0);
-      }
-
-      .cm-string-2 {
-        color: var(--gold-selection-dark);
-      }
-
-      .cm-variable {
-        color: var(--grey-6);
-      }
-
-      .cm-variable-2 {
-        color: var(--green-selection-dark);
-      }
-
-      .cm-keyword {
-        color: var(--purple-selection);
-      }
-
-      .cm-property {
-        color: var(--orange-2);
-      }
-
-      .cm-type {
-        color: var(--orange-2);
-      }
-
-      .cm-atom {
-        color: var(--green-0);
-      }
-
-      .cm-number {
-        color: var(--blue-0);
-      }
-    }
-
-    // Now general styling for variables
 
     // First generic variables
     .cm-comment,
@@ -87,102 +37,46 @@ body {
       font-family: 'Inconsolata', Consolas, Menlo, monospace;
     }
 
-    .cm-highlight {
-      // Both directives are !important to override any other colors.
-      background-color: yellow !important;
-      color: #333 !important;
-    }
-
-    .cm-fenced-code,
-    .cm-stex-mode {
-      font-family: 'Inconsolata', Consolas, Menlo, monospace;
-
-      &.cm-comment {
-        color: var(--grey-2);
-      }
-
-      &.cm-attribute {
-        color: var(--blue-0);
-      }
-
-      &.cm-builtin {
-        color: var(--blue-0);
-      }
-
-      // Some modes use this for keywords
-      &.cm-string {
-        color: var(--green-0);
-      }
-
-      &.cm-string-2 {
-        color: var(--gold-selection-dark);
-      }
-
-      &.cm-variable {
-        color: var(--grey-6);
-      }
-
-      &.cm-variable-2 {
-        color: var(--green-selection-dark);
-      }
-
-      &.cm-keyword {
-        color: var(--purple-selection-dark);
-      }
-
-      &.cm-property {
-        color: var(--orange-2);
-      }
-
-      &.cm-type {
-        color: var(--orange-2);
-      }
-
-      &.cm-atom {
-        color: var(--green-0);
-      }
-
-      &.cm-number {
-        color: var(--blue-0);
-      }
-
-      &.cm-positive {
-        color: var(--green-0);
-      }
-
-      &.cm-negative {
-        color: var(--red-0);
-      }
-    }
-
     // HTML tags
-    .cm-tag {
+    .cm-tag-name {
       font-family: 'Inconsolata', Consolas, Menlo, monospace;
       color: var(--orange-2);
     }
 
-    .cm-attribute {
+    .cm-attribute-name {
       font-family: 'Inconsolata', Consolas, Menlo, monospace;
       color: var(--blue-0);
     }
 
-    .cm-string {
+    .cm-attribute-value {
       font-family: 'Inconsolata', Consolas, Menlo, monospace;
       color: var(--green-0);
     }
 
-    .cm-bracket {
+    .cm-angle-bracket {
       font-family: 'Inconsolata', Consolas, Menlo, monospace;
       color: var(--grey-5);
     }
 
+    .cm-definition-operator {
+      font-family: 'Inconsolata', Consolas, Menlo, monospace;
+      color: var(--grey-5);
+    }
+
+    // END HTML TAGS
+
+    .cm-monospace,
+    .cm-code-mark {
+      font-family: Consolas, 'Inconsolata', Menlo, monospace;
+    }
+
     // TYPOGRAPHY
-    .cm-formatting-header-1,
-    .cm-formatting-header-2,
-    .cm-formatting-header-3,
-    .cm-formatting-header-4,
-    .cm-formatting-header-5,
-    .cm-formatting-header-6,
+    .cm-header-1.cm-code-mark,
+    .cm-header-2.cm-code-mark,
+    .cm-header-3.cm-code-mark,
+    .cm-header-4.cm-code-mark,
+    .cm-header-5.cm-code-mark,
+    .cm-header-6.cm-code-mark,
     .cm-url {
       color: var(--c-primary);
     }
@@ -212,8 +106,7 @@ body {
     }
 
     /* LISTS */
-    .cm-formatting-list-ul,
-    .cm-formatting-list-ol {
+    .cm-list.cm-code-mark:not(.cm-emphasis):not(.cm-strong) {
       color: var(--c-primary);
     }
 
@@ -237,10 +130,16 @@ body {
     }
 
     // cma = code-mirror-anchor
-    .cma {
+    a.markdown-link, .cm-link {
       color: var(--c-primary);
       font-weight: inherit;
     }
+
+    // For more diversity, don't color the link marks
+    .cm-link.cm-code-mark.cm-meta { color: inherit; }
+
+    // I can't believe that THAT's not part of the default theme
+    .cm-emphasis { font-style: italic; }
 
     // citations
     .citeproc-citation {
@@ -270,8 +169,8 @@ body {
       }
     }
 
-    .cm-escape-char {
-      color: var(--grey-3);
+    .cm-escape {
+      color: var(--grey-2);
     }
 
     // Horizontal ruler
@@ -281,20 +180,72 @@ body {
       font-weight: bold;
     }
 
-    // Add a cool indicator to the front matter -- overwrites the .cm-hr style above
-    .cm-yaml-frontmatter-start {
-      color: inherit;
+    // Styling for the frontmatter
+    .cm-yaml-frontmatter-start,
+    .cm-yaml-frontmatter-end {
+      color: var(--c-primary);
+      font-weight: bold;
+      font-family: 'Inconsolata', Consolas, Menlo, monospace;
+    }
 
-      &::after {
-        content: "YAML Frontmatter";
-        display: inline-block;
-        margin-left: 10px;
-        padding: 0px 5px;
-        font-size: 60%;
-        font-weight: normal;
-        vertical-align: middle;
-        color: rgb(180, 180, 180);
-        background-color: rgb(240, 240, 240);
+    .cm-yaml-frontmatter-start::after {
+      content: "YAML Frontmatter";
+      display: inline-block;
+      margin-left: 10px;
+      padding: 0px 5px;
+      font-size: 60%;
+      font-weight: normal;
+      vertical-align: middle;
+      color: rgb(180, 180, 180);
+      background-color: rgb(240, 240, 240);
+    }
+
+    // Applies to all tooltips
+    .cm-tooltip-hover,
+    .cm-tooltip-autocomplete,
+    .cm-tooltip {
+      border: none;
+      padding: 5px;
+      border-radius: 4px;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .25);
+    }
+
+    .cm-completionInfo { overflow: hidden; }
+
+    // Formatting bar
+    .cm-tooltip.cm-formatting-bar {
+      border-radius: 8px;
+      padding: 0;
+      border: none;
+      background-color: transparent;
+
+      .button-wrapper {
+        display: flex;
+      }
+
+      button.formatting-toolbar-button {
+        border: none;
+        margin: 0;
+        background-color: var(--grey-0);
+        border-radius: 0;
+        color: var(--grey-5);
+        transition: 0.3s background-color ease;
+        line-height: 30px;
+
+        &:hover {
+          background-color: var(--grey-3);
+          color: var(--grey-1);
+        }
+
+        &:first-child {
+          border-top-left-radius: 8px;
+          border-bottom-left-radius: 8px;
+        }
+
+        &:last-child {
+          border-top-right-radius: 8px;
+          border-bottom-right-radius: 8px;
+        }
       }
     }
 
@@ -332,16 +283,17 @@ body {
     }
   }
 
-  .CodeMirror-focused .CodeMirror-selected {
+  .cm-editor.cm-focused .cm-selectionBackground,
+  .cm-editor .cm-selectionBackground {
     background-color: var(--selection-light);
   }
 
-  .CodeMirror .CodeMirror-selected {
-    background-color: var(--selection-light);
-  }
-
-  .CodeMirror-cursor {
+  .cm-cursor-primary {
     background: var(--c-primary);
+  }
+
+  .cm-cursor-secondary {
+    background: var(--red-2);
   }
 
   // Hint related stuff. Hints mustn't be scoped by .CodeMirror as they are
@@ -382,8 +334,7 @@ body {
 
   // Custom styling for the various editors across the app
   // -----------------------------------------------------------------------------
-  .main-editor-wrapper .CodeMirror {
-
+  .main-editor-wrapper .cm-editor {
     // Comments in the main editor should have a background-color
     .cm-comment:not(.cm-formatting):not(.cm-fenced-code) {
       // NOTE: The background color must have transparency applied, otherwise
@@ -426,6 +377,12 @@ body {
         background-color: transparent !important;
         padding: 0 !important;
       }
+    }
+
+    .iframe-wrapper {
+      background-color: var(--grey-0);
+      border-radius: 4px;
+      padding: 20px;
     }
   }
 }

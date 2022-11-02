@@ -14,7 +14,6 @@
 import getAsciiSorter from './sort-ascii'
 import getNaturalSorter from './sort-natural'
 import getDateSorter from './sort-date'
-// import { MaybeRootDescriptor } from '@dts/main/fsal'
 
 export interface RequiredSortingProps {
   type: string
@@ -25,7 +24,7 @@ export interface RequiredSortingProps {
   creationtime: number
 }
 
-type GenericSorter = <T extends RequiredSortingProps>(arr: T[], type?: string) => T[]
+export type GenericSorter = <T extends RequiredSortingProps>(arr: T[], type?: string) => T[]
 
 /**
 * This function can sort an array of ZettlrFile and ZettlrDir objects

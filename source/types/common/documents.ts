@@ -8,10 +8,6 @@ export interface OpenDocument {
    */
   path: string
   /**
-   * The modtime is required so that we can check for remote changes
-   */
-  modtime: number
-  /**
    * Indicates whether this document should be handled as pinned
    */
   pinned: boolean
@@ -20,6 +16,16 @@ export interface OpenDocument {
    * instead of the filenames
    */
   icon?: string
+}
+
+/**
+ * This enum describes supported file types that can be opened in an editor.
+ */
+export enum DocumentType {
+  Markdown = 1,
+  YAML,
+  JSON,
+  LaTeX
 }
 
 /**
@@ -82,7 +88,7 @@ export enum DP_EVENTS {
   FILES_SORTED = 'files-sorted',
   // File status (pinned, modified, ...)
   CHANGE_FILE_STATUS = 'file-status-changed',
-  FILE_SAVED = 'file-saved',
+  // FILE_SAVED = 'file-saved',
   ACTIVE_FILE = 'active-file-changed',
   // Leafs (editor panes)
   NEW_LEAF = 'leaf-created',

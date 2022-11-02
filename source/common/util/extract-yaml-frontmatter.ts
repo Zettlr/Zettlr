@@ -27,6 +27,11 @@ interface ExtractYamlFrontmatterReturn {
  * @return  {any|null}            The parsed frontmatter as an object, or null.
  */
 export default function extractYamlFrontmatter (markdown: string): ExtractYamlFrontmatterReturn {
+  // Shortcut, since most files can be expected not to have a frontmatter
+  if (!markdown.startsWith('---')) {
+    return { frontmatter: null, content: markdown }
+  }
+
   const ret = {
     frontmatter: null,
     content: markdown

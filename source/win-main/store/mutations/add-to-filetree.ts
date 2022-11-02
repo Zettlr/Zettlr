@@ -12,13 +12,12 @@
  * END HEADER
  */
 
-import { DirMeta } from '@dts/common/fsal'
+import { DirDescriptor, MaybeRootDescriptor } from '@dts/common/fsal'
 import locateByPath from '@providers/fsal/util/locate-by-path'
 import getSorter from '@providers/fsal/util/sort'
 import { ZettlrState } from '../'
-import reconstructTree from '../reconstruct-tree'
 
-export default function (state: ZettlrState, descriptor: any): void {
+export default function (state: ZettlrState, descriptor: MaybeRootDescriptor): void {
   const sorter = getSorter(
     state.config.sorting,
     state.config.sortFoldersFirst,
@@ -27,16 +26,13 @@ export default function (state: ZettlrState, descriptor: any): void {
     state.config.sortingTime
   )
 
-  if (descriptor.parent == null && !state.fileTree.includes(descriptor)) {
+  if (descriptor.root && !state.fileTree.includes(descriptor)) {
     // It's a root, so insert at the root level
-    if (descriptor.type === 'directory') {
-      reconstructTree(descriptor)
-    }
     state.fileTree.push(descriptor)
     state.fileTree = sorter(state.fileTree) // Omit sorting to sort name-up
-  } else if (descriptor.parent != null) {
+  } else if (!descriptor.root) {
     const parentPath = descriptor.dir
-    const parentDescriptor = locateByPath(state.fileTree, parentPath) as DirMeta|undefined
+    const parentDescriptor = locateByPath(state.fileTree, parentPath) as DirDescriptor|undefined
     if (parentDescriptor === undefined) {
       console.warn(`Was about to add descriptor ${String(descriptor.path)} to the filetree, but the parent ${String(parentPath)} was null!`)
       return
@@ -46,14 +42,8 @@ export default function (state: ZettlrState, descriptor: any): void {
       return // We already have this descriptor, nothing to do.
     }
 
-    descriptor.parent = parentDescriptor // Attach the child to its parent
-    if (descriptor.type === 'directory') {
-      // Make sure the parent pointers work correctly even inside this subtree
-      reconstructTree(descriptor)
-    }
-
     parentDescriptor.children.push(descriptor)
-    parentDescriptor.children = sorter(parentDescriptor.children, parentDescriptor.sorting)
+    parentDescriptor.children = sorter(parentDescriptor.children, parentDescriptor.settings.sorting)
   } else {
     // NOTE: This is just in case we accidentally introduce a race condition.
     console.warn('[Store] Received event to add a descriptor to the filetree, but it was a root and already present:', descriptor)

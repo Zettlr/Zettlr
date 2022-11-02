@@ -14,13 +14,13 @@
 
 import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
+import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import { AnyMenuItem } from '@dts/renderer/context'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
 
-export default function displayFileContext (event: MouseEvent, fileObject: MDFileMeta|CodeFileMeta, el: HTMLElement, callback: any): void {
+export default function displayFileContext (event: MouseEvent, fileObject: MDFileDescriptor|CodeFileDescriptor, el: HTMLElement, callback: any): void {
   const template: AnyMenuItem[] = [
     {
       label: trans('menu.open_new_tab'),
@@ -83,7 +83,7 @@ export default function displayFileContext (event: MouseEvent, fileObject: MDFil
     }
   ]
 
-  if (fileObject.parent == null) {
+  if (fileObject.root) {
     template.push(
       { type: 'separator' },
       {

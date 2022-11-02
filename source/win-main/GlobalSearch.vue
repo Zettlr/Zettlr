@@ -128,7 +128,7 @@ import AutocompleteText from '@common/vue/form/elements/AutocompleteText.vue'
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
 import { SearchResult, SearchResultWrapper, SearchTerm } from '@dts/common/search'
-import { CodeFileMeta, DirMeta, MDFileMeta } from '@dts/common/fsal'
+import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { AnyMenuItem } from '@dts/renderer/context'
 
@@ -197,13 +197,13 @@ export default defineComponent({
     recentGlobalSearches: function (): string[] {
       return this.$store.state.config['window.recentGlobalSearches']
     },
-    selectedDir: function (): DirMeta|null {
+    selectedDir: function (): DirDescriptor|null {
       return this.$store.state.selectedDirectory
     },
-    fileTree: function (): Array<MDFileMeta|CodeFileMeta|DirMeta> {
+    fileTree: function (): Array<MDFileDescriptor|CodeFileDescriptor|DirDescriptor> {
       return this.$store.state.fileTree
     },
-    activeFile: function (): MDFileMeta|null {
+    activeFile: function (): MDFileDescriptor|null {
       return this.$store.state.activeFile
     },
     activeDocumentInfo: function (): any|null {

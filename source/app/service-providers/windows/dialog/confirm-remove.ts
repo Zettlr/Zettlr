@@ -1,5 +1,19 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        confirmRemove
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     A message box asking to remove the given file/directory
+ *
+ * END HEADER
+ */
+
 import { BrowserWindow, dialog, MessageBoxOptions, MessageBoxReturnValue } from 'electron'
-import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/main/fsal'
+import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import { trans } from '@common/i18n-main'
 
 /**

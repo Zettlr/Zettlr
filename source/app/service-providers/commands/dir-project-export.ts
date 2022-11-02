@@ -34,12 +34,12 @@ export default class DirProjectExport extends ZettlrCommand {
     // First get the directory
     const dir = this._app.fsal.findDir(arg)
 
-    if (dir === null) {
+    if (dir === undefined) {
       this._app.log.error('Could not export project: Directory not found.')
       return false
     }
 
-    const config = dir._settings.project
+    const config = dir.settings.project
 
     if (config === null) {
       this._app.log.error(`Could not export project: Directory ${dir.name} is not a project.`)

@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { DirMeta } from '@dts/common/fsal'
+import { DirDescriptor } from '@dts/common/fsal'
 import locateByPath from '@providers/fsal/util/locate-by-path'
 import { ZettlrState } from '..'
 
@@ -23,11 +23,11 @@ export default function (state: ZettlrState, pathToRemove: string): void {
     return // No descriptor found -- nothing to do.
   }
 
-  if (descriptor.parent == null) {
+  if (descriptor.root) {
     const idx = state.fileTree.findIndex(elem => elem === descriptor)
     state.fileTree.splice(idx, 1)
   } else {
-    const parentDescriptor = locateByPath(state.fileTree, descriptor.dir) as DirMeta|undefined
+    const parentDescriptor = locateByPath(state.fileTree, descriptor.dir) as DirDescriptor|undefined
     if (parentDescriptor !== undefined) {
       const idx = parentDescriptor.children.findIndex((elem: any) => elem === descriptor)
       parentDescriptor.children.splice(idx, 1)

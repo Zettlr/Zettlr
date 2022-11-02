@@ -28,11 +28,11 @@ export default class SetOpenDirectory extends ZettlrCommand {
    */
   async run (evt: string, dirPath: string): Promise<void> {
     // arg contains a hash for a directory.
-    let obj = this._app.fsal.findDir(dirPath)
+    const dir = this._app.fsal.findDir(dirPath)
 
     // Now send it back (the GUI should by itself filter out the files)
-    if (obj !== null && obj.type === 'directory') {
-      this._app.fsal.openDirectory = obj
+    if (dir !== undefined) {
+      this._app.fsal.openDirectory = dir
     } else {
       this._app.log.error('Could not find directory', dirPath)
       this._app.windows.prompt({

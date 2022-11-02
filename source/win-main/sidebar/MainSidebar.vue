@@ -11,6 +11,7 @@
       <ToCTab
         v-if="currentTab === 'toc'"
         v-on:move-section="$emit('move-section', $event)"
+        v-on:jump-to-line="$emit('jump-to-line', $event)"
       ></ToCTab>
       <ReferencesTab v-if="currentTab === 'references'"></ReferencesTab>
       <RelatedFilesTab v-if="currentTab === 'relatedFiles'"></RelatedFilesTab>
@@ -55,7 +56,7 @@ export default defineComponent({
     RelatedFilesTab,
     OtherFilesTab
   },
-  emits: ['move-section'],
+  emits: [ 'move-section', 'jump-to-line' ],
   data: function () {
     return {}
   },

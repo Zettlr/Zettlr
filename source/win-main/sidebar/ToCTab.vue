@@ -12,10 +12,9 @@
       v-bind:style="{
         'margin-left': `${entry.level * 10}px`
       }"
-      v-on:click="($root as any).jtl(entry.line, true)"
+      v-on:click="$emit('jump-to-line', entry.line)"
       v-on:dragstart="startDragging"
-      v-on:dragenter="dragEnter"
-      v-on:dragleave="dragLeave"
+      v-on:dragover="dragOver"
       v-on:drop="drop"
     >
       <div class="toc-level">
@@ -32,13 +31,13 @@
 
 <script lang="ts">
 import { trans } from '@common/i18n-renderer'
-import { CodeFileMeta, MDFileMeta } from '@dts/common/fsal'
 import { defineComponent } from 'vue'
 import sanitizeHtml from 'sanitize-html'
 import { getConverter } from '@common/util/md-to-html'
-import { ToCEntry } from '@common/modules/markdown-editor/util/generate-toc'
+import { ToCEntry } from '@common/modules/markdown-editor/plugins/toc-field'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { OpenDocument } from '@dts/common/documents'
+import { AnyDescriptor, MDFileDescriptor, CodeFileDescriptor } from '@dts/common/fsal'
 
 const ipcRenderer = window.ipc
 
@@ -47,10 +46,10 @@ let md2html: Function
 
 export default defineComponent({
   name: 'ToCTab',
-  emits: ['move-section'],
+  emits: [ 'move-section', 'jump-to-line' ],
   data () {
     return {
-      activeFileDescriptor: null as MDFileMeta|CodeFileMeta|null
+      activeFileDescriptor: null as AnyDescriptor|null
     }
   },
   computed: {
@@ -66,7 +65,7 @@ export default defineComponent({
     titleOrTocLabel: function (): string {
       if (
         this.activeFileDescriptor === null ||
-        this.activeFileDescriptor.type === 'code' ||
+        this.activeFileDescriptor.type !== 'file' ||
         this.activeFileDescriptor.frontmatter == null
       ) {
         return this.tocLabel
@@ -92,19 +91,15 @@ export default defineComponent({
       if (newValue === null) {
         this.activeFileDescriptor = null
       } else {
-        const descriptor: MDFileMeta|CodeFileMeta|undefined = await ipcRenderer.invoke('application', {
-          command: 'get-file-contents',
+        const descriptor: AnyDescriptor|undefined = await ipcRenderer.invoke('application', {
+          command: 'get-descriptor',
           payload: newValue.path
         })
 
-        if (descriptor === undefined) {
-          this.activeFileDescriptor = null
-        } else {
-          this.activeFileDescriptor = descriptor
-        }
+        this.activeFileDescriptor = descriptor ?? null
       }
     },
-    activeFileDescriptor (newValue: MDFileMeta|CodeFileMeta|null) {
+    activeFileDescriptor (newValue: MDFileDescriptor|CodeFileDescriptor|null) {
       if (newValue === null || newValue.type === 'code') {
         md2html = getConverter(window.getCitationCallback(CITEPROC_MAIN_DB))
       } else {
@@ -167,19 +162,11 @@ export default defineComponent({
       const fromLine = (event.currentTarget as HTMLElement).dataset.line
       event.dataTransfer?.setData('x-zettlr/toc-drag', fromLine as string)
     },
-    dragEnter: function (event: DragEvent) {
-      if (event.currentTarget === null) {
-        return
-      }
+    dragOver: function (event: DragEvent) {
+      const elem = document.querySelectorAll('.toc-entry-container')
+      elem.forEach(e => e.classList.remove('toc-drop-effect'))
       const container = event.currentTarget as HTMLElement
       container.classList.add('toc-drop-effect')
-    },
-    dragLeave: function (event: DragEvent) {
-      if (event.currentTarget === null) {
-        return
-      }
-      const container = event.currentTarget as HTMLElement
-      container.classList.remove('toc-drop-effect')
     },
     drop: function (event: DragEvent) {
       if (event.currentTarget === null) {
@@ -191,6 +178,10 @@ export default defineComponent({
 
       const fromLine = parseInt(event.dataTransfer?.getData('x-zettlr/toc-drag') as string, 10)
       const toLine = parseInt(container.dataset.line as string, 10)
+      if (fromLine === toLine) {
+        return
+      }
+
       const actualToLine = this.findEndOfEntry(toLine)
       if (actualToLine === undefined) {
         console.warn('Could not move section: Could not find correct target line')

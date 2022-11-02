@@ -28,34 +28,25 @@
 // Use the default mouse cursor on the vertical scrollbar
 .CodeMirror-vscrollbar { cursor: default; }
 
-.CodeMirror {
+.main-editor-wrapper:not(.code-file) {
+  // Reset the gutter styling
+  .cm-editor .cm-gutters {
+    border-right-color: transparent;
+    background-color: inherit !important;
+  }
+}
+
+.cm-editor {
+  height: 100%;
+  outline: 0 !important;
   font-size: 1em;
   line-height: 1.4375;
   user-select: text;
   background-color: inherit;
+  cursor: text;
 
   // STYLING FOR THE COMMON WRAPPER ELEMENTS
   // ===========================================================================
-
-  // The textarea element needs to have the same
-  // font-size as the editor, even though it is
-  // hidden. This way, pop-ups for non-western
-  // fonts such as Hiragana/Katakana are correctly
-  // aligned. Should also help accessibility-plugins.
-  &.CodeMirror-wrap > div:first-child {
-    margin-top: 0.4375em;
-    textarea {
-      font-family: inherit;
-      font-size: inherit;
-      line-height: inherit;
-      height: 1.4375em !important;
-    }
-  }
-
-  // This directive prevents strange colour artifacts when a document is open
-  // that has less lines of code than fit into the window (especially notable
-  // in dark mode, as the sizer is visible with a small green halo).
-  .CodeMirror-sizer { height: 100%; }
 
   &.CodeMirror-empty {
     background-position: center center;
@@ -72,12 +63,16 @@
     background-image: url(../../img/logo.svg);
   }
 
-  .CodeMirror-cursor {
+  // There are both .cm-cursor-primary as well as .cm-cursor-secondary, but all
+  // are .cm-cursors.
+  .cm-cursor {
     width: 2px;
     border: 0;
     z-index: 1;
     transform: translateZ(0);
-    animation: soft-blink 1s infinite; // Use the "soft-blink" animation
+    // With the new CodeMirror 6 implementation, this animation doesn't work
+    // well anymore.
+    // animation: soft-blink 1s infinite; // Use the "soft-blink" animation
   }
 
   /* Implement a "fat" cursor for Windows' overwrite mode (Ins key) */
@@ -96,20 +91,10 @@
     border-radius: 3px;
   }
 
-  // This class is applied for the dialogs that the vim plugin produces, i.e.
-  // the command bar.
-  .CodeMirror-dialog.CodeMirror-dialog-bottom, .vim-error-message {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-
-    input {
-      background-color: transparent;
-      border: none;
-      border-radius: none;
-    }
-  }
+  // Search results
+  .cm-selectionMatch { background-color: #99ff7780; }
+  // Manual highlight/mark elements
+  .cm-highlight { background-color: #ffff0080; }
 
   // SYNTAX-HIGHLIGHTING CLASSES
   // ===========================================================================
@@ -124,8 +109,13 @@
   }
 
   .cm-table,
-  .cm-zkn-tag {
+  .cm-zkn-tag,
+  .cm-strong {
     font-weight: bold;
+  }
+
+  .cm-strikethrough {
+    text-decoration: line-through;
   }
 
   .cm-tab { display: inline; }
@@ -209,14 +199,13 @@
   .editor-image-container {
     display: inline-block;
     position: relative;
-    width: 100%;
     text-align: center;
     cursor: default;
 
     figure {
-      img {
-        display: inherit;
-      }
+      display: inline-block;
+
+      img { display: inherit; }
 
       &:hover, &:focus-within {
         figcaption, span.image-size-info, span.open-externally-button {
@@ -254,20 +243,32 @@
         left: 10px;
         right: 10px;
         cursor: text; // Captions can be edited
+
+        // Codemirror 6's drawCursor plugin makes the actual cursor transparent,
+        // so we have to reset it here for the contenteditables. Same for
+        // selection backgrounds.
+        caret-color: rgb(255, 255, 255);
+        &::selection {
+          color: black;
+          // Overwrite the important by the plugin
+          background-color: rgba(255, 255, 255, 0.8) !important;
+        }
       }
     }
   }
 
-  // The warning if a given hostname is not yet on the whitelist
-  .iframe-warning-wrapper {
+  // The wrapper node for the iFrames (both rendered + the warning)
+  .iframe-wrapper {
     text-align: center;
-    min-height: 300px;
-    padding: 40px 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
-    // More spacing for the buttons
+    // More spacing for the buttons on the warning
     button {
       display: block;
-      margin: 20px auto;
+      margin: 10px auto;
     }
   }
 
@@ -282,72 +283,10 @@
     margin: 0 auto;
   }
 
-  // These two IDs are being used by the renderLines hook to make sure lists and
-  // blockquotes are always inset the right amount
-  #measureWidth {
-    position: absolute;
-    visibility: hidden;
-    height: auto;
-    width: auto;
-    white-space: nowrap;
-  }
-
-  #measureMonoWidth {
-    font-family: Consolas, 'Inconsolata', Menlo, monospace;;
-    position: absolute;
-    visibility: hidden;
-    height: auto;
-    width: auto;
-    white-space: nowrap;
-  }
-}
-
-// Hacky theming to remove the padding from the tippy since we don't want that
-// See: https://atomiks.github.io/tippyjs/v6/themes/
-body .tippy-box[data-theme~='no-padding'] {
-  .tippy-content { padding: 0; }
-}
-
-body .tippy-content {
-  .editor-formatting-bar {
-    // Style the formatting bar
-    cursor: default;
-    display: flex; // Make sure the significant spaces aren't significant
-
-    .button {
-      display: inline-block;
-      padding: 4px 8px;
-      width: 35px;
-      height: 35px;
-      line-height: 25px;
-
-      &:first-child {
-        border-top-left-radius: 4px;
-        border-bottom-left-radius: 4px;
-      }
-
-      &:last-child {
-        border-top-right-radius: 4px;
-        border-bottom-right-radius: 4px;
-      }
-
-      transition: 0.3s all ease;
-      &:hover { background-color: rgb(120, 120, 120); }
-    }
-  }
-
-  .editor-fn-textarea {
-    // Adapt the styling of the textarea to basically become "invisible" against
-    // its background
-    padding: 0px;
-    background-color: transparent;
-    color: inherit;
-    border: none;
-    min-width: 200px;
-    min-height: 150px;
-  }
-
   .editor-note-preview {
+    max-width: 300px;
+    padding: 5px;
+
     // Style the little preview note tooltips better
     h4.filename {
       font-size: 120%; // Not that much larger than the rest of the text

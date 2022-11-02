@@ -12,7 +12,7 @@ import { trans } from '@common/i18n-renderer'
 import extractCitations from '@common/util/extract-citations'
 import getBibliographyForDescriptor from '@common/util/get-bibliography-for-descriptor'
 import { DP_EVENTS, OpenDocument } from '@dts/common/documents'
-import { MDFileMeta, CodeFileMeta } from '@dts/common/fsal'
+import { AnyDescriptor } from '@dts/common/fsal'
 import { defineComponent } from 'vue'
 
 const ipcRenderer = window.ipc
@@ -60,7 +60,7 @@ export default defineComponent({
   mounted () {
     ipcRenderer.on('documents-update', (e, { event, context }) => {
       // Update the bibliography if the active file has been saved
-      if (event === DP_EVENTS.FILE_SAVED) {
+      if (event === DP_EVENTS.CHANGE_FILE_STATUS && context.status === 'modification') {
         const { filePath } = context
 
         if (filePath === this.activeFile?.path) {
@@ -83,8 +83,8 @@ export default defineComponent({
         return
       }
 
-      const descriptor: MDFileMeta|CodeFileMeta|undefined = await ipcRenderer.invoke('application', {
-        command: 'get-file-contents',
+      const descriptor: AnyDescriptor|undefined = await ipcRenderer.invoke('application', {
+        command: 'get-descriptor',
         payload: this.activeFile.path
       })
 
@@ -93,9 +93,13 @@ export default defineComponent({
         return
       }
 
-      const library = getBibliographyForDescriptor(descriptor)
+      const fileContents: string = await ipcRenderer.invoke('application', {
+        command: 'get-file-contents',
+        payload: this.activeFile.path
+      })
 
-      const citations = extractCitations(descriptor.content)
+      const library = getBibliographyForDescriptor(descriptor)
+      const citations = extractCitations(fileContents)
       const keys = []
       for (const citation of citations) {
         keys.push(...citation.citations.map(elem => elem.id))

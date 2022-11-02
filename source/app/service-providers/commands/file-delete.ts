@@ -27,7 +27,7 @@ export default class FileDelete extends ZettlrCommand {
     */
   async run (evt: string, arg: any): Promise<boolean> {
     let file = this._app.fsal.findFile(arg.path)
-    if (file === null) {
+    if (file === undefined) {
       this._app.log.error('Cannot delete file: Not found.')
       return false
     }
@@ -35,6 +35,9 @@ export default class FileDelete extends ZettlrCommand {
     if (!await this._app.windows.confirmRemove(file)) {
       return false
     }
+
+    // Ensure the file is closed before removing
+    this._app.documents.closeFileEverywhere(arg.path)
 
     // Now, remove the file
     await this._app.fsal.removeFile(file)

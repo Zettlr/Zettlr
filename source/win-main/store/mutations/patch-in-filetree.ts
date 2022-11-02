@@ -12,13 +12,13 @@
  * END HEADER
  */
 
-import { AnyMetaDescriptor, DirMeta } from '@dts/common/fsal'
+import { AnyDescriptor, DirDescriptor } from '@dts/common/fsal'
 import locateByPath from '@providers/fsal/util/locate-by-path'
 import getSorter from '@providers/fsal/util/sort'
 import { ZettlrState } from '..'
 
-export default function (state: ZettlrState, descriptor: AnyMetaDescriptor): void {
-  const ownDescriptor = locateByPath(state.fileTree, descriptor.path) as AnyMetaDescriptor|undefined
+export default function (state: ZettlrState, descriptor: AnyDescriptor): void {
+  const ownDescriptor = locateByPath(state.fileTree, descriptor.path)
   const sorter = getSorter(
     state.config.sorting,
     state.config.sortFoldersFirst,
@@ -32,9 +32,9 @@ export default function (state: ZettlrState, descriptor: AnyMetaDescriptor): voi
     return
   }
 
-  const protectedKeys = [ 'parent', 'children', 'attachments' ]
+  const protectedKeys = [ 'children', 'attachments' ]
 
-  for (const key of Object.keys(descriptor) as Array<keyof AnyMetaDescriptor>) {
+  for (const key of Object.keys(descriptor) as Array<keyof AnyDescriptor>) {
     if (protectedKeys.includes(key)) {
       continue // Don't overwrite protected keys which would result in dangling descriptors
     }
@@ -49,9 +49,12 @@ export default function (state: ZettlrState, descriptor: AnyMetaDescriptor): voi
   // sure to simply re-sort it in case the sorting has changed.
   // If we have a file, update the parent instead.
   if (ownDescriptor.type === 'directory') {
-    ownDescriptor.children = sorter(ownDescriptor.children, ownDescriptor.sorting)
-  } else if (ownDescriptor.type === 'file' && ownDescriptor.parent != null) {
-    const parentDescriptor = ownDescriptor.parent as unknown as DirMeta
-    parentDescriptor.children = sorter(parentDescriptor.children, parentDescriptor.sorting)
+    ownDescriptor.children = sorter(ownDescriptor.children, ownDescriptor.settings.sorting)
+  } else if (ownDescriptor.type === 'file' && !ownDescriptor.root) {
+    const parentDescriptor = locateByPath(state.fileTree, ownDescriptor.dir) as DirDescriptor|undefined
+    if (parentDescriptor === undefined) {
+      return
+    }
+    parentDescriptor.children = sorter(parentDescriptor.children, parentDescriptor.settings.sorting)
   }
 }

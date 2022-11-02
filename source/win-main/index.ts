@@ -18,6 +18,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import createStore, { key as storeKey } from './store'
 import PopupProvider from './popup-provider'
+import { DP_EVENTS } from '@dts/common/documents'
 
 const ipcRenderer = window.ipc
 
@@ -98,26 +99,9 @@ ipcRenderer.on('documents-update', (evt, payload) => {
 })
 
 // -----------------------------------------------------------------------------
-
-// Listen for updates to the tag database
-ipcRenderer.on('tags', (event) => {
-  ipcRenderer.invoke('tag-provider', { command: 'get-tags-database' })
-    .then(tags => {
-      app.$store.commit('updateTagDatabase', tags)
-    })
-    .catch(e => console.error(e))
-})
-
-// Also send an initial update
-ipcRenderer.invoke('tag-provider', { command: 'get-tags-database' })
-  .then(tags => {
-    app.$store.commit('updateTagDatabase', tags)
-  })
-  .catch(e => console.error(e))
-
-// -----------------------------------------------------------------------------
 let filetreeUpdateLock = false
 let openDirectoryLock = false
+
 // Listen for broadcasts from main in order to update the filetree
 ipcRenderer.on('fsal-state-changed', (event, kind: string) => {
   if (kind === 'filetree') {
@@ -141,6 +125,28 @@ ipcRenderer.on('fsal-state-changed', (event, kind: string) => {
   }
 })
 
+ipcRenderer.on('documents-update', (event, payload) => {
+  // A file has been saved or modified
+  if (payload.event === DP_EVENTS.CHANGE_FILE_STATUS && payload.status === 'modification') {
+    app.$store.dispatch('updateModifiedFiles')
+      .catch(e => console.error(e))
+  }
+})
+
+ipcRenderer.on('targets-provider', (event, what: string) => {
+  if (what === 'writing-targets-updated') {
+    app.$store.dispatch('updateWritingTargets')
+      .catch(e => console.error(e))
+  }
+})
+
+ipcRenderer.on('snippets-provider', (event, what: string) => {
+  if (what === 'snippets-updated') {
+    app.$store.dispatch('updateSnippets')
+      .catch(e => console.error(e))
+  }
+})
+
 // Initial update
 filetreeUpdateLock = true
 openDirectoryLock = true
@@ -152,6 +158,10 @@ app.$store.dispatch('updateOpenDirectory')
   .finally(() => { openDirectoryLock = false })
 app.$store.dispatch('documentTree', { event: 'init', context: { windowId } })
   .catch(err => console.error(err))
+app.$store.dispatch('updateModifiedFiles')
+  .catch(e => console.error(e))
+app.$store.dispatch('updateSnippets')
+  .catch(e => console.error(e))
 
 // -----------------------------------------------
 

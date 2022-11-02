@@ -57,7 +57,7 @@ import TextElement from '@common/vue/form/elements/Text.vue'
 import tippy from 'tippy.js'
 import { SimulationNodeDatum } from 'd3'
 import DirectedGraph from '@providers/links/directed-graph'
-import { MDFileMeta } from '@dts/common/fsal'
+import { MDFileDescriptor } from '@dts/common/fsal'
 
 const ipcRenderer = window.ipc
 
@@ -544,7 +544,7 @@ export default defineComponent({
           // return the full absolute path to the file identified by `target` or
           // the unaltered `target`.
           if (!resolvedLinks.has(target)) {
-            const found: MDFileMeta|undefined = await ipcRenderer.invoke('application', { command: 'find-exact', payload: target })
+            const found: MDFileDescriptor|undefined = await ipcRenderer.invoke('application', { command: 'find-exact', payload: target })
             if (found === undefined) {
               // This will create a vertex representing a latent (i.e. not yet
               // existing) file.

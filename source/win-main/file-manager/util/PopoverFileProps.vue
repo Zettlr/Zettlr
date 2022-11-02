@@ -53,7 +53,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -68,12 +68,13 @@
  * END HEADER
  */
 
-import NumberControl from '@common/vue/form/elements/Number'
-import SelectControl from '@common/vue/form/elements/Select'
+import NumberControl from '@common/vue/form/elements/Number.vue'
+import SelectControl from '@common/vue/form/elements/Select.vue'
 import { trans } from '@common/i18n-renderer'
 import formatDate from '@common/util/format-date'
 import formatSize from '@common/util/format-size'
 import localiseNumber from '@common/util/localise-number'
+import { ColouredTag } from '@dts/common/tag-provider'
 
 export default {
   name: 'PopoverFileProps',
@@ -87,7 +88,7 @@ export default {
       creationtime: 0,
       modtime: 0,
       tags: [],
-      colouredTags: [],
+      colouredTags: [] as ColouredTag[],
       targetValue: 0,
       targetMode: 'words',
       words: 0,
@@ -100,7 +101,7 @@ export default {
     // This property needs to be exposed on every Popover. The popover needs to
     // return the data that will then be reported back to the caller.
     popoverData: function () {
-      const data = {}
+      const data: any = {}
       if (this.type === 'file') {
         data.target = {
           value: this.targetValue,
@@ -148,12 +149,12 @@ export default {
       this.targetValue = 0
       this.targetMode = 'words'
     },
-    retrieveTagColour: function (tagName) {
+    retrieveTagColour: function (tagName: string) {
       const foundTag = this.colouredTags.find(tag => tag.name === tagName)
       if (foundTag !== undefined) {
         return foundTag.color
       } else {
-        return false
+        return 'transparent'
       }
     }
   }

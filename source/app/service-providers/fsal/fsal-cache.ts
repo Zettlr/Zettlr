@@ -20,6 +20,7 @@
  * END HEADER
  */
 
+import hash from '@common/util/hash'
 import LogProvider from '@providers/log'
 import fs from 'fs'
 import path from 'path'
@@ -211,7 +212,7 @@ export default class FSALCache {
    */
   _loadShard (key: string): Map<string, any> {
     // load a shard
-    let shard = this._determineShard(key)
+    const shard = this._determineShard(key)
 
     // If the requested shard is already loaded, simply return that one.
     const maybeShard = this._data.get(shard)
@@ -242,15 +243,8 @@ export default class FSALCache {
    * @return {string}       The shard key
    */
   _determineShard (key: string): string {
-    // Here's the algorithm for choosing the shard:
-    // Based off the first two characters of the key
-    // whoooooooooooooo. Well, but the keys will only
-    // be hashes, so whatever lol. Nothing fancy as
-    // Instagram does (cf. https://instagram-engineering.com/sharding-ids-at-instagram-1cf5a71e5a5c)
-
     // One more note: This caching algorithm will ensure
     // there'll be at most 99 files (10 to 99 and -1 to -9).
-
-    return String(key).substring(0, 2)
+    return hash(key).toString().substring(0, 2)
   }
 }

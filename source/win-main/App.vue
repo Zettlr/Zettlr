@@ -47,17 +47,22 @@
               v-bind:leaf-id="paneConfiguration.id"
               v-bind:editor-commands="editorCommands"
               v-bind:window-id="windowId"
+              v-on:global-search="startGlobalSearch($event)"
             ></EditorPane>
             <EditorBranch
               v-else
               v-bind:node="paneConfiguration"
               v-bind:window-id="windowId"
               v-bind:editor-commands="editorCommands"
+              v-on:global-search="startGlobalSearch($event)"
             ></EditorBranch>
           </template>
           <template #view2>
             <!-- Second side: Sidebar -->
-            <MainSidebar v-on:move-section="moveSection($event)"></MainSidebar>
+            <MainSidebar
+              v-on:move-section="moveSection($event)"
+              v-on:jump-to-line="genericJtl($event)"
+            ></MainSidebar>
           </template>
         </SplitView>
       </template>
@@ -105,6 +110,7 @@ import chimeFile from './assets/chime.mp3'
 import { ToolbarControl } from '@dts/renderer/window'
 import { OpenDocument, BranchNodeJSON, LeafNodeJSON } from '@dts/common/documents'
 import { EditorCommands } from '@dts/renderer/editor'
+import buildPipeTable from '@common/modules/markdown-editor/table-editor/build-pipe'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
@@ -227,33 +233,30 @@ export default defineComponent({
         // We have selections to display.
         let length = 0
         info.selections.forEach((sel: any) => {
-          length += sel.selectionLength
+          length += this.shouldCountChars ? sel.chars : sel.words
         })
 
         cnt = trans('gui.words_selected', localiseNumber(length))
         cnt += '<br>'
         if (info.selections.length === 1) {
-          cnt += (info.selections[0].start.line + 1) + ':'
-          cnt += (info.selections[0].start.ch + 1) + ' &ndash; '
-          cnt += (info.selections[0].end.line + 1) + ':'
-          cnt += (info.selections[0].end.ch + 1)
+          cnt += (info.selections[0].anchor.line + 1) + ':'
+          cnt += (info.selections[0].anchor.ch + 1) + ' &ndash; '
+          cnt += (info.selections[0].head.line + 1) + ':'
+          cnt += (info.selections[0].head.ch + 1)
         } else {
           // Multiple selections --> indicate
           cnt += trans('gui.number_selections', info.selections.length)
         }
       } else {
         // No selection.
-        const locID = (this.shouldCountChars === true) ? 'gui.chars' : 'gui.words'
-        const num = (this.shouldCountChars === true) ? info.chars : info.words
+        const locID = this.shouldCountChars ? 'gui.chars' : 'gui.words'
+        const num = this.shouldCountChars ? info.chars : info.words
         cnt = trans(locID, localiseNumber(num))
         cnt += '<br>'
         cnt += (info.cursor.line + 1) + ':' + (info.cursor.ch + 1)
       }
 
       return cnt
-    },
-    hasTagSuggestions: function (): boolean {
-      return this.$store.state.tagSuggestions.length > 0
     },
     toolbarControls: function (): ToolbarControl[] {
       return [
@@ -289,7 +292,7 @@ export default defineComponent({
           id: 'show-tag-cloud',
           title: trans('toolbar.tag_cloud'),
           icon: 'tags',
-          badge: this.hasTagSuggestions
+          badge: undefined // this.hasTagSuggestions
         },
         {
           type: 'button',
@@ -501,7 +504,7 @@ export default defineComponent({
         ipcRenderer.send('window-controls', { command: 'paste' })
 
         // Now restore the clipboard's original contents
-        setTimeout((e) => {
+        setTimeout(() => {
           clipboard.write({ text, html, rtf })
         }, 10) // Why do a timeout? Because the paste event is asynchronous.
       } else if (shortcut === 'copy-current-id') {
@@ -566,7 +569,17 @@ export default defineComponent({
     }
   },
   methods: {
-    jtl: function (filePath: string, lineNumber: number, newTab: boolean, setCursor: boolean = false) {
+    genericJtl: function (lineNumber: number) {
+      // This function is called from the sidebar where we already know the file
+      // is open (because its editor component has provided the table of
+      // contents in the first place).
+      const doc = this.$store.getters.lastLeafActiveFile() as OpenDocument|null
+      if (doc !== null) {
+        this.editorCommands.data = { filePath: doc.path, lineNumber }
+        this.editorCommands.jumpToLine = !this.editorCommands.jumpToLine
+      }
+    },
+    jtl: function (filePath: string, lineNumber: number, newTab: boolean) {
       // We need to make sure the given file is (a) open somewhere and (b) the
       // active file.
 
@@ -576,7 +589,7 @@ export default defineComponent({
       if (activeFileLeaf !== undefined) {
         // There is at least one leaf with the given file being active, so we
         // can simply emit the event
-        this.editorCommands.data = { filePath, lineNumber, setCursor }
+        this.editorCommands.data = { filePath, lineNumber }
         this.editorCommands.jumpToLine = !this.editorCommands.jumpToLine
         return
       }
@@ -596,7 +609,7 @@ export default defineComponent({
         })
           .then(() => {
             // Re-execute the jtl command
-            setTimeout(() => this.jtl(filePath, lineNumber, newTab, setCursor), WAIT_TIME)
+            setTimeout(() => this.jtl(filePath, lineNumber, newTab), WAIT_TIME)
           })
           .catch(e => console.error(e))
         return
@@ -616,7 +629,7 @@ export default defineComponent({
       })
         .then(() => {
           // Re-execute the jtl command
-          setTimeout(() => this.jtl(filePath, lineNumber, newTab, setCursor), WAIT_TIME)
+          setTimeout(() => this.jtl(filePath, lineNumber, newTab), WAIT_TIME)
         })
         .catch(e => console.error(e))
     },
@@ -683,26 +696,11 @@ export default defineComponent({
             this.$closePopover()
           })
       } else if (clickedID === 'show-tag-cloud') {
-        const allTags = Object.keys(this.$store.state.tagDatabase)
-        const tagMap = allTags.map(tag => {
-          // Tags have the properties "className", "count", and "text"
-          const storeTag = (this.$store.state.tagDatabase as any)[tag]
-
-          return {
-            className: storeTag.className,
-            count: storeTag.count,
-            text: storeTag.text
-          }
-        })
-
-        const data = {
-          tags: tagMap,
-          suggestions: this.$store.state.tagSuggestions
-        }
-
         const button = document.getElementById('toolbar-show-tag-cloud')
 
-        this.$togglePopover(PopoverTags, button as HTMLElement, data, (data: any) => {
+        this.$togglePopover(PopoverTags, button as HTMLElement, {
+          activeFile: this.$store.getters.lastLeafActiveFile()
+        }, (data: any) => {
           if (data.searchForTag !== '') {
             // The user has clicked a tag and wants to search for it
             this.startGlobalSearch('#' + data.searchForTag)
@@ -790,22 +788,25 @@ export default defineComponent({
         const elem = document.getElementById('toolbar-insert-table')
         this.$togglePopover(PopoverTable, elem as HTMLElement, data, (data: any) => {
           // Generate a simple table based on the info, and insert it.
-          let table = ''
+          const ast: string[][] = []
+          const align: any[] = []
           for (let i = 0; i < data.tableSize.rows; i++) {
-            table += '|'
+            const row: string[] = []
+            align.push('left')
             for (let k = 0; k < data.tableSize.cols; k++) {
-              table += '   |'
+              row.push('')
             }
-            table += '\n'
+            ast.push(row)
           }
 
-          this.editorCommands.data = table
+          this.editorCommands.data = buildPipeTable(ast, align)
           this.editorCommands.replaceSelection = !this.editorCommands.replaceSelection
           this.$closePopover()
         })
       } else if (clickedID === 'document-info') {
         const data = {
-          docInfo: this.$store.state.activeDocumentInfo
+          docInfo: this.$store.state.activeDocumentInfo,
+          shouldCountChars: this.shouldCountChars
         }
         const elem = document.getElementById('toolbar-document-info')
         this.$togglePopover(PopoverDocInfo, elem as HTMLElement, data, (data: any) => {

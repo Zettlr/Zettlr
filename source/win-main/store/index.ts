@@ -16,8 +16,7 @@
 
 import { StoreOptions, createStore as baseCreateStore, Store } from 'vuex'
 import { InjectionKey } from 'vue'
-import { CodeFileMeta, DirMeta, MDFileMeta, OtherFileMeta } from '@dts/common/fsal'
-import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
+import { ColouredTag } from '@dts/common/tag-provider'
 import { SearchResultWrapper } from '@dts/common/search'
 import { RelatedFile } from '@dts/renderer/misc'
 import locateByPath from '@providers/fsal/util/locate-by-path'
@@ -33,11 +32,15 @@ import documentTreeMutation from './mutations/document-tree'
 
 // Import Actions
 import filetreeUpdateAction from './actions/filetree-update'
-import regenerateTagSuggestionsAction from './actions/regenerate-tag-suggestions'
 import updateOpenDirectoryAction from './actions/update-open-directory'
 import updateRelatedFilesAction from './actions/update-related-files'
 import updateBibliographyAction from './actions/update-bibliography'
 import documentTreeUpdateAction from './actions/document-tree-update'
+import { AnyDescriptor, DirDescriptor, MaybeRootDescriptor } from '@dts/common/fsal'
+import { WritingTarget } from '@providers/targets'
+import updateSnippetsAction from './actions/update-snippets'
+
+const ipcRenderer = window.ipc
 
 /**
  * The injection key is required for store access from within composition API
@@ -52,7 +55,7 @@ export interface ZettlrState {
   /**
    * Contains the full file tree that is loaded into the app
    */
-  fileTree: Array<MDFileMeta|CodeFileMeta|DirMeta>
+  fileTree: MaybeRootDescriptor[]
   /**
    * Contains the last update timestamp from main
    */
@@ -66,10 +69,6 @@ export interface ZettlrState {
    */
   paneData: LeafNodeJSON[]
   /**
-   * Holds the currently modified files alongside their last modification timestamp
-   */
-  modifiedFiles: Map<string, number>
-  /**
    * This array contains the paths of directories which are open (necessary to
    * keep the state during filtering, etc.)
    */
@@ -77,7 +76,7 @@ export interface ZettlrState {
   /**
    * Contains the currently selected directory
    */
-  selectedDirectory: DirMeta|null
+  selectedDirectory: DirDescriptor|null
   activeFile: null
   /**
    * This property contains all leaf IDs on which the readability mode is
@@ -93,13 +92,9 @@ export interface ZettlrState {
    */
   colouredTags: ColouredTag[]
   /**
-   * Contains all tags across all files loaded into Zettlr
+   * Holds all current writing targets
    */
-  tagDatabase: TagDatabase[]
-  /**
-   * Contains a list of suggested tags for the current active file.
-   */
-  tagSuggestions: string[]
+  writingTargets: WritingTarget[]
   /**
    * Holds all configuration options. These need to be stored here separately
    * to make use of the reactivity of Vue. We'll basically be binding the config
@@ -131,6 +126,10 @@ export interface ZettlrState {
    */
   cslItems: any[]
   /**
+   * Snippets (including file contents)
+   */
+  snippets: Array<{ name: string, content: string }>
+  /**
    * This variable stores search results from the global search
    */
   searchResults: SearchResultWrapper[]
@@ -158,7 +157,6 @@ function getConfig (): StoreOptions<ZettlrState> {
         paneStructure: { type: 'leaf', id: '', openFiles: [], activeFile: null },
         paneData: [],
         fileTree: [],
-        modifiedFiles: new Map(),
         lastFiletreeUpdate: 0,
         readabilityModeActive: [],
         activeFile: null,
@@ -166,8 +164,7 @@ function getConfig (): StoreOptions<ZettlrState> {
         selectedDirectory: null,
         relatedFiles: [],
         colouredTags: [],
-        tagDatabase: [],
-        tagSuggestions: [],
+        writingTargets: [],
         config: configToArrayMapper(window.config.get()),
         activeDocumentInfo: null,
         modifiedDocuments: [],
@@ -176,12 +173,13 @@ function getConfig (): StoreOptions<ZettlrState> {
         bibliography: undefined,
         lastLeafId: undefined,
         distractionFreeMode: undefined,
+        snippets: [],
         cslItems: [],
         searchResults: []
       }
     },
     getters: {
-      file: state => (filePath: string): MDFileMeta|CodeFileMeta|OtherFileMeta|DirMeta|undefined => {
+      file: state => (filePath: string): AnyDescriptor|undefined => {
         return locateByPath(state.fileTree, filePath) as any
       },
       lastLeafActiveFile: state => (): OpenDocument|null => {
@@ -253,19 +251,19 @@ function getConfig (): StoreOptions<ZettlrState> {
         state.lastFiletreeUpdate = payload
       },
       updateRelatedFiles: function (state, relatedFiles: RelatedFile[]) {
-        state.relatedFiles = relatedFiles
+        // Make sure we're only updating if something has changed.
+        if (JSON.stringify(relatedFiles) !== JSON.stringify(state.relatedFiles)) {
+          state.relatedFiles = relatedFiles
+        }
       },
-      updateModifiedFiles: function (state, modifiedFiles: Map<string, number>) {
-        state.modifiedFiles = modifiedFiles
+      updateModifiedFiles: function (state, modifiedDocuments: string[]) {
+        state.modifiedDocuments = modifiedDocuments
       },
       colouredTags: function (state, tags) {
         state.colouredTags = tags
       },
-      updateTagDatabase: function (state, tags) {
-        state.tagDatabase = tags
-      },
-      setTagSuggestions: function (state, suggestions) {
-        state.tagSuggestions = suggestions
+      updateWritingTargets: function (state, targets: WritingTarget[]) {
+        state.writingTargets = targets
       },
       updateCitationKeys: function (state, newKeys: string[]) {
         // Update the citations, removing possible duplicates
@@ -286,6 +284,9 @@ function getConfig (): StoreOptions<ZettlrState> {
         // b-a reversal, since we want a descending sort)
         state.searchResults.sort((a, b) => b.weight - a.weight)
       },
+      snippets: function (state, snippets) {
+        state.snippets = snippets
+      },
       documentTree: documentTreeMutation,
       // Longer mutations that require more code are defined externally
       updateOpenDirectory: updateOpenDirectoryMutation,
@@ -298,15 +299,27 @@ function getConfig (): StoreOptions<ZettlrState> {
       updateOpenDirectory: updateOpenDirectoryAction,
       lastLeafId: async function (ctx, lastLeafId: string) {
         ctx.commit('lastLeafId', lastLeafId)
-        // Update the tag suggestions
-        await ctx.dispatch('regenerateTagSuggestions')
         // Update the related files
         await ctx.dispatch('updateRelatedFiles')
       },
-      regenerateTagSuggestions: regenerateTagSuggestionsAction,
       updateRelatedFiles: updateRelatedFilesAction,
       updateBibliography: updateBibliographyAction,
-      documentTree: documentTreeUpdateAction
+      documentTree: documentTreeUpdateAction,
+      updateSnippets: updateSnippetsAction,
+      updateModifiedFiles: async (ctx) => {
+        const modifiedFiles: string[] = await ipcRenderer.invoke('documents-provider', {
+          command: 'get-file-modification-status'
+        })
+
+        ctx.commit('updateModifiedFiles', modifiedFiles)
+      },
+      updateWritingTargets: async (ctx) => {
+        const targets: WritingTarget[] = await ipcRenderer.invoke('targets-provider', {
+          command: 'get-targets'
+        })
+
+        ctx.commit('updateWritingTargets', targets)
+      }
     }
   }
 

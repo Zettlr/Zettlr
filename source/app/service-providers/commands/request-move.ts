@@ -14,7 +14,7 @@
 
 import ZettlrCommand from './zettlr-command'
 import { trans } from '@common/i18n-main'
-import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/main/fsal'
+import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 
 export default class RequestMove extends ZettlrCommand {
   constructor (app: any) {
@@ -31,15 +31,15 @@ export default class RequestMove extends ZettlrCommand {
     // arg contains from and to. Prepare the necessary variables
     const fsal = this._app.fsal // We need this quite often here
 
-    let from: MDFileDescriptor|CodeFileDescriptor|DirDescriptor|null = fsal.findDir(arg.from)
+    let from: DirDescriptor|MDFileDescriptor|CodeFileDescriptor|undefined = fsal.findDir(arg.from)
     // Obviously a file!
-    if (from == null) {
+    if (from === undefined) {
       from = fsal.findFile(arg.from)
     }
 
     let to = fsal.findDir(arg.to)
 
-    if (to === null || from === null) {
+    if (to === undefined || from === undefined) {
       // If findDir doesn't return anything then it's a file
       this._app.log.error('Could not find the target directory for moving.')
       return false
@@ -54,7 +54,9 @@ export default class RequestMove extends ZettlrCommand {
     }
 
     // Let's check if the destination is a child of the source:
-    if (fsal.findFile(to.path, [from]) !== null || fsal.findDir(to.path, [from]) !== null) {
+    if (from.type === 'directory' && (
+      fsal.findFile(to.path, [from]) !== null || fsal.findDir(to.path, [from]) !== null
+    )) {
       this._app.windows.prompt({
         type: 'error',
         title: trans('system.error.move_into_child_title'),

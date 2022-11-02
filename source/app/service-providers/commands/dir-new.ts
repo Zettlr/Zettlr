@@ -29,7 +29,7 @@ export default class DirNew extends ZettlrCommand {
     */
   async run (evt: string, arg: any): Promise<boolean> {
     let sourceDir = this._app.fsal.findDir(arg.path)
-    if (sourceDir === null) {
+    if (sourceDir === undefined) {
       this._app.log.error('Could not create directory: No source given.', arg)
       this._app.windows.prompt({
         type: 'error',
@@ -66,7 +66,7 @@ export default class DirNew extends ZettlrCommand {
     // application of the changes, so all we have to do is set the directory
     // as the new current directory.
     let newDirPath = path.join(sourceDir.path, sanitizedName)
-    this._app.fsal.openDirectory = this._app.fsal.findDir(newDirPath)
+    this._app.fsal.openDirectory = this._app.fsal.findDir(newDirPath) ?? null
 
     return true
   }

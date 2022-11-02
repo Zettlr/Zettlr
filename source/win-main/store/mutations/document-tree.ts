@@ -312,6 +312,7 @@ function copyDelta (state: ZettlrState, treedata: DocumentTree, leafId: string):
     console.warn('Could not apply delta, either local or remote not available', localLeaf, remoteLeaf, leafId)
     return
   }
+
   localLeaf.activeFile = remoteLeaf.activeFile
   localLeaf.openFiles = remoteLeaf.openFiles
 }

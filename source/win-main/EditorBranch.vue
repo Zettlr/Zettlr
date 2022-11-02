@@ -16,6 +16,7 @@
         v-bind:editor-commands="editorCommands"
         v-bind:available-width="(node.direction === 'horizontal') ? sizes[index] : 100"
         v-bind:available-height="(node.direction === 'vertical') ? sizes[index] : 100"
+        v-on:global-search="$emit('globalSearch', $event)"
       ></EditorBranch>
       <EditorPane
         v-else
@@ -29,6 +30,7 @@
         }"
         v-bind:available-width="(node.direction === 'horizontal') ? sizes[index] : 100"
         v-bind:available-height="(node.direction === 'vertical') ? sizes[index] : 100"
+        v-on:global-search="$emit('globalSearch', $event)"
       ></EditorPane>
       <!-- Here comes the resizing (for every but the last child) -->
       <div
@@ -76,6 +78,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['globalSearch'],
   data () {
     return {
       sizes: this.node.sizes.map(s => s), // Holds the sizes of the child nodes

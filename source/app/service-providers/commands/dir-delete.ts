@@ -26,7 +26,7 @@ export default class DirDelete extends ZettlrCommand {
     */
   async run (evt: string, arg: any): Promise<boolean> {
     let dirToDelete = this._app.fsal.findDir(arg.path)
-    if (dirToDelete === null) {
+    if (dirToDelete === undefined) {
       this._app.log.error('Could not remove directory: Not found.')
       return false
     }

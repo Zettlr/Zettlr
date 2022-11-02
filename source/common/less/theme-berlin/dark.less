@@ -4,14 +4,15 @@
 
 // DARK STYLES
 body.dark {
+  // Gutters (for code files)
+  .main-editor-wrapper.code-file .cm-gutters {
+    border-right-color: var(--grey-5);
+    background-color: var(--grey-7);
+    color: var(--grey-4);
+  }
 
-  .main-editor-wrapper .CodeMirror {
+  .main-editor-wrapper .cm-editor {
     color: var(--grey-0);
-
-    // Add a background color to the vim command bar
-    .CodeMirror-dialog.CodeMirror-dialog-bottom, .vim-error-message {
-      background-color: rgb(80, 80, 80);
-    }
 
     // First the code blocks
     .cm-comment,
@@ -167,8 +168,8 @@ body.dark {
       }
     }
 
-    .cm-formatting-escape {
-      color: var(--grey-0);
+    .cm-escape {
+      color: var(--grey-4);
     }
 
     // YAML Frontmatter indicator -- dark version
@@ -200,13 +201,48 @@ body.dark {
       border-bottom: 2px solid @grey-3;
       background-color: @grey-6;
     }
-  }
 
-  .CodeMirror-focused .CodeMirror-selected {
-    background-color: var(--selection-dark);
-  }
+    .cm-tooltip-hover,
+    .cm-tooltip-autocomplete,
+    .cm-tooltip {
+      background-color: rgb(40, 40, 40);
+      // Because shadows look shitty on dark backgrounds (especially white
+      // "shadows"), we need to fall back to subtle borders here.
+      box-shadow: none;
+      border: 1px solid rgb(80, 80, 80);
+    }
 
-  .CodeMirror .CodeMirror-selected {
+    .cm-tooltip.cm-formatting-bar {
+      button.formatting-toolbar-button {
+        background-color: var(--grey-5);
+        color: var(--grey-2);
+  
+        &:hover {
+          background-color: var(--grey-3);
+          color: var(--grey-1);
+        }
+      }
+
+      &.cm-tooltip-below {
+        .cm-tooltip-arrow::before, .cm-tooltip-arrow::after {
+          border-bottom-color: var(--grey-5);
+        }
+      }
+
+      &.cm-tooltip-above {
+        .cm-tooltip-arrow::before, .cm-tooltip-arrow::after {
+          border-top-color: var(--grey-5);
+        }
+      }
+    }
+
+    .iframe-wrapper {
+      background-color: var(--grey-5);
+    }
+  } // END: All the editor-wrapper shenanigans
+
+  .cm-editor.cm-focused .cm-selectionBackground,
+  .cm-editor .cm-selectionBackground {
     background-color: var(--selection-dark);
   }
 
@@ -270,5 +306,16 @@ body.dark {
   .table-helper-remove-button-container,
   .table-helper-add-button {
     background-color: white;
+  }
+
+  .table-helper td {
+    /* Codemirror 6's drawCursor plugin makes the actual cursor transparent, so
+    we have to reset it here for the contenteditables. Similar with selections */
+    caret-color: rgb(255, 255, 255);
+
+    &::selection {
+      color: black;
+      background-color: rgba(255, 255, 255, 0.8) !important;
+    }
   }
 }

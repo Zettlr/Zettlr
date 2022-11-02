@@ -40,7 +40,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -60,8 +60,47 @@ import ButtonControl from '@common/vue/form/elements/Button.vue'
 import TokenList from '@common/vue/form/elements/TokenList.vue'
 import TabBar from '@common/vue/TabBar.vue'
 import { trans } from '@common/i18n-renderer'
+import { defineComponent } from 'vue'
+import { TagDatabase } from '@dts/common/tag-provider'
+import { TabbarControl } from '@dts/renderer/window'
+import { OpenDocument } from '@dts/common/documents'
+import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
+import { MDFileDescriptor } from '@dts/common/fsal'
 
-export default {
+const ipcRenderer = window.ipc
+
+async function regenerateTagSuggestions (activeFile: null|OpenDocument): Promise<string[]> {
+  const suggestions: string[] = []
+  if (activeFile === null || !hasMarkdownExt(activeFile.path)) {
+    return suggestions // Nothing to do
+  }
+
+  const contents: string = await ipcRenderer.invoke('application', {
+    command: 'get-file-contents',
+    payload: activeFile.path
+  })
+
+  const descriptor: MDFileDescriptor = await ipcRenderer.invoke('application', {
+    command: 'get-descriptor',
+    payload: activeFile.path
+  })
+
+  if (contents == null || descriptor == null) {
+    throw new Error('Could not generate tag suggestions: Main did not return the file contents!')
+  }
+
+  const tags = await ipcRenderer.invoke('tag-provider', { command: 'get-tags-database' })
+
+  for (const tag of Object.keys(tags)) {
+    if (String(contents).includes(tag) && !descriptor.tags.includes(tag)) {
+      suggestions.push(tag)
+    }
+  }
+
+  return suggestions
+}
+
+export default defineComponent({
   name: 'PopoverTags',
   components: {
     TextControl,
@@ -71,13 +110,18 @@ export default {
   },
   data: function () {
     return {
-      tags: [],
+      tags: [] as Array<{ text: string, count: number, className: string }>,
       tabs: [
         // TODO: Translate
         { id: 'name', label: 'Name' },
         { id: 'count', label: 'Count' }
-      ],
-      suggestions: [], // Tag suggestions for the currently active file
+      ] as TabbarControl[],
+      activeFile: null as OpenDocument|null,
+      // Super hacky way to get some tag suggestions. (Reminder to myself:
+      // Create a component for the popovers instead of having them float in the
+      // void of the app document.)
+      suggestionPromise: undefined as Promise<string[]>|undefined,
+      suggestions: [] as string[], // Tag suggestions for the currently active file
       query: '',
       searchForTag: '',
       sorting: 'name', // Can be "name" or "count"
@@ -123,17 +167,34 @@ export default {
       return this.sortedTags.filter(tag => {
         return tag.text.toLowerCase().includes(this.query.toLowerCase())
       })
+    },
+    filterInput: function () {
+      return this.$refs.filter as typeof TextControl
+    }
+  },
+  watch: {
+    activeFile () {
+      regenerateTagSuggestions(this.activeFile)
+        .then(tags => { this.suggestions = tags })
+        .catch(err => console.error(err))
     }
   },
   mounted: function () {
-    this.$refs.filter.focus()
+    this.filterInput.focus()
+    ipcRenderer.invoke('tag-provider', { command: 'get-tags-database' })
+      .then((tags: TagDatabase) => {
+        this.tags = Object.keys(tags).map(tag => {
+          return { ...tags[tag] }
+        })
+      })
+      .catch(err => console.error(err))
   },
   methods: {
-    handleClick: function (text) {
+    handleClick: function (text: string) {
       this.searchForTag = text // Handle click here means: Start a search
     }
   }
-}
+})
 </script>
 
 <style lang="less">

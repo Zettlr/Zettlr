@@ -390,10 +390,6 @@ export default {
 </script>
 
 <style lang="less">
-// Import the CodeMirror CSS so that it's available on every window which
-// includes the WindowChrome.
-@import '~codemirror/lib/codemirror.css';
-
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, Ubuntu, Roboto, Noto, 'Segoe UI', Arial, sans-serif;
   // macOS OPERATING SYSTEM STYLES

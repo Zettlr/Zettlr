@@ -1,7 +1,18 @@
-import { AnyMetaDescriptor } from '@dts/common/fsal'
-import { AnyDescriptor } from '@dts/main/fsal'
-
-type MetaOrNotToMeta = AnyDescriptor | AnyMetaDescriptor
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        locateByPath
+ * CVM-Role:        Utility Function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     A small utility function that takes a directory tree and
+ *                  returns the descriptor for the given path, if available.
+ *
+ * END HEADER
+ */
+import { AnyDescriptor } from '@dts/common/fsal'
 
 const PATH_SEP = process.platform === 'win32' ? '\\' : '/'
 
@@ -9,14 +20,12 @@ const PATH_SEP = process.platform === 'win32' ? '\\' : '/'
  * Takes a tree of descriptors and returns the descriptor that exactly matches
  * targetPath, or undefined.
  *
- * @param   {AnyMetaDescriptor|AnyDescriptor}  tree        One or more descriptors
- * @param   {string}                           targetPath  The (absolute) path to search for
+ * @param   {AnyDescriptor}            tree        One or more descriptors
+ * @param   {string}                   targetPath  The (absolute) path to search for
  *
- * @return  {AnyMetaDescriptor|AnyDescriptor|undefined}    Either the descriptor or undefined
+ * @return  {AnyDescriptor|undefined}              Either the descriptor or undefined
  */
-export function locateByPath (tree: AnyMetaDescriptor|AnyMetaDescriptor[], targetPath: string): AnyMetaDescriptor|undefined
-export function locateByPath (tree: AnyDescriptor|AnyDescriptor[], targetPath: string): AnyDescriptor|undefined
-export default function locateByPath (tree: MetaOrNotToMeta|MetaOrNotToMeta[], targetPath: string): MetaOrNotToMeta|undefined {
+export default function locateByPath (tree: AnyDescriptor|AnyDescriptor[], targetPath: string): AnyDescriptor|undefined {
   // We need to find a target
   if (Array.isArray(tree)) {
     for (const descriptor of tree) {

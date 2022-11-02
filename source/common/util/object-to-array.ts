@@ -14,21 +14,29 @@
  */
 
 /**
- * Crunches a recursive object tree into a one-dimensional array.
+ * Crunches a recursive tree object into a one-dimensional array. If `tree` is
+ * an array, runs the function on each element and concatenates the lists.
  *
- * @param {any}    tree     The tree to be transformed
- * @param {string} traverse The property over which the recursion takes place
- * @param {any[]}  arr      An optional array to append to
+ * @param   {any}    tree      The tree to be transformed. Can be an object or an array.
+ * @param   {string} traverse  The property over which the recursion takes place
+ * @param   {any[]}   arr      An optional array to append to
  *
- * @return {any[]}          The flattened array
+ * @return  {any[]}            The flattened array
  */
 export default function objectToArray (tree: any, traverse: string, arr: any[] = []): any[] {
+  if (Array.isArray(tree)) {
+    for (const elem of tree) {
+      arr = objectToArray(elem, traverse, arr)
+    }
+    return arr
+  }
+
   // Add the current tree
   arr.push(tree)
 
   if (traverse in tree && Array.isArray(tree[traverse]) && tree[traverse].length > 0) {
     // We have some children -> concat them
-    for (let child of tree[traverse]) {
+    for (const child of tree[traverse]) {
       arr = objectToArray(child, traverse, arr)
     }
   }

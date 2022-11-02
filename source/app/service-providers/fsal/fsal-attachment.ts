@@ -14,17 +14,14 @@
 
 import path from 'path'
 import { promises as fs } from 'fs'
-import hash from '@common/util/hash'
-import { OtherFileDescriptor, DirDescriptor } from '@dts/main/fsal'
-import { OtherFileMeta } from '@dts/common/fsal'
+import { OtherFileDescriptor } from '@dts/common/fsal'
 import { shell } from 'electron'
 
-export async function parse (absPath: string, parent: DirDescriptor): Promise<OtherFileDescriptor> {
+export async function parse (absPath: string): Promise<OtherFileDescriptor> {
   let attachment: OtherFileDescriptor = {
-    parent,
+    root: false, // other files are never roots
     path: absPath,
     name: path.basename(absPath),
-    hash: hash(absPath),
     ext: path.extname(absPath),
     size: 0,
     dir: path.dirname(absPath),
@@ -47,26 +44,6 @@ export async function parse (absPath: string, parent: DirDescriptor): Promise<Ot
   return attachment
 }
 
-export function metadata (attachment: OtherFileDescriptor): OtherFileMeta {
-  return {
-    // By only passing the hash, the object becomes
-    // both lean AND it can be reconstructed into a
-    // circular structure with NO overheads in the
-    // renderer.
-    parent: attachment.parent.hash,
-    path: attachment.path,
-    name: attachment.name,
-    hash: attachment.hash,
-    ext: attachment.ext,
-    size: attachment.size,
-    type: attachment.type,
-    modtime: attachment.modtime,
-    creationtime: attachment.creationtime,
-    dir: attachment.dir
-
-  }
-}
-
 export async function reparseChangedFile (attachment: OtherFileDescriptor): Promise<void> {
   let stat = await fs.lstat(attachment.path)
   attachment.modtime = stat.mtime.getTime() // stat.ctimeMs DEBUG: Switch to mtimeMs for the time being
@@ -85,11 +62,5 @@ export async function remove (fileObject: OtherFileDescriptor, deleteOnFail: boo
       err.message = `[FSAL File] Could not remove file ${fileObject.path}: ${String(err.message)}`
       throw err
     }
-  }
-
-  if (fileObject.parent !== null) {
-    // Splice it from the parent directory
-    const idx = fileObject.parent.children.indexOf(fileObject)
-    fileObject.parent.children.splice(idx, 1)
   }
 }

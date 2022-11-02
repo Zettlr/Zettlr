@@ -14,7 +14,7 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import { MDFileMeta } from '@dts/common/fsal'
+import { MDFileDescriptor } from '@dts/common/fsal'
 
 export default class FilePathFindMetaData extends ZettlrCommand {
   constructor (app: any) {
@@ -29,29 +29,27 @@ export default class FilePathFindMetaData extends ZettlrCommand {
    * @param   {string}                         evt  The event
    * @param   {arg}                            arg  The argument, should be a query string
    *
-   * @return  {MDFileMeta|undefined|string[]}       Returns a MetaDescriptor, undefined, or an array
+   * @return  {MDFileDescriptor|undefined|string[]} Returns a MetaDescriptor, undefined, or an array
    */
-  async run (evt: string, arg: any): Promise<MDFileMeta|undefined|any[]> {
+  async run (evt: string, arg: any): Promise<MDFileDescriptor|undefined|any[]> {
     // Quick'n'dirty command to return the Meta descriptor for the given query
     if (evt === 'find-exact') {
       const descriptor = this._app.fsal.findExact(arg)
       if (descriptor === undefined) {
         return undefined
       }
-      return this._app.fsal.getMetadataFor(descriptor) as MDFileMeta
+      return descriptor
     }
 
     const file = this._app.fsal.findExact(arg)
     if (file !== undefined) {
-      const metaData = await this._app.fsal.getFileContents(file) as MDFileMeta
-      let content = metaData.content.substring(0, 200) // The content
-      if (metaData.content.length > 200) {
-        content += '...'
+      const contents = (await this._app.fsal.loadAnySupportedFile(file.path))
+      let preview = contents.substring(0, 200)
+      if (contents.length > 200) {
+        preview += '...'
       }
-      const wordCount = metaData.wordCount // The word count
-      const title = metaData.name // The file name
 
-      return ([ title, content, wordCount, metaData.modtime ])
+      return ([ file.name, preview, file.wordCount, file.modtime ])
     }
 
     // We can't find it, so return Not Found

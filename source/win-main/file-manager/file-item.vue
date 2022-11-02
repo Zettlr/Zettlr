@@ -9,7 +9,7 @@
     <div
       v-bind:class="{
         'list-item': true,
-        project: obj.type === 'directory' && obj.project !== null,
+        project: obj.type === 'directory' && obj.settings.project !== null,
         selected: selectedFile !== null && obj.path === selectedFile.path,
         active: activeFile !== null && obj.path === activeFile.path,
         'has-meta-info': fileMeta,
@@ -143,7 +143,8 @@ import formatSize from '@common/util/format-size'
 import itemMixin from './util/item-mixin'
 
 import { defineComponent } from 'vue'
-import { CodeFileMeta, DirMeta, MDFileMeta } from '@dts/common/fsal'
+import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '@dts/common/fsal'
+import { WritingTarget } from '@providers/targets'
 
 export default defineComponent({
   name: 'FileItem',
@@ -158,7 +159,7 @@ export default defineComponent({
       required: true
     },
     obj: {
-      type: Object as () => MDFileMeta|CodeFileMeta|DirMeta,
+      type: Object as () => MDFileDescriptor|CodeFileDescriptor|DirDescriptor,
       required: true
     },
     windowId: {
@@ -175,6 +176,9 @@ export default defineComponent({
     },
     useTitle: function (): boolean {
       return this.$store.state.config.fileNameDisplay.includes('title')
+    },
+    writingTargets: function (): WritingTarget[] {
+      return this.$store.state.writingTargets
     },
     displayMdExtensions: function (): boolean {
       return this.$store.state.config['display.markdownFileExtensions']
@@ -207,7 +211,7 @@ export default defineComponent({
       return this.obj.tags !== undefined && this.obj.tags.length > 0
     },
     isProject: function () {
-      return this.obj.type === 'directory' && this.obj.project !== null
+      return this.obj.type === 'directory' && this.obj.settings.project !== null
     },
     isDraggable: function () {
       return this.isDirectory === false
@@ -255,21 +259,28 @@ export default defineComponent({
       return this.obj.tags.length
     },
     hasWritingTarget: function () {
-      if (this.obj.type !== 'file' || this.obj.target === undefined) {
+      // TODO: REIMPLEMENT WRITING TARGETS APPROPRIATELY!
+      if (this.obj.type !== 'file') {
         return false
       }
 
-      // We definitely have a target
-      return true
+      const targetPaths = this.writingTargets.map(x => x.path)
+      return targetPaths.includes(this.obj.path)
     },
     writingTargetPath: function () {
       if (this.obj.type !== 'file') {
         throw new Error('Could not compute writingTargetPath: Was called on non-file object')
       }
 
+      const target = this.writingTargets.find(x => x.path === this.obj.path)
+
+      if (target === undefined) {
+        throw new Error('Could not compute writingTargetPath: No target found')
+      }
+
       let current = this.obj.charCount
-      if (this.obj.target.mode === 'words') current = this.obj.wordCount
-      let progress = current / this.obj.target.count
+      if (target.mode === 'words') current = this.obj.wordCount
+      let progress = current / target.count
       let large = (progress > 0.5) ? 1 : 0
       if (progress > 1) progress = 1 // Never exceed 100 %
       let x = Math.cos(2 * Math.PI * progress)
@@ -281,22 +292,28 @@ export default defineComponent({
         throw new Error('Could not compute writingTargetInfo: Was called on non-file object')
       }
 
+      const target = this.writingTargets.find(x => x.path === this.obj.path)
+
+      if (target === undefined) {
+        throw new Error('Could not compute writingTargetInfo: No target found')
+      }
+
       let current = this.obj.charCount
-      if (this.obj.target.mode === 'words') {
+      if (target.mode === 'words') {
         current = this.obj.wordCount
       }
 
-      let progress = Math.round(current / this.obj.target.count * 100)
+      let progress = Math.round(current / target.count * 100)
       if (progress > 100) {
         progress = 100 // Never exceed 100 %
       }
 
       let label = trans('dialog.target.chars')
-      if (this.obj.target.mode === 'words') {
+      if (target.mode === 'words') {
         label = trans('dialog.target.words')
       }
 
-      return `${localiseNumber(current)} / ${localiseNumber(this.obj.target.count)} ${label} (${progress} %)`
+      return `${localiseNumber(current)} / ${localiseNumber(target.count)} ${label} (${progress} %)`
     },
     formattedWordCharCountOfFile: function () {
       if (this.obj.type !== 'file') {
@@ -610,6 +627,16 @@ body.win32 {
       div.list-item {
         border-bottom-color: #505050;
         background-color: rgb(40, 40, 50);
+
+        &.selected {
+          background-color: var(--system-accent-color, --c-primary);
+          color: var(--system-accent-color-contrast, white);
+
+          div.filename div.date {
+            background-color: var(--system-accent-color, --c-primary);
+            color: var(--system-accent-color-contrast, white);
+          }
+        }
 
         &.active {
         background-color: rgb(80, 80, 80);
