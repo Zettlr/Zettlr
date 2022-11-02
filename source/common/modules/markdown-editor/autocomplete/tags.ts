@@ -53,23 +53,11 @@ const apply = function (view: EditorView, completion: Completion, from: number, 
 
 export const tags: AutocompletePlugin = {
   applies (ctx) {
-    // A valid citekey position is: Beginning of the line (citekey without square
-    // brackets), after a square bracket open (regular citation without prefix),
-    // or after a space (either a standalone citation or within square brackets
-    // but with a prefix). Also, the citekey can be prefixed with a -.
-    if (ctx.state.doc.sliceString(ctx.pos - 1, ctx.pos) !== '#') {
-      return false // Only applies after the user typed an #
-    }
-
-    const lineObject = ctx.state.doc.lineAt(ctx.pos)
-
-    if (ctx.pos - lineObject.from === 1) {
-      return true // Start of Line with an '#' -> Definitely a tag
-    }
-
-    const charBefore = ctx.state.doc.sliceString(ctx.pos - 2, ctx.pos - 1)
-    if (charBefore === ' ') {
-      return true // Valid char in front of the #
+    const match = ctx.matchBefore(/(?<=^|\s|[({[])#(#?[^\s,.:;…!?"'`»«“”‘’—–@$%&*#^+~÷\\/|<=>[\](){}]+#?)/)
+    if (match === null || match.to < ctx.pos) {
+      return false
+    } else if (match.to === ctx.pos) {
+      return match.from + 1
     }
 
     return false

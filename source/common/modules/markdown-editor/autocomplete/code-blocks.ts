@@ -94,10 +94,14 @@ export const codeBlocks: AutocompletePlugin = {
   applies (ctx) {
     const line = ctx.state.doc.lineAt(ctx.pos)
     const ch = ctx.pos - line.from
-    return (line.text.startsWith('```') || line.text.startsWith('~~~')) && ch === 3
     // We're not at the very start of the document, so let's see what the line
     // above the position says. TODO: For this we have to check if the previous
     // line is already part of a codeblock
+    if ((line.text.startsWith('```') || line.text.startsWith('~~~')) && ch === 3) {
+      return ctx.pos
+    } else {
+      return false
+    }
   },
   entries (ctx, query) {
     query = query.toLowerCase()

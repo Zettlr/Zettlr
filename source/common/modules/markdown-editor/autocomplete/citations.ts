@@ -93,12 +93,12 @@ export const citations: AutocompletePlugin = {
     const lineObject = ctx.state.doc.lineAt(ctx.pos)
 
     if (ctx.pos - lineObject.from === 1) {
-      return true // Start of Line with an '@' -> Definitely a citation
+      return ctx.pos // Start of Line with an '@' -> Definitely a citation
     }
 
     const charBefore = ctx.state.doc.sliceString(ctx.pos - 2, ctx.pos - 1)
     if ([ ' ', '[', '-' ].includes(charBefore)) {
-      return true // Valid char in front of the @
+      return ctx.pos // Valid char in front of the @
     }
 
     return false

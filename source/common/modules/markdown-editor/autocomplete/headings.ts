@@ -25,7 +25,7 @@ export const headings: AutocompletePlugin = {
       return false // Only applies after the user typed an # within a link
     }
 
-    return true
+    return ctx.pos
   },
   entries (ctx, query) {
     query = query.toLowerCase()

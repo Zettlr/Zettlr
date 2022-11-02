@@ -311,12 +311,12 @@ export const snippets: AutocompletePlugin = {
     const lineObject = ctx.state.doc.lineAt(ctx.pos)
 
     if (ctx.pos - lineObject.from === 1) {
-      return true // Start of Line, so perfectly fine
+      return ctx.pos // Start of Line, so perfectly fine
     }
 
     const charBefore = ctx.state.doc.sliceString(ctx.pos - 2, ctx.pos - 1)
     if (charBefore === ' ') {
-      return true // Valid char in front of the colon (so that `something:`
+      return ctx.pos // Valid char in front of the colon (so that `something:`
       // won't trigger)
     }
 

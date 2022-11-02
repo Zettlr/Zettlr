@@ -80,7 +80,11 @@ export const files: AutocompletePlugin = {
     // File autocompletion triggers as soon as we detect the start of a link
     const { linkStart } = ctx.state.field(configField)
     const linkStartRange = ctx.state.sliceDoc(ctx.pos - linkStart.length, ctx.pos)
-    return linkStartRange === linkStart
+    if (linkStartRange === linkStart) {
+      return ctx.pos
+    } else {
+      return false
+    }
   },
   entries (ctx, query) {
     query = query.toLowerCase()

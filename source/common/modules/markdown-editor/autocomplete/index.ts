@@ -36,10 +36,11 @@ export interface AutocompletePlugin {
    *
    * @param   {CompletionContext}  ctx  The current completion context.
    *
-   * @return  {boolean}                 True as soon as the plugin can
-   *                                    autocomplete something.
+   * @return  {number|false}            If the function returns false, the
+   *                                    autocompletion does not apply. Otherwise
+   *                                    returns a number -> the start pos.
    */
-  applies: (ctx: CompletionContext) => boolean
+  applies: (ctx: CompletionContext) => number|false
   /**
    * This function is called while an autocompletion is active. It is provided
    * the current query the user has typed and should return a filtered list of
@@ -80,24 +81,20 @@ const autocompleteSource: CompletionSource = function (ctx): CompletionResult|nu
   }
 
   let plugin: AutocompletePlugin|undefined
+  let startpos = ctx.pos
 
-  if (codeBlocks.applies(ctx)) {
-    plugin = codeBlocks
-  } else if (citations.applies(ctx)) {
-    plugin = citations
-  } else if (files.applies(ctx)) {
-    plugin = files
-  } else if (headings.applies(ctx)) {
-    plugin = headings // NOTE: Headings has to be checked before tags
-  } else if (tags.applies(ctx)) {
-    plugin = tags
-  } else if (snippets.applies(ctx)) {
-    plugin = snippets
+  // NOTE: Headings has to be checked before tags
+  for (const p of [ codeBlocks, citations, files, headings, tags, snippets ]) {
+    const res = p.applies(ctx)
+    if (res !== false) {
+      plugin = p
+      startpos = res
+    }
   }
 
   if (plugin !== undefined) {
     return {
-      from: ctx.pos,
+      from: startpos,
       options: plugin.entries(ctx, ''),
       filter: false,
       update: (current, from, to, ctx) => {
