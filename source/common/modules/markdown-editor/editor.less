@@ -70,7 +70,9 @@
     border: 0;
     z-index: 1;
     transform: translateZ(0);
-    animation: soft-blink 1s infinite; // Use the "soft-blink" animation
+    // With the new CodeMirror 6 implementation, this animation doesn't work
+    // well anymore.
+    // animation: soft-blink 1s infinite; // Use the "soft-blink" animation
   }
 
   /* Implement a "fat" cursor for Windows' overwrite mode (Ins key) */
@@ -91,6 +93,8 @@
 
   // Search results
   .cm-selectionMatch { background-color: #99ff7780; }
+  // Manual highlight/mark elements
+  .cm-highlight { background-color: #ffff0080; }
 
   // SYNTAX-HIGHLIGHTING CLASSES
   // ===========================================================================

@@ -99,7 +99,7 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     history(),
     // SELECTIONS
     // Overrides the default browser selection drawing, allows styling
-    drawSelection({ drawRangeCursor: false, cursorBlinkRate: 0 }),
+    drawSelection({ drawRangeCursor: false, cursorBlinkRate: 1000 }),
     EditorState.allowMultipleSelections.of(true),
     search({ top: true }), // Add a search
     // TAB SIZES/INDENTATION -> Depend on the configuration field
