@@ -29,7 +29,7 @@ function getInlineDecorator (): Extension {
   const tagDeco = Decoration.mark({ class: 'cm-zkn-tag' })
   const highlightDeco = Decoration.mark({ class: 'cm-highlight' })
 
-  const highlightRe = /(::.+?::)/.source
+  const highlightRe = /(::.+?::|==.+?==)/.source
   const tagRe = /(?<=^|\s|[({[])#(#?[^\s,.:;…!?"'`»«“”‘’—–@$%&*#^+~÷\\/|<=>[\](){}]+#?)/.source
 
   // Next, we need a so-called MatchDecorator that parses the code and returns a
