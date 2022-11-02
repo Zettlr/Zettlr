@@ -120,14 +120,13 @@ export function hookDocumentAuthority (
               }
 
               if (updates === false) {
-                console.error('The client is completely out of sync -- pulling document again...')
-                // By returning `false`, the authority told us that basically we've
-                // run out of sync in so far that our current version is so old that
-                // it cannot provide us with precise updates anymore. This means
-                // that we have to fetch the document anew and re-set our internal
-                // state. TODO
-                resolve()
-                return
+                // By returning `false`, the authority told us that we've lost
+                // synchronization and there is no way to re-synchronize in this
+                // method. The `false` will be captured by the MainEditor
+                // instance (in the pullUpdates handler) and handled by simply
+                // reloading the full editor state. What we need to do here is
+                // break out of the pull-loop.
+                return resolve()
               }
 
               // Revitalize the updates

@@ -176,9 +176,13 @@ async function pullUpdates (filePath: string, version: number): Promise<false|Up
           // Clean up to not pollute the event listener with millions of callbacks
           stopListening()
           if (result === false) {
-            // The leaf is completely out of sync, so we need to reload the file.
-            // The easiest way is to simply "swapDoc" again as this will pull in
-            // everything anew.
+            // The leaf is completely out of sync (either because there was an
+            // issue with the IPC calls, or because we've reached
+            // MAX_SAFE_INTEGER and the main process was required to reset the
+            // version number). NOTE: We have to resolve in any case to allow
+            // the internal handler of the editor to break out of its infinite
+            // pull-loop!
+            console.warn(`Client ${props.leafId} is out of sync -- resynchronizing...`)
             mdEditor?.swapDoc(filePath).catch(e => console.error(e))
           }
           resolve(result)
