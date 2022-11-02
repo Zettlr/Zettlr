@@ -142,9 +142,9 @@ module.exports = {
     ]
   },
   plugins: [
-    [
-      '@electron-forge/plugin-webpack',
-      {
+    {
+      name: '@electron-forge/plugin-webpack',
+      config: {
         mainConfig: './webpack.main.config.js',
         // Since electron-forge v6.0.0-beta.58, this property controls the CSP
         // for the development process. Since the defaults by electron-forge are
@@ -261,6 +261,6 @@ module.exports = {
           ]
         }
       }
-    ]
+    }
   ]
 }

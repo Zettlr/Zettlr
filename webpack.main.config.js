@@ -56,5 +56,5 @@ module.exports = {
       '@dts': [path.resolve(__dirname, 'source/types')]
     }
   },
-  externals: externals
+  externals
 }

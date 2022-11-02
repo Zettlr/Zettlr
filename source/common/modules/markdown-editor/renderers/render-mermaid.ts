@@ -37,8 +37,9 @@ class MermaidWidget extends WidgetType {
     const elem = document.createElement('span')
     elem.classList.add('mermaid-chart')
     try {
-      const graph = mermaid.render(`graphDiv${Date.now()}`, this.graph)
-      elem.innerHTML = graph
+      mermaid.render(`graphDiv${Date.now()}`, this.graph, (svg) => {
+        elem.innerHTML = svg
+      })
       elem.onclick = clickAndSelect(view, this.node)
     } catch (err: any) {
       elem.classList.add('error')

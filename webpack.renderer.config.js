@@ -59,7 +59,7 @@ module.exports = {
   // in production (i.e. when we ship to users). NOTE, however, that these env-
   // variables must be set, which we're doing using cross-env in package.json.
   devtool: (process.env.NODE_ENV === 'production') ? false : 'source-map',
-  plugins: plugins,
+  plugins,
   resolve: {
     extensions: [
       '.js', '.ts', '.jsx', '.tsx',
