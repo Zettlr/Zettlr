@@ -36,7 +36,7 @@ export default async function (context: ActionContext<ZettlrState, ZettlrState>)
   const { inbound, outbound } = await ipcRenderer.invoke('link-provider', {
     command: 'get-inbound-links',
     payload: { filePath: activeFile.path }
-  }) as { inbound: string[], outbound: string[]}
+  }) as { inbound: string[], outbound: string[] }
 
   for (const absPath of [ ...inbound, ...outbound ]) {
     const found = unreactiveList.find(elem => elem.path === absPath)

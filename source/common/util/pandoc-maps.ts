@@ -193,7 +193,7 @@ export const WRITER2EXT: { [writer: string]: string } = {
  *
  * @var {{[extension: string]: string[]}}
  */
-export const EXT2READER: {[extension: string]: string[]} = {
+export const EXT2READER: { [extension: string]: string[] } = {
   'md': [ 'commonmark', 'commonmark_x', 'markdown', 'markdown_mmd', 'markdown_phpextra', 'markdown_strict', 'gfm' ],
   'markdown': [ 'commonmark', 'commonmark_x', 'markdown', 'markdown_mmd', 'markdown_phpextra', 'markdown_strict', 'gfm' ],
   'rmd': [ 'commonmark', 'commonmark_x', 'markdown', 'markdown_mmd', 'markdown_phpextra', 'markdown_strict', 'gfm' ],

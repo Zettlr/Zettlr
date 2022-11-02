@@ -69,7 +69,7 @@ import { imageParser } from './image-parser'
 import { gridTableParser, pipeTableParser } from './pandoc-table-parser'
 import { getZknLinkParser } from './zkn-link-parser'
 
-const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors: string[]}> = [
+const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors: string[] }> = [
   {
     // Hear me out: There may be no mermaid syntax highlighting, BUT we need it
     // to be inside a 'FencedCode' Syntax node so that our renderer can pick it

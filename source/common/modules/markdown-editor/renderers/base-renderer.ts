@@ -63,7 +63,7 @@ import { EditorState, StateField } from '@codemirror/state'
  */
 function renderWidgets (
   state: EditorState,
-  visibleRanges: ReadonlyArray<{from: number, to: number}>,
+  visibleRanges: ReadonlyArray<{ from: number, to: number }>,
   shouldHandleNode: (node: SyntaxNodeRef) => boolean,
   createWidget: (state: EditorState, node: SyntaxNodeRef) => WidgetType|undefined
 ): DecorationSet {
