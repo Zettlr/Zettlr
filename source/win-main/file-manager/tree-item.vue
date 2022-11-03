@@ -100,9 +100,11 @@
         v-if="operationType !== undefined"
         ref="new-object-input"
         type="text"
-        v-on:keyup.esc="operationType = undefined"
-        v-on:blur="operationType = undefined"
         v-on:keyup.enter="handleOperationFinish(($event.target as HTMLInputElement).value)"
+        v-on:keyup.esc="operationType = undefined"
+        v-on:keydown.stop=""
+        v-on:blur="operationType = undefined"
+        v-on:click.stop=""
       >
     </div>
     <div v-if="isDirectory && !shouldBeCollapsed">
