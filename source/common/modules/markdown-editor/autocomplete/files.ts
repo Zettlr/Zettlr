@@ -53,26 +53,23 @@ const apply = (filename: string, fileId: string) => function (view: EditorView, 
   // Applies a filename insertion
   const { linkFilenameOnly, linkPreference, linkEnd } = view.state.field(configField)
 
+  let insert = ''
   if (linkFilenameOnly) {
     // Just dump the filename in there
-    view.dispatch({
-      changes: [{ from, to, insert: `${filename}${linkEnd}` }],
-      selection: { anchor: to }
-    })
+    insert = `${filename}${linkEnd}`
   } else {
     const textToInsert = fileId === '' ? filename: fileId
     if (linkPreference === 'always' || (linkPreference === 'withID' && textToInsert === fileId)) {
-      view.dispatch({
-        changes: [{ from, to, insert: `${textToInsert}${linkEnd} ${filename}` }],
-        selection: { anchor: to }
-      })
+      insert = `${textToInsert}${linkEnd} ${filename}`
     } else {
-      view.dispatch({
-        changes: [{ from, to, insert: `${textToInsert}${linkEnd}` }],
-        selection: { anchor: to }
-      })
+      insert = `${textToInsert}${linkEnd}`
     }
   }
+
+  view.dispatch({
+    changes: [{ from, to, insert }],
+    selection: { anchor: from + insert.length }
+  })
 }
 
 export const files: AutocompletePlugin = {
