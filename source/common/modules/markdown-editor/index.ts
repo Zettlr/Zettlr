@@ -57,6 +57,8 @@ import { highlightRangesEffect } from './plugins/highlight-ranges'
 import { applyComment, insertImage, insertLink } from './commands/markdown'
 import { addNewFootnote } from './commands/footnotes'
 import countWords from '@common/util/count-words'
+import { syntaxTree } from '@codemirror/language'
+import openMarkdownLink from './util/open-markdown-link'
 
 export interface DocumentWrapper {
   path: string
@@ -195,6 +197,15 @@ export default class MarkdownEditor extends EventEmitter {
               event.preventDefault()
               return true
             }
+          }
+
+          // Now check plain URLs
+          const nodeAt = syntaxTree(view.state).resolve(pos, 0)
+          if (nodeAt.type.name === 'URL') {
+            // We found a link!
+            const url = view.state.sliceDoc(nodeAt.from, nodeAt.to)
+            openMarkdownLink(url, view)
+            return true
           }
 
           // Now let's check for links
