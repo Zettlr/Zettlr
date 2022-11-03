@@ -37,11 +37,12 @@ class CitationWidget extends WidgetType {
     const callback = window.getCitationCallback(library)
     const renderedCitation = callback(this.citation.citations, false)
 
-    const elem = document.createElement('a')
+    const elem = document.createElement('span')
+    elem.classList.add('citeproc-citation')
     if (renderedCitation !== undefined) {
       elem.innerText = renderedCitation
     } else {
-      elem.innerText = `(Could not render ${this.citation.citations.map(x => x.id).join(', ')})`
+      elem.innerText = '[' + this.citation.citations.map(x => '@' + x.id).join(', ') + ']'
       elem.classList.add('error')
     }
     elem.addEventListener('click', clickAndSelect(view, this.node))
