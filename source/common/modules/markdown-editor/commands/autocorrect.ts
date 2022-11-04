@@ -14,7 +14,8 @@
  */
 
 // The autocorrect plugin is basically just a keymap that listens to spaces and enters
-import { ChangeSpec, EditorSelection } from '@codemirror/state'
+import { syntaxTree } from '@codemirror/language'
+import { ChangeSpec, EditorSelection, EditorState } from '@codemirror/state'
 import { Command, EditorView } from '@codemirror/view'
 import { configField } from '../util/configuration'
 
@@ -22,20 +23,26 @@ import { configField } from '../util/configuration'
 const startChars = ' ([{-–—'
 
 /**
- * Retrieves the length of the longest replacement key
+ * Given the editor state and a position, this function returns whether the
+ * position sits within a node that is protected from autocorrect. In those
+ * cases, no autocorrection will be applied, regardless of whether there is a
+ * suitable candidate.
  *
- * @param   {Array<{ key: string, value: string }>}  candidates  The list of candidates
+ * @param   {EditorState}  state  The state
+ * @param   {number}       pos    The position to check
  *
- * @return  {number}               The length of the longest key
+ * @return  {boolean}             True if the position touches a protected node.
  */
-function getMaxCandidateLength (candidates: Array<{ key: string, value: string }>): number {
-  let len = 0
-  for (const keyLength of candidates.map(c => c.key.length)) {
-    if (keyLength > len) {
-      len = keyLength
-    }
-  }
-  return len
+function posInProtectedNode (state: EditorState, pos: number): boolean {
+  const node = syntaxTree(state).resolve(pos, 0)
+  console.log(node.type.name)
+  return [
+    'InlineCode', // `code`
+    'CommentBlock', // <!-- comment -->
+    'FencedCode', // Code block
+    'CodeText', // Code block
+    'HorizontalRule'
+  ].includes(node.type.name)
 }
 
 /**
@@ -52,25 +59,42 @@ export function handleReplacement (view: EditorView): boolean {
     return false
   }
 
-  // First, get the cursor position
-  const maxLength = getMaxCandidateLength(autocorrect.replacements)
+  // Make a deep copy of the autocorrect (to not mess with the order), sort by
+  // key length descending.
+  const replacements = autocorrect.replacements.map(e => { return { ...e } })
+  replacements.sort((a, b) => b.key.length - a.key.length)
+
+  const maxKeyLength = replacements[0].key.length
   const changes: ChangeSpec[] = []
 
   for (const range of view.state.selection.ranges) {
-    const from = Math.max(range.from - maxLength, 0)
+    // Ignore selections (only cursors)
+    if (!range.empty) {
+      continue
+    }
+
+    // Ignore those cursors that are inside protected nodes
+    if (posInProtectedNode(view.state, range.from)) {
+      continue
+    }
+
+    // Leave --- and ... lines (YAML frontmatter as well as horizontal rules)
+    const line = view.state.doc.lineAt(range.from)
+    if ([ '---', '...' ].includes(line.text)) {
+      continue
+    }
+
+    const from = Math.max(range.from - maxKeyLength, 0)
     const slice = view.state.sliceDoc(from, range.from)
-    for (const { key, value } of autocorrect.replacements) {
+    for (const { key, value } of replacements) {
       if (slice.endsWith(key)) {
-        if (key === '---' && from === 0) {
-          // Three hyphens at the beginning of the document should not be
-          // replaced (YAML frontmatter start)
-          break
-        } else if ([ '---', '...' ].includes(key) && view.state.doc.lineAt(range.from).length === 3) {
-          // Three hyphens or three dots alone on their own line should also not
-          // be replaced (YAML frontmatter end)
-          break
+        const startOfReplacement = range.from - key.length
+        if (posInProtectedNode(view.state, startOfReplacement)) {
+          break // `range.from` may not be in a protected area, but start is.
         }
-        changes.push({ from: range.from - key.length, to: range.from, insert: value })
+
+        changes.push({ from: startOfReplacement, to: range.from, insert: value })
+        break // Do not check the other possible replacements
       }
     }
   }
