@@ -12,6 +12,7 @@
  * END HEADER
  */
 
+import { acceptCompletion } from '@codemirror/autocomplete'
 import { copyLineDown, copyLineUp, indentLess, indentMore, moveLineDown, moveLineUp } from '@codemirror/commands'
 import { KeyBinding } from '@codemirror/view'
 import { abortSnippet, nextSnippet } from '../autocomplete/snippets'
@@ -30,6 +31,7 @@ export const customKeymap: KeyBinding[] = [
   { key: 'Mod-Shift-c', run: applyComment },
   { key: 'Mod-Alt-r', run: addNewFootnote },
   { key: 'Tab', run: nextSnippet },
+  { key: 'Tab', run: acceptCompletion },
   { key: 'Tab', run: maybeIndentList, shift: maybeUnindentList },
   { key: 'Tab', run: indentMore, shift: indentLess },
   { key: 'Esc', run: abortSnippet },

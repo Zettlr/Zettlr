@@ -112,7 +112,7 @@ const autocompleteSource: CompletionSource = function (ctx): CompletionResult|nu
 export const autocomplete = [
   autocompletion({
     activateOnTyping: true, // Always show immediately
-    selectOnOpen: false, // But never pre-select anything
+    selectOnOpen: true, // But never pre-select anything
     closeOnBlur: true,
     maxRenderedOptions: 20,
     override: [autocompleteSource]
