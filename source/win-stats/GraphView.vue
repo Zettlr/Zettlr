@@ -513,13 +513,14 @@ export default defineComponent({
       }
 
       this.isBuildingGraph = true
-      // We have to build the graph in the renderer because in main OH BOY IT'S
-      // A DISASTER. Even with my limited amount of files the whole app locks
-      // for 10-15 seconds (!)
-      // Here we do that shit asynchronously, therefore not blocking the main
-      // process.
+
       const dbObject = await ipcRenderer.invoke('link-provider', { command: 'get-link-database' })
       const database = new Map<string, string[]>(Object.entries(dbObject))
+
+      const fileNameDisplay: string = window.config.get('fileNameDisplay')
+      const useH1 = fileNameDisplay.includes('heading')
+      const useTitle = fileNameDisplay.includes('title')
+      const displayMdExtensions = window.config.get('display.markdownFileExtensions') as boolean
 
       this.buildProgress.currentFile = 0
       this.buildProgress.totalFiles = Object.entries(dbObject).length
@@ -535,7 +536,22 @@ export default defineComponent({
         this.buildProgress.currentFile += 1
         // We have to specifically add the source, since isolates will have 0
         // targets, and hence we cannot rely on the Graph adding these vertices
-        DG.addVertex(sourcePath)
+        const sourceDescriptor: MDFileDescriptor|undefined = await ipcRenderer.invoke('application', { command: 'get-descriptor', payload: sourcePath })
+        if (sourceDescriptor === undefined) {
+          console.warn(`Could not find descriptor for ${sourcePath}. Not adding to graph.`)
+          continue
+        }
+
+        if (useTitle && sourceDescriptor.yamlTitle !== undefined) {
+          DG.addVertex(sourcePath, sourceDescriptor.yamlTitle)
+        } else if (useH1 && sourceDescriptor.firstHeading != null) {
+          DG.addVertex(sourcePath, sourceDescriptor.firstHeading)
+        } else if (displayMdExtensions) {
+          DG.addVertex(sourcePath, sourceDescriptor.name)
+        } else {
+          DG.addVertex(sourcePath, sourceDescriptor.name.replace(sourceDescriptor.ext, ''))
+        }
+
         for (const target of targets) {
           // Before adding a target, we MUST resolve the link to an actual file
           // path if possible. This is necessary because there are at least two
@@ -549,19 +565,24 @@ export default defineComponent({
               // This will create a vertex representing a latent (i.e. not yet
               // existing) file.
               resolvedLinks.set(target, target)
+              DG.addVertex(target, target)
             } else {
               resolvedLinks.set(target, found.path)
+              if (useTitle && found.yamlTitle !== undefined) {
+                DG.addVertex(found.path, found.yamlTitle)
+              } else if (useH1 && found.firstHeading != null) {
+                DG.addVertex(found.path, found.firstHeading)
+              } else if (displayMdExtensions) {
+                DG.addVertex(found.path, found.name)
+              } else {
+                DG.addVertex(found.path, found.name.replace(found.ext, ''))
+              }
             }
           }
           DG.addArc(sourcePath, resolvedLinks.get(target) as string)
         }
       }
       DG.endOperation()
-
-      // Now set the labels (i.e. the filenames)
-      for (const V of DG.vertices) {
-        DG.setLabel(V.id, window.path.basename(V.id))
-      }
 
       const duration = performance.now() - startTime
       console.log(`[Link Provider] Graph constructed in ${Math.round(duration)}ms. Graph contains ${DG.countVertices} nodes, ${DG.countArcs} arcs and ${DG.countComponents} components.`)

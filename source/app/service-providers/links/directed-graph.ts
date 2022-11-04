@@ -70,7 +70,7 @@ export default class DirectedGraph {
     return this._vertices
   }
 
-  addVertex (id: string): GraphVertex {
+  addVertex (id: string, label?: string): GraphVertex {
     const foundV = this._vertices.find(V => V.id === id)
     if (foundV !== undefined) {
       return foundV
@@ -78,6 +78,7 @@ export default class DirectedGraph {
 
     const newV = {
       id,
+      label,
       component: NONE_COMPONENT,
       isolate: true
     }

@@ -200,6 +200,8 @@ there.
 - File tree items now show their absolute path on mouse hover
 - Clicking a directory will now also uncollapse it without having to click on
   the arrow
+- The graph view now uses as labels YAML frontmatter titles, first headings
+  level 1, or a filename without extension based on the preferences
 
 ## Under the Hood
 
