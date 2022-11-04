@@ -1099,7 +1099,6 @@ function handleDragLeave (event: DragEvent) {
   .katex-display, .katex-display > .katex > .katex-html {
     display: inline-block; // needed for display math to behave properly
     width: 100%; // display math should be centred
-    margin-bottom: -0.5em; // counterbalance additional empty line that is added by code mirror due to a bug https://github.com/codemirror/CodeMirror/issues/6600
   }
 }
 
