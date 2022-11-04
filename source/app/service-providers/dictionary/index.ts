@@ -14,9 +14,7 @@
  */
 
 import EventEmitter from 'events'
-// @ts-expect-error
-import Nodehun from 'nodehun/build/Release/Nodehun.node'
-// import { Nodehun } from 'nodehun'
+import { Nodehun } from 'nodehun'
 import path from 'path'
 import { promises as fs } from 'fs'
 
