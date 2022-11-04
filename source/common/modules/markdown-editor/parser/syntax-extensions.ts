@@ -94,7 +94,7 @@ function getCodeBlockLineHighlighter (): Extension {
       }
     })
 
-    return Decoration.set(widgets)
+    return Decoration.set(widgets, true)
   }
 
   const pluginField = StateField.define<DecorationSet>({
