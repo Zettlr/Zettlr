@@ -140,7 +140,7 @@ ipcRenderer.on('targets-provider', (event, what: string) => {
   }
 })
 
-ipcRenderer.on('snippets-provider', (event, what: string) => {
+ipcRenderer.on('assets-provider', (event, what: string) => {
   if (what === 'snippets-updated') {
     app.$store.dispatch('updateSnippets')
       .catch(e => console.error(e))
