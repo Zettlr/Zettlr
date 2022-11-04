@@ -62,21 +62,24 @@ const apply = function (view: EditorView, completion: Completion, from: number, 
   const noBrackets = !afterOpen && !beforeClose
 
   if (citeStyle === 'regular' && noBrackets) {
+    const insert = `[@${completion.label}]`
     view.dispatch({
       // Minus 1 is important since we have to overwrite the @-sign with [@
-      changes: [{ from: from - 1, to, insert: `[@${completion.label}]` }],
-      selection: { anchor: to - 1 } // Between citekey and ]
+      changes: [{ from: from - 1, to, insert }],
+      selection: { anchor: from - 1 + insert.length - 1 } // Between citekey and ]
     })
   } else if (citeStyle === 'in-text-suffix' && noBrackets) {
     // We should add square brackets after the completion text
+    const insert = `${completion.label} []`
     view.dispatch({
-      changes: [{ from, to, insert: `${completion.label} []` }],
-      selection: { anchor: to - 1 } // Inside []
+      changes: [{ from, to, insert }],
+      selection: { anchor: from + insert.length - 1 } // Inside []
     })
   } else {
     // Otherwise: citeStyle was in-text or there were brackets surrounding the
     // citekey, so we can simply replace it
-    view.dispatch({ changes: [{ from, to, insert: String(completion.label) }] })
+    const insert = String(completion.label)
+    view.dispatch({ changes: [{ from, to, insert }], selection: { anchor: from + insert.length } })
   }
 }
 
