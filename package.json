@@ -82,6 +82,7 @@
     "mermaid": "9.0.1",
     "minimatch": "^5.0.0",
     "moment": "^2.29.2",
+    "nodehun": "^3.0.2",
     "nspell": "^2.1.5",
     "rimraf": "^3.0.2",
     "sanitize-filename": "^1.6.3",

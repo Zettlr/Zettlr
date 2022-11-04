@@ -2,7 +2,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const path = require('path')
 const rules = require('./webpack.rules')
 
-const externals = {}
+const externals = { nodehun: 'nodehun' }
 
 if (process.env.BUNDLE_FSEVENTS !== '1') {
   // Do not embed fsevents (otherwise this leads to problems on Linux and

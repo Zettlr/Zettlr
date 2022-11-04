@@ -14,7 +14,9 @@
  */
 
 import EventEmitter from 'events'
-import NSpell from 'nspell'
+// @ts-expect-error
+import Nodehun from 'nodehun/build/Release/Nodehun.node'
+// import { Nodehun } from 'nodehun'
 import path from 'path'
 import { promises as fs } from 'fs'
 
@@ -32,7 +34,7 @@ import ConfigProvider from '@providers/config'
  * loaded dictionaries for words and even change the dictionaries during runtime.
  */
 export default class DictionaryProvider extends ProviderContract {
-  private readonly _typos: NSpell[]
+  private readonly hunspell: Nodehun[]
   private readonly _loadedDicts: string[]
   private readonly _userDictionaryPath: string
   private readonly _emitter: EventEmitter
@@ -45,8 +47,8 @@ export default class DictionaryProvider extends ProviderContract {
 
   constructor (private readonly _logger: LogProvider, private readonly _config: ConfigProvider) {
     super()
-    // Array containing all loaded NSpell dictionaries
-    this._typos = []
+    // Array containing all loaded Hunspell dictionaries
+    this.hunspell = []
     // Array containing the language codes for which checking currently works
     this._loadedDicts = []
     // Path to the user dictionary
@@ -197,37 +199,38 @@ export default class DictionaryProvider extends ProviderContract {
       if (!selectedDicts.includes(dict)) {
         let index = this._loadedDicts.indexOf(dict)
         this._loadedDicts.splice(index, 1) // Remove both from the loadedDicts...
-        this._typos.splice(index, 1) // ... and the typos themselves
+        this.hunspell.splice(index, 1) // ... and the typos themselves
         changeWanted = true
       }
     }
 
-    for (let dict of dictsToLoad) {
+    for (const dict of dictsToLoad) {
       // First request a dictionary.
-      let dictMeta = this._getDictionaryFile(dict)
+      const dictMeta = this._getDictionaryFile(dict)
       if (dictMeta.status !== 'exact') {
         this._logger.error(`[Dictionary Provider] Could not load ${dict}: No exact match found.`, dictMeta)
         continue // Only consider exact matches
       }
-      let aff = null
-      let dic = null
+
+      let aff: null|Buffer = null
+      let dic: null|Buffer = null
 
       try {
-        aff = await fs.readFile(dictMeta.aff, 'utf8')
+        aff = await fs.readFile(dictMeta.aff)
       } catch (err: any) {
         this._logger.error(`[Dictionary Provider] Could not load affix file for ${dict}`, err)
         continue
       }
 
       try {
-        dic = await fs.readFile(dictMeta.dic, 'utf8')
+        dic = await fs.readFile(dictMeta.dic)
       } catch (err: any) {
         this._logger.error(`[Dictionary Provider] Could not load .dic-file for ${dict}`, err)
         continue
       }
 
       this._loadedDicts.push(dict)
-      this._typos.push(new NSpell(aff, dic))
+      this.hunspell.push(new Nodehun(aff, dic))
     } // END for
 
     if (changeWanted) {
@@ -304,7 +307,7 @@ export default class DictionaryProvider extends ProviderContract {
    */
   check (term: string): boolean {
     // Don't check until all are loaded
-    if (this._config.get('selectedDicts').length !== this._typos.length) {
+    if (this._config.get('selectedDicts').length !== this.hunspell.length) {
       return true
     }
 
@@ -312,7 +315,7 @@ export default class DictionaryProvider extends ProviderContract {
     // dictionaries. Because in the latter case, returning true means to let the
     // renderer save the words anyway. Object indexing is still more efficient
     // than querying the main process via IPC.
-    if (this._typos.length === 0) {
+    if (this.hunspell.length === 0) {
       return true
     }
 
@@ -325,8 +328,8 @@ export default class DictionaryProvider extends ProviderContract {
       return true
     }
 
-    for (let typo of this._typos) {
-      if ((typo as any).correct(term) === true) {
+    for (const dictionary of this.hunspell) {
+      if (dictionary.spellSync(term)) {
         return true
       }
     }
@@ -340,18 +343,18 @@ export default class DictionaryProvider extends ProviderContract {
    * @return {Array}      An array containing all returned possible alternatives.
    */
   suggest (term: string): string[] {
+    if (this.hunspell.length === 0) {
+      return []
+    }
+
     // Return no suggestions
-    if (this._config.get('selectedDicts').length !== this._typos.length) {
+    if (this._config.get('selectedDicts').length !== this.hunspell.length) {
       return []
     }
 
-    if (this._typos.length === 0) {
-      return []
-    }
-
-    let suggestions: string[] = []
-    for (let typo of this._typos) {
-      suggestions = suggestions.concat(typo.suggest(term))
+    const suggestions: string[] = []
+    for (const dictionary of this.hunspell) {
+      suggestions.push(...(dictionary.suggestSync(term) ?? []))
     }
 
     return suggestions
