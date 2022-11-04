@@ -14,13 +14,19 @@
 import YAML from 'yaml'
 
 interface ExtractYamlFrontmatterReturn {
-  frontmatter: any|null
+  frontmatter: { [key: string]: any }|null
   content: string
 }
 
 /**
  * Takes Markdown source and returns a parsed YAML frontmatter as an object or
- * null (if there was no frontmatter).
+ * null (if there was no frontmatter). NOTE: This function will always return
+ * either null or an object with keys and values, as frontmatter in the context
+ * of this function does NOT simply mean "valid YAML" (since that could also be
+ * just a string or a number). So if the frontmatter consists solely of a
+ * primitive or a list, this function will remove the frontmatter from the
+ * content BUT return an empty object. This makes it easy to work with the
+ * returned object but is strictly speaking opiniated.
  *
  * @param   {string}    markdown  The Markdown source
  *
@@ -32,7 +38,7 @@ export default function extractYamlFrontmatter (markdown: string): ExtractYamlFr
     return { frontmatter: null, content: markdown }
   }
 
-  const ret = {
+  const ret: ExtractYamlFrontmatterReturn = {
     frontmatter: null,
     content: markdown
   }
@@ -79,7 +85,18 @@ export default function extractYamlFrontmatter (markdown: string): ExtractYamlFr
 
   // Parse and return
   try {
-    ret.frontmatter = YAML.parse(frontmatter)
+    const parsedFrontmatter = YAML.parse(frontmatter)
+    const isPrimitive = [ 'string', 'number', 'boolean' ].includes(typeof parsedFrontmatter)
+
+    if (!isPrimitive && !Array.isArray(parsedFrontmatter)) {
+      ret.frontmatter = parsedFrontmatter
+    } else {
+      // We have a frontmatter but it only consists of either a primitive or an
+      // array. Since this function is assumed to return a Pandoc-parseable
+      // frontmatter, we need to overwrite it here.
+      ret.frontmatter = {}
+    }
+
     // Remove frontmatter from content.
     ret.content = lines.slice(end + 2).join(linefeed)
     return ret
