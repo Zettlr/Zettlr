@@ -48,21 +48,6 @@
   // STYLING FOR THE COMMON WRAPPER ELEMENTS
   // ===========================================================================
 
-  &.CodeMirror-empty {
-    background-position: center center;
-    background-size: contain;
-    background-repeat: no-repeat;
-    // In the editor.less, we've defined 5em top margin on the code element
-    // which it not present in an empty editor. Therefore, we need to apply
-    // it to the whole content in case of an empty editor.
-    padding-top: 5em;
-  }
-
-  &.CodeMirror-empty.CodeMirror-readonly {
-    // If the editor is empty, display a nice background image
-    background-image: url(../../img/logo.svg);
-  }
-
   // There are both .cm-cursor-primary as well as .cm-cursor-secondary, but all
   // are .cm-cursors.
   .cm-cursor {
