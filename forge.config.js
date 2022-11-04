@@ -133,8 +133,10 @@ module.exports = {
     // notarization.
     osxNotarize: ('APPLE_ID' in process.env && 'APPLE_ID_PASS' in process.env)
       ? {
+          tool: 'notarytool',
           appleId: process.env.APPLE_ID,
-          appleIdPassword: process.env.APPLE_ID_PASS
+          appleIdPassword: process.env.APPLE_ID_PASS,
+          teamId: 'QS52BN8W68'
         }
       : false,
     extraResource: [
