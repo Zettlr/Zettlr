@@ -19,7 +19,6 @@ import EventEmitter from 'events'
 // unable to detect that Nodehun is not a Javascript, but a native module,
 // because the dylib is referenced directly in the package.json -- but without
 // a file extension.
-// @ts-expect-error
 import Nodehun from 'nodehun/build/Release/Nodehun.node'
 // import { Nodehun } from 'nodehun'
 import path from 'path'
