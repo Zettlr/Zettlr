@@ -229,6 +229,12 @@ there.
   managed by the document provider
 - Completely removed all instances of `hash`; the FSAL cache now is being called
   with absolute file paths. Hashed paths are only used to determine the shard.
+- Exchanged `nspell` with `nodehun` so that we can load any Hunspell-compatible
+  dictionary file in Zettlr, including the previously too-complex ones such as
+  the Italian or Portuguese dictionaries
+- Fixed the build pipeline so that native Node modules are now code-signed and
+  work on macOS and Windows, meaning that `chokidar` should not need to fall
+  back to CPU intensive polling anymore
 
 # 2.3.0
 
