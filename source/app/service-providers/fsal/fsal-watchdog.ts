@@ -100,20 +100,9 @@ export default class FSALWatchdog extends EventEmitter {
       followSymlinks: true, // Follow symlinks
       ignorePermissionErrors: true, // In the worst case one has to reboot the software, but so it looks nicer.
 
-      // Chokidar is an asshole to deal with, and as long as we cannot get fsevents
-      // to be compiled together with Electron, chokidar will *always* fall back
-      // to polling on macOS platforms. This is the bad news. The good news,
-      // however, is, that even Microsoft itself has this problem. So their
-      // approach was simply to only poll the file system every 5 seconds, which
-      // does, in fact, reduce the load on the CPU *big time*. This means that
-      // we simply use this setting and then be done with it for the time being.
-      //
-      // Thank you for reading this far! If you, person from the future, have
-      // the cure for what ails our file watching, please come forward and
-      // propose a Pull Request like a lover proposes to their loved ones!
-      //
-      // cf. on ye misery:
-      // https://github.com/microsoft/vscode/blob/master/src/vs/platform/files/node/watcher/unix/chokidarWatcherService.ts
+      // Chokidar should always be using fsevents, but we will be leaving this
+      // in here both in case something happens in the future, and for nostalgic
+      // reasons.
       interval: 5000,
       binaryInterval: 5000
     }
