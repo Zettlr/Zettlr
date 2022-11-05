@@ -104,7 +104,13 @@ module.exports = {
     appBundleId: 'com.zettlr.app',
     // This info.plist file contains file association for the app on macOS.
     extendInfo: './scripts/assets/info.plist',
-    asar: true,
+    asar: {
+      // We must add native node modules to this option. Doing so ensures that
+      // the modules will be code-signed. (They still end up in the final
+      // app.asar file, but they will be code-signed.) Code signing these dylibs
+      // is required on macOS for the Node process to properly load them.
+      unpack: '*.{node,dll}'
+    },
     darwinDarkModeSupport: 'true',
     // Electron-forge automatically adds the file extension based on OS
     icon: './resources/icons/icon',
@@ -133,8 +139,10 @@ module.exports = {
     // notarization.
     osxNotarize: ('APPLE_ID' in process.env && 'APPLE_ID_PASS' in process.env)
       ? {
+          tool: 'notarytool',
           appleId: process.env.APPLE_ID,
-          appleIdPassword: process.env.APPLE_ID_PASS
+          appleIdPassword: process.env.APPLE_ID_PASS,
+          teamId: 'QS52BN8W68'
         }
       : false,
     extraResource: [
