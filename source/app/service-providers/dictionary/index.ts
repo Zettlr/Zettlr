@@ -14,7 +14,14 @@
  */
 
 import EventEmitter from 'events'
-import { Nodehun } from 'nodehun'
+// NOTE: We have to include the compiled Nodehun.node library directly, because
+// webpack, the asset relocator, forge, or all of them at once will otherwise be
+// unable to detect that Nodehun is not a Javascript, but a native module,
+// because the dylib is referenced directly in the package.json -- but without
+// a file extension.
+// @ts-expect-error
+import Nodehun from 'nodehun/build/Release/Nodehun.node'
+// import { Nodehun } from 'nodehun'
 import path from 'path'
 import { promises as fs } from 'fs'
 
