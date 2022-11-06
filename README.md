@@ -69,9 +69,9 @@ After you have installed Zettlr, [head over to our documentation](https://docs.z
 
 ## Contributing
 
-Zettlr is an [Electron](https://www.electronjs.org/)-based app, so to start developing, you'll need to have:
+Zettlr is an [Electron](https://www.electronjs.org/)-based app, so to start developing, you'll need to have installed on your computer:
 
-1. A [NodeJS](https://nodejs.org/)-stack installed on your computer. Make sure it's at least Node 14 (`lts/fermium`). To test what version you have, run `node -v`.
+1. A [NodeJS](https://nodejs.org/)-stack. Make sure it's at least Node 14 (`lts/fermium`). To test what version you have, run `node -v`.
 2. [Yarn](https://yarnpkg.com/en/). This is the required package manager for the project, as we do not commit `package-lock.json`-files and many commands require yarn. You can install this globally using `npm install -g yarn` or Homebrew, if you are on macOS.
 3. [cURL](https://curl.se/download.html). This library is required to fetch Pandoc in the background.
 
