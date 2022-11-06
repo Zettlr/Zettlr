@@ -196,12 +196,28 @@ body.linux {
 body zettlr-separator {
   box-sizing: content-box;
   flex-basis: 1px;
-  padding: 0 5px;
-  margin: 0 -5px;
   background-clip: content-box;
   position: relative;
-  cursor: col-resize;
   background-color: rgb(213, 213, 213);
+
+  z-index: 1;
+  transition: background-color 0.5s ease;
+
+  &:hover, &[active] {
+    background-color: rgb(128, 128, 128, .5);
+  }
+}
+
+body zettlr-splitter zettlr-separator {
+  padding: 0 5px;
+  margin: 0 -5px;
+  cursor: col-resize;
+}
+
+body zettlr-splitter:where([data-direction="column"], [data-direction="column-reverse"]) > zettlr-separator {
+  padding: 5px 0;
+  margin: -5px 0;
+  cursor: row-resize;
 }
 
 body.dark zettlr-separator {
@@ -209,5 +225,11 @@ body.dark zettlr-separator {
 }
 
 body.linux {
-  zettlr-separator { background-color: var(--headerbar-shade-color); }
+  zettlr-separator {
+    background-color: var(--headerbar-shade-color);
+
+    &:hover, &[active] {
+      background-color: var(--border-color);
+    }
+  }
 }

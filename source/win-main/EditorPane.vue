@@ -4,7 +4,6 @@
       'editor-pane': true,
       'distraction-free': distractionFree
     }"
-    v-bind:style="elementStyles"
   >
     <!-- We have a leaf: Default DocumentTabs/Editor combo -->
     <DocumentTabs
@@ -47,14 +46,6 @@ export default defineComponent({
       type: String,
       required: true
     },
-    availableWidth: {
-      type: Number,
-      default: 100
-    },
-    availableHeight: {
-      type: Number,
-      default: 100
-    },
     editorCommands: {
       type: Object as () => EditorCommands,
       required: true
@@ -62,13 +53,6 @@ export default defineComponent({
   },
   emits: ['globalSearch'],
   computed: {
-    elementStyles () {
-      if (this.distractionFree) {
-        return ''
-      } else {
-        return `width: ${this.availableWidth}%; height: ${this.availableHeight}%`
-      }
-    },
     lastLeafId () {
       return this.$store.state.lastLeafId
     },
@@ -86,20 +70,13 @@ export default defineComponent({
 </script>
 
 <style lang="less">
-body {
-  .split-pane-container {
-    .editor-pane {
-      // Styles for the editor pane
-      flex-grow: 1;
-    }
-  }
+body .editor-pane {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 
-  .editor-pane .empty-pane {
-    position: absolute;
-    top: 30px; // Space for the document tabbar
-    bottom: 0;
-    left: 0;
-    right: 0;
+  .empty-pane {
     // If the editor is empty, display a nice background image
     background-position: center center;
     background-size: contain;
@@ -108,10 +85,5 @@ body {
     background-image: url(../common/img/logo.svg);
     padding-top: 5em;
   }
-}
-
-body .editor-pane {
-  display: flex;
-  flex-direction: column;
 }
 </style>

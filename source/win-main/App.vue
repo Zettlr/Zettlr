@@ -12,10 +12,10 @@
   >
     <zettlr-splitter
       ref="file-manager-split"
-      data-direction="row"
+      aria-orientation="horizontal"
       style="width: 100%;"
     >
-      <zettlr-pane data-basis="60%" data-grow="1" style="min-width: 50%;">
+      <zettlr-pane basis="60%" style="flex-grow: 1; min-width: 50%;">
         <EditorPane
           v-if="paneConfiguration.type === 'leaf'"
           v-bind:node="paneConfiguration"
@@ -34,7 +34,7 @@
       </zettlr-pane>
       <zettlr-pane
         v-show="fileManagerVisible"
-        data-order="-1" data-basis="20%" style="min-width: 10%;"
+        basis="20%" style="min-width: 10%; order: -1"
       >
         <!-- File manager in the left side of the split view -->
         <FileManager
@@ -51,9 +51,9 @@
         >
         </GlobalSearch>
       </zettlr-pane>
-      <zettlr-separator v-show="fileManagerVisible" data-order="-1"></zettlr-separator>
+      <zettlr-separator v-show="fileManagerVisible" style="order: -1;"></zettlr-separator>
       <zettlr-separator v-show="sidebarVisible"></zettlr-separator>
-      <zettlr-pane v-show="sidebarVisible" data-basis="20%" style="min-width: 10%;">
+      <zettlr-pane v-show="sidebarVisible" basis="20%" style="min-width: 10%;">
         <!-- Second side: Sidebar -->
         <MainSidebar
           v-on:move-section="moveSection($event)"

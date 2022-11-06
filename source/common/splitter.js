@@ -13,37 +13,140 @@
  */
 /* eslint-env es6 */
 
+/* The <zettlr-splitter> implements a vertical or horizontal layout containing
+ * multiple panes that can be resized by the user.
+ *
+ * A <zettlr-splitter> element should only contain <zettlr-pane> and
+ * <zettlr-separator> elements.  <zettlr-pane>s are the different panes, while
+ * <zettlr-separator>s are empty separator elements that the user can grab to
+ * resize the panes.
+ *
+ * The <zettlr-splitter> is a flex container, and tries to adhere to flexbox
+ * expectations as much as possible. In particular, the <zettlr-splitter>
+ * supports RTL horizontal layouts out of the box.
+ *
+ * When a <zettlr-separator> is being moved, it increases (or decreases) the
+ * size of the enclosing (previous and next) panes correspondingly, where the
+ * enclosing panes are computed according to the visual order (i.e. it follows
+ * the CSS `order` property).
+ *
+ * The <zettlr-separator> elements have default flex-grow and flex-shrink
+ * values of 0 to ensure they maintain a fixed size.  The <zettlr-pane>
+ * elements have a default flex-grow (but not flex-shrink) value of 0.
+ *
+ * To get the behavior of a main element with sidebars where the main element
+ * should grow and shrink with the window but the sidebars remain at a constant
+ * size, set `flex-grow: 0` on the sidebars and give them a non-relative size.
+ */
 class Splitter extends HTMLElement {
   constructor () {
     super()
 
     const shadowRoot = this.attachShadow({ mode: 'open' })
 
-    // Use flexbox by default for the splitter.  Note that non-flex display
-    // values will render the splitter useless, since we use flex-basis to set
-    // the size.
     const style = document.createElement('style')
-    style.textContent = ':host { display: flex; } :host([hidden]) { display: none; }'
+    style.textContent = `
+:host { display: flex; }
+:host([hidden]) { display: none; }
+:host([aria-orientation="vertical"]) { flex-direction: column; }
+`
 
     const slot = document.createElement('slot')
     shadowRoot.appendChild(style)
     shadowRoot.appendChild(slot)
   }
 
-  static get observedAttributes () { return ['data-direction'] }
+  static get observedAttributes () { return ['aria-orientation'] }
 
-  attributeChangedCallback (name, oldValue, newValue) {
-    if (name === 'data-direction') {
-      this.style.setProperty('flex-direction', newValue)
+  get orientation () {
+    return this.getAttribute('aria-orientation') === 'vertical' ? 'vertical' : 'horizontal'
+  }
+
+  set orientation (value) {
+    this.setAttribute('aria-orientation', value)
+  }
+
+  // Returns the name of the property corresponding to the main flex axis.
+  //
+  // This is "width" for horizontal splitters, and "height" for vertical
+  // splitters.
+  get propertyName () {
+    return this.orientation === 'vertical' ? 'height' : 'width'
+  }
+
+  // Returns the inner size of the container in the main flex axis, in pixels.
+  //
+  // This corresponds to the size that is available to children across that
+  // axis, and properly accounts for the `box-sizing` CSS property.  It is used
+  // to convert absolute pixel values to percentages.
+  get containerSize () {
+    const style = getComputedStyle(this)
+
+    if (style.boxSizing === 'border-box') {
+      let containerSize = this.getBoundingClientRect()[this.propertyName]
+
+      if (this.orientation === 'vertical') {
+        containerSize -= parseFloat(style.paddinTop)
+        containerSize -= parseFloat(style.paddingBottom)
+        containerSize -= parseFloat(style.borderTopWidth)
+        containerSize -= parseFloat(style.borderBottomWidth)
+      } else {
+        containerSize -= parseFloat(style.paddingLeft)
+        containerSize -= parseFloat(style.paddingRight)
+        containerSize -= parseFloat(style.borderLeftWidth)
+        containerSize -= parseFloat(style.borderRightWidth)
+      }
+
+      return containerSize
+    } else {
+      return parseFloat(style.getPropertyValue(this.propertyName))
     }
   }
 
-  get direction () {
-    return getComputedStyle(this).getPropertyValue('flex-direction')
-  }
+  // Reset the basis attribute of the <zettlr-pane> children according to their
+  // actual size in the main flex dimension.
+  //
+  // When the user clicks on a separator, we will set the value of the basis
+  // according to its current size (as computed by e.g. getBoundingClientRect).
+  // If the corresponding panes were shrunk or grown according the their
+  // flex-shrink and flex-grow values, this will cause a sudden change in their
+  // corresponding size, as it will change the amount of positive or negative
+  // space they get allocated.
+  //
+  // By recomputing the bases of *all* panes according to their current size,
+  // we ensure that there is neither positive nor negative space, and prevent
+  // this behavior.
+  //
+  // Note: we must take care to *first* compute the size of all children,
+  // *then* reset all the bases at once, otherwise there would be a cascading
+  // effect of the changes.
+  recomputeSizes () {
+    const delayed = []
+    let containerSize // We only need the container size if there are % bases
 
-  set direction (value) {
-    this.setAttribute('data-direction', value)
+    for (const child of this.children) {
+      if (!(child instanceof Pane)) continue
+
+      const oldBasis = child.basis
+      const childSize = getComputedStyle(child).getPropertyValue(this.propertyName)
+
+      let newBasis
+      if (oldBasis.includes('%')) {
+        if (containerSize === undefined) containerSize = this.containerSize
+
+        newBasis = `${100 * (parseFloat(childSize) / containerSize)}%`
+      } else {
+        newBasis = childSize
+      }
+
+      if (newBasis !== oldBasis) {
+        delayed.push(() => {
+          child.basis = newBasis
+        })
+      }
+    }
+
+    for (const fn of delayed) fn()
   }
 
   connectedCallback () {
@@ -62,118 +165,63 @@ class Splitter extends HTMLElement {
     // resize, especially if the user scrolls while resizing.
     const { target, pageX: initialPageX, pageY: initialPageY } = event
 
-    // Capture the event if it is a mousedown on a child Separator
-    if (!target || !(target instanceof Separator) || target.parentNode !== this) return
+    // Capture the event iff it is a mousedown on a child <zettlr-separator>.
+    //
+    // Note: <zettlr-separator> do not display their children (they have a
+    // shadow root and no slots), so we don't have to deal with the target
+    // possibly being a deeper descendant of the separator.
+    if (!(target instanceof Separator) || target.parentNode !== this) return
     event.stopPropagation()
     event.preventDefault()
 
+    // Compute a list of all relevant panes.
+    //
+    // Note: if either pane has a flex-grow value of `0`, we do not resize the
+    // other pane if it has a non-zero flex-grow value.   If we do not do this,
+    // we always end up setting
+    //
+    // Note: If the enclosing visual elements are not <zettlr-pane>s, we simply
+    // discard them to avoid messing up with arbitrary elements.
     const [ previousSibling, nextSibling ] = target.getEnclosingVisualElements()
     const previousPane = previousSibling instanceof Pane ? previousSibling : null
     const nextPane = nextSibling instanceof Pane ? nextSibling : null
 
-    // The style object returned by getComputedStyle is live, so we don't need
-    // to call that function each time
-    const style = getComputedStyle(this)
+    // Only resize when there are both a previous and next pane
+    if (previousPane === null || nextPane === null) return
 
-    // Compute the initial sizes of the panes
-    const isHorizontal = style.getPropertyValue('flex-direction').startsWith('row')
-    const propertyName = isHorizontal ? 'width' : 'height'
+    // Mark the separator as currently being active
+    target.setAttribute('active', '')
 
-    const computeContainerBasis = () => {
-      if (style.getPropertyValue('box-sizing') === 'content-box') {
-        return parseFloat(style.getPropertyValue(isHorizontal ? 'width' : 'height'))
-      }
-
-      const clientRect = this.getBoundingClientRect()
-      let containerBasis = isHorizontal ? clientRect.width : clientRect.height
-
-      if (isHorizontal) {
-        containerBasis -= parseFloat(style.getPropertyValue('padding-left'))
-        containerBasis -= parseFloat(style.getPropertyValue('padding-right'))
-        containerBasis -= parseFloat(style.getPropertyValue('border-left-width'))
-        containerBasis -= parseFloat(style.getPropertyValue('border-right-width'))
-      } else {
-        containerBasis -= parseFloat(style.getPropertyValue('padding-top'))
-        containerBasis -= parseFloat(style.getPropertyValue('padding-bottom'))
-        containerBasis -= parseFloat(style.getPropertyValue('border-top-width'))
-        containerBasis -= parseFloat(style.getPropertyValue('border-bottom-width'))
-      }
-
-      return containerBasis
-    }
-
-    // Clamp to avoid separator teleportation
-    const clampBases = () => {
-      const delayed = []
-      let containerBasis
-      for (const child of this.children) {
-        const childStyle = getComputedStyle(child)
-        const oldBasis = childStyle.flexBasis
-        if (oldBasis !== 'auto') {
-          const childSize = childStyle.getPropertyValue(propertyName)
-
-          let newBasis
-          if (oldBasis.includes('%')) {
-            if (containerBasis === undefined) containerBasis = computeContainerBasis()
-
-            newBasis = `${100 * (parseFloat(childSize) / containerBasis)}%`
-          } else {
-            newBasis = childSize
-          }
-
-          if (newBasis !== oldBasis) {
-            delayed.push(() => {
-              child.dataset.basis = newBasis
-            })
-          }
-        }
-      }
-      for (const fn of delayed) fn()
-    }
-    clampBases()
-    // Reset done
-
-    const panes = []
-
-    const addPane = (pane, factor = 1) => {
-      const paneStyle = getComputedStyle(pane)
-      const unit = paneStyle.getPropertyValue('flex-basis').includes('%') ? '%' : 'px'
-      panes.push([ pane, paneStyle, parseFloat(paneStyle.getPropertyValue(propertyName)), factor, unit ])
-    }
-
-    if (previousPane !== null) addPane(previousPane)
-    if (nextPane !== null) addPane(nextPane, -1)
+    const panes = [
+      [ previousPane,
+        parseFloat(getComputedStyle(previousPane).getPropertyValue(this.propertyName)),
+        1 ],
+      [ nextPane,
+        parseFloat(getComputedStyle(nextPane).getPropertyValue(this.propertyName)),
+        -1 ]
+    ]
 
     const onMouseMove = ({ pageX, pageY }) => {
-      const direction = style.getPropertyValue('flex-direction')
-      const isHorizontal = direction.startsWith('row')
-      let isReverse = direction.endsWith('-reverse')
-      // Flexbox row layout is direction-aware, so we must be as well
-      if (isHorizontal && style.getPropertyValue('direction') === 'rtl') isReverse = !isReverse
+      const isHorizontal = this.orientation !== 'vertical'
 
-      // For relative sizes using percentages, we need to compute the container
-      // basis.  It is computed on first use below.
-      let containerBasis
+      // Flexbox row layout is direction-aware, so we must be as well
+      const isReverse = isHorizontal && getComputedStyle(this).direction === 'rtl'
 
       // Set the new value using flex-basis, because if flex-basis is not
       // `auto`, width and height will not be taken into account.
       // This also has a better behavior when the direction changes while
       // resizing.
       const offset = (isReverse ? -1 : 1) * (isHorizontal ? pageX - initialPageX : pageY - initialPageY)
-      for (const [ pane, paneStyle, initialBasis, factor, unit ] of panes) {
-        if (paneStyle.getPropertyValue('flex-grow') !== '0') continue
-
-        let paneBasis = Math.max(0, initialBasis + factor * offset)
-        if (unit === '%') {
-          if (containerBasis === undefined) containerBasis = computeContainerBasis()
-
-          paneBasis = 100 * (paneBasis / containerBasis)
-        }
-
-        // TODO: while resizing, bypass the data-basis attribute and assign to the style directly.
-        pane.dataset.basis = `${paneBasis}${unit}`
+      for (const [ pane, initialBasis, factor ] of panes) {
+        const paneBasis = Math.max(0, initialBasis + factor * offset)
+        pane.style.flexBasis = `${paneBasis}px`
+        // TODO: pane._offset = factor * offset
       }
     }
+
+    // Recompute all `basis` values to avoid teleportation, see comment in
+    // `recomputeSizes`
+    this.recomputeSizes()
     window.addEventListener('mousemove', onMouseMove, { passive: true })
     window.addEventListener('wheel', onMouseMove, { passive: true })
 
@@ -183,102 +231,105 @@ class Splitter extends HTMLElement {
     // let's not make users suffer if we can avoid it).
     const oldOverflowAnchor = this.style.overflowAnchor
     this.style.overflowAnchor = 'none'
-    const stopResizing = (observer) => {
+    const stopResizing = () => {
       this.style.overflowAnchor = oldOverflowAnchor
+      window.removeEventListener('mouseup', stopResizing, { once: true })
       window.removeEventListener('mousemove', onMouseMove, { passive: true })
       window.removeEventListener('wheel', onMouseMove, { passive: true })
       observer.disconnect()
-      clampBases()
+      target.removeAttribute('active')
+
+      // Emit the splitter-resize event *after* recomputing all the
+      // <zettlr-pane> `basis` attributes.  In particular, this transfers the
+      // new flex-basis value from the `style` property of the resized panes to
+      // their `basis` attribute, and trigger `pane-resize` events as
+      // appropriate.
+      this.recomputeSizes()
+      this.dispatchEvent(new CustomEvent('splitter-resize'))
     }
-    const observer = new MutationObserver((_mutationList, observer) => stopResizing(observer))
+
+    const observer = new MutationObserver(() => stopResizing())
     observer.observe(this, { childList: true })
 
-    window.addEventListener('mouseup', () => stopResizing(observer), { once: true })
+    window.addEventListener('mouseup', stopResizing, { once: true })
   }
 }
+customElements.define('zettlr-splitter', Splitter)
 
+// The <zettlr-pane> element is a piece of content that can be resized by
+// dragging adjacent <zettlr-separator>.
+//
+// <zettlr-pane> elements have a `basis` attribute that is used to set the
+// pane's width or height, depending on the containing <zettlr-splitter>'s
+// orientation.
 class Pane extends HTMLElement {
   constructor () {
     super()
 
     const shadowRoot = this.attachShadow({ mode: 'open' })
 
-    // By default, panes do not grow.  The user can set some panes to grow, in
-    // which case manual resizing will not apply.
     const style = document.createElement('style')
-    style.textContent = ':host { display: block; flex-grow: 0; flex-shrink: 1; } :host([hidden]) { display: none; }'
+    style.textContent = ':host { display: block; } :host([hidden]) { display: none; }'
+
+    const basisStyle = document.createElement('style')
+    basisStyle.setAttribute('id', 'basis')
+    basisStyle.textContent = ':host { flex-basis: auto; }'
 
     const slot = document.createElement('slot')
     shadowRoot.appendChild(style)
     shadowRoot.appendChild(slot)
   }
 
-  static get observedAttributes () { return [ 'data-basis', 'data-shrink', 'data-grow', 'data-order' ] }
+  static get observedAttributes () { return ['basis'] }
 
   attributeChangedCallback (name, oldValue, newValue) {
-    const setStyle = (name, value) => {
-      if (value === null) this.style.removeProperty(name)
-      else this.style.setProperty(name, value)
-    }
-
-    if (name === 'data-basis') {
-      setStyle('flex-basis', newValue)
-    } else if (name === 'data-shrink') {
-      setStyle('flex-shrink', newValue)
-    } else if (name === 'data-grow') {
-      setStyle('flex-grow', newValue)
-    } else if (name === 'data-order') {
-      setStyle('order', newValue)
+    if (name === 'basis') {
+      const basisStyle = this.shadowRoot.getElementById('basis')
+      basisStyle.textContent = `:host { flex-basis: ${newValue === null ? '0' : newValue}; }`
+      this.dispatchEvent(new CustomEvent('pane-resize'))
     }
   }
 
   get basis () {
-    return getComputedStyle(this).getPropertyValue('flex-basis')
+    return this.getAttribute('basis')
   }
 
   set basis (value) {
-    this.setAttribute('data-basis', value)
-  }
-
-  get order () {
-    return parseInt(getComputedStyle(this).order, 10)
-  }
-
-  set order (value) {
-    this.setAttribute('data-order', value)
+    this.style.removeProperty('flex-basis')
+    this.setAttribute('basis', value.trim())
   }
 }
+customElements.define('zettlr-pane', Pane)
 
+/* The <zettlr-separator> element is a separator that can be dragged to resize
+ * adjacent panes.
+ *
+ * The default style for separators is very basic: it is simply a 1 pixel wide
+ * black line.  Separators should be styled appropriately depending on context.
+ *
+ * Separators have their `flex-shrink` and `flex-grow` properties set to `0` so
+ * that they do not change size with their container, irrespective of available
+ * positive or negative space.
+ */
 class Separator extends HTMLElement {
   constructor () {
     super()
 
     const shadowRoot = this.attachShadow({ mode: 'open' })
 
-    // Separators have flex-shrink and flex-grow set to 0 by default, and it is
-    // a good idea to *not* change that default.
     const style = document.createElement('style')
-    style.textContent = ':host { display: block; flex: 0 0 1px; background: black; } :host([hidden]) { display: none; }'
+    style.textContent = `
+:host { display: block; flex: 0 0 1px; background: black; }
+:host([hidden]) { display: none; }
+`
     shadowRoot.appendChild(style)
   }
 
-  static get observedAttributes () { return ['data-order'] }
-
-  attributeChangedCallback (name, oldValue, newValue) {
-    if (name === 'data-order') {
-      if (newValue === null) this.style.removeProperty('order')
-      else this.style.setProperty('order', newValue)
-    }
-  }
-
-  get order () {
-    return parseInt(getComputedStyle(this).order, 10)
-  }
-
-  set order (value) {
-    this.setAttribute('data-order', value)
-  }
-
+  // `separator.getEnclosingVisualElements()` returns a pair of HTMLElement
+  // (i.e. it does not include text nodes) `[ previous, next ]` such that
+  // `previous` immmediately precedes `separator` in visual order, and
+  // `separator` immediately precedes `next` in visual order, where the visual
+  // order is the one defined through the CSS `order` property.
   getEnclosingVisualElements () {
     // Consider a list of nodes:
     //
@@ -474,7 +525,4 @@ class Separator extends HTMLElement {
     return [ currentPredecessor[1], currentSuccessor[1] ]
   }
 }
-
-customElements.define('zettlr-splitter', Splitter)
-customElements.define('zettlr-pane', Pane)
 customElements.define('zettlr-separator', Separator)

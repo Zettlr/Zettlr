@@ -1107,17 +1107,9 @@ body.dark .main-editor-wrapper {
   .CodeMirror .CodeMirror-gutters { background-color: rgba(20, 20, 30, 1); }
 }
 
-body.darwin .main-editor-wrapper {
-  // On macOS the tabbar is 30px high.
+body .main-editor-wrapper {
   &:not(.fullscreen) {
-    height: calc(100% - 30px);
-  }
-}
-
-body.win32 .main-editor-wrapper, body.linux .main-editor-wrapper {
-  // On Windows, the tab bar is 30px high
-  &:not(.fullscreen) {
-    height: calc(100% - 30px);
+    flex: 1 1 calc(10vw + 4rem);
   }
 }
 

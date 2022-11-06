@@ -1,46 +1,41 @@
 <template>
-  <div
-    ref="root-elem"
+  <zettlr-splitter
     class="split-pane-container"
-    v-bind:style="elementStyles"
+    v-bind:aria-orientation="node.direction"
+    v-on:splitter-resize="onResize()"
   >
     <template
       v-for="(subNode, index) in node.nodes"
       v-bind:key="JSON.stringify(subNode)"
     >
-      <EditorBranch
-        v-if="subNode.type === 'branch'"
-        v-bind:key="`branch-${index}`"
-        v-bind:node="subNode"
-        v-bind:window-id="windowId"
-        v-bind:editor-commands="editorCommands"
-        v-bind:available-width="(node.direction === 'horizontal') ? sizes[index] : 100"
-        v-bind:available-height="(node.direction === 'vertical') ? sizes[index] : 100"
-        v-on:global-search="$emit('globalSearch', $event)"
-      ></EditorBranch>
-      <EditorPane
-        v-else
-        v-bind:key="subNode.id"
-        v-bind:leaf-id="subNode.id"
-        v-bind:window-id="windowId"
-        v-bind:editor-commands="editorCommands"
-        v-bind:class="{
-          'border-right': index < node.nodes.length - 1 && node.direction === 'horizontal',
-          'border-bottom': index < node.nodes.length - 1 && node.direction === 'vertical'
-        }"
-        v-bind:available-width="(node.direction === 'horizontal') ? sizes[index] : 100"
-        v-bind:available-height="(node.direction === 'vertical') ? sizes[index] : 100"
-        v-on:global-search="$emit('globalSearch', $event)"
-      ></EditorPane>
+      <zettlr-pane
+        style="flex-grow: 1"
+        v-bind:basis="sizes[index] + '%'"
+        v-on:pane-resize="sizes[index] = parseFloat($event.target.basis, 10)"
+      >
+        <EditorBranch
+          v-if="subNode.type === 'branch'"
+          v-bind:key="`branch-${index}`"
+          v-bind:node="subNode"
+          v-bind:window-id="windowId"
+          v-bind:editor-commands="editorCommands"
+	  v-on:global-search="$emit('globalSearch', $event)"
+        ></EditorBranch>
+        <EditorPane
+          v-else
+          v-bind:key="subNode.id"
+          v-bind:leaf-id="subNode.id"
+          v-bind:window-id="windowId"
+          v-bind:editor-commands="editorCommands"
+	  v-on:global-search="$emit('globalSearch', $event)"
+        ></EditorPane>
+      </zettlr-pane>
       <!-- Here comes the resizing (for every but the last child) -->
-      <div
+      <zettlr-separator
         v-if="index < node.nodes.length - 1 && !distractionFree"
-        v-bind:class="resizerClass"
-        v-bind:style="getResizerStyle(index)"
-        v-on:mousedown="beginResizing($event, index)"
-      ></div>
+      ></zettlr-separator>
     </template>
-  </div>
+  </zettlr-splitter>
 </template>
 
 <script lang="ts">
@@ -65,14 +60,6 @@ export default defineComponent({
       type: String,
       required: true
     },
-    availableWidth: {
-      type: Number,
-      default: 100
-    },
-    availableHeight: {
-      type: Number,
-      default: 100
-    },
     editorCommands: {
       type: Object as () => EditorCommands,
       required: true
@@ -81,98 +68,16 @@ export default defineComponent({
   emits: ['globalSearch'],
   data () {
     return {
-      sizes: this.node.sizes.map(s => s), // Holds the sizes of the child nodes
-      currentResizerIndex: -1, // Holds the index of the resizer during resizing
-      lastOffset: 0
+      sizes: this.node.sizes.map(s => s)
     }
   },
   computed: {
-    rootElem (): HTMLDivElement {
-      return this.$refs['root-elem'] as HTMLDivElement
-    },
-    isHorizontalBranch () {
-      return this.node.direction === 'horizontal'
-    },
-    elementStyles () {
-      const rules = [
-        `width: ${this.availableWidth}%; height: ${this.availableHeight}%`
-      ]
-      if (this.node.type === 'branch') {
-        if (this.node.direction === 'horizontal') {
-          rules.push('flex-direction: row')
-        } else {
-          rules.push('flex-direction: column')
-        }
-      }
-      return rules.join('; ')
-    },
-    resizerClass () {
-      return `resizer ${this.node.direction}`
-    },
-    nodeSizes () {
-      return this.node.sizes
-    },
     distractionFree () {
       return this.$store.state.distractionFreeMode !== undefined
     }
   },
-  watch: {
-    nodeSizes () {
-      this.sizes = this.node.sizes.map(s => s)
-    }
-  },
   methods: {
-    getResizerStyle (index: number) {
-      // Every resizer has a different left/top offset
-      const dirProp = this.isHorizontalBranch ? 'left' : 'top'
-      let val = 0
-      for (let i = 0; i <= index; i++) {
-        val += this.sizes[i]
-      }
-
-      const extendProp = this.isHorizontalBranch ? 'height' : 'width'
-
-      // The calc is necessary to position the resizer exactly on top of the border
-      return `${dirProp}: calc(${val}% - 2.5px); ${extendProp}: 100%`
-    },
-    beginResizing (event: MouseEvent, index: number) {
-      this.currentResizerIndex = index
-      this.lastOffset = this.isHorizontalBranch ? event.clientX : event.clientY
-      this.rootElem.addEventListener('mousemove', this.onResizing)
-      this.rootElem.addEventListener('mouseup', this.endResizing)
-    },
-    onResizing (event: MouseEvent) {
-      if (this.currentResizerIndex < 0) {
-        return
-      }
-
-      const node1 = this.currentResizerIndex
-      const node2 = node1 + 1
-      const offset = this.isHorizontalBranch ? event.clientX : event.clientY
-
-      // Convert from pixels to percent
-      const offsetPixels = Math.abs(this.lastOffset - offset)
-      const rect = this.rootElem.getBoundingClientRect()
-      const totalPixels = this.isHorizontalBranch ? rect.width : rect.height
-      const offsetPercent = offsetPixels / totalPixels * 100
-
-      if (offset > this.lastOffset) {
-        // Direction --> or v
-        this.sizes[node1] += offsetPercent
-        this.sizes[node2] -= offsetPercent
-      } else if (offset < this.lastOffset) {
-        // Direction <-- or ^
-        this.sizes[node1] -= offsetPercent
-        this.sizes[node2] += offsetPercent
-      }
-
-      this.lastOffset = offset
-    },
-    endResizing (event: MouseEvent) {
-      this.currentResizerIndex = -1
-      this.lastOffset = 0
-      this.rootElem.removeEventListener('mousemove', this.onResizing)
-      this.rootElem.removeEventListener('mouseup', this.endResizing)
+    onResize () {
       // Inform main about the new sizes
       ipcRenderer.invoke('documents-provider', {
         command: 'set-branch-sizes',
@@ -181,48 +86,19 @@ export default defineComponent({
           branchId: this.node.id,
           sizes: this.sizes.map(s => s) // Again, deproxy
         }
-      })
-        .catch(err => console.error(err))
+      }).catch(err => console.error(err))
     }
   }
 })
 </script>
 
 <style lang="less">
-body .split-pane-container {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  position: relative;
-
-  .resizer {
-    position: absolute;
-    z-index: 1000;
-    transition: background-color 0.5s ease;
-  }
-
-  .resizer:hover { background-color: rgba(128, 128, 128, .5); }
-
-  .resizer.horizontal {
-    width: 5px;
-    height: 100%;
-    cursor: ew-resize;
-  }
-
-  .resizer.vertical {
+body {
+  .split-pane-container {
     width: 100%;
-    height: 5px;
-    cursor: ns-resize;
+    height: 100%;
+    position: relative;
+    overflow: auto;
   }
-
-  .editor-pane {
-    &.border-right { border-right: 1px solid #d5d5d5; }
-    &.border-bottom { border-bottom: 1px solid #d5d5d5; }
-  }
-}
-
-body.dark .split-pane-container .editor-pane {
-  &.border-right { border-color: #505050; }
-    &.border-bottom { border-color: #505050; }
 }
 </style>

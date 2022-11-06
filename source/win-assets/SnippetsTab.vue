@@ -1,6 +1,6 @@
 <template>
   <zettlr-splitter style="width: 100%; height: 100%;">
-    <zettlr-pane data-basis="20%" style="min-width: 20%;">
+    <zettlr-pane basis="20%" style="min-width: 20%;">
       <SelectableList
         v-bind:items="availableSnippets"
         v-bind:selected-item="currentItem"
@@ -11,7 +11,7 @@
       ></SelectableList>
     </zettlr-pane>
     <zettlr-separator></zettlr-separator>
-    <zettlr-pane data-basis="80%" style="min-width: 20%;">
+    <zettlr-pane basis="80%" style="min-width: 20%;">
       <div id="snippets-container">
         <p>{{ snippetsExplanation }}</p>
 
