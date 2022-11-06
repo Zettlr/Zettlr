@@ -20,7 +20,7 @@ import { Command, EditorView } from '@codemirror/view'
 import { configField } from '../util/configuration'
 
 // These characters can be directly followed by a starting magic quote
-const startChars = ' ([{-–—'
+const startChars = ' ([{-–—\n\r\t\v\f'
 
 /**
  * Given the editor state and a position, this function returns whether the
@@ -35,7 +35,6 @@ const startChars = ' ([{-–—'
  */
 function posInProtectedNode (state: EditorState, pos: number): boolean {
   const node = syntaxTree(state).resolve(pos, 0)
-  console.log(node.type.name)
   return [
     'InlineCode', // `code`
     'CommentBlock', // <!-- comment -->
@@ -165,10 +164,19 @@ export function handleQuote (quote: string): Command {
     const quotes = (quote === '"') ? primary : secondary
 
     const transaction = view.state.changeByRange((range) => {
+      // NOTE we're running through the hassle of definitely inserting quotes as
+      // otherwise the quote character would be swallowed, even in "protected"
+      // areas of the document.
+      const isFromProtected = posInProtectedNode(view.state, range.from)
+      const isToProtected = posInProtectedNode(view.state, range.to)
+
       if (range.empty) {
         // Check the character before and insert an appropriate quote
         const charBefore = view.state.sliceDoc(range.from - 1, range.from)
-        const insert = startChars.includes(charBefore) ? quotes[0] : quotes[1]
+        const insert = isFromProtected
+          ? quote // `from` is protected so no fancy quotes
+          : startChars.includes(charBefore) ? quotes[0] : quotes[1]
+
         return {
           range: EditorSelection.cursor(range.to + insert.length),
           changes: {
@@ -180,9 +188,11 @@ export function handleQuote (quote: string): Command {
       } else {
         // Surround the selection with quotes
         const text = view.state.sliceDoc(range.from, range.to)
+        const quoteStart = isFromProtected ? quote : quotes[0]
+        const quoteEnd = isToProtected ? quote : quotes[1]
         return {
-          range: EditorSelection.range(range.from + quotes[0].length, range.to + quotes[1].length),
-          changes: { from: range.from, to: range.to, insert: `${quotes[0]}${text}${quotes[1]}` }
+          range: EditorSelection.range(range.from + quoteStart.length, range.to + quoteEnd.length),
+          changes: { from: range.from, to: range.to, insert: `${quoteStart}${text}${quoteEnd}` }
         }
       }
     })
