@@ -37,7 +37,7 @@
         v-on:dragend="handleDragEnd"
         v-on:contextmenu="handleContextMenu($event, file)"
         v-on:mouseup="handleMiddleMouseClick($event, file)"
-        v-on:click="handleClickFilename($event, file)"
+        v-on:mousedown="handleClickFilename($event, file)"
       >
         <span
           class="filename"
@@ -50,7 +50,7 @@
           v-if="!file.pinned"
           class="close"
           aria-hidden="true"
-          v-on:mousedown.stop="handleClickClose($event, file)"
+          v-on:mousedown.stop.prevent="handleClickClose($event, file)"
         >&times;</span>
       </div>
     </div>
@@ -350,6 +350,7 @@ export default defineComponent({
         // the context menu.
         // See: https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button#return_value
         event.stopPropagation()
+        event.preventDefault()
       } else {
         return // We don't handle this event here.
       }
@@ -371,6 +372,7 @@ export default defineComponent({
      * @param   {any}         file   The file descriptor
      */
     handleClickFilename: function (event: MouseEvent, file: any) {
+      console.log('Clicking normally on tab!')
       if (event.button === 0) {
         // It was a left-click. (We must check because otherwise we would also
         // perform this action on a right-click (button === 2), but that event
