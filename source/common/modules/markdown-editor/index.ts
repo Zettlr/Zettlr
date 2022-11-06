@@ -60,6 +60,8 @@ import countWords from '@common/util/count-words'
 import { syntaxTree } from '@codemirror/language'
 import openMarkdownLink from './util/open-markdown-link'
 
+const path = window.path
+
 export interface DocumentWrapper {
   path: string
   state: EditorState
@@ -215,6 +217,58 @@ export default class MarkdownEditor extends EventEmitter {
             event.preventDefault()
             return true
           }
+        },
+        drop (event, view) {
+          event.preventDefault()
+          event.stopPropagation()
+
+          const dataTransfer = event.dataTransfer
+
+          if (dataTransfer === null) {
+            return false
+          }
+
+          const pos = view.posAtCoords({ x: event.clientX, y: event.clientY })
+          if (pos === null) {
+            return false
+          }
+
+          const zettlrFile = dataTransfer.getData('text/x-zettlr-file')
+
+          // First: Do we have a fileList of files to drop here?
+          if (dataTransfer.files.length > 0) {
+            const files: string[] = []
+            // We have a list of files being dropped onto the editor --> link them
+            for (let i = 0; i < dataTransfer.files.length; i++) {
+              const file = dataTransfer.files.item(i)
+              if (file !== null) {
+                files.push(file.path)
+              }
+            }
+
+            const toInsert = files.map(f => {
+              if (/\.(?:png|jpe?g|gif|bmp|svg|tiff?)$/i.test(f)) {
+                return `![${path.basename(f)}](${f})`
+              } else {
+                return `[${path.basename(f)}](${f})`
+              }
+            })
+
+            view.dispatch({ changes: { from: pos, insert: toInsert.join('\n') } })
+          } else if (zettlrFile !== '') {
+            // We have a ZettlrFile to insert
+            const data = JSON.parse(zettlrFile) as { type: 'code'|'file'|'directory', path: string, id: string }
+            const name = path.basename(data.path)
+            if (data.type === 'file') {
+              const { linkStart, linkEnd } = view.state.field(configField)
+              // Insert as Zkn link
+              view.dispatch({ changes: { from: pos, insert: `${linkStart}${name}${linkEnd}` } })
+            } else if (data.type === 'code') {
+              // Insert as Md link
+              view.dispatch({ changes: { from: pos, insert: `[${name}](${data.path})` } })
+            }
+          }
+          return false
         }
       }
     }

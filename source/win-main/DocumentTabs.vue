@@ -372,7 +372,6 @@ export default defineComponent({
      * @param   {any}         file   The file descriptor
      */
     handleClickFilename: function (event: MouseEvent, file: any) {
-      console.log('Clicking normally on tab!')
       if (event.button === 0) {
         // It was a left-click. (We must check because otherwise we would also
         // perform this action on a right-click (button === 2), but that event
