@@ -18,6 +18,7 @@ import path from 'path'
 import sanitize from 'sanitize-filename'
 import generateFilename from '@common/util/generate-filename'
 import { hasMdOrCodeExt } from '@providers/fsal/util/is-md-or-code-file'
+import { app } from 'electron'
 
 export default class FileNew extends ZettlrCommand {
   constructor (app: any) {
@@ -68,19 +69,20 @@ export default class FileNew extends ZettlrCommand {
       dir = this._app.fsal.findDir(arg.path)
     }
 
+    let isFallbackDir = false
     if (dir === undefined) {
-      const msg = 'Could not create new file: No directory selected!'
-      this._app.windows.prompt({
-        title: 'Could not create new file',
-        message: msg,
-        type: 'error'
-      })
-      this._app.log.error(msg)
-      return
+      // There is no directory we could salvage, so choose a default one: the
+      // documents directory. Displaying the file choosing dialog should never
+      // fail because we can't decide on a directory.
+      dir = await this._app.fsal.getAnyDirectoryDescriptor(app.getPath('documents'))
+      isFallbackDir = true
     }
 
     // Make sure we have a filename and have the user confirm this if applicable
-    if (arg.name === undefined && shouldPromptUser) {
+    // Also, if the user does not want to be prompted BUT we had to use the
+    // fallback directory, we should also prompt the user as otherwise it would
+    // be opaque to the user where the notes end up in.
+    if ((arg.name === undefined && shouldPromptUser) || (!shouldPromptUser && isFallbackDir)) {
       // The user wishes to confirm the filename
       const chosenPath = await this._app.windows.saveFile(path.join(dir.path, generatedName))
       if (chosenPath === undefined) {
@@ -144,7 +146,6 @@ export default class FileNew extends ZettlrCommand {
       }
 
       // First create the file
-      console.log('CREATING FILE!', filename)
       await this._app.fsal.createFile(dir, {
         name: filename,
         content: '',
