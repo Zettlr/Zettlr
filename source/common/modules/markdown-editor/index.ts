@@ -106,6 +106,8 @@ export default class MarkdownEditor extends EventEmitter {
     files: Array<{ filename: string, id: string }>
   }
 
+  private readonly scrollPositions: Map<string, number>
+
   /**
    * Creates a new MarkdownEditor instance attached to the anchorElement
    *
@@ -130,6 +132,10 @@ export default class MarkdownEditor extends EventEmitter {
     // we have to rebuild it (during swapDoc).
     this.databaseCache = { tags: [], citations: [], snippets: [], files: [] }
 
+    // This remembers the last seen scroll positions per document and restores them
+    // if possible.
+    this.scrollPositions = new Map()
+
     // The following fields are used to cache certain values, especially since
     // they aren't retained during document swaps
     this.config = getDefaultConfig()
@@ -144,6 +150,15 @@ export default class MarkdownEditor extends EventEmitter {
       state: undefined,
       parent: anchorElement
     })
+
+    // Keep the scroll position for the current document always updated.
+    this._instance.scrollDOM.addEventListener('scroll', (event) => {
+      const documentPath = this._instance.state.field(configField, false)?.metadata.path
+      if (documentPath !== undefined) {
+        const pos = this._instance.scrollDOM.scrollTop
+        this.scrollPositions.set(documentPath, pos)
+      }
+    }, true)
   } // END CONSTRUCTOR
 
   private _getExtensions (filePath: string, type: DocumentType, startVersion: number): Extension[] {
@@ -319,6 +334,14 @@ export default class MarkdownEditor extends EventEmitter {
     }
 
     this._instance.focus()
+
+    // Restore the old scrollposition if applicable
+    const pos = this.scrollPositions.get(documentPath)
+    if (pos !== undefined) {
+      this._instance.scrollDOM.scrollTop = pos
+    } else {
+      this._instance.scrollDOM.scrollTop = 0 // Scroll to top
+    }
   }
 
   /**
