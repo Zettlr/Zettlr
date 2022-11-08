@@ -15,7 +15,7 @@ jobs:
         # Always fetch the branch that triggered the event (develop or master)
         ref: ${{ github.ref }}
     - name: Setup NodeJS 16
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
         node-version: '16'
     - name: Install packages

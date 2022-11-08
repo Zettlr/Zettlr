@@ -19,7 +19,7 @@ jobs:
         with:
           ref: develop
       - name: Setup NodeJS 16
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: '16'
       # The scripts require some modules that we need to install.

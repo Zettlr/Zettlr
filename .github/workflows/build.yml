@@ -110,7 +110,7 @@ jobs:
         with:
           ref: 'develop'
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Set up build environment
@@ -195,7 +195,7 @@ jobs:
         with:
           ref: 'develop'
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Set up build environment
@@ -269,7 +269,7 @@ jobs:
         with:
           ref: 'develop'
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Set up build environment
@@ -328,7 +328,7 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v3
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Set up build environment
