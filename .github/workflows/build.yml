@@ -166,7 +166,7 @@ jobs:
       # step. It should be noted that "artifacts" are more like file shares.
       # Thus they can contain multiple files.
       - name: Cache installers
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: win32
           path: |
@@ -240,7 +240,7 @@ jobs:
         run: yarn release:mac-x64
       # Finally upload both
       - name: Cache image files
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: darwin
           path: |
@@ -296,7 +296,7 @@ jobs:
         run: yarn release:linux-arm
       # After everything has been created, now we need to cache them.
       - name: Cache installers
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: linux
           path: |
@@ -346,17 +346,17 @@ jobs:
         run: mkdir ./release
       # First, download all resulting assets from the previous steps.
       - name: Retrieve windows installers
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: win32
           path: ./release
       - name: Retrieve macOS images
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: darwin
           path: ./release
       - name: Retrieve Linux installers
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: linux
           path: ./release
@@ -392,7 +392,7 @@ jobs:
           cp ./resources/icons/png/512x512.png ./release/logo.png
       - name: Upload nightlies to the server
         if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
-        uses: easingthemes/ssh-deploy@v2.0.7
+        uses: easingthemes/ssh-deploy@v3
         env:
           SSH_PRIVATE_KEY: ${{ secrets.NIGHTLY_SSH_PRIVATE_KEY }}
           # --delete so that no old releases remain on the server. Each iteration is approx. 1GB in size.
