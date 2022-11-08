@@ -123,7 +123,7 @@ jobs:
         id: ref
         run: |
           pkgver=$(node ./scripts/get-pkg-version.js)
-          echo ::set-output name=version::$pkgver
+          echo "version=$pkgver" >> $GITHUB_ENV
       # If we're building a full release, we have to make sure that nobody (that
       # is: Hendrik) forgot to increment the tag version. If we already have a
       # tag with this version, we should not proceed, because that will then
@@ -133,7 +133,7 @@ jobs:
       - name: Verify the corresponding tag does not yet exist
         if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
         # Note the ! - it will return 0 if the command fails, and 1 otherwise
-        run: '! git rev-parse "v${{steps.ref.outputs.version}}"'
+        run: '! git rev-parse "v${{env.version}}"'
       # Create the windows binaries. First package both for x64 and arm64, then
       # make an NSIS installer. Make sure to sign the windows installer using
       # the corresponding SSL EV.
@@ -161,7 +161,7 @@ jobs:
       # have to include --ia32 in the build flags for ARM builds (thus,
       # strictly speaking it has two architectures).
       - name: Rename arm64 artifact
-        run: mv ./release/Zettlr-${{steps.ref.outputs.version}}.exe ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.exe
+        run: mv ./release/Zettlr-${{env.version}}.exe ./release/Zettlr-${{env.version}}-arm64.exe
       # Now we need to cache all artifacts. We create one artifact per build
       # step. It should be noted that "artifacts" are more like file shares.
       # Thus they can contain multiple files.
@@ -170,8 +170,8 @@ jobs:
         with:
           name: win32
           path: |
-            ./release/Zettlr-${{steps.ref.outputs.version}}-x64.exe
-            ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.exe
+            ./release/Zettlr-${{env.version}}-x64.exe
+            ./release/Zettlr-${{env.version}}-arm64.exe
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
   #                                                                           #
@@ -208,10 +208,10 @@ jobs:
         id: ref
         run: |
           pkgver=$(node ./scripts/get-pkg-version.js)
-          echo ::set-output name=version::$pkgver
+          echo "version=$pkgver" >> $GITHUB_ENV
       - name: Verify the corresponding tag does not yet exist # See windows build for detailed comments on this command
         if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
-        run: '! git rev-parse "v${{steps.ref.outputs.version}}"'
+        run: '! git rev-parse "v${{env.version}}"'
       # Save the macOS certificate on this runner for forge to access it in the
       # next step below.
       - name: Retrieve code signing certificate
@@ -244,8 +244,8 @@ jobs:
         with:
           name: darwin
           path: |
-            ./release/Zettlr-${{steps.ref.outputs.version}}-x64.dmg
-            ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.dmg
+            ./release/Zettlr-${{env.version}}-x64.dmg
+            ./release/Zettlr-${{env.version}}-arm64.dmg
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
   #                                                                           #
@@ -282,10 +282,10 @@ jobs:
         id: ref
         run: |
           pkgver=$(node ./scripts/get-pkg-version.js)
-          echo ::set-output name=version::$pkgver
+          echo "version=$pkgver" >> $GITHUB_ENV
       - name: Verify the corresponding tag does not yet exist # See windows build for detailed comments on this command
         if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
-        run: '! git rev-parse "v${{steps.ref.outputs.version}}"'
+        run: '! git rev-parse "v${{env.version}}"'
       - name: Package Linux targets (x64)
         run: yarn package:linux-x64
       - name: Create Linux installers (x64)
@@ -300,12 +300,12 @@ jobs:
         with:
           name: linux
           path: |
-            ./release/Zettlr-${{steps.ref.outputs.version}}-amd64.deb
-            ./release/Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm
-            ./release/Zettlr-${{steps.ref.outputs.version}}-x86_64.AppImage
-            ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.deb
-            ./release/Zettlr-${{steps.ref.outputs.version}}-aarch64.rpm
-            ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.AppImage
+            ./release/Zettlr-${{env.version}}-amd64.deb
+            ./release/Zettlr-${{env.version}}-x86_64.rpm
+            ./release/Zettlr-${{env.version}}-x86_64.AppImage
+            ./release/Zettlr-${{env.version}}-arm64.deb
+            ./release/Zettlr-${{env.version}}-aarch64.rpm
+            ./release/Zettlr-${{env.version}}-arm64.AppImage
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
   #                                                                           #
@@ -341,7 +341,7 @@ jobs:
         id: ref
         run: |
           pkgver=$(node ./scripts/get-pkg-version.js)
-          echo ::set-output name=version::$pkgver
+          echo "version=$pkgver" >> $GITHUB_ENV
       - name: Make release directory
         run: mkdir ./release
       # First, download all resulting assets from the previous steps.
@@ -365,16 +365,16 @@ jobs:
       - name: Generate SHA256 checksums
         run: |
           cd ./release
-          sha256sum "Zettlr-${{steps.ref.outputs.version}}-x64.exe" > "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{steps.ref.outputs.version}}-arm64.exe" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{steps.ref.outputs.version}}-x64.dmg" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{steps.ref.outputs.version}}-arm64.dmg" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{steps.ref.outputs.version}}-amd64.deb" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{steps.ref.outputs.version}}-x86_64.AppImage" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{steps.ref.outputs.version}}-arm64.deb" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{steps.ref.outputs.version}}-aarch64.rpm" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{steps.ref.outputs.version}}-arm64.AppImage" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{env.version}}-x64.exe" > "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{env.version}}-arm64.exe" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{env.version}}-x64.dmg" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{env.version}}-arm64.dmg" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{env.version}}-amd64.deb" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{env.version}}-x86_64.rpm" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{env.version}}-x86_64.AppImage" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{env.version}}-arm64.deb" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{env.version}}-aarch64.rpm" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{env.version}}-arm64.AppImage" >> "SHA256SUMS.txt"
           cd ..
       - name: Verify checksums
         run: |
@@ -409,20 +409,20 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           # Populate the inputs of the release we already know
-          tag_name: v${{steps.ref.outputs.version}}
-          name: Release v${{steps.ref.outputs.version}}
+          tag_name: v${{env.version}}
+          name: Release v${{env.version}}
           body: If you can read this, we have forgotten to fill in the changelog. Sorry!
           draft: true # Always create as draft, so that we can populate the remaining values easily
           # Gosh, is that convenient as opposed to earlier!
           files: |
-            ./release/Zettlr-${{steps.ref.outputs.version}}-x64.exe
-            ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.exe
-            ./release/Zettlr-${{steps.ref.outputs.version}}-x64.dmg
-            ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.dmg
-            ./release/Zettlr-${{steps.ref.outputs.version}}-amd64.deb
-            ./release/Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm
-            ./release/Zettlr-${{steps.ref.outputs.version}}-x86_64.AppImage
-            ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.deb
-            ./release/Zettlr-${{steps.ref.outputs.version}}-aarch64.rpm
-            ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.AppImage
+            ./release/Zettlr-${{env.version}}-x64.exe
+            ./release/Zettlr-${{env.version}}-arm64.exe
+            ./release/Zettlr-${{env.version}}-x64.dmg
+            ./release/Zettlr-${{env.version}}-arm64.dmg
+            ./release/Zettlr-${{env.version}}-amd64.deb
+            ./release/Zettlr-${{env.version}}-x86_64.rpm
+            ./release/Zettlr-${{env.version}}-x86_64.AppImage
+            ./release/Zettlr-${{env.version}}-arm64.deb
+            ./release/Zettlr-${{env.version}}-aarch64.rpm
+            ./release/Zettlr-${{env.version}}-arm64.AppImage
             ./release/SHA256SUMS.txt
