@@ -392,7 +392,7 @@ jobs:
           cp ./resources/icons/png/512x512.png ./release/logo.png
       - name: Upload nightlies to the server
         if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
-        uses: easingthemes/ssh-deploy@v3
+        uses: easingthemes/ssh-deploy@v3.0.1
         env:
           SSH_PRIVATE_KEY: ${{ secrets.NIGHTLY_SSH_PRIVATE_KEY }}
           # --delete so that no old releases remain on the server. Each iteration is approx. 1GB in size.
