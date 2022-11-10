@@ -202,8 +202,10 @@ export default class MarkdownEditor extends EventEmitter {
         // Update the selection in our cache
         const cache = this.documentViewCache.get(filePath)
         if (cache !== undefined) {
-          cache.selection = update.state.selection.toJSON()
-          this.documentViewCache.set(filePath, cache)
+          this.documentViewCache.set(filePath, {
+            scrollPosition: cache.scrollPosition,
+            selection: update.state.selection.toJSON()
+          })
         }
       },
       domEventsListeners: {
@@ -337,6 +339,8 @@ export default class MarkdownEditor extends EventEmitter {
       extensions: this._getExtensions(documentPath, type, startVersion)
     })
 
+    // Get the cache before so it is not overridden by the initial state update
+    const cache = this.documentViewCache.get(documentPath)
     this._instance.setState(state)
 
     // Provide the cached databases to the state (can be overridden by the
@@ -357,7 +361,6 @@ export default class MarkdownEditor extends EventEmitter {
     this._instance.focus()
 
     // Restore the old cached positions if applicable
-    const cache = this.documentViewCache.get(documentPath)
     if (cache !== undefined) {
       this._instance.scrollDOM.scrollTop = cache.scrollPosition
       this._instance.dispatch({ selection: EditorSelection.fromJSON(cache.selection) })
