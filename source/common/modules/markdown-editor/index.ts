@@ -27,7 +27,7 @@ import './editor.less'
 import EventEmitter from 'events'
 
 import { EditorView } from '@codemirror/view'
-import { EditorState, Extension, SelectionRange } from '@codemirror/state'
+import { EditorSelection, EditorState, Extension, SelectionRange } from '@codemirror/state'
 import {
   getSearchQuery,
   SearchQuery,
@@ -106,7 +106,17 @@ export default class MarkdownEditor extends EventEmitter {
     files: Array<{ filename: string, id: string }>
   }
 
-  private readonly scrollPositions: Map<string, number>
+  // "What is this?", you may ask. This is a cache to remember anything important
+  // that has to be set for a document that is open but that is not saved inside
+  // the state in the main process. The scroll position is obvious (has nothing
+  // to do with the state), but the selection will also not be stored in the main
+  // process. This might look cool because you could literally remote-control
+  // other editor panes, but we don't really need this.
+  // Still TODO: Need to map the selection everytime through updates!
+  private readonly documentViewCache: Map<string, {
+    scrollPosition: number
+    selection: any
+  }>
 
   /**
    * Creates a new MarkdownEditor instance attached to the anchorElement
@@ -134,7 +144,7 @@ export default class MarkdownEditor extends EventEmitter {
 
     // This remembers the last seen scroll positions per document and restores them
     // if possible.
-    this.scrollPositions = new Map()
+    this.documentViewCache = new Map()
 
     // The following fields are used to cache certain values, especially since
     // they aren't retained during document swaps
@@ -155,8 +165,12 @@ export default class MarkdownEditor extends EventEmitter {
     this._instance.scrollDOM.addEventListener('scroll', (event) => {
       const documentPath = this._instance.state.field(configField, false)?.metadata.path
       if (documentPath !== undefined) {
-        const pos = this._instance.scrollDOM.scrollTop
-        this.scrollPositions.set(documentPath, pos)
+        const cache = this.documentViewCache.get(documentPath)
+        if (cache !== undefined) {
+          const pos = this._instance.scrollDOM.scrollTop
+          cache.scrollPosition = pos
+          this.documentViewCache.set(documentPath, cache)
+        }
       }
     }, true)
   } // END CONSTRUCTOR
@@ -183,6 +197,13 @@ export default class MarkdownEditor extends EventEmitter {
         }
         if (update.selectionSet) {
           this.emit('cursorActivity')
+        }
+
+        // Update the selection in our cache
+        const cache = this.documentViewCache.get(filePath)
+        if (cache !== undefined) {
+          cache.selection = update.state.selection.toJSON()
+          this.documentViewCache.set(filePath, cache)
         }
       },
       domEventsListeners: {
@@ -335,12 +356,18 @@ export default class MarkdownEditor extends EventEmitter {
 
     this._instance.focus()
 
-    // Restore the old scrollposition if applicable
-    const pos = this.scrollPositions.get(documentPath)
-    if (pos !== undefined) {
-      this._instance.scrollDOM.scrollTop = pos
+    // Restore the old cached positions if applicable
+    const cache = this.documentViewCache.get(documentPath)
+    if (cache !== undefined) {
+      this._instance.scrollDOM.scrollTop = cache.scrollPosition
+      this._instance.dispatch({ selection: EditorSelection.fromJSON(cache.selection) })
     } else {
       this._instance.scrollDOM.scrollTop = 0 // Scroll to top
+      // Selection will already be default
+      this.documentViewCache.set(documentPath, {
+        scrollPosition: 0,
+        selection: this._instance.state.selection.toJSON()
+      })
     }
   }
 
