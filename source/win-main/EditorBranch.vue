@@ -16,6 +16,7 @@
         v-bind:editor-commands="editorCommands"
         v-bind:available-width="(node.direction === 'horizontal') ? sizes[index] : 100"
         v-bind:available-height="(node.direction === 'vertical') ? sizes[index] : 100"
+        v-bind:is-last="index === node.nodes.length - 1"
         v-on:global-search="$emit('globalSearch', $event)"
       ></EditorBranch>
       <EditorPane
@@ -25,7 +26,7 @@
         v-bind:window-id="windowId"
         v-bind:editor-commands="editorCommands"
         v-bind:class="{
-          'border-right': index < node.nodes.length - 1 && node.direction === 'horizontal',
+          'border-right': (index < node.nodes.length - 1 && node.direction === 'horizontal') || !isLast,
           'border-bottom': index < node.nodes.length - 1 && node.direction === 'vertical'
         }"
         v-bind:available-width="(node.direction === 'horizontal') ? sizes[index] : 100"
@@ -72,6 +73,10 @@ export default defineComponent({
     availableHeight: {
       type: Number,
       default: 100
+    },
+    isLast: {
+      type: Boolean,
+      default: false
     },
     editorCommands: {
       type: Object as () => EditorCommands,
