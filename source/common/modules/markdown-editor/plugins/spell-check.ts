@@ -169,7 +169,13 @@ async function checkWord (word: string, index: number, nodeStart: number, autoco
   const from = nodeStart + index
   const to = from + word.length
 
-  const dia: Diagnostic = { from, to, severity: 'error', message: 'Spelling mistake' } // TODO: Translate
+  const dia: Diagnostic = {
+    from,
+    to,
+    message: 'Spelling mistake', // TODO: Translate
+    severity: 'error',
+    source: 'spellcheck' // Useful for later filtering of all diagnostics present
+  }
 
   const actions: Action[] = [
     {
