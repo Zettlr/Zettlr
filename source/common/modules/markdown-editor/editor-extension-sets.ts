@@ -44,6 +44,7 @@ import { EditorConfiguration, configField } from './util/configuration'
 import { highlightRanges } from './plugins/highlight-ranges'
 import { jsonFolding } from './code-folding/json'
 import { jsonLanguage } from '@codemirror/lang-json'
+import { softwrapVisualIndent } from './plugins/visual-indent'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -92,6 +93,7 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
       ...historyKeymap // , // History commands (redo/undo)
       // ...searchKeymap // Search commands (Ctrl+F, etc.)
     ]),
+    softwrapVisualIndent, // Always indent visually
     // CODE FOLDING
     codeFolding(),
     foldGutter(),
