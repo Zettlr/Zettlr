@@ -38,10 +38,20 @@ export const customKeymap: KeyBinding[] = [
   { key: 'Space', run: handleReplacement },
   { key: 'Enter', run: handleReplacement },
   { key: 'Backspace', run: handleBackspace },
-  { key: '"', run: handleQuote('"') },
-  { key: "'", run: handleQuote("'") },
   { key: 'Alt-Up', run: moveLineUp, shift: copyLineUp },
   { key: 'Alt-Down', run: moveLineDown, shift: copyLineDown },
   { key: 'Mod-v', run: view => { paste(view); return true }, shift: view => { pasteAsPlain(view); return true } },
-  { key: 'Mod-Alt-c', run: (target) => { copyAsHTML(target); return true } }
+  { key: 'Mod-Alt-c', run: (target) => { copyAsHTML(target); return true } },
+  { key: '"', run: handleQuote('"') },
+  { key: "'", run: handleQuote("'") },
+  // DEBUG: We have to add handlers that specifically listen for the German
+  // a-umlaut characters, because they have the same keycode as the quote key on
+  // us-ANSI layouts (222). If we omit the following two listeners, German users
+  // won't be able to insert an a-umlaut and instead produce many quotes.
+  // DEBUG: This also happens with literally any other keyboard layout. The
+  // Swedish layout works, since it has an a-umlaut at the same position, but
+  // the Russian `э`-key, for example, still produces the same behavior.
+  // SEE THIS ISSUE: https://github.com/codemirror/dev/issues/1001
+  { key: 'ä', run: view => { view.dispatch(view.state.replaceSelection('ä')); return true } },
+  { key: 'Ä', run: view => { view.dispatch(view.state.replaceSelection('Ä')); return true } }
 ]
