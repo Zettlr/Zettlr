@@ -110,7 +110,7 @@
     "@types/d3": "^7.4.0",
     "@types/katex": "^0.14.0",
     "@types/lodash": "^4.14.187",
-    "@types/luxon": "^3.0.2",
+    "@types/luxon": "^3.1.0",
     "@types/md5": "^2.3.2",
     "@types/mermaid": "^9.1.0",
     "@types/mocha": "^10.0.0",
