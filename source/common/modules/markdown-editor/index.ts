@@ -398,7 +398,6 @@ export default class MarkdownEditor extends EventEmitter {
   }
 
   searchNext (query: SearchQuery): void {
-    console.log('Searching next!', query)
     this.maybeExchangeQuery(query)
     console.log(findNext(this._instance))
   }
@@ -668,8 +667,8 @@ export default class MarkdownEditor extends EventEmitter {
           const headLine = this._instance.state.doc.lineAt(sel.to)
           const selContent = this._instance.state.sliceDoc(sel.from, sel.to)
           return {
-            anchor: { line: anchorLine.number, ch: sel.from - anchorLine.from },
-            head: { line: headLine.number, ch: sel.to - headLine.from },
+            anchor: { line: anchorLine.number, ch: sel.from - anchorLine.from + 1 },
+            head: { line: headLine.number, ch: sel.to - headLine.from + 1 },
             words: countWords(selContent, false),
             chars: countWords(selContent, true)
           }

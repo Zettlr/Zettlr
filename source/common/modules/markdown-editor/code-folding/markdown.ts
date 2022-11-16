@@ -16,7 +16,9 @@ import { foldService, syntaxTree } from '@codemirror/language'
 import { SyntaxNode } from '@lezer/common'
 
 // Code folding for Markdown documents, as the regular code folding service
-// doesn't completely do what we need it to.
+// doesn't completely do what we need it to. NOTE: Most folding is already
+// provided by the corresponding mode. Here we only add more folding which that
+// mode doesn't already provide out of the box.
 export const markdownFolding = foldService.of((state, lineStart, lineEnd) => {
   let { node } = syntaxTree(state).cursorAt(lineStart, 1)
   if (node.from < lineStart) {

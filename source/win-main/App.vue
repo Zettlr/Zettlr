@@ -239,10 +239,10 @@ export default defineComponent({
         cnt = trans('gui.words_selected', localiseNumber(length))
         cnt += '<br>'
         if (info.selections.length === 1) {
-          cnt += (info.selections[0].anchor.line + 1) + ':'
-          cnt += (info.selections[0].anchor.ch + 1) + ' &ndash; '
-          cnt += (info.selections[0].head.line + 1) + ':'
-          cnt += (info.selections[0].head.ch + 1)
+          cnt += (info.selections[0].anchor.line) + ':'
+          cnt += (info.selections[0].anchor.ch) + ' &ndash; '
+          cnt += (info.selections[0].head.line) + ':'
+          cnt += (info.selections[0].head.ch)
         } else {
           // Multiple selections --> indicate
           cnt += trans('gui.number_selections', info.selections.length)
@@ -253,7 +253,7 @@ export default defineComponent({
         const num = this.shouldCountChars ? info.chars : info.words
         cnt = trans(locID, localiseNumber(num))
         cnt += '<br>'
-        cnt += (info.cursor.line + 1) + ':' + (info.cursor.ch + 1)
+        cnt += info.cursor.line + ':' + info.cursor.ch
       }
 
       return cnt
