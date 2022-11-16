@@ -36,7 +36,6 @@ module.exports = [
     test: /\.css$/,
     use: [
       'style-loader',
-      '@teamsupercell/typings-for-css-modules-loader',
       'css-loader'
     ]
   },

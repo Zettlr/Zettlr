@@ -104,7 +104,6 @@
     "@electron-forge/maker-zip": "^6.0.0-beta.75",
     "@electron-forge/plugin-webpack": "^6.0.0-beta.75",
     "@electron/notarize": "^1.2.3",
-    "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
     "@types/adm-zip": "^0.5.0",
     "@types/archiver": "^5.3.1",
     "@types/command-exists": "^1.2.0",
@@ -151,7 +150,6 @@
     "ts-node": "^10.6.0",
     "tsconfig-paths": "^4.0.0",
     "typescript": "^4.5.5",
-    "typings-for-css-modules-loader": "^1.7.0",
     "vue-loader": "^17.0.1",
     "webpack": "^5.72.0"
   }
