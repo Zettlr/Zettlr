@@ -152,23 +152,18 @@
     }
   }
 
+  // Ensure that elements within the gutters are centered relative to the line
+  .cm-gutterElement {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
   // These classes are being applied by the heading-classes hook
-  .size-header-1 {
-    font-size: 2em;
-    .CodeMirror-gutter-elt { line-height: 1.5em; }
-  }
-  .size-header-2 {
-    font-size: 1.8em;
-    .CodeMirror-gutter-elt { line-height: 1.5em; }
-  }
-  .size-header-3 {
-    font-size: 1.5em;
-    .CodeMirror-gutter-elt { line-height: 1.4em; }
-  }
-  .size-header-4 {
-    font-size: 1.3em;
-    .CodeMirror-gutter-elt { line-height: 1.3em; }
-  }
+  .size-header-1 { font-size: 2em; }
+  .size-header-2 { font-size: 1.8em; }
+  .size-header-3 { font-size: 1.5em; }
+  .size-header-4 { font-size: 1.3em; }
   .size-header-5 { font-size: 1em; }
   .size-header-6 { font-size: 1em; }
 
@@ -298,64 +293,4 @@
 body.dark .tippy-content .editor-fn-textarea {
   background-color: transparent;
   border: none;
-}
-
-// Text-folding related stuff
-.CodeMirror-gutters {
-  //background-color: transparent;
-  background-color: white;
-  border: none;
-}
-.CodeMirror-foldgutter {
-  width: 20px;
-}
-.CodeMirror-linenumbers {
-  width: 40px;
-  border-right: 1px solid rgba(0, 0, 0, 0.25);
-}
-.CodeMirror-foldgutter-open, .CodeMirror-foldgutter-folded {
-  text-align: right;
-  cursor: pointer;
-  font-size: 18px;
-
-  &:hover { color: var(--c-primary); }
-}
-
-.CodeMirror-foldgutter-open:after { content: "\25BE"; }
-.CodeMirror-foldgutter-folded:after { content: "\25B8"; }
-
-.CodeMirror-foldmarker {
-  border-radius: 3px;
-  font-size: 75%;
-  margin-left: 10px;
-  padding: 2px;
-  cursor: pointer;
-  vertical-align: baseline;
-}
-// END text-folding
-
-// Hints (tag autocompletion, etc.)
-.CodeMirror-hints {
-  position: absolute;
-  z-index: 10;
-  overflow: hidden;
-  list-style: none;
-  margin: 0;
-  padding: 0px;
-
-  // Restrict the size of the container and make it scrollable
-  max-height: 20em;
-  max-width: 95vw;
-  overflow-y: auto;
-
-  li.CodeMirror-hint {
-    margin: 0;
-    white-space: pre;
-    cursor: pointer;
-    padding: 5px;
-    line-height: 150%;
-  }
-
-  // Apply a bolder font weight to tags that have a specific colour assigned.
-  .cm-hint-colour { font-weight: bold; }
 }

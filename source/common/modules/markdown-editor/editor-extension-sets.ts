@@ -43,6 +43,7 @@ import { formattingToolbar, footnoteHover, filePreview, urlHover } from './toolt
 import { EditorConfiguration, configField } from './util/configuration'
 import { highlightRanges } from './plugins/highlight-ranges'
 import { jsonFolding } from './code-folding/json'
+import { markdownFolding } from './code-folding/markdown'
 import { jsonLanguage } from '@codemirror/lang-json'
 import { softwrapVisualIndent } from './plugins/visual-indent'
 
@@ -205,6 +206,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     mdStatistics,
     typewriter,
     tocField,
+    markdownFolding,
     autocomplete,
     readabilityMode,
     formattingToolbar,
