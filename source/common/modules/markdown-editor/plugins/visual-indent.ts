@@ -53,7 +53,7 @@ function render (view: EditorView): DecorationSet {
     let offset = (tabs * tabSize + spaces) * charWidth
 
     // Here we additionally account for list markers and indent even further.
-    const match = /\s*([+*>-]|\d+\.)\s/.exec(text)
+    const match = /^\s*([+*>-]|\d+\.)\s/.exec(text)
     if (match !== null) {
       offset += (match[1].length + 1) * charWidth
     }
