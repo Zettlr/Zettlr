@@ -152,6 +152,22 @@
     }
   }
 
+  // This ensures that the fold markers are hidden by default and become visible
+  // once you hover over them (similar to logseq or VSCode)
+  .cm-gutters {
+    .cm-gutter.cm-foldGutter {
+      opacity: 0;
+      transition: 0.2s opacity ease;
+    }
+
+    // NOTE: We listen to hover events on the gutter container itself so that
+    // the margin of the fold gutter appearing is broader and it's easier to
+    // make it appear.
+    &:hover {
+      .cm-gutter.cm-foldGutter { opacity: 1; }
+    }
+  }
+
   // Ensure that elements within the gutters are centered relative to the line
   .cm-gutterElement {
     display: flex;
