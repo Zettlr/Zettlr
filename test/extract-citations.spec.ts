@@ -31,6 +31,7 @@ const tests = [
         from: 10,
         to: 42,
         composite: false,
+        source: '[@doe99; @smith2000; @smith2004]',
         citations: [{ ...defaults, id: 'doe99' }, { ...defaults, id: 'smith2000' }, { ...defaults, id: 'smith2004' }]
       }
     ],
@@ -43,6 +44,7 @@ const tests = [
         from: 10,
         to: 65,
         composite: false,
+        source: '[see @doe99, pp. 33-35 and *passim*; @smith04, chap. 1]',
         citations: [
           { ...defaults, id: 'doe99', prefix: 'see', label: 'page', locator: '33-35', suffix: 'and *passim*' },
           { ...defaults, id: 'smith04', label: 'chapter', locator: '1', suffix: '' }
@@ -58,6 +60,7 @@ const tests = [
         from: 0,
         to: 57,
         composite: false,
+        source: '[@{https://example.com/bib?name=foobar&date=2000}, p. 33]',
         citations: [{ ...defaults, id: 'https://example.com/bib?name=foobar&date=2000', label: 'page', locator: '33', suffix: '' }]
       }
     ],
@@ -70,6 +73,7 @@ const tests = [
         from: 0,
         to: 35,
         composite: false,
+        source: '[@smith{ii, A, D-Z}, with a suffix]',
         citations: [{ ...defaults, id: 'smith', label: 'page', locator: 'ii, A, D-Z', suffix: 'with a suffix' }]
       }
     ],
@@ -82,6 +86,7 @@ const tests = [
         from: 0,
         to: 55,
         composite: false,
+        source: '[@smith, {pp. iv, vi-xi, (xv)-(xvii)} with suffix here]',
         citations: [{ ...defaults, id: 'smith', label: 'page', locator: 'iv, vi-xi, (xv)-(xvii)', suffix: 'with suffix here' }]
       }
     ],
@@ -94,6 +99,7 @@ const tests = [
         from: 0,
         to: 26,
         composite: false,
+        source: '[@smith{}, 99 years later]',
         citations: [{ ...defaults, id: 'smith', label: 'page', suffix: '99 years later', locator: '' }]
       }
     ],
@@ -106,6 +112,7 @@ const tests = [
         from: 16,
         to: 27,
         composite: false,
+        source: '[-@smith04]',
         citations: [{ ...defaults, id: 'smith04', 'suppress-author': true, prefix: '' }]
       }
     ],
@@ -118,6 +125,7 @@ const tests = [
         from: 36,
         to: 45,
         composite: true,
+        source: '@smith04',
         citations: [{ ...defaults, id: 'smith04', 'suppress-author': true }]
       }
     ],
@@ -130,6 +138,7 @@ const tests = [
         from: 0,
         to: 8,
         composite: true,
+        source: '@smith04',
         citations: [{ ...defaults, id: 'smith04' }]
       }
     ],
@@ -142,6 +151,7 @@ const tests = [
         from: 0,
         to: 16,
         composite: true,
+        source: '@smith04 [p. 33]',
         citations: [{ ...defaults, id: 'smith04', label: 'page', locator: '33', suffix: '' }]
       }
     ],
@@ -154,6 +164,7 @@ const tests = [
         from: 0,
         to: 48,
         composite: true,
+        source: '@{https://example.com/bib?name=foobar&date=2000}',
         citations: [{ ...defaults, id: 'https://example.com/bib?name=foobar&date=2000' }]
       }
     ],
@@ -166,6 +177,7 @@ const tests = [
         from: 0,
         to: 56,
         composite: true,
+        source: '@{https://example.com/bib?name=foobar&date=2000} [p. 33]',
         citations: [{ ...defaults, id: 'https://example.com/bib?name=foobar&date=2000', label: 'page', locator: '33', suffix: '' }]
       }
     ],
@@ -179,6 +191,7 @@ const tests = [
         from: 0,
         to: 53,
         composite: true,
+        source: '@{https://example.com/bib?name=foobar&date=2000} [33]',
         citations: [{ ...defaults, id: 'https://example.com/bib?name=foobar&date=2000', label: 'page', locator: '33', suffix: '' }]
       }
     ],
@@ -191,6 +204,7 @@ const tests = [
         from: 0,
         to: 16,
         composite: true,
+        source: '@Author2015 [33]',
         citations: [{ ...defaults, id: 'Author2015', label: 'page', locator: '33', suffix: '' }]
       }
     ],
@@ -203,6 +217,7 @@ const tests = [
         from: 8,
         to: 25,
         composite: false,
+        source: '[@Author2015, 33]',
         citations: [{ ...defaults, id: 'Author2015', label: 'page', locator: '33', suffix: '' }]
       }
     ],
@@ -215,6 +230,7 @@ const tests = [
         from: 8,
         to: 44,
         composite: false,
+        source: '[@Author2015, 33 and someplace else]',
         citations: [{ ...defaults, id: 'Author2015', label: 'page', locator: '33', suffix: 'and someplace else' }]
       }
     ],
@@ -227,6 +243,7 @@ const tests = [
         from: 8,
         to: 47,
         composite: false,
+        source: '[@Author2015, ix-xi and someplace else]',
         citations: [{ ...defaults, id: 'Author2015', label: 'page', locator: 'ix-xi', suffix: 'and someplace else' }]
       }
     ],
