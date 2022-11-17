@@ -99,9 +99,15 @@ const locatorRE = /^(?:[\d, -]*\d|[ivxlcdm, -]*[ivxlcdm])/i
  * to citeproc-js.
  */
 export interface CitePosition {
+  // The start position of this citation
   from: number
+  // The end position of this citation
   to: number
+  // The full source of this citation
+  source: string
+  // True if the citation should be composite
   composite: boolean
+  // The list of cite items in CSL JSON style
   citations: CiteItem[]
 }
 
@@ -251,7 +257,7 @@ export default function extractCitations (markdown: string): CitePosition[] {
         if (rawPrefix !== undefined) {
           thisCitation['suppress-author'] = rawPrefix.trim().endsWith('-')
           if (thisCitation['suppress-author']) {
-            thisCitation.prefix = rawPrefix.substr(0, rawPrefix.trim().length - 1).trim()
+            thisCitation.prefix = rawPrefix.substring(0, rawPrefix.trim().length - 1).trim()
           } else {
             thisCitation.prefix = rawPrefix.trim()
           }
@@ -309,7 +315,7 @@ export default function extractCitations (markdown: string): CitePosition[] {
     }
 
     // After all of our yadda yadda, push the citation
-    retValue.push({ from, to, citations, composite })
+    retValue.push({ from, to, citations, composite, source: match[0] })
   }
 
   return retValue

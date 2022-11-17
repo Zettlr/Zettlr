@@ -4603,6 +4603,13 @@ fastq@^1.6.0:
   dependencies:
     reusify "^1.0.4"
 
+fault@^2.0.0:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/fault/-/fault-2.0.1.tgz#d47ca9f37ca26e4bd38374a7c500b5a384755b6c"
+  integrity sha512-WtySTkS4OKev5JtpHXnib4Gxiurzh5NCGvWrFaZ34m6JehfTUhKZvn9njTfw48t6JumVQOmrKqpmGcdwxnhqBQ==
+  dependencies:
+    format "^0.2.0"
+
 faye-websocket@^0.11.3:
   version "0.11.4"
   resolved "https://registry.yarnpkg.com/faye-websocket/-/faye-websocket-0.11.4.tgz#7f0d9275cfdd86a1c963dc8b65fcc451edcbb1da"
@@ -4781,6 +4788,11 @@ form-data@~2.3.2:
     asynckit "^0.4.0"
     combined-stream "^1.0.6"
     mime-types "^2.1.12"
+
+format@^0.2.0:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/format/-/format-0.2.2.tgz#d6170107e9efdc4ed30c9dc39016df942b5cb58b"
+  integrity sha512-wzsgA6WOq+09wrU1tsJ09udeR/YZRaeArL9e1wPbFg3GG2yDnC2ldKpxs4xunpFF9DgqCqOIra3bc1HWrJ37Ww==
 
 forwarded@0.2.0:
   version "0.2.0"
@@ -6456,6 +6468,13 @@ mdast-util-from-markdown@^1.0.0:
     unist-util-stringify-position "^3.0.0"
     uvu "^0.5.0"
 
+mdast-util-frontmatter@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/mdast-util-frontmatter/-/mdast-util-frontmatter-1.0.0.tgz#ef12469379782e4a0fd995fed60cc3b871e6c819"
+  integrity sha512-7itKvp0arEVNpCktOET/eLFAYaZ+0cNjVtFtIPxgQ5tV+3i+D4SDDTjTzPWl44LT59PC+xdx+glNTawBdF98Mw==
+  dependencies:
+    micromark-extension-frontmatter "^1.0.0"
+
 mdast-util-heading-style@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/mdast-util-heading-style/-/mdast-util-heading-style-2.0.0.tgz#19bcc14d96b4a6f24efbe1318409bd34af64bb7f"
@@ -6578,6 +6597,15 @@ micromark-core-commonmark@^1.0.1:
     micromark-util-symbol "^1.0.0"
     micromark-util-types "^1.0.1"
     uvu "^0.5.0"
+
+micromark-extension-frontmatter@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/micromark-extension-frontmatter/-/micromark-extension-frontmatter-1.0.0.tgz#612498e6dad87c132c95e25f0918e7cc0cd535f6"
+  integrity sha512-EXjmRnupoX6yYuUJSQhrQ9ggK0iQtQlpi6xeJzVD5xscyAI+giqco5fdymayZhJMbIFecjnE2yz85S9NzIgQpg==
+  dependencies:
+    fault "^2.0.0"
+    micromark-util-character "^1.0.0"
+    micromark-util-symbol "^1.0.0"
 
 micromark-factory-destination@^1.0.0:
   version "1.0.0"
@@ -7906,6 +7934,16 @@ relateurl@^0.2.7:
   resolved "https://registry.yarnpkg.com/relateurl/-/relateurl-0.2.7.tgz#54dbf377e51440aca90a4cd274600d3ff2d888a9"
   integrity sha512-G08Dxvm4iDN3MLM0EsP62EDV9IuhXPR6blNz6Utcp7zyV3tr4HVNINt6MpaRWbxoOHT3Q7YN2P+jaHX8vUbgog==
 
+remark-frontmatter@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/remark-frontmatter/-/remark-frontmatter-4.0.1.tgz#84560f7ccef114ef076d3d3735be6d69f8922309"
+  integrity sha512-38fJrB0KnmD3E33a5jZC/5+gGAC2WKNiPw1/fdXJvijBlhA7RCsvJklrYJakS0HedninvaCYW8lQGf9C918GfA==
+  dependencies:
+    "@types/mdast" "^3.0.0"
+    mdast-util-frontmatter "^1.0.0"
+    micromark-extension-frontmatter "^1.0.0"
+    unified "^10.0.0"
+
 remark-lint-blockquote-indentation@^3.0.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/remark-lint-blockquote-indentation/-/remark-lint-blockquote-indentation-3.1.1.tgz#756c099efd43a125f04df329bfe84398358758b6"
@@ -8146,7 +8184,7 @@ remark-lint-no-shortcut-reference-link@^3.0.0:
     unist-util-generated "^2.0.0"
     unist-util-visit "^4.0.0"
 
-remark-lint-no-undefined-references@^4.0.0:
+remark-lint-no-undefined-references@^4.0.0, remark-lint-no-undefined-references@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/remark-lint-no-undefined-references/-/remark-lint-no-undefined-references-4.2.0.tgz#11a3e579b9107493d7781973dde8517793f52e0c"
   integrity sha512-EDV9B1ZXMLcKVtMQFvfvtbag4AkLcu8aUNGXoez5GJLcCAQ8Q+sG74yOtIW4xNVlVubEjl0vdkFhaKYLxvn2Sw==
