@@ -158,6 +158,8 @@ there.
 - **New Feature**: Overhauled, improved, and streamlined the defaults file
   system used by the importer and exporter
 - **New Feature**: You can now pin tabs, which prevents them from being closed
+- **New Feature**: The editor will now check your Markdown for potential style
+  issues (can be disabled in the preferences)
 - The TableEditor now has a clear data saving strategy: Whenever you change a
   table, you need to manually click the disk icon at the top of the table to
   apply all your changes to the document so that it can then be saved

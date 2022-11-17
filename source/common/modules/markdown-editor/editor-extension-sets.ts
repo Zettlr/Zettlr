@@ -34,7 +34,9 @@ import { defaultContextMenu } from './plugins/default-context-menu'
 import { pasteHandler } from './plugins/paste-handlers'
 import { readabilityMode } from './plugins/readability'
 import { hookDocumentAuthority } from './plugins/remote-doc'
-import { spellchecker } from './plugins/spell-check'
+import { lintGutter } from '@codemirror/lint'
+import { spellchecker } from './linters/spell-check'
+import { mdLint } from './linters/md-lint'
 import { mdStatistics } from './plugins/statistics-fields'
 import { tocField } from './plugins/toc-field'
 import { typewriter } from './plugins/typewriter'
@@ -62,6 +64,11 @@ export interface CoreExtensionOptions {
   }
   updateListener: (update: ViewUpdate) => void
   domEventsListeners: DOMEventHandlers<any>
+  // Linter configuration
+  lint: {
+    // Should Markdown documents be linted?
+    markdown: boolean
+  }
 }
 
 /**
@@ -181,6 +188,28 @@ function getGenericCodeExtensions (options: CoreExtensionOptions): Extension[] {
  * @return  {Extension[]}                    An array of Markdown extensions
  */
 export function getMarkdownExtensions (options: CoreExtensionOptions): Extension[] {
+  const mdLinterExtensions = [spellchecker]
+
+  let hasLinters = false
+
+  if (options.lint.markdown) {
+    hasLinters = true
+    mdLinterExtensions.push(mdLint)
+  }
+
+  if (hasLinters) {
+    // If there's any linter (except the spellchecker), add a lint gutter
+    mdLinterExtensions.push(
+      lintGutter({
+        markerFilter (diagnostics) {
+          // Show any linter warnings and errors in the gutter *except* wrongly
+          // spelled words, since that would be weird.
+          return diagnostics.filter(d => d.source !== 'spellcheck')
+        }
+      })
+    )
+  }
+
   return [
     ...getCoreExtensions(options),
     // We need our custom keymaps first
@@ -202,6 +231,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
       renderTables: options.initialConfig.renderTables,
       renderEmphasis: options.initialConfig.renderEmphasis
     }),
+    mdLinterExtensions,
     // Some statistics we need for Markdown documents
     mdStatistics,
     typewriter,
@@ -215,7 +245,6 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     filePreview,
     pasteHandler, // Manages image saving
     defaultContextMenu, // A default context menu
-    spellchecker,
     EditorView.domEventHandlers(options.domEventsListeners)
   ]
 }

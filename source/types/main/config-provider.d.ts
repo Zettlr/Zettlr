@@ -70,6 +70,9 @@ export interface ConfigOptions {
     readabilityAlgorithm: string
     direction: 'ltr'|'rtl'
     rtlMoveVisually: boolean
+    lint: {
+      markdown: boolean
+    }
     autoCorrect: {
       active: boolean
       style: 'LibreOffice'|'Word'

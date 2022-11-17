@@ -94,6 +94,13 @@ export default function (): any {
       [
         {
           type: 'checkbox',
+          label: 'Check Markdown for style issues', // TODO: Translate!
+          model: 'editor.lint.markdown'
+        }
+      ],
+      [
+        {
+          type: 'checkbox',
           label: trans('dialog.preferences.mute_lines'),
           model: 'muteLines'
         },
