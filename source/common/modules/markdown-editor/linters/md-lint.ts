@@ -53,11 +53,19 @@ export const mdLint = linter(async view => {
     // 2. Only start -> Point message
     // 3. No offset prop -> Calculate with line
     if (message.position === null) {
-      console.warn(`Skipping linter warning ${message.message}: No position`)
+      console.warn(`Skipping linter warning "${message.message}": No position`)
       continue
     }
 
     const { start, end } = message.position
+
+    if (start.line === null || start.column === null) {
+      // We require at least a start. NOTE: Rule `final-newline` does not
+      // provide a position. We can either ignore that for now, or find a fix
+      // before Zettlr v3, but I'd argue it's relatively unproblematic for now.
+      console.warn(`Skipping linter warning "${message.message}": No position`)
+      continue
+    }
 
     // As the offset can be calculated from the line:column properties, we just
     // default to always calculating that (regardless of presence of an offset)
