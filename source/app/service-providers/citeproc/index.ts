@@ -481,15 +481,15 @@ export default class CiteprocProvider extends ProviderContract {
       return undefined
     }
 
-    // Make sure we have the correct database loaded
-    this.selectDatabase(database)
-    const citekeys = citations.map(c => c.id)
-    if (!this.ensureCitekeysExist(citekeys)) {
-      this._logger.verbose(`[CiteprocProvider] Cannot render citation with citekeys ${citekeys.join(', ')}: At least one key does not exist in database ${database}`)
-      return undefined
-    }
-
     try {
+      // Make sure we have the correct database loaded
+      this.selectDatabase(database)
+      const citekeys = citations.map(c => c.id)
+      if (!this.ensureCitekeysExist(citekeys)) {
+        this._logger.verbose(`[CiteprocProvider] Cannot render citation with citekeys ${citekeys.join(', ')}: At least one key does not exist in database ${database}`)
+        return undefined
+      }
+
       if (!composite || citations.length > 1) {
         return this.engine.makeCitationCluster(citations)
       } else if (composite && citations.length === 1) {
@@ -528,17 +528,17 @@ export default class CiteprocProvider extends ProviderContract {
       return undefined
     }
 
-    this.selectDatabase(database)
-    if (!this.ensureCitekeysExist(citekeys)) {
-      this._logger.verbose(`[CiteprocProvider] Cannot render bibliography with citekeys ${citekeys.join(', ')}: At least one key does not exist in database ${database}`)
-      return undefined
-    }
-
     try {
+      this.selectDatabase(database)
+      if (!this.ensureCitekeysExist(citekeys)) {
+        this._logger.verbose(`[CiteprocProvider] Cannot render bibliography with citekeys ${citekeys.join(', ')}: At least one key does not exist in database ${database}`)
+        return undefined
+      }
+
       this.engine.updateItems(citekeys)
       return this.engine.makeBibliography()
     } catch (err: any) {
-      this._logger.warning(err.message, err)
+      this._logger.error(`[citeproc] makeBibliography: Could not create bibliography: ${String(err)}`, err)
       return undefined // Something went wrong (e.g. falsy items in the registry)
     }
   }
