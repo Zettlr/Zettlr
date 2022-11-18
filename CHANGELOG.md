@@ -237,6 +237,7 @@ there.
 - Fixed the build pipeline so that native Node modules are now code-signed and
   work on macOS and Windows, meaning that `chokidar` should not need to fall
   back to CPU intensive polling anymore
+- Sandbox print preview window iframe elements
 
 # 2.3.0
 
