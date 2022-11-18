@@ -27,7 +27,7 @@ import remarkLintNoUndefinedReferences from 'remark-lint-no-undefined-references
 export const mdLint = linter(async view => {
   // We're using a set since somehow the remark linter sometimes happily throws
   // the same warnings
-  const diagnostics: Set<Diagnostic> = new Set()
+  const diagnostics: Diagnostic[] = []
 
   const result = await remark()
     .use(remarkFrontmatter, [
@@ -48,23 +48,34 @@ export const mdLint = linter(async view => {
   // Now we may or may not have messages that we can basically almost directly
   // convert into diagnostics
   for (const message of result.messages) {
-    let from = 0
-    let to = 0
-    if (message.position?.start.offset !== undefined) {
-      // If we have a start position, use that one (plus optionally an end)
-      // instead of the default beginning of file.
-      from = message.position.start.offset
-      to = message.position.end.offset ?? from // to === from for points
+    // So, the positions the messages give can come in several forms:
+    // 1. No position -> Skip message
+    // 2. Only start -> Point message
+    // 3. No offset prop -> Calculate with line
+    if (message.position === null) {
+      console.warn(`Skipping linter warning ${message.message}: No position`)
+      continue
     }
 
-    diagnostics.add({
+    const { start, end } = message.position
+
+    // As the offset can be calculated from the line:column properties, we just
+    // default to always calculating that (regardless of presence of an offset)
+    // in order to keep the logic slim.
+    const from = view.state.doc.line(start.line).from + start.column - 1
+    const to = (end.line === null || end.column === null)
+      ? from
+      : view.state.doc.line(end.line).from + end.column - 1
+
+    diagnostics.push({
       from,
       to,
       severity: (message.fatal === true) ? 'error' : 'warning',
       message: message.message,
-      source: 'remark-lint' // message.source is preferred, but can be undefined...?
+      // message.source is preferred, but can be undefined...?
+      source: (message.ruleId === null) ? 'remark-lint' : `remark-lint (${message.ruleId})`
     })
   }
 
-  return [...diagnostics]
+  return diagnostics
 })
