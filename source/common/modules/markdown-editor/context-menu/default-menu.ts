@@ -18,7 +18,7 @@ import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { AnyMenuItem } from '@dts/renderer/context'
 import { SyntaxNode } from '@lezer/common'
-import { applyBold, applyItalic, insertLink, applyBlockquote } from '../commands/markdown'
+import { applyBold, applyItalic, insertLink, applyBlockquote, applyOrderedList, applyBulletList, applyTaskList } from '../commands/markdown'
 import { cut, copyAsPlain, copyAsHTML, paste, pasteAsPlain } from '../util/copy-paste-cut'
 
 /**
@@ -144,11 +144,11 @@ export function defaultMenu (view: EditorView, node: SyntaxNode, coords: { x: nu
     } else if (clickedID === 'markdownLink') {
       insertLink(view)
     } else if (clickedID === 'markdownMakeOrderedList') {
-      // TODO
+      applyOrderedList(view)
     } else if (clickedID === 'markdownMakeUnorderedList') {
-      // TODO
+      applyBulletList(view)
     } else if (clickedID === 'markdownMakeTaskList') {
-      // TODO
+      applyTaskList(view)
     } else if (clickedID === 'markdownBlockquote') {
       applyBlockquote(view)
     } else if (clickedID === 'markdownInsertTable') {

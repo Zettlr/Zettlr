@@ -133,6 +133,29 @@ function applyInlineMarkup (target: EditorView, start: string, end: string): voi
   target.dispatch(transaction)
 }
 
+function applyList (target: EditorView, type: 'ul'|'ol'|'task'): void {
+  const transaction = target.state.changeByRange(range => {
+    const startLine = target.state.doc.lineAt(range.from).number
+    const endLine = target.state.doc.lineAt(range.to).number
+
+    const changes: ChangeSpec[] = []
+
+    let offsetCharacters = 0
+
+    for (let i = startLine; i <= endLine; i++) {
+      const line = target.state.doc.line(i)
+      const withoutBlocks = removeBlockMarkup(line.text)
+      const formatting = (type === 'ol') ? `${i - startLine + 1}.` : (type === 'ul') ? '*' : '- [ ]'
+      offsetCharacters += line.text.length - withoutBlocks.length + formatting.length + 1
+      changes.push({ from: line.from, to: line.to, insert: formatting + ' ' + withoutBlocks })
+    }
+
+    return { changes, range: EditorSelection.range(range.from, range.to + offsetCharacters) }
+  })
+
+  target.dispatch(transaction)
+}
+
 export function insertLink (target: EditorView): boolean {
   insertLinkOrImage(target, 'link')
   return true
@@ -199,5 +222,20 @@ export function applyH6 (target: EditorView): boolean {
 
 export function applyBlockquote (target: EditorView): boolean {
   applyBlockMarkup(target, '>')
+  return true
+}
+
+export function applyBulletList (target: EditorView): boolean {
+  applyList(target, 'ul')
+  return true
+}
+
+export function applyOrderedList (target: EditorView): boolean {
+  applyList(target, 'ol')
+  return true
+}
+
+export function applyTaskList (target: EditorView): boolean {
+  applyList(target, 'task')
   return true
 }

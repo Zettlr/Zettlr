@@ -54,7 +54,7 @@ import { DocumentType } from '@dts/common/documents'
 import { copyAsHTML, pasteAsPlain } from './util/copy-paste-cut'
 import { CoreExtensionOptions, getJSONExtensions, getMarkdownExtensions, getTexExtensions, getYAMLExtensions } from './editor-extension-sets'
 import { highlightRangesEffect } from './plugins/highlight-ranges'
-import { applyComment, insertImage, insertLink } from './commands/markdown'
+import { applyComment, applyTaskList, insertImage, insertLink } from './commands/markdown'
 import { addNewFootnote } from './commands/footnotes'
 import countWords from '@common/util/count-words'
 import { syntaxTree } from '@codemirror/language'
@@ -567,9 +567,11 @@ export default class MarkdownEditor extends EventEmitter {
       case 'insertFootnote':
         addNewFootnote(this._instance)
         break
+      case 'markdownMakeTaskList':
+        applyTaskList(this._instance)
+        break
       default:
         console.warn('Unimplemented command:', cmd)
-      // TODO case 'markdownMakeTaskList':
     }
   }
 
