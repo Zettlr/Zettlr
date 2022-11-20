@@ -13,11 +13,11 @@
  * END HEADER
  */
 
-import { ChangeSpec, EditorSelection, SelectionRange } from '@codemirror/state'
+import { ChangeSpec } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
 import html2md from '@common/util/html-to-md'
 import { getConverter } from '@common/util/md-to-html'
-import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
+import { configField } from './configuration'
 
 const clipboard = window.clipboard
 
@@ -28,8 +28,9 @@ const clipboard = window.clipboard
  * @param   {EditorView}  view  The view
  */
 export function copyAsHTML (view: EditorView): void {
+  const { library } = view.state.field(configField).metadata
   const selections: string[] = []
-  const md2html = getConverter(window.getCitationCallback(CITEPROC_MAIN_DB)) // TODO: Correct database
+  const md2html = getConverter(window.getCitationCallback(library))
 
   for (const { from, to } of view.state.selection.ranges) {
     selections.push(view.state.sliceDoc(from, to))
@@ -89,65 +90,23 @@ export function paste (view: EditorView): void {
   const plain = clipboard.readText()
   const html = clipboard.readHTML()
 
-  const changes: ChangeSpec[] = []
-  const ranges: SelectionRange[] = []
-
-  let offset = 0
-
   if (html === '' || html === plain) {
-    // Insert the plain text
-    for (const { from, to } of view.state.selection.ranges) {
-      changes.push({ from, to, insert: plain })
-      offset += plain.length
-      const pos = from + offset
-      ranges.push(EditorSelection.range(pos, pos))
-    }
+    view.dispatch(view.state.replaceSelection(plain))
   } else {
     // Convert HTML to plain and insert that
     const converted = html2md(html)
-    for (const { from, to } of view.state.selection.ranges) {
-      changes.push({ from, to, insert: converted })
-      offset += converted.length
-      const pos = from + offset
-      ranges.push(EditorSelection.range(pos, pos))
-    }
+    view.dispatch(view.state.replaceSelection(converted))
   }
-
-  view.dispatch({ changes, selection: EditorSelection.create(ranges) })
 }
 
 /**
- * Inserts the clipboard contents, but treats it as plain text, even if it's
- * HTML
+ * Explicitly paste the plain text from the clipboard.
  *
  * @param   {EditorView}  view  The view
  */
 export function pasteAsPlain (view: EditorView): void {
   const plain = clipboard.readText()
-  const html = clipboard.readHTML()
-
-  const changes: ChangeSpec[] = []
-  const ranges: SelectionRange[] = []
-
-  let offset = 0
-
-  if (html === '' || html === plain) {
-    // Insert the plain text
-    for (const { from, to } of view.state.selection.ranges) {
-      changes.push({ from, to, insert: plain })
-      offset += plain.length
-      const pos = from + offset
-      ranges.push(EditorSelection.range(pos, pos))
-    }
-  } else {
-    // Insert the HTML without conversion
-    for (const { from, to } of view.state.selection.ranges) {
-      changes.push({ from, to, insert: html })
-      offset += html.length
-      const pos = from + offset
-      ranges.push(EditorSelection.range(pos, pos))
-    }
+  if (plain !== '') {
+    view.dispatch(view.state.replaceSelection(plain))
   }
-
-  view.dispatch({ changes, selection: EditorSelection.create(ranges) })
 }
