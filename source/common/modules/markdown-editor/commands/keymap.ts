@@ -20,7 +20,7 @@ import { copyAsHTML, paste, pasteAsPlain } from '../util/copy-paste-cut'
 import { handleReplacement, handleBackspace, handleQuote } from './autocorrect'
 import { addNewFootnote } from './footnotes'
 import { maybeIndentList, maybeUnindentList } from './lists'
-import { insertLink, insertImage, applyBold, applyItalic, applyComment } from './markdown'
+import { insertLink, insertImage, applyBold, applyItalic, applyComment, applyTaskList } from './markdown'
 
 // Custom keymap implementing less complex keyboard shortcuts
 export const customKeymap: KeyBinding[] = [
@@ -40,8 +40,9 @@ export const customKeymap: KeyBinding[] = [
   { key: 'Backspace', run: handleBackspace },
   { key: 'Alt-Up', run: moveLineUp, shift: copyLineUp },
   { key: 'Alt-Down', run: moveLineDown, shift: copyLineDown },
+  { key: 'Mod-t', run: applyTaskList },
   { key: 'Mod-v', run: view => { paste(view); return true }, shift: view => { pasteAsPlain(view); return true } },
-  { key: 'Mod-Alt-c', run: (target) => { copyAsHTML(target); return true } },
+  { key: 'Mod-Alt-c', run: view => { copyAsHTML(view); return true } },
   { key: '"', run: handleQuote('"') },
   { key: "'", run: handleQuote("'") },
   // DEBUG: We have to add handlers that specifically listen for the German
