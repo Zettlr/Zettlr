@@ -158,10 +158,10 @@
     "@lezer/lr" "^1.0.0"
     style-mod "^4.0.0"
 
-"@codemirror/legacy-modes@^6.0.0":
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/@codemirror/legacy-modes/-/legacy-modes-6.2.0.tgz#473016ccafba0990f23c981b678843194be5e131"
-  integrity sha512-RtZfwALTSswzKsnU3zo5FytDBA+/6J85Z8qNO7hnJ3Lo+jbdKUHreiw5m9yAT1DoB5WFhSZODsSijksdSbnGqA==
+"@codemirror/legacy-modes@^6.3.0":
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/@codemirror/legacy-modes/-/legacy-modes-6.3.0.tgz#93d9fe4afb83bc419d8c9b15c1088f0497b29d05"
+  integrity sha512-54ncmguzXZQ3u+8gx4/mpBRbkn6TLzfIrCGvFNLgB3giFYY3E2UETzv1RCFP0hM2L2bQBKBoI92i4ahrDAiE6g==
   dependencies:
     "@codemirror/language" "^6.0.0"
 
