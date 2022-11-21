@@ -43,10 +43,10 @@
   resolved "https://registry.yarnpkg.com/@clr/icons/-/icons-13.0.2.tgz#600b530fe8e0d654de81f97d2b64db5905266eb6"
   integrity sha512-bdcSuFvQAbIIp8Q2Fm55BjHW5cawP4xEOkZf2IEIin0d9ViRcAJNjACBCOMDhx2up7nPZsXwN2gL8zJhL7TSZQ==
 
-"@codemirror/autocomplete@^6.0.0":
-  version "6.3.2"
-  resolved "https://registry.yarnpkg.com/@codemirror/autocomplete/-/autocomplete-6.3.2.tgz#cfd5d8eb2348dddf7b63098f9f09ff47b02f57db"
-  integrity sha512-+VzxrHWkuvSSt0fw4I57SULo/NMrLnNgm6JHrkbIYfDw9jZJNTruCwkv32TCqSeC8xIXhYWMuxawwr/xOoHr8w==
+"@codemirror/autocomplete@^6.0.0", "@codemirror/autocomplete@^6.3.3":
+  version "6.3.3"
+  resolved "https://registry.yarnpkg.com/@codemirror/autocomplete/-/autocomplete-6.3.3.tgz#f9dba421b9a0d83ecf89a06def37a96e6afb593a"
+  integrity sha512-8MGqPuKvE0W0XjabDYX3BFJNJRsYFAYpDBol+YCg6o5t2JyoDeoMYrqRMVnJv1B1FBgNAkvdDVrNrVE/7c9qvQ==
   dependencies:
     "@codemirror/language" "^6.0.0"
     "@codemirror/state" "^6.0.0"
