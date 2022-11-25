@@ -43,14 +43,14 @@
   resolved "https://registry.yarnpkg.com/@clr/icons/-/icons-13.0.2.tgz#600b530fe8e0d654de81f97d2b64db5905266eb6"
   integrity sha512-bdcSuFvQAbIIp8Q2Fm55BjHW5cawP4xEOkZf2IEIin0d9ViRcAJNjACBCOMDhx2up7nPZsXwN2gL8zJhL7TSZQ==
 
-"@codemirror/autocomplete@^6.0.0":
-  version "6.3.2"
-  resolved "https://registry.yarnpkg.com/@codemirror/autocomplete/-/autocomplete-6.3.2.tgz#cfd5d8eb2348dddf7b63098f9f09ff47b02f57db"
-  integrity sha512-+VzxrHWkuvSSt0fw4I57SULo/NMrLnNgm6JHrkbIYfDw9jZJNTruCwkv32TCqSeC8xIXhYWMuxawwr/xOoHr8w==
+"@codemirror/autocomplete@^6.0.0", "@codemirror/autocomplete@^6.3.4":
+  version "6.3.4"
+  resolved "https://registry.yarnpkg.com/@codemirror/autocomplete/-/autocomplete-6.3.4.tgz#dd22f0a0220718e1f6e3b48319649859b6c929b6"
+  integrity sha512-irxKsTSjS0OkfMWWt9YxtNK97++/E+XIHfKnRpSVfZyHzda/amYF0BR+T8mMkrGQWidx2zApxHx08GT13egyQA==
   dependencies:
     "@codemirror/language" "^6.0.0"
     "@codemirror/state" "^6.0.0"
-    "@codemirror/view" "^6.5.0"
+    "@codemirror/view" "^6.6.0"
     "@lezer/common" "^1.0.0"
 
 "@codemirror/collab@^6.0.0":
@@ -188,10 +188,10 @@
   resolved "https://registry.yarnpkg.com/@codemirror/state/-/state-6.1.4.tgz#2b654ae233ac4f41ee89ce095509ea35ecdf1031"
   integrity sha512-g+3OJuRylV5qsXuuhrc6Cvs1NQluNioepYMM2fhnpYkNk7NgX+j0AFuevKSVKzTDmDyt9+Puju+zPdHNECzCNQ==
 
-"@codemirror/view@^6.0.0", "@codemirror/view@^6.2.2", "@codemirror/view@^6.5.0":
-  version "6.5.1"
-  resolved "https://registry.yarnpkg.com/@codemirror/view/-/view-6.5.1.tgz#f4533cd796f0569508822d0012bee9a15dc4b3f9"
-  integrity sha512-xBKP8N3AXOs06VcKvIuvIQoUlGs7Hb78ftJWahLaRX909jKPMgGxR5XjvrawzTTZMSTU3DzdjDNPwG6fPM/ypQ==
+"@codemirror/view@^6.0.0", "@codemirror/view@^6.2.2", "@codemirror/view@^6.6.0":
+  version "6.6.0"
+  resolved "https://registry.yarnpkg.com/@codemirror/view/-/view-6.6.0.tgz#d89a24912ae2f4b9d7bd430c7804c25c5e32838c"
+  integrity sha512-40VaFVZI3rkyjO5GHFAbNwaW+YgZexjKyx5gxLU2DvfuXAEZX0kW0apOXb0SBRLnKIQJ+U/n2nPfxgBVFHERrg==
   dependencies:
     "@codemirror/state" "^6.1.4"
     style-mod "^4.0.0"
