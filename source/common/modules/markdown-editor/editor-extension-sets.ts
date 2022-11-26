@@ -31,7 +31,6 @@ import { codeSyntaxHighlighter, markdownSyntaxHighlighter } from './highlight/ge
 import markdownParser from './parser/markdown-parser'
 import { syntaxExtensions } from './parser/syntax-extensions'
 import { defaultContextMenu } from './plugins/default-context-menu'
-import { pasteHandler } from './plugins/paste-handlers'
 import { readabilityMode } from './plugins/readability'
 import { hookDocumentAuthority } from './plugins/remote-doc'
 import { lintGutter } from '@codemirror/lint'
@@ -243,7 +242,6 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     footnoteHover,
     urlHover,
     filePreview,
-    pasteHandler, // Manages image saving
     defaultContextMenu, // A default context menu
     EditorView.domEventHandlers(options.domEventsListeners)
   ]

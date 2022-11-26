@@ -20,6 +20,48 @@ import { getConverter } from '@common/util/md-to-html'
 import { configField } from './configuration'
 
 const clipboard = window.clipboard
+const ipcRenderer = window.ipc
+const path = window.path
+
+/**
+ * This function attempts to paste an image into the editor. Should be called by
+ * paste handlers to ensure it has a chance of saving an image. Returns true if
+ * there was an image in the clipboard and this function is handling the paste
+ * event.
+ *
+ * @param   {EditorView}  view  The editor view
+ *
+ * @return  {boolean}           True if an image has been handled, else false.
+ */
+export function pasteImage (view: EditorView): boolean {
+  if (!clipboard.hasImage()) {
+    return false
+  }
+
+  const basePath = path.dirname(view.state.field(configField).metadata.path)
+
+  // We've got an image. So we need to handle it.
+  ipcRenderer.invoke('application', {
+    command: 'save-image-from-clipboard',
+    payload: { startPath: basePath }
+  })
+    .then((pathToInsert: string|undefined) => {
+      // If the user aborts the pasting process, the command will return
+      // undefined, so we have to check for this.
+      if (pathToInsert !== undefined) {
+        // Replace backward slashes with forward slashes to make Windows
+        // paths cross-platform compatible
+        const relative = path.relative(basePath, pathToInsert)
+        const sanitizedPath = relative.replace(/\\/g, '/')
+        // We need to replace spaces, since the Markdown parser is strict here
+        const tag = `![${path.basename(sanitizedPath)}](${sanitizedPath.replace(/ /g, '%20')})`
+        const { from, to } = view.state.selection.main
+        view.dispatch({ changes: { from, to, insert: tag } })
+      }
+    })
+    .catch(err => console.error(err))
+  return true // We're handling the event
+}
 
 /**
  * Copies whatever is currently selected into the clipboard as HTML (with plain
@@ -87,6 +129,11 @@ export function cut (view: EditorView, asHTML?: boolean): void {
  * @param   {EditorView}  view  The view
  */
 export function paste (view: EditorView): void {
+  // Allow the image paster to paste an image before attempting to paste text
+  if (pasteImage(view)) {
+    return
+  }
+
   const plain = clipboard.readText()
   const html = clipboard.readHTML()
 
