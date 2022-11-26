@@ -212,8 +212,8 @@ there.
 
 - Refactored the main editor component further
 - Refactored the Sidebar panels into their own respective components
-- Upgrade Electron to `19.x.x`
-- Upgrade Pandoc to `2.19`
+- Upgrade Electron to `20.x.x`
+- Upgrade Pandoc to `2.19.2`
 - Upgrade CodeMirror to version 6
 - Pandoc logs are now logged in every case
 - Improve the display and functionality of log messages
