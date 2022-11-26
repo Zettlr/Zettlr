@@ -36,6 +36,7 @@ export default function (): any {
           model: 'export.cslLibrary',
           reset: '',
           filter: {
+            'json, yaml, yml, bib': 'CSL JSON or BibTeX',
             'json, yaml, yml': 'CSL JSON',
             'bib': 'BibTeX'
           }

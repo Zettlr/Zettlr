@@ -204,6 +204,9 @@ there.
   the arrow
 - The graph view now uses as labels YAML frontmatter titles, first headings
   level 1, or a filename without extension based on the preferences
+- Fixed a usability issue on macOS where if you wanted to select a BibTeX file
+  for your citations you had to click through intransparent buttons before being
+  able to; now you can immediately select both CSL JSON and BibTeX files
 
 ## Under the Hood
 
