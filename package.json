@@ -134,7 +134,7 @@
     "electron": "^21.0.0",
     "electron-builder": "^23.0.3",
     "electron-devtools-installer": "^3.2.0",
-    "eslint": "^8.26.0",
+    "eslint": "^8.28.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-config-standard-with-typescript": "^23.0.0",
     "eslint-loader": "^4.0.2",
