@@ -74,12 +74,9 @@ export const plugin: ExporterPlugin = {
 
     await printer.loadFile(htmlFilePath)
     const pdfData = await printer.webContents.printToPDF({
-      marginsType: 0,
       printBackground: false,
-      printSelectionOnly: false,
       landscape: false,
-      pageSize: 'A4',
-      scaleFactor: 100
+      pageSize: 'A4'
     })
     printer.close()
 
