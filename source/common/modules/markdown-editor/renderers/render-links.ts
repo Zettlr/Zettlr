@@ -93,7 +93,6 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): LinkWidget|unde
   // Get the actual link contents, extract title and URL and create a
   // replacement widget
   if (node.type.name === 'URL') {
-    console.log('Rendering plain link!')
     const url = state.sliceDoc(node.from, node.to)
     return new LinkWidget(url, url, node.node)
   }

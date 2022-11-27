@@ -331,9 +331,18 @@ export default class MarkdownEditor extends EventEmitter {
   /**
    * Swaps the current CodeMirror Document with a new one.
    *
-   * @param   {string}           documentPath         The document to switch to
+   * @param  {string}   documentPath  The document to switch to
+   * @param  {boolean}  force         Optional. If not given or not true, prevents
+   *                                  reloading the same document again.
    */
-  async swapDoc (documentPath: string): Promise<void> {
+  async swapDoc (documentPath: string, force = false): Promise<void> {
+    // Do not reload the document unless explicitly specified. The reason is
+    // that sometimes we do need to programmatically reload the document, but in
+    // 99% of the cases, this only leads to unnecessary flickering.
+    if (this.config.metadata.path === documentPath && !force) {
+      return
+    }
+
     // We need to set the file's path already here so that it's available on
     // the initial rendering round for any extensions that need it
     this.config.metadata.path = documentPath
