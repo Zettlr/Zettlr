@@ -753,8 +753,6 @@ export default class DocumentManager extends ProviderContract {
       return false
     }
 
-    const openFile = this.documents.find(doc => doc.filePath === filePath)
-
     let numOpenInstances = 0
     await this.forEachLeaf(async tabMan => {
       const file = tabMan.openFiles.find(f => f.path === filePath)
@@ -764,14 +762,13 @@ export default class DocumentManager extends ProviderContract {
       return false
     })
 
-    if (openFile === undefined) {
-      return false
-    }
-
     // If we were to completely remove the file from our buffer, we have to ask
     // first. If there's at least another instance open that means that we won't
-    // lose the file.
-    if (this.isModified(filePath) && numOpenInstances === 1) {
+    // lose the file. NOTE: openFile will be undefined if the file has not been
+    // opened in this session of Zettlr, hence it will not be modified, hence we
+    // don't have to do anything.
+    const openFile = this.documents.find(doc => doc.filePath === filePath)
+    if (openFile !== undefined && this.isModified(filePath) && numOpenInstances === 1) {
       const result = await this._app.windows.askSaveChanges()
       // 0 = 'Close without saving changes',
       // 1 = 'Save changes'
