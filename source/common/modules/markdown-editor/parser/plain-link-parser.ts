@@ -29,7 +29,14 @@ export const plainLinkParser: InlineParser = {
   name: 'plain-links',
   parse: (ctx, next, pos) => {
     const relativeOffset = pos - ctx.offset
+    const sliceBefore = ctx.text.slice(0, relativeOffset)
     const slice = ctx.text.slice(relativeOffset)
+    const openBracketBefore = sliceBefore.lastIndexOf('[') > sliceBefore.lastIndexOf(']')
+    const closeBracketAfter = slice.includes(']') && (slice.includes('[') ? slice.indexOf(']') < slice.indexOf('[') : true)
+    if (openBracketBefore && closeBracketAfter) {
+      return -1 // Somehow if we render an URL inside a Link title, the Link parser doesn't parse the link anymore
+    }
+
     const nextSpace = slice.includes(' ') ? slice.indexOf(' ') : ctx.end - pos
 
     if (protocolRe.test(slice) || wwwRe.test(slice)) {
