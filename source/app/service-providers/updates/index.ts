@@ -145,6 +145,13 @@ export default class UpdateProvider extends ProviderContract {
     try {
       this._logger.info(`[Updater] Checking ${REPO_URL} for updates ...`)
       const response: Response<string> = await got(REPO_URL, {
+        // I'm currently on Mälartåg and, despite WiFi normally being pretty good,
+        // it's abysmally slow right now, and I noticed that the update check was
+        // taking forever to complete, which prevented the app from properly
+        // booting up. Then I realized that got by default does not include any
+        // timeout, so I'm adding one here (+ decouple the update check from the
+        // boot cycle further below)
+        timeout: { request: 5000 },
         method: 'GET',
         searchParams: new URLSearchParams([
           [ 'accept-beta', this._config.get('checkForBeta') ]
@@ -448,13 +455,15 @@ export default class UpdateProvider extends ProviderContract {
     // Initiate a first check for updates
     const checkUpdates: boolean = this._config.get('system.checkForUpdates')
     if (checkUpdates) {
-      await this.check()
-
-      if (this.applicationUpdateAvailable()) {
-        const { tagName } = this.getUpdateState()
-        this._logger.info(`Update available: ${tagName}`)
-        this._notifications.show(trans('dialog.update.new_update_available', tagName))
-      }
+      this.check()
+        .then(() => {
+          if (this.applicationUpdateAvailable()) {
+            const { tagName } = this.getUpdateState()
+            this._logger.info(`Update available: ${tagName}`)
+            this._notifications.show(trans('dialog.update.new_update_available', tagName))
+          }
+        })
+        .catch(err => this._logger.error('[Update Provider] Could not check for updates: Unexpected error', err))
     }
   }
 

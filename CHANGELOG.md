@@ -242,6 +242,9 @@ there.
   work on macOS and Windows, meaning that `chokidar` should not need to fall
   back to CPU intensive polling anymore
 - Sandbox print preview window iframe elements
+- The update check will no longer block the boot cycle, making start up times
+  fast even in degraded Wifi contexts where there is a connection, but extremely
+  slow
 
 # 2.3.0
 
