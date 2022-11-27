@@ -19,6 +19,10 @@ import { EditorState } from '@codemirror/state'
 import clickAndSelect from './click-and-select'
 import openMarkdownLink from '../util/open-markdown-link'
 import { linkImageMenu } from '../context-menu/link-image-menu'
+import { configField } from '../util/configuration'
+import makeValidUri from '@common/util/make-valid-uri'
+
+const path = window.path
 
 class LinkWidget extends WidgetType {
   constructor (readonly linkTitle: string, readonly linkUrl: string, readonly node: SyntaxNode) {
@@ -30,10 +34,13 @@ class LinkWidget extends WidgetType {
   }
 
   toDOM (view: EditorView): HTMLElement {
+    const base = path.dirname(view.state.field(configField).metadata.path)
+    const validURI = makeValidUri(this.linkUrl, base)
+
     const elem = document.createElement('a')
     elem.innerText = this.linkTitle
-    elem.setAttribute('title', this.linkUrl)
-    elem.setAttribute('href', this.linkUrl)
+    elem.setAttribute('title', validURI)
+    elem.setAttribute('href', validURI)
 
     elem.classList.add('markdown-link')
 
@@ -76,12 +83,21 @@ class LinkWidget extends WidgetType {
 }
 
 function shouldHandleNode (node: SyntaxNodeRef): boolean {
-  return node.type.name === 'Link'
+  // We render either full Links (-> [Title](URL)), or plain links (identified
+  // as URL nodes which are not children of Link nodes)
+  return node.type.name === 'Link' ||
+    (node.type.name === 'URL' && node.node.parent?.type.name !== 'Link')
 }
 
 function createWidget (state: EditorState, node: SyntaxNodeRef): LinkWidget|undefined {
   // Get the actual link contents, extract title and URL and create a
   // replacement widget
+  if (node.type.name === 'URL') {
+    console.log('Rendering plain link!')
+    const url = state.sliceDoc(node.from, node.to)
+    return new LinkWidget(url, url, node.node)
+  }
+
   const literalLink = state.sliceDoc(node.from, node.to)
   const match = /(?!!)\[(?<title>.+)\]\((?<url>.+)\)/.exec(literalLink)
   if (match === null) {

@@ -207,6 +207,7 @@ there.
 - Fixed a usability issue on macOS where if you wanted to select a BibTeX file
   for your citations you had to click through intransparent buttons before being
   able to; now you can immediately select both CSL JSON and BibTeX files
+- Parsed links will now show the correctly resolved link as titles
 
 ## Under the Hood
 
