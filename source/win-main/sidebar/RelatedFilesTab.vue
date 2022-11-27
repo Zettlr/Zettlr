@@ -63,6 +63,7 @@ import { trans } from '@common/i18n-renderer'
 import { RelatedFile } from '@dts/renderer/misc'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import { defineComponent } from 'vue'
+import { OpenDocument } from '@dts/common/documents'
 
 const ipcRenderer = window.ipc
 
@@ -89,8 +90,15 @@ export default defineComponent({
     relatedFilesLabel: function (): string {
       return trans('gui.related_files_label')
     },
+    lastActiveFile: function (): OpenDocument|null {
+      return this.$store.getters.lastLeafActiveFile()
+    },
     relatedFiles: function (): RelatedFile[] {
-      return this.$store.state.relatedFiles
+      if (this.lastActiveFile === null) {
+        return []
+      } else {
+        return this.$store.state.relatedFiles
+      }
     },
     noRelatedFilesMessage: function (): string {
       return trans('gui.no_related_files')
