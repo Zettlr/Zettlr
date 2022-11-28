@@ -16,7 +16,7 @@
  * END HEADER
  */
 
-import { closeBrackets, completionKeymap } from '@codemirror/autocomplete'
+import { closeBrackets, closeBracketsKeymap, completionKeymap } from '@codemirror/autocomplete'
 import { Update } from '@codemirror/collab'
 import { defaultKeymap, historyKeymap, history } from '@codemirror/commands'
 import { bracketMatching, codeFolding, foldGutter, indentOnInput, indentUnit, StreamLanguage } from '@codemirror/language'
@@ -97,7 +97,8 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     // KEYMAPS
     keymap.of([
       ...defaultKeymap, // Minimal default keymap
-      ...historyKeymap // , // History commands (redo/undo)
+      ...historyKeymap, // , // History commands (redo/undo)
+      ...closeBracketsKeymap // Binds Backspace to deletion of matching brackets
       // ...searchKeymap // Search commands (Ctrl+F, etc.)
     ]),
     softwrapVisualIndent, // Always indent visually
@@ -114,7 +115,8 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     // TAB SIZES/INDENTATION -> Depend on the configuration field
     EditorState.tabSize.from(configField, (val) => val.indentUnit),
     indentUnit.from(configField, (val) => val.indentWithTabs ? '\t' : ' '.repeat(val.indentUnit)),
-    EditorView.lineWrapping, // Enable line wrapping
+    EditorView.lineWrapping, // Enable line wrapping,
+    closeBrackets(),
 
     // Add the configuration and preset it with whatever is in the cached
     // config.
@@ -154,7 +156,6 @@ function getGenericCodeExtensions (options: CoreExtensionOptions): Extension[] {
   return [
     ...getCoreExtensions(options),
     lineNumbers(),
-    closeBrackets(),
     bracketMatching(),
     indentOnInput(),
     codeSyntaxHighlighter()
