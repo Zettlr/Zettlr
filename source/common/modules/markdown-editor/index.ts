@@ -259,13 +259,17 @@ export default class MarkdownEditor extends EventEmitter {
           }
         },
         drop (event, view) {
-          event.preventDefault()
-          event.stopPropagation()
-
           const dataTransfer = event.dataTransfer
 
           if (dataTransfer === null) {
             return false
+          }
+
+          const zettlrFile = dataTransfer.getData('text/x-zettlr-file')
+          const docTab = dataTransfer.getData('zettlr/document-tab')
+
+          if (docTab !== '') {
+            return false // There's a document being dragged, let the MainEditor capture the event
           }
 
           const pos = view.posAtCoords({ x: event.clientX, y: event.clientY })
@@ -273,7 +277,8 @@ export default class MarkdownEditor extends EventEmitter {
             return false
           }
 
-          const zettlrFile = dataTransfer.getData('text/x-zettlr-file')
+          event.preventDefault()
+          event.stopPropagation()
 
           // First: Do we have a fileList of files to drop here?
           if (dataTransfer.files.length > 0) {
