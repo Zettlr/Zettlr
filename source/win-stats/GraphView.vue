@@ -451,7 +451,7 @@ export default defineComponent({
               .attr('r', 5)
               .attr('fill', (vertex, value) => (vertex.isolate) ? color(ISOLATES_CLASS) : color(vertex.component))
               .on('click', (event, vertex) => {
-                ipcRenderer.invoke('application', {
+                ipcRenderer.invoke('documents-provider', {
                   command: 'open-file',
                   payload: { path: vertex.id }
                 }).catch(err => console.error(err))

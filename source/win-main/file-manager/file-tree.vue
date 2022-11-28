@@ -146,6 +146,9 @@ export default defineComponent({
     useTitle: function (): boolean {
       return this.$store.state.config.fileNameDisplay.includes('title')
     },
+    lastLeafId: function (): string {
+      return this.$store.state.lastLeafId
+    },
     getFilteredTree: function (): MaybeRootDescriptor[] {
       const q = String(this.filterQuery).trim().toLowerCase() // Easy access
 
@@ -254,10 +257,12 @@ export default defineComponent({
             .catch(e => console.error(e))
         } else {
           // Select the active file (if there is one)
-          ipcRenderer.invoke('application', {
+          ipcRenderer.invoke('documents-provider', {
             command: 'open-file',
             payload: {
               path: this.activeTreeItem[0],
+              windowId: this.windowId,
+              leafId: this.lastLeafId,
               newTab: false
             }
           })

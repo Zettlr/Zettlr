@@ -271,7 +271,7 @@ export default defineComponent({
             .catch(e => console.error(e))
         } else {
           // Select the active file (if there is one)
-          ipcRenderer.invoke('application', {
+          ipcRenderer.invoke('documents-provider', {
             command: 'open-file',
             payload: {
               path: descriptor.path,
