@@ -28,6 +28,10 @@ async function filePreviewTooltip (view: EditorView, pos: number, side: 1 | -1):
   const { linkStart, linkEnd } = view.state.field(configField)
   const { from, text } = view.state.doc.lineAt(pos)
 
+  // Variable descriptions:
+  // pos = Wherever the cursor is (absolute position)
+  // start = After linkStart (relative position)
+  // end = Before linkEnd (relative position)
   const start = text.substring(0, pos - from).lastIndexOf(linkStart) + linkStart.length
   const end = text.indexOf(linkEnd, pos - from)
 
@@ -42,19 +46,16 @@ async function filePreviewTooltip (view: EditorView, pos: number, side: 1 | -1):
     { command: 'file-find-and-return-meta-data', payload: fileToDisplay }
   )
 
-  if (res !== undefined) {
-    return {
-      pos,
-      above: true,
-      create (view) {
+  // By annotating a range (providing `end`) the hover tooltip will stay as long
+  // as the user is somewhere over the links
+  return {
+    pos: from + start,
+    end: pos + end + linkEnd.length,
+    above: true,
+    create (view) {
+      if (res !== undefined) {
         return { dom: getPreviewElement(res, fileToDisplay) }
-      }
-    }
-  } else {
-    return {
-      pos,
-      above: true,
-      create (view) {
+      } else {
         const dom = document.createElement('div')
         dom.textContent = `File ${fileToDisplay} does not exist.` // TODO: Translate!
         return { dom }
