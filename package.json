@@ -141,7 +141,7 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-n": "^15.4.0",
     "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-vue": "^9.7.0",
+    "eslint-plugin-vue": "^9.8.0",
     "file-loader": "^6.2.0",
     "fork-ts-checker-webpack-plugin": "^7.0.0",
     "jsdom": "^20.0.2",
