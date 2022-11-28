@@ -72,6 +72,12 @@ export default defineComponent({
   components: {
     RecycleScroller
   },
+  data: function () {
+    const searchParams = new URLSearchParams(window.location.search)
+    return {
+      windowId: searchParams.get('window_id') as string
+    }
+  },
   computed: {
     /**
      * The Vue Virtual Scroller component expects an array of objects which
@@ -111,6 +117,9 @@ export default defineComponent({
     },
     displayMdExtensions: function (): boolean {
       return this.$store.state.config['display.markdownFileExtensions']
+    },
+    lastLeafId: function (): string {
+      return this.$store.state.lastLeafId
     }
   },
   methods: {
@@ -124,10 +133,12 @@ export default defineComponent({
       }))
     },
     requestFile: function (event: MouseEvent, filePath: string) {
-      ipcRenderer.invoke('application', {
+      ipcRenderer.invoke('documents-provider', {
         command: 'open-file',
         payload: {
           path: filePath,
+          windowId: this.windowId,
+          leafId: this.lastLeafId,
           newTab: event.type === 'mousedown' && event.button === 1
         }
       })
