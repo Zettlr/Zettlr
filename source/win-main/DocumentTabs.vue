@@ -19,6 +19,8 @@
       role="tablist"
       v-bind:class="{ 'tab-container': true }"
       v-on:contextmenu="handleTabbarContext($event)"
+      v-on:dragover="handleExternalDragover"
+      v-on:dragend="handleExternalDragleave"
     >
       <div
         v-for="file in openFiles"
@@ -52,6 +54,19 @@
           aria-hidden="true"
           v-on:mousedown.stop.prevent="handleClickClose($event, file)"
         >&times;</span>
+      </div>
+
+      <div
+        v-if="documentTabDragOver"
+        v-bind:class="{
+          dropzone: true,
+          dragover: true
+        }"
+        v-on:drop="handleExternalDrop"
+        v-on:dragover="handleExternalDragover"
+        v-on:dragleave="handleExternalDragleave"
+        v-on:dragend="handleExternalDragleave"
+      >
       </div>
     </div>
   </div>
@@ -99,7 +114,12 @@ export default defineComponent({
       showScrollers: false,
       resizeObserver: new ResizeObserver(() => {
         this.maybeActivateScrollers()
-      })
+      }),
+      // Is there a document being dragged over this tabbar?
+      documentTabDragOver: false,
+      // Is the document originating from here? (If so we should not display the
+      // dropzone)
+      documentTabDragOverOrigin: false
     }
   },
   computed: {
@@ -488,11 +508,25 @@ export default defineComponent({
         }
       })
     },
+    /**
+     * Managed the begin of a drag of one of the internal document tabs we have
+     * here on this tabbar.
+     *
+     * @param   {DragEvent}  event     The Drag event
+     * @param   {string}     filePath  The file to be dragged
+     */
     handleDragStart: function (event: DragEvent, filePath: string) {
       const DELIM = (process.platform === 'win32') ? ';' : ':'
       const data = `${this.windowId}${DELIM}${this.leafId}${DELIM}${filePath}`
       event.dataTransfer?.setData('zettlr/document-tab', data)
+      this.documentTabDragOverOrigin = true
     },
+    /**
+     * This function handles internal document tabs (i.e. the reordering of
+     * document tabs belonging to this tabbar)
+     *
+     * @param   {DragEvent}  event  The drag event
+     */
     handleDrag: function (event: DragEvent) {
       const tab = event.target as Element
       const tablist = tab.parentNode as Element
@@ -546,7 +580,15 @@ export default defineComponent({
         tablist.insertBefore(tab, swapItem)
       }
     },
+    /**
+     * This event is solely used when the user drops a document tab onto the
+     * origin tabbar to see if something has changed and resort the document
+     * tabs as necessary.
+     *
+     * @param   {DragEvent}  event  The drag event
+     */
     handleDragEnd: function (event: DragEvent) {
+      this.documentTabDragOverOrigin = false
       // Here we just need to inspect the actual order and notify the main
       // process of that order.
       const newOrder = []
@@ -607,6 +649,76 @@ export default defineComponent({
         }
       })
         .catch(err => console.error(err))
+    },
+    /**
+     * This function is used when something *external* has been dropped onto the
+     * tabbar. In this case, we need to execute a move command (if applicable
+     * analogously to the MainEditor component).
+     *
+     * @param   {DragEvent}  event  The drag event
+     */
+    handleExternalDrop: function (event: DragEvent) {
+      this.documentTabDragOver = false
+      const DELIM = (process.platform === 'win32') ? ';' : ':'
+      const documentTab = event.dataTransfer?.getData('zettlr/document-tab')
+      if (documentTab === undefined || !documentTab.includes(DELIM)) {
+        return
+      }
+
+      // The user dropped the file onto the origin (this indicates a bug as
+      // the dropzone shouldn't even be on the DOM in that case)
+      if (this.documentTabDragOverOrigin) {
+        console.error('A document tab has been dropped onto its origin, but the dropzone was in the DOM. This is a bug.')
+        this.documentTabDragOverOrigin = false
+        return
+      }
+
+      // At this point, we have received a drop we need to handle it. The drag
+      // data contains both the origin and the path, separated by the $PATH
+      // delimiter -> window:leaf:absPath
+      const [ originWindow, originLeaf, filePath ] = documentTab.split(DELIM)
+      // Now actually perform the act
+      ipcRenderer.invoke('documents-provider', {
+        command: 'move-file',
+        payload: {
+          originWindow,
+          targetWindow: this.windowId,
+          originLeaf,
+          targetLeaf: this.leafId,
+          path: filePath
+        }
+      })
+        .catch(err => console.error(err))
+    },
+    /**
+     * This event is used to indicate to the user if they can drop a document
+     * tab onto this tabbar. This gives the tabbar a blue-ish shimmer (similarly
+     * to the dropzones in the MainEditor component) to indicate that the user
+     * can drop a document tab on here.
+     *
+     * @param   {DragEvent}  event  The drag event
+     */
+    handleExternalDragover: function (event: DragEvent) {
+      if (this.documentTabDragOverOrigin) {
+        return // The document tab is coming from this tabbar
+      }
+
+      const hasDocumentTab = event.dataTransfer?.types.includes('zettlr/document-tab') ?? false
+      if (hasDocumentTab) {
+        this.documentTabDragOver = true
+      } else {
+        console.log('Something else drag over.')
+        this.documentTabDragOver = false
+      }
+    },
+    /**
+     * This is being called on dragleave and some other, related external events
+     * to reset the internal state so that the dropzone disappears.
+     *
+     * @param   {DragEvent}  event  The drag event
+     */
+    handleExternalDragleave: function (event: DragEvent) {
+      this.documentTabDragOver = false
     }
   }
 })
@@ -641,6 +753,16 @@ body div.tab-container {
   border-bottom: 1px solid grey;
   display: flex;
   overflow-x: auto;
+
+  .dropzone {
+    position: absolute;
+    transition: all 0.3s ease;
+    background-color: rgba(21, 61, 107, 0.5);
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
 
   // In case of an overflow, hide the scrollbar so that scrolling left/right
   // remains possible, but no thicc scrollbar in the way!
