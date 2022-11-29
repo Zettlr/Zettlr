@@ -242,9 +242,9 @@ export default defineComponent({
       .on('wheel.zoom', function (event: WheelEvent) {
         // What we do here is take the cursor offset from the container center
         // as well as the SVG offset and also move the SVG based on where the
-        // cursor is. This mimicks somewhat the Google Maps approach to always
+        // cursor is. This mimics somewhat the Google Maps approach to always
         // also move the map ever so slightly towards wherever the cursor is
-        // pointing. But the behavior can certainly be imporved I guess.
+        // pointing. But the behavior can certainly be improved I guess.
         const containerRect = graphComponent.containerElement.getBoundingClientRect()
         const cursorY = event.clientY - containerRect.y
         const cursorX = event.clientX - containerRect.x

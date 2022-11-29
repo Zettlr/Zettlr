@@ -25,7 +25,7 @@ const thisdir = __dirname
 const filePath = path.join(thisdir, 'test-container.config')
 // Since we're not dealing with many set() calls per second, we can set the delay
 // to something much shorter here so we don't have to wait for too long for testing
-// if everthing works fine.
+// if everything works fine.
 const delay = 10
 
 // Test data

@@ -443,7 +443,7 @@ export default defineComponent({
     emptySearchResults: function () {
       this.$store.commit('clearSearchResults')
 
-      // Clear indeces of active search result
+      // Clear indices of active search result
       this.activeFileIdx = -1
       this.activeLineIdx = -1
 
@@ -474,7 +474,7 @@ export default defineComponent({
         return // Do not handle right-clicks
       }
 
-      // Update indeces so we can keep track of the most recently clicked
+      // Update indices so we can keep track of the most recently clicked
       // search result.
       this.activeFileIdx = idx
       this.activeLineIdx = idx2

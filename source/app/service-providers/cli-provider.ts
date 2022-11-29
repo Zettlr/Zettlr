@@ -22,7 +22,7 @@ export const CLEAR_CACHE = 'clear-cache'
 export const LAUNCH_MINIMIZED = 'launch-minimized'
 
 /**
- * This function returns wether or not a predefined argument was passed to the zettlr executable.
+ * This function returns whether or not a predefined argument was passed to the zettlr executable.
  * Possible keys:
  *    data-dir,
  *    disable-hardware-acceleration,
@@ -85,7 +85,7 @@ function showHelp (): void {
   console.log('-h | --help                            Show this help')
   console.log('-v | --version                         Show the Version of Zettlr')
   console.log('   | --clear-cache                     Removes all cached files')
-  console.log('   | --disable-hardware-acceleration   Disables Hardware Accelleration for systems that do not support it.')
+  console.log('   | --disable-hardware-acceleration   Disables Hardware Acceleration for systems that do not support it.')
   console.log('   | --data-dir=FILEPATH               Set a custom directory for Zettlr\'s configuration files')
   console.log('-m | --launch-minimized                Start Zettlr mimimized in the Systemtray')
 }

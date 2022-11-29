@@ -42,7 +42,7 @@ interface DefaultsOverride {
 }
 
 /**
- * This interface descripes options that can be passed in general to the
+ * This interface describes options that can be passed in general to the
  * exporter to control its behaviour.
  */
 export interface ExporterOptions {

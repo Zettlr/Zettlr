@@ -154,7 +154,7 @@ export default defineComponent({
       const tab = event.key === 'Tab'
       const del = event.key === 'Backspace'
 
-      // If this is true, we should't add the event.key
+      // If this is true, we shouldn't add the event.key
       const hasSpecial = plus || space || tab || del || /* Mods */ meta || alt || altGr
 
       // Now build the shortcut

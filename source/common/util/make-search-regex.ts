@@ -35,7 +35,7 @@ export default function makeSearchRegex (term: string, injectFlags: string|strin
   // Test if we have a regular expression
   if (/^\/.+\/[gimy]{0,4}$/.test(term)) {
     // The user wants to do a regex search -> transform
-    const r = term.split('/') // 0 is empty, last index contains flags, everthing else is expression
+    const r = term.split('/') // 0 is empty, last index contains flags, everything else is expression
     r.shift() // Remove empty index 0
     const flags = r.pop()
     if (flags !== undefined) {

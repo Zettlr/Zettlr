@@ -250,7 +250,7 @@ export default defineComponent({
       const ctrl = evt.ctrlKey === true && process.platform !== 'darwin'
       const cmdOrCtrl = cmd || ctrl
 
-      // getDirectoryContents accomodates the virtual scroller
+      // getDirectoryContents accommodates the virtual scroller
       // by packing the actual items in a props property.
       const list = this.getFilteredDirectoryContents.map(e => e.props)
       const descriptor = list.find(e => {

@@ -27,7 +27,7 @@ import { syntaxTree } from '@codemirror/language'
  * @return  {string}                 The generated ID
  */
 function headingToID (headingString: string): string {
-  // If there are Pandoc attributs inside this header, and they include an ID,
+  // If there are Pandoc attributes inside this header, and they include an ID,
   // then we should use that one.
   const pandocAttrs = /\{(.+)\}$/.exec(headingString)
   if (pandocAttrs !== null) {

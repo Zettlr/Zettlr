@@ -985,7 +985,7 @@ export default class WindowProvider extends ProviderContract {
 
   /**
     * This function prompts the user with information.
-    * @param  {any} options Necessary informations for displaying the prompt
+    * @param  {any} options Necessary information for displaying the prompt
     */
   prompt (options: any): void {
     const firstMainWin = this.getFirstMainWindow()

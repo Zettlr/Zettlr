@@ -237,7 +237,7 @@ export default defineComponent({
       }
     },
     /**
-     * Display the arrow button for nagivation, if applicable.
+     * Display the arrow button for navigation, if applicable.
      * @param {MouseEvent} evt The associated event.
      */
     maybeShowArrowButton: function (evt: MouseEvent) {

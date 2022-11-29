@@ -235,7 +235,7 @@ Object>>method: num
 heapExample
     "HeapTest new heapExample"
     "Multiline
-    decription"
+    description"
     | n rnd array time sorted |
     n := 5000.
     "# of elements to sort"

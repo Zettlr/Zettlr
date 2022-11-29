@@ -111,7 +111,7 @@ export default {
         this.view2Width = this.availableSize * view2Percent
       }
 
-      // Don't forget to also update the minum widths
+      // Don't forget to also update the minimum widths
       this.view1WidthMin = this.availableSize * (this.minimumSizePercent[0] / 100)
       this.view2WidthMin = this.availableSize * (this.minimumSizePercent[1] / 100)
     },
