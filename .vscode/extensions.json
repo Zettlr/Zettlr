@@ -6,8 +6,6 @@
 	"recommendations": [
 		// This is a simple extension that automatically closes also custom tags
 		"formulahendry.auto-close-tag",
-		// Allows for quick formatting of Zettlr-generated JSON-files
-		"hookyqr.beautify",
 		// Makes it easy to write semantic commit messages
 		"adam-bender.commit-message-editor",
 		// Activates ESLint for JavaScript and TypeScript files
@@ -25,8 +23,6 @@
 		// Recommended keyword configuration for Zettlr:
 		// "todohighlight.keywords": [ "DEBUG", "TODO", "NOTE", "BUG" ]
 		"wayou.vscode-todo-highlight",
-		// Enables ESLint for TypeScript (TSLint)
-		"ms-vscode.vscode-typescript-tslint-plugin",
 		// Vue.js tooling -- previously, we recommended Vetur, but since that had
 		// issues with TypeScript we switched to Volar (which is recommended by the
 		// Vue team)
