@@ -153,6 +153,7 @@ body {
     background-color: rgb(230, 230, 230);
     height: 100%;
     width: 100%;
+    overflow: hidden;
 
     #sidebar-tab-container {
       position: absolute;
