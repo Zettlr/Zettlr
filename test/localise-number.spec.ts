@@ -19,8 +19,8 @@
 // for the time being. Plus, the test never failed, and I don't see any reason
 // why we would need to change that function, so ... just don't change it, and
 // we'll be good!
-const localiseNumber = require('../source/common/util/localise-number')
-const assert = require('assert')
+import localiseNumber from '@common/util/localise-number'
+import assert from 'assert'
 
 const localiseNumberTesters = [
   { 'input': 123456789, 'expected': '123,456,789' },
@@ -32,12 +32,19 @@ const localiseNumberTesters = [
 ]
 
 describe('Utility#localiseNumber()', function () {
+  before(function () {
+    // @ts-expect-error
+    global.i18n = global.i18nFallback = { 'localise': { 'thousand_delimiter': ',', 'decimal_delimiter': '.' } }
+  })
+
   for (let test of localiseNumberTesters) {
     it(`should return ${test.expected} for ${test.input.toString()}`, function () {
-      global.i18n = global.i18nFallback = { 'localise': { 'thousand_delimiter': ',', 'decimal_delimiter': '.' } }
       assert.strictEqual(localiseNumber(test.input), test.expected)
     })
   }
-})
 
-global.i18n = undefined // Unset
+  after(function () {
+    // @ts-expect-error
+    global.i18n = global.i18nFallback = undefined // Unset
+  })
+})
