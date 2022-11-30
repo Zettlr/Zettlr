@@ -34,7 +34,7 @@ import { defaultContextMenu } from './plugins/default-context-menu'
 import { readabilityMode } from './plugins/readability'
 import { hookDocumentAuthority } from './plugins/remote-doc'
 import { lintGutter } from '@codemirror/lint'
-import { spellchecker } from './linters/spell-check'
+import { spellcheck } from './linters/spellcheck'
 import { mdLint } from './linters/md-lint'
 import { mdStatistics } from './plugins/statistics-fields'
 import { tocField } from './plugins/toc-field'
@@ -188,7 +188,7 @@ function getGenericCodeExtensions (options: CoreExtensionOptions): Extension[] {
  * @return  {Extension[]}                    An array of Markdown extensions
  */
 export function getMarkdownExtensions (options: CoreExtensionOptions): Extension[] {
-  const mdLinterExtensions = [spellchecker]
+  const mdLinterExtensions = [spellcheck]
 
   let hasLinters = false
 

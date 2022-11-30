@@ -13,11 +13,12 @@
  * END HEADER
  */
 
-import { syntaxTree } from '@codemirror/language'
 import { linter, Diagnostic, Action } from '@codemirror/lint'
 import { trans } from '@common/i18n-renderer'
+import { Parent, Text } from 'mdast' // NOTE: Dependency of remark, not in package.json
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { getZknTagRE } from '@common/regular-expressions'
+import { md2ast } from '@common/util/md-to-ast'
 import { AnyMenuItem } from '@dts/renderer/context'
 import { configField } from '../util/configuration'
 
@@ -28,35 +29,12 @@ const emojiRegex = /(?:[\u00A9\u00AE\u203C\u2049\u2122\u2139\u2194-\u2199\u21A9-
 
 const zknTagRE = getZknTagRE()
 
-// The cache is a simple hashmap
+// The cache is a simple hashmap. NOTE: This is shared across all spellcheckers,
+// which reduces the memory footprint but prevents differences in spellchecker
+// configuration across the window. So if we want to allow that at some point,
+// we'll have to move that whole file into a function scope.
 const spellcheckCache = new Map<string, boolean>()
 const suggestionCache = new Map<string, string[]>()
-
-// Nodes that are not being checked
-const ignoreNodes = [
-  'FencedCode', // Code blocks
-  'HTMLTag', // HTML tags
-  'URL', // Only URLs (not titles etc.)
-  'InlineCode',
-  // Various formatting characters
-  'TableDelimiter',
-  'CodeMark',
-  'HeaderMark',
-  'EmphasisMark',
-  'LinkMark',
-  'QuoteMark',
-  'ListMark'
-]
-
-// Container nodes where we only check its contents
-const passOverNodes = [
-  'Document',
-  'Link',
-  'Image',
-  'BulletList',
-  'OrderedList',
-  'Table'
-]
 
 // Listen for dictionary-provider messages
 ipcRenderer.on('dictionary-provider', (event, message) => {
@@ -269,67 +247,75 @@ async function fetchSuggestions (term: string): Promise<string[]> {
   return suggestions[0]
 }
 
-export const spellchecker = linter(async view => {
+/**
+ * Returns just the text nodes from a string of Markdown, using mdast
+ *
+ * @param   {string|Parent}  input  Either Markdown string or an AST element (only)
+ *
+ * @return  {Text[]}            A set of text nodes (including their positions)
+ */
+function extractTextnodes (input: string|Parent): Text[] {
+  const ast = (typeof input === 'string') ? md2ast(input) : input
+  const textNodes: Text[] = []
+  // NOTE: We're dealing with an mdast, not the CodeMirror Markdown mode one!
+  const ignoreBlocks = [ 'code', 'math' ]
+
+  for (const child of ast.children) {
+    if (ignoreBlocks.includes(child.type)) {
+      continue // Ignore non-text blocks
+    }
+
+    if ('children' in child && Array.isArray(child.children)) {
+      textNodes.push(...extractTextnodes(child)) // Text nodes cannot have children
+    } else if (child.type === 'text') {
+      // Only spit out text nodes
+      textNodes.push(child)
+    }
+  }
+
+  return textNodes
+}
+
+/**
+ * Defines a spellchecker that runs over the text content of the document and
+ * highlights misspelled words
+ */
+export const spellcheck = linter(async view => {
   const diagnostics: Diagnostic[] = []
-
   const autocorrectValues = view.state.field(configField).autocorrect.replacements.map(x => x.value)
+  const textNodes = extractTextnodes(view.state.doc.toString())
 
-  const wordsToCheck: Array<{ word: string, index: number, nodeStart: number }> = []
-
-  // Iterate over the syntax tree to collect all words that need checking,
-  // including any additional information we may need. We do this synchronously
-  // and then perform the "real" check below.
-  syntaxTree(view.state).cursor().iterate(node => {
-    if (node.type.name.startsWith('YAML')) {
-      return false // Do not check a frontmatter
-    }
-
-    if (ignoreNodes.includes(node.type.name)) {
-      return false
-    }
-
-    if (passOverNodes.includes(node.type.name)) {
-      return
-    }
-
-    let contents = view.state.sliceDoc(node.from, node.to)
-
-    // Heading nodes will contain their === or --- markers.
-    if (node.type.name.startsWith('SetextHeading')) {
-      contents = contents.substring(0, contents.lastIndexOf('\n'))
-    }
-
-    // Remove tags
-    contents = contents.replace(zknTagRE, '')
-    // Remove formatting characters
-    contents = contents.replace(/^(?:#{1,6}|>)\s/, '')
-    contents = contents.replace(/[_*]{1,3}/g, '')
-    contents = contents.replace(/`{1,3}.+`{1,3}/g, '')
-    // Images and Links
-    contents = contents.replace(/!?\[(.+)\]\(.+\)/g, '$1')
-    // HTML
-    contents = contents.replace(/<.+>/g, '')
-    // Emojis
-    contents = contents.replace(emojiRegex, '')
-
-    // At this point we should have more or less plain text which we can further
-    // treat.
-    const words = contents.split(/\s+/)
-      .filter(w => w !== '') // Remove empty words
-      .filter(w => /^\w+$/.test(w) && !/\d/.test(w)) // And those with numbers
-
-    // Now we have easy word lists. We now need to go over the original contents
-    // again, retrieving the indices of the given words and add Diagnostics for
-    // those deemed erroneous.
-    const nodeContents = view.state.sliceDoc(node.from, node.to)
-    let index = 0
-    for (const word of words) {
-      index = nodeContents.indexOf(word, index)
-      wordsToCheck.push({ word, index, nodeStart: node.from })
-      index += word.length
-    }
-    return false // Do not descend further
+  // At this point, we've basically already gotten rid of everything inside
+  // the document, except Emojis
+  textNodes.map(node => {
+    node.value = node.value.replace(emojiRegex, '')
+    return node
   })
+
+  const wordsToCheck: Array<{ word: string, index: number, nodeStart: number }> = textNodes
+  // Remove nodes w/o position (should not happen, but TypeScript complained)
+    .filter(node => node.position?.start.offset !== undefined)
+    // Then, extract all words from the node's value
+    .map(node => {
+      const words = node.value.replace(emojiRegex, '').split(/\s+/)
+        .filter(w => !zknTagRE.test(w)) // Remove tags
+        .map(w => sanitizeTerm(w))
+        .map(w => w.replace(/^\W*([\w']+)\W*$/, '$1')) // Strip non-word chars
+        .filter(w => w !== '') // Remove empty words
+        .filter(w => !/\d/.test(w)) // And those with numbers
+
+      const ret: Array<{ word: string, index: number, nodeStart: number }> = []
+      const nodeStart = node.position?.start.offset as number
+      let index = 0
+      for (const word of words) {
+        index = node.value.indexOf(word, index)
+        ret.push({ word, index, nodeStart })
+        index += word.length
+      }
+
+      return ret
+    })
+    .flat() // We now have a 2d array --> flatten
 
   // Now make sure everything is cached beforehand with two IPC calls
   await batchCheck(wordsToCheck.map(x => x.word))
