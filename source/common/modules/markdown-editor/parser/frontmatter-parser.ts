@@ -52,6 +52,14 @@ export const frontmatterParser: BlockParser = {
       return false
     }
 
+    // A final check: A frontmatter is NOT a valid document if there is
+    // whitespace at the top (i.e. no blank lines between the delimiters and the
+    // frontmatter content). NOTE: Whitespace AFTER the frontmatter content is
+    // allowed!
+    if (yamlLines[0].trim() === '') {
+      return false
+    }
+
     // At this point we have a correct and full YAML frontmatter, we know where
     // it starts and we know where it ends. In order to simplify creating the
     // required AST, we defer to letting the YAML parser parse this thing into
