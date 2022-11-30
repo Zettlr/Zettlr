@@ -208,6 +208,8 @@ there.
   for your citations you had to click through intransparent buttons before being
   able to; now you can immediately select both CSL JSON and BibTeX files
 - Parsed links will now show the correctly resolved link as titles
+- The file tree now properly cuts too long file and directory names, indicating
+  these with an ellipsis, rather than simply cutting off the text mid-letter
 
 ## Under the Hood
 

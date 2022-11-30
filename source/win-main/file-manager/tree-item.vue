@@ -1,11 +1,5 @@
 <template>
-  <div
-    class="tree-item-container"
-    v-on:dragover="acceptDrags"
-    v-on:dragenter="enterDragging"
-    v-on:dragleave="leaveDragging"
-    v-on:drop="handleDrop"
-  >
+  <div class="tree-item-container">
     <div
       v-bind:class="{
         'tree-item': true,
@@ -23,12 +17,13 @@
       v-on:click.stop="requestSelection"
       v-on:auxclick.stop="requestSelection"
       v-on:contextmenu="handleContextMenu"
+      v-on:dragover="acceptDrags"
+      v-on:dragenter="enterDragging"
+      v-on:dragleave="leaveDragging"
+      v-on:drop="handleDrop"
     >
       <!-- First: Secondary icon (only if primaryIcon displays the chevron) -->
-      <span
-        class="item-icon"
-        aria-hidden="true"
-      >
+      <span class="item-icon" aria-hidden="true">
         <clr-icon
           v-if="secondaryIcon !== false"
           v-bind:shape="secondaryIcon"
@@ -40,9 +35,7 @@
         />
       </span>
       <!-- Second: Primary icon (either the chevron, or the custom icon) -->
-      <span
-        class="toggle-icon"
-      >
+      <span class="toggle-icon" aria-hidden="true">
         <clr-icon
           v-if="primaryIcon !== false"
           v-bind:shape="primaryIcon"
@@ -535,9 +528,21 @@ export default defineComponent({
 <style lang="less">
 body {
   div.tree-item-container {
-    white-space: nowrap;
-
     .tree-item {
+      white-space: nowrap;
+      display: flex;
+
+      .item-icon, .toggle-icon {
+        display: inline-block;
+        width: 18px; // Size of clr-icon with the margin of the icon
+        flex-shrink: 0; // Prevent shrinking; only the display text should
+      }
+
+      .display-text {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
       // These inputs should be more or less "invisible"
       input {
         border: none;
@@ -586,11 +591,6 @@ body.darwin {
     // On macOS, non-standard icons are normally displayed in color
     clr-icon.special { color: var(--system-accent-color, --c-primary); }
 
-    .item-icon, .toggle-icon {
-      display: inline-block;
-      width: 18px; // Size of clr-icon with the margin of the icon
-    }
-
     .display-text {
       font-size: 13px;
       padding: 3px 5px;
@@ -620,11 +620,6 @@ body.win32 {
   .tree-item {
     margin: 8px 0px;
 
-    .item-icon, .toggle-icon {
-      display: inline-block;
-      width: 18px; // Size of clr-icon with the margin of the icon
-    }
-
     .display-text {
       font-size: 13px;
       padding: 3px 5px;
@@ -642,11 +637,6 @@ body.win32 {
 body.linux {
   .tree-item {
     margin: 8px 0px;
-
-    .item-icon, .toggle-icon {
-      display: inline-block;
-      width: 18px; // Size of clr-icon with the margin of the icon
-    }
 
     .display-text {
       font-size: 13px;
