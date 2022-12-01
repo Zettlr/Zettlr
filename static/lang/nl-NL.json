@@ -8,7 +8,7 @@
             "Taylan TATLI"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-05-27T13:10:01.000000Z"
+        "updated_at": "2022-10-23T13:31:09.000000Z"
     },
     "dialog": {
         "about": {
@@ -217,7 +217,9 @@
             "delete_on_fail": "Verwijder items definitief als ze niet in de prullenbak geworpen kunnen worden",
             "display": {
                 "hide_toolbar_distraction_free": "Verberg de gereedschapsbalk in afleidingsvrije modus",
+                "image_height": "Maximale afbeeldingshoogte (procent)",
                 "image_size_info": "Met deze bedieningselementen kunt u de voorvertoningen van afbeeldingen beperken.",
+                "image_width": "Maximale afbeeldingsbreedte (procent)",
                 "preview_info": "Deze opties bepalen welke elementen in documenten worden weergegeven.",
                 "render_citations": "Geef citaten weer",
                 "render_htags": "Verberg karakters voor kopteksten",
@@ -232,6 +234,7 @@
             "display_markdown_file_extensions": "Toon Markdown bestandsextensies",
             "display_time_explanation": "In de metadata van het bestand toon",
             "editor": "Editor",
+            "editor_font_size": "Tekengrootte in de editor",
             "editor_setting": {
                 "direction_ltr": "Gebruik links naar rechts (LTR) schrijfrichting",
                 "direction_rtl": "Gebruik rechts naar links (RTL) schrijfrichting",
@@ -256,12 +259,19 @@
             "filemanager_expanded": "Uitgeklapt &mdash; toon zowel de bestandsboom als de bestandslijst",
             "filemanager_explanation": "Bestandsmanager modus",
             "filemanager_thin": "Dun &mdash; toon de bestandsboom of de bestandslijst",
+            "filename_display": {
+                "filename_only": "Alleen bestandsnaam",
+                "label": "Toon bestanden die gebruik maken van",
+                "title": "Titel (indien van toepassing)",
+                "title_heading": "Titel of eerste kop (indien van toepassing)"
+            },
             "filename_generator": "Patroon voor nieuwe bestandsnamen",
             "formatting_characters_explanation": "Kies de opmaaktekens die de vet/nadruk commando's moeten gebruiken",
             "general": "Algemeen",
             "hide_dirs": "Verberg mappen tijdens globaal zoeken",
             "homeEndBehaviour": "Gebruik de standaard CodeMirror acties voor \u003Ckbd\u003EHome\u003C/kbd\u003E en \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
             "indent_unit": "Spring in met het volgende aantal spaties",
+            "indent_with_tabs": "Inspringen met tabs",
             "input_mode": "Invoermodus editor",
             "modtime": "Tijdstip waarop de laatste aanpassingen zijn gemaakt.",
             "mute_lines": "Maak regels zonder focus minder opvallend in afleidingsvrije modus",
@@ -319,6 +329,7 @@
             },
             "readability_algorithm": "Algoritme dat gebruikt wordt in de leesbaarheid modus",
             "reset_pandoc_command": "Pandoc commando opnieuw instellen",
+            "sort_folders_first": "Toon mappen boven bestanden",
             "sorting_ascii": "ASCII volgorde (2 na 10)",
             "sorting_explanation": "Manier van sorteren van bestanden (gebruikt bij sorteren op naam)",
             "sorting_natural": "Natuurlijke volgorde (10 na 2)",
@@ -330,7 +341,11 @@
                 "title": "Spellingscontrole"
             },
             "theme": {
+                "accent_color_info": "Deze instelling is alleen beschikbaar in Windows en macOS",
+                "accent_color_label": "Gebruik de accentkleur van het besturingssysteem in plaats van de themakleur",
                 "info": "Hier kun je het thema voor de app kiezen.",
+                "select_label": "klik om te selecteren",
+                "selected_label": "geselecteerd",
                 "title": "Thema"
             },
             "title": "Voorkeuren",
@@ -357,7 +372,9 @@
                 "success": "%s succesvol gedownload!",
                 "updated": "Bijgewerkte vertalingen: %s"
             },
+            "use_native_appearance": "Gebruik het systeemeigen vensteruiterlijk",
             "user_dictionary": "Gebruikerswoordenboek. Verwijder woorden door op ze te klikken.",
+            "user_dictionary_label": "Woordenboeklemma",
             "watchdog_checkbox_label": "Activeer Watchdog polling",
             "watchdog_explainer": "Op sommige computers kan het voorkomen dat Zettlr te veel veranderingen aangeeft op remote bestanden. Wanneer dit het geval is, probeer dan deze instelling te activeren.",
             "watchdog_threshold_label": "Tijdsduur om te wachten voordat er wordt aangenomen dat het schrijven naar een bestand is afgerond (in ms)",
@@ -365,6 +382,7 @@
             "xelatex_default": "Standaard: xelatex",
             "zkn": {
                 "auto_create_file": "Automatisch aanmaken van niet-bestaande bestanden wanneer interne links worden gevolgd",
+                "auto_search": "Begin een zoekopdracht bij klik op een Zettelkasten-link",
                 "generated_id": "Gegenereerd ID",
                 "id_generator_label": "Patroon dat gebruikt wordt om nieuwe IDs te genereren.",
                 "id_label": "ID reguliere expressie",
@@ -389,7 +407,13 @@
                 "var_month": "Maand (voorloopnullen)",
                 "var_second": "Seconden (voorloopnullen)",
                 "var_week_number": "Weeknummer (voorloop nullen)",
-                "var_year": "Jaar (vier cijfers)"
+                "var_year": "Jaar (vier cijfers)",
+                "var_year_two": "Jaar (twee cijfers)"
+            },
+            "zoom_behavior": {
+                "editor": "Zoomen verandert de tekengrootte in de editor",
+                "gui": "Zoom verandert de hele gebruiksinterface",
+                "label": "Zoomgedrag"
             }
         },
         "statistics": {
@@ -406,6 +430,7 @@
             "year": "Jaar"
         },
         "tag_cloud": {
+            "add_to_file": "Voeg toe aan bestand",
             "copy": "Kopieer naar klembord",
             "info": "Hier vind je alle labels die je ergens in je bestanden hebt gebruikt. Je kan de hele lijst kopi\u00ebren naar het klembord. Beweeg over de labels om te zien hoe vaak je ze gebruikt hebt.",
             "title": "Wolk met labels"
@@ -426,11 +451,17 @@
             "client_error": "Kon niet controleren op nieuwe versies. Clientfout (status code: %s)",
             "connection_error": "Kon niet controleren op updates: Kon geen verbinding maken",
             "current_version": "Jouw versie",
+            "download_progress_label": "Update downloaden ...",
+            "new_update_available": "Er is een update naar versie %s beschikbaar!",
             "no_data": "Kon niet controleren op updates: Server heeft geen data gestuurd",
+            "no_new_update": "Geen update beschikbaar, u heeft de meest recente versie.",
             "notification": "Er is een nieuwe versie van Zettlr beschikbaar om te downloaden. Lees de wijzigingen hieronder.",
+            "other_error": "Kon niet controloren op updates. %s: %s",
             "redirect_error": "Kon niet controleren op nieuwe versies. De server heeft geprobeerd door te verwijzen (status code: %s)",
             "release_url": "Open de download pagina",
             "server_error": "Kon niet controleren op nieuwe versies. Serverfout (status code: %s)",
+            "start_update_label": "Klik om update te starten",
+            "start_update_message": "Update starten ...",
             "title": "Nieuwe updates beschikbaar",
             "transmission_error": "Kon niet controleren op nieuwe versies. Connectie onderbroken."
         }
@@ -439,7 +470,13 @@
         "assets_man": {
             "defaults_restore_error": "Kon het bestand met de standaardinstellingen niet herstellen!",
             "defaults_restored": "Het bestand met de standaardinstellingen werd hersteld!",
-            "defaults_restoring": "Het bestand met de standaardinstelingen aan het herstellen ..."
+            "defaults_restoring": "Het bestand met de standaardinstelingen aan het herstellen ...",
+            "status": {
+                "save_error": "Opslaan mislukt",
+                "saved": "Opgeslagen!",
+                "saving": "Opslaan ...",
+                "unsaved_changes": "Onopgeslagen wijzigingen"
+            }
         },
         "attachments": "Bijlagen",
         "attachments_open_dir": "Open map",
@@ -447,6 +484,11 @@
         "avg_not_reached": "\u270d\ud83c\udffc Ga schrijven om je dagelijkse gemiddelde te overtreffen.",
         "avg_surpassed": "\ud83d\udd25 Je staat in brand!",
         "avg_words": "dagelijks gemiddelde",
+        "chart": {
+            "high_legend": "Meer dan het dubbele maandelijks gemiddelde",
+            "high_mid_legend": "Meer dan het maandelijks gemiddelde",
+            "low_mid_legend": "Onder het maandelijks gemiddelde"
+        },
         "citeproc": {
             "error_db": "De citaten database kan niet worden geladen",
             "error_report_message": "% s items in je bibliotheek kunnen niet worden geladen vanwege fouten. Controleer de onderstaande foutmeldingen om te zien welke CiteKeys verkeerd zijn opgemaakt en wat de fout was.",
@@ -458,6 +500,7 @@
             "references_none": "Er zijn geen citaten in dit document.",
             "reloading": "Wijzigingen in het bibliotheek bestand gedetecteerd. Opnieuw laden ..."
         },
+        "date_just_now_label": "zonet",
         "dirs": "Mappen",
         "display_search_results": "Toon zoekresultaten",
         "empty_dir": "Lege map",
@@ -485,17 +528,44 @@
             "ul": "Gespecificeerde lijst"
         },
         "global_search": {
+            "clear_label": "Zoekopdracht verwijderen",
             "filter_label": "Filter zoekresultaten",
             "query_label": "Voer hieronder uw zoektermen in",
             "query_placeholder": "Vind ...",
+            "restrict_dir_label": "Alleen zoeken in map",
+            "restrict_dir_placeholder": "Alleen in map ...",
             "search_label": "Zoeken",
             "title": "Doorzoek de volledige tekst",
             "toggle_label": "Toon resultaten"
         },
+        "modified": "Gewijzigd",
+        "months": {
+            "apr": "april",
+            "aug": "augustus",
+            "dec": "december",
+            "feb": "februari",
+            "jan": "januari",
+            "jul": "juli",
+            "jun": "juni",
+            "mar": "maart",
+            "may": "mei",
+            "nov": "november",
+            "oct": "oktober",
+            "sep": "september"
+        },
         "no_attachments": "Geen bijlagen",
         "no_dir_selected": "Geen map geselecteerd",
+        "no_open_document": "Geen open document",
+        "no_other_files": "Geen andere bestanden",
+        "no_related_files": "Geen gerelateerde bestanden",
         "no_search_results": "Geen resultaten",
         "number_selections": "%s selecties",
+        "other_files": "Andere bestanden",
+        "preview_modification_date": "Gewijzigd",
+        "preview_searching_label": "Zoeken naar bestand ...",
+        "preview_word_count": "Aantal woorden",
+        "related_files_label": "Gerelateerde bestanden",
+        "reset": "Reset",
         "statistics_more": "Meer statistieken ...",
         "table_of_contents": "Inhoudsopgave",
         "today_words": "woorden vandaag",
@@ -517,9 +587,11 @@
         "close_dir": "Sluit map",
         "close_file": "Sluit bestand",
         "copy": "Kopi\u00ebren",
+        "copy_abs_path": "Volledig pad kopi\u00ebren",
         "copy_filename": "Kopieer bestandsnaam",
         "copy_html": "Kopieer als HTML",
         "copy_id": "Kopieer ID",
+        "copy_img_to_clipboard": "Afbeelding naar klembord kopi\u00ebren",
         "copy_link": "Kopieer link",
         "copy_mail": "Kopieer e-mail adres",
         "custom_css": "Aangepaste CSS...",
@@ -530,6 +602,7 @@
         "donate": "Help Zettlr",
         "duplicate_file": "Dupliceer bestand",
         "export": "Exporteren...",
+        "filter_files": "Bestanden filteren",
         "find_dir": "Zoek in map",
         "find_file": "Zoek in bestand",
         "generate_id": "Genereer nieuwe ID",
@@ -557,19 +630,26 @@
         "new_dir": "Nieuwe map...",
         "new_file": "Nieuw bestand...",
         "new_project": "Maak project aan",
+        "next_file": "Volgend bestand",
         "no_suggestions": "Geen suggesties",
         "open": "Open...",
         "open_attachment": "Open bijlage",
+        "open_in_browser": "Open in browser",
         "open_link": "Open link",
         "open_logs": "Open logs",
+        "open_new_tab": "Open in nieuw tabblad",
+        "open_tutorial": "Instructies openen",
         "pandoc": "Download Pandoc",
         "paste": "Plakken",
         "paste_plain": "Plakken zonder stijl",
         "pdf_preferences": "PDF voorkeuren...",
+        "pin_tab": "Tabblad vastzetten",
         "preferences": "Voorkeuren",
+        "previous_file": "Vorig bestand",
         "print": "Afdrukken...",
         "project_build": "Exporteer project",
         "project_properties": "Project instellingen...",
+        "properties": "Eigenschappen",
         "quicklook": "Snelle blik",
         "quit": "Afsluiten",
         "recent_docs": "Recente documenten",
@@ -590,6 +670,8 @@
         "start_speaking": "Begin te praten",
         "stop_speaking": "Stop met praten",
         "tab_close": "Sluit tabblad",
+        "tab_close_all": "Alle tabbladen sluiten",
+        "tab_close_others": "Andere tabbladen sluiten",
         "tab_next": "Volgend tabblad",
         "tab_previous": "Vorig tabblad",
         "tags": "Beheer labels...",
@@ -603,6 +685,7 @@
         "toggle_typewriter_mode": "Typemachine modus",
         "undo": "Herstel",
         "unhide": "Toon",
+        "unpin_tab": "Tabblad losmaken",
         "update": "Controleer op updates",
         "win_close": "Sluiten",
         "win_minimize": "Minimaliseren",
@@ -622,6 +705,11 @@
     "system": {
         "all_files": "Alle bestanden",
         "cancel": "Annuleren",
+        "common": {
+            "filter": "Filter ...",
+            "list_actions_label": "Acties",
+            "list_add_button": "Toevoegen"
+        },
         "directories": "Mappen",
         "directory_removed": "Map %s is verwijderd.",
         "error": {
@@ -643,6 +731,8 @@
             "fnf_title": "Bestand niet gevonden",
             "ignored_dir_message": "Map &quot;%s&quot; kan niet worden geopend door Zettlr.",
             "ignored_dir_title": "Kan map niet openen",
+            "image_not_found": "Afbeelding niet gevonden: %s",
+            "malformed_citekey": "Onjuiste citeersleutel: @%s",
             "malformed_textbundle": "Misvormde tekstbundel: %s",
             "move_into_child_message": "Je kan een map niet naar een van zijn onderliggende mappen verplaatsen.",
             "move_into_child_title": "Kan map niet verplaatsen",
@@ -658,6 +748,10 @@
             "remove_message": "Wil je echt %s verwijderen?",
             "remove_title": "Echt verwijderen?"
         },
+        "export_dialog": {
+            "save": "Opslaan",
+            "title": "Kies exportbestemming"
+        },
         "export_success": "Exporteren naar %s",
         "file_changed": "Bestand %s is buiten de applicatie gewijzigd.",
         "file_removed": "Bestand %s is verwijderd.",
@@ -672,6 +766,7 @@
         "lang_import_success": "Taalbestand ge\u00efmporteerd: %s",
         "no_command": "Een bericht ontvangen zonder commando: %s",
         "ok": "Ok",
+        "open_file": "Bestand openen",
         "open_folder": "Open project map",
         "open_root_directory": "Nieuwe hoofdmap %s openen ...",
         "open_root_directory_success": "%s is geladen.",
@@ -686,6 +781,7 @@
         "save_changes_save": "Opslaan",
         "save_changes_select_dir": "Selecteer alsjeblieft een map zodat het nieuwe bestand opgeslagen kan worden.",
         "save_changes_title": "Niet-opgeslagen wijzigingen weglaten?",
+        "save_file": "Bestand opslaan",
         "unknown_command": "Onbekend commando ontvangen: %s"
     },
     "toolbar": {
@@ -715,7 +811,8 @@
         "stats": "Bekijk statistieken",
         "tag_cloud": "Labels",
         "toggle_attachments": "Bekijk bijlagen",
-        "toggle_file_manager": "Bestandsmanager"
+        "toggle_file_manager": "Bestandsmanager",
+        "toggle_global_search": "Globale zoekopdracht"
     },
     "tray": {
         "show_zettlr": "Toon Zettlr",

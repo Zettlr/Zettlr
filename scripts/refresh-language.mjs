@@ -22,7 +22,7 @@ got('https://translate.zettlr.com/api/languages')
           // Write to file
           writeFile(path.join(targetDir, language.bcp47 + '.json'), data.body, 'utf8', (err) => {
             if (err) {
-              error(err)
+              error(`Error writing file for ${language.bcp47}: ${String(err)}`)
               // We have to exit the process with an
               // error signal for correct behaviour on CI
               process.exit(1)
@@ -30,7 +30,7 @@ got('https://translate.zettlr.com/api/languages')
             success(`${language.bcp47} successfully written to file!`)
           })
         }).catch((err) => {
-          error(err)
+          error(`Error downloading language ${language.bcp47}: ${String(err)}`)
           // We have to exit the process with an
           // error signal for correct behaviour on CI
           process.exit(1)

@@ -4,7 +4,7 @@
             "Ales Nehyba \u003Cneal.cz@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2022-08-26T19:28:49.000000Z"
+        "updated_at": "2022-10-11T07:10:38.000000Z"
     },
     "dialog": {
         "about": {
@@ -44,6 +44,8 @@
             "explanation": "Zde uprav\u00edte v\u00fdchoz\u00ed nastaven\u00ed pro import a export.",
             "exporting_title": "Export",
             "importing_title": "Import",
+            "invalid_warning": "V tomto profilu chyb\u00ed bu\u010f vlastnost z\u00e1pis nebo \u010dten\u00ed. Ujist\u011bte se, \u017ee jsou ob\u011b nastaven\u00e9, aby Zettlr mohl profil pou\u017e\u00edvat.",
+            "protected_warning": "Tento profil je chr\u00e1n\u011bn\u00fd. To znamen\u00e1, \u017ee bude obnoven, pokud ho odstran\u00edte nebo p\u0159ejmenujete.",
             "restore": "Obnovit v\u00fdchoz\u00ed nastaven\u00ed"
         },
         "dir_new": {
@@ -76,6 +78,7 @@
             "close_label": "Zav\u0159\u00edt vyhled\u00e1v\u00e1n\u00ed",
             "find_label": "Naj\u00edt",
             "find_placeholder": "Naj\u00edt ...",
+            "regex_label": "P\u0159epnout hled\u00e1n\u00ed regul\u00e1rn\u00edch v\u00fdraz\u016f",
             "replace_all_label": "Nahradit v\u0161e",
             "replace_label": "Nahradit",
             "replace_next_label": "Nahradit dal\u0161\u00ed",
@@ -175,6 +178,7 @@
             "auto_save": {
                 "delayed": "Po kr\u00e1tk\u00e9 prodlev\u011b",
                 "immediately": "Ihned",
+                "label": "Automatick\u00e9 ukl\u00e1d\u00e1n\u00ed",
                 "off": "Vyp."
             },
             "autocomplete_accept_space": "Automatick\u00e9 dopl\u0148ov\u00e1n\u00ed v\u010detn\u011b mezer",
@@ -216,6 +220,7 @@
                 "image_width": "Maxim\u00e1ln\u00ed \u0161\u00ed\u0159ka obr\u00e1zk\u016f (procenta)",
                 "preview_info": "Tato nastaven\u00ed ur\u010duj\u00ed, kter\u00e9 prvky se v dokumentech vygeneruj\u00ed.",
                 "render_citations": "Generovat citace",
+                "render_emphasis": "Vykreslit zv\u00fdrazn\u011bn\u00ed",
                 "render_htags": "Skr\u00fdt znaky z\u00e1hlav\u00ed",
                 "render_iframes": "Generovat Iframes",
                 "render_images": "Generovat obr\u00e1zky",
@@ -350,6 +355,22 @@
                 "title": "T\u00e9ma"
             },
             "title": "Mo\u017enosti",
+            "toolbar": {
+                "showDocumentInfoText": "Zobrazit informace o dokumentu",
+                "showInsertFootnoteButton": "Zobrazit tla\u010d\u00edtko \"Vlo\u017eit pozn\u00e1mku pod \u010darou\"",
+                "showInsertTableButton": "Zobrazit tla\u010d\u00edtko \"Vlo\u017eit tabulku\"",
+                "showMarkdownCommentButton": "Zobrazit tla\u010d\u00edtko \"Vlo\u017eit koment\u00e1\u0159\"",
+                "showMarkdownImageButton": "Zobrazit tla\u010d\u00edtko \"Obr\u00e1zek\"",
+                "showMarkdownLinkButton": "Zobrazit tla\u010d\u00edtko \"Odkaz\"",
+                "showMarkdownMakeTaskListButton": "Zobrazit tla\u010d\u00edtko \"Seznam \u00faloh\"",
+                "showNewFileButton": "Zobrazit tla\u010d\u00edtko \"Nov\u00fd soubor\"",
+                "showNextFileButton": "Zobrazit tla\u010d\u00edtko \"Dal\u0161\u00ed soubor\"",
+                "showOpenPreferencesButton": "Zobrazit tla\u010d\u00edtko \"Otev\u0159\u00edt dialog nastaven\u00ed\"",
+                "showPomodoroButton": "Zobrazit Pomodoro \u010dasova\u010d",
+                "showPreviousFileButton": "Zobrazit tla\u010d\u00edtko \"P\u0159edchoz\u00ed soubor\"",
+                "showToggleReadabilityButton": "Zobrazit tla\u010d\u00edtko ov\u011b\u0159en\u00ed \u010ditelnosti",
+                "title": "N\u00e1strojov\u00e1 li\u0161ta"
+            },
             "translations": {
                 "download": "Klepnut\u00edm st\u00e1hn\u011bte",
                 "downloading": "Stahuje se %s",
@@ -508,7 +529,7 @@
         "date_just_now_label": "pr\u00e1v\u011b te\u010f",
         "dirs": "Slo\u017eky",
         "display_search_results": "Zobrazit v\u00fdsledky hled\u00e1n\u00ed",
-        "empty_dir": "Vymazat slo\u017eku",
+        "empty_dir": "Pr\u00e1zdn\u00e1 slo\u017eka",
         "empty_directories": "\u017d\u00e1dn\u00e9 otev\u0159en\u00e9 soubory nebo slo\u017eky",
         "file_chars": "znak\u016f",
         "file_chars_sel": "znak\u016f (v\u00fdb\u011br)",
@@ -592,7 +613,7 @@
         "close_all_tabs": "Zav\u0159\u00edt v\u0161echny z\u00e1lo\u017eky",
         "close_dir": "Zav\u0159\u00edt slo\u017eku",
         "close_file": "Zav\u0159\u00edt soubor",
-        "close_workspace": "Zav\u0159\u00edt plochu",
+        "close_workspace": "Zav\u0159\u00edt pracovn\u00ed prostor",
         "copy": "Kop\u00edrovat",
         "copy_abs_path": "Zkop\u00edrovat plnou cestu",
         "copy_equation": "Zkop\u00edrovat k\u00f3d rovnice",
@@ -647,7 +668,7 @@
         "open_logs": "Otev\u0159\u00edt logy",
         "open_new_tab": "Otev\u0159\u00edt na nov\u00e9 z\u00e1lo\u017ece",
         "open_tutorial": "Otev\u0159\u00edt Tutori\u00e1l",
-        "open_workspace": "Otev\u0159\u00edt plochu...",
+        "open_workspace": "Otev\u0159\u00edt pracovn\u00ed prostor...",
         "pandoc": "Z\u00edskat Pandoc",
         "paste": "Vlo\u017eit",
         "paste_plain": "Vlo\u017eit bez form\u00e1tov\u00e1n\u00ed",
@@ -687,8 +708,8 @@
         "toggle_devtools": "P\u0159epnout v\u00fdvoj\u00e1\u0159sk\u00e9 n\u00e1stroje",
         "toggle_distraction_free": "Re\u017eim soust\u0159ed\u011bn\u00ed",
         "toggle_file_meta": "Dal\u0161\u00ed informace",
-        "toggle_filemanager": "\u00dapravy spr\u00e1vce soubor\u016f",
-        "toggle_fullscreen": "Celoobrazovkov\u00fd re\u017eim",
+        "toggle_filemanager": "P\u0159epnout zobrazen\u00ed spr\u00e1vce soubor\u016f",
+        "toggle_fullscreen": "P\u0159epnout celoobrazovkov\u00fd re\u017eim",
         "toggle_sidebar": "Bo\u010dn\u00ed li\u0161ta",
         "toggle_theme": "No\u010dn\u00ed re\u017eim",
         "toggle_typewriter_mode": "Re\u017eim psac\u00edho stroje",
@@ -743,6 +764,7 @@
             "ignored_dir_message": "Aplikace nem\u016f\u017ee otev\u0159\u00edt slo\u017eku &quot;%s&quot;.",
             "ignored_dir_title": "Slo\u017eku nelze otev\u0159\u00edt",
             "image_not_found": "Obr\u00e1zek nenalezen: %s",
+            "malformed_citekey": "Neplatn\u00e1 citace: @%s",
             "malformed_textbundle": "Chybn\u00fd Textbundle: %s",
             "move_into_child_message": "Slo\u017eku nelze p\u0159esunout do jej\u00ed podslo\u017eky.",
             "move_into_child_title": "Slo\u017eku nelze p\u0159esunout",
