@@ -159,8 +159,7 @@ export default function markdownParser (linkStart: string, linkEnd: string): Lan
         blockMathParser,
         footnoteRefParser,
         gridTableParser,
-        pipeTableParser // ,
-        // simpleTableParser
+        pipeTableParser
       ],
       parseInline: [
         // Add inline parsers that add AST elements for various additional types

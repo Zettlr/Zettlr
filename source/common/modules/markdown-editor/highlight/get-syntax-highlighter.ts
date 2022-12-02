@@ -62,7 +62,7 @@ const markdownTheme = HighlightStyle.define([
   { tag: customTags.YAMLFrontmatterPair, class: 'yaml-frontmatter-pair' },
   // Codeblocks
   { tag: tags.labelName, class: 'cm-info-string' }, // CodeInfo (info string)
-  { tag: tags.processingInstruction, class: 'cm-code-mark' }, // CodeMark (i.e. ```) but also (pipe) table delimiters
+  { tag: tags.processingInstruction, class: 'cm-code-mark' }, // CodeMark (i.e. ```) but also table delimiters
   { tag: tags.monospace, class: 'cm-monospace' }, // CodeText (i.e. code block content)
   // Tables TODO
   // Footnotes

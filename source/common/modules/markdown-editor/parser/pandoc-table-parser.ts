@@ -9,25 +9,22 @@
  *
  * Description:     Since the default Markdown mode only offers limited support
  *                  for tables, this parser ensures we detect any kind of table
- *                  supported by Pandoc in a given document.
+ *                  supported by Pandoc in a given document. The exception are
+ *                  simple tables, both because they are hard to detect and as
+ *                  other parsers will always take precedence. Tl;DR: Use pipe
+ *                  or grid tables instead. That's what we have the TableEditor
+ *                  for.
  *
  * END HEADER
  */
 
-import { BlockParser, Element, BlockContext /* , LeafBlockParser */ } from '@lezer/markdown'
+import { BlockParser, Element, BlockContext, LeafBlockParser } from '@lezer/markdown'
 
 // Group 1: ^| table contents |$; Group 2: some text | with pipes in between
 const pipeRE = /^(\|.+?\|)$|(.+?\|.+?)/
 const pipeHeaderRE = /^[|+:-]+$/
 const gridLineRE = /^\+[-=+:]+\+$/
 const gridContentRE = /^\|.+\|$/
-const simpleHeaderRE = /^[\s-]+$/
-
-// TODO: Simple parser!
-function parseSimpleTable (ctx: BlockContext, pos: number, end: number, lines: string[]): Element {
-  const rows: Element[] = []
-  return ctx.elt('Table', pos, end, rows)
-}
 
 /**
  * Parses a grid table and returns a subtree that can be used for syntax highlighting
@@ -127,15 +124,6 @@ function parsePipeTable (ctx: BlockContext, pos: number, end: number, lines: str
   return ctx.elt('Table', pos, end, rows)
 }
 
-// const leafParser: LeafBlockParser = {
-//   finish(cx, leaf) {
-//     return false
-//   },
-//   nextLine(cx, line, leaf) {
-//     return false
-//   }
-// }
-
 export const gridTableParser: BlockParser = {
   name: 'grid-table',
   parse: (ctx, line) => {
@@ -164,90 +152,54 @@ export const gridTableParser: BlockParser = {
   }
 }
 
-export const pipeTableParser: BlockParser = {
-  name: 'pipe-table',
-  parse (ctx, line) {
-    if (!pipeRE.test(line.text)) {
-      return false
-    }
-    // We may have a pipe table. Requirement is that the next line is a header
-    // const outerPipes = (pipeRE.exec(line.text) ?? [])[1] !== undefined
-    const lines: string[] = [line.text]
-    const start = ctx.lineStart
-    ctx.nextLine()
-    lines.push(line.text)
-    if (!pipeHeaderRE.test(line.text)) {
-      return false // No pipe table, after all.
-    }
-    ctx.nextLine()
-
-    // The table ends with the first empty line
-    let match: null|RegExpExecArray = null
-
-    do {
-      match = pipeRE.exec(line.text)
-      if (match === null) {
-        break
-      }
-
-      lines.push(line.text)
-    } while (ctx.nextLine())
-
+const pipeLeafParser: LeafBlockParser = {
+  nextLine (ctx, line, leaf) {
+    // Pipe tables are only finished on empty lines, i.e. we don't have to do
+    // any logic in here.
+    return false
+  },
+  finish (ctx, leaf) {
+    // Called when there is an empty line, or something similar. At this point
+    // we need to check that whatever is in the leaf block is a valid pipe table
+    const lines = leaf.content.split('\n')
     if (lines.length < 3) {
-      return false // Pipe tables need to span at least 3 lines
+      return false // Pipe tables must have at least three lines
     }
 
-    const end = ctx.prevLineEnd()
-
-    const elt = parsePipeTable(ctx, start, end, lines)
-    ctx.addElement(elt)
-    return true
-  }
-}
-
-// TODO: Docs for this: https://github.com/lezer-parser/markdown#user-content-blockparser
-export const simpleTableParser: BlockParser = {
-  name: 'simple-table',
-  before: 'HorizontalRule',
-  after: 'SetextHeading',
-  parse: (ctx, line) => {
-    console.warn(`SIMPLE TABLE "${line.text}"`)
-    // Lastly, simple tables which are much harder to detect. First, we need a
-    // non-empty line, then a line consisting of hyphens and spaces. If the
-    // first line is a hyphen/space line, the table must end with a hyphen/
-    // space line, otherwise an empty line marks the end of the table.
-    const startsWithLine = simpleHeaderRE.test(line.text)
-    const lines: string[] = [line.text]
-    const start = ctx.lineStart
-    ctx.nextLine()
-    lines.push(line.text)
-
-    if (!startsWithLine && !simpleHeaderRE.test(line.text)) {
-      return false // Neither first nor second line is a hyphen/space line
+    if (!pipeHeaderRE.test(lines[1])) {
+      return false // Second line must be a pipe table header
     }
 
-    if (startsWithLine) {
-      // It must end with a line
-      while (ctx.nextLine() && !simpleHeaderRE.test(line.text)) {
-        lines.push(line.text)
-      }
-      lines.push(line.text)
-    } else {
-      // Next empty line marks the end
-      while (ctx.nextLine() && line.text.trim() !== '') {
-        lines.push(line.text)
+    // All other lines must conform to pipeRE
+    for (let i = 0; i < lines.length; i++) {
+      if (i === 1) {
+        continue
       }
 
-      if (lines.length < 3) {
+      if (!pipeRE.test(lines[i])) {
         return false
       }
     }
 
-    const end = ctx.lineStart + line.text.length
-
-    console.log(`Simple table found between ${start} and ${end}!`, '\n' + lines.join('\n'))
-    const elt = parseSimpleTable(ctx, start, end, lines)
-    ctx.addElement(elt)
+    // Construct the pipe table
+    const elt = parsePipeTable(ctx, leaf.start, leaf.start + leaf.content.length, lines)
+    ctx.addLeafElement(leaf, elt)
     return true
+  }
+}
+
+export const pipeTableParser: BlockParser = {
+  name: 'pipe-table',
+  leaf (ctx, leaf) {
+    if (pipeRE.test(leaf.content)) {
+      // NOTE: This will not detect "full" or "regular" pipe tables, since these
+      // will already be handled by the GFM table parser. This parser therefore
+      // basically only takes care of the "ugly" pipe tables (where the outer
+      // pipes are omitted). So don't wonder if out of your test pipe tables
+      // only some are detected, that's the reason.
+      return pipeLeafParser
+    } else {
+      return null
+    }
   }
 }
