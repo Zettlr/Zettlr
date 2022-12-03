@@ -210,6 +210,10 @@ there.
 - Parsed links will now show the correctly resolved link as titles
 - The file tree now properly cuts too long file and directory names, indicating
   these with an ellipsis, rather than simply cutting off the text mid-letter
+- Pressing `Cmd/Ctrl+S` while a TableEditor is focused, this will now trigger an
+  update that applies the changes to the underlying document. In other words,
+  when editing a table, you can press `Cmd/Ctrl+S` twice to first apply any
+  changes from the table to the document and second save the document itself.
 
 ## Under the Hood
 

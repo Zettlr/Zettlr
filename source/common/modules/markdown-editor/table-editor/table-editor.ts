@@ -480,6 +480,26 @@ export default class TableEditor {
    * @param   {KeyboardEvent}  evt  The keyboard event
    */
   _onKeyDown (event: KeyboardEvent): void {
+    const cmd = process.platform === 'darwin' && event.metaKey
+    const ctrl = process.platform !== 'darwin' && event.ctrlKey
+
+    // If the user types Cmd/Ctrl+S, this means that the user wants to save the
+    // table. Here we intercept that command and trigger a saveIntent, which
+    // writes the table to the document. NOTE: Because there is the possibility
+    // of a race condition where the file's save is triggered before the content
+    // changes have been applied, we "preventDefault" here. This means that the
+    // user has to press Cmd/Ctrl+S twice to actually save the document contents
+    // but this way it prevents data loss much better.
+    if (event.key === 's' && (cmd || ctrl)) {
+      if (!this._isClean) {
+        if (this._options.saveIntent !== undefined) {
+          event.preventDefault()
+          this._options.saveIntent(this)
+          return
+        }
+      }
+    }
+
     // Also recalculate the button positions as the table's size may have changed.
     this._recalculateEdgeButtonPositions()
 
