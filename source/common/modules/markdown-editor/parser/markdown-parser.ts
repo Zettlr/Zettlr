@@ -68,6 +68,7 @@ import { inlineMathParser, blockMathParser } from './math-parser'
 import { imageParser } from './image-parser'
 import { gridTableParser, pipeTableParser } from './pandoc-table-parser'
 import { getZknLinkParser } from './zkn-link-parser'
+import { pandocAttributesParser } from './pandoc-attributes-parser'
 
 const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors: string[] }> = [
   {
@@ -168,7 +169,8 @@ export default function markdownParser (linkStart: string, linkEnd: string): Lan
         citationParser,
         plainLinkParser,
         imageParser,
-        getZknLinkParser(linkStart, linkEnd)
+        getZknLinkParser(linkStart, linkEnd),
+        pandocAttributesParser
       ],
       // We have to notify the markdown parser about the additional Node Types
       // that the YAML block parser utilizes
@@ -188,7 +190,8 @@ export default function markdownParser (linkStart: string, linkEnd: string): Lan
         { name: 'FootnoteRef', style: customTags.FootnoteRef },
         { name: 'FootnoteBody', style: customTags.FootnoteBody },
         { name: 'ZknLink', style: customTags.ZknLink },
-        { name: 'ZknLinkContent', style: customTags.ZknLinkContent }
+        { name: 'ZknLinkContent', style: customTags.ZknLinkContent },
+        { name: 'PandocAttribute', style: customTags.PandocAttribute }
       ]
     }
   })

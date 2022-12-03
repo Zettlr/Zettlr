@@ -214,6 +214,7 @@ there.
   update that applies the changes to the underlying document. In other words,
   when editing a table, you can press `Cmd/Ctrl+S` twice to first apply any
   changes from the table to the document and second save the document itself.
+- The editor now recognizes Pandoc attribute syntax (e.g., `{.unnumbered}`)
 
 ## Under the Hood
 

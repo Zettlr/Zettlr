@@ -69,7 +69,8 @@ const markdownTheme = HighlightStyle.define([
   { tag: customTags.Footnote, class: 'footnote' },
   { tag: customTags.FootnoteRef, class: 'footnote-ref' },
   { tag: customTags.FootnoteBody, class: 'footnote-body' },
-  { tag: customTags.ZknLinkContent, class: 'cm-zkn-link' }
+  { tag: customTags.ZknLinkContent, class: 'cm-zkn-link' },
+  { tag: customTags.PandocAttribute, class: 'pandoc-attribute' }
 ])
 
 const codeTheme = HighlightStyle.define([
