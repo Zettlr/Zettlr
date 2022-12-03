@@ -721,7 +721,7 @@ export default class TableEditor {
    */
   _signalContentChange (): void {
     const currentTable = JSON.stringify(this._ast)
-    if (currentTable === this._lastSeenTable) {
+    if (currentTable === this._lastSeenTable && this._isClean) {
       // The table has not changed
       this._saveStatusButton.classList.add('is-clean')
       return
