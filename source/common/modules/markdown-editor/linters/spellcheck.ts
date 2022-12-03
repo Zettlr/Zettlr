@@ -186,7 +186,7 @@ async function checkWord (word: string, index: number, nodeStart: number, autoco
               items.push({
                 type: 'normal',
                 enabled: false,
-                label: trans('menu.no_suggestions'),
+                label: trans('No suggestions'),
                 id: 'no-suggestion'
               })
             }
@@ -194,7 +194,7 @@ async function checkWord (word: string, index: number, nodeStart: number, autoco
             // Add the add method
             items.unshift(
               {
-                label: trans('menu.add_to_dictionary'),
+                label: trans('Add to dictionary'),
                 id: 'add-to-dictionary',
                 type: 'normal',
                 enabled: true

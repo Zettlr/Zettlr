@@ -37,14 +37,14 @@ export default async function askFileDialog (config: ConfigProvider, win: Browse
   // Fallback filter: All files
   if (filters === null) {
     filters = [{
-      name: trans('system.all_files'),
+      name: trans('All Files'),
       extensions: ['*']
     }]
   }
 
   // Prepare options
   let opt: OpenDialogOptions = {
-    title: trans('system.open_file'),
+    title: trans('Open file'),
     defaultPath: startDir,
     properties: ['openFile'],
     filters

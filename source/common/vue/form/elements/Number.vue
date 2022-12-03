@@ -101,7 +101,7 @@ export default {
       return 'field-input-' + this.name
     },
     resetLabel: function () {
-      return trans('gui.reset')
+      return trans('Reset')
     }
   },
   methods: {

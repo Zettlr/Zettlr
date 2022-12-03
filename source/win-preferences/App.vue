@@ -120,61 +120,61 @@ export default defineComponent({
       currentTab: 0,
       tabs: [
         {
-          label: trans('dialog.preferences.general'),
+          label: trans('General'),
           controls: 'tab-general',
           id: 'tab-general-control',
           icon: 'cog'
         },
         {
-          label: trans('dialog.preferences.editor'),
+          label: trans('Editor'),
           controls: 'tab-editor',
           id: 'tab-editor-control',
           icon: 'note'
         },
         {
-          label: trans('dialog.preferences.export.title'),
+          label: trans('Export'),
           controls: 'tab-export',
           id: 'tab-export-control',
           icon: 'share'
         },
         {
-          label: trans('dialog.preferences.citations.title'),
+          label: trans('Citations'),
           controls: 'tab-citations',
           id: 'tab-citations-control',
           icon: 'block-quote'
         },
         {
-          label: trans('dialog.preferences.zkn.title'),
+          label: trans('Zettelkasten'),
           controls: 'tab-zettelkasten',
           id: 'tab-zettelkasten-control',
           icon: 'details'
         },
         {
-          label: trans('dialog.preferences.display.title'),
+          label: trans('Display'),
           controls: 'tab-display',
           id: 'tab-display-control',
           icon: 'display'
         },
         {
-          label: trans('dialog.preferences.spellchecking.title'),
+          label: trans('Spellchecking'),
           controls: 'tab-spellchecking',
           id: 'tab-spellchecking-control',
           icon: 'text'
         },
         {
-          label: trans('dialog.preferences.autocorrect.title'),
+          label: trans('AutoCorrect'),
           controls: 'tab-autocorrect',
           id: 'tab-autocorrect-control',
           icon: 'wand' // 'block-quote'
         },
         {
-          label: trans('dialog.preferences.advanced'),
+          label: trans('Advanced'),
           controls: 'tab-advanced',
           id: 'tab-advanced-control',
           icon: 'tools'
         },
         {
-          label: trans('dialog.preferences.toolbar.title'),
+          label: trans('Toolbar'),
           controls: 'tab-toolbar',
           id: 'tab-toolbar-control',
           icon: 'container'
@@ -196,7 +196,7 @@ export default defineComponent({
       if (process.platform === 'darwin') {
         return this.tabs[this.currentTab].label
       } else {
-        return trans('dialog.preferences.title')
+        return trans('dialog.preferences.Preferences')
       }
     },
     showTitlebar: function (): boolean {
@@ -312,6 +312,8 @@ export default defineComponent({
         .then((languages) => {
           const options: any = {}
           languages.map((lang: string) => {
+            // TODO: This is currently un-changeable, need to fix this before
+            // merging the i18n update PR!!!
             options[lang] = trans('dialog.preferences.app_lang.' + lang)
             return null
           })
@@ -332,6 +334,7 @@ export default defineComponent({
             values.push({
               selected: this.model.selectedDicts.includes(dict),
               key: dict,
+              // TODO: SAME AS ABOVE, FIX BEFORE MERGING PR!
               value: trans('dialog.preferences.app_lang.' + dict)
             })
             return null

@@ -20,58 +20,58 @@ export default function (): any {
       [
         {
           type: 'radio',
-          label: trans('dialog.preferences.formatting_characters_explanation'),
+          label: trans('Choose the formatting characters that the bold/emphasis commands should use'),
           model: 'editor.boldFormatting',
           options: {
-            '**': '**' + trans('gui.formatting.bold') + '**',
-            '__': '__' + trans('gui.formatting.bold') + '__'
+            '**': '**' + trans('Bold') + '**',
+            '__': '__' + trans('Bold') + '__'
           }
         },
         {
           type: 'radio',
           model: 'editor.italicFormatting',
           options: {
-            '*': '*' + trans('gui.formatting.italic') + '*',
-            '_': '_' + trans('gui.formatting.italic') + '_'
+            '*': '*' + trans('Italics') + '*',
+            '_': '_' + trans('Italics') + '_'
           }
         }
       ],
       [
         {
           type: 'radio',
-          label: trans('dialog.preferences.auto_save.label'),
+          label: trans('Autosave'),
           model: 'editor.autoSave',
           options: {
-            'off': trans('dialog.preferences.auto_save.off'),
-            'immediately': trans('dialog.preferences.auto_save.immediately'),
-            'delayed': trans('dialog.preferences.auto_save.delayed')
+            'off': trans('Off'),
+            'immediately': trans('Immediately'),
+            'delayed': trans('After a short delay')
           }
         }
       ],
       [
         {
           type: 'text',
-          label: trans('dialog.preferences.default_image_save_path'),
+          label: trans('Default image path (relative or absolute)'),
           model: 'editor.defaultSaveImagePath'
         },
         {
           type: 'number',
-          label: trans('dialog.preferences.indent_unit'),
+          label: trans('Indent by the following number of spaces'),
           model: 'editor.indentUnit'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.indent_with_tabs'),
+          label: trans('Indent using tabs'),
           model: 'editor.indentWithTabs'
         },
         {
           type: 'number',
-          label: trans('dialog.preferences.editor_font_size'),
+          label: trans('Editor font size'),
           model: 'editor.fontSize'
         },
         {
           type: 'select',
-          label: trans('dialog.preferences.readability_algorithm'),
+          label: trans('Algorithm to use for the readability mode'),
           model: 'editor.readabilityAlgorithm',
           options: {
             'dale-chall': 'Dale-Chall',
@@ -82,7 +82,7 @@ export default function (): any {
         },
         {
           type: 'select',
-          label: trans('dialog.preferences.input_mode'),
+          label: trans('Editor input mode'),
           model: 'editor.inputMode',
           options: {
             'default': 'Normal',
@@ -101,32 +101,32 @@ export default function (): any {
       [
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.mute_lines'),
+          label: trans('Mute non-focused lines in distraction-free mode'),
           model: 'muteLines'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.auto_close_brackets'),
+          label: trans('Automatically close matching character pairs'),
           model: 'editor.autoCloseBrackets'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.autocomplete_accept_space'),
+          label: trans('Accept spaces during autocompletion'),
           model: 'editor.autocompleteAcceptSpace'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.homeEndBehaviour'),
+          label: trans('Use the CodeMirror default actions for <kbd>Home</kbd> and <kbd>End</kbd>.'),
           model: 'editor.homeEndBehaviour'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.enable_table_helper'),
+          label: trans('Enable Table Editor'),
           model: 'editor.enableTableHelper'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.count_chars'),
+          label: trans('Count characters instead of words (e.g., for Chinese)'),
           model: 'editor.countChars'
         }
       ],
@@ -136,13 +136,13 @@ export default function (): any {
           label: '', // TODO
           model: 'editor.direction',
           options: {
-            'ltr': trans('dialog.preferences.editor_setting.direction_ltr'),
-            'rtl': trans('dialog.preferences.editor_setting.direction_rtl')
+            'ltr': trans('Use left-to-right (LTR) writing direction'),
+            'rtl': trans('Use right-to-left (RTL) writing direction')
           }
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.editor_setting.rtl_move_visually'),
+          label: trans('Use visual order for arrow key movement while in RTL-mode'),
           model: 'editor.rtlMoveVisually'
         }
       ]

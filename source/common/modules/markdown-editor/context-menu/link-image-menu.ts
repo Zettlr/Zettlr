@@ -69,7 +69,7 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
     },
     {
       id: 'menu.open_link',
-      label: trans('menu.open_link'),
+      label: trans('Open Link'),
       enabled: true,
       type: 'normal'
     },
@@ -78,7 +78,7 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
       id: 'menu.copy_link',
       enabled: true,
       type: 'normal',
-      label: (url.indexOf('mailto:') === 0) ? trans('menu.copy_mail') : trans('menu.copy_link')
+      label: (url.indexOf('mailto:') === 0) ? trans('Copy Mail Address') : trans('Copy Link')
     }
   ]
 
@@ -87,19 +87,19 @@ export function linkImageMenu (view: EditorView, node: SyntaxNode, coords: { x: 
 
   const imgTpl: AnyMenuItem[] = [
     {
-      label: trans('menu.copy_img_to_clipboard'),
+      label: trans('Copy image to clipboard'),
       id: 'copy-img-to-clipboard',
       enabled: isFileLink,
       type: 'normal'
     },
     {
-      label: trans('menu.open_in_browser'),
+      label: trans('Open in browser'),
       id: 'open-img-in-browser',
       enabled: !isFileLink,
       type: 'normal'
     },
     {
-      label: trans('menu.show_file'),
+      label: trans('Show file'),
       id: 'show-img-in-folder',
       enabled: !isFileLink,
       type: 'normal'

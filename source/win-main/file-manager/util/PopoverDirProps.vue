@@ -214,25 +214,25 @@ export default {
       return localiseNumber(this.dirs)
     },
     formattedWordCount: function () {
-      return trans('gui.words', localiseNumber(this.totalWords))
+      return trans('%s words', localiseNumber(this.totalWords))
     },
     foldersLabel: function () {
-      return trans('gui.dirs')
+      return trans('Directories')
     },
     modifiedLabel: function () {
-      return trans('gui.modified')
+      return trans('Modified')
     },
     createdLabel: function () {
-      return trans('gui.created')
+      return trans('Created')
     },
     filesLabel: function () {
-      return trans('gui.files')
+      return trans('Files')
     },
     icons: function () {
       return ICONS
     },
     projectPropertiesLabel: function () {
-      return trans('menu.project_properties')
+      return trans('Project Settings…')
     }
   },
   created: function () {

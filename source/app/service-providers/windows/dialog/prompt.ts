@@ -29,7 +29,7 @@ export default function promptDialog (logger: LogProvider, win: BrowserWindow|nu
 
   const boxOptions: MessageBoxOptions = {
     type: 'info',
-    buttons: [trans('system.ok')],
+    buttons: [trans('Ok')],
     defaultId: 0,
     title: 'Zettlr',
     message: options.message

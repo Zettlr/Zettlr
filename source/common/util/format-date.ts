@@ -30,7 +30,7 @@ export default function formatDate (dateObj: Date|number, locale: string, relati
     // Check if there is at least a minute difference between the datetime object
     // and now. If not, simply output "just now", else the actual relative difference.
     if (dt.diff(DateTime.now(), 'minutes').toObject().minutes as number * -1 < 1) {
-      return trans('gui.date_just_now_label')
+      return trans('just now')
     } else {
       return dt.toRelative({
         style: 'short', // Can be short, narrow, or long

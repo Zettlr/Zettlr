@@ -100,13 +100,13 @@ export default defineComponent({
   },
   computed: {
     saveButtonLabel: function (): string {
-      return trans('dialog.button.save')
+      return trans('Save')
     },
     renameSnippetLabel: function (): string {
-      return trans('dialog.snippets.rename')
+      return trans('Rename snippet')
     },
     snippetsExplanation: function (): string {
-      return trans('dialog.snippets.explanation')
+      return trans('Snippets let you define reusable pieces of text with variables.')
     }
   },
   watch: {
@@ -118,7 +118,7 @@ export default defineComponent({
       if (editor.isClean() === true) {
         this.savingStatus = ''
       } else {
-        this.savingStatus = trans('gui.assets_man.status.unsaved_changes')
+        this.savingStatus = trans('Unsaved changes')
       }
     }
   },
@@ -177,7 +177,7 @@ export default defineComponent({
         .catch(err => console.error(err))
     },
     saveSnippet: function () {
-      this.savingStatus = trans('gui.assets_man.status.saving')
+      this.savingStatus = trans('Saving …')
 
       ipcRenderer.invoke('assets-provider', {
         command: 'set-snippet',
@@ -187,7 +187,7 @@ export default defineComponent({
         }
       })
         .then(() => {
-          this.savingStatus = trans('gui.assets_man.status.saved')
+          this.savingStatus = trans('Saved!')
           setTimeout(() => {
             this.savingStatus = ''
           }, 1000)

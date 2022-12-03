@@ -20,71 +20,71 @@ export default function (): any {
       [
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.toolbar.showOpenPreferencesButton'),
+          label: trans('Display "Open Preferences" button'),
           model: 'displayToolbarButtons.showOpenPreferencesButton'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.toolbar.showNewFileButton'),
+          label: trans('Display "New File" button'),
           model: 'displayToolbarButtons.showNewFileButton'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.toolbar.showPreviousFileButton'),
+          label: trans('Display "Previous File" button'),
           model: 'displayToolbarButtons.showPreviousFileButton'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.toolbar.showNextFileButton'),
+          label: trans('Display "Next File" button'),
           model: 'displayToolbarButtons.showNextFileButton'
         }
       ],
       [
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.toolbar.showToggleReadabilityButton'),
+          label: trans('Display readability button'),
           model: 'displayToolbarButtons.showToggleReadabilityButton'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.toolbar.showMarkdownCommentButton'),
+          label: trans('Display "Insert Comment" button'),
           model: 'displayToolbarButtons.showMarkdownCommentButton'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.toolbar.showMarkdownLinkButton'),
+          label: trans('Display link button'),
           model: 'displayToolbarButtons.showMarkdownLinkButton'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.toolbar.showMarkdownImageButton'),
+          label: trans('Display image button'),
           model: 'displayToolbarButtons.showMarkdownImageButton'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.toolbar.showMarkdownMakeTaskListButton'),
+          label: trans('Display task list button'),
           model: 'displayToolbarButtons.showMarkdownMakeTaskListButton'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.toolbar.showInsertTableButton'),
+          label: trans('Display "Insert Table" button'),
           model: 'displayToolbarButtons.showInsertTableButton'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.toolbar.showInsertFootnoteButton'),
+          label: trans('Display "Insert Footnote" button'),
           model: 'displayToolbarButtons.showInsertFootnoteButton'
         }
       ],
       [
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.toolbar.showDocumentInfoText'),
+          label: trans('Display document info'),
           model: 'displayToolbarButtons.showDocumentInfoText'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.toolbar.showPomodoroButton'),
+          label: trans('Display Pomodoro-timer'),
           model: 'displayToolbarButtons.showPomodoroButton'
         }
       ]

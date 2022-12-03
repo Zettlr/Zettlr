@@ -57,7 +57,7 @@ export default class RootOpen extends ZettlrCommand {
   private async openFiles (): Promise<string[]> {
     // The user wants to open another file or directory.
     const extensions = [ 'markdown', 'md', 'txt', 'rmd' ]
-    const filter = [{ name: trans('system.files'), extensions }]
+    const filter = [{ name: trans('Files'), extensions }]
 
     return await this._app.windows.askFile(filter, true)
   }
@@ -70,7 +70,7 @@ export default class RootOpen extends ZettlrCommand {
   private async openWorkspaces (): Promise<string[]> {
     // TODO: Move this to a command
     // The user wants to open another file or directory.
-    const ret = await this._app.windows.askDir(trans('system.open_folder'), null)
+    const ret = await this._app.windows.askDir(trans('Open project folder'), null)
 
     for (const workspace of ret) {
       const ignoredDir = isDir(workspace) && ignoreDir(workspace)
@@ -80,8 +80,8 @@ export default class RootOpen extends ZettlrCommand {
         this._app.log.error(`The chosen workspace "${workspace}" is on the ignore list.`)
         this._app.windows.prompt({
           'type': 'error',
-          'title': trans('system.error.ignored_dir_title'),
-          'message': trans('system.error.ignored_dir_message', path.basename(workspace))
+          'title': trans('Cannot open directory'),
+          'message': trans('Directory &quot;%s&quot; cannot be opened by Zettlr.', path.basename(workspace))
         })
       }
     }
@@ -133,7 +133,7 @@ export default class RootOpen extends ZettlrCommand {
       } else if (this._app.config.addPath(absPath)) {
         try {
           if (isDir(absPath)) {
-            this._app.notifications.show(trans('system.open_root_directory', path.basename(absPath)))
+            this._app.notifications.show(trans('Opening new root %s …', path.basename(absPath)))
           }
           const loaded = await this._app.fsal.loadPath(absPath)
           if (loaded) {
@@ -144,7 +144,7 @@ export default class RootOpen extends ZettlrCommand {
             }
 
             if (isDir(absPath)) {
-              this._app.notifications.show(trans('system.open_root_directory_success', path.basename(absPath)))
+              this._app.notifications.show(trans('%s has been loaded.', path.basename(absPath)))
             }
           } else {
             this._app.config.removePath(absPath)
@@ -156,7 +156,7 @@ export default class RootOpen extends ZettlrCommand {
           this._app.windows.reportFSError('Could not open new root', err)
         }
       } else {
-        this._app.notifications.show(trans('system.error.open_root_error', path.basename(absPath)))
+        this._app.notifications.show(trans('Could not open workspace %s.', path.basename(absPath)))
         this._app.log.error(`Could not open new root ${absPath}!`)
       }
     }

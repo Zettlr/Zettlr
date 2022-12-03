@@ -27,11 +27,11 @@ import { trans } from '@common/i18n-main'
 export default async function confirmRemove (win: BrowserWindow|null, descriptor: MDFileDescriptor|CodeFileDescriptor|DirDescriptor): Promise<boolean> {
   const options: MessageBoxOptions = {
     type: 'warning',
-    buttons: [ trans('system.ok'), trans('system.error.cancel_remove') ],
+    buttons: [ trans('Ok'), trans('Cancel') ],
     defaultId: 0,
     cancelId: 1,
-    title: trans('system.error.remove_title'),
-    message: trans('system.error.remove_message', descriptor.name)
+    title: trans('Really delete?'),
+    message: trans('Do you really want to remove %s?', descriptor.name)
   }
 
   let response: MessageBoxReturnValue

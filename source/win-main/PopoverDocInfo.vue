@@ -77,16 +77,16 @@ export default defineComponent({
       return {} // This popover doesn't return anything
     },
     noDocumentLabel: function () {
-      return trans('gui.no_open_document')
+      return trans('No open document')
     },
     wordsLabel: function () {
-      return trans('gui.file_words')
+      return trans('words')
     },
     charsLabel: function () {
-      return trans('gui.file_chars')
+      return trans('characters')
     },
     withoutSpacesLabel: function () {
-      return trans('gui.file_chars_wo_spaces')
+      return trans('characters (w/o spaces)')
     },
     selectedWords: function (): string {
       if (this.docInfo === null) {
@@ -113,9 +113,9 @@ export default defineComponent({
   methods: {
     getWdSelectedLabel: function (wordsOrChars: number) {
       if (this.shouldCountChars) {
-        return trans('gui.chars', localiseNumber(wordsOrChars))
+        return trans('%s characters', localiseNumber(wordsOrChars))
       } else {
-        return trans('gui.words', localiseNumber(wordsOrChars))
+        return trans('%s words', localiseNumber(wordsOrChars))
       }
     }
   }

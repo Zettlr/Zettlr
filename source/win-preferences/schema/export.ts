@@ -20,14 +20,14 @@ export default function (): any {
       [
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.export.use_bundled_pandoc'),
+          label: trans('Use the internal Pandoc for exports'),
           model: 'export.useBundledPandoc'
         }
       ],
       [
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.export.strip_tags_label'),
+          label: trans('Remove tags from files'),
           model: 'export.stripTags'
         }
       ],
@@ -37,21 +37,21 @@ export default function (): any {
           label: '', // TODO
           model: 'export.stripLinks',
           options: {
-            'full': trans('dialog.preferences.export.strip_links_full_label'),
-            'unlink': trans('dialog.preferences.export.strip_links_unlink_label'),
-            'no': trans('dialog.preferences.export.strip_links_no_label')
+            'full': trans('Remove internal links completely'),
+            'unlink': trans('Unlink internal links'),
+            'no': trans('Don\'t touch internal links')
           }
         }
       ],
       [
         {
           type: 'radio',
-          label: trans('dialog.preferences.export.dest'),
+          label: trans('Target directory for exported files. <em>Attention:</em> Selecting the current working directory will overwrite files without warning!'),
           model: 'export.dir',
           options: {
-            'temp': trans('dialog.preferences.export.dest_temp_label'),
-            'cwd': trans('dialog.preferences.export.dest_cwd_label'),
-            'ask': trans('dialog.preferences.export.dest_ask_label')
+            'temp': trans('Temporary directory: is regularly expunged'),
+            'cwd': trans('Current working directory: exported files will be saved into the currently selected directory.'),
+            'ask': trans('Ask for directory')
           }
         }
       ]

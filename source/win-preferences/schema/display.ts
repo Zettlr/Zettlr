@@ -21,46 +21,46 @@ export default function (): any {
       [
         {
           type: 'fieldset-label', // TODO: Create this type
-          text: trans('dialog.preferences.display.preview_info')
+          text: trans('These options determine which elements are rendered in documents.')
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.display.render_citations'),
+          label: trans('Render Citations'),
           model: 'display.renderCitations'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.display.render_iframes'),
+          label: trans('Render Iframes'),
           model: 'display.renderIframes'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.display.render_images'),
+          label: trans('Render Images'),
           model: 'display.renderImages'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.display.render_links'),
+          label: trans('Render Links'),
           model: 'display.renderLinks'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.display.render_math'),
+          label: trans('Render Formulae'),
           model: 'display.renderMath'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.display.render_tasks'),
+          label: trans('Render Tasks'),
           model: 'display.renderTasks'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.display.render_htags'),
+          label: trans('Hide heading characters'),
           model: 'display.renderHTags'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.display.render_emphasis'),
+          label: trans('Render emphasis'),
           model: 'display.renderEmphasis'
         }
       ],
@@ -68,7 +68,7 @@ export default function (): any {
         {
           type: 'theme',
           model: 'display.theme',
-          label: trans('dialog.preferences.theme.info'),
+          label: trans('Here you can choose the theme for the app.'),
           options: {
             'berlin': {
               textColor: 'white',
@@ -109,28 +109,28 @@ export default function (): any {
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.theme.accent_color_label'),
+          label: trans('Use the operating system\'s accent colour instead of the theme colour'),
           model: 'display.useSystemAccentColor',
           // Disable on anything except macOS and Windows
           disabled: !isWinOrMac,
-          info: (!isWinOrMac) ? trans('dialog.preferences.theme.accent_color_info') : undefined
+          info: (!isWinOrMac) ? trans('This setting is only available on Windows and macOS') : undefined
         }
       ],
       [
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.display.hide_toolbar_distraction_free'),
+          label: trans('Hide toolbar in distraction free mode'),
           model: 'display.hideToolbarInDistractionFree'
         }
       ],
       [
         {
           type: 'fieldset-label', // TODO: Create this type
-          text: trans('dialog.preferences.display.image_size_info')
+          text: trans('With these controls you can constrain the image previews.')
         },
         {
           type: 'slider',
-          label: trans('dialog.preferences.display.image_width'),
+          label: trans('Maximum width of images (percent)'),
           name: 'slider-image-width',
           min: 0,
           max: 100,
@@ -138,7 +138,7 @@ export default function (): any {
         },
         {
           type: 'slider',
-          label: trans('dialog.preferences.display.image_height'),
+          label: trans('Maximum height of images (percent)'),
           name: 'slider-image-height',
           min: 0,
           max: 100,

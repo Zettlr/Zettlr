@@ -95,7 +95,7 @@ export default defineComponent({
       return 'field-input-' + this.name
     },
     resetLabel: function (): string {
-      return trans('gui.reset')
+      return trans('Reset')
     },
     element: function (): HTMLInputElement {
       return this.$refs.input as HTMLInputElement

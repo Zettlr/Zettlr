@@ -236,7 +236,7 @@ export default defineComponent({
           length += this.shouldCountChars ? sel.chars : sel.words
         })
 
-        cnt = trans('gui.words_selected', localiseNumber(length))
+        cnt = trans('%s selected', localiseNumber(length))
         cnt += '<br>'
         if (info.selections.length === 1) {
           cnt += (info.selections[0].anchor.line) + ':'
@@ -245,7 +245,7 @@ export default defineComponent({
           cnt += (info.selections[0].head.ch)
         } else {
           // Multiple selections --> indicate
-          cnt += trans('gui.number_selections', info.selections.length)
+          cnt += trans('%s selections', info.selections.length)
         }
       } else {
         // No selection.
@@ -265,12 +265,12 @@ export default defineComponent({
           id: 'toggle-file-manager',
           stateOne: {
             id: 'fileManager',
-            title: trans('toolbar.toggle_file_manager'),
+            title: trans('File manager'),
             icon: 'hard-disk'
           },
           stateTwo: {
             id: 'globalSearch',
-            title: trans('toolbar.toggle_global_search'),
+            title: trans('Global search'),
             icon: 'search'
           },
           initialState: (this.fileManagerVisible === true) ? this.mainSplitViewVisibleComponent : undefined
@@ -278,47 +278,47 @@ export default defineComponent({
         {
           type: 'button',
           id: 'root-open-workspaces',
-          title: trans('menu.open_workspace'),
+          title: trans('Open Workspace …'),
           icon: 'folder-open'
         },
         {
           type: 'button',
           id: 'show-stats',
-          title: trans('toolbar.stats'),
+          title: trans('View stats'),
           icon: 'line-chart'
         },
         {
           type: 'button',
           id: 'show-tag-cloud',
-          title: trans('toolbar.tag_cloud'),
+          title: trans('Tags'),
           icon: 'tags',
           badge: undefined // this.hasTagSuggestions
         },
         {
           type: 'button',
           id: 'open-preferences',
-          title: trans('toolbar.preferences'),
+          title: trans('Open the settings dialog'),
           icon: 'cog',
           visible: this.getToolbarButtonDisplay('showOpenPreferencesButton')
         },
         {
           type: 'button',
           id: 'new-file',
-          title: trans('menu.new_file'),
+          title: trans('New File…'),
           icon: 'plus',
           visible: this.getToolbarButtonDisplay('showNewFileButton')
         },
         {
           type: 'button',
           id: 'previous-file',
-          title: trans('menu.previous_file'),
+          title: trans('Previous file'),
           icon: 'arrow left',
           visible: this.getToolbarButtonDisplay('showPreviousFileButton')
         },
         {
           type: 'button',
           id: 'next-file',
-          title: trans('menu.next_file'),
+          title: trans('Next file'),
           icon: 'arrow right',
           visible: this.getToolbarButtonDisplay('showNextFileButton')
         },
@@ -330,13 +330,13 @@ export default defineComponent({
           type: 'button',
           class: 'share',
           id: 'export',
-          title: trans('toolbar.share'),
+          title: trans('Share the current file as HTML, DOCX, ODT or PDF'),
           icon: 'export'
         },
         {
           type: 'toggle',
           id: 'toggle-readability',
-          title: trans('toolbar.readability'),
+          title: trans('Toggle readability mode'),
           icon: 'eye',
           visible: this.getToolbarButtonDisplay('showToggleReadabilityButton'),
           initialState: this.readabilityActive
@@ -349,42 +349,42 @@ export default defineComponent({
         {
           type: 'button',
           id: 'markdownComment',
-          title: trans('gui.formatting.comment'),
+          title: trans('Comment'),
           icon: 'code',
           visible: this.getToolbarButtonDisplay('showMarkdownCommentButton')
         },
         {
           type: 'button',
           id: 'markdownLink',
-          title: trans('gui.formatting.link'),
+          title: trans('Link'),
           icon: 'link',
           visible: this.getToolbarButtonDisplay('showMarkdownLinkButton')
         },
         {
           type: 'button',
           id: 'markdownImage',
-          title: trans('gui.formatting.image'),
+          title: trans('Image'),
           icon: 'image',
           visible: this.getToolbarButtonDisplay('showMarkdownImageButton')
         },
         {
           type: 'button',
           id: 'markdownMakeTaskList',
-          title: trans('gui.formatting.tasklist'),
+          title: trans('Tasklist'),
           icon: 'checkbox-list',
           visible: this.getToolbarButtonDisplay('showMarkdownMakeTaskListButton')
         },
         {
           type: 'button',
           id: 'insert-table',
-          title: trans('gui.formatting.insert_table'),
+          title: trans('Insert Table'),
           icon: 'table',
           visible: this.getToolbarButtonDisplay('showInsertTableButton')
         },
         {
           type: 'button',
           id: 'insertFootnote',
-          title: trans('gui.formatting.footnote'),
+          title: trans('Footnote'),
           icon: 'footnote',
           visible: this.getToolbarButtonDisplay('showInsertFootnoteButton')
         },
@@ -402,7 +402,7 @@ export default defineComponent({
         {
           type: 'ring',
           id: 'pomodoro',
-          title: trans('toolbar.pomodoro'),
+          title: trans('Pomodoro-Timer'),
           // Good morning, we are verbose here
           progressPercent: this.pomodoro.phase.elapsed / this.pomodoro.durations[this.pomodoro.phase.type] * 100,
           colour: this.pomodoro.colour[this.pomodoro.phase.type],
@@ -411,7 +411,7 @@ export default defineComponent({
         {
           type: 'toggle',
           id: 'toggle-sidebar',
-          title: trans('menu.toggle_sidebar'),
+          title: trans('Toggle Sidebar'),
           icon: 'view-columns',
           initialState: this.sidebarVisible
         }

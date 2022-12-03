@@ -93,16 +93,16 @@ export default defineComponent({
       ]
     },
     otherFilesLabel: function (): string {
-      return trans('gui.other_files')
+      return trans('Other files')
     },
     referencesLabel: function (): string {
-      return trans('gui.citeproc.references_heading')
+      return trans('References')
     },
     tocLabel: function (): string {
-      return trans('gui.table_of_contents')
+      return trans('Table of Contents')
     },
     relatedFilesLabel: function (): string {
-      return trans('gui.related_files_label')
+      return trans('Related files')
     },
     activeFile: function (): OpenDocument|null {
       return this.$store.getters.lastLeafActiveFile()

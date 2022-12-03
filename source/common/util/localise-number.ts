@@ -25,8 +25,8 @@ export default function (number: number): string {
     return number.toString()
   }
 
-  let delim = trans('localise.thousand_delimiter')
-  let decimal = trans('localise.decimal_delimiter')
+  let delim = trans(',')
+  let decimal = trans('.')
   // No delimiter available -> fallback
   if (delim === 'localise.thousand_delimiter') delim = '.'
   if (decimal === 'localise.decimal_delimiter') decimal = ','

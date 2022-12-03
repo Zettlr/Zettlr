@@ -134,7 +134,7 @@ export default defineComponent({
   name: 'ProjectsTab',
   data: function () {
     return {
-      projectsIntro: trans('dialog.about.other_projects')
+      projectsIntro: trans('Zettlr also makes use of these projects:')
     }
   }
 })

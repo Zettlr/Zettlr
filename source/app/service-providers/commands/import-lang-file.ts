@@ -56,12 +56,12 @@ export default class ImportLangFile extends ZettlrCommand {
         // It's a language file!
         try {
           fs.copyFileSync(f, path.join(langDir, path.basename(f)))
-          this._app.notifications.show(trans('system.lang_import_success', path.basename(f)))
+          this._app.notifications.show(trans('Language file imported: %s', path.basename(f)))
         } catch (err) {
-          this._app.notifications.show(trans('system.lang_import_error', path.basename(f)))
+          this._app.notifications.show(trans('Could not import language file %s!', path.basename(f)))
         }
       } else {
-        this._app.notifications.show(trans('system.lang_import_error', path.basename(f)))
+        this._app.notifications.show(trans('Could not import language file %s!', path.basename(f)))
       }
     }
 

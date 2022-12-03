@@ -262,10 +262,10 @@ export default {
       }
     },
     addButtonLabel: function () {
-      return trans('system.common.list_add_button')
+      return trans('Add')
     },
     actionsLabel: function () {
-      return trans('system.common.list_actions_label')
+      return trans('Actions')
     },
     columnLabels: function () {
       if (this.labels.length !== 0) {
@@ -287,7 +287,7 @@ export default {
       }
 
       // Apparently we have a simple array, so exactly one column
-      return [trans('system.common.list_default_column_label')]
+      return [trans('Item')]
     },
     platform: function () {
       return process.platform

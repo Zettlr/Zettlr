@@ -26,7 +26,7 @@ export default defineComponent({
   },
   computed: {
     referencesLabel: function (): string {
-      return trans('gui.citeproc.references_heading')
+      return trans('References')
     },
     activeFile: function (): OpenDocument|null {
       return this.$store.getters.lastLeafActiveFile()
@@ -38,7 +38,7 @@ export default defineComponent({
      */
     referenceHTML: function (): string {
       if (this.bibliography === undefined || this.bibliography[1].length === 0) {
-        return `<p>${trans('gui.citeproc.references_none')}</p>`
+        return `<p>${trans('There are no citations in this document.')}</p>`
       }
 
       const html = [this.bibliography[0].bibstart]

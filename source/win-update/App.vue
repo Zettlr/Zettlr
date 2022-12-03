@@ -107,9 +107,9 @@ export default defineComponent({
   },
   data: function () {
     return {
-      windowTitle: trans('dialog.update.window_title'),
+      windowTitle: trans('Updater'),
       disableStartButton: false, // True as soon as the update starts
-      startButtonLabel: trans('dialog.update.start_update_label'),
+      startButtonLabel: trans('Click to start update'),
       updateState: {
         lastErrorMessage: undefined,
         lastErrorCode: undefined,
@@ -148,25 +148,25 @@ export default defineComponent({
       return this.updateState.size_downloaded > 0 && this.updateState.size_downloaded === this.updateState.size_total
     },
     updateTitle: function (): string {
-      return trans('dialog.update.title')
+      return trans('New update available')
     },
     updateCurrentVersion: function (): string {
-      return trans('dialog.update.current_version')
+      return trans('Your version')
     },
     updateNotification: function (): string {
-      return trans('dialog.update.notification')
+      return trans('There is a new version of Zettlr available to download. Please read the changelog below.')
     },
     downloadProgressLabel: function (): string {
-      return trans('dialog.update.download_progress_label')
+      return trans('Downloading your update')
     },
     noUpdateMessage: function (): string {
-      return trans('dialog.update.no_new_update')
+      return trans('No update available. You have the most recent version.')
     },
     currentVersion: function (): string {
       return PACKAGE_JSON.version
     },
     checkForUpdateLabel: function (): string {
-      return trans('menu.update')
+      return trans('Check for updates')
     },
     getETA: function (): string {
       let seconds = this.updateState.eta_seconds
@@ -205,7 +205,7 @@ export default defineComponent({
     },
     startUpdate: function () {
       this.disableStartButton = true
-      this.startButtonLabel = trans('dialog.update.start_update_message')
+      this.startButtonLabel = trans('Starting update …')
       ipcRenderer.invoke('update-provider', { command: 'begin-update' })
         .catch(e => {
           this.disableStartButton = false

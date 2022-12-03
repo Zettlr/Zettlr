@@ -37,8 +37,8 @@ export default class SetOpenDirectory extends ZettlrCommand {
       this._app.log.error('Could not find directory', dirPath)
       this._app.windows.prompt({
         type: 'error',
-        title: trans('system.error.dnf_title'),
-        message: trans('system.error.dnf_message')
+        title: trans('Directory not found'),
+        message: trans('The requested directory was not found.')
       })
     }
   }

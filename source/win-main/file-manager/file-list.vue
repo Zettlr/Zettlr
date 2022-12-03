@@ -139,13 +139,13 @@ export default defineComponent({
       }
     },
     noResultsMessage: function (): string {
-      return trans('gui.no_search_results')
+      return trans('No results')
     },
     emptyFileListMessage: function (): string {
-      return trans('gui.no_dir_selected')
+      return trans('No directory selected')
     },
     emptyDirectoryMessage: function (): string {
-      return trans('gui.empty_dir')
+      return trans('Empty directory')
     },
     selectedFile: function (): string {
       return this.$store.state.activeFile

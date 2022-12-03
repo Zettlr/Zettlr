@@ -176,7 +176,7 @@ export default class TranslationProvider extends ProviderContract {
     Promise.all(allPromises)
       .then(() => {
         // Now we are done and can notify the user of all updated translations!
-        this._logger.info(trans('dialog.preferences.translations.updated', langList))
+        this._logger.info(trans('Updated translations: %s', langList))
       })
       .catch((err) => {
         this._logger.error(`Could not update language: ${err.message as string}`, err)

@@ -43,7 +43,7 @@ export default async function makeImport (
   try {
     await commandExists('pandoc')
   } catch (err) {
-    throw new Error(trans('system.error.no_pandoc_message'))
+    throw new Error(trans('Pandoc has not been found on this system. Please install Pandoc prior to exporting or importing files.'))
   }
 
   let files = await checkImportIntegrity(fileList)

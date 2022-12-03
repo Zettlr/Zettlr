@@ -353,7 +353,7 @@ export default defineComponent({
             input.value = generateFilename(filenamePattern, idGenPattern)
           } else if (this.operationType === 'createDir') {
             // Else standard val for new dirs.
-            input.value = trans('dialog.dir_new.value')
+            input.value = trans('Untitled')
           }
           input.focus()
           // Select from the beginning until the last dot

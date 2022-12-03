@@ -131,19 +131,19 @@ export default {
       return `${minStr}:${secStr}`
     },
     startLabel: function () {
-      return trans('pomodoro.start')
+      return trans('Start')
     },
     stopLabel: function () {
-      return trans('pomodoro.stop')
+      return trans('Stop')
     },
     taskLabel: function () {
-      return trans('pomodoro.phase.task')
+      return trans('Work')
     },
     shortLabel: function () {
-      return trans('pomodoro.phase.short')
+      return trans('Short break')
     },
     longLabel: function () {
-      return trans('pomodoro.phase.long')
+      return trans('Break')
     },
     currentPhaseLabel: function () {
       if (this.currentPhase === 'task') {

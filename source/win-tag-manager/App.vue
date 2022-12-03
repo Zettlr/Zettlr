@@ -80,32 +80,32 @@ export default defineComponent({
   },
   computed: {
     namePlaceholder: function () {
-      return trans('dialog.tags.name_desc')
+      return trans('The Tag (without #)')
     },
     colorPlaceholder: function () {
-      return trans('dialog.tags.color_desc')
+      return trans('Colour (e.g. #ff0000 or rgb(255, 0, 0))')
     },
     descriptionPlaceholder: function () {
-      return trans('dialog.tags.desc_desc')
+      return trans('A short and concise description (max. 100 characters)')
     },
     tagManagerIntro: function () {
-      return trans('dialog.tags.description')
+      return trans('Here you can assign colours to different tags. If a tag is found in a file, its tile in the preview list will receive a coloured indicator. The description will be shown on mouse hover.')
     },
     windowTitle: function () {
-      return trans('dialog.tags.title')
+      return trans('Manage tags')
     },
     statusbarControls: function () {
       return [
         {
           type: 'button',
-          label: trans('dialog.button.save'),
+          label: trans('Save'),
           id: 'save',
           icon: '',
           buttonClass: 'primary' // It's a primary button
         },
         {
           type: 'button',
-          label: trans('dialog.button.cancel'),
+          label: trans('Cancel'),
           id: 'cancel',
           icon: ''
         },

@@ -233,13 +233,13 @@ export default defineComponent({
       if (this.obj.type !== 'directory') {
         return 0
       }
-      return this.obj.children.filter((e: any) => e.type === 'directory').length + ' ' + trans('system.directories') || 0
+      return this.obj.children.filter((e: any) => e.type === 'directory').length + ' ' + trans('Directories') || 0
     },
     countFiles: function () {
       if (this.obj.type !== 'directory') {
         return 0
       }
-      return this.obj.children.filter((e: any) => [ 'file', 'code' ].includes(e.type)).length + ' ' + trans('system.files') || 0
+      return this.obj.children.filter((e: any) => [ 'file', 'code' ].includes(e.type)).length + ' ' + trans('Files') || 0
     },
     countWordsOrCharsOfDirectory: function () {
       if (this.obj.type !== 'directory') {
@@ -308,9 +308,9 @@ export default defineComponent({
         progress = 100 // Never exceed 100 %
       }
 
-      let label = trans('dialog.target.chars')
+      let label = trans('Characters')
       if (target.mode === 'words') {
-        label = trans('dialog.target.words')
+        label = trans('Words')
       }
 
       return `${localiseNumber(current)} / ${localiseNumber(target.count)} ${label} (${progress} %)`
@@ -320,9 +320,9 @@ export default defineComponent({
         return '' // Failsafe because code files don't have a word count.
       }
       if (this.shouldCountChars) {
-        return trans('gui.chars', localiseNumber(this.obj.charCount))
+        return trans('%s characters', localiseNumber(this.obj.charCount))
       } else {
-        return trans('gui.words', localiseNumber(this.obj.wordCount))
+        return trans('%s words', localiseNumber(this.obj.wordCount))
       }
     },
     formattedSize: function () {

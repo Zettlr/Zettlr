@@ -20,21 +20,21 @@ export default function (): any {
       [
         {
           type: 'list',
-          label: trans('dialog.preferences.spellcheck'),
+          label: trans('Select the languages for which you want to enable automatic spell checking.'),
           model: 'availableDictionaries',
           deletable: false,
           editable: [0], // Only the "selectable" column may be edited
           searchable: true,
-          searchLabel: trans('dialog.preferences.spellcheck_search_placeholder')
+          searchLabel: trans('Search for dictionaries &hellip;')
         },
         {
           type: 'list',
-          label: trans('dialog.preferences.user_dictionary'),
+          label: trans('User dictionary. Remove words by clicking them.'),
           model: 'userDictionaryContents',
-          labels: [trans('dialog.preferences.user_dictionary_label')],
+          labels: [trans('Dictionary entry')],
           deletable: true,
           searchable: true,
-          searchLabel: trans('system.common.list_search_placeholder')
+          searchLabel: trans('Search for entries …')
         }
       ]
     ]
