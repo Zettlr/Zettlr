@@ -29,8 +29,9 @@ const ipcRenderer = window.ipc
 // The L matches any letter from any alphabet, including chinese, Japanese,
 // Russian, etc. Additionally, we have quote characters so that "don't" (with
 // typographically correct quotes) is also recognized.
-const anyLetterRE = /[\p{L}'’‘‚‹›»“”」]+/gu
-const noneLetterRE = /^['’‘‚‹›»“”」]+$/
+const anyLetterRE = /[\p{L}'’‘]+/gu
+const noneLetterRE = /^['’‘]+$/
+const nonLetters = '\'’‘'
 
 // const zknTagRE = getZknTagRE()
 
@@ -299,7 +300,15 @@ export const spellcheck = linter(async view => {
       for (const match of node.value.matchAll(anyLetterRE)) {
         // Remove words that only consists, e.g., of quotes
         if (!noneLetterRE.test(match[0])) {
-          words.push(match[0].replace(noneLetterRE, ''))
+          // Remove none-letters from the beginnings and ends of words
+          let word = match[0]
+          while (nonLetters.includes(word[0])) {
+            word = word.slice(1)
+          }
+          while (nonLetters.includes(word[word.length - 1])) {
+            word = word.slice(0, word.length - 2)
+          }
+          words.push(word)
         }
       }
 
