@@ -53,16 +53,22 @@ const apply = (filename: string, fileId: string) => function (view: EditorView, 
   // Applies a filename insertion
   const { linkFilenameOnly, linkPreference, linkEnd } = view.state.field(configField)
 
+  const linkEndAfterCursor = view.state.sliceDoc(to, to + linkEnd.length) === linkEnd
+  const postLink = (linkEndAfterCursor) ? '' : linkEnd
+
   let insert = ''
   if (linkFilenameOnly) {
     // Just dump the filename in there
-    insert = `${filename}${linkEnd}`
+    insert = `${filename}${postLink}`
   } else {
     const textToInsert = fileId === '' ? filename: fileId
     if (linkPreference === 'always' || (linkPreference === 'withID' && textToInsert === fileId)) {
-      insert = `${textToInsert}${linkEnd} ${filename}`
+      insert = `${textToInsert}${linkEnd} ${filename}` // NOTE: No postLink, but linkEnd
+      if (linkEndAfterCursor) {
+        to += linkEnd.length // Overwrite the linkEnd following the completion
+      }
     } else {
-      insert = `${textToInsert}${linkEnd}`
+      insert = `${textToInsert}${postLink}`
     }
   }
 
