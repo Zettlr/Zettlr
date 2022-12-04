@@ -81,10 +81,16 @@ const apply = (filename: string, fileId: string) => function (view: EditorView, 
 export const files: AutocompletePlugin = {
   applies (ctx) {
     // File autocompletion triggers as soon as we detect the start of a link
-    const { linkStart } = ctx.state.field(configField)
+    const { linkStart, linkEnd } = ctx.state.field(configField)
+    const { text, from } = ctx.state.doc.lineAt(ctx.pos)
+    const lineTextUntilPos = text.slice(0, ctx.pos - from)
+    const linkStartBefore = lineTextUntilPos.indexOf(linkStart) > lineTextUntilPos.indexOf(linkEnd)
     const linkStartRange = ctx.state.sliceDoc(ctx.pos - linkStart.length, ctx.pos)
+
     if (linkStartRange === linkStart) {
       return ctx.pos
+    } else if (linkStartBefore) {
+      return from + text.indexOf(linkStart) + linkStart.length
     } else {
       return false
     }

@@ -89,22 +89,18 @@ export const citations: AutocompletePlugin = {
     // brackets), after a square bracket open (regular citation without prefix),
     // or after a space (either a standalone citation or within square brackets
     // but with a prefix). Also, the citekey can be prefixed with a -.
-    if (ctx.state.doc.sliceString(ctx.pos - 1, ctx.pos) !== '@') {
-      return false // Only applies after the user typed an @
+    const { text, from } = ctx.state.doc.lineAt(ctx.pos)
+    const textBefore = text.slice(0, ctx.pos - from)
+    if (text.startsWith('@') && ctx.pos - from === 1) {
+      // The line starts with an @ and the cursor is directly behind it
+      return ctx.pos
+    } else if (/(?<=[-[\s])@[^[\]]*$/.test(textBefore)) {
+      // The text immediately before the cursor matches a valid citation
+      return from + textBefore.lastIndexOf('@') + 1
+    } else {
+      // Nopey
+      return false
     }
-
-    const lineObject = ctx.state.doc.lineAt(ctx.pos)
-
-    if (ctx.pos - lineObject.from === 1) {
-      return ctx.pos // Start of Line with an '@' -> Definitely a citation
-    }
-
-    const charBefore = ctx.state.doc.sliceString(ctx.pos - 2, ctx.pos - 1)
-    if ([ ' ', '[', '-' ].includes(charBefore)) {
-      return ctx.pos // Valid char in front of the @
-    }
-
-    return false
   },
   entries (ctx, query) {
     query = query.toLowerCase()
