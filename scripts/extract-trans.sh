@@ -1,3 +1,7 @@
+# This script extracts (new) translatable strings from the source and updates
+# all dependent *.po-files.
+# Good tutorial: https://www.labri.fr/perso/fleury/posts/programming/a-quick-gettext-tutorial.html
+
 # First, cd into the root directory
 cd "$(dirname "$0")"
 cd ..
@@ -26,3 +30,10 @@ xgettext --language=JavaScript --keyword=trans --join-existing \
 
 # Afterwards, remove that tmp dir again that the Vue splitter has created
 rm -rf ./source/tmp
+
+# Now, we can update the existing *.po-files.
+msgmerge --update static/lang/de-DE.po static/i18n.pot
+# TODO: Add a way to do that with every file
+
+# NOTE: Creating a new file can be done as such:
+# msginit --input=static/i18n.pot --locale=de-DE --output=static/lang/de-DE.po
