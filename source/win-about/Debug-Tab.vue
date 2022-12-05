@@ -22,6 +22,13 @@
         <li>OpenSSL <strong>v{{ versions.openssl }}</strong></li>
       </ul>
     </p>
+    <h2>Helper programs</h2>
+    <ul>
+      <li>Bundled Pandoc: <strong>{{ programVersions.pandocInternal }}</strong></li>
+      <li>System Pandoc: <strong>{{ programVersions.pandocSystem }}</strong></li>
+      <li>System Quarto: <strong>{{ programVersions.quartoSystem }}</strong></li>
+      <li>Git SVN: <strong>{{ programVersions.gitSystem }}</strong></li>
+    </ul>
     <h2>Renderer flags</h2>
     <ul>
       <li v-for="(arg, idx) in argv" v-bind:key="idx">
@@ -65,7 +72,14 @@ export default defineComponent({
       arch: process.arch,
       env: Object.assign({}, process.env),
       platform: process.platform,
-      platformVersion: process.getSystemVersion
+      platformVersion: process.getSystemVersion,
+      // Add version strings for external helper programs Zettlr can use
+      programVersions: {
+        pandocInternal: process.env.PANDOC_VERSION_INTERNAL,
+        pandocSystem: process.env.PANDOC_VERSION_SYSTEM ?? 'not found',
+        quartoSystem: process.env.QUARTO_VERSION_SYSTEM ?? 'not found',
+        gitSystem: process.env.GIT_VERSION ?? 'not found'
+      }
     }
   },
   methods: {

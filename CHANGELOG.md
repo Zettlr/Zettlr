@@ -252,6 +252,8 @@ there.
 - The update check will no longer block the boot cycle, making start up times
   fast even in degraded Wifi contexts where there is a connection, but extremely
   slow
+- Zettlr now attempts to extract the version strings for supported external
+  programs (such as Pandoc, Git, and Quarto) and displays them in the About panel
 
 # 2.3.0
 
