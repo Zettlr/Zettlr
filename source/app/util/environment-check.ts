@@ -135,6 +135,16 @@ export default async function environmentCheck (): Promise<void> {
     // No system wide install
   }
 
+  // Finally, determine if git is installed on this machine
+  try {
+    await commandExists('git')
+    process.env.GIT_SUPPORT = '1'
+    const version = await getProgramVersion('git')
+    process.env.GIT_VERSION = version
+  } catch (err) {
+    process.env.GIT_SUPPORT = '0'
+  }
+
   // Make sure the PATH property exists
   if (process.env.PATH === undefined) {
     process.env.PATH = ''
@@ -176,16 +186,6 @@ export default async function environmentCheck (): Promise<void> {
     process.env.ZETTLR_IS_TRAY_SUPPORTED = '0'
     process.env.ZETTLR_TRAY_ERROR = err.message
     console.warn(err.message)
-  }
-
-  // Determine if git is installed on this machine
-  try {
-    await commandExists('git')
-    process.env.GIT_SUPPORT = '1'
-    const version = await getProgramVersion('git')
-    process.env.GIT_VERSION = version
-  } catch (err) {
-    process.env.GIT_SUPPORT = '0'
   }
 
   console.log('[Application] Environment check complete.')
