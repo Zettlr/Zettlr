@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { acceptCompletion } from '@codemirror/autocomplete'
+import { acceptCompletion, deleteBracketPair } from '@codemirror/autocomplete'
 import { copyLineDown, copyLineUp, indentLess, indentMore, moveLineDown, moveLineUp } from '@codemirror/commands'
 import { KeyBinding } from '@codemirror/view'
 import { abortSnippet, nextSnippet } from '../autocomplete/snippets'
@@ -37,6 +37,10 @@ export const customKeymap: KeyBinding[] = [
   { key: 'Esc', run: abortSnippet },
   { key: 'Space', run: handleReplacement },
   { key: 'Enter', run: handleReplacement },
+  // TODO: We're including the pre-made keymap that defines the next line
+  // already in our core extensions (see editor-extension-sets.ts), but somehow
+  // it never gets called if we don't also define it here. Double check why.
+  { key: 'Backspace', run: deleteBracketPair },
   { key: 'Backspace', run: handleBackspace },
   { key: 'Alt-Up', run: moveLineUp, shift: copyLineUp },
   { key: 'Alt-Down', run: moveLineDown, shift: copyLineDown },
