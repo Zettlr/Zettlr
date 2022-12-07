@@ -22,6 +22,7 @@ const path = window.path
 
 const protocolRE = getProtocolRE()
 const linkRE = getLinkRE()
+const emailRe = /^[a-z0-9-.]+@[a-z0-9-.]+\.[a-z0-9-.]{2,}$/i
 const mdFileRE = getMarkDownFileRE()
 
 /**
@@ -55,6 +56,8 @@ export default function makeValidUri (uri: string, base: string = ''): string {
     // Shortcut for mailto-links, as these have a protocol (mailto) but with
     // *only* a colon, not the double-slash (//).
     return uri
+  } else if (emailRe.test(uri)) {
+    return 'mailto:' + uri
   }
 
   // Set the isFile var to undefined

@@ -23,6 +23,7 @@ import { InlineParser } from '@lezer/markdown'
 // follows the form www.google.com (+ optional port number)
 const protocolRe = /^[a-z0-9-]+:\/{1,3}[^\s\W]/i
 const wwwRe = /^[a-z0-9-]+\.[a-z0-9-]+\.[a-z]{2,}(?::\d{2,5})?/i
+const emailRe = /^[a-z0-9-.]+@[a-z0-9-.]+\.[a-z0-9-.]{2,}/i
 
 // A small parser that can parse plain text links
 export const plainLinkParser: InlineParser = {
@@ -39,7 +40,7 @@ export const plainLinkParser: InlineParser = {
 
     const nextSpace = slice.includes(' ') ? slice.indexOf(' ') : ctx.end - pos
 
-    if (protocolRe.test(slice) || wwwRe.test(slice)) {
+    if (protocolRe.test(slice) || emailRe.test(slice) || wwwRe.test(slice)) {
       return ctx.addElement(ctx.elt('URL', pos, pos + nextSpace))
     } else {
       // Definitely not a link
