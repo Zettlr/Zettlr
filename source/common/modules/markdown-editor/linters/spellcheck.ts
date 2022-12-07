@@ -13,13 +13,9 @@
  * END HEADER
  */
 
-import { linter, Diagnostic, Action } from '@codemirror/lint'
-import { trans } from '@common/i18n-renderer'
+import { linter, Diagnostic } from '@codemirror/lint'
 import { Parent, Text } from 'mdast' // NOTE: Dependency of remark, not in package.json
-import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-// import { getZknTagRE } from '@common/regular-expressions'
 import { md2ast } from '@common/util/md-to-ast'
-import { AnyMenuItem } from '@dts/renderer/context'
 import { configField } from '../util/configuration'
 
 const ipcRenderer = window.ipc
@@ -33,14 +29,11 @@ const anyLetterRE = /[\p{L}'’‘]+/gu
 const noneLetterRE = /^['’‘]+$/
 const nonLetters = '\'’‘'
 
-// const zknTagRE = getZknTagRE()
-
 // The cache is a simple hashmap. NOTE: This is shared across all spellcheckers,
 // which reduces the memory footprint but prevents differences in spellchecker
 // configuration across the window. So if we want to allow that at some point,
 // we'll have to move that whole file into a function scope.
 const spellcheckCache = new Map<string, boolean>()
-const suggestionCache = new Map<string, string[]>()
 
 // Listen for dictionary-provider messages
 ipcRenderer.on('dictionary-provider', (event, message) => {
@@ -49,7 +42,6 @@ ipcRenderer.on('dictionary-provider', (event, message) => {
   if (command === 'invalidate-dict') {
     // Invalidate the buffered dictionary
     spellcheckCache.clear()
-    suggestionCache.clear()
   }
 })
 
@@ -150,107 +142,13 @@ async function checkWord (word: string, index: number, nodeStart: number, autoco
     return undefined
   }
 
-  const from = nodeStart + index
-  const to = from + word.length
-
-  const dia: Diagnostic = {
-    from,
-    to,
+  return {
+    from: nodeStart + index,
+    to: nodeStart + index + word.length,
     message: 'Spelling mistake', // TODO: Translate
     severity: 'error',
     source: 'spellcheck' // Useful for later filtering of all diagnostics present
   }
-
-  const actions: Action[] = [
-    {
-      name: 'Options', // TODO: Translate!
-      apply (view, from, to) {
-        fetchSuggestions(word)
-          .then(suggestions => {
-            const coords = { x: 0, y: 0 }
-            const rect = view.coordsAtPos(from)
-            if (rect !== null) {
-              coords.x = rect.left
-              coords.y = rect.top
-            }
-
-            const items: AnyMenuItem[] = suggestions.map(suggestion => {
-              return {
-                type: 'normal',
-                enabled: true,
-                label: suggestion,
-                id: suggestion
-              }
-            })
-
-            if (items.length === 0) {
-              items.push({
-                type: 'normal',
-                enabled: false,
-                label: trans('menu.no_suggestions'),
-                id: 'no-suggestion'
-              })
-            }
-
-            // Add the add method
-            items.unshift(
-              {
-                label: trans('menu.add_to_dictionary'),
-                id: 'add-to-dictionary',
-                type: 'normal',
-                enabled: true
-              },
-              { type: 'separator' }
-            )
-
-            showPopupMenu(coords, items, clickedID => {
-              if (clickedID === 'no-suggestion') {
-                // Do nothing
-              } else if (clickedID === 'add-to-dictionary') {
-                ipcRenderer.invoke(
-                  'dictionary-provider',
-                  { command: 'add', terms: [word] }
-                )
-                  .catch(e => console.error(e))
-              } else {
-                view.dispatch({ changes: { from, to, insert: clickedID } })
-              }
-            })
-          })
-          .catch(e => console.error(e))
-      }
-    }
-  ]
-
-  dia.actions = actions
-
-  return dia
-}
-
-/**
- * Returns a list of suggestions. If none are cached locally, this will return
- * an empty list and start a fetch in the background.
- *
- * @param   {string}             term  The term to get suggestions for
- *
- * @return  {Promise<string[]>}        A list of possible suggestions
- */
-async function fetchSuggestions (term: string): Promise<string[]> {
-  const saneTerm = sanitizeTerm(term)
-  const cachedSuggestions = suggestionCache.get(saneTerm)
-  if (cachedSuggestions !== undefined) {
-    return cachedSuggestions
-  }
-
-  // If we're here, the suggestion has not yet been cached. Code is equal to
-  // above's batchSuggest
-  const suggestions: string[][] = await ipcRenderer.invoke(
-    'dictionary-provider',
-    { command: 'suggest', terms: [saneTerm] }
-  )
-
-  suggestionCache.set(saneTerm, suggestions[0])
-  return suggestions[0]
 }
 
 /**

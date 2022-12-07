@@ -56,7 +56,7 @@ export const defaultContextMenu = EditorView.domEventHandlers({
           view.dispatch({ selection: wordAt })
         }
 
-        defaultMenu(view, node, coords)
+        defaultMenu(view, node, coords).catch(err => console.error(err))
         return true
       }
     }
