@@ -18,6 +18,7 @@ import { promises as fs } from 'fs'
 import isFile from '../../common/util/is-file'
 import isTraySupported from './is-tray-supported'
 import commandExists from 'command-exists'
+import { getProgramVersion } from './get-program-version'
 
 export default async function environmentCheck (): Promise<void> {
   console.log('[Application] Performing environment check ...')
@@ -92,17 +93,56 @@ export default async function environmentCheck (): Promise<void> {
   if (isFile(pandocPath)) {
     console.log(`[Application] Pandoc has been bundled with this release. Path: ${pandocPath}`)
     process.env.PANDOC_PATH = pandocPath
+    // Determine the bundled version
+    const version = await getProgramVersion(pandocPath)
+    if (version !== undefined) {
+      process.env.PANDOC_VERSION_INTERNAL = version
+    } else {
+      console.warn('[Application] Warning: Could not determine version of internal bundled Pandoc.')
+    }
   } else if (!app.isPackaged) {
     // We're in develop mode, so possibly, we have a Pandoc exe. Let's check
     const resPath = path.join(__dirname, '../../resources', executable)
     if (isFile(resPath)) {
-      console.log(`[Application] App is unpackaged, and Pandoc has been found in the resources directory: ${resPath}`)
       process.env.PANDOC_PATH = resPath
+      const version = await getProgramVersion(resPath)
+      process.env.PANDOC_VERSION_INTERNAL = String(version)
+      console.log(`[Application] App is unpackaged, and Pandoc has been found in the resources directory: ${resPath} (version: ${String(version)})`)
     } else {
       console.warn(`[Application] App is unpackaged, but there was no Pandoc executable: ${resPath}`)
     }
   } else {
     console.warn('[Application] Pandoc has not been bundled with this release. Falling back to system version instead.')
+  }
+
+  // Also, let's see if we can find a system pandoc
+  try {
+    await commandExists('pandoc')
+    const version = await getProgramVersion('pandoc')
+    console.log(`[Application] Found a system-wide Pandoc install! Version ${String(version)}`)
+    process.env.PANDOC_VERSION_SYSTEM = String(version)
+  } catch (err) {
+    // No system wide install
+  }
+
+  // Now, let's see if there's a quarto package installed
+  try {
+    await commandExists('quarto')
+    const version = await getProgramVersion('quarto')
+    console.log(`[Application] Found a system-wide Quarto install! Version ${String(version)}`)
+    process.env.QUARTO_VERSION_SYSTEM = String(version)
+  } catch (err) {
+    // No system wide install
+  }
+
+  // Finally, determine if git is installed on this machine
+  try {
+    await commandExists('git')
+    process.env.GIT_SUPPORT = '1'
+    const version = await getProgramVersion('git')
+    process.env.GIT_VERSION = version
+  } catch (err) {
+    process.env.GIT_SUPPORT = '0'
   }
 
   // Make sure the PATH property exists
@@ -146,14 +186,6 @@ export default async function environmentCheck (): Promise<void> {
     process.env.ZETTLR_IS_TRAY_SUPPORTED = '0'
     process.env.ZETTLR_TRAY_ERROR = err.message
     console.warn(err.message)
-  }
-
-  // Determine if git is installed on this machine
-  try {
-    await commandExists('git')
-    process.env.GIT_SUPPORT = '1'
-  } catch (err) {
-    process.env.GIT_SUPPORT = '0'
   }
 
   console.log('[Application] Environment check complete.')

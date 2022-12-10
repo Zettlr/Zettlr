@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { acceptCompletion } from '@codemirror/autocomplete'
+import { acceptCompletion, deleteBracketPair } from '@codemirror/autocomplete'
 import { copyLineDown, copyLineUp, indentLess, indentMore, moveLineDown, moveLineUp } from '@codemirror/commands'
 import { KeyBinding } from '@codemirror/view'
 import { abortSnippet, nextSnippet } from '../autocomplete/snippets'
@@ -37,6 +37,10 @@ export const customKeymap: KeyBinding[] = [
   { key: 'Esc', run: abortSnippet },
   { key: 'Space', run: handleReplacement },
   { key: 'Enter', run: handleReplacement },
+  // TODO: We're including the pre-made keymap that defines the next line
+  // already in our core extensions (see editor-extension-sets.ts), but somehow
+  // it never gets called if we don't also define it here. Double check why.
+  { key: 'Backspace', run: deleteBracketPair },
   { key: 'Backspace', run: handleBackspace },
   { key: 'Alt-Up', run: moveLineUp, shift: copyLineUp },
   { key: 'Alt-Down', run: moveLineDown, shift: copyLineDown },
@@ -44,15 +48,5 @@ export const customKeymap: KeyBinding[] = [
   { key: 'Mod-v', run: view => { paste(view); return true }, shift: view => { pasteAsPlain(view); return true } },
   { key: 'Mod-Alt-c', run: view => { copyAsHTML(view); return true } },
   { key: '"', run: handleQuote('"') },
-  { key: "'", run: handleQuote("'") },
-  // DEBUG: We have to add handlers that specifically listen for the German
-  // a-umlaut characters, because they have the same keycode as the quote key on
-  // us-ANSI layouts (222). If we omit the following two listeners, German users
-  // won't be able to insert an a-umlaut and instead produce many quotes.
-  // DEBUG: This also happens with literally any other keyboard layout. The
-  // Swedish layout works, since it has an a-umlaut at the same position, but
-  // the Russian `э`-key, for example, still produces the same behavior.
-  // SEE THIS ISSUE: https://github.com/codemirror/dev/issues/1001
-  { key: 'ä', run: view => { view.dispatch(view.state.replaceSelection('ä')); return true } },
-  { key: 'Ä', run: view => { view.dispatch(view.state.replaceSelection('Ä')); return true } }
+  { key: "'", run: handleQuote("'") }
 ]

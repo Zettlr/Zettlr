@@ -124,7 +124,6 @@ export function handleBackspace (view: EditorView): boolean {
   // pressing Backspace will not remove the quote, but rather replace it with a
   // simple " or ' quote.
   const changes: ChangeSpec[] = []
-  let hasHandled = false
 
   for (const range of view.state.selection.ranges) {
     if (range.from === 0) {
@@ -133,16 +132,17 @@ export function handleBackspace (view: EditorView): boolean {
 
     const slice = view.state.sliceDoc(range.from - 1, range.from)
     if (primaryMagicQuotes.includes(slice) && slice !== '"') {
-      hasHandled = true
       changes.push({ from: range.from - 1, to: range.from, insert: '"' })
     } else if (secondaryMagicQuotes.includes(slice) && slice !== "'") {
-      hasHandled = true
       changes.push({ from: range.from - 1, to: range.from, insert: "'" })
     }
   }
 
-  view.dispatch({ changes })
-  return hasHandled // If we've replaced a quote, we must stop Codemirror from removing it
+  if (changes.length > 0) {
+    view.dispatch({ changes })
+  }
+
+  return changes.length > 0 // If we've replaced a quote, we must stop Codemirror from removing it
 }
 
 /**

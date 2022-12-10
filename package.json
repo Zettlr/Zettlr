@@ -105,7 +105,9 @@
   "optionalDependencies": {
     "fsevents": "^2.3.2"
   },
-  "resolutions": {},
+  "resolutions": {
+    "@codemirror/autocomplete/@codemirror/view": "^6.7.0"
+  },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0",
     "@electron-forge/maker-zip": "^6.0.0",

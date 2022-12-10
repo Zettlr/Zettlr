@@ -93,9 +93,10 @@ const autocompleteSource: CompletionSource = function (ctx): CompletionResult|nu
   }
 
   if (plugin !== undefined) {
+    const initialOptions = plugin.entries(ctx, ctx.state.doc.sliceString(startpos, ctx.pos).toLowerCase())
     return {
       from: startpos,
-      options: plugin.entries(ctx, ''),
+      options: initialOptions,
       filter: false,
       update: (current, from, to, ctx) => {
         const query = ctx.state.doc.sliceString(from, to).toLowerCase()

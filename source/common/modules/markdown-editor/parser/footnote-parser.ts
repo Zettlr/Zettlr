@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { InlineParser, BlockParser, parser } from '@lezer/markdown'
+import { InlineParser, BlockParser } from '@lezer/markdown'
 import { partialParse } from './partial-parse'
 
 // TODO: Docs for this: https://github.com/lezer-parser/markdown#user-content-blockparser
@@ -54,7 +54,7 @@ export const footnoteRefParser: BlockParser = {
       to += line.text.length + 1
     }
 
-    const treeElem = partialParse(ctx, parser, footnoteBody.join('\n'), from)
+    const treeElem = partialParse(ctx, ctx.parser, footnoteBody.join('\n'), from)
     ctx.addElement(ctx.elt('FootnoteBody', from, to, [treeElem]))
 
     return true

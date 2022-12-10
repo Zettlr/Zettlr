@@ -53,16 +53,22 @@ const apply = (filename: string, fileId: string) => function (view: EditorView, 
   // Applies a filename insertion
   const { linkFilenameOnly, linkPreference, linkEnd } = view.state.field(configField)
 
+  const linkEndAfterCursor = view.state.sliceDoc(to, to + linkEnd.length) === linkEnd
+  const postLink = (linkEndAfterCursor) ? '' : linkEnd
+
   let insert = ''
   if (linkFilenameOnly) {
     // Just dump the filename in there
-    insert = `${filename}${linkEnd}`
+    insert = `${filename}${postLink}`
   } else {
     const textToInsert = fileId === '' ? filename: fileId
     if (linkPreference === 'always' || (linkPreference === 'withID' && textToInsert === fileId)) {
-      insert = `${textToInsert}${linkEnd} ${filename}`
+      insert = `${textToInsert}${linkEnd} ${filename}` // NOTE: No postLink, but linkEnd
+      if (linkEndAfterCursor) {
+        to += linkEnd.length // Overwrite the linkEnd following the completion
+      }
     } else {
-      insert = `${textToInsert}${linkEnd}`
+      insert = `${textToInsert}${postLink}`
     }
   }
 
@@ -75,10 +81,16 @@ const apply = (filename: string, fileId: string) => function (view: EditorView, 
 export const files: AutocompletePlugin = {
   applies (ctx) {
     // File autocompletion triggers as soon as we detect the start of a link
-    const { linkStart } = ctx.state.field(configField)
+    const { linkStart, linkEnd } = ctx.state.field(configField)
+    const { text, from } = ctx.state.doc.lineAt(ctx.pos)
+    const lineTextUntilPos = text.slice(0, ctx.pos - from)
+    const linkStartBefore = lineTextUntilPos.indexOf(linkStart) > lineTextUntilPos.indexOf(linkEnd)
     const linkStartRange = ctx.state.sliceDoc(ctx.pos - linkStart.length, ctx.pos)
+
     if (linkStartRange === linkStart) {
       return ctx.pos
+    } else if (linkStartBefore) {
+      return from + text.indexOf(linkStart) + linkStart.length
     } else {
       return false
     }

@@ -33,7 +33,6 @@ const localiseNumberTesters = [
 
 describe('Utility#localiseNumber()', function () {
   before(function () {
-    // @ts-expect-error
     global.i18n = global.i18nFallback = { 'localise': { 'thousand_delimiter': ',', 'decimal_delimiter': '.' } }
   })
 
@@ -44,7 +43,6 @@ describe('Utility#localiseNumber()', function () {
   }
 
   after(function () {
-    // @ts-expect-error
     global.i18n = global.i18nFallback = undefined // Unset
   })
 })

@@ -18,8 +18,62 @@ import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { AnyMenuItem } from '@dts/renderer/context'
 import { SyntaxNode } from '@lezer/common'
+import { forEachDiagnostic, Diagnostic } from '@codemirror/lint'
 import { applyBold, applyItalic, insertLink, applyBlockquote, applyOrderedList, applyBulletList, applyTaskList } from '../commands/markdown'
 import { cut, copyAsPlain, copyAsHTML, paste, pasteAsPlain } from '../util/copy-paste-cut'
+
+const ipcRenderer = window.ipc
+const suggestionCache = new Map<string, string[]>()
+
+// Listen for dictionary-provider messages. NOTE: The suggestionCache is shared,
+// meaning I'd have to implement it in a scope if I need custom
+ipcRenderer.on('dictionary-provider', (event, message) => {
+  const { command } = message
+
+  if (command === 'invalidate-dict') {
+    // Invalidate the buffered dictionary
+    suggestionCache.clear()
+  }
+})
+
+/**
+ * Sanitizes a term so that the dictionary can find it (remove funky characters
+ * and quotes, for example)
+ *
+ * @param   {string}  term  The unsanitized term
+ *
+ * @return  {string}        The sanitized term
+ */
+function sanitizeTerm (term: string): string {
+  // Convert smart quotes into the default before checking the term, see #1948
+  return term.replace(/’‘‚‹›»“”」/g, "'")
+}
+
+/**
+ * Returns a list of suggestions. If none are cached locally, this will return
+ * an empty list and start a fetch in the background.
+ *
+ * @param   {string}             term  The term to get suggestions for
+ *
+ * @return  {Promise<string[]>}        A list of possible suggestions
+ */
+async function fetchSuggestions (term: string): Promise<string[]> {
+  const saneTerm = sanitizeTerm(term)
+  const cachedSuggestions = suggestionCache.get(saneTerm)
+  if (cachedSuggestions !== undefined) {
+    return cachedSuggestions
+  }
+
+  // If we're here, the suggestion has not yet been cached. Code is equal to
+  // above's batchSuggest
+  const suggestions: string[][] = await ipcRenderer.invoke(
+    'dictionary-provider',
+    { command: 'suggest', terms: [saneTerm] }
+  )
+
+  suggestionCache.set(saneTerm, suggestions[0])
+  return suggestions[0]
+}
 
 /**
  * Shows a default context menu for the given node at the given coordinates in
@@ -29,7 +83,70 @@ import { cut, copyAsPlain, copyAsHTML, paste, pasteAsPlain } from '../util/copy-
  * @param   {SyntaxNode}                node    The node
  * @param   {{ x: number, y: number }}  coords  The screen coordinates
  */
-export function defaultMenu (view: EditorView, node: SyntaxNode, coords: { x: number, y: number }): void {
+export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: { x: number, y: number }): Promise<void> {
+  // In this function, we're doing a lot of iffs to check if there is a
+  // spellcheck underneath the cursor and, if there is, add suggestions (if
+  // there are) to the context menu.
+  const pos = view.posAtCoords(coords)
+
+  const suggestions: string[] = []
+  let diagnostic: Diagnostic|undefined
+  let word: string|undefined
+
+  if (pos !== null) {
+    forEachDiagnostic(view.state, (diag, from, to) => {
+      // We need a suggestion that's under the cursor and also of a spellcheck
+      if (from <= pos && to >= pos && diag.source === 'spellcheck') {
+        diagnostic = diag
+      }
+    })
+  }
+
+  // If we have a diagnostic, we can extract the word & select it
+  if (diagnostic !== undefined) {
+    word = view.state.sliceDoc(diagnostic.from, diagnostic.to)
+    view.dispatch({
+      selection: { anchor: diagnostic.from, head: diagnostic.to }
+    })
+  }
+
+  // If we have a word, we can fetch suggestions ...
+  if (word !== undefined) {
+    suggestions.push(...await fetchSuggestions(word))
+  }
+
+  // ... and transform them to menu items
+  const suggestionItems: AnyMenuItem[] = suggestions.map(suggestion => {
+    return {
+      type: 'normal',
+      enabled: true,
+      label: suggestion,
+      id: '$' + suggestion // The $ helps distinguish the suggestions
+    }
+  })
+
+  // If there are no suggestions, add an indication
+  if (suggestionItems.length === 0) {
+    suggestionItems.push({
+      type: 'normal',
+      enabled: false,
+      label: trans('menu.no_suggestions'),
+      id: 'no-suggestion'
+    })
+  }
+
+  // Always add a separator afterwards and an add-to-dictionary before
+  suggestionItems.push({ type: 'separator' })
+  suggestionItems.unshift(
+    {
+      label: trans('menu.add_to_dictionary'),
+      id: 'add-to-dictionary',
+      type: 'normal',
+      enabled: true
+    },
+    { type: 'separator' }
+  )
+
   const tpl: AnyMenuItem[] = [
     {
       label: trans('Bold'),
@@ -136,6 +253,11 @@ export function defaultMenu (view: EditorView, node: SyntaxNode, coords: { x: nu
     }
   ]
 
+  // If we found a diagnostic earlier and a word, add the suggestion items
+  if (diagnostic !== undefined && word !== undefined) {
+    tpl.unshift(...suggestionItems)
+  }
+
   showPopupMenu(coords, tpl, (clickedID) => {
     if (clickedID === 'markdownBold') {
       applyBold(view)
@@ -165,6 +287,18 @@ export function defaultMenu (view: EditorView, node: SyntaxNode, coords: { x: nu
       pasteAsPlain(view)
     } else if (clickedID === 'selectAll') {
       view.dispatch({ selection: { anchor: 0, head: view.state.doc.length } })
+    } else if (clickedID === 'no-suggestion') {
+      // Do nothing
+    } else if (clickedID === 'add-to-dictionary' && word !== undefined) {
+      ipcRenderer.invoke(
+        'dictionary-provider',
+        { command: 'add', terms: [word] }
+      )
+        .catch(e => console.error(e))
+    } else if (clickedID.startsWith('$') && diagnostic !== undefined) {
+      view.dispatch({
+        changes: { from: diagnostic.from, to: diagnostic.to, insert: clickedID.slice(1) }
+      })
     }
   })
 }
