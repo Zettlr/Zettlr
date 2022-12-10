@@ -182,7 +182,7 @@ export async function parse (
     } else if (isMdOrCodeFile(absolutePath)) {
       const isCode = ALLOWED_CODE_FILES.includes(path.extname(absolutePath).toLowerCase())
       if (isCode) {
-        const file = await FSALCodeFile.parse(absolutePath, cache, dir)
+        const file = await FSALCodeFile.parse(absolutePath, cache, false)
         dir.children.push(file)
       } else {
         const file = await FSALFile.parse(absolutePath, cache, parser, false)
@@ -371,7 +371,7 @@ export async function createFile (
   const fullPath = path.join(dirObject.path, filename)
   await fs.writeFile(fullPath, content)
   if (hasCodeExt(fullPath)) {
-    const file = await FSALCodeFile.parse(fullPath, cache, dirObject)
+    const file = await FSALCodeFile.parse(fullPath, cache, false)
     dirObject.children.push(file)
   } else {
     const file = await FSALFile.parse(fullPath, cache, parser, false)
@@ -429,7 +429,7 @@ export async function renameChild (
     const descriptor = await FSALFile.parse(newPath, cache, parser, false)
     dirObject.children.push(descriptor)
   } else if (hasCodeExt(newPath)) {
-    const descriptor = await FSALCodeFile.parse(newPath, cache)
+    const descriptor = await FSALCodeFile.parse(newPath, cache, false)
     dirObject.children.push(descriptor)
   } else {
     const descriptor = await FSALAttachment.parse(newPath)
@@ -501,7 +501,7 @@ export async function addChild (
   if (isDir(childPath)) {
     dirObject.children.push(await parse(childPath, cache, parser, sorter, false))
   } else if (ALLOWED_CODE_FILES.includes(path.extname(childPath))) {
-    dirObject.children.push(await FSALCodeFile.parse(childPath, cache, dirObject))
+    dirObject.children.push(await FSALCodeFile.parse(childPath, cache, false))
   } else if (MARKDOWN_FILES.includes(path.extname(childPath))) {
     dirObject.children.push(await FSALFile.parse(childPath, cache, parser, false))
   }

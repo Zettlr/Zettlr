@@ -404,7 +404,7 @@ export default class FSAL extends ProviderContract {
    */
   private async _loadFile (filePath: string): Promise<void> {
     if (hasCodeExt(filePath)) {
-      const file = await FSALCodeFile.parse(filePath, this._cache)
+      const file = await FSALCodeFile.parse(filePath, this._cache, true)
       this._state.filetree.push(file)
       this._recordFiletreeChange('add', filePath)
     } else if (hasMarkdownExt(filePath)) {
@@ -1252,12 +1252,14 @@ export default class FSAL extends ProviderContract {
       throw new Error(`[FSAL] Cannot load file ${absPath}: Not found`)
     }
 
+    const isRoot = this.findDir(path.dirname(absPath)) === undefined
+
     if (hasMarkdownExt(absPath)) {
       const parser = this.getMarkdownFileParser()
-      const descriptor = await FSALFile.parse(absPath, this._cache, parser, false)
+      const descriptor = await FSALFile.parse(absPath, this._cache, parser, isRoot)
       return descriptor
     } else if (hasCodeExt(absPath)) {
-      const descriptor = await FSALCodeFile.parse(absPath, this._cache)
+      const descriptor = await FSALCodeFile.parse(absPath, this._cache, isRoot)
       return descriptor
     } else {
       const descriptor = await FSALAttachment.parse(absPath)

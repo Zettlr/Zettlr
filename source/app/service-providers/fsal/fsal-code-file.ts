@@ -18,7 +18,7 @@ import searchFile from './util/search-file'
 import { shell } from 'electron'
 import safeAssign from '@common/util/safe-assign'
 // Import the interfaces that we need
-import { DirDescriptor, CodeFileDescriptor } from '@dts/common/fsal'
+import { CodeFileDescriptor } from '@dts/common/fsal'
 import FSALCache from './fsal-cache'
 import extractBOM from './util/extract-bom'
 
@@ -70,11 +70,11 @@ function parseFileContents (file: CodeFileDescriptor, content: string): void {
 export async function parse (
   filePath: string,
   cache: FSALCache|null,
-  parent: DirDescriptor|null = null
+  isRoot: boolean
 ): Promise<CodeFileDescriptor> {
   // First of all, prepare the file descriptor
   let file: CodeFileDescriptor = {
-    root: parent === null,
+    root: isRoot,
     dir: path.dirname(filePath), // Containing dir
     path: filePath,
     name: path.basename(filePath),
