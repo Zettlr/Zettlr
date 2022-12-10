@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2022-12-03 15:19+0100\n"
+"POT-Creation-Date: 2022-12-10 14:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,7 +73,7 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: source/common/modules/markdown-editor/linters/spellcheck.ts:197
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:142
 msgid "Add to dictionary"
 msgstr ""
 
@@ -172,11 +172,11 @@ msgstr ""
 msgid "Below the monthly average"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:78
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:195
 msgid "Blockquote"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:35
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
 #: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:42
 #: source/win-preferences/schema/editor.ts:26
 #: source/win-preferences/schema/editor.ts:27
@@ -313,7 +313,7 @@ msgstr ""
 
 #: source/app/service-providers/menu/menu.win32.ts:342
 #: source/app/service-providers/menu/menu.darwin.ts:341
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:100
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:217
 msgid "Copy"
 msgstr ""
 
@@ -334,7 +334,7 @@ msgstr ""
 
 #: source/app/service-providers/menu/menu.win32.ts:347
 #: source/app/service-providers/menu/menu.darwin.ts:346
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:107
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:224
 msgid "Copy as HTML"
 msgstr ""
 
@@ -412,6 +412,11 @@ msgstr ""
 msgid "Could not open attachment. Is Zotero running?"
 msgstr ""
 
+#: source/app/service-providers/commands/root-open.ts:159
+#, javascript-format
+msgid "Could not open workspace %s."
+msgstr ""
+
 #: source/app/service-providers/commands/save-image-from-clipboard.ts:86
 msgid "Could not save image"
 msgstr ""
@@ -442,7 +447,7 @@ msgstr ""
 
 #: source/app/service-providers/menu/menu.win32.ts:336
 #: source/app/service-providers/menu/menu.darwin.ts:335
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:93
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:210
 msgid "Cut"
 msgstr ""
 
@@ -849,27 +854,27 @@ msgstr ""
 msgid "Indent using tabs"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:84
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:201
 msgid "Insert Table"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:52
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:169
 msgid "Insert link"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:59
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:176
 msgid "Insert numbered list"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:71
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:188
 msgid "Insert tasklist"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:65
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:182
 msgid "Insert unordered list"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:42
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:159
 msgid "Italic"
 msgstr ""
 
@@ -1029,7 +1034,7 @@ msgstr ""
 msgid "No results"
 msgstr ""
 
-#: source/common/modules/markdown-editor/linters/spellcheck.ts:189
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:133
 msgid "No suggestions"
 msgstr ""
 
@@ -1184,13 +1189,13 @@ msgstr ""
 
 #: source/app/service-providers/menu/menu.win32.ts:356
 #: source/app/service-providers/menu/menu.darwin.ts:355
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:114
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:231
 msgid "Paste"
 msgstr ""
 
 #: source/app/service-providers/menu/menu.win32.ts:361
 #: source/app/service-providers/menu/menu.darwin.ts:360
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:121
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:238
 msgid "Paste without style"
 msgstr ""
 
@@ -1417,7 +1422,7 @@ msgstr ""
 
 #: source/app/service-providers/menu/menu.win32.ts:370
 #: source/app/service-providers/menu/menu.darwin.ts:369
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:131
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:248
 msgid "Select all"
 msgstr ""
 
@@ -1874,36 +1879,6 @@ msgstr ""
 
 #: source/tmp/Theme.vue.ts:37
 msgid "selected"
-msgstr ""
-
-#: source/app/service-providers/commands/root-open.ts:242
-msgid "system.error.ignored_dir_message"
-msgstr ""
-
-#: source/app/service-providers/commands/root-open.ts:241
-msgid "system.error.ignored_dir_title"
-msgstr ""
-
-#: source/app/service-providers/commands/root-open.ts:317
-msgid "system.error.open_root_error"
-msgstr ""
-
-#: source/app/service-providers/commands/root-open.ts:218
-msgid "system.files"
-msgstr ""
-
-#. TODO: Move this to a command
-#. The user wants to open another file or directory.
-#: source/app/service-providers/commands/root-open.ts:231
-msgid "system.open_folder"
-msgstr ""
-
-#: source/app/service-providers/commands/root-open.ts:294
-msgid "system.open_root_directory"
-msgstr ""
-
-#: source/app/service-providers/commands/root-open.ts:305
-msgid "system.open_root_directory_success"
 msgstr ""
 
 #: source/tmp/PopoverDocInfo.vue.ts:38

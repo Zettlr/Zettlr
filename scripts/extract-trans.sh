@@ -17,9 +17,11 @@ node ./scripts/split-vue-sfc.js
 FILES=$(find ./source -type f -name "*.ts" -o -name "*.js")
 PKGVER=$(node ./scripts/get-pkg-version.js)
 
-# NOTE: This command expects an existing file at static/i18n.pot!
-xgettext --language=JavaScript --keyword=trans --join-existing \
-  --package-name=Zettlr --package-version=$PKGVER \
+xgettext \
+  --language=JavaScript \
+  --keyword=trans \
+  --package-name=Zettlr \
+  --package-version=$PKGVER \
   --msgid-bugs-address=https://github.com/Zettlr/Zettlr/issues \
   --copyright-holder="Hendrik Erz <info@zettlr.com>" \
   --sort-output \
@@ -32,7 +34,7 @@ xgettext --language=JavaScript --keyword=trans --join-existing \
 rm -rf ./source/tmp
 
 # Now, we can update the existing *.po-files.
-msgmerge --update static/lang/de-DE.po static/i18n.pot
+# msgmerge --update static/lang/de-DE.po static/i18n.pot
 # TODO: Add a way to do that with every file
 
 # NOTE: Creating a new file can be done as such:

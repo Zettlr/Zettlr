@@ -130,7 +130,7 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
     suggestionItems.push({
       type: 'normal',
       enabled: false,
-      label: trans('menu.no_suggestions'),
+      label: trans('No suggestions'),
       id: 'no-suggestion'
     })
   }
@@ -139,7 +139,7 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
   suggestionItems.push({ type: 'separator' })
   suggestionItems.unshift(
     {
-      label: trans('menu.add_to_dictionary'),
+      label: trans('Add to dictionary'),
       id: 'add-to-dictionary',
       type: 'normal',
       enabled: true
