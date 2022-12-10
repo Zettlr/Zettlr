@@ -88,14 +88,14 @@ export default async function (context: ActionContext<ZettlrState, ZettlrState>)
       context.commit('removeFromFiletree', event.path)
     } else if (event.event === 'add') {
       const descriptor = await ipcRenderer.invoke('application', { command: 'get-descriptor', payload: event.path })
-      if (descriptor === undefined) {
+      if (descriptor == null) {
         console.error(`The descriptor for path ${event.path} was empty!`)
       } else {
         context.commit('addToFiletree', descriptor)
       }
     } else if (event.event === 'change') {
       const descriptor = await ipcRenderer.invoke('application', { command: 'get-descriptor', payload: event.path })
-      if (descriptor === null) {
+      if (descriptor == null) {
         console.error(`The descriptor for path ${event.path} was empty!`)
       } else {
         context.commit('patchInFiletree', descriptor)

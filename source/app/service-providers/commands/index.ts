@@ -48,6 +48,7 @@ import ZettlrCommand from './zettlr-command'
 import SetOpenDirectory from './set-open-directory'
 import { clipboard, ipcMain, nativeImage } from 'electron'
 import isFile from '@common/util/is-file'
+import isDir from '@common/util/is-dir'
 
 export const commands = [
   DirDelete,
@@ -117,8 +118,10 @@ export default class CommandProvider extends ProviderContract {
     } else if (command === 'get-descriptor') {
       if (isFile(payload)) {
         return await this._app.fsal.getDescriptorForAnySupportedFile(payload)
-      } else {
+      } else if (isDir(payload)) {
         return await this._app.fsal.getAnyDirectoryDescriptor(payload)
+      } else {
+        this._app.log.error(`[Application] Could not return descriptor for ${String(payload)}: Neither file nor directory.`)
       }
     } else if (command === 'get-open-directory') {
       const openDir = this._app.fsal.openDirectory
