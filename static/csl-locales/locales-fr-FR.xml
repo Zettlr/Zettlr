@@ -72,7 +72,6 @@
     <term name="in">in</term>
     <term name="in press">sous presse</term>
     <term name="internet">Internet</term>
-    <term name="interview">entretien</term>
     <term name="letter">lettre</term>
     <term name="no date">sans date</term>
     <term name="no date" form="short">s.&#160;d.</term>
@@ -96,9 +95,9 @@
     <term name="article-magazine">article de magazine</term>
     <term name="article-newspaper">article de presse</term>
     <term name="bill">projet de loi</term>
-    <term name="book">livre</term>
+    <!-- book is in the list of locator terms -->
     <term name="broadcast">émission</term>
-    <term name="chapter">chapitre de livre</term>
+    <!-- chapter is in the list of locator terms -->
     <term name="classic">classique</term>
     <term name="collection">collection</term>
     <term name="dataset">jeu de données</term>
@@ -110,7 +109,7 @@
     <!-- figure is in the list of locator terms -->
     <term name="graphic">image</term>
     <term name="hearing">audience</term>
-    <term name="interview">interview</term>
+    <term name="interview">entretien</term>
     <term name="legal_case">affaire</term>
     <term name="legislation">acte juridique</term>
     <term name="manuscript">manuscrit</term>
@@ -141,8 +140,8 @@
     <term name="article-journal" form="short">art. de revue</term>
     <term name="article-magazine" form="short">art. de mag.</term>
     <term name="article-newspaper" form="short">art. de presse</term>
-    <term name="book" form="short">liv.</term>
-    <term name="chapter" form="short">chap. de liv.</term>
+    <!-- book is in the list of locator terms -->
+    <!-- chapter is in the list of locator terms -->
     <term name="document" form="short">doc.</term>
     <!-- figure is in the list of locator terms -->
     <term name="graphic" form="short">graph.</term>
@@ -302,39 +301,39 @@
     </term>
 
     <!-- SHORT LOCATOR FORMS -->
-    <term name="appendix">
+    <term name="appendix" form="short">
       <single>append.</single>
       <multiple>append.</multiple>
     </term>
-    <term name="article-locator">
+    <term name="article-locator" form="short">
       <single>art.</single>
       <multiple>art.</multiple>
     </term>
-    <term name="elocation">
+    <term name="elocation" form="short">
       <single>emplact</single>
       <multiple>emplact</multiple>
     </term>
-    <term name="equation">
+    <term name="equation" form="short">
       <single>eq.</single>
       <multiple>eq.</multiple>
     </term>
-    <term name="rule">
+    <term name="rule" form="short">
       <single>règle</single>
       <multiple>règles</multiple>
     </term>
-    <term name="scene">
+    <term name="scene" form="short">
       <single>sc.</single>
       <multiple>sc.</multiple>
     </term>
-    <term name="table">
+    <term name="table" form="short">
       <single>tab.</single>
       <multiple>tab.</multiple>
     </term>
-    <term name="timestamp"> <!-- generally blank -->
+    <term name="timestamp" form="short"> <!-- generally blank -->
       <single></single>
       <multiple></multiple>
     </term>
-    <term name="title-locator">
+    <term name="title-locator" form="short">
       <single>tit.</single>
       <multiple>tit.</multiple>
     </term>

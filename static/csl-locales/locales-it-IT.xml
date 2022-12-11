@@ -20,7 +20,7 @@
     <date-part name="year"/>
   </date>
   <terms>
-    <term name="advance-online-publication">advance online publication</term>
+    <term name="advance-online-publication">pubblicazione online ad accesso anticipato</term>
     <term name="album">album</term>
     <term name="audio-recording">registrazione audio</term>
     <term name="film">film</term>
@@ -65,15 +65,13 @@
     </term>
     <term name="edition" form="short">ed.</term>
     <term name="et-al">et al.</term>
-    <term name="forthcoming">futuro</term>
+    <term name="forthcoming">in corso di pubblicazione</term>
     <term name="from">da</term>
-    <term name="ibid">ibid.</term>
     <term name="ibid">ibidem</term>
     <term name="ibid" form="short">ibid.</term>
     <term name="in">in</term>
     <term name="in press">in stampa</term>
     <term name="internet">internet</term>
-    <term name="interview">intervista</term>
     <term name="letter">lettera</term>
     <term name="no date">sine data</term>
     <term name="no date" form="short">s.d.</term>
@@ -97,9 +95,9 @@
     <term name="article-magazine">articolo di rivista generalista</term>
     <term name="article-newspaper">articolo di giornale</term>
     <term name="bill">proposta di legge</term>
-    <term name="book">libro</term>
+    <!-- book is in the list of locator terms -->
     <term name="broadcast">broadcast</term>
-    <term name="chapter">capitolo di libro</term>
+    <!-- chapter is in the list of locator terms -->
     <term name="classic">classico</term>
     <term name="collection">collezione</term>
     <term name="dataset">dataset</term>
@@ -142,8 +140,8 @@
     <term name="article-journal" form="short">art. di riv.</term>
     <term name="article-magazine" form="short">art. di riv</term>
     <term name="article-newspaper" form="short">art. di g.</term>
-    <term name="book" form="short">l.</term>
-    <term name="chapter" form="short">c. di l.</term>
+    <!-- book is in the list of locator terms -->
+    <!-- chapter is in the list of locator terms -->
     <term name="document" form="short">doc.</term>
     <!-- figure is in the list of locator terms -->
     <term name="graphic" form="short">op. d'arte</term>
@@ -323,39 +321,39 @@
     </term>
 
     <!-- SHORT LOCATOR FORMS -->
-    <term name="appendix">			 
+    <term name="appendix" form="short">			 
       <single>app.</single>
       <multiple>app.</multiple>						 
     </term>
-    <term name="article-locator">			 
+    <term name="article-locator" form="short">			 
       <single>art.</single>
       <multiple>art.</multiple>
     </term>
-    <term name="elocation">			 
+    <term name="elocation" form="short">			 
       <single>loc.</single>
       <multiple>locs.</multiple>
     </term>
-    <term name="equation">			 
+    <term name="equation" form="short">			 
       <single>eq.</single>
       <multiple>eq.</multiple>
     </term>
-    <term name="rule">			 
+    <term name="rule" form="short">			 
       <single>r.</single>
       <multiple>r.</multiple>						 
     </term>
-    <term name="scene">			 
+    <term name="scene" form="short">			 
       <single>sc.</single>
       <multiple>sc.</multiple>						 
     </term>
-    <term name="table">			 
+    <term name="table" form="short">			 
       <single>tab.</single>
       <multiple>tab.</multiple>						 
     </term>
-    <term name="timestamp"> <!-- generally blank -->
+    <term name="timestamp" form="short"> <!-- generally blank -->
       <single></single>
       <multiple></multiple>						 
     </term>
-    <term name="title-locator">			 
+    <term name="title-locator" form="short">			 
       <single>tit.</single>
       <multiple>tits.</multiple>
     </term>

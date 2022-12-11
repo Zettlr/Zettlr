@@ -75,7 +75,6 @@
     <term name="in">in</term>
     <term name="in press">in press</term>
     <term name="internet">internet</term>
-    <term name="interview">interview</term>
     <term name="letter">letter</term>
     <term name="no date">no date</term>
     <term name="no date" form="short">n.d.</term>
@@ -99,9 +98,9 @@
     <term name="article-magazine">magazine article</term>
     <term name="article-newspaper">newspaper article</term>
     <term name="bill">bill</term>
-    <term name="book">book</term>
+    <!-- book is in the list of locator terms -->
     <term name="broadcast">broadcast</term>
-    <term name="chapter">book chapter</term>
+    <!-- chapter is in the list of locator terms -->
     <term name="classic">classic</term>
     <term name="collection">collection</term>
     <term name="dataset">dataset</term>
@@ -144,8 +143,8 @@
     <term name="article-journal" form="short">journal art.</term>
     <term name="article-magazine" form="short">mag. art.</term>
     <term name="article-newspaper" form="short">newspaper art.</term>
-    <term name="book" form="short">bk.</term>
-    <term name="chapter" form="short">bk. chap.</term>
+    <!-- book is in the list of locator terms -->
+    <!-- chapter is in the list of locator terms -->
     <term name="document" form="short">doc.</term>
     <!-- figure is in the list of locator terms -->
     <term name="graphic" form="short">graph.</term>
