@@ -255,6 +255,7 @@ there.
   slow
 - Zettlr now attempts to extract the version strings for supported external
   programs (such as Pandoc, Git, and Quarto) and displays them in the About panel
+- Exchanged Zettlr Translate system with `gettext`
 
 # 2.3.0
 
