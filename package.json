@@ -30,7 +30,6 @@
     "release:win-arm": "electron-builder --win --ia32 --arm64 --publish never --prepackaged out/Zettlr-win32-arm64",
     "release:linux-x64": "electron-builder --linux AppImage deb rpm zip --x64 --publish never --prepackaged out/Zettlr-linux-x64",
     "release:linux-arm": "electron-builder --linux AppImage deb rpm zip --arm64 --publish never --prepackaged out/Zettlr-linux-arm64",
-    "lang:refresh": "node scripts/refresh-language.mjs",
     "csl:refresh": "node scripts/update-csl.mjs",
     "update:citation": "node scripts/update-citation.mjs",
     "test": "mocha",
