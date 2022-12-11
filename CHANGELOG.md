@@ -215,6 +215,7 @@ there.
   when editing a table, you can press `Cmd/Ctrl+S` twice to first apply any
   changes from the table to the document and second save the document itself.
 - The editor now recognizes Pandoc attribute syntax (e.g., `{.unnumbered}`)
+- Added `lua` syntax highlighting support
 
 ## Under the Hood
 
