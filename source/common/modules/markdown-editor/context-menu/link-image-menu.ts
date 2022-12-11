@@ -14,7 +14,7 @@
 
 import { EditorState } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
-import { trans } from '@common/i18n-main'
+import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { AnyMenuItem } from '@dts/renderer/context'
 import { SyntaxNode } from '@lezer/common'
