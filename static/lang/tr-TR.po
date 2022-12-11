@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2022-12-10 15:17+0100\n"
+"POT-Creation-Date: 2022-12-11 19:37+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -751,12 +751,6 @@ msgstr ""
 msgid "Always load remote changes to the current file"
 msgstr "Her zaman mevcut dosyaya dışarıdan yapılan değişikleri ekle"
 
-#: source/app/service-providers/translations/index.ts:179
-#. Now we are done and can notify the user of all updated translations!
-#, javascript-format
-msgid "Updated translations: %s"
-msgstr "Güncellenen çeviriler: %s"
-
 #: source/win-main/tabs-context.ts:44
 msgid "Close other tabs"
 msgstr ""
@@ -983,7 +977,8 @@ msgid "No related files"
 msgstr ""
 
 #: source/tmp/PopoverDirProps.vue.ts:144 source/tmp/PopoverFileProps.vue.ts:86
-#: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/file-item.vue.ts:202
+#: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/file-item.vue.ts:134
+#: source/tmp/file-item.vue.ts:207
 #, javascript-format
 msgid "%s words"
 msgstr "%s kelime"
@@ -1022,7 +1017,7 @@ msgstr ""
 msgid "Add to file"
 msgstr ""
 
-#: source/tmp/PopoverFileProps.vue.ts:59 source/tmp/file-item.vue.ts:190
+#: source/tmp/PopoverFileProps.vue.ts:59 source/tmp/file-item.vue.ts:195
 msgid "Words"
 msgstr "Kelime"
 
@@ -1030,7 +1025,7 @@ msgstr "Kelime"
 msgid "Set writing target…"
 msgstr "Yazma hedefi belirle..."
 
-#: source/tmp/PopoverFileProps.vue.ts:74 source/tmp/file-item.vue.ts:188
+#: source/tmp/PopoverFileProps.vue.ts:74 source/tmp/file-item.vue.ts:193
 msgid "Characters"
 msgstr "Karakter"
 
@@ -1082,9 +1077,282 @@ msgstr "karakter"
 msgid "characters (w/o spaces)"
 msgstr "karakter (boşluksuz)"
 
-#: source/tmp/PopoverDocInfo.vue.ts:71 source/tmp/file-item.vue.ts:200
+#: source/tmp/PopoverDocInfo.vue.ts:71 source/tmp/file-item.vue.ts:132
+#: source/tmp/file-item.vue.ts:205
 #, javascript-format
 msgid "%s characters"
+msgstr ""
+
+#: source/tmp/Contributors-Tab.vue.ts:32
+msgid "Afrikaans (South Africa)"
+msgstr "Afrikaan (Güney Afrika)"
+
+#: source/tmp/Contributors-Tab.vue.ts:33
+msgid "Arabic"
+msgstr "Arapça"
+
+#: source/tmp/Contributors-Tab.vue.ts:34
+msgid "Belarus"
+msgstr "Belarusça"
+
+#: source/tmp/Contributors-Tab.vue.ts:35
+msgid "Bulgarian"
+msgstr "Bulgarca"
+
+#: source/tmp/Contributors-Tab.vue.ts:36
+msgid "Bosnian"
+msgstr "Boşnakça"
+
+#: source/tmp/Contributors-Tab.vue.ts:37
+msgid "Catalan (Catalonia)"
+msgstr "Katalanca (Katalonya)"
+
+#: source/tmp/Contributors-Tab.vue.ts:38
+msgid "Czech (Czech Republic)"
+msgstr "Çekçe (Çek Cumhuriyeti)"
+
+#: source/tmp/Contributors-Tab.vue.ts:39
+msgid "Danish"
+msgstr "Danca"
+
+#: source/tmp/Contributors-Tab.vue.ts:40
+msgid "German (Austria)"
+msgstr "Almanca (Avusturya)"
+
+#: source/tmp/Contributors-Tab.vue.ts:41
+msgid "German (Switzerland)"
+msgstr "Almanca (İsviçre)"
+
+#: source/tmp/Contributors-Tab.vue.ts:42
+msgid "German (Germany)"
+msgstr "Almanca (Almanya)"
+
+#: source/tmp/Contributors-Tab.vue.ts:43
+msgid "Greek"
+msgstr "Yunanca"
+
+#: source/tmp/Contributors-Tab.vue.ts:44
+msgid "English (Australia)"
+msgstr "İngilizce (Avusturya)"
+
+#: source/tmp/Contributors-Tab.vue.ts:45
+msgid "English (Canada)"
+msgstr "İngilizce (Kanada)"
+
+#: source/tmp/Contributors-Tab.vue.ts:46
+msgid "English (United Kingdom)"
+msgstr "İngilizce (Birleşik Krallık)"
+
+#: source/tmp/Contributors-Tab.vue.ts:47
+msgid "English (India)"
+msgstr "İngilizce (Hindistan)"
+
+#: source/tmp/Contributors-Tab.vue.ts:48
+msgid "English (United States)"
+msgstr "İngilizce (ABD)"
+
+#: source/tmp/Contributors-Tab.vue.ts:49
+msgid "English (South Africa)"
+msgstr "İngilizce (Güney Afrika)"
+
+#: source/tmp/Contributors-Tab.vue.ts:50
+msgid "Esperanto"
+msgstr "Esperanto"
+
+#: source/tmp/Contributors-Tab.vue.ts:51
+msgid "Spanish (Spain)"
+msgstr "İspanyolca (İspanya)"
+
+#: source/tmp/Contributors-Tab.vue.ts:52
+msgid "Estonian"
+msgstr "Estonya Dili"
+
+#: source/tmp/Contributors-Tab.vue.ts:53
+msgid "Basque"
+msgstr "Bask"
+
+#: source/tmp/Contributors-Tab.vue.ts:54
+msgid "Persian (Farsi)"
+msgstr "Farsça (Farsi)"
+
+#: source/tmp/Contributors-Tab.vue.ts:55
+msgid "Finnish"
+msgstr "Fince"
+
+#: source/tmp/Contributors-Tab.vue.ts:56
+msgid "Faroese"
+msgstr "Faroe Dili"
+
+#: source/tmp/Contributors-Tab.vue.ts:57
+msgid "French (France)"
+msgstr "Fransızca (Fransa)"
+
+#: source/tmp/Contributors-Tab.vue.ts:58
+msgid "Irish"
+msgstr "İrlanda Dili"
+
+#: source/tmp/Contributors-Tab.vue.ts:59
+msgid "Scottish (Gaelic)"
+msgstr "İskoçça (Galce)"
+
+#: source/tmp/Contributors-Tab.vue.ts:60
+msgid "Galician (Spain)"
+msgstr "Galiçyaca (İspanya)"
+
+#: source/tmp/Contributors-Tab.vue.ts:61
+msgid "Hebrew"
+msgstr "İbranice"
+
+#: source/tmp/Contributors-Tab.vue.ts:62
+msgid "Hindi"
+msgstr "Hintçe"
+
+#: source/tmp/Contributors-Tab.vue.ts:63
+msgid "Croatian"
+msgstr "Hırvatça"
+
+#: source/tmp/Contributors-Tab.vue.ts:64
+msgid "Hungarian"
+msgstr "Macarca"
+
+#: source/tmp/Contributors-Tab.vue.ts:65
+msgid "Armenian"
+msgstr "Ermenice"
+
+#: source/tmp/Contributors-Tab.vue.ts:66
+msgid "Indonesian"
+msgstr "Endonezya Dili"
+
+#: source/tmp/Contributors-Tab.vue.ts:67
+msgid "Icelandic"
+msgstr "İzlandaca"
+
+#: source/tmp/Contributors-Tab.vue.ts:68
+msgid "Italian (Italy)"
+msgstr "İtalyanca (İtalya)"
+
+#: source/tmp/Contributors-Tab.vue.ts:69
+msgid "Japanese"
+msgstr "Japonca"
+
+#: source/tmp/Contributors-Tab.vue.ts:70
+msgid "Georgian"
+msgstr "Gürcü Dili"
+
+#: source/tmp/Contributors-Tab.vue.ts:71
+msgid "Korean"
+msgstr "Korece"
+
+#: source/tmp/Contributors-Tab.vue.ts:72
+msgid "Latin"
+msgstr "Latince"
+
+#: source/tmp/Contributors-Tab.vue.ts:73
+msgid "Luxembourgian"
+msgstr "Lüksemburg Dili"
+
+#: source/tmp/Contributors-Tab.vue.ts:74
+msgid "Lithuanian"
+msgstr "Litvanya Dili"
+
+#: source/tmp/Contributors-Tab.vue.ts:75
+msgid "Latvian"
+msgstr "Letonya Dili"
+
+#: source/tmp/Contributors-Tab.vue.ts:76
+msgid "Macedonian"
+msgstr "Makedonca"
+
+#: source/tmp/Contributors-Tab.vue.ts:77
+msgid "Mongolian"
+msgstr "Moğolca"
+
+#: source/tmp/Contributors-Tab.vue.ts:78
+msgid "Malaysian (Malaysia)"
+msgstr "Malayca (Malezya)"
+
+#: source/tmp/Contributors-Tab.vue.ts:79
+msgid "Norwegian (Bokmål)"
+msgstr "Norveççe (Bokmål)"
+
+#: source/tmp/Contributors-Tab.vue.ts:80
+msgid "Nepalese"
+msgstr "Nepalce"
+
+#: source/tmp/Contributors-Tab.vue.ts:81
+msgid "Dutch (Belgium)"
+msgstr "Hollandaca (Belçika)"
+
+#: source/tmp/Contributors-Tab.vue.ts:82
+msgid "Dutch (Netherlands)"
+msgstr "Hollandaca (Hollanda)"
+
+#: source/tmp/Contributors-Tab.vue.ts:83
+msgid "Norwegian (Nyorsk)"
+msgstr "Norveççe (Nyorsk)"
+
+#: source/tmp/Contributors-Tab.vue.ts:84
+msgid "Polish"
+msgstr "Lehçe"
+
+#: source/tmp/Contributors-Tab.vue.ts:85
+msgid "Portuguese (Brazil)"
+msgstr "Portekizce (Brezilya)"
+
+#: source/tmp/Contributors-Tab.vue.ts:86
+msgid "Portuguese (Portugal)"
+msgstr "Portekizce (Portekiz)"
+
+#: source/tmp/Contributors-Tab.vue.ts:87
+msgid "Romanian"
+msgstr "Rumence"
+
+#: source/tmp/Contributors-Tab.vue.ts:88
+msgid "Russian"
+msgstr "Rusça"
+
+#: source/tmp/Contributors-Tab.vue.ts:89
+msgid "Rwandan (Kinyarwanda)"
+msgstr "Ruandaca (Kinvaryanda)"
+
+#: source/tmp/Contributors-Tab.vue.ts:90
+msgid "Slovakian"
+msgstr "Slovakça"
+
+#: source/tmp/Contributors-Tab.vue.ts:91
+msgid "Slovenian"
+msgstr "Slovence"
+
+#: source/tmp/Contributors-Tab.vue.ts:92
+msgid "Serbian"
+msgstr "Sırpça"
+
+#: source/tmp/Contributors-Tab.vue.ts:93
+msgid "Swedish"
+msgstr "İsveççe"
+
+#: source/tmp/Contributors-Tab.vue.ts:94
+msgid "Turkish"
+msgstr "Türkçe"
+
+#: source/tmp/Contributors-Tab.vue.ts:95
+msgid "Ukrainian"
+msgstr "Ukraynaca"
+
+#: source/tmp/Contributors-Tab.vue.ts:96
+msgid "Urdu (Pakistan)"
+msgstr "Urduca (Pakistan)"
+
+#: source/tmp/Contributors-Tab.vue.ts:97
+msgid "Vietnamese"
+msgstr "Vietnamca"
+
+#: source/tmp/Contributors-Tab.vue.ts:98
+msgid "Chinese (China)"
+msgstr "Çince (Çin)"
+
+#: source/tmp/Contributors-Tab.vue.ts:99
+msgid "Chinese (Taiwan)"
 msgstr ""
 
 #: source/tmp/MainSidebar.vue.ts:74 source/tmp/OtherFilesTab.vue.ts:13

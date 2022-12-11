@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2022-12-10 15:17+0100\n"
+"POT-Creation-Date: 2022-12-11 19:37+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -743,12 +743,6 @@ msgstr "檔案 %s 已被其他人修改。是否使用硬碟中的新版本取�
 msgid "Always load remote changes to the current file"
 msgstr "總是將遠端的修改讀取到目前檔案"
 
-#: source/app/service-providers/translations/index.ts:179
-#. Now we are done and can notify the user of all updated translations!
-#, javascript-format
-msgid "Updated translations: %s"
-msgstr "已更新翻譯：%s"
-
 #: source/win-main/tabs-context.ts:44
 msgid "Close other tabs"
 msgstr "關閉其他分頁"
@@ -967,7 +961,8 @@ msgid "No related files"
 msgstr "沒有相關檔案"
 
 #: source/tmp/PopoverDirProps.vue.ts:144 source/tmp/PopoverFileProps.vue.ts:86
-#: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/file-item.vue.ts:202
+#: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/file-item.vue.ts:134
+#: source/tmp/file-item.vue.ts:207
 #, javascript-format
 msgid "%s words"
 msgstr "%s 字"
@@ -1006,7 +1001,7 @@ msgstr "當前文件的建議標籤"
 msgid "Add to file"
 msgstr "加到檔案"
 
-#: source/tmp/PopoverFileProps.vue.ts:59 source/tmp/file-item.vue.ts:190
+#: source/tmp/PopoverFileProps.vue.ts:59 source/tmp/file-item.vue.ts:195
 msgid "Words"
 msgstr "字數"
 
@@ -1014,7 +1009,7 @@ msgstr "字數"
 msgid "Set writing target…"
 msgstr "設定寫作目標"
 
-#: source/tmp/PopoverFileProps.vue.ts:74 source/tmp/file-item.vue.ts:188
+#: source/tmp/PopoverFileProps.vue.ts:74 source/tmp/file-item.vue.ts:193
 msgid "Characters"
 msgstr "字元"
 
@@ -1066,10 +1061,283 @@ msgstr "字元"
 msgid "characters (w/o spaces)"
 msgstr "字元（不含空白）"
 
-#: source/tmp/PopoverDocInfo.vue.ts:71 source/tmp/file-item.vue.ts:200
+#: source/tmp/PopoverDocInfo.vue.ts:71 source/tmp/file-item.vue.ts:132
+#: source/tmp/file-item.vue.ts:205
 #, javascript-format
 msgid "%s characters"
 msgstr "%s 字元"
+
+#: source/tmp/Contributors-Tab.vue.ts:32
+msgid "Afrikaans (South Africa)"
+msgstr "南非荷蘭語（南非）"
+
+#: source/tmp/Contributors-Tab.vue.ts:33
+msgid "Arabic"
+msgstr "阿拉伯語"
+
+#: source/tmp/Contributors-Tab.vue.ts:34
+msgid "Belarus"
+msgstr "白俄羅斯語"
+
+#: source/tmp/Contributors-Tab.vue.ts:35
+msgid "Bulgarian"
+msgstr "保加利亞語"
+
+#: source/tmp/Contributors-Tab.vue.ts:36
+msgid "Bosnian"
+msgstr "波斯語"
+
+#: source/tmp/Contributors-Tab.vue.ts:37
+msgid "Catalan (Catalonia)"
+msgstr "加泰羅尼亞語（加泰羅尼亞）"
+
+#: source/tmp/Contributors-Tab.vue.ts:38
+msgid "Czech (Czech Republic)"
+msgstr "捷克語（捷克共和國）"
+
+#: source/tmp/Contributors-Tab.vue.ts:39
+msgid "Danish"
+msgstr "丹麥語"
+
+#: source/tmp/Contributors-Tab.vue.ts:40
+msgid "German (Austria)"
+msgstr "德語（奧地利）"
+
+#: source/tmp/Contributors-Tab.vue.ts:41
+msgid "German (Switzerland)"
+msgstr "德語（瑞士）"
+
+#: source/tmp/Contributors-Tab.vue.ts:42
+msgid "German (Germany)"
+msgstr "德語（德國）"
+
+#: source/tmp/Contributors-Tab.vue.ts:43
+msgid "Greek"
+msgstr "希臘語"
+
+#: source/tmp/Contributors-Tab.vue.ts:44
+msgid "English (Australia)"
+msgstr "英語（澳大利亞）"
+
+#: source/tmp/Contributors-Tab.vue.ts:45
+msgid "English (Canada)"
+msgstr "英語（加拿大）"
+
+#: source/tmp/Contributors-Tab.vue.ts:46
+msgid "English (United Kingdom)"
+msgstr "英語（英國）"
+
+#: source/tmp/Contributors-Tab.vue.ts:47
+msgid "English (India)"
+msgstr "英語（印度）"
+
+#: source/tmp/Contributors-Tab.vue.ts:48
+msgid "English (United States)"
+msgstr "英語（美國）"
+
+#: source/tmp/Contributors-Tab.vue.ts:49
+msgid "English (South Africa)"
+msgstr "英語（南非）"
+
+#: source/tmp/Contributors-Tab.vue.ts:50
+msgid "Esperanto"
+msgstr "世界語"
+
+#: source/tmp/Contributors-Tab.vue.ts:51
+msgid "Spanish (Spain)"
+msgstr "西班牙語（西班牙）"
+
+#: source/tmp/Contributors-Tab.vue.ts:52
+msgid "Estonian"
+msgstr "愛沙尼亞語"
+
+#: source/tmp/Contributors-Tab.vue.ts:53
+msgid "Basque"
+msgstr "巴斯克語"
+
+#: source/tmp/Contributors-Tab.vue.ts:54
+msgid "Persian (Farsi)"
+msgstr "波斯語"
+
+#: source/tmp/Contributors-Tab.vue.ts:55
+msgid "Finnish"
+msgstr "芬蘭語"
+
+#: source/tmp/Contributors-Tab.vue.ts:56
+msgid "Faroese"
+msgstr "法羅語"
+
+#: source/tmp/Contributors-Tab.vue.ts:57
+msgid "French (France)"
+msgstr "法語（法國）"
+
+#: source/tmp/Contributors-Tab.vue.ts:58
+msgid "Irish"
+msgstr "愛爾蘭語"
+
+#: source/tmp/Contributors-Tab.vue.ts:59
+msgid "Scottish (Gaelic)"
+msgstr "蘇格蘭蓋爾語"
+
+#: source/tmp/Contributors-Tab.vue.ts:60
+msgid "Galician (Spain)"
+msgstr "加利西亞語（西班牙）"
+
+#: source/tmp/Contributors-Tab.vue.ts:61
+msgid "Hebrew"
+msgstr "希伯來語"
+
+#: source/tmp/Contributors-Tab.vue.ts:62
+msgid "Hindi"
+msgstr "印地語"
+
+#: source/tmp/Contributors-Tab.vue.ts:63
+msgid "Croatian"
+msgstr "克羅地亞語"
+
+#: source/tmp/Contributors-Tab.vue.ts:64
+msgid "Hungarian"
+msgstr "匈牙利語"
+
+#: source/tmp/Contributors-Tab.vue.ts:65
+msgid "Armenian"
+msgstr "亞美尼亞語"
+
+#: source/tmp/Contributors-Tab.vue.ts:66
+msgid "Indonesian"
+msgstr "印度尼西亞語"
+
+#: source/tmp/Contributors-Tab.vue.ts:67
+msgid "Icelandic"
+msgstr "冰島語"
+
+#: source/tmp/Contributors-Tab.vue.ts:68
+msgid "Italian (Italy)"
+msgstr "意大利語（意大利）"
+
+#: source/tmp/Contributors-Tab.vue.ts:69
+msgid "Japanese"
+msgstr "日語"
+
+#: source/tmp/Contributors-Tab.vue.ts:70
+msgid "Georgian"
+msgstr "格魯吉亞語"
+
+#: source/tmp/Contributors-Tab.vue.ts:71
+msgid "Korean"
+msgstr "韓語"
+
+#: source/tmp/Contributors-Tab.vue.ts:72
+msgid "Latin"
+msgstr "拉丁語"
+
+#: source/tmp/Contributors-Tab.vue.ts:73
+msgid "Luxembourgian"
+msgstr "盧森堡語"
+
+#: source/tmp/Contributors-Tab.vue.ts:74
+msgid "Lithuanian"
+msgstr "立陶宛語"
+
+#: source/tmp/Contributors-Tab.vue.ts:75
+msgid "Latvian"
+msgstr "拉脫維亞語"
+
+#: source/tmp/Contributors-Tab.vue.ts:76
+msgid "Macedonian"
+msgstr "馬其頓語"
+
+#: source/tmp/Contributors-Tab.vue.ts:77
+msgid "Mongolian"
+msgstr "蒙古語"
+
+#: source/tmp/Contributors-Tab.vue.ts:78
+msgid "Malaysian (Malaysia)"
+msgstr "馬來語（馬來西亞）"
+
+#: source/tmp/Contributors-Tab.vue.ts:79
+msgid "Norwegian (Bokmål)"
+msgstr "挪威語 (Bokmål)"
+
+#: source/tmp/Contributors-Tab.vue.ts:80
+msgid "Nepalese"
+msgstr "尼泊爾語"
+
+#: source/tmp/Contributors-Tab.vue.ts:81
+msgid "Dutch (Belgium)"
+msgstr "荷蘭語（比利時）"
+
+#: source/tmp/Contributors-Tab.vue.ts:82
+msgid "Dutch (Netherlands)"
+msgstr "荷蘭語（荷蘭）"
+
+#: source/tmp/Contributors-Tab.vue.ts:83
+msgid "Norwegian (Nyorsk)"
+msgstr "挪威語（尼諾斯克）"
+
+#: source/tmp/Contributors-Tab.vue.ts:84
+msgid "Polish"
+msgstr "波蘭語"
+
+#: source/tmp/Contributors-Tab.vue.ts:85
+msgid "Portuguese (Brazil)"
+msgstr "葡萄牙語（巴西）"
+
+#: source/tmp/Contributors-Tab.vue.ts:86
+msgid "Portuguese (Portugal)"
+msgstr "葡萄牙語（葡萄牙）"
+
+#: source/tmp/Contributors-Tab.vue.ts:87
+msgid "Romanian"
+msgstr "羅馬尼亞語"
+
+#: source/tmp/Contributors-Tab.vue.ts:88
+msgid "Russian"
+msgstr "俄語"
+
+#: source/tmp/Contributors-Tab.vue.ts:89
+msgid "Rwandan (Kinyarwanda)"
+msgstr "盧旺達語"
+
+#: source/tmp/Contributors-Tab.vue.ts:90
+msgid "Slovakian"
+msgstr "斯洛伐克語"
+
+#: source/tmp/Contributors-Tab.vue.ts:91
+msgid "Slovenian"
+msgstr "斯洛文尼亞語"
+
+#: source/tmp/Contributors-Tab.vue.ts:92
+msgid "Serbian"
+msgstr "塞爾維亞語"
+
+#: source/tmp/Contributors-Tab.vue.ts:93
+msgid "Swedish"
+msgstr "瑞典語"
+
+#: source/tmp/Contributors-Tab.vue.ts:94
+msgid "Turkish"
+msgstr "土耳其語"
+
+#: source/tmp/Contributors-Tab.vue.ts:95
+msgid "Ukrainian"
+msgstr "烏克蘭語"
+
+#: source/tmp/Contributors-Tab.vue.ts:96
+msgid "Urdu (Pakistan)"
+msgstr "烏爾都語（巴基斯坦）"
+
+#: source/tmp/Contributors-Tab.vue.ts:97
+msgid "Vietnamese"
+msgstr "越南語"
+
+#: source/tmp/Contributors-Tab.vue.ts:98
+msgid "Chinese (China)"
+msgstr "簡體中文"
+
+#: source/tmp/Contributors-Tab.vue.ts:99
+msgid "Chinese (Taiwan)"
+msgstr ""
 
 #: source/tmp/MainSidebar.vue.ts:74 source/tmp/OtherFilesTab.vue.ts:13
 msgid "Other files"

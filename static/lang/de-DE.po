@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2022-12-10 15:17+0100\n"
+"POT-Creation-Date: 2022-12-11 19:37+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -751,12 +751,6 @@ msgstr ""
 msgid "Always load remote changes to the current file"
 msgstr "Lade externe Änderungen an der aktuellen Datei automatisch"
 
-#: source/app/service-providers/translations/index.ts:179
-#. Now we are done and can notify the user of all updated translations!
-#, javascript-format
-msgid "Updated translations: %s"
-msgstr "Übersetzungen aktualisiert: %s"
-
 #: source/win-main/tabs-context.ts:44
 msgid "Close other tabs"
 msgstr "Alle anderen Tabs schließen"
@@ -984,7 +978,8 @@ msgid "No related files"
 msgstr "Keine verwandten Dateien"
 
 #: source/tmp/PopoverDirProps.vue.ts:144 source/tmp/PopoverFileProps.vue.ts:86
-#: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/file-item.vue.ts:202
+#: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/file-item.vue.ts:134
+#: source/tmp/file-item.vue.ts:207
 #, javascript-format
 msgid "%s words"
 msgstr "%s Wörter"
@@ -1023,7 +1018,7 @@ msgstr "Vorgeschlagene Schlagworte für die aktuelle Datei"
 msgid "Add to file"
 msgstr "Hinzufügen"
 
-#: source/tmp/PopoverFileProps.vue.ts:59 source/tmp/file-item.vue.ts:190
+#: source/tmp/PopoverFileProps.vue.ts:59 source/tmp/file-item.vue.ts:195
 msgid "Words"
 msgstr "Wörter"
 
@@ -1031,7 +1026,7 @@ msgstr "Wörter"
 msgid "Set writing target…"
 msgstr "Schreibziel setzen…"
 
-#: source/tmp/PopoverFileProps.vue.ts:74 source/tmp/file-item.vue.ts:188
+#: source/tmp/PopoverFileProps.vue.ts:74 source/tmp/file-item.vue.ts:193
 msgid "Characters"
 msgstr "Zeichen"
 
@@ -1083,10 +1078,283 @@ msgstr "Zeichen"
 msgid "characters (w/o spaces)"
 msgstr "Zeichen (ohne Leer)"
 
-#: source/tmp/PopoverDocInfo.vue.ts:71 source/tmp/file-item.vue.ts:200
+#: source/tmp/PopoverDocInfo.vue.ts:71 source/tmp/file-item.vue.ts:132
+#: source/tmp/file-item.vue.ts:205
 #, javascript-format
 msgid "%s characters"
 msgstr "%s Zeichen"
+
+#: source/tmp/Contributors-Tab.vue.ts:32
+msgid "Afrikaans (South Africa)"
+msgstr "Afrikaans (Südafrika)"
+
+#: source/tmp/Contributors-Tab.vue.ts:33
+msgid "Arabic"
+msgstr "Arabisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:34
+msgid "Belarus"
+msgstr "Weißrussisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:35
+msgid "Bulgarian"
+msgstr "Bulgarisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:36
+msgid "Bosnian"
+msgstr "Bosnisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:37
+msgid "Catalan (Catalonia)"
+msgstr "Katalanisch (Katalonien)"
+
+#: source/tmp/Contributors-Tab.vue.ts:38
+msgid "Czech (Czech Republic)"
+msgstr "Tschechisch (Tschechien)"
+
+#: source/tmp/Contributors-Tab.vue.ts:39
+msgid "Danish"
+msgstr "Dänisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:40
+msgid "German (Austria)"
+msgstr "Deutsch (Österreich)"
+
+#: source/tmp/Contributors-Tab.vue.ts:41
+msgid "German (Switzerland)"
+msgstr "Deutsch (Schweiz)"
+
+#: source/tmp/Contributors-Tab.vue.ts:42
+msgid "German (Germany)"
+msgstr "Deutsch (Deutschland)"
+
+#: source/tmp/Contributors-Tab.vue.ts:43
+msgid "Greek"
+msgstr "Griechisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:44
+msgid "English (Australia)"
+msgstr "Englisch (Australien)"
+
+#: source/tmp/Contributors-Tab.vue.ts:45
+msgid "English (Canada)"
+msgstr "Englisch (Kanada)"
+
+#: source/tmp/Contributors-Tab.vue.ts:46
+msgid "English (United Kingdom)"
+msgstr "Englisch (Großbritannien)"
+
+#: source/tmp/Contributors-Tab.vue.ts:47
+msgid "English (India)"
+msgstr "Englisch (Indien)"
+
+#: source/tmp/Contributors-Tab.vue.ts:48
+msgid "English (United States)"
+msgstr "Englisch (Vereinigte Staaten)"
+
+#: source/tmp/Contributors-Tab.vue.ts:49
+msgid "English (South Africa)"
+msgstr "Englisch (Südafrika)"
+
+#: source/tmp/Contributors-Tab.vue.ts:50
+msgid "Esperanto"
+msgstr "Esperanto"
+
+#: source/tmp/Contributors-Tab.vue.ts:51
+msgid "Spanish (Spain)"
+msgstr "Spanisch (Spanien)"
+
+#: source/tmp/Contributors-Tab.vue.ts:52
+msgid "Estonian"
+msgstr "Estnisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:53
+msgid "Basque"
+msgstr "Baskisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:54
+msgid "Persian (Farsi)"
+msgstr "Persisch (Farsi)"
+
+#: source/tmp/Contributors-Tab.vue.ts:55
+msgid "Finnish"
+msgstr "Finnisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:56
+msgid "Faroese"
+msgstr "Faröisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:57
+msgid "French (France)"
+msgstr "Französisch (Frankreich)"
+
+#: source/tmp/Contributors-Tab.vue.ts:58
+msgid "Irish"
+msgstr "Irisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:59
+msgid "Scottish (Gaelic)"
+msgstr "Schottisch (Gaelisch)"
+
+#: source/tmp/Contributors-Tab.vue.ts:60
+msgid "Galician (Spain)"
+msgstr "Galizisch (Spanien)"
+
+#: source/tmp/Contributors-Tab.vue.ts:61
+msgid "Hebrew"
+msgstr "Hebräisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:62
+msgid "Hindi"
+msgstr "Hindi"
+
+#: source/tmp/Contributors-Tab.vue.ts:63
+msgid "Croatian"
+msgstr "Kroatisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:64
+msgid "Hungarian"
+msgstr "Ungarisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:65
+msgid "Armenian"
+msgstr "Armenisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:66
+msgid "Indonesian"
+msgstr "Indonesisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:67
+msgid "Icelandic"
+msgstr "Isländisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:68
+msgid "Italian (Italy)"
+msgstr "Italienisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:69
+msgid "Japanese"
+msgstr "Japanisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:70
+msgid "Georgian"
+msgstr "Georgisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:71
+msgid "Korean"
+msgstr "Koreanisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:72
+msgid "Latin"
+msgstr "Latein"
+
+#: source/tmp/Contributors-Tab.vue.ts:73
+msgid "Luxembourgian"
+msgstr "Luxemburgisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:74
+msgid "Lithuanian"
+msgstr "Litauisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:75
+msgid "Latvian"
+msgstr "Lettisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:76
+msgid "Macedonian"
+msgstr "Mazedonisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:77
+msgid "Mongolian"
+msgstr "Mongolisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:78
+msgid "Malaysian (Malaysia)"
+msgstr "Malaysisch (Malaysia)"
+
+#: source/tmp/Contributors-Tab.vue.ts:79
+msgid "Norwegian (Bokmål)"
+msgstr "Norwegisch (Bokmål)"
+
+#: source/tmp/Contributors-Tab.vue.ts:80
+msgid "Nepalese"
+msgstr "Nepali"
+
+#: source/tmp/Contributors-Tab.vue.ts:81
+msgid "Dutch (Belgium)"
+msgstr "Belgisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:82
+msgid "Dutch (Netherlands)"
+msgstr "Niederländisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:83
+msgid "Norwegian (Nyorsk)"
+msgstr "Norwegisch (Nyorsk)"
+
+#: source/tmp/Contributors-Tab.vue.ts:84
+msgid "Polish"
+msgstr "Polnisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:85
+msgid "Portuguese (Brazil)"
+msgstr "Portugiesisch (Brasilien)"
+
+#: source/tmp/Contributors-Tab.vue.ts:86
+msgid "Portuguese (Portugal)"
+msgstr "Portugiesisch (Portugal)"
+
+#: source/tmp/Contributors-Tab.vue.ts:87
+msgid "Romanian"
+msgstr "Rumänisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:88
+msgid "Russian"
+msgstr "Russisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:89
+msgid "Rwandan (Kinyarwanda)"
+msgstr "Ruandisch (Kinyarwanda)"
+
+#: source/tmp/Contributors-Tab.vue.ts:90
+msgid "Slovakian"
+msgstr "Slowakisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:91
+msgid "Slovenian"
+msgstr "Slowenisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:92
+msgid "Serbian"
+msgstr "Serbisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:93
+msgid "Swedish"
+msgstr "Schwedisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:94
+msgid "Turkish"
+msgstr "Türkisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:95
+msgid "Ukrainian"
+msgstr "Ukrainisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:96
+msgid "Urdu (Pakistan)"
+msgstr "Urdu (Pakistan)"
+
+#: source/tmp/Contributors-Tab.vue.ts:97
+msgid "Vietnamese"
+msgstr "Vietnamesisch"
+
+#: source/tmp/Contributors-Tab.vue.ts:98
+msgid "Chinese (China)"
+msgstr "Chinesisch (China)"
+
+#: source/tmp/Contributors-Tab.vue.ts:99
+msgid "Chinese (Taiwan)"
+msgstr ""
 
 #: source/tmp/MainSidebar.vue.ts:74 source/tmp/OtherFilesTab.vue.ts:13
 msgid "Other files"
