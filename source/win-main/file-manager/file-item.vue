@@ -250,7 +250,12 @@ export default defineComponent({
         .filter((file: any) => file.type === 'file')
         .map((file: any) => this.shouldCountChars ? file.charCount : file.wordCount)
         .reduce((prev: number, cur: number) => prev + cur, 0)
-      return trans((this.shouldCountChars ? 'gui.chars' : 'gui.words'), localiseNumber(wordOrCharCount))
+
+      if (this.shouldCountChars) {
+        return trans('%s characters', localiseNumber(wordOrCharCount))
+      } else {
+        return trans('%s words', localiseNumber(wordOrCharCount))
+      }
     },
     countTags: function () {
       if (this.obj.type !== 'file') {

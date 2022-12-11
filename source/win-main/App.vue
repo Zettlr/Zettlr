@@ -249,9 +249,9 @@ export default defineComponent({
         }
       } else {
         // No selection.
-        const locID = this.shouldCountChars ? 'gui.chars' : 'gui.words'
-        const num = this.shouldCountChars ? info.chars : info.words
-        cnt = trans(locID, localiseNumber(num))
+        cnt = this.shouldCountChars
+          ? trans('%s characters', localiseNumber(info.chars))
+          : trans('%s words', localiseNumber(info.words))
         cnt += '<br>'
         cnt += info.cursor.line + ':' + info.cursor.ch
       }
