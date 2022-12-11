@@ -1143,6 +1143,13 @@
   resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-7946.0.10.tgz#6dfbf5ea17142f7f9a043809f1cd4c448cb68249"
   integrity sha512-Nmh0K3iWQJzniTuPRcJn5hxXkfB1T1pgB89SBig5PlJQU5yocazeu4jATJlaA0GYFKWMqDdvYemoSnF2pXgLVA==
 
+"@types/gettext-parser@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@types/gettext-parser/-/gettext-parser-4.0.1.tgz#83a772ec171f0a4430eb7b6e7365686be6858e12"
+  integrity sha512-5W+M9INThadGD2nOKMZfbpA0WKvHSBviQdY8qWLVpeCl3d43smzshGKiIiDsaejBSh/ugiDAfBG1hPzJvOswBw==
+  dependencies:
+    "@types/node" "*"
+
 "@types/glob@*":
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/@types/glob/-/glob-8.0.0.tgz#321607e9cbaec54f687a0792b2d1d370739455d2"

@@ -59,6 +59,7 @@
     "@joplin/turndown": "^4.0.63",
     "@lezer/common": "^1.0.1",
     "@lezer/highlight": "^1.1.2",
+    "@types/gettext-parser": "^4.0.1",
     "@types/node": "^18.11.9",
     "@types/sanitize-html": "^2.6.2",
     "@types/semver": "^7.3.13",
