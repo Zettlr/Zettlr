@@ -1,0 +1,41 @@
+name: Extract translatable strings from codebase
+
+on:
+  push:
+    paths:
+      - '.github/workflows/i18n.yml'
+  workflow_dispatch: {} # Enable manual triggers
+  schedule:
+    - cron: '17 2 * * *' # Run every night at 02:17 (random minute to avoid high loads)
+
+jobs:
+  refresh:
+    name: Extract translatable strings
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+        with:
+          ref: develop
+      - name: Setup NodeJS 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      # The scripts require some modules that we need to install.
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Configure git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+      # Update translations
+      - name: Update translations
+        run: |
+          yarn lang:refresh
+          git add -A
+          git diff-index --quiet HEAD || git commit -m "Update translations"
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: develop
