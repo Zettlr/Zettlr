@@ -44,7 +44,7 @@ function getTranslation (msgid: string): string {
 
   const context = i18nData.translations['']
 
-  if (msgid in context) {
+  if (msgid in context && context[msgid].msgstr[0] !== '') {
     return context[msgid].msgstr[0]
   } else {
     return msgid
