@@ -89,7 +89,8 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
   const tooltipContent = findRefForFootnote(view.state, fn) ?? 'No ref found.'
 
   return {
-    pos,
+    pos: from + (footnoteMatch.index as number),
+    end: from + (footnoteMatch.index as number) + footnoteMatch[0].length,
     above: true,
     create (view) {
       let dom = document.createElement('div')
