@@ -15,6 +15,8 @@
 import { EditorView, hoverTooltip, Tooltip } from '@codemirror/view'
 import { syntaxTree } from '@codemirror/language'
 import { EditorState } from '@codemirror/state'
+import { getConverter } from '@common/util/md-to-html'
+import { configField } from '../util/configuration'
 
 /**
  * Given fn in the format [^some-identifier], this function attempts to find a
@@ -88,13 +90,16 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
 
   const tooltipContent = findRefForFootnote(view.state, fn) ?? 'No ref found.'
 
+  const { library } = view.state.field(configField).metadata
+  const md2html = getConverter(window.getCitationCallback(library))
+
   return {
     pos: from + (footnoteMatch.index as number),
     end: from + (footnoteMatch.index as number) + footnoteMatch[0].length,
     above: true,
     create (view) {
-      let dom = document.createElement('div')
-      dom.textContent = tooltipContent
+      const dom = document.createElement('div')
+      dom.innerHTML = md2html(tooltipContent)
       return { dom }
     }
   }
