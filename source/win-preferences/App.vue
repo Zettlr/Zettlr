@@ -378,7 +378,7 @@ export default defineComponent({
      */
     populateDynamicValues: function () {
       // Get a list of all available languages
-      ipcRenderer.invoke('translation-provider', {
+      ipcRenderer.invoke('application', {
         command: 'get-available-languages'
       })
         .then((languages) => {
@@ -395,7 +395,7 @@ export default defineComponent({
         .catch(err => console.error(err))
 
       // Also, get a list of all available dictionaries
-      ipcRenderer.invoke('translation-provider', {
+      ipcRenderer.invoke('application', {
         command: 'get-available-dictionaries'
       })
         .then((dictionaries) => {
