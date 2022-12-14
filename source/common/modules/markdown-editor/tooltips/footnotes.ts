@@ -15,6 +15,8 @@
 import { EditorView, hoverTooltip, Tooltip } from '@codemirror/view'
 import { syntaxTree } from '@codemirror/language'
 import { EditorState } from '@codemirror/state'
+import { getConverter } from '@common/util/md-to-html'
+import { configField } from '../util/configuration'
 
 /**
  * Given fn in the format [^some-identifier], this function attempts to find a
@@ -23,10 +25,10 @@ import { EditorState } from '@codemirror/state'
  * @param   {EditorState}       state  The state
  * @param   {string}            fn     The footnote to match with a ref
  *
- * @return  {string|undefined}         Either the body, or undefined
+ * @return  {{ from: number, to: number, text: string }|undefined}         Either the body, or undefined
  */
-function findRefForFootnote (state: EditorState, fn: string): string|undefined {
-  let text: string|undefined
+function findRefForFootnote (state: EditorState, fn: string): { from: number, to: number, text: string }|undefined {
+  let text: { from: number, to: number, text: string }|undefined
   // Find the corresponding ref
   syntaxTree(state).iterate({
     enter (node) {
@@ -51,7 +53,11 @@ function findRefForFootnote (state: EditorState, fn: string): string|undefined {
         return false
       }
 
-      text = state.sliceDoc(body.from, body.to)
+      text = {
+        from: body.from,
+        to: body.to,
+        text: state.sliceDoc(body.from, body.to)
+      }
     }
   })
 
@@ -86,14 +92,30 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
     return null // It's an inline footnote
   }
 
-  const tooltipContent = findRefForFootnote(view.state, fn) ?? 'No ref found.'
+  const fnBody = findRefForFootnote(view.state, fn)
+
+  const { library } = view.state.field(configField).metadata
+  const md2html = getConverter(window.getCitationCallback(library))
+  const tooltipContent = md2html(fnBody?.text ?? 'No ref found.') // TODO: Translate!
 
   return {
-    pos,
+    pos: from + (footnoteMatch.index as number),
+    end: from + (footnoteMatch.index as number) + footnoteMatch[0].length,
     above: true,
     create (view) {
-      let dom = document.createElement('div')
-      dom.textContent = tooltipContent
+      const dom = document.createElement('div')
+      dom.innerHTML = tooltipContent
+      if (fnBody !== undefined) {
+        const editButton = document.createElement('button')
+        editButton.textContent = 'Edit' // TODO: Translate!
+        dom.appendChild(editButton)
+        editButton.addEventListener('click', e => {
+          view.dispatch({
+            selection: { anchor: fnBody.from, head: fnBody.to },
+            scrollIntoView: true
+          })
+        })
+      }
       return { dom }
     }
   }

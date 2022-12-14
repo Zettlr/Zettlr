@@ -28,6 +28,11 @@ quick list:
    it modified, the background will turn red. Click the button to apply all
    changes to the document.
 6. Quicklook windows are completely gone now.
+7. Footnote editing has changed: Instead of editing the footnote in-place by
+   `Cmd/Ctrl`-clicking it, there is now an "Edit" button inside the footnote
+   preview which, upon clicking, will bring you to the footnote context. This
+   has the benefit that you will have full syntax highlighting support as well
+   as any shortcuts and commands you may need.
 
 ## Split-Panes and Multiple Windows
 
