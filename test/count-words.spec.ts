@@ -18,6 +18,11 @@ import { strictEqual } from 'assert'
 
 const countWordsTesters = [
   {
+    input: '',
+    expectedWords: 0,
+    expectedChars: 0
+  },
+  {
     input: 'Lorem\n\n# Ipsum',
     expectedWords: 2,
     expectedChars: 12
@@ -61,12 +66,15 @@ const countWordsTesters = [
 
 describe('Utility#countWords()', function () {
   for (let test of countWordsTesters) {
-    it(`should return ${test.expectedWords} words`, function () {
-      strictEqual(countWords(test.input, false), test.expectedWords)
+    let wordCount = countWords(test.input, false)
+    let charCount = countWords(test.input, true)
+
+    it(`should return ${test.expectedWords} words` + (wordCount !== test.expectedWords ? ` but returned ${wordCount}` : ''), function () {
+      strictEqual(wordCount, test.expectedWords)
     })
 
-    it(`should return ${test.expectedChars} characters`, function () {
-      strictEqual(countWords(test.input, true), test.expectedChars)
+    it(`should return ${test.expectedChars} characters` + (charCount !== test.expectedChars ? ` but returned ${charCount}` : ''), function () {
+      strictEqual(charCount, test.expectedChars)
     })
   }
 })
