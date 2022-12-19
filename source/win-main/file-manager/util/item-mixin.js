@@ -279,6 +279,7 @@ export default {
               .catch(err => console.error(err))
           } else if (clickedID === 'properties') {
             const data = {
+              filepath: this.obj.path,
               filename: this.obj.name,
               creationtime: this.obj.creationtime,
               modtime: this.obj.modtime,
@@ -294,12 +295,10 @@ export default {
               ext: this.obj.ext
             }
 
-            if (this.hasWritingTarget === true) {
-              const target = this.getWritingTarget(this.obj.path)
-              if (target !== undefined) {
-                data.targetValue = target.count
-                data.targetMode = target.mode
-              }
+            const target = this.getWritingTarget(this.obj.path)
+            if (target !== undefined) {
+              data.targetValue = target.count
+              data.targetMode = target.mode
             }
 
             if (this.obj.type === 'file') {
@@ -309,19 +308,6 @@ export default {
             const elem = (treeItem) ? this.$refs['display-text'] : this.$el
 
             this.$showPopover(PopoverFileProps, elem, data, (data) => {
-              // Whenever the data changes, update the target
-
-              // 1.: Writing Target
-              if (this.obj.type === 'file') {
-                ipcRenderer.invoke('targets-provider', {
-                  command: 'set-writing-target',
-                  payload: {
-                    mode: data.target.mode,
-                    count: data.target.value,
-                    path: this.obj.path
-                  }
-                }).catch(e => console.error(e))
-              }
             })
           } else if (clickedID === 'menu.close_file') {
             // The close_file item is only shown in the tree view on root files

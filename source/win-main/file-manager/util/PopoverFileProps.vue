@@ -76,6 +76,8 @@ import formatSize from '@common/util/format-size'
 import localiseNumber from '@common/util/localise-number'
 import { ColouredTag } from '@dts/common/tag-provider'
 
+const ipcRenderer = window.ipc
+
 export default {
   name: 'PopoverFileProps',
   components: {
@@ -84,6 +86,7 @@ export default {
   },
   data: function () {
     return {
+      filepath: '',
       filename: '',
       creationtime: 0,
       modtime: 0,
@@ -141,6 +144,14 @@ export default {
       return trans('gui.words', localiseNumber(this.words))
     }
   },
+  watch: {
+    targetValue () {
+      this.updateWritingTarget()
+    },
+    targetMode () {
+      this.updateWritingTarget()
+    }
+  },
   methods: {
     /**
      * Resets the data, a.k.a. removes the writing target
@@ -148,6 +159,16 @@ export default {
     reset: function () {
       this.targetValue = 0
       this.targetMode = 'words'
+    },
+    updateWritingTarget () {
+      ipcRenderer.invoke('targets-provider', {
+        command: 'set-writing-target',
+        payload: {
+          mode: this.targetMode,
+          count: this.targetValue,
+          path: this.filepath
+        }
+      }).catch(e => console.error(e))
     },
     retrieveTagColour: function (tagName: string) {
       const foundTag = this.colouredTags.find(tag => tag.name === tagName)
