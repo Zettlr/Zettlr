@@ -69,11 +69,22 @@ describe('Utility#countWords()', function () {
     const wordCount = countWords(test.input, false)
     const charCount = countWords(test.input, true)
 
-    it(`should return ${test.expectedWords} words` + (wordCount !== test.expectedWords ? ` but returned ${wordCount}` : ''), function () {
+    let wordCountMessage = `should return ${test.expectedWords} words`
+    let charCountMessage = `should return ${test.expectedChars} characters`
+
+    if (wordCount !== test.expectedWords) {
+      wordCountMessage += ` but returned ${wordCount} words`
+    }
+
+    if (charCount !== test.expectedChars) {
+      charCountMessage += ` but returned ${charCount} characters`
+    }
+
+    it(wordCountMessage, function () {
       strictEqual(wordCount, test.expectedWords)
     })
 
-    it(`should return ${test.expectedChars} characters` + (charCount !== test.expectedChars ? ` but returned ${charCount}` : ''), function () {
+    it(charCountMessage, function () {
       strictEqual(charCount, test.expectedChars)
     })
   }
