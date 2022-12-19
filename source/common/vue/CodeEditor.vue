@@ -309,6 +309,7 @@ body {
   }
 
   .cm-editor {
+    cursor: text;
     .cm-scroller { overflow: auto; }
     height: 100%;
 
@@ -357,7 +358,7 @@ body {
     .cm-editor {
       background-color: rgb(65, 65, 65);
       border-color: rgb(100, 100, 100);
-      color: @base01;
+      color: @base3;
       .cm-string     { color: @red; }
       .cm-string-2   { color: @red; }
       .cm-keyword    { color: @red; }
