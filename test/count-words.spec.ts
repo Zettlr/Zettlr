@@ -66,8 +66,8 @@ const countWordsTesters = [
 
 describe('Utility#countWords()', function () {
   for (let test of countWordsTesters) {
-    let wordCount = countWords(test.input, false)
-    let charCount = countWords(test.input, true)
+    const wordCount = countWords(test.input, false)
+    const charCount = countWords(test.input, true)
 
     it(`should return ${test.expectedWords} words` + (wordCount !== test.expectedWords ? ` but returned ${wordCount}` : ''), function () {
       strictEqual(wordCount, test.expectedWords)
