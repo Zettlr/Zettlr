@@ -37,7 +37,7 @@
         v-on:dragstart="handleDragStart($event, file.path)"
         v-on:drag="handleDrag"
         v-on:dragend="handleDragEnd"
-        v-on:contextmenu="handleContextMenu($event, file)"
+        v-on:contextmenu.stop="handleContextMenu($event, file)"
         v-on:mouseup="handleMiddleMouseClick($event, file)"
         v-on:mousedown="handleClickFilename($event, file)"
       >
