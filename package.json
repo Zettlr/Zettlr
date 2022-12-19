@@ -67,7 +67,7 @@
     "astrocite": "^0.16.4",
     "bcp-47": "^2.1.0",
     "chalk": "^5.1.2",
-    "chart.js": "^3.7.1",
+    "chart.js": "^4.1.1",
     "chokidar": "^3.5.3",
     "citeproc": "^2.4.62",
     "command-exists": "^1.2.9",
