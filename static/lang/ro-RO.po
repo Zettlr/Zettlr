@@ -2,841 +2,88 @@
 # Copyright (C) YEAR Hendrik Erz <info@zettlr.com>
 # This file is distributed under the same license as the Zettlr package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2022-12-11 19:37+0100\n"
+"POT-Creation-Date: 2022-12-20 15:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ro-RO\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: source/app/service-providers/config/config-validation.ts:282
-#, javascript-format
-msgid "Option %s has to be of type %s."
-msgstr "Opțiunea %s trebuie să fie de tip %s."
-
-#: source/app/service-providers/config/config-validation.ts:285
-#, javascript-format
-msgid "Option %s must be one of: %s."
-msgstr "Opțiunea %s trebuie să fie una din: %s."
-
-#: source/app/service-providers/config/config-validation.ts:288
-#, javascript-format
-msgid "Option %s must be between %s and %s (characters long)."
-msgstr "Opțiunea %s trebuie să aibă între %s și %s caractere."
-
-#: source/app/service-providers/config/config-validation.ts:291
-#, javascript-format
-msgid "Option %s may not exceed %s (characters)."
-msgstr "Opțiunea %s trebuie să aibă cel mult %s caractere."
-
-#: source/app/service-providers/config/config-validation.ts:294
-#, javascript-format
-msgid "Option %s must be at least %s (characters long)."
-msgstr "Opțiunea %s trebuie să aibă cel puțin %s caractere."
-
-#: source/app/service-providers/config/config-validation.ts:297
-#, javascript-format
-msgid "Option %s is required."
-msgstr "Opțiunea %s este necesară."
-
-#: source/app/service-providers/tray/index.ts:159
-msgid "Show Zettlr"
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:100
+msgid "No footnote text found."
 msgstr ""
 
-#: source/app/service-providers/tray/index.ts:165
-#: source/app/service-providers/menu/menu.win32.ts:306
-#: source/app/service-providers/menu/menu.darwin.ts:102
-msgid "Quit"
-msgstr "Renunță"
-
-#: source/app/service-providers/tray/index.ts:172
-msgid "Zettlr"
-msgstr ""
-
-#: source/app/service-providers/updates/index.ts:176
-#, javascript-format
-msgid "Could not check for updates: Server Error (Status code: %s)"
-msgstr "Nu am putut verifica actualizările: Eroare de server (cod %s)"
-
-#: source/app/service-providers/updates/index.ts:178
-#, javascript-format
-msgid "Could not check for updates: Client Error (Status code: %s)"
-msgstr "Nu am putut verifica actualizările: Eroare client (cod %s)"
-
-#: source/app/service-providers/updates/index.ts:180
-#, javascript-format
-msgid "Could not check for updates: The server tried to redirect (Status code: %s)"
-msgstr ""
-"Nu am putut verifica actualizările: Serverul a încercat o redirecționare "
-"(cod %s)"
-
-#: source/app/service-providers/updates/index.ts:185
-#. getaddrinfo has reported that the host has not been found.
-#. This normally only happens if the networking interface is
-#. offline.
-msgid "Could not check for updates: Could not establish connection"
-msgstr "Nu am putut verifica actualizările: Nu s-a putut realiza o conexiune"
-
-#: source/app/service-providers/updates/index.ts:188
-#. Something else has occurred. GotError objects have a name property.
-#, javascript-format
-msgid "Could not check for updates. %s: %s"
-msgstr ""
-
-#: source/app/service-providers/updates/index.ts:204
-msgid "Could not check for updates: Server hasn't sent any data"
-msgstr "Nu am putut verifica actualizările: Serverul nu a trimis date."
-
-#: source/app/service-providers/updates/index.ts:463
-#, javascript-format
-msgid "An update to version %s is available!"
-msgstr ""
-
-#: source/app/service-providers/menu/menu.win32.ts:42
-#: source/app/service-providers/menu/menu.win32.ts:54
-#: source/app/service-providers/menu/menu.darwin.ts:182
-msgid "Recent documents"
-msgstr "Documente recente"
-
-#: source/app/service-providers/menu/menu.win32.ts:46
-#: source/app/service-providers/menu/menu.win32.ts:58
-#: source/app/service-providers/menu/menu.darwin.ts:186
-msgid "Empty"
-msgstr "Șterge"
-
-#: source/app/service-providers/menu/menu.win32.ts:85
-#: source/app/service-providers/menu/menu.darwin.ts:111
-msgid "File"
-msgstr "Fișier"
-
-#: source/app/service-providers/menu/menu.win32.ts:88
-#: source/app/service-providers/menu/menu.darwin.ts:114
-#: source/win-main/file-manager/util/dir-item-context.ts:52
-msgid "New File…"
-msgstr "Fișier nou..."
-
-#: source/app/service-providers/menu/menu.win32.ts:127
-#: source/app/service-providers/menu/menu.darwin.ts:153
-#: source/win-main/file-manager/util/dir-item-context.ts:58
-msgid "New directory…"
-msgstr "Dosar nou..."
-
-#: source/app/service-providers/menu/menu.win32.ts:138
-#: source/app/service-providers/menu/menu.darwin.ts:164
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:110
-msgid "Open…"
-msgstr "Deschide"
-
-#: source/app/service-providers/menu/menu.win32.ts:147
-#: source/app/service-providers/menu/menu.darwin.ts:173
-msgid "Open Workspace …"
-msgstr ""
-
-#: source/app/service-providers/menu/menu.win32.ts:160
-#: source/app/service-providers/menu/menu.darwin.ts:195
-#: source/app/service-providers/commands/export.ts:79
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
-#: source/tmp/Defaults.vue.ts:112 source/tmp/SnippetsTab.vue.ts:47
-#: source/tmp/CustomCSS.vue.ts:42 source/tmp/CustomCSS.vue.ts:56
-#. 0: Omit all changes
-msgid "Save"
-msgstr "Salvează"
-
-#: source/app/service-providers/menu/menu.win32.ts:171
-#: source/app/service-providers/menu/menu.darwin.ts:206
-msgid "Previous file"
-msgstr ""
-
-#: source/app/service-providers/menu/menu.win32.ts:182
-#: source/app/service-providers/menu/menu.darwin.ts:217
-msgid "Next file"
-msgstr ""
-
-#: source/app/service-providers/menu/menu.win32.ts:196
-#: source/app/service-providers/menu/menu.darwin.ts:231
-msgid "Import files…"
-msgstr "Importă fișiere..."
-
-#: source/app/service-providers/menu/menu.win32.ts:204
-#: source/app/service-providers/menu/menu.darwin.ts:239
-msgid "Export…"
-msgstr "Exportă..."
-
-#: source/app/service-providers/menu/menu.win32.ts:212
-#: source/app/service-providers/menu/menu.darwin.ts:247
-msgid "Print…"
-msgstr "Imprimă..."
-
-#: source/app/service-providers/menu/menu.win32.ts:220
-#: source/app/service-providers/menu/menu.win32.ts:224
-#: source/app/service-providers/menu/menu.darwin.ts:49
-msgid "Preferences…"
-msgstr "Preferințe"
-
-#: source/app/service-providers/menu/menu.win32.ts:232
-#: source/app/service-providers/menu/menu.darwin.ts:57
-msgid "Assets Manager"
-msgstr ""
-
-#: source/app/service-providers/menu/menu.win32.ts:240
-#: source/app/service-providers/menu/menu.darwin.ts:65
-msgid "Manage Tags…"
-msgstr "Gestionează etichetele"
-
-#: source/app/service-providers/menu/menu.win32.ts:252
-#: source/app/service-providers/menu/menu.darwin.ts:258
-msgid "Import translation…"
-msgstr "Importă traducere..."
-
-#: source/app/service-providers/menu/menu.win32.ts:260
-#: source/app/service-providers/menu/menu.darwin.ts:266
-msgid "Import dictionary…"
-msgstr "Importă dicționar..."
-
-#: source/app/service-providers/menu/menu.win32.ts:279
-#: source/app/service-providers/menu/menu.darwin.ts:285
-#: source/win-main/file-manager/util/file-item-context.ts:41
-msgid "Rename file"
-msgstr "Redenumește fișierul"
-
-#: source/app/service-providers/menu/menu.win32.ts:290
-#: source/app/service-providers/menu/menu.darwin.ts:296
-#: source/win-main/file-manager/util/file-item-context.ts:48
-msgid "Delete file"
-msgstr "Șterge fișierul"
-
-#: source/app/service-providers/menu/menu.win32.ts:297
-#: source/app/service-providers/menu/menu.darwin.ts:304
-#: source/win-main/file-manager/util/dir-item-context.ts:37
-msgid "Delete directory"
-msgstr "Șterge dosarul"
-
-#: source/app/service-providers/menu/menu.win32.ts:316
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:111
 #: source/app/service-providers/menu/menu.darwin.ts:315
+#: source/app/service-providers/menu/menu.win32.ts:316
 msgid "Edit"
 msgstr "Etichetă"
 
-#: source/app/service-providers/menu/menu.win32.ts:321
-#: source/app/service-providers/menu/menu.darwin.ts:320
-msgid "Undo"
-msgstr "Anulează"
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:42
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
+#: source/win-preferences/schema/editor.ts:26
+#: source/win-preferences/schema/editor.ts:27
+msgid "Bold"
+msgstr "Aldin"
 
-#: source/app/service-providers/menu/menu.win32.ts:327
-#: source/app/service-providers/menu/menu.darwin.ts:326
-msgid "Redo"
-msgstr "Refă"
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:47
+#: source/win-preferences/schema/editor.ts:34
+#: source/win-preferences/schema/editor.ts:35
+msgid "Italics"
+msgstr "Cursiv"
 
-#: source/app/service-providers/menu/menu.win32.ts:336
-#: source/app/service-providers/menu/menu.darwin.ts:335
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:210
-msgid "Cut"
-msgstr "Taie"
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:52
+msgid "Link"
+msgstr "Legătură"
 
-#: source/app/service-providers/menu/menu.win32.ts:342
-#: source/app/service-providers/menu/menu.darwin.ts:341
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:217
-msgid "Copy"
-msgstr "Copiază"
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:57
+msgid "Image"
+msgstr "Imagine"
 
-#: source/app/service-providers/menu/menu.win32.ts:347
-#: source/app/service-providers/menu/menu.darwin.ts:346
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:224
-msgid "Copy as HTML"
-msgstr "Copiază ca HTML"
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:62
+msgid "Comment"
+msgstr "Cometariu"
 
-#: source/app/service-providers/menu/menu.win32.ts:356
-#: source/app/service-providers/menu/menu.darwin.ts:355
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:231
-msgid "Paste"
-msgstr "Lipește"
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:67
+msgid "Code"
+msgstr "Cod"
 
-#: source/app/service-providers/menu/menu.win32.ts:361
-#: source/app/service-providers/menu/menu.darwin.ts:360
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:238
-msgid "Paste without style"
-msgstr "Lipește fără a păstra stilul"
-
-#: source/app/service-providers/menu/menu.win32.ts:370
-#: source/app/service-providers/menu/menu.darwin.ts:369
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:248
-msgid "Select all"
-msgstr "Selectează tot"
-
-#: source/app/service-providers/menu/menu.win32.ts:378
-#: source/app/service-providers/menu/menu.darwin.ts:377
-msgid "Find in file"
-msgstr "Găsește în fișier"
-
-#: source/app/service-providers/menu/menu.win32.ts:386
-#: source/app/service-providers/menu/menu.darwin.ts:385
-msgid "Find in directory"
-msgstr "Găsește dosarul"
-
-#: source/app/service-providers/menu/menu.win32.ts:394
-#: source/app/service-providers/menu/menu.darwin.ts:393
-msgid "Filter files"
-msgstr ""
-
-#: source/app/service-providers/menu/menu.win32.ts:405
-#: source/app/service-providers/menu/menu.darwin.ts:404
-msgid "Generate new ID"
-msgstr "Generează un nou ID"
-
-#: source/app/service-providers/menu/menu.win32.ts:413
-#: source/app/service-providers/menu/menu.darwin.ts:412
-#: source/win-main/tabs-context.ts:80
-#: source/win-main/file-manager/util/file-item-context.ts:70
-msgid "Copy ID"
-msgstr "Copiază ID"
-
-#: source/app/service-providers/menu/menu.win32.ts:424
-#: source/app/service-providers/menu/menu.darwin.ts:442
-msgid "View"
-msgstr "Examinare"
-
-#: source/app/service-providers/menu/menu.win32.ts:428
-#: source/app/service-providers/menu/menu.darwin.ts:446
-#: source/win-preferences/schema/general.ts:31
-msgid "Dark mode"
-msgstr ""
-
-#: source/app/service-providers/menu/menu.win32.ts:438
-#: source/app/service-providers/menu/menu.darwin.ts:456
-msgid "Additional Information"
-msgstr "Informații adiționale"
-
-#: source/app/service-providers/menu/menu.win32.ts:448
-#: source/app/service-providers/menu/menu.darwin.ts:466
-msgid "Distraction free mode"
-msgstr "Modul fără abaterea atenției"
-
-#: source/app/service-providers/menu/menu.win32.ts:456
-#: source/app/service-providers/menu/menu.darwin.ts:474
-msgid "Typewriter Mode"
-msgstr ""
-
-#: source/app/service-providers/menu/menu.win32.ts:467
-#: source/app/service-providers/menu/menu.darwin.ts:485
-msgid "Toggle file manager"
-msgstr ""
-
-#: source/app/service-providers/menu/menu.win32.ts:475
-#: source/app/service-providers/menu/menu.darwin.ts:493
-msgid "Toggle Sidebar"
-msgstr "Comută bara laterală"
-
-#: source/app/service-providers/menu/menu.win32.ts:486
-#: source/app/service-providers/menu/menu.darwin.ts:507
-msgid "Reset zoom"
-msgstr "Inițializare zoom"
-
-#: source/app/service-providers/menu/menu.win32.ts:495
-#: source/app/service-providers/menu/menu.darwin.ts:516
-msgid "Zoom in"
-msgstr "Mărește"
-
-#: source/app/service-providers/menu/menu.win32.ts:502
-#: source/app/service-providers/menu/menu.darwin.ts:523
-msgid "Zoom out"
-msgstr "Micșorează"
-
-#: source/app/service-providers/menu/menu.win32.ts:512
-#: source/app/service-providers/menu/menu.darwin.ts:533
-msgid "Toggle fullscreen"
-msgstr "Ecran complet"
-
-#: source/app/service-providers/menu/menu.win32.ts:521
-#: source/app/service-providers/menu/menu.darwin.ts:541
-msgid "Develop"
-msgstr "Depanare"
-
-#: source/app/service-providers/menu/menu.win32.ts:525
-#: source/app/service-providers/menu/menu.darwin.ts:545
-msgid "Reload"
-msgstr "Reîncarcă"
-
-#: source/app/service-providers/menu/menu.win32.ts:533
-#: source/app/service-providers/menu/menu.darwin.ts:553
-msgid "Toggle developer tools"
-msgstr "Intrumente dezvoltator"
-
-#: source/app/service-providers/menu/menu.win32.ts:541
-#: source/app/service-providers/menu/menu.darwin.ts:561
-msgid "Open Logs"
-msgstr ""
-
-#: source/app/service-providers/menu/menu.win32.ts:552
-#: source/app/service-providers/menu/menu.darwin.ts:572
-msgid "Window"
-msgstr "Fereastră"
-
-#: source/app/service-providers/menu/menu.win32.ts:557
-#: source/app/service-providers/menu/menu.darwin.ts:577
-msgid "Minimize"
-msgstr "Minimizează"
-
-#: source/app/service-providers/menu/menu.win32.ts:563
-#: source/app/service-providers/menu/menu.darwin.ts:585
-msgid "Close"
-msgstr "Închide"
-
-#: source/app/service-providers/menu/menu.win32.ts:572
-#: source/app/service-providers/menu/menu.darwin.ts:599
-#: source/win-main/tabs-context.ts:38
-msgid "Close Tab"
-msgstr ""
-
-#: source/app/service-providers/menu/menu.win32.ts:580
-#: source/app/service-providers/menu/menu.darwin.ts:607
-msgid "Previous Tab"
-msgstr ""
-
-#: source/app/service-providers/menu/menu.win32.ts:588
-#: source/app/service-providers/menu/menu.darwin.ts:615
-msgid "Next Tab"
-msgstr ""
-
-#: source/app/service-providers/menu/menu.win32.ts:607
-#: source/app/service-providers/menu/menu.darwin.ts:634
-msgid "Help"
-msgstr "Ajutor"
-
-#: source/app/service-providers/menu/menu.win32.ts:612
-#: source/app/service-providers/menu/menu.darwin.ts:44
-#: source/app/service-providers/menu/menu.darwin.ts:639
-msgid "About Zettlr"
-msgstr "Despre Zettlr"
-
-#: source/app/service-providers/menu/menu.win32.ts:619
-#: source/app/service-providers/menu/menu.darwin.ts:646
-msgid "Support Zettlr"
-msgstr "Susține Zettlr donînd"
-
-#: source/app/service-providers/menu/menu.win32.ts:629
-#: source/app/service-providers/menu/menu.darwin.ts:656
-msgid "Go to website"
-msgstr "Vizitează site-ul Zettlr"
-
-#: source/app/service-providers/menu/menu.win32.ts:639
-#: source/app/service-providers/menu/menu.darwin.ts:666
-msgid "Get LaTeX"
-msgstr "Obține LaTeX"
-
-#: source/app/service-providers/menu/menu.win32.ts:649
-#: source/app/service-providers/menu/menu.darwin.ts:676
-msgid "Open user manual"
-msgstr "Manualul utilizator"
-
-#: source/app/service-providers/menu/menu.win32.ts:660
-#: source/app/service-providers/menu/menu.darwin.ts:687
-msgid "Open Tutorial"
-msgstr ""
-
-#: source/app/service-providers/menu/menu.win32.ts:668
-#: source/app/service-providers/menu/menu.darwin.ts:695
-#: source/tmp/App.vue.ts:93
-msgid "Check for updates"
-msgstr "Caută actualizări"
-
-#: source/app/service-providers/menu/menu.darwin.ts:75
-msgid "Services"
-msgstr "Servicii"
-
-#: source/app/service-providers/menu/menu.darwin.ts:84
-msgid "Hide"
-msgstr "Ascunde"
-
-#: source/app/service-providers/menu/menu.darwin.ts:89
-msgid "Hide others"
-msgstr "Ascunde-le pe celelalte"
-
-#: source/app/service-providers/menu/menu.darwin.ts:94
-msgid "Show"
-msgstr "Arată"
-
-#: source/app/service-providers/menu/menu.darwin.ts:423
-msgid "Speech"
-msgstr "Voce"
-
-#: source/app/service-providers/menu/menu.darwin.ts:427
-msgid "Start speaking"
-msgstr "Începe lectura"
-
-#: source/app/service-providers/menu/menu.darwin.ts:432
-msgid "Stop speaking"
-msgstr "Oprește lectura"
-
-#: source/app/service-providers/menu/menu.darwin.ts:591
-msgid "Bring All to Front"
-msgstr "Toate în prim-plan"
-
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:37
-msgid "The requested file was not found."
-msgstr "Fișierul solicitat nu a fost găsit"
-
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:54
-msgid "The provided name did not contain any allowed letters."
-msgstr "Numele furnizat nu conține nici un caracter permis"
-
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:75
-#: source/app/service-providers/commands/set-open-directory.ts:41
-msgid "The requested directory was not found."
-msgstr "Dosarul solicitat nu a fost găsit"
-
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:86
-msgid "Could not save image"
-msgstr "Imaginea nu a putut fi salvată"
-
-#: source/app/service-providers/commands/file-new.ts:161
-#: source/app/service-providers/commands/file-duplicate.ts:43
-#: source/app/service-providers/commands/file-duplicate.ts:59
-msgid "Could not create file"
-msgstr "Fișierul nu a putut fi creat"
-
-#: source/app/service-providers/commands/importer/import-textbundle.ts:63
-#: source/app/service-providers/commands/importer/import-textbundle.ts:69
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:60
 #, javascript-format
-msgid "Malformed Textbundle: %s"
-msgstr "Textbundle incorect: %s"
-
-#: source/app/service-providers/commands/importer/index.ts:46
-#: source/app/service-providers/commands/exporter/default-exporter.ts:32
-#: source/app/service-providers/commands/exporter/pdf-exporter.ts:37
-msgid ""
-"Pandoc has not been found on this system. Please install Pandoc prior to "
-"exporting or importing files."
-msgstr ""
-"Pandoc nu a fost găsit în sistem. Instalează Pandoc înainte de a importa "
-"ori exporta fișiere."
-
-#: source/app/service-providers/commands/root-open.ts:60
-#: source/tmp/PopoverDirProps.vue.ts:156 source/tmp/file-item.vue.ts:119
-#: source/tmp/file-tree.vue.ts:26
-msgid "Files"
-msgstr "Fișiere"
-
-#: source/app/service-providers/commands/root-open.ts:73
-#: source/app/service-providers/windows/index.ts:213
-#. TODO: Move this to a command
-#. The user wants to open another file or directory.
-msgid "Open project folder"
-msgstr "Deschide dosarul proiect"
-
-#: source/app/service-providers/commands/root-open.ts:83
-msgid "Cannot open directory"
-msgstr "Dosarul nu poate fi deschis"
-
-#: source/app/service-providers/commands/root-open.ts:84
-#, javascript-format
-msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
-msgstr "Dosarul &quot;%s&quot; nu poate fi deschis de Zettlr"
-
-#: source/app/service-providers/commands/root-open.ts:136
-#, javascript-format
-msgid "Opening new root %s …"
-msgstr "Deschide noul fișier rădăcină %s"
-
-#: source/app/service-providers/commands/root-open.ts:147
-#, javascript-format
-msgid "%s has been loaded."
-msgstr "%s a fost încărcat"
-
-#: source/app/service-providers/commands/root-open.ts:159
-#, javascript-format
-msgid "Could not open workspace %s."
+msgid "File %s does not exist."
 msgstr ""
 
-#: source/app/service-providers/commands/request-move.ts:62
-msgid "Cannot move directory"
-msgstr "Dosarul nu poate fi mutat"
-
-#: source/app/service-providers/commands/request-move.ts:63
-msgid "You cannot move a directory into one of its subdirectories."
-msgstr "Un dosar nu poate fi mutat într-unul din subdosarele sale"
-
-#: source/app/service-providers/commands/request-move.ts:72
-msgid "Cannot move directory or file"
-msgstr "Dosarul sau fișierul nu pot fi mutate"
-
-#: source/app/service-providers/commands/request-move.ts:73
-#, javascript-format
-msgid "The file/directory %s already exists in target."
-msgstr "Fișierul/Dosarul %s există deja"
-
-#: source/app/service-providers/commands/import-lang-file.ts:59
-#, javascript-format
-msgid "Language file imported: %s"
-msgstr "Fișierul pentru limba %s a fost importat"
-
-#: source/app/service-providers/commands/import-lang-file.ts:61
-#: source/app/service-providers/commands/import-lang-file.ts:64
-#, javascript-format
-msgid "Could not import language file %s!"
-msgstr "Fișierul pentru limba %s nu a putut fi importat"
-
-#: source/app/service-providers/commands/export.ts:79
-msgid "Choose export destination"
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:90
+msgid "Word count"
 msgstr ""
 
-#: source/app/service-providers/commands/export.ts:110
-#, javascript-format
-msgid "Exporting to %s"
-msgstr "Export în %s"
-
-#: source/app/service-providers/commands/export.ts:122
-msgid "Export failed"
-msgstr "Procesul de exportare a eșuat"
-
-#: source/app/service-providers/commands/export.ts:123
-#, javascript-format
-msgid "An error occurred on export: %s"
-msgstr "O eroare a apărut cînd s-a încercat exportarea: %s"
-
-#: source/app/service-providers/commands/set-open-directory.ts:40
-msgid "Directory not found"
-msgstr "Dosar negăsit"
-
-#: source/app/service-providers/commands/dir-new.ts:36
-#: source/app/service-providers/commands/dir-new.ts:37
-#: source/app/service-providers/commands/dir-new.ts:48
-#: source/app/service-providers/commands/dir-new.ts:49
-#: source/app/service-providers/commands/dir-new.ts:59
-msgid "Could not create directory"
-msgstr "Dosarul nu a putut fi creat"
-
-#: source/app/service-providers/commands/dir-new.ts:42
-#: source/tmp/tree-item.vue.ts:239
-#. Else standard val for new dirs.
-msgid "Untitled"
-msgstr "Fără nume"
-
-#: source/app/service-providers/commands/open-attachment.ts:92
-#. Better error message
-#, javascript-format
-msgid "The reference with key %s does not appear to have attachments."
-msgstr "Referința notată cu %s nu pare să aibă fișiere atașate"
-
-#: source/app/service-providers/commands/open-attachment.ts:97
-msgid "Could not open attachment. Is Zotero running?"
-msgstr "Nu am reușit să deschid fișierul atașat. Este Zotero pornit?"
-
-#: source/app/service-providers/commands/import.ts:35
-msgid "You have to select a directory to import to."
-msgstr "Trebuie să alegi un dosar în care să imporți fișierele"
-
-#: source/app/service-providers/commands/import.ts:41
-#: source/app/service-providers/windows/dialog/ask-file.ts:40
-#. Prepare the list of file filters
-#. The "All Files" filter should be at the top
-msgid "All Files"
-msgstr "Toate fișierele"
-
-#: source/app/service-providers/commands/import.ts:58
-#. Now import.
-msgid "Importing. Please wait …"
-msgstr "Import. Așteaptă te rog..."
-
-#: source/app/service-providers/commands/import.ts:63
-#. This callback gets called whenever there is an error while running pandoc.
-#, javascript-format
-msgid "Couldn't import %s."
-msgstr "%s nu a putut fi importat"
-
-#: source/app/service-providers/commands/import.ts:66
-#. And this on each success!
-#, javascript-format
-msgid "%s imported successfully."
-msgstr "%s a fost importat cu succes"
-
-#: source/app/service-providers/commands/import.ts:71
-#: source/app/service-providers/commands/import.ts:77
-#. Some files failed to import.
-#, javascript-format
-msgid ""
-"The following %s files could not be imported, because their filetype is "
-"unknown: %s"
-msgstr ""
-"Următoarele fișiere %s nu au putut fi importate, pentru că tipul lor de "
-"fișier nu este cunoscut: %s"
-
-#: source/app/service-providers/citeproc/index.ts:231
-#: source/app/service-providers/citeproc/index.ts:427
-msgid "The citation database could not be loaded"
-msgstr "Baza de date ce conține căutările nu poate fi încărcată."
-
-#: source/app/service-providers/citeproc/index.ts:415
-msgid "Changes to the library file detected. Reloading …"
-msgstr "Au fost detectate schimbări în fișierul bibliotecă. Repornire..."
-
-#: source/app/service-providers/windows/dialog/prompt.ts:32
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:33
-#: source/app/service-providers/windows/dialog/confirm-remove.ts:30
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:37
-msgid "Ok"
-msgstr "OK"
-
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
-msgid "Proceed without saving"
-msgstr "Continuă fără să salvezi"
-
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
-#: source/app/service-providers/windows/dialog/confirm-remove.ts:30
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:36
-#: source/tmp/CustomCSS.vue.ts:49
-#. 1: Save all changes
-msgid "Cancel"
-msgstr "Anulează"
-
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
-#. If the user cancels, do not omit (the default) but actually cancel
-msgid "Omit unsaved changes?"
-msgstr "Omite modificările nesalvate?"
-
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
-msgid ""
-"There are unsaved changes to the current file. Do you want to omit them or "
-"save?"
-msgstr ""
-"Există modificări nesalvate pentru fișierul curent. Vrei să le omiți ori să "
-"le salvezi?"
-
-#: source/app/service-providers/windows/dialog/ask-file.ts:47
-msgid "Open file"
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:92
+#: source/tmp/PopoverFileProps.vue.ts:68 source/tmp/PopoverDirProps.vue.ts:150
+msgid "Modified"
 msgstr ""
 
-#: source/app/service-providers/windows/dialog/save-dialog.ts:52
-msgid "Save file"
-msgstr ""
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:110
+#: source/app/service-providers/menu/menu.darwin.ts:164
+#: source/app/service-providers/menu/menu.win32.ts:138
+msgid "Open…"
+msgstr "Deschide"
 
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:29
-msgid "Overwrite existing file"
-msgstr "Suprascriu fișier deja existent"
-
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:30
-#, javascript-format
-msgid "The file %s already exists in this directory. Overwrite?"
-msgstr "Acest fișier există deja în dosar. Suprascriu?"
-
-#: source/app/service-providers/windows/dialog/confirm-remove.ts:33
-msgid "Really delete?"
-msgstr "Ești sigur că vrei să ștergi?"
-
-#: source/app/service-providers/windows/dialog/confirm-remove.ts:34
-#, javascript-format
-msgid "Do you really want to remove %s?"
-msgstr "Vrei cu-adevărat să ștergi %s?"
-
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
-msgid "Replace file"
-msgstr "Înlocuiește fișierul"
-
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
-#, javascript-format
-msgid ""
-"File %s has been modified remotely. Replace the loaded version with the "
-"newer one from disk?"
-msgstr ""
-"Fișierul %s a fost modificat de la distanță. Să înlocuiesc versiunea aflată "
-"acum în memorie cu versiunea mai nouă de pe disc?"
-
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:33
-#: source/win-preferences/schema/general.ts:41
-msgid "Always load remote changes to the current file"
-msgstr "Încarcă întotdeauna modificările de la distanță pentru fișierul curent"
-
-#: source/win-main/tabs-context.ts:44
-msgid "Close other tabs"
-msgstr ""
-
-#: source/win-main/tabs-context.ts:50
-msgid "Close all tabs"
-msgstr ""
-
-#: source/win-main/tabs-context.ts:59
-msgid "Unpin tab"
-msgstr ""
-
-#: source/win-main/tabs-context.ts:59
-msgid "Pin tab"
-msgstr ""
-
-#: source/win-main/tabs-context.ts:68
-#: source/win-main/file-manager/util/file-item-context.ts:64
-msgid "Copy filename"
-msgstr "Copiază numele fișierului"
-
-#: source/win-main/tabs-context.ts:74
-msgid "Copy full path"
-msgstr ""
-
-#: source/win-main/file-manager/util/file-item-context.ts:26
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:131
 #: source/tmp/GlobalSearch.vue.ts:40
+#: source/win-main/file-manager/util/file-item-context.ts:26
 msgid "Open in a new tab"
 msgstr ""
 
-#: source/win-main/file-manager/util/file-item-context.ts:32
-#: source/win-main/file-manager/util/dir-item-context.ts:25
-msgid "Properties"
-msgstr ""
-
-#: source/win-main/file-manager/util/file-item-context.ts:55
-msgid "Duplicate file"
-msgstr "Fișier duplicat"
-
-#: source/win-main/file-manager/util/file-item-context.ts:79
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:102
-msgid "Show file"
-msgstr "Arată fișierul"
-
-#: source/win-main/file-manager/util/file-item-context.ts:92
-msgid "Close file"
-msgstr "Închide fișierul"
-
-#: source/win-main/file-manager/util/dir-item-context.ts:31
-msgid "Rename directory"
-msgstr "Redenumește dosarul"
-
-#: source/win-main/file-manager/util/dir-item-context.ts:43
-#: source/tmp/OtherFilesTab.vue.ts:16
-msgid "Open directory"
-msgstr "Deschide dosarul"
-
-#: source/win-main/file-manager/util/dir-item-context.ts:69
-msgid "Check for directory …"
-msgstr "Cautare dosar..."
-
-#: source/win-main/file-manager/util/dir-item-context.ts:86
-msgid "Export Project"
-msgstr "Exportă proiectul"
-
-#: source/win-main/file-manager/util/dir-item-context.ts:98
-msgid "Close Workspace"
-msgstr ""
-
-#: source/common/util/format-date.ts:33
-msgid "just now"
-msgstr ""
-
-#: source/common/util/localise-number.ts:28
-msgid ","
-msgstr "."
-
-#: source/common/util/localise-number.ts:29
-msgid "."
-msgstr ","
-
-#: source/common/modules/markdown-editor/context-menu/equation-menu.ts:33
-msgid "Copy equation code"
+#: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
+msgid "No highlighting"
 msgstr ""
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:133
@@ -846,13 +93,6 @@ msgstr "Fără sugestii"
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:142
 msgid "Add to dictionary"
 msgstr "Adaugă în dicționar"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:42
-#: source/win-preferences/schema/editor.ts:26
-#: source/win-preferences/schema/editor.ts:27
-msgid "Bold"
-msgstr "Aldin"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:159
 msgid "Italic"
@@ -882,6 +122,46 @@ msgstr "Citare"
 msgid "Insert Table"
 msgstr "Inserează tabel"
 
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:210
+#: source/app/service-providers/menu/menu.darwin.ts:335
+#: source/app/service-providers/menu/menu.win32.ts:336
+msgid "Cut"
+msgstr "Taie"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:217
+#: source/app/service-providers/menu/menu.darwin.ts:341
+#: source/app/service-providers/menu/menu.win32.ts:342
+msgid "Copy"
+msgstr "Copiază"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:224
+#: source/app/service-providers/menu/menu.darwin.ts:346
+#: source/app/service-providers/menu/menu.win32.ts:347
+msgid "Copy as HTML"
+msgstr "Copiază ca HTML"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:231
+#: source/app/service-providers/menu/menu.darwin.ts:355
+#: source/app/service-providers/menu/menu.win32.ts:356
+msgid "Paste"
+msgstr "Lipește"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:238
+#: source/app/service-providers/menu/menu.darwin.ts:360
+#: source/app/service-providers/menu/menu.win32.ts:361
+msgid "Paste without style"
+msgstr "Lipește fără a păstra stilul"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:248
+#: source/app/service-providers/menu/menu.darwin.ts:369
+#: source/app/service-providers/menu/menu.win32.ts:370
+msgid "Select all"
+msgstr "Selectează tot"
+
+#: source/common/modules/markdown-editor/context-menu/equation-menu.ts:33
+msgid "Copy equation code"
+msgstr ""
+
 #: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:72
 msgid "Open Link"
 msgstr "Deschide legătura"
@@ -902,133 +182,31 @@ msgstr ""
 msgid "Open in browser"
 msgstr ""
 
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:47
-#: source/win-preferences/schema/editor.ts:34
-#: source/win-preferences/schema/editor.ts:35
-msgid "Italics"
-msgstr "Cursiv"
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:102
+#: source/win-main/file-manager/util/file-item-context.ts:79
+msgid "Show file"
+msgstr "Arată fișierul"
 
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:52
-msgid "Link"
-msgstr "Legătură"
-
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:57
-msgid "Image"
-msgstr "Imagine"
-
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:62
-msgid "Comment"
-msgstr "Cometariu"
-
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:67
-msgid "Code"
-msgstr "Cod"
-
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:90
-msgid "Word count"
-msgstr ""
-
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:92
-#: source/tmp/PopoverDirProps.vue.ts:150 source/tmp/PopoverFileProps.vue.ts:65
-msgid "Modified"
-msgstr ""
-
-#: source/tmp/General-Tab.vue.ts:23
-msgid ""
-"Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. "
-"It is Open Source, free of charge and based upon the Electron framework. "
-"Zettlr would like to thank the developers of Electron, the Node.js "
-"framework and the CodeMirror editor for their work. Without them, Zettlr "
-"would not be possible. Below you can find all projects that Zettlr uses."
-msgstr ""
-"Zettlr este un proiect al lui Hendrik Erz, licențiat sub licență GNU GPL "
-"v3. Este Open Source, gratuit și bazat pe cadrul de dezvoltare Electron. "
-"Zettlr ar dori să mulțumească dezvoltatorilor Electron, Node.js și ai "
-"editorului CodeMirror pentru munca lor. Fără ei, Zettlr nu ar fi fost "
-"posobil. Mai jos găsești toate proiectele folosite de Zettlr."
-
-#: source/tmp/General-Tab.vue.ts:24
-msgid ""
-"Zettlr makes use of citeproc to display citations directly in the editor. "
-"To this end, Zettlr uses the CitationStyleLanguage (CSL) language and style "
-"files. The files have been shipped unaltered with author metadata. More "
-"information:"
-msgstr ""
-"Zettlr folosește citeproc pentru a prezenta citările direct în editor. În "
-"acest scop Zettlr folosește limbajul CitationStyleLanguage (CSL) și fișiere "
-"de stil. Aceste fișiere sînt transmise nealterate cu informațiile metadata "
-"ale autorului. Mai multe informații"
-
-#: source/tmp/General-Tab.vue.ts:25
-msgid ""
-"All logos and brand names are subject to their rightful owners. Besides "
-"using their code, Zettlr is in no way affiliated with any of these "
-"projects. Node.js is a trademark of Joyent, Inc."
-msgstr ""
-"Toate logo-urile și brandurile aparține deținătorilor de drept. Cu excepția "
-"folosirii codului, Zettlr nu este afiliat în nici un mod cu nici unul "
-"dintre proiecte. Node.js este marcă înregistrată a Joyent, Inc."
-
-#: source/tmp/RelatedFilesTab.vue.ts:37 source/tmp/MainSidebar.vue.ts:83
-msgid "Related files"
-msgstr ""
-
-#: source/tmp/RelatedFilesTab.vue.ts:50
-msgid "No related files"
-msgstr ""
-
-#: source/tmp/PopoverDirProps.vue.ts:144 source/tmp/PopoverFileProps.vue.ts:86
-#: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/file-item.vue.ts:134
-#: source/tmp/file-item.vue.ts:207
+#: source/common/modules/markdown-editor/renderers/render-images.ts:92
 #, javascript-format
-msgid "%s words"
-msgstr "cuvinte"
-
-#: source/tmp/PopoverDirProps.vue.ts:147 source/tmp/file-item.vue.ts:113
-msgid "Directories"
-msgstr "Dosare"
-
-#: source/tmp/PopoverDirProps.vue.ts:153 source/tmp/PopoverFileProps.vue.ts:62
-msgid "Created"
+msgid "Image not found: %s"
 msgstr ""
 
-#: source/tmp/PopoverDirProps.vue.ts:162
-msgid "Project Settings…"
-msgstr "Proprietăți"
-
-#: source/tmp/File.vue.ts:59 source/tmp/PopoverFileProps.vue.ts:68
-#: source/tmp/Number.vue.ts:59 source/tmp/Color.vue.ts:50
-#: source/tmp/ShortcutChooser.vue.ts:61
-msgid "Reset"
+#: source/common/modules/markdown-editor/linters/spellcheck.ts:149
+msgid "Spelling mistake"
 msgstr ""
 
-#: source/tmp/PopoverTags.vue.ts:99
-msgid "Filter tags…"
-msgstr "Filtrează etichetele..."
-
-#: source/tmp/PopoverTags.vue.ts:102
-msgid "Tag Cloud"
-msgstr "Noianul de etichete"
-
-#: source/tmp/PopoverTags.vue.ts:105
-msgid "Suggested tags for the current file"
+#: source/common/util/format-date.ts:33
+msgid "just now"
 msgstr ""
 
-#: source/tmp/PopoverTags.vue.ts:108
-msgid "Add to file"
-msgstr ""
+#: source/common/util/localise-number.ts:28
+msgid ","
+msgstr "."
 
-#: source/tmp/PopoverFileProps.vue.ts:59 source/tmp/file-item.vue.ts:195
-msgid "Words"
-msgstr "Cuvinte"
-
-#: source/tmp/PopoverFileProps.vue.ts:71
-msgid "Set writing target…"
-msgstr "Definește norma de scris"
-
-#: source/tmp/PopoverFileProps.vue.ts:74 source/tmp/file-item.vue.ts:193
-msgid "Characters"
-msgstr "Caractere"
+#: source/common/util/localise-number.ts:29
+msgid "."
+msgstr ","
 
 #: source/tmp/Theme.vue.ts:37
 msgid "selected"
@@ -1037,6 +215,35 @@ msgstr ""
 #: source/tmp/Theme.vue.ts:40
 msgid "click to select"
 msgstr ""
+
+#: source/tmp/PopoverFileProps.vue.ts:62 source/tmp/file-item.vue.ts:195
+msgid "Words"
+msgstr "Cuvinte"
+
+#: source/tmp/PopoverFileProps.vue.ts:65 source/tmp/PopoverDirProps.vue.ts:153
+msgid "Created"
+msgstr ""
+
+#: source/tmp/PopoverFileProps.vue.ts:71 source/tmp/File.vue.ts:59
+#: source/tmp/Number.vue.ts:59 source/tmp/Color.vue.ts:50
+#: source/tmp/ShortcutChooser.vue.ts:61
+msgid "Reset"
+msgstr ""
+
+#: source/tmp/PopoverFileProps.vue.ts:74
+msgid "Set writing target…"
+msgstr "Definește norma de scris"
+
+#: source/tmp/PopoverFileProps.vue.ts:77 source/tmp/file-item.vue.ts:193
+msgid "Characters"
+msgstr "Caractere"
+
+#: source/tmp/PopoverFileProps.vue.ts:89 source/tmp/PopoverDocInfo.vue.ts:73
+#: source/tmp/PopoverDirProps.vue.ts:144 source/tmp/file-item.vue.ts:134
+#: source/tmp/file-item.vue.ts:207
+#, javascript-format
+msgid "%s words"
+msgstr "cuvinte"
 
 #: source/tmp/EditorSearchPanel.vue.ts:13
 msgid "Find…"
@@ -1062,369 +269,120 @@ msgstr ""
 msgid "Toggle regular expression search"
 msgstr ""
 
-#: source/tmp/PopoverDocInfo.vue.ts:35
-msgid "No open document"
+#: source/tmp/ChartView.vue.ts:60
+msgid "Charts"
 msgstr ""
 
-#: source/tmp/PopoverDocInfo.vue.ts:38
-msgid "words"
-msgstr "cuvinte"
-
-#: source/tmp/PopoverDocInfo.vue.ts:41
-msgid "characters"
-msgstr "caractere"
-
-#: source/tmp/PopoverDocInfo.vue.ts:44
-msgid "characters (w/o spaces)"
-msgstr "caractere (fără spații)"
-
-#: source/tmp/PopoverDocInfo.vue.ts:71 source/tmp/file-item.vue.ts:132
-#: source/tmp/file-item.vue.ts:205
-#, javascript-format
-msgid "%s characters"
+#: source/tmp/App.vue.ts:34
+msgid "Updater"
 msgstr ""
 
-#: source/tmp/Contributors-Tab.vue.ts:32
-msgid "Afrikaans (South Africa)"
-msgstr "Africaans"
-
-#: source/tmp/Contributors-Tab.vue.ts:33
-msgid "Arabic"
-msgstr "Arabă"
-
-#: source/tmp/Contributors-Tab.vue.ts:34
-msgid "Belarus"
-msgstr "Bielorusă"
-
-#: source/tmp/Contributors-Tab.vue.ts:35
-msgid "Bulgarian"
-msgstr "Bulgară"
-
-#: source/tmp/Contributors-Tab.vue.ts:36
-msgid "Bosnian"
-msgstr "Bosniacă"
-
-#: source/tmp/Contributors-Tab.vue.ts:37
-msgid "Catalan (Catalonia)"
-msgstr "Catalană"
-
-#: source/tmp/Contributors-Tab.vue.ts:38
-msgid "Czech (Czech Republic)"
-msgstr "Cehă"
-
-#: source/tmp/Contributors-Tab.vue.ts:39
-msgid "Danish"
-msgstr "Daneză"
-
-#: source/tmp/Contributors-Tab.vue.ts:40
-msgid "German (Austria)"
-msgstr "Germană (Austria)"
-
-#: source/tmp/Contributors-Tab.vue.ts:41
-msgid "German (Switzerland)"
-msgstr "Germană (Elveția)"
-
-#: source/tmp/Contributors-Tab.vue.ts:42
-msgid "German (Germany)"
-msgstr "Germană (Germania)"
-
-#: source/tmp/Contributors-Tab.vue.ts:43
-msgid "Greek"
-msgstr "Greacă"
-
-#: source/tmp/Contributors-Tab.vue.ts:44
-msgid "English (Australia)"
-msgstr "Engleză (Australia)"
-
-#: source/tmp/Contributors-Tab.vue.ts:45
-msgid "English (Canada)"
-msgstr "Engleză (Canada)"
-
-#: source/tmp/Contributors-Tab.vue.ts:46
-msgid "English (United Kingdom)"
-msgstr "Engleză (Marea Britanie)"
-
-#: source/tmp/Contributors-Tab.vue.ts:47
-msgid "English (India)"
-msgstr "Engleză (India)"
-
-#: source/tmp/Contributors-Tab.vue.ts:48
-msgid "English (United States)"
-msgstr "Engleză (SUA)"
-
-#: source/tmp/Contributors-Tab.vue.ts:49
-msgid "English (South Africa)"
-msgstr "Engleză (Africa de Sud)"
-
-#: source/tmp/Contributors-Tab.vue.ts:50
-msgid "Esperanto"
-msgstr "Esperantă"
-
-#: source/tmp/Contributors-Tab.vue.ts:51
-msgid "Spanish (Spain)"
-msgstr "Spaniolă (Spania)"
-
-#: source/tmp/Contributors-Tab.vue.ts:52
-msgid "Estonian"
-msgstr "Estoniană"
-
-#: source/tmp/Contributors-Tab.vue.ts:53
-msgid "Basque"
-msgstr "Bască"
-
-#: source/tmp/Contributors-Tab.vue.ts:54
-msgid "Persian (Farsi)"
-msgstr "Persană (Farsi)"
-
-#: source/tmp/Contributors-Tab.vue.ts:55
-msgid "Finnish"
-msgstr "Finlandeză"
-
-#: source/tmp/Contributors-Tab.vue.ts:56
-msgid "Faroese"
-msgstr "Feroeză"
-
-#: source/tmp/Contributors-Tab.vue.ts:57
-msgid "French (France)"
-msgstr "Franceză (Franța)"
-
-#: source/tmp/Contributors-Tab.vue.ts:58
-msgid "Irish"
-msgstr "Irlandeză"
-
-#: source/tmp/Contributors-Tab.vue.ts:59
-msgid "Scottish (Gaelic)"
-msgstr "Galeză"
-
-#: source/tmp/Contributors-Tab.vue.ts:60
-msgid "Galician (Spain)"
-msgstr "Galiciana"
-
-#: source/tmp/Contributors-Tab.vue.ts:61
-msgid "Hebrew"
-msgstr "Ebraică"
-
-#: source/tmp/Contributors-Tab.vue.ts:62
-msgid "Hindi"
-msgstr "Hindi"
-
-#: source/tmp/Contributors-Tab.vue.ts:63
-msgid "Croatian"
-msgstr "Croată"
-
-#: source/tmp/Contributors-Tab.vue.ts:64
-msgid "Hungarian"
-msgstr "Maghiară"
-
-#: source/tmp/Contributors-Tab.vue.ts:65
-msgid "Armenian"
-msgstr "Armeană"
-
-#: source/tmp/Contributors-Tab.vue.ts:66
-msgid "Indonesian"
-msgstr "Indonesiană"
-
-#: source/tmp/Contributors-Tab.vue.ts:67
-msgid "Icelandic"
-msgstr "Islandeză"
-
-#: source/tmp/Contributors-Tab.vue.ts:68
-msgid "Italian (Italy)"
-msgstr "Italiană"
-
-#: source/tmp/Contributors-Tab.vue.ts:69
-msgid "Japanese"
-msgstr "Japoneză"
-
-#: source/tmp/Contributors-Tab.vue.ts:70
-msgid "Georgian"
-msgstr "Georgiană"
-
-#: source/tmp/Contributors-Tab.vue.ts:71
-msgid "Korean"
-msgstr "Coreeană"
-
-#: source/tmp/Contributors-Tab.vue.ts:72
-msgid "Latin"
-msgstr "Latină"
-
-#: source/tmp/Contributors-Tab.vue.ts:73
-msgid "Luxembourgian"
-msgstr "Franceză (Luxemburg)"
-
-#: source/tmp/Contributors-Tab.vue.ts:74
-msgid "Lithuanian"
-msgstr "Lituaniană"
-
-#: source/tmp/Contributors-Tab.vue.ts:75
-msgid "Latvian"
-msgstr "Letonă"
-
-#: source/tmp/Contributors-Tab.vue.ts:76
-msgid "Macedonian"
-msgstr "Macedoniană"
-
-#: source/tmp/Contributors-Tab.vue.ts:77
-msgid "Mongolian"
-msgstr "Mongolă"
-
-#: source/tmp/Contributors-Tab.vue.ts:78
-msgid "Malaysian (Malaysia)"
-msgstr "Malaieză"
-
-#: source/tmp/Contributors-Tab.vue.ts:79
-msgid "Norwegian (Bokmål)"
-msgstr "Norvegiană (Bokmål)"
-
-#: source/tmp/Contributors-Tab.vue.ts:80
-msgid "Nepalese"
-msgstr "Nepaleză"
-
-#: source/tmp/Contributors-Tab.vue.ts:81
-msgid "Dutch (Belgium)"
-msgstr "Neerlandeză (Belgia)"
-
-#: source/tmp/Contributors-Tab.vue.ts:82
-msgid "Dutch (Netherlands)"
-msgstr "Neerlandeză (Olanda)"
-
-#: source/tmp/Contributors-Tab.vue.ts:83
-msgid "Norwegian (Nyorsk)"
-msgstr "Norvegiană (Nyorsk)"
-
-#: source/tmp/Contributors-Tab.vue.ts:84
-msgid "Polish"
-msgstr "Poloneză"
-
-#: source/tmp/Contributors-Tab.vue.ts:85
-msgid "Portuguese (Brazil)"
-msgstr "Portugheză (Brazilia)"
-
-#: source/tmp/Contributors-Tab.vue.ts:86
-msgid "Portuguese (Portugal)"
-msgstr "Portugheză (Portugalia)"
-
-#: source/tmp/Contributors-Tab.vue.ts:87
-msgid "Romanian"
-msgstr "Română"
-
-#: source/tmp/Contributors-Tab.vue.ts:88
-msgid "Russian"
-msgstr "Rusă"
-
-#: source/tmp/Contributors-Tab.vue.ts:89
-msgid "Rwandan (Kinyarwanda)"
-msgstr "Kinyarwanda (Rwanda)"
-
-#: source/tmp/Contributors-Tab.vue.ts:90
-msgid "Slovakian"
-msgstr "Slovacă"
-
-#: source/tmp/Contributors-Tab.vue.ts:91
-msgid "Slovenian"
-msgstr "Slovenă"
-
-#: source/tmp/Contributors-Tab.vue.ts:92
-msgid "Serbian"
-msgstr "Sîrbă"
-
-#: source/tmp/Contributors-Tab.vue.ts:93
-msgid "Swedish"
-msgstr "Suedeză"
-
-#: source/tmp/Contributors-Tab.vue.ts:94
-msgid "Turkish"
-msgstr "Turcă"
-
-#: source/tmp/Contributors-Tab.vue.ts:95
-msgid "Ukrainian"
-msgstr "Ucraianeană"
-
-#: source/tmp/Contributors-Tab.vue.ts:96
-msgid "Urdu (Pakistan)"
-msgstr "Urdu (Pakistan)"
-
-#: source/tmp/Contributors-Tab.vue.ts:97
-msgid "Vietnamese"
-msgstr "Vietnameză"
-
-#: source/tmp/Contributors-Tab.vue.ts:98
-msgid "Chinese (China)"
-msgstr "Chineză"
-
-#: source/tmp/Contributors-Tab.vue.ts:99
-msgid "Chinese (Taiwan)"
+#. True as soon as the update starts
+#: source/tmp/App.vue.ts:36
+msgid "Click to start update"
 msgstr ""
 
-#: source/tmp/MainSidebar.vue.ts:74 source/tmp/OtherFilesTab.vue.ts:13
-msgid "Other files"
-msgstr ""
+#: source/tmp/App.vue.ts:75
+msgid "New update available"
+msgstr "O versiune nouă disponibilă"
 
-#: source/tmp/MainSidebar.vue.ts:77 source/tmp/ReferencesTab.vue.ts:20
-msgid "References"
-msgstr "Bibliografie"
+#: source/tmp/App.vue.ts:78
+msgid "Your version"
+msgstr "Versiunea ta"
 
-#: source/tmp/MainSidebar.vue.ts:80 source/tmp/ToCTab.vue.ts:55
-msgid "Table of Contents"
-msgstr ""
-
-#: source/tmp/PopoverStats.vue.ts:111
-msgid "words last month"
-msgstr "cuvinte în ultima luna"
-
-#: source/tmp/PopoverStats.vue.ts:114
-msgid "daily average"
-msgstr "media zilnică"
-
-#: source/tmp/PopoverStats.vue.ts:117
-msgid "words today"
-msgstr "cuvinte astăzi"
-
-#: source/tmp/PopoverStats.vue.ts:120
-msgid "🔥 You're on fire!"
-msgstr "Ai depășit media zilnică!"
-
-#: source/tmp/PopoverStats.vue.ts:123
-msgid "💪 You're close to hitting your daily average!"
-msgstr "Te apropii de media zilnică..."
-
-#: source/tmp/PopoverStats.vue.ts:126
-msgid "✍🏼 Get writing to surpass your daily average."
-msgstr "Mai scrie ca să-ți depășești media zilnică!"
-
-#: source/tmp/PopoverStats.vue.ts:129
-msgid "More statistics …"
-msgstr ""
-
-#: source/tmp/Defaults.vue.ts:70
+#: source/tmp/App.vue.ts:81
 msgid ""
-"This profile is protected. This means that it will be restored when you "
-"remove or rename it."
+"There is a new version of Zettlr available to download. Please read the "
+"changelog below."
+msgstr ""
+"O nouă versiune Zettlr este disponibilă pentru descărcare. Citește te rog "
+"fișierul cu istoricul modificărilor."
+
+#: source/tmp/App.vue.ts:84
+msgid "Downloading your update"
 msgstr ""
 
-#: source/tmp/Defaults.vue.ts:73
+#: source/tmp/App.vue.ts:87
+msgid "No update available. You have the most recent version."
+msgstr ""
+
+#: source/tmp/App.vue.ts:93
+#: source/app/service-providers/menu/menu.darwin.ts:695
+#: source/app/service-providers/menu/menu.win32.ts:668
+msgid "Check for updates"
+msgstr "Caută actualizări"
+
+#: source/tmp/App.vue.ts:132
+msgid "Starting update …"
+msgstr ""
+
+#: source/tmp/file-tree.vue.ts:26 source/tmp/PopoverDirProps.vue.ts:156
+#: source/tmp/file-item.vue.ts:119
+#: source/app/service-providers/commands/root-open.ts:60
+msgid "Files"
+msgstr "Fișiere"
+
+#: source/tmp/file-tree.vue.ts:29
+msgid "Workspaces"
+msgstr ""
+
+#: source/tmp/file-tree.vue.ts:32
+msgid "No open files or folders"
+msgstr "Nu sînt fișiere ori dosare deschise"
+
+#: source/tmp/file-tree.vue.ts:35 source/tmp/file-list.vue.ts:66
+msgid "No results"
+msgstr "Nici un rezultat"
+
+#. Else standard val for new dirs.
+#: source/tmp/tree-item.vue.ts:239
+#: source/app/service-providers/commands/dir-new.ts:42
+msgid "Untitled"
+msgstr "Fără nume"
+
+#: source/tmp/General-Tab.vue.ts:23
 msgid ""
-"This profile appears to be either missing the writer or reader property. "
-"Make sure to set both so that Zettlr can use this profile."
+"Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. "
+"It is Open Source, free of charge and based upon the Electron framework. "
+"Zettlr would like to thank the developers of Electron, the Node.js framework "
+"and the CodeMirror editor for their work. Without them, Zettlr would not be "
+"possible. Below you can find all projects that Zettlr uses."
 msgstr ""
+"Zettlr este un proiect al lui Hendrik Erz, licențiat sub licență GNU GPL v3. "
+"Este Open Source, gratuit și bazat pe cadrul de dezvoltare Electron. Zettlr "
+"ar dori să mulțumească dezvoltatorilor Electron, Node.js și ai editorului "
+"CodeMirror pentru munca lor. Fără ei, Zettlr nu ar fi fost posobil. Mai jos "
+"găsești toate proiectele folosite de Zettlr."
 
-#: source/tmp/Defaults.vue.ts:109
-msgid "Edit the default settings for imports or exports here."
+#: source/tmp/General-Tab.vue.ts:24
+msgid ""
+"Zettlr makes use of citeproc to display citations directly in the editor. To "
+"this end, Zettlr uses the CitationStyleLanguage (CSL) language and style "
+"files. The files have been shipped unaltered with author metadata. More "
+"information:"
 msgstr ""
+"Zettlr folosește citeproc pentru a prezenta citările direct în editor. În "
+"acest scop Zettlr folosește limbajul CitationStyleLanguage (CSL) și fișiere "
+"de stil. Aceste fișiere sînt transmise nealterate cu informațiile metadata "
+"ale autorului. Mai multe informații"
 
-#: source/tmp/Defaults.vue.ts:130 source/tmp/SnippetsTab.vue.ts:65
-#: source/tmp/CustomCSS.vue.ts:65
-msgid "Unsaved changes"
+#: source/tmp/General-Tab.vue.ts:25
+msgid ""
+"All logos and brand names are subject to their rightful owners. Besides "
+"using their code, Zettlr is in no way affiliated with any of these projects. "
+"Node.js is a trademark of Joyent, Inc."
 msgstr ""
+"Toate logo-urile și brandurile aparține deținătorilor de drept. Cu excepția "
+"folosirii codului, Zettlr nu este afiliat în nici un mod cu nici unul dintre "
+"proiecte. Node.js este marcă înregistrată a Joyent, Inc."
 
-#: source/tmp/Defaults.vue.ts:192 source/tmp/SnippetsTab.vue.ts:124
-#: source/tmp/CustomCSS.vue.ts:88
-msgid "Saving …"
-msgstr ""
+#: source/tmp/file-list.vue.ts:69
+msgid "No directory selected"
+msgstr "Nici un dosar selectat"
 
-#: source/tmp/Defaults.vue.ts:201 source/tmp/SnippetsTab.vue.ts:134
-msgid "Saved!"
-msgstr ""
+#: source/tmp/file-list.vue.ts:72
+msgid "Empty directory"
+msgstr "Dosar gol"
 
 #: source/tmp/CalendarView.vue.ts:59
 msgid "Calendar"
@@ -1490,42 +448,157 @@ msgstr ""
 msgid "More than twice the monthly average"
 msgstr ""
 
-#: source/tmp/App.vue.ts:34
-msgid "Updater"
+#: source/tmp/ToCTab.vue.ts:55 source/tmp/MainSidebar.vue.ts:80
+msgid "Table of Contents"
 msgstr ""
 
-#: source/tmp/App.vue.ts:36
-#. True as soon as the update starts
-msgid "Click to start update"
+#: source/tmp/PopoverDocInfo.vue.ts:35
+msgid "No open document"
 msgstr ""
 
-#: source/tmp/App.vue.ts:75
-msgid "New update available"
-msgstr "O versiune nouă disponibilă"
+#: source/tmp/PopoverDocInfo.vue.ts:38
+msgid "words"
+msgstr "cuvinte"
 
-#: source/tmp/App.vue.ts:78
-msgid "Your version"
-msgstr "Versiunea ta"
+#: source/tmp/PopoverDocInfo.vue.ts:41
+msgid "characters"
+msgstr "caractere"
 
-#: source/tmp/App.vue.ts:81
+#: source/tmp/PopoverDocInfo.vue.ts:44
+msgid "characters (w/o spaces)"
+msgstr "caractere (fără spații)"
+
+#: source/tmp/PopoverDocInfo.vue.ts:71 source/tmp/file-item.vue.ts:132
+#: source/tmp/file-item.vue.ts:205
+#, javascript-format
+msgid "%s characters"
+msgstr ""
+
+#: source/tmp/PopoverStats.vue.ts:111
+msgid "words last month"
+msgstr "cuvinte în ultima luna"
+
+#: source/tmp/PopoverStats.vue.ts:114
+msgid "daily average"
+msgstr "media zilnică"
+
+#: source/tmp/PopoverStats.vue.ts:117
+msgid "words today"
+msgstr "cuvinte astăzi"
+
+#: source/tmp/PopoverStats.vue.ts:120
+msgid "🔥 You're on fire!"
+msgstr "Ai depășit media zilnică!"
+
+#: source/tmp/PopoverStats.vue.ts:123
+msgid "💪 You're close to hitting your daily average!"
+msgstr "Te apropii de media zilnică..."
+
+#: source/tmp/PopoverStats.vue.ts:126
+msgid "✍🏼 Get writing to surpass your daily average."
+msgstr "Mai scrie ca să-ți depășești media zilnică!"
+
+#: source/tmp/PopoverStats.vue.ts:129
+msgid "More statistics …"
+msgstr ""
+
+#: source/tmp/PopoverPomodoro.vue.ts:72
+msgid "Start"
+msgstr "Start"
+
+#: source/tmp/PopoverPomodoro.vue.ts:75
+msgid "Stop"
+msgstr "Stop"
+
+#: source/tmp/PopoverPomodoro.vue.ts:78
+msgid "Work"
+msgstr "Exercițiu"
+
+#: source/tmp/PopoverPomodoro.vue.ts:81
+msgid "Short break"
+msgstr "Pauză scurtă"
+
+#: source/tmp/PopoverPomodoro.vue.ts:84
+msgid "Break"
+msgstr "Pauză lungă"
+
+#: source/tmp/PopoverPomodoro.vue.ts:87
+msgid "Sound Effect"
+msgstr ""
+
+#: source/tmp/PopoverPomodoro.vue.ts:90
+msgid "Volume"
+msgstr ""
+
+#: source/tmp/OtherFilesTab.vue.ts:13 source/tmp/MainSidebar.vue.ts:74
+msgid "Other files"
+msgstr ""
+
+#: source/tmp/OtherFilesTab.vue.ts:16
+#: source/win-main/file-manager/util/dir-item-context.ts:43
+msgid "Open directory"
+msgstr "Deschide dosarul"
+
+#: source/tmp/OtherFilesTab.vue.ts:19
+msgid "No other files"
+msgstr ""
+
+#: source/tmp/CustomCSS.vue.ts:31
+msgid "Custom CSS"
+msgstr "CSS personalizat"
+
+#: source/tmp/CustomCSS.vue.ts:32
 msgid ""
-"There is a new version of Zettlr available to download. Please read the "
-"changelog below."
+"Here you can override the styles of Zettlr to customise it even further. "
+"<strong>Attention: This file overrides all CSS directives! Never alter the "
+"geometry of elements, otherwise the app may expose unwanted behaviour!</"
+"strong>"
 msgstr ""
-"O nouă versiune Zettlr este disponibilă pentru descărcare. Citește te rog "
-"fișierul cu istoricul modificărilor."
+"Aici se pot modifica parametrii de stil ai aplicației Zettlr personalizîndu-"
+"l și mai mult. <strong>Atenție: Acest fișier șterge toate valorile CSS! Nu "
+"modifica geometria elemetentelor, în caz contrar aplicația poate prezenta un "
+"comportament nedorit!</strong>"
 
-#: source/tmp/App.vue.ts:84
-msgid "Downloading your update"
+#. 0: Omit all changes
+#: source/tmp/CustomCSS.vue.ts:42 source/tmp/CustomCSS.vue.ts:56
+#: source/tmp/Defaults.vue.ts:112 source/tmp/SnippetsTab.vue.ts:47
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
+#: source/app/service-providers/menu/menu.darwin.ts:195
+#: source/app/service-providers/menu/menu.win32.ts:160
+#: source/app/service-providers/commands/export.ts:79
+msgid "Save"
+msgstr "Salvează"
+
+#. 1: Save all changes
+#: source/tmp/CustomCSS.vue.ts:49
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:36
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:30
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
+msgid "Cancel"
+msgstr "Anulează"
+
+#: source/tmp/CustomCSS.vue.ts:65 source/tmp/Defaults.vue.ts:130
+#: source/tmp/SnippetsTab.vue.ts:65
+msgid "Unsaved changes"
 msgstr ""
 
-#: source/tmp/App.vue.ts:87
-msgid "No update available. You have the most recent version."
+#: source/tmp/CustomCSS.vue.ts:88 source/tmp/Defaults.vue.ts:192
+#: source/tmp/SnippetsTab.vue.ts:124
+msgid "Saving …"
 msgstr ""
 
-#: source/tmp/App.vue.ts:132
-msgid "Starting update …"
+#: source/tmp/CustomCSS.vue.ts:97
+msgid "Saving failed"
 msgstr ""
+
+#: source/tmp/PopoverDirProps.vue.ts:147 source/tmp/file-item.vue.ts:113
+msgid "Directories"
+msgstr "Dosare"
+
+#: source/tmp/PopoverDirProps.vue.ts:162
+msgid "Project Settings…"
+msgstr "Proprietăți"
 
 #: source/tmp/GlobalSearch.vue.ts:116
 msgid "Full-Text Search"
@@ -1567,56 +640,31 @@ msgstr ""
 msgid "Toggle results"
 msgstr ""
 
-#: source/tmp/file-tree.vue.ts:29
-msgid "Workspaces"
+#: source/tmp/Defaults.vue.ts:70
+msgid ""
+"This profile is protected. This means that it will be restored when you "
+"remove or rename it."
 msgstr ""
 
-#: source/tmp/file-tree.vue.ts:32
-msgid "No open files or folders"
-msgstr "Nu sînt fișiere ori dosare deschise"
-
-#: source/tmp/file-tree.vue.ts:35 source/tmp/file-list.vue.ts:66
-msgid "No results"
-msgstr "Nici un rezultat"
-
-#: source/tmp/OtherFilesTab.vue.ts:19
-msgid "No other files"
+#: source/tmp/Defaults.vue.ts:73
+msgid ""
+"This profile appears to be either missing the writer or reader property. "
+"Make sure to set both so that Zettlr can use this profile."
 msgstr ""
 
-#: source/tmp/PopoverPomodoro.vue.ts:72
-msgid "Start"
-msgstr "Start"
+#: source/tmp/Defaults.vue.ts:76
+#: source/win-main/file-manager/util/file-item-context.ts:41
+#: source/app/service-providers/menu/menu.darwin.ts:285
+#: source/app/service-providers/menu/menu.win32.ts:279
+msgid "Rename file"
+msgstr "Redenumește fișierul"
 
-#: source/tmp/PopoverPomodoro.vue.ts:75
-msgid "Stop"
-msgstr "Stop"
-
-#: source/tmp/PopoverPomodoro.vue.ts:78
-msgid "Work"
-msgstr "Exercițiu"
-
-#: source/tmp/PopoverPomodoro.vue.ts:81
-msgid "Short break"
-msgstr "Pauză scurtă"
-
-#: source/tmp/PopoverPomodoro.vue.ts:84
-msgid "Break"
-msgstr "Pauză lungă"
-
-#: source/tmp/ReferencesTab.vue.ts:32
-msgid "There are no citations in this document."
-msgstr "Nu sînt citări în acest document"
-
-#: source/tmp/SnippetsTab.vue.ts:50
-msgid "Rename snippet"
+#: source/tmp/Defaults.vue.ts:109
+msgid "Edit the default settings for imports or exports here."
 msgstr ""
 
-#: source/tmp/SnippetsTab.vue.ts:53
-msgid "Snippets let you define reusable pieces of text with variables."
-msgstr ""
-
-#: source/tmp/ChartView.vue.ts:60
-msgid "Charts"
+#: source/tmp/Defaults.vue.ts:201 source/tmp/SnippetsTab.vue.ts:134
+msgid "Saved!"
 msgstr ""
 
 #: source/tmp/List.vue.ts:141
@@ -1627,50 +675,438 @@ msgstr ""
 msgid "Actions"
 msgstr ""
 
-#: source/tmp/List.vue.ts:166
+#: source/tmp/List.vue.ts:147
+#, fuzzy
+msgid "Delete"
+msgstr "Șterge fișierul"
+
 #. Apparently we have a simple array, so exactly one column
+#: source/tmp/List.vue.ts:169
 msgid "Item"
 msgstr ""
 
-#: source/tmp/CustomCSS.vue.ts:31
-msgid "Custom CSS"
-msgstr "CSS personalizat"
+#: source/tmp/MainSidebar.vue.ts:77 source/tmp/ReferencesTab.vue.ts:20
+msgid "References"
+msgstr "Bibliografie"
 
-#: source/tmp/CustomCSS.vue.ts:32
-msgid ""
-"Here you can override the styles of Zettlr to customise it even further. "
-"<strong>Attention: This file overrides all CSS directives! Never alter the "
-"geometry of elements, otherwise the app may expose unwanted "
-"behaviour!</strong>"
-msgstr ""
-"Aici se pot modifica parametrii de stil ai aplicației Zettlr "
-"personalizîndu-l și mai mult. <strong>Atenție: Acest fișier șterge toate "
-"valorile CSS! Nu modifica geometria elemetentelor, în caz contrar aplicația "
-"poate prezenta un comportament nedorit!</strong>"
-
-#: source/tmp/CustomCSS.vue.ts:97
-msgid "Saving failed"
+#: source/tmp/MainSidebar.vue.ts:83 source/tmp/RelatedFilesTab.vue.ts:37
+msgid "Related files"
 msgstr ""
 
-#: source/tmp/file-list.vue.ts:69
-msgid "No directory selected"
-msgstr "Nici un dosar selectat"
+#: source/tmp/PopoverTags.vue.ts:73
+msgid "Name"
+msgstr ""
 
-#: source/tmp/file-list.vue.ts:72
-msgid "Empty directory"
-msgstr "Dosar gol"
+#: source/tmp/PopoverTags.vue.ts:74
+msgid "Count"
+msgstr ""
+
+#: source/tmp/PopoverTags.vue.ts:98
+msgid "Filter tags…"
+msgstr "Filtrează etichetele..."
+
+#: source/tmp/PopoverTags.vue.ts:101
+msgid "Tag Cloud"
+msgstr "Noianul de etichete"
+
+#: source/tmp/PopoverTags.vue.ts:104
+msgid "Suggested tags for the current file"
+msgstr ""
+
+#: source/tmp/PopoverTags.vue.ts:107
+msgid "Add to file"
+msgstr ""
+
+#: source/tmp/SnippetsTab.vue.ts:50
+msgid "Rename snippet"
+msgstr ""
+
+#: source/tmp/SnippetsTab.vue.ts:53
+msgid "Snippets let you define reusable pieces of text with variables."
+msgstr ""
+
+#: source/tmp/RelatedFilesTab.vue.ts:50
+msgid "No related files"
+msgstr ""
+
+#: source/tmp/ReferencesTab.vue.ts:32
+msgid "There are no citations in this document."
+msgstr "Nu sînt citări în acest document"
 
 #: source/tmp/Projects-Tab.vue.ts:24
 msgid "Zettlr also makes use of these projects:"
 msgstr "Zettlr folosește de asemenea următoarele proiecte:"
 
+#: source/win-main/tabs-context.ts:38
+#: source/app/service-providers/menu/menu.darwin.ts:599
+#: source/app/service-providers/menu/menu.win32.ts:572
+msgid "Close Tab"
+msgstr ""
+
+#: source/win-main/tabs-context.ts:44
+msgid "Close other tabs"
+msgstr ""
+
+#: source/win-main/tabs-context.ts:50
+msgid "Close all tabs"
+msgstr ""
+
+#: source/win-main/tabs-context.ts:59
+msgid "Unpin tab"
+msgstr ""
+
+#: source/win-main/tabs-context.ts:59
+msgid "Pin tab"
+msgstr ""
+
+#: source/win-main/tabs-context.ts:68
+#: source/win-main/file-manager/util/file-item-context.ts:64
+msgid "Copy filename"
+msgstr "Copiază numele fișierului"
+
+#: source/win-main/tabs-context.ts:74
+msgid "Copy full path"
+msgstr ""
+
+#: source/win-main/tabs-context.ts:80
+#: source/win-main/file-manager/util/file-item-context.ts:70
+#: source/app/service-providers/menu/menu.darwin.ts:412
+#: source/app/service-providers/menu/menu.win32.ts:413
+msgid "Copy ID"
+msgstr "Copiază ID"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:25
+#: source/win-main/file-manager/util/file-item-context.ts:32
+msgid "Properties"
+msgstr ""
+
+#: source/win-main/file-manager/util/dir-item-context.ts:31
+msgid "Rename directory"
+msgstr "Redenumește dosarul"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:37
+#: source/app/service-providers/menu/menu.darwin.ts:304
+#: source/app/service-providers/menu/menu.win32.ts:297
+msgid "Delete directory"
+msgstr "Șterge dosarul"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:52
+#: source/app/service-providers/menu/menu.darwin.ts:114
+#: source/app/service-providers/menu/menu.win32.ts:88
+msgid "New File…"
+msgstr "Fișier nou..."
+
+#: source/win-main/file-manager/util/dir-item-context.ts:58
+#: source/app/service-providers/menu/menu.darwin.ts:153
+#: source/app/service-providers/menu/menu.win32.ts:127
+msgid "New directory…"
+msgstr "Dosar nou..."
+
+#: source/win-main/file-manager/util/dir-item-context.ts:69
+msgid "Check for directory …"
+msgstr "Cautare dosar..."
+
+#: source/win-main/file-manager/util/dir-item-context.ts:86
+msgid "Export Project"
+msgstr "Exportă proiectul"
+
+#: source/win-main/file-manager/util/dir-item-context.ts:98
+msgid "Close Workspace"
+msgstr ""
+
+#: source/win-main/file-manager/util/file-item-context.ts:48
+#: source/app/service-providers/menu/menu.darwin.ts:296
+#: source/app/service-providers/menu/menu.win32.ts:290
+msgid "Delete file"
+msgstr "Șterge fișierul"
+
+#: source/win-main/file-manager/util/file-item-context.ts:55
+msgid "Duplicate file"
+msgstr "Fișier duplicat"
+
+#: source/win-main/file-manager/util/file-item-context.ts:92
+msgid "Close file"
+msgstr "Închide fișierul"
+
+#: source/win-preferences/schema/citations.ts:23
+msgid "How would you like autocomplete to insert your citations?"
+msgstr ""
+
+#: source/win-preferences/schema/citations.ts:35
+msgid "Citation Database (CSL JSON or BibTex)"
+msgstr "Baza de date citări (CSL JSON sau Bibtex)"
+
+#: source/win-preferences/schema/citations.ts:46
+msgid "CSL-Style (optional)"
+msgstr "CSL-Style (optional)"
+
+#: source/win-preferences/schema/editor.ts:23
+msgid ""
+"Choose the formatting characters that the bold/emphasis commands should use"
+msgstr ""
+"Alege caracterele de formatare pe care ar trebui să le utilizeze comanda "
+"pentru aldine/cursive"
+
+#: source/win-preferences/schema/editor.ts:42
+msgid "Autosave"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:45
+#: source/win-preferences/schema/general.ts:56
+msgid "Off"
+msgstr "Anulează"
+
+#: source/win-preferences/schema/editor.ts:46
+msgid "Immediately"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:47
+msgid "After a short delay"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:54
+msgid "Default image path (relative or absolute)"
+msgstr "Calea implicită pentru imagini (relativă sau absolută)"
+
+#: source/win-preferences/schema/editor.ts:59
+msgid "Indent by the following number of spaces"
+msgstr "Separa cu următorul număr de caractere"
+
+#: source/win-preferences/schema/editor.ts:64
+msgid "Indent using tabs"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:69
+msgid "Editor font size"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:74
+msgid "Algorithm to use for the readability mode"
+msgstr "Algorithm pentru modul lizibilitate"
+
+#: source/win-preferences/schema/editor.ts:85
+msgid "Editor input mode"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:97
+msgid "Check Markdown for style issues"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:104
+msgid "Mute non-focused lines in distraction-free mode"
+msgstr "Ascunde liniile inactive în modul fără abaterea atenției"
+
+#: source/win-preferences/schema/editor.ts:109
+msgid "Automatically close matching character pairs"
+msgstr "Închise automat perechile de caractere"
+
+#: source/win-preferences/schema/editor.ts:114
+msgid "Accept spaces during autocompletion"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:119
+msgid "Enable Table Editor"
+msgstr "Permite editorul de tabele"
+
+#: source/win-preferences/schema/editor.ts:124
+msgid "Count characters instead of words (e.g., for Chinese)"
+msgstr "Numără caractere, în loc de cuvinte (e.g. pentru limba chineză)"
+
+#: source/win-preferences/schema/advanced.ts:23
+msgid "Pattern for new filenames"
+msgstr "Șablon pentru nume fișiere noi"
+
+#: source/win-preferences/schema/advanced.ts:29
+msgid "Do not prompt for filename when creating new files"
+msgstr "Nu cere nume fișier când se creează fișiere noi"
+
+#: source/win-preferences/schema/advanced.ts:36
+msgid "Enable debug mode"
+msgstr "Activează modulul dezvoltator"
+
+#: source/win-preferences/schema/advanced.ts:41
+msgid "Notify me about beta releases"
+msgstr "Informează-mă despre versiunile beta disponibile"
+
+#: source/win-preferences/schema/advanced.ts:46
+msgid "Use native window appearance"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:52
+msgid "Delete items irreversibly, if moving them to trash fails"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:58
+msgid "Show app in the notification area"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:59
+msgid "Leave app running in the notification area"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:66
+msgid "Automatically check for updates"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:73
+msgid ""
+"Enter all file extensions that you want to see in your attachment sidebar. "
+"Separate them with a comma. Changes are recognised after a restart."
+msgstr ""
+"Introdu toate extensiile de fișier pe care vrei să le vezi în bara laterală "
+"a anexelor. Delimitează-le printr-o virgulă. Modificările vor fi recunoscute "
+"după repornire."
+
+#: source/win-preferences/schema/advanced.ts:81
+msgid "Zoom behavior"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:83
+msgid "Zoom resizes the whole GUI"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:84
+msgid "Zoom changes the editor font size"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:91
+msgid "iFrame rendering whitelist"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:94
+msgid "Hostname"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:96
+#: source/win-preferences/schema/spellchecking.ts:37
+msgid "Search for entries …"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:102
+msgid "Activate Watchdog polling"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:107
+msgid "Time to wait before writing a file is considered done (in ms)"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:23
+msgid ""
+"Select the languages for which you want to enable automatic spell checking."
+msgstr "Selectează limba pentru care vrei să activezi corectura ortografică."
+
+#: source/win-preferences/schema/spellchecking.ts:28
+msgid "Search for dictionaries &hellip;"
+msgstr "Caută dicționare &hellip;"
+
+#: source/win-preferences/schema/spellchecking.ts:32
+msgid "User dictionary. Remove words by clicking them."
+msgstr "Dicționarul utilizatorului. Eliminați cuvinte apăsîndu-le"
+
+#: source/win-preferences/schema/spellchecking.ts:34
+msgid "Dictionary entry"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:23
+msgid "Turn on AutoCorrect"
+msgstr "Activează Corectorul automat"
+
+#: source/win-preferences/schema/autocorrect.ts:32
+msgid "Primary Magic Quotes"
+msgstr "Semnele citării primare"
+
+#: source/win-preferences/schema/autocorrect.ts:35
+#: source/win-preferences/schema/autocorrect.ts:56
+msgid "Disable Magic Quotes"
+msgstr "Nici unul"
+
+#: source/win-preferences/schema/autocorrect.ts:53
+msgid "Secondary Magic Quotes"
+msgstr "Semnele citării secundare"
+
+#: source/win-preferences/schema/autocorrect.ts:79
+msgid ""
+"Here you can define certain strings that will be replaced when AutoCorrect "
+"is on. The characters on the left side will be replaced with whatever comes "
+"on the right."
+msgstr ""
+"Aici puteți defini anumite șiruri de caractere ce vor fi înlocuite cînd "
+"Corectorul automat este activat, Caracterele din partea stîngă vor fi "
+"înlocuite cu cele din dreapta."
+
+#: source/win-preferences/schema/zettelkasten.ts:23
+msgid "ID regular expression"
+msgstr "Expresie regulată ID"
+
+#: source/win-preferences/schema/zettelkasten.ts:29
+msgid "Link start"
+msgstr "Început legătură"
+
+#: source/win-preferences/schema/zettelkasten.ts:35
+msgid "Link ending"
+msgstr "Sfîrșit legătură"
+
+#: source/win-preferences/schema/zettelkasten.ts:41
+msgid "Pattern used to generate new IDs"
+msgstr "Model folosit pentru generarea de noi ID-uri"
+
+#. TODO: Create this type
+#: source/win-preferences/schema/zettelkasten.ts:50
+msgid "Options for ZKN elements"
+msgstr "Opțiuni pentru elementele ZKN"
+
+#: source/win-preferences/schema/zettelkasten.ts:54
+msgid "Link with filename only"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:59
+msgid "When linking files, add the filename …"
+msgstr ""
+"Atunci când sunt incluse link-uri către alte fișiere, include numele "
+"fișierului..."
+
+#: source/win-preferences/schema/zettelkasten.ts:62
+msgid "always"
+msgstr "De fiecare dată"
+
+#: source/win-preferences/schema/zettelkasten.ts:63
+msgid "only when linking using the ID"
+msgstr "Doar când se folosesc link-uri cu ID"
+
+#: source/win-preferences/schema/zettelkasten.ts:64
+msgid "never"
+msgstr "Niciodată"
+
+#: source/win-preferences/schema/zettelkasten.ts:72
+msgid "Start a search when following Zettelkasten-links"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:77
+msgid "Automatically create non-existing files when following internal links"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:82
+msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
+msgstr ""
+
 #: source/win-preferences/schema/general.ts:23
 msgid "Application language (<strong>Restart required!</strong>)"
 msgstr "Limba aplicației (<strong>Este necesară repornirea acesteia</strong>)"
 
+#: source/win-preferences/schema/general.ts:31
+#: source/app/service-providers/menu/menu.darwin.ts:446
+#: source/app/service-providers/menu/menu.win32.ts:428
+msgid "Dark mode"
+msgstr ""
+
 #: source/win-preferences/schema/general.ts:36
 msgid "Show file information"
 msgstr "Arată informațiile fișierului"
+
+#: source/win-preferences/schema/general.ts:41
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:33
+msgid "Always load remote changes to the current file"
+msgstr "Încarcă întotdeauna modificările de la distanță pentru fișierul curent"
 
 #: source/win-preferences/schema/general.ts:46
 msgid "Avoid opening files in new tabs if possible"
@@ -1679,11 +1115,6 @@ msgstr ""
 #: source/win-preferences/schema/general.ts:53
 msgid "Automatically switch to dark mode"
 msgstr "Trecere automată la modul nocturn"
-
-#: source/win-preferences/schema/general.ts:56
-#: source/win-preferences/schema/editor.ts:45
-msgid "Off"
-msgstr "Anulează"
 
 #: source/win-preferences/schema/general.ts:57
 msgid "Schedule"
@@ -1775,122 +1206,115 @@ msgstr "Timpul de creare a fișierului"
 msgid "In the file metadata display"
 msgstr "In prezentarea metadata pentru fișier"
 
-#: source/win-preferences/schema/editor.ts:23
-msgid "Choose the formatting characters that the bold/emphasis commands should use"
-msgstr ""
-"Alege caracterele de formatare pe care ar trebui să le utilizeze comanda "
-"pentru aldine/cursive"
-
-#: source/win-preferences/schema/editor.ts:42
-msgid "Autosave"
+#: source/win-preferences/schema/export.ts:23
+msgid "Use the internal Pandoc for exports"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:46
-msgid "Immediately"
-msgstr ""
+#: source/win-preferences/schema/export.ts:30
+msgid "Remove tags from files"
+msgstr "Șterge etichetele din fișiere"
 
-#: source/win-preferences/schema/editor.ts:47
-msgid "After a short delay"
-msgstr ""
+#: source/win-preferences/schema/export.ts:40
+msgid "Remove internal links completely"
+msgstr "Șterge definitiv legăturile interne"
 
-#: source/win-preferences/schema/editor.ts:54
-msgid "Default image path (relative or absolute)"
-msgstr "Calea implicită pentru imagini (relativă sau absolută)"
+#: source/win-preferences/schema/export.ts:41
+msgid "Unlink internal links"
+msgstr "Elimină legăturile interne"
 
-#: source/win-preferences/schema/editor.ts:59
-msgid "Indent by the following number of spaces"
-msgstr "Separa cu următorul număr de caractere"
+#: source/win-preferences/schema/export.ts:42
+msgid "Don't touch internal links"
+msgstr "Nu modifica legăturile interne"
 
-#: source/win-preferences/schema/editor.ts:64
-msgid "Indent using tabs"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:69
-msgid "Editor font size"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:74
-msgid "Algorithm to use for the readability mode"
-msgstr "Algorithm pentru modul lizibilitate"
-
-#: source/win-preferences/schema/editor.ts:85
-msgid "Editor input mode"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:104
-msgid "Mute non-focused lines in distraction-free mode"
-msgstr "Ascunde liniile inactive în modul fără abaterea atenției"
-
-#: source/win-preferences/schema/editor.ts:109
-msgid "Automatically close matching character pairs"
-msgstr "Închise automat perechile de caractere"
-
-#: source/win-preferences/schema/editor.ts:114
-msgid "Accept spaces during autocompletion"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:119
-msgid "Use the CodeMirror default actions for <kbd>Home</kbd> and <kbd>End</kbd>."
-msgstr ""
-"Folosește modul implicit CodeMirror pentru <kbd>Home</kbd> și "
-"<kbd>End</kbd>."
-
-#: source/win-preferences/schema/editor.ts:124
-msgid "Enable Table Editor"
-msgstr "Permite editorul de tabele"
-
-#: source/win-preferences/schema/editor.ts:129
-msgid "Count characters instead of words (e.g., for Chinese)"
-msgstr "Numără caractere, în loc de cuvinte (e.g. pentru limba chineză)"
-
-#: source/win-preferences/schema/editor.ts:139
-msgid "Use left-to-right (LTR) writing direction"
-msgstr "Utilizează scrierea de la stânga-la-dreapta"
-
-#: source/win-preferences/schema/editor.ts:140
-msgid "Use right-to-left (RTL) writing direction"
-msgstr "Utilizează scrierea de la dreapta-la-stânga"
-
-#: source/win-preferences/schema/editor.ts:145
-msgid "Use visual order for arrow key movement while in RTL-mode"
-msgstr ""
-"Utilizează ordinea vizuală pentru miscarea cursorului în timpul modului de "
-"la dreapta-la-stânga"
-
-#: source/win-preferences/schema/autocorrect.ts:23
-msgid "Turn on AutoCorrect"
-msgstr "Activează Corectorul automat"
-
-#: source/win-preferences/schema/autocorrect.ts:32
-msgid "Word style (replace immediately without pressing Space/Enter)"
-msgstr "Stilul Word"
-
-#: source/win-preferences/schema/autocorrect.ts:33
-msgid "LibreOffice style (press Space or Enter to replace)"
-msgstr "Stilul LibreOffice"
-
-#: source/win-preferences/schema/autocorrect.ts:42
-msgid "Primary Magic Quotes"
-msgstr "Semnele citării primare"
-
-#: source/win-preferences/schema/autocorrect.ts:45
-#: source/win-preferences/schema/autocorrect.ts:66
-msgid "Disable Magic Quotes"
-msgstr "Nici unul"
-
-#: source/win-preferences/schema/autocorrect.ts:63
-msgid "Secondary Magic Quotes"
-msgstr "Semnele citării secundare"
-
-#: source/win-preferences/schema/autocorrect.ts:89
+#: source/win-preferences/schema/export.ts:49
 msgid ""
-"Here you can define certain strings that will be replaced when AutoCorrect "
-"is on. The characters on the left side will be replaced with whatever comes "
-"on the right."
+"Target directory for exported files. <em>Attention:</em> Selecting the "
+"current working directory will overwrite files without warning!"
 msgstr ""
-"Aici puteți defini anumite șiruri de caractere ce vor fi înlocuite cînd "
-"Corectorul automat este activat, Caracterele din partea stîngă vor fi "
-"înlocuite cu cele din dreapta."
+"Dosarul destinație pentru fișierele exportate. <em>Atenție</em> Selectarea "
+"dosarului curent va rescrie fișierele fără atenționare!"
+
+#: source/win-preferences/schema/export.ts:52
+msgid "Temporary directory: is regularly expunged"
+msgstr "Dosar temporar: este curățat în mod regulat."
+
+#: source/win-preferences/schema/export.ts:53
+msgid ""
+"Current working directory: exported files will be saved into the currently "
+"selected directory."
+msgstr ""
+"Dosarul de lucru curent: fișierele exportate vor fi exportate în dosarul "
+"curent selectat."
+
+#: source/win-preferences/schema/export.ts:54
+msgid "Ask for directory"
+msgstr ""
+
+#. TODO: Create this type
+#: source/win-preferences/schema/display.ts:24
+msgid "These options determine which elements are rendered in documents."
+msgstr "Aceste opțiuni determină care elemente sînt vizualizate în documente."
+
+#: source/win-preferences/schema/display.ts:28
+msgid "Render Citations"
+msgstr "Vizualizare citări"
+
+#: source/win-preferences/schema/display.ts:33
+msgid "Render Iframes"
+msgstr "Vizualizare iframe-uri"
+
+#: source/win-preferences/schema/display.ts:38
+msgid "Render Images"
+msgstr "Vizualizare imagini"
+
+#: source/win-preferences/schema/display.ts:43
+msgid "Render Links"
+msgstr "Vizualizare legături"
+
+#: source/win-preferences/schema/display.ts:48
+msgid "Render Formulae"
+msgstr "Vizualizare formule matematice"
+
+#: source/win-preferences/schema/display.ts:53
+msgid "Render Tasks"
+msgstr "Vizualizare sarcini"
+
+#: source/win-preferences/schema/display.ts:58
+msgid "Hide heading characters"
+msgstr "Vizualizare #"
+
+#: source/win-preferences/schema/display.ts:63
+msgid "Render emphasis"
+msgstr ""
+
+#: source/win-preferences/schema/display.ts:71
+msgid "Here you can choose the theme for the app."
+msgstr "Aici puteți selecta tema pentru aplicație"
+
+#: source/win-preferences/schema/display.ts:112
+msgid "Use the operating system's accent colour instead of the theme colour"
+msgstr ""
+
+#: source/win-preferences/schema/display.ts:116
+msgid "This setting is only available on Windows and macOS"
+msgstr ""
+
+#: source/win-preferences/schema/display.ts:122
+msgid "Hide toolbar in distraction free mode"
+msgstr ""
+
+#. TODO: Create this type
+#: source/win-preferences/schema/display.ts:129
+msgid "With these controls you can constrain the image previews."
+msgstr "Contrlează dimensiunile de previzualizare a imaginii."
+
+#: source/win-preferences/schema/display.ts:133
+msgid "Maximum width of images (percent)"
+msgstr ""
+
+#: source/win-preferences/schema/display.ts:141
+msgid "Maximum height of images (percent)"
+msgstr ""
 
 #: source/win-preferences/schema/toolbar.ts:23
 msgid "Display \"Open Preferences\" button"
@@ -1944,273 +1368,840 @@ msgstr ""
 msgid "Display Pomodoro-timer"
 msgstr ""
 
-#: source/win-preferences/schema/display.ts:24
-#. TODO: Create this type
-msgid "These options determine which elements are rendered in documents."
-msgstr "Aceste opțiuni determină care elemente sînt vizualizate în documente."
+#: source/app/service-providers/updates/index.ts:176
+#, javascript-format
+msgid "Could not check for updates: Server Error (Status code: %s)"
+msgstr "Nu am putut verifica actualizările: Eroare de server (cod %s)"
 
-#: source/win-preferences/schema/display.ts:28
-msgid "Render Citations"
-msgstr "Vizualizare citări"
+#: source/app/service-providers/updates/index.ts:178
+#, javascript-format
+msgid "Could not check for updates: Client Error (Status code: %s)"
+msgstr "Nu am putut verifica actualizările: Eroare client (cod %s)"
 
-#: source/win-preferences/schema/display.ts:33
-msgid "Render Iframes"
-msgstr "Vizualizare iframe-uri"
-
-#: source/win-preferences/schema/display.ts:38
-msgid "Render Images"
-msgstr "Vizualizare imagini"
-
-#: source/win-preferences/schema/display.ts:43
-msgid "Render Links"
-msgstr "Vizualizare legături"
-
-#: source/win-preferences/schema/display.ts:48
-msgid "Render Formulae"
-msgstr "Vizualizare formule matematice"
-
-#: source/win-preferences/schema/display.ts:53
-msgid "Render Tasks"
-msgstr "Vizualizare sarcini"
-
-#: source/win-preferences/schema/display.ts:58
-msgid "Hide heading characters"
-msgstr "Vizualizare #"
-
-#: source/win-preferences/schema/display.ts:63
-msgid "Render emphasis"
-msgstr ""
-
-#: source/win-preferences/schema/display.ts:71
-msgid "Here you can choose the theme for the app."
-msgstr "Aici puteți selecta tema pentru aplicație"
-
-#: source/win-preferences/schema/display.ts:112
-msgid "Use the operating system's accent colour instead of the theme colour"
-msgstr ""
-
-#: source/win-preferences/schema/display.ts:116
-msgid "This setting is only available on Windows and macOS"
-msgstr ""
-
-#: source/win-preferences/schema/display.ts:122
-msgid "Hide toolbar in distraction free mode"
-msgstr ""
-
-#: source/win-preferences/schema/display.ts:129
-#. TODO: Create this type
-msgid "With these controls you can constrain the image previews."
-msgstr "Contrlează dimensiunile de previzualizare a imaginii."
-
-#: source/win-preferences/schema/display.ts:133
-msgid "Maximum width of images (percent)"
-msgstr ""
-
-#: source/win-preferences/schema/display.ts:141
-msgid "Maximum height of images (percent)"
-msgstr ""
-
-#: source/win-preferences/schema/export.ts:23
-msgid "Use the internal Pandoc for exports"
-msgstr ""
-
-#: source/win-preferences/schema/export.ts:30
-msgid "Remove tags from files"
-msgstr "Șterge etichetele din fișiere"
-
-#: source/win-preferences/schema/export.ts:40
-msgid "Remove internal links completely"
-msgstr "Șterge definitiv legăturile interne"
-
-#: source/win-preferences/schema/export.ts:41
-msgid "Unlink internal links"
-msgstr "Elimină legăturile interne"
-
-#: source/win-preferences/schema/export.ts:42
-msgid "Don't touch internal links"
-msgstr "Nu modifica legăturile interne"
-
-#: source/win-preferences/schema/export.ts:49
+#: source/app/service-providers/updates/index.ts:180
+#, javascript-format
 msgid ""
-"Target directory for exported files. <em>Attention:</em> Selecting the "
-"current working directory will overwrite files without warning!"
+"Could not check for updates: The server tried to redirect (Status code: %s)"
 msgstr ""
-"Dosarul destinație pentru fișierele exportate. <em>Atenție</em> Selectarea "
-"dosarului curent va rescrie fișierele fără atenționare!"
+"Nu am putut verifica actualizările: Serverul a încercat o redirecționare "
+"(cod %s)"
 
-#: source/win-preferences/schema/export.ts:52
-msgid "Temporary directory: is regularly expunged"
-msgstr "Dosar temporar: este curățat în mod regulat."
+#. getaddrinfo has reported that the host has not been found.
+#. This normally only happens if the networking interface is
+#. offline.
+#: source/app/service-providers/updates/index.ts:185
+msgid "Could not check for updates: Could not establish connection"
+msgstr "Nu am putut verifica actualizările: Nu s-a putut realiza o conexiune"
 
-#: source/win-preferences/schema/export.ts:53
+#. Something else has occurred. GotError objects have a name property.
+#: source/app/service-providers/updates/index.ts:188
+#, javascript-format
+msgid "Could not check for updates. %s: %s"
+msgstr ""
+
+#: source/app/service-providers/updates/index.ts:204
+msgid "Could not check for updates: Server hasn't sent any data"
+msgstr "Nu am putut verifica actualizările: Serverul nu a trimis date."
+
+#: source/app/service-providers/updates/index.ts:463
+#, javascript-format
+msgid "An update to version %s is available!"
+msgstr ""
+
+#. TODO: Move this to a command
+#. The user wants to open another file or directory.
+#: source/app/service-providers/windows/index.ts:213
+#: source/app/service-providers/commands/root-open.ts:73
+msgid "Open project folder"
+msgstr "Deschide dosarul proiect"
+
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
+msgid "Proceed without saving"
+msgstr "Continuă fără să salvezi"
+
+#. If the user cancels, do not omit (the default) but actually cancel
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
+msgid "Omit unsaved changes?"
+msgstr "Omite modificările nesalvate?"
+
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
 msgid ""
-"Current working directory: exported files will be saved into the currently "
-"selected directory."
+"There are unsaved changes to the current file. Do you want to omit them or "
+"save?"
 msgstr ""
-"Dosarul de lucru curent: fișierele exportate vor fi exportate în dosarul "
-"curent selectat."
+"Există modificări nesalvate pentru fișierul curent. Vrei să le omiți ori să "
+"le salvezi?"
 
-#: source/win-preferences/schema/export.ts:54
-msgid "Ask for directory"
-msgstr ""
+#: source/app/service-providers/windows/dialog/prompt.ts:32
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:37
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:30
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:33
+msgid "Ok"
+msgstr "OK"
 
-#: source/win-preferences/schema/zettelkasten.ts:23
-msgid "ID regular expression"
-msgstr "Expresie regulată ID"
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:31
+msgid "Replace file"
+msgstr "Înlocuiește fișierul"
 
-#: source/win-preferences/schema/zettelkasten.ts:29
-msgid "Link start"
-msgstr "Început legătură"
-
-#: source/win-preferences/schema/zettelkasten.ts:35
-msgid "Link ending"
-msgstr "Sfîrșit legătură"
-
-#: source/win-preferences/schema/zettelkasten.ts:41
-msgid "Pattern used to generate new IDs"
-msgstr "Model folosit pentru generarea de noi ID-uri"
-
-#: source/win-preferences/schema/zettelkasten.ts:50
-#. TODO: Create this type
-msgid "Options for ZKN elements"
-msgstr "Opțiuni pentru elementele ZKN"
-
-#: source/win-preferences/schema/zettelkasten.ts:59
-msgid "When linking files, add the filename …"
-msgstr ""
-"Atunci când sunt incluse link-uri către alte fișiere, include numele "
-"fișierului..."
-
-#: source/win-preferences/schema/zettelkasten.ts:62
-msgid "always"
-msgstr "De fiecare dată"
-
-#: source/win-preferences/schema/zettelkasten.ts:63
-msgid "only when linking using the ID"
-msgstr "Doar când se folosesc link-uri cu ID"
-
-#: source/win-preferences/schema/zettelkasten.ts:64
-msgid "never"
-msgstr "Niciodată"
-
-#: source/win-preferences/schema/zettelkasten.ts:72
-msgid "Start a search when following Zettelkasten-links"
-msgstr ""
-
-#: source/win-preferences/schema/zettelkasten.ts:77
-msgid "Automatically create non-existing files when following internal links"
-msgstr ""
-
-#: source/win-preferences/schema/zettelkasten.ts:82
-msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:23
-msgid "Select the languages for which you want to enable automatic spell checking."
-msgstr "Selectează limba pentru care vrei să activezi corectura ortografică."
-
-#: source/win-preferences/schema/spellchecking.ts:28
-msgid "Search for dictionaries &hellip;"
-msgstr "Caută dicționare &hellip;"
-
-#: source/win-preferences/schema/spellchecking.ts:32
-msgid "User dictionary. Remove words by clicking them."
-msgstr "Dicționarul utilizatorului. Eliminați cuvinte apăsîndu-le"
-
-#: source/win-preferences/schema/spellchecking.ts:34
-msgid "Dictionary entry"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:37
-#: source/win-preferences/schema/advanced.ts:101
-msgid "Search for entries …"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:23
-msgid "Pattern for new filenames"
-msgstr "Șablon pentru nume fișiere noi"
-
-#: source/win-preferences/schema/advanced.ts:29
-msgid "Do not prompt for filename when creating new files"
-msgstr "Nu cere nume fișier când se creează fișiere noi"
-
-#: source/win-preferences/schema/advanced.ts:36
-msgid "Enable debug mode"
-msgstr "Activează modulul dezvoltator"
-
-#: source/win-preferences/schema/advanced.ts:41
-msgid "Notify me about beta releases"
-msgstr "Informează-mă despre versiunile beta disponibile"
-
-#: source/win-preferences/schema/advanced.ts:46
-msgid "Use native window appearance"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:52
-msgid "Delete items irreversibly, if moving them to trash fails"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:58
-msgid "Show app in the notification area"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:59
-msgid "Leave app running in the notification area"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:66
-msgid "Automatically check for updates"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:71
-msgid "Check for updated translations on start"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:78
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:32
+#, javascript-format
 msgid ""
-"Enter all file extensions that you want to see in your attachment sidebar. "
-"Separate them with a comma. Changes are recognised after a restart."
+"File %s has been modified remotely. Replace the loaded version with the "
+"newer one from disk?"
 msgstr ""
-"Introdu toate extensiile de fișier pe care vrei să le vezi în bara laterală "
-"a anexelor. Delimitează-le printr-o virgulă. Modificările vor fi "
-"recunoscute după repornire."
+"Fișierul %s a fost modificat de la distanță. Să înlocuiesc versiunea aflată "
+"acum în memorie cu versiunea mai nouă de pe disc?"
 
-#: source/win-preferences/schema/advanced.ts:86
-msgid "Zoom behavior"
-msgstr ""
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:33
+msgid "Really delete?"
+msgstr "Ești sigur că vrei să ștergi?"
 
-#: source/win-preferences/schema/advanced.ts:88
-msgid "Zoom resizes the whole GUI"
-msgstr ""
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:34
+#, javascript-format
+msgid "Do you really want to remove %s?"
+msgstr "Vrei cu-adevărat să ștergi %s?"
 
-#: source/win-preferences/schema/advanced.ts:89
-msgid "Zoom changes the editor font size"
-msgstr ""
+#. Prepare the list of file filters
+#. The "All Files" filter should be at the top
+#: source/app/service-providers/windows/dialog/ask-file.ts:40
+#: source/app/service-providers/commands/import.ts:41
+msgid "All Files"
+msgstr "Toate fișierele"
 
-#: source/win-preferences/schema/advanced.ts:96
-msgid "iFrame rendering whitelist"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:99
-msgid "Hostname"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:107
-msgid "Activate Watchdog polling"
+#: source/app/service-providers/windows/dialog/ask-file.ts:47
+msgid "Open file"
 msgstr ""
 
-#: source/win-preferences/schema/advanced.ts:112
-msgid "Time to wait before writing a file is considered done (in ms)"
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:29
+msgid "Overwrite existing file"
+msgstr "Suprascriu fișier deja existent"
+
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:30
+#, javascript-format
+msgid "The file %s already exists in this directory. Overwrite?"
+msgstr "Acest fișier există deja în dosar. Suprascriu?"
+
+#: source/app/service-providers/windows/dialog/save-dialog.ts:52
+msgid "Save file"
 msgstr ""
 
-#: source/win-preferences/schema/citations.ts:23
-msgid "How would you like autocomplete to insert your citations?"
+#: source/app/service-providers/menu/menu.darwin.ts:44
+#: source/app/service-providers/menu/menu.darwin.ts:639
+#: source/app/service-providers/menu/menu.win32.ts:612
+msgid "About Zettlr"
+msgstr "Despre Zettlr"
+
+#: source/app/service-providers/menu/menu.darwin.ts:49
+#: source/app/service-providers/menu/menu.win32.ts:220
+#: source/app/service-providers/menu/menu.win32.ts:224
+msgid "Preferences…"
+msgstr "Preferințe"
+
+#: source/app/service-providers/menu/menu.darwin.ts:57
+#: source/app/service-providers/menu/menu.win32.ts:232
+msgid "Assets Manager"
 msgstr ""
 
-#: source/win-preferences/schema/citations.ts:35
-msgid "Citation Database (CSL JSON or BibTex)"
-msgstr "Baza de date citări (CSL JSON sau Bibtex)"
+#: source/app/service-providers/menu/menu.darwin.ts:65
+#: source/app/service-providers/menu/menu.win32.ts:240
+msgid "Manage Tags…"
+msgstr "Gestionează etichetele"
 
-#: source/win-preferences/schema/citations.ts:46
-msgid "CSL-Style (optional)"
-msgstr "CSL-Style (optional)"
+#: source/app/service-providers/menu/menu.darwin.ts:75
+msgid "Services"
+msgstr "Servicii"
+
+#: source/app/service-providers/menu/menu.darwin.ts:84
+msgid "Hide"
+msgstr "Ascunde"
+
+#: source/app/service-providers/menu/menu.darwin.ts:89
+msgid "Hide others"
+msgstr "Ascunde-le pe celelalte"
+
+#: source/app/service-providers/menu/menu.darwin.ts:94
+msgid "Show"
+msgstr "Arată"
+
+#: source/app/service-providers/menu/menu.darwin.ts:102
+#: source/app/service-providers/menu/menu.win32.ts:306
+#: source/app/service-providers/tray/index.ts:165
+msgid "Quit"
+msgstr "Renunță"
+
+#: source/app/service-providers/menu/menu.darwin.ts:111
+#: source/app/service-providers/menu/menu.win32.ts:85
+msgid "File"
+msgstr "Fișier"
+
+#: source/app/service-providers/menu/menu.darwin.ts:173
+#: source/app/service-providers/menu/menu.win32.ts:147
+msgid "Open Workspace …"
+msgstr ""
+
+#: source/app/service-providers/menu/menu.darwin.ts:182
+#: source/app/service-providers/menu/menu.win32.ts:42
+#: source/app/service-providers/menu/menu.win32.ts:54
+msgid "Recent documents"
+msgstr "Documente recente"
+
+#: source/app/service-providers/menu/menu.darwin.ts:186
+#: source/app/service-providers/menu/menu.win32.ts:46
+#: source/app/service-providers/menu/menu.win32.ts:58
+msgid "Empty"
+msgstr "Șterge"
+
+#: source/app/service-providers/menu/menu.darwin.ts:206
+#: source/app/service-providers/menu/menu.win32.ts:171
+msgid "Previous file"
+msgstr ""
+
+#: source/app/service-providers/menu/menu.darwin.ts:217
+#: source/app/service-providers/menu/menu.win32.ts:182
+msgid "Next file"
+msgstr ""
+
+#: source/app/service-providers/menu/menu.darwin.ts:231
+#: source/app/service-providers/menu/menu.win32.ts:196
+msgid "Import files…"
+msgstr "Importă fișiere..."
+
+#: source/app/service-providers/menu/menu.darwin.ts:239
+#: source/app/service-providers/menu/menu.win32.ts:204
+msgid "Export…"
+msgstr "Exportă..."
+
+#: source/app/service-providers/menu/menu.darwin.ts:247
+#: source/app/service-providers/menu/menu.win32.ts:212
+msgid "Print…"
+msgstr "Imprimă..."
+
+#: source/app/service-providers/menu/menu.darwin.ts:258
+#: source/app/service-providers/menu/menu.win32.ts:252
+msgid "Import translation…"
+msgstr "Importă traducere..."
+
+#: source/app/service-providers/menu/menu.darwin.ts:266
+#: source/app/service-providers/menu/menu.win32.ts:260
+msgid "Import dictionary…"
+msgstr "Importă dicționar..."
+
+#: source/app/service-providers/menu/menu.darwin.ts:320
+#: source/app/service-providers/menu/menu.win32.ts:321
+msgid "Undo"
+msgstr "Anulează"
+
+#: source/app/service-providers/menu/menu.darwin.ts:326
+#: source/app/service-providers/menu/menu.win32.ts:327
+msgid "Redo"
+msgstr "Refă"
+
+#: source/app/service-providers/menu/menu.darwin.ts:377
+#: source/app/service-providers/menu/menu.win32.ts:378
+msgid "Find in file"
+msgstr "Găsește în fișier"
+
+#: source/app/service-providers/menu/menu.darwin.ts:385
+#: source/app/service-providers/menu/menu.win32.ts:386
+msgid "Find in directory"
+msgstr "Găsește dosarul"
+
+#: source/app/service-providers/menu/menu.darwin.ts:393
+#: source/app/service-providers/menu/menu.win32.ts:394
+msgid "Filter files"
+msgstr ""
+
+#: source/app/service-providers/menu/menu.darwin.ts:404
+#: source/app/service-providers/menu/menu.win32.ts:405
+msgid "Generate new ID"
+msgstr "Generează un nou ID"
+
+#: source/app/service-providers/menu/menu.darwin.ts:423
+msgid "Speech"
+msgstr "Voce"
+
+#: source/app/service-providers/menu/menu.darwin.ts:427
+msgid "Start speaking"
+msgstr "Începe lectura"
+
+#: source/app/service-providers/menu/menu.darwin.ts:432
+msgid "Stop speaking"
+msgstr "Oprește lectura"
+
+#: source/app/service-providers/menu/menu.darwin.ts:442
+#: source/app/service-providers/menu/menu.win32.ts:424
+msgid "View"
+msgstr "Examinare"
+
+#: source/app/service-providers/menu/menu.darwin.ts:456
+#: source/app/service-providers/menu/menu.win32.ts:438
+msgid "Additional Information"
+msgstr "Informații adiționale"
+
+#: source/app/service-providers/menu/menu.darwin.ts:466
+#: source/app/service-providers/menu/menu.win32.ts:448
+msgid "Distraction free mode"
+msgstr "Modul fără abaterea atenției"
+
+#: source/app/service-providers/menu/menu.darwin.ts:474
+#: source/app/service-providers/menu/menu.win32.ts:456
+msgid "Typewriter Mode"
+msgstr ""
+
+#: source/app/service-providers/menu/menu.darwin.ts:485
+#: source/app/service-providers/menu/menu.win32.ts:467
+msgid "Toggle file manager"
+msgstr ""
+
+#: source/app/service-providers/menu/menu.darwin.ts:493
+#: source/app/service-providers/menu/menu.win32.ts:475
+msgid "Toggle Sidebar"
+msgstr "Comută bara laterală"
+
+#: source/app/service-providers/menu/menu.darwin.ts:507
+#: source/app/service-providers/menu/menu.win32.ts:486
+msgid "Reset zoom"
+msgstr "Inițializare zoom"
+
+#: source/app/service-providers/menu/menu.darwin.ts:516
+#: source/app/service-providers/menu/menu.win32.ts:495
+msgid "Zoom in"
+msgstr "Mărește"
+
+#: source/app/service-providers/menu/menu.darwin.ts:523
+#: source/app/service-providers/menu/menu.win32.ts:502
+msgid "Zoom out"
+msgstr "Micșorează"
+
+#: source/app/service-providers/menu/menu.darwin.ts:533
+#: source/app/service-providers/menu/menu.win32.ts:512
+msgid "Toggle fullscreen"
+msgstr "Ecran complet"
+
+#: source/app/service-providers/menu/menu.darwin.ts:541
+#: source/app/service-providers/menu/menu.win32.ts:521
+msgid "Develop"
+msgstr "Depanare"
+
+#: source/app/service-providers/menu/menu.darwin.ts:545
+#: source/app/service-providers/menu/menu.win32.ts:525
+msgid "Reload"
+msgstr "Reîncarcă"
+
+#: source/app/service-providers/menu/menu.darwin.ts:553
+#: source/app/service-providers/menu/menu.win32.ts:533
+msgid "Toggle developer tools"
+msgstr "Intrumente dezvoltator"
+
+#: source/app/service-providers/menu/menu.darwin.ts:561
+#: source/app/service-providers/menu/menu.win32.ts:541
+msgid "Open Logs"
+msgstr ""
+
+#: source/app/service-providers/menu/menu.darwin.ts:572
+#: source/app/service-providers/menu/menu.win32.ts:552
+msgid "Window"
+msgstr "Fereastră"
+
+#: source/app/service-providers/menu/menu.darwin.ts:577
+#: source/app/service-providers/menu/menu.win32.ts:557
+msgid "Minimize"
+msgstr "Minimizează"
+
+#: source/app/service-providers/menu/menu.darwin.ts:585
+#: source/app/service-providers/menu/menu.win32.ts:563
+msgid "Close"
+msgstr "Închide"
+
+#: source/app/service-providers/menu/menu.darwin.ts:591
+msgid "Bring All to Front"
+msgstr "Toate în prim-plan"
+
+#: source/app/service-providers/menu/menu.darwin.ts:607
+#: source/app/service-providers/menu/menu.win32.ts:580
+msgid "Previous Tab"
+msgstr ""
+
+#: source/app/service-providers/menu/menu.darwin.ts:615
+#: source/app/service-providers/menu/menu.win32.ts:588
+msgid "Next Tab"
+msgstr ""
+
+#: source/app/service-providers/menu/menu.darwin.ts:634
+#: source/app/service-providers/menu/menu.win32.ts:607
+msgid "Help"
+msgstr "Ajutor"
+
+#: source/app/service-providers/menu/menu.darwin.ts:646
+#: source/app/service-providers/menu/menu.win32.ts:619
+msgid "Support Zettlr"
+msgstr "Susține Zettlr donînd"
+
+#: source/app/service-providers/menu/menu.darwin.ts:656
+#: source/app/service-providers/menu/menu.win32.ts:629
+msgid "Go to website"
+msgstr "Vizitează site-ul Zettlr"
+
+#: source/app/service-providers/menu/menu.darwin.ts:666
+#: source/app/service-providers/menu/menu.win32.ts:639
+msgid "Get LaTeX"
+msgstr "Obține LaTeX"
+
+#: source/app/service-providers/menu/menu.darwin.ts:676
+#: source/app/service-providers/menu/menu.win32.ts:649
+msgid "Open user manual"
+msgstr "Manualul utilizator"
+
+#: source/app/service-providers/menu/menu.darwin.ts:687
+#: source/app/service-providers/menu/menu.win32.ts:660
+msgid "Open Tutorial"
+msgstr ""
+
+#: source/app/service-providers/config/config-validation.ts:282
+#, javascript-format
+msgid "Option %s has to be of type %s."
+msgstr "Opțiunea %s trebuie să fie de tip %s."
+
+#: source/app/service-providers/config/config-validation.ts:285
+#, javascript-format
+msgid "Option %s must be one of: %s."
+msgstr "Opțiunea %s trebuie să fie una din: %s."
+
+#: source/app/service-providers/config/config-validation.ts:288
+#, javascript-format
+msgid "Option %s must be between %s and %s (characters long)."
+msgstr "Opțiunea %s trebuie să aibă între %s și %s caractere."
+
+#: source/app/service-providers/config/config-validation.ts:291
+#, javascript-format
+msgid "Option %s may not exceed %s (characters)."
+msgstr "Opțiunea %s trebuie să aibă cel mult %s caractere."
+
+#: source/app/service-providers/config/config-validation.ts:294
+#, javascript-format
+msgid "Option %s must be at least %s (characters long)."
+msgstr "Opțiunea %s trebuie să aibă cel puțin %s caractere."
+
+#: source/app/service-providers/config/config-validation.ts:297
+#, javascript-format
+msgid "Option %s is required."
+msgstr "Opțiunea %s este necesară."
+
+#: source/app/service-providers/tray/index.ts:159
+msgid "Show Zettlr"
+msgstr ""
+
+#: source/app/service-providers/tray/index.ts:172
+msgid "Zettlr"
+msgstr ""
+
+#: source/app/service-providers/citeproc/index.ts:231
+#: source/app/service-providers/citeproc/index.ts:427
+msgid "The citation database could not be loaded"
+msgstr "Baza de date ce conține căutările nu poate fi încărcată."
+
+#: source/app/service-providers/citeproc/index.ts:415
+msgid "Changes to the library file detected. Reloading …"
+msgstr "Au fost detectate schimbări în fișierul bibliotecă. Repornire..."
+
+#: source/app/service-providers/commands/root-open.ts:83
+msgid "Cannot open directory"
+msgstr "Dosarul nu poate fi deschis"
+
+#: source/app/service-providers/commands/root-open.ts:84
+#, javascript-format
+msgid "Directory &quot;%s&quot; cannot be opened by Zettlr."
+msgstr "Dosarul &quot;%s&quot; nu poate fi deschis de Zettlr"
+
+#: source/app/service-providers/commands/root-open.ts:136
+#, javascript-format
+msgid "Opening new root %s …"
+msgstr "Deschide noul fișier rădăcină %s"
+
+#: source/app/service-providers/commands/root-open.ts:147
+#, javascript-format
+msgid "%s has been loaded."
+msgstr "%s a fost încărcat"
+
+#: source/app/service-providers/commands/root-open.ts:159
+#, javascript-format
+msgid "Could not open workspace %s."
+msgstr ""
+
+#: source/app/service-providers/commands/import-lang-file.ts:59
+#, javascript-format
+msgid "Language file imported: %s"
+msgstr "Fișierul pentru limba %s a fost importat"
+
+#: source/app/service-providers/commands/import-lang-file.ts:61
+#: source/app/service-providers/commands/import-lang-file.ts:64
+#, javascript-format
+msgid "Could not import language file %s!"
+msgstr "Fișierul pentru limba %s nu a putut fi importat"
+
+#: source/app/service-providers/commands/request-move.ts:62
+msgid "Cannot move directory"
+msgstr "Dosarul nu poate fi mutat"
+
+#: source/app/service-providers/commands/request-move.ts:63
+msgid "You cannot move a directory into one of its subdirectories."
+msgstr "Un dosar nu poate fi mutat într-unul din subdosarele sale"
+
+#: source/app/service-providers/commands/request-move.ts:72
+msgid "Cannot move directory or file"
+msgstr "Dosarul sau fișierul nu pot fi mutate"
+
+#: source/app/service-providers/commands/request-move.ts:73
+#, javascript-format
+msgid "The file/directory %s already exists in target."
+msgstr "Fișierul/Dosarul %s există deja"
+
+#: source/app/service-providers/commands/importer/import-textbundle.ts:63
+#: source/app/service-providers/commands/importer/import-textbundle.ts:69
+#, javascript-format
+msgid "Malformed Textbundle: %s"
+msgstr "Textbundle incorect: %s"
+
+#: source/app/service-providers/commands/importer/index.ts:46
+#: source/app/service-providers/commands/exporter/default-exporter.ts:32
+#: source/app/service-providers/commands/exporter/pdf-exporter.ts:37
+msgid ""
+"Pandoc has not been found on this system. Please install Pandoc prior to "
+"exporting or importing files."
+msgstr ""
+"Pandoc nu a fost găsit în sistem. Instalează Pandoc înainte de a importa ori "
+"exporta fișiere."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:37
+msgid "The requested file was not found."
+msgstr "Fișierul solicitat nu a fost găsit"
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:54
+msgid "The provided name did not contain any allowed letters."
+msgstr "Numele furnizat nu conține nici un caracter permis"
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:75
+#: source/app/service-providers/commands/set-open-directory.ts:41
+msgid "The requested directory was not found."
+msgstr "Dosarul solicitat nu a fost găsit"
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:86
+msgid "Could not save image"
+msgstr "Imaginea nu a putut fi salvată"
+
+#. Better error message
+#: source/app/service-providers/commands/open-attachment.ts:92
+#, javascript-format
+msgid "The reference with key %s does not appear to have attachments."
+msgstr "Referința notată cu %s nu pare să aibă fișiere atașate"
+
+#: source/app/service-providers/commands/open-attachment.ts:97
+msgid "Could not open attachment. Is Zotero running?"
+msgstr "Nu am reușit să deschid fișierul atașat. Este Zotero pornit?"
+
+#: source/app/service-providers/commands/dir-new.ts:36
+#: source/app/service-providers/commands/dir-new.ts:37
+#: source/app/service-providers/commands/dir-new.ts:48
+#: source/app/service-providers/commands/dir-new.ts:49
+#: source/app/service-providers/commands/dir-new.ts:59
+msgid "Could not create directory"
+msgstr "Dosarul nu a putut fi creat"
+
+#: source/app/service-providers/commands/dir-project-export.ts:121
+msgid "Project successfully exported. Click to show."
+msgstr ""
+
+#: source/app/service-providers/commands/dir-project-export.ts:121
+#, fuzzy
+msgid "Export"
+msgstr "Exportă..."
+
+#: source/app/service-providers/commands/export.ts:79
+msgid "Choose export destination"
+msgstr ""
+
+#: source/app/service-providers/commands/export.ts:110
+#, javascript-format
+msgid "Exporting to %s"
+msgstr "Export în %s"
+
+#: source/app/service-providers/commands/export.ts:122
+msgid "Export failed"
+msgstr "Procesul de exportare a eșuat"
+
+#: source/app/service-providers/commands/export.ts:123
+#, javascript-format
+msgid "An error occurred on export: %s"
+msgstr "O eroare a apărut cînd s-a încercat exportarea: %s"
+
+#: source/app/service-providers/commands/file-duplicate.ts:43
+#: source/app/service-providers/commands/file-duplicate.ts:59
+#: source/app/service-providers/commands/file-new.ts:161
+msgid "Could not create file"
+msgstr "Fișierul nu a putut fi creat"
+
+#. We need to generate our own filename. First, attempt to just use 'copy of'
+#: source/app/service-providers/commands/file-duplicate.ts:71
+#, javascript-format
+msgid "Copy of %s"
+msgstr ""
+
+#: source/app/service-providers/commands/import.ts:35
+msgid "You have to select a directory to import to."
+msgstr "Trebuie să alegi un dosar în care să imporți fișierele"
+
+#. Now import.
+#: source/app/service-providers/commands/import.ts:58
+msgid "Importing. Please wait …"
+msgstr "Import. Așteaptă te rog..."
+
+#. This callback gets called whenever there is an error while running pandoc.
+#: source/app/service-providers/commands/import.ts:63
+#, javascript-format
+msgid "Couldn't import %s."
+msgstr "%s nu a putut fi importat"
+
+#. And this on each success!
+#: source/app/service-providers/commands/import.ts:66
+#, javascript-format
+msgid "%s imported successfully."
+msgstr "%s a fost importat cu succes"
+
+#. Some files failed to import.
+#: source/app/service-providers/commands/import.ts:71
+#: source/app/service-providers/commands/import.ts:77
+#, javascript-format
+msgid ""
+"The following %s files could not be imported, because their filetype is "
+"unknown: %s"
+msgstr ""
+"Următoarele fișiere %s nu au putut fi importate, pentru că tipul lor de "
+"fișier nu este cunoscut: %s"
+
+#: source/app/service-providers/commands/set-open-directory.ts:40
+msgid "Directory not found"
+msgstr "Dosar negăsit"
+
+#~ msgid "Afrikaans (South Africa)"
+#~ msgstr "Africaans"
+
+#~ msgid "Arabic"
+#~ msgstr "Arabă"
+
+#~ msgid "Belarus"
+#~ msgstr "Bielorusă"
+
+#~ msgid "Bulgarian"
+#~ msgstr "Bulgară"
+
+#~ msgid "Bosnian"
+#~ msgstr "Bosniacă"
+
+#~ msgid "Catalan (Catalonia)"
+#~ msgstr "Catalană"
+
+#~ msgid "Czech (Czech Republic)"
+#~ msgstr "Cehă"
+
+#~ msgid "Danish"
+#~ msgstr "Daneză"
+
+#~ msgid "German (Austria)"
+#~ msgstr "Germană (Austria)"
+
+#~ msgid "German (Switzerland)"
+#~ msgstr "Germană (Elveția)"
+
+#~ msgid "German (Germany)"
+#~ msgstr "Germană (Germania)"
+
+#~ msgid "Greek"
+#~ msgstr "Greacă"
+
+#~ msgid "English (Australia)"
+#~ msgstr "Engleză (Australia)"
+
+#~ msgid "English (Canada)"
+#~ msgstr "Engleză (Canada)"
+
+#~ msgid "English (United Kingdom)"
+#~ msgstr "Engleză (Marea Britanie)"
+
+#~ msgid "English (India)"
+#~ msgstr "Engleză (India)"
+
+#~ msgid "English (United States)"
+#~ msgstr "Engleză (SUA)"
+
+#~ msgid "English (South Africa)"
+#~ msgstr "Engleză (Africa de Sud)"
+
+#~ msgid "Esperanto"
+#~ msgstr "Esperantă"
+
+#~ msgid "Spanish (Spain)"
+#~ msgstr "Spaniolă (Spania)"
+
+#~ msgid "Estonian"
+#~ msgstr "Estoniană"
+
+#~ msgid "Basque"
+#~ msgstr "Bască"
+
+#~ msgid "Persian (Farsi)"
+#~ msgstr "Persană (Farsi)"
+
+#~ msgid "Finnish"
+#~ msgstr "Finlandeză"
+
+#~ msgid "Faroese"
+#~ msgstr "Feroeză"
+
+#~ msgid "French (France)"
+#~ msgstr "Franceză (Franța)"
+
+#~ msgid "Irish"
+#~ msgstr "Irlandeză"
+
+#~ msgid "Scottish (Gaelic)"
+#~ msgstr "Galeză"
+
+#~ msgid "Galician (Spain)"
+#~ msgstr "Galiciana"
+
+#~ msgid "Hebrew"
+#~ msgstr "Ebraică"
+
+#~ msgid "Hindi"
+#~ msgstr "Hindi"
+
+#~ msgid "Croatian"
+#~ msgstr "Croată"
+
+#~ msgid "Hungarian"
+#~ msgstr "Maghiară"
+
+#~ msgid "Armenian"
+#~ msgstr "Armeană"
+
+#~ msgid "Indonesian"
+#~ msgstr "Indonesiană"
+
+#~ msgid "Icelandic"
+#~ msgstr "Islandeză"
+
+#~ msgid "Italian (Italy)"
+#~ msgstr "Italiană"
+
+#~ msgid "Japanese"
+#~ msgstr "Japoneză"
+
+#~ msgid "Georgian"
+#~ msgstr "Georgiană"
+
+#~ msgid "Korean"
+#~ msgstr "Coreeană"
+
+#~ msgid "Latin"
+#~ msgstr "Latină"
+
+#~ msgid "Luxembourgian"
+#~ msgstr "Franceză (Luxemburg)"
+
+#~ msgid "Lithuanian"
+#~ msgstr "Lituaniană"
+
+#~ msgid "Latvian"
+#~ msgstr "Letonă"
+
+#~ msgid "Macedonian"
+#~ msgstr "Macedoniană"
+
+#~ msgid "Mongolian"
+#~ msgstr "Mongolă"
+
+#~ msgid "Malaysian (Malaysia)"
+#~ msgstr "Malaieză"
+
+#~ msgid "Norwegian (Bokmål)"
+#~ msgstr "Norvegiană (Bokmål)"
+
+#~ msgid "Nepalese"
+#~ msgstr "Nepaleză"
+
+#~ msgid "Dutch (Belgium)"
+#~ msgstr "Neerlandeză (Belgia)"
+
+#~ msgid "Dutch (Netherlands)"
+#~ msgstr "Neerlandeză (Olanda)"
+
+#~ msgid "Norwegian (Nyorsk)"
+#~ msgstr "Norvegiană (Nyorsk)"
+
+#~ msgid "Polish"
+#~ msgstr "Poloneză"
+
+#~ msgid "Portuguese (Brazil)"
+#~ msgstr "Portugheză (Brazilia)"
+
+#~ msgid "Portuguese (Portugal)"
+#~ msgstr "Portugheză (Portugalia)"
+
+#~ msgid "Romanian"
+#~ msgstr "Română"
+
+#~ msgid "Russian"
+#~ msgstr "Rusă"
+
+#~ msgid "Rwandan (Kinyarwanda)"
+#~ msgstr "Kinyarwanda (Rwanda)"
+
+#~ msgid "Slovakian"
+#~ msgstr "Slovacă"
+
+#~ msgid "Slovenian"
+#~ msgstr "Slovenă"
+
+#~ msgid "Serbian"
+#~ msgstr "Sîrbă"
+
+#~ msgid "Swedish"
+#~ msgstr "Suedeză"
+
+#~ msgid "Turkish"
+#~ msgstr "Turcă"
+
+#~ msgid "Ukrainian"
+#~ msgstr "Ucraianeană"
+
+#~ msgid "Urdu (Pakistan)"
+#~ msgstr "Urdu (Pakistan)"
+
+#~ msgid "Vietnamese"
+#~ msgstr "Vietnameză"
+
+#~ msgid "Chinese (China)"
+#~ msgstr "Chineză"
+
+#~ msgid ""
+#~ "Use the CodeMirror default actions for <kbd>Home</kbd> and <kbd>End</kbd>."
+#~ msgstr ""
+#~ "Folosește modul implicit CodeMirror pentru <kbd>Home</kbd> și <kbd>End</"
+#~ "kbd>."
+
+#~ msgid "Use left-to-right (LTR) writing direction"
+#~ msgstr "Utilizează scrierea de la stânga-la-dreapta"
+
+#~ msgid "Use right-to-left (RTL) writing direction"
+#~ msgstr "Utilizează scrierea de la dreapta-la-stânga"
+
+#~ msgid "Use visual order for arrow key movement while in RTL-mode"
+#~ msgstr ""
+#~ "Utilizează ordinea vizuală pentru miscarea cursorului în timpul modului "
+#~ "de la dreapta-la-stânga"
+
+#~ msgid "Word style (replace immediately without pressing Space/Enter)"
+#~ msgstr "Stilul Word"
+
+#~ msgid "LibreOffice style (press Space or Enter to replace)"
+#~ msgstr "Stilul LibreOffice"
