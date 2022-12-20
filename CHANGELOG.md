@@ -223,6 +223,7 @@ there.
   changes from the table to the document and second save the document itself.
 - The editor now recognizes Pandoc attribute syntax (e.g., `{.unnumbered}`)
 - Added `lua` syntax highlighting support
+- Improved the tutorial to make use of the new split views
 
 ## Under the Hood
 
