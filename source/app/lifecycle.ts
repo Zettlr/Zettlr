@@ -37,7 +37,7 @@ let upTimestamp: number
  *
  * @return  {void}    Nothing to return
  */
-export async function bootApplication (): Promise<void> {
+export async function bootApplication (): Promise<AppServiceContainer> {
   upTimestamp = Date.now()
 
   // First of all we MUST perform the environment check, since everything else
@@ -78,6 +78,8 @@ export async function bootApplication (): Promise<void> {
     addToPath(log, path.dirname(process.env.PANDOC_PATH), 'unshift')
     log.info('[Application] The bundled pandoc executable is now in PATH. If you do not want to use the bundled pandoc, uncheck the corresponding setting and reboot the app.')
   }
+
+  return appServiceContainer
 }
 
 /**

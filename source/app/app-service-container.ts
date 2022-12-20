@@ -120,6 +120,19 @@ export default class AppServiceContainer {
     await this._informativeBoot(this._documentManager, 'DocumentManager')
 
     this._menuProvider.set() // TODO
+
+    this.log.info('[AppServiceContainer] Boot successful!')
+
+    // Now that the config provider is definitely set up, let's see if we
+    // should copy the interactive tutorial to the documents directory.
+    if (this.config.isFirstStart()) {
+      this.log.info('[AppServiceContainer] Copying over the interactive tutorial!')
+      this.commands.run('tutorial-open', {})
+        .catch(err => this.log.error('[AppServiceContainer] Could not open tutorial', err))
+    }
+
+    // After everything has been booted up, show the windows
+    this.windows.maybeShowWindows()
   }
 
   /**
