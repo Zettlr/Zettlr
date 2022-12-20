@@ -85,15 +85,10 @@ async function prepareEnvironment () {
   await fs.mkdir(CONF_DIRECTORY, { recursive: true })
   success('Created app data directory!')
 
-  const readmeFile = roots.find(root => path.basename(root) === 'README.md')
-
   // Now it's time to create the new config file
   info('Creating new configuration file from test-config.yml ...')
   let cfg = await makeConfig()
   cfg.openPaths = roots
-  // Set the README.md file as open
-  cfg.openFiles = [readmeFile]
-  cfg.activeFile = readmeFile
 
   // We also want the dialogs to start at the test directory for easier navigation
   cfg.dialogPaths = {
