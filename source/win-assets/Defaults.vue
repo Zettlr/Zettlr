@@ -33,13 +33,11 @@
         ></ButtonControl>
 
         <span v-if="visibleItems.length > 0 && visibleItems[currentItem].isProtected === true" class="protected-info">
-          <!-- TODO: Translate -->
           &#128274; {{ protectedProfileWarning }}
         </span>
 
         <p v-if="visibleItems[currentItem]?.isInvalid" class="warning">
           <clr-icon shape="warning"></clr-icon>
-          <!-- TODO: Translate! -->
           <span> <!-- NOTE: Wrapping in a span due to the flex -->
             {{ invalidProfileWarning }}
           </span>
@@ -141,7 +139,7 @@ export default defineComponent({
       return trans('This profile appears to be either missing the writer or reader property. Make sure to set both so that Zettlr can use this profile.')
     },
     renameFileLabel: function (): string {
-      return 'Rename file' // TODO: Translate!
+      return trans('Rename file')
     },
     codeEditor: function (): typeof CodeEditor {
       return this.$refs['code-editor'] as typeof CodeEditor

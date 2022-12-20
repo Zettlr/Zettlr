@@ -68,7 +68,7 @@ export default class FileDuplicate extends ZettlrCommand {
       filename = sanitize(arg.name.trim(), { 'replacement': '-' })
     } else {
       // We need to generate our own filename. First, attempt to just use 'copy of'
-      filename = 'Copy of ' + file.name // TODO: Translate
+      filename = trans('Copy of %s', file.name)
       // See if it's a file
       if (isFile(path.join(dir.path, filename))) {
         // Filename is already given, so we need to add increasing numbers

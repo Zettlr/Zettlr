@@ -17,18 +17,17 @@
       <!-- Add the project title field -->
       <TextControl
         v-model="projectTitle"
-        v-bind:label="'Project Title'"
+        v-bind:label="projectTitleLabel"
       ></TextControl>
 
       <p v-if="selectedExportProfiles.length === 0" class="warning">
         <clr-icon shape="warning"></clr-icon>
-        <!-- TODO: Translate! -->
-        <span>Please select at least one profile to build this project.</span>
+        <span>{{ projectBuildWarning }}</span>
       </p>
       <ListControl
         v-bind:label="exportFormatLabel"
         v-bind:model-value="exportFormatList"
-        v-bind:labels="[exportFormatUseLabel, exportFormatNameLabel, 'Conversion']"
+        v-bind:labels="[exportFormatUseLabel, exportFormatNameLabel, conversionLabel]"
         v-bind:editable="[0]"
         v-on:update:model-value="selectExportProfile($event)"
       ></ListControl>
@@ -51,20 +50,20 @@
       <!-- Then the CSL file -->
       <FileControl
         v-model="cslStyle"
-        v-bind:label="'CSL Stylesheet'"
+        v-bind:label="cslStyleLabel"
         v-bind:reset="true"
         v-bind:filter="{'csl': 'CSL Stylesheet'}"
       ></FileControl>
       <!-- Also, the other possible files users can override -->
       <FileControl
         v-model="texTemplate"
-        v-bind:label="'LaTeX Template'"
+        v-bind:label="texTemplateLabel"
         v-bind:reset="true"
         v-bind:filter="{'tex': 'LaTeX Source'}"
       ></FileControl>
       <FileControl
         v-model="htmlTemplate"
-        v-bind:label="'HTML Template'"
+        v-bind:label="htmlTemplateLabel"
         v-bind:reset="true"
         v-bind:filter="{'html,htm': 'HTML Template'}"
       ></FileControl>
@@ -163,11 +162,29 @@ export default defineComponent({
     exportFormatNameLabel: function (): string {
       return trans('Format')
     },
+    conversionLabel: function (): string {
+      return trans('Conversion')
+    },
     exportPatternLabel: function (): string {
       return trans('Add Glob patterns to include only specific files')
     },
     exportPatternNameLabel: function (): string {
       return trans('Glob Pattern')
+    },
+    projectBuildWarning: function (): string {
+      return trans('Please select at least one profile to build this project.')
+    },
+    projectTitleLabel: function (): string {
+      return trans('Project Title')
+    },
+    cslStyleLabel: function (): string {
+      return trans('CSL Stylesheet')
+    },
+    texTemplateLabel: function (): string {
+      return trans('LaTeX Template')
+    },
+    htmlTemplateLabel: function (): string {
+      return trans('HTML Template')
     }
   },
   watch: {

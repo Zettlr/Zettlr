@@ -17,6 +17,7 @@ import { linter, Diagnostic } from '@codemirror/lint'
 import { Parent, Text } from 'mdast' // NOTE: Dependency of remark, not in package.json
 import { md2ast } from '@common/util/md-to-ast'
 import { configField } from '../util/configuration'
+import { trans } from '@common/i18n-renderer'
 
 const ipcRenderer = window.ipc
 
@@ -145,7 +146,7 @@ async function checkWord (word: string, index: number, nodeStart: number, autoco
   return {
     from: nodeStart + index,
     to: nodeStart + index + word.length,
-    message: 'Spelling mistake', // TODO: Translate
+    message: trans('Spelling mistake'),
     severity: 'error',
     source: 'spellcheck' // Useful for later filtering of all diagnostics present
   }

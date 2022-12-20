@@ -17,6 +17,7 @@ import { syntaxTree } from '@codemirror/language'
 import { EditorState } from '@codemirror/state'
 import { getConverter } from '@common/util/md-to-html'
 import { configField } from '../util/configuration'
+import { trans } from '@common/i18n-renderer'
 
 /**
  * Given fn in the format [^some-identifier], this function attempts to find a
@@ -96,7 +97,7 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
 
   const { library } = view.state.field(configField).metadata
   const md2html = getConverter(window.getCitationCallback(library))
-  const tooltipContent = md2html(fnBody?.text ?? 'No ref found.') // TODO: Translate!
+  const tooltipContent = md2html(fnBody?.text ?? trans('No footnote text found.'))
 
   return {
     pos: from + (footnoteMatch.index as number),
@@ -107,7 +108,7 @@ function footnotesTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip
       dom.innerHTML = tooltipContent
       if (fnBody !== undefined) {
         const editButton = document.createElement('button')
-        editButton.textContent = 'Edit' // TODO: Translate!
+        editButton.textContent = trans('Edit')
         dom.appendChild(editButton)
         editButton.addEventListener('click', e => {
           view.dispatch({

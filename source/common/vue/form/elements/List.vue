@@ -79,7 +79,7 @@
           <!-- The list items are deletable -->
           <td v-if="deletable" style="text-align: center">
             <button v-on:click="handleDeletion(idx)">
-              Delete
+              {{ deleteLabel }}
             </button>
           </td>
           <td v-else-if="addable" style="text-align: center">
@@ -266,6 +266,9 @@ export default {
     },
     actionsLabel: function () {
       return trans('Actions')
+    },
+    deleteLabel: function () {
+      return trans('Delete')
     },
     columnLabels: function () {
       if (this.labels.length !== 0) {

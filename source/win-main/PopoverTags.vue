@@ -112,9 +112,8 @@ export default defineComponent({
     return {
       tags: [] as Array<{ text: string, count: number, className: string }>,
       tabs: [
-        // TODO: Translate
-        { id: 'name', label: 'Name' },
-        { id: 'count', label: 'Count' }
+        { id: 'name', label: trans('Name') },
+        { id: 'count', label: trans('Count') }
       ] as TabbarControl[],
       activeFile: null as OpenDocument|null,
       // Super hacky way to get some tag suggestions. (Reminder to myself:

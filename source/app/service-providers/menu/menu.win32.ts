@@ -89,7 +89,7 @@ export default function getMenu (
           submenu: [
             {
               id: 'menu.new_file',
-              label: 'Markdown', // TODO: Translate
+              label: 'Markdown',
               accelerator: 'Ctrl+N',
               click: function (menuitem, focusedWindow) {
                 commands.run('file-new', { type: 'md' })
@@ -98,7 +98,7 @@ export default function getMenu (
             },
             {
               id: 'menu.new_tex_file',
-              label: 'TeX', // TODO: Translate
+              label: 'TeX',
               click: function (menuitem, focusedWindow) {
                 commands.run('file-new', { type: 'tex' })
                   .catch(e => logger.error(String(e.message), e))
@@ -106,7 +106,7 @@ export default function getMenu (
             },
             {
               id: 'menu.new_yaml_file',
-              label: 'YAML', // TODO: Translate
+              label: 'YAML',
               click: function (menuitem, focusedWindow) {
                 commands.run('file-new', { type: 'yaml' })
                   .catch(e => logger.error(String(e.message), e))
@@ -114,7 +114,7 @@ export default function getMenu (
             },
             {
               id: 'menu.new_json_file',
-              label: 'JSON', // TODO: Translate
+              label: 'JSON',
               click: function (menuitem, focusedWindow) {
                 commands.run('file-new', { type: 'json' })
                   .catch(e => logger.error(String(e.message), e))

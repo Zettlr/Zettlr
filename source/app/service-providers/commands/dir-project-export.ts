@@ -19,6 +19,7 @@ import { filter as minimatch } from 'minimatch'
 import { shell } from 'electron'
 import { ExporterOptions } from './exporter/types'
 import LogProvider from '@providers/log'
+import { trans } from '@common/i18n-main'
 
 export default class DirProjectExport extends ZettlrCommand {
   constructor (app: any) {
@@ -117,8 +118,7 @@ export default class DirProjectExport extends ZettlrCommand {
       }
     }
 
-    // TODO: Translate!
-    const notificationShown = this._app.notifications.show('Project successfully exported. Click to show.', 'Export', () => {
+    const notificationShown = this._app.notifications.show(trans('Project successfully exported. Click to show.'), trans('Export'), () => {
       openDirectory(this._app.log, dir.path)
     })
 

@@ -57,7 +57,7 @@ async function filePreviewTooltip (view: EditorView, pos: number, side: 1 | -1):
         return { dom: getPreviewElement(res, fileToDisplay) }
       } else {
         const dom = document.createElement('div')
-        dom.textContent = `File ${fileToDisplay} does not exist.` // TODO: Translate!
+        dom.textContent = trans('File %s does not exist.', fileToDisplay)
         return { dom }
       }
     }

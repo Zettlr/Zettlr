@@ -36,7 +36,7 @@
       <hr>
       <SelectControl
         v-model="effect"
-        v-bind:label="'Sound Effect'"
+        v-bind:label="soundEffectsLabel"
         v-bind:options="soundEffects"
       ></SelectControl>
       <!--
@@ -47,7 +47,7 @@
       -->
       <SliderControl
         v-bind:model-value="volume"
-        v-bind:label="'Volume'"
+        v-bind:label="volumeLabel"
         v-bind:min="0"
         v-bind:max="100"
         v-on:change="volume = $event"
@@ -144,6 +144,12 @@ export default {
     },
     longLabel: function () {
       return trans('Break')
+    },
+    soundEffectsLabel: function () {
+      return trans('Sound Effect')
+    },
+    volumeLabel: function () {
+      return trans('Volume')
     },
     currentPhaseLabel: function () {
       if (this.currentPhase === 'task') {
