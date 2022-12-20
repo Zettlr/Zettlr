@@ -123,7 +123,7 @@ export default defineComponent({
       return this.$store.state.selectedDirectory
     },
     filterPlaceholder: function () {
-      return trans('system.common.filter')
+      return trans('Filter …')
     },
     isThin: function () {
       return this.fileManagerMode === 'thin'

@@ -26,11 +26,11 @@ import { trans } from '@common/i18n-main'
 export default async function shouldOverwriteFileDialog (win: BrowserWindow|null, filename: string): Promise<boolean> {
   let options = {
     type: 'question',
-    title: trans('system.overwrite_file_title'),
-    message: trans('system.overwrite_file_message', filename),
+    title: trans('Overwrite existing file'),
+    message: trans('The file %s already exists in this directory. Overwrite?', filename),
     buttons: [
-      trans('system.cancel'),
-      trans('system.ok')
+      trans('Cancel'),
+      trans('Ok')
     ],
     cancelId: 0,
     defaultId: 1

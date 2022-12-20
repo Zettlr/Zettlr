@@ -263,6 +263,10 @@ there.
   slow
 - Zettlr now attempts to extract the version strings for supported external
   programs (such as Pandoc, Git, and Quarto) and displays them in the About panel
+- Exchanged Zettlr Translate system with `gettext`
+- Removed the translation provider, since its remaining functionality to list
+  available dictionary files and translations has now been moved to the main
+  command hub
 - Removed the `Zettlr` class; the last remnant of the old, class-based system
 
 # 2.3.0

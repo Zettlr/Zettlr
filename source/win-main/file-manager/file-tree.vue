@@ -201,16 +201,16 @@ export default defineComponent({
       return flatArray
     },
     fileSectionHeading: function (): string {
-      return trans('gui.files')
+      return trans('Files')
     },
     workspaceSectionHeading: function (): string {
-      return trans('gui.workspaces')
+      return trans('Workspaces')
     },
     noRootsMessage: function (): string {
-      return trans('gui.empty_directories')
+      return trans('No open files or folders')
     },
     noResultsMessage: function () {
-      return trans('gui.no_search_results')
+      return trans('No results')
     }
   },
   methods: {

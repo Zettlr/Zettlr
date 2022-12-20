@@ -40,7 +40,7 @@ export default class FileDuplicate extends ZettlrCommand {
       this._app.log.error('Could not duplicate source file, because the source file was not found')
       this._app.windows.prompt({
         type: 'error',
-        title: trans('system.error.could_not_create_file'),
+        title: trans('Could not create file'),
         message: 'Could not duplicate file, because the source file was not found'
       })
       return
@@ -56,7 +56,7 @@ export default class FileDuplicate extends ZettlrCommand {
       this._app.log.error('Could not create file, because no directory was found')
       this._app.windows.prompt({
         type: 'error',
-        title: trans('system.error.could_not_create_file'),
+        title: trans('Could not create file'),
         message: 'No directory provided'
       })
       return

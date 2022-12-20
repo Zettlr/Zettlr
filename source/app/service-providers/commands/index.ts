@@ -49,6 +49,8 @@ import SetOpenDirectory from './set-open-directory'
 import { clipboard, ipcMain, nativeImage } from 'electron'
 import isFile from '@common/util/is-file'
 import isDir from '@common/util/is-dir'
+import enumLangFiles from '@common/util/enum-lang-files'
+import enumDictFiles from '@common/util/enum-dict-files'
 
 export const commands = [
   DirDelete,
@@ -181,6 +183,10 @@ export default class CommandProvider extends ProviderContract {
           this._app.log.error('[Application] Error received while running command: ' + String(err.message), err)
           return false
         }
+      } else if (command === 'get-available-languages') {
+        return enumLangFiles().map(elem => elem.tag)
+      } else if (command === 'get-available-dictionaries') {
+        return enumDictFiles().map(elem => elem.tag)
       } else {
         this._app.log.warning(`[Application] Received a request to run command ${command}, but it's not registered.`)
       }

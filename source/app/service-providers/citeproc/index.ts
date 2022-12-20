@@ -228,7 +228,7 @@ export default class CiteprocProvider extends ProviderContract {
       await this.loadDatabase(this.mainLibrary)
     } catch (err: any) {
       this._logger.error(`[Citeproc Provider] Could not load main library: ${String(err.message)}`, err)
-      this._windows.showErrorMessage(trans('gui.citeproc.error_db'), err.message, err.message)
+      this._windows.showErrorMessage(trans('The citation database could not be loaded'), err.message, err.message)
     }
   }
 
@@ -412,7 +412,7 @@ export default class CiteprocProvider extends ProviderContract {
       const newValue = this._config.get('export.cslLibrary')
 
       if (newValue !== this.mainLibrary) {
-        this._notifications.show(trans('gui.citeproc.reloading'))
+        this._notifications.show(trans('Changes to the library file detected. Reloading …'))
         this.unloadDatabase(this.mainLibrary)
         broadcastIpcMessage('citeproc-database-updated', CITEPROC_MAIN_DB)
         this.mainLibrary = newValue
@@ -424,7 +424,7 @@ export default class CiteprocProvider extends ProviderContract {
           .then(() => broadcastIpcMessage('citeproc-database-updated', CITEPROC_MAIN_DB))
           .catch(err => {
             this._logger.error(`[Citeproc Provider] Could not reload main library: ${String(err.message)}`, err)
-            this._windows.showErrorMessage(trans('gui.citeproc.error_db'), err.message)
+            this._windows.showErrorMessage(trans('The citation database could not be loaded'), err.message)
           })
       }
     }

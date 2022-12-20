@@ -173,19 +173,19 @@ export default class UpdateProvider extends ProviderContract {
 
       // Give a more detailed error message.
       if (serverError) {
-        msg = trans('dialog.update.server_error', err.response.statusCode)
+        msg = trans('Could not check for updates: Server Error (Status code: %s)', err.response.statusCode)
       } else if (clientError) {
-        msg = trans('dialog.update.client_error', err.response.statusCode)
+        msg = trans('Could not check for updates: Client Error (Status code: %s)', err.response.statusCode)
       } else if (redirectError) {
-        msg = trans('dialog.update.redirect_error', err.response.statusCode)
+        msg = trans('Could not check for updates: The server tried to redirect (Status code: %s)', err.response.statusCode)
       } else if (notFoundError) {
         // getaddrinfo has reported that the host has not been found.
         // This normally only happens if the networking interface is
         // offline.
-        msg = trans('dialog.update.connection_error')
+        msg = trans('Could not check for updates: Could not establish connection')
       } else {
         // Something else has occurred. GotError objects have a name property.
-        msg = trans('dialog.update.other_error', err.name, err.message)
+        msg = trans('Could not check for updates. %s: %s', err.name, err.message)
       }
 
       this._reportError(err.code, msg)
@@ -201,7 +201,7 @@ export default class UpdateProvider extends ProviderContract {
   private async _parseResponse (response: Response<string>): Promise<void> {
     // Error handling
     if (response.body.trim() === '') {
-      this._reportError('ERR_BODY_PARSE_FAILURE', trans('dialog.update.no_data'))
+      this._reportError('ERR_BODY_PARSE_FAILURE', trans('Could not check for updates: Server hasn\'t sent any data'))
       return
     }
 
@@ -460,7 +460,7 @@ export default class UpdateProvider extends ProviderContract {
           if (this.applicationUpdateAvailable()) {
             const { tagName } = this.getUpdateState()
             this._logger.info(`Update available: ${tagName}`)
-            this._notifications.show(trans('dialog.update.new_update_available', tagName))
+            this._notifications.show(trans('An update to version %s is available!', tagName))
           }
         })
         .catch(err => this._logger.error('[Update Provider] Could not check for updates: Unexpected error', err))

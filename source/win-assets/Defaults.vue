@@ -135,10 +135,10 @@ export default defineComponent({
   },
   computed: {
     protectedProfileWarning: function (): string {
-      return trans('dialog.defaults.protected_warning')
+      return trans('This profile is protected. This means that it will be restored when you remove or rename it.')
     },
     invalidProfileWarning: function (): string {
-      return trans('dialog.defaults.invalid_warning')
+      return trans('This profile appears to be either missing the writer or reader property. Make sure to set both so that Zettlr can use this profile.')
     },
     renameFileLabel: function (): string {
       return 'Rename file' // TODO: Translate!
@@ -174,10 +174,10 @@ export default defineComponent({
         })
     },
     defaultsExplanation: function (): string {
-      return trans('dialog.defaults.explanation') // Edit the corresponding defaults file here.
+      return trans('Edit the default settings for imports or exports here.') // Edit the corresponding defaults file here.
     },
     saveButtonLabel: function (): string {
-      return trans('dialog.button.save')
+      return trans('Save')
     }
   },
   watch: {
@@ -195,7 +195,7 @@ export default defineComponent({
       if (editor.isClean() === true) {
         this.savingStatus = ''
       } else {
-        this.savingStatus = trans('gui.assets_man.status.unsaved_changes')
+        this.savingStatus = trans('Unsaved changes')
       }
     }
   },
@@ -257,7 +257,7 @@ export default defineComponent({
         .catch(err => console.error(err))
     },
     saveDefaultsFile: function () {
-      this.savingStatus = trans('gui.assets_man.status.saving')
+      this.savingStatus = trans('Saving …')
 
       const name = this.visibleItems[this.currentItem].name
 
@@ -266,7 +266,7 @@ export default defineComponent({
         payload: { filename: name, contents: this.editorContents }
       })
         .then(async () => {
-          this.savingStatus = trans('gui.assets_man.status.saved')
+          this.savingStatus = trans('Saved!')
           await this.retrieveDefaultsFiles() // Always make sure to pull in any changes
           setTimeout(() => { this.savingStatus = '' }, 1000)
         })

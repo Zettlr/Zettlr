@@ -16,53 +16,52 @@
 import sanitizeHtml from 'sanitize-html'
 const ipcRenderer = window.ipc
 
+let i18nData: any
+
 /**
- * This translates a given identifier string into the loaded language
- * @param  {String} string A dot-delimited string containing the translatable
- * @param  {any} args   Zero or more strings that will replace %s-placeholders in the string
- * @return {String}        The translation with all potential replacements applied.
+ * Call this function during window registration to load the translation data
+ * immediately after start so that the translations are available. NOTE: This
+ * function produces a side-effect in that it sets the local module variable.
  */
-export function trans (string: string, ...args: any[]): string {
-  if (!string.includes('.')) {
-    // Wtf? But alright, return the string and log an error
-    console.log('The translation string was malformed: ' + string + '!')
-    return string
+export async function loadData (): Promise<void> {
+  console.log('Loading i18n data ...')
+  i18nData = await ipcRenderer.invoke('i18n')
+  console.log('i18n data loaded')
+}
+
+/**
+ * Takes a message ID and returns the appropriate translated message string. If
+ * there is no language data loaded, this function returns the message ID.
+ *
+ * @param   {string}  msgid  The message ID to return a translation for
+ *
+ * @return  {string}         The translation, or the message ID if no translations were found.
+ */
+function getTranslation (msgid: string): string {
+  if (i18nData === undefined) {
+    return msgid
   }
 
-  // Make sure the translations are ready
-  if (global.i18n === undefined || global.i18nFallback === undefined) {
-    const { i18n, i18nFallback } = ipcRenderer.sendSync('get-translation')
-    global.i18n = i18n
-    global.i18nFallback = i18nFallback
-  }
+  const context = i18nData.translations['']
 
-  // Split the string by dots
-  const str = string.split('.')
-  // The function will be called from line 58 as a fallback
-  // if a given string couldn't be found.
-  let transString = global.i18n
-  let skipFallback = false
-  if (args[0] === true) {
-    transString = global.i18nFallback
-    skipFallback = true // Prevent an endless loop if the string is also missing from fallback
-    args.splice(0, 1) // Remove the first argument as it's only the injected "true"
+  if (msgid in context && context[msgid].msgstr[0] !== '') {
+    return context[msgid].msgstr[0]
+  } else {
+    return msgid
   }
+}
 
-  for (const obj of str) {
-    if (obj in transString) {
-      transString = transString[obj]
-    } else {
-      // Something went wrong and the requested translation string was
-      // not found -> fall back and just return the original string
-      return (Boolean(window.config.get('debug')) || skipFallback) ? string : trans(string, ...[true].concat(args))
-    }
-  }
-
-  // There was an additional attribute missing (there is a whole object
-  // in the variable) -> just return the string
-  if (typeof transString !== 'string') {
-    return string
-  }
+/**
+ * Translates the given message ID
+ *
+ * @param   {string}  msgid  The message ID to translate
+ * @param   {any[]}   args   Provide optional arguments to replace in the
+ *                           translation. One argument replaces one %s, in order.
+ *
+ * @return  {string}         The translated and replaced string.
+ */
+export function trans (msgid: string, ...args: any[]): string {
+  let transString = getTranslation(msgid)
 
   for (const a of args) {
     transString = transString.replace('%s', a) // Always replace one %s with an arg

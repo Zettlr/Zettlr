@@ -138,16 +138,16 @@ export default defineComponent({
       }
     },
     filterPlaceholder: function () {
-      return trans('dialog.filter_tags')
+      return trans('Filter tags…')
     },
     tagCloudTitle: function () {
-      return trans('dialog.tag_cloud.title')
+      return trans('Tag Cloud')
     },
     tagSuggestionsLabel: function () {
-      return trans('dialog.tag_cloud.suggestions_label')
+      return trans('Suggested tags for the current file')
     },
     addButtonLabel: function () {
-      return trans('dialog.tag_cloud.add_to_file')
+      return trans('Add to file')
     },
     sortedTags: function () {
       // Sorts the tags based on either name or count

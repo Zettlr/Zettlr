@@ -23,13 +23,13 @@ const clipboard = window.clipboard
 export default function displayFileContext (event: MouseEvent, fileObject: MDFileDescriptor|CodeFileDescriptor, el: HTMLElement, callback: any): void {
   const template: AnyMenuItem[] = [
     {
-      label: trans('menu.open_new_tab'),
+      label: trans('Open in a new tab'),
       id: 'new-tab',
       type: 'normal',
       enabled: true
     },
     {
-      label: trans('menu.properties'),
+      label: trans('Properties'),
       id: 'properties',
       type: 'normal',
       enabled: true
@@ -38,21 +38,21 @@ export default function displayFileContext (event: MouseEvent, fileObject: MDFil
       type: 'separator'
     },
     {
-      label: trans('menu.rename_file'),
+      label: trans('Rename file'),
       id: 'menu.rename_file',
       accelerator: 'CmdOrCtrl+R',
       type: 'normal',
       enabled: true
     },
     {
-      label: trans('menu.delete_file'),
+      label: trans('Delete file'),
       id: 'menu.delete_file',
       accelerator: 'CmdOrCtrl+Backspace',
       type: 'normal',
       enabled: true
     },
     {
-      label: trans('menu.duplicate_file'),
+      label: trans('Duplicate file'),
       id: 'menu.duplicate_file',
       type: 'normal',
       enabled: true
@@ -61,13 +61,13 @@ export default function displayFileContext (event: MouseEvent, fileObject: MDFil
       type: 'separator'
     },
     {
-      label: trans('menu.copy_filename'),
+      label: trans('Copy filename'),
       id: 'menu.copy_filename',
       type: 'normal',
       enabled: true
     },
     {
-      label: trans('menu.copy_id'),
+      label: trans('Copy ID'),
       id: 'menu.copy_id',
       type: 'normal',
       enabled: fileObject.type === 'file' && fileObject.id !== ''
@@ -76,7 +76,7 @@ export default function displayFileContext (event: MouseEvent, fileObject: MDFil
       type: 'separator'
     },
     {
-      label: trans('menu.show_file'),
+      label: trans('Show file'),
       id: 'menu.show_file',
       type: 'normal',
       enabled: true
@@ -89,7 +89,7 @@ export default function displayFileContext (event: MouseEvent, fileObject: MDFil
       {
         id: 'menu.close_file',
         type: 'normal',
-        label: trans('menu.close_file'),
+        label: trans('Close file'),
         enabled: true
       })
   }

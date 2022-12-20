@@ -155,7 +155,7 @@ function snippetsAutocomplete (context: CompletionContext) {
 //         className: 'cm-link',
 //         inclusiveLeft: false,
 //         inclusiveRight: true,
-//         attributes: { title: trans('gui.ctrl_click_to_open', match[0]) }
+//         attributes: { title: trans('Cmd/Ctrl+Click to open %s', match[0]) }
 //       }
 //     )
 //   }

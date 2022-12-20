@@ -61,25 +61,25 @@ export default defineComponent({
     return {
       tabs: [
         {
-          label: trans('dialog.defaults.exporting_title'),
+          label: trans('Exporting'),
           controls: 'tab-export',
           id: 'tab-export-control',
           icon: 'export'
         },
         {
-          label: trans('dialog.defaults.importing_title'),
+          label: trans('Importing'),
           controls: 'tab-import',
           id: 'tab-import-control',
           icon: 'import'
         },
         {
-          label: trans('dialog.custom_css.title'),
+          label: trans('Custom CSS'),
           controls: 'tab-custom-css',
           id: 'tab-custom-css-control',
           icon: 'code'
         },
         {
-          label: trans('dialog.snippets.title'),
+          label: trans('Snippets'),
           controls: 'tab-snippets',
           id: 'tab-snippets-control',
           icon: 'pinboard'
@@ -93,7 +93,7 @@ export default defineComponent({
       if (document.body.classList.contains('darwin')) {
         return this.tabs[this.currentTab].label
       } else {
-        return trans('gui.assets_man.win_title')
+        return trans('Assets Manager')
       }
     }
   }

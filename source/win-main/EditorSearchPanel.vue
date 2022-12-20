@@ -88,12 +88,12 @@ const props = defineProps({
   }
 })
 
-const findPlaceholder = trans('dialog.find.find_placeholder')
-const replacePlaceholder = trans('dialog.find.replace_placeholder')
-const replaceNextLabel = trans('dialog.find.replace_next_label')
-const replaceAllLabel = trans('dialog.find.replace_all_label')
-const closeLabel = trans('dialog.find.close_label')
-const regexLabel = trans('dialog.find.regex_label')
+const findPlaceholder = trans('Find…')
+const replacePlaceholder = trans('Replace with')
+const replaceNextLabel = trans('Replace next occurrence')
+const replaceAllLabel = trans('Replace all occurrences')
+const closeLabel = trans('Close search')
+const regexLabel = trans('Toggle regular expression search')
 
 const regexpSearch = ref(false)
 const caseSensitive = ref(false)

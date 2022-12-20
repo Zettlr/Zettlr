@@ -12,62 +12,67 @@
  * END HEADER
  */
 
-import ConfigProvider from '@providers/config'
 import sanitizeHtml from 'sanitize-html'
+import { GetTextTranslations, po } from 'gettext-parser'
+import getLanguageFile from './util/get-language-file'
+import { promises as fs } from 'fs'
+import { ipcMain } from 'electron'
+import { Candidate } from './util/find-lang-candidates'
+import { LangFileMetadata } from './util/enum-lang-files'
 
-let config: ConfigProvider|undefined
+let i18nData: GetTextTranslations|undefined
 
-export function provideConfigToI18NMain (provider: ConfigProvider): void {
-  config = provider
+/**
+ * Call this function during boot to load the translation data immediately after
+ * start so that the translations are available. NOTE: This function produces a
+ * side-effect in that it sets the local module variable i18nData
+ */
+export async function loadData (lang: string): Promise<Candidate & LangFileMetadata> {
+  const file = getLanguageFile(lang)
+  const contents = await fs.readFile(file.path, 'utf-8')
+  i18nData = po.parse(contents)
+
+  // Also make the data available to renderers who request the i18n data
+  ipcMain.handle('i18n', (event) => { return i18nData })
+
+  // We need to return the actually loaded file so that the config provider
+  // knows what the app is showing.
+  return file
 }
 
 /**
- * This translates a given identifier string into the loaded language
- * @param  {string} identifier A dot-delimited string containing the translatable
- * @param  {any} args   Zero or more strings that will replace %s-placeholders in the string
- * @return {String}        The translation with all potential replacements applied.
+ * Takes a message ID and returns the appropriate translated message string. If
+ * there is no language data loaded, this function returns the message ID.
+ *
+ * @param   {string}  msgid  The message ID to return a translation for
+ *
+ * @return  {string}         The translation, or the message ID if no translations were found.
  */
-export function trans (identifier: string, ...args: any[]): string {
-  if (global.i18n === undefined) {
-    // If you see this error while developing, you're doing something wrong
-    // (e.g. call `trans` in one of the constructors of the service providers).
-    throw new Error(`Cannot translate ${identifier}, since the translations have not yet been loaded!`)
+function getTranslation (msgid: string): string {
+  if (i18nData === undefined) {
+    return msgid
   }
 
-  if (!identifier.includes('.')) {
-    // This happens especially if you, e.g., call the `trans` function with a
-    // yet-to-translate string that does not contain dots.
-    throw new Error(`The translation string was malformed: ${identifier}!`)
-  }
+  const context = i18nData.translations['']
 
-  // Split the string by dots
-  const str = identifier.split('.')
-  // The function will be called from line 74 as a fallback
-  // if a given string couldn't be found.
-  let transString = global.i18n
-  let skipFallback = false
-  if (args[0] === true) {
-    transString = global.i18nFallback
-    skipFallback = true // Prevent an endless loop if the string is also missing from fallback
-    args.splice(0, 1) // Remove the first argument as it's only the injected "true"
+  if (msgid in context && context[msgid].msgstr[0] !== '') {
+    return context[msgid].msgstr[0]
+  } else {
+    return msgid
   }
+}
 
-  for (const obj of str) {
-    if (obj in transString) {
-      transString = transString[obj]
-    } else {
-      const isDebug: boolean = config?.get('debug') ?? skipFallback
-      // Something went wrong and the requested translation string was
-      // not found -> fall back and just return the original string
-      return (isDebug || skipFallback) ? identifier : trans(identifier, ...[true].concat(args))
-    }
-  }
-
-  // There was an additional attribute missing (there is a whole object
-  // in the variable) -> just return the string
-  if (typeof transString !== 'string') {
-    return identifier
-  }
+/**
+ * Translates the given message ID
+ *
+ * @param   {string}  msgid  The message ID to translate
+ * @param   {any[]}   args   Provide optional arguments to replace in the
+ *                           translation. One argument replaces one %s, in order.
+ *
+ * @return  {string}         The translated and replaced string.
+ */
+export function trans (msgid: string, ...args: any[]): string {
+  let transString = getTranslation(msgid)
 
   for (const a of args) {
     transString = transString.replace('%s', a) // Always replace one %s with an arg

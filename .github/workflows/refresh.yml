@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: develop
       - name: Setup NodeJS 16
@@ -35,12 +35,6 @@ jobs:
           yarn csl:refresh
           git add -A
           git diff-index --quiet HEAD || git commit -m "Update CSL files"
-      # Update translations
-      - name: Update translations
-        run: |
-          yarn lang:refresh
-          git add -A
-          git diff-index --quiet HEAD || git commit -m "Update translations"
       # Update the CITATION.cff file if applicable
       - name: Update CITATION.cff
         run: |

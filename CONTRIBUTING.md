@@ -35,7 +35,9 @@ As mentioned above, there are numerous ways in which you can help Zettlr. Choose
 
 Our aim is to support as many languages as possible, making Zettlr a truly international application. As of now, more than a dozen languages are already available, but even the most popular languages have room for improvement. Translating does not at all require technical knowledge.
 
-Translating works via a system of voting – the more you vote on good translations, the better it will be. All you need is some valid e-mail address to register for an account over on [Zettlr Translate](https://translate.zettlr.com/), and you can start! There is a better explanation of how Zettlr Translate works [at this link](https://translate.zettlr.com/welcome).
+Zettlr utilizes the `gettext` system for translating content. All translations reside in the folder `static/lang`. Inside, you will find a set of `*.po` files, named with their corresponding language codes (e.g. `fr-FR` for French and `pt-BR` for Brazilian Portuguese).
+
+To improve upon a translation, simply edit the corresponding `*.po` file using a method of your choice. This can be done either with a text editor, or, if you would like to have a graphical user interface, the application POedit. After you have modified the translation file, open a Pull Request to add your changes to the application.
 
 ### Documentation
 

@@ -60,13 +60,13 @@ export default async function importTextbundle (bundle: any, target: DirDescript
     }
   }
 
-  if (!foundMDFile) throw new Error(trans('system.error.malformed_textbundle', path.basename(bundle.path)))
+  if (!foundMDFile) throw new Error(trans('Malformed Textbundle: %s', path.basename(bundle.path)))
 
   // Now the assets
   try {
     bdl = await fs.readdir(path.join(bundle.path, 'assets'))
   } catch (err) {
-    throw new Error(trans('system.error.malformed_textbundle', path.basename(bundle.path)))
+    throw new Error(trans('Malformed Textbundle: %s', path.basename(bundle.path)))
   }
 
   if (bdl.length > 0) {

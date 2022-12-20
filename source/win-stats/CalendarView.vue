@@ -125,7 +125,7 @@ export default defineComponent({
       return this.now.year === DateTime.local().year
     },
     calendarLabel: function (): string {
-      return trans('dialog.statistics.tabs.calendar_label')
+      return trans('Calendar')
     },
     isMinimumYear: function (): boolean {
       // Returns true if this.now holds the minimum year for which there is
@@ -143,18 +143,18 @@ export default defineComponent({
     months: function (): Array<{ name: string, padding: number, daysInMonth: number }> {
       const ret = []
       const MONTHS = [
-        trans('gui.months.jan'),
-        trans('gui.months.feb'),
-        trans('gui.months.mar'),
-        trans('gui.months.apr'),
-        trans('gui.months.may'),
-        trans('gui.months.jun'),
-        trans('gui.months.jul'),
-        trans('gui.months.aug'),
-        trans('gui.months.sep'),
-        trans('gui.months.oct'),
-        trans('gui.months.nov'),
-        trans('gui.months.dec')
+        trans('January'),
+        trans('February'),
+        trans('March'),
+        trans('April'),
+        trans('May'),
+        trans('June'),
+        trans('July'),
+        trans('August'),
+        trans('September'),
+        trans('October'),
+        trans('November'),
+        trans('December')
       ]
 
       for (let i = 1; i <= 12; i++) {
@@ -170,13 +170,13 @@ export default defineComponent({
       return ret
     },
     lowMidLegend: function (): string {
-      return trans('gui.chart.low_mid_legend')
+      return trans('Below the monthly average')
     },
     highMidLegend: function (): string {
-      return trans('gui.chart.high_mid_legend')
+      return trans('Over the monthly average')
     },
     highLegend: function (): string {
-      return trans('gui.chart.high_legend')
+      return trans('More than twice the monthly average')
     }
   },
   methods: {

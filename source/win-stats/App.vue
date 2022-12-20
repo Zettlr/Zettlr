@@ -84,19 +84,19 @@ export default defineComponent({
       currentTab: 0,
       tabs: [
         {
-          label: trans('dialog.statistics.tabs.calendar_label'),
+          label: trans('Calendar'),
           controls: 'tab-calendar',
           id: 'tab-calendar-control',
           icon: 'calendar'
         },
         {
-          label: trans('dialog.statistics.tabs.chart_label'),
+          label: trans('Charts'),
           controls: 'tab-charts',
           id: 'tab-charts-control',
           icon: 'line-chart'
         },
         {
-          label: trans('dialog.statistics.tabs.fsal_label'),
+          label: trans('FSAL Stats'),
           controls: 'tab-fsal',
           id: 'tab-fsal-control',
           icon: 'file-group'
@@ -116,7 +116,7 @@ export default defineComponent({
       if (process.platform === 'darwin') {
         return this.tabs[this.currentTab].label
       } else {
-        return trans('dialog.statistics.title')
+        return trans('Writing statistics')
       }
     },
     wordCounts: function (): any {

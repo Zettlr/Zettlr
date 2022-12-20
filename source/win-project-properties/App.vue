@@ -155,19 +155,19 @@ export default defineComponent({
       })
     },
     exportFormatLabel: function (): string {
-      return trans('dialog.preferences.project.format')
+      return trans('Export project to:')
     },
     exportFormatUseLabel: function (): string {
-      return trans('dialog.preferences.project.use_label')
+      return trans('Use')
     },
     exportFormatNameLabel: function (): string {
-      return trans('dialog.preferences.project.name_label')
+      return trans('Format')
     },
     exportPatternLabel: function (): string {
-      return trans('dialog.preferences.project.pattern')
+      return trans('Add Glob patterns to include only specific files')
     },
     exportPatternNameLabel: function (): string {
-      return trans('dialog.preferences.project.pattern_name')
+      return trans('Glob Pattern')
     }
   },
   watch: {

@@ -45,13 +45,13 @@ export default defineComponent({
   name: 'OtherFilesTab',
   computed: {
     otherFilesLabel: function (): string {
-      return trans('gui.other_files')
+      return trans('Other files')
     },
     openDirLabel: function (): string {
-      return trans('gui.attachments_open_dir')
+      return trans('Open directory')
     },
     noAttachmentsMessage: function (): string {
-      return trans('gui.no_other_files')
+      return trans('No other files')
     },
     attachments: function (): OtherFileDescriptor[] {
       const currentDir = this.$store.state.selectedDirectory as DirDescriptor|null

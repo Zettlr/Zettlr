@@ -54,8 +54,8 @@ export default defineComponent({
         document.title = path.basename(this.filePath)
         return path.basename(this.filePath)
       } else {
-        document.title = trans('menu.print')
-        return trans('menu.print')
+        document.title = trans('Print…')
+        return trans('Print…')
       }
     },
     fileUrl: function (): string {

@@ -46,8 +46,8 @@ export default defineComponent({
   },
   data: function () {
     return {
-      customCSSTitle: trans('dialog.custom_css.title'),
-      customCSSInfo: trans('dialog.custom_css.info'),
+      customCSSTitle: trans('Custom CSS'),
+      customCSSInfo: trans('Here you can override the styles of Zettlr to customise it even further. <strong>Attention: This file overrides all CSS directives! Never alter the geometry of elements, otherwise the app may expose unwanted behaviour!</strong>'),
       css: '',
       savingStatus: ''
     }
@@ -57,21 +57,21 @@ export default defineComponent({
       return [
         {
           type: 'button',
-          label: trans('dialog.button.save'),
+          label: trans('Save'),
           id: 'save',
           icon: '',
           buttonClass: 'primary' // It's a primary button
         },
         {
           type: 'button',
-          label: trans('dialog.button.cancel'),
+          label: trans('Cancel'),
           id: 'cancel',
           icon: ''
         }
       ]
     },
     saveButtonLabel: function (): string {
-      return trans('dialog.button.save')
+      return trans('Save')
     }
   },
   watch: {
@@ -80,7 +80,7 @@ export default defineComponent({
       if (editor.isClean() === true) {
         this.savingStatus = ''
       } else {
-        this.savingStatus = trans('gui.assets_man.status.unsaved_changes')
+        this.savingStatus = trans('Unsaved changes')
       }
     }
   },
@@ -103,7 +103,7 @@ export default defineComponent({
   methods: {
     handleClick: function (controlID: string) {
       if (controlID === 'save') {
-        this.savingStatus = trans('gui.assets_man.status.saving')
+        this.savingStatus = trans('Saving …')
         ipcRenderer.invoke('css-provider', {
           command: 'set-custom-css',
           css: this.css
@@ -112,7 +112,7 @@ export default defineComponent({
             this.savingStatus = ''
           })
           .catch(e => {
-            this.savingStatus = trans('gui.assets_man.status.save_error')
+            this.savingStatus = trans('Saving failed')
             console.error(e)
           })
       }

@@ -20,7 +20,7 @@ export default function (): any {
       [
         {
           type: 'radio',
-          label: trans('dialog.preferences.cite_style_label'),
+          label: trans('How would you like autocomplete to insert your citations?'),
           model: 'editor.citeStyle',
           options: {
             'regular': '[@Author2015, p. 123] → (Author 2015, 123)',
@@ -32,7 +32,7 @@ export default function (): any {
       [
         {
           type: 'file',
-          label: trans('dialog.preferences.citation_database'),
+          label: trans('Citation Database (CSL JSON or BibTex)'),
           model: 'export.cslLibrary',
           reset: '',
           filter: {
@@ -43,7 +43,7 @@ export default function (): any {
         },
         {
           type: 'file',
-          label: trans('dialog.preferences.project.csl_style'),
+          label: trans('CSL-Style (optional)'),
           model: 'export.cslStyle',
           reset: '',
           filter: {

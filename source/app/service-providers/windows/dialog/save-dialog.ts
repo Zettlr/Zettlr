@@ -49,7 +49,7 @@ export default async function saveFileDialog (logger: LogProvider, config: Confi
 
   // Prepare options
   let opt: SaveDialogOptions = {
-    title: trans('system.save_file'),
+    title: trans('Save file'),
     // If the caller has provided an absolute path to a file, start there. Otherwise,
     // concatenate the startdir
     defaultPath: (isDir(path.dirname(fileOrPathName))) ? fileOrPathName : path.join(startDir, fileOrPathName),

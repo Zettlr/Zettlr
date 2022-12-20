@@ -76,7 +76,7 @@ export default class Export extends ZettlrCommand {
       exporterOptions.cwd = fileDescriptor.dir
       switch (exportTo) {
         case 'ask': {
-          const folderSelection = await this._app.windows.askDir(trans('system.export_dialog.title'), null, trans('system.export_dialog.save'))
+          const folderSelection = await this._app.windows.askDir(trans('Choose export destination'), null, trans('Save'))
           if (folderSelection === undefined || folderSelection.length === 0) {
             this._app.log.error('[Export] Could not run exporter: Folderselection did not have a result!')
             return
@@ -107,7 +107,7 @@ export default class Export extends ZettlrCommand {
       if (output.code === 0) {
         this._app.log.info(`Successfully exported file to ${output.targetFile}`)
         const readableFormat = (profile.writer in PANDOC_WRITERS) ? PANDOC_WRITERS[profile.writer] : profile.writer
-        this._app.notifications.show(trans('system.export_success', readableFormat))
+        this._app.notifications.show(trans('Exporting to %s', readableFormat))
 
         // In case of a textbundle/pack it's a folder, else it's a file
         if ([ 'textbundle', 'textpack' ].includes(arg.profile.writer)) {
@@ -119,8 +119,8 @@ export default class Export extends ZettlrCommand {
           }
         }
       } else {
-        const title = trans('system.error.export_error_title')
-        const message = trans('system.error.export_error_message', `Pandoc exited with code ${output.code}`)
+        const title = trans('Export failed')
+        const message = trans('An error occurred on export: %s', `Pandoc exited with code ${output.code}`)
         const contents = output.stderr.join('\n')
         this._app.windows.showErrorMessage(title, message, contents)
       }
