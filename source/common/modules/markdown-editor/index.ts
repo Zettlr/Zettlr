@@ -398,7 +398,7 @@ export default class MarkdownEditor extends EventEmitter {
    * a setting has changed that requires extensions to be fully reloaded.
    */
   async reload (): Promise<void> {
-    await this.swapDoc(this.config.metadata.path)
+    await this.swapDoc(this.config.metadata.path, true)
   }
 
   /**

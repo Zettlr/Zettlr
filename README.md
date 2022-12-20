@@ -175,6 +175,8 @@ Use this command to carefree test any changes you make to the application. This 
 
 Whenever you want to reset the test directory to its initial state (or you removed the directory, or cloned the whole project anew), pass the flag `--clean` to the command in order to create or reset the directory. **This is also necessary if you changed something in `test-config.yml`**.
 
+If you want to prevent a config-file from being created (e.g., to simulate the first start experience), you can pass the flag `--no-config` to this command.
+
 You can pass additional command-line switches such as `--clear-cache` to this command as well. They will be passed to the child process.
 
 > Attention: Before first running the command, you **must** run it with the `--clean`-flag to create the directory in the first place!

@@ -18,7 +18,7 @@ import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { AnyMenuItem } from '@dts/renderer/context'
 import { SyntaxNode } from '@lezer/common'
-import { forEachDiagnostic, Diagnostic } from '@codemirror/lint'
+import { forEachDiagnostic, Diagnostic, forceLinting, setDiagnostics } from '@codemirror/lint'
 import { applyBold, applyItalic, insertLink, applyBlockquote, applyOrderedList, applyBulletList, applyTaskList } from '../commands/markdown'
 import { cut, copyAsPlain, copyAsHTML, paste, pasteAsPlain } from '../util/copy-paste-cut'
 
@@ -294,6 +294,20 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
         'dictionary-provider',
         { command: 'add', terms: [word] }
       )
+        .then(() => {
+          // After we've added the word to the dictionary, we have to invalidate
+          // the spellcheck linter errors that mark this specific word as wrong.
+          const filteredDiagnostics: Diagnostic[] = []
+          forEachDiagnostic(view.state, (d, from, to) => {
+            if (d.source !== 'spellcheck') {
+              filteredDiagnostics.push(d)
+            } else if (view.state.sliceDoc(from, to) !== word) {
+              filteredDiagnostics.push(d)
+            }
+          })
+          view.dispatch(setDiagnostics(view.state, filteredDiagnostics))
+          forceLinting(view)
+        })
         .catch(e => console.error(e))
     } else if (clickedID.startsWith('$') && diagnostic !== undefined) {
       view.dispatch({

@@ -57,14 +57,16 @@ it works:
   top, bottom) and also move the file into that new pane.
 * You can also move document tabs between multiple panes by simply dropping them
   in the center of an editor pane. As long as there's no shimmer, the file will
-  be moved instead.
+  be moved instead. You can also drop a file onto a tabbar of one of the
+  editors, which will have the same effect (but it will be indicated with the
+  same blue shimmer as when you are splitting an editor).
 * After you have closed the last file inside such a pane, it will automatically
   close itself. If the pane was part of a split, the other pane will then occupy
   the place of the now closed editor pane. To create the pane again, simply drag
   another file to the correct border of an existing editor pane.
 * You can resize the panes at will. Unlike the sidebar and file manager, we have
   not implemented any size limits, so with a little bit of care, you can create
-  your unique mosaique of files.
+  your unique mosaic of files.
 * Since we are now not limited to one active file and one set of open files per
   window, these notions have changed their meaning. Now, every editor pane has
   one set of open files and one active file. Each window also remembers which
@@ -221,6 +223,7 @@ there.
   changes from the table to the document and second save the document itself.
 - The editor now recognizes Pandoc attribute syntax (e.g., `{.unnumbered}`)
 - Added `lua` syntax highlighting support
+- Improved the tutorial to make use of the new split views
 
 ## Under the Hood
 
@@ -264,6 +267,7 @@ there.
 - Removed the translation provider, since its remaining functionality to list
   available dictionary files and translations has now been moved to the main
   command hub
+- Removed the `Zettlr` class; the last remnant of the old, class-based system
 
 # 2.3.0
 

@@ -10,7 +10,7 @@ keywords:
 
 # Citing with Zettlr 💬
 
-In this final guide, we will dive into how you can automatically cite using Zettlr! If you have been using the Zotero plugin for Word before (or even the Citavi plugin), rest assured: It works almost the same, you only have much more freedom to adapt the citations to your needs.
+In this final guide, we will dive into how you can automatically cite using Zettlr! If you have been using the Zotero plugin for Word before (or even the Citavi plugin), rest assured: It works almost the same, but you have much more freedom to adapt the citations to your needs.
 
 To begin citing with Zettlr, you’ll need to set up a references database, [which we describe in our documentation](https://docs.zettlr.com/en/academic/citations/). For the purposes of this tutorial, we have already prepared a small database which’ll cover everything you need to know. Let’s load it! In the tutorial directory, there is a small file called “references.json”. It contains some references that Zettlr can cite. To load it, first head over into the preferences and into the tab “Citations”. Once there, navigate to the file using the file browser of the references database-field.
 

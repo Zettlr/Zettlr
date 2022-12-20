@@ -30,11 +30,11 @@ const CONFIG_FILE = path.join(__dirname, '../../resources/test-cfg/config.json')
 // Test if we should nuke the old test environment, or simply start
 // with the old one (useful for testing persistence of settings)
 if (process.argv.includes('--clean')) {
+  let argv = process.argv.slice(2)
+  argv.splice(argv.indexOf('--clean'), 1)
   info('☢️ Nuking test environment ...')
-  prepareEnvironment().then(() => {
+  prepareEnvironment(argv).then(() => {
     console.log('') // Empty line
-    let argv = process.argv.slice(2)
-    argv.splice(argv.indexOf('--clean'), 1)
     startApp(argv)
   }).catch(err => {
     error(err.message)
@@ -47,7 +47,12 @@ if (process.argv.includes('--clean')) {
   startApp(process.argv.slice(2))
 }
 
-async function prepareEnvironment () {
+/**
+ * Prepares the environment for a fresh start
+ *
+ * @param   {string[]}  argv  The arguments provided
+ */
+async function prepareEnvironment (argv) {
   // First, remove the ./resources/test folder
   try {
     await fs.lstat(TEST_DIRECTORY)
@@ -85,15 +90,17 @@ async function prepareEnvironment () {
   await fs.mkdir(CONF_DIRECTORY, { recursive: true })
   success('Created app data directory!')
 
-  const readmeFile = roots.find(root => path.basename(root) === 'README.md')
+  // Now it's time to create the new config file. But only if the flag
+  // `--no-config` is not given
+  if (argv.includes('--no-config')) {
+    info('Not creating config file.')
+    argv.splice(argv.indexOf('--no-config'), 1)
+    return
+  }
 
-  // Now it's time to create the new config file
   info('Creating new configuration file from test-config.yml ...')
   let cfg = await makeConfig()
   cfg.openPaths = roots
-  // Set the README.md file as open
-  cfg.openFiles = [readmeFile]
-  cfg.activeFile = readmeFile
 
   // We also want the dialogs to start at the test directory for easier navigation
   cfg.dialogPaths = {
@@ -107,6 +114,11 @@ async function prepareEnvironment () {
   success(`Written file ${CONFIG_FILE}.`)
 }
 
+/**
+ * Starts the application in develop mode
+ *
+ * @param   {string[]}  argv  The arguments provided (sans arguments required for this script itself)
+ */
 function startApp (argv = []) {
   info('Starting Zettlr with custom configuration ...')
 
