@@ -24,6 +24,11 @@ jobs:
       # The scripts require some modules that we need to install.
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+      # Gettext is not installed on Ubuntu by default, so we have to do it here
+      - name: Install gettext
+        run: |
+          sudo apt-get update
+          sudo apt-get install gettext
       - name: Configure git
         run: |
           git config --local user.email "action@github.com"
