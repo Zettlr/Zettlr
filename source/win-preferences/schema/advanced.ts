@@ -65,11 +65,6 @@ export default function (): any {
           type: 'checkbox',
           label: trans('Automatically check for updates'),
           model: 'system.checkForUpdates'
-        },
-        {
-          type: 'checkbox',
-          label: trans('Check for updated translations on start'),
-          model: 'system.checkForTranslationUpdates'
         }
       ],
       [

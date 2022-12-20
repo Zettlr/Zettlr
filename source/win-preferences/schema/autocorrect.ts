@@ -25,16 +25,6 @@ export default function (): any {
         }
       ],
       [
-        {
-          type: 'radio',
-          model: 'editor.autoCorrect.style',
-          options: {
-            'Word': trans('Word style (replace immediately without pressing Space/Enter)'),
-            'LibreOffice': trans('LibreOffice style (press Space or Enter to replace)')
-          }
-        }
-      ],
-      [
         // Taken from: https://de.wikipedia.org/wiki/Anf%C3%BChrungszeichen
         // ATTENTION when adding new pairs: They will be SPLIT using the hyphen character!
         {

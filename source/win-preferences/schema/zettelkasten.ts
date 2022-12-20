@@ -51,7 +51,7 @@ export default function (): any {
         },
         {
           type: 'checkbox',
-          label: 'Link with filename only',
+          label: trans('Link with filename only'),
           model: 'zkn.linkFilenameOnly'
         },
         {

@@ -58,7 +58,6 @@ export interface ConfigOptions {
     citeStyle: 'in-text'|'in-text-suffix'|'regular'
     autoCloseBrackets: boolean
     defaultSaveImagePath: string
-    homeEndBehaviour: boolean
     enableTableHelper: boolean
     indentUnit: number
     indentWithTabs: boolean
@@ -68,14 +67,11 @@ export interface ConfigOptions {
     boldFormatting: '**'|'__'
     italicFormatting: '_'|'*'
     readabilityAlgorithm: string
-    direction: 'ltr'|'rtl'
-    rtlMoveVisually: boolean
     lint: {
       markdown: boolean
     }
     autoCorrect: {
       active: boolean
-      style: 'LibreOffice'|'Word'
       magicQuotes: {
         primary: string
         secondary: string
@@ -112,7 +108,6 @@ export interface ConfigOptions {
     avoidNewTabs: boolean
     iframeWhitelist: string[]
     checkForUpdates: boolean
-    checkForTranslationUpdates: boolean
     zoomBehavior: 'gui'|'editor'
   }
   checkForBeta: boolean

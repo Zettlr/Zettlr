@@ -94,7 +94,7 @@ export default function (): any {
       [
         {
           type: 'checkbox',
-          label: 'Check Markdown for style issues', // TODO: Translate!
+          label: trans('Check Markdown for style issues'),
           model: 'editor.lint.markdown'
         }
       ],
@@ -116,11 +116,6 @@ export default function (): any {
         },
         {
           type: 'checkbox',
-          label: trans('Use the CodeMirror default actions for <kbd>Home</kbd> and <kbd>End</kbd>.'),
-          model: 'editor.homeEndBehaviour'
-        },
-        {
-          type: 'checkbox',
           label: trans('Enable Table Editor'),
           model: 'editor.enableTableHelper'
         },
@@ -128,22 +123,6 @@ export default function (): any {
           type: 'checkbox',
           label: trans('Count characters instead of words (e.g., for Chinese)'),
           model: 'editor.countChars'
-        }
-      ],
-      [
-        {
-          type: 'radio',
-          label: '', // TODO
-          model: 'editor.direction',
-          options: {
-            'ltr': trans('Use left-to-right (LTR) writing direction'),
-            'rtl': trans('Use right-to-left (RTL) writing direction')
-          }
-        },
-        {
-          type: 'checkbox',
-          label: trans('Use visual order for arrow key movement while in RTL-mode'),
-          model: 'editor.rtlMoveVisually'
         }
       ]
     ]
