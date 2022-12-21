@@ -32,7 +32,9 @@ export const filesUpdateField = StateField.define<Completion[]>({
         // Convert the files into completion objects
         return effect.value.map(entry => {
           return {
-            label: entry.filename,
+            label: (entry.id != null && entry.id !== '')
+              ? `${entry.id}: ${entry.filename}`
+              : entry.filename,
             info: entry.id,
             apply: apply(entry.filename, entry.id)
           }
