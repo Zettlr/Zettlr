@@ -66,26 +66,12 @@ const countWordsTesters = [
 
 describe('Utility#countWords()', function () {
   for (let test of countWordsTesters) {
-    const wordCount = countWords(test.input, false)
-    const charCount = countWords(test.input, true)
-
-    let wordCountMessage = `should return ${test.expectedWords} words`
-    let charCountMessage = `should return ${test.expectedChars} characters`
-
-    if (wordCount !== test.expectedWords) {
-      wordCountMessage += ` but returned ${wordCount} words`
-    }
-
-    if (charCount !== test.expectedChars) {
-      charCountMessage += ` but returned ${charCount} characters`
-    }
-
-    it(wordCountMessage, function () {
-      strictEqual(wordCount, test.expectedWords)
+    it(`should return ${test.expectedWords} words`, function () {
+      strictEqual(countWords(test.input, false), test.expectedWords)
     })
 
-    it(charCountMessage, function () {
-      strictEqual(charCount, test.expectedChars)
+    it(`should return ${test.expectedChars} characters`, function () {
+      strictEqual(countWords(test.input, true), test.expectedChars)
     })
   }
 })
