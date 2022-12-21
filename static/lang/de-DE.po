@@ -3,23 +3,23 @@
 # This file is distributed under the same license as the Zettlr package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2022-12-20 15:57+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: de-DE\n"
+"PO-Revision-Date: 2022-12-21 14:25+0100\n"
+"Last-Translator: Hendrik Erz <info@zettlr.com>\n"
+"Language-Team: \n"
+"Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:100
 msgid "No footnote text found."
-msgstr ""
+msgstr "Kein Fußnotentext gefunden."
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:111
 #: source/app/service-providers/menu/menu.darwin.ts:315
@@ -59,7 +59,7 @@ msgstr "Codeblock"
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:60
 #, javascript-format
 msgid "File %s does not exist."
-msgstr ""
+msgstr "Datei %s existiert nicht."
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:90
 msgid "Word count"
@@ -84,7 +84,7 @@ msgstr "In neuem Tab öffnen"
 
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
-msgstr ""
+msgstr "Keine Syntax"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:133
 msgid "No suggestions"
@@ -190,11 +190,11 @@ msgstr "Datei anzeigen"
 #: source/common/modules/markdown-editor/renderers/render-images.ts:92
 #, javascript-format
 msgid "Image not found: %s"
-msgstr ""
+msgstr "Bild konnte nicht geladen werden: %s"
 
 #: source/common/modules/markdown-editor/linters/spellcheck.ts:149
 msgid "Spelling mistake"
-msgstr ""
+msgstr "Rechtschreibfehler"
 
 #: source/common/util/format-date.ts:33
 msgid "just now"
@@ -525,11 +525,11 @@ msgstr "Lange Pause"
 
 #: source/tmp/PopoverPomodoro.vue.ts:87
 msgid "Sound Effect"
-msgstr ""
+msgstr "Ton"
 
 #: source/tmp/PopoverPomodoro.vue.ts:90
 msgid "Volume"
-msgstr ""
+msgstr "Lautstärke"
 
 #: source/tmp/OtherFilesTab.vue.ts:13 source/tmp/MainSidebar.vue.ts:74
 msgid "Other files"
@@ -681,9 +681,8 @@ msgid "Actions"
 msgstr "Aktionen"
 
 #: source/tmp/List.vue.ts:147
-#, fuzzy
 msgid "Delete"
-msgstr "Datei löschen"
+msgstr "Löschen"
 
 #. Apparently we have a simple array, so exactly one column
 #: source/tmp/List.vue.ts:169
@@ -700,11 +699,11 @@ msgstr "Verwandte Dateien"
 
 #: source/tmp/PopoverTags.vue.ts:73
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 #: source/tmp/PopoverTags.vue.ts:74
 msgid "Count"
-msgstr ""
+msgstr "Anzahl"
 
 #: source/tmp/PopoverTags.vue.ts:98
 msgid "Filter tags…"
@@ -893,7 +892,7 @@ msgstr "Eingabemodus des Editors"
 
 #: source/win-preferences/schema/editor.ts:97
 msgid "Check Markdown for style issues"
-msgstr ""
+msgstr "Überprüfe Markdown auf stilistische Probleme"
 
 #: source/win-preferences/schema/editor.ts:104
 msgid "Mute non-focused lines in distraction-free mode"
@@ -1065,9 +1064,8 @@ msgid "Options for ZKN elements"
 msgstr "Optionen für ZKN-Elemente"
 
 #: source/win-preferences/schema/zettelkasten.ts:54
-#, fuzzy
 msgid "Link with filename only"
-msgstr "Nur Dateiname"
+msgstr "Nur mit Dateinamen verlinken"
 
 #: source/win-preferences/schema/zettelkasten.ts:59
 msgid "When linking files, add the filename …"
@@ -1264,7 +1262,7 @@ msgstr "Verzeichnis auswählen"
 #. TODO: Create this type
 #: source/win-preferences/schema/display.ts:24
 msgid "These options determine which elements are rendered in documents."
-msgstr "Hiermit bestimmst du, welche Elemente Zettlr darstellt"
+msgstr "Hiermit bestimmst du, welche Elemente Zettlr darstellt."
 
 #: source/win-preferences/schema/display.ts:28
 msgid "Render Citations"
@@ -1272,7 +1270,7 @@ msgstr "Zitationen darstellen"
 
 #: source/win-preferences/schema/display.ts:33
 msgid "Render Iframes"
-msgstr "iframe-Elemente darstellen"
+msgstr "IFrame-Elemente darstellen"
 
 #: source/win-preferences/schema/display.ts:38
 msgid "Render Images"
@@ -1317,7 +1315,7 @@ msgstr "Blende Werkzeugleiste im ablenkungsfreien Modus aus"
 #. TODO: Create this type
 #: source/win-preferences/schema/display.ts:129
 msgid "With these controls you can constrain the image previews."
-msgstr "Hiermit bestimmst du die maximale Größe der Bildvorschauen"
+msgstr "Hiermit bestimmst du die maximale Größe der Bildvorschauen."
 
 #: source/win-preferences/schema/display.ts:133
 msgid "Maximum width of images (percent)"
@@ -1836,12 +1834,12 @@ msgstr "Verzeichnis %s wurde geladen."
 #: source/app/service-providers/commands/root-open.ts:159
 #, javascript-format
 msgid "Could not open workspace %s."
-msgstr ""
+msgstr "Konnte Arbeitsverzeichnis %s nicht öffnen."
 
 #: source/app/service-providers/commands/import-lang-file.ts:59
 #, javascript-format
 msgid "Language file imported: %s"
-msgstr "Sprachdatei %s wurde erfolgreich importiert!"
+msgstr "Sprachdatei %s wurde erfolgreich importiert"
 
 #: source/app/service-providers/commands/import-lang-file.ts:61
 #: source/app/service-providers/commands/import-lang-file.ts:64
@@ -1920,12 +1918,11 @@ msgstr "Konnte Verzeichnis nicht erstellen"
 
 #: source/app/service-providers/commands/dir-project-export.ts:121
 msgid "Project successfully exported. Click to show."
-msgstr ""
+msgstr "Projekt erfolgreich exportiert. Klicke zum Anzeigen."
 
 #: source/app/service-providers/commands/dir-project-export.ts:121
-#, fuzzy
 msgid "Export"
-msgstr "Exportieren…"
+msgstr "Exportieren"
 
 #: source/app/service-providers/commands/export.ts:79
 msgid "Choose export destination"
@@ -1955,7 +1952,7 @@ msgstr "Konnte Datei nicht erstellen"
 #: source/app/service-providers/commands/file-duplicate.ts:71
 #, javascript-format
 msgid "Copy of %s"
-msgstr ""
+msgstr "Kopie von %s"
 
 #: source/app/service-providers/commands/import.ts:35
 msgid "You have to select a directory to import to."
