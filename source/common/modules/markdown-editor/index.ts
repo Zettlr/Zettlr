@@ -772,26 +772,6 @@ export default class MarkdownEditor extends EventEmitter {
   }
 
   /**
-   * Whether the instance is currently readonly
-   *
-   * @return  {Boolean}  True if users cannot edit the contents
-   */
-  get readOnly (): boolean {
-    return this._instance.state.readOnly
-  }
-
-  /**
-   * Sets the readonly flag on the instance
-   *
-   * @param   {Boolean}  shouldBeReadonly  Whether the editor contents should be readonly
-   */
-  set readOnly (shouldBeReadonly: boolean) {
-    this._instance.state.update({
-      // effects: EditorState.readOnly.of(shouldBeReadonly) // TODO figure out properly
-    })
-  }
-
-  /**
    * Returns the current contents of the editor
    *
    * @return  {String}  The editor contents
