@@ -531,7 +531,7 @@ export default class MarkdownEditor extends EventEmitter {
 
     // First: The configuration updates themselves. This will already update a
     // bunch of other facets and values (such as tab size and unit)
-    this._instance.state.update({ effects: configUpdateEffect.of(this.config) })
+    this._instance.dispatch({ effects: configUpdateEffect.of(this.config) })
 
     // Second: The renderers
     reconfigureRenderers(this._instance, {
