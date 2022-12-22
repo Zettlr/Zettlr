@@ -35,7 +35,6 @@ export const filesUpdateField = StateField.define<Completion[]>({
             label: (entry.id != null && entry.id !== '')
               ? `${entry.id}: ${entry.filename}`
               : entry.filename,
-            info: entry.id,
             apply: apply(entry.filename, entry.id)
           }
         })

@@ -123,6 +123,7 @@ import { EditorSelection } from '@codemirror/state'
 import { TagDatabase } from '@dts/common/tag-provider'
 
 const ipcRenderer = window.ipc
+const path = window.path
 
 const props = defineProps({
   leafId: {
@@ -634,24 +635,9 @@ function updateFileDatabase () {
   const fileDatabase: Array<{ filename: string, id: string }> = []
 
   for (const file of fsalFiles.value) {
-    const fname = file.name.substring(0, file.name.lastIndexOf('.'))
-    let displayText = fname // Fallback: Only filename
-    if (useTitle.value && typeof file.frontmatter?.title === 'string') {
-      // (Else) if there is a frontmatter, use that title
-      displayText = file.frontmatter.title
-    } else if (useH1.value && file.firstHeading !== null) {
-      // The user wants to use first headings as fallbacks
-      displayText = file.firstHeading
-    }
-
-    if (file.id !== '' && !filenameOnly.value) {
-      displayText = `${file.id}: ${displayText}`
-    }
-
     fileDatabase.push({
-      // Use the ID, if given, or the filename
-      filename: (file.id !== '' && !filenameOnly.value) ? file.id : fname,
-      id: (file.id !== '' && !filenameOnly.value) ? file.id : ''
+      filename: path.basename(file.name, file.ext),
+      id: file.id
     })
   }
 
