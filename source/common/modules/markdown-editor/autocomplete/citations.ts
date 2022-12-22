@@ -13,8 +13,9 @@
  */
 
 import { Completion } from '@codemirror/autocomplete'
-import { StateEffect, StateField } from '@codemirror/state'
+import { EditorState, StateEffect, StateField } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
+import extractCitations from '@common/util/extract-citations'
 import { AutocompletePlugin } from '.'
 import { configField } from '../util/configuration'
 
@@ -42,6 +43,47 @@ export const citekeyUpdateField = StateField.define<Completion[]>({
     return val
   }
 })
+
+/**
+ * This function takes the citations from the corresponding database and returns
+ * them in a sorted fashion based on which citations occur in the document, by
+ * count.
+ *
+ * @param   {EditorState}  state  The editor state
+ *
+ * @return  {Completion[]}        The sorted completions
+ */
+function sortCitationKeysByUsage (state: EditorState): Completion[] {
+  // First, get our existing entries in the database, and re-transform them into
+  // what the update effect expects
+  const entries = state.field(citekeyUpdateField)
+
+  // Then, retrieve the already existing citations
+  const existingCitations = extractCitations(state.doc.toString())
+    .map(c => {
+      return c.citations.map(cite => cite.id)
+    })
+    .flat()
+
+  // Create a counter
+  const citationCounts: { [key: string]: number } = {}
+  for (const key of existingCitations) {
+    if (!(key in citationCounts)) {
+      citationCounts[key] = 0
+    }
+
+    citationCounts[key] += 1
+  }
+
+  // Now sort the entries based on the existing citation counts
+  entries.sort((a, b) => {
+    const countA: number = citationCounts[a.label] ?? 0
+    const countB: number = citationCounts[b.label] ?? 0
+    return countB - countA
+  })
+
+  return entries
+}
 
 /**
  * This utility function just takes a citekey and ensures that the way the
@@ -104,7 +146,7 @@ export const citations: AutocompletePlugin = {
   },
   entries (ctx, query) {
     query = query.toLowerCase()
-    const entries = ctx.state.field(citekeyUpdateField)
+    const entries = sortCitationKeysByUsage(ctx.state)
     return entries.filter(entry => {
       return entry.label.toLowerCase().includes(query) || (entry.info as string|undefined)?.toLowerCase().includes(query)
     })
