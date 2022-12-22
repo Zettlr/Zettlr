@@ -20,25 +20,25 @@ export default function (): any {
       [
         {
           type: 'text',
-          label: trans('dialog.preferences.zkn.id_label'),
+          label: trans('ID regular expression'),
           model: 'zkn.idRE',
           reset: '(\\d{14})' // Default enables the reset button
         },
         {
           type: 'text',
-          label: trans('dialog.preferences.zkn.linkstart_label'),
+          label: trans('Link start'),
           model: 'zkn.linkStart',
           reset: '[['
         },
         {
           type: 'text',
-          label: trans('dialog.preferences.zkn.linkend_label'),
+          label: trans('Link ending'),
           model: 'zkn.linkEnd',
           reset: ']]'
         },
         {
           type: 'text',
-          label: trans('dialog.preferences.zkn.id_generator_label'),
+          label: trans('Pattern used to generate new IDs'),
           model: 'zkn.idGen',
           reset: '%Y%M%D%h%m%s',
           info: 'Variables: %Y, %y, %M, %D, %W, %h, %m, %s, %X, %uuid4'
@@ -47,21 +47,21 @@ export default function (): any {
       [
         {
           type: 'fieldset-label', // TODO: Create this type
-          text: trans('dialog.preferences.export.stripping')
+          text: trans('Options for ZKN elements')
         },
         {
           type: 'checkbox',
-          label: 'Link with filename only',
+          label: trans('Link with filename only'),
           model: 'zkn.linkFilenameOnly'
         },
         {
           type: 'radio',
-          label: trans('dialog.preferences.zkn.link_behaviour_description'),
+          label: trans('When linking files, add the filename …'),
           model: 'zkn.linkWithFilename',
           options: {
-            'always': trans('dialog.preferences.zkn.link_behaviour_always'),
-            'withID': trans('dialog.preferences.zkn.link_behaviour_id'),
-            'never': trans('dialog.preferences.zkn.link_behaviour_never')
+            'always': trans('always'),
+            'withID': trans('only when linking using the ID'),
+            'never': trans('never')
           },
           disabled: window.config.get('zkn.linkFilenameOnly') === true
         }
@@ -69,17 +69,17 @@ export default function (): any {
       [
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.zkn.auto_search'),
+          label: trans('Start a search when following Zettelkasten-links'),
           model: 'zkn.autoSearch'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.zkn.auto_create_file'),
+          label: trans('Automatically create non-existing files when following internal links'),
           model: 'zkn.autoCreateLinkedFiles'
         },
         {
           type: 'directory',
-          label: trans('dialog.preferences.zkn.custom_directory'),
+          label: trans('Put auto-created files into this directory (must be loaded in Zettlr)'),
           model: 'zkn.customDirectory',
           reset: ''
         }

@@ -24,13 +24,11 @@
       </ProjectsTab>
       <SponsorsTab v-else-if="currentTab === 2">
       </SponsorsTab>
-      <ContributorsTab v-else-if="currentTab === 3">
-      </ContributorsTab>
-      <LicenseTab v-else-if="currentTab === 4">
+      <LicenseTab v-else-if="currentTab === 3">
       </LicenseTab>
-      <FontLicenseTab v-else-if="currentTab === 5">
+      <FontLicenseTab v-else-if="currentTab === 4">
       </FontLicenseTab>
-      <DebugTab v-else-if="currentTab === 6">
+      <DebugTab v-else-if="currentTab === 5">
       </DebugTab>
     </div>
   </WindowChrome>
@@ -59,7 +57,6 @@ import { defineComponent } from 'vue'
 import GeneralTab from './General-Tab.vue'
 import ProjectsTab from './Projects-Tab.vue'
 import SponsorsTab from './Sponsors-Tab.vue'
-import ContributorsTab from './Contributors-Tab.vue'
 import LicenseTab from './License-Tab.vue'
 import FontLicenseTab from './Font-License-Tab.vue'
 import DebugTab from './Debug-Tab.vue'
@@ -71,7 +68,6 @@ export default defineComponent({
     GeneralTab,
     ProjectsTab,
     SponsorsTab,
-    ContributorsTab,
     LicenseTab,
     FontLicenseTab,
     DebugTab
@@ -81,31 +77,25 @@ export default defineComponent({
       currentTab: 0,
       tabs: [
         {
-          label: trans('dialog.about.title'),
+          label: trans('About Zettlr'),
           controls: 'tab-general',
           id: 'tab-general-control',
           icon: 'info-standard'
         },
         {
-          label: trans('dialog.about.projects'),
+          label: trans('Other projects'),
           controls: 'tab-projects',
           id: 'tab-projects-control',
           icon: 'applications'
         },
         {
-          label: trans('dialog.about.sponsors'),
+          label: trans('Sponsors'),
           controls: 'tab-sponsors',
           id: 'tab-sponsors-control',
           icon: 'star'
         },
         {
-          label: trans('dialog.about.contributors'),
-          controls: 'tab-contributors',
-          id: 'tab-contributors-control',
-          icon: 'users'
-        },
-        {
-          label: trans('dialog.about.license'),
+          label: trans('License'),
           controls: 'tab-license',
           id: 'tab-license-control',
           icon: 'cog'
@@ -130,7 +120,7 @@ export default defineComponent({
       if (process.platform === 'darwin') {
         return this.tabs[this.currentTab].label
       } else {
-        return trans('dialog.about.title') + ' ' + (global as any).config.get('version')
+        return trans('About Zettlr') + ' ' + (global as any).config.get('version')
       }
     }
   }

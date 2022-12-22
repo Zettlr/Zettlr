@@ -91,16 +91,19 @@ body {
     }
 
     // Style the code block line wrapper classes
-    .code-block-line {
+    .code-block-line-background {
       background-color: #eee;
     }
 
-    .code-block-first-line {
+    // NOTE: Our codeblock layer creates THREE blocks per codeblock:
+    // First line, rest of the block, and an empty block at the end.
+    // Therefore we have to style elements 1, 4, 7, etc. and 2, 5, 8, etc.
+    .code-block-line-background:nth-child(3n+1) {
         border-top-left-radius: 4px;
         border-top-right-radius: 4px;
     }
 
-    .code-block-last-line {
+    .code-block-line-background:nth-child(3n+2) {
         border-bottom-left-radius: 4px;
         border-bottom-right-radius: 4px;
     }
@@ -207,6 +210,7 @@ body {
       border: none;
       padding: 5px;
       border-radius: 4px;
+      word-break: break-all;
       box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .25);
       a { color: inherit; }
     }
@@ -217,7 +221,7 @@ body {
     // within that div and would otherwise be hidden.
     .cm-tooltip:not(.cm-tooltip-autocomplete) {
       overflow: auto;
-      max-width: 500px;
+      max-width: 50vw;
     }
 
     .cm-completionInfo { overflow: hidden; }
@@ -227,6 +231,7 @@ body {
       border-radius: 8px;
       padding: 0;
       border: none;
+      max-width: initial;
       background-color: transparent;
 
       .button-wrapper {

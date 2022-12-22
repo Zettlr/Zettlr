@@ -112,9 +112,8 @@ export default defineComponent({
     return {
       tags: [] as Array<{ text: string, count: number, className: string }>,
       tabs: [
-        // TODO: Translate
-        { id: 'name', label: 'Name' },
-        { id: 'count', label: 'Count' }
+        { id: 'name', label: trans('Name') },
+        { id: 'count', label: trans('Count') }
       ] as TabbarControl[],
       activeFile: null as OpenDocument|null,
       // Super hacky way to get some tag suggestions. (Reminder to myself:
@@ -138,16 +137,16 @@ export default defineComponent({
       }
     },
     filterPlaceholder: function () {
-      return trans('dialog.filter_tags')
+      return trans('Filter tags…')
     },
     tagCloudTitle: function () {
-      return trans('dialog.tag_cloud.title')
+      return trans('Tag Cloud')
     },
     tagSuggestionsLabel: function () {
-      return trans('dialog.tag_cloud.suggestions_label')
+      return trans('Suggested tags for the current file')
     },
     addButtonLabel: function () {
-      return trans('dialog.tag_cloud.add_to_file')
+      return trans('Add to file')
     },
     sortedTags: function () {
       // Sorts the tags based on either name or count

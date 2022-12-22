@@ -89,12 +89,12 @@ export default class OpenAttachment extends ZettlrCommand {
     } catch (err: any) {
       if (appearsToHaveNoAttachments) {
         // Better error message
-        let msg = trans('system.error.citation_no_attachments', arg.citekey)
+        let msg = trans('The reference with key %s does not appear to have attachments.', arg.citekey)
         this._app.log.info(msg)
         this._app.notifications.show(msg)
       } else {
         this._app.log.error('Could not open attachment.', err.message)
-        this._app.notifications.show(trans('system.error.open_attachment_error'))
+        this._app.notifications.show(trans('Could not open attachment. Is Zotero running?'))
       }
       return false
     }

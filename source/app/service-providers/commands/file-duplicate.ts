@@ -40,7 +40,7 @@ export default class FileDuplicate extends ZettlrCommand {
       this._app.log.error('Could not duplicate source file, because the source file was not found')
       this._app.windows.prompt({
         type: 'error',
-        title: trans('system.error.could_not_create_file'),
+        title: trans('Could not create file'),
         message: 'Could not duplicate file, because the source file was not found'
       })
       return
@@ -56,7 +56,7 @@ export default class FileDuplicate extends ZettlrCommand {
       this._app.log.error('Could not create file, because no directory was found')
       this._app.windows.prompt({
         type: 'error',
-        title: trans('system.error.could_not_create_file'),
+        title: trans('Could not create file'),
         message: 'No directory provided'
       })
       return
@@ -68,7 +68,7 @@ export default class FileDuplicate extends ZettlrCommand {
       filename = sanitize(arg.name.trim(), { 'replacement': '-' })
     } else {
       // We need to generate our own filename. First, attempt to just use 'copy of'
-      filename = 'Copy of ' + file.name // TODO: Translate
+      filename = trans('Copy of %s', file.name)
       // See if it's a file
       if (isFile(path.join(dir.path, filename))) {
         // Filename is already given, so we need to add increasing numbers

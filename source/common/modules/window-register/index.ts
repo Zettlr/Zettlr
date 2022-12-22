@@ -18,6 +18,7 @@
 import registerThemes from './register-themes'
 import registerDefaultContextMenu from './register-default-context'
 import loadIcons from './load-icons'
+import { loadData } from '@common/i18n-renderer'
 
 /**
  * This function is the renderer's counterpart to the main process's window
@@ -25,8 +26,10 @@ import loadIcons from './load-icons'
  * bar (on Windows and Linux, if native is off)
  */
 export default function windowRegister (): void {
+  // Immediately load the translations
+  loadData().catch(e => console.error(e))
   // Load the clarity icons
-  loadIcons().catch(e => { console.error(e) })
+  loadIcons().catch(e => console.error(e))
 
   // ... the theming functionality ...
   registerThemes()

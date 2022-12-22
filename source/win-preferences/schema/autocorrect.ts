@@ -20,18 +20,8 @@ export default function (): any {
       [
         {
           type: 'switch',
-          label: trans('dialog.preferences.autocorrect.active_label'),
+          label: trans('Turn on AutoCorrect'),
           model: 'editor.autoCorrect.active'
-        }
-      ],
-      [
-        {
-          type: 'radio',
-          model: 'editor.autoCorrect.style',
-          options: {
-            'Word': trans('dialog.preferences.autocorrect.style_word_label'),
-            'LibreOffice': trans('dialog.preferences.autocorrect.style_libre_office_label')
-          }
         }
       ],
       [
@@ -39,10 +29,10 @@ export default function (): any {
         // ATTENTION when adding new pairs: They will be SPLIT using the hyphen character!
         {
           type: 'select',
-          label: trans('dialog.preferences.autocorrect.quotes_double_label'),
+          label: trans('Primary Magic Quotes'),
           model: 'editor.autoCorrect.magicQuotes.primary',
           options: {
-            '"…"': trans('dialog.preferences.autocorrect.quick_select_none_label'),
+            '"…"': trans('Disable Magic Quotes'),
             '“…”': '“…” (US primary)',
             '‘…’': '‘…’ (UK primary)',
             '”…”': '”…” (Finnish/Swedish primary)',
@@ -60,10 +50,10 @@ export default function (): any {
         },
         {
           type: 'select',
-          label: trans('dialog.preferences.autocorrect.quotes_single_label'),
+          label: trans('Secondary Magic Quotes'),
           model: 'editor.autoCorrect.magicQuotes.secondary',
           options: {
-            '\'…\'': trans('dialog.preferences.autocorrect.quick_select_none_label'),
+            '\'…\'': trans('Disable Magic Quotes'),
             '‘…’': '‘…’ (US secondary)',
             '“…”': '“…” (UK secondary)',
             '’…’': '’…’ (Finnish/Swedish secondary)',
@@ -86,7 +76,7 @@ export default function (): any {
       [
         {
           type: 'list',
-          label: trans('dialog.preferences.autocorrect.replacement_info'),
+          label: trans('Here you can define certain strings that will be replaced when AutoCorrect is on. The characters on the left side will be replaced with whatever comes on the right.'),
           model: 'editor.autoCorrect.replacements',
           deletable: true,
           searchable: true,

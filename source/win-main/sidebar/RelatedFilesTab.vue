@@ -94,7 +94,7 @@ export default defineComponent({
       })
     },
     relatedFilesLabel: function (): string {
-      return trans('gui.related_files_label')
+      return trans('Related files')
     },
     lastActiveFile: function (): OpenDocument|null {
       return this.$store.getters.lastLeafActiveFile()
@@ -107,7 +107,7 @@ export default defineComponent({
       }
     },
     noRelatedFilesMessage: function (): string {
-      return trans('gui.no_related_files')
+      return trans('No related files')
     },
     useH1: function (): boolean {
       return this.$store.state.config.fileNameDisplay.includes('heading')

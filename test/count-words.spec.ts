@@ -18,6 +18,11 @@ import { strictEqual } from 'assert'
 
 const countWordsTesters = [
   {
+    input: '',
+    expectedWords: 0,
+    expectedChars: 0
+  },
+  {
     input: 'Lorem\n\n# Ipsum',
     expectedWords: 2,
     expectedChars: 12

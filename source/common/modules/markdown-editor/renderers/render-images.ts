@@ -19,6 +19,7 @@ import { EditorState } from '@codemirror/state'
 import { configField } from '../util/configuration'
 import makeAbsoluteURL from '@common/util/make-absolute-url'
 import { linkImageMenu } from '../context-menu/link-image-menu'
+import { trans } from '@common/i18n-renderer'
 
 const path = window.path
 
@@ -88,7 +89,7 @@ class ImageWidget extends WidgetType {
     img.onerror = () => {
       img.src = img404
       isDataUrl = true
-      caption.textContent = 'Image not found: ' + decodedUrl // TODO: Translate
+      caption.textContent = trans('Image not found: %s', decodedUrl)
       caption.contentEditable = 'false'
     }
 

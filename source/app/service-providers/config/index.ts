@@ -27,6 +27,7 @@ import enumDictFiles from '@common/util/enum-dict-files'
 import ProviderContract from '../provider-contract'
 import LogProvider from '../log'
 import { ConfigOptions } from '@dts/main/config-provider'
+import { loadData } from '@common/i18n-main'
 
 const ZETTLR_VERSION = app.getVersion()
 
@@ -176,6 +177,15 @@ export default class ConfigProvider extends ProviderContract {
 
     // Remove potential dead links to non-existent files and dirs
     this.checkPaths()
+
+    // Immediately begin loading the translation strings. These have to be
+    // available directly after the config has been loaded.
+    const file = await loadData(this.config.appLang)
+    // It may be that only a fallback has been provided or else. In this case we
+    // must update the config to reflect this.
+    if (file.tag !== this.config.appLang) {
+      this.config.appLang = file.tag
+    }
 
     // Boot up the validation rules
     for (let i = 0; i < VALIDATE_RULES.length; i++) {

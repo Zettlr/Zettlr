@@ -20,7 +20,7 @@ export default function (): any {
       [
         {
           type: 'select',
-          label: trans('dialog.preferences.app_lang.title'),
+          label: trans('Application language (<strong>Restart required!</strong>)'),
           model: 'appLang',
           options: {} // Will be set dynamically
         }
@@ -28,45 +28,45 @@ export default function (): any {
       [
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.dark_mode'),
+          label: trans('Dark mode'),
           model: 'darkMode'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.file_meta'),
+          label: trans('Show file information'),
           model: 'fileMeta'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.always_reload_files'),
+          label: trans('Always load remote changes to the current file'),
           model: 'alwaysReloadFiles'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.avoid_new_tabs'),
+          label: trans('Avoid opening files in new tabs if possible'),
           model: 'system.avoidNewTabs'
         }
       ],
       [
         {
           type: 'radio',
-          label: trans('dialog.preferences.auto_dark_mode_explanation'),
+          label: trans('Automatically switch to dark mode'),
           model: 'autoDarkMode',
           options: {
-            'off': trans('dialog.preferences.auto_dark_mode_off'),
-            'schedule': trans('dialog.preferences.auto_dark_mode_schedule'),
-            'system': trans('dialog.preferences.auto_dark_mode_system')
+            'off': trans('Off'),
+            'schedule': trans('Schedule'),
+            'system': trans('Follow Operating System')
           }
         },
         {
           type: 'time',
-          label: trans('dialog.preferences.dark_mode_schedule.start'),
+          label: trans('Start dark mode at'),
           model: 'autoDarkModeStart',
           inline: true
         },
         {
           type: 'time',
-          label: trans('dialog.preferences.dark_mode_schedule.end'),
+          label: trans('End dark mode at'),
           model: 'autoDarkModeEnd',
           inline: true
         }
@@ -74,66 +74,66 @@ export default function (): any {
       [
         {
           type: 'radio',
-          label: trans('dialog.preferences.filemanager_explanation'),
+          label: trans('File manager mode'),
           model: 'fileManagerMode',
           options: {
-            'thin': trans('dialog.preferences.filemanager_thin'),
-            'expanded': trans('dialog.preferences.filemanager_expanded'),
-            'combined': trans('dialog.preferences.filemanager_combined')
+            'thin': trans('Thin &mdash; show either file tree or file list'),
+            'expanded': trans('Expanded &mdash; show both file tree and file list'),
+            'combined': trans('Combined &mdash; show files and directories in the file tree')
           }
         },
         {
           type: 'radio',
-          label: trans('dialog.preferences.filename_display.label'),
+          label: trans('Display files using'),
           model: 'fileNameDisplay',
           options: {
-            'filename': trans('dialog.preferences.filename_display.filename_only'),
-            'title': trans('dialog.preferences.filename_display.title'),
-            'heading': trans('dialog.preferences.filename_display.heading'),
-            'title+heading': trans('dialog.preferences.filename_display.title_heading')
+            'filename': trans('Filename only'),
+            'title': trans('Title if applicable'),
+            'heading': trans('First heading level 1 if applicable'),
+            'title+heading': trans('Title or first heading level 1 if applicable')
           }
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.display_markdown_file_extensions'),
+          label: trans('Display Markdown file extensions'),
           model: 'display.markdownFileExtensions'
         }
       ],
       [
         {
           type: 'radio',
-          label: trans('dialog.preferences.sorting_explanation'),
+          label: trans('Sorting order for files (used for sorting by name)'),
           model: 'sorting',
           options: {
-            'natural': trans('dialog.preferences.sorting_natural'),
-            'ascii': trans('dialog.preferences.sorting_ascii')
+            'natural': trans('Natural order (10 after 2)'),
+            'ascii': trans('ASCII order (2 after 10)')
           }
         }
       ],
       [
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.sort_folders_first'),
+          label: trans('Show folders above files'),
           model: 'sortFoldersFirst'
         }
       ],
       [
         {
           type: 'radio',
-          label: trans('dialog.preferences.sorting_time_explanation'),
+          label: trans('When sorting by time, sort by'),
           model: 'sortingTime',
           options: {
-            'modtime': trans('dialog.preferences.modtime'),
-            'creationtime': trans('dialog.preferences.creationtime')
+            'modtime': trans('Last modification time'),
+            'creationtime': trans('File creation time')
           }
         },
         {
           type: 'radio',
-          label: trans('dialog.preferences.display_time_explanation'),
+          label: trans('In the file metadata display'),
           model: 'fileMetaTime',
           options: {
-            'modtime': trans('dialog.preferences.modtime'),
-            'creationtime': trans('dialog.preferences.creationtime')
+            'modtime': trans('Last modification time'),
+            'creationtime': trans('File creation time')
           }
         }
       ]

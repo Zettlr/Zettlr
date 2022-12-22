@@ -33,20 +33,20 @@ export default class DirNew extends ZettlrCommand {
       this._app.log.error('Could not create directory: No source given.', arg)
       this._app.windows.prompt({
         type: 'error',
-        title: trans('system.error.could_not_create_dir'),
-        message: trans('system.error.could_not_create_dir')
+        title: trans('Could not create directory'),
+        message: trans('Could not create directory')
       })
       return false
     }
 
-    const sanitizedName = (arg.name !== undefined) ? sanitize(arg.name.trim(), { replacement: '-' }) : trans('dialog.dir_new.value')
+    const sanitizedName = (arg.name !== undefined) ? sanitize(arg.name.trim(), { replacement: '-' }) : trans('Untitled')
 
     if (sanitizedName.length === 0) {
       this._app.log.error('New directory name was empty after sanitization.', arg)
       this._app.windows.prompt({
         type: 'error',
-        title: trans('system.error.could_not_create_dir'),
-        message: trans('system.error.could_not_create_dir')
+        title: trans('Could not create directory'),
+        message: trans('Could not create directory')
       })
       return false
     }
@@ -56,7 +56,7 @@ export default class DirNew extends ZettlrCommand {
     } catch (err: any) {
       this._app.windows.prompt({
         type: 'error',
-        title: trans('system.error.could_not_create_dir'),
+        title: trans('Could not create directory'),
         message: err.message
       })
       return false

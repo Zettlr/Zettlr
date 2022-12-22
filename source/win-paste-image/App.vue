@@ -128,38 +128,38 @@ export default defineComponent({
   },
   computed: {
     windowTitle: function () {
-      return trans('dialog.paste_image.title')
+      return trans('Insert Image from Clipboard')
     },
     dimensionsLabel: function () {
-      return trans('dialog.paste_image.dimensions')
+      return trans('Image size')
     },
     aspectRatioLabel: function () {
-      return trans('dialog.paste_image.retain_aspect_label')
+      return trans('Retain aspect ratio')
     },
     resizeToLabel: function () {
-      return trans('dialog.paste_image.resize_to')
+      return trans('Resize image to')
     },
     pathLabel: function () {
-      return trans('dialog.paste_image.name_label')
+      return trans('Filename')
     },
     pathPlaceholder: function () {
-      return trans('dialog.paste_image.name_placeholder')
+      return trans('A unique filename')
     },
     filenameLabel: function () {
-      return trans('dialog.paste_image.name_placeholder')
+      return trans('A unique filename')
     },
     statusbarControls: function () {
       return [
         {
           type: 'button',
-          label: trans('dialog.button.save'),
+          label: trans('Save'),
           id: 'save',
           icon: '',
           primary: true // It's a primary button
         },
         {
           type: 'button',
-          label: trans('dialog.button.cancel'),
+          label: trans('Cancel'),
           id: 'cancel',
           icon: ''
         }

@@ -65,8 +65,6 @@ function getInlineDecorator (): Extension {
  */
 function getCodeBlockLineHighlighter (): Extension {
   const codeLineDecorator = Decoration.line({ class: 'code code-block-line' })
-  const codeBlockStart = Decoration.line({ class: 'code-block-first-line' })
-  const codeBlockEnd = Decoration.line({ class: 'code-block-last-line' })
 
   const render = function (state: EditorState): DecorationSet {
     const widgets: any[] = []
@@ -83,14 +81,10 @@ function getCodeBlockLineHighlighter (): Extension {
         const start = state.doc.lineAt(node.from).number
         const end = state.doc.lineAt(node.to).number
 
-        widgets.push(codeBlockStart.range(state.doc.line(start).from))
-
         for (let lineNo = start; lineNo <= end; lineNo++) {
           const line = state.doc.line(lineNo)
           widgets.push(codeLineDecorator.range(line.from))
         }
-
-        widgets.push(codeBlockEnd.range(state.doc.line(end).from))
       }
     })
 

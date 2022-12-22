@@ -210,7 +210,7 @@ export default class WindowProvider extends ProviderContract {
 
     ipcMain.handle('request-dir', async (event, message) => {
       const focusedWindow = BrowserWindow.getFocusedWindow()
-      let dir = await this.askDir(trans('system.open_folder'), focusedWindow)
+      let dir = await this.askDir(trans('Open project folder'), focusedWindow)
       return dir
     })
 

@@ -24,10 +24,9 @@
     </p>
     <h2>Helper programs</h2>
     <ul>
-      <li>Bundled Pandoc: <strong>{{ programVersions.pandocInternal }}</strong></li>
-      <li>System Pandoc: <strong>{{ programVersions.pandocSystem }}</strong></li>
-      <li>System Quarto: <strong>{{ programVersions.quartoSystem }}</strong></li>
-      <li>Git SVN: <strong>{{ programVersions.gitSystem }}</strong></li>
+      <li>Pandoc: <strong>{{ programVersions.pandoc }}</strong></li>
+      <li>Quarto: <strong>{{ programVersions.quarto }}</strong></li>
+      <li>Git SVN: <strong>{{ programVersions.git }}</strong></li>
     </ul>
     <h2>Renderer flags</h2>
     <ul>
@@ -75,10 +74,9 @@ export default defineComponent({
       platformVersion: process.getSystemVersion,
       // Add version strings for external helper programs Zettlr can use
       programVersions: {
-        pandocInternal: process.env.PANDOC_VERSION_INTERNAL,
-        pandocSystem: process.env.PANDOC_VERSION_SYSTEM ?? 'not found',
-        quartoSystem: process.env.QUARTO_VERSION_SYSTEM ?? 'not found',
-        gitSystem: process.env.GIT_VERSION ?? 'not found'
+        pandoc: process.env.PANDOC_VERSION,
+        quarto: process.env.QUARTO_VERSION ?? 'not available',
+        git: process.env.GIT_VERSION ?? 'not available'
       }
     }
   },

@@ -13,7 +13,7 @@
  */
 
 import { EditorView } from '@codemirror/view'
-import { trans } from '@common/i18n-main'
+import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { AnyMenuItem } from '@dts/renderer/context'
 
@@ -30,7 +30,7 @@ export function equationMenu (view: EditorView, equation: string, coords: { x: n
   const tpl: AnyMenuItem[] = [
     {
       id: 'copy-equation',
-      label: trans('menu.copy_equation'),
+      label: trans('Copy equation code'),
       type: 'normal',
       enabled: true
     }

@@ -83,7 +83,7 @@ export default defineComponent({
       return this.$store.getters.lastLeafActiveFile()
     },
     tocLabel: function (): string {
-      return trans('gui.table_of_contents')
+      return trans('Table of Contents')
     }
   },
   watch: {

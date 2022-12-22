@@ -36,7 +36,7 @@
       <hr>
       <SelectControl
         v-model="effect"
-        v-bind:label="'Sound Effect'"
+        v-bind:label="soundEffectsLabel"
         v-bind:options="soundEffects"
       ></SelectControl>
       <!--
@@ -47,7 +47,7 @@
       -->
       <SliderControl
         v-bind:model-value="volume"
-        v-bind:label="'Volume'"
+        v-bind:label="volumeLabel"
         v-bind:min="0"
         v-bind:max="100"
         v-on:change="volume = $event"
@@ -131,19 +131,25 @@ export default {
       return `${minStr}:${secStr}`
     },
     startLabel: function () {
-      return trans('pomodoro.start')
+      return trans('Start')
     },
     stopLabel: function () {
-      return trans('pomodoro.stop')
+      return trans('Stop')
     },
     taskLabel: function () {
-      return trans('pomodoro.phase.task')
+      return trans('Work')
     },
     shortLabel: function () {
-      return trans('pomodoro.phase.short')
+      return trans('Short break')
     },
     longLabel: function () {
-      return trans('pomodoro.phase.long')
+      return trans('Break')
+    },
+    soundEffectsLabel: function () {
+      return trans('Sound Effect')
+    },
+    volumeLabel: function () {
+      return trans('Volume')
     },
     currentPhaseLabel: function () {
       if (this.currentPhase === 'task') {

@@ -18,7 +18,7 @@ import { trans } from '@common/i18n-renderer'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { AnyMenuItem } from '@dts/renderer/context'
 import { SyntaxNode } from '@lezer/common'
-import { forEachDiagnostic, Diagnostic } from '@codemirror/lint'
+import { forEachDiagnostic, Diagnostic, forceLinting, setDiagnostics } from '@codemirror/lint'
 import { applyBold, applyItalic, insertLink, applyBlockquote, applyOrderedList, applyBulletList, applyTaskList } from '../commands/markdown'
 import { cut, copyAsPlain, copyAsHTML, paste, pasteAsPlain } from '../util/copy-paste-cut'
 
@@ -130,7 +130,7 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
     suggestionItems.push({
       type: 'normal',
       enabled: false,
-      label: trans('menu.no_suggestions'),
+      label: trans('No suggestions'),
       id: 'no-suggestion'
     })
   }
@@ -139,7 +139,7 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
   suggestionItems.push({ type: 'separator' })
   suggestionItems.unshift(
     {
-      label: trans('menu.add_to_dictionary'),
+      label: trans('Add to dictionary'),
       id: 'add-to-dictionary',
       type: 'normal',
       enabled: true
@@ -149,14 +149,14 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
 
   const tpl: AnyMenuItem[] = [
     {
-      label: trans('menu.bold'),
+      label: trans('Bold'),
       accelerator: 'CmdOrCtrl+B',
       id: 'markdownBold',
       type: 'normal',
       enabled: true
     },
     {
-      label: trans('menu.italic'),
+      label: trans('Italic'),
       accelerator: 'CmdOrCtrl+I',
       id: 'markdownItalic',
       type: 'normal',
@@ -166,39 +166,39 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       type: 'separator'
     },
     {
-      label: trans('menu.insert_link'),
+      label: trans('Insert link'),
       accelerator: 'CmdOrCtrl+K',
       id: 'markdownLink',
       type: 'normal',
       enabled: true
     },
     {
-      label: trans('menu.insert_ol'),
+      label: trans('Insert numbered list'),
       id: 'markdownMakeOrderedList',
       type: 'normal',
       enabled: true
     },
     {
-      label: trans('menu.insert_ul'),
+      label: trans('Insert unordered list'),
       id: 'markdownMakeUnorderedList',
       type: 'normal',
       enabled: true
     },
     {
-      label: trans('menu.insert_tasklist'),
+      label: trans('Insert tasklist'),
       accelerator: 'CmdOrCtrl+T',
       id: 'markdownMakeTaskList',
       type: 'normal',
       enabled: true
     },
     {
-      label: trans('gui.formatting.blockquote'),
+      label: trans('Blockquote'),
       id: 'markdownBlockquote',
       type: 'normal',
       enabled: true
     },
     {
-      label: trans('gui.formatting.insert_table'),
+      label: trans('Insert Table'),
       id: 'markdownInsertTable',
       type: 'normal',
       enabled: true
@@ -207,35 +207,35 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       type: 'separator'
     },
     {
-      label: trans('menu.cut'),
+      label: trans('Cut'),
       accelerator: 'CmdOrCtrl+X',
       id: 'cut',
       type: 'normal',
       enabled: true
     },
     {
-      label: trans('menu.copy'),
+      label: trans('Copy'),
       accelerator: 'CmdOrCtrl+C',
       id: 'copy',
       type: 'normal',
       enabled: true
     },
     {
-      label: trans('menu.copy_html'),
+      label: trans('Copy as HTML'),
       accelerator: 'CmdOrCtrl+Alt+C',
       id: 'copyAsHTML',
       type: 'normal',
       enabled: true
     },
     {
-      label: trans('menu.paste'),
+      label: trans('Paste'),
       accelerator: 'CmdOrCtrl+V',
       id: 'paste',
       type: 'normal',
       enabled: true
     },
     {
-      label: trans('menu.paste_plain'),
+      label: trans('Paste without style'),
       accelerator: 'CmdOrCtrl+Shift+V',
       id: 'pasteAsPlain',
       type: 'normal',
@@ -245,7 +245,7 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       type: 'separator'
     },
     {
-      label: trans('menu.select_all'),
+      label: trans('Select all'),
       accelerator: 'CmdOrCtrl+A',
       id: 'selectAll',
       type: 'normal',
@@ -294,6 +294,20 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
         'dictionary-provider',
         { command: 'add', terms: [word] }
       )
+        .then(() => {
+          // After we've added the word to the dictionary, we have to invalidate
+          // the spellcheck linter errors that mark this specific word as wrong.
+          const filteredDiagnostics: Diagnostic[] = []
+          forEachDiagnostic(view.state, (d, from, to) => {
+            if (d.source !== 'spellcheck') {
+              filteredDiagnostics.push(d)
+            } else if (view.state.sliceDoc(from, to) !== word) {
+              filteredDiagnostics.push(d)
+            }
+          })
+          view.dispatch(setDiagnostics(view.state, filteredDiagnostics))
+          forceLinting(view)
+        })
         .catch(e => console.error(e))
     } else if (clickedID.startsWith('$') && diagnostic !== undefined) {
       view.dispatch({

@@ -57,7 +57,7 @@ async function filePreviewTooltip (view: EditorView, pos: number, side: 1 | -1):
         return { dom: getPreviewElement(res, fileToDisplay) }
       } else {
         const dom = document.createElement('div')
-        dom.textContent = `File ${fileToDisplay} does not exist.` // TODO: Translate!
+        dom.textContent = trans('File %s does not exist.', fileToDisplay)
         return { dom }
       }
     }
@@ -87,9 +87,9 @@ function getPreviewElement (metadata: [string, string, number, number], linkCont
 
   const meta = document.createElement('div')
   meta.classList.add('metadata')
-  meta.innerHTML = `${trans('gui.preview_word_count')}: ${metadata[2]}`
+  meta.innerHTML = `${trans('Word count')}: ${metadata[2]}`
   meta.innerHTML += '<br>'
-  meta.innerHTML += `${trans('gui.modified')}: ${formatDate(metadata[3], window.config.get('appLang'))}`
+  meta.innerHTML += `${trans('Modified')}: ${formatDate(metadata[3], window.config.get('appLang'))}`
 
   const actions = document.createElement('div')
   actions.classList.add('actions')
@@ -107,7 +107,7 @@ function getPreviewElement (metadata: [string, string, number, number], linkCont
 
   const openButton = document.createElement('button')
   openButton.setAttribute('id', 'open-note')
-  openButton.textContent = trans('menu.open').replace('\u2026', '') // remove "...", if any
+  openButton.textContent = trans('Open…').replace('\u2026', '') // remove "...", if any
   openButton.addEventListener('click', openFunc)
   actions.appendChild(openButton)
 
@@ -128,7 +128,7 @@ function getPreviewElement (metadata: [string, string, number, number], linkCont
 
     const openButtonNT = document.createElement('button')
     openButtonNT.setAttribute('id', 'open-note-new-tab')
-    openButtonNT.textContent = trans('menu.open_new_tab')
+    openButtonNT.textContent = trans('Open in a new tab')
     openButtonNT.addEventListener('click', openFuncNewTab)
     openButtonNT.style.marginLeft = '10px'
     actions.appendChild(openButtonNT)

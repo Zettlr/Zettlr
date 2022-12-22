@@ -102,10 +102,10 @@ export default {
   emits: ['update:modelValue'],
   computed: {
     selectedLabel: function () {
-      return trans('dialog.preferences.theme.selected_label')
+      return trans('selected')
     },
     selectLabel: function () {
-      return trans('dialog.preferences.theme.select_label')
+      return trans('click to select')
     }
   },
   methods: {

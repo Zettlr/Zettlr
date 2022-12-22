@@ -398,7 +398,7 @@ export default class MarkdownEditor extends EventEmitter {
    * a setting has changed that requires extensions to be fully reloaded.
    */
   async reload (): Promise<void> {
-    await this.swapDoc(this.config.metadata.path)
+    await this.swapDoc(this.config.metadata.path, true)
   }
 
   /**
@@ -531,7 +531,7 @@ export default class MarkdownEditor extends EventEmitter {
 
     // First: The configuration updates themselves. This will already update a
     // bunch of other facets and values (such as tab size and unit)
-    this._instance.state.update({ effects: configUpdateEffect.of(this.config) })
+    this._instance.dispatch({ effects: configUpdateEffect.of(this.config) })
 
     // Second: The renderers
     reconfigureRenderers(this._instance, {
@@ -769,26 +769,6 @@ export default class MarkdownEditor extends EventEmitter {
   set readabilityMode (shouldBeReadability: boolean) {
     this.config.readabilityMode = shouldBeReadability
     this._instance.dispatch({ effects: configUpdateEffect.of(this.config) })
-  }
-
-  /**
-   * Whether the instance is currently readonly
-   *
-   * @return  {Boolean}  True if users cannot edit the contents
-   */
-  get readOnly (): boolean {
-    return this._instance.state.readOnly
-  }
-
-  /**
-   * Sets the readonly flag on the instance
-   *
-   * @param   {Boolean}  shouldBeReadonly  Whether the editor contents should be readonly
-   */
-  set readOnly (shouldBeReadonly: boolean) {
-    this._instance.state.update({
-      // effects: EditorState.readOnly.of(shouldBeReadonly) // TODO figure out properly
-    })
   }
 
   /**

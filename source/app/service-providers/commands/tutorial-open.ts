@@ -32,10 +32,10 @@ export default class TutorialOpen extends ZettlrCommand {
   async run (evt: string, arg: any): Promise<any> {
     const tutorialPath = path.join(__dirname, 'tutorial')
     const targetPath = path.join(app.getPath('documents'), 'Zettlr Tutorial')
-    const availableLanguages = await fs.readdir(tutorialPath, { 'encoding': 'utf8' })
+    const availableLanguages = await fs.readdir(tutorialPath, 'utf8')
 
     const candidates = availableLanguages
-      .map(e => { return { 'tag': e, 'path': path.join(tutorialPath, e) } })
+      .map(e => { return { tag: e, path: path.join(tutorialPath, e) } })
       .filter(e => isDir(e.path))
 
     const { exact, close } = findLangCandidates(this._app.config.get('appLang'), candidates)
@@ -50,7 +50,7 @@ export default class TutorialOpen extends ZettlrCommand {
     // Now we have both a target and a language candidate, let's copy over the files!
     try {
       await fs.lstat(targetPath)
-      this._app.log.info(`The directory ${targetPath} already exists.`)
+      this._app.log.info(`The directory ${targetPath} already exists. Not overwriting any files.`)
     } catch (err) {
       await fs.mkdir(targetPath)
 
@@ -61,14 +61,65 @@ export default class TutorialOpen extends ZettlrCommand {
       }
       this._app.log.info('Successfully copied the tutorial files', tutorialFiles)
     }
+
     // Now the last thing to do is set it as open
     await this._app.commands.run('roots-add', [targetPath])
     const tutorialDirectory = this._app.fsal.findDir(targetPath)
-    if (tutorialDirectory !== undefined) {
-      this._app.fsal.openDirectory = tutorialDirectory
-      // Always open the tutorial in the first window
-      const windowId = this._app.documents.windowKeys()[0]
-      await this._app.documents.openFile(windowId, undefined, path.join(targetPath, 'welcome.md'), true)
+    if (tutorialDirectory === undefined) {
+      this._app.log.error('[Application] Could not open tutorial files: Directory has not been added to FSAL')
+      return
     }
+
+    this._app.fsal.openDirectory = tutorialDirectory
+    // We will pre-set the app with a three-pane layout at first. There are two
+    // reference files that we will open to the right of the "main" file (welcome.md)
+
+    // We will use the document provider's functions to programmatically create
+    // that layout.
+    const windowId = this._app.documents.windowKeys()[0]
+    // Find the leaf ID
+    let leafId: string|undefined
+    await this._app.documents.forEachLeaf(async (tabMan, window, leaf) => {
+      leafId = leaf
+      return false
+    })
+
+    if (leafId === undefined) {
+      this._app.log.error('[Application] Could not open tutorial: Could not retrieve leafID')
+      return
+    }
+
+    // What follows basically emulates a user opening the welcome and the split
+    // view file, then dragging the split view file to a new split pane, opening
+    // the links file, and dragging that down to end up with a three-way split
+    // layout.
+    const welcomePath = path.join(targetPath, 'welcome.md')
+    const linksPath = path.join(targetPath, 'helpful-links.md')
+    const splitviewPath = path.join(targetPath, 'split-view-intro.md')
+
+    await this._app.documents.openFile(windowId, leafId, welcomePath, true)
+    await this._app.documents.openFile(windowId, leafId, splitviewPath, true)
+
+    // First split: Horizontal to the right
+    await this._app.documents.splitLeaf(windowId, leafId, 'horizontal', 'after', splitviewPath)
+
+    // Find the leafId of the newly created leaf
+    leafId = undefined
+    await this._app.documents.forEachLeaf(async (tabMan, window, leaf) => {
+      if (tabMan.activeFile?.path === splitviewPath) {
+        leafId = leaf
+      }
+      return false
+    })
+
+    if (leafId === undefined) {
+      this._app.log.error('[Application] Could not find new split leaf ID -- aborting opening tutorial files.')
+      return
+    }
+
+    // Open the links file ...
+    await this._app.documents.openFile(windowId, leafId, linksPath, true)
+    // ... and directly split it downwards
+    await this._app.documents.splitLeaf(windowId, leafId, 'vertical', 'after', linksPath)
   }
 }

@@ -32,7 +32,6 @@ import RecentDocumentsProvider from '@providers/recent-docs'
 import StatsProvider from '@providers/stats'
 import TagProvider from '@providers/tags'
 import TargetProvider from '@providers/targets'
-import TranslationProvider from '@providers/translations'
 import TrayProvider from '@providers/tray'
 import UpdateProvider from '@providers/updates'
 import WindowProvider from '@providers/windows'
@@ -54,7 +53,6 @@ export default class AppServiceContainer {
   private readonly _statsProvider: StatsProvider
   private readonly _tagProvider: TagProvider
   private readonly _targetProvider: TargetProvider
-  private readonly _translationProvider: TranslationProvider
   private readonly _trayProvider: TrayProvider
   private readonly _updateProvider: UpdateProvider
   private readonly _windowProvider: WindowProvider
@@ -67,8 +65,6 @@ export default class AppServiceContainer {
     this._logProvider = new LogProvider()
     this._configProvider = new ConfigProvider(this._logProvider)
     this._commandProvider = new CommandProvider(this)
-    // NOTE: This provider still produces side effects
-    this._translationProvider = new TranslationProvider(this._logProvider, this._configProvider)
     this._assetsProvider = new AssetsProvider(this._logProvider)
     this._cssProvider = new CssProvider(this._logProvider)
     this._notificationProvider = new NotificationProvider(this._logProvider)
@@ -96,7 +92,6 @@ export default class AppServiceContainer {
   async boot (): Promise<void> {
     await this._informativeBoot(this._logProvider, 'LogProvider')
     await this._informativeBoot(this._configProvider, 'ConfigProvider')
-    await this._informativeBoot(this._translationProvider, 'TranslationProvider')
     await this._informativeBoot(this._assetsProvider, 'AssetsProvider')
     await this._informativeBoot(this._linkProvider, 'LinkProvider')
     await this._informativeBoot(this._tagProvider, 'TagProvider')
@@ -120,6 +115,19 @@ export default class AppServiceContainer {
     await this._informativeBoot(this._documentManager, 'DocumentManager')
 
     this._menuProvider.set() // TODO
+
+    this.log.info('[AppServiceContainer] Boot successful!')
+
+    // Now that the config provider is definitely set up, let's see if we
+    // should copy the interactive tutorial to the documents directory.
+    if (this.config.isFirstStart()) {
+      this.log.info('[AppServiceContainer] Copying over the interactive tutorial!')
+      this.commands.run('tutorial-open', {})
+        .catch(err => this.log.error('[AppServiceContainer] Could not open tutorial', err))
+    }
+
+    // After everything has been booted up, show the windows
+    this.windows.maybeShowWindows()
   }
 
   /**
@@ -193,11 +201,6 @@ export default class AppServiceContainer {
   public get targets (): TargetProvider { return this._targetProvider }
 
   /**
-   * Returns the translation provider
-   */
-  public get translations (): TranslationProvider { return this._translationProvider }
-
-  /**
    * Returns the tray provider
    */
   public get tray (): TrayProvider { return this._trayProvider }
@@ -240,7 +243,6 @@ export default class AppServiceContainer {
     await this._safeShutdown(this._statsProvider, 'StatsProvider')
     await this._safeShutdown(this._notificationProvider, 'NotificationProvider')
     await this._safeShutdown(this._updateProvider, 'UpdateProvider')
-    await this._safeShutdown(this._translationProvider, 'TranslationProvider')
     await this._safeShutdown(this._cssProvider, 'CSSProvider')
     await this._safeShutdown(this._targetProvider, 'TargetProvider')
     await this._safeShutdown(this._linkProvider, 'LinkProvider')

@@ -33,12 +33,12 @@ export default async function isTraySupported (): Promise<boolean> {
           // will only be loaded after this code has run, so on systems which
           // don't support a tray, we can't display a localized message as of
           // now. We have to revisit this later on.
-          // reject(new Error(trans('system.error.tray_not_supported')))
+          // reject(new Error(trans('Tray is not supported. Gnome Extension &quot;KStatusNotifierItem/AppIndicator Support&quot; is required for Tray support on the Gnome Desktop.')))
           reject(new Error('Your operating system does not support a tray.'))
         } else if (out.includes("'appindicatorsupport@rgcjonas.gmail.com'")) {
           resolve(true)
         } else {
-          // reject(new Error(trans('system.error.tray_not_supported')))
+          // reject(new Error(trans('Tray is not supported. Gnome Extension &quot;KStatusNotifierItem/AppIndicator Support&quot; is required for Tray support on the Gnome Desktop.')))
           reject(new Error('Your operating system does not support a tray.'))
         }
       })

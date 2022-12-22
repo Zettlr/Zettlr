@@ -223,6 +223,9 @@ there.
   changes from the table to the document and second save the document itself.
 - The editor now recognizes Pandoc attribute syntax (e.g., `{.unnumbered}`)
 - Added `lua` syntax highlighting support
+- Improved the tutorial to make use of the new split views
+- Citation keys in the autocomplete dropdown are now sorted by number of
+  occurrences in the text
 
 ## Under the Hood
 
@@ -262,6 +265,11 @@ there.
   slow
 - Zettlr now attempts to extract the version strings for supported external
   programs (such as Pandoc, Git, and Quarto) and displays them in the About panel
+- Exchanged Zettlr Translate system with `gettext`
+- Removed the translation provider, since its remaining functionality to list
+  available dictionary files and translations has now been moved to the main
+  command hub
+- Removed the `Zettlr` class; the last remnant of the old, class-based system
 
 # 2.3.0
 

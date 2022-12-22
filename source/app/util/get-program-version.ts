@@ -31,14 +31,23 @@ import { spawn } from 'child_process'
 export async function getProgramVersion (program: string): Promise<string|undefined> {
   let output: string = ''
   await new Promise<void>((resolve, reject) => {
+    let err: string = ''
     const process = spawn(program, ['--version'], { shell: true })
 
-    process.stdout.on('data', (data) => {
+    process.stderr?.on('data', (data) => {
+      err += String(data)
+    })
+
+    process.stdout?.on('data', (data) => {
       output += String(data)
     })
 
     process.on('close', (code: number, signal) => {
-      resolve()
+      if (code !== 0) {
+        reject(new Error(`Could not check program version, process exited with code ${code}; stderr: ${err}`))
+      } else {
+        resolve()
+      }
     })
 
     process.on('error', (err) => {
@@ -48,9 +57,10 @@ export async function getProgramVersion (program: string): Promise<string|undefi
 
   // First line is the "pandoc 2.19.2" or any other version string
   output = output.split('\n')[0]
-  const version = /[\d.]+/.exec(output)
-  if (version === null) {
+  const match = /\d[\d.]+/.exec(output)
+  if (match === null) {
     return undefined
+  } else {
+    return match[0]
   }
-  return version[0]
 }

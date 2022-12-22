@@ -143,7 +143,7 @@ const ipcRenderer = window.ipc
 function getContextMenu (): AnyMenuItem[] {
   return [
     {
-      label: trans('menu.open_new_tab'),
+      label: trans('Open in a new tab'),
       id: 'new-tab',
       type: 'normal',
       enabled: true
@@ -219,34 +219,34 @@ export default defineComponent({
       return this.$refs['query-input'] as HTMLInputElement|null
     },
     searchTitle: function () {
-      return trans('gui.global_search.title')
+      return trans('Full-Text Search')
     },
     queryInputLabel: function () {
-      return trans('gui.global_search.query_label')
+      return trans('Enter your search terms below')
     },
     queryInputPlaceholder: function () {
-      return trans('gui.global_search.query_placeholder')
+      return trans('Find …')
     },
     filterPlaceholder: function () {
-      return trans('system.common.filter')
+      return trans('Filter …')
     },
     filterLabel: function () {
-      return trans('gui.global_search.filter_label')
+      return trans('Filter search results')
     },
     restrictDirLabel: function () {
-      return trans('gui.global_search.restrict_dir_label')
+      return trans('Restrict search to directory')
     },
     restrictDirPlaceholder: function () {
-      return trans('gui.global_search.restrict_dir_placeholder')
+      return trans('Restrict to directory …')
     },
     searchButtonLabel: function () {
-      return trans('gui.global_search.search_label')
+      return trans('Search')
     },
     clearButtonLabel: function () {
-      return trans('gui.global_search.clear_label')
+      return trans('Clear search')
     },
     toggleButtonLabel: function () {
-      return trans('gui.global_search.toggle_label')
+      return trans('Toggle results')
     },
     sep: function (): string {
       return path.sep

@@ -112,7 +112,6 @@ export default function getConfigTemplate (): ConfigOptions {
       autoCloseBrackets: true,
       defaultSaveImagePath: '',
       citeStyle: 'regular', // Determines how autocomplete will complete citations
-      homeEndBehaviour: false, // If true, Home/End goes to start/end of a paragraph, false means start/end of line.
       enableTableHelper: true, // Enable the table helper plugin
       indentUnit: 4, // The number of spaces to be added
       indentWithTabs: false,
@@ -122,14 +121,11 @@ export default function getConfigTemplate (): ConfigOptions {
       boldFormatting: '**', // Can be ** or __
       italicFormatting: '_', // Can be * or _
       readabilityAlgorithm: 'dale-chall', // The algorithm to use with readability mode.
-      direction: 'ltr', // Can be set to rtl for right-to-left scripts such as Persian
-      rtlMoveVisually: true, // Whether the cursor should move visually with arrows in RTL mode
       lint: {
         markdown: true // Should Markdown be linted?
       },
       autoCorrect: {
         active: true, // AutoCorrect is on by default
-        style: 'LibreOffice', // Default to LibreOffice style
         magicQuotes: {
           // Can be various quote pairs. The default characters (" and ')
           // will disable magic quotes.
@@ -225,7 +221,6 @@ export default function getConfigTemplate (): ConfigOptions {
       avoidNewTabs: false, // Whether to avoid opening new tabs for documents if possible
       iframeWhitelist: [ 'www.youtube.com', 'player.vimeo.com' ], // Contains a list of whitelisted iFrame prerendering domains
       checkForUpdates: true,
-      checkForTranslationUpdates: true,
       zoomBehavior: 'gui' // Used to determine what gets zoomed: The GUI or the editor
     },
     checkForBeta: false, // Should the user be notified of beta releases?

@@ -158,7 +158,7 @@ export default class FileNew extends ZettlrCommand {
       this._app.log.error(`Could not create file: ${err.message as string}`)
       this._app.windows.prompt({
         type: 'error',
-        title: trans('system.error.could_not_create_file'),
+        title: trans('Could not create file'),
         message: err.message
       })
     }

@@ -85,9 +85,9 @@ export default defineComponent({
   name: 'GeneralTab',
   data: function () {
     return {
-      dialogIntro: trans('dialog.about.lead'),
-      CSLInfo: trans('dialog.about.citationstyle'),
-      nodeTrademark: trans('dialog.about.trademark')
+      dialogIntro: trans('Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. It is Open Source, free of charge and based upon the Electron framework. Zettlr would like to thank the developers of Electron, the Node.js framework and the CodeMirror editor for their work. Without them, Zettlr would not be possible. Below you can find all projects that Zettlr uses.'),
+      CSLInfo: trans('Zettlr makes use of citeproc to display citations directly in the editor. To this end, Zettlr uses the CitationStyleLanguage (CSL) language and style files. The files have been shipped unaltered with author metadata. More information:'),
+      nodeTrademark: trans('All logos and brand names are subject to their rightful owners. Besides using their code, Zettlr is in no way affiliated with any of these projects. Node.js is a trademark of Joyent, Inc.')
     }
   },
   computed: {

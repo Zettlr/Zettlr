@@ -59,8 +59,8 @@ export default class RequestMove extends ZettlrCommand {
     )) {
       this._app.windows.prompt({
         type: 'error',
-        title: trans('system.error.move_into_child_title'),
-        message: trans('system.error.move_into_child_message')
+        title: trans('Cannot move directory'),
+        message: trans('You cannot move a directory into one of its subdirectories.')
       })
       return false
     }
@@ -69,8 +69,8 @@ export default class RequestMove extends ZettlrCommand {
     if (fsal.hasChild(to, from)) {
       this._app.windows.prompt({
         type: 'error',
-        title: trans('system.error.already_exists_title'),
-        message: trans('system.error.already_exists_message', from.name)
+        title: trans('Cannot move directory or file'),
+        message: trans('The file/directory %s already exists in target.', from.name)
       })
 
       return false

@@ -20,62 +20,57 @@ export default function (): any {
       [
         {
           type: 'text',
-          label: trans('dialog.preferences.filename_generator'),
+          label: trans('Pattern for new filenames'),
           model: 'newFileNamePattern',
           info: 'Variables: %id, %Y, %y, %M, %D, %W, %h, %m, %s, %X, %uuid4'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.new_file_dont_prompt'),
+          label: trans('Do not prompt for filename when creating new files'),
           model: 'newFileDontPrompt'
         }
       ],
       [
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.debug'),
+          label: trans('Enable debug mode'),
           model: 'debug'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.checkForBeta'),
+          label: trans('Notify me about beta releases'),
           model: 'checkForBeta'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.use_native_appearance'),
+          label: trans('Use native window appearance'),
           model: 'window.nativeAppearance',
           disabled: process.platform !== 'linux'
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.delete_on_fail'),
+          label: trans('Delete items irreversibly, if moving them to trash fails'),
           model: 'system.deleteOnFail'
         },
         {
           type: 'checkbox',
           label: process.platform === 'darwin'
-            ? trans('dialog.preferences.show_app_in_the_notification_area')
-            : trans('dialog.preferences.leave_app_running_in_the_notification_area'),
+            ? trans('Show app in the notification area')
+            : trans('Leave app running in the notification area'),
           model: 'system.leaveAppRunning',
           disabled: process.env.ZETTLR_IS_TRAY_SUPPORTED === '0',
           info: process.env.ZETTLR_TRAY_ERROR
         },
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.check_updates'),
+          label: trans('Automatically check for updates'),
           model: 'system.checkForUpdates'
-        },
-        {
-          type: 'checkbox',
-          label: trans('dialog.preferences.check_translation_updates'),
-          model: 'system.checkForTranslationUpdates'
         }
       ],
       [
         {
           type: 'token',
-          label: trans('dialog.preferences.attachments_info'),
+          label: trans('Enter all file extensions that you want to see in your attachment sidebar. Separate them with a comma. Changes are recognised after a restart.'),
           model: 'attachmentExtensions'
         }
       ],
@@ -83,33 +78,33 @@ export default function (): any {
         {
           type: 'radio',
           model: 'system.zoomBehavior',
-          label: trans('dialog.preferences.zoom_behavior.label'),
+          label: trans('Zoom behavior'),
           options: {
-            'gui': trans('dialog.preferences.zoom_behavior.gui'),
-            'editor': trans('dialog.preferences.zoom_behavior.editor')
+            'gui': trans('Zoom resizes the whole GUI'),
+            'editor': trans('Zoom changes the editor font size')
           }
         }
       ],
       [
         {
           type: 'list',
-          label: trans('dialog.preferences.whitelist'),
+          label: trans('iFrame rendering whitelist'),
           model: 'system.iframeWhitelist',
           deletable: true,
-          labels: [trans('dialog.preferences.whitelist_hostname')],
+          labels: [trans('Hostname')],
           searchable: true,
-          searchLabel: trans('system.common.list_search_placeholder')
+          searchLabel: trans('Search for entries …')
         }
       ],
       [
         {
           type: 'checkbox',
-          label: trans('dialog.preferences.watchdog_checkbox_label'),
+          label: trans('Activate Watchdog polling'),
           model: 'watchdog.activatePolling'
         },
         {
           type: 'number',
-          label: trans('dialog.preferences.watchdog_threshold_label'),
+          label: trans('Time to wait before writing a file is considered done (in ms)'),
           model: 'watchdog.stabilityThreshold',
           disabled: window.config.get('watchdog.activatePolling') === false
         }

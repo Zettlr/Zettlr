@@ -19,6 +19,8 @@ import environmentCheck from './util/environment-check'
 import addToPath from './util/add-to-PATH'
 import resolveTimespanMs from './util/resolve-timespan-ms'
 import path from 'path'
+import commandExists from 'command-exists'
+import { getProgramVersion } from './util/get-program-version'
 
 // Developer tools
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
@@ -37,7 +39,7 @@ let upTimestamp: number
  *
  * @return  {void}    Nothing to return
  */
-export async function bootApplication (): Promise<void> {
+export async function bootApplication (): Promise<AppServiceContainer> {
   upTimestamp = Date.now()
 
   // First of all we MUST perform the environment check, since everything else
@@ -78,6 +80,21 @@ export async function bootApplication (): Promise<void> {
     addToPath(log, path.dirname(process.env.PANDOC_PATH), 'unshift')
     log.info('[Application] The bundled pandoc executable is now in PATH. If you do not want to use the bundled pandoc, uncheck the corresponding setting and reboot the app.')
   }
+
+  // NOTE: Normally, we should check the Pandoc version in the environment check.
+  // However, since the user can decide whether they want to use the internal
+  // one or the system one (if applicable), we have to wait until here to
+  // extract the version string, since we may get any of the two but need the
+  // correct version string of the version that will actually be used.
+  try {
+    await commandExists('pandoc')
+    const version = await getProgramVersion('pandoc')
+    process.env.PANDOC_VERSION = String(version)
+  } catch (err) {
+    // No Pandoc available.
+  }
+
+  return appServiceContainer
 }
 
 /**
