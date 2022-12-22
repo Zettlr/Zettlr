@@ -224,6 +224,8 @@ there.
 - The editor now recognizes Pandoc attribute syntax (e.g., `{.unnumbered}`)
 - Added `lua` syntax highlighting support
 - Improved the tutorial to make use of the new split views
+- Citation keys in the autocomplete dropdown are now sorted by number of
+  occurrences in the text
 
 ## Under the Hood
 
