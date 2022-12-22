@@ -47,6 +47,7 @@ import { jsonFolding } from './code-folding/json'
 import { markdownFolding } from './code-folding/markdown'
 import { jsonLanguage } from '@codemirror/lang-json'
 import { softwrapVisualIndent } from './plugins/visual-indent'
+import { codeblockBackground } from './plugins/codeblock-background'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -243,6 +244,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     footnoteHover,
     urlHover,
     filePreview,
+    codeblockBackground, // Add a background behind codeblocks
     defaultContextMenu, // A default context menu
     EditorView.domEventHandlers(options.domEventsListeners)
   ]
