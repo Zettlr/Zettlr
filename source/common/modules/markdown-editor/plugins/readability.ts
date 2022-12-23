@@ -203,12 +203,18 @@ function extractScores (text: string, offset: number, algorithm: string): any[] 
         index = node.value.indexOf(sentence, index)
 
         const words = sentence.trim().split(' ').filter(word => word !== '')
-        ret.push({
-          sentence,
-          from: relativeStart + index,
-          to: relativeStart + index + sentence.length,
-          score: readabilityAlgorithms[algorithm](words)
-        })
+        const score = readabilityAlgorithms[algorithm](words)
+        const from = relativeStart + index
+        let to = relativeStart + index + sentence.length
+        // If the next character after the sentence is a sentence ending, add it
+        // to the sentence range so that the decorator includes it, which makes
+        // it all look better.
+        const charAfter = node.value.slice(to - relativeStart, to - relativeStart + 1)
+        if ('.:!?'.includes(charAfter)) {
+          to++
+        }
+
+        ret.push({ sentence, from, to, score })
         index += sentence.length
       }
 

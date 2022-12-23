@@ -1139,11 +1139,14 @@ body.darwin {
 }
 
 // Define the readability classes
-.cm-readability-0   { background-color: #fc5555aa; color: #444444 !important; }
-.cm-readability-1   { background-color: #fa7b7baa; color: #444444 !important; }
-.cm-readability-2   { background-color: #db5fbeaa; color: #444444 !important; }
-.cm-readability-3   { background-color: #e977ceaa; color: #444444 !important; }
-.cm-readability-4   { background-color: #ee94d9aa; color: #444444 !important; }
+// Red, orange, and yellow indicate bad scores
+// Purple and blue indicate average scores
+// Green indicates good scores
+.cm-readability-0   { background-color: #ff0000aa; color: #444444 !important; }
+.cm-readability-1   { background-color: #f67b2baa; color: #444444 !important; }
+.cm-readability-2   { background-color: #e5a14faa; color: #444444 !important; }
+.cm-readability-3   { background-color: #e3e532aa; color: #444444 !important; }
+.cm-readability-4   { background-color: #d4c1fdaa; color: #444444 !important; }
 .cm-readability-5   { background-color: #538fe9aa; color: #444444 !important; }
 .cm-readability-6   { background-color: #53bce9aa; color: #444444 !important; }
 .cm-readability-7   { background-color: #53e7e9aa; color: #444444 !important; }
