@@ -59,12 +59,12 @@
           Generation of diagrams and flowcharts from text in a similar manner as Markdown
         </p>
       </div>
-      <div class="project-box" onclick="window.location = 'https://github.com/wooorm/nspell/'">
+      <div class="project-box" onclick="window.location = 'https://github.com/Wulf/nodehun'">
         <h4 class="project-name">
-          nspell
+          nodehun
         </h4>
         <p class="project-description">
-          Hunspell compatible spell-checker
+          The Hunspell binding for NodeJS that exposes as much of Hunspell as possible and also adds new features.
         </p>
       </div>
       <div class="project-box" onclick="window.location = 'http://showdownjs.com/'">
