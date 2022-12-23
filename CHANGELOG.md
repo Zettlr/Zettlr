@@ -226,6 +226,7 @@ there.
 - Improved the tutorial to make use of the new split views
 - Citation keys in the autocomplete dropdown are now sorted by number of
   occurrences in the text
+- Fixed the readability mode color gradient (red -> purple -> blue -> green)
 
 ## Under the Hood
 

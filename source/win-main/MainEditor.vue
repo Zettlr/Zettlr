@@ -1139,15 +1139,15 @@ body.darwin {
 }
 
 // Define the readability classes
-.cm-readability-0   { background-color: hsv(52, 27.6%, 96.5%); color: #444444 !important; }
-.cm-readability-1   { background-color: hsv( 1, 19.7%, 89.8%); color: #444444 !important; }
-.cm-readability-2   { background-color: hsv( 184, 36%, 93.7%); color: #444444 !important; }
-.cm-readability-3   { background-color: hsv( 202, 20.4%, 96.1%); color: #444444 !important; }
-.cm-readability-4   { background-color: hsv( 31, 41.9%, 90%); color: #444444 !important; }
-.cm-readability-5   { background-color: hsv( 91, 36%, 95%); color: #444444 !important; }
-.cm-readability-6   { background-color: hsv( 91, 80%, 91%); color: #444444 !important; }
-.cm-readability-7   { background-color: hsv( 52, 60%, 40%); color: #444444 !important; }
-.cm-readability-8   { background-color: hsv( 1, 62.4%, 52.5%); color: #444444 !important; }
-.cm-readability-9   { background-color: hsv( 184, 70%, 45.5%); color: #444444 !important; }
-.cm-readability-10  { background-color: hsv( 201, 89%, 24.5%); color: #444444 !important; }
+.cm-readability-0   { background-color: #fc5555aa; color: #444444 !important; }
+.cm-readability-1   { background-color: #fa7b7baa; color: #444444 !important; }
+.cm-readability-2   { background-color: #db5fbeaa; color: #444444 !important; }
+.cm-readability-3   { background-color: #e977ceaa; color: #444444 !important; }
+.cm-readability-4   { background-color: #ee94d9aa; color: #444444 !important; }
+.cm-readability-5   { background-color: #538fe9aa; color: #444444 !important; }
+.cm-readability-6   { background-color: #53bce9aa; color: #444444 !important; }
+.cm-readability-7   { background-color: #53e7e9aa; color: #444444 !important; }
+.cm-readability-8   { background-color: #4ad14caa; color: #444444 !important; }
+.cm-readability-9   { background-color: #53e955aa; color: #444444 !important; }
+.cm-readability-10  { background-color: #7cf87eaa; color: #444444 !important; }
 </style>

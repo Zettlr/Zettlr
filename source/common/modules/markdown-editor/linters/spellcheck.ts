@@ -14,8 +14,7 @@
  */
 
 import { linter, Diagnostic } from '@codemirror/lint'
-import { Parent, Text } from 'mdast' // NOTE: Dependency of remark, not in package.json
-import { md2ast } from '@common/util/md-to-ast'
+import { extractTextnodes } from '@common/util/md-to-ast'
 import { configField } from '../util/configuration'
 import { trans } from '@common/i18n-renderer'
 
@@ -150,35 +149,6 @@ async function checkWord (word: string, index: number, nodeStart: number, autoco
     severity: 'error',
     source: 'spellcheck' // Useful for later filtering of all diagnostics present
   }
-}
-
-/**
- * Returns just the text nodes from a string of Markdown, using mdast
- *
- * @param   {string|Parent}  input  Either Markdown string or an AST element (only)
- *
- * @return  {Text[]}            A set of text nodes (including their positions)
- */
-function extractTextnodes (input: string|Parent): Text[] {
-  const ast = (typeof input === 'string') ? md2ast(input) : input
-  const textNodes: Text[] = []
-  // NOTE: We're dealing with an mdast, not the CodeMirror Markdown mode one!
-  const ignoreBlocks = [ 'code', 'math' ]
-
-  for (const child of ast.children) {
-    if (ignoreBlocks.includes(child.type)) {
-      continue // Ignore non-text blocks
-    }
-
-    if ('children' in child && Array.isArray(child.children)) {
-      textNodes.push(...extractTextnodes(child)) // Text nodes cannot have children
-    } else if (child.type === 'text') {
-      // Only spit out text nodes
-      textNodes.push(child)
-    }
-  }
-
-  return textNodes
 }
 
 /**

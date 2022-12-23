@@ -15,6 +15,7 @@
 
 import { ViewUpdate, ViewPlugin, DecorationSet, EditorView, Decoration } from '@codemirror/view'
 import { configField } from '../util/configuration'
+import { extractTextnodes } from '@common/util/md-to-ast'
 
 const scoreDecorations = [
   Decoration.mark({ class: 'cm-readability-0' }),
@@ -187,50 +188,36 @@ const readabilityAlgorithms: { [key: string]: (words: string[]) => number } = {
 
 function extractScores (text: string, offset: number, algorithm: string): any[] {
   // Split at potential sentence-endings
-  let lastSeenIndex = 0
-  return text
-    // Remove block-level markup that shouldn't get readability'd
-    .replace(/^`{1,3}.+?^`{1,3}$/gsm, '')
-    .replace(/^-{3}.+?^(?:-{3}|\.{3})$/gsm, '')
-    .replace(/^#{1,6}\s+/gm, '')
-    .replace(/^\s*[-+*]\s\[[x\s]\]\s/gmi, '')
-    // Now split into sentences at LF and delimiters
-    .split(/[.:!?]\s+|\n/ig)
-    // Immediately retrieve the ranges in `text` for them
-    .map(sentence => {
-      // lastSeenIndex is important because sentences can appear multiple times
-      // in text. Without it, we would have multiple sentences with the same
-      // range, making the plugin crash.
-      const idx = text.indexOf(sentence, lastSeenIndex)
-      lastSeenIndex = idx + sentence.length
+  const textNodes = extractTextnodes(text)
+  const sentences = textNodes
+  // Remove nodes w/o position (should not happen, but TypeScript complained)
+    .filter(node => node.position?.start.offset !== undefined)
+    // Then, extract all sentences from the node's value
+    .map(node => {
+      const sentences = node.value.split(/[.:!?]\s+|\n/ig).filter(s => s.trim() !== '')
+      const ret: Array<{ sentence: string, score: number, from: number, to: number }> = []
+      const relativeStart = offset + (node.position?.start.offset as number)
+      let index = 0
 
-      let rangeEnd = lastSeenIndex
-      if ('.:!?'.includes(text.charAt(rangeEnd))) {
-        rangeEnd++
+      for (const sentence of sentences) {
+        index = node.value.indexOf(sentence, index)
+
+        const words = sentence.trim().split(' ').filter(word => word !== '')
+        ret.push({
+          sentence,
+          from: relativeStart + index,
+          to: relativeStart + index + sentence.length,
+          score: readabilityAlgorithms[algorithm](words)
+        })
+        index += sentence.length
       }
 
-      return {
-        from: offset + idx,
-        to: offset + rangeEnd,
-        sentence: sentence
-          // Remove inline Markdown
-          .replace(/[*_]{1,3}[^_*]+[_*]{1,3}/g, '')
-          .replace(/\[\[[^\]]+\[\[/g, '')
-          .replace(/!\[[^\]]+\]\([^)]+\)/g, '')
-          .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-          .replace(/\[[^[\]]*@[^[\]]+\]/, '')
-      }
+      return ret
     })
-    // Remove too short sentences
-    .filter(v => v.sentence.length >= 2)
-    // Tokenize & score
-    .map(v => {
-      const words = v.sentence.trim().split(' ').filter(word => word !== '')
-      const score = readabilityAlgorithms[algorithm](words)
-      return { from: v.from, to: v.to, score }
-    })
-    // Finally, map to decorations
-    .map(v => scoreDecorations[v.score].range(v.from, v.to))
+    .flat() // We now have a 2d array --> flatten
+
+  return sentences
+    .map(sentence => scoreDecorations[sentence.score].range(sentence.from, sentence.to))
 }
 
 function readabilityScores (view: EditorView): DecorationSet {
@@ -252,7 +239,7 @@ export const readabilityMode = ViewPlugin.fromClass(class {
   decorations: DecorationSet
 
   constructor (view: EditorView) {
-    this.decorations = Decoration.none
+    this.decorations = readabilityScores(view)
   }
 
   update (update: ViewUpdate): void {
