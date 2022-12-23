@@ -34,7 +34,7 @@ Also, what about links that close]] but never open?`,
   }
 ]
 
-describe('extractTags()', function () {
+describe('extractLinks()', function () {
   for (const test of tests) {
     it(`extracts the links [ ${test.expected.join(', ')} ]`, function () {
       assert.deepStrictEqual(extractLinks(test.input), test.expected)
