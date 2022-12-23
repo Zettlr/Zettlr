@@ -162,6 +162,8 @@ app.$store.dispatch('updateModifiedFiles')
   .catch(e => console.error(e))
 app.$store.dispatch('updateSnippets')
   .catch(e => console.error(e))
+app.$store.dispatch('updateWritingTargets')
+  .catch(e => console.error(e))
 
 // -----------------------------------------------
 

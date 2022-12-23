@@ -167,6 +167,8 @@ there.
 - **New Feature**: You can now pin tabs, which prevents them from being closed
 - **New Feature**: The editor will now check your Markdown for potential style
   issues (can be disabled in the preferences)
+- **New Feature**: In the combined filemanager mode, you can now see writing
+  targets as a ring progress bar in the position of the file icon
 - The TableEditor now has a clear data saving strategy: Whenever you change a
   table, you need to manually click the disk icon at the top of the table to
   apply all your changes to the document so that it can then be saved

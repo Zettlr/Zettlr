@@ -4,44 +4,15 @@
     role="button"
     v-on:click="$emit('click')"
   >
-    <svg
-      class="progress-ring"
-      v-bind:style="{
-        width: circleSize,
-        height: circleSize
-      }"
-    >
-      <!-- Always-on circle -->
-      <circle
-        stroke="#aaaaaa"
-        fill="transparent"
-        v-bind:stroke-width="lineWidth"
-        v-bind:r="circleRadius"
-        v-bind:cx="circleSize / 2"
-        v-bind:cy="circleSize / 2"
-      ></circle>
-      <!-- Actual progress circle -->
-      <circle
-        v-bind:stroke="trackColour"
-        fill="transparent"
-        v-bind:style="{
-          'stroke-dasharray': `${circleCircumference} ${circleCircumference}`,
-          'stroke-dashoffset': circleOffset,
-          'transition': 'stroke-dashoffset 0.35s',
-          'transform': 'rotate(-90deg)',
-          'transform-origin': '50% 50%'
-        }"
-        v-bind:stroke-width="lineWidth"
-        v-bind:r="circleRadius"
-        v-bind:cx="circleSize / 2"
-        v-bind:cy="circleSize / 2"
-      />
-    </svg>
+    <RingProgress
+      v-bind:ratio="progressPercent / 100"
+      v-bind:color="trackColour"
+    ></RingProgress>
     <span v-html="control.label"></span>
   </button>
 </template>
 
-<script>
+<script lang="ts">
 /**
  * @ignore
  * BEGIN HEADER
@@ -60,8 +31,12 @@
  * END HEADER
  */
 
-export default {
+import RingProgress from './RingProgress.vue'
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'RingProgressControl',
+  components: { RingProgress },
   props: {
     control: {
       type: Object,
@@ -74,21 +49,6 @@ export default {
   },
   emits: ['click'],
   computed: {
-    lineWidth: function () {
-      return 2
-    },
-    circleSize: function () {
-      return 20
-    },
-    circleCircumference: function () {
-      return this.circleRadius * 2 * Math.PI
-    },
-    circleRadius: function () {
-      return (this.circleSize / 2) - (this.lineWidth * 2)
-    },
-    circleOffset: function () {
-      return this.circleCircumference - this.progressPercent / 100 * this.circleCircumference
-    },
     trackColour: function () {
       if (this.control.colour !== undefined) {
         return this.control.colour
@@ -97,7 +57,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style lang="less">

@@ -36,8 +36,15 @@
       </span>
       <!-- Second: Primary icon (either the chevron, or the custom icon) -->
       <span class="toggle-icon" aria-hidden="true">
+        <!-- If the customIcon is set to 'writing-target' we need to display our
+        custom progress ring, instead of a regular icon -->
+        <RingProgress
+          v-if="primaryIcon === 'writing-target'"
+          v-bind:ratio="writingTargetPercent"
+        ></RingProgress>
+        <!-- Otherwise, display whatever the secondary Icon is -->
         <clr-icon
-          v-if="primaryIcon !== false"
+          v-else-if="primaryIcon !== false"
           v-bind:shape="primaryIcon"
           role="presentation"
           v-bind:class="{
@@ -134,6 +141,7 @@ import itemMixin from './util/item-mixin'
 import generateFilename from '@common/util/generate-filename'
 import { trans } from '@common/i18n-renderer'
 
+import RingProgress from '@common/vue/window/toolbar-controls/RingProgress.vue'
 import { nextTick, defineComponent } from 'vue'
 import { DirDescriptor, MaybeRootDescriptor } from '@dts/common/fsal'
 
@@ -142,6 +150,7 @@ const ipcRenderer = window.ipc
 
 export default defineComponent({
   name: 'TreeItem',
+  components: { RingProgress },
   mixins: [itemMixin],
   props: {
     // How deep is this tree item nested?
@@ -194,7 +203,7 @@ export default defineComponent({
      * @return  {string|boolean}  False if no secondary icon
      */
     secondaryIcon: function (): string|boolean {
-      if (this.hasChildren === false) {
+      if (!this.hasChildren) {
         // If whatever the object we're representing has no children, we do not
         // need the secondary icon, since the primary icon will display whatever
         // is necessary.
@@ -226,13 +235,12 @@ export default defineComponent({
      * @return  {string|boolean}  False if no custom icon.
      */
     customIcon: function (): string|boolean {
-      if (this.obj.type !== 'directory') {
-        // Indicate that this is a file.
-        if (this.obj.type === 'file') {
-          return 'file'
-        } else {
-          return 'code'
-        }
+      if (this.obj.type === 'file' && this.writingTarget !== undefined) {
+        return 'writing-target'
+      } else if (this.obj.type === 'file') {
+        return 'file'
+      } else if (this.obj.type === 'code') {
+        return 'code'
       } else if (this.obj.dirNotFoundFlag === true) {
         return 'disconnect'
       } else if (this.obj.settings.project !== null) {
@@ -245,6 +253,25 @@ export default defineComponent({
 
       // No icon available
       return false
+    },
+    writingTarget: function (): undefined|{ path: string, mode: 'words'|'chars', count: number } {
+      if (this.obj.type !== 'file') {
+        return undefined
+      } else {
+        return this.$store.state.writingTargets.find((x: any) => x.path === this.obj.path)
+      }
+    },
+    writingTargetPercent: function (): number {
+      if (this.writingTarget !== undefined && this.obj.type === 'file') {
+        const count = this.writingTarget.mode === 'words'
+          ? this.obj.wordCount
+          : this.obj.charCount
+
+        let ratio = count / this.writingTarget.count
+        return Math.min(1, ratio)
+      } else {
+        return 0.0
+      }
     },
     /**
      * Returns true if this item is a root item
@@ -533,8 +560,10 @@ body {
       display: flex;
 
       .item-icon, .toggle-icon {
-        display: inline-block;
-        width: 18px; // Size of clr-icon with the margin of the icon
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
         flex-shrink: 0; // Prevent shrinking; only the display text should
       }
 
