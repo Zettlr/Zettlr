@@ -227,6 +227,7 @@ there.
 - Citation keys in the autocomplete dropdown are now sorted by number of
   occurrences in the text
 - Fixed the readability mode color gradient (red -> purple -> blue -> green)
+- The "Save changes" dialog is now simpler and easier to understand
 
 ## Under the Hood
 

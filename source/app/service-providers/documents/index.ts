@@ -321,9 +321,10 @@ export default class DocumentManager extends ProviderContract {
 
         this._app.windows.askSaveChanges()
           .then(async result => {
+            // 0 = Save, 1 = Don't save, 2 = Cancel
             if (result.response < 2) {
               for (const document of this.documents) {
-                if (result.response === 0) {
+                if (result.response === 1) {
                   document.lastSavedVersion = document.currentVersion
                 } else {
                   await this.saveFile(document.filePath)
@@ -363,7 +364,8 @@ export default class DocumentManager extends ProviderContract {
     // document is still open somewhere else.
 
     const result = await this._app.windows.askSaveChanges()
-    if (result.response === 0) {
+    // 0 = Save, 1 = Don't save, 2 = Cancel
+    if (result.response === 1) {
       // Mark everything as clean TODO: As of now this would mean that if the
       // documents are open in other windows, they would still reflect the
       // "wrong" (b/c omitted, unsaved) state!
@@ -378,7 +380,7 @@ export default class DocumentManager extends ProviderContract {
       }
 
       return true
-    } else if (result.response === 1) {
+    } else if (result.response === 0) {
       // Save all docs
       for (const document of this.documents) {
         await this.saveFile(document.filePath)
@@ -770,12 +772,11 @@ export default class DocumentManager extends ProviderContract {
     const openFile = this.documents.find(doc => doc.filePath === filePath)
     if (openFile !== undefined && this.isModified(filePath) && numOpenInstances === 1) {
       const result = await this._app.windows.askSaveChanges()
-      // 0 = 'Close without saving changes',
-      // 1 = 'Save changes'
-      if (result.response === 0) {
+      // 0 = Save, 1 = Don't save, 2 = Cancel
+      if (result.response === 1) {
         // Clear the modification flag
         openFile.lastSavedVersion = openFile.currentVersion
-      } else if (result.response === 1) {
+      } else if (result.response === 0) {
         await this.saveFile(filePath) // TODO: Check return status
       } else {
         // Don't close the file
