@@ -21,6 +21,30 @@ const hashTesters = [
   {
     input: '',
     expectedValue: 0
+  },
+  {
+    input: '1',
+    expectedValue: 49
+  },
+  {
+    input: '2',
+    expectedValue: 50
+  },
+  {
+    input: 'a',
+    expectedValue: 97
+  },
+  {
+    input: 'ab',
+    expectedValue: 3105
+  },
+  {
+    input: 'test',
+    expectedValue: 3556498
+  },
+  {
+    input: 'test case',
+    expectedValue: -1238814210
   }
 ]
 
