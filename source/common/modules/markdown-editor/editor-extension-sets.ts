@@ -24,7 +24,7 @@ import { stex } from '@codemirror/legacy-modes/mode/stex'
 import { yaml } from '@codemirror/legacy-modes/mode/yaml'
 import { search } from '@codemirror/search'
 import { EditorState, Extension, Prec } from '@codemirror/state'
-import { keymap, drawSelection, EditorView, lineNumbers, ViewUpdate, DOMEventHandlers } from '@codemirror/view'
+import { keymap, drawSelection, EditorView, lineNumbers, ViewUpdate, DOMEventHandlers, dropCursor } from '@codemirror/view'
 import { autocomplete } from './autocomplete'
 import { customKeymap } from './commands/keymap'
 import { codeSyntaxHighlighter, markdownSyntaxHighlighter } from './highlight/get-syntax-highlighter'
@@ -111,6 +111,7 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     // SELECTIONS
     // Overrides the default browser selection drawing, allows styling
     drawSelection({ drawRangeCursor: false, cursorBlinkRate: 1000 }),
+    dropCursor(),
     EditorState.allowMultipleSelections.of(true),
     search({ top: true }), // Add a search
     // TAB SIZES/INDENTATION -> Depend on the configuration field

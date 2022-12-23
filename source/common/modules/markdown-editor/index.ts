@@ -280,6 +280,8 @@ export default class MarkdownEditor extends EventEmitter {
           event.preventDefault()
           event.stopPropagation()
 
+          const cwd = path.dirname(view.state.field(configField).metadata.path)
+
           // First: Do we have a fileList of files to drop here?
           if (dataTransfer.files.length > 0) {
             const files: string[] = []
@@ -292,25 +294,35 @@ export default class MarkdownEditor extends EventEmitter {
             }
 
             const toInsert = files.map(f => {
+              const pathToInsert = path.posix.relative(cwd, f)
               if (/\.(?:png|jpe?g|gif|bmp|svg|tiff?)$/i.test(f)) {
-                return `![${path.basename(f)}](${f})`
+                return `![${path.basename(f)}](${pathToInsert})`
               } else {
-                return `[${path.basename(f)}](${f})`
+                return `[${path.basename(f)}](${pathToInsert})`
               }
             })
 
             view.dispatch({ changes: { from: pos, insert: toInsert.join('\n') } })
           } else if (zettlrFile !== '') {
-            // We have a ZettlrFile to insert
-            const data = JSON.parse(zettlrFile) as { type: 'code'|'file'|'directory', path: string, id: string }
-            const name = path.basename(data.path)
+            // We have a Markdown/Code file to insert
+            const data = JSON.parse(zettlrFile) as { type: 'code'|'file'|'directory'|'other', path: string, id?: string }
+            const name = path.basename(data.path, path.extname(data.path))
+            const pathToInsert = path.posix.relative(cwd, data.path)
+
             if (data.type === 'file') {
               const { linkStart, linkEnd } = view.state.field(configField)
               // Insert as Zkn link
               view.dispatch({ changes: { from: pos, insert: `${linkStart}${name}${linkEnd}` } })
             } else if (data.type === 'code') {
               // Insert as Md link
-              view.dispatch({ changes: { from: pos, insert: `[${name}](${data.path})` } })
+              view.dispatch({ changes: { from: pos, insert: `[${name}](${pathToInsert})` } })
+            } else if (data.type === 'other') {
+              const isImage = /\.(?:png|jpe?g|gif|bmp|svg|tiff?)$/i.test(data.path)
+              if (isImage) {
+                view.dispatch({ changes: { from: pos, insert: `![${name}](${pathToInsert})` } })
+              } else {
+                view.dispatch({ changes: { from: pos, insert: `[${name}](${pathToInsert})` } })
+              }
             }
           }
           return false

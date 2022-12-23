@@ -73,7 +73,8 @@ export default defineComponent({
      */
     handleDragStart: function (event: DragEvent, attachmentPath: string) {
       // Indicate with custom data that this is a file from the sidebar
-      event.dataTransfer?.setData('text/x-zettlr-other-file', attachmentPath)
+      const data = { type: 'other', path: attachmentPath }
+      event.dataTransfer?.setData('text/x-zettlr-file', JSON.stringify(data))
     },
     getIcon: function (attachmentPath: string) {
       const fileExtIcon = ClarityIcons.get('file-ext')
