@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2022-12-20 15:57+0000\n"
+"POT-Creation-Date: 2022-12-24 02:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -192,7 +192,7 @@ msgstr "Näita faili"
 msgid "Image not found: %s"
 msgstr ""
 
-#: source/common/modules/markdown-editor/linters/spellcheck.ts:149
+#: source/common/modules/markdown-editor/linters/spellcheck.ts:148
 msgid "Spelling mistake"
 msgstr ""
 
@@ -333,7 +333,7 @@ msgid "No results"
 msgstr "Tulemused puuduvad"
 
 #. Else standard val for new dirs.
-#: source/tmp/tree-item.vue.ts:239
+#: source/tmp/tree-item.vue.ts:259
 #: source/app/service-providers/commands/dir-new.ts:42
 msgid "Untitled"
 msgstr "Nimetu"
@@ -541,17 +541,15 @@ msgid ""
 "strong>"
 msgstr ""
 
-#. 0: Omit all changes
 #: source/tmp/CustomCSS.vue.ts:42 source/tmp/CustomCSS.vue.ts:56
 #: source/tmp/Defaults.vue.ts:112 source/tmp/SnippetsTab.vue.ts:47
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
 #: source/app/service-providers/menu/menu.darwin.ts:195
 #: source/app/service-providers/menu/menu.win32.ts:160
 #: source/app/service-providers/commands/export.ts:79
 msgid "Save"
 msgstr "Salvesta"
 
-#. 1: Save all changes
+#. 1: Omit all changes
 #: source/tmp/CustomCSS.vue.ts:49
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:36
@@ -560,8 +558,10 @@ msgstr "Salvesta"
 msgid "Cancel"
 msgstr "Tühista"
 
+#. If the user cancels, do not omit (the default) but actually cancel
 #: source/tmp/CustomCSS.vue.ts:65 source/tmp/Defaults.vue.ts:130
 #: source/tmp/SnippetsTab.vue.ts:65
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
 msgid "Unsaved changes"
 msgstr "Salvestamata muudatused"
 
@@ -1384,18 +1384,17 @@ msgid "Open project folder"
 msgstr "Ava porjekti kaust"
 
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
-msgid "Proceed without saving"
-msgstr "Jätka salvestamata"
+msgid "Yes"
+msgstr ""
 
-#. If the user cancels, do not omit (the default) but actually cancel
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
-msgid "Omit unsaved changes?"
-msgstr "Hülga salvestamata muudatused?"
+#. 0: Save all changes
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
+msgid "No"
+msgstr ""
 
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
-msgid ""
-"There are unsaved changes to the current file. Do you want to omit them or "
-"save?"
+#, fuzzy
+msgid "There are unsaved changes. Do you want to save them first?"
 msgstr ""
 "Selles failis on salvestamata muudatusi. Kas soovid need hüljata või "
 "salvestada?"
@@ -1945,6 +1944,12 @@ msgstr "%s faile pole võimalik importida, kuna nende failitüüp pole teada: %s
 #: source/app/service-providers/commands/set-open-directory.ts:40
 msgid "Directory not found"
 msgstr "Nimistut ei leitud"
+
+#~ msgid "Proceed without saving"
+#~ msgstr "Jätka salvestamata"
+
+#~ msgid "Omit unsaved changes?"
+#~ msgstr "Hülga salvestamata muudatused?"
 
 #~ msgid "Afrikaans (South Africa)"
 #~ msgstr "afrikaani (Lõuna-Aafrika)"

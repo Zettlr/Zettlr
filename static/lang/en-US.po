@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2022-12-23 02:32+0000\n"
+"POT-Creation-Date: 2022-12-24 02:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -192,7 +192,7 @@ msgstr "Show file"
 msgid "Image not found: %s"
 msgstr "Image not found: %s"
 
-#: source/common/modules/markdown-editor/linters/spellcheck.ts:149
+#: source/common/modules/markdown-editor/linters/spellcheck.ts:148
 msgid "Spelling mistake"
 msgstr "Spelling mistake"
 
@@ -335,7 +335,7 @@ msgid "No results"
 msgstr "No results"
 
 #. Else standard val for new dirs.
-#: source/tmp/tree-item.vue.ts:239
+#: source/tmp/tree-item.vue.ts:259
 #: source/app/service-providers/commands/dir-new.ts:42
 msgid "Untitled"
 msgstr "Untitled"
@@ -559,17 +559,15 @@ msgstr ""
 "geometry of elements, otherwise the app may expose unwanted behaviour!</"
 "strong>"
 
-#. 0: Omit all changes
 #: source/tmp/CustomCSS.vue.ts:42 source/tmp/CustomCSS.vue.ts:56
 #: source/tmp/Defaults.vue.ts:112 source/tmp/SnippetsTab.vue.ts:47
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
 #: source/app/service-providers/menu/menu.darwin.ts:195
 #: source/app/service-providers/menu/menu.win32.ts:160
 #: source/app/service-providers/commands/export.ts:79
 msgid "Save"
 msgstr "Save"
 
-#. 1: Save all changes
+#. 1: Omit all changes
 #: source/tmp/CustomCSS.vue.ts:49
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:36
@@ -578,8 +576,10 @@ msgstr "Save"
 msgid "Cancel"
 msgstr "Cancel"
 
+#. If the user cancels, do not omit (the default) but actually cancel
 #: source/tmp/CustomCSS.vue.ts:65 source/tmp/Defaults.vue.ts:130
 #: source/tmp/SnippetsTab.vue.ts:65
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
 msgid "Unsaved changes"
 msgstr "Unsaved changes"
 
@@ -1415,21 +1415,17 @@ msgid "Open project folder"
 msgstr "Open project folder"
 
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
-msgid "Proceed without saving"
-msgstr "Proceed without saving"
+msgid "Yes"
+msgstr "Yes"
 
-#. If the user cancels, do not omit (the default) but actually cancel
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
-msgid "Omit unsaved changes?"
-msgstr "Omit unsaved changes?"
+#. 0: Save all changes
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
+msgid "No"
+msgstr "No"
 
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
-msgid ""
-"There are unsaved changes to the current file. Do you want to omit them or "
-"save?"
-msgstr ""
-"There are unsaved changes to the current file. Do you want to omit them or "
-"save?"
+msgid "There are unsaved changes. Do you want to save them first?"
+msgstr "There are unsaved changes. Do you want to save them first?"
 
 #: source/app/service-providers/windows/dialog/prompt.ts:32
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:37

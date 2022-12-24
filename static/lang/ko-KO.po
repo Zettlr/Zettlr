@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2022-12-20 15:57+0000\n"
+"POT-Creation-Date: 2022-12-24 02:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -192,7 +192,7 @@ msgstr "파일 보기"
 msgid "Image not found: %s"
 msgstr ""
 
-#: source/common/modules/markdown-editor/linters/spellcheck.ts:149
+#: source/common/modules/markdown-editor/linters/spellcheck.ts:148
 msgid "Spelling mistake"
 msgstr ""
 
@@ -334,7 +334,7 @@ msgid "No results"
 msgstr "결과 없음"
 
 #. Else standard val for new dirs.
-#: source/tmp/tree-item.vue.ts:239
+#: source/tmp/tree-item.vue.ts:259
 #: source/app/service-providers/commands/dir-new.ts:42
 msgid "Untitled"
 msgstr "Untitled"
@@ -557,17 +557,15 @@ msgstr ""
 "지 마십시오.  그렇지 않으면 앱이 원치 않는 동작을 노출 할 수 있습니다.</"
 "strong>"
 
-#. 0: Omit all changes
 #: source/tmp/CustomCSS.vue.ts:42 source/tmp/CustomCSS.vue.ts:56
 #: source/tmp/Defaults.vue.ts:112 source/tmp/SnippetsTab.vue.ts:47
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
 #: source/app/service-providers/menu/menu.darwin.ts:195
 #: source/app/service-providers/menu/menu.win32.ts:160
 #: source/app/service-providers/commands/export.ts:79
 msgid "Save"
 msgstr "저장"
 
-#. 1: Save all changes
+#. 1: Omit all changes
 #: source/tmp/CustomCSS.vue.ts:49
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:36
@@ -576,8 +574,10 @@ msgstr "저장"
 msgid "Cancel"
 msgstr "취소"
 
+#. If the user cancels, do not omit (the default) but actually cancel
 #: source/tmp/CustomCSS.vue.ts:65 source/tmp/Defaults.vue.ts:130
 #: source/tmp/SnippetsTab.vue.ts:65
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
 msgid "Unsaved changes"
 msgstr ""
 
@@ -1407,18 +1407,17 @@ msgid "Open project folder"
 msgstr "프로젝트 폴더 열기"
 
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
-msgid "Proceed without saving"
-msgstr "저장하지 않고 진행"
+msgid "Yes"
+msgstr ""
 
-#. If the user cancels, do not omit (the default) but actually cancel
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
-msgid "Omit unsaved changes?"
-msgstr "저장하지 않은 변경 사항을 생략하시겠습니까?"
+#. 0: Save all changes
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
+msgid "No"
+msgstr ""
 
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
-msgid ""
-"There are unsaved changes to the current file. Do you want to omit them or "
-"save?"
+#, fuzzy
+msgid "There are unsaved changes. Do you want to save them first?"
 msgstr ""
 "현재 파일에 저장하지 않은 변경 사항이 있습니다. 변경 사항을 생략하거나 아니"
 "면 저장할까요?"
@@ -1970,6 +1969,12 @@ msgstr "파일 유형을 알 수 없기 때문에 파일을 가져올 수 없습
 #: source/app/service-providers/commands/set-open-directory.ts:40
 msgid "Directory not found"
 msgstr "디렉토리가 존재하지 않습니다"
+
+#~ msgid "Proceed without saving"
+#~ msgstr "저장하지 않고 진행"
+
+#~ msgid "Omit unsaved changes?"
+#~ msgstr "저장하지 않은 변경 사항을 생략하시겠습니까?"
 
 #~ msgid "Afrikaans (South Africa)"
 #~ msgstr "Afrikaans (South Africa)"

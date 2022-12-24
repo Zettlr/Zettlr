@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2022-12-20 15:57+0000\n"
+"POT-Creation-Date: 2022-12-24 02:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -192,7 +192,7 @@ msgstr "顯示檔案"
 msgid "Image not found: %s"
 msgstr ""
 
-#: source/common/modules/markdown-editor/linters/spellcheck.ts:149
+#: source/common/modules/markdown-editor/linters/spellcheck.ts:148
 msgid "Spelling mistake"
 msgstr ""
 
@@ -333,7 +333,7 @@ msgid "No results"
 msgstr "沒有結果"
 
 #. Else standard val for new dirs.
-#: source/tmp/tree-item.vue.ts:239
+#: source/tmp/tree-item.vue.ts:259
 #: source/app/service-providers/commands/dir-new.ts:42
 msgid "Untitled"
 msgstr "未命名"
@@ -551,17 +551,15 @@ msgstr ""
 "你可以自訂 Zettlr 的樣式。<strong>注意：該文件會覆蓋所有的 CSS 指令！不要隨意"
 "改動幾何參數，應用程序可能會有異常！</strong>"
 
-#. 0: Omit all changes
 #: source/tmp/CustomCSS.vue.ts:42 source/tmp/CustomCSS.vue.ts:56
 #: source/tmp/Defaults.vue.ts:112 source/tmp/SnippetsTab.vue.ts:47
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
 #: source/app/service-providers/menu/menu.darwin.ts:195
 #: source/app/service-providers/menu/menu.win32.ts:160
 #: source/app/service-providers/commands/export.ts:79
 msgid "Save"
 msgstr "存檔"
 
-#. 1: Save all changes
+#. 1: Omit all changes
 #: source/tmp/CustomCSS.vue.ts:49
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:36
@@ -570,8 +568,10 @@ msgstr "存檔"
 msgid "Cancel"
 msgstr "取消"
 
+#. If the user cancels, do not omit (the default) but actually cancel
 #: source/tmp/CustomCSS.vue.ts:65 source/tmp/Defaults.vue.ts:130
 #: source/tmp/SnippetsTab.vue.ts:65
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
 msgid "Unsaved changes"
 msgstr "還沒存檔的修改"
 
@@ -1397,18 +1397,17 @@ msgid "Open project folder"
 msgstr "開啟專案資料夾"
 
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
-msgid "Proceed without saving"
-msgstr "不要存檔並繼續"
+msgid "Yes"
+msgstr ""
 
-#. If the user cancels, do not omit (the default) but actually cancel
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
-msgid "Omit unsaved changes?"
-msgstr "放棄未存檔的修改？"
+#. 0: Save all changes
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
+msgid "No"
+msgstr ""
 
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
-msgid ""
-"There are unsaved changes to the current file. Do you want to omit them or "
-"save?"
+#, fuzzy
+msgid "There are unsaved changes. Do you want to save them first?"
 msgstr "有些修改還未儲存，你要放棄它們還是要存檔？"
 
 #: source/app/service-providers/windows/dialog/prompt.ts:32
@@ -1954,6 +1953,12 @@ msgstr "以下文件 %s 無法被匯入，因為檔案類型未知：%s"
 #: source/app/service-providers/commands/set-open-directory.ts:40
 msgid "Directory not found"
 msgstr "找不到目錄"
+
+#~ msgid "Proceed without saving"
+#~ msgstr "不要存檔並繼續"
+
+#~ msgid "Omit unsaved changes?"
+#~ msgstr "放棄未存檔的修改？"
 
 #~ msgid "Afrikaans (South Africa)"
 #~ msgstr "南非荷蘭語（南非）"
