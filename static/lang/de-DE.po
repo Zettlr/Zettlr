@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2022-12-24 02:29+0000\n"
-"PO-Revision-Date: 2022-12-21 14:25+0100\n"
+"PO-Revision-Date: 2022-12-24 16:19+0100\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -1427,17 +1427,16 @@ msgstr "Projektverzeichnis öffnen"
 
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #. 0: Save all changes
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
 msgid "No"
-msgstr ""
+msgstr "Nein"
 
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
-#, fuzzy
 msgid "There are unsaved changes. Do you want to save them first?"
-msgstr "Die Datei enthält ungespeicherte Änderungen. Verwerfen oder speichern?"
+msgstr "Die Datei enthält ungesicherte Änderungen. Verwerfen oder speichern?"
 
 #: source/app/service-providers/windows/dialog/prompt.ts:32
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:37
