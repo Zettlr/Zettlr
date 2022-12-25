@@ -51,6 +51,7 @@ import isFile from '@common/util/is-file'
 import isDir from '@common/util/is-dir'
 import enumLangFiles from '@common/util/enum-lang-files'
 import enumDictFiles from '@common/util/enum-dict-files'
+import RenameTag from './rename-tag'
 
 export const commands = [
   DirDelete,
@@ -75,6 +76,7 @@ export const commands = [
   IncreasePomodoro,
   OpenAttachment,
   Print,
+  RenameTag,
   RequestMove,
   RootClose,
   RootOpen,

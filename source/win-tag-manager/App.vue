@@ -26,6 +26,9 @@
           <th style="text-align: right;">
             {{ countLabel }}
           </th>
+          <th>
+            Actions <!-- TODO: Translate -->
+          </th>
         </tr>
         <tr v-for="(tag, index) in tags" v-bind:key="index" class="tag-flex">
           <td style="text-align: left;">
@@ -64,6 +67,25 @@
 
           <td style="text-align: right;">
             <span style="flex-shrink: 1;">{{ tag.files.length ?? 0 }}&times;</span>
+          </td>
+
+          <td>
+            <TextControl
+              v-if="renameActiveFor === index"
+              v-model="newTag"
+              v-bind:placeholder="'New tag'"
+            ></TextControl>
+            <ButtonControl
+              v-if="renameActiveFor === index"
+              v-bind:label="'Rename'"
+              v-on:click="renameTag(tag.name)"
+            ></ButtonControl>
+
+            <ButtonControl
+              v-else
+              v-bind:label="'Rename tag...'"
+              v-on:click="renameActiveFor = index"
+            ></ButtonControl>
           </td>
         </tr>
       </table>
@@ -106,7 +128,9 @@ export default defineComponent({
   data: function () {
     return {
       tags: [] as TagRecord[],
-      hasUnsavedChanges: false
+      hasUnsavedChanges: false,
+      renameActiveFor: -1,
+      newTag: ''
     }
   },
   computed: {
@@ -189,6 +213,15 @@ export default defineComponent({
       this.tags = await ipcRenderer.invoke('tag-provider', {
         command: 'get-all-tags'
       }) as TagRecord[]
+    },
+    renameTag: async function (tagName: string) {
+      await ipcRenderer.invoke('application', {
+        command: 'rename-tag',
+        payload: { oldName: tagName, newName: this.newTag }
+      })
+
+      // Afterwards, fetch the new set of tags
+      await this.retrieveTags()
     }
   }
 })

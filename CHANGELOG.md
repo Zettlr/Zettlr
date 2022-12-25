@@ -107,6 +107,9 @@ tag first. Additionally, it gives you a better overview over your tags. The info
 is now being propagated better across the app, with more places showing the
 assigned colors for tags.
 
+Additionally, you now have a better way to consolidate your tags: Within the
+tag manager, you can now rename tags in order to clean up your tagging system.
+
 ### Migration Guide
 
 There are two instances where you will want to migrate something.

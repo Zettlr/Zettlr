@@ -631,6 +631,17 @@ export default class FSAL extends ProviderContract {
   }
 
   /**
+   * Returns all files that are loaded somewhere in the app
+   *
+   * @return  {Array<MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor>}  A list of all files
+   */
+  public getAllFiles (): Array<MDFileDescriptor|CodeFileDescriptor|OtherFileDescriptor> {
+    const allFiles = objectToArray(this._state.filetree, 'children')
+      .filter(descriptor => descriptor.type !== 'directory')
+    return allFiles
+  }
+
+  /**
    * Attempts to find a directory in the FSAL. Returns null if not found.
    *
    * @param  {string}       val  An absolute path to search for.
