@@ -608,7 +608,7 @@ export default class FSAL extends ProviderContract {
    *
    * @return  {Array<[ string, string[] ]>}  The list of tags with the files
    */
-  public collectTags (): Array<[ string, string[] ]> {
+  public collectTags (): Array<[ tag: string, files: string[] ]> {
     // NOTE: Did a small performance check, on my full directory with >1,000
     // tags and several hundred files this takes 23ms. Memory is indeed fast.
     const tags: Array<[ string, string[] ]> = []

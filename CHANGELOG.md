@@ -98,6 +98,15 @@ here's what has changed:
 * Furthermore, we have dropped our internal reveal.js exporter, since Pandoc
   supports everything we did out of the box (and better) than our exporter
 
+## Tag Manager Update
+
+The tag manager has received a necessary face lift. Now, the tag manager shows
+all your tags and allows you to assign/un-assign colors and descriptions. This
+makes it easier to assign colors to certain tags without having to remember the
+tag first. Additionally, it gives you a better overview over your tags. The info
+is now being propagated better across the app, with more places showing the
+assigned colors for tags.
+
 ### Migration Guide
 
 There are two instances where you will want to migrate something.

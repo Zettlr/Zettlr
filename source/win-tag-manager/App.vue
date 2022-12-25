@@ -6,34 +6,67 @@
     v-bind:show-statusbar="true"
     v-bind:statusbar-controls="statusbarControls"
     v-bind:disable-vibrancy="true"
-    v-on:statusbar-click="handleClick($event)"
+    v-on:statusbar-click="handleStatusbar($event)"
   >
     <div id="tag-manager">
       <p>
         {{ tagManagerIntro }}
       </p>
-      <div>
-        <div v-for="(tag, index) in tags" v-bind:key="index" class="tag-flex">
-          <TextControl
-            v-model="tag.name"
-            v-bind:placeholder="namePlaceholder"
-            v-bind:inline="false"
-          ></TextControl>
-          <ColorControl
-            v-model="tag.color"
-            v-bind:placeholder="colorPlaceholder"
-            v-bind:inline="false"
-          ></ColorControl>
-          <TextControl
-            v-model="tag.desc"
-            v-bind:placeholder="descriptionPlaceholder"
-            v-bind:inline="false"
-          ></TextControl>
-          <button type="button" v-on:click="removeTag(index)">
-            Delete
-          </button>
-        </div>
-      </div>
+
+      <hr>
+
+      <table>
+        <tr>
+          <th style="text-align: left;">
+            {{ tagNameLabel }}
+          </th>
+          <th style="text-align: left;">
+            {{ colorLabel }}
+          </th>
+          <th style="text-align: right;">
+            {{ countLabel }}
+          </th>
+        </tr>
+        <tr v-for="(tag, index) in tags" v-bind:key="index" class="tag-flex">
+          <td style="text-align: left;">
+            <span style="flex-shrink: 1;">{{ tag.name }}</span>
+          </td>
+
+          <td>
+            <ColorControl
+              v-if="tag.color !== undefined"
+              v-model="tag.color"
+              v-bind:inline="true"
+              v-on:change="hasUnsavedChanges = true"
+            ></ColorControl>
+
+            <TextControl
+              v-if="tag.color !== undefined"
+              v-model="tag.desc"
+              v-bind:inline="true"
+              v-bind:placeholder="descriptionPlaceholder"
+              v-on:change="hasUnsavedChanges = true"
+            ></TextControl>
+
+            <ButtonControl
+              v-if="tag.color !== undefined"
+              v-bind:label="removeColorLabel"
+              v-bind:inline="true"
+              v-on:click="removeColor(index)"
+            ></ButtonControl>
+            <ButtonControl
+              v-else
+              v-bind:label="assignColorLabel"
+              v-bind:inline="true"
+              v-on:click="assignColor(index)"
+            ></ButtonControl>
+          </td>
+
+          <td style="text-align: right;">
+            <span style="flex-shrink: 1;">{{ tag.files.length ?? 0 }}&times;</span>
+          </td>
+        </tr>
+      </table>
     </div>
   </WindowChrome>
 </template>
@@ -56,40 +89,47 @@
 import WindowChrome from '@common/vue/window/Chrome.vue'
 import TextControl from '@common/vue/form/elements/Text.vue'
 import ColorControl from '@common/vue/form/elements/Color.vue'
+import ButtonControl from '@common/vue/form/elements/Button.vue'
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
+import { TagRecord } from '@providers/tags'
 
 const ipcRenderer = window.ipc
-
-interface ColouredTag {
-  name: string
-  color: string
-  desc: string
-}
 
 export default defineComponent({
   components: {
     WindowChrome,
     TextControl,
+    ButtonControl,
     ColorControl
   },
   data: function () {
     return {
-      tags: [] as ColouredTag[]
+      tags: [] as TagRecord[],
+      hasUnsavedChanges: false
     }
   },
   computed: {
-    namePlaceholder: function () {
-      return trans('The Tag (without #)')
+    assignColorLabel: function () {
+      return trans('Assign color')
     },
-    colorPlaceholder: function () {
-      return trans('Colour (e.g. #ff0000 or rgb(255, 0, 0))')
+    removeColorLabel: function () {
+      return trans('Remove color')
+    },
+    tagNameLabel: function () {
+      return trans('Tag name')
+    },
+    colorLabel: function () {
+      return trans('Color')
+    },
+    countLabel: function () {
+      return trans('Count')
     },
     descriptionPlaceholder: function () {
-      return trans('A short and concise description (max. 100 characters)')
+      return trans('A short description')
     },
     tagManagerIntro: function () {
-      return trans('Here you can assign colours to different tags. If a tag is found in a file, its tile in the preview list will receive a coloured indicator. The description will be shown on mouse hover.')
+      return trans('Here you can assign colors to different tags. If a tag is found in a file, its tile in the preview list will receive a colored indicator. The description will be shown on mouse hover.')
     },
     windowTitle: function () {
       return trans('Manage tags')
@@ -104,59 +144,51 @@ export default defineComponent({
           buttonClass: 'primary' // It's a primary button
         },
         {
-          type: 'button',
-          label: trans('Cancel'),
-          id: 'cancel',
-          icon: ''
+          type: 'text',
+          label: this.hasUnsavedChanges ? trans('Unsaved changes') : ''
         },
         {
           type: 'button',
-          label: 'Add new tag',
-          id: 'add-new',
+          label: trans('Close'),
+          id: 'close',
           icon: ''
         }
       ]
     }
   },
   created: function () {
-    ipcRenderer.invoke('tag-provider', {
-      command: 'get-coloured-tags'
-    })
-      .then((tags) => {
-        this.tags = tags
-      })
-      .catch(e => console.error(e))
+    this.retrieveTags().catch(e => console.error(e))
   },
   methods: {
-    handleClick: function (controlID: string) {
+    handleStatusbar: function (controlID: string) {
       if (controlID === 'save') {
         ipcRenderer.invoke('tag-provider', {
-          command: 'set-coloured-tags',
-          payload: this.tags.map(tag => {
-            // De-proxy the tags so they can be sent over IPC
-            return {
-              name: tag.name,
-              color: tag.color,
-              desc: tag.desc
-            }
-          })
+          command: 'set-colored-tags',
+          // De-proxy the tags so they can be sent over IPC
+          payload: JSON.parse(JSON.stringify(this.tags))
         })
           .then(() => {
             ipcRenderer.send('window-controls', { command: 'win-close' })
           })
           .catch(e => console.error(e))
-      } else if (controlID === 'cancel') {
+      } else if (controlID === 'close') {
         ipcRenderer.send('window-controls', { command: 'win-close' })
-      } else if (controlID === 'add-new') {
-        this.tags.push({
-          name: '',
-          color: '#ffffff',
-          desc: ''
-        })
       }
     },
-    removeTag: function (tagIndex: number) {
-      this.tags.splice(tagIndex, 1)
+    removeColor: function (tagIndex: number) {
+      this.tags[tagIndex].color = undefined
+      this.tags[tagIndex].desc = undefined
+      this.hasUnsavedChanges = true
+    },
+    assignColor: function (tagIndex: number) {
+      this.tags[tagIndex].color = '#1cb27e'
+      this.tags[tagIndex].desc = ''
+      this.hasUnsavedChanges = true
+    },
+    retrieveTags: async function () {
+      this.tags = await ipcRenderer.invoke('tag-provider', {
+        command: 'get-all-tags'
+      }) as TagRecord[]
     }
   }
 })
@@ -167,18 +199,22 @@ div#tag-manager {
   padding: 10px;
   margin-top: 10px;
 
-  div.tag-flex {
-    display: flex;
+  p:first-child { margin-bottom: 10px; }
 
-    & > * {
-      flex: 1;
-      text-align: center;
-      margin: 5px 5px;
-    }
+  table {
+    width: 100%;
+    margin-top: 10px;
+    border-collapse: collapse;
 
-    & > :last-child, & > :nth-child(2) {
-      flex: 0.2;
+    td, th { padding: 5px; }
+
+    tr:nth-child(2n) {
+      background-color: rgb(200, 200, 200);
     }
   }
+}
+
+body.dark div#tag-manager table tr:nth-child(2n) {
+  background-color: rgb(100, 100, 100);
 }
 </style>

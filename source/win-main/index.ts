@@ -66,9 +66,9 @@ document.addEventListener('drop', (event) => {
 /**
  * Listen to update events
  */
-function updateColouredTags (): void {
+function updateColoredTags (): void {
   ipcRenderer.invoke('tag-provider', {
-    command: 'get-coloured-tags'
+    command: 'get-colored-tags'
   })
     .then(tags => {
       app.$store.commit('colouredTags', tags)
@@ -76,13 +76,13 @@ function updateColouredTags (): void {
     .catch(e => console.error(e))
 }
 
-ipcRenderer.on('coloured-tags', (event) => {
+ipcRenderer.on('colored-tags', (event) => {
   // Update the tags
-  updateColouredTags()
+  updateColoredTags()
 })
 
 // Send the first update for tags
-updateColouredTags()
+updateColoredTags()
 
 // -----------------------------------------------------------------------------
 

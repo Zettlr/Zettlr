@@ -120,7 +120,7 @@ import getBibliographyForDescriptor from '@common/util/get-bibliography-for-desc
 import EditorSearchPanel from './EditorSearchPanel.vue'
 import { SearchQuery } from '@codemirror/search'
 import { EditorSelection } from '@codemirror/state'
-import { TagDatabase } from '@dts/common/tag-provider'
+import { TagRecord } from '@providers/tags'
 
 const ipcRenderer = window.ipc
 const path = window.path
@@ -566,8 +566,8 @@ async function swapDocument (doc: string) {
 
   mdEditor.setCompletionDatabase('snippets', snippets.value)
 
-  const tags = await ipcRenderer.invoke('tag-provider', { command: 'get-tags-database' }) as TagDatabase
-  mdEditor.setCompletionDatabase('tags', Object.keys(tags))
+  const tags = await ipcRenderer.invoke('tag-provider', { command: 'get-all-tags' }) as TagRecord[]
+  mdEditor.setCompletionDatabase('tags', tags)
 
   // Provide the editor instance with metadata for the new file
   mdEditor.setOptions({

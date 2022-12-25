@@ -59,6 +59,7 @@ import { addNewFootnote } from './commands/footnotes'
 import countWords from '@common/util/count-words'
 import { syntaxTree } from '@codemirror/language'
 import openMarkdownLink from './util/open-markdown-link'
+import { TagRecord } from '@providers/tags'
 
 const path = window.path
 
@@ -100,7 +101,7 @@ export default class MarkdownEditor extends EventEmitter {
   private config: EditorConfiguration
 
   private readonly databaseCache: {
-    tags: string[]
+    tags: TagRecord[]
     citations: Array<{ citekey: string, displayText: string }>
     snippets: Array<{ name: string, content: string }>
     files: Array<{ filename: string, id: string }>
@@ -635,7 +636,7 @@ export default class MarkdownEditor extends EventEmitter {
    * @param   {String}  type      The type of the database
    * @param   {Object}  database  The show-hint-addon compatible database
    */
-  setCompletionDatabase (type: 'tags', database: string[]): void
+  setCompletionDatabase (type: 'tags', database: TagRecord[]): void
   setCompletionDatabase (type: 'citations', database: Array<{ citekey: string, displayText: string }>): void
   setCompletionDatabase (type: 'snippets', database: Array<{ name: string, content: string }>): void
   setCompletionDatabase (type: 'files', database: Array<{ filename: string, id: string }>): void

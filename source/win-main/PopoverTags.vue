@@ -32,10 +32,16 @@
       v-for="tag, idx in filteredTags"
       v-bind:key="idx"
       class="tag"
-      v-on:click="handleClick(tag.text)"
+      v-bind:title="tag.desc"
+      v-on:click="handleClick(tag.name)"
     >
-      <!-- Tags have a count, text, and a className -->
-      {{ tag.text }} ({{ tag.count }}x)
+      <!-- Tags have a name, a count, and optionally a color -->
+      <span
+        v-if="tag.color !== undefined"
+        class="color-circle"
+        v-bind:style="`background-color: ${tag.color};`"
+      ></span>
+      {{ tag.name }} ({{ tag.files.length }}x)
     </div>
   </div>
 </template>
@@ -61,11 +67,11 @@ import TokenList from '@common/vue/form/elements/TokenList.vue'
 import TabBar from '@common/vue/TabBar.vue'
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
-import { TagDatabase } from '@dts/common/tag-provider'
 import { TabbarControl } from '@dts/renderer/window'
 import { OpenDocument } from '@dts/common/documents'
 import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
 import { MDFileDescriptor } from '@dts/common/fsal'
+import { TagRecord } from '@providers/tags'
 
 const ipcRenderer = window.ipc
 
@@ -89,11 +95,11 @@ async function regenerateTagSuggestions (activeFile: null|OpenDocument): Promise
     throw new Error('Could not generate tag suggestions: Main did not return the file contents!')
   }
 
-  const tags = await ipcRenderer.invoke('tag-provider', { command: 'get-tags-database' })
+  const tags = await ipcRenderer.invoke('tag-provider', { command: 'get-all-tags' }) as TagRecord[]
 
-  for (const tag of Object.keys(tags)) {
-    if (String(contents).includes(tag) && !descriptor.tags.includes(tag)) {
-      suggestions.push(tag)
+  for (const tag of tags) {
+    if (String(contents).includes(tag.name) && !descriptor.tags.includes(tag.name)) {
+      suggestions.push(tag.name)
     }
   }
 
@@ -110,7 +116,7 @@ export default defineComponent({
   },
   data: function () {
     return {
-      tags: [] as Array<{ text: string, count: number, className: string }>,
+      tags: [] as TagRecord[],
       tabs: [
         { id: 'name', label: trans('Name') },
         { id: 'count', label: trans('Count') }
@@ -155,16 +161,16 @@ export default defineComponent({
       const coll = new Intl.Collator(languagePreferences, { 'numeric': true })
       sorted.sort((a, b) => {
         if (this.sorting === 'name') {
-          return coll.compare(a.text, b.text)
+          return coll.compare(a.name, b.name)
         } else {
-          return b.count - a.count
+          return b.files.length - a.files.length
         }
       })
       return sorted
     },
     filteredTags: function () {
       return this.sortedTags.filter(tag => {
-        return tag.text.toLowerCase().includes(this.query.toLowerCase())
+        return tag.name.toLowerCase().includes(this.query.toLowerCase())
       })
     },
     filterInput: function () {
@@ -180,11 +186,9 @@ export default defineComponent({
   },
   mounted: function () {
     this.filterInput.focus()
-    ipcRenderer.invoke('tag-provider', { command: 'get-tags-database' })
-      .then((tags: TagDatabase) => {
-        this.tags = Object.keys(tags).map(tag => {
-          return { ...tags[tag] }
-        })
+    ipcRenderer.invoke('tag-provider', { command: 'get-all-tags' })
+      .then((tags: TagRecord[]) => {
+        this.tags = tags
       })
       .catch(err => console.error(err))
   },
@@ -211,6 +215,14 @@ body {
 
       &:hover {
         background-color: rgba(70, 70, 70, .3);
+      }
+
+      .color-circle {
+        display: inline-block;
+        width: 9px;
+        height: 9px;
+        border: 1px solid white;
+        border-radius: 50%;
       }
     }
   }

@@ -12,11 +12,12 @@
         v-bind:primary="item.primary"
         v-on:click="$emit('click', item.id)"
       ></ButtonControl>
-      <TextControl
+      <span
         v-if="item.type === 'text'"
         v-bind:key="idx"
-        v-bind:control="item"
-      ></TextControl>
+      >
+        {{ item.label }}
+      </span>
     </template>
   </div>
 </template>
@@ -38,13 +39,11 @@
 
 // Regular form button, but a static text display
 import ButtonControl from '../form/elements/Button.vue'
-import TextControl from './toolbar-controls/Text.vue'
 
 export default {
   name: 'WindowStatusbar',
   components: {
-    ButtonControl,
-    TextControl
+    ButtonControl
   },
   props: {
     controls: {

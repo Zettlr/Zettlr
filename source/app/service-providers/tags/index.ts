@@ -8,6 +8,12 @@
  * License:         GNU GPL v3
  *
  * Description:     Handles everything tag related that's going on in the app.
+ *                  The provider basically provides the "weaving together" of
+ *                  the existing tags within the files loaded in the app and the
+ *                  "special" tags that have a color assigned. The provider
+ *                  always receives just all tags, and makes sure to disentangle
+ *                  and enrich the colors from the "normal" tags as they pass
+ *                  through it.
  *
  * END HEADER
  */
@@ -15,49 +21,51 @@
 import path from 'path'
 import { app, ipcMain } from 'electron'
 import broadcastIpcMessage from '@common/util/broadcast-ipc-message'
-import { ColouredTag, TagDatabase } from '@dts/common/tag-provider'
 import ProviderContract from '../provider-contract'
 import LogProvider from '../log'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
 import FSAL from '@providers/fsal'
 
-interface InternalTagRecord {
-  text: string
+export interface TagRecord {
+  name: string
   files: string[]
-  className: string
+  color?: string
+  desc?: string
+}
+
+export interface ColoredTag {
+  name: string
+  color: string
+  desc: string
 }
 
 /**
- * This class manages the coloured tags of the app. It reads the tags on each
+ * This class manages the colored tags of the app. It reads the tags on each
  * start of the app and writes them after they have been changed.
  */
 export default class TagProvider extends ProviderContract {
   private readonly _file: string
   private readonly container: PersistentDataContainer
-  private _colouredTags: ColouredTag[]
-  private readonly _globalTagDatabase: Map<string, InternalTagRecord>
+  private _coloredTags: ColoredTag[]
   /**
    * Create the instance on program start and initially load the tags.
    */
   constructor (private readonly _logger: LogProvider, private readonly _fsal: FSAL) {
     super()
     this._file = path.join(app.getPath('userData'), 'tags.json')
-    this._colouredTags = []
+    this._coloredTags = []
     this.container = new PersistentDataContainer(this._file, 'json')
-    // The global tag database; it contains all tags that are used in any of the
-    // files.
-    this._globalTagDatabase = new Map()
 
     ipcMain.handle('tag-provider', (event, message) => {
       const { command } = message
 
-      if (command === 'get-tags-database') {
-        return this.getTagDatabase()
-      } else if (command === 'set-coloured-tags') {
+      if (command === 'get-all-tags') {
+        return this.getAllTags()
+      } else if (command === 'set-colored-tags') {
         const { payload } = message
-        this.setColouredTags(payload)
-      } else if (command === 'get-coloured-tags') {
-        return this._colouredTags
+        this.setColoredTags(payload)
+      } else if (command === 'get-colored-tags') {
+        return this._coloredTags
       } else if (command === 'recommend-matching-files') {
         const wantedTags: string[] = message.payload
         const allTags = this._fsal.collectTags().filter(record => wantedTags.includes(record[0]))
@@ -84,7 +92,7 @@ export default class TagProvider extends ProviderContract {
     if (!await this.container.isInitialized()) {
       await this.container.init([])
     } else {
-      this.setColouredTags(await this.container.get())
+      this.setColoredTags(await this.container.get())
     }
   }
 
@@ -99,50 +107,49 @@ export default class TagProvider extends ProviderContract {
 
   /**
    * Updates all tags (i.e. replaces them)
-   * @param  {ColouredTag[]} tags The new tags as an array
+   * @param  {ColoredTag[]} tags The new tags as an array
    */
-  setColouredTags (tags: ColouredTag[]): void {
-    const uniqueTags: ColouredTag[] = []
+  setColoredTags (tags: TagRecord[]): void {
+    // First, remove anything that doesn't have a color set
+    tags = tags.filter(tag => tag.color !== undefined && tag.desc !== undefined)
+
+    const uniqueTags: ColoredTag[] = []
     for (const tag of tags) {
       const hasTag = uniqueTags.find(elem => elem.name === tag.name)
       if (hasTag === undefined) {
-        uniqueTags.push(tag)
+        uniqueTags.push({ name: tag.name, color: tag.color as string, desc: tag.desc as string })
       }
     }
 
-    this._colouredTags = uniqueTags
-    this.container.set(this._colouredTags)
-    broadcastIpcMessage('coloured-tags')
-    // Necessary so that, e.g., the autocomplete list, receives a tag database
-    // with the correct class names applied, since the className property is
-    // injected in getTagDatabase()
+    this._coloredTags = uniqueTags
+    this.container.set(this._coloredTags)
+    broadcastIpcMessage('colored-tags')
     broadcastIpcMessage('tags')
   }
 
   /**
-   * Returns the special (= coloured) tags
+   * Returns the special (= colored) tags
    * @param  {string} name An optional name to get one. Otherwise, will return all.
-   * @return {ColouredTag[]}      The special tag array.
+   * @return {ColoredTag[]}      The special tag array.
    */
-  getColouredTags (): ColouredTag[] {
-    return this._colouredTags
+  getColoredTags (): ColoredTag[] {
+    return this._coloredTags
   }
 
   /**
    * Returns a simplified version of the internal tag database for external use.
    *
-   * @return  {TagDatabase}  The database
+   * @return  {TagRecord[]}  The database
    */
-  getTagDatabase (): TagDatabase {
-    const ret: TagDatabase = {}
-    for (const [ tag, files ] of this._fsal.collectTags()) {
-      const cInfo = this._colouredTags.find(e => e.name === tag)
-      ret[tag] = {
-        text: tag,
-        count: files.length,
-        className: (cInfo !== undefined) ? 'cm-hint-colour' : ''
-      }
+  getAllTags (): TagRecord[] {
+    const ret: TagRecord[] = []
+    for (const [ name, files ] of this._fsal.collectTags()) {
+      const tagColor = this._coloredTags.find(c => c.name === name)
+      ret.push({ name, files, color: tagColor?.color, desc: tagColor?.desc })
     }
+
+    // Before returning, make sure to sort the tags by count
+    ret.sort((a, b) => { return b.files.length - a.files.length })
     return ret
   }
 }
