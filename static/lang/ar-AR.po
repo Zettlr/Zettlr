@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2022-12-24 02:29+0000\n"
+"POT-Creation-Date: 2022-12-26 02:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -567,6 +567,7 @@ msgstr "حفظ"
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:36
 #: source/app/service-providers/windows/dialog/confirm-remove.ts:30
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
+#: source/app/service-providers/commands/rename-tag.ts:49
 msgid "Cancel"
 msgstr "إلغاء"
 
@@ -1401,6 +1402,7 @@ msgid "Open project folder"
 msgstr "افتح مجلد المشروع"
 
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
+#: source/app/service-providers/commands/rename-tag.ts:48
 msgid "Yes"
 msgstr ""
 
@@ -1915,6 +1917,15 @@ msgstr "فشل التصدير"
 #, javascript-format
 msgid "An error occurred on export: %s"
 msgstr "حدث خطأ أثناء التصدير:٪ s"
+
+#: source/app/service-providers/commands/rename-tag.ts:45
+msgid "Confirm"
+msgstr ""
+
+#: source/app/service-providers/commands/rename-tag.ts:46
+#, javascript-format
+msgid "Replace tag \"%s\" with \"%s\" across %s files?"
+msgstr ""
 
 #: source/app/service-providers/commands/file-duplicate.ts:43
 #: source/app/service-providers/commands/file-duplicate.ts:59
