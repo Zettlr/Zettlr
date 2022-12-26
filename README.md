@@ -62,7 +62,7 @@ On our website and here on GitHub, we provide a set of installers for the most c
 
 * Windows (x64 and ARM)
 * macOS (Intel and Apple Silicon)
-* Linux (x64 and ARM)
+* Debian and Fedora (x64 and ARM)
 * AppImage (x64 and ARM)
 
 Thanks to our community, we can also offer you a variety of other installation opportunities:
@@ -90,7 +90,7 @@ As an Open Source application, Zettlr always welcomes contributions from the com
 
 The development team maintains the English and German translations, but lacks adequate knowledge of other languages. All the other available translations have been created by our community.
 
-Zettlr's translations utilize the [gettext system|(https://www.gnu.org/software/gettext/). This means that the translations are kept in PO-files within the [`static/lang` directory](./static/lang).
+Zettlr's translations utilize the [gettext system](https://www.gnu.org/software/gettext/). This means that the translations are kept in PO-files within the [`static/lang` directory](./static/lang).
 
 To update a translation, simply download the corresponding language file and edit it. You can edit PO-files with a simple text editor, but if you prefer a more comfortable graphical editor, there are many out there. One good option is the Open Source editor [POedit](https://poedit.net/).
 
