@@ -604,7 +604,6 @@ export default class DocumentManager extends ProviderContract {
     }
 
     if (clientVersion !== doc.currentVersion) {
-      console.log('CLIENT VERSION OUT OF SYNC', clientVersion, doc.currentVersion)
       return false
     }
 
@@ -637,11 +636,11 @@ export default class DocumentManager extends ProviderContract {
       doc.minimumVersion++
     }
 
-    // TODO: Set timeouts for the documents to save them automatically, if the user so wishes
+    clearTimeout(doc.saveTimeout)
     const autoSave = this._app.config.get().editor.autoSave
 
-    // Either no autosave or there is currently a timeout in progress
-    if (autoSave === 'off' || doc.saveTimeout !== undefined) {
+    // No autosave
+    if (autoSave === 'off') {
       return true
     }
 
@@ -879,6 +878,7 @@ export default class DocumentManager extends ProviderContract {
         // In any case remove the isShownFor for this file.
         this._remoteChangeDialogShownFor.splice(this._remoteChangeDialogShownFor.indexOf(filePath), 1)
         if (!shouldReplace) {
+          this.broadcastEvent(DP_EVENTS.CHANGE_FILE_STATUS, { filePath, status: 'modification' })
           return
         }
 
@@ -1051,12 +1051,13 @@ export default class DocumentManager extends ProviderContract {
    * @param {string} filePath The file in question
    */
   public async notifyRemoteChange (filePath: string): Promise<void> {
-    // TODO: Here we basically only need to close the document and wait for the
+    // Here we basically only need to close the document and wait for the
     // renderers to reload themselves with getDocument, which will automatically
     // open the new document.
     const idx = this.documents.findIndex(file => file.filePath === filePath)
     this.documents.splice(idx, 1)
-    // TODO: Emit an update that basically means "please pull this file in again"
+    // Indicate to all affected editors that they should reload the file
+    this.broadcastEvent(DP_EVENTS.FILE_REMOTELY_CHANGED, filePath)
   }
 
   /**

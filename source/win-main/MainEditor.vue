@@ -184,7 +184,8 @@ async function pullUpdates (filePath: string, version: number): Promise<false|Up
             // the internal handler of the editor to break out of its infinite
             // pull-loop!
             console.warn(`Client ${props.leafId} is out of sync -- resynchronizing...`)
-            mdEditor?.swapDoc(filePath).catch(e => console.error(e))
+            mdEditor?.reload().catch(e => console.error(e))
+            // mdEditor?.swapDoc(filePath).catch(e => console.error(e))
           }
           resolve(result)
         })
@@ -258,6 +259,15 @@ ipcRenderer.on('shortcut', (event, command) => {
     mdEditor.hasTypewriterMode = !mdEditor.hasTypewriterMode
   } else if (command === 'copy-as-html') {
     mdEditor.copyAsHTML()
+  }
+})
+
+ipcRenderer.on('documents-update', (e, { event, context }) => {
+  if (event === DP_EVENTS.FILE_REMOTELY_CHANGED && context === activeFile.value?.path) {
+    // The currently loaded document has been changed remotely. This event indicates
+    // that the document provider has already reloaded the document and we only
+    // need to tell the main editor to reload it as well.
+    mdEditor?.reload().catch(e => console.error(e))
   }
 })
 
@@ -348,8 +358,6 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
   // even if we incur a performance penalty, it won't be noticed that much.
   return {
     // keyMap: store.state.config['editor.inputMode'], TODO
-    // direction: store.state.config['editor.direction'],
-    // rtlMoveVisually: store.state.config['editor.rtlMoveVisually'],
     indentUnit: store.state.config['editor.indentUnit'],
     indentWithTabs: store.state.config['editor.indentWithTabs'],
     autoCloseBrackets: store.state.config['editor.autoCloseBrackets'],
