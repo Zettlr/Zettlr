@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2022-12-26 02:32+0000\n"
-"PO-Revision-Date: 2022-12-24 16:19+0100\n"
+"PO-Revision-Date: 2022-12-27 10:55+0100\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -1944,12 +1944,12 @@ msgstr "Ein Fehler ist beim Export aufgetreten: %s"
 
 #: source/app/service-providers/commands/rename-tag.ts:45
 msgid "Confirm"
-msgstr ""
+msgstr "Bestätigen"
 
 #: source/app/service-providers/commands/rename-tag.ts:46
 #, javascript-format
 msgid "Replace tag \"%s\" with \"%s\" across %s files?"
-msgstr ""
+msgstr "Ersetze Schlagwort “%s” mit “%s” in %s Dateien?"
 
 #: source/app/service-providers/commands/file-duplicate.ts:43
 #: source/app/service-providers/commands/file-duplicate.ts:59
