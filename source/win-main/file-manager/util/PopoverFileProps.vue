@@ -7,7 +7,7 @@
         <span>{{ formattedWords }}</span>
       </div>
       <div v-else>
-        <span>Type: <span class="badge primary">{{ ext.substr(1) }}</span></span>
+        <span>Type: <span class="badge primary">{{ ext.substring(1) }}</span></span>
       </div>
     </div>
     <div class="properties-info-container">
@@ -74,7 +74,7 @@ import { trans } from '@common/i18n-renderer'
 import formatDate from '@common/util/format-date'
 import formatSize from '@common/util/format-size'
 import localiseNumber from '@common/util/localise-number'
-import { ColouredTag } from '@dts/common/tag-provider'
+import { ColoredTag } from '@providers/tags'
 
 const ipcRenderer = window.ipc
 
@@ -91,7 +91,7 @@ export default {
       creationtime: 0,
       modtime: 0,
       tags: [],
-      colouredTags: [] as ColouredTag[],
+      colouredTags: [] as ColoredTag[],
       targetValue: 0,
       targetMode: 'words',
       words: 0,

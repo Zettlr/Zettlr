@@ -16,7 +16,7 @@
 
 import { StoreOptions, createStore as baseCreateStore, Store } from 'vuex'
 import { InjectionKey } from 'vue'
-import { ColouredTag } from '@dts/common/tag-provider'
+import { ColoredTag } from '@providers/tags'
 import { SearchResultWrapper } from '@dts/common/search'
 import { RelatedFile } from '@dts/renderer/misc'
 import locateByPath from '@providers/fsal/util/locate-by-path'
@@ -90,7 +90,7 @@ export interface ZettlrState {
   /**
    * Contains coloured tags that can be managed in the tag manager
    */
-  colouredTags: ColouredTag[]
+  colouredTags: ColoredTag[]
   /**
    * Holds all current writing targets
    */
