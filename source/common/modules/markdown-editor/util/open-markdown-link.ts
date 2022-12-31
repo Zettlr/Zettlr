@@ -19,6 +19,7 @@ import { EditorState, Line } from '@codemirror/state'
 import { configField } from './configuration'
 import { EditorView } from '@codemirror/view'
 import { tocField } from '../plugins/toc-field'
+import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
 
 const path = window.path
 const ipcRenderer = window.ipc
@@ -52,24 +53,31 @@ function findMatchingHeading (headingId: string, state: EditorState): Line|undef
  */
 export default function (url: string, view: EditorView): void {
   const base = path.dirname(view.state.field(configField).metadata.path)
+  const searchParams = new URLSearchParams(window.location.search)
+  const windowId = searchParams.get('window_id') as string
 
   if (url[0] === '#') {
     // We should open an internal link, i.e. "jump to line".
     const targetLine = findMatchingHeading(url.substring(1), view.state)
     if (targetLine !== undefined) {
-      console.log('jtl:', targetLine)
       view.dispatch({
         selection: { anchor: targetLine.from, head: targetLine.to },
         effects: EditorView.scrollIntoView(targetLine.from, { y: 'center' })
       })
     }
-  } else if (url.startsWith('.')) {
-    // We are definitely dealing with a relative URL. So let's resolve it
-    const absPath = path.resolve(base, url)
-    window.location.assign(`safe-file://${absPath}`)
-  } else if (url.startsWith('/') || url.startsWith('\\')) {
-    // We are definitely dealing with an absolute URL.
-    window.location.assign(`safe-file://${url}`)
+  } else if (url.startsWith('/') || url.startsWith('\\') || url.startsWith('.')) {
+    // We are definitely dealing with a relative or absolute URL.
+    const absPath = url.startsWith('.') ? path.resolve(base, url) : url
+    if (hasMarkdownExt(absPath)) {
+      // Attempt to open internally
+      ipcRenderer.invoke('documents-provider', {
+        command: 'open-file',
+        payload: { path: absPath, newTab: false, windowId }
+      })
+        .catch(e => console.error(e))
+    } else {
+      window.location.assign(`safe-file://${absPath}`)
+    }
   } else {
     // It is valid Markdown to surround the URL with < and >
     url = url.replace(/^<(.+)>$/, '$1') // Looks like an Emoji!
@@ -81,15 +89,15 @@ export default function (url: string, view: EditorView): void {
 
     // Now we have a valid link. Finally, let's check if we can open the file
     // internally, without having to switch to an external program.
-    const localPath = validURI.replace('file://', '')
+    const localPath = validURI.replace('safe-file://', '')
     const isValidFile = VALID_FILETYPES.includes(path.extname(localPath))
     const isLocalMdFile = path.isAbsolute(localPath) && isValidFile
 
     if (isLocalMdFile) {
       // Attempt to open internally
-      ipcRenderer.invoke('application', {
+      ipcRenderer.invoke('documents-provider', {
         command: 'open-file',
-        payload: { path: localPath, newTab: false }
+        payload: { path: localPath, newTab: false, windowId }
       })
         .catch(e => console.error(e))
     } else {
