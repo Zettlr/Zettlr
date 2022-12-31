@@ -874,8 +874,8 @@ function handleDragLeave (event: DragEvent) {
 
 // Editor margins left and right for all breakpoints in both fullscreen and
 // normal mode.
-@editor-margin-fullscreen-sm:   50px;
-@editor-margin-fullscreen-md:  5vw;
+@editor-margin-fullscreen-sm:  50px;
+@editor-margin-fullscreen-md:   5vw;
 @editor-margin-fullscreen-lg:  10vw;
 @editor-margin-fullscreen-xl:  20vw;
 @editor-margin-fullscreen-xxl: 30vw;
@@ -987,14 +987,12 @@ function handleDragLeave (event: DragEvent) {
     // The CodeMirror editor needs to respect the new tabbar; it cannot take
     // up 100 % all for itself anymore.
     margin-left: 0.5em;
-    height: 100%;
     font-family: inherit;
     background-color: transparent;
 
-    @media(min-width: 1025px) { margin-left: @editor-margin-normal-lg; }
-    @media(max-width: 1024px) { margin-left: @editor-margin-normal-md; }
-    @media(max-width:  900px) { margin-left: @editor-margin-normal-sm; }
-    margin-left: 5%;
+    @media(min-width: 1025px) { margin: 0 @editor-margin-normal-lg; }
+    @media(max-width: 1024px) { margin: 0 @editor-margin-normal-md; }
+    @media(max-width:  900px) { margin: 0 @editor-margin-normal-sm; }
 
     .code { // BEGIN: CODE BLOCK/FILE THEME
       // We're using this solarized theme here: https://ethanschoonover.com/solarized/
@@ -1065,9 +1063,6 @@ function handleDragLeave (event: DragEvent) {
   .cm-content {
     // padding-right: 5em;
     padding-right: 5%;
-    @media(min-width: 1025px) { padding-right: @editor-margin-normal-lg; }
-    @media(max-width: 1024px) { padding-right: @editor-margin-normal-md; }
-    @media(max-width:  900px) { padding-right: @editor-margin-normal-sm; }
     overflow-x: hidden !important; // Necessary to hide the horizontal scrollbar
 
     // We need to override a negative margin

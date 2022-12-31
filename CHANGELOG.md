@@ -242,6 +242,7 @@ there.
   occurrences in the text
 - Fixed the readability mode color gradient (red -> purple -> blue -> green)
 - The "Save changes" dialog is now simpler and easier to understand
+- The main editor is finally properly styled and looks more natural to work with
 
 ## Under the Hood
 
