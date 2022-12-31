@@ -169,17 +169,18 @@
   }
 
   // Ensure that elements within the gutters are centered relative to the line
-  .cm-gutterElement {
+  .cm-gutter.cm-foldGutter .cm-gutterElement,
+  .cm-gutter.cm-gutter-lint .cm-gutterElement {
     display: flex;
     flex-direction: column;
     justify-content: center;
+  }
 
-    // Those warnings are too goddamn large
-    .cm-lint-marker {
-      width: 10px;
-      cursor: help;
-      margin: 0 auto; // (Re-)center
-    }
+  // Those warnings are too goddamn large
+  .cm-gutter.cm-gutter-lint .cm-lint-marker {
+    width: 10px;
+    cursor: help;
+    margin: 0 auto; // (Re-)center
   }
 
   // These classes are being applied by the heading-classes hook
