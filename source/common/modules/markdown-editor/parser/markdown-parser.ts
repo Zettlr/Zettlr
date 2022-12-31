@@ -66,7 +66,7 @@ import { footnoteParser, footnoteRefParser } from './footnote-parser'
 import { plainLinkParser } from './plain-link-parser'
 import { frontmatterParser } from './frontmatter-parser'
 import { inlineMathParser, blockMathParser } from './math-parser'
-import { imageParser } from './image-parser'
+import { sloppyParser } from './sloppy-parser'
 import { gridTableParser, pipeTableParser } from './pandoc-table-parser'
 import { getZknLinkParser } from './zkn-link-parser'
 import { pandocAttributesParser } from './pandoc-attributes-parser'
@@ -170,7 +170,7 @@ export default function markdownParser (linkStart: string, linkEnd: string): Lan
         footnoteParser,
         citationParser,
         plainLinkParser,
-        imageParser,
+        sloppyParser,
         getZknLinkParser(linkStart, linkEnd),
         pandocAttributesParser
       ],
