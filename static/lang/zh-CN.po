@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2022-12-26 02:32+0000\n"
+"POT-Creation-Date: 2023-01-01 02:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,27 +56,27 @@ msgstr "注释"
 msgid "Code"
 msgstr "代码"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:60
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:58
 #, javascript-format
 msgid "File %s does not exist."
 msgstr ""
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:90
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:88
 msgid "Word count"
 msgstr "词数"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:92
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:90
 #: source/tmp/PopoverFileProps.vue.ts:68 source/tmp/PopoverDirProps.vue.ts:150
 msgid "Modified"
 msgstr "已修改"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:110
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:108
 #: source/app/service-providers/menu/menu.darwin.ts:164
 #: source/app/service-providers/menu/menu.win32.ts:138
 msgid "Open…"
 msgstr "打开…"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:131
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:129
 #: source/tmp/GlobalSearch.vue.ts:40
 #: source/win-main/file-manager/util/file-item-context.ts:26
 msgid "Open in a new tab"
@@ -1030,52 +1030,44 @@ msgid "ID regular expression"
 msgstr "ID正则表达式"
 
 #: source/win-preferences/schema/zettelkasten.ts:29
-msgid "Link start"
-msgstr "链接"
-
-#: source/win-preferences/schema/zettelkasten.ts:35
-msgid "Link ending"
-msgstr "链接结束"
-
-#: source/win-preferences/schema/zettelkasten.ts:41
 msgid "Pattern used to generate new IDs"
 msgstr "用于生成新ID的模式"
 
 #. TODO: Create this type
-#: source/win-preferences/schema/zettelkasten.ts:50
+#: source/win-preferences/schema/zettelkasten.ts:38
 msgid "Options for ZKN elements"
 msgstr "ZKN元素的选项"
 
-#: source/win-preferences/schema/zettelkasten.ts:54
+#: source/win-preferences/schema/zettelkasten.ts:42
 #, fuzzy
 msgid "Link with filename only"
 msgstr "只显示文件名"
 
-#: source/win-preferences/schema/zettelkasten.ts:59
+#: source/win-preferences/schema/zettelkasten.ts:47
 msgid "When linking files, add the filename …"
 msgstr "当链接文件时，添加文件名"
 
-#: source/win-preferences/schema/zettelkasten.ts:62
+#: source/win-preferences/schema/zettelkasten.ts:50
 msgid "always"
 msgstr "总是"
 
-#: source/win-preferences/schema/zettelkasten.ts:63
+#: source/win-preferences/schema/zettelkasten.ts:51
 msgid "only when linking using the ID"
 msgstr "只在链接时使用 ID"
 
-#: source/win-preferences/schema/zettelkasten.ts:64
+#: source/win-preferences/schema/zettelkasten.ts:52
 msgid "never"
 msgstr "从不"
 
-#: source/win-preferences/schema/zettelkasten.ts:72
+#: source/win-preferences/schema/zettelkasten.ts:60
 msgid "Start a search when following Zettelkasten-links"
 msgstr "跟踪Zettelkasten-links时搜索"
 
-#: source/win-preferences/schema/zettelkasten.ts:77
+#: source/win-preferences/schema/zettelkasten.ts:65
 msgid "Automatically create non-existing files when following internal links"
 msgstr "追踪内部链接时自动创建不存在的文件"
 
-#: source/win-preferences/schema/zettelkasten.ts:82
+#: source/win-preferences/schema/zettelkasten.ts:70
 msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
 msgstr "将自动创建的文件放入此目录（必须在Zettlr中已经加载）"
 
@@ -1738,32 +1730,32 @@ msgstr "打开用户手册"
 msgid "Open Tutorial"
 msgstr "打开教程"
 
-#: source/app/service-providers/config/config-validation.ts:282
+#: source/app/service-providers/config/config-validation.ts:280
 #, javascript-format
 msgid "Option %s has to be of type %s."
 msgstr "选项％s必须是％s类型。"
 
-#: source/app/service-providers/config/config-validation.ts:285
+#: source/app/service-providers/config/config-validation.ts:283
 #, javascript-format
 msgid "Option %s must be one of: %s."
 msgstr "选项％s必须是以下之一：％s。"
 
-#: source/app/service-providers/config/config-validation.ts:288
+#: source/app/service-providers/config/config-validation.ts:286
 #, javascript-format
 msgid "Option %s must be between %s and %s (characters long)."
 msgstr "选项％s必须介于％s和％s之间（字符长）。"
 
-#: source/app/service-providers/config/config-validation.ts:291
+#: source/app/service-providers/config/config-validation.ts:289
 #, javascript-format
 msgid "Option %s may not exceed %s (characters)."
 msgstr "选项％s不得超过％s（字符）。"
 
-#: source/app/service-providers/config/config-validation.ts:294
+#: source/app/service-providers/config/config-validation.ts:292
 #, javascript-format
 msgid "Option %s must be at least %s (characters long)."
 msgstr "选项％s必须至少为％s（字符长）。"
 
-#: source/app/service-providers/config/config-validation.ts:297
+#: source/app/service-providers/config/config-validation.ts:295
 #, javascript-format
 msgid "Option %s is required."
 msgstr "选项％s是必需的。"
@@ -1967,6 +1959,12 @@ msgstr "以下文件 %s 无法被导入，因为其未知文件类型：%s"
 #: source/app/service-providers/commands/set-open-directory.ts:40
 msgid "Directory not found"
 msgstr "找不到目录"
+
+#~ msgid "Link start"
+#~ msgstr "链接"
+
+#~ msgid "Link ending"
+#~ msgstr "链接结束"
 
 #~ msgid "Proceed without saving"
 #~ msgstr "不保存并继续"

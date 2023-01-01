@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2022-12-26 02:32+0000\n"
+"POT-Creation-Date: 2023-01-01 02:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,27 +56,27 @@ msgstr "Yorum"
 msgid "Code"
 msgstr "Kod"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:60
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:58
 #, javascript-format
 msgid "File %s does not exist."
 msgstr ""
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:90
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:88
 msgid "Word count"
 msgstr ""
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:92
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:90
 #: source/tmp/PopoverFileProps.vue.ts:68 source/tmp/PopoverDirProps.vue.ts:150
 msgid "Modified"
 msgstr ""
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:110
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:108
 #: source/app/service-providers/menu/menu.darwin.ts:164
 #: source/app/service-providers/menu/menu.win32.ts:138
 msgid "Open…"
 msgstr "Aç..."
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:131
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:129
 #: source/tmp/GlobalSearch.vue.ts:40
 #: source/win-main/file-manager/util/file-item-context.ts:26
 msgid "Open in a new tab"
@@ -1039,52 +1039,44 @@ msgid "ID regular expression"
 msgstr "ID düzenli ifade"
 
 #: source/win-preferences/schema/zettelkasten.ts:29
-msgid "Link start"
-msgstr "Link başlangıcı"
-
-#: source/win-preferences/schema/zettelkasten.ts:35
-msgid "Link ending"
-msgstr "Link bitişi"
-
-#: source/win-preferences/schema/zettelkasten.ts:41
 msgid "Pattern used to generate new IDs"
 msgstr "Yeni IDler oluşturmak için kullanılacak şablon"
 
 #. TODO: Create this type
-#: source/win-preferences/schema/zettelkasten.ts:50
+#: source/win-preferences/schema/zettelkasten.ts:38
 msgid "Options for ZKN elements"
 msgstr "ZKN elementleri için ayarlar"
 
-#: source/win-preferences/schema/zettelkasten.ts:54
+#: source/win-preferences/schema/zettelkasten.ts:42
 msgid "Link with filename only"
 msgstr ""
 
-#: source/win-preferences/schema/zettelkasten.ts:59
+#: source/win-preferences/schema/zettelkasten.ts:47
 msgid "When linking files, add the filename …"
 msgstr "Dosyaları bağlarken dosya ismi ekle ..."
 
-#: source/win-preferences/schema/zettelkasten.ts:62
+#: source/win-preferences/schema/zettelkasten.ts:50
 msgid "always"
 msgstr "her zaman"
 
-#: source/win-preferences/schema/zettelkasten.ts:63
+#: source/win-preferences/schema/zettelkasten.ts:51
 msgid "only when linking using the ID"
 msgstr "Sadece ID kullanarak bağlandığında"
 
-#: source/win-preferences/schema/zettelkasten.ts:64
+#: source/win-preferences/schema/zettelkasten.ts:52
 msgid "never"
 msgstr "hiçbir zaman"
 
-#: source/win-preferences/schema/zettelkasten.ts:72
+#: source/win-preferences/schema/zettelkasten.ts:60
 msgid "Start a search when following Zettelkasten-links"
 msgstr "Zettelkasten bağlantılarını takip ederken aramayı başlat"
 
-#: source/win-preferences/schema/zettelkasten.ts:77
+#: source/win-preferences/schema/zettelkasten.ts:65
 msgid "Automatically create non-existing files when following internal links"
 msgstr ""
 "İş bağlantıları takip ederken var olmayan dosyaları otomatik olarak oluştur"
 
-#: source/win-preferences/schema/zettelkasten.ts:82
+#: source/win-preferences/schema/zettelkasten.ts:70
 msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
 msgstr ""
 
@@ -1756,32 +1748,32 @@ msgstr "Kullanım kılavuzunu aç"
 msgid "Open Tutorial"
 msgstr ""
 
-#: source/app/service-providers/config/config-validation.ts:282
+#: source/app/service-providers/config/config-validation.ts:280
 #, javascript-format
 msgid "Option %s has to be of type %s."
 msgstr "%s ayarı %s türünde olmalı."
 
-#: source/app/service-providers/config/config-validation.ts:285
+#: source/app/service-providers/config/config-validation.ts:283
 #, javascript-format
 msgid "Option %s must be one of: %s."
 msgstr "%s ayarı, %s içinde olmalı."
 
-#: source/app/service-providers/config/config-validation.ts:288
+#: source/app/service-providers/config/config-validation.ts:286
 #, javascript-format
 msgid "Option %s must be between %s and %s (characters long)."
 msgstr "%s ayarı %s ile %s (karakter uzunluğu) arasında olmalı."
 
-#: source/app/service-providers/config/config-validation.ts:291
+#: source/app/service-providers/config/config-validation.ts:289
 #, javascript-format
 msgid "Option %s may not exceed %s (characters)."
 msgstr "%s ayarı %s (karakter)'i geçemez"
 
-#: source/app/service-providers/config/config-validation.ts:294
+#: source/app/service-providers/config/config-validation.ts:292
 #, javascript-format
 msgid "Option %s must be at least %s (characters long)."
 msgstr "%s ayarı en az %s (karakter uzunluğu)'nda olmalı."
 
-#: source/app/service-providers/config/config-validation.ts:297
+#: source/app/service-providers/config/config-validation.ts:295
 #, javascript-format
 msgid "Option %s is required."
 msgstr "%s ayarı gereklidir."
@@ -1988,6 +1980,12 @@ msgstr "%s dosyaları içeri aktarılamadı, çünkü dosya uzantıları bilinmi
 #: source/app/service-providers/commands/set-open-directory.ts:40
 msgid "Directory not found"
 msgstr "Dizin bulunamadı"
+
+#~ msgid "Link start"
+#~ msgstr "Link başlangıcı"
+
+#~ msgid "Link ending"
+#~ msgstr "Link bitişi"
 
 #~ msgid "Proceed without saving"
 #~ msgstr "Kaydetmeden devam et"

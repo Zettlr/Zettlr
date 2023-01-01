@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2022-12-26 02:32+0000\n"
+"POT-Creation-Date: 2023-01-01 02:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,27 +56,27 @@ msgstr "Comentario"
 msgid "Code"
 msgstr "Code"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:60
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:58
 #, javascript-format
 msgid "File %s does not exist."
 msgstr ""
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:90
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:88
 msgid "Word count"
 msgstr "Recuento de palabras"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:92
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:90
 #: source/tmp/PopoverFileProps.vue.ts:68 source/tmp/PopoverDirProps.vue.ts:150
 msgid "Modified"
 msgstr "Modificado"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:110
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:108
 #: source/app/service-providers/menu/menu.darwin.ts:164
 #: source/app/service-providers/menu/menu.win32.ts:138
 msgid "Open…"
 msgstr "Abrir..."
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:131
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:129
 #: source/tmp/GlobalSearch.vue.ts:40
 #: source/win-main/file-manager/util/file-item-context.ts:26
 msgid "Open in a new tab"
@@ -1050,54 +1050,46 @@ msgid "ID regular expression"
 msgstr "Expresión regular de ID"
 
 #: source/win-preferences/schema/zettelkasten.ts:29
-msgid "Link start"
-msgstr "Marca 'inicio de vinculo'"
-
-#: source/win-preferences/schema/zettelkasten.ts:35
-msgid "Link ending"
-msgstr "Marca 'fin de vinculo'"
-
-#: source/win-preferences/schema/zettelkasten.ts:41
 msgid "Pattern used to generate new IDs"
 msgstr "Formato utilizado para generar nuevos IDs"
 
 #. TODO: Create this type
-#: source/win-preferences/schema/zettelkasten.ts:50
+#: source/win-preferences/schema/zettelkasten.ts:38
 msgid "Options for ZKN elements"
 msgstr "Opciones para elementos del Zettelkasten ZKN (fichero)"
 
-#: source/win-preferences/schema/zettelkasten.ts:54
+#: source/win-preferences/schema/zettelkasten.ts:42
 #, fuzzy
 msgid "Link with filename only"
 msgstr "Solo el nombre del archivo"
 
-#: source/win-preferences/schema/zettelkasten.ts:59
+#: source/win-preferences/schema/zettelkasten.ts:47
 msgid "When linking files, add the filename …"
 msgstr "Al enlazar, usar el nombre de archivo..."
 
-#: source/win-preferences/schema/zettelkasten.ts:62
+#: source/win-preferences/schema/zettelkasten.ts:50
 msgid "always"
 msgstr "Siempre"
 
-#: source/win-preferences/schema/zettelkasten.ts:63
+#: source/win-preferences/schema/zettelkasten.ts:51
 msgid "only when linking using the ID"
 msgstr "solo usar ID al enlazar"
 
-#: source/win-preferences/schema/zettelkasten.ts:64
+#: source/win-preferences/schema/zettelkasten.ts:52
 msgid "never"
 msgstr "nunca"
 
-#: source/win-preferences/schema/zettelkasten.ts:72
+#: source/win-preferences/schema/zettelkasten.ts:60
 msgid "Start a search when following Zettelkasten-links"
 msgstr "Empieza la búsqueda cuando se sigan los enlaces Zettelkasten"
 
-#: source/win-preferences/schema/zettelkasten.ts:77
+#: source/win-preferences/schema/zettelkasten.ts:65
 msgid "Automatically create non-existing files when following internal links"
 msgstr ""
 "Crear automáticamente los ficheros inexistentes cuando se siguen vínculos "
 "internos"
 
-#: source/win-preferences/schema/zettelkasten.ts:82
+#: source/win-preferences/schema/zettelkasten.ts:70
 msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
 msgstr ""
 "Poner los archivos creados automáticamente en este directorio (debe ser "
@@ -1786,32 +1778,32 @@ msgstr "Abrir el manual del usuario"
 msgid "Open Tutorial"
 msgstr "Abrir Tutorial"
 
-#: source/app/service-providers/config/config-validation.ts:282
+#: source/app/service-providers/config/config-validation.ts:280
 #, javascript-format
 msgid "Option %s has to be of type %s."
 msgstr "La opción %s tiene que ser del tipo %s."
 
-#: source/app/service-providers/config/config-validation.ts:285
+#: source/app/service-providers/config/config-validation.ts:283
 #, javascript-format
 msgid "Option %s must be one of: %s."
 msgstr "La opción %s debe ser una de: %s."
 
-#: source/app/service-providers/config/config-validation.ts:288
+#: source/app/service-providers/config/config-validation.ts:286
 #, javascript-format
 msgid "Option %s must be between %s and %s (characters long)."
 msgstr "La opción %s debe estar en el rango de %s y %s caracteres."
 
-#: source/app/service-providers/config/config-validation.ts:291
+#: source/app/service-providers/config/config-validation.ts:289
 #, javascript-format
 msgid "Option %s may not exceed %s (characters)."
 msgstr "Opción %s no puede exceder %s (caracteres)."
 
-#: source/app/service-providers/config/config-validation.ts:294
+#: source/app/service-providers/config/config-validation.ts:292
 #, javascript-format
 msgid "Option %s must be at least %s (characters long)."
 msgstr "La opcion %s tiene que tener al menos %s caracteres."
 
-#: source/app/service-providers/config/config-validation.ts:297
+#: source/app/service-providers/config/config-validation.ts:295
 #, javascript-format
 msgid "Option %s is required."
 msgstr "Opción %s es necesaria."
@@ -2020,6 +2012,12 @@ msgstr ""
 #: source/app/service-providers/commands/set-open-directory.ts:40
 msgid "Directory not found"
 msgstr "Carpeta no encontrada"
+
+#~ msgid "Link start"
+#~ msgstr "Marca 'inicio de vinculo'"
+
+#~ msgid "Link ending"
+#~ msgstr "Marca 'fin de vinculo'"
 
 #~ msgid "Proceed without saving"
 #~ msgstr "Continuar sin guardar"
