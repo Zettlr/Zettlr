@@ -742,6 +742,16 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.6.tgz#cee20bd55e68a1720bdab363ecf0c821ded4cd45"
   integrity sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==
 
+"@replit/codemirror-emacs@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@replit/codemirror-emacs/-/codemirror-emacs-6.0.0.tgz#0ddce18bd770b12e12dd0578b425692243b01431"
+  integrity sha512-zxSDg3UKm7811hjqNtgvK9G0IBtCWf82Idb9nZQo0ldmGl4d9SV7oCSuXQ58NmOG4AV7coD7kgFSZhEqHhyQhA==
+
+"@replit/codemirror-vim@^6.0.4":
+  version "6.0.4"
+  resolved "https://registry.yarnpkg.com/@replit/codemirror-vim/-/codemirror-vim-6.0.4.tgz#3733654315ff9287e47688aab63cbd69eaba0c00"
+  integrity sha512-/LnuwOpD9lKInyQbVNe6b8HC5wM5lWV2WUHWGqE2tTeZB4n2gQL30pvW1M69xV5yLOPNf1o6vUAHn259ljQxZw==
+
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"

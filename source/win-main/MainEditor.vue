@@ -390,6 +390,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     renderEmphasis: store.state.config['display.renderEmphasis'],
     linkPreference: store.state.config['zkn.linkWithFilename'],
     linkFilenameOnly: store.state.config['zkn.linkFilenameOnly'],
+    inputMode: store.state.config['editor.inputMode'],
     readabilityMode: false, // TODO
     typewriterMode: false // TODO
   } as EditorConfigOptions

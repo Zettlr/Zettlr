@@ -23,7 +23,7 @@ import { bracketMatching, codeFolding, foldGutter, indentOnInput, indentUnit, St
 import { stex } from '@codemirror/legacy-modes/mode/stex'
 import { yaml } from '@codemirror/legacy-modes/mode/yaml'
 import { search } from '@codemirror/search'
-import { EditorState, Extension, Prec } from '@codemirror/state'
+import { Compartment, EditorState, Extension, Prec } from '@codemirror/state'
 import { keymap, drawSelection, EditorView, lineNumbers, ViewUpdate, DOMEventHandlers, dropCursor } from '@codemirror/view'
 import { autocomplete } from './autocomplete'
 import { customKeymap } from './commands/keymap'
@@ -48,6 +48,8 @@ import { markdownFolding } from './code-folding/markdown'
 import { jsonLanguage } from '@codemirror/lang-json'
 import { softwrapVisualIndent } from './plugins/visual-indent'
 import { codeblockBackground } from './plugins/codeblock-background'
+import { vim } from '@replit/codemirror-vim'
+import { emacs } from '@replit/codemirror-emacs'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -72,6 +74,14 @@ export interface CoreExtensionOptions {
 }
 
 /**
+ * This compartment is being used to activate/disable the vim or emacs
+ * keybindings dependent on the configuration.
+ *
+ * @var  {Compartment}
+ */
+export const inputModeCompartment = new Compartment()
+
+/**
  * This private function loads a set of core extensions that are required for
  * all Codemirror instances inside of Zettlr regardless of document type. These
  * include:
@@ -94,7 +104,17 @@ export interface CoreExtensionOptions {
  * @return  {Extension[]}                    An array of core extensions
  */
 function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
+  let inputMode: Extension = []
+  if (options.initialConfig.inputMode === 'vim') {
+    inputMode = vim()
+  } else if (options.initialConfig.inputMode === 'emacs') {
+    inputMode = emacs()
+  }
+
   return [
+    // Both vim and emacs modes need to be included first, before any other
+    // keymap.
+    inputModeCompartment.of(inputMode),
     // KEYMAPS
     keymap.of([
       ...defaultKeymap, // Minimal default keymap

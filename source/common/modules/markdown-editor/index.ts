@@ -47,12 +47,16 @@ import { reconfigureRenderers } from './renderers'
 import { ToCEntry, tocField } from './plugins/toc-field'
 import { citekeyUpdate, filesUpdate, tagsUpdate, snippetsUpdate } from './autocomplete'
 
+// Keymap plugins
+import { vim } from '@replit/codemirror-vim'
+import { emacs } from '@replit/codemirror-emacs'
+
 // Main configuration
 import { configField, configUpdateEffect, EditorConfigOptions, EditorConfiguration, getDefaultConfig } from './util/configuration'
 import { Update } from '@codemirror/collab'
 import { DocumentType } from '@dts/common/documents'
 import { copyAsHTML, pasteAsPlain } from './util/copy-paste-cut'
-import { CoreExtensionOptions, getJSONExtensions, getMarkdownExtensions, getTexExtensions, getYAMLExtensions } from './editor-extension-sets'
+import { CoreExtensionOptions, getJSONExtensions, getMarkdownExtensions, getTexExtensions, getYAMLExtensions, inputModeCompartment } from './editor-extension-sets'
 import { highlightRangesEffect } from './plugins/highlight-ranges'
 import { applyComment, applyTaskList, insertImage, insertLink } from './commands/markdown'
 import { addNewFootnote } from './commands/footnotes'
@@ -537,9 +541,10 @@ export default class MarkdownEditor extends EventEmitter {
    * @param   {Object}  newOptions  The new options
    */
   setOptions (newOptions: EditorConfigOptions): void {
-    // Cache the current config here
+    const inputModeChanged = newOptions.inputMode !== undefined && newOptions.inputMode !== this.config.inputMode
+
+    // Cache the current config first, and then apply it
     this.config = safeAssign(newOptions, this.config)
-    // Apply the new options to the state
 
     // First: The configuration updates themselves. This will already update a
     // bunch of other facets and values (such as tab size and unit)
@@ -558,6 +563,17 @@ export default class MarkdownEditor extends EventEmitter {
       renderEmphasis: this.config.renderEmphasis,
       renderMermaid: true
     })
+
+    // Third: The input mode, if applicable
+    if (inputModeChanged) {
+      if (this.config.inputMode === 'emacs') {
+        this._instance.dispatch({ effects: inputModeCompartment.reconfigure(emacs()) })
+      } else if (this.config.inputMode === 'vim') {
+        this._instance.dispatch({ effects: inputModeCompartment.reconfigure(vim()) })
+      } else {
+        this._instance.dispatch({ effects: inputModeCompartment.reconfigure([]) })
+      }
+    }
   }
 
   /**
