@@ -14,7 +14,7 @@
 
 import extractYamlFrontmatter from '@common/util/extract-yaml-frontmatter'
 
-export default function extractLinks (markdown: string, linkStart: string = '[[', linkEnd: string = ']]'): string[] {
+export default function extractLinks (markdown: string): string[] {
   const links: string[] = []
 
   const { content } = extractYamlFrontmatter(markdown)
@@ -23,12 +23,12 @@ export default function extractLinks (markdown: string, linkStart: string = '[['
   const lines = content.split(/[\r\n]+/g)
   for (const line of lines) {
     // I think this is the first time I've used a for-loop like this
-    for (let pos = 0; line.includes(linkStart, pos);) {
+    for (let pos = 0; line.includes('[[', pos);) {
       // We need to increase the pos right away
-      pos = line.indexOf(linkStart, pos) + linkStart.length
+      pos = line.indexOf('[[', pos) + 2
       // Find a potential end
-      if (line.includes(linkEnd, pos)) {
-        links.push(line.substring(pos, line.indexOf(linkEnd, pos)))
+      if (line.includes(']]', pos)) {
+        links.push(line.substring(pos, line.indexOf(']]', pos)))
       } else {
         break // No more complete links in this line
       }

@@ -39,8 +39,6 @@ export interface EditorConfiguration {
   renderEmphasis: boolean
   imagePreviewWidth: number
   imagePreviewHeight: number
-  linkStart: string
-  linkEnd: string
   idRE: string
   idGen: string
   indentUnit: number
@@ -82,8 +80,6 @@ export function getDefaultConfig (): EditorConfiguration {
     renderEmphasis: true,
     imagePreviewWidth: 100,
     imagePreviewHeight: 100,
-    linkStart: '[[',
-    linkEnd: ']]',
     idRE: '(\\d{14})',
     idGen: '',
     indentUnit: 4,

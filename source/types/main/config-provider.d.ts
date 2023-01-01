@@ -44,8 +44,6 @@ export interface ConfigOptions {
   zkn: {
     idRE: string
     idGen: string
-    linkStart: string
-    linkEnd: string
     linkFilenameOnly: boolean
     linkWithFilename: 'always'|'never'|'withID'
     autoCreateLinkedFiles: boolean

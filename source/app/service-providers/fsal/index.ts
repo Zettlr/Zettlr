@@ -459,10 +459,8 @@ export default class FSAL extends ProviderContract {
    * @return  {Function}  A parser that can be passed to FSAL functions involving files
    */
   public getMarkdownFileParser (): (file: MDFileDescriptor, content: string) => void {
-    const linkStart = this._config.get('zkn.linkStart')
-    const linkEnd = this._config.get('zkn.linkEnd')
     const idPattern = this._config.get('zkn.idRE')
-    return getMarkdownFileParser(linkStart, linkEnd, idPattern)
+    return getMarkdownFileParser(idPattern)
   }
 
   /**

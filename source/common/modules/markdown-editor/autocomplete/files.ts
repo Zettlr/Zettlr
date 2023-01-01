@@ -52,10 +52,10 @@ export const filesUpdateField = StateField.define<Completion[]>({
  */
 const apply = (filename: string, fileId: string) => function (view: EditorView, completion: Completion, from: number, to: number) {
   // Applies a filename insertion
-  const { linkFilenameOnly, linkPreference, linkEnd } = view.state.field(configField)
+  const { linkFilenameOnly, linkPreference } = view.state.field(configField)
 
-  const linkEndAfterCursor = view.state.sliceDoc(to, to + linkEnd.length) === linkEnd
-  const postLink = (linkEndAfterCursor) ? '' : linkEnd
+  const linkEndAfterCursor = view.state.sliceDoc(to, to + 2) === ']]'
+  const postLink = (linkEndAfterCursor) ? '' : ']]'
 
   let insert = ''
   if (linkFilenameOnly) {
@@ -64,9 +64,9 @@ const apply = (filename: string, fileId: string) => function (view: EditorView, 
   } else {
     const textToInsert = fileId === '' ? filename: fileId
     if (linkPreference === 'always' || (linkPreference === 'withID' && textToInsert === fileId)) {
-      insert = `${textToInsert}${linkEnd} ${filename}` // NOTE: No postLink, but linkEnd
+      insert = `${textToInsert}]] ${filename}` // NOTE: No postLink, but linkEnd
       if (linkEndAfterCursor) {
-        to += linkEnd.length // Overwrite the linkEnd following the completion
+        to += 2 // Overwrite the linkEnd following the completion
       }
     } else {
       insert = `${textToInsert}${postLink}`
@@ -82,16 +82,15 @@ const apply = (filename: string, fileId: string) => function (view: EditorView, 
 export const files: AutocompletePlugin = {
   applies (ctx) {
     // File autocompletion triggers as soon as we detect the start of a link
-    const { linkStart, linkEnd } = ctx.state.field(configField)
     const { text, from } = ctx.state.doc.lineAt(ctx.pos)
     const lineTextUntilPos = text.slice(0, ctx.pos - from)
-    const linkStartBefore = lineTextUntilPos.indexOf(linkStart) > lineTextUntilPos.indexOf(linkEnd)
-    const linkStartRange = ctx.state.sliceDoc(ctx.pos - linkStart.length, ctx.pos)
+    const linkStartBefore = lineTextUntilPos.indexOf('[[') > lineTextUntilPos.indexOf(']]')
+    const linkStartRange = ctx.state.sliceDoc(ctx.pos - 2, ctx.pos)
 
-    if (linkStartRange === linkStart) {
+    if (linkStartRange === '[[') {
       return ctx.pos
     } else if (linkStartBefore) {
-      return from + text.indexOf(linkStart) + linkStart.length
+      return from + text.indexOf('[[') + 2
     } else {
       return false
     }

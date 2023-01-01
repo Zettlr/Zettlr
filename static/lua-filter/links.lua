@@ -25,14 +25,6 @@ return {
         if meta.zettlr.strip_links then
           strip_links = meta.zettlr.strip_links
         end
-        
-        if meta.zettlr.link_start then
-          link_start = meta.zettlr.link_start
-        end
-
-        if meta.zettlr.link_end then
-          link_end = meta.zettlr.link_end
-        end
       end
       return meta
     end

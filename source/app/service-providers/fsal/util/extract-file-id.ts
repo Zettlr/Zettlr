@@ -22,17 +22,13 @@ import { getIDRE } from '@common/regular-expressions'
  * @param   {string}  filename   The filename (in case that contains the ID)
  * @param   {string}  markdown   The full contents of the file
  * @param   {string}  idPattern  The ID pattern as defined by the user
- * @param   {string}  linkStart  The link start pattern as defined by the user
- * @param   {string}  linkEnd    The link end pattern as defined by the user
  *
  * @return  {string}             The found ID, an empty string otherwise
  */
 export default function extractFileId (
   filename: string,
   markdown: string,
-  idPattern: string,
-  linkStart: string,
-  linkEnd: string
+  idPattern: string
 ): string {
   const idRE = getIDRE(idPattern)
 
@@ -48,10 +44,10 @@ export default function extractFileId (
       continue // This is because TypeScript doesn't know about the global flag
     }
 
-    if (markdown.substring(match.index - linkStart.length, match.index) !== linkStart) {
+    if (markdown.substring(match.index - 2, match.index) !== '[[') {
       // Found an ID. Make sure the ID doesn't start with linkStart and not end
       // with the linkEnd
-      if (!match[1].endsWith(linkEnd)) {
+      if (!match[1].endsWith(']]')) {
         return match[1]
       }
     }

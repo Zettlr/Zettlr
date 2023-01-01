@@ -26,18 +26,6 @@ export default function (): any {
         },
         {
           type: 'text',
-          label: trans('Link start'),
-          model: 'zkn.linkStart',
-          reset: '[['
-        },
-        {
-          type: 'text',
-          label: trans('Link ending'),
-          model: 'zkn.linkEnd',
-          reset: ']]'
-        },
-        {
-          type: 'text',
           label: trans('Pattern used to generate new IDs'),
           model: 'zkn.idGen',
           reset: '%Y%M%D%h%m%s',

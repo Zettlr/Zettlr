@@ -218,7 +218,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     keymap.of(completionKeymap),
     Prec.highest(keymap.of(customKeymap)),
     // The parser generates the AST for the document ...
-    markdownParser(options.initialConfig.linkStart, options.initialConfig.linkEnd),
+    markdownParser(),
     // ... which can then be styled with a highlighter
     markdownSyntaxHighlighter(),
     syntaxExtensions, // Add our own specific syntax plugin

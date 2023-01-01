@@ -311,9 +311,8 @@ export default class MarkdownEditor extends EventEmitter {
             const pathToInsert = path.posix.relative(cwd, data.path)
 
             if (data.type === 'file') {
-              const { linkStart, linkEnd } = view.state.field(configField)
               // Insert as Zkn link
-              view.dispatch({ changes: { from: pos, insert: `${linkStart}${name}${linkEnd}` } })
+              view.dispatch({ changes: { from: pos, insert: `[[${name}]]` } })
             } else if (data.type === 'code') {
               // Insert as Md link
               view.dispatch({ changes: { from: pos, insert: `[${name}](${pathToInsert})` } })

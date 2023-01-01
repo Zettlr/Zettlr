@@ -16,7 +16,6 @@
 import { EditorView, hoverTooltip, Tooltip } from '@codemirror/view'
 import { trans } from '@common/i18n-renderer'
 import formatDate from '@common/util/format-date'
-import { configField } from '../util/configuration'
 
 const ipcRenderer = window.ipc
 
@@ -25,15 +24,14 @@ type IpcResult = undefined|[string, string, number, number]
 
 // Previews files with tooltips
 async function filePreviewTooltip (view: EditorView, pos: number, side: 1 | -1): Promise<Tooltip|null> {
-  const { linkStart, linkEnd } = view.state.field(configField)
   const { from, text } = view.state.doc.lineAt(pos)
 
   // Variable descriptions:
   // pos = Wherever the cursor is (absolute position)
   // start = After linkStart (relative position)
   // end = Before linkEnd (relative position)
-  const start = text.substring(0, pos - from).lastIndexOf(linkStart) + linkStart.length
-  const end = text.indexOf(linkEnd, pos - from)
+  const start = text.substring(0, pos - from).lastIndexOf('[[') + 2
+  const end = text.indexOf(']]', pos - from)
 
   if (pos > from + end || pos < from + start) {
     return null
@@ -50,7 +48,7 @@ async function filePreviewTooltip (view: EditorView, pos: number, side: 1 | -1):
   // as the user is somewhere over the links
   return {
     pos: from + start,
-    end: pos + end + linkEnd.length,
+    end: pos + end + 2,
     above: true,
     create (view) {
       if (res !== undefined) {

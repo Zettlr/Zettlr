@@ -96,8 +96,6 @@ export default function getConfigTemplate (): ConfigOptions {
     zkn: {
       idRE: '(\\d{14})',
       idGen: '%Y%M%D%h%m%s',
-      linkStart: '[[',
-      linkEnd: ']]',
       linkFilenameOnly: false,
       linkWithFilename: 'always', // can be always|never|withID
       // If true, create files that are not found, if forceOpen is called

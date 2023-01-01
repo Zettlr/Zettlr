@@ -33,6 +33,10 @@ quick list:
    preview which, upon clicking, will bring you to the footnote context. This
    has the benefit that you will have full syntax highlighting support as well
    as any shortcuts and commands you may need.
+8. We have deprecated the Zettelkasten link start and end configuration
+   settings. Both are now fixed to `[[` and `]]` respectively. We have figured
+   that nobody needs to configure this, and it makes many parts of our code
+   easier.
 
 ## Split-Panes and Multiple Windows
 

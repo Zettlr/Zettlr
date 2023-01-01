@@ -28,8 +28,6 @@ const RULES = {
   'export.stripTags': 'required|boolean|default:false',
   'export.stripLinks': 'required|string|in:full,unlink,no|default:full',
   'zkn.idRE': 'required|string|default:',
-  'zkn.linkStart': 'required|string|default:',
-  'zkn.linkEnd': 'required|string|default:',
   'zkn.idGen': 'required|string|min:2|default:',
   'zkn.autoCreateLinkedFiles': 'required|boolean|default:false',
   'attachmentExtensions': 'optional|array',

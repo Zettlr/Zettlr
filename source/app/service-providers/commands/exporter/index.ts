@@ -204,8 +204,6 @@ async function writeDefaults (
 
   defaults.metadata.zettlr.strip_tags = Boolean(config.get('export.stripTags'))
   defaults.metadata.zettlr.strip_links = String(config.get('export.stripLinks'))
-  defaults.metadata.zettlr.link_start = String(config.get('zkn.linkStart'))
-  defaults.metadata.zettlr.link_end = String(config.get('zkn.linkEnd'))
 
   // Potentially override allowed defaults properties
   if (defaultsOverride?.title !== undefined) {

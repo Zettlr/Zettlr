@@ -46,8 +46,6 @@ const FRONTMATTER_VARS = [
  * @returns {Function}            A parser that can then be used to parse files
  */
 export default function getMarkdownFileParser (
-  linkStart: string,
-  linkEnd: string,
   idREPattern: string
 ): (file: MDFileDescriptor, content: string) => void {
   return function parseMarkdownFile (
@@ -77,9 +75,9 @@ export default function getMarkdownFileParser (
     // Finally, reset all those properties which we will extract from the file's
     // content so that they remain in their default if we don't find those in the
     // file.
-    file.id = extractFileId(file.name, content, idREPattern, linkStart, linkEnd)
+    file.id = extractFileId(file.name, content, idREPattern)
     file.tags = extractTags(frontmatter, contentWithoutCode)
-    file.links = extractLinks(content, linkStart, linkEnd)
+    file.links = extractLinks(content)
     file.firstHeading = null
     file.yamlTitle = undefined
     file.frontmatter = null

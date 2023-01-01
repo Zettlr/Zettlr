@@ -388,8 +388,6 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     renderHeadings: store.state.config['display.renderHTags'],
     renderTables: store.state.config['editor.enableTableHelper'],
     renderEmphasis: store.state.config['display.renderEmphasis'],
-    linkStart: store.state.config['zkn.linkStart'],
-    linkEnd: store.state.config['zkn.linkEnd'],
     linkPreference: store.state.config['zkn.linkWithFilename'],
     linkFilenameOnly: store.state.config['zkn.linkFilenameOnly'],
     readabilityMode: false, // TODO
