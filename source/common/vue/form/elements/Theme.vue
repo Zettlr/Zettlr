@@ -239,6 +239,7 @@ div#theme-container {
       p.theme-name {
         display: inline-block;
         font-weight: bold;
+        margin-right: 5px;
       }
 
       div.selected-button, div.not-selected-button {
