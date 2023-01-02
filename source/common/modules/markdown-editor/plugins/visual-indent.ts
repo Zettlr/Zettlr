@@ -19,7 +19,7 @@
  * END HEADER
  */
 
-import { RangeSetBuilder } from '@codemirror/state'
+import { Line, RangeSetBuilder } from '@codemirror/state'
 import { Decoration, DecorationSet, EditorView, ViewPlugin, ViewUpdate } from '@codemirror/view'
 
 function render (view: EditorView): DecorationSet {
@@ -33,14 +33,20 @@ function render (view: EditorView): DecorationSet {
   const tabSize = view.state.tabSize
   const builder = new RangeSetBuilder<Decoration>()
 
-  for (const blockInfo of view.viewportLineBlocks) {
-    // Now, we need the text of the line
-    const { text } = view.state.doc.lineAt(blockInfo.from)
+  const visibleLines: Set<Line> = new Set()
+  for (const { from, to } of view.visibleRanges) {
+    const firstLine = view.state.doc.lineAt(from).number
+    const lastLine = view.state.doc.lineAt(to).number
+    for (let i = firstLine; i <= lastLine; i++) {
+      visibleLines.add(view.state.doc.line(i))
+    }
+  }
 
-    // Now first determine how much we're actually offset
+  for (const line of [...visibleLines]) {
+    // First determine how much we're actually offset
     let tabs = 0
     let spaces = 0
-    for (const char of text) {
+    for (const char of line.text) {
       if (char === '\t') {
         tabs++
       } else if (char === ' ') {
@@ -53,13 +59,13 @@ function render (view: EditorView): DecorationSet {
     let offset = (tabs * tabSize + spaces) * charWidth
 
     // Here we additionally account for list markers and indent even further.
-    const match = /^\s*([+*>-]|\d+\.)\s/.exec(text)
+    const match = /^\s*([+*>-]|\d+\.)\s/.exec(line.text)
     if (match !== null) {
-      offset += match[0].length * charWidth
+      offset += match[1].length * charWidth
     }
 
     if (offset === 0) {
-      break // Nothing to indent here
+      continue // Nothing to indent here
     }
 
     offset += basePadding // Add some base padding which is necessary
@@ -71,7 +77,7 @@ function render (view: EditorView): DecorationSet {
         }
       })
 
-      builder.add(blockInfo.from, blockInfo.from, deco)
+      builder.add(line.from, line.from, deco)
     }
   }
 
