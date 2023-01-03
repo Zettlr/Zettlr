@@ -105,7 +105,7 @@
     "fsevents": "^2.3.2"
   },
   "resolutions": {
-    "@codemirror/autocomplete/@codemirror/view": "^6.7.0"
+    "@codemirror/lang-markdown/@codemirror/language": "^6.3.2"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0",
