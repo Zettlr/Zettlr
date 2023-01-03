@@ -254,6 +254,7 @@ there.
 - Refactored the Sidebar panels into their own respective components
 - Upgrade Electron to `21.x.x`
 - Upgrade Pandoc to `2.19.2`
+- Upgrade Chart.js to `4.x.x`
 - Upgrade CodeMirror to version 6
 - Pandoc logs are now logged in every case
 - Improve the display and functionality of log messages

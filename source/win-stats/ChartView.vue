@@ -323,6 +323,7 @@ export default defineComponent({
   beforeUnmount: function () {
     if (chart !== null) {
       chart.destroy()
+      chart = null
     }
   },
   methods: {
