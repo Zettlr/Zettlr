@@ -252,7 +252,7 @@ there.
 
 - Refactored the main editor component further
 - Refactored the Sidebar panels into their own respective components
-- Upgrade Electron to `21.x.x`
+- Upgrade Electron to `22.x.x`
 - Upgrade Pandoc to `2.19.2`
 - Upgrade Chart.js to `4.x.x`
 - Upgrade CodeMirror to version 6
