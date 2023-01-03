@@ -66,7 +66,7 @@ function sortCitationKeysByUsage (state: EditorState): Completion[] {
     .flat()
 
   // Create a counter
-  const citationCounts: { [key: string]: number } = {}
+  const citationCounts: Record<string, number> = {}
   for (const key of existingCitations) {
     if (!(key in citationCounts)) {
       citationCounts[key] = 0

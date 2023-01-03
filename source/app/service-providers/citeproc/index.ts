@@ -36,8 +36,8 @@ interface DatabaseRecord {
   // We basically have CSL databases (do not contain attachments) or BibTex
   // (contain attachments).
   type: 'csl'|'bibtex'
-  cslData: { [citekey: string]: CSLItem }
-  bibtexAttachments: { [citeKey: string]: string[]|false }
+  cslData: Record<string, CSLItem>
+  bibtexAttachments: Record<string, string[]|false>
 }
 
 /**
@@ -80,7 +80,7 @@ export default class CiteprocProvider extends ProviderContract {
    *
    * @var {Object}
    */
-  private _items: { [citekey: string]: CSLItem }
+  private _items: Record<string, CSLItem>
 
   /**
    * Just like the FSAL, the citeproc provider maintains a watcher for citation

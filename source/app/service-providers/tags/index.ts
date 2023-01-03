@@ -70,7 +70,7 @@ export default class TagProvider extends ProviderContract {
         const wantedTags: string[] = message.payload
         const allTags = this._fsal.collectTags().filter(record => wantedTags.includes(record[0]))
         // We cannot use a Map for the return value since Maps are not JSONable.
-        const ret: { [key: string]: string[] } = {}
+        const ret: Record<string, string[]> = {}
 
         for (const [ tag, files ] of allTags) {
           for (const file of files) {

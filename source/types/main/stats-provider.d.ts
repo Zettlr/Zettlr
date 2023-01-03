@@ -1,7 +1,5 @@
 // Dictionary in the form dic['yyyy-mm-dd'] = value
-export interface DailyDictionary {
-  [day: string]: number
-}
+export type DailyDictionary = Record<string, number>
 
 // Statistics object
 export interface Stats {

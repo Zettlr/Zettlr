@@ -98,7 +98,7 @@ function zTransform (val: number, sourceMin: number, sourceMax: number, targetMi
  * coleman-liau and automated readability.
  * @type {Object}
  */
-const readabilityAlgorithms: { [key: string]: (words: string[]) => number } = {
+const readabilityAlgorithms: Record<string, (words: string[]) => number> = {
   'dale-chall': (words: string[]) => {
     // Gunning-Fog produces grades between 0 and 11 (tested with Bartleby full text).
     let score = 0

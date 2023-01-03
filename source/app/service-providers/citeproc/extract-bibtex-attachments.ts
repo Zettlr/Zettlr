@@ -20,9 +20,7 @@ import LogProvider from '@providers/log'
 
 const AstrociteAST = bibtex.AST
 
-interface BibTexAttachments {
-  [citekey: string]: string[]|false
-}
+type BibTexAttachments = Record<string, string[]|false>
 
 /**
  * Returns a dictionary in the form citeKey: Array(files)

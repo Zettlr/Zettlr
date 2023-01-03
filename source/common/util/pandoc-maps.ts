@@ -20,7 +20,7 @@
  *
  * @var {{[reader: string]: string}}
  */
-export const PANDOC_READERS: { [reader: string]: string } = {
+export const PANDOC_READERS: Record<string, string> = {
   'commonmark': 'CommonMark',
   'commonmark_x': 'CommonMark +Ext',
   'creole': 'Creole 1.0',
@@ -61,7 +61,7 @@ export const PANDOC_READERS: { [reader: string]: string } = {
  *
  * @var {{[writer: string]: string}}
  */
-export const PANDOC_WRITERS: { [writer: string]: string } = {
+export const PANDOC_WRITERS: Record<string, string> = {
   'asciidoc': 'AsciiDoc',
   'beamer': 'Beamer slides',
   'commonmark': 'CommonMark',
@@ -135,7 +135,7 @@ export const SUPPORTED_READERS = [
  *
  * @var {{[writer: string]: string }}
  */
-export const WRITER2EXT: { [writer: string]: string } = {
+export const WRITER2EXT: Record<string, string> = {
   'asciidoc': 'adoc', // See https://asciidoctor.org/docs/asciidoc-recommended-practices/#document-extension
   'beamer': 'pdf',
   'commonmark': 'md',
@@ -193,7 +193,7 @@ export const WRITER2EXT: { [writer: string]: string } = {
  *
  * @var {{[extension: string]: string[]}}
  */
-export const EXT2READER: { [extension: string]: string[] } = {
+export const EXT2READER: Record<string, string[]> = {
   'md': [ 'commonmark', 'commonmark_x', 'markdown', 'markdown_mmd', 'markdown_phpextra', 'markdown_strict', 'gfm' ],
   'markdown': [ 'commonmark', 'commonmark_x', 'markdown', 'markdown_mmd', 'markdown_phpextra', 'markdown_strict', 'gfm' ],
   'rmd': [ 'commonmark', 'commonmark_x', 'markdown', 'markdown_mmd', 'markdown_phpextra', 'markdown_strict', 'gfm' ],

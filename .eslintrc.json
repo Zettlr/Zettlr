@@ -32,6 +32,7 @@
         "no-prototype-builtins": "off",
         "dot-notation": "off",
         "@typescript-eslint/dot-notation": ["warn"],
+        "@typescript-eslint/no-confusing-void-expression": "off",
         "array-bracket-spacing": [
             2,
             "always",

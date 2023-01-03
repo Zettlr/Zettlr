@@ -34,9 +34,7 @@ import { ChangeSet, Text } from '@codemirror/state'
 import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import countWords from '@common/util/count-words'
 
-interface DocumentWindows {
-  [windowId: string]: DocumentTree
-}
+type DocumentWindows = Record<string, DocumentTree>
 
 const MAX_VERSION_HISTORY = 100 // Keep no more than this many updates.
 const DELAYED_SAVE_TIMEOUT = 5000 // Delayed timeout means: Save after 5 seconds

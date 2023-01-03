@@ -24,7 +24,7 @@
  *
  * @var {{ [key: string]: string[] }}}
  */
-const locatorLabels: { [key: string]: string[] } = {
+const locatorLabels: Record<string, string[]> = {
   'book': [ 'Buch', 'Bücher', 'B.', 'book', 'books', 'bk.', 'bks.', 'livre', 'livres', 'liv.' ],
   'chapter': [ 'Kapitel', 'Kap.', 'chapter', 'chapters', 'chap.', 'chaps', 'chapitre', 'chapitres' ],
   'column': [ 'Spalte', 'Spalten', 'Sp.', 'column', 'columns', 'col.', 'cols', 'colonne', 'colonnes' ],

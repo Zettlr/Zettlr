@@ -14,7 +14,7 @@
 import YAML from 'yaml'
 
 interface ExtractYamlFrontmatterReturn {
-  frontmatter: { [key: string]: any }|null
+  frontmatter: Record<string, any>|null
   content: string
 }
 

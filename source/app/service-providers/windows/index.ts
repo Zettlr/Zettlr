@@ -59,7 +59,7 @@ import ConfigProvider from '@providers/config'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
 
 export default class WindowProvider extends ProviderContract {
-  private readonly _mainWindows: { [key: string]: BrowserWindow }
+  private readonly _mainWindows: Record<string, BrowserWindow>
   private _printWindow: BrowserWindow|null
   private _updateWindow: BrowserWindow|null
   private _logWindow: BrowserWindow|null
