@@ -72,7 +72,7 @@ export default class FSAL extends ProviderContract {
   private _isCurrentlyHandlingRemoteChange: boolean
   private _fsalIsBusy: boolean
   private readonly _remoteChangeBuffer: WatchdogEvent[]
-  private _state: FSALState
+  private readonly _state: FSALState
   private _history: FSALHistoryEvent[]
   private readonly _emitter: EventEmitter
 
