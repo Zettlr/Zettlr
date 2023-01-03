@@ -1,4 +1,5 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const ESLintPlugin = require('eslint-webpack-plugin')
 const path = require('path')
 const rules = require('./webpack.rules')
 
@@ -18,6 +19,7 @@ module.exports = {
   entry: './source/main.ts',
   module: { rules },
   plugins: [
+    new ESLintPlugin(),
     new CopyWebpackPlugin({
       patterns: [
         // These are all static files that simply need to be bundled with the
