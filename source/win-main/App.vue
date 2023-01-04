@@ -111,6 +111,7 @@ import { ToolbarControl } from '@dts/renderer/window'
 import { OpenDocument, BranchNodeJSON, LeafNodeJSON } from '@dts/common/documents'
 import { EditorCommands } from '@dts/renderer/editor'
 import buildPipeTable from '@common/modules/markdown-editor/table-editor/build-pipe'
+import { UpdateState } from '@dts/main/update-provider'
 
 const ipcRenderer = window.ipc
 const clipboard = window.clipboard
@@ -149,6 +150,7 @@ export default defineComponent({
       windowId: searchParams.get('window_id') as string,
       fileManagerVisible: true,
       mainSplitViewVisibleComponent: 'fileManager',
+      isUpdateAvailable: false,
       // Pomodoro state
       pomodoro: {
         currentEffectFile: glassFile,
@@ -414,6 +416,13 @@ export default defineComponent({
           title: trans('Toggle Sidebar'),
           icon: 'view-columns',
           initialState: this.sidebarVisible
+        },
+        {
+          type: 'button',
+          id: 'open-updater',
+          title: trans('Update available'),
+          icon: 'download',
+          visible: this.isUpdateAvailable
         }
       ]
     },
@@ -567,6 +576,20 @@ export default defineComponent({
     if (this.sidebarVisible === false) {
       this.editorSidebarSplitComponent.hideView(2)
     }
+
+    // Check if there is an update available.
+    ipcRenderer.invoke('update-provider', { command: 'update-status' })
+      .then((state: UpdateState) => {
+        this.isUpdateAvailable = state.updateAvailable
+      })
+      .catch(err => console.error(err))
+
+    // Also, listen for any changes in the update available state
+    ipcRenderer.on('update-provider', (event, command: string, updateState: UpdateState) => {
+      if (command === 'state-changed') {
+        this.isUpdateAvailable = updateState.updateAvailable
+      }
+    })
   },
   methods: {
     genericJtl: function (lineNumber: number) {
@@ -819,6 +842,11 @@ export default defineComponent({
       } else if (clickedID === 'insertFootnote') {
         this.editorCommands.data = clickedID
         this.editorCommands.executeCommand = !this.editorCommands.executeCommand
+      } else if (clickedID === 'open-updater') {
+        ipcRenderer.invoke('application', {
+          command: 'open-update-window'
+        })
+          .catch(err => console.error(err))
       }
     },
     handleToggle: function (controlState: { id: string, state: any }) {
