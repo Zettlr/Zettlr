@@ -220,6 +220,9 @@ export default defineComponent({
         payload: { oldName: tagName, newName: this.newTag }
       })
 
+      this.newTag = ''
+      this.renameActiveFor = -1
+
       // Afterwards, fetch the new set of tags
       await this.retrieveTags()
     }
