@@ -19,13 +19,13 @@
       <div>
         <div v-for="(item, idx) in tags" v-bind:key="idx" class="badge">
           <span
-            v-if="retrieveTagColour(item)"
+            v-if="retrieveTagColour(item) !== ''"
             class="color-circle"
             v-bind:style="{
               'background-color': retrieveTagColour(item)
             }"
           ></span>
-          <span>#{{ item }}</span>
+          <span>{{ item }}</span>
         </div>
       </div>
     </template>
@@ -172,11 +172,7 @@ export default {
     },
     retrieveTagColour: function (tagName: string) {
       const foundTag = this.colouredTags.find(tag => tag.name === tagName)
-      if (foundTag !== undefined) {
-        return foundTag.color
-      } else {
-        return 'transparent'
-      }
+      return foundTag !== undefined ? foundTag.color : ''
     }
   }
 }
