@@ -49,10 +49,12 @@ module.exports = [
   },
   {
     test: /\.svg$/,
-    use: ['svg-inline-loader'],
+    type: 'asset/source',
     include: [
       // Make sure to only inline the icons for Clarity. Other SVGs will be
-      // handled regularly as resources.
+      // handled regularly as resources. NOTE: We're using asset/source, not
+      // asset/inline, since "inline" will prepend an SVG-data header which
+      // breaks the functionality. Source works with literal strings.
       path.resolve(__dirname, 'source/common/modules/window-register/icons')
     ]
   },
