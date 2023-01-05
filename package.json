@@ -54,7 +54,7 @@
     "@codemirror/legacy-modes": "^6.0.0",
     "@codemirror/search": "^6.0.0",
     "@codemirror/state": "^6.0.0",
-    "@codemirror/view": "^6.0.0",
+    "@codemirror/view": "^6.7.2",
     "@joplin/turndown": "^4.0.63",
     "@lezer/common": "^1.0.1",
     "@lezer/highlight": "^1.1.2",
