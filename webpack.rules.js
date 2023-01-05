@@ -40,10 +40,15 @@ module.exports = [
     ]
   },
   {
-    test: /\.(png|jpg|svg|gif)$/,
+    // Most assets can simply be copied over into the output directory:
+    // * png|jpe?g|svg|gif:   Images
+    // * woff2?|eot|ttf|otf:  Fonts
+    // * ogg|mp3|wav:         Audio files
+    test: /\.(png|jpe?g|svg|gif|woff2?|eot|ttf|otf|ogg|mp3|wav)$/,
     type: 'asset/resource',
     exclude: [
-      // Clarity expects inline SVG, so we cannot handle them as resources.
+      // We exclude the custom clarity icons here, since clarity expects string
+      // literals, not file paths
       path.resolve(__dirname, 'source/common/modules/window-register/icons')
     ]
   },
@@ -51,34 +56,11 @@ module.exports = [
     test: /\.svg$/,
     type: 'asset/source',
     include: [
-      // Make sure to only inline the icons for Clarity. Other SVGs will be
-      // handled regularly as resources. NOTE: We're using asset/source, not
-      // asset/inline, since "inline" will prepend an SVG-data header which
-      // breaks the functionality. Source works with literal strings.
+      // NOTE: We're using asset/source, not asset/inline, since "inline" will
+      // prepend an SVG-data header which breaks clarity. Source works with
+      // literal strings.
       path.resolve(__dirname, 'source/common/modules/window-register/icons')
     ]
-  },
-  {
-    test: /\.(woff|woff2|eot|ttf|otf)$/,
-    type: 'asset/resource'
-  },
-  {
-    // Handle audio files: just copy them
-    test: /\.(ogg|mp3|wav)$/,
-    use: {
-      loader: 'file-loader',
-      options: {
-        // Do not wrap in js module
-        esModule: false,
-        name: '[path][name].[ext]',
-        // Forge puts the entry points in their own dedicated directory, so we
-        // have to "manually" move up from that directory again
-        publicPath: '..',
-        // The main context is our source directory. The resources are only
-        // important for handlebars, but not for anything else.
-        context: 'source'
-      }
-    }
   },
   {
     test: /(.ts|.tsx)$/,

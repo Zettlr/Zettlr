@@ -292,7 +292,7 @@ there.
   available dictionary files and translations has now been moved to the main
   command hub
 - Removed the `Zettlr` class; the last remnant of the old, class-based system
-- Remove deprecated module `svg-inline-loader`
+- Remove deprecated modules `svg-inline-loader`, `raw-loader`, and `file-loader`
 
 # 2.3.0
 
