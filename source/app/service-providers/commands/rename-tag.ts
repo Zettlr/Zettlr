@@ -40,7 +40,6 @@ export default class RenameTag extends ZettlrCommand {
     // Then, retain only the relevant files
     const relevantFiles = allFiles.filter((d: MDFileDescriptor) => d.tags.includes(oldName))
 
-    // TODO: Add a guard dialog
     const response = await dialog.showMessageBox({
       title: trans('Confirm'),
       message: trans('Replace tag "%s" with "%s" across %s files?', oldName, newName, relevantFiles.length),

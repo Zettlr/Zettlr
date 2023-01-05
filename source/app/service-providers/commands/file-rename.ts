@@ -16,6 +16,10 @@ import path from 'path'
 import ZettlrCommand from './zettlr-command'
 import sanitize from 'sanitize-filename'
 import { codeFileExtensions, mdFileExtensions } from '@providers/fsal/util/valid-file-extensions'
+import { dialog } from 'electron'
+import { promises as fs } from 'fs'
+import { trans } from '@common/i18n-main'
+import replaceLinks from '@common/util/replace-links'
 
 const ALLOWED_FILETYPES = mdFileExtensions(true)
 const CODE_FILETYPES = codeFileExtensions(true)
@@ -74,31 +78,41 @@ export default class FileRename extends ZettlrCommand {
       }
     }
 
-    // Check if the file was currently open. Since only the FSAL will get the
-    // info, we should close immediately, in order to prevent a "zombie" file
-    // to remain open in the document manager.
-    // const wasActive = this._app.documents.activeFile?.path === file.path
-    // const wasOpen = documentDescriptor !== undefined
-    // if (documentDescriptor !== undefined) {
-    //   const result = await this._app.commands.run('file-close', documentDescriptor.path)
-    //   if (result === false) {
-    //     this._app.log.warning(`[FileRename] Not renaming ${documentDescriptor.path}.`)
-    //     return
-    //   }
-    // } TODO TODO
-
     try {
+      // We need to retrieve the inboundLinks before we rename the file, since
+      // afterwards the links won't be valid anymore.
+      const oldName = file.name
+      const inboundLinks = this._app.links.retrieveInbound(file.path)
+
+      // Now, rename the file.
       await this._app.fsal.renameFile(file, newName)
-      // NOTE: At this point, `file` will contain the _new_ information which
-      // we can now use to re-set the documentManager's state if need be.
-      // if (wasOpen) {
-      //   // NOTE: We must open in a new tab regardless of setting, since in this
-      //   // case we have programmatically closed the file
-      //   await this._app.documents.openFile(file.path, true)
-      // }
-      // if (wasActive) {
-      //   this._app.documents.activeFile = file
-      // } TODO TODO
+
+      // Finally, let's check if we can update some internal links to that file.
+      if (inboundLinks.length > 0) {
+        const response = await dialog.showMessageBox({
+          title: trans('Confirm'),
+          message: trans('Update %s internal links to file %s?', inboundLinks.length, newName),
+          buttons: [
+            trans('Yes'),
+            trans('No')
+          ],
+          defaultId: 1
+        })
+
+        if (response.response === 1) {
+          return // Do not update the links.
+        }
+
+        // So ... update. We'll basically take the rename-tag command as a template.
+        for (const file of inboundLinks) {
+          const content = await fs.readFile(file, 'utf-8')
+          const newContent = replaceLinks(content, oldName, newName)
+          if (newContent !== content) {
+            await fs.writeFile(file, newContent, 'utf-8')
+            this._app.log.info(`[Application] Replaced link to ${oldName} with ${newName} in file ${file}`)
+          }
+        }
+      }
     } catch (e: any) {
       this._app.log.error(`Error during renaming file: ${e.message as string}`, e)
     }
