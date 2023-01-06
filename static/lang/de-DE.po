@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2023-01-06 02:38+0000\n"
-"PO-Revision-Date: 2022-12-27 10:55+0100\n"
+"PO-Revision-Date: 2023-01-06 11:32+0100\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -1949,7 +1949,7 @@ msgstr "Ersetze Schlagwort “%s” mit “%s” in %s Dateien?"
 #: source/app/service-providers/commands/file-rename.ts:94
 #, javascript-format
 msgid "Update %s internal links to file %s?"
-msgstr ""
+msgstr "Aktualisiere %s interne Links auf Datei %s?"
 
 #: source/app/service-providers/commands/file-duplicate.ts:43
 #: source/app/service-providers/commands/file-duplicate.ts:59
