@@ -249,6 +249,9 @@ there.
 - Fixed the readability mode color gradient (red -> purple -> blue -> green)
 - The "Save changes" dialog is now simpler and easier to understand
 - The main editor is finally properly styled and looks more natural to work with
+- Pre-rendered citations within Zettlr now respect the composite flag, meaning
+  that `Some sentence by @Author2015` renders as
+  `Some sentence by Author (2015)` instead of `Some sentence by (Author 2015)`
 
 ## Under the Hood
 

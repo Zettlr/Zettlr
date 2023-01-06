@@ -35,7 +35,7 @@ class CitationWidget extends WidgetType {
     const config = view.state.field(configField).metadata.library
     const library = config === '' ? CITEPROC_MAIN_DB : config
     const callback = window.getCitationCallback(library)
-    const renderedCitation = callback(this.citation.citations, false)
+    const renderedCitation = callback(this.citation.citations, this.citation.composite)
 
     const elem = document.createElement('span')
     elem.classList.add('citeproc-citation')
