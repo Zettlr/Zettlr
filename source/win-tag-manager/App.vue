@@ -17,23 +17,23 @@
 
       <table>
         <tr>
-          <th style="text-align: left;">
+          <th style="text-align: left;" v-on:click="changeSorting('name')">
             {{ tagNameLabel }}
           </th>
-          <th style="text-align: left;">
+          <th style="text-align: left;" v-on:click="changeSorting('color')">
             {{ colorLabel }}
           </th>
-          <th style="text-align: right;">
+          <th style="text-align: right;" v-on:click="changeSorting('count')">
             {{ countLabel }}
           </th>
-          <th style="text-align: right;">
+          <th style="text-align: right;" v-on:click="changeSorting('idf')">
             IDF
           </th>
           <th>
             Actions <!-- TODO: Translate -->
           </th>
         </tr>
-        <tr v-for="(tag, index) in tags" v-bind:key="index" class="tag-flex">
+        <tr v-for="(tag, index) in filteredTags" v-bind:key="index" class="tag-flex">
           <td style="text-align: left;">
             <span style="flex-shrink: 1;">{{ tag.name }}</span>
           </td>
@@ -138,6 +138,8 @@ export default defineComponent({
       tags: [] as TagRecord[],
       hasUnsavedChanges: false,
       renameActiveFor: -1,
+      sortBy: 'name' as 'name'|'idf'|'count'|'color',
+      descending: false,
       newTag: ''
     }
   },
@@ -165,6 +167,37 @@ export default defineComponent({
     },
     windowTitle: function () {
       return trans('Manage tags')
+    },
+    filteredTags () {
+      const copy = this.tags.map(x => x)
+
+      const languagePreferences = [ window.config.get('appLang'), 'en' ]
+      const coll = new Intl.Collator(languagePreferences, { 'numeric': true })
+      copy.sort((a, b) => {
+        if (this.sortBy === 'name') {
+          return coll.compare(a.name, b.name)
+        } else if (this.sortBy === 'color') {
+          const aCol = a.color !== undefined
+          const bCol = b.color !== undefined
+          if (!aCol && bCol) {
+            return 1
+          } else if (aCol && !bCol) {
+            return -1
+          } else {
+            return 0
+          }
+        } else if (this.sortBy === 'count') {
+          return a.files.length - b.files.length
+        } else {
+          return a.idf - b.idf
+        }
+      })
+
+      if (this.descending) {
+        copy.reverse()
+      }
+
+      return copy
     },
     statusbarControls: function () {
       return [
@@ -233,6 +266,14 @@ export default defineComponent({
 
       // Afterwards, fetch the new set of tags
       await this.retrieveTags()
+    },
+    changeSorting (which: 'name'|'color'|'count'|'idf') {
+      if (this.sortBy === which) {
+        this.descending = !this.descending
+      } else {
+        this.sortBy = which
+        this.descending = false
+      }
     }
   }
 })
