@@ -16,6 +16,7 @@ import { OpenDocument } from '@dts/common/documents'
 import { MDFileDescriptor } from '@dts/common/fsal'
 import { RelatedFile } from '@dts/renderer/misc'
 import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
+import { TagRecord } from '@providers/tags'
 import { ActionContext } from 'vuex'
 import { ZettlrState } from '..'
 
@@ -75,25 +76,28 @@ export default async function (context: ActionContext<ZettlrState, ZettlrState>)
   // The second way files can be related to each other is via shared tags.
   // This relation is not as important as explicit links, so they should
   // be below the inbound linked files.
-  const recommendations = await ipcRenderer.invoke('tag-provider', {
-    command: 'recommend-matching-files',
-    payload: descriptor.tags.map(tag => tag) // De-proxy
-  })
 
-  // Recommendations come in the form of [file: string]: string[]
-  for (const filePath of Object.keys(recommendations)) {
-    const existingFile = unreactiveList.find(elem => elem.path === filePath)
-    if (existingFile !== undefined) {
-      // This file already links here
-      existingFile.tags = recommendations[filePath]
-    } else {
-      // This file doesn't explicitly link here but it shares tags
-      unreactiveList.push({
-        file: path.basename(filePath),
-        path: filePath,
-        tags: recommendations[filePath],
-        link: 'none'
-      })
+  const tags = await ipcRenderer.invoke('tag-provider', { command: 'get-all-tags' }) as TagRecord[]
+  const recommendations = tags.filter(tag => descriptor.tags.includes(tag.name))
+
+  for (const tagRecord of recommendations) {
+    for (const filePath of tagRecord.files) {
+      if (filePath === descriptor.path) {
+        continue
+      }
+      const existingFile = unreactiveList.find(elem => elem.path === filePath)
+      if (existingFile !== undefined) {
+        // This file already links here
+        existingFile.tags.push(tagRecord.name)
+      } else {
+        // This file doesn't explicitly link here but it shares tags
+        unreactiveList.push({
+          file: path.basename(filePath),
+          path: filePath,
+          tags: [tagRecord.name],
+          link: 'none'
+        })
+      }
     }
   }
 
@@ -109,7 +113,16 @@ export default async function (context: ActionContext<ZettlrState, ZettlrState>)
   // No sorting necessary
 
   const tagsOnly = unreactiveList.filter(e => e.link === 'none')
-  tagsOnly.sort((a, b) => { return b.tags.length - a.tags.length })
+  const idf: Record<string, number> = {}
+  for (const tagRecord of tags) {
+    idf[tagRecord.name] = tagRecord.idf
+  }
+
+  // We sort based on the IDF frequency of shared tags, which "weighs" the tags
+  // by importance. Files with less shared tags hence can get higher counts and
+  // are listed higher than files with more shared tags, if those few tags have
+  // high IDF scores.
+  tagsOnly.sort((a, b) => b.tags.map(tag => idf[tag]).reduce((p, c) => p + c, 0) - a.tags.map(tag => idf[tag]).reduce((p, c) => p + c, 0))
 
   context.commit('updateRelatedFiles', [
     ...backlinksAndTags,

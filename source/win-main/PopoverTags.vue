@@ -76,9 +76,9 @@ import { TagRecord } from '@providers/tags'
 const ipcRenderer = window.ipc
 
 async function regenerateTagSuggestions (activeFile: null|OpenDocument): Promise<string[]> {
-  const suggestions: string[] = []
+  const suggestions: TagRecord[] = []
   if (activeFile === null || !hasMarkdownExt(activeFile.path)) {
-    return suggestions // Nothing to do
+    return [] // Nothing to do
   }
 
   const contents: string = await ipcRenderer.invoke('application', {
@@ -99,11 +99,15 @@ async function regenerateTagSuggestions (activeFile: null|OpenDocument): Promise
 
   for (const tag of tags) {
     if (String(contents).includes(tag.name) && !descriptor.tags.includes(tag.name)) {
-      suggestions.push(tag.name)
+      suggestions.push(tag)
     }
   }
 
-  return suggestions
+  // Sort based on idf, and then return only the tag names. This sorts more
+  // informative tags to the beginning. NOTE: We only return the 10 most
+  // important tags to prevent the user being bombarded with hundreds of tags.
+  suggestions.sort((a, b) => b.idf - a.idf)
+  return suggestions.map(x => x.name).slice(0, Math.min(10, suggestions.length))
 }
 
 export default defineComponent({

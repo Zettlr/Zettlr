@@ -26,10 +26,29 @@ import LogProvider from '../log'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
 import FSAL from '@providers/fsal'
 
+/**
+ * This interface describes a single tag within the files loaded in here.
+ */
 export interface TagRecord {
+  /**
+   * The tag's name, e.g., #todo
+   */
   name: string
+  /**
+   * A list of absolute paths to files which share this tag
+   */
   files: string[]
+  /**
+   * The IDF score of this tag (idf = Math.log(N / files.length))
+   */
+  idf: number
+  /**
+   * An optional color for this tag
+   */
   color?: string
+  /**
+   * An optional description for thist ag
+   */
   desc?: string
 }
 
@@ -66,23 +85,6 @@ export default class TagProvider extends ProviderContract {
         this.setColoredTags(payload)
       } else if (command === 'get-colored-tags') {
         return this._coloredTags
-      } else if (command === 'recommend-matching-files') {
-        const wantedTags: string[] = message.payload
-        const allTags = this._fsal.collectTags().filter(record => wantedTags.includes(record[0]))
-        // We cannot use a Map for the return value since Maps are not JSONable.
-        const ret: Record<string, string[]> = {}
-
-        for (const [ tag, files ] of allTags) {
-          for (const file of files) {
-            if (ret[file] === undefined) {
-              ret[file] = [tag]
-            } else if (!ret[file].includes(tag)) {
-              ret[file].push(tag)
-            }
-          }
-        }
-
-        return ret
       }
     })
   }
@@ -145,7 +147,13 @@ export default class TagProvider extends ProviderContract {
     const ret: TagRecord[] = []
     for (const [ name, files ] of this._fsal.collectTags()) {
       const tagColor = this._coloredTags.find(c => c.name === name)
-      ret.push({ name, files, color: tagColor?.color, desc: tagColor?.desc })
+      ret.push({ name, files, color: tagColor?.color, desc: tagColor?.desc, idf: 0 })
+    }
+
+    // Calculate idf based on the info we have for each tag
+    const N = ret.map(x => x.files.length).reduce((prev, cur) => prev + cur, 0)
+    for (const tag of ret) {
+      tag.idf = Math.log(N / tag.files.length)
     }
 
     // Before returning, make sure to sort the tags by count

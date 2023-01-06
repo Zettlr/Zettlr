@@ -33,22 +33,22 @@
               <clr-icon
                 v-if="item.props.tags.length > 0"
                 shape="tag"
-                title="This relation is based on tag similarity."
+                v-bind:title="getTagsLabel(item.props.tags)"
               ></clr-icon>
               <clr-icon
                 v-if="item.props.link === 'inbound'"
                 shape="arrow left"
-                title="This relation is based on a backlink."
+                v-bind:title="inboundLinkLabel"
               ></clr-icon>
               <clr-icon
                 v-else-if="item.props.link === 'outbound'"
                 shape="arrow right"
-                title="This relation is based on an outbound link."
+                v-bind:title="outboundLinkLabel"
               ></clr-icon>
               <clr-icon
                 v-else-if="item.props.link === 'bidirectional'"
                 shape="two-way-arrows"
-                title="This relation is based on a bidirectional link."
+                v-bind:title="bidirectionalLinkLabel"
               ></clr-icon>
             </span>
           </div>
@@ -79,6 +79,21 @@ export default defineComponent({
     }
   },
   computed: {
+    relatedFilesLabel: function (): string {
+      return trans('Related files')
+    },
+    noRelatedFilesMessage: function (): string {
+      return trans('No related files')
+    },
+    bidirectionalLinkLabel: function () {
+      return trans('This relation is based on a bidirectional link.')
+    },
+    outboundLinkLabel: function () {
+      return trans('This relation is based on an outbound link.')
+    },
+    inboundLinkLabel: function () {
+      return trans('This relation is based on a backlink.')
+    },
     /**
      * The Vue Virtual Scroller component expects an array of objects which
      * expose two properties: id and "props". The latter contains the actual
@@ -93,9 +108,6 @@ export default defineComponent({
         return { id: idx, props: elem }
       })
     },
-    relatedFilesLabel: function (): string {
-      return trans('Related files')
-    },
     lastActiveFile: function (): OpenDocument|null {
       return this.$store.getters.lastLeafActiveFile()
     },
@@ -105,9 +117,6 @@ export default defineComponent({
       } else {
         return this.$store.state.relatedFiles
       }
-    },
-    noRelatedFilesMessage: function (): string {
-      return trans('No related files')
     },
     useH1: function (): boolean {
       return this.$store.state.config.fileNameDisplay.includes('heading')
@@ -159,6 +168,9 @@ export default defineComponent({
       } else {
         return descriptor.name.replace(descriptor.ext, '')
       }
+    },
+    getTagsLabel (tagList: string[]) {
+      return trans('This relation is based on %s shared tags: %s', tagList.length, tagList.join(', '))
     }
   }
 })

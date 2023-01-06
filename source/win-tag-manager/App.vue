@@ -26,6 +26,9 @@
           <th style="text-align: right;">
             {{ countLabel }}
           </th>
+          <th style="text-align: right;">
+            IDF
+          </th>
           <th>
             Actions <!-- TODO: Translate -->
           </th>
@@ -67,6 +70,11 @@
 
           <td style="text-align: right;">
             <span style="flex-shrink: 1;">{{ tag.files.length ?? 0 }}&times;</span>
+          </td>
+
+          <!-- IDF shall be displayed rounded to two floating point numbers -->
+          <td style="text-align: right;">
+            {{ Math.round(tag.idf * 100) / 100 }}
           </td>
 
           <td>

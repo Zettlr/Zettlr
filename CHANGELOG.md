@@ -252,6 +252,10 @@ there.
 - Pre-rendered citations within Zettlr now respect the composite flag, meaning
   that `Some sentence by @Author2015` renders as
   `Some sentence by Author (2015)` instead of `Some sentence by (Author 2015)`
+- Tags now include a measure of informativeness or uniqueness, called Inverse
+  Document Frequency (IDF); the higher this value the more informative a tag is.
+  This number is shown in the tag manager, and tags are ordered by this in some
+  places
 
 ## Under the Hood
 
