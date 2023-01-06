@@ -123,7 +123,8 @@ export default defineComponent({
       tags: [] as TagRecord[],
       tabs: [
         { id: 'name', label: trans('Name') },
-        { id: 'count', label: trans('Count') }
+        { id: 'count', label: trans('Count') },
+        { id: 'idf', label: 'IDF' }
       ] as TabbarControl[],
       activeFile: null as OpenDocument|null,
       // Super hacky way to get some tag suggestions. (Reminder to myself:
@@ -166,6 +167,8 @@ export default defineComponent({
       sorted.sort((a, b) => {
         if (this.sorting === 'name') {
           return coll.compare(a.name, b.name)
+        } else if (this.sorting === 'idf') {
+          return b.idf - a.idf
         } else {
           return b.files.length - a.files.length
         }
