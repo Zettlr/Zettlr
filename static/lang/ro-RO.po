@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-01-01 02:43+0000\n"
+"POT-Creation-Date: 2023-01-06 02:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -573,7 +573,7 @@ msgstr "Salvează"
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:36
 #: source/app/service-providers/windows/dialog/confirm-remove.ts:30
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
-#: source/app/service-providers/commands/rename-tag.ts:49
+#: source/app/service-providers/commands/rename-tag.ts:48
 msgid "Cancel"
 msgstr "Anulează"
 
@@ -1409,12 +1409,14 @@ msgid "Open project folder"
 msgstr "Deschide dosarul proiect"
 
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
-#: source/app/service-providers/commands/rename-tag.ts:48
+#: source/app/service-providers/commands/rename-tag.ts:47
+#: source/app/service-providers/commands/file-rename.ts:96
 msgid "Yes"
 msgstr ""
 
 #. 0: Save all changes
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
+#: source/app/service-providers/commands/file-rename.ts:97
 msgid "No"
 msgstr ""
 
@@ -1927,13 +1929,19 @@ msgstr "Procesul de exportare a eșuat"
 msgid "An error occurred on export: %s"
 msgstr "O eroare a apărut cînd s-a încercat exportarea: %s"
 
-#: source/app/service-providers/commands/rename-tag.ts:45
+#: source/app/service-providers/commands/rename-tag.ts:44
+#: source/app/service-providers/commands/file-rename.ts:93
 msgid "Confirm"
 msgstr ""
 
-#: source/app/service-providers/commands/rename-tag.ts:46
+#: source/app/service-providers/commands/rename-tag.ts:45
 #, javascript-format
 msgid "Replace tag \"%s\" with \"%s\" across %s files?"
+msgstr ""
+
+#: source/app/service-providers/commands/file-rename.ts:94
+#, javascript-format
+msgid "Update %s internal links to file %s?"
 msgstr ""
 
 #: source/app/service-providers/commands/file-duplicate.ts:43
