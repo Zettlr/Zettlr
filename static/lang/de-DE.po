@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2023-01-07 02:32+0000\n"
-"PO-Revision-Date: 2023-01-06 11:32+0100\n"
+"PO-Revision-Date: 2023-01-07 14:32+0100\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -736,20 +736,20 @@ msgstr "Keine verwandten Dateien"
 
 #: source/tmp/RelatedFilesTab.vue.ts:29
 msgid "This relation is based on a bidirectional link."
-msgstr ""
+msgstr "Verwandt aufgrund gegenseitiger Verlinkung."
 
 #: source/tmp/RelatedFilesTab.vue.ts:32
 msgid "This relation is based on an outbound link."
-msgstr ""
+msgstr "Verwandt aufgrund ausgehendem Link."
 
 #: source/tmp/RelatedFilesTab.vue.ts:35
 msgid "This relation is based on a backlink."
-msgstr ""
+msgstr "Verwandt aufgrund eingehendem Link."
 
 #: source/tmp/RelatedFilesTab.vue.ts:113
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
-msgstr ""
+msgstr "Verwandt basierend auf %s gemeinsamen Schlagworten: %s"
 
 #: source/tmp/ReferencesTab.vue.ts:32
 msgid "There are no citations in this document."
