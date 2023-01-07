@@ -22,7 +22,7 @@
               'outbound': item.props.link === 'outbound',
               'bidirectional': item.props.link === 'bidirectional'
             }"
-            v-on:mousedown.stop="requestFile($event, item.props.path)"
+            v-on:click.stop="requestFile($event, item.props.path)"
             v-on:dragstart="beginDragRelatedFile($event, item.props.path)"
           >
             <span
