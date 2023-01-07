@@ -13,6 +13,13 @@
         {{ tagManagerIntro }}
       </p>
 
+      <p>
+        <TextControl
+          v-model="query"
+          v-bind:placeholder="filterPlaceholder"
+        ></TextControl>
+      </p>
+
       <hr>
 
       <table>
@@ -140,6 +147,7 @@ export default defineComponent({
       renameActiveFor: -1,
       sortBy: 'name' as 'name'|'idf'|'count'|'color',
       descending: false,
+      query: '',
       newTag: ''
     }
   },
@@ -168,8 +176,12 @@ export default defineComponent({
     windowTitle: function () {
       return trans('Manage tags')
     },
+    filterPlaceholder () {
+      return trans('Filter tags…')
+    },
     filteredTags () {
-      const copy = this.tags.map(x => x)
+      const q = this.query.toLowerCase()
+      const copy = this.tags.map(x => x).filter(x => x.name.toLowerCase().includes(q))
 
       const languagePreferences = [ window.config.get('appLang'), 'en' ]
       const coll = new Intl.Collator(languagePreferences, { 'numeric': true })
