@@ -270,7 +270,6 @@ body {
 
         span.filename {
           font-size: 11px;
-          height: 28px;
           flex-grow: 8;
           // The next four properties together ensure that we show at most two
           // lines with a nice ellipsis (…) to indicate cut-off lines.
