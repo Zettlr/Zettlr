@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-01-06 02:38+0000\n"
+"POT-Creation-Date: 2023-01-07 02:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -684,31 +684,31 @@ msgstr "条目"
 msgid "References"
 msgstr "参考文献"
 
-#: source/tmp/MainSidebar.vue.ts:83 source/tmp/RelatedFilesTab.vue.ts:37
+#: source/tmp/MainSidebar.vue.ts:83 source/tmp/RelatedFilesTab.vue.ts:23
 msgid "Related files"
 msgstr "相关文件"
 
-#: source/tmp/PopoverTags.vue.ts:73
+#: source/tmp/PopoverTags.vue.ts:77
 msgid "Name"
 msgstr ""
 
-#: source/tmp/PopoverTags.vue.ts:74
+#: source/tmp/PopoverTags.vue.ts:78
 msgid "Count"
 msgstr ""
 
-#: source/tmp/PopoverTags.vue.ts:98
+#: source/tmp/PopoverTags.vue.ts:103
 msgid "Filter tags…"
 msgstr "过滤标签…"
 
-#: source/tmp/PopoverTags.vue.ts:101
+#: source/tmp/PopoverTags.vue.ts:106
 msgid "Tag Cloud"
 msgstr "标签云"
 
-#: source/tmp/PopoverTags.vue.ts:104
+#: source/tmp/PopoverTags.vue.ts:109
 msgid "Suggested tags for the current file"
 msgstr "当前文件的建议标签"
 
-#: source/tmp/PopoverTags.vue.ts:107
+#: source/tmp/PopoverTags.vue.ts:112
 msgid "Add to file"
 msgstr "添加到文件"
 
@@ -720,9 +720,26 @@ msgstr "片段重命名"
 msgid "Snippets let you define reusable pieces of text with variables."
 msgstr "片段可以让您可以使用变量定义可重复使用的文本片段"
 
-#: source/tmp/RelatedFilesTab.vue.ts:50
+#: source/tmp/RelatedFilesTab.vue.ts:26
 msgid "No related files"
 msgstr "相关文件不存在"
+
+#: source/tmp/RelatedFilesTab.vue.ts:29
+msgid "This relation is based on a bidirectional link."
+msgstr ""
+
+#: source/tmp/RelatedFilesTab.vue.ts:32
+msgid "This relation is based on an outbound link."
+msgstr ""
+
+#: source/tmp/RelatedFilesTab.vue.ts:35
+msgid "This relation is based on a backlink."
+msgstr ""
+
+#: source/tmp/RelatedFilesTab.vue.ts:113
+#, javascript-format
+msgid "This relation is based on %s shared tags: %s"
+msgstr ""
 
 #: source/tmp/ReferencesTab.vue.ts:32
 msgid "There are no citations in this document."

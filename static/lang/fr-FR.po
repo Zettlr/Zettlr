@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-01-06 02:38+0000\n"
+"POT-Creation-Date: 2023-01-07 02:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -696,31 +696,31 @@ msgstr "Élément"
 msgid "References"
 msgstr "Bibliographie"
 
-#: source/tmp/MainSidebar.vue.ts:83 source/tmp/RelatedFilesTab.vue.ts:37
+#: source/tmp/MainSidebar.vue.ts:83 source/tmp/RelatedFilesTab.vue.ts:23
 msgid "Related files"
 msgstr "Fichiers connexes"
 
-#: source/tmp/PopoverTags.vue.ts:73
+#: source/tmp/PopoverTags.vue.ts:77
 msgid "Name"
 msgstr ""
 
-#: source/tmp/PopoverTags.vue.ts:74
+#: source/tmp/PopoverTags.vue.ts:78
 msgid "Count"
 msgstr ""
 
-#: source/tmp/PopoverTags.vue.ts:98
+#: source/tmp/PopoverTags.vue.ts:103
 msgid "Filter tags…"
 msgstr "filtrer les mots-clés"
 
-#: source/tmp/PopoverTags.vue.ts:101
+#: source/tmp/PopoverTags.vue.ts:106
 msgid "Tag Cloud"
 msgstr "Nuage de mots-clés"
 
-#: source/tmp/PopoverTags.vue.ts:104
+#: source/tmp/PopoverTags.vue.ts:109
 msgid "Suggested tags for the current file"
 msgstr "Étiquettes suggérées pour le fichier actuel"
 
-#: source/tmp/PopoverTags.vue.ts:107
+#: source/tmp/PopoverTags.vue.ts:112
 msgid "Add to file"
 msgstr "Ajouter au fichier"
 
@@ -734,9 +734,26 @@ msgstr ""
 "Les extraits vous permettent de définir des morceaux de texte réutilisables "
 "avec des variables."
 
-#: source/tmp/RelatedFilesTab.vue.ts:50
+#: source/tmp/RelatedFilesTab.vue.ts:26
 msgid "No related files"
 msgstr "Aucun fichier associé"
+
+#: source/tmp/RelatedFilesTab.vue.ts:29
+msgid "This relation is based on a bidirectional link."
+msgstr ""
+
+#: source/tmp/RelatedFilesTab.vue.ts:32
+msgid "This relation is based on an outbound link."
+msgstr ""
+
+#: source/tmp/RelatedFilesTab.vue.ts:35
+msgid "This relation is based on a backlink."
+msgstr ""
+
+#: source/tmp/RelatedFilesTab.vue.ts:113
+#, javascript-format
+msgid "This relation is based on %s shared tags: %s"
+msgstr ""
 
 #: source/tmp/ReferencesTab.vue.ts:32
 msgid "There are no citations in this document."
