@@ -100,6 +100,11 @@ module.exports = {
       }
     }
   },
+  rebuildConfig: {
+    // Since we must build native modules for both x64 as well as arm64, we have
+    // to explicitly build it everytime for the correct architecture
+    force: true
+  },
   packagerConfig: {
     appBundleId: 'com.zettlr.app',
     // This info.plist file contains file association for the app on macOS.
