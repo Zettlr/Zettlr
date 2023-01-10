@@ -38,11 +38,8 @@ export const plainLinkParser: InlineParser = {
       return -1 // Somehow if we render an URL inside a Link title, the Link parser doesn't parse the link anymore
     }
 
-    // Using InlineParsers unfortunately doesn't shield from stumbling upon
-    // newlines, and badly formatted documents can therefore break this.
-    const nextSpace = slice.includes('\n')
-      ? slice.indexOf('\n')
-      : slice.includes(' ') ? slice.indexOf(' ') : ctx.end - pos
+    const match = /\s/.exec(slice)
+    const nextSpace = match !== null ? match.index : ctx.end - pos
 
     if (protocolRe.test(slice) || emailRe.test(slice) || wwwRe.test(slice)) {
       return ctx.addElement(ctx.elt('URL', pos, pos + nextSpace))
