@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the Zettlr package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
@@ -12,14 +11,14 @@ msgstr ""
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: pt-BR\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:100
 msgid "No footnote text found."
-msgstr ""
+msgstr "Nenhum texto de nota de rodapé encontrado."
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:111
 #: source/app/service-providers/menu/menu.darwin.ts:315
@@ -59,7 +58,7 @@ msgstr "Código"
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:58
 #, javascript-format
 msgid "File %s does not exist."
-msgstr ""
+msgstr "O arquivo %s não existe."
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:88
 msgid "Word count"
@@ -84,7 +83,7 @@ msgstr "Abrir em Nova Aba"
 
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
-msgstr ""
+msgstr "Sem destaques"
 
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:133
 msgid "No suggestions"
@@ -190,11 +189,11 @@ msgstr "Mostrar aquivo"
 #: source/common/modules/markdown-editor/renderers/render-images.ts:92
 #, javascript-format
 msgid "Image not found: %s"
-msgstr ""
+msgstr "Imagem não encontrada: %s"
 
 #: source/common/modules/markdown-editor/linters/spellcheck.ts:148
 msgid "Spelling mistake"
-msgstr ""
+msgstr "Erro de grafia"
 
 #: source/common/util/format-date.ts:33
 msgid "just now"
@@ -524,11 +523,11 @@ msgstr "Pausa"
 
 #: source/tmp/PopoverPomodoro.vue.ts:87
 msgid "Sound Effect"
-msgstr ""
+msgstr "Efeito Sonoro"
 
 #: source/tmp/PopoverPomodoro.vue.ts:90
 msgid "Volume"
-msgstr ""
+msgstr "Volume"
 
 #: source/tmp/OtherFilesTab.vue.ts:13 source/tmp/MainSidebar.vue.ts:74
 msgid "Other files"
@@ -646,12 +645,16 @@ msgid ""
 "This profile is protected. This means that it will be restored when you "
 "remove or rename it."
 msgstr ""
+"Este perfil está protegido. Isso significa que ele será restaurado quando "
+"você o remover ou renomear."
 
 #: source/tmp/Defaults.vue.ts:73
 msgid ""
 "This profile appears to be either missing the writer or reader property. "
 "Make sure to set both so that Zettlr can use this profile."
 msgstr ""
+"Este perfil parece não ter propriedades de leitura e escrita. "
+"Certifique-se de definir ambos para que o Zettlr possa usar esse perfil."
 
 #: source/tmp/Defaults.vue.ts:76
 #: source/win-main/file-manager/util/file-item-context.ts:41
@@ -677,9 +680,8 @@ msgid "Actions"
 msgstr "Ações"
 
 #: source/tmp/List.vue.ts:147
-#, fuzzy
 msgid "Delete"
-msgstr "Apagar arquivo"
+msgstr "Excluir"
 
 #. Apparently we have a simple array, so exactly one column
 #: source/tmp/List.vue.ts:169
@@ -696,11 +698,11 @@ msgstr "Arquivos relacionados"
 
 #: source/tmp/PopoverTags.vue.ts:77
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 #: source/tmp/PopoverTags.vue.ts:78
 msgid "Count"
-msgstr ""
+msgstr "Contar"
 
 #: source/tmp/PopoverTags.vue.ts:103
 msgid "Filter tags…"
@@ -732,20 +734,20 @@ msgstr "Sem arquivos relacionados"
 
 #: source/tmp/RelatedFilesTab.vue.ts:29
 msgid "This relation is based on a bidirectional link."
-msgstr ""
+msgstr "Esta relação é baseada em um link bidirecional."
 
 #: source/tmp/RelatedFilesTab.vue.ts:32
 msgid "This relation is based on an outbound link."
-msgstr ""
+msgstr "Esta relação é baseada em um link de saída."
 
 #: source/tmp/RelatedFilesTab.vue.ts:35
 msgid "This relation is based on a backlink."
-msgstr ""
+msgstr "Esta relação é baseada em um backlink."
 
 #: source/tmp/RelatedFilesTab.vue.ts:113
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
-msgstr ""
+msgstr "Esta relação é baseada em %s tags compartilhadas: %s"
 
 #: source/tmp/ReferencesTab.vue.ts:32
 msgid "There are no citations in this document."
@@ -909,7 +911,7 @@ msgstr "Modo editor"
 
 #: source/win-preferences/schema/editor.ts:97
 msgid "Check Markdown for style issues"
-msgstr ""
+msgstr "Verifique problemas de estilo no Markdown"
 
 #: source/win-preferences/schema/editor.ts:104
 msgid "Mute non-focused lines in distraction-free mode"
@@ -1070,13 +1072,12 @@ msgid "Options for ZKN elements"
 msgstr "Opções para elementos ZKN"
 
 #: source/win-preferences/schema/zettelkasten.ts:42
-#, fuzzy
 msgid "Link with filename only"
-msgstr "Apenas nome do arquivo"
+msgstr "Link contendo apenas o nome do arquivo"
 
 #: source/win-preferences/schema/zettelkasten.ts:47
 msgid "When linking files, add the filename …"
-msgstr "Quando linkar arquivos, adicione o nome do arquivo ..."
+msgstr "Quando linkar arquivos, adicione o nome do arquivo …"
 
 #: source/win-preferences/schema/zettelkasten.ts:50
 msgid "always"
@@ -1448,18 +1449,17 @@ msgstr "Abrir projeto"
 #: source/app/service-providers/commands/rename-tag.ts:47
 #: source/app/service-providers/commands/file-rename.ts:96
 msgid "Yes"
-msgstr ""
+msgstr "Sim"
 
 #. 0: Save all changes
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
 #: source/app/service-providers/commands/file-rename.ts:97
 msgid "No"
-msgstr ""
+msgstr "Não"
 
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
-#, fuzzy
 msgid "There are unsaved changes. Do you want to save them first?"
-msgstr "Há alterações não salvas no arquivo atual. Deseja omitir ou salvar?"
+msgstr "Há alterações não salvas. Você quer salvá-los primeiro?"
 
 #: source/app/service-providers/windows/dialog/prompt.ts:32
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:37
@@ -1850,7 +1850,7 @@ msgstr "Abrir pasta raiz %s ..."
 #: source/app/service-providers/commands/root-open.ts:147
 #, javascript-format
 msgid "%s has been loaded."
-msgstr "% carregado."
+msgstr "%s carregado."
 
 #: source/app/service-providers/commands/root-open.ts:159
 #, javascript-format
@@ -1938,12 +1938,11 @@ msgstr "Não foi possível criar pasta"
 
 #: source/app/service-providers/commands/dir-project-export.ts:121
 msgid "Project successfully exported. Click to show."
-msgstr ""
+msgstr "Projeto exportado com sucesso. Clique para exibir."
 
 #: source/app/service-providers/commands/dir-project-export.ts:121
-#, fuzzy
 msgid "Export"
-msgstr "Exportar..."
+msgstr "Exportar"
 
 #: source/app/service-providers/commands/export.ts:79
 msgid "Choose export destination"
@@ -1966,17 +1965,17 @@ msgstr "Ocorreu um erro na exportação: %s"
 #: source/app/service-providers/commands/rename-tag.ts:44
 #: source/app/service-providers/commands/file-rename.ts:93
 msgid "Confirm"
-msgstr ""
+msgstr "Confirmar"
 
 #: source/app/service-providers/commands/rename-tag.ts:45
 #, javascript-format
 msgid "Replace tag \"%s\" with \"%s\" across %s files?"
-msgstr ""
+msgstr "Substituir a tag \"%s\" por \"%s\" nos arquivos %s?"
 
 #: source/app/service-providers/commands/file-rename.ts:94
 #, javascript-format
 msgid "Update %s internal links to file %s?"
-msgstr ""
+msgstr "Atualizar os links internos de %s para o arquivo %s?"
 
 #: source/app/service-providers/commands/file-duplicate.ts:43
 #: source/app/service-providers/commands/file-duplicate.ts:59
@@ -1988,7 +1987,7 @@ msgstr "Não foi possível criar arquivo"
 #: source/app/service-providers/commands/file-duplicate.ts:71
 #, javascript-format
 msgid "Copy of %s"
-msgstr ""
+msgstr "Cópia de %s"
 
 #: source/app/service-providers/commands/import.ts:35
 msgid "You have to select a directory to import to."
