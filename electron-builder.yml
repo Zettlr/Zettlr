@@ -113,4 +113,5 @@ rpm:
   # How do we implement this? --> https://github.com/ferdium/ferdium-app/issues/416
   # Docs on this option --> https://www.electron.build/configuration/linux
   # Other flags we could use --> https://github.com/jordansissel/fpm/wiki#usage
-  fpm: ['--rpm-rpmbuild-define "_build_id_links none"']
+  fpm:
+  - --rpm-rpmbuild-define "_build_id_links none"
