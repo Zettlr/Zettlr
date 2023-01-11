@@ -74,7 +74,7 @@ class LinkWidget extends WidgetType {
     })
 
     tippy(elem, {
-      content: this.linkUrl,
+      content: validURI,
       arrow: false,
       delay: 100,
       placement: 'auto-start'

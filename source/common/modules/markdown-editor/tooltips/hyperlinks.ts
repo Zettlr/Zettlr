@@ -14,6 +14,10 @@
 
 import { EditorView, hoverTooltip, Tooltip } from '@codemirror/view'
 import { syntaxTree } from '@codemirror/language'
+import { configField } from '../util/configuration'
+import makeValidUri from '@common/util/make-valid-uri'
+
+const path = window.path
 
 /**
  * Displays a tooltip for URLs and Links across a document
@@ -38,13 +42,15 @@ function urlTooltips (view: EditorView, pos: number, side: 1 | -1): Tooltip|null
 
   // We got an URL.
   const url = view.state.sliceDoc(nodeAt.from, nodeAt.to)
+  const base = path.dirname(view.state.field(configField).metadata.path)
+  const validURI = makeValidUri(url, base)
 
   return {
     pos,
     above: true,
     create (view) {
       let dom = document.createElement('div')
-      dom.textContent = url
+      dom.textContent = validURI
       return { dom }
     }
   }
