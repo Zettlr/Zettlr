@@ -21,6 +21,7 @@ import openMarkdownLink from '../util/open-markdown-link'
 import { linkImageMenu } from '../context-menu/link-image-menu'
 import { configField } from '../util/configuration'
 import makeValidUri from '@common/util/make-valid-uri'
+import tippy from 'tippy.js'
 
 const path = window.path
 
@@ -65,11 +66,20 @@ class LinkWidget extends WidgetType {
         clickAndSelect(view, this.node)(event)
       }
     })
+
     elem.addEventListener('contextmenu', (event) => {
       event.preventDefault()
       event.stopPropagation()
       linkImageMenu(view, this.node, { x: event.clientX, y: event.clientY })
     })
+
+    tippy(elem, {
+      content: this.linkUrl,
+      arrow: false,
+      delay: 100,
+      placement: 'auto-start'
+    })
+
     return elem
   }
 
