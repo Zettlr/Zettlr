@@ -104,3 +104,13 @@ deb:
 #
 rpm:
   compression: xz
+  # We need to set an RPM flag to none to avoid conflicts with other Electron
+  # apps. This is a fedora-specific feature baked into the RPM builds, and if I
+  # didn't misunderstand something, it seems to be a form of Lockfile.
+  #
+  # What is this? --> https://fedoraproject.org/wiki/Releases/FeatureBuildId
+  # How do we avoid this? --> https://github.com/jordansissel/fpm/issues/1503
+  # How do we implement this? --> https://github.com/ferdium/ferdium-app/issues/416
+  # Docs on this option --> https://www.electron.build/configuration/linux
+  # Other flags we could use --> https://github.com/jordansissel/fpm/wiki#usage
+  fpm: ['--rpm-rpmbuild-define "_build_id_links none"']
