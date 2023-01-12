@@ -55,6 +55,7 @@ export interface ConfigOptions {
     autoSave: 'off'|'immediately'|'delayed'
     citeStyle: 'in-text'|'in-text-suffix'|'regular'
     autoCloseBrackets: boolean
+    showLinkPreviews: boolean
     defaultSaveImagePath: string
     enableTableHelper: boolean
     indentUnit: number

@@ -23,6 +23,7 @@ import DirRescan from './dir-rescan'
 import DirSetIcon from './dir-set-icon'
 import DirSort from './dir-sort'
 import Export from './export'
+import FetchLinkPreview from './fetch-link-preview'
 import FileDelete from './file-delete'
 import FileDuplicate from './file-duplicate'
 import FileNew from './file-new'
@@ -64,6 +65,7 @@ export const commands = [
   DirSetIcon,
   DirSort,
   Export,
+  FetchLinkPreview,
   FileDelete,
   FileDuplicate,
   FileNew,

@@ -24,6 +24,7 @@ import makeValidUri from '@common/util/make-valid-uri'
 import tippy from 'tippy.js'
 
 const path = window.path
+const ipcRenderer = window.ipc
 
 class LinkWidget extends WidgetType {
   constructor (readonly linkTitle: string, readonly linkUrl: string, readonly node: SyntaxNode) {
@@ -40,7 +41,7 @@ class LinkWidget extends WidgetType {
 
     const elem = document.createElement('a')
     elem.innerText = this.linkTitle
-    elem.setAttribute('title', validURI)
+    // elem.setAttribute('title', validURI)
     elem.setAttribute('href', validURI)
 
     elem.classList.add('markdown-link')
@@ -73,12 +74,52 @@ class LinkWidget extends WidgetType {
       linkImageMenu(view, this.node, { x: event.clientX, y: event.clientY })
     })
 
-    tippy(elem, {
+    const tooltip = tippy(elem, {
       content: validURI,
       arrow: false,
       delay: 100,
-      placement: 'auto-start'
+      placement: 'auto-start',
+      allowHTML: true
     })
+
+    ipcRenderer.invoke('application', { command: 'fetch-link-preview', payload: validURI })
+      .then(res => {
+        if (res === undefined) {
+          return // No link preview available
+        }
+
+        const dom = document.createElement('div')
+
+        const h4 = document.createElement('h4')
+        h4.textContent = res.title
+        dom.appendChild(h4)
+
+        if (res.image !== undefined) {
+          const img = document.createElement('img')
+          img.src = res.image
+          img.style.maxWidth = '100px'
+          img.style.maxHeight = '100px'
+          img.style.float = 'left'
+          img.style.marginRight = '10px'
+          img.style.marginBottom = '10px'
+          dom.appendChild(img)
+        }
+
+        if (res.summary !== undefined) {
+          const para = document.createElement('p')
+          para.textContent = res.summary
+          dom.appendChild(para)
+        }
+
+        const link = document.createElement('span')
+        link.textContent = validURI
+        link.style.fontSize = '80%'
+        link.style.fontFamily = 'monospace'
+        dom.appendChild(link)
+
+        tooltip.setContent(dom)
+      })
+      .catch(err => { console.error(`Could not generate link preview for URL ${validURI}`, err) })
 
     return elem
   }

@@ -18,6 +18,7 @@ import { configField } from '../util/configuration'
 import makeValidUri from '@common/util/make-valid-uri'
 
 const path = window.path
+const ipcRenderer = window.ipc
 
 /**
  * Displays a tooltip for URLs and Links across a document
@@ -49,8 +50,44 @@ function urlTooltips (view: EditorView, pos: number, side: 1 | -1): Tooltip|null
     pos,
     above: true,
     create (view) {
-      let dom = document.createElement('div')
+      const dom = document.createElement('div')
       dom.textContent = validURI
+      ipcRenderer.invoke('application', { command: 'fetch-link-preview', payload: validURI })
+        .then(res => {
+          if (res === undefined) {
+            return // No link preview available
+          }
+
+          dom.innerHTML = ''
+
+          const h4 = document.createElement('h4')
+          h4.textContent = res.title
+          dom.appendChild(h4)
+
+          if (res.image !== undefined) {
+            const img = document.createElement('img')
+            img.src = res.image
+            img.style.maxWidth = '100px'
+            img.style.maxHeight = '100px'
+            img.style.float = 'left'
+            img.style.marginRight = '10px'
+            img.style.marginBottom = '10px'
+            dom.appendChild(img)
+          }
+
+          if (res.summary !== undefined) {
+            const para = document.createElement('p')
+            para.textContent = res.summary
+            dom.appendChild(para)
+          }
+
+          const link = document.createElement('span')
+          link.textContent = validURI
+          link.style.fontSize = '80%'
+          link.style.fontFamily = 'monospace'
+          dom.appendChild(link)
+        })
+        .catch(err => { console.error(`Could not generate link preview for URL ${validURI}`, err) })
       return { dom }
     }
   }

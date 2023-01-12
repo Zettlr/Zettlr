@@ -187,6 +187,7 @@ there.
   targets as a ring progress bar in the position of the file icon
 - **New Feature**: Zettlr can now automatically update internal links (Wiki/
   Zettelkasten style) if you rename a file
+- **New Feature**: When you hover over a link, you can now get a link preview
 - The TableEditor now has a clear data saving strategy: Whenever you change a
   table, you need to manually click the disk icon at the top of the table to
   apply all your changes to the document so that it can then be saved

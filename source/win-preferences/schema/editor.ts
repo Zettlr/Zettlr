@@ -121,6 +121,11 @@ export default function (): any {
         },
         {
           type: 'checkbox',
+          label: trans('Show link previews'),
+          model: 'editor.showLinkPreviews'
+        },
+        {
+          type: 'checkbox',
           label: trans('Count characters instead of words (e.g., for Chinese)'),
           model: 'editor.countChars'
         }

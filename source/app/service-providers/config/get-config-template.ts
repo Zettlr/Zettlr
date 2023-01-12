@@ -108,6 +108,7 @@ export default function getConfigTemplate (): ConfigOptions {
       autoSave: 'delayed',
       autocompleteAcceptSpace: false, // Whether you can type spaces in autocorrect
       autoCloseBrackets: true,
+      showLinkPreviews: true, // Whether to fetch link previews in the editor
       defaultSaveImagePath: '',
       citeStyle: 'regular', // Determines how autocomplete will complete citations
       enableTableHelper: true, // Enable the table helper plugin
