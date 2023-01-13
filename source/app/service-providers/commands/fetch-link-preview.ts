@@ -28,10 +28,15 @@ export default class FetchLinkPreview extends ZettlrCommand {
    *
    * @return  {Promise<LinkPreviewResult|undefined>}       The result
    */
-  async run (evt: string, arg: any): Promise<LinkPreviewResult|undefined> {
+  async run (evt: string, arg: string): Promise<LinkPreviewResult|undefined> {
     const { editor } = this._app.config.getConfig()
     if (!editor.showLinkPreviews) {
       return undefined // No link previews wanted
+    }
+
+    // Catch a set of links that we can't fetch a preview for
+    if (arg.startsWith('mailto')) {
+      return undefined
     }
 
     try {
