@@ -21,12 +21,28 @@ export const citationParser: InlineParser = {
   name: 'citations',
   before: 'Link', // [@citekey, p. 123] will otherwise be detected as a link
   parse: (ctx, next, pos) => {
-    const currentOffset = pos - ctx.offset
+    // The next char must be either an opening bracket or an @
+    if (next !== 64 && next !== 91) {
+      // 64 = [; 91 = @
+      return -1
+    }
+
+    // Ignore anything before pos
+    const slice = ctx.text.slice(pos - ctx.offset)
+
+    // Ensure the character before is valid
+    const charBefore = pos > 0 ? ctx.slice(pos - 1, pos) : ' '
+    const validBefore = pos === 0 || [ '(', ' ' ].includes(charBefore)
+    if (!validBefore) {
+      return -1
+    }
+
     // NOTE: We MUST always extract the citations from the whole line. Otherwise
     // @-symbols in illegal positions (e.g. emails) will be detected as valid.
-    // Therefore we filter out all citations that do not exactly start at our
-    // current offset.
-    const citations = extractCitations(ctx.text).filter(c => c.from === currentOffset)
+    // However, running extractCitations on a considerable piece of text has a
+    // large performance impact, so we need to ensure we only run it if there's
+    // a reasonable chance there's a citation at this position.
+    const citations = extractCitations(slice).filter(c => c.from === 0)
 
     // The first found citation after currentOffset must be exactly there.
     if (citations.length !== 1) {
