@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2023-01-13 02:55+0000\n"
-"PO-Revision-Date: 2023-01-07 14:32+0100\n"
+"PO-Revision-Date: 2023-01-13 11:47+0100\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -992,7 +992,7 @@ msgstr "Tabelleneditor aktivieren"
 
 #: source/win-preferences/schema/editor.ts:124
 msgid "Show link previews"
-msgstr ""
+msgstr "Link-Vorschauen anzeigen"
 
 #: source/win-preferences/schema/editor.ts:129
 msgid "Count characters instead of words (e.g., for Chinese)"
