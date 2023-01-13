@@ -1056,7 +1056,7 @@ function handleDragLeave (event: DragEvent) {
     padding-top: 50px;
     padding-bottom: 50px;
 
-    .muted { opacity:0.2; }
+    .muted { opacity: 0.2; }
   }
 
   .cm-content {
