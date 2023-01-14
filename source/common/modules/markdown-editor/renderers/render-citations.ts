@@ -23,7 +23,7 @@ import { citationMenu } from '../context-menu/citation-menu'
 import { configField } from '../util/configuration'
 
 class CitationWidget extends WidgetType {
-  constructor (readonly citation: CitePosition, readonly node: SyntaxNode) {
+  constructor (readonly citation: CitePosition, readonly rawCitation: string, readonly node: SyntaxNode) {
     super()
   }
 
@@ -42,7 +42,7 @@ class CitationWidget extends WidgetType {
     if (renderedCitation !== undefined) {
       elem.innerText = renderedCitation
     } else {
-      elem.innerText = '[' + this.citation.citations.map(x => '@' + x.id).join(', ') + ']'
+      elem.innerText = this.rawCitation
       elem.classList.add('error')
     }
     elem.addEventListener('click', clickAndSelect(view, this.node))
@@ -74,7 +74,7 @@ function createWidget (state: EditorState, node: SyntaxNodeRef): CitationWidget|
     return undefined // Should not happen, but we never know.
   }
 
-  return new CitationWidget(citation[0], node.node)
+  return new CitationWidget(citation[0], state.sliceDoc(node.from, node.to), node.node)
 }
 
 export const renderCitations = renderInlineWidgets(shouldHandleNode, createWidget)
