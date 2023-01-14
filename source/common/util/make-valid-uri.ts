@@ -15,7 +15,6 @@
 
 // NOTE: fileExists is called "isFile" everywhere else, we have just renamed
 // it because of a naming conflict in the function.
-import fileExists from './is-file'
 import { getProtocolRE, getLinkRE, getMarkDownFileRE } from '../regular-expressions'
 
 const path = window.path
@@ -77,11 +76,8 @@ export default function makeValidUri (uri: string, base: string = ''): string {
   } else if (uri.startsWith('//') || uri.startsWith('./') || uri.startsWith('../')) {
     // We know it's a file (shared drive, or relative to this directory)
     isFile = true
-  } else if (path.isAbsolute(uri) && fileExists(uri)) {
-    // The link is already absolute and exists
-    isFile = true
-  } else if (path.isAbsolute(uri) && fileExists(path.resolve(base, uri))) {
-    // The link is relative and exists
+  } else if (path.isAbsolute(uri)) {
+    // The link is already absolute
     isFile = true
   }
 
