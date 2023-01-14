@@ -16,6 +16,8 @@
 import ZettlrCommand from './zettlr-command'
 import { MDFileDescriptor } from '@dts/common/fsal'
 
+const MAX_FILE_PREVIEW_LENGTH = 300
+
 export default class FilePathFindMetaData extends ZettlrCommand {
   constructor (app: any) {
     super(app, [ 'find-exact', 'file-find-and-return-meta-data' ])
@@ -33,26 +35,35 @@ export default class FilePathFindMetaData extends ZettlrCommand {
    */
   async run (evt: string, arg: any): Promise<MDFileDescriptor|undefined|any[]> {
     // Quick'n'dirty command to return the Meta descriptor for the given query
+    const descriptor = this._app.fsal.findExact(arg)
+    if (descriptor === undefined) {
+      return undefined
+    }
+
     if (evt === 'find-exact') {
-      const descriptor = this._app.fsal.findExact(arg)
-      if (descriptor === undefined) {
-        return undefined
-      }
       return descriptor
     }
 
-    const file = this._app.fsal.findExact(arg)
-    if (file !== undefined) {
-      const contents = (await this._app.fsal.loadAnySupportedFile(file.path))
-      let preview = contents.substring(0, 200)
-      if (contents.length > 200) {
-        preview += '...'
-      }
+    const contents = await this._app.fsal.loadAnySupportedFile(descriptor.path)
+    const lines = contents.split('\n')
 
-      return ([ file.name, preview, file.wordCount, file.modtime ])
+    let preview = ''
+    let i = 0
+    while (preview.length <= MAX_FILE_PREVIEW_LENGTH && i < 10) {
+      const remainingChars = MAX_FILE_PREVIEW_LENGTH - preview.length
+      if (lines[i].length <= remainingChars) {
+        preview += lines[i] + '\n'
+      } else {
+        preview += lines[i].slice(0, remainingChars) + '…'
+      }
+      i++
     }
 
-    // We can't find it, so return Not Found
-    return undefined
+    return [
+      descriptor.name,
+      preview,
+      descriptor.wordCount,
+      descriptor.modtime
+    ]
   }
 }

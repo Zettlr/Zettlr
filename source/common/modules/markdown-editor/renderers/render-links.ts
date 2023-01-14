@@ -107,12 +107,15 @@ class LinkWidget extends WidgetType {
 
         if (res.summary !== undefined) {
           const para = document.createElement('p')
+          para.style.whiteSpace = 'pre-wrap'
           para.textContent = res.summary
           dom.appendChild(para)
         }
 
         const link = document.createElement('span')
-        link.textContent = validURI
+        // We can remove the "safe file" as this is a protocol only intended for
+        // local files
+        link.textContent = validURI.replace(/^safe-file:\/\//, '')
         link.style.fontSize = '80%'
         link.style.fontFamily = 'monospace'
         dom.appendChild(link)
