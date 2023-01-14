@@ -299,7 +299,11 @@ export default class MarkdownEditor extends EventEmitter {
             }
 
             const toInsert = files.map(f => {
-              const pathToInsert = path.posix.relative(cwd, f)
+              let pathToInsert = path.posix.relative(cwd, f)
+              if (!pathToInsert.startsWith('./') && !pathToInsert.startsWith('../')) {
+                pathToInsert = './' + pathToInsert
+              }
+
               if (/\.(?:png|jpe?g|gif|bmp|svg|tiff?)$/i.test(f)) {
                 return `![${path.basename(f)}](${pathToInsert})`
               } else {
@@ -312,7 +316,10 @@ export default class MarkdownEditor extends EventEmitter {
             // We have a Markdown/Code file to insert
             const data = JSON.parse(zettlrFile) as { type: 'code'|'file'|'directory'|'other', path: string, id?: string }
             const name = path.basename(data.path, path.extname(data.path))
-            const pathToInsert = path.posix.relative(cwd, data.path)
+            let pathToInsert = path.posix.relative(cwd, data.path)
+            if (!pathToInsert.startsWith('./') && !pathToInsert.startsWith('../')) {
+              pathToInsert = './' + pathToInsert
+            }
 
             if (data.type === 'file') {
               // Insert as Zkn link
