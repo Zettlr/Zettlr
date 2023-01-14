@@ -60,9 +60,13 @@ on:
     inputs:
       target:
         # Access using github.event.inputs.target
-        description: 'Target ("nightly"/"stable")'     
-        required: false
+        description: 'Target'
+        required: true
         default: 'nightly'
+        type: choice
+        options:
+        - nightly
+        - stable
   schedule: # Every Monday at noon (UTC) we run a scheduled nightly build
     - cron: '0 12 * * 1'
 
