@@ -79,14 +79,8 @@ defaults:
 env:
   # Easy way to set the node version
   NODE_VERSION: '16'
-  # Whenever we either trigger a build manually *or* a scheduled run starts,
-  # this indicates a nightly build, and NOT a regular, stable release. We are
-  # writing it here into the environment variable to keep the code DRY and for
-  # easier reference.
-  # BUG: Disabled due to a bug in Github Actions that will not resolve this
-  # environment variable, thus rendering this approach unusable. We have to
-  # manually copy this into the appropriate places.
-  # BUILD_NIGHTLY: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
+  # Determine if the pipeline should build a nightly or a regular release.
+  BUILD_NIGHTLY: ${{ (github.event_name == 'workflow_dispatch' && inputs.target === 'nightly') || github.event_name == 'schedule' }}
 
 # This workflow file contains four jobs, three to build the corresponding
 # releases on all three supported platforms, and a last one, which will
@@ -103,13 +97,13 @@ jobs:
     steps:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Clone repository (master branch)
-        if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
+        if: ${{ !env.BUILD_NIGHTLY }}
         uses: actions/checkout@v3
         with:
           ref: 'master'
           fetch-depth: 0 # Required for the tag verification step.
       - name: Clone repository (develop branch)
-        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
+        if: ${{ env.BUILD_NIGHTLY }}
         uses: actions/checkout@v3
         with:
           ref: 'develop'
@@ -121,7 +115,7 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
-        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
+        if: ${{ env.BUILD_NIGHTLY }}
         run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
@@ -135,8 +129,8 @@ jobs:
       # doesn't cause any havoc because we don't push unstable code to master,
       # BUT it looks bad.
       - name: Verify the corresponding tag does not yet exist
-        if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
-        # Note the ! - it will return 0 if the command fails, and 1 otherwise
+        if: ${{ !env.BUILD_NIGHTLY }}
+        # NOTE: the ! will return 0 if the command fails, and 1 otherwise
         run: '! git rev-parse "v${{env.version}}"'
       # Create the windows binaries. First package both for x64 and arm64, then
       # make an NSIS installer. Make sure to sign the windows installer using
@@ -188,13 +182,13 @@ jobs:
     steps:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Clone repository (master branch)
-        if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
+        if: ${{ !env.BUILD_NIGHTLY }}
         uses: actions/checkout@v3
         with:
           ref: 'master'
           fetch-depth: 0 # Required for the tag verification step.
       - name: Clone repository (develop branch)
-        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
+        if: ${{ env.BUILD_NIGHTLY }}
         uses: actions/checkout@v3
         with:
           ref: 'develop'
@@ -205,8 +199,7 @@ jobs:
       - name: Set up build environment
         run: yarn install --frozen-lockfile
       - name: Set tag version to nightly
-        # If this a scheduled workflow, we know that we should build a nightly
-        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
+        if: ${{ env.BUILD_NIGHTLY }}
         run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
@@ -214,7 +207,7 @@ jobs:
           pkgver=$(node ./scripts/get-pkg-version.js)
           echo "version=$pkgver" >> $GITHUB_ENV
       - name: Verify the corresponding tag does not yet exist # See windows build for detailed comments on this command
-        if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
+        if: ${{ !env.BUILD_NIGHTLY }}
         run: '! git rev-parse "v${{env.version}}"'
       # Save the macOS certificate on this runner for forge to access it in the
       # next step below.
@@ -262,13 +255,13 @@ jobs:
     steps:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Clone repository (master branch)
-        if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
+        if: ${{ !env.BUILD_NIGHTLY }}
         uses: actions/checkout@v3
         with:
           ref: 'master'
           fetch-depth: 0 # Required for the tag verification step.
       - name: Clone repository (develop branch)
-        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
+        if: ${{ env.BUILD_NIGHTLY }}
         uses: actions/checkout@v3
         with:
           ref: 'develop'
@@ -280,7 +273,7 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
-        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
+        if: ${{ env.BUILD_NIGHTLY }}
         run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
@@ -288,7 +281,7 @@ jobs:
           pkgver=$(node ./scripts/get-pkg-version.js)
           echo "version=$pkgver" >> $GITHUB_ENV
       - name: Verify the corresponding tag does not yet exist # See windows build for detailed comments on this command
-        if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
+        if: ${{ !env.BUILD_NIGHTLY }}
         run: '! git rev-parse "v${{env.version}}"'
       - name: Package Linux targets (x64)
         run: yarn package:linux-x64
@@ -339,7 +332,7 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
-        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
+        if: ${{ env.BUILD_NIGHTLY }}
         run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
@@ -389,13 +382,13 @@ jobs:
       # We must make sure to copy the three additional files
       # to the release folder because of the --delete flag in rsync below.
       - name: Copy Nightly Static Files
-        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
+        if: ${{ env.BUILD_NIGHTLY }}
         run: |
           cp ./scripts/assets/nightly-index.php ./release/index.php
           cp ./scripts/assets/nightly-sm_preview.png ./release/sm_preview.png
           cp ./resources/icons/png/512x512.png ./release/logo.png
       - name: Upload nightlies to the server
-        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
+        if: ${{ env.BUILD_NIGHTLY }}
         uses: easingthemes/ssh-deploy@v3.0.1
         env:
           SSH_PRIVATE_KEY: ${{ secrets.NIGHTLY_SSH_PRIVATE_KEY }}
@@ -407,7 +400,7 @@ jobs:
           TARGET: ${{ secrets.NIGHTLY_TARGET }}
       # OTHERWISE: Create a new release draft
       - name: Create release draft
-        if: ${{ !(github.event_name == 'workflow_dispatch' || github.event_name == 'schedule') }}
+        if: ${{ !env.BUILD_NIGHTLY }}
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
