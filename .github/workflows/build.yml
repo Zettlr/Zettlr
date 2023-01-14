@@ -80,7 +80,7 @@ env:
   # Easy way to set the node version
   NODE_VERSION: '16'
   # Determine if the pipeline should build a nightly or a regular release.
-  BUILD_NIGHTLY: ${{ (github.event_name == 'workflow_dispatch' && inputs.target === 'nightly') || github.event_name == 'schedule' }}
+  BUILD_NIGHTLY: ${{ (github.event_name == 'workflow_dispatch' && inputs.target == 'nightly') || github.event_name == 'schedule' }}
 
 # This workflow file contains four jobs, three to build the corresponding
 # releases on all three supported platforms, and a last one, which will
