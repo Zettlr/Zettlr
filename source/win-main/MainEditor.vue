@@ -391,8 +391,7 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     linkPreference: store.state.config['zkn.linkWithFilename'],
     linkFilenameOnly: store.state.config['zkn.linkFilenameOnly'],
     inputMode: store.state.config['editor.inputMode'],
-    readabilityMode: false, // TODO
-    typewriterMode: false // TODO
+    distractionFree: props.distractionFree.valueOf()
   } as EditorConfigOptions
 })
 

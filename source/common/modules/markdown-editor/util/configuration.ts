@@ -58,6 +58,7 @@ export interface EditorConfiguration {
   readabilityAlgorithm: 'dale-chall'|'gunning-fog'|'coleman-liau'|'automated-readability'
   readabilityMode: boolean
   typewriterMode: boolean
+  distractionFree: boolean
 }
 
 export function getDefaultConfig (): EditorConfiguration {
@@ -99,7 +100,8 @@ export function getDefaultConfig (): EditorConfiguration {
     readabilityAlgorithm: 'dale-chall',
     inputMode: 'default',
     readabilityMode: false,
-    typewriterMode: false
+    typewriterMode: false,
+    distractionFree: false
   }
 }
 

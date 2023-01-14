@@ -50,6 +50,7 @@ import { softwrapVisualIndent } from './plugins/visual-indent'
 import { codeblockBackground } from './plugins/codeblock-background'
 import { vim } from '@replit/codemirror-vim'
 import { emacs } from '@replit/codemirror-emacs'
+import { distractionFree } from './plugins/distraction-free'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -257,6 +258,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     // Some statistics we need for Markdown documents
     mdStatistics,
     typewriter,
+    distractionFree,
     tocField,
     markdownFolding,
     autocomplete,

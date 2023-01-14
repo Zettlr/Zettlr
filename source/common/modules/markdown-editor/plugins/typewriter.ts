@@ -17,9 +17,8 @@ import { Decoration, DecorationSet, EditorView } from '@codemirror/view'
 import { configField, configUpdateEffect } from '../util/configuration'
 
 /**
- * The class to be applied to all muted lines
+ * The class to be applied to the typewriter line
  */
-const typewriterLineDeco = Decoration.line({ class: 'muted' })
 const typewriterFocusedLineDeco = Decoration.line({ class: 'typewriter-active-line' })
 
 /**
@@ -72,41 +71,28 @@ const scrollAndTheme = EditorState.transactionExtender.of(transaction => {
 /**
  * Renders all muted lines (except the active one)
  */
-function renderMutedLines (state: EditorState): DecorationSet {
-  const widgets: any[] = []
-  const activeLine = state.doc.lineAt(state.selection.main.head).number
-
-  for (let i = 1; i <= state.doc.lines; i++) {
-    const lineStart = state.doc.line(i).from
-    if (i === activeLine) {
-      widgets.push(typewriterFocusedLineDeco.range(lineStart))
-    } else {
-      widgets.push(typewriterLineDeco.range(lineStart))
-    }
+function renderTypewriterLine (state: EditorState): DecorationSet {
+  if (!state.field(configField).typewriterMode) {
+    return Decoration.none
   }
-  return Decoration.set(widgets)
+
+  const activeLine = state.doc.lineAt(state.selection.main.head).number
+  const lineStart = state.doc.line(activeLine).from
+  return Decoration.set(typewriterFocusedLineDeco.range(lineStart))
 }
 
-const typewriterMuteLines = StateField.define<DecorationSet>({
+const typewriterLine = StateField.define<DecorationSet>({
   create (state: EditorState) {
-    if (!state.field(configField).typewriterMode) {
-      return Decoration.none
-    }
-
-    return renderMutedLines(state)
+    return renderTypewriterLine(state)
   },
   update (oldDecoSet, transaction) {
-    if (!transaction.state.field(configField).typewriterMode) {
-      return Decoration.none
-    }
-
-    return renderMutedLines(transaction.state)
+    return renderTypewriterLine(transaction.state)
   },
   provide: f => EditorView.decorations.from(f)
 })
 
 export const typewriter = [
   scrollAndTheme,
-  typewriterMuteLines,
+  typewriterLine,
   typewriterThemeCompartment.of([])
 ]
