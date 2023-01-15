@@ -1,4 +1,4 @@
-name: Lint
+name: Unit Tests / Lint
 
 on: [push, pull_request]
 
@@ -25,3 +25,9 @@ jobs:
       run: yarn install --immutable
     - name: Run ESLint
       run: yarn lint
+    - name: Run unit tests
+      run: yarn test
+    - name: Test CSL update
+      run: yarn update:csl
+    - name: Test Citation update
+      run: yarn update:citation
