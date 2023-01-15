@@ -266,6 +266,7 @@ there.
 - Upgrade Pandoc to `2.19.2`
 - Upgrade Chart.js to `4.x.x`
 - Upgrade CodeMirror to version 6
+- Upgrade to Yarn v2
 - Pandoc logs are now logged in every case
 - Improve the display and functionality of log messages
 - Switched the configuration file management for the different service providers

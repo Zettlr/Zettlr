@@ -161,5 +161,6 @@
     "typescript": "4.9.x",
     "vue-loader": "^17.0.1",
     "webpack": "^5.72.0"
-  }
+  },
+  "packageManager": "yarn@3.3.1"
 }

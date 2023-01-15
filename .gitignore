@@ -40,6 +40,15 @@ eslint_report.htm
 !.vscode/extensions.json
 !.vscode/zettlr.code-snippets
 
+# Yarn-specific ignores (cf. https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored)
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
 .history
