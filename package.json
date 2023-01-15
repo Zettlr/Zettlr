@@ -147,7 +147,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-vue": "^9.7.0",
     "eslint-webpack-plugin": "^3.2.0",
-    "fork-ts-checker-webpack-plugin": "^7.0.0",
+    "fork-ts-checker-webpack-plugin": "^7.3.0",
     "jsdom": "^20.0.2",
     "less": "^4.1.2",
     "less-loader": "^11.1.0",
