@@ -1,4 +1,4 @@
-name: Extract translatable strings from codebase
+name: i18n
 
 on:
   push:
@@ -13,7 +13,7 @@ env:
 
 jobs:
   refresh:
-    name: Extract translatable strings
+    name: i18n
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source

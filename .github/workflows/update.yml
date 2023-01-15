@@ -13,7 +13,7 @@ env:
   NODE_VERSION: '16'
 
 jobs:
-  refresh:
+  update:
     name: Update static assets
     runs-on: ubuntu-latest
     steps:

@@ -9,7 +9,8 @@ env:
   NODE_VERSION: '16'
 
 jobs:
-  lint:
+  check:
+    name: Unit Tests / Lint
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
