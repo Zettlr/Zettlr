@@ -15,7 +15,6 @@
   "description": "A Markdown Editor for the 21st century.",
   "main": ".webpack/main",
   "scripts": {
-    "postinstall": "electron-builder install-app-deps",
     "start": "cross-env NODE_ENV=develop electron-forge start",
     "package": "cross-env NODE_ENV=production SKIP_TYPECHECKING=true electron-forge package",
     "package:mac-x64": "cross-env NODE_ENV=production npm_config_arch=x64 electron-forge package --platform=darwin --arch=x64",
