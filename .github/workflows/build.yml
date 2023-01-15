@@ -111,8 +111,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
       - name: Set up build environment
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
         if: ${{ env.BUILD_NIGHTLY }}
@@ -196,8 +197,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
       - name: Set up build environment
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
       - name: Set tag version to nightly
         if: ${{ env.BUILD_NIGHTLY }}
         run: node ./scripts/set-nightly-version.js
@@ -269,8 +271,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
       - name: Set up build environment
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
         if: ${{ env.BUILD_NIGHTLY }}
@@ -328,8 +331,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
       - name: Set up build environment
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
         if: ${{ env.BUILD_NIGHTLY }}

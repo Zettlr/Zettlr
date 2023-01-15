@@ -5,6 +5,9 @@ on: [push, pull_request]
 permissions:
   contents: read
 
+env:
+  NODE_VERSION: '16'
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -13,10 +16,11 @@ jobs:
       with:
         # Always fetch the branch that triggered the event (develop or master)
         ref: ${{ github.ref }}
-    - name: Setup NodeJS 16
+    - name: Setup NodeJS ${{ env.NODE_VERSION }}
       uses: actions/setup-node@v3
       with:
-        node-version: '16'
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'yarn'
     - name: Install packages
       run: yarn install --immutable
     - name: Run ESLint
