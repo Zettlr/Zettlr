@@ -8,6 +8,9 @@ on:
   schedule:
     - cron: '17 2 * * *' # Run every night at 02:17 (random minute to avoid high loads)
 
+permissions:
+  contents: write
+
 env:
   NODE_VERSION: '16'
 
