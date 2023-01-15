@@ -1,4 +1,4 @@
-name: Update static assets (CSL files, translations, revealJS builds)
+name: Update static assets
 
 on:
   push:
