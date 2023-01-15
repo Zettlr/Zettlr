@@ -3,7 +3,7 @@ name: Update static assets (CSL files, translations, revealJS builds)
 on:
   push:
     paths:
-      - '.github/workflows/refresh.yml'
+      - '.github/workflows/update.yml'
   workflow_dispatch: {} # Used to manually trigger a nightly build.
   schedule:
     # Run on 1st and 15th of each month
@@ -36,7 +36,7 @@ jobs:
       # Update CSL files
       - name: Update CSL files
         run: |
-          yarn csl:refresh
+          yarn update:csl
           git add -A
           git diff-index --quiet HEAD || git commit -m "Update CSL files"
       # Update the CITATION.cff file if applicable
