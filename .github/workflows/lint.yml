@@ -18,6 +18,6 @@ jobs:
       with:
         node-version: '16'
     - name: Install packages
-      run: yarn install --frozen-lockfile
+      run: yarn install --immutable
     - name: Run ESLint
       run: yarn lint

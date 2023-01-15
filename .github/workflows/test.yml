@@ -19,7 +19,7 @@ jobs:
       with:
         node-version: '16'
     - name: Install packages
-      run: yarn install --frozen-lockfile
+      run: yarn install --immutable
     - name: Run the unit tests
       run: yarn test
     - name: Test CSL refreshing
