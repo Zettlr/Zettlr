@@ -9,6 +9,9 @@ on:
     # Run on 1st and 15th of each month
     - cron: '1 2 1,15 * *'
 
+permissions:
+  contents: write
+
 env:
   NODE_VERSION: '16'
 
