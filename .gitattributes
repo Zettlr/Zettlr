@@ -1,2 +1,6 @@
 # Force lf for sh
 *.sh text eol=lf
+# Ensure git treats the somewhat larger Yarn installs as binary and doesn't run
+# diffs against them. (cf. https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored)
+/.yarn/releases/** binary
+/.yarn/plugins/** binary
