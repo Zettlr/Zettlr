@@ -3,7 +3,7 @@ name: Extract translatable strings from codebase
 on:
   push:
     paths:
-      - '.github/workflows/i18n.yml'
+      - '.github/workflows/i18n.yaml'
   workflow_dispatch: {} # Enable manual triggers
   schedule:
     - cron: '17 2 * * *' # Run every night at 02:17 (random minute to avoid high loads)
