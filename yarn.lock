@@ -225,6 +225,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@codemirror/language@npm:^6.4.0":
+  version: 6.4.0
+  resolution: "@codemirror/language@npm:6.4.0"
+  dependencies:
+    "@codemirror/state": ^6.0.0
+    "@codemirror/view": ^6.0.0
+    "@lezer/common": ^1.0.0
+    "@lezer/highlight": ^1.0.0
+    "@lezer/lr": ^1.0.0
+    style-mod: ^4.0.0
+  checksum: 607072e234db59a9a21eb41b8777b62d68a55ed28298edc4f6aaedfcf52349db1fe3ff3e7747ccfc77f03757bad45ba9a657d59a0e9c67be1231902586dec7a3
+  languageName: node
+  linkType: hard
+
 "@codemirror/legacy-modes@npm:^6.0.0":
   version: 6.3.1
   resolution: "@codemirror/legacy-modes@npm:6.3.1"
@@ -13425,7 +13439,7 @@ __metadata:
     "@codemirror/lang-markdown": ^6.0.0
     "@codemirror/lang-php": ^6.0.0
     "@codemirror/lang-python": ^6.0.0
-    "@codemirror/language": ^6.0.0
+    "@codemirror/language": ^6.4.0
     "@codemirror/legacy-modes": ^6.0.0
     "@codemirror/search": ^6.0.0
     "@codemirror/state": ^6.0.0
