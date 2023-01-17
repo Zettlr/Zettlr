@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-01-13 02:55+0000\n"
+"POT-Creation-Date: 2023-01-17 19:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -158,27 +158,27 @@ msgstr "Seleccionar todo"
 msgid "Copy equation code"
 msgstr "Copia el código de la ecuación"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:72
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:71
 msgid "Open Link"
 msgstr "Abrir enlace"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:81
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
 msgid "Copy Mail Address"
 msgstr "Copiar dirección de correo"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:81
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
 msgid "Copy Link"
 msgstr "Copiar enlace"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:90
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:89
 msgid "Copy image to clipboard"
 msgstr "Copia la imagen en el porta-papeles"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:96
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:95
 msgid "Open in browser"
 msgstr "Abre en el navegador"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:102
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:101
 #: source/win-main/file-manager/util/file-item-context.ts:79
 msgid "Show file"
 msgstr "Mostrar archivo"
@@ -1311,12 +1311,12 @@ msgstr ""
 "Poner los archivos creados automáticamente en este directorio (debe ser "
 "cargado en Zettlr)"
 
-#: source/app/service-providers/citeproc/index.ts:231
-#: source/app/service-providers/citeproc/index.ts:427
+#: source/app/service-providers/citeproc/index.ts:236
+#: source/app/service-providers/citeproc/index.ts:434
 msgid "The citation database could not be loaded"
 msgstr "La base de datos de citaciones no se ha podido cargar"
 
-#: source/app/service-providers/citeproc/index.ts:415
+#: source/app/service-providers/citeproc/index.ts:422
 msgid "Changes to the library file detected. Reloading …"
 msgstr ""
 "Se han detectado cambios en el archivo de la biblioteca. Recargando...."
