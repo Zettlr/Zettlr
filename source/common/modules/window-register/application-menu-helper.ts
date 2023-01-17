@@ -121,6 +121,18 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
           closeSubmenu = null
         } // Else: Keep it open
       })
+
+      appMenu.addEventListener('mousedown', (event: MouseEvent) => {
+        const point = { x: event.clientX, y: event.clientY }
+        const rect: DOMRect = menuItem.getBoundingClientRect()
+
+        if (pointInRect(point, rect)) {
+          // It's on the menu item, so prevent default and stop propagation so
+          // that the menu doesn't close
+          event.preventDefault()
+          event.stopPropagation()
+        }
+      })
     }
 
     appMenu.appendChild(menuItem)
