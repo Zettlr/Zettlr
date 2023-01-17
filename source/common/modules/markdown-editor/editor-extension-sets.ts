@@ -62,6 +62,7 @@ export interface CoreExtensionOptions {
   remoteConfig: {
     filePath: string
     startVersion: number
+    editorId: string
     pullUpdates: (filePath: string, version: number) => Promise<Update[]|false>
     pushUpdates: (filePath: string, version: number, updates: Update[]) => Promise<boolean>
   }
@@ -151,6 +152,7 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
 
     // Enables the editor to fetch updates to the document from main
     hookDocumentAuthority(
+      options.remoteConfig.editorId,
       options.remoteConfig.filePath,
       options.remoteConfig.startVersion,
       options.remoteConfig.pullUpdates,

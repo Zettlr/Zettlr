@@ -99,6 +99,7 @@ export interface DocumentInfo {
 
 export default class MarkdownEditor extends EventEmitter {
   private readonly _instance: EditorView
+  private readonly editorId: string
   private readonly fetchDoc: (filePath: string) => Promise<{ content: string, type: DocumentType, startVersion: number }>
   private readonly pullUpdates: (filePath: string, version: number) => Promise<Update[]|false>
   private readonly pushUpdates: (filePath: string, version: number, updates: Update[]) => Promise<boolean>
@@ -133,6 +134,7 @@ export default class MarkdownEditor extends EventEmitter {
    */
   constructor (
     anchorElement: Element|DocumentFragment|undefined,
+    editorId: string,
     getDocument: (path: string) => Promise<{ content: string, type: DocumentType, startVersion: number }>,
     pullUpdates: (filePath: string, version: number) => Promise<Update[]|false>,
     pushUpdates: (filePath: string, version: number, updates: Update[]) => Promise<boolean>
@@ -142,6 +144,8 @@ export default class MarkdownEditor extends EventEmitter {
     this.fetchDoc = getDocument
     this.pullUpdates = pullUpdates
     this.pushUpdates = pushUpdates
+
+    this.editorId = editorId
     // Since the editor state needs to be rebuilt whenever the document changes,
     // we have to persist the databases (and feed them to the state) everytime
     // we have to rebuild it (during swapDoc).
@@ -191,6 +195,7 @@ export default class MarkdownEditor extends EventEmitter {
       remoteConfig: {
         filePath,
         startVersion,
+        editorId: this.editorId,
         pullUpdates: this.pullUpdates,
         pushUpdates: this.pushUpdates
       },

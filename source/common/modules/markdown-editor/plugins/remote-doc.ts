@@ -24,6 +24,7 @@ type PullUpdateCallback = (filePath: string, version: number) => Promise<Update[
 type PushUpdateCallback = (filePath: string, version: number, updates: Update[]) => Promise<boolean>
 
 export function hookDocumentAuthority (
+  editorId: string,
   filePath: string,
   startVersion: number,
   pullUpdates: PullUpdateCallback,
@@ -158,6 +159,5 @@ export function hookDocumentAuthority (
     }
   })
 
-  // TODO: Use the leaf ID for the clientID later on!
-  return [ collab({ startVersion, clientID: undefined }), plugin ]
+  return [ collab({ startVersion, clientID: editorId }), plugin ]
 }

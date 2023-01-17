@@ -274,7 +274,7 @@ ipcRenderer.on('documents-update', (e, { event, context }) => {
 // MOUNTED HOOK
 onMounted(() => {
   // As soon as the component is mounted, initiate the editor
-  mdEditor = new MarkdownEditor(undefined, getDoc, pullUpdates, pushUpdates)
+  mdEditor = new MarkdownEditor(undefined, props.leafId, getDoc, pullUpdates, pushUpdates)
 
   const wrapper = document.getElementById(editorId.value)
 
