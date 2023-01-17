@@ -34,7 +34,6 @@ const ipcRenderer = window.ipc
  */
 function getURLForNode (node: SyntaxNode, state: EditorState): string|undefined {
   const child = node.getChild('URL')
-  console.log(child)
 
   if (child === null) {
     return undefined
