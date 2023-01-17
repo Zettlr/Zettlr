@@ -45,7 +45,7 @@ jobs:
         run: |
           ./scripts/i18n.sh
           git add -A
-          git diff-index --quiet HEAD || git commit -m "Update translations"
+          git diff-index --quiet HEAD || git commit -m "chore(i18n): Update translations"
       - name: Push changes
         uses: ad-m/github-push-action@v0.6.0
         with:
