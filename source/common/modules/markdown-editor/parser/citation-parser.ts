@@ -31,8 +31,8 @@ export const citationParser: InlineParser = {
     const slice = ctx.text.slice(pos - ctx.offset)
 
     // Ensure the character before is valid
-    const charBefore = pos > 0 ? ctx.slice(pos - 1, pos) : ' '
-    const validBefore = pos === 0 || [ '(', ' ' ].includes(charBefore)
+    const charBefore = pos > 0 ? ctx.slice(pos - 1, pos) : ''
+    const validBefore = charBefore === '' || [ '(', ' ' ].includes(charBefore)
     if (!validBefore) {
       return -1
     }
