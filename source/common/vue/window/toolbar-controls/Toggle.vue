@@ -11,7 +11,7 @@
     v-bind:title="titleWithFallback"
     v-on:click="toggle"
   >
-    <clr-icon v-if="control.icon" v-bind:shape="control.icon"></clr-icon>
+    <cds-icon v-if="control.icon" v-bind:shape="control.icon"></cds-icon>
     <span v-if="showLabel" class="toolbar-label" v-html="labelWithFallback"></span>
   </button>
 </template>

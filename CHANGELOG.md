@@ -272,6 +272,7 @@ there.
 - Upgrade Chart.js to `4.x.x`
 - Upgrade CodeMirror to version 6
 - Upgrade to Yarn v2
+- Switch from deprecated `@clr/icons` to `@cds/core`
 - Pandoc logs are now logged in every case
 - Improve the display and functionality of log messages
 - Switched the configuration file management for the different service providers

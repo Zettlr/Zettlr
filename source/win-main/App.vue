@@ -293,7 +293,7 @@ export default defineComponent({
           type: 'button',
           id: 'show-tag-cloud',
           title: trans('Tags'),
-          icon: 'tags',
+          icon: 'tag',
           badge: undefined // this.hasTagSuggestions
         },
         {
@@ -314,14 +314,16 @@ export default defineComponent({
           type: 'button',
           id: 'previous-file',
           title: trans('Previous file'),
-          icon: 'arrow left',
+          icon: 'arrow',
+          direction: 'left',
           visible: this.getToolbarButtonDisplay('showPreviousFileButton')
         },
         {
           type: 'button',
           id: 'next-file',
           title: trans('Next file'),
-          icon: 'arrow right',
+          icon: 'arrow',
+          direction: 'right',
           visible: this.getToolbarButtonDisplay('showNextFileButton')
         },
         {

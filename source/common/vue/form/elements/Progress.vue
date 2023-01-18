@@ -11,7 +11,7 @@
       class="interrupt-button"
       v-on:click="$emit('interrupt')"
     >
-      <clr-icon shape="times" size="14"></clr-icon>
+      <cds-icon shape="times" size="14"></cds-icon>
     </button>
   </div>
 </template>

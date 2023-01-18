@@ -3,12 +3,12 @@
     <!-- Other files contents -->
     <h1>
       {{ otherFilesLabel }}
-      <clr-icon
+      <cds-icon
         id="open-dir-external"
         v-bind:title="openDirLabel"
         shape="folder"
         class="is-solid"
-      ></clr-icon>
+      ></cds-icon>
     </h1>
 
     <!-- Render all attachments -->
@@ -36,7 +36,7 @@
 <script lang="ts">
 import { trans } from '@common/i18n-renderer'
 import { DirDescriptor, OtherFileDescriptor } from '@dts/common/fsal'
-import { ClarityIcons } from '@clr/icons'
+import { ClarityIcons } from '@cds/core/icon'
 import { defineComponent } from 'vue'
 
 const path = window.path
@@ -77,7 +77,7 @@ export default defineComponent({
       event.dataTransfer?.setData('text/x-zettlr-file', JSON.stringify(data))
     },
     getIcon: function (attachmentPath: string) {
-      const fileExtIcon = ClarityIcons.get('file-ext')
+      const fileExtIcon = ClarityIcons.registry?.['file-ext'] // ClarityIcons.get('file-ext')
       if (typeof fileExtIcon === 'string') {
         return fileExtIcon.replace('EXT', path.extname(attachmentPath).slice(1, 4))
       } else {

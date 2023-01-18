@@ -8,13 +8,14 @@
       }"
       v-bind:title="titleWithFallback"
     >
-      <clr-icon
+      <cds-icon
         v-if="control.icon"
         v-bind:shape="control.icon"
         v-bind:class="{
           'has-badge': control.badge
         }"
-      ></clr-icon>
+        v-bind:direction="control.direction"
+      ></cds-icon>
     </button>
     <span v-if="showLabel" class="toolbar-label" v-html="labelWithFallback"></span>
   </div>

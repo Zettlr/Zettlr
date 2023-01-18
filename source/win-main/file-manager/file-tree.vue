@@ -15,10 +15,10 @@
       </div>
 
       <div v-show="getFiles.length > 0" id="directories-files-header">
-        <clr-icon
+        <cds-icon
           shape="file"
           role="presentation"
-        ></clr-icon>{{ fileSectionHeading }}
+        ></cds-icon>{{ fileSectionHeading }}
       </div>
       <TreeItem
         v-for="item in getFiles"
@@ -31,10 +31,10 @@
       >
       </TreeItem>
       <div v-show="getDirectories.length > 0" id="directories-dirs-header">
-        <clr-icon
+        <cds-icon
           shape="tree-view"
           role="presentation"
-        ></clr-icon>{{ workspaceSectionHeading }}
+        ></cds-icon>{{ workspaceSectionHeading }}
       </div>
       <TreeItem
         v-for="item in getDirectories"

@@ -4,7 +4,8 @@
     <div>
       <ButtonControl
         v-bind:disabled="isMinimumYear"
-        v-bind:icon="'angle left'"
+        v-bind:icon="'angle'"
+        v-bind:direction="'left'"
         v-bind:label="String(year - 1)"
         v-bind:inline="true"
         v-on:click="yearMinus()"
@@ -12,7 +13,8 @@
       </ButtonControl>
       <ButtonControl
         v-bind:disabled="isCurrentYear"
-        v-bind:icon="'angle right'"
+        v-bind:icon="'angle'"
+        v-bind:direction="'right'"
         v-bind:label="String(year + 1)"
         v-bind:inline="true"
         v-on:click="yearPlus()"

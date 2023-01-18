@@ -17,7 +17,7 @@
         v-bind:class="{ 'active': regexpSearch }"
         v-on:click="regexpSearch = !regexpSearch; toggleQueryRegexp()"
       >
-        <clr-icon shape="regexp"></clr-icon>
+        <cds-icon shape="regexp"></cds-icon>
       </button>
 
       <!-- Case Sensitive Search Button -->
@@ -26,7 +26,7 @@
         v-bind:class="{ 'active': caseSensitive }"
         v-on:click="caseSensitive = !caseSensitive"
       >
-        <clr-icon shape="text"></clr-icon>
+        <cds-icon shape="text"></cds-icon>
       </button>
 
       <!-- Whole Word Search Button -->
@@ -35,7 +35,7 @@
         v-bind:class="{ 'active': wholeWord }"
         v-on:click="wholeWord = !wholeWord"
       >
-        <clr-icon shape="text" style="border-bottom: 1px solid black"></clr-icon>
+        <cds-icon shape="text" style="border-bottom: 1px solid black"></cds-icon>
       </button>
     </div>
     <div class="row">
@@ -54,7 +54,7 @@
         v-bind:title="replaceNextLabel"
         v-on:click="replaceNext()"
       >
-        <clr-icon shape="two-way-arrows"></clr-icon>
+        <cds-icon shape="two-way-arrows"></cds-icon>
       </button>
 
       <!-- Replace All Button -->
@@ -62,7 +62,7 @@
         v-bind:title="replaceAllLabel"
         v-on:click="replaceAll()"
       >
-        <clr-icon shape="step-forward-2"></clr-icon>
+        <cds-icon shape="step-forward-2"></cds-icon>
       </button>
 
       <!-- Close Button -->
@@ -70,7 +70,7 @@
         v-bind:title="closeLabel"
         v-on:click="endSearch()"
       >
-        <clr-icon shape="times"></clr-icon>
+        <cds-icon shape="times"></cds-icon>
       </button>
     </div>
   </div>

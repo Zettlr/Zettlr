@@ -40,32 +40,32 @@ function getToolbar (state: EditorState): Tooltip[] {
       const bold = document.createElement('button')
       bold.classList.add('formatting-toolbar-button')
       bold.setAttribute('title', trans('Bold'))
-      bold.innerHTML = '<clr-icon shape="bold"></clr-icon>'
+      bold.innerHTML = '<cds-icon shape="bold"></cds-icon>'
 
       const italic = document.createElement('button')
       italic.classList.add('formatting-toolbar-button')
       italic.setAttribute('title', trans('Italics'))
-      italic.innerHTML = '<clr-icon shape="italic"></clr-icon>'
+      italic.innerHTML = '<cds-icon shape="italic"></cds-icon>'
 
       const link = document.createElement('button')
       link.classList.add('formatting-toolbar-button')
       link.setAttribute('title', trans('Link'))
-      link.innerHTML = '<clr-icon shape="link"></clr-icon>'
+      link.innerHTML = '<cds-icon shape="link"></cds-icon>'
 
       const image = document.createElement('button')
       image.classList.add('formatting-toolbar-button')
       image.setAttribute('title', trans('Image'))
-      image.innerHTML = '<clr-icon shape="image"></clr-icon>'
+      image.innerHTML = '<cds-icon shape="image"></cds-icon>'
 
       const comment = document.createElement('button')
       comment.classList.add('formatting-toolbar-button')
       comment.setAttribute('title', trans('Comment'))
-      comment.innerHTML = '<clr-icon shape="code-alt"></clr-icon>'
+      comment.innerHTML = '<cds-icon shape="code-alt"></cds-icon>'
 
       const code = document.createElement('button')
       code.classList.add('formatting-toolbar-button')
       code.setAttribute('title', trans('Code'))
-      code.innerHTML = '<clr-icon shape="code"></clr-icon>'
+      code.innerHTML = '<cds-icon shape="code"></cds-icon>'
 
       buttonWrapper.append(bold, italic, link, image, comment, code)
       dom.append(buttonWrapper)

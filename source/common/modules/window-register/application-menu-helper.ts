@@ -220,11 +220,11 @@ function renderMenuItem (item: AnyMenuItem, elementClass?: string): HTMLElement 
 
   // Specials for checkboxes and radios
   if (item.type === 'checkbox' && item.checked) {
-    const icon = document.createElement('clr-icon')
+    const icon = document.createElement('cds-icon')
     icon.setAttribute('shape', 'check')
     statusElement.appendChild(icon)
   } else if (item.type === 'radio') {
-    const icon = document.createElement('clr-icon')
+    const icon = document.createElement('cds-icon')
     icon.setAttribute('shape', (item.checked) ? 'dot-circle' : 'circle')
     statusElement.appendChild(icon)
   }
@@ -242,9 +242,9 @@ function renderMenuItem (item: AnyMenuItem, elementClass?: string): HTMLElement 
   menuItem.appendChild(afterElement)
 
   if (item.type === 'submenu') {
-    const submenuIndicator = document.createElement('clr-icon')
+    const submenuIndicator = document.createElement('cds-icon')
     submenuIndicator.setAttribute('shape', 'angle')
-    submenuIndicator.setAttribute('dir', 'right')
+    submenuIndicator.setAttribute('direction', 'right')
     afterElement.appendChild(submenuIndicator)
   } else if (item.type !== 'separator' && item.accelerator != null) {
     const accel = document.createElement('span')

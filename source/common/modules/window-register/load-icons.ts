@@ -12,8 +12,19 @@
  * END HEADER
  */
 
-import { ClarityIcons } from '@clr/icons'
-import '@clr/icons/shapes/all-shapes'
+import {
+  essentialCollectionIcons,
+  coreCollectionIcons,
+  commerceCollectionIcons,
+  mediaCollectionIcons,
+  socialCollectionIcons,
+  travelCollectionIcons,
+  textEditCollectionIcons,
+  technologyCollectionIcons,
+  chartCollectionIcons,
+  ClarityIcons
+} from '@cds/core/icon'
+import '@cds/core/icon/register.js'
 
 import CodeAltIcon from './icons/clarity-custom/code-alt.svg'
 import FootnoteIcon from './icons/clarity-custom/footnote.svg'
@@ -23,12 +34,26 @@ import RegExpIcon from './icons/clarity-custom/regexp.svg'
 import GitIcon from './icons/clarity-custom/git.svg'
 
 export default async function loadIcons (): Promise<void> {
-  ClarityIcons.add({
-    'code-alt': CodeAltIcon,
-    'file-ext': FileExtIcon,
-    'indented-view-list': IndentedViewListIcon,
-    'regexp': RegExpIcon,
-    'footnote': FootnoteIcon,
-    'git': GitIcon
-  })
+  // I don't know why they decided to not export an "all" collection, but so be it.
+  ClarityIcons.addIcons(
+    ...essentialCollectionIcons,
+    ...coreCollectionIcons,
+    ...commerceCollectionIcons,
+    ...mediaCollectionIcons,
+    ...socialCollectionIcons,
+    ...travelCollectionIcons,
+    ...textEditCollectionIcons,
+    ...technologyCollectionIcons,
+    ...chartCollectionIcons
+  )
+  ClarityIcons.addIcons(
+    [ 'code-alt', CodeAltIcon ],
+    [ 'file-ext', FileExtIcon ],
+    [ 'indented-view-list', IndentedViewListIcon ],
+    [ 'regexp', RegExpIcon ],
+    [ 'footnote', FootnoteIcon ],
+    [ 'git', GitIcon ]
+  )
+
+  console.log(ClarityIcons.registry)
 }

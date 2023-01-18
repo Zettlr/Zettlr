@@ -29,12 +29,12 @@
         <div class="date">
           {{ getDate }}
         </div>
-        <clr-icon
+        <cds-icon
           v-if="isProject"
           aria-label="Project"
           shape="blocks-group"
           class="is-solid"
-        ></clr-icon>
+        ></cds-icon>
         <input
           v-if="nameEditing"
           ref="name-editing-input"

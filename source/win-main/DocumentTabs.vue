@@ -7,11 +7,11 @@
   >
     <!-- Left scroller arrow -->
     <div v-if="showScrollers" class="scroller left" v-on:click="scrollLeft()">
-      <clr-icon shape="caret left"></clr-icon>
+      <cds-icon shape="angle" direction="left"></cds-icon>
     </div>
     <!-- Right scroller arrow -->
-    <div v-if="showScrollers" class="scroller right">
-      <clr-icon shape="caret right" v-on:click="scrollRight()"></clr-icon>
+    <div v-if="showScrollers" class="scroller right" v-on:click="scrollRight()">
+      <cds-icon shape="angle" direction="right"></cds-icon>
     </div>
 
     <div
@@ -45,7 +45,7 @@
           class="filename"
           role="button"
         >
-          <clr-icon v-if="file.pinned" shape="pin"></clr-icon>
+          <cds-icon v-if="file.pinned" shape="pin"></cds-icon>
           {{ getTabText(file) }}
         </span>
         <span

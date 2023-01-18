@@ -18,7 +18,7 @@
           count flush right, even if we don't have a git repository
         -->
         <span v-if="isGitRepository">
-          <clr-icon shape="git"></clr-icon> Git Repository
+          <cds-icon shape="git"></cds-icon> Git Repository
         </span>
       </div>
       <div><span>{{ formattedWordCount }}</span></div>
@@ -62,10 +62,10 @@
         v-bind:title="iconElement.title"
         v-on:click="icon = iconElement.shape"
       >
-        <clr-icon
+        <cds-icon
           v-if="iconElement.shape !== null"
           v-bind:shape="iconElement.shape"
-        ></clr-icon>
+        ></cds-icon>
       </div>
     </div>
   </div>
@@ -258,8 +258,9 @@ body {
     margin: 0 auto; // Center the div
     width: 200px; // Ten icons per row
     div {
-      display: inline-block;
-      padding: 2px; // The icons are 16x16px
+      display: flex;
+      justify-content: center;
+      align-items: center;
       width: 20px;
       height: 20px;
       &:hover, &.active { background-color: rgb(180, 180, 180); }

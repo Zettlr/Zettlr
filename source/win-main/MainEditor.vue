@@ -40,7 +40,7 @@
       v-on:dragenter="handleDragEnter($event, 'top')"
       v-on:dragleave="handleDragLeave($event)"
     >
-      <clr-icon v-if="documentTabDragWhere === 'top'" shape="caret up"></clr-icon>
+      <cds-icon v-if="documentTabDragWhere === 'top'" shape="angle" direction="up"></cds-icon>
     </div>
     <div
       v-if="documentTabDrag"
@@ -53,7 +53,7 @@
       v-on:dragenter="handleDragEnter($event, 'left')"
       v-on:dragleave="handleDragLeave($event)"
     >
-      <clr-icon v-if="documentTabDragWhere === 'left'" shape="caret left"></clr-icon>
+      <cds-icon v-if="documentTabDragWhere === 'left'" shape="angle" direction="left"></cds-icon>
     </div>
     <div
       v-if="documentTabDrag"
@@ -66,7 +66,7 @@
       v-on:dragenter="handleDragEnter($event, 'bottom')"
       v-on:dragleave="handleDragLeave($event)"
     >
-      <clr-icon v-if="documentTabDragWhere === 'bottom'" shape="caret down"></clr-icon>
+      <cds-icon v-if="documentTabDragWhere === 'bottom'" shape="angle" direction="down"></cds-icon>
     </div>
     <div
       v-if="documentTabDrag"
@@ -79,7 +79,7 @@
       v-on:dragenter="handleDragEnter($event, 'right')"
       v-on:dragleave="handleDragLeave($event)"
     >
-      <clr-icon v-if="documentTabDragWhere === 'right'" shape="caret right"></clr-icon>
+      <cds-icon v-if="documentTabDragWhere === 'right'" shape="angle" direction="right"></cds-icon>
     </div>
   </div>
 </template>
@@ -945,7 +945,7 @@ function handleDragLeave (event: DragEvent) {
     // ... and in white (against the dragover background color)
     color: white;
 
-    clr-icon { margin: 0; }
+    cds-icon { margin: 0; }
 
     &.dragover {
       background-color: rgba(21, 61, 107, 0.5);
@@ -958,7 +958,7 @@ function handleDragLeave (event: DragEvent) {
       width: 100%;
       height: @dropzone-size;
       flex-direction: column-reverse;
-      clr-icon { animation: 1s ease-out infinite running caretup; }
+      cds-icon { animation: 1s ease-out infinite running caretup; }
     }
 
     &.left {
@@ -967,7 +967,7 @@ function handleDragLeave (event: DragEvent) {
       height: 100%;
       width: @dropzone-size;
       flex-direction: row-reverse;
-      clr-icon { animation: 1s ease-out infinite running caretleft; }
+      cds-icon { animation: 1s ease-out infinite running caretleft; }
     }
 
     &.right {
@@ -976,7 +976,7 @@ function handleDragLeave (event: DragEvent) {
       height: 100%;
       width: @dropzone-size;
       flex-direction: row;
-      clr-icon { animation: 1s ease-out infinite running caretright; }
+      cds-icon { animation: 1s ease-out infinite running caretright; }
     }
 
     &.bottom {
@@ -985,7 +985,7 @@ function handleDragLeave (event: DragEvent) {
       height: @dropzone-size;
       justify-content: center;
       align-items: flex-start;
-      clr-icon { animation: 1s ease-out infinite running caretdown; }
+      cds-icon { animation: 1s ease-out infinite running caretdown; }
     }
   }
 

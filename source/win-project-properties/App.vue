@@ -21,7 +21,7 @@
       ></TextControl>
 
       <p v-if="selectedExportProfiles.length === 0" class="warning">
-        <clr-icon shape="warning"></clr-icon>
+        <cds-icon shape="warning"></cds-icon>
         <span>{{ projectBuildWarning }}</span>
       </p>
       <ListControl

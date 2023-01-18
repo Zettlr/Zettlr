@@ -4,7 +4,7 @@
     role="search"
     v-on:click="$refs.input.focus()"
   >
-    <clr-icon shape="search" role="presentation"></clr-icon>
+    <cds-icon shape="search" role="presentation"></cds-icon>
     <input
       v-bind:id="`toolbar-${control.id}`"
       ref="input"
@@ -92,7 +92,7 @@ body.darwin {
       padding: 4px 8px;
 
       // While the input is hidden anyway, we must reset the CLR-ICON's position
-      clr-icon { position: initial; }
+      cds-icon { position: initial; }
     }
 
     .toolbar-search {

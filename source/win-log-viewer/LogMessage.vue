@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="expand-details">
-      <clr-icon v-show="hasDetails" v-bind:shape="iconShape"></clr-icon>
+      <cds-icon v-show="hasDetails" shape="angle" v-bind:direction="iconDirection"></cds-icon>
     </div>
   </div>
 </template>
@@ -60,8 +60,8 @@ export default defineComponent({
      *
      * @return  {string}  The clr icon's shape
      */
-    iconShape: function () {
-      return (this.showDetails) ? 'caret up' : 'caret down'
+    iconDirection: function () {
+      return (this.showDetails) ? 'up' : 'down'
     },
     /**
      * Determines if this log message has additional details

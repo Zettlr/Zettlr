@@ -73,14 +73,14 @@
             while the collapse icon is floated to the right.
           -->
           <div class="overflow-hidden">
-            <clr-icon v-if="result.weight / maxWeight < 0.3" shape="dot-circle" style="fill: #aaaaaa"></clr-icon>
-            <clr-icon v-else-if="result.weight / maxWeight < 0.7" shape="dot-circle" style="fill: #2975d9"></clr-icon>
-            <clr-icon v-else shape="dot-circle" style="fill: #33aa33"></clr-icon>
+            <cds-icon v-if="result.weight / maxWeight < 0.3" shape="dot-circle" style="fill: #aaaaaa"></cds-icon>
+            <cds-icon v-else-if="result.weight / maxWeight < 0.7" shape="dot-circle" style="fill: #2975d9"></cds-icon>
+            <cds-icon v-else shape="dot-circle" style="fill: #33aa33"></cds-icon>
             {{ result.file.displayName }}
           </div>
 
           <div class="collapse-icon">
-            <clr-icon v-bind:shape="(result.hideResultSet) ? 'caret left' : 'caret down'"></clr-icon>
+            <cds-icon shape="angle" v-bind:direction="(result.hideResultSet) ? 'left' : 'down'"></cds-icon>
           </div>
         </div>
         <div class="filepath">

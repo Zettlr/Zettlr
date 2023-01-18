@@ -39,7 +39,7 @@
     "forge": "./forge.config.js"
   },
   "dependencies": {
-    "@clr/icons": "^13.0.2",
+    "@cds/core": "^6.2.3",
     "@codemirror/autocomplete": "^6.0.0",
     "@codemirror/collab": "^6.0.0",
     "@codemirror/commands": "^6.0.0",

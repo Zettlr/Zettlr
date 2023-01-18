@@ -16,7 +16,7 @@
       v-bind:title="control.stateOne.title"
       v-on:click="toggle('stateOne')"
     >
-      <clr-icon v-if="control.stateOne.icon" v-bind:shape="control.stateOne.icon"></clr-icon>
+      <cds-icon v-if="control.stateOne.icon" v-bind:shape="control.stateOne.icon"></cds-icon>
     </button>
     <!-- Second state -->
     <button
@@ -29,7 +29,7 @@
       v-bind:title="control.stateTwo.title"
       v-on:click="toggle('stateTwo')"
     >
-      <clr-icon v-if="control.stateTwo.icon" v-bind:shape="control.stateTwo.icon"></clr-icon>
+      <cds-icon v-if="control.stateTwo.icon" v-bind:shape="control.stateTwo.icon"></cds-icon>
     </button>
   </div>
 </template>

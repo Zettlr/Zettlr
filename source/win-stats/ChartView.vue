@@ -24,7 +24,8 @@
     <h1>{{ chartLabel }} {{ currentYear }}</h1>
     <ButtonControl
       v-bind:disabled="unit === 'year' || currentYear <= earliestYear"
-      v-bind:icon="'angle left'"
+      v-bind:icon="'angle'"
+      v-bind:direction="'left'"
       v-bind:label="String(currentYear - 1)"
       v-bind:inline="true"
       v-on:click="prevYear()"
@@ -40,7 +41,8 @@
     ></SelectControl>
     <ButtonControl
       v-bind:disabled="unit === 'year' || currentYear >= latestYear"
-      v-bind:icon="'angle right'"
+      v-bind:icon="'angle'"
+      v-bind:direction="'right'"
       v-bind:label="String(currentYear + 1)"
       v-bind:inline="true"
       v-on:click="nextYear()"

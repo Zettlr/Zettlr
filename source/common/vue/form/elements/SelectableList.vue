@@ -28,10 +28,10 @@
     <!-- Add an optional footer -->
     <div v-if="editable" class="selectable-list-footer">
       <div class="add" v-on:click="$emit('add')">
-        <clr-icon shape="plus" size="16"></clr-icon>
+        <cds-icon shape="plus" size="16"></cds-icon>
       </div>
       <div class="remove" v-on:click="$emit('remove', selectedItem)">
-        <clr-icon shape="minus" size="16"></clr-icon>
+        <cds-icon shape="minus" size="16"></cds-icon>
       </div>
     </div>
   </div>

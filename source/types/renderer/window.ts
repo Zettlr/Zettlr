@@ -23,6 +23,10 @@ export interface ToolbarControl {
    */
   icon?: string
   /**
+   * Icon direction
+   */
+  direction?: 'left'|'right'|'up'|'down'
+  /**
    * If set to true, display the clarity icon's badge
    */
   badge?: boolean

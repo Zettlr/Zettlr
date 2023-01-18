@@ -11,7 +11,7 @@
       v-bind:disabled="disabled"
       v-bind:class="{ 'primary': primary }"
     >
-      <clr-icon v-if="icon !== ''" v-bind:shape="icon"></clr-icon>
+      <cds-icon v-if="icon !== ''" v-bind:shape="icon" v-bind:direction="direction"></cds-icon>
       {{ label }}
     </button>
   </div>
@@ -42,6 +42,10 @@ export default {
     icon: {
       type: String,
       default: ''
+    },
+    direction: {
+      type: String,
+      default: undefined
     },
     name: {
       type: String,

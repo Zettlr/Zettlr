@@ -24,7 +24,7 @@
     >
       <!-- First: Secondary icon (only if primaryIcon displays the chevron) -->
       <span class="item-icon" aria-hidden="true">
-        <clr-icon
+        <cds-icon
           v-if="secondaryIcon !== false"
           v-bind:shape="secondaryIcon"
           role="presentation"
@@ -43,17 +43,18 @@
           v-bind:ratio="writingTargetPercent"
         ></RingProgress>
         <!-- Otherwise, display whatever the secondary Icon is -->
-        <clr-icon
+        <cds-icon
           v-else-if="primaryIcon !== false"
           v-bind:shape="primaryIcon"
           role="presentation"
           v-bind:class="{
-            'is-solid': typeof primaryIcon !== 'boolean' && [ 'disconnect', 'blocks-group' ].includes(primaryIcon),
-            'special': typeof primaryIcon !== 'boolean' && ![ 'caret right', 'caret down' ].includes(primaryIcon)
+            'special': typeof primaryIcon !== 'boolean' && ![ 'right', 'down' ].includes(primaryIcon)
           }"
+          v-bind:direction="angleDirection"
+          v-bind:solid="typeof primaryIcon !== 'boolean' && [ 'disconnect', 'blocks-group' ].includes(primaryIcon)"
           v-on:click.stop="handlePrimaryIconClick"
           v-on:auxclick.stop.prevent="handlePrimaryIconClick"
-        ></clr-icon>
+        ></cds-icon>
       </span>
       <span
         ref="display-text"
@@ -222,10 +223,13 @@ export default defineComponent({
     primaryIcon: function (): string|boolean {
       // The primary icon is _always_ the chevron if we're dealing with a
       // directory and it has children. Otherwise, it will display the custom icon.
-      if (this.hasChildren === true) {
-        return this.shouldBeCollapsed ? 'caret right' : 'caret down'
+      return this.hasChildren ? 'angle' : this.customIcon
+    },
+    angleDirection: function (): string|undefined {
+      if (!this.hasChildren) {
+        return undefined
       } else {
-        return this.customIcon
+        return this.shouldBeCollapsed ? 'right' : 'down'
       }
     },
     /**

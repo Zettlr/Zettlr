@@ -37,7 +37,7 @@
         </span>
 
         <p v-if="visibleItems[currentItem]?.isInvalid" class="warning">
-          <clr-icon shape="warning"></clr-icon>
+          <cds-icon shape="warning"></cds-icon>
           <span> <!-- NOTE: Wrapping in a span due to the flex -->
             {{ invalidProfileWarning }}
           </span>

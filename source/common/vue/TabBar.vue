@@ -14,11 +14,11 @@
       v-on:click="$emit('tab', tab.id)"
     >
       <!-- Display either an icon, or the title -->
-      <clr-icon
+      <cds-icon
         v-if="tab.icon !== undefined"
         v-bind:shape="tab.icon"
         role="presentation"
-      ></clr-icon>
+      ></cds-icon>
       <template v-else>
         {{ tab.label }}
       </template>
@@ -49,7 +49,7 @@ export default defineComponent({
   name: 'TabBar',
   props: {
     // Each tab must have the following properties:
-    // * icon (matches clr-icons, if not set, title will become the content)
+    // * icon (matches cds-icons, if not set, title will become the content)
     // * id (a unique string)
     // * target (a CSS ID string)
     // * label (a title string)

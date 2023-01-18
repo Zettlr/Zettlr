@@ -30,26 +30,28 @@
               draggable="true"
             >{{ getRelatedFileName(item.props.path) }}</span>
             <span class="icons">
-              <clr-icon
+              <cds-icon
                 v-if="item.props.tags.length > 0"
                 shape="tag"
                 v-bind:title="getTagsLabel(item.props.tags)"
-              ></clr-icon>
-              <clr-icon
+              ></cds-icon>
+              <cds-icon
                 v-if="item.props.link === 'inbound'"
-                shape="arrow left"
+                shape="arrow"
+                direction="left"
                 v-bind:title="inboundLinkLabel"
-              ></clr-icon>
-              <clr-icon
+              ></cds-icon>
+              <cds-icon
                 v-else-if="item.props.link === 'outbound'"
-                shape="arrow right"
+                shape="arrow"
+                direction="right"
                 v-bind:title="outboundLinkLabel"
-              ></clr-icon>
-              <clr-icon
+              ></cds-icon>
+              <cds-icon
                 v-else-if="item.props.link === 'bidirectional'"
                 shape="two-way-arrows"
                 v-bind:title="bidirectionalLinkLabel"
-              ></clr-icon>
+              ></cds-icon>
             </span>
           </div>
         </RecycleScroller>

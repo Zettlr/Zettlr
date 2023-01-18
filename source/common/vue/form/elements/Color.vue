@@ -16,7 +16,7 @@
         v-bind:title="resetLabel"
         v-on:click="resetValue"
       >
-        <clr-icon shape="refresh"></clr-icon>
+        <cds-icon shape="refresh"></cds-icon>
       </button>
     </div>
     <!-- Else: Normal input w/o reset button -->

@@ -18,7 +18,7 @@
         data-tippy-content="dialog.preferences.choose_file"
         v-on:click="(directory) ? requestDir() : requestFile()"
       >
-        <clr-icon shape="file"></clr-icon>
+        <cds-icon shape="file"></cds-icon>
       </button>
       <button
         v-if="reset !== false"
@@ -26,7 +26,7 @@
         v-bind:title="resetLabel"
         v-on:click="resetValue"
       >
-        <clr-icon shape="refresh"></clr-icon>
+        <cds-icon shape="refresh"></cds-icon>
       </button>
     </div>
   </div>

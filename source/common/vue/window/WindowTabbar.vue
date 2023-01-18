@@ -15,12 +15,12 @@
       v-on:click="currentTab = idx"
     >
       <div class="toolbar-icon">
-        <clr-icon
+        <cds-icon
           v-if="tab.icon"
           v-bind:shape="tab.icon"
-          size="24"
+          style="width: 24px; height: 24px;"
         >
-        </clr-icon>
+        </cds-icon>
       </div>
       <!--
         Below's if-statement makes sure that on Windows, where the tabs are
