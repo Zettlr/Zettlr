@@ -153,6 +153,7 @@ body {
     position: absolute;
     top: 0;
     right: 0;
+    z-index: 2001; // NOTE: Must be 1 higher than the menuBar component
 
     .minimise, .resize, .close {
       float: left;

@@ -897,8 +897,7 @@ function handleDragLeave (event: DragEvent) {
 
   &.fullscreen {
     position: fixed;
-    z-index: 1000; // Ensure this editor instance is on top of any other pane
-    top: 40px; // Titlebar height
+    z-index: 100; // Ensure this editor instance is on top of any other pane
     bottom: 0;
     left: 0;
     right: 0;
@@ -986,13 +985,14 @@ function handleDragLeave (event: DragEvent) {
   .cm-editor {
     // The CodeMirror editor needs to respect the new tabbar; it cannot take
     // up 100 % all for itself anymore.
-    margin-left: 0.5em;
     font-family: inherit;
     background-color: transparent;
 
-    @media(min-width: 1025px) { margin: 0 @editor-margin-normal-lg; }
-    @media(max-width: 1024px) { margin: 0 @editor-margin-normal-md; }
-    @media(max-width:  900px) { margin: 0 @editor-margin-normal-sm; }
+    .cm-scroller {
+      @media(min-width: 1025px) { margin: 0 @editor-margin-normal-lg; }
+      @media(max-width: 1024px) { margin: 0 @editor-margin-normal-md; }
+      @media(max-width:  900px) { margin: 0 @editor-margin-normal-sm; }
+    }
 
     .code { // BEGIN: CODE BLOCK/FILE THEME
       // We're using this solarized theme here: https://ethanschoonover.com/solarized/
@@ -1112,20 +1112,14 @@ body.win32 .main-editor-wrapper, body.linux .main-editor-wrapper {
 
 // CodeMirror fullscreen
 .main-editor-wrapper.fullscreen {
-    .cm-editor {
-    @media(min-width: 1301px) { margin-left: @editor-margin-fullscreen-xxl !important; }
-    @media(max-width: 1300px) { margin-left: @editor-margin-fullscreen-xl  !important; }
-    @media(max-width: 1100px) { margin-left: @editor-margin-fullscreen-lg  !important; }
-    @media(max-width: 1000px) { margin-left: @editor-margin-fullscreen-md  !important; }
-    @media(max-width:  800px) { margin-left: @editor-margin-fullscreen-sm  !important; }
+  .cm-scroller {
+    margin: 0;
+    @media(min-width: 1301px) { margin: 0 @editor-margin-fullscreen-xxl !important; }
+    @media(max-width: 1300px) { margin: 0 @editor-margin-fullscreen-xl  !important; }
+    @media(max-width: 1100px) { margin: 0 @editor-margin-fullscreen-lg  !important; }
+    @media(max-width: 1000px) { margin: 0 @editor-margin-fullscreen-md  !important; }
+    @media(max-width:  800px) { margin: 0 @editor-margin-fullscreen-sm  !important; }
 
-    .cm-content {
-      @media(min-width: 1301px) { padding-right: @editor-margin-fullscreen-xxl !important; }
-      @media(max-width: 1300px) { padding-right: @editor-margin-fullscreen-xl  !important; }
-      @media(max-width: 1100px) { padding-right: @editor-margin-fullscreen-lg  !important; }
-      @media(max-width: 1000px) { padding-right: @editor-margin-fullscreen-md  !important; }
-      @media(max-width:  800px) { padding-right: @editor-margin-fullscreen-sm  !important; }
-    }
   }
 }
 

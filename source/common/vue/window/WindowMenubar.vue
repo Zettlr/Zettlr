@@ -152,6 +152,7 @@ export default defineComponent({
 #menubar {
   position: absolute;
   top: 0;
+  z-index: 2000; // Make sure it always stays on top (main enemy is the distraction free main editor)
   height: 31px;
   width: 100%;
   // Use the system font with a somewhat smaller font-size
