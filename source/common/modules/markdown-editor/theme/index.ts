@@ -13,7 +13,7 @@
  */
 
 import { Compartment, EditorState, StateEffect, StateField } from '@codemirror/state'
-import { defaultDark, defaultLight } from './main-override'
+import { defaultDark, defaultLight, mainOverride } from './main-override'
 
 const themeCompartment = new Compartment()
 
@@ -39,9 +39,9 @@ const themeSwitcher = EditorState.transactionExtender.of((transaction) => {
   for (const effect of transaction.effects) {
     if (effect.is(darkModeSwitch)) {
       if (effect.value) {
-        effects.push(themeCompartment.reconfigure(defaultDark))
+        effects.push(themeCompartment.reconfigure([ mainOverride, defaultDark ]))
       } else {
-        effects.push(themeCompartment.reconfigure(defaultLight))
+        effects.push(themeCompartment.reconfigure([ mainOverride, defaultLight ]))
       }
     }
   }
@@ -50,7 +50,7 @@ const themeSwitcher = EditorState.transactionExtender.of((transaction) => {
 })
 
 export const themeManager = [
-  themeCompartment.of(defaultLight),
+  themeCompartment.of([ mainOverride, defaultLight ]),
   themeSwitcher,
   themeField
 ]

@@ -996,9 +996,9 @@ function handleDragLeave (event: DragEvent) {
     background-color: transparent;
 
     .cm-scroller {
-      @media(min-width: 1025px) { margin: 0 @editor-margin-normal-lg; }
-      @media(max-width: 1024px) { margin: 0 @editor-margin-normal-md; }
-      @media(max-width:  900px) { margin: 0 @editor-margin-normal-sm; }
+      @media(min-width: 1025px) { padding: 0 @editor-margin-normal-lg; }
+      @media(max-width: 1024px) { padding: 0 @editor-margin-normal-md; }
+      @media(max-width:  900px) { padding: 0 @editor-margin-normal-sm; }
     }
 
     .code { // BEGIN: CODE BLOCK/FILE THEME
