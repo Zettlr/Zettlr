@@ -14,8 +14,17 @@
 
 import { showPanel, Panel, EditorView } from '@codemirror/view'
 import { StateField } from '@codemirror/state'
+import { openLintPanel, forEachDiagnostic } from '@codemirror/lint'
 import { configField, configUpdateEffect } from '../util/configuration'
 import { languageToolRunning } from '../linters/language-tool'
+import { trans } from '@common/i18n-renderer'
+
+export interface StatusbarItem {
+  content: string
+  title?: string
+  allowHtml?: boolean
+  onClick?: (event: MouseEvent) => void
+}
 
 function createStatusbar (view: EditorView): Panel {
   const elem = document.createElement('div')
@@ -24,20 +33,20 @@ function createStatusbar (view: EditorView): Panel {
     top: false,
     dom: elem,
     update (update) {
-      const elements: string[] = []
+      const elements: StatusbarItem[] = []
 
       // Cursor
       const mainOffset = update.state.selection.main.from
       const line = update.state.doc.lineAt(mainOffset)
-      elements.push(`${line.number}:${mainOffset - line.from + 1}`)
+      elements.push({ content: `${line.number}:${mainOffset - line.from + 1}` })
 
       const config = update.state.field(configField)
 
       if (config.inputMode !== 'default') {
-        elements.push('Mode: ' + (config.inputMode === 'vim' ? 'Vim' : 'Emacs'))
+        elements.push({ content: 'Mode: ' + (config.inputMode === 'vim' ? 'Vim' : 'Emacs') })
       }
 
-      elements.push('Indent: ' + (config.indentWithTabs ? '<Tab>' : '<Space>'))
+      elements.push({ content: 'Indent: ' + (config.indentWithTabs ? '<Tab>' : '<Space>') })
 
       // Detect linters
       const linters: string[] = []
@@ -47,26 +56,57 @@ function createStatusbar (view: EditorView): Panel {
       if (config.lintLanguageTool) {
         linters.push('LT')
       }
-      elements.push('Lint: ' + linters.join(' + '))
+      elements.push({ content: 'Lint: ' + linters.join(' + ') })
 
       // Determine if LanguageTool is currently running
       const hasLanguageTool = update.state.field(languageToolRunning, false) !== undefined
       if (config.lintLanguageTool && hasLanguageTool) {
         if (update.state.field(languageToolRunning)) {
-          elements.push('LanguageTool: running…')
+          elements.push({ content: 'LanguageTool: running…' })
         } else {
-          elements.push('LanguageTool: idle')
+          elements.push({ content: 'LanguageTool: idle' })
         }
       }
 
-      // Get numbers of diagnostics TODO
+      // Get numbers of diagnostics
+      let info = 0
+      let warn = 0
+      let error = 0
+      forEachDiagnostic(update.state, (dia, from, to) => {
+        if (dia.severity === 'info') {
+          info++
+        } else if (dia.severity === 'warning') {
+          warn++
+        } else {
+          error++
+        }
+      })
+
+      elements.push({
+        content: `<strong>i</strong> ${info} <strong>⚠️</strong> ${warn} <strong>!</strong> ${error}`,
+        allowHtml: true,
+        title: trans('Open diagnostics panel'),
+        onClick (event) {
+          openLintPanel(update.view)
+        }
+      })
 
       // Add all elements to the panel
       elem.innerHTML = ''
       for (const element of elements) {
         const span = document.createElement('span')
-        span.textContent = element
+        if (element.allowHtml === true) {
+          span.innerHTML = element.content
+        } else {
+          span.textContent = element.content
+        }
         span.className = 'cm-statusbar-item'
+        if (element.onClick !== undefined) {
+          span.addEventListener('click', element.onClick)
+        }
+        if (element.title !== undefined) {
+          span.title = element.title
+        }
         elem.appendChild(span)
       }
     }
