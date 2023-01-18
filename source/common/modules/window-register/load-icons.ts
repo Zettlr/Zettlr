@@ -54,6 +54,4 @@ export default async function loadIcons (): Promise<void> {
     [ 'footnote', FootnoteIcon ],
     [ 'git', GitIcon ]
   )
-
-  console.log(ClarityIcons.registry)
 }

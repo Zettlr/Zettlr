@@ -329,6 +329,7 @@ onMounted(() => {
 
   // Supply the configuration object once initially
   mdEditor.setOptions(editorConfiguration.value)
+  mdEditor.darkMode = darkMode.value
 })
 
 // DATA SETUP

@@ -77,8 +77,6 @@ const ltLinter = linter(async view => {
     return [] // Either an error or something else -- check the logs
   }
 
-  console.log(ltSuggestions.language.detectedLanguage)
-
   view.dispatch({ effects: toggleLTR.of({ running: false, lastDetectedLanguage: ltSuggestions.language.detectedLanguage.code }) })
 
   if (ltSuggestions.matches.length === 0) {

@@ -76,6 +76,7 @@ export interface CoreExtensionOptions {
     // Should Markdown documents be linted?
     markdown: boolean
   }
+  darkMode: boolean // Whether the editor should init with darkMode
 }
 
 /**
@@ -128,7 +129,7 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
       // ...searchKeymap // Search commands (Ctrl+F, etc.)
     ]),
     softwrapVisualIndent, // Always indent visually
-    themeManager,
+    themeManager(options),
     // CODE FOLDING
     codeFolding(),
     foldGutter(),

@@ -12,7 +12,8 @@
  * END HEADER
  */
 
-import { Compartment, EditorState, StateEffect, StateField } from '@codemirror/state'
+import { Compartment, EditorState, Extension, StateEffect, StateField } from '@codemirror/state'
+import { CoreExtensionOptions } from '../editor-extension-sets'
 import { defaultDark, defaultLight, mainOverride } from './main-override'
 
 const themeCompartment = new Compartment()
@@ -49,8 +50,10 @@ const themeSwitcher = EditorState.transactionExtender.of((transaction) => {
   return { effects }
 })
 
-export const themeManager = [
-  themeCompartment.of([ mainOverride, defaultLight ]),
-  themeSwitcher,
-  themeField
-]
+export function themeManager (options: CoreExtensionOptions): Extension {
+  return [
+    themeCompartment.of([ mainOverride, (options.darkMode) ? defaultDark : defaultLight ]),
+    themeSwitcher,
+    themeField
+  ]
+}

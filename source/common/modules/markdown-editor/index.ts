@@ -195,6 +195,7 @@ export default class MarkdownEditor extends EventEmitter {
 
     const options: CoreExtensionOptions = {
       initialConfig: JSON.parse(JSON.stringify(this.config)),
+      darkMode: this._darkMode,
       remoteConfig: {
         filePath,
         startVersion,
