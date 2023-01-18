@@ -55,9 +55,11 @@
     </div>
     <hr>
     <p>
-      <span v-html="CSLInfo"></span>
+      <span v-html="CSLInfo + ' '"></span>
       <a href="https://citationstyles.org">CitationStyles.org</a>
     </p>
+    <hr>
+    <p v-html="LanguageToolInfo"></p>
     <hr>
     <p v-html="nodeTrademark"></p>
   </div>
@@ -87,7 +89,8 @@ export default defineComponent({
     return {
       dialogIntro: trans('Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. It is Open Source, free of charge and based upon the Electron framework. Zettlr would like to thank the developers of Electron, the Node.js framework and the CodeMirror editor for their work. Without them, Zettlr would not be possible. Below you can find all projects that Zettlr uses.'),
       CSLInfo: trans('Zettlr makes use of citeproc to display citations directly in the editor. To this end, Zettlr uses the CitationStyleLanguage (CSL) language and style files. The files have been shipped unaltered with author metadata. More information:'),
-      nodeTrademark: trans('All logos and brand names are subject to their rightful owners. Besides using their code, Zettlr is in no way affiliated with any of these projects. Node.js is a trademark of Joyent, Inc.')
+      nodeTrademark: trans('All logos and brand names are subject to their rightful owners. Besides using their code, Zettlr is in no way affiliated with any of these projects. Node.js is a trademark of Joyent, Inc.'),
+      LanguageToolInfo: trans('Zettlr offers an integration with LanguageTool.org, a service provided by LanguageTooler GmbH. Using this service requires an internet connection and is subject to the privacy policy of LanguageTooler GmbH or the corresponding server that you use.') + ' <a href="https://languagetool.org/legal/privacy">View the Privacy Policy by LanguageTooler GmbH</a>.'
     }
   },
   computed: {
