@@ -96,6 +96,11 @@ export default function (): any {
           type: 'checkbox',
           label: trans('Check Markdown for style issues'),
           model: 'editor.lint.markdown'
+        },
+        {
+          type: 'checkbox',
+          label: trans('Show statusbar'),
+          model: 'editor.showStatusbar'
         }
       ],
       [

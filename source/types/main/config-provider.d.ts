@@ -56,6 +56,7 @@ export interface ConfigOptions {
     citeStyle: 'in-text'|'in-text-suffix'|'regular'
     autoCloseBrackets: boolean
     showLinkPreviews: boolean
+    showStatusbar: boolean
     defaultSaveImagePath: string
     enableTableHelper: boolean
     indentUnit: number

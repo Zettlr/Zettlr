@@ -107,7 +107,7 @@ export function getDefaultConfig (): EditorConfiguration {
     distractionFree: false,
     lintMarkdown: false,
     lintLanguageTool: false,
-    showStatusbar: true
+    showStatusbar: false
   }
 }
 

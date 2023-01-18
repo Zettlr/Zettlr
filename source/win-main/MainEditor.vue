@@ -394,7 +394,8 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     lintMarkdown: store.state.config['editor.lint.markdown'],
     // The editor only needs to know if it should use languageTool
     lintLanguageTool: store.state.config['editor.lint.languageTool.active'],
-    distractionFree: props.distractionFree.valueOf()
+    distractionFree: props.distractionFree.valueOf(),
+    showStatusbar: store.state.config['editor.showStatusbar']
   } as EditorConfigOptions
 })
 

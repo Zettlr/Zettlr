@@ -120,6 +120,7 @@ export default function getConfigTemplate (): ConfigOptions {
       boldFormatting: '**', // Can be ** or __
       italicFormatting: '_', // Can be * or _
       readabilityAlgorithm: 'dale-chall', // The algorithm to use with readability mode.
+      showStatusbar: false,
       lint: {
         markdown: true, // Should Markdown be linted?
         languageTool: {
