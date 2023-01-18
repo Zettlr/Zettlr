@@ -17,17 +17,34 @@ import { linter, Diagnostic, Action } from '@codemirror/lint'
 import { extractTextnodes } from '@common/util/md-to-ast'
 import { configField } from '../util/configuration'
 import { LanguageToolAPIResponse } from '@providers/commands/language-tool'
+import { StateEffect, StateField } from '@codemirror/state'
 
 const ipcRenderer = window.ipc
+
+const toggleLTR = StateEffect.define<boolean>()
+
+export const languageToolRunning = StateField.define<boolean>({
+  create: () => false,
+  update (value, transaction) {
+    for (const e of transaction.effects) {
+      if (e.is(toggleLTR)) {
+        value = e.value
+      }
+    }
+    return value
+  }
+})
 
 /**
  * Defines a spellchecker that runs over the text content of the document and
  * highlights misspelled words
  */
-export const languageTool = linter(async view => {
+const ltLinter = linter(async view => {
   if (!view.state.field(configField).lintLanguageTool) {
     return []
   }
+
+  view.dispatch({ effects: toggleLTR.of(true) })
 
   const diagnostics: Diagnostic[] = []
 
@@ -43,6 +60,8 @@ export const languageTool = linter(async view => {
     command: 'run-language-tool',
     payload: document
   })
+
+  view.dispatch({ effects: toggleLTR.of(false) })
 
   if (ltSuggestions === undefined) {
     return [] // Either an error or something else -- check the logs
@@ -111,3 +130,8 @@ export const languageTool = linter(async view => {
 
   return diagnostics
 })
+
+export const languageTool = [
+  ltLinter,
+  languageToolRunning
+]

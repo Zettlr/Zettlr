@@ -64,6 +64,7 @@ import countWords from '@common/util/count-words'
 import { syntaxTree } from '@codemirror/language'
 import openMarkdownLink from './util/open-markdown-link'
 import { TagRecord } from '@providers/tags'
+import { darkModeSwitch } from './theme'
 
 const path = window.path
 
@@ -104,6 +105,7 @@ export default class MarkdownEditor extends EventEmitter {
   private readonly pullUpdates: (filePath: string, version: number) => Promise<Update[]|false>
   private readonly pushUpdates: (filePath: string, version: number, updates: Update[]) => Promise<boolean>
   private config: EditorConfiguration
+  private _darkMode: boolean
 
   private readonly databaseCache: {
     tags: TagRecord[]
@@ -146,6 +148,7 @@ export default class MarkdownEditor extends EventEmitter {
     this.pushUpdates = pushUpdates
 
     this.editorId = editorId
+    this._darkMode = false
     // Since the editor state needs to be rebuilt whenever the document changes,
     // we have to persist the databases (and feed them to the state) everytime
     // we have to rebuild it (during swapDoc).
@@ -773,6 +776,15 @@ export default class MarkdownEditor extends EventEmitter {
     this._instance.dispatch({
       effects: configUpdateEffect.of({ typewriterMode: shouldBeTypewriter })
     })
+  }
+
+  get darkMode (): boolean {
+    return this._darkMode
+  }
+
+  set darkMode (newValue: boolean) {
+    this._darkMode = newValue
+    this._instance.dispatch({ effects: darkModeSwitch.of(newValue) })
   }
 
   /**

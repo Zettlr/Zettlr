@@ -348,6 +348,7 @@ const node = computed(() => store.state.paneData.find(leaf => leaf.id === props.
 const activeFile = computed(() => node.value?.activeFile) // TODO: MAYBE REMOVE
 const lastLeafId = computed(() => store.state.lastLeafId)
 const snippets = computed(() => store.state.snippets)
+const darkMode = computed(() => store.state.config.darkMode)
 
 const activeFileDescriptor = ref<undefined|MDFileDescriptor|CodeFileDescriptor>(undefined)
 
@@ -453,6 +454,11 @@ watch(toRef(props.editorCommands, 'replaceSelection'), () => {
   }
   const textToInsert: string = props.editorCommands.data
   mdEditor?.replaceSelection(textToInsert)
+})
+watch(darkMode, () => {
+  if (mdEditor !== null) {
+    mdEditor.darkMode = darkMode.value
+  }
 })
 
 const isMarkdown = computed(() => {

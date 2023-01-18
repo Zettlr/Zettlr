@@ -27,7 +27,7 @@ import { Compartment, EditorState, Extension, Prec } from '@codemirror/state'
 import { keymap, drawSelection, EditorView, lineNumbers, ViewUpdate, DOMEventHandlers, dropCursor } from '@codemirror/view'
 import { autocomplete } from './autocomplete'
 import { customKeymap } from './commands/keymap'
-import { codeSyntaxHighlighter, markdownSyntaxHighlighter } from './highlight/get-syntax-highlighter'
+import { codeSyntaxHighlighter, markdownSyntaxHighlighter } from './theme/syntax'
 import markdownParser from './parser/markdown-parser'
 import { syntaxExtensions } from './parser/syntax-extensions'
 import { defaultContextMenu } from './plugins/default-context-menu'
@@ -52,6 +52,8 @@ import { vim } from '@replit/codemirror-vim'
 import { emacs } from '@replit/codemirror-emacs'
 import { distractionFree } from './plugins/distraction-free'
 import { languageTool } from './linters/language-tool'
+import { statusbar } from './plugins/statusbar'
+import { themeManager } from './theme'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -126,6 +128,7 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
       // ...searchKeymap // Search commands (Ctrl+F, etc.)
     ]),
     softwrapVisualIndent, // Always indent visually
+    themeManager,
     // CODE FOLDING
     codeFolding(),
     foldGutter(),
@@ -142,6 +145,9 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     indentUnit.from(configField, (val) => val.indentWithTabs ? '\t' : ' '.repeat(val.indentUnit)),
     EditorView.lineWrapping, // Enable line wrapping,
     closeBrackets(),
+
+    // Add the statusbar
+    statusbar,
 
     // Add the configuration and preset it with whatever is in the cached
     // config.
