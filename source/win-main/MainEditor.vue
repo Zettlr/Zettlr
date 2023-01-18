@@ -1142,35 +1142,4 @@ body.darwin {
   }
 }
 
-// Define the readability classes
-// Red, orange, and yellow indicate bad scores
-// Purple and blue indicate average scores
-// Green indicates good scores
-body {
-  .cm-readability-0   { background-color: #ff0000aa; color: #444444 !important; }
-  .cm-readability-1   { background-color: #f67b2baa; color: #444444 !important; }
-  .cm-readability-2   { background-color: #e5a14faa; color: #444444 !important; }
-  .cm-readability-3   { background-color: #e3e532aa; color: #444444 !important; }
-  .cm-readability-4   { background-color: #d4c1fdaa; color: #444444 !important; }
-  .cm-readability-5   { background-color: #538fe9aa; color: #444444 !important; }
-  .cm-readability-6   { background-color: #53bce9aa; color: #444444 !important; }
-  .cm-readability-7   { background-color: #53e7e9aa; color: #444444 !important; }
-  .cm-readability-8   { background-color: #4ad14caa; color: #444444 !important; }
-  .cm-readability-9   { background-color: #53e955aa; color: #444444 !important; }
-  .cm-readability-10  { background-color: #7cf87eaa; color: #444444 !important; }
-}
-
-body.dark {
-  .cm-readability-0,
-  .cm-readability-1,
-  .cm-readability-2,
-  .cm-readability-3,
-  .cm-readability-4,
-  .cm-readability-5,
-  .cm-readability-6,
-  .cm-readability-7,
-  .cm-readability-8,
-  .cm-readability-9,
-  .cm-readability-10 { color: #cccccc !important; }
-}
 </style>
