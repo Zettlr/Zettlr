@@ -357,7 +357,6 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
   // everything all the time, but rather do one initial configuration, so
   // even if we incur a performance penalty, it won't be noticed that much.
   return {
-    // keyMap: store.state.config['editor.inputMode'], TODO
     indentUnit: store.state.config['editor.indentUnit'],
     indentWithTabs: store.state.config['editor.indentWithTabs'],
     autoCloseBrackets: store.state.config['editor.autoCloseBrackets'],
@@ -391,6 +390,9 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     linkPreference: store.state.config['zkn.linkWithFilename'],
     linkFilenameOnly: store.state.config['zkn.linkFilenameOnly'],
     inputMode: store.state.config['editor.inputMode'],
+    lintMarkdown: store.state.config['editor.lint.markdown'],
+    // The editor only needs to know if it should use languageTool
+    lintLanguageTool: store.state.config['editor.lint.languageTool.active'],
     distractionFree: props.distractionFree.valueOf()
   } as EditorConfigOptions
 })

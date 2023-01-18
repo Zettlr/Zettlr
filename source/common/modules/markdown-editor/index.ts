@@ -553,7 +553,6 @@ export default class MarkdownEditor extends EventEmitter {
    * @param   {Object}  newOptions  The new options
    */
   setOptions (newOptions: EditorConfigOptions): void {
-    console.log(newOptions)
     const inputModeChanged = newOptions.inputMode !== undefined && newOptions.inputMode !== this.config.inputMode
 
     // Cache the current config first, and then apply it

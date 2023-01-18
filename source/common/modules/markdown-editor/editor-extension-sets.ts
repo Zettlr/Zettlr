@@ -51,6 +51,7 @@ import { codeblockBackground } from './plugins/codeblock-background'
 import { vim } from '@replit/codemirror-vim'
 import { emacs } from '@replit/codemirror-emacs'
 import { distractionFree } from './plugins/distraction-free'
+import { languageTool } from './linters/language-tool'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -222,6 +223,10 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     mdLinterExtensions.push(mdLint)
   }
 
+  if (options.initialConfig.lintLanguageTool) {
+    hasLinters = true // We always add this linter
+  }
+
   if (hasLinters) {
     // If there's any linter (except the spellchecker), add a lint gutter
     mdLinterExtensions.push(
@@ -229,7 +234,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
         markerFilter (diagnostics) {
           // Show any linter warnings and errors in the gutter *except* wrongly
           // spelled words, since that would be weird.
-          return diagnostics.filter(d => d.source !== 'spellcheck')
+          return diagnostics.filter(d => d.source !== 'spellcheck' && d.source?.startsWith('language-tool') === false)
         }
       })
     )
@@ -257,6 +262,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
       renderEmphasis: options.initialConfig.renderEmphasis
     }),
     mdLinterExtensions,
+    languageTool,
     // Some statistics we need for Markdown documents
     mdStatistics,
     typewriter,

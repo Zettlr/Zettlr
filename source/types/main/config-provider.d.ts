@@ -68,6 +68,14 @@ export interface ConfigOptions {
     readabilityAlgorithm: string
     lint: {
       markdown: boolean
+      languageTool: {
+        active: boolean
+        level: 'picky'|'default'
+        provider: 'official'|'custom'
+        customServer: string
+        username: string
+        apiKey: string
+      }
     }
     autoCorrect: {
       active: boolean

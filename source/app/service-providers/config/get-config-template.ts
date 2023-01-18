@@ -121,7 +121,15 @@ export default function getConfigTemplate (): ConfigOptions {
       italicFormatting: '_', // Can be * or _
       readabilityAlgorithm: 'dale-chall', // The algorithm to use with readability mode.
       lint: {
-        markdown: true // Should Markdown be linted?
+        markdown: true, // Should Markdown be linted?
+        languageTool: {
+          active: false, // Utilize languageTool?
+          level: 'picky', // API: https://languagetool.org/http-api/#!/default/post_check
+          provider: 'official',
+          customServer: '',
+          username: '',
+          apiKey: ''
+        }
       },
       autoCorrect: {
         active: true, // AutoCorrect is on by default
