@@ -990,15 +990,19 @@ function handleDragLeave (event: DragEvent) {
   }
 
   .cm-editor {
-    // The CodeMirror editor needs to respect the new tabbar; it cannot take
-    // up 100 % all for itself anymore.
-    font-family: inherit;
-    background-color: transparent;
-
     .cm-scroller {
-      @media(min-width: 1025px) { padding: 0 @editor-margin-normal-lg; }
-      @media(max-width: 1024px) { padding: 0 @editor-margin-normal-md; }
-      @media(max-width:  900px) { padding: 0 @editor-margin-normal-sm; }
+      @media(min-width: 1025px) {
+        padding-left: @editor-margin-normal-lg;
+        padding-right: @editor-margin-fullscreen-lg
+      }
+      @media(max-width: 1024px) {
+        padding-left: 0 @editor-margin-normal-md;
+        padding-right: 0 @editor-margin-normal-md;
+      }
+      @media(max-width:  900px) {
+        padding-left: 0 @editor-margin-normal-sm;
+        padding-right: 0 @editor-margin-normal-sm;
+      }
     }
 
     .code { // BEGIN: CODE BLOCK/FILE THEME
@@ -1059,42 +1063,8 @@ function handleDragLeave (event: DragEvent) {
     }
   }
 
-  .cm-editor .cm-scroller {
-    // Apply some padding so that Markdown documents aren't glued to the edges
-    padding-top: 50px;
-    padding-bottom: 50px;
-
-    .muted { opacity: 0.2; }
-  }
-
   .cm-content {
-    // padding-right: 5em;
-    padding-right: 5%;
     overflow-x: hidden !important; // Necessary to hide the horizontal scrollbar
-
-    // We need to override a negative margin
-    // and a bottom padding from the standard
-    // CSS for some calculations to be correct
-    // such as the table editor
-    margin-bottom: 0px;
-    padding-bottom: 0px;
-  }
-
-  .CodeMirror.CodeMirror-readonly {
-    .CodeMirror-cursor { display: none !important; }
-  }
-
-  // Math equations in text mode
-  .katex {
-    font-size: 1.1em; // reduce font-size of math a bit
-    display: inline-block; // needed for display math to behave properly
-    user-select: none; // Disable user text selection
-  }
-
-  // Math equations in display mode
-  .katex-display, .katex-display > .katex > .katex-html {
-    display: inline-block; // needed for display math to behave properly
-    width: 100%; // display math should be centred
   }
 }
 

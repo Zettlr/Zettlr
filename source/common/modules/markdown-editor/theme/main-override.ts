@@ -2,10 +2,26 @@ import { EditorView } from '@codemirror/view'
 
 export const mainOverride = EditorView.baseTheme({
   '&.cm-editor': {
-    height: '100%'
+    height: '100%',
+    fontFamily: 'inherit',
+    backgroundColor: 'transparent'
   },
-  '&.cm-scroller': {
-    flexGrow: '1'
+  '.cm-scroller': {
+    flexGrow: '1', // Ensure the content pushes possible panels towards the edge
+    paddingTop: '50px',
+    paddingBottom: '50px'
+  },
+  '.cm-scroller .muted': {
+    opacity: '0.2'
+  },
+  '.katex': {
+    fontSize: '1.1em', // reduce font-size of math a bit
+    display: 'inline-block', // needed for display math to behave properly
+    userSelect: 'none' // Disable user text selection
+  },
+  '.katex-display, .katex-display > .katex > .katex-html': {
+    display: 'inline-block', // needed for display math to behave properly
+    width: '100%' // display math should be centered
   },
   // Define the readability classes. Red, orange, and yellow indicate bad scores
   // Purple and blue indicate average scores, and green indicates good scores
