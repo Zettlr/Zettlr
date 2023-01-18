@@ -9,6 +9,8 @@
           v-if="field.type === 'text'"
           v-bind:key="f_idx"
           v-bind:model-value="getModelValue(field.model)"
+          v-bind:disabled="field.disabled"
+          v-bind:placeholder="field.placeholder"
           v-bind:label="field.label"
           v-bind:name="field.model"
           v-bind:reset="field.reset"

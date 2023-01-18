@@ -127,12 +127,15 @@ export default class CiteprocProvider extends ProviderContract {
     this._watcher.on('all', (eventName, affectedPath) => {
       const db = this.databases.get(affectedPath)
 
-      if (db === undefined) {
-        this._logger.warning(`[Citeproc Provider] Chokidar reported the event ${eventName}:${affectedPath}, but no such database was loaded`)
-        return
-      }
-
-      if (eventName === 'change') {
+      if (db === undefined && eventName === 'change') {
+        // This indicates that the library had been loaded, but threw an error
+        // on reload (happens frequently, e.g., with Zotero). In that case,
+        // simply load it.
+        this.loadDatabase(affectedPath, false)
+          .catch(err => { this._logger.error(`[Citeproc] Could not reload database ${affectedPath}: ${String(err.message)}`, err) })
+      } else if (db === undefined) {
+        this._logger.warning(`[Citeproc] Received an event ${eventName} for path ${affectedPath}: Could not handle.`)
+      } else if (eventName === 'change') {
         // NOTE: We have to ask the engine to not unwatch the database.
         // Sometimes, errors may be, and if we unwatch the database on change
         // events, this would lead any error to no more changes being detected.

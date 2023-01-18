@@ -27,7 +27,7 @@ import { Decoration, EditorView, lineNumbers, MatchDecorator, ViewPlugin, ViewUp
 import { onMounted, ref, toRef, watch } from 'vue'
 import { autocompletion, closeBrackets, CompletionContext } from '@codemirror/autocomplete'
 import { bracketMatching, indentOnInput, StreamLanguage } from '@codemirror/language'
-import { codeSyntaxHighlighter, markdownSyntaxHighlighter } from '@common/modules/markdown-editor/highlight/get-syntax-highlighter'
+import { codeSyntaxHighlighter, markdownSyntaxHighlighter } from '@common/modules/markdown-editor/theme/syntax'
 import { yaml } from '@codemirror/legacy-modes/mode/yaml'
 import { EditorState } from '@codemirror/state'
 import { cssLanguage } from '@codemirror/lang-css'
@@ -222,7 +222,7 @@ const mdExtensions = [
     maxRenderedOptions: 20,
     override: [snippetsAutocomplete]
   }),
-  markdownParser('[[', ']]'), // Comes from the main editor
+  markdownParser(), // Comes from the main editor
   markdownSyntaxHighlighter(), // Comes from the main editor
   snippetsHighlight
 ]

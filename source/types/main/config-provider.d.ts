@@ -56,6 +56,7 @@ export interface ConfigOptions {
     citeStyle: 'in-text'|'in-text-suffix'|'regular'
     autoCloseBrackets: boolean
     showLinkPreviews: boolean
+    showStatusbar: boolean
     defaultSaveImagePath: string
     enableTableHelper: boolean
     indentUnit: number
@@ -68,6 +69,14 @@ export interface ConfigOptions {
     readabilityAlgorithm: string
     lint: {
       markdown: boolean
+      languageTool: {
+        active: boolean
+        level: 'picky'|'default'
+        provider: 'official'|'custom'
+        customServer: string
+        username: string
+        apiKey: string
+      }
     }
     autoCorrect: {
       active: boolean

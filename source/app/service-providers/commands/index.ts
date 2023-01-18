@@ -34,6 +34,7 @@ import FileFindAndReturnMetaData from './file-find-and-return-meta-data'
 import ImportLangFile from './import-lang-file'
 import ImportFiles from './import'
 import IncreasePomodoro from './increase-pomodoro'
+import LanguageTool from './language-tool'
 import OpenAttachment from './open-attachment'
 import Print from './print'
 import RequestMove from './request-move'
@@ -76,6 +77,7 @@ export const commands = [
   ImportFiles,
   ImportLangFile,
   IncreasePomodoro,
+  LanguageTool,
   OpenAttachment,
   Print,
   RenameTag,

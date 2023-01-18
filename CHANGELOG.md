@@ -188,6 +188,11 @@ there.
 - **New Feature**: Zettlr can now automatically update internal links (Wiki/
   Zettelkasten style) if you rename a file
 - **New Feature**: When you hover over a link, you can now get a link preview
+- **New Feature**: Zettlr now features a LanguageTool integration. You can turn
+  it on in the Spellchecker settings and even provide your LanguageTool username
+  and an API key to unlock premium features
+- **New Feature**: You can now activate a statusbar that shows some context-
+  specific information for each editor pane you have open
 - The TableEditor now has a clear data saving strategy: Whenever you change a
   table, you need to manually click the disk icon at the top of the table to
   apply all your changes to the document so that it can then be saved

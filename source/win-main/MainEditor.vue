@@ -348,6 +348,7 @@ const node = computed(() => store.state.paneData.find(leaf => leaf.id === props.
 const activeFile = computed(() => node.value?.activeFile) // TODO: MAYBE REMOVE
 const lastLeafId = computed(() => store.state.lastLeafId)
 const snippets = computed(() => store.state.snippets)
+const darkMode = computed(() => store.state.config.darkMode)
 
 const activeFileDescriptor = ref<undefined|MDFileDescriptor|CodeFileDescriptor>(undefined)
 
@@ -357,7 +358,6 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
   // everything all the time, but rather do one initial configuration, so
   // even if we incur a performance penalty, it won't be noticed that much.
   return {
-    // keyMap: store.state.config['editor.inputMode'], TODO
     indentUnit: store.state.config['editor.indentUnit'],
     indentWithTabs: store.state.config['editor.indentWithTabs'],
     autoCloseBrackets: store.state.config['editor.autoCloseBrackets'],
@@ -391,7 +391,11 @@ const editorConfiguration = computed<EditorConfigOptions>(() => {
     linkPreference: store.state.config['zkn.linkWithFilename'],
     linkFilenameOnly: store.state.config['zkn.linkFilenameOnly'],
     inputMode: store.state.config['editor.inputMode'],
-    distractionFree: props.distractionFree.valueOf()
+    lintMarkdown: store.state.config['editor.lint.markdown'],
+    // The editor only needs to know if it should use languageTool
+    lintLanguageTool: store.state.config['editor.lint.languageTool.active'],
+    distractionFree: props.distractionFree.valueOf(),
+    showStatusbar: store.state.config['editor.showStatusbar']
   } as EditorConfigOptions
 })
 
@@ -451,6 +455,11 @@ watch(toRef(props.editorCommands, 'replaceSelection'), () => {
   }
   const textToInsert: string = props.editorCommands.data
   mdEditor?.replaceSelection(textToInsert)
+})
+watch(darkMode, () => {
+  if (mdEditor !== null) {
+    mdEditor.darkMode = darkMode.value
+  }
 })
 
 const isMarkdown = computed(() => {
@@ -895,8 +904,7 @@ function handleDragLeave (event: DragEvent) {
 
   &.fullscreen {
     position: fixed;
-    z-index: 1000; // Ensure this editor instance is on top of any other pane
-    top: 40px; // Titlebar height
+    z-index: 100; // Ensure this editor instance is on top of any other pane
     bottom: 0;
     left: 0;
     right: 0;
@@ -982,15 +990,20 @@ function handleDragLeave (event: DragEvent) {
   }
 
   .cm-editor {
-    // The CodeMirror editor needs to respect the new tabbar; it cannot take
-    // up 100 % all for itself anymore.
-    margin-left: 0.5em;
-    font-family: inherit;
-    background-color: transparent;
-
-    @media(min-width: 1025px) { margin: 0 @editor-margin-normal-lg; }
-    @media(max-width: 1024px) { margin: 0 @editor-margin-normal-md; }
-    @media(max-width:  900px) { margin: 0 @editor-margin-normal-sm; }
+    .cm-scroller {
+      @media(min-width: 1025px) {
+        padding-left: @editor-margin-normal-lg;
+        padding-right: @editor-margin-fullscreen-lg
+      }
+      @media(max-width: 1024px) {
+        padding-left: 0 @editor-margin-normal-md;
+        padding-right: 0 @editor-margin-normal-md;
+      }
+      @media(max-width:  900px) {
+        padding-left: 0 @editor-margin-normal-sm;
+        padding-right: 0 @editor-margin-normal-sm;
+      }
+    }
 
     .code { // BEGIN: CODE BLOCK/FILE THEME
       // We're using this solarized theme here: https://ethanschoonover.com/solarized/
@@ -1050,42 +1063,8 @@ function handleDragLeave (event: DragEvent) {
     }
   }
 
-  .cm-editor .cm-scroller {
-    // Apply some padding so that Markdown documents aren't glued to the edges
-    padding-top: 50px;
-    padding-bottom: 50px;
-
-    .muted { opacity: 0.2; }
-  }
-
   .cm-content {
-    // padding-right: 5em;
-    padding-right: 5%;
     overflow-x: hidden !important; // Necessary to hide the horizontal scrollbar
-
-    // We need to override a negative margin
-    // and a bottom padding from the standard
-    // CSS for some calculations to be correct
-    // such as the table editor
-    margin-bottom: 0px;
-    padding-bottom: 0px;
-  }
-
-  .CodeMirror.CodeMirror-readonly {
-    .CodeMirror-cursor { display: none !important; }
-  }
-
-  // Math equations in text mode
-  .katex {
-    font-size: 1.1em; // reduce font-size of math a bit
-    display: inline-block; // needed for display math to behave properly
-    user-select: none; // Disable user text selection
-  }
-
-  // Math equations in display mode
-  .katex-display, .katex-display > .katex > .katex-html {
-    display: inline-block; // needed for display math to behave properly
-    width: 100%; // display math should be centred
   }
 }
 
@@ -1110,20 +1089,14 @@ body.win32 .main-editor-wrapper, body.linux .main-editor-wrapper {
 
 // CodeMirror fullscreen
 .main-editor-wrapper.fullscreen {
-    .cm-editor {
-    @media(min-width: 1301px) { margin-left: @editor-margin-fullscreen-xxl !important; }
-    @media(max-width: 1300px) { margin-left: @editor-margin-fullscreen-xl  !important; }
-    @media(max-width: 1100px) { margin-left: @editor-margin-fullscreen-lg  !important; }
-    @media(max-width: 1000px) { margin-left: @editor-margin-fullscreen-md  !important; }
-    @media(max-width:  800px) { margin-left: @editor-margin-fullscreen-sm  !important; }
+  .cm-scroller {
+    margin: 0;
+    @media(min-width: 1301px) { margin: 0 @editor-margin-fullscreen-xxl !important; }
+    @media(max-width: 1300px) { margin: 0 @editor-margin-fullscreen-xl  !important; }
+    @media(max-width: 1100px) { margin: 0 @editor-margin-fullscreen-lg  !important; }
+    @media(max-width: 1000px) { margin: 0 @editor-margin-fullscreen-md  !important; }
+    @media(max-width:  800px) { margin: 0 @editor-margin-fullscreen-sm  !important; }
 
-    .cm-content {
-      @media(min-width: 1301px) { padding-right: @editor-margin-fullscreen-xxl !important; }
-      @media(max-width: 1300px) { padding-right: @editor-margin-fullscreen-xl  !important; }
-      @media(max-width: 1100px) { padding-right: @editor-margin-fullscreen-lg  !important; }
-      @media(max-width: 1000px) { padding-right: @editor-margin-fullscreen-md  !important; }
-      @media(max-width:  800px) { padding-right: @editor-margin-fullscreen-sm  !important; }
-    }
   }
 }
 
@@ -1139,35 +1112,4 @@ body.darwin {
   }
 }
 
-// Define the readability classes
-// Red, orange, and yellow indicate bad scores
-// Purple and blue indicate average scores
-// Green indicates good scores
-body {
-  .cm-readability-0   { background-color: #ff0000aa; color: #444444 !important; }
-  .cm-readability-1   { background-color: #f67b2baa; color: #444444 !important; }
-  .cm-readability-2   { background-color: #e5a14faa; color: #444444 !important; }
-  .cm-readability-3   { background-color: #e3e532aa; color: #444444 !important; }
-  .cm-readability-4   { background-color: #d4c1fdaa; color: #444444 !important; }
-  .cm-readability-5   { background-color: #538fe9aa; color: #444444 !important; }
-  .cm-readability-6   { background-color: #53bce9aa; color: #444444 !important; }
-  .cm-readability-7   { background-color: #53e7e9aa; color: #444444 !important; }
-  .cm-readability-8   { background-color: #4ad14caa; color: #444444 !important; }
-  .cm-readability-9   { background-color: #53e955aa; color: #444444 !important; }
-  .cm-readability-10  { background-color: #7cf87eaa; color: #444444 !important; }
-}
-
-body.dark {
-  .cm-readability-0,
-  .cm-readability-1,
-  .cm-readability-2,
-  .cm-readability-3,
-  .cm-readability-4,
-  .cm-readability-5,
-  .cm-readability-6,
-  .cm-readability-7,
-  .cm-readability-8,
-  .cm-readability-9,
-  .cm-readability-10 { color: #cccccc !important; }
-}
 </style>
