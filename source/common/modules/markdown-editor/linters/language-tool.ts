@@ -21,10 +21,20 @@ import { StateEffect, StateField } from '@codemirror/state'
 
 const ipcRenderer = window.ipc
 
-const toggleLTR = StateEffect.define<boolean>()
+export interface LanguageToolStateField {
+  running: boolean
+  lastDetectedLanguage: string
+}
 
-export const languageToolRunning = StateField.define<boolean>({
-  create: () => false,
+const toggleLTR = StateEffect.define<LanguageToolStateField>()
+
+export const languageToolState = StateField.define<LanguageToolStateField>({
+  create: () => {
+    return {
+      running: false,
+      lastDetectedLanguage: 'auto'
+    }
+  },
   update (value, transaction) {
     for (const e of transaction.effects) {
       if (e.is(toggleLTR)) {
@@ -44,7 +54,7 @@ const ltLinter = linter(async view => {
     return []
   }
 
-  view.dispatch({ effects: toggleLTR.of(true) })
+  view.dispatch({ effects: toggleLTR.of({ running: true, lastDetectedLanguage: 'auto' }) })
 
   const diagnostics: Diagnostic[] = []
 
@@ -61,11 +71,15 @@ const ltLinter = linter(async view => {
     payload: document
   })
 
-  view.dispatch({ effects: toggleLTR.of(false) })
+  view.dispatch({ effects: toggleLTR.of({ running: false, lastDetectedLanguage: 'auto' }) })
 
   if (ltSuggestions === undefined) {
     return [] // Either an error or something else -- check the logs
   }
+
+  console.log(ltSuggestions.language.detectedLanguage)
+
+  view.dispatch({ effects: toggleLTR.of({ running: false, lastDetectedLanguage: ltSuggestions.language.detectedLanguage.code }) })
 
   if (ltSuggestions.matches.length === 0) {
     return [] // Hooray, nothing wrong!
@@ -140,5 +154,5 @@ const ltLinter = linter(async view => {
 
 export const languageTool = [
   ltLinter,
-  languageToolRunning
+  languageToolState
 ]

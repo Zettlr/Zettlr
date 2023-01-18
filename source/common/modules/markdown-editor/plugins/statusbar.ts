@@ -16,8 +16,10 @@ import { showPanel, Panel, EditorView } from '@codemirror/view'
 import { StateField } from '@codemirror/state'
 import { openLintPanel, forEachDiagnostic } from '@codemirror/lint'
 import { configField, configUpdateEffect } from '../util/configuration'
-import { languageToolRunning } from '../linters/language-tool'
+import { languageToolState } from '../linters/language-tool'
 import { trans } from '@common/i18n-renderer'
+import { charCountField, wordCountField } from './statistics-fields'
+import localiseNumber from '@common/util/localise-number'
 
 export interface StatusbarItem {
   content: string
@@ -42,30 +44,33 @@ function createStatusbar (view: EditorView): Panel {
 
       const config = update.state.field(configField)
 
+      // Word and char count
+      const wordCount = update.state.field(wordCountField, false)
+      const charCount = update.state.field(charCountField, false)
+
+      if (wordCount !== undefined) {
+        elements.push({ content: trans('%s words', localiseNumber(wordCount)) })
+      }
+      if (charCount !== undefined) {
+        elements.push({ content: trans('%s characters', localiseNumber(charCount)) })
+      }
+
       if (config.inputMode !== 'default') {
         elements.push({ content: 'Mode: ' + (config.inputMode === 'vim' ? 'Vim' : 'Emacs') })
       }
 
-      elements.push({ content: 'Indent: ' + (config.indentWithTabs ? '<Tab>' : '<Space>') })
-
-      // Detect linters
-      const linters: string[] = []
-      if (config.lintMarkdown) {
-        linters.push('MD')
-      }
-      if (config.lintLanguageTool) {
-        linters.push('LT')
-      }
-      elements.push({ content: 'Lint: ' + linters.join(' + ') })
-
       // Determine if LanguageTool is currently running
-      const hasLanguageTool = update.state.field(languageToolRunning, false) !== undefined
-      if (config.lintLanguageTool && hasLanguageTool) {
-        if (update.state.field(languageToolRunning)) {
-          elements.push({ content: 'LanguageTool: running…' })
-        } else {
-          elements.push({ content: 'LanguageTool: idle' })
+      const ltState = update.state.field(languageToolState, false)
+      if (config.lintLanguageTool && ltState !== undefined) {
+        let icon = '<cds-icon shape="check"></cds-icon>'
+        if (ltState.running) {
+          icon = '<cds-icon shape="hourglass"></cds-icon>'
         }
+
+        elements.push({
+          content: `LanguageTool: ${icon} (${ltState.lastDetectedLanguage})`,
+          allowHtml: true
+        })
       }
 
       // Get numbers of diagnostics
@@ -83,7 +88,7 @@ function createStatusbar (view: EditorView): Panel {
       })
 
       elements.push({
-        content: `<cds-icon shape="info-standard"></cds-icon> ${info} <cds-icon shape="warning-standard"></cds-icon> ${warn} <cds-icon shape="exclamation-triangle" solid="true"></cds-icon> ${error}`,
+        content: `<cds-icon shape="help-info"></cds-icon> ${info} <cds-icon shape="warning-standard"></cds-icon> ${warn} <cds-icon shape="times-circle"></cds-icon> ${error}`,
         allowHtml: true,
         title: trans('Open diagnostics panel'),
         onClick (event) {
