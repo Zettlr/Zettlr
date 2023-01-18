@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-01-17 19:05+0000\n"
+"POT-Creation-Date: 2023-01-18 18:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -182,6 +182,10 @@ msgstr "Otevřít v prohlížeči"
 #: source/win-main/file-manager/util/file-item-context.ts:79
 msgid "Show file"
 msgstr "Zobrazit soubor"
+
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:88
+msgid "Open diagnostics panel"
+msgstr ""
 
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
@@ -581,7 +585,7 @@ msgid "Add to file"
 msgstr "Přidat do souboru"
 
 #. Else standard val for new dirs.
-#: source/tmp/tree-item.vue.ts:259
+#: source/tmp/tree-item.vue.ts:262
 #: source/app/service-providers/commands/dir-new.ts:42
 msgid "Untitled"
 msgstr "Bez názvu"
@@ -821,7 +825,7 @@ msgid "Hostname"
 msgstr "Hostname"
 
 #: source/win-preferences/schema/advanced.ts:96
-#: source/win-preferences/schema/spellchecking.ts:37
+#: source/win-preferences/schema/spellchecking.ts:81
 msgid "Search for entries …"
 msgstr "Hledat položky ..."
 
@@ -967,27 +971,32 @@ msgstr "Režim editoru"
 msgid "Check Markdown for style issues"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:104
+#: source/win-preferences/schema/editor.ts:102
+#, fuzzy
+msgid "Show statusbar"
+msgstr "Zobrazit Zettlr"
+
+#: source/win-preferences/schema/editor.ts:109
 msgid "Mute non-focused lines in distraction-free mode"
 msgstr "V režimu soustředění ztlumit neaktivní řádky"
 
-#: source/win-preferences/schema/editor.ts:109
+#: source/win-preferences/schema/editor.ts:114
 msgid "Automatically close matching character pairs"
 msgstr "Automaticky uzavírat odpovídající párové znaky"
 
-#: source/win-preferences/schema/editor.ts:114
+#: source/win-preferences/schema/editor.ts:119
 msgid "Accept spaces during autocompletion"
 msgstr "Automatické doplňování včetně mezer"
 
-#: source/win-preferences/schema/editor.ts:119
+#: source/win-preferences/schema/editor.ts:124
 msgid "Enable Table Editor"
 msgstr "Povolit Editor tabulek"
 
-#: source/win-preferences/schema/editor.ts:124
+#: source/win-preferences/schema/editor.ts:129
 msgid "Show link previews"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:129
+#: source/win-preferences/schema/editor.ts:134
 msgid "Count characters instead of words (e.g., for Chinese)"
 msgstr "Počítat znaky místo slov (např. pro čínštinu)"
 
@@ -1161,20 +1170,55 @@ msgid "In the file metadata display"
 msgstr "Zobrazit metadata souboru"
 
 #: source/win-preferences/schema/spellchecking.ts:23
+msgid "Use LanguageTool"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:28
+msgid "Strictness"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:30
+#, fuzzy
+msgid "Standard"
+msgstr "Kalendář"
+
+#: source/win-preferences/schema/spellchecking.ts:31
+msgid "Picky"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:38
+msgid "LanguageTool Provider"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:41
+#: source/win-preferences/schema/spellchecking.ts:48
+#, fuzzy
+msgid "Custom server"
+msgstr "Vlastní CSS"
+
+#: source/win-preferences/schema/spellchecking.ts:55
+msgid "LanguageTool Username"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:60
+msgid "LanguageTool API key"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:67
 msgid ""
 "Select the languages for which you want to enable automatic spell checking."
 msgstr ""
 "Vyberte jazyky, pro které chcete zapnout automatickou kontrolu pravopisu."
 
-#: source/win-preferences/schema/spellchecking.ts:28
+#: source/win-preferences/schema/spellchecking.ts:72
 msgid "Search for dictionaries &hellip;"
 msgstr "Hledat slovníky &hellip;"
 
-#: source/win-preferences/schema/spellchecking.ts:32
+#: source/win-preferences/schema/spellchecking.ts:76
 msgid "User dictionary. Remove words by clicking them."
 msgstr "Uživatelský slovník. Slova odstraníte klepnutím na ně."
 
-#: source/win-preferences/schema/spellchecking.ts:34
+#: source/win-preferences/schema/spellchecking.ts:78
 msgid "Dictionary entry"
 msgstr "Záznam ve slovníku"
 
@@ -1292,12 +1336,12 @@ msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
 msgstr ""
 "Automaticky vytvářené soubory ukládat do složky (musí být nahraná do Zettlr)"
 
-#: source/app/service-providers/citeproc/index.ts:236
-#: source/app/service-providers/citeproc/index.ts:434
+#: source/app/service-providers/citeproc/index.ts:239
+#: source/app/service-providers/citeproc/index.ts:437
 msgid "The citation database could not be loaded"
 msgstr "Databázi citací nelze nahrát"
 
-#: source/app/service-providers/citeproc/index.ts:422
+#: source/app/service-providers/citeproc/index.ts:425
 msgid "Changes to the library file detected. Reloading …"
 msgstr "Zjištěna změna souboru knihovny. Načítá se znovu..."
 

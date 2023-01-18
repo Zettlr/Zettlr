@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-01-17 19:05+0000\n"
+"POT-Creation-Date: 2023-01-18 18:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -182,6 +182,10 @@ msgstr "Otwórz w przeglądarce"
 #: source/win-main/file-manager/util/file-item-context.ts:79
 msgid "Show file"
 msgstr "Pokaż plik"
+
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:88
+msgid "Open diagnostics panel"
+msgstr ""
 
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
@@ -577,7 +581,7 @@ msgid "Add to file"
 msgstr "Dodaj do pliku"
 
 #. Else standard val for new dirs.
-#: source/tmp/tree-item.vue.ts:259
+#: source/tmp/tree-item.vue.ts:262
 #: source/app/service-providers/commands/dir-new.ts:42
 msgid "Untitled"
 msgstr "Bez tytułu"
@@ -817,7 +821,7 @@ msgid "Hostname"
 msgstr "Nazwa hosta"
 
 #: source/win-preferences/schema/advanced.ts:96
-#: source/win-preferences/schema/spellchecking.ts:37
+#: source/win-preferences/schema/spellchecking.ts:81
 msgid "Search for entries …"
 msgstr "Szukaj wpisów..."
 
@@ -959,27 +963,32 @@ msgstr "Tryb wprowadzania"
 msgid "Check Markdown for style issues"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:104
+#: source/win-preferences/schema/editor.ts:102
+#, fuzzy
+msgid "Show statusbar"
+msgstr "Pokaż Zettlr"
+
+#: source/win-preferences/schema/editor.ts:109
 msgid "Mute non-focused lines in distraction-free mode"
 msgstr "Wygaś pozostałe linie w trybie bez rozproszeń"
 
-#: source/win-preferences/schema/editor.ts:109
+#: source/win-preferences/schema/editor.ts:114
 msgid "Automatically close matching character pairs"
 msgstr "Automatycznie zamykaj pary znaków"
 
-#: source/win-preferences/schema/editor.ts:114
+#: source/win-preferences/schema/editor.ts:119
 msgid "Accept spaces during autocompletion"
 msgstr "Akceptuj spacje podczas autouzupełniania"
 
-#: source/win-preferences/schema/editor.ts:119
+#: source/win-preferences/schema/editor.ts:124
 msgid "Enable Table Editor"
 msgstr "Włącz edytor tabeli"
 
-#: source/win-preferences/schema/editor.ts:124
+#: source/win-preferences/schema/editor.ts:129
 msgid "Show link previews"
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:129
+#: source/win-preferences/schema/editor.ts:134
 msgid "Count characters instead of words (e.g., for Chinese)"
 msgstr "Liczenie znaków zamiast słów"
 
@@ -1153,19 +1162,54 @@ msgid "In the file metadata display"
 msgstr "Wyświetlane metadane pliku"
 
 #: source/win-preferences/schema/spellchecking.ts:23
+msgid "Use LanguageTool"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:28
+msgid "Strictness"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:30
+#, fuzzy
+msgid "Standard"
+msgstr "Kalendarz"
+
+#: source/win-preferences/schema/spellchecking.ts:31
+msgid "Picky"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:38
+msgid "LanguageTool Provider"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:41
+#: source/win-preferences/schema/spellchecking.ts:48
+#, fuzzy
+msgid "Custom server"
+msgstr "Własny CSS"
+
+#: source/win-preferences/schema/spellchecking.ts:55
+msgid "LanguageTool Username"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:60
+msgid "LanguageTool API key"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:67
 msgid ""
 "Select the languages for which you want to enable automatic spell checking."
 msgstr "Wybierz języki automatycznego sprawdzania pisowni"
 
-#: source/win-preferences/schema/spellchecking.ts:28
+#: source/win-preferences/schema/spellchecking.ts:72
 msgid "Search for dictionaries &hellip;"
 msgstr "Szukaj słowników &hellip;"
 
-#: source/win-preferences/schema/spellchecking.ts:32
+#: source/win-preferences/schema/spellchecking.ts:76
 msgid "User dictionary. Remove words by clicking them."
 msgstr "Słownik osobisty. Kliknięcie usuwa słowa."
 
-#: source/win-preferences/schema/spellchecking.ts:34
+#: source/win-preferences/schema/spellchecking.ts:78
 msgid "Dictionary entry"
 msgstr "Wpis słownika"
 
@@ -1281,12 +1325,12 @@ msgstr "Automatycznie twórz nowe pliki podążając za łączami wewnętrznymi"
 msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
 msgstr "Zapisuj automatycznie stworzone pliki w tym folderze"
 
-#: source/app/service-providers/citeproc/index.ts:236
-#: source/app/service-providers/citeproc/index.ts:434
+#: source/app/service-providers/citeproc/index.ts:239
+#: source/app/service-providers/citeproc/index.ts:437
 msgid "The citation database could not be loaded"
 msgstr "Nie udało się załadować bazy cytowań"
 
-#: source/app/service-providers/citeproc/index.ts:422
+#: source/app/service-providers/citeproc/index.ts:425
 msgid "Changes to the library file detected. Reloading …"
 msgstr "Wykryto zmiany w pliku biblioteki. Trwa ładowanie..."
 
