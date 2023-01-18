@@ -83,7 +83,7 @@ function createStatusbar (view: EditorView): Panel {
       })
 
       elements.push({
-        content: `<strong>i</strong> ${info} <strong>⚠️</strong> ${warn} <strong>!</strong> ${error}`,
+        content: `<clr-icon shape="info"></clr-icon> ${info} <clr-icon shape="warning"></clr-icon> ${warn} <clr-icon shape="danger" solid="true"></clr-icon> ${error}`,
         allowHtml: true,
         title: trans('Open diagnostics panel'),
         onClick (event) {
@@ -145,7 +145,7 @@ const statusbarTheme = EditorView.baseTheme({
     color: '#ddd'
   },
   '.cm-statusbar .cm-statusbar-item': {
-    display: 'block',
+    display: 'flex',
     padding: '0 5px'
   },
   '.cm-statusbar .cm-statusbar-item:not(:first-child)': {
