@@ -136,7 +136,7 @@ const ltLinter = linter(async view => {
   }
 
   return diagnostics
-})
+}, { delay: 2000 }) // Increase the delay to reduce server strain
 
 export const languageTool = [
   ltLinter,

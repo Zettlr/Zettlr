@@ -15,6 +15,7 @@
 import ZettlrCommand from './zettlr-command'
 import got from 'got'
 import { URLSearchParams } from 'url'
+import { app } from 'electron'
 
 export interface LanguageToolAPIMatch {
   message: string // Long message (English)
@@ -112,10 +113,16 @@ export default class LanguageTool extends ZettlrCommand {
       server = server.substring(0, server.length - 1)
     }
 
+    const headers = {
+      // NOTE: For debugging purposes, we send a custom User-Agent string. This
+      // should help figure out potential problems in case Zettlr causes large
+      // request flows to the official servers
+      'User-Agent': `Zettlr/${app.getVersion()} (${process.platform}-${process.arch})`
+    }
+
     try {
-      console.log(server)
       // NOTE: Documentation at https://languagetool.org/http-api/#!/default/post_check
-      const result = await got(`${server}/v2/check`, { method: 'post', body: searchParams.toString() })
+      const result = await got(`${server}/v2/check`, { method: 'post', body: searchParams.toString(), headers })
       return JSON.parse(result.body)
     } catch (err: any) {
       this._app.log.error(`[Application] Error running LanguageTool: ${String(err.message)}`, err)
