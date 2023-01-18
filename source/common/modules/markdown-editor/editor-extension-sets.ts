@@ -33,7 +33,7 @@ import { syntaxExtensions } from './parser/syntax-extensions'
 import { defaultContextMenu } from './plugins/default-context-menu'
 import { readabilityMode } from './plugins/readability'
 import { hookDocumentAuthority } from './plugins/remote-doc'
-import { lintGutter } from '@codemirror/lint'
+import { lintGutter, linter } from '@codemirror/lint'
 import { spellcheck } from './linters/spellcheck'
 import { mdLint } from './linters/md-lint'
 import { mdStatistics } from './plugins/statistics-fields'
@@ -45,7 +45,7 @@ import { EditorConfiguration, configField } from './util/configuration'
 import { highlightRanges } from './plugins/highlight-ranges'
 import { jsonFolding } from './code-folding/json'
 import { markdownFolding } from './code-folding/markdown'
-import { jsonLanguage } from '@codemirror/lang-json'
+import { jsonLanguage, jsonParseLinter } from '@codemirror/lang-json'
 import { softwrapVisualIndent } from './plugins/visual-indent'
 import { codeblockBackground } from './plugins/codeblock-background'
 import { vim } from '@replit/codemirror-vim'
@@ -300,7 +300,8 @@ export function getJSONExtensions (options: CoreExtensionOptions): Extension[] {
   return [
     ...getGenericCodeExtensions(options),
     jsonFolding,
-    jsonLanguage
+    jsonLanguage,
+    linter(jsonParseLinter())
   ]
 }
 
