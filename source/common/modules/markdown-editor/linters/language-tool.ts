@@ -114,7 +114,14 @@ const ltLinter = linter(async view => {
     if (match.replacements.length > 0) {
       const actions: Action[] = []
 
+      // Show at most 10 actions to not overload those messages
+      let i = 0
       for (const { value } of match.replacements) {
+        if (i === 10) {
+          break
+        }
+        i++
+
         actions.push({
           name: value,
           apply (view, from, to) {
