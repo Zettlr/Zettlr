@@ -101,7 +101,7 @@ jobs:
   # overwriting of the files in the previous release. That doesn't wreak any
   # havoc because we don't push unstable code to master, BUT it looks bad.
   verify_version:
-    name: 'Verify version tag'
+    name: 'Preflight / Verify version tag'
     runs-on: ubuntu-latest
     steps:
       - name: Clone repository (master branch)
