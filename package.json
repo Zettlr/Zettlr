@@ -16,7 +16,7 @@
   "main": ".webpack/main",
   "scripts": {
     "start": "cross-env NODE_ENV=develop electron-forge start",
-    "package": "cross-env NODE_ENV=production SKIP_TYPECHECKING=true electron-forge package",
+    "package": "cross-env NODE_ENV=production electron-forge package",
     "package:mac-x64": "cross-env NODE_ENV=production npm_config_arch=x64 electron-forge package --platform=darwin --arch=x64",
     "package:mac-arm": "cross-env NODE_ENV=production npm_config_arch=arm64 electron-forge package --platform=darwin --arch=arm64",
     "package:win-x64": "cross-env NODE_ENV=production npm_config_arch=x64 electron-forge package --platform=win32 --arch=x64",
@@ -32,7 +32,7 @@
     "update:csl": "node scripts/update-csl.mjs",
     "update:citation": "node scripts/update-citation.mjs",
     "test": "mocha",
-    "test-gui": "cross-env NODE_ENV=develop SKIP_TYPECHECKING=true node scripts/test-gui/index.mjs",
+    "test-gui": "cross-env NODE_ENV=develop node scripts/test-gui/index.mjs",
     "lint": "eslint --ext js,vue,ts source"
   },
   "config": {
@@ -147,7 +147,6 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-vue": "^9.7.0",
     "eslint-webpack-plugin": "^3.2.0",
-    "fork-ts-checker-webpack-plugin": "^7.0.0",
     "jsdom": "^20.0.2",
     "less": "^4.1.2",
     "less-loader": "^11.1.0",
