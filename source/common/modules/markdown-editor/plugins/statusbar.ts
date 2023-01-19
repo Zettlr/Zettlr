@@ -62,15 +62,24 @@ function createStatusbar (view: EditorView): Panel {
       // Determine if LanguageTool is currently running
       const ltState = update.state.field(languageToolState, false)
       if (config.lintLanguageTool && ltState !== undefined) {
-        let icon = '<cds-icon shape="check"></cds-icon>'
+        // Three possibilities: It's currently running, there was an error, or
+        // LT is idling
         if (ltState.running) {
-          icon = '<cds-icon shape="hourglass"></cds-icon>'
+          elements.push({
+            content: 'LanguageTool: <cds-icon shape="hourglass"></cds-icon>',
+            allowHtml: true
+          })
+        } else if (ltState.lastError !== undefined) {
+          elements.push({
+            content: `LanguageTool: <cds-icon shape="exclamation-triangle"></cds-icon> (${ltState.lastError})`,
+            allowHtml: true
+          })
+        } else {
+          elements.push({
+            content: `LanguageTool: <cds-icon shape="check"></cds-icon> (${ltState.lastDetectedLanguage})`,
+            allowHtml: true
+          })
         }
-
-        elements.push({
-          content: `LanguageTool: ${icon} (${ltState.lastDetectedLanguage})`,
-          allowHtml: true
-        })
       }
 
       // Get numbers of diagnostics

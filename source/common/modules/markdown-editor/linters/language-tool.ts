@@ -24,6 +24,7 @@ const ipcRenderer = window.ipc
 export interface LanguageToolStateField {
   running: boolean
   lastDetectedLanguage: string
+  lastError?: string
 }
 
 const toggleLTR = StateEffect.define<LanguageToolStateField>()
@@ -68,7 +69,7 @@ const ltLinter = linter(async view => {
   // but we are clever: Since we can extract the textNodes, we can basically
   // ignore any warning outside of these ranges! YAY!
 
-  const ltSuggestions: LanguageToolAPIResponse|undefined = await ipcRenderer.invoke('application', {
+  const ltSuggestions: LanguageToolAPIResponse|undefined|string = await ipcRenderer.invoke('application', {
     command: 'run-language-tool',
     payload: document
   })
@@ -76,7 +77,10 @@ const ltLinter = linter(async view => {
   view.dispatch({ effects: toggleLTR.of({ running: false, lastDetectedLanguage }) })
 
   if (ltSuggestions === undefined) {
-    return [] // Either an error or something else -- check the logs
+    return [] // Could not fetch a response, but it's benign
+  } else if (typeof ltSuggestions === 'string') {
+    view.dispatch({ effects: toggleLTR.of({ running: false, lastDetectedLanguage, lastError: ltSuggestions }) })
+    return [] // There was an error
   }
 
   view.dispatch({ effects: toggleLTR.of({ running: false, lastDetectedLanguage: ltSuggestions.language.detectedLanguage.code }) })

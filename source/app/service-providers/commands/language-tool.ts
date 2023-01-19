@@ -13,9 +13,10 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import got from 'got'
+import got, { HTTPError } from 'got'
 import { URLSearchParams } from 'url'
 import { app } from 'electron'
+import { trans } from '@common/i18n-main'
 
 export interface LanguageToolAPIMatch {
   message: string // Long message (English)
@@ -79,14 +80,19 @@ export default class LanguageTool extends ZettlrCommand {
   }
 
   /**
-   * Fetches LanguageTool replies for a given text
+   * Fetches LanguageTool replies for a given text. It returns either an API
+   * response, if everything went well, a string if there was a (possibly
+   * fixable) error (such as using the official LanguageTool API and sending a
+   * document with more than 20k or 80k characters), and undefined if something
+   * to-be-expected happened (such as: the service is not even turned on in the
+   * settings).
    *
    * @param   {string}                       evt  The event
    * @param   {string}                       arg  The text to check
    *
-   * @return  {Promise<LanguageToolAPIResponse|undefined>}       The result
+   * @return  {Promise<LanguageToolAPIResponse|string|undefined>}       The result
    */
-  async run (evt: string, arg: string): Promise<LanguageToolAPIResponse|undefined> {
+  async run (evt: string, arg: string): Promise<LanguageToolAPIResponse|string|undefined> {
     const { languageTool } = this._app.config.getConfig().editor.lint
     if (!languageTool.active) {
       return undefined // LanguageTool is not active
@@ -125,6 +131,17 @@ export default class LanguageTool extends ZettlrCommand {
       const result = await got(`${server}/v2/check`, { method: 'post', body: searchParams.toString(), headers })
       return JSON.parse(result.body)
     } catch (err: any) {
+      if (err instanceof HTTPError && err.code === 'ERR_NON_2XX_3XX_RESPONSE') {
+        // The API complained. There are a few things that can happen, and here
+        // we only translate them into error messages the users can understand.
+        switch (err.message) {
+          case 'Response code 413 (Request Entity Too Large)':
+            return trans('Document too long')
+          default:
+            return err.message // This allows us to detect other error messages we need to translate
+        }
+      }
+
       this._app.log.error(`[Application] Error running LanguageTool: ${String(err.message)}`, err)
       return undefined // Silently swallow errors
     }
