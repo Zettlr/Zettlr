@@ -93,7 +93,7 @@ concurrency:
 jobs:
   # First, ensure that nothing breaks before attempting to build
   preflight:
-    name: 'Preflight: Unit tests'
+    name: 'Preflight'
     uses: ./.github/workflows/check.yml
   # If we're building a full release, we have to make sure that nobody (that is:
   # Hendrik) forgot to increment the tag version. If we already have a tag with
