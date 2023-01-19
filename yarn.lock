@@ -7648,9 +7648,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsdom@npm:^20.0.2":
-  version: 20.0.3
-  resolution: "jsdom@npm:20.0.3"
+"jsdom@npm:^21.0.0":
+  version: 21.0.0
+  resolution: "jsdom@npm:21.0.0"
   dependencies:
     abab: ^2.0.6
     acorn: ^8.8.1
@@ -7683,7 +7683,7 @@ __metadata:
   peerDependenciesMeta:
     canvas:
       optional: true
-  checksum: 6e2ae21db397133a061b270c26d2dbc0b9051733ea3b896a7ece78d79f475ff0974f766a413c1198a79c793159119169f2335ddb23150348fbfdcfa6f3105536
+  checksum: 5e553f8a106716a7fc8084350418c69bbbe9121e792760a9b153d5eb184464497c660f2dadcc425f3a17fdde31a3ed4c8bc7b9e9515832f4bbc9d877041bce3a
   languageName: node
   linkType: hard
 
@@ -13384,7 +13384,7 @@ __metadata:
     gettext-parser: ^6.0.0
     got: ^12.5.2
     joplin-turndown-plugin-gfm: ^1.0.12
-    jsdom: ^20.0.2
+    jsdom: ^21.0.0
     katex: ^0.16.3
     ky: 0.33.x
     less: ^4.1.2
