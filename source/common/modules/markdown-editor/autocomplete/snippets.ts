@@ -59,21 +59,21 @@ class SnippetWidget extends WidgetType {
  * This utility function inserts a snippet
  */
 function apply (view: EditorView, completion: Completion, from: number, to: number): void {
-  const [ textToInsert, ranges ] = template2snippet(view.state, completion.info as string, from - 1)
+  const [ textToInsert, selections ] = template2snippet(view.state, completion.info as string, from - 1)
   // We can immediately take the first rangeset and set it as a selection, whilst
   // committing the rest into our StateField as an effect
-  const firstRange = ranges.shift()
+  const firstSelection = selections.shift()
   view.dispatch({
     changes: [{ from: from - 1, to, insert: textToInsert }],
-    selection: EditorSelection.create(firstRange ?? [EditorSelection.cursor(to)]),
-    effects: snippetTabsEffect.of(ranges)
+    selection: firstSelection,
+    effects: snippetTabsEffect.of(selections)
   })
 }
 
 /**
  * Used internally to add ranges for the snippets to the state
  */
-const snippetTabsEffect = StateEffect.define<SelectionRange[][]>()
+const snippetTabsEffect = StateEffect.define<EditorSelection[]>()
 
 /**
  * This effect is used to indicate to the library that it should remove the
@@ -89,14 +89,14 @@ export const snippetsUpdate = StateEffect.define<Array<{ name: string, content: 
 
 interface SnippetStateField {
   availableSnippets: Completion[]
-  activeRanges: SelectionRange[][]
+  activeSelections: EditorSelection[]
 }
 
 export const snippetsUpdateField = StateField.define<SnippetStateField>({
   create (state) {
     return {
       availableSnippets: [],
-      activeRanges: []
+      activeSelections: []
     }
   },
   update (val, transaction) {
@@ -107,7 +107,7 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
         })
         return { ...val }
       } else if (effect.is(snippetTabsEffect)) {
-        val.activeRanges = effect.value
+        val.activeSelections = effect.value
         return { ...val }
       } else if (effect.is(shiftNextTabEffect)) {
         // NOTE: We cannot shift the range in the nextTab() command, as this
@@ -116,20 +116,18 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
         // up the fact that this range doesn't exist anymore after the user
         // starts typing, which re-evaluates the length of the activeRanges
         // array.)
-        val.activeRanges.shift()
+        val.activeSelections.shift()
         return { ...val }
       }
     }
 
-    if (!transaction.docChanged || val.activeRanges.length === 0) {
+    if (!transaction.docChanged || val.activeSelections.length === 0) {
       return val
     }
 
     // This monstrosity ensures that our ranges stay in sync while the user types
-    val.activeRanges = val.activeRanges.map(ranges => {
-      return ranges.map((range) => {
-        return range.map(transaction.changes)
-      })
+    val.activeSelections = val.activeSelections.map(selection => {
+      return selection.map(transaction.changes)
     })
 
     return { ...val }
@@ -137,15 +135,15 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
   // Turns any active ranges into decorations to highlight them
   provide: field => {
     return EditorView.decorations.from(field, (fieldValue) => {
-      if (fieldValue.activeRanges.length === 0) {
+      if (fieldValue.activeSelections.length === 0) {
         return Decoration.none
       }
 
       const decorations: any[] = []
       let position = 0
-      for (const ranges of fieldValue.activeRanges) {
+      for (const selection of fieldValue.activeSelections) {
         position++
-        for (const range of ranges) {
+        for (const range of selection.ranges) {
           if (range.empty) {
             const widget = new SnippetWidget(`$${position}`, range)
             decorations.push(Decoration.widget({ widget }).range(range.from))
@@ -175,10 +173,10 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
  * @param   {number}  rangeOffset           The global offset at which the
  *                                          template will be inserted
  *
- * @return  {[string, SelectionRange[][]]}  The final text as well as tabstop
+ * @return  {[string, EditorSelection[]]}  The final text as well as tabstop
  *                                          ranges (if any)
  */
-function template2snippet (state: EditorState, template: string, rangeOffset: number): [string, SelectionRange[][]] {
+function template2snippet (state: EditorState, template: string, rangeOffset: number): [string, EditorSelection[]] {
   const rawRanges: Array<{ position: number, ranges: SelectionRange[] }> = []
   let finalText = replaceSnippetVariables(state, template)
 
@@ -231,9 +229,9 @@ function template2snippet (state: EditorState, template: string, rangeOffset: nu
 
   // For the rest of the script, it's irrelevant which position the tabs had,
   // since it expects the array to be sorted anyways, so we can omit that info now.
-  const onlyRanges = combinedRanges.map(v => v.ranges)
+  const slections = combinedRanges.map(v => EditorSelection.create(v.ranges))
 
-  return [ finalText, onlyRanges ]
+  return [ finalText, slections ]
 }
 
 /**
@@ -331,16 +329,16 @@ export const snippets: AutocompletePlugin = {
 
 export function nextSnippet (target: EditorView): boolean {
   // Progresses to the next tabstop if there's one available
-  const activeRanges = target.state.field(snippetsUpdateField).activeRanges
-  if (activeRanges.length === 0) {
+  const { activeSelections } = target.state.field(snippetsUpdateField)
+  if (activeSelections.length === 0) {
     return false
   }
 
   target.dispatch({
-    selection: EditorSelection.create(activeRanges[0]),
+    selection: activeSelections[0],
     effects: [
       shiftNextTabEffect.of(null),
-      EditorView.scrollIntoView(activeRanges[0][0].from, { y: 'center' })
+      EditorView.scrollIntoView(activeSelections[0].main.from, { y: 'center' })
     ]
   })
   return true
@@ -348,7 +346,7 @@ export function nextSnippet (target: EditorView): boolean {
 
 export function abortSnippet (target: EditorView): boolean {
   // Removes all tabstops, if there are any
-  const ranges = target.state.field(snippetsUpdateField).activeRanges.length
+  const ranges = target.state.field(snippetsUpdateField).activeSelections.length
   if (ranges > 0) {
     target.dispatch({ effects: snippetTabsEffect.of([]) })
     return true
