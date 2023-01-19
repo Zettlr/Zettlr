@@ -1,12 +1,18 @@
 name: Unit Tests / Lint
 
-on: [push, pull_request]
+# On every push, and whenever another workflow calls this one
+on: [push, workflow_call]
 
 permissions:
   contents: read
 
 env:
   NODE_VERSION: '16'
+
+# Ensure only a single unit test workflow runs at any one time for any event
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}
+  cancel-in-progress: true
 
 jobs:
   check:
