@@ -13,7 +13,7 @@
  */
 
 import ZettlrCommand from './zettlr-command'
-import got, { HTTPError } from 'got'
+import got, { HTTPError, RequestError } from 'got'
 import { URLSearchParams } from 'url'
 import { app } from 'electron'
 import { trans } from '@common/i18n-main'
@@ -140,6 +140,8 @@ export default class LanguageTool extends ZettlrCommand {
           default:
             return err.message // This allows us to detect other error messages we need to translate
         }
+      } else if (err instanceof RequestError) {
+        return trans('offline') // Maybe very coarse, but remember it needs to be concise and user-readable
       }
 
       this._app.log.error(`[Application] Error running LanguageTool: ${String(err.message)}`, err)
