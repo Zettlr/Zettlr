@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-01-18 18:29+0000\n"
+"POT-Creation-Date: 2023-01-19 02:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -183,7 +183,22 @@ msgstr "在瀏覽器開啟"
 msgid "Show file"
 msgstr "顯示檔案"
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:88
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:52
+#: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/PopoverDirProps.vue.ts:144
+#: source/tmp/file-item.vue.ts:134 source/tmp/file-item.vue.ts:207
+#: source/tmp/PopoverFileProps.vue.ts:89
+#, javascript-format
+msgid "%s words"
+msgstr "%s 字"
+
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:55
+#: source/tmp/PopoverDocInfo.vue.ts:71 source/tmp/file-item.vue.ts:132
+#: source/tmp/file-item.vue.ts:205
+#, javascript-format
+msgid "%s characters"
+msgstr "%s 字元"
+
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:93
 msgid "Open diagnostics panel"
 msgstr ""
 
@@ -318,19 +333,6 @@ msgstr "字元"
 #: source/tmp/PopoverDocInfo.vue.ts:44
 msgid "characters (w/o spaces)"
 msgstr "字元（不含空白）"
-
-#: source/tmp/PopoverDocInfo.vue.ts:71 source/tmp/file-item.vue.ts:132
-#: source/tmp/file-item.vue.ts:205
-#, javascript-format
-msgid "%s characters"
-msgstr "%s 字元"
-
-#: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/PopoverDirProps.vue.ts:144
-#: source/tmp/file-item.vue.ts:134 source/tmp/file-item.vue.ts:207
-#: source/tmp/PopoverFileProps.vue.ts:89
-#, javascript-format
-msgid "%s words"
-msgstr "%s 字"
 
 #: source/tmp/MainSidebar.vue.ts:74 source/tmp/OtherFilesTab.vue.ts:13
 msgid "Other files"
@@ -696,6 +698,14 @@ msgid ""
 msgstr ""
 "所有商標和品牌名稱相關的一切權力歸其合法所有人。除了使用它們的程式碼之外，"
 "Zettlr 與其概無任何關聯。Node.js 是 Joyent 的商標。"
+
+#: source/tmp/General-Tab.vue.ts:26
+msgid ""
+"Zettlr offers an integration with LanguageTool.org, a service provided by "
+"LanguageTooler GmbH. Using this service requires an internet connection and "
+"is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
+"server that you use."
+msgstr ""
 
 #: source/tmp/Theme.vue.ts:37
 msgid "selected"

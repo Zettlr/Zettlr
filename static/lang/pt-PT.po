@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-01-18 18:29+0000\n"
+"POT-Creation-Date: 2023-01-19 02:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -183,7 +183,22 @@ msgstr "Abrir no navegador"
 msgid "Show file"
 msgstr "Mostrar ficheiro"
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:88
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:52
+#: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/PopoverDirProps.vue.ts:144
+#: source/tmp/file-item.vue.ts:134 source/tmp/file-item.vue.ts:207
+#: source/tmp/PopoverFileProps.vue.ts:89
+#, javascript-format
+msgid "%s words"
+msgstr "%s palavras"
+
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:55
+#: source/tmp/PopoverDocInfo.vue.ts:71 source/tmp/file-item.vue.ts:132
+#: source/tmp/file-item.vue.ts:205
+#, javascript-format
+msgid "%s characters"
+msgstr "%s caracteres"
+
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:93
 msgid "Open diagnostics panel"
 msgstr ""
 
@@ -321,19 +336,6 @@ msgstr "caracteres"
 #: source/tmp/PopoverDocInfo.vue.ts:44
 msgid "characters (w/o spaces)"
 msgstr "caracteres (sem espaços)"
-
-#: source/tmp/PopoverDocInfo.vue.ts:71 source/tmp/file-item.vue.ts:132
-#: source/tmp/file-item.vue.ts:205
-#, javascript-format
-msgid "%s characters"
-msgstr "%s caracteres"
-
-#: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/PopoverDirProps.vue.ts:144
-#: source/tmp/file-item.vue.ts:134 source/tmp/file-item.vue.ts:207
-#: source/tmp/PopoverFileProps.vue.ts:89
-#, javascript-format
-msgid "%s words"
-msgstr "%s palavras"
 
 #: source/tmp/MainSidebar.vue.ts:74 source/tmp/OtherFilesTab.vue.ts:13
 msgid "Other files"
@@ -705,6 +707,14 @@ msgstr ""
 "Todos os logótipos e marcas pertencem aos seus legítimos proprietários. Para "
 "além do uso do seu código, o Zettlr não está de nenhuma forma afiliado a "
 "estes projectos. Node.js é uma marca comercial da Joyent, Inc."
+
+#: source/tmp/General-Tab.vue.ts:26
+msgid ""
+"Zettlr offers an integration with LanguageTool.org, a service provided by "
+"LanguageTooler GmbH. Using this service requires an internet connection and "
+"is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
+"server that you use."
+msgstr ""
 
 #: source/tmp/Theme.vue.ts:37
 msgid "selected"

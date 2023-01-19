@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 3.0.0-beta\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-01-18 18:29+0000\n"
+"POT-Creation-Date: 2023-01-19 02:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -183,7 +183,22 @@ msgstr ""
 msgid "Show file"
 msgstr ""
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:88
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:52
+#: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/PopoverDirProps.vue.ts:144
+#: source/tmp/file-item.vue.ts:134 source/tmp/file-item.vue.ts:207
+#: source/tmp/PopoverFileProps.vue.ts:89
+#, javascript-format
+msgid "%s words"
+msgstr ""
+
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:55
+#: source/tmp/PopoverDocInfo.vue.ts:71 source/tmp/file-item.vue.ts:132
+#: source/tmp/file-item.vue.ts:205
+#, javascript-format
+msgid "%s characters"
+msgstr ""
+
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:93
 msgid "Open diagnostics panel"
 msgstr ""
 
@@ -315,19 +330,6 @@ msgstr ""
 
 #: source/tmp/PopoverDocInfo.vue.ts:44
 msgid "characters (w/o spaces)"
-msgstr ""
-
-#: source/tmp/PopoverDocInfo.vue.ts:71 source/tmp/file-item.vue.ts:132
-#: source/tmp/file-item.vue.ts:205
-#, javascript-format
-msgid "%s characters"
-msgstr ""
-
-#: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/PopoverDirProps.vue.ts:144
-#: source/tmp/file-item.vue.ts:134 source/tmp/file-item.vue.ts:207
-#: source/tmp/PopoverFileProps.vue.ts:89
-#, javascript-format
-msgid "%s words"
 msgstr ""
 
 #: source/tmp/MainSidebar.vue.ts:74 source/tmp/OtherFilesTab.vue.ts:13
@@ -685,6 +687,14 @@ msgid ""
 "All logos and brand names are subject to their rightful owners. Besides "
 "using their code, Zettlr is in no way affiliated with any of these projects. "
 "Node.js is a trademark of Joyent, Inc."
+msgstr ""
+
+#: source/tmp/General-Tab.vue.ts:26
+msgid ""
+"Zettlr offers an integration with LanguageTool.org, a service provided by "
+"LanguageTooler GmbH. Using this service requires an internet connection and "
+"is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
+"server that you use."
 msgstr ""
 
 #: source/tmp/Theme.vue.ts:37
