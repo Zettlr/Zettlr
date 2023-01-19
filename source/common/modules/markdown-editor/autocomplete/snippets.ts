@@ -121,17 +121,14 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
       }
     }
 
-    if (!transaction.docChanged) {
+    if (!transaction.docChanged || val.activeRanges.length === 0) {
       return val
     }
 
     // This monstrosity ensures that our ranges stay in sync while the user types
     val.activeRanges = val.activeRanges.map(ranges => {
-      return ranges.map(({ from, to }) => {
-        return EditorSelection.range(
-          transaction.changes.mapPos(from),
-          transaction.changes.mapPos(to)
-        )
+      return ranges.map((range) => {
+        return range.map(transaction.changes)
       })
     })
 
@@ -149,7 +146,7 @@ export const snippetsUpdateField = StateField.define<SnippetStateField>({
       for (const ranges of fieldValue.activeRanges) {
         position++
         for (const range of ranges) {
-          if (range.to === range.from) {
+          if (range.empty) {
             const widget = new SnippetWidget(`$${position}`, range)
             decorations.push(Decoration.widget({ widget }).range(range.from))
           } else {
