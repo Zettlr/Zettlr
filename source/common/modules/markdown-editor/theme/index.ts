@@ -47,7 +47,11 @@ const themeSwitcher = EditorState.transactionExtender.of((transaction) => {
     }
   }
 
-  return { effects }
+  if (effects.length === 0) {
+    return null
+  } else {
+    return { effects }
+  }
 })
 
 export function themeManager (options: CoreExtensionOptions): Extension {

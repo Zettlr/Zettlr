@@ -65,7 +65,11 @@ const scrollAndTheme = EditorState.transactionExtender.of(transaction => {
     effects.push(EditorView.scrollIntoView(transaction.state.selection.main.from, { y: 'center' }))
   }
 
-  return { effects }
+  if (effects.length === 0) {
+    return null
+  } else {
+    return { effects }
+  }
 })
 
 /**
