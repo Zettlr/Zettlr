@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2023-01-19 02:40+0000\n"
-"PO-Revision-Date: 2023-01-13 11:47+0100\n"
+"PO-Revision-Date: 2023-01-19 10:15+0100\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -200,7 +200,7 @@ msgstr "%s Zeichen"
 
 #: source/common/modules/markdown-editor/plugins/statusbar.ts:93
 msgid "Open diagnostics panel"
-msgstr ""
+msgstr "Prüfpaneel öffnen"
 
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
@@ -719,6 +719,11 @@ msgid ""
 "is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
 "server that you use."
 msgstr ""
+"Zettlr enthält eine Integration mit LanguageTool.org, ein Service von "
+"LanguageTooler GmbH. Für die Nutzung dieses Services ist eine "
+"Internetverbindung erforderlich. Die Nutzung von LanguageTool.org unterliegt "
+"der Datenschutzerklärung von LanguageTooler GmbH oder alternativ des "
+"benutzerdefinierten Servers; je nachdem, welche Option du nutzt."
 
 #: source/tmp/Theme.vue.ts:37
 msgid "selected"
@@ -989,9 +994,8 @@ msgid "Check Markdown for style issues"
 msgstr "Überprüfe Markdown auf stilistische Probleme"
 
 #: source/win-preferences/schema/editor.ts:102
-#, fuzzy
 msgid "Show statusbar"
-msgstr "Zettlr anzeigen"
+msgstr "Statusleiste anzeigen"
 
 #: source/win-preferences/schema/editor.ts:109
 msgid "Mute non-focused lines in distraction-free mode"
@@ -1188,38 +1192,36 @@ msgstr "Zeige folgende Zeit in den Dateiinformationen an"
 
 #: source/win-preferences/schema/spellchecking.ts:23
 msgid "Use LanguageTool"
-msgstr ""
+msgstr "LanguageTool aktivieren"
 
 #: source/win-preferences/schema/spellchecking.ts:28
 msgid "Strictness"
-msgstr ""
+msgstr "Strenge der Empfehlungen"
 
 #: source/win-preferences/schema/spellchecking.ts:30
-#, fuzzy
 msgid "Standard"
-msgstr "Kalender"
+msgstr "Standard"
 
 #: source/win-preferences/schema/spellchecking.ts:31
 msgid "Picky"
-msgstr ""
+msgstr "Akribisch"
 
 #: source/win-preferences/schema/spellchecking.ts:38
 msgid "LanguageTool Provider"
-msgstr ""
+msgstr "LanguageTool-Anbieter"
 
 #: source/win-preferences/schema/spellchecking.ts:41
 #: source/win-preferences/schema/spellchecking.ts:48
-#, fuzzy
 msgid "Custom server"
-msgstr "Benutzerdefiniertes CSS"
+msgstr "Benutzerdefinierter Server"
 
 #: source/win-preferences/schema/spellchecking.ts:55
 msgid "LanguageTool Username"
-msgstr ""
+msgstr "LanguageTool-Benutzername"
 
 #: source/win-preferences/schema/spellchecking.ts:60
 msgid "LanguageTool API key"
-msgstr ""
+msgstr "LanguageTool API key"
 
 #: source/win-preferences/schema/spellchecking.ts:67
 msgid ""
