@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 3.0.0-beta\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-01-19 02:40+0000\n"
+"POT-Creation-Date: 2023-01-19 12:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -198,7 +198,7 @@ msgstr "%s words"
 msgid "%s characters"
 msgstr "%s characters"
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:93
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:102
 msgid "Open diagnostics panel"
 msgstr "Open diagnostics panel"
 
@@ -1508,6 +1508,10 @@ msgstr "Project successfully exported. Click to show."
 #: source/app/service-providers/commands/dir-project-export.ts:121
 msgid "Export"
 msgstr "Export"
+
+#: source/app/service-providers/commands/language-tool.ts:139
+msgid "Document too long"
+msgstr "Document too long"
 
 #: source/app/service-providers/commands/import.ts:35
 msgid "You have to select a directory to import to."
