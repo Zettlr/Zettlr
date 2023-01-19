@@ -1,19 +1,12 @@
 const rules = require('./webpack.rules')
 const path = require('path')
 
-const ESLintPlugin = require('eslint-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
 const { DefinePlugin } = require('webpack')
 
 const plugins = [
   // Apply webpack rules to the corresponding language blocks in .vue files
   new VueLoaderPlugin(),
-  new ESLintPlugin({
-    // Check JS, TS, and Vue
-    extensions: [ 'js', 'ts', 'vue' ],
-    // Spread the load across threads
-    threads: true
-  }),
 
   // Set a few Vue 3 options; see: http://link.vuejs.org/feature-flags
   new DefinePlugin({
