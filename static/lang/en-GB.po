@@ -3,24 +3,24 @@
 # This file is distributed under the same license as the Zettlr package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2023-01-19 02:40+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: en-GB\n"
+"PO-Revision-Date: 2023-01-19 10:18+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:58
 #, javascript-format
 msgid "File %s does not exist."
-msgstr ""
+msgstr "File %s does not exist."
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:88
 msgid "Word count"
@@ -45,7 +45,7 @@ msgstr "Open in a new tab"
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:100
 msgid "No footnote text found."
-msgstr ""
+msgstr "No footnote text found."
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:111
 #: source/app/service-providers/menu/menu.darwin.ts:315
@@ -200,20 +200,20 @@ msgstr "%s characters"
 
 #: source/common/modules/markdown-editor/plugins/statusbar.ts:93
 msgid "Open diagnostics panel"
-msgstr ""
+msgstr "Open diagnostics panel"
 
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
-msgstr ""
+msgstr "No highlighting"
 
 #: source/common/modules/markdown-editor/linters/spellcheck.ts:148
 msgid "Spelling mistake"
-msgstr ""
+msgstr "Spelling mistake"
 
 #: source/common/modules/markdown-editor/renderers/render-images.ts:92
 #, javascript-format
 msgid "Image not found: %s"
-msgstr ""
+msgstr "Image not found: %s"
 
 #: source/common/util/format-date.ts:33
 msgid "just now"
@@ -358,20 +358,20 @@ msgstr "No related files"
 
 #: source/tmp/RelatedFilesTab.vue.ts:29
 msgid "This relation is based on a bidirectional link."
-msgstr ""
+msgstr "This relation is based on a bidirectional link."
 
 #: source/tmp/RelatedFilesTab.vue.ts:32
 msgid "This relation is based on an outbound link."
-msgstr ""
+msgstr "This relation is based on an outbound link."
 
 #: source/tmp/RelatedFilesTab.vue.ts:35
 msgid "This relation is based on a backlink."
-msgstr ""
+msgstr "This relation is based on a backlink."
 
 #: source/tmp/RelatedFilesTab.vue.ts:113
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
-msgstr ""
+msgstr "This relation is based on %s shared tags: %s"
 
 #: source/tmp/file-list.vue.ts:66 source/tmp/file-tree.vue.ts:35
 msgid "No results"
@@ -567,11 +567,11 @@ msgstr "Words"
 
 #: source/tmp/PopoverTags.vue.ts:77
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 #: source/tmp/PopoverTags.vue.ts:78
 msgid "Count"
-msgstr ""
+msgstr "Count"
 
 #: source/tmp/PopoverTags.vue.ts:103
 msgid "Filter tags…"
@@ -718,6 +718,10 @@ msgid ""
 "is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
 "server that you use."
 msgstr ""
+"Zettlr offers an integration with LanguageTool.org, a service provided by "
+"LanguageTooler GmbH. Using this service requires an internet connection and "
+"is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
+"server that you use."
 
 #: source/tmp/Theme.vue.ts:37
 msgid "selected"
@@ -736,9 +740,8 @@ msgid "Actions"
 msgstr "Actions"
 
 #: source/tmp/List.vue.ts:147
-#, fuzzy
 msgid "Delete"
-msgstr "Delete file"
+msgstr "Delete"
 
 #. Apparently we have a simple array, so exactly one column
 #: source/tmp/List.vue.ts:169
@@ -767,11 +770,11 @@ msgstr "Break"
 
 #: source/tmp/PopoverPomodoro.vue.ts:87
 msgid "Sound Effect"
-msgstr ""
+msgstr "Sound Effect"
 
 #: source/tmp/PopoverPomodoro.vue.ts:90
 msgid "Volume"
-msgstr ""
+msgstr "Volume"
 
 #: source/win-preferences/schema/advanced.ts:23
 msgid "Pattern for new filenames"
@@ -982,12 +985,11 @@ msgstr "Editor input mode"
 
 #: source/win-preferences/schema/editor.ts:97
 msgid "Check Markdown for style issues"
-msgstr ""
+msgstr "Check Markdown for style issues"
 
 #: source/win-preferences/schema/editor.ts:102
-#, fuzzy
 msgid "Show statusbar"
-msgstr "Show Zettlr"
+msgstr "Show statusbar"
 
 #: source/win-preferences/schema/editor.ts:109
 msgid "Mute non-focused lines in distraction-free mode"
@@ -1007,7 +1009,7 @@ msgstr "Enable Table Editor"
 
 #: source/win-preferences/schema/editor.ts:129
 msgid "Show link previews"
-msgstr ""
+msgstr "Show link previews"
 
 #: source/win-preferences/schema/editor.ts:134
 msgid "Count characters instead of words (e.g., for Chinese)"
@@ -1184,38 +1186,36 @@ msgstr "In the file metadata display"
 
 #: source/win-preferences/schema/spellchecking.ts:23
 msgid "Use LanguageTool"
-msgstr ""
+msgstr "Use LanguageTool"
 
 #: source/win-preferences/schema/spellchecking.ts:28
 msgid "Strictness"
-msgstr ""
+msgstr "Strictness"
 
 #: source/win-preferences/schema/spellchecking.ts:30
-#, fuzzy
 msgid "Standard"
-msgstr "Calendar"
+msgstr "Standard"
 
 #: source/win-preferences/schema/spellchecking.ts:31
 msgid "Picky"
-msgstr ""
+msgstr "Picky"
 
 #: source/win-preferences/schema/spellchecking.ts:38
 msgid "LanguageTool Provider"
-msgstr ""
+msgstr "LanguageTool Provider"
 
 #: source/win-preferences/schema/spellchecking.ts:41
 #: source/win-preferences/schema/spellchecking.ts:48
-#, fuzzy
 msgid "Custom server"
-msgstr "Custom CSS"
+msgstr "Custom server"
 
 #: source/win-preferences/schema/spellchecking.ts:55
 msgid "LanguageTool Username"
-msgstr ""
+msgstr "LanguageTool Username"
 
 #: source/win-preferences/schema/spellchecking.ts:60
 msgid "LanguageTool API key"
-msgstr ""
+msgstr "LanguageTool API key"
 
 #: source/win-preferences/schema/spellchecking.ts:67
 msgid ""
@@ -1315,9 +1315,8 @@ msgid "Options for ZKN elements"
 msgstr "Options for ZKN elements"
 
 #: source/win-preferences/schema/zettelkasten.ts:42
-#, fuzzy
 msgid "Link with filename only"
-msgstr "Filename only"
+msgstr "Link with filename only"
 
 #: source/win-preferences/schema/zettelkasten.ts:47
 msgid "When linking files, add the filename …"
@@ -1484,32 +1483,31 @@ msgstr "%s has been loaded."
 #: source/app/service-providers/commands/root-open.ts:159
 #, javascript-format
 msgid "Could not open workspace %s."
-msgstr ""
+msgstr "Could not open workspace %s."
 
 #: source/app/service-providers/commands/rename-tag.ts:44
 #: source/app/service-providers/commands/file-rename.ts:93
 msgid "Confirm"
-msgstr ""
+msgstr "Confirm"
 
 #: source/app/service-providers/commands/rename-tag.ts:45
 #, javascript-format
 msgid "Replace tag \"%s\" with \"%s\" across %s files?"
-msgstr ""
+msgstr "Replace tag “%s” with “%s” across %s files?"
 
 #: source/app/service-providers/commands/rename-tag.ts:47
 #: source/app/service-providers/commands/file-rename.ts:96
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
 msgid "Yes"
-msgstr ""
+msgstr "Yes"
 
 #: source/app/service-providers/commands/dir-project-export.ts:121
 msgid "Project successfully exported. Click to show."
-msgstr ""
+msgstr "Project successfully exported. Click to show."
 
 #: source/app/service-providers/commands/dir-project-export.ts:121
-#, fuzzy
 msgid "Export"
-msgstr "Export…"
+msgstr "Export"
 
 #: source/app/service-providers/commands/import.ts:35
 msgid "You have to select a directory to import to."
@@ -1610,18 +1608,18 @@ msgstr "Could not import language file %s!"
 #: source/app/service-providers/commands/file-duplicate.ts:71
 #, javascript-format
 msgid "Copy of %s"
-msgstr ""
+msgstr "Copy of %s"
 
 #: source/app/service-providers/commands/file-rename.ts:94
 #, javascript-format
 msgid "Update %s internal links to file %s?"
-msgstr ""
+msgstr "Update %s internal links to file %s?"
 
 #. 0: Save all changes
 #: source/app/service-providers/commands/file-rename.ts:97
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: source/app/service-providers/commands/request-move.ts:62
 msgid "Cannot move directory"
@@ -1966,11 +1964,8 @@ msgid "Open file"
 msgstr "Open file"
 
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:39
-#, fuzzy
 msgid "There are unsaved changes. Do you want to save them first?"
-msgstr ""
-"There are unsaved changes to the current file. Do you want to omit them or "
-"save?"
+msgstr "There are unsaved changes. Do you want to save them first?"
 
 #: source/app/service-providers/windows/dialog/prompt.ts:32
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:33
