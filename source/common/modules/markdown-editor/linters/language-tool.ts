@@ -54,7 +54,9 @@ const ltLinter = linter(async view => {
     return []
   }
 
-  view.dispatch({ effects: toggleLTR.of({ running: true, lastDetectedLanguage: 'auto' }) })
+  const { lastDetectedLanguage } = view.state.field(languageToolState)
+
+  view.dispatch({ effects: toggleLTR.of({ running: true, lastDetectedLanguage }) })
 
   const diagnostics: Diagnostic[] = []
 
@@ -71,7 +73,7 @@ const ltLinter = linter(async view => {
     payload: document
   })
 
-  view.dispatch({ effects: toggleLTR.of({ running: false, lastDetectedLanguage: 'auto' }) })
+  view.dispatch({ effects: toggleLTR.of({ running: false, lastDetectedLanguage }) })
 
   if (ltSuggestions === undefined) {
     return [] // Either an error or something else -- check the logs
