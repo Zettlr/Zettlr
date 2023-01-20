@@ -14,13 +14,15 @@
 
 import { showPanel, Panel, EditorView } from '@codemirror/view'
 import { StateField } from '@codemirror/state'
-import { openLintPanel, forEachDiagnostic } from '@codemirror/lint'
+import { openLintPanel, forEachDiagnostic, forceLinting } from '@codemirror/lint'
 import { configField, configUpdateEffect } from '../util/configuration'
-import { languageToolState } from '../linters/language-tool'
+import { languageToolState, updateLTState } from '../linters/language-tool'
 import { trans } from '@common/i18n-renderer'
 import { charCountField, wordCountField } from './statistics-fields'
 import localiseNumber from '@common/util/localise-number'
 import { resolveLangCode } from '@common/util/map-lang-code'
+import showPopupMenu from '@common/modules/window-register/application-menu-helper'
+import { AnyMenuItem } from '@dts/renderer/context'
 
 export interface StatusbarItem {
   content: string
@@ -76,15 +78,51 @@ function createStatusbar (view: EditorView): Panel {
             allowHtml: true
           })
         } else {
-          let lang = `(${ltState.lastDetectedLanguage})`
-          const resolvedFlag = resolveLangCode(ltState.lastDetectedLanguage, 'flag')
-          if (resolvedFlag !== ltState.lastDetectedLanguage) {
+          const displayLanguage = ltState.overrideLanguage !== 'auto'
+            ? ltState.overrideLanguage
+            : ltState.lastDetectedLanguage
+
+          let lang = `(${displayLanguage})`
+          const resolvedFlag = resolveLangCode(displayLanguage, 'flag')
+          if (resolvedFlag !== displayLanguage) {
             lang = resolvedFlag
           }
           elements.push({
             content: `LanguageTool: <cds-icon shape="check"></cds-icon> ${lang}`,
-            title: resolveLangCode(ltState.lastDetectedLanguage),
-            allowHtml: true
+            title: resolveLangCode(displayLanguage),
+            allowHtml: true,
+            onClick (event) {
+              const items: AnyMenuItem[] = ltState.supportedLanguages.map(e => {
+                const displayName = resolveLangCode(e, 'name')
+                let flag = resolveLangCode(e, 'flag')
+                if (flag === e) {
+                  flag = '🇺🇳' // United Nations flag
+                }
+                return {
+                  label: `${flag} ${displayName}`,
+                  id: e,
+                  type: 'checkbox',
+                  enabled: true,
+                  checked: ltState.overrideLanguage === e
+                }
+              })
+
+              // Insert the "auto" item
+              items.unshift(
+                { type: 'separator' },
+                {
+                  label: trans('Detect automatically'),
+                  id: 'auto',
+                  type: 'checkbox',
+                  enabled: true,
+                  checked: ltState.overrideLanguage === 'auto'
+                }
+              )
+              showPopupMenu({ x: event.clientX, y: event.clientY }, items, clickedID => {
+                view.dispatch({ effects: updateLTState.of({ overrideLanguage: clickedID }) })
+                forceLinting(view)
+              })
+            }
           })
         }
       }
@@ -123,7 +161,7 @@ function createStatusbar (view: EditorView): Panel {
         }
         span.className = 'cm-statusbar-item'
         if (element.onClick !== undefined) {
-          span.addEventListener('click', element.onClick)
+          span.addEventListener('mousedown', element.onClick)
         }
         if (element.title !== undefined) {
           span.title = element.title

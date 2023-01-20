@@ -74,6 +74,32 @@ export interface LanguageToolAPIResponse {
   sentenceRanges: Array<[ number, number ]>
 }
 
+const supportedLanguages: Record<string, string[]> = {}
+
+/**
+ * Returns a list of all language codes that the given server supports. Returns
+ * this list either from cache, or fetch the list from the server.
+ *
+ * @param   {string}             server  The server to query
+ *
+ * @return  {Promise<string>[]}          A list of supported languages
+ */
+async function fetchSupportedLanguages (server: string): Promise<string[]> {
+  if (server in supportedLanguages) {
+    return supportedLanguages[server]
+  }
+
+  // Otherwise, fetch the languages from the server
+  const result = await got(`${server}/v2/languages`)
+  const languages: Array<{ name: string, code: string, longCode: string }> = JSON.parse(result.body)
+  const shortCodes = languages.map(l => l.code)
+  const longCodes = languages.map(l => l.longCode)
+
+  const allLanguages = [...new Set([ ...shortCodes, ...longCodes ])]
+  supportedLanguages[server] = allLanguages
+  return allLanguages
+}
+
 export default class LanguageTool extends ZettlrCommand {
   constructor (app: any) {
     super(app, 'run-language-tool')
@@ -92,17 +118,14 @@ export default class LanguageTool extends ZettlrCommand {
    *
    * @return  {Promise<LanguageToolAPIResponse|string|undefined>}       The result
    */
-  async run (evt: string, arg: string): Promise<LanguageToolAPIResponse|string|undefined> {
+  async run (evt: string, arg: { text: string, language: string }): Promise<[LanguageToolAPIResponse, string[]]|string|undefined> {
     const { languageTool } = this._app.config.getConfig().editor.lint
     if (!languageTool.active) {
       return undefined // LanguageTool is not active
     }
+    const { text, language } = arg
 
-    const searchParams = new URLSearchParams({
-      language: 'auto',
-      text: arg,
-      level: languageTool.level
-    })
+    const searchParams = new URLSearchParams({ language, text, level: languageTool.level })
 
     // If users have Premium, they can do so by providing their username and API key
     if (languageTool.username.trim() !== '' && languageTool.apiKey.trim() !== '') {
@@ -127,9 +150,10 @@ export default class LanguageTool extends ZettlrCommand {
     }
 
     try {
+      const languages = await fetchSupportedLanguages(server)
       // NOTE: Documentation at https://languagetool.org/http-api/#!/default/post_check
       const result = await got(`${server}/v2/check`, { method: 'post', body: searchParams.toString(), headers })
-      return JSON.parse(result.body)
+      return [ JSON.parse(result.body), languages ]
     } catch (err: any) {
       if (err instanceof HTTPError && err.code === 'ERR_NON_2XX_3XX_RESPONSE') {
         // The API complained. There are a few things that can happen, and here

@@ -24,22 +24,31 @@ const ipcRenderer = window.ipc
 export interface LanguageToolStateField {
   running: boolean
   lastDetectedLanguage: string
-  lastError?: string
+  supportedLanguages: string[]
+  overrideLanguage: 'auto'|string
+  lastError: string|undefined
 }
 
-const toggleLTR = StateEffect.define<LanguageToolStateField>()
+export const updateLTState = StateEffect.define<Partial<LanguageToolStateField>>()
 
 export const languageToolState = StateField.define<LanguageToolStateField>({
   create: () => {
     return {
       running: false,
-      lastDetectedLanguage: 'auto'
+      lastDetectedLanguage: 'auto',
+      lastError: undefined,
+      overrideLanguage: 'auto',
+      supportedLanguages: []
     }
   },
   update (value, transaction) {
     for (const e of transaction.effects) {
-      if (e.is(toggleLTR)) {
-        value = e.value
+      if (e.is(updateLTState)) {
+        value.running = e.value.running ?? value.running
+        value.lastDetectedLanguage = e.value.lastDetectedLanguage ?? value.lastDetectedLanguage
+        value.lastError = e.value.lastError ?? value.lastError
+        value.supportedLanguages = e.value.supportedLanguages ?? value.supportedLanguages
+        value.overrideLanguage = e.value.overrideLanguage ?? value.overrideLanguage
       }
     }
     return value
@@ -55,9 +64,7 @@ const ltLinter = linter(async view => {
     return []
   }
 
-  const { lastDetectedLanguage } = view.state.field(languageToolState)
-
-  view.dispatch({ effects: toggleLTR.of({ running: true, lastDetectedLanguage }) })
+  view.dispatch({ effects: updateLTState.of({ running: true }) })
 
   const diagnostics: Diagnostic[] = []
 
@@ -69,21 +76,32 @@ const ltLinter = linter(async view => {
   // but we are clever: Since we can extract the textNodes, we can basically
   // ignore any warning outside of these ranges! YAY!
 
-  const ltSuggestions: LanguageToolAPIResponse|undefined|string = await ipcRenderer.invoke('application', {
+  const response: [LanguageToolAPIResponse, string[]]|undefined|string = await ipcRenderer.invoke('application', {
     command: 'run-language-tool',
-    payload: document
+    payload: {
+      text: document,
+      language: view.state.field(languageToolState).overrideLanguage
+    }
   })
 
-  view.dispatch({ effects: toggleLTR.of({ running: false, lastDetectedLanguage }) })
+  view.dispatch({ effects: updateLTState.of({ running: false }) })
 
-  if (ltSuggestions === undefined) {
+  if (response === undefined) {
     return [] // Could not fetch a response, but it's benign
-  } else if (typeof ltSuggestions === 'string') {
-    view.dispatch({ effects: toggleLTR.of({ running: false, lastDetectedLanguage, lastError: ltSuggestions }) })
+  } else if (typeof response === 'string') {
+    view.dispatch({ effects: updateLTState.of({ running: false, lastError: response }) })
     return [] // There was an error
   }
 
-  view.dispatch({ effects: toggleLTR.of({ running: false, lastDetectedLanguage: ltSuggestions.language.detectedLanguage.code }) })
+  const [ ltSuggestions, supportedLanguages ] = response
+
+  view.dispatch({
+    effects: updateLTState.of({
+      running: false,
+      lastDetectedLanguage: ltSuggestions.language.detectedLanguage.code,
+      supportedLanguages
+    })
+  })
 
   if (ltSuggestions.matches.length === 0) {
     return [] // Hooray, nothing wrong!
