@@ -1,6 +1,7 @@
 import { EditorView } from '@codemirror/view'
 
 export const mainOverride = EditorView.baseTheme({
+  // General overrides
   '&.cm-editor': {
     height: '100%',
     fontFamily: 'inherit',
@@ -14,6 +15,7 @@ export const mainOverride = EditorView.baseTheme({
   '.cm-scroller .muted': {
     opacity: '0.2'
   },
+  // KaTeX overrides
   '.katex': {
     fontSize: '1.1em', // reduce font-size of math a bit
     display: 'inline-block', // needed for display math to behave properly
@@ -22,6 +24,20 @@ export const mainOverride = EditorView.baseTheme({
   '.katex-display, .katex-display > .katex > .katex-html': {
     display: 'inline-block', // needed for display math to behave properly
     width: '100%' // display math should be centered
+  },
+  // Panel button overrides
+  '.cm-panels .cm-button': {
+    backgroundImage: 'none',
+    backgroundColor: 'inherit',
+    borderRadius: '6px',
+    fontSize: '13px'
+  },
+  '&light .cm-panels .cm-button': {
+    backgroundColor: 'white',
+    borderColor: '#aaa'
+  },
+  '.cm-panel.cm-search label input[type=checkbox]': {
+    marginRight: '10px'
   },
   // Define the readability classes. Red, orange, and yellow indicate bad scores
   // Purple and blue indicate average scores, and green indicates good scores
