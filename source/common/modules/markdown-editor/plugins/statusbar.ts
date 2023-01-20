@@ -20,6 +20,7 @@ import { languageToolState } from '../linters/language-tool'
 import { trans } from '@common/i18n-renderer'
 import { charCountField, wordCountField } from './statistics-fields'
 import localiseNumber from '@common/util/localise-number'
+import { resolveLangCode } from '@common/util/map-lang-code'
 
 export interface StatusbarItem {
   content: string
@@ -75,8 +76,14 @@ function createStatusbar (view: EditorView): Panel {
             allowHtml: true
           })
         } else {
+          let lang = `(${ltState.lastDetectedLanguage})`
+          const resolvedFlag = resolveLangCode(ltState.lastDetectedLanguage, 'flag')
+          if (resolvedFlag !== ltState.lastDetectedLanguage) {
+            lang = resolvedFlag
+          }
           elements.push({
-            content: `LanguageTool: <cds-icon shape="check"></cds-icon> (${ltState.lastDetectedLanguage})`,
+            content: `LanguageTool: <cds-icon shape="check"></cds-icon> ${lang}`,
+            title: resolveLangCode(ltState.lastDetectedLanguage),
             allowHtml: true
           })
         }
