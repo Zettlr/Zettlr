@@ -19,16 +19,6 @@
       <!-- This element will be replaced with Codemirror's wrapper element on mount -->
     </div>
 
-    <EditorSearchPanel
-      v-show="showSearch"
-      v-bind:show-search="showSearch"
-      v-on:search-next="searchNext($event)"
-      v-on:search-previous="searchPrevious($event)"
-      v-on:replace-next="replaceNext($event)"
-      v-on:replace-all="replaceAll($event)"
-      v-on:end-search="showSearch = false"
-    ></EditorSearchPanel>
-
     <div
       v-if="documentTabDrag"
       v-bind:class="{
@@ -117,8 +107,6 @@ import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { EditorConfigOptions } from '@common/modules/markdown-editor/util/configuration'
 import { CodeFileDescriptor, MDFileDescriptor } from '@dts/common/fsal'
 import getBibliographyForDescriptor from '@common/util/get-bibliography-for-descriptor'
-import EditorSearchPanel from './EditorSearchPanel.vue'
-import { SearchQuery } from '@codemirror/search'
 import { EditorSelection } from '@codemirror/state'
 import { TagRecord } from '@providers/tags'
 
@@ -524,14 +512,6 @@ watch(activeFile, async () => {
   await loadActiveFile()
 })
 
-watch(showSearch, (newValue, oldValue) => {
-  if (newValue === false) {
-    // Always "stopSearch" if the input is not shown, since this will clear
-    // out, e.g., the matches on the scrollbar
-    mdEditor?.stopSearch()
-  }
-})
-
 watch(snippets, (newValue) => {
   mdEditor?.setCompletionDatabase('snippets', newValue)
 })
@@ -687,12 +667,6 @@ async function updateFileDatabase () {
 
   mdEditor.setCompletionDatabase('files', fileDatabase)
 }
-
-// SEARCH FUNCTIONALITY BLOCK
-function searchNext (query: SearchQuery) { mdEditor?.searchNext(query) }
-function searchPrevious (query: SearchQuery) { mdEditor?.searchPrevious(query) }
-function replaceNext (query: SearchQuery) { mdEditor?.replaceNext(query) }
-function replaceAll (query: SearchQuery) { mdEditor?.replaceAll(query) }
 
 function maybeHighlightSearchResults () {
   const doc = activeFile.value

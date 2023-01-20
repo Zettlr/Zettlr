@@ -28,15 +28,6 @@ import EventEmitter from 'events'
 
 import { EditorView } from '@codemirror/view'
 import { EditorSelection, EditorState, Extension, SelectionRange } from '@codemirror/state'
-import {
-  getSearchQuery,
-  SearchQuery,
-  setSearchQuery,
-  findNext,
-  findPrevious,
-  replaceNext as _replaceNext,
-  replaceAll as _replaceAll
-} from '@codemirror/search'
 
 import safeAssign from '@common/util/safe-assign'
 
@@ -439,36 +430,6 @@ export default class MarkdownEditor extends EventEmitter {
   public emptyEditor (): void {
     this._instance.setState(EditorState.create())
   }
-
-  // SEARCH FUNCTIONALITY
-  private maybeExchangeQuery (query: SearchQuery): void {
-    const currentQuery = getSearchQuery(this._instance.state)
-    if (!currentQuery.eq(query)) {
-      this._instance.dispatch({ effects: setSearchQuery.of(query) })
-    }
-  }
-
-  searchNext (query: SearchQuery): void {
-    this.maybeExchangeQuery(query)
-    console.log(findNext(this._instance))
-  }
-
-  searchPrevious (query: SearchQuery): void {
-    this.maybeExchangeQuery(query)
-    findPrevious(this._instance)
-  }
-
-  replaceNext (query: SearchQuery): void {
-    this.maybeExchangeQuery(query)
-    _replaceNext(this._instance)
-  }
-
-  replaceAll (query: SearchQuery): void {
-    this.maybeExchangeQuery(query)
-    _replaceAll(this._instance)
-  }
-
-  stopSearch (): void {}
 
   /**
    * Allows highlighting of arbitrary ranges independent of a search

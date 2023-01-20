@@ -266,6 +266,7 @@ there.
   enables you to define links to files that you may want to create at another
   point in time and ensure that all files that link to this file include the
   correct link
+- The editor now uses the built-in search panel from CodeMirror
 
 ## Under the Hood
 

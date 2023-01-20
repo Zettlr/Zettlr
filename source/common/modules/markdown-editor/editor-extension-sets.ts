@@ -22,7 +22,7 @@ import { defaultKeymap, historyKeymap, history } from '@codemirror/commands'
 import { bracketMatching, codeFolding, foldGutter, indentOnInput, indentUnit, StreamLanguage } from '@codemirror/language'
 import { stex } from '@codemirror/legacy-modes/mode/stex'
 import { yaml } from '@codemirror/legacy-modes/mode/yaml'
-import { search } from '@codemirror/search'
+import { search, searchKeymap } from '@codemirror/search'
 import { Compartment, EditorState, Extension, Prec } from '@codemirror/state'
 import { keymap, drawSelection, EditorView, lineNumbers, ViewUpdate, DOMEventHandlers, dropCursor } from '@codemirror/view'
 import { autocomplete } from './autocomplete'
@@ -125,8 +125,8 @@ function getCoreExtensions (options: CoreExtensionOptions): Extension[] {
     keymap.of([
       ...defaultKeymap, // Minimal default keymap
       ...historyKeymap, // , // History commands (redo/undo)
-      ...closeBracketsKeymap // Binds Backspace to deletion of matching brackets
-      // ...searchKeymap // Search commands (Ctrl+F, etc.)
+      ...closeBracketsKeymap, // Binds Backspace to deletion of matching brackets
+      ...searchKeymap // Search commands (Ctrl+F, etc.)
     ]),
     softwrapVisualIndent, // Always indent visually
     themeManager(options),
