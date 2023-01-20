@@ -54,11 +54,6 @@ export default class Export extends ZettlrCommand {
     if (isModified) {
       const cachedVersion = await this._app.documents.getDocument(file)
       await fs.writeFile(tempPath, cachedVersion.content, { encoding: 'utf8' })
-      exporterOptions.sourceFiles = [{
-        path: tempPath,
-        name: filename,
-        ext: path.extname(file)
-      }]
     }
 
     // We must have an absolute path given in file

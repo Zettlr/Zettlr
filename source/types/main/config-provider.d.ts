@@ -40,6 +40,7 @@ export interface ConfigOptions {
     cslStyle: string
     useBundledPandoc: boolean
     singleFileLastExporter: string
+    exportQmdWithQuarto: boolean
   }
   zkn: {
     idRE: string
