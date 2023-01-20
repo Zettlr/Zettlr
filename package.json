@@ -78,7 +78,7 @@
     "luxon": "^3.0.0",
     "md5": "^2.3.0",
     "mermaid": "^9.0.0",
-    "minimatch": "^5.0.0",
+    "minimatch": "^6.1.5",
     "moment": "^2.29.2",
     "nodehun": "^3.0.2",
     "remark": "^14.0.2",
