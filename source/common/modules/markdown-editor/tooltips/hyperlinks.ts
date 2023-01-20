@@ -23,10 +23,7 @@ const ipcRenderer = window.ipc
 /**
  * Displays a tooltip for URLs and Links across a document
  */
-function urlTooltips (view: EditorView, pos: number, side: 1 | -1): Tooltip|null {
-  // let { from, text } = view.state.doc.lineAt(pos)
-  // const relativePos = pos - from
-
+export function urlTooltip (view: EditorView, pos: number, side: 1 | -1): Tooltip|null {
   let nodeAt = syntaxTree(view.state).cursorAt(pos, side).node
 
   // NOTE: If the user has renderLinks set to true, they depend on the widget's
@@ -93,4 +90,4 @@ function urlTooltips (view: EditorView, pos: number, side: 1 | -1): Tooltip|null
   }
 }
 
-export const urlHover = hoverTooltip(urlTooltips, { hoverTime: 100 })
+export const urlHover = hoverTooltip(urlTooltip, { hoverTime: 100 })
