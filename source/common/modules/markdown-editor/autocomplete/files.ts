@@ -21,7 +21,7 @@ import { configField } from '../util/configuration'
 /**
  * Use this effect to provide the editor state with a set of new citekeys
  */
-export const filesUpdate = StateEffect.define<Array<{ filename: string, id: string }>>()
+export const filesUpdate = StateEffect.define<Array<{ filename: string, displayName: string, id: string }>>()
 export const filesUpdateField = StateField.define<Completion[]>({
   create (state) {
     return []
@@ -32,9 +32,8 @@ export const filesUpdateField = StateField.define<Completion[]>({
         // Convert the files into completion objects
         return effect.value.map(entry => {
           return {
-            label: (entry.id != null && entry.id !== '')
-              ? `${entry.id}: ${entry.filename}`
-              : entry.filename,
+            label: entry.displayName,
+            detail: entry.id !== '' ? entry.id : undefined,
             apply: apply(entry.filename, entry.id)
           }
         })

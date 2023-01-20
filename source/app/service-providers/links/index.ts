@@ -112,14 +112,10 @@ export default class LinkProvider extends ProviderContract {
       // New file reporting
       this._fileLinkDatabase.set(path, newLinks)
       broadcastIpcMessage('links')
-    } else {
-      const sameLinks = JSON.stringify(oldLinks) === JSON.stringify(newLinks)
-
-      if (!sameLinks) {
-        // Same file reporting different links
-        this._fileLinkDatabase.set(path, newLinks)
-        broadcastIpcMessage('links')
-      }
+    } else if (JSON.stringify(oldLinks) !== JSON.stringify(newLinks)) {
+      // Same file reporting different links
+      this._fileLinkDatabase.set(path, newLinks)
+      broadcastIpcMessage('links')
     }
   }
 

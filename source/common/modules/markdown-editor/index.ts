@@ -111,7 +111,7 @@ export default class MarkdownEditor extends EventEmitter {
     tags: TagRecord[]
     citations: Array<{ citekey: string, displayText: string }>
     snippets: Array<{ name: string, content: string }>
-    files: Array<{ filename: string, id: string }>
+    files: Array<{ filename: string, displayName: string, id: string }>
   }
 
   // "What is this?", you may ask. This is a cache to remember anything important

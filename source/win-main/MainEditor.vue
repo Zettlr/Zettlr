@@ -271,6 +271,11 @@ ipcRenderer.on('documents-update', (e, { event, context }) => {
   }
 })
 
+// Update the file database whenever links have been updated
+ipcRenderer.on('links', e => {
+  updateFileDatabase().catch(err => console.error('Could not update file database', err))
+})
+
 // MOUNTED HOOK
 onMounted(() => {
   // As soon as the component is mounted, initiate the editor
@@ -488,10 +493,10 @@ const fsalFiles = computed<MDFileDescriptor[]>(() => {
 })
 
 // WATCHERS
-watch(useH1, () => { updateFileDatabase() })
-watch(useTitle, () => { updateFileDatabase() })
-watch(filenameOnly, () => { updateFileDatabase() })
-watch(fsalFiles, () => { updateFileDatabase() })
+watch(useH1, () => { updateFileDatabase().catch(err => console.error('Could not update file database', err)) })
+watch(useTitle, () => { updateFileDatabase().catch(err => console.error('Could not update file database', err)) })
+watch(filenameOnly, () => { updateFileDatabase().catch(err => console.error('Could not update file database', err)) })
+watch(fsalFiles, () => { updateFileDatabase().catch(err => console.error('Could not update file database', err)) })
 
 watch(activeFile, async () => {
   // Request the descriptor and put it into our ref
@@ -643,18 +648,41 @@ async function updateCitationKeys (library: string): Promise<void> {
   mdEditor.setCompletionDatabase('citations', items)
 }
 
-function updateFileDatabase () {
+async function updateFileDatabase () {
   if (mdEditor === null) {
     return
   }
 
-  const fileDatabase: Array<{ filename: string, id: string }> = []
+  // Get all our files ...
+  const fileDatabase: Array<{ filename: string, displayName: string, id: string }> = []
 
+  // ... and the unique links that are part of the link database
+  const rawLinks: Record<string, string[]> = await ipcRenderer.invoke('link-provider', { command: 'get-link-database' })
+  const linkDatabase = [...new Set(Object.values(rawLinks).flat())]
+
+  // First, add all existing files to the database ...
   for (const file of fsalFiles.value) {
+    let displayName = path.basename(file.name, file.ext)
+    if (useTitle.value && file.yamlTitle !== undefined) {
+      displayName = file.yamlTitle
+    } else if (useH1.value && file.firstHeading !== null) {
+      displayName = file.firstHeading
+    }
     fileDatabase.push({
       filename: path.basename(file.name, file.ext),
+      displayName,
       id: file.id
     })
+  }
+
+  // ... before going through the link database to add those links that link to
+  // not yet existing files
+  for (const link of linkDatabase) {
+    const existingFile = fileDatabase.find(file => file.filename === link || file.id === link)
+    if (existingFile === undefined) {
+      // Non-existing link
+      fileDatabase.push({ filename: link, displayName: link, id: '' })
+    }
   }
 
   mdEditor.setCompletionDatabase('files', fileDatabase)

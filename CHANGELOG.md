@@ -262,6 +262,10 @@ there.
   Document Frequency (IDF); the higher this value the more informative a tag is.
   This number is shown in the tag manager, and tags are ordered by this in some
   places
+- The file autocomplete now also includes links to not-yet-existing files. This
+  enables you to define links to files that you may want to create at another
+  point in time and ensure that all files that link to this file include the
+  correct link
 
 ## Under the Hood
 
