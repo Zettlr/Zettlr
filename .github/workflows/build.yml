@@ -56,17 +56,7 @@ on:
   push:
     branches:
       - master
-  workflow_dispatch: # Used to manually trigger a nightly build.
-    inputs:
-      target:
-        # Access using github.event.inputs.target
-        description: 'Target'
-        required: true
-        default: 'nightly'
-        type: choice
-        options:
-        - nightly
-        - stable
+  workflow_dispatch: {} # Used to manually trigger a nightly build.
   schedule: # Every Monday at noon (UTC) we run a scheduled nightly build
     - cron: '0 12 * * 1'
 
@@ -77,10 +67,7 @@ defaults:
 
 # Global environment variables
 env:
-  # Easy way to set the node version
   NODE_VERSION: '16'
-  # Determine if the pipeline should build a nightly or a regular release.
-  BUILD_NIGHTLY: ${{ (github.event_name == 'workflow_dispatch' && inputs.target == 'nightly') || github.event_name == 'schedule' }}
 
 # Ensure only a single build workflow runs at any one time
 concurrency:
@@ -101,7 +88,7 @@ jobs:
   # overwriting of the files in the previous release. That doesn't wreak any
   # havoc because we don't push unstable code to master, BUT it looks bad.
   verify_version:
-    name: 'Preflight / Verify version tag'
+    name: 'Preflight: Verify version tag'
     runs-on: ubuntu-latest
     steps:
       - name: Clone repository (master branch)
@@ -120,7 +107,7 @@ jobs:
           pkgver=$(node ./scripts/get-pkg-version.js)
           echo "version=$pkgver" >> $GITHUB_ENV
       - name: Verify the corresponding tag does not yet exist
-        if: ${{ !env.BUILD_NIGHTLY }}
+        if: github.ref_name == 'master'
         # NOTE: the ! will return 0 if the command fails, and 1 otherwise
         run: '! git rev-parse "v${{env.version}}"'
 
@@ -138,17 +125,10 @@ jobs:
     runs-on: windows-latest
     steps:
       # Check out master for a regular release, or develop branch for a nightly
-      - name: Clone repository (master branch)
-        if: ${{ !env.BUILD_NIGHTLY }}
+      - name: Clone repository (${{ github.ref_name }})
         uses: actions/checkout@v3
         with:
-          ref: 'master'
-          fetch-depth: 0 # Required for the tag verification step.
-      - name: Clone repository (develop branch)
-        if: ${{ env.BUILD_NIGHTLY }}
-        uses: actions/checkout@v3
-        with:
-          ref: 'develop'
+          ref: ${{ github.ref_name }}
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v3
         with:
@@ -158,7 +138,7 @@ jobs:
         run: yarn install --immutable
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
-        if: ${{ env.BUILD_NIGHTLY }}
+        if: github.ref_name == 'develop'
         run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
@@ -215,17 +195,10 @@ jobs:
     runs-on: macos-latest
     steps:
       # Check out master for a regular release, or develop branch for a nightly
-      - name: Clone repository (master branch)
-        if: ${{ !env.BUILD_NIGHTLY }}
+      - name: Clone repository (${{ github.ref_name }})
         uses: actions/checkout@v3
         with:
-          ref: 'master'
-          fetch-depth: 0 # Required for the tag verification step.
-      - name: Clone repository (develop branch)
-        if: ${{ env.BUILD_NIGHTLY }}
-        uses: actions/checkout@v3
-        with:
-          ref: 'develop'
+          ref: ${{ github.ref_name }}
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v3
         with:
@@ -234,7 +207,7 @@ jobs:
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
-        if: ${{ env.BUILD_NIGHTLY }}
+        if: github.ref_name == 'develop'
         run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
@@ -287,17 +260,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Check out master for a regular release, or develop branch for a nightly
-      - name: Clone repository (master branch)
-        if: ${{ !env.BUILD_NIGHTLY }}
+      - name: Clone repository (${{ github.ref_name }})
         uses: actions/checkout@v3
         with:
-          ref: 'master'
-          fetch-depth: 0 # Required for the tag verification step.
-      - name: Clone repository (develop branch)
-        if: ${{ env.BUILD_NIGHTLY }}
-        uses: actions/checkout@v3
-        with:
-          ref: 'develop'
+          ref: ${{ github.ref_name }}
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v3
         with:
@@ -307,7 +273,7 @@ jobs:
         run: yarn install --immutable
       - name: Set tag version to nightly
         # If this a scheduled workflow, we know that we should build a nightly
-        if: ${{ env.BUILD_NIGHTLY }}
+        if: github.ref_name == 'develop'
         run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
@@ -353,7 +319,7 @@ jobs:
     steps:
       # NOTE: Here we do not care about which branch is checked out since we
       # just need the two scripts which are present in both.
-      - name: Clone repository
+      - name: Clone repository (${{ github.ref_name }})
         uses: actions/checkout@v3
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v3
@@ -363,8 +329,7 @@ jobs:
       - name: Set up build environment
         run: yarn install --immutable
       - name: Set tag version to nightly
-        # If this a scheduled workflow, we know that we should build a nightly
-        if: ${{ env.BUILD_NIGHTLY }}
+        if: github.ref_name == 'develop'
         run: node ./scripts/set-nightly-version.js
       - name: Retrieve tag version
         id: ref
@@ -414,13 +379,13 @@ jobs:
       # We must make sure to copy the three additional files
       # to the release folder because of the --delete flag in rsync below.
       - name: Copy Nightly Static Files
-        if: ${{ env.BUILD_NIGHTLY }}
+        if: github.ref_name == 'develop'
         run: |
           cp ./scripts/assets/nightly-index.php ./release/index.php
           cp ./scripts/assets/nightly-sm_preview.png ./release/sm_preview.png
           cp ./resources/icons/png/512x512.png ./release/logo.png
       - name: Upload nightlies to the server
-        if: ${{ env.BUILD_NIGHTLY }}
+        if: github.ref_name == 'develop'
         uses: easingthemes/ssh-deploy@v3.0.1
         env:
           SSH_PRIVATE_KEY: ${{ secrets.NIGHTLY_SSH_PRIVATE_KEY }}
@@ -432,7 +397,7 @@ jobs:
           TARGET: ${{ secrets.NIGHTLY_TARGET }}
       # OTHERWISE: Create a new release draft
       - name: Create release draft
-        if: ${{ !env.BUILD_NIGHTLY }}
+        if: github.ref_name == 'master'
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
