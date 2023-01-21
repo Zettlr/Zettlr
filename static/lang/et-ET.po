@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-01-20 02:39+0000\n"
+"POT-Creation-Date: 2023-01-21 02:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -235,7 +235,7 @@ msgstr "Tühi"
 
 #: source/app/service-providers/menu/menu.darwin.ts:195
 #: source/app/service-providers/menu/menu.win32.ts:160
-#: source/app/service-providers/commands/export.ts:79
+#: source/app/service-providers/commands/export.ts:74
 #: source/tmp/SnippetsTab.vue.ts:47 source/tmp/CustomCSS.vue.ts:42
 #: source/tmp/CustomCSS.vue.ts:56 source/tmp/Defaults.vue.ts:112
 msgid "Save"
@@ -517,20 +517,20 @@ msgstr ""
 msgid "Changes to the library file detected. Reloading …"
 msgstr ""
 
-#: source/app/service-providers/commands/export.ts:79
+#: source/app/service-providers/commands/export.ts:74
 msgid "Choose export destination"
 msgstr ""
 
-#: source/app/service-providers/commands/export.ts:110
+#: source/app/service-providers/commands/export.ts:105
 #, javascript-format
 msgid "Exporting to %s"
 msgstr "Eksportimine %s"
 
-#: source/app/service-providers/commands/export.ts:122
+#: source/app/service-providers/commands/export.ts:117
 msgid "Export failed"
 msgstr "Eksportimine ebaõnnestus"
 
-#: source/app/service-providers/commands/export.ts:123
+#: source/app/service-providers/commands/export.ts:118
 #, javascript-format
 msgid "An error occurred on export: %s"
 msgstr "Eksportimisel tekkis viga: %s"
@@ -622,8 +622,12 @@ msgid ""
 "unknown: %s"
 msgstr "%s faile pole võimalik importida, kuna nende failitüüp pole teada: %s"
 
-#: source/app/service-providers/commands/language-tool.ts:139
+#: source/app/service-providers/commands/language-tool.ts:163
 msgid "Document too long"
+msgstr ""
+
+#: source/app/service-providers/commands/language-tool.ts:168
+msgid "offline"
 msgstr ""
 
 #: source/app/service-providers/commands/root-open.ts:60
@@ -912,7 +916,7 @@ msgstr "Kood"
 msgid "No footnote text found."
 msgstr ""
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:52
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:55
 #: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/PopoverDirProps.vue.ts:144
 #: source/tmp/PopoverFileProps.vue.ts:89 source/tmp/file-item.vue.ts:134
 #: source/tmp/file-item.vue.ts:207
@@ -920,14 +924,18 @@ msgstr ""
 msgid "%s words"
 msgstr "%s sõna"
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:55
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:58
 #: source/tmp/PopoverDocInfo.vue.ts:71 source/tmp/file-item.vue.ts:132
 #: source/tmp/file-item.vue.ts:205
 #, javascript-format
 msgid "%s characters"
 msgstr "%s tähemärki"
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:102
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:114
+msgid "Detect automatically"
+msgstr ""
+
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:147
 msgid "Open diagnostics panel"
 msgstr ""
 
@@ -1007,6 +1015,407 @@ msgstr ","
 #: source/common/util/localise-number.ts:29
 msgid "."
 msgstr "."
+
+#: source/common/util/map-lang-code.ts:33
+msgid "Afrikaans"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:34
+msgid "Arabic"
+msgstr "araabia"
+
+#: source/common/util/map-lang-code.ts:35
+msgid "Asturian"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:36
+msgid "Belarus"
+msgstr "valgevene"
+
+#: source/common/util/map-lang-code.ts:37
+msgid "Bulgarian"
+msgstr "bulgaaria"
+
+#: source/common/util/map-lang-code.ts:38
+msgid "Breton"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:39
+msgid "Bosnian"
+msgstr "bosnia"
+
+#: source/common/util/map-lang-code.ts:40
+msgid "Catalan"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:41
+msgid "Czech"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:42
+msgid "Danish"
+msgstr "taani"
+
+#: source/common/util/map-lang-code.ts:43
+msgid "German (Austria)"
+msgstr "saksa (Austria)"
+
+#: source/common/util/map-lang-code.ts:44
+msgid "German (Switzerland)"
+msgstr "saksa (Šveits)"
+
+#: source/common/util/map-lang-code.ts:45
+#, fuzzy
+msgid "German (simple)"
+msgstr "saksa (Austria)"
+
+#: source/common/util/map-lang-code.ts:46
+msgid "German (Germany)"
+msgstr "saksa (Saksamaa)"
+
+#: source/common/util/map-lang-code.ts:47
+#, fuzzy
+msgid "German (Luxembourg)"
+msgstr "saksa (Austria)"
+
+#: source/common/util/map-lang-code.ts:48
+msgid "German"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:49
+msgid "Greek"
+msgstr "kreeka"
+
+#: source/common/util/map-lang-code.ts:50
+msgid "English (Australia)"
+msgstr "inglise (Austraalia)"
+
+#: source/common/util/map-lang-code.ts:51
+msgid "English (Canada)"
+msgstr "inglise (Kanada)"
+
+#: source/common/util/map-lang-code.ts:52
+msgid "English (United Kingdom)"
+msgstr "inglise (ÜK)"
+
+#: source/common/util/map-lang-code.ts:53
+msgid "English (India)"
+msgstr "inglise (India)"
+
+#: source/common/util/map-lang-code.ts:54
+#, fuzzy
+msgid "English (New Zealand)"
+msgstr "inglise (Kanada)"
+
+#: source/common/util/map-lang-code.ts:55
+msgid "English (United States)"
+msgstr "inglise (USA)"
+
+#: source/common/util/map-lang-code.ts:56
+msgid "English (South Africa)"
+msgstr "inglise (Lõuna-Aafrika)"
+
+#: source/common/util/map-lang-code.ts:57
+#, fuzzy
+msgid "English"
+msgstr "inglise (India)"
+
+#: source/common/util/map-lang-code.ts:58
+msgid "Esperanto"
+msgstr "esperanto"
+
+#: source/common/util/map-lang-code.ts:59
+#, fuzzy
+msgid "Spanish (Argentina)"
+msgstr "hispaania (Hispaania)"
+
+#: source/common/util/map-lang-code.ts:60
+msgid "Spanish (Spain)"
+msgstr "hispaania (Hispaania)"
+
+#: source/common/util/map-lang-code.ts:61
+#, fuzzy
+msgid "Spanish"
+msgstr "taani"
+
+#: source/common/util/map-lang-code.ts:62
+msgid "Estonian"
+msgstr "eesti"
+
+#: source/common/util/map-lang-code.ts:63
+msgid "Basque"
+msgstr "baski"
+
+#: source/common/util/map-lang-code.ts:64
+msgid "Persian (Farsi)"
+msgstr "pärsia (farsi)"
+
+#: source/common/util/map-lang-code.ts:65
+msgid "Finnish"
+msgstr "soome"
+
+#: source/common/util/map-lang-code.ts:66
+msgid "Faroese"
+msgstr "fääri"
+
+#: source/common/util/map-lang-code.ts:67
+#, fuzzy
+msgid "French (Belgium)"
+msgstr "hollandi (Belgia)"
+
+#: source/common/util/map-lang-code.ts:68
+#, fuzzy
+msgid "French (Switzerland)"
+msgstr "saksa (Šveits)"
+
+#: source/common/util/map-lang-code.ts:69
+msgid "French (France)"
+msgstr "prantsuse (Prantsusmaa)"
+
+#: source/common/util/map-lang-code.ts:70
+#, fuzzy
+msgid "French (Luxembourg)"
+msgstr "luxemburgi"
+
+#: source/common/util/map-lang-code.ts:71
+msgid "French (Principality of Monaco)"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:72
+msgid "French"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:73
+msgid "Irish"
+msgstr "iiri"
+
+#: source/common/util/map-lang-code.ts:74
+msgid "Scottish (Gaelic)"
+msgstr "šoti (keldi)"
+
+#: source/common/util/map-lang-code.ts:75
+#, fuzzy
+msgid "Galician"
+msgstr "galiitsia (Hispaania)"
+
+#: source/common/util/map-lang-code.ts:76
+msgid "Hebrew"
+msgstr "heebrea"
+
+#: source/common/util/map-lang-code.ts:77
+msgid "Hindi"
+msgstr "hindi"
+
+#: source/common/util/map-lang-code.ts:78
+msgid "Croatian"
+msgstr "horvaatia"
+
+#: source/common/util/map-lang-code.ts:79
+msgid "Hungarian"
+msgstr "ungari"
+
+#: source/common/util/map-lang-code.ts:80
+msgid "Armenian"
+msgstr "armeenia"
+
+#: source/common/util/map-lang-code.ts:81
+msgid "Indonesian"
+msgstr "indoneesia"
+
+#: source/common/util/map-lang-code.ts:82
+msgid "Icelandic"
+msgstr "islandi"
+
+#: source/common/util/map-lang-code.ts:83
+#, fuzzy
+msgid "Italian (Switzerland)"
+msgstr "saksa (Šveits)"
+
+#: source/common/util/map-lang-code.ts:84
+msgid "Italian (Italy)"
+msgstr "itaalia (Itaalia)"
+
+#: source/common/util/map-lang-code.ts:85
+#, fuzzy
+msgid "Italian"
+msgstr "Kursiiv"
+
+#: source/common/util/map-lang-code.ts:86
+msgid "Japanese"
+msgstr "jaapani"
+
+#: source/common/util/map-lang-code.ts:87
+msgid "Georgian"
+msgstr "gruusia"
+
+#: source/common/util/map-lang-code.ts:88
+msgid "Khmer (Cambodia)"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:89
+msgid "Korean"
+msgstr "korea"
+
+#: source/common/util/map-lang-code.ts:90
+msgid "Latin"
+msgstr "ladina"
+
+#: source/common/util/map-lang-code.ts:91
+msgid "Luxembourgian"
+msgstr "luxemburgi"
+
+#: source/common/util/map-lang-code.ts:92
+msgid "Lithuanian"
+msgstr "leedu"
+
+#: source/common/util/map-lang-code.ts:93
+msgid "Latvian"
+msgstr "läti"
+
+#: source/common/util/map-lang-code.ts:94
+msgid "Macedonian"
+msgstr "makedoonia"
+
+#: source/common/util/map-lang-code.ts:95
+msgid "Mongolian"
+msgstr "mongoolia"
+
+#: source/common/util/map-lang-code.ts:96
+#, fuzzy
+msgid "Malaysian (Brunei Darussalam)"
+msgstr "malaisia (Malaisia)"
+
+#: source/common/util/map-lang-code.ts:97
+msgid "Malaysian (Malaysia)"
+msgstr "malaisia (Malaisia)"
+
+#: source/common/util/map-lang-code.ts:98
+#, fuzzy
+msgid "Malaysian"
+msgstr "malaisia (Malaisia)"
+
+#: source/common/util/map-lang-code.ts:99
+msgid "Norwegian (Bokmål)"
+msgstr "norra (bokmål)"
+
+#: source/common/util/map-lang-code.ts:100
+msgid "Nepalese"
+msgstr "nepaali"
+
+#: source/common/util/map-lang-code.ts:101
+msgid "Dutch (Belgium)"
+msgstr "hollandi (Belgia)"
+
+#: source/common/util/map-lang-code.ts:102
+msgid "Dutch (Netherlands)"
+msgstr "hollandi (Holland)"
+
+#: source/common/util/map-lang-code.ts:103
+msgid "Dutch"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:104
+msgid "Norwegian (Nyorsk)"
+msgstr "norra (nynorsk)"
+
+#: source/common/util/map-lang-code.ts:105
+#, fuzzy
+msgid "Norwegian"
+msgstr "gruusia"
+
+#: source/common/util/map-lang-code.ts:106
+msgid "Polish"
+msgstr "poola"
+
+#: source/common/util/map-lang-code.ts:107
+#, fuzzy
+msgid "Portuguese (Angola)"
+msgstr "portugali (Portugal)"
+
+#: source/common/util/map-lang-code.ts:108
+msgid "Portuguese (Brazil)"
+msgstr "portugali (Brasiilia)"
+
+#: source/common/util/map-lang-code.ts:109
+#, fuzzy
+msgid "Portuguese (Mozambique)"
+msgstr "portugali (Brasiilia)"
+
+#: source/common/util/map-lang-code.ts:110
+msgid "Portuguese (Portugal)"
+msgstr "portugali (Portugal)"
+
+#: source/common/util/map-lang-code.ts:111
+#, fuzzy
+msgid "Portuguese"
+msgstr "portugali (Brasiilia)"
+
+#: source/common/util/map-lang-code.ts:112
+msgid "Romanian"
+msgstr "rumeenia"
+
+#: source/common/util/map-lang-code.ts:113
+msgid "Russian"
+msgstr "vene"
+
+#: source/common/util/map-lang-code.ts:114
+msgid "Rwandan (Kinyarwanda)"
+msgstr "ruanda"
+
+#: source/common/util/map-lang-code.ts:115
+msgid "Slovakian"
+msgstr "slovakkia"
+
+#: source/common/util/map-lang-code.ts:116
+msgid "Slovenian"
+msgstr "sloveenia"
+
+#: source/common/util/map-lang-code.ts:117
+msgid "Serbian"
+msgstr "serbia"
+
+#: source/common/util/map-lang-code.ts:118
+msgid "Swedish"
+msgstr "rootsi"
+
+#: source/common/util/map-lang-code.ts:119
+#, fuzzy
+msgid "Tamil (India)"
+msgstr "inglise (India)"
+
+#: source/common/util/map-lang-code.ts:120
+msgid "Tagalog (Filipino)"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:121
+msgid "Turkish"
+msgstr "türgi"
+
+#: source/common/util/map-lang-code.ts:122
+msgid "Ukrainian"
+msgstr "ukraina"
+
+#: source/common/util/map-lang-code.ts:123
+msgid "Urdu"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:124
+msgid "Vietnamese"
+msgstr "vietnami"
+
+#: source/common/util/map-lang-code.ts:125
+msgid "Chinese (China)"
+msgstr "hiina (Hiina)"
+
+#: source/common/util/map-lang-code.ts:126
+#, fuzzy
+msgid "Chinese (Taiwan)"
+msgstr "hiina (Hiina)"
+
+#: source/common/util/map-lang-code.ts:127
+#, fuzzy
+msgid "Chinese"
+msgstr "hiina (Hiina)"
 
 #: source/common/util/format-date.ts:33
 msgid "just now"
@@ -1704,30 +2113,6 @@ msgstr "Sisukord"
 msgid "Related files"
 msgstr "Seotud failid"
 
-#: source/tmp/EditorSearchPanel.vue.ts:13
-msgid "Find…"
-msgstr "Otsi..."
-
-#: source/tmp/EditorSearchPanel.vue.ts:14
-msgid "Replace with"
-msgstr "Asenda"
-
-#: source/tmp/EditorSearchPanel.vue.ts:15
-msgid "Replace next occurrence"
-msgstr ""
-
-#: source/tmp/EditorSearchPanel.vue.ts:16
-msgid "Replace all occurrences"
-msgstr ""
-
-#: source/tmp/EditorSearchPanel.vue.ts:17
-msgid "Close search"
-msgstr "Sulge otsing"
-
-#: source/tmp/EditorSearchPanel.vue.ts:18
-msgid "Toggle regular expression search"
-msgstr ""
-
 #: source/tmp/App.vue.ts:34
 msgid "Updater"
 msgstr "Uuendaja"
@@ -2034,6 +2419,15 @@ msgstr ""
 msgid "Edit the default settings for imports or exports here."
 msgstr "Muuda importimise ja eksportimise vaikimisi sätteid siin."
 
+#~ msgid "Find…"
+#~ msgstr "Otsi..."
+
+#~ msgid "Replace with"
+#~ msgstr "Asenda"
+
+#~ msgid "Close search"
+#~ msgstr "Sulge otsing"
+
 #~ msgid "Link ending"
 #~ msgstr "Lingi muutmine"
 
@@ -2046,203 +2440,14 @@ msgstr "Muuda importimise ja eksportimise vaikimisi sätteid siin."
 #~ msgid "Afrikaans (South Africa)"
 #~ msgstr "afrikaani (Lõuna-Aafrika)"
 
-#~ msgid "Arabic"
-#~ msgstr "araabia"
-
-#~ msgid "Belarus"
-#~ msgstr "valgevene"
-
-#~ msgid "Bulgarian"
-#~ msgstr "bulgaaria"
-
-#~ msgid "Bosnian"
-#~ msgstr "bosnia"
-
 #~ msgid "Catalan (Catalonia)"
 #~ msgstr "katalaani"
 
 #~ msgid "Czech (Czech Republic)"
 #~ msgstr "tšehhi"
 
-#~ msgid "Danish"
-#~ msgstr "taani"
-
-#~ msgid "German (Austria)"
-#~ msgstr "saksa (Austria)"
-
-#~ msgid "German (Switzerland)"
-#~ msgstr "saksa (Šveits)"
-
-#~ msgid "German (Germany)"
-#~ msgstr "saksa (Saksamaa)"
-
-#~ msgid "Greek"
-#~ msgstr "kreeka"
-
-#~ msgid "English (Australia)"
-#~ msgstr "inglise (Austraalia)"
-
-#~ msgid "English (Canada)"
-#~ msgstr "inglise (Kanada)"
-
-#~ msgid "English (United Kingdom)"
-#~ msgstr "inglise (ÜK)"
-
-#~ msgid "English (India)"
-#~ msgstr "inglise (India)"
-
-#~ msgid "English (United States)"
-#~ msgstr "inglise (USA)"
-
-#~ msgid "English (South Africa)"
-#~ msgstr "inglise (Lõuna-Aafrika)"
-
-#~ msgid "Esperanto"
-#~ msgstr "esperanto"
-
-#~ msgid "Spanish (Spain)"
-#~ msgstr "hispaania (Hispaania)"
-
-#~ msgid "Estonian"
-#~ msgstr "eesti"
-
-#~ msgid "Basque"
-#~ msgstr "baski"
-
-#~ msgid "Persian (Farsi)"
-#~ msgstr "pärsia (farsi)"
-
-#~ msgid "Finnish"
-#~ msgstr "soome"
-
-#~ msgid "Faroese"
-#~ msgstr "fääri"
-
-#~ msgid "French (France)"
-#~ msgstr "prantsuse (Prantsusmaa)"
-
-#~ msgid "Irish"
-#~ msgstr "iiri"
-
-#~ msgid "Scottish (Gaelic)"
-#~ msgstr "šoti (keldi)"
-
-#~ msgid "Galician (Spain)"
-#~ msgstr "galiitsia (Hispaania)"
-
-#~ msgid "Hebrew"
-#~ msgstr "heebrea"
-
-#~ msgid "Hindi"
-#~ msgstr "hindi"
-
-#~ msgid "Croatian"
-#~ msgstr "horvaatia"
-
-#~ msgid "Hungarian"
-#~ msgstr "ungari"
-
-#~ msgid "Armenian"
-#~ msgstr "armeenia"
-
-#~ msgid "Indonesian"
-#~ msgstr "indoneesia"
-
-#~ msgid "Icelandic"
-#~ msgstr "islandi"
-
-#~ msgid "Italian (Italy)"
-#~ msgstr "itaalia (Itaalia)"
-
-#~ msgid "Japanese"
-#~ msgstr "jaapani"
-
-#~ msgid "Georgian"
-#~ msgstr "gruusia"
-
-#~ msgid "Korean"
-#~ msgstr "korea"
-
-#~ msgid "Latin"
-#~ msgstr "ladina"
-
-#~ msgid "Luxembourgian"
-#~ msgstr "luxemburgi"
-
-#~ msgid "Lithuanian"
-#~ msgstr "leedu"
-
-#~ msgid "Latvian"
-#~ msgstr "läti"
-
-#~ msgid "Macedonian"
-#~ msgstr "makedoonia"
-
-#~ msgid "Mongolian"
-#~ msgstr "mongoolia"
-
-#~ msgid "Malaysian (Malaysia)"
-#~ msgstr "malaisia (Malaisia)"
-
-#~ msgid "Norwegian (Bokmål)"
-#~ msgstr "norra (bokmål)"
-
-#~ msgid "Nepalese"
-#~ msgstr "nepaali"
-
-#~ msgid "Dutch (Belgium)"
-#~ msgstr "hollandi (Belgia)"
-
-#~ msgid "Dutch (Netherlands)"
-#~ msgstr "hollandi (Holland)"
-
-#~ msgid "Norwegian (Nyorsk)"
-#~ msgstr "norra (nynorsk)"
-
-#~ msgid "Polish"
-#~ msgstr "poola"
-
-#~ msgid "Portuguese (Brazil)"
-#~ msgstr "portugali (Brasiilia)"
-
-#~ msgid "Portuguese (Portugal)"
-#~ msgstr "portugali (Portugal)"
-
-#~ msgid "Romanian"
-#~ msgstr "rumeenia"
-
-#~ msgid "Russian"
-#~ msgstr "vene"
-
-#~ msgid "Rwandan (Kinyarwanda)"
-#~ msgstr "ruanda"
-
-#~ msgid "Slovakian"
-#~ msgstr "slovakkia"
-
-#~ msgid "Slovenian"
-#~ msgstr "sloveenia"
-
-#~ msgid "Serbian"
-#~ msgstr "serbia"
-
-#~ msgid "Swedish"
-#~ msgstr "rootsi"
-
-#~ msgid "Turkish"
-#~ msgstr "türgi"
-
-#~ msgid "Ukrainian"
-#~ msgstr "ukraina"
-
 #~ msgid "Urdu (Pakistan)"
 #~ msgstr "urdu (Pakistan)"
-
-#~ msgid "Vietnamese"
-#~ msgstr "vietnami"
-
-#~ msgid "Chinese (China)"
-#~ msgstr "hiina (Hiina)"
 
 #~ msgid "Word style (replace immediately without pressing Space/Enter)"
 #~ msgstr "Wordi stiil (asenda kohe ilma tühikut või enterit vajutamata)"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-01-20 02:39+0000\n"
+"POT-Creation-Date: 2023-01-21 02:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -235,7 +235,7 @@ msgstr "فارغ"
 
 #: source/app/service-providers/menu/menu.darwin.ts:195
 #: source/app/service-providers/menu/menu.win32.ts:160
-#: source/app/service-providers/commands/export.ts:79
+#: source/app/service-providers/commands/export.ts:74
 #: source/tmp/SnippetsTab.vue.ts:47 source/tmp/CustomCSS.vue.ts:42
 #: source/tmp/CustomCSS.vue.ts:56 source/tmp/Defaults.vue.ts:112
 msgid "Save"
@@ -517,20 +517,20 @@ msgstr "تعذر تحميل قاعدة بيانات الاقتباس"
 msgid "Changes to the library file detected. Reloading …"
 msgstr "تم الكشف عن تغييرات في ملف المكتبة. جارٍ إعادة التحميل…"
 
-#: source/app/service-providers/commands/export.ts:79
+#: source/app/service-providers/commands/export.ts:74
 msgid "Choose export destination"
 msgstr ""
 
-#: source/app/service-providers/commands/export.ts:110
+#: source/app/service-providers/commands/export.ts:105
 #, javascript-format
 msgid "Exporting to %s"
 msgstr "تصدير إلى٪ s"
 
-#: source/app/service-providers/commands/export.ts:122
+#: source/app/service-providers/commands/export.ts:117
 msgid "Export failed"
 msgstr "فشل التصدير"
 
-#: source/app/service-providers/commands/export.ts:123
+#: source/app/service-providers/commands/export.ts:118
 #, javascript-format
 msgid "An error occurred on export: %s"
 msgstr "حدث خطأ أثناء التصدير:٪ s"
@@ -622,8 +622,12 @@ msgid ""
 "unknown: %s"
 msgstr "تعذر استيراد ملفات٪ s التالية لأن نوع ملفاتها غير معروف:٪ s"
 
-#: source/app/service-providers/commands/language-tool.ts:139
+#: source/app/service-providers/commands/language-tool.ts:163
 msgid "Document too long"
+msgstr ""
+
+#: source/app/service-providers/commands/language-tool.ts:168
+msgid "offline"
 msgstr ""
 
 #: source/app/service-providers/commands/root-open.ts:60
@@ -913,7 +917,7 @@ msgstr "الشفرة"
 msgid "No footnote text found."
 msgstr ""
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:52
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:55
 #: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/PopoverDirProps.vue.ts:144
 #: source/tmp/PopoverFileProps.vue.ts:89 source/tmp/file-item.vue.ts:134
 #: source/tmp/file-item.vue.ts:207
@@ -921,14 +925,18 @@ msgstr ""
 msgid "%s words"
 msgstr "٪ s كلمات"
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:55
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:58
 #: source/tmp/PopoverDocInfo.vue.ts:71 source/tmp/file-item.vue.ts:132
 #: source/tmp/file-item.vue.ts:205
 #, javascript-format
 msgid "%s characters"
 msgstr ""
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:102
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:114
+msgid "Detect automatically"
+msgstr ""
+
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:147
 msgid "Open diagnostics panel"
 msgstr ""
 
@@ -1008,6 +1016,407 @@ msgstr "تحديد فاصلة الألوف"
 #: source/common/util/localise-number.ts:29
 msgid "."
 msgstr "تحديد الفاصلة العشرية"
+
+#: source/common/util/map-lang-code.ts:33
+msgid "Afrikaans"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:34
+msgid "Arabic"
+msgstr "العربية"
+
+#: source/common/util/map-lang-code.ts:35
+msgid "Asturian"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:36
+msgid "Belarus"
+msgstr "بيلاروسي"
+
+#: source/common/util/map-lang-code.ts:37
+msgid "Bulgarian"
+msgstr "البلغارية"
+
+#: source/common/util/map-lang-code.ts:38
+msgid "Breton"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:39
+msgid "Bosnian"
+msgstr "البوسنية"
+
+#: source/common/util/map-lang-code.ts:40
+msgid "Catalan"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:41
+msgid "Czech"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:42
+msgid "Danish"
+msgstr "الدانماركية"
+
+#: source/common/util/map-lang-code.ts:43
+msgid "German (Austria)"
+msgstr "الألمانية (النمسا)"
+
+#: source/common/util/map-lang-code.ts:44
+msgid "German (Switzerland)"
+msgstr "الألمانية (سويسرا)"
+
+#: source/common/util/map-lang-code.ts:45
+#, fuzzy
+msgid "German (simple)"
+msgstr "الألمانية (النمسا)"
+
+#: source/common/util/map-lang-code.ts:46
+msgid "German (Germany)"
+msgstr "الألمانية (ألمانيا)"
+
+#: source/common/util/map-lang-code.ts:47
+#, fuzzy
+msgid "German (Luxembourg)"
+msgstr "الألمانية (النمسا)"
+
+#: source/common/util/map-lang-code.ts:48
+msgid "German"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:49
+msgid "Greek"
+msgstr "اليونانية"
+
+#: source/common/util/map-lang-code.ts:50
+msgid "English (Australia)"
+msgstr "الإنجليزية (أستراليا)"
+
+#: source/common/util/map-lang-code.ts:51
+msgid "English (Canada)"
+msgstr "الإنكليزية (كندا)"
+
+#: source/common/util/map-lang-code.ts:52
+msgid "English (United Kingdom)"
+msgstr "الإنجليزية (المملكة المتحدة)"
+
+#: source/common/util/map-lang-code.ts:53
+msgid "English (India)"
+msgstr "الإنجليزية (الهند)"
+
+#: source/common/util/map-lang-code.ts:54
+#, fuzzy
+msgid "English (New Zealand)"
+msgstr "الإنكليزية (كندا)"
+
+#: source/common/util/map-lang-code.ts:55
+msgid "English (United States)"
+msgstr "الانجليزية (الولايات المتحدة)"
+
+#: source/common/util/map-lang-code.ts:56
+msgid "English (South Africa)"
+msgstr "الإنجليزية (جنوب إفريقيا)"
+
+#: source/common/util/map-lang-code.ts:57
+#, fuzzy
+msgid "English"
+msgstr "الإنجليزية (الهند)"
+
+#: source/common/util/map-lang-code.ts:58
+msgid "Esperanto"
+msgstr "الاسبرانتو"
+
+#: source/common/util/map-lang-code.ts:59
+#, fuzzy
+msgid "Spanish (Argentina)"
+msgstr "الإسبانية (إسبانيا)"
+
+#: source/common/util/map-lang-code.ts:60
+msgid "Spanish (Spain)"
+msgstr "الإسبانية (إسبانيا)"
+
+#: source/common/util/map-lang-code.ts:61
+#, fuzzy
+msgid "Spanish"
+msgstr "الدانماركية"
+
+#: source/common/util/map-lang-code.ts:62
+msgid "Estonian"
+msgstr "الإستونية"
+
+#: source/common/util/map-lang-code.ts:63
+msgid "Basque"
+msgstr "الباسكية"
+
+#: source/common/util/map-lang-code.ts:64
+msgid "Persian (Farsi)"
+msgstr "الفارسية"
+
+#: source/common/util/map-lang-code.ts:65
+msgid "Finnish"
+msgstr "الفنلندية"
+
+#: source/common/util/map-lang-code.ts:66
+msgid "Faroese"
+msgstr "الفارويز"
+
+#: source/common/util/map-lang-code.ts:67
+#, fuzzy
+msgid "French (Belgium)"
+msgstr "الهولندية (بلجيكا)"
+
+#: source/common/util/map-lang-code.ts:68
+#, fuzzy
+msgid "French (Switzerland)"
+msgstr "الألمانية (سويسرا)"
+
+#: source/common/util/map-lang-code.ts:69
+msgid "French (France)"
+msgstr "الفرنسية (فرنسا)"
+
+#: source/common/util/map-lang-code.ts:70
+#, fuzzy
+msgid "French (Luxembourg)"
+msgstr "اللكسمبورجية"
+
+#: source/common/util/map-lang-code.ts:71
+msgid "French (Principality of Monaco)"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:72
+msgid "French"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:73
+msgid "Irish"
+msgstr "الأيرلندية"
+
+#: source/common/util/map-lang-code.ts:74
+msgid "Scottish (Gaelic)"
+msgstr "الاسكتلندية (الغيلية)"
+
+#: source/common/util/map-lang-code.ts:75
+#, fuzzy
+msgid "Galician"
+msgstr "الجاليكية (إسبانيا)"
+
+#: source/common/util/map-lang-code.ts:76
+msgid "Hebrew"
+msgstr "العبرية"
+
+#: source/common/util/map-lang-code.ts:77
+msgid "Hindi"
+msgstr "االهندية"
+
+#: source/common/util/map-lang-code.ts:78
+msgid "Croatian"
+msgstr "الكرواتية"
+
+#: source/common/util/map-lang-code.ts:79
+msgid "Hungarian"
+msgstr "الهنغارية"
+
+#: source/common/util/map-lang-code.ts:80
+msgid "Armenian"
+msgstr "الأرمينية"
+
+#: source/common/util/map-lang-code.ts:81
+msgid "Indonesian"
+msgstr "الأندونيسية"
+
+#: source/common/util/map-lang-code.ts:82
+msgid "Icelandic"
+msgstr "الأيسلاندية"
+
+#: source/common/util/map-lang-code.ts:83
+#, fuzzy
+msgid "Italian (Switzerland)"
+msgstr "الألمانية (سويسرا)"
+
+#: source/common/util/map-lang-code.ts:84
+msgid "Italian (Italy)"
+msgstr "الإيطالية (إيطاليا)"
+
+#: source/common/util/map-lang-code.ts:85
+#, fuzzy
+msgid "Italian"
+msgstr "خط مائل"
+
+#: source/common/util/map-lang-code.ts:86
+msgid "Japanese"
+msgstr "اليابانية"
+
+#: source/common/util/map-lang-code.ts:87
+msgid "Georgian"
+msgstr "الجورجية"
+
+#: source/common/util/map-lang-code.ts:88
+msgid "Khmer (Cambodia)"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:89
+msgid "Korean"
+msgstr "الكورية"
+
+#: source/common/util/map-lang-code.ts:90
+msgid "Latin"
+msgstr "اللاتينية"
+
+#: source/common/util/map-lang-code.ts:91
+msgid "Luxembourgian"
+msgstr "اللكسمبورجية"
+
+#: source/common/util/map-lang-code.ts:92
+msgid "Lithuanian"
+msgstr "اللتوانية"
+
+#: source/common/util/map-lang-code.ts:93
+msgid "Latvian"
+msgstr "اللاتفية"
+
+#: source/common/util/map-lang-code.ts:94
+msgid "Macedonian"
+msgstr "المقدونية"
+
+#: source/common/util/map-lang-code.ts:95
+msgid "Mongolian"
+msgstr "المنغولية"
+
+#: source/common/util/map-lang-code.ts:96
+#, fuzzy
+msgid "Malaysian (Brunei Darussalam)"
+msgstr "الماليزية (ماليزيا)"
+
+#: source/common/util/map-lang-code.ts:97
+msgid "Malaysian (Malaysia)"
+msgstr "الماليزية (ماليزيا)"
+
+#: source/common/util/map-lang-code.ts:98
+#, fuzzy
+msgid "Malaysian"
+msgstr "الماليزية (ماليزيا)"
+
+#: source/common/util/map-lang-code.ts:99
+msgid "Norwegian (Bokmål)"
+msgstr "النرويجية (النرويج)"
+
+#: source/common/util/map-lang-code.ts:100
+msgid "Nepalese"
+msgstr "النيبالية"
+
+#: source/common/util/map-lang-code.ts:101
+msgid "Dutch (Belgium)"
+msgstr "الهولندية (بلجيكا)"
+
+#: source/common/util/map-lang-code.ts:102
+msgid "Dutch (Netherlands)"
+msgstr "الهولندية (هولندا)"
+
+#: source/common/util/map-lang-code.ts:103
+msgid "Dutch"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:104
+msgid "Norwegian (Nyorsk)"
+msgstr "النرويجية (نينورسك)"
+
+#: source/common/util/map-lang-code.ts:105
+#, fuzzy
+msgid "Norwegian"
+msgstr "الجورجية"
+
+#: source/common/util/map-lang-code.ts:106
+msgid "Polish"
+msgstr "البولندية"
+
+#: source/common/util/map-lang-code.ts:107
+#, fuzzy
+msgid "Portuguese (Angola)"
+msgstr "البرتغالية (البرتغال)"
+
+#: source/common/util/map-lang-code.ts:108
+msgid "Portuguese (Brazil)"
+msgstr "البرتغالية (البرازيل)."
+
+#: source/common/util/map-lang-code.ts:109
+#, fuzzy
+msgid "Portuguese (Mozambique)"
+msgstr "البرتغالية (البرازيل)."
+
+#: source/common/util/map-lang-code.ts:110
+msgid "Portuguese (Portugal)"
+msgstr "البرتغالية (البرتغال)"
+
+#: source/common/util/map-lang-code.ts:111
+#, fuzzy
+msgid "Portuguese"
+msgstr "البرتغالية (البرازيل)."
+
+#: source/common/util/map-lang-code.ts:112
+msgid "Romanian"
+msgstr "الرومانية"
+
+#: source/common/util/map-lang-code.ts:113
+msgid "Russian"
+msgstr "الروسية"
+
+#: source/common/util/map-lang-code.ts:114
+msgid "Rwandan (Kinyarwanda)"
+msgstr "الرواندانية (كينيارواندا)"
+
+#: source/common/util/map-lang-code.ts:115
+msgid "Slovakian"
+msgstr "السلوفاكية"
+
+#: source/common/util/map-lang-code.ts:116
+msgid "Slovenian"
+msgstr "السلوفانية"
+
+#: source/common/util/map-lang-code.ts:117
+msgid "Serbian"
+msgstr "الصربية"
+
+#: source/common/util/map-lang-code.ts:118
+msgid "Swedish"
+msgstr "السويدية"
+
+#: source/common/util/map-lang-code.ts:119
+#, fuzzy
+msgid "Tamil (India)"
+msgstr "الإنجليزية (الهند)"
+
+#: source/common/util/map-lang-code.ts:120
+msgid "Tagalog (Filipino)"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:121
+msgid "Turkish"
+msgstr "التركية"
+
+#: source/common/util/map-lang-code.ts:122
+msgid "Ukrainian"
+msgstr "الأوكرانية"
+
+#: source/common/util/map-lang-code.ts:123
+msgid "Urdu"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:124
+msgid "Vietnamese"
+msgstr "الفيتنامية"
+
+#: source/common/util/map-lang-code.ts:125
+msgid "Chinese (China)"
+msgstr "الصينية (الصين)"
+
+#: source/common/util/map-lang-code.ts:126
+#, fuzzy
+msgid "Chinese (Taiwan)"
+msgstr "الصينية (الصين)"
+
+#: source/common/util/map-lang-code.ts:127
+#, fuzzy
+msgid "Chinese"
+msgstr "الصينية (الصين)"
 
 #: source/common/util/format-date.ts:33
 msgid "just now"
@@ -1707,30 +2116,6 @@ msgstr "جدول المحتويات"
 msgid "Related files"
 msgstr ""
 
-#: source/tmp/EditorSearchPanel.vue.ts:13
-msgid "Find…"
-msgstr "بحث"
-
-#: source/tmp/EditorSearchPanel.vue.ts:14
-msgid "Replace with"
-msgstr "استبدال ب"
-
-#: source/tmp/EditorSearchPanel.vue.ts:15
-msgid "Replace next occurrence"
-msgstr ""
-
-#: source/tmp/EditorSearchPanel.vue.ts:16
-msgid "Replace all occurrences"
-msgstr ""
-
-#: source/tmp/EditorSearchPanel.vue.ts:17
-msgid "Close search"
-msgstr ""
-
-#: source/tmp/EditorSearchPanel.vue.ts:18
-msgid "Toggle regular expression search"
-msgstr ""
-
 #: source/tmp/App.vue.ts:34
 msgid "Updater"
 msgstr ""
@@ -2049,6 +2434,12 @@ msgstr ""
 msgid "Edit the default settings for imports or exports here."
 msgstr ""
 
+#~ msgid "Find…"
+#~ msgstr "بحث"
+
+#~ msgid "Replace with"
+#~ msgstr "استبدال ب"
+
 #~ msgid "Link start"
 #~ msgstr "بداية الارتباط"
 
@@ -2064,203 +2455,14 @@ msgstr ""
 #~ msgid "Afrikaans (South Africa)"
 #~ msgstr "الأفريكانية (جنوب إفريقيا)"
 
-#~ msgid "Arabic"
-#~ msgstr "العربية"
-
-#~ msgid "Belarus"
-#~ msgstr "بيلاروسي"
-
-#~ msgid "Bulgarian"
-#~ msgstr "البلغارية"
-
-#~ msgid "Bosnian"
-#~ msgstr "البوسنية"
-
 #~ msgid "Catalan (Catalonia)"
 #~ msgstr "الكاتالانية (كاتالونيا)"
 
 #~ msgid "Czech (Czech Republic)"
 #~ msgstr "التشيكية (الجمهورية التشيكية)"
 
-#~ msgid "Danish"
-#~ msgstr "الدانماركية"
-
-#~ msgid "German (Austria)"
-#~ msgstr "الألمانية (النمسا)"
-
-#~ msgid "German (Switzerland)"
-#~ msgstr "الألمانية (سويسرا)"
-
-#~ msgid "German (Germany)"
-#~ msgstr "الألمانية (ألمانيا)"
-
-#~ msgid "Greek"
-#~ msgstr "اليونانية"
-
-#~ msgid "English (Australia)"
-#~ msgstr "الإنجليزية (أستراليا)"
-
-#~ msgid "English (Canada)"
-#~ msgstr "الإنكليزية (كندا)"
-
-#~ msgid "English (United Kingdom)"
-#~ msgstr "الإنجليزية (المملكة المتحدة)"
-
-#~ msgid "English (India)"
-#~ msgstr "الإنجليزية (الهند)"
-
-#~ msgid "English (United States)"
-#~ msgstr "الانجليزية (الولايات المتحدة)"
-
-#~ msgid "English (South Africa)"
-#~ msgstr "الإنجليزية (جنوب إفريقيا)"
-
-#~ msgid "Esperanto"
-#~ msgstr "الاسبرانتو"
-
-#~ msgid "Spanish (Spain)"
-#~ msgstr "الإسبانية (إسبانيا)"
-
-#~ msgid "Estonian"
-#~ msgstr "الإستونية"
-
-#~ msgid "Basque"
-#~ msgstr "الباسكية"
-
-#~ msgid "Persian (Farsi)"
-#~ msgstr "الفارسية"
-
-#~ msgid "Finnish"
-#~ msgstr "الفنلندية"
-
-#~ msgid "Faroese"
-#~ msgstr "الفارويز"
-
-#~ msgid "French (France)"
-#~ msgstr "الفرنسية (فرنسا)"
-
-#~ msgid "Irish"
-#~ msgstr "الأيرلندية"
-
-#~ msgid "Scottish (Gaelic)"
-#~ msgstr "الاسكتلندية (الغيلية)"
-
-#~ msgid "Galician (Spain)"
-#~ msgstr "الجاليكية (إسبانيا)"
-
-#~ msgid "Hebrew"
-#~ msgstr "العبرية"
-
-#~ msgid "Hindi"
-#~ msgstr "االهندية"
-
-#~ msgid "Croatian"
-#~ msgstr "الكرواتية"
-
-#~ msgid "Hungarian"
-#~ msgstr "الهنغارية"
-
-#~ msgid "Armenian"
-#~ msgstr "الأرمينية"
-
-#~ msgid "Indonesian"
-#~ msgstr "الأندونيسية"
-
-#~ msgid "Icelandic"
-#~ msgstr "الأيسلاندية"
-
-#~ msgid "Italian (Italy)"
-#~ msgstr "الإيطالية (إيطاليا)"
-
-#~ msgid "Japanese"
-#~ msgstr "اليابانية"
-
-#~ msgid "Georgian"
-#~ msgstr "الجورجية"
-
-#~ msgid "Korean"
-#~ msgstr "الكورية"
-
-#~ msgid "Latin"
-#~ msgstr "اللاتينية"
-
-#~ msgid "Luxembourgian"
-#~ msgstr "اللكسمبورجية"
-
-#~ msgid "Lithuanian"
-#~ msgstr "اللتوانية"
-
-#~ msgid "Latvian"
-#~ msgstr "اللاتفية"
-
-#~ msgid "Macedonian"
-#~ msgstr "المقدونية"
-
-#~ msgid "Mongolian"
-#~ msgstr "المنغولية"
-
-#~ msgid "Malaysian (Malaysia)"
-#~ msgstr "الماليزية (ماليزيا)"
-
-#~ msgid "Norwegian (Bokmål)"
-#~ msgstr "النرويجية (النرويج)"
-
-#~ msgid "Nepalese"
-#~ msgstr "النيبالية"
-
-#~ msgid "Dutch (Belgium)"
-#~ msgstr "الهولندية (بلجيكا)"
-
-#~ msgid "Dutch (Netherlands)"
-#~ msgstr "الهولندية (هولندا)"
-
-#~ msgid "Norwegian (Nyorsk)"
-#~ msgstr "النرويجية (نينورسك)"
-
-#~ msgid "Polish"
-#~ msgstr "البولندية"
-
-#~ msgid "Portuguese (Brazil)"
-#~ msgstr "البرتغالية (البرازيل)."
-
-#~ msgid "Portuguese (Portugal)"
-#~ msgstr "البرتغالية (البرتغال)"
-
-#~ msgid "Romanian"
-#~ msgstr "الرومانية"
-
-#~ msgid "Russian"
-#~ msgstr "الروسية"
-
-#~ msgid "Rwandan (Kinyarwanda)"
-#~ msgstr "الرواندانية (كينيارواندا)"
-
-#~ msgid "Slovakian"
-#~ msgstr "السلوفاكية"
-
-#~ msgid "Slovenian"
-#~ msgstr "السلوفانية"
-
-#~ msgid "Serbian"
-#~ msgstr "الصربية"
-
-#~ msgid "Swedish"
-#~ msgstr "السويدية"
-
-#~ msgid "Turkish"
-#~ msgstr "التركية"
-
-#~ msgid "Ukrainian"
-#~ msgstr "الأوكرانية"
-
 #~ msgid "Urdu (Pakistan)"
 #~ msgstr "الأردية (باكستان)"
-
-#~ msgid "Vietnamese"
-#~ msgstr "الفيتنامية"
-
-#~ msgid "Chinese (China)"
-#~ msgstr "الصينية (الصين)"
 
 #~ msgid ""
 #~ "Use the CodeMirror default actions for <kbd>Home</kbd> and <kbd>End</kbd>."
