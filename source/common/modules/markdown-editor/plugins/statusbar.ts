@@ -22,7 +22,7 @@ import { charCountField, wordCountField } from './statistics-fields'
 import localiseNumber from '@common/util/localise-number'
 import { resolveLangCode } from '@common/util/map-lang-code'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import { AnyMenuItem } from '@dts/renderer/context'
+import { AnyMenuItem, NormalItem } from '@dts/renderer/context'
 
 export interface StatusbarItem {
   content: string
@@ -105,6 +105,12 @@ function createStatusbar (view: EditorView): Panel {
                   enabled: true,
                   checked: ltState.overrideLanguage === e
                 }
+              })
+
+              // Sort these things correctly
+              const coll = new Intl.Collator([ window.config.get('appLang'), 'en' ])
+              ;(items as NormalItem[]).sort((a, b) => {
+                return coll.compare(a.label, b.label)
               })
 
               // Insert the "auto" item
