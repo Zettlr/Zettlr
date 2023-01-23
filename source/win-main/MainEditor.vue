@@ -1093,12 +1093,11 @@ body.win32 .main-editor-wrapper, body.linux .main-editor-wrapper {
 // CodeMirror fullscreen
 .main-editor-wrapper.fullscreen {
   .cm-scroller {
-    margin: 0;
-    @media(min-width: 1301px) { margin: 0 @editor-margin-fullscreen-xxl !important; }
-    @media(max-width: 1300px) { margin: 0 @editor-margin-fullscreen-xl  !important; }
-    @media(max-width: 1100px) { margin: 0 @editor-margin-fullscreen-lg  !important; }
-    @media(max-width: 1000px) { margin: 0 @editor-margin-fullscreen-md  !important; }
-    @media(max-width:  800px) { margin: 0 @editor-margin-fullscreen-sm  !important; }
+    @media(min-width: 1301px) { padding: 0 @editor-margin-fullscreen-xxl; }
+    @media(max-width: 1300px) { padding: 0 @editor-margin-fullscreen-xl; }
+    @media(max-width: 1100px) { padding: 0 @editor-margin-fullscreen-lg; }
+    @media(max-width: 1000px) { padding: 0 @editor-margin-fullscreen-md; }
+    @media(max-width:  800px) { padding: 0 @editor-margin-fullscreen-sm; }
 
   }
 }
