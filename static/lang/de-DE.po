@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2023-01-21 02:33+0000\n"
-"PO-Revision-Date: 2023-01-19 10:15+0100\n"
+"PO-Revision-Date: 2023-01-23 18:38+0100\n"
 "Last-Translator: Hendrik Erz <info@zettlr.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -628,11 +628,11 @@ msgstr ""
 
 #: source/app/service-providers/commands/language-tool.ts:163
 msgid "Document too long"
-msgstr ""
+msgstr "Dokument zu lang"
 
 #: source/app/service-providers/commands/language-tool.ts:168
 msgid "offline"
-msgstr ""
+msgstr "offline"
 
 #: source/app/service-providers/commands/root-open.ts:60
 #: source/tmp/file-tree.vue.ts:26 source/tmp/PopoverDirProps.vue.ts:156
@@ -938,7 +938,7 @@ msgstr "%s Zeichen"
 
 #: source/common/modules/markdown-editor/plugins/statusbar.ts:114
 msgid "Detect automatically"
-msgstr ""
+msgstr "Automatisch erkennen"
 
 #: source/common/modules/markdown-editor/plugins/statusbar.ts:147
 msgid "Open diagnostics panel"
@@ -1023,7 +1023,7 @@ msgstr ","
 
 #: source/common/util/map-lang-code.ts:33
 msgid "Afrikaans"
-msgstr ""
+msgstr "Afrikaans"
 
 #: source/common/util/map-lang-code.ts:34
 msgid "Arabic"
@@ -1031,7 +1031,7 @@ msgstr "Arabisch"
 
 #: source/common/util/map-lang-code.ts:35
 msgid "Asturian"
-msgstr ""
+msgstr "Asturisch"
 
 #: source/common/util/map-lang-code.ts:36
 msgid "Belarus"
@@ -1043,7 +1043,7 @@ msgstr "Bulgarisch"
 
 #: source/common/util/map-lang-code.ts:38
 msgid "Breton"
-msgstr ""
+msgstr "Bretonisch"
 
 #: source/common/util/map-lang-code.ts:39
 msgid "Bosnian"
@@ -1051,11 +1051,11 @@ msgstr "Bosnisch"
 
 #: source/common/util/map-lang-code.ts:40
 msgid "Catalan"
-msgstr ""
+msgstr "Katalonisch"
 
 #: source/common/util/map-lang-code.ts:41
 msgid "Czech"
-msgstr ""
+msgstr "Tschechisch"
 
 #: source/common/util/map-lang-code.ts:42
 msgid "Danish"
@@ -1070,22 +1070,20 @@ msgid "German (Switzerland)"
 msgstr "Deutsch (Schweiz)"
 
 #: source/common/util/map-lang-code.ts:45
-#, fuzzy
 msgid "German (simple)"
-msgstr "Deutsch (Österreich)"
+msgstr "Deutsch (einfach)"
 
 #: source/common/util/map-lang-code.ts:46
 msgid "German (Germany)"
 msgstr "Deutsch (Deutschland)"
 
 #: source/common/util/map-lang-code.ts:47
-#, fuzzy
 msgid "German (Luxembourg)"
-msgstr "Deutsch (Österreich)"
+msgstr "Deutsch (Luxemburg)"
 
 #: source/common/util/map-lang-code.ts:48
 msgid "German"
-msgstr ""
+msgstr "Deutsch"
 
 #: source/common/util/map-lang-code.ts:49
 msgid "Greek"
@@ -1108,9 +1106,8 @@ msgid "English (India)"
 msgstr "Englisch (Indien)"
 
 #: source/common/util/map-lang-code.ts:54
-#, fuzzy
 msgid "English (New Zealand)"
-msgstr "Englisch (Kanada)"
+msgstr "Englisch (Neuseeland)"
 
 #: source/common/util/map-lang-code.ts:55
 msgid "English (United States)"
@@ -1121,27 +1118,24 @@ msgid "English (South Africa)"
 msgstr "Englisch (Südafrika)"
 
 #: source/common/util/map-lang-code.ts:57
-#, fuzzy
 msgid "English"
-msgstr "Englisch (Indien)"
+msgstr "Englisch"
 
 #: source/common/util/map-lang-code.ts:58
 msgid "Esperanto"
 msgstr "Esperanto"
 
 #: source/common/util/map-lang-code.ts:59
-#, fuzzy
 msgid "Spanish (Argentina)"
-msgstr "Spanisch (Spanien)"
+msgstr "Spanisch (Argentinien)"
 
 #: source/common/util/map-lang-code.ts:60
 msgid "Spanish (Spain)"
 msgstr "Spanisch (Spanien)"
 
 #: source/common/util/map-lang-code.ts:61
-#, fuzzy
 msgid "Spanish"
-msgstr "Dänisch"
+msgstr "Spanisch"
 
 #: source/common/util/map-lang-code.ts:62
 msgid "Estonian"
@@ -1164,31 +1158,28 @@ msgid "Faroese"
 msgstr "Faröisch"
 
 #: source/common/util/map-lang-code.ts:67
-#, fuzzy
 msgid "French (Belgium)"
-msgstr "Belgisch"
+msgstr "Französisch (Belgien)"
 
 #: source/common/util/map-lang-code.ts:68
-#, fuzzy
 msgid "French (Switzerland)"
-msgstr "Deutsch (Schweiz)"
+msgstr "Französisch (Schweiz)"
 
 #: source/common/util/map-lang-code.ts:69
 msgid "French (France)"
 msgstr "Französisch (Frankreich)"
 
 #: source/common/util/map-lang-code.ts:70
-#, fuzzy
 msgid "French (Luxembourg)"
-msgstr "Luxemburgisch"
+msgstr "Französisch (Luxemburg)"
 
 #: source/common/util/map-lang-code.ts:71
 msgid "French (Principality of Monaco)"
-msgstr ""
+msgstr "Französisch (Monaco)"
 
 #: source/common/util/map-lang-code.ts:72
 msgid "French"
-msgstr ""
+msgstr "Französisch"
 
 #: source/common/util/map-lang-code.ts:73
 msgid "Irish"
@@ -1199,9 +1190,8 @@ msgid "Scottish (Gaelic)"
 msgstr "Schottisch (Gaelisch)"
 
 #: source/common/util/map-lang-code.ts:75
-#, fuzzy
 msgid "Galician"
-msgstr "Galizisch (Spanien)"
+msgstr "Galizisch"
 
 #: source/common/util/map-lang-code.ts:76
 msgid "Hebrew"
@@ -1232,18 +1222,16 @@ msgid "Icelandic"
 msgstr "Isländisch"
 
 #: source/common/util/map-lang-code.ts:83
-#, fuzzy
 msgid "Italian (Switzerland)"
-msgstr "Deutsch (Schweiz)"
+msgstr "Italienisch (Schweiz)"
 
 #: source/common/util/map-lang-code.ts:84
 msgid "Italian (Italy)"
 msgstr "Italienisch"
 
 #: source/common/util/map-lang-code.ts:85
-#, fuzzy
 msgid "Italian"
-msgstr "Kursiv"
+msgstr "Italienisch"
 
 #: source/common/util/map-lang-code.ts:86
 msgid "Japanese"
@@ -1255,7 +1243,7 @@ msgstr "Georgisch"
 
 #: source/common/util/map-lang-code.ts:88
 msgid "Khmer (Cambodia)"
-msgstr ""
+msgstr "Khmer"
 
 #: source/common/util/map-lang-code.ts:89
 msgid "Korean"
@@ -1286,18 +1274,16 @@ msgid "Mongolian"
 msgstr "Mongolisch"
 
 #: source/common/util/map-lang-code.ts:96
-#, fuzzy
 msgid "Malaysian (Brunei Darussalam)"
-msgstr "Malaysisch (Malaysia)"
+msgstr "Malaysisch (Brunei Darussalam)"
 
 #: source/common/util/map-lang-code.ts:97
 msgid "Malaysian (Malaysia)"
 msgstr "Malaysisch (Malaysia)"
 
 #: source/common/util/map-lang-code.ts:98
-#, fuzzy
 msgid "Malaysian"
-msgstr "Malaysisch (Malaysia)"
+msgstr "Malaysisch"
 
 #: source/common/util/map-lang-code.ts:99
 msgid "Norwegian (Bokmål)"
@@ -1317,43 +1303,39 @@ msgstr "Niederländisch"
 
 #: source/common/util/map-lang-code.ts:103
 msgid "Dutch"
-msgstr ""
+msgstr "Niederländisch"
 
 #: source/common/util/map-lang-code.ts:104
 msgid "Norwegian (Nyorsk)"
 msgstr "Norwegisch (Nyorsk)"
 
 #: source/common/util/map-lang-code.ts:105
-#, fuzzy
 msgid "Norwegian"
-msgstr "Georgisch"
+msgstr "Norwegisch"
 
 #: source/common/util/map-lang-code.ts:106
 msgid "Polish"
 msgstr "Polnisch"
 
 #: source/common/util/map-lang-code.ts:107
-#, fuzzy
 msgid "Portuguese (Angola)"
-msgstr "Portugiesisch (Portugal)"
+msgstr "Portugiesisch (Angola)"
 
 #: source/common/util/map-lang-code.ts:108
 msgid "Portuguese (Brazil)"
 msgstr "Portugiesisch (Brasilien)"
 
 #: source/common/util/map-lang-code.ts:109
-#, fuzzy
 msgid "Portuguese (Mozambique)"
-msgstr "Portugiesisch (Brasilien)"
+msgstr "Portugiesisch (Mosambique)"
 
 #: source/common/util/map-lang-code.ts:110
 msgid "Portuguese (Portugal)"
 msgstr "Portugiesisch (Portugal)"
 
 #: source/common/util/map-lang-code.ts:111
-#, fuzzy
 msgid "Portuguese"
-msgstr "Portugiesisch (Brasilien)"
+msgstr "Portugiesisch"
 
 #: source/common/util/map-lang-code.ts:112
 msgid "Romanian"
@@ -1384,13 +1366,12 @@ msgid "Swedish"
 msgstr "Schwedisch"
 
 #: source/common/util/map-lang-code.ts:119
-#, fuzzy
 msgid "Tamil (India)"
-msgstr "Englisch (Indien)"
+msgstr "Tamil (Indien)"
 
 #: source/common/util/map-lang-code.ts:120
 msgid "Tagalog (Filipino)"
-msgstr ""
+msgstr "Tagalog (Filipino)"
 
 #: source/common/util/map-lang-code.ts:121
 msgid "Turkish"
@@ -1402,7 +1383,7 @@ msgstr "Ukrainisch"
 
 #: source/common/util/map-lang-code.ts:123
 msgid "Urdu"
-msgstr ""
+msgstr "Urdu"
 
 #: source/common/util/map-lang-code.ts:124
 msgid "Vietnamese"
@@ -1413,14 +1394,12 @@ msgid "Chinese (China)"
 msgstr "Chinesisch (China)"
 
 #: source/common/util/map-lang-code.ts:126
-#, fuzzy
 msgid "Chinese (Taiwan)"
-msgstr "Chinesisch (China)"
+msgstr "Chinesisch (Taiwan)"
 
 #: source/common/util/map-lang-code.ts:127
-#, fuzzy
 msgid "Chinese"
-msgstr "Chinesisch (China)"
+msgstr "Chinesisch"
 
 #: source/common/util/format-date.ts:33
 msgid "just now"
