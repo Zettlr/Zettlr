@@ -99,7 +99,7 @@ function createStatusbar (view: EditorView): Panel {
                   flag = '🇺🇳' // United Nations flag
                 }
                 return {
-                  label: `${flag} ${displayName}`,
+                  label: `${flag} ${displayName} (${e})`,
                   id: e,
                   type: 'checkbox',
                   enabled: true,
@@ -115,14 +115,14 @@ function createStatusbar (view: EditorView): Panel {
 
               // Insert the "auto" item
               items.unshift(
-                { type: 'separator' },
                 {
                   label: trans('Detect automatically'),
                   id: 'auto',
                   type: 'checkbox',
                   enabled: true,
                   checked: ltState.overrideLanguage === 'auto'
-                }
+                },
+                { type: 'separator' }
               )
               showPopupMenu({ x: event.clientX, y: event.clientY }, items, clickedID => {
                 view.dispatch({ effects: updateLTState.of({ overrideLanguage: clickedID }) })
