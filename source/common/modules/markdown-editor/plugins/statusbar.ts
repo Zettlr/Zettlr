@@ -22,7 +22,7 @@ import { charCountField, wordCountField } from './statistics-fields'
 import localiseNumber from '@common/util/localise-number'
 import { resolveLangCode } from '@common/util/map-lang-code'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
-import { AnyMenuItem, NormalItem } from '@dts/renderer/context'
+import { AnyMenuItem } from '@dts/renderer/context'
 
 export interface StatusbarItem {
   content: string
@@ -92,28 +92,74 @@ function createStatusbar (view: EditorView): Panel {
             title: resolveLangCode(displayLanguage),
             allowHtml: true,
             onClick (event) {
-              const items: AnyMenuItem[] = ltState.supportedLanguages.map(e => {
-                const displayName = resolveLangCode(e, 'name')
-                let flag = resolveLangCode(e, 'flag')
-                if (flag === e) {
+              // The languages can be a tad tricky: We want the info that we're
+              // going to present to the user as concise as possible, but
+              // sometimes we lack the information. For example, if we have two
+              // language codes sv, and sv-SV, there may be a subtle difference
+              // but it could be that we only have the translation for sv. In
+              // that case, we need to add the language code to the duplicate
+              // to de-duplicate the two entries.
+              // We'll go as follows:
+
+              // First, retrieve the translations for all our codes
+              const resolved = ltState.supportedLanguages.map(code => {
+                let flag = resolveLangCode(code, 'flag')
+                if (flag === code) {
                   flag = '🇺🇳' // United Nations flag
                 }
                 return {
-                  label: `${flag} ${displayName} (${e})`,
-                  id: e,
-                  type: 'checkbox',
-                  enabled: true,
-                  checked: ltState.overrideLanguage === e
+                  code,
+                  displayName: resolveLangCode(code, 'name'),
+                  flag,
+                  duplicate: false
                 }
               })
 
-              // Sort these things correctly
-              const coll = new Intl.Collator([ window.config.get('appLang'), 'en' ])
-              ;(items as NormalItem[]).sort((a, b) => {
-                return coll.compare(a.label, b.label)
+              // Then, let's have a look if we have duplicates and switch their
+              // flags correspondingly
+              for (let i = 0; i < resolved.length; i++) {
+                if (resolved[i].duplicate) {
+                  continue
+                }
+
+                const indexOfTwin = resolved.findIndex(e => {
+                  return e.displayName === resolved[i].displayName
+                })
+
+                if (indexOfTwin > -1 && indexOfTwin !== i) {
+                  resolved[i].duplicate = true
+                  resolved[indexOfTwin].duplicate = true
+                }
+              }
+
+              // Now sort the items ascending (we can't sort the final items,
+              // since they'd be sorted according to the flag emoji order)
+              const coll = new Intl.Collator(
+                [ window.config.get('appLang'), 'en' ],
+                { sensitivity: 'base', usage: 'sort' }
+              )
+
+              resolved.sort((a, b) => {
+                return coll.compare(a.displayName, b.displayName)
               })
 
-              // Insert the "auto" item
+              // At this point, we have the info we need. We only use the
+              // displayName property except in situations where there are
+              // duplicates, in which case we'll add the code in brackets
+              // afterwards to de-duplicate the entries.
+              const items: AnyMenuItem[] = resolved.map(entry => {
+                const suffix = entry.duplicate ? ` (${entry.code})` : ''
+
+                return {
+                  label: `${entry.flag} ${entry.displayName}${suffix}`,
+                  id: entry.code,
+                  type: 'checkbox',
+                  enabled: true,
+                  checked: ltState.overrideLanguage === entry.code
+                }
+              })
+
+              // Insert the "auto" item on top
               items.unshift(
                 {
                   label: trans('Detect automatically'),
@@ -124,6 +170,7 @@ function createStatusbar (view: EditorView): Panel {
                 },
                 { type: 'separator' }
               )
+
               showPopupMenu({ x: event.clientX, y: event.clientY }, items, clickedID => {
                 view.dispatch({ effects: updateLTState.of({ overrideLanguage: clickedID }) })
                 forceLinting(view)
