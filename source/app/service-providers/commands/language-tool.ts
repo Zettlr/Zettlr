@@ -155,6 +155,8 @@ export default class LanguageTool extends ZettlrCommand {
       const result = await got(`${server}/v2/check`, { method: 'post', body: searchParams.toString(), headers })
       return [ JSON.parse(result.body), languages ]
     } catch (err: any) {
+      // Always report errors
+      this._app.log.error(`[Application] Error running LanguageTool: ${String(err.message)}`, err)
       if (err instanceof HTTPError && err.code === 'ERR_NON_2XX_3XX_RESPONSE') {
         // The API complained. There are a few things that can happen, and here
         // we only translate them into error messages the users can understand.
@@ -168,7 +170,6 @@ export default class LanguageTool extends ZettlrCommand {
         return trans('offline') // Maybe very coarse, but remember it needs to be concise and user-readable
       }
 
-      this._app.log.error(`[Application] Error running LanguageTool: ${String(err.message)}`, err)
       return undefined // Silently swallow errors
     }
   }
