@@ -206,6 +206,19 @@ export default class MarkdownEditor extends EventEmitter {
           this.emit('cursorActivity')
         }
 
+        // Listen for config updates, and parse them into the internal cache. We
+        // do it this way, because the editor itself is also capable of changing
+        // its configuration (e.g., via the statusbar). This way we ensure that
+        // both external updates (via setOptions) as well as internal updates
+        // both end up in our cache.
+        for (const transaction of update.transactions) {
+          for (const effect of transaction.effects) {
+            if (effect.is(configUpdateEffect)) {
+              this.onConfigUpdate(effect.value)
+            }
+          }
+        }
+
         // Update the selection in our cache
         const cache = this.documentViewCache.get(filePath)
         if (cache !== undefined) {
@@ -518,14 +531,28 @@ export default class MarkdownEditor extends EventEmitter {
    * @param   {Object}  newOptions  The new options
    */
   setOptions (newOptions: EditorConfigOptions): void {
+    // Here, we only trigger an update in the state itself. Then, we grab the
+    // update via an effect to ensure we can cache the final, correct
+    // configuration. However, in case there's no state (initial update), we
+    // still need to cache the config here, as the updateListener won't be
+    // firing yet.
+    this.config = safeAssign(newOptions, this.config)
+    this._instance.dispatch({ effects: configUpdateEffect.of(this.config) })
+  }
+
+  /**
+   * This function is called by an updateListener that listens for changes to
+   * the main configuration. We do so to ensure that the editor state is the
+   * main source of truth, but that the editor class can cache the config in
+   * case we need to exchange the states.
+   *
+   * @param   {Partial<EditorConfiguration>}  newOptions  The new options passed via the effect
+   */
+  private onConfigUpdate (newOptions: Partial<EditorConfiguration>): void {
     const inputModeChanged = newOptions.inputMode !== undefined && newOptions.inputMode !== this.config.inputMode
 
     // Cache the current config first, and then apply it
     this.config = safeAssign(newOptions, this.config)
-
-    // First: The configuration updates themselves. This will already update a
-    // bunch of other facets and values (such as tab size and unit)
-    this._instance.dispatch({ effects: configUpdateEffect.of(this.config) })
 
     // Second: The renderers
     reconfigureRenderers(this._instance, {
