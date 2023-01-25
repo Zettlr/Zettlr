@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-01-24 02:33+0000\n"
+"POT-Creation-Date: 2023-01-25 02:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -624,11 +624,11 @@ msgstr ""
 "No s'ha pogut importar %s fitxers, perquè el tipus de fitxer és desconegut: "
 "%s"
 
-#: source/app/service-providers/commands/language-tool.ts:163
+#: source/app/service-providers/commands/language-tool.ts:165
 msgid "Document too long"
 msgstr ""
 
-#: source/app/service-providers/commands/language-tool.ts:168
+#: source/app/service-providers/commands/language-tool.ts:170
 msgid "offline"
 msgstr ""
 
@@ -943,11 +943,11 @@ msgstr "%s Paraules"
 msgid "%s characters"
 msgstr "%s caràcters"
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:119
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:165
 msgid "Detect automatically"
 msgstr ""
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:153
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:200
 msgid "Open diagnostics panel"
 msgstr ""
 
