@@ -622,11 +622,11 @@ msgstr "以下文件 %s 无法被导入，因为其未知文件类型：%s"
 
 #: source/app/service-providers/commands/language-tool.ts:165
 msgid "Document too long"
-msgstr ""
+msgstr "文档太长了"
 
 #: source/app/service-providers/commands/language-tool.ts:170
 msgid "offline"
-msgstr ""
+msgstr "离线"
 
 #: source/app/service-providers/commands/root-open.ts:60
 #: source/tmp/file-tree.vue.ts:26 source/tmp/PopoverDirProps.vue.ts:156
@@ -663,7 +663,7 @@ msgstr "%s 已载入"
 #: source/app/service-providers/commands/root-open.ts:159
 #, javascript-format
 msgid "Could not open workspace %s."
-msgstr ""
+msgstr "无法打开工作区 %s."
 
 #: source/app/service-providers/commands/save-image-from-clipboard.ts:37
 msgid "The requested file was not found."
@@ -686,7 +686,7 @@ msgstr "格式错误的Textbundle：％s"
 #: source/app/service-providers/commands/rename-tag.ts:44
 #: source/app/service-providers/commands/file-rename.ts:93
 msgid "Confirm"
-msgstr ""
+msgstr "确定"
 
 #: source/app/service-providers/commands/rename-tag.ts:45
 #, javascript-format
@@ -697,7 +697,7 @@ msgstr ""
 #: source/app/service-providers/commands/file-rename.ts:96
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
 msgid "Yes"
-msgstr ""
+msgstr "是的"
 
 #. 1: Omit all changes
 #: source/app/service-providers/commands/rename-tag.ts:48
@@ -735,11 +735,11 @@ msgstr ""
 #: source/app/service-providers/commands/file-rename.ts:97
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
 msgid "No"
-msgstr ""
+msgstr "否"
 
 #: source/app/service-providers/commands/dir-project-export.ts:121
 msgid "Project successfully exported. Click to show."
-msgstr ""
+msgstr "项目已成功导出。点击显示。"
 
 #: source/app/service-providers/commands/dir-project-export.ts:121
 #, fuzzy
@@ -750,7 +750,7 @@ msgstr "导出…"
 #: source/app/service-providers/commands/file-duplicate.ts:71
 #, javascript-format
 msgid "Copy of %s"
-msgstr ""
+msgstr " %s的副本"
 
 #. Better error message
 #: source/app/service-providers/commands/open-attachment.ts:92
@@ -783,7 +783,7 @@ msgstr "始终将远程更改加载到当前文件"
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:33
 #: source/app/service-providers/windows/dialog/prompt.ts:32
 msgid "Ok"
-msgstr "OK"
+msgstr "好的"
 
 #: source/app/service-providers/windows/dialog/save-dialog.ts:52
 msgid "Save file"
@@ -863,12 +863,12 @@ msgstr "可以更新到最新版本  %s ！"
 
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
-msgstr ""
+msgstr "无高亮显示"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:58
 #, javascript-format
 msgid "File %s does not exist."
-msgstr ""
+msgstr "文件 %s 不存在。"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:88
 msgid "Word count"
@@ -910,7 +910,7 @@ msgstr "代码"
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:100
 msgid "No footnote text found."
-msgstr ""
+msgstr "未找到脚注文本"
 
 #: source/common/modules/markdown-editor/plugins/statusbar.ts:55
 #: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/PopoverDirProps.vue.ts:144
@@ -929,20 +929,20 @@ msgstr "%s 字"
 
 #: source/common/modules/markdown-editor/plugins/statusbar.ts:165
 msgid "Detect automatically"
-msgstr ""
+msgstr "自动检测"
 
 #: source/common/modules/markdown-editor/plugins/statusbar.ts:200
 msgid "Open diagnostics panel"
-msgstr ""
+msgstr "打开诊断面板"
 
 #: source/common/modules/markdown-editor/renderers/render-images.ts:92
 #, javascript-format
 msgid "Image not found: %s"
-msgstr ""
+msgstr "未找到图像: %s"
 
 #: source/common/modules/markdown-editor/linters/spellcheck.ts:148
 msgid "Spelling mistake"
-msgstr ""
+msgstr "拼写错误"
 
 #: source/common/modules/markdown-editor/context-menu/equation-menu.ts:33
 msgid "Copy equation code"
@@ -1014,7 +1014,7 @@ msgstr "."
 
 #: source/common/util/map-lang-code.ts:33
 msgid "Afrikaans"
-msgstr ""
+msgstr "南非荷兰语"
 
 #: source/common/util/map-lang-code.ts:34
 msgid "Arabic"
@@ -1022,7 +1022,7 @@ msgstr "阿拉伯语"
 
 #: source/common/util/map-lang-code.ts:35
 msgid "Asturian"
-msgstr ""
+msgstr "阿斯图里亚斯"
 
 #: source/common/util/map-lang-code.ts:36
 msgid "Belarus"
@@ -1034,7 +1034,7 @@ msgstr "保加利亚语"
 
 #: source/common/util/map-lang-code.ts:38
 msgid "Breton"
-msgstr ""
+msgstr "布列坦尼语"
 
 #: source/common/util/map-lang-code.ts:39
 msgid "Bosnian"
@@ -1042,11 +1042,11 @@ msgstr "波斯语"
 
 #: source/common/util/map-lang-code.ts:40
 msgid "Catalan"
-msgstr ""
+msgstr "加泰罗尼亚语"
 
 #: source/common/util/map-lang-code.ts:41
 msgid "Czech"
-msgstr ""
+msgstr "捷克语"
 
 #: source/common/util/map-lang-code.ts:42
 msgid "Danish"
@@ -1063,7 +1063,7 @@ msgstr "德语（瑞士）"
 #: source/common/util/map-lang-code.ts:45
 #, fuzzy
 msgid "German (simple)"
-msgstr "德语（奥地利）"
+msgstr "德语（simple）"
 
 #: source/common/util/map-lang-code.ts:46
 msgid "German (Germany)"
@@ -1072,11 +1072,11 @@ msgstr "德语（德国）"
 #: source/common/util/map-lang-code.ts:47
 #, fuzzy
 msgid "German (Luxembourg)"
-msgstr "德语（奥地利）"
+msgstr "德语（卢森堡）"
 
 #: source/common/util/map-lang-code.ts:48
 msgid "German"
-msgstr ""
+msgstr "德语"
 
 #: source/common/util/map-lang-code.ts:49
 msgid "Greek"
@@ -1101,7 +1101,7 @@ msgstr "英语（印度）"
 #: source/common/util/map-lang-code.ts:54
 #, fuzzy
 msgid "English (New Zealand)"
-msgstr "英语（加拿大）"
+msgstr "英语（新西兰）"
 
 #: source/common/util/map-lang-code.ts:55
 msgid "English (United States)"
@@ -1123,7 +1123,7 @@ msgstr "世界语"
 #: source/common/util/map-lang-code.ts:59
 #, fuzzy
 msgid "Spanish (Argentina)"
-msgstr "西班牙语（西班牙）"
+msgstr "西班牙语（阿根廷）"
 
 #: source/common/util/map-lang-code.ts:60
 msgid "Spanish (Spain)"
@@ -1144,7 +1144,7 @@ msgstr "巴斯克语"
 
 #: source/common/util/map-lang-code.ts:64
 msgid "Persian (Farsi)"
-msgstr "波斯语"
+msgstr "波斯语 (波斯语)"
 
 #: source/common/util/map-lang-code.ts:65
 msgid "Finnish"
@@ -1171,15 +1171,15 @@ msgstr "法语（法国）"
 #: source/common/util/map-lang-code.ts:70
 #, fuzzy
 msgid "French (Luxembourg)"
-msgstr "卢森堡语"
+msgstr "法语 (卢森堡语)"
 
 #: source/common/util/map-lang-code.ts:71
 msgid "French (Principality of Monaco)"
-msgstr ""
+msgstr "法语 (摩纳哥)"
 
 #: source/common/util/map-lang-code.ts:72
 msgid "French"
-msgstr ""
+msgstr "法语"
 
 #: source/common/util/map-lang-code.ts:73
 msgid "Irish"
@@ -1246,7 +1246,7 @@ msgstr "格鲁吉亚语"
 
 #: source/common/util/map-lang-code.ts:88
 msgid "Khmer (Cambodia)"
-msgstr ""
+msgstr "高棉语 (柬埔寨)"
 
 #: source/common/util/map-lang-code.ts:89
 msgid "Korean"
@@ -1304,15 +1304,15 @@ msgstr "荷兰语（比利时）"
 
 #: source/common/util/map-lang-code.ts:102
 msgid "Dutch (Netherlands)"
-msgstr "德语（荷兰）"
+msgstr "荷兰语 (荷兰)"
 
 #: source/common/util/map-lang-code.ts:103
 msgid "Dutch"
-msgstr ""
+msgstr "荷兰"
 
 #: source/common/util/map-lang-code.ts:104
 msgid "Norwegian (Nyorsk)"
-msgstr "挪威语 (Nyorsk)"
+msgstr "挪威语 (挪威语)"
 
 #: source/common/util/map-lang-code.ts:105
 #, fuzzy
@@ -1326,7 +1326,7 @@ msgstr "波兰语"
 #: source/common/util/map-lang-code.ts:107
 #, fuzzy
 msgid "Portuguese (Angola)"
-msgstr "葡萄牙语（葡萄牙）"
+msgstr "葡萄牙语（安哥拉）"
 
 #: source/common/util/map-lang-code.ts:108
 msgid "Portuguese (Brazil)"
@@ -1344,7 +1344,7 @@ msgstr "葡萄牙语（葡萄牙）"
 #: source/common/util/map-lang-code.ts:111
 #, fuzzy
 msgid "Portuguese"
-msgstr "葡萄牙语（巴西）"
+msgstr "葡萄牙语"
 
 #: source/common/util/map-lang-code.ts:112
 msgid "Romanian"
@@ -1356,7 +1356,7 @@ msgstr "俄语"
 
 #: source/common/util/map-lang-code.ts:114
 msgid "Rwandan (Kinyarwanda)"
-msgstr "卢旺达语"
+msgstr "卢旺达语 (基尼亚卢旺达语)"
 
 #: source/common/util/map-lang-code.ts:115
 msgid "Slovakian"
@@ -1377,11 +1377,11 @@ msgstr "瑞典语"
 #: source/common/util/map-lang-code.ts:119
 #, fuzzy
 msgid "Tamil (India)"
-msgstr "英语（印度）"
+msgstr "泰米尔语（印度）"
 
 #: source/common/util/map-lang-code.ts:120
 msgid "Tagalog (Filipino)"
-msgstr ""
+msgstr "他加禄语 (菲律宾)"
 
 #: source/common/util/map-lang-code.ts:121
 msgid "Turkish"
@@ -1393,7 +1393,7 @@ msgstr "乌克兰语"
 
 #: source/common/util/map-lang-code.ts:123
 msgid "Urdu"
-msgstr ""
+msgstr "乌尔都语"
 
 #: source/common/util/map-lang-code.ts:124
 msgid "Vietnamese"
@@ -1401,12 +1401,12 @@ msgstr "越南语"
 
 #: source/common/util/map-lang-code.ts:125
 msgid "Chinese (China)"
-msgstr "中文简体（中国）"
+msgstr "简体中文（中国）"
 
 #: source/common/util/map-lang-code.ts:126
 #, fuzzy
 msgid "Chinese (Taiwan)"
-msgstr "中文简体（中国）"
+msgstr "繁体中文（中国）"
 
 #: source/common/util/map-lang-code.ts:127
 #, fuzzy
@@ -1460,11 +1460,11 @@ msgstr "询问目录"
 
 #: source/win-preferences/schema/spellchecking.ts:23
 msgid "Use LanguageTool"
-msgstr ""
+msgstr "使用语言工具"
 
 #: source/win-preferences/schema/spellchecking.ts:28
 msgid "Strictness"
-msgstr ""
+msgstr "严格"
 
 #: source/win-preferences/schema/spellchecking.ts:30
 #, fuzzy
@@ -1473,11 +1473,11 @@ msgstr "日历"
 
 #: source/win-preferences/schema/spellchecking.ts:31
 msgid "Picky"
-msgstr ""
+msgstr "讲究"
 
 #: source/win-preferences/schema/spellchecking.ts:38
 msgid "LanguageTool Provider"
-msgstr ""
+msgstr "语言工具 提供程序"
 
 #: source/win-preferences/schema/spellchecking.ts:41
 #: source/win-preferences/schema/spellchecking.ts:48
@@ -1487,11 +1487,11 @@ msgstr "自定义CSS"
 
 #: source/win-preferences/schema/spellchecking.ts:55
 msgid "LanguageTool Username"
-msgstr ""
+msgstr "语言工具 用户名"
 
 #: source/win-preferences/schema/spellchecking.ts:60
 msgid "LanguageTool API key"
-msgstr ""
+msgstr "语言工具 API密钥"
 
 #: source/win-preferences/schema/spellchecking.ts:67
 msgid ""
@@ -1773,7 +1773,7 @@ msgstr "编辑器输入模式"
 
 #: source/win-preferences/schema/editor.ts:97
 msgid "Check Markdown for style issues"
-msgstr ""
+msgstr "检查 Markdown 是否存在样式问题"
 
 #: source/win-preferences/schema/editor.ts:102
 #, fuzzy
@@ -1798,7 +1798,7 @@ msgstr "启用表格编辑器"
 
 #: source/win-preferences/schema/editor.ts:129
 msgid "Show link previews"
-msgstr ""
+msgstr "显示链接预览"
 
 #: source/win-preferences/schema/editor.ts:134
 msgid "Count characters instead of words (e.g., for Chinese)"
@@ -2154,20 +2154,20 @@ msgstr "相关文件不存在"
 
 #: source/tmp/RelatedFilesTab.vue.ts:29
 msgid "This relation is based on a bidirectional link."
-msgstr ""
+msgstr "这种联系基于双向链接"
 
 #: source/tmp/RelatedFilesTab.vue.ts:32
 msgid "This relation is based on an outbound link."
-msgstr ""
+msgstr "此联系基于出站链接。"
 
 #: source/tmp/RelatedFilesTab.vue.ts:35
 msgid "This relation is based on a backlink."
-msgstr ""
+msgstr "这种联系基于反向链接。"
 
 #: source/tmp/RelatedFilesTab.vue.ts:113
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
-msgstr ""
+msgstr "此联系基于 %s 共享标签: %s"
 
 #: source/tmp/PopoverDocInfo.vue.ts:35
 msgid "No open document"
@@ -2243,11 +2243,11 @@ msgstr "长休息"
 
 #: source/tmp/PopoverPomodoro.vue.ts:87
 msgid "Sound Effect"
-msgstr ""
+msgstr "音效"
 
 #: source/tmp/PopoverPomodoro.vue.ts:90
 msgid "Volume"
-msgstr ""
+msgstr "音量"
 
 #: source/tmp/CustomCSS.vue.ts:31
 msgid "Custom CSS"
@@ -2384,6 +2384,9 @@ msgid ""
 "is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
 "server that you use."
 msgstr ""
+"Zettlr 提供与 LanguageTooler GmbH 提供的 LanguageTool.org 服务集成，"
+"使用此服务需要互联网连接，并受 LanguageTooler GmbH 或您使用的相应服务器的"
+"隐私政策的约束。"
 
 #: source/tmp/PopoverStats.vue.ts:111
 msgid "words last month"
@@ -2493,4 +2496,4 @@ msgstr "编辑导入或导出的默认设置"
 #~ msgstr "LibreOffice 样式"
 
 #~ msgid "Check for updated translations on start"
-#~ msgstr "检查最新翻译"
+#~ msgstr "检察最新翻译"
