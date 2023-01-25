@@ -39,13 +39,22 @@ function createStatusbar (view: EditorView): Panel {
     dom: elem,
     update (update) {
       const elements: StatusbarItem[] = []
+      const config = update.state.field(configField)
+
+      // Readability mode
+      elements.push({
+        content: `<cds-icon shape=${config.readabilityMode ? 'eye' : 'eye-hide'}></cds-icon>`,
+        allowHtml: true,
+        title: trans('Readability mode (%s)', config.readabilityAlgorithm),
+        onClick (event) {
+          view.dispatch({ effects: configUpdateEffect.of({ readabilityMode: !config.readabilityMode }) })
+        }
+      })
 
       // Cursor
       const mainOffset = update.state.selection.main.from
       const line = update.state.doc.lineAt(mainOffset)
       elements.push({ content: `${line.number}:${mainOffset - line.from + 1}` })
-
-      const config = update.state.field(configField)
 
       // Word and char count
       const wordCount = update.state.field(wordCountField, false)
