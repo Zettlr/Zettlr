@@ -52,6 +52,10 @@ export const frontmatterParser: BlockParser = {
       return false
     }
 
+    if (yamlLines.length === 0) {
+      return false // A frontmatter must have content
+    }
+
     // A final check: A frontmatter is NOT a valid document if there is
     // whitespace at the top (i.e. no blank lines between the delimiters and the
     // frontmatter content). NOTE: Whitespace AFTER the frontmatter content is
