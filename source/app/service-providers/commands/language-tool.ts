@@ -119,23 +119,37 @@ export default class LanguageTool extends ZettlrCommand {
    * @return  {Promise<LanguageToolAPIResponse|string|undefined>}       The result
    */
   async run (evt: string, arg: { text: string, language: string }): Promise<[LanguageToolAPIResponse, string[]]|string|undefined> {
-    const { languageTool } = this._app.config.getConfig().editor.lint
-    if (!languageTool.active) {
-      return undefined // LanguageTool is not active
-    }
+    const {
+      active,
+      level,
+      username,
+      apiKey,
+      customServer,
+      provider
+    } = this._app.config.getConfig().editor.lint.languageTool
     const { text, language } = arg
 
-    const searchParams = new URLSearchParams({ language, text, level: languageTool.level })
-
-    // If users have Premium, they can do so by providing their username and API key
-    if (languageTool.username.trim() !== '' && languageTool.apiKey.trim() !== '') {
-      searchParams.set('username', languageTool.username)
-      searchParams.set('apiKey', languageTool.apiKey)
+    if (!active) {
+      return undefined // LanguageTool is not active
     }
 
+    const searchParams = new URLSearchParams({ language, text, level })
+    const useCredentials = username.trim() !== '' && apiKey.trim() !== ''
+
     let server = 'https://api.languagetool.org'
-    if (languageTool.provider === 'custom' && languageTool.customServer.trim() !== '') {
-      server = languageTool.customServer
+    if (provider === 'custom' && customServer.trim() !== '') {
+      // The user has provided a custom server
+      server = customServer.trim()
+    }
+
+    // If users have Premium, they can do so by providing their username and API
+    // key. NOTE: In that case, we must use the premium API at
+    // languagetoolplus.com, since both custom servers and the basic API are not
+    // equipped to handle authentication.
+    if (useCredentials) {
+      searchParams.set('username', username.trim())
+      searchParams.set('apiKey', apiKey.trim())
+      server = 'https://api.languagetoolplus.com'
     }
 
     if (server.endsWith('/')) {
@@ -150,6 +164,7 @@ export default class LanguageTool extends ZettlrCommand {
     }
 
     try {
+      this._app.log.verbose(`[Application] Contacting LanguageTool at ${server} (using credentials: ${String(useCredentials)}); payload: ${text.length} characters`)
       const languages = await fetchSupportedLanguages(server)
       // NOTE: Documentation at https://languagetool.org/http-api/#!/default/post_check
       const result = await got(`${server}/v2/check`, { method: 'post', body: searchParams.toString(), headers })
