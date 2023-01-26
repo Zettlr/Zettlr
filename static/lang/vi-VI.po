@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-01-25 02:33+0000\n"
+"POT-Creation-Date: 2023-01-26 02:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -624,11 +624,11 @@ msgstr ""
 "%s tập tin không thể được tích hợp vào hệ thống, bởi kiểu tập tin là không "
 "rõ: %s"
 
-#: source/app/service-providers/commands/language-tool.ts:165
+#: source/app/service-providers/commands/language-tool.ts:180
 msgid "Document too long"
 msgstr ""
 
-#: source/app/service-providers/commands/language-tool.ts:170
+#: source/app/service-providers/commands/language-tool.ts:185
 msgid "offline"
 msgstr ""
 
@@ -919,7 +919,12 @@ msgstr "Mã"
 msgid "No footnote text found."
 msgstr ""
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:55
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:48
+#, javascript-format
+msgid "Readability mode (%s)"
+msgstr ""
+
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:64
 #: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/PopoverDirProps.vue.ts:144
 #: source/tmp/PopoverFileProps.vue.ts:89 source/tmp/file-item.vue.ts:134
 #: source/tmp/file-item.vue.ts:207
@@ -927,18 +932,18 @@ msgstr ""
 msgid "%s words"
 msgstr "%s từ"
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:58
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:67
 #: source/tmp/PopoverDocInfo.vue.ts:71 source/tmp/file-item.vue.ts:132
 #: source/tmp/file-item.vue.ts:205
 #, javascript-format
 msgid "%s characters"
 msgstr "%s kí tự"
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:165
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:174
 msgid "Detect automatically"
 msgstr ""
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:200
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:209
 msgid "Open diagnostics panel"
 msgstr ""
 
