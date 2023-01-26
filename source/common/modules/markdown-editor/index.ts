@@ -26,36 +26,73 @@ import './editor.less'
  */
 import EventEmitter from 'events'
 
+// CodeMirror imports
 import { EditorView } from '@codemirror/view'
-import { EditorSelection, EditorState, Extension, SelectionRange } from '@codemirror/state'
+import {
+  EditorSelection,
+  EditorState,
+  Extension,
+  SelectionRange
+} from '@codemirror/state'
+import { Update } from '@codemirror/collab'
+import { syntaxTree } from '@codemirror/language'
 
-import safeAssign from '@common/util/safe-assign'
-
-import { charCountField, charCountNoSpacesField, wordCountField } from './plugins/statistics-fields'
-
-// Renderer plugins
-import { reconfigureRenderers } from './renderers'
-import { ToCEntry, tocField } from './plugins/toc-field'
-import { citekeyUpdate, filesUpdate, tagsUpdate, snippetsUpdate } from './autocomplete'
-
-// Keymap plugins
+// Keymaps/Input modes
 import { vim } from '@replit/codemirror-vim'
 import { emacs } from '@replit/codemirror-emacs'
 
+import {
+  charCountField,
+  charCountNoSpacesField,
+  wordCountField
+} from './plugins/statistics-fields'
+
+import { reconfigureRenderers } from './renderers'
+import { ToCEntry, tocField } from './plugins/toc-field'
+import {
+  citekeyUpdate,
+  filesUpdate,
+  tagsUpdate,
+  snippetsUpdate
+} from './autocomplete'
+
 // Main configuration
-import { configField, configUpdateEffect, EditorConfigOptions, EditorConfiguration, getDefaultConfig } from './util/configuration'
-import { Update } from '@codemirror/collab'
-import { DocumentType } from '@dts/common/documents'
-import { copyAsHTML, pasteAsPlain } from './util/copy-paste-cut'
-import { CoreExtensionOptions, getJSONExtensions, getMarkdownExtensions, getTexExtensions, getYAMLExtensions, inputModeCompartment } from './editor-extension-sets'
-import { highlightRangesEffect } from './plugins/highlight-ranges'
-import { applyComment, applyTaskList, insertImage, insertLink } from './commands/markdown'
+import {
+  CoreExtensionOptions,
+  getJSONExtensions,
+  getMarkdownExtensions,
+  getTexExtensions,
+  getYAMLExtensions,
+  inputModeCompartment
+} from './editor-extension-sets'
+
+import {
+  configField,
+  configUpdateEffect,
+  EditorConfigOptions,
+  EditorConfiguration,
+  getDefaultConfig
+} from './util/configuration'
+
+// Custom commands
+import {
+  applyComment,
+  applyTaskList,
+  insertImage,
+  insertLink
+} from './commands/markdown'
 import { addNewFootnote } from './commands/footnotes'
-import countWords from '@common/util/count-words'
-import { syntaxTree } from '@codemirror/language'
+
+// Utilities
+import { copyAsHTML, pasteAsPlain } from './util/copy-paste-cut'
 import openMarkdownLink from './util/open-markdown-link'
-import { TagRecord } from '@providers/tags'
+import { highlightRangesEffect } from './plugins/highlight-ranges'
 import { darkModeSwitch } from './theme'
+
+import safeAssign from '@common/util/safe-assign'
+import countWords from '@common/util/count-words'
+import { DocumentType } from '@dts/common/documents'
+import { TagRecord } from '@providers/tags'
 
 const path = window.path
 
