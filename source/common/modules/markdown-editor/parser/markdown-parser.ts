@@ -27,6 +27,7 @@ import { jsonLanguage } from '@codemirror/lang-json'
 // Now from the legacy modes package
 import { c, cpp, csharp, java, kotlin, objectiveC, dart, scala } from '@codemirror/legacy-modes/mode/clike'
 import { clojure } from '@codemirror/legacy-modes/mode/clojure'
+import { cobol } from '@codemirror/legacy-modes/mode/cobol'
 import { elm } from '@codemirror/legacy-modes/mode/elm'
 import { fSharp } from '@codemirror/legacy-modes/mode/mllike'
 import { fortran } from '@codemirror/legacy-modes/mode/fortran'
@@ -88,6 +89,7 @@ const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors:
   { mode: python().language, selectors: [ 'python', 'py' ] },
   { mode: StreamLanguage.define(c), selectors: ['c'] },
   { mode: StreamLanguage.define(clojure), selectors: ['clojure'] },
+  { mode: StreamLanguage.define(cobol), selectors: ['cobol'] },
   { mode: StreamLanguage.define(commonLisp), selectors: [ 'clisp', 'commonlisp' ] },
   { mode: StreamLanguage.define(cpp), selectors: [ 'c\\+\\+', 'cpp' ] },
   { mode: StreamLanguage.define(csharp), selectors: [ 'c\\#', 'csharp', 'cs' ] },

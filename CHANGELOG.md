@@ -267,6 +267,7 @@ there.
   point in time and ensure that all files that link to this file include the
   correct link
 - The editor now uses the built-in search panel from CodeMirror
+- Added support for COBOL syntax highlighting
 
 ## Under the Hood
 
