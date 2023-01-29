@@ -25,7 +25,7 @@
         shape="angle"
         solid="true"
         direction="left"
-        size="20"
+        size="l"
       ></cds-icon>
     </div>
 
