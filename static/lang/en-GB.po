@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
 "POT-Creation-Date: 2023-01-26 02:34+0000\n"
-"PO-Revision-Date: 2023-01-23 18:54+0100\n"
+"PO-Revision-Date: 2023-01-29 17:55+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -920,7 +920,7 @@ msgstr "No footnote text found."
 #: source/common/modules/markdown-editor/plugins/statusbar.ts:48
 #, javascript-format
 msgid "Readability mode (%s)"
-msgstr ""
+msgstr "Readability mode (%s)"
 
 #: source/common/modules/markdown-editor/plugins/statusbar.ts:64
 #: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/PopoverDirProps.vue.ts:144
