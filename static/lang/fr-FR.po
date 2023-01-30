@@ -144,8 +144,7 @@ msgstr "L'option %s doit être l'une de celles-ci : %s."
 #: source/app/service-providers/config/config-validation.ts:286
 #, javascript-format
 msgid "Option %s must be between %s and %s (characters long)."
-msgstr ""
-"La longueur de l'option %s doit être comprise entre %s et %s caractères."
+msgstr "La longueur de l'option %s doit être comprise entre %s et %s caractères."
 
 #: source/app/service-providers/config/config-validation.ts:289
 #, javascript-format
@@ -627,11 +626,11 @@ msgstr ""
 
 #: source/app/service-providers/commands/language-tool.ts:180
 msgid "Document too long"
-msgstr ""
+msgstr "Document trop long"
 
 #: source/app/service-providers/commands/language-tool.ts:185
 msgid "offline"
-msgstr ""
+msgstr "hors ligne"
 
 #: source/app/service-providers/commands/root-open.ts:60
 #: source/tmp/file-tree.vue.ts:26 source/tmp/PopoverDirProps.vue.ts:156
@@ -668,7 +667,7 @@ msgstr "%s a été chargé."
 #: source/app/service-providers/commands/root-open.ts:159
 #, javascript-format
 msgid "Could not open workspace %s."
-msgstr ""
+msgstr "Impossible d'ouvrir l'espace de travail %s."
 
 #: source/app/service-providers/commands/save-image-from-clipboard.ts:37
 msgid "The requested file was not found."
@@ -691,18 +690,18 @@ msgstr "Textbundle incorrect: %s"
 #: source/app/service-providers/commands/rename-tag.ts:44
 #: source/app/service-providers/commands/file-rename.ts:93
 msgid "Confirm"
-msgstr ""
+msgstr "Confirmer"
 
 #: source/app/service-providers/commands/rename-tag.ts:45
 #, javascript-format
 msgid "Replace tag \"%s\" with \"%s\" across %s files?"
-msgstr ""
+msgstr "Remplacer le tag \"%s\" par \"%s\" à travers les fichiers %s ?"
 
 #: source/app/service-providers/commands/rename-tag.ts:47
 #: source/app/service-providers/commands/file-rename.ts:96
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
 msgid "Yes"
-msgstr ""
+msgstr "Oui"
 
 #. 1: Omit all changes
 #: source/app/service-providers/commands/rename-tag.ts:48
@@ -734,28 +733,28 @@ msgstr "Erreur lors de la création du fichier"
 #: source/app/service-providers/commands/file-rename.ts:94
 #, javascript-format
 msgid "Update %s internal links to file %s?"
-msgstr ""
+msgstr "Mettre à jour les liens internes %s  vers le fichier %s ?"
 
 #. 0: Save all changes
 #: source/app/service-providers/commands/file-rename.ts:97
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
 msgid "No"
-msgstr ""
+msgstr "Non"
 
 #: source/app/service-providers/commands/dir-project-export.ts:121
 msgid "Project successfully exported. Click to show."
-msgstr ""
+msgstr "Le projet a été exporté avec succès. Cliquer pour le voir."
 
 #: source/app/service-providers/commands/dir-project-export.ts:121
 #, fuzzy
 msgid "Export"
-msgstr "Exporter…"
+msgstr "Exporter"
 
 #. We need to generate our own filename. First, attempt to just use 'copy of'
 #: source/app/service-providers/commands/file-duplicate.ts:71
 #, javascript-format
 msgid "Copy of %s"
-msgstr ""
+msgstr "Copie de %s"
 
 #. Better error message
 #: source/app/service-providers/commands/open-attachment.ts:92
@@ -828,7 +827,7 @@ msgstr "Modifications non enregistrées"
 msgid "There are unsaved changes. Do you want to save them first?"
 msgstr ""
 "Le fichier contient des modifications non enregistrées. Voulez-vous les "
-"annuler ou les enregistrer ?"
+"enregistrer ?"
 
 #: source/app/service-providers/windows/dialog/ask-file.ts:47
 msgid "Open file"
@@ -880,12 +879,12 @@ msgstr "Une mise à jour vers la version %s est disponible !"
 
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
-msgstr ""
+msgstr "Aucun surlignage"
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:58
 #, javascript-format
 msgid "File %s does not exist."
-msgstr ""
+msgstr "Le fichier %s n'existe pas."
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:88
 msgid "Word count"
@@ -927,12 +926,12 @@ msgstr "Code"
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:100
 msgid "No footnote text found."
-msgstr ""
+msgstr "Aucune note de bas de page trouvée."
 
 #: source/common/modules/markdown-editor/plugins/statusbar.ts:48
 #, javascript-format
 msgid "Readability mode (%s)"
-msgstr ""
+msgstr "Mode de lisibilité (%s)"
 
 #: source/common/modules/markdown-editor/plugins/statusbar.ts:64
 #: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/PopoverDirProps.vue.ts:144
@@ -951,20 +950,20 @@ msgstr "%s caractères"
 
 #: source/common/modules/markdown-editor/plugins/statusbar.ts:174
 msgid "Detect automatically"
-msgstr ""
+msgstr "Détecter automatiquement"
 
 #: source/common/modules/markdown-editor/plugins/statusbar.ts:209
 msgid "Open diagnostics panel"
-msgstr ""
+msgstr "Ouvrir le panneau des diagnostiques"
 
 #: source/common/modules/markdown-editor/renderers/render-images.ts:92
 #, javascript-format
 msgid "Image not found: %s"
-msgstr ""
+msgstr "Image non trouvée : %s"
 
 #: source/common/modules/markdown-editor/linters/spellcheck.ts:148
 msgid "Spelling mistake"
-msgstr ""
+msgstr "Erreur d'orthographe"
 
 #: source/common/modules/markdown-editor/context-menu/equation-menu.ts:33
 msgid "Copy equation code"
@@ -1036,7 +1035,7 @@ msgstr ","
 
 #: source/common/util/map-lang-code.ts:33
 msgid "Afrikaans"
-msgstr ""
+msgstr "Afrikaans"
 
 #: source/common/util/map-lang-code.ts:34
 msgid "Arabic"
@@ -1044,7 +1043,7 @@ msgstr "Arabe"
 
 #: source/common/util/map-lang-code.ts:35
 msgid "Asturian"
-msgstr ""
+msgstr "Asturien"
 
 #: source/common/util/map-lang-code.ts:36
 msgid "Belarus"
@@ -1056,7 +1055,7 @@ msgstr "Bulgare"
 
 #: source/common/util/map-lang-code.ts:38
 msgid "Breton"
-msgstr ""
+msgstr "Breton"
 
 #: source/common/util/map-lang-code.ts:39
 msgid "Bosnian"
@@ -1064,11 +1063,11 @@ msgstr "Bosniaque"
 
 #: source/common/util/map-lang-code.ts:40
 msgid "Catalan"
-msgstr ""
+msgstr "Catalan"
 
 #: source/common/util/map-lang-code.ts:41
 msgid "Czech"
-msgstr ""
+msgstr "Tchèque"
 
 #: source/common/util/map-lang-code.ts:42
 msgid "Danish"
@@ -1098,7 +1097,7 @@ msgstr "Allemand (Autriche)"
 
 #: source/common/util/map-lang-code.ts:48
 msgid "German"
-msgstr ""
+msgstr "Allemand"
 
 #: source/common/util/map-lang-code.ts:49
 msgid "Greek"
@@ -1197,11 +1196,11 @@ msgstr "Luxembourgeois"
 
 #: source/common/util/map-lang-code.ts:71
 msgid "French (Principality of Monaco)"
-msgstr ""
+msgstr "Français (Principauté de Monaco)"
 
 #: source/common/util/map-lang-code.ts:72
 msgid "French"
-msgstr ""
+msgstr "Français"
 
 #: source/common/util/map-lang-code.ts:73
 msgid "Irish"
@@ -1268,7 +1267,7 @@ msgstr "Géorgien"
 
 #: source/common/util/map-lang-code.ts:88
 msgid "Khmer (Cambodia)"
-msgstr ""
+msgstr "Khmer (Cambodge)"
 
 #: source/common/util/map-lang-code.ts:89
 msgid "Korean"
@@ -1330,7 +1329,7 @@ msgstr "Néerlandais (Pays-Bas)"
 
 #: source/common/util/map-lang-code.ts:103
 msgid "Dutch"
-msgstr ""
+msgstr "Néerlandais"
 
 #: source/common/util/map-lang-code.ts:104
 msgid "Norwegian (Nyorsk)"
@@ -1339,7 +1338,7 @@ msgstr "Norvégien (Nyorsk)"
 #: source/common/util/map-lang-code.ts:105
 #, fuzzy
 msgid "Norwegian"
-msgstr "Géorgien"
+msgstr "Norvégien"
 
 #: source/common/util/map-lang-code.ts:106
 msgid "Polish"
@@ -1403,7 +1402,7 @@ msgstr "Anglais (Inde)"
 
 #: source/common/util/map-lang-code.ts:120
 msgid "Tagalog (Filipino)"
-msgstr ""
+msgstr "Tagalog (Philippines)"
 
 #: source/common/util/map-lang-code.ts:121
 msgid "Turkish"
@@ -1415,7 +1414,7 @@ msgstr "Ukrainien"
 
 #: source/common/util/map-lang-code.ts:123
 msgid "Urdu"
-msgstr ""
+msgstr "Ourdou"
 
 #: source/common/util/map-lang-code.ts:124
 msgid "Vietnamese"
@@ -1483,24 +1482,24 @@ msgstr "Demander le dossier"
 
 #: source/win-preferences/schema/spellchecking.ts:23
 msgid "Use LanguageTool"
-msgstr ""
+msgstr "Utiliser LanguageTool"
 
 #: source/win-preferences/schema/spellchecking.ts:28
 msgid "Strictness"
-msgstr ""
+msgstr "Sévérité"
 
 #: source/win-preferences/schema/spellchecking.ts:30
 #, fuzzy
 msgid "Standard"
-msgstr "Calendrier"
+msgstr "Standard"
 
 #: source/win-preferences/schema/spellchecking.ts:31
 msgid "Picky"
-msgstr ""
+msgstr "Pointilleux"
 
 #: source/win-preferences/schema/spellchecking.ts:38
 msgid "LanguageTool Provider"
-msgstr ""
+msgstr "Fournisseur de LanguageTool"
 
 #: source/win-preferences/schema/spellchecking.ts:41
 #: source/win-preferences/schema/spellchecking.ts:48
@@ -1510,11 +1509,11 @@ msgstr "CSS personnalisé"
 
 #: source/win-preferences/schema/spellchecking.ts:55
 msgid "LanguageTool Username"
-msgstr ""
+msgstr "LanguageTool Username"
 
 #: source/win-preferences/schema/spellchecking.ts:60
 msgid "LanguageTool API key"
-msgstr ""
+msgstr "LanguageTool API key"
 
 #: source/win-preferences/schema/spellchecking.ts:67
 msgid ""
@@ -1808,7 +1807,7 @@ msgstr "Mode de saisie de l'éditeur"
 
 #: source/win-preferences/schema/editor.ts:97
 msgid "Check Markdown for style issues"
-msgstr ""
+msgstr "Vérifier les erreurs de style Markdown"
 
 #: source/win-preferences/schema/editor.ts:102
 #, fuzzy
@@ -1833,7 +1832,7 @@ msgstr "Activer l'éditeur de tableau"
 
 #: source/win-preferences/schema/editor.ts:129
 msgid "Show link previews"
-msgstr ""
+msgstr "Afficher l'aperçu des liens"
 
 #: source/win-preferences/schema/editor.ts:134
 msgid "Count characters instead of words (e.g., for Chinese)"
@@ -1879,13 +1878,12 @@ msgstr "Lancer une recherche en suivant les liens Zettelkasten"
 
 #: source/win-preferences/schema/zettelkasten.ts:65
 msgid "Automatically create non-existing files when following internal links"
-msgstr ""
-"Création automatique des fichiers inexistants en suivant des liens internes"
+msgstr "Création automatique des fichiers inexistants en suivant des liens internes"
 
 #: source/win-preferences/schema/zettelkasten.ts:70
 msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
 msgstr ""
-"Placer les fichiers créés automatiquement dans ce répertoire, qui doit être "
+"Placer les fichiers créés automatiquement dans ce répertoire, qui doit être"
 "chargé dans Zettlr"
 
 #: source/win-preferences/schema/toolbar.ts:23
@@ -1963,8 +1961,8 @@ msgstr "Utiliser l'apparence native des fenêtres"
 #: source/win-preferences/schema/advanced.ts:52
 msgid "Delete items irreversibly, if moving them to trash fails"
 msgstr ""
-"Supprimer les éléments de manière irréversible, si leur déplacement vers la "
-"corbeille échoue"
+"Supprimer les éléments de manière irréversible, si leur déplacement vers"
+"la corbeille échoue"
 
 #: source/win-preferences/schema/advanced.ts:58
 msgid "Show app in the notification area"
@@ -1972,8 +1970,7 @@ msgstr "Afficher l'application dans la zone de notification"
 
 #: source/win-preferences/schema/advanced.ts:59
 msgid "Leave app running in the notification area"
-msgstr ""
-"Laisser l'application en cours d'exécution dans la zone de notification"
+msgstr "Laisser l'application en cours d'exécution dans la zone de notification"
 
 #: source/win-preferences/schema/advanced.ts:66
 msgid "Automatically check for updates"
@@ -1984,8 +1981,8 @@ msgid ""
 "Enter all file extensions that you want to see in your attachment sidebar. "
 "Separate them with a comma. Changes are recognised after a restart."
 msgstr ""
-"Entrez toutes les extensions de fichiers que vous voulez voir dans la liste "
-"d’annexes. Séparez-les par des virgules. Les modifications prendront effet "
+"Entrez toutes les extensions de fichiers que vous voulez voir dans la liste"
+"d’annexes. Séparez-les par des virgules. Les modifications prendront effet"
 "au prochain redémarrage."
 
 #: source/win-preferences/schema/advanced.ts:81
@@ -2015,8 +2012,8 @@ msgstr "Activer le décompte du chien de garde"
 #: source/win-preferences/schema/advanced.ts:107
 msgid "Time to wait before writing a file is considered done (in ms)"
 msgstr ""
-"Temps d'attente avant de considérer l’écriture d’un fichier comme terminée "
-"(en ms)"
+"Temps d'attente avant de considérer l’écriture d’un fichier comme"
+"terminée (en ms)"
 
 #: source/tmp/file-list.vue.ts:66 source/tmp/file-tree.vue.ts:35
 msgid "No results"
@@ -2032,15 +2029,15 @@ msgstr "Répertoire vide"
 
 #: source/tmp/PopoverTags.vue.ts:77
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: source/tmp/PopoverTags.vue.ts:78
 msgid "Count"
-msgstr ""
+msgstr "Nombre"
 
 #: source/tmp/PopoverTags.vue.ts:103
 msgid "Filter tags…"
-msgstr "filtrer les mots-clés"
+msgstr "Filtrer les mots-clés"
 
 #: source/tmp/PopoverTags.vue.ts:106
 msgid "Tag Cloud"
@@ -2067,7 +2064,7 @@ msgstr "Renommer l'extrait"
 #: source/tmp/SnippetsTab.vue.ts:53
 msgid "Snippets let you define reusable pieces of text with variables."
 msgstr ""
-"Les extraits vous permettent de définir des morceaux de texte réutilisables "
+"Les extraits vous permettent de définir des morceaux de texte réutilisables"
 "avec des variables."
 
 #: source/tmp/SnippetsTab.vue.ts:124 source/tmp/CustomCSS.vue.ts:88
@@ -2181,8 +2178,8 @@ msgid ""
 "There is a new version of Zettlr available to download. Please read the "
 "changelog below."
 msgstr ""
-"Une nouvelle version de Zettlr est disponible. La liste des changements est "
-"ci-dessous."
+"Une nouvelle version de Zettlr est disponible. La liste des changements"
+"est ci-dessous."
 
 #: source/tmp/App.vue.ts:84
 msgid "Downloading your update"
@@ -2202,20 +2199,20 @@ msgstr "Aucun fichier associé"
 
 #: source/tmp/RelatedFilesTab.vue.ts:29
 msgid "This relation is based on a bidirectional link."
-msgstr ""
+msgstr "Cette relation est basée sur un lien bicirectionnel"
 
 #: source/tmp/RelatedFilesTab.vue.ts:32
 msgid "This relation is based on an outbound link."
-msgstr ""
+msgstr "Cette relation est basée sur un lien sortant"
 
 #: source/tmp/RelatedFilesTab.vue.ts:35
 msgid "This relation is based on a backlink."
-msgstr ""
+msgstr "Cette relation est basée sur un lien entrant"
 
 #: source/tmp/RelatedFilesTab.vue.ts:113
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
-msgstr ""
+msgstr "Cette relation est basée sur des tags partagés"
 
 #: source/tmp/PopoverDocInfo.vue.ts:35
 msgid "No open document"
@@ -2291,11 +2288,11 @@ msgstr "Pause longue"
 
 #: source/tmp/PopoverPomodoro.vue.ts:87
 msgid "Sound Effect"
-msgstr ""
+msgstr "Effet sonore"
 
 #: source/tmp/PopoverPomodoro.vue.ts:90
 msgid "Volume"
-msgstr ""
+msgstr "Volume"
 
 #: source/tmp/CustomCSS.vue.ts:31
 msgid "Custom CSS"
@@ -2439,6 +2436,10 @@ msgid ""
 "is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
 "server that you use."
 msgstr ""
+"Zettlr offre une integration de LanguageTool.org, un service fournit"
+"par LanguageTooler GmbH. Ce service nécessite une connexion internet et"
+"est sujet à la politique de confidentialité de LanguageTooler GmbH ou du"
+"serveur correspondant que vous utilisez."
 
 #: source/tmp/PopoverStats.vue.ts:111
 msgid "words last month"
