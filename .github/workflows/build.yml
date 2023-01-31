@@ -192,6 +192,7 @@ jobs:
       # Third, and finally, we can download the correct headers.
       - name: Download Windows arm64 headers
         run: |
+          mkdir -p "${{ env.appdata }}\\Local\\node-gyp\\Cache\\${{ env.electron_version }}\\arm64"
           curl -sL "https://electronjs.org/headers/v${{ env.electron_version }}/win-arm64/node.lib" -o "${{ env.appdata }}/Local/node-gyp/Cache/${{ env.electron_version }}/arm64/node.lib"
       # At this point, the Windows ARM64 build should succeed.
       - name: Set up build environment
