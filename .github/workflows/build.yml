@@ -382,7 +382,7 @@ jobs:
     # Make sure (and wait until) the builds have succeeded
     needs:
       - build_win_x64
-      - build_win_arm64
+      # - build_win_arm64 # DEBUG: Disable win arm for now
       - build_macos_x64
       - build_macos_arm64
       - build_linux_x64
@@ -412,11 +412,11 @@ jobs:
         with:
           name: win32_x64
           path: ./release
-      - name: Retrieve installers (Windows arm64)
-        uses: actions/download-artifact@v3
-        with:
-          name: win32_arm64
-          path: ./release
+      # - name: Retrieve installers (Windows arm64)
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: win32_arm64
+      #     path: ./release # DEBUG: Disable win arm for now
       - name: Retrieve installers (macOS x86_64)
         uses: actions/download-artifact@v3
         with:
@@ -439,10 +439,10 @@ jobs:
           path: ./release
       # Generate the checksums
       - name: Generate SHA256 checksums
+        #  sha256sum "Zettlr-${{env.version}}-arm64.exe" >> "SHA256SUMS.txt" # DEBUG: Disable win arm for now
         run: |
           cd ./release
           sha256sum "Zettlr-${{env.version}}-x64.exe" > "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{env.version}}-arm64.exe" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{env.version}}-x64.dmg" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{env.version}}-arm64.dmg" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{env.version}}-amd64.deb" >> "SHA256SUMS.txt"
