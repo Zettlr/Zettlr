@@ -19,33 +19,32 @@
     <date-part name="day" form="numeric-leading-zeros" prefix="-" range-delimiter="/"/>
   </date>
   <terms>
-    <term name="advance-online-publication">advance online publication</term>
+    <term name="advance-online-publication">forhåndspublisert på nett</term>
     <term name="album">album</term>
-    <term name="audio-recording">audio recording</term>
+    <term name="audio-recording">lydopptak</term>
     <term name="film">film</term>
-    <term name="henceforth">henceforth</term>
+    <term name="henceforth">heretter</term>
     <term name="loc-cit">loc. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
-    <term name="no-place">no place</term>
-    <term name="no-place" form="short">n.p.</term>
-    <term name="no-publisher">no publisher</term> <!-- sine nomine -->
-    <term name="no-publisher" form="short">n.p.</term>
-    <term name="on">on</term>
+    <term name="no-place">mangler sted</term>
+    <term name="no-publisher">mangler utgiver</term> <!-- sine nomine -->
+    <term name="no-publisher" form="short">s.n.</term>
+    <term name="on">om</term>
     <term name="op-cit">op. cit.</term> <!-- like ibid., the abbreviated form is the regular form  -->
-    <term name="original-work-published">original work published</term>
+    <term name="original-work-published">opprinnelig verk utgitt</term>
     <term name="personal-communication">personlig kommunikasjon</term>
-    <term name="podcast">podcast</term>
-    <term name="podcast-episode">podcast episode</term>
-    <term name="preprint">preprint</term>
-    <term name="radio-broadcast">radio broadcast</term>
-    <term name="radio-series">radio series</term>
-    <term name="radio-series-episode">radio series episode</term>
-    <term name="special-issue">special issue</term>
-    <term name="special-section">special section</term>
-    <term name="television-broadcast">television broadcast</term>
-    <term name="television-series">television series</term>
-    <term name="television-series-episode">television series episode</term>
+    <term name="podcast">podkast</term>
+    <term name="podcast-episode">podkastepisode</term>
+    <term name="preprint">innsendt manuskript</term>
+    <term name="radio-broadcast">radiosending</term>
+    <term name="radio-series">radioserie</term>
+    <term name="radio-series-episode">radioserie-episode</term>
+    <term name="special-issue">spesialutgave</term>
+    <term name="special-section">spesialseksjon</term>
+    <term name="television-broadcast">fjernsynssending</term>
+    <term name="television-series">fjernsynsserie</term>
+    <term name="television-series-episode">fjernsynsserie-episode</term>
     <term name="video">video</term>
-    <term name="working-paper">working paper</term>
+    <term name="working-paper">notat</term>
     <term name="accessed">åpnet</term>
     <term name="and">og</term>
     <term name="and others">med flere</term>
@@ -59,7 +58,7 @@
     <term name="cited">sitert</term>
     <term name="edition">
       <single>utgave</single>
-      <multiple>utgaver</multiple>
+      <multiple>utgave</multiple>
     </term>
     <term name="edition" form="short">utg.</term>
     <term name="et-al">mfl.</term>
@@ -70,85 +69,77 @@
     <term name="in press">i trykk</term>
     <term name="internet">Internett</term>
     <term name="letter">brev</term>
-    <term name="no date">ingen dato</term>
+    <term name="no date">uten dato</term>
     <term name="no date" form="short">u.å.</term>
     <term name="online">online</term>
     <term name="presented at">presentert på</term>
     <term name="reference">
       <single>referanse</single>
-      <multiple>referanser</multiple>
+      <multiple>referanse</multiple>
     </term>
     <term name="reference" form="short">
       <single>ref.</single>
-      <multiple>refr.</multiple>
+      <multiple>ref.</multiple>
     </term>
     <term name="retrieved">hentet</term>
     <term name="scale">målestokk</term>
     <term name="version">versjon</term>
 
     <!-- LONG ITEM TYPE FORMS -->
-    <term name="article">preprint</term>
-    <term name="article-journal">journal article</term>
-    <term name="article-magazine">magazine article</term>
-    <term name="article-newspaper">newspaper article</term>
-    <term name="bill">bill</term>
+    <term name="article">innsendt manuskript</term>
+    <term name="article-journal">tidsskriftartikkel</term>
+    <term name="article-magazine">magasinartikkel</term>
+    <term name="article-newspaper">avisartikkel</term>
+    <term name="bill">proposisjon</term>
     <!-- book is in the list of locator terms -->
-    <term name="broadcast">broadcast</term>
+    <term name="broadcast">kringkasting</term>
     <!-- chapter is in the list of locator terms -->
-    <term name="classic">classic</term>
-    <term name="collection">collection</term>
-    <term name="dataset">dataset</term>
-    <term name="document">document</term>
-    <term name="entry">entry</term>
-    <term name="entry-dictionary">dictionary entry</term>
-    <term name="entry-encyclopedia">encyclopedia entry</term>
-    <term name="event">event</term>
+    <term name="classic">klassiker</term>
+    <term name="collection">samling</term>
+    <term name="dataset">datasett</term>
+    <term name="document">dokument</term>
+    <term name="entry">oppføring</term>
+    <term name="entry-dictionary">ordbokoppføring</term>
+    <term name="entry-encyclopedia">leksikonoppføring</term>
+    <term name="event">begivenhet</term>
     <!-- figure is in the list of locator terms -->
-    <term name="graphic">graphic</term>
-    <term name="hearing">hearing</term>
+    <term name="graphic">grafikk</term>
+    <term name="hearing">høring</term>
     <term name="interview">intervju</term>
-    <term name="legal_case">legal case</term>
-    <term name="legislation">legislation</term>
-    <term name="manuscript">manuscript</term>
-    <term name="map">map</term>
-    <term name="motion_picture">video recording</term>
-    <term name="musical_score">musical score</term>
-    <term name="pamphlet">pamphlet</term>
-    <term name="paper-conference">conference paper</term>
+    <term name="legal_case">rettssak</term>
+    <term name="legislation">lovgiving</term>
+    <term name="manuscript">manuskript</term>
+    <term name="map">kart</term>
+    <term name="motion_picture">videoopptak</term>
+    <term name="musical_score">partitur</term>
+    <term name="pamphlet">pamflett</term>
+    <term name="paper-conference">konferanseartikkel</term>
     <term name="patent">patent</term>
-    <term name="performance">performance</term>
-    <term name="periodical">periodical</term>
+    <term name="performance">fremføring</term>
+    <term name="periodical">tidsskrift</term>
     <term name="personal_communication">personlig kommunikasjon</term>
-    <term name="post">post</term>
-    <term name="post-weblog">blog post</term>
-    <term name="regulation">regulation</term>
-    <term name="report">report</term>
-    <term name="review">review</term>
-    <term name="review-book">book review</term>
-    <term name="software">software</term>
-    <term name="song">audio recording</term>
-    <term name="speech">presentation</term>
+    <term name="post">innlegg</term>
+    <term name="post-weblog">blogginnlegg</term>
+    <term name="regulation">forskrift</term>
+    <term name="report">rapport</term>
+    <term name="review">anmeldelse</term>
+    <term name="review-book">bokanmeldelse</term>
+    <term name="software">programvare</term>
+    <term name="song">lydopptak</term>
+    <term name="speech">presentasjon</term>
     <term name="standard">standard</term>
-    <term name="thesis">thesis</term>
-    <term name="treaty">treaty</term>
-    <term name="webpage">webpage</term>
+    <term name="thesis">avhandling</term>
+    <term name="treaty">traktat</term>
+    <term name="webpage">nettside</term>
 
     <!-- SHORT ITEM TYPE FORMS -->
-    <term name="article-journal" form="short">journal art.</term>
-    <term name="article-magazine" form="short">mag. art.</term>
-    <term name="article-newspaper" form="short">newspaper art.</term>
+    <term name="article-journal" form="short">tidsskriftart.</term>
+    <term name="article-newspaper" form="short">avisart.</term>
     <!-- book is in the list of locator terms -->
     <!-- chapter is in the list of locator terms -->
-    <term name="document" form="short">doc.</term>
+    <term name="document" form="short">dok.</term>
     <!-- figure is in the list of locator terms -->
-    <term name="graphic" form="short">graph.</term>
-    <term name="interview" form="short">interv.</term>
-    <term name="manuscript" form="short">MS</term>
-    <term name="motion_picture" form="short">video rec.</term>
-    <term name="report" form="short">rep.</term>
-    <term name="review" form="short">rev.</term>
-    <term name="review-book" form="short">bk. rev.</term>
-    <term name="song" form="short">audio rec.</term>
+    <term name="manuscript" form="short">ms.</term>
 
     <!-- HISTORICAL ERA TERMS -->
     <term name="ad">e.Kr.</term>
@@ -183,80 +174,80 @@
 
     <!-- LONG LOCATOR FORMS -->
     <term name="act">			 
-      <single>act</single>
-      <multiple>acts</multiple>						 
+      <single>akt</single>
+      <multiple>akt</multiple>						 
     </term>
     <term name="appendix">			 
-      <single>appendix</single>
-      <multiple>appendices</multiple>						 
+      <single>appendiks</single>
+      <multiple>appendiks</multiple>						 
     </term>
     <term name="article-locator">			 
-      <single>article</single>
-      <multiple>articles</multiple>						 
+      <single>artikkel</single>
+      <multiple>artikkel</multiple>						 
     </term>
     <term name="canon">			 
-      <single>canon</single>
-      <multiple>canons</multiple>						 
+      <single>kanon</single>
+      <multiple>kanon</multiple>						 
     </term>
     <term name="elocation">			 
-      <single>location</single>
-      <multiple>locations</multiple>						 
+      <single>sted</single>
+      <multiple>sted</multiple>						 
     </term>
     <term name="equation">			 
-      <single>equation</single>
-      <multiple>equations</multiple>						 
+      <single>ligning</single>
+      <multiple>ligning</multiple>						 
     </term>
     <term name="rule">			 
-      <single>rule</single>
-      <multiple>rules</multiple>						 
+      <single>regel</single>
+      <multiple>regel</multiple>						 
     </term>
     <term name="scene">			 
       <single>scene</single>
-      <multiple>scenes</multiple>						 
+      <multiple>scene</multiple>						 
     </term>
     <term name="table">			 
-      <single>table</single>
-      <multiple>tables</multiple>						 
+      <single>tabell</single>
+      <multiple>tabell</multiple>						 
     </term>
     <term name="timestamp"> <!-- generally blank -->
       <single></single>
       <multiple></multiple>						 
     </term>
     <term name="title-locator">			 
-      <single>title</single>
-      <multiple>titles</multiple>						 
+      <single>tittel</single>
+      <multiple>tittel</multiple>						 
     </term>
     <term name="book">
       <single>bok</single>
-      <multiple>bøker</multiple>
+      <multiple>bok</multiple>
     </term>
     <term name="chapter">
       <single>kapittel</single>
-      <multiple>kapitler</multiple>
+      <multiple>kapittel</multiple>
     </term>
     <term name="column">
       <single>kolonne</single>
-      <multiple>kolonner</multiple>
+      <multiple>kolonne</multiple>
     </term>
     <term name="figure">
       <single>figur</single>
-      <multiple>figurer</multiple>
+      <multiple>figur</multiple>
     </term>
     <term name="folio">
       <single>folio</single>
-      <multiple>folioer</multiple>
+      <multiple>folio</multiple>
     </term>
     <term name="issue">
       <single>nummer</single>
-      <multiple>numre</multiple>
+      <multiple>nummer</multiple>
     </term>
     <term name="line">
       <single>linje</single>
-      <multiple>linjer</multiple>
+      <multiple>linje</multiple>
     </term>
     <term name="note">
       <single>note</single>
-      <multiple>noter</multiple>
+      <multiple>note</multiple>
     </term>
     <term name="opus">
       <single>opus</single>
@@ -276,11 +267,11 @@
     </term>
     <term name="part">
       <single>del</single>
-      <multiple>deler</multiple>
+      <multiple>del</multiple>
     </term>
     <term name="section">
       <single>paragraf</single>
-      <multiple>paragrafer</multiple>
+      <multiple>paragraf</multiple>
     </term>
     <term name="sub-verbo">
       <single>sub verbo</single>
@@ -296,61 +287,33 @@
     </term>
 
     <!-- SHORT LOCATOR FORMS -->
-    <term name="appendix" form="short">			 
-      <single>app.</single>
-      <multiple>apps.</multiple>						 
-    </term>
     <term name="article-locator" form="short">			 
       <single>art.</single>
-      <multiple>arts.</multiple>
-    </term>
-    <term name="elocation" form="short">			 
-      <single>loc.</single>
-      <multiple>locs.</multiple>
-    </term>
-    <term name="equation" form="short">			 
-      <single>eq.</single>
-      <multiple>eqs.</multiple>
-    </term>
-    <term name="rule" form="short">			 
-      <single>r.</single>
-      <multiple>rr.</multiple>						 
-    </term>
-    <term name="scene" form="short">			 
-      <single>sc.</single>
-      <multiple>scs.</multiple>						 
+      <multiple>art.</multiple>
     </term>
     <term name="table" form="short">			 
-      <single>tbl.</single>
-      <multiple>tbls.</multiple>						 
+      <single>tab.</single>
+      <multiple>tab.</multiple>						 
     </term>
     <term name="timestamp" form="short"> <!-- generally blank -->
       <single></single>
       <multiple></multiple>						 
     </term>
-    <term name="title-locator" form="short">			 
-      <single>tit.</single>
-      <multiple>tits.</multiple>
-    </term>
-    <term name="book" form="short">b.</term>
     <term name="chapter" form="short">kap.</term>
     <term name="column" form="short">kol.</term>
     <term name="figure" form="short">fig.</term>
     <term name="folio" form="short">fol.</term>
     <term name="issue" form="short">nr.</term>
-    <term name="line" form="short">l.</term>
-    <term name="note" form="short">n.</term>
     <term name="opus" form="short">op.</term>
     <term name="page" form="short">
       <single>s.</single>
-      <multiple>s.</multiple>
+      <multiple>ss.</multiple>
     </term>
     <term name="number-of-pages" form="short">
       <single>s.</single>
       <multiple>s.</multiple>
     </term>
     <term name="paragraph" form="short">avsn.</term>
-    <term name="part" form="short">d.</term>
     <term name="section" form="short">pargr.</term>
     <term name="sub-verbo" form="short">
       <single>s.v.</single>
@@ -377,56 +340,56 @@
 
     <!-- LONG ROLE FORMS -->
     <term name="chair">
-      <single>chair</single>
-      <multiple>chairs</multiple>
+      <single>leder</single>
+      <multiple>ledere</multiple>
     </term>
     <term name="compiler">
-      <single>compiler</single>
-      <multiple>compilers</multiple>
+      <single>kompilator</single>
+      <multiple>kompilatorer</multiple>
     </term>
     <term name="contributor">
-      <single>contributor</single>
-      <multiple>contributors</multiple>
+      <single>bidragsyter</single>
+      <multiple>bidragsytere</multiple>
     </term>
     <term name="curator">
-      <single>curator</single>
-      <multiple>curators</multiple>
+      <single>kurator</single>
+      <multiple>kuratorer</multiple>
     </term>
     <term name="executive-producer">
-      <single>executive producer</single>
-      <multiple>executive producers</multiple>
+      <single>utøvende produsent</single>
+      <multiple>utøvende produsenter</multiple>
     </term>
     <term name="guest">
-      <single>guest</single>
-      <multiple>guests</multiple>
+      <single>gjest</single>
+      <multiple>gjester</multiple>
     </term>
     <term name="host">
-      <single>host</single>
-      <multiple>hosts</multiple>
+      <single>vert</single>
+      <multiple>verter</multiple>
     </term>
     <term name="narrator">
-      <single>narrator</single>
-      <multiple>narrators</multiple>
+      <single>forteller</single>
+      <multiple>fortellere</multiple>
     </term>
     <term name="organizer">
-      <single>organizer</single>
-      <multiple>organizers</multiple>
+      <single>organisator</single>
+      <multiple>organisatorer</multiple>
     </term>
     <term name="performer">
-      <single>performer</single>
-      <multiple>performers</multiple>
+      <single>utøver</single>
+      <multiple>utøvere</multiple>
     </term>
     <term name="producer">
-      <single>producer</single>
-      <multiple>producers</multiple>
+      <single>produsent</single>
+      <multiple>produsenter</multiple>
     </term>
     <term name="script-writer">
-      <single>writer</single>
-      <multiple>writers</multiple>
+      <single>manusforfatter</single>
+      <multiple>manusforfattere</multiple>
     </term>
     <term name="series-creator">
-      <single>series creator</single>
-      <multiple>series creators</multiple>
+      <single>serieskaper</single>
+      <multiple>serieskapere</multiple>
     </term>
     <term name="director">
       <single>regissør</single>
@@ -454,45 +417,17 @@
     </term>
 
     <!-- SHORT ROLE FORMS -->
-    <term name="compiler" form="short">
-      <single>comp.</single>
-      <multiple>comps.</multiple>
-    </term>
-    <term name="contributor" form="short">
-      <single>contrib.</single>
-      <multiple>contribs.</multiple>
-    </term>
-    <term name="curator" form="short">
-      <single>cur.</single>
-      <multiple>curs.</multiple>
-    </term>
     <term name="executive-producer" form="short">
-      <single>exec. prod.</single>
-      <multiple>exec. prods.</multiple>
-    </term>
-    <term name="narrator" form="short">
-      <single>narr.</single>
-      <multiple>narrs.</multiple>
-    </term>
-    <term name="organizer" form="short">
-      <single>org.</single>
-      <multiple>orgs.</multiple>
-    </term>
-    <term name="performer" form="short">
-      <single>perf.</single>
-      <multiple>perfs.</multiple>
+      <single>utøv. prod.</single>
+      <multiple>utøv. prod.</multiple>
     </term>
     <term name="producer" form="short">
       <single>prod.</single>
-      <multiple>prods.</multiple>
+      <multiple>prod.</multiple>
     </term>
     <term name="script-writer" form="short">
-      <single>writ.</single>
-      <multiple>writs.</multiple>
-    </term>
-    <term name="series-creator" form="short">
-      <single>cre.</single>
-      <multiple>cres.</multiple>
+      <single>forf.</single>
+      <multiple>forf.</multiple>
     </term>
     <term name="director" form="short">
       <single>regi</single>
@@ -508,7 +443,7 @@
     </term>
     <term name="illustrator" form="short">
       <single>ill.</single>
-      <multiple>ills.</multiple>
+      <multiple>ill.</multiple>
     </term>
     <term name="translator" form="short">
       <single>overs.</single>
@@ -520,19 +455,19 @@
     </term>
 
     <!-- VERB ROLE FORMS -->
-    <term name="chair" form="verb">chaired by</term>
-    <term name="compiler" form="verb">compiled by</term>
-    <term name="contributor" form="verb">with</term>
-    <term name="curator" form="verb">curated by</term>
-    <term name="executive-producer" form="verb">executive produced by</term>
-    <term name="guest" form="verb">with guest</term>
-    <term name="host" form="verb">hosted by</term>
-    <term name="narrator" form="verb">narrated by</term>
-    <term name="organizer" form="verb">organized by</term>
-    <term name="performer" form="verb">performed by</term>
-    <term name="producer" form="verb">produced by</term>
-    <term name="script-writer" form="verb">written by</term>
-    <term name="series-creator" form="verb">created by</term>
+    <term name="chair" form="verb">leda av</term>
+    <term name="compiler" form="verb">kompilert av</term>
+    <term name="contributor" form="verb">med</term>
+    <term name="curator" form="verb">kuratert av</term>
+    <term name="executive-producer" form="verb">utøvende produsert av</term>
+    <term name="guest" form="verb">med gjest</term>
+    <term name="host" form="verb">vertskap av</term>
+    <term name="narrator" form="verb">fortalt av</term>
+    <term name="organizer" form="verb">organisert av</term>
+    <term name="performer" form="verb">fremført av</term>
+    <term name="producer" form="verb">produsert av</term>
+    <term name="script-writer" form="verb">forfatta av</term>
+    <term name="series-creator" form="verb">skapt av</term>
     <term name="container-author" form="verb">av</term>
     <term name="director" form="verb">regissert av</term>
     <term name="editor" form="verb">redigert av</term>
@@ -545,18 +480,9 @@
     <term name="editortranslator" form="verb">redigert &amp; oversatt av</term>
 
     <!-- SHORT VERB ROLE FORMS -->
-    <term name="compiler" form="verb-short">comp. by</term>
-    <term name="contributor" form="verb-short">w.</term>
-    <term name="curator" form="verb-short">cur. by</term>
-    <term name="executive-producer" form="verb-short">exec. prod. by</term>
-    <term name="guest" form="verb-short">w. guest</term>
-    <term name="host" form="verb-short">hosted by</term>
-    <term name="narrator" form="verb-short">narr. by</term>
-    <term name="organizer" form="verb-short">org. by</term>
-    <term name="performer" form="verb-short">perf. by</term>
-    <term name="producer" form="verb-short">prod. by</term>
-    <term name="script-writer" form="verb-short">writ. by</term>
-    <term name="series-creator" form="verb-short">cre. by</term>
+    <term name="executive-producer" form="verb-short">utøv. prod. av</term>
+    <term name="producer" form="verb-short">prod. av</term>
+    <term name="script-writer" form="verb-short">forf. av</term>
     <term name="director" form="verb-short">regi</term>
     <term name="editor" form="verb-short">red.</term>
     <term name="editorial-director" form="verb-short">red.</term>
