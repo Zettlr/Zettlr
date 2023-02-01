@@ -33,7 +33,8 @@
     "update:citation": "node scripts/update-citation.mjs",
     "test": "mocha",
     "test-gui": "cross-env NODE_ENV=develop node scripts/test-gui/index.mjs",
-    "lint": "eslint --ext js,vue,ts source"
+    "lint": "eslint --ext js,vue,ts source",
+    "lint:po": "node scripts/lint-po.mjs"
   },
   "config": {
     "forge": "./forge.config.js"

@@ -1,0 +1,38 @@
+name: Lint PO-Files
+
+# On every push to the lang folder, and whenever another workflow calls this one
+on:
+  workflow_call: {}
+  push:
+    paths:
+      - static/lang/**
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: '16'
+
+# Ensure only a single unit test workflow runs at any one time for any event
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}
+  cancel-in-progress: true
+
+jobs:
+  po_lint:
+    name: Lint PO-Files
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        # Always fetch the branch that triggered the event (develop or master)
+        ref: ${{ github.ref }}
+    - name: Setup NodeJS ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'yarn'
+    - name: Install packages
+      run: yarn install --immutable
+    - name: Run lint:po
+      run: yarn lint:po
