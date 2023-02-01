@@ -46,7 +46,7 @@ msgstr "Копировать файл"
 
 #: source/win-main/tabs-context.ts:74
 msgid "Copy full path"
-msgstr ""
+msgstr "Скопировать полный путь"
 
 #: source/win-main/tabs-context.ts:80
 #: source/win-main/file-manager/util/file-item-context.ts:70
@@ -519,7 +519,7 @@ msgstr "Обнаружены изменения в файле библиотек
 
 #: source/app/service-providers/commands/export.ts:74
 msgid "Choose export destination"
-msgstr ""
+msgstr "Выберите место экспорта"
 
 #: source/app/service-providers/commands/export.ts:105
 #, javascript-format
@@ -624,11 +624,11 @@ msgstr "Файл %s не может быть импортирован, так к
 
 #: source/app/service-providers/commands/language-tool.ts:180
 msgid "Document too long"
-msgstr ""
+msgstr "Слишком длинный документ"
 
 #: source/app/service-providers/commands/language-tool.ts:185
 msgid "offline"
-msgstr ""
+msgstr "Оффлайн"
 
 #: source/app/service-providers/commands/root-open.ts:60
 #: source/tmp/file-tree.vue.ts:26 source/tmp/PopoverDirProps.vue.ts:156
@@ -665,7 +665,7 @@ msgstr "%s была загружена."
 #: source/app/service-providers/commands/root-open.ts:159
 #, javascript-format
 msgid "Could not open workspace %s."
-msgstr ""
+msgstr "Невозможно открыть рабочепространство %s."
 
 #: source/app/service-providers/commands/save-image-from-clipboard.ts:37
 msgid "The requested file was not found."
@@ -688,7 +688,7 @@ msgstr "Некорректные границы текста: %s."
 #: source/app/service-providers/commands/rename-tag.ts:44
 #: source/app/service-providers/commands/file-rename.ts:93
 msgid "Confirm"
-msgstr ""
+msgstr "Подтвердить"
 
 #: source/app/service-providers/commands/rename-tag.ts:45
 #, javascript-format
@@ -699,7 +699,7 @@ msgstr ""
 #: source/app/service-providers/commands/file-rename.ts:96
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
 msgid "Yes"
-msgstr ""
+msgstr "Да"
 
 #. 1: Omit all changes
 #: source/app/service-providers/commands/rename-tag.ts:48
@@ -731,17 +731,17 @@ msgstr "Невозможно создать файл"
 #: source/app/service-providers/commands/file-rename.ts:94
 #, javascript-format
 msgid "Update %s internal links to file %s?"
-msgstr ""
+msgstr "Обновить %s внутренни ссылки файла %s?"
 
 #. 0: Save all changes
 #: source/app/service-providers/commands/file-rename.ts:97
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
 msgid "No"
-msgstr ""
+msgstr "Нет"
 
 #: source/app/service-providers/commands/dir-project-export.ts:121
 msgid "Project successfully exported. Click to show."
-msgstr ""
+msgstr "Проект успешно экспортирован. Нажмите чтобы показать"
 
 #: source/app/service-providers/commands/dir-project-export.ts:121
 #, fuzzy
@@ -752,7 +752,7 @@ msgstr "Экспорт..."
 #: source/app/service-providers/commands/file-duplicate.ts:71
 #, javascript-format
 msgid "Copy of %s"
-msgstr ""
+msgstr "Скопировать из %s"
 
 #. Better error message
 #: source/app/service-providers/commands/open-attachment.ts:92
@@ -869,12 +869,12 @@ msgstr "Доступно обновление до версии %s!"
 
 #: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
 msgid "No highlighting"
-msgstr ""
+msgstr "Нет выделения "
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:58
 #, javascript-format
 msgid "File %s does not exist."
-msgstr ""
+msgstr "Файл %s не существует."
 
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:88
 msgid "Word count"
@@ -916,12 +916,12 @@ msgstr "Код"
 
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:100
 msgid "No footnote text found."
-msgstr ""
+msgstr "Текст сноски не найден."
 
 #: source/common/modules/markdown-editor/plugins/statusbar.ts:48
 #, javascript-format
 msgid "Readability mode (%s)"
-msgstr ""
+msgstr "Режим удобочитаемости (%s)"
 
 #: source/common/modules/markdown-editor/plugins/statusbar.ts:64
 #: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/PopoverDirProps.vue.ts:144
@@ -940,20 +940,20 @@ msgstr "%s символов"
 
 #: source/common/modules/markdown-editor/plugins/statusbar.ts:174
 msgid "Detect automatically"
-msgstr ""
+msgstr "Обнаружить автоматически"
 
 #: source/common/modules/markdown-editor/plugins/statusbar.ts:209
 msgid "Open diagnostics panel"
-msgstr ""
+msgstr "Открыть панель диагностики"
 
 #: source/common/modules/markdown-editor/renderers/render-images.ts:92
 #, javascript-format
 msgid "Image not found: %s"
-msgstr ""
+msgstr "Изображение не найдено: %s"
 
 #: source/common/modules/markdown-editor/linters/spellcheck.ts:148
 msgid "Spelling mistake"
-msgstr ""
+msgstr "Орфографическая ошибка"
 
 #: source/common/modules/markdown-editor/context-menu/equation-menu.ts:33
 msgid "Copy equation code"
@@ -1471,28 +1471,28 @@ msgstr ""
 
 #: source/win-preferences/schema/export.ts:54
 msgid "Ask for directory"
-msgstr ""
+msgstr "Спросите каталог"
 
 #: source/win-preferences/schema/spellchecking.ts:23
 msgid "Use LanguageTool"
-msgstr ""
+msgstr "Используйте LanguageTool"
 
 #: source/win-preferences/schema/spellchecking.ts:28
 msgid "Strictness"
-msgstr ""
+msgstr "Строгость"
 
 #: source/win-preferences/schema/spellchecking.ts:30
 #, fuzzy
 msgid "Standard"
-msgstr "Календарь"
+msgstr "Стандартный"
 
 #: source/win-preferences/schema/spellchecking.ts:31
 msgid "Picky"
-msgstr ""
+msgstr "Придирчивый"
 
 #: source/win-preferences/schema/spellchecking.ts:38
 msgid "LanguageTool Provider"
-msgstr ""
+msgstr "Поставщик LanguageTool"
 
 #: source/win-preferences/schema/spellchecking.ts:41
 #: source/win-preferences/schema/spellchecking.ts:48
@@ -1502,11 +1502,11 @@ msgstr "Собственная CSS"
 
 #: source/win-preferences/schema/spellchecking.ts:55
 msgid "LanguageTool Username"
-msgstr ""
+msgstr "Имя пользователя LanguageTool"
 
 #: source/win-preferences/schema/spellchecking.ts:60
 msgid "LanguageTool API key"
-msgstr ""
+msgstr "Ключ API LanguageTool"
 
 #: source/win-preferences/schema/spellchecking.ts:67
 msgid ""
@@ -1528,7 +1528,7 @@ msgstr "Элемент словаря"
 #: source/win-preferences/schema/spellchecking.ts:81
 #: source/win-preferences/schema/advanced.ts:96
 msgid "Search for entries …"
-msgstr "Поиск элементов"
+msgstr "Поиск элементов …"
 
 #: source/win-preferences/schema/citations.ts:23
 msgid "How would you like autocomplete to insert your citations?"
@@ -1704,7 +1704,7 @@ msgstr "Доступно только в Windows и macOS"
 
 #: source/win-preferences/schema/display.ts:122
 msgid "Hide toolbar in distraction free mode"
-msgstr ""
+msgstr "Скрыть панель инструментов в свободном режиме"
 
 #. TODO: Create this type
 #: source/win-preferences/schema/display.ts:129
@@ -1772,7 +1772,7 @@ msgstr "Число пробелов в табуляции"
 
 #: source/win-preferences/schema/editor.ts:64
 msgid "Indent using tabs"
-msgstr ""
+msgstr "Отступ с помощью табуляции"
 
 #: source/win-preferences/schema/editor.ts:69
 msgid "Editor font size"
@@ -1788,7 +1788,7 @@ msgstr "Редактор в режиме ввода"
 
 #: source/win-preferences/schema/editor.ts:97
 msgid "Check Markdown for style issues"
-msgstr ""
+msgstr "Проверьте Markdown на наличие проблем со стилем"
 
 #: source/win-preferences/schema/editor.ts:102
 #, fuzzy
@@ -1813,7 +1813,7 @@ msgstr "Включить редактор таблиц"
 
 #: source/win-preferences/schema/editor.ts:129
 msgid "Show link previews"
-msgstr ""
+msgstr "Показать превью ссылок"
 
 #: source/win-preferences/schema/editor.ts:134
 msgid "Count characters instead of words (e.g., for Chinese)"
@@ -1865,11 +1865,11 @@ msgstr ""
 
 #: source/win-preferences/schema/zettelkasten.ts:70
 msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
-msgstr ""
+msgstr "Поместите в этот каталог автоматически созданные файлы (должны быть загружены в Zettlr)"
 
 #: source/win-preferences/schema/toolbar.ts:23
 msgid "Display \"Open Preferences\" button"
-msgstr ""
+msgstr "Показать кнопку \"Открыть настройки\""
 
 #: source/win-preferences/schema/toolbar.ts:28
 msgid "Display \"New File\" button"
@@ -1877,47 +1877,47 @@ msgstr ""
 
 #: source/win-preferences/schema/toolbar.ts:33
 msgid "Display \"Previous File\" button"
-msgstr ""
+msgstr "Показать кнопку \"Новый файл\""
 
 #: source/win-preferences/schema/toolbar.ts:38
 msgid "Display \"Next File\" button"
-msgstr ""
+msgstr "Показать кнопку \"Следующий файл\""
 
 #: source/win-preferences/schema/toolbar.ts:45
 msgid "Display readability button"
-msgstr ""
+msgstr "Отобразить кнопку удобочитаемости"
 
 #: source/win-preferences/schema/toolbar.ts:50
 msgid "Display \"Insert Comment\" button"
-msgstr ""
+msgstr "Показать кнопку \"Вставить комментарий\""
 
 #: source/win-preferences/schema/toolbar.ts:55
 msgid "Display link button"
-msgstr ""
+msgstr "Показать кнопку ссылки"
 
 #: source/win-preferences/schema/toolbar.ts:60
 msgid "Display image button"
-msgstr ""
+msgstr "Кнопка отображения изображения"
 
 #: source/win-preferences/schema/toolbar.ts:65
 msgid "Display task list button"
-msgstr ""
+msgstr "Кнопка отображения списка задач"
 
 #: source/win-preferences/schema/toolbar.ts:70
 msgid "Display \"Insert Table\" button"
-msgstr ""
+msgstr "Показать кнопку \"Вставить таблицу\""
 
 #: source/win-preferences/schema/toolbar.ts:75
 msgid "Display \"Insert Footnote\" button"
-msgstr ""
+msgstr "Показать кнопку \"Вставить сноску\""
 
 #: source/win-preferences/schema/toolbar.ts:82
 msgid "Display document info"
-msgstr ""
+msgstr "Показать информацию о документе"
 
 #: source/win-preferences/schema/toolbar.ts:87
 msgid "Display Pomodoro-timer"
-msgstr ""
+msgstr "Показать Pomodoro-таймер"
 
 #: source/win-preferences/schema/advanced.ts:23
 msgid "Pattern for new filenames"
@@ -1966,15 +1966,15 @@ msgstr ""
 
 #: source/win-preferences/schema/advanced.ts:81
 msgid "Zoom behavior"
-msgstr ""
+msgstr "Масштабирование"
 
 #: source/win-preferences/schema/advanced.ts:83
 msgid "Zoom resizes the whole GUI"
-msgstr ""
+msgstr "Масштабирование изменяет размер всего графического интерфейса"
 
 #: source/win-preferences/schema/advanced.ts:84
 msgid "Zoom changes the editor font size"
-msgstr ""
+msgstr "Масштабирование изменяет размер шрифта редактора"
 
 #: source/win-preferences/schema/advanced.ts:91
 msgid "iFrame rendering whitelist"
@@ -2008,11 +2008,11 @@ msgstr "Пустая директория"
 
 #: source/tmp/PopoverTags.vue.ts:77
 msgid "Name"
-msgstr ""
+msgstr "Имя"
 
 #: source/tmp/PopoverTags.vue.ts:78
 msgid "Count"
-msgstr ""
+msgstr "Количество"
 
 #: source/tmp/PopoverTags.vue.ts:103
 msgid "Filter tags…"
@@ -2042,7 +2042,7 @@ msgstr "Переименовать фрагмент"
 
 #: source/tmp/SnippetsTab.vue.ts:53
 msgid "Snippets let you define reusable pieces of text with variables."
-msgstr ""
+msgstr "Фрагменты позволяют вам определять многократно используемые фрагменты текста с переменными."
 
 #: source/tmp/SnippetsTab.vue.ts:124 source/tmp/CustomCSS.vue.ts:88
 #: source/tmp/Defaults.vue.ts:192
@@ -2176,20 +2176,20 @@ msgstr "Нет связанных файлов"
 
 #: source/tmp/RelatedFilesTab.vue.ts:29
 msgid "This relation is based on a bidirectional link."
-msgstr ""
+msgstr "Это отношение основано на двунаправленной связи."
 
 #: source/tmp/RelatedFilesTab.vue.ts:32
 msgid "This relation is based on an outbound link."
-msgstr ""
+msgstr "Это отношение основано на исходящей ссылке."
 
 #: source/tmp/RelatedFilesTab.vue.ts:35
 msgid "This relation is based on a backlink."
-msgstr ""
+msgstr "Это отношение основано на обратной ссылке."
 
 #: source/tmp/RelatedFilesTab.vue.ts:113
 #, javascript-format
 msgid "This relation is based on %s shared tags: %s"
-msgstr ""
+msgstr "Это отношение основано на общих тегах %s: %s"
 
 #: source/tmp/PopoverDocInfo.vue.ts:35
 msgid "No open document"
@@ -2265,11 +2265,11 @@ msgstr "Перерыв"
 
 #: source/tmp/PopoverPomodoro.vue.ts:87
 msgid "Sound Effect"
-msgstr ""
+msgstr "Звуковой эффект"
 
 #: source/tmp/PopoverPomodoro.vue.ts:90
 msgid "Volume"
-msgstr ""
+msgstr "Громкость"
 
 #: source/tmp/CustomCSS.vue.ts:31
 msgid "Custom CSS"
@@ -2337,7 +2337,7 @@ msgstr "Очистить поиск"
 
 #: source/tmp/GlobalSearch.vue.ts:143
 msgid "Toggle results"
-msgstr ""
+msgstr "Переключить результаты"
 
 #: source/tmp/List.vue.ts:141
 msgid "Add"
