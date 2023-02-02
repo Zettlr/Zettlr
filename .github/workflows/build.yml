@@ -199,7 +199,7 @@ jobs:
         run: yarn install --immutable
         env:
           npm_config_ensure: "true"
-          npm_config_dist_url: https://unofficial-builds.nodejs.org
+          npm_config_dist_url: https://unofficial-builds.nodejs.org/download/release
       - name: Set tag version to nightly
         if: github.ref_name == 'develop'
         run: echo "$(cat package.json | jq '.version = .version + ".nightly"')" > package.json
