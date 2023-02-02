@@ -194,14 +194,12 @@ jobs:
           curl -sL \
             "https://unofficial-builds.nodejs.org/download/release/$NODEVER/win-arm64/node.lib" \
             -o "${{ env.appdata }}\\node-gyp\\Cache\\${NODEVER#v}\\arm64\\node.lib"
-          if [[ -f "${{ env.appdata }}\\node-gyp\\Cache\\${NODEVER#v}\\arm64\\node.lib" ]]; then
-            echo "Windows arm64 headers found."
-          else
-            echo "Windows arm64 headers not found! Something went wrong."
-          fi
       # At this point, the Windows ARM64 build should succeed.
       - name: Set up build environment
         run: yarn install --immutable
+        env:
+          npm_config_ensure: "true"
+          npm_config_dist_url: https://unofficial-builds.nodejs.org
       - name: Set tag version to nightly
         if: github.ref_name == 'develop'
         run: echo "$(cat package.json | jq '.version = .version + ".nightly"')" > package.json
