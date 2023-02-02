@@ -172,32 +172,27 @@ jobs:
       # NOTE: While the GitHub Actions hosters have already all required
       # software installed for building native ARM64 modules, we have to do one
       # step more of preparation, unfortunately. Specifically, we have to
-      # manually download the correct ARM64 headers. This involves three steps.
-      # (see https://www.electronjs.org/docs/latest/tutorial/windows-arm/)
-
-      # First, resolve the precise Electron version we're using by invoking
-      # `yarn info electron` and using jq for some JSON magic.
-      - name: Retrieve resolved Electron version
+      # manually download the correct ARM64 headers as Node.js does not (yet)
+      # ship those officially. This involves two steps.
+      # (see https://www.electronjs.org/docs/latest/tutorial/windows-arm/, but
+      # the tutorial is not completely correct. Shoutout to
+      # https://github.com/hydraulic-software/github-desktop for the hopefully
+      # last piece of info we need.)
+      - name: Retrieve path to AppData/Local
         run: |
-          echo "electron_version=$(yarn info electron --json | jq -r '.children.Version')" >> $GITHUB_ENV
-      # Second, since we have to move the file to the Node-gyp cache, we must
-      # resolve the APPDATA path. Below's PowerShell monstrosity retrieves the
-      # APPDATA path, converts it into an object, and returns the full name of
-      # its parent path (NOTE that APPDATA points to `Roaming`, but we need
-      # `Local`)
-      - name: Retrieve %APPDATA% location
-        run: |
-          "appdata=$((get-item $env:APPDATA).parent.FullName)" >> $env:GITHUB_ENV
+          "appdata=$($env:LOCALAPPDATA)" >> $env:GITHUB_ENV
         shell: pwsh # NOTE: Runs explicitly on PowerShell
-      # Third, and finally, we can download the correct headers. NOTE that
-      # unlike described in the docs, we need to version the cache with the used
-      # NODE version, not Electron version! Also NOTE that we have to specify
-      # node.exe, just node WILL NOT WORK.
+      # Now, we can download the correct headers. NOTE that unlike described in
+      # the docs, we need to version the cache with the used NODE version, not
+      # Electron version! Also NOTE that we have to specify node.exe, just node
+      # WILL NOT WORK, because Windows.
       - name: Download Windows arm64 headers
         run: |
           NODEVER=$(node.exe --version)
-          mkdir -p "${{ env.appdata }}\\Local\\node-gyp\\Cache\\${NODEVER#v}\\arm64"
-          curl -sL "https://electronjs.org/headers/v${{ env.electron_version }}/win-arm64/node.lib" -o "${{ env.appdata }}\\Local\\node-gyp\\Cache\\${NODEVER#v}\\arm64\\node.lib"
+          mkdir -p "${{ env.appdata }}\\node-gyp\\Cache\\${NODEVER#v}\\arm64"
+          curl -sL \
+            "https://unofficial-builds.nodejs.org/download/release/$NODEVER/win-arm64/node.lib" \
+            -o "${{ env.appdata }}\\node-gyp\\Cache\\${NODEVER#v}\\arm64\\node.lib"
       # At this point, the Windows ARM64 build should succeed.
       - name: Set up build environment
         run: yarn install --immutable
