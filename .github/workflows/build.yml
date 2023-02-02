@@ -157,6 +157,7 @@ jobs:
     name: Windows (arm64)
     env:
       npm_config_arch: arm64
+      TARGET_ARCH: arm64 # Seen at https://github.com/hydraulic-software/github-desktop/blob/conveyorize/.github/workflows/ci.yml
     needs: [preflight, verify_version]
     runs-on: windows-latest
     steps:
@@ -193,6 +194,11 @@ jobs:
           curl -sL \
             "https://unofficial-builds.nodejs.org/download/release/$NODEVER/win-arm64/node.lib" \
             -o "${{ env.appdata }}\\node-gyp\\Cache\\${NODEVER#v}\\arm64\\node.lib"
+          if [[ -f "${{ env.appdata }}\\node-gyp\\Cache\\${NODEVER#v}\\arm64\\node.lib" ]]; then
+            echo "Windows arm64 headers found."
+          else
+            echo "Windows arm64 headers not found! Something went wrong."
+          fi
       # At this point, the Windows ARM64 build should succeed.
       - name: Set up build environment
         run: yarn install --immutable
