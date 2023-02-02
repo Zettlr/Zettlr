@@ -153,75 +153,75 @@ jobs:
           path: |
             ./release/Zettlr-${{env.version}}-x64.exe
 
-  build_win_arm64:
-    name: Windows (arm64)
-    env:
-      npm_config_arch: arm64
-      TARGET_ARCH: arm64 # Seen at https://github.com/hydraulic-software/github-desktop/blob/conveyorize/.github/workflows/ci.yml
-    needs: [preflight, verify_version]
-    runs-on: windows-latest
-    steps:
-      - name: Checkout branch ${{ github.ref_name }}
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.ref_name }}
-      - name: Setup NodeJS ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'yarn'
-      # NOTE: While the GitHub Actions hosters have already all required
-      # software installed for building native ARM64 modules, we have to do one
-      # step more of preparation, unfortunately. Specifically, we have to
-      # manually download the correct ARM64 headers as Node.js does not (yet)
-      # ship those officially. This involves two steps.
-      # (see https://www.electronjs.org/docs/latest/tutorial/windows-arm/, but
-      # the tutorial is not completely correct. Shoutout to
-      # https://github.com/hydraulic-software/github-desktop for the hopefully
-      # last piece of info we need.)
-      - name: Retrieve path to AppData/Local
-        run: |
-          "appdata=$($env:LOCALAPPDATA)" >> $env:GITHUB_ENV
-        shell: pwsh # NOTE: Runs explicitly on PowerShell
-      # Now, we can download the correct headers. NOTE that unlike described in
-      # the docs, we need to version the cache with the used NODE version, not
-      # Electron version! Also NOTE that we have to specify node.exe, just node
-      # WILL NOT WORK, because Windows.
-      - name: Download Windows arm64 headers
-        run: |
-          NODEVER=$(node.exe --version)
-          mkdir -p "${{ env.appdata }}\\node-gyp\\Cache\\${NODEVER#v}\\arm64"
-          curl -sL \
-            "https://unofficial-builds.nodejs.org/download/release/$NODEVER/win-arm64/node.lib" \
-            -o "${{ env.appdata }}\\node-gyp\\Cache\\${NODEVER#v}\\arm64\\node.lib"
-      # At this point, the Windows ARM64 build should succeed.
-      - name: Set up build environment
-        run: yarn install --immutable
-        env:
-          npm_config_ensure: "true"
-          npm_config_dist_url: https://unofficial-builds.nodejs.org/download/release
-      - name: Set tag version to nightly
-        if: github.ref_name == 'develop'
-        run: echo "$(cat package.json | jq '.version = .version + ".nightly"')" > package.json
-      - name: Retrieve tag version
-        id: ref
-        run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
-      - name: Package & Release
-        run: yarn package:win-arm && yarn release:win-arm
-        env:
-          CSC_LINK: ${{ secrets.WIN_CERT_2025_03_15 }}
-          CSC_KEY_PASSWORD: ${{ secrets.WIN_CERT_PASS_2025_03_15 }}
-      # The ARM64 artifact is being output simply as .exe w/o arch, since we
-      # have to include --ia32 in the build flags for ARM builds (thus,
-      # strictly speaking it has two architectures).
-      - name: Rename artifact
-        run: mv ./release/Zettlr-${{env.version}}.exe ./release/Zettlr-${{env.version}}-arm64.exe
-      - name: Cache installer
-        uses: actions/upload-artifact@v3
-        with:
-          name: win32_arm64
-          path: |
-            ./release/Zettlr-${{env.version}}-arm64.exe
+  # build_win_arm64:
+  #   name: Windows (arm64)
+  #   env:
+  #     npm_config_arch: arm64
+  #     TARGET_ARCH: arm64 # Seen at https://github.com/hydraulic-software/github-desktop/blob/conveyorize/.github/workflows/ci.yml
+  #   needs: [preflight, verify_version]
+  #   runs-on: windows-latest
+  #   steps:
+  #     - name: Checkout branch ${{ github.ref_name }}
+  #       uses: actions/checkout@v3
+  #       with:
+  #         ref: ${{ github.ref_name }}
+  #     - name: Setup NodeJS ${{ env.NODE_VERSION }}
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: ${{ env.NODE_VERSION }}
+  #         cache: 'yarn'
+  #     # NOTE: While the GitHub Actions hosters have already all required
+  #     # software installed for building native ARM64 modules, we have to do one
+  #     # step more of preparation, unfortunately. Specifically, we have to
+  #     # manually download the correct ARM64 headers as Node.js does not (yet)
+  #     # ship those officially. This involves two steps.
+  #     # (see https://www.electronjs.org/docs/latest/tutorial/windows-arm/, but
+  #     # the tutorial is not completely correct. Shoutout to
+  #     # https://github.com/hydraulic-software/github-desktop for the hopefully
+  #     # last piece of info we need.)
+  #     - name: Retrieve path to AppData/Local
+  #       run: |
+  #         "appdata=$($env:LOCALAPPDATA)" >> $env:GITHUB_ENV
+  #       shell: pwsh # NOTE: Runs explicitly on PowerShell
+  #     # Now, we can download the correct headers. NOTE that unlike described in
+  #     # the docs, we need to version the cache with the used NODE version, not
+  #     # Electron version! Also NOTE that we have to specify node.exe, just node
+  #     # WILL NOT WORK, because Windows.
+  #     - name: Download Windows arm64 headers
+  #       run: |
+  #         NODEVER=$(node.exe --version)
+  #         mkdir -p "${{ env.appdata }}\\node-gyp\\Cache\\${NODEVER#v}\\arm64"
+  #         curl -sL \
+  #           "https://unofficial-builds.nodejs.org/download/release/$NODEVER/win-arm64/node.lib" \
+  #           -o "${{ env.appdata }}\\node-gyp\\Cache\\${NODEVER#v}\\arm64\\node.lib"
+  #     # At this point, the Windows ARM64 build should succeed.
+  #     - name: Set up build environment
+  #       run: yarn install --immutable
+  #       env:
+  #         npm_config_ensure: "true"
+  #         npm_config_dist_url: https://unofficial-builds.nodejs.org/download/release
+  #     - name: Set tag version to nightly
+  #       if: github.ref_name == 'develop'
+  #       run: echo "$(cat package.json | jq '.version = .version + ".nightly"')" > package.json
+  #     - name: Retrieve tag version
+  #       id: ref
+  #       run: echo "version=$(cat package.json | jq -r '.version')" >> $GITHUB_ENV
+  #     - name: Package & Release
+  #       run: yarn package:win-arm && yarn release:win-arm
+  #       env:
+  #         CSC_LINK: ${{ secrets.WIN_CERT_2025_03_15 }}
+  #         CSC_KEY_PASSWORD: ${{ secrets.WIN_CERT_PASS_2025_03_15 }}
+  #     # The ARM64 artifact is being output simply as .exe w/o arch, since we
+  #     # have to include --ia32 in the build flags for ARM builds (thus,
+  #     # strictly speaking it has two architectures).
+  #     - name: Rename artifact
+  #       run: mv ./release/Zettlr-${{env.version}}.exe ./release/Zettlr-${{env.version}}-arm64.exe
+  #     - name: Cache installer
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: win32_arm64
+  #         path: |
+  #           ./release/Zettlr-${{env.version}}-arm64.exe
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
   #                                                                           #
