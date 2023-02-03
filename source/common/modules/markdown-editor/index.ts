@@ -91,10 +91,11 @@ import { darkModeSwitch } from './theme'
 
 import safeAssign from '@common/util/safe-assign'
 import countWords from '@common/util/count-words'
-import { DocumentType } from '@dts/common/documents'
+import { DocumentType, DP_EVENTS } from '@dts/common/documents'
 import { TagRecord } from '@providers/tags'
 
 const path = window.path
+const ipcRenderer = window.ipc
 
 export interface DocumentWrapper {
   path: string
@@ -142,6 +143,14 @@ export default class MarkdownEditor extends EventEmitter {
     files: Array<{ filename: string, displayName: string, id: string }>
   }
 
+  /**
+   * Holds all documents that are still open as a cache so the sometimes quite
+   * large initial configuration doesn't always have to be re-added
+   *
+   * @var {Map<string, EditorState>}
+   */
+  private readonly stateCache: Map<string, EditorState>
+
   // "What is this?", you may ask. This is a cache to remember anything important
   // that has to be set for a document that is open but that is not saved inside
   // the state in the main process. The scroll position is obvious (has nothing
@@ -181,6 +190,7 @@ export default class MarkdownEditor extends EventEmitter {
     // we have to persist the databases (and feed them to the state) everytime
     // we have to rebuild it (during swapDoc).
     this.databaseCache = { tags: [], citations: [], snippets: [], files: [] }
+    this.stateCache = new Map()
 
     // This remembers the last seen scroll positions per document and restores them
     // if possible.
@@ -213,6 +223,19 @@ export default class MarkdownEditor extends EventEmitter {
         }
       }
     }, true)
+
+    // Listen to file close events so that we can keep the document cache clean
+    ipcRenderer.on('documents-update', (e, payload: { event: DP_EVENTS, context?: any }) => {
+      const { event, context } = payload
+      if (
+        event === DP_EVENTS.CLOSE_FILE &&
+        context !== undefined &&
+        context.filePath !== undefined &&
+        this.stateCache.has(context.filePath)
+      ) {
+        this.stateCache.delete(context.filePath)
+      }
+    })
   } // END CONSTRUCTOR
 
   private _getExtensions (filePath: string, type: DocumentType, startVersion: number): Extension[] {
@@ -413,7 +436,7 @@ export default class MarkdownEditor extends EventEmitter {
    * @param  {boolean}  force         Optional. If not given or not true, prevents
    *                                  reloading the same document again.
    */
-  async swapDoc (documentPath: string, force = false): Promise<void> {
+  async swapDoc (documentPath: string, force: boolean = false): Promise<void> {
     // Do not reload the document unless explicitly specified. The reason is
     // that sometimes we do need to programmatically reload the document, but in
     // 99% of the cases, this only leads to unnecessary flickering.
@@ -421,19 +444,31 @@ export default class MarkdownEditor extends EventEmitter {
       return
     }
 
-    // We need to set the file's path already here so that it's available on
-    // the initial rendering round for any extensions that need it
-    this.config.metadata.path = documentPath
+    // Before exchanging anything, cache the current state
+    this.stateCache.set(this.config.metadata.path, this._instance.state)
+
+    // Get the scroll position cache before so it is not overridden by the
+    // initial state update
+    const cache = this.documentViewCache.get(documentPath)
+
     const { content, type, startVersion } = await this.fetchDoc(documentPath)
 
-    const state = EditorState.create({
-      doc: content,
-      extensions: this._getExtensions(documentPath, type, startVersion)
-    })
+    // Now set the correct state, either from cache or create anew
+    const stateToBeRestored = this.stateCache.get(documentPath)
+    if (stateToBeRestored !== undefined) {
+      this._instance.setState(stateToBeRestored)
+    } else {
+      // We need to set the file's path already here so that it's available on
+      // the initial rendering round for any extensions that need it
+      this.config.metadata.path = documentPath
 
-    // Get the cache before so it is not overridden by the initial state update
-    const cache = this.documentViewCache.get(documentPath)
-    this._instance.setState(state)
+      const state = EditorState.create({
+        doc: content,
+        extensions: this._getExtensions(documentPath, type, startVersion)
+      })
+
+      this._instance.setState(state)
+    }
 
     // Provide the cached databases to the state (can be overridden by the
     // caller afterwards by calling setCompletionDatabase)
