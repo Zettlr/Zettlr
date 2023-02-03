@@ -26,11 +26,19 @@ type IpcResult = undefined|[string, string, number, number]
 async function filePreviewTooltip (view: EditorView, pos: number, side: 1 | -1): Promise<Tooltip|null> {
   const { from, text } = view.state.doc.lineAt(pos)
 
-  // Variable descriptions:
-  // pos = Wherever the cursor is (absolute position)
-  // start = After linkStart (relative position)
-  // end = Before linkEnd (relative position)
-  const start = text.substring(0, pos - from).lastIndexOf('[[') + 2
+  // Ensure there is an internal link opening before pos, but not closing, and
+  // that there is an internal link closing after pos, but not opening.
+  const sliceBefore = text.substring(0, pos - from)
+  const sliceAfter = text.substring(pos - from)
+  const openLinkBeforePos = sliceBefore.includes('[[') && sliceBefore.lastIndexOf('[[') > sliceBefore.lastIndexOf(']]')
+  const closeLinkAfterPos = sliceAfter.includes(']]') && sliceAfter.indexOf(']]') < sliceAfter.indexOf('[[')
+
+  if (!openLinkBeforePos && !closeLinkAfterPos) {
+    return null
+  }
+
+  // Extract the relative start and end positions, and do a sanity test
+  const start = sliceBefore.lastIndexOf('[[') + 2
   const end = text.indexOf(']]', pos - from)
 
   if (pos > from + end || pos < from + start) {
