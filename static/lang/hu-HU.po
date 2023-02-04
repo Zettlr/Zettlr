@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-01-26 02:34+0000\n"
+"POT-Creation-Date: 2023-02-04 02:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,7 +56,7 @@ msgid "Copy ID"
 msgstr "Azonosítót másolni"
 
 #: source/win-main/file-manager/util/file-item-context.ts:26
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:129
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:137
 #: source/tmp/GlobalSearch.vue.ts:40
 msgid "Open in a new tab"
 msgstr ""
@@ -212,7 +212,7 @@ msgstr "Fájl"
 
 #: source/app/service-providers/menu/menu.darwin.ts:164
 #: source/app/service-providers/menu/menu.win32.ts:138
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:108
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:116
 msgid "Open…"
 msgstr "Kinyitni …"
 
@@ -875,16 +875,16 @@ msgstr ""
 msgid "No highlighting"
 msgstr ""
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:58
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:66
 #, javascript-format
 msgid "File %s does not exist."
 msgstr ""
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:88
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:96
 msgid "Word count"
 msgstr ""
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:90
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:98
 #: source/tmp/PopoverDirProps.vue.ts:150 source/tmp/PopoverFileProps.vue.ts:68
 msgid "Modified"
 msgstr ""

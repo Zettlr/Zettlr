@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-01-26 02:34+0000\n"
+"POT-Creation-Date: 2023-02-04 02:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,7 +56,7 @@ msgid "Copy ID"
 msgstr "Copier l’identifiant"
 
 #: source/win-main/file-manager/util/file-item-context.ts:26
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:129
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:137
 #: source/tmp/GlobalSearch.vue.ts:40
 msgid "Open in a new tab"
 msgstr "Ouvrir dans un nouvel onglet"
@@ -144,7 +144,8 @@ msgstr "L'option %s doit être l'une de celles-ci : %s."
 #: source/app/service-providers/config/config-validation.ts:286
 #, javascript-format
 msgid "Option %s must be between %s and %s (characters long)."
-msgstr "La longueur de l'option %s doit être comprise entre %s et %s caractères."
+msgstr ""
+"La longueur de l'option %s doit être comprise entre %s et %s caractères."
 
 #: source/app/service-providers/config/config-validation.ts:289
 #, javascript-format
@@ -212,7 +213,7 @@ msgstr "Fichier"
 
 #: source/app/service-providers/menu/menu.darwin.ts:164
 #: source/app/service-providers/menu/menu.win32.ts:138
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:108
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:116
 msgid "Open…"
 msgstr "Ouvrir..."
 
@@ -881,16 +882,16 @@ msgstr "Une mise à jour vers la version %s est disponible !"
 msgid "No highlighting"
 msgstr "Aucun surlignage"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:58
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:66
 #, javascript-format
 msgid "File %s does not exist."
 msgstr "Le fichier %s n'existe pas."
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:88
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:96
 msgid "Word count"
 msgstr "Nombre de mots"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:90
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:98
 #: source/tmp/PopoverDirProps.vue.ts:150 source/tmp/PopoverFileProps.vue.ts:68
 msgid "Modified"
 msgstr "Modifié"
@@ -1878,13 +1879,14 @@ msgstr "Lancer une recherche en suivant les liens Zettelkasten"
 
 #: source/win-preferences/schema/zettelkasten.ts:65
 msgid "Automatically create non-existing files when following internal links"
-msgstr "Création automatique des fichiers inexistants en suivant des liens internes"
+msgstr ""
+"Création automatique des fichiers inexistants en suivant des liens internes"
 
 #: source/win-preferences/schema/zettelkasten.ts:70
 msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
 msgstr ""
-"Placer les fichiers créés automatiquement dans ce répertoire, qui doit être"
-"chargé dans Zettlr"
+"Placer les fichiers créés automatiquement dans ce répertoire, qui doit "
+"êtrechargé dans Zettlr"
 
 #: source/win-preferences/schema/toolbar.ts:23
 msgid "Display \"Open Preferences\" button"
@@ -1961,8 +1963,8 @@ msgstr "Utiliser l'apparence native des fenêtres"
 #: source/win-preferences/schema/advanced.ts:52
 msgid "Delete items irreversibly, if moving them to trash fails"
 msgstr ""
-"Supprimer les éléments de manière irréversible, si leur déplacement vers"
-"la corbeille échoue"
+"Supprimer les éléments de manière irréversible, si leur déplacement versla "
+"corbeille échoue"
 
 #: source/win-preferences/schema/advanced.ts:58
 msgid "Show app in the notification area"
@@ -1970,7 +1972,8 @@ msgstr "Afficher l'application dans la zone de notification"
 
 #: source/win-preferences/schema/advanced.ts:59
 msgid "Leave app running in the notification area"
-msgstr "Laisser l'application en cours d'exécution dans la zone de notification"
+msgstr ""
+"Laisser l'application en cours d'exécution dans la zone de notification"
 
 #: source/win-preferences/schema/advanced.ts:66
 msgid "Automatically check for updates"
@@ -1981,9 +1984,9 @@ msgid ""
 "Enter all file extensions that you want to see in your attachment sidebar. "
 "Separate them with a comma. Changes are recognised after a restart."
 msgstr ""
-"Entrez toutes les extensions de fichiers que vous voulez voir dans la liste"
-"d’annexes. Séparez-les par des virgules. Les modifications prendront effet"
-"au prochain redémarrage."
+"Entrez toutes les extensions de fichiers que vous voulez voir dans la "
+"listed’annexes. Séparez-les par des virgules. Les modifications prendront "
+"effetau prochain redémarrage."
 
 #: source/win-preferences/schema/advanced.ts:81
 msgid "Zoom behavior"
@@ -2012,8 +2015,8 @@ msgstr "Activer le décompte du chien de garde"
 #: source/win-preferences/schema/advanced.ts:107
 msgid "Time to wait before writing a file is considered done (in ms)"
 msgstr ""
-"Temps d'attente avant de considérer l’écriture d’un fichier comme"
-"terminée (en ms)"
+"Temps d'attente avant de considérer l’écriture d’un fichier commeterminée "
+"(en ms)"
 
 #: source/tmp/file-list.vue.ts:66 source/tmp/file-tree.vue.ts:35
 msgid "No results"
@@ -2064,8 +2067,8 @@ msgstr "Renommer l'extrait"
 #: source/tmp/SnippetsTab.vue.ts:53
 msgid "Snippets let you define reusable pieces of text with variables."
 msgstr ""
-"Les extraits vous permettent de définir des morceaux de texte réutilisables"
-"avec des variables."
+"Les extraits vous permettent de définir des morceaux de texte "
+"réutilisablesavec des variables."
 
 #: source/tmp/SnippetsTab.vue.ts:124 source/tmp/CustomCSS.vue.ts:88
 #: source/tmp/Defaults.vue.ts:192
@@ -2178,8 +2181,8 @@ msgid ""
 "There is a new version of Zettlr available to download. Please read the "
 "changelog below."
 msgstr ""
-"Une nouvelle version de Zettlr est disponible. La liste des changements"
-"est ci-dessous."
+"Une nouvelle version de Zettlr est disponible. La liste des changementsest "
+"ci-dessous."
 
 #: source/tmp/App.vue.ts:84
 msgid "Downloading your update"
@@ -2436,10 +2439,10 @@ msgid ""
 "is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
 "server that you use."
 msgstr ""
-"Zettlr offre une integration de LanguageTool.org, un service fournit"
-"par LanguageTooler GmbH. Ce service nécessite une connexion internet et"
-"est sujet à la politique de confidentialité de LanguageTooler GmbH ou du"
-"serveur correspondant que vous utilisez."
+"Zettlr offre une integration de LanguageTool.org, un service fournitpar "
+"LanguageTooler GmbH. Ce service nécessite une connexion internet etest sujet "
+"à la politique de confidentialité de LanguageTooler GmbH ou duserveur "
+"correspondant que vous utilisez."
 
 #: source/tmp/PopoverStats.vue.ts:111
 msgid "words last month"

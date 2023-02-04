@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-01-26 02:34+0000\n"
+"POT-Creation-Date: 2023-02-04 02:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,7 +56,7 @@ msgid "Copy ID"
 msgstr "复制ID"
 
 #: source/win-main/file-manager/util/file-item-context.ts:26
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:129
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:137
 #: source/tmp/GlobalSearch.vue.ts:40
 msgid "Open in a new tab"
 msgstr "在新标签页中打开"
@@ -212,7 +212,7 @@ msgstr "文档"
 
 #: source/app/service-providers/menu/menu.darwin.ts:164
 #: source/app/service-providers/menu/menu.win32.ts:138
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:108
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:116
 msgid "Open…"
 msgstr "打开…"
 
@@ -865,16 +865,16 @@ msgstr "可以更新到最新版本  %s ！"
 msgid "No highlighting"
 msgstr "无高亮显示"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:58
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:66
 #, javascript-format
 msgid "File %s does not exist."
 msgstr "文件 %s 不存在。"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:88
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:96
 msgid "Word count"
 msgstr "词数"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:90
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:98
 #: source/tmp/PopoverDirProps.vue.ts:150 source/tmp/PopoverFileProps.vue.ts:68
 msgid "Modified"
 msgstr "已修改"
@@ -2389,9 +2389,9 @@ msgid ""
 "is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
 "server that you use."
 msgstr ""
-"Zettlr 提供与 LanguageTooler GmbH 提供的 LanguageTool.org 服务集成，"
-"使用此服务需要互联网连接，并受 LanguageTooler GmbH 或您使用的相应服务器的"
-"隐私政策的约束。"
+"Zettlr 提供与 LanguageTooler GmbH 提供的 LanguageTool.org 服务集成，使用此服"
+"务需要互联网连接，并受 LanguageTooler GmbH 或您使用的相应服务器的隐私政策的约"
+"束。"
 
 #: source/tmp/PopoverStats.vue.ts:111
 msgid "words last month"

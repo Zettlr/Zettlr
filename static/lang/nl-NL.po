@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-01-26 02:34+0000\n"
+"POT-Creation-Date: 2023-02-04 02:32+0000\n"
 "PO-Revision-Date: 2022-12-29 23:16+0100\n"
 "Last-Translator: Marcel van den Brink <marcel.vandenbrink@gmail.com>\n"
 "Language-Team: \n"
@@ -56,7 +56,7 @@ msgid "Copy ID"
 msgstr "Kopieer ID"
 
 #: source/win-main/file-manager/util/file-item-context.ts:26
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:129
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:137
 #: source/tmp/GlobalSearch.vue.ts:40
 msgid "Open in a new tab"
 msgstr "Open in nieuw tabblad"
@@ -213,7 +213,7 @@ msgstr "Bestand"
 
 #: source/app/service-providers/menu/menu.darwin.ts:164
 #: source/app/service-providers/menu/menu.win32.ts:138
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:108
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:116
 msgid "Open…"
 msgstr "Open…"
 
@@ -873,16 +873,16 @@ msgstr "Er is een update naar versie %s beschikbaar!"
 msgid "No highlighting"
 msgstr "Geen markering"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:58
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:66
 #, javascript-format
 msgid "File %s does not exist."
 msgstr "Bestand %s bestaat niet."
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:88
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:96
 msgid "Word count"
 msgstr "Aantal woorden"
 
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:90
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:98
 #: source/tmp/PopoverDirProps.vue.ts:150 source/tmp/PopoverFileProps.vue.ts:68
 msgid "Modified"
 msgstr "Gewijzigd"
