@@ -252,7 +252,7 @@ export default class WindowProvider extends ProviderContract {
     this._logger.verbose('Window manager booting up ...')
 
     // Immediately begin loading the data
-    if (!await this._stateContainer.isInitialized()) {
+    if (!await this._stateContainer.isInitialized() || (await this._stateContainer.get()) === null) {
       await this._stateContainer.init(Object.fromEntries(this._windowState))
     }
     const tmpObject = await this._stateContainer.get()
