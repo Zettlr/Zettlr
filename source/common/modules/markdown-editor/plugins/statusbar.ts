@@ -101,6 +101,8 @@ function createStatusbar (view: EditorView): Panel {
             title: resolveLangCode(displayLanguage),
             allowHtml: true,
             onClick (event) {
+              // Necessary so that the context menu doesn't close again
+              event.stopPropagation()
               // The languages can be a tad tricky: We want the info that we're
               // going to present to the user as concise as possible, but
               // sometimes we lack the information. For example, if we have two

@@ -309,6 +309,7 @@ function pointInRect (point: Point, rect: Rect): boolean {
  */
 function positionMenu (menu: HTMLElement, target: Rect): void {
   // Now position the element: First generally where it is supposed to be.
+  const PADDING = 10 // Generic padding to the edges of the window
   menu.style.top = `${target.top}px`
   menu.style.left = `${target.left + target.width}px`
   const bounds = menu.getBoundingClientRect()
@@ -330,7 +331,7 @@ function positionMenu (menu: HTMLElement, target: Rect): void {
     menu.style.top = `${window.innerHeight - bounds.height - 10}px`
   } else if (isTooHigh) {
     // Crunch it together (also apply a margin of 10px again)
-    menu.style.top = '10px'
-    menu.style.height = `${window.innerHeight - 20}px`
+    menu.style.top = `${PADDING}px`
+    menu.style.height = `${window.innerHeight - 2 * PADDING}px`
   }
 }
