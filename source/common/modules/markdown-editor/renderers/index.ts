@@ -13,8 +13,7 @@
  * END HEADER
  */
 
-import { Compartment, Extension } from '@codemirror/state'
-import { EditorView } from '@codemirror/view'
+import { Compartment, EditorState, Extension } from '@codemirror/state'
 import { renderHeadings } from './render-headings'
 import { renderImages } from './render-images'
 import { renderLinks } from './render-links'
@@ -25,65 +24,54 @@ import { renderMermaid } from './render-mermaid'
 import { renderTables } from './render-tables'
 import { renderIframes } from './render-iframes'
 import { renderEmphasis } from './render-emphasis'
+import { configField, EditorConfiguration } from '../util/configuration'
 
 const renderCompartment = new Compartment()
 
-interface RendererConfig {
-  renderImages?: boolean
-  renderLinks?: boolean
-  renderMath?: boolean
-  renderTasks?: boolean
-  renderHeadings?: boolean
-  renderCitations?: boolean
-  renderMermaid?: boolean
-  renderTables?: boolean
-  renderIframes?: boolean
-  renderEmphasis?: boolean
-}
+const transactionExtender = EditorState.transactionExtender.from(configField, config => transaction => {
+  const ext: Extension[] = [renderMermaid]
+  if (config.renderImages) ext.push(renderImages)
+  if (config.renderLinks) ext.push(renderLinks)
+  if (config.renderMath) ext.push(renderMath)
+  if (config.renderTasks) ext.push(renderTasks)
+  if (config.renderHeadings) ext.push(renderHeadings)
+  if (config.renderCitations) ext.push(renderCitations)
+  if (config.renderTables) ext.push(renderTables)
+  if (config.renderIframes) ext.push(renderIframes)
+  if (config.renderEmphasis) ext.push(renderEmphasis)
 
-function getRenderersConf (config: RendererConfig): Extension {
-  const ext = []
-  if (config.renderImages === true) {
-    ext.push(renderImages)
-  }
-  if (config.renderLinks === true) {
-    ext.push(renderLinks)
-  }
-  if (config.renderMath === true) {
-    ext.push(renderMath)
-  }
-  if (config.renderTasks === true) {
-    ext.push(renderTasks)
-  }
-  if (config.renderHeadings === true) {
-    ext.push(renderHeadings)
-  }
-  if (config.renderCitations === true) {
-    ext.push(renderCitations)
-  }
-  if (config.renderMermaid === true) {
-    ext.push(renderMermaid)
-  }
-  if (config.renderTables === true) {
-    ext.push(renderTables)
-  }
-  if (config.renderIframes === true) {
-    ext.push(renderIframes)
+  const currentState = renderCompartment.get(transaction.state) as Extension[]|undefined
+  if (currentState === undefined) {
+    return { effects: renderCompartment.reconfigure(ext) }
+  } else {
+    // Compare the two states. Reconfigure if they differ
+    for (const extension of ext.concat(currentState)) {
+      if (currentState.includes(extension) !== ext.includes(extension)) {
+        return { effects: renderCompartment.reconfigure(ext) }
+      }
+    }
   }
 
-  if (config.renderEmphasis === true) {
-    ext.push(renderEmphasis)
-  }
+  return null
+})
 
-  return ext
-}
-
-export function initRenderers (config: RendererConfig): Extension {
-  return renderCompartment.of(getRenderersConf(config))
-}
-
-export function reconfigureRenderers (view: EditorView, config: RendererConfig = {}): void {
-  view.dispatch({
-    effects: renderCompartment.reconfigure(getRenderersConf(config))
-  })
+/**
+ * Configures the renderers that are active in the given Markdown state.
+ *
+ * @param   {Partial<EditorConfiguration>}  config  An optional initial config
+ *
+ * @return  {Extension}                             The extension set
+ */
+export function renderers (config?: Partial<EditorConfiguration>): Extension {
+  const ext: Extension[] = [renderMermaid]
+  if (config?.renderImages === true) ext.push(renderImages)
+  if (config?.renderLinks === true) ext.push(renderLinks)
+  if (config?.renderMath === true) ext.push(renderMath)
+  if (config?.renderTasks === true) ext.push(renderTasks)
+  if (config?.renderHeadings === true) ext.push(renderHeadings)
+  if (config?.renderCitations === true) ext.push(renderCitations)
+  if (config?.renderTables === true) ext.push(renderTables)
+  if (config?.renderIframes === true) ext.push(renderIframes)
+  if (config?.renderEmphasis === true) ext.push(renderEmphasis)
+  return [ transactionExtender, renderCompartment.of(ext) ]
 }

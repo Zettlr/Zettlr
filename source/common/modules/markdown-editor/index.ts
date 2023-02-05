@@ -47,7 +47,6 @@ import {
   wordCountField
 } from './plugins/statistics-fields'
 
-import { reconfigureRenderers } from './renderers'
 import { ToCEntry, tocField } from './plugins/toc-field'
 import {
   citekeyUpdate,
@@ -625,20 +624,6 @@ export default class MarkdownEditor extends EventEmitter {
 
     // Cache the current config first, and then apply it
     this.config = safeAssign(newOptions, this.config)
-
-    // Second: The renderers
-    reconfigureRenderers(this._instance, {
-      renderImages: this.config.renderImages,
-      renderLinks: this.config.renderLinks,
-      renderMath: this.config.renderMath,
-      renderTasks: this.config.renderTasks,
-      renderHeadings: this.config.renderHeadings,
-      renderCitations: this.config.renderCitations,
-      renderTables: this.config.renderTables,
-      renderIframes: this.config.renderIframes,
-      renderEmphasis: this.config.renderEmphasis,
-      renderMermaid: true
-    })
 
     // Third: The input mode, if applicable
     if (inputModeChanged) {

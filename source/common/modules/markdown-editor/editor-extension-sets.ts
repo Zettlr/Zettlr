@@ -39,7 +39,6 @@ import { mdLint } from './linters/md-lint'
 import { mdStatistics } from './plugins/statistics-fields'
 import { tocField } from './plugins/toc-field'
 import { typewriter } from './plugins/typewriter'
-import { initRenderers } from './renderers'
 import { formattingToolbar, footnoteHover, filePreview, urlHover } from './tooltips'
 import { EditorConfiguration, configField } from './util/configuration'
 import { highlightRanges } from './plugins/highlight-ranges'
@@ -54,6 +53,7 @@ import { distractionFree } from './plugins/distraction-free'
 import { languageTool } from './linters/language-tool'
 import { statusbar } from './plugins/statusbar'
 import { themeManager } from './theme'
+import { renderers } from './renderers'
 
 /**
  * This interface describes the required properties which the extension sets
@@ -259,17 +259,7 @@ export function getMarkdownExtensions (options: CoreExtensionOptions): Extension
     // ... which can then be styled with a highlighter
     markdownSyntaxHighlighter(),
     syntaxExtensions, // Add our own specific syntax plugin
-    initRenderers({
-      renderImages: options.initialConfig.renderImages,
-      renderLinks: options.initialConfig.renderLinks,
-      renderMath: options.initialConfig.renderMath,
-      renderTasks: options.initialConfig.renderTasks,
-      renderHeadings: options.initialConfig.renderHeadings,
-      renderCitations: options.initialConfig.renderCitations,
-      renderMermaid: true,
-      renderTables: options.initialConfig.renderTables,
-      renderEmphasis: options.initialConfig.renderEmphasis
-    }),
+    renderers(options.initialConfig),
     mdLinterExtensions,
     languageTool,
     // Some statistics we need for Markdown documents
