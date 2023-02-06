@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-02-04 02:32+0000\n"
+"POT-Creation-Date: 2023-02-06 02:35+0000\n"
 "PO-Revision-Date: 2023-01-29 17:55+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -937,11 +937,11 @@ msgstr "%s words"
 msgid "%s characters"
 msgstr "%s characters"
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:174
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:176
 msgid "Detect automatically"
 msgstr "Detect automatically"
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:209
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:211
 msgid "Open diagnostics panel"
 msgstr "Open diagnostics panel"
 
