@@ -19,16 +19,49 @@ import { Root, Parent, Text } from 'mdast' // NOTE: Dependency of remark, not in
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkMath from 'remark-math'
 
+/**
+ * This is a DEBUG function used until issue #5 at micromark-extension-frontmatter is fixed
+ *
+ * @param   {string}  md  The original Markdown
+ *
+ * @return  {string}      The new Markdown with Pandoc frontmatters normalized to Jekyll-style
+ */
+// eslint-disable-next-line @typescript-eslint/naming-convention
+function __DEBUG__normalizeFrontmatter (md: string): string {
+  const eol = md.includes('\r\n')
+    ? '\r\n'
+    : md.includes('\n\r') ? '\n\r' : '\n'
+
+  if (!md.startsWith(`---${eol}`)) {
+    return md // No frontmatter, nothing to do
+  }
+
+  const lines = md.split(eol)
+
+  for (let i = 1; i < lines.length; i++) {
+    if (lines[i] === '---') {
+      return md // We first found a correct frontmatter, so nothing to do
+    } else if (lines[i] === '...') {
+      // Pandoc style ending, so exchange and return normalized frontmatter
+      lines[i] = '---'
+      return lines.join(eol)
+    }
+  }
+
+  return md
+}
+
 export function md2ast (markdown: string): Root {
   return remark()
     .use(remarkFrontmatter, [
       // Either Pandoc-style frontmatters ...
-      { type: 'yaml', fence: { open: '---', close: '...' } },
+      // DEBUG: See issue https://github.com/micromark/micromark-extension-frontmatter/issues/5
+      // { type: 'yaml', fence: { open: '---', close: '...' } },
       // ... or Jekyll/Static site generators-style frontmatters.
       { type: 'yaml', fence: { open: '---', close: '---' } }
     ])
     .use(remarkMath)
-    .parse(markdown)
+    .parse(__DEBUG__normalizeFrontmatter(markdown))
 }
 
 /**
