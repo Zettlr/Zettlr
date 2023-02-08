@@ -14,7 +14,7 @@
  */
 
 import { EditorState, StateField } from '@codemirror/state'
-import { syntaxTree } from '@codemirror/language'
+import { ensureSyntaxTree, syntaxTree } from '@codemirror/language'
 
 /**
  * Takes a heading (the full line) and transforms it into an ID. This function
@@ -120,7 +120,12 @@ function generateToc (state: EditorState): ToCEntry[] {
   // We try to retrieve the full syntax tree, and if that fails, fall back to
   // the (possibly incomplete) syntax tree. For the ToC we definitely want to
   // utilize the full tree.
-  syntaxTree(state).iterate({
+  let tree = ensureSyntaxTree(state, state.doc.length, 1000)
+  if (tree === null) {
+    tree = syntaxTree(state)
+  }
+
+  tree.iterate({
     enter (node) {
       if (node.type.name === 'Document') {
         return
