@@ -27,23 +27,12 @@ import { MatchDecorator, ViewPlugin, Decoration, DecorationSet, EditorView, View
 function getInlineDecorator (): Extension {
   // First, we need to define the decorations we would like to add
   const tagDeco = Decoration.mark({ class: 'cm-zkn-tag' })
-  const highlightDeco = Decoration.mark({ class: 'cm-highlight' })
 
-  const highlightRe = /(::.+?::|==.+?==)/.source
-  const tagRe = /(?<=^|\s|[({[])#(#?[^\s,.:;…!?"'`»«“”‘’—–@$%&*#^+~÷\\/|<=>[\](){}]+#?)/.source
+  const tagRe = /(?<=^|\s|[({[])#(#?[^\s,.:;…!?"'`»«“”‘’—–@$%&*#^+~÷\\/|<=>[\](){}]+#?)/gu
 
   // Next, we need a so-called MatchDecorator that parses the code and returns a
   // decoration that should apply to those matches
-  const decorator = new MatchDecorator({
-    regexp: new RegExp(`${highlightRe}|${tagRe}`, 'gu'),
-    decoration: m => {
-      if (m[1] !== undefined) {
-        return highlightDeco
-      } else {
-        return tagDeco
-      }
-    }
-  })
+  const decorator = new MatchDecorator({ regexp: tagRe, decoration: m => tagDeco })
 
   // Lastly, we define a view plugin (because we're just messing with styles here)
   // that binds our own decorator to the given view (decorator.createDeco) and then

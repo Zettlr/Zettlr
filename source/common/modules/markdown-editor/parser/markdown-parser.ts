@@ -71,6 +71,7 @@ import { sloppyParser } from './sloppy-parser'
 import { gridTableParser, pipeTableParser } from './pandoc-table-parser'
 import { zknLinkParser } from './zkn-link-parser'
 import { pandocAttributesParser } from './pandoc-attributes-parser'
+import { highlightParser } from './highlight-parser'
 
 const codeLanguages: Array<{ mode: Language|LanguageDescription|null, selectors: string[] }> = [
   {
@@ -174,7 +175,8 @@ export default function markdownParser (): LanguageSupport {
         plainLinkParser,
         sloppyParser,
         zknLinkParser,
-        pandocAttributesParser
+        pandocAttributesParser,
+        highlightParser
       ],
       // We have to notify the markdown parser about the additional Node Types
       // that the YAML block parser utilizes
@@ -190,6 +192,8 @@ export default function markdownParser (): LanguageSupport {
         { name: 'YAMLFrontmatterSeq', style: customTags.YAMLFrontmatterSeq },
         { name: 'YAMLFrontmatterMap', style: customTags.YAMLFrontmatterMap },
         { name: 'Citation', style: customTags.Citation },
+        { name: 'Highlight', style: customTags.Highlight },
+        { name: 'HighlightContent', style: customTags.HighlightContent },
         { name: 'Footnote', style: customTags.Footnote },
         { name: 'FootnoteRef', style: customTags.FootnoteRef },
         { name: 'FootnoteRefLabel', style: customTags.FootnoteRefLabel },
