@@ -192,7 +192,8 @@ export default function markdownParser (): LanguageSupport {
         { name: 'Citation', style: customTags.Citation },
         { name: 'Footnote', style: customTags.Footnote },
         { name: 'FootnoteRef', style: customTags.FootnoteRef },
-        { name: 'FootnoteBody', style: customTags.FootnoteBody },
+        { name: 'FootnoteRefLabel', style: customTags.FootnoteRefLabel },
+        { name: 'FootnoteRefBody', style: customTags.FootnoteRefBody },
         { name: 'ZknLink', style: customTags.ZknLink },
         { name: 'ZknLinkContent', style: customTags.ZknLinkContent },
         { name: 'PandocAttribute', style: customTags.PandocAttribute }
