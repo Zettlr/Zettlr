@@ -77,6 +77,11 @@ export const frontmatterParser: BlockParser = {
       ctx.elt('YAMLFrontmatterEnd', ctx.lineStart, ctx.lineStart + 3)
     ])
 
+    // Now that we are certain that we have a frontmatter, we must "consume" the
+    // final line of the frontmatter so that the HorizontalRule parser cannot
+    // detect this as a HorizontalRule (if the frontmatter ends with ---)
+    ctx.nextLine()
+
     ctx.addElement(wrapperNode)
     return true // Signal that we've parsed this block
   }
