@@ -56,8 +56,15 @@ export const footnoteRefParser: BlockParser = {
       to += line.text.length + 1
     }
 
+    // Remove trailing empty lines from the body itself
+    let bodyTo = to
+    while (footnoteBody.length > 0 && footnoteBody[footnoteBody.length - 1].trim() === '') {
+      const lastline = footnoteBody.pop() as string
+      bodyTo = bodyTo - lastline.length - 1
+    }
+
     const treeElem = partialParse(ctx, ctx.parser, footnoteBody.join('\n'), from)
-    const body = ctx.elt('FootnoteRefBody', from, to, [treeElem])
+    const body = ctx.elt('FootnoteRefBody', from, bodyTo, [treeElem])
 
     const wrapper = ctx.elt('FootnoteRef', refFrom, to, [ label, body ])
     ctx.addElement(wrapper)
