@@ -52,7 +52,7 @@ function createStatusbar (view: EditorView): Panel {
       })
 
       // Cursor
-      const mainOffset = update.state.selection.main.from
+      const mainOffset = update.state.selection.main.head
       const line = update.state.doc.lineAt(mainOffset)
       elements.push({ content: `${line.number}:${mainOffset - line.from + 1}` })
 

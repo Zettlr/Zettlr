@@ -759,7 +759,7 @@ export default class MarkdownEditor extends EventEmitter {
     // First, we need the main selection's main offset in the document and
     // compute the correct line number for that offset, in order to arrive at
     // a cursor position.
-    const mainOffset = this._instance.state.selection.main.from
+    const mainOffset = this._instance.state.selection.main.head
     const line = this._instance.state.doc.lineAt(mainOffset)
     return {
       words: this.wordCount ?? 0,
@@ -773,8 +773,8 @@ export default class MarkdownEditor extends EventEmitter {
         .map(sel => {
           // Analogous to how we determine the cursor position we do it here for
           // each selection present.
-          const anchorLine = this._instance.state.doc.lineAt(sel.from)
-          const headLine = this._instance.state.doc.lineAt(sel.to)
+          const anchorLine = this._instance.state.doc.lineAt(sel.anchor)
+          const headLine = this._instance.state.doc.lineAt(sel.head)
           const selContent = this._instance.state.sliceDoc(sel.from, sel.to)
           return {
             anchor: { line: anchorLine.number, ch: sel.from - anchorLine.from + 1 },
