@@ -33,23 +33,21 @@
 import { trans } from '@common/i18n-renderer'
 import { defineComponent } from 'vue'
 import sanitizeHtml from 'sanitize-html'
-import { getConverter } from '@common/util/md-to-html'
 import { ToCEntry } from '@common/modules/markdown-editor/plugins/toc-field'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
 import { OpenDocument } from '@dts/common/documents'
 import { AnyDescriptor, MDFileDescriptor, CodeFileDescriptor } from '@dts/common/fsal'
+import { md2html } from '@common/modules/markdown-utils'
 
 const ipcRenderer = window.ipc
-
-// Must be instantiated after loading, i.e. when the Sidebar is initialized
-let md2html: Function
 
 export default defineComponent({
   name: 'ToCTab',
   emits: [ 'move-section', 'jump-to-line' ],
   data () {
     return {
-      activeFileDescriptor: null as AnyDescriptor|null
+      activeFileDescriptor: null as AnyDescriptor|null,
+      library: CITEPROC_MAIN_DB
     }
   },
   computed: {
@@ -101,19 +99,14 @@ export default defineComponent({
     },
     activeFileDescriptor (newValue: MDFileDescriptor|CodeFileDescriptor|null) {
       if (newValue === null || newValue.type === 'code') {
-        md2html = getConverter(window.getCitationCallback(CITEPROC_MAIN_DB))
+        this.library = CITEPROC_MAIN_DB
       } else {
         const fm = newValue.frontmatter
         if (fm != null && 'bibliography' in fm && typeof fm.bibliography === 'string' && fm.bibliography.length > 0) {
-          md2html = getConverter(window.getCitationCallback(fm.bibliography))
+          this.library = fm.bibliography
         }
       }
     }
-  },
-  created: function () {
-    // Instantiate a converter so that we can convert the md of our ToC entries
-    // to html with citation support TODO
-    md2html = getConverter(window.getCitationCallback(CITEPROC_MAIN_DB))
   },
   methods: {
     /**
@@ -149,7 +142,7 @@ export default defineComponent({
      * @return  {string}             The safe HTML string
      */
     toc2html: function (entryText: string): string {
-      const html = md2html(entryText)
+      const html = md2html(entryText, this.library)
       return sanitizeHtml(html, {
         // Headings may be emphasised and contain code
         allowedTags: [ 'em', 'kbd', 'code' ]

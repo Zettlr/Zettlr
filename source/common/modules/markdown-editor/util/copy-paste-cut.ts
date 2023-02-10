@@ -15,8 +15,8 @@
 
 import { ChangeSpec } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
+import { md2html } from '@common/modules/markdown-utils'
 import html2md from '@common/util/html-to-md'
-import { getConverter } from '@common/util/md-to-html'
 import { configField } from './configuration'
 
 const clipboard = window.clipboard
@@ -72,7 +72,6 @@ export function pasteImage (view: EditorView): boolean {
 export function copyAsHTML (view: EditorView): void {
   const { library } = view.state.field(configField).metadata
   const selections: string[] = []
-  const md2html = getConverter(window.getCitationCallback(library))
 
   for (const { from, to } of view.state.selection.ranges) {
     selections.push(view.state.sliceDoc(from, to))
@@ -80,7 +79,7 @@ export function copyAsHTML (view: EditorView): void {
 
   clipboard.write({
     text: selections.join('\n'),
-    html: md2html(selections.join('\n'))
+    html: md2html(selections.join('\n'), library)
   })
 }
 
@@ -141,8 +140,10 @@ export function paste (view: EditorView): void {
     view.dispatch(view.state.replaceSelection(plain))
   } else {
     // Convert HTML to plain and insert that
-    const converted = html2md(html)
-    view.dispatch(view.state.replaceSelection(converted))
+    html2md(html).then(converted => {
+      view.dispatch(view.state.replaceSelection(converted))
+    })
+      .catch(e => console.error('Could not paste HTML code', e))
   }
 }
 

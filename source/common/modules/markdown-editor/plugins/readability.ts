@@ -15,7 +15,7 @@
 
 import { ViewUpdate, ViewPlugin, DecorationSet, EditorView, Decoration } from '@codemirror/view'
 import { configField } from '../util/configuration'
-import { extractTextnodes } from '@common/util/md-to-ast'
+import { extractTextnodes, markdownToAST } from '@common/modules/markdown-utils'
 
 const scoreDecorations = [
   Decoration.mark({ class: 'cm-readability-0' }),
@@ -188,15 +188,13 @@ const readabilityAlgorithms: Record<string, (words: string[]) => number> = {
 
 function extractScores (text: string, offset: number, algorithm: string): any[] {
   // Split at potential sentence-endings
-  const textNodes = extractTextnodes(text)
+  const textNodes = extractTextnodes(markdownToAST(text))
   const sentences = textNodes
-  // Remove nodes w/o position (should not happen, but TypeScript complained)
-    .filter(node => node.position?.start.offset !== undefined)
     // Then, extract all sentences from the node's value
     .map(node => {
       const sentences = node.value.split(/[.:!?]\s+|\n/ig).filter(s => s.trim() !== '')
       const ret: Array<{ sentence: string, score: number, from: number, to: number }> = []
-      const relativeStart = offset + (node.position?.start.offset as number)
+      const relativeStart = offset + node.from
       let index = 0
 
       for (const sentence of sentences) {

@@ -14,7 +14,7 @@
  */
 
 import { linter, Diagnostic } from '@codemirror/lint'
-import { extractTextnodes } from '@common/util/md-to-ast'
+import { extractTextnodes, markdownToAST } from '@common/modules/markdown-utils'
 import { configField } from '../util/configuration'
 import { trans } from '@common/i18n-renderer'
 
@@ -158,11 +158,9 @@ async function checkWord (word: string, index: number, nodeStart: number, autoco
 export const spellcheck = linter(async view => {
   const diagnostics: Diagnostic[] = []
   const autocorrectValues = view.state.field(configField).autocorrect.replacements.map(x => x.value)
-  const textNodes = extractTextnodes(view.state.doc.toString())
+  const textNodes = extractTextnodes(markdownToAST(view.state.doc.toString()))
 
   const wordsToCheck: Array<{ word: string, index: number, nodeStart: number }> = textNodes
-  // Remove nodes w/o position (should not happen, but TypeScript complained)
-    .filter(node => node.position?.start.offset !== undefined)
     // Then, extract all words from the node's value
     .map(node => {
       const words: string[] = []
@@ -182,7 +180,7 @@ export const spellcheck = linter(async view => {
       }
 
       const ret: Array<{ word: string, index: number, nodeStart: number }> = []
-      const nodeStart = node.position?.start.offset as number
+      const nodeStart = node.from
       let index = 0
       for (const word of words) {
         index = node.value.indexOf(word, index)

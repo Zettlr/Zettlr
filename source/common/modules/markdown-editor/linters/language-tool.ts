@@ -14,7 +14,7 @@
  */
 
 import { linter, Diagnostic, Action } from '@codemirror/lint'
-import { extractTextnodes } from '@common/util/md-to-ast'
+import { extractTextnodes, markdownToAST } from '@common/modules/markdown-utils'
 import { configField } from '../util/configuration'
 import { LanguageToolAPIResponse } from '@providers/commands/language-tool'
 import { StateEffect, StateField } from '@codemirror/state'
@@ -69,7 +69,8 @@ const ltLinter = linter(async view => {
   const diagnostics: Diagnostic[] = []
 
   const document = view.state.doc.toString()
-  const textNodes = extractTextnodes(document)
+  const ast = markdownToAST(document)
+  const textNodes = extractTextnodes(ast)
 
   // To avoid too high loads, we have to send a "pseudo-plain text" document.
   // That will generate a few warnings that relate towards the Markdown syntax,
@@ -115,9 +116,7 @@ const ltLinter = linter(async view => {
     let isValid = false
 
     for (const node of textNodes) {
-      const nodeStart = node.position?.start.offset as number
-      const nodeEnd = nodeStart + node.value.length
-      if (from >= nodeStart && to <= nodeEnd) {
+      if (from >= node.from && to <= node.to) {
         // As soon as we find a textNode that contains the match, we are good.
         isValid = true
         break

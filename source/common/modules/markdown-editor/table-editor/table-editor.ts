@@ -19,13 +19,12 @@ import buildPipeTable from './build-pipe'
 import buildSimpleTable from './build-simple'
 import buildGridTable from './build-grid'
 
-import { getConverter } from '@common/util/md-to-html'
-
 import computeCSS from './compute-css'
 import { ColAlignment, TableEditorOptions } from './types'
 
 import { diskIcon } from './save-icon'
 import { CITEPROC_MAIN_DB } from '@dts/common/citeproc'
+import { md2html } from '@common/modules/markdown-utils'
 
 // Look what I found: https://www.w3schools.com/jsref/dom_obj_table.asp
 
@@ -148,8 +147,6 @@ export default class TableEditor {
 
   private readonly _saveStatusButton: HTMLDivElement
 
-  private readonly _md2html: ReturnType<typeof getConverter>
-
   private _lastMousemoveEvent: MouseEvent|undefined
 
   /**
@@ -173,9 +170,6 @@ export default class TableEditor {
     this._colAlignment = alignments
     this._edgeButtonSize = 30 // Size in pixels
     this._isClean = true
-
-    // TODO
-    this._md2html = getConverter(window.getCitationCallback(CITEPROC_MAIN_DB))
 
     // Find the container element
     if ('container' in options && options.container instanceof HTMLElement) {
@@ -384,7 +378,7 @@ export default class TableEditor {
 
       for (let j = 0; j < this._ast[i].length; j++) {
         const cell = row.insertCell(-1)
-        cell.innerHTML = this._md2html(this._ast[i][j])
+        cell.innerHTML = md2html(this._ast[i][j], CITEPROC_MAIN_DB) // TODO: Library
         cell.style.textAlign = this._colAlignment[j]
         cell.setAttribute('contenteditable', 'true')
         cell.addEventListener('focus', (event) => {
@@ -414,7 +408,7 @@ export default class TableEditor {
 
     // Re-render the table element and save the textContent as data-source
     this._ast[row][col] = cell.textContent ?? ''
-    cell.innerHTML = this._md2html(this._ast[row][col])
+    cell.innerHTML = md2html(this._ast[row][col], CITEPROC_MAIN_DB) // TODO: Library
 
     // For a short amount of time, the table won't have any focused
     // elements, so we'll set a small timeout, after which we test

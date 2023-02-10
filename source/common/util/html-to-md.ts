@@ -12,26 +12,10 @@
  * END HEADER
  */
 
-import TurndownService from '@joplin/turndown'
-import * as turndownGfm from 'joplin-turndown-plugin-gfm'
-
-// HTML to Markdown conversion is better done with Turndown.
-const converter = new TurndownService({
-  headingStyle: 'atx',
-  hr: '---',
-  blankReplacement: function (content: string, node: any) {
-    // A workaround solution for the whitespace deletion issue when copying HTML content
-    // from Chromium-based browsers. This method extends the default blankReplacement
-    // rule of Joplin-Turndown, all '<span> </span>' will not be replaced.
-    if (node.nodeName === 'SPAN') {
-      return ' '
-    }
-    return node.isBlock === true ? '\n\n' : ''
-  }
-})
-
-// Switch to GithubFlavored Markdown
-converter.use(turndownGfm.gfm)
+import rehypeParse from 'rehype-parse'
+import rehypeRemark from 'rehype-remark'
+import remarkStringify from 'remark-stringify'
+import { unified } from 'unified'
 
 /**
  * Turns the given HTML string to Markdown
@@ -40,6 +24,11 @@ converter.use(turndownGfm.gfm)
  *
  * @return  {string}        The converted Markdown
  */
-export default function html2md (html: string): string {
-  return converter.turndown(html)
+export default async function html2md (html: string): Promise<string> {
+  const file = await unified()
+    .use(rehypeParse)
+    .use(rehypeRemark)
+    .use(remarkStringify)
+    .process(html)
+  return String(file)
 }

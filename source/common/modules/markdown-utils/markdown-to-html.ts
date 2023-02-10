@@ -1,0 +1,386 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        md2html
+ * CVM-Role:        Utility Function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file contains a Markdown to HTML converter that will
+ *                  take in a Markdown source string and convert it to HTML. It
+ *                  uses the MainEditor's Markdown parser instance to ensure
+ *                  that every element that the editor recognizes is being
+ *                  appropriately converted into HTML tags. Any Markdown element
+ *                  that comes from the Lezer tree and is not dedicatedly
+ *                  handled (read: It has type 'Generic') the formatter will
+ *                  create a Span or DIV element (depending on how many children
+ *                  the generic has) and supply the node name (from the Lezer
+ *                  tree) as a classname, converting the CamelCase to kebab-case.
+ *
+ * END HEADER
+ */
+
+import katex from 'katex'
+import 'katex/contrib/mhchem'
+import { markdownToAST } from '.'
+import { ASTNode, GenericNode } from './markdown-ast'
+
+/**
+ * Represents an HTML tag. This is a purposefully shallow representation
+ */
+interface HTMLTag {
+  /**
+   * The tag name for the resulting HTML tag
+   */
+  tagName: string
+  /**
+   * Self closing are, e.g., <hr>
+   */
+  selfClosing: boolean
+  /**
+   * A simple map of attributes (e.g., ['class', 'my-class'])
+   */
+  attributes: Array<[ string, string ]>
+}
+
+/**
+ * Use this function to convert plain text contents to HTML entities before
+ * converting an AST to HTML.
+ *
+ * @param   {string}  text  The input string
+ *
+ * @return  {string}        The string with HTML entities replaced
+ */
+function htmlEntities (text: string): string {
+  // List taken from https://www.freeformatter.com/html-entities.html
+  // Not necessarily, complete, but it's 2023 and everyone should just support
+  // Unicode.
+  text = text.replace('&', '&amp;')
+  text = text.replace('<', '&lt;')
+  text = text.replace('>', '&gt;')
+  text = text.replace('"', '&quot;')
+  text = text.replace(' ', '&nbsp;')
+  text = text.replace('¡', '&iexcl;')
+  text = text.replace('¢', '&cent;')
+  text = text.replace('£', '&pound;')
+  text = text.replace('¤', '&curren;')
+  text = text.replace('¥', '&yen;')
+  text = text.replace('¦', '&brvbar;')
+  text = text.replace('§', '&sect;')
+  text = text.replace('¨', '&uml;')
+  text = text.replace('©', '&copy;')
+  text = text.replace('ª', '&ordf;')
+  text = text.replace('«', '&laquo;')
+  text = text.replace('¬', '&not;')
+  text = text.replace('®', '&reg;')
+  text = text.replace('¯', '&macr;')
+  text = text.replace('°', '&deg;')
+  text = text.replace('±', '&plusmn;')
+  text = text.replace('¹', '&sup1;')
+  text = text.replace('²', '&sup2;')
+  text = text.replace('³', '&sup3;')
+  text = text.replace('´', '&acute;')
+  text = text.replace('µ', '&micro;')
+  text = text.replace('¶', '&para;')
+  text = text.replace('¸', '&cedil;')
+  text = text.replace('º', '&ordm;')
+  text = text.replace('»', '&raquo;')
+  text = text.replace('¼', '&frac14;')
+  text = text.replace('½', '&frac12;')
+  text = text.replace('¾', '&frac34;')
+  text = text.replace('¿', '&iquest;')
+  text = text.replace('×', '&times;')
+  text = text.replace('÷', '&divide;')
+  text = text.replace('∀', '&forall;')
+  text = text.replace('∂', '&part;')
+  text = text.replace('∃', '&exist;')
+  text = text.replace('∅', '&empty;')
+  text = text.replace('∇', '&nabla;')
+  text = text.replace('∈', '&isin;')
+  text = text.replace('∉', '&notin;')
+  text = text.replace('∋', '&ni;')
+  text = text.replace('∏', '&prod;')
+  text = text.replace('∑', '&sum;')
+  text = text.replace('−', '&minus;')
+  text = text.replace('∗', '&lowast;')
+  text = text.replace('√', '&radic;')
+  text = text.replace('∝', '&prop;')
+  text = text.replace('∞', '&infin;')
+  text = text.replace('∠', '&ang;')
+  text = text.replace('∧', '&and;')
+  text = text.replace('∨', '&or;')
+  text = text.replace('∩', '&cap;')
+  text = text.replace('∪', '&cup;')
+  text = text.replace('∫', '&int;')
+  text = text.replace('∴', '&there4;')
+  text = text.replace('∼', '&sim;')
+  text = text.replace('≅', '&cong;')
+  text = text.replace('≈', '&asymp;')
+  text = text.replace('≠', '&ne;')
+  text = text.replace('≡', '&equiv;')
+  text = text.replace('≤', '&le;')
+  text = text.replace('≥', '&ge;')
+  text = text.replace('⊂', '&sub;')
+  text = text.replace('⊃', '&sup;')
+  text = text.replace('⊄', '&nsub;')
+  text = text.replace('⊇', '&supe;')
+  text = text.replace('⊕', '&oplus;')
+  text = text.replace('⊗', '&otimes;')
+  text = text.replace('⊥', '&perp;')
+  text = text.replace('⋅', '&sdot;')
+  text = text.replace('Α', '&Alpha;')
+  text = text.replace('Β', '&Beta;')
+  text = text.replace('Γ', '&Gamma;')
+  text = text.replace('Δ', '&Delta;')
+  text = text.replace('Ε', '&Epsilon;')
+  text = text.replace('Ζ', '&Zeta;')
+  text = text.replace('Η', '&Eta;')
+  text = text.replace('Θ', '&Theta;')
+  text = text.replace('Ι', '&Iota;')
+  text = text.replace('Κ', '&Kappa;')
+  text = text.replace('Λ', '&Lambda;')
+  text = text.replace('Μ', '&Mu;')
+  text = text.replace('Ν', '&Nu;')
+  text = text.replace('Ξ', '&Xi;')
+  text = text.replace('Ο', '&Omicron;')
+  text = text.replace('Π', '&Pi;')
+  text = text.replace('Ρ', '&Rho;')
+  text = text.replace('Σ', '&Sigma;')
+  text = text.replace('Τ', '&Tau;')
+  text = text.replace('Υ', '&Upsilon;')
+  text = text.replace('Φ', '&Phi;')
+  text = text.replace('Χ', '&Chi;')
+  text = text.replace('Ψ', '&Psi;')
+  text = text.replace('Ω', '&Omega;')
+  text = text.replace('α', '&alpha;')
+  text = text.replace('β', '&beta;')
+  text = text.replace('γ', '&gamma;')
+  text = text.replace('δ', '&delta;')
+  text = text.replace('ε', '&epsilon;')
+  text = text.replace('ζ', '&zeta;')
+  text = text.replace('η', '&eta;')
+  text = text.replace('θ', '&theta;')
+  text = text.replace('ι', '&iota;')
+  text = text.replace('κ', '&kappa;')
+  text = text.replace('λ', '&lambda;')
+  text = text.replace('μ', '&mu;')
+  text = text.replace('ν', '&nu;')
+  text = text.replace('ξ', '&xi;')
+  text = text.replace('ο', '&omicron;')
+  text = text.replace('π', '&pi;')
+  text = text.replace('ρ', '&rho;')
+  text = text.replace('ς', '&sigmaf;')
+  text = text.replace('σ', '&sigma;')
+  text = text.replace('τ', '&tau;')
+  text = text.replace('υ', '&upsilon;')
+  text = text.replace('φ', '&phi;')
+  text = text.replace('χ', '&chi;')
+  text = text.replace('ψ', '&psi;')
+  text = text.replace('ω', '&omega;')
+  text = text.replace('ϑ', '&thetasym;')
+  text = text.replace('ϒ', '&upsih;')
+  text = text.replace('ϖ', '&piv;')
+  text = text.replace('Œ', '&OElig;')
+  text = text.replace('œ', '&oelig;')
+  text = text.replace('Š', '&Scaron;')
+  text = text.replace('š', '&scaron;')
+  text = text.replace('Ÿ', '&Yuml;')
+  text = text.replace('ƒ', '&fnof;')
+  text = text.replace('ˆ', '&circ;')
+  text = text.replace('˜', '&tilde;')
+  text = text.replace(' ', '&ensp;')
+  text = text.replace(' ', '&emsp;')
+  text = text.replace(' ', '&thinsp;')
+  text = text.replace('‌', '&zwnj;')
+  text = text.replace('‍', '&zwj;')
+  text = text.replace('‎', '&lrm;')
+  text = text.replace('‏', '&rlm;')
+  text = text.replace('–', '&ndash;')
+  text = text.replace('—', '&mdash;')
+  text = text.replace('‘', '&lsquo;')
+  text = text.replace('’', '&rsquo;')
+  text = text.replace('‚', '&sbquo;')
+  text = text.replace('“', '&ldquo;')
+  text = text.replace('”', '&rdquo;')
+  text = text.replace('„', '&bdquo;')
+  text = text.replace('†', '&dagger;')
+  text = text.replace('‡', '&Dagger;')
+  text = text.replace('•', '&bull;')
+  text = text.replace('…', '&hellip;')
+  text = text.replace('‰', '&permil;')
+  text = text.replace('′', '&prime;')
+  text = text.replace('″', '&Prime;')
+  text = text.replace('‹', '&lsaquo;')
+  text = text.replace('›', '&rsaquo;')
+  text = text.replace('‾', '&oline;')
+  text = text.replace('€', '&euro;')
+  text = text.replace('™', '&trade;')
+  text = text.replace('←', '&larr;')
+  text = text.replace('↑', '&uarr;')
+  text = text.replace('→', '&rarr;')
+  text = text.replace('↓', '&darr;')
+  text = text.replace('↔', '&harr;')
+  text = text.replace('↵', '&crarr;')
+  text = text.replace('⌈', '&lceil;')
+  text = text.replace('⌉', '&rceil;')
+  text = text.replace('⌊', '&lfloor;')
+  text = text.replace('⌋', '&rfloor;')
+  text = text.replace('◊', '&loz;')
+  text = text.replace('♠', '&spades;')
+  text = text.replace('♣', '&clubs;')
+  text = text.replace('♥', '&hearts;')
+  text = text.replace('♦', '&diams;')
+  return text
+}
+
+/**
+ * This function looks at a GenericNode and returns information regarding the
+ * tag that the node should result in.
+ *
+ * @param   {GenericNode}  node  The input node
+ *
+ * @return  {HTMLTag}            The HTML tag information
+ */
+function getTagInfo (node: GenericNode): HTMLTag {
+  const ret: HTMLTag = {
+    tagName: 'div',
+    selfClosing: false,
+    attributes: []
+  }
+
+  if (node.name === 'HorizontalRule') {
+    ret.tagName = 'hr'
+    ret.selfClosing = true
+  } else if (node.name === 'Paragraph') {
+    ret.tagName = 'p'
+  } else if (node.name === 'FencedCode' || node.name === 'InlineCode') {
+    ret.tagName = 'code'
+  } else if (node.children.length === 1) {
+    ret.tagName = 'span'
+  }
+
+  if (ret.tagName === 'span' || ret.tagName === 'div') {
+    ret.attributes.push([ 'class', node.name ])
+  }
+
+  return ret
+}
+
+/**
+ * Takes a Markdown AST node and turns it to an HTML string
+ *
+ * @param   {ASTNode}  node         The node
+ * @param   {string}   citeLibrary  The citation library to use
+ * @param   {number}   indent       The indentation for this node
+ *
+ * @return  {string}                The HTML string
+ */
+function nodeToHTML (node: ASTNode|ASTNode[], citeLibrary: string, indent: number = 0): string {
+  // Convenience to convert a list of child nodes to HTML
+  if (Array.isArray(node)) {
+    const body: string[] = []
+    for (const child of node) {
+      body.push(nodeToHTML(child, citeLibrary, indent))
+    }
+    return body.join('\n')
+  } else if (node.type === 'Generic' && node.name === 'Document') {
+    // This ensures there's no outer div class=Document
+    return nodeToHTML(node.children, citeLibrary, indent)
+  } else if (node.type === 'YAMLFrontmatter') {
+    return '' // Frontmatters must be removed upon HTML export
+  } else if (node.type === 'Citation') {
+    const cb = window.getCitationCallback(citeLibrary)
+    const rendered = cb(node.parsedCitation.citations, node.parsedCitation.composite)
+    return `<span class="citation">${rendered ?? htmlEntities(node.value.value)}</span>`
+  } else if (node.type === 'Footnote') {
+    return `<a class="footnote" href="#fnref:${htmlEntities(node.label)}">${htmlEntities(node.label)}</a>`
+  } else if (node.type === 'FootnoteRef') {
+    return `<div class="footnote-ref"><a name="fnref:${htmlEntities(node.label)}"></a>${nodeToHTML(node.children, citeLibrary, indent)}</div>`
+  } else if (node.type === 'Heading') {
+    return `<h${node.level}>${htmlEntities(node.value.value)}</h${node.level}>`
+  } else if (node.type === 'Highlight') {
+    return `<mark>${nodeToHTML(node.children, citeLibrary, indent)}</mark>`
+  } else if (node.type === 'Image') {
+    return `<img src="${node.url.value}" alt="${htmlEntities(node.alt.value)}" title="${node.title?.value ?? htmlEntities(node.alt.value)}">`
+  } else if (node.type === 'Link') {
+    return `<a href="${node.url.value}" title="${node.title?.value ?? htmlEntities(node.url.value)}">${htmlEntities(node.alt.value)}</a>`
+  } else if (node.type === 'List') {
+    if (node.ordered) {
+      return `<ol>\n${nodeToHTML(node.items, citeLibrary, indent)}\n</ol>`
+    } else {
+      return `<ul>\n${nodeToHTML(node.items, citeLibrary, indent)}\n</ul>`
+    }
+  } else if (node.type === 'ListItem') {
+    const task = node.checked !== undefined ? `<input type="checkbox" disabled="disabled" ${node.checked ? 'checked="checked"' : ''}>` : ''
+    return `<li>${task}${nodeToHTML(node.children, citeLibrary, indent + 1)}</li>`
+  } else if (node.type === 'Emphasis') {
+    const body = nodeToHTML(node.children, citeLibrary, indent)
+
+    switch (node.which) {
+      case 'bold':
+        return `<strong>${body}</strong>`
+      case 'italic':
+        return `<em>${body}</em>`
+    }
+  } else if (node.type === 'Table') {
+    const rows: string[] = []
+    for (const row of node.rows) {
+      const cells: string[] = []
+      for (const cell of row.cells) {
+        cells.push(nodeToHTML(cell.children, citeLibrary, indent))
+      }
+      const tag = row.isHeaderOrFooter ? 'th' : 'td'
+      const content = cells.map(c => `<${tag}>${c}</${tag}>`).join('\n')
+      if (row.isHeaderOrFooter) {
+        rows.push(`<thead>\n<tr>\n${content}\n</tr>\n</thead>`)
+      } else {
+        rows.push(`<tr>\n${content}\n</tr>`)
+      }
+    }
+    return `<table>\n${rows.join('\n')}\n</table>`
+  } else if (node.type === 'Text') {
+    return node.value.trim() // Plain text
+  } else if (node.type === 'FencedCode') {
+    if (node.info === '$$') {
+      return katex.renderToString(node.source)
+    } else {
+      return `<pre><code class="language-${node.info}">${htmlEntities(node.source)}</code></pre>`
+    }
+  } else if (node.type === 'InlineCode') {
+    return `<code>${htmlEntities(node.source)}</code>`
+  } else if (node.type === 'Generic') {
+    // Generic nodes are differentiated by name. There are a few we can support,
+    // but most we wrap in a div.
+    const tagInfo = getTagInfo(node)
+
+    if ([ 'div', 'span' ].includes(tagInfo.tagName) && node.children.length === 0) {
+      return '' // Simplify the resulting HTML by removing empty elements
+    }
+
+    const attr = tagInfo.attributes.length > 0
+      ? ' ' + tagInfo.attributes.map(a => `${a[0]}="${a[1]}"`).join(' ')
+      : ''
+
+    const open = `<${tagInfo.tagName}${attr}${tagInfo.selfClosing ? '/' : ''}>`
+    const close = tagInfo.selfClosing ? '' : `</${tagInfo.tagName}>`
+    const body = tagInfo.selfClosing ? '' : nodeToHTML(node.children, citeLibrary)
+    return `${open}${body}${close}`
+  }
+
+  return ''
+}
+
+/**
+ * Takes Markdown source and turns it into a valid HTML fragment. The citeLibrary
+ * will be used to resolve citations.
+ *
+ * @param   {string}  markdown     The Markdown source
+ * @param   {string}  citeLibrary  The citation library
+ *
+ * @return  {string}               The resulting HTML
+ */
+export function md2html (markdown: string, citeLibrary: string): string {
+  const ast = markdownToAST(markdown)
+  return nodeToHTML(ast, citeLibrary)
+}

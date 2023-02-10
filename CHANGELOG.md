@@ -193,6 +193,9 @@ there.
   and an API key to unlock premium features
 - **New Feature**: You can now activate a statusbar that shows some context-
   specific information for each editor pane you have open
+- Replaced the old Markdown-to-HTML and HTML-to-Markdown converter with more up-
+  to-date modules. This should not change how pasting from HTML or copying as
+  HTML work, but it could.
 - The TableEditor now has a clear data saving strategy: Whenever you change a
   table, you need to manually click the disk icon at the top of the table to
   apply all your changes to the document so that it can then be saved
