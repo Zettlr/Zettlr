@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-02-06 02:35+0000\n"
+"POT-Creation-Date: 2023-02-10 13:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -278,7 +278,7 @@ msgstr "Importar dicionário..."
 
 #: source/app/service-providers/menu/menu.darwin.ts:315
 #: source/app/service-providers/menu/menu.win32.ts:316
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:111
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:110
 msgid "Edit"
 msgstr "Editar"
 
@@ -830,21 +830,21 @@ msgstr ""
 msgid "Open file"
 msgstr "Abrir ficheiro"
 
-#: source/app/service-providers/updates/index.ts:176
+#: source/app/service-providers/updates/index.ts:177
 #, javascript-format
 msgid "Could not check for updates: Server Error (Status code: %s)"
 msgstr ""
 "Não foi possível verificar se há actualizações: Server Error (Status code: "
 "%s)"
 
-#: source/app/service-providers/updates/index.ts:178
+#: source/app/service-providers/updates/index.ts:179
 #, javascript-format
 msgid "Could not check for updates: Client Error (Status code: %s)"
 msgstr ""
 "Não foi possível verificar se há actualizações: Client Error (Status code: "
 "%s)"
 
-#: source/app/service-providers/updates/index.ts:180
+#: source/app/service-providers/updates/index.ts:181
 #, javascript-format
 msgid ""
 "Could not check for updates: The server tried to redirect (Status code: %s)"
@@ -855,25 +855,25 @@ msgstr ""
 #. getaddrinfo has reported that the host has not been found.
 #. This normally only happens if the networking interface is
 #. offline.
-#: source/app/service-providers/updates/index.ts:185
+#: source/app/service-providers/updates/index.ts:186
 msgid "Could not check for updates: Could not establish connection"
 msgstr ""
 "Não foi possível verificar se há actualizações: Não foi possível estabelecer "
 "ligação"
 
 #. Something else has occurred. GotError objects have a name property.
-#: source/app/service-providers/updates/index.ts:188
+#: source/app/service-providers/updates/index.ts:189
 #, javascript-format
 msgid "Could not check for updates. %s: %s"
 msgstr "Não foi possível verificar actualizações. %s: %s"
 
-#: source/app/service-providers/updates/index.ts:204
+#: source/app/service-providers/updates/index.ts:205
 msgid "Could not check for updates: Server hasn't sent any data"
 msgstr ""
 "Não foi possível verificar se há actualizações: O servidor não enviou "
 "quaisquer dados"
 
-#: source/app/service-providers/updates/index.ts:463
+#: source/app/service-providers/updates/index.ts:462
 #, javascript-format
 msgid "An update to version %s is available!"
 msgstr "Está disponível uma atualização para a versão %s"
@@ -925,7 +925,7 @@ msgstr "Comentário"
 msgid "Code"
 msgstr "Código"
 
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:100
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:99
 msgid "No footnote text found."
 msgstr ""
 
@@ -2139,7 +2139,7 @@ msgstr "Outros ficheiros"
 msgid "References"
 msgstr "Referências"
 
-#: source/tmp/MainSidebar.vue.ts:80 source/tmp/ToCTab.vue.ts:55
+#: source/tmp/MainSidebar.vue.ts:80 source/tmp/ToCTab.vue.ts:53
 msgid "Table of Contents"
 msgstr "Índice"
 
