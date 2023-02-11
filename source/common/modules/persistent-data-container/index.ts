@@ -94,7 +94,7 @@ export default class PersistentDataContainer {
   public async isInitialized (): Promise<boolean> {
     try {
       await fs.access(this._filePath, FSConstants.R_OK | FSConstants.W_OK)
-      return (await this.get()) !== null
+      return (await fs.readFile(this._filePath, { encoding: 'utf-8' })).trim() !== ''
     } catch (err: any) {
       return false
     }
