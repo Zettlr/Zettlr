@@ -18,6 +18,8 @@ import windowRegister from '@common/modules/window-register'
 
 // The first thing we have to do is run the window controller
 windowRegister()
-
-const app = createApp(App)
-app.mount('#app')
+  .then(() => {
+    const app = createApp(App)
+    app.mount('#app')
+  })
+  .catch(e => console.error(e))

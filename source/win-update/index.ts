@@ -21,13 +21,15 @@ import App from './App.vue'
 const ipcRenderer = window.ipc
 
 windowRegister()
+  .then(() => {
+    const app = createApp(App)
+    app.mount('#app')
 
-const app = createApp(App)
-app.mount('#app')
-
-// This window will be closed immediately on a window-close command
-ipcRenderer.on('shortcut', (event, shortcut) => {
-  if (shortcut === 'close-window') {
-    ipcRenderer.send('window-controls', { command: 'win-close' })
-  }
-})
+    // This window will be closed immediately on a window-close command
+    ipcRenderer.on('shortcut', (event, shortcut) => {
+      if (shortcut === 'close-window') {
+        ipcRenderer.send('window-controls', { command: 'win-close' })
+      }
+    })
+  })
+  .catch(e => console.error(e))
