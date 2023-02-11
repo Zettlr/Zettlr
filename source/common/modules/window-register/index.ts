@@ -25,11 +25,11 @@ import { loadData } from '@common/i18n-renderer'
  * configuration and registers stuff like custom window controls and the menu
  * bar (on Windows and Linux, if native is off)
  */
-export default function windowRegister (): void {
+export default async function windowRegister (): Promise<void> {
   // Immediately load the translations
-  loadData().catch(e => console.error(e))
+  await loadData()
   // Load the clarity icons
-  loadIcons().catch(e => console.error(e))
+  await loadIcons()
 
   // ... the theming functionality ...
   registerThemes()
