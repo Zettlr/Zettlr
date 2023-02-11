@@ -154,7 +154,7 @@ const ICONS = [
   { shape: 'crown', title: 'Crown' },
   { shape: 'star', title: 'Star' },
   { shape: 'flag', title: 'Flag' },
-  { shape: 'envlope', title: 'Envelope' },
+  { shape: 'envelope', title: 'Envelope' },
   { shape: 'airplane', title: 'Airplane' },
   { shape: 'happy-face', title: 'Happy emoji' },
   { shape: 'neutral-face', title: 'Neutral emoji' },
