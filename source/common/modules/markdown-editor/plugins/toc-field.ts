@@ -133,31 +133,35 @@ function generateToc (state: EditorState): ToCEntry[] {
 
       switch (node.type.name) {
         case 'ATXHeading1':
-        case 'SetextHeading1':
+        case 'SetextHeading1': {
           h1++
           h2 = h3 = h4 = h5 = h6 = 0
+          const from = node.type.name === 'ATXHeading1' ? node.from + 2 : node.from
           toc.push({
             line: state.doc.lineAt(node.from).number,
             pos: node.from,
-            text: state.doc.sliceString(node.from + 2, node.to),
+            text: state.doc.sliceString(from, node.to),
             level: 1,
             renderedLevel: [h1].join('.'),
-            id: headingToID(state.doc.sliceString(node.from + 2, node.to))
+            id: headingToID(state.doc.sliceString(from, node.to))
           })
           return false
+        }
         case 'ATXHeading2':
-        case 'SetextHeading2':
+        case 'SetextHeading2': {
           h2++
           h3 = h4 = h5 = h6 = 0
+          const from = node.type.name === 'ATXHeading2' ? node.from + 3 : node.from
           toc.push({
             line: state.doc.lineAt(node.from).number,
             pos: node.from,
-            text: state.doc.sliceString(node.from + 2, node.to),
+            text: state.doc.sliceString(from, node.to),
             level: 2,
             renderedLevel: [ h1, h2 ].join('.'),
-            id: headingToID(state.doc.sliceString(node.from + 2, node.to))
+            id: headingToID(state.doc.sliceString(from, node.to))
           })
           return false
+        }
         case 'ATXHeading3':
           h3++
           h4 = h5 = h6 = 0
