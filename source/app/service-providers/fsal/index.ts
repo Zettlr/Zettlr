@@ -305,6 +305,43 @@ export default class FSAL extends ProviderContract {
       }
       // Finally, add a history event of what has happened
       this._recordFiletreeChange('add', changedPath)
+    } else if (['change'].includes(event) && isDir(changedPath)) {
+      // A hidden file or dir (such as .git or .ztr-directory) has changed in
+      // this dir.
+      const affectedDescriptor = this.findDir(changedPath)
+      if (affectedDescriptor === undefined) {
+        this._logger.error(`[FSAL] Received a change event for directory ${changedPath}, but it was not found.`)
+      } else {
+        const reparsed = await FSALDir.parse(
+          changedPath,
+          this._cache,
+          this.getMarkdownFileParser(),
+          this.getDirectorySorter(),
+          affectedDescriptor.root
+        )
+
+        // Now exchange in the tree
+        const parent = this.findDir(reparsed.dir)
+        if (affectedDescriptor.root || parent !== undefined) {
+          const idx = parent !== undefined
+            ? parent.children.findIndex(x => x.path === reparsed.path)
+            : this._state.filetree.findIndex(x => x.path === reparsed.path)
+
+          if (idx > -1 && parent === undefined) {
+            // Root
+            this._state.filetree.splice(idx, 1, reparsed)
+            this._recordFiletreeChange('change', changedPath)
+          } else if (idx > -1 && parent !== undefined) {
+            // Non-root
+            parent.children.splice(idx, 1, reparsed)
+            this._recordFiletreeChange('change', changedPath)
+          } else {
+            this._logger.error(`[FSAL] Received a change event for directory ${changedPath}, but it wasn't found.`)
+          }
+        } else {
+          this._logger.error(`[FSAL] Received a change event for directory ${changedPath}, but its parent was not found.`)
+        }
+      }
     } else if (['change'].includes(event)) {
       // A file has been modified. Can be an attachment, a MD file, or a code file
       const affectedDescriptor = this.find(changedPath) as AnyDescriptor

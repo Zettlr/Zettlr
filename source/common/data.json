@@ -8,8 +8,6 @@
         ".mdx"
     ],
     "ignoreDirs": [
-        "^\\.",
-        "^\\.git",
         ".+?\\.app",
         ".+?\\.textbundle"
     ],

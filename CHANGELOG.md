@@ -271,6 +271,12 @@ there.
   correct link
 - The editor now uses the built-in search panel from CodeMirror
 - Added support for COBOL syntax highlighting
+- Zettlr can now recognize changes to the Zettlr directory files (where things
+  such as sorting and project settings are stored), which means that, if you
+  have Zettlr open on two computers and synchronize your files, changes you make
+  in one app should be picked up by the other
+- Zettlr can now detect changes to the status of a directory as a git repository
+  during runtime
 
 ## Under the Hood
 

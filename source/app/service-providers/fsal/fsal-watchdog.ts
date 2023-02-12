@@ -27,6 +27,7 @@ import { ignoreDirs as IGNORE_DIR_REGEXP } from '@common/data.json'
 import LogProvider from '@providers/log'
 import { hasMdOrCodeExt } from './util/is-md-or-code-file'
 import ConfigProvider from '@providers/config'
+import path from 'path'
 
 /**
 * Represents an event the watchdog can work with
@@ -87,10 +88,17 @@ export default class FSALWatchdog extends EventEmitter {
     // directories that should be ignored and a function that returns true
     // for all files that are _not_ in the filetypes list (whitelisting)
     // Further reading: https://github.com/micromatch/anymatch
-    const ignoreDirs = [/(^|[/\\])\../]
+    const ignoreDirs = [
+      // Ignore dot-dirs/files, except .git (to detect changes to possible
+      // git-repos) and .ztr-files (which contain, e.g., directory settings)
+      // /(?:^|[/\\])\.(?!git|ztr-.+).+/ // /(^|[/\\])\../
+      /(?:^|[/\\])\.(?!git$|ztr-[^\\/]+$).+/
+    ]
 
     // Create new regexps from the strings
-    for (let x of IGNORE_DIR_REGEXP) ignoreDirs.push(new RegExp(x, 'i'))
+    for (let x of IGNORE_DIR_REGEXP) {
+      ignoreDirs.push(new RegExp(x, 'i'))
+    }
 
     const options: chokidar.WatchOptions = {
       useFsEvents: process.platform === 'darwin',
@@ -160,6 +168,22 @@ export default class FSALWatchdog extends EventEmitter {
         const i = this._ignoredEvents[shouldIgnore]
         this._logger.info(`[WATCHDOG] Ignore event: ${i.event}:${i.path}`)
         this._ignoredEvents.splice(shouldIgnore, 1)
+        return
+      }
+
+      // Specials: .git and .ztr-directory
+      const basename = path.basename(p)
+      if (basename === '.git') {
+        const dirname = path.dirname(p)
+        // Even on add or unlink, it's strictly speaking a change for the dir
+        this._logger.info(`[WATCHDOG] Emitting event (.git): change:${dirname}`)
+        this.emit('change', 'change', dirname)
+        return
+      } else if (basename === '.ztr-directory') {
+        const dirname = path.dirname(p)
+        // Even on add or unlink, it's strictly speaking a change for the dir
+        this._logger.info(`[WATCHDOG] Emitting event (.ztr-directory): change:${dirname}`)
+        this.emit('change', 'change', dirname)
         return
       }
 
