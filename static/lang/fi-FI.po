@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-02-10 13:55+0000\n"
+"POT-Creation-Date: 2023-02-14 02:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -278,7 +278,7 @@ msgstr "Tuo sanakirja…"
 
 #: source/app/service-providers/menu/menu.darwin.ts:315
 #: source/app/service-providers/menu/menu.win32.ts:316
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:110
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:111
 msgid "Edit"
 msgstr "Muokkaa"
 
@@ -921,7 +921,7 @@ msgstr "Kommentti"
 msgid "Code"
 msgstr "Koodi"
 
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:99
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:100
 msgid "No footnote text found."
 msgstr ""
 
