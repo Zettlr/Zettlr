@@ -17,7 +17,6 @@
 import { syntaxTree } from '@codemirror/language'
 import { EditorView } from '@codemirror/view'
 import { defaultMenu } from '../context-menu/default-menu'
-import { headingMenu } from '../context-menu/heading-menu'
 import { linkImageMenu } from '../context-menu/link-image-menu'
 
 export const defaultContextMenu = EditorView.domEventHandlers({
@@ -30,20 +29,10 @@ export const defaultContextMenu = EditorView.domEventHandlers({
       return false // No context menu to show
     }
 
-    const node = syntaxTree(view.state).resolve(pos)
+    const node = syntaxTree(view.state).resolveInner(pos)
     console.log(`Context menu at node ${node.type.name}.`)
 
     switch (node.type.name) {
-      case 'ATXHeading1':
-      case 'ATXHeading2':
-      case 'ATXHeading3':
-      case 'ATXHeading4':
-      case 'ATXHeading5':
-      case 'ATXHeading6':
-      case 'SetextHeading1':
-      case 'SetextHeading2':
-        headingMenu(view, node, coords)
-        return true
       case 'Link':
       case 'Image':
         linkImageMenu(view, node, coords)
