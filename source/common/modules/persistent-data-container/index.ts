@@ -139,6 +139,7 @@ export default class PersistentDataContainer {
     try {
       const content = await fs.readFile(this._filePath, { encoding: 'utf-8' })
 
+      if (content.trim().length === 0) throw new Error("Container at " + this._filePath + " was empty (content is null).");
       if (this._dataType === 'json') {
         this._data = JSON.parse(content)
       } else {

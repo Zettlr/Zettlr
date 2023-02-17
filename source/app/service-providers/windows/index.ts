@@ -256,6 +256,7 @@ export default class WindowProvider extends ProviderContract {
       await this._stateContainer.init(Object.fromEntries(this._windowState))
     }
     const tmpObject = await this._stateContainer.get()
+    if (tmpObject === null) this._logger.error('[Window Manager] tmpObject is null');
     this._windowState = new Map(Object.entries(tmpObject))
     this._logger.info('[Window Manager] Window Manager started.')
   }
