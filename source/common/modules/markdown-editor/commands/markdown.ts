@@ -150,7 +150,7 @@ function applyList (target: EditorView, type: 'ul'|'ol'|'task'): void {
       changes.push({ from: line.from, to: line.to, insert: formatting + ' ' + withoutBlocks })
     }
 
-    return { changes, range: EditorSelection.range(range.from, range.to + offsetCharacters) }
+    return { changes, range: EditorSelection.cursor(range.to + offsetCharacters) }
   })
 
   target.dispatch(transaction)
