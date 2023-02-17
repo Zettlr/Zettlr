@@ -23,6 +23,7 @@ import localiseNumber from '@common/util/localise-number'
 import { resolveLangCode } from '@common/util/map-lang-code'
 import showPopupMenu from '@common/modules/window-register/application-menu-helper'
 import { AnyMenuItem } from '@dts/renderer/context'
+import { hasMarkdownExt } from '@providers/fsal/util/is-md-or-code-file'
 
 export interface StatusbarItem {
   content: string
@@ -41,15 +42,17 @@ function createStatusbar (view: EditorView): Panel {
       const elements: StatusbarItem[] = []
       const config = update.state.field(configField)
 
-      // Readability mode
-      elements.push({
-        content: `<cds-icon shape=${config.readabilityMode ? 'eye' : 'eye-hide'}></cds-icon>`,
-        allowHtml: true,
-        title: trans('Readability mode (%s)', config.readabilityAlgorithm),
-        onClick (event) {
-          view.dispatch({ effects: configUpdateEffect.of({ readabilityMode: !config.readabilityMode }) })
-        }
-      })
+      if (hasMarkdownExt(config.metadata.path)) {
+        // Readability mode
+        elements.push({
+          content: `<cds-icon shape=${config.readabilityMode ? 'eye' : 'eye-hide'}></cds-icon>`,
+          allowHtml: true,
+          title: trans('Readability mode (%s)', config.readabilityAlgorithm),
+          onClick (event) {
+            view.dispatch({ effects: configUpdateEffect.of({ readabilityMode: !config.readabilityMode }) })
+          }
+        })
+      }
 
       // Cursor
       const mainOffset = update.state.selection.main.head
