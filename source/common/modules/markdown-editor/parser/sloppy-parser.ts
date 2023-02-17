@@ -26,7 +26,7 @@ export const sloppyParser: InlineParser = {
   name: 'sloppy-parser', // Could be a fancy restaurant name or a bad one for a photographer
   before: 'Link',
   parse: (ctx, next, pos) => {
-    const imgOrLinkRE = /^!?\[(?<alt>.+?)\]\((?<url>.+?)(?:(<whitespace>\s+)"(?<title>.+)")?\)/i
+    const imgOrLinkRE = /^!?\[(?<alt>[^]]+?)\]\((?<url>.+?)(?:(<whitespace>\s+)"(?<title>.+)")?\)/i
     const relativeOffset = pos - ctx.offset
     const relativeSlice = ctx.text.slice(relativeOffset)
     const match = imgOrLinkRE.exec(relativeSlice)
