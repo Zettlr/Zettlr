@@ -159,6 +159,7 @@ export const spellcheck = linter(async view => {
   const diagnostics: Diagnostic[] = []
   const autocorrectValues = view.state.field(configField).autocorrect.replacements.map(x => x.value)
   const textNodes = extractTextnodes(markdownToAST(view.state.doc.toString()))
+    .filter(node => !node.value.startsWith('<!--') && !node.value.endsWith('-->'))
 
   const wordsToCheck: Array<{ word: string, index: number, nodeStart: number }> = textNodes
     // Then, extract all words from the node's value
