@@ -346,6 +346,47 @@ function genericTextNode (from: number, to: number, value: string): TextNode {
 }
 
 /**
+ * Parses an attribute node (PandocAttribute), according to the Pandoc rules
+ * (mostly). cf.: https://pandoc.org/MANUAL.html#extension-attributes
+ *
+ * @param   {Record<string, string>}  oldAttributes  Attribute nodes are merged.
+ * @param   {SyntaxNode}              node           The SyntaxNode
+ * @param   {string}                  markdown       The original markdown
+ *
+ * @return  {Record<string, string>}                 A map of the attributes
+ */
+function parseAttributeNode (oldAttributes: Record<string, string> = {}, node: SyntaxNode, markdown: string): Record<string, string> {
+  if (node.name !== 'PandocAttribute') {
+    return oldAttributes
+  }
+
+  const rawString: string = markdown.substring(node.from + 1, node.to - 1) // Remove { and }
+  const rawAttributes: string[] = rawString.split(/\s+/)
+  // General syntax: {#identifier .class .class key=value key=value}
+  for (const attribute of rawAttributes) {
+    if (attribute.startsWith('.')) {
+      // It's a class
+      if ('class' in oldAttributes) {
+        oldAttributes.class = oldAttributes.class + ' ' + attribute.substring(1)
+      } else {
+        oldAttributes.class = attribute.substring(1)
+      }
+    } else if (attribute.startsWith('#') && !('id' in oldAttributes)) {
+      // It's an ID, but only the *first* one found counts
+      oldAttributes.id = attribute.substring(1)
+    } else if (attribute.includes('=')) {
+      // It's a key=value attribute. NOTE: Later generic attributes override
+      // earlier ones!
+      const parts: string[] = attribute.split('=')
+      if (parts.length === 2) {
+        oldAttributes[parts[0]] = parts[1]
+      } // Else: Invalid
+    }
+  }
+  return oldAttributes
+}
+
+/**
  * Parses the children of ASTNodes who can have children.
  *
  * @param   {T}           astNode   The AST node that must support children
@@ -354,7 +395,7 @@ function genericTextNode (from: number, to: number, value: string): TextNode {
  *
  * @return  {T}                     Returns the same astNode with children.
  */
-function parseChildren<T extends { children: ASTNode[] }> (astNode: T, node: SyntaxNode, markdown: string): T {
+function parseChildren<T extends { children: ASTNode[] } & MDNode> (astNode: T, node: SyntaxNode, markdown: string): T {
   if (node.firstChild === null) {
     if (!EMPTY_NODES.includes(node.name)) {
       const textNode = genericTextNode(node.from, node.to, markdown.substring(node.from, node.to))
@@ -376,7 +417,16 @@ function parseChildren<T extends { children: ASTNode[] }> (astNode: T, node: Syn
       const textNode = genericTextNode(currentIndex, currentChild.from, gap)
       astNode.children.push(textNode)
     }
-    astNode.children.push(parseNode(currentChild, markdown))
+    if (currentChild.name === 'PandocAttribute') {
+      // PandocAttribute nodes should never show up in the tree
+      // TODO: This assumes that the PandocAttribute should apply to the parent
+      // node, but often (e.g., for images) they belong to the previous child!
+      // TODO: Check what the *previous* child was, and if it can have attributes
+      // Docs: https://pandoc.org/MANUAL.html#extension-attributes
+      astNode.attributes = parseAttributeNode(astNode.attributes, currentChild, markdown)
+    } else {
+      astNode.children.push(parseNode(currentChild, markdown))
+    }
     currentIndex = currentChild.to // Must happen before the nextSibling assignment
     currentChild = currentChild.nextSibling
   }
