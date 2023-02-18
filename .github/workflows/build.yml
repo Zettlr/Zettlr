@@ -89,7 +89,7 @@ jobs:
   # havoc because we don't push unstable code to master, BUT it looks bad.
   verify_version:
     name: 'Preflight: Verify version tag'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Clone repository (master branch)
         uses: actions/checkout@v3
@@ -329,7 +329,7 @@ jobs:
     env:
       npm_config_arch: x64
     needs: [preflight, verify_version]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       # Check out master for a regular release, or develop branch for a nightly
       - name: Checkout branch ${{ github.ref_name }}
@@ -366,7 +366,7 @@ jobs:
     env:
       npm_config_arch: arm64
     needs: [preflight, verify_version]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout branch ${{ github.ref_name }}
         uses: actions/checkout@v3
@@ -416,7 +416,7 @@ jobs:
       - build_macos_arm64
       - build_linux_x64
       - build_linux_arm64
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout branch ${{ github.ref_name }}
         uses: actions/checkout@v3
