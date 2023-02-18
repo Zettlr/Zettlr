@@ -51,7 +51,7 @@ import { vim } from '@replit/codemirror-vim'
 import { emacs } from '@replit/codemirror-emacs'
 import { distractionFree } from './plugins/distraction-free'
 import { languageTool } from './linters/language-tool'
-import { statusbar } from './plugins/statusbar'
+import { statusbar } from './statusbar'
 import { themeManager } from './theme'
 import { renderers } from './renderers'
 
