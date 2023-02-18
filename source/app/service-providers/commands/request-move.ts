@@ -37,7 +37,7 @@ export default class RequestMove extends ZettlrCommand {
       from = fsal.findFile(arg.from)
     }
 
-    let to = fsal.findDir(arg.to)
+    const to = fsal.findDir(arg.to)
 
     if (to === undefined || from === undefined) {
       // If findDir doesn't return anything then it's a file
@@ -54,9 +54,7 @@ export default class RequestMove extends ZettlrCommand {
     }
 
     // Let's check if the destination is a child of the source:
-    if (from.type === 'directory' && (
-      fsal.findFile(to.path, [from]) !== null || fsal.findDir(to.path, [from]) !== null
-    )) {
+    if (from.type === 'directory' && fsal.findDir(from.path, [to]) !== undefined) {
       this._app.windows.prompt({
         type: 'error',
         title: trans('Cannot move directory'),
