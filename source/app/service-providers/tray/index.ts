@@ -25,6 +25,7 @@ import ProviderContract from '../provider-contract'
 import WindowProvider from '../windows'
 import LogProvider from '../log'
 import ConfigProvider from '@providers/config'
+import { getCLIArgument, LAUNCH_MINIMIZED } from '@providers/cli-provider'
 
 /**
  * This class generates the Tray in the system notification area
@@ -65,7 +66,7 @@ export default class TrayProvider extends ProviderContract {
   async boot (): Promise<void> {
     this._logger.verbose('Tray provider booting up ...')
     let addToTray: boolean = this._config.get('system.leaveAppRunning')
-    const shouldStartMinimized = process.argv.includes('--launch-minimized')
+    const shouldStartMinimized = getCLIArgument(LAUNCH_MINIMIZED) === true
     const traySupported = process.env.ZETTLR_IS_TRAY_SUPPORTED === '1'
 
     if (shouldStartMinimized && !addToTray && traySupported) {
@@ -157,7 +158,7 @@ export default class TrayProvider extends ProviderContract {
     const menu: MenuItemConstructorOptions[] = [
       {
         label: trans('Show Zettlr'),
-        click: () => this._windows.showAnyWindow(),
+        click: () => this._windows.activateFromTray(),
         type: 'normal'
       },
       { label: '', type: 'separator' },

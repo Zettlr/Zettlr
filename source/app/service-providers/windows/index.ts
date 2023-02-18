@@ -57,6 +57,7 @@ import { DP_EVENTS } from '@dts/common/documents'
 import { trans } from '@common/i18n-main'
 import ConfigProvider from '@providers/config'
 import PersistentDataContainer from '@common/modules/persistent-data-container'
+import { getCLIArgument, LAUNCH_MINIMIZED } from '@providers/cli-provider'
 
 export default class WindowProvider extends ProviderContract {
   private readonly _mainWindows: Record<string, BrowserWindow>
@@ -76,6 +77,7 @@ export default class WindowProvider extends ProviderContract {
   private readonly _configFile: string
   private readonly _stateContainer: PersistentDataContainer
   private readonly _hasRTLLocale: boolean
+  private suppressWindowOpening: boolean
   private readonly _emitter: EventEmitter
 
   constructor (
@@ -101,6 +103,11 @@ export default class WindowProvider extends ProviderContract {
     this._windowState = new Map()
     this._configFile = path.join(app.getPath('userData'), 'window_state.yml')
     this._stateContainer = new PersistentDataContainer(this._configFile, 'yaml', 1000)
+
+    // If the corresponding CLI flag is passed, we should suppress opening of
+    // any windows until the user has manually activated the app by utilizing
+    // the tray menu.
+    this.suppressWindowOpening = getCLIArgument(LAUNCH_MINIMIZED) === true
 
     // Detect whether we have an RTL locale for correct traffic light positions.
     const schema = bcp47.parse(app.getLocale())
@@ -223,12 +230,14 @@ export default class WindowProvider extends ProviderContract {
     })
 
     this._documents.on(DP_EVENTS.NEW_WINDOW, () => {
-      this.showMainWindows()
+      this.syncMainWindows()
     })
 
     this._documents.on(DP_EVENTS.WINDOW_CLOSED, ({ windowId }) => {
       const win = this._mainWindows[windowId]
-      win.close()
+      if (win !== undefined) {
+        win.close()
+      }
     })
   }
 
@@ -239,10 +248,6 @@ export default class WindowProvider extends ProviderContract {
     for (const key in this._mainWindows) {
       this._mainWindows[key].close()
     }
-  }
-
-  newMainWindow (): void {
-    this._documents.newWindow()
   }
 
   /**
@@ -260,11 +265,15 @@ export default class WindowProvider extends ProviderContract {
     this._logger.info('[Window Manager] Window Manager started.')
   }
 
+  /**
+   * This function gets called from the AppServiceContainer after boot. It
+   * should begin opening the main windows, if applicable.
+   */
   public maybeShowWindows (): void {
-    const shouldStartMinimized = process.argv.includes('--launch-minimized')
     const traySupported = process.env.ZETTLR_IS_TRAY_SUPPORTED === '1'
-    if (!shouldStartMinimized || !traySupported) {
-      this.showMainWindows()
+    if (!this.suppressWindowOpening || !traySupported) {
+      this.suppressWindowOpening = false
+      this.syncMainWindows()
     } else {
       this._logger.info('[Window Manager] Application should start in tray. Not showing main window.')
     }
@@ -526,9 +535,25 @@ export default class WindowProvider extends ProviderContract {
   }
 
   /**
-   * Shows the main windows
+   * This function gets called from the tray provider to signal to the window
+   * provider that the user is ready to "activate" the app. Only gets called
+   * once per program run.
    */
-  showMainWindows (): void {
+  public activateFromTray (): void {
+    this.suppressWindowOpening = false
+    this.syncMainWindows() // Ensure all main windows are there
+    this.showAnyWindow() // Ensure at least one window is actually visible
+  }
+
+  /**
+   * Synchronizes the open main windows with the documents manager.
+   */
+  private syncMainWindows (): void {
+    if (this.suppressWindowOpening) {
+      this._logger.info('[Window Manager] Received request to synchronize windows, but the app is still in tray mode.')
+      return
+    }
+
     // Remove main windows that are no longer in the document manager
     const documentKeys = this._documents.windowKeys()
     for (const key in this._mainWindows) {
@@ -567,12 +592,17 @@ export default class WindowProvider extends ProviderContract {
   }
 
   /**
-   * Shows any window. If none are open, the main window will be opened and shown.
+   * Shows any window. If none are open, the main window will be opened and
+   * shown. NOTE: If `suppressWindowOpening` is true, it will not show windows.
    */
   showAnyWindow (): void {
+    if (BrowserWindow.getFocusedWindow() !== null) {
+      return // We already have a focused window
+    }
+
     const windows = BrowserWindow.getAllWindows()
     if (windows.length === 0) {
-      this.showMainWindows()
+      this.syncMainWindows()
     } else {
       this._makeVisible(windows[0])
     }

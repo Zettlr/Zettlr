@@ -23,6 +23,7 @@ import CommandProvider from '@providers/commands'
 import LogProvider from '@providers/log'
 import { zoomIn, zoomOut } from './font-zoom'
 import ConfigProvider from '@providers/config'
+import DocumentManager from '@providers/documents'
 
 export default function getMenu (
   logger: LogProvider,
@@ -30,6 +31,7 @@ export default function getMenu (
   recentDocs: RecentDocumentsProvider,
   commands: CommandProvider,
   windows: WindowProvider,
+  documents: DocumentManager,
   getCheckboxState: (id: string, init: boolean) => boolean,
   setCheckboxState: (id: string, val: boolean) => void
 ): MenuItemConstructorOptions[] {
@@ -596,7 +598,7 @@ export default function getMenu (
           label: 'New window',
           accelerator: 'CmdOrCtrl+Shift+N',
           click: function (menuItem, focusedWindow) {
-            windows.newMainWindow()
+            documents.newWindow()
           }
         }
       ]
