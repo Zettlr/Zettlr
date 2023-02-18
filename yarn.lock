@@ -1852,7 +1852,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:^5.0.0, @typescript-eslint/parser@npm:^5.20.0":
+"@typescript-eslint/parser@npm:^5.0.0":
   version: 5.48.0
   resolution: "@typescript-eslint/parser@npm:5.48.0"
   dependencies:
@@ -1866,6 +1866,23 @@ __metadata:
     typescript:
       optional: true
   checksum: 41d5ce5c8742d286fb083523295a4f186e57bbe4e3da63b6b2de1edbafbcbf6d5225ed3405da2c56e2b0fe1d52bb72babc37508d2ee9b86f6fadad3c4a7950d0
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/parser@npm:^5.52.0":
+  version: 5.52.0
+  resolution: "@typescript-eslint/parser@npm:5.52.0"
+  dependencies:
+    "@typescript-eslint/scope-manager": 5.52.0
+    "@typescript-eslint/types": 5.52.0
+    "@typescript-eslint/typescript-estree": 5.52.0
+    debug: ^4.3.4
+  peerDependencies:
+    eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 1d8ff6e932f9c9db8d24b16ce89fd963f0982c38559e500aa1f8dc5cd66abd02f1659dd1a1361ce550def05331803caa69a69a039b54c94fc0f22919a2305c12
   languageName: node
   linkType: hard
 
@@ -12962,7 +12979,7 @@ __metadata:
     "@types/showdown": ^2.0.0
     "@types/uuid": ^9.0.0
     "@typescript-eslint/eslint-plugin": ^5.52.0
-    "@typescript-eslint/parser": ^5.20.0
+    "@typescript-eslint/parser": ^5.52.0
     "@vercel/webpack-asset-relocator-loader": ^1.7.0
     adm-zip: ^0.5.9
     archiver: ^5.3.1
