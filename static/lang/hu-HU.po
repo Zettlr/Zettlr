@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-02-14 02:41+0000\n"
+"POT-Creation-Date: 2023-02-18 02:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,8 +56,8 @@ msgid "Copy ID"
 msgstr "Azonosítót másolni"
 
 #: source/win-main/file-manager/util/file-item-context.ts:26
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:137
 #: source/tmp/GlobalSearch.vue.ts:40
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:137
 msgid "Open in a new tab"
 msgstr ""
 
@@ -161,6 +161,75 @@ msgstr "A(z) %s opció hossza nem lehet kevesebb, mint %s."
 msgid "Option %s is required."
 msgstr "Kell hozzá a(z) %s opció."
 
+#: source/app/service-providers/citeproc/index.ts:239
+#: source/app/service-providers/citeproc/index.ts:437
+msgid "The citation database could not be loaded"
+msgstr "Az idézetek adatbázisát nem lehet betölteni."
+
+#: source/app/service-providers/citeproc/index.ts:425
+msgid "Changes to the library file detected. Reloading …"
+msgstr "A jegyzék-állomány módosítva lett. Újratöltés…"
+
+#: source/app/service-providers/tray/index.ts:159
+msgid "Show Zettlr"
+msgstr "A Zettlr megjelenítése"
+
+#: source/app/service-providers/tray/index.ts:165
+#: source/app/service-providers/menu/menu.darwin.ts:102
+#: source/app/service-providers/menu/menu.win32.ts:306
+msgid "Quit"
+msgstr "Kilépni"
+
+#: source/app/service-providers/tray/index.ts:172
+msgid "Zettlr"
+msgstr "Zettlr"
+
+#: source/app/service-providers/updates/index.ts:177
+#, javascript-format
+msgid "Could not check for updates: Server Error (Status code: %s)"
+msgstr ""
+"Nem sikerült ellenőrizni a frissítéseket: a kiszolgáló hibája (állapotkód: "
+"%s)."
+
+#: source/app/service-providers/updates/index.ts:179
+#, javascript-format
+msgid "Could not check for updates: Client Error (Status code: %s)"
+msgstr ""
+"Nem sikerült ellenőrizni a frissítéseket: az ügyfél hibája (állapotkód: %s)."
+
+#: source/app/service-providers/updates/index.ts:181
+#, javascript-format
+msgid ""
+"Could not check for updates: The server tried to redirect (Status code: %s)"
+msgstr ""
+"Nem sikerült ellenőrizni a frissítéseket: a kiszolgáló megpróbálta "
+"átirányítani (állapotkód: %s)."
+
+#. getaddrinfo has reported that the host has not been found.
+#. This normally only happens if the networking interface is
+#. offline.
+#: source/app/service-providers/updates/index.ts:186
+msgid "Could not check for updates: Could not establish connection"
+msgstr ""
+"Nem sikerült ellenőrizni a frissítéseket: nem sikerült létrehozni a "
+"kapcsolatot."
+
+#. Something else has occurred. GotError objects have a name property.
+#: source/app/service-providers/updates/index.ts:189
+#, javascript-format
+msgid "Could not check for updates. %s: %s"
+msgstr ""
+
+#: source/app/service-providers/updates/index.ts:205
+msgid "Could not check for updates: Server hasn't sent any data"
+msgstr ""
+"Nem sikerült ellenőrizni a frissítéseket: a kiszolgáló nem küldött adatokat."
+
+#: source/app/service-providers/updates/index.ts:462
+#, javascript-format
+msgid "An update to version %s is available!"
+msgstr ""
+
 #: source/app/service-providers/menu/menu.darwin.ts:44
 #: source/app/service-providers/menu/menu.darwin.ts:639
 #: source/app/service-providers/menu/menu.win32.ts:612
@@ -199,12 +268,6 @@ msgstr "Többit elrejteni"
 msgid "Show"
 msgstr "Megmutatni"
 
-#: source/app/service-providers/menu/menu.darwin.ts:102
-#: source/app/service-providers/menu/menu.win32.ts:306
-#: source/app/service-providers/tray/index.ts:165
-msgid "Quit"
-msgstr "Kilépni"
-
 #: source/app/service-providers/menu/menu.darwin.ts:111
 #: source/app/service-providers/menu/menu.win32.ts:85
 msgid "File"
@@ -236,8 +299,8 @@ msgstr "Elfelejteni"
 #: source/app/service-providers/menu/menu.darwin.ts:195
 #: source/app/service-providers/menu/menu.win32.ts:160
 #: source/app/service-providers/commands/export.ts:74
-#: source/tmp/SnippetsTab.vue.ts:47 source/tmp/CustomCSS.vue.ts:42
-#: source/tmp/CustomCSS.vue.ts:56 source/tmp/Defaults.vue.ts:112
+#: source/tmp/Defaults.vue.ts:112 source/tmp/SnippetsTab.vue.ts:47
+#: source/tmp/CustomCSS.vue.ts:42 source/tmp/CustomCSS.vue.ts:56
 msgid "Save"
 msgstr "Menteni"
 
@@ -500,91 +563,6 @@ msgstr ""
 msgid "Check for updates"
 msgstr "Frissítést ellenőrizni"
 
-#: source/app/service-providers/tray/index.ts:159
-msgid "Show Zettlr"
-msgstr "A Zettlr megjelenítése"
-
-#: source/app/service-providers/tray/index.ts:172
-msgid "Zettlr"
-msgstr "Zettlr"
-
-#: source/app/service-providers/citeproc/index.ts:239
-#: source/app/service-providers/citeproc/index.ts:437
-msgid "The citation database could not be loaded"
-msgstr "Az idézetek adatbázisát nem lehet betölteni."
-
-#: source/app/service-providers/citeproc/index.ts:425
-msgid "Changes to the library file detected. Reloading …"
-msgstr "A jegyzék-állomány módosítva lett. Újratöltés…"
-
-#: source/app/service-providers/commands/export.ts:74
-msgid "Choose export destination"
-msgstr ""
-
-#: source/app/service-providers/commands/export.ts:105
-#, javascript-format
-msgid "Exporting to %s"
-msgstr "%s exportálása"
-
-#: source/app/service-providers/commands/export.ts:117
-msgid "Export failed"
-msgstr "Az exportálás nem sikerült"
-
-#: source/app/service-providers/commands/export.ts:118
-#, javascript-format
-msgid "An error occurred on export: %s"
-msgstr "Hiba történt exportálás közben: %s"
-
-#: source/app/service-providers/commands/dir-new.ts:36
-#: source/app/service-providers/commands/dir-new.ts:37
-#: source/app/service-providers/commands/dir-new.ts:48
-#: source/app/service-providers/commands/dir-new.ts:49
-#: source/app/service-providers/commands/dir-new.ts:59
-msgid "Could not create directory"
-msgstr "A könyvtárat nem lehetett létrehozni"
-
-#. Else standard val for new dirs.
-#: source/app/service-providers/commands/dir-new.ts:42
-#: source/tmp/tree-item.vue.ts:262
-msgid "Untitled"
-msgstr "Névtelen"
-
-#: source/app/service-providers/commands/exporter/default-exporter.ts:32
-#: source/app/service-providers/commands/exporter/pdf-exporter.ts:37
-#: source/app/service-providers/commands/importer/index.ts:46
-msgid ""
-"Pandoc has not been found on this system. Please install Pandoc prior to "
-"exporting or importing files."
-msgstr ""
-"Nincs <em>Pandoc</em> a rendszerben, pedig a Zettlr csak annak segítségével "
-"tud importálni vagy exportálni. Ezért azt külön telepíteni kell."
-
-#: source/app/service-providers/commands/set-open-directory.ts:40
-msgid "Directory not found"
-msgstr "Nincs ilyen könyvtár"
-
-#: source/app/service-providers/commands/set-open-directory.ts:41
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:75
-msgid "The requested directory was not found."
-msgstr "A keresett könyvtár nem található"
-
-#: source/app/service-providers/commands/request-move.ts:62
-msgid "Cannot move directory"
-msgstr "Nem lehet áthelyezni a könyvtárat"
-
-#: source/app/service-providers/commands/request-move.ts:63
-msgid "You cannot move a directory into one of its subdirectories."
-msgstr "Könyvtárat nem lehet a saját alkönyvtárába áthelyezni."
-
-#: source/app/service-providers/commands/request-move.ts:72
-msgid "Cannot move directory or file"
-msgstr "A fájlt illetve könyvtárat nem lehet áthelyezni"
-
-#: source/app/service-providers/commands/request-move.ts:73
-#, javascript-format
-msgid "The file/directory %s already exists in target."
-msgstr "A(z) file vagy könyvtár már létezik."
-
 #: source/app/service-providers/commands/import.ts:35
 msgid "You have to select a directory to import to."
 msgstr "Az importáláshoz ki kell választani egy könyvtárat."
@@ -622,6 +600,63 @@ msgid ""
 "unknown: %s"
 msgstr "A(z) %s fájl(ok) %s típusa ismeretlen, ezért az importálás nem megy."
 
+#: source/app/service-providers/commands/export.ts:74
+msgid "Choose export destination"
+msgstr ""
+
+#: source/app/service-providers/commands/export.ts:105
+#, javascript-format
+msgid "Exporting to %s"
+msgstr "%s exportálása"
+
+#: source/app/service-providers/commands/export.ts:117
+msgid "Export failed"
+msgstr "Az exportálás nem sikerült"
+
+#: source/app/service-providers/commands/export.ts:118
+#, javascript-format
+msgid "An error occurred on export: %s"
+msgstr "Hiba történt exportálás közben: %s"
+
+#: source/app/service-providers/commands/exporter/pdf-exporter.ts:37
+#: source/app/service-providers/commands/exporter/default-exporter.ts:32
+#: source/app/service-providers/commands/importer/index.ts:46
+msgid ""
+"Pandoc has not been found on this system. Please install Pandoc prior to "
+"exporting or importing files."
+msgstr ""
+"Nincs <em>Pandoc</em> a rendszerben, pedig a Zettlr csak annak segítségével "
+"tud importálni vagy exportálni. Ezért azt külön telepíteni kell."
+
+#: source/app/service-providers/commands/file-duplicate.ts:43
+#: source/app/service-providers/commands/file-duplicate.ts:59
+#: source/app/service-providers/commands/file-new.ts:161
+msgid "Could not create file"
+msgstr "A fájlt nem lehetett létrehozni"
+
+#. We need to generate our own filename. First, attempt to just use 'copy of'
+#: source/app/service-providers/commands/file-duplicate.ts:71
+#, javascript-format
+msgid "Copy of %s"
+msgstr ""
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:37
+msgid "The requested file was not found."
+msgstr "A keresett fájl nem található."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:54
+msgid "The provided name did not contain any allowed letters."
+msgstr "A megadott név nem tartalmazott engedélyezett betűket."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:75
+#: source/app/service-providers/commands/set-open-directory.ts:41
+msgid "The requested directory was not found."
+msgstr "A keresett könyvtár nem található"
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:86
+msgid "Could not save image"
+msgstr "A képet nem lehetett menteni"
+
 #: source/app/service-providers/commands/language-tool.ts:180
 msgid "Document too long"
 msgstr ""
@@ -630,9 +665,76 @@ msgstr ""
 msgid "offline"
 msgstr ""
 
+#: source/app/service-providers/commands/rename-tag.ts:44
+#: source/app/service-providers/commands/file-rename.ts:93
+msgid "Confirm"
+msgstr ""
+
+#: source/app/service-providers/commands/rename-tag.ts:45
+#, javascript-format
+msgid "Replace tag \"%s\" with \"%s\" across %s files?"
+msgstr ""
+
+#: source/app/service-providers/commands/rename-tag.ts:47
+#: source/app/service-providers/commands/file-rename.ts:96
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
+msgid "Yes"
+msgstr ""
+
+#. 1: Omit all changes
+#: source/app/service-providers/commands/rename-tag.ts:48
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:30
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:36
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
+#: source/tmp/CustomCSS.vue.ts:49
+msgid "Cancel"
+msgstr "Mégsem"
+
+#: source/app/service-providers/commands/set-open-directory.ts:40
+msgid "Directory not found"
+msgstr "Nincs ilyen könyvtár"
+
+#: source/app/service-providers/commands/importer/import-textbundle.ts:63
+#: source/app/service-providers/commands/importer/import-textbundle.ts:69
+#, javascript-format
+msgid "Malformed Textbundle: %s"
+msgstr "Rosszul formázott szövegköteg: %s"
+
+#: source/app/service-providers/commands/request-move.ts:62
+msgid "Cannot move directory"
+msgstr "Nem lehet áthelyezni a könyvtárat"
+
+#: source/app/service-providers/commands/request-move.ts:63
+msgid "You cannot move a directory into one of its subdirectories."
+msgstr "Könyvtárat nem lehet a saját alkönyvtárába áthelyezni."
+
+#: source/app/service-providers/commands/request-move.ts:72
+msgid "Cannot move directory or file"
+msgstr "A fájlt illetve könyvtárat nem lehet áthelyezni"
+
+#: source/app/service-providers/commands/request-move.ts:73
+#, javascript-format
+msgid "The file/directory %s already exists in target."
+msgstr "A(z) file vagy könyvtár már létezik."
+
+#: source/app/service-providers/commands/dir-new.ts:36
+#: source/app/service-providers/commands/dir-new.ts:37
+#: source/app/service-providers/commands/dir-new.ts:48
+#: source/app/service-providers/commands/dir-new.ts:49
+#: source/app/service-providers/commands/dir-new.ts:59
+msgid "Could not create directory"
+msgstr "A könyvtárat nem lehetett létrehozni"
+
+#. Else standard val for new dirs.
+#: source/app/service-providers/commands/dir-new.ts:42
+#: source/tmp/tree-item.vue.ts:262
+msgid "Untitled"
+msgstr "Névtelen"
+
 #: source/app/service-providers/commands/root-open.ts:60
-#: source/tmp/file-tree.vue.ts:26 source/tmp/PopoverDirProps.vue.ts:156
-#: source/tmp/file-item.vue.ts:119
+#: source/tmp/file-item.vue.ts:119 source/tmp/PopoverDirProps.vue.ts:156
+#: source/tmp/file-tree.vue.ts:26
 msgid "Files"
 msgstr "Fájlok"
 
@@ -667,49 +769,16 @@ msgstr ""
 msgid "Could not open workspace %s."
 msgstr ""
 
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:37
-msgid "The requested file was not found."
-msgstr "A keresett fájl nem található."
-
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:54
-msgid "The provided name did not contain any allowed letters."
-msgstr "A megadott név nem tartalmazott engedélyezett betűket."
-
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:86
-msgid "Could not save image"
-msgstr "A képet nem lehetett menteni"
-
-#: source/app/service-providers/commands/importer/import-textbundle.ts:63
-#: source/app/service-providers/commands/importer/import-textbundle.ts:69
+#: source/app/service-providers/commands/file-rename.ts:94
 #, javascript-format
-msgid "Malformed Textbundle: %s"
-msgstr "Rosszul formázott szövegköteg: %s"
-
-#: source/app/service-providers/commands/rename-tag.ts:44
-#: source/app/service-providers/commands/file-rename.ts:93
-msgid "Confirm"
+msgid "Update %s internal links to file %s?"
 msgstr ""
 
-#: source/app/service-providers/commands/rename-tag.ts:45
-#, javascript-format
-msgid "Replace tag \"%s\" with \"%s\" across %s files?"
+#. 0: Save all changes
+#: source/app/service-providers/commands/file-rename.ts:97
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
+msgid "No"
 msgstr ""
-
-#: source/app/service-providers/commands/rename-tag.ts:47
-#: source/app/service-providers/commands/file-rename.ts:96
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
-msgid "Yes"
-msgstr ""
-
-#. 1: Omit all changes
-#: source/app/service-providers/commands/rename-tag.ts:48
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:36
-#: source/app/service-providers/windows/dialog/confirm-remove.ts:30
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
-#: source/tmp/CustomCSS.vue.ts:49
-msgid "Cancel"
-msgstr "Mégsem"
 
 #: source/app/service-providers/commands/import-lang-file.ts:59
 #, javascript-format
@@ -722,21 +791,14 @@ msgstr "A(z) %s fordítás importálása sikerült"
 msgid "Could not import language file %s!"
 msgstr "A(z) %s fordítás importálása nem sikerült!"
 
-#: source/app/service-providers/commands/file-new.ts:161
-#: source/app/service-providers/commands/file-duplicate.ts:43
-#: source/app/service-providers/commands/file-duplicate.ts:59
-msgid "Could not create file"
-msgstr "A fájlt nem lehetett létrehozni"
-
-#: source/app/service-providers/commands/file-rename.ts:94
+#. Better error message
+#: source/app/service-providers/commands/open-attachment.ts:92
 #, javascript-format
-msgid "Update %s internal links to file %s?"
+msgid "The reference with key %s does not appear to have attachments."
 msgstr ""
 
-#. 0: Save all changes
-#: source/app/service-providers/commands/file-rename.ts:97
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
-msgid "No"
+#: source/app/service-providers/commands/open-attachment.ts:97
+msgid "Could not open attachment. Is Zotero running?"
 msgstr ""
 
 #: source/app/service-providers/commands/dir-project-export.ts:121
@@ -748,21 +810,29 @@ msgstr ""
 msgid "Export"
 msgstr "Exportálni …"
 
-#. We need to generate our own filename. First, attempt to just use 'copy of'
-#: source/app/service-providers/commands/file-duplicate.ts:71
-#, javascript-format
-msgid "Copy of %s"
+#: source/app/service-providers/windows/dialog/save-dialog.ts:52
+msgid "Save file"
+msgstr "Fájl mentése"
+
+#: source/app/service-providers/windows/dialog/prompt.ts:32
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:30
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:37
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:33
+msgid "Ok"
+msgstr "Oké"
+
+#: source/app/service-providers/windows/dialog/ask-file.ts:47
+msgid "Open file"
 msgstr ""
 
-#. Better error message
-#: source/app/service-providers/commands/open-attachment.ts:92
-#, javascript-format
-msgid "The reference with key %s does not appear to have attachments."
-msgstr ""
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:33
+msgid "Really delete?"
+msgstr "Tényleg törölni?"
 
-#: source/app/service-providers/commands/open-attachment.ts:97
-msgid "Could not open attachment. Is Zotero running?"
-msgstr ""
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:34
+#, javascript-format
+msgid "Do you really want to remove %s?"
+msgstr "%s tényleg törlendő?"
 
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:31
 msgid "Replace file"
@@ -780,26 +850,6 @@ msgstr ""
 msgid "Always load remote changes to the current file"
 msgstr "Külső változtatásokat mindig betölteni"
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:37
-#: source/app/service-providers/windows/dialog/confirm-remove.ts:30
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:33
-#: source/app/service-providers/windows/dialog/prompt.ts:32
-msgid "Ok"
-msgstr "Oké"
-
-#: source/app/service-providers/windows/dialog/save-dialog.ts:52
-msgid "Save file"
-msgstr "Fájl mentése"
-
-#: source/app/service-providers/windows/dialog/confirm-remove.ts:33
-msgid "Really delete?"
-msgstr "Tényleg törölni?"
-
-#: source/app/service-providers/windows/dialog/confirm-remove.ts:34
-#, javascript-format
-msgid "Do you really want to remove %s?"
-msgstr "%s tényleg törlendő?"
-
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:29
 msgid "Overwrite existing file"
 msgstr ""
@@ -811,8 +861,8 @@ msgstr ""
 
 #. If the user cancels, do not omit (the default) but actually cancel
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
-#: source/tmp/SnippetsTab.vue.ts:65 source/tmp/CustomCSS.vue.ts:65
-#: source/tmp/Defaults.vue.ts:130
+#: source/tmp/Defaults.vue.ts:130 source/tmp/SnippetsTab.vue.ts:65
+#: source/tmp/CustomCSS.vue.ts:65
 msgid "Unsaved changes"
 msgstr ""
 
@@ -821,202 +871,1059 @@ msgstr ""
 msgid "There are unsaved changes. Do you want to save them first?"
 msgstr "A fájl megváltozott. Menteni vagy eldobni?"
 
-#: source/app/service-providers/windows/dialog/ask-file.ts:47
-msgid "Open file"
-msgstr ""
+#: source/tmp/file-item.vue.ts:113 source/tmp/PopoverDirProps.vue.ts:147
+msgid "Directories"
+msgstr "Könyvtárak"
 
-#: source/app/service-providers/updates/index.ts:177
-#, javascript-format
-msgid "Could not check for updates: Server Error (Status code: %s)"
-msgstr ""
-"Nem sikerült ellenőrizni a frissítéseket: a kiszolgáló hibája (állapotkód: "
-"%s)."
-
-#: source/app/service-providers/updates/index.ts:179
-#, javascript-format
-msgid "Could not check for updates: Client Error (Status code: %s)"
-msgstr ""
-"Nem sikerült ellenőrizni a frissítéseket: az ügyfél hibája (állapotkód: %s)."
-
-#: source/app/service-providers/updates/index.ts:181
-#, javascript-format
-msgid ""
-"Could not check for updates: The server tried to redirect (Status code: %s)"
-msgstr ""
-"Nem sikerült ellenőrizni a frissítéseket: a kiszolgáló megpróbálta "
-"átirányítani (állapotkód: %s)."
-
-#. getaddrinfo has reported that the host has not been found.
-#. This normally only happens if the networking interface is
-#. offline.
-#: source/app/service-providers/updates/index.ts:186
-msgid "Could not check for updates: Could not establish connection"
-msgstr ""
-"Nem sikerült ellenőrizni a frissítéseket: nem sikerült létrehozni a "
-"kapcsolatot."
-
-#. Something else has occurred. GotError objects have a name property.
-#: source/app/service-providers/updates/index.ts:189
-#, javascript-format
-msgid "Could not check for updates. %s: %s"
-msgstr ""
-
-#: source/app/service-providers/updates/index.ts:205
-msgid "Could not check for updates: Server hasn't sent any data"
-msgstr ""
-"Nem sikerült ellenőrizni a frissítéseket: a kiszolgáló nem küldött adatokat."
-
-#: source/app/service-providers/updates/index.ts:462
-#, javascript-format
-msgid "An update to version %s is available!"
-msgstr ""
-
-#: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
-msgid "No highlighting"
-msgstr ""
-
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:66
-#, javascript-format
-msgid "File %s does not exist."
-msgstr ""
-
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:96
-msgid "Word count"
-msgstr ""
-
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:98
-#: source/tmp/PopoverDirProps.vue.ts:150 source/tmp/PopoverFileProps.vue.ts:68
-msgid "Modified"
-msgstr ""
-
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:42
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
-#: source/win-preferences/schema/editor.ts:26
-#: source/win-preferences/schema/editor.ts:27
-msgid "Bold"
-msgstr "Félkövér"
-
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:47
-#: source/win-preferences/schema/editor.ts:34
-#: source/win-preferences/schema/editor.ts:35
-msgid "Italics"
-msgstr "Dőlt betűs"
-
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:52
-msgid "Link"
-msgstr "Hivatkozás"
-
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:57
-msgid "Image"
-msgstr "Kép"
-
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:62
-msgid "Comment"
-msgstr "Megjegyzés"
-
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:67
-msgid "Code"
-msgstr "Forráskód"
-
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:100
-msgid "No footnote text found."
-msgstr ""
-
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:48
-#, javascript-format
-msgid "Readability mode (%s)"
-msgstr ""
-
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:64
-#: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/PopoverDirProps.vue.ts:144
-#: source/tmp/PopoverFileProps.vue.ts:89 source/tmp/file-item.vue.ts:134
-#: source/tmp/file-item.vue.ts:207
-#, javascript-format
-msgid "%s words"
-msgstr "%s szó"
-
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:67
-#: source/tmp/PopoverDocInfo.vue.ts:71 source/tmp/file-item.vue.ts:132
-#: source/tmp/file-item.vue.ts:205
+#: source/tmp/file-item.vue.ts:132 source/tmp/file-item.vue.ts:205
+#: source/tmp/PopoverDocInfo.vue.ts:71
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:70
 #, javascript-format
 msgid "%s characters"
 msgstr ""
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:176
-msgid "Detect automatically"
-msgstr ""
-
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:211
-msgid "Open diagnostics panel"
-msgstr ""
-
-#: source/common/modules/markdown-editor/renderers/render-images.ts:92
+#: source/tmp/file-item.vue.ts:134 source/tmp/file-item.vue.ts:207
+#: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/PopoverDirProps.vue.ts:144
+#: source/tmp/PopoverFileProps.vue.ts:89
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:67
 #, javascript-format
-msgid "Image not found: %s"
+msgid "%s words"
+msgstr "%s szó"
+
+#: source/tmp/file-item.vue.ts:193 source/tmp/PopoverFileProps.vue.ts:77
+msgid "Characters"
+msgstr "Betű"
+
+#: source/tmp/file-item.vue.ts:195 source/tmp/PopoverFileProps.vue.ts:62
+msgid "Words"
+msgstr "Szó"
+
+#: source/tmp/file-list.vue.ts:66 source/tmp/file-tree.vue.ts:35
+msgid "No results"
 msgstr ""
 
-#: source/common/modules/markdown-editor/linters/spellcheck.ts:148
-msgid "Spelling mistake"
+#: source/tmp/file-list.vue.ts:69
+msgid "No directory selected"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/equation-menu.ts:33
-msgid "Copy equation code"
+#: source/tmp/file-list.vue.ts:72
+msgid "Empty directory"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:71
-msgid "Open Link"
-msgstr "Hivatkozást megnyitni"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
-msgid "Copy Mail Address"
-msgstr "Levelezési címet másolni"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
-msgid "Copy Link"
-msgstr "Hivatkozást másolni"
-
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:89
-msgid "Copy image to clipboard"
+#: source/tmp/ToCTab.vue.ts:53 source/tmp/MainSidebar.vue.ts:80
+msgid "Table of Contents"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:95
-msgid "Open in browser"
+#: source/tmp/GlobalSearch.vue.ts:116
+msgid "Full-Text Search"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:133
-msgid "No suggestions"
-msgstr "Nincsen javaslat"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:142
-msgid "Add to dictionary"
-msgstr "A szótárhoz adni"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:159
-msgid "Italic"
-msgstr "Félkövér betű"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:169
-msgid "Insert link"
-msgstr "Hivatkozást beszúrni"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:176
-msgid "Insert numbered list"
-msgstr "Számozott felsorolást beszúrni"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:182
-msgid "Insert unordered list"
-msgstr "Felsorolást beszúrni"
-
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:188
-msgid "Insert tasklist"
+#: source/tmp/GlobalSearch.vue.ts:119
+msgid "Enter your search terms below"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:195
-msgid "Blockquote"
-msgstr "Idézetblokk"
+#: source/tmp/GlobalSearch.vue.ts:122
+msgid "Find …"
+msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:201
-msgid "Insert Table"
+#: source/tmp/GlobalSearch.vue.ts:125
+msgid "Filter …"
+msgstr ""
+
+#: source/tmp/GlobalSearch.vue.ts:128
+msgid "Filter search results"
+msgstr ""
+
+#: source/tmp/GlobalSearch.vue.ts:131
+msgid "Restrict search to directory"
+msgstr ""
+
+#: source/tmp/GlobalSearch.vue.ts:134
+msgid "Restrict to directory …"
+msgstr ""
+
+#: source/tmp/GlobalSearch.vue.ts:137
+msgid "Search"
+msgstr ""
+
+#: source/tmp/GlobalSearch.vue.ts:140
+msgid "Clear search"
+msgstr ""
+
+#: source/tmp/GlobalSearch.vue.ts:143
+msgid "Toggle results"
+msgstr ""
+
+#: source/tmp/PopoverPomodoro.vue.ts:72
+msgid "Start"
+msgstr "Indítani"
+
+#: source/tmp/PopoverPomodoro.vue.ts:75
+msgid "Stop"
+msgstr "Megállítani"
+
+#: source/tmp/PopoverPomodoro.vue.ts:78
+msgid "Work"
+msgstr "Tevékenységi idő"
+
+#: source/tmp/PopoverPomodoro.vue.ts:81
+msgid "Short break"
+msgstr "Kis szünet"
+
+#: source/tmp/PopoverPomodoro.vue.ts:84
+msgid "Break"
+msgstr "Nagy szünet"
+
+#: source/tmp/PopoverPomodoro.vue.ts:87
+msgid "Sound Effect"
+msgstr ""
+
+#: source/tmp/PopoverPomodoro.vue.ts:90
+msgid "Volume"
+msgstr ""
+
+#: source/tmp/ChartView.vue.ts:60
+msgid "Charts"
+msgstr ""
+
+#: source/tmp/Projects-Tab.vue.ts:24
+msgid "Zettlr also makes use of these projects:"
+msgstr "Zettlr a következő projekteket is felhasználja:"
+
+#: source/tmp/PopoverDocInfo.vue.ts:35
+msgid "No open document"
+msgstr ""
+
+#: source/tmp/PopoverDocInfo.vue.ts:38
+msgid "words"
+msgstr "szavak"
+
+#: source/tmp/PopoverDocInfo.vue.ts:41
+msgid "characters"
+msgstr "betűk"
+
+#: source/tmp/PopoverDocInfo.vue.ts:44
+msgid "characters (w/o spaces)"
+msgstr "szóköz nélküli betűk"
+
+#: source/tmp/ReferencesTab.vue.ts:20 source/tmp/MainSidebar.vue.ts:77
+msgid "References"
+msgstr "Irodalom jegyzék"
+
+#: source/tmp/ReferencesTab.vue.ts:32
+msgid "There are no citations in this document."
+msgstr "Ebben a dokumentumban nincsenek idézetek."
+
+#: source/tmp/Theme.vue.ts:37
+msgid "selected"
+msgstr ""
+
+#: source/tmp/Theme.vue.ts:40
+msgid "click to select"
+msgstr ""
+
+#: source/tmp/File.vue.ts:59 source/tmp/PopoverFileProps.vue.ts:71
+#: source/tmp/Color.vue.ts:50 source/tmp/Number.vue.ts:59
+#: source/tmp/ShortcutChooser.vue.ts:61
+msgid "Reset"
+msgstr ""
+
+#: source/tmp/Defaults.vue.ts:70
+msgid ""
+"This profile is protected. This means that it will be restored when you "
+"remove or rename it."
+msgstr ""
+
+#: source/tmp/Defaults.vue.ts:73
+msgid ""
+"This profile appears to be either missing the writer or reader property. "
+"Make sure to set both so that Zettlr can use this profile."
+msgstr ""
+
+#: source/tmp/Defaults.vue.ts:109
+msgid "Edit the default settings for imports or exports here."
+msgstr ""
+
+#: source/tmp/Defaults.vue.ts:192 source/tmp/SnippetsTab.vue.ts:124
+#: source/tmp/CustomCSS.vue.ts:88
+msgid "Saving …"
+msgstr ""
+
+#: source/tmp/Defaults.vue.ts:201 source/tmp/SnippetsTab.vue.ts:134
+msgid "Saved!"
+msgstr ""
+
+#: source/tmp/PopoverTags.vue.ts:77
+msgid "Name"
+msgstr ""
+
+#: source/tmp/PopoverTags.vue.ts:78
+msgid "Count"
+msgstr ""
+
+#: source/tmp/PopoverTags.vue.ts:103
+msgid "Filter tags…"
+msgstr "Szűrési címkék..."
+
+#: source/tmp/PopoverTags.vue.ts:106
+msgid "Tag Cloud"
+msgstr "Címkefelhő"
+
+#: source/tmp/PopoverTags.vue.ts:109
+msgid "Suggested tags for the current file"
+msgstr ""
+
+#: source/tmp/PopoverTags.vue.ts:112
+msgid "Add to file"
+msgstr ""
+
+#: source/tmp/App.vue.ts:34
+msgid "Updater"
+msgstr ""
+
+#. True as soon as the update starts
+#: source/tmp/App.vue.ts:36
+msgid "Click to start update"
+msgstr ""
+
+#: source/tmp/App.vue.ts:75
+msgid "New update available"
+msgstr "Van új frissítés"
+
+#: source/tmp/App.vue.ts:78
+msgid "Your version"
+msgstr "Telepített verzió"
+
+#: source/tmp/App.vue.ts:81
+msgid ""
+"There is a new version of Zettlr available to download. Please read the "
+"changelog below."
+msgstr "Letölthető a Zettlr új verziója. A változásokat lásd alább."
+
+#: source/tmp/App.vue.ts:84
+msgid "Downloading your update"
+msgstr ""
+
+#: source/tmp/App.vue.ts:87
+msgid "No update available. You have the most recent version."
+msgstr ""
+
+#: source/tmp/App.vue.ts:132
+msgid "Starting update …"
+msgstr ""
+
+#: source/tmp/PopoverDirProps.vue.ts:150 source/tmp/PopoverFileProps.vue.ts:68
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:98
+msgid "Modified"
+msgstr ""
+
+#: source/tmp/PopoverDirProps.vue.ts:153 source/tmp/PopoverFileProps.vue.ts:65
+msgid "Created"
+msgstr ""
+
+#: source/tmp/PopoverDirProps.vue.ts:162
+msgid "Project Settings…"
+msgstr "Projekt beállítások …"
+
+#: source/tmp/PopoverFileProps.vue.ts:74
+msgid "Set writing target…"
+msgstr "Célteljesítményt kitűzni …"
+
+#: source/tmp/RelatedFilesTab.vue.ts:23 source/tmp/MainSidebar.vue.ts:83
+msgid "Related files"
+msgstr ""
+
+#: source/tmp/RelatedFilesTab.vue.ts:26
+msgid "No related files"
+msgstr ""
+
+#: source/tmp/RelatedFilesTab.vue.ts:29
+msgid "This relation is based on a bidirectional link."
+msgstr ""
+
+#: source/tmp/RelatedFilesTab.vue.ts:32
+msgid "This relation is based on an outbound link."
+msgstr ""
+
+#: source/tmp/RelatedFilesTab.vue.ts:35
+msgid "This relation is based on a backlink."
+msgstr ""
+
+#: source/tmp/RelatedFilesTab.vue.ts:113
+#, javascript-format
+msgid "This relation is based on %s shared tags: %s"
+msgstr ""
+
+#: source/tmp/General-Tab.vue.ts:23
+msgid ""
+"Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. "
+"It is Open Source, free of charge and based upon the Electron framework. "
+"Zettlr would like to thank the developers of Electron, the Node.js framework "
+"and the CodeMirror editor for their work. Without them, Zettlr would not be "
+"possible. Below you can find all projects that Zettlr uses."
+msgstr ""
+"A Zettlr Hendrik Erz projektje, amelyet a GNU GPL v3 licenc alapján "
+"licenceltek. A program nyílt forráskódú, ingyenes és az Elektron "
+"keretrendszeren alapszik. A projekt szeretné megköszönni az Electron, a Node."
+"js keretrendszer, valamint a CodeMirror szövegszerkesztő fejlesztőinek "
+"munkáját. Nélkülük a Zettlr nem lenne lehetséges. Az alábbiakban "
+"megtalálható a Zettlr keretén belül felhasznált összes projekt."
+
+#: source/tmp/General-Tab.vue.ts:24
+msgid ""
+"Zettlr makes use of citeproc to display citations directly in the editor. To "
+"this end, Zettlr uses the CitationStyleLanguage (CSL) language and style "
+"files. The files have been shipped unaltered with author metadata. More "
+"information:"
+msgstr ""
+"A Zettlr a citeproc-ot használja az idézetek közvetlen megjelenítésére. E "
+"célból Citation Style Language (CSL) nyelvi és stílusfájlok kerülnek "
+"felhasználásra, melyekhez szerzői meta-adatok csatoltattak. Egyéb információ "
+"erről:"
+
+#: source/tmp/General-Tab.vue.ts:25
+msgid ""
+"All logos and brand names are subject to their rightful owners. Besides "
+"using their code, Zettlr is in no way affiliated with any of these projects. "
+"Node.js is a trademark of Joyent, Inc."
+msgstr ""
+"Minden logó és márkanév jogosult tulajdonosáé. A kód felhasználásán kívül a "
+"Zettlr semmilyen módon nem kapcsolódik ezekhez a projektekhez. A Node.js a "
+"Joyent, Inc. védjegye."
+
+#: source/tmp/General-Tab.vue.ts:26
+msgid ""
+"Zettlr offers an integration with LanguageTool.org, a service provided by "
+"LanguageTooler GmbH. Using this service requires an internet connection and "
+"is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
+"server that you use."
+msgstr ""
+
+#: source/tmp/SnippetsTab.vue.ts:50
+msgid "Rename snippet"
+msgstr ""
+
+#: source/tmp/SnippetsTab.vue.ts:53
+msgid "Snippets let you define reusable pieces of text with variables."
+msgstr ""
+
+#: source/tmp/CalendarView.vue.ts:59
+msgid "Calendar"
+msgstr ""
+
+#: source/tmp/CalendarView.vue.ts:77
+msgid "January"
+msgstr ""
+
+#: source/tmp/CalendarView.vue.ts:78
+msgid "February"
+msgstr ""
+
+#: source/tmp/CalendarView.vue.ts:79
+msgid "March"
+msgstr ""
+
+#: source/tmp/CalendarView.vue.ts:80
+msgid "April"
+msgstr ""
+
+#: source/tmp/CalendarView.vue.ts:81
+msgid "May"
+msgstr ""
+
+#: source/tmp/CalendarView.vue.ts:82
+msgid "June"
+msgstr ""
+
+#: source/tmp/CalendarView.vue.ts:83
+msgid "July"
+msgstr ""
+
+#: source/tmp/CalendarView.vue.ts:84
+msgid "August"
+msgstr ""
+
+#: source/tmp/CalendarView.vue.ts:85
+msgid "September"
+msgstr ""
+
+#: source/tmp/CalendarView.vue.ts:86
+msgid "October"
+msgstr ""
+
+#: source/tmp/CalendarView.vue.ts:87
+msgid "November"
+msgstr ""
+
+#: source/tmp/CalendarView.vue.ts:88
+msgid "December"
+msgstr ""
+
+#: source/tmp/CalendarView.vue.ts:104
+msgid "Below the monthly average"
+msgstr ""
+
+#: source/tmp/CalendarView.vue.ts:107
+msgid "Over the monthly average"
+msgstr ""
+
+#: source/tmp/CalendarView.vue.ts:110
+msgid "More than twice the monthly average"
+msgstr ""
+
+#: source/tmp/OtherFilesTab.vue.ts:13 source/tmp/MainSidebar.vue.ts:74
+msgid "Other files"
+msgstr ""
+
+#: source/tmp/OtherFilesTab.vue.ts:19
+msgid "No other files"
+msgstr ""
+
+#: source/tmp/file-tree.vue.ts:29
+msgid "Workspaces"
+msgstr ""
+
+#: source/tmp/file-tree.vue.ts:32
+msgid "No open files or folders"
+msgstr "Nincs nyitva fájl illetve könyvtár"
+
+#: source/tmp/List.vue.ts:141
+msgid "Add"
+msgstr ""
+
+#: source/tmp/List.vue.ts:144
+msgid "Actions"
+msgstr ""
+
+#: source/tmp/List.vue.ts:147
+#, fuzzy
+msgid "Delete"
+msgstr "Fájlt törölni"
+
+#. Apparently we have a simple array, so exactly one column
+#: source/tmp/List.vue.ts:169
+msgid "Item"
+msgstr ""
+
+#: source/tmp/PopoverStats.vue.ts:111
+msgid "words last month"
+msgstr "a múlt hónapban gépelt szó"
+
+#: source/tmp/PopoverStats.vue.ts:114
+msgid "daily average"
+msgstr "napi átlag"
+
+#: source/tmp/PopoverStats.vue.ts:117
+msgid "words today"
+msgstr "ma gépelt szó"
+
+#: source/tmp/PopoverStats.vue.ts:120
+msgid "🔥 You're on fire!"
+msgstr "🔥 Éget a szorgalom!"
+
+#: source/tmp/PopoverStats.vue.ts:123
+msgid "💪 You're close to hitting your daily average!"
+msgstr "💪 Közel áll a napi átlaghoz!"
+
+#: source/tmp/PopoverStats.vue.ts:126
+msgid "✍🏼 Get writing to surpass your daily average."
+msgstr "✍🏼 Írni kéne még meg a napi átlaghoz!"
+
+#: source/tmp/PopoverStats.vue.ts:129
+msgid "More statistics …"
+msgstr ""
+
+#: source/tmp/CustomCSS.vue.ts:31
+msgid "Custom CSS"
+msgstr "Egyéni CSS"
+
+#: source/tmp/CustomCSS.vue.ts:32
+msgid ""
+"Here you can override the styles of Zettlr to customise it even further. "
+"<strong>Attention: This file overrides all CSS directives! Never alter the "
+"geometry of elements, otherwise the app may expose unwanted behaviour!</"
+"strong>"
+msgstr ""
+"A pontosabb testreszabás érdekében itt felülbírálhatja a Zettlr stílusát. "
+"<strong> Figyelem: Ez a fájl felülírja az összes CSS-irányelvet! Soha ne "
+"változtassa meg az elemek geometriáját, különben az alkalmazás viselkedése "
+"előreláthatatlanná válik! </strong>"
+
+#: source/tmp/CustomCSS.vue.ts:97
+msgid "Saving failed"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:23
+msgid "ID regular expression"
+msgstr "Az azonosító reguláris kifejezése"
+
+#: source/win-preferences/schema/zettelkasten.ts:29
+msgid "Pattern used to generate new IDs"
+msgstr "Az azonosítókhoz használt minta"
+
+#. TODO: Create this type
+#: source/win-preferences/schema/zettelkasten.ts:38
+msgid "Options for ZKN elements"
+msgstr "A cédulás doboz jellemzői"
+
+#: source/win-preferences/schema/zettelkasten.ts:42
+msgid "Link with filename only"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:47
+msgid "When linking files, add the filename …"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:50
+msgid "always"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:51
+msgid "only when linking using the ID"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:52
+msgid "never"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:60
+msgid "Start a search when following Zettelkasten-links"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:65
+msgid "Automatically create non-existing files when following internal links"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:70
+msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
+msgstr ""
+
+#: source/win-preferences/schema/export.ts:23
+msgid "Use the internal Pandoc for exports"
+msgstr ""
+
+#: source/win-preferences/schema/export.ts:30
+msgid "Remove tags from files"
+msgstr "Címkéket eltávolítani"
+
+#: source/win-preferences/schema/export.ts:40
+msgid "Remove internal links completely"
+msgstr "Eltávolítani a belső hivatkozásokat"
+
+#: source/win-preferences/schema/export.ts:41
+msgid "Unlink internal links"
+msgstr "Kikapcsolni a belső hivatkozásokat"
+
+#: source/win-preferences/schema/export.ts:42
+msgid "Don't touch internal links"
+msgstr "Megtartani a belső hivatkozásokat"
+
+#: source/win-preferences/schema/export.ts:49
+msgid ""
+"Target directory for exported files. <em>Attention:</em> Selecting the "
+"current working directory will overwrite files without warning!"
+msgstr ""
+"Exportált fájlok célkönyvtára. <em> Figyelem: </em> Az aktuális "
+"munkakönyvtár kiválasztása figyelmeztetés nélkül felülírja a fájlokat!"
+
+#: source/win-preferences/schema/export.ts:52
+msgid "Temporary directory: is regularly expunged"
+msgstr "Ideiglenes könyvtár (rendszeresen kiürítve)"
+
+#: source/win-preferences/schema/export.ts:53
+msgid ""
+"Current working directory: exported files will be saved into the currently "
+"selected directory."
+msgstr ""
+"Jelenlegi munkakönyvtár: az exportált fájlokat az aktuálisan kiválasztott "
+"könyvtárba menti."
+
+#: source/win-preferences/schema/export.ts:54
+msgid "Ask for directory"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:23
+msgid "Use LanguageTool"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:28
+msgid "Strictness"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:30
+msgid "Standard"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:31
+msgid "Picky"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:38
+msgid "LanguageTool Provider"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:41
+#: source/win-preferences/schema/spellchecking.ts:48
+#, fuzzy
+msgid "Custom server"
+msgstr "Egyéni CSS"
+
+#: source/win-preferences/schema/spellchecking.ts:55
+msgid "LanguageTool Username"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:60
+msgid "LanguageTool API key"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:67
+msgid ""
+"Select the languages for which you want to enable automatic spell checking."
+msgstr "Válassza ki a helyesírás ellenőrzésére használandó nyelveket."
+
+#: source/win-preferences/schema/spellchecking.ts:72
+msgid "Search for dictionaries &hellip;"
+msgstr "Szótárat keresni …"
+
+#: source/win-preferences/schema/spellchecking.ts:76
+msgid "User dictionary. Remove words by clicking them."
+msgstr "Felhasználói szótár. A benne levő szavak rákattintással törölhetők."
+
+#: source/win-preferences/schema/spellchecking.ts:78
+msgid "Dictionary entry"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:81
+#: source/win-preferences/schema/advanced.ts:96
+msgid "Search for entries …"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:23
+msgid "Turn on AutoCorrect"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:32
+msgid "Primary Magic Quotes"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:35
+#: source/win-preferences/schema/autocorrect.ts:56
+msgid "Disable Magic Quotes"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:53
+msgid "Secondary Magic Quotes"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:79
+msgid ""
+"Here you can define certain strings that will be replaced when AutoCorrect "
+"is on. The characters on the left side will be replaced with whatever comes "
+"on the right."
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:23
+msgid "Pattern for new filenames"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:29
+msgid "Do not prompt for filename when creating new files"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:36
+msgid "Enable debug mode"
+msgstr "A hibakeresési mód engedélyezése"
+
+#: source/win-preferences/schema/advanced.ts:41
+msgid "Notify me about beta releases"
+msgstr "Értesítsen a béta kiadásokról"
+
+#: source/win-preferences/schema/advanced.ts:46
+msgid "Use native window appearance"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:52
+msgid "Delete items irreversibly, if moving them to trash fails"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:58
+msgid "Show app in the notification area"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:59
+msgid "Leave app running in the notification area"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:66
+msgid "Automatically check for updates"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:73
+msgid ""
+"Enter all file extensions that you want to see in your attachment sidebar. "
+"Separate them with a comma. Changes are recognised after a restart."
+msgstr ""
+"A melléklet oldalsávjában, újraindítás után megjeleníttethető, vesszővel "
+"elválasztott fájlkiterjesztések"
+
+#: source/win-preferences/schema/advanced.ts:81
+msgid "Zoom behavior"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:83
+msgid "Zoom resizes the whole GUI"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:84
+msgid "Zoom changes the editor font size"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:91
+msgid "iFrame rendering whitelist"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:94
+msgid "Hostname"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:102
+msgid "Activate Watchdog polling"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:107
+msgid "Time to wait before writing a file is considered done (in ms)"
+msgstr ""
+
+#: source/win-preferences/schema/toolbar.ts:23
+msgid "Display \"Open Preferences\" button"
+msgstr ""
+
+#: source/win-preferences/schema/toolbar.ts:28
+msgid "Display \"New File\" button"
+msgstr ""
+
+#: source/win-preferences/schema/toolbar.ts:33
+msgid "Display \"Previous File\" button"
+msgstr ""
+
+#: source/win-preferences/schema/toolbar.ts:38
+msgid "Display \"Next File\" button"
+msgstr ""
+
+#: source/win-preferences/schema/toolbar.ts:45
+msgid "Display readability button"
+msgstr ""
+
+#: source/win-preferences/schema/toolbar.ts:50
+msgid "Display \"Insert Comment\" button"
+msgstr ""
+
+#: source/win-preferences/schema/toolbar.ts:55
+msgid "Display link button"
+msgstr ""
+
+#: source/win-preferences/schema/toolbar.ts:60
+msgid "Display image button"
+msgstr ""
+
+#: source/win-preferences/schema/toolbar.ts:65
+msgid "Display task list button"
+msgstr ""
+
+#: source/win-preferences/schema/toolbar.ts:70
+msgid "Display \"Insert Table\" button"
+msgstr ""
+
+#: source/win-preferences/schema/toolbar.ts:75
+msgid "Display \"Insert Footnote\" button"
+msgstr ""
+
+#: source/win-preferences/schema/toolbar.ts:82
+msgid "Display document info"
+msgstr ""
+
+#: source/win-preferences/schema/toolbar.ts:87
+msgid "Display Pomodoro-timer"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:23
+msgid "Application language (<strong>Restart required!</strong>)"
+msgstr "Alkalmazás nyelve (<strong> Újraindítani! </strong>)"
+
+#: source/win-preferences/schema/general.ts:36
+msgid "Show file information"
+msgstr "Fájlinformációkat megjeleníteni"
+
+#: source/win-preferences/schema/general.ts:46
+msgid "Avoid opening files in new tabs if possible"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:53
+msgid "Automatically switch to dark mode"
+msgstr "Automatikusan sötét módra váltás"
+
+#: source/win-preferences/schema/general.ts:56
+#: source/win-preferences/schema/editor.ts:45
+msgid "Off"
+msgstr "Ki"
+
+#: source/win-preferences/schema/general.ts:57
+msgid "Schedule"
+msgstr "Tervezett idő"
+
+#: source/win-preferences/schema/general.ts:58
+msgid "Follow Operating System"
+msgstr "Kövesse az operációs rendszert"
+
+#: source/win-preferences/schema/general.ts:63
+msgid "Start dark mode at"
+msgstr "Sötét mód indítása ekkor:"
+
+#: source/win-preferences/schema/general.ts:69
+msgid "End dark mode at"
+msgstr "Sötét mód befejezése ekkor:"
+
+#: source/win-preferences/schema/general.ts:77
+msgid "File manager mode"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:80
+msgid "Thin &mdash; show either file tree or file list"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:81
+msgid "Expanded &mdash; show both file tree and file list"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:82
+msgid "Combined &mdash; show files and directories in the file tree"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:87
+msgid "Display files using"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:90
+msgid "Filename only"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:91
+msgid "Title if applicable"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:92
+msgid "First heading level 1 if applicable"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:93
+msgid "Title or first heading level 1 if applicable"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:98
+msgid "Display Markdown file extensions"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:105
+msgid "Sorting order for files (used for sorting by name)"
+msgstr "Fájlok rendezési sorrendje (név szerinti rendezéshez)"
+
+#: source/win-preferences/schema/general.ts:108
+msgid "Natural order (10 after 2)"
+msgstr "Rendes sorrend (10 után 2 jön)"
+
+#: source/win-preferences/schema/general.ts:109
+msgid "ASCII order (2 after 10)"
+msgstr "ASCII sorrend (2 után 10 jön)"
+
+#: source/win-preferences/schema/general.ts:116
+msgid "Show folders above files"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:123
+msgid "When sorting by time, sort by"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:126
+#: source/win-preferences/schema/general.ts:135
+msgid "Last modification time"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:127
+#: source/win-preferences/schema/general.ts:136
+msgid "File creation time"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:132
+msgid "In the file metadata display"
+msgstr ""
+
+#. TODO: Create this type
+#: source/win-preferences/schema/display.ts:24
+msgid "These options determine which elements are rendered in documents."
+msgstr "A dokumentumok elemeit meghatározó opciók."
+
+#: source/win-preferences/schema/display.ts:28
+msgid "Render Citations"
+msgstr "Idézeteket megjeleníteni"
+
+#: source/win-preferences/schema/display.ts:33
+msgid "Render Iframes"
+msgstr "<em>Iframe</em>-eket megjeleníteni"
+
+#: source/win-preferences/schema/display.ts:38
+msgid "Render Images"
+msgstr "Képeket megjeleníteni"
+
+#: source/win-preferences/schema/display.ts:43
+msgid "Render Links"
+msgstr "Hivatkozásokat megjeleníteni"
+
+#: source/win-preferences/schema/display.ts:48
+msgid "Render Formulae"
+msgstr "Képleteket megjeleníteni"
+
+#: source/win-preferences/schema/display.ts:53
+msgid "Render Tasks"
+msgstr "Feladatokat megjeleníteni"
+
+#: source/win-preferences/schema/display.ts:58
+msgid "Hide heading characters"
+msgstr "Címsorok jeleit elrejteni"
+
+#: source/win-preferences/schema/display.ts:63
+msgid "Render emphasis"
+msgstr ""
+
+#: source/win-preferences/schema/display.ts:71
+msgid "Here you can choose the theme for the app."
+msgstr "Itt kiválasztható az alkalmazás témája."
+
+#: source/win-preferences/schema/display.ts:112
+msgid "Use the operating system's accent colour instead of the theme colour"
+msgstr ""
+
+#: source/win-preferences/schema/display.ts:116
+msgid "This setting is only available on Windows and macOS"
+msgstr ""
+
+#: source/win-preferences/schema/display.ts:122
+msgid "Hide toolbar in distraction free mode"
+msgstr ""
+
+#. TODO: Create this type
+#: source/win-preferences/schema/display.ts:129
+msgid "With these controls you can constrain the image previews."
+msgstr "Ezekkel a vezérlőkkel korlátozható a kép előnézete."
+
+#: source/win-preferences/schema/display.ts:133
+msgid "Maximum width of images (percent)"
+msgstr ""
+
+#: source/win-preferences/schema/display.ts:141
+msgid "Maximum height of images (percent)"
+msgstr ""
+
+#: source/win-preferences/schema/citations.ts:23
+msgid "How would you like autocomplete to insert your citations?"
+msgstr ""
+
+#: source/win-preferences/schema/citations.ts:35
+msgid "Citation Database (CSL JSON or BibTex)"
+msgstr "Idézetek adatbázisa (CSL-JSON vagy BibTex)"
+
+#: source/win-preferences/schema/citations.ts:46
+msgid "CSL-Style (optional)"
+msgstr "CSL stílus (opcionális)"
+
+#: source/win-preferences/schema/editor.ts:23
+msgid ""
+"Choose the formatting characters that the bold/emphasis commands should use"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:26
+#: source/win-preferences/schema/editor.ts:27
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:42
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
+msgid "Bold"
+msgstr "Félkövér"
+
+#: source/win-preferences/schema/editor.ts:34
+#: source/win-preferences/schema/editor.ts:35
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:47
+msgid "Italics"
+msgstr "Dőlt betűs"
+
+#: source/win-preferences/schema/editor.ts:42
+msgid "Autosave"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:46
+msgid "Immediately"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:47
+msgid "After a short delay"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:54
+msgid "Default image path (relative or absolute)"
+msgstr "A képek alapértelmezett elérési útja"
+
+#: source/win-preferences/schema/editor.ts:59
+msgid "Indent by the following number of spaces"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:64
+msgid "Indent using tabs"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:69
+msgid "Editor font size"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:74
+msgid "Algorithm to use for the readability mode"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:85
+msgid "Editor input mode"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:97
+msgid "Check Markdown for style issues"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:102
+#, fuzzy
+msgid "Show statusbar"
+msgstr "A Zettlr megjelenítése"
+
+#: source/win-preferences/schema/editor.ts:109
+msgid "Mute non-focused lines in distraction-free mode"
+msgstr "Nem használt sorokat elrejteni a zavarmentes üzemmódban"
+
+#: source/win-preferences/schema/editor.ts:114
+msgid "Automatically close matching character pairs"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:119
+msgid "Accept spaces during autocompletion"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:124
+msgid "Enable Table Editor"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:129
+msgid "Show link previews"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:134
+msgid "Count characters instead of words (e.g., for Chinese)"
+msgstr ""
+
+#: source/common/util/format-date.ts:33
+msgid "just now"
 msgstr ""
 
 #: source/common/util/localise-number.ts:28
@@ -1428,1026 +2335,119 @@ msgstr "kínai"
 msgid "Chinese"
 msgstr "kínai"
 
-#: source/common/util/format-date.ts:33
-msgid "just now"
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:100
+msgid "No footnote text found."
 msgstr ""
 
-#: source/win-preferences/schema/export.ts:23
-msgid "Use the internal Pandoc for exports"
-msgstr ""
-
-#: source/win-preferences/schema/export.ts:30
-msgid "Remove tags from files"
-msgstr "Címkéket eltávolítani"
-
-#: source/win-preferences/schema/export.ts:40
-msgid "Remove internal links completely"
-msgstr "Eltávolítani a belső hivatkozásokat"
-
-#: source/win-preferences/schema/export.ts:41
-msgid "Unlink internal links"
-msgstr "Kikapcsolni a belső hivatkozásokat"
-
-#: source/win-preferences/schema/export.ts:42
-msgid "Don't touch internal links"
-msgstr "Megtartani a belső hivatkozásokat"
-
-#: source/win-preferences/schema/export.ts:49
-msgid ""
-"Target directory for exported files. <em>Attention:</em> Selecting the "
-"current working directory will overwrite files without warning!"
-msgstr ""
-"Exportált fájlok célkönyvtára. <em> Figyelem: </em> Az aktuális "
-"munkakönyvtár kiválasztása figyelmeztetés nélkül felülírja a fájlokat!"
-
-#: source/win-preferences/schema/export.ts:52
-msgid "Temporary directory: is regularly expunged"
-msgstr "Ideiglenes könyvtár (rendszeresen kiürítve)"
-
-#: source/win-preferences/schema/export.ts:53
-msgid ""
-"Current working directory: exported files will be saved into the currently "
-"selected directory."
-msgstr ""
-"Jelenlegi munkakönyvtár: az exportált fájlokat az aktuálisan kiválasztott "
-"könyvtárba menti."
-
-#: source/win-preferences/schema/export.ts:54
-msgid "Ask for directory"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:23
-msgid "Use LanguageTool"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:28
-msgid "Strictness"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:30
-msgid "Standard"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:31
-msgid "Picky"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:38
-msgid "LanguageTool Provider"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:41
-#: source/win-preferences/schema/spellchecking.ts:48
-#, fuzzy
-msgid "Custom server"
-msgstr "Egyéni CSS"
-
-#: source/win-preferences/schema/spellchecking.ts:55
-msgid "LanguageTool Username"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:60
-msgid "LanguageTool API key"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:67
-msgid ""
-"Select the languages for which you want to enable automatic spell checking."
-msgstr "Válassza ki a helyesírás ellenőrzésére használandó nyelveket."
-
-#: source/win-preferences/schema/spellchecking.ts:72
-msgid "Search for dictionaries &hellip;"
-msgstr "Szótárat keresni …"
-
-#: source/win-preferences/schema/spellchecking.ts:76
-msgid "User dictionary. Remove words by clicking them."
-msgstr "Felhasználói szótár. A benne levő szavak rákattintással törölhetők."
-
-#: source/win-preferences/schema/spellchecking.ts:78
-msgid "Dictionary entry"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:81
-#: source/win-preferences/schema/advanced.ts:96
-msgid "Search for entries …"
-msgstr ""
-
-#: source/win-preferences/schema/citations.ts:23
-msgid "How would you like autocomplete to insert your citations?"
-msgstr ""
-
-#: source/win-preferences/schema/citations.ts:35
-msgid "Citation Database (CSL JSON or BibTex)"
-msgstr "Idézetek adatbázisa (CSL-JSON vagy BibTex)"
-
-#: source/win-preferences/schema/citations.ts:46
-msgid "CSL-Style (optional)"
-msgstr "CSL stílus (opcionális)"
-
-#: source/win-preferences/schema/general.ts:23
-msgid "Application language (<strong>Restart required!</strong>)"
-msgstr "Alkalmazás nyelve (<strong> Újraindítani! </strong>)"
-
-#: source/win-preferences/schema/general.ts:36
-msgid "Show file information"
-msgstr "Fájlinformációkat megjeleníteni"
-
-#: source/win-preferences/schema/general.ts:46
-msgid "Avoid opening files in new tabs if possible"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:53
-msgid "Automatically switch to dark mode"
-msgstr "Automatikusan sötét módra váltás"
-
-#: source/win-preferences/schema/general.ts:56
-#: source/win-preferences/schema/editor.ts:45
-msgid "Off"
-msgstr "Ki"
-
-#: source/win-preferences/schema/general.ts:57
-msgid "Schedule"
-msgstr "Tervezett idő"
-
-#: source/win-preferences/schema/general.ts:58
-msgid "Follow Operating System"
-msgstr "Kövesse az operációs rendszert"
-
-#: source/win-preferences/schema/general.ts:63
-msgid "Start dark mode at"
-msgstr "Sötét mód indítása ekkor:"
-
-#: source/win-preferences/schema/general.ts:69
-msgid "End dark mode at"
-msgstr "Sötét mód befejezése ekkor:"
-
-#: source/win-preferences/schema/general.ts:77
-msgid "File manager mode"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:80
-msgid "Thin &mdash; show either file tree or file list"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:81
-msgid "Expanded &mdash; show both file tree and file list"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:82
-msgid "Combined &mdash; show files and directories in the file tree"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:87
-msgid "Display files using"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:90
-msgid "Filename only"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:91
-msgid "Title if applicable"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:92
-msgid "First heading level 1 if applicable"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:93
-msgid "Title or first heading level 1 if applicable"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:98
-msgid "Display Markdown file extensions"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:105
-msgid "Sorting order for files (used for sorting by name)"
-msgstr "Fájlok rendezési sorrendje (név szerinti rendezéshez)"
-
-#: source/win-preferences/schema/general.ts:108
-msgid "Natural order (10 after 2)"
-msgstr "Rendes sorrend (10 után 2 jön)"
-
-#: source/win-preferences/schema/general.ts:109
-msgid "ASCII order (2 after 10)"
-msgstr "ASCII sorrend (2 után 10 jön)"
-
-#: source/win-preferences/schema/general.ts:116
-msgid "Show folders above files"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:123
-msgid "When sorting by time, sort by"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:126
-#: source/win-preferences/schema/general.ts:135
-msgid "Last modification time"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:127
-#: source/win-preferences/schema/general.ts:136
-msgid "File creation time"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:132
-msgid "In the file metadata display"
-msgstr ""
-
-#. TODO: Create this type
-#: source/win-preferences/schema/display.ts:24
-msgid "These options determine which elements are rendered in documents."
-msgstr "A dokumentumok elemeit meghatározó opciók."
-
-#: source/win-preferences/schema/display.ts:28
-msgid "Render Citations"
-msgstr "Idézeteket megjeleníteni"
-
-#: source/win-preferences/schema/display.ts:33
-msgid "Render Iframes"
-msgstr "<em>Iframe</em>-eket megjeleníteni"
-
-#: source/win-preferences/schema/display.ts:38
-msgid "Render Images"
-msgstr "Képeket megjeleníteni"
-
-#: source/win-preferences/schema/display.ts:43
-msgid "Render Links"
-msgstr "Hivatkozásokat megjeleníteni"
-
-#: source/win-preferences/schema/display.ts:48
-msgid "Render Formulae"
-msgstr "Képleteket megjeleníteni"
-
-#: source/win-preferences/schema/display.ts:53
-msgid "Render Tasks"
-msgstr "Feladatokat megjeleníteni"
-
-#: source/win-preferences/schema/display.ts:58
-msgid "Hide heading characters"
-msgstr "Címsorok jeleit elrejteni"
-
-#: source/win-preferences/schema/display.ts:63
-msgid "Render emphasis"
-msgstr ""
-
-#: source/win-preferences/schema/display.ts:71
-msgid "Here you can choose the theme for the app."
-msgstr "Itt kiválasztható az alkalmazás témája."
-
-#: source/win-preferences/schema/display.ts:112
-msgid "Use the operating system's accent colour instead of the theme colour"
-msgstr ""
-
-#: source/win-preferences/schema/display.ts:116
-msgid "This setting is only available on Windows and macOS"
-msgstr ""
-
-#: source/win-preferences/schema/display.ts:122
-msgid "Hide toolbar in distraction free mode"
-msgstr ""
-
-#. TODO: Create this type
-#: source/win-preferences/schema/display.ts:129
-msgid "With these controls you can constrain the image previews."
-msgstr "Ezekkel a vezérlőkkel korlátozható a kép előnézete."
-
-#: source/win-preferences/schema/display.ts:133
-msgid "Maximum width of images (percent)"
-msgstr ""
-
-#: source/win-preferences/schema/display.ts:141
-msgid "Maximum height of images (percent)"
-msgstr ""
-
-#: source/win-preferences/schema/autocorrect.ts:23
-msgid "Turn on AutoCorrect"
-msgstr ""
-
-#: source/win-preferences/schema/autocorrect.ts:32
-msgid "Primary Magic Quotes"
-msgstr ""
-
-#: source/win-preferences/schema/autocorrect.ts:35
-#: source/win-preferences/schema/autocorrect.ts:56
-msgid "Disable Magic Quotes"
-msgstr ""
-
-#: source/win-preferences/schema/autocorrect.ts:53
-msgid "Secondary Magic Quotes"
-msgstr ""
-
-#: source/win-preferences/schema/autocorrect.ts:79
-msgid ""
-"Here you can define certain strings that will be replaced when AutoCorrect "
-"is on. The characters on the left side will be replaced with whatever comes "
-"on the right."
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:23
-msgid ""
-"Choose the formatting characters that the bold/emphasis commands should use"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:42
-msgid "Autosave"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:46
-msgid "Immediately"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:47
-msgid "After a short delay"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:54
-msgid "Default image path (relative or absolute)"
-msgstr "A képek alapértelmezett elérési útja"
-
-#: source/win-preferences/schema/editor.ts:59
-msgid "Indent by the following number of spaces"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:64
-msgid "Indent using tabs"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:69
-msgid "Editor font size"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:74
-msgid "Algorithm to use for the readability mode"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:85
-msgid "Editor input mode"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:97
-msgid "Check Markdown for style issues"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:102
-#, fuzzy
-msgid "Show statusbar"
-msgstr "A Zettlr megjelenítése"
-
-#: source/win-preferences/schema/editor.ts:109
-msgid "Mute non-focused lines in distraction-free mode"
-msgstr "Nem használt sorokat elrejteni a zavarmentes üzemmódban"
-
-#: source/win-preferences/schema/editor.ts:114
-msgid "Automatically close matching character pairs"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:119
-msgid "Accept spaces during autocompletion"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:124
-msgid "Enable Table Editor"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:129
-msgid "Show link previews"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:134
-msgid "Count characters instead of words (e.g., for Chinese)"
-msgstr ""
-
-#: source/win-preferences/schema/zettelkasten.ts:23
-msgid "ID regular expression"
-msgstr "Az azonosító reguláris kifejezése"
-
-#: source/win-preferences/schema/zettelkasten.ts:29
-msgid "Pattern used to generate new IDs"
-msgstr "Az azonosítókhoz használt minta"
-
-#. TODO: Create this type
-#: source/win-preferences/schema/zettelkasten.ts:38
-msgid "Options for ZKN elements"
-msgstr "A cédulás doboz jellemzői"
-
-#: source/win-preferences/schema/zettelkasten.ts:42
-msgid "Link with filename only"
-msgstr ""
-
-#: source/win-preferences/schema/zettelkasten.ts:47
-msgid "When linking files, add the filename …"
-msgstr ""
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:52
+msgid "Link"
+msgstr "Hivatkozás"
 
-#: source/win-preferences/schema/zettelkasten.ts:50
-msgid "always"
-msgstr ""
-
-#: source/win-preferences/schema/zettelkasten.ts:51
-msgid "only when linking using the ID"
-msgstr ""
-
-#: source/win-preferences/schema/zettelkasten.ts:52
-msgid "never"
-msgstr ""
-
-#: source/win-preferences/schema/zettelkasten.ts:60
-msgid "Start a search when following Zettelkasten-links"
-msgstr ""
-
-#: source/win-preferences/schema/zettelkasten.ts:65
-msgid "Automatically create non-existing files when following internal links"
-msgstr ""
-
-#: source/win-preferences/schema/zettelkasten.ts:70
-msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
-msgstr ""
-
-#: source/win-preferences/schema/toolbar.ts:23
-msgid "Display \"Open Preferences\" button"
-msgstr ""
-
-#: source/win-preferences/schema/toolbar.ts:28
-msgid "Display \"New File\" button"
-msgstr ""
-
-#: source/win-preferences/schema/toolbar.ts:33
-msgid "Display \"Previous File\" button"
-msgstr ""
-
-#: source/win-preferences/schema/toolbar.ts:38
-msgid "Display \"Next File\" button"
-msgstr ""
-
-#: source/win-preferences/schema/toolbar.ts:45
-msgid "Display readability button"
-msgstr ""
-
-#: source/win-preferences/schema/toolbar.ts:50
-msgid "Display \"Insert Comment\" button"
-msgstr ""
-
-#: source/win-preferences/schema/toolbar.ts:55
-msgid "Display link button"
-msgstr ""
-
-#: source/win-preferences/schema/toolbar.ts:60
-msgid "Display image button"
-msgstr ""
-
-#: source/win-preferences/schema/toolbar.ts:65
-msgid "Display task list button"
-msgstr ""
-
-#: source/win-preferences/schema/toolbar.ts:70
-msgid "Display \"Insert Table\" button"
-msgstr ""
-
-#: source/win-preferences/schema/toolbar.ts:75
-msgid "Display \"Insert Footnote\" button"
-msgstr ""
-
-#: source/win-preferences/schema/toolbar.ts:82
-msgid "Display document info"
-msgstr ""
-
-#: source/win-preferences/schema/toolbar.ts:87
-msgid "Display Pomodoro-timer"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:23
-msgid "Pattern for new filenames"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:29
-msgid "Do not prompt for filename when creating new files"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:36
-msgid "Enable debug mode"
-msgstr "A hibakeresési mód engedélyezése"
-
-#: source/win-preferences/schema/advanced.ts:41
-msgid "Notify me about beta releases"
-msgstr "Értesítsen a béta kiadásokról"
-
-#: source/win-preferences/schema/advanced.ts:46
-msgid "Use native window appearance"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:52
-msgid "Delete items irreversibly, if moving them to trash fails"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:58
-msgid "Show app in the notification area"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:59
-msgid "Leave app running in the notification area"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:66
-msgid "Automatically check for updates"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:73
-msgid ""
-"Enter all file extensions that you want to see in your attachment sidebar. "
-"Separate them with a comma. Changes are recognised after a restart."
-msgstr ""
-"A melléklet oldalsávjában, újraindítás után megjeleníttethető, vesszővel "
-"elválasztott fájlkiterjesztések"
-
-#: source/win-preferences/schema/advanced.ts:81
-msgid "Zoom behavior"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:83
-msgid "Zoom resizes the whole GUI"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:84
-msgid "Zoom changes the editor font size"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:91
-msgid "iFrame rendering whitelist"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:94
-msgid "Hostname"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:102
-msgid "Activate Watchdog polling"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:107
-msgid "Time to wait before writing a file is considered done (in ms)"
-msgstr ""
-
-#: source/tmp/file-list.vue.ts:66 source/tmp/file-tree.vue.ts:35
-msgid "No results"
-msgstr ""
-
-#: source/tmp/file-list.vue.ts:69
-msgid "No directory selected"
-msgstr ""
-
-#: source/tmp/file-list.vue.ts:72
-msgid "Empty directory"
-msgstr ""
-
-#: source/tmp/PopoverTags.vue.ts:77
-msgid "Name"
-msgstr ""
-
-#: source/tmp/PopoverTags.vue.ts:78
-msgid "Count"
-msgstr ""
-
-#: source/tmp/PopoverTags.vue.ts:103
-msgid "Filter tags…"
-msgstr "Szűrési címkék..."
-
-#: source/tmp/PopoverTags.vue.ts:106
-msgid "Tag Cloud"
-msgstr "Címkefelhő"
-
-#: source/tmp/PopoverTags.vue.ts:109
-msgid "Suggested tags for the current file"
-msgstr ""
-
-#: source/tmp/PopoverTags.vue.ts:112
-msgid "Add to file"
-msgstr ""
-
-#: source/tmp/File.vue.ts:59 source/tmp/Number.vue.ts:59
-#: source/tmp/ShortcutChooser.vue.ts:61 source/tmp/Color.vue.ts:50
-#: source/tmp/PopoverFileProps.vue.ts:71
-msgid "Reset"
-msgstr ""
-
-#: source/tmp/SnippetsTab.vue.ts:50
-msgid "Rename snippet"
-msgstr ""
-
-#: source/tmp/SnippetsTab.vue.ts:53
-msgid "Snippets let you define reusable pieces of text with variables."
-msgstr ""
-
-#: source/tmp/SnippetsTab.vue.ts:124 source/tmp/CustomCSS.vue.ts:88
-#: source/tmp/Defaults.vue.ts:192
-msgid "Saving …"
-msgstr ""
-
-#: source/tmp/SnippetsTab.vue.ts:134 source/tmp/Defaults.vue.ts:201
-msgid "Saved!"
-msgstr ""
-
-#: source/tmp/CalendarView.vue.ts:59
-msgid "Calendar"
-msgstr ""
-
-#: source/tmp/CalendarView.vue.ts:77
-msgid "January"
-msgstr ""
-
-#: source/tmp/CalendarView.vue.ts:78
-msgid "February"
-msgstr ""
-
-#: source/tmp/CalendarView.vue.ts:79
-msgid "March"
-msgstr ""
-
-#: source/tmp/CalendarView.vue.ts:80
-msgid "April"
-msgstr ""
-
-#: source/tmp/CalendarView.vue.ts:81
-msgid "May"
-msgstr ""
-
-#: source/tmp/CalendarView.vue.ts:82
-msgid "June"
-msgstr ""
-
-#: source/tmp/CalendarView.vue.ts:83
-msgid "July"
-msgstr ""
-
-#: source/tmp/CalendarView.vue.ts:84
-msgid "August"
-msgstr ""
-
-#: source/tmp/CalendarView.vue.ts:85
-msgid "September"
-msgstr ""
-
-#: source/tmp/CalendarView.vue.ts:86
-msgid "October"
-msgstr ""
-
-#: source/tmp/CalendarView.vue.ts:87
-msgid "November"
-msgstr ""
-
-#: source/tmp/CalendarView.vue.ts:88
-msgid "December"
-msgstr ""
-
-#: source/tmp/CalendarView.vue.ts:104
-msgid "Below the monthly average"
-msgstr ""
-
-#: source/tmp/CalendarView.vue.ts:107
-msgid "Over the monthly average"
-msgstr ""
-
-#: source/tmp/CalendarView.vue.ts:110
-msgid "More than twice the monthly average"
-msgstr ""
-
-#: source/tmp/MainSidebar.vue.ts:74 source/tmp/OtherFilesTab.vue.ts:13
-msgid "Other files"
-msgstr ""
-
-#: source/tmp/MainSidebar.vue.ts:77 source/tmp/ReferencesTab.vue.ts:20
-msgid "References"
-msgstr "Irodalom jegyzék"
-
-#: source/tmp/MainSidebar.vue.ts:80 source/tmp/ToCTab.vue.ts:53
-msgid "Table of Contents"
-msgstr ""
-
-#: source/tmp/MainSidebar.vue.ts:83 source/tmp/RelatedFilesTab.vue.ts:23
-msgid "Related files"
-msgstr ""
-
-#: source/tmp/App.vue.ts:34
-msgid "Updater"
-msgstr ""
-
-#. True as soon as the update starts
-#: source/tmp/App.vue.ts:36
-msgid "Click to start update"
-msgstr ""
-
-#: source/tmp/App.vue.ts:75
-msgid "New update available"
-msgstr "Van új frissítés"
-
-#: source/tmp/App.vue.ts:78
-msgid "Your version"
-msgstr "Telepített verzió"
-
-#: source/tmp/App.vue.ts:81
-msgid ""
-"There is a new version of Zettlr available to download. Please read the "
-"changelog below."
-msgstr "Letölthető a Zettlr új verziója. A változásokat lásd alább."
-
-#: source/tmp/App.vue.ts:84
-msgid "Downloading your update"
-msgstr ""
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:57
+msgid "Image"
+msgstr "Kép"
 
-#: source/tmp/App.vue.ts:87
-msgid "No update available. You have the most recent version."
-msgstr ""
-
-#: source/tmp/App.vue.ts:132
-msgid "Starting update …"
-msgstr ""
-
-#: source/tmp/RelatedFilesTab.vue.ts:26
-msgid "No related files"
-msgstr ""
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:62
+msgid "Comment"
+msgstr "Megjegyzés"
 
-#: source/tmp/RelatedFilesTab.vue.ts:29
-msgid "This relation is based on a bidirectional link."
-msgstr ""
-
-#: source/tmp/RelatedFilesTab.vue.ts:32
-msgid "This relation is based on an outbound link."
-msgstr ""
-
-#: source/tmp/RelatedFilesTab.vue.ts:35
-msgid "This relation is based on a backlink."
-msgstr ""
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:67
+msgid "Code"
+msgstr "Forráskód"
 
-#: source/tmp/RelatedFilesTab.vue.ts:113
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:66
 #, javascript-format
-msgid "This relation is based on %s shared tags: %s"
+msgid "File %s does not exist."
 msgstr ""
 
-#: source/tmp/PopoverDocInfo.vue.ts:35
-msgid "No open document"
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:96
+msgid "Word count"
 msgstr ""
 
-#: source/tmp/PopoverDocInfo.vue.ts:38
-msgid "words"
-msgstr "szavak"
-
-#: source/tmp/PopoverDocInfo.vue.ts:41
-msgid "characters"
-msgstr "betűk"
-
-#: source/tmp/PopoverDocInfo.vue.ts:44
-msgid "characters (w/o spaces)"
-msgstr "szóköz nélküli betűk"
-
-#: source/tmp/ReferencesTab.vue.ts:32
-msgid "There are no citations in this document."
-msgstr "Ebben a dokumentumban nincsenek idézetek."
-
-#: source/tmp/file-tree.vue.ts:29
-msgid "Workspaces"
+#: source/common/modules/markdown-editor/renderers/render-images.ts:92
+#, javascript-format
+msgid "Image not found: %s"
 msgstr ""
 
-#: source/tmp/file-tree.vue.ts:32
-msgid "No open files or folders"
-msgstr "Nincs nyitva fájl illetve könyvtár"
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:133
+msgid "No suggestions"
+msgstr "Nincsen javaslat"
 
-#: source/tmp/PopoverDirProps.vue.ts:147 source/tmp/file-item.vue.ts:113
-msgid "Directories"
-msgstr "Könyvtárak"
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:142
+msgid "Add to dictionary"
+msgstr "A szótárhoz adni"
 
-#: source/tmp/PopoverDirProps.vue.ts:153 source/tmp/PopoverFileProps.vue.ts:65
-msgid "Created"
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:159
+msgid "Italic"
+msgstr "Félkövér betű"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:169
+msgid "Insert link"
+msgstr "Hivatkozást beszúrni"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:176
+msgid "Insert numbered list"
+msgstr "Számozott felsorolást beszúrni"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:182
+msgid "Insert unordered list"
+msgstr "Felsorolást beszúrni"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:188
+msgid "Insert tasklist"
 msgstr ""
 
-#: source/tmp/PopoverDirProps.vue.ts:162
-msgid "Project Settings…"
-msgstr "Projekt beállítások …"
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:195
+msgid "Blockquote"
+msgstr "Idézetblokk"
 
-#: source/tmp/PopoverFileProps.vue.ts:62 source/tmp/file-item.vue.ts:195
-msgid "Words"
-msgstr "Szó"
-
-#: source/tmp/PopoverFileProps.vue.ts:74
-msgid "Set writing target…"
-msgstr "Célteljesítményt kitűzni …"
-
-#: source/tmp/PopoverFileProps.vue.ts:77 source/tmp/file-item.vue.ts:193
-msgid "Characters"
-msgstr "Betű"
-
-#: source/tmp/PopoverPomodoro.vue.ts:72
-msgid "Start"
-msgstr "Indítani"
-
-#: source/tmp/PopoverPomodoro.vue.ts:75
-msgid "Stop"
-msgstr "Megállítani"
-
-#: source/tmp/PopoverPomodoro.vue.ts:78
-msgid "Work"
-msgstr "Tevékenységi idő"
-
-#: source/tmp/PopoverPomodoro.vue.ts:81
-msgid "Short break"
-msgstr "Kis szünet"
-
-#: source/tmp/PopoverPomodoro.vue.ts:84
-msgid "Break"
-msgstr "Nagy szünet"
-
-#: source/tmp/PopoverPomodoro.vue.ts:87
-msgid "Sound Effect"
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:201
+msgid "Insert Table"
 msgstr ""
 
-#: source/tmp/PopoverPomodoro.vue.ts:90
-msgid "Volume"
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:71
+msgid "Open Link"
+msgstr "Hivatkozást megnyitni"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
+msgid "Copy Mail Address"
+msgstr "Levelezési címet másolni"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
+msgid "Copy Link"
+msgstr "Hivatkozást másolni"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:89
+msgid "Copy image to clipboard"
 msgstr ""
 
-#: source/tmp/CustomCSS.vue.ts:31
-msgid "Custom CSS"
-msgstr "Egyéni CSS"
-
-#: source/tmp/CustomCSS.vue.ts:32
-msgid ""
-"Here you can override the styles of Zettlr to customise it even further. "
-"<strong>Attention: This file overrides all CSS directives! Never alter the "
-"geometry of elements, otherwise the app may expose unwanted behaviour!</"
-"strong>"
-msgstr ""
-"A pontosabb testreszabás érdekében itt felülbírálhatja a Zettlr stílusát. "
-"<strong> Figyelem: Ez a fájl felülírja az összes CSS-irányelvet! Soha ne "
-"változtassa meg az elemek geometriáját, különben az alkalmazás viselkedése "
-"előreláthatatlanná válik! </strong>"
-
-#: source/tmp/CustomCSS.vue.ts:97
-msgid "Saving failed"
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:95
+msgid "Open in browser"
 msgstr ""
 
-#: source/tmp/ChartView.vue.ts:60
-msgid "Charts"
+#: source/common/modules/markdown-editor/context-menu/equation-menu.ts:33
+msgid "Copy equation code"
 msgstr ""
 
-#: source/tmp/OtherFilesTab.vue.ts:19
-msgid "No other files"
+#: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
+msgid "No highlighting"
 msgstr ""
 
-#: source/tmp/GlobalSearch.vue.ts:116
-msgid "Full-Text Search"
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:50
+#, javascript-format
+msgid "Readability mode (%s)"
 msgstr ""
 
-#: source/tmp/GlobalSearch.vue.ts:119
-msgid "Enter your search terms below"
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:179
+msgid "Detect automatically"
 msgstr ""
 
-#: source/tmp/GlobalSearch.vue.ts:122
-msgid "Find …"
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:214
+msgid "Open diagnostics panel"
 msgstr ""
 
-#: source/tmp/GlobalSearch.vue.ts:125
-msgid "Filter …"
-msgstr ""
-
-#: source/tmp/GlobalSearch.vue.ts:128
-msgid "Filter search results"
-msgstr ""
-
-#: source/tmp/GlobalSearch.vue.ts:131
-msgid "Restrict search to directory"
-msgstr ""
-
-#: source/tmp/GlobalSearch.vue.ts:134
-msgid "Restrict to directory …"
-msgstr ""
-
-#: source/tmp/GlobalSearch.vue.ts:137
-msgid "Search"
-msgstr ""
-
-#: source/tmp/GlobalSearch.vue.ts:140
-msgid "Clear search"
-msgstr ""
-
-#: source/tmp/GlobalSearch.vue.ts:143
-msgid "Toggle results"
-msgstr ""
-
-#: source/tmp/List.vue.ts:141
-msgid "Add"
-msgstr ""
-
-#: source/tmp/List.vue.ts:144
-msgid "Actions"
-msgstr ""
-
-#: source/tmp/List.vue.ts:147
-#, fuzzy
-msgid "Delete"
-msgstr "Fájlt törölni"
-
-#. Apparently we have a simple array, so exactly one column
-#: source/tmp/List.vue.ts:169
-msgid "Item"
-msgstr ""
-
-#: source/tmp/Projects-Tab.vue.ts:24
-msgid "Zettlr also makes use of these projects:"
-msgstr "Zettlr a következő projekteket is felhasználja:"
-
-#: source/tmp/Theme.vue.ts:37
-msgid "selected"
-msgstr ""
-
-#: source/tmp/Theme.vue.ts:40
-msgid "click to select"
-msgstr ""
-
-#: source/tmp/General-Tab.vue.ts:23
-msgid ""
-"Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. "
-"It is Open Source, free of charge and based upon the Electron framework. "
-"Zettlr would like to thank the developers of Electron, the Node.js framework "
-"and the CodeMirror editor for their work. Without them, Zettlr would not be "
-"possible. Below you can find all projects that Zettlr uses."
-msgstr ""
-"A Zettlr Hendrik Erz projektje, amelyet a GNU GPL v3 licenc alapján "
-"licenceltek. A program nyílt forráskódú, ingyenes és az Elektron "
-"keretrendszeren alapszik. A projekt szeretné megköszönni az Electron, a Node."
-"js keretrendszer, valamint a CodeMirror szövegszerkesztő fejlesztőinek "
-"munkáját. Nélkülük a Zettlr nem lenne lehetséges. Az alábbiakban "
-"megtalálható a Zettlr keretén belül felhasznált összes projekt."
-
-#: source/tmp/General-Tab.vue.ts:24
-msgid ""
-"Zettlr makes use of citeproc to display citations directly in the editor. To "
-"this end, Zettlr uses the CitationStyleLanguage (CSL) language and style "
-"files. The files have been shipped unaltered with author metadata. More "
-"information:"
-msgstr ""
-"A Zettlr a citeproc-ot használja az idézetek közvetlen megjelenítésére. E "
-"célból Citation Style Language (CSL) nyelvi és stílusfájlok kerülnek "
-"felhasználásra, melyekhez szerzői meta-adatok csatoltattak. Egyéb információ "
-"erről:"
-
-#: source/tmp/General-Tab.vue.ts:25
-msgid ""
-"All logos and brand names are subject to their rightful owners. Besides "
-"using their code, Zettlr is in no way affiliated with any of these projects. "
-"Node.js is a trademark of Joyent, Inc."
-msgstr ""
-"Minden logó és márkanév jogosult tulajdonosáé. A kód felhasználásán kívül a "
-"Zettlr semmilyen módon nem kapcsolódik ezekhez a projektekhez. A Node.js a "
-"Joyent, Inc. védjegye."
-
-#: source/tmp/General-Tab.vue.ts:26
-msgid ""
-"Zettlr offers an integration with LanguageTool.org, a service provided by "
-"LanguageTooler GmbH. Using this service requires an internet connection and "
-"is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
-"server that you use."
-msgstr ""
-
-#: source/tmp/PopoverStats.vue.ts:111
-msgid "words last month"
-msgstr "a múlt hónapban gépelt szó"
-
-#: source/tmp/PopoverStats.vue.ts:114
-msgid "daily average"
-msgstr "napi átlag"
-
-#: source/tmp/PopoverStats.vue.ts:117
-msgid "words today"
-msgstr "ma gépelt szó"
-
-#: source/tmp/PopoverStats.vue.ts:120
-msgid "🔥 You're on fire!"
-msgstr "🔥 Éget a szorgalom!"
-
-#: source/tmp/PopoverStats.vue.ts:123
-msgid "💪 You're close to hitting your daily average!"
-msgstr "💪 Közel áll a napi átlaghoz!"
-
-#: source/tmp/PopoverStats.vue.ts:126
-msgid "✍🏼 Get writing to surpass your daily average."
-msgstr "✍🏼 Írni kéne még meg a napi átlaghoz!"
-
-#: source/tmp/PopoverStats.vue.ts:129
-msgid "More statistics …"
-msgstr ""
-
-#: source/tmp/Defaults.vue.ts:70
-msgid ""
-"This profile is protected. This means that it will be restored when you "
-"remove or rename it."
-msgstr ""
-
-#: source/tmp/Defaults.vue.ts:73
-msgid ""
-"This profile appears to be either missing the writer or reader property. "
-"Make sure to set both so that Zettlr can use this profile."
-msgstr ""
-
-#: source/tmp/Defaults.vue.ts:109
-msgid "Edit the default settings for imports or exports here."
+#: source/common/modules/markdown-editor/linters/spellcheck.ts:148
+msgid "Spelling mistake"
 msgstr ""
 
 #~ msgid "Find…"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-02-14 02:41+0000\n"
+"POT-Creation-Date: 2023-02-18 02:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,8 +56,8 @@ msgid "Copy ID"
 msgstr "Kopeeri ID"
 
 #: source/win-main/file-manager/util/file-item-context.ts:26
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:137
 #: source/tmp/GlobalSearch.vue.ts:40
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:137
 msgid "Open in a new tab"
 msgstr "Ava uues aknas"
 
@@ -161,6 +161,67 @@ msgstr ""
 msgid "Option %s is required."
 msgstr ""
 
+#: source/app/service-providers/citeproc/index.ts:239
+#: source/app/service-providers/citeproc/index.ts:437
+msgid "The citation database could not be loaded"
+msgstr ""
+
+#: source/app/service-providers/citeproc/index.ts:425
+msgid "Changes to the library file detected. Reloading …"
+msgstr ""
+
+#: source/app/service-providers/tray/index.ts:159
+msgid "Show Zettlr"
+msgstr "Näita Zettlrit"
+
+#: source/app/service-providers/tray/index.ts:165
+#: source/app/service-providers/menu/menu.darwin.ts:102
+#: source/app/service-providers/menu/menu.win32.ts:306
+msgid "Quit"
+msgstr "Lahku"
+
+#: source/app/service-providers/tray/index.ts:172
+msgid "Zettlr"
+msgstr "Zettlr"
+
+#: source/app/service-providers/updates/index.ts:177
+#, javascript-format
+msgid "Could not check for updates: Server Error (Status code: %s)"
+msgstr ""
+
+#: source/app/service-providers/updates/index.ts:179
+#, javascript-format
+msgid "Could not check for updates: Client Error (Status code: %s)"
+msgstr ""
+
+#: source/app/service-providers/updates/index.ts:181
+#, javascript-format
+msgid ""
+"Could not check for updates: The server tried to redirect (Status code: %s)"
+msgstr ""
+
+#. getaddrinfo has reported that the host has not been found.
+#. This normally only happens if the networking interface is
+#. offline.
+#: source/app/service-providers/updates/index.ts:186
+msgid "Could not check for updates: Could not establish connection"
+msgstr ""
+
+#. Something else has occurred. GotError objects have a name property.
+#: source/app/service-providers/updates/index.ts:189
+#, javascript-format
+msgid "Could not check for updates. %s: %s"
+msgstr ""
+
+#: source/app/service-providers/updates/index.ts:205
+msgid "Could not check for updates: Server hasn't sent any data"
+msgstr ""
+
+#: source/app/service-providers/updates/index.ts:462
+#, javascript-format
+msgid "An update to version %s is available!"
+msgstr "%s on uuendamiseks saadaval!"
+
 #: source/app/service-providers/menu/menu.darwin.ts:44
 #: source/app/service-providers/menu/menu.darwin.ts:639
 #: source/app/service-providers/menu/menu.win32.ts:612
@@ -199,12 +260,6 @@ msgstr "Peida ülejäänud"
 msgid "Show"
 msgstr "Näita"
 
-#: source/app/service-providers/menu/menu.darwin.ts:102
-#: source/app/service-providers/menu/menu.win32.ts:306
-#: source/app/service-providers/tray/index.ts:165
-msgid "Quit"
-msgstr "Lahku"
-
 #: source/app/service-providers/menu/menu.darwin.ts:111
 #: source/app/service-providers/menu/menu.win32.ts:85
 msgid "File"
@@ -236,8 +291,8 @@ msgstr "Tühi"
 #: source/app/service-providers/menu/menu.darwin.ts:195
 #: source/app/service-providers/menu/menu.win32.ts:160
 #: source/app/service-providers/commands/export.ts:74
-#: source/tmp/SnippetsTab.vue.ts:47 source/tmp/CustomCSS.vue.ts:42
-#: source/tmp/CustomCSS.vue.ts:56 source/tmp/Defaults.vue.ts:112
+#: source/tmp/Defaults.vue.ts:112 source/tmp/SnippetsTab.vue.ts:47
+#: source/tmp/CustomCSS.vue.ts:42 source/tmp/CustomCSS.vue.ts:56
 msgid "Save"
 msgstr "Salvesta"
 
@@ -500,91 +555,6 @@ msgstr "Ava Õpetus"
 msgid "Check for updates"
 msgstr "Kontrolli uuendusi"
 
-#: source/app/service-providers/tray/index.ts:159
-msgid "Show Zettlr"
-msgstr "Näita Zettlrit"
-
-#: source/app/service-providers/tray/index.ts:172
-msgid "Zettlr"
-msgstr "Zettlr"
-
-#: source/app/service-providers/citeproc/index.ts:239
-#: source/app/service-providers/citeproc/index.ts:437
-msgid "The citation database could not be loaded"
-msgstr ""
-
-#: source/app/service-providers/citeproc/index.ts:425
-msgid "Changes to the library file detected. Reloading …"
-msgstr ""
-
-#: source/app/service-providers/commands/export.ts:74
-msgid "Choose export destination"
-msgstr ""
-
-#: source/app/service-providers/commands/export.ts:105
-#, javascript-format
-msgid "Exporting to %s"
-msgstr "Eksportimine %s"
-
-#: source/app/service-providers/commands/export.ts:117
-msgid "Export failed"
-msgstr "Eksportimine ebaõnnestus"
-
-#: source/app/service-providers/commands/export.ts:118
-#, javascript-format
-msgid "An error occurred on export: %s"
-msgstr "Eksportimisel tekkis viga: %s"
-
-#: source/app/service-providers/commands/dir-new.ts:36
-#: source/app/service-providers/commands/dir-new.ts:37
-#: source/app/service-providers/commands/dir-new.ts:48
-#: source/app/service-providers/commands/dir-new.ts:49
-#: source/app/service-providers/commands/dir-new.ts:59
-msgid "Could not create directory"
-msgstr "Nimistut polnud võimalik luua"
-
-#. Else standard val for new dirs.
-#: source/app/service-providers/commands/dir-new.ts:42
-#: source/tmp/tree-item.vue.ts:262
-msgid "Untitled"
-msgstr "Nimetu"
-
-#: source/app/service-providers/commands/exporter/default-exporter.ts:32
-#: source/app/service-providers/commands/exporter/pdf-exporter.ts:37
-#: source/app/service-providers/commands/importer/index.ts:46
-msgid ""
-"Pandoc has not been found on this system. Please install Pandoc prior to "
-"exporting or importing files."
-msgstr ""
-"Süsteemist ei leitud Pandoci. Palun installi enne failide eksportimist või "
-"importimist Pandoc."
-
-#: source/app/service-providers/commands/set-open-directory.ts:40
-msgid "Directory not found"
-msgstr "Nimistut ei leitud"
-
-#: source/app/service-providers/commands/set-open-directory.ts:41
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:75
-msgid "The requested directory was not found."
-msgstr "Otsitud nimistut ei leitud."
-
-#: source/app/service-providers/commands/request-move.ts:62
-msgid "Cannot move directory"
-msgstr "Nimistut pole võimalik liigutada"
-
-#: source/app/service-providers/commands/request-move.ts:63
-msgid "You cannot move a directory into one of its subdirectories."
-msgstr "Nimistust pole võimalik selle allnimistusse liigutada."
-
-#: source/app/service-providers/commands/request-move.ts:72
-msgid "Cannot move directory or file"
-msgstr "Nimistut või faili pole võimalik liigutada."
-
-#: source/app/service-providers/commands/request-move.ts:73
-#, javascript-format
-msgid "The file/directory %s already exists in target."
-msgstr "Fail või nimistu %s juba eksisteerib sihtkohas."
-
 #: source/app/service-providers/commands/import.ts:35
 msgid "You have to select a directory to import to."
 msgstr "Pead valima nimistu, kuhu importida."
@@ -622,6 +592,63 @@ msgid ""
 "unknown: %s"
 msgstr "%s faile pole võimalik importida, kuna nende failitüüp pole teada: %s"
 
+#: source/app/service-providers/commands/export.ts:74
+msgid "Choose export destination"
+msgstr ""
+
+#: source/app/service-providers/commands/export.ts:105
+#, javascript-format
+msgid "Exporting to %s"
+msgstr "Eksportimine %s"
+
+#: source/app/service-providers/commands/export.ts:117
+msgid "Export failed"
+msgstr "Eksportimine ebaõnnestus"
+
+#: source/app/service-providers/commands/export.ts:118
+#, javascript-format
+msgid "An error occurred on export: %s"
+msgstr "Eksportimisel tekkis viga: %s"
+
+#: source/app/service-providers/commands/exporter/pdf-exporter.ts:37
+#: source/app/service-providers/commands/exporter/default-exporter.ts:32
+#: source/app/service-providers/commands/importer/index.ts:46
+msgid ""
+"Pandoc has not been found on this system. Please install Pandoc prior to "
+"exporting or importing files."
+msgstr ""
+"Süsteemist ei leitud Pandoci. Palun installi enne failide eksportimist või "
+"importimist Pandoc."
+
+#: source/app/service-providers/commands/file-duplicate.ts:43
+#: source/app/service-providers/commands/file-duplicate.ts:59
+#: source/app/service-providers/commands/file-new.ts:161
+msgid "Could not create file"
+msgstr "Faili polnud võimalik luua"
+
+#. We need to generate our own filename. First, attempt to just use 'copy of'
+#: source/app/service-providers/commands/file-duplicate.ts:71
+#, javascript-format
+msgid "Copy of %s"
+msgstr ""
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:37
+msgid "The requested file was not found."
+msgstr "Otsitud faili ei leitud."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:54
+msgid "The provided name did not contain any allowed letters."
+msgstr "See nimi ei sisaldanud ühtki lubatud tähtedest."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:75
+#: source/app/service-providers/commands/set-open-directory.ts:41
+msgid "The requested directory was not found."
+msgstr "Otsitud nimistut ei leitud."
+
+#: source/app/service-providers/commands/save-image-from-clipboard.ts:86
+msgid "Could not save image"
+msgstr "Pilti polnud võimalik salvestada"
+
 #: source/app/service-providers/commands/language-tool.ts:180
 msgid "Document too long"
 msgstr ""
@@ -630,9 +657,76 @@ msgstr ""
 msgid "offline"
 msgstr ""
 
+#: source/app/service-providers/commands/rename-tag.ts:44
+#: source/app/service-providers/commands/file-rename.ts:93
+msgid "Confirm"
+msgstr ""
+
+#: source/app/service-providers/commands/rename-tag.ts:45
+#, javascript-format
+msgid "Replace tag \"%s\" with \"%s\" across %s files?"
+msgstr ""
+
+#: source/app/service-providers/commands/rename-tag.ts:47
+#: source/app/service-providers/commands/file-rename.ts:96
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
+msgid "Yes"
+msgstr ""
+
+#. 1: Omit all changes
+#: source/app/service-providers/commands/rename-tag.ts:48
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:30
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:36
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
+#: source/tmp/CustomCSS.vue.ts:49
+msgid "Cancel"
+msgstr "Tühista"
+
+#: source/app/service-providers/commands/set-open-directory.ts:40
+msgid "Directory not found"
+msgstr "Nimistut ei leitud"
+
+#: source/app/service-providers/commands/importer/import-textbundle.ts:63
+#: source/app/service-providers/commands/importer/import-textbundle.ts:69
+#, javascript-format
+msgid "Malformed Textbundle: %s"
+msgstr "Moondunud Textbundle: %s"
+
+#: source/app/service-providers/commands/request-move.ts:62
+msgid "Cannot move directory"
+msgstr "Nimistut pole võimalik liigutada"
+
+#: source/app/service-providers/commands/request-move.ts:63
+msgid "You cannot move a directory into one of its subdirectories."
+msgstr "Nimistust pole võimalik selle allnimistusse liigutada."
+
+#: source/app/service-providers/commands/request-move.ts:72
+msgid "Cannot move directory or file"
+msgstr "Nimistut või faili pole võimalik liigutada."
+
+#: source/app/service-providers/commands/request-move.ts:73
+#, javascript-format
+msgid "The file/directory %s already exists in target."
+msgstr "Fail või nimistu %s juba eksisteerib sihtkohas."
+
+#: source/app/service-providers/commands/dir-new.ts:36
+#: source/app/service-providers/commands/dir-new.ts:37
+#: source/app/service-providers/commands/dir-new.ts:48
+#: source/app/service-providers/commands/dir-new.ts:49
+#: source/app/service-providers/commands/dir-new.ts:59
+msgid "Could not create directory"
+msgstr "Nimistut polnud võimalik luua"
+
+#. Else standard val for new dirs.
+#: source/app/service-providers/commands/dir-new.ts:42
+#: source/tmp/tree-item.vue.ts:262
+msgid "Untitled"
+msgstr "Nimetu"
+
 #: source/app/service-providers/commands/root-open.ts:60
-#: source/tmp/file-tree.vue.ts:26 source/tmp/PopoverDirProps.vue.ts:156
-#: source/tmp/file-item.vue.ts:119
+#: source/tmp/file-item.vue.ts:119 source/tmp/PopoverDirProps.vue.ts:156
+#: source/tmp/file-tree.vue.ts:26
 msgid "Files"
 msgstr "Failid"
 
@@ -667,49 +761,16 @@ msgstr "%s on laadinud."
 msgid "Could not open workspace %s."
 msgstr ""
 
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:37
-msgid "The requested file was not found."
-msgstr "Otsitud faili ei leitud."
-
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:54
-msgid "The provided name did not contain any allowed letters."
-msgstr "See nimi ei sisaldanud ühtki lubatud tähtedest."
-
-#: source/app/service-providers/commands/save-image-from-clipboard.ts:86
-msgid "Could not save image"
-msgstr "Pilti polnud võimalik salvestada"
-
-#: source/app/service-providers/commands/importer/import-textbundle.ts:63
-#: source/app/service-providers/commands/importer/import-textbundle.ts:69
+#: source/app/service-providers/commands/file-rename.ts:94
 #, javascript-format
-msgid "Malformed Textbundle: %s"
-msgstr "Moondunud Textbundle: %s"
-
-#: source/app/service-providers/commands/rename-tag.ts:44
-#: source/app/service-providers/commands/file-rename.ts:93
-msgid "Confirm"
+msgid "Update %s internal links to file %s?"
 msgstr ""
 
-#: source/app/service-providers/commands/rename-tag.ts:45
-#, javascript-format
-msgid "Replace tag \"%s\" with \"%s\" across %s files?"
+#. 0: Save all changes
+#: source/app/service-providers/commands/file-rename.ts:97
+#: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
+msgid "No"
 msgstr ""
-
-#: source/app/service-providers/commands/rename-tag.ts:47
-#: source/app/service-providers/commands/file-rename.ts:96
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:32
-msgid "Yes"
-msgstr ""
-
-#. 1: Omit all changes
-#: source/app/service-providers/commands/rename-tag.ts:48
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:36
-#: source/app/service-providers/windows/dialog/confirm-remove.ts:30
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:32
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:34
-#: source/tmp/CustomCSS.vue.ts:49
-msgid "Cancel"
-msgstr "Tühista"
 
 #: source/app/service-providers/commands/import-lang-file.ts:59
 #, javascript-format
@@ -722,22 +783,15 @@ msgstr "Keelefail imporditud: %s"
 msgid "Could not import language file %s!"
 msgstr "Keelefaili %s polnud võimalik importida!"
 
-#: source/app/service-providers/commands/file-new.ts:161
-#: source/app/service-providers/commands/file-duplicate.ts:43
-#: source/app/service-providers/commands/file-duplicate.ts:59
-msgid "Could not create file"
-msgstr "Faili polnud võimalik luua"
-
-#: source/app/service-providers/commands/file-rename.ts:94
+#. Better error message
+#: source/app/service-providers/commands/open-attachment.ts:92
 #, javascript-format
-msgid "Update %s internal links to file %s?"
+msgid "The reference with key %s does not appear to have attachments."
 msgstr ""
 
-#. 0: Save all changes
-#: source/app/service-providers/commands/file-rename.ts:97
-#: source/app/service-providers/windows/dialog/ask-save-changes.ts:33
-msgid "No"
-msgstr ""
+#: source/app/service-providers/commands/open-attachment.ts:97
+msgid "Could not open attachment. Is Zotero running?"
+msgstr "Manust ei olnud võimalik avada. Kas Zotero töötab?"
 
 #: source/app/service-providers/commands/dir-project-export.ts:121
 msgid "Project successfully exported. Click to show."
@@ -748,21 +802,29 @@ msgstr ""
 msgid "Export"
 msgstr "Ekspordi..."
 
-#. We need to generate our own filename. First, attempt to just use 'copy of'
-#: source/app/service-providers/commands/file-duplicate.ts:71
-#, javascript-format
-msgid "Copy of %s"
-msgstr ""
+#: source/app/service-providers/windows/dialog/save-dialog.ts:52
+msgid "Save file"
+msgstr "Salvesta fail"
 
-#. Better error message
-#: source/app/service-providers/commands/open-attachment.ts:92
-#, javascript-format
-msgid "The reference with key %s does not appear to have attachments."
-msgstr ""
+#: source/app/service-providers/windows/dialog/prompt.ts:32
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:30
+#: source/app/service-providers/windows/dialog/should-replace-file.ts:37
+#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:33
+msgid "Ok"
+msgstr "Olgu"
 
-#: source/app/service-providers/commands/open-attachment.ts:97
-msgid "Could not open attachment. Is Zotero running?"
-msgstr "Manust ei olnud võimalik avada. Kas Zotero töötab?"
+#: source/app/service-providers/windows/dialog/ask-file.ts:47
+msgid "Open file"
+msgstr "Ava fail"
+
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:33
+msgid "Really delete?"
+msgstr "Kustuta?"
+
+#: source/app/service-providers/windows/dialog/confirm-remove.ts:34
+#, javascript-format
+msgid "Do you really want to remove %s?"
+msgstr "Kas soovite tõesti %s eemaldada?"
 
 #: source/app/service-providers/windows/dialog/should-replace-file.ts:31
 msgid "Replace file"
@@ -780,26 +842,6 @@ msgstr "Faili %s on natukene muudetud. Asenda see versioon uuemaga kettalt?"
 msgid "Always load remote changes to the current file"
 msgstr ""
 
-#: source/app/service-providers/windows/dialog/should-replace-file.ts:37
-#: source/app/service-providers/windows/dialog/confirm-remove.ts:30
-#: source/app/service-providers/windows/dialog/should-overwrite-file.ts:33
-#: source/app/service-providers/windows/dialog/prompt.ts:32
-msgid "Ok"
-msgstr "Olgu"
-
-#: source/app/service-providers/windows/dialog/save-dialog.ts:52
-msgid "Save file"
-msgstr "Salvesta fail"
-
-#: source/app/service-providers/windows/dialog/confirm-remove.ts:33
-msgid "Really delete?"
-msgstr "Kustuta?"
-
-#: source/app/service-providers/windows/dialog/confirm-remove.ts:34
-#, javascript-format
-msgid "Do you really want to remove %s?"
-msgstr "Kas soovite tõesti %s eemaldada?"
-
 #: source/app/service-providers/windows/dialog/should-overwrite-file.ts:29
 msgid "Overwrite existing file"
 msgstr "Kirjuta olemasolev fail üle"
@@ -811,8 +853,8 @@ msgstr "Fail %s on nimistus juba olemas. Kirjuta üle?"
 
 #. If the user cancels, do not omit (the default) but actually cancel
 #: source/app/service-providers/windows/dialog/ask-save-changes.ts:38
-#: source/tmp/SnippetsTab.vue.ts:65 source/tmp/CustomCSS.vue.ts:65
-#: source/tmp/Defaults.vue.ts:130
+#: source/tmp/Defaults.vue.ts:130 source/tmp/SnippetsTab.vue.ts:65
+#: source/tmp/CustomCSS.vue.ts:65
 msgid "Unsaved changes"
 msgstr "Salvestamata muudatused"
 
@@ -823,195 +865,1040 @@ msgstr ""
 "Selles failis on salvestamata muudatusi. Kas soovid need hüljata või "
 "salvestada?"
 
-#: source/app/service-providers/windows/dialog/ask-file.ts:47
-msgid "Open file"
-msgstr "Ava fail"
+#: source/tmp/file-item.vue.ts:113 source/tmp/PopoverDirProps.vue.ts:147
+msgid "Directories"
+msgstr "Nimistud"
 
-#: source/app/service-providers/updates/index.ts:177
-#, javascript-format
-msgid "Could not check for updates: Server Error (Status code: %s)"
-msgstr ""
-
-#: source/app/service-providers/updates/index.ts:179
-#, javascript-format
-msgid "Could not check for updates: Client Error (Status code: %s)"
-msgstr ""
-
-#: source/app/service-providers/updates/index.ts:181
-#, javascript-format
-msgid ""
-"Could not check for updates: The server tried to redirect (Status code: %s)"
-msgstr ""
-
-#. getaddrinfo has reported that the host has not been found.
-#. This normally only happens if the networking interface is
-#. offline.
-#: source/app/service-providers/updates/index.ts:186
-msgid "Could not check for updates: Could not establish connection"
-msgstr ""
-
-#. Something else has occurred. GotError objects have a name property.
-#: source/app/service-providers/updates/index.ts:189
-#, javascript-format
-msgid "Could not check for updates. %s: %s"
-msgstr ""
-
-#: source/app/service-providers/updates/index.ts:205
-msgid "Could not check for updates: Server hasn't sent any data"
-msgstr ""
-
-#: source/app/service-providers/updates/index.ts:462
-#, javascript-format
-msgid "An update to version %s is available!"
-msgstr "%s on uuendamiseks saadaval!"
-
-#: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
-msgid "No highlighting"
-msgstr ""
-
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:66
-#, javascript-format
-msgid "File %s does not exist."
-msgstr ""
-
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:96
-msgid "Word count"
-msgstr "Sõnade arv"
-
-#: source/common/modules/markdown-editor/tooltips/file-preview.ts:98
-#: source/tmp/PopoverDirProps.vue.ts:150 source/tmp/PopoverFileProps.vue.ts:68
-msgid "Modified"
-msgstr "Muudetud"
-
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:42
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
-#: source/win-preferences/schema/editor.ts:26
-#: source/win-preferences/schema/editor.ts:27
-msgid "Bold"
-msgstr "Paks"
-
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:47
-#: source/win-preferences/schema/editor.ts:34
-#: source/win-preferences/schema/editor.ts:35
-msgid "Italics"
-msgstr "Kursiiv"
-
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:52
-msgid "Link"
-msgstr "Link"
-
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:57
-msgid "Image"
-msgstr "Pilt"
-
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:62
-msgid "Comment"
-msgstr "Kommentaar"
-
-#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:67
-msgid "Code"
-msgstr "Kood"
-
-#: source/common/modules/markdown-editor/tooltips/footnotes.ts:100
-msgid "No footnote text found."
-msgstr ""
-
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:48
-#, javascript-format
-msgid "Readability mode (%s)"
-msgstr ""
-
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:64
-#: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/PopoverDirProps.vue.ts:144
-#: source/tmp/PopoverFileProps.vue.ts:89 source/tmp/file-item.vue.ts:134
-#: source/tmp/file-item.vue.ts:207
-#, javascript-format
-msgid "%s words"
-msgstr "%s sõna"
-
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:67
-#: source/tmp/PopoverDocInfo.vue.ts:71 source/tmp/file-item.vue.ts:132
-#: source/tmp/file-item.vue.ts:205
+#: source/tmp/file-item.vue.ts:132 source/tmp/file-item.vue.ts:205
+#: source/tmp/PopoverDocInfo.vue.ts:71
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:70
 #, javascript-format
 msgid "%s characters"
 msgstr "%s tähemärki"
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:176
-msgid "Detect automatically"
-msgstr ""
-
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:211
-msgid "Open diagnostics panel"
-msgstr ""
-
-#: source/common/modules/markdown-editor/renderers/render-images.ts:92
+#: source/tmp/file-item.vue.ts:134 source/tmp/file-item.vue.ts:207
+#: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/PopoverDirProps.vue.ts:144
+#: source/tmp/PopoverFileProps.vue.ts:89
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:67
 #, javascript-format
-msgid "Image not found: %s"
+msgid "%s words"
+msgstr "%s sõna"
+
+#: source/tmp/file-item.vue.ts:193 source/tmp/PopoverFileProps.vue.ts:77
+msgid "Characters"
+msgstr "Tähemärgid"
+
+#: source/tmp/file-item.vue.ts:195 source/tmp/PopoverFileProps.vue.ts:62
+msgid "Words"
+msgstr "Sõnad"
+
+#: source/tmp/file-list.vue.ts:66 source/tmp/file-tree.vue.ts:35
+msgid "No results"
+msgstr "Tulemused puuduvad"
+
+#: source/tmp/file-list.vue.ts:69
+msgid "No directory selected"
+msgstr "Nimistut pole valitud"
+
+#: source/tmp/file-list.vue.ts:72
+msgid "Empty directory"
+msgstr "Tühi nimistu"
+
+#: source/tmp/ToCTab.vue.ts:53 source/tmp/MainSidebar.vue.ts:80
+msgid "Table of Contents"
+msgstr "Sisukord"
+
+#: source/tmp/GlobalSearch.vue.ts:116
+msgid "Full-Text Search"
+msgstr "Täistekstiga otsimine"
+
+#: source/tmp/GlobalSearch.vue.ts:119
+msgid "Enter your search terms below"
+msgstr "Sisesta otsingutingimused alla"
+
+#: source/tmp/GlobalSearch.vue.ts:122
+msgid "Find …"
+msgstr "Otsi ..."
+
+#: source/tmp/GlobalSearch.vue.ts:125
+msgid "Filter …"
+msgstr "Filter ..."
+
+#: source/tmp/GlobalSearch.vue.ts:128
+msgid "Filter search results"
+msgstr "Filtreeri otsingutulemusi"
+
+#: source/tmp/GlobalSearch.vue.ts:131
+msgid "Restrict search to directory"
+msgstr "Piira otsing nimistule."
+
+#: source/tmp/GlobalSearch.vue.ts:134
+msgid "Restrict to directory …"
+msgstr "Piira nimistule ..."
+
+#: source/tmp/GlobalSearch.vue.ts:137
+msgid "Search"
+msgstr "Otsi"
+
+#: source/tmp/GlobalSearch.vue.ts:140
+msgid "Clear search"
+msgstr "Tühjenda otsing"
+
+#: source/tmp/GlobalSearch.vue.ts:143
+msgid "Toggle results"
+msgstr "Tulemuste lüliti"
+
+#: source/tmp/PopoverPomodoro.vue.ts:72
+msgid "Start"
+msgstr "Alustamine"
+
+#: source/tmp/PopoverPomodoro.vue.ts:75
+msgid "Stop"
+msgstr "Lõpetamine"
+
+#: source/tmp/PopoverPomodoro.vue.ts:78
+msgid "Work"
+msgstr "Töö"
+
+#: source/tmp/PopoverPomodoro.vue.ts:81
+msgid "Short break"
+msgstr "Lühike paus"
+
+#: source/tmp/PopoverPomodoro.vue.ts:84
+msgid "Break"
+msgstr "Paus"
+
+#: source/tmp/PopoverPomodoro.vue.ts:87
+msgid "Sound Effect"
 msgstr ""
 
-#: source/common/modules/markdown-editor/linters/spellcheck.ts:148
-msgid "Spelling mistake"
+#: source/tmp/PopoverPomodoro.vue.ts:90
+msgid "Volume"
 msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/equation-menu.ts:33
-msgid "Copy equation code"
-msgstr "Kopeeri võrrandikood"
+#: source/tmp/ChartView.vue.ts:60
+msgid "Charts"
+msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:71
-msgid "Open Link"
-msgstr "Ava link"
+#: source/tmp/Projects-Tab.vue.ts:24
+msgid "Zettlr also makes use of these projects:"
+msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
-msgid "Copy Mail Address"
-msgstr "Kopeeri meiliaadress"
+#: source/tmp/PopoverDocInfo.vue.ts:35
+msgid "No open document"
+msgstr "Avatud dokumenti pole"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
-msgid "Copy Link"
-msgstr "Kopeeri Link"
+#: source/tmp/PopoverDocInfo.vue.ts:38
+msgid "words"
+msgstr "sõnad"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:89
-msgid "Copy image to clipboard"
-msgstr "Kopeeri pilt lõikelauale"
+#: source/tmp/PopoverDocInfo.vue.ts:41
+msgid "characters"
+msgstr "tähemärke"
 
-#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:95
-msgid "Open in browser"
-msgstr "Ava brauseris"
+#: source/tmp/PopoverDocInfo.vue.ts:44
+msgid "characters (w/o spaces)"
+msgstr "tähemärgid (ilma tühikuteta)"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:133
-msgid "No suggestions"
-msgstr "Soovitusi pole"
+#: source/tmp/ReferencesTab.vue.ts:20 source/tmp/MainSidebar.vue.ts:77
+msgid "References"
+msgstr "Viited"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:142
-msgid "Add to dictionary"
-msgstr "Lisa sõnaraamatusse"
+#: source/tmp/ReferencesTab.vue.ts:32
+msgid "There are no citations in this document."
+msgstr "Selles dokumendis pole ühtegi tsitaati."
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:159
-msgid "Italic"
+#: source/tmp/Theme.vue.ts:37
+msgid "selected"
+msgstr "valitud"
+
+#: source/tmp/Theme.vue.ts:40
+msgid "click to select"
+msgstr "klõpsa valimiseks"
+
+#: source/tmp/File.vue.ts:59 source/tmp/PopoverFileProps.vue.ts:71
+#: source/tmp/Color.vue.ts:50 source/tmp/Number.vue.ts:59
+#: source/tmp/ShortcutChooser.vue.ts:61
+msgid "Reset"
+msgstr "Lähtesta"
+
+#: source/tmp/Defaults.vue.ts:70
+msgid ""
+"This profile is protected. This means that it will be restored when you "
+"remove or rename it."
+msgstr ""
+
+#: source/tmp/Defaults.vue.ts:73
+msgid ""
+"This profile appears to be either missing the writer or reader property. "
+"Make sure to set both so that Zettlr can use this profile."
+msgstr ""
+
+#: source/tmp/Defaults.vue.ts:109
+msgid "Edit the default settings for imports or exports here."
+msgstr "Muuda importimise ja eksportimise vaikimisi sätteid siin."
+
+#: source/tmp/Defaults.vue.ts:192 source/tmp/SnippetsTab.vue.ts:124
+#: source/tmp/CustomCSS.vue.ts:88
+msgid "Saving …"
+msgstr "Salvestamine ..."
+
+#: source/tmp/Defaults.vue.ts:201 source/tmp/SnippetsTab.vue.ts:134
+msgid "Saved!"
+msgstr "Salvestatud!"
+
+#: source/tmp/PopoverTags.vue.ts:77
+msgid "Name"
+msgstr ""
+
+#: source/tmp/PopoverTags.vue.ts:78
+msgid "Count"
+msgstr ""
+
+#: source/tmp/PopoverTags.vue.ts:103
+msgid "Filter tags…"
+msgstr "Filtreeri märksõnu..."
+
+#: source/tmp/PopoverTags.vue.ts:106
+msgid "Tag Cloud"
+msgstr "Märksõnade pilv"
+
+#: source/tmp/PopoverTags.vue.ts:109
+msgid "Suggested tags for the current file"
+msgstr ""
+
+#: source/tmp/PopoverTags.vue.ts:112
+msgid "Add to file"
+msgstr "Lisa faili"
+
+#: source/tmp/App.vue.ts:34
+msgid "Updater"
+msgstr "Uuendaja"
+
+#. True as soon as the update starts
+#: source/tmp/App.vue.ts:36
+msgid "Click to start update"
+msgstr "Klõpsa uuenduse alustamiseks"
+
+#: source/tmp/App.vue.ts:75
+msgid "New update available"
+msgstr "Uuendus saadaval"
+
+#: source/tmp/App.vue.ts:78
+msgid "Your version"
+msgstr "Sinu versioon"
+
+#: source/tmp/App.vue.ts:81
+msgid ""
+"There is a new version of Zettlr available to download. Please read the "
+"changelog below."
+msgstr ""
+
+#: source/tmp/App.vue.ts:84
+msgid "Downloading your update"
+msgstr "Uuenduse allalaadimine"
+
+#: source/tmp/App.vue.ts:87
+msgid "No update available. You have the most recent version."
+msgstr "Uuendus pole saadaval. Sul on olemas kõige hilisem versioon."
+
+#: source/tmp/App.vue.ts:132
+msgid "Starting update …"
+msgstr "Uuenduse alustamine ..."
+
+#: source/tmp/PopoverDirProps.vue.ts:150 source/tmp/PopoverFileProps.vue.ts:68
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:98
+msgid "Modified"
+msgstr "Muudetud"
+
+#: source/tmp/PopoverDirProps.vue.ts:153 source/tmp/PopoverFileProps.vue.ts:65
+msgid "Created"
+msgstr "Loodud"
+
+#: source/tmp/PopoverDirProps.vue.ts:162
+msgid "Project Settings…"
+msgstr "Projekti Sätted..."
+
+#: source/tmp/PopoverFileProps.vue.ts:74
+msgid "Set writing target…"
+msgstr "Sea kirjutamiseesmärk..."
+
+#: source/tmp/RelatedFilesTab.vue.ts:23 source/tmp/MainSidebar.vue.ts:83
+msgid "Related files"
+msgstr "Seotud failid"
+
+#: source/tmp/RelatedFilesTab.vue.ts:26
+msgid "No related files"
+msgstr "Seotud faile pole"
+
+#: source/tmp/RelatedFilesTab.vue.ts:29
+msgid "This relation is based on a bidirectional link."
+msgstr ""
+
+#: source/tmp/RelatedFilesTab.vue.ts:32
+msgid "This relation is based on an outbound link."
+msgstr ""
+
+#: source/tmp/RelatedFilesTab.vue.ts:35
+msgid "This relation is based on a backlink."
+msgstr ""
+
+#: source/tmp/RelatedFilesTab.vue.ts:113
+#, javascript-format
+msgid "This relation is based on %s shared tags: %s"
+msgstr ""
+
+#: source/tmp/General-Tab.vue.ts:23
+msgid ""
+"Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. "
+"It is Open Source, free of charge and based upon the Electron framework. "
+"Zettlr would like to thank the developers of Electron, the Node.js framework "
+"and the CodeMirror editor for their work. Without them, Zettlr would not be "
+"possible. Below you can find all projects that Zettlr uses."
+msgstr ""
+
+#: source/tmp/General-Tab.vue.ts:24
+msgid ""
+"Zettlr makes use of citeproc to display citations directly in the editor. To "
+"this end, Zettlr uses the CitationStyleLanguage (CSL) language and style "
+"files. The files have been shipped unaltered with author metadata. More "
+"information:"
+msgstr ""
+
+#: source/tmp/General-Tab.vue.ts:25
+msgid ""
+"All logos and brand names are subject to their rightful owners. Besides "
+"using their code, Zettlr is in no way affiliated with any of these projects. "
+"Node.js is a trademark of Joyent, Inc."
+msgstr ""
+
+#: source/tmp/General-Tab.vue.ts:26
+msgid ""
+"Zettlr offers an integration with LanguageTool.org, a service provided by "
+"LanguageTooler GmbH. Using this service requires an internet connection and "
+"is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
+"server that you use."
+msgstr ""
+
+#: source/tmp/SnippetsTab.vue.ts:50
+msgid "Rename snippet"
+msgstr ""
+
+#: source/tmp/SnippetsTab.vue.ts:53
+msgid "Snippets let you define reusable pieces of text with variables."
+msgstr ""
+
+#: source/tmp/CalendarView.vue.ts:59
+msgid "Calendar"
+msgstr "Kalender"
+
+#: source/tmp/CalendarView.vue.ts:77
+msgid "January"
+msgstr "jaanuar"
+
+#: source/tmp/CalendarView.vue.ts:78
+msgid "February"
+msgstr "veerbuar"
+
+#: source/tmp/CalendarView.vue.ts:79
+msgid "March"
+msgstr "märts"
+
+#: source/tmp/CalendarView.vue.ts:80
+msgid "April"
+msgstr "aprill"
+
+#: source/tmp/CalendarView.vue.ts:81
+msgid "May"
+msgstr "mai"
+
+#: source/tmp/CalendarView.vue.ts:82
+msgid "June"
+msgstr "juuni"
+
+#: source/tmp/CalendarView.vue.ts:83
+msgid "July"
+msgstr "juuli"
+
+#: source/tmp/CalendarView.vue.ts:84
+msgid "August"
+msgstr "august"
+
+#: source/tmp/CalendarView.vue.ts:85
+msgid "September"
+msgstr "september"
+
+#: source/tmp/CalendarView.vue.ts:86
+msgid "October"
+msgstr "oktoober"
+
+#: source/tmp/CalendarView.vue.ts:87
+msgid "November"
+msgstr "november"
+
+#: source/tmp/CalendarView.vue.ts:88
+msgid "December"
+msgstr "detsember"
+
+#: source/tmp/CalendarView.vue.ts:104
+msgid "Below the monthly average"
+msgstr "Alla kuu keskmise"
+
+#: source/tmp/CalendarView.vue.ts:107
+msgid "Over the monthly average"
+msgstr "Üle kuu keskmise"
+
+#: source/tmp/CalendarView.vue.ts:110
+msgid "More than twice the monthly average"
+msgstr ""
+
+#: source/tmp/OtherFilesTab.vue.ts:13 source/tmp/MainSidebar.vue.ts:74
+msgid "Other files"
+msgstr "Teised failid"
+
+#: source/tmp/OtherFilesTab.vue.ts:19
+msgid "No other files"
+msgstr "Teisi faile pole"
+
+#: source/tmp/file-tree.vue.ts:29
+msgid "Workspaces"
+msgstr "Töölauad"
+
+#: source/tmp/file-tree.vue.ts:32
+msgid "No open files or folders"
+msgstr "Avatud failid või kaustad puuduvad"
+
+#: source/tmp/List.vue.ts:141
+msgid "Add"
+msgstr "Lisa"
+
+#: source/tmp/List.vue.ts:144
+msgid "Actions"
+msgstr "Tegevused"
+
+#: source/tmp/List.vue.ts:147
+#, fuzzy
+msgid "Delete"
+msgstr "Kustuta fail"
+
+#. Apparently we have a simple array, so exactly one column
+#: source/tmp/List.vue.ts:169
+msgid "Item"
+msgstr "Objekt"
+
+#: source/tmp/PopoverStats.vue.ts:111
+msgid "words last month"
+msgstr "sõnu see kuu"
+
+#: source/tmp/PopoverStats.vue.ts:114
+msgid "daily average"
+msgstr "Päevane keskmine"
+
+#: source/tmp/PopoverStats.vue.ts:117
+msgid "words today"
+msgstr "sõnu täna"
+
+#: source/tmp/PopoverStats.vue.ts:120
+msgid "🔥 You're on fire!"
+msgstr "🔥 Sa oled leegitsemas!"
+
+#: source/tmp/PopoverStats.vue.ts:123
+msgid "💪 You're close to hitting your daily average!"
+msgstr ""
+
+#: source/tmp/PopoverStats.vue.ts:126
+msgid "✍🏼 Get writing to surpass your daily average."
+msgstr ""
+
+#: source/tmp/PopoverStats.vue.ts:129
+msgid "More statistics …"
+msgstr "Rohkem statistikat ..."
+
+#: source/tmp/CustomCSS.vue.ts:31
+msgid "Custom CSS"
+msgstr "Kohandatud CSS"
+
+#: source/tmp/CustomCSS.vue.ts:32
+msgid ""
+"Here you can override the styles of Zettlr to customise it even further. "
+"<strong>Attention: This file overrides all CSS directives! Never alter the "
+"geometry of elements, otherwise the app may expose unwanted behaviour!</"
+"strong>"
+msgstr ""
+
+#: source/tmp/CustomCSS.vue.ts:97
+msgid "Saving failed"
+msgstr "Salvestamine nurjus"
+
+#: source/win-preferences/schema/zettelkasten.ts:23
+msgid "ID regular expression"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:29
+msgid "Pattern used to generate new IDs"
+msgstr ""
+
+#. TODO: Create this type
+#: source/win-preferences/schema/zettelkasten.ts:38
+msgid "Options for ZKN elements"
+msgstr "Valikud ZKN-i elementide jaoks"
+
+#: source/win-preferences/schema/zettelkasten.ts:42
+#, fuzzy
+msgid "Link with filename only"
+msgstr "Ainult failinimi"
+
+#: source/win-preferences/schema/zettelkasten.ts:47
+msgid "When linking files, add the filename …"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:50
+msgid "always"
+msgstr "alati"
+
+#: source/win-preferences/schema/zettelkasten.ts:51
+msgid "only when linking using the ID"
+msgstr "ainult siis, kui linkides ID-d kasutada"
+
+#: source/win-preferences/schema/zettelkasten.ts:52
+msgid "never"
+msgstr "mitte kunagi"
+
+#: source/win-preferences/schema/zettelkasten.ts:60
+msgid "Start a search when following Zettelkasten-links"
+msgstr "Järgidel Zettelkasteni linke, alusta otsingut"
+
+#: source/win-preferences/schema/zettelkasten.ts:65
+msgid "Automatically create non-existing files when following internal links"
+msgstr ""
+
+#: source/win-preferences/schema/zettelkasten.ts:70
+msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
+msgstr ""
+
+#: source/win-preferences/schema/export.ts:23
+msgid "Use the internal Pandoc for exports"
+msgstr "Kasuta eksportimiseks sisemist Pandoci"
+
+#: source/win-preferences/schema/export.ts:30
+msgid "Remove tags from files"
+msgstr "Eemalda failidelt märksõnad"
+
+#: source/win-preferences/schema/export.ts:40
+msgid "Remove internal links completely"
+msgstr "Eemalda kõik sisemised lingid"
+
+#: source/win-preferences/schema/export.ts:41
+msgid "Unlink internal links"
+msgstr ""
+
+#: source/win-preferences/schema/export.ts:42
+msgid "Don't touch internal links"
+msgstr "Ära puutu sisemisi linke"
+
+#: source/win-preferences/schema/export.ts:49
+msgid ""
+"Target directory for exported files. <em>Attention:</em> Selecting the "
+"current working directory will overwrite files without warning!"
+msgstr ""
+
+#: source/win-preferences/schema/export.ts:52
+msgid "Temporary directory: is regularly expunged"
+msgstr ""
+
+#: source/win-preferences/schema/export.ts:53
+msgid ""
+"Current working directory: exported files will be saved into the currently "
+"selected directory."
+msgstr ""
+
+#: source/win-preferences/schema/export.ts:54
+msgid "Ask for directory"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:23
+msgid "Use LanguageTool"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:28
+msgid "Strictness"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:30
+#, fuzzy
+msgid "Standard"
+msgstr "Kalender"
+
+#: source/win-preferences/schema/spellchecking.ts:31
+msgid "Picky"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:38
+msgid "LanguageTool Provider"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:41
+#: source/win-preferences/schema/spellchecking.ts:48
+#, fuzzy
+msgid "Custom server"
+msgstr "Kohandatud CSS"
+
+#: source/win-preferences/schema/spellchecking.ts:55
+msgid "LanguageTool Username"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:60
+msgid "LanguageTool API key"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:67
+msgid ""
+"Select the languages for which you want to enable automatic spell checking."
+msgstr "Vali keeled, mille puhul automaatparandust kasutada."
+
+#: source/win-preferences/schema/spellchecking.ts:72
+msgid "Search for dictionaries &hellip;"
+msgstr ""
+
+#: source/win-preferences/schema/spellchecking.ts:76
+msgid "User dictionary. Remove words by clicking them."
+msgstr "Kasuta sõnaraamatut. Eemalda sõnad neile vajutades."
+
+#: source/win-preferences/schema/spellchecking.ts:78
+msgid "Dictionary entry"
+msgstr "Sõnaraamatu sissekanne"
+
+#: source/win-preferences/schema/spellchecking.ts:81
+#: source/win-preferences/schema/advanced.ts:96
+msgid "Search for entries …"
+msgstr "Otsi sissekandeid ..."
+
+#: source/win-preferences/schema/autocorrect.ts:23
+msgid "Turn on AutoCorrect"
+msgstr "Lülita automaatparandus välja"
+
+#: source/win-preferences/schema/autocorrect.ts:32
+msgid "Primary Magic Quotes"
+msgstr "Peamised \"maagilised\" jutumärgid"
+
+#: source/win-preferences/schema/autocorrect.ts:35
+#: source/win-preferences/schema/autocorrect.ts:56
+msgid "Disable Magic Quotes"
+msgstr ""
+
+#: source/win-preferences/schema/autocorrect.ts:53
+msgid "Secondary Magic Quotes"
+msgstr "Teisesed \"maagilised\" jutumärgid"
+
+#: source/win-preferences/schema/autocorrect.ts:79
+msgid ""
+"Here you can define certain strings that will be replaced when AutoCorrect "
+"is on. The characters on the left side will be replaced with whatever comes "
+"on the right."
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:23
+msgid "Pattern for new filenames"
+msgstr "Muster uute failinimede jaoks"
+
+#: source/win-preferences/schema/advanced.ts:29
+msgid "Do not prompt for filename when creating new files"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:36
+msgid "Enable debug mode"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:41
+msgid "Notify me about beta releases"
+msgstr "Teavita mind beta väljaannetest"
+
+#: source/win-preferences/schema/advanced.ts:46
+msgid "Use native window appearance"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:52
+msgid "Delete items irreversibly, if moving them to trash fails"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:58
+msgid "Show app in the notification area"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:59
+msgid "Leave app running in the notification area"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:66
+msgid "Automatically check for updates"
+msgstr "Kontrolli uuendusi automaatselt"
+
+#: source/win-preferences/schema/advanced.ts:73
+msgid ""
+"Enter all file extensions that you want to see in your attachment sidebar. "
+"Separate them with a comma. Changes are recognised after a restart."
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:81
+msgid "Zoom behavior"
+msgstr "Suumi käitumine"
+
+#: source/win-preferences/schema/advanced.ts:83
+msgid "Zoom resizes the whole GUI"
+msgstr "Suum muutab terve GUI (graafilise kasutajaliigese) suurust"
+
+#: source/win-preferences/schema/advanced.ts:84
+msgid "Zoom changes the editor font size"
+msgstr "Suum muudab toimetaja kirjasuurust"
+
+#: source/win-preferences/schema/advanced.ts:91
+msgid "iFrame rendering whitelist"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:94
+msgid "Hostname"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:102
+msgid "Activate Watchdog polling"
+msgstr ""
+
+#: source/win-preferences/schema/advanced.ts:107
+msgid "Time to wait before writing a file is considered done (in ms)"
+msgstr ""
+
+#: source/win-preferences/schema/toolbar.ts:23
+msgid "Display \"Open Preferences\" button"
+msgstr "Kuva \"Ava eelistused\" nupp"
+
+#: source/win-preferences/schema/toolbar.ts:28
+msgid "Display \"New File\" button"
+msgstr "Kuva \"Uue faili\" nupp"
+
+#: source/win-preferences/schema/toolbar.ts:33
+msgid "Display \"Previous File\" button"
+msgstr "Kuva \"Eelmise faili\" nupp"
+
+#: source/win-preferences/schema/toolbar.ts:38
+msgid "Display \"Next File\" button"
+msgstr "Kuva \"Järgmise faili\" nupp"
+
+#: source/win-preferences/schema/toolbar.ts:45
+msgid "Display readability button"
+msgstr "Kuva loetavuse nupp"
+
+#: source/win-preferences/schema/toolbar.ts:50
+msgid "Display \"Insert Comment\" button"
+msgstr ""
+
+#: source/win-preferences/schema/toolbar.ts:55
+msgid "Display link button"
+msgstr "Kuva lingi nupp"
+
+#: source/win-preferences/schema/toolbar.ts:60
+msgid "Display image button"
+msgstr "Kuva pildi nupp"
+
+#: source/win-preferences/schema/toolbar.ts:65
+msgid "Display task list button"
+msgstr "Kuva ülesannete nimekirja nupp"
+
+#: source/win-preferences/schema/toolbar.ts:70
+msgid "Display \"Insert Table\" button"
+msgstr ""
+
+#: source/win-preferences/schema/toolbar.ts:75
+msgid "Display \"Insert Footnote\" button"
+msgstr ""
+
+#: source/win-preferences/schema/toolbar.ts:82
+msgid "Display document info"
+msgstr "Kuva dokumendi info"
+
+#: source/win-preferences/schema/toolbar.ts:87
+msgid "Display Pomodoro-timer"
+msgstr "Kuva Pomodoro-taimer"
+
+#: source/win-preferences/schema/general.ts:23
+msgid "Application language (<strong>Restart required!</strong>)"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:36
+msgid "Show file information"
+msgstr "Näita faili infot"
+
+#: source/win-preferences/schema/general.ts:46
+msgid "Avoid opening files in new tabs if possible"
+msgstr "Kui võimalik, hoidu failide avamisest uues aknas"
+
+#: source/win-preferences/schema/general.ts:53
+msgid "Automatically switch to dark mode"
+msgstr "Lülita tume režiim automaatselt sisse"
+
+#: source/win-preferences/schema/general.ts:56
+#: source/win-preferences/schema/editor.ts:45
+msgid "Off"
+msgstr "Väljas"
+
+#: source/win-preferences/schema/general.ts:57
+msgid "Schedule"
+msgstr "Ajakava"
+
+#: source/win-preferences/schema/general.ts:58
+msgid "Follow Operating System"
+msgstr "Jälgi operatsioonisüsteemi"
+
+#: source/win-preferences/schema/general.ts:63
+msgid "Start dark mode at"
+msgstr "Lülita tume režiim sisse kell"
+
+#: source/win-preferences/schema/general.ts:69
+msgid "End dark mode at"
+msgstr "Lülita tume režiim välja kell"
+
+#: source/win-preferences/schema/general.ts:77
+msgid "File manager mode"
+msgstr "Failihalduri režiim"
+
+#: source/win-preferences/schema/general.ts:80
+msgid "Thin &mdash; show either file tree or file list"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:81
+msgid "Expanded &mdash; show both file tree and file list"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:82
+msgid "Combined &mdash; show files and directories in the file tree"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:87
+msgid "Display files using"
+msgstr "Kuva faile kasutades"
+
+#: source/win-preferences/schema/general.ts:90
+msgid "Filename only"
+msgstr "Ainult failinimi"
+
+#: source/win-preferences/schema/general.ts:91
+msgid "Title if applicable"
+msgstr "Nimi, kui võimalik"
+
+#: source/win-preferences/schema/general.ts:92
+msgid "First heading level 1 if applicable"
+msgstr "Esimese pealkirja tase 1, kui võimalik"
+
+#: source/win-preferences/schema/general.ts:93
+msgid "Title or first heading level 1 if applicable"
+msgstr "Nimi või esimese pealkirja tase 1, kui võimalik"
+
+#: source/win-preferences/schema/general.ts:98
+msgid "Display Markdown file extensions"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:105
+msgid "Sorting order for files (used for sorting by name)"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:108
+msgid "Natural order (10 after 2)"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:109
+msgid "ASCII order (2 after 10)"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:116
+msgid "Show folders above files"
+msgstr "Näita kaustu üle failide"
+
+#: source/win-preferences/schema/general.ts:123
+msgid "When sorting by time, sort by"
+msgstr "Sorteerides aja järgi, sorteeri"
+
+#: source/win-preferences/schema/general.ts:126
+#: source/win-preferences/schema/general.ts:135
+msgid "Last modification time"
+msgstr ""
+
+#: source/win-preferences/schema/general.ts:127
+#: source/win-preferences/schema/general.ts:136
+msgid "File creation time"
+msgstr "Faili loomisaeg"
+
+#: source/win-preferences/schema/general.ts:132
+msgid "In the file metadata display"
+msgstr ""
+
+#. TODO: Create this type
+#: source/win-preferences/schema/display.ts:24
+msgid "These options determine which elements are rendered in documents."
+msgstr ""
+
+#: source/win-preferences/schema/display.ts:28
+msgid "Render Citations"
+msgstr ""
+
+#: source/win-preferences/schema/display.ts:33
+msgid "Render Iframes"
+msgstr ""
+
+#: source/win-preferences/schema/display.ts:38
+msgid "Render Images"
+msgstr ""
+
+#: source/win-preferences/schema/display.ts:43
+msgid "Render Links"
+msgstr ""
+
+#: source/win-preferences/schema/display.ts:48
+msgid "Render Formulae"
+msgstr ""
+
+#: source/win-preferences/schema/display.ts:53
+msgid "Render Tasks"
+msgstr ""
+
+#: source/win-preferences/schema/display.ts:58
+msgid "Hide heading characters"
+msgstr ""
+
+#: source/win-preferences/schema/display.ts:63
+msgid "Render emphasis"
+msgstr ""
+
+#: source/win-preferences/schema/display.ts:71
+msgid "Here you can choose the theme for the app."
+msgstr "Siin saad valida värviteema."
+
+#: source/win-preferences/schema/display.ts:112
+msgid "Use the operating system's accent colour instead of the theme colour"
+msgstr "Kasuta teemavärvi asemel operatsioonisüsteemi aktsentvärvi."
+
+#: source/win-preferences/schema/display.ts:116
+msgid "This setting is only available on Windows and macOS"
+msgstr "See säte on saadavad ainult Windowsis ja MacOS-is."
+
+#: source/win-preferences/schema/display.ts:122
+msgid "Hide toolbar in distraction free mode"
+msgstr ""
+
+#. TODO: Create this type
+#: source/win-preferences/schema/display.ts:129
+msgid "With these controls you can constrain the image previews."
+msgstr ""
+
+#: source/win-preferences/schema/display.ts:133
+msgid "Maximum width of images (percent)"
+msgstr "Fotode maksimaalne laius (protsentides)"
+
+#: source/win-preferences/schema/display.ts:141
+msgid "Maximum height of images (percent)"
+msgstr "Fotode maksimaalne kõrgus (protsentides)"
+
+#: source/win-preferences/schema/citations.ts:23
+msgid "How would you like autocomplete to insert your citations?"
+msgstr ""
+
+#: source/win-preferences/schema/citations.ts:35
+msgid "Citation Database (CSL JSON or BibTex)"
+msgstr "Tsiteerimise andmebaas (CSL, JSON või BibTex)"
+
+#: source/win-preferences/schema/citations.ts:46
+msgid "CSL-Style (optional)"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:23
+msgid ""
+"Choose the formatting characters that the bold/emphasis commands should use"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:26
+#: source/win-preferences/schema/editor.ts:27
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:42
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:152
+msgid "Bold"
+msgstr "Paks"
+
+#: source/win-preferences/schema/editor.ts:34
+#: source/win-preferences/schema/editor.ts:35
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:47
+msgid "Italics"
 msgstr "Kursiiv"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:169
-msgid "Insert link"
-msgstr "Sisesta link"
+#: source/win-preferences/schema/editor.ts:42
+msgid "Autosave"
+msgstr "Automaatsalvestus"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:176
-msgid "Insert numbered list"
-msgstr "Sisesta nummerdatud nimekiri"
+#: source/win-preferences/schema/editor.ts:46
+msgid "Immediately"
+msgstr "Kohe"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:182
-msgid "Insert unordered list"
-msgstr "Sisesta järjestamata nimekiri"
+#: source/win-preferences/schema/editor.ts:47
+msgid "After a short delay"
+msgstr "Väikese viivitusega"
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:188
-msgid "Insert tasklist"
-msgstr "Sisesta ülesannete loetelu"
+#: source/win-preferences/schema/editor.ts:54
+msgid "Default image path (relative or absolute)"
+msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:195
-msgid "Blockquote"
-msgstr "Tsitaadiplokk"
+#: source/win-preferences/schema/editor.ts:59
+msgid "Indent by the following number of spaces"
+msgstr ""
 
-#: source/common/modules/markdown-editor/context-menu/default-menu.ts:201
-msgid "Insert Table"
-msgstr "Sisesta tabel"
+#: source/win-preferences/schema/editor.ts:64
+msgid "Indent using tabs"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:69
+msgid "Editor font size"
+msgstr "Toimetaja kirjasuurus"
+
+#: source/win-preferences/schema/editor.ts:74
+msgid "Algorithm to use for the readability mode"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:85
+msgid "Editor input mode"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:97
+msgid "Check Markdown for style issues"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:102
+#, fuzzy
+msgid "Show statusbar"
+msgstr "Näita Zettlrit"
+
+#: source/win-preferences/schema/editor.ts:109
+msgid "Mute non-focused lines in distraction-free mode"
+msgstr ""
+"Muuda segajatevabas režiimis ollas fookusest väljas olevad read häguseks"
+
+#: source/win-preferences/schema/editor.ts:114
+msgid "Automatically close matching character pairs"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:119
+msgid "Accept spaces during autocompletion"
+msgstr "Luba tühikud automaattäitmise ajal"
+
+#: source/win-preferences/schema/editor.ts:124
+msgid "Enable Table Editor"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:129
+msgid "Show link previews"
+msgstr ""
+
+#: source/win-preferences/schema/editor.ts:134
+msgid "Count characters instead of words (e.g., for Chinese)"
+msgstr "Loe sõnade asemel tähemärke (nt hiina keele puhul)"
+
+#: source/common/util/format-date.ts:33
+msgid "just now"
+msgstr "just nüüd"
 
 #: source/common/util/localise-number.ts:28
 msgid ","
@@ -1422,1007 +2309,120 @@ msgstr "hiina (Hiina)"
 msgid "Chinese"
 msgstr "hiina (Hiina)"
 
-#: source/common/util/format-date.ts:33
-msgid "just now"
-msgstr "just nüüd"
-
-#: source/win-preferences/schema/export.ts:23
-msgid "Use the internal Pandoc for exports"
-msgstr "Kasuta eksportimiseks sisemist Pandoci"
-
-#: source/win-preferences/schema/export.ts:30
-msgid "Remove tags from files"
-msgstr "Eemalda failidelt märksõnad"
-
-#: source/win-preferences/schema/export.ts:40
-msgid "Remove internal links completely"
-msgstr "Eemalda kõik sisemised lingid"
-
-#: source/win-preferences/schema/export.ts:41
-msgid "Unlink internal links"
-msgstr ""
-
-#: source/win-preferences/schema/export.ts:42
-msgid "Don't touch internal links"
-msgstr "Ära puutu sisemisi linke"
-
-#: source/win-preferences/schema/export.ts:49
-msgid ""
-"Target directory for exported files. <em>Attention:</em> Selecting the "
-"current working directory will overwrite files without warning!"
-msgstr ""
-
-#: source/win-preferences/schema/export.ts:52
-msgid "Temporary directory: is regularly expunged"
-msgstr ""
-
-#: source/win-preferences/schema/export.ts:53
-msgid ""
-"Current working directory: exported files will be saved into the currently "
-"selected directory."
-msgstr ""
-
-#: source/win-preferences/schema/export.ts:54
-msgid "Ask for directory"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:23
-msgid "Use LanguageTool"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:28
-msgid "Strictness"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:30
-#, fuzzy
-msgid "Standard"
-msgstr "Kalender"
-
-#: source/win-preferences/schema/spellchecking.ts:31
-msgid "Picky"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:38
-msgid "LanguageTool Provider"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:41
-#: source/win-preferences/schema/spellchecking.ts:48
-#, fuzzy
-msgid "Custom server"
-msgstr "Kohandatud CSS"
-
-#: source/win-preferences/schema/spellchecking.ts:55
-msgid "LanguageTool Username"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:60
-msgid "LanguageTool API key"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:67
-msgid ""
-"Select the languages for which you want to enable automatic spell checking."
-msgstr "Vali keeled, mille puhul automaatparandust kasutada."
-
-#: source/win-preferences/schema/spellchecking.ts:72
-msgid "Search for dictionaries &hellip;"
-msgstr ""
-
-#: source/win-preferences/schema/spellchecking.ts:76
-msgid "User dictionary. Remove words by clicking them."
-msgstr "Kasuta sõnaraamatut. Eemalda sõnad neile vajutades."
-
-#: source/win-preferences/schema/spellchecking.ts:78
-msgid "Dictionary entry"
-msgstr "Sõnaraamatu sissekanne"
-
-#: source/win-preferences/schema/spellchecking.ts:81
-#: source/win-preferences/schema/advanced.ts:96
-msgid "Search for entries …"
-msgstr "Otsi sissekandeid ..."
-
-#: source/win-preferences/schema/citations.ts:23
-msgid "How would you like autocomplete to insert your citations?"
-msgstr ""
-
-#: source/win-preferences/schema/citations.ts:35
-msgid "Citation Database (CSL JSON or BibTex)"
-msgstr "Tsiteerimise andmebaas (CSL, JSON või BibTex)"
-
-#: source/win-preferences/schema/citations.ts:46
-msgid "CSL-Style (optional)"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:23
-msgid "Application language (<strong>Restart required!</strong>)"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:36
-msgid "Show file information"
-msgstr "Näita faili infot"
-
-#: source/win-preferences/schema/general.ts:46
-msgid "Avoid opening files in new tabs if possible"
-msgstr "Kui võimalik, hoidu failide avamisest uues aknas"
-
-#: source/win-preferences/schema/general.ts:53
-msgid "Automatically switch to dark mode"
-msgstr "Lülita tume režiim automaatselt sisse"
-
-#: source/win-preferences/schema/general.ts:56
-#: source/win-preferences/schema/editor.ts:45
-msgid "Off"
-msgstr "Väljas"
-
-#: source/win-preferences/schema/general.ts:57
-msgid "Schedule"
-msgstr "Ajakava"
-
-#: source/win-preferences/schema/general.ts:58
-msgid "Follow Operating System"
-msgstr "Jälgi operatsioonisüsteemi"
-
-#: source/win-preferences/schema/general.ts:63
-msgid "Start dark mode at"
-msgstr "Lülita tume režiim sisse kell"
-
-#: source/win-preferences/schema/general.ts:69
-msgid "End dark mode at"
-msgstr "Lülita tume režiim välja kell"
-
-#: source/win-preferences/schema/general.ts:77
-msgid "File manager mode"
-msgstr "Failihalduri režiim"
-
-#: source/win-preferences/schema/general.ts:80
-msgid "Thin &mdash; show either file tree or file list"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:81
-msgid "Expanded &mdash; show both file tree and file list"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:82
-msgid "Combined &mdash; show files and directories in the file tree"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:87
-msgid "Display files using"
-msgstr "Kuva faile kasutades"
-
-#: source/win-preferences/schema/general.ts:90
-msgid "Filename only"
-msgstr "Ainult failinimi"
-
-#: source/win-preferences/schema/general.ts:91
-msgid "Title if applicable"
-msgstr "Nimi, kui võimalik"
-
-#: source/win-preferences/schema/general.ts:92
-msgid "First heading level 1 if applicable"
-msgstr "Esimese pealkirja tase 1, kui võimalik"
-
-#: source/win-preferences/schema/general.ts:93
-msgid "Title or first heading level 1 if applicable"
-msgstr "Nimi või esimese pealkirja tase 1, kui võimalik"
-
-#: source/win-preferences/schema/general.ts:98
-msgid "Display Markdown file extensions"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:105
-msgid "Sorting order for files (used for sorting by name)"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:108
-msgid "Natural order (10 after 2)"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:109
-msgid "ASCII order (2 after 10)"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:116
-msgid "Show folders above files"
-msgstr "Näita kaustu üle failide"
-
-#: source/win-preferences/schema/general.ts:123
-msgid "When sorting by time, sort by"
-msgstr "Sorteerides aja järgi, sorteeri"
-
-#: source/win-preferences/schema/general.ts:126
-#: source/win-preferences/schema/general.ts:135
-msgid "Last modification time"
-msgstr ""
-
-#: source/win-preferences/schema/general.ts:127
-#: source/win-preferences/schema/general.ts:136
-msgid "File creation time"
-msgstr "Faili loomisaeg"
-
-#: source/win-preferences/schema/general.ts:132
-msgid "In the file metadata display"
-msgstr ""
-
-#. TODO: Create this type
-#: source/win-preferences/schema/display.ts:24
-msgid "These options determine which elements are rendered in documents."
-msgstr ""
-
-#: source/win-preferences/schema/display.ts:28
-msgid "Render Citations"
-msgstr ""
-
-#: source/win-preferences/schema/display.ts:33
-msgid "Render Iframes"
-msgstr ""
-
-#: source/win-preferences/schema/display.ts:38
-msgid "Render Images"
-msgstr ""
-
-#: source/win-preferences/schema/display.ts:43
-msgid "Render Links"
-msgstr ""
-
-#: source/win-preferences/schema/display.ts:48
-msgid "Render Formulae"
-msgstr ""
-
-#: source/win-preferences/schema/display.ts:53
-msgid "Render Tasks"
-msgstr ""
-
-#: source/win-preferences/schema/display.ts:58
-msgid "Hide heading characters"
-msgstr ""
-
-#: source/win-preferences/schema/display.ts:63
-msgid "Render emphasis"
-msgstr ""
-
-#: source/win-preferences/schema/display.ts:71
-msgid "Here you can choose the theme for the app."
-msgstr "Siin saad valida värviteema."
-
-#: source/win-preferences/schema/display.ts:112
-msgid "Use the operating system's accent colour instead of the theme colour"
-msgstr "Kasuta teemavärvi asemel operatsioonisüsteemi aktsentvärvi."
-
-#: source/win-preferences/schema/display.ts:116
-msgid "This setting is only available on Windows and macOS"
-msgstr "See säte on saadavad ainult Windowsis ja MacOS-is."
-
-#: source/win-preferences/schema/display.ts:122
-msgid "Hide toolbar in distraction free mode"
-msgstr ""
-
-#. TODO: Create this type
-#: source/win-preferences/schema/display.ts:129
-msgid "With these controls you can constrain the image previews."
-msgstr ""
-
-#: source/win-preferences/schema/display.ts:133
-msgid "Maximum width of images (percent)"
-msgstr "Fotode maksimaalne laius (protsentides)"
-
-#: source/win-preferences/schema/display.ts:141
-msgid "Maximum height of images (percent)"
-msgstr "Fotode maksimaalne kõrgus (protsentides)"
-
-#: source/win-preferences/schema/autocorrect.ts:23
-msgid "Turn on AutoCorrect"
-msgstr "Lülita automaatparandus välja"
-
-#: source/win-preferences/schema/autocorrect.ts:32
-msgid "Primary Magic Quotes"
-msgstr "Peamised \"maagilised\" jutumärgid"
-
-#: source/win-preferences/schema/autocorrect.ts:35
-#: source/win-preferences/schema/autocorrect.ts:56
-msgid "Disable Magic Quotes"
-msgstr ""
-
-#: source/win-preferences/schema/autocorrect.ts:53
-msgid "Secondary Magic Quotes"
-msgstr "Teisesed \"maagilised\" jutumärgid"
-
-#: source/win-preferences/schema/autocorrect.ts:79
-msgid ""
-"Here you can define certain strings that will be replaced when AutoCorrect "
-"is on. The characters on the left side will be replaced with whatever comes "
-"on the right."
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:23
-msgid ""
-"Choose the formatting characters that the bold/emphasis commands should use"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:42
-msgid "Autosave"
-msgstr "Automaatsalvestus"
-
-#: source/win-preferences/schema/editor.ts:46
-msgid "Immediately"
-msgstr "Kohe"
-
-#: source/win-preferences/schema/editor.ts:47
-msgid "After a short delay"
-msgstr "Väikese viivitusega"
-
-#: source/win-preferences/schema/editor.ts:54
-msgid "Default image path (relative or absolute)"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:59
-msgid "Indent by the following number of spaces"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:64
-msgid "Indent using tabs"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:69
-msgid "Editor font size"
-msgstr "Toimetaja kirjasuurus"
-
-#: source/win-preferences/schema/editor.ts:74
-msgid "Algorithm to use for the readability mode"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:85
-msgid "Editor input mode"
+#: source/common/modules/markdown-editor/tooltips/footnotes.ts:100
+msgid "No footnote text found."
 msgstr ""
 
-#: source/win-preferences/schema/editor.ts:97
-msgid "Check Markdown for style issues"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:102
-#, fuzzy
-msgid "Show statusbar"
-msgstr "Näita Zettlrit"
-
-#: source/win-preferences/schema/editor.ts:109
-msgid "Mute non-focused lines in distraction-free mode"
-msgstr ""
-"Muuda segajatevabas režiimis ollas fookusest väljas olevad read häguseks"
-
-#: source/win-preferences/schema/editor.ts:114
-msgid "Automatically close matching character pairs"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:119
-msgid "Accept spaces during autocompletion"
-msgstr "Luba tühikud automaattäitmise ajal"
-
-#: source/win-preferences/schema/editor.ts:124
-msgid "Enable Table Editor"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:129
-msgid "Show link previews"
-msgstr ""
-
-#: source/win-preferences/schema/editor.ts:134
-msgid "Count characters instead of words (e.g., for Chinese)"
-msgstr "Loe sõnade asemel tähemärke (nt hiina keele puhul)"
-
-#: source/win-preferences/schema/zettelkasten.ts:23
-msgid "ID regular expression"
-msgstr ""
-
-#: source/win-preferences/schema/zettelkasten.ts:29
-msgid "Pattern used to generate new IDs"
-msgstr ""
-
-#. TODO: Create this type
-#: source/win-preferences/schema/zettelkasten.ts:38
-msgid "Options for ZKN elements"
-msgstr "Valikud ZKN-i elementide jaoks"
-
-#: source/win-preferences/schema/zettelkasten.ts:42
-#, fuzzy
-msgid "Link with filename only"
-msgstr "Ainult failinimi"
-
-#: source/win-preferences/schema/zettelkasten.ts:47
-msgid "When linking files, add the filename …"
-msgstr ""
-
-#: source/win-preferences/schema/zettelkasten.ts:50
-msgid "always"
-msgstr "alati"
-
-#: source/win-preferences/schema/zettelkasten.ts:51
-msgid "only when linking using the ID"
-msgstr "ainult siis, kui linkides ID-d kasutada"
-
-#: source/win-preferences/schema/zettelkasten.ts:52
-msgid "never"
-msgstr "mitte kunagi"
-
-#: source/win-preferences/schema/zettelkasten.ts:60
-msgid "Start a search when following Zettelkasten-links"
-msgstr "Järgidel Zettelkasteni linke, alusta otsingut"
-
-#: source/win-preferences/schema/zettelkasten.ts:65
-msgid "Automatically create non-existing files when following internal links"
-msgstr ""
-
-#: source/win-preferences/schema/zettelkasten.ts:70
-msgid "Put auto-created files into this directory (must be loaded in Zettlr)"
-msgstr ""
-
-#: source/win-preferences/schema/toolbar.ts:23
-msgid "Display \"Open Preferences\" button"
-msgstr "Kuva \"Ava eelistused\" nupp"
-
-#: source/win-preferences/schema/toolbar.ts:28
-msgid "Display \"New File\" button"
-msgstr "Kuva \"Uue faili\" nupp"
-
-#: source/win-preferences/schema/toolbar.ts:33
-msgid "Display \"Previous File\" button"
-msgstr "Kuva \"Eelmise faili\" nupp"
-
-#: source/win-preferences/schema/toolbar.ts:38
-msgid "Display \"Next File\" button"
-msgstr "Kuva \"Järgmise faili\" nupp"
-
-#: source/win-preferences/schema/toolbar.ts:45
-msgid "Display readability button"
-msgstr "Kuva loetavuse nupp"
-
-#: source/win-preferences/schema/toolbar.ts:50
-msgid "Display \"Insert Comment\" button"
-msgstr ""
-
-#: source/win-preferences/schema/toolbar.ts:55
-msgid "Display link button"
-msgstr "Kuva lingi nupp"
-
-#: source/win-preferences/schema/toolbar.ts:60
-msgid "Display image button"
-msgstr "Kuva pildi nupp"
-
-#: source/win-preferences/schema/toolbar.ts:65
-msgid "Display task list button"
-msgstr "Kuva ülesannete nimekirja nupp"
-
-#: source/win-preferences/schema/toolbar.ts:70
-msgid "Display \"Insert Table\" button"
-msgstr ""
-
-#: source/win-preferences/schema/toolbar.ts:75
-msgid "Display \"Insert Footnote\" button"
-msgstr ""
-
-#: source/win-preferences/schema/toolbar.ts:82
-msgid "Display document info"
-msgstr "Kuva dokumendi info"
-
-#: source/win-preferences/schema/toolbar.ts:87
-msgid "Display Pomodoro-timer"
-msgstr "Kuva Pomodoro-taimer"
-
-#: source/win-preferences/schema/advanced.ts:23
-msgid "Pattern for new filenames"
-msgstr "Muster uute failinimede jaoks"
-
-#: source/win-preferences/schema/advanced.ts:29
-msgid "Do not prompt for filename when creating new files"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:36
-msgid "Enable debug mode"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:41
-msgid "Notify me about beta releases"
-msgstr "Teavita mind beta väljaannetest"
-
-#: source/win-preferences/schema/advanced.ts:46
-msgid "Use native window appearance"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:52
-msgid "Delete items irreversibly, if moving them to trash fails"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:58
-msgid "Show app in the notification area"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:59
-msgid "Leave app running in the notification area"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:66
-msgid "Automatically check for updates"
-msgstr "Kontrolli uuendusi automaatselt"
-
-#: source/win-preferences/schema/advanced.ts:73
-msgid ""
-"Enter all file extensions that you want to see in your attachment sidebar. "
-"Separate them with a comma. Changes are recognised after a restart."
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:81
-msgid "Zoom behavior"
-msgstr "Suumi käitumine"
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:52
+msgid "Link"
+msgstr "Link"
 
-#: source/win-preferences/schema/advanced.ts:83
-msgid "Zoom resizes the whole GUI"
-msgstr "Suum muutab terve GUI (graafilise kasutajaliigese) suurust"
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:57
+msgid "Image"
+msgstr "Pilt"
 
-#: source/win-preferences/schema/advanced.ts:84
-msgid "Zoom changes the editor font size"
-msgstr "Suum muudab toimetaja kirjasuurust"
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:62
+msgid "Comment"
+msgstr "Kommentaar"
 
-#: source/win-preferences/schema/advanced.ts:91
-msgid "iFrame rendering whitelist"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:94
-msgid "Hostname"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:102
-msgid "Activate Watchdog polling"
-msgstr ""
-
-#: source/win-preferences/schema/advanced.ts:107
-msgid "Time to wait before writing a file is considered done (in ms)"
-msgstr ""
-
-#: source/tmp/file-list.vue.ts:66 source/tmp/file-tree.vue.ts:35
-msgid "No results"
-msgstr "Tulemused puuduvad"
-
-#: source/tmp/file-list.vue.ts:69
-msgid "No directory selected"
-msgstr "Nimistut pole valitud"
-
-#: source/tmp/file-list.vue.ts:72
-msgid "Empty directory"
-msgstr "Tühi nimistu"
-
-#: source/tmp/PopoverTags.vue.ts:77
-msgid "Name"
-msgstr ""
-
-#: source/tmp/PopoverTags.vue.ts:78
-msgid "Count"
-msgstr ""
-
-#: source/tmp/PopoverTags.vue.ts:103
-msgid "Filter tags…"
-msgstr "Filtreeri märksõnu..."
-
-#: source/tmp/PopoverTags.vue.ts:106
-msgid "Tag Cloud"
-msgstr "Märksõnade pilv"
-
-#: source/tmp/PopoverTags.vue.ts:109
-msgid "Suggested tags for the current file"
-msgstr ""
-
-#: source/tmp/PopoverTags.vue.ts:112
-msgid "Add to file"
-msgstr "Lisa faili"
-
-#: source/tmp/File.vue.ts:59 source/tmp/Number.vue.ts:59
-#: source/tmp/ShortcutChooser.vue.ts:61 source/tmp/Color.vue.ts:50
-#: source/tmp/PopoverFileProps.vue.ts:71
-msgid "Reset"
-msgstr "Lähtesta"
-
-#: source/tmp/SnippetsTab.vue.ts:50
-msgid "Rename snippet"
-msgstr ""
-
-#: source/tmp/SnippetsTab.vue.ts:53
-msgid "Snippets let you define reusable pieces of text with variables."
-msgstr ""
-
-#: source/tmp/SnippetsTab.vue.ts:124 source/tmp/CustomCSS.vue.ts:88
-#: source/tmp/Defaults.vue.ts:192
-msgid "Saving …"
-msgstr "Salvestamine ..."
-
-#: source/tmp/SnippetsTab.vue.ts:134 source/tmp/Defaults.vue.ts:201
-msgid "Saved!"
-msgstr "Salvestatud!"
-
-#: source/tmp/CalendarView.vue.ts:59
-msgid "Calendar"
-msgstr "Kalender"
-
-#: source/tmp/CalendarView.vue.ts:77
-msgid "January"
-msgstr "jaanuar"
-
-#: source/tmp/CalendarView.vue.ts:78
-msgid "February"
-msgstr "veerbuar"
-
-#: source/tmp/CalendarView.vue.ts:79
-msgid "March"
-msgstr "märts"
-
-#: source/tmp/CalendarView.vue.ts:80
-msgid "April"
-msgstr "aprill"
-
-#: source/tmp/CalendarView.vue.ts:81
-msgid "May"
-msgstr "mai"
-
-#: source/tmp/CalendarView.vue.ts:82
-msgid "June"
-msgstr "juuni"
-
-#: source/tmp/CalendarView.vue.ts:83
-msgid "July"
-msgstr "juuli"
-
-#: source/tmp/CalendarView.vue.ts:84
-msgid "August"
-msgstr "august"
-
-#: source/tmp/CalendarView.vue.ts:85
-msgid "September"
-msgstr "september"
-
-#: source/tmp/CalendarView.vue.ts:86
-msgid "October"
-msgstr "oktoober"
-
-#: source/tmp/CalendarView.vue.ts:87
-msgid "November"
-msgstr "november"
-
-#: source/tmp/CalendarView.vue.ts:88
-msgid "December"
-msgstr "detsember"
-
-#: source/tmp/CalendarView.vue.ts:104
-msgid "Below the monthly average"
-msgstr "Alla kuu keskmise"
-
-#: source/tmp/CalendarView.vue.ts:107
-msgid "Over the monthly average"
-msgstr "Üle kuu keskmise"
-
-#: source/tmp/CalendarView.vue.ts:110
-msgid "More than twice the monthly average"
-msgstr ""
-
-#: source/tmp/MainSidebar.vue.ts:74 source/tmp/OtherFilesTab.vue.ts:13
-msgid "Other files"
-msgstr "Teised failid"
-
-#: source/tmp/MainSidebar.vue.ts:77 source/tmp/ReferencesTab.vue.ts:20
-msgid "References"
-msgstr "Viited"
-
-#: source/tmp/MainSidebar.vue.ts:80 source/tmp/ToCTab.vue.ts:53
-msgid "Table of Contents"
-msgstr "Sisukord"
-
-#: source/tmp/MainSidebar.vue.ts:83 source/tmp/RelatedFilesTab.vue.ts:23
-msgid "Related files"
-msgstr "Seotud failid"
-
-#: source/tmp/App.vue.ts:34
-msgid "Updater"
-msgstr "Uuendaja"
-
-#. True as soon as the update starts
-#: source/tmp/App.vue.ts:36
-msgid "Click to start update"
-msgstr "Klõpsa uuenduse alustamiseks"
-
-#: source/tmp/App.vue.ts:75
-msgid "New update available"
-msgstr "Uuendus saadaval"
-
-#: source/tmp/App.vue.ts:78
-msgid "Your version"
-msgstr "Sinu versioon"
-
-#: source/tmp/App.vue.ts:81
-msgid ""
-"There is a new version of Zettlr available to download. Please read the "
-"changelog below."
-msgstr ""
-
-#: source/tmp/App.vue.ts:84
-msgid "Downloading your update"
-msgstr "Uuenduse allalaadimine"
-
-#: source/tmp/App.vue.ts:87
-msgid "No update available. You have the most recent version."
-msgstr "Uuendus pole saadaval. Sul on olemas kõige hilisem versioon."
-
-#: source/tmp/App.vue.ts:132
-msgid "Starting update …"
-msgstr "Uuenduse alustamine ..."
-
-#: source/tmp/RelatedFilesTab.vue.ts:26
-msgid "No related files"
-msgstr "Seotud faile pole"
-
-#: source/tmp/RelatedFilesTab.vue.ts:29
-msgid "This relation is based on a bidirectional link."
-msgstr ""
-
-#: source/tmp/RelatedFilesTab.vue.ts:32
-msgid "This relation is based on an outbound link."
-msgstr ""
-
-#: source/tmp/RelatedFilesTab.vue.ts:35
-msgid "This relation is based on a backlink."
-msgstr ""
+#: source/common/modules/markdown-editor/tooltips/formatting-toolbar.ts:67
+msgid "Code"
+msgstr "Kood"
 
-#: source/tmp/RelatedFilesTab.vue.ts:113
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:66
 #, javascript-format
-msgid "This relation is based on %s shared tags: %s"
+msgid "File %s does not exist."
 msgstr ""
 
-#: source/tmp/PopoverDocInfo.vue.ts:35
-msgid "No open document"
-msgstr "Avatud dokumenti pole"
+#: source/common/modules/markdown-editor/tooltips/file-preview.ts:96
+msgid "Word count"
+msgstr "Sõnade arv"
 
-#: source/tmp/PopoverDocInfo.vue.ts:38
-msgid "words"
-msgstr "sõnad"
-
-#: source/tmp/PopoverDocInfo.vue.ts:41
-msgid "characters"
-msgstr "tähemärke"
-
-#: source/tmp/PopoverDocInfo.vue.ts:44
-msgid "characters (w/o spaces)"
-msgstr "tähemärgid (ilma tühikuteta)"
-
-#: source/tmp/ReferencesTab.vue.ts:32
-msgid "There are no citations in this document."
-msgstr "Selles dokumendis pole ühtegi tsitaati."
-
-#: source/tmp/file-tree.vue.ts:29
-msgid "Workspaces"
-msgstr "Töölauad"
-
-#: source/tmp/file-tree.vue.ts:32
-msgid "No open files or folders"
-msgstr "Avatud failid või kaustad puuduvad"
-
-#: source/tmp/PopoverDirProps.vue.ts:147 source/tmp/file-item.vue.ts:113
-msgid "Directories"
-msgstr "Nimistud"
-
-#: source/tmp/PopoverDirProps.vue.ts:153 source/tmp/PopoverFileProps.vue.ts:65
-msgid "Created"
-msgstr "Loodud"
-
-#: source/tmp/PopoverDirProps.vue.ts:162
-msgid "Project Settings…"
-msgstr "Projekti Sätted..."
-
-#: source/tmp/PopoverFileProps.vue.ts:62 source/tmp/file-item.vue.ts:195
-msgid "Words"
-msgstr "Sõnad"
-
-#: source/tmp/PopoverFileProps.vue.ts:74
-msgid "Set writing target…"
-msgstr "Sea kirjutamiseesmärk..."
-
-#: source/tmp/PopoverFileProps.vue.ts:77 source/tmp/file-item.vue.ts:193
-msgid "Characters"
-msgstr "Tähemärgid"
-
-#: source/tmp/PopoverPomodoro.vue.ts:72
-msgid "Start"
-msgstr "Alustamine"
-
-#: source/tmp/PopoverPomodoro.vue.ts:75
-msgid "Stop"
-msgstr "Lõpetamine"
-
-#: source/tmp/PopoverPomodoro.vue.ts:78
-msgid "Work"
-msgstr "Töö"
-
-#: source/tmp/PopoverPomodoro.vue.ts:81
-msgid "Short break"
-msgstr "Lühike paus"
-
-#: source/tmp/PopoverPomodoro.vue.ts:84
-msgid "Break"
-msgstr "Paus"
-
-#: source/tmp/PopoverPomodoro.vue.ts:87
-msgid "Sound Effect"
+#: source/common/modules/markdown-editor/renderers/render-images.ts:92
+#, javascript-format
+msgid "Image not found: %s"
 msgstr ""
 
-#: source/tmp/PopoverPomodoro.vue.ts:90
-msgid "Volume"
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:133
+msgid "No suggestions"
+msgstr "Soovitusi pole"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:142
+msgid "Add to dictionary"
+msgstr "Lisa sõnaraamatusse"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:159
+msgid "Italic"
+msgstr "Kursiiv"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:169
+msgid "Insert link"
+msgstr "Sisesta link"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:176
+msgid "Insert numbered list"
+msgstr "Sisesta nummerdatud nimekiri"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:182
+msgid "Insert unordered list"
+msgstr "Sisesta järjestamata nimekiri"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:188
+msgid "Insert tasklist"
+msgstr "Sisesta ülesannete loetelu"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:195
+msgid "Blockquote"
+msgstr "Tsitaadiplokk"
+
+#: source/common/modules/markdown-editor/context-menu/default-menu.ts:201
+msgid "Insert Table"
+msgstr "Sisesta tabel"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:71
+msgid "Open Link"
+msgstr "Ava link"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
+msgid "Copy Mail Address"
+msgstr "Kopeeri meiliaadress"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:80
+msgid "Copy Link"
+msgstr "Kopeeri Link"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:89
+msgid "Copy image to clipboard"
+msgstr "Kopeeri pilt lõikelauale"
+
+#: source/common/modules/markdown-editor/context-menu/link-image-menu.ts:95
+msgid "Open in browser"
+msgstr "Ava brauseris"
+
+#: source/common/modules/markdown-editor/context-menu/equation-menu.ts:33
+msgid "Copy equation code"
+msgstr "Kopeeri võrrandikood"
+
+#: source/common/modules/markdown-editor/autocomplete/code-blocks.ts:42
+msgid "No highlighting"
 msgstr ""
 
-#: source/tmp/CustomCSS.vue.ts:31
-msgid "Custom CSS"
-msgstr "Kohandatud CSS"
-
-#: source/tmp/CustomCSS.vue.ts:32
-msgid ""
-"Here you can override the styles of Zettlr to customise it even further. "
-"<strong>Attention: This file overrides all CSS directives! Never alter the "
-"geometry of elements, otherwise the app may expose unwanted behaviour!</"
-"strong>"
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:50
+#, javascript-format
+msgid "Readability mode (%s)"
 msgstr ""
 
-#: source/tmp/CustomCSS.vue.ts:97
-msgid "Saving failed"
-msgstr "Salvestamine nurjus"
-
-#: source/tmp/ChartView.vue.ts:60
-msgid "Charts"
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:179
+msgid "Detect automatically"
 msgstr ""
 
-#: source/tmp/OtherFilesTab.vue.ts:19
-msgid "No other files"
-msgstr "Teisi faile pole"
-
-#: source/tmp/GlobalSearch.vue.ts:116
-msgid "Full-Text Search"
-msgstr "Täistekstiga otsimine"
-
-#: source/tmp/GlobalSearch.vue.ts:119
-msgid "Enter your search terms below"
-msgstr "Sisesta otsingutingimused alla"
-
-#: source/tmp/GlobalSearch.vue.ts:122
-msgid "Find …"
-msgstr "Otsi ..."
-
-#: source/tmp/GlobalSearch.vue.ts:125
-msgid "Filter …"
-msgstr "Filter ..."
-
-#: source/tmp/GlobalSearch.vue.ts:128
-msgid "Filter search results"
-msgstr "Filtreeri otsingutulemusi"
-
-#: source/tmp/GlobalSearch.vue.ts:131
-msgid "Restrict search to directory"
-msgstr "Piira otsing nimistule."
-
-#: source/tmp/GlobalSearch.vue.ts:134
-msgid "Restrict to directory …"
-msgstr "Piira nimistule ..."
-
-#: source/tmp/GlobalSearch.vue.ts:137
-msgid "Search"
-msgstr "Otsi"
-
-#: source/tmp/GlobalSearch.vue.ts:140
-msgid "Clear search"
-msgstr "Tühjenda otsing"
-
-#: source/tmp/GlobalSearch.vue.ts:143
-msgid "Toggle results"
-msgstr "Tulemuste lüliti"
-
-#: source/tmp/List.vue.ts:141
-msgid "Add"
-msgstr "Lisa"
-
-#: source/tmp/List.vue.ts:144
-msgid "Actions"
-msgstr "Tegevused"
-
-#: source/tmp/List.vue.ts:147
-#, fuzzy
-msgid "Delete"
-msgstr "Kustuta fail"
-
-#. Apparently we have a simple array, so exactly one column
-#: source/tmp/List.vue.ts:169
-msgid "Item"
-msgstr "Objekt"
-
-#: source/tmp/Projects-Tab.vue.ts:24
-msgid "Zettlr also makes use of these projects:"
+#: source/common/modules/markdown-editor/plugins/statusbar.ts:214
+msgid "Open diagnostics panel"
 msgstr ""
 
-#: source/tmp/Theme.vue.ts:37
-msgid "selected"
-msgstr "valitud"
-
-#: source/tmp/Theme.vue.ts:40
-msgid "click to select"
-msgstr "klõpsa valimiseks"
-
-#: source/tmp/General-Tab.vue.ts:23
-msgid ""
-"Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. "
-"It is Open Source, free of charge and based upon the Electron framework. "
-"Zettlr would like to thank the developers of Electron, the Node.js framework "
-"and the CodeMirror editor for their work. Without them, Zettlr would not be "
-"possible. Below you can find all projects that Zettlr uses."
+#: source/common/modules/markdown-editor/linters/spellcheck.ts:148
+msgid "Spelling mistake"
 msgstr ""
-
-#: source/tmp/General-Tab.vue.ts:24
-msgid ""
-"Zettlr makes use of citeproc to display citations directly in the editor. To "
-"this end, Zettlr uses the CitationStyleLanguage (CSL) language and style "
-"files. The files have been shipped unaltered with author metadata. More "
-"information:"
-msgstr ""
-
-#: source/tmp/General-Tab.vue.ts:25
-msgid ""
-"All logos and brand names are subject to their rightful owners. Besides "
-"using their code, Zettlr is in no way affiliated with any of these projects. "
-"Node.js is a trademark of Joyent, Inc."
-msgstr ""
-
-#: source/tmp/General-Tab.vue.ts:26
-msgid ""
-"Zettlr offers an integration with LanguageTool.org, a service provided by "
-"LanguageTooler GmbH. Using this service requires an internet connection and "
-"is subject to the privacy policy of LanguageTooler GmbH or the corresponding "
-"server that you use."
-msgstr ""
-
-#: source/tmp/PopoverStats.vue.ts:111
-msgid "words last month"
-msgstr "sõnu see kuu"
-
-#: source/tmp/PopoverStats.vue.ts:114
-msgid "daily average"
-msgstr "Päevane keskmine"
-
-#: source/tmp/PopoverStats.vue.ts:117
-msgid "words today"
-msgstr "sõnu täna"
-
-#: source/tmp/PopoverStats.vue.ts:120
-msgid "🔥 You're on fire!"
-msgstr "🔥 Sa oled leegitsemas!"
-
-#: source/tmp/PopoverStats.vue.ts:123
-msgid "💪 You're close to hitting your daily average!"
-msgstr ""
-
-#: source/tmp/PopoverStats.vue.ts:126
-msgid "✍🏼 Get writing to surpass your daily average."
-msgstr ""
-
-#: source/tmp/PopoverStats.vue.ts:129
-msgid "More statistics …"
-msgstr "Rohkem statistikat ..."
-
-#: source/tmp/Defaults.vue.ts:70
-msgid ""
-"This profile is protected. This means that it will be restored when you "
-"remove or rename it."
-msgstr ""
-
-#: source/tmp/Defaults.vue.ts:73
-msgid ""
-"This profile appears to be either missing the writer or reader property. "
-"Make sure to set both so that Zettlr can use this profile."
-msgstr ""
-
-#: source/tmp/Defaults.vue.ts:109
-msgid "Edit the default settings for imports or exports here."
-msgstr "Muuda importimise ja eksportimise vaikimisi sätteid siin."
 
 #~ msgid "Find…"
 #~ msgstr "Otsi..."
