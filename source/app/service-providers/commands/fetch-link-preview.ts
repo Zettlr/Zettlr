@@ -111,7 +111,7 @@ export default class FetchLinkPreview extends ZettlrCommand {
     try {
       return await fetchLinkPreview(arg)
     } catch (err: any) {
-      this._app.log.error(`[Application] Could not fetch link preview for URL ${String(arg)}: ${String(err.message)}`, err)
+      this._app.log.error(`[Application] Could not fetch link preview for URL ${String(arg)}: ${String(err.message)}` /*, err */)
       return undefined // Silently swallow errors
     }
   }
