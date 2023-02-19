@@ -92,7 +92,7 @@ import ListControl from '@common/vue/form/elements/List.vue'
 import FileControl from '@common/vue/form/elements/File.vue'
 import TextControl from '@common/vue/form/elements/Text.vue'
 import { defineComponent } from 'vue'
-import { ProjectSettings } from '@dts/common/fsal'
+import { DirDescriptor, ProjectSettings } from '@dts/common/fsal'
 import { WindowTab } from '@dts/renderer/window'
 import { PandocProfileMetadata } from '@dts/common/assets'
 import { PANDOC_READERS, PANDOC_WRITERS, SUPPORTED_READERS } from '@common/util/pandoc-maps'
@@ -113,7 +113,7 @@ export default defineComponent({
       dirPath: '',
       profiles: [] as PandocProfileMetadata[],
       selectedExportProfiles: [] as string[], // NOTE: Must correspond to the defaults in fsal-directory.ts
-      patterns: [],
+      patterns: [] as string[],
       cslStyle: '',
       texTemplate: '',
       htmlTemplate: '',
@@ -268,15 +268,16 @@ export default defineComponent({
         command: 'get-descriptor',
         payload: this.dirPath
       })
-        .then(descriptor => {
+        .then((descriptor: DirDescriptor) => {
           // Save the actually used formats.
-          if (descriptor.project !== null) {
-            this.selectedExportProfiles = descriptor.project.profiles
-            this.patterns = descriptor.project.filters
-            this.cslStyle = descriptor.project.cslStyle
-            this.htmlTemplate = descriptor.project.templates.html
-            this.texTemplate = descriptor.project.templates.tex
-            this.projectTitle = descriptor.project.title
+          if (descriptor.settings.project !== null) {
+            console.log(descriptor)
+            this.selectedExportProfiles = descriptor.settings.project.profiles
+            this.patterns = descriptor.settings.project.filters
+            this.cslStyle = descriptor.settings.project.cslStyle
+            this.htmlTemplate = descriptor.settings.project.templates.html
+            this.texTemplate = descriptor.settings.project.templates.tex
+            this.projectTitle = descriptor.settings.project.title
           } else {
             // Apparently the user kept the window open and removed the project
             // state on this project. So let's close this window silently.
