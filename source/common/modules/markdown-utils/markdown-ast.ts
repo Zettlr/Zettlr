@@ -179,10 +179,22 @@ export interface ListItem extends MDNode {
    */
   checked?: boolean
   /**
-   * An optional property. Only set for bulleted lists. Indicates the marker
-   * that was used for the list.
+   * A property that includes information about the list item marker.
    */
-  marker?: '*'|'-'|'+'
+  marker: {
+    /**
+     * The symbol used for the list item. Only present for unordered lists.
+     */
+    symbol?: '*'|'-'|'+'
+    /**
+     * The start of the symbol.
+     */
+    from: number
+    /**
+     * The end of the symbol.
+     */
+    to: number
+  }
   /**
    * A list item can contain an arbitrary amount of child nodes. Adding "List"
    * as an explicit child to signify that nested lists are children of an item.
@@ -590,14 +602,22 @@ export function parseNode (node: SyntaxNode, markdown: string): ASTNode {
           name: 'ListItem',
           from: item.from,
           to: item.to,
-          children: []
+          children: [],
+          marker: {
+            symbol: undefined,
+            from: item.from,
+            to: item.from
+          }
         }
 
-        // Identify list marker, if applicable
-        if (!astNode.ordered) {
-          const listMark = item.getChild('ListMark')
-          if (listMark !== null && listMark.to - listMark.from === 1) {
-            listItem.marker = markdown.substring(listMark.from, listMark.to) as '+'|'-'|'*'
+        // Identify list marker properties
+        const listMark = item.getChild('ListMark')
+        if (listMark !== null) {
+          listItem.marker.from = listMark.from
+          listItem.marker.to = listMark.to
+
+          if (!astNode.ordered && listMark.to - listMark.from === 1) {
+            listItem.marker.symbol = markdown.substring(listMark.from, listMark.to) as '+'|'-'|'*'
           }
         }
 
