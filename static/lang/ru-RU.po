@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-02-18 02:36+0000\n"
+"POT-Creation-Date: 2023-02-19 02:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,8 +18,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: source/win-main/tabs-context.ts:38
-#: source/app/service-providers/menu/menu.darwin.ts:599
-#: source/app/service-providers/menu/menu.win32.ts:572
+#: source/app/service-providers/menu/menu.darwin.ts:601
+#: source/app/service-providers/menu/menu.win32.ts:574
 msgid "Close Tab"
 msgstr "Закрыть вкладку"
 
@@ -50,8 +50,8 @@ msgstr "Скопировать полный путь"
 
 #: source/win-main/tabs-context.ts:80
 #: source/win-main/file-manager/util/file-item-context.ts:70
-#: source/app/service-providers/menu/menu.darwin.ts:412
-#: source/app/service-providers/menu/menu.win32.ts:413
+#: source/app/service-providers/menu/menu.darwin.ts:414
+#: source/app/service-providers/menu/menu.win32.ts:415
 msgid "Copy ID"
 msgstr "Скопировать ID"
 
@@ -67,15 +67,15 @@ msgid "Properties"
 msgstr "Настройки"
 
 #: source/win-main/file-manager/util/file-item-context.ts:41
-#: source/app/service-providers/menu/menu.darwin.ts:285
-#: source/app/service-providers/menu/menu.win32.ts:279
+#: source/app/service-providers/menu/menu.darwin.ts:287
+#: source/app/service-providers/menu/menu.win32.ts:281
 #: source/tmp/Defaults.vue.ts:76
 msgid "Rename file"
 msgstr "Переименовать файл"
 
 #: source/win-main/file-manager/util/file-item-context.ts:48
-#: source/app/service-providers/menu/menu.darwin.ts:296
-#: source/app/service-providers/menu/menu.win32.ts:290
+#: source/app/service-providers/menu/menu.darwin.ts:298
+#: source/app/service-providers/menu/menu.win32.ts:292
 msgid "Delete file"
 msgstr "Удалить файл"
 
@@ -97,8 +97,8 @@ msgid "Rename directory"
 msgstr "Переименовать директорию"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:37
-#: source/app/service-providers/menu/menu.darwin.ts:304
-#: source/app/service-providers/menu/menu.win32.ts:297
+#: source/app/service-providers/menu/menu.darwin.ts:306
+#: source/app/service-providers/menu/menu.win32.ts:299
 msgid "Delete directory"
 msgstr "Удалить директорию"
 
@@ -108,14 +108,14 @@ msgid "Open directory"
 msgstr "Открыть директорию"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:52
-#: source/app/service-providers/menu/menu.darwin.ts:114
-#: source/app/service-providers/menu/menu.win32.ts:88
+#: source/app/service-providers/menu/menu.darwin.ts:116
+#: source/app/service-providers/menu/menu.win32.ts:90
 msgid "New File…"
 msgstr "Новый файл..."
 
 #: source/win-main/file-manager/util/dir-item-context.ts:58
-#: source/app/service-providers/menu/menu.darwin.ts:153
-#: source/app/service-providers/menu/menu.win32.ts:127
+#: source/app/service-providers/menu/menu.darwin.ts:155
+#: source/app/service-providers/menu/menu.win32.ts:129
 msgid "New directory…"
 msgstr "Новая директория"
 
@@ -170,17 +170,17 @@ msgstr "База данных цитат не может быть загруже
 msgid "Changes to the library file detected. Reloading …"
 msgstr "Обнаружены изменения в файле библиотеки. Обновление..."
 
-#: source/app/service-providers/tray/index.ts:159
+#: source/app/service-providers/tray/index.ts:160
 msgid "Show Zettlr"
 msgstr "Показать Zettlr"
 
-#: source/app/service-providers/tray/index.ts:165
-#: source/app/service-providers/menu/menu.darwin.ts:102
-#: source/app/service-providers/menu/menu.win32.ts:306
+#: source/app/service-providers/tray/index.ts:166
+#: source/app/service-providers/menu/menu.darwin.ts:104
+#: source/app/service-providers/menu/menu.win32.ts:308
 msgid "Quit"
 msgstr "Выход"
 
-#: source/app/service-providers/tray/index.ts:172
+#: source/app/service-providers/tray/index.ts:173
 msgid "Zettlr"
 msgstr "Zettlr"
 
@@ -224,336 +224,336 @@ msgstr "Невозможно проверить наличие обновлен�
 msgid "An update to version %s is available!"
 msgstr "Доступно обновление до версии %s!"
 
-#: source/app/service-providers/menu/menu.darwin.ts:44
-#: source/app/service-providers/menu/menu.darwin.ts:639
-#: source/app/service-providers/menu/menu.win32.ts:612
+#: source/app/service-providers/menu/menu.darwin.ts:46
+#: source/app/service-providers/menu/menu.darwin.ts:641
+#: source/app/service-providers/menu/menu.win32.ts:614
 msgid "About Zettlr"
 msgstr "О Zettlr"
 
-#: source/app/service-providers/menu/menu.darwin.ts:49
-#: source/app/service-providers/menu/menu.win32.ts:220
-#: source/app/service-providers/menu/menu.win32.ts:224
+#: source/app/service-providers/menu/menu.darwin.ts:51
+#: source/app/service-providers/menu/menu.win32.ts:222
+#: source/app/service-providers/menu/menu.win32.ts:226
 msgid "Preferences…"
 msgstr "Настройки"
 
-#: source/app/service-providers/menu/menu.darwin.ts:57
-#: source/app/service-providers/menu/menu.win32.ts:232
+#: source/app/service-providers/menu/menu.darwin.ts:59
+#: source/app/service-providers/menu/menu.win32.ts:234
 msgid "Assets Manager"
 msgstr "Управление ресурсами"
 
-#: source/app/service-providers/menu/menu.darwin.ts:65
-#: source/app/service-providers/menu/menu.win32.ts:240
+#: source/app/service-providers/menu/menu.darwin.ts:67
+#: source/app/service-providers/menu/menu.win32.ts:242
 msgid "Manage Tags…"
 msgstr "Управление тегами"
 
-#: source/app/service-providers/menu/menu.darwin.ts:75
+#: source/app/service-providers/menu/menu.darwin.ts:77
 msgid "Services"
 msgstr "Сервисы"
 
-#: source/app/service-providers/menu/menu.darwin.ts:84
+#: source/app/service-providers/menu/menu.darwin.ts:86
 msgid "Hide"
 msgstr "Скрыть"
 
-#: source/app/service-providers/menu/menu.darwin.ts:89
+#: source/app/service-providers/menu/menu.darwin.ts:91
 msgid "Hide others"
 msgstr "Скрыть прочих"
 
-#: source/app/service-providers/menu/menu.darwin.ts:94
+#: source/app/service-providers/menu/menu.darwin.ts:96
 msgid "Show"
 msgstr "Показать"
 
-#: source/app/service-providers/menu/menu.darwin.ts:111
-#: source/app/service-providers/menu/menu.win32.ts:85
+#: source/app/service-providers/menu/menu.darwin.ts:113
+#: source/app/service-providers/menu/menu.win32.ts:87
 msgid "File"
 msgstr "Файл"
 
-#: source/app/service-providers/menu/menu.darwin.ts:164
-#: source/app/service-providers/menu/menu.win32.ts:138
+#: source/app/service-providers/menu/menu.darwin.ts:166
+#: source/app/service-providers/menu/menu.win32.ts:140
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:116
 msgid "Open…"
 msgstr "Открыть..."
 
-#: source/app/service-providers/menu/menu.darwin.ts:173
-#: source/app/service-providers/menu/menu.win32.ts:147
+#: source/app/service-providers/menu/menu.darwin.ts:175
+#: source/app/service-providers/menu/menu.win32.ts:149
 msgid "Open Workspace …"
 msgstr "Открыть рабочее окружение..."
 
-#: source/app/service-providers/menu/menu.darwin.ts:182
-#: source/app/service-providers/menu/menu.win32.ts:42
-#: source/app/service-providers/menu/menu.win32.ts:54
+#: source/app/service-providers/menu/menu.darwin.ts:184
+#: source/app/service-providers/menu/menu.win32.ts:44
+#: source/app/service-providers/menu/menu.win32.ts:56
 msgid "Recent documents"
 msgstr "Недавние документы"
 
-#: source/app/service-providers/menu/menu.darwin.ts:186
-#: source/app/service-providers/menu/menu.win32.ts:46
-#: source/app/service-providers/menu/menu.win32.ts:58
+#: source/app/service-providers/menu/menu.darwin.ts:188
+#: source/app/service-providers/menu/menu.win32.ts:48
+#: source/app/service-providers/menu/menu.win32.ts:60
 msgid "Empty"
 msgstr "Очистить"
 
-#: source/app/service-providers/menu/menu.darwin.ts:195
-#: source/app/service-providers/menu/menu.win32.ts:160
+#: source/app/service-providers/menu/menu.darwin.ts:197
+#: source/app/service-providers/menu/menu.win32.ts:162
 #: source/app/service-providers/commands/export.ts:74
 #: source/tmp/Defaults.vue.ts:112 source/tmp/SnippetsTab.vue.ts:47
 #: source/tmp/CustomCSS.vue.ts:42 source/tmp/CustomCSS.vue.ts:56
 msgid "Save"
 msgstr "Сохранить изменения"
 
-#: source/app/service-providers/menu/menu.darwin.ts:206
-#: source/app/service-providers/menu/menu.win32.ts:171
+#: source/app/service-providers/menu/menu.darwin.ts:208
+#: source/app/service-providers/menu/menu.win32.ts:173
 msgid "Previous file"
 msgstr "Предыдущий файл"
 
-#: source/app/service-providers/menu/menu.darwin.ts:217
-#: source/app/service-providers/menu/menu.win32.ts:182
+#: source/app/service-providers/menu/menu.darwin.ts:219
+#: source/app/service-providers/menu/menu.win32.ts:184
 msgid "Next file"
 msgstr "Следующий файл"
 
-#: source/app/service-providers/menu/menu.darwin.ts:231
-#: source/app/service-providers/menu/menu.win32.ts:196
+#: source/app/service-providers/menu/menu.darwin.ts:233
+#: source/app/service-providers/menu/menu.win32.ts:198
 msgid "Import files…"
 msgstr "Импорт файлов..."
 
-#: source/app/service-providers/menu/menu.darwin.ts:239
-#: source/app/service-providers/menu/menu.win32.ts:204
+#: source/app/service-providers/menu/menu.darwin.ts:241
+#: source/app/service-providers/menu/menu.win32.ts:206
 msgid "Export…"
 msgstr "Экспорт..."
 
-#: source/app/service-providers/menu/menu.darwin.ts:247
-#: source/app/service-providers/menu/menu.win32.ts:212
+#: source/app/service-providers/menu/menu.darwin.ts:249
+#: source/app/service-providers/menu/menu.win32.ts:214
 msgid "Print…"
 msgstr "Печатать..."
 
-#: source/app/service-providers/menu/menu.darwin.ts:258
-#: source/app/service-providers/menu/menu.win32.ts:252
+#: source/app/service-providers/menu/menu.darwin.ts:260
+#: source/app/service-providers/menu/menu.win32.ts:254
 msgid "Import translation…"
 msgstr "Импорт переводов..."
 
-#: source/app/service-providers/menu/menu.darwin.ts:266
-#: source/app/service-providers/menu/menu.win32.ts:260
+#: source/app/service-providers/menu/menu.darwin.ts:268
+#: source/app/service-providers/menu/menu.win32.ts:262
 msgid "Import dictionary…"
 msgstr "Импорт директории..."
 
-#: source/app/service-providers/menu/menu.darwin.ts:315
-#: source/app/service-providers/menu/menu.win32.ts:316
+#: source/app/service-providers/menu/menu.darwin.ts:317
+#: source/app/service-providers/menu/menu.win32.ts:318
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:111
 msgid "Edit"
 msgstr "Редактировать"
 
-#: source/app/service-providers/menu/menu.darwin.ts:320
-#: source/app/service-providers/menu/menu.win32.ts:321
+#: source/app/service-providers/menu/menu.darwin.ts:322
+#: source/app/service-providers/menu/menu.win32.ts:323
 msgid "Undo"
 msgstr "Отмена"
 
-#: source/app/service-providers/menu/menu.darwin.ts:326
-#: source/app/service-providers/menu/menu.win32.ts:327
+#: source/app/service-providers/menu/menu.darwin.ts:328
+#: source/app/service-providers/menu/menu.win32.ts:329
 msgid "Redo"
 msgstr "Повтор"
 
-#: source/app/service-providers/menu/menu.darwin.ts:335
-#: source/app/service-providers/menu/menu.win32.ts:336
+#: source/app/service-providers/menu/menu.darwin.ts:337
+#: source/app/service-providers/menu/menu.win32.ts:338
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:210
 msgid "Cut"
 msgstr "Вырезать"
 
-#: source/app/service-providers/menu/menu.darwin.ts:341
-#: source/app/service-providers/menu/menu.win32.ts:342
+#: source/app/service-providers/menu/menu.darwin.ts:343
+#: source/app/service-providers/menu/menu.win32.ts:344
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:217
 msgid "Copy"
 msgstr "Скопировать"
 
-#: source/app/service-providers/menu/menu.darwin.ts:346
-#: source/app/service-providers/menu/menu.win32.ts:347
+#: source/app/service-providers/menu/menu.darwin.ts:348
+#: source/app/service-providers/menu/menu.win32.ts:349
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:224
 msgid "Copy as HTML"
 msgstr "Копировать как HTML"
 
-#: source/app/service-providers/menu/menu.darwin.ts:355
-#: source/app/service-providers/menu/menu.win32.ts:356
+#: source/app/service-providers/menu/menu.darwin.ts:357
+#: source/app/service-providers/menu/menu.win32.ts:358
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:231
 msgid "Paste"
 msgstr "Вставить"
 
-#: source/app/service-providers/menu/menu.darwin.ts:360
-#: source/app/service-providers/menu/menu.win32.ts:361
+#: source/app/service-providers/menu/menu.darwin.ts:362
+#: source/app/service-providers/menu/menu.win32.ts:363
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:238
 msgid "Paste without style"
 msgstr "Вставить только текст"
 
-#: source/app/service-providers/menu/menu.darwin.ts:369
-#: source/app/service-providers/menu/menu.win32.ts:370
+#: source/app/service-providers/menu/menu.darwin.ts:371
+#: source/app/service-providers/menu/menu.win32.ts:372
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:248
 msgid "Select all"
 msgstr "Выделить всё"
 
-#: source/app/service-providers/menu/menu.darwin.ts:377
-#: source/app/service-providers/menu/menu.win32.ts:378
+#: source/app/service-providers/menu/menu.darwin.ts:379
+#: source/app/service-providers/menu/menu.win32.ts:380
 msgid "Find in file"
 msgstr "Поиск в файле"
 
-#: source/app/service-providers/menu/menu.darwin.ts:385
-#: source/app/service-providers/menu/menu.win32.ts:386
+#: source/app/service-providers/menu/menu.darwin.ts:387
+#: source/app/service-providers/menu/menu.win32.ts:388
 msgid "Find in directory"
 msgstr "Найти в директории"
 
-#: source/app/service-providers/menu/menu.darwin.ts:393
-#: source/app/service-providers/menu/menu.win32.ts:394
+#: source/app/service-providers/menu/menu.darwin.ts:395
+#: source/app/service-providers/menu/menu.win32.ts:396
 msgid "Filter files"
 msgstr "Фильтр файлов"
 
-#: source/app/service-providers/menu/menu.darwin.ts:404
-#: source/app/service-providers/menu/menu.win32.ts:405
+#: source/app/service-providers/menu/menu.darwin.ts:406
+#: source/app/service-providers/menu/menu.win32.ts:407
 msgid "Generate new ID"
 msgstr "Сгенерировать новый ID"
 
-#: source/app/service-providers/menu/menu.darwin.ts:423
+#: source/app/service-providers/menu/menu.darwin.ts:425
 msgid "Speech"
 msgstr "Речь"
 
-#: source/app/service-providers/menu/menu.darwin.ts:427
+#: source/app/service-providers/menu/menu.darwin.ts:429
 msgid "Start speaking"
 msgstr "Начать речь"
 
-#: source/app/service-providers/menu/menu.darwin.ts:432
+#: source/app/service-providers/menu/menu.darwin.ts:434
 msgid "Stop speaking"
 msgstr "Остановить речь"
 
-#: source/app/service-providers/menu/menu.darwin.ts:442
-#: source/app/service-providers/menu/menu.win32.ts:424
+#: source/app/service-providers/menu/menu.darwin.ts:444
+#: source/app/service-providers/menu/menu.win32.ts:426
 msgid "View"
 msgstr "Вид"
 
-#: source/app/service-providers/menu/menu.darwin.ts:446
-#: source/app/service-providers/menu/menu.win32.ts:428
+#: source/app/service-providers/menu/menu.darwin.ts:448
+#: source/app/service-providers/menu/menu.win32.ts:430
 #: source/win-preferences/schema/general.ts:31
 msgid "Dark mode"
 msgstr "Темный режим"
 
-#: source/app/service-providers/menu/menu.darwin.ts:456
-#: source/app/service-providers/menu/menu.win32.ts:438
+#: source/app/service-providers/menu/menu.darwin.ts:458
+#: source/app/service-providers/menu/menu.win32.ts:440
 msgid "Additional Information"
 msgstr "Дополнительная информация"
 
-#: source/app/service-providers/menu/menu.darwin.ts:466
-#: source/app/service-providers/menu/menu.win32.ts:448
+#: source/app/service-providers/menu/menu.darwin.ts:468
+#: source/app/service-providers/menu/menu.win32.ts:450
 msgid "Distraction free mode"
 msgstr "Рассеять свободный режим"
 
-#: source/app/service-providers/menu/menu.darwin.ts:474
-#: source/app/service-providers/menu/menu.win32.ts:456
+#: source/app/service-providers/menu/menu.darwin.ts:476
+#: source/app/service-providers/menu/menu.win32.ts:458
 msgid "Typewriter Mode"
 msgstr "Режим пишущей машинки"
 
-#: source/app/service-providers/menu/menu.darwin.ts:485
-#: source/app/service-providers/menu/menu.win32.ts:467
+#: source/app/service-providers/menu/menu.darwin.ts:487
+#: source/app/service-providers/menu/menu.win32.ts:469
 msgid "Toggle file manager"
 msgstr "Переключить вид менеджера: директория/файлы"
 
-#: source/app/service-providers/menu/menu.darwin.ts:493
-#: source/app/service-providers/menu/menu.win32.ts:475
+#: source/app/service-providers/menu/menu.darwin.ts:495
+#: source/app/service-providers/menu/menu.win32.ts:477
 msgid "Toggle Sidebar"
 msgstr "Включить боковую панель"
 
-#: source/app/service-providers/menu/menu.darwin.ts:507
-#: source/app/service-providers/menu/menu.win32.ts:486
+#: source/app/service-providers/menu/menu.darwin.ts:509
+#: source/app/service-providers/menu/menu.win32.ts:488
 msgid "Reset zoom"
 msgstr "Сбросить масштаб"
 
-#: source/app/service-providers/menu/menu.darwin.ts:516
-#: source/app/service-providers/menu/menu.win32.ts:495
+#: source/app/service-providers/menu/menu.darwin.ts:518
+#: source/app/service-providers/menu/menu.win32.ts:497
 msgid "Zoom in"
 msgstr "Увеличить"
 
-#: source/app/service-providers/menu/menu.darwin.ts:523
-#: source/app/service-providers/menu/menu.win32.ts:502
+#: source/app/service-providers/menu/menu.darwin.ts:525
+#: source/app/service-providers/menu/menu.win32.ts:504
 msgid "Zoom out"
 msgstr "Уменьшить"
 
-#: source/app/service-providers/menu/menu.darwin.ts:533
-#: source/app/service-providers/menu/menu.win32.ts:512
+#: source/app/service-providers/menu/menu.darwin.ts:535
+#: source/app/service-providers/menu/menu.win32.ts:514
 msgid "Toggle fullscreen"
 msgstr "Полноэкранный режим"
 
-#: source/app/service-providers/menu/menu.darwin.ts:541
-#: source/app/service-providers/menu/menu.win32.ts:521
+#: source/app/service-providers/menu/menu.darwin.ts:543
+#: source/app/service-providers/menu/menu.win32.ts:523
 msgid "Develop"
 msgstr "Разработка"
 
-#: source/app/service-providers/menu/menu.darwin.ts:545
-#: source/app/service-providers/menu/menu.win32.ts:525
+#: source/app/service-providers/menu/menu.darwin.ts:547
+#: source/app/service-providers/menu/menu.win32.ts:527
 msgid "Reload"
 msgstr "Перегрузить"
 
-#: source/app/service-providers/menu/menu.darwin.ts:553
-#: source/app/service-providers/menu/menu.win32.ts:533
+#: source/app/service-providers/menu/menu.darwin.ts:555
+#: source/app/service-providers/menu/menu.win32.ts:535
 msgid "Toggle developer tools"
 msgstr "Средства разработки"
 
-#: source/app/service-providers/menu/menu.darwin.ts:561
-#: source/app/service-providers/menu/menu.win32.ts:541
+#: source/app/service-providers/menu/menu.darwin.ts:563
+#: source/app/service-providers/menu/menu.win32.ts:543
 msgid "Open Logs"
 msgstr "Открыть логи"
 
-#: source/app/service-providers/menu/menu.darwin.ts:572
-#: source/app/service-providers/menu/menu.win32.ts:552
+#: source/app/service-providers/menu/menu.darwin.ts:574
+#: source/app/service-providers/menu/menu.win32.ts:554
 msgid "Window"
 msgstr "Окно"
 
-#: source/app/service-providers/menu/menu.darwin.ts:577
-#: source/app/service-providers/menu/menu.win32.ts:557
+#: source/app/service-providers/menu/menu.darwin.ts:579
+#: source/app/service-providers/menu/menu.win32.ts:559
 msgid "Minimize"
 msgstr "Свернуть"
 
-#: source/app/service-providers/menu/menu.darwin.ts:585
-#: source/app/service-providers/menu/menu.win32.ts:563
+#: source/app/service-providers/menu/menu.darwin.ts:587
+#: source/app/service-providers/menu/menu.win32.ts:565
 msgid "Close"
 msgstr "Закрыть"
 
-#: source/app/service-providers/menu/menu.darwin.ts:591
+#: source/app/service-providers/menu/menu.darwin.ts:593
 msgid "Bring All to Front"
 msgstr "На передний план"
 
-#: source/app/service-providers/menu/menu.darwin.ts:607
-#: source/app/service-providers/menu/menu.win32.ts:580
+#: source/app/service-providers/menu/menu.darwin.ts:609
+#: source/app/service-providers/menu/menu.win32.ts:582
 msgid "Previous Tab"
 msgstr "Предыдущая вкладка"
 
-#: source/app/service-providers/menu/menu.darwin.ts:615
-#: source/app/service-providers/menu/menu.win32.ts:588
+#: source/app/service-providers/menu/menu.darwin.ts:617
+#: source/app/service-providers/menu/menu.win32.ts:590
 msgid "Next Tab"
 msgstr "Следующая вкладка"
 
-#: source/app/service-providers/menu/menu.darwin.ts:634
-#: source/app/service-providers/menu/menu.win32.ts:607
+#: source/app/service-providers/menu/menu.darwin.ts:636
+#: source/app/service-providers/menu/menu.win32.ts:609
 msgid "Help"
 msgstr "Помощь"
 
-#: source/app/service-providers/menu/menu.darwin.ts:646
-#: source/app/service-providers/menu/menu.win32.ts:619
+#: source/app/service-providers/menu/menu.darwin.ts:648
+#: source/app/service-providers/menu/menu.win32.ts:621
 msgid "Support Zettlr"
 msgstr "Поддержать Zettlr"
 
-#: source/app/service-providers/menu/menu.darwin.ts:656
-#: source/app/service-providers/menu/menu.win32.ts:629
+#: source/app/service-providers/menu/menu.darwin.ts:658
+#: source/app/service-providers/menu/menu.win32.ts:631
 msgid "Go to website"
 msgstr "Перейти на сайт"
 
-#: source/app/service-providers/menu/menu.darwin.ts:666
-#: source/app/service-providers/menu/menu.win32.ts:639
+#: source/app/service-providers/menu/menu.darwin.ts:668
+#: source/app/service-providers/menu/menu.win32.ts:641
 msgid "Get LaTeX"
 msgstr "Скачать LaTeX"
 
-#: source/app/service-providers/menu/menu.darwin.ts:676
-#: source/app/service-providers/menu/menu.win32.ts:649
+#: source/app/service-providers/menu/menu.darwin.ts:678
+#: source/app/service-providers/menu/menu.win32.ts:651
 msgid "Open user manual"
 msgstr "Документация"
 
-#: source/app/service-providers/menu/menu.darwin.ts:687
-#: source/app/service-providers/menu/menu.win32.ts:660
+#: source/app/service-providers/menu/menu.darwin.ts:689
+#: source/app/service-providers/menu/menu.win32.ts:662
 msgid "Open Tutorial"
 msgstr "Открыть учебник"
 
-#: source/app/service-providers/menu/menu.darwin.ts:695
-#: source/app/service-providers/menu/menu.win32.ts:668 source/tmp/App.vue.ts:93
+#: source/app/service-providers/menu/menu.darwin.ts:697
+#: source/app/service-providers/menu/menu.win32.ts:670 source/tmp/App.vue.ts:93
 msgid "Check for updates"
 msgstr "Проверить обновление"
 
@@ -695,19 +695,19 @@ msgstr "Директория не найдена"
 msgid "Malformed Textbundle: %s"
 msgstr "Некорректные границы текста: %s."
 
-#: source/app/service-providers/commands/request-move.ts:62
+#: source/app/service-providers/commands/request-move.ts:60
 msgid "Cannot move directory"
 msgstr "Невозможно переместить директорию"
 
-#: source/app/service-providers/commands/request-move.ts:63
+#: source/app/service-providers/commands/request-move.ts:61
 msgid "You cannot move a directory into one of its subdirectories."
 msgstr "Нельзя перемещать родительскую директорию в дочернюю."
 
-#: source/app/service-providers/commands/request-move.ts:72
+#: source/app/service-providers/commands/request-move.ts:70
 msgid "Cannot move directory or file"
 msgstr "Ошибка перемещения"
 
-#: source/app/service-providers/commands/request-move.ts:73
+#: source/app/service-providers/commands/request-move.ts:71
 #, javascript-format
 msgid "The file/directory %s already exists in target."
 msgstr "Файл/директория уже существует"
@@ -735,7 +735,7 @@ msgstr "Файлы"
 #. TODO: Move this to a command
 #. The user wants to open another file or directory.
 #: source/app/service-providers/commands/root-open.ts:73
-#: source/app/service-providers/windows/index.ts:213
+#: source/app/service-providers/windows/index.ts:220
 msgid "Open project folder"
 msgstr "Открыть папку проекта"
 
@@ -873,7 +873,7 @@ msgstr "Директории"
 
 #: source/tmp/file-item.vue.ts:132 source/tmp/file-item.vue.ts:205
 #: source/tmp/PopoverDocInfo.vue.ts:71
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:70
+#: source/common/modules/markdown-editor/statusbar/index.ts:108
 #, javascript-format
 msgid "%s characters"
 msgstr "%s символов"
@@ -881,7 +881,7 @@ msgstr "%s символов"
 #: source/tmp/file-item.vue.ts:134 source/tmp/file-item.vue.ts:207
 #: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/PopoverDirProps.vue.ts:144
 #: source/tmp/PopoverFileProps.vue.ts:89
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:67
+#: source/common/modules/markdown-editor/statusbar/index.ts:89
 #, javascript-format
 msgid "%s words"
 msgstr "%s слов(а)"
@@ -2444,16 +2444,16 @@ msgstr "Копировать код формулы"
 msgid "No highlighting"
 msgstr "Нет выделения "
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:50
+#: source/common/modules/markdown-editor/statusbar/index.ts:52
 #, javascript-format
 msgid "Readability mode (%s)"
 msgstr "Режим удобочитаемости (%s)"
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:179
+#: source/common/modules/markdown-editor/statusbar/index.ts:252
 msgid "Detect automatically"
 msgstr "Обнаружить автоматически"
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:214
+#: source/common/modules/markdown-editor/statusbar/index.ts:294
 msgid "Open diagnostics panel"
 msgstr "Открыть панель диагностики"
 

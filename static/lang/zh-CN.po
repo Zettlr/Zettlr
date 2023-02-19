@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-02-18 02:36+0000\n"
+"POT-Creation-Date: 2023-02-19 02:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,8 +18,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: source/win-main/tabs-context.ts:38
-#: source/app/service-providers/menu/menu.darwin.ts:599
-#: source/app/service-providers/menu/menu.win32.ts:572
+#: source/app/service-providers/menu/menu.darwin.ts:601
+#: source/app/service-providers/menu/menu.win32.ts:574
 msgid "Close Tab"
 msgstr "关闭标签"
 
@@ -50,8 +50,8 @@ msgstr "复制全路径按钮"
 
 #: source/win-main/tabs-context.ts:80
 #: source/win-main/file-manager/util/file-item-context.ts:70
-#: source/app/service-providers/menu/menu.darwin.ts:412
-#: source/app/service-providers/menu/menu.win32.ts:413
+#: source/app/service-providers/menu/menu.darwin.ts:414
+#: source/app/service-providers/menu/menu.win32.ts:415
 msgid "Copy ID"
 msgstr "复制ID"
 
@@ -67,15 +67,15 @@ msgid "Properties"
 msgstr "属性"
 
 #: source/win-main/file-manager/util/file-item-context.ts:41
-#: source/app/service-providers/menu/menu.darwin.ts:285
-#: source/app/service-providers/menu/menu.win32.ts:279
+#: source/app/service-providers/menu/menu.darwin.ts:287
+#: source/app/service-providers/menu/menu.win32.ts:281
 #: source/tmp/Defaults.vue.ts:76
 msgid "Rename file"
 msgstr "重命名文档"
 
 #: source/win-main/file-manager/util/file-item-context.ts:48
-#: source/app/service-providers/menu/menu.darwin.ts:296
-#: source/app/service-providers/menu/menu.win32.ts:290
+#: source/app/service-providers/menu/menu.darwin.ts:298
+#: source/app/service-providers/menu/menu.win32.ts:292
 msgid "Delete file"
 msgstr "删除文档"
 
@@ -97,8 +97,8 @@ msgid "Rename directory"
 msgstr "重命名目录"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:37
-#: source/app/service-providers/menu/menu.darwin.ts:304
-#: source/app/service-providers/menu/menu.win32.ts:297
+#: source/app/service-providers/menu/menu.darwin.ts:306
+#: source/app/service-providers/menu/menu.win32.ts:299
 msgid "Delete directory"
 msgstr "删除目录"
 
@@ -108,14 +108,14 @@ msgid "Open directory"
 msgstr "打开目录"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:52
-#: source/app/service-providers/menu/menu.darwin.ts:114
-#: source/app/service-providers/menu/menu.win32.ts:88
+#: source/app/service-providers/menu/menu.darwin.ts:116
+#: source/app/service-providers/menu/menu.win32.ts:90
 msgid "New File…"
 msgstr "新文档…"
 
 #: source/win-main/file-manager/util/dir-item-context.ts:58
-#: source/app/service-providers/menu/menu.darwin.ts:153
-#: source/app/service-providers/menu/menu.win32.ts:127
+#: source/app/service-providers/menu/menu.darwin.ts:155
+#: source/app/service-providers/menu/menu.win32.ts:129
 msgid "New directory…"
 msgstr "新目录…"
 
@@ -170,17 +170,17 @@ msgstr "无法加载引文数据库"
 msgid "Changes to the library file detected. Reloading …"
 msgstr "检测到库文件更改，重新加载中…"
 
-#: source/app/service-providers/tray/index.ts:159
+#: source/app/service-providers/tray/index.ts:160
 msgid "Show Zettlr"
 msgstr "在托盘中显示Zettlr"
 
-#: source/app/service-providers/tray/index.ts:165
-#: source/app/service-providers/menu/menu.darwin.ts:102
-#: source/app/service-providers/menu/menu.win32.ts:306
+#: source/app/service-providers/tray/index.ts:166
+#: source/app/service-providers/menu/menu.darwin.ts:104
+#: source/app/service-providers/menu/menu.win32.ts:308
 msgid "Quit"
 msgstr "退出"
 
-#: source/app/service-providers/tray/index.ts:172
+#: source/app/service-providers/tray/index.ts:173
 msgid "Zettlr"
 msgstr "Zettlr"
 
@@ -222,336 +222,336 @@ msgstr "无法检查更新：服务器尚未发送任何数据"
 msgid "An update to version %s is available!"
 msgstr "可以更新到最新版本  %s ！"
 
-#: source/app/service-providers/menu/menu.darwin.ts:44
-#: source/app/service-providers/menu/menu.darwin.ts:639
-#: source/app/service-providers/menu/menu.win32.ts:612
+#: source/app/service-providers/menu/menu.darwin.ts:46
+#: source/app/service-providers/menu/menu.darwin.ts:641
+#: source/app/service-providers/menu/menu.win32.ts:614
 msgid "About Zettlr"
 msgstr "关于 Zettlr"
 
-#: source/app/service-providers/menu/menu.darwin.ts:49
-#: source/app/service-providers/menu/menu.win32.ts:220
-#: source/app/service-providers/menu/menu.win32.ts:224
+#: source/app/service-providers/menu/menu.darwin.ts:51
+#: source/app/service-providers/menu/menu.win32.ts:222
+#: source/app/service-providers/menu/menu.win32.ts:226
 msgid "Preferences…"
 msgstr "偏好"
 
-#: source/app/service-providers/menu/menu.darwin.ts:57
-#: source/app/service-providers/menu/menu.win32.ts:232
+#: source/app/service-providers/menu/menu.darwin.ts:59
+#: source/app/service-providers/menu/menu.win32.ts:234
 msgid "Assets Manager"
 msgstr "资源管理器"
 
-#: source/app/service-providers/menu/menu.darwin.ts:65
-#: source/app/service-providers/menu/menu.win32.ts:240
+#: source/app/service-providers/menu/menu.darwin.ts:67
+#: source/app/service-providers/menu/menu.win32.ts:242
 msgid "Manage Tags…"
 msgstr "管理标签…"
 
-#: source/app/service-providers/menu/menu.darwin.ts:75
+#: source/app/service-providers/menu/menu.darwin.ts:77
 msgid "Services"
 msgstr "服务"
 
-#: source/app/service-providers/menu/menu.darwin.ts:84
+#: source/app/service-providers/menu/menu.darwin.ts:86
 msgid "Hide"
 msgstr "隐藏"
 
-#: source/app/service-providers/menu/menu.darwin.ts:89
+#: source/app/service-providers/menu/menu.darwin.ts:91
 msgid "Hide others"
 msgstr "隐藏其他"
 
-#: source/app/service-providers/menu/menu.darwin.ts:94
+#: source/app/service-providers/menu/menu.darwin.ts:96
 msgid "Show"
 msgstr "显示"
 
-#: source/app/service-providers/menu/menu.darwin.ts:111
-#: source/app/service-providers/menu/menu.win32.ts:85
+#: source/app/service-providers/menu/menu.darwin.ts:113
+#: source/app/service-providers/menu/menu.win32.ts:87
 msgid "File"
 msgstr "文档"
 
-#: source/app/service-providers/menu/menu.darwin.ts:164
-#: source/app/service-providers/menu/menu.win32.ts:138
+#: source/app/service-providers/menu/menu.darwin.ts:166
+#: source/app/service-providers/menu/menu.win32.ts:140
 #: source/common/modules/markdown-editor/tooltips/file-preview.ts:116
 msgid "Open…"
 msgstr "打开…"
 
-#: source/app/service-providers/menu/menu.darwin.ts:173
-#: source/app/service-providers/menu/menu.win32.ts:147
+#: source/app/service-providers/menu/menu.darwin.ts:175
+#: source/app/service-providers/menu/menu.win32.ts:149
 msgid "Open Workspace …"
 msgstr "打开工作区..."
 
-#: source/app/service-providers/menu/menu.darwin.ts:182
-#: source/app/service-providers/menu/menu.win32.ts:42
-#: source/app/service-providers/menu/menu.win32.ts:54
+#: source/app/service-providers/menu/menu.darwin.ts:184
+#: source/app/service-providers/menu/menu.win32.ts:44
+#: source/app/service-providers/menu/menu.win32.ts:56
 msgid "Recent documents"
 msgstr "最近的文件"
 
-#: source/app/service-providers/menu/menu.darwin.ts:186
-#: source/app/service-providers/menu/menu.win32.ts:46
-#: source/app/service-providers/menu/menu.win32.ts:58
+#: source/app/service-providers/menu/menu.darwin.ts:188
+#: source/app/service-providers/menu/menu.win32.ts:48
+#: source/app/service-providers/menu/menu.win32.ts:60
 msgid "Empty"
 msgstr "清空近期文档"
 
-#: source/app/service-providers/menu/menu.darwin.ts:195
-#: source/app/service-providers/menu/menu.win32.ts:160
+#: source/app/service-providers/menu/menu.darwin.ts:197
+#: source/app/service-providers/menu/menu.win32.ts:162
 #: source/app/service-providers/commands/export.ts:74
 #: source/tmp/Defaults.vue.ts:112 source/tmp/SnippetsTab.vue.ts:47
 #: source/tmp/CustomCSS.vue.ts:42 source/tmp/CustomCSS.vue.ts:56
 msgid "Save"
 msgstr "保存"
 
-#: source/app/service-providers/menu/menu.darwin.ts:206
-#: source/app/service-providers/menu/menu.win32.ts:171
+#: source/app/service-providers/menu/menu.darwin.ts:208
+#: source/app/service-providers/menu/menu.win32.ts:173
 msgid "Previous file"
 msgstr "上一个文件"
 
-#: source/app/service-providers/menu/menu.darwin.ts:217
-#: source/app/service-providers/menu/menu.win32.ts:182
+#: source/app/service-providers/menu/menu.darwin.ts:219
+#: source/app/service-providers/menu/menu.win32.ts:184
 msgid "Next file"
 msgstr "下一个文件"
 
-#: source/app/service-providers/menu/menu.darwin.ts:231
-#: source/app/service-providers/menu/menu.win32.ts:196
+#: source/app/service-providers/menu/menu.darwin.ts:233
+#: source/app/service-providers/menu/menu.win32.ts:198
 msgid "Import files…"
 msgstr "导入文档…"
 
-#: source/app/service-providers/menu/menu.darwin.ts:239
-#: source/app/service-providers/menu/menu.win32.ts:204
+#: source/app/service-providers/menu/menu.darwin.ts:241
+#: source/app/service-providers/menu/menu.win32.ts:206
 msgid "Export…"
 msgstr "导出…"
 
-#: source/app/service-providers/menu/menu.darwin.ts:247
-#: source/app/service-providers/menu/menu.win32.ts:212
+#: source/app/service-providers/menu/menu.darwin.ts:249
+#: source/app/service-providers/menu/menu.win32.ts:214
 msgid "Print…"
 msgstr "打印…"
 
-#: source/app/service-providers/menu/menu.darwin.ts:258
-#: source/app/service-providers/menu/menu.win32.ts:252
+#: source/app/service-providers/menu/menu.darwin.ts:260
+#: source/app/service-providers/menu/menu.win32.ts:254
 msgid "Import translation…"
 msgstr "导入翻译…"
 
-#: source/app/service-providers/menu/menu.darwin.ts:266
-#: source/app/service-providers/menu/menu.win32.ts:260
+#: source/app/service-providers/menu/menu.darwin.ts:268
+#: source/app/service-providers/menu/menu.win32.ts:262
 msgid "Import dictionary…"
 msgstr "导入字典…"
 
-#: source/app/service-providers/menu/menu.darwin.ts:315
-#: source/app/service-providers/menu/menu.win32.ts:316
+#: source/app/service-providers/menu/menu.darwin.ts:317
+#: source/app/service-providers/menu/menu.win32.ts:318
 #: source/common/modules/markdown-editor/tooltips/footnotes.ts:111
 msgid "Edit"
 msgstr "编辑"
 
-#: source/app/service-providers/menu/menu.darwin.ts:320
-#: source/app/service-providers/menu/menu.win32.ts:321
+#: source/app/service-providers/menu/menu.darwin.ts:322
+#: source/app/service-providers/menu/menu.win32.ts:323
 msgid "Undo"
 msgstr "撤销"
 
-#: source/app/service-providers/menu/menu.darwin.ts:326
-#: source/app/service-providers/menu/menu.win32.ts:327
+#: source/app/service-providers/menu/menu.darwin.ts:328
+#: source/app/service-providers/menu/menu.win32.ts:329
 msgid "Redo"
 msgstr "重做"
 
-#: source/app/service-providers/menu/menu.darwin.ts:335
-#: source/app/service-providers/menu/menu.win32.ts:336
+#: source/app/service-providers/menu/menu.darwin.ts:337
+#: source/app/service-providers/menu/menu.win32.ts:338
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:210
 msgid "Cut"
 msgstr "剪切"
 
-#: source/app/service-providers/menu/menu.darwin.ts:341
-#: source/app/service-providers/menu/menu.win32.ts:342
+#: source/app/service-providers/menu/menu.darwin.ts:343
+#: source/app/service-providers/menu/menu.win32.ts:344
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:217
 msgid "Copy"
 msgstr "复制"
 
-#: source/app/service-providers/menu/menu.darwin.ts:346
-#: source/app/service-providers/menu/menu.win32.ts:347
+#: source/app/service-providers/menu/menu.darwin.ts:348
+#: source/app/service-providers/menu/menu.win32.ts:349
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:224
 msgid "Copy as HTML"
 msgstr "复制为HTML"
 
-#: source/app/service-providers/menu/menu.darwin.ts:355
-#: source/app/service-providers/menu/menu.win32.ts:356
+#: source/app/service-providers/menu/menu.darwin.ts:357
+#: source/app/service-providers/menu/menu.win32.ts:358
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:231
 msgid "Paste"
 msgstr "粘贴"
 
-#: source/app/service-providers/menu/menu.darwin.ts:360
-#: source/app/service-providers/menu/menu.win32.ts:361
+#: source/app/service-providers/menu/menu.darwin.ts:362
+#: source/app/service-providers/menu/menu.win32.ts:363
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:238
 msgid "Paste without style"
 msgstr "粘贴为纯文本"
 
-#: source/app/service-providers/menu/menu.darwin.ts:369
-#: source/app/service-providers/menu/menu.win32.ts:370
+#: source/app/service-providers/menu/menu.darwin.ts:371
+#: source/app/service-providers/menu/menu.win32.ts:372
 #: source/common/modules/markdown-editor/context-menu/default-menu.ts:248
 msgid "Select all"
 msgstr "全选"
 
-#: source/app/service-providers/menu/menu.darwin.ts:377
-#: source/app/service-providers/menu/menu.win32.ts:378
+#: source/app/service-providers/menu/menu.darwin.ts:379
+#: source/app/service-providers/menu/menu.win32.ts:380
 msgid "Find in file"
 msgstr "在文档中查找"
 
-#: source/app/service-providers/menu/menu.darwin.ts:385
-#: source/app/service-providers/menu/menu.win32.ts:386
+#: source/app/service-providers/menu/menu.darwin.ts:387
+#: source/app/service-providers/menu/menu.win32.ts:388
 msgid "Find in directory"
 msgstr "在目录中查找"
 
-#: source/app/service-providers/menu/menu.darwin.ts:393
-#: source/app/service-providers/menu/menu.win32.ts:394
+#: source/app/service-providers/menu/menu.darwin.ts:395
+#: source/app/service-providers/menu/menu.win32.ts:396
 msgid "Filter files"
 msgstr "过滤文件"
 
-#: source/app/service-providers/menu/menu.darwin.ts:404
-#: source/app/service-providers/menu/menu.win32.ts:405
+#: source/app/service-providers/menu/menu.darwin.ts:406
+#: source/app/service-providers/menu/menu.win32.ts:407
 msgid "Generate new ID"
 msgstr "生成新的ID"
 
-#: source/app/service-providers/menu/menu.darwin.ts:423
+#: source/app/service-providers/menu/menu.darwin.ts:425
 msgid "Speech"
 msgstr "语音"
 
-#: source/app/service-providers/menu/menu.darwin.ts:427
+#: source/app/service-providers/menu/menu.darwin.ts:429
 msgid "Start speaking"
 msgstr "开始讲话"
 
-#: source/app/service-providers/menu/menu.darwin.ts:432
+#: source/app/service-providers/menu/menu.darwin.ts:434
 msgid "Stop speaking"
 msgstr "结束讲话"
 
-#: source/app/service-providers/menu/menu.darwin.ts:442
-#: source/app/service-providers/menu/menu.win32.ts:424
+#: source/app/service-providers/menu/menu.darwin.ts:444
+#: source/app/service-providers/menu/menu.win32.ts:426
 msgid "View"
 msgstr "视图"
 
-#: source/app/service-providers/menu/menu.darwin.ts:446
-#: source/app/service-providers/menu/menu.win32.ts:428
+#: source/app/service-providers/menu/menu.darwin.ts:448
+#: source/app/service-providers/menu/menu.win32.ts:430
 #: source/win-preferences/schema/general.ts:31
 msgid "Dark mode"
 msgstr "夜间模式"
 
-#: source/app/service-providers/menu/menu.darwin.ts:456
-#: source/app/service-providers/menu/menu.win32.ts:438
+#: source/app/service-providers/menu/menu.darwin.ts:458
+#: source/app/service-providers/menu/menu.win32.ts:440
 msgid "Additional Information"
 msgstr "额外信息"
 
-#: source/app/service-providers/menu/menu.darwin.ts:466
-#: source/app/service-providers/menu/menu.win32.ts:448
+#: source/app/service-providers/menu/menu.darwin.ts:468
+#: source/app/service-providers/menu/menu.win32.ts:450
 msgid "Distraction free mode"
 msgstr "专注模式"
 
-#: source/app/service-providers/menu/menu.darwin.ts:474
-#: source/app/service-providers/menu/menu.win32.ts:456
+#: source/app/service-providers/menu/menu.darwin.ts:476
+#: source/app/service-providers/menu/menu.win32.ts:458
 msgid "Typewriter Mode"
 msgstr "打字机模式"
 
-#: source/app/service-providers/menu/menu.darwin.ts:485
-#: source/app/service-providers/menu/menu.win32.ts:467
+#: source/app/service-providers/menu/menu.darwin.ts:487
+#: source/app/service-providers/menu/menu.win32.ts:469
 msgid "Toggle file manager"
 msgstr "切换文件管理器"
 
-#: source/app/service-providers/menu/menu.darwin.ts:493
-#: source/app/service-providers/menu/menu.win32.ts:475
+#: source/app/service-providers/menu/menu.darwin.ts:495
+#: source/app/service-providers/menu/menu.win32.ts:477
 msgid "Toggle Sidebar"
 msgstr "切换侧边栏"
 
-#: source/app/service-providers/menu/menu.darwin.ts:507
-#: source/app/service-providers/menu/menu.win32.ts:486
+#: source/app/service-providers/menu/menu.darwin.ts:509
+#: source/app/service-providers/menu/menu.win32.ts:488
 msgid "Reset zoom"
 msgstr "重置缩放"
 
-#: source/app/service-providers/menu/menu.darwin.ts:516
-#: source/app/service-providers/menu/menu.win32.ts:495
+#: source/app/service-providers/menu/menu.darwin.ts:518
+#: source/app/service-providers/menu/menu.win32.ts:497
 msgid "Zoom in"
 msgstr "放大"
 
-#: source/app/service-providers/menu/menu.darwin.ts:523
-#: source/app/service-providers/menu/menu.win32.ts:502
+#: source/app/service-providers/menu/menu.darwin.ts:525
+#: source/app/service-providers/menu/menu.win32.ts:504
 msgid "Zoom out"
 msgstr "缩小"
 
-#: source/app/service-providers/menu/menu.darwin.ts:533
-#: source/app/service-providers/menu/menu.win32.ts:512
+#: source/app/service-providers/menu/menu.darwin.ts:535
+#: source/app/service-providers/menu/menu.win32.ts:514
 msgid "Toggle fullscreen"
 msgstr "切换全屏"
 
-#: source/app/service-providers/menu/menu.darwin.ts:541
-#: source/app/service-providers/menu/menu.win32.ts:521
+#: source/app/service-providers/menu/menu.darwin.ts:543
+#: source/app/service-providers/menu/menu.win32.ts:523
 msgid "Develop"
 msgstr "改进"
 
-#: source/app/service-providers/menu/menu.darwin.ts:545
-#: source/app/service-providers/menu/menu.win32.ts:525
+#: source/app/service-providers/menu/menu.darwin.ts:547
+#: source/app/service-providers/menu/menu.win32.ts:527
 msgid "Reload"
 msgstr "重新加载"
 
-#: source/app/service-providers/menu/menu.darwin.ts:553
-#: source/app/service-providers/menu/menu.win32.ts:533
+#: source/app/service-providers/menu/menu.darwin.ts:555
+#: source/app/service-providers/menu/menu.win32.ts:535
 msgid "Toggle developer tools"
 msgstr "切换开发人员工具"
 
-#: source/app/service-providers/menu/menu.darwin.ts:561
-#: source/app/service-providers/menu/menu.win32.ts:541
+#: source/app/service-providers/menu/menu.darwin.ts:563
+#: source/app/service-providers/menu/menu.win32.ts:543
 msgid "Open Logs"
 msgstr "打开日志"
 
-#: source/app/service-providers/menu/menu.darwin.ts:572
-#: source/app/service-providers/menu/menu.win32.ts:552
+#: source/app/service-providers/menu/menu.darwin.ts:574
+#: source/app/service-providers/menu/menu.win32.ts:554
 msgid "Window"
 msgstr "窗口"
 
-#: source/app/service-providers/menu/menu.darwin.ts:577
-#: source/app/service-providers/menu/menu.win32.ts:557
+#: source/app/service-providers/menu/menu.darwin.ts:579
+#: source/app/service-providers/menu/menu.win32.ts:559
 msgid "Minimize"
 msgstr "最小化"
 
-#: source/app/service-providers/menu/menu.darwin.ts:585
-#: source/app/service-providers/menu/menu.win32.ts:563
+#: source/app/service-providers/menu/menu.darwin.ts:587
+#: source/app/service-providers/menu/menu.win32.ts:565
 msgid "Close"
 msgstr "关闭"
 
-#: source/app/service-providers/menu/menu.darwin.ts:591
+#: source/app/service-providers/menu/menu.darwin.ts:593
 msgid "Bring All to Front"
 msgstr "前置"
 
-#: source/app/service-providers/menu/menu.darwin.ts:607
-#: source/app/service-providers/menu/menu.win32.ts:580
+#: source/app/service-providers/menu/menu.darwin.ts:609
+#: source/app/service-providers/menu/menu.win32.ts:582
 msgid "Previous Tab"
 msgstr "上一个标签"
 
-#: source/app/service-providers/menu/menu.darwin.ts:615
-#: source/app/service-providers/menu/menu.win32.ts:588
+#: source/app/service-providers/menu/menu.darwin.ts:617
+#: source/app/service-providers/menu/menu.win32.ts:590
 msgid "Next Tab"
 msgstr "下一个标签"
 
-#: source/app/service-providers/menu/menu.darwin.ts:634
-#: source/app/service-providers/menu/menu.win32.ts:607
+#: source/app/service-providers/menu/menu.darwin.ts:636
+#: source/app/service-providers/menu/menu.win32.ts:609
 msgid "Help"
 msgstr "帮助"
 
-#: source/app/service-providers/menu/menu.darwin.ts:646
-#: source/app/service-providers/menu/menu.win32.ts:619
+#: source/app/service-providers/menu/menu.darwin.ts:648
+#: source/app/service-providers/menu/menu.win32.ts:621
 msgid "Support Zettlr"
 msgstr "支持 Zettlr"
 
-#: source/app/service-providers/menu/menu.darwin.ts:656
-#: source/app/service-providers/menu/menu.win32.ts:629
+#: source/app/service-providers/menu/menu.darwin.ts:658
+#: source/app/service-providers/menu/menu.win32.ts:631
 msgid "Go to website"
 msgstr "打开网址"
 
-#: source/app/service-providers/menu/menu.darwin.ts:666
-#: source/app/service-providers/menu/menu.win32.ts:639
+#: source/app/service-providers/menu/menu.darwin.ts:668
+#: source/app/service-providers/menu/menu.win32.ts:641
 msgid "Get LaTeX"
 msgstr "安装 LaTeX"
 
-#: source/app/service-providers/menu/menu.darwin.ts:676
-#: source/app/service-providers/menu/menu.win32.ts:649
+#: source/app/service-providers/menu/menu.darwin.ts:678
+#: source/app/service-providers/menu/menu.win32.ts:651
 msgid "Open user manual"
 msgstr "打开用户手册"
 
-#: source/app/service-providers/menu/menu.darwin.ts:687
-#: source/app/service-providers/menu/menu.win32.ts:660
+#: source/app/service-providers/menu/menu.darwin.ts:689
+#: source/app/service-providers/menu/menu.win32.ts:662
 msgid "Open Tutorial"
 msgstr "打开教程"
 
-#: source/app/service-providers/menu/menu.darwin.ts:695
-#: source/app/service-providers/menu/menu.win32.ts:668 source/tmp/App.vue.ts:93
+#: source/app/service-providers/menu/menu.darwin.ts:697
+#: source/app/service-providers/menu/menu.win32.ts:670 source/tmp/App.vue.ts:93
 msgid "Check for updates"
 msgstr "检查更新"
 
@@ -691,19 +691,19 @@ msgstr "找不到目录"
 msgid "Malformed Textbundle: %s"
 msgstr "格式错误的Textbundle：％s"
 
-#: source/app/service-providers/commands/request-move.ts:62
+#: source/app/service-providers/commands/request-move.ts:60
 msgid "Cannot move directory"
 msgstr "无法移动目录"
 
-#: source/app/service-providers/commands/request-move.ts:63
+#: source/app/service-providers/commands/request-move.ts:61
 msgid "You cannot move a directory into one of its subdirectories."
 msgstr "您无法将目录移动到其子目录之一。"
 
-#: source/app/service-providers/commands/request-move.ts:72
+#: source/app/service-providers/commands/request-move.ts:70
 msgid "Cannot move directory or file"
 msgstr "无法移动目录或文档"
 
-#: source/app/service-providers/commands/request-move.ts:73
+#: source/app/service-providers/commands/request-move.ts:71
 #, javascript-format
 msgid "The file/directory %s already exists in target."
 msgstr "文件/目录％s已存在。"
@@ -731,7 +731,7 @@ msgstr "文件"
 #. TODO: Move this to a command
 #. The user wants to open another file or directory.
 #: source/app/service-providers/commands/root-open.ts:73
-#: source/app/service-providers/windows/index.ts:213
+#: source/app/service-providers/windows/index.ts:220
 msgid "Open project folder"
 msgstr "打开项目文件夹"
 
@@ -867,7 +867,7 @@ msgstr "目录"
 
 #: source/tmp/file-item.vue.ts:132 source/tmp/file-item.vue.ts:205
 #: source/tmp/PopoverDocInfo.vue.ts:71
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:70
+#: source/common/modules/markdown-editor/statusbar/index.ts:108
 #, javascript-format
 msgid "%s characters"
 msgstr "%s 字"
@@ -875,7 +875,7 @@ msgstr "%s 字"
 #: source/tmp/file-item.vue.ts:134 source/tmp/file-item.vue.ts:207
 #: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/PopoverDirProps.vue.ts:144
 #: source/tmp/PopoverFileProps.vue.ts:89
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:67
+#: source/common/modules/markdown-editor/statusbar/index.ts:89
 #, javascript-format
 msgid "%s words"
 msgstr "%s 字数"
@@ -2422,16 +2422,16 @@ msgstr "复制方程代码"
 msgid "No highlighting"
 msgstr "无高亮显示"
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:50
+#: source/common/modules/markdown-editor/statusbar/index.ts:52
 #, javascript-format
 msgid "Readability mode (%s)"
 msgstr ""
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:179
+#: source/common/modules/markdown-editor/statusbar/index.ts:252
 msgid "Detect automatically"
 msgstr "自动检测"
 
-#: source/common/modules/markdown-editor/plugins/statusbar.ts:214
+#: source/common/modules/markdown-editor/statusbar/index.ts:294
 msgid "Open diagnostics panel"
 msgstr "打开诊断面板"
 
