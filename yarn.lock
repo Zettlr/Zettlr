@@ -128,6 +128,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@codemirror/lang-css@npm:^6.0.2":
+  version: 6.0.2
+  resolution: "@codemirror/lang-css@npm:6.0.2"
+  dependencies:
+    "@codemirror/autocomplete": ^6.0.0
+    "@codemirror/language": ^6.0.0
+    "@codemirror/state": ^6.0.0
+    "@lezer/css": ^1.0.0
+  checksum: 3ab3f03af1c07be650efb2613ea7f9ad3a32e8e733eff1233b410fece87235fe0a5ca534ca2e136bf21dbf619801e3ae9666a83f4f26f91871ec69788519d3e6
+  languageName: node
+  linkType: hard
+
 "@codemirror/lang-html@npm:^6.0.0":
   version: 6.1.4
   resolution: "@codemirror/lang-html@npm:6.1.4"
@@ -12925,7 +12937,7 @@ __metadata:
     "@codemirror/autocomplete": ^6.0.0
     "@codemirror/collab": ^6.0.0
     "@codemirror/commands": ^6.0.0
-    "@codemirror/lang-css": ^6.0.0
+    "@codemirror/lang-css": ^6.0.2
     "@codemirror/lang-javascript": ^6.0.0
     "@codemirror/lang-json": ^6.0.0
     "@codemirror/lang-markdown": ^6.0.0
