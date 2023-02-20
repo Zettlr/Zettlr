@@ -40,21 +40,21 @@
     "forge": "./forge.config.js"
   },
   "dependencies": {
-    "@cds/core": "^6.2.3",
-    "@codemirror/autocomplete": "^6.0.0",
+    "@cds/core": "^6.3.0",
+    "@codemirror/autocomplete": "^6.4.2",
     "@codemirror/collab": "^6.0.0",
-    "@codemirror/commands": "^6.0.0",
-    "@codemirror/lang-css": "^6.0.0",
-    "@codemirror/lang-javascript": "^6.0.0",
-    "@codemirror/lang-json": "^6.0.0",
-    "@codemirror/lang-markdown": "^6.0.0",
-    "@codemirror/lang-php": "^6.0.0",
-    "@codemirror/lang-python": "^6.0.0",
-    "@codemirror/language": "^6.0.0",
-    "@codemirror/legacy-modes": "^6.0.0",
-    "@codemirror/search": "^6.0.0",
-    "@codemirror/state": "^6.0.0",
-    "@codemirror/view": "^6.0.0",
+    "@codemirror/commands": "^6.2.1",
+    "@codemirror/lang-css": "^6.0.2",
+    "@codemirror/lang-javascript": "^6.1.4",
+    "@codemirror/lang-json": "^6.0.1",
+    "@codemirror/lang-markdown": "^6.1.0",
+    "@codemirror/lang-php": "^6.0.1",
+    "@codemirror/lang-python": "^6.1.1",
+    "@codemirror/language": "^6.6.0",
+    "@codemirror/legacy-modes": "^6.3.1",
+    "@codemirror/search": "^6.2.3",
+    "@codemirror/state": "^6.2.0",
+    "@codemirror/view": "^6.9.1",
     "@lezer/common": "^1.0.1",
     "@lezer/highlight": "^1.1.2",
     "@replit/codemirror-emacs": "^6.0.0",
@@ -106,8 +106,8 @@
     "fsevents": "^2.3.2"
   },
   "resolutions": {
-    "@codemirror/lang-markdown/@codemirror/language": "^6.3.2",
-    "@codemirror/autocomplete/@codemirror/view": "^6.7.2"
+    "@codemirror/language": "^6.6.0",
+    "@codemirror/view": "^6.9.1"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0",

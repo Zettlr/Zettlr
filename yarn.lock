@@ -60,9 +60,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cds/core@npm:^6.2.3":
-  version: 6.2.3
-  resolution: "@cds/core@npm:6.2.3"
+"@cds/core@npm:^6.3.0":
+  version: 6.3.0
+  resolution: "@cds/core@npm:6.3.0"
   dependencies:
     "@cds/city": ^1.1.0
     lit: ^2.1.3
@@ -74,7 +74,7 @@ __metadata:
       optional: true
     modern-normalize:
       optional: true
-  checksum: d3426fcf648a7c94638ef0e0d187c7fe413ee4fcc7d9b7f52f3b94258064cc75251aa8a885102c930fca30b5a39405d7f06d46c56f0ce387968bf6b8a26cdb4f
+  checksum: 2f24e8b2db800ad577c2103be942add711a5cebb8fcfb87aa6482be5110c1904b44d069cfd9b844f3f45a3d2334532470fde23f3955bb1f37f557f7d9bda1caa
   languageName: node
   linkType: hard
 
@@ -95,6 +95,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@codemirror/autocomplete@npm:^6.4.2":
+  version: 6.4.2
+  resolution: "@codemirror/autocomplete@npm:6.4.2"
+  dependencies:
+    "@codemirror/language": ^6.0.0
+    "@codemirror/state": ^6.0.0
+    "@codemirror/view": ^6.6.0
+    "@lezer/common": ^1.0.0
+  peerDependencies:
+    "@codemirror/language": ^6.0.0
+    "@codemirror/state": ^6.0.0
+    "@codemirror/view": ^6.0.0
+    "@lezer/common": ^1.0.0
+  checksum: c6cc4edb1c412153e6f6f27926674d7f1d386d1f30d6d4f60c5b52bfa0105870b0c70449b69891937bcf082340d8b0fa6d1f9f28f5eb60adc2974ed4c73aadc1
+  languageName: node
+  linkType: hard
+
 "@codemirror/collab@npm:^6.0.0":
   version: 6.0.0
   resolution: "@codemirror/collab@npm:6.0.0"
@@ -104,15 +121,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/commands@npm:^6.0.0":
-  version: 6.1.3
-  resolution: "@codemirror/commands@npm:6.1.3"
+"@codemirror/commands@npm:^6.2.1":
+  version: 6.2.1
+  resolution: "@codemirror/commands@npm:6.2.1"
   dependencies:
     "@codemirror/language": ^6.0.0
     "@codemirror/state": ^6.2.0
     "@codemirror/view": ^6.0.0
     "@lezer/common": ^1.0.0
-  checksum: beca0248fa2528005e4088a46840bc2a057d34e5b51c60cb20703ca734761dc55f5e205f5dcf94280ffbb5c3366753f46f2d03a5abfd69bd95eac8a67c2e96bb
+  checksum: 216308c57745e86bdd9cbbecc8fa6d8302c340674c3f1837894f1eeb12a91d47adeb24a1d1d76faf05f7630f6dd80b9dad974ff23f017370ebdc5329b2204262
   languageName: node
   linkType: hard
 
@@ -125,6 +142,18 @@ __metadata:
     "@codemirror/state": ^6.0.0
     "@lezer/css": ^1.0.0
   checksum: c459baeeb912f424167cf8308df9fe20aaba3f6a65e5ce7b128e2d4d0ceda7474e3bf94b7b4b87ead7d10f79edfbf9807b2058a2354318adacf906eba4f6eb76
+  languageName: node
+  linkType: hard
+
+"@codemirror/lang-css@npm:^6.0.2":
+  version: 6.0.2
+  resolution: "@codemirror/lang-css@npm:6.0.2"
+  dependencies:
+    "@codemirror/autocomplete": ^6.0.0
+    "@codemirror/language": ^6.0.0
+    "@codemirror/state": ^6.0.0
+    "@lezer/css": ^1.0.0
+  checksum: 3ab3f03af1c07be650efb2613ea7f9ad3a32e8e733eff1233b410fece87235fe0a5ca534ca2e136bf21dbf619801e3ae9666a83f4f26f91871ec69788519d3e6
   languageName: node
   linkType: hard
 
@@ -159,7 +188,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-json@npm:^6.0.0":
+"@codemirror/lang-javascript@npm:^6.1.4":
+  version: 6.1.4
+  resolution: "@codemirror/lang-javascript@npm:6.1.4"
+  dependencies:
+    "@codemirror/autocomplete": ^6.0.0
+    "@codemirror/language": ^6.6.0
+    "@codemirror/lint": ^6.0.0
+    "@codemirror/state": ^6.0.0
+    "@codemirror/view": ^6.0.0
+    "@lezer/common": ^1.0.0
+    "@lezer/javascript": ^1.0.0
+  checksum: d550db179c522cd7c39d26815ee47ac4751656c856d42eeb3743e67482d4377692c4fcd3413b0e97c2c7070b6b10aaa582909c6234f42b04145d56efc49c8a6b
+  languageName: node
+  linkType: hard
+
+"@codemirror/lang-json@npm:^6.0.1":
   version: 6.0.1
   resolution: "@codemirror/lang-json@npm:6.0.1"
   dependencies:
@@ -169,9 +213,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-markdown@npm:^6.0.0":
-  version: 6.0.5
-  resolution: "@codemirror/lang-markdown@npm:6.0.5"
+"@codemirror/lang-markdown@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "@codemirror/lang-markdown@npm:6.1.0"
   dependencies:
     "@codemirror/lang-html": ^6.0.0
     "@codemirror/language": ^6.3.0
@@ -179,11 +223,11 @@ __metadata:
     "@codemirror/view": ^6.0.0
     "@lezer/common": ^1.0.0
     "@lezer/markdown": ^1.0.0
-  checksum: d69148ea3f954aaae98cb22ef2ae790a1d51ad9a22344b2cf3e8b7cdb0e953c342f736257a88fb71b4b74f0fd4338480091fdb047e266b4c6665e4a83f552d4c
+  checksum: faee880c5e695391fc5b92788d1500bed3f0cc3766c987077cdc1643cf38b97eb1774a29491a7a75064089478b895e7c8fe5a4f08ac93c9614ccbbe188f10b47
   languageName: node
   linkType: hard
 
-"@codemirror/lang-php@npm:^6.0.0":
+"@codemirror/lang-php@npm:^6.0.1":
   version: 6.0.1
   resolution: "@codemirror/lang-php@npm:6.0.1"
   dependencies:
@@ -196,7 +240,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-python@npm:^6.0.0":
+"@codemirror/lang-python@npm:^6.1.1":
   version: 6.1.1
   resolution: "@codemirror/lang-python@npm:6.1.1"
   dependencies:
@@ -207,9 +251,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/language@npm:^6.0.0, @codemirror/language@npm:^6.3.2":
-  version: 6.3.2
-  resolution: "@codemirror/language@npm:6.3.2"
+"@codemirror/language@npm:^6.6.0":
+  version: 6.6.0
+  resolution: "@codemirror/language@npm:6.6.0"
   dependencies:
     "@codemirror/state": ^6.0.0
     "@codemirror/view": ^6.0.0
@@ -217,11 +261,11 @@ __metadata:
     "@lezer/highlight": ^1.0.0
     "@lezer/lr": ^1.0.0
     style-mod: ^4.0.0
-  checksum: b70ed9b85d0bea79181c86e88a1f5c0bada30680ee1fe6a68efc01bc037c3d14f94a83602fc46cc4b4393589605ef7e986ed5174443502f3365dd61f883894fa
+  checksum: bb9411620e2f231653a3f0c4429e0d19a3843bff5dbc117df4649d7bf783ec4ad809c0add8bc0887a4ec3f48b4f8f941621168e47d76101d5383f0d670af1722
   languageName: node
   linkType: hard
 
-"@codemirror/legacy-modes@npm:^6.0.0":
+"@codemirror/legacy-modes@npm:^6.3.1":
   version: 6.3.1
   resolution: "@codemirror/legacy-modes@npm:6.3.1"
   dependencies:
@@ -241,7 +285,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/search@npm:^6.0.0":
+"@codemirror/search@npm:^6.2.3":
   version: 6.2.3
   resolution: "@codemirror/search@npm:6.2.3"
   dependencies:
@@ -259,25 +303,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.7.2":
-  version: 6.7.2
-  resolution: "@codemirror/view@npm:6.7.2"
+"@codemirror/view@npm:^6.9.1":
+  version: 6.9.1
+  resolution: "@codemirror/view@npm:6.9.1"
   dependencies:
     "@codemirror/state": ^6.1.4
     style-mod: ^4.0.0
     w3c-keyname: ^2.2.4
-  checksum: ad08a4a0a50e2b34c0141311e7db9f045a2186b81ae28271318374b5b9964435267ec0af210b5d061cb84bc8fdca6dabc1919eb7fe05837d931038b9095c3f8c
-  languageName: node
-  linkType: hard
-
-"@codemirror/view@npm:^6.2.2":
-  version: 6.5.1
-  resolution: "@codemirror/view@npm:6.5.1"
-  dependencies:
-    "@codemirror/state": ^6.1.4
-    style-mod: ^4.0.0
-    w3c-keyname: ^2.2.4
-  checksum: 1bd66b4f174642c559a521b546e80a67556fdc1b7cc7d1c7baf1cac37fed83e0e63d7a9ff6a88f3991a82d11bbbcfcca6e7b3491dcdd536c4c114de142b0300d
+  checksum: 485d54d338a27ebde6bec489e3008db80a2a801fe27db0d4a3c70181c8739f806f035855ba13d5b311d186ad2b130db07196e8b465ec102b0142df0689bff2f8
   languageName: node
   linkType: hard
 
@@ -12921,21 +12954,21 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "zettlr@workspace:."
   dependencies:
-    "@cds/core": ^6.2.3
-    "@codemirror/autocomplete": ^6.0.0
+    "@cds/core": ^6.3.0
+    "@codemirror/autocomplete": ^6.4.2
     "@codemirror/collab": ^6.0.0
-    "@codemirror/commands": ^6.0.0
-    "@codemirror/lang-css": ^6.0.0
-    "@codemirror/lang-javascript": ^6.0.0
-    "@codemirror/lang-json": ^6.0.0
-    "@codemirror/lang-markdown": ^6.0.0
-    "@codemirror/lang-php": ^6.0.0
-    "@codemirror/lang-python": ^6.0.0
-    "@codemirror/language": ^6.0.0
-    "@codemirror/legacy-modes": ^6.0.0
-    "@codemirror/search": ^6.0.0
-    "@codemirror/state": ^6.0.0
-    "@codemirror/view": ^6.0.0
+    "@codemirror/commands": ^6.2.1
+    "@codemirror/lang-css": ^6.0.2
+    "@codemirror/lang-javascript": ^6.1.4
+    "@codemirror/lang-json": ^6.0.1
+    "@codemirror/lang-markdown": ^6.1.0
+    "@codemirror/lang-php": ^6.0.1
+    "@codemirror/lang-python": ^6.1.1
+    "@codemirror/language": ^6.6.0
+    "@codemirror/legacy-modes": ^6.3.1
+    "@codemirror/search": ^6.2.3
+    "@codemirror/state": ^6.2.0
+    "@codemirror/view": ^6.9.1
     "@electron-forge/cli": ^6.0.0
     "@electron-forge/maker-zip": ^6.0.0
     "@electron-forge/plugin-webpack": ^6.0.0
