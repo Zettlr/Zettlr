@@ -86,7 +86,6 @@ import { addNewFootnote } from './commands/footnotes'
 import { copyAsHTML, pasteAsPlain } from './util/copy-paste-cut'
 import openMarkdownLink from './util/open-markdown-link'
 import { highlightRangesEffect } from './plugins/highlight-ranges'
-import { darkModeSwitch } from './theme'
 
 import safeAssign from '@common/util/safe-assign'
 import countWords from '@common/util/count-words'
@@ -133,7 +132,6 @@ export default class MarkdownEditor extends EventEmitter {
   private readonly pullUpdates: (filePath: string, version: number) => Promise<Update[]|false>
   private readonly pushUpdates: (filePath: string, version: number, updates: Update[]) => Promise<boolean>
   private config: EditorConfiguration
-  private _darkMode: boolean
 
   private readonly databaseCache: {
     tags: TagRecord[]
@@ -184,7 +182,6 @@ export default class MarkdownEditor extends EventEmitter {
     this.pushUpdates = pushUpdates
 
     this.editorId = editorId
-    this._darkMode = false
     // Since the editor state needs to be rebuilt whenever the document changes,
     // we have to persist the databases (and feed them to the state) everytime
     // we have to rebuild it (during swapDoc).
@@ -245,7 +242,6 @@ export default class MarkdownEditor extends EventEmitter {
 
     const options: CoreExtensionOptions = {
       initialConfig: JSON.parse(JSON.stringify(this.config)),
-      darkMode: this._darkMode,
       remoteConfig: {
         filePath,
         startVersion,
@@ -825,12 +821,11 @@ export default class MarkdownEditor extends EventEmitter {
   }
 
   get darkMode (): boolean {
-    return this._darkMode
+    return this.config.darkMode
   }
 
   set darkMode (newValue: boolean) {
-    this._darkMode = newValue
-    this._instance.dispatch({ effects: darkModeSwitch.of(newValue) })
+    this.setOptions({ darkMode: newValue })
   }
 
   /**

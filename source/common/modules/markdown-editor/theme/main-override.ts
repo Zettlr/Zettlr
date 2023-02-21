@@ -1,3 +1,18 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Main Override Theme
+ * CVM-Role:        BaseTheme
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file exports the base editor theme which configures the
+ *                  main editor in such a way that it fits within the general
+ *                  appearance of Zettlr.
+ *
+ * END HEADER
+ */
 import { EditorView } from '@codemirror/view'
 
 export const mainOverride = EditorView.baseTheme({
@@ -8,9 +23,7 @@ export const mainOverride = EditorView.baseTheme({
     backgroundColor: 'transparent'
   },
   '.cm-scroller': {
-    flexGrow: '1', // Ensure the content pushes possible panels towards the edge
-    paddingTop: '50px',
-    paddingBottom: '50px'
+    flexGrow: '1' // Ensure the content pushes possible panels towards the edge
   },
   '.cm-scroller .muted': {
     opacity: '0.2'
@@ -64,6 +77,6 @@ export const mainOverride = EditorView.baseTheme({
   '&dark .cm-readability-9': { backgroundColor: '#53e955aa', color: '#ccc' },
   '&dark .cm-readability-10': { backgroundColor: '#7cf87eaa', color: '#ccc' }
 })
-export const defaultLight = EditorView.theme({}, { dark: false })
 
+export const defaultLight = EditorView.theme({}, { dark: false })
 export const defaultDark = EditorView.theme({}, { dark: true })

@@ -62,6 +62,8 @@ export interface EditorConfiguration {
   lintMarkdown: boolean
   lintLanguageTool: boolean
   showStatusbar: boolean
+  darkMode: boolean
+  margins: 'S'|'M'|'L'
 }
 
 export function getDefaultConfig (): EditorConfiguration {
@@ -107,7 +109,9 @@ export function getDefaultConfig (): EditorConfiguration {
     distractionFree: false,
     lintMarkdown: false,
     lintLanguageTool: false,
-    showStatusbar: false
+    showStatusbar: false,
+    darkMode: false,
+    margins: 'M'
   }
 }
 

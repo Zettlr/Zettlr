@@ -890,10 +890,6 @@ function handleDragLeave (event: DragEvent) {
 @editor-margin-fullscreen-xl:  20vw;
 @editor-margin-fullscreen-xxl: 30vw;
 
-@editor-margin-normal-sm:  20px;
-@editor-margin-normal-md:  50px;
-@editor-margin-normal-lg: 100px;
-
 @dropzone-size: 60px;
 
 .main-editor-wrapper {
@@ -993,20 +989,7 @@ function handleDragLeave (event: DragEvent) {
   }
 
   .cm-editor {
-    .cm-scroller {
-      @media(min-width: 1025px) {
-        padding-left: @editor-margin-normal-lg;
-        padding-right: @editor-margin-fullscreen-lg
-      }
-      @media(max-width: 1024px) {
-        padding-left: 0 @editor-margin-normal-md;
-        padding-right: 0 @editor-margin-normal-md;
-      }
-      @media(max-width:  900px) {
-        padding-left: 0 @editor-margin-normal-sm;
-        padding-right: 0 @editor-margin-normal-sm;
-      }
-    }
+    .cm-scroller { padding: 50px 50px; }
 
     .code { // BEGIN: CODE BLOCK/FILE THEME
       // We're using this solarized theme here: https://ethanschoonover.com/solarized/
@@ -1057,13 +1040,8 @@ function handleDragLeave (event: DragEvent) {
   &.code-file .cm-editor {
     font-family: 'Inconsolata', Consolas, Menlo, monospace;
 
-    margin-left: 0px;
-
     // Reset the margins for code files
-    .cm-scroller {
-      padding: 0px;
-      margin: 0;
-    }
+    .cm-scroller { padding: 0px; }
   }
 
   .cm-content {

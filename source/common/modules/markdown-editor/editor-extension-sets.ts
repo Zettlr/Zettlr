@@ -76,7 +76,6 @@ export interface CoreExtensionOptions {
     // Should Markdown documents be linted?
     markdown: boolean
   }
-  darkMode: boolean // Whether the editor should init with darkMode
 }
 
 /**

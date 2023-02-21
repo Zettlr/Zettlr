@@ -12,52 +12,51 @@
  * END HEADER
  */
 
-import { Compartment, EditorState, Extension, StateEffect, StateField } from '@codemirror/state'
+import { Compartment, EditorState, Extension, StateEffect } from '@codemirror/state'
 import { CoreExtensionOptions } from '../editor-extension-sets'
+import { configUpdateEffect } from '../util/configuration'
 import { defaultDark, defaultLight, mainOverride } from './main-override'
 
 const themeCompartment = new Compartment()
 
-export const darkModeSwitch = StateEffect.define<boolean>()
-
-export const themeField = StateField.define<boolean>({
-  create (state) {
-    return false
-  },
-  update (value, transaction) {
-    for (const effect of transaction.effects) {
-      if (effect.is(darkModeSwitch)) {
-        value = effect.value
-      }
-    }
-
-    return value
-  }
-})
-
-const themeSwitcher = EditorState.transactionExtender.of((transaction) => {
+/**
+ * This theme switcher switches between the dark and light theme depending on
+ * the corresponding configuration option.
+ */
+const themeSwitcher = EditorState.transactionExtender.of(transaction => {
   const effects: Array<StateEffect<any>> = []
   for (const effect of transaction.effects) {
-    if (effect.is(darkModeSwitch)) {
-      if (effect.value) {
-        effects.push(themeCompartment.reconfigure([ mainOverride, defaultDark ]))
-      } else {
-        effects.push(themeCompartment.reconfigure([ mainOverride, defaultLight ]))
+    if (effect.is(configUpdateEffect)) {
+      if (effect.value.darkMode !== undefined) {
+        const newTheme = effect.value.darkMode ? defaultDark : defaultLight
+        const themeEffect = themeCompartment.reconfigure(newTheme)
+        effects.push(themeEffect)
       }
     }
   }
 
-  if (effects.length === 0) {
-    return null
-  } else {
-    return { effects }
-  }
+  return effects.length > 0 ? { effects } : null
 })
 
+/**
+ * The theme manager should be included in every CodeMirror instance. It offers:
+ *
+ * * A themeCompartment that contains either the light or the dark base theme
+ * * A themeSwitcher, that is a transactionExtender changing the theme according
+ *   to the config.
+ * * The main Theme override that applies in general
+ *
+ * @param   {CoreExtensionOptions}  options  The initial options
+ *
+ * @return  {Extension}                      The extension
+ */
 export function themeManager (options: CoreExtensionOptions): Extension {
+  const startTheme = options.initialConfig.darkMode ? defaultDark : defaultLight
   return [
-    themeCompartment.of([ mainOverride, (options.darkMode) ? defaultDark : defaultLight ]),
+    // General dark/light theme
+    themeCompartment.of(startTheme),
     themeSwitcher,
-    themeField
+    // Main overrides
+    mainOverride
   ]
 }
