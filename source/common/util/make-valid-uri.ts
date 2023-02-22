@@ -45,15 +45,22 @@ export default function makeValidUri (uri: string, base: string = ''): string {
   // path/file.md --> Also valid, also relative, but without the dot indicator
   // path/to/.htaccess --> Valid extension-only filepath
   //
-  // All of these examples can (in case of rel. paths with the base) be
+  // All of these examples can (in case of relative paths with the base) be
   // resolved perfectly. The first two examples only need the http(s) protocol,
   // the other three examples need the base and file:// prepended.
   //
   // So what we need to do first is distinguish between a URL and a Path.
 
+  // But before we do anything like that, we have to ensure that the URL that
+  // gets passed in here is not surrounded with angle brackets. This is
+  // perfectly valid, especially within Markdown documents, but of course these
+  // serve only as delineators of URLs. Instead of dispersing this functionality
+  // across the codebase, we can do this centrally here.
+  uri = uri.replace(/^<(.+)>$/, '$1')
+
+  // Shortcut for mailto-links, as these have a protocol (mailto) but with
+  // *only* a colon, not the double-slash (//).
   if (uri.startsWith('mailto:')) {
-    // Shortcut for mailto-links, as these have a protocol (mailto) but with
-    // *only* a colon, not the double-slash (//).
     return uri
   } else if (emailRe.test(uri)) {
     return 'mailto:' + uri
@@ -113,14 +120,12 @@ export default function makeValidUri (uri: string, base: string = ''): string {
   // At this point, we definitely know the isFile. If the protocol
   // is still not known we can now derive it from the information
   // we have gathered so far.
-  if (protocol === '') {
-    if (isFile) {
-      protocol = 'file'
-    } else {
-      // For links we assume HTTPS. Websites that still
-      // don't use HTTPS by 2020 can go home.
-      protocol = 'https'
-    }
+  if (protocol === '' && isFile) {
+    protocol = 'file'
+  } else if (protocol === '' && !isFile) {
+    // For links we assume HTTPS. Websites that still
+    // don't use HTTPS by 2020* can go home. (* 2023)
+    protocol = 'https'
   }
 
   // Now we have both the protocol and whether it's a file
