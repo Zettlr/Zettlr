@@ -33,6 +33,161 @@ export interface StatusbarItem {
 }
 
 /**
+ * Contains all available MagicQuotes pairs (primary+secondary) as listed on the
+ * Wikipedia, as always: https://de.wikipedia.org/wiki/Anf%C3%BChrungszeichen
+ */
+const MAGIC_QUOTES_PAIRS: Record<string, { primary: string, secondary: string }> = {
+  'af': { primary: '“…”', secondary: '‘…’' },
+  'ar': { primary: '«…»', secondary: '‹…›' },
+  'be': { primary: '«…»', secondary: '„…“' },
+  'bg': { primary: '„…“', secondary: '‚…‘' },
+  'ca': { primary: '«…»', secondary: '“…”' },
+  'cs': { primary: '„…“', secondary: '‚…‘' },
+  'da': { primary: '„…“', secondary: '‚…‘' },
+  'de-CH': { primary: '«…»', secondary: '‹…›' },
+  'de-DE': { primary: '„…“', secondary: '‚…‘' },
+  'el': { primary: '«…»', secondary: '“…”' },
+  'en-GB': { primary: '‘…’', secondary: '“…”' },
+  'en-US': { primary: '“…”', secondary: '‘…’' },
+  'eo': { primary: '“…”', secondary: "'…'" },
+  'es': { primary: '«…»', secondary: '“…”' },
+  'et': { primary: '„…”', secondary: '„…”' },
+  'eu': { primary: '«…»', secondary: '“…”' },
+  'fi-FI': { primary: '”…”', secondary: '’…’' },
+  'fr-FR': { primary: '« … »', secondary: '‹ … ›' },
+  'ga': { primary: '“…”', secondary: '‘…’' },
+  'he': { primary: '“…”', secondary: '«…»' },
+  'hr': { primary: '„…”', secondary: "'…'" },
+  'hu': { primary: '„…”', secondary: "'…'" },
+  'hy': { primary: '«…»', secondary: '„…“' },
+  'id': { primary: '”…”', secondary: '’…’' },
+  'is': { primary: '„…“', secondary: '‚…‘' },
+  'it': { primary: '«…»', secondary: "'…'" },
+  'ja-JA': { primary: '「…」', secondary: '『…』' },
+  'ka': { primary: '„…“', secondary: "'…'" },
+  'ko': { primary: '“…”', secondary: '‘…’' },
+  'lt': { primary: '„…“', secondary: '‚…‘' },
+  'lv': { primary: '„…“', secondary: '‚…‘' },
+  'nl': { primary: '“…”', secondary: '‘…’' },
+  'no': { primary: '«…»', secondary: '‘…’' },
+  'pl': { primary: '„…”', secondary: "'…'" },
+  'pt-BR': { primary: '“…”', secondary: '‘…’' },
+  'pt-PT': { primary: '«…»', secondary: '“…”' },
+  'ro': { primary: '„…”', secondary: '«…»' },
+  'ru': { primary: '«…»', secondary: '„…“' },
+  'sk': { primary: '„…“', secondary: '‚…‘' },
+  'sl': { primary: '„…“', secondary: '‚…‘' },
+  'sq': { primary: '«…»', secondary: '‹…›' },
+  'sr': { primary: '„…”', secondary: '‚…’' },
+  'sv-SV': { primary: '”…”', secondary: '’…’' },
+  'th': { primary: '“…”', secondary: '‘…’' },
+  'tr': { primary: '“…”', secondary: '‘…’' },
+  'uk': { primary: '«…»', secondary: '„…“' },
+  'wen': { primary: '„…“', secondary: '‚…‘' },
+  'zh-CN': { primary: '“…”', secondary: '‘…’' },
+  'zh-TW': { primary: '「…」', secondary: '『…』' }
+}
+
+/**
+ * Displays the current mode of the MagicQuotes setting
+ *
+ * @param   {EditorState}    state  The editor state
+ * @param   {EditorView}     view   The editor view
+ *
+ * @return  {StatusbarItem}         The statusbar item, or null
+ */
+function magicQuotesStatus (state: EditorState, view: EditorView): StatusbarItem|null {
+  const config = state.field(configField)
+  const { path } = config.metadata
+  const { magicQuotes } = config.autocorrect
+  const disabled = magicQuotes.primary === '"…"' && magicQuotes.secondary === "'…'"
+
+  if (!hasMarkdownExt(path)) {
+    return null
+  }
+
+  let currentSetting = 'custom'
+
+  if (disabled) {
+    currentSetting = 'disabled'
+  } else {
+    for (const key in MAGIC_QUOTES_PAIRS) {
+      const { primary, secondary } = MAGIC_QUOTES_PAIRS[key]
+      if (primary === magicQuotes.primary && secondary === magicQuotes.secondary) {
+        currentSetting = key
+        break
+      }
+    }
+  }
+
+  let label = ''
+  switch (currentSetting) {
+    case 'custom':
+      label = trans('Custom')
+      break
+    case 'disabled':
+      label = trans('Disabled')
+      break
+    default:
+      label = resolveLangCode(currentSetting, 'flag')
+  }
+
+  return {
+    content: `MagicQuotes: ${label}`,
+    onClick (event) {
+      const items: AnyMenuItem[] = [
+        {
+          type: 'checkbox',
+          id: 'disabled',
+          label: trans('Disabled'),
+          enabled: true,
+          checked: currentSetting === 'disabled'
+        },
+        {
+          type: 'checkbox',
+          id: 'custom',
+          label: trans('Custom'),
+          enabled: false, // You cannot select custom here on the statusbar
+          checked: currentSetting === 'custom'
+        },
+        {
+          type: 'separator'
+        }
+      ]
+
+      for (const key in MAGIC_QUOTES_PAIRS) {
+        let flag = resolveLangCode(key, 'flag')
+        if (flag === key) {
+          flag = '🇺🇳' // United Nations flag
+        }
+        items.push({
+          type: 'checkbox',
+          id: key,
+          label: flag + ' ' + resolveLangCode(key, 'name'),
+          enabled: true,
+          checked: key === currentSetting
+        })
+      }
+
+      showPopupMenu({ x: event.clientX, y: event.clientY }, items, clickedID => {
+        if (clickedID === 'custom') {
+          console.error('How did you manage to click the disabled menu item?')
+        } else if (clickedID === 'disabled') {
+          // Disable MQ
+          window.config.set('editor.autoCorrect.magicQuotes.primary', '"…"')
+          window.config.set('editor.autoCorrect.magicQuotes.secondary', "'…'")
+        } else {
+          // Set them to whatever the user clicked
+          const { primary, secondary } = MAGIC_QUOTES_PAIRS[clickedID]
+          window.config.set('editor.autoCorrect.magicQuotes.primary', primary)
+          window.config.set('editor.autoCorrect.magicQuotes.secondary', secondary)
+        }
+      })
+    }
+  }
+}
+
+/**
  * Displays the readability mode status, if applicable
  *
  * @param   {EditorState}    state  The EditorState
@@ -308,6 +463,7 @@ function createStatusbar (view: EditorView): Panel {
       const elements: StatusbarItem[] = []
       // NOTE: Order here determines the order in the statusbar
       const items = [
+        magicQuotesStatus,
         readabilityStatus,
         cursorStatus,
         wordcountStatus,
