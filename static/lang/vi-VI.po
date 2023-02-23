@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-02-19 02:41+0000\n"
+"POT-Creation-Date: 2023-02-23 02:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -874,7 +874,7 @@ msgstr "Các thư mục"
 
 #: source/tmp/file-item.vue.ts:132 source/tmp/file-item.vue.ts:205
 #: source/tmp/PopoverDocInfo.vue.ts:71
-#: source/common/modules/markdown-editor/statusbar/index.ts:108
+#: source/common/modules/markdown-editor/statusbar/index.ts:263
 #, javascript-format
 msgid "%s characters"
 msgstr "%s kí tự"
@@ -882,7 +882,7 @@ msgstr "%s kí tự"
 #: source/tmp/file-item.vue.ts:134 source/tmp/file-item.vue.ts:207
 #: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/PopoverDirProps.vue.ts:144
 #: source/tmp/PopoverFileProps.vue.ts:89
-#: source/common/modules/markdown-editor/statusbar/index.ts:89
+#: source/common/modules/markdown-editor/statusbar/index.ts:244
 #, javascript-format
 msgid "%s words"
 msgstr "%s từ"
@@ -2305,44 +2305,65 @@ msgid "Serbian"
 msgstr "Serb"
 
 #: source/common/util/map-lang-code.ts:118
+#, fuzzy
+msgid "Albanian"
+msgstr "Romani"
+
+#: source/common/util/map-lang-code.ts:119
+#, fuzzy
+msgid "Albanian (Albania)"
+msgstr "Malaysia"
+
+#: source/common/util/map-lang-code.ts:120
 msgid "Swedish"
 msgstr "Thuỵ Điển"
 
-#: source/common/util/map-lang-code.ts:119
+#: source/common/util/map-lang-code.ts:121
 #, fuzzy
 msgid "Tamil (India)"
 msgstr "Anh (Ấn Độ)"
 
-#: source/common/util/map-lang-code.ts:120
+#: source/common/util/map-lang-code.ts:122
+msgid "Thai"
+msgstr ""
+
+#: source/common/util/map-lang-code.ts:123
 msgid "Tagalog (Filipino)"
 msgstr ""
 
-#: source/common/util/map-lang-code.ts:121
+#: source/common/util/map-lang-code.ts:124
 msgid "Turkish"
 msgstr "Thổ Nhĩ Kỳ"
 
-#: source/common/util/map-lang-code.ts:122
+#: source/common/util/map-lang-code.ts:125
 msgid "Ukrainian"
 msgstr "Ukraina"
 
-#: source/common/util/map-lang-code.ts:123
+#: source/common/util/map-lang-code.ts:126
 msgid "Urdu"
 msgstr ""
 
-#: source/common/util/map-lang-code.ts:124
+#: source/common/util/map-lang-code.ts:127
 msgid "Vietnamese"
 msgstr "Việt Nam"
 
-#: source/common/util/map-lang-code.ts:125
+#. NOTE: According to ISO 639-2, while hsb and dsb denote Higher and Lower
+#. Sorbian, wen denotes the language family as such
+#: source/common/util/map-lang-code.ts:130
+#, fuzzy
+msgid "Sorbian"
+msgstr "Serb"
+
+#: source/common/util/map-lang-code.ts:131
 msgid "Chinese (China)"
 msgstr "Trung Quốc"
 
-#: source/common/util/map-lang-code.ts:126
+#: source/common/util/map-lang-code.ts:132
 #, fuzzy
 msgid "Chinese (Taiwan)"
 msgstr "Trung Quốc"
 
-#: source/common/util/map-lang-code.ts:127
+#: source/common/util/map-lang-code.ts:133
 #, fuzzy
 msgid "Chinese"
 msgstr "Trung Quốc"
@@ -2445,16 +2466,27 @@ msgstr "Sao chép mã phương trình"
 msgid "No highlighting"
 msgstr ""
 
-#: source/common/modules/markdown-editor/statusbar/index.ts:52
+#: source/common/modules/markdown-editor/statusbar/index.ts:126
+#: source/common/modules/markdown-editor/statusbar/index.ts:149
+#, fuzzy
+msgid "Custom"
+msgstr "Tuỳ chỉnh CSS"
+
+#: source/common/modules/markdown-editor/statusbar/index.ts:129
+#: source/common/modules/markdown-editor/statusbar/index.ts:142
+msgid "Disabled"
+msgstr ""
+
+#: source/common/modules/markdown-editor/statusbar/index.ts:207
 #, javascript-format
 msgid "Readability mode (%s)"
 msgstr ""
 
-#: source/common/modules/markdown-editor/statusbar/index.ts:252
+#: source/common/modules/markdown-editor/statusbar/index.ts:407
 msgid "Detect automatically"
 msgstr ""
 
-#: source/common/modules/markdown-editor/statusbar/index.ts:294
+#: source/common/modules/markdown-editor/statusbar/index.ts:449
 msgid "Open diagnostics panel"
 msgstr ""
 

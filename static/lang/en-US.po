@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 3.0.0-beta.2\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-02-22 02:42+0000\n"
+"POT-Creation-Date: 2023-02-23 02:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -872,7 +872,7 @@ msgstr "Directories"
 
 #: source/tmp/file-item.vue.ts:132 source/tmp/file-item.vue.ts:205
 #: source/tmp/PopoverDocInfo.vue.ts:71
-#: source/common/modules/markdown-editor/statusbar/index.ts:108
+#: source/common/modules/markdown-editor/statusbar/index.ts:263
 #, javascript-format
 msgid "%s characters"
 msgstr "%s characters"
@@ -880,7 +880,7 @@ msgstr "%s characters"
 #: source/tmp/file-item.vue.ts:134 source/tmp/file-item.vue.ts:207
 #: source/tmp/PopoverDocInfo.vue.ts:73 source/tmp/PopoverDirProps.vue.ts:144
 #: source/tmp/PopoverFileProps.vue.ts:89
-#: source/common/modules/markdown-editor/statusbar/index.ts:89
+#: source/common/modules/markdown-editor/statusbar/index.ts:244
 #, javascript-format
 msgid "%s words"
 msgstr "%s words"
@@ -2281,42 +2281,60 @@ msgid "Serbian"
 msgstr "Serbian"
 
 #: source/common/util/map-lang-code.ts:118
+msgid "Albanian"
+msgstr "Albanian"
+
+#: source/common/util/map-lang-code.ts:119
+msgid "Albanian (Albania)"
+msgstr "Albanian (Albania)"
+
+#: source/common/util/map-lang-code.ts:120
 msgid "Swedish"
 msgstr "Swedish"
 
-#: source/common/util/map-lang-code.ts:119
+#: source/common/util/map-lang-code.ts:121
 msgid "Tamil (India)"
 msgstr "Tamil (India)"
 
-#: source/common/util/map-lang-code.ts:120
+#: source/common/util/map-lang-code.ts:122
+msgid "Thai"
+msgstr "Thai"
+
+#: source/common/util/map-lang-code.ts:123
 msgid "Tagalog (Filipino)"
 msgstr "Tagalog (Filipino)"
 
-#: source/common/util/map-lang-code.ts:121
+#: source/common/util/map-lang-code.ts:124
 msgid "Turkish"
 msgstr "Turkish"
 
-#: source/common/util/map-lang-code.ts:122
+#: source/common/util/map-lang-code.ts:125
 msgid "Ukrainian"
 msgstr "Ukrainian"
 
-#: source/common/util/map-lang-code.ts:123
+#: source/common/util/map-lang-code.ts:126
 msgid "Urdu"
 msgstr "Urdu"
 
-#: source/common/util/map-lang-code.ts:124
+#: source/common/util/map-lang-code.ts:127
 msgid "Vietnamese"
 msgstr "Vietnamese"
 
-#: source/common/util/map-lang-code.ts:125
+#. NOTE: According to ISO 639-2, while hsb and dsb denote Higher and Lower
+#. Sorbian, wen denotes the language family as such
+#: source/common/util/map-lang-code.ts:130
+msgid "Sorbian"
+msgstr "Sorbian"
+
+#: source/common/util/map-lang-code.ts:131
 msgid "Chinese (China)"
 msgstr "Chinese (China)"
 
-#: source/common/util/map-lang-code.ts:126
+#: source/common/util/map-lang-code.ts:132
 msgid "Chinese (Taiwan)"
 msgstr "Chinese (Taiwan)"
 
-#: source/common/util/map-lang-code.ts:127
+#: source/common/util/map-lang-code.ts:133
 msgid "Chinese"
 msgstr "Chinese"
 
@@ -2418,16 +2436,26 @@ msgstr "Copy equation code"
 msgid "No highlighting"
 msgstr "No highlighting"
 
-#: source/common/modules/markdown-editor/statusbar/index.ts:52
+#: source/common/modules/markdown-editor/statusbar/index.ts:126
+#: source/common/modules/markdown-editor/statusbar/index.ts:149
+msgid "Custom"
+msgstr "Custom"
+
+#: source/common/modules/markdown-editor/statusbar/index.ts:129
+#: source/common/modules/markdown-editor/statusbar/index.ts:142
+msgid "Disabled"
+msgstr "Disabled"
+
+#: source/common/modules/markdown-editor/statusbar/index.ts:207
 #, javascript-format
 msgid "Readability mode (%s)"
 msgstr "Readability mode (%s)"
 
-#: source/common/modules/markdown-editor/statusbar/index.ts:252
+#: source/common/modules/markdown-editor/statusbar/index.ts:407
 msgid "Detect automatically"
 msgstr "Detect automatically"
 
-#: source/common/modules/markdown-editor/statusbar/index.ts:294
+#: source/common/modules/markdown-editor/statusbar/index.ts:449
 msgid "Open diagnostics panel"
 msgstr "Open diagnostics panel"
 
