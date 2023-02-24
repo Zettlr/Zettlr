@@ -103,7 +103,7 @@ module.exports = {
   rebuildConfig: {
     // Since we must build native modules for both x64 as well as arm64, we have
     // to explicitly build it everytime for the correct architecture
-    force: true
+    force: false // NOTE: By now covered by the global flag on packaging.
   },
   packagerConfig: {
     appBundleId: 'com.zettlr.app',
