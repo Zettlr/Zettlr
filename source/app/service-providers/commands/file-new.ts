@@ -94,12 +94,7 @@ export default class FileNew extends ZettlrCommand {
       // The user may also have selected a different directory altogether. If
       // that directory exists and is loaded by the FSAL, overwrite the dir.
       if (path.dirname(chosenPath) !== dir.path) {
-        dir = this._app.fsal.findDir(path.dirname(chosenPath))
-        if (dir === undefined) {
-          // TODO: Better feedback to the user!
-          this._app.log.error(`Could not create new file ${arg.name}: The selected directory is not loaded in Zettlr!`)
-          return
-        }
+        dir = await this._app.fsal.getAnyDirectoryDescriptor(path.dirname(chosenPath))
       }
     } else if (arg.name === undefined) {
       // Just generate a name.
