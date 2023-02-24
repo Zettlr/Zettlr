@@ -120,20 +120,11 @@ function magicQuotesStatus (state: EditorState, view: EditorView): StatusbarItem
     }
   }
 
-  let label = ''
-  switch (currentSetting) {
-    case 'custom':
-      label = trans('Custom')
-      break
-    case 'disabled':
-      label = trans('Disabled')
-      break
-    default:
-      label = resolveLangCode(currentSetting, 'flag')
-  }
-
+  const labelStyle = 'border: 1px solid #333; border-radius: 4px; padding: 2px 5px;'
+  const label = `<span style="${labelStyle}">${magicQuotes.primary}</span> <span style="${labelStyle}">${magicQuotes.secondary}</span>`
   return {
-    content: `MagicQuotes: ${label}`,
+    content: label,
+    allowHtml: true,
     onClick (event) {
       const items: AnyMenuItem[] = [
         {
@@ -155,6 +146,14 @@ function magicQuotesStatus (state: EditorState, view: EditorView): StatusbarItem
         }
       ]
 
+      const currentlySelected: string[] = []
+      for (const key in MAGIC_QUOTES_PAIRS) {
+        const { primary, secondary } = MAGIC_QUOTES_PAIRS[key]
+        if (primary === magicQuotes.primary && secondary === magicQuotes.secondary) {
+          currentlySelected.push(key)
+        }
+      }
+
       for (const key in MAGIC_QUOTES_PAIRS) {
         let flag = resolveLangCode(key, 'flag')
         if (flag === key) {
@@ -165,7 +164,7 @@ function magicQuotesStatus (state: EditorState, view: EditorView): StatusbarItem
           id: key,
           label: flag + ' ' + resolveLangCode(key, 'name'),
           enabled: true,
-          checked: key === currentSetting
+          checked: currentlySelected.includes(key) // Every candidate is selected
         })
       }
 
