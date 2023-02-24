@@ -120,11 +120,12 @@ function magicQuotesStatus (state: EditorState, view: EditorView): StatusbarItem
     }
   }
 
-  const labelStyle = 'border: 1px solid #333; border-radius: 4px; padding: 2px 5px;'
+  const labelStyle = 'border: 1px solid currentColor; border-radius: 4px; padding: 2px 5px;'
   const label = `<span style="${labelStyle}">${magicQuotes.primary}</span> <span style="${labelStyle}">${magicQuotes.secondary}</span>`
   return {
     content: label,
     allowHtml: true,
+    title: 'MagicQuotes',
     onClick (event) {
       const items: AnyMenuItem[] = [
         {
