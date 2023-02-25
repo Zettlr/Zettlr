@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zettlr 2.3.0\n"
 "Report-Msgid-Bugs-To: https://github.com/Zettlr/Zettlr/issues\n"
-"POT-Creation-Date: 2023-02-23 02:38+0000\n"
+"POT-Creation-Date: 2023-02-25 02:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -628,7 +628,7 @@ msgstr ""
 
 #: source/app/service-providers/commands/file-duplicate.ts:43
 #: source/app/service-providers/commands/file-duplicate.ts:59
-#: source/app/service-providers/commands/file-new.ts:161
+#: source/app/service-providers/commands/file-new.ts:156
 msgid "Could not create file"
 msgstr "Tiedostoa ei voitu luoda"
 
@@ -2470,16 +2470,14 @@ msgstr "Kopioi yhtälön koodi"
 msgid "No highlighting"
 msgstr ""
 
-#: source/common/modules/markdown-editor/statusbar/index.ts:126
-#: source/common/modules/markdown-editor/statusbar/index.ts:149
+#: source/common/modules/markdown-editor/statusbar/index.ts:134
+msgid "Disabled"
+msgstr ""
+
+#: source/common/modules/markdown-editor/statusbar/index.ts:141
 #, fuzzy
 msgid "Custom"
 msgstr "Mukautettu CSS"
-
-#: source/common/modules/markdown-editor/statusbar/index.ts:129
-#: source/common/modules/markdown-editor/statusbar/index.ts:142
-msgid "Disabled"
-msgstr ""
 
 #: source/common/modules/markdown-editor/statusbar/index.ts:207
 #, javascript-format
